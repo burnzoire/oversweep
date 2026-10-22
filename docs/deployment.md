@@ -13,10 +13,10 @@ server or self-hosted runner is needed. The repository stays private; the deploy
 website is public. A personal private repository requires GitHub Pro (or another
 eligible plan); do not make the repository public to work around unavailable Pages.
 
-The [Pages workflow](../.github/workflows/pages.yml) is manually dispatched from
-main. Merging a PR does not publish anything. An owner-invoked dispatch is the
-release action; do not invoke it as part of feature work. Other branches are
-skipped, and PRs receive no deployment permissions or public previews.
+The [Pages workflow](../.github/workflows/pages.yml) runs automatically on every
+push to main, including merged PRs. Manual dispatch from main remains available.
+Merging a PR therefore initiates publication after the workflow's checks pass.
+Other branches are skipped, and PRs receive no deployment permissions or public previews.
 
 The build job uses a GitHub-hosted Linux runner, Node 22, the committed npm lockfile,
 foundation checks and the application's required `npm run check`. It then removes
@@ -78,7 +78,7 @@ hydration and content exclusion through the live URL. A successful deployment
 job alone does not establish application behavior or aviation validity.
 
 To roll back, revert the offending application change through a reviewed PR,
-merge it, then dispatch the workflow on main. Do not dispatch an arbitrary
+merge it, and the push to main automatically deploys the reverted version. Do not dispatch an arbitrary
 branch or assume that rerunning an old job restores the current domain setup.
 Keep the prior successful run/commit recorded. Publication requirements in
 [content standards](content-standards.md) still apply.
