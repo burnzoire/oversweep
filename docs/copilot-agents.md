@@ -11,7 +11,7 @@ assignments or intermediate plan approvals are required.
 | [Feature delivery / implementer](../.github/agents/implementer.agent.md) | Own the full feature cycle; retain existing profile name | Read/search/edit/execute, agent delegation, web where supported, GitHub reads and local Playwright; manually selected |
 | [Planner](../.github/agents/planner.agent.md) | Optional bounded research/planning subtask or explicit planning-only request | Read/search/edit, web where supported and GitHub reads; model invocation allowed |
 | [Reviewer](../.github/agents/reviewer.agent.md) | Optional specialist for fresh independent review | Read/search, web where supported and GitHub reads; model invocation allowed; no edit, shell or delegation |
-| [UX reviewer](../.github/agents/ux-reviewer.agent.md) | Browser-based review of the exact PR experience; reports findings without editing | Read/search, GitHub reads and Playwright browser tools; model invocation allowed; no edit or shell |
+| [UX reviewer](../.github/agents/ux-reviewer.agent.md) | Browser-based review of the exact PR experience; reports findings without editing | Read/search and Playwright browser tools; model invocation allowed; no edit, shell or GitHub tools |
 
 ## Start a feature
 
@@ -74,8 +74,8 @@ the `agent` tool. Example handoff:
 > trainer. Report checked, failed and untested areas with the required evidence.
 
 The delivery agent must check out or otherwise run the exact PR head, identify the
-changed routes/journeys, and provide those instructions and base/head SHAs to the
-reviewer. On this Astro site, `npm ci` followed by
+changed routes/journeys, and provide the diff, instructions and base/head SHAs to the
+reviewer; the UX profile has no GitHub tools. On this Astro site, `npm ci` followed by
 `npm run dev -- --host 0.0.0.0` serves the local review experience at
 `http://localhost:4321`; port selection can change if occupied. From the exact PR
 checkout, verify `git rev-parse HEAD` matches the supplied head SHA before starting

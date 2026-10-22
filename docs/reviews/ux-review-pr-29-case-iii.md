@@ -42,8 +42,10 @@ layout and overflow measurements were checked at each size.
 - **Low — Expanded subject navigation delays the Case III content.** Reproduction:
   open `/manual/naval-operations/case-iii/` at the top of the page. The 13-link
   **Manual subjects** disclosure is open and rendered full-width before the article.
-  Its measured height is 645 px; the Drafted status panel starts at y=1005 px at
-  1440 × 900 and 390 × 844, and y=990 px at 768 × 1024. At desktop and phone sizes,
+  Expected: the deep-linked experience's status and scope are available near its
+  heading, while subject navigation remains available without displacing the article.
+  Actual: the disclosure measures 645 px tall; the Drafted status panel starts at
+  y=1005 px at 1440 × 900 and 390 × 844, and y=990 px at 768 × 1024. At desktop and phone sizes,
   users must scroll past the entire subject list before reaching the scope notes;
   at tablet size, the status panel starts just below the initial viewport. This
   delays the purpose and limitations of the embedded experience. Consider keeping
