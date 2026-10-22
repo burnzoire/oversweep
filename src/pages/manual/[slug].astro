@@ -1,0 +1,29 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { manualSubjects } from "../../data/catalogue";
+import { sitePath } from "../../lib/paths";
+
+export function getStaticPaths() {
+  return manualSubjects.map((subject) => ({
+    params: { slug: subject.slug },
+    props: { subject },
+  }));
+}
+
+const { subject } = Astro.props;
+---
+
+<SiteLayout
+  title={subject.title}
+  activeSection="manual"
+  activeSubject={subject.slug}
+  breadcrumbs={[
+    { label: "Manual", href: sitePath("manual/") },
+    { label: subject.title },
+  ]}
+>
+  <section class="status-panel">
+    <h2>Coming soon</h2>
+    <p>This subject page is a navigation placeholder. No aviation guidance or training content is published here.</p>
+  </section>
+</SiteLayout>

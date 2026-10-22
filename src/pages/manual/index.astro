@@ -1,0 +1,26 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { manualSubjects } from "../../data/catalogue";
+import { sitePath } from "../../lib/paths";
+---
+
+<SiteLayout
+  title="Manual"
+  activeSection="manual"
+  breadcrumbs={[{ label: "Manual" }]}
+>
+  <section class="status-panel">
+    <h2>Coming soon</h2>
+    <p>Manual topics are mapped for future development. No procedures or aircraft-specific guidance are published in this site foundation.</p>
+  </section>
+  <h2>Subjects</h2>
+  <ul class="card-grid">
+    {manualSubjects.map((subject) => (
+      <li class="collection-card">
+        <h3>{subject.title}</h3>
+        <p>Coming soon</p>
+        <a href={sitePath(`manual/${subject.slug}/`)}>Open subject</a>
+      </li>
+    ))}
+  </ul>
+</SiteLayout>

@@ -3,7 +3,8 @@
 Status: GitHub Pages replaces the Windows 11 Docker hosting proposal at the owner's
 request on 22 October 2026. The workflow is configured in this PR; no site has been
 published and repository Pages settings/account entitlement have not been verified.
-The application scaffold is being developed separately in PR #21.
+The site shell is being delivered in issue #25 / PR #26. PR #21 contains separate,
+unfinished trainer work and is not required to publish the shell.
 
 ## Delivery
 
@@ -26,11 +27,10 @@ Actions are pinned to commit SHAs; releases are serialized without cancellation.
 
 ## Application integration contract
 
-The first-slice PR must provide `package-lock.json`, `astro.config.mjs`, static
-output to `dist/`, and `npm run check` covering types, registry/content publication
-exclusion and model tests. Production build must fail on invalid content and
-exclude unapproved experiences and assets. The workflow fails clearly until the
-scaffold is merged; it does not publish a placeholder from repository files.
+The site PR provides `package-lock.json`, `astro.config.mjs`, static output to
+`dist/`, and `npm run check` for type and generated-site validation. Future
+experience work must extend the production checks to fail closed on invalid content
+and exclude unapproved experiences and assets.
 
 Astro receives `--site` and `--base` from Pages metadata. Default project hosting
 uses `https://burnzoire.github.io/oversweep/` with base `/oversweep`; a configured

@@ -3,8 +3,8 @@
 A subject-centric, NATOPS-inspired aviation reference for understanding concepts,
 learning procedures and practising practical knowledge. Intended domain: oversweep.com.
 
-**Phase: planning and foundation.** No website, trainers or hosting exist here yet.
-Nothing in this repository is approved operational aviation guidance.
+**Phase: site skeleton.** The responsive static shell and navigation are in
+development; trainer experiences and validated aviation guidance are not included.
 
 ## Start here
 
@@ -22,7 +22,21 @@ combines research, audit, planning, implementation, tests and review in one issu
 
 First vertical slice: the existing [Case III carrier trainer](https://case-three-tomcat.burnzoire.chatgpt.site/).
 Deployment: static GitHub Pages via a manually triggered GitHub Actions workflow;
-see [setup and release instructions](docs/deployment.md). No site is published yet.
+see [setup and release instructions](docs/deployment.md). The site has not yet been
+published.
+
+## Run the site
+
+Use Node.js 22.23.4 or newer within major version 22:
+
+```sh
+npm ci
+npm run dev
+npm run check
+```
+
+The Manual, Encyclopedia and Training Library are navigation shells with Coming
+soon placeholders; no Case III trainer or aviation guidance is published.
 
 ## Check this foundation
 

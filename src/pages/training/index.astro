@@ -1,0 +1,26 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { manualSubjects } from "../../data/catalogue";
+import { sitePath } from "../../lib/paths";
+---
+
+<SiteLayout
+  title="Training Library"
+  activeSection="training"
+  breadcrumbs={[{ label: "Training Library" }]}
+>
+  <section class="status-panel">
+    <h2>Coming soon</h2>
+    <p>No interactive, exploratory or trainer experiences are published in this site foundation.</p>
+  </section>
+  <h2>Library index</h2>
+  <p>Future entries will be organised by subject, experience type, applicability and learning objective.</p>
+  <h2>Subjects</h2>
+  <ul class="subject-list">
+    {manualSubjects.map((subject) => (
+      <li><a href={sitePath(`manual/${subject.slug}/`)}>{subject.title}</a></li>
+    ))}
+  </ul>
+  <h2>Experience types</h2>
+  <p>Interactive · Exploratory · Trainer</p>
+</SiteLayout>
