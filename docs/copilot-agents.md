@@ -69,19 +69,21 @@ the `agent` tool. Example handoff:
 
 > UX-review PR #29 for issue #28 at base `c5524f9ffa16bee96e013a3d9ad27f4bf904aa3c`,
 > head `2c16d437fd1264d69f9340b4442a452707baab42`. Use the local site from that exact
-> checkout, started with `npm ci` and `npm run dev -- --host 0.0.0.0`. Inspect Manual →
+> checkout, started with `npm ci` and `npm run dev -- --host 127.0.0.1`. Inspect Manual →
 > Naval Operations → Case III, Training Library, and the embedded and full-window
 > trainer. Report checked, failed and untested areas with the required evidence.
 
 The delivery agent must check out or otherwise run the exact PR head, identify the
 changed routes/journeys, and provide the diff, instructions and base/head SHAs to the
 reviewer; the UX profile has no GitHub tools. On this Astro site, `npm ci` followed by
-`npm run dev -- --host 0.0.0.0` serves the local review experience at
-`http://localhost:4321`; port selection can change if occupied. From the exact PR
+`npm run dev -- --host 127.0.0.1` serves the local review experience at
+`http://127.0.0.1:4321`; port selection can change if occupied. From the exact PR
 checkout, verify `git rev-parse HEAD` matches the supplied head SHA before starting
 and confirm the served page in Playwright. The trainer is available in development;
 production output excludes draft trainer content.
 Never substitute the production site or an unverified preview for a PR-head build.
+Keep the server loopback-only; if the browser runtime cannot reach it, report that
+limitation instead of binding to all network interfaces.
 
 The reviewer uses Playwright browser tools to inspect routes and interact at desktop
 (1440 × 900), tablet (768 × 1024) and phone (390 × 844), including keyboard/focus

@@ -11,7 +11,7 @@
 - Runtime: Node.js 22.23.4, Chromium 155, Playwright 1.64.1
 
 The PR-head checkout was started with `npm ci` and
-`npm run dev -- --host 0.0.0.0`. Playwright ran against the local server using the
+`npm run dev -- --host 127.0.0.1`. Playwright ran against the loopback-only server using the
 system Chromium binary; it was installed ephemerally for this review and is not a
 repository dependency. The configured Playwright MCP browser tool could not be
 authenticated in this session (`Browser-based OAuth required`), so this demonstrates
