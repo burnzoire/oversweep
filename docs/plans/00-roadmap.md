@@ -24,7 +24,8 @@ Library. Do not replace this choice with a Bullseye or turn-geometry starter.
 is the single assignment. Research, source/provenance audit, a brief integration
 plan, scaffolding, implementation, tests, independent review and fixes are phases
 inside that task, not separately approved prerequisites. Reuse #5–#7 and PR #19
-findings where useful. An old planning-only exclusion does not override #20's
+findings where useful, including the [integration plan](04-case-iii-integration-plan.md).
+An old planning-only exclusion does not override #20's
 explicit implementation scope; preserve the historical records without inventing
 completed audits or tests.
 
