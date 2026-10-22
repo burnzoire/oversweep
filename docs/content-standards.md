@@ -27,6 +27,8 @@ access location, access date, rights/licence and affected claims. Keep source
 registers beside the eventual content. A citation to an entire manual is insufficient
 for a numeric limitation. Do not copy or upload restricted/copyrighted manuals
 without permission; link and paraphrase only within applicable rights.
+The proposed [content contract](content-contracts.md) and its JSON Schema example
+show record shapes and cross-link rules; the example records are synthetic only.
 
 A named human with relevant subject competence must review aviation accuracy and
 source applicability before Technically Validated. Record reviewer identity,

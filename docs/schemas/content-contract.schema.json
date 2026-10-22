@@ -1,0 +1,477 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oversweep.com/schemas/content-contract.schema.json",
+  "title": "Oversweep content and experience registry",
+  "type": "object",
+  "required": ["records"],
+  "properties": {
+    "records": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "$ref": "#/$defs/subject" },
+          { "$ref": "#/$defs/manualEntry" },
+          { "$ref": "#/$defs/claim" },
+          { "$ref": "#/$defs/source" },
+          { "$ref": "#/$defs/experience" }
+        ]
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "stableId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$",
+      "description": "Immutable lowercase namespaced ID; the prefix identifies the record kind."
+    },
+    "applicability": {
+      "type": "object",
+      "required": ["scope"],
+      "properties": {
+        "scope": {
+          "enum": ["general", "aircraft", "simulator", "synthetic"]
+        },
+        "aircraft": { "type": "string", "minLength": 1 },
+        "variant": { "type": "string", "minLength": 1 },
+        "configuration": { "type": "string", "minLength": 1 },
+        "simulator": { "type": "string", "minLength": 1 },
+        "module": { "type": "string", "minLength": 1 },
+        "simulatorVersion": { "type": "string", "minLength": 1 },
+        "notes": { "type": "string" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "scope": { "const": "aircraft" } },
+            "required": ["scope"]
+          },
+          "then": { "required": ["aircraft", "variant"] }
+        },
+        {
+          "if": {
+            "properties": { "scope": { "const": "simulator" } },
+            "required": ["scope"]
+          },
+          "then": { "required": ["simulator", "module", "simulatorVersion"] }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "maturity": {
+      "enum": [
+        "Outlined",
+        "Researched",
+        "Drafted",
+        "Technically Validated",
+        "Published"
+      ]
+    },
+    "validation": {
+      "type": "object",
+      "required": [
+        "reviewedRevision",
+        "reviewer",
+        "qualification",
+        "reviewedOn",
+        "findings"
+      ],
+      "properties": {
+        "reviewedRevision": { "type": "integer", "minimum": 1 },
+        "reviewer": { "type": "string", "minLength": 1 },
+        "qualification": { "type": "string", "minLength": 1 },
+        "reviewedOn": { "type": "string", "format": "date" },
+        "findings": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "publication": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["excluded", "approved"] },
+        "reason": { "type": "string", "minLength": 1 },
+        "approvedBy": { "type": "string", "minLength": 1 },
+        "approvedOn": { "type": "string", "format": "date" },
+        "accessibilityReviewedRevision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "status": { "const": "excluded" } },
+            "required": ["status"]
+          },
+          "then": { "required": ["reason"] }
+        },
+        {
+          "if": {
+            "properties": { "status": { "const": "approved" } },
+            "required": ["status"]
+          },
+          "then": {
+            "required": [
+              "approvedBy",
+              "approvedOn",
+              "accessibilityReviewedRevision"
+            ]
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "release": {
+      "type": "object",
+      "required": ["releaseId", "releasedOn"],
+      "properties": {
+        "releaseId": { "type": "string", "minLength": 1 },
+        "releasedOn": { "type": "string", "format": "date" }
+      },
+      "additionalProperties": false
+    },
+    "versionedContent": {
+      "type": "object",
+      "required": ["revision", "maturity"],
+      "properties": {
+        "revision": { "type": "integer", "minimum": 1 },
+        "maturity": { "$ref": "#/$defs/maturity" },
+        "validation": { "$ref": "#/$defs/validation" },
+        "publication": { "$ref": "#/$defs/publication" },
+        "release": { "$ref": "#/$defs/release" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "maturity": {
+                "enum": ["Technically Validated", "Published"]
+              }
+            },
+            "required": ["maturity"]
+          },
+          "then": { "required": ["validation"] }
+        },
+        {
+          "if": {
+            "properties": { "maturity": { "const": "Published" } },
+            "required": ["maturity"]
+          },
+          "then": { "required": ["release"] }
+        },
+        {
+          "if": {
+            "properties": {
+              "publication": {
+                "properties": { "status": { "const": "approved" } },
+                "required": ["status"]
+              }
+            },
+            "required": ["publication"]
+          },
+          "then": {
+            "required": ["validation", "maturity"],
+            "properties": {
+              "maturity": {
+                "enum": ["Technically Validated", "Published"]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "blockId": {
+      "type": "string",
+      "pattern": "^block\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "claimIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^claim\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+      }
+    },
+    "sourceClaimRef": {
+      "type": "object",
+      "required": ["claimId", "location"],
+      "properties": {
+        "claimId": {
+          "type": "string",
+          "pattern": "^claim\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+        },
+        "location": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "referenceBlock": {
+      "type": "object",
+      "required": ["id", "type", "claimIds", "text"],
+      "properties": {
+        "id": { "$ref": "#/$defs/blockId" },
+        "type": { "const": "reference" },
+        "claimIds": { "$ref": "#/$defs/claimIds" },
+        "text": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "experienceBlock": {
+      "type": "object",
+      "required": ["id", "type", "claimIds", "experienceId"],
+      "properties": {
+        "id": { "$ref": "#/$defs/blockId" },
+        "type": { "enum": ["interactive", "exploratory", "trainer"] },
+        "claimIds": { "$ref": "#/$defs/claimIds" },
+        "experienceId": {
+          "type": "string",
+          "pattern": "^experience\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "encyclopediaBlock": {
+      "type": "object",
+      "required": ["id", "type", "claimIds", "text"],
+      "properties": {
+        "id": { "$ref": "#/$defs/blockId" },
+        "type": { "const": "encyclopedia" },
+        "claimIds": { "$ref": "#/$defs/claimIds" },
+        "text": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "block": {
+      "oneOf": [
+        { "$ref": "#/$defs/referenceBlock" },
+        { "$ref": "#/$defs/experienceBlock" },
+        { "$ref": "#/$defs/encyclopediaBlock" }
+      ]
+    },
+    "subject": {
+      "type": "object",
+      "required": ["recordType", "id", "title", "collection", "revision"],
+      "properties": {
+        "recordType": { "const": "subject" },
+        "id": {
+          "type": "string",
+          "pattern": "^subject\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+        },
+        "title": { "type": "string", "minLength": 1 },
+        "collection": { "enum": ["manual", "encyclopedia"] },
+        "revision": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "manualEntry": {
+      "type": "object",
+      "required": [
+        "recordType",
+        "id",
+        "title",
+        "collection",
+        "subjectIds",
+        "objective",
+        "applicability",
+        "revision",
+        "maturity",
+        "claimIds",
+        "sourceIds",
+        "experienceIds",
+        "blocks"
+      ],
+      "properties": {
+        "recordType": { "const": "manualEntry" },
+        "id": {
+          "type": "string",
+          "pattern": "^manual\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+        },
+        "title": { "type": "string", "minLength": 1 },
+        "collection": { "enum": ["manual", "encyclopedia"] },
+        "subjectIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^subject\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+          }
+        },
+        "objective": { "type": "string", "minLength": 1 },
+        "prerequisiteIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/stableId" }
+        },
+        "applicability": { "$ref": "#/$defs/applicability" },
+        "revision": { "type": "integer", "minimum": 1 },
+        "maturity": { "$ref": "#/$defs/maturity" },
+        "validation": { "$ref": "#/$defs/validation" },
+        "publication": { "$ref": "#/$defs/publication" },
+        "release": { "$ref": "#/$defs/release" },
+        "claimIds": { "$ref": "#/$defs/claimIds" },
+        "sourceIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^source\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+          }
+        },
+        "experienceIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^experience\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+          }
+        },
+        "blocks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/block" }
+        }
+      },
+      "allOf": [{ "$ref": "#/$defs/versionedContent" }],
+      "additionalProperties": false
+    },
+    "claim": {
+      "type": "object",
+      "required": [
+        "recordType",
+        "id",
+        "revision",
+        "statement",
+        "evidenceClass",
+        "applicability",
+        "sourceIds",
+        "resolution"
+      ],
+      "properties": {
+        "recordType": { "const": "claim" },
+        "id": {
+          "type": "string",
+          "pattern": "^claim\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+        },
+        "revision": { "type": "integer", "minimum": 1 },
+        "statement": { "type": "string", "minLength": 1 },
+        "evidenceClass": {
+          "enum": [
+            "verified fact/procedure",
+            "aircraft-specific",
+            "simulator-specific",
+            "simplified educational model",
+            "unresolved"
+          ]
+        },
+        "applicability": { "$ref": "#/$defs/applicability" },
+        "sourceIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^source\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+          }
+        },
+        "resolution": { "enum": ["unresolved", "resolved"] }
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "recordType",
+        "id",
+        "revision",
+        "title",
+        "publisher",
+        "edition",
+        "location",
+        "accessedOn",
+        "rights",
+        "claimRefs"
+      ],
+      "properties": {
+        "recordType": { "const": "source" },
+        "id": {
+          "type": "string",
+          "pattern": "^source\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+        },
+        "revision": { "type": "integer", "minimum": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "publisher": { "type": "string", "minLength": 1 },
+        "edition": { "type": "string", "minLength": 1 },
+        "publishedOn": { "type": ["string", "null"], "format": "date" },
+        "location": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "format": "uri" },
+        "accessedOn": { "type": "string", "format": "date" },
+        "rights": {
+          "type": "object",
+          "required": ["status", "notes"],
+          "properties": {
+            "status": {
+              "enum": ["permitted", "restricted", "unknown", "synthetic"]
+            },
+            "notes": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false
+        },
+        "claimRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/sourceClaimRef" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "experience": {
+      "type": "object",
+      "required": [
+        "recordType",
+        "id",
+        "title",
+        "revision",
+        "version",
+        "manualEntryId",
+        "objective",
+        "prerequisiteIds",
+        "applicability",
+        "inputSchema",
+        "modelVersion",
+        "claimIds",
+        "maturity"
+      ],
+      "properties": {
+        "recordType": { "const": "experience" },
+        "id": {
+          "type": "string",
+          "pattern": "^experience\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+        },
+        "title": { "type": "string", "minLength": 1 },
+        "revision": { "type": "integer", "minimum": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "manualEntryId": {
+          "type": "string",
+          "pattern": "^manual\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+        },
+        "objective": { "type": "string", "minLength": 1 },
+        "prerequisiteIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/stableId" }
+        },
+        "applicability": { "$ref": "#/$defs/applicability" },
+        "inputSchema": { "type": "object" },
+        "modelVersion": { "type": "string", "minLength": 1 },
+        "claimIds": { "$ref": "#/$defs/claimIds" },
+        "maturity": { "$ref": "#/$defs/maturity" },
+        "validation": { "$ref": "#/$defs/validation" },
+        "publication": { "$ref": "#/$defs/publication" },
+        "release": { "$ref": "#/$defs/release" }
+      },
+      "allOf": [{ "$ref": "#/$defs/versionedContent" }],
+      "additionalProperties": false
+    }
+  }
+}

@@ -9,7 +9,8 @@ Nothing in this repository is approved operational aviation guidance.
 ## Start here
 
 1. [Agent instructions](AGENTS.md)
-2. [Vision](docs/vision.md) and [content catalogue](docs/content-catalogue.md)
+2. [Vision](docs/vision.md), [content catalogue](docs/content-catalogue.md) and
+   [content/experience contracts](docs/content-contracts.md)
 3. [Solo development workflow](docs/development.md) — assign a scoped issue; agents handle routine decisions and status
 4. [Architecture proposal](docs/architecture.md) and [decisions](docs/decisions/README.md)
 5. [Content standards](docs/content-standards.md) and [provisional design](docs/design-system.md)
