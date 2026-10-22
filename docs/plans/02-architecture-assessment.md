@@ -1,5 +1,10 @@
 # Architecture assessment — issue #2
 
+Historical assessment. The candidate/spike/final-ADR approval sequence below is
+superseded by the [solo workflow](../development.md) and updated
+[decision note](../decisions/0001-content-first-architecture.md). Comparison and
+validation ideas remain useful; an unaccepted ADR does not block assigned work.
+
 Assessed: 22 October 2026 (Australia/Melbourne). Status: recommendation awaiting
 independent review and human decision. Foundation PR #9 is merged. This report
 does not install packages, run a framework spike or author aviation guidance.

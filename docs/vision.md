@@ -43,6 +43,6 @@ Deployment planning uses GitHub Actions and the owner's private Windows 11 Docke
 server; delivery and access-control details remain proposed in [deployment](deployment.md).
 
 Decisions still needed: authoritative source editions
-and reuse rights, qualified reviewers, stack acceptance, search approach, preview
+and reuse rights, qualified reviewers, search approach, preview
 access control and eventual progress persistence. Resolve through scoped issues
 and ADRs rather than adding implied requirements.

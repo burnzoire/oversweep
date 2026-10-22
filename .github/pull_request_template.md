@@ -11,7 +11,7 @@ Excluded work:
 ## Evidence at revision
 
 - [ ] Self-review of complete diff
-- [ ] Independent review: reviewer/context, revision, findings and disposition
+- [ ] Review: self-review; fresh review for substantive changes, or disclose unavailability
 - [ ] Required automated checks: commands and results
 - [ ] Applicable visual verification: viewports/flows/artifacts, or reason N/A
 - [ ] Source mapping and qualified human technical review, or reason N/A
