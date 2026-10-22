@@ -3,8 +3,10 @@
 A subject-centric, NATOPS-inspired aviation reference for understanding concepts,
 learning procedures and practising practical knowledge. Intended domain: oversweep.com.
 
-**Phase: planning and foundation.** No website, trainers or hosting exist here yet.
-Nothing in this repository is approved operational aviation guidance.
+**Phase: application foundation.** A local Astro application and source-gated
+development exercise are implemented. The Case III prototype has not been
+audited, and the synthetic preview is not a Case III trainer or approved
+operational aviation guidance. No hosting or deployment is configured.
 
 ## Start here
 
@@ -21,7 +23,40 @@ First vertical slice: the existing [Case III carrier trainer](https://case-three
 Deployment planning: GitHub Actions and a private Windows 11 Docker server;
 see [delivery proposal](docs/deployment.md).
 
-## Check this foundation
+## Run and verify the application
+
+Use Node.js 22.23.4 or newer in the 22.x line and npm 10.
+
+```sh
+npm ci
+npm run dev
+```
+
+The local development site exposes a synthetic arithmetic exercise from both
+Naval Operations and the Training Library. It is not a reproduction of the
+inaccessible prototype and does not simulate or assess Case III procedures.
+Production builds fail closed: records without resolved evidence, current
+qualified validation, rights, accessibility review, and publication approval
+are omitted.
+
+```sh
+npm run check
+npx playwright install chromium
+npm run test:browser
+python3 scripts/check_docs.py
+```
+
+`npm run check` runs Astro diagnostics, TypeScript, schema/registry and model
+tests, and a static production build. The browser suite uses local Chromium;
+CI installs its system dependencies and runs the same checks.
+
+The implementation still needs the owner-authorised prototype export and its
+provenance (creator/source, revision/export date, assets, dependencies, included
+third-party material, and reuse permissions), lawful access to applicable
+primary publications for exact edition/section/page mapping, and a qualified
+technical reviewer. Do not upload restricted manuals or assets without rights.
+
+## Documentation foundation check
 
 Run `python3 scripts/check_docs.py` using Python 3.11 or newer; no third-party
 dependencies are required. CI runs the same check. It checks repository structure,

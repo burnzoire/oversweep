@@ -1,6 +1,8 @@
 # Working technical architecture
 
-Status: working default; no application dependencies or framework scaffold installed.
+Status: working default; the first Astro + TypeScript + React application
+foundation is now implemented with locked dependencies. The Case III experience
+remains source-gated and excluded from production output.
 See [ADR 0001](decisions/0001-content-first-architecture.md).
 The [issue #2 assessment](plans/02-architecture-assessment.md) records the official
 documentation comparison, state/content boundaries and unexecuted local spike plan.
@@ -13,10 +15,10 @@ The table evaluates fit, not benchmark results or guarantees about current relea
 | Next.js + React | Candidate if server features or application-wide state become central | Static export is possible; server features introduce optional runtime complexity |
 | Vite + React SPA | Simple cohesive interactive application | Requires separate decisions for prerendered content and search indexing |
 
-Recommend validating Astro with structured Markdown/MDX lessons, schema-validated
-data records and TypeScript model packages. Confirm against official framework
-documentation and implementation checks when needed; no versions are selected
-here. A separate architecture spike is optional. No backend or account system is justified yet.
+Use Astro with structured content, schema-validated data records and TypeScript
+model packages. The implementation records locked package versions in
+`package.json`/`package-lock.json`; a separate architecture spike is optional.
+No backend or account system is justified yet.
 
 ## Separation and contracts
 
@@ -32,8 +34,9 @@ here. A separate architecture spike is optional. No backend or account system is
 - Platform adapters: search index, optional versioned local progress storage and
   future analytics; adapters must not become prerequisites for reading.
 
-Proposed future paths: src/content, src/models, src/components, src/experiences
-and src/platform. These are boundaries to validate, not directories to create now.
+Current boundaries: `src/content`, `src/models`, `src/components`, `src/pages`
+and `src/platform`. The initial implementation uses a single React root for the
+local synthetic exercise and pure model/storage modules.
 See the [proposed content and experience contract](content-contracts.md) and its
 example schema/records. Content metadata covers the fields in content standards,
 stable IDs, cross-references, block dependencies and validation revision. Keep
@@ -47,11 +50,11 @@ A search backend is deferred until evidence warrants it.
 Optional local progress needs schema versions, reset/export behaviour and graceful
 handling of unavailable storage; no sign-in gate or cross-device guarantee.
 
-When application implementation is assigned, add locked dependencies, formatting, lint/type checks, schema
-validation, model unit/reference-case tests, component checks, production build and
-Playwright flows. Check keyboard, reduced motion and representative desktop/tablet/
-mobile layouts. Assess bundle size and render performance against measured budgets
-before setting numerical thresholds.
+The initial implementation locks dependencies and supplies Astro/type/schema,
+model and registry tests, a static production build, and Playwright browser flows.
+The project has no configured formatter/linter yet. Browser checks cover keyboard,
+reduced motion, and representative desktop/tablet/mobile layouts. Assess bundle
+size and render performance against measured budgets before setting thresholds.
 
 Private PR previews require explicit access-control and hosting decisions. Treat
 private repository visibility as distinct from preview visibility. Until approved,
@@ -71,7 +74,8 @@ complete its audit and integration plan before importing it.
 ## Assessment sources
 
 Initial documentation check: 22 October 2026. These support capability assessment,
-not a selected version or measured performance claim. Recheck during implementation.
+not a measured performance claim. Recheck when framework capabilities or package
+versions change.
 
 - [Astro islands](https://docs.astro.build/en/concepts/islands/): selective interactive components.
 - [Astro content collections](https://docs.astro.build/en/guides/content-collections/): structured content.

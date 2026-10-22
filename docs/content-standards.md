@@ -63,10 +63,12 @@ Deterministic test fixtures must distinguish exact expectations from approximati
 | Published | Validation retained, accessibility/visual checks passed, explicit publication approval and actual release |
 
 Maturity belongs to each content revision, independent of issue status.
-Unvalidated material must be visibly marked and excluded from any future published
-validated-content index by default. Add a machine-enforced publication gate when
-content tooling is implemented. AI prose remains Drafted at most without evidence
-and human review. CI cannot certify factual correctness.
+Unvalidated material must be visibly marked and excluded from published
+validated-content outputs by default. The initial application gate excludes
+records without resolved sourced claims, permitted rights, matching qualified
+and accessibility review, and explicit approval. Missing or invalid evidence
+still means exclusion. AI prose remains Drafted at most without evidence and
+human review. CI cannot certify factual correctness.
 
 Define acronyms on first use; use consistent terminology and step numbering.
 Keep standard procedures separate from aircraft and simulator notes. Make source

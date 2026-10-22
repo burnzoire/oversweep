@@ -139,6 +139,11 @@ export function validateRegistry(records: readonly ContentRecord[]) {
       }
     }
   };
+  const requireReferences = (ownerId: string, references: string[]) => {
+    for (const id of references) {
+      if (!ids.has(id)) errors.push(`${ownerId} references missing record ${id}`);
+    }
+  };
 
   const experiences = records.filter(
     (record) => record.recordType === "experience",
@@ -147,20 +152,39 @@ export function validateRegistry(records: readonly ContentRecord[]) {
   for (const record of records) {
     const owner = record.id;
     if (record.recordType === "manualEntry") {
+      requireReferences(owner, strings(field(record, "prerequisiteIds")));
       requireKind(owner, strings(field(record, "subjectIds")), "subject");
       requireKind(owner, strings(field(record, "claimIds")), "claim");
       requireKind(owner, strings(field(record, "sourceIds")), "source");
       requireKind(owner, strings(field(record, "experienceIds")), "experience");
+      for (const claimId of strings(field(record, "claimIds"))) {
+        const claim = ids.get(claimId);
+        for (const sourceId of claim
+          ? strings(field(claim, "sourceIds"))
+          : []) {
+          if (!strings(field(record, "sourceIds")).includes(sourceId)) {
+            errors.push(`${owner} does not link source ${sourceId} for ${claimId}`);
+          }
+        }
+      }
       const linked = strings(field(record, "experienceIds")).sort();
       const blocks = field(record, "blocks");
-      const blockIds = Array.isArray(blocks)
-        ? blocks.flatMap((block) =>
-            block && typeof block === "object" && "experienceId" in block
-              ? [String(block.experienceId)]
-              : [],
+      const blockRecords = Array.isArray(blocks)
+        ? blocks.filter(
+            (block): block is Record<string, unknown> =>
+              Boolean(block) && typeof block === "object",
           )
         : [];
-      if (linked.join("|") !== blockIds.sort().join("|")) {
+      const blockIds = blockRecords.flatMap((block) =>
+        typeof block.id === "string" ? [block.id] : [],
+      );
+      const blockExperienceIds = blockRecords.flatMap((block) =>
+        typeof block.experienceId === "string" ? [block.experienceId] : [],
+      );
+      if (new Set(blockIds).size !== blockIds.length) {
+        errors.push(`${owner} has duplicate block IDs`);
+      }
+      if (linked.join("|") !== blockExperienceIds.sort().join("|")) {
         errors.push(`${owner} experience links and blocks do not agree`);
       }
       for (const block of Array.isArray(blocks) ? blocks : []) {
@@ -176,6 +200,7 @@ export function validateRegistry(records: readonly ContentRecord[]) {
     }
 
     if (record.recordType === "experience") {
+      requireReferences(owner, strings(field(record, "prerequisiteIds")));
       requireKind(owner, [String(field(record, "manualEntryId"))], "manualEntry");
       requireKind(owner, strings(field(record, "claimIds")), "claim");
       const manual = ids.get(String(field(record, "manualEntryId")));
@@ -184,6 +209,14 @@ export function validateRegistry(records: readonly ContentRecord[]) {
         !strings(field(manual, "experienceIds")).includes(record.id)
       ) {
         errors.push(`${owner} is not linked by its manual entry`);
+      }
+      for (const claimId of strings(field(record, "claimIds"))) {
+        if (
+          manual &&
+          !strings(field(manual, "claimIds")).includes(claimId)
+        ) {
+          errors.push(`${owner} claim ${claimId} is not linked by its manual entry`);
+        }
       }
     }
 
@@ -224,16 +257,6 @@ export function validateRegistry(records: readonly ContentRecord[]) {
     }
   }
 
-  for (const experience of experiences) {
-    const manual = ids.get(String(field(experience, "manualEntryId")));
-    if (
-      manual &&
-      !strings(field(manual, "experienceIds")).includes(experience.id)
-    ) {
-      errors.push(`${manual.id} does not link to ${experience.id}`);
-    }
-  }
-
   const isEligible = (record: ContentRecord): boolean => {
     if (errors.length > 0) return false;
     const publication = field(record, "publication");
@@ -265,6 +288,27 @@ export function validateRegistry(records: readonly ContentRecord[]) {
 
     const claimIds = strings(field(record, "claimIds"));
     if (claimIds.length === 0) return false;
+    const recordSourceIds = strings(field(record, "sourceIds"));
+    if (
+      !recordSourceIds.every((sourceId) => {
+        const source = ids.get(sourceId);
+        const rights = source && field(source, "rights");
+        return (
+          source !== undefined &&
+          rights !== undefined &&
+          rights !== null &&
+          typeof rights === "object" &&
+          "status" in rights &&
+          rights.status === "permitted"
+        );
+      })
+    ) {
+      return false;
+    }
+    if (record.recordType === "experience") {
+      const manual = ids.get(String(field(record, "manualEntryId")));
+      if (!manual || !isEligible(manual)) return false;
+    }
     return claimIds.every((claimId) => {
       const claim = ids.get(claimId);
       if (

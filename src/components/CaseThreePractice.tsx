@@ -78,6 +78,14 @@ export default function CaseThreePractice() {
     setStorageIssue(result.issue ?? "");
   }
 
+  function resetSession() {
+    setAngle("90");
+    setRate("3");
+    setEstimate("");
+    setAssessment(null);
+    setFeedback("");
+  }
+
   return (
     <div className="practice" data-hydrated={hydrated}>
       <div className="notice notice--warning" role="note">
@@ -137,9 +145,19 @@ export default function CaseThreePractice() {
               required
             />
           </label>
-          <button type="submit" disabled={!hydrated}>
-            Check arithmetic
-          </button>
+          <div className="practice__actions">
+            <button type="submit" disabled={!hydrated}>
+              Check arithmetic
+            </button>
+            <button
+              type="button"
+              className="button--secondary"
+              onClick={resetSession}
+              disabled={!hydrated}
+            >
+              Reset exercise
+            </button>
+          </div>
         </form>
 
         <p className="feedback" aria-live="polite" role="status">

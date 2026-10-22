@@ -73,6 +73,18 @@ describe("local debrief storage", () => {
     expect(current.entries[0]?.id).toBe("run-1");
   });
 
+  it("rejects stored entries outside the model's input domain", () => {
+    const storage = memoryStorage();
+    storage.setItem(
+      DEBRIEF_STORAGE_KEY,
+      JSON.stringify([{ ...entry, angleDeg: 400 }]),
+    );
+    expect(readDebrief(storage)).toMatchObject({
+      entries: [],
+      issue: "Some saved debrief entries could not be read.",
+    });
+  });
+
   it("clears the saved history", () => {
     const storage = memoryStorage();
     saveDebrief(storage, entry);

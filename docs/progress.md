@@ -71,7 +71,9 @@ above are historical; live issues are authoritative. Issue #2 is selected next
 following the owner's instruction. Its [architecture assessment](plans/02-architecture-assessment.md)
 now supplies the working architecture; formal ADR acceptance is no longer required.
 Tracking/control setup #8 remains separate; its outstanding settings do not prevent
-this documentation assessment. No application or deployment work is authorised.
+this documentation assessment. The owner subsequently authorised end-to-end
+implementation in issue #20, superseding the planning-only scope of #5–#7; this
+does not waive source, rights, technical-review, or publication gates.
 
 ## Copilot profile follow-up
 

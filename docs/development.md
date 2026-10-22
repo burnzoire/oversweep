@@ -26,11 +26,14 @@ Local technical experiments can be part of an authorised implementation task;
 there is no separate spike approval process.
 
 Work on a fresh branch from current main. Self-review the diff and run relevant
-checks on the final revision. For this phase use `python3 scripts/check_docs.py`.
-Later implementation adds lint/type/schema, model/component, production-build and
-browser checks as appropriate. Record what passed and any skipped checks/reasons.
-UI changes need representative desktop/tablet/mobile and keyboard verification;
-model changes need independent numerical cases and boundary/error tests.
+checks on the final revision. Documentation changes use
+`python3 scripts/check_docs.py`. Application changes additionally use `npm ci`,
+`npm run check`, and `npm run test:browser` after installing Chromium with
+`npx playwright install chromium`; CI runs documentation, type/schema, model,
+production-build, and browser checks. Record what passed and any skipped
+checks/reasons. UI changes need representative desktop/tablet/mobile and keyboard
+verification; model changes need independent numerical cases and boundary/error
+tests.
 
 Request fresh-context agent review for substantive code, models and workflow
 changes. Give the reviewer the issue, diff/revision and evidence, not a desired

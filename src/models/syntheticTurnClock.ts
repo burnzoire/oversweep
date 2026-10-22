@@ -21,13 +21,28 @@ const failure = (code: string, message: string): ModelResult<never> => ({
   error: { code, message },
 });
 
-export function calculateSyntheticTurnTime({
-  angleDeg,
-  rateDegPerSecond,
-}: SyntheticTurnClockInput): ModelResult<number> {
-  if (!Number.isFinite(angleDeg) || !Number.isFinite(rateDegPerSecond)) {
+function readInput(input: unknown): ModelResult<SyntheticTurnClockInput> {
+  if (!input || typeof input !== "object" || Array.isArray(input)) {
+    return failure("invalid-input", "Input must be an object.");
+  }
+  const { angleDeg, rateDegPerSecond } =
+    input as Partial<SyntheticTurnClockInput>;
+  if (
+    typeof angleDeg !== "number" ||
+    typeof rateDegPerSecond !== "number" ||
+    !Number.isFinite(angleDeg) ||
+    !Number.isFinite(rateDegPerSecond)
+  ) {
     return failure("non-finite-input", "Inputs must be finite numbers.");
   }
+  return { ok: true, value: { angleDeg, rateDegPerSecond } };
+}
+
+export function calculateSyntheticTurnTime(input: unknown): ModelResult<number> {
+  const parsed = readInput(input);
+  if (!parsed.ok) return parsed;
+  const { angleDeg, rateDegPerSecond } = parsed.value;
+
   if (angleDeg < 0 || angleDeg > 360) {
     return failure("angle-out-of-range", "Angle must be between 0° and 360°.");
   }
@@ -43,29 +58,41 @@ export function calculateSyntheticTurnTime({
 }
 
 export function assessSyntheticTurnTime(
-  input: SyntheticTurnClockInput & { estimateSeconds: number },
+  input: unknown,
 ): ModelResult<SyntheticTurnClockAssessment> {
-  if (!Number.isFinite(input.estimateSeconds) || input.estimateSeconds < 0) {
+  if (!input || typeof input !== "object" || Array.isArray(input)) {
+    return failure("invalid-input", "Input must be an object.");
+  }
+  const estimateSeconds = (input as { estimateSeconds?: unknown })
+    .estimateSeconds;
+  if (
+    typeof estimateSeconds !== "number" ||
+    !Number.isFinite(estimateSeconds) ||
+    estimateSeconds < 0
+  ) {
     return failure(
       "invalid-estimate",
       "Estimate must be a finite, non-negative number of seconds.",
     );
   }
 
-  const calculation = calculateSyntheticTurnTime(input);
+  const modelInput = readInput(input);
+  if (!modelInput.ok) return modelInput;
+  const calculation = calculateSyntheticTurnTime(modelInput.value);
   if (!calculation.ok) return calculation;
 
-  const absoluteErrorSeconds = Math.abs(
-    input.estimateSeconds - calculation.value,
-  );
+  const { angleDeg, rateDegPerSecond } = modelInput.value;
+  const absoluteErrorSeconds = Math.abs(estimateSeconds - calculation.value);
   const roundingAllowance =
     Number.EPSILON *
-    Math.max(1, Math.abs(input.estimateSeconds), calculation.value);
+    Math.max(1, Math.abs(estimateSeconds), calculation.value);
   const passed = absoluteErrorSeconds <= 0.001 + roundingAllowance;
   return {
     ok: true,
     value: {
-      ...input,
+      angleDeg,
+      rateDegPerSecond,
+      estimateSeconds,
       expectedSeconds: calculation.value,
       absoluteErrorSeconds,
       passed,

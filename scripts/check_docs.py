@@ -6,6 +6,14 @@ import sys
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
+IGNORED_DIRS = {
+    ".git",
+    "node_modules",
+    "dist",
+    ".astro",
+    "playwright-report",
+    "test-results",
+}
 REQUIRED = (
     "README.md", "AGENTS.md", "docs/vision.md", "docs/content-catalogue.md",
     "docs/content-standards.md", "docs/architecture.md", "docs/design-system.md",
@@ -28,7 +36,7 @@ for name in REQUIRED:
         errors.append(f"Missing required file: {name}")
 files = sorted(
     p for p in ROOT.rglob("*")
-    if p.is_file() and ".git" not in p.relative_to(ROOT).parts
+    if p.is_file() and not IGNORED_DIRS.intersection(p.relative_to(ROOT).parts)
     and p.suffix in {".md", ".py", ".yml"}
 )
 for path in files:

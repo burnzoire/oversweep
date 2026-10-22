@@ -9,6 +9,7 @@ async function openPractice(page: import("@playwright/test").Page) {
     "data-hydrated",
     "true",
   );
+  await expect(page.locator("astro-dev-toolbar")).toHaveCount(0);
 }
 
 test.beforeEach(async ({ page }) => {
@@ -90,6 +91,36 @@ test("incorrect estimates receive explanatory feedback", async ({ page }) => {
   await expect(page.getByText("Review", { exact: true })).toBeVisible();
 });
 
+test("rejects a zero synthetic angular rate", async ({ page }) => {
+  await openPractice(page);
+  await page.getByLabel("Constant rate (degrees per second)").fill("0");
+  await page.getByLabel("Your estimated elapsed time (seconds)").fill("30");
+  await page.getByRole("button", { name: "Check arithmetic" }).click();
+  await expect(page.getByRole("status")).toContainText(
+    "Rate must be greater than 0°/s",
+  );
+});
+
+test("reset clears the current exercise but preserves its debrief", async ({
+  page,
+}) => {
+  await openPractice(page);
+  await page.getByLabel("Your estimated elapsed time (seconds)").fill("31");
+  await page.getByRole("button", { name: "Check arithmetic" }).click();
+  await expect(page.getByRole("status")).toContainText("Recheck");
+
+  await page.getByRole("button", { name: "Reset exercise" }).click();
+  await expect(
+    page.getByLabel("Swept angle (degrees)"),
+  ).toHaveValue("90");
+  await expect(
+    page.getByLabel("Your estimated elapsed time (seconds)"),
+  ).toHaveValue("");
+  await expect(
+    page.getByRole("list", { name: "Synthetic exercise debrief history" }),
+  ).toContainText("arithmetic result 30.000 s");
+});
+
 test("shows a useful result when browser storage is unavailable", async ({
   page,
 }) => {
@@ -150,6 +181,23 @@ test("long debrief remains in normal document flow at mobile, tablet, and deskto
     expect(dimensions.content).toBeLessThanOrEqual(dimensions.viewport);
     await expect(history.getByRole("listitem").last()).toBeVisible();
   }
+  await page.evaluate(() => {
+    document.documentElement.style.zoom = "200%";
+  });
+  const zoomedDimensions = await page.evaluate(() => ({
+    viewport: document.documentElement.clientWidth,
+    content: document.documentElement.scrollWidth,
+  }));
+  expect(zoomedDimensions.content).toBeLessThanOrEqual(
+    zoomedDimensions.viewport,
+  );
+  await expect(history.getByRole("listitem").last()).toBeVisible();
+  const touchTargetHeights = await page
+    .locator(".site-nav a, .practice__form input, .practice__actions button")
+    .evaluateAll((elements) =>
+      elements.map((element) => element.getBoundingClientRect().height),
+    );
+  expect(touchTargetHeights.every((height) => height >= 44)).toBe(true);
 });
 
 test("respects reduced-motion browser preference", async ({ page }) => {
@@ -160,4 +208,23 @@ test("respects reduced-motion browser preference", async ({ page }) => {
       window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     ),
   ).toBe(true);
+});
+
+test("keeps the explanation available without JavaScript", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto(`http://127.0.0.1:4321${experiencePath}`);
+  await expect(
+    page.getByRole("heading", {
+      name: "Local synthetic exercise — not Case III guidance",
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/elapsed seconds equal swept degrees divided/),
+  ).toBeVisible();
+  await expect(page.getByText(/Interactive controls require JavaScript/)).toBeVisible();
+  await expect(
+    page.getByRole("spinbutton", { name: "Swept angle (degrees)" }),
+  ).toHaveCount(0);
+  await context.close();
 });

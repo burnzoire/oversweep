@@ -1,5 +1,4 @@
 ---
-import CaseThreePractice from "../../components/CaseThreePractice";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { registry, registryValidation } from "../../content/registry";
 
@@ -29,8 +28,11 @@ const showPractice =
 >
   <article>
     <p>
-      <a href="/manual/naval-operations/">Manual — Naval Operations</a> /
-      <a href="/training/">Training Library</a> / {experience.title}
+      <a href="/manual/naval-operations/">Manual — Naval Operations</a>
+      {" / "}
+      <a href="/training/">Training Library</a>
+      {" / "}
+      {experience.title}
     </p>
     <h1>{experience.title}</h1>
     <p>
@@ -40,7 +42,33 @@ const showPractice =
     <p class="content-status">Outlined — not technically validated · excluded from publication</p>
     {
       showPractice ? (
-        <CaseThreePractice client:load />
+        <>
+          <div id="local-practice-root">
+            <div class="notice notice--warning" role="note">
+              <h2>Local synthetic exercise — not Case III guidance</h2>
+              <p>
+                The prototype export, behavior, rights, and procedural
+                applicability have not been audited. This independent arithmetic
+                illustration is not a Case III sequence, hold, marshal timeline,
+                aircraft model, or operational timing reference.
+              </p>
+              <p>
+                For this example only, elapsed seconds equal swept degrees divided
+                by constant degrees per second. No flight or simulator procedure
+                is represented.
+              </p>
+            </div>
+            <p>
+              Interactive controls require JavaScript; this explanation and its
+              limitations remain available without it.
+            </p>
+          </div>
+          <script
+            is:inline
+            type="module"
+            src="/src/dev-preview.tsx"
+          ></script>
+        </>
       ) : (
         <div class="notice notice--warning" role="note">
           <h2>Experience unavailable</h2>

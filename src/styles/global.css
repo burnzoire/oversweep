@@ -74,6 +74,9 @@ button:disabled {
   top: 0.5rem;
   left: 0.5rem;
   z-index: 10;
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
   padding: 0.5rem 0.75rem;
   transform: translateY(-200%);
   background: #fff;
@@ -114,6 +117,12 @@ button:disabled {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem 1.25rem;
+}
+
+.site-nav a {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
 }
 
 .site-main {
@@ -165,6 +174,12 @@ button:disabled {
   max-width: 36rem;
   gap: 1rem;
   margin-block: 1.5rem;
+}
+
+.practice__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 .practice__form label {

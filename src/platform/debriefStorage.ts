@@ -24,11 +24,18 @@ function isDebriefEntry(value: unknown): value is DebriefEntry {
   const entry = value as Partial<DebriefEntry>;
   return (
     typeof entry.id === "string" &&
+    entry.id.length > 0 &&
     typeof entry.createdAt === "string" &&
+    Number.isFinite(Date.parse(entry.createdAt)) &&
     Number.isFinite(entry.angleDeg) &&
+    Number(entry.angleDeg) >= 0 &&
+    Number(entry.angleDeg) <= 360 &&
     Number.isFinite(entry.rateDegPerSecond) &&
+    Number(entry.rateDegPerSecond) > 0 &&
     Number.isFinite(entry.estimateSeconds) &&
+    Number(entry.estimateSeconds) >= 0 &&
     Number.isFinite(entry.expectedSeconds) &&
+    Number(entry.expectedSeconds) >= 0 &&
     typeof entry.passed === "boolean"
   );
 }

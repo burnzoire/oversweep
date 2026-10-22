@@ -25,15 +25,15 @@ Every record ID must be unique across the registry. Block IDs are stable and
 unique within their owning entry. References use IDs, not copied records or
 display labels.
 
-The schema checks individual record shape. A future content validator must also
-check registry-wide invariants: unique record and entry-local block IDs; every
-subject, claim, source, prerequisite, manual-entry and experience reference
-resolves; manual-entry and experience links agree in both directions; each
-source's affected-claim list agrees with claims that cite it, with a precise
-source location for each mapping; every claim used by a block is linked from its
-containing entry; review and accessibility revisions equal the current revision;
-and every eligible record satisfies the publication policy below.
-These checks are not implemented by this documentation task.
+The schema checks individual record shape. The initial registry validator in
+[`src/content/registry.ts`](../src/content/registry.ts) additionally checks
+record-ID uniqueness, required subject/claim/source/experience links, two-way
+manual-entry/experience relationships, block/claim links, and source/claim
+locations. Publication eligibility also requires current qualified and
+accessibility review, approved publication, resolved claims, and permitted
+source rights. Prerequisite-cycle checks and validation of emitted routes,
+search data, manifests, and assets remain future work; current generated output
+is separately tested to omit the source-gated Case III record.
 
 ## Applicability, evidence and revision
 
@@ -121,9 +121,9 @@ assessment rules.
 
 ## Scope and checks
 
-These examples define documentation contracts only. They do not select a
-framework version, implement a schema validator, create application folders,
-author bulk content, validate aviation claims, or approve publication. When
-content tooling is authorised, validation must cover JSON Schema shape,
-registry links and publication exclusion; tests must prove ineligible records
-are absent from generated routes, search data, manifests and emitted assets.
+These example records remain contract fixtures, not authored aviation content.
+The application uses the schema and implements first-pass registry validation
+and publication exclusion; that tooling does not validate aviation claims or
+approve publication. Tests must keep ineligible records out of routes and
+emitted assets; search data and manifests are future outputs and must use the
+same eligibility policy if added.

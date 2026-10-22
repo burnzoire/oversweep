@@ -27,6 +27,11 @@ describe("synthetic constant-rate turn clock", () => {
   });
 
   it.each([
+    [null, "invalid-input"],
+    ["invalid", "invalid-input"],
+    [[], "invalid-input"],
+    [{ angleDeg: "90", rateDegPerSecond: 3 }, "non-finite-input"],
+    [{ angleDeg: 90 }, "non-finite-input"],
     [{ angleDeg: -1, rateDegPerSecond: 3 }, "angle-out-of-range"],
     [{ angleDeg: 361, rateDegPerSecond: 3 }, "angle-out-of-range"],
     [{ angleDeg: 90, rateDegPerSecond: 0 }, "rate-not-positive"],
@@ -78,4 +83,11 @@ describe("synthetic constant-rate turn clock", () => {
       ).toMatchObject({ ok: false, error: { code: "invalid-estimate" } });
     },
   );
+
+  it("rejects missing assessment input", () => {
+    expect(assessSyntheticTurnTime(null)).toMatchObject({
+      ok: false,
+      error: { code: "invalid-input" },
+    });
+  });
 });

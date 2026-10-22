@@ -1,8 +1,9 @@
 # Case III prototype integration plan — issue #6
 
-Status: planning proposal; no application implementation or prototype import is
-authorised by this document. Snapshot: 22 October 2026. The selected subject
-remains the owner's Case III Tomcat trainer; this plan does not establish
+Status: planning input for delivery issue #20. The owner explicitly authorised
+the end-to-end implementation scope in #20; its assignment supersedes the
+planning-only boundary recorded here. Snapshot: 22 October 2026. The selected
+subject remains the owner's Case III Tomcat trainer; this plan does not establish
 prototype behavior, source rights, procedural accuracy or technical validation.
 
 ## Inputs and readiness
@@ -161,10 +162,12 @@ gates:
 
 ## Follow-on authorization and remaining decisions
 
-After this plan is reviewed and approved, open a separate implementation issue;
-do not implement under #6. It should authorize only the selected Case III slice
-and use the gates above as acceptance criteria. Do not merge, deploy, publish or
-configure hosting without the applicable explicit approval.
+Historical planning boundary: when this plan was written, implementation required
+a separate authorization after plan review. The owner subsequently created issue
+#20 with explicit end-to-end delivery scope, so no additional issue or plan
+approval is required. That authorization does not waive source, rights, primary
+evidence, or qualified technical-review gates. Do not merge, deploy, publish, or
+configure hosting without applicable explicit approval.
 
 The owner/source holder must still provide the export and provenance/rights
 information. Issue #7 must complete the audit; primary-source editions and

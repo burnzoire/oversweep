@@ -147,4 +147,17 @@ describe("content registry", () => {
     );
     expect(result.eligibleExperiences).toEqual([]);
   });
+
+  it("requires entry source and claim links to cover the canonical experience", () => {
+    const records = publishableRegistry().map((record) => ({ ...record }));
+    const entry = records.find(
+      (record) => record.recordType === "manualEntry",
+    );
+    if (entry) entry.sourceIds = [];
+    const result = validateRegistry(records);
+    expect(result.errors).toContain(
+      "manual.test-entry does not link source source.test-reference for claim.test-fact",
+    );
+    expect(result.eligibleExperiences).toEqual([]);
+  });
 });
