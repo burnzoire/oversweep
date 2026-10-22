@@ -2,6 +2,9 @@
 
 Status: proposal; no application dependencies or framework scaffold installed.
 See [ADR 0001](decisions/0001-content-first-architecture.md).
+The [issue #2 assessment](plans/02-architecture-assessment.md) records the official
+documentation comparison, state/content boundaries and unexecuted local spike plan.
+Recommendation retained; human stack acceptance remains pending.
 The table evaluates fit, not benchmark results or guarantees about current releases.
 
 | Option | Fit | Tradeoff |
