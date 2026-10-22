@@ -1,0 +1,52 @@
+---
+import SiteLayout from "../../../layouts/SiteLayout.astro";
+import { registry, registryValidation } from "../../../content/registry";
+
+const manualEntry = registry.find(
+  (record) => record.id === "manual.case-three-tomcat",
+);
+const experience = registry.find(
+  (record) => record.id === "experience.case-three-tomcat",
+);
+const showLocalPreview =
+  import.meta.env.DEV &&
+  Boolean(manualEntry && experience) &&
+  registryValidation.errors.length === 0;
+---
+
+<SiteLayout
+  title="Naval Operations"
+  description="Naval Operations subject entry in the Oversweep Manual."
+>
+  <article>
+    <p><a href="/">Manual</a> / Naval Operations</p>
+    <h1>Naval Operations</h1>
+    <p>
+      Carrier operations are a proposed subject in the Manual. Claims and
+      experiences appear in publication only after their source, review, and
+      accessibility gates are satisfied.
+    </p>
+
+    {showLocalPreview && manualEntry && experience ? (
+      <section aria-labelledby="case-three-heading">
+        <h2 id="case-three-heading">{manualEntry.title}</h2>
+        <p>
+          Content maturity: <strong>Outlined — not technically validated</strong>.
+          Publication status: <strong>excluded</strong>.
+        </p>
+        <p>
+          Prototype behavior, rights, aircraft/simulator applicability, and
+          procedural references remain unresolved. The local link opens a
+          clearly labeled synthetic arithmetic exercise, not an audited trainer.
+        </p>
+        <a
+          href={`/experiences/${experience.id.replace("experience.", "")}/`}
+        >
+          Open local development preview
+        </a>
+      </section>
+    ) : (
+      <p>No source-reviewed carrier experience is currently available.</p>
+    )}
+  </article>
+</SiteLayout>

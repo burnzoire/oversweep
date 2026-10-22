@@ -1,0 +1,40 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <title>{title} | Oversweep</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="site-brand" href="/">Oversweep</a>
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href="/manual/naval-operations/">Manual</a>
+          <a href="/training/">Training Library</a>
+        </nav>
+      </div>
+    </header>
+    <main class="site-main" id="main-content" tabindex="-1">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="site-footer__inner">
+        Educational reference scaffold. Not approved operational aviation guidance.
+      </div>
+    </footer>
+  </body>
+</html>

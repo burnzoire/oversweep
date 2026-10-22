@@ -1,0 +1,55 @@
+---
+import CaseThreePractice from "../../components/CaseThreePractice";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { registry, registryValidation } from "../../content/registry";
+
+export function getStaticPaths() {
+  const candidates = import.meta.env.DEV
+    ? registry.filter((record) => record.recordType === "experience")
+    : registryValidation.eligibleExperiences;
+  return candidates.map((experience) => ({
+    params: { slug: experience.id.replace("experience.", "") },
+    props: { experience },
+  }));
+}
+
+const { experience } = Astro.props;
+const manualEntry = registry.find(
+  (record) => record.id === experience.manualEntryId,
+);
+const showPractice =
+  import.meta.env.DEV &&
+  experience.id === "experience.case-three-tomcat" &&
+  registryValidation.errors.length === 0;
+---
+
+<SiteLayout
+  title={String(experience.title)}
+  description="A local-only, source-gated development preview."
+>
+  <article>
+    <p>
+      <a href="/manual/naval-operations/">Manual — Naval Operations</a> /
+      <a href="/training/">Training Library</a> / {experience.title}
+    </p>
+    <h1>{experience.title}</h1>
+    <p>
+      Canonical experience: <code>{experience.id}</code>
+      {manualEntry && <> · Manual entry: <code>{manualEntry.id}</code></>}
+    </p>
+    <p class="content-status">Outlined — not technically validated · excluded from publication</p>
+    {
+      showPractice ? (
+        <CaseThreePractice client:load />
+      ) : (
+        <div class="notice notice--warning" role="note">
+          <h2>Experience unavailable</h2>
+          <p>
+            This record is excluded because required source, review, and
+            publication evidence is missing.
+          </p>
+        </div>
+      )
+    }
+  </article>
+</SiteLayout>

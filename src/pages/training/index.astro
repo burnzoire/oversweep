@@ -1,0 +1,51 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { registry, registryValidation } from "../../content/registry";
+
+const experiences = registry.filter(
+  (record) => record.recordType === "experience",
+);
+const showLocalPreview =
+  import.meta.env.DEV && registryValidation.errors.length === 0;
+---
+
+<SiteLayout
+  title="Training Library"
+  description="Index of canonical Oversweep interactive experiences."
+>
+  <article>
+    <p><a href="/">Collections</a> / Training Library</p>
+    <h1>Training Library</h1>
+    <p>
+      The library indexes canonical experience records; it does not duplicate
+      trainer implementations.
+    </p>
+    {showLocalPreview ? (
+      <ul>
+        {
+          experiences.map((experience) => (
+            <li>
+              <h2>{experience.title}</h2>
+              <p>
+                Content maturity: <strong>Outlined — not technically validated</strong>.
+                Publication status: <strong>excluded</strong>.
+              </p>
+              <p>
+                The prototype source, rights, applicability, and procedural
+                evidence are unresolved. The local preview is synthetic and is
+                not a Case III trainer.
+              </p>
+              <a
+                href={`/experiences/${experience.id.replace("experience.", "")}/`}
+              >
+                Open local development preview
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    ) : (
+      <p>No experiences currently meet the publication requirements.</p>
+    )}
+  </article>
+</SiteLayout>
