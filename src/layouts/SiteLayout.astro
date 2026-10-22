@@ -13,10 +13,18 @@ interface Props {
   activeSection: "manual" | "encyclopedia" | "training" | "home";
   activeSubject?: string;
   isSectionIndex?: boolean;
+  isHomePage?: boolean;
   breadcrumbs?: Breadcrumb[];
 }
 
-const { title, activeSection, activeSubject, isSectionIndex = false, breadcrumbs = [] } = Astro.props;
+const {
+  title,
+  activeSection,
+  activeSubject,
+  isSectionIndex = false,
+  isHomePage = false,
+  breadcrumbs = [],
+} = Astro.props;
 const sections = [
   { id: "manual", label: "Manual", path: "manual/" },
   { id: "encyclopedia", label: "Encyclopedia", path: "encyclopedia/" },
@@ -41,7 +49,7 @@ const pageTitle = `${title} | Oversweep`;
           class="brand"
           href={sitePath()}
           aria-label="Oversweep home"
-          aria-current={activeSection === "home" ? "page" : undefined}
+          aria-current={isHomePage ? "page" : undefined}
         >
           <span class="brand-name">OVERSWEEP</span>
           <span class="brand-tagline">The Interactive Flight Reference</span>

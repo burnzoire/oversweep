@@ -74,6 +74,7 @@ for (const filename of htmlFiles) {
   const relativePage = path.relative(output, filename).split(path.sep).join("/");
   const isSectionIndex = /^(manual|encyclopedia|training)\/index\.html$/.test(relativePage);
   assert.equal(currentPrimaryLinks, Number(isSectionIndex), `${relativePage} should mark only its exact primary destination current`);
+  assert.equal(/<a class="brand"[^>]*aria-current="page"/.test(html), relativePage === "index.html", `${relativePage} should mark only the home destination current`);
 
   const attributes = html.matchAll(/\b(?:href|src|poster)="([^"]+)"/g);
   for (const [, value] of attributes) {
