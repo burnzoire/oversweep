@@ -61,3 +61,11 @@ Published. Definitions and validation regression rules are in content standards.
 The bootstrap issue remains In Review until authorised merge. Other work remains
 Backlog until its stated dependencies are met. This table is a starting index;
 live issues are authoritative for changing work status.
+
+## Copilot profile follow-up
+
+[#12](https://github.com/burnzoire/oversweep/issues/12) tracks the owner's authorised
+planner/implementer/reviewer scaffolding. See [profile usage](copilot-agents.md).
+Profiles do not automate issue transitions or complete repository controls #8.
+Review, CI and owner runtime discovery evidence are tracked in the issue/PR;
+adding files does not establish live Copilot availability.

@@ -2,6 +2,8 @@
 
 Use existing agent sessions, fresh-context reviewers, Issues, PRs and Actions.
 No custom coordinator or unattended merge loop is needed.
+Optional [Copilot role profiles](copilot-agents.md) provide planner, implementer
+and reviewer entry points with manual handoffs. Shared rules remain in AGENTS.md.
 
 | Stage | Required action and evidence |
 | --- | --- |
