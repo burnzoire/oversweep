@@ -7,7 +7,8 @@
     "build": "astro build",
     "check": "npm run test:case-iii && astro check && tsc --noEmit && npm run build && node scripts/check_site.mjs && node scripts/check_case_iii_site.mjs",
     "test:case-iii": "node tests/case-iii/model.cjs && node tests/case-iii/sortie.cjs",
-    "check:review": "astro build --base /oversweep && node scripts/check_case_iii_site.mjs --review --base=/oversweep"
+    "check:review": "astro build --base /oversweep && node scripts/check_case_iii_site.mjs --review --base=/oversweep",
+    "check:dev": "node scripts/check_case_iii_dev.mjs"
   },
   "license": "MIT",
   "private": true,

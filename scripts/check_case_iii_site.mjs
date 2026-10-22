@@ -4,9 +4,10 @@ import path from 'node:path';
 const review = process.argv.includes('--review');
 const base = (process.argv.find(a=>a.startsWith('--base='))?.slice(7) ?? '').replace(/\/$/,'');
 const route = 'manual/naval-operations/case-iii/index.html';
-const assets = ['index.html','app.js','style.css','model.cjs','embed.js'];
+const assets = ['app.js','style.css','model.cjs','embed.js'];
 const exists = async file => stat(path.join('dist',file)).then(s=>s.isFile(),()=>false);
 assert.equal(await exists(route),review,'draft route is emitted only for explicit review');
+assert.equal(await exists('review/case-iii/index.html'),review);
 for (const asset of assets) assert.equal(await exists(`review/case-iii/${asset}`),review,asset);
 const manual = await readFile('dist/manual/naval-operations/index.html','utf8');
 const library = await readFile('dist/training/index.html','utf8');
@@ -17,7 +18,7 @@ for (const html of [manual,library]) {
 }
 if (review) {
   const html = await readFile(path.join('dist',route),'utf8');
-  assert(html.includes(`src="${base}/review/case-iii/index.html"`));
+  assert(html.includes(`src="${base}/review/case-iii/"`));
   assert(html.includes('Drafted — not technically validated'));
   const trainer = await readFile('dist/review/case-iii/index.html','utf8');
   for (const asset of assets.filter(a=>a!=='index.html')) assert(trainer.includes(`"${asset}"`));

@@ -18,9 +18,9 @@ export function getStaticPaths() { return reviewTrainers ? [{ params: { trainer:
   <h2>Scope and limits</h2>
   <p>Aircraft dynamics, AoA, fuel consumption, glidepath and arrestment are synthetic. Hold entry is automatic; a fixed six-minute circuit and amended EATs simplify timing. This is not a full cockpit or approved operating procedure. The exact DCS version has not been verified. Radio dialogue and scoring tolerances remain inherited prototype content, pending claim-by-claim aviation review.</p>
   <p>CV NATOPS, 31 July 2009, §6.4.1.1 (p. 6-6) describes a six-minute racetrack. The implementation uses two-minute half-turns and one-minute legs. §6.4.4 (p. 6-8) requires adjusting the pattern to depart at EAT; variable-leg timing is not implemented here.</p>
-  <p><a href={sitePath(caseIII.assets) + 'index.html'}>Open trainer in a full window</a> · <a href="#sources">Sources and unresolved review</a></p>
+  <p><a href={sitePath(caseIII.assets)}>Open trainer in a full window</a> · <a href="#sources">Sources and unresolved review</a></p>
   <noscript><p>The trainer requires JavaScript. Scope notes and source references remain readable without it.</p></noscript>
-  <iframe id="case-iii-frame" title="Case III Tomcat procedure trainer — unvalidated review" src={sitePath(caseIII.assets) + 'index.html'} height="1000" allow="autoplay" data-experience-id={caseIII.id}></iframe>
+  <iframe id="case-iii-frame" title="Case III Tomcat procedure trainer — unvalidated review" src={sitePath(caseIII.assets)} height="1000" allow="autoplay" data-experience-id={caseIII.id}></iframe>
   <h2 id="sources">Sources and unresolved review</h2>
   <p>References identify the prototype’s inputs; they do not certify the procedures or grant rights to reproduce manuals. No manual files or third-party media are included.</p>
   <ul>

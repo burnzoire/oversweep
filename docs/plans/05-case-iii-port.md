@@ -132,9 +132,16 @@ Validation on Node.js 22.23.4:
 - `python3 scripts/check_docs.py`: passed (30 text files).
 - Independent fresh-context coding review: model derivation/source comparison
   and regression tests passed; findings corrected (standalone draft notice,
-  explicit `index.html` URL, output-exclusion assertions). Re-review reported no
+  output-exclusion assertions). Re-review reported no
   remaining actionable code defects. This does not certify aviation accuracy.
-- Application CI adds the same review-build checks. No Pages deployment change.
+- Follow-up development-route regression: reproduced the iframe 404 missed by
+  generated-output checks. The trainer HTML is now an Astro page; script/style
+  endpoints have explicit file extensions. `npm run check:dev` starts Astro via
+  its API and requests the real wrapper/frame/four assets at `/` and `/oversweep/`,
+  checks HTTP status and MIME types, and rejects unknown assets. This passes;
+  it is HTTP integration coverage, not browser execution or visual QA.
+- Application CI adds development HTTP and review-build checks. No Pages
+  deployment change.
  Browser/speech/keyboard/viewport checks have not been run
 in this Work session: browser preview infrastructure is unavailable. Source and
 VM checks are not substitutes for visual/accessibility or qualified aviation

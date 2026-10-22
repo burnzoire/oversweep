@@ -29,6 +29,8 @@ jobs:
         run: python3 scripts/check_docs.py
       - name: Check application
         run: npm run check
+      - name: Check trainer development HTTP routes
+        run: npm run check:dev
       - name: Check local-review trainer and Pages base path
         env:
           OVERSWEEP_REVIEW_TRAINERS: '1'
