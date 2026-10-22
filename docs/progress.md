@@ -88,3 +88,11 @@ planner/implementer/reviewer scaffolding. See [profile usage](copilot-agents.md)
 Profiles do not automate issue transitions or complete repository controls #8.
 Review, CI and owner runtime discovery evidence are tracked in the issue/PR;
 adding files does not establish live Copilot availability.
+
+## GitHub Pages hosting change
+
+22 October 2026: owner requested GitHub Pages instead of the Windows Docker host.
+The [deployment configuration](deployment.md) replaces the mechanism assessed by
+historical issue #10. A manual main-only Pages workflow is prepared; app integration
+(PR #21), account entitlement, repository Pages settings, first release and DNS
+remain pending. No deployment or issue completion is claimed.

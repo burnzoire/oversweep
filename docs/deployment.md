@@ -1,98 +1,92 @@
-# Deployment proposal: GitHub Actions to private Windows Docker host
+# Deployment: GitHub Pages
 
-Status: Proposed delivery mechanism. Product-owner constraints: GitHub Actions
-(GHA), an existing private server running Windows 11 with Docker, and intended
-domain oversweep.com. No server connection, workflow, credentials, registry package,
-runner, ingress or deployment has been configured by this planning task.
+Status: GitHub Pages replaces the Windows 11 Docker hosting proposal at the owner's
+request on 22 October 2026. The workflow is configured in this PR; no site has been
+published and repository Pages settings/account entitlement have not been verified.
+The application scaffold is being developed separately in PR #21.
 
-## Recommendation
+## Delivery
 
-Build and test on GitHub-hosted Linux runners, package the selected site's output
-as a Linux container image and store an immutable release in private GHCR.
-Promote an explicitly approved image digest to Docker Compose on the private host.
-Keep source builds and PR execution away from that host.
+Use static Astro output on GitHub Pages. No Docker image, GHCR package, private
+server or self-hosted runner is needed. The repository stays private; the deployed
+website is public. A personal private repository requires GitHub Pro (or another
+eligible plan); do not make the repository public to work around unavailable Pages.
 
-For the first deployment, recommend an owner-invoked host-side pull/recreate
-operation. This gives a small, reviewable baseline without a persistent Actions
-runner on the server. Once unattended delivery is wanted, assess a dedicated
-deploy-only self-hosted runner executing trusted release jobs. The image/digest
-contract remains the same whichever transport is selected. This is a recommendation,
-not permission to publish an image or deploy.
+The [Pages workflow](../.github/workflows/pages.yml) is manually dispatched from
+main. Merging a PR does not publish anything. An owner-invoked dispatch is the
+release action; do not invoke it as part of feature work. Other branches are
+skipped, and PRs receive no deployment permissions or public previews.
 
-Assumption: Docker on this Windows 11 host can run Linux containers, likely through
-Docker Desktop/WSL 2. That setup, CPU architecture and unattended startup are not
-verified. Native Windows containers would need a different image/runtime decision.
-For a static build, the image can serve compiled files through a small web server;
-if the accepted stack needs a runtime, revise the image and health-check contract.
+The build job uses a GitHub-hosted Linux runner, Node 22, the committed npm lockfile,
+foundation checks and the application's required `npm run check`. It then removes
+previous output and builds Astro for the URL returned by configure-pages. Only
+`dist/` is uploaded; never upload the repository, documentation or a development
+preview build. The deploy job alone receives Pages write and OIDC permissions.
+Actions are pinned to commit SHAs; releases are serialized without cancellation.
 
-## Delivery options
+## Application integration contract
 
-| Mechanism | Benefits | Costs / decision |
-| --- | --- | --- |
-| GHA builds private GHCR image; owner pulls approved digest on host | Small initial setup; no inbound management access or general CI runner on server | Manual release action; recommended initial baseline |
-| GHA builds image; dedicated self-hosted deployment runner pulls digest | Automated delivery using outbound GitHub connectivity; no public SSH required | Runner executes commands with Docker/host authority; isolate and restrict to trusted release workflows |
-| GitHub-hosted deploy job reaches host through private network/SSH | No persistent Actions runner on host | Adds network, key and Windows remote-management setup; assess only if such access already exists |
+The first-slice PR must provide `package-lock.json`, `astro.config.mjs`, static
+output to `dist/`, and `npm run check` covering types, registry/content publication
+exclusion and model tests. Production build must fail on invalid content and
+exclude unapproved experiences and assets. The workflow fails clearly until the
+scaffold is merged; it does not publish a placeholder from repository files.
 
-Do not auto-update a mutable latest tag or install a polling updater that silently
-bypasses explicit release approval. No custom orchestration service is needed.
-A self-hosted runner is an optional delivery executor, never the PR build runner.
-Labels alone are routing, not an access-control boundary: assess repository/write
-access, runner groups where supported and workflow-edit permissions. Use a separate
-deployment repository/runner boundary if required to enforce that separation.
-Windows runners can execute Docker CLI commands, but Docker container actions and
-Actions service containers require a Linux runner; do not assume a native Windows
-runner supports those job features.
+Astro receives `--site` and `--base` from Pages metadata. Default project hosting
+uses `https://burnzoire.github.io/oversweep/` with base `/oversweep`; a configured
+custom domain uses its origin and root base. Use `import.meta.env.BASE_URL` for
+internal navigation, public assets, fetch URLs and search paths. Astro does not
+rewrite hard-coded root-relative links automatically.
 
-## Proposed release contract
+Before the first release, test the production build at both `/oversweep/` and
+`/`: direct nested navigation, refresh, images, JS hydration, trainer/debrief,
+search and 404 behavior. Pages serves static files and has no application-server
+fallback. Generate real routes; do not rely on an SPA rewrite. Verify production
+output excludes source-gated content. The separate scaffold PR has not been
+validated with this workflow.
 
-1. Validate the approved commit using the required tests, build and content gates.
-   PR validation does not receive registry-push or production access.
-2. With explicit release/build authorisation, build once on a trusted GitHub-hosted
-   runner. Use narrowly scoped workflow permissions: contents read and packages
-   write only in the publishing job. Use GITHUB_TOKEN for that job, pin actions
-   and base images, record source commit, workflow run and resulting image digest.
-3. Keep the GHCR package private and verify access settings independently of the
-   repository's visibility. The host uses a separately stored read:packages
-   credential for private pulls; no source-write or package-write credential is
-   needed for the host. Keep credentials out of Compose files and logs.
-4. Record human approval of the exact digest and target. Use environment approval
-   rules if supported by the account/private-repository plan. GitHub limits these
-   features by plan; do not claim a required-reviewer gate exists without checking.
-   If unavailable, keep owner-invoked promotion with approval recorded in the issue.
-5. Pull that digest, retain the previous release/configuration, update the Compose
-   service, verify container health and exercise the page/trainer through its real
-   ingress. Serialize releases to avoid overlapping updates.
-6. Record deployed digest, source commit, approver and smoke-test results. On failed
-   health/smoke checks restore the previous digest/configuration and verify again.
-   Retain rollback images; define registry retention before pruning.
+## First release and domain setup
 
-Compose replacement can briefly interrupt service; zero-downtime delivery is not
-promised. Rehearse rollback and Windows reboot recovery before calling the host
-production-ready. Confirm Docker/backend availability without interactive login,
-service/restart policy, firewall/port bindings and storage/backup needs. Container
-restart policies alone do not prove the engine starts after a Windows reboot.
+1. Merge the application scaffold and this configuration after review. Confirm
+   an eligible GitHub plan and the production content/build checks.
+2. In repository **Settings → Pages**, choose **GitHub Actions** as the source.
+   The current connector cannot change Pages settings. Review the
+   `github-pages` environment's branch policy to allow main only; optional
+   reviewer gates depend on plan availability and are not claimed here.
+3. In **Actions → Deploy GitHub Pages → Run workflow**, select main. Check the
+   build/deploy jobs and use the deployment URL reported by the run. Initially
+   expect `https://burnzoire.github.io/oversweep/`; it is not a live URL yet.
+4. Once the intended spelling is confirmed, set the custom domain in Pages
+   settings, for example `www.oversweep.com`. The owner's message said
+   `www.oversleep.com`; no domain has been set on that assumption.
+5. Set DNS record `CNAME www → burnzoire.github.io` at the DNS provider.
+   The target excludes `https://` and `/oversweep/`. Configure the domain in
+   GitHub before changing DNS. A CNAME file is unnecessary for Actions publishing.
+6. Run the workflow again to rebuild using custom-domain metadata. After DNS and
+   certificate provisioning complete, enable **Enforce HTTPS** and check the
+   site, nested routes and assets at the custom domain.
 
-## Access and implementation decisions
+DNS changes remain owner-managed. No DNS credentials, PAT or custom deployment
+secret is required by this workflow. Domain verification through GitHub is
+recommended before binding the custom domain.
 
-Confirm Docker backend and CPU architecture, current Compose/reverse-proxy setup,
-network reachability (including NAT/CGNAT), TLS/DNS handling, monitoring and owner
-operations preferences. Hosting on a private machine is separate from public
-access: public oversweep.com and private previews need explicit routing/access
-decisions. Do not change DNS, open ports or enable tunnels during planning.
+## Release verification and rollback
 
-Next deliverable: a reviewed server inventory and delivery decision recorded in
-the issue or PR, selecting manual
-promotion or deploy-only runner, a credential/approval plan, Compose/release
-contract, smoke tests, rollback and reboot test plan. Only then author deployment
-workflows/configuration in a separately authorised task.
+Record the workflow run URL, source SHA, deployed URL and observed smoke-test
+results. Confirm the homepage, nested references, experience entry points,
+hydration and content exclusion through the live URL. A successful deployment
+job alone does not establish application behavior or aviation validity.
+
+To roll back, revert the offending application change through a reviewed PR,
+merge it, then dispatch the workflow on main. Do not dispatch an arbitrary
+branch or assume that rerunning an old job restores the current domain setup.
+Keep the prior successful run/commit recorded. Publication requirements in
+[content standards](content-standards.md) still apply.
 
 ## Primary documentation
 
-Assessed 22 October 2026; verify account entitlements and installed versions before implementation.
+Checked 22 October 2026.
 
-- [GitHub image publishing](https://docs.github.com/en/actions/tutorials/publish-packages/publish-docker-images)
-- [GHCR authentication and visibility](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry)
-- [Self-hosted runner requirements](https://docs.github.com/en/actions/reference/runners/self-hosted-runners)
-- [Runner security](https://docs.github.com/en/actions/reference/security/secure-use)
-- [Environment and approval availability](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments)
-- [Docker Desktop WSL 2 backend](https://docs.docker.com/desktop/features/wsl/)
+- [GitHub Pages custom workflows and plan availability](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)
+- [Custom domain and DNS setup](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site)
+- [Astro on GitHub Pages and base paths](https://docs.astro.build/en/guides/deploy/github/)
