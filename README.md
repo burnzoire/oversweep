@@ -15,6 +15,10 @@ Nothing in this repository is approved operational aviation guidance.
 5. [Content standards](docs/content-standards.md) and [provisional design](docs/design-system.md)
 6. [Roadmap](docs/plans/00-roadmap.md) and [tracking setup](docs/progress.md)
 
+First vertical slice: the existing [Case III carrier trainer](https://case-three-tomcat.burnzoire.chatgpt.site/).
+Deployment planning: GitHub Actions and a private Windows 11 Docker server;
+see [delivery proposal](docs/deployment.md).
+
 ## Check this foundation
 
 Run `python3 scripts/check_docs.py` using Python 3.11 or newer; no third-party

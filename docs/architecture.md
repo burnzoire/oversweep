@@ -53,11 +53,16 @@ Private PR previews require explicit access-control and hosting decisions. Treat
 private repository visibility as distinct from preview visibility. Until approved,
 use local verification; never enable public previews or deployment by default.
 
+Deployment target: GitHub Actions delivering to the owner's private Windows 11
+Docker server. See the [deployment proposal](deployment.md) for delivery options,
+Linux-container assumptions, approval and rollback. No deployment is configured.
+
 ## Decision gates
 
 Accept stack ADR before application scaffolding. Approve content schema before
 bulk authoring. Approve source/reviewer and numerical cases before validating
-aviation content. Select first slice before importing the Case III prototype.
+aviation content. The first slice is the owner's Case III Tomcat prototype;
+complete its audit and integration plan before importing it.
 
 ## Assessment sources
 

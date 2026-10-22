@@ -52,10 +52,11 @@ Published. Definitions and validation regression rules are in content standards.
 | [#2 — Assess and approve the application architecture](https://github.com/burnzoire/oversweep/issues/2) | M1 | Backlog |
 | [#3 — Define the content and experience contracts](https://github.com/burnzoire/oversweep/issues/3) | M1 | Backlog |
 | [#4 — Review responsive manual design direction](https://github.com/burnzoire/oversweep/issues/4) | M1 | Backlog |
-| [#5 — Select and research the first vertical slice](https://github.com/burnzoire/oversweep/issues/5) | M2 | Backlog |
-| [#6 — Plan the first vertical-slice implementation](https://github.com/burnzoire/oversweep/issues/6) | M2 | Backlog |
-| [#7 — Audit the existing Case III prototype for later integration](https://github.com/burnzoire/oversweep/issues/7) | M3 | Backlog |
+| [#5 — Research and scope the Case III carrier trainer slice](https://github.com/burnzoire/oversweep/issues/5) | M2 | Backlog |
+| [#6 — Plan Case III prototype integration](https://github.com/burnzoire/oversweep/issues/6) | M2 | Backlog |
+| [#7 — Audit the Case III prototype for the first vertical slice](https://github.com/burnzoire/oversweep/issues/7) | M2 | Backlog |
 | [#8 — Configure private tracking and repository review controls](https://github.com/burnzoire/oversweep/issues/8) | M0 | Backlog |
+| [#10 — Assess GHA delivery to the Windows 11 Docker server](https://github.com/burnzoire/oversweep/issues/10) | M1 | Backlog |
 
 The bootstrap issue remains In Review until authorised merge. Other work remains
 Backlog until its stated dependencies are met. This table is a starting index;

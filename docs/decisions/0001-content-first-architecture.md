@@ -17,7 +17,9 @@ See the comparison in [architecture](../architecture.md).
 
 Validate Astro + TypeScript, structured Markdown/MDX and schema-validated data;
 use pure model functions and reusable experience contracts independent of renderer.
-Do not install dependencies or commit to a hosting provider in this task.
+Do not install dependencies or configure hosting in this task. Deployment planning
+uses GitHub Actions and the owner's private Windows 11 Docker server; delivery
+mechanism and ingress remain proposals in [deployment](../deployment.md).
 
 ## Consequences
 
@@ -32,4 +34,5 @@ one proposed content/experience contract, test and accessibility strategy,
 dependency/maintenance assessment and human stack approval. No prototype
 implementation is authorised by this ADR alone.
 
-Open: stack acceptance, package versions, search library, first slice and hosting.
+The first slice is selected: the owner's Case III Tomcat carrier trainer.
+Open: stack acceptance, package versions, search library, delivery mechanism and ingress.

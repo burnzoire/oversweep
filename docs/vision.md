@@ -27,8 +27,10 @@ pages within one content system. The Training Library indexes embedded experienc
 it does not duplicate their content or define a second application.
 
 Initial subjects and examples are proposals in the catalogue, not promised releases.
-Case III has an existing prototype to assess and integrate later; it has not been
-imported, inspected or certified by this foundation task.
+The first vertical slice is the existing [Case III Tomcat carrier trainer](https://case-three-tomcat.burnzoire.chatgpt.site/),
+selected by the product owner. Assess and integrate it under Naval Operations,
+with a linked Training Library entry. Its source, procedures and models still need
+review; this foundation has not imported or certified the prototype.
 
 ## Boundaries and open questions
 
@@ -37,7 +39,10 @@ manuals or instructor judgement with agent-generated content.
 No accounts, backend service, paid access, telemetry, multiplayer features,
 public hosting or custom agent coordinator are required by this foundation.
 
-Decisions still needed: first vertical-slice subject, authoritative source editions
+Deployment planning uses GitHub Actions and the owner's private Windows 11 Docker
+server; delivery and access-control details remain proposed in [deployment](deployment.md).
+
+Decisions still needed: authoritative source editions
 and reuse rights, qualified reviewers, stack acceptance, search approach, preview
 access control and eventual progress persistence. Resolve through scoped issues
 and ADRs rather than adding implied requirements.

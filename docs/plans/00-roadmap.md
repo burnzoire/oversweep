@@ -2,29 +2,48 @@
 
 Milestones are proposed outcomes, not dates or completion estimates.
 Live issue links are maintained in [progress](../progress.md).
-No application implementation is authorised by this bootstrap PR.
+No application implementation or deployment is authorised by this bootstrap PR.
 
 | Milestone | Exit evidence | Initial work |
 | --- | --- | --- |
 | M0 — Foundation | Documentation/CI reviewed and merged by human; tracking configured or gaps explicit | Bootstrap and repository controls |
-| M1 — Architecture and design | Accepted stack ADR, content contract, reviewed responsive design proposal | Architecture assessment, content schema, design |
-| M2 — First vertical slice | One selected subject end-to-end, sourced and technically reviewed; tests and browser evidence | Slice/source selection, then separate implementation authorisation |
-| M3 — Reuse and integration | Shared experience contract proven; prototype audit and integration plan accepted | Case III prototype assessment after M2 learning |
+| M1 — Architecture and design | Accepted stack ADR, content contract, reviewed responsive design and deployment proposals | Architecture assessment, content schema, design, Windows Docker delivery plan |
+| M2 — Case III carrier trainer vertical slice | Existing prototype integrated into one sourced manual/trainer slice; technical review, model tests and browser evidence complete | Prototype audit, integration plan, separately authorised implementation |
+| M3 — Reuse and expansion | Reusable experience contract proven from Case III; next subject selected using findings | Extract reusable components and prioritise subsequent subjects |
 
-## Sequencing
+## Selected first slice
 
-M0 review can proceed now. M1 planning depends on accepted foundation; keep issues
-Backlog until dependencies and scope are confirmed. Select a narrow first slice
-using source availability, reviewer availability and educational value. Bullseye
-or turn geometry are candidates, not decisions. Do not default to implementing
-all six flagship subjects.
+The product owner selected the existing
+[Case III Tomcat carrier trainer](https://case-three-tomcat.burnzoire.chatgpt.site/).
+Integrate it within Naval Operations and index the same experience in the Training
+Library. Do not replace this choice with a Bullseye or turn-geometry starter.
 
-For each implementation issue, write an individual numbered plan only when the
-work is Ready. Include acceptance criteria, source/rights risks, model reference
-cases where relevant, exclusions, test/browser plan and rollback considerations.
+Issue #7 audits the prototype early, before #5 research/gap assessment and #6
+integration planning conclude. Obtain the source/export and provenance; the hosted
+URL is a reference, not a substitute for source code or proof of technical accuracy.
+The site could not be retrieved through the research tool during this update;
+its current behaviour and implementation have not been verified.
 
-After the first-slice plan is approved, create a separate, explicitly authorised
-implementation issue using that plan's acceptance criteria. Issue #6 delivers
-the plan only; M2 cannot exit until the follow-up implementation, technical review,
-automated checks and browser verification are complete. No implementation issue
-is pre-authorised by the bootstrap backlog.
+Review applicable NATOPS editions, procedural/timing models, radio exchanges,
+assessment feedback and usability. Check previously reported hold-turn timing
+and debrief/log scrolling as regression candidates, not established defects in
+the current prototype. Audit before deciding what to reuse or refactor.
+
+After #6's integration plan is approved, create a separately authorised
+implementation issue with its acceptance criteria. M2 requires completed
+implementation, qualified technical review, automated checks and browser evidence;
+planning or a source import alone does not complete it.
+
+## Deployment sequencing
+
+GitHub Actions and the owner's private Windows 11 Docker server are the planned
+build/delivery setting. [Deployment proposal](../deployment.md) compares image
+delivery mechanisms and approval boundaries. Complete delivery assessment in M1;
+create a separate implementation issue after mechanism approval. Publishing images,
+installing a runner, configuring ingress and deploying remain separately authorised
+actions. A private server does not decide whether oversweep.com will be publicly
+accessible or whether previews are private.
+
+For each Ready implementation issue, write a numbered plan covering scope,
+acceptance criteria, sources/rights, independent model reference cases, exclusions,
+test/browser plan and rollback. No artificial dates or completion percentages.
