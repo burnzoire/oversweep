@@ -44,8 +44,11 @@ summary:focus-visible {
 .skip-link {
   position: absolute;
   z-index: 2;
+  display: flex;
+  align-items: center;
   top: 0.5rem;
   left: 0.5rem;
+  min-height: 2.75rem;
   padding: 0.5rem 0.75rem;
   transform: translateY(-160%);
   background: #fff;
@@ -79,7 +82,9 @@ summary:focus-visible {
 
 .brand {
   display: grid;
+  align-content: center;
   gap: 0.1rem;
+  min-height: 2.75rem;
   color: inherit;
   line-height: 1.25;
   text-decoration: none;
@@ -138,6 +143,18 @@ summary:focus-visible {
   color: var(--color-muted);
   list-style: none;
   font-size: 0.9rem;
+}
+
+.breadcrumbs li {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+}
+
+.breadcrumbs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
 }
 
 .breadcrumbs li + li::before {
@@ -274,6 +291,9 @@ h2 {
 }
 
 .collection-card a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
   margin-top: auto;
   font-weight: 700;
 }
@@ -286,6 +306,12 @@ h2 {
 .subject-list li {
   break-inside: avoid;
   margin-block: 0.25rem;
+}
+
+.subject-list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
 }
 
 .site-footer {
@@ -305,6 +331,12 @@ h2 {
   margin: 0;
   color: var(--color-muted);
   font-size: 0.9rem;
+}
+
+.footer-inner > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
 }
 
 @media (min-width: 40rem) {

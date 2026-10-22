@@ -69,6 +69,11 @@ assert.ok(htmlFiles.length >= requiredRoutes.length, "all catalogue routes shoul
 for (const filename of htmlFiles) {
   const html = await readFile(filename, "utf8");
   assert.doesNotMatch(html, /CaseThreePractice|case-three-tomcat/i, "trainer implementation must not ship");
+  const primaryNav = html.match(/<nav class="primary-nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1] ?? "";
+  const currentPrimaryLinks = [...primaryNav.matchAll(/aria-current="page"/g)].length;
+  const relativePage = path.relative(output, filename).split(path.sep).join("/");
+  const isSectionIndex = /^(manual|encyclopedia|training)\/index\.html$/.test(relativePage);
+  assert.equal(currentPrimaryLinks, Number(isSectionIndex), `${relativePage} should mark only its exact primary destination current`);
 
   const attributes = html.matchAll(/\b(?:href|src|poster)="([^"]+)"/g);
   for (const [, value] of attributes) {
