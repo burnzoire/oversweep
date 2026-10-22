@@ -21,7 +21,7 @@ First slice delivery task: [#20](https://github.com/burnzoire/oversweep/issues/2
 combines research, audit, planning, implementation, tests and review in one issue.
 
 First vertical slice: the existing [Case III carrier trainer](https://case-three-tomcat.burnzoire.chatgpt.site/).
-Deployment: static GitHub Pages via a manually triggered GitHub Actions workflow;
+Deployment: static GitHub Pages via GitHub Actions on pushes to main, with manual dispatch available;
 see [setup and release instructions](docs/deployment.md). The site has not yet been
 published.
 
