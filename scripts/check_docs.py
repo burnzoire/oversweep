@@ -46,9 +46,9 @@ for path in files:
         # Repository convention: JSON values on one line are a YAML subset.
         # Fail closed on other YAML syntax; this is not a general YAML parser.
         try:
-            marker, header, markdown_body = body.split("---\n", 2)
-            if marker:
+            if not body.startswith("---\n"):
                 raise ValueError("frontmatter must start at first line")
+            header, markdown_body = body[4:].split("\n---\n", 1)
             fields = {}
             for line in header.splitlines():
                 key, value = line.split(":", 1)
