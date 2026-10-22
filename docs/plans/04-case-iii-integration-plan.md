@@ -1,5 +1,11 @@
 # Case III prototype integration plan — issue #6
 
+Historical planning input. Its separate plan approval/follow-on issue sequence is
+superseded by [delivery issue #20](https://github.com/burnzoire/oversweep/issues/20)
+and the [one-task workflow](../development.md). Reuse the technical findings and
+checks within that delivery task; no additional implementation issue is required.
+This note does not claim source audit, technical validation or tests are complete.
+
 Status: planning proposal; no application implementation or prototype import is
 authorised by this document. Snapshot: 22 October 2026. The selected subject
 remains the owner's Case III Tomcat trainer; this plan does not establish

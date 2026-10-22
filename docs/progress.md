@@ -52,6 +52,14 @@ unconfigured board fields or milestone objects as a dependency.
 7. Confirm Actions can run in the private repository. CI needs contents: read
    only and no secrets. Preview hosting/access policy is a future decision.
 
+## Feature delivery
+
+Use one feature issue and one assigned delivery agent through research, brief plan,
+implementation, tests, review and fixes. Case III is [#20](https://github.com/burnzoire/oversweep/issues/20).
+Old #5–#7/PR #19 are inputs, not phase approvals or a requirement to create another
+implementation ticket. Existing work remains available; this workflow change does
+not close it as delivered or execute the feature.
+
 ## Initial issue register
 
 | Issue | Proposed milestone | Initial status |

@@ -66,7 +66,8 @@ Linux-container assumptions, approval and rollback. No deployment is configured.
 No formal ADR acceptance is required to start an assigned task. Establish content
 contracts before bulk authoring. Retain source, qualified review and numerical
 evidence before validating aviation content. The first slice is the owner's Case III Tomcat prototype;
-complete its audit and integration plan before importing it.
+audit and plan within the same delivery task before importing affected material.
+Issue #20 supplies implementation scope; no separate phase issues are required.
 
 ## Assessment sources
 
