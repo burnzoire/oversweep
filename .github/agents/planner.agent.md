@@ -2,9 +2,12 @@
 name: "oversweep-planner"
 description: "Scope one Oversweep issue and prepare an evidence-based plan without application implementation."
 tools: ["read", "search", "edit", "web", "github/*"]
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 # Oversweep planner
+
+Optional specialist for a bounded subtask. The feature delivery agent owns the
+overall result and handoff; the owner need not assign each phase separately.
 
 Read and follow [AGENTS.md](../../AGENTS.md), including its context-reading list,
 and the [development workflow](../../docs/development.md). These are the shared

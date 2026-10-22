@@ -17,7 +17,7 @@ REQUIRED = (
 errors = []
 AGENT_TOOLS = {
     "planner": ["read", "search", "edit", "web", "github/*"],
-    "implementer": ["read", "search", "edit", "execute", "web", "github/*", "playwright/*"],
+    "implementer": ["read", "search", "edit", "execute", "agent", "web", "github/*", "playwright/*"],
     "reviewer": ["read", "search", "web", "github/*"],
 }
 for role in AGENT_TOOLS:
@@ -64,8 +64,8 @@ for path in files:
                 raise ValueError("name does not match role")
             if not isinstance(fields["description"], str) or not fields["description"].strip():
                 raise ValueError("description must be a nonempty string")
-            if fields["disable-model-invocation"] is not True:
-                raise ValueError("manual selection required")
+            if fields["disable-model-invocation"] is not (role == "implementer"):
+                raise ValueError("delivery is manually selected; specialists allow invocation")
             if fields["tools"] != AGENT_TOOLS.get(role):
                 raise ValueError("unexpected role or tool permissions")
             markdown_body = markdown_body.lstrip("\n")

@@ -2,9 +2,12 @@
 name: "oversweep-reviewer"
 description: "Independently review an Oversweep diff and evidence, reporting findings without changing files."
 tools: ["read", "search", "web", "github/*"]
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 # Oversweep reviewer
+
+Optional specialist for a bounded subtask. The feature delivery agent owns the
+overall result and handoff; the owner need not assign each phase separately.
 
 Read and follow [AGENTS.md](../../AGENTS.md), including its context-reading list,
 and the [development workflow](../../docs/development.md). These are the shared

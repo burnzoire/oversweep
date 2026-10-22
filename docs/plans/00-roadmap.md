@@ -2,13 +2,15 @@
 
 Milestones are proposed outcomes, not dates or completion estimates.
 Live issue links are maintained in [progress](../progress.md).
-No application implementation or deployment is authorised by this bootstrap PR.
+This roadmap is context, not task authorisation. The assigned issue defines scope;
+[#20](https://github.com/burnzoire/oversweep/issues/20) explicitly covers Case III
+research through implementation. This workflow change does not implement it.
 
 | Milestone | Exit evidence | Initial work |
 | --- | --- | --- |
 | M0 — Foundation | Documentation/CI reviewed and merged by human; tracking configured or gaps explicit | Bootstrap and repository controls |
 | M1 — Architecture and design | Working architecture, content contract, reviewed responsive design and deployment proposals | Architecture assessment, content schema, design, Windows Docker delivery plan |
-| M2 — Case III carrier trainer vertical slice | Existing prototype integrated into one sourced manual/trainer slice; technical review, model tests and browser evidence complete | Prototype audit, integration plan, separately authorised implementation |
+| M2 — Case III carrier trainer vertical slice | Existing prototype integrated into one sourced manual/trainer slice; technical review, model tests and browser evidence complete | One delivery issue: research, audit, plan, implement, test and review |
 | M3 — Reuse and expansion | Reusable experience contract proven from Case III; next subject selected using findings | Extract reusable components and prioritise subsequent subjects |
 
 ## Selected first slice
@@ -18,24 +20,23 @@ The product owner selected the existing
 Integrate it within Naval Operations and index the same experience in the Training
 Library. Do not replace this choice with a Bullseye or turn-geometry starter.
 
-Issue #7 audits the prototype early, before #5 research/gap assessment and #6
-integration planning conclude. Obtain the source/export and provenance; the hosted
-URL is a reference, not a substitute for source code or proof of technical accuracy.
-The [issue #5 research and scope record](03-case-iii-research.md) documents the
-current access blocker, unverified source/behavior/NATOPS references, synthetic
-model fixtures and remaining evidence needed. The site and candidate manual
-metadata endpoints could not be retrieved from the research environment; current
-behavior and exact procedure pages have not been verified.
+[#20 — Deliver the Case III first vertical slice](https://github.com/burnzoire/oversweep/issues/20)
+is the single assignment. Research, source/provenance audit, a brief integration
+plan, scaffolding, implementation, tests, independent review and fixes are phases
+inside that task, not separately approved prerequisites. Reuse #5–#7 and PR #19
+findings where useful. An old planning-only exclusion does not override #20's
+explicit implementation scope; preserve the historical records without inventing
+completed audits or tests.
 
-Review applicable NATOPS editions, procedural/timing models, radio exchanges,
-assessment feedback and usability. Check previously reported hold-turn timing
-and debrief/log scrolling as regression candidates, not established defects in
-the current prototype. Audit before deciding what to reuse or refactor.
-
-After #6's integration plan is approved, create a separately authorised
-implementation issue with its acceptance criteria. M2 requires completed
-implementation, qualified technical review, automated checks and browser evidence;
-planning or a source import alone does not complete it.
+The [research record](03-case-iii-research.md) documents source/primary-reference
+access gaps. Obtain the actual source/export and provenance before reuse. If a
+required input is unavailable, identify it precisely and continue independent
+work; do not fabricate behaviour, rights or procedural facts. Investigate reported
+hold timing and debrief scrolling as regression candidates. Keep unvalidated
+content excluded from publication and record qualified technical review when it
+occurs. M2 completion still needs actual delivered behaviour and check evidence;
+a plan or source import alone does not complete it. Merge/release approval remains
+explicit and separate from feature implementation.
 
 ## Deployment sequencing
 

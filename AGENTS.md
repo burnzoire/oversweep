@@ -25,9 +25,17 @@ architecture unless the task supplies contrary evidence. Ask only when a missing
 input materially prevents correct work or a decision changes product scope, cost,
 external access or security. Continue any independent work while blocked.
 
-The existing backlog is planning work. Assigning a planning issue authorises its
-plans/contracts/audit, not application implementation. An explicit implementation
-task is still required to build the application or trainer. Do not expand scope.
+One feature issue and one assigned delivery agent cover research, a brief plan,
+implementation, tests, independent review and fixes, and one PR. These are internal
+phases; do not require separate tickets, agent assignments or intermediate sign-offs.
+Use delegation for bounded research/planning/review when the runtime supports it;
+the delivery agent retains ownership. Do not stop at a plan for a feature task.
+
+Scope is determined by the assigned issue. Historical planning-only issues remain
+planning-only; a feature delivery issue explicitly authorises implementation. For
+Case III, [issue #20](https://github.com/burnzoire/oversweep/issues/20) combines the
+previous split research/audit/planning work with implementation. Use prior work as
+inputs; actual source access and evidence matter, not ticket status. Do not expand scope.
 Never merge, deploy, publish or configure hosting without explicit owner approval.
 No custom orchestration service or unapproved external integration is needed.
 
