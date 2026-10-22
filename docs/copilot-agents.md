@@ -11,6 +11,7 @@ assignments or intermediate plan approvals are required.
 | [Feature delivery / implementer](../.github/agents/implementer.agent.md) | Own the full feature cycle; retain existing profile name | Read/search/edit/execute, agent delegation, web where supported, GitHub reads and local Playwright; manually selected |
 | [Planner](../.github/agents/planner.agent.md) | Optional bounded research/planning subtask or explicit planning-only request | Read/search/edit, web where supported and GitHub reads; model invocation allowed |
 | [Reviewer](../.github/agents/reviewer.agent.md) | Optional specialist for fresh independent review | Read/search, web where supported and GitHub reads; model invocation allowed; no edit, shell or delegation |
+| [UX reviewer](../.github/agents/ux-reviewer.agent.md) | Browser-based review of the exact PR experience; reports findings without editing | Read/search, GitHub reads and Playwright browser tools; model invocation allowed; no edit or shell |
 
 ## Start a feature
 
@@ -59,6 +60,44 @@ invocation settings. These checks are not GitHub's parser or live runtime testin
 After merging, start a new delivery task to verify profile discovery and whether
 its runtime exposes delegation. Report absent delegation without inventing review.
 No live Copilot delegation test is claimed by this workflow-only change.
+
+## UX review
+
+Invoke `oversweep-ux-reviewer` directly from a supported custom-agent UI, or ask
+`oversweep-implementer` to delegate a fresh-context review when its runtime exposes
+the `agent` tool. Example handoff:
+
+> UX-review PR #29 for issue #28 at base `c5524f9ffa16bee96e013a3d9ad27f4bf904aa3c`,
+> head `2c16d437fd1264d69f9340b4442a452707baab42`. Use the local site from that exact
+> checkout, started with `npm ci` and `npm run dev -- --host 0.0.0.0`. Inspect Manual →
+> Naval Operations → Case III, Training Library, and the embedded and full-window
+> trainer. Report checked, failed and untested areas with the required evidence.
+
+The delivery agent must check out or otherwise run the exact PR head, identify the
+changed routes/journeys, and provide those instructions and base/head SHAs to the
+reviewer. On this Astro site, `npm ci` followed by
+`npm run dev -- --host 0.0.0.0` serves the local review experience at
+`http://localhost:4321`; port selection can change if occupied. From the exact PR
+checkout, verify `git rev-parse HEAD` matches the supplied head SHA before starting
+and confirm the served page in Playwright. The trainer is available in development;
+production output excludes draft trainer content.
+Never substitute the production site or an unverified preview for a PR-head build.
+
+The reviewer uses Playwright browser tools to inspect routes and interact at desktop
+(1440 × 900), tablet (768 × 1024) and phone (390 × 844), including keyboard/focus
+checks. Its report records the exact revision and URL, routes, journeys, dimensions,
+checks performed, observed defects with severity/reproduction/impact/fix, separate
+optional design suggestions, and failed or untested areas. Screenshots are included
+when useful. The delivery agent owns fixes and requests re-review of affected
+journeys; the reviewer must not modify or post to the PR.
+
+Playwright is an opt-in browser capability: the profile grants `playwright/*`, while
+actual tool availability depends on the selected Copilot product/runtime. This
+repository does not install Playwright or configure an MCP server. The supported
+Copilot cloud workflow documents localhost Playwright, but this does not guarantee
+that a particular UI or delegation runtime exposes it. If unavailable, inaccessible,
+or unable to reach the local server, the reviewer records that limitation and does
+not claim browser verification. A source-only review is not a UX/browser review.
 
 ## Official references
 

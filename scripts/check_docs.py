@@ -20,6 +20,7 @@ AGENT_TOOLS = {
     "planner": ["read", "search", "edit", "web", "github/*"],
     "implementer": ["read", "search", "edit", "execute", "agent", "web", "github/*", "playwright/*"],
     "reviewer": ["read", "search", "web", "github/*"],
+    "ux-reviewer": ["read", "search", "github/*", "playwright/*"],
 }
 for role in AGENT_TOOLS:
     if not (ROOT / ".github/agents" / f"{role}.agent.md").is_file():
