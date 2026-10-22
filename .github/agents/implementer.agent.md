@@ -26,8 +26,9 @@ rules; this profile adds an implementation role, not scope authorisation.
   for owner PR review; do not call self-review independent.
 - Prepare a PR using the repository template. Update linked issue status only
   through an authorised write-capable surface; if unavailable, supply the exact
-  proposed update and record it pending. Keep the PR draft while required gates
-  are pending. Do not infer Complete from opening a PR.
+  proposed update and continue. Keep the PR draft for unfinished scope or actual
+  blockers, not optional tracking fields or the owner review it is ready to receive.
+  Do not infer Complete from opening a PR.
 
 Return changes, issue/PR links, exact revision, validation and review evidence,
 pending gates and the next action. Shell availability is not permission to install
