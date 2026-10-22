@@ -16,6 +16,21 @@ implementation; a task to define contracts does not. Ask about missing informati
 only when it changes the work materially. Do not add serial approvals for plan,
 stack, spike and implementation inside an already authorised task.
 
+## One feature, one delivery owner
+
+Research, plan, implement, test, independently review and fix are internal phases
+of one feature assignment and one PR. The delivery agent handles each phase and
+may invoke optional planner/reviewer specialists when the runtime provides that
+capability. No separate research, planning or implementation issue is required.
+A short issue/PR plan suffices; move from it into code within the assigned scope.
+
+Use a separate research task only when explicitly requested or the unresolved
+feasibility/input prevents implementation. Report the concrete blocker and keep
+unaffected work moving. Do not manufacture phase dependencies from legacy tickets.
+Case III delivery is consolidated in [#20](https://github.com/burnzoire/oversweep/issues/20);
+prior #5–#7/PR #19 findings are inputs, not separate approval stages. The current
+workflow PR only updates instructions; the feature agent will implement that slice.
+
 ## Decisions and checks
 
 Make routine reversible technical decisions within scope and record the choice,

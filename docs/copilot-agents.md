@@ -1,81 +1,69 @@
 # Repository Copilot agents
 
-Three manually selected profiles implement the roles in the existing
-[workflow](development.md). [AGENTS.md](../AGENTS.md) remains the shared authority
-for all coding tools. Profiles reference it rather than maintaining parallel rules.
+Assign one feature issue to **`oversweep-implementer`**, the end-to-end delivery role.
+It researches, plans briefly, implements, tests, obtains independent review and
+fixes findings, then delivers one PR. [AGENTS.md](../AGENTS.md) and the
+[solo workflow](development.md) remain the shared rules. No phase-by-phase owner
+assignments or intermediate plan approvals are required.
 
-| Profile | Use | Enabled tools |
+| Profile | Purpose | Tools and invocation |
 | --- | --- | --- |
-| [Planner](../.github/agents/planner.agent.md) | Scope one issue and edit plans | Read/search/edit, web where supported, repository GitHub reads |
-| [Implementer](../.github/agents/implementer.agent.md) | Deliver an explicitly authorised task and checks | Read/search/edit/execute, web where supported, GitHub reads, local Playwright where available |
-| [Reviewer](../.github/agents/reviewer.agent.md) | Fresh independent review; return findings | Read/search, web where supported, repository GitHub reads; no edit, shell or delegation |
+| [Feature delivery / implementer](../.github/agents/implementer.agent.md) | Own the full feature cycle; retain existing profile name | Read/search/edit/execute, agent delegation, web where supported, GitHub reads and local Playwright; manually selected |
+| [Planner](../.github/agents/planner.agent.md) | Optional bounded research/planning subtask or explicit planning-only request | Read/search/edit, web where supported and GitHub reads; model invocation allowed |
+| [Reviewer](../.github/agents/reviewer.agent.md) | Optional specialist for fresh independent review | Read/search, web where supported and GitHub reads; model invocation allowed; no edit, shell or delegation |
 
-Profiles inherit the selected/default model. No target restriction, new MCP server,
-secret, setup workflow or account setting is added. Automatic model invocation is
-disabled; select a role explicitly. These are reusable role instructions, not an
-automatic planning/implementation/review pipeline. Tool filters do not replace the
-repository's permissions or human approval gates.
+## Start a feature
 
-## Use and handoff
+1. Choose the repository and current branch containing the profiles in a supported
+   Copilot agent UI and select `oversweep-implementer`. GitHub documents discovery
+   after default-branch merge/refresh; use a local IDE checkout for pre-merge checks.
+   New tasks should use the updated instructions; existing PR sessions can retain
+   the profile revision they started with.
+2. Assign one issue with the outcome, scope and acceptance criteria. For the first
+   slice use [#20](https://github.com/burnzoire/oversweep/issues/20). Historical split
+   plans/audits provide reusable evidence, not separate owner-managed stages.
+3. Let the delivery agent run the phases and invoke specialists where supported.
+   Review the resulting PR. A genuine missing source/input may require your help;
+   routine choices and readiness fields do not.
 
-1. In GitHub's agent task UI, choose the repository and select `oversweep-planner`,
-   `oversweep-implementer` or `oversweep-reviewer` from the custom-agent selection.
-   In a supported IDE, select the repository profile in its agent picker. Confirm
-   the selected branch contains the profile. GitHub's documented discovery path
-   requires merging profiles into the default branch and refreshing its picker;
-   use a local IDE checkout for pre-merge checks, not an assumed GitHub listing.
-2. Give the planner the issue and desired outcome. It returns scoped criteria,
-   dependencies, evidence and a plan. Routine choices are recorded in the issue/PR.
-   Owner assignment supplies scope authorisation; a planner cannot expand it.
-3. Assign the issue with its intended scope and checks. No manual Ready transition
-   or ADR acceptance is needed. Planning tasks stay
-   documentation-only. Application work needs an explicit implementation task.
-4. For substantive changes, start a separate reviewer context with the issue, base/head SHA, full diff and
-   check evidence. Record findings and disposition in the PR. After fixes, review
-   the changed scope on the new head. A profile name alone proves no independence.
-5. Record actual work status in the issue. Human approval and authorised merge
-   remain the completion gate; aviation maturity is tracked separately.
+Suggested brief: “Deliver this feature end to end: research what is necessary,
+plan briefly, implement, test and independently review it. Resolve routine choices,
+fix findings and open one PR with evidence. Do not merge or deploy.”
 
-Suggested task briefs:
+The `agent` tool alias enables delegation where the runtime exposes it. Specialist
+profiles allow model invocation; this enables their use without requiring a separate
+owner assignment. It does not guarantee runtime support for named subagents,
+force a sequence or install an orchestration service. No VS Code-only `handoffs`
+property is used. If delegation is unavailable, the delivery agent supplies a review
+brief and discloses the limitation for owner PR review while continuing useful work.
+Self-review must never be labelled independent. No new MCP server or secret is added.
 
-- Planner: “Plan issue #N. Inspect dependencies and sources; return acceptance
-  criteria, exclusions, checks and decisions. No application implementation.”
-- Implementer: “Deliver the authorised scope of #N from current main. Follow
-  AGENTS.md, run checks, request independent review and prepare a PR. Do not merge.”
-- Reviewer: “Review #N at base SHA / head SHA in a fresh context. Inspect the full
-  diff and evidence; return findings and limitations without changing files.”
+## Checks and access limits
 
-Copilot's built-in code review is a separate PR review feature. It is not activated
-by `reviewer.agent.md`; request it separately if desired. Record the reviewer and
-revision actually used. No automatic review rule or repository setting is changed.
+The delivery agent passes a reviewer the issue, base/head, full diff and check
+results in a fresh context, resolves findings and records their disposition. Optional
+planner/reviewer profiles do not broaden feature scope. Copilot's built-in PR code
+review is a separate feature; this configuration does not activate it automatically.
 
-## Tool availability and verification
+GitHub's cloud documentation describes read-only `github/*`, localhost Playwright,
+and no cloud mapping for `web`. Missing tools/access must be reported accurately;
+external-source research can need another available authorised tool or the owner's
+specific missing input. Never claim those reads or issue/PR updates happened without
+evidence. The delivery role has shell access for checks; specialists do not.
+Profiles inherit the selected/default model. Tool filters supplement permissions;
+no profile authorises merge, deployment or publication.
 
-The GitHub cloud environment documents read-only `github/*` tools and localhost
-Playwright. Its `web` alias is currently unsupported. Planner/reviewer research
-that needs inaccessible external documentation must report a blocker and use a
-separate authorised research session. GitHub write operations such as issue status
-updates may need the owner or a write-capable session; never report them as done
-without evidence. The implementer's shell can run repository checks and prepare
-Git changes; its instructions continue to restrict scope and release actions.
-
-Run `python3 scripts/check_docs.py`. It checks local links and a deliberately narrow
-profile frontmatter format: single-line JSON values (valid YAML), expected fields,
-role tools, manual invocation and Markdown body title. It is not GitHub's parser
-and does not prove agent discovery, tool availability, behaviour or account access.
-
-Owner runtime check: use a local IDE checkout before merge, or GitHub's picker
-after an authorised merge. Confirm all three profiles appear, then run a read-only reviewer task
-against a known diff and verify it returns the head and limitations without edits.
-No live Copilot session has been executed as part of this change. Rendered Markdown
-inspection was not performed for the original profiles. Record applicable CI/review
-evidence in the linked PR; that historical limitation is not a workflow blocker.
+Run `python3 scripts/check_docs.py` for local links and the supported frontmatter
+subset: single-line JSON values (valid YAML), expected fields, role tool lists and
+invocation settings. These checks are not GitHub's parser or live runtime testing.
+After merging, start a new delivery task to verify profile discovery and whether
+its runtime exposes delegation. Report absent delegation without inventing review.
+No live Copilot delegation test is claimed by this workflow-only change.
 
 ## Official references
 
-Checked 22 October 2026 (Australia/Melbourne). Recheck before changing supported
-properties or tools; this is an assessment date, not a compatibility guarantee.
+Checked 22 October 2026. Recheck supported properties/tools when changing profiles.
 
-- [Profile configuration and tool aliases](https://docs.github.com/en/copilot/reference/custom-agents-configuration)
-- [Create and select repository agents](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/create-custom-agents)
+- [Configuration: agent tool alias, invocation and profile versioning](https://docs.github.com/en/copilot/reference/custom-agents-configuration)
+- [Create/select repository agents](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/create-custom-agents)
 - [Copilot code review](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-code-review)

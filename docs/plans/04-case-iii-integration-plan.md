@@ -1,10 +1,15 @@
 # Case III prototype integration plan — issue #6
 
-Status: planning input for delivery issue #20. The owner explicitly authorised
-the end-to-end implementation scope in #20; its assignment supersedes the
-planning-only boundary recorded here. Snapshot: 22 October 2026. The selected
-subject remains the owner's Case III Tomcat trainer; this plan does not establish
-prototype behavior, source rights, procedural accuracy or technical validation.
+Historical planning input. Its separate plan approval/follow-on issue sequence is
+superseded by [delivery issue #20](https://github.com/burnzoire/oversweep/issues/20)
+and the [one-task workflow](../development.md). The owner authorised the stated
+end-to-end implementation scope in #20; no additional implementation issue or
+plan approval is required. That authorization does not establish source audit,
+technical validation, or publication.
+
+Status: planning input for delivery issue #20. Snapshot: 22 October 2026. The
+selected subject remains the owner's Case III Tomcat trainer; this plan does not
+establish prototype behavior, source rights, procedural accuracy or technical validation.
 
 ## Inputs and readiness
 
@@ -48,17 +53,18 @@ and reset/replay behavior to learning objectives and sourced claims.
   logic. The browser experience must not be a second source of procedural facts
   or scoring rules.
 
-These are proposed boundaries for a separately authorised implementation.
-Candidate `src/` paths in the architecture are not created by this planning task.
+These boundaries informed the implementation authorised by issue #20. Its source
+files now exist, but no prototype code, text, assets, or dependencies were reused.
 
 ## Manual and Training Library integration
 
 Create one canonical experience registration and reference it from the Naval
 Operations manual entry and the Training Library index. The latter is an index
 of the same experience ID, not a second scenario, assessment, or implementation.
-The contract's registry-wide validator will need to confirm both-direction
-manual/experience links and exclude ineligible records from routes, search,
-manifests and emitted assets.
+The initial registry validator now checks the two-way manual/experience links,
+and the static build excludes this unresolved experience and its trainer-specific
+assets. Search and manifests are not yet generated; any future index must use the
+same eligibility policy.
 
 Use the existing contract fields: stable IDs; objective; prerequisites;
 applicability; revision and experience/model versions; input schema; claim and
@@ -125,8 +131,9 @@ keyboard-accessible after long runs and at narrow viewports.
 
 ## Implementation and verification gates
 
-The separately authorised implementation issue should include these deliverable
-gates:
+Issue #20 authorizes these deliverable gates. Source-independent implementation
+and checks are recorded in its PR; source audit, factual behavior, and technical
+validation remain outstanding.
 
 1. **Before reuse:** record export revision, provenance, dependency/asset
    inventory, rights dispositions and the completed #7 behavior audit.

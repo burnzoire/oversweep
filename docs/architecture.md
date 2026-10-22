@@ -60,16 +60,19 @@ Private PR previews require explicit access-control and hosting decisions. Treat
 private repository visibility as distinct from preview visibility. Until approved,
 use local verification; never enable public previews or deployment by default.
 
-Deployment target: GitHub Actions delivering to the owner's private Windows 11
-Docker server. See the [deployment proposal](deployment.md) for delivery options,
-Linux-container assumptions, approval and rollback. No deployment is configured.
+Deployment target: static GitHub Pages via GitHub Actions, replacing the private
+Windows Docker server proposal. The owner-invoked workflow publishes only production
+output from main; it needs the application scaffold and Pages settings before use.
+See [deployment](deployment.md) for base paths, custom domain setup and rollback.
+No site has been published.
 
 ## Decision gates
 
 No formal ADR acceptance is required to start an assigned task. Establish content
 contracts before bulk authoring. Retain source, qualified review and numerical
 evidence before validating aviation content. The first slice is the owner's Case III Tomcat prototype;
-complete its audit and integration plan before importing it.
+audit and plan within the same delivery task before importing affected material.
+Issue #20 supplies implementation scope; no separate phase issues are required.
 
 ## Assessment sources
 
