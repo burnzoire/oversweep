@@ -2,6 +2,11 @@
 
 Status: Proposed
 
+Documentation assessment: [issue #2 report](../plans/02-architecture-assessment.md),
+22 October 2026. Recommend retaining this proposal with one React root per trainer.
+The report supplies a provisional contract, maintenance/test strategy and scoped
+spike plan. No spike has run; human acceptance or replacement is still required.
+
 ## Context
 
 Oversweep needs searchable reference content, structured facts and reusable

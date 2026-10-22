@@ -58,6 +58,9 @@ Published. Definitions and validation regression rules are in content standards.
 | [#8 — Configure private tracking and repository review controls](https://github.com/burnzoire/oversweep/issues/8) | M0 | Backlog |
 | [#10 — Assess GHA delivery to the Windows 11 Docker server](https://github.com/burnzoire/oversweep/issues/10) | M1 | Backlog |
 
-The bootstrap issue remains In Review until authorised merge. Other work remains
-Backlog until its stated dependencies are met. This table is a starting index;
-live issues are authoritative for changing work status.
+Foundation PR #9 was merged by the owner on 22 October 2026. The initial statuses
+above are historical; live issues are authoritative. Issue #2 is selected next
+following the owner's instruction. Its [architecture assessment](plans/02-architecture-assessment.md)
+retains ADR 0001 as Proposed pending independent review and human stack decision.
+Tracking/control setup #8 remains separate; its outstanding settings do not prevent
+this documentation assessment. No application or deployment work is authorised.
