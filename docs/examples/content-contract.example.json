@@ -1,0 +1,108 @@
+{
+  "records": [
+    {
+      "recordType": "subject",
+      "id": "subject.synthetic-examples",
+      "title": "Synthetic examples",
+      "collection": "manual",
+      "revision": 1
+    },
+    {
+      "recordType": "manualEntry",
+      "id": "manual.synthetic-contract",
+      "title": "Synthetic contract fixture",
+      "collection": "manual",
+      "subjectIds": ["subject.synthetic-examples"],
+      "objective": "Demonstrate record links only; this is not instructional content.",
+      "applicability": {
+        "scope": "synthetic",
+        "notes": "Example data only; no aviation applicability."
+      },
+      "revision": 1,
+      "maturity": "Drafted",
+      "publication": {
+        "status": "excluded",
+        "reason": "Synthetic schema fixture, not content for publication."
+      },
+      "claimIds": ["claim.synthetic-placeholder"],
+      "sourceIds": ["source.synthetic-placeholder"],
+      "experienceIds": ["experience.synthetic-demo"],
+      "blocks": [
+        {
+          "id": "block.synthetic-reference",
+          "type": "reference",
+          "claimIds": ["claim.synthetic-placeholder"],
+          "text": "Synthetic example only; this is not aviation guidance."
+        },
+        {
+          "id": "block.synthetic-trainer",
+          "type": "trainer",
+          "claimIds": [],
+          "experienceId": "experience.synthetic-demo"
+        }
+      ]
+    },
+    {
+      "recordType": "claim",
+      "id": "claim.synthetic-placeholder",
+      "revision": 1,
+      "statement": "Placeholder statement for schema demonstration; not a factual claim.",
+      "evidenceClass": "unresolved",
+      "applicability": {
+        "scope": "synthetic",
+        "notes": "No real-world or simulator applicability."
+      },
+      "sourceIds": ["source.synthetic-placeholder"],
+      "resolution": "unresolved"
+    },
+    {
+      "recordType": "source",
+      "id": "source.synthetic-placeholder",
+      "revision": 1,
+      "title": "Synthetic source record fixture",
+      "publisher": "Oversweep example fixture",
+      "edition": "Synthetic; not a publication",
+      "publishedOn": null,
+      "location": "This example file only; no external source.",
+      "accessedOn": "2026-10-22",
+      "rights": {
+        "status": "synthetic",
+        "notes": "Placeholder metadata only; no third-party material."
+      },
+      "claimRefs": [
+        {
+          "claimId": "claim.synthetic-placeholder",
+          "location": "Synthetic fixture only; no external source location."
+        }
+      ]
+    },
+    {
+      "recordType": "experience",
+      "id": "experience.synthetic-demo",
+      "title": "Synthetic experience registration",
+      "revision": 1,
+      "version": "1",
+      "manualEntryId": "manual.synthetic-contract",
+      "objective": "Demonstrate registration and linking only.",
+      "prerequisiteIds": [],
+      "applicability": {
+        "scope": "synthetic",
+        "notes": "Example data only; no simulator implementation."
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "demoSeed": { "type": "integer" }
+        },
+        "additionalProperties": false
+      },
+      "modelVersion": "synthetic-only",
+      "claimIds": ["claim.synthetic-placeholder"],
+      "maturity": "Drafted",
+      "publication": {
+        "status": "excluded",
+        "reason": "Synthetic schema fixture, not an implemented experience."
+      }
+    }
+  ]
+}

@@ -34,9 +34,10 @@ here. A separate architecture spike is optional. No backend or account system is
 
 Proposed future paths: src/content, src/models, src/components, src/experiences
 and src/platform. These are boundaries to validate, not directories to create now.
-Content metadata should cover the fields in the content standards, stable IDs,
-cross-references, block dependencies and validation revision. Keep facts in a single
-record rather than copying values into model code and prose.
+See the [proposed content and experience contract](content-contracts.md) and its
+example schema/records. Content metadata covers the fields in content standards,
+stable IDs, cross-references, block dependencies and validation revision. Keep
+facts in a single record rather than copying values into model code and prose.
 
 ## Future infrastructure
 
