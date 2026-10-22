@@ -1,0 +1,27 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { encyclopediaCategories } from "../../data/catalogue";
+import { sitePath } from "../../lib/paths";
+---
+
+<SiteLayout
+  title="Encyclopedia"
+  activeSection="encyclopedia"
+  isSectionIndex
+  breadcrumbs={[{ label: "Encyclopedia" }]}
+>
+  <section class="status-panel">
+    <h2>Coming soon</h2>
+    <p>Category destinations are available for future sourced reference records. No technical reference entries are published yet.</p>
+  </section>
+  <h2>Categories</h2>
+  <ul class="card-grid">
+    {encyclopediaCategories.map((category) => (
+      <li class="collection-card">
+        <h3>{category.title}</h3>
+        <p>Coming soon</p>
+        <a href={sitePath(`encyclopedia/${category.slug}/`)}>Open category</a>
+      </li>
+    ))}
+  </ul>
+</SiteLayout>

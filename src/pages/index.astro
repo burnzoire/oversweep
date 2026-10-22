@@ -1,0 +1,39 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { sitePath } from "../lib/paths";
+
+const collections = [
+  {
+    title: "Manual",
+    description: "A subject-organised reference for aviation concepts and learning.",
+    path: "manual/",
+  },
+  {
+    title: "Encyclopedia",
+    description: "A future index of aircraft, systems, terminology and reference records.",
+    path: "encyclopedia/",
+  },
+  {
+    title: "Training Library",
+    description: "An index for future interactive, exploratory and trainer experiences.",
+    path: "training/",
+  },
+];
+---
+
+<SiteLayout title="The Interactive Flight Reference" activeSection="home" isHomePage>
+  <section class="status-panel" aria-labelledby="welcome-heading">
+    <h2 id="welcome-heading">Site foundation</h2>
+    <p>Oversweep is being built as a subject-centric aviation reference. The collections below are available to explore; their content is coming soon.</p>
+    <p>No aviation procedures, validated guidance or training experiences are published here.</p>
+  </section>
+  <ul class="card-grid">
+    {collections.map((collection) => (
+      <li class="collection-card">
+        <h2>{collection.title}</h2>
+        <p>{collection.description}</p>
+        <a href={sitePath(collection.path)}>Explore {collection.title}</a>
+      </li>
+    ))}
+  </ul>
+</SiteLayout>

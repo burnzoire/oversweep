@@ -1,0 +1,28 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { encyclopediaCategories } from "../../data/catalogue";
+import { sitePath } from "../../lib/paths";
+
+export function getStaticPaths() {
+  return encyclopediaCategories.map((category) => ({
+    params: { slug: category.slug },
+    props: { category },
+  }));
+}
+
+const { category } = Astro.props;
+---
+
+<SiteLayout
+  title={category.title}
+  activeSection="encyclopedia"
+  breadcrumbs={[
+    { label: "Encyclopedia", href: sitePath("encyclopedia/") },
+    { label: category.title },
+  ]}
+>
+  <section class="status-panel">
+    <h2>Coming soon</h2>
+    <p>This category page is a placeholder. No technical reference content is published here.</p>
+  </section>
+</SiteLayout>

@@ -1,0 +1,123 @@
+---
+import { manualSubjects } from "../data/catalogue";
+import { sitePath } from "../lib/paths";
+import "../styles/global.css";
+
+interface Breadcrumb {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  title: string;
+  activeSection: "manual" | "encyclopedia" | "training" | "home";
+  activeSubject?: string;
+  isSectionIndex?: boolean;
+  isHomePage?: boolean;
+  breadcrumbs?: Breadcrumb[];
+}
+
+const {
+  title,
+  activeSection,
+  activeSubject,
+  isSectionIndex = false,
+  isHomePage = false,
+  breadcrumbs = [],
+} = Astro.props;
+const sections = [
+  { id: "manual", label: "Manual", path: "manual/" },
+  { id: "encyclopedia", label: "Encyclopedia", path: "encyclopedia/" },
+  { id: "training", label: "Training Library", path: "training/" },
+];
+const pageTitle = `${title} | Oversweep`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="A subject-centric, NATOPS-inspired aviation reference." />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a
+          class="brand"
+          href={sitePath()}
+          aria-label="Oversweep home"
+          aria-current={isHomePage ? "page" : undefined}
+        >
+          <span class="brand-name">OVERSWEEP</span>
+          <span class="brand-tagline">The Interactive Flight Reference</span>
+        </a>
+        <nav class="primary-nav" aria-label="Primary navigation">
+          {sections.map((section) => (
+            <a
+              href={sitePath(section.path)}
+              class:list={["primary-link", { current: activeSection === section.id }]}
+              aria-current={activeSection === section.id && isSectionIndex ? "page" : undefined}
+            >
+              {section.label}
+            </a>
+          ))}
+        </nav>
+      </div>
+    </header>
+    <main id="main-content" class="page-shell">
+      {breadcrumbs.length > 0 && (
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <ol>
+            {breadcrumbs.map((crumb, index) => (
+              <li>
+                {crumb.href && index < breadcrumbs.length - 1
+                  ? <a href={crumb.href}>{crumb.label}</a>
+                  : <span aria-current="page">{crumb.label}</span>}
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )}
+      <header class="page-heading">
+        <p class="eyebrow">Oversweep · {sections.find((section) => section.id === activeSection)?.label ?? "Home"}</p>
+        <h1>{title}</h1>
+      </header>
+      <div class:list={["page-layout", { "with-subject-nav": activeSection === "manual" }]}>
+        {activeSection === "manual" && (
+          <aside class="subject-nav" aria-label="Manual subjects">
+            <details open>
+              <summary>Manual subjects</summary>
+              <nav aria-label="Manual subject navigation">
+                <ul>
+                  {manualSubjects.map((subject) => (
+                    <li>
+                      <a
+                        href={sitePath(`manual/${subject.slug}/`)}
+                        class:list={{ current: activeSubject === subject.slug }}
+                        aria-current={activeSubject === subject.slug ? "page" : undefined}
+                      >
+                        {subject.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </details>
+          </aside>
+        )}
+        <article class="page-content">
+          <slot />
+        </article>
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <a href={sitePath()}>Oversweep</a>
+        <p>Educational reference in development. Not approved operational guidance.</p>
+      </div>
+    </footer>
+  </body>
+</html>
