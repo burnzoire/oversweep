@@ -39,8 +39,9 @@ manuals or instructor judgement with agent-generated content.
 No accounts, backend service, paid access, telemetry, multiplayer features,
 public hosting or custom agent coordinator are required by this foundation.
 
-Deployment planning uses GitHub Actions and the owner's private Windows 11 Docker
-server; delivery and access-control details remain proposed in [deployment](deployment.md).
+Deployment uses static GitHub Pages via GitHub Actions, replacing the private
+Windows Docker server proposal. See [deployment](deployment.md) for setup and release.
+This authorises hosting configuration; content publication remains separately reviewed.
 
 Decisions still needed: authoritative source editions
 and reuse rights, qualified reviewers, search approach, preview
