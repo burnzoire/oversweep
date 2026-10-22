@@ -1,5 +1,6 @@
 """Dependency-free structural checks; not a factual or full Markdown validator."""
 from pathlib import Path
+import json
 import re
 import sys
 from urllib.parse import unquote, urlsplit
@@ -14,6 +15,14 @@ REQUIRED = (
     ".github/ISSUE_TEMPLATE/content.md", ".github/workflows/foundation.yml",
 )
 errors = []
+AGENT_TOOLS = {
+    "planner": ["read", "search", "edit", "web", "github/*"],
+    "implementer": ["read", "search", "edit", "execute", "web", "github/*", "playwright/*"],
+    "reviewer": ["read", "search", "web", "github/*"],
+}
+for role in AGENT_TOOLS:
+    if not (ROOT / ".github/agents" / f"{role}.agent.md").is_file():
+        errors.append(f"Missing required agent: {role}")
 for name in REQUIRED:
     if not (ROOT / name).is_file():
         errors.append(f"Missing required file: {name}")
@@ -32,7 +41,39 @@ for path in files:
             errors.append(f"{rel}:{number}: trailing whitespace")
     if path.suffix != ".md":
         continue
-    if not body.startswith("# ") and path.parent.name != "ISSUE_TEMPLATE":
+    markdown_body = body
+    if path.parent == ROOT / ".github/agents":
+        # Repository convention: JSON values on one line are a YAML subset.
+        # Fail closed on other YAML syntax; this is not a general YAML parser.
+        try:
+            if not body.startswith("---\n"):
+                raise ValueError("frontmatter must start at first line")
+            header, markdown_body = body[4:].split("\n---\n", 1)
+            fields = {}
+            for line in header.splitlines():
+                key, value = line.split(":", 1)
+                if key in fields:
+                    raise ValueError(f"duplicate field: {key}")
+                fields[key] = json.loads(value.strip())
+            role = path.name.removesuffix(".agent.md")
+            if role not in AGENT_TOOLS or path.name != f"{role}.agent.md":
+                raise ValueError("unknown profile filename")
+            if set(fields) != {"name", "description", "tools", "disable-model-invocation"}:
+                raise ValueError("unexpected or missing profile fields")
+            if fields["name"] != f"oversweep-{role}":
+                raise ValueError("name does not match role")
+            if not isinstance(fields["description"], str) or not fields["description"].strip():
+                raise ValueError("description must be a nonempty string")
+            if fields["disable-model-invocation"] is not True:
+                raise ValueError("manual selection required")
+            if fields["tools"] != AGENT_TOOLS.get(role):
+                raise ValueError("unexpected role or tool permissions")
+            markdown_body = markdown_body.lstrip("\n")
+            if len(markdown_body) > 30000:
+                raise ValueError("agent prompt exceeds limit")
+        except (ValueError, KeyError) as exc:
+            errors.append(f"{rel}: invalid agent profile: {exc}")
+    if not markdown_body.startswith("# ") and path.parent.name != "ISSUE_TEMPLATE":
         errors.append(f"{rel}: missing document title")
     if "ISSUE_REGISTER_PLACEHOLDER" in body:
         errors.append(f"{rel}: unresolved issue register")

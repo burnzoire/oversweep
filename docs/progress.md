@@ -64,3 +64,11 @@ following the owner's instruction. Its [architecture assessment](plans/02-archit
 retains ADR 0001 as Proposed pending independent review and human stack decision.
 Tracking/control setup #8 remains separate; its outstanding settings do not prevent
 this documentation assessment. No application or deployment work is authorised.
+
+## Copilot profile follow-up
+
+[#12](https://github.com/burnzoire/oversweep/issues/12) tracks the owner's authorised
+planner/implementer/reviewer scaffolding. See [profile usage](copilot-agents.md).
+Profiles do not automate issue transitions or complete repository controls #8.
+Review, CI and owner runtime discovery evidence are tracked in the issue/PR;
+adding files does not establish live Copilot availability.
