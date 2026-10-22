@@ -1,6 +1,10 @@
 # Progress tracking
 
 GitHub Issues are the work record. PRs and checks supply implementation evidence.
+Owner assignment authorises the issue scope. Agents start after checking actual
+dependencies; they update status themselves or include a proposed update in the PR.
+Never block on a missing Ready field, Project, milestone object or ADR acceptance.
+A private Project and milestone objects are optional conveniences for this solo repo.
 No Projects or milestone mutation capability is exposed by the current connector;
 board creation, actual milestone objects and repository rules remain manual setup.
 The roadmap's milestone names are proposals until those objects are created.
@@ -9,8 +13,8 @@ The roadmap's milestone names are proposals until those objects are created.
 
 | Status | Meaning and transition |
 | --- | --- |
-| Backlog | Proposed; dependencies, priority or decisions outstanding |
-| Ready | Scoped acceptance criteria, dependencies and verification plan agreed |
+| Backlog | Not started; owner assignment allows work once actual dependencies are checked |
+| Ready | Optional indication that scope/dependencies are clear; no owner transition required |
 | In Progress | An agent/human has started the selected scope |
 | In Review | Reviewable PR exists; checks/review can still be pending |
 | Blocked | Named dependency prevents next required action; record owner and next step |
@@ -23,9 +27,13 @@ Content maturity is separate and per content revision: Outlined, Researched,
 Drafted, Technically Validated, Published. Engineering issues use N/A, never
 Published. Definitions and validation regression rules are in content standards.
 
-## Remaining GitHub setup
+## Optional tracking and repository controls
 
-1. Repository owner creates a **private** Project named Oversweep, links this
+Tracking items 1–5 are optional conveniences, not prerequisites for work. Repository
+controls in 6–7 can be configured where useful and supported. An agent cannot treat
+unconfigured board fields or milestone objects as a dependency.
+
+1. If wanted, the repository owner creates a **private** Project named Oversweep, links this
    repository and restricts access to the intended collaborators.
 2. Add single-select Work status with the six values above. Add Content maturity
    with the five values above; leave blank for engineering and track mixed content
@@ -61,7 +69,7 @@ Published. Definitions and validation regression rules are in content standards.
 Foundation PR #9 was merged by the owner on 22 October 2026. The initial statuses
 above are historical; live issues are authoritative. Issue #2 is selected next
 following the owner's instruction. Its [architecture assessment](plans/02-architecture-assessment.md)
-retains ADR 0001 as Proposed pending independent review and human stack decision.
+now supplies the working architecture; formal ADR acceptance is no longer required.
 Tracking/control setup #8 remains separate; its outstanding settings do not prevent
 this documentation assessment. No application or deployment work is authorised.
 

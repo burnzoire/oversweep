@@ -1,10 +1,10 @@
-# Proposed technical architecture
+# Working technical architecture
 
-Status: proposal; no application dependencies or framework scaffold installed.
+Status: working default; no application dependencies or framework scaffold installed.
 See [ADR 0001](decisions/0001-content-first-architecture.md).
 The [issue #2 assessment](plans/02-architecture-assessment.md) records the official
 documentation comparison, state/content boundaries and unexecuted local spike plan.
-Recommendation retained; human stack acceptance remains pending.
+Use this working recommendation within assigned scope; no separate stack approval is required.
 The table evaluates fit, not benchmark results or guarantees about current releases.
 
 | Option | Fit | Tradeoff |
@@ -15,8 +15,8 @@ The table evaluates fit, not benchmark results or guarantees about current relea
 
 Recommend validating Astro with structured Markdown/MDX lessons, schema-validated
 data records and TypeScript model packages. Confirm against official framework
-documentation and a scoped architecture spike before acceptance; no versions are
-selected here. No backend or account system is justified yet.
+documentation and implementation checks when needed; no versions are selected
+here. A separate architecture spike is optional. No backend or account system is justified yet.
 
 ## Separation and contracts
 
@@ -46,7 +46,7 @@ A search backend is deferred until evidence warrants it.
 Optional local progress needs schema versions, reset/export behaviour and graceful
 handling of unavailable storage; no sign-in gate or cross-device guarantee.
 
-After stack approval, add locked dependencies, formatting, lint/type checks, schema
+When application implementation is assigned, add locked dependencies, formatting, lint/type checks, schema
 validation, model unit/reference-case tests, component checks, production build and
 Playwright flows. Check keyboard, reduced motion and representative desktop/tablet/
 mobile layouts. Assess bundle size and render performance against measured budgets
@@ -62,15 +62,15 @@ Linux-container assumptions, approval and rollback. No deployment is configured.
 
 ## Decision gates
 
-Accept stack ADR before application scaffolding. Approve content schema before
-bulk authoring. Approve source/reviewer and numerical cases before validating
-aviation content. The first slice is the owner's Case III Tomcat prototype;
+No formal ADR acceptance is required to start an assigned task. Establish content
+contracts before bulk authoring. Retain source, qualified review and numerical
+evidence before validating aviation content. The first slice is the owner's Case III Tomcat prototype;
 complete its audit and integration plan before importing it.
 
 ## Assessment sources
 
 Initial documentation check: 22 October 2026. These support capability assessment,
-not a selected version or measured performance claim. Recheck before accepting ADR 0001.
+not a selected version or measured performance claim. Recheck during implementation.
 
 - [Astro islands](https://docs.astro.build/en/concepts/islands/): selective interactive components.
 - [Astro content collections](https://docs.astro.build/en/guides/content-collections/): structured content.

@@ -1,61 +1,59 @@
-# Development and review workflow
+# Solo development workflow
 
-Use existing agent sessions, fresh-context reviewers, Issues, PRs and Actions.
-No custom coordinator or unattended merge loop is needed.
-Optional [Copilot role profiles](copilot-agents.md) provide planner, implementer
-and reviewer entry points with manual handoffs. Shared rules remain in AGENTS.md.
+One owner, one scoped task, one reviewable PR. Use existing agent sessions,
+[Copilot profiles](copilot-agents.md), Issues and Actions; no orchestration service.
 
-| Stage | Required action and evidence |
-| --- | --- |
-| Planning | Read AGENTS.md/context; select Ready issue; record scope, dependencies, acceptance criteria, checks and exclusions |
-| Implementation | Fresh branch from main; small focused changes; source records and docs updated alongside work |
-| Self-review | Inspect complete diff; trace each acceptance criterion; remove scope drift; check sources, security and failure states |
-| Independent review | Fresh agent context or separate reviewer reads brief, diff and evidence; record revision, findings and disposition |
-| Automated validation | Run relevant required checks on reviewed revision; repair failures, rerun affected checks and final full suite |
-| Visual verification | Inspect rendered output when applicable; record viewports, interaction checks, screenshots and revision |
-| Pull request | Open with issue links, completed checklist, evidence, limitations and pending decisions |
-| Human approval | Human assesses scope, evidence and review; only explicit approval authorises merge or publication |
+## Start without a readiness ceremony
 
-Reviewers must not simply repeat implementer conclusions. Give them the brief,
-repository instructions, diff/revision and test commands, not an expected verdict.
-They should examine omissions, incorrect assumptions, numerical cases, accessibility
-and whether claims outrun evidence. Record even a no-findings review with its scope
-and limitations. Fresh review can run before PR creation and its record goes in
-the PR; later changes require review of the affected scope.
+The owner's task assignment authorises the stated scope. An agent checks actual
+inputs/dependencies, writes a short plan and starts. It can move Backlog straight
+to In Progress; Ready is optional. Missing labels, Project fields, milestone objects
+or a separate ADR acceptance are never blockers. If tracking write access is
+unavailable, record the proposed update in the PR and continue useful work.
 
-## Applicable checks
+Planning issues remain planning-only. A task to implement a feature authorises that
+implementation; a task to define contracts does not. Ask about missing information
+only when it changes the work materially. Do not add serial approvals for plan,
+stack, spike and implementation inside an already authorised task.
 
-Now: Python documentation checks, complete-file consistency review and manual
-inspection of tables and templates. Browser checks of application flows are N/A
-because there is no application. Do not invent screenshots or say UX passed.
-If a Markdown rendering/browser surface is available, inspect rendered documents;
-otherwise record that rendering inspection is pending rather than imply it ran.
+## Decisions and checks
 
-Later: lint/type/schema checks, model/reference-case and assessment tests, component
-and end-to-end tests, production build and browser verification. Add commands to
-README and CI in the same PR that introduces the corresponding implementation.
-Assess content truth through the separate technical review gate.
-UI work must exercise desktop/tablet/mobile, keyboard and relevant error states.
-Model work must validate dimensional consistency, boundaries and independent cases.
+Make routine reversible technical decisions within scope and record the choice,
+reason and significant tradeoff in the issue or PR. Existing architecture notes
+provide working defaults; ADR files are optional durable notes. Consult the owner
+for product-scope changes, new costs/services or material access/security choices.
+Local technical experiments can be part of an authorised implementation task;
+there is no separate spike approval process.
 
-## Failures and blockers
+Work on a fresh branch from current main. Self-review the diff and run relevant
+checks on the final revision. For this phase use `python3 scripts/check_docs.py`.
+Later implementation adds lint/type/schema, model/component, production-build and
+browser checks as appropriate. Record what passed and any skipped checks/reasons.
+UI changes need representative desktop/tablet/mobile and keyboard verification;
+model changes need independent numerical cases and boundary/error tests.
 
-Do not suppress a check or loosen tolerances to obtain green results without
-documented justification and review. Record reproducible failure, cause, fix and
-rerun result. Infrastructure retries do not count as fixing a deterministic failure.
-If blocked, set Blocked, identify dependency/decision, evidence, owner needed and
-smallest next action. Continue independent authorised work; avoid routine questions.
-Material scope, architecture or security decisions go to a human with a concrete
-proposal and alternatives.
+Request fresh-context agent review for substantive code, models and workflow
+changes. Give the reviewer the issue, diff/revision and evidence, not a desired
+verdict. Resolve findings and review material fixes. Routine documentation does
+not require a separate reviewer. If fresh review is unavailable, disclose it for
+the owner's PR review; do not fabricate independence or halt routine progress.
+Rendered Markdown inspection is useful for layout changes; plain text instructions
+do not need a separate visual approval. Disclose checks not performed.
 
-## Definition of done
+## One owner review at the PR
 
-Acceptance criteria met; scoped diff reviewed by implementer and independent context;
-required automated and applicable visual checks passed on final revision; sources
-and qualified technical review complete where required; docs/tracking updated;
-no unresolved blocking findings; human approval and authorised merge confirmed.
-A draft/review PR may legitimately have pending gates, but must name them. Published
-content additionally needs explicit publication approval and actual release.
+The PR explains outcome, issue, decision rationale, checks and genuine remaining
+risks. Keep it draft for unfinished work or actual blockers, not merely because an
+optional process field or document-rendering check is missing. The owner reviews
+the concrete change and approves merge. Do not merge, deploy, publish or configure
+hosting without explicit approval. Deployment/release approval remains separate
+when the task is only to prepare a change.
 
-Progress updates state completed work, evidence, remaining work and blockers.
-Issue/PR links and check results are the record; never invent completion percentages.
+Content standards still require primary sources, independently derived model
+cases and qualified human review for aviation validation. The owner may perform
+that technical review when competent; the process does not require another human.
+Content without that evidence remains unvalidated and excluded from publication.
+
+Complete means delivered scope, applicable checks and review, and authorised merge.
+No estimated percentages. Record actual blockers and the smallest next action;
+continue unaffected work. Do not close an issue just because a PR was opened.
