@@ -1,0 +1,45 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import { caseIII, reviewTrainers } from '../../../data/experiences';
+import { sitePath } from '../../../lib/paths';
+export function getStaticPaths() { return reviewTrainers ? [{ params: { trainer: "case-iii" } }] : []; }
+
+---
+<SiteLayout title={caseIII.title} activeSection="manual" activeSubject="naval-operations"
+  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Naval Operations',href:sitePath('manual/naval-operations/')},{label:'Case III'}]}>
+  <section class="status-panel" data-experience-id={caseIII.id}>
+    <h2>{caseIII.maturity}</h2>
+    <p>{caseIII.applicability} No qualified aviation review has been recorded.</p>
+    <p>{caseIII.objective}</p>
+  </section>
+  <h2>Before starting</h2>
+  <p>Prerequisites: {caseIII.prerequisites.join(' · ')}.</p>
+  <p>Direct the pilot using heading, airspeed, altitude and vertical-rate commands. Read the sortie popup, then select Start Exercise. Instructor mode provides cues and pauses at decisions; switch it off to rehearse without hints. Voice is optional and uses your browser’s available speech voices.</p>
+  <h2>Scope and limits</h2>
+  <p>Aircraft dynamics, AoA, fuel consumption, glidepath and arrestment are synthetic. Hold entry is automatic; a fixed six-minute circuit and amended EATs simplify timing. This is not a full cockpit or approved operating procedure. The exact DCS version has not been verified. Radio dialogue and scoring tolerances remain inherited prototype content, pending claim-by-claim aviation review.</p>
+  <p>CV NATOPS, 31 July 2009, §6.4.1.1 (p. 6-6) describes a six-minute racetrack. The implementation uses two-minute half-turns and one-minute legs. §6.4.4 (p. 6-8) requires adjusting the pattern to depart at EAT; variable-leg timing is not implemented here.</p>
+  <p><a href={sitePath(caseIII.assets)}>Open trainer in a full window</a> · <a href="#sources">Sources and unresolved review</a></p>
+  <noscript><p>The trainer requires JavaScript. Scope notes and source references remain readable without it.</p></noscript>
+  <iframe id="case-iii-frame" title="Case III Tomcat procedure trainer — unvalidated review" src={sitePath(caseIII.assets)} height="1000" allow="autoplay" data-experience-id={caseIII.id}></iframe>
+  <h2 id="sources">Sources and unresolved review</h2>
+  <p>References identify the prototype’s inputs; they do not certify the procedures or grant rights to reproduce manuals. No manual files or third-party media are included.</p>
+  <ul>
+    <li><a href="https://info.publicintelligence.net/CV-NATOPS-JUL09.pdf">NAVAIR 00-80T-105, CV NATOPS, 31 July 2009</a>, §§6.4.1.1 and 6.4.4, pp. 6-6 and 6-8: marshal circuit and departure timing. Historical edition; current applicability and qualified review pending.</li>
+    <li><a href="https://www.digitalcombatsimulator.com/upload/iblock/e1b/430ooc582lpb0npynbsewan6omd5ohvs/DCS_Supercarrier_Operations_Guide_EN.pdf">Eagle Dynamics Supercarrier Operations Guide</a>, detailed Case III approach pp. 75–81: dialogue and sequence inputs. Edition/version mapping pending.</li>
+    <li><a href="https://f14.manuals.heatblur.se/">Heatblur F-14 manual</a>: aircraft-system context. Numeric limitation and source-edition review remains incomplete.</li>
+  </ul>
+</SiteLayout>
+<style>
+  iframe{width:100%;border:1px solid #767676;display:block;min-height:800px}
+  :global(.page-content:has(#case-iii-frame)){max-width:none}
+  :global(.page-layout:has(#case-iii-frame)){display:block}
+  :global(.page-layout:has(#case-iii-frame)>.subject-nav){position:static;margin-bottom:1rem}
+</style>
+<script is:inline>
+  const frame = document.querySelector('#case-iii-frame');
+  window.addEventListener('message', event => {
+    if (!frame || event.origin !== location.origin || event.source !== frame.contentWindow) return;
+    if (event.data?.type !== 'oversweep:case-iii:size' || !Number.isFinite(event.data.height)) return;
+    frame.height = String(Math.min(12000, Math.max(800, event.data.height)));
+  });
+</script>

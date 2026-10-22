@@ -1,0 +1,14 @@
+---
+import { readFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { reviewTrainers, caseIII } from '../../data/experiences';
+import { sitePath } from '../../lib/paths';
+export function getStaticPaths() {
+  return reviewTrainers ? [{ params: { experience: 'case-iii' } }] : [];
+}
+// A real page route, not a dynamic index.html endpoint: Astro normalizes index
+// URLs in development. The base keeps authored asset links valid at either base.
+const source = await readFile(resolve(process.cwd(), 'src/experiences/case-iii/index.html'), 'utf8');
+const html = source.replace('<head>', `<head><base href="${sitePath(caseIII.assets)}">`);
+---
+<Fragment set:html={html} />

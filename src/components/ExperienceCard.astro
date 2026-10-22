@@ -1,0 +1,11 @@
+---
+import { caseIII } from '../data/experiences';
+import { sitePath } from '../lib/paths';
+---
+<section class="status-panel" data-experience-id={caseIII.id}>
+  <h2>{caseIII.title}</h2>
+  <p><strong>{caseIII.maturity}</strong> · Local review only</p>
+  <p>{caseIII.objective}</p>
+  <p>{caseIII.applicability}</p>
+  <a href={sitePath(caseIII.route)}>Open the trainer and scope notes →</a>
+</section>

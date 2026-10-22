@@ -96,3 +96,13 @@ The [deployment configuration](deployment.md) replaces the mechanism assessed by
 historical issue #10. A manual main-only Pages workflow is prepared; app integration
 (PR #21), account entitlement, repository Pages settings, first release and DNS
 remain pending. No deployment or issue completion is claimed.
+
+## Current prototype source port
+
+[#28](https://github.com/burnzoire/oversweep/issues/28) ports the owner-authorised
+current source into one local-review experience under Naval Operations and the
+Training Library. See [port evidence](plans/05-case-iii-port.md). Source access is
+now available; historical #5–#7/#20 notes remain inputs, not aviation approval.
+Work status and linked implementation PR are tracked in #28. Content: Drafted,
+not technically validated. Normal production excludes the trainer and assets.
+No merge, deployment, technical validation or publication is claimed.

@@ -3,8 +3,9 @@
 A subject-centric, NATOPS-inspired aviation reference for understanding concepts,
 learning procedures and practising practical knowledge. Intended domain: oversweep.com.
 
-**Phase: site skeleton.** The responsive static shell and navigation are in
-development; trainer experiences and validated aviation guidance are not included.
+**Phase: site skeleton plus draft Case III port.** The responsive static shell
+and navigation include a local-review trainer. Normal production builds exclude
+unvalidated trainer routes and assets; no aviation validation is claimed.
 
 ## Start here
 
@@ -35,8 +36,21 @@ npm run dev
 npm run check
 ```
 
-The Manual, Encyclopedia and Training Library are navigation shells with Coming
-soon placeholders; no Case III trainer or aviation guidance is published.
+The Manual and Training Library expose the same Case III Tomcat trainer during
+`npm run dev`, under Naval Operations. Start Exercise in its briefing popup begins
+the simulation; instructor mode is optional. The remaining catalogue is Coming soon.
+The port is Drafted, not technically validated. It is absent from normal production
+output, including direct asset paths.
+
+```sh
+npm run test:case-iii
+OVERSWEEP_REVIEW_TRAINERS=1 npm run check:review
+npm run build  # restore ordinary production output after local review
+```
+
+The explicit review build uses `/oversweep/` to verify GitHub Pages base paths.
+Do not deploy review output. See [port/provenance and limitations](docs/plans/05-case-iii-port.md).
+This PR changes no hosting or deployment settings.
 
 ## Check this foundation
 
