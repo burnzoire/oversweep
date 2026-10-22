@@ -11,7 +11,8 @@ and the [development workflow](../../docs/development.md). These are the shared
 rules; this profile adds a planning role, not new project authority.
 
 - Start from the requested issue and current main, live dependencies, open PRs
-  and working-tree changes. Confirm Ready scope or document the missing decision.
+  and working-tree changes. Owner assignment authorises the stated scope; do not
+  wait for Ready fields or ADR acceptance. Check actual dependencies and proceed.
 - Produce one focused plan: outcome, observable acceptance criteria, dependencies,
   exclusions, affected boundaries, sources/rights, checks and remaining decisions.
 - Use official sources for framework capabilities and primary sources for aviation

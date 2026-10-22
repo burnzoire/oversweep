@@ -25,11 +25,12 @@ repository's permissions or human approval gates.
    requires merging profiles into the default branch and refreshing its picker;
    use a local IDE checkout for pre-merge checks, not an assumed GitHub listing.
 2. Give the planner the issue and desired outcome. It returns scoped criteria,
-   dependencies, evidence and a plan. Human decisions remain explicit in the issue
-   or ADR; a planner handoff supplies no additional authorisation.
-3. Give the implementer the approved scope, issue and checks. Planning tasks stay
+   dependencies, evidence and a plan. Routine choices are recorded in the issue/PR.
+   Owner assignment supplies scope authorisation; a planner cannot expand it.
+3. Assign the issue with its intended scope and checks. No manual Ready transition
+   or ADR acceptance is needed. Planning tasks stay
    documentation-only. Application work needs an explicit implementation task.
-4. Start a separate reviewer context with the issue, base/head SHA, full diff and
+4. For substantive changes, start a separate reviewer context with the issue, base/head SHA, full diff and
    check evidence. Record findings and disposition in the PR. After fixes, review
    the changed scope on the new head. A profile name alone proves no independence.
 5. Record actual work status in the issue. Human approval and authorised merge
@@ -67,7 +68,8 @@ Owner runtime check: use a local IDE checkout before merge, or GitHub's picker
 after an authorised merge. Confirm all three profiles appear, then run a read-only reviewer task
 against a known diff and verify it returns the head and limitations without edits.
 No live Copilot session has been executed as part of this change. Rendered Markdown
-inspection is pending. CI and independent review evidence belong in the linked PR.
+inspection was not performed for the original profiles. Record applicable CI/review
+evidence in the linked PR; that historical limitation is not a workflow blocker.
 
 ## Official references
 

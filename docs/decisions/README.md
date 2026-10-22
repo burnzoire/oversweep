@@ -1,10 +1,13 @@
-# Architecture decision records
+# Technical decision notes
 
-Use numbered records with status, context, alternatives, decision/proposal,
-consequences and acceptance evidence. Proposed is not Accepted. Acceptance needs
-a recorded human decision linked to the approving PR or issue. Supersede records
-rather than rewriting history.
+ADRs are optional notes for decisions worth retaining. Routine choices belong in
+the issue or PR: decision, reason, important tradeoff and follow-up if needed.
+No separate human acceptance or numbered ADR is required to start an assigned task.
+The owner reviews changes in the PR. Do not report an approval that did not occur.
 
-| ADR | Status | Topic |
+| Note | Current use | Topic |
 | --- | --- | --- |
-| [0001](0001-content-first-architecture.md) | Proposed | Content-first static architecture |
+| [0001](0001-content-first-architecture.md) | Working architecture; no approval gate | Content-first static architecture |
+
+Preserve the reason and history when a working choice changes. Ask the owner only
+for material scope, cost, external access or security decisions, not routine details.

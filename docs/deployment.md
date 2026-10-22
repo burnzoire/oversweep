@@ -80,7 +80,8 @@ operations preferences. Hosting on a private machine is separate from public
 access: public oversweep.com and private previews need explicit routing/access
 decisions. Do not change DNS, open ports or enable tunnels during planning.
 
-Next deliverable: a reviewed server inventory and delivery ADR selecting manual
+Next deliverable: a reviewed server inventory and delivery decision recorded in
+the issue or PR, selecting manual
 promotion or deploy-only runner, a credential/approval plan, Compose/release
 contract, smoke tests, rollback and reboot test plan. Only then author deployment
 workflows/configuration in a separately authorised task.

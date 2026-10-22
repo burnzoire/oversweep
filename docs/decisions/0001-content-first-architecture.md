@@ -1,43 +1,40 @@
-# ADR 0001: Content-first static architecture
+# Decision note 0001: Content-first static architecture
 
-Status: Proposed
+Status: Working default; no separate acceptance required.
 
-Documentation assessment: [issue #2 report](../plans/02-architecture-assessment.md),
-22 October 2026. Recommend retaining this proposal with one React root per trainer.
-The report supplies a provisional contract, maintenance/test strategy and scoped
-spike plan. No spike has run; human acceptance or replacement is still required.
+## Current choice
 
-## Context
+Use Astro + TypeScript with static output, structured Markdown/MDX and validated
+data records. Use one React root per complete trainer and pure deterministic model
+functions independent of UI. The [assessment](../plans/02-architecture-assessment.md)
+records the rationale, alternatives and useful future validation cases.
 
-Oversweep needs searchable reference content, structured facts and reusable
-interactive experiences without accounts as an access prerequisite. The foundation
-contains no application; server-side features have not been justified.
+This is the assessed working recommendation, not a claim of owner stack approval,
+measured performance, installed package compatibility or a successful spike.
 
-## Alternatives
+## Why and when to revisit
 
-Astro with selective React interactions; Next.js with React; Vite React SPA.
-See the comparison in [architecture](../architecture.md).
+The site is a reference with embedded experiences, so static content and selective
+interactivity fit its current scope. Next.js and a Vite React SPA were considered.
+Revisit in the implementing PR if source audit, shared state or server requirements
+show a concrete problem. Record routine adjustments and their checks in that PR;
+no additional ADR ceremony is required.
 
-## Proposal
+## Validation and boundaries
 
-Validate Astro + TypeScript, structured Markdown/MDX and schema-validated data;
-use pure model functions and reusable experience contracts independent of renderer.
-Do not install dependencies or configure hosting in this task. Deployment planning
-uses GitHub Actions and the owner's private Windows 11 Docker server; delivery
-mechanism and ingress remain proposals in [deployment](../deployment.md).
+Select and lock compatible versions when an implementation task needs them. Test
+content shape, publication exclusion, hydration, deterministic model behaviour,
+accessibility and production output within that task. A separate approved spike
+is not a prerequisite for contracts, design, audit or implementation.
 
-## Consequences
+Existing issues remain planning tasks unless the owner assigns implementation.
+Case III remains the first slice; its source audit, evidence and integration scope
+still matter. Delivery details remain in [deployment](../deployment.md); no server,
+registry, hosting or deployment changes are authorised by this note.
 
-A static-first approach may reduce runtime needs but cross-island state, search,
-MDX trust and build-time validation require deliberate design. A richer application
-may warrant another option; revisit with evidence rather than preserving a preference.
+## History
 
-## Acceptance evidence required
-
-Scoped spike plan, official documentation checks for supported integrations,
-one proposed content/experience contract, test and accessibility strategy,
-dependency/maintenance assessment and human stack approval. No prototype
-implementation is authorised by this ADR alone.
-
-The first slice is selected: the owner's Case III Tomcat carrier trainer.
-Open: stack acceptance, package versions, search library, delivery mechanism and ingress.
+The original proposal and assessment required separate candidate/spike/final-stack
+approvals. On 22 October 2026 the sole owner requested a lighter process. Those
+procedural gates are superseded by the [solo workflow](../development.md).
+No spike has been run and aviation validation requirements have not changed.
