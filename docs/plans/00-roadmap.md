@@ -27,6 +27,11 @@ model fixtures and remaining evidence needed. The site and candidate manual
 metadata endpoints could not be retrieved from the research environment; current
 behavior and exact procedure pages have not been verified.
 
+The [issue #6 integration plan](04-case-iii-integration-plan.md) defines the
+reuse, content/experience, validation and publication gates. It is planning
+only; source audit #7 and the documented evidence gaps remain prerequisites
+before authorizing implementation.
+
 Review applicable NATOPS editions, procedural/timing models, radio exchanges,
 assessment feedback and usability. Check previously reported hold-turn timing
 and debrief/log scrolling as regression candidates, not established defects in
