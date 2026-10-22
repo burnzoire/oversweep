@@ -21,8 +21,11 @@ Library. Do not replace this choice with a Bullseye or turn-geometry starter.
 Issue #7 audits the prototype early, before #5 research/gap assessment and #6
 integration planning conclude. Obtain the source/export and provenance; the hosted
 URL is a reference, not a substitute for source code or proof of technical accuracy.
-The site could not be retrieved through the research tool during this update;
-its current behaviour and implementation have not been verified.
+The [issue #5 research and scope record](03-case-iii-research.md) documents the
+current access blocker, unverified source/behavior/NATOPS references, synthetic
+model fixtures and remaining evidence needed. The site and candidate manual
+metadata endpoints could not be retrieved from the research environment; current
+behavior and exact procedure pages have not been verified.
 
 Review applicable NATOPS editions, procedural/timing models, radio exchanges,
 assessment feedback and usability. Check previously reported hold-turn timing
