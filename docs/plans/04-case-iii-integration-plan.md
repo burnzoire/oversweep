@@ -175,11 +175,14 @@ before coding affected behavior.
 
 ## Validation and review record
 
-- Scope self-review: this document defines a plan only; it does not claim
-  source inspection, behavior observation, rights clearance, aviation accuracy,
-  implementation, accessibility testing or publication.
+- Manual self-review against issue #6 and the architecture, content contract,
+  design, research and roadmap: references and scope align; this document does
+  not claim source inspection, behavior observation, rights clearance, aviation
+  accuracy, implementation, accessibility testing or publication.
 - Documentation checker: pending; this session has no shell/command execution
   tool to run `python3 scripts/check_docs.py`.
+- Whitespace check: pending; this session has no shell/command execution tool to
+  run `git diff --check`.
 - Independent review: not recorded. No independent reviewer is available
   through the current session tools; request fresh-context review or record
   owner review before treating the plan as approved.
