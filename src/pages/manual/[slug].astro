@@ -1,4 +1,6 @@
 ---
+import ExperienceCard from "../../components/ExperienceCard.astro";
+import { reviewTrainers } from "../../data/experiences";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { manualSubjects } from "../../data/catalogue";
 import { sitePath } from "../../lib/paths";
@@ -22,6 +24,7 @@ const { subject } = Astro.props;
     { label: subject.title },
   ]}
 >
+  {subject.slug === "naval-operations" && reviewTrainers && <ExperienceCard />}
   <section class="status-panel">
     <h2>Coming soon</h2>
     <p>This subject page is a navigation placeholder. No aviation guidance or training content is published here.</p>
