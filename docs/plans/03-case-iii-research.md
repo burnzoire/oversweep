@@ -6,6 +6,10 @@ guidance, technical validation or publication approval. The owner-selected
 [Case III Tomcat trainer](https://case-three-tomcat.burnzoire.chatgpt.site/) remains
 the subject; no replacement is proposed.
 
+This is a pre-port snapshot. The source/export and provenance blocker was later
+resolved for the port in [issue #28 / PR #29](https://github.com/burnzoire/oversweep/pull/29);
+that does not resolve aviation validation or qualify the content for publication.
+
 ## Outcome and dependency check
 
 Issue #3 is closed and its
@@ -23,11 +27,11 @@ screenshots, code, export, test, creator identity or version was obtained. Do no
 interpret this access failure as evidence that the owner cannot provide an export or
 that the site is unavailable to its intended users.
 
-**Next required input:** obtain an owner-authorised source/export and provenance
-record, including creator/source, export date and revision, included assets and
-dependencies, applicable third-party material, and permission/rights for reuse.
-Until then, source origin, completeness, licence and reuse rights are unknown. Do
-not copy site text, assets or code into Oversweep.
+**Next input at this snapshot:** obtain an owner-authorised source/export and
+provenance record, including creator/source, export date and revision, included
+assets and dependencies, applicable third-party material, and permission/rights for
+reuse. This source-access blocker was resolved for the #28 port; do not treat this
+historical note as a current blocker or as proof of aviation validation.
 
 ## Evidence register and source gaps
 

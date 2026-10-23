@@ -1,17 +1,19 @@
 # Deployment: GitHub Pages
 
-Status: GitHub Pages replaces the Windows 11 Docker hosting proposal at the owner's
-request on 22 October 2026. The workflow is configured in this PR; no site has been
-published and repository Pages settings/account entitlement have not been verified.
-The site shell is being delivered in issue #25 / PR #26. PR #21 contains separate,
-unfinished trainer work and is not required to publish the shell.
+Status: GitHub Pages replaced the Windows 11 Docker proposal at the owner's request
+on 22 October 2026. PR #27 configured the push-to-main workflow, and the latest
+observed main deployment succeeded at SHA `72ad6cb` (see
+[run evidence](progress.md)). A successful run does not establish live-site
+reachability or a content release. Repository Pages settings and account eligibility
+are not exposed by the current settings connector and remain unverified.
 
 ## Delivery
 
 Use static Astro output on GitHub Pages. No Docker image, GHCR package, private
-server or self-hosted runner is needed. The repository stays private; the deployed
-website is public. A personal private repository requires GitHub Pro (or another
-eligible plan); do not make the repository public to work around unavailable Pages.
+server or self-hosted runner is needed. The intended model keeps the source
+repository private and serves the website publicly when Pages settings and account
+eligibility permit it. Verify access in Settings; do not make the repository public
+to work around unavailable Pages.
 
 The [Pages workflow](../.github/workflows/pages.yml) runs automatically on every
 push to main, including merged PRs. Manual dispatch from main remains available.
@@ -38,31 +40,27 @@ custom domain uses its origin and root base. Use `import.meta.env.BASE_URL` for
 internal navigation, public assets, fetch URLs and search paths. Astro does not
 rewrite hard-coded root-relative links automatically.
 
-Before the first release, test the production build at both `/oversweep/` and
-`/`: direct nested navigation, refresh, images, JS hydration, trainer/debrief,
-search and 404 behavior. Pages serves static files and has no application-server
-fallback. Generate real routes; do not rely on an SPA rewrite. Verify production
-output excludes source-gated content. The separate scaffold PR has not been
-validated with this workflow.
+Test the production build at both `/oversweep/` and `/`: direct nested navigation,
+refresh, images, JS hydration, trainer/debrief, search and 404 behavior. Pages
+serves static files and has no application-server fallback. Generate real routes;
+do not rely on an SPA rewrite. Verify production output excludes source-gated
+content. The successful deployment job is not a substitute for these live checks.
 
-## First release and domain setup
+## Settings, live verification and domain setup
 
-1. Merge the application scaffold and this configuration after review. Confirm
-   an eligible GitHub plan and the production content/build checks.
-2. In repository **Settings → Pages**, choose **GitHub Actions** as the source.
-   The current connector cannot change Pages settings. Review the
-   `github-pages` environment's branch policy to allow main only; optional
-   reviewer gates depend on plan availability and are not claimed here.
-3. In **Actions → Deploy GitHub Pages → Run workflow**, select main. Check the
-   build/deploy jobs and use the deployment URL reported by the run. Initially
-   expect `https://burnzoire.github.io/oversweep/`; it is not a live URL yet.
-4. Once the intended spelling is confirmed, set the custom domain in Pages
+1. In repository **Settings → Pages**, verify **GitHub Actions** as the source,
+   account eligibility and the `github-pages` environment's main-only branch
+   policy. The current connector cannot inspect or change these settings.
+2. After a push to main (or an explicitly authorised manual dispatch), check both
+   build/deploy jobs and use the deployment URL reported by the run. The latest
+   observed main run succeeded, but the URL and live behavior still need verification.
+3. Once the intended spelling is confirmed, set the custom domain in Pages
    settings, for example `www.oversweep.com`. The owner's message said
    `www.oversleep.com`; no domain has been set on that assumption.
-5. Set DNS record `CNAME www → burnzoire.github.io` at the DNS provider.
+4. Set DNS record `CNAME www → burnzoire.github.io` at the DNS provider.
    The target excludes `https://` and `/oversweep/`. Configure the domain in
    GitHub before changing DNS. A CNAME file is unnecessary for Actions publishing.
-6. Run the workflow again to rebuild using custom-domain metadata. After DNS and
+5. Run the workflow again to rebuild using custom-domain metadata. After DNS and
    certificate provisioning complete, enable **Enforce HTTPS** and check the
    site, nested routes and assets at the custom domain.
 

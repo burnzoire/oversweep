@@ -33,9 +33,10 @@ the delivery agent retains ownership. Do not stop at a plan for a feature task.
 
 Scope is determined by the assigned issue. Historical planning-only issues remain
 planning-only; a feature delivery issue explicitly authorises implementation. For
-Case III, [issue #20](https://github.com/burnzoire/oversweep/issues/20) combines the
-previous split research/audit/planning work with implementation. Use prior work as
-inputs; actual source access and evidence matter, not ticket status. Do not expand scope.
+Case III, the former issue #20 combined the previous split research/audit/planning
+work with implementation, but that issue is now deleted. The delivered port is
+recorded in issue #28 / PR #29. Use prior work as inputs; actual source access and
+evidence matter, not ticket status. Do not expand scope.
 Never merge, deploy, publish or configure hosting without explicit owner approval.
 No custom orchestration service or unapproved external integration is needed.
 

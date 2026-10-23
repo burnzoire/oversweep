@@ -1,15 +1,15 @@
 # Case III prototype integration plan — issue #6
 
 Historical planning input. Its separate plan approval/follow-on issue sequence is
-superseded by [delivery issue #20](https://github.com/burnzoire/oversweep/issues/20)
-and the [one-task workflow](../development.md). Reuse the technical findings and
-checks within that delivery task; no additional implementation issue is required.
-This note does not claim source audit, technical validation or tests are complete.
+superseded by the [one-task workflow](../development.md). The former delivery issue
+#20 is deleted; issue #28 / PR #29 records the delivered port. Reuse technical
+findings as inputs, not approval gates. This note does not claim aviation validation
+or publication is complete.
 
-Status: planning proposal; no application implementation or prototype import is
-authorised by this document. Snapshot: 22 October 2026. The selected subject
-remains the owner's Case III Tomcat trainer; this plan does not establish
-prototype behavior, source rights, procedural accuracy or technical validation.
+Status at snapshot (22 October 2026): planning proposal; this document did not
+authorize implementation or prototype import. The owner later authorized the port
+in #28 / PR #29. This plan does not establish procedural accuracy or technical
+validation.
 
 ## Inputs and readiness
 
@@ -53,8 +53,9 @@ and reset/replay behavior to learning objectives and sourced claims.
   logic. The browser experience must not be a second source of procedural facts
   or scoring rules.
 
-These are proposed boundaries for a separately authorised implementation.
-Candidate `src/` paths in the architecture are not created by this planning task.
+These were proposed boundaries for implementation. The port now exists; use the
+current architecture and assigned issue for further work. Candidate `src/` paths
+were proposals, not requirements to create every directory.
 
 ## Manual and Training Library integration
 
@@ -75,9 +76,9 @@ or content records.
 The entry should explain the experience objective, applicability, assumptions,
 limitations and relevant references before its controls. Keep the reference
 explanation useful without JavaScript; present results and debrief after the
-scenario. Until the source and research gaps are resolved, new Case III claims
-remain unresolved or Drafted, and the experience and its assets remain excluded
-from publication.
+scenario. The source-access gap was later resolved for the port. Claims without the required
+source mapping and qualified review remain unresolved or Drafted, and unvalidated
+experience content remains excluded from publication.
 
 ## Scenario and assessment contracts
 
@@ -128,10 +129,10 @@ sources. Do not preserve an unsupported result just because it matches the
 prototype. Verify that debrief entries remain available, in order, readable and
 keyboard-accessible after long runs and at narrow viewports.
 
-## Implementation and verification gates
+## Implementation and verification guidance
 
-The separately authorised implementation issue should include these deliverable
-gates:
+These historical proposals are guidance for relevant future changes, not a demand
+for separate issues or approval stages:
 
 1. **Before reuse:** record export revision, provenance, dependency/asset
    inventory, rights dispositions and the completed #7 behavior audit.
@@ -165,19 +166,15 @@ gates:
    validator errors must keep all outputs excluded. Publishing is a separately
    authorised action, not an implementation default.
 
-## Follow-on authorization and remaining decisions
+## Current status and remaining aviation evidence
 
-After this plan is reviewed and approved, open a separate implementation issue;
-do not implement under #6. It should authorize only the selected Case III slice
-and use the gates above as acceptance criteria. Do not merge, deploy, publish or
-configure hosting without the applicable explicit approval.
-
-The owner/source holder must still provide the export and provenance/rights
-information. Issue #7 must complete the audit; primary-source editions and
-locations, applicability and a qualified reviewer remain unidentified in the
-available records. The audit may change the component reuse decision, scenario
-schema and model fixtures. Resolve those decisions in the implementation issue
-before coding affected behavior.
+Issue #28 / PR #29 records the owner-authorised port; no additional implementation
+issue is required merely to repeat this plan. The source/export blocker described
+above was resolved for that port. The content remains Drafted, not technically
+validated. Qualified human review, claim-level source support and other applicable
+content-standard gates remain required before validation or publication. A new
+task follows its own assigned scope; merge, deployment and content publication
+remain separate owner decisions.
 
 ## Validation and review record
 

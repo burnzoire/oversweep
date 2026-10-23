@@ -1,6 +1,7 @@
 # Working technical architecture
 
-Status: working default; no application dependencies or framework scaffold installed.
+Status: working default; the Astro/TypeScript site scaffold and Drafted Case III
+port are implemented. See [README](../README.md) for current local commands.
 See [ADR 0001](decisions/0001-content-first-architecture.md).
 The [issue #2 assessment](plans/02-architecture-assessment.md) records the official
 documentation comparison, state/content boundaries and unexecuted local spike plan.
@@ -47,29 +48,33 @@ A search backend is deferred until evidence warrants it.
 Optional local progress needs schema versions, reset/export behaviour and graceful
 handling of unavailable storage; no sign-in gate or cross-device guarantee.
 
-When application implementation is assigned, add locked dependencies, formatting, lint/type checks, schema
-validation, model unit/reference-case tests, component checks, production build and
-Playwright flows. Check keyboard, reduced motion and representative desktop/tablet/
-mobile layouts. Assess bundle size and render performance against measured budgets
-before setting numerical thresholds.
+The application now has locked dependencies, foundation/application checks and a
+production build. Extend relevant checks with future content schemas, model
+reference cases, component behavior and browser flows. Check keyboard, reduced
+motion and representative desktop/tablet/mobile layouts. Assess bundle size and
+render performance against measured budgets before setting numerical thresholds.
 
 Private PR previews require explicit access-control and hosting decisions. Treat
 private repository visibility as distinct from preview visibility. Until approved,
-use local verification; never enable public previews or deployment by default.
+use local verification and do not enable public previews. Preserve the existing
+owner-authorised production Pages deployment; do not create another deploy target
+without explicit approval.
 
 Deployment target: static GitHub Pages via GitHub Actions, replacing the private
-Windows Docker server proposal. The owner-invoked workflow publishes only production
-output from main; it needs the application scaffold and Pages settings before use.
-See [deployment](deployment.md) for base paths, custom domain setup and rollback.
-No site has been published.
+Windows Docker server proposal. The workflow deploys production output on pushes to
+main and supports manual dispatch; both application and documentation checks run
+before deployment. The latest observed main deployment succeeded, but this does not
+verify live-site reachability, settings, or aviation-content maturity. See
+[deployment](deployment.md) for base paths, settings and rollback.
 
 ## Decision gates
 
 No formal ADR acceptance is required to start an assigned task. Establish content
 contracts before bulk authoring. Retain source, qualified review and numerical
-evidence before validating aviation content. The first slice is the owner's Case III Tomcat prototype;
-audit and plan within the same delivery task before importing affected material.
-Issue #20 supplies implementation scope; no separate phase issues are required.
+evidence before validating aviation content. The initial Case III port is recorded
+in issue #28 / PR #29; its merge does not validate the Drafted content. Future
+delivery follows the scope and evidence in its assigned issue; no separate phase
+issues are required.
 
 ## Assessment sources
 
