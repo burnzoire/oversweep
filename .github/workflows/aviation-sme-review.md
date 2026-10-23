@@ -23,10 +23,6 @@ on:
         description: Pull request number to review at its current head
         required: true
         type: string
-if: github.event_name == 'workflow_dispatch' || (
-      github.event_name == 'pull_request' &&
-      github.event.pull_request.draft == false
-    )
 permissions:
   contents: read
   pull-requests: read
@@ -88,7 +84,8 @@ agent and imports the same review standard used by its repository profile.
 2. Resolve the target PR from the `pull_request` event, or from
    `workflow_dispatch` input `pr_number`. Retrieve its current metadata from
    GitHub. Validate that a manual input is a positive PR number in this
-   repository. Skip drafts, including manually selected draft PRs.
+   repository. Drafts are reviewed too; a skipped draft review must never be
+   mistaken for a release approval.
 3. Record the current head SHA, inspect changed-file names and the diff, and read
    relevant changed and neighboring files at that exact head revision. The
    workflow sets `checkout: false`; retrieve files as data through read-only
@@ -131,17 +128,29 @@ simplifications as standard procedures.
 
 When the head is still current, call the `add_comment` safe-output exactly once.
 It is configured to target only the resolved PR number. Start the visible body
-with `# Oversweep Aviation SME advisory review`. Include:
+with `# Oversweep Aviation SME advisory review`. Include these exact,
+machine-readable lines:
 
-- reviewed head SHA and review scope;
+- `**Reviewed head:** \`<40-character SHA>\``
+- `**Release readiness:** BLOCKED` or `**Release readiness:** READY`
+- `**Blocking findings:** <integer>`
+- `**Actions run:** <URL ending in /actions/runs/<run-id>>`
+
+For each finding, state `release_blocking: true` or `release_blocking: false`
+and explain the disposition. Include:
+
 - evidence-supported claims with exact source locators and applicability;
 - factual defects, unresolved evidence/applicability, and editorial suggestions
   in separate sections, each with severity and an actionable recommendation;
 - independently derived numerical checks where relevant;
 - unreviewed files/claims, inaccessible sources, and other limitations; and
-- the Actions run link.
+- the review scope and any claims outside it.
 
-If no issue is found, say so and still list the checked scope and untested areas.
+Critical, high, and unresolved medium evidence/applicability findings block
+release readiness. Low editorial suggestions do not block by themselves. A
+review with no applicable aviation changes may say `READY` with zero blocking
+findings, but must state that aviation review was not applicable. If no issue is
+found, say so and still list the checked scope and untested areas.
 The `replace-older-comments` safe output updates this workflow's prior summary
 instead of accumulating comments. PR updates cancel superseded runs; the final
 head check suppresses any stale result that reaches output processing. This
