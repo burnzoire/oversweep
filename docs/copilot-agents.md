@@ -166,8 +166,11 @@ do not enable both, because the permission makes the framework ignore the PAT.
 Do not commit tokens. The profile and compiled workflow are not evidence of a
 live review; record run URLs, reviewed SHAs, comment output, and any
 credentials/runtime blocker separately. Any corrections require review again
-at the new head. The SME review cannot replace qualified human technical
-approval or advance maturity.
+at the new head. Independent source-backed SME review can satisfy technical
+validation under the content standards; no human aviation reviewer is required.
+The delivery agent owns fixes and records maturity only after all evidence gates
+are met. The read-only review comment itself does not change maturity or authorize
+publication.
 
 ## UX review
 

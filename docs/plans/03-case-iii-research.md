@@ -1,5 +1,11 @@
 # Case III trainer research and scope — issue #5
 
+Current policy: [content standards](../content-standards.md) supersede historical human aviation review requirements below.
+Independent source-backed SME agent review can satisfy technical validation;
+no human aviation reviewer is required. Historical review results and unresolved
+source/browser evidence remain unchanged. This policy update does not validate
+or publish the trainer.
+
 Research snapshot: 22 October 2026. Status: partial; source/export and behaviour
 remain unverified. This is a planning record, not trainer implementation, aviation
 guidance, technical validation or publication approval. The owner-selected

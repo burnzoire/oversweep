@@ -65,16 +65,17 @@ the existing Pages workflow; do not merge, manually dispatch, change hosting
 settings or publish content without the applicable explicit approval. Engineering
 deployment does not itself authorize aviation-content publication.
 
-Content standards still require primary sources, independently derived model
-cases and qualified human review for aviation validation. The owner may perform
-that technical review when competent; the process does not require another human.
+Content standards require applicable primary sources, independently derived model
+cases and independent fresh-context aviation SME agent review for validation.
+No human aviation reviewer is required. The delivery agent owns source research,
+SME/UX/code review, corrections and re-review through one release-ready PR.
 Content without that evidence remains unvalidated and excluded from publication.
 
 The optional [aviation SME reviewer](copilot-agents.md#aviation-sme-review)
 reports evidence-backed findings and unresolved sources without editing or
 approving content. Re-review material corrections at the new revision. Automated
-or AI review does not substitute for qualified human validation or change
-content maturity.
+review alone does not change maturity: the delivery agent records validation
+only after the content-standard evidence and independent review gates are met.
 
 Complete means delivered scope, applicable checks and review, and authorised merge.
 No estimated percentages. Record actual blockers and the smallest next action;

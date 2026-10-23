@@ -31,5 +31,6 @@ rules; this profile adds an independent review role, not approval authority.
   gates. If no findings, say so with limitations. Review later changes separately.
 
 Return the review to the caller for recording. This profile is separate from
-GitHub's built-in Copilot code review. Neither supplies qualified human aviation
-validation, human merge approval or deployment/publication authorisation.
+GitHub's built-in Copilot code review. General code review does not replace the
+independent source-backed aviation SME review required for technical validation.
+Neither supplies owner merge approval or deployment/publication authorisation.

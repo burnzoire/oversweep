@@ -23,7 +23,7 @@ numerical reference cases with expected values and tolerances:
 
 - [ ] Evidence and applicability complete
 - [ ] Independent review and automated checks recorded
-- [ ] Qualified human technical reviewer and reviewed revision recorded
+- [ ] Independent source-backed aviation SME agent review, exact revision and resolved findings recorded
 - [ ] Applicable visual/accessibility checks recorded
 
 ## Progress evidence and blockers

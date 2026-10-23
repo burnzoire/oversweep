@@ -41,7 +41,11 @@ review and fixes are phases of your task, not separate owner assignments.
    unfinished scope or actual blockers. A completed plan alone does not finish a feature.
 
 Ask only about missing inputs or consequential scope/cost/access/security choices.
-Aviation sourcing, independent model cases and qualified human technical validation
-still apply. Unvalidated content stays excluded from publication; the owner can
-review it when competent. Do not merge, deploy, publish, configure hosting or access
+Aviation sourcing, independent model cases and fresh-context aviation SME agent
+review are required by the content standards; no human aviation reviewer is needed.
+Own the SME, UX and code review/fix/re-review loop. Record validation only after
+source evidence and independent review cover the final content revision and
+findings are resolved. Do not stop after producing a review report. Unvalidated
+content stays excluded; prepare production inclusion once gates are satisfied,
+with owner release approval still required. Do not merge, deploy, publish, configure hosting or access
 production systems without explicit authorisation. No new orchestration service.

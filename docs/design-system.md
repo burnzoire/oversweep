@@ -101,8 +101,8 @@ Expose assumptions and unresolved limitations next to the affected claim.
 Use the maturity values and gates in [content standards](content-standards.md):
 Outlined, Researched, Drafted, Technically Validated and Published. For example,
 show “Drafted — not technically validated” rather than an ambiguous “draft”
-badge. A Technically Validated label requires the named qualified human review
-for that revision; Published additionally requires the publication gates and
+badge. A Technically Validated label requires independent source-backed SME agent
+review and complete evidence for that revision; Published additionally requires the publication gates and
 actual release. Do not imply that a visual treatment itself validates or
 approves content.
 

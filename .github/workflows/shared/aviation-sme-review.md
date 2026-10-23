@@ -89,7 +89,11 @@ than reproduce source text. If there are no findings in a category, say so.
 Review is advisory. The reviewer does not edit the PR, submit approval, merge,
 publish, or change maturity. Record the findings against the reviewed revision.
 After a correction, re-review the affected claims and source mappings at the
-new head SHA. Only a named human with relevant competence may record qualified
-technical validation; a material source, procedure, equation, or applicability
-change invalidates prior validation. AI output and CI cannot advance a revision
-to **Technically Validated** or **Published**.
+new head SHA. Independent source-backed SME agent review can satisfy technical
+validation under the content standards; no human aviation reviewer is required.
+State whether the inspected scope meets those gates and identify every remaining
+blocker. The delivery agent records maturity only after all required evidence and
+resolved findings cover the final content revision. A material source, procedure,
+equation, or applicability change invalidates affected validation. This read-only
+review does not itself change maturity or authorize publication; owner release
+approval and the other publication gates remain required.
