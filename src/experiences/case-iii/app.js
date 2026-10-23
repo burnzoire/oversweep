@@ -25,7 +25,7 @@ function cancelSpeech(){speechEpoch++;markSpeaking(speakingCard,false);speakingC
 const digitWords=['zero','one','two','three','four','five','six','seven','eight','nine'];
 const speakDigits=value=>String(value).split('').map(d=>digitWords[Number(d)]).join(' ');
 function speakNumber(value){const n=Number(value),small=['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'],tens=['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];if(n<20)return small[n];if(n<100)return tens[Math.floor(n/10)]+(n%10?' '+small[n%10]:'');if(n<1000)return small[Math.floor(n/100)]+' hundred'+(n%100?' '+speakNumber(n%100):'');return speakNumber(Math.floor(n/1000))+' thousand'+(n%1000?' '+speakNumber(n%1000):'');}
-// Radio numbers follow FAA JO 7110.65 2-4-16/17; carrier exchanges follow ED pp. 76–81.
+// Display dialogue and speech formatting are unverified exercise content, not phraseology standards.
 function radioSpeech(display,{naval=true}={}){const digits=n=>speakDigits(n).replace(/\bnine\b/g,naval?'niner':'nine');return display
 .replace(/\breadback\b/gi,'read back').replace(/\bglidepath\b/gi,'glide path')
 .replace(/\bCase III\b/gi,'Case three').replace(/\bCase II\b/gi,'Case two').replace(/\bCV-1\b/g,'C V one')
@@ -125,19 +125,19 @@ function syncInputs(){for(const[id,key]of[['heading','th'],['speed','tv'],['alti
 const configLabels={gear:'Gear',flaps:'Flaps',hook:'Hook',onspeed:'On-speed',dlc:'DLC'};
 function configBlock(key){
 if(s[key])return null;
-if((key==='gear'&&s.v>280)||(key==='flaps'&&s.v>225)){const limit=key==='gear'?280:225;return{kind:'speed',limit,text:`${configLabels[key]} unavailable at ${Math.ceil(s.v)} KIAS. Slow to ${limit} KIAS or below, then select ${configLabels[key]} again.`};}
+if((key==='gear'&&s.v>280)||(key==='flaps'&&s.v>225)){const limit=key==='gear'?280:225;return{kind:'speed',limit,text:`Exercise gate: ${configLabels[key]} is unavailable above ${limit} KIAS in this trainer. This is not a verified aircraft limit.`};}
 if((key==='onspeed'||key==='dlc')&&(!s.gear||!s.flaps)){const missing=[!s.gear?'gear':null,!s.flaps?'flaps':null].filter(Boolean).join(' and ');return{kind:'configuration',text:`${configLabels[key]} requires ${missing} down first.`};}
 return null;
 }
 function renderConfigFeedback(){
 const box=$('configFeedback'),notice=s.configNotice;
-if(!notice){box.innerHTML=`ACTUAL ${Math.ceil(s.v)} KIAS · GEAR ≤280 · FLAPS ≤225<br>Selections are immediate; no actuator delay.`;return;}
+if(!notice){box.innerHTML=`TRAINER GATES: GEAR ≤280 · FLAPS ≤225 KIAS<br>These exercise thresholds are not verified aircraft limits.`;return;}
 const block=configBlock(notice.key),name=configLabels[notice.key];
 if(!block){box.innerHTML=`<strong>${name} now available.</strong> Select ${name} again to ${['gear','flaps','hook'].includes(notice.key)?'lower it':'engage it'}.`;return;}
 if(block.kind!=='speed'){box.textContent=block.text;return;}
 const target=s.onspeed?135:s.tv,slowing=target<=block.limit;
 let text=block.text;
-if(slowing){const span=Math.max(1,notice.startSpeed-block.limit),progress=clamp((notice.startSpeed-s.v)/span*100,0,100);text=`Slowing for ${name.toLowerCase()}: ${Math.ceil(s.v)} → ${block.limit} KIAS. ${s.playing?'Select it again when available.':'Paused — Resume to continue slowing.'}`;box.innerHTML=`<strong>${text}</strong><progress max="100" value="${progress.toFixed(1)}" aria-label="Airspeed reduction for ${name.toLowerCase()}"></progress><span>This tracks slowing, not actuator travel.</span>`;}
+if(slowing){const span=Math.max(1,notice.startSpeed-block.limit),progress=clamp((notice.startSpeed-s.v)/span*100,0,100);text=`Slowing for ${name.toLowerCase()} exercise gate: ${Math.ceil(s.v)} → ${block.limit} KIAS. ${s.playing?'Select it again when available.':'Paused — Resume to continue slowing.'}`;box.innerHTML=`<strong>${text}</strong><progress max="100" value="${progress.toFixed(1)}" aria-label="Airspeed reduction for ${name.toLowerCase()} exercise gate"></progress><span>This tracks slowing, not actuator travel.</span>`;}
 else{box.textContent=`${text} Command an airspeed of ${block.limit} KIAS or below.`;}
 }
 function toggleConfig(key){if(s.arrestment)return;
@@ -145,7 +145,7 @@ if(s.finished)return;
 const blocked=configBlock(key);if(blocked){s.configNotice={key,startSpeed:s.v};feedback(blocked.text,true);render();return;}
 s[key]=!s[key];if(s.configNotice?.key===key)s.configNotice=null;
 if((key==='gear'||key==='flaps')&&!s[key]){s.onspeed=false;s.dlc=false;}
-if(key==='onspeed'&&s.onspeed)feedback('Pilot: slowing and trimming to 15 AoA units. Synthetic approach speed: 135 KIAS.');render();
+if(key==='onspeed'&&s.onspeed)feedback('Pilot: entering the trainer’s synthetic on-speed condition at 135 KIAS.');render();
 }
 
 function radio(action){if(s.finished||s.arrestment)return;const ch=$('channel').value;const needs={inbound:'Marshal',readback:'Marshal',established:'Marshal',commencing:'Marshal',eat:'Marshal',checkin:'Approach',platform:'Approach',ball:'LSO',clara:'LSO'};if(ch!==needs[action])return feedback(`Select ${needs[action]} before this call. You are on ${ch}.`,true);let r=range();
@@ -208,7 +208,7 @@ grooveCall();
 if(s.phase>=4&&s.phase<11&&s.y<.03){const good=Math.abs(lineError())<.01&&Math.abs(delta(s.h,s.finalBearing))<7&&s.a>20&&s.a<110&&s.v>120&&s.v<150&&s.gear&&s.flaps&&s.hook&&s.onspeed&&s.ball;if(good){beginArrestment();}else{const issues=[];if(!s.hook)issues.push('hook up');if(!s.gear)issues.push('gear up');if(!s.ball)issues.push('ball not called');if(s.a>=110||s.a<=20)issues.push('outside glidepath gate');if(Math.abs(lineError())>=.01)issues.push('outside deck centreline');if(!s.onspeed||s.v>=150||s.v<=120)issues.push('not on-speed');finish('MISSED APPROACH',`Approach did not meet landing gates: ${issues.join(', ')||'unstable heading or configuration'}. Reset and try again.`);}}
 if(s.a<15&&s.y>.2)finish('UNSAFE DESCENT','Descended to the sea before reaching the deck.');if(range()>60)finish('OUT OF AREA','Aircraft left the exercise area.');}
 let debriefRenderedState=null;
-function renderCoach(){const c=$('coach');if(s.briefPending){c.innerHTML='';return;}c.classList.toggle('debrief',s.finished);$('modeLabel').textContent=s.guided?'GUIDED':'PRACTICE';if(s.arrestment&&!s.finished){c.innerHTML='<div class="eyebrow">DECK RECOVERY</div><h2>'+ (s.arrestment.caught?'Three wire.':'Touchdown.')+'</h2><p>'+(s.arrestment.caught?'The cable follows the hook as the aircraft decelerates along the landing-area centreline.':'Rolling along the angled deck toward the arresting wires.')+'</p><div class="hint-values">'+Math.round(s.v)+' KT · '+(s.arrestment.caught?'ARRESTING':'HOOK DOWN')+'</div>';return;}if(s.finished){if(debriefRenderedState===s)return;debriefRenderedState=s;c.innerHTML=`<div class="eyebrow">SORTIE DEBRIEF</div><h2>${s.result}</h2><p>${Object.keys(s.checks).length} checks completed · ${s.mistakes.length} corrections · ${clock(s.t)}</p><div class="results">${Object.values(s.checks).map(t=>`<p>✓ ${t}</p>`).join('')}</div>${s.mistakes.length?'<p>Review the radio log and corrections below.</p>':''}<button id="again">Fly again →</button>`;if(s.mistakes.length){const d=document.createElement('details'),sum=document.createElement('summary');sum.textContent='Corrections';d.append(sum);for(const m of s.mistakes){const p=document.createElement('p');p.textContent=`${clock(m.t)} · ${m.text}`;d.append(p);}c.append(d);}$('again').onclick=()=>reset();return;}
+function renderCoach(){const c=$('coach');if(s.briefPending){c.innerHTML='';return;}c.classList.toggle('debrief',s.finished);$('modeLabel').textContent=s.guided?'GUIDED':'PRACTICE';if(s.arrestment&&!s.finished){c.innerHTML='<div class="eyebrow">DECK RECOVERY</div><h2>'+ (s.arrestment.caught?'Three wire.':'Touchdown.')+'</h2><p>'+(s.arrestment.caught?'The cable follows the hook as the aircraft decelerates along the landing-area centreline.':'Rolling along the angled deck toward the arresting wires.')+'</p><div class="hint-values">'+Math.round(s.v)+' KT · '+(s.arrestment.caught?'ARRESTING':'HOOK DOWN')+'</div>';return;}if(s.finished){if(debriefRenderedState===s)return;debriefRenderedState=s;c.innerHTML=`<div class="eyebrow">SORTIE DEBRIEF</div><h2>${s.result}</h2><p>${Object.keys(s.checks).length} exercise checks passed · ${s.mistakes.length} recorded corrections · ${clock(s.t)}</p><p>This summary is not a proficiency score.</p><div class="results">${Object.values(s.checks).map(t=>`<p>✓ ${t}</p>`).join('')}</div>${s.mistakes.length?'<p>Review the radio log and corrections below.</p>':''}<button id="again">Fly again →</button>`;if(s.mistakes.length){const d=document.createElement('details'),sum=document.createElement('summary');sum.textContent='Corrections';d.append(sum);for(const m of s.mistakes){const p=document.createElement('p');p.textContent=`${clock(m.t)} · ${m.text}`;d.append(p);}c.append(d);}$('again').onclick=()=>reset();return;}
 if(!s.guided){c.innerHTML='<div class="eyebrow">INSTRUCTOR OFF</div><h2>Your procedure.</h2><p>Fly the assigned clearance. Controller transmissions and navigation instruments remain available.</p><p>Turn the instructor on at any point if you need a hand.</p>';return;}
 let h=[...hints[s.phase]],extra=h[2],cta='';
 if(s.phase===2){h=['Find the radial / DME fix','Use the TACAN pointer tail and DME to locate yourself relative to Mother. Select PTP sketch to compare YOU with the assigned FIX. Estimate a heading, set 250 KIAS and 6,000 ft, then Command pilot and Resume. Refine the heading while watching radial and DME converge.'];extra=`YOU ${fmt(radial())}° RADIAL / ${range().toFixed(1)} DME<br>FIX {RADIAL}° RADIAL / 21 DME${s.navHint?'<br>OPTIONAL DIRECT HEADING '+fmt(fixHeading())+'° / '+fixDist().toFixed(1)+' NM TO FIX':''}`;}

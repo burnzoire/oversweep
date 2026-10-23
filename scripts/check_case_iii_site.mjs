@@ -25,6 +25,14 @@ if (review) {
   assert(trainer.includes('id="briefDialog"'));
   assert(trainer.includes('DRAFTED — NOT TECHNICALLY VALIDATED'));
   assert(trainer.includes('aria-label="Radio history"'));
+  assert(trainer.includes('Trainer setpoints'));
+  assert(html.includes('not an approved operating procedure or a proficiency assessment'));
+  assert(html.includes('not verified Navy phraseology'));
+  assert(trainer.includes('not been verified as Navy phraseology'));
+  const app = await readFile('dist/review/case-iii/app.js','utf8');
+  assert(app.includes('Exercise gate:'));
+  assert(app.includes('This is not a verified aircraft limit.'));
+  assert(app.includes('not a proficiency score'));
 } else {
   // Fail closed for all output paths and assets, not just navigation links.
   async function walk(dir) {

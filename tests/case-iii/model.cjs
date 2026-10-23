@@ -1,6 +1,6 @@
 const assert = require('node:assert/strict');
 const { holdPosition } = require('../../src/experiences/case-iii/model.cjs');
-// Independent arithmetic: 250 kt / 60 = 25/6 NM per 60 s;
+// Independent arithmetic: synthetic 250 NM/hour / 60 = 25/6 NM per 60 s;
 // radius = (25/6 NM) / (pi/2 rad) = 25/(3*pi) NM.
 const r = 25 / (3 * Math.PI), leg = 25 / 6;
 const cases = [
