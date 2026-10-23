@@ -9,6 +9,8 @@ const exists = async file => stat(path.join('dist',file)).then(s=>s.isFile(),()=
 assert.equal(await exists(route),review,'draft route is emitted only for explicit review');
 assert.equal(await exists('review/case-iii/index.html'),review);
 for (const asset of assets) assert.equal(await exists(`review/case-iii/${asset}`),review,asset);
+const manualIndex = await readFile('dist/manual/index.html','utf8');
+assert(manualIndex.includes('<details open>'));
 const manual = await readFile('dist/manual/naval-operations/index.html','utf8');
 const library = await readFile('dist/training/index.html','utf8');
 const marker = 'data-experience-id="experience.case-iii-tomcat"';
@@ -18,13 +20,17 @@ for (const html of [manual,library]) {
 }
 if (review) {
   const html = await readFile(path.join('dist',route),'utf8');
+  assert(html.includes('<summary>Manual subjects</summary>'));
+  assert(!html.includes('<details open>'));
   assert(html.includes(`src="${base}/review/case-iii/"`));
   assert(html.includes('Drafted — not technically validated'));
   assert(html.includes('heading, simulated speed'));
   assert(html.includes('No applicable Navy or DCS passage has been verified'));
   assert(html.includes('49bbd9a144c32033bd3b3d98f04b113c58f22fa0'));
   const trainer = await readFile('dist/review/case-iii/index.html','utf8');
-  assert(trainer.includes('data-experience-revision="4"'));
+  assert(trainer.includes('data-experience-revision="5"'));
+  assert(trainer.includes('NIGHT THEME ONLY'));
+  assert(trainer.includes('no night effects modeled'));
   for (const asset of assets.filter(a=>a!=='index.html')) assert(trainer.includes(`"${asset}"`));
   assert(trainer.includes('id="briefDialog"'));
   assert(trainer.includes('DRAFTED — NOT TECHNICALLY VALIDATED'));
@@ -35,6 +41,7 @@ if (review) {
   assert(trainer.includes('id="simSpeedNote"'));
   assert(trainer.includes('outside the hold, numeric KIAS is used as NM/hour for position, not groundspeed'));
   assert(html.includes('not an approved operating procedure or a proficiency assessment'));
+  assert(html.includes('night-themed scenario does not model date, lighting or visibility conditions'));
   assert(html.includes('not verified Navy phraseology'));
   assert(trainer.includes('not been verified as Navy phraseology'));
   const app = await readFile('dist/review/case-iii/app.js','utf8');
@@ -45,7 +52,7 @@ if (review) {
   assert(app.includes('SIM SPEED'));
   assert(app.includes('KIAS*'));
   assert(html.includes('Outside the hold, the simulated KIAS number is also used as NM/hour for position'));
-  assert(library.includes('data-experience-revision="4"'));
+  assert(library.includes('data-experience-revision="5"'));
 } else {
   // Fail closed for all output paths and assets, not just navigation links.
   async function walk(dir) {
