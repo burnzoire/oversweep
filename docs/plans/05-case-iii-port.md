@@ -349,3 +349,28 @@ Release checklist:
 **Disposition:** the two medium aviation evidence findings and the missing
 browser review are release blockers. Revision 5 remains **Drafted**, excluded
 from production; this PR is not a release authorization.
+
+## Release-gate pilot — revision 6
+
+The follow-up restores the control, telemetry, briefing and instructor wording
+to `AIRSPEED` / `KIAS`, with no asterisk. The adjacent motion-model explanation
+states that the airspeed number drives map movement without IAS-to-TAS conversion
+or wind. Model equations, numeric gates, hold timing, dialogue and scoring are
+unchanged. This addresses the owner's terminology feedback; it does not resolve
+the two medium evidence findings or establish aircraft limitations.
+
+Revision 6 requires fresh SME review. It remains Drafted and excluded until
+validation is complete. The new production-inclusion check must therefore fail
+on this PR, rather than allow an all-green result based on safe draft exclusion.
+The PR is a non-draft review of the unfinished release, not a publication bypass.
+See [release acceptance](../development.md#case-iii-release-acceptance).
+
+Local verification on Node 22.23.4: `npm run check`, `npm run check:dev`,
+`OVERSWEEP_REVIEW_TRAINERS=1 npm run check:review`, ten gate unit tests,
+`python3 scripts/check_docs.py` and `git diff --check` passed. The production
+release command exited 1 with missing route, frame, index and asset blockers;
+the review-flag command also exited 1 as required. Independent code review
+identified and corrected omitted listing paths and two-dot PR comparison;
+the latter has a divergent-history regression. Browser smoke verification was
+attempted but Chromium was absent and the installation returned invalid ZIP
+downloads. No browser, visual, speech or independent UX approval is claimed.

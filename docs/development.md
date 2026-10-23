@@ -71,6 +71,30 @@ No human aviation reviewer is required. The delivery agent owns source research,
 SME/UX/code review, corrections and re-review through one release-ready PR.
 Content without that evidence remains unvalidated and excluded from publication.
 
+### Case III release acceptance
+
+Case III implementation, registration, embedded-route and index-card changes run
+`Release readiness / Production inclusion` on every PR, including draft PRs.
+It builds ordinary production output without the review flag. Missing routes,
+assets or Manual/Training Library links, and draft/unvalidated notices, fail the
+check with explicit blockers. `npm run check` can still pass because it tests
+safe draft exclusion; it is not a release-readiness result.
+
+The current Case III revision remains Drafted. A PR changing it must remain
+blocked until the evidence and independent SME/UX reviews are resolved and the
+validated experience is included in normal output. Do not clear the check by
+deploying a review build, deleting notices alone or removing the gate. A
+non-draft PR exposes this unfinished release for review; it does not authorize
+publication. Unrelated PRs report this inclusion check as not applicable.
+
+Require the `Production inclusion` check from the `Release readiness` workflow
+and the existing `verify` check from `Aviation SME review gate` in the `main`
+ruleset, alongside application/foundation checks. Confirm these exact job names
+in GitHub's ruleset picker after their first runs. This code change does not
+configure branch protection, and a red check prevents merge only when required
+and not bypassed. Independent browser UX automation is still missing; this
+production-output check does not supply UX or aviation approval.
+
 The optional [aviation SME reviewer](copilot-agents.md#aviation-sme-review)
 reports evidence-backed findings and unresolved sources without editing or
 approving content. Re-review material corrections at the new revision. Automated
