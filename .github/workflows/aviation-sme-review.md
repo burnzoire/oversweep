@@ -28,6 +28,9 @@ permissions:
   pull-requests: read
 engine:
   id: copilot
+  # This release has a reviewed SHA256SUMS pin in the trusted setup action.
+  # Avoid compatibility-window upgrades outrunning that action's integrity pins.
+  version: "1.0.98"
   copilot-sdk: true
   agent: aviation-sme-reviewer
 imports:
@@ -55,6 +58,10 @@ network:
     - heatblur.se
     - navsup.navy.mil
 safe-outputs:
+  threat-detection:
+    engine:
+      id: copilot
+      version: "1.0.98"
   allowed-domains: [default-safe-outputs]
   create-issue: false
   report-failed-jobs: false
@@ -99,7 +106,7 @@ Pull-request events are grouped by the framework's PR-specific concurrency
 policy, which cancels an older in-progress run when a newer PR event arrives.
 The explicit group applies the same cancellation to manual dispatches of that
 PR. Manual dispatch is also available from the Actions page with the PR number.
-Neither dispatch nor the manual input bypasses the draft check. The final head
+Automatic and manually selected draft PRs receive the same review. The final head
 check is best-effort: GitHub does not make the read and comment write atomic, so
 a narrow race remains possible if a new commit arrives between them.
 
