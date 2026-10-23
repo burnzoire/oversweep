@@ -87,18 +87,22 @@ layout, actual speech output or real-world aviation correctness.
 - [Eagle Dynamics Supercarrier Operations Guide](https://www.digitalcombatsimulator.com/upload/iblock/e1b/430ooc582lpb0npynbsewan6omd5ohvs/DCS_Supercarrier_Operations_Guide_EN.pdf),
   pp. 75–81 are a possible DCS-specific dialogue/sequence lead; the pages,
   edition and exact simulator-version mapping have not been verified.
-- [Heatblur manual](https://f14.manuals.heatblur.se/): inherited F-14B system
-  context. No precise numeric-limit passage was identified or verified; a
-  complete claim/source audit remains pending;
-  280 KIAS gear / 225 KIAS flaps remain prototype exercise limits, not validated
-  guidance. Source-backed technical validation remains incomplete.
+- [Heatblur F-14 manual](https://f14.manuals.heatblur.se/): the revision-3
+  review inspected the [Airspeed/AoA indicator passages](https://github.com/Heatblur-Simulations/f-14-manual/blob/49bbd9a144c32033bd3b3d98f04b113c58f22fa0/src/f14bu/cockpit/pilot/left_instrument_panel.md),
+  [CASE I landing section](https://github.com/Heatblur-Simulations/f-14-manual/blob/49bbd9a144c32033bd3b3d98f04b113c58f22fa0/src/f14bu/procedures/landing_procedures.md)
+  and [flap caution table](https://github.com/Heatblur-Simulations/f-14-manual/blob/49bbd9a144c32033bd3b3d98f04b113c58f22fa0/src/f14bu/cockpit/pilot/right_console.md)
+  at repository commit `49bbd9a144c32033bd3b3d98f04b113c58f22fa0`. These provide
+  limited DCS F-14 system and CASE I context, not Case III procedure or validation
+  of the 135 KIAS, 280 KIAS gear, or 225 KIAS flap exercise gates. The 225-knot
+  caution is not an extension limit; module-version mapping remains unverified.
+  Source-backed technical validation remains incomplete.
 
-Source access date for prototype research: 22 October 2026. This port does not
-claim a new primary-source research audit. These are a partial source register,
-not a complete claim registry. All inherited procedural/scoring claims remain
-unvalidated. Synthetic dynamics, AoA/fuel/arrestment and LSO thresholds are not
-performance models. Automatic hold entry, fixed circuit, amended EATs and
-procedural gate tolerances are teaching simplifications. No F/A-18C is added.
+Prototype source access date: 22 October 2026. The original port did not claim a
+primary-source audit. This remains a partial source register, not a complete
+claim registry. All inherited procedural/scoring claims remain unvalidated.
+Synthetic dynamics, AoA/fuel/arrestment and LSO thresholds are not performance
+models. Automatic hold entry, fixed circuit, amended EATs and procedural gate
+tolerances are teaching simplifications. No F/A-18C is added.
 
 ## Independent numerical cases
 
@@ -200,13 +204,32 @@ and nearby note are now aligned; the content revision advances to 3, so review
 evidence for revision 2 does not validate revision 3. The trainer remains
 Drafted.
 
-Direct retrieval of the cited CV NATOPS, DCS Supercarrier Guide and Heatblur
-manual failed DNS in this session. The custom UX reviewer could not access its
-browser MCP at `b78867cd9d86e0f68b34a41df25d031eb104fde8` because it returned
-`MCPOAuthBrowserRequiredError`; local Chromium checks are not independent UX
-approval. The revision-2 SME workflow run `39895597649` ended `action_required`
-with zero jobs; prior run `39891533760` failed with HTTP 401 /
-`catalog_unavailable`. Neither the source retrieval nor browser failure proves
-those resources are unavailable elsewhere. Exact applicable source passages,
-source-backed validation and independent browser review remain outstanding; the
-trainer remains Drafted and excluded from production output.
+Fresh aviation SME review of revision 3 at HEAD
+`ad315f712e2b7d615c009a5863e4d3c939a3fd1c` independently checked the synthetic
+hold math and found no factual contradiction. It inspected exact Heatblur manual
+passages at commit `49bbd9a144c32033bd3b3d98f04b113c58f22fa0`: the
+Airspeed/AoA indicator pages, CASE I landing section and flap caution table.
+Those passages support only limited simulator-specific context; the flap caution
+does not establish an extension limit. The review reported medium unresolved
+procedure/numeric-gate and phraseology/assessment evidence findings, plus a low
+terminology finding for “airspeed” and unstarred “KIAS” in the Manual and
+instructor prompts. No operational claim was verified against an applicable
+Navy or DCS passage. The Manual introduction and coached copy now use simulated
+speed terminology; revision 4 supersedes revision 3, and revision-3 review
+evidence does not validate revision 4.
+
+Fresh code review at revision 3 found no actionable code findings and did not
+run tests. Foundation run `39896936496` and Application run `39896936533`
+passed at that SHA (attempt 2); the revision-3 aviation SME workflow run
+`39896936359` ended `action_required` with zero jobs. The parallel validation
+tool could not start its review model and CodeQL analysis in this environment.
+
+Direct retrieval of the cited CV NATOPS and DCS Supercarrier Guide failed DNS in
+this session; exact applicable passages and edition/module mappings remain
+unverified. The custom UX reviewer could not access its browser MCP at revision
+3 (`MCPOAuthBrowserRequiredError`); local Chromium checks are not independent UX
+approval. A prior revision-2 SME workflow run `39895597649` also ended
+`action_required`; run `39891533760` failed with HTTP 401 / `catalog_unavailable`.
+Neither source retrieval nor browser failure proves those resources are
+unavailable elsewhere. Source-backed validation and independent browser review
+remain outstanding; revision 4 remains Drafted and excluded from production.

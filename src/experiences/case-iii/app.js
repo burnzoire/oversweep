@@ -54,6 +54,7 @@ const preview=document.createElement('button');preview.type='button';preview.tex
 function initialiseVoices(){if(window.speechSynthesis){const refresh=()=>{availableVoices=window.speechSynthesis.getVoices();let changed=false;for(const role of Object.keys(voicePreferences)){if(availableVoices.some(v=>v.voiceURI===voicePreferences[role]&&isNoveltyVoice(v))){delete voicePreferences[role];changed=true;}}if(changed){try{localStorage.setItem('oversweep.caseIII.voicePreferences',JSON.stringify(voicePreferences));}catch{}}renderVoiceChoices();};window.speechSynthesis.addEventListener?.('voiceschanged',refresh);refresh();}}
 const SOURCE='https://www.digitalcombatsimulator.com/upload/iblock/e1b/430ooc582lpb0npynbsewan6omd5ohvs/DCS_Supercarrier_Operations_Guide_EN.pdf';
 function scenarioText(text){return text.replaceAll('{BRC}',fmt(s.brc)).replaceAll('{FINAL}',fmt(s.finalBearing)).replaceAll('{RADIAL}',fmt(s.marshalRadial));}
+function coachSpeedText(text){return text.replace(/\bAIRSPEED\b/gi,'SIM SPEED').replace(/\bKIAS\b(?!\*)/g,'KIAS*');}
 function nextBearing(previous){const n=Math.floor(Math.random()*(previous===undefined?360:359));return previous===undefined?n:n>=previous?n+1:n;}
 // Positions are in a carrier-aligned frame: x starboard, y astern; headings are magnetic.
 function toWorld(x,y){return{x:x*Math.cos(s.brc*D)-y*Math.sin(s.brc*D),y:x*Math.sin(s.brc*D)+y*Math.cos(s.brc*D)};}
@@ -89,12 +90,12 @@ setTimeScale(1);setView('overview');$('channel').value='Marshal';$('log').innerH
 $('briefBrc').textContent=fmt(s.brc)+'°';$('briefFinal').textContent=fmt(s.finalBearing)+'°';$('briefInbound').textContent=fmt(s.startHeading)+'°';
 $('manualScenario').textContent=`Single F-14B, carrier-relative reference frame, no wind or magnetic variation. Every new sortie randomises BRC and arrival direction. This sortie: BRC ${fmt(s.brc)}°, final bearing ${fmt(s.finalBearing)}°, marshal ${fmt(s.marshalRadial)}° radial / 21 DME / 6,000 ft. Your initial heading generally toward Mother is ${fmt(s.startHeading)}°. A radial is FROM Mother; the inbound course from the marshal fix is its reciprocal, ${fmt(s.brc)}°.`;
 $('manualRadialExample').textContent=`Your sortie: marshal on Mother’s ${fmt(s.marshalRadial)}° radial at 21 DME means the fix lies on bearing ${fmt(s.marshalRadial)}° FROM Mother, 21 NM away. Once at that fix, the course back TO Mother is ${fmt(s.brc)}°. Your heading to reach the fix depends on your current position. Use your present radial and DME in the PTP sketch to estimate that heading. The assigned radial describes where the fix lies relative to Mother, not the heading you must fly from an arbitrary starting position.`;
-syncInputs();$('briefText').textContent=`Single ship, 102. BRC ${fmt(s.brc)}°, final ${fmt(s.finalBearing)}°. Arriving on Mother’s ${fmt(s.arrivalRadial)}° radial at ${s.arrivalRange.toFixed(1)} NM, 6,000 ft and 250 KIAS. Current heading ${fmt(s.startHeading)}° generally toward Mother. Navigate to the assigned marshal fix after clearance using TACAN radial and DME. Call Mother for a Case III recovery.`;render();if(!$('briefDialog').open)$('briefDialog').showModal();}
+syncInputs();$('briefText').textContent=`Single ship, 102. BRC ${fmt(s.brc)}°, final ${fmt(s.finalBearing)}°. Arriving on Mother’s ${fmt(s.arrivalRadial)}° radial at ${s.arrivalRange.toFixed(1)} NM, 6,000 ft and simulated speed 250 KIAS*. Current heading ${fmt(s.startHeading)}° generally toward Mother. Navigate to the assigned marshal fix after clearance using TACAN radial and DME. Call Mother for a Case III recovery.`;render();if(!$('briefDialog').open)$('briefDialog').showModal();}
 function startExercise(){if(!s.briefPending)return;s.briefPending=false;$('briefDialog').close();s.started=true;s.playing=true;s.manualPause=false;setTimeScale(1);render();}
 
 
 function message(who,text,spokenText=null){if(who==='INSTRUCTOR'&&!s.guided)return;text=scenarioText(text);spokenText=spokenText===null?radioSpeech(text,{naval:['102','MARSHAL','APPROACH','LSO'].includes(who)}):scenarioText(spokenText);const log=$('log'),followLog=!s.finished&&log.scrollHeight-log.clientHeight-log.scrollTop<=24;s.events.push({t:s.t,who,text,spokenText});const el=document.createElement('div');el.className='message'+(who==='102'?' player':'');el.setAttribute('data-speaker',who);const sm=document.createElement('small');sm.textContent=`${clock(s.t)} / ${who==='PILOT'?'PILOT / COCKPIT':who}`;el.append(sm,document.createTextNode(text));log.append(el);if(followLog)log.scrollTop=log.scrollHeight;const icon=document.createElement('span');icon.className='speaking-icon';icon.setAttribute('aria-hidden','true');icon.innerHTML='<i></i><i></i><i></i><i></i>';sm.append(icon);if(s.voice&&who!=='BRIEF'&&(s.guided||speakerRole(who)!=='instructor'))speakRole(speakerRole(who),text,el,spokenText);}
-function feedback(text,error=false){text=scenarioText(text);if(error)s.mistakes.push({t:s.t,text});if(!s.guided)return;$('feedback').textContent=text;renderCoach();}
+function feedback(text,error=false){text=coachSpeedText(scenarioText(text));if(error)s.mistakes.push({t:s.t,text});if(!s.guided)return;$('feedback').textContent=text;renderCoach();}
 function pass(key,text){if(s.checks[key])return;s.checks[key]=text;}
 function pauseFor(text,reason){if(s.guided){s.playing=false;s.autoPause=s.manualPause?null:reason;feedback(text);}}
 function announce(key,text){if(!s.flags[key]){s.flags[key]=true;if(s.guided){message('INSTRUCTOR',text);pauseFor(text,key);}}}
@@ -125,20 +126,20 @@ function syncInputs(){for(const[id,key]of[['heading','th'],['speed','tv'],['alti
 const configLabels={gear:'Gear',flaps:'Flaps',hook:'Hook',onspeed:'On-speed',dlc:'DLC'};
 function configBlock(key){
 if(s[key])return null;
-if((key==='gear'&&s.v>280)||(key==='flaps'&&s.v>225)){const limit=key==='gear'?280:225;return{kind:'speed',limit,text:`Exercise gate: ${configLabels[key]} is unavailable above ${limit} KIAS in this trainer. This is not a verified aircraft limit.`};}
+if((key==='gear'&&s.v>280)||(key==='flaps'&&s.v>225)){const limit=key==='gear'?280:225;return{kind:'speed',limit,text:`Exercise gate: ${configLabels[key]} is unavailable above ${limit} KIAS* in this trainer. This is not a verified aircraft limit.`};}
 if((key==='onspeed'||key==='dlc')&&(!s.gear||!s.flaps)){const missing=[!s.gear?'gear':null,!s.flaps?'flaps':null].filter(Boolean).join(' and ');return{kind:'configuration',text:`${configLabels[key]} requires ${missing} down first.`};}
 return null;
 }
 function renderConfigFeedback(){
 const box=$('configFeedback'),notice=s.configNotice;
-if(!notice){box.innerHTML=`TRAINER GATES: GEAR ≤280 · FLAPS ≤225 KIAS<br>These exercise thresholds are not verified aircraft limits.`;return;}
+if(!notice){box.innerHTML=`TRAINER GATES: GEAR ≤280 · FLAPS ≤225 KIAS*<br>These exercise thresholds are not verified aircraft limits.`;return;}
 const block=configBlock(notice.key),name=configLabels[notice.key];
 if(!block){box.innerHTML=`<strong>${name} now available.</strong> Select ${name} again to ${['gear','flaps','hook'].includes(notice.key)?'lower it':'engage it'}.`;return;}
 if(block.kind!=='speed'){box.textContent=block.text;return;}
 const target=s.onspeed?135:s.tv,slowing=target<=block.limit;
 let text=block.text;
-if(slowing){const span=Math.max(1,notice.startSpeed-block.limit),progress=clamp((notice.startSpeed-s.v)/span*100,0,100);text=`Slowing for ${name.toLowerCase()} exercise gate: ${Math.ceil(s.v)} → ${block.limit} KIAS. ${s.playing?'Select it again when available.':'Paused — Resume to continue slowing.'}`;box.innerHTML=`<strong>${text}</strong><progress max="100" value="${progress.toFixed(1)}" aria-label="Airspeed reduction for ${name.toLowerCase()} exercise gate"></progress><span>This tracks slowing, not actuator travel.</span>`;}
-else{box.textContent=`${text} Command an airspeed of ${block.limit} KIAS or below.`;}
+if(slowing){const span=Math.max(1,notice.startSpeed-block.limit),progress=clamp((notice.startSpeed-s.v)/span*100,0,100);text=`Slowing for ${name.toLowerCase()} exercise gate: ${Math.ceil(s.v)} → ${block.limit} KIAS*. ${s.playing?'Select it again when available.':'Paused — Resume to continue slowing.'}`;box.innerHTML=`<strong>${text}</strong><progress max="100" value="${progress.toFixed(1)}" aria-label="Simulated speed reduction for ${name.toLowerCase()} exercise gate"></progress><span>This tracks slowing, not actuator travel.</span>`;}
+else{box.textContent=`${text} Command a simulated speed of ${block.limit} KIAS* or below.`;}
 }
 function toggleConfig(key){if(s.arrestment)return;
 if(s.finished)return;
@@ -224,11 +225,11 @@ else if(s.mode==='hold'){h=['Finish this hold circuit',s.playing?'The pilot is r
 else if(remaining>1){h=['Wait for your approach time',s.playing?'Keep 6,000 ft and 250 KIAS. The clock is running. Instructor mode will pause automatically at EAT; then you will call Commencing.':'The simulation is paused, so the EAT countdown is stopped. Click Resume to EAT below. Keep 6,000 ft and 250 KIAS; the trainer will pause again when it is time to call.'];if(!s.playing)cta='<button data-coach="resume">Resume to EAT →</button>';}
 else{h=['Call commencing now','One second to EAT. Stay paused and keep 6,000 ft until you make the call. Select Marshal in the Radio panel, then click Commencing. Your next step will be to command the descent.'];cta=$('channel').value==='Marshal'?'<button data-coach="commencing">Transmit Commencing →</button>':'<button data-coach="marshal">Select Marshal →</button>';}
 }
-if(s.phase===4){h=['Command the descent','Set HEADING {BRC}°, AIRSPEED 250, TARGET ALT 1200 and VERTICAL RATE 4,000. Click Command pilot. Then select Approach in Radio and click Check in. The simulation resumes after you apply these commands and check in.'];extra='{BRC}° · 250 KIAS · TARGET 1,200 FT<br>4,000 FT/MIN DOWN';cta=$('channel').value==='Approach'?'<button data-coach="checkin">Transmit Check in →</button>':'<button data-coach="approach">Select Approach radio channel →</button>';}
+if(s.phase===4){h=['Command the descent','Set HEADING {BRC}°, SIM SPEED 250 KIAS*, TARGET ALT 1200 and VERTICAL RATE 4,000. Click Command pilot. Then select Approach in Radio and click Check in. The simulation resumes after you apply these commands and check in.'];extra='{BRC}° · 250 KIAS* · TARGET 1,200 FT<br>4,000 FT/MIN DOWN';cta=$('channel').value==='Approach'?'<button data-coach="checkin">Transmit Check in →</button>':'<button data-coach="approach">Select Approach radio channel →</button>';}
 if(s.phase===5&&s.a>5200){h=['Descend toward platform',s.playing?'Continue descending at 250 KIAS and 4,000 ft/min. At 5,000 ft, instructor mode will pause: report Platform and reduce vertical rate to 2,000.':'Apply heading {BRC}°, 250 KIAS, target 1,200 ft and 4,000 ft/min with Command pilot. The simulation resumes once these commands and Approach check-in are complete. If you paused manually, click Resume.'];extra='NEXT GATE: 5,000 FT / PLATFORM';}
 if(s.phase===6){h=['Keep {BRC}° through platform','Keep heading {BRC}° and 250 KIAS. Set TARGET ALT 1200 and VERTICAL RATE 2,000, then click Command pilot. Once Platform is reported and these commands are applied, the simulation resumes to level at 1,200 ft. Platform is an altitude gate, not a turn point.'];extra='{BRC}° · 250 KIAS · TARGET 1,200 FT<br>2,000 FT/MIN DOWN';}
 if(s.phase===7&&s.mode!=='final'){h=['Intercept the angled deck','You are level at 1,200 ft. Click Track final bearing below the pilot controls. The pilot will intercept and track {FINAL}°, the angled-deck centreline. Stay at 1,200 ft. At 10 DME begin slowing; configure at 8 DME.'];extra='BRC / PENETRATION {BRC}°<br>FINAL BEARING {FINAL}°';}
-c.innerHTML=`<div class="eyebrow">${String(s.phase+1).padStart(2,'0')} / ${phases[s.phase].toUpperCase()}</div><h2>${h[0]}</h2><p>${h[1]}</p><div class="hint-values">${extra}</div>${cta}`;c.innerHTML=scenarioText(c.innerHTML);
+h=h.map(coachSpeedText);extra=coachSpeedText(extra||'');c.innerHTML=`<div class="eyebrow">${String(s.phase+1).padStart(2,'0')} / ${phases[s.phase].toUpperCase()}</div><h2>${h[0]}</h2><p>${h[1]}</p><div class="hint-values">${extra}</div>${cta}`;c.innerHTML=scenarioText(c.innerHTML);
 }
 
 let activeActionCues=new Set();
