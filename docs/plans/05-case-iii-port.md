@@ -1,5 +1,11 @@
 # Case III source port — issue #28
 
+Current policy: [content standards](../content-standards.md) supersede historical human aviation review requirements below.
+Independent source-backed SME agent review can satisfy technical validation;
+no human aviation reviewer is required. Historical review results and unresolved
+source/browser evidence remain unchanged. This policy update does not validate
+or publish the trainer.
+
 Work status: tracked in issue #28. Content maturity: Drafted, not technically validated.
 Owner request: port the current trainer and open an implementation PR. No merge,
 release, deployment or hosting changes are included.

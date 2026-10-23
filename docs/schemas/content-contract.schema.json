@@ -79,7 +79,7 @@
       "properties": {
         "reviewedRevision": { "type": "integer", "minimum": 1 },
         "reviewer": { "type": "string", "minLength": 1 },
-        "qualification": { "type": "string", "minLength": 1 },
+        "qualification": { "type": "string", "minLength": 1, "description": "Reviewer agent profile/model and review context or run reference; human credentials are not required." },
         "reviewedOn": { "type": "string", "format": "date" },
         "findings": {
           "type": "array",

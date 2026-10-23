@@ -53,9 +53,12 @@ checks suffice. If an independent reviewer is unavailable, disclose that limitat
 for the owner's PR review rather than stopping routine work. Self-review is never
 independent review. Re-review material changes after findings are addressed.
 
-Aviation evidence and qualified technical review remain governed by content
-standards: agents cannot self-certify Technically Validated content. Models require
-independently derived numerical cases. CI does not establish aviation correctness.
+Aviation validation follows docs/content-standards.md: independent, source-backed
+aviation SME agent review can satisfy Technically Validated; no human aviation
+reviewer is required. Authors cannot self-validate. Record the exact revision,
+inspected sources, independent model cases and resolved findings. CI alone does
+not establish aviation correctness. This policy supersedes human-review gates in
+historical plans; those plans are evidence inputs, not additional approval stages.
 
 ## Progress and completion
 

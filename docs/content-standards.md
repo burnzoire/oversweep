@@ -30,12 +30,20 @@ without permission; link and paraphrase only within applicable rights.
 The proposed [content contract](content-contracts.md) and its JSON Schema example
 show record shapes and cross-link rules; the example records are synthetic only.
 
-A named human with relevant subject competence must review aviation accuracy and
-source applicability before Technically Validated. Record reviewer identity,
-qualification/context, reviewed revision and findings. An independent coding agent
-can review consistency and calculations but cannot supply that technical approval.
-Any material source, procedure, equation or applicability change invalidates affected
-validation and returns the item to Drafted until re-reviewed.
+Independent, fresh-context aviation SME agent review of reliable, applicable
+sources is the technical validation gate; no human aviation reviewer is required.
+The author must not validate its own work. Record the reviewer profile/model and
+session or workflow run, exact reviewed revision, scope, inspected source passages,
+independent numerical cases, findings and their resolution. A generic code review,
+unread bibliography, successful workflow run or passing CI alone is insufficient.
+Every substantive claim must have verified source support or be explicitly bounded
+as an educational simplification with evidence-backed assumptions. Unresolved
+material claims, source conflicts or inaccessible evidence block affected content.
+The delivery agent may record Technically Validated only when that evidence is
+complete and review findings are resolved. Material source, procedure, equation or
+applicability changes return affected content to Drafted until independently
+re-reviewed. This status describes educational content review, not operational
+certification. Owner approval remains required for merge and publication.
 
 ## Models
 
@@ -59,14 +67,14 @@ Deterministic test fixtures must distinguish exact expectations from approximati
 | Outlined | Objective, scope and proposed applicability |
 | Researched | Located sources, claim map and rights assessment |
 | Drafted | Complete prose/diagrams/models; uncertainties visible |
-| Technically Validated | Named qualified human review; model reference cases and findings resolved |
+| Technically Validated | Independent source-backed aviation SME agent review of the exact revision; model reference cases and findings resolved |
 | Published | Validation retained, accessibility/visual checks passed, explicit publication approval and actual release |
 
 Maturity belongs to each content revision, independent of issue status.
 Unvalidated material must be visibly marked and excluded from any future published
 validated-content index by default. Add a machine-enforced publication gate when
-content tooling is implemented. AI prose remains Drafted at most without evidence
-and human review. CI cannot certify factual correctness.
+content tooling is implemented. AI prose remains Drafted without the evidence and independent agent review above.
+CI alone cannot establish factual correctness.
 
 Define acronyms on first use; use consistent terminology and step numbering.
 Keep standard procedures separate from aircraft and simulator notes. Make source

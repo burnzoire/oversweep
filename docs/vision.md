@@ -31,7 +31,7 @@ The first vertical slice is the existing [Case III Tomcat carrier trainer](https
 selected by the product owner. It is integrated under Naval Operations with a
 linked Training Library entry in [issue #28 / PR #29](https://github.com/burnzoire/oversweep/pull/29).
 Its content remains Drafted: source claims, procedures and models still need
-qualified review; the port is not certified.
+independent source-backed SME agent review; the port is not certified.
 
 ## Boundaries and open questions
 
@@ -45,6 +45,6 @@ Windows Docker server proposal. See [deployment](deployment.md) for setup and re
 This authorises hosting configuration; content publication remains separately reviewed.
 
 Decisions still needed: authoritative source editions
-and reuse rights, qualified reviewers, search approach, preview
+and reuse rights, independent SME agent review, search approach, preview
 access control and eventual progress persistence. Resolve through scoped issues
 and ADRs rather than adding implied requirements.

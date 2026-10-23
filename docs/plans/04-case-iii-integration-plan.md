@@ -1,5 +1,11 @@
 # Case III prototype integration plan — issue #6
 
+Current policy: [content standards](../content-standards.md) supersede historical human aviation review requirements below.
+Independent source-backed SME agent review can satisfy technical validation;
+no human aviation reviewer is required. Historical review results and unresolved
+source/browser evidence remain unchanged. This policy update does not validate
+or publish the trainer.
+
 Historical planning input. Its separate plan approval/follow-on issue sequence is
 superseded by the [one-task workflow](../development.md). The former delivery issue
 #20 is deleted; issue #28 / PR #29 records the delivered port. Reuse technical

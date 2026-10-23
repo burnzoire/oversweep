@@ -14,7 +14,7 @@ Excluded work:
 - [ ] Review: self-review; fresh review for substantive changes, or disclose unavailability
 - [ ] Required automated checks: commands and results
 - [ ] Applicable visual verification: viewports/flows/artifacts, or reason N/A
-- [ ] Source mapping and qualified human technical review, or reason N/A
+- [ ] Source mapping and independent aviation SME agent review evidence, or reason N/A
 - [ ] Issue and PR evidence linked; close the issue only if its full scope is delivered
 
 Pending gates, blockers and unresolved decisions:

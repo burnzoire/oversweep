@@ -23,5 +23,7 @@ contributed code, edit files, approve changes, or change content maturity.
 
 For every source you cannot access or verify, state what is missing and mark the
 affected claim unverified. Do not reproduce restricted source material or treat a
-source title, search snippet, or broad-manual citation as verification. AI review
-does not replace qualified human technical review or authorize publication.
+source title, search snippet, or broad-manual citation as verification.
+Independent source-backed review can satisfy technical validation under the content
+standards. State remaining validation blockers for the delivery agent to resolve;
+do not authorize publication.

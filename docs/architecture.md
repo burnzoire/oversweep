@@ -70,7 +70,7 @@ verify live-site reachability, settings, or aviation-content maturity. See
 ## Decision gates
 
 No formal ADR acceptance is required to start an assigned task. Establish content
-contracts before bulk authoring. Retain source, qualified review and numerical
+contracts before bulk authoring. Retain source, independent SME agent review and numerical
 evidence before validating aviation content. The initial Case III port is recorded
 in issue #28 / PR #29; its merge does not validate the Drafted content. Future
 delivery follows the scope and evidence in its assigned issue; no separate phase

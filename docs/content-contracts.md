@@ -68,7 +68,7 @@ registry-wide eligibility.
 
 A future publisher must derive eligibility from the whole registry. Inclusion
 requires explicit approval, accessibility review of the current revision,
-Technically Validated content with matching qualified review, resolved claims
+Technically Validated content with matching independent source-backed SME agent review, resolved claims
 with applicable sources and cleared rights, and valid links. Marking an item
 Published additionally records its actual release. Missing checks or validator
 errors mean exclusion, never a warning-only build. Private preview access is a

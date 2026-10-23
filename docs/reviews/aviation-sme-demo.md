@@ -1,5 +1,11 @@
 # Aviation SME review demonstration
 
+Current policy: [content standards](../content-standards.md) supersede historical human aviation review requirements below.
+Independent source-backed SME agent review can satisfy technical validation;
+no human aviation reviewer is required. Historical review results and unresolved
+source/browser evidence remain unchanged. This policy update does not validate
+or publish the trainer.
+
 ## Revision and scope
 
 - Example issue/PR: [#28](https://github.com/burnzoire/oversweep/issues/28) /
