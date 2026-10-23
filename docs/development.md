@@ -27,9 +27,9 @@ A short issue/PR plan suffices; move from it into code within the assigned scope
 Use a separate research task only when explicitly requested or the unresolved
 feasibility/input prevents implementation. Report the concrete blocker and keep
 unaffected work moving. Do not manufacture phase dependencies from legacy tickets.
-Case III delivery is consolidated in [#20](https://github.com/burnzoire/oversweep/issues/20);
-prior #5–#7/PR #19 findings are inputs, not separate approval stages. The current
-workflow PR only updates instructions; the feature agent will implement that slice.
+The initial Case III port was delivered through [#28 / PR #29](https://github.com/burnzoire/oversweep/pull/29).
+Historical #5–#7, deleted issue #20 and PR #19 findings are inputs, not separate
+approval stages or active prerequisites.
 
 ## Decisions and checks
 
@@ -60,9 +60,10 @@ do not need a separate visual approval. Disclose checks not performed.
 The PR explains outcome, issue, decision rationale, checks and genuine remaining
 risks. Keep it draft for unfinished work or actual blockers, not merely because an
 optional process field or document-rendering check is missing. The owner reviews
-the concrete change and approves merge. Do not merge, deploy, publish or configure
-hosting without explicit approval. Deployment/release approval remains separate
-when the task is only to prepare a change.
+the concrete change and approves merge. An owner-approved merge to main triggers
+the existing Pages workflow; do not merge, manually dispatch, change hosting
+settings or publish content without the applicable explicit approval. Engineering
+deployment does not itself authorize aviation-content publication.
 
 Content standards still require primary sources, independently derived model
 cases and qualified human review for aviation validation. The owner may perform

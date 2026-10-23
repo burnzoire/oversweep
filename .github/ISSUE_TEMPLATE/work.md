@@ -5,7 +5,6 @@ title: ""
 ---
 ## Outcome and scope
 
-Work status: Backlog
 Content maturity: N/A
 Milestone:
 Dependencies:
@@ -23,5 +22,6 @@ Commands, independent review and applicable browser checks:
 
 ## Progress evidence
 
-Link branch, PR, reviewed revision and check results. Record blocked reason and
-next action when applicable. Do not use completion percentages.
+Link branch, PR, reviewed revision and check results. If blocked, record the
+dependency and next action here or in an issue comment. Do not use completion
+percentages or duplicate status in labels/Project fields.

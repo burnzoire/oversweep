@@ -15,7 +15,7 @@ Excluded work:
 - [ ] Required automated checks: commands and results
 - [ ] Applicable visual verification: viewports/flows/artifacts, or reason N/A
 - [ ] Source mapping and qualified human technical review, or reason N/A
-- [ ] Documentation and issue status updated
+- [ ] Issue and PR evidence linked; close the issue only if its full scope is delivered
 
 Pending gates, blockers and unresolved decisions:
 

@@ -28,9 +28,10 @@ it does not duplicate their content or define a second application.
 
 Initial subjects and examples are proposals in the catalogue, not promised releases.
 The first vertical slice is the existing [Case III Tomcat carrier trainer](https://case-three-tomcat.burnzoire.chatgpt.site/),
-selected by the product owner. Assess and integrate it under Naval Operations,
-with a linked Training Library entry. Its source, procedures and models still need
-review; this foundation has not imported or certified the prototype.
+selected by the product owner. It is integrated under Naval Operations with a
+linked Training Library entry in [issue #28 / PR #29](https://github.com/burnzoire/oversweep/pull/29).
+Its content remains Drafted: source claims, procedures and models still need
+qualified review; the port is not certified.
 
 ## Boundaries and open questions
 
