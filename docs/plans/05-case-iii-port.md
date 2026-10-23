@@ -233,3 +233,29 @@ approval. A prior revision-2 SME workflow run `39895597649` also ended
 Neither source retrieval nor browser failure proves those resources are
 unavailable elsewhere. Source-backed validation and independent browser review
 remain outstanding; revision 4 remains Drafted and excluded from production.
+
+### Issue #35 fresh aviation SME review
+
+The `oversweep-aviation-sme-reviewer` reviewed revision 4 at HEAD
+`8f2c457a0195cead9f5e0f22f0445fbf30b8edfa` (base
+`975714384117a179db40c0e7291d5aaaf089f1f9`; fresh session
+`case3-sme-audit`; 23 October 2026). It inspected the trainer, wrapper, model,
+tests, metadata and this plan. The reviewer independently reproduced the
+synthetic hold calculations, but verified no operational procedure, aircraft
+limit, radio call or assessment criterion against an accessible applicable
+primary-source passage. CV NATOPS §§6.4.1.1/6.4.4, DCS Supercarrier Operations
+Guide pp. 75–81 and the cited Heatblur manual files were not retrievable in that
+review; their edition, passage and applicability evidence remain unresolved.
+
+Findings: medium unresolved evidence/applicability for procedure/dialogue and
+numeric gates/aircraft applicability/assessment; low clarity issue because
+“NIGHT RECOVERY” implied unmodeled night conditions; no factual defect was
+established. The low finding is corrected in revision 5 by labeling this
+“NIGHT THEME ONLY”, stating that night effects are not modeled in the trainer,
+and stating in the Manual that date, lighting and visibility conditions are not
+modeled. The medium findings remain unresolved; revision 4 does not validate
+revision 5, and the content remains Drafted and excluded from production.
+
+The review did not run code or tests and did not perform browser, audio,
+accessibility or visual checks. Its arithmetic result establishes only the
+stated synthetic geometry, not a carrier procedure or training parameter.

@@ -6,6 +6,7 @@ export function getStaticPaths() { return reviewTrainers ? [{ params: { trainer:
 
 ---
 <SiteLayout title={caseIII.title} activeSection="manual" activeSubject="naval-operations"
+  compactSubjectNav={true}
   breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Naval Operations',href:sitePath('manual/naval-operations/')},{label:'Case III'}]}>
   <section class="status-panel" data-experience-id={caseIII.id} data-experience-revision={caseIII.revision}>
     <h2>{caseIII.maturity}</h2>
@@ -16,7 +17,7 @@ export function getStaticPaths() { return reviewTrainers ? [{ params: { trainer:
   <p>Prerequisites: {caseIII.prerequisites.join(' · ')}.</p>
   <p>Direct the pilot using heading, simulated speed, altitude and vertical-rate commands. Read the sortie popup, then select Start Exercise. Instructor mode provides cues and pauses at decisions; switch it off to rehearse without hints. Voice is optional and uses your browser’s available speech voices.</p>
   <h2>Scope and limits</h2>
-  <p>Aircraft dynamics, AoA, fuel consumption, glidepath and arrestment are synthetic. Outside the hold, the simulated KIAS number is also used as NM/hour for position; this is not groundspeed. Hold geometry uses a fixed synthetic 250 NM/hour. Timing and approach gates are exercise setpoints, not verified procedures or aircraft limitations. This is not an approved operating procedure or a proficiency assessment. The exact DCS version has not been verified. Radio dialogue and scoring criteria are inherited exercise content, not verified Navy phraseology or measures of proficiency.</p>
+  <p>Aircraft dynamics, AoA, fuel consumption, glidepath and arrestment are synthetic. Outside the hold, the simulated KIAS number is also used as NM/hour for position; this is not groundspeed. Hold geometry uses a fixed synthetic 250 NM/hour. Timing and approach gates are exercise setpoints, not verified procedures or aircraft limitations. The night-themed scenario does not model date, lighting or visibility conditions. This is not an approved operating procedure or a proficiency assessment. The exact DCS version has not been verified. Radio dialogue and scoring criteria are inherited exercise content, not verified Navy phraseology or measures of proficiency.</p>
   <p>The 2009 CV NATOPS citation in the source register is a historical research lead only: its cited passages, current applicability and claim mapping have not been verified. Fixed turns and legs are synthetic exercise parameters, not a claim about a prescribed hold.</p>
   <p><a href={sitePath(caseIII.assets)}>Open trainer in a full window</a> · <a href="#sources">Sources and unresolved review</a></p>
   <noscript><p>The trainer requires JavaScript. Scope notes and source references remain readable without it.</p></noscript>

@@ -12,6 +12,7 @@ interface Props {
   title: string;
   activeSection: "manual" | "encyclopedia" | "training" | "home";
   activeSubject?: string;
+  compactSubjectNav?: boolean;
   isSectionIndex?: boolean;
   isHomePage?: boolean;
   breadcrumbs?: Breadcrumb[];
@@ -21,6 +22,7 @@ const {
   title,
   activeSection,
   activeSubject,
+  compactSubjectNav = false,
   isSectionIndex = false,
   isHomePage = false,
   breadcrumbs = [],
@@ -88,7 +90,7 @@ const pageTitle = `${title} | Oversweep`;
       <div class:list={["page-layout", { "with-subject-nav": activeSection === "manual" }]}>
         {activeSection === "manual" && (
           <aside class="subject-nav" aria-label="Manual subjects">
-            <details open>
+            <details open={!compactSubjectNav}>
               <summary>Manual subjects</summary>
               <nav aria-label="Manual subject navigation">
                 <ul>
