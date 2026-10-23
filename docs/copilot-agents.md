@@ -21,9 +21,10 @@ assignments or intermediate plan approvals are required.
    after default-branch merge/refresh; use a local IDE checkout for pre-merge checks.
    New tasks should use the updated instructions; existing PR sessions can retain
    the profile revision they started with.
-2. Assign one issue with the outcome, scope and acceptance criteria. For the first
-   slice use [#20](https://github.com/burnzoire/oversweep/issues/20). Historical split
-   plans/audits provide reusable evidence, not separate owner-managed stages.
+2. Assign one issue with the outcome, scope and acceptance criteria. The initial
+   Case III port is delivered in [#28 / PR #29](https://github.com/burnzoire/oversweep/pull/29);
+   use a new assigned issue for follow-on work. Historical split plans/audits provide
+   reusable evidence, not separate owner-managed stages.
 3. Let the delivery agent run the phases and invoke specialists where supported.
    Review the resulting PR. A genuine missing source/input may require your help;
    routine choices and readiness fields do not.
@@ -54,6 +55,35 @@ specific missing input. Never claim those reads or issue/PR updates happened wit
 evidence. The delivery role has shell access for checks; specialists do not.
 Profiles inherit the selected/default model. Tool filters supplement permissions;
 no profile authorises merge, deployment or publication.
+
+### Discovery troubleshooting
+
+If a profile is missing, first confirm the selected repository and branch. Verify
+that the file is on the repository's default branch at
+`.github/agents/<role>.agent.md`, and that its name, supported frontmatter fields
+and tool configuration match this repository's profile conventions. Run
+`python3 scripts/check_docs.py`, then refresh/reopen the agent picker or start a new
+session so it loads the default-branch revision. The check validates only the
+repository's supported frontmatter subset; it cannot test GitHub discovery. Record
+the UI/runtime and branch/revision actually checked. Live picker discovery remains
+unverified until observed in a supported runtime.
+
+### PR-triggered specialist workflows
+
+The UX profile was delivered by [#30 / PR #32](https://github.com/burnzoire/oversweep/pull/32),
+but #30 is closed and PR #32 explicitly excluded automated review posting. Do not
+treat it as an active workflow implementation. #30's issue description did require
+automated review posting and a demonstration, so its closure leaves an unresolved
+scope discrepancy; no open UX-specific issue for that remaining scope is verified.
+Issue [#31](https://github.com/burnzoire/oversweep/issues/31) remains open for
+SME/profile and shared workflow setup; its draft PR #33 coordinates with #30 but
+does not establish that the UX workflow is owned or running. The owner must decide
+whether to track the #30 gap; this documentation change does not duplicate or
+reassign it. Check the active implementation PR for engine support, permissions,
+required secrets and account limitations before relying on automation. Do not
+assume the required setup is complete. Keep credentials in GitHub Actions settings,
+never in Git. Specialist comments remain advisory and must not approve, merge,
+deploy, publish or advance content maturity.
 
 Run `python3 scripts/check_docs.py` for local links and the supported frontmatter
 subset: single-line JSON values (valid YAML), expected fields, role tool lists and

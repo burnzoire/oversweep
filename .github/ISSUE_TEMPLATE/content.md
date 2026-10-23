@@ -5,7 +5,6 @@ title: ""
 ---
 ## Objective and applicability
 
-Work status: Backlog
 Content maturity: Outlined
 Milestone:
 Subject, aircraft/variant, simulator/version:

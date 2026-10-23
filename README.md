@@ -15,18 +15,19 @@ unvalidated trainer routes and assets; no aviation validation is claimed.
 3. [Solo development workflow](docs/development.md) — assign a scoped issue; agents handle routine decisions and status
 4. [Architecture proposal](docs/architecture.md) and [decisions](docs/decisions/README.md)
 5. [Content standards](docs/content-standards.md) and [provisional design](docs/design-system.md)
-6. [Roadmap](docs/plans/00-roadmap.md) and [tracking setup](docs/progress.md)
+6. [Roadmap](docs/plans/00-roadmap.md) and [progress evidence](docs/progress.md)
 7. [One-assignment feature delivery](docs/copilot-agents.md) — use `oversweep-implementer`
 8. [Aviation SME review standard](docs/aviation-sme-review.md) and
    [profile/workflow use](docs/copilot-agents.md#aviation-sme-review)
 
-First slice delivery task: [#20](https://github.com/burnzoire/oversweep/issues/20)
-combines research, audit, planning, implementation, tests and review in one issue.
+The initial Case III port was delivered in
+[#28 / PR #29](https://github.com/burnzoire/oversweep/pull/29); it remains Drafted,
+not technically validated.
 
 First vertical slice: the existing [Case III carrier trainer](https://case-three-tomcat.burnzoire.chatgpt.site/).
-Deployment: static GitHub Pages via GitHub Actions on pushes to main, with manual dispatch available;
-see [setup and release instructions](docs/deployment.md). The site has not yet been
-published.
+Deployment: GitHub Pages via GitHub Actions on pushes to main, with manual dispatch
+available. The latest observed main deployment succeeded; live URL reachability has
+not been checked. See [setup and release instructions](docs/deployment.md).
 
 ## Run the site
 
