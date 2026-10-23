@@ -21,6 +21,7 @@ if (review) {
   assert(html.includes(`src="${base}/review/case-iii/"`));
   assert(html.includes('Drafted — not technically validated'));
   const trainer = await readFile('dist/review/case-iii/index.html','utf8');
+  assert(trainer.includes('data-experience-revision="2"'));
   for (const asset of assets.filter(a=>a!=='index.html')) assert(trainer.includes(`"${asset}"`));
   assert(trainer.includes('id="briefDialog"'));
   assert(trainer.includes('DRAFTED — NOT TECHNICALLY VALIDATED'));
@@ -33,6 +34,10 @@ if (review) {
   assert(app.includes('Exercise gate:'));
   assert(app.includes('This is not a verified aircraft limit.'));
   assert(app.includes('not a proficiency score'));
+  assert(app.includes('SIM SPEED'));
+  assert(app.includes('KIAS*'));
+  assert(html.includes('Outside the hold, the simulated KIAS number is also used as NM/hour for position'));
+  assert(library.includes('data-experience-revision="2"'));
 } else {
   // Fail closed for all output paths and assets, not just navigation links.
   async function walk(dir) {

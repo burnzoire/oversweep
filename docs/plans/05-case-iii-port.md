@@ -57,6 +57,8 @@ fixed synthetic path rate is 250 NM/hour, separate from the displayed KIAS comma
 it is not an aircraft-groundspeed or hold-performance model. There is no wind or
 drift. Negative/nonfinite time or nonfinite BRC throws RangeError; positive time
 wraps at 360 seconds. This is synthetic geometry.
+Outside the hold, the simulated KIAS value is also used as NM/hour for position;
+that is not groundspeed. The status labels now state this simplification.
 The rest of the simulation retains random inputs, browser timing and scoring;
 full deterministic replay/state contracts are not delivered by this port.
 
@@ -177,6 +179,15 @@ states that exercise checks are not a proficiency score, separates the synthetic
 250 NM/hour path rate from displayed KIAS, and classifies dialogue/TTS as
 unverified exercise content. These edits do not supply the missing source
 passages or advance content maturity.
+
+Independent code review session `case3-code-review` on HEAD
+`e0af1e7b964ae2cf08c6ca533094eb9bf16ba7fe` found a P2 ambiguity: the live
+speed readout was called AIRSPEED although its numeric value also drives the
+synthetic position rate. The follow-up labels it `SIM SPEED` / `KIAS*` and
+explains the outside-hold KIAS-to-NM/hour approximation. The scenario math and
+values are unchanged. Per [content revision rules](../content-contracts.md), the
+experience metadata advances from revision 1 to revision 2; revision 2 remains
+Drafted until it has matching independent review evidence.
 
 Direct retrieval of the cited CV NATOPS, DCS Supercarrier Guide and Heatblur
 manual failed DNS in this session. The custom UX reviewer could not access its
