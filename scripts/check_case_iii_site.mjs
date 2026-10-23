@@ -20,11 +20,32 @@ if (review) {
   const html = await readFile(path.join('dist',route),'utf8');
   assert(html.includes(`src="${base}/review/case-iii/"`));
   assert(html.includes('Drafted — not technically validated'));
+  assert(html.includes('heading, simulated speed'));
+  assert(html.includes('No applicable Navy or DCS passage has been verified'));
+  assert(html.includes('49bbd9a144c32033bd3b3d98f04b113c58f22fa0'));
   const trainer = await readFile('dist/review/case-iii/index.html','utf8');
+  assert(trainer.includes('data-experience-revision="4"'));
   for (const asset of assets.filter(a=>a!=='index.html')) assert(trainer.includes(`"${asset}"`));
   assert(trainer.includes('id="briefDialog"'));
   assert(trainer.includes('DRAFTED — NOT TECHNICALLY VALIDATED'));
   assert(trainer.includes('aria-label="Radio history"'));
+  assert(trainer.includes('Trainer setpoints'));
+  assert(trainer.includes('<label for="speed">SIM SPEED <span>KIAS*</span></label>'));
+  assert(trainer.includes('aria-describedby="scrubHint simSpeedNote"'));
+  assert(trainer.includes('id="simSpeedNote"'));
+  assert(trainer.includes('outside the hold, numeric KIAS is used as NM/hour for position, not groundspeed'));
+  assert(html.includes('not an approved operating procedure or a proficiency assessment'));
+  assert(html.includes('not verified Navy phraseology'));
+  assert(trainer.includes('not been verified as Navy phraseology'));
+  const app = await readFile('dist/review/case-iii/app.js','utf8');
+  assert(app.includes('function coachSpeedText'));
+  assert(app.includes('Exercise gate:'));
+  assert(app.includes('This is not a verified aircraft limit.'));
+  assert(app.includes('not a proficiency score'));
+  assert(app.includes('SIM SPEED'));
+  assert(app.includes('KIAS*'));
+  assert(html.includes('Outside the hold, the simulated KIAS number is also used as NM/hour for position'));
+  assert(library.includes('data-experience-revision="4"'));
 } else {
   // Fail closed for all output paths and assets, not just navigation links.
   async function walk(dir) {

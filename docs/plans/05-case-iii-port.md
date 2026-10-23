@@ -52,9 +52,13 @@ not a claim that this legacy source fully implements the proposed contracts.
 
 The deterministic hold model is extracted into `model.cjs`, usable both by the
 browser and Node. It receives explicit elapsed seconds and magnetic BRC. Carrier
-frame: x starboard, y astern in NM; headings clockwise from magnetic north. Speed
-is fixed at 250 knots, no wind or drift. Negative/nonfinite time or nonfinite BRC
-throws RangeError; positive time wraps at 360 seconds. This is synthetic geometry.
+frame: x starboard, y astern in NM; headings clockwise from magnetic north. Its
+fixed synthetic path rate is 250 NM/hour, separate from the displayed KIAS command;
+it is not an aircraft-groundspeed or hold-performance model. There is no wind or
+drift. Negative/nonfinite time or nonfinite BRC throws RangeError; positive time
+wraps at 360 seconds. This is synthetic geometry.
+Outside the hold, the simulated KIAS value is also used as NM/hour for position;
+that is not groundspeed. The status labels now state this simplification.
 The rest of the simulation retains random inputs, browser timing and scoring;
 full deterministic replay/state contracts are not delivered by this port.
 
@@ -75,30 +79,36 @@ layout, actual speech output or real-world aviation correctness.
 
 ## Aviation evidence and unresolved claims
 
-- CV NATOPS, NAVAIR 00-80T-105, 31 July 2009, §6.4.1.1 p. 6-6: six-minute
-  left-hand racetrack; §6.4.4 p. 6-8: adjust pattern to depart at EAT.
+- CV NATOPS, NAVAIR 00-80T-105, 31 July 2009, §§6.4.1.1 p. 6-6 and 6.4.4
+  p. 6-8 are historical source leads for the six-minute racetrack/EAT claims.
   [Historical copy](https://info.publicintelligence.net/CV-NATOPS-JUL09.pdf).
-  Prototype research inspected these sections; current edition/applicability and
-  qualified review remain pending. No source file is redistributed.
+  The cited passages, current edition/applicability and claim mapping have not
+  been verified for this release-readiness review. No source file is redistributed.
 - [Eagle Dynamics Supercarrier Operations Guide](https://www.digitalcombatsimulator.com/upload/iblock/e1b/430ooc582lpb0npynbsewan6omd5ohvs/DCS_Supercarrier_Operations_Guide_EN.pdf),
-  detailed approach pp. 75–81: inherited dialogue/sequence inputs. Edition and
-  exact simulator-version mapping pending.
-- [Heatblur manual](https://f14.manuals.heatblur.se/): inherited F-14B system
-  context. A complete numeric-limit and claim/source audit remains pending;
-  280 KIAS gear / 225 KIAS flaps remain prototype exercise limits, not validated
-  guidance. No qualified human review has been recorded.
+  pp. 75–81 are a possible DCS-specific dialogue/sequence lead; the pages,
+  edition and exact simulator-version mapping have not been verified.
+- [Heatblur F-14 manual](https://f14.manuals.heatblur.se/): the revision-3
+  review inspected the [Airspeed/AoA indicator passages](https://github.com/Heatblur-Simulations/f-14-manual/blob/49bbd9a144c32033bd3b3d98f04b113c58f22fa0/src/f14bu/cockpit/pilot/left_instrument_panel.md),
+  [CASE I landing section](https://github.com/Heatblur-Simulations/f-14-manual/blob/49bbd9a144c32033bd3b3d98f04b113c58f22fa0/src/f14bu/procedures/landing_procedures.md)
+  and [flap caution table](https://github.com/Heatblur-Simulations/f-14-manual/blob/49bbd9a144c32033bd3b3d98f04b113c58f22fa0/src/f14bu/cockpit/pilot/right_console.md)
+  at repository commit `49bbd9a144c32033bd3b3d98f04b113c58f22fa0`. These provide
+  limited DCS F-14 system and CASE I context, not Case III procedure or validation
+  of the 135 KIAS, 280 KIAS gear, or 225 KIAS flap exercise gates. The 225-knot
+  caution is not an extension limit; module-version mapping remains unverified.
+  Source-backed technical validation remains incomplete.
 
-Source access date for prototype research: 22 October 2026. This port does not
-claim a new primary-source research audit. These are a partial source register,
-not a complete claim registry. All inherited procedural/scoring claims remain
-unvalidated. Synthetic dynamics, AoA/fuel/arrestment and LSO thresholds are not
-performance models. Automatic hold entry, fixed circuit, amended EATs and
-procedural gate tolerances are teaching simplifications. No F/A-18C is added.
+Prototype source access date: 22 October 2026. The original port did not claim a
+primary-source audit. This remains a partial source register, not a complete
+claim registry. All inherited procedural/scoring claims remain unvalidated.
+Synthetic dynamics, AoA/fuel/arrestment and LSO thresholds are not performance
+models. Automatic hold entry, fixed circuit, amended EATs and procedural gate
+tolerances are teaching simplifications. No F/A-18C is added.
 
 ## Independent numerical cases
 
-At 250 kt, a 60-second straight leg is 250/60 = 25/6 NM. A 120-second
-semicircle travels 250 × 120/3600 = 25/3 NM, so its radius is
+At the fixed synthetic rate of 250 NM/hour, a 60-second straight leg is
+250 × 60/3600 = 25/6 NM. A 120-second semicircle travels
+250 × 120/3600 = 25/3 NM, so its radius is
 (25/3)/pi = 25/(3pi) NM. Each 60 seconds in a turn sweeps 90°.
 With R = 25/(3pi), L = 25/6 and BRC 000°:
 
@@ -148,7 +158,78 @@ Validation on Node.js 22.23.4:
   it is HTTP integration coverage, not browser execution or visual QA.
 - Application CI adds development HTTP and review-build checks. No Pages
   deployment change.
- Browser/speech/keyboard/viewport checks have not been run
-in this Work session: browser preview infrastructure is unavailable. Source and
-VM checks are not substitutes for visual/accessibility or qualified aviation
-review. A future release must obtain those checks, not infer them from CI.
+ Browser/speech/keyboard/viewport checks had not been run in the original port
+ session. Source and VM checks are not substitutes for visual/accessibility or
+ qualified aviation review. A future release must obtain those checks, not infer
+ them from CI.
+
+## Issue #35 independent audit
+
+The `oversweep-aviation-sme-reviewer` was invoked against baseline HEAD
+`c0fc75bb8778ca739be4c7f69c70ce416ae19d36` (base
+`91025066e3598826062a2af092583526440dbb28`; session
+`case3-sme-audit`; 23 October 2026). The review covered this note, the wrapper,
+trainer/model, metadata and tests. The reviewer independently checked the
+synthetic hold arithmetic, but verified no real-world procedure, aircraft limit,
+radio call or scoring criterion against an accessible applicable primary-source
+passage.
+
+The review identified unresolved evidence/applicability gaps in Case III
+procedure and dialogue; F-14B gear/flap and on-speed statements; assessment and
+gate tolerances; KIAS versus synthetic path-rate units; and FAA/DCS source
+applicability for spoken radio formatting. No factual contradiction was
+established. This follow-up identifies the 280/225 KIAS values as trainer gates,
+states that exercise checks are not a proficiency score, separates the synthetic
+250 NM/hour path rate from displayed KIAS, and classifies dialogue/TTS as
+unverified exercise content. These edits do not supply the missing source
+passages or advance content maturity.
+
+Independent code review session `case3-code-review` on HEAD
+`e0af1e7b964ae2cf08c6ca533094eb9bf16ba7fe` found a P2 ambiguity: the live
+speed readout was called AIRSPEED although its numeric value also drives the
+synthetic position rate. The follow-up labels it `SIM SPEED` / `KIAS*` and
+explains the outside-hold KIAS-to-NM/hour approximation. The scenario math and
+values are unchanged. Per [content revision rules](../content-contracts.md), the
+experience metadata advances from revision 1 to revision 2.
+
+Fresh code review of the full diff at
+`b78867cd9d86e0f68b34a41df25d031eb104fde8` found no actionable code findings;
+tests were not run by that reviewer. A fresh aviation SME review of revision 2
+at the same HEAD independently checked the synthetic hold geometry and confirmed
+that no operational claim was verified against an accessible applicable
+primary-source passage. It found no factual contradiction, but noted that the
+command still said `AIRSPEED / KIAS` while telemetry said `SIM SPEED / KIAS*`,
+and asked for a readily visible explanation of the asterisk. The command label
+and nearby note are now aligned; the content revision advances to 3, so review
+evidence for revision 2 does not validate revision 3. The trainer remains
+Drafted.
+
+Fresh aviation SME review of revision 3 at HEAD
+`ad315f712e2b7d615c009a5863e4d3c939a3fd1c` independently checked the synthetic
+hold math and found no factual contradiction. It inspected exact Heatblur manual
+passages at commit `49bbd9a144c32033bd3b3d98f04b113c58f22fa0`: the
+Airspeed/AoA indicator pages, CASE I landing section and flap caution table.
+Those passages support only limited simulator-specific context; the flap caution
+does not establish an extension limit. The review reported medium unresolved
+procedure/numeric-gate and phraseology/assessment evidence findings, plus a low
+terminology finding for “airspeed” and unstarred “KIAS” in the Manual and
+instructor prompts. No operational claim was verified against an applicable
+Navy or DCS passage. The Manual introduction and coached copy now use simulated
+speed terminology; revision 4 supersedes revision 3, and revision-3 review
+evidence does not validate revision 4.
+
+Fresh code review at revision 3 found no actionable code findings and did not
+run tests. Foundation run `39896936496` and Application run `39896936533`
+passed at that SHA (attempt 2); the revision-3 aviation SME workflow run
+`39896936359` ended `action_required` with zero jobs. The parallel validation
+tool could not start its review model and CodeQL analysis in this environment.
+
+Direct retrieval of the cited CV NATOPS and DCS Supercarrier Guide failed DNS in
+this session; exact applicable passages and edition/module mappings remain
+unverified. The custom UX reviewer could not access its browser MCP at revision
+3 (`MCPOAuthBrowserRequiredError`); local Chromium checks are not independent UX
+approval. A prior revision-2 SME workflow run `39895597649` also ended
+`action_required`; run `39891533760` failed with HTTP 401 / `catalog_unavailable`.
+Neither source retrieval nor browser failure proves those resources are
+unavailable elsewhere. Source-backed validation and independent browser review
+remain outstanding; revision 4 remains Drafted and excluded from production.
