@@ -259,3 +259,93 @@ revision 5, and the content remains Drafted and excluded from production.
 The review did not run code or tests and did not perform browser, audio,
 accessibility or visual checks. Its arithmetic result establishes only the
 stated synthetic geometry, not a carrier procedure or training parameter.
+
+### Issue #35 final review and release checklist
+
+The fresh `oversweep-aviation-sme-reviewer` re-reviewed the complete revision-5
+trainer at HEAD `02662989f721c9733379c24b1a31e9bfddb9cd4d` (base
+`975714384117a179db40c0e7291d5aaaf089f1f9`; 23 October 2026). The only later
+change, at `3fbc19695c650cf47670b1755017d615ef042b1c`, adds a regression assertion
+for ordinary Manual navigation and does not change trainer content. The reviewer
+resolved the low night-theme finding and found no factual defect; the two medium
+source/applicability findings remain open.
+
+The reviewer inspected Heatblur’s F-14B manual at commit
+`49bbd9a144c32033bd3b3d98f04b113c58f22fa0`: the IAS/AoA instrument passages,
+CASE I landing procedures and flap-caution table. These provide limited DCS
+F-14B context only. In particular, neither the AoA reference nor flap caution
+validates the trainer’s synthetic 135 KIAS or 225 KIAS gates; the cited caution
+is not an extension limit. The manual’s installed-module version mapping is
+unverified. The reviewer located the official Eagle Dynamics Supercarrier guide
+listing but did not inspect pp. 75–81. CV NATOPS §§6.4.1.1/6.4.4 and their
+current applicability were not verified. No primary passage was established for
+the Case III sequence, phraseology, gates or assessment criteria.
+
+The independent arithmetic review reproduced the synthetic hold values:
+250 NM/hour gives 25/6 NM for a 60-second leg, 25/3 NM over a 120-second
+semicircle, radius 25/(3π) NM, and 1.5°/s turn rate. Checks of radial reciprocal,
+the expressly artificial KIAS-number-to-NM/hour position rule, and the
+trainer’s 3.5° glidepath were limited to internal mathematical consistency.
+They establish no operational procedure, aircraft performance or training
+standard. The reviewer did not execute code, tests or browser/audio checks.
+
+Independent code review compared base `975714384117a179db40c0e7291d5aaaf089f1f9`
+with HEAD `3fbc19695c650cf47670b1755017d615ef042b1c`. It found that the first
+review-build test covered the Case III collapsed disclosure but did not assert
+the default on other Manual pages. That finding was fixed by asserting the
+ordinary Manual index retains `<details open>` in both build modes. Fresh
+re-review at `3fbc19695c650cf47670b1755017d615ef042b1c` found no remaining
+actionable code findings.
+
+The exact-head UX reviewer was invoked for PR #40 at `02662989f721c9733379c24b1a31e9bfddb9cd4d`, but its browser tool failed with
+`MCP request failed: Transport closed`. A direct local Playwright browser attempt
+also failed because browser OAuth was required. Thus the requested desktop and
+phone journeys—embedded/full-window recovery and waveoff, instructor-off,
+reset, radio history, and debrief—were not independently browser-checked. HTTP
+development-route checks and VM regressions are not substitutes for that review.
+
+The automated SME workflow did execute successfully on an earlier revision:
+run [39900150651](https://github.com/burnzoire/oversweep/actions/runs/39900150651),
+attempt 3, reviewed head `7097a38b70c30b5d3421ecb5ef6451412c327262`; the agent,
+safe-output and conclusion jobs succeeded. It does not review this PR head.
+Current PR #40 runs at `02662989f721c9733379c24b1a31e9bfddb9cd4d` and
+`3fbc19695c650cf47670b1755017d615ef042b1c` concluded `action_required` with zero
+jobs. The workflow therefore did not review the current revision. The run did
+not expose whether a credential is missing or which approval/runtime condition
+prevented job execution; no credential status is claimed.
+
+Checks run on the final code head `3fbc19695c650cf47670b1755017d615ef042b1c`
+with Node 22.23.4:
+
+- `python3 scripts/check_docs.py` — passed.
+- `npm run check` — passed model/sortie tests, Astro checks, TypeScript, normal
+  production build and generated-site checks.
+- `npm run check:dev` — passed HTTP routes at `/` and `/oversweep/`.
+- `OVERSWEEP_REVIEW_TRAINERS=1 npm run check:review` — passed review-only
+  navigation, revision, asset and `/oversweep/` checks.
+- `npm ci` reported zero package vulnerabilities. CodeQL was not available in
+  this session; no CodeQL result is claimed.
+- `git diff --check` — passed.
+
+Release checklist:
+
+- [x] Revision 5 identifies itself as Drafted and distinguishes trainer
+  setpoints from verified procedure, aircraft limitations and proficiency.
+- [x] Normal production output excludes the trainer route, library/manual
+  listing and trainer assets; only the explicit local review build includes
+  them. Regression checks cover both modes and the Manual navigation behavior.
+- [x] Review evidence, findings, limitations and exact reviewed revisions are
+  recorded above.
+- [ ] Obtain applicable, lawful primary passages and complete claim-to-source
+  mapping for Case III procedure, radio dialogue, numeric gates and assessment,
+  or remove/bound those unsupported claims.
+- [ ] Complete independent browser UX review on desktop and phone after browser
+  access is available.
+- [ ] Obtain a current-head automated SME workflow result; current draft-PR
+  runs have no jobs.
+- [ ] Owner approval for merge/publication; this task does not merge, deploy or
+  publish.
+
+**Disposition:** the two medium aviation evidence findings and the missing
+browser review are release blockers. Revision 5 remains **Drafted**, excluded
+from production; this PR is not a release authorization.
