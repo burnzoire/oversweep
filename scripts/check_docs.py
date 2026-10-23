@@ -11,9 +11,14 @@ REQUIRED = (
     "README.md", "AGENTS.md", "docs/vision.md", "docs/content-catalogue.md",
     "docs/content-standards.md", "docs/architecture.md", "docs/design-system.md",
     "docs/development.md", "docs/progress.md", "docs/plans/00-roadmap.md",
+    "docs/aviation-sme-review.md", "docs/reviews/aviation-sme-demo.md",
+    ".github/workflows/shared/aviation-sme-review.md",
     "docs/decisions/README.md", "docs/decisions/0001-content-first-architecture.md",
     ".github/pull_request_template.md", ".github/ISSUE_TEMPLATE/work.md",
     ".github/ISSUE_TEMPLATE/content.md", ".github/workflows/foundation.yml",
+    ".github/agents/aviation-sme-reviewer.agent.md",
+    ".github/workflows/aviation-sme-review.md",
+    ".github/workflows/aviation-sme-review.lock.yml",
 )
 errors = []
 AGENT_TOOLS = {
@@ -21,6 +26,7 @@ AGENT_TOOLS = {
     "implementer": ["read", "search", "edit", "execute", "agent", "web", "github/*", "playwright/*"],
     "reviewer": ["read", "search", "web", "github/*"],
     "ux-reviewer": ["read", "search", "playwright/*"],
+    "aviation-sme-reviewer": ["read", "search", "web", "github/*"],
 }
 for role in AGENT_TOOLS:
     if not (ROOT / ".github/agents" / f"{role}.agent.md").is_file():
@@ -75,6 +81,14 @@ for path in files:
                 raise ValueError("agent prompt exceeds limit")
         except (ValueError, KeyError) as exc:
             errors.append(f"{rel}: invalid agent profile: {exc}")
+    elif path.parent == ROOT / ".github/workflows" and path.suffix == ".md":
+        try:
+            if not body.startswith("---\n"):
+                raise ValueError("frontmatter must start at first line")
+            _, markdown_body = body[4:].split("\n---\n", 1)
+            markdown_body = markdown_body.lstrip("\n")
+        except ValueError as exc:
+            errors.append(f"{rel}: invalid workflow frontmatter: {exc}")
     if not markdown_body.startswith("# ") and path.parent.name != "ISSUE_TEMPLATE":
         errors.append(f"{rel}: missing document title")
     if "ISSUE_REGISTER_PLACEHOLDER" in body:

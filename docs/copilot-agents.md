@@ -12,6 +12,7 @@ assignments or intermediate plan approvals are required.
 | [Planner](../.github/agents/planner.agent.md) | Optional bounded research/planning subtask or explicit planning-only request | Read/search/edit, web where supported and GitHub reads; model invocation allowed |
 | [Reviewer](../.github/agents/reviewer.agent.md) | Optional specialist for fresh independent review | Read/search, web where supported and GitHub reads; model invocation allowed; no edit, shell or delegation |
 | [UX reviewer](../.github/agents/ux-reviewer.agent.md) | Browser-based review of the exact PR experience; reports findings without editing | Read/search and Playwright browser tools; model invocation allowed; no edit, shell or GitHub tools |
+| [Aviation SME reviewer](../.github/agents/aviation-sme-reviewer.agent.md) | Advisory, claim-level review of aviation evidence, applicability, instruction and models | Read/search, web where supported and GitHub reads; model invocation allowed; no edits or approval |
 
 ## Start a feature
 
@@ -90,6 +91,83 @@ invocation settings. These checks are not GitHub's parser or live runtime testin
 After merging, start a new delivery task to verify profile discovery and whether
 its runtime exposes delegation. Report absent delegation without inventing review.
 No live Copilot delegation test is claimed by this workflow-only change.
+
+## Aviation SME review
+
+Use `oversweep-aviation-sme-reviewer` directly in a supported custom-agent UI,
+or ask `oversweep-implementer` to delegate a fresh-context review where named
+agent delegation is available. Example:
+
+> Aviation-SME review PR #29 for issue #28 at head
+> `2c16d437fd1264d69f9340b4442a452707baab42`. Review changed claims and relevant
+> surrounding sources, trainer assumptions, and independent model cases. Follow
+> `docs/aviation-sme-review.md`; return source locators, applicability, severity,
+> suggested corrections, and unverified/untested areas. Do not edit or approve.
+
+The [documentation entry point](aviation-sme-review.md) links to the one
+canonical review standard used by the profile and imported by the
+[automated workflow](../.github/workflows/aviation-sme-review.md).
+The GitHub Agentic Workflow uses the Copilot engine with
+`engine.agent: aviation-sme-reviewer`, a supported custom-agent invocation, and
+imports the same review standard. It enables the framework's actual `web-fetch`
+tool in Copilot SDK mode; the profile's cloud-agent `web` alias is not used as
+the workflow's source-retrieval mechanism. The agent has only read-only GitHub
+toolsets, no shell/edit access, and no checkout of the PR branch. The firewall
+allows cited-source retrieval from `faa.gov`, `digitalcombatsimulator.com`,
+`heatblur.se`, and `navsup.navy.mil`, plus the framework's `github` alias. In
+the compiled lock, that alias expands to
+`*.githubusercontent.com`, `codeload.github.com`, `docs.github.com`,
+`github-cloud.githubusercontent.com`, `github-cloud.s3.amazonaws.com`,
+`github.blog`, `github.com`, `github.githubassets.com`, `lfs.github.com`,
+`objects.githubusercontent.com`, `patch-diff.githubusercontent.com`,
+`patchdiff.githubusercontent.com`, and `raw.githubusercontent.com`. The broad
+`defaults` network alias is not enabled. The workflow does not provide general
+web search; absent or inaccessible evidence remains unverified. In GH-AW
+v0.93.0, the Copilot SDK mode is documented as stable, native `engine.agent`
+selection is supported, and `web-fetch` is available in SDK mode; this workflow
+does not enable experimental dynamic workflows or web search.
+
+The workflow runs for opened, reopened, ready-for-review and synchronized PRs
+with relevant aviation/source/model paths changed; drafts are skipped. Use
+**Actions → Aviation SME PR review → Run workflow** with a PR number for a
+manual rerun. It reads PR files through GitHub tools without checking out or
+executing the branch, uses read-only agent permissions, and writes only one
+updatable summary through the restricted safe output. New PR events cancel
+older in-progress reviews; every result identifies its reviewed SHA and must
+re-check freshness before comment output. As the head check and comment write
+cannot be atomic, a narrow race remains possible if a new commit arrives between
+them; no live rapid-head test has been performed. Safe outputs are restricted
+to one replaceable comment on the selected PR; issue creation, failure issues,
+and missing-data/tool issue outputs are disabled. The framework's generated
+activation gate skips automatic reviews of fork PRs; manually dispatch from the
+Actions page to review a fork PR after the workflow is on the default branch.
+
+The workflow definition is in `.github/workflows/aviation-sme-review.md`; its
+compiled `.lock.yml` is committed beside it. The source uses
+[GitHub Agentic Workflows](https://github.com/github/gh-aw) v0.93.0, installed
+with `gh extension install github/gh-aw@v0.93.0` and compiled with
+`gh aw compile`. There is no added provider, search API, MCP server, or repository
+dependency. Each run uses GitHub Actions minutes and Copilot inference under the
+repository's Copilot entitlement; actual inference charges depend on the model,
+usage, and account policy.
+
+The implementation follows the versioned framework references for [Copilot
+custom agents and SDK](https://github.github.com/gh-aw/reference/engines/copilot/),
+[web retrieval](https://github.github.com/gh-aw/reference/tools/#web-tools),
+[safe outputs](https://github.github.com/gh-aw/reference/safe-outputs/),
+[concurrency](https://github.github.com/gh-aw/reference/concurrency/), and
+[authentication](https://github.github.com/gh-aw/reference/auth/).
+
+This workflow uses personal-token authentication: live inference requires the
+repository Actions secret `COPILOT_GITHUB_TOKEN`, a fine-grained user PAT with
+Copilot Requests: Read and an active Copilot entitlement. The alternative
+organization-billed mode uses `copilot-requests: write` instead of that secret;
+do not enable both, because the permission makes the framework ignore the PAT.
+Do not commit tokens. The profile and compiled workflow are not evidence of a
+live review; record run URLs, reviewed SHAs, comment output, and any
+credentials/runtime blocker separately. Any corrections require review again
+at the new head. The SME review cannot replace qualified human technical
+approval or advance maturity.
 
 ## UX review
 

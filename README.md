@@ -17,6 +17,8 @@ unvalidated trainer routes and assets; no aviation validation is claimed.
 5. [Content standards](docs/content-standards.md) and [provisional design](docs/design-system.md)
 6. [Roadmap](docs/plans/00-roadmap.md) and [progress evidence](docs/progress.md)
 7. [One-assignment feature delivery](docs/copilot-agents.md) — use `oversweep-implementer`
+8. [Aviation SME review standard](docs/aviation-sme-review.md) and
+   [profile/workflow use](docs/copilot-agents.md#aviation-sme-review)
 
 The initial Case III port was delivered in
 [#28 / PR #29](https://github.com/burnzoire/oversweep/pull/29); it remains Drafted,

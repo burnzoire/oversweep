@@ -37,8 +37,8 @@ Audit base: `main` at `72ad6cb3663110dfa6c62d6385d053c4c204a9b8`.
 - The site skeleton and Case III trainer are present. Issue [#28](https://github.com/burnzoire/oversweep/issues/28) is closed and PR [#29](https://github.com/burnzoire/oversweep/pull/29) is merged; the trainer remains Drafted and is excluded from normal production output. The issue's old `In Review` body text illustrates why issue/PR events, not copied status text, are authoritative.
 - The planner, implementer, reviewer and UX reviewer profile files are on main. File presence and frontmatter checks do not establish that a live Copilot picker/runtime discovers or can invoke them.
 - The former Case III issue #20 now returns HTTP 410 and is not a live work item. Issue #28 / PR #29 is the current delivery evidence; old #20 references are historical only.
-- Issue [#8](https://github.com/burnzoire/oversweep/issues/8) is open with a draft PR [#34](https://github.com/burnzoire/oversweep/pull/34); this is In Progress, not In Review. Its existing `Backlog` body line is stale. PR [#33](https://github.com/burnzoire/oversweep/pull/33) is also an open draft for issue [#31](https://github.com/burnzoire/oversweep/issues/31). UX profile PR [#32](https://github.com/burnzoire/oversweep/pull/32) is merged.
-- Issue #30 is closed with UX profile PR #32, whose description says automated review posting was excluded, although #30's issue description required a PR-triggered workflow and demonstration. This is an unresolved closure/scope discrepancy; closure alone does not prove that acceptance was met. No open UX-specific issue for that remaining workflow scope is verified. Issue #31 remains open with draft PR #33 for SME work and shared setup. Do not treat #30 as active work, move its UX scope into #31, duplicate either implementation, or claim authentication/setup is complete. The owner must decide whether the #30 gap needs a follow-up.
+- Issue [#8](https://github.com/burnzoire/oversweep/issues/8) is open with a draft PR [#34](https://github.com/burnzoire/oversweep/pull/34); this is In Progress, not In Review. Its existing `Backlog` body line is stale. PR [#33](https://github.com/burnzoire/oversweep/pull/33) is open for issue [#31](https://github.com/burnzoire/oversweep/issues/31); live PR events now show it ready for review. UX profile PR [#32](https://github.com/burnzoire/oversweep/pull/32) is merged.
+- Issue #30 is closed with UX profile PR #32, whose description says automated review posting was excluded, although #30's issue description required a PR-triggered workflow and demonstration. This is an unresolved closure/scope discrepancy; closure alone does not prove that acceptance was met. No open UX-specific issue for that remaining workflow scope is verified. Issue #31 remains open with PR #33 for SME work and shared setup. Do not treat #30 as active work, move its UX scope into #31, duplicate either implementation, or claim authentication/setup is complete. The owner must decide whether the #30 gap needs a follow-up.
 
 ### Checks and deployment evidence
 
@@ -133,7 +133,55 @@ The latest observed main deployment succeeded at SHA `72ad6cb` (run linked above
 Settings, account eligibility, deployed URL reachability and live smoke testing
 remain unverified by this audit. See [deployment guidance](deployment.md).
 
+## Current prototype source port
+
+[#28](https://github.com/burnzoire/oversweep/issues/28) ports the owner-authorised
+current source into one local-review experience under Naval Operations and the
+Training Library. See [port evidence](plans/05-case-iii-port.md). Source access is
+now available; historical #5–#7/#20 notes remain inputs, not aviation approval.
+Work status and linked implementation PR are tracked in #28. Content: Drafted,
+not technically validated. Normal production excludes the trainer and assets.
+No merge, deployment, technical validation or publication is claimed.
+
+## Aviation SME profile and workflow
+
+Issue [#31](https://github.com/burnzoire/oversweep/issues/31) is In Review through
+[PR #33](https://github.com/burnzoire/oversweep/pull/33), which is open and
+non-draft. Its existing `Backlog` body text is stale; live issue/PR events are
+authoritative. The change adds a read-only profile, shared review standard,
+claim-level Case III demonstration, and versioned PR workflow and lock. The
+demonstration is scoped to PR #29 at head
+`2c16d437fd1264d69f9340b4442a452707baab42`; it records the FAA search snippet
+as an unverified lead, the F-14 applicability gap, inaccessible NATOPS
+evidence, and independently derived conditional arithmetic. No primary-source
+aviation claim is verified by this demonstration. It is not a live Agentic
+Workflow run.
+
+No `Aviation SME PR review` workflow run or summary comment has been observed.
+The workflow is not yet on the default branch, and this session has not verified
+that the configured Copilot token enables live inference. No updated-head/comment
+cycle or live source-fetch run is claimed. The current independent re-review
+identified two remaining gaps: manual dispatch does not deterministically gate
+draft PRs, and the example has no primary-source-verified supported claim.
+
+Checks run on this revision:
+
+- `python3 scripts/check_docs.py` — passed (38 text files; local links checked).
+- GH-AW v0.93.0 strict compile/validation and `gh-aw validate --strict` — passed
+  with zero warnings; the compiled actions are pinned to
+  `8df88b66116c3ead88419803ef9ced0c1a253510`.
+- `npm run test:case-iii` — passed.
+- `git diff --check` — passed.
+
 PR #29 delivered the Case III port and merged; its source/content remains Drafted,
 not technically validated. Normal production excludes the draft trainer. The
 successful Pages deployment does not change that maturity or authorize its
 publication. No aviation validation or publication is claimed.
+
+The initial independent-review findings about issue-producing safe outputs,
+search-snippet classification, and broad network defaults were corrected:
+outputs are restricted to one fixed-PR comment, the `defaults` network alias is
+removed, and the FAA source remains explicitly unverified. Direct FAA, BIPM, and
+NIST page retrieval failed DNS in this session; the browser tool was unavailable.
+Neither the demonstration nor the workflow advances content maturity or supplies
+qualified human validation.
