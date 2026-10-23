@@ -2,7 +2,7 @@
 export const caseIII = {
   id: 'experience.case-iii-tomcat',
   manualId: 'manual.case-iii-tomcat',
-  revision: 2,
+  revision: 3,
   title: 'Case III — Tomcat recovery exercise',
   route: 'manual/naval-operations/case-iii/',
   assets: 'review/case-iii/',

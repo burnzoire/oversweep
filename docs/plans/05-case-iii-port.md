@@ -91,7 +91,7 @@ layout, actual speech output or real-world aviation correctness.
   context. No precise numeric-limit passage was identified or verified; a
   complete claim/source audit remains pending;
   280 KIAS gear / 225 KIAS flaps remain prototype exercise limits, not validated
-  guidance. No qualified human review has been recorded.
+  guidance. Source-backed technical validation remains incomplete.
 
 Source access date for prototype research: 22 October 2026. This port does not
 claim a new primary-source research audit. These are a partial source register,
@@ -186,12 +186,27 @@ speed readout was called AIRSPEED although its numeric value also drives the
 synthetic position rate. The follow-up labels it `SIM SPEED` / `KIAS*` and
 explains the outside-hold KIAS-to-NM/hour approximation. The scenario math and
 values are unchanged. Per [content revision rules](../content-contracts.md), the
-experience metadata advances from revision 1 to revision 2; revision 2 remains
-Drafted until it has matching independent review evidence.
+experience metadata advances from revision 1 to revision 2.
+
+Fresh code review of the full diff at
+`b78867cd9d86e0f68b34a41df25d031eb104fde8` found no actionable code findings;
+tests were not run by that reviewer. A fresh aviation SME review of revision 2
+at the same HEAD independently checked the synthetic hold geometry and confirmed
+that no operational claim was verified against an accessible applicable
+primary-source passage. It found no factual contradiction, but noted that the
+command still said `AIRSPEED / KIAS` while telemetry said `SIM SPEED / KIAS*`,
+and asked for a readily visible explanation of the asterisk. The command label
+and nearby note are now aligned; the content revision advances to 3, so review
+evidence for revision 2 does not validate revision 3. The trainer remains
+Drafted.
 
 Direct retrieval of the cited CV NATOPS, DCS Supercarrier Guide and Heatblur
 manual failed DNS in this session. The custom UX reviewer could not access its
-browser MCP because it returned `MCPOAuthBrowserRequiredError`. Neither failure
-is evidence that the sources or browser experience are unavailable elsewhere.
-Source-backed aviation review and specialist browser review remain outstanding;
-the trainer remains Drafted and excluded from production output.
+browser MCP at `b78867cd9d86e0f68b34a41df25d031eb104fde8` because it returned
+`MCPOAuthBrowserRequiredError`; local Chromium checks are not independent UX
+approval. The revision-2 SME workflow run `39895597649` ended `action_required`
+with zero jobs; prior run `39891533760` failed with HTTP 401 /
+`catalog_unavailable`. Neither the source retrieval nor browser failure proves
+those resources are unavailable elsewhere. Exact applicable source passages,
+source-backed validation and independent browser review remain outstanding; the
+trainer remains Drafted and excluded from production output.
