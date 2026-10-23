@@ -9,6 +9,8 @@ const exists = async file => stat(path.join('dist',file)).then(s=>s.isFile(),()=
 assert.equal(await exists(route),review,'draft route is emitted only for explicit review');
 assert.equal(await exists('review/case-iii/index.html'),review);
 for (const asset of assets) assert.equal(await exists(`review/case-iii/${asset}`),review,asset);
+const manualIndex = await readFile('dist/manual/index.html','utf8');
+assert(manualIndex.includes('<details open>'));
 const manual = await readFile('dist/manual/naval-operations/index.html','utf8');
 const library = await readFile('dist/training/index.html','utf8');
 const marker = 'data-experience-id="experience.case-iii-tomcat"';
