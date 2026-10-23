@@ -17,6 +17,8 @@ unvalidated trainer routes and assets; no aviation validation is claimed.
 5. [Content standards](docs/content-standards.md) and [provisional design](docs/design-system.md)
 6. [Roadmap](docs/plans/00-roadmap.md) and [tracking setup](docs/progress.md)
 7. [One-assignment feature delivery](docs/copilot-agents.md) — use `oversweep-implementer`
+8. [Aviation SME review standard](docs/aviation-sme-review.md) and
+   [profile/workflow use](docs/copilot-agents.md#aviation-sme-review)
 
 First slice delivery task: [#20](https://github.com/burnzoire/oversweep/issues/20)
 combines research, audit, planning, implementation, tests and review in one issue.

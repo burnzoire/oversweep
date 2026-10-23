@@ -106,3 +106,47 @@ now available; historical #5–#7/#20 notes remain inputs, not aviation approval
 Work status and linked implementation PR are tracked in #28. Content: Drafted,
 not technically validated. Normal production excludes the trainer and assets.
 No merge, deployment, technical validation or publication is claimed.
+
+## Aviation SME profile and workflow
+
+Issue #31 implementation is in progress through the draft
+[PR #33](https://github.com/burnzoire/oversweep/pull/33). Its issue still says
+Backlog; issue-write access was unavailable, so the proposed status update is
+In Progress. The change adds a read-only profile, one shared review standard, a
+claim-level Case III demonstration, and the versioned PR workflow plus its
+compiled lock file. The demonstration is scoped to PR #29 at head
+`2c16d437fd1264d69f9340b4442a452707baab42`; it records the FAA search snippet
+as an unverified lead, the F-14 applicability gap, inaccessible NATOPS
+evidence, and independently derived conditional arithmetic. No primary-source
+aviation claim is verified by this demonstration. It is not a live Agentic
+Workflow run.
+
+No `Aviation SME PR review` workflow run or summary comment has been observed.
+PR #33 is draft, and the workflow is not on the default branch;
+automatic draft reviews are intentionally skipped. No updated-head/comment cycle
+or live source-fetch run is claimed. After the workflow is available on the
+default branch, live inference needs the owner to configure `COPILOT_GITHUB_TOKEN`
+as an Actions secret (fine-grained PAT with Copilot Requests: Read and active
+Copilot entitlement). Organization-billed inference is an alternative requiring
+the `copilot-requests: write` workflow permission instead of the PAT; this
+workflow is configured for the secret path. This session cannot configure
+secrets, change PR readiness, merge, or dispatch the workflow.
+
+Checks run on this revision:
+
+- `python3 scripts/check_docs.py` — passed (38 text files; local links checked).
+- GH-AW v0.93.0 strict compile/validation and `gh-aw validate --strict` — passed
+  with zero warnings; the compiled actions are pinned to
+  `8df88b66116c3ead88419803ef9ced0c1a253510`.
+- `npm run test:case-iii` — passed.
+- `git diff --check` — passed.
+
+The independent reviewer identified issues with default issue-producing safe
+outputs, the search snippet's initial classification, and broad network defaults.
+They were corrected by restricting outputs to one fixed-PR comment, removing the
+`defaults` network alias, and marking the inaccessible FAA source unverified; a
+fresh re-review is pending. Direct FAA, BIPM, and NIST page retrieval failed DNS
+in this session, and the browser tool was unavailable. The demonstration makes
+no primary-source aviation verification claim. Neither compilation nor the
+manual demonstration changes content maturity or supplies qualified human
+validation.

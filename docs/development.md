@@ -69,6 +69,12 @@ cases and qualified human review for aviation validation. The owner may perform
 that technical review when competent; the process does not require another human.
 Content without that evidence remains unvalidated and excluded from publication.
 
+The optional [aviation SME reviewer](copilot-agents.md#aviation-sme-review)
+reports evidence-backed findings and unresolved sources without editing or
+approving content. Re-review material corrections at the new revision. Automated
+or AI review does not substitute for qualified human validation or change
+content maturity.
+
 Complete means delivered scope, applicable checks and review, and authorised merge.
 No estimated percentages. Record actual blockers and the smallest next action;
 continue unaffected work. Do not close an issue just because a PR was opened.
