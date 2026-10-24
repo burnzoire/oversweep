@@ -128,7 +128,7 @@ turn rate.
 | j 3 (b) | Teardrop: “fly to the fix, turn outbound to a heading for a 30 degree teardrop entry within the pattern (on the holding side) for a period of one minute, then turn in the direction of the holding pattern to intercept the inbound holding course.” | Same |
 | j 3 (c) | Direct: “fly directly to the fix and turn to follow the holding pattern.” | Same |
 | j 3 (e) | “Fix end and outbound end turns are made to the left.” … “Entry procedures to a nonstandard pattern are oriented in relation to the 70 degree line on the holding side just as in the standard pattern.” | Left-hand pattern note |
-| j 8 | Turns during entry and holding at “3 degrees per second”, “30 degree bank angle”, or “25 degree bank angle, provided a flight director system is used”, “whichever requires the least bank angle.” | Comparison rate in the turn section |
+| j 8 | Turns during entry and holding at “3 degrees per second”, “30 degree bank angle”, or “25 degree bank angle, provided a flight director system is used”, “whichever requires the least bank angle.” | Entry turn rate in the entry practice; comparison rate in the turn section |
 
 The entry sectors are defined only in the AIM figure, which was not inspected,
 so the module does not say which entry a heading calls for.
@@ -165,5 +165,16 @@ Hand-derived; also encoded as tests in `tests/lessons/case-iii-lesson.test.mjs`.
 - **Profile, angels 14.** 29 DME, 9,000 ft to platform: 29 − 9.375 = 19.625 DME.
 - **Correction.** 160 radial → inbound 340°. Final bearing 015° is +35° → the
   30° correction. 180/352 → −8° → gradual.
+- **Entry turn rate (revision 2.1).** AIM 5-3-8 j 8: 3°/s, 30° bank, or 25°
+  with a flight director, whichever needs the least bank. At 250 kt =
+  128.611 m/s, 3°/s needs atan(0.05236 × 128.611 ÷ 9.80665) = 34.5° of bank,
+  so 30° applies: 9.80665 × tan 30° ÷ 128.611 = 0.044022 rad/s = 2.522°/s,
+  radius 2,921.5 m = 1.578 NM. The flight-director option is not modelled.
+  At 120 kt, 30° would give 5.26°/s, so 3°/s applies.
+- **Teardrop (revision 2.1).** Right hold, inbound 000°, arriving on 180°.
+  Left 30° onto 150° moves 1.578 × (1 − cos 30°) = 0.211 NM east; one minute
+  on 150° adds 4.167 × sin 30° = 2.083 NM; a full-rate right turn from 150° to
+  000° moves 1.578 × (1 + cos 30°) = 2.944 NM west, so the turn back passes
+  the course by about 0.65 NM and corrects onto it before the fix.
 - **Timed turn.** 90° at 1.5°/s = 60 s; 180° = 120 s, matching P-816's
   two-minute turns.

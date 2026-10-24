@@ -129,3 +129,32 @@ Validation: `npm run check` and `python3 scripts/check_docs.py` pass on Node
 22.23.4. A Playwright pass at 1280 px and 360 px checked layout, no page-level
 horizontal scroll, no console errors, a timed turn and the profile playback.
 No independent review or accessibility audit is claimed.
+
+### Revision 2.1: entries join the inbound course
+
+Owner feedback (24 October 2026): the entry plots ended well off the inbound
+course, where a pilot expects to roll out lined up inbound, ready to start the
+racetrack. The AIM text says the teardrop and parallel turns back "intercept
+the inbound course", and the old model homed on the fix instead. It also flew
+the entry turns at P-816's two-minute rate, twice the radius the AIM's
+one-minute legs suit.
+
+The owner asked for no deliberate simplifications: prefer a stated source,
+even one the review packet cannot yet verify, over a convenient model change.
+So `entryPath` now:
+
+- flies entry turns at the AIM 5-3-8 j 8 holding rate (3°/s or 30° bank,
+  whichever needs less bank; 2.52°/s at 250 kt via g·tan 30° ÷ speed), keeps
+  the one-minute legs, and keeps P-816's two-minute turns for the racetrack;
+- joins a course instead of homing: it turns in the hold's direction until a
+  same-rate turn would roll out on the course, cutting at no more than 45°
+  (the AIM gives no intercept angle; the page says 45° is the model's choice);
+- lets a turn back that is too wide cross the course and correct, and reports
+  by how much;
+- when the entry is not lined up by the fix, flies one racetrack circuit and
+  is established inbound on the next pass, as in any hold;
+- for the direct entry, cuts onto the racetrack's outbound leg, because the
+  entry turn is tighter than the racetrack turn.
+
+An earlier draft of this revision lengthened the legs instead; it was
+dropped at the owner's request.
