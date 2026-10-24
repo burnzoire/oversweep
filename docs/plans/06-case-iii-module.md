@@ -66,3 +66,21 @@ browser installation attempts returned invalid download archives. No desktop,
 tablet/mobile, keyboard runtime or visual browser pass is claimed. Static UX
 review checked labels, section targets, no-JavaScript fallback and launch markup.
 The base-path review build and checks also passed.
+
+## Source-access remediation after live SME review
+
+The live reviewer reached P-816 after the allowlist correction, but its fetcher
+returned compressed PDF streams. Selected readable source passages, original
+locators, PDF identity/hash and extraction provenance are now in
+[the P-816 evidence record](../reviews/case-iii-p816-evidence.md). This is a
+small review packet, not redistribution of the manual. The reviewer must assess
+the passages independently; a successful download is not passage verification.
+
+The general Navy controller-training source NAVEDTRA 14342A, chapter 11,
+p. 11-32, supports clearance fields, aircraft-type-dependent marshal fixes and
+final-bearing definition. See [general source evidence](../reviews/case-iii-general-source.md).
+The page retains its aircraft-agnostic conceptual structure while explicitly
+attributing the Air Boss statement and bolter/waveoff handling example to their
+historical training context. It does not claim a T-45C checklist applies to all
+aircraft. These changes address live-review findings U1/U2 without removing the
+reference module or weakening the release gate.
