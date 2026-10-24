@@ -1,0 +1,92 @@
+---
+// Figure 1: plan view of the P-816 CV-1 example recovery. Not to scale.
+// Every label repeats a numbered callout in the page text; data-part ties
+// drawn elements to their callout for the highlight interaction.
+const callouts = [
+  [1, 312, 38], [2, 214, 104], [3, 88, 276], [4, 60, 184], [5, 125, 276], [6, 165, 226],
+  [7, 200, 226], [8, 238, 318], [9, 400, 338], [10, 500, 318], [11, 628, 286], [12, 506, 108],
+];
+---
+<svg class="natops overview" viewBox="0 0 800 440" role="img" aria-labelledby="overview-fig-title overview-fig-desc">
+  <title id="overview-fig-title">Figure 1. Case III recovery overview, plan view, not to scale</title>
+  <desc id="overview-fig-desc">Arrival through Red Crown and Strike to Marshal; a left-hand racetrack at the marshal fix astern of the ship; commencing toward the ship; platform and the 20 DME correction to final bearing; the 12 DME arc; level-off, landing checks and gear; ACLS lock-on between 8 and 4 DME; the ball call at three-quarters of a mile; and the bolter or waveoff re-entry along a downwind leg. The numbered callouts are listed after the figure.</desc>
+  <defs>
+    <marker id="ov-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor" /></marker>
+  </defs>
+  <rect class="frame" x="1" y="1" width="798" height="438" />
+  <!-- Arrival -->
+  <g data-part="1 2" class="part">
+    <path class="ln dashed" d="M300 46 L132 186" marker-end="url(#ov-arrow)" />
+    <text x="330" y="34" class="lbl">FROM MISSION · RED CROWN → STRIKE</text>
+    <text x="330" y="48" class="lbl small">HANDOFF BEFORE THE 50 NM CCA</text>
+    <text x="232" y="100" class="lbl">MARSHAL CHECK-IN INSIDE CCA</text>
+  </g>
+  <!-- Marshal stack and racetrack (left-hand) -->
+  <g data-part="3 4" class="part">
+    <path class="ln" d="M40 250 L100 250 A25 25 0 0 0 100 200 L40 200 A25 25 0 0 0 40 250" />
+    <path class="ln" d="M54 200 L61 195 M54 200 L61 205" />
+    <path class="fixmark" d="M100 242 L108 250 L100 258 L92 250 Z" />
+    <text x="16" y="136" class="lbl">MARSHAL STACK</text>
+    <text x="16" y="150" class="lbl small">LEFT-HAND · 6 MIN</text>
+    <text x="16" y="163" class="lbl small">FIX: ANGELS + 15 DME</text>
+    <text x="16" y="318" class="lbl small">180 RADIAL RELATIVE TO BRC</text>
+    <text x="16" y="331" class="lbl small">(GENERALLY WITHIN 30°)</text>
+  </g>
+  <!-- Commence and penetration to 20 DME -->
+  <g data-part="5 6" class="part">
+    <path class="ln heavy" d="M100 250 L200 250" />
+    <text x="114" y="243" class="lbl small">COMMENCE</text>
+  </g>
+  <g data-part="7" class="part">
+    <path class="tick" d="M200 238 L200 262" />
+    <text x="200" y="282" class="lbl small" text-anchor="middle">20 DME · PLATFORM</text>
+    <text x="200" y="295" class="lbl small" text-anchor="middle">5,000 FT</text>
+  </g>
+  <!-- Correction to final bearing and the 12 DME arc -->
+  <g data-part="8" class="part">
+    <path class="ln heavy" d="M200 250 L330 325" marker-end="url(#ov-arrow)" />
+    <path class="ln dashed" d="M368.1 151.4 A300 300 0 0 0 368.1 356.6" />
+    <text x="372" y="146" class="lbl small">12 DME ARC</text>
+    <text x="150" y="372" class="lbl small">30° CORRECTION AT 20 DME (IF MORE THAN 10°)</text>
+  </g>
+  <!-- Final bearing: ship's landing-area centreline extended aft -->
+  <path class="ln centreline" d="M330 325 L648 254" />
+  <text x="300" y="398" class="lbl small">FINAL BEARING (EXTENDED LANDING-AREA CENTRELINE)</text>
+  <g data-part="9" class="part">
+    <path class="tick" d="M350 312 L350 330 M400 301 L400 319 M450 290 L450 308 M500 279 L500 297" />
+    <text x="350" y="304" class="lbl small" text-anchor="middle">12</text>
+    <text x="400" y="293" class="lbl small" text-anchor="middle">10</text>
+    <text x="450" y="282" class="lbl small" text-anchor="middle">8</text>
+    <text x="500" y="271" class="lbl small" text-anchor="middle">6</text>
+    <text x="420" y="366" class="lbl small">LEVEL 1,200 FT · CHECKS · GEAR · 150 KT</text>
+  </g>
+  <g data-part="10" class="part">
+    <path class="bracket" d="M450 312 L450 318 L550 296 L550 290" />
+    <text x="540" y="336" class="lbl small">ACLS LOCK-ON 8–4 DME</text>
+  </g>
+  <g data-part="11" class="part">
+    <circle class="ballmark" cx="631" cy="258" r="5" />
+    <text x="600" y="310" class="lbl small">¾ NM · BALL CALL · LSO</text>
+  </g>
+  <!-- Ship (heading east), angled landing area exaggerated -->
+  <g class="ship">
+    <path d="M640 243 L715 243 L738 250 L715 257 L640 257 Z" />
+    <path class="deck" d="M648 254 L702 242" />
+    <rect x="688" y="252" width="12" height="4" />
+  </g>
+  <path class="ln" d="M745 268 L782 268" marker-end="url(#ov-arrow)" />
+  <text x="745" y="284" class="lbl small">BRC</text>
+  <!-- Bolter / waveoff re-entry -->
+  <g data-part="12" class="part">
+    <path class="ln dashed" d="M738 250 L766 250 C796 250 796 130 760 130 L520 130 C468 130 446 190 452 290" marker-end="url(#ov-arrow)" />
+    <text x="530" y="122" class="lbl small">DOWNWIND WHEN INSTRUCTED BY APPROACH</text>
+    <text x="530" y="146" class="lbl small">TURN TO FINAL 4–8 NM PAST ABEAM</text>
+  </g>
+  {callouts.map(([n, x, y]) => (
+    <g class="callout" data-callout={n} data-part={String(n)}>
+      <circle cx={x} cy={y} r="11" />
+      <text x={x} y={y + 4} text-anchor="middle">{n}</text>
+    </g>
+  ))}
+  <text x="16" y="428" class="lbl small">NOT TO SCALE · ANGLED-DECK OFFSET EXAGGERATED · HISTORICAL T-45C CV-1 EXAMPLE, CNATRA P-816</text>
+</svg>

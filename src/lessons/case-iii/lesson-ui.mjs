@@ -1,6 +1,9 @@
 // Presentation for the Case III module's interactive blocks. All numbers come
 // from lesson-model.mjs; this file only reads inputs and draws results.
-import { eatPlan, entryPath, norm, pointToPoint, reciprocal, timeEnroute } from './lesson-model.mjs';
+import {
+  approachProfile, eatPlan, entryPath, finalCorrection, marshalFix, norm, pointToPoint, profileAltitude,
+  reciprocal, timeEnroute, turnAmount, turnSeconds,
+} from './lesson-model.mjs';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const C = 160; // SVG centre for 320 × 320 plots
@@ -273,7 +276,344 @@ function setupQuiz(root) {
   });
 }
 
-const blocks = { navigation: setupNavigation, entry: setupEntry, eat: setupEat, quiz: setupQuiz };
+/* ---------- Figure 1: recovery overview callouts ---------- */
+// Selecting a callout, in the list or on the figure, highlights the parts of
+// the figure it describes. The list text is the explanation; nothing is hidden.
+function setupOverview(root) {
+  const svg = root.querySelector('svg');
+  const items = [...root.querySelectorAll('[data-callout-item]')];
+  const select = (n) => {
+    for (const part of svg.querySelectorAll('[data-part]'))
+      part.classList.toggle('active', part.dataset.part.split(' ').includes(n));
+    for (const item of items) {
+      const on = item.dataset.calloutItem === n;
+      item.classList.toggle('active', on);
+      item.querySelector('button').setAttribute('aria-pressed', String(on));
+    }
+  };
+  for (const item of items) {
+    const button = item.querySelector('button');
+    button.addEventListener('click', () => select(item.dataset.calloutItem));
+  }
+  for (const callout of svg.querySelectorAll('[data-callout]')) {
+    callout.addEventListener('click', () => {
+      const n = callout.dataset.callout;
+      select(n);
+      items.find((i) => i.dataset.calloutItem === n)?.querySelector('button').focus();
+    });
+  }
+  select('1');
+}
+
+/* ---------- Figure 2: CV-1 example profile ---------- */
+const feet = (ft) => `${Math.round(ft).toLocaleString('en-US')} ft`;
+const nm = (d) => (d < 1 ? d.toFixed(2) : d.toFixed(1));
+
+function setupProfile(root) {
+  const f = Object.fromEntries([...root.querySelectorAll('[name]')].map((i) => [i.name, i]));
+  const svg = root.querySelector('svg');
+  const rows = [...root.querySelectorAll('tr[data-dme]')];
+  const play = root.querySelector('[data-play]');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const H = 300, X0 = 60, X1 = 700, Y0 = 260, Y1 = 24, MAXNM = 30, MAXFT = 15000;
+  const x = (d) => X1 - (d / MAXNM) * (X1 - X0);
+  const y = (a) => Y0 - (a / MAXFT) * (Y0 - Y1);
+  let timer = null;
+
+  // Rows whose range depends on the marshal altitude carry a key, not a number.
+  const rowDme = (row, p) => ({ fix: p.fix.dme, platform: p.platformDme, level: p.levelDme })[row.dataset.dme] ?? Number(row.dataset.dme);
+
+  function draw() {
+    const p = approachProfile({ angels: num(f.angels) });
+    root.querySelector('[data-angels-value]').textContent = `Angels ${f.angels.value} · fix ${p.fix.dme} DME`;
+    if (Number(f.pos.max) !== p.fix.dme) { f.pos.max = p.fix.dme; if (num(f.pos) > p.fix.dme) f.pos.value = p.fix.dme; }
+    const pos = num(f.pos), alt = profileAltitude(p, pos);
+    for (const row of rows) {
+      const d = rowDme(row, p);
+      const cells = row.querySelectorAll('[data-cell]');
+      if (row.dataset.dme in { fix: 1, platform: 1, level: 1 }) cells[0].textContent = row.dataset.dme === 'fix' ? String(d) : `≈${nm(d)}`;
+      if (row.dataset.dme === 'fix') cells[1].textContent = feet(p.fix.altitude);
+      row.classList.toggle('passed', pos <= d + 1e-9);
+    }
+    const current = rows.filter((r) => pos <= rowDme(r, p) + 1e-9).at(-1);
+    const next = rows.find((r) => rowDme(r, p) < pos - 1e-9);
+    svg.replaceChildren();
+    arrowMarker(svg, 'profile-arrow');
+    for (let d = 0; d <= MAXNM; d += 5) {
+      svg.append(el('line', { x1: x(d), y1: Y0, x2: x(d), y2: Y1, class: 'grid' }));
+      svg.append(el('text', { x: x(d), y: Y0 + 16, class: 'label', 'text-anchor': 'middle' }, String(d)));
+    }
+    for (let a = 0; a <= MAXFT; a += 5000) {
+      svg.append(el('line', { x1: X0, y1: y(a), x2: X1, y2: y(a), class: 'grid' }));
+      svg.append(el('text', { x: X0 - 6, y: y(a) + 4, class: 'label', 'text-anchor': 'end' }, a ? `${a / 1000},000` : '0'));
+    }
+    svg.append(el('text', { x: (X0 + X1) / 2, y: H - 6, class: 'label strong', 'text-anchor': 'middle' }, 'RANGE FROM SHIP (NM)'));
+    svg.append(el('text', { x: 12, y: 16, class: 'label strong' }, 'ALTITUDE (FT)'));
+    svg.append(el('polyline', { points: p.points.map(([d, a]) => `${x(d)},${y(a)}`).join(' '), class: 'path' }));
+    const marks = [
+      [p.fix.dme, p.fix.altitude, 'FIX · COMMENCE', -12],
+      [p.platformDme, 5000, 'PLATFORM', -12],
+      [p.levelDme, 1200, 'LEVEL 1,200', -12],
+      [3, 1200, '3 NM GCA', -12],
+      [0.75, 300, '¾ BALL', -14],
+    ];
+    for (const [d, a, label, dy] of marks) {
+      svg.append(el('circle', { cx: x(d), cy: y(a), r: 4, class: 'mark' }));
+      svg.append(el('text', { x: x(d), y: y(a) + dy, class: 'label', 'text-anchor': 'middle' }, label));
+    }
+    svg.append(el('text', { x: x(p.fix.dme) - 18, y: y(p.fix.altitude) + 4, class: 'label', 'text-anchor': 'end' }, '4,000 FT/MIN'));
+    svg.append(el('text', { x: x((p.platformDme + p.levelDme) / 2), y: y(3100) + 18, class: 'label', 'text-anchor': 'middle' }, '2,000 FT/MIN'));
+    // Landing checks, gear and 150 kt points (10, 8 and 6 DME) as ticks; the table names them.
+    for (const d of [10, 8, 6]) svg.append(el('line', { x1: x(d), y1: Y0, x2: x(d), y2: Y0 - 8, class: 'tick' }));
+    svg.append(el('line', { x1: x(8), y1: Y0 - 48, x2: x(4), y2: Y0 - 48, class: 'dim', 'marker-start': 'url(#profile-arrow)', 'marker-end': 'url(#profile-arrow)' }));
+    svg.append(el('text', { x: x(6), y: Y0 - 54, class: 'label', 'text-anchor': 'middle' }, 'ACLS LOCK-ON 8–4'));
+    svg.append(el('path', { d: `M${x(0) - 14} ${Y0} L${x(0) + 6} ${Y0} L${x(0) + 10} ${Y0 - 6} L${x(0) - 14} ${Y0 - 6} Z`, class: 'station' }));
+    // Aircraft symbol: a small side-view silhouette heading toward the ship.
+    const [ax, ay] = [x(pos), y(alt)];
+    svg.append(el('line', { x1: ax, y1: ay, x2: ax, y2: Y0, class: 'drop' }));
+    svg.append(el('path', { d: `M${ax + 12} ${ay} L${ax - 8} ${ay - 3} L${ax - 12} ${ay - 9} L${ax - 14} ${ay - 9} L${ax - 13} ${ay + 1} L${ax - 8} ${ay + 3} Z`, class: 'acft' }));
+    const readout = root.querySelector('[data-readout]');
+    const phase = current?.querySelector('[data-cell="what"]')?.textContent ?? 'At the marshal fix.';
+    const coming = next ? `Next, at ${nm(rowDme(next, p))} NM: ${next.querySelector('[data-cell="what"]').textContent}` : 'The approach ends at the ship.';
+    readout.replaceChildren(
+      ...[`${nm(pos)} NM from the ship · ${feet(alt)} in this model.`, `Last point passed: ${phase}`, coming]
+        .map((t) => Object.assign(document.createElement('p'), { textContent: t })));
+    svg.setAttribute('aria-label', `Profile from angels ${f.angels.value} at ${p.fix.dme} DME: platform at ${nm(p.platformDme)} NM, level 1,200 ft at ${nm(p.levelDme)} NM. Aircraft at ${nm(pos)} NM, ${feet(alt)}.`);
+  }
+
+  const stop = () => { clearInterval(timer); timer = null; play.textContent = 'Fly it'; play.setAttribute('aria-pressed', 'false'); };
+  play.addEventListener('click', () => {
+    if (timer) return stop();
+    if (num(f.pos) <= 0.25) f.pos.value = f.pos.max;
+    play.textContent = 'Pause'; play.setAttribute('aria-pressed', 'true');
+    // 0.25 NM per tick; reduced motion jumps a whole NM less often.
+    const step = reduced ? 1 : 0.25;
+    timer = setInterval(() => {
+      f.pos.value = Math.max(0, num(f.pos) - step);
+      draw();
+      if (num(f.pos) <= 0) stop();
+    }, reduced ? 700 : 120);
+  });
+  root.addEventListener('input', (e) => { if (e.target === f.pos && timer) stop(); draw(); });
+  draw();
+}
+
+/* ---------- Marshal stack and clearance decoder ---------- */
+function setupStack(root) {
+  const f = Object.fromEntries([...root.querySelectorAll('[name]')].map((i) => [i.name, i]));
+  const svg = root.querySelector('svg');
+  const X1 = 690, PX = 16, Y0 = 268, PY = 0.0175;
+  const x = (d) => X1 - d * PX, y = (a) => Y0 - a * PY;
+
+  // Clearance decoder: turn each <dt> into a phrase button; its <dd> explains it.
+  const dl = root.querySelector('dl.decode');
+  const sentence = root.querySelector('[data-clearance]');
+  const meaning = root.querySelector('[data-meaning]');
+  const pairs = [...dl.querySelectorAll('dt')].map((dt) => [dt, dt.nextElementSibling]);
+  for (const [dt, dd] of pairs) {
+    const b = Object.assign(document.createElement('button'), { type: 'button', textContent: dt.textContent, className: 'phrase' });
+    b.setAttribute('aria-pressed', 'false');
+    b.addEventListener('click', () => {
+      for (const other of sentence.querySelectorAll('button')) other.setAttribute('aria-pressed', String(other === b));
+      meaning.textContent = dd.textContent;
+      if (dt.dataset.angels) { f.angels.value = dt.dataset.angels; draw(); }
+    });
+    sentence.append(b, ' ');
+  }
+  dl.hidden = true;
+  sentence.querySelector('button')?.click();
+
+  function draw() {
+    const angels = num(f.angels), fix = marshalFix(angels), p = approachProfile({ angels });
+    root.querySelector('[data-stack-value]').textContent = `Angels ${angels}: ${fix.altitude.toLocaleString('en-US')} ft at ${fix.dme} DME`;
+    svg.replaceChildren();
+    arrowMarker(svg, 'stack-arrow');
+    svg.append(el('line', { x1: 20, y1: Y0, x2: 712, y2: Y0, class: 'sea' }));
+    for (let d = 0; d <= 35; d += 5) {
+      svg.append(el('line', { x1: x(d), y1: Y0, x2: x(d), y2: Y0 + 6, class: 'tick' }));
+      svg.append(el('text', { x: x(d), y: Y0 + 18, class: 'label', 'text-anchor': 'middle' }, String(d)));
+    }
+    svg.append(el('text', { x: 20, y: Y0 + 34, class: 'label strong' }, 'DME FROM SHIP (NM) · VERTICAL SCALE EXAGGERATED'));
+    svg.append(el('path', { d: `M${x(0) - 16} ${Y0} L${x(0) + 8} ${Y0} L${x(0) + 12} ${Y0 - 7} L${x(0) - 16} ${Y0 - 7} Z`, class: 'station' }));
+    svg.append(el('text', { x: x(0) - 4, y: Y0 - 12, class: 'label', 'text-anchor': 'middle' }, 'MOTHER'));
+    for (let a = 6; a <= 14; a++) {
+      const s = marshalFix(a), on = a === angels;
+      svg.append(el('ellipse', { cx: x(s.dme), cy: y(s.altitude), rx: 9, ry: 4, class: on ? 'slot on' : 'slot' }));
+      svg.append(el('text', { x: x(s.dme) + 13, y: y(s.altitude) + 4, class: on ? 'label strong' : 'label' }, on ? `ANGELS ${a} · ${s.dme} DME` : `${a}`));
+    }
+    svg.append(el('text', { x: x(29) - 12, y: y(14000) - 22, class: 'label' }, 'STACK · 1,000 FT APART'));
+    // The source requires being level at the assigned altitude 10 NM from the stack.
+    svg.append(el('line', { x1: x(fix.dme + 10), y1: y(fix.altitude), x2: x(fix.dme) - 12, y2: y(fix.altitude), class: 'arrival', 'marker-end': 'url(#stack-arrow)' }));
+    svg.append(el('text', { x: x(fix.dme + 10), y: y(fix.altitude) + 16, class: 'label' }, 'LEVEL BY 10 NM FROM STACK'));
+    svg.append(el('polyline', { points: p.points.map(([d, a]) => `${x(d)},${y(a)}`).join(' '), class: 'flown' }));
+    svg.append(el('circle', { cx: x(p.platformDme), cy: y(5000), r: 3.5, class: 'mark' }));
+    svg.append(el('text', { x: x(p.platformDme) + 8, y: y(5000) + 14, class: 'label' }, 'PLATFORM 5,000'));
+    svg.setAttribute('aria-label', `Marshal stack side view. Angels 6 to 14 at 21 to 29 DME. Selected: angels ${angels} at ${fix.dme} DME, with the CV-1 example descent to the ship.`);
+
+    // Final-bearing correction (P-816 p. 2-23).
+    const out = root.querySelector('[data-correction]');
+    let c;
+    try { c = finalCorrection({ marshalRadial: bounded(f.radial), finalBearing: bounded(f.fb) }); } catch (error) { out.textContent = error.message; return; }
+    const side = c.offset > 0 ? 'right' : 'left';
+    // The final-bearing line runs aft of the ship, on the side opposite the offset.
+    out.textContent = c.kind === 'none'
+      ? `Inbound course ${fmt(c.inbound)}° already matches the final bearing: no correction.`
+      : `Inbound course ${fmt(c.inbound)}°. Final bearing ${fmt(num(f.fb))}° is ${Math.abs(c.offset)}° ${side} of it, so the example procedure calls for ${c.kind === 'gradual' ? 'a gradual correction' : 'a 30° correction at 20 DME'}. The source gives no turn direction; geometrically the final-bearing line lies to your ${c.turn} astern of the ship, so this module's reading turns ${c.turn}${c.kind === 'thirty' ? `, for example to ${fmt(c.inbound + (c.turn === 'right' ? 30 : -30))}° if the 30° is taken as an intercept angle` : ''}.`;
+  }
+  root.addEventListener('input', draw);
+  draw();
+}
+
+/* ---------- Timed turns on the turn needle ---------- */
+function setupTurn(root) {
+  const f = Object.fromEntries([...root.querySelectorAll('[name]')].map((i) => [i.name, i]));
+  const needle = root.querySelector('[data-needle]'), card = root.querySelector('[data-card]');
+  const headingOut = root.querySelector('[data-heading-readout]');
+  const out = root.querySelector('[data-result]'), task = root.querySelector('[data-task]'), clockOut = root.querySelector('[data-clock]');
+  const start = root.querySelector('[data-start]'), rollout = root.querySelector('[data-rollout]');
+  const WIDTH_DEG = 6.5; // needle rotation for one needle width in the drawing
+  let turn = { from: 40, to: 310, direction: 'left' }, run = null, heading = turn.from;
+
+  const rate = () => Number(f.aircraft.selectedOptions[0].dataset.oneWidth) * Number(root.querySelector('[name="widths"]:checked').value);
+  const widths = () => Number(root.querySelector('[name="widths"]:checked').value);
+  const show = (hdg, sign) => {
+    heading = norm(hdg);
+    card.setAttribute('transform', `rotate(${-heading})`);
+    needle.setAttribute('transform', `rotate(${sign * widths() * WIDTH_DEG} 0 20)`);
+    headingOut.textContent = `${fmt(heading)}°`;
+  };
+  function brief() {
+    const degrees = turnAmount(turn.from, turn.to, turn.direction);
+    const seconds = turnSeconds(degrees, rate());
+    task.textContent = `Turn ${turn.direction} from ${fmt(turn.from)}° to ${fmt(turn.to)}°: ${degrees}°.`;
+    out.textContent = `At ${widths()} needle width${widths() === 1 ? '' : 's'} (${rate()}°/s) this turn takes ${clock(seconds)}. A 180° turn takes ${clock(turnSeconds(180, rate()))}; 360° takes ${clock(turnSeconds(360, rate()))}.`;
+    return { degrees, seconds };
+  }
+  function reset() {
+    cancelAnimationFrame(run?.frame); run = null;
+    start.disabled = false; rollout.disabled = true; f.speed.disabled = false;
+    clockOut.textContent = '0:00';
+    show(turn.from, 0);
+    brief();
+  }
+  start.addEventListener('click', () => {
+    const { degrees } = brief();
+    const speed = Number(f.speed.value), sign = turn.direction === 'right' ? 1 : -1, r = rate();
+    const t0 = performance.now();
+    // Speed is read once per run, so lock it until roll-out.
+    start.disabled = true; rollout.disabled = false; f.speed.disabled = true; rollout.focus();
+    const tick = (now) => {
+      const t = ((now - t0) / 1000) * speed;
+      run.turned = Math.min(r * t, 720);
+      clockOut.textContent = clock(t);
+      show(turn.from + sign * run.turned, 1 * sign);
+      if (run.turned < 720) run.frame = requestAnimationFrame(tick);
+    };
+    run = { turned: 0, degrees, frame: requestAnimationFrame(tick) };
+  });
+  rollout.addEventListener('click', () => {
+    if (!run) return;
+    cancelAnimationFrame(run.frame);
+    const error = run.turned - run.degrees;
+    show(heading, 0);
+    out.textContent = Math.abs(error) <= 5
+      ? `Rolled out on ${fmt(heading)}°, ${Math.abs(error).toFixed(0)}° from the target. Good timing.`
+      : `Rolled out on ${fmt(heading)}°: ${Math.abs(error).toFixed(0)}° ${error > 0 ? 'past' : 'short of'} ${fmt(turn.to)}°. At ${rate()}°/s each second is ${rate()}°.`;
+    run = null; start.disabled = false; rollout.disabled = true; f.speed.disabled = false;
+  });
+  root.querySelector('[data-new]').addEventListener('click', () => {
+    const from = randomInt(0, 35) * 10, by = randomInt(3, 27) * 10, direction = Math.random() < 0.5 ? 'left' : 'right';
+    turn = { from, to: norm(from + (direction === 'right' ? by : -by)), direction };
+    reset();
+  });
+  root.querySelector('[data-reset]').addEventListener('click', reset);
+  root.addEventListener('change', (e) => { if (e.target.name !== 'speed') reset(); });
+  reset();
+}
+
+/* ---------- Optical landing system ---------- */
+function setupLens(root) {
+  const f = Object.fromEntries([...root.querySelectorAll('[name]')].map((i) => [i.name, i]));
+  const svg = root.querySelector('svg'), ball = svg.querySelector('[data-ball]');
+  const out = root.querySelector('[data-result]'), waveoff = root.querySelector('[data-waveoff]');
+  const says = [...root.querySelectorAll('[data-ball-state]')];
+  function draw() {
+    const k = num(f.glide); // lens cells above (+) or below (−) the datum
+    ball.setAttribute('cy', String(119 - k * 15));
+    const state = k <= -3 ? 'red' : k < 0 ? 'low' : k > 0 ? 'high' : 'on';
+    ball.classList.toggle('red', state === 'red');
+    const lines = [says.find((s) => s.dataset.ballState === state).textContent];
+    const wo = waveoff.getAttribute('aria-pressed') === 'true';
+    svg.classList.toggle('waveoff', wo);
+    if (wo) lines.push(says.find((s) => s.dataset.ballState === 'waveoff').textContent);
+    out.textContent = lines.join(' ');
+  }
+  waveoff.addEventListener('click', () => { waveoff.setAttribute('aria-pressed', String(waveoff.getAttribute('aria-pressed') !== 'true')); draw(); });
+  root.addEventListener('input', draw);
+  draw();
+}
+
+/* ---------- Communications ladder and example dialogue ---------- */
+function setupComms(root) {
+  const steps = [...root.querySelectorAll('.dialogue > li')];
+  const stations = [...root.querySelectorAll('[data-agency-station]')];
+  const counter = root.querySelector('[data-step]');
+  const all = root.querySelector('[data-all]');
+  let at = 0;
+  function show() {
+    const showAll = all.getAttribute('aria-pressed') === 'true';
+    steps.forEach((s, i) => { s.hidden = !showAll && i !== at; s.classList.toggle('current', i === at); });
+    const agency = steps[at].dataset.agency;
+    for (const st of stations) {
+      st.classList.toggle('on', st.dataset.agencyStation === agency);
+      st.querySelector('button').setAttribute('aria-pressed', String(st.dataset.agencyStation === agency));
+    }
+    counter.textContent = `Call ${at + 1} of ${steps.length}`;
+  }
+  root.querySelector('[data-prev]').addEventListener('click', () => { at = Math.max(0, at - 1); show(); });
+  root.querySelector('[data-next]').addEventListener('click', () => { at = Math.min(steps.length - 1, at + 1); show(); });
+  all.addEventListener('click', () => { all.setAttribute('aria-pressed', String(all.getAttribute('aria-pressed') !== 'true')); show(); });
+  for (const st of stations) st.querySelector('button').addEventListener('click', () => {
+    const i = steps.findIndex((s) => s.dataset.agency === st.dataset.agencyStation);
+    if (i >= 0) { at = i; show(); }
+  });
+  show();
+}
+
+/* ---------- Radio terms quiz ---------- */
+function setupJargon(root) {
+  // The term list sits just before the quiz section.
+  const terms = [...document.querySelectorAll('dl.jargon > div')].map((d) => ({
+    term: d.querySelector('dt').textContent.trim(), meaning: d.querySelector('dd').textContent.trim(),
+  }));
+  const prompt = root.querySelector('[data-prompt]'), choices = root.querySelector('[data-choices]');
+  const out = root.querySelector('[data-result]');
+  let score = 0, asked = 0;
+  function ask() {
+    const pool = [...terms].sort(() => Math.random() - 0.5).slice(0, 4);
+    const answer = pool[randomInt(0, pool.length - 1)];
+    // Hide the term itself if a definition repeats it.
+    prompt.textContent = answer.meaning.replace(new RegExp(answer.term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), '—');
+    choices.replaceChildren(...pool.map((t) => {
+      const b = Object.assign(document.createElement('button'), { type: 'button', textContent: t.term });
+      b.addEventListener('click', () => {
+        asked++;
+        if (t === answer) score++;
+        out.textContent = `${t === answer ? 'Correct' : `Not quite: that was ${answer.term}`}. ${score} of ${asked}.`;
+        for (const c of choices.children) c.disabled = true;
+      });
+      return b;
+    }));
+  }
+  root.querySelector('[data-new]').addEventListener('click', () => { out.textContent = ''; ask(); });
+  ask();
+}
+
+const blocks = {
+  navigation: setupNavigation, entry: setupEntry, eat: setupEat, quiz: setupQuiz,
+  overview: setupOverview, profile: setupProfile, stack: setupStack, turn: setupTurn,
+  lens: setupLens, comms: setupComms, jargon: setupJargon,
+};
 for (const root of document.querySelectorAll('[data-lesson]')) {
   blocks[root.dataset.lesson]?.(root);
   root.classList.add('ready');

@@ -41,8 +41,9 @@ npm run check
 
 The Manual and Training Library list every experience registered in
 `src/data/experiences.json`. Case III is published under Naval Operations as a
-rounded aircraft-agnostic fixed-wing recovery module with an interactive TACAN
-geometry exercise, phase explanations and knowledge checks; it ends
+rounded aircraft-agnostic fixed-wing recovery module with NATOPS-style figures
+(overview, marshal stack, profile, optical landing system), TACAN, hold-entry and
+timed-turn practice, a radio-call walkthrough and knowledge checks; it ends
 by launching the Tomcat trainer in its own window, which is never framed. Start
 Exercise in the trainer's briefing popup begins the simulation; instructor mode
 is optional. It is Drafted, not technically validated, and says so on every

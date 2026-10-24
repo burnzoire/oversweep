@@ -1,0 +1,43 @@
+---
+// Turn-and-slip indicator and heading card for the timed-turn practice.
+// Index marks sit one and two needle widths either side of centre; lesson-ui
+// rotates [data-needle] and [data-card]; the ball stays centred (coordinated).
+const ticks = Array.from({ length: 36 }, (_, i) => i * 10);
+---
+<svg class="natops turn" viewBox="0 0 460 230" role="img" aria-label="Turn-and-slip indicator and heading card">
+  <g transform="translate(115 115)">
+    <circle class="bezel" r="100" />
+    <circle class="face" r="92" />
+    <text y="44" text-anchor="middle" class="lbl">TURN</text>
+    <!-- Needle-width index marks (needle tip is 8 units wide at radius 70). -->
+    <g class="index">
+      <path d="M-4 -78 L4 -78 L4 -70 L0 -66 L-4 -70 Z" />
+      <path d="M-12 -78 L-4 -78 M4 -78 L12 -78" class="thin" />
+      <path transform="rotate(-6.5)" d="M-4 -78 L4 -78 L4 -70 L0 -66 L-4 -70 Z" class="width" />
+      <path transform="rotate(6.5)" d="M-4 -78 L4 -78 L4 -70 L0 -66 L-4 -70 Z" class="width" />
+      <path transform="rotate(-13)" d="M-4 -78 L4 -78 L4 -70 L0 -66 L-4 -70 Z" class="width" />
+      <path transform="rotate(13)" d="M-4 -78 L4 -78 L4 -70 L0 -66 L-4 -70 Z" class="width" />
+    </g>
+    <text x="-64" y="-18" class="lbl small" text-anchor="middle">L</text>
+    <text x="64" y="-18" class="lbl small" text-anchor="middle">R</text>
+    <g data-needle><path class="needle" d="M-4 20 L-4 -62 L0 -66 L4 -62 L4 20 Z" /><circle class="hub" r="9" cy="20" /></g>
+    <!-- Inclinometer -->
+    <path class="tube" d="M-50 52 Q0 72 50 52 L50 66 Q0 86 -50 66 Z" />
+    <path class="thin" d="M-9 55 L-9 79 M9 55 L9 79" />
+    <circle data-ball class="ball" cy="67" r="7" />
+  </g>
+  <g transform="translate(340 115)">
+    <circle class="bezel" r="100" />
+    <g data-card>
+      {ticks.map((t) => (
+        <g transform={`rotate(${t})`}>
+          <path class={t % 30 ? 'thin' : 'tick'} d={t % 30 ? 'M0 -88 L0 -80' : 'M0 -90 L0 -76'} />
+          {t % 30 === 0 && <text y="-62" text-anchor="middle" class="lbl">{t === 0 ? 'N' : t === 90 ? 'E' : t === 180 ? 'S' : t === 270 ? 'W' : String(t / 10)}</text>}
+        </g>
+      ))}
+    </g>
+    <path class="lubber" d="M0 -100 L0 -84 M-7 -100 L0 -90 L7 -100" />
+    <path class="plane" d="M0 -22 L4 -6 L28 4 L28 9 L4 4 L3 18 L10 24 L10 28 L0 25 L-10 28 L-10 24 L-3 18 L-4 4 L-28 9 L-28 4 L-4 -6 Z" />
+    <text y="54" text-anchor="middle" class="readout" data-heading-readout>040°</text>
+  </g>
+</svg>

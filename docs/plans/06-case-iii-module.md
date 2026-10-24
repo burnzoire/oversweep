@@ -90,3 +90,42 @@ bolter/waveoff sequence, p. 2-26 pre-platform handoff and p. 2-27 reports/ball
 call passages requested by the live reviewer. General NAVEDTRA excerpts are
 consolidated in that same packet for complete review coverage. The optical
 cue citation is narrowed to p. 1-11 and the weather conflict to pp. 2-4/2-22.
+
+## Revision 2 — visual and interactive module
+
+Owner request (project thread, 24 October 2026): the module was detailed but
+dry, with only the point-to-point TACAN tool. Add marshal entry techniques,
+timed turns on the turn needle with an aircraft toggle, an overview with
+callouts, a profile, the channels and handoffs, radio jargon, in NATOPS-style art.
+
+Delivered as module revision 2, still Drafted:
+
+- Figure 1, a plan-view recovery overview with twelve selectable callouts.
+- A clearance decoder on the P-816 example, Figure 2 marshal stack side view
+  (angels 6–14, angels + 15 DME) and a final-bearing correction calculator.
+- Figure 3, BRC versus final bearing on the angled deck.
+- The hold-entry practice is back (`entryPath`, AIM 5-3-8 j 3), framed as a
+  general instrument technique beside P-816's join conditions (level by 10 NM
+  from the stack, at the fix on 250 kt at EAT ± 10 s). It still does not assign
+  entry sectors, for the reason recorded in commit 838726b.
+- Timed-turn practice with a turn-and-slip indicator and heading card. Only the
+  F-14 is offered (Heatblur manual: one needle width = 360° in 4 min). No F/A-18
+  source was readable within the review's host and size limits; adding an
+  aircraft is one `<option data-one-width>` once a source is on file.
+- Figure 4, the CV-1 example profile with a position scrubber, from a new pure
+  model (`approachProfile`, `profileAltitude`) with hand-derived tests.
+- Figure 5, the optical landing system with ball, datum, cut, red-lens and
+  waveoff states from P-816 pp. 1-11–1-13.
+- A communications ladder (Red Crown → Strike → Marshal → Approach → LSO) and a
+  step-through of the P-816 pp. 2-26–2-27 dialogue; radio-terms cards and quiz.
+
+Sources added: FAA AIM 5-3-8 (entries, turn rate) and the Heatblur F-14 manual
+turn-and-slip passage. New page-specific passages are in
+[the revision 2 evidence record](../reviews/case-iii-visual-module-evidence.md).
+Figures are original line art. Wide figures scroll sideways under 40rem rather
+than shrinking below legibility.
+
+Validation: `npm run check` and `python3 scripts/check_docs.py` pass on Node
+22.23.4. A Playwright pass at 1280 px and 360 px checked layout, no page-level
+horizontal scroll, no console errors, a timed turn and the profile playback.
+No independent review or accessibility audit is claimed.

@@ -1,0 +1,21 @@
+---
+// Optical landing system face, after the elements named in P-816 pp. 1-11–1-13:
+// ten green datum lights each side, four green cut lights above, waveoff
+// lights, and the lens cells in which the ball appears. lesson-ui moves
+// [data-ball] and toggles the .waveoff class. Not to scale.
+const datum = Array.from({ length: 10 }, (_, i) => i);
+---
+<svg class="natops lens" viewBox="0 0 440 220" role="img" aria-label="Optical landing system: ball and datum lights">
+  <rect class="frame" x="1" y="1" width="438" height="218" />
+  <g class="cut">{[0, 1, 2, 3].map((i) => <circle cx={190 + i * 20} cy="26" r="5" />)}</g>
+  <text x="300" y="30" class="lbl small">CUT LIGHTS</text>
+  <rect class="box" x="200" y="44" width="40" height="150" />
+  <rect class="redcell" x="200" y="164" width="40" height="30" />
+  <path class="thin" d="M200 74 L240 74 M200 104 L240 104 M200 134 L240 134 M200 164 L240 164" />
+  <g class="datum">{datum.map((i) => <><circle cx={186 - i * 14} cy="119" r="5" /><circle cx={254 + i * 14} cy="119" r="5" /></>)}</g>
+  <text x="44" y="142" class="lbl small">DATUM LIGHTS</text>
+  <g class="wol">{[0, 1, 2, 3].map((i) => <><circle cx="180" cy={50 + i * 15} r="5" /><circle cx="260" cy={50 + i * 15} r="5" /></>)}</g>
+  <text x="280" y="70" class="lbl small">WAVEOFF LIGHTS</text>
+  <circle data-ball class="ball" cx="220" cy="119" r="10" />
+  <text x="220" y="212" class="lbl small" text-anchor="middle">RED LENS VISIBLE: DANGEROUSLY LOW</text>
+</svg>
