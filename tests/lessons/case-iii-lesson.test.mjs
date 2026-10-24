@@ -48,36 +48,54 @@ test('time en route at a fixed rate', () => {
 const R = 250 / 30 / Math.PI, LEG = 250 / 60;
 const xs = (path) => path.points.map((p) => p.x);
 
-test('direct entry turns in the hold direction onto the outbound heading', () => {
+// Lateral offset from the inbound course 000° (x) and track at the end.
+const lastTrack = (r) => {
+  const [p, q] = r.points.slice(-2);
+  return (Math.atan2(q.x - p.x, q.y - p.y) * 180 / Math.PI + 360) % 360;
+};
+const near0 = (deg) => Math.min(deg, 360 - deg);
+
+test('direct entry turns in the hold direction and joins the inbound course', () => {
   // Right hold, inbound 000°, arriving on 000°: turn right 180° onto 180°.
   const r = entryPath({ inboundCourse: 0, heading: 0, turns: 'right', entry: 'direct' });
   assert.deepEqual(r.firstTurn, { direction: 'right', degrees: 180 });
   assert.deepEqual(r.secondTurn, { direction: 'right', degrees: 180 });
-  // The turn ends 2R east of the fix, the leg runs south; all on the holding (east) side.
+  // The turn ends 2R east of the fix, on the racetrack's outbound leg.
   const end = r.points[120];
   near(end.x, 2 * R, 0.01, 'turn end x'); near(end.y, 0, 0.01, 'turn end y');
   near(r.points[180].y, -LEG, 0.01, 'leg end y');
   assert(Math.min(...xs(r)) > -0.05, 'stays on the holding side');
-  assert(r.miss < 0.2, `returns to the fix (${r.miss})`);
-  // Left hold arriving on 090°: the hold-direction turn onto 180° is 270°.
-  assert.deepEqual(entryPath({ inboundCourse: 0, heading: 90, turns: 'left', entry: 'direct' }).firstTurn, { direction: 'left', degrees: 270 });
+  assert.equal(r.legSeconds, 60);
+  assert(r.established && r.miss < 0.05, `ends on the fix (${r.miss})`);
+  // Arriving on 090°, the turn onto the outbound leg is right 90° (heading to heading).
+  const across = entryPath({ inboundCourse: 0, heading: 90, turns: 'right', entry: 'direct' });
+  assert.equal(across.firstTurn.direction, 'right');
+  near(across.firstTurn.degrees, 90, 2, 'first turn');
+  assert(across.established, 'joins the inbound course');
+  assert(near0(lastTrack(across)) < 1, 'ends tracking 000°');
+  // Left hold arriving on 090°: the hold-direction turn onto 180° is about 270°.
+  near(entryPath({ inboundCourse: 0, heading: 90, turns: 'left', entry: 'direct' }).firstTurn.degrees, 270, 2, 'left turn');
 });
 
-test('teardrop entry flies 30° toward the holding side for one minute', () => {
+test('teardrop entry flies 30° toward the holding side and rolls out inbound', () => {
   // Right hold, inbound 000°, arriving on 180°: holding side east, leg heading 150°.
   const r = entryPath({ inboundCourse: 0, heading: 180, turns: 'right', entry: 'teardrop' });
   assert.equal(r.legHeading, 150);
   assert.deepEqual(r.firstTurn, { direction: 'left', degrees: 30 });
-  // Then a right turn from 150° to 000°: 210°.
-  assert.deepEqual(r.secondTurn, { direction: 'right', degrees: 210 });
   // A 30° turn at 1.5°/s takes 20 s; then 60 s on 150° puts the aircraft east of the fix.
   assert(r.points[80].x > 2, 'leg ends on the holding side');
-  assert(r.miss < 0.2, `returns to the fix (${r.miss})`);
+  // One minute leaves 0.355 + 2.083 − 4.951 ≈ −2.5 NM after a full-rate turn
+  // back: across the course. Rolling out needs ≈ 9.19 NM ≈ 132 s on 150°.
+  assert(r.extended && r.legSeconds >= 120 && r.legSeconds <= 140, `leg ${r.legSeconds} s`);
+  assert.equal(r.secondTurn.direction, 'right');
+  near(r.secondTurn.degrees, 210, 5, 'turn back');
+  assert(Math.min(...xs(r)) > -0.1, 'never crosses the inbound course');
+  assert(r.established && near0(lastTrack(r)) < 1 && r.miss < 0.05, 'established inbound at the fix');
   // Left hold, inbound 040°: outbound 220°, 30° toward the north-west holding side is 250°.
   assert.equal(entryPath({ inboundCourse: 40, heading: 220, turns: 'left', entry: 'teardrop' }).legHeading, 250);
 });
 
-test('parallel entry flies the non-holding side, then turns more than 180°', () => {
+test('parallel entry flies the non-holding side, then turns more than 180° to intercept', () => {
   // Left hold, inbound 000°, arriving on 090°: turn right 90° onto 180°, east of the course.
   const r = entryPath({ inboundCourse: 0, heading: 90, turns: 'left', entry: 'parallel' });
   assert.equal(r.legHeading, 180);
@@ -85,18 +103,23 @@ test('parallel entry flies the non-holding side, then turns more than 180°', ()
   // A 90° turn of radius R from heading 090° ends R east and R south of the fix.
   near(r.points[60].x, R, 0.01, 'turn end x'); near(r.points[60].y, -R, 0.01, 'turn end y');
   assert(r.points.slice(1, 121).every((p) => p.x > 0), 'outbound leg on the non-holding (east) side');
-  assert.equal(r.secondTurn.direction, 'left');
-  assert(r.secondTurn.degrees > 180, `turn back ${r.secondTurn.degrees}° exceeds 180°`);
-  assert(r.miss < 0.2, `returns to the fix (${r.miss})`);
+  // Turning left from 180° through 000° to a 45° cut (315°) is 225°.
+  assert.deepEqual(r.secondTurn, { direction: 'left', degrees: 225 });
+  assert(Math.min(...xs(r)) > -0.1, 'does not cross into the holding side');
+  assert(r.established && near0(lastTrack(r)) < 1 && r.miss < 0.05, 'established inbound at the fix');
+  // Wrong side: a right-hand parallel from 090° starts on the holding side and cannot join.
+  assert.equal(entryPath({ inboundCourse: 0, heading: 90, turns: 'right', entry: 'parallel' }).established, false);
 });
 
-test('entry paths stay finite and come back to the fix area', () => {
+test('entry paths stay finite and end at the fix when established', () => {
   for (const turns of ['left', 'right']) for (const entry of ['direct', 'teardrop', 'parallel']) {
     for (let inboundCourse = 0; inboundCourse < 360; inboundCourse += 45) for (let heading = 0; heading < 360; heading += 15) {
       const r = entryPath({ inboundCourse, heading, turns, entry });
-      assert(r.points.length < 900, `${entry} ${turns} ${inboundCourse}/${heading}: ${r.points.length} s`);
-      assert(r.points.every((p) => Number.isFinite(p.x) && Number.isFinite(p.y)));
-      assert(Number.isFinite(r.miss) && r.miss < 4 * R, `${entry} ${turns} ${inboundCourse}/${heading}: miss ${r.miss}`);
+      const label = `${entry} ${turns} ${inboundCourse}/${heading}`;
+      assert(r.points.length < 2400, `${label}: ${r.points.length} s`);
+      assert(r.points.every((p) => Number.isFinite(p.x) && Number.isFinite(p.y)), label);
+      if (r.established) assert(r.miss < 0.1, `${label}: miss ${r.miss}`);
+      if (entry === 'direct') assert(r.established, `${label}: direct always joins`);
     }
   }
 });

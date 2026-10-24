@@ -129,3 +129,23 @@ Validation: `npm run check` and `python3 scripts/check_docs.py` pass on Node
 22.23.4. A Playwright pass at 1280 px and 360 px checked layout, no page-level
 horizontal scroll, no console errors, a timed turn and the profile playback.
 No independent review or accessibility audit is claimed.
+
+### Revision 2.1: entries join the inbound course
+
+Owner feedback (24 October 2026): the entry plots ended well off the inbound
+course, where a pilot expects to roll out lined up inbound, ready to start the
+racetrack. The AIM text says the teardrop and parallel turns back "intercept
+the inbound course", and the old model homed on the fix instead. Two-minute
+turns also have twice the radius the one-minute AIM legs are sized for, so a
+teardrop turn back crossed the course by about 3 NM.
+
+`entryPath` now joins a course instead of homing: it turns in the hold's
+direction until the heading reaches one from which a turn at the same rate
+rolls out on the course (capped at a 45° cut, easing to 30° per NM close in).
+The direct entry joins the racetrack's outbound leg, one turn diameter out on
+the holding side, before turning inbound. Where a one-minute teardrop or
+parallel leg leaves too little room, the leg is lengthened in 5 s steps until
+the aircraft is established at least 1 NM before the fix without crossing the
+course; the page states the lengthened time and calls it this module's
+simplification. An entry flown from a heading where it cannot join (for
+example a parallel entry that starts on the holding side) says so.

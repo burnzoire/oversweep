@@ -165,5 +165,15 @@ Hand-derived; also encoded as tests in `tests/lessons/case-iii-lesson.test.mjs`.
 - **Profile, angels 14.** 29 DME, 9,000 ft to platform: 29 − 9.375 = 19.625 DME.
 - **Correction.** 160 radial → inbound 340°. Final bearing 015° is +35° → the
   30° correction. 180/352 → −8° → gradual.
+- **Teardrop join (revision 2.1).** Right hold, inbound 000°, arriving on
+  180°, turns at 1.5°/s, so turn radius R = (250 ÷ 3600 × 120) ÷ π = 2.653 NM.
+  Left 30° onto 150° moves 2.653 × (1 − cos 30°) = 0.355 NM east; one minute on
+  150° adds 4.167 × sin 30° = 2.083 NM; a full-rate right turn from 150° to 000°
+  moves 2.653 × (1 + cos 30°) = 4.951 NM west. One minute therefore leaves the
+  aircraft 0.355 + 2.083 − 4.951 ≈ −2.5 NM, across the inbound course. To roll
+  out on the course the leg needs about (4.951 − 0.355) ÷ sin 30° = 9.19 NM,
+  about 2 min 12 s; the model, which eases the last part of the turn, needs
+  2 min 10 s. The AIM gives one minute; lengthening it is this module's
+  simplification for two-minute turns, and the page says so.
 - **Timed turn.** 90° at 1.5°/s = 60 s; 180° = 120 s, matching P-816's
   two-minute turns.
