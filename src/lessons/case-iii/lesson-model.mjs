@@ -168,3 +168,87 @@ export function eatPlan({ secondsToEat, turnSeconds = 120, legSeconds = 60 }) {
   const extend = full >= 1 ? { circuits: full - 1, legSeconds: (standard + slack - minimum) / 2 } : null;
   return { kind: 'adjust', standard, slack, shorten, extend };
 }
+
+/* ---------- CV-1 approach profile (P-816 example) ----------
+ * Source values: marshal fix at (angels + 15) DME, lowest assignment angels 6
+ * (p. 2-19); commence at 4,000 ft/min and 250 KIAS, 2,000 ft/min from the
+ * 5,000 ft platform, level at 1,200 ft (p. 2-23); self-contained GCA check
+ * altitudes of 1,200 ft at 3 NM down to 200 ft at 0.5 NM (p. 2-25).
+ * Educational assumptions: no wind, groundspeed equal to the 250 kt figure,
+ * instant rate changes, DME as horizontal range and the GCA check altitudes
+ * joined as a straight line. Not a performance model.
+ */
+export const CV1 = Object.freeze({
+  rate: 250, penetrationFpm: 4000, platformFt: 5000, platformFpm: 2000,
+  levelFt: 1200, glideStartNm: 3, glideFtPerNm: 400, lowestAngels: 6,
+});
+
+/** Marshal fix range and altitude for an assigned altitude in angels. */
+export function marshalFix(angels) {
+  finite('Angels', angels);
+  if (!Number.isInteger(angels) || angels < CV1.lowestAngels) throw new RangeError(`Angels must be a whole number of at least ${CV1.lowestAngels}.`);
+  return { dme: angels + 15, altitude: angels * 1000 };
+}
+
+/**
+ * Key points of the example profile from the fix to the ship.
+ * Feet lost per NM = descent rate (ft/min) ÷ groundspeed (NM/min).
+ */
+export function approachProfile({ angels, rate = CV1.rate }) {
+  finite('Rate', rate);
+  if (rate <= 0) throw new RangeError('Rate must be positive.');
+  const fix = marshalFix(angels);
+  const nmPerMin = rate / 60;
+  const platformDme = fix.dme - (fix.altitude - CV1.platformFt) / (CV1.penetrationFpm / nmPerMin);
+  const levelDme = platformDme - (CV1.platformFt - CV1.levelFt) / (CV1.platformFpm / nmPerMin);
+  return {
+    fix, platformDme, levelDme, glideDme: CV1.glideStartNm,
+    points: [[fix.dme, fix.altitude], [platformDme, CV1.platformFt], [levelDme, CV1.levelFt], [CV1.glideStartNm, CV1.levelFt], [0, 0]],
+  };
+}
+
+/** Profile altitude (ft) at a range (NM) from the ship, by linear interpolation. */
+export function profileAltitude(profile, dme) {
+  finite('DME', dme);
+  const p = profile.points;
+  if (dme >= p[0][0]) return p[0][1];
+  if (dme <= 0) return 0;
+  for (let i = 1; i < p.length; i++) {
+    const [d1, a1] = p[i - 1], [d2, a2] = p[i];
+    if (dme >= d2) return a2 + ((dme - d2) / (d1 - d2)) * (a1 - a2);
+  }
+  return 0;
+}
+
+/**
+ * Correction from the marshal inbound course to the final bearing (P-816
+ * p. 2-23): gradual within 10°, otherwise a 30° correction at 20 DME.
+ * `offset` is signed: positive when the final bearing is right of inbound.
+ */
+export function finalCorrection({ marshalRadial, finalBearing }) {
+  finite('Marshal radial', marshalRadial);
+  finite('Final bearing', finalBearing);
+  const inbound = reciprocal(marshalRadial);
+  const offset = ((norm(finalBearing) - inbound + 540) % 360) - 180;
+  const kind = offset === 0 ? 'none' : Math.abs(offset) <= 10 ? 'gradual' : 'thirty';
+  return { inbound, offset, kind };
+}
+
+/* ---------- Timed turns ---------- */
+
+/** Degrees turned from `from` to `to` turning `direction` ('left' | 'right'). */
+export function turnAmount(from, to, direction) {
+  finite('From heading', from);
+  finite('To heading', to);
+  if (direction !== 'left' && direction !== 'right') throw new RangeError('Direction must be "left" or "right".');
+  return direction === 'right' ? norm(to - from) : norm(from - to);
+}
+
+/** Seconds to turn `degrees` at a constant `rate` in degrees per second. */
+export function turnSeconds(degrees, rate) {
+  finite('Degrees', degrees);
+  finite('Turn rate', rate);
+  if (degrees < 0) throw new RangeError('Degrees must not be negative.');
+  if (rate <= 0) throw new RangeError('Turn rate must be positive.');
+  return degrees / rate;
+}

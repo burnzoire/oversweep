@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { entryPath, eatPlan, pointToPoint, reciprocal, tacanPosition, timeEnroute } from '../../src/lessons/case-iii/lesson-model.mjs';
+import { approachProfile, entryPath, eatPlan, finalCorrection, marshalFix, pointToPoint, profileAltitude, reciprocal, tacanPosition, timeEnroute, turnAmount, turnSeconds } from '../../src/lessons/case-iii/lesson-model.mjs';
 
 // Expected values are derived by hand from the station frame (x east, y north,
 // x = DME·sin(radial), y = DME·cos(radial)), not by calling the model.
@@ -126,4 +126,54 @@ test('invalid inputs are rejected', () => {
   assert.throws(() => entryPath({ inboundCourse: 0, heading: 0, turns: 'left', entry: 'hold' }), RangeError);
   assert.throws(() => eatPlan({ secondsToEat: Infinity }), RangeError);
   assert.throws(() => eatPlan({ secondsToEat: 600, turnSeconds: 0 }), RangeError);
+});
+
+// CV-1 example profile, derived by hand from P-816 values: at 250 kt a minute
+// covers 250/60 = 4.1667 NM, so 4,000 ft/min loses 960 ft/NM and 2,000 ft/min
+// loses 480 ft/NM.
+test('CV-1 example profile from angels 7 at 22 DME', () => {
+  const p = approachProfile({ angels: 7 });
+  assert.deepEqual(p.fix, { dme: 22, altitude: 7000 });
+  // 2,000 ft to platform at 960 ft/NM = 2.0833 NM → 19.917 DME.
+  near(p.platformDme, 22 - 2000 / 960, 1e-9, 'platform');
+  near(p.platformDme, 19.917, 0.001, 'platform rounded');
+  // 3,800 ft to 1,200 ft at 480 ft/NM = 7.9167 NM → 12.000 DME.
+  near(p.levelDme, 12.0, 0.001, 'level-off');
+  // Self-contained GCA check altitudes, P-816 p. 2-25.
+  for (const [nm, ft] of [[3, 1200], [2, 800], [1, 400], [0.5, 200]]) near(profileAltitude(p, nm), ft, 1e-9, `${nm} NM`);
+  near(profileAltitude(p, 21), 7000 - 960, 1e-9, '21 DME');
+  near(profileAltitude(p, 16), 5000 - (p.platformDme - 16) * 480, 1e-9, '16 DME');
+  assert.equal(profileAltitude(p, 8), 1200);
+  assert.equal(profileAltitude(p, 30), 7000);
+});
+
+test('higher marshal altitudes reach platform close to 20 DME', () => {
+  // Angels 14: 29 DME, 9,000 ft to lose at 960 ft/NM = 9.375 NM → 19.625 DME.
+  near(approachProfile({ angels: 14 }).platformDme, 19.625, 1e-9, 'angels 14');
+  // Angels 6: 21 DME, 1,000 ft → 1.0417 NM → 19.958 DME; level-off 12.042.
+  const six = approachProfile({ angels: 6 });
+  near(six.platformDme, 19.958, 0.001, 'angels 6 platform');
+  near(six.levelDme, 12.042, 0.001, 'angels 6 level');
+  assert.throws(() => marshalFix(5), RangeError);
+  assert.throws(() => marshalFix(7.5), RangeError);
+});
+
+test('final-bearing correction rule', () => {
+  // P-816 p. 2-26 example: marshal on the 160 radial, expected final bearing 015.
+  // Inbound 340°; 015° is 35° right of it → 30° correction at 20 DME.
+  assert.deepEqual(finalCorrection({ marshalRadial: 160, finalBearing: 15 }), { inbound: 340, offset: 35, kind: 'thirty' });
+  assert.deepEqual(finalCorrection({ marshalRadial: 180, finalBearing: 352 }), { inbound: 0, offset: -8, kind: 'gradual' });
+  assert.deepEqual(finalCorrection({ marshalRadial: 190, finalBearing: 0 }), { inbound: 10, offset: -10, kind: 'gradual' });
+  assert.equal(finalCorrection({ marshalRadial: 200, finalBearing: 20 }).kind, 'none');
+});
+
+test('timed turns', () => {
+  assert.equal(turnAmount(40, 310, 'left'), 90);
+  assert.equal(turnAmount(40, 310, 'right'), 270);
+  assert.equal(turnAmount(350, 10, 'right'), 20);
+  // One F-14 needle width: 360° in 4 min = 1.5°/s, so the marshal's 180° turn takes 120 s.
+  assert.equal(turnSeconds(180, 360 / 240), 120);
+  assert.equal(turnSeconds(90, 3), 30);
+  assert.throws(() => turnSeconds(90, 0), RangeError);
+  assert.throws(() => turnAmount(0, 90, 'up'), RangeError);
 });
