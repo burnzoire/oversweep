@@ -130,11 +130,10 @@ function setupNavigation(root) {
 
 /* ---------- Marshal fix entry ---------- */
 const ENTRY_STEPS = {
-  direct: (o, side) => `Direct: at the fix, turn ${side} (the hold’s direction) onto the outbound leg, ${fmt(o)}°, and follow the pattern.`,
+  direct: (o, side) => `Direct: at the fix, turn ${side} (the hold’s direction) to follow the pattern, joining the outbound leg (${fmt(o)}°).`,
   teardrop: (o, side) => `Teardrop: at the fix, turn to ${fmt(o)}°, 30° from the outbound course toward the holding side, fly one minute, then turn ${side} (the hold’s direction) to intercept the inbound course.`,
   parallel: (o, side) => `Parallel: at the fix, turn to ${fmt(o)}° to parallel the outbound course on the non-holding side for one minute, then turn ${side} (the hold’s direction) through more than 180° to intercept the inbound course.`,
 };
-const legText = (s) => (s % 60 ? `${Math.floor(s / 60)} min ${s % 60} s` : `${s / 60} min`);
 const turnText = (t) => `${t.direction} ${Math.round(t.degrees)}°`;
 
 function setupEntry(root) {
@@ -179,14 +178,14 @@ function setupEntry(root) {
     const outbound = norm(c + 180);
     const steps = ENTRY_STEPS[entry](path.legHeading ?? outbound, turns);
     const flown = entry === 'direct'
-      ? `From this heading the turn onto the outbound leg is ${turnText(path.firstTurn)}.`
+      ? `From this heading the first turn is ${turnText(path.firstTurn)}, cutting onto the outbound leg.`
       : `From this heading the first turn is ${turnText(path.firstTurn)} and the turn back is ${turnText(path.secondTurn)}.`;
-    const leg = !path.established
-      ? ' From this heading this entry cannot roll out on the inbound course before the fix in the model, even with a longer leg. Try another entry.'
-      : path.extended
-        ? ` With two-minute turns, one minute leaves too little room to roll out on the inbound course, so the model flies this leg for ${legText(path.legSeconds)}, then rolls out established inbound before the fix.`
-        : ' It rolls out established on the inbound course before the fix, ready to start the racetrack.';
-    out.textContent = `${steps} ${flown}${leg}`;
+    const nm = (v) => `${v.toFixed(1)} NM`;
+    const crossing = path.crossed >= 0.1 ? ` The ${entry === 'direct' ? 'inbound turn' : 'turn back'} is too wide to roll out on the course, so it crosses by about ${nm(path.crossed)} and corrects back.` : '';
+    const leg = path.circuit
+      ? ` It reaches the fix ${path.atFix.offset >= 0.1 ? `about ${nm(path.atFix.offset)} off the inbound course` : 'not yet on the inbound heading'}, so it corrects on the first circuit of the racetrack and is established inbound on the next pass.`
+      : ' It is established on the inbound course at the fix, ready to start the racetrack.';
+    out.textContent = `${steps} ${flown}${crossing}${leg}`;
   }
 
   root.addEventListener('input', draw);

@@ -54,15 +54,35 @@ export function timeEnroute(distance, rate) {
   return (distance / rate) * 3600;
 }
 
+/** Standard gravity (m/s²) and metres per nautical mile. */
+const G = 9.80665, M_PER_NM = 1852;
+
+/**
+ * Rate of turn (°/s) for the FAA AIM 5-3-8 j 8 holding turn: 3° per second
+ * or `bank` degrees of bank, whichever needs less bank, at `rate` NM/hour.
+ * Coordinated level turn: rate = g·tan(bank) / speed.
+ */
+export function holdingTurnRate(rate = 250, bank = 30) {
+  finite('Rate', rate);
+  finite('Bank', bank);
+  if (rate <= 0 || bank <= 0 || bank >= 90) throw new RangeError('Rate must be positive and bank between 0° and 90°.');
+  const speed = (rate * M_PER_NM) / 3600;
+  return Math.min(3, (G * Math.tan(bank * D)) / speed / D);
+}
+
 /**
  * Flies one holding entry, as the FAA AIM describes it, from the fix, and
- * joins the inbound course established at the fix, ready for the racetrack.
- * The aircraft starts over the fix on `heading`. Turns are flown at a constant
- * rate (180° in `turnSeconds`) and straight legs at `rate` NM/hour, with no
- * wind. Fix frame: fix at the origin, x east, y north, NM.
- *   direct:   turn in the hold's direction onto the outbound leg and follow it
- *             for `legSeconds` past abeam the fix, then turn in the hold's
- *             direction onto the inbound course.
+ * joins the inbound course. The aircraft starts over the fix on `heading`.
+ * Entry turns are flown at `entryTurnRate` (default: the AIM j 8 holding
+ * rate, `holdingTurnRate(rate)`), racetrack turns at 180° in `turnSeconds`
+ * (P-816's two-minute turns), legs for `legSeconds` at `rate` NM/hour, with
+ * no wind. Fix frame: fix at the origin, x east, y north, NM.
+ *   direct:   turn in the hold's direction to intercept the racetrack's
+ *             outbound leg, follow it until `legSeconds` past abeam the fix,
+ *             then make the racetrack turn (P-816 rate) onto the inbound
+ *             course. Entry turns are tighter than racetrack turns, so the
+ *             model intercepts the outbound leg rather than flying the
+ *             outbound heading from wherever the first turn ends.
  *   teardrop: turn the short way to 30° from the outbound course toward the
  *             holding side, fly `legSeconds`, then turn in the hold's direction
  *             to intercept the inbound course.
@@ -70,130 +90,131 @@ export function timeEnroute(distance, rate) {
  *             then turn in the hold's direction through more than 180° to
  *             intercept the inbound course.
  * Joining a course: turn in the given direction until the heading reaches
- * the joining heading, which cuts the course at up to `cutAngle` and eases
- * off as the offset shrinks, so that a turn at the same rate rolls out on
- * the course instead of crossing it. When the minimum leg would leave the
- * aircraft too close to roll out (the two-minute turns are wider than the
- * AIM's one-minute legs allow for), the leg is lengthened in 5 s steps, up
- * to `maxLegSeconds`, until the aircraft is established at least
- * `establishedNm` before the fix without crossing the course. The AIM does
- * not say which way to make the first teardrop or parallel turn; the model
- * turns the short way. It does not choose an entry: the AIM's entry figure
- * assigns the sectors.
- * Returns the flown `points`, each named turn's direction and size,
- * `legSeconds` actually flown, whether the leg was `extended`, whether the
- * aircraft is `established` on the inbound course, and `miss`, its distance
- * (NM) from the fix at the end.
+ * the joining heading, which cuts the course at up to `cutAngle` (the AIM
+ * gives no intercept angle; 45° is this model's choice) and eases off as the
+ * offset shrinks, so that a turn at the same rate rolls out on the course.
+ * If the turn back is too wide to roll out without crossing, the aircraft
+ * crosses and corrects back; `crossed` is how far (NM) it went past. If it
+ * is not on the inbound course by the fix (`atFix`), it flies one racetrack
+ * circuit (`circuit`), correcting onto the outbound leg and then the inbound
+ * course, as a holding aircraft would on its next circuit. The AIM
+ * does not say which way to make the first teardrop or parallel turn; the
+ * model turns the short way. It does not choose an entry: the AIM's entry
+ * figure assigns the sectors.
+ * Returns the flown `points`, each named turn's direction and size, the
+ * `entryTurnRate` used, `crossed`, `atFix` (offset and whether established
+ * when the entry first reaches the fix), `circuit`, whether the aircraft ends
+ * `established` on the inbound course (within 0.05 NM and 2°) at the fix,
+ * and `miss`, its distance (NM) from the fix at the end.
  */
 export function entryPath({
   inboundCourse, heading, turns, entry, rate = 250, turnSeconds = 120, legSeconds = 60,
-  cutAngle = 45, establishedNm = 1, maxLegSeconds = 480,
+  entryTurnRate = holdingTurnRate(rate), cutAngle = 45,
 }) {
   finite('Inbound course', inboundCourse);
   finite('Heading', heading);
   finite('Rate', rate);
   finite('Turn time', turnSeconds);
   finite('Leg time', legSeconds);
+  finite('Entry turn rate', entryTurnRate);
   if (turns !== 'left' && turns !== 'right') throw new RangeError('Turns must be "left" or "right".');
   if (!['direct', 'teardrop', 'parallel'].includes(entry)) throw new RangeError('Entry must be direct, teardrop or parallel.');
-  if (rate <= 0 || turnSeconds <= 0 || legSeconds < 0) throw new RangeError('Rate and turn time must be positive and leg time not negative.');
+  if (rate <= 0 || turnSeconds <= 0 || legSeconds < 0 || entryTurnRate <= 0) throw new RangeError('Rate, turn time and turn rate must be positive and leg time not negative.');
   const hold = turns === 'right' ? 1 : -1;
   const inbound = norm(inboundCourse), outbound = norm(inbound + 180);
-  const step = rate / 3600, turnRate = 180 / turnSeconds; // NM and degrees per second
-  const radius = (step * turnSeconds) / Math.PI;
-  // The racetrack's outbound leg runs one turn diameter out on the holding side.
+  const step = rate / 3600, patternRate = 180 / turnSeconds; // NM and degrees per second
+  const radiusAt = (turnRate) => step / (turnRate * D);
+  // The racetrack's outbound leg runs one pattern-turn diameter out on the holding side.
   const sideX = Math.cos(inbound * D) * hold, sideY = -Math.sin(inbound * D) * hold;
-  const outboundTrack = { course: outbound, x: 2 * radius * sideX, y: 2 * radius * sideY };
+  const outboundTrack = { course: outbound, x: 2 * radiusAt(patternRate) * sideX, y: 2 * radiusAt(patternRate) * sideY };
   const inboundTrack = { course: inbound, x: 0, y: 0 };
   const legHeading = entry === 'teardrop' ? norm(outbound - hold * 30) : entry === 'parallel' ? outbound : undefined;
 
-  function fly(leg) {
-    let x = 0, y = 0, hdg = norm(heading);
-    const points = [{ x, y }];
-    let watch = null; // called after every move of the final join
-    const move = (delta) => {
-      const mean = (hdg + delta / 2) * D;
-      x += step * Math.sin(mean); y += step * Math.cos(mean); hdg = norm(hdg + delta);
-      points.push({ x, y });
-      if (watch) watch();
-    };
-    const away = (target, dir) => (dir > 0 ? norm(target - hdg) : norm(hdg - target));
-    const shortWay = (target) => (norm(target - hdg) <= 180 ? 1 : -1);
-    const named = (dir, degrees) => ({ direction: dir > 0 ? 'right' : 'left', degrees });
-    const turnTo = (target, dir) => {
-      let left = away(target, dir), turned = 0;
-      while (left > 1e-9) { const d = Math.min(turnRate, left); move(dir * d); left -= d; turned += d; }
-      return named(dir, turned);
-    };
-    const straight = (seconds) => { for (let t = 0; t < seconds; t++) move(0); };
-    // Offset right of a track (NM) and distance along it from its reference point.
-    const offset = (t) => (x - t.x) * Math.cos(t.course * D) - (y - t.y) * Math.sin(t.course * D);
-    const along = (t) => (x - t.x) * Math.sin(t.course * D) + (y - t.y) * Math.cos(t.course * D);
-    // Heading error from which a full-rate turn rolls out on the course
-    // (offset = radius·(1 − cos error)), capped at the cut angle and, close
-    // in, at 30° per NM of offset so the last correction eases on smoothly.
-    const courseHeading = (t) => {
-      const e = Math.abs(offset(t));
-      const cut = Math.min(cutAngle, 30 * e, Math.acos(1 - Math.min(e, radius) / radius) / D);
-      return norm(t.course - Math.sign(offset(t)) * cut);
-    };
-    // Turn in `dir` until the heading reaches the course-joining heading, then
-    // keep joining (rate-limited) until `done`. Returns the turn's size.
-    // The turn's size is the furthest it swings in `dir`.
-    const join = (t, dir, done, limit = 1200) => {
-      let swing = 0, most = 0;
-      for (let n = 0; n < 720 / turnRate; n++) {
-        const left = away(courseHeading(t), dir);
-        if (left <= turnRate || left > 360 - turnRate) break;
-        move(dir * turnRate); swing += turnRate; most = Math.max(most, swing);
-      }
-      for (let n = 0; n < limit && !done(); n++) {
-        const off = norm(courseHeading(t) - hdg), want = off <= 180 ? off : off - 360;
-        const d = Math.max(-turnRate, Math.min(turnRate, want));
-        move(d); swing += dir * d; most = Math.max(most, swing);
-      }
-      return named(dir, Math.round(most));
-    };
-    const result = { points };
-    if (entry === 'direct') {
-      result.firstTurn = join(outboundTrack, hold, () => along(outboundTrack) >= leg * step && Math.abs(offset(outboundTrack)) < 0.02);
-    } else {
-      result.firstTurn = turnTo(legHeading, shortWay(legHeading));
-      straight(leg);
-    }
-    // The final turn starts on one side of the inbound course; record the
-    // furthest the path then goes past it, over every second of the join.
-    // Starting on the course (a parallel entry flown along it), a turn in the
-    // hold's direction first carries the aircraft to the non-holding side.
-    const startOffset = offset(inboundTrack);
-    const startSide = Math.abs(startOffset) < 0.05 ? -hold : Math.sign(startOffset);
-    let crossed = 0;
-    watch = () => { crossed = Math.max(crossed, -startSide * offset(inboundTrack)); };
-    result.secondTurn = join(inboundTrack, hold, () => along(inboundTrack) >= 0);
-    watch = null;
-    // Established: on course within 0.05 NM and 2° at `establishedNm` out.
-    const i = points.findIndex((p, k) => k > 0 && (p.x * Math.sin(inbound * D) + p.y * Math.cos(inbound * D)) >= -establishedNm
-      && k > points.length - 1 - Math.ceil(4 * radius / step));
-    const at = points[Math.max(i, 1)], before = points[Math.max(i, 1) - 1];
-    const lateral = at.x * Math.cos(inbound * D) - at.y * Math.sin(inbound * D);
-    const track = norm(Math.atan2(at.x - before.x, at.y - before.y) / D);
-    const err = Math.abs(((track - inbound + 540) % 360) - 180);
-    result.established = Math.abs(lateral) < 0.05 && err < 2 && along(inboundTrack) >= 0;
-    result.crossed = crossed;
-    result.miss = Math.hypot(x, y);
-    return result;
-  }
-
-  let leg = legSeconds, flown = fly(leg);
-  while (!(flown.established && flown.crossed < 0.1) && leg + 5 <= maxLegSeconds) {
-    leg += 5; flown = fly(leg);
-  }
-  if (!(flown.established && flown.crossed < 0.1)) { leg = legSeconds; flown = fly(leg); }
-  return {
-    entry, turns, inboundCourse: inbound, heading: norm(heading), ...(legHeading === undefined ? {} : { legHeading }),
-    points: flown.points, firstTurn: flown.firstTurn, secondTurn: flown.secondTurn,
-    legSeconds: leg, extended: leg > legSeconds, established: flown.established && flown.crossed < 0.1, miss: flown.miss,
+  let x = 0, y = 0, hdg = norm(heading);
+  const points = [{ x, y }];
+  let watch = null; // called after every move of the final join
+  const move = (delta) => {
+    const mean = (hdg + delta / 2) * D;
+    x += step * Math.sin(mean); y += step * Math.cos(mean); hdg = norm(hdg + delta);
+    points.push({ x, y });
+    if (watch) watch();
   };
+  const away = (target, dir) => (dir > 0 ? norm(target - hdg) : norm(hdg - target));
+  const shortWay = (target) => (norm(target - hdg) <= 180 ? 1 : -1);
+  const named = (dir, degrees) => ({ direction: dir > 0 ? 'right' : 'left', degrees });
+  const turnTo = (target, dir, turnRate) => {
+    let left = away(target, dir), turned = 0;
+    while (left > 1e-9) { const d = Math.min(turnRate, left); move(dir * d); left -= d; turned += d; }
+    return named(dir, Math.round(turned));
+  };
+  const straight = (seconds) => { for (let t = 0; t < seconds; t++) move(0); };
+  // Offset right of a track (NM) and distance along it from its reference point.
+  const offset = (t) => (x - t.x) * Math.cos(t.course * D) - (y - t.y) * Math.sin(t.course * D);
+  const along = (t) => (x - t.x) * Math.sin(t.course * D) + (y - t.y) * Math.cos(t.course * D);
+  // Heading error from which a turn at `turnRate` rolls out on the course
+  // (offset = radius·(1 − cos error)), capped at the cut angle and, close
+  // in, at 30° per NM of offset so the last correction eases on smoothly.
+  const courseHeading = (t, turnRate) => {
+    const e = Math.abs(offset(t)), radius = radiusAt(turnRate);
+    const cut = Math.min(cutAngle, 30 * e, Math.acos(1 - Math.min(e, radius) / radius) / D);
+    return norm(t.course - Math.sign(offset(t)) * cut);
+  };
+  // Turn in `dir` until the heading reaches the course-joining heading, then
+  // keep joining (rate-limited) until `done`. The turn's size is the furthest
+  // it swings in `dir`.
+  const join = (t, dir, turnRate, done, limit = 1200) => {
+    let swing = 0, most = 0;
+    for (let n = 0; n < 720 / turnRate; n++) {
+      const left = away(courseHeading(t, turnRate), dir);
+      if (left <= turnRate || left > 360 - turnRate) break;
+      move(dir * turnRate); swing += turnRate; most = Math.max(most, swing);
+    }
+    for (let n = 0; n < limit && !done(); n++) {
+      const off = norm(courseHeading(t, turnRate) - hdg), want = off <= 180 ? off : off - 360;
+      const d = Math.max(-turnRate, Math.min(turnRate, want));
+      move(d); swing += dir * d; most = Math.max(most, swing);
+    }
+    return named(dir, Math.round(most));
+  };
+
+  const result = { entry, turns, inboundCourse: inbound, heading: norm(heading), entryTurnRate, points };
+  if (legHeading !== undefined) result.legHeading = legHeading;
+  let finalRate = entryTurnRate;
+  if (entry === 'direct') {
+    result.firstTurn = join(outboundTrack, hold, entryTurnRate,
+      () => along(outboundTrack) >= legSeconds * step);
+    finalRate = patternRate;
+  } else {
+    result.firstTurn = turnTo(legHeading, shortWay(legHeading), entryTurnRate);
+    straight(legSeconds);
+  }
+  // The final turn starts on one side of the inbound course; record the
+  // furthest the path then goes past it, over every second of the join.
+  // Starting on the course (a parallel entry flown along it), a turn in the
+  // hold's direction first carries the aircraft to the non-holding side.
+  const startOffset = offset(inboundTrack);
+  const startSide = Math.abs(startOffset) < 0.05 ? -hold : Math.sign(startOffset);
+  let crossed = 0;
+  watch = () => { crossed = Math.max(crossed, -startSide * offset(inboundTrack)); };
+  result.secondTurn = join(inboundTrack, hold, finalRate, () => along(inboundTrack) >= 0);
+  watch = null;
+  const onCourse = () => {
+    const [p, q] = points.slice(-2);
+    const track = norm(Math.atan2(q.x - p.x, q.y - p.y) / D);
+    return Math.abs(offset(inboundTrack)) < 0.05 && Math.abs(((track - inbound + 540) % 360) - 180) < 2;
+  };
+  result.crossed = crossed;
+  // Not yet on the inbound course at the fix: as in any hold, keep going round
+  // the racetrack (P-816 turns and legs) and correct on the first circuit.
+  result.atFix = { offset: Math.abs(offset(inboundTrack)), established: onCourse() };
+  result.circuit = !result.atFix.established;
+  if (result.circuit) {
+    join(outboundTrack, hold, patternRate, () => along(outboundTrack) >= legSeconds * step);
+    join(inboundTrack, hold, patternRate, () => along(inboundTrack) >= 0);
+  }
+  result.established = along(inboundTrack) >= 0 && onCourse();
+  result.miss = Math.hypot(x, y);
+  return result;
 }
 
 /**

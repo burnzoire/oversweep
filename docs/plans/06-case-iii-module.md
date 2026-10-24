@@ -135,17 +135,26 @@ No independent review or accessibility audit is claimed.
 Owner feedback (24 October 2026): the entry plots ended well off the inbound
 course, where a pilot expects to roll out lined up inbound, ready to start the
 racetrack. The AIM text says the teardrop and parallel turns back "intercept
-the inbound course", and the old model homed on the fix instead. Two-minute
-turns also have twice the radius the one-minute AIM legs are sized for, so a
-teardrop turn back crossed the course by about 3 NM.
+the inbound course", and the old model homed on the fix instead. It also flew
+the entry turns at P-816's two-minute rate, twice the radius the AIM's
+one-minute legs suit.
 
-`entryPath` now joins a course instead of homing: it turns in the hold's
-direction until the heading reaches one from which a turn at the same rate
-rolls out on the course (capped at a 45° cut, easing to 30° per NM close in).
-The direct entry joins the racetrack's outbound leg, one turn diameter out on
-the holding side, before turning inbound. Where a one-minute teardrop or
-parallel leg leaves too little room, the leg is lengthened in 5 s steps until
-the aircraft is established at least 1 NM before the fix without crossing the
-course; the page states the lengthened time and calls it this module's
-simplification. An entry flown from a heading where it cannot join (for
-example a parallel entry that starts on the holding side) says so.
+The owner asked for no deliberate simplifications: prefer a stated source,
+even one the review packet cannot yet verify, over a convenient model change.
+So `entryPath` now:
+
+- flies entry turns at the AIM 5-3-8 j 8 holding rate (3°/s or 30° bank,
+  whichever needs less bank; 2.52°/s at 250 kt via g·tan 30° ÷ speed), keeps
+  the one-minute legs, and keeps P-816's two-minute turns for the racetrack;
+- joins a course instead of homing: it turns in the hold's direction until a
+  same-rate turn would roll out on the course, cutting at no more than 45°
+  (the AIM gives no intercept angle; the page says 45° is the model's choice);
+- lets a turn back that is too wide cross the course and correct, and reports
+  by how much;
+- when the entry is not lined up by the fix, flies one racetrack circuit and
+  is established inbound on the next pass, as in any hold;
+- for the direct entry, cuts onto the racetrack's outbound leg, because the
+  entry turn is tighter than the racetrack turn.
+
+An earlier draft of this revision lengthened the legs instead; it was
+dropped at the owner's request.
