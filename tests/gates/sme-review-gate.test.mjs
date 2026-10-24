@@ -79,6 +79,14 @@ test("a blocked gate shows its blockers and links the full review", () => {
   assert.ok(result.message.includes(commentUrl));
 });
 
+test("a listed blocker fails the gate even when the header says READY", () => {
+  const inconsistent = `${readySummary}\n## Blocking findings\n\n- **B1** · High · \`src/pages/a.astro\` · Unsourced limit stated as fact.\n`;
+  const result = review(inconsistent);
+  assert.equal(result.ready, false);
+  assert.equal(result.blockers.length, 1);
+  assert.match(result.message, /1 blocking finding\./);
+});
+
 test("only the owner's sme-override label overrides the review", () => {
   const labels = [{ name: "sme-override" }];
   const labeled = (login) => ({ event: "labeled", label: { name: "sme-override" }, actor: { login }, created_at: "2026-10-24T09:00:00Z" });

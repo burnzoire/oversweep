@@ -240,8 +240,15 @@ def previous_review(repo, pr, head, token):
     elif match.group(1) == head:
         records.append(('CHANGED SINCE PREVIOUS REVIEW', 'Nothing: the previous review covered this exact head.'))
     else:
-        compare = api_json(repo, f'compare/{match.group(1)}...{head}', token)
-        if compare.get('status') not in ('ahead', 'identical'):
+        try:
+            compare = api_json(repo, f'compare/{match.group(1)}...{head}', token)
+        except (ValueError, OSError):
+            # e.g. 404 once the old head is gone; optional context must not stop a review.
+            compare = {}
+        if not compare:
+            records.append(('CHANGED SINCE PREVIOUS REVIEW',
+                            'The previous reviewed head could not be compared; review the whole changed scope.'))
+        elif compare.get('status') not in ('ahead', 'identical'):
             records.append(('CHANGED SINCE PREVIOUS REVIEW',
                             'History was rewritten since the previous review; review the whole changed scope.'))
         else:

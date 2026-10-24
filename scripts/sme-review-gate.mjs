@@ -89,8 +89,9 @@ export function evaluateSmeResult({ run, jobs, pullRequest, comments }) {
   if (!readiness || !Number.isInteger(blockingFindings)) {
     return fail("The SME summary is missing its machine-readable release-readiness result.");
   }
-  if (readiness !== "READY" || blockingFindings > 0) {
-    const blockers = parseBlockingFindings(report.body);
+  // A listed blocker fails the gate even if the header lines disagree with it.
+  const blockers = parseBlockingFindings(report.body);
+  if (readiness !== "READY" || blockingFindings > 0 || blockers.length > 0) {
     const count = Math.max(blockingFindings, blockers.length);
     const list = blockers.map(({ id, severity, file, detail }) => `- **${id}** (${severity}${file ? `, \`${file}\`` : ""}): ${detail}`).join("\n");
     return {

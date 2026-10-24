@@ -155,6 +155,9 @@ class SourceSafety(unittest.TestCase):
             self.assertEqual(s.previous_review('owner/repo', 1, 'b' * 40, 'token'), '')
         with patch.object(s, 'api_json', side_effect=[[self.review_comment('a' * 40)], {'status': 'diverged'}]):
             self.assertIn('History was rewritten', s.previous_review('owner/repo', 1, 'b' * 40, 'token'))
+        missing = OSError('HTTP Error 404: Not Found')
+        with patch.object(s, 'api_json', side_effect=[[self.review_comment('a' * 40)], missing]):
+            self.assertIn('could not be compared', s.previous_review('owner/repo', 1, 'b' * 40, 'token'))
         with patch.object(s, 'api_json', side_effect=[[self.review_comment('b' * 40)]]):
             self.assertIn('exact head', s.previous_review('owner/repo', 1, 'b' * 40, 'token'))
 
