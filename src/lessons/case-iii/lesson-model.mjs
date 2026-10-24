@@ -59,8 +59,8 @@ export function timeEnroute(distance, rate) {
  * Sectors relative to the inbound course: direct 180°, teardrop 70°,
  * parallel 110°, bounded by the 70° line. `offset` is the arrival heading
  * measured from the inbound course in the direction of the hold's turns.
- * `nearBoundary` marks offsets within 5° of a sector boundary, where either
- * adjacent entry is acceptable.
+ * `nearBoundary` marks offsets within 5° of a sector boundary, where the
+ * `alternative` entry across that boundary is also acceptable.
  */
 export function holdEntry({ inboundCourse, heading, turns }) {
   finite('Inbound course', inboundCourse);
@@ -68,9 +68,11 @@ export function holdEntry({ inboundCourse, heading, turns }) {
   if (turns !== 'left' && turns !== 'right') throw new RangeError('Turns must be "left" or "right".');
   const offset = turns === 'right' ? norm(heading - inboundCourse) : norm(inboundCourse - heading);
   const entry = offset < 110 || offset >= 290 ? 'direct' : offset < 180 ? 'teardrop' : 'parallel';
-  const boundaries = [110, 180, 290];
-  const nearBoundary = boundaries.some((b) => Math.abs(offset - b) <= 5);
-  return { entry, offset, nearBoundary };
+  // Each boundary separates two entries; near one, the other entry is also acceptable.
+  const boundaries = [[110, 'direct', 'teardrop'], [180, 'teardrop', 'parallel'], [290, 'parallel', 'direct']];
+  const near = boundaries.find(([b]) => Math.abs(offset - b) <= 5);
+  const alternative = near ? near.slice(1).find((e) => e !== entry) : null;
+  return { entry, offset, nearBoundary: Boolean(near), alternative };
 }
 
 /**

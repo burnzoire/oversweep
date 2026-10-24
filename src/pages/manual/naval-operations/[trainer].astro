@@ -58,10 +58,10 @@ const contents = [
       </tbody>
     </table>
   </div>
-  <p>BRC (base recovery course) is the carrier’s heading during the recovery. The landing area is angled to the left of the ship’s heading; the trainer models that offset as 9°, so its final bearing is BRC − 9°. The offset for a particular carrier has not been verified.</p>
+  <p>In the trainer, BRC (base recovery course) is the carrier’s heading during the recovery, and the angled landing area is modelled 9° left of it, so the final bearing is BRC − 9°. Neither the definition nor the offset for a particular carrier has been verified against a source.</p>
 
   <h2 id="clearance">The Marshal clearance</h2>
-  <p>Marshal’s clearance gives you everything you need before you descend: a radial, a DME, an altitude (“angels”, in thousands of feet) and an expected approach time (EAT). The trainer’s Marshal says, for example, “Marshal mother’s 220 radial, 21 DME, angels 6. Expected approach time 16:21.” That wording is inherited exercise dialogue, not verified Navy phraseology.</p>
+  <p>In the trainer, Marshal’s clearance gives you everything you need before you descend: a radial, a DME, an altitude (“angels 6” is 6,000 ft in the trainer’s dialogue) and an expected approach time (EAT). The trainer’s Marshal says, for example, “Marshal mother’s 220 radial, 21 DME, angels 6. Expected approach time 16:21.” That wording is inherited exercise dialogue, not verified Navy phraseology.</p>
   <ul>
     <li><strong>A radial is a magnetic bearing from the station.</strong> The FAA Pilot/Controller Glossary defines it as a magnetic bearing extending from a VOR, VORTAC or TACAN facility. Here the station is Mother, the carrier’s TACAN.</li>
     <li><strong>Radial plus DME is a position.</strong> The marshal fix is where the assigned radial crosses the assigned DME ring.</li>
@@ -115,7 +115,7 @@ const contents = [
     <li><strong>Teardrop:</strong> at the fix turn outbound to a heading 30° toward the holding side of the outbound course, fly it for one minute, then turn in the direction of the hold to intercept the inbound course.</li>
     <li><strong>Parallel:</strong> at the fix turn to parallel the outbound course on the non-holding side for one minute, then turn back toward the holding side through more than 180° to return to the fix or intercept the inbound course.</li>
   </ul>
-  <p>The entry is chosen from your heading on arrival at the fix, and the AIM treats ±5° of heading as acceptable when choosing (5-3-8 j.8). The AIM shows the sectors in a figure that this revision has not checked. The module uses the conventional reading of it: measured from the inbound course in the direction of the hold’s turns, an arrival heading 110° to 180° round is a teardrop, 180° to 290° is a parallel, and everything else (a 180° sector) is direct. A left-hand hold mirrors a right-hand one.</p>
+  <p>The entry is chosen from your heading on arrival at the fix, and the AIM treats ±5° of heading as acceptable when choosing (5-3-8 j.8(d)). The AIM shows the sectors in a figure that this revision has not checked. The module uses the conventional reading of it: measured from the inbound course in the direction of the hold’s turns, an arrival heading 110° to 180° round is a teardrop, 180° to 290° is a parallel, and everything else (a 180° sector) is direct. A left-hand hold mirrors a right-hand one.</p>
   <p class="note"><strong>Applicability:</strong> these are FAA civil instrument holding entries applied to the trainer’s marshal hold as a general instrument-flying skill. Whether CV NATOPS prescribes these entries for a Case III marshal pattern has not been verified. The trainer itself joins the hold automatically when you select <em>Enter marshal hold</em>; it does not fly these manoeuvres.</p>
 
   <section class="lesson" data-lesson="entry" aria-labelledby="entry-title">
@@ -149,7 +149,7 @@ const contents = [
   </section>
 
   <h2 id="eat">Holding and making EAT</h2>
-  <p>EAT is the time you are expected to leave the fix inbound and begin the descent. Because each aircraft’s EAT is different, hitting it is what keeps the approach spaced. In the trainer you must call Commencing at the fix within 10 seconds of EAT, and EATs are whole minutes on a clock that starts at 16:00Z.</p>
+  <p>In the trainer, EAT is the time you leave the fix inbound and begin the descent. In outline (unverified, see the CV NATOPS lead below), each aircraft’s EAT differs and hitting it is what keeps the approach spaced. For FAA civil holding, the AIM likewise expects pilots told when to leave a fix to adjust the pattern to leave at that time (5-3-8 k). In the trainer you must call Commencing at the fix within 10 seconds of EAT, and EATs are whole minutes on a clock that starts at 16:00Z.</p>
   <p>Hold time is adjustable, so plan it as soon as you know when you will reach the fix:</p>
   <ol>
     <li><strong>Work out the time available</strong> from reaching the fix to EAT.</li>
@@ -174,7 +174,7 @@ const contents = [
 
   <h2 id="penetration">Commencing, platform and the descent</h2>
   <p>At EAT, leaving the fix inbound, call Commencing on Marshal. In the trainer you then turn to BRC, hold 250 KIAS and descend toward 1,200 ft at 4,000 ft/min. Marshal hands you to Approach, and you check in before platform.</p>
-  <p><strong>Platform is an altitude, not a distance.</strong> At 5,000 ft report Platform and reduce the descent to 2,000 ft/min, continuing to 1,200 ft. Level there, and intercept the final bearing (BRC − 9° in the trainer).</p>
+  <p><strong>In the trainer, platform is an altitude, not a distance.</strong> At 5,000 ft report Platform and reduce the descent to 2,000 ft/min, continuing to 1,200 ft. Level there, and intercept the final bearing (BRC − 9° in the trainer).</p>
   <figure>
     <svg class="profile" viewBox="0 0 640 230" role="img" aria-labelledby="profile-caption">
       <g class="grid">
@@ -268,7 +268,7 @@ const contents = [
   <p>The references below are not a claim-to-source map. No applicable Navy or DCS passage has been verified for this module’s or the trainer’s Case III procedure, numeric gates, radio dialogue or scoring. A revision-3 review inspected limited Heatblur F-14 and CASE I passages for DCS-specific context only; those do not validate this exercise. References do not certify procedures or grant rights to reproduce manuals. No manual files or third-party media are included.</p>
   <ul>
     <li><a href="https://info.publicintelligence.net/CV-NATOPS-JUL09.pdf">NAVAIR 00-80T-105, CV NATOPS, 31 July 2009</a>, §§6.4.1.1 and 6.4.4, pp. 6-6 and 6-8: historical leads for the Case III overview, hold and EAT claims only; the passages and current applicability were not verified.</li>
-    <li><a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap5_section_3.html">FAA Aeronautical Information Manual</a>, ¶5-3-8 j.3 (holding entry procedures), j.8 (±5° heading tolerance when choosing an entry) and Fig 5-3-4 (entry sectors), accessed 24 October 2026: supports the three entry definitions for FAA civil instrument holding. The 70°/110°/180° sector sizes are the conventional reading of the figure, which this revision did not inspect. It does not establish Case III marshal procedure.</li>
+    <li><a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap5_section_3.html">FAA Aeronautical Information Manual</a>, ¶5-3-8 j.3 (holding entry procedures), j.8(d) (±5° heading tolerance when choosing an entry), k (adjusting the pattern to leave the fix at a specified time) and the entry-sector figure (cited in the text as FIG 5-3-4, captioned FIG 5-3-8), accessed 24 October 2026: supports the entry definitions and timing adjustment for FAA civil instrument holding. The 70°/110°/180° sector sizes are the conventional reading of the figure, which this revision did not inspect. It does not establish Case III marshal procedure.</li>
     <li><a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap1_section_1.html">FAA Aeronautical Information Manual</a>, ¶1-1-7 (DME), accessed 24 October 2026: DME distance is slant range, not horizontal distance.</li>
     <li><a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/glossary-r.html">FAA Pilot/Controller Glossary</a>, “Radial”, accessed 24 October 2026: a magnetic bearing extending from a VOR, VORTAC or TACAN facility.</li>
     <li><a href="https://www.digitalcombatsimulator.com/upload/iblock/e1b/430ooc582lpb0npynbsewan6omd5ohvs/DCS_Supercarrier_Operations_Guide_EN.pdf">Eagle Dynamics Supercarrier Operations Guide</a>, pp. 75–81: possible DCS-specific dialogue/sequence lead; pages and module-version mapping were not verified, and it does not establish real-world procedure.</li>

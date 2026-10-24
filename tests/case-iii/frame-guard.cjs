@@ -1,6 +1,7 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
-// Inside a frame the guard sets oversweepFramed; app.js must not start the simulator.
-function run(framed){let frames=0;const element=()=>({value:'',checked:false,innerHTML:'',textContent:'',classList:{toggle(){}},setAttribute(){},addEventListener(){},append(){},showModal(){},close(){}});const ctx=vm.createContext({document:{getElementById:element,createElement:element,createTextNode:t=>t},window:{oversweepFramed:framed},localStorage:{setItem(){}},requestAnimationFrame(){frames++},confirm:()=>true,console});ctx.CaseIIIModel=require('../../src/experiences/case-iii/model.cjs');vm.runInContext(fs.readFileSync('src/experiences/case-iii/app.js','utf8'),ctx);return frames;}
-assert.equal(run(true),0,'framed trainer must not start');
-assert.equal(run(undefined),1,'standalone trainer starts its frame loop');
-console.log('Framed trainer stays stopped; standalone trainer starts: PASS.');
+// Runs frame-guard.js, then app.js, as the browser does; inside a frame the
+// simulator must not start and the page must offer a new-window link.
+function load(framed){let frames=0,ready=null,shown=null;const element=()=>({value:'',checked:false,innerHTML:'',textContent:'',classList:{toggle(){}},setAttribute(){},addEventListener(){},append(...parts){this.parts=(this.parts||[]).concat(parts)},showModal(){},close(){}});const window={};window.self=window;window.top=framed?{}:window;const ctx=vm.createContext({window,location:{href:'https://oversweep.test/experiences/case-iii/'},document:{getElementById:element,createElement:element,createTextNode:t=>t,addEventListener(type,fn){if(type==='DOMContentLoaded')ready=fn},body:{replaceChildren(n){shown=n}}},localStorage:{setItem(){}},requestAnimationFrame(){frames++},confirm:()=>true,console});ctx.CaseIIIModel=require('../../src/experiences/case-iii/model.cjs');for(const f of['frame-guard.js','app.js'])vm.runInContext(fs.readFileSync('src/experiences/case-iii/'+f,'utf8'),ctx);if(ready)ready();return{frames,shown};}
+const framed=load(true);assert.equal(framed.frames,0,'framed trainer must not start');const link=framed.shown.parts.find(p=>p&&p.target);assert.equal(link.target,'_blank');assert.equal(link.href,'https://oversweep.test/experiences/case-iii/');
+const own=load(false);assert.equal(own.frames,1,'standalone trainer starts its frame loop');assert.equal(own.shown,null);
+console.log('Framed trainer stays stopped and links to a new window; standalone trainer starts: PASS.');

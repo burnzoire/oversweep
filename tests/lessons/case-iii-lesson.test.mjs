@@ -56,8 +56,10 @@ test('hold entry sectors, left-hand pattern mirror the right-hand ones', () => {
   for (const h of [180, 90, 71]) assert.equal(entry(h), 'parallel', `heading ${h}`);
   // Rotated inbound course 270: heading 160 is 110° anticlockwise → teardrop.
   assert.equal(holdEntry({ inboundCourse: 270, heading: 160, turns: 'left' }).entry, 'teardrop');
-  assert.equal(holdEntry({ inboundCourse: 0, heading: 112, turns: 'right' }).nearBoundary, true);
-  assert.equal(holdEntry({ inboundCourse: 0, heading: 140, turns: 'right' }).nearBoundary, false);
+  assert.deepEqual(holdEntry({ inboundCourse: 0, heading: 112, turns: 'right' }), { entry: 'teardrop', offset: 112, nearBoundary: true, alternative: 'direct' });
+  assert.equal(holdEntry({ inboundCourse: 0, heading: 178, turns: 'right' }).alternative, 'parallel');
+  assert.equal(holdEntry({ inboundCourse: 0, heading: 293, turns: 'right' }).alternative, 'parallel');
+  assert.deepEqual(holdEntry({ inboundCourse: 0, heading: 140, turns: 'right' }), { entry: 'teardrop', offset: 140, nearBoundary: false, alternative: null });
 });
 
 test('EAT plans with 120 s turns and 60 s legs', () => {

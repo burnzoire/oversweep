@@ -5,7 +5,7 @@ import { eatPlan, holdEntry, norm, pointToPoint, reciprocal, timeEnroute } from 
 const SVG = 'http://www.w3.org/2000/svg';
 const C = 160; // SVG centre for 320 × 320 plots
 const fmt = (a) => String(Math.round(norm(a)) % 360).padStart(3, '0');
-const clock = (s) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
+const clock = (seconds) => { const s = Math.round(seconds); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
 const pt = (bearing, r) => [C + r * Math.sin(bearing * Math.PI / 180), C - r * Math.cos(bearing * Math.PI / 180)];
 const num = (input) => Number(input.value);
 const randomInt = (lo, hi) => lo + Math.floor(Math.random() * (hi - lo + 1));
@@ -90,7 +90,8 @@ function setupNavigation(root) {
 
   root.addEventListener('input', () => { revealed = false; feedback.textContent = ''; draw(); });
   root.querySelector('[data-check]').addEventListener('click', () => {
-    const { course } = pointToPoint(problem().from, problem().to);
+    let course;
+    try { ({ course } = pointToPoint(problem().from, problem().to)); } catch (error) { feedback.textContent = error.message; return; }
     const guess = num(f.guess);
     if (course === null || !Number.isFinite(guess) || f.guess.value === '') {
       feedback.textContent = course === null ? 'You are already at the fix.' : 'Enter a heading from 000 to 359 first.';
@@ -180,7 +181,7 @@ function setupEntry(root) {
     const teardrop = norm(outbound + (turns === 'right' ? -30 : 30));
     out.textContent = revealed
       ? `${result.entry[0].toUpperCase() + result.entry.slice(1)} entry. ${ENTRY_STEPS[result.entry](result.entry === 'teardrop' ? teardrop : outbound, side)}`
-        + (result.nearBoundary ? ' This heading is within 5° of a sector boundary, so either adjacent entry is acceptable.' : '')
+        + (result.alternative ? ` This heading is within 5° of the ${result.alternative} sector, so a ${result.alternative} entry is also acceptable.` : '')
       : 'Choose the entry you would fly, then check it.';
   }
 
@@ -191,11 +192,12 @@ function setupEntry(root) {
   root.querySelector('[data-check]').addEventListener('click', () => {
     const choice = root.querySelector('[name="answer"]:checked')?.value;
     if (!choice) { feedback.textContent = 'Select direct, teardrop or parallel first.'; return; }
-    const result = holdEntry(state());
+    let result;
+    try { result = holdEntry(state()); } catch (error) { feedback.textContent = error.message; return; }
     revealed = true; draw();
-    feedback.textContent = choice === result.entry
-      ? 'Correct.'
-      : result.nearBoundary ? `Acceptable near a boundary, but the sector is ${result.entry}.` : `Not quite: the arrival heading is in the ${result.entry} sector.`;
+    feedback.textContent = choice === result.entry ? 'Correct.'
+      : choice === result.alternative ? `Acceptable: within 5° of the boundary, though the sector is ${result.entry}.`
+      : `Not quite: the arrival heading is in the ${result.entry} sector.`;
   });
   root.querySelector('[data-new]').addEventListener('click', () => {
     f.inbound.value = randomInt(0, 35) * 10;
