@@ -463,6 +463,33 @@ pages: 1
         self.assertIn('- failed · SOURCE PAGES NOT EXTRACTED: ' + self.URL + ' physical pages 2, 4', text)
         self.assertIn('1 of 2 records are cut, failed or omitted.', text)
 
+    @unittest.skipUnless(shutil.which('pdftotext') and shutil.which('pdfinfo'), 'Poppler needed')
+    def test_same_pdf_is_deduplicated_by_pages_not_by_body(self):
+        mirror = 'https://murphysys.com/P-1289.pdf'
+        with tempfile.TemporaryDirectory() as directory:
+            download = self.write(directory, [f'Body of physical page {n}' for n in range(1, 31)])
+            seen = {}
+            cited = s.source_records(self.URL, self.declaration([(20, 21, '')]), download, seen)
+            opening = s.source_records(mirror, None, download[:4] + (mirror,), seen)
+            again = s.source_records(mirror, self.declaration([(20, 21, '')]), download[:4] + (mirror,), seen)
+        self.assertIn('Body of physical page 20', cited[0][1])
+        self.assertIn('Body of physical page 1\n', opening[0][1], 'opening pages were never extracted before')
+        self.assertIn(f'Duplicate pages: these pages of this same PDF are shown under {self.URL}', again[0][1])
+
+    def test_declaration_errors_in_unchanged_evidence_are_kept_for_linked_sources(self):
+        head = 'a' * 40
+        evidence = f'```review-sources\nsource: {self.URL}\npages: 52-53; 90-89\n```\n'
+        unrelated = '```review-sources\nsource: https://faa.gov/x.pdf\npages: 9-1\n```\n'
+        listing = [{'type': 'file', 'path': 'docs/reviews/bfm.md'}, {'type': 'file', 'path': 'docs/reviews/other.md'}]
+        calls = [{'head': {'sha': head}}, [{'filename': 'src/pages/bfm.astro', 'status': 'modified'}],
+                 contents(f'Page cites {self.URL}'), listing, contents(evidence), contents(unrelated),
+                 {'head': {'sha': head}}]
+        with patch.object(s, 'api_json', side_effect=calls), patch.object(s, 'fetch_source', return_value=None), \
+                patch.object(s, 'source_records', return_value=[]):
+            text = s.collect('owner/repo', 1, head, 'token')
+        self.assertIn('- failed · SOURCE DECLARATION ERROR · docs/reviews/bfm.md: ' + self.URL + ': unreadable page range "90-89"', text)
+        self.assertNotIn('docs/reviews/other.md', text)
+
     def test_too_many_ranges_are_reported_not_dropped(self):
         ranges = [(n, n, '') for n in range(1, s.MAX_RANGES_PER_SOURCE + 3)]
         with tempfile.TemporaryDirectory() as directory, \

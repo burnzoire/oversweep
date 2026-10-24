@@ -431,16 +431,17 @@ def source_records(url, declaration, download, seen):
     heading += f'\nPDF pages: {count}'
     ranges = declaration['ranges'] if declaration else []
     if not ranges:
-        if digest in seen:
-            return [(heading, f'Duplicate body: same SHA-256 as {seen[digest]}; text shown there.', None)]
-        seen[digest] = url
         last = min(count, UNDECLARED_PAGES)
+        # Dedupe PDFs by the pages actually extracted, not by body alone.
+        key = f'{digest}:1-{last}'
+        if key in seen:
+            return [(heading, f'Duplicate pages: physical pages 1-{last} of this same PDF are shown under {seen[key]}.', None)]
+        seen[key] = url
         note = (f'[No cited pages declared: physical pages 1-{last} of {count} only. Declare cited '
                 'pages in a review-sources block of the evidence file to read others.]\n')
         records = pdf_records(url, heading, path, 1, last, MAX_SOURCE_CHARS)
         records[0] = (heading, note + records[0][1], MAX_SOURCE_CHARS)
         return records
-    seen.setdefault(digest, url)
     records, budget = [], MAX_CITED_PAGES
     if len(ranges) > MAX_RANGES_PER_SOURCE:
         skipped = '; '.join(describe(*r) for r in ranges[MAX_RANGES_PER_SOURCE:])
@@ -458,6 +459,11 @@ def source_records(url, declaration, download, seen):
             records.append((f'SOURCE PAGES NOT EXTRACTED: {url} {describe(start, end, label)}',
                             f'Over the {MAX_CITED_PAGES}-page limit per source; cite fewer pages.', None))
             continue
+        key = f'{digest}:{start}-{end}'
+        if key in seen:
+            records.append((part, f'Duplicate pages: these pages of this same PDF are shown under {seen[key]}.', None))
+            continue
+        seen[key] = url
         budget -= end - start + 1
         try:
             records += pdf_records(url, part, path, start, end, MAX_RANGE_CHARS)
@@ -515,8 +521,11 @@ def unchanged_declarations(repo, head, token, read, urls):
         text = read_repo_file(repo, path, head, token)
         if 'review-sources' not in text:
             continue
-        found, _ = parse_declarations(path, text)
+        found, errors = parse_declarations(path, text)
         sources += [source for source in found if source['url'] in urls]
+        # A rejected range or hash for a linked source must still show in coverage.
+        if errors and any(url in text for url in urls):
+            notes += [('SOURCE DECLARATION ERROR', error, None) for error in errors]
     return sources, notes
 
 
