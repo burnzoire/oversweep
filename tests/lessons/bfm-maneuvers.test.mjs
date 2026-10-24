@@ -23,6 +23,18 @@ test('bleed is calibrated to the source corner figure', () => {
   near(bleed(300, 1), 0, 1e-12, '1 G holds speed');
 });
 
+test('fly: the corner bleed holds in indicated airspeed at altitude', () => {
+  // At 15,000 ft a level 7.33 G pull at 410 KIAS should still lose about
+  // 8 KIAS per second; the path itself flies at true airspeed.
+  const sigma = SIGMA_15K, v = 410 / Math.sqrt(sigma) * KTFT, a = GFT * Math.sqrt(7.33 ** 2 - 1);
+  const track = fly({
+    p: [0, 0, 0], v: [0, v, 0], sigma, maxTime: 0.2,
+    control: (s) => { const h = Math.hypot(s.v[0], s.v[1]); return [s.v[1] / h * a, -s.v[0] / h * a, GFT]; },
+  });
+  const kias = (s) => Math.hypot(...s.v) / KTFT * Math.sqrt(sigma);
+  near((kias(track[0]) - kias(track.at(-1))) / track.at(-1).t, 8, 0.1, 'KIAS per second');
+});
+
 test('fly: 1 G straight and level holds height and speed', () => {
   const v = 300 * KTFT;
   const track = fly({ p: [0, 0, 0], v: [0, v, 0], maxTime: 10, control: () => [0, 0, GFT] });
@@ -92,6 +104,10 @@ test('scissors: paths cross and drift downrange', () => {
   near(o.track[i].p[0], -b.track[i].p[0], 1e-9, 'mirror x');
   near(o.track[i].p[2], b.track[i].p[2], 1e-9, 'same height');
   assert(Math.max(...o.track.map((s) => s.p[2])) > 1900, 'over the top');
+  // Slower over the top than at the bottom.
+  const speed = (s) => Math.hypot(...s.v);
+  const top = o.track.reduce((a, s) => (s.p[2] > a.p[2] ? s : a)), bottom = o.track[0];
+  assert(speed(top) < speed(bottom), 'slows over the top');
   const [fb, fo] = flatScissors();
   const xs = fo.track.map((s) => s.p[0]);
   assert(xs.some((x) => x > 1000) && xs.some((x) => x < -1000), 'weaves both ways');

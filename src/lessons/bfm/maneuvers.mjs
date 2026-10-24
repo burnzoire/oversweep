@@ -57,7 +57,8 @@ export function fly({ p, v, control, dt = 0.05, maxTime = 60, gLimit = Infinity,
     const cap = Math.min(gLimit, availableG(s.speed)) * GFT;
     if (len(lift) > cap) lift = mul(unit(lift), cap);
     track.push({ t, p, v, lift, g: len(lift) / GFT });
-    if (drag) e0 -= len(v) * bleed(s.speed, len(lift) / GFT) * KTFT * dt;
+    // The bleed is in KIAS per second; a TAS change is that over √σ.
+    if (drag) e0 -= len(v) * bleed(s.speed, len(lift) / GFT) * KTFT / Math.sqrt(sigma) * dt;
     // Turn the velocity by lift and gravity, then set its size from energy.
     const a = add(lift, [0, 0, -GFT]);
     const turned = add(v, mul(a, dt));
@@ -262,7 +263,7 @@ export function rollingScissors({ loops = 1.25 } = {}) {
   const R = 1000, period = 20, drift = 220; // ft, s, ft/s downrange
   const T = loops * period;
   // Phase runs faster at the bottom than over the top, as energy is traded.
-  const phase = (t) => { const w = 2 * Math.PI * t / period; return w - 0.35 * Math.sin(w); };
+  const phase = (t) => { const w = 2 * Math.PI * t / period; return w + 0.35 * Math.sin(w); };
   const path = (side, lag) => (t) => {
     const a = phase(t);
     return [side * R * Math.sin(a), drift * t - lag, R * (1 - Math.cos(a))];

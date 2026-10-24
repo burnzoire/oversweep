@@ -93,7 +93,7 @@ or high-aspect BFM.
   1 G; pulling n G bleeds B(n² − 1)(410/KIAS)² kt/s, with B set from the p. 4-4
   corner bleed (8 kt/s at 7.33 G, 410 KIAS). Available G is 7.33(KIAS/410)²,
   capped at 7.33 (lift limit below corner, load limit above). The split-S is
-  flown at 15,000 ft (ISA density ratio 0.6292): it loses about 6,240–6,460 ft
+  flown at 15,000 ft (ISA density ratio 0.6292): it loses about 6,260–6,470 ft
   for entries of 150–300 KIAS, inside the p. 4-7 figure of 6,000–6,500 ft; the
   same model at sea level gives about 4,050 ft. Yo-yos fly at sea level against
   a level 350 kt, 3,000 ft bandit turn. Scissors are fixed parametric shapes.
