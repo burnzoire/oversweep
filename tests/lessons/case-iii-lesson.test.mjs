@@ -111,6 +111,21 @@ test('parallel entry flies the non-holding side, then turns more than 180° to i
   assert.equal(entryPath({ inboundCourse: 0, heading: 90, turns: 'right', entry: 'parallel' }).established, false);
 });
 
+test('entry joins are judged over the whole turn back and from on-course starts', () => {
+  // Left teardrop, inbound 000°, arriving on 030°: the turn back must not be
+  // accepted if it swings across the inbound course before recapturing it.
+  const t = entryPath({ inboundCourse: 0, heading: 30, turns: 'left', entry: 'teardrop' });
+  // The turn back starts after the first turn (at 1.5°/s) and the leg.
+  const turnBack = t.points.slice(Math.ceil(t.firstTurn.degrees / 1.5) + t.legSeconds);
+  if (t.established) assert(Math.max(...turnBack.map((p) => p.x)) < 0.1, 'teardrop does not cross onto the east side');
+  // Parallel flown along the inbound course (arriving on the outbound heading):
+  // rotated and mirrored versions of the same geometry all join.
+  for (const [inboundCourse, turns] of [[0, 'right'], [10, 'right'], [0, 'left'], [10, 'left'], [250, 'right']]) {
+    const r = entryPath({ inboundCourse, heading: inboundCourse + 180, turns, entry: 'parallel' });
+    assert(r.established, `parallel ${turns} ${inboundCourse}° from the outbound heading joins`);
+  }
+});
+
 test('entry paths stay finite and end at the fix when established', () => {
   for (const turns of ['left', 'right']) for (const entry of ['direct', 'teardrop', 'parallel']) {
     for (let inboundCourse = 0; inboundCourse < 360; inboundCourse += 45) for (let heading = 0; heading < 360; heading += 15) {

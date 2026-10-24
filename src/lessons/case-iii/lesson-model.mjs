@@ -110,10 +110,12 @@ export function entryPath({
   function fly(leg) {
     let x = 0, y = 0, hdg = norm(heading);
     const points = [{ x, y }];
+    let watch = null; // called after every move of the final join
     const move = (delta) => {
       const mean = (hdg + delta / 2) * D;
       x += step * Math.sin(mean); y += step * Math.cos(mean); hdg = norm(hdg + delta);
       points.push({ x, y });
+      if (watch) watch();
     };
     const away = (target, dir) => (dir > 0 ? norm(target - hdg) : norm(hdg - target));
     const shortWay = (target) => (norm(target - hdg) <= 180 ? 1 : -1);
@@ -160,13 +162,15 @@ export function entryPath({
       straight(leg);
     }
     // The final turn starts on one side of the inbound course; record the
-    // furthest the path then goes past it.
-    const startSide = Math.sign(offset(inboundTrack)) || 1;
+    // furthest the path then goes past it, over every second of the join.
+    // Starting on the course (a parallel entry flown along it), a turn in the
+    // hold's direction first carries the aircraft to the non-holding side.
+    const startOffset = offset(inboundTrack);
+    const startSide = Math.abs(startOffset) < 0.05 ? -hold : Math.sign(startOffset);
     let crossed = 0;
-    result.secondTurn = join(inboundTrack, hold, () => {
-      crossed = Math.max(crossed, -startSide * offset(inboundTrack));
-      return along(inboundTrack) >= 0;
-    });
+    watch = () => { crossed = Math.max(crossed, -startSide * offset(inboundTrack)); };
+    result.secondTurn = join(inboundTrack, hold, () => along(inboundTrack) >= 0);
+    watch = null;
     // Established: on course within 0.05 NM and 2° at `establishedNm` out.
     const i = points.findIndex((p, k) => k > 0 && (p.x * Math.sin(inbound * D) + p.y * Math.cos(inbound * D)) >= -establishedNm
       && k > points.length - 1 - Math.ceil(4 * radius / step));
