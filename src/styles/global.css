@@ -459,6 +459,11 @@ h2 {
   text-decoration: underline;
 }
 
+.entry-applicability {
+  color: var(--color-muted);
+  font-size: 0.95rem;
+}
+
 .entry-meta {
   color: var(--color-muted);
   font-size: 0.9rem;

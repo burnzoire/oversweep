@@ -107,7 +107,7 @@ const subjects = manualSubjects.map((subject) => ({ ...subject, count: subjectEn
               <li>
                 {crumb.href && index < breadcrumbs.length - 1
                   ? <a href={crumb.href}>{crumb.label}</a>
-                  : <span aria-current="page">{crumb.label}</span>}
+                  : <span aria-current={index === breadcrumbs.length - 1 ? "page" : undefined}>{crumb.label}</span>}
               </li>
             ))}
           </ol>

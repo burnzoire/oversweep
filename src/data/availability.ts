@@ -10,6 +10,7 @@ export interface Entry {
   id: string;
   title: string;
   objective: string;
+  applicability: string;
   maturity: string;
   href: string;
   subject: string;
@@ -22,6 +23,7 @@ const fromExperience = (e: Experience): Entry => ({
   id: e.id,
   title: e.module?.title ?? e.title,
   objective: e.module?.objective ?? e.objective,
+  applicability: e.module?.applicability ?? e.applicability,
   maturity: e.module?.maturity ?? e.maturity,
   href: experienceRoute(e),
   subject: e.subject,
@@ -32,6 +34,7 @@ const fromModule = (m: Module): Entry => ({
   id: m.id,
   title: m.title,
   objective: m.objective,
+  applicability: m.applicability,
   maturity: m.maturity,
   href: moduleRoute(m),
   subject: m.subject,

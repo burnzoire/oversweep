@@ -13,6 +13,7 @@ const experience = entry.trainer?.experience;
 const asTrainer = focus === 'trainer' && entry.trainer;
 const title = asTrainer ? entry.trainer!.title : entry.title;
 const objective = asTrainer ? experience!.objective : entry.objective;
+const applicability = asTrainer ? experience!.applicability : entry.applicability;
 const maturity = asTrainer ? experience!.maturity : entry.maturity;
 const revision = asTrainer
   ? `Exercise revision ${experience!.revision}`
@@ -27,6 +28,7 @@ const Heading = (headingLevel === 3 ? 'h3' : 'h2') as 'h2' | 'h3';
   {showSubject && <p class="entry-kicker">{subjectTitle(entry.subject)}</p>}
   <Heading class="entry-title"><a href={sitePath(entry.href)}>{title}</a></Heading>
   <p class="entry-objective">{objective}</p>
+  <p class="entry-applicability">{applicability}</p>
   <p class="entry-meta"><span class="maturity">{maturity}</span> · {revision}{local && ' · Local review only'}</p>
   <p class="entry-actions">
     {asTrainer ? (
