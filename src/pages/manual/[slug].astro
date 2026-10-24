@@ -1,6 +1,8 @@
 ---
 import ExperienceCard from "../../components/ExperienceCard.astro";
+import ModuleCard from "../../components/ModuleCard.astro";
 import { includedExperiences } from "../../data/experiences";
+import { includedModules } from "../../data/modules";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { manualSubjects } from "../../data/catalogue";
 import { sitePath } from "../../lib/paths";
@@ -25,6 +27,7 @@ const { subject } = Astro.props;
   ]}
 >
   {includedExperiences.filter((e) => e.subject === subject.slug).map((experience) => <ExperienceCard experience={experience} module />)}
+  {includedModules.filter((m) => m.subject === subject.slug).map((m) => <ModuleCard module={m} />)}
   <section class="status-panel">
     <h2>Coming soon</h2>
     <p>Additional reference modules are planned for this subject. Available modules are listed above with their review status.</p>

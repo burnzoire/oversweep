@@ -91,6 +91,16 @@ An entry's optional `launch` says how the Manual page presents it. The default,
 too busy to share a page: the Manual page must link to the frame with
 `target="_blank"` and `data-experience-launch`, and must contain no `<iframe>`.
 
+### Module publication
+
+Reference modules without a trainer are registered in `src/data/modules.json`
+with the same `publication` and `maturity` fields. The subject listing, the
+module route and `scripts/check_modules.mjs` read that registry; no check names
+a specific module. A published module must emit its page and subject listing
+with the registered id, revision and maturity, and its page must contain no
+`<iframe>` or trainer launch link. Excluded modules follow the experience rules
+above. A module that has a trainer stays in `experiences.json` under `module`.
+
 Setting an entry to `published` is an owner publication decision for the exact
 revision; record it in the PR. Publication does not change maturity: a Drafted
 experience stays visibly marked Drafted, and Technically Validated still requires
