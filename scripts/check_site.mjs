@@ -53,21 +53,26 @@ const requiredRoutes = [
   "training",
 ];
 
-for (const route of requiredRoutes) {
-  const filename = pageFile(route);
-  await stat(filename);
-  const html = await readFile(filename, "utf8");
-  if (route) {
-    assert.match(html, /Coming soon/i, `${route} should be marked Coming soon`);
-  }
-}
+for (const route of requiredRoutes) await stat(pageFile(route));
 await stat(path.join(output, "404.html"));
 
 const htmlFiles = (await filesIn(output)).filter((filename) => filename.endsWith(".html"));
 assert.ok(htmlFiles.length >= requiredRoutes.length, "all catalogue routes should be emitted");
 
-for (const filename of htmlFiles) {
-  const html = await readFile(filename, "utf8");
+// Catalogue destinations with nothing published still build, so their URLs stay
+// stable, but carry `data-empty` and are shown dimmed and unlinked in navigation.
+const pages = new Map(await Promise.all(htmlFiles.map(async (filename) => [filename, await readFile(filename, "utf8")])));
+const isEmpty = (html) => /<main\b[^>]*\bdata-empty\b/.test(html);
+const emptyPages = new Set([...pages].filter(([, html]) => isEmpty(html)).map(([filename]) => filename));
+
+for (const [filename, html] of pages) {
+  const relativePage = path.relative(output, filename).split(path.sep).join("/");
+  assert.doesNotMatch(html, /coming soon/i, `${relativePage} should dim unavailable destinations, not label them Coming soon`);
+  if (emptyPages.has(filename))
+    assert.doesNotMatch(html, /data-(?:module|experience)-id=/, `${relativePage} lists content but is marked empty`);
+}
+
+for (const [filename, html] of pages) {
   const primaryNav = html.match(/<nav class="primary-nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1] ?? "";
   const currentPrimaryLinks = [...primaryNav.matchAll(/aria-current="page"/g)].length;
   const relativePage = path.relative(output, filename).split(path.sep).join("/");
@@ -91,6 +96,7 @@ for (const filename of htmlFiles) {
       ? destination
       : path.join(destination, "index.html");
     await stat(candidate);
+    assert.ok(!emptyPages.has(candidate), `${relativePage} links to ${relative || "/"}, which has nothing published`);
   }
 }
 

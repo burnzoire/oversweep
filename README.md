@@ -47,7 +47,8 @@ timed-turn practice, a radio-call walkthrough and knowledge checks; it ends
 by launching the Tomcat trainer in its own window, which is never framed. Start
 Exercise in the trainer's briefing popup begins the simulation; instructor mode
 is optional. It is Drafted, not technically validated, and says so on every
-page that lists it. The remaining catalogue is Coming soon.
+page that lists it. Catalogue destinations with nothing published still build,
+but navigation shows them dimmed and unlinked (`src/data/availability.ts`).
 
 ```sh
 npm test

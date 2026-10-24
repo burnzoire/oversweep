@@ -1,0 +1,44 @@
+---
+import { subjectTitle, type Entry } from '../data/availability';
+import { sitePath } from '../lib/paths';
+interface Props {
+  entry: Entry;
+  // `trainer` presents the standalone exercise first, for the Training Library.
+  focus?: 'module' | 'trainer';
+  showSubject?: boolean;
+  headingLevel?: 2 | 3;
+}
+const { entry, focus = 'module', showSubject = false, headingLevel = 2 } = Astro.props;
+const experience = entry.trainer?.experience;
+const asTrainer = focus === 'trainer' && entry.trainer;
+const title = asTrainer ? entry.trainer!.title : entry.title;
+const objective = asTrainer ? experience!.objective : entry.objective;
+const maturity = asTrainer ? experience!.maturity : entry.maturity;
+const revision = asTrainer
+  ? `Exercise revision ${experience!.revision}`
+  : `Module revision ${experience?.module?.revision ?? entry.module?.revision}`;
+const local = (experience ?? entry.module)?.publication !== 'published';
+const markers = experience
+  ? { 'data-experience-id': experience.id, 'data-experience-revision': experience.revision }
+  : { 'data-module-id': entry.module!.id, 'data-module-revision': entry.module!.revision };
+const Heading = (headingLevel === 3 ? 'h3' : 'h2') as 'h2' | 'h3';
+---
+<section class="entry-card" {...markers}>
+  {showSubject && <p class="entry-kicker">{subjectTitle(entry.subject)}</p>}
+  <Heading class="entry-title"><a href={sitePath(entry.href)}>{title}</a></Heading>
+  <p class="entry-objective">{objective}</p>
+  <p class="entry-meta"><span class="maturity">{maturity}</span> · {revision}{local && ' · Local review only'}</p>
+  <p class="entry-actions">
+    {asTrainer ? (
+      <>
+        <a class="button" href={sitePath(entry.trainer!.href)} target="_blank" rel="noopener">Launch the exercise <span class="visually-hidden"> (opens in a new window)</span> <span aria-hidden="true">↗</span></a>
+        <a href={sitePath(entry.href)}>Read the {entry.title} module first</a>
+      </>
+    ) : (
+      <>
+        <a class="button" href={sitePath(entry.href)}>Read the module</a>
+        {entry.trainer && <span class="entry-extra">Includes a practice exercise</span>}
+      </>
+    )}
+  </p>
+</section>
