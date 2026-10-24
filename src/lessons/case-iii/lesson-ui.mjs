@@ -458,7 +458,7 @@ function setupStack(root) {
     // The final-bearing line runs aft of the ship, on the side opposite the offset.
     out.textContent = c.kind === 'none'
       ? `Inbound course ${fmt(c.inbound)}° already matches the final bearing: no correction.`
-      : `Inbound course ${fmt(c.inbound)}°. Final bearing ${fmt(num(f.fb))}° is ${Math.abs(c.offset)}° ${side} of it, so the example procedure calls for ${c.kind === 'gradual' ? 'a gradual correction' : 'a 30° correction at 20 DME'}. The final-bearing line lies to your ${c.turn} astern of the ship, so the correction turns ${c.turn}${c.kind === 'thirty' ? ` to ${fmt(c.inbound + (c.turn === 'right' ? 30 : -30))}°` : ''}.`;
+      : `Inbound course ${fmt(c.inbound)}°. Final bearing ${fmt(num(f.fb))}° is ${Math.abs(c.offset)}° ${side} of it, so the example procedure calls for ${c.kind === 'gradual' ? 'a gradual correction' : 'a 30° correction at 20 DME'}. The source gives no turn direction; geometrically the final-bearing line lies to your ${c.turn} astern of the ship, so this module's reading turns ${c.turn}${c.kind === 'thirty' ? `, for example to ${fmt(c.inbound + (c.turn === 'right' ? 30 : -30))}° if the 30° is taken as an intercept angle` : ''}.`;
   }
   root.addEventListener('input', draw);
   draw();
