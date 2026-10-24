@@ -363,7 +363,7 @@ Revision 6 requires fresh SME review. It remains Drafted and excluded until
 validation is complete. The new production-inclusion check must therefore fail
 on this PR, rather than allow an all-green result based on safe draft exclusion.
 The PR is a non-draft review of the unfinished release, not a publication bypass.
-See [release acceptance](../development.md#case-iii-release-acceptance).
+The production-inclusion check described here was superseded in revision 7.
 
 Local verification on Node 22.23.4: `npm run check`, `npm run check:dev`,
 `OVERSWEEP_REVIEW_TRAINERS=1 npm run check:review`, ten gate unit tests,
@@ -374,3 +374,26 @@ identified and corrected omitted listing paths and two-dot PR comparison;
 the latter has a divergent-history regression. Browser smoke verification was
 attempted but Chromium was absent and the installation returned invalid ZIP
 downloads. No browser, visual, speech or independent UX approval is claimed.
+
+## Owner-approved publication — revision 7
+
+On 2026-10-24 the owner asked for the Case III trainer to be live on the
+production site. Revision 7 sets its registry entry to `published` while keeping
+maturity **Drafted — not technically validated**, shown on the Manual page,
+subject listing and Training Library card. This is a publication decision, not a
+validation: no source locator or SME finding was resolved by it.
+
+The revision-6 SME review blocked on `AIRSPEED` / `KIAS` labels reading as
+verified values. Revision 7 keeps the owner's wording and adds the bounding the
+review asked for: the always-visible note under the speed control and the sortie
+brief state that every airspeed, altitude, vertical rate, DME fix and gate is a
+trainer setpoint rather than a verified procedure or aircraft value, and the
+scope notes name the 250 KIAS / 6,000 ft / 21 DME marshal, 4,000 then 2,000 ft/min
+descent and 10 / 8 DME configuration setpoints explicitly. The gate notice now
+reads KIAS, matching the other labels. Model equations and numeric values are
+unchanged.
+
+The Case III-specific release-readiness workflow and output assertions were
+replaced by registry-driven checks; see
+[experience publication](../development.md#experience-publication). The trainer
+frame and assets moved from `/review/case-iii/` to `/experiences/case-iii/`.

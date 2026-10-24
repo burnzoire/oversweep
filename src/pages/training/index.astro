@@ -1,6 +1,6 @@
 ---
 import ExperienceCard from "../../components/ExperienceCard.astro";
-import { reviewTrainers } from "../../data/experiences";
+import { includedExperiences } from "../../data/experiences";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { manualSubjects } from "../../data/catalogue";
 import { sitePath } from "../../lib/paths";
@@ -12,10 +12,12 @@ import { sitePath } from "../../lib/paths";
   isSectionIndex
   breadcrumbs={[{ label: "Training Library" }]}
 >
-  {reviewTrainers && <ExperienceCard />}
+  {includedExperiences.map((experience) => <ExperienceCard experience={experience} />)}
   <section class="status-panel">
     <h2>Coming soon</h2>
-    <p>No validated trainer experiences are published. Draft experiences are available only in local review mode.</p>
+    <p>{includedExperiences.length
+      ? "More trainer experiences are planned. Each experience shows its own review maturity."
+      : "No trainer experiences are published yet."}</p>
   </section>
   <h2>Library index</h2>
   <p>Future entries will be organised by subject, experience type, applicability and learning objective.</p>

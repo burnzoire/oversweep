@@ -1,8 +1,9 @@
 ---
 import SiteLayout from '../../../layouts/SiteLayout.astro';
-import { caseIII, reviewTrainers } from '../../../data/experiences';
+import { getExperience, includedExperiences, experienceFrame } from '../../../data/experiences';
 import { sitePath } from '../../../lib/paths';
-export function getStaticPaths() { return reviewTrainers ? [{ params: { trainer: "case-iii" } }] : []; }
+const caseIII = getExperience('case-iii');
+export function getStaticPaths() { return includedExperiences.some(e => e.slug === 'case-iii') ? [{ params: { trainer: 'case-iii' } }] : []; }
 
 ---
 <SiteLayout title={caseIII.title} activeSection="manual" activeSubject="naval-operations"
@@ -17,11 +18,11 @@ export function getStaticPaths() { return reviewTrainers ? [{ params: { trainer:
   <p>Prerequisites: {caseIII.prerequisites.join(' · ')}.</p>
   <p>Direct the pilot using heading, airspeed, altitude and vertical-rate commands. Read the sortie popup, then select Start Exercise. Instructor mode provides cues and pauses at decisions; switch it off to rehearse without hints. Voice is optional and uses your browser’s available speech voices.</p>
   <h2>Scope and limits</h2>
-  <p>Aircraft dynamics, AoA, fuel consumption, glidepath and arrestment are synthetic. Outside the hold, the airspeed number is also used as NM/hour for map movement; IAS-to-TAS conversion and wind are not modeled. Hold geometry uses a fixed synthetic 250 NM/hour. Timing and approach gates are exercise setpoints, not verified procedures or aircraft limitations. The night-themed scenario does not model date, lighting or visibility conditions. This is not an approved operating procedure or a proficiency assessment. The exact DCS version has not been verified. Radio dialogue and scoring criteria are inherited exercise content, not verified Navy phraseology or measures of proficiency.</p>
+  <p>Aircraft dynamics, AoA, fuel consumption, glidepath and arrestment are synthetic. Outside the hold, the airspeed number is also used as NM/hour for map movement; IAS-to-TAS conversion and wind are not modeled. Hold geometry uses a fixed synthetic 250 NM/hour. Every airspeed, altitude, vertical rate, DME fix, timing and configuration gate shown in the trainer (for example 250 KIAS at the 6,000 ft, 21 DME marshal, the 4,000 then 2,000 ft/min descent, and the 10 and 8 DME slow-down and configuration points) is an exercise setpoint. None has a verified source locator, and none is a verified procedure or aircraft limitation. The night-themed scenario does not model date, lighting or visibility conditions. This is not an approved operating procedure or a proficiency assessment. The exact DCS version has not been verified. Radio dialogue and scoring criteria are inherited exercise content, not verified Navy phraseology or measures of proficiency.</p>
   <p>The 2009 CV NATOPS citation in the source register is a historical research lead only: its cited passages, current applicability and claim mapping have not been verified. Fixed turns and legs are synthetic exercise parameters, not a claim about a prescribed hold.</p>
-  <p><a href={sitePath(caseIII.assets)}>Open trainer in a full window</a> · <a href="#sources">Sources and unresolved review</a></p>
+  <p><a href={sitePath(experienceFrame(caseIII))}>Open trainer in a full window</a> · <a href="#sources">Sources and unresolved review</a></p>
   <noscript><p>The trainer requires JavaScript. Scope notes and source references remain readable without it.</p></noscript>
-  <iframe id="case-iii-frame" title="Case III F-14B recovery exercise — unvalidated review" src={sitePath(caseIII.assets)} height="1000" allow="autoplay" data-experience-id={caseIII.id}></iframe>
+  <iframe id="case-iii-frame" title="Case III F-14B recovery exercise — drafted, not technically validated" src={sitePath(experienceFrame(caseIII))} height="1000" allow="autoplay" data-experience-id={caseIII.id}></iframe>
   <h2 id="sources">Sources and unresolved review</h2>
   <p>The references below are not a claim-to-source map. No applicable Navy or DCS passage has been verified for this trainer’s Case III procedure, numeric gates, radio dialogue or scoring. A revision-3 review inspected limited Heatblur F-14 and CASE I passages for DCS-specific context only; those do not validate this exercise. References do not certify procedures or grant rights to reproduce manuals. No manual files or third-party media are included.</p>
   <ul>

@@ -1,18 +1,22 @@
-// One canonical registration shared by Manual and Training Library.
-export const caseIII = {
-  id: 'experience.case-iii-tomcat',
-  manualId: 'manual.case-iii-tomcat',
-  revision: 6,
-  title: 'Case III — Tomcat recovery exercise',
-  route: 'manual/naval-operations/case-iii/',
-  assets: 'review/case-iii/',
-  subject: 'naval-operations',
-  maturity: 'Drafted — not technically validated',
-  objective: 'Practise modeled navigation, timing, radio choices and configuration in a synthetic recovery scenario.',
-  applicability: 'F-14B / DCS-oriented educational exercise; simulator version not verified.',
-  prerequisites: ['Magnetic headings and radials', 'TACAN bearing and DME', 'Basic carrier terminology'],
-  publication: 'excluded',
-} as const;
+import registry from './experiences.json';
 
-// Explicit local review builds only. Not an aviation validation or publication bypass.
+// The registry is the single source for Manual, Training Library, routes and
+// output checks. `publication` decides whether an experience ships in normal
+// builds; it is independent of `maturity`, which is always shown to readers.
+export type Experience = (typeof registry)[number] & { publication: 'published' | 'excluded' };
+
+// Explicit local review builds also include excluded experiences.
+// Not an aviation validation or publication bypass.
 export const reviewTrainers = import.meta.env.DEV || process.env.OVERSWEEP_REVIEW_TRAINERS === '1';
+
+export const experiences = registry as Experience[];
+export const includedExperiences = experiences.filter(e => e.publication === 'published' || reviewTrainers);
+
+export const experienceRoute = (e: Experience) => `manual/${e.subject}/${e.slug}/`;
+export const experienceFrame = (e: Experience) => `experiences/${e.slug}/`;
+
+export function getExperience(slug: string): Experience {
+  const experience = experiences.find(e => e.slug === slug);
+  if (!experience) throw new Error(`Unregistered experience: ${slug}`);
+  return experience;
+}

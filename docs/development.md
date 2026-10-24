@@ -71,29 +71,30 @@ No human aviation reviewer is required. The delivery agent owns source research,
 SME/UX/code review, corrections and re-review through one release-ready PR.
 Content without that evidence remains unvalidated and excluded from publication.
 
-### Case III release acceptance
+### Experience publication
 
-Case III implementation, registration, embedded-route and index-card changes run
-`Release readiness / Production inclusion` on every PR, including draft PRs.
-It builds ordinary production output without the review flag. Missing routes,
-assets or Manual/Training Library links, and draft/unvalidated notices, fail the
-check with explicit blockers. `npm run check` can still pass because it tests
-safe draft exclusion; it is not a release-readiness result.
+Every trainer or interactive experience is registered once in
+`src/data/experiences.json`. The Manual, Training Library, embedded route, trainer
+frame, asset routes and output checks all read that registry; no check names a
+specific experience. Each entry declares `publication` separately from `maturity`:
 
-The current Case III revision remains Drafted. A PR changing it must remain
-blocked until the evidence and independent SME/UX reviews are resolved and the
-validated experience is included in normal output. Do not clear the check by
-deploying a review build, deleting notices alone or removing the gate. A
-non-draft PR exposes this unfinished release for review; it does not authorize
-publication. Unrelated PRs report this inclusion check as not applicable.
+- `published` ships in normal production builds. `npm run check` fails unless the
+  Manual route, embedded frame, every listed asset and the subject and Training
+  Library listings are emitted, carry the registered id and revision, and show the
+  registered maturity to readers.
+- `excluded` ships only in explicit local review builds
+  (`OVERSWEEP_REVIEW_TRAINERS=1 npm run check:review`). The production check fails
+  if any output file references it.
 
-Require the `Production inclusion` check from the `Release readiness` workflow
-and the existing `verify` check from `Aviation SME review gate` in the `main`
-ruleset, alongside application/foundation checks. Confirm these exact job names
-in GitHub's ruleset picker after their first runs. This code change does not
-configure branch protection, and a red check prevents merge only when required
-and not bypassed. Independent browser UX automation is still missing; this
-production-output check does not supply UX or aviation approval.
+Setting an entry to `published` is an owner publication decision for the exact
+revision; record it in the PR. Publication does not change maturity: a Drafted
+experience stays visibly marked Drafted, and Technically Validated still requires
+the content-standard evidence and independent SME review. The `Aviation SME
+review gate` remains a separate check on trainer and content changes.
+
+Require `verify` from `Application checks` and `Aviation SME review gate` in the
+`main` ruleset, alongside foundation checks. This code change does not configure
+branch protection. Independent browser UX automation is still missing.
 
 The optional [aviation SME reviewer](copilot-agents.md#aviation-sme-review)
 reports evidence-backed findings and unresolved sources without editing or
