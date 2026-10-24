@@ -57,6 +57,9 @@ network:
     - digitalcombatsimulator.com
     - heatblur.se
     - navsup.navy.mil
+    - cnatra.navy.mil
+    - www.cnatra.navy.mil
+    - murphysys.com
 safe-outputs:
   threat-detection:
     engine:
@@ -117,8 +120,18 @@ source records, diagrams, quiz keys/explanations, trainer assumptions, models,
 and assessment rules. Use the configured `web-fetch` tool to retrieve the
 public primary-source URLs cited in the PR, then record exact publisher, title,
 edition/date, section/page, variant/configuration, operational context, and
-simulator/module version. The retrieval network allowlist is limited to FAA, DCS,
-Heatblur, and Naval Logistics Library domains. A title, broad manual citation,
+simulator/module version. The retrieval network allowlist includes FAA, DCS, Heatblur, Naval Logistics
+Library, official CNATRA hosts and the owner-authorised murphysys.com mirror.
+Network permission is not a document rights determination. Public-domain or
+otherwise lawfully accessible documents may be read, paraphrased and cited.
+Do not call a document unlawful merely because it is hosted by a third party.
+Identify its original publisher, edition, provenance and any explicit access or
+reuse restrictions. A mirror is a retrieval location, not an authoritative
+publisher; assess the document itself and check edition consistency using the
+cover and revision/change pages. Public availability alone does not authorise
+redistribution: do not copy manuals into the repository. If legal availability
+is unresolved, state the concrete evidence gap separately from technical
+source verification or network access failures. A title, broad manual citation,
 missing URL, unavailable page, or inaccessible restricted source is not
 verification. This workflow fetches cited URLs; it does not provide a general
 web-search or source-discovery service. Do not bypass access controls; mark
@@ -171,3 +184,4 @@ separate safe-output handler can write the one PR comment. No PR code is execute
 the PR branch is not checked out, no credentials are passed to PR-controlled code,
 and no files are edited. The review cannot approve, merge, deploy, publish, or
 change content maturity.
+
