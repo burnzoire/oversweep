@@ -92,7 +92,7 @@ Mapping: Historical CV-1 example; no aircraft limit is inferred.
 
 > At 5,000 feet (platform), the rate of descent will be reduced to 2,000 feet per minute.
 
-Mapping: Platform is an altitude checkpoint.
+Mapping: Platform is where the descent rate changes, at 5,000 ft. Glossary p. A-5 also defines platform as a reporting point normally about 20 NM from the ship at 5,000 ft; that passage is not quoted here, so check it in the retrieved PDF.
 
 ## Level-off — p. 2-23
 
