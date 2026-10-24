@@ -44,6 +44,15 @@ export function parseBlockingFindings(body) {
     .map(([, id, severity, file, detail]) => ({ id, severity, file, detail: detail.trim() }));
 }
 
+// The review copies the preprocessor's coverage list into "## Source coverage" so the
+// gate can show which files and cited pages were cut, failed or never read.
+export function parseSourceCoverage(body) {
+  const section = body.match(/^##\s+Source coverage\s*$([\s\S]*?)(?=^##\s|^<details|(?![\s\S]))/im)?.[1]?.trim();
+  if (!section) return { complete: false, text: "The review did not report source coverage; read the full review before relying on it." };
+  const complete = /^all\b.*\bcomplete\.?$/i.test(section) && !/^\s*[-*]\s/m.test(section);
+  return { complete, text: section };
+}
+
 // An override counts only if the repository owner applied the label most recently.
 export function evaluateOverride({ labels, events, owner }) {
   if (!labels?.some((label) => label.name === overrideLabel)) return null;
@@ -91,21 +100,31 @@ export function evaluateSmeResult({ run, jobs, pullRequest, comments }) {
   }
   // A listed blocker fails the gate even if the header lines disagree with it.
   const blockers = parseBlockingFindings(report.body);
+  const coverage = parseSourceCoverage(report.body);
+  const coverageText = `**Source coverage**\n\n${coverage.text}`;
   if (readiness !== "READY" || blockingFindings > 0 || blockers.length > 0) {
     const count = Math.max(blockingFindings, blockers.length);
     const list = blockers.map(({ id, severity, file, detail }) => `- **${id}** (${severity}${file ? `, \`${file}\`` : ""}): ${detail}`).join("\n");
     return {
       ready: false,
       blockers,
+      coverage,
       reportUrl,
       message: [
         `The SME review found ${count} blocking finding${count === 1 ? "" : "s"}.`,
         list || "The review did not list its blockers in the expected format; read the full review.",
+        coverageText,
         reportUrl ? `Full review: ${reportUrl}` : "",
       ].filter(Boolean).join("\n\n"),
     };
   }
-  return { ready: true, reportUrl, message: "The current-head SME review has no blocking findings." };
+  return {
+    ready: true,
+    coverage,
+    reportUrl,
+    message: ["The current-head SME review has no blocking findings.", coverageText, reportUrl ? `Full review: ${reportUrl}` : ""]
+      .filter(Boolean).join("\n\n"),
+  };
 }
 
 async function request(apiUrl, token, path) {
@@ -133,7 +152,7 @@ async function pagedRequest(apiUrl, token, path) {
 const escapeData = (text) => text.replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
 const escapeProperty = (text) => escapeData(text).replace(/:/g, "%3A").replace(/,/g, "%2C");
 
-async function writeSummary(message, ready, blockers = []) {
+async function writeSummary(message, ready, blockers = [], coverage = null) {
   const text = `## Aviation SME review gate: ${ready ? "READY" : "BLOCKED"}\n\n${message}\n`;
   if (process.env.GITHUB_STEP_SUMMARY) await appendFile(process.env.GITHUB_STEP_SUMMARY, text);
   console.log(text);
@@ -141,6 +160,10 @@ async function writeSummary(message, ready, blockers = []) {
   for (const { id, severity, file, detail } of blockers) {
     const location = file ? `file=${escapeProperty(file)},` : "";
     console.log(`::error ${location}title=${escapeProperty(`SME blocker ${id} (${severity})`)}::${escapeData(detail)}`);
+  }
+  // Incomplete reading never blocks by itself, but it must be visible on the checks list.
+  if (coverage && !coverage.complete) {
+    console.log(`::warning title=SME review source coverage incomplete::${escapeData(coverage.text)}`);
   }
   if (!ready && !blockers.length) console.log(`::error title=Aviation SME review gate::${escapeData(message)}`);
 }
@@ -210,7 +233,7 @@ async function main() {
     comments,
   });
   const message = override?.ignored ? `${result.message}\n\n${override.message}` : result.message;
-  await writeSummary(message, result.ready, result.blockers);
+  await writeSummary(message, result.ready, result.blockers, result.coverage);
   if (!result.ready) process.exitCode = 1;
 }
 
