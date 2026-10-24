@@ -11,6 +11,18 @@ Maneuvering (2v1), T-45*; Revision 3 dated 7 January 2016, Change 1 dated
 Rights: p. iii states the instruction "is cleared for public release". The module
 paraphrases and cites pages; it reproduces no figures.
 
+**Cited pages for the review reader.** The PDF could not be downloaded from the
+authoring session (the network proxy refuses cnatra.navy.mil), so its hash and
+the mapping from printed folios to physical pages are unknown. The block below
+asks for physical pages 1–80, which should span the front matter through the
+end of Chapter 5 (printed p. 5-28); the packet labels each extracted page, so
+check that pp. xiii, 2-2, 2-5, 3-1–3-3, 4-1–4-8 and 5-1–5-24 fall inside it.
+
+```review-sources
+source: https://www.cnatra.navy.mil/local/docs/pat-pubs/P-1289.pdf
+pages: 1-80
+```
+
 **Retrieval limitation.** Passages were read on 24 October 2026 through a web
 text-extraction tool that returned the front matter through the start of
 Chapter 6. A direct download, Poppler text and a hash were not available in that
