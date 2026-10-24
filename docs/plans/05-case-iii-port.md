@@ -422,3 +422,12 @@ radial. These are FAA civil instrument-flying sources applied as general
 concepts; they do not establish Case III marshal procedure. The CV NATOPS leads
 remain unverified, every trainer value remains an exercise setpoint, and the
 module stays **Drafted — not technically validated**.
+
+After the first SME review, the module page also maps the trainer's setpoints
+to the Eagle Dynamics DCS: Supercarrier Operations Guide (updated 20 November
+2024, pp. 16 and 75–81, page numbers read from the PDF's extracted text) as
+simulator-specific evidence. Most setpoints match. Two differ and are shown on
+the page: the guide expects 600 ft at 3 NM rather than a glidepath intercept from
+1,200 ft near 3 NM, and it describes the angled deck as about 14° rather than the
+trainer's 9°. The trainer's values are unchanged. The holding-entry model gains
+a test built from the side of the hold the aircraft arrives from.

@@ -87,3 +87,31 @@ test('invalid inputs are rejected', () => {
   assert.throws(() => eatPlan({ secondsToEat: Infinity }), RangeError);
   assert.throws(() => eatPlan({ secondsToEat: 600, turnSeconds: 0 }), RangeError);
 });
+
+// Independent construction from the hold's geometry, not from the sector table:
+// the outbound leg lies on the holding side; an aircraft on heading h arrives
+// from bearing h + 180° from the fix.
+test('hold entry sectors agree with the side of the hold the aircraft arrives from', () => {
+  for (const turns of ['right', 'left']) {
+    for (let inboundCourse = 0; inboundCourse < 360; inboundCourse += 40) {
+      for (let heading = 0; heading < 360; heading += 7) {
+        const from = (heading + 180 - inboundCourse) * Math.PI / 180;
+        const right = Math.sin(from), ahead = Math.cos(from); // relative to the inbound direction
+        const holdingSide = turns === 'right' ? right > 0 : right < 0;
+        const { entry, nearBoundary } = holdEntry({ inboundCourse, heading, turns });
+        if (nearBoundary) continue;
+        const label = `${turns} hold, inbound ${inboundCourse}, heading ${heading}`;
+        // Behind the 70° line (more than 20° aft of abeam) every arrival is direct.
+        if (ahead < Math.cos(110 * Math.PI / 180)) assert.equal(entry, 'direct', `${label}: arriving from behind the fix`);
+        if (entry === 'parallel') assert(holdingSide, `${label}: parallel arrives from the holding side`);
+        if (entry === 'teardrop') assert(!holdingSide && ahead > 0, `${label}: teardrop arrives from the non-holding side beyond the fix`);
+      }
+    }
+  }
+  // Left hold, inbound 000°, heading 090°: from the west, the holding side, so a
+  // left turn onto 180° would be 270°; the entry is parallel.
+  assert.equal(holdEntry({ inboundCourse: 0, heading: 90, turns: 'left' }).entry, 'parallel');
+  // Right hold, inbound 000°, heading 090°: from the west, abeam the fix on the
+  // non-holding side; a 90° right turn reaches the outbound heading: direct.
+  assert.equal(holdEntry({ inboundCourse: 0, heading: 90, turns: 'right' }).entry, 'direct');
+});
