@@ -1,4 +1,4 @@
-# BFM module revision 1 — CNATRA P-1289 evidence
+# BFM module revisions 1–2 — CNATRA P-1289 evidence
 
 Short, page-specific excerpts supporting the claims in the BFM module
 (`src/pages/manual/air-combat/[module].astro`). They are review evidence, not a
@@ -16,7 +16,7 @@ authoring session (the network proxy refuses cnatra.navy.mil), so its hash and
 the mapping from printed folios to physical pages are unknown. The block below
 asks for physical pages 1–80, which should span the front matter through the
 end of Chapter 5 (printed p. 5-28); the packet labels each extracted page, so
-check that pp. xiii, 2-2, 2-5, 3-1–3-3, 4-1–4-8 and 5-1–5-24 fall inside it.
+check that pp. xiii, 2-2, 2-5, 3-1–3-3, 4-1–4-8 and 5-1–5-25 fall inside it.
 
 ```review-sources
 source: https://www.cnatra.navy.mil/local/docs/pat-pubs/P-1289.pdf
@@ -59,7 +59,18 @@ or high-aspect BFM.
 | 5-8 | "AOT is the angular measure that an aircraft is off your tail." | Geometry |
 | 5-8–5-9 | LAC "Used for tracking non-maneuvering targets at 1000 ft range" ("We don't use it"); RTGS "Used for tracking a maneuvering target by aiming and keeping the reticle pipper ahead of the target." | Guns |
 | 5-9–5-12 | Snap shot: bandit "filling ¾ to all of your pipper" (about 1,000-1,500 ft); trigger "when the bandit crosses the canopy bow"; "skip it" if the 500 ft bubble would be violated | Guns |
+| 4-6 | "The T-45 does not bleed energy in an extreme nose-low maneuver." | Split-S (rev. 2) |
+| 4-7 | "A T-45 requires approximately 6,000-6,500 ft of altitude to execute a pure nose-low maneuver (split-s)" | Split-S; Figure 8 check (rev. 2) |
 | 5-13–5-15 | Flat scissors trades kinetic for potential energy; "your airspeed minus 100 is the max usable AOB" (about 30° at 130 KIAS) | Energy |
+| 5-13 | "The horizontal, or flat, scissors (flats) is a slow-speed, high-AOA radius fight"; "A flat scissors typically results from an in-close overshoot."; "a series of S turns"; "Lift vector placement, typically placed aft of the bandit's CZ" | Flat scissors (rev. 2) |
+| 5-14 | "initially pull 40-50 degrees nose-high, and at 150-160 KIAS, begin your recovery maneuver" | Flat scissors (rev. 2) |
+| 5-15 | "Simply flying as slow as possible wings level and having no energy for maneuverability is not the answer"; "To work in phase, turn aft of the bandit's 3/9 line prior to flight path crossing." | Flat scissors (rev. 2) |
+| 5-18 | "The rolling scissors is a fight with both aircraft inside each other's bubble as long as the fight remains neutral."; "Offensively, if you find yourself in a roller, you have made a mistake" | Rolling scissors (rev. 2) |
+| 5-19 | "perform a nibble of buffet wings-level pull to force a vertical overshoot" | Rolling scissors (rev. 2) |
+| 5-20 | "strive to get your nose up when you are at the bottom"; airspeed "enough to force a vertical overshoot but not so much as to flush downrange"; "one aircraft will gain enough advantage to pull for a shot, or the roller will be redefined" | Rolling scissors (rev. 2) |
+| 5-21 | "Roll to place your lift vector above the bandit (about 60º AOB), executing a lift-limit pull"; "you normally need 4,000 ft of turning room above the deck"; "Overbank in your current direction, trade altitude for airspeed, and transition to 2C flow." | Rolling scissors (rev. 2) |
+| 5-23 | "Use a lag maneuver to prevent an in-close overshoot." / "You can ease your pull or roll 45° up and out of plane momentarily" | High yo-yo (rev. 2) |
+| 5-25 | "Do not perform a low yo-yo type maneuver to make up angles as this will only result in a loss of altitude advantage." | Low yo-yo (rev. 2) |
 | 5-22 | Average T-45 turn radius 3,000 ft (bubble about 6,000 ft across) | Geometry |
 | 5-24 | Do not drop below 300-330 KIAS except for an energy excursion for a shot | Energy |
 
@@ -77,9 +88,39 @@ or high-aspect BFM.
   of bandit flight ahead, on or behind the bandit. Shows only the qualitative
   range behaviour described on p. 5-4.
 
+- **Maneuvers (Figure 8, revision 2).** `src/lessons/bfm/maneuvers.mjs`: point
+  mass at the end of its lift vector, with gravity. Thrust balances drag at
+  1 G; pulling n G bleeds B(n² − 1)(410/KIAS)² kt/s, with B set from the p. 4-4
+  corner bleed (8 kt/s at 7.33 G, 410 KIAS). Available G is 7.33(KIAS/410)²,
+  capped at 7.33 (lift limit below corner, load limit above). The split-S is
+  flown at 15,000 ft (ISA density ratio 0.6292): it loses about 6,240–6,460 ft
+  for entries of 150–300 KIAS, inside the p. 4-7 figure of 6,000–6,500 ft; the
+  same model at sea level gives about 4,050 ft. Yo-yos fly at sea level against
+  a level 350 kt, 3,000 ft bandit turn. Scissors are fixed parametric shapes.
+  Ribbons and views: `src/lessons/bfm/ribbon.mjs`.
+
+## Second source: P-1218 (revision 2)
+
+US Navy flight training publication P-1218, *Tactical Formation*, (11-98)
+Original, read as transcribed by Integrated Publishing on
+navyflightmanuals.tpub.com, a host the source preprocessor does not fetch yet,
+so it has no review-sources block. The transcription shows no issuing command or
+distribution statement; the module paraphrases and quotes short phrases only.
+
+| Page | Passage | Module use |
+| --- | --- | --- |
+| 27 | Low yo-yo: "Pull the nose down toward the inside of the bandit's turn and position it well in front of the bandit" (lead pursuit); "Upon approaching the desired weapons range, work the nose back up toward the bandit, avoiding heavy buffet."; "Should you generate excessive closure, use a high yo-yo"; use when you overshoot the control zone or cannot manage the turn rate to bring the nose to bear | Low yo-yo |
+| 28 | "The high yo-yo is a lag pursuit maneuver designed to reduce angle off and closure rate."; quarter roll away from the bandit's maneuvering plane and pull the nose up, trading airspeed for altitude, then roll back and pull down to pursuit; "A low-angle overshoot at range is far better than a high angle overshoot in-close." | High yo-yo |
+
+URLs: https://navyflightmanuals.tpub.com/P-1218/Low-Yo-Yo-P-12180038-38.htm and
+https://navyflightmanuals.tpub.com/P-1218/High-Yo-Yo-P-12180039-39.htm
+
 ## Unverified in the reviewed pages
 
 - How 1C and 2C flow arise from turn directions at the pass (Figure 6
   callouts). Marked "Unverified here" on the page.
 - The control-zone width drawn in Figure 1 (±30°) is illustrative; the source
   gives only the 2,000–4,000 ft range. The caption says so.
+- Figure 8's yo-yo and scissors geometry (start positions, climb and dive
+  heights, loop sizes) is chosen for illustration; the sources describe the
+  maneuvers in words, without numbers for these.
