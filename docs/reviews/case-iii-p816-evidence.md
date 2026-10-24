@@ -342,3 +342,21 @@ No general bolter definition or mandatory-waveoff sentence was independently
 located in these inspected pages. Keep those attributed to P-816 unless another
 applicable general source is inspected. No numerical approach minima, current
 fleet applicability or aircraft configuration is established here.
+
+## P-816 supplementary passage: Holding speed — p. 2-20
+
+> Unless otherwise briefed, the pattern will be flown at max conserve fuel flow or NATOPS holding airspeed.
+
+Mapping: Supports fuel-conserving or aircraft-specified holding speed, not a universal value.
+
+## P-816 supplementary passage: Guidance agreement — p. 2-23
+
+> If this concurs with the readout on the approach radar scope, the controller will direct, “fly the needles.”
+
+Mapping: Use of ACLS needles follows agreement and confirmed guidance.
+
+## P-816 supplementary passage: Guidance disagreement — p. 2-23
+
+> If there is a disagreement, the controller will break lock and attempt a new lock. In this case, he will say “fly the bullseye” (ICLS) until he acquires a new ACLS lock.
+
+Mapping: Explains the distinction between needle/bullseye exchanges; not generic commands.
