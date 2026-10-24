@@ -225,3 +225,19 @@ Checked 22 October 2026. Recheck supported properties/tools when changing profil
 - [Create/select repository agents](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/create-custom-agents)
 - [Copilot code review](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-code-review)
 
+
+## PDF-capable source retrieval
+
+The SME workflow uses a trusted base-revision preprocessing script to read
+changed module/evidence files through the GitHub API at the exact PR head, fetch
+allowlisted primary-source URLs and convert PDFs with Poppler. Retrieved text,
+page breaks, hashes and errors are appended to the agent input as untrusted
+evidence, alongside full changed module text. No PR script is executed, and the
+agent still has no shell/edit access. Source failures remain visible blockers;
+this does not weaken the gate or establish publication approval.
+
+The source reader validates HTTPS hosts and redirects, bounds source count, byte
+size and output, separates GitHub authentication from public fetches, and checks
+the PR head again. Foundation checks run its stdlib unit tests. The documented
+Navy controller-training mirror `navyaviation.tpub.com` is also allowed. Live
+retrieval requires the trusted workflow change on main before reviewing #47.
