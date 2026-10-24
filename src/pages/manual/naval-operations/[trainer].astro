@@ -6,7 +6,7 @@ const caseIII = getExperience('case-iii');
 export function getStaticPaths() { return includedExperiences.some(e => e.slug === 'case-iii') ? [{ params: { trainer: 'case-iii' } }] : []; }
 const trainerHref = sitePath(experienceFrame(caseIII));
 const contents = [
-  ['overview', 'What Case III is'],
+  ['overview', 'What this module covers'],
   ['at-a-glance', 'The recovery at a glance'],
   ['clearance', 'The Marshal clearance'],
   ['tacan', 'Point-to-point TACAN navigation'],
@@ -35,8 +35,8 @@ const contents = [
     <ol>{contents.map(([id, label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol>
   </nav>
 
-  <h2 id="overview">What Case III is</h2>
-  <p>In outline, Case III is the carrier recovery used when darkness or weather rules out a visual approach to the ship. Instead of joining overhead, each aircraft is cleared to a holding fix, leaves it at an assigned time and flies a controlled descent onto an instrument final approach, so spacing comes from timing rather than from seeing other aircraft. This outline is unverified: the 2009 CV NATOPS manual named in the <a href="#sources">sources</a> is a research lead whose passages have not been checked for this revision. The details below describe how the trainer models the recovery.</p>
+  <h2 id="overview">What this module covers</h2>
+  <p>This module describes the Case III recovery as the trainer models it: Marshal clears you to a holding fix, you leave the fix at an assigned time and fly a controlled descent onto an instrument final approach. It does not describe a verified Navy procedure. The 2009 CV NATOPS manual named in the <a href="#sources">sources</a> is a research lead whose passages have not been checked, so no statement here should be read as what CV NATOPS says.</p>
   <p>Every number on this page is the trainer’s exercise setpoint unless a source is named beside it. Speeds are KIAS (knots indicated airspeed), distances are nautical miles (NM), DME (distance measuring equipment) values are TACAN (tactical air navigation) ranges from the carrier, and headings, radials and courses are magnetic. The trainer has no wind, so in this module a heading equals the track over the ground.</p>
 
   <h2 id="at-a-glance">The recovery at a glance</h2>
@@ -115,7 +115,7 @@ const contents = [
     <li><strong>Teardrop:</strong> at the fix turn outbound to a heading 30° toward the holding side of the outbound course, fly it for one minute, then turn in the direction of the hold to intercept the inbound course.</li>
     <li><strong>Parallel:</strong> at the fix turn to parallel the outbound course on the non-holding side for one minute, then turn back toward the holding side through more than 180° to return to the fix or intercept the inbound course.</li>
   </ul>
-  <p>The entry is chosen from your heading on arrival at the fix, and the AIM treats ±5° of heading as acceptable when choosing (5-3-8 j.8(d)). The AIM shows the sectors in a figure that this revision has not checked. The module uses the conventional reading of it: measured from the inbound course in the direction of the hold’s turns, an arrival heading 110° to 180° round is a teardrop, 180° to 290° is a parallel, and everything else (a 180° sector) is direct. A left-hand hold mirrors a right-hand one.</p>
+  <p>The entry is chosen from your heading on arrival at the fix, and the AIM treats ±5° of heading as acceptable when choosing (5-3-8 j.8(d)). The AIM shows the sectors only in a figure (<a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/images/aim0503_At_Anchor2.png">FIG 5-3-8, Holding Pattern Entry Procedures</a>), which the author could not open for this revision. The module uses the conventional reading of it, unverified against the figure: measured from the inbound course in the direction of the hold’s turns, an arrival heading 110° to 180° round is a teardrop, 180° to 290° is a parallel, and everything else (a 180° sector) is direct. A left-hand hold mirrors a right-hand one.</p>
   <p class="note"><strong>Applicability:</strong> these are FAA civil instrument holding entries applied to the trainer’s marshal hold as a general instrument-flying skill. Whether CV NATOPS prescribes these entries for a Case III marshal pattern has not been verified. The trainer itself joins the hold automatically when you select <em>Enter marshal hold</em>; it does not fly these manoeuvres.</p>
 
   <section class="lesson" data-lesson="entry" aria-labelledby="entry-title">
@@ -149,7 +149,7 @@ const contents = [
   </section>
 
   <h2 id="eat">Holding and making EAT</h2>
-  <p>In the trainer, EAT is the time you leave the fix inbound and begin the descent. In outline (unverified, see the CV NATOPS lead below), each aircraft’s EAT differs and hitting it is what keeps the approach spaced. For FAA civil holding, the AIM likewise expects pilots told when to leave a fix to adjust the pattern to leave at that time (5-3-8 k). In the trainer you must call Commencing at the fix within 10 seconds of EAT, and EATs are whole minutes on a clock that starts at 16:00Z.</p>
+  <p>In the trainer, EAT is the time you leave the fix inbound and begin the descent. For FAA civil holding, the AIM likewise expects pilots told when to leave a fix to adjust the pattern to leave at that time (5-3-8 k). In the trainer you must call Commencing at the fix within 10 seconds of EAT, and EATs are whole minutes on a clock that starts at 16:00Z.</p>
   <p>Hold time is adjustable, so plan it as soon as you know when you will reach the fix:</p>
   <ol>
     <li><strong>Work out the time available</strong> from reaching the fix to EAT.</li>
@@ -268,7 +268,7 @@ const contents = [
   <p>The references below are not a claim-to-source map. No applicable Navy or DCS passage has been verified for this module’s or the trainer’s Case III procedure, numeric gates, radio dialogue or scoring. A revision-3 review inspected limited Heatblur F-14 and CASE I passages for DCS-specific context only; those do not validate this exercise. References do not certify procedures or grant rights to reproduce manuals. No manual files or third-party media are included.</p>
   <ul>
     <li><a href="https://info.publicintelligence.net/CV-NATOPS-JUL09.pdf">NAVAIR 00-80T-105, CV NATOPS, 31 July 2009</a>, §§6.4.1.1 and 6.4.4, pp. 6-6 and 6-8: historical leads for the Case III overview, hold and EAT claims only; the passages and current applicability were not verified.</li>
-    <li><a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap5_section_3.html">FAA Aeronautical Information Manual</a>, ¶5-3-8 j.3 (holding entry procedures), j.8(d) (±5° heading tolerance when choosing an entry), k (adjusting the pattern to leave the fix at a specified time) and the entry-sector figure (cited in the text as FIG 5-3-4, captioned FIG 5-3-8), accessed 24 October 2026: supports the entry definitions and timing adjustment for FAA civil instrument holding. The 70°/110°/180° sector sizes are the conventional reading of the figure, which this revision did not inspect. It does not establish Case III marshal procedure.</li>
+    <li><a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap5_section_3.html">FAA Aeronautical Information Manual</a>, ¶5-3-8 j.3 (holding entry procedures), j.8(d) (±5° heading tolerance when choosing an entry), k (adjusting the pattern to leave the fix at a specified time) and the entry-sector figure (cited in the text as FIG 5-3-4, captioned FIG 5-3-8 “Holding Pattern Entry Procedures”, <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/images/aim0503_At_Anchor2.png">image</a>), accessed 24 October 2026: supports the entry definitions and timing adjustment for FAA civil instrument holding. The 70°/110°/180° sector sizes are the conventional reading of the figure, which this revision did not inspect. It does not establish Case III marshal procedure.</li>
     <li><a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap1_section_1.html">FAA Aeronautical Information Manual</a>, ¶1-1-7 (DME), accessed 24 October 2026: DME distance is slant range, not horizontal distance.</li>
     <li><a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/glossary-r.html">FAA Pilot/Controller Glossary</a>, “Radial”, accessed 24 October 2026: a magnetic bearing extending from a VOR, VORTAC or TACAN facility.</li>
     <li><a href="https://www.digitalcombatsimulator.com/upload/iblock/e1b/430ooc582lpb0npynbsewan6omd5ohvs/DCS_Supercarrier_Operations_Guide_EN.pdf">Eagle Dynamics Supercarrier Operations Guide</a>, pp. 75–81: possible DCS-specific dialogue/sequence lead; pages and module-version mapping were not verified, and it does not establish real-world procedure.</li>
