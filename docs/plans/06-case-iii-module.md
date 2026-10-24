@@ -31,7 +31,7 @@ material; do not infer rights in third-party material from repository MIT licenc
 | Clearance fields, reports and handoff | §204.3.d pp. 2-26–27 |
 | Fix/hold, EAT and sequencing | §204.2.a pp. 2-19–20, incorporated by §204.3.a |
 | Commence/profile, platform and final intercept | §204.3.b p. 2-23 |
-| Optical landing cue (ball) | §102 pp. 1-10–1-13 |
+| Optical landing cue (ball) | §102 p. 1-11 |
 | ACLS/ICLS comparison and ball transition | §204.3.b pp. 2-23–25 |
 | Waveoff requirement and recovery outcomes | p. 2-17; §204.3.c pp. 2-25–26; glossary A-1 |
 | BRC, final bearing | Glossary A-1 and A-3 |
@@ -84,3 +84,9 @@ attributing the Air Boss statement and bolter/waveoff handling example to their
 historical training context. It does not claim a T-45C checklist applies to all
 aircraft. These changes address live-review findings U1/U2 without removing the
 reference module or weakening the release gate.
+
+The source packet now includes the specific p. 2-19 fix, p. 2-25
+bolter/waveoff sequence, p. 2-26 pre-platform handoff and p. 2-27 reports/ball
+call passages requested by the live reviewer. General NAVEDTRA excerpts are
+consolidated in that same packet for complete review coverage. The optical
+cue citation is narrowed to p. 1-11 and the weather conflict to pp. 2-4/2-22.
