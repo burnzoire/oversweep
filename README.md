@@ -41,7 +41,8 @@ npm run check
 
 The Manual and Training Library list every experience registered in
 `src/data/experiences.json`. Case III is published under Naval Operations as a
-guide to the trainer's exercise with interactive TACAN, holding-entry and EAT exercises; it ends
+rounded aircraft-agnostic fixed-wing recovery module with an interactive TACAN
+geometry exercise, phase explanations and knowledge checks; it ends
 by launching the Tomcat trainer in its own window, which is never framed. Start
 Exercise in the trainer's briefing popup begins the simulation; instructor mode
 is optional. It is Drafted, not technically validated, and says so on every
@@ -67,3 +68,4 @@ local Markdown file links, whitespace and required templates, not aviation truth
 
 Existing MIT licence is retained. Third-party manuals, imagery and excerpts need
 their own permission and attribution; repository licensing does not grant those rights.
+

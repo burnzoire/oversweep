@@ -95,7 +95,7 @@ function setupNavigation(root) {
     if (!revealed) out.textContent = 'Estimate the heading, then check it or reveal the solution.';
     else if (answer.course === null) out.textContent = 'You are already at the fix.';
     else out.textContent = `Direct track ${fmt(answer.course)}° magnetic, ${answer.distance.toFixed(1)} NM. `
-      + `At the trainer’s fixed 250 NM/hour map rate (no wind) that takes ${clock(timeEnroute(answer.distance, 250))}.`;
+      + `At this illustration’s fixed 250 NM/hour map rate (no wind) that takes ${clock(timeEnroute(answer.distance, 250))}.`;
   }
 
   root.addEventListener('input', () => { revealed = false; feedback.textContent = ''; draw(); });
@@ -278,3 +278,4 @@ for (const root of document.querySelectorAll('[data-lesson]')) {
   blocks[root.dataset.lesson]?.(root);
   root.classList.add('ready');
 }
+

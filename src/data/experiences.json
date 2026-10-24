@@ -5,13 +5,29 @@
     "slug": "case-iii",
     "subject": "naval-operations",
     "revision": 8,
-    "title": "Case III — Tomcat recovery exercise",
-    "maturity": "Drafted — not technically validated",
+    "title": "Case III \u2014 Tomcat recovery exercise",
+    "maturity": "Drafted \u2014 not technically validated",
     "publication": "published",
     "launch": "window",
     "objective": "Practise modeled navigation, timing, radio choices and configuration in a synthetic recovery scenario.",
     "applicability": "F-14B / DCS-oriented educational exercise; simulator version not verified.",
-    "prerequisites": ["Magnetic headings and radials", "TACAN bearing and DME", "Basic carrier terminology"],
-    "assets": ["frame-guard.js", "app.js", "style.css", "model.cjs"]
+    "prerequisites": [
+      "Magnetic headings and radials",
+      "TACAN bearing and DME",
+      "Basic carrier terminology"
+    ],
+    "assets": [
+      "frame-guard.js",
+      "app.js",
+      "style.css",
+      "model.cjs"
+    ],
+    "module": {
+      "title": "Case III Recoveries",
+      "objective": "Understand the fixed-wing recovery sequence, marshal, navigation, timing, communications and recovery outcomes; then practise selected skills in a standalone Tomcat exercise.",
+      "applicability": "Aircraft-agnostic fixed-wing concepts with historical US Navy training examples; type-specific procedures remain separate.",
+      "revision": 1,
+      "maturity": "Drafted \u2014 not technically validated"
+    }
   }
 ]
