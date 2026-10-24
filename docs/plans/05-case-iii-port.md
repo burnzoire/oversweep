@@ -423,11 +423,13 @@ concepts; they do not establish Case III marshal procedure. The CV NATOPS leads
 remain unverified, every trainer value remains an exercise setpoint, and the
 module stays **Drafted — not technically validated**.
 
-After the first SME review, the module page also maps the trainer's setpoints
-to the Eagle Dynamics DCS: Supercarrier Operations Guide (updated 20 November
-2024, pp. 16 and 75–81, page numbers read from the PDF's extracted text) as
-simulator-specific evidence. Most setpoints match. Two differ and are shown on
-the page: the guide expects 600 ft at 3 NM rather than a glidepath intercept from
-1,200 ft near 3 NM, and it describes the angled deck as about 14° rather than the
-trainer's 9°. The trainer's values are unchanged. The holding-entry model gains
-a test built from the side of the hold the aircraft arrives from.
+After the first SME review, the module page also records where the author
+located the trainer's setpoints in the Eagle Dynamics DCS: Supercarrier
+Operations Guide (cover date 20 November 2024, pp. 16 and 75–81, page numbers
+read from the PDF's extracted text). This is an unverified research lead: the SME
+workflow could not retrieve the PDF, so no independent reviewer has confirmed the
+locators. The author's reading shows most setpoints matching and two differing
+(600 ft at 3 NM rather than a glidepath intercept from 1,200 ft near 3 NM, and an
+angled deck of about 14° rather than the trainer's 9°). The trainer's values are
+unchanged. The holding-entry model gains a test built from the side of the hold
+the aircraft arrives from.
