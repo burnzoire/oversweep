@@ -55,25 +55,91 @@ export function timeEnroute(distance, rate) {
 }
 
 /**
- * Holding entry from the arrival heading at the fix, by the module's own
- * practice rule (an unverified construction, not taken from the AIM figure):
- * direct 180°, teardrop 70°, parallel 110°, bounded by the 70° line on the
- * holding side and the inbound course line. `offset` is the arrival heading
- * measured from the inbound course in the direction of the hold's turns.
- * `nearBoundary` marks offsets within 5° of a sector boundary, where the
- * `alternative` entry across that boundary is also acceptable.
+ * Flies one holding entry, as the FAA AIM describes it, from the fix.
+ * The aircraft starts over the fix on `heading`. Turns are flown at a constant
+ * rate (180° in `turnSeconds`) and straight legs at `rate` NM/hour, with no
+ * wind. Fix frame: fix at the origin, x east, y north, NM.
+ *   direct:   turn in the hold's direction onto the outbound heading, fly the
+ *             outbound leg, turn in the hold's direction inbound and home.
+ *   teardrop: turn the short way to 30° from the outbound course toward the
+ *             holding side, fly `legSeconds`, turn in the hold's direction
+ *             onto the inbound course and home.
+ *   parallel: turn the short way onto the outbound heading, fly `legSeconds`,
+ *             turn in the hold's direction until pointing at the fix and home.
+ * The AIM does not say which way to make the first teardrop or parallel turn;
+ * the model turns the short way. Homing also turns the short way and stops at
+ * the closest approach to the fix. It does not choose an entry: the AIM's entry figure assigns the sectors.
+ * Returns the flown `points`, each named turn's direction and size, and
+ * `miss`, the closest distance (NM) to the fix on the way back.
  */
-export function holdEntry({ inboundCourse, heading, turns }) {
+export function entryPath({ inboundCourse, heading, turns, entry, rate = 250, turnSeconds = 120, legSeconds = 60 }) {
   finite('Inbound course', inboundCourse);
   finite('Heading', heading);
+  finite('Rate', rate);
+  finite('Turn time', turnSeconds);
+  finite('Leg time', legSeconds);
   if (turns !== 'left' && turns !== 'right') throw new RangeError('Turns must be "left" or "right".');
-  const offset = turns === 'right' ? norm(heading - inboundCourse) : norm(inboundCourse - heading);
-  const entry = offset < 110 || offset >= 290 ? 'direct' : offset < 180 ? 'teardrop' : 'parallel';
-  // Each boundary separates two entries; near one, the other entry is also acceptable.
-  const boundaries = [[110, 'direct', 'teardrop'], [180, 'teardrop', 'parallel'], [290, 'parallel', 'direct']];
-  const near = boundaries.find(([b]) => Math.abs(offset - b) <= 5);
-  const alternative = near ? near.slice(1).find((e) => e !== entry) : null;
-  return { entry, offset, nearBoundary: Boolean(near), alternative };
+  if (!['direct', 'teardrop', 'parallel'].includes(entry)) throw new RangeError('Entry must be direct, teardrop or parallel.');
+  if (rate <= 0 || turnSeconds <= 0 || legSeconds < 0) throw new RangeError('Rate and turn time must be positive and leg time not negative.');
+  const hold = turns === 'right' ? 1 : -1;
+  const inbound = norm(inboundCourse), outbound = norm(inbound + 180);
+  const step = rate / 3600, turnRate = 180 / turnSeconds; // NM and degrees per second
+  let x = 0, y = 0, hdg = norm(heading);
+  const points = [{ x, y }];
+  // Fly one second while changing heading by `delta`, using the mean heading.
+  const fly = (delta) => {
+    const mean = (hdg + delta / 2) * D;
+    x += step * Math.sin(mean); y += step * Math.cos(mean); hdg = norm(hdg + delta);
+    points.push({ x, y });
+  };
+  const away = (target, dir) => (dir > 0 ? norm(target - hdg) : norm(hdg - target));
+  const shortWay = (target) => (norm(target - hdg) <= 180 ? 1 : -1);
+  const named = (dir, degrees) => ({ direction: dir > 0 ? 'right' : 'left', degrees });
+  // Turn in direction `dir` (+1 right, −1 left) onto `target`.
+  const turnTo = (target, dir) => {
+    let left = away(target, dir), turned = 0;
+    while (left > 1e-9) { const d = Math.min(turnRate, left); fly(dir * d); left -= d; turned += d; }
+    return named(dir, turned);
+  };
+  const straight = (seconds) => { for (let t = 0; t < seconds; t++) fly(0); };
+  const bearingToFix = () => norm(Math.atan2(-x, -y) / D);
+  // Optionally turn in direction `dir` until the fix is ahead (at most one
+  // full turn), then home on it the short way.
+  const home = (dir) => {
+    let turned = 0, t = 0;
+    for (; dir && turned < 360; t++) {
+      const off = away(bearingToFix(), dir) % (360 - 1e-9);
+      if (off <= turnRate) { fly(dir * off); turned += off; break; }
+      fly(dir * turnRate); turned += turnRate;
+    }
+    // Stop at the closest approach to the fix.
+    for (let last = Infinity; t < 3600 && Math.hypot(x, y) < last; t++) {
+      last = Math.hypot(x, y);
+      const off = norm(bearingToFix() - hdg), want = off <= 180 ? off : off - 360;
+      fly(Math.max(-turnRate, Math.min(turnRate, want)));
+    }
+    return dir ? named(dir, turned) : null;
+  };
+  const result = { entry, turns, inboundCourse: inbound, heading: norm(heading), points };
+  if (entry === 'direct') {
+    result.firstTurn = turnTo(outbound, hold);
+    straight(legSeconds);
+    result.secondTurn = turnTo(inbound, hold);
+    home(0);
+  } else if (entry === 'teardrop') {
+    result.legHeading = norm(outbound - hold * 30);
+    result.firstTurn = turnTo(result.legHeading, shortWay(result.legHeading));
+    straight(legSeconds);
+    result.secondTurn = turnTo(inbound, hold);
+    home(0);
+  } else {
+    result.legHeading = outbound;
+    result.firstTurn = turnTo(outbound, shortWay(outbound));
+    straight(legSeconds);
+    result.secondTurn = home(hold);
+  }
+  result.miss = Math.hypot(x, y);
+  return result;
 }
 
 /**

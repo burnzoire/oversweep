@@ -404,7 +404,7 @@ Revision 8 turns the Manual page into a guide to the trainer's Case III
 exercise that covers each phase: the Marshal clearance, point-to-point TACAN navigation,
 holding entries, making EAT, the penetration and platform, configuration, final
 and the ball, a five-question self-check, scope and sources. Three interactive
-blocks (point-to-point heading, holding-entry sector and hold planner) read
+blocks (point-to-point heading, holding-entry paths and hold planner) read
 `src/lessons/case-iii/lesson-model.mjs`, a pure model with independently
 derived cases in `tests/lessons/case-iii-lesson.test.mjs`. Worked examples keep
 each block useful without JavaScript.
@@ -430,9 +430,12 @@ instrument skills; it makes no claim about real Case III procedure. The
 author's unverified mapping of trainer setpoints onto the DCS Supercarrier guide
 was removed: the SME workflow could not retrieve the PDF, so the guide is cited
 only as an unverified DCS lead, as on `main`. The AIM text gives no entry-sector
-widths, so the 110°/180°/290° boundaries the entry practice checks against are
-labelled the guide's own unverified construction, and readers are pointed to the
-AIM figure for the real boundaries. The hold planner and quiz Q4 are labelled a
+widths and the reviewer cannot read the figure, so the guide no longer teaches
+or marks which entry a heading calls for. Its entry practice instead flies the
+entry the reader picks, from the AIM's entry definitions, and reports the turns;
+readers are pointed to the AIM figure for sector choice. The hold planner and quiz Q4 are labelled a
 trainer-only arithmetic model whose stretched legs exceed the FAA civil 1-minute
-inbound leg. The trainer's values are unchanged. The holding-entry model has a
-test built from the side of the hold the aircraft arrives from.
+inbound leg. The trainer's values are unchanged. `entryPath` replaces the sector
+classifier, with hand-derived turn and position checks. Citations the reviewer
+could not read at the passage (AIM ¶1-1-7, the glossary "Radial" entry and
+¶5-3-8 k) were dropped; those statements are now the guide's own conventions.

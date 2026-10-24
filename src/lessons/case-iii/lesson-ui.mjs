@@ -1,6 +1,6 @@
 // Presentation for the Case III module's interactive blocks. All numbers come
 // from lesson-model.mjs; this file only reads inputs and draws results.
-import { eatPlan, holdEntry, norm, pointToPoint, reciprocal, timeEnroute } from './lesson-model.mjs';
+import { eatPlan, entryPath, norm, pointToPoint, reciprocal, timeEnroute } from './lesson-model.mjs';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const C = 160; // SVG centre for 320 × 320 plots
@@ -126,94 +126,66 @@ function setupNavigation(root) {
 }
 
 /* ---------- Marshal fix entry ---------- */
-const SECTORS = {
-  // Position sectors: bearing FROM the fix, relative to the inbound course.
-  right: { direct: [110, 290], teardrop: [290, 360], parallel: [0, 110] },
-  left: { direct: [70, 250], teardrop: [0, 70], parallel: [250, 360] },
-};
 const ENTRY_STEPS = {
-  direct: () => 'Fly to the fix, then turn in the direction of the hold onto the outbound leg and follow the pattern.',
-  teardrop: (o, side) => `At the fix, turn to ${fmt(o)}°, 30° from the outbound course toward the holding side, fly about one minute, then turn ${side} (the hold’s direction) to intercept the inbound course.`,
-  parallel: (o, side) => `At the fix, turn to ${fmt(o)}° to parallel the outbound course on the non-holding side for about one minute, then turn back toward the holding side (${side === 'left' ? 'right' : 'left'}) through more than 180° to the fix or the inbound course.`,
+  direct: (o, side) => `Direct: at the fix, turn ${side} (the hold’s direction) onto the outbound heading ${fmt(o)}° and follow the pattern.`,
+  teardrop: (o, side) => `Teardrop: at the fix, turn to ${fmt(o)}°, 30° from the outbound course toward the holding side, fly one minute, then turn ${side} (the hold’s direction) to intercept the inbound course.`,
+  parallel: (o, side) => `Parallel: at the fix, turn to ${fmt(o)}° to parallel the outbound course on the non-holding side for one minute, then turn ${side} (the hold’s direction) through more than 180° back to the fix.`,
 };
+const turnText = (t) => `${t.direction} ${Math.round(t.degrees)}°`;
 
 function setupEntry(root) {
   const f = Object.fromEntries([...root.querySelectorAll('[name]')].map((i) => [i.name, i]));
   const svg = root.querySelector('svg');
   const out = root.querySelector('[data-result]');
-  const feedback = root.querySelector('[data-feedback]');
-  let revealed = false;
-
-  const state = () => ({
-    inboundCourse: num(f.inbound),
-    heading: num(f.heading),
-    turns: root.querySelector('[name="turns"]:checked').value,
-  });
-
-  function local(c, u, v) {
-    // u: NM to the right of the inbound direction; v: NM behind the fix.
-    const s = Math.sin(c * Math.PI / 180), k = Math.cos(c * Math.PI / 180), px = 13;
-    return [C + px * (u * k - v * s), C + px * (u * s + v * k)];
-  }
+  const checked = (name) => root.querySelector(`[name="${name}"]:checked`).value;
 
   function draw() {
-    const { inboundCourse: c, heading, turns } = state();
+    const c = num(f.inbound), heading = num(f.heading), turns = checked('turns'), entry = checked('entry');
     root.querySelector('[data-heading-value]').textContent = `${fmt(heading)}°`;
     root.querySelector('[data-inbound-value]').textContent = `${fmt(c)}°`;
-    let result;
-    try { result = holdEntry(state()); } catch (error) { out.textContent = error.message; return; }
+    let path;
+    try { path = entryPath({ inboundCourse: c, heading, turns, entry }); } catch (error) { out.textContent = error.message; return; }
+    const reach = Math.max(6, ...path.points.map((p) => Math.hypot(p.x, p.y)));
+    const px = Math.min(16, 128 / reach);
+    const xy = (x, y) => [C + px * x, C - px * y];
+    // Hold-frame point: u NM to the right of the inbound direction, v NM behind the fix.
+    const local = (u, v) => {
+      const sn = Math.sin(c * Math.PI / 180), k = Math.cos(c * Math.PI / 180);
+      return xy(u * k - v * sn, -u * sn - v * k);
+    };
     svg.replaceChildren();
     arrowMarker(svg, 'entry-arrow');
     compass(svg, 140);
-    for (const [name, [a, b]] of Object.entries(SECTORS[turns])) {
-      const [x1, y1] = pt(c + a, 140), [x2, y2] = pt(c + b, 140);
-      const active = revealed && name === result.entry;
-      svg.append(el('path', { d: `M${C} ${C} L${x1} ${y1} A140 140 0 ${b - a > 180 ? 1 : 0} 1 ${x2} ${y2} Z`, class: `sector ${name}${active ? ' active' : ''}` }));
-      const [lx, ly] = pt(c + (a + b) / 2, name === 'teardrop' ? 112 : 104);
-      svg.append(el('text', { x: lx, y: ly, class: `label sector-label${active ? ' strong' : ''}`, 'text-anchor': 'middle' }, name.toUpperCase()));
-    }
-    // Racetrack: two 180° turns of radius R and legs of length L (trainer geometry).
-    const R = 25 / (3 * Math.PI), L = 25 / 6, s = turns === 'right' ? 1 : -1, points = [];
-    for (let i = 0; i <= 24; i++) { const p = Math.PI * i / 24; points.push(local(c, R * s - R * s * Math.cos(p), -R * Math.sin(p))); }
-    points.push(local(c, 2 * R * s, L));
-    for (let i = 0; i <= 24; i++) { const p = Math.PI * i / 24; points.push(local(c, R * s + R * s * Math.cos(p), L + R * Math.sin(p))); }
-    points.push(local(c, 0, 0));
-    svg.append(el('polyline', { points: points.map((p) => p.join(',')).join(' '), class: 'racetrack' }));
-    const [ix, iy] = local(c, 0, L * 0.9);
+    // Racetrack: two 180° turns and two straight legs, from the trainer's geometry.
+    const R = 25 / (3 * Math.PI), L = 25 / 6, side = turns === 'right' ? 1 : -1, track = [];
+    for (let i = 0; i <= 24; i++) { const a = Math.PI * i / 24; track.push(local(R * side - R * side * Math.cos(a), -R * Math.sin(a))); }
+    track.push(local(2 * R * side, L));
+    for (let i = 0; i <= 24; i++) { const a = Math.PI * i / 24; track.push(local(R * side + R * side * Math.cos(a), L + R * Math.sin(a))); }
+    track.push(local(0, 0));
+    svg.append(el('polyline', { points: track.map((p) => p.join(',')).join(' '), class: 'racetrack' }));
+    const [hx, hy] = local(R * side, L * 0.5);
+    svg.append(el('text', { x: hx, y: hy, class: 'label', 'text-anchor': 'middle' }, 'holding side'));
+    const [ix, iy] = local(0, L * 0.9);
     svg.append(el('line', { x1: ix, y1: iy, x2: C, y2: C, class: 'inbound', 'marker-end': 'url(#entry-arrow)' }));
     const [ax, ay] = pt(heading + 180, 132), [bx, by] = pt(heading + 180, 14);
     svg.append(el('line', { x1: ax, y1: ay, x2: bx, y2: by, class: 'arrival', 'marker-end': 'url(#entry-arrow)' }));
+    svg.append(el('polyline', { points: path.points.map((p) => xy(p.x, p.y).join(',')).join(' '), class: 'flown' }));
     svg.append(el('path', { d: `M${C} ${C - 7} L${C + 7} ${C} L${C} ${C + 7} L${C - 7} ${C} Z`, class: 'fix' }));
-    svg.setAttribute('aria-label', `Fix at centre, ${turns}-hand racetrack with inbound course ${fmt(c)} degrees. Arrival heading ${fmt(heading)} degrees.`
-      + (revealed ? ` ${result.entry} entry sector.` : ''));
+    svg.setAttribute('aria-label', `Fix at centre, ${turns}-hand racetrack with inbound course ${fmt(c)} degrees, arrival heading ${fmt(heading)} degrees and the flown ${entry} entry.`);
     const outbound = norm(c + 180);
-    const side = turns;
-    const teardrop = norm(outbound + (turns === 'right' ? -30 : 30));
-    out.textContent = revealed
-      ? `${result.entry[0].toUpperCase() + result.entry.slice(1)} entry. ${ENTRY_STEPS[result.entry](result.entry === 'teardrop' ? teardrop : outbound, side)}`
-        + (result.alternative ? ` This heading is within 5° of the ${result.alternative} sector, so a ${result.alternative} entry is also acceptable.` : '')
-      : 'Choose the entry you would fly, then check it.';
+    const steps = ENTRY_STEPS[entry](path.legHeading ?? outbound, turns);
+    const flown = entry === 'direct'
+      ? `From this heading the turn onto the outbound leg is ${turnText(path.firstTurn)}.`
+      : `From this heading the first turn is ${turnText(path.firstTurn)} and the turn back is ${turnText(path.secondTurn)}.`;
+    const miss = path.miss > 0.5 ? ` The path returns no closer than ${path.miss.toFixed(1)} NM from the fix.` : '';
+    out.textContent = `${steps} ${flown}${miss}`;
   }
 
-  root.addEventListener('input', (event) => {
-    if (event.target.name === 'answer') return;
-    revealed = false; feedback.textContent = ''; draw();
-  });
-  root.querySelector('[data-check]').addEventListener('click', () => {
-    const choice = root.querySelector('[name="answer"]:checked')?.value;
-    if (!choice) { feedback.textContent = 'Select direct, teardrop or parallel first.'; return; }
-    let result;
-    try { result = holdEntry(state()); } catch (error) { feedback.textContent = error.message; return; }
-    revealed = true; draw();
-    feedback.textContent = choice === result.entry ? 'Correct by the guide’s exercise rule.'
-      : choice === result.alternative ? `Acceptable: within 5° of the exercise rule’s boundary, though the rule gives ${result.entry}.`
-      : `Not quite: the guide’s exercise rule gives ${result.entry} for this heading.`;
-  });
+  root.addEventListener('input', draw);
+  root.addEventListener('change', draw);
   root.querySelector('[data-new]').addEventListener('click', () => {
-    f.inbound.value = randomInt(0, 35) * 10;
     f.heading.value = randomInt(0, 359);
-    for (const r of root.querySelectorAll('[name="answer"]')) r.checked = false;
-    revealed = false; feedback.textContent = ''; draw();
+    draw();
   });
   draw();
 }
