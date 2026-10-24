@@ -14,6 +14,19 @@ export async function loadModules() {
 
 const route = (m) => `manual/${m.subject}/${m.slug}/`;
 
+// The <section> element carrying a module's marker: its opening tag and body.
+// Checking inside it stops one module's card masking another's on a shared page.
+export function moduleSection(html, id) {
+  const at = html.indexOf(`data-module-id="${id}"`);
+  if (at < 0) return null;
+  const start = html.lastIndexOf("<section", at);
+  const end = html.indexOf("</section>", at);
+  if (start < 0 || end < 0) return null;
+  return { tag: html.slice(start, html.indexOf(">", at) + 1), body: html.slice(start, end) };
+}
+
+const escape = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 async function filesIn(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
   const nested = await Promise.all(entries.map((entry) => {
@@ -36,16 +49,17 @@ export async function checkModules({ dist, modules, review = false, base = "" })
       if (await read(`${route(m)}index.html`) !== null) problems.push(`${m.id} is excluded but ${route(m)}index.html was emitted.`);
       continue;
     }
-    const marker = `data-module-id="${m.id}"`;
     const revision = `data-module-revision="${m.revision}"`;
     const pages = { page: await read(`${route(m)}index.html`), "subject index": await read(`manual/${m.subject}/index.html`) };
+    const sections = {};
     for (const [name, html] of Object.entries(pages)) {
       if (html === null) { problems.push(`${m.id}: ${name} is missing.`); continue; }
-      if (!html.includes(marker) || !html.includes(revision))
+      const section = sections[name] = moduleSection(html, m.id);
+      if (!section || !section.tag.includes(revision))
         problems.push(`${m.id}: ${name} lacks the registered id or revision ${m.revision}.`);
-      if (!html.includes(m.maturity)) problems.push(`${m.id}: ${name} does not show maturity "${m.maturity}".`);
+      if (!section?.body.includes(m.maturity)) problems.push(`${m.id}: ${name} does not show maturity "${m.maturity}".`);
     }
-    if (pages["subject index"] && !pages["subject index"].includes(`href="${base}/${route(m)}"`))
+    if (pages["subject index"] && !sections["subject index"]?.body.includes(`href="${base}/${route(m)}"`))
       problems.push(`${m.id}: subject index does not link to ${base}/${route(m)}.`);
     // A module without a trainer must not frame or launch one.
     if (pages.page && (/<iframe\b/.test(pages.page) || pages.page.includes("data-experience-launch")))
@@ -54,8 +68,12 @@ export async function checkModules({ dist, modules, review = false, base = "" })
   if (excluded.length) {
     for (const file of await filesIn(dist)) {
       const text = await readFile(file, "utf8");
-      for (const m of excluded)
-        if (text.includes(`data-module-id="${m.id}"`)) problems.push(`${m.id} is excluded but referenced in ${path.relative(dist, file)}.`);
+      for (const m of excluded) {
+        // A marker or any link to its route, with or without a base path.
+        const link = new RegExp(`(?:href|src)="[^"]*/${escape(route(m))}(?:index\\.html)?"`);
+        if (text.includes(`data-module-id="${m.id}"`) || link.test(text))
+          problems.push(`${m.id} is excluded but referenced in ${path.relative(dist, file)}.`);
+      }
     }
   }
   return problems;

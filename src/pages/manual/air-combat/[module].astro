@@ -49,6 +49,7 @@ const p = (pages: string) => `[1, ${pages.includes('–') || pages.includes(',')
    <label for="geo-rel">Bandit heading vs yours <output for="rel"></output><input id="geo-rel" name="rel" type="range" min="-180" max="180" step="5" value="30" /></label>
   </div>
   <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 440" role="img" aria-label="Plan view of you and the bandit with its 3/9 line, bubble and control zone"></svg></div>
+  <p class="no-js">Interactive figure unavailable. At the default setting (bandit 3,000 ft away, 20° right of your nose, heading 30° right of yours) target aspect is 170° and you are 10° off its tail: behind its 3/9 line, outside its bubble and in the control zone range band.</p>
   <div class="feedback derived" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">Bubble circles use the source's 3,000 ft typical radius. The control zone is drawn ±30° either side of the bandit's tail for illustration; the source gives its range, not its width.</p>
  </section>
@@ -67,10 +68,11 @@ const p = (pages: string) => `[1, ${pages.includes('–') || pages.includes(',')
    <label><input type="radio" name="mode" value="pure" /> Pure</label>
    <label><input type="radio" name="mode" value="lag" /> Lag</label>
   </fieldset>
-  <div class="buttons"><button type="button" data-run>Run again</button></div>
+  <div class="buttons"><button type="button" data-play>Play</button></div>
   <div class="fig-scroll" role="region" aria-label="Figure 2, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 400" role="img" aria-label="Fighter and bandit tracks for the selected pursuit"></svg></div>
+  <p class="no-js">Interactive figure unavailable. Closest approach in this illustration: lead 337 ft, pure 1,125 ft, lag 1,921 ft, each at 12.6 s; after 24 s the ranges are 3,117, 3,205 and 3,289 ft.</p>
   <p class="feedback" data-result role="status" aria-live="polite"></p>
-  <p class="fig-caption">Kinematic illustration only: both aircraft hold 350 kt; the bandit flies a 3,000 ft circle; the fighter starts 6,000 ft away, 45° off the bandit's tail, and turns at up to 15° per second toward a point 1.5 seconds of bandit flight ahead of it (lead), on it (pure) or behind it (lag). Energy, G and closure control are not modelled. Watch how lead collapses range fastest and lag keeps it.</p>
+  <p class="fig-caption">Kinematic illustration only: both aircraft hold 350 kt; the bandit flies a 3,000 ft circle; the fighter starts 6,000 ft away, 45° off the bandit's tail, and turns at up to 15° per second toward a point 1.5 seconds of bandit flight ahead of it (lead), on it (pure) or behind it (lag). Energy, G and closure control are not modelled. Select Play to watch it develop: lead collapses range fastest and lag keeps it.</p>
  </section>
 
  <h2 id="performance">Turn performance</h2>
@@ -95,6 +97,7 @@ const p = (pages: string) => `[1, ${pages.includes('–') || pages.includes(',')
    <label for="turn-g">Load factor <output for="g"></output><input id="turn-g" name="g" type="range" min="1.5" max="7.33" step="0.01" value="7.33" /></label>
   </div>
   <div class="fig-scroll" role="region" aria-label="Figure 3, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 440" role="img" aria-label="Speed tape with T-45 bands, and the level-turn circle at the chosen speed and G"></svg></div>
+  <p class="no-js">Interactive figure unavailable. At 410 KIAS and 7.33 G the level turn has 82.2° of bank, a 2,050 ft radius and a rate of 19.3° per second: corner airspeed, inside the 3,000 ft bubble radius.</p>
   <div class="feedback derived" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">Level-turn model: bank φ = arccos(1/n); radius r = V² ÷ (g√(n² − 1)); rate ω = g√(n² − 1) ÷ V, with V the true airspeed and g = 9.80665 m/s². It treats the indicated airspeed as true airspeed (sea level, standard day, no instrument or compressibility error), so at altitude the real radius is larger. Worked example: 410 kt (210.9 m/s) at 7.33 G gives √(7.33² − 1) = 7.26, r = 210.9² ÷ (9.807 × 7.26) = 625 m ≈ 2,050 ft and ω = 0.338 rad/s ≈ 19.3° per second.</p>
  </section>
@@ -108,6 +111,7 @@ const p = (pages: string) => `[1, ${pages.includes('–') || pages.includes(',')
    <label for="loop-n">Load factor <output for="n"></output><input id="loop-n" name="n" type="range" min="1" max="7.3" step="0.1" value="4" /></label>
   </div>
   <div class="fig-scroll" role="region" aria-label="Figure 4, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 440" role="img" aria-label="Aircraft on a loop with load-factor and gravity vectors"></svg></div>
+  <p class="no-js">Interactive figure unavailable. At a constant 4 G: 3 radial G at the bottom, 4 pointing straight up, 5 inverted at the top.</p>
   <p class="feedback" data-result role="status" aria-live="polite"></p>
   <p class="fig-caption">Radial G = n − cos θ, where θ is the pitch angle around the loop (0° at the bottom, 90° straight up, 180° inverted at the top). With n = 4 this gives 3 at the bottom and 5 at the top, matching the source. The drawn loop is a circle for clarity; with constant G a real loop is tighter over the top.</p>
  </section>
@@ -120,6 +124,7 @@ const p = (pages: string) => `[1, ${pages.includes('–') || pages.includes(',')
    <label for="deck-alt">Height above the deck <output for="alt"></output><input id="deck-alt" name="alt" type="range" min="0" max="9000" step="250" value="4000" /></label>
   </div>
   <div class="fig-scroll" role="region" aria-label="Figure 5, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 440" role="img" aria-label="Aircraft above the hard deck with its maximum nose-low line"></svg></div>
+  <p class="no-js">Interactive figure unavailable. 4,000 ft above the deck: no more than about 40° nose low.</p>
   <p class="feedback" data-result role="status" aria-live="polite"></p>
   <p class="fig-caption">Vertical scale only; the line shows the attitude, not a flight path.</p>
  </section>
@@ -230,13 +235,15 @@ const p = (pages: string) => `[1, ${pages.includes('–') || pages.includes(',')
   .feedback { font-weight: 700; min-height: 1.6em; }
   .feedback p { margin: 0.2rem 0; }
   .lesson:not(.ready) .buttons, .lesson:not(.ready) .controls, .lesson:not(.ready) fieldset, .lesson:not(.ready) svg:empty { display: none; }
+  .lesson.ready .no-js { display: none; }
+  .no-js { font-weight: 700; }
   .figure-lesson { border-width: 2px; }
   .figure-lesson { width: min(64rem, calc(100vw - 3rem)); background: #fff; }
   @media (min-width: 64rem) {
     .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
   }
   .fig-scroll { overflow-x: auto; }
-  .fig-scroll svg { min-width: 36rem; }
+  .fig-scroll :global(svg) { min-width: 36rem; }
   .fig-title { font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 2px solid var(--color-text); padding-bottom: 0.3rem; }
   .fig-caption { color: var(--color-muted); font-size: 0.9rem; }
   .callouts.plain { padding-left: 0; list-style: none; }

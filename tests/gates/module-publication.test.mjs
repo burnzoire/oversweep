@@ -15,18 +15,20 @@ const complete = {
   'manual/navigation/index.html': `<section ${tag}><strong>${module.maturity}</strong><a href="/manual/navigation/example/">Open</a></section>`,
 };
 
-async function check(files, options = {}) {
+async function checkAll(files, modules, review = false) {
   const dist = await mkdtemp(path.join(tmpdir(), 'oversweep-modules-'));
   try {
     for (const [file, text] of Object.entries(files)) {
       await mkdir(path.dirname(path.join(dist, file)), { recursive: true });
       await writeFile(path.join(dist, file), text);
     }
-    return await checkModules({ dist, modules: [{ ...module, ...options.module }], review: options.review });
+    return await checkModules({ dist, modules, review });
   } finally {
     await rm(dist, { recursive: true, force: true });
   }
 }
+
+const check = (files, options = {}) => checkAll(files, [{ ...module, ...options.module }], options.review);
 
 test('a complete published module passes', async () => {
   assert.deepEqual(await check(complete), []);
@@ -68,4 +70,28 @@ test('review builds require excluded modules to be complete', async () => {
 test('unknown publication values are rejected', async () => {
   const problems = await check(complete, { module: { publication: 'draft' } });
   assert(problems.some(p => p.includes('unknown publication')));
+});
+
+test('one module card cannot mask another on a shared subject page', async () => {
+  const other = { ...module, id: 'module.other', slug: 'other', revision: 5, maturity: 'Outlined' };
+  const otherTag = `data-module-id="${other.id}" data-module-revision="4"`;
+  const files = {
+    ...complete,
+    'manual/navigation/other/index.html': `<section data-module-id="${other.id}" data-module-revision="5">Outlined</section>`,
+    // The other card is stale (revision 4) and hides its maturity; the first card carries both values.
+    'manual/navigation/index.html': `<section ${otherTag}><a href="/manual/navigation/other/">Open</a></section>`
+      + `<section ${tag} data-note="5">${module.maturity} Outlined<a href="/manual/navigation/example/">Open</a></section>`,
+  };
+  const problems = await checkAll(files, [module, other]);
+  assert(problems.some(p => p.includes('module.other: subject index lacks the registered id or revision 5')));
+  assert(problems.some(p => p.includes('module.other: subject index does not show maturity')));
+  assert(!problems.some(p => p.startsWith('module.example')));
+});
+
+test('an excluded module must not be linked without its marker', async () => {
+  for (const href of ['/manual/navigation/example/', '/oversweep/manual/navigation/example/', 'https://x.test/manual/navigation/example/index.html']) {
+    const problems = await check({ 'index.html': `<a href="${href}">Example</a>` }, { module: { publication: 'excluded' } });
+    assert(problems.some(p => p.includes('referenced in index.html')), href);
+  }
+  assert.deepEqual(await check({ 'index.html': '<a href="/manual/navigation/example-two/">Other</a>' }, { module: { publication: 'excluded' } }), []);
 });

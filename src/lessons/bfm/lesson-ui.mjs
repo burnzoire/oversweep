@@ -86,26 +86,27 @@ function setupGeometry(root) {
 
 /* ---------- Pursuit curves ---------- */
 function setupPursuit(root) {
+  // Shows the finished tracks; playback runs only on request and can be paused.
   const svg = root.querySelector('svg');
   const out = root.querySelector('[data-result]');
-  let frame = 0;
-  function run() {
-    cancelAnimationFrame(frame);
+  const play = root.querySelector('[data-play]');
+  let frame = 0, n = 0, from = 0, start = 0, track, draw;
+  function prepare() {
     const mode = root.querySelector('input[name="mode"]:checked').value;
-    const track = pursuit({ mode });
+    track = pursuit({ mode });
     const xs = track.flatMap((p) => [p.fighter.x, p.bandit.x]), ys = track.flatMap((p) => [p.fighter.y, p.bandit.y]);
     const ox = (Math.min(...xs) + Math.max(...xs)) / 2, oy = (Math.min(...ys) + Math.max(...ys)) / 2;
     const scale = Math.min(600 / (Math.max(...xs) - Math.min(...xs)), 340 / (Math.max(...ys) - Math.min(...ys)));
     const at = view(320, 200, scale, ox, oy);
-    const line = (key, n) => track.slice(0, n + 1).map((p, i) => `${i ? 'L' : 'M'}${at(p[key].x, p[key].y)}`).join(' ');
+    const line = (key, i) => track.slice(0, i + 1).map((p, j) => `${j ? 'L' : 'M'}${at(p[key].x, p[key].y)}`).join(' ');
     const minimum = track.reduce((m, p) => (p.range < m.range ? p : m));
-    const draw = (n) => {
-      const p = track[n];
+    draw = (i) => {
+      const p = track[i];
       const [fx, fy] = at(p.fighter.x, p.fighter.y), [bx, by] = at(p.bandit.x, p.bandit.y);
       svg.replaceChildren(
         el('rect', { x: 1, y: 1, width: 638, height: 398, class: 'frame' }),
-        el('path', { d: line('bandit', n), class: 'ln dashed' }),
-        el('path', { d: line('fighter', n), class: 'track' }),
+        el('path', { d: line('bandit', i), class: 'ln dashed' }),
+        el('path', { d: line('fighter', i), class: 'track' }),
         el('line', { x1: fx, y1: fy, x2: bx, y2: by, class: 'los' }),
         jet(bx, by, p.bandit.h * 180 / Math.PI, 'bandit'),
         jet(fx, fy, p.fighter.h * 180 / Math.PI, 'own'),
@@ -113,23 +114,32 @@ function setupPursuit(root) {
         el('text', { x: 12, y: 388, class: 'lbl small' }, '— FIGHTER TRACK   - - BANDIT TRACK (3,000 FT TURN CIRCLE)'),
       );
     };
-    const finish = () => {
-      draw(track.length - 1);
-      out.textContent = `${mode[0].toUpperCase()}${mode.slice(1)} pursuit: closest approach ${r0(minimum.range)} ft at ${minimum.t.toFixed(1)} s; range after ${track.at(-1).t.toFixed(0)} s is ${r0(track.at(-1).range)} ft.`;
-    };
-    if (reduceMotion()) return finish();
-    out.textContent = '';
-    const start = performance.now();
-    const tick = (now) => {
-      const n = Math.min(track.length - 1, Math.floor((now - start) / 1000 / 0.1 * 1.5));
-      draw(n);
-      if (n < track.length - 1) frame = requestAnimationFrame(tick); else finish();
-    };
-    frame = requestAnimationFrame(tick);
+    out.textContent = `${mode[0].toUpperCase()}${mode.slice(1)} pursuit: closest approach ${r0(minimum.range)} ft at ${minimum.t.toFixed(1)} s; range after ${track.at(-1).t.toFixed(0)} s is ${r0(track.at(-1).range)} ft.`;
   }
-  root.querySelector('[data-run]').addEventListener('click', run);
-  root.addEventListener('change', run);
-  run();
+  function pause() {
+    cancelAnimationFrame(frame);
+    frame = 0;
+    play.textContent = n >= track.length - 1 ? 'Play' : 'Resume';
+  }
+  function tick(now) {
+    // 0.1 s model steps played at 1.5× real time: 15 steps per second.
+    n = Math.min(track.length - 1, from + Math.floor((now - start) * 15 / 1000));
+    draw(n);
+    if (n < track.length - 1) frame = requestAnimationFrame(tick); else pause();
+  }
+  play.addEventListener('click', () => {
+    if (frame) return pause();
+    if (reduceMotion()) { n = track.length - 1; draw(n); return; }
+    if (n >= track.length - 1) n = 0;
+    play.textContent = 'Pause';
+    from = n;
+    start = performance.now();
+    frame = requestAnimationFrame(tick);
+  });
+  root.addEventListener('change', () => { cancelAnimationFrame(frame); frame = 0; prepare(); n = track.length - 1; draw(n); play.textContent = 'Play'; });
+  prepare();
+  n = track.length - 1;
+  draw(n);
 }
 
 /* ---------- Turn performance ---------- */
@@ -162,14 +172,15 @@ function setupTurn(root) {
     svg.append(el('path', { d: `M60 ${tapeY(speed)} l-14 -8 v16 z`, class: 'pointer' }));
     svg.append(el('text', { x: 50, y: 28, 'text-anchor': 'middle', class: 'lbl small' }, 'KIAS'));
     // Turn circle to the same scale as the 3,000 ft bubble.
-    const cx = 470, cy = 230, s = 0.05;
+    const cx = 460, cy = 230, s = 0.05;
+    const rMax = 640 - cx - 18; // keep the circle and aircraft inside the frame
     svg.append(el('circle', { cx, cy, r: T45.bubbleRadius * s, class: 'ln dashed' }));
     svg.append(el('text', { x: cx, y: cy - T45.bubbleRadius * s - 6, 'text-anchor': 'middle', class: 'lbl small' }, '3,000 FT BUBBLE'));
-    const rr = Math.min(turn.radius * s, 200);
+    const rr = Math.min(turn.radius * s, rMax);
     svg.append(el('circle', { cx, cy, r: rr, class: 'ln heavy circle' }));
     svg.append(el('line', { x1: cx, y1: cy, x2: cx + rr, y2: cy, class: 'thin' }));
     svg.append(jet(cx + rr, cy, 180, 'own'));
-    svg.append(el('text', { x: cx, y: cy + 16, 'text-anchor': 'middle', class: 'lbl small' }, turn.radius * s > 200 ? `R ${r0(turn.radius)} FT (OFF SCALE)` : `R ${r0(turn.radius)} FT`));
+    svg.append(el('text', { x: cx, y: cy + 16, 'text-anchor': 'middle', class: 'lbl small' }, turn.radius * s > rMax ? `R ${r0(turn.radius)} FT (OFF SCALE)` : `R ${r0(turn.radius)} FT`));
     const pull = band.pull === 'load'
       ? `Above corner: the maximum-performance pull is load-limited, ${T45.loadLimit} G above 5,000 ft.`
       : band.pull === 'lift'
