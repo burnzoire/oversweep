@@ -4,6 +4,7 @@ import { getExperience, includedExperiences, experienceFrame } from '../../../da
 import { sitePath } from '../../../lib/paths';
 const caseIII = getExperience('case-iii');
 export function getStaticPaths() { return includedExperiences.some(e => e.slug === 'case-iii') ? [{ params: { trainer: 'case-iii' } }] : []; }
+const recoveryModule = caseIII.module;
 const trainerHref = sitePath(experienceFrame(caseIII));
 const contents = [
  ['overview', 'Purpose and learning objectives'], ['sequence', 'Recovery sequence'],
@@ -19,8 +20,8 @@ const contents = [
  compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Naval Operations',href:sitePath('manual/naval-operations/')},{label:'Case III Recoveries'}]}>
  <section class="status-panel">
-  <h2>Drafted — not technically validated</h2>
-  <p>Module revision 1 · Conventional fixed-wing, arrested carrier recoveries. Aircraft-agnostic concepts, illustrated using historical US Navy training material. Helicopter and vertical-landing procedures are outside this module.</p>
+  <h2>{recoveryModule.maturity}</h2>
+  <p>Module revision {recoveryModule.revision} · Conventional fixed-wing, arrested carrier recoveries. Aircraft-agnostic concepts, illustrated using historical US Navy training material. Helicopter and vertical-landing procedures are outside this module.</p>
   <p>Read the recovery sequence, explore the navigation geometry, then practise selected skills in the optional standalone Tomcat exercise.</p>
  </section>
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>

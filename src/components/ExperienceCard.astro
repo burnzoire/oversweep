@@ -4,10 +4,12 @@ import { sitePath } from '../lib/paths';
 interface Props { experience: Experience; module?: boolean }
 const { experience, module = false } = Astro.props;
 const reference = module ? experience.module : undefined;
+const maturity = reference?.maturity ?? experience.maturity;
+const revision = reference?.revision ?? experience.revision;
 ---
 <section class="status-panel" data-experience-id={experience.id} data-experience-revision={experience.revision}>
   <h2>{reference?.title ?? experience.title}</h2>
-  <p><strong>{experience.maturity}</strong>{experience.publication !== 'published' && ' · Local review only'} · Exercise revision {experience.revision}</p>
+  <p><strong>{maturity}</strong>{experience.publication !== 'published' && ' · Local review only'} · {reference ? 'Module' : 'Exercise'} revision {revision}</p>
   <p>{reference?.objective ?? experience.objective}</p>
   <p>{reference?.applicability ?? experience.applicability}</p>
   <a href={sitePath(experienceRoute(experience))}>Open the recovery module and practice options →</a>
