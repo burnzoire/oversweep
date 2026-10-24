@@ -14,6 +14,12 @@ export async function loadExperiences() {
 const route = (e) => `manual/${e.subject}/${e.slug}/`;
 const frame = (e) => `experiences/${e.slug}/`;
 
+// A launch link opens the experience in a new browsing context, never a frame.
+export function launchLink(html, href) {
+  return [...html.matchAll(/<a\b[^>]*>/g)].some(([tag]) =>
+    tag.includes(`href="${href}"`) && tag.includes('target="_blank"') && tag.includes("data-experience-launch"));
+}
+
 async function filesIn(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
   const nested = await Promise.all(entries.map((entry) => {
@@ -32,6 +38,7 @@ export async function checkExperiences({ dist, experiences, review = false, base
   const excluded = experiences.filter((e) => e.publication !== "published" && !review);
   for (const e of experiences) {
     if (!["published", "excluded"].includes(e.publication)) problems.push(`${e.id}: unknown publication "${e.publication}".`);
+    if (![undefined, "embed", "window"].includes(e.launch)) problems.push(`${e.id}: unknown launch "${e.launch}".`);
     if (excluded.includes(e)) {
       for (const file of [`${route(e)}index.html`, `${frame(e)}index.html`, ...e.assets.map((a) => frame(e) + a)])
         if (await read(file) !== null) problems.push(`${e.id} is excluded but ${file} was emitted.`);
@@ -55,7 +62,12 @@ export async function checkExperiences({ dist, experiences, review = false, base
     const href = `href="${base}/${route(e)}"`;
     for (const name of ["subject index", "Training Library"])
       if (pages[name] && !pages[name].includes(href)) problems.push(`${e.id}: ${name} does not link to ${base}/${route(e)}.`);
-    if (pages.wrapper && !new RegExp(`<iframe[^>]*src="${base}/${frame(e)}"`).test(pages.wrapper))
+    // Window-only experiences must be linked in a new window and never framed.
+    if (pages.wrapper && e.launch === "window") {
+      if (!launchLink(pages.wrapper, `${base}/${frame(e)}`))
+        problems.push(`${e.id}: wrapper does not link to ${base}/${frame(e)} in a new window.`);
+      if (/<iframe\b/.test(pages.wrapper)) problems.push(`${e.id}: wrapper frames a window-only experience.`);
+    } else if (pages.wrapper && !new RegExp(`<iframe[^>]*src="${base}/${frame(e)}"`).test(pages.wrapper))
       problems.push(`${e.id}: wrapper does not embed ${base}/${frame(e)}.`);
     for (const asset of e.assets) {
       if (!(await read(frame(e) + asset))?.trim()) problems.push(`${e.id}: asset ${asset} is missing or empty.`);

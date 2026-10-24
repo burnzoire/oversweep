@@ -4,44 +4,348 @@ import { getExperience, includedExperiences, experienceFrame } from '../../../da
 import { sitePath } from '../../../lib/paths';
 const caseIII = getExperience('case-iii');
 export function getStaticPaths() { return includedExperiences.some(e => e.slug === 'case-iii') ? [{ params: { trainer: 'case-iii' } }] : []; }
-
+const trainerHref = sitePath(experienceFrame(caseIII));
+const contents = [
+  ['overview', 'What this guide covers'],
+  ['at-a-glance', 'The exercise at a glance'],
+  ['clearance', 'The trainer’s Marshal clearance'],
+  ['tacan', 'Point-to-point TACAN navigation'],
+  ['entry', 'Flying the hold entries'],
+  ['eat', 'Planning the hold to EAT'],
+  ['penetration', 'The trainer’s descent'],
+  ['final', 'The trainer’s final approach'],
+  ['check', 'Check your understanding'],
+  ['launch', 'Launch the trainer'],
+  ['limits', 'Scope and limits'],
+  ['sources', 'Sources and unresolved review'],
+];
 ---
-<SiteLayout title={caseIII.title} activeSection="manual" activeSubject="naval-operations"
+<SiteLayout title="Case III trainer guide" activeSection="manual" activeSubject="naval-operations"
   compactSubjectNav={true}
   breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Naval Operations',href:sitePath('manual/naval-operations/')},{label:'Case III'}]}>
   <section class="status-panel" data-experience-id={caseIII.id} data-experience-revision={caseIII.revision}>
     <h2>{caseIII.maturity}</h2>
-    <p>Revision {caseIII.revision} · {caseIII.applicability} No source-backed aviation review has validated this exercise.</p>
-    <p>{caseIII.objective}</p>
+    <p>Revision {caseIII.revision} · {caseIII.applicability} No source-backed aviation review has validated this guide or its trainer.</p>
+    <p>This guide walks through the exercise the {caseIII.title} runs: {caseIII.objective.charAt(0).toLowerCase() + caseIII.objective.slice(1)}</p>
+    <p>Prerequisites: {caseIII.prerequisites.join(' · ')}.</p>
   </section>
-  <h2>Before starting</h2>
-  <p>Prerequisites: {caseIII.prerequisites.join(' · ')}.</p>
-  <p>Direct the pilot using heading, airspeed, altitude and vertical-rate commands. Read the sortie popup, then select Start Exercise. Instructor mode provides cues and pauses at decisions; switch it off to rehearse without hints. Voice is optional and uses your browser’s available speech voices.</p>
-  <h2>Scope and limits</h2>
-  <p>Aircraft dynamics, AoA, fuel consumption, glidepath and arrestment are synthetic. Outside the hold, the airspeed number is also used as NM/hour for map movement; IAS-to-TAS conversion and wind are not modeled. Hold geometry uses a fixed synthetic 250 NM/hour. Every airspeed, altitude, vertical rate, DME fix, timing and configuration gate shown in the trainer (for example 250 KIAS at the 6,000 ft, 21 DME marshal, the 4,000 then 2,000 ft/min descent, and the 10 and 8 DME slow-down and configuration points) is an exercise setpoint. None has a verified source locator, and none is a verified procedure or aircraft limitation. The night-themed scenario does not model date, lighting or visibility conditions. This is not an approved operating procedure or a proficiency assessment. The exact DCS version has not been verified. Radio dialogue and scoring criteria are inherited exercise content, not verified Navy phraseology or measures of proficiency.</p>
-  <p>The 2009 CV NATOPS citation in the source register is a historical research lead only: its cited passages, current applicability and claim mapping have not been verified. Fixed turns and legs are synthetic exercise parameters, not a claim about a prescribed hold.</p>
-  <p><a href={sitePath(experienceFrame(caseIII))}>Open trainer in a full window</a> · <a href="#sources">Sources and unresolved review</a></p>
-  <noscript><p>The trainer requires JavaScript. Scope notes and source references remain readable without it.</p></noscript>
-  <iframe id="case-iii-frame" title="Case III F-14B recovery exercise — drafted, not technically validated" src={sitePath(experienceFrame(caseIII))} height="1000" allow="autoplay" data-experience-id={caseIII.id}></iframe>
-  <h2 id="sources">Sources and unresolved review</h2>
-  <p>The references below are not a claim-to-source map. No applicable Navy or DCS passage has been verified for this trainer’s Case III procedure, numeric gates, radio dialogue or scoring. A revision-3 review inspected limited Heatblur F-14 and CASE I passages for DCS-specific context only; those do not validate this exercise. References do not certify procedures or grant rights to reproduce manuals. No manual files or third-party media are included.</p>
+
+  <nav class="contents" aria-labelledby="contents-title">
+    <h2 id="contents-title">In this guide</h2>
+    <ol>{contents.map(([id, label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol>
+  </nav>
+
+  <h2 id="overview">What this guide covers</h2>
+  <p>This is a guide to the trainer’s Case III-style exercise, not a lesson in how the Navy or DCS flies a Case III recovery. In the exercise, Marshal clears you to a holding fix, you leave the fix at an assigned time and fly a controlled descent onto an instrument final approach. The guide explains what the trainer expects at each step and practises three general skills the exercise relies on: point-to-point TACAN plotting, choosing a hold entry and timing a hold. No real Case III procedure has been verified for this guide: the 2009 CV NATOPS manual and the DCS Supercarrier guide named in the <a href="#sources">sources</a> are research leads whose passages have not been checked, so nothing here should be read as what either says or as how to fly a real recovery.</p>
+  <p>Every number on this page is the trainer’s exercise setpoint unless a source is named beside it. Speeds are KIAS (knots indicated airspeed), distances are nautical miles (NM), DME (distance measuring equipment) values are TACAN (tactical air navigation) ranges from the carrier, and headings, radials and courses are magnetic. The trainer has no wind, so in this guide a heading equals the track over the ground.</p>
+
+  <h2 id="at-a-glance">The exercise at a glance</h2>
+  <div class="table-scroll" role="region" aria-labelledby="glance-caption" tabindex="0">
+    <table>
+      <caption id="glance-caption">Phases of the trainer’s exercise. Values are the trainer’s setpoints, not verified procedure, simulator values or aircraft limits.</caption>
+      <thead><tr><th scope="col">Phase</th><th scope="col">What the trainer expects</th><th scope="col">Trainer setpoint</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">1. Check in</th><td>Call Marshal inbound and read back the clearance.</td><td>Marshal radial, 21 DME, 6,000 ft, EAT</td></tr>
+        <tr><th scope="row">2. Navigate</th><td>Fly point to point from your radial/DME to the marshal fix.</td><td>6,000 ft, 250 KIAS</td></tr>
+        <tr><th scope="row">3. Enter the hold</th><td>Join the racetrack at the fix; report established.</td><td>Left-hand, 6:00 circuit</td></tr>
+        <tr><th scope="row">4. Hold</th><td>Adjust the pattern so you leave the fix inbound at EAT.</td><td>Within 10 s of EAT</td></tr>
+        <tr><th scope="row">5. Commence</th><td>Call Commencing, descend toward the ship on BRC, switch to Approach.</td><td>250 KIAS, 4,000 ft/min</td></tr>
+        <tr><th scope="row">6. Platform</th><td>Report Platform and reduce the descent rate.</td><td>5,000 ft, then 2,000 ft/min</td></tr>
+        <tr><th scope="row">7. Level and intercept</th><td>Level off and intercept the final bearing.</td><td>1,200 ft, final = BRC − 9°</td></tr>
+        <tr><th scope="row">8. Configure</th><td>Slow down, then gear, flaps and hook; on-speed.</td><td>200 KIAS at 10 DME; configure at 8 DME; on-speed by 6 DME</td></tr>
+        <tr><th scope="row">9. Glidepath</th><td>Intercept and follow the glidepath.</td><td>About 3 NM</td></tr>
+        <tr><th scope="row">10. Ball and landing</th><td>Call the ball, respond to the LSO, trap or wave off.</td><td>Ball call about 0.75 NM</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>In the trainer, BRC (base recovery course) is the carrier’s heading during the recovery, and the trainer models the landing area 9° left of it, so its final bearing is BRC − 9°. That offset is the trainer’s geometry; no Navy or DCS value for it has been verified.</p>
+
+  <h2 id="clearance">The trainer’s Marshal clearance</h2>
+  <p>In the trainer, Marshal’s clearance gives you everything you need before you descend: a radial, a DME, an altitude (“angels 6” is 6,000 ft in the trainer’s dialogue) and an expected approach time (EAT). The trainer’s Marshal says, for example, “Marshal mother’s 220 radial, 21 DME, angels 6. Expected approach time 16:21.” That wording is inherited exercise dialogue, not verified Navy phraseology.</p>
   <ul>
-    <li><a href="https://info.publicintelligence.net/CV-NATOPS-JUL09.pdf">NAVAIR 00-80T-105, CV NATOPS, 31 July 2009</a>, §§6.4.1.1 and 6.4.4, pp. 6-6 and 6-8: historical leads for hold and EAT claims only; the passages and current applicability were not verified.</li>
-    <li><a href="https://www.digitalcombatsimulator.com/upload/iblock/e1b/430ooc582lpb0npynbsewan6omd5ohvs/DCS_Supercarrier_Operations_Guide_EN.pdf">Eagle Dynamics Supercarrier Operations Guide</a>, pp. 75–81: possible DCS-specific dialogue/sequence lead; pages and module-version mapping were not verified, and it does not establish real-world procedure.</li>
+    <li><strong>A radial is a magnetic bearing from the station.</strong> Here the station is Mother, the carrier’s TACAN; the trainer and this guide use radials in that sense.</li>
+    <li><strong>Radial plus DME is a position.</strong> The marshal fix is where the assigned radial crosses the assigned DME ring.</li>
+    <li><strong>The inbound course is the reciprocal.</strong> To fly from the fix toward Mother you fly the radial’s reciprocal: add or subtract 180° and wrap into 000–359°. The 220 radial gives an inbound course of 040°.</li>
+    <li><strong>The trainer puts the fix directly astern.</strong> Its marshal radial is always BRC + 180°, so the inbound course equals BRC. In DCS, use the actual clearance you receive.</li>
+  </ul>
+
+  <h2 id="tacan">Point-to-point TACAN navigation</h2>
+  <p>You rarely start on the marshal radial. TACAN tells you where you are (your radial and DME) but not the direction to a fix that is somewhere else. Point-to-point navigation is the skill of turning two radial/DME positions into a heading.</p>
+  <ol>
+    <li><strong>Find your own radial.</strong> On the trainer’s representative HSI the bearing pointer’s head points to Mother and its tail sits on your radial. That is the trainer’s display, not verified for the F-14 instrument; check your own aircraft’s display. Your radial is not your heading.</li>
+    <li><strong>Picture the plot.</strong> Imagine a compass rose centred on Mother. Plot yourself on your radial at your DME and the fix on its radial at its DME. The larger DME sets the edge of the picture.</li>
+    <li><strong>Read the direction of the line.</strong> Draw a line from you to the fix. Slide that line, without turning it, until it passes through the centre of the rose: where it points on the rose is the heading to fly.</li>
+    <li><strong>Fly it and refine.</strong> Every minute or so, re-plot from your new radial and DME and correct the heading. Judge the combined position, not each number alone: DME is your distance from Mother, not from the fix. On the worked example below, the direct track passes inside 21 DME before the range opens back out to the fix, and that is correct.</li>
+  </ol>
+  <p>Avoid two common slips: flying the fix radial (that is a direction from Mother, not from you), and flying the inbound course before you have reached the radial. The guide and the trainer treat DME as horizontal range from Mother and ignore your height above the ship. At 6,000 ft, about 1 NM up, that changes the 21 DME fix by under 0.03 NM.</p>
+
+  <section class="lesson" data-lesson="navigation" aria-labelledby="nav-title">
+    <h3 id="nav-title">Practise: heading to the marshal fix</h3>
+    <p>Set the ship’s BRC and your own position, estimate the heading to the fix, then check it. The fix is on the BRC + 180° radial as in the trainer.</p>
+    <div class="lesson-grid">
+      <div class="controls">
+        <label>BRC (°)<input name="brc" type="number" min="0" max="359" step="1" value="0" inputmode="numeric" /></label>
+        <p class="derived">Marshal radial <strong data-fix-radial>180</strong>°</p>
+        <label>Fix DME (NM)<input name="fixDme" type="number" min="1" max="60" step="1" value="21" inputmode="numeric" /></label>
+        <label>Your radial (°)<input name="youRadial" type="number" min="0" max="359" step="1" value="90" inputmode="numeric" /></label>
+        <label>Your DME (NM)<input name="youDme" type="number" min="0" max="80" step="1" value="30" inputmode="numeric" /></label>
+        <label>Your heading estimate (°)<input name="guess" type="number" min="0" max="359" step="1" inputmode="numeric" /></label>
+        <div class="buttons">
+          <button type="button" data-check>Check estimate</button>
+          <button type="button" data-reveal>Reveal</button>
+          <button type="button" data-new>New problem</button>
+        </div>
+      </div>
+      <svg viewBox="0 0 320 320" role="img" aria-label="Compass plot centred on Mother"></svg>
+    </div>
+    <p class="feedback" data-feedback role="status" aria-live="polite"></p>
+    <p data-result aria-live="polite">Worked example: from the 090 radial at 30 DME to the 180 radial at 21 DME, the direct track is about 235° for 36.6 NM.</p>
+    <noscript><p>The interactive plot needs JavaScript. The worked example above shows the same calculation.</p></noscript>
+  </section>
+  <details>
+    <summary>How the check is calculated</summary>
+    <p>Place Mother at the origin with x east and y north. A position on radial <var>r</var> at <var>d</var> NM is x = <var>d</var>·sin <var>r</var>, y = <var>d</var>·cos <var>r</var>. The track from you to the fix is the direction of the difference vector, atan2(Δx, Δy), and the distance is its length. In the worked example you are at (30, 0) and the fix at (0, −21), so Δx = −30, Δy = −21: the track is 180° + atan(30/21) ≈ 235.0° and the distance √1341 ≈ 36.6 NM. With no wind, that track is also the heading. The time shown uses the trainer’s fixed map rate of 250 NM/hour, which is not a groundspeed model.</p>
+  </details>
+
+  <h2 id="entry">Flying the hold entries</h2>
+  <p>The marshal hold is a racetrack anchored on the fix. Its inbound leg runs along the inbound course to the fix; you turn at the fix onto the outbound leg and turn again back to the inbound leg. The trainer flies a left-hand pattern: two 180° turns of 2:00 each and two 1:00 straight legs, a 6:00 circuit. These are the trainer’s fixed hold parameters.</p>
+  <p>How you join the racetrack depends on your heading as you reach the fix. The FAA AIM (5-3-8 j.3) describes three entries for instrument holding:</p>
+  <ul>
+    <li><strong>Direct:</strong> fly to the fix and turn to follow the pattern.</li>
+    <li><strong>Teardrop:</strong> at the fix turn outbound to a heading 30° toward the holding side of the outbound course, fly it for one minute, then turn in the direction of the hold to intercept the inbound course.</li>
+    <li><strong>Parallel:</strong> at the fix turn to parallel the outbound course on the non-holding side for one minute, then turn back toward the holding side through more than 180° to return to the fix or intercept the inbound course.</li>
+  </ul>
+  <p>The holding side is the side of the inbound course where the pattern lies: right of the inbound course for a right-hand hold, left for a left-hand hold. The AIM assigns each entry to a lettered sector of its entry figure (<a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/images/aim0503_At_Anchor2.png">Holding Pattern Entry Procedures</a>), orients the entries to the 70° line on the holding side, and says a left-hand pattern is oriented the same way. Its text gives no sector widths, and this guide has not verified them against the figure, so <strong>it does not tell you which entry a heading calls for: use the AIM figure for that.</strong></p>
+  <p>What the guide can show is what each entry looks like when flown. The practice below flies the entry you pick from your heading at the fix and reports the turns it takes, so you can see, for example, why a parallel entry needs a turn of more than 180° back to the fix, or how a direct entry from the wrong side swings wide of the pattern.</p>
+  <p class="note"><strong>Applicability:</strong> these are FAA civil instrument holding entries, practised here as a general instrument-flying skill. Whether CV NATOPS prescribes these entries for a Case III marshal pattern has not been verified. The trainer itself joins the hold automatically when you select <em>Enter marshal hold</em>; it does not fly these manoeuvres.</p>
+
+  <section class="lesson" data-lesson="entry" aria-labelledby="entry-title">
+    <h3 id="entry-title">Practise: fly an entry</h3>
+    <p>Set the hold, the inbound course and your heading at the fix, then pick an entry to fly. The plot shows the racetrack, your arrival track and the path the entry flies. The path is a no-wind sketch at the trainer’s 250 NM/hour with 2:00 half-turns and one-minute legs; it turns the short way where the AIM does not name a direction, and homes on the fix at the end.</p>
+    <div class="lesson-grid">
+      <div class="controls">
+        <fieldset class="inline">
+          <legend>Hold direction</legend>
+          <label><input type="radio" name="turns" value="left" checked /> Left (trainer)</label>
+          <label><input type="radio" name="turns" value="right" /> Right</label>
+        </fieldset>
+        <label>Inbound course <output data-inbound-value>000°</output><input name="inbound" type="range" min="0" max="350" step="10" value="0" /></label>
+        <label>Heading at the fix <output data-heading-value>090°</output><input name="heading" type="range" min="0" max="359" step="1" value="90" /></label>
+        <fieldset class="inline">
+          <legend>Entry to fly</legend>
+          <label><input type="radio" name="entry" value="direct" /> Direct</label>
+          <label><input type="radio" name="entry" value="teardrop" /> Teardrop</label>
+          <label><input type="radio" name="entry" value="parallel" checked /> Parallel</label>
+        </fieldset>
+        <div class="buttons">
+          <button type="button" data-new>Random heading</button>
+        </div>
+      </div>
+      <svg viewBox="0 0 320 320" role="img" aria-label="Holding pattern at the marshal fix with the flown entry"></svg>
+    </div>
+    <p data-result aria-live="polite">Worked example: left-hand hold, inbound course 000°, arriving on heading 090°. The pattern lies west of the inbound course, so west is the holding side. A parallel entry turns right 90° onto the outbound heading 180°, which puts you east of the inbound course, on the non-holding side. After one minute it turns left through about 236°, more than 180°, back to the fix. Flying a direct entry instead would start with a 270° left turn onto the outbound heading.</p>
+    <noscript><p>The interactive plot needs JavaScript. The worked example above describes the same entries.</p></noscript>
+  </section>
+
+  <h2 id="eat">Planning the hold to EAT</h2>
+  <p>In the trainer, EAT is the time you leave the fix inbound and begin the descent. In the trainer you must call Commencing at the fix within 10 seconds of EAT, and EATs are whole minutes on a clock that starts at 16:00Z.</p>
+  <p>The planner below is a trainer-only arithmetic exercise. It uses the trainer’s fixed turns and stretches both straight legs, which is not a sourced technique: for FAA civil holding, the inbound leg is timed at 1 minute at or below 14,000 ft MSL. The trainer does not let you change leg length at all, so treat this as practice in timing arithmetic only:</p>
+  <ol>
+    <li><strong>Work out the time available</strong> from reaching the fix to EAT.</li>
+    <li><strong>Count whole circuits.</strong> Each standard trainer circuit is 6:00.</li>
+    <li><strong>Absorb the remainder in one circuit (trainer model only).</strong> In the model the two turns take a fixed 4:00 and both straight legs stretch or shrink equally, so every extra second on each leg adds two seconds to the circuit. The model extends the last circuit, or adds a short one if at least 4:00 remains. Legs longer than 1:00 exceed the FAA civil inbound-leg time; this is not how to adjust a real hold.</li>
+    <li><strong>Check on every pass of the fix</strong> and correct the next outbound leg if you are early or late.</li>
+    <li><strong>If you cannot make it,</strong> the trainer expects you to ask Marshal for an amended EAT rather than leave late.</li>
+  </ol>
+  <p class="note"><strong>Model limits:</strong> this planner is an educational no-wind, symmetric-leg model built on the trainer’s geometry, not an AIM procedure. For FAA civil holding the AIM sets the inbound leg time (1 minute at or below 14,000 ft MSL) and adjusts the outbound leg to achieve it (5-3-8 j.4); the model’s stretched inbound legs do not follow that, and with wind, outbound and inbound leg times differ, which this model does not represent. The trainer’s 250 KIAS hold is an exercise setpoint; FAA civil maximum holding speeds (5-3-8 j.2) are lower, so do not carry it over to civil holding. The trainer itself only flies standard circuits and lets the aircraft wait at the fix, which a real aircraft cannot do; it does not let you change leg lengths, speed or turn rate. Real holding corrections for wind and the CV NATOPS EAT guidance (a §6.4.4 lead) have not been verified.</p>
+
+  <section class="lesson" data-lesson="eat" aria-labelledby="eat-title">
+    <h3 id="eat-title">Practise: plan the hold</h3>
+    <p>Enter when you will reach the fix and your EAT, using HH:MM or HH:MM:SS.</p>
+    <div class="controls row">
+      <label>At the fix (UTC)<input name="arrive" type="text" value="16:08:20" inputmode="numeric" autocomplete="off" /></label>
+      <label>EAT (UTC)<input name="eat" type="text" value="16:21" inputmode="numeric" autocomplete="off" /></label>
+    </div>
+    <svg class="timeline" viewBox="0 0 320 64" role="img" aria-label="Hold timeline"></svg>
+    <div data-result aria-live="polite"><p>Worked example: reaching the fix at 16:08:20 for a 16:21 EAT leaves 12:40. Two standard circuits take 12:00, so 0:40 is left over. That is too short for an extra circuit, so the trainer model gives one standard circuit and then one stretched circuit of 6:40, with 1:20 outbound and inbound legs instead of 1:00.</p></div>
+    <noscript><p>The planner needs JavaScript. The worked example above shows the method.</p></noscript>
+  </section>
+
+  <h2 id="penetration">The trainer’s descent</h2>
+  <p>At EAT, leaving the fix inbound, call Commencing on Marshal. In the trainer you then turn to BRC, hold 250 KIAS and descend toward 1,200 ft at 4,000 ft/min. Marshal hands you to Approach, and you check in before platform.</p>
+  <p><strong>In the trainer, platform is an altitude, not a distance.</strong> At 5,000 ft report Platform and reduce the descent to 2,000 ft/min, continuing to 1,200 ft. Level there, and intercept the final bearing (BRC − 9° in the trainer).</p>
+  <figure>
+    <svg class="profile" viewBox="0 0 640 230" role="img" aria-labelledby="profile-caption">
+      <g class="grid">
+        <line x1="60" y1="190" x2="620" y2="190" />
+        <line x1="60" y1="20" x2="60" y2="190" />
+        {[0, 3, 6, 10, 12, 15, 18, 21].map(d => <g><line x1={620 - d * (560 / 21)} y1="190" x2={620 - d * (560 / 21)} y2="196" /><text x={620 - d * (560 / 21)} y="210" text-anchor="middle">{d}</text></g>)}
+        {[1200, 5000, 6000].map(a => <g><line x1="54" y1={190 - a * (160 / 6000)} x2="60" y2={190 - a * (160 / 6000)} /><text x="50" y={194 - a * (160 / 6000)} text-anchor="end">{a.toLocaleString('en-US')}</text></g>)}
+        <text x="340" y="226" text-anchor="middle">DME from Mother (NM)</text>
+        <text x="14" y="105" text-anchor="middle" transform="rotate(-90 14 105)">Altitude (ft)</text>
+      </g>
+      <polyline class="path" points={[[21, 6000], [19.96, 5000], [12.04, 1200], [3, 1200], [0, 0]].map(([d, a]) => `${620 - d * (560 / 21)},${190 - a * (160 / 6000)}`).join(' ')} />
+      <g class="marks">
+        <text x="70" y="22">Marshal fix · 21 DME · 6,000 ft</text>
+        <text x="90" y="50">Platform 5,000 ft ≈ 20 DME</text>
+        <text x="300" y="150">Level 1,200 ft ≈ 12 DME</text>
+        <line x1={620 - 10 * (560 / 21)} y1="158" x2={620 - 10 * (560 / 21)} y2="166" />
+        <line x1={620 - 8 * (560 / 21)} y1="158" x2={620 - 8 * (560 / 21)} y2="166" />
+        <text x="440" y="120">10 DME slow</text>
+        <text x="440" y="136">8 DME configure</text>
+        <text x="540" y="182">Glidepath ≈ 3 NM</text>
+      </g>
+    </svg>
+    <figcaption id="profile-caption">Trainer vertical profile with no wind, drawn to scale from the setpoints above. Leaving 21 DME at 6,000 ft and 250 NM/hour, the 1,000 ft to platform at 4,000 ft/min takes 15 s, about 1.0 NM, so platform is reached near 20 DME. The 3,800 ft from platform to 1,200 ft at 2,000 ft/min takes 1:54, about 7.9 NM, so the aircraft levels near 12 DME. These are exercise numbers, not a published profile.</figcaption>
+  </figure>
+
+  <h2 id="final">The trainer’s final approach</h2>
+  <ul>
+    <li><strong>10 DME:</strong> begin slowing to 200 KIAS, level at 1,200 ft on the final bearing.</li>
+    <li><strong>8 DME:</strong> gear, flaps and hook down; select on-speed and DLC (direct lift control). Be configured and on-speed by 6 DME. The trainer’s 135 KIAS on-speed value is an exercise setpoint, not a verified F-14 approach speed or angle-of-attack value.</li>
+    <li><strong>About 3 NM:</strong> intercept the glidepath and follow the needles. In the trainer, Approach says “fly bullseye” once you are aligned.</li>
+    <li><strong>About 0.75 NM:</strong> call the ball on the LSO (landing signal officer) frequency. The trainer’s LSO then calls your line-up and glidepath deviations.</li>
+    <li><strong>Touchdown:</strong> the trainer simulates a three-wire arrestment when you are configured, on speed and on centreline; otherwise it waves you off and you climb on the final bearing. Bolters, wind over deck and ACLS (automatic carrier landing system) exchanges are not simulated.</li>
+  </ul>
+
+  <h2 id="check">Check your understanding</h2>
+  <form class="lesson quiz" data-lesson="quiz" aria-labelledby="quiz-title" onsubmit="return false">
+    <h3 id="quiz-title">Five questions</h3>
+    <fieldset data-answer="b">
+      <legend>1. Marshal clears you to the 220 radial, 21 DME. What is your inbound course from the fix?</legend>
+      <label><input type="radio" name="q1" value="a" /> 220°</label>
+      <label><input type="radio" name="q1" value="b" /> 040°</label>
+      <label><input type="radio" name="q1" value="c" /> 310°</label>
+      <p data-explanation hidden><strong></strong>The inbound course is the radial’s reciprocal: 220° − 180° = 040°.</p>
+    </fieldset>
+    <fieldset data-answer="b">
+      <legend>2. You are on the 090 radial at 30 DME. The fix is the 180 radial at 21 DME. Which heading is closest to the direct track?</legend>
+      <label><input type="radio" name="q2" value="a" /> 180°, the fix radial</label>
+      <label><input type="radio" name="q2" value="b" /> 235°</label>
+      <label><input type="radio" name="q2" value="c" /> 270°, toward Mother</label>
+      <p data-explanation hidden><strong></strong>The fix lies south-west of you. The line from (30, 0) to (0, −21) points about 235°. The fix radial is a direction from Mother, not from you.</p>
+    </fieldset>
+    <fieldset data-answer="b">
+      <legend>3. A left-hand hold has an inbound course of 040°. Flying a teardrop entry, which heading do you take from the fix?</legend>
+      <label><input type="radio" name="q3" value="a" /> 190°</label>
+      <label><input type="radio" name="q3" value="b" /> 250°</label>
+      <label><input type="radio" name="q3" value="c" /> 220°</label>
+      <p data-explanation hidden><strong></strong>The outbound course is 040° + 180° = 220°. A left-hand pattern lies left of the inbound course, to the north-west, so the teardrop heading is 30° from 220° toward that side: 250°. 190° points toward the non-holding side, and 220° is the outbound course itself, which a parallel entry flies on the non-holding side.</p>
+    </fieldset>
+    <fieldset data-answer="a">
+      <legend>4. In the guide’s trainer-only planner, you reach the fix with 9:30 to EAT. Circuits are 6:00, with 4:00 of turns. What does the planner give?</legend>
+      <label><input type="radio" name="q4" value="a" /> One stretched circuit with 2:45 legs</label>
+      <label><input type="radio" name="q4" value="b" /> One standard circuit, then leave 3:30 early</label>
+      <label><input type="radio" name="q4" value="c" /> Two standard circuits</label>
+      <p data-explanation hidden><strong></strong>9:30 is one circuit plus 3:30, too short for a second circuit, so the planner stretches one circuit to 9:30, leaving 5:30 for the two legs, 2:45 each. That is the trainer model’s arithmetic only: 2:45 legs exceed the FAA civil 1-minute inbound leg, so it is not a real holding technique. Leaving early (b) misses EAT, and two circuits (c) take 12:00 and arrive late.</p>
+    </fieldset>
+    <fieldset data-answer="b">
+      <legend>5. What changes at platform in the trainer?</legend>
+      <label><input type="radio" name="q5" value="a" /> You slow to 200 KIAS</label>
+      <label><input type="radio" name="q5" value="b" /> You report Platform and reduce the descent from 4,000 to 2,000 ft/min</label>
+      <label><input type="radio" name="q5" value="c" /> You lower the gear</label>
+      <p data-explanation hidden><strong></strong>Platform is 5,000 ft. Speed and configuration changes come later, at 10 and 8 DME.</p>
+    </fieldset>
+    <div class="buttons"><button type="button" data-check>Check answers</button></div>
+    <p data-score role="status" aria-live="polite"></p>
+  </form>
+
+  <h2 id="launch">Launch the trainer</h2>
+  <p>The trainer puts the exercise together in one sortie: Marshal check-in, point-to-point navigation, the hold and EAT, the descent, final and the ball. Direct the pilot using heading, airspeed, altitude and vertical-rate commands. Read the sortie popup, then select Start Exercise. Instructor mode gives cues and pauses at decisions; switch it off to rehearse without hints. Voice is optional and uses your browser’s speech voices.</p>
+  <p>The trainer needs a whole window, so it always opens on its own rather than inside this page.</p>
+  <p class="launch">
+    <a class="launch-button" href={trainerHref} target="_blank" rel="noopener" data-experience-launch data-experience-id={caseIII.id}>Launch the Case III trainer<span> (opens in a new window)</span></a>
+  </p>
+  <p>{caseIII.maturity}. Revision {caseIII.revision}.</p>
+  <noscript><p>The trainer requires JavaScript. This guide’s text, worked examples and sources remain readable without it.</p></noscript>
+
+  <h2 id="limits">Scope and limits</h2>
+  <p>Aircraft dynamics, AoA, fuel consumption, glidepath and arrestment are synthetic. Outside the hold, the airspeed number is also used as NM/hour for map movement; IAS-to-TAS conversion and wind are not modeled. Hold geometry uses a fixed synthetic 250 NM/hour. Every airspeed, altitude, vertical rate, DME fix, timing and configuration gate shown in the trainer and this guide (for example 250 KIAS at the 6,000 ft, 21 DME marshal, the 4,000 then 2,000 ft/min descent, and the 10 and 8 DME slow-down and configuration points) is an exercise setpoint; none is a verified procedure, simulator value or aircraft limitation. The night-themed scenario does not model date, lighting or visibility conditions. This is not an approved operating procedure or a proficiency assessment. The exact DCS version has not been verified. Radio dialogue and scoring criteria are inherited exercise content, not verified Navy phraseology or measures of proficiency.</p>
+  <p>The guide’s calculations (point-to-point track, entry rule and hold plan) are simplified educational models: flat-earth plotting around Mother, DME as horizontal range, no wind, and the trainer’s fixed turns and legs. The 2009 CV NATOPS citation in the source register is a historical research lead only: its cited passages, current applicability and claim mapping have not been verified. Fixed turns and legs are synthetic exercise parameters, not a claim about a prescribed hold.</p>
+
+  <h2 id="sources">Sources and unresolved review</h2>
+  <p>No applicable Navy or DCS passage has been verified for the trainer’s Case III exercise, numeric gates, radio dialogue or scoring. A revision-3 review inspected limited Heatblur F-14 and CASE I passages for DCS-specific context only; those do not validate this exercise. References do not certify procedures or grant rights to reproduce manuals. No manual files or third-party media are included.</p>
+  <ul>
+    <li><a href="https://info.publicintelligence.net/CV-NATOPS-JUL09.pdf">NAVAIR 00-80T-105, CV NATOPS, 31 July 2009</a>, §§6.4.1.1 and 6.4.4, pp. 6-6 and 6-8: historical research lead only; the passages and current applicability were not verified, and this guide makes no claim from them.</li>
+    <li><a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap5_section_3.html">FAA Aeronautical Information Manual</a>, ¶5-3-8 “Holding”, accessed 24 October 2026: the entry procedures (parallel, teardrop, direct), the nonstandard-pattern note that entries are oriented to the 70° line on the holding side, inbound leg timing (1 minute at or below 14,000 ft MSL, outbound adjusted to achieve it), the maximum holding airspeeds, and the entry figure “Holding Pattern Entry Procedures” (<a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/images/aim0503_At_Anchor2.png">image</a>), which this guide cites but has not inspected. FAA civil instrument holding only; it does not establish Case III marshal procedure.</li>
+    <li><a href="https://www.digitalcombatsimulator.com/upload/iblock/e1b/430ooc582lpb0npynbsewan6omd5ohvs/DCS_Supercarrier_Operations_Guide_EN.pdf">Eagle Dynamics, DCS: Supercarrier Operations Guide</a>, updated 20 November 2024, CASE III recovery pp. 75–81: possible DCS-specific dialogue and sequence lead; pages and module-version mapping were not verified, and it does not establish real-world procedure.</li>
     <li><a href="https://f14.manuals.heatblur.se/">Heatblur F-14 manual</a>: a revision-3 review inspected the <a href="https://github.com/Heatblur-Simulations/f-14-manual/blob/49bbd9a144c32033bd3b3d98f04b113c58f22fa0/src/f14bu/cockpit/pilot/left_instrument_panel.md">Airspeed/AoA indicator passages</a>, <a href="https://github.com/Heatblur-Simulations/f-14-manual/blob/49bbd9a144c32033bd3b3d98f04b113c58f22fa0/src/f14bu/procedures/landing_procedures.md">CASE I landing section</a> and <a href="https://github.com/Heatblur-Simulations/f-14-manual/blob/49bbd9a144c32033bd3b3d98f04b113c58f22fa0/src/f14bu/cockpit/pilot/right_console.md">flap caution table</a> at commit <code>49bbd9a144c32033bd3b3d98f04b113c58f22fa0</code>. These do not establish the Case III procedure or validate the trainer’s 135/280/225 KIAS exercise gates; module-version mapping remains unverified.</li>
   </ul>
 </SiteLayout>
-<style>
-  iframe{width:100%;border:1px solid #767676;display:block;min-height:800px}
-  :global(.page-content:has(#case-iii-frame)){max-width:none}
-  :global(.page-layout:has(#case-iii-frame)){display:block}
-  :global(.page-layout:has(#case-iii-frame)>.subject-nav){position:static;margin-bottom:1rem}
-</style>
-<script is:inline>
-  const frame = document.querySelector('#case-iii-frame');
-  window.addEventListener('message', event => {
-    if (!frame || event.origin !== location.origin || event.source !== frame.contentWindow) return;
-    if (event.data?.type !== 'oversweep:case-iii:size' || !Number.isFinite(event.data.height)) return;
-    frame.height = String(Math.min(12000, Math.max(800, event.data.height)));
-  });
+<script>
+  import '../../../lessons/case-iii/lesson-ui.mjs';
 </script>
+<style>
+  code { overflow-wrap: anywhere; }
+  .contents ol { columns: 2; column-gap: 2rem; padding-left: 1.5rem; }
+  .contents li { break-inside: avoid; }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--color-border); }
+  .table-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  caption { padding: 0.5rem 0.75rem; text-align: left; color: var(--color-muted); font-size: 0.9rem; }
+  th, td { padding: 0.45rem 0.75rem; border-top: 1px solid var(--color-border); text-align: left; vertical-align: top; }
+  thead th { background: var(--color-surface); }
+  tbody th { white-space: nowrap; }
+  .note { padding: 0.75rem 1rem; border-left: 0.25rem solid var(--color-border); background: var(--color-surface); }
+  .lesson { margin-block: 1.5rem; padding: 1rem; border: 1px solid var(--color-text); }
+  .lesson h3 { margin-top: 0; }
+  .lesson-grid { display: grid; gap: 1rem; }
+  .controls { display: grid; gap: 0.6rem; align-content: start; }
+  .controls.row { grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); }
+  .controls label { display: grid; gap: 0.2rem; font-weight: 700; }
+  .controls output { font-weight: 400; font-variant-numeric: tabular-nums; }
+  fieldset { margin: 0; padding: 0.5rem 0.75rem; border: 1px solid var(--color-border); }
+  legend { font-weight: 700; }
+  fieldset.inline { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; }
+  fieldset label, .quiz label { display: flex; align-items: center; gap: 0.4rem; min-height: 2.75rem; font-weight: 400; }
+  input[type="number"], input[type="text"] { min-height: 2.75rem; padding: 0.3rem 0.5rem; font: inherit; border: 1px solid var(--color-border); max-width: 12rem; }
+  input[type="range"] { min-height: 2.75rem; width: 100%; }
+  input:focus-visible, button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  button { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: #fff; background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
+  button + button { color: var(--color-text); background: #fff; }
+  .derived { margin: 0; }
+  .feedback { font-weight: 700; min-height: 1.6em; }
+  .lesson svg { width: 100%; max-width: 24rem; height: auto; justify-self: center; color: var(--color-text); }
+  .lesson svg.timeline { max-width: none; margin-block: 0.75rem; }
+  .lesson:not(.ready) .buttons, .lesson:not(.ready) svg, .lesson:not(.ready) .controls { display: none; }
+  .quiz:not(.ready) .buttons { display: none; }
+  .quiz:not(.ready) [data-explanation] { display: block; }
+  .quiz fieldset { margin-bottom: 1rem; }
+  .quiz [data-explanation] { margin: 0.25rem 0 0; }
+  figure { margin: 1.5rem 0; }
+  figcaption { color: var(--color-muted); font-size: 0.9rem; }
+  .profile { width: 100%; height: auto; font-size: 12px; }
+  .profile .grid line, .profile .marks line { stroke: var(--color-text); }
+  .profile .grid text, .profile .marks text { fill: var(--color-text); }
+  .profile .path { fill: none; stroke: var(--color-text); stroke-width: 3; }
+  .launch { margin-block: 1.5rem; }
+  .launch-button { display: inline-flex; flex-wrap: wrap; align-items: center; min-height: 3rem; padding: 0.6rem 1.2rem; color: #fff; background: var(--color-text); font-weight: 700; font-size: 1.1rem; text-decoration: none; }
+  .launch-button span { font-weight: 400; font-size: 0.95rem; }
+  .launch-button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+  :global(.lesson svg .ring) { fill: none; stroke: var(--color-text); }
+  :global(.lesson svg .ring.minor) { stroke: var(--color-border); stroke-dasharray: 2 3; }
+  :global(.lesson svg text) { fill: var(--color-text); font: 11px Arial, Helvetica, sans-serif; }
+  :global(.lesson svg .compass) { font-weight: 700; }
+  :global(.lesson svg .ring-label) { fill: var(--color-muted); font-size: 9px; }
+  :global(.lesson svg .label.strong) { font-weight: 700; font-size: 12px; }
+  :global(.lesson svg .station) { fill: var(--color-text); }
+  :global(.lesson svg .radial) { stroke: var(--color-border); stroke-dasharray: 5 3; }
+  :global(.lesson svg .you) { fill: #fff; stroke: var(--color-text); stroke-width: 2; }
+  :global(.lesson svg .fix) { fill: var(--color-text); }
+  :global(.lesson svg .track) { stroke: var(--color-link); stroke-width: 2.5; color: var(--color-link); }
+  :global(.lesson svg .parallel) { stroke: var(--color-link); stroke-width: 1.5; stroke-dasharray: 6 4; color: var(--color-link); }
+  :global(.lesson svg .flown) { fill: none; stroke: var(--color-link); stroke-width: 2.5; stroke-dasharray: 7 4; }
+  :global(.lesson svg .racetrack) { fill: none; stroke: var(--color-text); stroke-width: 2; }
+  :global(.lesson svg .inbound) { stroke: var(--color-text); stroke-width: 2; }
+  :global(.lesson svg .arrival) { stroke: var(--color-link); stroke-width: 2.5; color: var(--color-link); }
+  :global(.lesson svg .circuit) { stroke: var(--color-text); fill: var(--color-surface); }
+  :global(.lesson svg .circuit.adjusted) { fill: #d7dbe0; stroke-dasharray: 4 2; }
+  :global(.lesson svg .circuit.short) { fill: #fff; stroke-dasharray: 2 2; }
+  @media (min-width: 40rem) {
+    .lesson-grid { grid-template-columns: minmax(12rem, 1fr) minmax(0, 1.3fr); }
+  }
+  @media (max-width: 30rem) {
+    .contents ol { columns: 1; }
+  }
+</style>

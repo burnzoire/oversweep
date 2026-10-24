@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { dev } from 'astro';
-import { loadExperiences } from './check_experiences.mjs';
+import { launchLink, loadExperiences } from './check_experiences.mjs';
 const request = url => fetch(url, { signal: AbortSignal.timeout(15000) });
 const experiences = await loadExperiences();
 
@@ -13,8 +13,15 @@ for (const base of ['/', '/oversweep/']) {
       const route = `${base}manual/${e.subject}/${e.slug}/`;
       const page = await request(`${origin}${route}`);
       assert.equal(page.status, 200, route);
-      const source = (await page.text()).match(/<iframe[^>]*src="([^"]+)"/)?.[1];
-      assert(source, `${route} must embed the trainer frame`);
+      const html = await page.text();
+      const source = e.launch === 'window'
+        ? html.match(/<a\b[^>]*href="([^"]+)"[^>]*data-experience-launch/)?.[1]
+        : html.match(/<iframe[^>]*src="([^"]+)"/)?.[1];
+      assert(source, `${route} must ${e.launch === 'window' ? 'link to' : 'embed'} the trainer frame`);
+      if (e.launch === 'window') {
+        assert(launchLink(html, source), `${route} must open the trainer in a new window`);
+        assert(!/<iframe\b/.test(html), `${route} must not frame a window-only experience`);
+      }
       const frame = await request(new URL(source, origin));
       assert.equal(frame.status, 200, `trainer frame at ${source} must not render the 404 page`);
       const frameHTML = await frame.text();

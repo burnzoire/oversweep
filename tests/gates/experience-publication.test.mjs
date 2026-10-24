@@ -59,3 +59,17 @@ test('review builds require excluded experiences to be complete', async () => {
   const problems = await check({ 'index.html': '<p>Home</p>' }, { experience: { publication: 'excluded' }, review: true });
   assert(problems.some(p => p.includes('wrapper page is missing')));
 });
+
+test('a window-only experience must be linked in a new window and never framed', async () => {
+  const wrapper = 'manual/navigation/example/index.html';
+  const launch = `<section ${tag}>${experience.maturity}</section><a href="/experiences/example/" target="_blank" rel="noopener" data-experience-launch>Launch</a>`;
+  const options = { experience: { launch: 'window' } };
+  assert.deepEqual(await check({ ...complete, [wrapper]: launch }, options), []);
+  let problems = await check(complete, options);
+  assert(problems.some(p => p.includes('in a new window')));
+  assert(problems.some(p => p.includes('frames a window-only experience')));
+  problems = await check({ ...complete, [wrapper]: launch.replace(' target="_blank"', '') }, options);
+  assert(problems.some(p => p.includes('in a new window')));
+  problems = await check({ ...complete, [wrapper]: launch }, { experience: { launch: 'popup' } });
+  assert(problems.some(p => p.includes('unknown launch')));
+});
