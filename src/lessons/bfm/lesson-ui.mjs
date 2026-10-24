@@ -1,10 +1,13 @@
 // Presentation for the BFM module's interactive blocks. All numbers come from
 // lesson-model.mjs; this file only reads inputs and draws results.
 import { BANDS, T45, geometry, levelTurn, maxNoseLow, norm, pursuit, radialG, speedBand } from './lesson-model.mjs';
+import { SIGMA_15K, flatScissors, highYoYo, lowYoYo, relative, rollingScissors, splitS, summary } from './maneuvers.mjs';
+import { VIEWS, render } from './ribbon.mjs';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const rad = (d) => d * Math.PI / 180;
 const r0 = (v) => Math.round(v).toLocaleString('en-US');
+const r10 = (v) => r0(Math.round(v / 10) * 10);
 const reduceMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
 function el(name, attrs = {}, text) {
@@ -276,6 +279,93 @@ function setupDeck(root) {
   draw();
 }
 
+/* ---------- Maneuvers in three dimensions ---------- */
+// Each maneuver: its aircraft (with a dashed comparison track where there is
+// one), three fixed views, and a readout of the model's numbers.
+const ghost = (pair) => ({ ...pair[1], id: 'ghost', ghost: true });
+const MANEUVERS = {
+  splits: () => {
+    const ac = splitS();
+    const s = summary(ac[0].track, SIGMA_15K);
+    return {
+      ac, views: [VIEWS.perspective(-60, 20), VIEWS.top(), VIEWS.sideEast()],
+      text: [`Split-S from ${r0(s.entrySpeed)} KIAS at 15,000 ft, pulling at the lift limit: ${r10(s.altitudeLoss)} ft to complete, exit at ${r0(s.exitSpeed)} KIAS on the reverse heading, peak ${s.maxG.toFixed(1)} G.`,
+        'The band goes dark where you see its underside: inverted at the top, from above.'],
+    };
+  },
+  high: () => {
+    const ac = highYoYo(), none = highYoYo({ yoyo: false });
+    const r = relative(ac[1].track, ac[0].track).at(-1), n = relative(none[1].track, none[0].track).at(-1);
+    const s = summary(ac[1].track);
+    return {
+      ac: [...ac, ghost(none)], views: [VIEWS.perspective(20, 25), VIEWS.top(), VIEWS.rear()],
+      text: [`The yo-yo climbs ${r10(s.altitudeGain)} ft above the bandit and slows from ${r0(s.entrySpeed)} to ${r0(s.minSpeed)} kt. After ${r.t.toFixed(0)} s you are ${r0(r.range)} ft behind, ${Math.round(r.aot)}° off its tail, closing at ${Math.round(r.closure)} kt: in the control zone's range band.`,
+        `Without it (dashed), the same pursuit is ${r0(n.range)} ft behind at ${n.t.toFixed(0)} s, inside the 2,000 ft in-close region and still closing.`],
+    };
+  },
+  low: () => {
+    const ac = lowYoYo(), none = lowYoYo({ yoyo: false });
+    const r = relative(ac[1].track, ac[0].track).at(-1), n = relative(none[1].track, none[0].track).at(-1);
+    const s = summary(ac[1].track);
+    return {
+      ac: [...ac, ghost(none)], views: [VIEWS.perspective(20, 20), VIEWS.top(), VIEWS.sideEast()],
+      text: [`The yo-yo drops ${r10(s.altitudeLoss)} ft below the bandit and speeds up from ${r0(s.entrySpeed)} to ${r0(s.maxSpeed)} kt before working the nose back up. After ${r.t.toFixed(0)} s you are ${r0(r.range)} ft behind, ${Math.round(r.aot)}° off its tail, ${r0(Math.abs(r.dz))} ft ${r.dz < 0 ? 'below' : 'above'} it.`,
+        `A level pursuit from the same start (dashed) ends ${r0(n.range)} ft behind. In this model the low yo-yo buys no range against a bandit holding its turn, and costs altitude.`],
+    };
+  },
+  rolling: () => ({
+    ac: rollingScissors(), views: [VIEWS.perspective(25, 15), VIEWS.top(), VIEWS.rear()],
+    text: ['Illustration: both aircraft roll over the top of each other in opposite directions, their flight paths crossing at the top and again at the bottom, while both drift downrange. Seen from behind, each traces a loop.'],
+  }),
+  flats: () => ({
+    ac: flatScissors(), views: [VIEWS.perspective(25, 25), VIEWS.top(), VIEWS.rear()],
+    text: ['Illustration: a slow weave in the horizontal, each aircraft reversing toward the other as the flight paths cross, and trading airspeed for altitude to slow its travel downrange.'],
+  }),
+};
+
+function setupManeuvers(root) {
+  const svg = root.querySelector('svg');
+  const out = root.querySelector('[data-result]');
+  const boxes = [[0, 0, 640, 330], [0, 330, 320, 230], [320, 330, 320, 230]];
+  const cache = {};
+  const poly = (pts, close) => `M${pts.map((p) => `${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' L')}${close ? ' Z' : ''}`;
+  function draw() {
+    const id = root.querySelector('input[name="maneuver"]:checked').value;
+    const m = cache[id] ??= MANEUVERS[id]();
+    svg.replaceChildren();
+    m.views.forEach((v, i) => {
+      const [x, y, w, h] = boxes[i];
+      const fig = render(m.ac, v, boxes[i]);
+      const g = el('g', { class: 'rb-view' });
+      g.append(el('rect', { x: x + 1, y: y + 1, width: w - 2, height: h - 2, class: 'frame' }));
+      for (const r of fig.refs) g.append(el('path', { d: poly(r.pts), class: `rb-${r.kind}` }));
+      for (const r of fig.ghosts) g.append(el('path', { d: poly(r.pts), class: 'rb-ghost' }));
+      for (const s of fig.shapes) {
+        const part = el('g', { class: `rb rb-${s.id} ${s.face}` });
+        part.append(el('path', { d: poly(s.pts, true), class: 'rb-fill' }));
+        if (s.kind === 'band') {
+          const [a, b, c, d] = s.pts;
+          part.append(el('path', { d: `${poly([a, b])} ${poly([d, c])}`, class: 'rb-edge' }));
+          if (s.tick) part.append(el('path', { d: poly([a, d]), class: 'rb-edge tick' }));
+        } else part.append(el('path', { d: poly(s.pts, true), class: 'rb-edge' }));
+        g.append(part);
+      }
+      for (const k of fig.marks) g.append(el('text', { x: k.pt[0], y: k.pt[1] + 4, 'text-anchor': 'middle', class: `lbl small rb-mark rb-${k.id}` }, k.first ? k.label : Math.round(k.t)));
+      g.append(el('text', { x: x + 10, y: y + 18, class: 'lbl small' }, v.label));
+      if (fig.feetPerUnit) {
+        // 1,000 ft scale bar, bottom left of an orthographic view.
+        const bar = 1000 / fig.feetPerUnit;
+        g.append(el('path', { d: `M${x + 12} ${y + h - 14} h${bar.toFixed(1)} M${x + 12} ${y + h - 18} v8 M${(x + 12 + bar).toFixed(1)} ${y + h - 18} v8`, class: 'thin' }));
+        g.append(el('text', { x: x + 16 + bar, y: y + h - 11, class: 'lbl small' }, '1,000 FT'));
+      } else if (fig.grid) g.append(el('text', { x: x + 10, y: y + h - 10, class: 'lbl small' }, `GROUND GRID ${r0(fig.grid)} FT`));
+      svg.append(g);
+    });
+    out.replaceChildren(...m.text.map((t) => Object.assign(document.createElement('p'), { textContent: t })));
+  }
+  root.addEventListener('change', draw);
+  draw();
+}
+
 /* ---------- Figure callouts ---------- */
 function setupFlow(root) {
   const items = [...root.querySelectorAll('[data-flow]')];
@@ -317,7 +407,7 @@ function setupTerms(root) {
   ask();
 }
 
-const blocks = { geometry: setupGeometry, pursuit: setupPursuit, turn: setupTurn, loop: setupLoop, deck: setupDeck, flow: setupFlow, overshoot: setupFlow, terms: setupTerms };
+const blocks = { maneuvers: setupManeuvers, geometry: setupGeometry, pursuit: setupPursuit, turn: setupTurn, loop: setupLoop, deck: setupDeck, flow: setupFlow, overshoot: setupFlow, terms: setupTerms };
 for (const root of document.querySelectorAll('[data-lesson]')) {
   blocks[root.dataset.lesson]?.(root);
   root.classList.add('ready');

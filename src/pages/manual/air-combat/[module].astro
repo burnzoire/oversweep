@@ -11,17 +11,18 @@ const contents = [
  ['geometry', 'Geometry: who is offensive?'], ['pursuit', 'Pursuit curves'],
  ['performance', 'Turn performance'], ['vertical', 'Using the vertical'], ['deck', 'The deck and the 10% rule'],
  ['flow', 'One-circle and two-circle flow'], ['overshoots', 'Overshoots and energy'],
- ['guns', 'Guns employment'], ['terms', 'BFM terms'], ['check', 'Check your understanding'],
+ ['maneuvers', 'Maneuvering in three dimensions'], ['guns', 'Guns employment'], ['terms', 'BFM terms'], ['check', 'Check your understanding'],
  ['sources', 'Sources and applicability'],
 ];
-const p = (pages: string) => `[1, ${pages.includes('–') || pages.includes(',') ? 'pp.' : 'p.'} ${pages}]`;
+const cite = (n: number) => (pages: string) => `[${n}, ${pages.includes('–') || pages.includes(',') ? 'pp.' : 'p.'} ${pages}]`;
+const p = cite(1), q = cite(2);
 ---
 <SiteLayout title={bfm.title} activeSection="manual" activeSubject="air-combat" compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Air Combat',href:sitePath('manual/air-combat/')},{label:bfm.title}]}>
  <section class="status-panel" data-module-id={bfm.id} data-module-revision={bfm.revision}>
   <h2>{bfm.maturity}</h2>
   <p>Module revision {bfm.revision} · One-versus-one (1v1) basic fighter maneuvers (BFM). Aircraft-agnostic concepts, illustrated with the US Navy's T-45C training syllabus. Defensive and high-aspect BFM and section (2v1) engaged maneuvering are outside this revision.</p>
-  <p>Learn the geometry first, then how turn performance, the vertical and energy decide what each aircraft can do. Every figure is interactive.</p>
+  <p>Learn the geometry first, then how turn performance, the vertical and energy decide what each aircraft can do. Every figure is interactive. Revision 2 adds three-dimensional maneuvers: the split-S, yo-yos and scissors.</p>
  </section>
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
   <ol>{contents.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol>
@@ -29,7 +30,7 @@ const p = (pages: string) => `[1, ${pages.includes('–') || pages.includes(',')
 
  <h2 id="overview">Purpose and learning objectives</h2>
  <p>BFM is the craft of maneuvering one aircraft against another, within visual range, to reach a position to employ weapons or deny the opponent one. The Navy's training text notes that the fundamental tactics and maneuvers of air combat have changed little in the last 70 years. <a href="#source-p1289">{p('xiii')}</a></p>
- <p>By the end you should be able to: say who has positional advantage from the 3/9 line, angle off and aspect; choose lead, pure or lag pursuit for a purpose; explain corner airspeed and the difference between a load-limited and a lift-limited pull; describe how gravity changes a turn in the vertical; tell a one-circle fight from a two-circle fight; and name the three overshoots.</p>
+ <p>By the end you should be able to: say who has positional advantage from the 3/9 line, angle off and aspect; choose lead, pure or lag pursuit for a purpose; explain corner airspeed and the difference between a load-limited and a lift-limited pull; describe how gravity changes a turn in the vertical; tell a one-circle fight from a two-circle fight; name the three overshoots; and describe the split-S, the high and low yo-yo and the flat and rolling scissors in three dimensions.</p>
  <p class="note">This is a conceptual reference, not a syllabus or an aircraft procedure. Numbers such as 410 KIAS or 7.33 G belong to the T-45C in the source. Your aircraft's corner airspeed, limits and training rules come from its own manual and your unit's rules.</p>
 
  <h2 id="rules">The training frame</h2>
@@ -163,6 +164,38 @@ const p = (pages: string) => `[1, ${pages.includes('–') || pages.includes(',')
  </section>
  <p>An <strong>energy excursion</strong> is the conscious sacrifice of airspeed for angles, accepted to take or deny a shot or turning room. <a href="#source-p1289">{p('5-7')}</a> In the flat scissors, airspeed (kinetic energy) is traded for altitude (potential energy) to control airspeed and downrange travel; a source rule of thumb there is that your airspeed minus 100 is the maximum usable angle of bank, about 30° at 130 KIAS. <a href="#source-p1289">{p('5-13–5-15')}</a> On the offensive, the source's T-45 guidance is not to let airspeed fall below 300–330 KIAS except during an energy excursion for a shot. <a href="#source-p1289">{p('5-24')}</a></p>
 
+ <h2 id="maneuvers">Maneuvering in three dimensions</h2>
+ <p>Fights are not flat. Pulling the nose above or below the horizon trades airspeed for altitude and back, changes how gravity helps or hurts the turn, and takes you out of the opponent's plane of motion. Figure 8 draws five maneuvers as wide ribbon arrows: each aircraft's path is a band as wide as its wings, lying in its wing plane, so the band twists as the aircraft rolls. Every maneuver is shown in a fixed perspective view and two flat views, so nothing needs rotating.</p>
+ <section class="lesson figure-lesson" data-lesson="maneuvers" aria-labelledby="man-title">
+  <h3 id="man-title" class="fig-title">Figure 8 — Maneuvers as ribbon arrows (perspective, plan and side views)</h3>
+  <fieldset class="inline"><legend>Maneuver</legend>
+   <label><input type="radio" name="maneuver" value="splits" checked /> Split-S</label>
+   <label><input type="radio" name="maneuver" value="high" /> High yo-yo</label>
+   <label><input type="radio" name="maneuver" value="low" /> Low yo-yo</label>
+   <label><input type="radio" name="maneuver" value="rolling" /> Rolling scissors</label>
+   <label><input type="radio" name="maneuver" value="flats" /> Flat scissors</label>
+  </fieldset>
+  <div class="fig-scroll" role="region" aria-label="Figure 8, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 560" role="img" aria-label="Ribbon-arrow drawing of the selected maneuver in a perspective view, a plan view and a side or rear view"></svg></div>
+  <p class="no-js">Interactive figure unavailable. In the figure's model a split-S from 250 KIAS at 15,000 ft, pulled at the lift limit, takes about 6,440 ft and exits at about 340 KIAS; a high yo-yo from 450 kt climbs about 1,320 ft and arrives about 2,900 ft behind the bandit, where the same pursuit without it closes to 650 ft.</p>
+  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Reading the ribbons: light where you see the band's canopy side, dark where you see its underside; numbers are seconds from the start, at the same times on both aircraft; the arrowhead is where the drawing ends. Blue is you, black and white the bandit; a dashed line is the same start flown without the maneuver. Ribbons are drawn wider than to scale. Model: each aircraft is a point mass flying at the end of its lift vector, with gravity; thrust balances drag at 1 G, and pulling harder bleeds energy at a rate set so that a 7.33 G pull at the 410 KIAS corner bleeds 8 kt per second, the source's T-45 figure <a href="#source-p1289">{p('4-4')}</a>. The G available grows with the square of indicated airspeed up to the 7.33 G limit at corner. The split-S is flown at 15,000 ft (true airspeed is about 26% above indicated there; at sea level the same pull would take about 4,050 ft). The yo-yos are flown at sea level against a bandit holding a level 350 kt, 3,000 ft turn. The scissors are fixed shapes that illustrate the geometry; they are not solved fights.</p>
+ </section>
+
+ <h3 id="split-s">Split-S</h3>
+ <p>From level flight, roll inverted and pull through the bottom to level flight on the reverse heading: a pure nose-low, wings-level maneuver. A T-45 needs about 6,000–6,500 ft of altitude to complete a pure nose-low maneuver (split-S) at maximum performance, 19–21 units AOA; slower airspeeds need less. <a href="#source-p1289">{p('4-7')}</a> The aircraft does not bleed energy in an extreme nose-low maneuver: it comes out faster than it went in. <a href="#source-p1289">{p('4-6')}</a> Before going nose-low, check the 10% rule above.</p>
+
+ <h3 id="high-yo-yo">High yo-yo</h3>
+ <p>The high yo-yo is "a lag pursuit maneuver designed to reduce angle off and closure rate". It prevents an in-close, low-to-medium angle-off overshoot and controls nose-to-tail separation. When you recognize excessive closure or a potential overshoot, quarter-roll away from the bandit's maneuvering plane and pull the nose up, trading airspeed for altitude; then roll back toward the bandit and pull back down into pursuit. "A low-angle overshoot at range is far better than a high angle overshoot in-close." <a href="#source-p1218">{q('28')}</a> P-1289 gives the same idea at the perch: to prevent an in-close overshoot, ease the pull or roll 45° up and out of plane momentarily. <a href="#source-p1289">{p('5-23')}</a></p>
+
+ <h3 id="low-yo-yo">Low yo-yo</h3>
+ <p>When you overshoot the control zone, or cannot manage the turn rate to bring your nose to bear, a low yo-yo is an option. Pull the nose down toward the inside of the bandit's turn and position it well in front of the bandit (lead pursuit); approaching the desired weapons range, work the nose back up toward the bandit, avoiding heavy buffet. If that builds excessive closure, use a high yo-yo. <a href="#source-p1218">{q('27')}</a> P-1289 is cautious: when following a bandit's nose-low maneuver, "Do not perform a low yo-yo type maneuver to make up angles as this will only result in a loss of altitude advantage." <a href="#source-p1289">{p('5-25')}</a> As an illustration only, not evidence: in the figure's simplified model, against a bandit holding its turn, the low yo-yo also costs altitude without gaining range.</p>
+
+ <h3 id="rolling-scissors">Rolling scissors</h3>
+ <p>The rolling scissors (the "roller") is a fight with both aircraft inside each other's bubble for as long as it stays neutral; offensively, finding yourself in one means you have made a mistake. <a href="#source-p1289">{p('5-18')}</a> In the training set it starts from a wings-level pull that forces a vertical overshoot. <a href="#source-p1289">{p('5-19')}</a> A key to winning is getting your nose up while you are at the bottom, with enough airspeed to force a vertical overshoot but not so much that you flush downrange. Over the top, roll to put your lift vector above the bandit, about 60° angle of bank, in a lift-limit pull. A full iteration normally needs 4,000 ft of turning room above the deck. <a href="#source-p1289">{p('5-20–5-21')}</a> It ends when one aircraft gains enough advantage to pull for a shot, or the fight is redefined: overbank in your current direction, trade altitude for airspeed and transition to two-circle flow. <a href="#source-p1289">{p('5-20–5-21')}</a></p>
+
+ <h3 id="flat-scissors">Flat scissors</h3>
+ <p>The flat scissors ("flats") is a slow-speed, high-AOA radius fight that typically follows an in-close overshoot. Both aircraft try to reduce their travel downrange with a series of S turns, transferring airspeed into altitude, with the lift vector typically placed aft of the bandit's control zone. <a href="#source-p1289">{p('5-13')}</a> A rule of thumb is to pull 40–50° nose-high at first and begin recovering at 150–160 KIAS; simply flying as slowly as possible, wings level, with no energy left to maneuver, is not the answer. <a href="#source-p1289">{p('5-14–5-15')}</a> To work in phase, turn aft of the bandit's 3/9 line before the flight paths cross. <a href="#source-p1289">{p('5-15')}</a></p>
+
  <h2 id="guns">Guns employment</h2>
  <p>The source contrasts two gun reticle modes. The lead-angle-computing mode is for non-maneuvering targets at 1,000 ft and is not used in its syllabus; the real-time gunsight (RTGS) is for tracking a maneuvering target by keeping the pipper ahead of it. <a href="#source-p1289">{p('5-8–5-9')}</a> In the snap shot drill, adjust the pull until the bandit fills three-quarters to all of the pipper (about a 1,000–1,500 ft shot) and squeeze the trigger as the bandit crosses the canopy bow, holding it until he passes through the head-up display. If the shooter would violate the 500 ft bubble, either aircraft calls "skip it". <a href="#source-p1289">{p('5-9–5-12')}</a> For training kill assessment, two valid snap shots, or one second of cumulative tracking, equal a kill. <a href="#source-p1289">{p('2-5')}</a></p>
 
@@ -181,6 +214,11 @@ const p = (pages: string) => `[1, ${pages.includes('–') || pages.includes(',')
   <div><dt>Energy excursion</dt><dd>The conscious sacrifice of airspeed for angles.</dd></div>
   <div><dt>Two-circle flow</dt><dd>A nose-to-tail rate fight, usually won by the aircraft with the higher turn rate at its corner speed.</dd></div>
   <div><dt>One-circle flow</dt><dd>A nose-to-nose radius fight, won by the aircraft with the smaller turn radius.</dd></div>
+  <div><dt>Split-S</dt><dd>A pure nose-low maneuver: roll inverted and pull through to level flight on the reverse heading.</dd></div>
+  <div><dt>High yo-yo</dt><dd>A lag maneuver out of the bandit's plane of motion, trading airspeed for altitude to reduce angle off and closure.</dd></div>
+  <div><dt>Low yo-yo</dt><dd>Nose down inside the bandit's turn and in front of it, then back up toward it approaching weapons range.</dd></div>
+  <div><dt>Rolling scissors</dt><dd>A neutral fight with both aircraft inside each other's bubble, rolling over the top of each other.</dd></div>
+  <div><dt>Flat scissors</dt><dd>A slow-speed, high-AOA radius fight of S turns, each aircraft trying to reduce its travel downrange.</dd></div>
   <div><dt>Hard deck</dt><dd>The training floor: at least 10,000 ft above ground level in the T-45 rules.</dd></div>
  </dl>
  <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
@@ -198,11 +236,14 @@ const p = (pages: string) => `[1, ${pages.includes('–') || pages.includes(',')
  <details><summary>Where in a 4 G loop is the turn tightest?</summary><p>Over the top, where gravity adds to the pull: about 5 radial G against 3 at the bottom.</p></details>
  <details><summary>You are 3,000 ft above the deck. How far nose-low can you go?</summary><p>About 30° by the 10% rule.</p></details>
  <details><summary>In a one-circle fight, does a higher turn rate win?</summary><p>No. One-circle is a radius fight: the smaller turn radius has the advantage.</p></details>
+ <details><summary>You are closing fast, low angle off, about to overshoot. Which yo-yo?</summary><p>A high yo-yo: roll away from the bandit's plane of motion and pull up, trading airspeed for altitude to kill closure, then come back down behind it. A low-angle overshoot at range beats a high-angle one in close.</p></details>
+ <details><summary>How much room does a T-45 need for a split-S at maximum performance?</summary><p>About 6,000–6,500 ft. Start one only with that much room above the deck.</p></details>
 
  <h2 id="sources">Sources and applicability</h2>
- <p id="source-p1289"><strong>[1] Naval Air Training Command, CNATRA P-1289 (Rev. 01-16), Flight Training Instruction, Basic Fighter Maneuvering (1v1), Section Engaged Maneuvering (2v1), T-45.</strong> Revision 3 dated 7 January 2016, Change 1 dated 3 March 2021; cleared for public release. <a href="https://www.cnatra.navy.mil/local/docs/pat-pubs/P-1289.pdf">Read the publication (cnatra.navy.mil)</a>. Inspected 24 October 2026: introduction p. xiii; PADS and kill criteria pp. 2-2, 2-5; training rules pp. 3-1–3-3; aerodynamics pp. 4-1–4-8; offensive BFM pp. 5-1–5-24.</p>
+ <p id="source-p1289"><strong>[1] Naval Air Training Command, CNATRA P-1289 (Rev. 01-16), Flight Training Instruction, Basic Fighter Maneuvering (1v1), Section Engaged Maneuvering (2v1), T-45.</strong> Revision 3 dated 7 January 2016, Change 1 dated 3 March 2021; cleared for public release. <a href="https://www.cnatra.navy.mil/local/docs/pat-pubs/P-1289.pdf">Read the publication (cnatra.navy.mil)</a>. Inspected 24 October 2026: introduction p. xiii; PADS and kill criteria pp. 2-2, 2-5; training rules pp. 3-1–3-3; aerodynamics pp. 4-1–4-8; offensive BFM pp. 5-1–5-25 (revision 2 adds pp. 4-6, 5-13–5-21 and 5-23–5-25).</p>
+ <p id="source-p1218"><strong>[2] US Navy flight training publication P-1218, Tactical Formation, (11-98) Original.</strong> Read as transcribed by Integrated Publishing: <a href="https://navyflightmanuals.tpub.com/P-1218/Low-Yo-Yo-P-12180038-38.htm">low yo-yo, p. 27</a> and <a href="https://navyflightmanuals.tpub.com/P-1218/High-Yo-Yo-P-12180039-39.htm">high yo-yo, p. 28</a> (navyflightmanuals.tpub.com). Inspected 24 October 2026. The transcription carries no issuing command or distribution statement, and its host is not yet one the repository's source review can read, so claims cited to it are unverified by that review.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/bfm-p1289-evidence.md">P-1289 evidence</a>.</p>
- <p>Figures 1–7 are original line drawings, not reproductions of any manual figure, and are not to scale except where a caption says so. The level-turn, radial-G and pursuit figures use the simplified models described with them.</p>
+ <p>Figures 1–8 are original line drawings, not reproductions of any manual figure, and are not to scale except where a caption says so. The level-turn, radial-G, pursuit and maneuver figures use the simplified models described with them.</p>
  <p class="note">Applicability: the source is a T-45C training instruction. Its airspeeds, G limit, deck altitudes and training rules are that syllabus's figures, used here as worked examples. This revision is Drafted pending independent source-backed review.</p>
 </SiteLayout>
 <script>import '../../../lessons/bfm/lesson-ui.mjs';</script>
@@ -288,4 +329,18 @@ const p = (pages: string) => `[1, ${pages.includes('–') || pages.includes(',')
   :global(.natops .nose) { stroke: var(--color-link); }
   :global(.natops .part.active .ln) { stroke: var(--color-link); stroke-width: 3.2; }
   :global(.natops .part.active .lbl) { fill: var(--color-link); }
+  :global(.natops .rb-fill) { stroke-width: 0.6; stroke-linejoin: round; }
+  :global(.natops .rb-edge) { fill: none; stroke-width: 1.3; stroke-linejoin: round; }
+  :global(.natops .rb-edge.tick) { stroke-width: 1.8; }
+  :global(.natops .rb.rb-own .rb-edge) { stroke: var(--color-link); }
+  :global(.natops .rb.rb-own.top .rb-fill) { fill: #cfe0f0; stroke: #cfe0f0; }
+  :global(.natops .rb.rb-own.under .rb-fill) { fill: var(--color-link); stroke: var(--color-link); }
+  :global(.natops .rb.rb-bandit .rb-edge) { stroke: var(--color-text); }
+  :global(.natops .rb.rb-bandit.top .rb-fill) { fill: #fff; stroke: #fff; }
+  :global(.natops .rb.rb-bandit.under .rb-fill) { fill: #8a8f94; stroke: #8a8f94; }
+  :global(.natops .rb-mark.rb-own) { fill: var(--color-link); }
+  :global(.natops .rb-grid) { fill: none; stroke: #c8ccd0; stroke-width: 1; }
+  :global(.natops .rb-drop) { fill: none; stroke: var(--color-border); stroke-width: 1; stroke-dasharray: 3 3; }
+  :global(.natops .rb-datum) { fill: none; stroke: var(--color-border); stroke-width: 1; stroke-dasharray: 3 3; }
+  :global(.natops .rb-ghost) { fill: none; stroke: var(--color-text); stroke-width: 1.4; stroke-dasharray: 6 4; }
 </style>
