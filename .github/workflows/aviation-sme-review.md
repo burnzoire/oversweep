@@ -4,15 +4,14 @@ description: Advisory source-backed review of aviation content changes
 on:
   pull_request:
     types: [opened, reopened, ready_for_review, synchronize]
+    # Keep in sync with smeReviewPaths in scripts/sme-review-gate.mjs (tested).
     paths:
       - "content/**"
-      - "docs/aviation-sme-review.md"
-      - "docs/content-*.md"
-      - "docs/plans/**"
+      - "src/pages/**"
+      - "src/lessons/**"
+      - "src/experiences/**"
       - "docs/reviews/**"
-      - "public/**"
-      - "src/**"
-      - "tests/**"
+      - "docs/aviation-sme-review.md"
       - "scripts/prepare_review_sources.py"
       - ".github/agents/aviation-sme-reviewer.agent.md"
       - ".github/workflows/aviation-sme-review.md"
@@ -32,6 +31,8 @@ engine:
   # This release has a reviewed SHA256SUMS pin in the trusted setup action.
   # Avoid compatibility-window upgrades outrunning that action's integrity pins.
   version: "1.0.98"
+  # Pinned rather than "auto" so reruns are judged by the same model.
+  model: claude-sonnet-5.5
   copilot-sdk: true
   agent: aviation-sme-reviewer
 imports:
@@ -94,6 +95,8 @@ safe-outputs:
     engine:
       id: copilot
       version: "1.0.98"
+      # Keep the small detection model; it would otherwise inherit the agent's.
+      model: detection
   allowed-domains: [default-safe-outputs]
   create-issue: false
   report-failed-jobs: false
@@ -184,33 +187,65 @@ tolerance. Never derive expected values solely from the implementation. Check
 instructional clarity and contradictions without treating educational
 simplifications as standard procedures.
 
+## Previous review and consistency
+
+The prepared data may include a `PREVIOUS SME REVIEW` section (this workflow's
+last comment on the PR, as untrusted data) and a `CHANGED SINCE PREVIOUS REVIEW`
+section (the diff from that review's head to this one). When they are present:
+
+1. Re-check every blocking finding from the previous review first. Report each
+   one as resolved or still open, keeping its `B<n>` number.
+2. Raise a new blocking finding only for text that changed since the previous
+   review, or for a Critical finding anywhere. Do not newly block unchanged text
+   that the previous review already read and did not block; note it as
+   non-blocking instead.
+3. Do not reverse an earlier non-blocking disposition of unchanged text unless a
+   retrieved source passage now contradicts it, and say so explicitly.
+
+Without a previous review, review the whole changed scope.
+
 ## One current-head comment
 
 When the head is still current, call the `add_comment` safe-output exactly once.
-It is configured to target only the resolved PR number. Start the visible body
-with `# Oversweep Aviation SME advisory review`. Include these exact,
-machine-readable lines:
+It is configured to target only the resolved PR number. Keep the whole comment
+under about 8,000 characters so it is never cut off; summarise rather than
+repeat. Use exactly this layout, in this order:
 
-- `**Reviewed head:** \`<40-character SHA>\``
-- `**Release readiness:** BLOCKED` or `**Release readiness:** READY`
-- `**Blocking findings:** <integer>`
-- `**Actions run:** <URL ending in /actions/runs/<run-id>>`
+```
+# Oversweep Aviation SME advisory review
 
-For each finding, state `release_blocking: true` or `release_blocking: false`
-and explain the disposition. Include:
+**Reviewed head:** `<40-character SHA>`
+**Release readiness:** BLOCKED | READY
+**Blocking findings:** <integer>
+**Actions run:** <URL ending in /actions/runs/<run-id>>
 
-- evidence-supported claims with exact source locators and applicability;
-- factual defects, unresolved evidence/applicability, and editorial suggestions
-  in separate sections, each with severity and an actionable recommendation;
-- independently derived numerical checks where relevant;
-- unreviewed files/claims, inaccessible sources, and other limitations; and
-- the review scope and any claims outside it.
+## Blocking findings
 
-Critical, high, and unresolved medium evidence/applicability findings block
-release readiness. Low editorial suggestions do not block by themselves. A
-review with no applicable aviation changes may say `READY` with zero blocking
-findings, but must state that aviation review was not applicable. If no issue is
-found, say so and still list the checked scope and untested areas.
+- **B1** · <Critical|High|Medium> · `<file path>` · <the claim, quoted briefly>. **Source:** <publisher, title, exact locator and what it says>. **Fix:** <the exact change that would resolve it>.
+
+## Previous blockers
+
+- **B<n>** · resolved | still open · <one line>
+
+<details><summary>Full review</summary>
+
+... scope, evidence-supported claims, non-blocking findings, numerical checks,
+editorial suggestions, untested areas and limitations ...
+
+</details>
+```
+
+Each blocking finding is one line in that exact `- **B<n>** · severity · `file` ·
+detail` format, because the gate check parses those lines and shows them on the
+PR. Leave out the file segment only when a finding has no single file. Write
+`None.` under `## Blocking findings` when there are none, and leave out
+`## Previous blockers` when there was no previous review. The integer on the
+`Blocking findings` line must equal the number of `B<n>` lines.
+
+Apply the blocking rule in the imported standard exactly. A review with no
+applicable aviation changes says `READY` with zero blocking findings and states
+that aviation review was not applicable. If no issue is found, say so and still
+list the checked scope and untested areas inside the details block.
 The `replace-older-comments` safe output updates this workflow's prior summary
 instead of accumulating comments. PR updates cancel superseded runs; the final
 head check suppresses any stale result that reaches output processing. This

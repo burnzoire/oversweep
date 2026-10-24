@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { evaluateSmeResult, isSmeReviewRequired } from "../../scripts/sme-review-gate.mjs";
+import { readFile } from "node:fs/promises";
+import {
+  evaluateOverride,
+  evaluateSmeResult,
+  isSmeReviewRequired,
+  parseBlockingFindings,
+  smeReviewPaths,
+} from "../../scripts/sme-review-gate.mjs";
 
 const sha = "02662989f721c9733379c24b1a31e9bfddb9cd4d";
 const run = { id: 123, head_sha: sha, status: "completed", conclusion: "success" };
@@ -11,22 +18,83 @@ const readySummary = `# Oversweep Aviation SME advisory review
 **Blocking findings:** 0
 **Actions run:** https://github.com/burnzoire/oversweep/actions/runs/123
 `;
+const commentUrl = "https://github.com/burnzoire/oversweep/pull/1#issuecomment-1";
 const review = (body) => evaluateSmeResult({
   run,
   jobs: [{ name: "agent", conclusion: "success" }],
   pullRequest: { head: { sha } },
-  comments: [{ user: { login: "github-actions[bot]" }, body }],
+  comments: [{ user: { login: "github-actions[bot]" }, body, html_url: commentUrl }],
+});
+const blockedSummary = readySummary
+  .replace("Release readiness:** READY", "Release readiness:** BLOCKED")
+  .replace("Blocking findings:** 0", "Blocking findings:** 2") + `
+## Blocking findings
+
+- **B1** · Medium · \`src/pages/manual/case-iii.astro\` · Platform is called "not a DME fix". **Source:** P-816 p. A-5. **Fix:** describe it at 20 NM and 5,000 ft.
+- **B2** · High · Unsourced 250 KIAS limit stated as fact. **Fix:** cite it or label it a trainer setpoint.
+
+<details><summary>Full review</summary>
+
+- **B9** · Low · \`x\` · not a blocker
+</details>
+`;
+
+test("requires review for aviation content, lessons and trainers only", () => {
+  assert.equal(isSmeReviewRequired([{ filename: "src/experiences/case-iii/index.html" }]), true);
+  assert.equal(isSmeReviewRequired([{ filename: "src/pages/manual/naval-operations/[trainer].astro" }]), true);
+  assert.equal(isSmeReviewRequired([{ filename: "src/lessons/case-iii/lesson-model.mjs" }]), true);
+  assert.equal(isSmeReviewRequired([{ filename: "docs/reviews/evidence.md" }]), true);
+  for (const filename of ["README.md", "tests/case-iii/model.cjs", "src/styles/global.css", "public/favicon.svg", "docs/content-standards.md"]) {
+    assert.equal(isSmeReviewRequired([{ filename }]), false, filename);
+  }
 });
 
-test("requires review for trainer, content, and source changes", () => {
-  assert.equal(isSmeReviewRequired([{ filename: "src/experiences/case-iii/index.html" }]), true);
-  assert.equal(isSmeReviewRequired([{ filename: "docs/content-standards.md" }]), true);
-  assert.equal(isSmeReviewRequired([{ filename: "README.md" }]), false);
+test("gate paths match the SME workflow trigger paths", async () => {
+  const workflow = await readFile(new URL("../../.github/workflows/aviation-sme-review.md", import.meta.url), "utf8");
+  const block = workflow.match(/^ {4}paths:\n((?: {6}- .+\n)+)/m)[1];
+  const paths = [...block.matchAll(/- "(.+)"/g)].map((match) => match[1]);
+  assert.deepEqual(paths, smeReviewPaths);
+});
+
+test("parses each listed blocker and ignores the collapsed full review", () => {
+  assert.deepEqual(parseBlockingFindings(blockedSummary), [
+    {
+      id: "B1",
+      severity: "Medium",
+      file: "src/pages/manual/case-iii.astro",
+      detail: 'Platform is called "not a DME fix". **Source:** P-816 p. A-5. **Fix:** describe it at 20 NM and 5,000 ft.',
+    },
+    { id: "B2", severity: "High", file: undefined, detail: "Unsourced 250 KIAS limit stated as fact. **Fix:** cite it or label it a trainer setpoint." },
+  ]);
+  assert.deepEqual(parseBlockingFindings(`${readySummary}\n## Blocking findings\n\nNone.\n`), []);
+});
+
+test("a blocked gate shows its blockers and links the full review", () => {
+  const result = review(blockedSummary);
+  assert.equal(result.ready, false);
+  assert.equal(result.blockers.length, 2);
+  assert.match(result.message, /2 blocking findings/);
+  assert.match(result.message, /\*\*B1\*\* \(Medium, `src\/pages\/manual\/case-iii\.astro`\): Platform/);
+  assert.match(result.message, /\*\*B2\*\* \(High\): Unsourced/);
+  assert.ok(result.message.includes(commentUrl));
+});
+
+test("only the owner's sme-override label overrides the review", () => {
+  const labels = [{ name: "sme-override" }];
+  const labeled = (login) => ({ event: "labeled", label: { name: "sme-override" }, actor: { login }, created_at: "2026-10-24T09:00:00Z" });
+  assert.equal(evaluateOverride({ labels: [], events: [labeled("burnzoire")], owner: "burnzoire" }), null);
+  const owner = evaluateOverride({ labels, events: [labeled("burnzoire")], owner: "burnzoire" });
+  assert.equal(owner.ready, true);
+  assert.match(owner.message, /@burnzoire overrode/);
+  const other = evaluateOverride({ labels, events: [labeled("burnzoire"), labeled("someone")], owner: "burnzoire" });
+  assert.equal(other.ready, false);
+  assert.equal(other.ignored, true);
 });
 
 test("accepts only a successful exact-head agent report", () => {
   assert.deepEqual(review(readySummary), {
     ready: true,
+    reportUrl: commentUrl,
     message: "The current-head SME review has no blocking findings.",
   });
 });

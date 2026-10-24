@@ -4,26 +4,59 @@ import { fileURLToPath } from "node:url";
 
 const workflowPath = ".github/workflows/aviation-sme-review.lock.yml";
 const summaryTitle = "Oversweep Aviation SME advisory review";
+export const overrideLabel = "sme-override";
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Keep in sync with `on.pull_request.paths` in .github/workflows/aviation-sme-review.md;
+// a test checks the two lists match. Code, test, style and registry changes are not
+// aviation claims, so they no longer wait on an SME review.
+export const smeReviewPaths = [
+  "content/**",
+  "src/pages/**",
+  "src/lessons/**",
+  "src/experiences/**",
+  "docs/reviews/**",
+  "docs/aviation-sme-review.md",
+  "scripts/prepare_review_sources.py",
+  ".github/agents/aviation-sme-reviewer.agent.md",
+  ".github/workflows/aviation-sme-review.md",
+  workflowPath,
+  ".github/workflows/shared/aviation-sme-review.md",
+];
+
+const matchesPath = (file, pattern) =>
+  pattern.endsWith("/**") ? file.startsWith(pattern.slice(0, -2)) : file === pattern;
 
 export function isSmeReviewRequired(files) {
   return files.some(({ filename, previous_filename }) =>
-    [filename, previous_filename].some((file) =>
-      file &&
-      (file.startsWith("content/") ||
-        file === "docs/aviation-sme-review.md" ||
-        (file.startsWith("docs/content-") && file.endsWith(".md")) ||
-        file.startsWith("docs/plans/") ||
-        file.startsWith("docs/reviews/") ||
-        file.startsWith("public/") ||
-        file.startsWith("src/") ||
-        file.startsWith("tests/") ||
-        file === ".github/agents/aviation-sme-reviewer.agent.md" ||
-        file === ".github/workflows/aviation-sme-review.md" ||
-        file === workflowPath ||
-        file === ".github/workflows/shared/aviation-sme-review.md"),
-    ),
+    [filename, previous_filename].some((file) => file && smeReviewPaths.some((pattern) => matchesPath(file, pattern))),
   );
+}
+
+// Blocking findings are listed one per line under "## Blocking findings" as
+// "- **B1** · <severity> · `<file>` · <claim and fix>"; the file is optional.
+export function parseBlockingFindings(body) {
+  const section = body.match(/^##\s+Blocking findings\s*$([\s\S]*?)(?=^##\s|^<details|(?![\s\S]))/im)?.[1] ?? "";
+  return section
+    .split("\n")
+    .map((line) => line.match(/^\s*[-*]\s+\*\*(B\d+)\*\*\s*·\s*([^·]+?)\s*·\s*(?:`([^`]+)`\s*·\s*)?(.+)$/))
+    .filter(Boolean)
+    .map(([, id, severity, file, detail]) => ({ id, severity, file, detail: detail.trim() }));
+}
+
+// An override counts only if the repository owner applied the label most recently.
+export function evaluateOverride({ labels, events, owner }) {
+  if (!labels?.some((label) => label.name === overrideLabel)) return null;
+  const applied = events
+    ?.filter((event) => event.event === "labeled" && event.label?.name === overrideLabel)
+    .at(-1);
+  if (!applied || applied.actor?.login !== owner) {
+    return { ready: false, ignored: true, message: `The \`${overrideLabel}\` label was not applied by @${owner}, so it is ignored.` };
+  }
+  return {
+    ready: true,
+    message: `@${owner} overrode the SME review with the \`${overrideLabel}\` label at ${applied.created_at}. Remove the label to re-apply the review result.`,
+  };
 }
 
 export function evaluateSmeResult({ run, jobs, pullRequest, comments }) {
@@ -46,6 +79,7 @@ export function evaluateSmeResult({ run, jobs, pullRequest, comments }) {
     comment.body.includes(`/actions/runs/${run.id}`),
   );
   if (!report) return fail("The current SME run has no visible PR review summary.");
+  const reportUrl = report.html_url;
 
   const reviewedHead = report.body.match(/^\*\*Reviewed head:\*\*\s*`?([a-f0-9]{40})`?\s*$/im)?.[1];
   if (reviewedHead !== run.head_sha) return fail("The PR summary does not identify this run's exact head SHA.");
@@ -56,9 +90,21 @@ export function evaluateSmeResult({ run, jobs, pullRequest, comments }) {
     return fail("The SME summary is missing its machine-readable release-readiness result.");
   }
   if (readiness !== "READY" || blockingFindings > 0) {
-    return fail(`SME findings block release readiness (${blockingFindings} blocking finding${blockingFindings === 1 ? "" : "s"}).`);
+    const blockers = parseBlockingFindings(report.body);
+    const count = Math.max(blockingFindings, blockers.length);
+    const list = blockers.map(({ id, severity, file, detail }) => `- **${id}** (${severity}${file ? `, \`${file}\`` : ""}): ${detail}`).join("\n");
+    return {
+      ready: false,
+      blockers,
+      reportUrl,
+      message: [
+        `The SME review found ${count} blocking finding${count === 1 ? "" : "s"}.`,
+        list || "The review did not list its blockers in the expected format; read the full review.",
+        reportUrl ? `Full review: ${reportUrl}` : "",
+      ].filter(Boolean).join("\n\n"),
+    };
   }
-  return { ready: true, message: "The current-head SME review has no blocking findings." };
+  return { ready: true, reportUrl, message: "The current-head SME review has no blocking findings." };
 }
 
 async function request(apiUrl, token, path) {
@@ -83,10 +129,19 @@ async function pagedRequest(apiUrl, token, path) {
   }
 }
 
-async function writeSummary(message, ready) {
+const escapeData = (text) => text.replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
+const escapeProperty = (text) => escapeData(text).replace(/:/g, "%3A").replace(/,/g, "%2C");
+
+async function writeSummary(message, ready, blockers = []) {
   const text = `## Aviation SME review gate: ${ready ? "READY" : "BLOCKED"}\n\n${message}\n`;
   if (process.env.GITHUB_STEP_SUMMARY) await appendFile(process.env.GITHUB_STEP_SUMMARY, text);
   console.log(text);
+  // Annotations show each blocker on the PR's checks list and against the file.
+  for (const { id, severity, file, detail } of blockers) {
+    const location = file ? `file=${escapeProperty(file)},` : "";
+    console.log(`::error ${location}title=${escapeProperty(`SME blocker ${id} (${severity})`)}::${escapeData(detail)}`);
+  }
+  if (!ready && !blockers.length) console.log(`::error title=Aviation SME review gate::${escapeData(message)}`);
 }
 
 async function main() {
@@ -106,7 +161,17 @@ async function main() {
   if (pullRequest.head.sha !== headSha) throw new Error("PR head changed before the SME gate started.");
   const files = await pagedRequest(apiUrl, token, `${pullPath}/files`);
   if (!isSmeReviewRequired(files)) {
-    await writeSummary("No aviation-content or trainer implementation files changed; no SME review is required.", true);
+    await writeSummary("No aviation content, lesson or trainer files changed; no SME review is required.", true);
+    return;
+  }
+
+  const override = evaluateOverride({
+    labels: pullRequest.labels,
+    events: await pagedRequest(apiUrl, token, `/repos/${owner}/${repo}/issues/${pullNumber}/events`),
+    owner: event.repository?.owner?.login ?? owner,
+  });
+  if (override?.ready) {
+    await writeSummary(override.message, true);
     return;
   }
 
@@ -143,7 +208,8 @@ async function main() {
     pullRequest: currentPullRequest,
     comments,
   });
-  await writeSummary(result.message, result.ready);
+  const message = override?.ignored ? `${result.message}\n\n${override.message}` : result.message;
+  await writeSummary(message, result.ready, result.blockers);
   if (!result.ready) process.exitCode = 1;
 }
 

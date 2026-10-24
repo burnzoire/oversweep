@@ -132,6 +132,32 @@ class SourceSafety(unittest.TestCase):
         self.assertIn('Duplicate body', text)
         self.assertIn('later general source', text)
 
+    def review_comment(self, head):
+        return {'user': {'login': 'github-actions[bot]'},
+                'body': f'# Oversweep Aviation SME advisory review\n\n**Reviewed head:** `{head}`\n- **B1** · Medium · `src/pages/a.astro` · x'}
+
+    def test_previous_review_includes_changes_since_its_head(self):
+        old, new = 'a' * 40, 'b' * 40
+        compare = {'status': 'ahead', 'files': [
+            {'filename': 'src/pages/a.astro', 'status': 'modified', 'patch': '@@ -1 +1 @@\n-old\n+new'},
+            {'filename': 'tests/a.test.mjs', 'status': 'modified', 'patch': 'secret test diff'}]}
+        with patch.object(s, 'api_json', side_effect=[[self.review_comment(old)], compare]) as api:
+            text = s.previous_review('owner/repo', 1, new, 'token')
+        self.assertEqual(api.call_args.args[1], f'compare/{old}...{new}')
+        self.assertIn('PREVIOUS SME REVIEW', text)
+        self.assertIn('**B1**', text)
+        self.assertIn('+new', text)
+        self.assertNotIn('secret test diff', text)
+
+    def test_previous_review_ignores_other_authors_and_handles_rewrites(self):
+        forged = {'user': {'login': 'someone'}, 'body': self.review_comment('a' * 40)['body']}
+        with patch.object(s, 'api_json', side_effect=[[forged]]):
+            self.assertEqual(s.previous_review('owner/repo', 1, 'b' * 40, 'token'), '')
+        with patch.object(s, 'api_json', side_effect=[[self.review_comment('a' * 40)], {'status': 'diverged'}]):
+            self.assertIn('History was rewritten', s.previous_review('owner/repo', 1, 'b' * 40, 'token'))
+        with patch.object(s, 'api_json', side_effect=[[self.review_comment('b' * 40)]]):
+            self.assertIn('exact head', s.previous_review('owner/repo', 1, 'b' * 40, 'token'))
+
     def test_output_limit_reports_incomplete_content(self):
         text = s.render([('test', 'x' * (s.MAX_OUTPUT + 1))], 'a' * 40)
         self.assertLessEqual(len(text), s.MAX_OUTPUT)
