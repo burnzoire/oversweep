@@ -114,7 +114,12 @@ tool in Copilot SDK mode; the profile's cloud-agent `web` alias is not used as
 the workflow's source-retrieval mechanism. The agent has only read-only GitHub
 toolsets, no shell/edit access, and no checkout of the PR branch. The firewall
 allows cited-source retrieval from `faa.gov`, `digitalcombatsimulator.com`,
-`heatblur.se`, and `navsup.navy.mil`, plus the framework's `github` alias. In
+`heatblur.se`, `navsup.navy.mil`, `cnatra.navy.mil`,
+`www.cnatra.navy.mil`, and the owner-authorised `murphysys.com` mirror, plus
+the framework's `github` alias. Network permission does not establish document
+rights or source authority: the reviewer checks original publisher, edition,
+provenance and restrictions for each document. Public-domain or otherwise
+lawfully accessible material can be referenced; manuals are not redistributed. In
 the compiled lock, that alias expands to
 `*.githubusercontent.com`, `codeload.github.com`, `docs.github.com`,
 `github-cloud.githubusercontent.com`, `github-cloud.s3.amazonaws.com`,
@@ -219,3 +224,4 @@ Checked 22 October 2026. Recheck supported properties/tools when changing profil
 - [Configuration: agent tool alias, invocation and profile versioning](https://docs.github.com/en/copilot/reference/custom-agents-configuration)
 - [Create/select repository agents](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/create-custom-agents)
 - [Copilot code review](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-code-review)
+
