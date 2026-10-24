@@ -1,0 +1,24 @@
+---
+// The three overshoots: defender turning left, attacker track crossing it.
+// Plan view, not to scale. lesson-ui highlights [data-part] groups.
+const jet = 'M0 -11 L2 -5 L2 -2 L9 3 L9 5 L2 3 L2 7 L4 10 L4 11 L0 10 L-4 11 L-4 10 L-2 7 L-2 3 L-9 5 L-9 3 L-2 -2 L-2 -5 Z';
+const panels = [
+  { id: 'path', x: 0, label: 'FLIGHT PATH', cross: 'M40 250 Q120 230 200 190', at: [200, 190, 63] },
+  { id: 'close', x: 213, label: 'IN-CLOSE', cross: 'M40 210 Q100 150 175 120', at: [175, 120, 68] },
+  { id: 'line', x: 426, label: '3/9 LINE', cross: 'M150 250 Q110 150 70 90', at: [70, 90, -34] },
+];
+---
+<svg class="natops overshoot" viewBox="0 0 640 300" role="img" aria-label="Flight path, in-close and 3/9 line overshoots, plan view">
+  <rect class="frame" x="1" y="1" width="638" height="298" />
+  {panels.map((p) => (
+    <g data-part={p.id} class="part" transform={`translate(${p.x} 0)`}>
+      <text class="lbl" x="106" y="28" text-anchor="middle">{p.label}</text>
+      <path class="ln dashed" d="M180 270 Q170 140 110 90 Q70 60 30 60" />
+      <path class="bandit" d={jet} transform="translate(116 96) rotate(-45)" />
+      <path class="ln centreline" d="M86 66 L146 126" />
+      <path class="ln heavy" d={p.cross} />
+      <path class="acft" d={jet} transform={`translate(${p.at[0]} ${p.at[1]}) rotate(${p.at[2]})`} />
+    </g>
+  ))}
+  <text class="lbl small" x="320" y="290" text-anchor="middle">- - DEFENDER TRACK (TURNING LEFT)   — ATTACKER TRACK   — · — DEFENDER 3/9 LINE</text>
+</svg>

@@ -1,0 +1,13 @@
+[
+  {
+    "id": "module.bfm",
+    "slug": "bfm",
+    "subject": "air-combat",
+    "revision": 1,
+    "title": "Basic Fighter Maneuvers",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Understand one-versus-one BFM geometry, pursuit, turn performance, vertical maneuvering, energy and guns employment well enough to describe what each aircraft is doing and why.",
+    "applicability": "Aircraft-agnostic concepts illustrated with US Navy T-45C training figures; type-specific numbers belong to that training example."
+  }
+]

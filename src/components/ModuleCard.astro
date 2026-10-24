@@ -1,0 +1,13 @@
+---
+import { moduleRoute, type Module } from '../data/modules';
+import { sitePath } from '../lib/paths';
+interface Props { module: Module }
+const { module } = Astro.props;
+---
+<section class="status-panel" data-module-id={module.id} data-module-revision={module.revision}>
+  <h2>{module.title}</h2>
+  <p><strong>{module.maturity}</strong>{module.publication !== 'published' && ' · Local review only'} · Module revision {module.revision}</p>
+  <p>{module.objective}</p>
+  <p>{module.applicability}</p>
+  <a href={sitePath(moduleRoute(module))}>Open the {module.title.toLowerCase()} module →</a>
+</section>

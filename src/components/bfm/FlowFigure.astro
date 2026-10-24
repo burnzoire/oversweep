@@ -1,0 +1,29 @@
+---
+// One-circle and two-circle flow after a neutral pass. Plan view, not to
+// scale. lesson-ui highlights [data-part] groups from the buttons below it.
+const jet = 'M0 -11 L2 -5 L2 -2 L9 3 L9 5 L2 3 L2 7 L4 10 L4 11 L0 10 L-4 11 L-4 10 L-2 7 L-2 3 L-9 5 L-9 3 L-2 -2 L-2 -5 Z';
+---
+<svg class="natops flow" viewBox="0 0 640 300" role="img" aria-label="Two-circle and one-circle flow after a pass, plan view">
+  <rect class="frame" x="1" y="1" width="638" height="298" />
+  <g data-part="2c" class="part">
+    <text class="lbl" x="160" y="28" text-anchor="middle">TWO-CIRCLE (2C) · NOSE-TO-TAIL</text>
+    <circle class="ln dashed" cx="90" cy="160" r="70" />
+    <circle class="ln" cx="230" cy="160" r="70" />
+    <circle class="fixmark" cx="160" cy="160" r="3" />
+    <text class="lbl small" x="160" y="250" text-anchor="middle">MERGE: BOTH TURN TOWARD THE OTHER</text>
+    <path class="tick" d="M90 90 l-8 -5 M90 90 l-8 5" />
+    <path class="tick" d="M230 230 l8 -5 M230 230 l8 5" />
+    <path class="acft" d={jet} transform="translate(152 150) rotate(0)" />
+    <path class="bandit" d={jet} transform="translate(168 172) rotate(180)" />
+    <text class="lbl small" x="160" y="276" text-anchor="middle">SEPARATE TURN CIRCLES, SAME TURN DIRECTION</text>
+  </g>
+  <g data-part="1c" class="part">
+    <text class="lbl" x="480" y="28" text-anchor="middle">ONE-CIRCLE (1C) · NOSE-TO-NOSE</text>
+    <circle class="ln" cx="480" cy="160" r="90" />
+    <path class="tick" d="M480 70 l-8 -5 M480 70 l-8 5" />
+    <path class="tick" d="M480 250 l-8 -5 M480 250 l-8 5" />
+    <path class="acft" d={jet} transform="translate(388 150) rotate(0)" />
+    <path class="bandit" d={jet} transform="translate(372 170) rotate(180)" />
+    <text class="lbl small" x="480" y="276" text-anchor="middle">ONE SHARED CIRCLE, OPPOSITE TURN DIRECTIONS</text>
+  </g>
+</svg>

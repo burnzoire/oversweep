@@ -6,8 +6,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "test": "node --test \"tests/**/*.test.mjs\" \"tests/*/*.cjs\"",
-    "check": "npm test && astro check && tsc --noEmit && npm run build && node scripts/check_site.mjs && node scripts/check_experiences.mjs",
-    "check:review": "astro build --base /oversweep && node scripts/check_site.mjs /oversweep && node scripts/check_experiences.mjs --review --base=/oversweep",
+    "check": "npm test && astro check && tsc --noEmit && npm run build && node scripts/check_site.mjs && node scripts/check_experiences.mjs && node scripts/check_modules.mjs",
+    "check:review": "astro build --base /oversweep && node scripts/check_site.mjs /oversweep && node scripts/check_experiences.mjs --review --base=/oversweep && node scripts/check_modules.mjs --review --base=/oversweep",
     "check:dev": "node scripts/check_experiences_dev.mjs"
   },
   "license": "MIT",
