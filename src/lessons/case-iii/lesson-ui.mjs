@@ -6,8 +6,19 @@ const SVG = 'http://www.w3.org/2000/svg';
 const C = 160; // SVG centre for 320 × 320 plots
 const fmt = (a) => String(Math.round(norm(a)) % 360).padStart(3, '0');
 const clock = (seconds) => { const s = Math.round(seconds); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
+// Leg times can end in half a second; keep it so the legs sum to the circuit.
+const legClock = (seconds) => Number.isInteger(seconds) ? clock(seconds) : `${clock(Math.floor(seconds))}.5`;
 const pt = (bearing, r) => [C + r * Math.sin(bearing * Math.PI / 180), C - r * Math.cos(bearing * Math.PI / 180)];
 const num = (input) => Number(input.value);
+// Typed values bypass min/max, so enforce each field's own range before plotting.
+function bounded(input) {
+  const value = num(input);
+  if (input.value.trim() === '' || !(value >= Number(input.min) && value <= Number(input.max))) {
+    const name = input.closest('label')?.firstChild?.textContent.trim() ?? input.name;
+    throw new RangeError(`${name} must be from ${input.min} to ${input.max}.`);
+  }
+  return value;
+}
 const randomInt = (lo, hi) => lo + Math.floor(Math.random() * (hi - lo + 1));
 
 function el(name, attrs = {}, text) {
@@ -42,19 +53,18 @@ function setupNavigation(root) {
   let revealed = false;
 
   const problem = () => ({
-    from: { radial: num(f.youRadial), dme: num(f.youDme) },
-    to: { radial: reciprocal(num(f.brc)), dme: num(f.fixDme) },
+    from: { radial: bounded(f.youRadial), dme: bounded(f.youDme) },
+    to: { radial: reciprocal(bounded(f.brc)), dme: bounded(f.fixDme) },
   });
 
   function draw() {
-    const { from, to } = problem();
-    root.querySelector('[data-fix-radial]').textContent = fmt(to.radial);
-    let answer;
-    try { answer = pointToPoint(from, to); } catch (error) {
+    let from, to, answer;
+    try { ({ from, to } = problem()); answer = pointToPoint(from, to); } catch (error) {
       out.textContent = error.message; svg.replaceChildren(); return;
     }
     const range = Math.max(5, Math.ceil(Math.max(from.dme, to.dme) / 5) * 5);
     const scale = 130 / range;
+    root.querySelector('[data-fix-radial]').textContent = fmt(to.radial);
     svg.replaceChildren();
     arrowMarker(svg, 'nav-arrow');
     compass(svg, 130);
@@ -91,7 +101,7 @@ function setupNavigation(root) {
   root.addEventListener('input', () => { revealed = false; feedback.textContent = ''; draw(); });
   root.querySelector('[data-check]').addEventListener('click', () => {
     let course;
-    try { ({ course } = pointToPoint(problem().from, problem().to)); } catch (error) { feedback.textContent = error.message; return; }
+    try { const { from, to } = problem(); ({ course } = pointToPoint(from, to)); } catch (error) { feedback.textContent = error.message; return; }
     const guess = num(f.guess);
     if (course === null || !Number.isFinite(guess) || f.guess.value === '') {
       feedback.textContent = course === null ? 'You are already at the fix.' : 'Enter a heading from 000 to 359 first.';
@@ -243,6 +253,9 @@ function setupEat(root) {
     if (plan.kind === 'late') {
       lines.push(`EAT passed ${clock(plan.lateBy)} ago. In the trainer, request an amended EAT on Marshal.`);
       svg.replaceChildren();
+    } else if (plan.kind === 'short' && available === 0) {
+      lines.push('You reach the fix exactly at EAT: no hold is needed, so call Commencing as you pass it inbound.');
+      svg.replaceChildren();
     } else if (plan.kind === 'short') {
       lines.push(`Less than ${clock(plan.minimum)} remains, the time for the two turns alone, so no circuit fits. The trainer’s aircraft waits at the fix, which a real aircraft cannot do; in the trainer, request an amended EAT if you will miss it.`);
       bar([[available, clock(available), 'short']], available);
@@ -251,7 +264,7 @@ function setupEat(root) {
       bar(Array.from({ length: plan.circuits }, () => [plan.standard, '6:00', 'standard']), available);
     } else {
       const option = (o, verb) => {
-        const adjusted = `one circuit with ${clock(o.legSeconds)} outbound and inbound legs (${clock(240 + 2 * o.legSeconds)} circuit)`;
+        const adjusted = `one circuit with ${legClock(o.legSeconds)} outbound and inbound legs (${clock(240 + 2 * o.legSeconds)} circuit)`;
         return o.circuits === 0 ? `${verb}: fly ${adjusted}.`
           : `${verb}: fly ${o.circuits} standard circuit${o.circuits === 1 ? '' : 's'}, then ${adjusted}.`;
       };
