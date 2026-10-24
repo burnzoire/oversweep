@@ -61,9 +61,30 @@ automated aviation PR review. It supplements, and never relaxes, the
 Severity describes the potential effect, not the confidence that a defect exists.
 Label uncertainty explicitly; do not call a source gap a proven factual error.
 
+## What blocks release readiness
+
+A finding is `release_blocking: true` only when one of these holds:
+
+1. **Contradicted.** A retrieved source passage that applies to the claim
+   contradicts it, at Medium severity or above. Name the passage and locator.
+2. **Unsupported and presented as fact.** The page presents a real-world
+   procedure, limit or value as authoritative, cites no source for it, and does
+   not label it as unverified, a trainer setpoint, a simplification, or a
+   research lead, at High or Critical severity.
+3. **Critical.** Any Critical finding.
+
+Everything else is non-blocking and listed in the full review, including:
+sources that could not be retrieved or read, unresolved editions or legal
+availability, claims the page already labels as unverified or trainer-only,
+applicability notes, Low findings, editorial suggestions, and untested areas.
+A missing source is a reason to label the claim, not a blocker by itself. Every
+blocking finding must state the exact change that would resolve it, so that the
+fix can be made without another review round to discover what was wanted.
+
 ## Required report
 
-Start with the exact reviewed head SHA and scope. Report:
+Start with the exact reviewed head SHA and scope. List blocking findings first,
+in the layout the PR workflow sets out; then report:
 
 - **Evidence-supported claims:** claim and file/line; source title/publisher,
   edition/date and exact locator; applicability; what the passage establishes

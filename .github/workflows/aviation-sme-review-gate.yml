@@ -2,7 +2,8 @@ name: Aviation SME review gate
 
 on:
   pull_request_target:
-    types: [opened, reopened, ready_for_review, synchronize]
+    # labeled/unlabeled re-run the gate when the owner adds or removes sme-override.
+    types: [opened, reopened, ready_for_review, synchronize, labeled, unlabeled]
 
 permissions:
   actions: read

@@ -95,7 +95,9 @@ Setting an entry to `published` is an owner publication decision for the exact
 revision; record it in the PR. Publication does not change maturity: a Drafted
 experience stays visibly marked Drafted, and Technically Validated still requires
 the content-standard evidence and independent SME review. The `Aviation SME
-review gate` remains a separate check on trainer and content changes.
+review gate` remains a separate check on trainer and content changes; see
+[reading and passing the SME gate](copilot-agents.md#reading-and-passing-the-sme-gate),
+including the owner-only `sme-override` label.
 
 Require `verify` from `Application checks` and `Aviation SME review gate` in the
 `main` ruleset, alongside foundation checks. This code change does not configure

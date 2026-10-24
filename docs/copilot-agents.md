@@ -133,7 +133,27 @@ selection is supported, and `web-fetch` is available in SDK mode; this workflow
 does not enable experimental dynamic workflows or web search.
 
 The workflow runs for opened, reopened, ready-for-review and synchronized PRs
-with relevant aviation/source/model paths changed; drafts are skipped. Use
+that change aviation content: `content/`, `src/pages/`, `src/lessons/`,
+`src/experiences/`, `docs/reviews/`, or the SME review files themselves. Code,
+test, style, `public/` and registry-only PRs are not reviewed and the gate
+passes them. The agent model is pinned (`claude-sonnet-5.5`) instead of `auto`.
+
+### Reading and passing the SME gate
+
+A finding blocks only when a retrieved source contradicts the claim (Medium or
+above), when an unsourced real-world procedure, limit or value is presented as
+fact without an unverified/trainer label (High or above), or when it is Critical.
+Everything else is listed in the review's collapsed "Full review" section.
+
+When `Aviation SME review gate / verify` is red, its check summary and
+annotations list each blocker (`B1`, `B2`, ...) with severity, file and the fix
+the reviewer wants, and link the full comment. The PR comment leads with the
+same list.
+
+To accept a review result you disagree with, the repository owner adds the
+`sme-override` label to the PR. The gate re-runs and passes, and its summary
+records who applied the override and when. A label applied by anyone else is
+ignored. Remove the label to apply the review result again. Use
 **Actions → Aviation SME PR review → Run workflow** with a PR number for a
 manual rerun. It reads PR files through GitHub tools without checking out or
 executing the branch, uses read-only agent permissions, and writes only one
@@ -233,8 +253,15 @@ changed module/evidence files through the GitHub API at the exact PR head, fetch
 allowlisted primary-source URLs and convert PDFs with Poppler. Retrieved text,
 page breaks, hashes and errors are appended to the agent input as untrusted
 evidence, alongside full changed module text. No PR script is executed, and the
-agent still has no shell/edit access. Source failures remain visible blockers;
-this does not weaken the gate or establish publication approval.
+agent still has no shell/edit access. Source failures are reported in the
+review, but a source that cannot be read is not by itself a blocker; it does not
+establish publication approval either.
+
+When the PR already has an SME review comment, the preprocessor also appends
+that comment and the diff from its reviewed head to the current head. The
+reviewer re-checks its earlier blockers and raises new blockers only for changed
+text (or a Critical finding), so reruns do not keep finding new reasons to block
+unchanged content.
 
 The source reader validates HTTPS hosts and redirects, bounds source count, byte
 size and output, separates GitHub authentication from public fetches, and checks
