@@ -90,7 +90,7 @@ function setupPursuit(root) {
   const svg = root.querySelector('svg');
   const out = root.querySelector('[data-result]');
   const play = root.querySelector('[data-play]');
-  let frame = 0, n = 0, from = 0, start = 0, track, draw;
+  let frame = 0, n = 0, from = 0, start = null, track, draw;
   function prepare() {
     const mode = root.querySelector('input[name="mode"]:checked').value;
     track = pursuit({ mode });
@@ -122,8 +122,11 @@ function setupPursuit(root) {
     play.textContent = n >= track.length - 1 ? 'Play' : 'Resume';
   }
   function tick(now) {
+    // Time from the first frame: a frame's timestamp can precede the click's
+    // performance.now(), which would step to before the start of the track.
+    start ??= now;
     // 0.1 s model steps played at 1.5× real time: 15 steps per second.
-    n = Math.min(track.length - 1, from + Math.floor((now - start) * 15 / 1000));
+    n = Math.min(track.length - 1, from + Math.max(0, Math.floor((now - start) * 15 / 1000)));
     draw(n);
     if (n < track.length - 1) frame = requestAnimationFrame(tick); else pause();
   }
@@ -133,7 +136,7 @@ function setupPursuit(root) {
     if (n >= track.length - 1) n = 0;
     play.textContent = 'Pause';
     from = n;
-    start = performance.now();
+    start = null;
     frame = requestAnimationFrame(tick);
   });
   root.addEventListener('change', () => { cancelAnimationFrame(frame); frame = 0; prepare(); n = track.length - 1; draw(n); play.textContent = 'Play'; });
