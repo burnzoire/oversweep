@@ -83,6 +83,7 @@ class SourceSafety(unittest.TestCase):
             {'head': {'sha': head}},
             [{'filename': 'src/pages/manual/module.astro', 'status': 'modified'}],
             {'encoding': 'base64', 'size': len(content), 'content': base64.b64encode(content.encode()).decode()},
+            [],
             {'head': {'sha': head}},
         ]
         with patch.object(s, 'api_json', side_effect=calls), patch.object(s, 'fetch_source', side_effect=OSError('not readable')):
@@ -148,7 +149,7 @@ class SourceSafety(unittest.TestCase):
                    'https://navyaviation.tpub.com/general.html')
         calls = [{'head': {'sha': head}},
                  [{'filename': 'src/pages/module.astro', 'status': 'modified'}],
-                 contents(content), {'head': {'sha': head}}]
+                 contents(content), [], {'head': {'sha': head}}]
         bodies = iter([b'unique primary body', b'unique primary body', b'later general source'])
 
         def download(url, directory):
@@ -198,6 +199,16 @@ class SourceSafety(unittest.TestCase):
         self.assertIn('omitted: packet budget exhausted · PR FILE DATA: 7', text)
         self.assertIn('complete · PR FILE DATA: 0', text)
         self.assertLess(text.index('## SOURCE COVERAGE'), text.index('## PR FILE DATA: 0'))
+
+    def test_coverage_is_never_cut_and_oversized_lists_are_rejected(self):
+        records = [(f'PR FILE DATA: {n}', 'x' * 39_000, 40_000) for n in range(40)]
+        text = s.render(records, 'a' * 40)
+        self.assertLessEqual(len(text), s.MAX_OUTPUT)
+        for n in range(40):
+            self.assertRegex(text, rf'- (complete|omitted: packet budget exhausted) · PR FILE DATA: {n}\n')
+        many = [(f'SOURCE PAGES NOT EXTRACTED: https://faa.gov/{n}.pdf', 'y' * 300, None) for n in range(400)]
+        with self.assertRaisesRegex(ValueError, 'split the change'):
+            s.render(many, 'a' * 40)
 
     def test_coverage_lists_failures_with_their_reason(self):
         text = s.render([('SOURCE RETRIEVAL FAILURE: https://www.cnatra.navy.mil/a.pdf', 'SSLCertVerificationError: x', None),
@@ -314,6 +325,19 @@ class Downloads(unittest.TestCase):
             with patch.object(s, 'MAX_PDF_BYTES', 20), self.assertRaisesRegex(ValueError, 'byte limit'):
                 s.read_to_file(self.response(b'%PDF-' + b'x' * 30), path)
 
+    @unittest.skipUnless(hasattr(s.signal, 'setitimer'), 'needs SIGALRM')
+    def test_a_trickling_download_is_interrupted_mid_read(self):
+        opener = MagicMock()
+        response = Mock(url='https://faa.gov/a.pdf', headers={})
+        response.read.side_effect = lambda n: s.time.sleep(5)
+        opener.open.return_value.__enter__.return_value = response
+        started = s.time.monotonic()
+        with tempfile.TemporaryDirectory() as directory, patch.object(s, 'DOWNLOAD_SECONDS', 0.2), \
+                patch.object(s, 'build_opener', return_value=opener), self.assertRaisesRegex(TimeoutError, 'longer than'):
+            s.fetch_source('https://faa.gov/a.pdf', directory)
+        self.assertLess(s.time.monotonic() - started, 2)
+        self.assertEqual(s.signal.getitimer(s.signal.ITIMER_REAL), (0.0, 0.0))
+
     def test_download_time_is_bounded(self):
         ticks = iter([0, s.DOWNLOAD_SECONDS + 1])
         with tempfile.TemporaryDirectory() as directory, self.assertRaisesRegex(ValueError, 'longer than'):
@@ -397,7 +421,7 @@ pages: 1
         calls = [{'head': {'sha': head}},
                  [{'filename': 'src/pages/bfm.astro', 'status': 'added'},
                   {'filename': 'docs/reviews/bfm.md', 'status': 'added'}],
-                 contents(page), contents(evidence), {'head': {'sha': head}}]
+                 contents(page), contents(evidence), [], {'head': {'sha': head}}]
         seen = []
 
         def records(url, declaration, download, _):
@@ -407,6 +431,49 @@ pages: 1
                 patch.object(s, 'source_records', side_effect=records):
             s.collect('owner/repo', 1, head, 'token')
         self.assertEqual(seen, [(self.URL, [(52, 53, '4-4 to 4-5')]), ('https://faa.gov/other.html', None)])
+
+    def test_page_only_change_uses_declarations_from_unchanged_evidence(self):
+        head = 'a' * 40
+        evidence = f'```review-sources\nsource: {self.URL}\nsha256: {"b" * 64}\npages: 52-53\n```\n'
+        unrelated = '```review-sources\nsource: https://faa.gov/unlinked.pdf\npages: 1\n```\n'
+        listing = [{'type': 'file', 'path': 'docs/reviews/bfm.md'}, {'type': 'file', 'path': 'docs/reviews/other.md'},
+                   {'type': 'file', 'path': 'docs/reviews/plain.md'}, {'type': 'dir', 'path': 'docs/reviews/x'}]
+        calls = [{'head': {'sha': head}}, [{'filename': 'src/pages/bfm.astro', 'status': 'modified'}],
+                 contents(f'Page cites {self.URL}'), listing, contents(evidence), contents(unrelated),
+                 contents('No block here'), {'head': {'sha': head}}]
+        seen = []
+
+        def records(url, declaration, download, _):
+            seen.append((url, declaration and (declaration['ranges'], declaration['sha256'])))
+            return []
+        with patch.object(s, 'api_json', side_effect=calls) as api, \
+                patch.object(s, 'fetch_source', return_value=None), patch.object(s, 'source_records', side_effect=records):
+            text = s.collect('owner/repo', 1, head, 'token')
+        self.assertEqual(api.call_args_list[3].args[1], f'contents/docs/reviews?ref={head}')
+        self.assertEqual(seen, [(self.URL, ([(52, 53, '')], 'b' * 64))])
+        self.assertNotIn('No block here', text, 'unchanged evidence is scanned, not added to the packet')
+
+    @unittest.skipUnless(shutil.which('pdftotext') and shutil.which('pdfinfo'), 'Poppler needed')
+    def test_image_only_pages_in_a_cited_range_are_reported(self):
+        with tempfile.TemporaryDirectory() as directory:
+            download = self.write(directory, ['Text page one', '', 'Text page three', ''])
+            records = s.source_records(self.URL, self.declaration([(1, 4, '')]), download, {})
+        text = s.render(records, 'a' * 40)
+        self.assertIn('[PDF physical page 2]\n[NO EXTRACTABLE TEXT', text)
+        self.assertIn('- failed · SOURCE PAGES NOT EXTRACTED: ' + self.URL + ' physical pages 2, 4', text)
+        self.assertIn('1 of 2 records are cut, failed or omitted.', text)
+
+    def test_too_many_ranges_are_reported_not_dropped(self):
+        ranges = [(n, n, '') for n in range(1, s.MAX_RANGES_PER_SOURCE + 3)]
+        with tempfile.TemporaryDirectory() as directory, \
+                patch.object(s, 'pdf_page_count', return_value=100), \
+                patch.object(s, 'pdf_records', side_effect=lambda url, h, p, a, b, n: [(h, 'x', n)]):
+            path = Path(directory) / 'p'
+            path.write_bytes(b'%PDF-1.4')
+            records = s.source_records(self.URL, self.declaration(ranges), (path, 'd', 8, 'application/pdf', self.URL), {})
+        self.assertEqual(len(records), s.MAX_RANGES_PER_SOURCE + 1)
+        self.assertIn('2 further ranges', records[0][0])
+        self.assertIn(f'physical pages {s.MAX_RANGES_PER_SOURCE + 2}', records[0][1])
 
 if __name__ == '__main__':
     unittest.main()

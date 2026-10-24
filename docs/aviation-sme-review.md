@@ -30,9 +30,12 @@ pages: 52-59 (4-1 to 4-8); 60-83 (5-1 to 5-24)
 - `sha256` is optional. When it is given and the download differs, no pages
   are extracted and the review reports the mismatch, because the pages may not
   be the edition you cited.
-- Ranges are read in records of up to ten pages, at most 80 pages per source.
-  A PDF may be up to 64 MB. A cited PDF without a block is read from page 1 to
-  page 15 only.
+- Ranges are read in records of up to ten pages, at most 12 ranges and 80
+  pages per source. A PDF may be up to 64 MB and must download within 90
+  seconds. A cited PDF without a block is read from page 1 to page 15 only.
+- Blocks in unchanged evidence files still apply, so a later page-only change
+  is checked against the same cited pages and hash.
+- Pages with no extractable text (scans, images) are listed as not read.
 - Sources must be on an approved host. A block may list several `source:`
   entries, each followed by its own `sha256` and `pages` lines.
 
