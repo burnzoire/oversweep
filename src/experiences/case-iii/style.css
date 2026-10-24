@@ -46,9 +46,6 @@ main.practice-mode .message[data-speaker="INSTRUCTOR"],main.practice-mode .messa
 /* Keep the radio history scroll surface stable inside the sidebar. */
 #log{flex:0 0 160px;height:160px;min-height:160px;max-height:160px;overflow-y:scroll;scrollbar-gutter:stable;overflow-anchor:none}
 /* Embedded experience grows in the document flow rather than clipping controls. */
-body.embedded main{height:auto;grid-template-rows:34px 33px auto auto}
-body.embedded main.practice-mode{grid-template-rows:34px auto auto}
-body.embedded .workspace{min-height:680px}
-@media(max-width:760px){body.embedded main,body.embedded main.practice-mode{display:block;height:auto}body.embedded .workspace{min-height:0}}
 
 .draft-status{padding:8px 12px;border-bottom:2px solid #222;font:11px/1.5 monospace;text-align:center}.draft-status a{color:inherit}
+.frame-notice{margin:2rem;font:16px/1.5 system-ui,sans-serif}

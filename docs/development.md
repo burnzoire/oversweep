@@ -74,17 +74,22 @@ Content without that evidence remains unvalidated and excluded from publication.
 ### Experience publication
 
 Every trainer or interactive experience is registered once in
-`src/data/experiences.json`. The Manual, Training Library, embedded route, trainer
+`src/data/experiences.json`. The Manual, Training Library, Manual route, trainer
 frame, asset routes and output checks all read that registry; no check names a
 specific experience. Each entry declares `publication` separately from `maturity`:
 
 - `published` ships in normal production builds. `npm run check` fails unless the
-  Manual route, embedded frame, every listed asset and the subject and Training
+  Manual route, trainer frame, every listed asset and the subject and Training
   Library listings are emitted, carry the registered id and revision, and show the
   registered maturity to readers.
 - `excluded` ships only in explicit local review builds
   (`OVERSWEEP_REVIEW_TRAINERS=1 npm run check:review`). The production check fails
   if any output file references it.
+
+An entry's optional `launch` says how the Manual page presents it. The default,
+`embed`, requires an `<iframe>` of the trainer frame. `window` is for experiences
+too busy to share a page: the Manual page must link to the frame with
+`target="_blank"` and `data-experience-launch`, and must contain no `<iframe>`.
 
 Setting an entry to `published` is an owner publication decision for the exact
 revision; record it in the PR. Publication does not change maturity: a Drafted

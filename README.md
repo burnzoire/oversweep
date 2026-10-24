@@ -40,9 +40,11 @@ npm run check
 ```
 
 The Manual and Training Library list every experience registered in
-`src/data/experiences.json`. The Case III Tomcat trainer is published under Naval
-Operations: Start Exercise in its briefing popup begins the simulation; instructor
-mode is optional. It is Drafted, not technically validated, and says so on every
+`src/data/experiences.json`. Case III is published under Naval Operations as a
+learning module with interactive TACAN, holding-entry and EAT exercises; it ends
+by launching the Tomcat trainer in its own window, which is never framed. Start
+Exercise in the trainer's briefing popup begins the simulation; instructor mode
+is optional. It is Drafted, not technically validated, and says so on every
 page that lists it. The remaining catalogue is Coming soon.
 
 ```sh
