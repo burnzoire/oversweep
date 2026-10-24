@@ -224,6 +224,9 @@ export function profileAltitude(profile, dme) {
  * Correction from the marshal inbound course to the final bearing (P-816
  * p. 2-23): gradual within 10°, otherwise a 30° correction at 20 DME.
  * `offset` is signed: positive when the final bearing is right of inbound.
+ * `turn` is the side to turn to intercept, which is opposite to `offset`:
+ * a final bearing δ right of inbound extends aft along radial R + δ, which
+ * lies to the left of an aircraft on radial R flying inbound.
  */
 export function finalCorrection({ marshalRadial, finalBearing }) {
   finite('Marshal radial', marshalRadial);
@@ -231,7 +234,7 @@ export function finalCorrection({ marshalRadial, finalBearing }) {
   const inbound = reciprocal(marshalRadial);
   const offset = ((norm(finalBearing) - inbound + 540) % 360) - 180;
   const kind = offset === 0 ? 'none' : Math.abs(offset) <= 10 ? 'gradual' : 'thirty';
-  return { inbound, offset, kind };
+  return { inbound, offset, kind, turn: offset === 0 ? null : offset > 0 ? 'left' : 'right' };
 }
 
 /* ---------- Timed turns ---------- */

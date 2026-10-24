@@ -293,11 +293,11 @@ const contents = [
  <section class="lesson bleed" data-lesson="comms" aria-labelledby="comms-title">
   <h3 id="comms-title">Practise: step through the radio calls</h3>
   <ol class="agencies" aria-label="Controlling agencies in order">
-   <li data-agency-station="redcrown"><strong>Red Crown</strong><span>Air defence controller. First check-in after the mission frequency.</span></li>
-   <li data-agency-station="strike"><strong>Strike</strong><span>Handoff before the 50 NM CCA. Add low state and alibis (maintenance discrepancies).</span></li>
-   <li data-agency-station="marshal"><strong>Marshal</strong><span>Inside the CCA. Clearance, holding, EAT, commencing.</span></li>
-   <li data-agency-station="approach"><strong>Approach</strong><span>“Button 18” in the example. During penetration, ideally before platform.</span></li>
-   <li data-agency-station="lso"><strong>LSO</strong><span>“Paddles”. Ball call to touchdown.</span></li>
+   <li data-agency-station="redcrown"><button type="button"><strong>Red Crown</strong><span>Air defence controller. First check-in after the mission frequency.</span></button></li>
+   <li data-agency-station="strike"><button type="button"><strong>Strike</strong><span>Handoff before the 50 NM CCA. Add low state and alibis (maintenance discrepancies).</span></button></li>
+   <li data-agency-station="marshal"><button type="button"><strong>Marshal</strong><span>Inside the CCA. Clearance, holding, EAT, commencing.</span></button></li>
+   <li data-agency-station="approach"><button type="button"><strong>Approach</strong><span>“Button 18” in the example. During penetration, ideally before platform.</span></button></li>
+   <li data-agency-station="lso"><button type="button"><strong>LSO</strong><span>“Paddles”. Ball call to touchdown.</span></button></li>
   </ol>
   <div class="buttons stepper">
    <button type="button" data-prev>Previous call</button>
@@ -460,7 +460,13 @@ const contents = [
   /* NATOPS-style line art shared by the static and script-drawn figures. */
   .figure-lesson { border-width: 2px; }
   /* Figures bleed wider than the reading column where the viewport allows. */
-  .figure-lesson, .lesson.bleed { width: min(calc(100vw - 2rem), 64rem); position: relative; left: 50%; transform: translateX(-50%); background: #fff; }
+  /* Extend right from the article's left edge into the layout column: the
+     article is capped at 68ch, its grid column is not. 3rem leaves room for a
+     scrollbar inside the page shell's 1rem gutters. */
+  .figure-lesson, .lesson.bleed { width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+  @media (min-width: 64rem) {
+    .figure-lesson, .lesson.bleed { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
+  }
   .fig-title { font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 2px solid var(--color-text); padding-bottom: 0.3rem; }
   .fig-caption, .deck-fig figcaption { color: var(--color-muted); font-size: 0.9rem; }
   .lesson svg.natops { max-width: none; }
@@ -468,6 +474,7 @@ const contents = [
   .lesson-grid.wide { grid-template-columns: minmax(0, 1fr) !important; }
   .lesson-grid.wide .controls { grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); align-items: end; }
   .lesson-grid.wide svg { max-width: none; }
+  .lesson-grid.wide .controls .feedback { grid-column: 1 / -1; }
   :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
   :global(.natops .frame) { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
   :global(.natops .lbl) { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
@@ -515,8 +522,8 @@ const contents = [
   .profile-table tr.passed td { color: var(--color-muted); }
   .profile-table tr.passed td:first-child::before { content: "✓ "; }
   .clearance { display: flex; flex-wrap: wrap; gap: 0.35rem; line-height: 1.3; }
-  .clearance .phrase { color: var(--color-text); background: #fff; border: 1px dashed var(--color-text); font-weight: 400; font-family: "Courier New", Courier, monospace; text-align: left; }
-  .clearance .phrase[aria-pressed="true"] { color: #fff; background: var(--color-text); border-style: solid; }
+  .clearance :global(.phrase) { color: var(--color-text); background: #fff; border: 1px dashed var(--color-text); font-weight: 400; font-family: "Courier New", Courier, monospace; text-align: left; }
+  .clearance :global(.phrase[aria-pressed="true"]) { color: #fff; background: var(--color-text); border-style: solid; }
   .decode dt { font-family: "Courier New", Courier, monospace; font-weight: 700; }
   .decode dd { margin: 0 0 0.5rem 1rem; }
   /* Turn indicator */
@@ -553,10 +560,11 @@ const contents = [
   .lesson.ready .ball-states { display: none; }
   /* Communications ladder */
   .agencies { display: flex; flex-wrap: wrap; gap: 0; padding: 0; list-style: none; counter-reset: agency; }
-  .agencies li { flex: 1 1 9rem; position: relative; padding: 0.5rem 0.75rem 0.5rem 0.75rem; border: 2px solid var(--color-text); margin: 0 -2px -2px 0; background: #fff; cursor: pointer; }
-  .agencies li strong { display: block; text-transform: uppercase; letter-spacing: 0.06em; }
-  .agencies li span { display: block; font-size: 0.85rem; line-height: 1.35; }
-  .agencies li.on { background: var(--color-text); color: #fff; }
+  .agencies li { flex: 1 1 9rem; display: flex; margin: 0 -2px -2px 0; }
+  .agencies button { flex: 1; display: block; text-align: left; padding: 0.5rem 0.75rem; color: var(--color-text); background: #fff; border: 2px solid var(--color-text); font-weight: 400; }
+  .agencies strong { display: block; text-transform: uppercase; letter-spacing: 0.06em; }
+  .agencies span { display: block; font-size: 0.85rem; line-height: 1.35; }
+  .agencies li.on button { background: var(--color-text); color: #fff; }
   .stepper { align-items: center; margin-block: 0.75rem; }
   .dialogue { list-style: none; padding: 0; display: grid; gap: 0.5rem; }
   .dialogue li { border-left: 0.3rem solid var(--color-border); padding: 0.4rem 0.75rem; background: var(--color-surface); }
@@ -571,7 +579,7 @@ const contents = [
   .jargon div { border: 1px solid var(--color-text); padding: 0.5rem 0.75rem; }
   .jargon dt { font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
   .jargon dd { margin: 0; font-size: 0.92rem; }
-  .quiz-lesson [data-choices] button { color: var(--color-text); background: #fff; }
+  .quiz-lesson [data-choices] :global(button) { color: var(--color-text); background: #fff; }
   .quiz-lesson:not(.ready) { display: none; }
   @media (min-width: 40rem) {
     .lesson-grid { grid-template-columns: minmax(12rem, 1fr) minmax(0, 1.3fr); }

@@ -161,10 +161,14 @@ test('higher marshal altitudes reach platform close to 20 DME', () => {
 test('final-bearing correction rule', () => {
   // P-816 p. 2-26 example: marshal on the 160 radial, expected final bearing 015.
   // Inbound 340°; 015° is 35° right of it → 30° correction at 20 DME.
-  assert.deepEqual(finalCorrection({ marshalRadial: 160, finalBearing: 15 }), { inbound: 340, offset: 35, kind: 'thirty' });
-  assert.deepEqual(finalCorrection({ marshalRadial: 180, finalBearing: 352 }), { inbound: 0, offset: -8, kind: 'gradual' });
-  assert.deepEqual(finalCorrection({ marshalRadial: 190, finalBearing: 0 }), { inbound: 10, offset: -10, kind: 'gradual' });
-  assert.equal(finalCorrection({ marshalRadial: 200, finalBearing: 20 }).kind, 'none');
+  // The final-bearing line extends aft along the 195 radial, 35° clockwise of
+  // the aircraft's 160 radial: west of an aircraft heading 340°, so turn left.
+  assert.deepEqual(finalCorrection({ marshalRadial: 160, finalBearing: 15 }), { inbound: 340, offset: 35, kind: 'thirty', turn: 'left' });
+  // Mirror: 352° is 8° left of 000°; its line runs aft on the 172 radial, east of
+  // an aircraft on the 180 radial heading 000°, so turn right.
+  assert.deepEqual(finalCorrection({ marshalRadial: 180, finalBearing: 352 }), { inbound: 0, offset: -8, kind: 'gradual', turn: 'right' });
+  assert.deepEqual(finalCorrection({ marshalRadial: 190, finalBearing: 0 }), { inbound: 10, offset: -10, kind: 'gradual', turn: 'right' });
+  assert.deepEqual(finalCorrection({ marshalRadial: 200, finalBearing: 20 }), { inbound: 20, offset: 0, kind: 'none', turn: null });
 });
 
 test('timed turns', () => {

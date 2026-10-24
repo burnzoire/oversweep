@@ -402,7 +402,7 @@ function setupProfile(root) {
 function setupStack(root) {
   const f = Object.fromEntries([...root.querySelectorAll('[name]')].map((i) => [i.name, i]));
   const svg = root.querySelector('svg');
-  const X1 = 690, PX = 19, Y0 = 268, PY = 0.0175;
+  const X1 = 690, PX = 16, Y0 = 268, PY = 0.0175;
   const x = (d) => X1 - d * PX, y = (a) => Y0 - a * PY;
 
   // Clearance decoder: turn each <dt> into a phrase button; its <dd> explains it.
@@ -441,7 +441,7 @@ function setupStack(root) {
       svg.append(el('ellipse', { cx: x(s.dme), cy: y(s.altitude), rx: 9, ry: 4, class: on ? 'slot on' : 'slot' }));
       svg.append(el('text', { x: x(s.dme) + 13, y: y(s.altitude) + 4, class: on ? 'label strong' : 'label' }, on ? `ANGELS ${a} · ${s.dme} DME` : `${a}`));
     }
-    svg.append(el('text', { x: x(29) - 12, y: y(14000) - 10, class: 'label' }, 'STACK · 1,000 FT APART'));
+    svg.append(el('text', { x: x(29) - 12, y: y(14000) - 22, class: 'label' }, 'STACK · 1,000 FT APART'));
     // The source requires being level at the assigned altitude 10 NM from the stack.
     svg.append(el('line', { x1: x(fix.dme + 10), y1: y(fix.altitude), x2: x(fix.dme) - 12, y2: y(fix.altitude), class: 'arrival', 'marker-end': 'url(#stack-arrow)' }));
     svg.append(el('text', { x: x(fix.dme + 10), y: y(fix.altitude) + 16, class: 'label' }, 'LEVEL BY 10 NM FROM STACK'));
@@ -455,9 +455,10 @@ function setupStack(root) {
     let c;
     try { c = finalCorrection({ marshalRadial: bounded(f.radial), finalBearing: bounded(f.fb) }); } catch (error) { out.textContent = error.message; return; }
     const side = c.offset > 0 ? 'right' : 'left';
+    // The final-bearing line runs aft of the ship, on the side opposite the offset.
     out.textContent = c.kind === 'none'
       ? `Inbound course ${fmt(c.inbound)}° already matches the final bearing: no correction.`
-      : `Inbound course ${fmt(c.inbound)}°. Final bearing ${fmt(num(f.fb))}° is ${Math.abs(c.offset)}° ${side} of it, so the example procedure calls for ${c.kind === 'gradual' ? 'a gradual correction' : `a 30° correction ${side} at 20 DME`}.`;
+      : `Inbound course ${fmt(c.inbound)}°. Final bearing ${fmt(num(f.fb))}° is ${Math.abs(c.offset)}° ${side} of it, so the example procedure calls for ${c.kind === 'gradual' ? 'a gradual correction' : 'a 30° correction at 20 DME'}. The final-bearing line lies to your ${c.turn} astern of the ship, so the correction turns ${c.turn}${c.kind === 'thirty' ? ` to ${fmt(c.inbound + (c.turn === 'right' ? 30 : -30))}°` : ''}.`;
   }
   root.addEventListener('input', draw);
   draw();
@@ -490,7 +491,7 @@ function setupTurn(root) {
   }
   function reset() {
     cancelAnimationFrame(run?.frame); run = null;
-    start.disabled = false; rollout.disabled = true;
+    start.disabled = false; rollout.disabled = true; f.speed.disabled = false;
     clockOut.textContent = '0:00';
     show(turn.from, 0);
     brief();
@@ -499,7 +500,8 @@ function setupTurn(root) {
     const { degrees } = brief();
     const speed = Number(f.speed.value), sign = turn.direction === 'right' ? 1 : -1, r = rate();
     const t0 = performance.now();
-    start.disabled = true; rollout.disabled = false; rollout.focus();
+    // Speed is read once per run, so lock it until roll-out.
+    start.disabled = true; rollout.disabled = false; f.speed.disabled = true; rollout.focus();
     const tick = (now) => {
       const t = ((now - t0) / 1000) * speed;
       run.turned = Math.min(r * t, 720);
@@ -517,7 +519,7 @@ function setupTurn(root) {
     out.textContent = Math.abs(error) <= 5
       ? `Rolled out on ${fmt(heading)}°, ${Math.abs(error).toFixed(0)}° from the target. Good timing.`
       : `Rolled out on ${fmt(heading)}°: ${Math.abs(error).toFixed(0)}° ${error > 0 ? 'past' : 'short of'} ${fmt(turn.to)}°. At ${rate()}°/s each second is ${rate()}°.`;
-    run = null; start.disabled = false; rollout.disabled = true;
+    run = null; start.disabled = false; rollout.disabled = true; f.speed.disabled = false;
   });
   root.querySelector('[data-new]').addEventListener('click', () => {
     const from = randomInt(0, 35) * 10, by = randomInt(3, 27) * 10, direction = Math.random() < 0.5 ? 'left' : 'right';
@@ -562,13 +564,16 @@ function setupComms(root) {
     const showAll = all.getAttribute('aria-pressed') === 'true';
     steps.forEach((s, i) => { s.hidden = !showAll && i !== at; s.classList.toggle('current', i === at); });
     const agency = steps[at].dataset.agency;
-    for (const st of stations) st.classList.toggle('on', st.dataset.agencyStation === agency);
+    for (const st of stations) {
+      st.classList.toggle('on', st.dataset.agencyStation === agency);
+      st.querySelector('button').setAttribute('aria-pressed', String(st.dataset.agencyStation === agency));
+    }
     counter.textContent = `Call ${at + 1} of ${steps.length}`;
   }
   root.querySelector('[data-prev]').addEventListener('click', () => { at = Math.max(0, at - 1); show(); });
   root.querySelector('[data-next]').addEventListener('click', () => { at = Math.min(steps.length - 1, at + 1); show(); });
   all.addEventListener('click', () => { all.setAttribute('aria-pressed', String(all.getAttribute('aria-pressed') !== 'true')); show(); });
-  for (const st of stations) st.addEventListener('click', () => {
+  for (const st of stations) st.querySelector('button').addEventListener('click', () => {
     const i = steps.findIndex((s) => s.dataset.agency === st.dataset.agencyStation);
     if (i >= 0) { at = i; show(); }
   });
