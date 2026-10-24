@@ -349,3 +349,51 @@ Release checklist:
 **Disposition:** the two medium aviation evidence findings and the missing
 browser review are release blockers. Revision 5 remains **Drafted**, excluded
 from production; this PR is not a release authorization.
+
+## Release-gate pilot — revision 6
+
+The follow-up restores the control, telemetry, briefing and instructor wording
+to `AIRSPEED` / `KIAS`, with no asterisk. The adjacent motion-model explanation
+states that the airspeed number drives map movement without IAS-to-TAS conversion
+or wind. Model equations, numeric gates, hold timing, dialogue and scoring are
+unchanged. This addresses the owner's terminology feedback; it does not resolve
+the two medium evidence findings or establish aircraft limitations.
+
+Revision 6 requires fresh SME review. It remains Drafted and excluded until
+validation is complete. The new production-inclusion check must therefore fail
+on this PR, rather than allow an all-green result based on safe draft exclusion.
+The PR is a non-draft review of the unfinished release, not a publication bypass.
+The production-inclusion check described here was superseded in revision 7.
+
+Local verification on Node 22.23.4: `npm run check`, `npm run check:dev`,
+`OVERSWEEP_REVIEW_TRAINERS=1 npm run check:review`, ten gate unit tests,
+`python3 scripts/check_docs.py` and `git diff --check` passed. The production
+release command exited 1 with missing route, frame, index and asset blockers;
+the review-flag command also exited 1 as required. Independent code review
+identified and corrected omitted listing paths and two-dot PR comparison;
+the latter has a divergent-history regression. Browser smoke verification was
+attempted but Chromium was absent and the installation returned invalid ZIP
+downloads. No browser, visual, speech or independent UX approval is claimed.
+
+## Owner-approved publication — revision 7
+
+On 2026-10-24 the owner asked for the Case III trainer to be live on the
+production site. Revision 7 sets its registry entry to `published` while keeping
+maturity **Drafted — not technically validated**, shown on the Manual page,
+subject listing and Training Library card. This is a publication decision, not a
+validation: no source locator or SME finding was resolved by it.
+
+The revision-6 SME review blocked on `AIRSPEED` / `KIAS` labels reading as
+verified values. Revision 7 keeps the owner's wording and adds the bounding the
+review asked for: the always-visible note under the speed control and the sortie
+brief state that every airspeed, altitude, vertical rate, DME fix and gate is a
+trainer setpoint rather than a verified procedure or aircraft value, and the
+scope notes name the 250 KIAS / 6,000 ft / 21 DME marshal, 4,000 then 2,000 ft/min
+descent and 10 / 8 DME configuration setpoints explicitly. The gate notice now
+reads KIAS, matching the other labels. Model equations and numeric values are
+unchanged.
+
+The Case III-specific release-readiness workflow and output assertions were
+replaced by registry-driven checks; see
+[experience publication](../development.md#experience-publication). The trainer
+frame and assets moved from `/review/case-iii/` to `/experiences/case-iii/`.

@@ -39,21 +39,23 @@ npm run dev
 npm run check
 ```
 
-The Manual and Training Library expose the same Case III Tomcat trainer during
-`npm run dev`, under Naval Operations. Start Exercise in its briefing popup begins
-the simulation; instructor mode is optional. The remaining catalogue is Coming soon.
-The port is Drafted, not technically validated. It is absent from normal production
-output, including direct asset paths.
+The Manual and Training Library list every experience registered in
+`src/data/experiences.json`. The Case III Tomcat trainer is published under Naval
+Operations: Start Exercise in its briefing popup begins the simulation; instructor
+mode is optional. It is Drafted, not technically validated, and says so on every
+page that lists it. The remaining catalogue is Coming soon.
 
 ```sh
-npm run test:case-iii
+npm test
+npm run check:dev
 OVERSWEEP_REVIEW_TRAINERS=1 npm run check:review
 npm run build  # restore ordinary production output after local review
 ```
 
-The explicit review build uses `/oversweep/` to verify GitHub Pages base paths.
-Do not deploy review output. See [port/provenance and limitations](docs/plans/05-case-iii-port.md).
-This PR changes no hosting or deployment settings.
+Experiences marked `excluded` appear only in development and the explicit review
+build, which uses `/oversweep/` to verify GitHub Pages base paths. Do not deploy
+review output. See [experience publication](docs/development.md#experience-publication)
+and [port/provenance and limitations](docs/plans/05-case-iii-port.md).
 
 ## Check this foundation
 

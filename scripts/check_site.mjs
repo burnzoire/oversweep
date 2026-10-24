@@ -68,7 +68,6 @@ assert.ok(htmlFiles.length >= requiredRoutes.length, "all catalogue routes shoul
 
 for (const filename of htmlFiles) {
   const html = await readFile(filename, "utf8");
-  assert.doesNotMatch(html, /CaseThreePractice|case-three-tomcat/i, "trainer implementation must not ship");
   const primaryNav = html.match(/<nav class="primary-nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1] ?? "";
   const currentPrimaryLinks = [...primaryNav.matchAll(/aria-current="page"/g)].length;
   const relativePage = path.relative(output, filename).split(path.sep).join("/");
@@ -76,10 +75,14 @@ for (const filename of htmlFiles) {
   assert.equal(currentPrimaryLinks, Number(isSectionIndex), `${relativePage} should mark only its exact primary destination current`);
   assert.equal(/<a class="brand"[^>]*aria-current="page"/.test(html), relativePage === "index.html", `${relativePage} should mark only the home destination current`);
 
-  const attributes = html.matchAll(/\b(?:href|src|poster)="([^"]+)"/g);
+  // Resolve relative links like a browser: against <base href> when present, else the page URL.
+  const pageURL = new URL(relativePage.replace(/index\.html$/, ""), `https://oversweep.test${base}`);
+  const documentBase = html.match(/<base href="([^"]+)"/)?.[1];
+  const resolveFrom = documentBase ? new URL(documentBase, pageURL) : pageURL;
+  const attributes = html.replace(/<base [^>]*>/, "").matchAll(/\b(?:href|src|poster)="([^"]+)"/g);
   for (const [, value] of attributes) {
     if (value.startsWith("#") || value.startsWith("mailto:") || value.startsWith("tel:")) continue;
-    const url = new URL(value, `https://oversweep.test${base}`);
+    const url = new URL(value, resolveFrom);
     if (url.origin !== "https://oversweep.test") continue;
     assert.ok(url.pathname.startsWith(base), `internal URL must respect the base path: ${value}`);
     const relative = decodeURIComponent(url.pathname.slice(base.length));

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "experience.case-iii-tomcat",
+    "manualId": "manual.case-iii-tomcat",
+    "slug": "case-iii",
+    "subject": "naval-operations",
+    "revision": 7,
+    "title": "Case III — Tomcat recovery exercise",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Practise modeled navigation, timing, radio choices and configuration in a synthetic recovery scenario.",
+    "applicability": "F-14B / DCS-oriented educational exercise; simulator version not verified.",
+    "prerequisites": ["Magnetic headings and radials", "TACAN bearing and DME", "Basic carrier terminology"],
+    "assets": ["app.js", "embed.js", "style.css", "model.cjs"]
+  }
+]

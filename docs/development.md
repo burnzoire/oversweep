@@ -71,6 +71,31 @@ No human aviation reviewer is required. The delivery agent owns source research,
 SME/UX/code review, corrections and re-review through one release-ready PR.
 Content without that evidence remains unvalidated and excluded from publication.
 
+### Experience publication
+
+Every trainer or interactive experience is registered once in
+`src/data/experiences.json`. The Manual, Training Library, embedded route, trainer
+frame, asset routes and output checks all read that registry; no check names a
+specific experience. Each entry declares `publication` separately from `maturity`:
+
+- `published` ships in normal production builds. `npm run check` fails unless the
+  Manual route, embedded frame, every listed asset and the subject and Training
+  Library listings are emitted, carry the registered id and revision, and show the
+  registered maturity to readers.
+- `excluded` ships only in explicit local review builds
+  (`OVERSWEEP_REVIEW_TRAINERS=1 npm run check:review`). The production check fails
+  if any output file references it.
+
+Setting an entry to `published` is an owner publication decision for the exact
+revision; record it in the PR. Publication does not change maturity: a Drafted
+experience stays visibly marked Drafted, and Technically Validated still requires
+the content-standard evidence and independent SME review. The `Aviation SME
+review gate` remains a separate check on trainer and content changes.
+
+Require `verify` from `Application checks` and `Aviation SME review gate` in the
+`main` ruleset, alongside foundation checks. This code change does not configure
+branch protection. Independent browser UX automation is still missing.
+
 The optional [aviation SME reviewer](copilot-agents.md#aviation-sme-review)
 reports evidence-backed findings and unresolved sources without editing or
 approving content. Re-review material corrections at the new revision. Automated

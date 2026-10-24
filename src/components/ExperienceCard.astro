@@ -1,11 +1,13 @@
 ---
-import { caseIII } from '../data/experiences';
+import { experienceRoute, type Experience } from '../data/experiences';
 import { sitePath } from '../lib/paths';
+interface Props { experience: Experience }
+const { experience } = Astro.props;
 ---
-<section class="status-panel" data-experience-id={caseIII.id} data-experience-revision={caseIII.revision}>
-  <h2>{caseIII.title}</h2>
-  <p><strong>{caseIII.maturity}</strong> · Local review only · Revision {caseIII.revision}</p>
-  <p>{caseIII.objective}</p>
-  <p>{caseIII.applicability}</p>
-  <a href={sitePath(caseIII.route)}>Open the trainer and scope notes →</a>
+<section class="status-panel" data-experience-id={experience.id} data-experience-revision={experience.revision}>
+  <h2>{experience.title}</h2>
+  <p><strong>{experience.maturity}</strong>{experience.publication !== 'published' && ' · Local review only'} · Revision {experience.revision}</p>
+  <p>{experience.objective}</p>
+  <p>{experience.applicability}</p>
+  <a href={sitePath(experienceRoute(experience))}>Open the trainer and scope notes →</a>
 </section>
