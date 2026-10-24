@@ -400,8 +400,8 @@ frame and assets moved from `/review/case-iii/` to `/experiences/case-iii/`.
 
 ## Learning module and window-only launch — issue #44
 
-Revision 8 turns the Manual page into a Case III learning module that covers
-the whole recovery: the Marshal clearance, point-to-point TACAN navigation,
+Revision 8 turns the Manual page into a guide to the trainer's Case III
+exercise that covers each phase: the Marshal clearance, point-to-point TACAN navigation,
 holding entries, making EAT, the penetration and platform, configuration, final
 and the ball, a five-question self-check, scope and sources. Three interactive
 blocks (point-to-point heading, holding-entry sector and hold planner) read
@@ -416,20 +416,23 @@ parent height listener are removed. `frame-guard.js` stops `app.js` starting
 inside any frame and shows a link to open it in its own window instead.
 
 New sources, accessed 24 October 2026: FAA AIM ¶5-3-8 j.3 and j.8 (holding entry
-definitions and ±5° heading tolerance; Fig 5-3-4 sector sizes not inspected),
+definitions and ±5° heading tolerance; the entry figure's sector sizes not inspected),
 ¶1-1-7 (DME is slant range) and the Pilot/Controller Glossary definition of
 radial. These are FAA civil instrument-flying sources applied as general
 concepts; they do not establish Case III marshal procedure. The CV NATOPS leads
 remain unverified, every trainer value remains an exercise setpoint, and the
 module stays **Drafted — not technically validated**.
 
-After the first SME review, the module page also records where the author
-located the trainer's setpoints in the Eagle Dynamics DCS: Supercarrier
-Operations Guide (cover date 20 November 2024, pp. 16 and 75–81, page numbers
-read from the PDF's extracted text). This is an unverified research lead: the SME
-workflow could not retrieve the PDF, so no independent reviewer has confirmed the
-locators. The author's reading shows most setpoints matching and two differing
-(600 ft at 3 NM rather than a glidepath intercept from 1,200 ft near 3 NM, and an
-angled deck of about 14° rather than the trainer's 9°). The trainer's values are
-unchanged. The holding-entry model gains a test built from the side of the hold
-the aircraft arrives from.
+After four SME review rounds the page is framed as a guide to the trainer's own
+exercise rather than a lesson in Case III procedure, and is titled "Case III
+trainer guide". It teaches what the trainer expects and three general
+instrument skills; it makes no claim about real Case III procedure. The
+author's unverified mapping of trainer setpoints onto the DCS Supercarrier guide
+was removed: the SME workflow could not retrieve the PDF, so the guide is cited
+only as an unverified DCS lead, as on `main`. The AIM text gives no entry-sector
+widths, so the 110°/180°/290° boundaries the entry practice checks against are
+labelled the guide's own unverified construction, and readers are pointed to the
+AIM figure for the real boundaries. The hold planner and quiz Q4 are labelled a
+trainer-only arithmetic model whose stretched legs exceed the FAA civil 1-minute
+inbound leg. The trainer's values are unchanged. The holding-entry model has a
+test built from the side of the hold the aircraft arrives from.

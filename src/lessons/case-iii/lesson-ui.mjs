@@ -205,9 +205,9 @@ function setupEntry(root) {
     let result;
     try { result = holdEntry(state()); } catch (error) { feedback.textContent = error.message; return; }
     revealed = true; draw();
-    feedback.textContent = choice === result.entry ? 'Correct.'
-      : choice === result.alternative ? `Acceptable: within 5° of the boundary, though the sector is ${result.entry}.`
-      : `Not quite: the arrival heading is in the ${result.entry} sector.`;
+    feedback.textContent = choice === result.entry ? 'Correct by the guide’s exercise rule.'
+      : choice === result.alternative ? `Acceptable: within 5° of the exercise rule’s boundary, though the rule gives ${result.entry}.`
+      : `Not quite: the guide’s exercise rule gives ${result.entry} for this heading.`;
   });
   root.querySelector('[data-new]').addEventListener('click', () => {
     f.inbound.value = randomInt(0, 35) * 10;

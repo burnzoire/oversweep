@@ -6,44 +6,44 @@ const caseIII = getExperience('case-iii');
 export function getStaticPaths() { return includedExperiences.some(e => e.slug === 'case-iii') ? [{ params: { trainer: 'case-iii' } }] : []; }
 const trainerHref = sitePath(experienceFrame(caseIII));
 const contents = [
-  ['overview', 'What this module covers'],
-  ['at-a-glance', 'The recovery at a glance'],
-  ['clearance', 'The Marshal clearance'],
+  ['overview', 'What this guide covers'],
+  ['at-a-glance', 'The exercise at a glance'],
+  ['clearance', 'The trainer’s Marshal clearance'],
   ['tacan', 'Point-to-point TACAN navigation'],
-  ['entry', 'Entering the marshal hold'],
-  ['eat', 'Holding and making EAT'],
-  ['penetration', 'Commencing, platform and the descent'],
-  ['final', 'Configuration, final and the ball'],
+  ['entry', 'Choosing a hold entry'],
+  ['eat', 'Planning the hold to EAT'],
+  ['penetration', 'The trainer’s descent'],
+  ['final', 'The trainer’s final approach'],
   ['check', 'Check your understanding'],
   ['launch', 'Launch the trainer'],
   ['limits', 'Scope and limits'],
   ['sources', 'Sources and unresolved review'],
 ];
 ---
-<SiteLayout title="Case III recovery" activeSection="manual" activeSubject="naval-operations"
+<SiteLayout title="Case III trainer guide" activeSection="manual" activeSubject="naval-operations"
   compactSubjectNav={true}
   breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Naval Operations',href:sitePath('manual/naval-operations/')},{label:'Case III'}]}>
   <section class="status-panel" data-experience-id={caseIII.id} data-experience-revision={caseIII.revision}>
     <h2>{caseIII.maturity}</h2>
-    <p>Revision {caseIII.revision} · {caseIII.applicability} No source-backed aviation review has validated this module or its trainer.</p>
-    <p>This module walks through the whole recovery the {caseIII.title} trains: {caseIII.objective.charAt(0).toLowerCase() + caseIII.objective.slice(1)}</p>
+    <p>Revision {caseIII.revision} · {caseIII.applicability} No source-backed aviation review has validated this guide or its trainer.</p>
+    <p>This guide walks through the exercise the {caseIII.title} runs: {caseIII.objective.charAt(0).toLowerCase() + caseIII.objective.slice(1)}</p>
     <p>Prerequisites: {caseIII.prerequisites.join(' · ')}.</p>
   </section>
 
   <nav class="contents" aria-labelledby="contents-title">
-    <h2 id="contents-title">In this module</h2>
+    <h2 id="contents-title">In this guide</h2>
     <ol>{contents.map(([id, label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol>
   </nav>
 
-  <h2 id="overview">What this module covers</h2>
-  <p>This module describes the Case III recovery as the trainer models it: Marshal clears you to a holding fix, you leave the fix at an assigned time and fly a controlled descent onto an instrument final approach. It does not describe a verified Navy procedure. The 2009 CV NATOPS manual named in the <a href="#sources">sources</a> is a research lead whose passages have not been checked, so no statement here should be read as what CV NATOPS says.</p>
-  <p>Every number on this page is the trainer’s exercise setpoint unless a source is named beside it. Speeds are KIAS (knots indicated airspeed), distances are nautical miles (NM), DME (distance measuring equipment) values are TACAN (tactical air navigation) ranges from the carrier, and headings, radials and courses are magnetic. The trainer has no wind, so in this module a heading equals the track over the ground.</p>
+  <h2 id="overview">What this guide covers</h2>
+  <p>This is a guide to the trainer’s Case III-style exercise, not a lesson in how the Navy or DCS flies a Case III recovery. In the exercise, Marshal clears you to a holding fix, you leave the fix at an assigned time and fly a controlled descent onto an instrument final approach. The guide explains what the trainer expects at each step and practises three general skills the exercise relies on: point-to-point TACAN plotting, choosing a hold entry and timing a hold. No real Case III procedure has been verified for this guide: the 2009 CV NATOPS manual and the DCS Supercarrier guide named in the <a href="#sources">sources</a> are research leads whose passages have not been checked, so nothing here should be read as what either says or as how to fly a real recovery.</p>
+  <p>Every number on this page is the trainer’s exercise setpoint unless a source is named beside it. Speeds are KIAS (knots indicated airspeed), distances are nautical miles (NM), DME (distance measuring equipment) values are TACAN (tactical air navigation) ranges from the carrier, and headings, radials and courses are magnetic. The trainer has no wind, so in this guide a heading equals the track over the ground.</p>
 
-  <h2 id="at-a-glance">The recovery at a glance</h2>
+  <h2 id="at-a-glance">The exercise at a glance</h2>
   <div class="table-scroll" role="region" aria-labelledby="glance-caption" tabindex="0">
     <table>
-      <caption id="glance-caption">Case III phases as modelled by the trainer. Values are exercise setpoints, not verified procedure or aircraft limits.</caption>
-      <thead><tr><th scope="col">Phase</th><th scope="col">What you do</th><th scope="col">Trainer setpoint</th></tr></thead>
+      <caption id="glance-caption">Phases of the trainer’s exercise. Values are the trainer’s setpoints, not verified procedure, simulator values or aircraft limits.</caption>
+      <thead><tr><th scope="col">Phase</th><th scope="col">What the trainer expects</th><th scope="col">Trainer setpoint</th></tr></thead>
       <tbody>
         <tr><th scope="row">1. Check in</th><td>Call Marshal inbound and read back the clearance.</td><td>Marshal radial, 21 DME, 6,000 ft, EAT</td></tr>
         <tr><th scope="row">2. Navigate</th><td>Fly point to point from your radial/DME to the marshal fix.</td><td>6,000 ft, 250 KIAS</td></tr>
@@ -58,9 +58,9 @@ const contents = [
       </tbody>
     </table>
   </div>
-  <p>In the trainer, BRC (base recovery course) is the carrier’s heading during the recovery, and the angled landing area is modelled 9° left of it, so the final bearing is BRC − 9°. The author’s reading of the DCS Supercarrier guide (an unverified lead) describes the angled deck as about 14° to port, which would differ from the trainer’s 9° (see the <a href="#source-map">DCS source map</a>); no Navy source has been checked.</p>
+  <p>In the trainer, BRC (base recovery course) is the carrier’s heading during the recovery, and the trainer models the landing area 9° left of it, so its final bearing is BRC − 9°. That offset is the trainer’s geometry; no Navy or DCS value for it has been verified.</p>
 
-  <h2 id="clearance">The Marshal clearance</h2>
+  <h2 id="clearance">The trainer’s Marshal clearance</h2>
   <p>In the trainer, Marshal’s clearance gives you everything you need before you descend: a radial, a DME, an altitude (“angels 6” is 6,000 ft in the trainer’s dialogue) and an expected approach time (EAT). The trainer’s Marshal says, for example, “Marshal mother’s 220 radial, 21 DME, angels 6. Expected approach time 16:21.” That wording is inherited exercise dialogue, not verified Navy phraseology.</p>
   <ul>
     <li><strong>A radial is a magnetic bearing from the station.</strong> The FAA Pilot/Controller Glossary defines it as a magnetic bearing extending from a VOR, VORTAC or TACAN facility. Here the station is Mother, the carrier’s TACAN.</li>
@@ -72,12 +72,12 @@ const contents = [
   <h2 id="tacan">Point-to-point TACAN navigation</h2>
   <p>You rarely start on the marshal radial. TACAN tells you where you are (your radial and DME) but not the direction to a fix that is somewhere else. Point-to-point navigation is the skill of turning two radial/DME positions into a heading.</p>
   <ol>
-    <li><strong>Find your own radial.</strong> On the trainer’s representative HSI the bearing pointer’s head points to Mother and its tail sits on your radial; check your own aircraft’s display. Your radial is not your heading.</li>
+    <li><strong>Find your own radial.</strong> On the trainer’s representative HSI the bearing pointer’s head points to Mother and its tail sits on your radial. That is the trainer’s display, not verified for the F-14 instrument; check your own aircraft’s display. Your radial is not your heading.</li>
     <li><strong>Picture the plot.</strong> Imagine a compass rose centred on Mother. Plot yourself on your radial at your DME and the fix on its radial at its DME. The larger DME sets the edge of the picture.</li>
     <li><strong>Read the direction of the line.</strong> Draw a line from you to the fix. Slide that line, without turning it, until it passes through the centre of the rose: where it points on the rose is the heading to fly.</li>
     <li><strong>Fly it and refine.</strong> Every minute or so, re-plot from your new radial and DME and correct the heading. Judge the combined position, not each number alone: DME is your distance from Mother, not from the fix. On the worked example below, the direct track passes inside 21 DME before the range opens back out to the fix, and that is correct.</li>
   </ol>
-  <p>Avoid two common slips: flying the fix radial (that is a direction from Mother, not from you), and flying the inbound course before you have reached the radial. DME is slant range, not horizontal distance (FAA AIM 1-1-7). At 6,000 ft, about 1 NM above the ship, the difference at 21 DME is under 0.03 NM, so the module treats DME as horizontal range.</p>
+  <p>Avoid two common slips: flying the fix radial (that is a direction from Mother, not from you), and flying the inbound course before you have reached the radial. DME is slant range, not horizontal distance (FAA AIM 1-1-7). At 6,000 ft, about 1 NM above the ship, the difference at 21 DME is under 0.03 NM, so the guide treats DME as horizontal range.</p>
 
   <section class="lesson" data-lesson="navigation" aria-labelledby="nav-title">
     <h3 id="nav-title">Practise: heading to the marshal fix</h3>
@@ -107,7 +107,7 @@ const contents = [
     <p>Place Mother at the origin with x east and y north. A position on radial <var>r</var> at <var>d</var> NM is x = <var>d</var>·sin <var>r</var>, y = <var>d</var>·cos <var>r</var>. The track from you to the fix is the direction of the difference vector, atan2(Δx, Δy), and the distance is its length. In the worked example you are at (30, 0) and the fix at (0, −21), so Δx = −30, Δy = −21: the track is 180° + atan(30/21) ≈ 235.0° and the distance √1341 ≈ 36.6 NM. With no wind, that track is also the heading. The time shown uses the trainer’s fixed map rate of 250 NM/hour, which is not a groundspeed model.</p>
   </details>
 
-  <h2 id="entry">Entering the marshal hold</h2>
+  <h2 id="entry">Choosing a hold entry</h2>
   <p>The marshal hold is a racetrack anchored on the fix. Its inbound leg runs along the inbound course to the fix; you turn at the fix onto the outbound leg and turn again back to the inbound leg. The trainer flies a left-hand pattern: two 180° turns of 2:00 each and two 1:00 straight legs, a 6:00 circuit. These are the trainer’s fixed hold parameters.</p>
   <p>How you join the racetrack depends on your heading as you reach the fix. The FAA AIM (5-3-8 j.3) describes three entries for instrument holding:</p>
   <ul>
@@ -115,14 +115,15 @@ const contents = [
     <li><strong>Teardrop:</strong> at the fix turn outbound to a heading 30° toward the holding side of the outbound course, fly it for one minute, then turn in the direction of the hold to intercept the inbound course.</li>
     <li><strong>Parallel:</strong> at the fix turn to parallel the outbound course on the non-holding side for one minute, then turn back toward the holding side through more than 180° to return to the fix or intercept the inbound course.</li>
   </ul>
-  <p>The entry is chosen from your heading on arrival at the fix, and the AIM treats ±5° of heading as acceptable when choosing (5-3-8 j.8(d)). The AIM shows the sectors only in a figure (<a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/images/aim0503_At_Anchor2.png">FIG 5-3-8, Holding Pattern Entry Procedures</a>), which the author could not open for this revision. The module uses the conventional reading of it, unverified against the figure: measured from the inbound course in the direction of the hold’s turns, an arrival heading 110° to 180° round is a teardrop, 180° to 290° is a parallel, and everything else (a 180° sector) is direct. A left-hand hold mirrors a right-hand one.</p>
-  <p>The sectors make physical sense. The holding side is the side of the inbound course where the outbound leg lies: right of the inbound course for a right-hand hold, left for a left-hand hold.</p>
+  <p>The AIM assigns each entry to a lettered sector of its entry figure (<a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/images/aim0503_At_Anchor2.png">Holding Pattern Entry Procedures</a>), orients the sectors to the 70° line on the holding side, says a left-hand pattern is oriented the same way, and treats ±5° of heading as acceptable when choosing (5-3-8 j.8(d)). Its text gives no sector widths, and this guide has not verified any against the figure. <strong>Use the AIM figure, not this guide, for the sector boundaries.</strong></p>
+  <p>The practice below therefore checks your answer against the guide’s own exercise rule, an unverified construction: measured from the inbound course in the direction of the hold’s turns, an arrival heading 110° to 180° round counts as a teardrop, 180° to 290° as a parallel, and everything else as direct, with either neighbouring entry accepted within 5° of a boundary. It is a practice aid for reasoning about the sides of the hold, not a reference for the sector sizes.</p>
+  <p>Whatever the exact boundaries, the entries follow from the sides of the hold. The holding side is the side of the inbound course where the outbound leg lies: right of the inbound course for a right-hand hold, left for a left-hand hold.</p>
   <ul>
     <li><strong>Direct</strong> fits when the first turn in the hold’s direction takes you onto the outbound leg without passing the inbound course, which is true when you arrive from behind the fix or from abeam it on the non-holding side.</li>
     <li><strong>Parallel</strong> fits when you arrive from the holding side: a turn in the hold’s direction onto the outbound heading would be about 270°, so you turn the short way onto the outbound heading instead, which puts you on the non-holding side.</li>
     <li><strong>Teardrop</strong> fits when you arrive from the non-holding side beyond the fix, close to the extension of the inbound course: you are already nearly on the outbound heading, and the 30° offset carries you onto the holding side before the turn inbound.</li>
   </ul>
-  <p class="note"><strong>Applicability:</strong> these are FAA civil instrument holding entries applied to the trainer’s marshal hold as a general instrument-flying skill. Whether CV NATOPS prescribes these entries for a Case III marshal pattern has not been verified. The trainer itself joins the hold automatically when you select <em>Enter marshal hold</em>; it does not fly these manoeuvres.</p>
+  <p class="note"><strong>Applicability:</strong> these are FAA civil instrument holding entries, practised here as a general instrument-flying skill. Whether CV NATOPS prescribes these entries for a Case III marshal pattern has not been verified. The trainer itself joins the hold automatically when you select <em>Enter marshal hold</em>; it does not fly these manoeuvres.</p>
 
   <section class="lesson" data-lesson="entry" aria-labelledby="entry-title">
     <h3 id="entry-title">Practise: choose the entry</h3>
@@ -150,21 +151,21 @@ const contents = [
       <svg viewBox="0 0 320 320" role="img" aria-label="Holding entry sectors around the marshal fix"></svg>
     </div>
     <p class="feedback" data-feedback role="status" aria-live="polite"></p>
-    <p data-result aria-live="polite">Worked example: left-hand hold, inbound course 000°, arriving on heading 090°. The outbound leg lies west of the inbound course, so west is the holding side, and heading 090° means you arrive from the west: the holding side. A left turn onto the 180° outbound heading would be a 270° turn, so this is a parallel entry: turn right 90° to 180° on the non-holding side, then after one minute turn left back toward the hold. By the sector rule, 090° measured anticlockwise from 000° is 270° round, inside the 180°–290° parallel sector.</p>
+    <p data-result aria-live="polite">Worked example: left-hand hold, inbound course 000°, arriving on heading 090°. The outbound leg lies west of the inbound course, so west is the holding side, and heading 090° means you arrive from the west: the holding side. A left turn onto the 180° outbound heading would be a 270° turn, so this is a parallel entry: turn right 90° to 180° on the non-holding side, then after one minute turn left back toward the hold. By the guide’s exercise rule, 090° measured anticlockwise from 000° is 270° round, inside its 180°–290° parallel band.</p>
     <noscript><p>The interactive plot needs JavaScript. The worked example above applies the same rule.</p></noscript>
   </section>
 
-  <h2 id="eat">Holding and making EAT</h2>
-  <p>In the trainer, EAT is the time you leave the fix inbound and begin the descent. For FAA civil holding, the AIM likewise expects pilots told when to leave a fix to adjust the pattern to leave at that time (5-3-8 k). In DCS the call appears to be Commencing at the assigned push time (Supercarrier guide p. 77, unverified lead). In the trainer you must call Commencing at the fix within 10 seconds of EAT, and EATs are whole minutes on a clock that starts at 16:00Z.</p>
-  <p>Hold time is adjustable, so plan it as soon as you know when you will reach the fix:</p>
+  <h2 id="eat">Planning the hold to EAT</h2>
+  <p>In the trainer, EAT is the time you leave the fix inbound and begin the descent. In the trainer you must call Commencing at the fix within 10 seconds of EAT, and EATs are whole minutes on a clock that starts at 16:00Z.</p>
+  <p>The planner below is a trainer-only arithmetic exercise. It uses the trainer’s fixed turns and stretches both straight legs, which is not a sourced technique: for FAA civil holding, the inbound leg is timed at 1 minute at or below 14,000 ft MSL, and the AIM’s guidance on leaving a fix at a specified time (5-3-8 k) is to adjust within the limits of the established pattern. The trainer does not let you change leg length at all, so treat this as practice in timing arithmetic only:</p>
   <ol>
     <li><strong>Work out the time available</strong> from reaching the fix to EAT.</li>
     <li><strong>Count whole circuits.</strong> Each standard trainer circuit is 6:00.</li>
-    <li><strong>Absorb the remainder in one circuit.</strong> The two turns take a fixed 4:00, so change only the straight legs. With no wind, the inbound leg lasts as long as the outbound leg, so every extra second outbound adds two seconds to the circuit. Extend the last circuit, or fly an extra short one if at least 4:00 remains.</li>
+    <li><strong>Absorb the remainder in one circuit (trainer model only).</strong> In the model the two turns take a fixed 4:00 and both straight legs stretch or shrink equally, so every extra second on each leg adds two seconds to the circuit. The model extends the last circuit, or adds a short one if at least 4:00 remains. Legs longer than 1:00 exceed the FAA civil inbound-leg time; this is not how to adjust a real hold.</li>
     <li><strong>Check on every pass of the fix</strong> and correct the next outbound leg if you are early or late.</li>
     <li><strong>If you cannot make it,</strong> the trainer expects you to ask Marshal for an amended EAT rather than leave late.</li>
   </ol>
-  <p class="note"><strong>Model limits:</strong> this planner is an educational no-wind, symmetric-leg model built on the trainer’s geometry, not an AIM procedure. For FAA civil holding the AIM sets the inbound leg time (1 minute at or below 14,000 ft MSL) and adjusts the outbound leg to achieve it (5-3-8 j.4(a)); with wind, outbound and inbound leg times differ, which this model does not represent. The trainer’s 250 KIAS hold is an exercise setpoint; FAA civil maximum holding speeds (5-3-8 j.2) are lower, so do not carry it over to civil holding. The trainer itself only flies standard circuits and lets the aircraft wait at the fix, which a real aircraft cannot do; it does not let you change leg lengths, speed or turn rate. Real holding corrections for wind and the CV NATOPS EAT guidance (a §6.4.4 lead) have not been verified.</p>
+  <p class="note"><strong>Model limits:</strong> this planner is an educational no-wind, symmetric-leg model built on the trainer’s geometry, not an AIM procedure. For FAA civil holding the AIM sets the inbound leg time (1 minute at or below 14,000 ft MSL) and adjusts the outbound leg to achieve it (5-3-8 j.4(a)); the model’s stretched inbound legs do not follow that, and with wind, outbound and inbound leg times differ, which this model does not represent. The trainer’s 250 KIAS hold is an exercise setpoint; FAA civil maximum holding speeds (5-3-8 j.2) are lower, so do not carry it over to civil holding. The trainer itself only flies standard circuits and lets the aircraft wait at the fix, which a real aircraft cannot do; it does not let you change leg lengths, speed or turn rate. Real holding corrections for wind and the CV NATOPS EAT guidance (a §6.4.4 lead) have not been verified.</p>
 
   <section class="lesson" data-lesson="eat" aria-labelledby="eat-title">
     <h3 id="eat-title">Practise: plan the hold</h3>
@@ -174,11 +175,11 @@ const contents = [
       <label>EAT (UTC)<input name="eat" type="text" value="16:21" inputmode="numeric" autocomplete="off" /></label>
     </div>
     <svg class="timeline" viewBox="0 0 320 64" role="img" aria-label="Hold timeline"></svg>
-    <div data-result aria-live="polite"><p>Worked example: reaching the fix at 16:08:20 for a 16:21 EAT leaves 12:40. Two standard circuits take 12:00, so 0:40 is left over. That is too short for an extra circuit, so fly one standard circuit and then one stretched circuit of 6:40, with 1:20 outbound and inbound legs instead of 1:00.</p></div>
+    <div data-result aria-live="polite"><p>Worked example: reaching the fix at 16:08:20 for a 16:21 EAT leaves 12:40. Two standard circuits take 12:00, so 0:40 is left over. That is too short for an extra circuit, so the trainer model gives one standard circuit and then one stretched circuit of 6:40, with 1:20 outbound and inbound legs instead of 1:00.</p></div>
     <noscript><p>The planner needs JavaScript. The worked example above shows the method.</p></noscript>
   </section>
 
-  <h2 id="penetration">Commencing, platform and the descent</h2>
+  <h2 id="penetration">The trainer’s descent</h2>
   <p>At EAT, leaving the fix inbound, call Commencing on Marshal. In the trainer you then turn to BRC, hold 250 KIAS and descend toward 1,200 ft at 4,000 ft/min. Marshal hands you to Approach, and you check in before platform.</p>
   <p><strong>In the trainer, platform is an altitude, not a distance.</strong> At 5,000 ft report Platform and reduce the descent to 2,000 ft/min, continuing to 1,200 ft. Level there, and intercept the final bearing (BRC − 9° in the trainer).</p>
   <figure>
@@ -206,7 +207,7 @@ const contents = [
     <figcaption id="profile-caption">Trainer vertical profile with no wind, drawn to scale from the setpoints above. Leaving 21 DME at 6,000 ft and 250 NM/hour, the 1,000 ft to platform at 4,000 ft/min takes 15 s, about 1.0 NM, so platform is reached near 20 DME. The 3,800 ft from platform to 1,200 ft at 2,000 ft/min takes 1:54, about 7.9 NM, so the aircraft levels near 12 DME. These are exercise numbers, not a published profile.</figcaption>
   </figure>
 
-  <h2 id="final">Configuration, final and the ball</h2>
+  <h2 id="final">The trainer’s final approach</h2>
   <ul>
     <li><strong>10 DME:</strong> begin slowing to 200 KIAS, level at 1,200 ft on the final bearing.</li>
     <li><strong>8 DME:</strong> gear, flaps and hook down; select on-speed and DLC (direct lift control). Be configured and on-speed by 6 DME. The trainer’s 135 KIAS on-speed value is an exercise setpoint, not a verified F-14 approach speed or angle-of-attack value.</li>
@@ -237,14 +238,14 @@ const contents = [
       <label><input type="radio" name="q3" value="a" /> Direct</label>
       <label><input type="radio" name="q3" value="b" /> Teardrop</label>
       <label><input type="radio" name="q3" value="c" /> Parallel</label>
-      <p data-explanation hidden><strong></strong>The outbound leg (220°) lies north-west of the inbound course, so north-west is the holding side, and heading 130° means you arrive from the north-west. A left turn from 130° onto 220° would be 270°, so you parallel. By the sector rule, 130° measured anticlockwise from 040° is 270° round, inside the 180°–290° parallel sector.</p>
+      <p data-explanation hidden><strong></strong>The outbound leg (220°) lies north-west of the inbound course, so north-west is the holding side, and heading 130° means you arrive from the north-west. A left turn from 130° onto 220° would be 270°, so you parallel. By the guide’s exercise rule, 130° measured anticlockwise from 040° is 270° round, inside its 180°–290° parallel band.</p>
     </fieldset>
     <fieldset data-answer="a">
-      <legend>4. You reach the fix with 9:30 to EAT. Trainer circuits are 6:00, with 4:00 of turns. What works?</legend>
+      <legend>4. In the guide’s trainer-only planner, you reach the fix with 9:30 to EAT. Circuits are 6:00, with 4:00 of turns. What does the planner give?</legend>
       <label><input type="radio" name="q4" value="a" /> One stretched circuit with 2:45 legs</label>
       <label><input type="radio" name="q4" value="b" /> One standard circuit, then leave 3:30 early</label>
       <label><input type="radio" name="q4" value="c" /> Two standard circuits</label>
-      <p data-explanation hidden><strong></strong>9:30 is one circuit plus 3:30, too short for a second circuit. Stretching one circuit to 9:30 leaves 5:30 for the two legs, 2:45 each.</p>
+      <p data-explanation hidden><strong></strong>9:30 is one circuit plus 3:30, too short for a second circuit, so the planner stretches one circuit to 9:30, leaving 5:30 for the two legs, 2:45 each. That is the trainer model’s arithmetic only: 2:45 legs exceed the FAA civil 1-minute inbound leg, so it is not a real holding technique. Leaving early (b) misses EAT, and two circuits (c) take 12:00 and arrive late.</p>
     </fieldset>
     <fieldset data-answer="b">
       <legend>5. What changes at platform in the trainer?</legend>
@@ -258,49 +259,26 @@ const contents = [
   </form>
 
   <h2 id="launch">Launch the trainer</h2>
-  <p>The trainer puts all of this together in one sortie: Marshal check-in, point-to-point navigation, the hold and EAT, the penetration, final and the ball. Direct the pilot using heading, airspeed, altitude and vertical-rate commands. Read the sortie popup, then select Start Exercise. Instructor mode gives cues and pauses at decisions; switch it off to rehearse without hints. Voice is optional and uses your browser’s speech voices.</p>
+  <p>The trainer puts the exercise together in one sortie: Marshal check-in, point-to-point navigation, the hold and EAT, the descent, final and the ball. Direct the pilot using heading, airspeed, altitude and vertical-rate commands. Read the sortie popup, then select Start Exercise. Instructor mode gives cues and pauses at decisions; switch it off to rehearse without hints. Voice is optional and uses your browser’s speech voices.</p>
   <p>The trainer needs a whole window, so it always opens on its own rather than inside this page.</p>
   <p class="launch">
     <a class="launch-button" href={trainerHref} target="_blank" rel="noopener" data-experience-launch data-experience-id={caseIII.id}>Launch the Case III trainer<span> (opens in a new window)</span></a>
   </p>
   <p>{caseIII.maturity}. Revision {caseIII.revision}.</p>
-  <noscript><p>The trainer requires JavaScript. This module’s text, worked examples and sources remain readable without it.</p></noscript>
+  <noscript><p>The trainer requires JavaScript. This guide’s text, worked examples and sources remain readable without it.</p></noscript>
 
   <h2 id="limits">Scope and limits</h2>
-  <p>Aircraft dynamics, AoA, fuel consumption, glidepath and arrestment are synthetic. Outside the hold, the airspeed number is also used as NM/hour for map movement; IAS-to-TAS conversion and wind are not modeled. Hold geometry uses a fixed synthetic 250 NM/hour. Every airspeed, altitude, vertical rate, DME fix, timing and configuration gate shown in the trainer and this module (for example 250 KIAS at the 6,000 ft, 21 DME marshal, the 4,000 then 2,000 ft/min descent, and the 10 and 8 DME slow-down and configuration points) is an exercise setpoint. The author has located many of them in the DCS Supercarrier guide (see the <a href="#source-map">DCS source map</a>), but that mapping is an unverified lead; none is a verified procedure, simulator value or aircraft limitation. The night-themed scenario does not model date, lighting or visibility conditions. This is not an approved operating procedure or a proficiency assessment. The exact DCS version has not been verified. Radio dialogue and scoring criteria are inherited exercise content, not verified Navy phraseology or measures of proficiency.</p>
-  <p>The module’s calculations (point-to-point track, entry sector and hold plan) are simplified educational models: flat-earth plotting around Mother, DME as horizontal range, no wind, and the trainer’s fixed turns and legs. The 2009 CV NATOPS citation in the source register is a historical research lead only: its cited passages, current applicability and claim mapping have not been verified. Fixed turns and legs are synthetic exercise parameters, not a claim about a prescribed hold.</p>
+  <p>Aircraft dynamics, AoA, fuel consumption, glidepath and arrestment are synthetic. Outside the hold, the airspeed number is also used as NM/hour for map movement; IAS-to-TAS conversion and wind are not modeled. Hold geometry uses a fixed synthetic 250 NM/hour. Every airspeed, altitude, vertical rate, DME fix, timing and configuration gate shown in the trainer and this guide (for example 250 KIAS at the 6,000 ft, 21 DME marshal, the 4,000 then 2,000 ft/min descent, and the 10 and 8 DME slow-down and configuration points) is an exercise setpoint; none is a verified procedure, simulator value or aircraft limitation. The night-themed scenario does not model date, lighting or visibility conditions. This is not an approved operating procedure or a proficiency assessment. The exact DCS version has not been verified. Radio dialogue and scoring criteria are inherited exercise content, not verified Navy phraseology or measures of proficiency.</p>
+  <p>The guide’s calculations (point-to-point track, entry rule and hold plan) are simplified educational models: flat-earth plotting around Mother, DME as horizontal range, no wind, and the trainer’s fixed turns and legs. The 2009 CV NATOPS citation in the source register is a historical research lead only: its cited passages, current applicability and claim mapping have not been verified. Fixed turns and legs are synthetic exercise parameters, not a claim about a prescribed hold.</p>
 
   <h2 id="sources">Sources and unresolved review</h2>
-  <p>No applicable Navy passage has been verified for this module’s or the trainer’s Case III procedure, numeric gates, radio dialogue or scoring. The DCS source map below records where the author located the trainer’s setpoints in the DCS Supercarrier guide. It is an unverified research lead: the locators and readings have not been independently checked, so the setpoints remain unverified. A revision-3 review inspected limited Heatblur F-14 and CASE I passages for DCS-specific context only; those do not validate this exercise. References do not certify procedures or grant rights to reproduce manuals. No manual files or third-party media are included.</p>
-  <h3 id="source-map">DCS source map (unverified lead)</h3>
-  <div class="table-scroll" role="region" aria-labelledby="map-caption" tabindex="0">
-    <table>
-      <caption id="map-caption">Where the author located each trainer setpoint in the DCS Supercarrier Operations Guide (cover date 20 November 2024), read from the PDF’s extracted text. Unverified research lead: no independent reviewer has confirmed these pages or readings. Simulator-specific at most; not Navy procedure.</caption>
-      <thead><tr><th scope="col">Trainer setpoint</th><th scope="col">Guide</th><th scope="col">Author’s reading (unverified)</th></tr></thead>
-      <tbody>
-        <tr><th scope="row">Clearance: radial, DME, angels, EAT</th><td>p. 76</td><td>Appears to match the clearance template</td></tr>
-        <tr><th scope="row">21 DME at angels 6</th><td>p. 76</td><td>Appears to match: 1 NM per 1,000 ft plus 15</td></tr>
-        <tr><th scope="row">Left-hand 6:00 hold, 2:00 turns, 1:00 legs</th><td>p. 77</td><td>Appears to match</td></tr>
-        <tr><th scope="row">Commencing at EAT</th><td>p. 77</td><td>Appears to match: Commencing at the push time</td></tr>
-        <tr><th scope="row">250 KIAS, 4,000 ft/min to 5,000 ft</th><td>p. 77</td><td>Appears to match (the guide says 250 knots)</td></tr>
-        <tr><th scope="row">Platform at 5,000 ft, then 2,000 ft/min</th><td>pp. 75, 77–78</td><td>Appears to match</td></tr>
-        <tr><th scope="row">Level at 1,200 ft</th><td>p. 75</td><td>Appears to match</td></tr>
-        <tr><th scope="row">“Fly bullseye” on final bearing</th><td>p. 78</td><td>Appears to match</td></tr>
-        <tr><th scope="row">Slow at 10 DME, configure at 8, on-speed by 6</th><td>pp. 75, 79</td><td>Appears to match p. 79; p. 75 says configure at 10 NM, so the guide is internally inconsistent</td></tr>
-        <tr><th scope="row">Ball call about 0.75 NM</th><td>p. 75</td><td>Appears to match: ¾ NM</td></tr>
-        <tr><th scope="row">Glidepath intercept about 3 NM from 1,200 ft</th><td>p. 75</td><td><strong>Appears to differ:</strong> the guide expects 600 ft at 3 NM, already on the glidepath</td></tr>
-        <tr><th scope="row">Final bearing BRC − 9°</th><td>p. 16</td><td><strong>Appears to differ:</strong> the guide describes the angled deck as about 14° to port</td></tr>
-        <tr><th scope="row">Amended EAT on request</th><td>—</td><td>Not in the guide; trainer mechanic</td></tr>
-        <tr><th scope="row">Holding entries</th><td>—</td><td>Not in the guide; the trainer joins the hold automatically</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <p>No applicable Navy or DCS passage has been verified for the trainer’s Case III exercise, numeric gates, radio dialogue or scoring. A revision-3 review inspected limited Heatblur F-14 and CASE I passages for DCS-specific context only; those do not validate this exercise. References do not certify procedures or grant rights to reproduce manuals. No manual files or third-party media are included.</p>
   <ul>
-    <li><a href="https://info.publicintelligence.net/CV-NATOPS-JUL09.pdf">NAVAIR 00-80T-105, CV NATOPS, 31 July 2009</a>, §§6.4.1.1 and 6.4.4, pp. 6-6 and 6-8: historical leads for the Case III overview, hold and EAT claims only; the passages and current applicability were not verified.</li>
-    <li><a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap5_section_3.html">FAA Aeronautical Information Manual</a>, ¶5-3-8 j.3 (holding entry procedures), j.4(a) (inbound leg timing; outbound adjusted to achieve it), j.8(d) (±5° heading tolerance when choosing an entry, under Pilot Action), k (adjusting the pattern to leave the fix at a specified time) and the entry-sector figure (cited in the text as FIG 5-3-4, captioned FIG 5-3-8 “Holding Pattern Entry Procedures”, <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/images/aim0503_At_Anchor2.png">image</a>), accessed 24 October 2026: supports the entry definitions and timing adjustment for FAA civil instrument holding. The 70°/110°/180° sector sizes are the conventional reading of the figure, which this revision did not inspect. It does not establish Case III marshal procedure.</li>
+    <li><a href="https://info.publicintelligence.net/CV-NATOPS-JUL09.pdf">NAVAIR 00-80T-105, CV NATOPS, 31 July 2009</a>, §§6.4.1.1 and 6.4.4, pp. 6-6 and 6-8: historical research lead only; the passages and current applicability were not verified, and this guide makes no claim from them.</li>
+    <li><a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap5_section_3.html">FAA Aeronautical Information Manual</a>, ¶5-3-8 j.3 (holding entry procedures), j.4(a) (inbound leg timing; outbound adjusted to achieve it), j.8(d) (±5° heading tolerance when choosing an entry, under Pilot Action), k (adjusting the pattern to leave the fix at a specified time) the nonstandard-pattern note (entries oriented to the 70° line on the holding side) and the entry figure “Holding Pattern Entry Procedures” (<a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/images/aim0503_At_Anchor2.png">image</a>), accessed 24 October 2026: supports the entry definitions and timing statements for FAA civil instrument holding. The guide’s 110°/180°/290° practice boundaries are its own unverified construction, not taken from the figure. It does not establish Case III marshal procedure.</li>
     <li><a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap1_section_1.html">FAA Aeronautical Information Manual</a>, ¶1-1-7 (DME), accessed 24 October 2026: DME distance is slant range, not horizontal distance.</li>
     <li><a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/glossary-r.html">FAA Pilot/Controller Glossary</a>, “Radial”, accessed 24 October 2026: a magnetic bearing extending from a VOR, VORTAC or TACAN facility.</li>
-    <li><a href="https://www.digitalcombatsimulator.com/upload/iblock/e1b/430ooc582lpb0npynbsewan6omd5ohvs/DCS_Supercarrier_Operations_Guide_EN.pdf">Eagle Dynamics, DCS: Supercarrier Operations Guide</a>, updated 20 November 2024, CASE III recovery pp. 75–81 and carrier description p. 16, accessed 24 October 2026: unverified research lead for the setpoints mapped above. Page numbers were read from the PDF’s extracted text and have not been independently checked. The DCS version the trainer targets has not been verified, and the guide does not establish real-world procedure.</li>
+    <li><a href="https://www.digitalcombatsimulator.com/upload/iblock/e1b/430ooc582lpb0npynbsewan6omd5ohvs/DCS_Supercarrier_Operations_Guide_EN.pdf">Eagle Dynamics, DCS: Supercarrier Operations Guide</a>, updated 20 November 2024, CASE III recovery pp. 75–81: possible DCS-specific dialogue and sequence lead; pages and module-version mapping were not verified, and it does not establish real-world procedure.</li>
     <li><a href="https://f14.manuals.heatblur.se/">Heatblur F-14 manual</a>: a revision-3 review inspected the <a href="https://github.com/Heatblur-Simulations/f-14-manual/blob/49bbd9a144c32033bd3b3d98f04b113c58f22fa0/src/f14bu/cockpit/pilot/left_instrument_panel.md">Airspeed/AoA indicator passages</a>, <a href="https://github.com/Heatblur-Simulations/f-14-manual/blob/49bbd9a144c32033bd3b3d98f04b113c58f22fa0/src/f14bu/procedures/landing_procedures.md">CASE I landing section</a> and <a href="https://github.com/Heatblur-Simulations/f-14-manual/blob/49bbd9a144c32033bd3b3d98f04b113c58f22fa0/src/f14bu/cockpit/pilot/right_console.md">flap caution table</a> at commit <code>49bbd9a144c32033bd3b3d98f04b113c58f22fa0</code>. These do not establish the Case III procedure or validate the trainer’s 135/280/225 KIAS exercise gates; module-version mapping remains unverified.</li>
   </ul>
 </SiteLayout>

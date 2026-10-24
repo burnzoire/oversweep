@@ -55,9 +55,10 @@ export function timeEnroute(distance, rate) {
 }
 
 /**
- * Holding-entry sector from the arrival heading at the fix.
- * Sectors relative to the inbound course: direct 180°, teardrop 70°,
- * parallel 110°, bounded by the 70° line. `offset` is the arrival heading
+ * Holding entry from the arrival heading at the fix, by the module's own
+ * practice rule (an unverified construction, not taken from the AIM figure):
+ * direct 180°, teardrop 70°, parallel 110°, bounded by the 70° line on the
+ * holding side and the inbound course line. `offset` is the arrival heading
  * measured from the inbound course in the direction of the hold's turns.
  * `nearBoundary` marks offsets within 5° of a sector boundary, where the
  * `alternative` entry across that boundary is also acceptable.
