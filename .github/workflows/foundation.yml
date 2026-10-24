@@ -16,6 +16,8 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
+      - name: Install PDF text extractor for page-extraction tests
+        run: sudo apt-get update -qq && sudo apt-get install --yes --no-install-recommends poppler-utils
       - name: Test review source retrieval boundaries
         run: python3 -m unittest discover -s tests/review_sources -p 'test_*.py'
       - name: Validate foundation

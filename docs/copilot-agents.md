@@ -263,6 +263,15 @@ reviewer re-checks its earlier blockers and raises new blockers only for changed
 text (or a Critical finding), so reruns do not keep finding new reasons to block
 unchanged content.
 
+Evidence files can declare the physical PDF pages they cite in a
+`review-sources` block (see [the SME review standard](aviation-sme-review.md));
+only those pages are extracted, in records of up to ten pages. Each record has
+its own character budget, the packet opens with a coverage list, and the gate
+summary repeats any cut, failed or omitted record. PDFs stream to disk up to
+64 MB. Public source fetches trust DoD Root CA 3–5 in addition to the default
+CA store, because `.navy.mil` hosts such as cnatra.navy.mil chain to them;
+verification is never disabled.
+
 The source reader validates HTTPS hosts and redirects, bounds source count, byte
 size and output, separates GitHub authentication from public fetches, and checks
 the PR head again. Foundation checks run its stdlib unit tests. The documented

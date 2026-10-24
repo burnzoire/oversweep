@@ -6,6 +6,7 @@ import {
   evaluateSmeResult,
   isSmeReviewRequired,
   parseBlockingFindings,
+  parseSourceCoverage,
   smeReviewPaths,
 } from "../../scripts/sme-review-gate.mjs";
 
@@ -100,11 +101,31 @@ test("only the owner's sme-override label overrides the review", () => {
 });
 
 test("accepts only a successful exact-head agent report", () => {
-  assert.deepEqual(review(readySummary), {
-    ready: true,
-    reportUrl: commentUrl,
-    message: "The current-head SME review has no blocking findings.",
-  });
+  const result = review(readySummary);
+  assert.equal(result.ready, true);
+  assert.equal(result.reportUrl, commentUrl);
+  assert.match(result.message, /^The current-head SME review has no blocking findings\./);
+});
+
+test("the gate summary shows which records were cut, failed or never read", () => {
+  const coverage = "\n## Source coverage\n\n- failed · SOURCE RETRIEVAL FAILURE: https://www.cnatra.navy.mil/a.pdf · URLError\n- cut at 40,000 of 52,000 characters · RETRIEVED SOURCE DATA: https://faa.gov/a.pdf physical pages 60-69\n\n<details><summary>Full review</summary>\n\nx\n</details>\n";
+  const result = review(readySummary + coverage);
+  assert.equal(result.ready, true, "incomplete reading is shown, not blocking by itself");
+  assert.equal(result.coverage.complete, false);
+  assert.match(result.message, /\*\*Source coverage\*\*/);
+  assert.match(result.message, /SOURCE RETRIEVAL FAILURE: https:\/\/www\.cnatra\.navy\.mil\/a\.pdf/);
+  assert.match(result.message, /physical pages 60-69/);
+  assert.doesNotMatch(result.message, /Full review<\/summary>/);
+  const blocked = review(blockedSummary + coverage);
+  assert.match(blocked.message, /SOURCE RETRIEVAL FAILURE/);
+});
+
+test("source coverage is complete only when the review says so without listing records", () => {
+  assert.equal(parseSourceCoverage("## Source coverage\n\nAll 6 records are complete.\n").complete, true);
+  assert.equal(parseSourceCoverage("## Source coverage\n\nAll complete.\n- omitted: packet budget exhausted · x\n").complete, false);
+  const missing = parseSourceCoverage("## Blocking findings\n\nNone.\n");
+  assert.equal(missing.complete, false);
+  assert.match(missing.text, /did not report source coverage/);
 });
 
 test("unresolved Case III evidence findings visibly block readiness", () => {
