@@ -770,7 +770,7 @@ function setupLightGun(root) {
 }
 
 /* ---------- Figure 11: radio calls in and out ---------- */
-const SOURCE_NO = { nav: [1, 'source-navedtra'], hw: [2, 'source-hollywood'], aim4: [4, 'source-aim4'], ac: [7, 'source-ac'] };
+const SOURCE_NO = { nav: [1, 'source-navedtra'], hw: [2, 'source-hollywood'], aim4: [8, 'source-aim4'], ac: [11, 'source-ac'] };
 function setupRadio(root) {
   const svg = root.querySelector('svg');
   const list = root.querySelector('[data-steps]');

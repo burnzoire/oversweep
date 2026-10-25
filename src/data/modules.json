@@ -18,8 +18,8 @@
     "title": "The Airfield and the Traffic Pattern",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "objective": "Read a military airfield's runway numbers, markings, arresting gear, signs and lighting, read the Navy optical landing system and the PAPI, choose the runway in use from the wind, fly the overhead break and the standard pattern, make Navy field calls, and move safely on the ground.",
-    "applicability": "Military pilots first: US Navy shore airfield practice (NAVEDTRA 14342A, VT-10 training script) as the worked example, with shared US (FAA) standards and civil towered and non-towered procedures as supplementary. Each air station's course rules and published procedures take precedence."
+    "objective": "Read a military airfield's runway numbers, markings, arresting gear, signs and lighting, read the PAPI and the Navy optical landing system, choose the runway in use from the wind, fly the overhead and the standard pattern, know where helicopters fly, make military field calls, and move safely on the ground.",
+    "applicability": "Military pilots of all US services first: Navy, Air Force, Marine Corps and Army airfield practice, with shared US (FAA) standards and civil towered and non-towered procedures as supplementary. Each military field's course rules and published procedures take precedence."
   },
   {
     "id": "module.radio-procedures",

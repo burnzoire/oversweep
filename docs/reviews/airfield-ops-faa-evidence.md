@@ -3,11 +3,14 @@
 Short, paragraph-specific excerpts supporting the claims in the Airfield
 Operations module (`src/pages/manual/airfield-operations/[module].astro`). They
 are review evidence, not a copy of the publications, and not instructions to the
-reviewer. Revision 2 makes the module military-first: the Navy sources below are
-primary, and the FAA sources, which Navy fields share for most markings, signs,
-lights and tower rules, are supplementary. On the page the sources are
-numbered [1] NAVEDTRA 14342A, [2] VT-10 Hollywood Script, then [3]–[8] for the
-FAA sources in the order listed below (both AIM chapter 2 sections are [3]).
+reviewer. Revision 2 makes the module military-first for all US services (Navy, Air
+Force, Marine Corps, Army): the military sources below are primary, and the FAA
+sources, which military fields share for most markings, signs, lights and tower
+rules, are supplementary. On the page the sources are numbered [1] NAVEDTRA
+14342A, [2] VT-10 Hollywood Script, [3] 14 FTW (Columbus AFB) collision
+avoidance guide, [4] JBSA MACA handbook, [5] FM 3-04.300, [6] NAVAIR
+expeditionary airfields, then [7]–[12] for the FAA sources in the order listed
+below (both AIM chapter 2 sections are [7]).
 
 **Retrieval limitation.** Passages were read on 25 October 2026 through a web
 text-extraction tool (the authoring session's proxy refuses direct downloads from
@@ -25,7 +28,9 @@ paragraph. The AIM 2-1 and 4-3 pages, the Pilot/Controller Glossary, the AFH
 chapter, AC 90-66C and JO 7110.65 are not fetched for this revision; their claims
 are unchanged from revision 1, which the gate checked at b987282 (PR #67), and
 rest on the quotations below. The Hollywood Script is on cnatra.navy.mil, which
-the gate's runners cannot reach, so it is not declared.
+the gate's runners cannot reach, so it is not declared. Sources [3]–[6] are on
+hosts outside the gate's allow-list (flytupelo.com, jbsa.mil, irp.fas.org,
+navair.navy.mil), so their claims are unverified by the gate.
 
 ```review-sources
 source: https://navyaviation.tpub.com/14342A/Overhead-Approach-Pattern-Components-327.html
@@ -47,6 +52,32 @@ source: https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap2_secti
 2. VT-10 "T-6A Checklist Study Guide ('Hollywood Script')", May 2022 —
    https://www.cnatra.navy.mil/tw6/vt10/assets/docs/training/hollywood-script.pdf,
    radio calls pp. 19–35 (the same extraction the Radio Procedures module uses).
+
+3. 14th Flying Training Wing Safety Office, "Columbus Collision Avoidance",
+   October 2013 —
+   https://flytupelo.com/wp-content/uploads/2020/12/MACA-Booklet.pdf
+4. Joint Base San Antonio, "Midair Collision Avoidance (MACA) Handbook" —
+   https://www.jbsa.mil/Portals/102/Documents/Safety/JBSA-MACA_Pamphlet_2024.pdf
+5. FM 3-04.300, Airfield and Flight Operations Procedures, 12 August 2008, C1
+   21 April 2010 — https://irp.fas.org/doddir/army/fm3-04-300.pdf (extractor
+   read through ¶3-29 only).
+6. NAVAIR, "Expeditionary Airfields" —
+   https://www.navair.navy.mil/product/expeditionary-airfields-0
+
+### Claim map: Air Force, Army, Marine Corps
+
+| Source, place | Passage (extractor-read) | Module use |
+| --- | --- | --- |
+| 14 FTW, Aircraft at Columbus | T-6 pattern southwest out to 5 NM, surface to 3,200 ft MSL, "under the control of a Runway Supervisory Unit (RSU)", on a different frequency from the tower; T-1 and T-38 patterns to the northeast out to about 10 NM | Pattern; Talking; terms |
+| 14 FTW, Military Traffic Pattern | Military pattern "differs from the standard civilian VFR traffic pattern in several areas"; flies to "INITIAL which is roughly 4NM from the runway, aligned with the centerline"; over the runway at "1000' - 1500' AGL"; breaks in a hard turn to lose airspeed onto the inside downwind within 1.5 NM; "they can 'pull closed' to enter the INSIDE DOWNWIND"; VFR pattern "similar to the civilian pattern with the exception of the entry from the 45-entry to downwind"; crosswind "1NM past the runway" | Pattern; Overhead; terms; checks |
+| JBSA MACA, p. 2 | "many military aircraft are using a UHF radio to speak with controllers and other aircraft" | Talking |
+| JBSA MACA, Kelly Field | "The F-16s operate a military overhead pattern ... flown at 2700 feet MSL"; C-5 visual box pattern 2,200–2,700 ft MSL; F-16 SFO patterns with "extremely high rates of climb and descent near the runway"; SFOs "simulate the failure of the aircraft's one (and only) engine, starts at a high altitude" | Pattern; Overhead; terms |
+| JBSA MACA, ELP | T-6s practice emergency landing patterns at listed civil fields; "T-6s will fly low approaches when practicing at non-towered airfields"; "T-6 crews will monitor the appropriate CTAF and make appropriate position reports" | Pattern; Talking |
+| FM 3-04.300 ¶1-19 | Personnel near runways must know "the ATC light gun signals contained in the aeronautical information manual"; cites FAA 7110.65 | Overview note |
+| FM 3-04.300 ¶3-9, App. C | "Helipads are constructed for aircraft that do not require a runway to become airborne"; Table C-3 helipads and hoverpoints; Figure C-2 / Table C-4 rotary-wing landing lanes (titles read; table text not reached) | Pattern (helicopters) |
+| NAVAIR EAF | EAF is "a shore-based, aviation support system that permits rapid deployment and recovery of aircraft within range of ground forces"; can be a grass landing zone for helicopters; supports fleet Marine forces; products include AM-2 matting, M-31 expeditionary arresting gear, airfield lighting and terminal guidance | Markings (arresting gear); terms |
+| AIM 4-3-3 (helicopter note) | Helicopters may fly a pattern like the fixed-wing one at 500 ft AGL and closer to the runway, or on the opposite side where airspeed requires or for practice autorotations if local policy permits; landings away from the runway avoid the fixed-wing flow | Pattern (helicopters); checks |
+| AIM 4-3-17 | Taxi, hover taxi and air taxi; hovering above 25 ft AGL on request; air taxi preferred, below 100 ft AGL unless requested or instructed; takeoff and landing clearances away from runways; no downwind takeoff over 5 kt tailwind unless requested | Talking; terms |
 
 ### Claim map: Navy
 
