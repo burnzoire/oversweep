@@ -17,9 +17,11 @@ radars:
   - { name: "1S51M3", nato: "Land Roll", role: "On the launcher: acquisition (C band), tracking (H band) and two fire-control radars (J band)" }
   - { name: "P-40", nato: "Long Track", role: "Separate early-warning vehicle", band: "E" }
   - { name: "PRV-9 / PRV-16", nato: "Thin Skin", role: "Separate height finder", band: "E" }
+radarsCite: [1]
 rwr:
   - { symbol: "8", emitter: "SA-8 Gecko search and track radar (Osa)" }
 battery:
+  cite: [1, 2]
   pattern: group
   items:
     - { kind: launcher, label: "TELARs with Land Roll radar (Osa-AK)", count: 4, missiles: 6 }
@@ -45,7 +47,7 @@ sources:
 
 ## Overview
 
-The 9K33 Osa, NATO reporting name **SA-8 Gecko**, entered service in 1971 and was fielded in 1972; the naval version is the SA-N-4. [[1]](#source-1) Each vehicle carries its own radars and missiles, so a single vehicle can find, track and engage a target.
+The 9K33 Osa, NATO reporting name **SA-8 Gecko**, entered service in 1971 and was fielded in 1972; the naval version is the SA-N-4. [[1]](#source-1)
 
 ## The vehicle
 
@@ -63,7 +65,7 @@ The missile is command guided for its whole flight. [[1]](#source-1) [[2]](#sour
 | 9M33M2 (Osa-AK) | 1.5–10 km (0.8–5.4 NM) | 25–5,000 m (80–16,400 ft) |
 | 9M33M3 (Osa-AKM) | about 15 km (8.1 NM) | 10–12,000 m (30–39,400 ft) |
 
-Source: [[1]](#source-1). The 1998 Army handout gives 12 km for the SA-8a and 15 km for the SA-8b, both with a 10 m minimum engagement altitude. [[2]](#source-2) Figure 1 uses the 9M33M2, the only version with all four limits in the cited source.
+Source: [[1]](#source-1). The 1998 Army handout gives 12 km for the SA-8a and 15 km for the SA-8b, both with a 10 m minimum engagement altitude. [[2]](#source-2) Figure 1 uses the 9M33M2: the Osa-AK, whose six-missile launchers the battery figure shows, with all four limits given and none of them approximate.
 
 ## On the radar warning receiver
 

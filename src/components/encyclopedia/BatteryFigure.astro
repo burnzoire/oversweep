@@ -1,5 +1,6 @@
 ---
 import type { ThreatData } from '../../data/encyclopedia';
+import Cited from './Cited.astro';
 interface Props { battery: NonNullable<ThreatData['battery']>; name: string; cite: string }
 const { battery, name, cite } = Astro.props;
 
@@ -26,9 +27,27 @@ const off = (p: { x: number; y: number }, d: number) => ({ x: p.x + n.x * d, y: 
 const d0 = off(p0, 34), d1 = off(p1, 34), dl = off(mid, 48);
 ---
 <section class="lesson figure-lesson battery-figure" aria-labelledby="battery-title">
-  <h3 id="battery-title" class="fig-title">Figure 3 — {battery.pattern === 'ring' ? `${name} site (plan view)` : `${name} unit composition`}</h3>
+  <h3 id="battery-title" class="fig-title">Figure 3 — {battery.pattern === 'ring' ? `${name} site (plan view)` : battery.pattern === 'rings' ? `${name} site rings (plan view)` : `${name} unit composition`}</h3>
   <div class="fig-scroll" role="region" aria-label="Figure 3, scrolls sideways on narrow screens" tabindex="0">
-    {battery.pattern === 'ring' ? (
+    {battery.pattern === 'rings' ? (
+      <svg class="natops" viewBox="0 0 640 380" role="img" aria-label={battery.items.map((i) => `${i.count} ${i.label}`).join(', ')}>
+        {battery.items.map((item, k) => {
+          const r = 80 + k * 80, n = item.count ?? 1;
+          return (
+            <g>
+              <circle class="ln dashed" cx="320" cy="190" r={r} />
+              {Array.from({ length: n }, (_, i) => {
+                const a = (i * 2 * Math.PI) / n;
+                return <rect class="bat-body" x={320 + r * Math.sin(a) - 5} y={190 - r * Math.cos(a) - 5} width="10" height="10" />;
+              })}
+              <text class="lbl" x="320" y={190 - r - 14} text-anchor="middle">{n} × {item.label}</text>
+            </g>
+          );
+        })}
+        <text class="lbl" x="320" y="194" text-anchor="middle">MOSCOW</text>
+        <text class="lbl small" x="24" y="366">Schematic: sites spaced evenly; ring radii and positions not to scale.</text>
+      </svg>
+    ) : battery.pattern === 'ring' ? (
       <svg class="natops" viewBox="0 0 640 380" role="img" aria-label={`${launcher?.count} launchers in a ring around the ${radar?.label}`}>
         <circle class="ln dashed" cx="320" cy="190" r="120" />
         {ring.map((p) => (
@@ -77,5 +96,5 @@ const d0 = off(p0, 34), d1 = off(p1, 34), dl = off(mid, 48);
       </svg>
     )}
   </div>
-  <p class="fig-caption">Schematic symbols for each element, drawn from the composition given in {cite}; not vehicle outlines and not to scale.<slot /></p>
+  <p class="fig-caption">Schematic symbols for each element, drawn from the composition given in <Cited text={cite} />; not vehicle outlines and not to scale.<slot /></p>
 </section>

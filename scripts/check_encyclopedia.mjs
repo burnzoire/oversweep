@@ -72,6 +72,10 @@ export async function checkRecords({ dist, records, review = false, base = "", c
       if (!anchors.size) problems.push(`${r.id}: page lists no sources.`);
       for (const [, target] of pages.page.matchAll(/href="#(source-\d+)"/g))
         if (!anchors.has(target)) problems.push(`${r.id}: citation #${target} has no source entry.`);
+      // A bare "[n]" outside a link is a citation the reader cannot follow.
+      const text = pages.page.replace(/<a\b[^>]*>[\s\S]*?<\/a>/g, "").replace(/<(script|style)\b[\s\S]*?<\/\1>/g, "");
+      for (const [marker] of text.matchAll(/\[\d+\]/g)) problems.push(`${r.id}: citation ${marker} is not linked to its source.`);
+      if (!/class="record-body"[^>]*>\s*<[a-z]/.test(pages.page)) problems.push(`${r.id}: page has no record text.`);
     }
   }
   if (excluded.length) {

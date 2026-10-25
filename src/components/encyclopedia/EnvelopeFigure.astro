@@ -41,7 +41,22 @@ function draw(scale: Scale) {
       label: labelAt(top[0], top[1]),
     };
   });
-  return { scale, ticksX, ticksY, x, y, shapes: shapes.sort((a, b) => Number(a.on) - Number(b.on)) };
+  // Labels for envelopes that run off the plot share one marker at the right
+  // edge; the rest are nudged up when they would overprint a neighbour.
+  const clipped = shapes.filter((s) => s.label.anchor === 'end');
+  const placed = shapes.filter((s) => s.label.anchor !== 'end').map((s) => ({ ...s.label, on: s.on })).sort((a, b) => a.x - b.x || b.y - a.y);
+  for (let i = 1; i < placed.length; i++) {
+    for (let j = 0; j < i; j++) {
+      const a = placed[j], b = placed[i];
+      if (Math.abs(a.x - b.x) < 16 && Math.abs(a.y - b.y) < 13) b.y = Math.max(a.y - 14, T + 12);
+    }
+  }
+  const labels = clipped.length
+    ? [...placed, { x: R - 6, y: T + 12, anchor: 'end', text: `${clipped.map((s) => s.item.label).join(', ')} ›`, on: clipped.some((s) => s.on) }]
+    : placed;
+  // Feet are 6,076.12 to the nautical mile.
+  const exaggeration = ((B - T) / ((scale.maxKft * 1000) / 6076.12)) / ((R - L) / scale.maxNm);
+  return { scale, ticksX, ticksY, x, y, labels, exaggeration, shapes: shapes.sort((a, b) => Number(a.on) - Number(b.on)) };
 }
 const views = scales.map(draw);
 const figId = `env-${highlight ?? 'all'}`;
@@ -57,6 +72,7 @@ const figId = `env-${highlight ?? 'all'}`;
         <defs><clipPath id={`${figId}-${v.scale.id}-clip`}><rect x={L} y={T} width={R - L} height={B - T} /></clipPath></defs>
         {v.ticksY.map((k) => <g><line class="env-grid" x1={L} x2={R} y1={B - (k / v.scale.maxKft) * (B - T)} y2={B - (k / v.scale.maxKft) * (B - T)} /><text class="lbl small" x={L - 6} y={B - (k / v.scale.maxKft) * (B - T) + 4} text-anchor="end">{k}</text></g>)}
         {v.ticksX.map((n) => <g><line class="env-grid" y1={T} y2={B} x1={L + (n / v.scale.maxNm) * (R - L)} x2={L + (n / v.scale.maxNm) * (R - L)} /><text class="lbl small" y={B + 16} x={L + (n / v.scale.maxNm) * (R - L)} text-anchor="middle">{n}</text></g>)}
+        <rect class="frame" x={L} y={T} width={R - L} height={B - T} />
         <g clip-path={`url(#${figId}-${v.scale.id}-clip)`}>
           {v.shapes.map((s) => s.band ? (
             <g class:list={['env', { on: s.on }]} data-env={s.item.slug}>
@@ -66,13 +82,13 @@ const figId = `env-${highlight ?? 'all'}`;
             <g class:list={['env', { on: s.on }]} data-env={s.item.slug}>
               <path class="env-fill" d={s.fill} />
               <path class="env-edge" d={s.outer} /><path class="env-edge" d={s.top} />
-              <path class:list={['env-edge', { dashed: s.innerDashed }]} d={s.inner} />
-              <path class:list={['env-edge', { dashed: s.bottomDashed }]} d={s.bottom} />
+              <path class:list={['env-edge', { dashed: s.innerDashed }]} d={s.inner} transform={s.innerDashed ? 'translate(3 0)' : undefined} />
+              <path class:list={['env-edge', { dashed: s.bottomDashed }]} d={s.bottom} transform={s.bottomDashed ? 'translate(0 -3)' : undefined} />
             </g>
           ))}
         </g>
-        {v.shapes.map((s) => <text class:list={['lbl', 'env-label', { on: s.on }]} x={s.label.x} y={s.label.y} text-anchor={s.label.anchor}>{s.label.text}</text>)}
-        <rect class="frame" x={L} y={T} width={R - L} height={B - T} />
+        {v.labels.map((l) => <text class:list={['lbl', 'env-label', { on: l.on }]} x={l.x} y={l.y} text-anchor={l.anchor}>{l.text}</text>)}
+        <text class="lbl small" x={R} y={H - 18} text-anchor="end">VERTICAL SCALE ×{v.exaggeration.toFixed(1)}</text>
         <text class="lbl" x={(L + R) / 2} y={H - 18} text-anchor="middle">RANGE FROM LAUNCHER (NM)</text>
         <text class="lbl" x={16} y={(T + B) / 2} text-anchor="middle" transform={`rotate(-90 16 ${(T + B) / 2})`}>ALTITUDE (THOUSANDS OF FT)</text>
       </svg>

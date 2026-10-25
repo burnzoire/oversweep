@@ -18,10 +18,12 @@ radars:
   - { name: "P-12", nato: "Spoon Rest", role: "Early warning, about 275 km; hands targets to the sites" }
   - { name: "P-15", nato: "Flat Face", role: "Search radar at regimental level", band: "C" }
   - { name: "PRV-11", role: "Height finder" }
+radarsCite: [1]
 rwr:
   - { symbol: "2", emitter: "SA-2 Guideline Fan Song track radar (S-75)" }
-  - { symbol: "FF", emitter: "SA-2, SA-3 and SA-5 Flat Face search radar" }
+  - { symbol: "FF", emitter: "SA-2, SA-3 and SA-5 Flat Face search radar (S-125 P-19)" }
 battery:
+  cite: [1, 2]
   pattern: ring
   spacing: "60–100 m apart"
   items:

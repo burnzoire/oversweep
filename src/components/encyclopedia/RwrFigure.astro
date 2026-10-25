@@ -1,4 +1,5 @@
 ---
+import Cited from './Cited.astro';
 interface Props { symbols: { symbol: string; emitter: string }[]; name: string; cite: string }
 const { symbols, name, cite } = Astro.props;
 // Search-only radars cannot guide a missile, so they sit in the non-lethal inner
@@ -32,5 +33,5 @@ const placed = symbols.map((s, i) => {
   ) : (
     <p class="rwr-none"><strong>No symbol.</strong> <slot name="none" /></p>
   )}
-  {symbols.length > 0 && <p class="fig-caption">Layout after the DCS F-14 AN/ALR-67 description {cite}: the inner band shows emitters that cannot engage you, the middle band systems within lethal range, and the outer band imminent threats; a symbol flashes when its radar is engaging. Search radars are drawn in the inner band and track radars in the middle band. Bearings are arbitrary. Other aircraft and RWRs use different symbols.</p>}
+  {symbols.length > 0 && <p class="fig-caption">Layout after the DCS F-14 AN/ALR-67 description <Cited text={cite} />: the inner band shows emitters that cannot engage you, the middle band systems within lethal range, and the outer band imminent threats; a symbol flashes when its radar is engaging. Search radars are drawn in the inner band and track radars in the middle band. Bearings are arbitrary. Other aircraft and RWRs use different symbols.</p>}
 </section>

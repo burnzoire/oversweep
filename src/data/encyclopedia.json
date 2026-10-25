@@ -8,7 +8,7 @@
     "designation": "S-25 Berkut",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The first Soviet strategic SAM: fixed sites in two rings around Moscow, command-guided."
+    "summary": "The first Soviet SAM: 56 fixed sites in two rings around Moscow, command-guided."
   },
   {
     "id": "encyclopedia.threat-systems.sa-2",
@@ -96,6 +96,6 @@
     "designation": "9K31 Strela-1",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "Four infrared missiles on a BRDM-2 scout car: silent to radar warning, short range, rear aspect."
+    "summary": "Four infrared missiles on a BRDM-2 scout car with a passive detector: nothing for a radar warning receiver to see, short range."
   }
 ]

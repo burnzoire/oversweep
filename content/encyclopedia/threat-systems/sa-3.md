@@ -18,9 +18,17 @@ radars:
   - { name: "P-15", nato: "Flat Face", role: "Target acquisition, 250 km", band: "C" }
   - { name: "P-15M(2)", nato: "Squat Eye", role: "Target acquisition (P-15 variant)", band: "C" }
   - { name: "PRV-11", nato: "Side Net", role: "Height finder" }
+radarsCite: [1]
+battery:
+  cite: [1]
+  pattern: group
+  items:
+    - { kind: radar, label: "SNR-125 Low Blow", count: 1 }
+    - { kind: launcher, label: "two-missile turret", count: 1, missiles: 2 }
+    - { kind: launcher, label: "four-missile turret", count: 1, missiles: 4 }
 rwr:
   - { symbol: "3", emitter: "SA-3 Goa Low Blow track radar (S-125)" }
-  - { symbol: "FF", emitter: "SA-2, SA-3 and SA-5 Flat Face search radar" }
+  - { symbol: "FF", emitter: "SA-2, SA-3 and SA-5 Flat Face search radar (S-125 P-19)" }
 sources:
   - n: 1
     title: "S-125 Neva/Pechora"
@@ -40,7 +48,7 @@ The S-125 Neva/Pechora, NATO reporting name **SA-3 Goa**, is a Soviet SAM system
 
 ## The site
 
-Missiles are typically deployed on fixed turrets holding two or four, but can also be carried ready to fire in pairs on ZIL trucks. [[1]](#source-1) The SNR-125 **Low Blow** radar tracks the target and guides the missiles: a 250 kW I/D-band radar with a 40 km range, or 80 km in a second mode. Targets are acquired by the 380 kW C-band P-15 **Flat Face** (250 km) or its P-15M(2) **Squat Eye** variant, with a PRV-11 **Side Net** height finder. [[1]](#source-1)
+Missiles are typically deployed on fixed turrets holding two or four, but can also be carried ready to fire in pairs on ZIL trucks. [[1]](#source-1) Figure 3 shows both turret types; the cited text does not give the number of launchers per battery. The SNR-125 **Low Blow** radar tracks the target and guides the missiles: a 250 kW I/D-band radar with a 40 km range, or 80 km in a second mode. Targets are acquired by the 380 kW C-band P-15 **Flat Face** (250 km) or its P-15M(2) **Squat Eye** variant, with a PRV-11 **Side Net** height finder. [[1]](#source-1)
 
 ## How it engages
 
@@ -48,11 +56,11 @@ Like the S-75, the S-125 uses radio command guidance. [[1]](#source-1) The first
 
 ## Envelope
 
-Published V-601 figures vary. The S-125 article gives intercept altitudes of 100 m to 18 km and a range of 3.5 to 35 km with the Pechora-2A upgrade, and notes that other sources give 2.5 to 22 km and 20 m to 14 km. [[1]](#source-1) Figure 1 uses the second, smaller set: 1.3–11.9 NM and about 70 to 46,000 ft.
+Published V-601 figures vary. The S-125 article gives intercept altitudes of 100 m to 18 km and a range of 3.5 to 35 km with the Pechora-2A upgrade, and notes that other sources give 2.5 to 22 km and 20 m to 14 km. [[1]](#source-1) Figure 1 uses the second, smaller set: 1.3–11.9 NM and 70 to 45,900 ft.
 
 ## On the radar warning receiver
 
-In the DCS F-14, the AN/ALR-67 shows the Low Blow track radar as **3** and the Flat Face search radar as **FF**. [[2]](#source-2) A Flat Face alone does not tell you which of the SA-2, SA-3 or SA-5 it is working with.
+In the DCS F-14, the AN/ALR-67 shows the Low Blow track radar as **3** and the Flat Face search radar as **FF**; the table identifies that radar as the P-19 used with the S-125. [[2]](#source-2) A Flat Face alone does not tell you which of the SA-2, SA-3 or SA-5 it is working with.
 
 ## History
 

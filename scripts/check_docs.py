@@ -94,6 +94,8 @@ for path in files:
         # rendered under the page's own heading, so they start at level 2.
         if not body.startswith("---\n") or "\n---\n" not in body[4:]:
             errors.append(f"{rel}: content record needs frontmatter")
+        elif not body[4:].split("\n---\n", 1)[1].lstrip("\n").startswith("## "):
+            errors.append(f"{rel}: content record must start with a level-2 heading")
         markdown_body = "# " + body
     if not markdown_body.startswith("# ") and path.parent.name != "ISSUE_TEMPLATE":
         errors.append(f"{rel}: missing document title")

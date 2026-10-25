@@ -17,6 +17,7 @@ radars: []
 rwr: []
 rwrNote: "It homes passively on infrared and has no radar, so a radar warning receiver has nothing to detect."
 battery:
+  cite: [1]
   pattern: group
   items:
     - { kind: gunner, label: "gunner with launch tube", count: 1 }
@@ -51,7 +52,7 @@ The Strela-2M's higher-thrust motor raised slant range from 3.4 to 4.2 km and th
 | Strela-2 (SA-7a) | up to 3.7 km (2.0 NM) | 50–1,500 m (160–4,900 ft) |
 | Strela-2M (SA-7b) | 800 m–4.2 km (0.4–2.3 NM) | 50–2,300 m (160–7,500 ft) |
 
-Source: [[1]](#source-1). The 1998 Army handout gives 3.6 km for the SA-7a and 5.5 km for the SA-7b, both with a 15 m minimum engagement altitude. [[2]](#source-2) Figure 1 uses the Strela-2M figures.
+Source: [[1]](#source-1). The same article also gives a 3.4 km slant range for the original Strela-2 against the 3.7 km in this table, without saying which is which. The 1998 Army handout gives 3.6 km for the SA-7a and 5.5 km for the SA-7b, both with a 15 m minimum engagement altitude. [[2]](#source-2) Figure 1 uses the Strela-2M figures.
 
 ## On the radar warning receiver
 

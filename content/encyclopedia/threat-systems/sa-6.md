@@ -15,9 +15,11 @@ envelope:
   cite: [1, 2]
 radars:
   - { name: "1S91", nato: "Straight Flush", role: "Acquisition (75 km), tracking, continuous-wave illumination and guidance (from 28 km), IFF; optical sight", band: "G/H" }
+radarsCite: [1]
 rwr:
   - { symbol: "6", emitter: "SA-6 Gainful Straight Flush track radar (Kub)" }
 battery:
+  cite: [1, 2]
   pattern: group
   items:
     - { kind: radar, label: "1S91 Straight Flush vehicle", count: 1 }
@@ -58,7 +60,7 @@ The missile flies on command guidance, then homes semi-actively on the target li
 
 ## Envelope
 
-The missile's effective range is 4–24 km (2.2–13 NM) and its effective altitude 50 m to 14 km (160 to 46,000 ft); the original Kub is listed at 6–22 km and 100 m–7 km. [[1]](#source-1) The 1998 Army handout gives a 24 km range and a 50 m minimum engagement altitude. [[2]](#source-2) Figure 1 uses 4–24 km and 50 m–14 km.
+The missile's effective range is 4–24 km (2.2–13 NM) and its effective altitude 50 m to 14 km (160 to 45,900 ft); the original Kub is listed at 6–22 km and 100 m–7 km. [[1]](#source-1) The 1998 Army handout gives a 24 km range and a 50 m minimum engagement altitude. [[2]](#source-2) Figure 1 uses 4–24 km and 50 m–14 km.
 
 ## On the radar warning receiver
 

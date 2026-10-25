@@ -3,7 +3,10 @@ import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 import { checkRecords, contentFile, loadRecords } from '../../scripts/check_encyclopedia.mjs';
+
+const root = fileURLToPath(new URL('../..', import.meta.url));
 
 const record = {
   id: 'encyclopedia.example.thing', slug: 'thing', category: 'example', revision: 2,
@@ -11,7 +14,7 @@ const record = {
 };
 const tag = `data-record-id="${record.id}" data-record-revision="2"`;
 const complete = {
-  'encyclopedia/example/thing/index.html': `<section ${tag}>${record.maturity}</section><a href="#source-1">[1]</a><li id="source-1">Source</li>`,
+  'encyclopedia/example/thing/index.html': `<section ${tag}>${record.maturity}</section><dd>12 km <a href="#source-1">[1]</a></dd><div class="record-body"><h2>Overview</h2></div><li id="source-1">Source</li>`,
   'encyclopedia/example/index.html': `<section ${tag}><span>${record.maturity}</span><a href="/encyclopedia/example/thing/">Open</a></section>`,
 };
 
@@ -59,6 +62,15 @@ test('a record page must list sources and resolve every citation', async () => {
   assert(problems.some(p => p.includes('lists no sources')));
   problems = await check({ ...complete, [page]: complete[page] + '<a href="#source-4">[4]</a>' });
   assert(problems.some(p => p.includes('#source-4 has no source entry')));
+  // A data-plate value cited as plain text, as frontmatter strings were rendered before.
+  problems = await check({ ...complete, [page]: complete[page] + '<dd>Command guidance [1]</dd>' });
+  assert(problems.some(p => p.includes('[1] is not linked')));
+});
+
+test('a record page must render its text', async () => {
+  const page = 'encyclopedia/example/thing/index.html';
+  const problems = await check({ ...complete, [page]: complete[page].replace('<h2>Overview</h2>', '') });
+  assert(problems.some(p => p.includes('has no record text')));
 });
 
 test('an excluded record must not appear anywhere in normal output', async () => {
@@ -83,5 +95,5 @@ test('unknown publication values and duplicate ids are rejected', async () => {
 test('every registered record has a content file in the repository', async () => {
   const records = await loadRecords();
   assert(records.length > 0);
-  for (const r of records) await import('node:fs/promises').then(fs => fs.access(contentFile(r)));
+  for (const r of records) await import('node:fs/promises').then(fs => fs.access(path.join(root, contentFile(r))));
 });

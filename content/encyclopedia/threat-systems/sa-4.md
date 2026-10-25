@@ -17,9 +17,11 @@ radars:
   - { name: "1S32", nato: "Pat Hand (unverified here)", role: "Continuous-wave fire control and guidance, 128 km", band: "H" }
   - { name: "P-40 (1S12)", nato: "Long Track", role: "Early warning, 175 km; passes target data by radio datalink", band: "E" }
   - { name: "PRV-9", nato: "Thin Skin", role: "Height finder, 240 km", band: "E" }
+radarsCite: [1]
 rwr: []
 rwrNote: "The cited F-14 AN/ALR-67 threat table [2] has no SA-4 or 1S32 entry, so this aircraft's RWR would not label it as an SA-4."
 battery:
+  cite: [1]
   pattern: group
   items:
     - { kind: launcher, label: "2P24 launcher on a tracked chassis", count: 1, missiles: 2 }
@@ -48,7 +50,7 @@ The 1S32 fire-control and guidance radar is an H-band continuous-wave radar with
 
 ## How it engages
 
-Solid-fuel boosters launch the missile, and a liquid-fuelled ramjet sustainer then takes over, for speeds up to Mach 4. It carries a 135 kg (300 lb) fragmentation warhead. The effective range is 50–55 km (27–30 NM), depending on version, and possible engagement altitudes run from 100 m to 27 km (330 to 88,500 ft). [[1]](#source-1) Optical tracking can be used for guidance in heavy electronic countermeasures (ECM), and in its three-point mode the Krug can home on a jamming target. [[1]](#source-1)
+Solid-fuel boosters launch the missile, and a liquid-fuelled ramjet sustainer then takes over, for speeds up to Mach 4. It carries a 135 kg (300 lb) fragmentation warhead. The effective range is 50–55 km (27–30 NM), depending on version, and possible engagement altitudes run from 100 m to 27 km (330 to 88,600 ft). [[1]](#source-1) Optical tracking can be used for guidance in heavy electronic countermeasures (ECM), and in its three-point mode the Krug can home on a jamming target. [[1]](#source-1)
 
 **Unverified here:** that the missile is radio-command guided with semi-active radar homing at the end, illuminated by the 1S32, and that NATO calls the 1S32 **Pat Hand**. Both are widely published, but neither is stated in the source text reviewed for this revision.
 

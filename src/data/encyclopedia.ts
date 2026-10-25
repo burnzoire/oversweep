@@ -58,10 +58,11 @@ export interface ThreatData {
   mobility: string;
   envelope: Envelope;
   radars: Radar[];
+  radarsCite?: number[];
   // Symbols from the cited RWR threat table; empty when the system has none.
   rwr: { symbol: string; emitter: string }[];
   rwrNote?: string;
-  battery?: { pattern: 'ring' | 'group'; spacing?: string; items: BatteryItem[] };
+  battery?: { pattern: 'ring' | 'rings' | 'group'; spacing?: string; cite: number[]; items: BatteryItem[] };
   sources: Source[];
 }
 

@@ -15,9 +15,11 @@ envelope:
   cite: [1, 2]
 radars:
   - { name: "9S16", nato: "Flat Box", role: "Passive detector: emits nothing, senses aircraft emissions in all directions (one vehicle per platoon)" }
+radarsCite: [1]
 rwr: []
 rwrNote: "The missile homes on infrared and the Flat Box detector is passive, so nothing in the system transmits for a radar warning receiver to detect."
 battery:
+  cite: [1, 2]
   pattern: group
   items:
     - { kind: launcher, label: "BRDM-2-based launcher", count: 1, missiles: 4 }

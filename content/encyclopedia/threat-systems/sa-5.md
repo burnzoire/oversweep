@@ -18,10 +18,13 @@ radars:
   - { name: "P-14 / 5N84A", nato: "Tall King C", role: "Early warning", band: "A" }
   - { name: "PRV-17", nato: "Odd Group", role: "Height finder" }
   - { name: "P-35", nato: "Bar Lock", role: "Associated search radar", band: "E/F" }
+radarsCite: [1]
 rwr:
   - { symbol: "5", emitter: "SA-5 Gammon Square Pair track radar" }
-  - { symbol: "FF", emitter: "SA-2, SA-3 and SA-5 Flat Face search radar" }
+  - { symbol: "FF", emitter: "SA-2, SA-3 and SA-5 Flat Face search radar (S-125 P-19)" }
+  - { symbol: "TS", emitter: "SA-5 Tin Shield search radar" }
 battery:
+  cite: [1]
   pattern: group
   items:
     - { kind: radar, label: "5N62 Square Pair", count: 1 }
@@ -63,7 +66,7 @@ The 5N62 **Square Pair** is an H-band continuous-wave radar that both tracks tar
 
 ## On the radar warning receiver
 
-In the DCS F-14, the AN/ALR-67 shows the Square Pair track radar as **5** and the Flat Face search radar, used with the SA-2, SA-3 and SA-5, as **FF**. [[2]](#source-2)
+In the DCS F-14, the AN/ALR-67 shows the Square Pair track radar as **5**, and lists two search radars with the SA-5: the Flat Face (**FF**, also used with the SA-2 and SA-3) and the Tin Shield (**TS**). [[2]](#source-2) Neither search radar is in the S-200 radar list above, which comes from [[1]](#source-1).
 
 ## History
 
