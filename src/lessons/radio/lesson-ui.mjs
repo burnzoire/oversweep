@@ -4,11 +4,11 @@ import {
   ELEMENT_LABEL, LIGHT_SIGNALS, ROUTE_RULES, SORTIE, SPECIAL_CODES, altitude, callSign, checkCall, checkReadback,
   direction, frequency, lostCommsAltitudes, lostCommsRoute, mach, safeOrder, speed, spell, squawk, time, transmit,
 } from './lesson-model.mjs';
+import { quickQuiz, shuffle, withDistractors } from '../shared/quick-quiz.mjs';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const r0 = (v) => Math.round(v).toLocaleString('en-US');
 const reduceMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-const shuffle = (xs) => [...xs].map((x) => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map((p) => p[1]);
 
 function el(name, attrs = {}, text) {
   const node = document.createElementNS(SVG, name);
@@ -291,24 +291,21 @@ const WORD_CASES = [
   ['You want the controller to talk more slowly.', 'Speak slower'],
 ];
 const WORD_POOL = [...new Set(WORD_CASES.map(([, w]) => w)), 'Over', 'Out', 'Acknowledge'];
+const quizUi = (root) => ({
+  prompt: root.querySelector('[data-prompt]'), choices: root.querySelector('[data-choices]'),
+  result: root.querySelector('[data-result]'), next: root.querySelector('[data-new]'),
+});
 function setupWords(root) {
-  const prompt = root.querySelector('[data-prompt]'), choices = root.querySelector('[data-choices]');
-  const out = root.querySelector('[data-result]');
-  let score = 0, asked = 0, order = shuffle(WORD_CASES), i = 0;
-  function ask() {
-    const [situation, answer] = order[i++ % order.length];
-    prompt.textContent = situation;
-    const pool = shuffle([answer, ...shuffle(WORD_POOL.filter((w) => w !== answer)).slice(0, 3)]);
-    choices.replaceChildren(...pool.map((w) => button(w, () => {
-      asked++;
-      if (w === answer) score++;
+  quickQuiz(quizUi(root), {
+    items: WORD_CASES,
+    show: ([situation], prompt) => { prompt.textContent = situation; },
+    options: ([, answer]) => withDistractors(answer, WORD_POOL),
+    isRight: ([, answer], w) => w === answer,
+    feedback: ([, answer], w, right) => {
       const roger = w === 'Roger' && answer !== 'Roger' ? ' Roger only says you received the transmission.' : '';
-      out.textContent = `${w === answer ? 'Correct' : `Not quite: “${answer}”.${roger}`} ${score} of ${asked}.`;
-      for (const c of choices.children) c.disabled = true;
-    })));
-  }
-  root.querySelector('[data-new]').addEventListener('click', () => { out.textContent = ''; ask(); });
-  ask();
+      return right ? 'Correct.' : `Not quite: “${answer}”.${roger}`;
+    },
+  });
 }
 
 /* ---------- Training-rule calls quiz (P-1289) ---------- */
@@ -323,21 +320,13 @@ const TRAINING_CASES = [
 ];
 const TRAINING_POOL = ['Knock it off', 'Terminate', 'Fight’s on', 'Blind', 'No joy'];
 function setupTraining(root) {
-  const prompt = root.querySelector('[data-prompt]'), choices = root.querySelector('[data-choices]');
-  const out = root.querySelector('[data-result]');
-  let score = 0, asked = 0, order = shuffle(TRAINING_CASES), i = 0;
-  function ask() {
-    const [situation, answer] = order[i++ % order.length];
-    prompt.textContent = situation;
-    choices.replaceChildren(...shuffle(TRAINING_POOL).map((w) => button(w, () => {
-      asked++;
-      if (w === answer) score++;
-      out.textContent = `${w === answer ? 'Correct' : `Not quite: “${answer}”.`} ${score} of ${asked}.`;
-      for (const c of choices.children) c.disabled = true;
-    })));
-  }
-  root.querySelector('[data-new]').addEventListener('click', () => { out.textContent = ''; ask(); });
-  ask();
+  quickQuiz(quizUi(root), {
+    items: TRAINING_CASES,
+    show: ([situation], prompt) => { prompt.textContent = situation; },
+    options: () => shuffle(TRAINING_POOL),
+    isRight: ([, answer], w) => w === answer,
+    feedback: ([, answer], w, right) => (right ? 'Correct.' : `Not quite: “${answer}”.`),
+  });
 }
 
 /* ---------- Figure 5: readback ---------- */
@@ -492,7 +481,7 @@ function setupSquawk(root) {
 function setupLight(root) {
   const svg = root.querySelector('svg'), prompt = root.querySelector('[data-prompt]');
   const choices = root.querySelector('[data-choices]'), out = root.querySelector('[data-result]');
-  let signal = LIGHT_SIGNALS[1], score = 0, asked = 0;
+  let signal = LIGHT_SIGNALS[1];
   const where = () => root.querySelector('[name="where"]:checked').value;
   function draw() {
     const air = where() === 'flight';
@@ -516,26 +505,21 @@ function setupLight(root) {
       svg.append(el('circle', { cx: lamp[0], cy: lamp[1], r: 16, class: 'flash-ring' }), el('text', { x: lamp[0] + 22, y: lamp[1] - 14, class: 'lbl small' }, signal.colors.length > 1 ? 'ALTERNATING' : 'FLASHING'));
     }
   }
-  function ask() {
-    const key = where();
-    const pool = LIGHT_SIGNALS.filter((s) => s[key] !== 'Not applicable');
-    signal = pool[Math.floor(Math.random() * pool.length)];
-    const look = signal.colors.length > 1 ? 'Alternating red and green' : `${signal.flash ? 'Flashing' : 'Steady'} ${signal.colors[0]}`;
-    prompt.textContent = `${look} light, aimed at you ${key === 'flight' ? 'in flight' : 'on the ground'}. What does it mean?`;
-    const options = shuffle([signal[key], ...shuffle([...new Set(pool.map((s) => s[key]).filter((m) => m !== signal[key]))]).slice(0, 3)]);
-    choices.replaceChildren(...options.map((m) => button(m, () => {
-      asked++;
-      if (m === signal[key]) score++;
-      const name = `${signal.flash ? (signal.colors.length > 1 ? 'Alternating red and green' : `Flashing ${signal.colors[0]}`) : `Steady ${signal.colors[0]}`}`;
-      out.textContent = `${m === signal[key] ? 'Correct' : `Not quite: ${signal[key]}`}. ${name}. ${score} of ${asked}.`;
-      for (const c of choices.children) c.disabled = true;
-    })));
-    out.textContent = '';
-    draw();
-  }
-  root.querySelector('[data-flash]').addEventListener('click', ask);
-  root.querySelectorAll('[name="where"]').forEach((i) => i.addEventListener('change', ask));
-  ask();
+  const pool = () => LIGHT_SIGNALS.filter((s) => s[where()] !== 'Not applicable');
+  const name = (s) => (s.flash ? (s.colors.length > 1 ? 'Alternating red and green' : `Flashing ${s.colors[0]}`) : `Steady ${s.colors[0]}`);
+  const quiz = quickQuiz({ prompt, choices, result: out, next: root.querySelector('[data-flash]') }, {
+    items: pool,
+    show: (s) => {
+      signal = s;
+      const look = s.colors.length > 1 ? 'Alternating red and green' : `${s.flash ? 'Flashing' : 'Steady'} ${s.colors[0]}`;
+      prompt.textContent = `${look} light, aimed at you ${where() === 'flight' ? 'in flight' : 'on the ground'}. What does it mean?`;
+      draw();
+    },
+    options: (s) => withDistractors(s[where()], [...new Set(pool().map((p) => p[where()]))]),
+    isRight: (s, m) => m === s[where()],
+    feedback: (s, m, right) => `${right ? 'Correct' : `Not quite: ${s[where()]}`}. ${name(s)}.`,
+  });
+  root.querySelectorAll('[name="where"]').forEach((i) => i.addEventListener('change', quiz.restart));
 }
 
 /* ---------- Figure 9: lost communications ---------- */
