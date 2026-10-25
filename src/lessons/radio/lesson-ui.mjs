@@ -144,14 +144,20 @@ function setupBands(root) {
 }
 
 /* ---------- Figure 3: say it ---------- */
+// A plain non-negative number, optionally with thousands commas; anything else
+// is refused rather than coerced.
+function num(v) {
+  if (!/^(\d{1,3}(,\d{3})+|\d+)(\.\d+)?$|^\.\d+$/.test(v)) throw new RangeError('Type a number, such as 13500 or 0.64.');
+  return Number(v.replace(/,/g, ''));
+}
 const SAY = {
   callsign: (v, type) => { const c = callSign(type || 'Cessna', v); return { spoken: c.full, pronounce: c.pronounce, alt: `Abbreviated, once ATC starts it: ${c.abbreviated}` }; },
   spell: (v) => spell(v),
-  altitude: (v) => altitude(+v.replace(/,/g, '')),
-  heading: (v) => direction(+v),
-  wind: (v) => direction(+v, { kind: 'wind' }),
-  speed: (v) => speed(+v),
-  mach: (v) => mach(+v),
+  altitude: (v) => altitude(num(v)),
+  heading: (v) => direction(num(v)),
+  wind: (v) => direction(num(v), { kind: 'wind' }),
+  speed: (v) => speed(num(v)),
+  mach: (v) => mach(num(v)),
   frequency: (v) => ({ ...frequency(v), alt: `ICAO: ${frequency(v, { icao: true }).spoken}` }),
   time: (v) => time(v),
   squawk: (v) => squawk(v),
@@ -165,8 +171,6 @@ function setupSay(root) {
     try {
       if (!text.value.trim()) throw new RangeError('Type a value.');
       const r = SAY[kind.value](text.value.trim(), type.value.trim());
-      if (!Number.isFinite(+text.value) && ['altitude', 'heading', 'wind', 'speed', 'mach'].includes(kind.value) && !/^[\d,.]+$/.test(text.value.trim()))
-        throw new RangeError('Type a number.');
       const lines = [para(`“${r.spoken}”`, 'words')];
       if (r.pronounce) lines.push(para(r.pronounce, 'pron'));
       if (r.alt) lines.push(para(r.alt, 'alt'));
@@ -344,7 +348,8 @@ function setupFlight(root) {
       svg.append(el('text', { x: 320, y: 172, class: 'lbl big', 'text-anchor': 'middle' }, 'SWITCHING ▼'));
     }
     svg.append(el('text', { x: 600, y: 286, class: 'lbl small', 'text-anchor': 'end' }, `CALL ${i + 1} OF ${FLIGHT.length}`));
-    out.textContent = s.note;
+    const speaker = s.talker === 'lead' ? 'Lead' : s.talker === 'wing' ? 'Wing' : null;
+    out.replaceChildren(...(speaker ? [para(`${speaker}, on ${s.tuned[0]} TAC: “${s.words}”`)] : []), para(s.note));
     prev.disabled = i === 0;
     next.disabled = i === FLIGHT.length - 1;
   }
@@ -437,7 +442,8 @@ function setupLight(root) {
     const key = where();
     const pool = LIGHT_SIGNALS.filter((s) => s[key] !== 'Not applicable');
     signal = pool[Math.floor(Math.random() * pool.length)];
-    prompt.textContent = 'What does this signal mean for you?';
+    const look = signal.colors.length > 1 ? 'Alternating red and green' : `${signal.flash ? 'Flashing' : 'Steady'} ${signal.colors[0]}`;
+    prompt.textContent = `${look} light, aimed at you ${key === 'flight' ? 'in flight' : 'on the ground'}. What does it mean?`;
     const options = shuffle([signal[key], ...shuffle([...new Set(pool.map((s) => s[key]).filter((m) => m !== signal[key]))]).slice(0, 3)]);
     choices.replaceChildren(...options.map((m) => button(m, () => {
       asked++;

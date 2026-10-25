@@ -53,6 +53,14 @@ const caseIii = sitePath('manual/naval-operations/case-iii/');
    <label for="gap-t">Time on the frequency <output for="t"></output><input id="gap-t" name="t" type="range" min="0" max="40" step="0.1" value="0" /></label>
   </div>
   <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 250" role="img" aria-label="Timeline of transmissions on one frequency, with your transmissions marked"></svg></div>
+  <details class="log"><summary>Frequency log (text)</summary>
+   <ul>
+    <li>0–3.6 s, Approach: "Navy 405, turn left heading 270"</li><li>4.1–6.6 s, Navy 405: "Left 270, Navy 405"</li>
+    <li>10–13.4 s, Approach: "Cessna 34A, descend and maintain 4,000"</li><li>13.9–16.6 s, Cessna 34A: "Down to 4,000, Cessna 34A"</li>
+    <li>21–25 s, Bonanza 55G: "Approach, Bonanza 55G, request ILS"</li><li>25.6–28.6 s, Approach: "Bonanza 55G, expect vectors ILS"</li>
+    <li>34–37.4 s, Approach: "Navy 405, contact tower 120.1"</li><li>37.9–40 s, Navy 405: "Tower 120.1, Navy 405"</li>
+   </ul>
+  </details>
   <p class="no-js">Interactive figure unavailable. The frequency is clear from about 6.6 to 10 seconds, 16.6 to 21 seconds and 28.6 to 34 seconds; a three-second call fits only in those gaps.</p>
   <div class="feedback" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">Constructed illustration: the calls and timings are invented. The AIM's point stands: a call over someone else's exchange is futile and forces repeats. <a href="#source-aim">{a('4-2-2')}</a></p>
@@ -60,7 +68,7 @@ const caseIii = sitePath('manual/naval-operations/case-iii/');
 
  <h2 id="bands">Bands and emergency frequencies</h2>
  <p>Civil air–ground voice uses the <strong>very high frequency (VHF)</strong> band, 30 to 300 MHz. Military air–ground voice uses the <strong>ultrahigh frequency (UHF)</strong> band, 300 to 3,000 MHz, which in some instances goes as low as 225 MHz. <a href="#source-pcg">{g('VHF; UHF')}</a></p>
- <p>Two emergency frequencies matter to every pilot: <strong>121.5 MHz</strong> (VHF) and <strong>243.0 MHz</strong> (UHF). Both are generally limited to line of sight. 121.5 is guarded by direction-finding stations; 243.0 is guarded by military aircraft. The frequency in use, or another ATC frequency, is still preferable for an emergency call. <a href="#source-aim">{a('6-3-1')}</a> 122.2 MHz is assigned to most flight service stations as a common en route simplex frequency. <a href="#source-aim">{a('4-2-14')}</a></p>
+ <p>Two emergency frequencies matter to every pilot: <strong>121.5 MHz</strong> (VHF) and <strong>243.0 MHz</strong> (UHF). Both are generally limited to line of sight. 121.5 is guarded by direction-finding stations and some military and civil aircraft; 243.0 is guarded by military aircraft. The frequency in use, or another ATC frequency, is still preferable for an emergency call. <a href="#source-aim">{a('6-3-1')}</a> 122.2 MHz is assigned to most flight service stations as a common en route simplex frequency. <a href="#source-aim">{a('4-2-14')}</a></p>
  <section class="lesson figure-lesson" data-lesson="bands" aria-labelledby="bands-title">
   <h3 id="bands-title" class="fig-title">Figure 2 — Where the voice frequencies sit</h3>
   <fieldset class="inline"><legend>Show</legend>
@@ -88,7 +96,7 @@ const caseIii = sitePath('manual/naval-operations/case-iii/');
  <h2 id="numbers">Numbers on the radio</h2>
  <p>The AIM's rules for numbers: <a href="#source-aim">{a('4-2-8–4-2-12')}</a></p>
  <ul>
-  <li><strong>Hundreds and thousands.</strong> Round hundreds and thousands up to 9,900 are spoken as words ("four thousand five hundred"). Above 9,900, the digits before "thousand" are spoken separately ("one zero thousand"). Other numbers are spoken digit by digit. A decimal point is "point"; ICAO uses "decimal", and the FAA accepts it from pilots required to use it.</li>
+  <li><strong>Hundreds and thousands.</strong> Round hundreds and thousands up to 9,900 are spoken as words ("four thousand five hundred"). Above 9,900, the digits before "thousand" are spoken separately ("one zero thousand"). Airway and jet route numbers are spoken as letters and words (V12 is "Victor Twelve"). Other numbers are spoken digit by digit. A decimal point is "point"; ICAO uses "decimal", and the FAA accepts it from pilots required to use it.</li>
   <li><strong>Altitudes.</strong> Below 18,000 ft mean sea level (MSL), say the thousands and hundreds: "one two thousand five hundred". At and above 18,000 ft (flight level 180), say "flight level" and three digits.</li>
   <li><strong>Directions.</strong> Bearings, courses, headings and wind directions are three digits and magnetic; add "true" when it applies.</li>
   <li><strong>Speeds.</strong> Digit by digit, then "knots". Mach numbers: "Mach" and the digits with "point".</li>
@@ -128,7 +136,7 @@ const caseIii = sitePath('manual/naval-operations/case-iii/');
   </div>
   <div class="spoken" data-result role="status" aria-live="polite"></div>
   <p class="no-js">Interactive figure unavailable. Use the rules and examples above: 13,500 ft is "one three thousand five hundred".</p>
-  <p class="fig-caption">The converter applies the AIM rules above. It accepts altitudes in whole hundreds of feet, directions 001–360 and transponder codes of four digits 0–7. Abbreviated call signs keep the type and the last three characters, and are used only after ATC abbreviates first.</p>
+  <p class="fig-caption">The converter applies the AIM rules above. It accepts altitudes in whole hundreds of feet, directions 001–360 and transponder codes of four digits 0–7. Abbreviated call signs keep the prefix (here the type) and the last three characters, and are used only after ATC abbreviates first.</p>
  </section>
 
  <h2 id="callsigns">Call signs</h2>
@@ -139,10 +147,10 @@ const caseIii = sitePath('manual/naval-operations/case-iii/');
   <li><strong>Military aircraft</strong> use a variety of call sign systems. <a href="#source-aim">{a('4-2-4')}</a></li>
   <li><strong>Student pilots</strong> can identify themselves as students on initial contact for extra help from ATC. <a href="#source-aim">{a('4-2-4')}</a></li>
  </ul>
- <p>Ground stations are called by name and function. <a href="#source-aim">{a('4-2-6')}</a></p>
+ <p>Ground stations are called by the facility's name followed by its type, such as "Columbia Ground" or "New York Radio". <a href="#source-aim">{a('4-2-6')}</a></p>
  <div class="table-scroll" role="region" aria-label="Ground station call signs" tabindex="0"><table>
   <caption>Ground station call signs <a href="#source-aim">{a('4-2-6')}</a></caption>
-  <thead><tr><th scope="col">Facility</th><th scope="col">Called as</th></tr></thead>
+  <thead><tr><th scope="col">Facility</th><th scope="col">Name, then</th></tr></thead>
   <tbody>
    <tr><th scope="row">Airport traffic control tower</th><td>"Tower"</td></tr>
    <tr><th scope="row">Ground control</th><td>"Ground"</td></tr>
@@ -279,8 +287,8 @@ const caseIii = sitePath('manual/naval-operations/case-iii/');
  <p>If two-way radio communication fails in VFR conditions, or VFR conditions are met after the failure, continue the flight under VFR and land as soon as practicable. In IFR conditions, fly the route and altitude below. <a href="#source-aim">{a('6-4-1')}</a> Squawk 7600, and remember that you may not be in radar coverage. <a href="#source-aim">{a('6-4-2')}</a></p>
  <ul>
   <li><strong>Route</strong>, the first of these that applies: the route assigned in the last ATC clearance received; if being radar vectored, direct from the point of radio failure to the fix, route or airway specified in the vector clearance; without an assigned route, the route ATC has advised may be expected in a further clearance; otherwise, the route filed in the flight plan.</li>
-  <li><strong>Altitude</strong>, for the route segment being flown, the highest of: the altitude or flight level assigned in the last ATC clearance received; the minimum altitude for IFR operations; and the altitude or flight level ATC has advised may be expected in a further clearance.</li>
-  <li><strong>Leaving the clearance limit.</strong> If the limit is a fix from which an approach begins, start descent or descent and approach as close as possible to the expect-further-clearance time if you received one; if not, as close as possible to the estimated time of arrival from the filed or amended estimated time en route. If the limit is not an approach fix, leave it at the expect-further-clearance time if you received one, or on arrival if not, and proceed to a fix from which an approach begins.</li>
+  <li><strong>Altitude</strong>, for the route segment being flown, the highest of: the altitude or flight level assigned in the last ATC clearance received; the minimum altitude for IFR operations; and the altitude or flight level ATC has advised may be expected in a further clearance, once you reach the time or fix at which ATC said to expect it.</li>
+  <li><strong>Leaving the clearance limit.</strong> If the limit is a fix from which an approach begins, start descent or descent and approach as close as possible to the expect-further-clearance time if you received one; if not, as close as possible to the estimated time of arrival from the filed or amended estimated time en route. If the limit is not an approach fix, leave it at the expect-further-clearance time if you received one, or on arrival if not, and proceed to a fix from which an approach begins; then start descent or descent and approach as close as possible to the estimated time of arrival calculated from the filed or amended estimated time en route.</li>
  </ul>
  <p class="fig-caption">All three rules: <a href="#source-aim">{a('6-4-1')}</a></p>
  <section class="lesson figure-lesson" data-lesson="lost" aria-labelledby="lost-title">
@@ -376,6 +384,8 @@ const caseIii = sitePath('manual/naval-operations/case-iii/');
   .lesson:not(.ready) .built, .lesson:not(.ready) .spoken, .lesson:not(.ready) .squawk, .lesson:not(.ready) blockquote { display: none; }
   .lesson.ready .no-js { display: none; }
   .no-js { font-weight: 700; }
+  details.log { margin-bottom: 0.75rem; }
+  details.log ul { margin: 0.4rem 0; font-size: 0.95rem; }
   .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: #fff; }
   @media (min-width: 64rem) {
     .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }

@@ -44,8 +44,8 @@ export function spell(text) {
 // thousands as words up to 9,900, digits before "thousand" above it. At and above
 // 18,000 ft: "flight level" and three digits. Inputs are whole hundreds of feet.
 export function altitude(feet) {
-  const ft = Math.round(feet / 100) * 100;
-  if (ft < 100) throw new RangeError('Altitude must be at least 100 ft.');
+  const ft = feet;
+  if (!Number.isInteger(ft) || ft % 100 || ft < 100) throw new RangeError('Altitude must be a whole hundred feet, 100 or more.');
   if (ft >= 18000) {
     const fl = String(ft / 100).padStart(3, '0');
     return result(`flight level ${words(digits(fl))}`, [...fl]);
@@ -61,7 +61,7 @@ export function altitude(feet) {
 // is added (4-2-10).
 export function direction(deg, { kind = 'heading', isTrue = false } = {}) {
   const d = Math.round(deg);
-  if (d < 1 || d > 360) throw new RangeError('Direction must be 1–360°.');
+  if (!Number.isFinite(d) || d < 1 || d > 360) throw new RangeError('Direction must be 1–360°.');
   const three = String(d).padStart(3, '0');
   const lead = kind === 'heading' ? 'heading ' : kind === 'wind' ? 'wind ' : '';
   return result(`${lead}${words(digits(three))}${isTrue ? ' true' : ''}`, [...three]);
@@ -70,10 +70,12 @@ export function direction(deg, { kind = 'heading', isTrue = false } = {}) {
 // Speeds digit by digit followed by "knots"; Mach numbers as "Mach" and the
 // digits with "point" (4-2-11).
 export function speed(knots) {
+  if (!Number.isFinite(knots) || knots <= 0) throw new RangeError('Speed must be a positive number of knots.');
   const k = String(Math.round(knots));
   return result(`${words(digits(k))} knots`, [...k]);
 }
 export function mach(m) {
+  if (!Number.isFinite(m) || m <= 0) throw new RangeError('Mach number must be positive.');
   const [whole, frac = ''] = Number(m).toFixed(2).replace(/0$/, '').split('.');
   const lead = whole === '0' ? [] : digits(whole);
   return result(`Mach ${words([...lead, 'point', ...digits(frac)])}`, [...(whole === '0' ? '' : whole), ...frac]);

@@ -26,6 +26,9 @@ test('figures and altitudes (4-2-8, 4-2-9)', () => {
   assert.equal(altitude(18000).spoken, 'flight level one eight zero');
   assert.equal(altitude(19000).spoken, 'flight level one niner zero');
   assert.equal(altitude(27500).spoken, 'flight level two seven five');
+  // Off-grid input is rejected, not rounded across the 18,000 ft boundary.
+  assert.throws(() => altitude(17950));
+  assert.throws(() => altitude(NaN));
 });
 
 test('directions, speeds, Mach (4-2-10, 4-2-11)', () => {
@@ -37,6 +40,10 @@ test('directions, speeds, Mach (4-2-10, 4-2-11)', () => {
   assert.equal(mach(1.5).spoken, 'Mach one point five');
   assert.equal(mach(0.64).spoken, 'Mach point six four');
   assert.throws(() => direction(0));
+  assert.throws(() => direction(NaN));
+  assert.throws(() => direction(1000));
+  assert.throws(() => speed(-190));
+  assert.throws(() => mach(-0.64));
 });
 
 test('frequencies, time, codes', () => {
