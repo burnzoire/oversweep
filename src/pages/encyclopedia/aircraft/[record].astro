@@ -1,6 +1,7 @@
 ---
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import Cited from '../../../components/encyclopedia/Cited.astro';
+import PhotoFigure from '../../../components/encyclopedia/PhotoFigure.astro';
 import { aircraftContent, aircraftGroups, categoryRecords, recordRoute, type EncyclopediaRecord } from '../../../data/encyclopedia';
 import { categoryTitle } from '../../../data/availability';
 import { sitePath } from '../../../lib/paths';
@@ -16,6 +17,7 @@ const category = categoryTitle(record.category);
 const group = aircraftGroups.find((g) => g.slug === data.group)!;
 // The record nav lists the aircraft of the same group, so it stays short.
 const siblings = categoryRecords('aircraft').filter((r) => aircraftContent(r).frontmatter.group === data.group);
+const [leadPhoto, ...morePhotos] = data.photos;
 const label = (r: EncyclopediaRecord) => aircraftContent(r).frontmatter.short ?? r.title.split(' ')[0];
 const plate: [string, string][] = [
   ['Variant described', data.variant],
@@ -39,6 +41,7 @@ const plate: [string, string][] = [
     <nav class="record-nav" aria-label={`${group.title} records`}>
       <ol>{siblings.map((r) => <li>{r.slug === record.slug ? <span aria-current="page">{label(r)}</span> : <a href={sitePath(recordRoute(r))}>{label(r)}</a>}</li>)}</ol>
     </nav>
+    {leadPhoto && <PhotoFigure photo={leadPhoto} lead />}
     <section class="status-panel" data-record-id={record.id} data-record-revision={record.revision}>
       <h2>{record.maturity}</h2>
       <p>Record revision {record.revision} · {record.summary}</p>
@@ -55,6 +58,7 @@ const plate: [string, string][] = [
     </section>
 
     <div class="record-body"><Content /></div>
+    {morePhotos.length > 0 && <div class="photo-grid">{morePhotos.map((photo) => <PhotoFigure photo={photo} />)}</div>}
 
     <section class="sources" aria-labelledby="sources-title">
       <h2 id="sources-title">Sources</h2>

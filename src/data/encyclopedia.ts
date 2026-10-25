@@ -66,6 +66,20 @@ export interface ThreatData {
   sources: Source[];
 }
 
+// A photograph with its credit. `src` is a file under public/, such as
+// encyclopedia/aircraft/f-16.jpg; `sourceUrl` is the page the photo and its
+// licence were taken from.
+export interface Photo {
+  src: string;
+  alt: string;
+  caption: string;
+  author: string;
+  licence: string;
+  licenceUrl?: string;
+  sourceUrl: string;
+  accessed: string;
+}
+
 // Aircraft records: the data plate gives cited text for the variant named in
 // `variant`; `quick` holds plain numbers for the category's comparison table.
 export interface AircraftData {
@@ -87,6 +101,8 @@ export interface AircraftData {
   range: string;
   armament: string[];
   sensors?: string[];
+  // The first photo leads the page; the others follow the record text.
+  photos: Photo[];
   quick: { firstFlight: number; maxSpeedKt: number | null; ceilingFt: number | null };
   sources: Source[];
 }

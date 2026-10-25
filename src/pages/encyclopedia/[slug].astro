@@ -54,7 +54,7 @@ const n = (value: number) => value.toLocaleString("en-GB");
             <>
               <h2>{group.title}</h2>
               <div class="entry-grid record-grid">
-                {records.map(({ record }) => <RecordCard record={record} />)}
+                {records.map(({ record, data }) => <RecordCard record={record} photo={data.photos[0]} />)}
               </div>
             </>
           ))}

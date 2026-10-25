@@ -1,0 +1,14 @@
+---
+import type { Photo } from '../../data/encyclopedia';
+import { assetPath } from '../../lib/paths';
+interface Props { photo: Photo; lead?: boolean }
+const { photo, lead = false } = Astro.props;
+const host = new URL(photo.sourceUrl).hostname === 'commons.wikimedia.org' ? 'Wikimedia Commons' : new URL(photo.sourceUrl).hostname;
+---
+<figure class:list={['photo', { lead }]}>
+  <img src={assetPath(photo.src)} alt={photo.alt} loading={lead ? 'eager' : 'lazy'} decoding="async" />
+  <figcaption>
+    {photo.caption}
+    <span class="credit">Photo: {photo.author}. {photo.licenceUrl ? <a href={photo.licenceUrl}>{photo.licence}</a> : photo.licence}, via <a href={photo.sourceUrl}>{host}</a> (accessed {photo.accessed}).</span>
+  </figcaption>
+</figure>
