@@ -20,35 +20,34 @@ the reviewer.
 **Cited pages for the review reader.** Each chapter is its own PDF and is
 expected to begin at the chapter's first printed page, so physical page N is
 printed page `<chapter>-N`. That mapping and the hashes could not be confirmed:
-the authoring session's network proxy refuses faa.gov for direct downloads. The
-blocks ask for a margin past the last cited page; check that the cited printed
-pages fall inside what the packet extracts. PHAK chapter 5 is requested to p. 40
-so the reviewer can also read the Load Factors section (pp. 5-33–5-40), which
-the author could not (see below).
+the authoring session's network proxy refuses faa.gov for direct downloads.
+The blocks declare only the cited pages, to keep the review packet inside the
+reviewer's context; check that the cited printed pages fall inside what the
+packet extracts.
 
 ```review-sources
 source: https://www.faa.gov/sites/faa.gov/files/06_phak_ch4_0.pdf
-pages: 1-10 (4-1 to 4-10)
+pages: 5-9 (4-5 to 4-9)
 ```
 
 ```review-sources
 source: https://www.faa.gov/sites/faa.gov/files/07_phak_ch5_0.pdf
-pages: 1-40 (5-1 to 5-40)
+pages: 1-8 (5-1 to 5-8); 11-17 (5-11 to 5-17); 22-25 (5-22 to 5-25)
 ```
 
 ```review-sources
 source: https://www.faa.gov/sites/faa.gov/files/08_phak_ch6.pdf
-pages: 1-11 (6-1 to 6-11)
+pages: 2-3 (6-2 to 6-3); 5 (6-5); 8 (6-8); 10 (6-10)
 ```
 
 ```review-sources
 source: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/05_afh_ch4.pdf
-pages: 1-19 (4-1 to 4-19)
+pages: 1-8 (4-1 to 4-8); 18 (4-18)
 ```
 
 ```review-sources
 source: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/06_afh_ch5.pdf
-pages: 1-27 (5-1 to 5-27)
+pages: 1 (5-1); 8 (5-8); 12 (5-12); 15 (5-15); 19-24 (5-19 to 5-24)
 ```
 
 **Retrieval limitation.** Passages were read on 25 October 2026 through a web
@@ -103,7 +102,7 @@ text, and treat a wording mismatch as a finding against this record.
 | 4-5 | Back side of the power required curve: low speed, high AOA, little or no excess power | Energy |
 | 4-7 | ES = h + V²/2g | Energy; Figure 9 |
 | 4-8 | Airplane "cruising at 100 knots and 6,000 feet" and one at 240 kt and 4,000 ft have the same energy height (6,500 ft); either could zoom to 6,500 ft | Energy; Figure 9; tests |
-| 5-1 | Upset parameters: "Pitch attitude greater than 25°, nose up"; "Pitch attitude greater than 10°, nose down"; bank greater than 45°; inappropriate airspeeds | Stalls |
+| 5-1 | An upset is an event that unintentionally exceeds normal flight parameters: "Pitch attitude greater than 25°, nose up"; "Pitch attitude greater than 10°, nose down"; bank greater than 45°; inappropriate airspeeds | Stalls |
 | 5-8 | "it is possible to stall the wing at any airspeed, at any flight attitude, and at any power setting"; "level 60° banked turn, the load factor is 2G"; stall speed "41 percent higher than the 1G stall speed"; coordinated when "the ball is centered in the slip/skid indicator" | Turns; stalls; controls; tests |
 | 5-12 | "It is possible to exceed the critical AOA at any airspeed, at any attitude, and at any power setting" | Stalls |
 | 5-15 | "the most important action to an impending stall or a full stall is to reduce the AOA" | Stalls |

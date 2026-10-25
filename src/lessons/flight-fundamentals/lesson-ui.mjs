@@ -52,11 +52,14 @@ function plot(svg, { x, y, w, h, xr, yr, xticks, yticks, xlabel, ylabel, xfmt = 
   svg.append(label(x + w / 2, y + h + 32, xlabel, 'lbl small', { 'text-anchor': 'middle' }));
   svg.append(label(x - 44, y + h / 2, ylabel, 'lbl small', { 'text-anchor': 'middle', transform: `rotate(-90 ${x - 44} ${y + h / 2})` }));
   const path = (fn, from, to, n = 120) => {
-    let d = '';
+    // Samples outside the plot are left out, and the line restarts where it
+    // comes back in, so a curve is clipped rather than flattened at the edge.
+    let d = '', pen = false;
     for (let i = 0; i <= n; i++) {
       const v = from + (to - from) * i / n, r = fn(v);
-      if (r === null || !Number.isFinite(r)) continue;
-      d += `${d ? 'L' : 'M'}${X(v).toFixed(1)} ${Y(Math.max(yr[0], Math.min(yr[1], r))).toFixed(1)}`;
+      if (r === null || !Number.isFinite(r) || r < yr[0] || r > yr[1]) { pen = false; continue; }
+      d += `${pen ? 'L' : 'M'}${X(v).toFixed(1)} ${Y(r).toFixed(1)}`;
+      pen = true;
     }
     return d;
   };
@@ -102,7 +105,7 @@ function setupForces(root) {
     svg.append(label(cx + 8, cy + s.weight * k + 4, `WEIGHT ${r0(s.weight)} LB`));
     svg.append(label(cx + u[0] * Math.max(0, s.thrust) * kt + 6, cy + u[1] * Math.max(0, s.thrust) * kt - 8, `THRUST ${r0(Math.max(0, s.thrust))}`, 'lbl on'));
     svg.append(label(cx - u[0] * s.drag * kt - 90, cy - u[1] * s.drag * kt - 8, `DRAG ${r0(s.drag)}`));
-    svg.append(label(14, 22, 'STEADY FLIGHT: FORCES ALONG AND ACROSS THE PATH CANCEL', 'lbl small'));
+    svg.append(label(14, 22, s.thrust < 0 ? 'NOT ATTAINABLE AT THIS SPEED: THE PATH IS STEEPER THAN THE GLIDE, SO THE FORCES CANNOT BALANCE' : 'STEADY FLIGHT: FORCES ALONG AND ACROSS THE PATH CANCEL', s.thrust < 0 ? 'lbl small on' : 'lbl small'));
     svg.append(label(14, 404, 'THRUST, DRAG AND THE WEIGHT COMPONENT ALONG THE PATH DRAWN ×5   - - WEIGHT COMPONENTS', 'lbl small'));
     const ld = s.lift / drag;
     say(out, [
@@ -111,7 +114,7 @@ function setupForces(root) {
         ? `Level: lift equals the ${r0(s.weight)} lb weight and thrust equals drag.`
         : gamma > 0
           ? `Climbing at ${gamma}°: ${r0(s.weight * Math.sin(rad(gamma)))} lb of the weight acts rearward along the path, so thrust must be ${r0(s.thrust)} lb, and lift drops to ${r0(s.lift)} lb.`
-          : `Descending at ${-gamma}°: ${r0(-s.weight * Math.sin(rad(gamma)))} lb of the weight acts forward along the path, so only ${r0(Math.max(0, s.thrust))} lb of thrust is needed${s.thrust < 0 ? ' (negative: this path needs more drag than the airplane has, or a steeper glide)' : ''}.`,
+          : `Descending at ${-gamma}°: ${r0(-s.weight * Math.sin(rad(gamma)))} lb of the weight acts forward along the path, so only ${r0(Math.max(0, s.thrust))} lb of thrust is needed${s.thrust < 0 ? ': the path is steeper than the airplane glides, so to hold the speed it needs more drag or a shallower path (the drawn vectors no longer balance)' : ''}.`,
     ]);
   }
   root.addEventListener('input', draw);
@@ -197,9 +200,9 @@ function setupAirfoil(root) {
     }
     svg.append(el('path', { d: `M${outline.map((p) => p.join(' ')).join(' L')}Z`, class: 'section' }));
     const [lx, ly] = pt([0, 0]), [tx, ty] = [tx0, ty0];
-    svg.append(el('line', { x1: lx - 30 * Math.cos(rad(alpha)), y1: ly + 30 * Math.sin(rad(alpha)), x2: tx + 40 * Math.cos(rad(alpha)), y2: ty - 40 * Math.sin(rad(alpha)), class: 'ln centreline' }));
+    svg.append(el('line', { x1: lx - 30 * Math.cos(rad(alpha)), y1: ly - 30 * Math.sin(rad(alpha)), x2: tx + 40 * Math.cos(rad(alpha)), y2: ty + 40 * Math.sin(rad(alpha)), class: 'ln centreline' }));
     svg.append(el('path', { d: `M${SECTION.camber.map(pt).map((p) => p.join(' ')).join(' L')}`, class: 'ln dashed' }));
-    svg.append(label(tx + 48 * Math.cos(rad(alpha)) - 20, ty - 48 * Math.sin(rad(alpha)) - 10, 'CHORD LINE', 'lbl small'));
+    svg.append(label(tx + 48 * Math.cos(rad(alpha)) - 30, ty + 48 * Math.sin(rad(alpha)) - 14, 'CHORD LINE', 'lbl small'));
     svg.append(label(lx - 40, ly + 30, 'LEADING EDGE', 'lbl small'));
     svg.append(label(tx - 20, ty + 34, 'TRAILING EDGE', 'lbl small'));
     // Relative wind and the AOA arc at the trailing edge.
@@ -207,15 +210,15 @@ function setupAirfoil(root) {
     svg.append(el('line', { x1: tx, y1: ty, x2: tx + 70, y2: ty, class: 'thin' }));
     if (alpha !== 0) {
       const r = 56, a = rad(alpha);
-      svg.append(el('path', { d: `M${tx + r} ${ty} A${r} ${r} 0 0 ${alpha > 0 ? 0 : 1} ${tx + r * Math.cos(a)} ${ty - r * Math.sin(a)}`, class: 'angle' }));
+      svg.append(el('path', { d: `M${tx + r} ${ty} A${r} ${r} 0 0 ${alpha > 0 ? 1 : 0} ${tx + r * Math.cos(a)} ${ty + r * Math.sin(a)}`, class: 'angle' }));
     }
     svg.append(label(tx + 62, ty + 16, `α ${alpha}°`, 'lbl on'));
     // Lift at the quarter chord, perpendicular to the relative wind.
     const [qxp, qyp] = pt([0.25, 0.04]);
-    svg.append(arrow(qxp, qyp, qxp, qyp - Math.max(0, cl) * 80, 'lift'));
-    svg.append(label(qxp + 8, qyp - Math.max(0, cl) * 80 + 4, `LIFT (CL ${f2(cl)})`, 'lbl on'));
+    svg.append(arrow(qxp, qyp, qxp, qyp - cl * 80, 'lift'));
+    svg.append(label(qxp + 8, qyp - cl * 80 + (cl < 0 ? 12 : 4), `LIFT (CL ${f2(cl)})`, 'lbl on'));
     // Inset lift curve.
-    const box = plot(svg, { x: 500, y: 40, w: 140, h: 140, xr: [-4, 24], yr: [0, 1.8], xticks: [0, 8, 16, 24], yticks: [0, 0.5, 1, 1.5], xlabel: 'ANGLE OF ATTACK (°)', ylabel: 'CL', yfmt: (v) => v.toFixed(1) });
+    const box = plot(svg, { x: 500, y: 40, w: 140, h: 140, xr: [-4, 24], yr: [-0.4, 1.8], xticks: [0, 8, 16, 24], yticks: [0, 0.5, 1, 1.5], xlabel: 'ANGLE OF ATTACK (°)', ylabel: 'CL', yfmt: (v) => v.toFixed(1) });
     svg.append(el('path', { d: box.path(liftCoefficient, -4, 24), class: 'track' }));
     svg.append(el('line', { x1: box.X(AIRFOIL.critical), y1: 40, x2: box.X(AIRFOIL.critical), y2: 180, class: 'mark-line' }));
     svg.append(label(box.X(AIRFOIL.critical) - 3, 52, 'CRITICAL', 'lbl small', { 'text-anchor': 'end' }));
@@ -243,7 +246,7 @@ function setupLiftSpeed(root) {
     svg.replaceChildren(frame(660, 380));
     const box = plot(svg, { x: 80, y: 40, w: 540, h: 270, xr: [40, 160], yr: [0, 2], xticks: range(40, 160, 20), yticks: [0, 0.5, 1, 1.5, 2], xlabel: 'TRUE AIRSPEED (KT), SEA LEVEL', ylabel: 'LIFT COEFFICIENT NEEDED', yfmt: (v) => v.toFixed(1) });
     svg.append(el('rect', { x: box.X(40), y: box.Y(2), width: box.X(vs) - box.X(40), height: box.Y(0) - box.Y(2), class: 'zone' }));
-    svg.append(label(box.X(vs) + 6, box.Y(1.9), 'BELOW STALL SPEED: CL MAX', 'lbl small'), label(box.X(vs) + 6, box.Y(1.8), 'CANNOT CARRY 1 G', 'lbl small'));
+    svg.append(label(box.X(41), box.Y(0.4), 'BELOW', 'lbl small'), label(box.X(41), box.Y(0.3), 'STALL', 'lbl small'), label(box.X(41), box.Y(0.2), 'SPEED', 'lbl small'));
     svg.append(el('line', { x1: box.X(40), y1: box.Y(clMaxOf()), x2: box.X(160), y2: box.Y(clMaxOf()), class: 'mark-line' }));
     svg.append(label(box.X(158), box.Y(clMaxOf()) - 6, `CL MAX ${clMaxOf().toFixed(1)}`, 'lbl small', { 'text-anchor': 'end' }));
     svg.append(el('path', { d: box.path((v) => requiredCl({ speed: v }), vs * Math.sqrt(clMaxOf() / 2), 160), class: 'track' }));
@@ -436,7 +439,7 @@ function setupTurn(root) {
     const px = 490, py = 210;
     svg.append(label(350, 22, 'PLAN VIEW: TURN CIRCLE', 'lbl small'));
     if (bank > 0) {
-      const scale = Math.min(140 / t.radius, 0.08), rr = t.radius * scale;
+      const scale = Math.min(140 / t.radius, 0.08), rr = Math.max(14, t.radius * scale); // never smaller than the airplane symbol
       svg.append(el('circle', { cx: px, cy: py, r: rr, class: 'ln dashed' }));
       svg.append(el('line', { x1: px, y1: py, x2: px + rr, y2: py, class: 'dim' }));
       svg.append(label(px + rr / 2, py - 6, `R ${r0(t.radius)} FT`, 'lbl small', { 'text-anchor': 'middle' }));
@@ -486,7 +489,8 @@ function setupEnvelope(root) {
     say(out, [
       `At ${speed} kt the wing can make at most ${f1(Math.min(nMax, 99))} G before it stalls (${r0(vs1)} kt × √n).`,
       stalled && over ? 'This point is beyond both the stall boundary and the limit load.'
-        : stalled ? `Asking for ${f1(g)} G here exceeds the critical angle of attack: an accelerated stall, at a speed well above the 1 G stall speed.`
+        : speed < vs1 ? `Below the ${r0(vs1)} kt stall speed the wing cannot carry even 1 G: the airplane is stalled or descending.`
+        : stalled ? `Asking for ${f1(g)} G here exceeds the critical angle of attack: an accelerated stall, at ${r0(speed)} kt, above the ${r0(vs1)} kt 1 G stall speed.`
           : over ? `${f1(g)} G is above the ${f1(limit)} G limit load: the wing can make it, and the structure may be damaged.`
             : `${f1(g)} G is inside the envelope.`,
       `Maneuvering speed VA, where the stall boundary meets the ${f1(limit)} G limit, is ${r0(va)} kt for this weight: below it, the wing stalls before it can overstress the airplane.`,
@@ -517,12 +521,12 @@ function setupEnergy(root) {
     }
     svg.append(el('circle', { cx: box.X(speed), cy: box.Y(alt), r: 7, class: 'pointer' }));
     const zoom = Math.min(es, 10000);
-    svg.append(label(box.X(2), box.Y(zoom) - 6, `ZOOM LIMIT ${r0(es)} FT`, 'lbl small'));
-    svg.append(label(14, 18, 'CURVES OF CONSTANT ENERGY HEIGHT ES = H + V²/2G (ZERO DRAG, THRUST = DRAG)', 'lbl small'));
-    const dive = speedAt(es, Math.max(0, alt - 1000));
+    svg.append(label(box.X(2), Math.max(44, box.Y(zoom) - 6), `ZOOM LIMIT ${r0(es)} FT`, 'lbl small'));
+    svg.append(label(14, 18, 'CURVES OF CONSTANT ENERGY HEIGHT ES = H + V²/2G (THRUST EQUALS DRAG: NO NET ENERGY CHANGE)', 'lbl small'));
+    const drop = Math.min(1000, alt), dive = speedAt(es, alt - drop);
     say(out, [
       `${speed} kt at ${r0(alt)} ft is an energy height of ${r0(es)} ft: ${r0(alt)} ft of altitude plus ${r0(es - alt)} ft stored in airspeed.`,
-      `Trading all of that speed with the elevator would, ideally, zoom the airplane to ${r0(es)} ft; diving 1,000 ft instead would, ideally, give ${r0(dive)} kt. Real airplanes lose some energy to drag along the way.`,
+      `Trading all of that speed with the elevator would, ideally, zoom the airplane to ${r0(es)} ft; ${drop > 0 ? `diving ${r0(drop)} ft instead would, ideally, give ${r0(dive)} kt` : 'at ground level there is no height left to trade for speed'}. Real airplanes lose some energy to drag along the way.`,
       'Moving along a curve is an energy exchange (elevator). Moving to a different curve needs a change in thrust or drag (throttle).',
     ]);
   }
