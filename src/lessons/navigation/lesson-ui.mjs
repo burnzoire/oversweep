@@ -11,6 +11,8 @@ const SVG = 'http://www.w3.org/2000/svg';
 const D = Math.PI / 180;
 const r0 = (v) => Math.round(v).toLocaleString('en-US');
 const deg3 = (v) => String(Math.round(norm(v)) % 360).padStart(3, '0');
+// Hours:minutes or minutes:seconds, rounded as a whole so 59.6 never prints as :60.
+const clock = (units) => { const t = Math.round(units * 60); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`; };
 const reduceMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
 function el(name, attrs = {}, text) {
@@ -248,7 +250,7 @@ function setupWind(root) {
     const side = w.wca > 0.05 ? 'right' : w.wca < -0.05 ? 'left' : null;
     const X = 440;
     [['WIND CORRECTION', side ? `${Math.abs(w.wca).toFixed(0)}° ${side.toUpperCase()}` : '0°'], ['TRUE HEADING', `${deg3(w.heading)}°`],
-      ['MAGNETIC HEADING', `${deg3(mh)}°`], ['GROUND SPEED', `${r0(w.groundSpeed)} kt`], ['TIME', `${Math.floor(dist / w.groundSpeed)}:${String(Math.round((dist / w.groundSpeed % 1) * 60)).padStart(2, '0')}`]]
+      ['MAGNETIC HEADING', `${deg3(mh)}°`], ['GROUND SPEED', `${r0(w.groundSpeed)} kt`], ['TIME', clock(dist / w.groundSpeed)]]
       .forEach(([k, val], i) => {
         svg.append(el('text', { x: X, y: 40 + i * 52, class: 'lbl small' }, k), el('text', { x: X, y: 64 + i * 52, class: 'lbl big mono' }, val));
       });
@@ -465,7 +467,7 @@ function setupArc(root) {
     const row = ARC_LEAD_TABLE.find((r) => r.dme === arc);
     out.replaceChildren(
       para(`Joining the ${arc} DME arc from a radial: start the turn ${leads.leadNm.toFixed(1)} NM early, at ${leads.leadDme.toFixed(1)} DME inbound or ${outbound.leadDme.toFixed(1)} DME outbound.`),
-      para(`Leaving the arc for a radial: lead by 60 ÷ ${arc} × ${(gs / 100).toFixed(1)} = ${leads.leadRadials.toFixed(1)} radials${row?.inbound ? `; inside 10 DME the FTI's table at 250 kt adds a correction (inbound turn ${row.inbound}, outbound ${row.outbound} radials)` : ''}.`),
+      para(`Leaving the arc for a radial: lead by 60 ÷ ${arc} × ${(gs / 100).toFixed(1)} = ${leads.leadRadials.toFixed(1)} radials${row?.inbound ? `; at 10 DME and closer the FTI's table at 250 kt adds a correction (inbound turn ${row.inbound}, outbound ${row.outbound} radials)` : ''}.`),
       para(`Holding the arc: the FTI suggests the ${leads.method === 'chord' ? 'chord method beyond 12 DME' : 'angle-of-bank method at 12 DME or less'}. Flown by chords here, the DME wanders between ${fly.minDme.toFixed(1)} and ${fly.maxDme.toFixed(1)} over ${fly.legs} legs.`, 'derived'),
     );
   }
@@ -572,7 +574,7 @@ function setupRoute(root) {
     const xtk = s.xtk, bar = Math.max(-1, Math.min(1, -xtk / 4));
     const rows = s.done ? [['ROUTE', 'COMPLETE']] : [
       ['STEERING', `WP ${ROUTE[s.active].name} · ${s.leg}`], ['BEARING / DIST', `${deg3(s.bearing)}° / ${s.distance.toFixed(1)}`],
-      ['TIME TO GO', `${Math.floor(s.timeToGo / 60)}:${String(Math.round(s.timeToGo % 60)).padStart(2, '0')}`],
+      ['TIME TO GO', clock(s.timeToGo / 60)],
       ['DESIRED TRACK', `${deg3(s.desiredTrack)}°`], ['CROSS-TRACK', `${Math.abs(xtk).toFixed(2)} NM ${Math.abs(xtk) < 0.005 ? '' : xtk > 0 ? 'R' : 'L'}`],
     ];
     rows.forEach(([kk, val], i) => svg.append(el('text', { x: X, y: 30 + i * 42, class: 'lbl small' }, kk), el('text', { x: X, y: 50 + i * 42, class: 'lbl mono' }, val)));
