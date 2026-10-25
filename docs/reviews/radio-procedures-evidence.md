@@ -1,4 +1,4 @@
-# Radio Procedures and Phraseology, revision 2 — source evidence
+# Radio Procedures and Phraseology, revision 3 — source evidence
 
 Short, paragraph-specific excerpts supporting the claims in the Radio
 Communications module (`src/pages/manual/radio-communications/[module].astro`)
@@ -17,6 +17,17 @@ dates were not shown in the extracted text.
 the VT-6 FORMSUP [2] and CNATRA P-1289 [3]. The FAA AIM [4] and Pilot/Controller
 Glossary [5] stay as the supplementary US civil rule set. The page's citation
 numbers changed accordingly (AIM was [1], P/CG [2], FORMSUP [3]).
+
+**Revision 3** widens the module from Navy training to all four services, at
+the owner's request ("this site is for all branches of aviation: navy,
+airforce, marines, and army"). It adds the multi-service brevity publication
+[4], a list shared by the Army, Marine Corps, Navy and Air Force, and an Air
+Force base's collision-avoidance handbook [5]; the sortie walkthrough is now
+labelled as a Navy example. The FAA AIM becomes [6] and the Pilot/Controller
+Glossary [7] (they were [4] and [5] in revision 2). Neither new host
+(marines.mil, jbsa.mil) is on the review packet's allow-list, so [4] and [5]
+carry no `review-sources` declaration and are expected to stay unverified by
+the packet.
 
 **Military sources and the review packet.** cnatra.navy.mil reset connections
 from GitHub-hosted runners in earlier reviews (PRs #54, #64), so [1]–[3] are
@@ -73,7 +84,7 @@ publication as the BFM module, `docs/reviews/bfm-p1289-evidence.md`).
 | 5-11 | "'Terminate' is a call used to temporarily cease SSD training for administrative purposes."; lead restarts with "[Callsign] 11, in target/shooter" | Training-rule calls |
 | 5-14 | Lead calls "3, 2, 1, fight's on," and wing echoes it | Training-rule calls |
 
-## [4] FAA Aeronautical Information Manual
+## [6] FAA Aeronautical Information Manual
 
 | Para | Passage (extractor-read) | Module use |
 | --- | --- | --- |
@@ -99,7 +110,7 @@ publication as the BFM module, `docs/reviews/bfm-p1289-evidence.md`).
 | 6-4-1 | VFR conditions: "continue the flight under VFR and land as soon as practicable"; IFR route: assigned; vectored direct from the point of failure; expected; filed. Altitude: "the HIGHEST of the following altitudes or flight levels FOR THE ROUTE SEGMENT BEING FLOWN": assigned, minimum IFR altitude, expected. Leaving the clearance limit at or near the expect-further-clearance time or ETA | When the radio fails; Figure 9 |
 | 6-4-2 | Squawk 7600; "the aircraft may not be in an area of radar coverage" | When the radio fails |
 
-## [5] FAA Pilot/Controller Glossary
+## [7] FAA Pilot/Controller Glossary
 
 Roger: "I have received all of your last transmission. It should not be used to
 answer a question requiring a yes or a no answer." Wilco: "I have received your
@@ -125,3 +136,40 @@ match the physical pages).
 | 3 | Lead: "Angry, Check Victor." Wing: "(Angry 1-2), with (ATIS Code)" or "2, standby (X) mikes" | Flight check-ins; Figure 6 |
 | 6 | NORDO wingman signals "can't talk" or "can't hear" by "patting the oxygen mask or the ear of the helmet followed by a "thumbs down" hand signal" | Flight check-ins |
 | 10 | Lead (on VHF TAC): "Angry, push UHF TAC"; Lead (on UHF TAC): "Angry"; Wing: "Angry 1-2"; then "Angry, push VHF (122.8/123.0)" with "no check-in on VHF as it is the new working frequency" | Flight check-ins; Figure 6 |
+
+## [4] Multi-Service Brevity Codes (25 April 2025)
+
+ATP 1-02.1 / MCRP 3-30B.1 / NTTP 6-02.1 / AFTTP 3-2.5, *Brevity: Multi-Service
+Tactics, Techniques, and Procedures for Multi-Service Brevity Codes*, 25 April
+2025: https://www.marines.mil/Portals/1/Publications/MCRP%203-30B.1%20(SECURED).pdf.
+Distribution statement A (approved for public release). Pages are the
+publication's printed numbers as the extractor reported them; the module's
+`BREVITY` list (`src/lessons/radio/lesson-model.mjs`) paraphrases each
+definition.
+
+| Page | Word | Definition (extractor-read, abridged) |
+| --- | --- | --- |
+| i | (front matter) | A multi-service publication of the Army, Marine Corps, Navy and Air Force |
+| 2 | Abort | Cease action or attack; terminate the event or mission |
+| 4 | Bandit | Positively identified as an enemy in accordance with theater identification criteria |
+| 5 | Bingo | Prebriefed fuel state needed for recovery |
+| 5 | Blind | No visual contact with a friendly aircraft, ship or ground position; opposite of visual |
+| 6 | Bogey | A contact whose identity is unknown |
+| 7 | Buster | Fly at maximum continuous speed |
+| 18 | Fence in / fence out | Set cockpit switches as appropriate before entering or exiting the combat area |
+| 25 | Joker | Fuel state above bingo at which separation, bugout or event termination should begin |
+| 26 | Knock-it-off | Cease all air combat maneuvers, attacks or activities; training use |
+| 31 | No joy | No visual contact with the target or bandit; opposite of tally |
+| 32 | Padlocked | Cannot take eyes off an aircraft or surface position without risk of losing tally or visual |
+| 33 | Pigeons | Magnetic bearing and range to home plate |
+| 34 | Popeye | Flying in clouds or an area of reduced visibility |
+| 35 | Push | Switch to the designated frequency; no acknowledgment required |
+
+## [5] JBSA Midair Collision Avoidance (MACA) Handbook
+
+https://www.jbsa.mil/Portals/102/Documents/Safety/JBSA-MACA_Pamphlet_2024.pdf,
+an Air Force base's guide for civil pilots flying near its training traffic.
+
+| Page | Passage (paraphrased) | Module use |
+| --- | --- | --- |
+| 2 | Military aircraft commonly talk to ATC on UHF, which civil VHF radios cannot receive, so a civil pilot may hear only the controller's side | Overview; bands |

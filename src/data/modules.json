@@ -25,22 +25,22 @@
     "id": "module.radio-procedures",
     "slug": "radio-procedures",
     "subject": "radio-communications",
-    "revision": 2,
+    "revision": 3,
     "title": "Radio Procedures and Phraseology",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "objective": "Speak and understand military air–ground radio: a Navy training sortie's calls, call signs and preset channels, formation check-ins and training-rule calls, then the FAA technique, phonetic alphabet and numbers, contact calls, readbacks, emergency calls, transponder codes and what to do when the radio fails.",
-    "applicability": "For US military pilots: US Navy training squadron scripts and instructions first, with the FAA Aeronautical Information Manual as the supplementary US civil rule set; units, other services and other countries differ in detail."
+    "objective": "Speak and understand military air–ground radio: multi-service brevity words, a training sortie's calls, call signs and preset channels, formation check-ins and training-rule calls, then the FAA technique, phonetic alphabet and numbers, contact calls, readbacks, emergency calls, transponder codes and what to do when the radio fails.",
+    "applicability": "For US military pilots of all services: the joint Army, Marine Corps, Navy and Air Force brevity codes and a worked Navy training sortie first, with the FAA Aeronautical Information Manual as the supplementary US civil rule set; units and other countries differ in detail."
   },
   {
     "id": "module.principles-of-flight",
     "slug": "principles-of-flight",
     "subject": "flight-fundamentals",
-    "revision": 2,
+    "revision": 3,
     "title": "Principles of Flight",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "objective": "Understand the four forces, lift and angle of attack, drag, control and stability, turns and load factor, stalls, the maneuvering envelope and energy well enough to explain what a military jet is doing and why.",
-    "applicability": "For military pilots: fixed-wing principles from Navy aerodynamics texts, with FAA handbooks as supplementary sources; worked numbers use an invented jet trainer, with US Navy T-45 training figures where cited."
+    "objective": "Understand the four forces, lift and angle of attack, drag, control and stability, turns and load factor, stalls, the maneuvering envelope, energy and rotor-wing aerodynamics well enough to explain what a military jet or helicopter is doing and why.",
+    "applicability": "For military pilots of every service: fixed- and rotary-wing principles from Navy aerodynamics texts and the Army's Fundamentals of Flight, with FAA handbooks as supplementary sources; worked numbers use an invented jet trainer and rotor, with US Navy T-45 training figures where cited."
   }
 ]

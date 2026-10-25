@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
-  PHONETIC, altitude, callSign, checkCall, checkReadback, codePath, direction, frequency, lostCommsAltitudes,
+  BREVITY, PHONETIC, altitude, callSign, checkCall, checkReadback, codePath, direction, frequency, lostCommsAltitudes,
   lostCommsRoute, mach, safeOrder, speed, spell, squawk, time, transmit,
 } from '../../src/lessons/radio/lesson-model.mjs';
 
@@ -155,4 +155,14 @@ test('a Navy takeoff readback needs only the call sign and runway', () => {
   assert.equal(checkReadback(clearance, ['id', 'rwy']).ok, true);
   assert.deepEqual(checkReadback(clearance, ['id', 'rwy', 'freq']).extra, ['freq']);
   assert.deepEqual(checkReadback(clearance, ['rwy']).missing, ['id']);
+});
+
+test('brevity words are unique, defined and page-cited', () => {
+  const words = BREVITY.map((b) => b.word);
+  assert.equal(new Set(words).size, words.length);
+  for (const b of BREVITY) {
+    assert(b.meaning.length > 10, b.word);
+    assert.match(b.page, /^\d+$/, b.word);
+  }
+  for (const w of ['Knock-it-off', 'Bingo', 'Joker', 'No joy', 'Popeye']) assert(words.includes(w), w);
 });
