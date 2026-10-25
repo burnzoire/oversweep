@@ -76,6 +76,8 @@ export async function checkRecords({ dist, records, review = false, base = "", c
       const text = pages.page.replace(/<a\b[^>]*>[\s\S]*?<\/a>/g, "").replace(/<(script|style)\b[\s\S]*?<\/\1>/g, "");
       for (const [marker] of text.matchAll(/\[\d+\]/g)) problems.push(`${r.id}: citation ${marker} is not linked to its source.`);
       if (!/class="record-body"[^>]*>\s*<[a-z]/.test(pages.page)) problems.push(`${r.id}: page has no record text.`);
+      // Aircraft records lead with a credited photograph (check_site checks the file ships).
+      if (r.category === "aircraft" && !/<figure class="photo lead"[\s\S]*?class="credit"/.test(pages.page)) problems.push(`${r.id}: page has no credited lead photo.`);
       // A photo must be self-hosted, described for screen readers and credited.
       for (const [figure] of pages.page.matchAll(/<figure class="record-photo"[\s\S]*?<\/figure>/g)) {
         const src = figure.match(/<img\b[^>]*\bsrc="([^"]*)"/)?.[1] ?? "";

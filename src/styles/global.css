@@ -434,6 +434,17 @@ h2 {
   margin-bottom: 0;
 }
 
+.entry-card > .entry-thumb {
+  display: block;
+  width: calc(100% + 2.5rem);
+  max-width: none;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  margin: -1.1rem -1.25rem 0.9rem;
+  background: var(--color-surface);
+}
+
 .entry-card > * {
   margin: 0 0 0.6rem;
 }

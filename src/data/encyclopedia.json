@@ -97,5 +97,126 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "Four infrared missiles on a BRDM-2 scout car with a passive detector: nothing for a radar warning receiver to see, short range."
+  },
+  {
+    "id": "encyclopedia.aircraft.a-10",
+    "slug": "a-10",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "A-10 Thunderbolt II",
+    "designation": "Fairchild Republic A-10A/C",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Warthog: a straight-wing, armoured close air support jet built around the 30 mm GAU-8 cannon."
+  },
+  {
+    "id": "encyclopedia.aircraft.av-8b",
+    "slug": "av-8b",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "AV-8B Harrier II",
+    "designation": "McDonnell Douglas AV-8B(NA)",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A vectored-thrust jump jet: vertical or short take-off, flown by the US Marines for close air support."
+  },
+  {
+    "id": "encyclopedia.aircraft.f-4",
+    "slug": "f-4",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "F-4 Phantom II",
+    "designation": "McDonnell Douglas F-4E",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The big two-seat Cold War fighter-bomber; the F-4E added an internal gun and slats after Vietnam."
+  },
+  {
+    "id": "encyclopedia.aircraft.f-5",
+    "slug": "f-5",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "F-5 Tiger II",
+    "designation": "Northrop F-5E",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A small, cheap supersonic fighter for US allies, and a long-serving adversary aircraft that stands in for the MiG-21."
+  },
+  {
+    "id": "encyclopedia.aircraft.f-14",
+    "slug": "f-14",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "F-14 Tomcat",
+    "designation": "Grumman F-14A/B",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Navy's swing-wing fleet defence fighter: two crew, AWG-9 radar and AIM-54 Phoenix."
+  },
+  {
+    "id": "encyclopedia.aircraft.f-15c",
+    "slug": "f-15c",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "F-15C Eagle",
+    "designation": "McDonnell Douglas F-15C",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A twin-engine air superiority fighter with more than 104 air-to-air victories and no losses."
+  },
+  {
+    "id": "encyclopedia.aircraft.f-15e",
+    "slug": "f-15e",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "F-15E Strike Eagle",
+    "designation": "McDonnell Douglas F-15E",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The two-seat, long-range, all-weather strike derivative of the Eagle."
+  },
+  {
+    "id": "encyclopedia.aircraft.f-16",
+    "slug": "f-16",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "F-16 Fighting Falcon",
+    "designation": "General Dynamics F-16C",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A single-engine multirole fighter: fly-by-wire, 9 g, and the US Air Force's main strike and SEAD aircraft."
+  },
+  {
+    "id": "encyclopedia.aircraft.f-86",
+    "slug": "f-86",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "F-86 Sabre",
+    "designation": "North American F-86F",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The swept-wing day fighter that met the MiG-15 over Korea."
+  },
+  {
+    "id": "encyclopedia.aircraft.f-100",
+    "slug": "f-100",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "F-100 Super Sabre",
+    "designation": "North American F-100D",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The first US Air Force fighter supersonic in level flight; a fighter-bomber and fast FAC in Vietnam."
+  },
+  {
+    "id": "encyclopedia.aircraft.fa-18c",
+    "slug": "fa-18c",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "F/A-18 Hornet",
+    "designation": "McDonnell Douglas F/A-18C",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A carrier-capable fighter and attack aircraft that one pilot can switch between roles on the same sortie."
   }
 ]

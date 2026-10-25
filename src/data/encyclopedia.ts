@@ -82,14 +82,64 @@ export interface ThreatData {
   sources: Source[];
 }
 
-type RecordFile = MarkdownInstance<ThreatData>;
-const files = import.meta.glob<RecordFile>('/content/encyclopedia/*/*.md', { eager: true });
+// A photograph with its credit. `src` is a file under public/, such as
+// encyclopedia/aircraft/f-16.jpg; `sourceUrl` is the page the photo and its
+// licence were taken from.
+export interface Photo {
+  src: string;
+  alt: string;
+  caption: string;
+  author: string;
+  licence: string;
+  licenceUrl?: string;
+  sourceUrl: string;
+  accessed: string;
+}
 
-export function recordContent(r: EncyclopediaRecord): RecordFile {
+// Aircraft records: the data plate gives cited text for the variant named in
+// `variant`; `quick` holds plain numbers for the category's comparison table.
+export interface AircraftData {
+  group: 'jet' | 'propeller' | 'helicopter';
+  // Short label for the record nav when the title's first word is not enough.
+  short?: string;
+  name: string;
+  variant: string;
+  role: string;
+  origin: string;
+  manufacturer: string;
+  crew: string;
+  firstFlight: string;
+  inService: string;
+  status: string;
+  powerplant: string;
+  maxSpeed: string;
+  ceiling: string;
+  range: string;
+  armament: string[];
+  sensors?: string[];
+  // The first photo leads the page; the others follow the record text.
+  photos: Photo[];
+  quick: { firstFlight: number; maxSpeedKt: number | null; ceilingFt: number | null };
+  sources: Source[];
+}
+
+export const aircraftGroups = [
+  { slug: 'jet', title: 'Jet aircraft' },
+  { slug: 'propeller', title: 'Propeller aircraft' },
+  { slug: 'helicopter', title: 'Helicopters' },
+] as const;
+
+type RecordFile<T extends Record<string, any> = ThreatData> = MarkdownInstance<T>;
+const files = import.meta.glob<RecordFile<Record<string, unknown>>>('/content/encyclopedia/*/*.md', { eager: true });
+
+function contentFile(r: EncyclopediaRecord) {
   const file = files[`/content/encyclopedia/${r.category}/${r.slug}.md`];
   if (!file) throw new Error(`Encyclopedia record ${r.id} has no content file`);
   return file;
 }
+
+export const recordContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile;
+export const aircraftContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AircraftData>;
 
 export function getRecord(category: string, slug: string): EncyclopediaRecord {
   const found = records.find(r => r.category === category && r.slug === slug);
