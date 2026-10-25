@@ -18,6 +18,22 @@ armament:
   - "Up to 7,000 kg on external pylons [1]"
   - "RB 04E anti-ship missiles (two on the inboard pylons, a third optional on the centreline) and RB 05 air-to-surface missiles (AJ 37) [1]"
   - "Bombs, rocket pods and gun pods; air-to-air missiles for self-defence [1] [2]"
+photos:
+  - src: "encyclopedia/aircraft/ajs-37.jpg"
+    alt: "A camouflaged Swedish Viggen banking overhead, its canard foreplanes and double-delta wing seen from below"
+    caption: "A Viggen in Swedish Air Force camouflage displaying at an air show, July 2022."
+    author: "Airwolfhound from Hertfordshire, UK"
+    licence: "CC BY-SA 2.0"
+    licenceUrl: "https://creativecommons.org/licenses/by-sa/2.0"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Viggen_(52526298757).jpg"
+    accessed: "2026-10-25"
+  - src: "encyclopedia/aircraft/ajs-37-2.jpg"
+    alt: "The underside of a Viggen in flight, showing its canards, delta wing and underwing stores"
+    caption: "The underside of a Swedish Viggen during the Baltic exercise BALTOPS '85."
+    author: "JOCS Russ Egnor, US Navy Reserve"
+    licence: "Public domain"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Saab_viggen_underside.jpg"
+    accessed: "2026-10-25"
 quick: { firstFlight: 1967, maxSpeedKt: 1205, ceilingFt: 59000 }
 sources:
   - n: 1

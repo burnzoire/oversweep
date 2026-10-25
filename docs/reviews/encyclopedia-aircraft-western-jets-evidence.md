@@ -15,6 +15,17 @@ review evidence, not instructions to the reviewer.
 
 C-101 and MB-339 cite Wikipedia only (no FAS page).
 
+## Narrative text and photographs
+
+- Record bodies are written as narrative history, following the US jets
+  records. Every paragraph ends with its citation, and anecdotes come from the
+  cited articles' development and operational-history sections.
+- Each record leads with a photograph from Wikimedia Commons and adds a second.
+  Public-domain US military photographs are used where Commons has one;
+  otherwise the photo is CC BY or CC BY-SA (or the UK Open Government Licence),
+  and its credit names the photographer and links the licence. Captions are
+  written from the Commons file description.
+
 ## Modelling choices
 
 - **Viggen**: the record describes the AJS 37 but the Wikipedia specification

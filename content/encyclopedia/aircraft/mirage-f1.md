@@ -21,6 +21,22 @@ armament:
   - "Bombs, rockets and, on Iraqi aircraft, Exocet anti-ship missiles [1]"
 sensors:
   - "Thomson-CSF Cyrano IV monopulse radar; the Cyrano IV-1 added limited look-down [1] [2]"
+photos:
+  - src: "encyclopedia/aircraft/mirage-f1.jpg"
+    alt: "A camouflaged two-seat Mirage F1 banking over desert, carrying drop tanks"
+    caption: "A French Mirage F1 returns to its mission over Afghanistan after refuelling from a US Air Force KC-10, November 2010."
+    author: "MSgt Eric Harris, US Air Force"
+    licence: "Public domain"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:French_Air_Force_Mirage_F1_returns_to_it%27s_mission_after_receiving_fuel_from_a_KC-10_Extender.jpg"
+    accessed: "2026-10-25"
+  - src: "encyclopedia/aircraft/mirage-f1-2.jpg"
+    alt: "A Mirage F1CR climbing steeply with its landing gear retracting"
+    caption: "A French reconnaissance Mirage F1CR in centenary markings departs the Royal International Air Tattoo, July 2013."
+    author: "Alan Wilson"
+    licence: "CC BY-SA 2.0"
+    licenceUrl: "https://creativecommons.org/licenses/by-sa/2.0"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Dassault_Mirage_F1CR_604_118CF_(9355378298).jpg"
+    accessed: "2026-10-25"
 quick: { firstFlight: 1966, maxSpeedKt: 1262, ceilingFt: 65600 }
 sources:
   - n: 1
