@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
-  NM, SM, baseBearing, designator, ends, heightOnPath, lightSignal, markingsFor, overhead, papi,
-  parallelNames, pathAngle, pattern, runwayForWind, runwayLights, thresholdStripes, turn, windComponents,
+  AIRFIELD, NM, RADIO_CALLS, SM, baseBearing, designator, ends, heightOnPath, lightSignal, markingsFor, overhead, papi,
+  parallelNames, pathAngle, pattern, radioCalls, runwayForWind, runwayLights, thresholdStripes, turn, windComponents,
 } from '../../src/lessons/airfield-ops/lesson-model.mjs';
 
 // Expected values are derived by hand or quoted from the AIM, not produced by the model.
@@ -169,4 +169,35 @@ test('the overhead initial is measured up to the break point', () => {
   const o = overhead({ breakAt: 4000, initial: 3 * NM });
   near(o.points.start[0], 4000 - 3 * 6076.115, 0.01, 'start');
   assert.deepEqual(o.points.break, [4000, 0]);
+});
+
+test('radio calls: who to call and when', () => {
+  // AIM 4-3-2: initial callup about 15 miles out. AC 90-66C ¶10.4.1: self-announce about 10 miles out.
+  const first = (key) => RADIO_CALLS[key].find((c) => c.you);
+  assert.equal(first('towered-inbound').at.nm, 15);
+  assert.equal(first('towered-inbound').station, 'Cedar Tower');
+  assert.equal(radioCalls(false, 'inbound').find((c) => c.id === 'ten').at.nm, 10);
+  assert.equal(radioCalls(true, 'sideways'), null);
+  // AIM 4-3-14: after landing, stay on tower until told to contact ground.
+  const inbound = radioCalls(true, 'inbound');
+  const toGround = inbound.findIndex((c) => c.station === 'Cedar Ground');
+  assert.match(inbound[toGround - 1].them, /contact ground/);
+  // AIM 4-3-14: ground before engine start, tower only when ready for takeoff.
+  assert.deepEqual(radioCalls(true, 'outbound').filter((c) => c.you).map((c) => c.station),
+    ['Cedar Ground', 'Cedar Ground', 'Cedar Tower', 'Cedar Tower']);
+});
+
+test('CTAF self-announcements follow AC 90-66C', () => {
+  const calls = [...RADIO_CALLS['nontowered-inbound'], ...RADIO_CALLS['nontowered-outbound']]
+    .filter((c) => c.you && c.freq.startsWith('CTAF'));
+  assert(calls.length >= 5);
+  for (const c of calls) {
+    const said = c.you.replace(/^"|\.?"$/g, '');
+    // ¶10.1(2): the airport name at the beginning and end of each call.
+    assert(said.startsWith(`${AIRFIELD} traffic`) && said.endsWith(AIRFIELD), said);
+    // ¶9.8.1: the runway number, never "active runway"; no "please advise".
+    assert(!/active|please advise/i.test(said), said);
+    // ¶10.3: avoid "to" and "for".
+    assert(!/\b(to|for)\b/i.test(said), said);
+  }
 });

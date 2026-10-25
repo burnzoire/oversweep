@@ -2,7 +2,7 @@
 // numbers come from lesson-model.mjs; this file only reads inputs and draws.
 import {
   LIGHT_SIGNALS, NM, SM, TOUCHDOWN_GROUPS, baseBearing, ends, heightOnPath, markingsFor,
-  norm, overhead, papi, parallelNames, pathAngle, pattern, runwayForWind, runwayLights, thresholdStripes,
+  norm, overhead, papi, parallelNames, pathAngle, pattern, radioCalls, runwayForWind, runwayLights, thresholdStripes,
   windComponents,
 } from './lesson-model.mjs';
 
@@ -675,7 +675,7 @@ function setupOverhead(root) {
   draw();
 }
 
-/* ---------- Figure 11: light gun signals ---------- */
+/* ---------- Figure 12: light gun signals ---------- */
 function setupLightGun(root) {
   const lamp = root.querySelector('[data-gun]');
   const what = root.querySelector('[data-gun-label]');
@@ -722,6 +722,97 @@ function setupLightGun(root) {
   ask();
 }
 
+/* ---------- Figure 11: radio calls in and out ---------- */
+const SOURCE_NO = { aim4: [2, 'source-aim4'], ac: [5, 'source-ac'] };
+function setupRadio(root) {
+  const svg = root.querySelector('svg');
+  const list = root.querySelector('[data-steps]');
+  const panel = root.querySelector('[data-call]');
+  const back = root.querySelector('[data-back]'), next = root.querySelector('[data-next]');
+  let step = 0;
+  // Distance strip: 20 NM at the left, the airfield at the right end.
+  const sx = (nm) => 300 - nm * 14, SY = 110;
+  // Airfield close-up: runway 27 lands west (to the left), left traffic to the south.
+  const spots = {
+    ramp: [455, 50, 90], hold: [600, 92, 180], entry: [452, 199, 45], downwind: [505, 180, 90],
+    base: [610, 152, 0], final: [597, 120, 270], exit: [440, 120, 270], clear: [430, 88, 0],
+  };
+  const PLACES = { ramp: 'On the ramp', hold: 'Holding short', entry: 'Entering the pattern', downwind: 'Downwind', base: 'Base', final: 'Final', exit: 'Rolling out', clear: 'Clear of the runway' };
+  const place = (c) => c.label ?? (c.at.nm !== undefined ? `${c.at.nm} NM` : PLACES[c.at.spot]);
+  const calls = () => radioCalls(checked(root, 'field') === 'towered', checked(root, 'dir'));
+  function draw() {
+    const cs = calls(), c = cs[step];
+    const towered = checked(root, 'field') === 'towered', outbound = checked(root, 'dir') === 'outbound';
+    svg.replaceChildren(el('rect', { x: 1, y: 1, width: 638, height: 223, class: 'frame' }));
+    // Strip.
+    svg.append(el('text', { x: 20, y: 40, class: 'lbl small' }, outbound ? 'DISTANCE OUT (NM)' : 'DISTANCE TO GO (NM)'));
+    svg.append(el('path', { d: `M${sx(20)} ${SY} H320`, class: 'ln' }));
+    for (const nm of [20, 15, 10, 5, 0]) {
+      svg.append(el('path', { d: `M${sx(nm)} ${SY - 5} V${SY + 5}`, class: 'ln' }));
+      svg.append(el('text', { x: sx(nm), y: SY + 20, 'text-anchor': 'middle', class: 'lbl small' }, nm));
+    }
+    const mark = towered ? [15, 'TOWER: INITIAL CALL ~15 NM'] : [10, 'CTAF: SELF-ANNOUNCE ~10 NM'];
+    svg.append(el('path', { d: `M${sx(mark[0])} ${SY - 24} V${SY + 5}`, class: 'ln dashed' }));
+    svg.append(el('text', { x: 20, y: SY - 28, class: 'lbl small' }, mark[1]));
+    // Airfield close-up.
+    svg.append(el('rect', { x: 320, y: 12, width: 310, height: 202, class: 'grass' }));
+    svg.append(el('rect', { x: 320, y: 12, width: 310, height: 202, class: 'thin' }));
+    svg.append(el('text', { x: 326, y: 27, class: 'lbl small' }, towered ? 'TOWERED AIRFIELD (ENLARGED)' : 'NON-TOWERED AIRFIELD (ENLARGED)'));
+    svg.append(el('path', { d: 'M430 62 V110 M510 50 H600 V120 H582', class: 'twy' }));
+    svg.append(el('rect', { x: 400, y: 36, width: 110, height: 26, class: 'apron' }));
+    svg.append(el('rect', { x: 360, y: 110, width: 222, height: 20, class: 'rwy' }));
+    svg.append(paintNumber(570, 120, 270, '27', 11));
+    if (towered) {
+      svg.append(el('rect', { x: 343, y: 44, width: 14, height: 26, class: 'bldg' }), el('rect', { x: 338, y: 36, width: 24, height: 9, class: 'bldg' }));
+      svg.append(el('text', { x: 350, y: 84, 'text-anchor': 'middle', class: 'lbl small' }, 'TWR'));
+    }
+    svg.append(el('path', { d: 'M345 180 H610 V120 H584', class: 'rb-datum' }));
+    svg.append(el('text', { x: 326, y: 207, class: 'lbl small' }, 'LEFT TRAFFIC, RUNWAY 27'));
+    // Aircraft.
+    let x, y, h;
+    if (c.at.nm !== undefined) [x, y, h] = [sx(c.at.nm), SY, outbound ? 270 : 90];
+    else [x, y, h] = spots[c.at.spot];
+    svg.append(plane(x, y, h));
+    // Step list and call panel.
+    for (const [i, b] of [...list.children].entries()) b.setAttribute('aria-pressed', String(i === step));
+    const lines = [];
+    const add = (cls, who, text) => { const p = document.createElement('p'); p.className = cls; p.append(Object.assign(document.createElement('strong'), { textContent: `${who}: ` }), text); lines.push(p); };
+    const head = document.createElement('p');
+    head.className = 'call-head';
+    head.textContent = `${step + 1} of ${cs.length} · ${place(c)}${c.at.nm !== undefined ? (outbound ? ' out, departing' : ' out, inbound') : ''} · ${c.station} on ${c.freq}`;
+    lines.push(head);
+    const them = c.station === 'ATIS' ? 'ATIS' : towered ? c.station : 'Heard';
+    if (c.theyFirst && c.them) add('them', them, c.them);
+    if (c.you) add('you', 'You', c.you);
+    if (!c.theyFirst && c.them) add('them', c.you ? (towered ? c.station : 'Reply') : them, c.them);
+    if (!c.you && !c.them) add('you', 'You', 'No call needed: keep listening.');
+    const note = document.createElement('p');
+    note.className = 'call-note';
+    note.append(c.note);
+    for (const [src, where] of c.cite) {
+      const [n, id] = SOURCE_NO[src];
+      note.append(' ', Object.assign(document.createElement('a'), { href: `#${id}`, textContent: `[${n}, ${where}]` }));
+    }
+    lines.push(note);
+    panel.replaceChildren(...lines);
+    back.disabled = step === 0;
+    next.disabled = step === cs.length - 1;
+  }
+  function rebuild() {
+    step = 0;
+    list.replaceChildren(...calls().map((c, i) => {
+      const b = Object.assign(document.createElement('button'), { type: 'button', textContent: `${i + 1}. ${place(c)}` });
+      b.addEventListener('click', () => { step = i; draw(); });
+      return b;
+    }));
+    draw();
+  }
+  back.addEventListener('click', () => { step = Math.max(0, step - 1); draw(); });
+  next.addEventListener('click', () => { step = Math.min(calls().length - 1, step + 1); draw(); });
+  root.addEventListener('change', rebuild);
+  rebuild();
+}
+
 /* ---------- Term quiz ---------- */
 function setupTerms(root) {
   const terms = [...document.querySelectorAll('dl.jargon > div')].map((d) => ({
@@ -752,7 +843,7 @@ function setupTerms(root) {
 const blocks = {
   aerodrome: setupCallouts, numbers: setupNumbers, markings: setupMarkings, hold: setupHold, signs: setupSigns,
   lighting: setupLighting, papi: setupPapi, wind: setupWind, pattern: setupPattern, overhead: setupOverhead,
-  lightgun: setupLightGun, terms: setupTerms,
+  radio: setupRadio, lightgun: setupLightGun, terms: setupTerms,
 };
 for (const root of document.querySelectorAll('[data-lesson]')) {
   blocks[root.dataset.lesson]?.(root);
