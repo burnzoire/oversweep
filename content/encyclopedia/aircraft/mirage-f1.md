@@ -35,16 +35,24 @@ sources:
     accessed: "2026-10-25"
 ---
 
-## Overview
+## The Mirage without a delta
 
-The Mirage F1 is a French single-engine fighter with a high-mounted swept wing and conventional tail, unlike the deltas before and after it. The prototype flew on 23 December 1966, and the F1C was the standard French fighter until the Mirage 2000 arrived in 1984. More than 700 were sold to 11 countries. [[2]](#source-2)
+For a decade "Mirage" had meant a delta wing. The F1 broke the pattern. In the mid-1960s, with two big projects cancelled and its design team short of work, Dassault began a smaller fighter as a successor to the Mirage III and Mirage 5, aimed at a French Air Force requirement for an all-weather interceptor. [[1]](#source-1) It used a swept wing mounted high on the fuselage and a conventional tail, unlike the deltas before and after it. [[2]](#source-2) Although its wingspan was smaller than the Mirage III's, it carried more fuel, needed a shorter take-off run and was more manoeuvrable. [[1]](#source-1)
 
-## Design
+The prototype flew on 23 December 1966 and passed Mach 2 on its fourth flight, but on 18 May 1967 it broke up after encountering flutter, killing its pilot. The programme survived, and the larger, costlier Mirage F2 was dropped in its favour. [[1]](#source-1)
 
-To meet the French Air Force's requirement for an all-weather interceptor, the first production **F1C** carried the Cyrano IV radar; the later Cyrano IV-1 added a limited look-down capability. The F1C-200 added a fixed refuelling probe. [[1]](#source-1) Missiles are usually carried on the wingtips. [[2]](#source-2)
+## Interceptor
 
-Spain's F1CE and F1EE received upgrades that extended their lives and improved the avionics, and Spain and Greece had the AIM-9 Sidewinder integrated. [[1]](#source-1)
+The first production **F1C** carried the Cyrano IV radar to meet the all-weather requirement; the later Cyrano IV-1 added a limited ability to look down at low-flying targets, though pilots reported that the radar tended to overheat. [[1]](#source-1) It entered service in 1973 and was France's standard fighter until the Mirage 2000 arrived in 1984, then moved on to reconnaissance. [[1]](#source-1) [[2]](#source-2) The F1C-200 added a fixed refuelling probe, and missiles usually ride on the wingtips. [[1]](#source-1) [[2]](#source-2)
 
-## In service
+French F1C-200s first went into action over Chad, flying top cover for Jaguar strike aircraft against Libyan-backed forces in 1984 and for the raid on Ouadi Doum airbase in February 1986. [[1]](#source-1) The last French F1s were retired in June 2014, and six made a farewell flypast over Paris on Bastille Day. [[1]](#source-1)
 
-The F1 has fought in the Western Sahara War, the Paquisha and Cenepa wars, the Iran–Iraq War, the Gulf War, the South African Border War and over Afghanistan, among others. [[1]](#source-1) In the Iran–Iraq War, Iraqi Mirage F1EQs flew intensively on interception, ground attack and anti-shipping missions. [[1]](#source-1)
+## A fighter for a dozen air forces
+
+More than 700 F1s were sold to 11 countries, and the type fought in more wars than most fighters of its era. [[2]](#source-2) It saw combat in the Western Sahara, in Ecuador's wars with Peru, in the Iran–Iraq War, the Gulf War, the South African Border War and over Afghanistan, among others. [[1]](#source-1)
+
+Iraq was its biggest combat user. Iraqi F1EQs flew intensively on interception, ground attack and anti-shipping missions against Iran, and could reach far deeper into Iran than earlier Iraqi aircraft. In November 1981 an Iraqi F1 became the first aircraft to shoot down an Iranian F-14, and Iraqi F1EQs claimed at least 35 Iranian aircraft during the war. They paid heavily too: by one researcher's count, Iranian F-14s shot down 33 of them. [[1]](#source-1) The war made the F1 a problem for its own makers: in 1991 French reconnaissance F1CRs were grounded for the first days of Desert Storm so that they would not be mistaken for Iraqi Mirages. [[1]](#source-1)
+
+South Africa bought F1s just before a 1977 arms embargo, and its F1CZs shot down two Angolan MiG-21s in 1981 and 1982. On both occasions Major Johan Rankin made the kill with his cannon, the first time after his missiles failed to lock on. [[1]](#source-1)
+
+Spain flew F1Cs and F1Es as its main air defence interceptors and upgraded them to F1M standard in the late 1990s, with a longer life, better avionics and anti-ship capability. Spain and Greece integrated the AIM-9 Sidewinder. [[1]](#source-1) Even now the F1 has a role in American training: former Spanish F1Ms fly with a private company as adversary aircraft supporting the US Air Force. [[1]](#source-1)

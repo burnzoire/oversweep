@@ -32,18 +32,26 @@ sources:
     accessed: "2026-10-25"
 ---
 
-## Overview
+## The duck and the thunderbolt
 
-The Saab 37 Viggen is a single-engine Swedish delta-wing combat aircraft. The Swedish government approved development in December 1961, with the AJ 37 attack aircraft as the basic version, followed by the S 37 reconnaissance and JA 37 fighter versions. The last of 329 Viggens was delivered in 1990. [[2]](#source-2)
+*Viggen* has two meanings in Swedish, and Saab meant both. A *vigg* is a tufted duck, a nod to the aircraft's canard foreplane, *canard* being French for duck. It is also a thunderbolt, from the "thunder wedges" of Nordic folklore, said to come from the lightning strikes of Thor's hammer. [[1]](#source-1)
 
-## Design
+## An air force that hides on roads
 
-Sweden's Bas 60 and later Bas 90 concepts dispersed its air force in wartime across many bases, including stretches of road used as runways, some only 800 m long. [[1]](#source-1) To fly from them the Viggen pairs its delta wing with a fixed foreplane carrying flaps, ahead of and above the main wing. [[2]](#source-2) Its RM8 engine was the second operational afterburning turbofan and the first fitted with a thrust reverser, which can be pre-selected in the air to engage when the nose wheel compresses on touchdown. With it the Viggen could operate from 500 m strips with minimal support. [[1]](#source-1)
+Neutral Sweden planned to survive a Soviet attack by scattering its air force. Under the Bas 60 system of the late 1950s, and its successor Bas 90, aircraft would disperse in wartime across many bases, including stretches of ordinary road used as runways, some only 800 m long. Damaged runways would have to be used too. [[1]](#source-1) The aircraft that replaced the Lansen attack jet and the Draken fighter therefore had to be supersonic at low level, reach Mach 2 at height, land short without flaring, stop hard, steer accurately on icy roads in a crosswind, and be easy to repair by mechanics with little training. [[1]](#source-1) Saab studied more than 100 layouts before settling on the design. [[1]](#source-1)
 
-## Sensors and weapons
+The answer was a delta wing with a fixed foreplane, carrying flaps, ahead of and above it. [[2]](#source-2) The engine, the Volvo RM8, was a heavily reworked licence-built version of the Pratt & Whitney JT8D airliner engine, with a Swedish afterburner. It was the second operational afterburning turbofan and the first fitted with a thrust reverser. The reverser could be selected in the air and fired automatically when the nose wheel touched down, and together with the wing it let the Viggen operate from 500 m strips with minimal support. [[1]](#source-1) The first of seven prototypes flew on 8 February 1967. [[1]](#source-1)
 
-The AJ 37 was built to attack ships: its main load was two RB 04E anti-ship missiles on the inboard wing pylons, with an optional third on the centreline. RB 05 air-to-surface missiles could be carried on the fuselage pylons. [[1]](#source-1)
+Five conscripts and one chief mechanic could look after a Viggen, and refuelling and rearming took less than ten minutes. [[1]](#source-1) Low over Sweden, its most persistent enemy was birds, and the air force paid close attention to their migration routes. [[1]](#source-1)
 
-## In service
+## Ship killer
 
-In May 1991 Sweden announced a programme to upgrade AJ 37, SF 37 and SH 37 Viggens to a common multirole standard, the **AJS 37**; 48 airframes were upgraded. [[1]](#source-1) The Viggen never fought, but Swedish JA 37 pilots repeatedly achieved radar lock on US SR-71s flying routine routes over the Baltic in the mid-1980s. [[1]](#source-1)
+The first production AJ 37, the attack version, reached the Skaraborg Wing in July 1971. [[1]](#source-1) It was built to attack an invasion fleet: its main load was two RB 04E anti-ship missiles on the inboard wing pylons, with an optional third on the centreline, and RB 05 air-to-surface missiles could go on the fuselage pylons. [[1]](#source-1) Reconnaissance versions and the JA 37 fighter followed, and the last of 329 Viggens was delivered in 1990. [[2]](#source-2)
+
+In May 1991 Sweden announced an upgrade of AJ 37, SF 37 and SH 37 aircraft to a common multirole standard, the **AJS 37**; 48 airframes were converted. [[1]](#source-1)
+
+## Locking on to the Blackbird
+
+The Viggen never went to war, but its pilots did something no one else is acknowledged to have done. In the mid-1980s US SR-71 Blackbirds flew routine, predictable routes over the Baltic, and Swedish JA 37 pilots achieved radar lock on them many times, despite heavy jamming, by feeding their fire-control computers with positions from ground radar. The favourite spot was the narrow strip of international airspace between the islands of Öland and Gotland that the SR-71 used on its way home. [[1]](#source-1)
+
+The JAS 39 Gripen replaced the Viggen from the mid-1990s. The last front-line Viggen was retired on 25 November 2005, and a few kept flying for electronic warfare training until June 2007. [[1]](#source-1)
