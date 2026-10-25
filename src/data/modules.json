@@ -9,5 +9,16 @@
     "publication": "published",
     "objective": "Understand one-versus-one BFM geometry, pursuit, turn performance, vertical maneuvering, energy and guns employment well enough to describe what each aircraft is doing and why.",
     "applicability": "Aircraft-agnostic concepts illustrated with US Navy T-45C training figures; type-specific numbers belong to that training example."
+  },
+  {
+    "id": "module.principles-of-flight",
+    "slug": "principles-of-flight",
+    "subject": "flight-fundamentals",
+    "revision": 1,
+    "title": "Principles of Flight",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Understand the four forces, lift and angle of attack, drag, control and stability, turns and load factor, stalls and energy well enough to explain what the airplane is doing and why.",
+    "applicability": "Aircraft-agnostic fixed-wing principles from the FAA handbooks; worked numbers use an invented example airplane."
   }
 ]
