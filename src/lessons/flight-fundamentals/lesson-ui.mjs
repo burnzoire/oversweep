@@ -2,7 +2,7 @@
 // numbers come from lesson-model.mjs; this file only reads inputs and draws.
 import {
   AIRFOIL, EXAMPLE, alphaFor, clMaxOf, dragPolar, energyHeight, levelTurn, liftCoefficient, maneuveringSpeed,
-  maxLoadFactor, requiredCl, speedAt, stabilityResponse, stallSpeed, stallSpeedAt, steadyPath,
+  maxLoadFactor, requiredCl, ROTOR, rotorSpeeds, speedAt, stabilityResponse, stallSpeed, stallSpeedAt, steadyPath,
 } from './lesson-model.mjs';
 
 const SVG = 'http://www.w3.org/2000/svg';
@@ -542,9 +542,65 @@ function setupEnergy(root) {
   draw();
 }
 
+/* ---------- Figure 10: dissymmetry of lift ---------- */
+function setupRotor(root) {
+  const f = fields(root), svg = root.querySelector('svg'), out = root.querySelector('[data-result]');
+  const cx = 170, cy = 200, R = 140, PX = 0.2; // disk centre and radius; arrow px per knot
+  function draw() {
+    const speed = Number(f.speed.value);
+    setOut(root, 'speed', `${speed} kt`);
+    const s = rotorSpeeds({ speed });
+    svg.replaceChildren(frame(660, 380));
+    // Top view: nose up, rotor turning counterclockwise, so the advancing blade is on the right.
+    svg.append(el('circle', { cx, cy, r: R, class: 'thin' }));
+    const rr = s.reverseRadius / ROTOR.radius * R;
+    if (rr > 0.5) {
+      svg.append(el('circle', { cx: cx - rr / 2, cy, r: rr / 2, class: 'zone hatch' }));
+    }
+    svg.append(el('line', { x1: cx - R, y1: cy, x2: cx + R, y2: cy, class: 'ln dashed' }));
+    // Rotation arrow outside the disk: counterclockwise, so the top of the disk moves left.
+    const ra = R + 14, a1 = rad(60), a2 = rad(115);
+    svg.append(el('path', { d: `M${cx + ra * Math.cos(a1)} ${cy - ra * Math.sin(a1)} A${ra} ${ra} 0 0 0 ${cx + ra * Math.cos(a2)} ${cy - ra * Math.sin(a2)}`, class: 'thin' }));
+    svg.append(arrow(cx + ra * Math.cos(rad(105)), cy - ra * Math.sin(rad(105)), cx + ra * Math.cos(a2), cy - ra * Math.sin(a2), 'component'));
+    svg.append(label(cx, 24, 'FLIGHT DIRECTION ↑', 'lbl small', { 'text-anchor': 'middle' }));
+    svg.append(label(cx + R, cy + R + 6, 'ADVANCING SIDE', 'lbl small', { 'text-anchor': 'end' }));
+    svg.append(label(cx - R, cy + R + 6, 'RETREATING SIDE', 'lbl small'));
+    // Blade airspeed at four stations on each side: forward on the right, aft on the left.
+    const omega = s.tip / ROTOR.radius; // knots per foot of radius
+    for (const k of [0.25, 0.5, 0.75, 1]) {
+      const r = k * ROTOR.radius, x = k * R;
+      const adv = omega * r + speed, ret = omega * r - speed;
+      svg.append(arrow(cx + x, cy, cx + x, cy - adv * PX, 'lift'));
+      svg.append(arrow(cx - x, cy, cx - x, cy + ret * PX, ret < 0 ? 'drag' : 'lift'));
+    }
+    if (rr > 0.5) svg.append(label(cx - R + 24, cy - 40, 'SHADED: REVERSE FLOW', 'lbl small'));
+    // Spanwise airspeed: negative where the air meets the retreating blade from behind.
+    const box = plot(svg, { x: 400, y: 40, w: 230, h: 270, xr: [-1, 1], yr: [-200, 700], xticks: [-1, -0.5, 0, 0.5, 1], yticks: range(-200, 700, 100), xlabel: 'SPAN: RETREATING TIP – HUB – ADVANCING TIP', ylabel: 'BLADE AIRSPEED (KT), < 0 REVERSE', xfmt: (v) => (v === 0 ? 'HUB' : `${Math.abs(v)} R`) });
+    svg.append(el('line', { x1: box.X(-1), y1: box.Y(0), x2: box.X(1), y2: box.Y(0), class: 'mark-line' }));
+    // Each half is a straight line: Ω r + V on the advancing side, Ω r − V on the retreating side.
+    svg.append(el('path', { d: box.path((v) => omega * ROTOR.radius * -v - speed, -1, 0), class: 'track' }));
+    svg.append(el('path', { d: box.path((v) => omega * ROTOR.radius * v + speed, 0, 1), class: 'track' }));
+    svg.append(el('path', { d: box.path((v) => omega * ROTOR.radius * Math.abs(v), -1, 1), class: 'ghost' }));
+    svg.append(el('circle', { cx: box.X(1), cy: box.Y(s.advancing), r: 5, class: 'pointer' }));
+    svg.append(el('circle', { cx: box.X(-1), cy: box.Y(s.retreating), r: 5, class: 'pointer' }));
+    svg.append(label(14, 370, `EXAMPLE ROTOR ${ROTOR.radius} FT RADIUS, ${ROTOR.rpm} RPM (INVENTED). FAINT LINE: HOVER`, 'lbl small'));
+    say(out, [
+      speed === 0
+        ? `In a hover both sides meet the air at the same speed: ${r0(s.tip)} kt at the tips. Lift is even across the disk.`
+        : `At ${speed} kt the advancing tip meets the air at ${r0(s.advancing)} kt and the retreating tip at ${r0(s.retreating)} kt.`,
+      s.tipLiftRatio === null
+        ? 'The whole retreating blade is in reverse flow: far outside any helicopter\'s envelope.'
+        : speed === 0 ? 'Move the slider to fly forward.' : `At the same blade angle the advancing tip would make about ${f1(s.tipLiftRatio)} times the lift of the retreating tip. Flapping evens it out: the advancing blade flaps up, losing angle of attack, and the retreating blade flaps down, gaining it.`,
+      speed === 0 ? '' : `Inboard of ${f1(s.reverseRadius)} ft on the retreating side the air meets the blade from its trailing edge (advance ratio ${f2(s.mu)}). The faster you fly, the more angle of attack the retreating blade needs, until it stalls.`,
+    ].filter(Boolean));
+  }
+  root.addEventListener('input', draw);
+  draw();
+}
+
 const SETUP = {
   forces: setupForces, airfoil: setupAirfoil, 'lift-speed': setupLiftSpeed, drag: setupDrag, axes: setupAxes,
-  stability: setupStability, turn: setupTurn, envelope: setupEnvelope, energy: setupEnergy,
+  stability: setupStability, turn: setupTurn, envelope: setupEnvelope, energy: setupEnergy, rotor: setupRotor,
 };
 for (const root of document.querySelectorAll('[data-lesson]')) {
   const setup = SETUP[root.dataset.lesson];

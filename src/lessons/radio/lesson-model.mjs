@@ -288,3 +288,24 @@ export const TRAINING_CALLS = [
   { call: 'Blind', meaning: 'I cannot see my wingman anywhere. Said with your call sign, then turn away from the predicted collision bearing.', page: '3-3' },
   { call: 'No joy', meaning: 'I cannot see the threat aircraft my wingman described.', page: '3-3' },
 ];
+
+// Multi-service brevity codes (ATP 1-02.1 / MCRP 3-30B.1 / NTTP 6-02.1 /
+// AFTTP 3-2.5, 25 April 2025): one list shared by the Army, Marine Corps, Navy
+// and Air Force. `page` is the page of the 2025 edition.
+export const BREVITY = [
+  { word: 'Knock-it-off', meaning: 'Cease all air combat maneuvers, attacks, activities or exercises (training use only).', page: '26' },
+  { word: 'Abort', meaning: 'Cease action, or terminate the attack before weapons release, the event or the mission.', page: '2' },
+  { word: 'Blind', meaning: 'No visual contact with a friendly aircraft, ship or ground position. Opposite of visual.', page: '5' },
+  { word: 'No joy', meaning: 'Aircrew does not have visual contact with the target or bandit. Opposite of tally.', page: '31' },
+  { word: 'Padlocked', meaning: 'Aircrew cannot take their eyes off an aircraft, ground target or surface position without risk of losing tally or visual.', page: '32' },
+  { word: 'Joker', meaning: 'A fuel state above bingo at which separation, bugout or event termination should begin.', page: '25' },
+  { word: 'Bingo', meaning: 'The prebriefed fuel state needed for recovery.', page: '5' },
+  { word: 'Push', meaning: 'Switch to the designated frequency; no acknowledgment required.', page: '35' },
+  { word: 'Fence in / fence out', meaning: 'Set cockpit switches as appropriate before entering or exiting the combat area.', page: '18' },
+  { word: 'Buster', meaning: 'Fly at maximum continuous speed.', page: '7' },
+  { word: 'Popeye', meaning: 'Flying in clouds or an area of reduced visibility.', page: '34' },
+  { word: 'Pigeons', meaning: 'Bearing (magnetic) and range (nautical miles) to home plate.', page: '33' },
+  { word: 'Bogey', meaning: 'A contact whose identity is unknown.', page: '6' },
+  { word: 'Bandit', meaning: 'Positively identified as an enemy in accordance with theater ID criteria.', page: '4' },
+];
+

@@ -150,3 +150,25 @@ export function stabilityResponse({ kind, t }) {
     default: return null;
   }
 }
+
+// Rotor in forward flight, seen from above. The example utility helicopter's
+// rotor (27 ft radius, 260 rpm) is invented. A blade element at radius r meets
+// the air at Ω·r plus the forward speed on the advancing side and Ω·r minus it
+// on the retreating side (at 90° and 270° of azimuth). Inboard of V/Ω on the
+// retreating side the air meets the blade from its trailing edge: reverse flow.
+// Lift varies with the square of velocity, so the ratio of the tip speeds
+// squared shows how unequal the two sides would be without flapping
+// (FM 3-04.203 ¶1-29 to 1-33; FAA-H-8083-21B p. 2-20).
+export const ROTOR = { radius: 27, rpm: 260 };
+export function rotorSpeeds({ speed, radius = ROTOR.radius, rpm = ROTOR.rpm }) {
+  if (!(speed >= 0) || !(radius > 0) || !(rpm > 0)) return null;
+  const omega = rpm * 2 * Math.PI / 60; // rad/s
+  const tip = omega * radius * FT / KT; // knots
+  const advancing = tip + speed, retreating = tip - speed;
+  return {
+    tip, advancing, retreating,
+    mu: speed / tip, // advance ratio
+    reverseRadius: Math.min(radius, speed * KT / FT / omega), // ft from the hub
+    tipLiftRatio: retreating > 0 ? (advancing / retreating) ** 2 : null,
+  };
+}
