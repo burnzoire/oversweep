@@ -14,12 +14,12 @@
     "id": "module.airfield-basics",
     "slug": "airfield-basics",
     "subject": "airfield-operations",
-    "revision": 1,
+    "revision": 2,
     "title": "The Airfield and the Traffic Pattern",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "objective": "Read an aerodrome's runway numbers, markings, signs and lighting, choose the runway in use from the wind, fly the traffic pattern and overhead maneuver, and move safely on the ground.",
-    "applicability": "Aircraft-agnostic; US (FAA) aerodrome standards and procedures as the worked example. Each airfield's published procedures take precedence."
+    "objective": "Read a military airfield's runway numbers, markings, arresting gear, signs and lighting, read the Navy optical landing system and the PAPI, choose the runway in use from the wind, fly the overhead break and the standard pattern, make Navy field calls, and move safely on the ground.",
+    "applicability": "Military pilots first: US Navy shore airfield practice (NAVEDTRA 14342A, VT-10 training script) as the worked example, with shared US (FAA) standards and civil towered and non-towered procedures as supplementary. Each air station's course rules and published procedures take precedence."
   },
   {
     "id": "module.radio-procedures",
