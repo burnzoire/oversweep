@@ -70,6 +70,8 @@ export interface ThreatData {
 // `variant`; `quick` holds plain numbers for the category's comparison table.
 export interface AircraftData {
   group: 'jet' | 'propeller' | 'helicopter';
+  // Short label for the record nav when the title's first word is not enough.
+  short?: string;
   name: string;
   variant: string;
   role: string;

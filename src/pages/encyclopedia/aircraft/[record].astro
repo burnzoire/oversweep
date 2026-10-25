@@ -16,6 +16,7 @@ const category = categoryTitle(record.category);
 const group = aircraftGroups.find((g) => g.slug === data.group)!;
 // The record nav lists the aircraft of the same group, so it stays short.
 const siblings = categoryRecords('aircraft').filter((r) => aircraftContent(r).frontmatter.group === data.group);
+const label = (r: EncyclopediaRecord) => aircraftContent(r).frontmatter.short ?? r.title.split(' ')[0];
 const plate: [string, string][] = [
   ['Variant described', data.variant],
   ['Role', data.role],
@@ -36,7 +37,7 @@ const plate: [string, string][] = [
   breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: category, href: sitePath('encyclopedia/aircraft/') }, { label: record.title }]}>
   <div class="ency">
     <nav class="record-nav" aria-label={`${group.title} records`}>
-      <ol>{siblings.map((r) => <li>{r.slug === record.slug ? <span aria-current="page">{r.title.split(' ')[0]}</span> : <a href={sitePath(recordRoute(r))}>{r.title.split(' ')[0]}</a>}</li>)}</ol>
+      <ol>{siblings.map((r) => <li>{r.slug === record.slug ? <span aria-current="page">{label(r)}</span> : <a href={sitePath(recordRoute(r))}>{label(r)}</a>}</li>)}</ol>
     </nav>
     <section class="status-panel" data-record-id={record.id} data-record-revision={record.revision}>
       <h2>{record.maturity}</h2>
