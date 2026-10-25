@@ -93,7 +93,7 @@ function setupNumbers(root) {
     out.replaceChildren(...para([
       `Magnetic azimuth ${hdg(az)}°: one-tenth is ${tenth.toFixed(1)}, and the nearest whole number is ${Math.round(tenth)}${Math.round(tenth) === 0 ? ', written 36' : ''}: runway ${a}. The other end points ${hdg(az + 180)}°: runway ${b}.`,
       count > 1 ? `With ${count} parallel runways the letters run left to right as seen on the approach: ${names.map((n) => n.near).join(', ')}. From the other end the same strips are ${names.map((n) => n.far).reverse().join(', ')}, so the left runway from one end is the right runway from the other.` : 'A single runway has no letter.',
-      Number.isInteger(tenth * 2) && !Number.isInteger(tenth) ? 'Exactly halfway: the AIM does not say how a tie is broken; this figure rounds up.' : '',
+      Number.isInteger(tenth * 2) && !Number.isInteger(tenth) ? `An azimuth ending in 5 could be designated either way, ${Math.floor(tenth) || 36} or ${Math.ceil(tenth)} (AIM 4-3-6); this figure shows the higher number.` : '',
     ].filter(Boolean)));
   }
   root.addEventListener('input', draw);
