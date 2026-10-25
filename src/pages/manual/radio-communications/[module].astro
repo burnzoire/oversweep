@@ -44,32 +44,26 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
  <h2 id="technique">Radio technique</h2>
  <p>The AIM's radio technique comes down to six habits. <a href="#source-aim">{a('4-2-2')}</a></p>
  <ol class="steps">
-  <li><strong>Listen before you transmit.</strong> Much of what you need may come from ATIS or from monitoring the frequency. Transmitting over someone else's exchange is futile and will likely jam receivers, forcing everyone to repeat. After changing frequency, pause and listen to make sure it is clear.</li>
+  <li><strong>Listen before you transmit.</strong> Much of what you need may come from ATIS or from monitoring the frequency. If you hear someone else talking, keying your transmitter is futile: you will probably jam their receivers and make them repeat their call. After changing frequency, pause and listen to make sure it is clear.</li>
   <li><strong>Think before keying your transmitter.</strong> Know what you want to say; write a long message, such as an IFR position report, down first.</li>
   <li><strong>Press, pause, then speak.</strong> Hold the microphone close to your lips; a slight pause after pressing the button may be necessary to be sure the first word is transmitted. Speak in a normal, conversational tone.</li>
   <li><strong>Wait before calling again.</strong> After releasing the button, wait a few seconds before calling again: the controller may be writing down your call sign, looking for your flight plan, or working another frequency.</li>
   <li><strong>Listen to your receiver.</strong> Be alert to the sounds, or the lack of sounds, in your receiver; check the volume and frequency, and make sure your microphone is not stuck on transmit. A stuck microphone can block a frequency for long periods.</li>
   <li><strong>Be within range.</strong> Make sure you are within the performance range of your radio equipment and the ground station equipment. At some sites you can hear the station but it cannot hear you, and higher altitude extends VHF line-of-sight range.</li>
  </ol>
+ <p>A quiet frequency is not always a clear one. Pilots acknowledge each ATC communication, <a href="#source-aim">{a('4-2-1')}</a> so after a controller's instruction, or a pilot's request, an answer is owed, and the pause before it belongs to that exchange. In the worked Navy sortie, most of the controllers' calls are answered at once by the pilot's readback. <a href="#source-hollywood">{h('19–35')}</a> Keying into that pause either steps on the answer or makes the controller hold you while the exchange finishes. Once the frequency is quiet and nothing is owed, call: anyone who has not keyed yet hears you and waits for your exchange to finish, as you waited for theirs.</p>
  <section class="lesson figure-lesson" data-lesson="gap" aria-labelledby="gap-title">
-  <h3 id="gap-title" class="fig-title">Figure 1 — Find a gap on a busy frequency</h3>
-  <p>The frequency below carries an approach controller, two Navy aircraft and a civil one. Your call takes about three seconds. Play the frequency, or drag the time slider, and transmit when it is clear. A call that overlaps another is wasted and makes both callers repeat.</p>
+  <h3 id="gap-title" class="fig-title">Figure 1 — Get a word in on a busy frequency</h3>
+  <p>You are KATT 31, just switched to Approach, which is working a Navy jet, an Army helicopter and an Air Force airlifter. Your check-in takes three seconds. Play the frequency and press Transmit when the frequency is quiet and nobody owes a reply. As on a real radio you only hear what has already been said; the other stations hear you too, and those that have not keyed yet wait their turn.</p>
   <div class="buttons"><button type="button" data-play>Play</button><button type="button" data-key>Transmit now</button><button type="button" data-reset>Clear</button></div>
   <div class="controls row">
-   <label for="gap-t">Time on the frequency <output for="t"></output><input id="gap-t" name="t" type="range" min="0" max="40" step="0.1" value="0" /></label>
+   <label for="gap-t">Time on the frequency <output for="t"></output><input id="gap-t" name="t" type="range" min="0" max="70" step="0.1" value="0" /></label>
   </div>
-  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 250" role="img" aria-label="Timeline of transmissions on one frequency, with your transmissions marked"></svg></div>
-  <details class="log"><summary>Frequency log (text)</summary>
-   <ul>
-    <li>0–3.6 s, Approach: "Navy 405, turn left heading 270"</li><li>4.1–6.6 s, Navy 405: "Left 270, Navy 405"</li>
-    <li>10–13.4 s, Approach: "KATT 23, descend and maintain 4,000"</li><li>13.9–16.6 s, KATT 23: "KATT 23, down to 4,000"</li>
-    <li>21–25 s, Bonanza 55G: "Approach, Bonanza 55G, request ILS"</li><li>25.6–28.6 s, Approach: "Bonanza 55G, expect vectors ILS"</li>
-    <li>34–37.4 s, Approach: "Navy 405, contact tower 120.1"</li><li>37.9–40 s, Navy 405: "Tower 120.1, Navy 405"</li>
-   </ul>
-  </details>
-  <p class="no-js">Interactive figure unavailable. The frequency is clear from about 6.6 to 10 seconds, 16.6 to 21 seconds and 28.6 to 34 seconds; a three-second call fits only in those gaps.</p>
+  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 250" role="img" aria-label="Timeline of transmissions heard so far on one frequency, with your transmissions marked"></svg></div>
+  <details class="log" open><summary>Heard so far</summary><ol data-heard></ol></details>
+  <p class="no-js">Interactive figure unavailable. If you stay silent, the frequency runs: Approach to Navy 405, "turn left heading 270", and its readback; Army 26019 requests descent, Approach clears it to 3,000, and it reads back; Approach turns REACH 451, hears nothing for three seconds and calls again before REACH 451 answers; Approach sends Navy 405 to Tower and it reads back. Call after a readback, not in the pause after an instruction or a request.</p>
   <div class="feedback" data-result role="status" aria-live="polite"></div>
-  <p class="fig-caption">Constructed illustration: the calls and timings are invented. The AIM's point stands: a call over someone else's exchange is futile and forces repeats. <a href="#source-aim">{a('4-2-2')}</a></p>
+  <p class="fig-caption">Constructed illustration: the calls and timings are invented, and a station keying within half a second of you is taken not to have heard you. A call over someone already talking is futile and makes them repeat. <a href="#source-aim">{a('4-2-2')}</a> Waiting for an owed reply follows from acknowledging each ATC call <a href="#source-aim">{a('4-2-1')}</a>; the AIM does not spell it out.</p>
  </section>
 
  <h2 id="bands">Bands and emergency frequencies</h2>
@@ -438,7 +432,7 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
   .lesson.ready .no-js { display: none; }
   .no-js { font-weight: 700; }
   details.log { margin-bottom: 0.75rem; }
-  details.log ul { margin: 0.4rem 0; font-size: 0.95rem; }
+  details.log ul, details.log ol { margin: 0.4rem 0; font-size: 0.95rem; }
   .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: #fff; }
   @media (min-width: 64rem) {
     .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
@@ -478,6 +472,8 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
   :global(.natops .busy.atc) { fill: #fff; stroke-dasharray: 4 2; }
   :global(.natops .mine) { fill: var(--color-link); stroke: var(--color-link); }
   :global(.natops .mine.bad) { fill: #a3000b; stroke: #a3000b; }
+  :global(.natops .busy.bad) { stroke: #a3000b; stroke-width: 2; }
+  :global(.natops .unheard) { fill: var(--color-surface); opacity: 0.6; }
   :global(.natops .band) { fill: #e4e6e8; stroke: var(--color-text); stroke-width: 1.4; }
   :global(.natops .band.uhf) { fill: #fff; }
   :global(.natops .cursor) { stroke: var(--color-link); stroke-width: 2.4; }
