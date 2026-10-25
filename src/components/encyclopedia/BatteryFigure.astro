@@ -1,0 +1,100 @@
+---
+import type { ThreatData } from '../../data/encyclopedia';
+import Cited from './Cited.astro';
+interface Props { battery: NonNullable<ThreatData['battery']>; name: string; cite: string }
+const { battery, name, cite } = Astro.props;
+
+// Schematic plan-view symbols, not to scale and not vehicle outlines.
+const missileMarks = (n: number, w: number) => Array.from({ length: n }, (_, i) => -w / 2 + ((i + 1) * w) / (n + 1));
+const ROW = 74;
+const rows = battery.items.map((item, i) => ({ ...item, y: 40 + i * ROW, n: Math.min(item.count ?? 1, 8) }));
+const groupHeight = 30 + rows.length * ROW;
+const radar = battery.items.find((i) => i.kind === 'radar');
+const launcher = battery.items.find((i) => i.kind === 'launcher');
+// Ring sites only; at least two positions so the spacing dimension exists.
+const ringCount = Math.max(launcher?.count ?? 6, 2);
+const ring = Array.from({ length: ringCount }, (_, i) => {
+  const a = (i * 2 * Math.PI) / ringCount;
+  return { x: 320 + 120 * Math.sin(a), y: 190 - 120 * Math.cos(a), deg: (a * 180) / Math.PI };
+});
+// Dimension line for the launcher spacing, offset outward from the chord between
+// the first two launchers.
+const [p0, p1] = ring;
+const mid = { x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2 };
+const out = Math.hypot(mid.x - 320, mid.y - 190);
+const n = { x: (mid.x - 320) / out, y: (mid.y - 190) / out };
+const off = (p: { x: number; y: number }, d: number) => ({ x: p.x + n.x * d, y: p.y + n.y * d });
+const d0 = off(p0, 34), d1 = off(p1, 34), dl = off(mid, 48);
+---
+<section class="lesson figure-lesson battery-figure" aria-labelledby="battery-title">
+  <h3 id="battery-title" class="fig-title">Figure 3 — {battery.pattern === 'ring' ? `${name} site (plan view)` : battery.pattern === 'rings' ? `${name} site rings (plan view)` : `${name} unit composition`}</h3>
+  <div class="fig-scroll" role="region" aria-label="Figure 3, scrolls sideways on narrow screens" tabindex="0">
+    {battery.pattern === 'rings' ? (
+      <svg class="natops" viewBox="0 0 640 380" role="img" aria-label={battery.items.map((i) => `${i.count} ${i.label}`).join(', ')}>
+        {battery.items.map((item, k) => {
+          const r = 80 + k * 80, n = item.count ?? 1;
+          return (
+            <g>
+              <circle class="ln dashed" cx="320" cy="190" r={r} />
+              {Array.from({ length: n }, (_, i) => {
+                const a = (i * 2 * Math.PI) / n;
+                return <rect class="bat-body" x={320 + r * Math.sin(a) - 5} y={190 - r * Math.cos(a) - 5} width="10" height="10" />;
+              })}
+              <text class="lbl" x="320" y={190 - r - 14} text-anchor="middle">{n} × {item.label}</text>
+            </g>
+          );
+        })}
+        <text class="lbl" x="320" y="194" text-anchor="middle">MOSCOW</text>
+        <text class="lbl small" x="24" y="366">Schematic: sites spaced evenly; ring radii and positions not to scale.</text>
+      </svg>
+    ) : battery.pattern === 'ring' ? (
+      <svg class="natops" viewBox="0 0 640 380" role="img" aria-label={`${launcher?.count} launchers in a ring around the ${radar?.label}`}>
+        <circle class="ln dashed" cx="320" cy="190" r="120" />
+        {ring.map((p) => (
+          <g transform={`translate(${p.x.toFixed(1)} ${p.y.toFixed(1)}) rotate(${p.deg.toFixed(0)})`}>
+            <rect class="bat-body" x="-11" y="-11" width="22" height="22" />
+            <line class="bat-missile" x1="0" y1="6" x2="0" y2="-24" />
+          </g>
+        ))}
+        <rect class="bat-radar" x="300" y="172" width="40" height="36" />
+        <path class="ln" d="M306 166 Q320 150 334 166" />
+        <text class="lbl" x="320" y="234" text-anchor="middle">{radar?.label}</text>
+        <line class="dim" x1={d0.x} y1={d0.y} x2={d1.x} y2={d1.y} />
+        <line class="dim" x1={off(p0, 26).x} y1={off(p0, 26).y} x2={off(p0, 40).x} y2={off(p0, 40).y} />
+        <line class="dim" x1={off(p1, 26).x} y1={off(p1, 26).y} x2={off(p1, 40).x} y2={off(p1, 40).y} />
+        <text class="lbl small" x={dl.x} y={dl.y + 4}>{battery.spacing}</text>
+        <text class="lbl" x="470" y="356">{launcher?.count} × {launcher?.label}</text>
+        <text class="lbl small" x="24" y="356">Schematic, not to scale. Missiles point outward.</text>
+      </svg>
+    ) : (
+      <svg class="natops" viewBox={`0 0 640 ${groupHeight}`} role="img" aria-label={battery.items.map((i) => `${i.count ?? 1} ${i.label}`).join(', ')}>
+        {rows.map((row) => (
+          <g>
+            <text class="lbl" x="20" y={row.y + 4}>{row.count ?? 1} × {row.label}</text>
+            {row.missiles && <text class="lbl small" x="20" y={row.y + 20}>{row.missiles} missile{row.missiles === 1 ? '' : 's'} each</text>}
+            {Array.from({ length: row.n }, (_, k) => {
+              const cx = 330 + k * 58;
+              return (
+                <g transform={`translate(${cx} ${row.y})`}>
+                  {row.kind === 'gunner' ? (
+                    <><circle class="bat-body" cx="0" cy="-14" r="7" /><line class="ln" x1="0" y1="-7" x2="0" y2="18" /><line class="bat-missile" x1="-18" y1="-4" x2="20" y2="-18" /></>
+                  ) : row.kind === 'radar' ? (
+                    <><rect class="bat-radar" x="-20" y="-14" width="40" height="30" /><path class="ln" d="M-14 -20 Q0 -36 14 -20" /></>
+                  ) : row.kind === 'command' ? (
+                    <><rect class="bat-body" x="-20" y="-14" width="40" height="30" /><line class="ln" x1="-12" y1="-14" x2="-12" y2="-32" /><path class="fixmark" d="M-12 -32 L4 -27 L-12 -22 Z" /></>
+                  ) : (
+                    <>
+                      <rect class:list={['bat-body', { reload: row.kind === 'reload' }]} x="-20" y="-14" width="40" height="30" />
+                      {missileMarks(row.missiles ?? 0, 36).map((mx) => <line class="bat-missile" x1={mx} y1="10" x2={mx} y2="-26" />)}
+                    </>
+                  )}
+                </g>
+              );
+            })}
+          </g>
+        ))}
+      </svg>
+    )}
+  </div>
+  <p class="fig-caption">Schematic symbols for each element, drawn from the composition given in <Cited text={cite} />; not vehicle outlines and not to scale.<slot /></p>
+</section>

@@ -1,0 +1,446 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import { getModule, includedModules } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import { PHONETIC, LIGHT_SIGNALS, DISTRESS_ORDER } from '../../../lessons/radio/lesson-model.mjs';
+const radio = getModule('radio-procedures');
+export function getStaticPaths() { return includedModules.some(m => m.slug === 'radio-procedures') ? [{ params: { module: 'radio-procedures' } }] : []; }
+const contents = [
+ ['overview', 'Purpose and learning objectives'], ['technique', 'Radio technique'], ['bands', 'Bands and emergency frequencies'],
+ ['alphabet', 'The phonetic alphabet'], ['numbers', 'Numbers on the radio'], ['callsigns', 'Call signs'],
+ ['contact', 'Making contact'], ['words', 'Words that do the work'], ['readback', 'Acknowledgement and readback'],
+ ['flight', 'Flight check-ins and frequency changes'], ['emergency', 'Distress and urgency'], ['transponder', 'Transponder codes'],
+ ['nordo', 'When the radio fails'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+];
+// [1] AIM paragraph, [2] Pilot/Controller Glossary term, [3] VT-6 FORMSUP page.
+const a = (para: string) => `[1, ${para.includes('–') || para.includes(',') ? 'paras' : 'para'} ${para}]`;
+const g = (term: string) => `[2, ${term}]`;
+const f = (page: string) => `[3, ${page.includes('–') || page.includes(',') ? 'pp.' : 'p.'} ${page}]`;
+const morse = (m: string) => m.replaceAll('.', '·').replaceAll('-', '–');
+const caseIii = sitePath('manual/naval-operations/case-iii/');
+---
+<SiteLayout title={radio.title} activeSection="manual" activeSubject="radio-communications" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Radio Communications',href:sitePath('manual/radio-communications/')},{label:radio.title}]}>
+ <section class="status-panel" data-module-id={radio.id} data-module-revision={radio.revision}>
+  <h2>{radio.maturity}</h2>
+  <p>Module revision {radio.revision} · Air–ground voice radio for pilots: how to transmit, how to say letters and numbers, how to make and answer calls, and what to do in an emergency or when the radio fails. US Federal Aviation Administration (FAA) phraseology, with one US Navy training squadron's formation calls.</p>
+  <p>Every figure is interactive. Build calls, convert numbers into radio words, read back clearances, set a transponder without tripping an emergency code, and fly a lost-communications route.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <ol>{contents.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol>
+ </nav>
+
+ <h2 id="overview">Purpose and learning objectives</h2>
+ <p>Radio is the critical link between pilots and air traffic control (ATC). The FAA's Aeronautical Information Manual (AIM) asks pilots to keep transmissions brief, to acknowledge each ATC communication with the aircraft's call sign, and to prefer standard phraseology over jargon and slang. <a href="#source-aim">{a('4-2-1')}</a> Good radio work is mostly listening: knowing what was said, to whom, and what you must do about it.</p>
+ <p>By the end you should be able to: transmit cleanly without blocking the frequency; spell with the phonetic alphabet; say altitudes, headings, speeds, frequencies and times the way the AIM does; make an initial call in the right order; choose the right acknowledgement word; read back the parts of a clearance that must be read back; follow a formation check-in and frequency push; make a distress call; change a transponder code without passing through an emergency code; and fly the AIM's lost-communications rules.</p>
+ <p class="note">This is a reference, not a substitute for the current AIM, your aircraft's manual or your unit's procedures. Military services, ships and other countries use additional or different procedures. Carrier recovery communications are in the <a href={`${caseIii}#radio`}>Case III module's radio section</a>, which steps through a Case III approach call by call.</p>
+
+ <h2 id="technique">Radio technique</h2>
+ <p>The AIM's radio technique comes down to six habits. <a href="#source-aim">{a('4-2-2')}</a></p>
+ <ol class="steps">
+  <li><strong>Listen before you transmit.</strong> Much of what you need may come from ATIS or from monitoring the frequency. Transmitting over someone else's exchange is futile and will likely jam receivers, forcing everyone to repeat. After changing frequency, pause and listen to make sure it is clear.</li>
+  <li><strong>Think before keying your transmitter.</strong> Know what you want to say; write a long message, such as an IFR position report, down first.</li>
+  <li><strong>Press, pause, then speak.</strong> Hold the microphone close to your lips; a slight pause after pressing the button may be necessary to be sure the first word is transmitted. Speak in a normal, conversational tone.</li>
+  <li><strong>Wait before calling again.</strong> After releasing the button, wait a few seconds before calling again: the controller may be writing down your call sign, looking for your flight plan, or working another frequency.</li>
+  <li><strong>Listen to your receiver.</strong> Be alert to the sounds, or the lack of sounds, in your receiver; check the volume and frequency, and make sure your microphone is not stuck on transmit. A stuck microphone can block a frequency for long periods.</li>
+  <li><strong>Be within range.</strong> Make sure you are within the performance range of your radio equipment and the ground station equipment. At some sites you can hear the station but it cannot hear you, and higher altitude extends VHF line-of-sight range.</li>
+ </ol>
+ <section class="lesson figure-lesson" data-lesson="gap" aria-labelledby="gap-title">
+  <h3 id="gap-title" class="fig-title">Figure 1 — Find a gap on a busy frequency</h3>
+  <p>The frequency below carries an approach controller and three aircraft. Your call takes about three seconds. Play the frequency, or drag the time slider, and transmit when it is clear. A call that overlaps another is wasted and makes both callers repeat.</p>
+  <div class="buttons"><button type="button" data-play>Play</button><button type="button" data-key>Transmit now</button><button type="button" data-reset>Clear</button></div>
+  <div class="controls row">
+   <label for="gap-t">Time on the frequency <output for="t"></output><input id="gap-t" name="t" type="range" min="0" max="40" step="0.1" value="0" /></label>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 250" role="img" aria-label="Timeline of transmissions on one frequency, with your transmissions marked"></svg></div>
+  <details class="log"><summary>Frequency log (text)</summary>
+   <ul>
+    <li>0–3.6 s, Approach: "Navy 405, turn left heading 270"</li><li>4.1–6.6 s, Navy 405: "Left 270, Navy 405"</li>
+    <li>10–13.4 s, Approach: "Cessna 34A, descend and maintain 4,000"</li><li>13.9–16.6 s, Cessna 34A: "Down to 4,000, Cessna 34A"</li>
+    <li>21–25 s, Bonanza 55G: "Approach, Bonanza 55G, request ILS"</li><li>25.6–28.6 s, Approach: "Bonanza 55G, expect vectors ILS"</li>
+    <li>34–37.4 s, Approach: "Navy 405, contact tower 120.1"</li><li>37.9–40 s, Navy 405: "Tower 120.1, Navy 405"</li>
+   </ul>
+  </details>
+  <p class="no-js">Interactive figure unavailable. The frequency is clear from about 6.6 to 10 seconds, 16.6 to 21 seconds and 28.6 to 34 seconds; a three-second call fits only in those gaps.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Constructed illustration: the calls and timings are invented. The AIM's point stands: a call over someone else's exchange is futile and forces repeats. <a href="#source-aim">{a('4-2-2')}</a></p>
+ </section>
+
+ <h2 id="bands">Bands and emergency frequencies</h2>
+ <p>Civil air–ground voice uses the <strong>very high frequency (VHF)</strong> band, 30 to 300 MHz. Military air–ground voice uses the <strong>ultrahigh frequency (UHF)</strong> band, 300 to 3,000 MHz, which in some instances goes as low as 225 MHz. <a href="#source-pcg">{g('VHF; UHF')}</a></p>
+ <p>Two emergency frequencies matter to every pilot: <strong>121.5 MHz</strong> (VHF) and <strong>243.0 MHz</strong> (UHF). Both are generally limited to line of sight. 121.5 is guarded by direction-finding stations and some military and civil aircraft; 243.0 is guarded by military aircraft. The frequency in use, or another ATC frequency, is still preferable for an emergency call. <a href="#source-aim">{a('6-3-1')}</a> 122.2 MHz is assigned to most flight service stations as a common en route simplex frequency. <a href="#source-aim">{a('4-2-14')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="bands" aria-labelledby="bands-title">
+  <h3 id="bands-title" class="fig-title">Figure 2 — Where the voice frequencies sit</h3>
+  <fieldset class="inline"><legend>Show</legend>
+   <label><input type="radio" name="mark" value="121.5" checked /> 121.5</label>
+   <label><input type="radio" name="mark" value="122.2" /> 122.2</label>
+   <label><input type="radio" name="mark" value="243.0" /> 243.0</label>
+   <label><input type="radio" name="mark" value="225" /> 225</label>
+  </fieldset>
+  <div class="fig-scroll" role="region" aria-label="Figure 2, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 230" role="img" aria-label="Frequency scale from 100 to 400 MHz with the VHF and UHF bands and the emergency frequencies marked"></svg></div>
+  <p class="no-js">Interactive figure unavailable. 121.5 MHz (VHF emergency) and 122.2 MHz (flight service) sit in VHF; 243.0 MHz (UHF emergency) sits in UHF, above the 225 MHz lower edge of military UHF voice.</p>
+  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Linear scale, 100–400 MHz only. The figure does not show the civil VHF voice band's exact limits.</p>
+ </section>
+
+ <h2 id="alphabet">The phonetic alphabet</h2>
+ <p>Use the International Civil Aviation Organization (ICAO) phonetic alphabet when communications conditions make letters hard to tell apart, when aircraft with similar call signs share a frequency, and to spell difficult words. Each letter has a telephony word and a pronunciation; the digits have their own pronunciations, such as TREE, FIFE and NIN-ER. <a href="#source-aim">{a('4-2-7')}</a></p>
+ <div class="phonetic" role="region" aria-label="Phonetic alphabet table" tabindex="0">
+  <table>
+   <caption>Phonetic alphabet and Morse code <a href="#source-aim">{a('4-2-7')}</a></caption>
+   <thead><tr><th scope="col">Character</th><th scope="col">Telephony</th><th scope="col">Pronunciation</th><th scope="col">Morse</th></tr></thead>
+   <tbody>{PHONETIC.map(p => <tr><th scope="row">{p.char}</th><td>{p.word}</td><td>{p.say}</td><td class="morse">{morse(p.morse)}</td></tr>)}</tbody>
+  </table>
+ </div>
+
+ <h2 id="numbers">Numbers on the radio</h2>
+ <p>The AIM's rules for numbers: <a href="#source-aim">{a('4-2-8–4-2-12')}</a></p>
+ <ul>
+  <li><strong>Hundreds and thousands.</strong> Round hundreds and thousands up to 9,900 are spoken as words ("four thousand five hundred"). Above 9,900, the digits before "thousand" are spoken separately ("one zero thousand"). Airway and jet route numbers are spoken as letters and words (V12 is "Victor Twelve"). Other numbers are spoken digit by digit. A decimal point is "point"; ICAO uses "decimal", and the FAA accepts it from pilots required to use it.</li>
+  <li><strong>Altitudes.</strong> Below 18,000 ft mean sea level (MSL), say the thousands and hundreds: "one two thousand five hundred". At and above 18,000 ft (flight level 180), say "flight level" and three digits.</li>
+  <li><strong>Directions.</strong> Bearings, courses, headings and wind directions are three digits and magnetic; add "true" when it applies.</li>
+  <li><strong>Speeds.</strong> Digit by digit, then "knots". Mach numbers: "Mach" and the digits with "point".</li>
+  <li><strong>Time.</strong> Coordinated Universal Time (UTC) on the 24-hour clock, digit by digit; "Zulu" may be used to denote UTC.</li>
+ </ul>
+ <div class="table-scroll" role="region" aria-label="Examples of numbers spoken on the radio" tabindex="0"><table>
+  <caption>The AIM's examples <a href="#source-aim">{a('4-2-8–4-2-12')}</a></caption>
+  <thead><tr><th scope="col">Written</th><th scope="col">Spoken</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">500 ft</th><td>five hundred</td></tr>
+   <tr><th scope="row">4,500 ft</th><td>four thousand five hundred</td></tr>
+   <tr><th scope="row">10,000 ft</th><td>one zero thousand</td></tr>
+   <tr><th scope="row">13,500 ft</th><td>one three thousand five hundred</td></tr>
+   <tr><th scope="row">FL 190</th><td>flight level one niner zero</td></tr>
+   <tr><th scope="row">Heading 100</th><td>heading one zero zero</td></tr>
+   <tr><th scope="row">Wind 220</th><td>wind two two zero</td></tr>
+   <tr><th scope="row">050 true course</th><td>zero five zero true</td></tr>
+   <tr><th scope="row">190 kt</th><td>one niner zero knots</td></tr>
+   <tr><th scope="row">Mach 1.5</th><td>Mach one point five</td></tr>
+   <tr><th scope="row">122.1 MHz</th><td>one two two point one</td></tr>
+   <tr><th scope="row">0920 UTC</th><td>zero niner two zero</td></tr>
+  </tbody>
+ </table></div>
+ <section class="lesson figure-lesson" data-lesson="say" aria-labelledby="say-title">
+  <h3 id="say-title" class="fig-title">Figure 3 — Say it on the radio</h3>
+  <p>Choose what you are saying and type it. The figure gives the words and, below them, the AIM pronunciation of each character.</p>
+  <div class="controls row">
+   <label for="say-kind">What it is
+    <select id="say-kind" name="kind">
+     <option value="callsign">Civil call sign</option><option value="spell">Letters and digits</option>
+     <option value="altitude" selected>Altitude (ft MSL)</option><option value="heading">Heading</option>
+     <option value="wind">Wind direction</option><option value="speed">Speed (kt)</option><option value="mach">Mach number</option>
+     <option value="frequency">Frequency (MHz)</option><option value="time">Time (UTC, hhmm)</option><option value="squawk">Transponder code</option>
+    </select></label>
+   <label for="say-text">Value <input id="say-text" name="text" type="text" value="13500" autocomplete="off" spellcheck="false" /></label>
+   <label for="say-type" data-for="callsign">Aircraft type <input id="say-type" name="type" type="text" value="Aztec" autocomplete="off" /></label>
+  </div>
+  <div class="spoken" data-result role="status" aria-live="polite"></div>
+  <p class="no-js">Interactive figure unavailable. Use the rules and examples above: 13,500 ft is "one three thousand five hundred".</p>
+  <p class="fig-caption">The converter applies the AIM rules above. It accepts altitudes in whole hundreds of feet, directions 001–360 and transponder codes of four digits 0–7. Abbreviated call signs keep the prefix (here the type) and the last three characters, and are used only after ATC abbreviates first.</p>
+ </section>
+
+ <h2 id="callsigns">Call signs</h2>
+ <p>Never abbreviate a call sign on initial contact, or when another aircraft on the frequency has a similar one. ATC may start abbreviating a call sign; after that the pilot may use the abbreviation, but ATC will not abbreviate the call signs of air carriers or other civil aircraft with authorized call signs. <a href="#source-aim">{a('4-2-4')}</a></p>
+ <ul>
+  <li><strong>Civil aircraft:</strong> the aircraft type, model or manufacturer's name, then the registration characters. When the type is stated, the "N" prefix is dropped: "Aztec Two Four Six Four Alfa". An abbreviated call sign is the prefix and the last three characters. <a href="#source-aim">{a('4-2-4')}</a></li>
+  <li><strong>Air carriers</strong> use their authorized call sign and the flight number in group form, "United Two Twenty-Two", adding "Heavy" or "Super" when appropriate. <a href="#source-aim">{a('4-2-3, 4-2-4')}</a></li>
+  <li><strong>Military aircraft</strong> use a variety of call sign systems. <a href="#source-aim">{a('4-2-4')}</a></li>
+  <li><strong>Student pilots</strong> can identify themselves as students on initial contact for extra help from ATC. <a href="#source-aim">{a('4-2-4')}</a></li>
+ </ul>
+ <p>Ground stations are called by the facility's name followed by its type, such as "Columbia Ground" or "New York Radio". <a href="#source-aim">{a('4-2-6')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Ground station call signs" tabindex="0"><table>
+  <caption>Ground station call signs <a href="#source-aim">{a('4-2-6')}</a></caption>
+  <thead><tr><th scope="col">Facility</th><th scope="col">Name, then</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Airport traffic control tower</th><td>"Tower"</td></tr>
+   <tr><th scope="row">Ground control</th><td>"Ground"</td></tr>
+   <tr><th scope="row">Clearance delivery</th><td>"Clearance Delivery"</td></tr>
+   <tr><th scope="row">Approach and departure control</th><td>"Approach", "Departure"</td></tr>
+   <tr><th scope="row">Flight service station</th><td>"Radio"</td></tr>
+   <tr><th scope="row">Air route traffic control center</th><td>"Center"</td></tr>
+   <tr><th scope="row">Airport UNICOM</th><td>"UNICOM"</td></tr>
+  </tbody>
+ </table></div>
+
+ <h2 id="contact">Making contact</h2>
+ <p>An initial call has up to five parts, in this order: <a href="#source-aim">{a('4-2-3')}</a></p>
+ <ol class="call-order">
+  <li>The name of the facility you are calling.</li>
+  <li>Your full aircraft identification, as filed in the flight plan.</li>
+  <li>Your position, when you are on the airport surface.</li>
+  <li>The type of message to follow, or your request if it is short.</li>
+  <li>"Over", if required.</li>
+ </ol>
+ <p>The AIM's examples are "New York Radio, Mooney Three One One Echo" and "Columbia Ground, Cessna Three One Six Zero Foxtrot, south ramp, I-F-R Memphis". After contact is established, use the same format, combining the call-up and the message in one transmission. Acknowledge every call-up or clearance unless told otherwise, and acknowledge a frequency change: "United Two Twenty-Two on one three four point five". Change to the new frequency as soon as possible unless told to change at a time, fix or altitude. <a href="#source-aim">{a('4-2-3')}</a> If the airport has automatic terminal information service (ATIS), say you have it on initial contact, using its code word: "have information Sierra". <a href="#source-aim">{a('4-1-13')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="call" aria-labelledby="call-title">
+  <h3 id="call-title" class="fig-title">Figure 4 — Build the initial call</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <p>Select the pieces in the order you would say them.</p>
+  <div class="buttons chips" data-choices></div>
+  <ol class="built" data-built aria-label="Your call so far"></ol>
+  <div class="buttons"><button type="button" data-check>Check the call</button><button type="button" data-undo>Undo</button><button type="button" data-next>Next situation</button></div>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="no-js">Interactive figure unavailable. Order: facility, full identification, position on the airport surface, request. For example: "Columbia Ground, Cessna Three One Six Zero Foxtrot, south ramp, I-F-R Memphis."</p>
+  <p class="fig-caption">The first two situations are the AIM's examples; the third is constructed.</p>
+ </section>
+
+ <h2 id="words">Words that do the work</h2>
+ <p>A few procedure words carry precise meanings. Using the right one saves a transmission; using the wrong one can mislead. <strong>Roger</strong> means only that you received the whole transmission: it must not answer a yes-or-no question. <a href="#source-pcg">{g('ROGER')}</a></p>
+ <dl class="jargon">
+  <div><dt>Roger</dt><dd>I have received all of your last transmission. Not an answer to a question needing a yes or no.</dd></div>
+  <div><dt>Wilco</dt><dd>I have received your message, understand it, and will comply with it.</dd></div>
+  <div><dt>Affirmative</dt><dd>Yes.</dd></div>
+  <div><dt>Negative</dt><dd>No; or permission not granted; or that is not correct.</dd></div>
+  <div><dt>Unable</dt><dd>Indicates inability to comply with a specific instruction, request or clearance.</dd></div>
+  <div><dt>Say again</dt><dd>Used to request a repeat of the last transmission.</dd></div>
+  <div><dt>I say again</dt><dd>The message will be repeated.</dd></div>
+  <div><dt>Stand by</dt><dd>The controller or pilot must pause for a few seconds, usually to attend to other duties of a higher priority.</dd></div>
+  <div><dt>Read back</dt><dd>Repeat my message back to me.</dd></div>
+  <div><dt>Verify</dt><dd>Request confirmation of information, e.g. "verify assigned altitude".</dd></div>
+  <div><dt>Acknowledge</dt><dd>Let me know that you have received and understood this message.</dd></div>
+  <div><dt>Advise intentions</dt><dd>Tell me what you plan to do.</dd></div>
+  <div><dt>Immediately</dt><dd>Compliance is required to avoid an imminent situation.</dd></div>
+  <div><dt>Negative contact</dt><dd>Previously issued traffic is not in sight; or you were unable to contact ATC on a particular frequency.</dd></div>
+  <div><dt>Words twice</dt><dd>Communication is difficult: please say every phrase twice; or, every phrase in this message will be spoken twice.</dd></div>
+  <div><dt>Speak slower</dt><dd>A request to reduce speech rate.</dd></div>
+  <div><dt>Over</dt><dd>My transmission is ended; I expect a response.</dd></div>
+  <div><dt>Out</dt><dd>The conversation is ended and no response is expected.</dd></div>
+ </dl>
+ <p class="fig-caption">Definitions from the Pilot/Controller Glossary. <a href="#source-pcg">{g('entries as listed')}</a></p>
+ <section class="lesson quiz-lesson" data-lesson="words" aria-labelledby="words-title">
+  <h3 id="words-title">Quiz: which word?</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next situation</button></div>
+ </section>
+
+ <h2 id="readback">Acknowledgement and readback</h2>
+ <p>Include the aircraft identification in every readback and acknowledgement. Read back the parts of ATC clearances and instructions that contain altitude assignments, vectors or runway assignments, as a means of mutual verification, and read altitudes, altitude restrictions and vectors back in the order they were given. Do not read back charted procedures unless the controller specifically states them. An initial readback of a taxi, departure or landing clearance should include the runway. <a href="#source-aim">{a('4-4-7')}</a> The AIM's examples: "Climbing to Flight Level three three zero, United Twelve" and "November Five Charlie Tango, roger, cleared to land runway nine left". <a href="#source-aim">{a('4-4-7')}</a> On an instrument flight rules (IFR) flight, make a written record of your clearance. <a href="#source-aim">{a('4-4-7')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="readback" aria-labelledby="rb-title">
+  <h3 id="rb-title" class="fig-title">Figure 5 — Read back the clearance</h3>
+  <p>The controller's transmission is split into its parts. Select every part you must read back, then check.</p>
+  <blockquote class="atc" data-clearance></blockquote>
+  <div class="buttons chips" data-parts></div>
+  <div class="buttons"><button type="button" data-check>Check readback</button><button type="button" data-next>Next instruction</button></div>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="no-js">Interactive figure unavailable. For "United Twelve, climb and maintain flight level three three zero", read back the altitude with your identification: "Climbing to Flight Level three three zero, United Twelve."</p>
+  <p class="fig-caption">The checker requires the parts AIM 4-4-7 lists: identification, altitude assignments and restrictions, vectors, and runway assignments. Reading back more is not marked wrong, but is shown. The first and third instructions are adapted from the AIM's examples; the others are constructed.</p>
+ </section>
+
+ <h2 id="flight">Flight check-ins and frequency changes</h2>
+ <p>A formation talks to ATC with one voice, its lead, and uses a separate tactical frequency between its own aircraft. One US Navy training squadron's formation supplement, VT-6's, sets out the pattern. Lead checks the flight in on the briefed tactical frequency on the ground, and once the flight is up on that frequency, neither aircraft switches off it for any reason. <a href="#source-formsup">{f('2')}</a> Radio changes are of three kinds: pre-briefed automatic switches, ATC-directed changes and lead-directed changes. Switches and check-ins are never made on an ATC, area common or common traffic advisory frequency, to keep traffic off saturated frequencies. If unsure of the correct frequency, use plain, concise language on the tactical frequency to get well. <a href="#source-formsup">{f('2')}</a></p>
+ <p>The flight's tactical call sign ("Angry" in the supplement's examples) addresses the whole flight; each aircraft answers with its position in the flight. <a href="#source-formsup">{f('2–3')}</a> Before taxi, lead calls "Angry, check Victor" and the wingman answers with its call sign and the ATIS code, or "Two, standby (X) mikes" if not ready. <a href="#source-formsup">{f('3')}</a> To leave the working area, lead calls "Angry, push UHF TAC" on the VHF tactical frequency, then checks the flight in on the new frequency: lead "Angry", wingman "Angry 1-2". A push to a frequency that becomes the working frequency, such as a VHF airfield frequency, has no check-in. <a href="#source-formsup">{f('10')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="flight" aria-labelledby="flight-title">
+  <h3 id="flight-title" class="fig-title">Figure 6 — Check-in and push, call by call</h3>
+  <div class="buttons"><button type="button" data-prev>Previous call</button><button type="button" data-next>Next call</button></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 6, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 300" role="img" aria-label="Lead and wingman radios, the tactical frequencies and who is transmitting"></svg></div>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="no-js">Interactive figure unavailable. Calls in order: on VHF TAC, "Angry, check Victor" – "Angry 1-2, with (ATIS code)"; later, "Angry, push UHF TAC"; both switch; on UHF TAC, "Angry" – "Angry 1-2".</p>
+  <p class="fig-caption">One squadron's training example, simplified to the calls cited. Unit procedures, frequencies and call signs differ.</p>
+ </section>
+ <p>If a wingman loses its radio in formation, it gets lead's attention and signals by hand: patting the oxygen mask means it cannot talk, patting the ear of the helmet means it cannot hear, each followed by a thumbs-down. <a href="#source-formsup">{f('6')}</a></p>
+
+ <h2 id="emergency">Distress and urgency</h2>
+ <p>Distress communications have absolute priority over all others; urgency communications come next. A distress call begins with <strong>MAYDAY</strong>, preferably said three times; an urgency call uses <strong>PAN-PAN</strong> in the same way. <a href="#source-aim">{a('6-3-1')}</a> Make the first call on the frequency in use, and do not change frequency or ground station unless absolutely necessary. <a href="#source-aim">{a('6-3-1, 6-3-2')}</a> Transmit as many of these items as you need, preferably in this order: <a href="#source-aim">{a('6-3-2')}</a></p>
+ <ol class="call-order distress">{DISTRESS_ORDER.map(item => <li>{item}</li>)}</ol>
+ <p>While you are in radio contact, keep the assigned transponder code unless ATC tells you otherwise. If you cannot immediately reach an ATC facility, squawk code 7700 with altitude reporting (Mode C). <a href="#source-aim">{a('6-3-2')}</a></p>
+
+ <h2 id="transponder">Transponder codes</h2>
+ <p>A transponder answers radar with a four-digit code. Unless ATC assigns one, a visual flight rules (VFR) aircraft squawks <strong>1200</strong>. Three codes are special: <strong>7500</strong> is the hijack code, <strong>7600</strong> signals two-way radio failure, and <strong>7700</strong> signals an emergency; 7600 and 7700 trigger special indications in automated facilities. When changing codes routinely, avoid passing through 7500, 7600 or 7700: to change from 2700 to 7200, first select 2200, then 7200. <a href="#source-aim">{a('4-1-20')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="squawk" aria-labelledby="sq-title">
+  <h3 id="sq-title" class="fig-title">Figure 7 — Change the code without an alarm</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <p>Each knob sets one digit. Every turn changes the code the transponder sends, so plan the order.</p>
+  <div class="squawk" data-knobs></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 7, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 110" role="img" aria-label="Transponder code window and the codes sent so far"></svg></div>
+  <div class="buttons"><button type="button" data-hint>Show a safe order</button><button type="button" data-next>Next change</button></div>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="no-js">Interactive figure unavailable. From 2700 to 7200, change the second digit first (2200), then the first (7200); setting the first digit first would send 7700.</p>
+  <p class="fig-caption">Each knob step is treated as one code sent. Real transponders differ in how and when a new code takes effect.</p>
+ </section>
+
+ <h2 id="nordo">When the radio fails</h2>
+ <h3>At a towered airport</h3>
+ <p>Arriving with the <strong>receiver</strong> inoperative, remain outside or above the Class D surface area until you have determined the direction and flow of traffic, then advise the tower of your aircraft type, position, altitude and intention to land, and request light signals. About 3 to 5 miles out, advise your position and join the traffic pattern, watching the tower for light signals. With the <strong>transmitter</strong> inoperative, monitor the tower frequency, and acknowledge tower transmissions or light signals by rocking your wings in daylight, or by blinking the landing or navigation lights at night. <a href="#source-aim">{a('4-2-13')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Tower light gun signals" tabindex="0"><table>
+  <caption>Airport traffic control tower light gun signals <a href="#source-aim">{a('4-3-13')}</a></caption>
+  <thead><tr><th scope="col">Signal</th><th scope="col">Aircraft on the ground</th><th scope="col">Aircraft in flight</th></tr></thead>
+  <tbody>{LIGHT_SIGNALS.map(s => <tr><th scope="row">{s.id.replace('-', ' ').replace('alternating', 'alternating red and green').replace(/^./, c => c.toUpperCase())}</th><td>{s.ground}</td><td>{s.flight}</td></tr>)}</tbody>
+ </table></div>
+ <section class="lesson figure-lesson" data-lesson="light" aria-labelledby="light-title">
+  <h3 id="light-title" class="fig-title">Figure 8 — Read the light gun</h3>
+  <fieldset class="inline"><legend>You are</legend>
+   <label><input type="radio" name="where" value="flight" checked /> In flight</label>
+   <label><input type="radio" name="where" value="ground" /> On the ground</label>
+  </fieldset>
+  <div class="buttons"><button type="button" data-flash>Show a signal</button></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 8, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 260" role="img" aria-label="Control tower aiming a light gun at your aircraft"></svg></div>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="no-js">Interactive figure unavailable. Use the table above: for example, a flashing green signal to an aircraft in flight means return for landing, to be followed by steady green at the proper time.</p>
+  <p class="fig-caption">With reduced motion set, flashing signals are shown as a dashed ring instead of blinking.</p>
+ </section>
+
+ <h3>In instrument conditions</h3>
+ <p>If two-way radio communication fails in VFR conditions, or VFR conditions are met after the failure, continue the flight under VFR and land as soon as practicable. In IFR conditions, fly the route and altitude below. <a href="#source-aim">{a('6-4-1')}</a> Squawk 7600, and remember that you may not be in radar coverage. <a href="#source-aim">{a('6-4-2')}</a></p>
+ <ul>
+  <li><strong>Route</strong>, the first of these that applies: the route assigned in the last ATC clearance received; if being radar vectored, direct from the point of radio failure to the fix, route or airway specified in the vector clearance; without an assigned route, the route ATC has advised may be expected in a further clearance; otherwise, the route filed in the flight plan.</li>
+  <li><strong>Altitude</strong>, for the route segment being flown, the highest of: the altitude or flight level assigned in the last ATC clearance received; the minimum altitude for IFR operations; and the altitude or flight level ATC has advised may be expected in a further clearance, once you reach the time or fix at which ATC said to expect it.</li>
+  <li><strong>Leaving the clearance limit.</strong> If the limit is a fix from which an approach begins, start descent or descent and approach as close as possible to the expect-further-clearance time if you received one; if not, as close as possible to the estimated time of arrival from the filed or amended estimated time en route. If the limit is not an approach fix, leave it at the expect-further-clearance time if you received one, or on arrival if not, and proceed to a fix from which an approach begins; then start descent or descent and approach as close as possible to the estimated time of arrival calculated from the filed or amended estimated time en route.</li>
+ </ul>
+ <p class="fig-caption">All three rules: <a href="#source-aim">{a('6-4-1')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="lost" aria-labelledby="lost-title">
+  <h3 id="lost-title" class="fig-title">Figure 9 — Lost communications: route and altitude</h3>
+  <fieldset class="inline"><legend>When the radio failed</legend>
+   <label><input type="checkbox" name="vectored" /> Being radar vectored</label>
+   <label><input type="checkbox" name="assigned" checked /> Route assigned</label>
+   <label><input type="checkbox" name="expectRoute" /> Told to expect a route</label>
+  </fieldset>
+  <div class="controls row">
+   <label for="lost-assigned">Last assigned altitude <output for="assigned"></output><input id="lost-assigned" name="assignedAlt" type="range" min="3000" max="12000" step="1000" value="5000" /></label>
+   <label for="lost-expected">Expected altitude <output for="expected"></output><input id="lost-expected" name="expected" type="range" min="0" max="12000" step="1000" value="9000" /></label>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 9, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 360" role="img" aria-label="Route rule chosen, and a side view of four route segments with their minimum altitudes and the altitude to fly"></svg></div>
+  <p class="no-js">Interactive figure unavailable. With a route assigned, fly it. Assigned 5,000 ft, segment minimums 3,000, 7,000, 4,000 and 2,000 ft, and 9,000 ft expected from the third segment: fly 5,000, 7,000, 9,000 and 9,000 ft.</p>
+  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Illustrative segments and minimum altitudes. The expected altitude applies from the third segment, standing in for "expect 9,000 ten minutes after the fix"; set it to zero for no expected altitude. In the AIM, an expected altitude counts once you reach the time or place ATC said to expect it.</p>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <details><summary>Approach asks "Can you accept a visual approach?" and you can. Is "Roger" the answer?</summary><p>No. Roger only says you received the transmission and must not answer a yes-or-no question. Say "Affirmative" with your call sign.</p></details>
+ <details><summary>How do you say 17,500 ft and 18,500 ft?</summary><p>"One seven thousand five hundred". At and above 18,000 ft it becomes a flight level: "flight level one eight five".</p></details>
+ <details><summary>You are told "turn right heading zero niner zero, descend and maintain three thousand, altimeter two niner niner two". What must you read back?</summary><p>The heading and the altitude, in that order, with your call sign. The AIM's readback list does not include the altimeter setting.</p></details>
+ <details><summary>You need to go from 1700 to 7100. Which knob first?</summary><p>The second digit: 1700 → 1100 → 7100. Setting the first digit first would send 7700.</p></details>
+ <details><summary>Your radio fails in cloud while you are being vectored. Which route?</summary><p>Direct from the point of failure to the fix, route or airway in the vector clearance.</p></details>
+ <details><summary>A steady red light from the tower while you are in the pattern?</summary><p>Give way to other aircraft and continue circling.</p></details>
+ <details><summary>Where do you make a MAYDAY call?</summary><p>On the frequency in use first; 121.5 or 243.0 if needed. Do not change frequency unless absolutely necessary.</p></details>
+
+ <h2 id="sources">Sources and applicability</h2>
+ <p id="source-aim"><strong>[1] Federal Aviation Administration, Aeronautical Information Manual (AIM), current edition as published online.</strong> Inspected 25 October 2026 on faa.gov: <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap4_section_2.html">chapter 4, section 2, Radio Communications Phraseology and Techniques</a> (paras 4-2-1 to 4-2-14); <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap4_section_4.html">chapter 4, section 4, ATC Clearances</a> (para 4-4-7); <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap6_section_3.html">chapter 6, section 3, Distress and Urgency Procedures</a> (paras 6-3-1, 6-3-2); <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap6_section_4.html">chapter 6, section 4, Two-way Radio Communications Failure</a> (paras 6-4-1, 6-4-2); <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap4_section_1.html">chapter 4, section 1, Services Available to Pilots</a> (paras 4-1-13, 4-1-20); <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap4_section_3.html">chapter 4, section 3, Airport Operations</a> (para 4-3-13, light gun signals).</p>
+ <p id="source-formsup"><strong>[3] Training Squadron SIX (VT-6), Formation Supplement (FORMSUP), June 2022.</strong> <a href="https://www.cnatra.navy.mil/tw5/vt6/assets/docs/university/formsup.pdf">Read the supplement (cnatra.navy.mil)</a>. Inspected 25 October 2026: radio procedures pp. 2–3, NORDO signals p. 6, frequency changes p. 10. A single training squadron's formation supplement, used as one example of military flight communications.</p>
+ <p id="source-pcg"><strong>[2] Federal Aviation Administration, Pilot/Controller Glossary (P/CG), current edition as published online.</strong> Inspected 25 October 2026 on faa.gov, entries: <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/chap1_section_19.html">R</a> (Roger, Read back), <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/chap1_section_24.html">W</a> (Wilco, Words twice), <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/chap1_section_2.html">A</a> (Affirmative, Acknowledge, Advise intentions), <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/chap1_section_15.html">N</a> (Negative, Negative contact), <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/chap1_section_20.html">S</a> (Say again, Stand by, Speak slower), <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/chap1_section_22.html">U</a> (Unable, UHF), <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/chap1_section_23.html">V</a> (Verify, VHF), <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/chap1_section_10.html">I</a> (I say again, Immediately), <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/chap1_section_16.html">O</a> (Over, Out).</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/radio-procedures-evidence.md">radio procedures evidence</a>.</p>
+ <p>Figures 1–9 are original drawings and constructed examples, not reproductions of any publication's figures. Call signs, frequencies and timings in constructed examples are invented.</p>
+ <p class="note">Applicability: US civil phraseology and procedures from the FAA AIM, which also apply to military aircraft in the US National Airspace System. ICAO and other national procedures differ in detail, and military units add their own. This revision is Drafted pending independent source-backed review.</p>
+</SiteLayout>
+<script>import '../../../lessons/radio/lesson-ui.mjs';</script>
+
+<style>
+  .contents ol { columns: 2; column-gap: 2rem; padding-left: 1.5rem; }
+  .contents li { break-inside: avoid; }
+  .table-scroll, .phonetic { overflow-x: auto; border: 1px solid var(--color-border); }
+  .table-scroll:focus-visible, .phonetic:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+  .phonetic { max-height: 32rem; overflow-y: auto; }
+  .phonetic thead th { position: sticky; top: 0; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  caption { padding: 0.5rem 0.75rem; text-align: left; color: var(--color-muted); font-size: 0.9rem; }
+  th, td { padding: 0.45rem 0.75rem; border-top: 1px solid var(--color-border); text-align: left; vertical-align: top; }
+  thead th { background: var(--color-surface); }
+  td.morse { font: 700 1.1rem/1 ui-monospace, Menlo, Consolas, monospace; letter-spacing: 0.15em; white-space: nowrap; }
+  .note { padding: 0.75rem 1rem; border-left: 0.25rem solid var(--color-border); background: var(--color-surface); }
+  ol.steps li, ol.call-order li { margin-block: 0.35rem; }
+  ol.call-order { counter-reset: call; list-style: none; padding-left: 0; }
+  ol.call-order li { counter-increment: call; display: grid; grid-template-columns: 2.2rem 1fr; align-items: baseline; }
+  ol.call-order li::before { content: counter(call); font-weight: 700; text-align: center; border: 2px solid var(--color-text); width: 1.6rem; height: 1.6rem; line-height: 1.4rem; }
+  .lesson { margin-block: 1.5rem; padding: 1rem; border: 1px solid var(--color-text); }
+  .lesson h3 { margin-top: 0; }
+  .controls { display: grid; gap: 0.6rem; align-content: start; margin-bottom: 0.75rem; }
+  .controls.row { grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); align-items: end; }
+  .controls label { display: grid; gap: 0.2rem; font-weight: 700; }
+  .controls output { font-weight: 400; font-variant-numeric: tabular-nums; }
+  .controls label[hidden] { display: none; }
+  .controls input[type="text"], .controls select { width: 100%; box-sizing: border-box; min-height: 2.75rem; font: inherit; padding: 0.3rem 0.5rem; border: 1px solid var(--color-text); background: #fff; }
+  fieldset { margin: 0 0 0.75rem; padding: 0.5rem 0.75rem; border: 1px solid var(--color-border); }
+  legend { font-weight: 700; }
+  fieldset.inline { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; }
+  fieldset label { display: flex; align-items: center; gap: 0.4rem; min-height: 2.75rem; }
+  input[type="range"] { min-height: 2.75rem; width: 100%; }
+  input:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .lesson :global(button) { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: #fff; background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
+  .lesson :global(button + button), .lesson :global(button[aria-pressed="false"]) { color: var(--color-text); background: #fff; }
+  .lesson :global(button[aria-pressed="true"]) { color: #fff; background: var(--color-link); border-color: var(--color-link); }
+  .lesson :global(button:disabled) { opacity: 0.45; cursor: default; }
+  .lesson :global(button:focus-visible) { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+  .lesson [data-choices] :global(button), .chips :global(button) { color: var(--color-text); background: #fff; font-weight: 400; text-align: left; }
+  .chips :global(button[aria-pressed="true"]) { color: #fff; background: var(--color-link); border-color: var(--color-link); }
+  ol.built { min-height: 2.75rem; margin: 0 0 0.75rem; padding: 0.5rem 0.75rem 0.5rem 2rem; border: 1px dashed var(--color-text); font-weight: 700; }
+  blockquote.atc { margin: 0 0 0.75rem; padding: 0.6rem 0.9rem; border-left: 0.3rem solid var(--color-text); background: var(--color-surface); font-style: italic; }
+  .spoken { min-height: 4rem; padding: 0.6rem 0.9rem; border: 2px solid var(--color-text); background: var(--color-surface); }
+  .spoken :global(.words) { font-size: 1.35rem; font-weight: 700; margin: 0; }
+  .spoken :global(.pron) { font: 0.95rem ui-monospace, Menlo, Consolas, monospace; margin: 0.3rem 0 0; color: var(--color-muted); }
+  .spoken :global(.alt) { margin: 0.3rem 0 0; }
+  .squawk { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.5rem; }
+  .squawk { padding: 0.75rem; background: #111a24; width: fit-content; }
+  .squawk :global(.knob) { display: grid; grid-template-columns: 2.75rem 2.6rem 2.75rem; align-items: center; text-align: center; border: 1px solid #8a8f94; background: #2a3440; }
+  .squawk :global(.knob span) { font: 700 1.8rem ui-monospace, Menlo, Consolas, monospace; color: #fff; }
+  .squawk :global(.knob button), .squawk :global(.knob button + span + button) { padding: 0; color: #fff; background: #3d4855; border-color: #8a8f94; font-size: 1.3rem; }
+  .feedback { font-weight: 700; min-height: 1.6em; }
+  .feedback :global(p) { margin: 0.2rem 0; }
+  .feedback :global(.bad) { color: #a3000b; }
+  .lesson:not(.ready) .buttons, .lesson:not(.ready) .controls, .lesson:not(.ready) fieldset, .lesson:not(.ready) svg:empty,
+  .lesson:not(.ready) .built, .lesson:not(.ready) .spoken, .lesson:not(.ready) .squawk, .lesson:not(.ready) blockquote { display: none; }
+  .lesson.ready .no-js { display: none; }
+  .no-js { font-weight: 700; }
+  details.log { margin-bottom: 0.75rem; }
+  details.log ul { margin: 0.4rem 0; font-size: 0.95rem; }
+  .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+  @media (min-width: 64rem) {
+    .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
+  }
+  .fig-scroll { overflow-x: auto; }
+  .fig-scroll :global(svg) { min-width: 36rem; }
+  .fig-title { font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 2px solid var(--color-text); padding-bottom: 0.3rem; }
+  .fig-caption { color: var(--color-muted); font-size: 0.9rem; }
+  dl.jargon { display: grid; gap: 0.4rem; }
+  dl.jargon div { display: grid; grid-template-columns: minmax(8rem, 12rem) 1fr; gap: 0.75rem; border-top: 1px solid var(--color-border); padding-top: 0.4rem; }
+  dl.jargon dt { font-weight: 700; }
+  dl.jargon dd { margin: 0; }
+  .quiz-lesson .task, .figure-lesson .task { font-style: italic; }
+  @media (max-width: 40rem) {
+    .contents ol { columns: 1; }
+    dl.jargon div { grid-template-columns: 1fr; gap: 0.1rem; }
+  }
+  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
+  :global(.natops .frame) { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
+  :global(.natops .lbl) { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
+  :global(.natops .lbl.small) { font-size: 10px; font-weight: 400; }
+  :global(.natops .lbl.big) { font-size: 15px; }
+  :global(.natops .lbl.mono) { font-family: ui-monospace, Menlo, Consolas, monospace; }
+  :global(.natops .lbl.on) { fill: var(--color-link); }
+  :global(.natops .lbl.bad) { fill: #a3000b; }
+  :global(.natops .lbl.inv) { fill: #fff; }
+  :global(.natops .ln) { fill: none; stroke: var(--color-text); stroke-width: 1.8; }
+  :global(.natops .ln.heavy) { stroke-width: 2.6; }
+  :global(.natops .ln.dashed) { stroke-dasharray: 7 4; }
+  :global(.natops .ln.on) { stroke: var(--color-link); }
+  :global(.natops .thin) { fill: none; stroke: var(--color-text); stroke-width: 1; }
+  :global(.natops .grid) { fill: none; stroke: #c8ccd0; stroke-width: 1; }
+  :global(.natops .box) { fill: #fff; stroke: var(--color-text); stroke-width: 1.6; }
+  :global(.natops .box.on) { fill: var(--color-link); stroke: var(--color-link); }
+  :global(.natops .box.dim) { fill: #fff; stroke: #c8ccd0; }
+  :global(.natops .busy) { fill: #e4e6e8; stroke: var(--color-text); stroke-width: 1.2; }
+  :global(.natops .busy.atc) { fill: #fff; stroke-dasharray: 4 2; }
+  :global(.natops .mine) { fill: var(--color-link); stroke: var(--color-link); }
+  :global(.natops .mine.bad) { fill: #a3000b; stroke: #a3000b; }
+  :global(.natops .band) { fill: #e4e6e8; stroke: var(--color-text); stroke-width: 1.4; }
+  :global(.natops .band.uhf) { fill: #fff; }
+  :global(.natops .cursor) { stroke: var(--color-link); stroke-width: 2.4; }
+  :global(.natops .fill) { fill: var(--color-text); }
+  :global(.natops .acft) { fill: var(--color-link); stroke: var(--color-link); stroke-width: 1; }
+  :global(.natops .acft.other) { fill: #fff; stroke: var(--color-text); stroke-width: 1.6; }
+  :global(.natops .terrain) { fill: #e4e6e8; stroke: var(--color-text); stroke-width: 1.2; }
+  :global(.natops .flown) { fill: none; stroke: var(--color-link); stroke-width: 3.4; stroke-linejoin: round; }
+  :global(.natops .lamp-green) { fill: #138a36; }
+  :global(.natops .lamp-red) { fill: #c4141c; }
+  :global(.natops .lamp-white) { fill: #fff; stroke: var(--color-text); stroke-width: 1.6; }
+  :global(.natops .beam-green) { fill: #138a36; opacity: 0.18; }
+  :global(.natops .beam-red) { fill: #c4141c; opacity: 0.18; }
+  :global(.natops .beam-white) { fill: #8a8f94; opacity: 0.15; }
+  :global(.natops .flash-ring) { fill: none; stroke: var(--color-text); stroke-width: 2; stroke-dasharray: 4 3; }
+  :global(.natops .blink) { animation: radio-blink 0.9s steps(1) infinite; }
+  @keyframes radio-blink { 50% { opacity: 0.08; } }
+  @media (prefers-reduced-motion: reduce) { :global(.natops .blink) { animation: none; } }
+</style>
