@@ -39,61 +39,67 @@ test('level turn radius and rate', () => {
   assert.equal(levelTurn({ speed: 0, bank: 30 }), null);
 });
 
-test('example airplane: 1 G stall speed and lift equation', () => {
-  // W = 2,300 lb = 10,230.9 N; S = 174 ft² = 16.1651 m²; CLmax 1.6; ρ 1.225.
-  // Vs = √(2 × 10,230.9 / (1.225 × 16.1651 × 1.6)) = √645.85 = 25.413 m/s = 49.40 kt.
-  near(stallSpeed(), 49.40, 0.01, 'Vs1');
-  near(stallSpeed({ n: 2 }), 49.40 * Math.SQRT2, 0.02, 'Vs at 2 G');
+test('example jet trainer: 1 G stall speed and lift equation', () => {
+  // W = 12,000 lb = 53,378.66 N; S = 180 ft² = 16.72255 m²; CLmax 1.2; ρ 1.225.
+  // Vs = √(2 × 53,378.66 / (1.225 × 16.72255 × 1.2)) = √4,342.96 = 65.901 m/s = 128.10 kt.
+  near(stallSpeed(), 128.10, 0.01, 'Vs1');
+  near(stallSpeed({ n: 2 }), 128.10 * Math.SQRT2, 0.02, 'Vs at 2 G');
   // At the stall speed, CLmax carries exactly the weight.
-  near(lift({ speed: stallSpeed(), cl: EXAMPLE.clMax }), 2300, 1e-6, 'lift at Vs');
+  near(lift({ speed: stallSpeed(), cl: EXAMPLE.clMax }), 12000, 1e-6, 'lift at Vs');
   // Halving speed needs four times the lift coefficient.
-  near(requiredCl({ speed: 60 }) / requiredCl({ speed: 120 }), 4, 1e-9, 'CL ∝ 1/V²');
+  near(requiredCl({ speed: 150 }) / requiredCl({ speed: 300 }), 4, 1e-9, 'CL ∝ 1/V²');
+  // Weight up 2% raises stall speed about 1% (00-80T-80 rule of thumb): √1.02 = 1.00995.
+  near(stallSpeed({ plane: { ...EXAMPLE, weight: 12240 } }) / stallSpeed(), 1.00995, 1e-5, 'Vs ∝ √W');
 });
 
 test('illustrative lift curve: linear, then a smooth peak at the critical angle', () => {
-  near(liftCoefficient(-2), 0, 1e-12, 'zero lift');
-  near(liftCoefficient(8), 1.0, 1e-12, 'linear range');
-  near(liftCoefficient(12), 1.4, 1e-12, 'knee');
-  // Parabola from the knee: 1.4 + 0.1x − 0.0125x²; at x = 4, 1.4 + 0.4 − 0.2 = 1.6.
-  near(liftCoefficient(16), 1.6, 1e-12, 'CLmax at critical');
-  near(clMaxOf(), 1.6, 1e-12, 'CLmax');
-  near(liftCoefficient(14), 1.4 + 0.2 - 0.05, 1e-12, 'mid-blend');
-  assert(liftCoefficient(20) < 1.6, 'lift falls past the critical angle');
-  near(alphaFor(1.0), 8, 1e-6, 'inverse');
-  assert.equal(alphaFor(1.7), null);
+  near(liftCoefficient(-1), 0, 1e-12, 'zero lift');
+  near(liftCoefficient(9), 0.8, 1e-12, 'linear range');
+  near(liftCoefficient(12), 1.04, 1e-12, 'knee');
+  // Parabola from the knee: 1.04 + 0.08x − 0.01x²; at x = 4, 1.04 + 0.32 − 0.16 = 1.2.
+  near(liftCoefficient(16), 1.2, 1e-12, 'CLmax at critical');
+  near(clMaxOf(), 1.2, 1e-12, 'CLmax');
+  near(clMaxOf(), EXAMPLE.clMax, 1e-12, 'curve matches the example');
+  near(liftCoefficient(14), 1.04 + 0.16 - 0.04, 1e-12, 'mid-blend');
+  assert(liftCoefficient(20) < 1.2, 'lift falls past the critical angle');
+  near(alphaFor(0.8), 9, 1e-6, 'inverse');
+  assert.equal(alphaFor(1.3), null);
 });
 
 test('V-n stall boundary and maneuvering speed', () => {
   near(maxLoadFactor(100, 50), 4, 1e-12, 'twice Vs gives 4 G');
   // VA = Vs√n: 50 × √3.8 = 97.468.
   near(maneuveringSpeed(50, 3.8), 97.468, 0.001, 'VA');
+  // Example jet trainer at a 7.5 G limit: 128.10 × √7.5 = 128.10 × 2.738613 = 350.82 kt.
+  near(maneuveringSpeed(stallSpeed(), 7.5), 350.82, 0.02, 'corner speed of the example');
 });
 
 test('drag curve: minimum where parasite equals induced, at L/Dmax', () => {
-  // k = 1/(π × 0.75 × 7.4) = 0.0573531; L/Dmax = 1 / (2√(k × 0.031)) = 11.858.
+  // k = 1/(π × 0.8 × 5) = 0.0795775; L/Dmax = 1 / (2√(k × 0.02)) = 12.5331.
+  // Vmd = √(2W/(ρS) × √(k/CD0)) = √(5,211.45 × 1.994712) = 101.958 m/s = 198.19 kt.
   const polar = dragPolar();
-  near(polar.k, 0.0573531, 1e-7, 'k');
-  near(polar.ldMax, 11.858, 0.001, 'L/Dmax');
-  near(polar.minDrag, 2300 / 11.858, 0.01, 'minimum drag');
+  near(polar.k, 0.0795775, 1e-7, 'k');
+  near(polar.ldMax, 12.5331, 0.0001, 'L/Dmax');
+  near(polar.minDrag, 12000 / 12.5331, 0.01, 'minimum drag');
   const vmd = polar.minDragSpeed();
-  near(vmd, 72.87, 0.01, 'minimum-drag speed');
+  near(vmd, 198.19, 0.01, 'minimum-drag speed');
   const at = polar.at(vmd);
   near(at.parasite, at.induced, 1e-6, 'equal at the minimum');
   near(at.total, polar.minDrag, 1e-6, 'total at the minimum');
   assert(polar.at(vmd * 0.8).total > at.total && polar.at(vmd * 1.2).total > at.total, 'minimum');
   // Parasite ∝ V², induced ∝ 1/V².
-  near(polar.at(140).parasite / polar.at(70).parasite, 4, 1e-9, 'parasite');
-  near(polar.at(70).induced / polar.at(140).induced, 4, 1e-9, 'induced');
+  near(polar.at(400).parasite / polar.at(200).parasite, 4, 1e-9, 'parasite');
+  near(polar.at(200).induced / polar.at(400).induced, 4, 1e-9, 'induced');
 });
 
 test('steady climb: thrust carries drag plus a weight component', () => {
-  const level = steadyPath({ gamma: 0, drag: 200 });
-  near(level.lift, 2300, 1e-9, 'level lift');
-  near(level.thrust, 200, 1e-9, 'level thrust');
-  // γ = 5°: sin 0.0871557, cos 0.9961947.
-  const climb = steadyPath({ gamma: 5, drag: 200 });
-  near(climb.thrust, 200 + 2300 * 0.0871557, 1e-4, 'climb thrust');
-  near(climb.lift, 2300 * 0.9961947, 1e-4, 'climb lift');
+  const level = steadyPath({ gamma: 0, drag: 1000 });
+  near(level.lift, 12000, 1e-9, 'level lift');
+  near(level.thrust, 1000, 1e-9, 'level thrust');
+  // γ = 5°: sin 0.0871557, cos 0.9961947; 1,000 + 1,045.87 = 2,045.87 lb.
+  const climb = steadyPath({ gamma: 5, drag: 1000 });
+  near(climb.thrust, 2045.87, 0.01, 'climb thrust');
+  near(climb.lift, 11954.34, 0.01, 'climb lift');
 });
 
 test('energy height matches the Airplane Flying Handbook example', () => {

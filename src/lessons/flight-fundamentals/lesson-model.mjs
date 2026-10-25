@@ -12,24 +12,26 @@ export const RHO0 = 1.225; // kg/m³, ISA sea level
 const rad = (d) => d * Math.PI / 180;
 const deg = (r) => r * 180 / Math.PI;
 
-// An invented light airplane with round numbers, used only to put figures on
-// the equations. It is not any real type.
+// An invented jet trainer with round numbers, used only to put figures on the
+// equations. It is not any real type; its weight and wing area are of the
+// order of a two-seat jet trainer's.
 export const EXAMPLE = {
-  weight: 2300, // lb
-  wingArea: 174, // ft²
-  clMax: 1.6, // flaps up
-  cd0: 0.031, // zero-lift (parasite) drag coefficient
-  aspectRatio: 7.4,
-  oswald: 0.75,
+  weight: 12000, // lb
+  wingArea: 180, // ft²
+  clMax: 1.2, // clean (gear and flaps up)
+  cd0: 0.02, // zero-lift (parasite) drag coefficient
+  aspectRatio: 5,
+  oswald: 0.8,
 };
 
-// Lift coefficient against angle of attack for an illustrative cambered
-// section: linear from zero lift at −2° at 0.1 per degree up to a knee 4°
-// before the critical angle, then a parabola that keeps the slope at the knee
-// and flattens to zero slope at the critical angle, where CL peaks at
-// CLmax = 0.1 × 14 + 0.1 × 4 / 2 = 1.6. Past it the flow separates and lift
-// falls away (shape illustrative only).
-export const AIRFOIL = { zeroLift: -2, slope: 0.1, knee: 12, critical: 16 };
+// Lift coefficient against angle of attack for the example's illustrative
+// wing: linear from zero lift at −1° at 0.08 per degree (a low-aspect-ratio
+// wing's shallower slope) up to a knee 4° before the critical angle, then a
+// parabola that keeps the slope at the knee and flattens to zero slope at the
+// critical angle, where CL peaks at CLmax = 0.08 × 13 + 0.08 × 4 / 2 = 1.2,
+// the example's CLmax. Past it the flow separates and lift falls away (shape
+// illustrative only).
+export const AIRFOIL = { zeroLift: -1, slope: 0.08, knee: 12, critical: 16 };
 export const clMaxOf = (a = AIRFOIL) => a.slope * (a.knee - a.zeroLift) + a.slope * (a.critical - a.knee) / 2;
 export function liftCoefficient(alpha, a = AIRFOIL) {
   if (!Number.isFinite(alpha)) return null;

@@ -234,3 +234,57 @@ export function transmit(busy, t, length) {
   const hit = busy.find(([a, b]) => t < b && end > a);
   return hit ? { blocked: true, with: hit } : { blocked: false };
 }
+
+/* ---------- A Navy training sortie (VT-10 "Hollywood Script", May 2022) ---------- */
+// One sortie's calls in order, as the script gives them. radio: the band and
+// preset channel named in the script; station: who is called; call: the
+// pilot's transmission; reply: the controller's answer; readback: the pilot's
+// readback, where the script gives one. page: the script page.
+export const SORTIE = [
+  { phase: 'ATIS', radio: 'UHF 1', station: 'Sherman ATIS', call: null, reply: null, readback: null, page: '19',
+    note: 'Copy the ATIS first: every later call can then quote its letter.' },
+  { phase: 'Clearance', radio: 'UHF 2', station: 'Sherman Clearance', call: 'Sherman Clearance, KATT 11, IFR, NPA 630, on request, ready to copy.',
+    reply: 'KATT 11, readback correct.', readback: null, page: '20', note: 'The IFR clearance is copied and read back; Clearance confirms the readback.' },
+  { phase: 'Base', radio: 'UHF 19', station: 'KATT Base', call: 'KATT Base, KATT 11 taxi outbound, side number 000.',
+    reply: 'KATT 11, side number 000, base has you outbound.', readback: null, page: '20', note: 'The squadron’s own base frequency: tell the squadron which jet you have and that you are taxiing.' },
+  { phase: 'Ground', radio: 'UHF 3', station: 'Sherman Ground', call: 'Sherman Ground, KATT 11, taxi, information (ATIS letter).',
+    reply: 'KATT 11, Runway 7 right, taxi via Foxtrot – Delta – Alpha, cross Runway 19.', readback: null, page: '21', note: 'Station, call sign, request, and the ATIS letter.' },
+  { phase: 'Base', radio: 'UHF 19', station: 'KATT Base', call: 'KATT Base, KATT 11 going flying.', reply: 'KATT 11, roger.', readback: null, page: '25',
+    note: 'A last call to the squadron before takeoff.' },
+  { phase: 'Tower', radio: 'UHF 4', station: 'Sherman Tower', call: 'Sherman Tower, KATT 11, takeoff IFR.',
+    reply: 'KATT 11, wind 060 at 8, Runway 7 right, cleared for takeoff, switch to Departure.', readback: 'KATT 11, cleared for takeoff Runway 7 right, switching.', page: '25',
+    note: 'The readback carries the runway; “switching” acknowledges the frequency change.' },
+  { phase: 'Departure', radio: 'UHF 6', station: 'Pensacola Departure', call: 'Pensacola Departure, KATT 11, passing (altitude) for 3000.',
+    reply: 'KATT 11, radar contact, climb and maintain 10,000.', readback: 'KATT 11, continuing to 10,000.', page: '27', note: 'Check in climbing: the altitude you are passing and the altitude you are climbing to.' },
+  { phase: 'Area', radio: 'UHF 6', station: 'Pensacola Departure', call: null,
+    reply: 'KATT 11, fly heading 310, climb and maintain 11,000, Gator 3 Bravo, frequency change approved.', readback: 'KATT 11, continuing to 11,000, Gator 3 Bravo, switching.', page: '28',
+    note: 'Cleared into the working area. Then UHF 16, MOA Common: a safety-of-flight frequency used by Departure, so there is no check-in.' },
+  { phase: 'Cancel', radio: 'VHF 5', station: 'Pensacola Approach', call: 'Pensacola Approach, KATT 11, complete in the MOA, cancel IFR.',
+    reply: 'KATT 11, cancellation received, squawk VFR, frequency change approved.', readback: 'KATT 11, switching.', page: '30', note: 'Done in the area: cancel IFR on VHF 5 (120.05) and squawk VFR.' },
+  { phase: 'Approach', radio: 'UHF 6', station: 'Pensacola Approach', call: 'Pensacola Approach, KATT 11, 3500, information Bravo, request course rules.',
+    reply: 'KATT 11, squawk 0134.', readback: 'KATT 11, squawk 0134.', page: '31', note: 'Coming home: altitude, ATIS letter and the request to fly the published course rules.' },
+  { phase: 'Approach', radio: 'UHF 6', station: 'Pensacola Approach', call: 'Pensacola Approach, KATT 11, Point Golf in sight.',
+    reply: 'KATT 11, contact Sherman Tower Button 4.', readback: null, page: '32', note: '“Button 4” is preset channel 4, Sherman Tower.' },
+  { phase: 'Tower', radio: 'UHF 4', station: 'Sherman Tower', call: 'Sherman Tower, KATT 11, Point Golf for the break.',
+    reply: 'KATT 11, report the numbers Runway 7 right.', readback: 'KATT 11, 7 right, wilco.', page: '32', note: 'Inbound for the overhead break.' },
+  { phase: 'Break', radio: 'UHF 4', station: 'Sherman Tower', call: 'Sherman Tower, KATT 11, numbers 7 right.',
+    reply: 'KATT 11, right break approved.', readback: null, page: '32', note: 'Over the runway numbers, tower approves the break.' },
+  { phase: 'Landing', radio: 'UHF 4', station: 'Sherman Tower', call: 'Sherman Tower, KATT 11, (abeam, 180, 90 or final), gear, stop.',
+    reply: 'KATT 11, wind 080 at 8, Runway 7 Right, cleared to land.', readback: 'KATT 11, cleared to land 7 Right.', page: '33–34', note: 'Your position in the pattern, then “gear” and “stop”. The script does not define them; read in context, the gear is down and the landing is a full stop.' },
+  { phase: 'Rollout', radio: 'UHF 4', station: 'Sherman Tower', call: null,
+    reply: 'KATT 11, turn right next taxiway, contact ground when clear.', readback: 'KATT 11, wilco.', page: '34', note: 'Stay with tower until clear of the runway.' },
+  { phase: 'Ground', radio: 'UHF 3', station: 'Sherman Ground', call: 'Sherman Ground, KATT 11, clear of the active, taxi to my line.',
+    reply: 'KATT 11, taxi to your line via Alpha, Alpha 4.', readback: 'KATT 11, taxi via Alpha, Alpha 4.', page: '34', note: 'Taxi back to the squadron line.' },
+  { phase: 'Base', radio: 'UHF 19', station: 'KATT Base', call: 'KATT Base, KATT 11 in and up.', reply: 'KATT 11, welcome back.', readback: null, page: '35',
+    note: 'The last call: tell the squadron you are back.' },
+];
+
+/* ---------- Training-rule calls (CNATRA P-1289) ---------- */
+// Calls that stop, start or deconflict training engagements. page: P-1289 page.
+export const TRAINING_CALLS = [
+  { call: 'Knock it off', meaning: 'Stop the engagement. Anyone may call it; every player echoes it. An aircraft rocking its wings means the same.', page: '3-3' },
+  { call: 'Terminate', meaning: 'Temporarily stop the training for administrative reasons; lead restarts it.', page: '5-11' },
+  { call: 'Fight’s on', meaning: 'The engagement starts. Lead counts “3, 2, 1, fight’s on” and the wingman echoes it.', page: '5-14' },
+  { call: 'Blind', meaning: 'I cannot see my wingman anywhere. Said with your call sign, then turn away from the predicted collision bearing.', page: '3-3' },
+  { call: 'No joy', meaning: 'I cannot see the threat aircraft my wingman described.', page: '3-3' },
+];
