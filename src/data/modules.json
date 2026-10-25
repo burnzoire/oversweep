@@ -20,5 +20,16 @@
     "publication": "published",
     "objective": "Speak and understand air–ground radio: technique, the phonetic alphabet and numbers, contact calls, acknowledgements and readbacks, formation check-ins, emergency calls, transponder codes and what to do when the radio fails.",
     "applicability": "US FAA phraseology from the Aeronautical Information Manual, with a US Navy training squadron's formation calls; other countries and services differ in detail."
+  },
+  {
+    "id": "module.principles-of-flight",
+    "slug": "principles-of-flight",
+    "subject": "flight-fundamentals",
+    "revision": 1,
+    "title": "Principles of Flight",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Understand the four forces, lift and angle of attack, drag, control and stability, turns and load factor, stalls and energy well enough to explain what the airplane is doing and why.",
+    "applicability": "Aircraft-agnostic fixed-wing principles from the FAA handbooks; worked numbers use an invented example airplane."
   }
 ]
