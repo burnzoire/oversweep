@@ -8,6 +8,6 @@ const { photo } = Astro.props;
   <img src={assetPath(photo.src)} width={photo.width} height={photo.height} alt={photo.alt} decoding="async" />
   <figcaption>
     {photo.caption}
-    <span class="credit">Photo: {photo.author}{photo.date && `, ${photo.date}`}. {photo.licence}. <a href={photo.sourceUrl}>Source page</a> (accessed {photo.accessed}).</span>
+    <span class="credit">Credit: {photo.author}{photo.date && `, ${photo.date}`}. {photo.licence}. <a href={photo.sourceUrl}>Source page</a> (accessed {photo.accessed}).</span>
   </figcaption>
 </figure>

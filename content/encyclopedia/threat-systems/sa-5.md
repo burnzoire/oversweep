@@ -29,6 +29,17 @@ battery:
   items:
     - { kind: radar, label: "5N62 Square Pair", count: 1 }
     - { kind: launcher, label: "launchers", count: 6, missiles: 1 }
+photo:
+  src: "encyclopedia/threat-systems/sa-5.jpg"
+  width: 1280
+  height: 940
+  alt: "Painting of an SA-5 missile raised on its trainable launcher on a concrete pad, with earth berms around it and smoke across the sky."
+  caption: "A Defense Intelligence Agency painting, not a photograph, of an SA-5 on its launcher, from the DIA's 1980s series on Soviet arms supplied to Libya. No public-domain photo of an SA-5 site was found."
+  author: "Ronald C. Wittmann, Defense Intelligence Agency"
+  date: "1986"
+  licence: "Public domain, work of the US federal government"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:SA-5s_in_Libya_(in_better_quality).jpg"
+  accessed: "2026-10-25"
 sources:
   - n: 1
     title: "S-200 (missile)"

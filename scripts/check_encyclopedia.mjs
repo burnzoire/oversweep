@@ -82,7 +82,7 @@ export async function checkRecords({ dist, records, review = false, base = "", c
         if (!src.startsWith(`${base}/`) || await access(path.join(dist, decodeURI(src.slice(base.length)))).then(() => false, () => true))
           problems.push(`${r.id}: photo ${src || "(no src)"} is not a file in the site.`);
         if (!/<img\b[^>]*\balt="[^"]+"/.test(figure)) problems.push(`${r.id}: photo has no alt text.`);
-        if (!/class="credit"[\s\S]*Photo:[\s\S]*<a href="https:\/\//.test(figure)) problems.push(`${r.id}: photo is not credited to its source page.`);
+        if (!/class="credit"[\s\S]*Credit:[\s\S]*<a href="https:\/\//.test(figure)) problems.push(`${r.id}: photo is not credited to its source page.`);
       }
     }
   }

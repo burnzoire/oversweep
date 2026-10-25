@@ -85,11 +85,11 @@ found in the public domain, the caption says what the photo shows instead.
 
 | Record | Commons file | Licence tag | What the source description says |
 | --- | --- | --- | --- |
-| SA-1 | [S-25 Berkut Kapustin Yar.JPG](https://commons.wikimedia.org/wiki/File:S-25_Berkut_Kapustin_Yar.JPG) | PD-self (photographer Kopwyh, 2007) | S-25 missile near site 30 of the Kapustin Yar range |
+| SA-1 | [S-25 Berkut Kapustin Yar.JPG](https://commons.wikimedia.org/wiki/File:S-25_Berkut_Kapustin_Yar.JPG) | PD-self (photographer Kopwyh, 2007) | S-25 missile near site 30 of the Kapustin Yar range. Shipped as Commons' 500 px thumbnail of the 600 px original |
 | SA-2 | [S-75 battery in NVietnam 1965.jpg](https://commons.wikimedia.org/wiki/File:S-75_battery_in_NVietnam_1965.jpg) | PD-USGov-Military-Air Force | USAF reconnaissance photo of a North Vietnamese SA-2 site, August 1965; NMUSAF photo 090605-F-1234P-001 |
 | SA-3 | [Egyptian Missile Site - Flickr - The Central Intelligence Agency.jpg](https://commons.wikimedia.org/wiki/File:Egyptian_Missile_Site_-_Flickr_-_The_Central_Intelligence_Agency.jpg) | PD-USGov-CIA | Egyptian missile site captured by Israelis in the October 1973 war; from the CIA booklet on intelligence in that war. Commons files it under S-125; the launcher and twin-stage missile match the SA-3 |
 | SA-4 | [SA-4 Ganef SAM.JPEG](https://commons.wikimedia.org/wiki/File:SA-4_Ganef_SAM.JPEG) | PD-USGov | SA-4 Ganef missiles on twin-round tracked launch vehicles; DoD still DF-ST-83-04925, 1 August 1982 |
-| SA-5 | [SA-5s in Libya (in better quality).jpg](https://commons.wikimedia.org/wiki/File:SA-5s_in_Libya_(in_better_quality).jpg) | PD-USGov-Military-DIA | SA-5 missiles for Libya, 1986, Ronald C. Wittmann, DIA |
+| SA-5 | [SA-5s in Libya (in better quality).jpg](https://commons.wikimedia.org/wiki/File:SA-5s_in_Libya_(in_better_quality).jpg) | PD-USGov-Military-DIA | SA-5 missiles for Libya, 1986, Ronald C. Wittmann, DIA, from the series "The Threat in the 1980's". The image is a painting, and the caption says so; no public-domain SA-5 photo was found (museum photos on Commons are CC BY-SA) |
 | SA-6 | [SA-6 Gainful SAM.JPEG](https://commons.wikimedia.org/wiki/File:SA-6_Gainful_SAM.JPEG) | PD-USGov-Military | Soviet tracked SA-6 Gainful launch vehicles; DoD photo dated 1977 |
 | SA-7 | [SA-7 being used in Vietnam.jpg](https://commons.wikimedia.org/wiki/File:SA-7_being_used_in_Vietnam.jpg) | PD-USGov-Military-Air Force | North Vietnamese soldier preparing to fire an SA-7, 1970 to 1973; NMUSAF |
 | SA-8 | [Soviet OSA SAM.JPEG](https://commons.wikimedia.org/wiki/File:Soviet_OSA_SAM.JPEG) | PD-USGov | Two SA-8 Gecko vehicles; DoD still DF-ST-83-04926, 1 August 1982 |

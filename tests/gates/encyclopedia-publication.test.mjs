@@ -75,7 +75,7 @@ test('a record page must render its text', async () => {
 
 test('a record photo must be a site file with alt text and a credit', async () => {
   const page = 'encyclopedia/example/thing/index.html';
-  const photo = (img, credit = '<span class="credit">Photo: US Air Force. Public domain. <a href="https://commons.wikimedia.org/wiki/File:X.jpg">Source page</a></span>') =>
+  const photo = (img, credit = '<span class="credit">Credit: US Air Force. Public domain. <a href="https://commons.wikimedia.org/wiki/File:X.jpg">Source page</a></span>') =>
     ({ ...complete, [page]: complete[page] + `<figure class="record-photo">${img}<figcaption>A site. ${credit}</figcaption></figure>` });
   const good = photo('<img src="/encyclopedia/example/thing.jpg" alt="A missile site">');
   assert.deepEqual(await check({ ...good, 'encyclopedia/example/thing.jpg': 'jpeg' }), []);
