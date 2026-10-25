@@ -71,3 +71,29 @@ independently retrieved text and treat any mismatch as a finding):
 The SME source reader allows a fixed host list and at most eight URLs. These
 records cite twelve URLs on four hosts, three of them new (en.wikipedia.org,
 www.nationalmuseum.af.mil, man.fas.org). See the PR for the reader change.
+
+## Photos (record revision 1, issue #63)
+
+Each record shows one photo, self-hosted under
+`public/encyclopedia/threat-systems/<slug>.jpg` (resized to at most 1280 px
+wide, metadata stripped) and stored in the record's `photo` frontmatter. The
+licence was read on each file's Wikimedia Commons page on 25 October 2026. A
+caption says only what the photo's own source description says; it is
+illustration and credit, not a technical claim, and no data plate value or
+figure relies on it. Active or wartime sites were preferred; where none was
+found in the public domain, the caption says what the photo shows instead.
+
+| Record | Commons file | Licence tag | What the source description says |
+| --- | --- | --- | --- |
+| SA-1 | [S-25 Berkut Kapustin Yar.JPG](https://commons.wikimedia.org/wiki/File:S-25_Berkut_Kapustin_Yar.JPG) | PD-self (photographer Kopwyh, 2007) | S-25 missile near site 30 of the Kapustin Yar range |
+| SA-2 | [S-75 battery in NVietnam 1965.jpg](https://commons.wikimedia.org/wiki/File:S-75_battery_in_NVietnam_1965.jpg) | PD-USGov-Military-Air Force | USAF reconnaissance photo of a North Vietnamese SA-2 site, August 1965; NMUSAF photo 090605-F-1234P-001 |
+| SA-3 | [Egyptian Missile Site - Flickr - The Central Intelligence Agency.jpg](https://commons.wikimedia.org/wiki/File:Egyptian_Missile_Site_-_Flickr_-_The_Central_Intelligence_Agency.jpg) | PD-USGov-CIA | Egyptian missile site captured by Israelis in the October 1973 war; from the CIA booklet on intelligence in that war. Commons files it under S-125; the launcher and twin-stage missile match the SA-3 |
+| SA-4 | [SA-4 Ganef SAM.JPEG](https://commons.wikimedia.org/wiki/File:SA-4_Ganef_SAM.JPEG) | PD-USGov | SA-4 Ganef missiles on twin-round tracked launch vehicles; DoD still DF-ST-83-04925, 1 August 1982 |
+| SA-5 | [SA-5s in Libya (in better quality).jpg](https://commons.wikimedia.org/wiki/File:SA-5s_in_Libya_(in_better_quality).jpg) | PD-USGov-Military-DIA | SA-5 missiles for Libya, 1986, Ronald C. Wittmann, DIA |
+| SA-6 | [SA-6 Gainful SAM.JPEG](https://commons.wikimedia.org/wiki/File:SA-6_Gainful_SAM.JPEG) | PD-USGov-Military | Soviet tracked SA-6 Gainful launch vehicles; DoD photo dated 1977 |
+| SA-7 | [SA-7 being used in Vietnam.jpg](https://commons.wikimedia.org/wiki/File:SA-7_being_used_in_Vietnam.jpg) | PD-USGov-Military-Air Force | North Vietnamese soldier preparing to fire an SA-7, 1970 to 1973; NMUSAF |
+| SA-8 | [Soviet OSA SAM.JPEG](https://commons.wikimedia.org/wiki/File:Soviet_OSA_SAM.JPEG) | PD-USGov | Two SA-8 Gecko vehicles; DoD still DF-ST-83-04926, 1 August 1982 |
+| SA-9 | [Soviet SA-9 Gaskin.jpg](https://commons.wikimedia.org/wiki/File:Soviet_SA-9_Gaskin.jpg) | PD-USGov | 9P31 launchers on BRDM-2 in Polish service; DoD still DF-ST-83-04921, about 1982 |
+
+Commons is not on the SME source reader's host list, so these descriptions
+are recorded here rather than fetched.
