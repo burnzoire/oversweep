@@ -1,6 +1,6 @@
 :root {
   color-scheme: light;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color: #171717;
   background: #fff;
   font-synthesis: none;
@@ -11,6 +11,13 @@
   --color-link: #005a9c;
   --color-focus: #005fcc;
   --color-surface: #f5f6f7;
+  /* Brand: a flight-deck ink band with a deck-yellow mark. Yellow is decorative
+     and only sits on ink; it never carries text on white. */
+  --color-ink: #111a24;
+  --color-ink-text: #f4f6f8;
+  --color-ink-muted: #b8c2cc;
+  --color-accent: #ffc20e;
+  --color-unavailable: #767676;
   --measure-page: 72rem;
 }
 
@@ -22,7 +29,20 @@ body {
   min-width: 20rem;
   margin: 0;
   color: var(--color-text);
+  background: #fff;
   line-height: 1.6;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 a {
@@ -61,7 +81,13 @@ summary:focus-visible {
 }
 
 .site-header {
-  border-bottom: 1px solid var(--color-border);
+  color: var(--color-ink-text);
+  background: var(--color-ink);
+  border-bottom: 3px solid var(--color-accent);
+}
+
+.site-header a:focus-visible {
+  outline-color: var(--color-accent);
 }
 
 .header-inner,
@@ -81,23 +107,35 @@ summary:focus-visible {
 }
 
 .brand {
-  display: grid;
-  align-content: center;
-  gap: 0.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
   min-height: 2.75rem;
   color: inherit;
   line-height: 1.25;
   text-decoration: none;
 }
 
+.brand-mark {
+  flex: none;
+  width: 2.1rem;
+  height: 3.3rem;
+  fill: var(--color-accent);
+}
+
+.brand-text {
+  display: grid;
+  gap: 0.1rem;
+}
+
 .brand-name {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.16em;
 }
 
 .brand-tagline {
-  color: var(--color-muted);
+  color: var(--color-ink-muted);
   font-size: 0.8rem;
 }
 
@@ -117,16 +155,31 @@ summary:focus-visible {
 }
 
 .primary-link {
-  color: var(--color-text);
+  color: var(--color-ink-text);
   font-weight: 700;
   text-decoration: none;
 }
 
-.primary-link.current,
+.primary-link:hover:not(.unavailable) {
+  text-decoration: underline;
+}
+
+.primary-link.current {
+  box-shadow: inset 0 -3px 0 var(--color-accent);
+}
+
+/* Destinations with nothing published: shown so the map stays whole, never linked. */
+.primary-link.unavailable {
+  color: var(--color-ink-muted);
+  font-weight: 400;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .subject-nav a.current {
   color: var(--color-text);
   background: var(--color-surface);
-  box-shadow: inset 0 -3px 0 var(--color-text);
+  box-shadow: inset 3px 0 0 var(--color-text);
 }
 
 .page-shell {
@@ -172,13 +225,22 @@ summary:focus-visible {
   margin-bottom: 1.5rem;
 }
 
-.eyebrow {
-  margin: 0 0 0.25rem;
-  color: var(--color-muted);
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.lead {
+  font-size: 1.15rem;
+  color: var(--color-text);
+}
+
+.hero {
+  padding-bottom: 0.5rem;
+}
+
+.hero h1 {
+  max-width: 18ch;
+}
+
+.hero .lead {
+  max-width: 52ch;
+  margin-block: 1rem 0;
 }
 
 h1,
@@ -240,10 +302,32 @@ h2 {
 
 .subject-nav a {
   display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
   min-height: 2.75rem;
   padding: 0.4rem 0.6rem;
   color: var(--color-text);
+  font-weight: 700;
   line-height: 1.3;
+}
+
+.subject-nav a.unavailable {
+  color: var(--color-unavailable);
+  font-weight: 400;
+  text-decoration: none;
+  cursor: default;
+}
+
+.subject-nav .count {
+  flex: none;
+  align-self: center;
+  min-width: 1.6rem;
+  padding: 0 0.4rem;
+  border-radius: 1rem;
+  color: var(--color-ink-text);
+  background: var(--color-ink);
+  font-size: 0.8rem;
+  text-align: center;
 }
 
 .status-panel {
@@ -290,6 +374,21 @@ h2 {
   margin: 0 0 0.75rem;
 }
 
+.collection-card .collection-status {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.collection-card.unavailable {
+  border-style: dashed;
+  color: var(--color-unavailable);
+}
+
+.collection-card.unavailable .collection-status {
+  color: var(--color-unavailable);
+}
+
 .collection-card a {
   display: inline-flex;
   align-items: center;
@@ -314,8 +413,155 @@ h2 {
   min-height: 2.75rem;
 }
 
+.entry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+
+.entry-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.1rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--color-border);
+  border-top: 4px solid var(--color-ink);
+  background: #fff;
+}
+
+.entry-grid .entry-card {
+  margin-bottom: 0;
+}
+
+.entry-card > * {
+  margin: 0 0 0.6rem;
+}
+
+.entry-kicker {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.entry-title {
+  font-size: 1.3rem;
+}
+
+.entry-title a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.entry-title a:hover {
+  text-decoration: underline;
+}
+
+.entry-applicability {
+  color: var(--color-muted);
+  font-size: 0.95rem;
+}
+
+.entry-meta {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.entry-meta .maturity {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.entry-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin: auto 0 0;
+}
+
+.entry-actions a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font-weight: 700;
+}
+
+.entry-extra {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
+
+.button,
+.entry-actions a.button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.2rem;
+  color: var(--color-ink-text);
+  background: var(--color-ink);
+  text-decoration: none;
+}
+
+.button:hover {
+  background: #26384b;
+}
+
+.subject-group h2 a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.subject-group h2 a:hover {
+  text-decoration: underline;
+}
+
+.planned {
+  margin-top: 2.5rem;
+  color: var(--color-muted);
+}
+
+.planned h2 {
+  font-size: 1.1rem;
+  color: var(--color-muted);
+}
+
+.planned-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.planned-list li {
+  padding: 0.25rem 0.65rem;
+  border: 1px dashed var(--color-border);
+  border-radius: 1rem;
+  font-size: 0.9rem;
+}
+
+.empty-note {
+  padding: 1rem;
+  border: 1px dashed var(--color-border);
+  color: var(--color-muted);
+}
+
 .site-footer {
   border-top: 1px solid var(--color-border);
+}
+
+.footer-brand {
+  gap: 0.5rem;
+  color: var(--color-text);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.footer-brand .brand-mark {
+  width: 1.2rem;
+  height: 1.9rem;
+  fill: var(--color-ink);
 }
 
 .footer-inner {
@@ -367,4 +613,8 @@ h2 {
     position: sticky;
     top: 1rem;
   }
+}
+
+.button [aria-hidden="true"] {
+  margin-left: 0.35rem;
 }

@@ -1,38 +1,57 @@
 ---
+import EntryCard from "../components/EntryCard.astro";
 import SiteLayout from "../layouts/SiteLayout.astro";
+import { encyclopediaCategories, manualSubjects } from "../data/catalogue";
+import { manualEntries, sectionHasContent, subjectHasContent } from "../data/availability";
+import { includedExperiences } from "../data/experiences";
 import { sitePath } from "../lib/paths";
 
+const subjectCount = manualSubjects.filter((s) => subjectHasContent(s.slug)).length;
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
 const collections = [
   {
     title: "Manual",
-    description: "A subject-organised reference for aviation concepts and learning.",
+    description: "Subject-organised modules with interactive figures, sources and knowledge checks.",
+    status: `${plural(manualEntries.length, "module")} in ${plural(subjectCount, "subject")}`,
     path: "manual/",
-  },
-  {
-    title: "Encyclopedia",
-    description: "A future index of aircraft, systems, terminology and reference records.",
-    path: "encyclopedia/",
+    available: sectionHasContent.manual,
   },
   {
     title: "Training Library",
-    description: "An index for future interactive, exploratory and trainer experiences.",
+    description: "Standalone exercises that let you practise what a module teaches.",
+    status: plural(includedExperiences.length, "exercise"),
     path: "training/",
+    available: sectionHasContent.training,
+  },
+  {
+    title: "Encyclopedia",
+    description: `Aircraft, ordnance, sensors and terminology records across ${encyclopediaCategories.length} categories.`,
+    status: "Nothing published yet",
+    path: "encyclopedia/",
+    available: sectionHasContent.encyclopedia,
   },
 ];
 ---
 
-<SiteLayout title="The Interactive Flight Reference" activeSection="home" isHomePage>
-  <section class="status-panel" aria-labelledby="welcome-heading">
-    <h2 id="welcome-heading">Site foundation</h2>
-    <p>Oversweep is being built as a subject-centric aviation reference. The collections below are available to explore; their content is coming soon.</p>
-    <p>No aviation procedures, validated guidance or training experiences are published here.</p>
+<SiteLayout title="The Interactive Flight Reference" activeSection="home" isHomePage customHeading>
+  <section class="hero" aria-labelledby="hero-title">
+    <h1 id="hero-title">The Interactive Flight Reference</h1>
+    <p class="lead">Understand how it actually works. Oversweep explains carrier recoveries, air combat geometry and more with figures you can move, every claim tied to the training publication it comes from.</p>
   </section>
+
+  <h2>Start here</h2>
+  <div class="entry-grid">
+    {manualEntries.map((entry) => <EntryCard entry={entry} showSubject headingLevel={3} />)}
+  </div>
+
+  <h2>Browse the collections</h2>
   <ul class="card-grid">
     {collections.map((collection) => (
-      <li class="collection-card">
-        <h2>{collection.title}</h2>
+      <li class:list={["collection-card", { unavailable: !collection.available }]}>
+        <h3>{collection.title}</h3>
         <p>{collection.description}</p>
-        <a href={sitePath(collection.path)}>Explore {collection.title}</a>
+        <p class="collection-status">{collection.status}</p>
+        {collection.available && <a href={sitePath(collection.path)}>Open the {collection.title}</a>}
       </li>
     ))}
   </ul>

@@ -16,13 +16,11 @@ const { category } = Astro.props;
 <SiteLayout
   title={category.title}
   activeSection="encyclopedia"
+  empty
   breadcrumbs={[
-    { label: "Encyclopedia", href: sitePath("encyclopedia/") },
+    { label: "Encyclopedia" },
     { label: category.title },
   ]}
 >
-  <section class="status-panel">
-    <h2>Coming soon</h2>
-    <p>This category page is a placeholder. No technical reference content is published here.</p>
-  </section>
+  <p class="empty-note">No {category.title.toLowerCase()} records are published yet. Start with the <a href={sitePath("manual/")}>Manual</a> instead.</p>
 </SiteLayout>

@@ -1,6 +1,8 @@
 ---
+import BrandMark from "../components/BrandMark.astro";
 import { manualSubjects } from "../data/catalogue";
-import { sitePath } from "../lib/paths";
+import { sectionHasContent, subjectEntries } from "../data/availability";
+import { assetPath, sitePath } from "../lib/paths";
 import "../styles/global.css";
 
 interface Breadcrumb {
@@ -16,6 +18,11 @@ interface Props {
   isSectionIndex?: boolean;
   isHomePage?: boolean;
   breadcrumbs?: Breadcrumb[];
+  // A destination with nothing published: navigation never links to it.
+  empty?: boolean;
+  // Pages that render their own <h1>, such as the home page hero.
+  customHeading?: boolean;
+  description?: string;
 }
 
 const {
@@ -26,13 +33,17 @@ const {
   isSectionIndex = false,
   isHomePage = false,
   breadcrumbs = [],
+  empty = false,
+  customHeading = false,
+  description = "Oversweep explains military flight concepts with interactive figures and visible sources.",
 } = Astro.props;
 const sections = [
-  { id: "manual", label: "Manual", path: "manual/" },
-  { id: "encyclopedia", label: "Encyclopedia", path: "encyclopedia/" },
-  { id: "training", label: "Training Library", path: "training/" },
-];
-const pageTitle = `${title} | Oversweep`;
+  { id: "manual", label: "Manual", path: "manual/", available: sectionHasContent.manual },
+  { id: "encyclopedia", label: "Encyclopedia", path: "encyclopedia/", available: sectionHasContent.encyclopedia },
+  { id: "training", label: "Training Library", path: "training/", available: sectionHasContent.training },
+] as const;
+const pageTitle = isHomePage ? `Oversweep · ${title}` : `${title} | Oversweep`;
+const subjects = manualSubjects.map((subject) => ({ ...subject, count: subjectEntries(subject.slug).length }));
 ---
 
 <!doctype html>
@@ -40,7 +51,10 @@ const pageTitle = `${title} | Oversweep`;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content="A subject-centric, NATOPS-inspired aviation reference." />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#111a24" />
+    {empty && <meta name="robots" content="noindex" />}
+    <link rel="icon" href={assetPath("favicon.svg")} type="image/svg+xml" />
     <title>{pageTitle}</title>
   </head>
   <body>
@@ -53,40 +67,57 @@ const pageTitle = `${title} | Oversweep`;
           aria-label="Oversweep home"
           aria-current={isHomePage ? "page" : undefined}
         >
-          <span class="brand-name">OVERSWEEP</span>
-          <span class="brand-tagline">The Interactive Flight Reference</span>
+          <BrandMark />
+          <span class="brand-text">
+            <span class="brand-name">OVERSWEEP</span>
+            <span class="brand-tagline">The Interactive Flight Reference</span>
+          </span>
         </a>
         <nav class="primary-nav" aria-label="Primary navigation">
-          {sections.map((section) => (
-            <a
-              href={sitePath(section.path)}
-              class:list={["primary-link", { current: activeSection === section.id }]}
-              aria-current={activeSection === section.id && isSectionIndex ? "page" : undefined}
-            >
-              {section.label}
-            </a>
-          ))}
+          {sections.map((section) => {
+            const current = activeSection === section.id;
+            const ariaCurrent = current && isSectionIndex ? "page" : undefined;
+            return section.available ? (
+              <a
+                href={sitePath(section.path)}
+                class:list={["primary-link", { current }]}
+                aria-current={ariaCurrent}
+              >
+                {section.label}
+              </a>
+            ) : (
+              <a
+                class:list={["primary-link", "unavailable", { current }]}
+                aria-disabled="true"
+                aria-current={ariaCurrent}
+                title="Nothing published yet"
+              >
+                {section.label}<span class="visually-hidden"> (nothing published yet)</span>
+              </a>
+            );
+          })}
         </nav>
       </div>
     </header>
-    <main id="main-content" class="page-shell">
-      {breadcrumbs.length > 0 && (
+    <main id="main-content" class="page-shell" data-empty={empty ? "" : undefined}>
+      {breadcrumbs.length > 1 && (
         <nav class="breadcrumbs" aria-label="Breadcrumb">
           <ol>
             {breadcrumbs.map((crumb, index) => (
               <li>
                 {crumb.href && index < breadcrumbs.length - 1
                   ? <a href={crumb.href}>{crumb.label}</a>
-                  : <span aria-current="page">{crumb.label}</span>}
+                  : <span aria-current={index === breadcrumbs.length - 1 ? "page" : undefined}>{crumb.label}</span>}
               </li>
             ))}
           </ol>
         </nav>
       )}
-      <header class="page-heading">
-        <p class="eyebrow">Oversweep · {sections.find((section) => section.id === activeSection)?.label ?? "Home"}</p>
-        <h1>{title}</h1>
-      </header>
+      {!customHeading && (
+        <header class="page-heading">
+          <h1>{title}</h1>
+        </header>
+      )}
       <div class:list={["page-layout", { "with-subject-nav": activeSection === "manual" }]}>
         {activeSection === "manual" && (
           <aside class="subject-nav" aria-label="Manual subjects">
@@ -94,17 +125,31 @@ const pageTitle = `${title} | Oversweep`;
               <summary>Manual subjects</summary>
               <nav aria-label="Manual subject navigation">
                 <ul>
-                  {manualSubjects.map((subject) => (
-                    <li>
-                      <a
-                        href={sitePath(`manual/${subject.slug}/`)}
-                        class:list={{ current: activeSubject === subject.slug }}
-                        aria-current={activeSubject === subject.slug ? "page" : undefined}
-                      >
-                        {subject.title}
-                      </a>
-                    </li>
-                  ))}
+                  {subjects.map((subject) => {
+                    const current = activeSubject === subject.slug;
+                    return (
+                      <li>
+                        {subject.count > 0 ? (
+                          <a
+                            href={sitePath(`manual/${subject.slug}/`)}
+                            class:list={{ current }}
+                            aria-current={current ? "page" : undefined}
+                          >
+                            <span>{subject.title}</span>
+                            <span class="count" aria-label={`${subject.count} ${subject.count === 1 ? "module" : "modules"}`}>{subject.count}</span>
+                          </a>
+                        ) : (
+                          <a
+                            class:list={["unavailable", { current }]}
+                            aria-disabled="true"
+                            aria-current={current ? "page" : undefined}
+                          >
+                            {subject.title}<span class="visually-hidden"> (nothing published yet)</span>
+                          </a>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </nav>
             </details>
@@ -117,8 +162,8 @@ const pageTitle = `${title} | Oversweep`;
     </main>
     <footer class="site-footer">
       <div class="footer-inner">
-        <a href={sitePath()}>Oversweep</a>
-        <p>Educational reference in development. Not approved operational guidance.</p>
+        <a class="footer-brand" href={sitePath()}><BrandMark />Oversweep</a>
+        <p>Educational reference for simulator pilots. Every module shows its review status. Not approved operational guidance.</p>
       </div>
     </footer>
   </body>

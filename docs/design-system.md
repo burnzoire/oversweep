@@ -89,6 +89,18 @@ Use a system sans-serif stack for prose and tabular numerals for aligned values;
 reserve monospace for literal code or identifiers. Test all text, focus and
 non-text boundaries against their actual backgrounds when UI is implemented.
 
+## Brand and availability (implemented)
+
+The header is a flight-deck ink band (`#111a24`) with a deck-yellow (`#ffc20e`)
+rule and mark: a plan-view F-14 Tomcat silhouette with its wings overswept for
+deck stowage, traced from the owner's reference drawing, also used as the favicon. Yellow is decorative and only sits
+on ink; pages stay white with black type. Navigation is derived from the
+registries in `src/data/availability.ts`: a section, subject or category with
+nothing published is shown dimmed and unlinked rather than labelled "coming
+soon", and its route still builds with `data-empty` so URLs stay stable.
+`scripts/check_site.mjs` fails if any page links to an empty destination or
+says "coming soon".
+
 ## Source and maturity presentation
 
 Keep applicability and content maturity visible near the page title and repeat

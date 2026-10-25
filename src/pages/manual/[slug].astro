@@ -1,10 +1,8 @@
 ---
-import ExperienceCard from "../../components/ExperienceCard.astro";
-import ModuleCard from "../../components/ModuleCard.astro";
-import { includedExperiences } from "../../data/experiences";
-import { includedModules } from "../../data/modules";
+import EntryCard from "../../components/EntryCard.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { manualSubjects } from "../../data/catalogue";
+import { subjectEntries } from "../../data/availability";
 import { sitePath } from "../../lib/paths";
 
 export function getStaticPaths() {
@@ -15,22 +13,20 @@ export function getStaticPaths() {
 }
 
 const { subject } = Astro.props;
+const entries = subjectEntries(subject.slug);
 ---
 
 <SiteLayout
   title={subject.title}
   activeSection="manual"
   activeSubject={subject.slug}
+  empty={entries.length === 0}
   breadcrumbs={[
     { label: "Manual", href: sitePath("manual/") },
     { label: subject.title },
   ]}
 >
-  {includedExperiences.filter((e) => e.subject === subject.slug).map((experience) => <ExperienceCard experience={experience} module />)}
-  {includedModules.filter((m) => m.subject === subject.slug).map((m) => <ModuleCard module={m} />)}
-  <section class="status-panel">
-    <h2>Coming soon</h2>
-    <p>Additional reference modules are planned for this subject. Available modules are listed above with their review status.</p>
-  </section>
+  {entries.length > 0
+    ? entries.map((entry) => <EntryCard entry={entry} />)
+    : <p class="empty-note">No {subject.title.toLowerCase()} modules are published yet. Subjects with modules are linked in the subject list, or see <a href={sitePath("manual/")}>everything in the Manual</a>.</p>}
 </SiteLayout>
-

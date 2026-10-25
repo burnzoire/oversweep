@@ -1,27 +1,19 @@
 ---
+import EntryCard from "../../components/EntryCard.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { manualSubjects } from "../../data/catalogue";
+import { subjectEntries } from "../../data/availability";
 import { sitePath } from "../../lib/paths";
+
+const available = manualSubjects.filter((s) => subjectEntries(s.slug).length > 0);
 ---
 
-<SiteLayout
-  title="Manual"
-  activeSection="manual"
-  isSectionIndex
-  breadcrumbs={[{ label: "Manual" }]}
->
-  <section class="status-panel">
-    <h2>Coming soon</h2>
-    <p>Manual topics are mapped for future development. No procedures or aircraft-specific guidance are published in this site foundation.</p>
-  </section>
-  <h2>Subjects</h2>
-  <ul class="card-grid">
-    {manualSubjects.map((subject) => (
-      <li class="collection-card">
-        <h3>{subject.title}</h3>
-        <p>Coming soon</p>
-        <a href={sitePath(`manual/${subject.slug}/`)}>Open subject</a>
-      </li>
-    ))}
-  </ul>
+<SiteLayout title="Manual" activeSection="manual" isSectionIndex>
+  <p class="lead">Each module teaches one topic from first principles, with interactive figures, sources and a short knowledge check. Every module states its review status. Subjects without modules yet are dimmed in the subject list.</p>
+  {available.map((subject) => (
+    <section class="subject-group" aria-labelledby={`subject-${subject.slug}`}>
+      <h2 id={`subject-${subject.slug}`}><a href={sitePath(`manual/${subject.slug}/`)}>{subject.title}</a></h2>
+      {subjectEntries(subject.slug).map((entry) => <EntryCard entry={entry} headingLevel={3} />)}
+    </section>
+  ))}
 </SiteLayout>
