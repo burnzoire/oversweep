@@ -34,20 +34,30 @@ sources:
     accessed: "2026-10-25"
 ---
 
-## Overview
+## An answer to the Eagle
 
-The MiG-29 is a twin-engine Soviet fighter, NATO reporting name **Fulcrum**, built to counter the F-15 and F-16. It has been widely exported. [[1]](#source-1) [[2]](#source-2)
+Over Vietnam in the mid-1960s, American fighter-bombers built for low-level strikes proved vulnerable to nimble MiGs, and the US Air Force answered with the F-15 Eagle, ordered in 1969. Moscow needed a reply. Its first requirement, for an advanced frontline fighter, asked for almost everything at once: long range, Mach 2-plus, heavy armament, superb agility and the ability to fly from rough strips. By 1971 Soviet planners had split it in two, much as the Americans paired the F-15 with the lightweight F-16. The heavy fighter went to Sukhoi and became the Su-27; the light one went to Mikoyan and became the MiG-29, which first flew on 6 October 1977. [[1]](#source-1)
 
-## Design
+American reconnaissance satellites spotted the prototype within weeks at the Zhukovsky flight test centre near Ramenskoye, and dubbed it "Ram-L". NATO later gave the production fighter the reporting name **Fulcrum**. Soviet pilots, who had no official name for it, liked the NATO name enough to use it themselves. [[1]](#source-1)
 
-The MiG-29 has blended leading-edge root extensions and two RD-33 turbofans under the fuselage. Its intakes have variable ramps for high-Mach flight, and on the ground they close, the engines breathing through louvres on top of the wing roots, which protects them from debris on rough airfields. [[1]](#source-1)
+## Built for a rough war
 
-The baseline **MiG-29 (9.12)** has the N019 radar, a head-up display and conventional dials, and the Shchel helmet-mounted sight, but no hands-on-throttle-and-stick controls. [[1]](#source-1) The **MiG-29S (9.13)**, Fulcrum-C, has an enlarged humped spine. [[1]](#source-1)
+The MiG-29 shares its aerodynamic roots with the Su-27: a swept wing blended into the fuselage by long root extensions, twin tails, and two widely spaced RD-33 turbofans whose broad fuselage between them adds lift. It has hydraulic controls rather than fly-by-wire, yet it is very agile, with excellent turning, good high angle-of-attack handling and a general resistance to spins, and it is stressed for 9 g. [[1]](#source-1)
 
-## Sensors and weapons
+Its most unusual feature is designed for battered frontline airfields. On take-off, landing and low flying the main intakes can close completely, and the engines breathe through louvres on top of the wing roots, so they do not swallow stones and debris from the runway. [[1]](#source-1) The cockpit was made deliberately familiar to pilots converting from the MiG-23, with dials, a head-up display and a high bubble canopy, but no hands-on-throttle-and-stick controls. [[1]](#source-1)
 
-The helmet sight lets the pilot cue the R-73 seeker to a target well off the nose. A US analysis of the 1990s judged that US fighters held the advantage at around 40 miles, thanks to their avionics, but that inside 10 miles the advantage shifted to the MiG-29, and at five miles its helmet sight and manoeuvrability favoured it clearly. [[2]](#source-2)
+## Look at it and shoot
 
-## In service
+The baseline MiG-29 paired a look-down/shoot-down radar and an infrared search and track sensor with the Shchel helmet-mounted sight, which let the pilot aim the R-73 missile's seeker simply by looking at a target. [[1]](#source-1) A 1990s US analysis judged that American fighters would hold the advantage at 40 miles thanks to their radars and missiles, but that inside 10 miles the edge shifted to the MiG-29, and at five miles its helmet sight and manoeuvrability favoured it clearly. [[2]](#source-2)
 
-MiG-29s have flown with the air forces of Russia, India, Germany, Poland, Iran, Iraq, North Korea, Syria, Ukraine and many others. [[2]](#source-2) In 1997 the United States bought 21 of Moldova's MiG-29s to keep them from Iran. [[2]](#source-2)
+## Stepping out from behind the curtain
+
+The West first saw the MiG-29 when Soviet aircraft visited Finland on 2 July 1986, then at Farnborough in 1988. At the 1989 Paris Air Show, only the second showing of Soviet fighters at an international air show since the 1930s, its agility impressed Western observers, though one crashed, without loss of life, during the first weekend. [[1]](#source-1)
+
+When Germany reunified in 1990, East Germany's 24 MiG-29s joined the Luftwaffe, putting the Fulcrum into a NATO air force. In mock combat with US fighters the German pilots found the helmet sight let them lock on to targets almost 45 degrees off the nose, and that the MiG out-turned the F-15, F-16, F-14 and F/A-18 at slow speed. Beyond visual range it was another story: working the R-27 missile while dodging the Americans' better radars and AIM-120s was hard. After more than 30,000 flying hours, Germany sold 22 of its MiGs to Poland in 2003 for a symbolic €1 each. [[1]](#source-1) In 1997 the United States bought 21 Moldovan MiG-29s, partly to keep them from being sold to Iran; some now stand on display at US bases. [[1]](#source-1) [[2]](#source-2)
+
+## At war
+
+Iraq's MiG-29s fared badly in 1991: five were shot down by US Air Force F-15s. [[1]](#source-1) In the Kargil war of 1999 Indian MiG-29s escorted Mirage 2000s attacking targets with laser-guided bombs, and the Indian Navy flies the carrier-based MiG-29K. [[1]](#source-1) Ukraine inherited up to 240 MiG-29s in 1991. After the Russian invasion of 2022 its MiG-29s flew as air superiority fighters, and some were adapted to fire the American AGM-88 HARM anti-radiation missile, apparently with a commercial GPS and a tablet fitted in the cockpit. In October 2022 a Ukrainian pilot destroyed a Shahed drone with his cannon and had to eject when debris struck the jet. [[1]](#source-1)
+
+More than 30 nations have flown the MiG-29, and an estimated 728 of the family remain in service, about 5% of the world's active combat aircraft. [[1]](#source-1)
