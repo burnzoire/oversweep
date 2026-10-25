@@ -143,6 +143,17 @@
     "summary": "A vectored-thrust jump jet: vertical or short take-off, flown by the US Marines for close air support."
   },
   {
+    "id": "encyclopedia.aircraft.bf-109k-4",
+    "slug": "bf-109k-4",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "Bf 109 K-4",
+    "designation": "Messerschmitt Bf 109 K-4",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The final production version of the most-produced fighter in history, Germany's standard fighter throughout the war."
+  },
+  {
     "id": "encyclopedia.aircraft.c-101",
     "slug": "c-101",
     "category": "aircraft",
@@ -174,6 +185,28 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "The tandem-rotor heavy-lift helicopter that has carried troops, guns and supplies for every war since Vietnam."
+  },
+  {
+    "id": "encyclopedia.aircraft.christen-eagle-ii",
+    "slug": "christen-eagle-ii",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "Christen Eagle II",
+    "designation": "Christen Eagle II",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A two-seat kit-built aerobatic biplane, flown by the Eagles Aerobatic Team."
+  },
+  {
+    "id": "encyclopedia.aircraft.f4u-1d",
+    "slug": "f4u-1d",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "F4U-1D Corsair",
+    "designation": "Vought F4U-1D Corsair",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The bent-wing Navy and Marine fighter of the Pacific war, with a kill ratio better than 11 to 1."
   },
   {
     "id": "encyclopedia.aircraft.f-4",
@@ -275,6 +308,39 @@
     "summary": "A carrier-capable fighter and attack aircraft that one pilot can switch between roles on the same sortie."
   },
   {
+    "id": "encyclopedia.aircraft.fw-190a-8",
+    "slug": "fw-190a-8",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "Fw 190 A-8",
+    "designation": "Focke-Wulf Fw 190 A-8",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Kurt Tank's radial-engined fighter, armoured and up-gunned in the A-8 to attack American heavy bombers."
+  },
+  {
+    "id": "encyclopedia.aircraft.fw-190d-9",
+    "slug": "fw-190d-9",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "Fw 190 D-9",
+    "designation": "Focke-Wulf Fw 190 D-9",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The long-nosed, Jumo-powered Fw 190 that entered service in late 1944."
+  },
+  {
+    "id": "encyclopedia.aircraft.i-16",
+    "slug": "i-16",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "I-16",
+    "designation": "Polikarpov I-16 Type 24",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The first front-line monoplane fighter with retractable gear, flown in Spain, China, Mongolia and in 1941."
+  },
+  {
     "id": "encyclopedia.aircraft.j-11a",
     "slug": "j-11a",
     "category": "aircraft",
@@ -317,6 +383,17 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "The Warsaw Pact's standard jet trainer, with armed light-attack versions."
+  },
+  {
+    "id": "encyclopedia.aircraft.la-7",
+    "slug": "la-7",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "La-7",
+    "designation": "Lavochkin La-7",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The refined Soviet radial-engined fighter of 1944–45, flown by the top Soviet ace Ivan Kozhedub."
   },
   {
     "id": "encyclopedia.aircraft.mb-339",
@@ -418,6 +495,17 @@
     "summary": "A swept-wing French fighter sold to eleven countries and flown in many wars."
   },
   {
+    "id": "encyclopedia.aircraft.mosquito-fb-vi",
+    "slug": "mosquito-fb-vi",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "Mosquito FB Mk VI",
+    "designation": "de Havilland Mosquito FB Mk VI",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The fast wooden twin-engined fighter-bomber that needed no defensive guns."
+  },
+  {
     "id": "encyclopedia.aircraft.oh-58d",
     "slug": "oh-58d",
     "category": "aircraft",
@@ -429,6 +517,28 @@
     "summary": "The US Army's armed scout helicopter, with its ball-shaped sight above the rotor, flown from the Persian Gulf to Afghanistan."
   },
   {
+    "id": "encyclopedia.aircraft.p-47d",
+    "slug": "p-47d",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "P-47D Thunderbolt",
+    "designation": "Republic P-47D Thunderbolt",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The heaviest single-engined fighter of the war: eight .50 calibre guns, a turbosupercharged radial, and a fearsome fighter-bomber."
+  },
+  {
+    "id": "encyclopedia.aircraft.p-51d",
+    "slug": "p-51d",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "P-51D Mustang",
+    "designation": "North American P-51D Mustang",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The long-range escort fighter that took US bombers to Berlin and back; Merlin-powered, with six .50 calibre guns."
+  },
+  {
     "id": "encyclopedia.aircraft.sa342",
     "slug": "sa342",
     "category": "aircraft",
@@ -438,6 +548,17 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "The light Franco-British helicopter that introduced the fenestron tail fan; the SA 342M hunts tanks with HOT missiles."
+  },
+  {
+    "id": "encyclopedia.aircraft.spitfire-ix",
+    "slug": "spitfire-ix",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "Spitfire LF Mk IX",
+    "designation": "Supermarine Spitfire LF Mk IX",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The elliptical-winged British fighter; the Merlin 66-powered Mark IX answered the Fw 190."
   },
   {
     "id": "encyclopedia.aircraft.su-25",
@@ -482,5 +603,16 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "The utility helicopter that defined the Vietnam War and served every US armed service; more than 16,000 built."
+  },
+  {
+    "id": "encyclopedia.aircraft.yak-52",
+    "slug": "yak-52",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "Yak-52",
+    "designation": "Yakovlev Yak-52",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A Soviet aerobatic primary trainer, built in Romania, that has also hunted drones over Ukraine."
   }
 ]
