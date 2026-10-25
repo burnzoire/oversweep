@@ -66,13 +66,17 @@ reviews, so [2] and [3] carry no new declaration and are expected to stay
 unverified by the packet. Hashes are not declared: the authoring session's
 network proxy refuses direct downloads from these hosts.
 
-**Packet budget for revision 3.** The review packet takes at most 80 cited
-pages and eight sources, and the reviewer's prompt is capped at 128k tokens
-(about 50 PDF pages, learned on PR #65). Revision 3 changes only the
-helicopter material and a few wording lines, so only the two HFH chapters are
-declared. The fixed-wing claims and their FAA pages are unchanged from
-revision 2, which the SME gate passed; their revision 2 declarations, for a
-reviewer who wants them, were:
+**Packet budget for revision 3.** The review packet fetches at most eight
+sources, declared ones first; an undeclared PDF is read from its start to
+40,000 characters. The reviewer's prompt is capped at 128k tokens, and the
+first revision 3 run went over (138k) because the undeclared fixed-wing PDFs
+were each read in full. Revision 3 changes the helicopter material and a few
+wording lines, so the two HFH chapters are declared in full, and the
+unchanged fixed-wing sources are declared only for the pages behind lines
+this revision touches (the overview, stalls and spin wording, and the
+ground-effect and tip-vortex terms). The other fixed-wing claims and pages are unchanged
+from revision 2, which the SME gate passed; their revision 2 declarations
+were:
 
 - https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/00-80T-80.pdf
   pages 25-28 (about printed 7); 37-46 (about printed 19-26); 52-59 (about printed 34-39)
@@ -86,6 +90,26 @@ reviewer who wants them, were:
   pages 1-8 (4-1 to 4-8); 18 (4-18)
 - https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/06_afh_ch5.pdf
   pages 1 (5-1); 8-9 (5-8 to 5-9); 12 (5-12); 15 (5-15); 19-24 (5-19 to 5-24)
+
+```review-sources
+source: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/00-80T-80.pdf
+pages: 52-54 (about printed 34-35); 57-59 (about printed 39)
+```
+
+```review-sources
+source: https://www.faa.gov/sites/faa.gov/files/06_phak_ch4_0.pdf
+pages: 9 (4-9)
+```
+
+```review-sources
+source: https://www.faa.gov/sites/faa.gov/files/07_phak_ch5_0.pdf
+pages: 11-12 (5-11 to 5-12)
+```
+
+```review-sources
+source: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/06_afh_ch5.pdf
+pages: 9 (5-9); 12 (5-12); 15 (5-15); 21-24 (5-21 to 5-24)
+```
 
 ```review-sources
 source: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/helicopter_flying_handbook/hfh_ch02.pdf
