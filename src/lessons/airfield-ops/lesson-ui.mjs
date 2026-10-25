@@ -5,6 +5,7 @@ import {
   norm, overhead, papi, parallelNames, pathAngle, pattern, radioCalls, runwayForWind, runwayLights, thresholdStripes,
   windComponents,
 } from './lesson-model.mjs';
+import { quickQuiz, termQuiz } from '../shared/quick-quiz.mjs';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const rad = (d) => d * Math.PI / 180;
@@ -275,27 +276,20 @@ function setupSigns(root) {
   }
   // Quiz: which kind of sign is this?
   const quiz = root.querySelector('[data-quiz]');
-  const shown = quiz.querySelector('[data-sign]'), choices = quiz.querySelector('[data-choices]'), result = quiz.querySelector('[data-quiz-result]');
   const kinds = [...new Set(SIGNS.map((s) => s.kind))];
-  let score = 0, asked = 0;
-  function ask() {
-    const s = SIGNS[Math.floor(Math.random() * SIGNS.length)];
-    shown.replaceChildren(signSvg(s, 1.4));
-    shown.setAttribute('aria-label', `Sign with ${s.bg.replace('sign-', '')} background${s.text ? `, reading ${s.text}` : ', with a circle and bar symbol'}`);
-    result.textContent = '';
-    choices.replaceChildren(...kinds.map((k) => {
-      const b = Object.assign(document.createElement('button'), { type: 'button', textContent: k });
-      b.addEventListener('click', () => {
-        asked++;
-        if (k === s.kind) score++;
-        result.textContent = `${k === s.kind ? 'Correct' : `Not quite: it is a ${s.kind.toLowerCase()} sign`}. ${s.meaning} ${score} of ${asked}.`;
-        for (const c of choices.children) c.disabled = true;
-      });
-      return b;
-    }));
-  }
-  quiz.querySelector('[data-new]').addEventListener('click', ask);
-  ask();
+  quickQuiz({
+    prompt: quiz.querySelector('[data-sign]'), choices: quiz.querySelector('[data-choices]'),
+    result: quiz.querySelector('[data-quiz-result]'), next: quiz.querySelector('[data-new]'),
+  }, {
+    items: SIGNS,
+    show: (s, shown) => {
+      shown.replaceChildren(signSvg(s, 1.4));
+      shown.setAttribute('aria-label', `Sign with ${s.bg.replace('sign-', '')} background${s.text ? `, reading ${s.text}` : ', with a circle and bar symbol'}`);
+    },
+    options: () => kinds,
+    isRight: (s, k) => k === s.kind,
+    feedback: (s, k, right) => `${right ? 'Correct' : `Not quite: it is a ${s.kind.toLowerCase()} sign`}. ${s.meaning}`,
+  });
 }
 
 /* ---------- Figure 6: lighting at night ---------- */
@@ -681,13 +675,13 @@ function setupLightGun(root) {
   const what = root.querySelector('[data-gun-label]');
   const choices = root.querySelector('[data-choices]');
   const out = root.querySelector('[data-result]');
-  let timer = 0, current = null, score = 0, asked = 0;
+  let timer = 0;
   const who = () => checked(root, 'who');
   const pattern = {
     'steady-green': ['green'], 'flashing-green': ['green', 'off'], 'steady-red': ['red'], 'flashing-red': ['red', 'off'],
     'flashing-white': ['white', 'off'], alternating: ['red', 'green'],
   };
-  function show(signal) {
+  function show(signal, label) {
     clearInterval(timer);
     const seq = pattern[signal.id];
     let i = 0;
@@ -695,31 +689,16 @@ function setupLightGun(root) {
     step();
     if (seq.length > 1 && !reduceMotion()) timer = setInterval(step, 500);
     // The lamp is decorative; the signal's name is the accessible prompt.
-    what.textContent = signal.colour;
+    label.textContent = signal.colour;
   }
-  function ask() {
-    const role = who();
-    const pool = LIGHT_SIGNALS.filter((s) => s[role] !== 'Not applicable');
-    current = pool[Math.floor(Math.random() * pool.length)];
-    show(current);
-    out.textContent = '';
-    const meanings = [...new Set(pool.map((s) => s[role]))];
-    choices.replaceChildren(...meanings.map((m) => {
-      const b = Object.assign(document.createElement('button'), { type: 'button', textContent: m });
-      b.addEventListener('click', () => {
-        asked++;
-        const right = m === current[role];
-        if (right) score++;
-        out.textContent = `${right ? 'Correct' : 'Not quite'}: ${current.colour.toLowerCase()} means "${current[role]}" ${{ ground: 'to an aircraft on the ground', air: 'to an aircraft in flight', vehicle: 'to vehicles, equipment and personnel' }[role]}. ${score} of ${asked}.`;
-        what.textContent = current.colour;
-        for (const c of choices.children) c.disabled = true;
-      });
-      return b;
-    }));
-  }
-  root.querySelector('[data-new]').addEventListener('click', ask);
-  root.addEventListener('change', ask);
-  ask();
+  const quiz = quickQuiz({ prompt: what, choices, result: out, next: root.querySelector('[data-new]') }, {
+    items: () => LIGHT_SIGNALS.filter((s) => s[who()] !== 'Not applicable'),
+    show,
+    options: () => [...new Set(LIGHT_SIGNALS.map((s) => s[who()]).filter((m) => m !== 'Not applicable'))],
+    isRight: (signal, m) => m === signal[who()],
+    feedback: (signal, m, right) => `${right ? 'Correct' : 'Not quite'}: ${signal.colour.toLowerCase()} means "${signal[who()]}" ${{ ground: 'to an aircraft on the ground', air: 'to an aircraft in flight', vehicle: 'to vehicles, equipment and personnel' }[who()]}.`,
+  });
+  root.addEventListener('change', quiz.restart);
 }
 
 /* ---------- Figure 11: radio calls in and out ---------- */
@@ -814,31 +793,7 @@ function setupRadio(root) {
 }
 
 /* ---------- Term quiz ---------- */
-function setupTerms(root) {
-  const terms = [...document.querySelectorAll('dl.jargon > div')].map((d) => ({
-    term: d.querySelector('dt').textContent.trim(), meaning: d.querySelector('dd').textContent.trim(),
-  }));
-  const prompt = root.querySelector('[data-prompt]'), choices = root.querySelector('[data-choices]');
-  const out = root.querySelector('[data-result]');
-  let score = 0, asked = 0;
-  function ask() {
-    const pool = [...terms].sort(() => Math.random() - 0.5).slice(0, 4);
-    const answer = pool[Math.floor(Math.random() * pool.length)];
-    prompt.textContent = answer.meaning;
-    choices.replaceChildren(...pool.map((t) => {
-      const b = Object.assign(document.createElement('button'), { type: 'button', textContent: t.term });
-      b.addEventListener('click', () => {
-        asked++;
-        if (t === answer) score++;
-        out.textContent = `${t === answer ? 'Correct' : `Not quite: that was ${answer.term}`}. ${score} of ${asked}.`;
-        for (const c of choices.children) c.disabled = true;
-      });
-      return b;
-    }));
-  }
-  root.querySelector('[data-new]').addEventListener('click', () => { out.textContent = ''; ask(); });
-  ask();
-}
+const setupTerms = (root) => termQuiz(root);
 
 const blocks = {
   aerodrome: setupCallouts, numbers: setupNumbers, markings: setupMarkings, hold: setupHold, signs: setupSigns,

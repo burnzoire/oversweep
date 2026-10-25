@@ -3,6 +3,7 @@
 import { BANDS, T45, geometry, levelTurn, maxNoseLow, norm, pursuit, radialG, speedBand } from './lesson-model.mjs';
 import { SIGMA_15K, flatScissors, highYoYo, lowYoYo, relative, rollingScissors, splitS, summary } from './maneuvers.mjs';
 import { VIEWS, render } from './ribbon.mjs';
+import { termQuiz } from '../shared/quick-quiz.mjs';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const rad = (d) => d * Math.PI / 180;
@@ -381,31 +382,7 @@ function setupFlow(root) {
 }
 
 /* ---------- Term quiz ---------- */
-function setupTerms(root) {
-  const terms = [...document.querySelectorAll('dl.jargon > div')].map((d) => ({
-    term: d.querySelector('dt').textContent.trim(), meaning: d.querySelector('dd').textContent.trim(),
-  }));
-  const prompt = root.querySelector('[data-prompt]'), choices = root.querySelector('[data-choices]');
-  const out = root.querySelector('[data-result]');
-  let score = 0, asked = 0;
-  function ask() {
-    const pool = [...terms].sort(() => Math.random() - 0.5).slice(0, 4);
-    const answer = pool[Math.floor(Math.random() * pool.length)];
-    prompt.textContent = answer.meaning;
-    choices.replaceChildren(...pool.map((t) => {
-      const b = Object.assign(document.createElement('button'), { type: 'button', textContent: t.term });
-      b.addEventListener('click', () => {
-        asked++;
-        if (t === answer) score++;
-        out.textContent = `${t === answer ? 'Correct' : `Not quite: that was ${answer.term}`}. ${score} of ${asked}.`;
-        for (const c of choices.children) c.disabled = true;
-      });
-      return b;
-    }));
-  }
-  root.querySelector('[data-new]').addEventListener('click', () => { out.textContent = ''; ask(); });
-  ask();
-}
+const setupTerms = (root) => termQuiz(root);
 
 const blocks = { maneuvers: setupManeuvers, geometry: setupGeometry, pursuit: setupPursuit, turn: setupTurn, loop: setupLoop, deck: setupDeck, flow: setupFlow, overshoot: setupFlow, terms: setupTerms };
 for (const root of document.querySelectorAll('[data-lesson]')) {
