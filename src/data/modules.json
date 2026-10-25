@@ -42,5 +42,16 @@
     "publication": "published",
     "objective": "Understand the four forces, lift and angle of attack, drag, control and stability, turns and load factor, stalls, the maneuvering envelope and energy well enough to explain what a military jet is doing and why.",
     "applicability": "For military pilots: fixed-wing principles from Navy aerodynamics texts, with FAA handbooks as supplementary sources; worked numbers use an invented jet trainer, with US Navy T-45 training figures where cited."
+  },
+  {
+    "id": "module.air-navigation",
+    "slug": "air-navigation",
+    "subject": "navigation",
+    "revision": 1,
+    "title": "Air Navigation",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Fix and describe a position, turn true courses into compass headings and correct for wind, then navigate by TACAN, VOR and DME (radials, intercepts, arcs and point-to-point), by GPS and inertial systems (waypoints, offsets and direct-to), and cross-check them.",
+    "applicability": "For military pilots: US Navy training publications first, with the FAA AIM and Pilot's Handbook as the supplementary US civil rule set and an Army field manual for the military grid. Worked examples use the T-45C training jet's displays; your aircraft's NATOPS manual governs its systems."
   }
 ]
