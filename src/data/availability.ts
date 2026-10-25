@@ -1,6 +1,7 @@
 import { encyclopediaCategories, manualSubjects } from './catalogue';
 import { experienceFrame, experienceRoute, includedExperiences, type Experience } from './experiences';
 import { includedModules, moduleRoute, type Module } from './modules';
+import { categoryRecords } from './encyclopedia';
 
 // What a reader can actually open, derived from the registries. Navigation shows
 // destinations without content dimmed and unlinked, so readers only follow links
@@ -50,8 +51,8 @@ export const subjectEntries = (slug: string) => manualEntries.filter((entry) => 
 export const subjectHasContent = (slug: string) => subjectEntries(slug).length > 0;
 export const subjectTitle = (slug: string) => manualSubjects.find((s) => s.slug === slug)?.title ?? slug;
 
-// No encyclopedia record registry exists yet, so every category is empty.
-export const categoryHasContent = (_slug: string) => false;
+export const categoryHasContent = (slug: string) => categoryRecords(slug).length > 0;
+export const categoryTitle = (slug: string) => encyclopediaCategories.find((c) => c.slug === slug)?.title ?? slug;
 
 export const sectionHasContent = {
   manual: manualSubjects.some((s) => subjectHasContent(s.slug)),

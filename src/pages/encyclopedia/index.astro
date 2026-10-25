@@ -1,15 +1,35 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
+import RecordCard from "../../components/encyclopedia/RecordCard.astro";
 import { encyclopediaCategories } from "../../data/catalogue";
+import { categoryHasContent } from "../../data/availability";
+import { categoryRecords } from "../../data/encyclopedia";
 import { sitePath } from "../../lib/paths";
+
+const available = encyclopediaCategories.filter((c) => categoryHasContent(c.slug));
+const empty = available.length === 0;
 ---
 
-<SiteLayout title="Encyclopedia" activeSection="encyclopedia" isSectionIndex empty>
-  <p class="empty-note">No encyclopedia records are published yet. Start with the <a href={sitePath("manual/")}>Manual</a> instead.</p>
+<SiteLayout title="Encyclopedia" activeSection="encyclopedia" isSectionIndex empty={empty}>
+  {empty ? (
+    <p class="empty-note">No encyclopedia records are published yet. Start with the <a href={sitePath("manual/")}>Manual</a> instead.</p>
+  ) : (
+    <>
+      <p class="lead">Structured reference records with their sources: what a system is, how it works and how to recognise it. Every record states its review status. Categories without records yet are dimmed below.</p>
+      {available.map((category) => (
+        <section class="subject-group" aria-labelledby={`category-${category.slug}`}>
+          <h2 id={`category-${category.slug}`}><a href={sitePath(`encyclopedia/${category.slug}/`)}>{category.title}</a></h2>
+          <div class="entry-grid">
+            {categoryRecords(category.slug).map((record) => <RecordCard record={record} />)}
+          </div>
+        </section>
+      ))}
+    </>
+  )}
   <section class="planned" aria-labelledby="planned-title">
-    <h2 id="planned-title">Planned categories</h2>
+    <h2 id="planned-title">{empty ? "Planned categories" : "Other categories"}</h2>
     <ul class="planned-list">
-      {encyclopediaCategories.map((category) => <li>{category.title}</li>)}
+      {encyclopediaCategories.filter((c) => !categoryHasContent(c.slug)).map((category) => <li>{category.title}</li>)}
     </ul>
   </section>
 </SiteLayout>

@@ -4,6 +4,7 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 import { encyclopediaCategories, manualSubjects } from "../data/catalogue";
 import { manualEntries, sectionHasContent, subjectHasContent } from "../data/availability";
 import { includedExperiences } from "../data/experiences";
+import { includedRecords } from "../data/encyclopedia";
 import { sitePath } from "../lib/paths";
 
 const subjectCount = manualSubjects.filter((s) => subjectHasContent(s.slug)).length;
@@ -26,7 +27,7 @@ const collections = [
   {
     title: "Encyclopedia",
     description: `Aircraft, ordnance, sensors and terminology records across ${encyclopediaCategories.length} categories.`,
-    status: "Nothing published yet",
+    status: includedRecords.length ? plural(includedRecords.length, "record") : "Nothing published yet",
     path: "encyclopedia/",
     available: sectionHasContent.encyclopedia,
   },
