@@ -9,5 +9,16 @@
     "publication": "published",
     "objective": "Understand one-versus-one BFM geometry, pursuit, turn performance, vertical maneuvering, energy and guns employment well enough to describe what each aircraft is doing and why.",
     "applicability": "Aircraft-agnostic concepts illustrated with US Navy T-45C training figures; type-specific numbers belong to that training example."
+  },
+  {
+    "id": "module.airfield-basics",
+    "slug": "airfield-basics",
+    "subject": "airfield-operations",
+    "revision": 1,
+    "title": "The Airfield and the Traffic Pattern",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Read an aerodrome's runway numbers, markings, signs and lighting, choose the runway in use from the wind, fly the traffic pattern and overhead maneuver, and move safely on the ground.",
+    "applicability": "Aircraft-agnostic; US (FAA) aerodrome standards and procedures as the worked example. Each airfield's published procedures take precedence."
   }
 ]
