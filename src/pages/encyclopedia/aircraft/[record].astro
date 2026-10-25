@@ -1,0 +1,68 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import Cited from '../../../components/encyclopedia/Cited.astro';
+import { aircraftContent, aircraftGroups, categoryRecords, recordRoute, type EncyclopediaRecord } from '../../../data/encyclopedia';
+import { categoryTitle } from '../../../data/availability';
+import { sitePath } from '../../../lib/paths';
+import '../../../styles/encyclopedia.css';
+
+export function getStaticPaths() {
+  return categoryRecords('aircraft').map((record) => ({ params: { record: record.slug }, props: { record } }));
+}
+
+const { record } = Astro.props as { record: EncyclopediaRecord };
+const { frontmatter: data, Content } = aircraftContent(record);
+const category = categoryTitle(record.category);
+const group = aircraftGroups.find((g) => g.slug === data.group)!;
+// The record nav lists the aircraft of the same group, so it stays short.
+const siblings = categoryRecords('aircraft').filter((r) => aircraftContent(r).frontmatter.group === data.group);
+const plate: [string, string][] = [
+  ['Variant described', data.variant],
+  ['Role', data.role],
+  ['Origin', data.origin],
+  ['Manufacturer', data.manufacturer],
+  ['Crew', data.crew],
+  ['First flight', data.firstFlight],
+  ['Entered service', data.inService],
+  ['Status', data.status],
+  ['Powerplant', data.powerplant],
+  ['Maximum speed', data.maxSpeed],
+  ['Service ceiling', data.ceiling],
+  ['Range', data.range],
+];
+---
+<SiteLayout title={record.title} activeSection="encyclopedia"
+  description={`${record.title} (${record.designation}): ${record.summary}`}
+  breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: category, href: sitePath('encyclopedia/aircraft/') }, { label: record.title }]}>
+  <div class="ency">
+    <nav class="record-nav" aria-label={`${group.title} records`}>
+      <ol>{siblings.map((r) => <li>{r.slug === record.slug ? <span aria-current="page">{r.title.split(' ')[0]}</span> : <a href={sitePath(recordRoute(r))}>{r.title.split(' ')[0]}</a>}</li>)}</ol>
+    </nav>
+    <section class="status-panel" data-record-id={record.id} data-record-revision={record.revision}>
+      <h2>{record.maturity}</h2>
+      <p>Record revision {record.revision} · {record.summary}</p>
+      <p>Real-world aircraft as described in public sources. Figures vary between variants, loads and sources; the data plate names the variant its figures describe, and differences are noted beside the number they affect.</p>
+    </section>
+
+    <section class="data-plate" aria-labelledby="plate-title">
+      <h2 id="plate-title">{data.name} · {record.designation}</h2>
+      <dl>
+        {plate.map(([term, text]) => <div><dt>{term}</dt><dd><Cited text={text} /></dd></div>)}
+        <div><dt>Armament</dt><dd><ul>{data.armament.map((a) => <li><Cited text={a} /></li>)}</ul></dd></div>
+        {data.sensors && <div><dt>Sensors and avionics</dt><dd><ul>{data.sensors.map((s) => <li><Cited text={s} /></li>)}</ul></dd></div>}
+      </dl>
+    </section>
+
+    <div class="record-body"><Content /></div>
+
+    <section class="sources" aria-labelledby="sources-title">
+      <h2 id="sources-title">Sources</h2>
+      <ol>
+        {data.sources.map((s) => (
+          <li id={`source-${s.n}`} value={s.n}><cite>{s.title}</cite>. {s.publisher}{s.date && `, ${s.date}`}. <a href={s.url}>{s.url}</a> (accessed {s.accessed}).{s.note && ` ${s.note}`}</li>
+        ))}
+      </ol>
+      <p class="note">Wikipedia articles are secondary sources and can change; they are cited with the date they were read. The Federation of American Scientists (FAS) Military Analysis Network pages largely reproduce US service fact sheets of the late 1990s and early 2000s, so later upgrades are not covered there.</p>
+    </section>
+  </div>
+</SiteLayout>

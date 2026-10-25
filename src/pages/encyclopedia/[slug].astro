@@ -4,7 +4,7 @@ import RecordCard from "../../components/encyclopedia/RecordCard.astro";
 import EnvelopeFigure from "../../components/encyclopedia/EnvelopeFigure.astro";
 import { encyclopediaCategories } from "../../data/catalogue";
 import { sectionHasContent } from "../../data/availability";
-import { categoryRecords, recordContent, recordRoute } from "../../data/encyclopedia";
+import { aircraftContent, aircraftGroups, categoryRecords, recordContent, recordRoute } from "../../data/encyclopedia";
 import { sitePath } from "../../lib/paths";
 import "../../styles/encyclopedia.css";
 
@@ -22,6 +22,11 @@ const label = (title: string) => title.split(" ")[0].replace(/^SA-/, "");
 // Citation numbers belong to each record's own source list, so the table drops them.
 const plain = (text: string) => text.replace(/\s*\[\d+\]/g, "");
 const km = (value: number) => `${Number(value.toFixed(1)).toLocaleString("en-GB")} km`;
+// Aircraft are listed by group (jets, propeller aircraft, helicopters).
+const aircraft = category.slug === "aircraft"
+  ? aircraftGroups.map((group) => ({ group, records: categoryRecords("aircraft").map((record) => ({ record, data: aircraftContent(record).frontmatter })).filter(({ data }) => data.group === group.slug) })).filter(({ records }) => records.length > 0)
+  : [];
+const n = (value: number) => value.toLocaleString("en-GB");
 ---
 
 <SiteLayout
@@ -42,10 +47,47 @@ const km = (value: number) => `${Number(value.toFixed(1)).toLocaleString("en-GB"
       {category.slug === "threat-systems" && (
         <p class="lead">Surface-to-air missile systems a pilot may face, starting with the single-digit SAMs, SA-1 to SA-9: the Soviet systems of the 1950s to the early 1970s that are still met in conflicts and simulators. Each record gives the system's radars, guidance, published engagement limits and what it shows on a radar warning receiver, with sources.</p>
       )}
-      <h2>Records</h2>
-      <div class="entry-grid record-grid">
-        {records.map(({ record }) => <RecordCard record={record} />)}
-      </div>
+      {category.slug === "aircraft" ? (
+        <>
+          <p class="lead">Military aircraft from the Second World War to today: fighters, attack aircraft, trainers, a transport and helicopters. Each record gives the aircraft's role, the variant its figures describe, performance, armament and service history, with sources.</p>
+          {aircraft.map(({ group, records }) => (
+            <>
+              <h2>{group.title}</h2>
+              <div class="entry-grid record-grid">
+                {records.map(({ record }) => <RecordCard record={record} />)}
+              </div>
+            </>
+          ))}
+          <h2>Quick reference</h2>
+          <div class="table-scroll" role="region" aria-label="Aircraft quick reference table, scrolls sideways on narrow screens" tabindex="0">
+            <table>
+              <thead><tr><th scope="col">Aircraft</th><th scope="col">Role</th><th scope="col">First flight</th><th scope="col">Max speed</th><th scope="col">Ceiling</th></tr></thead>
+              {aircraft.map(({ group, records }) => (
+                <tbody>
+                  <tr><th scope="rowgroup" colspan="5">{group.title}</th></tr>
+                  {records.map(({ record, data }) => (
+                    <tr>
+                      <th scope="row"><a href={sitePath(recordRoute(record))}>{record.title}</a><br /><span class="entry-kicker">{record.designation}</span></th>
+                      <td>{plain(data.role)}</td>
+                      <td>{data.quick.firstFlight}</td>
+                      <td>{data.quick.maxSpeedKt === null ? "not given" : `${n(data.quick.maxSpeedKt)} kt`}</td>
+                      <td>{data.quick.ceilingFt === null ? "not given" : `${n(data.quick.ceilingFt)} ft`}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              ))}
+            </table>
+          </div>
+          <p class="note">Speeds are true airspeed at the altitude given on each record, for the variant named there; each record cites its sources and notes other published figures.</p>
+        </>
+      ) : (
+        <>
+          <h2>Records</h2>
+          <div class="entry-grid record-grid">
+            {records.map(({ record }) => <RecordCard record={record} />)}
+          </div>
+        </>
+      )}
       {withEnvelopes.length > 0 && (
         <>
           <h2>Compare the envelopes</h2>

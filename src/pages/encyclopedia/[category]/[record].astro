@@ -11,7 +11,8 @@ import { sitePath } from '../../../lib/paths';
 import '../../../styles/encyclopedia.css';
 
 export function getStaticPaths() {
-  return includedRecords.map((record) => ({ params: { category: record.category, record: record.slug }, props: { record } }));
+  // Aircraft records have their own page, src/pages/encyclopedia/aircraft/[record].astro.
+  return includedRecords.filter((record) => record.category !== 'aircraft').map((record) => ({ params: { category: record.category, record: record.slug }, props: { record } }));
 }
 
 const { record } = Astro.props as { record: EncyclopediaRecord };
