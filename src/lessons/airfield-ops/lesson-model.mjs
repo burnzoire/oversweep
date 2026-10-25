@@ -66,10 +66,11 @@ export function markingsFor(type, { international = false, jet4000 = false } = {
 // Touchdown zone bar groups beyond the threshold, AIM 2-3-3.5: groups of one,
 // two and three bars in pairs, coded in 500 ft increments; the aiming point is
 // about 1,000 ft in (2-3-3.4). The AIM text gives the coding, not each group's
-// bar count, so the counts below (fewer bars further in) are illustrative.
+// bar count; the counts below follow the usual FAA layout (3, aiming point,
+// 2, 2, 1, 1) and are unverified against a text source.
 export const TOUCHDOWN_GROUPS = [
-  { at: 500, bars: 3 }, { at: 1000, bars: 0, aiming: true }, { at: 1500, bars: 3 },
-  { at: 2000, bars: 2 }, { at: 2500, bars: 2 }, { at: 3000, bars: 1 },
+  { at: 500, bars: 3 }, { at: 1000, bars: 0, aiming: true }, { at: 1500, bars: 2 },
+  { at: 2000, bars: 2 }, { at: 2500, bars: 1 }, { at: 3000, bars: 1 },
 ];
 
 // Wind components on a runway. θ = wind direction − runway direction.
@@ -82,7 +83,7 @@ export function windComponents({ wind, speed, runway }) {
 }
 
 // AIM 4-3-6.2: "ATC will assign the runway/s most nearly aligned with the wind
-// when 5 knots or more." Below 5 knots the calm-wind runway is used unless
+// when 5 knots or more." A tie keeps the first runway listed. Below 5 knots the calm-wind runway is used unless
 // another is operationally advantageous. `runways` are candidate landing
 // directions (one per runway end), `calm` the calm-wind direction.
 export function runwayForWind({ wind, speed, runways, calm }) {
@@ -189,11 +190,11 @@ export function overhead({ speed = 300, bank = 60, breakAt = 2500, extend = 2000
     breakAlt, downwind, pathLen,
     descentGradient: (breakAlt - rollHeight) / pathLen,
     seconds: pathLen / (speed * KT / FT),
-    points: { start: [-initial, 0], break: [breakAt, 0], abeam: [breakAt, -2 * r], final: [finalStart, -2 * r], rollout: [rollout, 0] },
+    points: { start: [breakAt - initial, 0], break: [breakAt, 0], abeam: [breakAt, -2 * r], final: [finalStart, -2 * r], rollout: [rollout, 0] },
   };
 }
 
-// AIM TBL 4-3-13, Traffic control light signals.
+// AIM 4-3-13, Traffic control light signals (the table in that paragraph).
 export const LIGHT_SIGNALS = [
   { id: 'steady-green', colour: 'Steady green', ground: 'Cleared for takeoff', air: 'Cleared to land', vehicle: 'Cleared to cross, proceed or go' },
   { id: 'flashing-green', colour: 'Flashing green', ground: 'Cleared for taxi', air: 'Return for landing (to be followed by steady green at the proper time)', vehicle: 'Not applicable' },

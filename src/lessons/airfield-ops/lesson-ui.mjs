@@ -190,7 +190,9 @@ function setupHold(root) {
   function draw() {
     const way = checked(root, 'way');
     const pos = Number(f.pos.value); // ft of the aircraft's nose from the solid lines, + toward the runway
-    setOut(root, 'pos', pos === 0 ? 'nose at the solid lines' : `${r0(Math.abs(pos))} ft ${pos < 0 ? 'before' : 'past'} the solid lines`);
+    // Entering, the solid lines come first; exiting, the aircraft reaches them last.
+    const side = pos < 0 ? 'on the holding (solid-line) side' : 'on the runway side';
+    setOut(root, 'pos', pos === 0 ? 'nose at the solid lines' : `nose ${r0(Math.abs(pos))} ft ${side} of the solid lines`);
     // Taxiway runs up the page into the runway. y screen = 300 − ft·0.9 (hold line at 300).
     const Yh = 300, s = 0.9, cx = 320;
     const Y = (ft) => Yh - ft * s;
@@ -363,7 +365,7 @@ function setupLighting(root) {
   function stop() { clearInterval(timer); timer = 0; play.textContent = 'Flash the beacon'; lamp.setAttribute('class', 'lt-lamp off'); }
   play.addEventListener('click', () => {
     if (timer) return stop();
-    if (reduceMotion()) return;
+    if (reduceMotion()) { play.textContent = 'Reduced motion: read the sequence above'; return; }
     play.textContent = 'Stop';
     i = 0;
     timer = setInterval(() => { const s = seq[kind()]; lamp.setAttribute('class', `lt-lamp ${s[i++ % s.length]}`); }, 450);
@@ -405,7 +407,7 @@ function setupPapi(root) {
     p.lights.forEach((c, i) => box.append(el('circle', { cx: 32 + i * 42, cy: 30, r: 13, class: `lt ${c}` })));
     box.append(el('text', { x: 95, y: 62, 'text-anchor': 'middle', class: 'lbl small rev' }, p.label.toUpperCase()));
     svg.append(box, el('text', { x: 250, y: 44, class: 'lbl small' }, 'PAPI AS SEEN FROM THE COCKPIT'));
-    svg.append(el('text', { x: 14, y: 24, class: 'lbl small' }, 'SIDE VIEW · VERTICAL SCALE EXAGGERATED ABOUT 20×'));
+    svg.append(el('text', { x: 14, y: 24, class: 'lbl small' }, `SIDE VIEW · VERTICAL SCALE EXAGGERATED ABOUT ${Math.round(sy / sx)}×`));
     const on3 = heightOnPath(dist, 3);
     out.replaceChildren(...para([
       `You are ${angle.toFixed(2)}° above the PAPI: ${p.white} white and ${4 - p.white} red, "${p.label.toLowerCase()}".`,
@@ -562,7 +564,7 @@ function setupPattern(root) {
     const depart = exit === 'remain' ? [p.legs.departure[0], p.legs.departure[1], p.legs.crosswind[1], [p.mid, y]] : p.exits[exit === 'straight' ? 'straight' : 'turn45'];
     route = [...arrive, ...p.legs.downwind.slice(1), p.legs.base[1], ...touch, ...depart.slice(1)];
     out.replaceChildren(...para([
-      highlight ? legsText[highlight] : `${side === 'left' ? 'Left' : 'Right'} traffic: every turn is to the ${side}. ${side === 'left' ? 'Left is the standard; right traffic is shown by markings such as segmented circle traffic pattern indicators.' : 'Right traffic is used only where the airport shows it.'}`,
+      highlight ? legsText[highlight] : `${side === 'left' ? 'Left' : 'Right'} traffic: every turn is to the ${side}. ${side === 'left' ? 'Turns are to the left unless the airport shows right traffic, for example with segmented circle traffic pattern indicators.' : 'Right traffic is used only where the airport shows it.'}`,
       `${type === 'turbine' ? 'Large and turbine-powered aircraft: not less than 1,500 ft AGL.' : 'Propeller-driven aircraft: 1,000 ft AGL.'} ${entry === '45' ? 'Enter at 45° to the downwind leg, abeam the runway midpoint, at pattern altitude.' : 'From the upwind side: cross midfield at least 500 ft above pattern altitude, descend to pattern altitude about 2 miles out, and turn back to a 45° entry.'}`,
       exit === 'remain' ? 'Staying in the pattern: after takeoff, turn crosswind beyond the departure end within 300 ft of pattern altitude.' : `Leaving the pattern: ${exit === 'straight' ? 'continue straight out' : 'exit with a 45° turn toward the pattern side'} beyond the departure end after reaching pattern altitude.`,
     ]));
@@ -570,7 +572,7 @@ function setupPattern(root) {
   function stop() { cancelAnimationFrame(frame); frame = 0; play.textContent = 'Fly the pattern'; svg.querySelector('.mover')?.remove(); }
   play.addEventListener('click', () => {
     if (frame) return stop();
-    const seg = route.slice(1).map((b, i) => { const a = route[i]; return { a, b, len: Math.hypot(b[0] - a[0], b[1] - a[1]) }; });
+    const seg = route.slice(1).map((b, i) => { const a = route[i]; return { a, b, len: Math.hypot(b[0] - a[0], b[1] - a[1]) }; }).filter((s) => s.len > 0);
     const total = seg.reduce((t, s) => t + s.len, 0);
     const at = (d) => {
       for (const s of seg) { if (d <= s.len) { const k = d / s.len; return { p: [s.a[0] + (s.b[0] - s.a[0]) * k, s.a[1] + (s.b[1] - s.a[1]) * k], h: Math.atan2(s.b[0] - s.a[0], -(s.b[1] - s.a[1])) * 180 / Math.PI + 90 }; } d -= s.len; }
@@ -592,11 +594,12 @@ function setupPattern(root) {
       const { p, h } = at(d);
       const [x, y] = S(p);
       mover.setAttribute('transform', `translate(${x} ${y}) rotate(${h - 90})`);
-      if (d < total) frame = requestAnimationFrame(tick); else { frame = 0; play.textContent = 'Fly the pattern'; }
+      if (d < total) frame = requestAnimationFrame(tick); else stop();
     };
     frame = requestAnimationFrame(tick);
   });
   for (const b of root.querySelectorAll('button[data-leg]')) b.addEventListener('click', () => {
+    stop();
     highlight = highlight === b.dataset.leg ? null : b.dataset.leg;
     for (const o of root.querySelectorAll('button[data-leg]')) o.setAttribute('aria-pressed', String(o.dataset.leg === highlight));
     build();
@@ -622,14 +625,16 @@ function setupOverhead(root) {
     const o = overhead({ speed, bank, breakAt, extend, initial });
     // Plan view (top): x along the runway, left traffic (downwind north of the runway, up the page).
     const oy = 150;
-    const minX = -initial, maxX = Math.max(L, breakAt + o.radius);
+    // The initial runs `initial` up to the break; the final turn reaches −extend − r.
+    const start = breakAt - initial;
+    const minX = Math.min(start, -extend - o.radius), maxX = Math.max(L, breakAt + o.radius);
     const scale = Math.min(560 / (maxX - minX), 110 / (2 * o.radius + 600));
     const X = (x) => 40 + (x - minX) * scale, Y = (y) => oy + y * scale;
     svg.replaceChildren(el('rect', { x: 1, y: 1, width: 638, height: 478, class: 'frame' }));
     svg.append(el('rect', { x: X(0), y: Y(-75) - 2, width: L * scale, height: 150 * scale + 4, class: 'rwy' }));
     const r = o.radius;
     const path = [
-      `M${X(-initial)} ${Y(0)} L${X(breakAt)} ${Y(0)}`,
+      `M${X(start)} ${Y(0)} L${X(breakAt)} ${Y(0)}`,
       `A${r * scale} ${r * scale} 0 0 0 ${X(breakAt)} ${Y(-2 * r)}`,
       `L${X(-extend)} ${Y(-2 * r)}`,
       `A${r * scale} ${r * scale} 0 0 0 ${X(-extend)} ${Y(0)}`,
@@ -637,21 +642,21 @@ function setupOverhead(root) {
     ].join(' ');
     svg.append(el('path', { d: path, class: 'track' }));
     const mark = (x, y, t, dy = -10, a = 'middle') => { svg.append(el('circle', { cx: X(x), cy: Y(y), r: 3.5, class: 'fixmark' })); svg.append(el('text', { x: X(x), y: Y(y) + dy, 'text-anchor': a, class: 'lbl small' }, t)); };
-    mark(-initial, 0, 'INITIAL', 18, 'start');
+    mark(start, 0, 'INITIAL', 18, 'start');
     mark(breakAt, 0, 'BREAK', 18);
     mark(-extend, 0, 'ROLL-OUT', 18, 'end');
-    svg.append(el('text', { x: X((breakAt - extend) / 2), y: Y(-2 * r) - 8, 'text-anchor': 'middle', class: 'lbl small' }, `DOWNWIND ${r10(o.spacing)} FT (2 × TURN RADIUS) FROM THE RUNWAY`));
+    svg.append(el('text', { x: Math.min(440, Math.max(200, X((breakAt - extend) / 2))), y: Math.max(40, Y(-2 * r) - 8), 'text-anchor': 'middle', class: 'lbl small' }, `DOWNWIND ${r10(o.spacing)} FT (2 × TURN RADIUS) FROM THE RUNWAY`));
     svg.append(el('text', { x: 14, y: 24, class: 'lbl small' }, `PLAN VIEW · LEFT BREAK OVER RUNWAY 9 · ${r0(L)} FT RUNWAY · NO WIND`));
     // Side view (bottom): height along the flown path, break to roll-out descending linearly.
     const sy0 = 440, hsc = 150 / 2000;
-    const total = initial + breakAt + o.pathLen + extend;
+    const total = initial + o.pathLen + extend;
     const PX = (d) => 40 + d / total * 560, PY = (h) => sy0 - h * hsc;
     svg.append(el('path', { d: `M30 ${sy0} H620`, class: 'ln heavy' }));
     for (const h of [300, 1000, 1500]) {
       svg.append(el('path', { d: `M30 ${PY(h)} H620`, class: 'rb-datum' }));
       svg.append(el('text', { x: 34, y: PY(h) - 3, class: 'lbl small' }, h === 1000 ? '1,000 FT CONVENTIONAL PATTERN' : `${r0(h)} FT`));
     }
-    const dBreak = initial + breakAt, dRoll = dBreak + o.pathLen;
+    const dBreak = initial, dRoll = dBreak + o.pathLen;
     svg.append(el('path', { d: `M${PX(0)} ${PY(o.breakAlt)} L${PX(dBreak)} ${PY(o.breakAlt)} L${PX(dRoll)} ${PY(o.rollHeight)} L${PX(dRoll + extend)} ${PY(0)}`, class: 'track' }));
     svg.append(el('text', { x: PX(dBreak), y: PY(o.breakAlt) - 8, 'text-anchor': 'middle', class: 'lbl small' }, 'BREAK'));
     svg.append(el('text', { x: PX(dRoll), y: PY(o.rollHeight) - 8, 'text-anchor': 'middle', class: 'lbl small' }, 'ROLL-OUT'));
@@ -659,10 +664,10 @@ function setupOverhead(root) {
     const ok = (b) => (b ? '✓' : '✗');
     out.replaceChildren(...para([
       `Break turn: ${bank}° of bank at ${speed} kt is ${o.load.toFixed(1)} G, a ${r10(o.radius)} ft radius at ${o.rate.toFixed(1)}° per second; each 180° takes ${(180 / o.rate).toFixed(0)} s. Break to roll-out: ${(o.seconds).toFixed(0)} s.`,
-      `${ok(o.initialOk)} Initial approach ${(initial / NM).toFixed(1)} NM (the glossary: 3 to 5 miles).`,
-      `${ok(o.altitudeOk)} Overhead at ${r0(o.breakAlt)} ft AGL, 500 ft above the 1,000 ft conventional pattern (at least 500 ft above).`,
+      `${ok(o.initialOk)} Initial approach ${(initial / NM).toFixed(1)} NM to the break (the glossary: 3 to 5 miles).`,
+      `Overhead flown at ${r0(o.breakAlt)} ft AGL, the glossary's minimum of 500 ft above the 1,000 ft conventional pattern.`,
       `${ok(o.rolloutOk)} Roll-out ${r0(o.rollout)} ft before the threshold (not less than 1/4 mile, ${r0(SM / 4)} ft).`,
-      `${ok(o.rollHeightOk)} Roll-out at ${o.rollHeight} ft above the ground (not less than 300 ft).`,
+      `Roll-out drawn at ${o.rollHeight} ft above the ground, the glossary's minimum.`,
     ]));
   }
   root.addEventListener('input', draw);
@@ -689,7 +694,8 @@ function setupLightGun(root) {
     const step = () => lamp.setAttribute('class', `gun-lamp ${seq[i++ % seq.length]}`);
     step();
     if (seq.length > 1 && !reduceMotion()) timer = setInterval(step, 500);
-    what.textContent = reduceMotion() || seq.length === 1 ? signal.colour : 'Watch the lamp';
+    // The lamp is decorative; the signal's name is the accessible prompt.
+    what.textContent = signal.colour;
   }
   function ask() {
     const role = who();

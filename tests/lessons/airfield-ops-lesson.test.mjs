@@ -147,3 +147,26 @@ test('light gun signals follow AIM TBL 4-3-13', () => {
   assert.equal(lightSignal('flashing-white', 'air'), 'Not applicable');
   assert.equal(lightSignal('blue', 'air'), null);
 });
+
+test('PAPI boundaries: a unit turns white only above its setting', () => {
+  // Settings 2°30′, 2°50′, 3°10′, 3°30′: exactly on a setting still shows red for that unit.
+  assert.equal(papi(2.5).white, 0);
+  assert.equal(papi(2.51).white, 1);
+  assert.equal(papi(2 + 50 / 60).white, 1);
+  assert.equal(papi(2.84).white, 2);
+  assert.equal(papi(3.5).white, 3);
+  assert.equal(papi(3.51).white, 4);
+});
+
+test('a wind exactly between two runways keeps the first listed', () => {
+  // 045° is 45° off both runway 9 and runway 36.
+  assert.equal(runwayForWind({ wind: 45, speed: 10, runways: [90, 270, 180, 360] }).runway, 90);
+  assert.equal(runwayForWind({ wind: 45, speed: 10, runways: [360, 90] }).runway, 360);
+});
+
+test('the overhead initial is measured up to the break point', () => {
+  // A 3 NM initial ending at a break 4,000 ft past the threshold starts 18,228 − 4,000 = 14,228 ft out.
+  const o = overhead({ breakAt: 4000, initial: 3 * NM });
+  near(o.points.start[0], 4000 - 3 * 6076.115, 0.01, 'start');
+  assert.deepEqual(o.points.break, [4000, 0]);
+});

@@ -19,12 +19,12 @@ all of their pages.
 
 ```review-sources
 source: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/09_afh_ch8.pdf
-pages: 1-8 (8-1 to 8-7)
+pages: 1-7 (8-1 to 8-7)
 ```
 
 ```review-sources
 source: https://www.faa.gov/documentlibrary/media/advisory_circular/ac_90-66c.pdf
-pages: 1-30
+pages: 1-28
 ```
 
 ## Sources
@@ -75,13 +75,13 @@ pages: 1-30
 | AIM 4-3-3 | Legs (departure, upwind, crosswind, downwind, base, final); departure to at least 1/2 mile beyond the runway end and within 300 ft of pattern altitude; crosswind turn "beyond the departure end of the runway within 300 feet of pattern altitude"; turn to final at least 1/4 mile from the runway; "Propeller-driven aircraft enter the traffic pattern at 1,000 feet above ground level (AGL)."; "Large and turbine-powered aircraft enter the traffic pattern at an altitude of not less than 1,500 feet AGL or 500 feet above the established pattern altitude."; left turns; "Enter pattern in level flight, abeam the midpoint of the runway, at pattern altitude."; "continue straight out, or exit with a 45 degree turn" | Pattern; Figure 9 |
 | AIM 4-3-4 | Segmented circle; "The large end of the wind cone/wind sock points into the wind as does the large end (cross bar) of the wind tee."; "The small end of the tetrahedron points in the direction of landing."; tower instructions supersede it; traffic pattern and landing strip indicators | Wind; Figures 1, 8 |
 | AIM 4-3-6.1–6.2 | "183 degrees is runway 18", "87 degrees is runway 9"; "ATC will assign the runway/s most nearly aligned with the wind when 5 knots or more"; calm wind runway below 5 knots | Numbers; wind; Figure 8 |
-| AIM 4-3-13 | Light signals for aircraft and vehicles "not equipped with radio" or "if radio contact cannot be established"; "only approval or disapproval of a pilot's anticipated actions may be transmitted"; TBL 4-3-13 as tabulated on the page | Ground; Figure 11 |
+| AIM 4-3-13 | Light signals for aircraft and vehicles "not equipped with radio" or "if radio contact cannot be established"; "only approval or disapproval of a pilot's anticipated actions may be transmitted"; the signal table as tabulated in that paragraph | Ground; Figure 11 |
 | AIM 4-3-18 | Approval before moving onto the movement area; clearance for runway taxi, takeoff, landing and crossings; "ATC will issue an explicit clearance for all runway crossings"; taxi to the departure runway does not authorize entering or crossing it; progressive taxi; jet blast | Ground |
 | AIM 4-3-21 | Exit at the first available taxiway or as instructed; clear when all parts have crossed the holding position marking; "the pilot must hold unless further instructions have been issued by ATC"; change to ground when advised | Holding; Figure 4 |
 | P/CG, Overhead maneuver | "A series of predetermined maneuvers prescribed for aircraft (often in formation)"; not an IFR approach; IFR plan cancelled at the "initial point"; "An initial approach 3 to 5 miles in length."; "An elliptical pattern consisting of two 180 degree turns."; break point; "Altitude (at least 500 feet above the conventional pattern)."; roll-out "not less than 1/4 mile from the landing threshold and not less than 300 feet above the ground" | Overhead; Figure 10 |
 | P/CG, Threshold; Traffic pattern; Tetrahedron | "The beginning of that portion of the runway usable for landing."; leg definitions; tetrahedron small end points in the direction of landing | Terms; pattern |
 | AFH pp. 8-1–8-4 | Rectangle, left turns unless marked; "usually 1,000 feet above the elevation of the airport surface"; "normally entered at a 45° angle to the downwind leg"; downwind "approximately 1/2 to 1 mile out"; base turn "approximately 45° from the approach end"; upwind-side entry: "cross over midfield at least 500 feet above pattern altitude", descend to pattern altitude about 2 miles out, turn to a 45° entry; "the aircraft at the lower altitude has the right-of-way"; "continue straight out or exit with a 45° turn" | Pattern; Figure 9 |
-| AC 90-66C ¶9.11.1, 11.3, 11.8, App. A | "The FAA discourages VFR straight-in approaches"; "Entry to the downwind leg should be at a 45-degree angle abeam the midpoint of the runway to be used for landing."; departure straight out or 45° turn beyond the departure end after reaching pattern altitude; turbine aircraft not less than 1,500 ft above airport elevation | Pattern; Figure 9 |
+| AC 90-66C ¶9.11.1, 11.3, 11.8 | "The FAA discourages VFR straight-in approaches"; "Entry to the downwind leg should be at a 45-degree angle abeam the midpoint of the runway to be used for landing."; departure straight out or 45° turn beyond the departure end after reaching pattern altitude | Pattern; Figure 9 |
 | JO 7110.65 ¶3-10-12 | Overhead patterns developed where aircraft have an operational need; "BREAK AT (specified point)" when nonstandard; standard overhead pattern does not preclude rectangular patterns | Overhead |
 
 ## Unverified or illustrative items, flagged on the page
@@ -91,7 +91,8 @@ pages: 1-30
   order are the module's assumption. The caption says so.
 - Runways within 5° of north numbered 36 rather than 0: convention, stated on
   the page as not in the AIM paragraph.
-- Touchdown zone bar counts per group, stripe lengths, centerline dash/gap,
+- Touchdown zone bar counts per group (3, aiming point, 2, 2, 1, 1, the usual FAA
+  layout, not in the AIM text), stripe lengths, centerline dash/gap,
   sign proportions and the midfield-crossing track are illustrative, as captioned.
 - Overhead break speeds, bank angles and the linear descent are not sourced; the
   caption says to use aircraft and field numbers.
