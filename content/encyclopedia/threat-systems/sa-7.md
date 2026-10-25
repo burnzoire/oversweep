@@ -21,6 +21,17 @@ battery:
   pattern: group
   items:
     - { kind: gunner, label: "gunner with launch tube", count: 1 }
+photo:
+  src: "encyclopedia/threat-systems/sa-7.jpg"
+  width: 816
+  height: 1000
+  alt: "A soldier in tall grass aims a shoulder-fired SA-7 launcher upward."
+  caption: "A North Vietnamese soldier preparing to fire an SA-7."
+  author: "National Museum of the US Air Force"
+  date: "between 1970 and 1973"
+  licence: "Public domain, work of the US federal government"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:SA-7_being_used_in_Vietnam.jpg"
+  accessed: "2026-10-25"
 sources:
   - n: 1
     title: "9K32 Strela-2"

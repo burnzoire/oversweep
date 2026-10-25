@@ -41,6 +41,21 @@ export interface Radar {
   band?: string;
 }
 
+// A photo self-hosted under public/, credited to where it was found. Any
+// record may carry one; the licence is checked on the source page first.
+export interface Photo {
+  src: string;
+  width: number;
+  height: number;
+  alt: string;
+  caption: string;
+  author: string;
+  date?: string;
+  licence: string;
+  sourceUrl: string;
+  accessed: string;
+}
+
 export interface BatteryItem {
   kind: 'radar' | 'launcher' | 'reload' | 'command' | 'gunner';
   label: string;
@@ -62,6 +77,7 @@ export interface ThreatData {
   // Symbols from the cited RWR threat table; empty when the system has none.
   rwr: { symbol: string; emitter: string }[];
   rwrNote?: string;
+  photo?: Photo;
   battery?: { pattern: 'ring' | 'rings' | 'group'; spacing?: string; cite: number[]; items: BatteryItem[] };
   sources: Source[];
 }

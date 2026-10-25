@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 // Generated-output checks for every registered encyclopedia record. Published
 // records must ship their page and category listing with visible maturity and
-// revision, list their sources, and have a content file; excluded records must
+// revision, list their sources, credit any photo, and have a content file; excluded records must
 // not leak into normal builds. `--review` treats every entry as included.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -76,6 +76,14 @@ export async function checkRecords({ dist, records, review = false, base = "", c
       const text = pages.page.replace(/<a\b[^>]*>[\s\S]*?<\/a>/g, "").replace(/<(script|style)\b[\s\S]*?<\/\1>/g, "");
       for (const [marker] of text.matchAll(/\[\d+\]/g)) problems.push(`${r.id}: citation ${marker} is not linked to its source.`);
       if (!/class="record-body"[^>]*>\s*<[a-z]/.test(pages.page)) problems.push(`${r.id}: page has no record text.`);
+      // A photo must be self-hosted, described for screen readers and credited.
+      for (const [figure] of pages.page.matchAll(/<figure class="record-photo"[\s\S]*?<\/figure>/g)) {
+        const src = figure.match(/<img\b[^>]*\bsrc="([^"]*)"/)?.[1] ?? "";
+        if (!src.startsWith(`${base}/`) || await access(path.join(dist, decodeURI(src.slice(base.length)))).then(() => false, () => true))
+          problems.push(`${r.id}: photo ${src || "(no src)"} is not a file in the site.`);
+        if (!/<img\b[^>]*\balt="[^"]+"/.test(figure)) problems.push(`${r.id}: photo has no alt text.`);
+        if (!/class="credit"[\s\S]*Credit:[\s\S]*<a href="https:\/\//.test(figure)) problems.push(`${r.id}: photo is not credited to its source page.`);
+      }
     }
   }
   if (excluded.length) {

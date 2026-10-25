@@ -25,6 +25,17 @@ battery:
     - { kind: radar, label: "1S91 Straight Flush vehicle", count: 1 }
     - { kind: launcher, label: "tracked launchers (TEL)", count: 4, missiles: 3 }
     - { kind: reload, label: "reload trucks with crane", count: 4, missiles: 3 }
+photo:
+  src: "encyclopedia/threat-systems/sa-6.jpg"
+  width: 1280
+  height: 930
+  alt: "A line of tracked SA-6 launch vehicles in open ground, each with three missiles raised, with soldiers standing nearby."
+  caption: "SA-6 Gainful launch vehicles, each with three missiles, in a US Department of Defense photo."
+  author: "US Department of Defense"
+  date: "1977"
+  licence: "Public domain, work of the US federal government"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:SA-6_Gainful_SAM.JPEG"
+  accessed: "2026-10-25"
 sources:
   - n: 1
     title: "2K12 Kub"
