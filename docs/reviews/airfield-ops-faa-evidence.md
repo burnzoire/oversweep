@@ -65,7 +65,7 @@ pages: 1-28
 | AIM 2-3-13 | Runway distance remaining: "black background with a white numeral inscription"; distance in thousands of feet | Signs; Figure 5 |
 | AIM 2-1-2.1 | VASI "2 bars, near and far"; "one visual glide path which is normally set at 3 degrees"; white upper, red lower beam segments; ±10° and 4 NM; three-bar upper path 1/4° higher for high cockpit aircraft | Glide path |
 | AIM 2-1-2.2 | PAPI "single row of either two or four light units"; "normally installed on the left side of the runway"; ±10° and 3.4 NM; about 5 miles day, 20 miles night; do not descend on it until visually aligned; indications "as depicted" in FIG 2-1-5 (image only) | Glide path; Figure 7 |
-| AIM 2-1-2.3–2.4 | Tri-color: below red, above amber, on green. Pulsating: on steady white, slightly below steady red, further below pulsing red, above pulsing white | Glide path |
+| AIM 2-1-2.3–2.4 | Tri-color: below red, above amber, on green. Pulsating: on steady white, slightly below steady red, further below pulsing red, above pulsing white; on some systems on-path is alternating red and white | Glide path |
 | AIM 2-1-3 | REIL: pair of synchronized flashing lights each side of the threshold | Lighting |
 | AIM 2-1-4.2–4.3 | Edge lights white; yellow on the last 2,000 ft or half the runway, whichever is less, on instrument runways; end lights red toward the runway, green outward at the threshold | Lighting; Figure 6 |
 | AIM 2-1-5.1–5.2 | Centerline white until the last 3,000 ft, alternating red/white for the next 2,000 ft, red the last 1,000 ft; TDZ lights from 100 ft to 3,000 ft or the midpoint | Lighting; Figure 6 |
