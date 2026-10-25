@@ -31,7 +31,7 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:FA-18C_of_VFA-34_on_catapult_of_USS_George_Washington_(CVN-73)_in_October_2015.JPG"
     accessed: "2026-10-25"
   - src: "encyclopedia/aircraft/fa-18c-2.jpg"
-    alt: "A grey F/A-18C Hornet in flight over the sea"
+    alt: "A grey F/A-18C Hornet in flight over wooded land and lakes"
     caption: "An F/A-18C of VFA-136 \"Knighthawks\" of Carrier Air Wing 7, 1992."
     author: "Cmdr. John Leenhouts, US Navy"
     licence: "Public domain"
