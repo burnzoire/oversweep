@@ -1,0 +1,449 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import { getModule, includedModules } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import { ARC_LEAD_TABLE, INTERCEPT_METHODS } from '../../../lessons/navigation/lesson-model.mjs';
+const nav = getModule('air-navigation');
+export function getStaticPaths() { return includedModules.some(m => m.slug === 'air-navigation') ? [{ params: { module: 'air-navigation' } }] : []; }
+const contents = [
+ ['overview', 'Purpose and learning objectives'], ['earth', 'Position on the earth'], ['coords', 'Writing a position'],
+ ['direction', 'Direction: true, magnetic and compass'], ['wind', 'Dead reckoning and the wind triangle'],
+ ['navaids', 'Radio navigation aids'], ['hsi', 'Radials and the HSI'], ['intercepts', 'Intercepting a course'],
+ ['dme', 'Using distance: ground speed and arcs'], ['fixes', 'Fixes'], ['p2p', 'Point to point'],
+ ['gps', 'Satellite navigation'], ['ins', 'Inertial navigation'], ['waypoints', 'Waypoints, offsets and direct-to'],
+ ['crosscheck', 'Cross-checking and degraded navigation'], ['terms', 'Terms'], ['check', 'Check your understanding'],
+ ['sources', 'Sources and applicability'],
+];
+// Military sources first: [1] NAVEDTRA 14342A page, [2] CNATRA P-1204 page,
+// [3] FM 3-25.26 page. Supplementary FAA sources: [4] AIM paragraph,
+// [5] Pilot's Handbook (PHAK) page.
+const pp = (n: number) => (page: string) => `[${n}, ${page.includes('–') || page.includes(',') ? 'pp.' : 'p.'} ${page}]`;
+const nv = pp(1), fti = pp(2), fm = pp(3), ph = pp(5);
+const a = (para: string) => `[4, ${para.includes('–') || para.includes(',') ? 'paras' : 'para'} ${para}]`;
+const caseIii = sitePath('manual/naval-operations/case-iii/');
+const radio = sitePath('manual/radio-communications/radio-procedures/');
+---
+<SiteLayout title={nav.title} activeSection="manual" activeSubject="navigation" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Navigation',href:sitePath('manual/navigation/')},{label:nav.title}]}>
+ <section class="status-panel" data-module-id={nav.id} data-module-revision={nav.revision}>
+  <h2>{nav.maturity}</h2>
+  <p>Module revision {nav.revision} · How a military pilot knows where the aircraft is and gets it where it needs to go: positions and coordinates, headings and wind, TACAN, VOR and DME, then GPS, inertial systems and waypoint steering. Written for military pilots of every service from US Navy training publications, with the Army field manual for the military grid and the Federal Aviation Administration (FAA) rules that every aircraft follows in US airspace as the supplementary source. The T-45C examples carry across to any military aircraft; the aircraft's NATOPS or service flight manual governs its own systems.</p>
+  <p>Every figure is interactive. Convert a position between coordinate formats and the military grid, work a heading from true to compass, solve a wind triangle, read an HSI, plan intercepts and arcs, solve a point-to-point, and fly a waypoint route with direct-to.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <ol>{contents.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol>
+ </nav>
+
+ <h2 id="overview">Purpose and learning objectives</h2>
+ <p>Every navigator faces three problems: where the aircraft is, which direction to go to get from one position to another, and how far, with the time and speed that go with it. Of the three, position matters most: unless the aircraft's position is known, its movements cannot be directed with accuracy. <a href="#source-navedtra">{nv('2-1–2-2')}</a> The Navy's instrument syllabus builds the skills in that order: aircraft control first, then radio instruments, where you learn to identify your position relative to navigation aids on the ground, then airways navigation on real cross-country flights. Its rule for all of it is "Aviate, Navigate, Communicate": fly the aircraft first, and do not let navigation take attention from basic airwork. <a href="#source-p1204">{fti('1')}</a></p>
+ <p>By the end you should be able to: give a position in latitude and longitude or as a Military Grid Reference System (MGRS) reference, and say how precise it is; turn a true course into a compass heading and correct it for wind; say what an NDB, VOR, TACAN and DME each give you; read the radial you are on from a horizontal situation indicator (HSI); intercept a course inbound or outbound with the right lead; join, fly and leave a DME arc; fly point to point from one radial/DME fix to another; explain what GPS and inertial systems do and how they fail; fly waypoints, fly-by and fly-over, and go direct to one; and cross-check one source against another.</p>
+ <p class="note">This is a reference, not a substitute for your aircraft's NATOPS or service flight manual, your unit's procedures, or current flight information publications. Worked examples use the T-45C training jet's displays from the Navy's instrument flight training instruction; other aircraft present the same information differently. Holding and instrument approaches belong to instrument flight; the carrier version of point-to-point TACAN navigation is in the <a href={`${caseIii}#tacan`}>Case III module</a>. Weapons-quality target coordinates, with elevation and datum checks for weapons delivery, are outside this module.</p>
+
+ <h2 id="earth">Position on the earth</h2>
+ <p>The earth is not a perfect sphere: its diameter at the equator is about 6,888 nautical miles (NM) and through the poles about 6,865 NM. For navigation it is treated as a sphere, because the difference is small enough to be insignificant. <a href="#source-navedtra">{nv('2-3')}</a> A position on it is given by a grid of geographic coordinates: <a href="#source-navedtra">{nv('2-4')}</a></p>
+ <ul>
+  <li><strong>Latitude</strong> locates a point north or south of the equator, from 0° at the equator to 90° at the poles. Parallels of latitude are always parallel to the plane of the equator, and "north" or "south" must always be stated.</li>
+  <li><strong>Longitude</strong> locates a point east or west of the prime meridian through Greenwich, England, from 0° to 180° east or west. Meridians are halves of great circles through the poles, and "east" or "west" must always be stated.</li>
+  <li>A <strong>great circle</strong> is the intersection of the earth's surface with a plane through its centre. The equator is one; every meridian is half of one.</li>
+ </ul>
+ <p>Distance in navigation is the international nautical mile, 6,076 ft, longer than the 5,280 ft statute mile. One minute of arc along a meridian, which is one minute of latitude, is 1 NM. <a href="#source-navedtra">{nv('2-7')}</a> Because meridians converge toward the poles, a minute of longitude is 1 NM only at the equator and shrinks toward the poles; for the same reason a course is measured against a meridian near the middle of the route, not at the departure point. <a href="#source-phak">{ph('16-5')}</a> Time is kept as Coordinated Universal Time (UTC), "Zulu", the time at the Greenwich meridian, on the 24-hour clock. <a href="#source-phak">{ph('16-5')}</a></p>
+
+ <h2 id="coords">Writing a position</h2>
+ <p>The same position can be written several ways, and navigation systems accept several of them. The Army's map-reading manual lists the formats a GPS receiver can show: degrees, minutes and seconds (DMS); degrees and decimal minutes (DM); Universal Transverse Mercator (UTM) grid eastings and northings in metres; and MGRS references. <a href="#source-fm">{fm('J-2')}</a> T-45C waypoints are entered as latitude and longitude, with the elevation and magnetic variation of the point. <a href="#source-p1204">{fti('80')}</a> Check which format and how many decimals a system expects before you type: N30°21.2' (degrees and minutes) and N30.212° (decimal degrees) are about 8.5 NM apart.</p>
+ <p><strong>The military grid.</strong> MGRS shortens UTM coordinates by replacing several numbers with letters, and it makes a reference unique worldwide. <a href="#source-fm">{fm('4-12')}</a> A reference is built from large to small: <a href="#source-fm">{fm('4-12–4-13, 4-21–4-23')}</a></p>
+ <ol class="steps">
+  <li><strong>Grid zone designation.</strong> Between 80°S and 84°N the earth is divided into 60 zones, each 6° of longitude wide, numbered 1 to 60 west to east from the 180° meridian, and into 20 rows lettered C to X (I and O are left out) from south to north. The rows are 8° high except X, which is 12°. Number then letter: "16S".</li>
+  <li><strong>100,000-metre square.</strong> Two letters, column then row, unique within the grid zone: "16S GL".</li>
+  <li><strong>Easting and northing.</strong> Digits within the square, always an even number of them, read right then up: the first half is the easting, the second the northing. Each added pair divides the square by ten: 10,000, 1,000, 100, 10 metres. The digits name the south-west corner of the square that contains the point.</li>
+ </ol>
+ <p>Coordinates are written as one continuous number, without spaces or punctuation, and the 100,000-metre square letters must always be included. Locations are normally reported to 100 m (six digits) and targets to 10 m (eight digits); GPS receivers give 4-, 6-, 8- and 10-digit references. <a href="#source-fm">{fm('4-21, J-2')}</a> The polar areas use the Universal Polar Stereographic (UPS) grid and its letters A, B, Y and Z instead. <a href="#source-fm">{fm('4-13')}</a></p>
+ <p><strong>Datum.</strong> Every coordinate is relative to a horizontal datum. Check the datum note on every chart, and that a receiver uses the same datum as the chart: UTM coordinates of the same point computed on different datums can differ by as much as 900 metres. <a href="#source-fm">{fm('3-3')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="coords" aria-labelledby="coords-title">
+  <h3 id="coords-title" class="fig-title">Figure 1 — One position, four ways</h3>
+  <p>Type a latitude and longitude in any format (30.35, N30 21.0 or 30 21 00 N), choose the precision, and compare. The panels zoom from the 100,000-metre square into the squares the MGRS digits name.</p>
+  <div class="buttons"><button type="button" data-preset="example">Example</button><button type="button" data-preset="equator">0°, 0°</button><button type="button" data-preset="south">Southern hemisphere</button><button type="button" data-preset="north">60°N</button></div>
+  <div class="controls row">
+   <label for="coords-lat">Latitude <input id="coords-lat" name="lat" type="text" value="N30 21.00" autocomplete="off" spellcheck="false" /></label>
+   <label for="coords-lon">Longitude <input id="coords-lon" name="lon" type="text" value="W087 19.20" autocomplete="off" spellcheck="false" /></label>
+   <label for="coords-sec">Seconds <select id="coords-sec" name="sec"><option value="0" selected>whole</option><option value="1">0.1</option></select></label>
+   <label for="coords-mins">Decimal minutes <select id="coords-mins" name="mins"><option value="1">0.1</option><option value="2" selected>0.01</option><option value="3">0.001</option></select></label>
+   <label for="coords-digits">MGRS digits <select id="coords-digits" name="digits"><option value="4">4</option><option value="6">6</option><option value="8">8</option><option value="10" selected>10</option></select></label>
+  </div>
+  <div class="table-scroll" role="region" aria-label="The position in each format" tabindex="0"><table>
+   <thead><tr><th scope="col">Format</th><th scope="col">Position</th><th scope="col">Size of the last digit</th></tr></thead>
+   <tbody></tbody>
+  </table></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 245" role="img" aria-label="Three nested grid squares, 100 km, 10 km and 1 km, with the position marked"></svg></div>
+  <p class="no-js">Interactive figure unavailable. N30°21.00' W087°19.20' is N30°21'00" W087°19'12", N30.3500° W087.3200°, and MGRS 16R DU 69245 57612.</p>
+  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">MGRS is computed on the WGS 84 ellipsoid with the standard lettering; the figure omits the polar UPS grid. The example point is arbitrary. Sizes use one minute of latitude = 1 NM = 1,852 m.</p>
+ </section>
+
+ <h2 id="direction">Direction: true, magnetic and compass</h2>
+ <p>Direction is measured clockwise in degrees from a north reference, from 000 through east 090, south 180 and west 270. <a href="#source-navedtra">{nv('2-5')}</a> Which north matters: a heading measured from true north is a true heading (TH), from magnetic north a magnetic heading (MH), and from the compass's own north a compass heading (CH), so always say which reference you mean. <a href="#source-navedtra">{nv('2-6')}</a></p>
+ <ul>
+  <li><strong>Variation</strong> is the angle between true north and magnetic north. It is east when magnetic north lies east of true north and west when it lies west, and it differs from place to place. <a href="#source-navedtra">{nv('2-6')}</a> Charts show it as isogonic lines; on the agonic line it is zero. To go from true to magnetic, subtract east variation and add west: "east is least, west is best". <a href="#source-phak">{ph('16-6–16-8')}</a></li>
+  <li><strong>Deviation</strong> is the compass's own error from the aircraft's magnetic fields: metal, electrical current and equipment turn with the aircraft, so deviation changes with heading. It is measured by swinging the compass on a compass rose, and a deviation card near the compass gives the correction. Variation plus deviation is compass error. <a href="#source-navedtra">{nv('2-6–2-7')}</a> <a href="#source-phak">{ph('16-8')}</a></li>
+  <li>The sequence is TH ± variation = MH ± deviation = CH. <a href="#source-phak">{ph('16-9')}</a></li>
+ </ul>
+ <p><strong>Heading, course, track and bearing</strong> are different things. Heading is where the nose points. Course is the intended path over the ground; track is the actual path; the angle between heading and track is drift. A bearing is the direction from the aircraft to an object. <a href="#source-phak">{ph('16-9–16-10')}</a> A relative bearing is measured clockwise from the aircraft's nose to the object, so an object directly behind is at 180 on any heading; a true bearing is measured from true north. Heading plus relative bearing gives the true bearing. <a href="#source-navedtra">{nv('2-11–2-13')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="compass" aria-labelledby="compass-title">
+  <h3 id="compass-title" class="fig-title">Figure 2 — From true to compass, and relative bearing</h3>
+  <p>Set the true heading, the local variation and the deviation card's correction, then place an object by its true bearing.</p>
+  <div class="controls row">
+   <label for="cmp-th">True heading <output for="th"></output><input id="cmp-th" name="th" type="range" min="0" max="359" step="1" value="60" /></label>
+   <label for="cmp-var">Variation (left west, right east) <output for="var"></output><input id="cmp-var" name="var" type="range" min="-20" max="20" step="1" value="9" /></label>
+   <label for="cmp-dev">Deviation correction <output for="dev"></output><input id="cmp-dev" name="dev" type="range" min="-5" max="5" step="1" value="2" /></label>
+   <label for="cmp-tb">True bearing to the object <output for="tb"></output><input id="cmp-tb" name="tb" type="range" min="0" max="359" step="1" value="280" /></label>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 2, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 320" role="img" aria-label="Compass rose with true and magnetic north, the aircraft's heading, the bearing to an object and the headings and bearings it gives"></svg></div>
+  <p class="no-js">Interactive figure unavailable. Example: true heading 060°, variation 9° east, deviation +2°: magnetic 051°, compass 053°. An object at true bearing 280° is at relative bearing 220°.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Constructed example; a real deviation card gives a different correction on each heading.</p>
+ </section>
+
+ <h2 id="wind">Dead reckoning and the wind triangle</h2>
+ <p>Dead reckoning is navigation by computation from time, airspeed, distance and direction; corrected for wind, it gives the heading to fly and the ground speed (GS). <a href="#source-phak">{ph('16-13')}</a> An aircraft moves through the air, and the air moves over the ground: at 120 kt true airspeed (TAS) with a 20 kt tailwind the ground speed is 140 kt; with a 20 kt headwind it is 100 kt; with a crosswind the aircraft drifts. To stay on course, head into the wind by the wind correction angle (WCA). <a href="#source-phak">{ph('16-9')}</a></p>
+ <p>The wind triangle solves it: one hour of airspeed along the heading plus one hour of wind gives the track and ground speed. The PHAK's example: true course 090°, wind from 045° at 40 kt, TAS 120 kt gives a WCA of 14° left, a true heading of 076° and a ground speed of 88 kt, so 220 NM takes 2 hours 30 minutes. <a href="#source-phak">{ph('16-14–16-15')}</a> In flight the T-45C shows the same thing directly: its HSI shows ground speed, wind and a ground-track marker, and the angle between the lubber line and the ground-track marker is the crab angle. To hold a course, turn until the ground-track marker sits under the bearing pointer. <a href="#source-p1204">{fti('12, 65')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="wind" aria-labelledby="wind-title">
+  <h3 id="wind-title" class="fig-title">Figure 3 — Solve the wind triangle</h3>
+  <p>Set the course, airspeed and wind. The triangle shows one hour of each motion: wind (dashed), airspeed along the heading, and the resulting track and ground speed.</p>
+  <div class="buttons"><button type="button" data-phak>PHAK example</button></div>
+  <div class="controls row">
+   <label for="w-tc">True course <output for="tc"></output><input id="w-tc" name="tc" type="range" min="0" max="359" step="1" value="90" /></label>
+   <label for="w-tas">True airspeed <output for="tas"></output><input id="w-tas" name="tas" type="range" min="80" max="500" step="5" value="120" /></label>
+   <label for="w-wf">Wind from <output for="wf"></output><input id="w-wf" name="wf" type="range" min="0" max="359" step="5" value="45" /></label>
+   <label for="w-ws">Wind speed <output for="ws"></output><input id="w-ws" name="ws" type="range" min="0" max="100" step="5" value="40" /></label>
+   <label for="w-var">Variation <output for="var"></output><input id="w-var" name="var" type="range" min="-20" max="20" step="1" value="0" /></label>
+   <label for="w-dist">Distance <output for="dist"></output><input id="w-dist" name="dist" type="range" min="10" max="500" step="10" value="220" /></label>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 3, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 300" role="img" aria-label="Wind triangle of wind, airspeed and ground speed vectors with the heading and ground speed it gives"></svg></div>
+  <p class="no-js">Interactive figure unavailable. The PHAK example: course 090°, wind 045° at 40 kt, TAS 120 kt: heading 076°, ground speed 88 kt.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">The figure solves the triangle exactly; a flight computer or the drawing method gives the same answer to the nearest degree and knot. Wind and course must use the same north.</p>
+ </section>
+
+ <h2 id="navaids">Radio navigation aids</h2>
+ <p>Ground navigation aids (NAVAIDs) are owned by the FAA, the military services and others; the FAA sets the standards for the aids used for instrument flight in US controlled airspace. <a href="#source-navedtra">{nv('2-24')}</a> <a href="#source-aim">{a('1-1-1')}</a> Disregard any indication from a transmitter that a NOTAM or other notice says is unusable or out of service, however valid it looks. <a href="#source-aim">{a('1-1-1')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Radio navigation aids compared" tabindex="0"><table>
+  <caption>What each aid gives you <a href="#source-navedtra">{nv('2-26–2-30')}</a> <a href="#source-aim">{a('1-1-2–1-1-8')}</a></caption>
+  <thead><tr><th scope="col">Aid</th><th scope="col">Gives</th><th scope="col">Band</th><th scope="col">Notes</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">NDB (nondirectional beacon)</th><td>Bearing to the station, on the aircraft's automatic direction finder (ADF)</td><td>LF/MF, normally 190–535 kHz; UHF NDBs 275–287 MHz</td><td>Homing in a crosswind flies a curved path. Static, thunderstorms and night interference cause erratic bearings, and the ADF has no warning flag: monitor the identifier.</td></tr>
+   <tr><th scope="row">VOR (VHF omnidirectional range)</th><td>360 radials: magnetic bearings from the station</td><td>VHF, 108.0–117.95 MHz</td><td>Line of sight, so range grows with altitude. Course alignment generally within ±1°. Identify by its Morse code or recorded voice identifier.</td></tr>
+   <tr><th scope="row">TACAN (tactical air navigation)</th><td>Bearing and continuous DME slant range</td><td>UHF, 126 two-way channels, 962–1213 MHz</td><td>Developed by the military because VOR/DME suited neither unusual sites nor the pitch and roll of ships. Compact and transportable; Morse identifier every 35 seconds. Bearing to unlimited aircraft, distance to 120 at once.</td></tr>
+   <tr><th scope="row">DME (distance measuring equipment)</th><td>Slant range to the station</td><td>UHF, 962–1213 MHz</td><td>Reliable to 199 NM at line-of-sight altitude, accurate to better than ½ NM or 3% of the distance, whichever is greater.</td></tr>
+   <tr><th scope="row">VORTAC</th><td>VOR azimuth, TACAN azimuth and TACAN distance</td><td>VHF and UHF, paired</td><td>A TACAN-equipped aircraft gets distance from it automatically; the VOR and TACAN channels are paired so azimuth and distance come from the same station.</td></tr>
+  </tbody>
+ </table></div>
+ <p>A VOR radial is identified by its magnetic bearing from the station: whatever its heading, an aircraft on the 090 radial is due east of the station, and flying to the station on that radial its magnetic course is 270. <a href="#source-navedtra">{nv('2-28')}</a> TACAN gives the same picture from different technical principles, needs TACAN airborne equipment and does not work through a VOR receiver. <a href="#source-aim">{a('1-1-5')}</a> Line-of-sight aids are spaced so that the airway system has coverage at the minimum en route altitude. <a href="#source-navedtra">{nv('2-30')}</a> Each aid has a standard service volume, the airspace in which the FAA protects its signal; a conical area directly above the aid is generally not usable for navigation. <a href="#source-aim">{a('1-1-8')}</a></p>
+
+ <h2 id="hsi">Radials and the HSI</h2>
+ <p>The T-45C's HSI is a heading-up compass rose with the aircraft symbol fixed in the centre. On it: <a href="#source-p1204">{fti('12–13')}</a></p>
+ <ul>
+  <li>The <strong>bearing pointer</strong>: its head points to the station and its tail sits on the radial you are on. The TACAN pointer is on the outer edge of the rose; the VOR or waypoint pointer on the inner edge.</li>
+  <li>The <strong>course line</strong> and course deviation indicator (CDI): with TACAN or VOR steering, each dot is 5° off the selected course. The bar is on the side the course lies, so fly toward the bar.</li>
+  <li>A <strong>planimetric course line</strong> option draws the course itself through the station symbol, showing intercept angle and distance from the course directly; the rose's range scale is selectable.</li>
+  <li>Digital bearing, slant range and time to go for the selected TACAN station or waypoint.</li>
+ </ul>
+ <p>The CDI starts to move when you are within 10° of the course. When you are 60 NM from the station the radials are 1 NM apart and at 30 NM ½ NM apart, so the CDI moves fast close to a station and slowly far from it. <a href="#source-p1204">{fti('66')}</a> DME is slant range, not horizontal distance. <a href="#source-aim">{a('1-1-7')}</a> <strong>Station passage:</strong> with VOR, when the bearing pointer falls past the 90° benchmark on the rose. TACAN has a larger cone of confusion over the station, so TACAN station passage is when DME stops decreasing, at minimum DME. <a href="#source-p1204">{fti('65')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="hsi" aria-labelledby="hsi-title">
+  <h3 id="hsi-title" class="fig-title">Figure 4 — Where am I on the HSI?</h3>
+  <p>Place the aircraft by radial and range, point it anywhere, and set a course. Compare the plan view with what the HSI shows. Then try the quiz below.</p>
+  <div class="controls row">
+   <label for="h-radial">Your radial <output for="radial"></output><input id="h-radial" name="radial" type="range" min="0" max="359" step="1" value="135" /></label>
+   <label for="h-dme">Range <output for="dme"></output><input id="h-dme" name="dme" type="range" min="0" max="60" step="1" value="30" /></label>
+   <label for="h-hdg">Heading <output for="hdg"></output><input id="h-hdg" name="hdg" type="range" min="0" max="359" step="1" value="20" /></label>
+   <label for="h-crs">Course set <output for="crs"></output><input id="h-crs" name="crs" type="range" min="0" max="359" step="1" value="300" /></label>
+   <label for="h-alt">Altitude <output for="alt"></output><input id="h-alt" name="alt" type="range" min="0" max="40000" step="1000" value="15000" /></label>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 4, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 325" role="img" aria-label="Plan view of the aircraft relative to a TACAN station beside the HSI it would show"></svg></div>
+  <p class="no-js">Interactive figure unavailable. On the 135 radial the bearing pointer's tail reads 135 and its head 315, whatever the heading.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Simplified HSI after the T-45C display description: one bearing pointer, CDI two dots each side at 5° a dot, TO/FROM arrow. Not a reproduction of the aircraft display.</p>
+ </section>
+ <section class="lesson quiz-lesson" data-lesson="hsi-quiz" aria-labelledby="hq-title">
+  <h3 id="hq-title">Quiz: read the radial</h3>
+  <div class="fig-scroll quiz-fig"><svg class="natops" viewBox="0 0 320 300" role="img" aria-label="HSI for the question"></svg></div>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next HSI</button></div>
+ </section>
+
+ <h2 id="intercepts">Intercepting a course</h2>
+ <p>To proceed direct to a station, tune and identify it, turn the shorter way to put the bearing pointer at the top, centre the course, and then put the ground-track marker under the lubber line and crab as needed to keep the course centred. Keeping the pointer at the top without correcting for wind is homing, and in a crosswind it flies a curved path. <a href="#source-p1204">{fti('64')}</a></p>
+ <p>The intercept angle is the angle between your heading and the course. It is normally greater than the number of degrees you are off course, and it must not exceed 90°, where the rate of closure is greatest. <a href="#source-p1204">{fti('65')}</a> The FTI's methods: <a href="#source-p1204">{fti('66–70')}</a></p>
+ <ul>
+  <li><strong>{INTERCEPT_METHODS.thirty.label}.</strong> Set the course, look from it to the head of the bearing pointer and 30° beyond: that is the intercept heading.</li>
+  <li><strong>{INTERCEPT_METHODS.double.label}.</strong> Look from the course to the head of the pointer and as many degrees again beyond it, at most 45°, so the intercept can be anything from a degree or two to 90°. Weigh your distance from the NAVAID, radial spread and wind when you choose between this and the 30° method.</li>
+  <li><strong>{INTERCEPT_METHODS.passage.label}.</strong> After passage turn parallel to the course, set it, look from the tail of the pointer to the course and as many degrees again beyond, at most 45°.</li>
+  <li><strong>{INTERCEPT_METHODS.fortyfive.label}.</strong> For an outbound radial some distance away: look from the tail of the pointer to the course and 45° beyond.</li>
+ </ul>
+ <p>Turn onto the course before you reach it. The lead point is 1% of ground speed for a 90° intercept and a proportion of that for smaller angles: a 45° intercept needs a third as much lead. <a href="#source-p1204">{fti('65–66')}</a> Watch the bearing pointer and the course line closing to judge the turn.</p>
+ <section class="lesson figure-lesson" data-lesson="intercept" aria-labelledby="int-title">
+  <h3 id="int-title" class="fig-title">Figure 5 — Plan an intercept</h3>
+  <p>Choose a method, the course and where you are. The figure gives the intercept heading and lead, and draws the intercept and the turn onto course.</p>
+  <div class="controls row">
+   <label for="i-method">Method <select id="i-method" name="method">{Object.entries(INTERCEPT_METHODS).map(([k, m]) => <option value={k} selected={k === 'thirty'}>{m.label}</option>)}</select></label>
+   <label for="i-crs">Desired course <output for="crs"></output><input id="i-crs" name="crs" type="range" min="0" max="359" step="1" value="0" /></label>
+   <label for="i-radial">Your radial <output for="radial"></output><input id="i-radial" name="radial" type="range" min="0" max="359" step="1" value="210" /></label>
+   <label for="i-dme">Range <output for="dme"></output><input id="i-dme" name="dme" type="range" min="3" max="40" step="1" value="30" /></label>
+   <label for="i-gs">Ground speed <output for="gs"></output><input id="i-gs" name="gs" type="range" min="150" max="450" step="10" value="250" /></label>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 5, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 320" role="img" aria-label="Plan view of the station, the desired course, the aircraft, its intercept leg and the turn onto course"></svg></div>
+  <p class="no-js">Interactive figure unavailable. Example: inbound course 360 from the 210 radial: the pointer's head is 030, so the 30-degree method gives heading 060, a 60° intercept.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">No wind. The drawn turn has a radius of 1% of ground speed, the FTI's figure for a half-standard-rate turn; the ⅔ and ⅓ lead ratios for smaller turns are its rules of thumb.</p>
+ </section>
+
+ <h2 id="dme">Using distance: ground speed and arcs</h2>
+ <p><strong>Ground speed check.</strong> Fly directly to or from the station, with the DME at least your altitude in thousands of feet so slant range does not distort it. Start timing on a whole DME number, note the change after a set time, and divide: 12 NM in 2 minutes is 6 NM a minute, 360 kt; 12 NM in 3 minutes is 240 kt. Timing longer improves accuracy. The T-45C's GPS/inertial system computes ground speed anywhere; its TACAN time to go uses slant range, so it is valid only under the same DME rule, while waypoint time to go is not slant range. <a href="#source-p1204">{fti('71')}</a></p>
+ <p><strong>Joining an arc.</strong> The turn from a radial onto an arc is normally about 90°. Lead it by 1% of ground speed: at 250 kt start the turn 2.5 NM early, adding the lead to the arc DME when inbound and subtracting it outbound. Use a half-standard-rate turn and roll out when the bearing pointer nears the 90° benchmark. For turns of about 45° use a third of that lead, for about 60° two-thirds, and for 30° or less very little. <a href="#source-p1204">{fti('72')}</a></p>
+ <p><strong>Flying the arc.</strong> The <em>chord method</em>, usually beyond 12 DME, flies short straight legs: roll out with the bearing pointer 5–10° ahead of the 90° benchmark, hold the heading until it falls 5–10° behind, and turn again. The <em>angle-of-bank method</em>, usually inside 12 DME, holds the pointer on the benchmark with a shallow turn; the closer the station, the steeper the bank. Correct 5–10° for each ½ NM off the arc, and adjust the pointer position for wind. <a href="#source-p1204">{fti('73–74')}</a></p>
+ <p><strong>Leaving the arc for a radial.</strong> Lead in radials: divide 60 by the arc DME and multiply by 1% of ground speed. On a 15 DME arc at 250 kt that is 60 ÷ 15 × 2.5 = 10 radials. Turn at a half standard rate, varying the bank (never more than 30°) to centre the course as you roll out. Inside 10 DME the turn is more than 90° inbound and less outbound, and the FTI corrects the lead: <a href="#source-p1204">{fti('74–76')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Approximate lead radials at 250 knots ground speed" tabindex="0"><table>
+  <caption>Approximate lead radials at 250 KGS, from the FTI <a href="#source-p1204">{fti('76')}</a></caption>
+  <thead><tr><th scope="col">Arc DME</th><th scope="col">90° turn</th><th scope="col">Inbound turn (&gt;90°)</th><th scope="col">Outbound turn (&lt;90°)</th></tr></thead>
+  <tbody>{ARC_LEAD_TABLE.map(r => <tr><th scope="row">{r.dme}</th><td>{r.ninety}</td><td>{r.inbound ?? '—'}</td><td>{r.outbound ?? '—'}</td></tr>)}</tbody>
+ </table></div>
+ <section class="lesson figure-lesson" data-lesson="arc" aria-labelledby="arc-title">
+  <h3 id="arc-title" class="fig-title">Figure 6 — Join, fly and leave a DME arc</h3>
+  <p>Outbound on the 180 radial, join the arc clockwise and leave it for the 270 radial. The figure marks the turn onto the arc, flies the arc by chords, and marks the lead radial.</p>
+  <div class="controls row">
+   <label for="a-arc">Arc <output for="arc"></output><input id="a-arc" name="arc" type="range" min="5" max="30" step="1" value="15" /></label>
+   <label for="a-gs">Ground speed <output for="gs"></output><input id="a-gs" name="gs" type="range" min="150" max="400" step="10" value="250" /></label>
+   <label for="a-ahead">Chord: pointer ahead and behind <output for="ahead"></output><input id="a-ahead" name="ahead" type="range" min="5" max="10" step="1" value="10" /></label>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 6, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 310" role="img" aria-label="Quarter of a DME arc south-west of a station, the chords flown along it, the lead point to join it and the lead radial to leave it"></svg></div>
+  <p class="no-js">Interactive figure unavailable. At 250 kt on a 15 DME arc: join at 12.5 DME outbound, and lead the radial by 10 radials.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">No wind. Chord turns are drawn as instant. The DME band the chords fly is computed geometry, not an FTI figure.</p>
+ </section>
+
+ <h2 id="fixes">Fixes</h2>
+ <p>A fix is an accurate position. Without a NAVAID or radar, a fix takes two or more lines of position, such as two railroads crossing, each found on the chart. <a href="#source-navedtra">{nv('2-10')}</a> TACAN gives a fix on its own: the radial and the distance from a station whose position is known. Airborne radar can fix a position by relative bearing and range from a known landmark. <a href="#source-navedtra">{nv('2-14')}</a> With DME it is now routine to fly from one radial/DME fix to another, and it allows tighter separation and holding patterns. <a href="#source-navedtra">{nv('2-30')}</a> Named fixes are also defined by a VOR radial, TACAN course or NDB bearing crossing another course. <a href="#source-aim">{a('1-2-3')}</a> On a route, waypoints are fixes defined by latitude and longitude. <a href="#source-aim">{a('1-2-1')}</a></p>
+
+ <h2 id="p2p">Point to point</h2>
+ <p>Cleared direct to a fix, you can use radar vectors, traditional point-to-point navigation or waypoint offset navigation. <a href="#source-p1204">{fti('76')}</a> The traditional method uses the HSI as a plotting board: <a href="#source-p1204">{fti('77–78')}</a></p>
+ <ol class="steps">
+  <li>Tune and identify the TACAN or VOR/DME station. Picture the station at the centre of the rose.</li>
+  <li>Put the fix that is farther from the station at the edge of the rose on its radial, and the nearer one at a proportional distance on its own radial. Your own position is on the tail of the bearing pointer.</li>
+  <li>Join the two points with a line, move that line parallel to itself through the centre of the rose, and read the course where it crosses the edge.</li>
+  <li>Turn to that course with any known wind correction, and repeat the solution periodically en route.</li>
+ </ol>
+ <p>With a waypoint system, waypoint offset navigation does the work: select the waypoint that is the NAVAID defining the fix and enter the fix's bearing and range from it. Steering then goes to the offset point. On the T-45C range runs 0.0–99.9 NM and bearing 000–359.9°; changing the waypoint's position clears its offset. <a href="#source-p1204">{fti('79')}</a> The Case III module uses the same geometry to reach the <a href={`${caseIii}#tacan`}>marshal fix</a>.</p>
+ <section class="lesson figure-lesson" data-lesson="p2p" aria-labelledby="p2p-title">
+  <h3 id="p2p-title" class="fig-title">Figure 7 — Point to point on the HSI</h3>
+  <p>Set your fix and the target fix. Estimate the course with the plotting-board method, then check it.</p>
+  <div class="controls row">
+   <label for="p-fr">Your radial <input id="p-fr" name="fr" type="number" min="0" max="359" step="1" value="90" inputmode="numeric" /></label>
+   <label for="p-fd">Your DME <input id="p-fd" name="fd" type="number" min="0" max="80" step="1" value="30" inputmode="numeric" /></label>
+   <label for="p-tr">Fix radial <input id="p-tr" name="tr" type="number" min="0" max="359" step="1" value="180" inputmode="numeric" /></label>
+   <label for="p-td">Fix DME <input id="p-td" name="td" type="number" min="0" max="80" step="1" value="21" inputmode="numeric" /></label>
+   <label for="p-guess">Your course estimate <input id="p-guess" name="guess" type="number" min="0" max="359" step="1" inputmode="numeric" /></label>
+  </div>
+  <div class="buttons"><button type="button" data-check>Check estimate</button><button type="button" data-reveal>Reveal</button><button type="button" data-new>New problem</button></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 7, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 300" role="img" aria-label="Compass rose used as a plotting board with your fix, the target fix and the course between them"></svg></div>
+  <p class="no-js">Interactive figure unavailable. Worked example: from the 090 radial at 30 DME to the 180 radial at 21 DME, the course is about 235° for 36.6 NM.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Flat-earth geometry with horizontal range and no wind, as in the Case III module.</p>
+ </section>
+
+ <h2 id="gps">Satellite navigation</h2>
+ <p>The Global Positioning System (GPS) is a space-based navigation system of 24 to 32 satellites in medium earth orbit that broadcast their exact positions. The receiver turns the signals into distances, and with at least three satellites computes its position; exact timing is essential, because a small time offset can move the solution miles. <a href="#source-navedtra">{nv('2-33')}</a> The Department of Defense operates the constellation and monitors the satellites; the Navy text names the US Air Force. The FAA's figures: the constellation is designed so at least five satellites are always visible, and four are needed for a three-dimensional position. <a href="#source-aim">{a('1-1-17')}</a></p>
+ <ul>
+  <li><strong>Integrity.</strong> Receiver autonomous integrity monitoring (RAIM) checks the solution using a satellite beyond those needed: at least five, or four with barometric aiding. Without RAIM the pilot has no assurance that the position is right. <a href="#source-aim">{a('1-1-17')}</a></li>
+  <li><strong>Augmentation.</strong> The Wide Area Augmentation System (WAAS) augments GPS to give precision approaches, with a tolerance the Navy text gives as 25 ft laterally and vertically. <a href="#source-navedtra">{nv('2-33')}</a></li>
+  <li><strong>Outages and interference.</strong> Satellites can fail or drift, and outages are announced by NOTAM. <a href="#source-navedtra">{nv('2-33')}</a> GPS signals are weak and vulnerable to unintentional interference and to deliberate jamming and spoofing, which can take away GPS, hybrid GPS/inertial navigation and RNP capability, corrupt displayed position, wind and ground speed, and affect conventional navigation where it relies on GPS. The US government also runs announced GPS test events. <a href="#source-aim">{a('1-2-4')}</a></li>
+ </ul>
+
+ <h2 id="ins">Inertial navigation</h2>
+ <p>An inertial reference unit uses gyros and accelerometers to give attitude, position and velocity. Once aligned with a known position it computes position continuously, but its accuracy decays with time: this is drift. An inertial navigation system (INS) adds a navigation computer and flies a programmed series of waypoints. <a href="#source-aim">{a('1-1-15')}</a> Inertial systems are often coupled with GPS or DME/DME to improve overall performance. <a href="#source-aim">{a('1-2-1')}</a> The T-45C's Global Positioning/Inertial Navigation Assembly (GINA) is such a system: it feeds the HSI's waypoint, offset, ground speed and wind information. <a href="#source-p1204">{fti('12, 71')}</a> An inertial system is self-contained, so it keeps navigating without GPS, but its error grows from the last good update; with GPS it is corrected continuously.</p>
+
+ <h2 id="waypoints">Waypoints, offsets and direct-to</h2>
+ <p>Area navigation (RNAV) lets an aircraft fly any desired path within the coverage of ground- or space-based aids or the limits of self-contained ones. <a href="#source-aim">{a('1-2-1')}</a> Its building blocks: <a href="#source-aim">{a('1-2-1')}</a></p>
+ <ul>
+  <li>A <strong>waypoint</strong> is a predetermined position defined by latitude and longitude; it can be a named point or a NAVAID, intersection or fix, and usually marks a change of direction, speed or altitude.</li>
+  <li><strong>Fly-by</strong> waypoints let the aircraft begin the turn to the next course before reaching the point (turn anticipation). <strong>Fly-over</strong> waypoints must be crossed before the turn begins.</li>
+  <li><strong>Leg types</strong> describe the path: track to fix (TF), also called point-to-point, between two waypoints; direct to fix (DF) from wherever the aircraft is ("turn right direct BRAVO"); course to fix (CF); radius to fix (RF); and heading legs.</li>
+ </ul>
+ <p><strong>On the T-45C,</strong> the selected steering, whether TACAN, VOR, waypoint or waypoint offset, drives the HSI's bearing pointer and data block. With waypoint steering the CDI shows cross-track distance: full scale is ±4.0 NM with the gear up and ±0.3 NM with the gear down. A sequential steering string of two or more waypoints can be drawn as a dashed line. <a href="#source-p1204">{fti('12–13')}</a> Waypoints come from the mission data loader, whose 200 stored points can be transferred into the tactical waypoints and must then be compared to check the transfer, or are entered by hand as latitude, longitude, elevation and magnetic variation. <a href="#source-p1204">{fti('79–80')}</a> Other aircraft name and lay out the same functions differently; your NATOPS manual governs.</p>
+ <p>Check the database: it must be current for instrument use, and waypoints must match the chart's names, order and logical positions. Manual entry of waypoints by latitude and longitude is not permitted for approach procedures. <a href="#source-aim">{a('1-1-17')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="route" aria-labelledby="route-title">
+  <h3 id="route-title" class="fig-title">Figure 8 — Fly a waypoint route, then go direct</h3>
+  <p>Fly the route and watch the steering data. Switch between fly-by and fly-over waypoints to see turn anticipation, and press a direct-to button at any time to fly a direct-to-fix leg from where you are.</p>
+  <div class="buttons"><button type="button" data-play>Fly</button><button type="button" data-step>Step 1 min</button><button type="button" data-reset>Reset</button></div>
+  <div class="buttons" data-direct></div>
+  <div class="controls row">
+   <fieldset class="inline"><legend>Waypoints</legend>
+    <label><input type="radio" name="wpt" value="by" checked /> Fly-by</label>
+    <label><input type="radio" name="wpt" value="over" /> Fly-over</label>
+   </fieldset>
+   <label for="r-gs">Ground speed <output for="gs"></output><input id="r-gs" name="gs" type="range" min="200" max="480" step="20" value="360" /></label>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 8, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 335" role="img" aria-label="Plan view of a five-waypoint route, the aircraft's flown track, and a data block with bearing, distance, time to go and cross-track error"></svg></div>
+  <p class="no-js">Interactive figure unavailable. Fly-by waypoints turn inside the corner; fly-over waypoints overshoot it and re-intercept the next leg. A direct-to leg starts from the present position.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Constructed route and steering model: no wind, 30° bank turns, a simple cross-track steering law. Real systems differ in turn anticipation and steering; the CDI scale is the T-45C's gear-up scale.</p>
+ </section>
+
+ <h2 id="crosscheck">Cross-checking and degraded navigation</h2>
+ <ul>
+  <li><strong>Identify every aid.</strong> The only positive identification of a VOR is its Morse code or recorded voice identifier; during maintenance it may send T-E-S-T or no identifier. <a href="#source-aim">{a('1-1-3')}</a> Disregard indications from an aid that is NOTAMed out of service. <a href="#source-aim">{a('1-1-1')}</a> An ADF has no failure flag, so monitor the NDB's identifier. <a href="#source-aim">{a('1-1-2')}</a></li>
+  <li><strong>Cross-check GPS.</strong> Routine position checks against VOR or DME can detect a compromised GPS signal. Before flight, check NOTAMs, plan fuel contingencies and plan to use conventional aids at the destination; in flight, watch for changes in navigation performance, clock errors and wrong positions, and tell ATC about apparent GPS degradation. <a href="#source-aim">{a('1-2-4')}</a></li>
+  <li><strong>Keep conventional skills.</strong> The FAA keeps a minimum network of VORs so that aircraft can navigate through a GPS outage or land without GPS; pilots of GPS-equipped aircraft should stay proficient in VOR and ILS approaches. <a href="#source-aim">{a('1-1-3')}</a></li>
+ </ul>
+ <p>Communication when navigation fails, and lost-communication routes, are in the <a href={`${radio}#nordo`}>Radio Procedures module</a>.</p>
+
+ <h2 id="terms">Terms</h2>
+ <dl class="jargon">
+  <div><dt>Radial</dt><dd>A magnetic bearing from a VOR or TACAN station; the radial you are on is under the tail of the bearing pointer.</dd></div>
+  <div><dt>Relative bearing</dt><dd>The angle clockwise from the aircraft's nose to an object.</dd></div>
+  <div><dt>Track</dt><dd>The actual path of the aircraft over the ground.</dd></div>
+  <div><dt>Drift angle</dt><dd>The angle between where the nose points and the path over the ground.</dd></div>
+  <div><dt>Variation</dt><dd>The angle between true north and magnetic north at a place.</dd></div>
+  <div><dt>Deviation</dt><dd>Compass error caused by the aircraft's own magnetic fields; it changes with heading.</dd></div>
+  <div><dt>Slant range</dt><dd>What DME measures: the straight-line distance to the station, including height.</dd></div>
+  <div><dt>Lead point</dt><dd>Where you start the turn so you roll out on the course or arc; 1% of ground speed for a 90° turn.</dd></div>
+  <div><dt>Station passage</dt><dd>Crossing over the station: for TACAN, the point of minimum DME.</dd></div>
+  <div><dt>Homing</dt><dd>Keeping the bearing pointer on the nose; in a crosswind it flies a curved path.</dd></div>
+  <div><dt>Fly-by waypoint</dt><dd>A point where the turn to the next course starts before the point is reached.</dd></div>
+  <div><dt>Direct to fix</dt><dd>A leg from wherever the aircraft is straight to the next waypoint.</dd></div>
+  <div><dt>RAIM</dt><dd>A GPS receiver's own check of its solution, using a satellite beyond those needed.</dd></div>
+  <div><dt>Drift</dt><dd>The growing position error of an inertial system since its last alignment or update.</dd></div>
+  <div><dt>Grid zone designation</dt><dd>The zone number and latitude band letter that begin an MGRS reference.</dd></div>
+ </dl>
+ <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
+  <h3 id="terms-title">Quiz: name the term</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next term</button></div>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <details><summary>The bearing pointer's head reads 045 and its tail 225. Which radial are you on, and which way is the station?</summary><p>The 225 radial, south-west of the station; the station is on a bearing of 045.</p></details>
+ <details><summary>True course 270°, variation 10° west, no wind. What magnetic heading?</summary><p>280°: west is best, so add the variation.</p></details>
+ <details><summary>You are 8 NM from a TACAN at 20,000 ft and time a 1-minute DME change. Is the ground speed good?</summary><p>No. DME must be at least the altitude in thousands of feet, here 20 NM, or slant range distorts the check.</p></details>
+ <details><summary>Leaving a 20 DME arc for a radial at 300 kt: how many radials of lead?</summary><p>60 ÷ 20 × 3 = 9 radials.</p></details>
+ <details><summary>Joining a 12 DME arc outbound at 250 kt: when do you turn?</summary><p>At 9.5 DME: 12 minus 1% of 250.</p></details>
+ <details><summary>Which MGRS reference is more precise, 16S GL 0182 or 16S GL 012823?</summary><p>The six-digit one, to 100 m; four digits name a 1,000 m square.</p></details>
+ <details><summary>Your GPS position and a TACAN fix disagree by several miles. What do you do?</summary><p>Suspect the GPS (interference or spoofing is possible), navigate on the conventional aid, and tell ATC about the apparent GPS problem.</p></details>
+ <details><summary>Why fly a fly-over waypoint differently from a fly-by one?</summary><p>You must cross a fly-over waypoint before turning, so you overshoot and re-intercept the next leg; at a fly-by waypoint the turn starts early and cuts inside.</p></details>
+
+ <h2 id="sources">Sources and applicability</h2>
+ <h3>Military sources</h3>
+ <p id="source-navedtra"><strong>[1] US Navy, Air Traffic Controller, NAVEDTRA 14342A, chapter 2, Air Navigation and Aids to Air Navigation.</strong> Read on the Integrated Publishing mirror (navyaviation.tpub.com), 25 October 2026: <a href="https://navyaviation.tpub.com/14342A/Table-2-2-Geographic-Coordinates-81.html">geographic coordinates (p. 2-4)</a>; <a href="https://navyaviation.tpub.com/14342A/Units-Of-Measurement-84.html">units of measurement (p. 2-7)</a>; <a href="https://navyaviation.tpub.com/14342A/Vhf-Uhf-Omnidirectional-Ranges-104.html">NDB limits and VOR (p. 2-27)</a>; <a href="https://navyaviation.tpub.com/14342A/Tactical-Air-Navigation-Tacan-System-105.html">VOR and TACAN (p. 2-28)</a>; <a href="https://navyaviation.tpub.com/14342A/Distance-Measuring-Equipment-106.html">VORTAC and DME (p. 2-29)</a>; <a href="https://navyaviation.tpub.com/14342A/Global-Positioning-System-110.html">GPS (p. 2-33)</a>. Also cited from the same chapter: pp. 2-1 to 2-3, 2-5, 2-6, 2-10 to 2-14, 2-24, 2-26 and 2-30. A Navy controller-training course, cited for navigation fundamentals and NAVAIDs.</p>
+ <p id="source-p1204"><strong>[2] Naval Air Training Command, CNATRA P-1204, Flight Training Instruction, Instrument Flight, T-45C (TS, ADV and IUT), (4-01) Original.</strong> Read on the Integrated Publishing mirror, navyflightmanuals.tpub.com/P-1204/, 25 October 2026: pp. 1, 12–13 (HSI), 64–80 (proceeding direct, intercepts, ground speed checks, arcs, point-to-point, waypoint offsets and GPS data). The edition read is an older revision of the T-45C instrument FTI; current CNATRA revisions may differ.</p>
+ <p id="source-fm"><strong>[3] Headquarters, Department of the Army, FM 3-25.26, Map Reading and Land Navigation, 20 July 2001.</strong> Approved for public release. Read from an archive.org copy, 25 October 2026: p. 3-3 (datum note), 4-12 to 4-13 and 4-21 to 4-23 (MGRS), J-2 (GPS coordinate formats). Cited for the military grid, which all US services share.</p>
+ <h3>Supplementary: FAA sources</h3>
+ <p id="source-aim"><strong>[4] Federal Aviation Administration, Aeronautical Information Manual (AIM), current edition as published online.</strong> Inspected 25 October 2026 on faa.gov: <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap1_section_2.html">chapter 1, section 2, Performance-Based Navigation and Area Navigation</a> (paras 1-2-1, 1-2-3, 1-2-4); <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap1_section_1.html">chapter 1, section 1, Air Navigation Aids</a> (paras 1-1-1 to 1-1-8, 1-1-15, 1-1-17).</p>
+ <p id="source-phak"><strong>[5] Federal Aviation Administration, Pilot's Handbook of Aeronautical Knowledge, FAA-H-8083-25C, chapter 16, Navigation.</strong> <a href="https://www.faa.gov/sites/faa.gov/files/18_phak_ch16.pdf">Read the chapter (faa.gov)</a>. Inspected 25 October 2026: pp. 16-5 to 16-15.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/air-navigation-evidence.md">air navigation evidence</a>.</p>
+ <p>Figures 1–8 are original drawings and constructed examples, not reproductions of any publication's figures. Routes, positions and winds in constructed examples are invented.</p>
+ <p class="note">Applicability: written for US military pilots. The Navy sources [1, 2] are training publications, one a controller course and one a training-aircraft instruction from an earlier revision; your NATOPS or service flight manual, unit procedures and current flight information publications govern. The Army manual [3] is cited only for the military grid. The FAA AIM and PHAK [4, 5] are the US civil references that military aircraft also follow in the National Airspace System. This revision is Drafted pending independent source-backed review.</p>
+</SiteLayout>
+<script>import '../../../lessons/navigation/lesson-ui.mjs';</script>
+
+<style>
+  .contents ol { columns: 2; column-gap: 2rem; padding-left: 1.5rem; }
+  .contents li { break-inside: avoid; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  caption { padding: 0.5rem 0.75rem; text-align: left; color: var(--color-muted); font-size: 0.9rem; }
+  th, td { padding: 0.45rem 0.75rem; border-top: 1px solid var(--color-border); text-align: left; vertical-align: top; }
+  thead th { background: var(--color-surface); }
+  .note { padding: 0.75rem 1rem; border-left: 0.25rem solid var(--color-border); background: var(--color-surface); }
+  ol.steps li, ol.call-order li { margin-block: 0.35rem; }
+  ol.call-order { counter-reset: call; list-style: none; padding-left: 0; }
+  ol.call-order li { counter-increment: call; display: grid; grid-template-columns: 2.2rem 1fr; align-items: baseline; }
+  ol.call-order li::before { content: counter(call); font-weight: 700; text-align: center; border: 2px solid var(--color-text); width: 1.6rem; height: 1.6rem; line-height: 1.4rem; }
+  .lesson { margin-block: 1.5rem; padding: 1rem; border: 1px solid var(--color-text); }
+  .lesson h3 { margin-top: 0; }
+  .controls { display: grid; gap: 0.6rem; align-content: start; margin-bottom: 0.75rem; }
+  .controls.row { grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); align-items: end; }
+  .controls label { display: grid; gap: 0.2rem; font-weight: 700; }
+  .controls output { font-weight: 400; font-variant-numeric: tabular-nums; }
+  .controls label[hidden] { display: none; }
+  .controls input[type="text"], .controls select { width: 100%; box-sizing: border-box; min-height: 2.75rem; font: inherit; padding: 0.3rem 0.5rem; border: 1px solid var(--color-text); background: #fff; }
+  fieldset { margin: 0 0 0.75rem; padding: 0.5rem 0.75rem; border: 1px solid var(--color-border); }
+  legend { font-weight: 700; }
+  fieldset.inline { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; }
+  fieldset label { display: flex; align-items: center; gap: 0.4rem; min-height: 2.75rem; }
+  input[type="range"] { min-height: 2.75rem; width: 100%; }
+  input:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .lesson :global(button) { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: #fff; background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
+  .lesson :global(button + button), .lesson :global(button[aria-pressed="false"]) { color: var(--color-text); background: #fff; }
+  .lesson :global(button[aria-pressed="true"]) { color: #fff; background: var(--color-link); border-color: var(--color-link); }
+  .lesson :global(button:disabled) { opacity: 0.45; cursor: default; }
+  .lesson :global(button:focus-visible) { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+  .lesson [data-choices] :global(button), .chips :global(button) { color: var(--color-text); background: #fff; font-weight: 400; text-align: left; }
+  .chips :global(button[aria-pressed="true"]) { color: #fff; background: var(--color-link); border-color: var(--color-link); }
+  .feedback { font-weight: 700; min-height: 1.6em; }
+  .feedback :global(p) { margin: 0.2rem 0; }
+  .feedback :global(.bad) { color: #a3000b; }
+  .lesson.ready .no-js { display: none; }
+  .no-js { font-weight: 700; }
+  details.log { margin-bottom: 0.75rem; }
+  details.log ul { margin: 0.4rem 0; font-size: 0.95rem; }
+  .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+  @media (min-width: 64rem) {
+    .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
+  }
+  .fig-scroll { overflow-x: auto; }
+  .fig-scroll :global(svg) { min-width: 36rem; }
+  .fig-title { font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 2px solid var(--color-text); padding-bottom: 0.3rem; }
+  .fig-caption { color: var(--color-muted); font-size: 0.9rem; }
+  dl.jargon { display: grid; gap: 0.4rem; }
+  dl.jargon div { display: grid; grid-template-columns: minmax(8rem, 12rem) 1fr; gap: 0.75rem; border-top: 1px solid var(--color-border); padding-top: 0.4rem; }
+  dl.jargon dt { font-weight: 700; }
+  dl.jargon dd { margin: 0; }
+  .quiz-lesson .task, .figure-lesson .task { font-style: italic; }
+  @media (max-width: 40rem) {
+    .contents ol { columns: 1; }
+    dl.jargon div { grid-template-columns: 1fr; gap: 0.1rem; }
+  }
+  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
+  :global(.natops .frame) { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
+  :global(.natops .lbl) { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
+  :global(.natops .lbl.small) { font-size: 10px; font-weight: 400; }
+  :global(.natops .lbl.big) { font-size: 15px; }
+  :global(.natops .lbl.mono) { font-family: ui-monospace, Menlo, Consolas, monospace; }
+  :global(.natops .lbl.on) { fill: var(--color-link); }
+  :global(.natops .lbl.bad) { fill: #a3000b; }
+  :global(.natops .lbl.inv) { fill: #fff; }
+  :global(.natops .ln) { fill: none; stroke: var(--color-text); stroke-width: 1.8; }
+  :global(.natops .ln.heavy) { stroke-width: 2.6; }
+  :global(.natops .ln.dashed) { stroke-dasharray: 7 4; }
+  :global(.natops .ln.on) { stroke: var(--color-link); }
+  :global(.natops .thin) { fill: none; stroke: var(--color-text); stroke-width: 1; }
+  :global(.natops .grid) { fill: none; stroke: #c8ccd0; stroke-width: 1; }
+  :global(.natops .box) { fill: #fff; stroke: var(--color-text); stroke-width: 1.6; }
+  :global(.natops .box.on) { fill: var(--color-link); stroke: var(--color-link); }
+  :global(.natops .box.dim) { fill: #fff; stroke: #c8ccd0; }
+  :global(.natops .mine) { fill: var(--color-link); stroke: var(--color-link); }
+  :global(.natops .mine.bad) { fill: #a3000b; stroke: #a3000b; }
+  :global(.natops .cursor) { stroke: var(--color-link); stroke-width: 2.4; }
+  :global(.natops .fill) { fill: var(--color-text); }
+  :global(.natops .dot) { fill: #fff; stroke: var(--color-text); stroke-width: 1.4; }
+  :global(.natops .dot.done) { fill: var(--color-text); }
+  :global(.natops .pointer) { fill: var(--color-link); stroke: #fff; stroke-width: 2; }
+  :global(.natops .thin.dotted) { stroke-dasharray: 2 3; }
+  .feedback :global(.derived) { font-weight: 400; }
+  :global(.natops .acft) { fill: var(--color-link); stroke: var(--color-link); stroke-width: 1; }
+  :global(.natops .acft.other) { fill: #fff; stroke: var(--color-text); stroke-width: 1.6; }
+  :global(.natops .terrain) { fill: #e4e6e8; stroke: var(--color-text); stroke-width: 1.2; }
+  :global(.natops .flown) { fill: none; stroke: var(--color-link); stroke-width: 3.4; stroke-linejoin: round; }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--color-border); }
+  .table-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+  .controls input[type="number"] { width: 100%; box-sizing: border-box; min-height: 2.75rem; font: inherit; padding: 0.3rem 0.5rem; border: 1px solid var(--color-text); background: #fff; }
+  .lesson [data-direct] :global(button) { color: var(--color-text); background: #fff; }
+  td.mono, .mono { font-family: ui-monospace, Menlo, Consolas, monospace; }
+  .table-scroll td.mono { white-space: nowrap; }
+  .quiz-fig { max-width: 22rem; }
+  .quiz-fig :global(svg) { min-width: 0; }
+  :global(.natops .cdi) { stroke: var(--color-link); stroke-width: 4; stroke-linecap: round; }
+  .lesson:not(.ready) .buttons, .lesson:not(.ready) .controls, .lesson:not(.ready) fieldset, .lesson:not(.ready) svg:empty,
+  .lesson:not(.ready) .table-scroll { display: none; }
+</style>
