@@ -1,0 +1,70 @@
+---
+// Figure 1: an illustrative small aerodrome in plan view, north up. Groups
+// carry data-part so the page's callout buttons can highlight them.
+const connectors = [100, 230, 410, 540];
+---
+<svg class="natops" viewBox="0 0 640 400" role="img" aria-label="Plan view of a small aerodrome: one runway 9-27, a parallel taxiway with four connectors and holding positions, an apron with a control tower and rotating beacon, and a segmented circle with a wind cone">
+  <rect x="1" y="1" width="638" height="398" class="frame" />
+  <text x="14" y="24" class="lbl small">ILLUSTRATIVE AERODROME · PLAN VIEW · NORTH UP · NOT TO SCALE</text>
+  <g transform="translate(606 46)"><path d="M0 -18 L6 4 L0 0 L-6 4 Z" class="fixmark" /><text x="0" y="20" text-anchor="middle" class="lbl small">N</text></g>
+
+  <g data-part="taxiway">
+    <path d="M80 252 H560" class="twy" />
+    {connectors.map((x) => <path d={`M${x} 196 V252`} class="twy" />)}
+    <path d="M80 252 H560" class="twy-cl" />
+    {connectors.map((x) => <path d={`M${x} 196 V252`} class="twy-cl" />)}
+    <text x="200" y="270" text-anchor="middle" class="lbl">TAXIWAY A</text>
+    {connectors.map((x, i) => <text x={x + 10} y="236" class="lbl small">A{i + 1}</text>)}
+  </g>
+
+  <g data-part="runway">
+    <rect x="60" y="168" width="520" height="28" class="rwy" />
+    <path d="M90 182 H550" class="rwy-cl" />
+    <text x="320" y="160" text-anchor="middle" class="lbl">RUNWAY 9-27</text>
+  </g>
+  <g data-part="numbers">
+    <text x="0" y="0" transform="translate(84 182) rotate(90)" text-anchor="middle" dominant-baseline="central" class="rwy-num">9</text>
+    <text x="0" y="0" transform="translate(556 182) rotate(-90)" text-anchor="middle" dominant-baseline="central" class="rwy-num">27</text>
+    <path d="M18 182 h30 M40 176 l8 6 l-8 6" class="ln" />
+    <text x="14" y="214" class="lbl small">LANDING EAST:</text>
+    <text x="14" y="226" class="lbl small">RUNWAY 9</text>
+  </g>
+
+  <g data-part="hold">
+    {connectors.map((x) => <g transform={`translate(${x} 212)`}>
+      <path d="M-9 0 H9 M-9 3 H9" class="hold-solid" />
+      <path d="M-9 -4 H9 M-9 -7 H9" class="hold-dash" />
+    </g>)}
+    <g transform="translate(244 206)"><rect x="0" y="0" width="34" height="13" class="sign-red" /><text x="17" y="10" text-anchor="middle" class="sign-txt white" font-size="10">9-27</text></g>
+  </g>
+
+  <g data-part="apron">
+    <rect x="230" y="282" width="180" height="70" class="apron" />
+    <path d="M300 252 V282" class="twy" /><path d="M300 252 V282" class="twy-cl" />
+    <text x="320" y="340" text-anchor="middle" class="lbl">APRON (RAMP)</text>
+    <path d="M262 304 l10 -8 l10 8 M272 296 v18" class="ln" />
+    <path d="M352 304 l10 -8 l10 8 M362 296 v18" class="ln" />
+  </g>
+
+  <g data-part="tower">
+    <rect x="432" y="296" width="18" height="40" class="bldg" />
+    <rect x="426" y="286" width="30" height="12" class="bldg" />
+    <text x="462" y="300" class="lbl small">CONTROL TOWER</text>
+  </g>
+  <g data-part="beacon">
+    <circle cx="486" cy="350" r="7" class="beacon" />
+    <path d="M486 336 v-6 M497 339 l4 -4 M475 339 l-4 -4" class="thin" />
+    <text x="500" y="354" class="lbl small">ROTATING BEACON</text>
+  </g>
+
+  <g data-part="circle">
+    <circle cx="470" cy="88" r="30" class="ln" stroke-dasharray="9 5" />
+    <path d="M410 88 h-26 M530 88 h26" class="ln heavy" />
+    <text x="470" y="138" text-anchor="middle" class="lbl small">SEGMENTED CIRCLE</text>
+  </g>
+  <g data-part="sock">
+    <path d="M470 88 V70" class="thin" />
+    <path d="M470 70 L446 74 L446 80 L470 84 Z" class="sock" />
+    <text x="440" y="66" text-anchor="end" class="lbl small">WIND CONE (WIND FROM THE EAST)</text>
+  </g>
+</svg>

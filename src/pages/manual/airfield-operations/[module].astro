@@ -1,0 +1,585 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import { getModule, includedModules } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import AerodromeFigure from '../../../components/airfield-ops/AerodromeFigure.astro';
+const mod = getModule('airfield-basics');
+export function getStaticPaths() { return includedModules.some(m => m.slug === 'airfield-basics') ? [{ params: { module: 'airfield-basics' } }] : []; }
+const contents = [
+ ['overview', 'Purpose and learning objectives'], ['aerodrome', 'The aerodrome at a glance'],
+ ['numbers', 'Runway numbers'], ['markings', 'Runway markings'], ['holding', 'Taxiways and holding positions'],
+ ['signs', 'Airport signs'], ['lighting', 'Airfield lighting'], ['glidepath', 'Visual glide slope indicators'],
+ ['wind', 'Wind and the runway in use'], ['pattern', 'The traffic pattern'], ['overhead', 'The overhead maneuver'],
+ ['talk', 'Talking to the airfield'], ['ground', 'Moving on the ground'], ['terms', 'Airfield terms'], ['check', 'Check your understanding'],
+ ['sources', 'Sources and applicability'],
+];
+// Source markers: [n, ¶ or p.]
+const cite = (n: number) => (where: string) => `[${n}, ${where}]`;
+const radioHref = sitePath('manual/radio-communications/radio-procedures/');
+const aim2 = cite(1), aim4 = cite(2), pcg = cite(3), afh = cite(4), ac = cite(5), atc = cite(6);
+---
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="airfield-operations" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Airfield Operations',href:sitePath('manual/airfield-operations/')},{label:mod.title}]}>
+ <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
+  <h2>{mod.maturity}</h2>
+  <p>Module revision {mod.revision} · How an aerodrome is laid out, marked, signed and lit, how the runway in use and the traffic pattern work, and how to move safely on the ground. Aircraft-agnostic, using US (FAA) standards as the worked example. It covers who to call, and when, arriving at and leaving towered and non-towered airfields; general radio technique and phraseology are taught in <a href={radioHref}>Radio Procedures</a>. Carrier operations belong to Naval Operations.</p>
+  <p>Every figure is interactive. Start with the aerodrome at a glance, then follow an aircraft from the ramp to the runway, around the pattern and back.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <ol>{contents.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol>
+ </nav>
+
+ <h2 id="overview">Purpose and learning objectives</h2>
+ <p>An airfield is full of standard information written on the ground, on signs and in lights. Pilots who can read it know where they are, where they may go and where they must stop, without needing anyone to tell them.</p>
+ <p>By the end you should be able to: work out a runway's number from its direction and tell parallel runways apart; read runway markings, including a displaced threshold; know which side of a holding position marking you must hold on; name each airport sign by its colours; read runway, taxiway and approach lighting, including a PAPI; pick the runway most nearly into the wind and work out the crosswind; fly the legs of the rectangular traffic pattern with its entries and exits; describe the overhead maneuver; make the right calls to the right station arriving at and departing from both towered and non-towered airfields; and read tower light-gun signals.</p>
+ <p class="note">This is a conceptual reference using US standards from the FAA's Aeronautical Information Manual (AIM) and handbooks. Other countries follow ICAO standards that differ in detail, and individual airfields, military fields above all, publish their own patterns and procedures. Always use the procedures published for the field you are flying from.</p>
+
+ <h2 id="aerodrome">The aerodrome at a glance</h2>
+ <p>Figure 1 shows a small aerodrome with the pieces this module covers. Select a part to read about it.</p>
+ <section class="lesson figure-lesson" data-lesson="aerodrome" aria-labelledby="aero-title">
+  <h3 id="aero-title" class="fig-title">Figure 1 — Parts of an aerodrome (plan view)</h3>
+  <div class="buttons">
+   <button type="button" data-show="runway" aria-pressed="false">Runway</button>
+   <button type="button" data-show="numbers" aria-pressed="false">Runway numbers</button>
+   <button type="button" data-show="taxiway" aria-pressed="false">Taxiways</button>
+   <button type="button" data-show="hold" aria-pressed="false">Holding positions</button>
+   <button type="button" data-show="apron" aria-pressed="false">Apron</button>
+   <button type="button" data-show="tower" aria-pressed="false">Tower</button>
+   <button type="button" data-show="beacon" aria-pressed="false">Beacon</button>
+   <button type="button" data-show="circle" aria-pressed="false">Segmented circle</button>
+   <button type="button" data-show="sock" aria-pressed="false">Wind cone</button>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><AerodromeFigure /></div>
+  <ol class="callouts plain">
+   <li data-callout="runway"><p><strong>Runway</strong>: the strip used for takeoff and landing. Runway markings are white. <a href="#source-aim2">{aim2('2-3-2.2')}</a></p></li>
+   <li data-callout="numbers"><p><strong>Runway numbers</strong>: each end carries the number of its own magnetic direction, so one strip is runway 9 landing east and runway 27 landing west. <a href="#source-aim2">{aim2('2-3-3.2')}</a></p></li>
+   <li data-callout="taxiway"><p><strong>Taxiways</strong>: the paths between the runway and the apron. Taxiway markings are yellow; the centerline is a single continuous yellow line. <a href="#source-aim2">{aim2('2-3-2.2, 2-3-4.2')}</a></p></li>
+   <li data-callout="hold"><p><strong>Runway holding positions</strong>: four yellow lines across each taxiway entering the runway, with a red runway holding position sign beside them. You stop here unless cleared onto or across the runway. <a href="#source-aim2">{aim2('2-3-5.1, 2-3-8.2')}</a></p></li>
+   <li data-callout="apron"><p><strong>Apron (ramp)</strong>: where aircraft park, load and refuel. Approval is needed before moving from it onto the movement area while the tower is operating. <a href="#source-aim4">{aim4('4-3-18')}</a></p></li>
+   <li data-callout="tower"><p><strong>Control tower</strong>: where one operates, pilots keep two-way radio contact with it, and a landing clearance from it is always required. <a href="#source-aim4">{aim4('4-3-2')}</a></p></li>
+   <li data-callout="beacon"><p><strong>Rotating beacon</strong>: white and green for a lighted civil land airport; a military field adds a dual-peaked white flash between the greens. <a href="#source-aim2">{aim2('2-1-9')}</a></p></li>
+   <li data-callout="circle"><p><strong>Segmented circle</strong>: where installed at an airport without an operating tower, it sits centrally and gathers the wind and traffic pattern indicators; pairs of landing strip indicators show the runway alignment. <a href="#source-aim4">{aim4('4-3-4')}</a></p></li>
+   <li data-callout="sock"><p><strong>Wind cone</strong>: its large end points into the wind. This one shows an east wind, so aircraft land on runway 9, toward the east. <a href="#source-aim4">{aim4('4-3-4')}</a></p></li>
+  </ol>
+ </section>
+
+ <h2 id="numbers">Runway numbers</h2>
+ <p>"The runway number is the whole number nearest one-tenth the magnetic azimuth of the centerline of the runway," measured in the direction of approach. <a href="#source-aim2">{aim2('2-3-3.2')}</a> A runway pointing 183° magnetic is runway 18; one pointing 087° is runway 9. For an azimuth ending in 5, such as 185°, the designation could be either 18 or 19. <a href="#source-aim4">{aim4('4-3-6.1')}</a> Each end is numbered for its own direction, so the two ends differ by 18: 9 and 27, 18 and 36. Read literally, the rule gives 0 for a runway pointing within 5° of north; such runways are numbered 36, a convention the AIM paragraph does not state.</p>
+ <p>Parallel runways add a letter, read left to right as seen on the approach: L and R for two, L, C and R for three. <a href="#source-aim2">{aim2('2-3-3.2')}</a> The same strip is "left" from one end and "right" from the other.</p>
+ <section class="lesson figure-lesson" data-lesson="numbers" aria-labelledby="num-title">
+  <h3 id="num-title" class="fig-title">Figure 2 — Runway numbers explorer (plan view, magnetic north up)</h3>
+  <div class="controls row">
+   <label for="num-az">Runway direction <output for="azimuth"></output><input id="num-az" name="azimuth" type="range" min="0" max="359" step="1" value="87" /></label>
+  </div>
+  <fieldset class="inline"><legend>Parallel runways</legend>
+   <label><input type="radio" name="count" value="1" checked /> One</label>
+   <label><input type="radio" name="count" value="2" /> Two</label>
+   <label><input type="radio" name="count" value="3" /> Three</label>
+  </fieldset>
+  <div class="fig-scroll" role="region" aria-label="Figure 2, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 440" role="img" aria-label="Compass ring with the runway or runways drawn along the chosen direction and their numbers painted at each end"></svg></div>
+  <p class="no-js">Interactive figure unavailable. A runway pointing 087° is runway 9; its other end points 267° and is runway 27. Two parallel runways in that direction are 9L and 9R, which are 27R and 27L from the other end.</p>
+  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">The numbers are drawn reading upright to a pilot on the approach to that end. Directions within 5° of north are shown as 36, by the convention described above.</p>
+ </section>
+
+ <h2 id="markings">Runway markings</h2>
+ <p>Runway markings are white; markings for taxiways, closed areas and holding positions are yellow, even when a holding position is on a runway. <a href="#source-aim2">{aim2('2-3-2.2')}</a> Which markings a runway carries depends on its type. <a href="#source-aim2">{aim2('Table 2-3-1')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Runway marking elements by runway type" tabindex="0"><table>
+  <caption>Runway marking elements <a href="#source-aim2">{aim2('Table 2-3-1')}</a></caption>
+  <thead><tr><th scope="col">Marking</th><th scope="col">Visual runway</th><th scope="col">Nonprecision instrument</th><th scope="col">Precision instrument</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Designation</th><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+   <tr><th scope="row">Centerline</th><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+   <tr><th scope="row">Threshold</th><td>On runways used, or intended to be used, by international commercial transports</td><td>Yes</td><td>Yes</td></tr>
+   <tr><th scope="row">Aiming point</th><td>On runways 4,000 ft (1,200 m) or longer used by jet aircraft</td><td>Yes</td><td>Yes</td></tr>
+   <tr><th scope="row">Touchdown zone</th><td>—</td><td>—</td><td>Yes</td></tr>
+   <tr><th scope="row">Side stripes</th><td>—</td><td>—</td><td>Yes</td></tr>
+  </tbody>
+ </table></div>
+ <ul>
+  <li><strong>Designation</strong>: the runway number, with any L, C or R. <a href="#source-aim2">{aim2('2-3-3.2')}</a></li>
+  <li><strong>Centerline</strong>: "a line of uniformly spaced stripes and gaps". <a href="#source-aim2">{aim2('2-3-3.3')}</a></li>
+  <li><strong>Threshold</strong>: longitudinal stripes whose number shows the runway width: 4 for 60 ft, 6 for 75 ft, 8 for 100 ft, 12 for 150 ft and 16 for 200 ft. <a href="#source-aim2">{aim2('2-3-3.8, Table 2-3-2')}</a></li>
+  <li><strong>Aiming point</strong>: two broad white stripes, one each side of the centerline, approximately 1,000 ft from the landing threshold. <a href="#source-aim2">{aim2('2-3-3.4')}</a></li>
+  <li><strong>Touchdown zone</strong>: groups of one, two and three bars in pairs either side of the centerline, coded to give distance in 500 ft (150 m) increments. Where a runway has them at both ends, pairs within 900 ft of the midpoint are left out. <a href="#source-aim2">{aim2('2-3-3.5')}</a></li>
+  <li><strong>Side stripes</strong>: continuous white stripes on each side of the runway. <a href="#source-aim2">{aim2('2-3-3.6')}</a></li>
+  <li><strong>Displaced threshold</strong>: "A ten feet wide white threshold bar is located across the width of the runway at the displaced threshold," with white arrows along the centerline before it. The pavement before a displaced threshold is available for takeoffs in either direction and landings from the opposite direction. <a href="#source-aim2">{aim2('2-3-3.8')}</a></li>
+  <li><strong>Demarcation bar and chevrons</strong>: a 3 ft wide yellow demarcation bar separates the runway from a blast pad, stopway or taxiway before it; yellow chevrons mark pavement aligned with the runway that is unusable for landing, takeoff and taxiing. <a href="#source-aim2">{aim2('2-3-3.9')}</a></li>
+  <li><strong>Closed runway</strong>: yellow crosses at each end of a temporarily closed runway; a permanently closed runway also has crosses every 1,000 ft. <a href="#source-aim2">{aim2('2-3-6.4–2-3-6.5')}</a></li>
+ </ul>
+ <section class="lesson figure-lesson" data-lesson="markings" aria-labelledby="mark-title">
+  <h3 id="mark-title" class="fig-title">Figure 3 — Runway markings by runway type (plan view)</h3>
+  <fieldset class="inline"><legend>Runway type</legend>
+   <label><input type="radio" name="rtype" value="visual" /> Visual</label>
+   <label><input type="radio" name="rtype" value="nonprecision" /> Nonprecision instrument</label>
+   <label><input type="radio" name="rtype" value="precision" checked /> Precision instrument</label>
+  </fieldset>
+  <div class="controls row">
+   <label for="mark-width">Runway width
+    <select id="mark-width" name="width"><option value="60">60 ft</option><option value="75">75 ft</option><option value="100">100 ft</option><option value="150" selected>150 ft</option><option value="200">200 ft</option></select>
+   </label>
+   <label class="check"><input type="checkbox" name="intl" /> Used by international commercial transports</label>
+   <label class="check"><input type="checkbox" name="jet" /> 4,000 ft or longer, used by jets</label>
+   <label class="check"><input type="checkbox" name="displaced" /> Displaced threshold</label>
+   <label class="check"><input type="checkbox" name="blast" /> Blast pad before the runway</label>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 3, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 320" role="img" aria-label="Runway 9 landing end in plan view with the markings for the chosen runway type, width and options"></svg></div>
+  <p class="no-js">Interactive figure unavailable. A 150 ft precision instrument runway carries 12 threshold stripes, the designation, a centerline, aiming point stripes about 1,000 ft in, touchdown zone bars and side stripes.</p>
+  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Lengths are to scale along the runway (first 3,600 ft); widths are drawn four times larger so the stripes can be seen. The number of threshold stripes follows the AIM table. The length of each stripe, the centerline dash and gap, the displacement and the bar count in each touchdown zone group (3, aiming point, 2, 2, 1, 1, the usual FAA layout) are not in the AIM text, which gives only the 500 ft coding, so they are unverified.</p>
+ </section>
+
+ <h2 id="holding">Taxiways and holding positions</h2>
+ <p>The taxiway centerline is a single continuous yellow line, 6 to 12 inches wide. <a href="#source-aim2">{aim2('2-3-4.2')}</a> Approaching a runway at larger airports, an <strong>enhanced centerline</strong> adds a parallel line of yellow dashes either side for up to 150 ft before the runway holding position marking. <a href="#source-aim2">{aim2('2-3-4.2')}</a> Taxiway edge markings are a continuous double yellow line where the edge must not be crossed, or a dashed double line where the pavement beyond is usable. <a href="#source-aim2">{aim2('2-3-4.3')}</a></p>
+ <p>A <strong>runway holding position marking</strong> is four yellow lines, two solid and two dashed, across the taxiway. "The solid lines are always on the side where the aircraft must hold." <a href="#source-aim2">{aim2('2-3-5.1')}</a> On a taxiway it shows where aircraft stop when they have no clearance to proceed onto the runway; at an airport with an operating tower, do not cross it without an ATC clearance. <a href="#source-aim2">{aim2('2-3-5.1')}</a> The same marking on a runway is used for land and hold short operations. <a href="#source-aim2">{aim2('2-3-5.1')}</a> An ILS critical area holding position is two solid yellow lines 2 ft apart joined by pairs of solid lines 10 ft apart. <a href="#source-aim2">{aim2('2-3-5.2')}</a> Where the holding position is wider than 200 ft, a red surface-painted holding position sign is added to the left of the centerline on the holding side. <a href="#source-aim2">{aim2('2-3-5.4')}</a></p>
+ <p>After landing, exit at the first available taxiway or as ATC instructs, and taxi clear: an aircraft has cleared the runway when all parts of it have crossed the holding position marking. Then hold unless ATC has issued further instructions. <a href="#source-aim4">{aim4('4-3-21')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="hold" aria-labelledby="hold-title">
+  <h3 id="hold-title" class="fig-title">Figure 4 — Which side do you hold on? (plan view)</h3>
+  <fieldset class="inline"><legend>You are</legend>
+   <label><input type="radio" name="way" value="enter" checked /> Taxiing toward the runway</label>
+   <label><input type="radio" name="way" value="exit" /> Exiting after landing</label>
+  </fieldset>
+  <div class="controls row">
+   <label for="hold-pos">Aircraft nose position <output for="pos"></output><input id="hold-pos" name="pos" type="range" min="-140" max="140" step="5" value="-40" /></label>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 4, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 440" role="img" aria-label="Taxiway meeting a runway with the holding position marking, enhanced centerline, location and holding position signs, and an aircraft at the chosen position"></svg></div>
+  <p class="no-js">Interactive figure unavailable. Taxiing toward the runway, hold on the side with the two solid lines. Exiting, keep going until every part of the aircraft has crossed the marking.</p>
+  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">The aircraft is 30 ft long. Distances are not to scale.</p>
+ </section>
+
+ <h2 id="signs">Airport signs</h2>
+ <p>Signs are coded by colour as well as by what they say. <a href="#source-aim2">{aim2('2-3-7–2-3-13')}</a></p>
+ <ul>
+  <li><strong>Mandatory instruction signs</strong>: red background, white inscription. They mark the entrance to a runway or critical area, or an area aircraft may not enter. <a href="#source-aim2">{aim2('2-3-8')}</a> A <em>runway holding position sign</em> carries the runway's designation; "15-33" means runway 15's threshold is to the left and runway 33's to the right. <a href="#source-aim2">{aim2('2-3-8.2')}</a> An <em>ILS critical area holding position sign</em> reads "ILS". <a href="#source-aim2">{aim2('2-3-8.3')}</a> A <em>no entry sign</em> prohibits aircraft from entering an area, such as a one-way taxiway or a road that could be mistaken for one. <a href="#source-aim2">{aim2('2-3-8.4')}</a></li>
+  <li><strong>Location signs</strong>: black background, yellow inscription and yellow border. A taxiway location sign tells you which taxiway you are on, alone or with direction or holding position signs. <a href="#source-aim2">{aim2('2-3-9')}</a></li>
+  <li><strong>Direction signs</strong>: yellow background, black inscription, with arrows to the taxiways leading off an intersection. <a href="#source-aim2">{aim2('2-3-10')}</a></li>
+  <li><strong>Destination signs</strong>: yellow background, black inscription, with an arrow toward a destination such as a runway or the ramp. <a href="#source-aim2">{aim2('2-3-11')}</a></li>
+  <li><strong>Information signs</strong>: yellow background, black inscription. <a href="#source-aim2">{aim2('2-3-12')}</a></li>
+  <li><strong>Runway distance remaining signs</strong>: black background, white numeral: the thousands of feet of landing runway remaining. <a href="#source-aim2">{aim2('2-3-13')}</a></li>
+ </ul>
+ <section class="lesson figure-lesson" data-lesson="signs" aria-labelledby="signs-title">
+  <h3 id="signs-title" class="fig-title">Figure 5 — Sign decoder</h3>
+  <p>Select a sign to read it.</p>
+  <div class="sign-gallery buttons" data-gallery></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="sign-quiz" data-quiz>
+   <h4>Quiz: what kind of sign is this?</h4>
+   <div class="sign-shown" data-sign role="img"></div>
+   <div class="buttons" data-choices></div>
+   <p class="feedback" data-quiz-result role="status" aria-live="polite"></p>
+   <div class="buttons"><button type="button" data-new>Another sign</button></div>
+  </div>
+  <p class="no-js">Interactive figure unavailable. Red with white text: mandatory instruction. Black with yellow text and border: location. Yellow with black text: direction, destination or information. Black with a white number: runway distance remaining.</p>
+  <p class="fig-caption">Signs are drawn from the AIM's colour descriptions; their proportions and lettering are illustrative. The taxiway and destination names are examples.</p>
+ </section>
+
+ <h2 id="lighting">Airfield lighting</h2>
+ <p>At night the same layout is written in coloured lights. <a href="#source-aim2">{aim2('2-1-4–2-1-10')}</a></p>
+ <ul>
+  <li><strong>Runway edge lights</strong> are white. On instrument runways, yellow replaces white on the last 2,000 ft or half the runway length, whichever is less, to form a caution zone for landings. <a href="#source-aim2">{aim2('2-1-4.2')}</a></li>
+  <li><strong>Runway end lights</strong> emit red toward the runway to mark its end for departing aircraft, and green outward from the runway end to mark the threshold for landing aircraft. <a href="#source-aim2">{aim2('2-1-4.3')}</a></li>
+  <li><strong>Runway centerline lights</strong> are white until the last 3,000 ft, then alternate red and white for the next 2,000 ft; the last 1,000 ft are all red. <a href="#source-aim2">{aim2('2-1-5.1')}</a></li>
+  <li><strong>Touchdown zone lights</strong> are steady white lights starting 100 ft beyond the landing threshold and extending to 3,000 ft beyond it or to the runway midpoint, whichever is less. <a href="#source-aim2">{aim2('2-1-5.2')}</a></li>
+  <li><strong>Runway end identifier lights</strong> (REIL) are a pair of synchronized flashing lights, one each side of the threshold. <a href="#source-aim2">{aim2('2-1-3')}</a></li>
+  <li><strong>Taxiway edge lights</strong> are blue; <strong>taxiway centerline lights</strong> are steady green. <a href="#source-aim2">{aim2('2-1-10')}</a></li>
+  <li><strong>Rotating beacons</strong> flash 24 to 30 times a minute at airports. White and green alternating marks a lighted land airport; military airport beacons alternate white and green but are told apart by dual-peaked (two quick) white flashes between the green flashes. <a href="#source-aim2">{aim2('2-1-9')}</a> In Class B, C, D and E surface areas, a beacon operating by day often means the ground visibility is less than 3 miles and/or the ceiling is less than 1,000 ft, but pilots should not rely solely on it to tell whether conditions are IFR or VFR. <a href="#source-aim2">{aim2('2-1-9')}</a></li>
+ </ul>
+ <section class="lesson figure-lesson" data-lesson="lighting" aria-labelledby="light-title">
+  <h3 id="light-title" class="fig-title">Figure 6 — A runway at night (plan view)</h3>
+  <div class="controls row">
+   <label for="light-pos">Landing roll <output for="travelled"></output><input id="light-pos" name="travelled" type="range" min="0" max="8000" step="100" value="5500" /></label>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 6, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 320" role="img" aria-label="Night plan view of an 8,000 ft instrument runway with edge, centerline, touchdown zone, threshold and end lights, a lit taxiway connector and an aircraft on its landing roll"></svg></div>
+  <p class="no-js">Interactive figure unavailable. With 2,500 ft of an 8,000 ft instrument runway left, edge lights are still white and centerline lights alternate red and white; with 1,500 ft left the edge lights are yellow; in the last 1,000 ft the centerline is red.</p>
+  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
+  <fieldset class="inline"><legend>Rotating beacon</legend>
+   <label><input type="radio" name="beacon" value="civil" checked /> Civil land airport</label>
+   <label><input type="radio" name="beacon" value="military" /> Military airport</label>
+  </fieldset>
+  <div class="beacon-row">
+   <svg class="beacon-lamp" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="16" class="lt-lamp off" data-lamp /></svg>
+   <svg class="natops beacon-strip" viewBox="0 0 330 54" role="img" aria-label="Beacon flash sequence for the chosen airport type"><g data-beacon></g></svg>
+  </div>
+  <div class="buttons"><button type="button" data-play>Flash the beacon</button></div>
+  <p class="fig-caption">Light spacing and the alternating pattern are drawn for clarity, not to scale. The beacon strip shows the order of flashes, not their timing; the lamp flashes only when asked and stays dark if your system asks for reduced motion.</p>
+ </section>
+
+ <h2 id="glidepath">Visual glide slope indicators</h2>
+ <p>A visual approach slope indicator (VASI) works by colour: each light unit projects a beam with a white segment in its upper part and a red segment in its lower part. <a href="#source-aim2">{aim2('2-1-2.1')}</a> Most VASIs have two bars, near and far, giving one visual glide path normally set at 3°. Its safe obstruction clearance extends within ±10° of the extended runway centerline and out to 4 NM from the threshold. <a href="#source-aim2">{aim2('2-1-2.1')}</a> A three-bar VASI adds a second, upper glide path, normally 1/4° higher, for high-cockpit aircraft. <a href="#source-aim2">{aim2('2-1-2.1')}</a></p>
+ <p>The <strong>precision approach path indicator</strong> (PAPI) uses the same red and white principle in a single row of two or four light units, normally on the left side of the runway. It typically gives safe obstruction clearance within ±10° of the extended centerline and to 3.4 NM from the threshold, and can be seen from about 5 miles by day and up to 20 miles at night. Do not start a descent using the PAPI until the aircraft is visually aligned with the runway. <a href="#source-aim2">{aim2('2-1-2.2')}</a></p>
+ <p>A <strong>tri-color</strong> system is a single light: red below the glide path, amber above it and green on it. <a href="#source-aim2">{aim2('2-1-2.3')}</a> A <strong>pulsating</strong> system shows steady white on the path, steady red slightly below, pulsing red further below and pulsing white above, pulsing faster the further off the path you are. On some systems the on-path indication is alternating red and white instead. <a href="#source-aim2">{aim2('2-1-2.4')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="papi" aria-labelledby="papi-title">
+  <h3 id="papi-title" class="fig-title">Figure 7 — Reading a four-light PAPI (side view)</h3>
+  <div class="controls row">
+   <label for="papi-dist">Distance from the PAPI <output for="dist"></output><input id="papi-dist" name="dist" type="range" min="5" max="40" step="1" value="20" /></label>
+   <label for="papi-h">Height above the touchdown point <output for="height"></output><input id="papi-h" name="height" type="range" min="0" max="1500" step="10" value="640" /></label>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 7, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 400" role="img" aria-label="Side view of an aircraft on approach with 2.5, 3 and 3.5 degree lines, and the four PAPI lights as the pilot sees them"></svg></div>
+  <p class="no-js">Interactive figure unavailable. On a 3° path a pilot sees two white and two red lights; three or four white means high, three or four red means low. At 2 NM the 3° path is about 640 ft above the touchdown point.</p>
+  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">The AIM depicts PAPI indications in a figure only (FIG 2-1-5), not in text: high (more than 3.5°) four white; slightly high (3.2°) three white, one red; on glide path (3°) two and two; slightly low (2.8°) one white, three red; low (less than 2.5°) four red. This figure reproduces those labels by giving the four units transition angles of 2°30′, 2°50′, 3°10′ and 3°30′. Those angles and the light order (white filling from the left) are this module's assumption, unverified against a text source. Angle = arctan(height ÷ distance), measured from the PAPI; the touchdown point is taken at the PAPI. Vertical scale exaggerated.</p>
+ </section>
+
+ <h2 id="wind">Wind and the runway in use</h2>
+ <p>At a towered airport, "ATC will assign the runway/s most nearly aligned with the wind when 5 knots or more"; below 5 knots the calm wind runway is used unless another is operationally advantageous. <a href="#source-aim4">{aim4('4-3-6.2')}</a></p>
+ <p>Without a tower, the airport may show the wind and landing direction on the ground. "The large end of the wind cone/wind sock points into the wind as does the large end (cross bar) of the wind tee." The small end of a <strong>tetrahedron</strong> points in the direction of landing; pilots should not use it as a wind indicator, and tower instructions supersede it. <a href="#source-aim4">{aim4('4-3-4')}</a> A <strong>segmented circle</strong>, if installed, gathers these with landing strip and traffic pattern indicators. <a href="#source-aim4">{aim4('4-3-4')}</a></p>
+ <p>The part of the wind blowing across the runway is the <strong>crosswind component</strong>; the part along it is the head- or tailwind. For a wind of speed V at an angle θ to the runway, crosswind = V sin θ and headwind = V cos θ. A 20 kt wind 30° off the runway gives 10 kt of crosswind and about 17 kt of headwind.</p>
+ <section class="lesson figure-lesson" data-lesson="wind" aria-labelledby="wind-title">
+  <h3 id="wind-title" class="fig-title">Figure 8 — Wind, indicators and the runway in use (plan view)</h3>
+  <div class="controls row">
+   <label for="wind-dir">Wind from <output for="wind"></output><input id="wind-dir" name="wind" type="range" min="0" max="350" step="10" value="120" /></label>
+   <label for="wind-spd">Wind speed <output for="speed"></output><input id="wind-spd" name="speed" type="range" min="0" max="35" step="1" value="12" /></label>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 8, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 440" role="img" aria-label="Two crossing runways with the wind arrow, the runway in use, a wind cone and a tetrahedron"></svg></div>
+  <div class="table-scroll" role="region" aria-label="Wind components on each runway" tabindex="0" data-table><table>
+   <caption>Wind components on each runway end</caption>
+   <thead><tr><th scope="col">Runway</th><th scope="col">Along the runway</th><th scope="col">Crosswind</th></tr></thead>
+   <tbody></tbody>
+  </table></div>
+  <p class="no-js">Interactive figure unavailable. Wind from 120° at 12 kt: runway 9 is 30° off the wind, with about 10 kt of headwind and 6 kt of crosswind from the right, so it is the runway most nearly aligned with the wind.</p>
+  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Model: headwind = V cos θ, crosswind = V sin θ, with θ the angle between the wind direction and the runway direction, both in the same reference (here magnetic). Gusts, and any difference between true and magnetic in a report, are not modelled. Runway 27 is the example calm-wind runway.</p>
+ </section>
+
+ <h2 id="pattern">The traffic pattern</h2>
+ <p>The traffic pattern organises arrivals and departures around a runway. It is a rectangle with turns to the left unless the airport shows right turns. <a href="#source-afh">{afh('p. 8-1')}</a> <a href="#source-aim4">{aim4('4-3-3')}</a> Its legs are: <a href="#source-aim4">{aim4('4-3-3')}</a> <a href="#source-pcg">{pcg('Traffic pattern')}</a></p>
+ <ol>
+  <li><strong>Departure leg</strong>: straight ahead along the extended runway centerline after takeoff, until at least 1/2 mile beyond the runway end and within 300 ft of pattern altitude. An <strong>upwind leg</strong> extends it where needed for separation, spacing or sequencing.</li>
+  <li><strong>Crosswind leg</strong>: at right angles to the landing runway, off its takeoff end. Turn onto it beyond the departure end of the runway, within 300 ft of pattern altitude.</li>
+  <li><strong>Downwind leg</strong>: parallel to the landing runway, in the opposite direction to landing.</li>
+  <li><strong>Base leg</strong>: at right angles to the landing runway, off its approach end, from the downwind leg to the extended centerline.</li>
+  <li><strong>Final approach</strong>: along the extended runway centerline, in the direction of landing, from the base leg to the runway. Complete the turn to final at least 1/4 mile from the runway.</li>
+ </ol>
+ <p><strong>Altitude.</strong> Propeller-driven aircraft enter the pattern at 1,000 ft above ground level (AGL); large and turbine-powered aircraft at not less than 1,500 ft AGL or 500 ft above the established pattern altitude. <a href="#source-aim4">{aim4('4-3-3')}</a></p>
+ <p><strong>Spacing and turns.</strong> The downwind leg is flown approximately 1/2 to 1 mile out from the landing runway. The turn to base starts at a point approximately 45° from the approach end of the runway. <a href="#source-afh">{afh('p. 8-3')}</a> When aircraft are approaching to land, the one at the lower altitude has the right-of-way, but it should not use that to cut in front of or overtake an aircraft already on final. <a href="#source-afh">{afh('p. 8-4')}</a></p>
+ <p><strong>Entering.</strong> "Entry to the downwind leg should be at a 45-degree angle abeam the midpoint of the runway to be used for landing." <a href="#source-ac">{ac('11.3')}</a> From the upwind side, the Airplane Flying Handbook describes crossing over midfield at least 500 ft above pattern altitude, descending to pattern altitude about 2 miles out, and turning to enter at 45°. <a href="#source-afh">{afh('p. 8-4')}</a> The FAA discourages VFR straight-in approaches because they raise the risk of a midair collision. <a href="#source-ac">{ac('9.11.1')}</a></p>
+ <p><strong>Leaving.</strong> Continue straight out or exit with a 45° turn, beyond the departure end of the runway after reaching pattern altitude. <a href="#source-ac">{ac('11.8')}</a> <a href="#source-afh">{afh('p. 8-4')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="pattern" aria-labelledby="pat-title">
+  <h3 id="pat-title" class="fig-title">Figure 9 — The rectangular traffic pattern (plan view)</h3>
+  <fieldset class="inline"><legend>Traffic</legend>
+   <label><input type="radio" name="side" value="left" checked /> Left</label>
+   <label><input type="radio" name="side" value="right" /> Right</label>
+  </fieldset>
+  <fieldset class="inline"><legend>Arrive</legend>
+   <label><input type="radio" name="entry" value="45" checked /> 45° to downwind</label>
+   <label><input type="radio" name="entry" value="midfield" /> Cross midfield</label>
+  </fieldset>
+  <fieldset class="inline"><legend>After the touch-and-go</legend>
+   <label><input type="radio" name="exit" value="remain" checked /> Stay in the pattern</label>
+   <label><input type="radio" name="exit" value="straight" /> Depart straight out</label>
+   <label><input type="radio" name="exit" value="turn45" /> Depart with a 45° turn</label>
+  </fieldset>
+  <fieldset class="inline"><legend>Aircraft</legend>
+   <label><input type="radio" name="type" value="prop" checked /> Propeller</label>
+   <label><input type="radio" name="type" value="turbine" /> Large or turbine</label>
+  </fieldset>
+  <div class="buttons">
+   <button type="button" data-leg="departure" aria-pressed="false">Departure</button>
+   <button type="button" data-leg="crosswind" aria-pressed="false">Crosswind</button>
+   <button type="button" data-leg="downwind" aria-pressed="false">Downwind</button>
+   <button type="button" data-leg="base" aria-pressed="false">Base</button>
+   <button type="button" data-leg="final" aria-pressed="false">Final</button>
+   <button type="button" data-play>Fly the pattern</button>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 9, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 460" role="img" aria-label="Plan view of runway 9 with the traffic pattern legs, the chosen entry and departure, and the base turn cue"></svg></div>
+  <p class="no-js">Interactive figure unavailable. Left traffic for runway 9: take off east, turn left onto crosswind beyond the runway end, left again onto downwind flying west about 3/4 NM north of the runway, left onto base when the approach end is 45° behind you, and left onto final. Arrive at 45° to downwind abeam the runway midpoint.</p>
+  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Drawn to scale for a 5,000 ft runway with the downwind 3/4 NM out, the departure leg to 1/2 statute mile past the runway end, and base where the approach end is 45° behind abeam, which makes the final leg as long as the downwind offset. Turns are drawn square. The midfield crossing track is illustrative. No wind.</p>
+ </section>
+
+ <h2 id="overhead">The overhead maneuver</h2>
+ <p>At airports where aircraft have an operational need for it, often military fields, aircraft can join the pattern with an <strong>overhead maneuver</strong> instead of a rectangular entry. <a href="#source-atc">{atc('3-10-12')}</a> The Pilot/Controller Glossary defines it as "A series of predetermined maneuvers prescribed for aircraft (often in formation)" for entry into the visual flight rules (VFR) traffic pattern and to proceed to a landing. It is not an instrument (IFR) approach procedure: an aircraft flying it is VFR, and its IFR flight plan is cancelled at the "initial point" on the initial approach. <a href="#source-pcg">{pcg('Overhead maneuver')}</a> The pattern usually specifies: <a href="#source-pcg">{pcg('Overhead maneuver')}</a></p>
+ <ul>
+  <li>the radio contact required of the pilot, and the speed to be maintained;</li>
+  <li>an initial approach 3 to 5 miles in length;</li>
+  <li>an elliptical pattern consisting of two 180° turns;</li>
+  <li>a break point at which the first 180° turn is started, and the direction of turns;</li>
+  <li>an altitude at least 500 ft above the conventional pattern;</li>
+  <li>a roll-out on final approach not less than 1/4 mile from the landing threshold and not less than 300 ft above the ground.</li>
+ </ul>
+ <p>Overhead patterns are developed at airports where aircraft have an operational need for them, and a standard overhead pattern does not rule out the conventional rectangular pattern. If the break point is not standard, the tower names it, for example "break at midfield". <a href="#source-atc">{atc('3-10-12')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="overhead" aria-labelledby="ovh-title">
+  <h3 id="ovh-title" class="fig-title">Figure 10 — Planning an overhead break (plan and side view)</h3>
+  <fieldset class="inline"><legend>Break point</legend>
+   <label><input type="radio" name="break" value="approach" /> Approach end</label>
+   <label><input type="radio" name="break" value="midfield" checked /> Midfield</label>
+   <label><input type="radio" name="break" value="departure" /> Departure end</label>
+  </fieldset>
+  <div class="controls row">
+   <label for="ovh-speed">Speed in the break <output for="speed"></output><input id="ovh-speed" name="speed" type="range" min="150" max="350" step="10" value="250" /></label>
+   <label for="ovh-bank">Bank in the turns <output for="bank"></output><input id="ovh-bank" name="bank" type="range" min="30" max="80" step="1" value="70" /></label>
+   <label for="ovh-ext">Downwind past the threshold <output for="extend"></output><input id="ovh-ext" name="extend" type="range" min="0" max="6000" step="100" value="2000" /></label>
+   <label for="ovh-init">Initial approach <output for="initial"></output><input id="ovh-init" name="initial" type="range" min="20" max="60" step="1" value="30" /></label>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 10, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 480" role="img" aria-label="Plan view of the overhead pattern with initial, break, downwind and roll-out, above a side view of height along the flown path"></svg></div>
+  <p class="no-js">Interactive figure unavailable. At 250 kt and 70° of bank (2.9 G) each 180° turn has a radius of about 2,010 ft, so the downwind lies about 4,030 ft from the runway; extending 2,000 ft past the threshold rolls out on final 2,000 ft out, more than the 1/4 mile minimum.</p>
+  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Model: both 180° turns are level, constant-speed semicircles of radius V² ÷ (g tan φ), with V the true airspeed in still air, so the downwind lies two radii from the runway. Real breaks usually slow down in the turn and descend from the downwind, which tightens the second turn; the side view simply descends in a straight line from the break altitude to a 300 ft roll-out. "Miles" in the glossary are taken as nautical for the initial and statute (1,320 ft) for the 1/4 mile roll-out. Speeds, bank angles and the descent are not from a source: use your aircraft's and your field's published numbers.</p>
+ </section>
+
+ <h2 id="talk">Talking to the airfield</h2>
+ <p>Everything above is the same at every airfield. What changes is who you talk to. At an airfield with an operating control tower, you talk to controllers, and nothing happens on the runway without their clearance. At an airfield without one, there is nobody to clear you: every pilot broadcasts on one shared frequency and sorts out the traffic by announcing where they are and what they will do. This section covers who to call and when. How to make a call, say numbers and read back a clearance is taught in <a href={radioHref}>Radio Procedures</a>, along with what to do when the radio fails.</p>
+ <h3>Towered airfields</h3>
+ <p>Inside the surface area of a towered airfield you must keep two-way radio contact with the tower unless it authorizes otherwise. Make the initial call about 15 miles out. The tower then issues the instructions that shape your path, such as which leg of the pattern to join and what to report, and a clearance from the tower is always required before landing. Not every towered airfield sits in Class D airspace. <a href="#source-aim4">{aim4('4-3-2')}</a> Listen to the recorded airport information (ATIS) before the first call so you can say you have it; <a href={radioHref}>Radio Procedures</a> shows how.</p>
+ <p>The airfield has more than one controller, each on its own frequency. <strong>Ground control</strong> handles the taxiways and <strong>tower (local control)</strong> handles the runway and the air around it. Departing, call ground control or clearance delivery before starting engines, stay on that frequency through taxi and runup, and change to the tower only when ready to request takeoff clearance. <a href="#source-aim4">{aim4('4-3-14')}</a> When departure delays are expected to exceed 15 minutes, gate hold procedures apply, and the call before engine start is how you get your start time. <a href="#source-aim4">{aim4('4-3-15')}</a> State your position on the airport whenever you ask for taxi, and read back taxi instructions; ATC must get a readback of every runway hold short instruction. <a href="#source-aim4">{aim4('4-3-18')}</a> After landing, stay with the tower until it tells you to contact ground, then change immediately and get a taxi clearance. <a href="#source-aim4">{aim4('4-3-14, 4-3-21')}</a></p>
+ <h3>Non-towered airfields</h3>
+ <p>Where there is no operating tower, traffic advisories happen on the <strong>common traffic advisory frequency</strong> (CTAF). Where the airfield has no tower, CTAF or UNICOM published, use the MULTICOM frequency, 122.9 MHz. <a href="#source-ac">{ac('6.3, 9.6')}</a> All traffic, VFR or IFR, should at least monitor the CTAF. <a href="#source-ac">{ac('9.5')}</a> A UNICOM station, where there is one, may give you the weather and wind on request, but its operator is not required to talk to you. <a href="#source-ac">{ac('9.3')}</a></p>
+ <p>The calls are <strong>self-announcements</strong>: call sign, aircraft type, position, altitude and intentions. <a href="#source-ac">{ac('9.8, 9.8.1')}</a> Start and end each one with the airport's published name, not the name of the town nearby, and use the runway number rather than "the active runway". <a href="#source-ac">{ac('9.8.1, 10.1')}</a> Avoid "to" and "for", which can be heard as numbers. <a href="#source-ac">{ac('10.3')}</a> Report your position, not your guess at the landing order. <a href="#source-ac">{ac('10.1')}</a> "Any traffic in the area, please advise" is not a recognized call; traffic that may conflict should answer an announcement without being asked. <a href="#source-ac">{ac('9.8.1')}</a></p>
+ <ul>
+  <li><strong>Inbound</strong>: about 10 miles out, monitor the CTAF and announce your position, altitude and intentions; <a href="#source-ac">{ac('10.4.1')}</a> then announce entering the downwind leg, and each leg after it. <a href="#source-ac">{ac('9.11.2')}</a> A pilot flying a straight-in approach announces between about 8 and 10 miles out. <a href="#source-ac">{ac('9.11.1')}</a></li>
+  <li><strong>Outbound</strong>: monitor the CTAF from engine start, through taxi and after departure. <a href="#source-ac">{ac('10.4.2')}</a> Announce your intentions before taxi, and before entering the runway announce the runway and your direction of flight. <a href="#source-ac">{ac('9.5, 10.4.3')}</a> An IFR departure keeps monitoring the CTAF until it is in contact with ATC, and an IFR release is not authorization to take off. <a href="#source-ac">{ac('9.5, 10.4.3')}</a></li>
+ </ul>
+ <p>A <strong>part-time tower</strong> changes the rules with the clock. When the tower is closed, or operates only part of the day, use the published CTAF to self-announce within 10 miles. <a href="#source-ac">{ac('9.8')}</a> Check the field's published hours and frequencies before you go.</p>
+ <section class="lesson figure-lesson" data-lesson="radio" aria-labelledby="radio-title">
+  <h3 id="radio-title" class="fig-title">Figure 11 — Calls in and out</h3>
+  <fieldset class="inline"><legend>Airfield</legend>
+   <label><input type="radio" name="field" value="towered" checked /> Towered</label>
+   <label><input type="radio" name="field" value="nontowered" /> Non-towered (CTAF)</label>
+  </fieldset>
+  <fieldset class="inline"><legend>You are</legend>
+   <label><input type="radio" name="dir" value="inbound" checked /> Arriving</label>
+   <label><input type="radio" name="dir" value="outbound" /> Departing</label>
+  </fieldset>
+  <div class="fig-scroll" role="region" aria-label="Figure 11, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 225" role="img" aria-label="Where the aircraft is for the selected call"></svg></div>
+  <div class="buttons step-list" data-steps></div>
+  <div class="call" data-call aria-live="polite"></div>
+  <div class="buttons"><button type="button" data-back>Back</button><button type="button" data-next>Next call</button></div>
+  <p class="no-js">Interactive figure unavailable. Towered, arriving: ATIS; tower about 15 miles out; report as instructed until cleared to land; stay with tower until told to contact ground; ground for taxi. Towered, departing: ATIS; ground before engine start; read back the taxi instructions; tower when ready for takeoff; stay with tower until it approves a frequency change. Non-towered, arriving: UNICOM or automated weather; self-announce on the CTAF about 10 miles out, entering downwind, on base, on final and clear of the runway. Non-towered, departing: monitor the CTAF from engine start; announce before taxi and before entering the runway; keep monitoring after departure.</p>
+  <p class="fig-caption">Cedar is a made-up airfield with runway 27 in use and left traffic. The calls are examples in the formats the AIM and AC 90-66C give, with numbers spelled out as you would say them; the controller's replies are typical, not quoted. Real controllers will give different instructions, and every airfield publishes its own frequencies and procedures. Not to scale.</p>
+ </section>
+
+ <h2 id="ground">Moving on the ground</h2>
+ <p>At an airport with an operating tower, approval is needed before moving an aircraft or vehicle onto the movement area, and a clearance is needed before taxiing on a runway, taking off, landing or crossing any runway. ATC issues an explicit clearance for every runway crossing, and a taxi instruction to the departure runway is not a clearance to enter or cross it. <a href="#source-aim4">{aim4('4-3-18')}</a> Pilots unfamiliar with an airport can ask for progressive taxi instructions, and should remember that jet blast, prop wash and rotor wash can damage aircraft and equipment close behind. <a href="#source-aim4">{aim4('4-3-18')}</a> Who you call for taxi, and when, is in <a href="#talk">Talking to the airfield</a>.</p>
+ <p>Towers control aircraft, vehicles and people without radios, or whose radio contact cannot be established, with a light gun: an intense narrow beam of a selected colour. Light signals can only approve or disapprove what the pilot is expected to do, and a pilot may not be looking at the tower when a signal is sent. <a href="#source-aim4">{aim4('4-3-13')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Traffic control light signals" tabindex="0"><table>
+  <caption>Traffic control light signals <a href="#source-aim4">{aim4('4-3-13')}</a></caption>
+  <thead><tr><th scope="col">Signal</th><th scope="col">Vehicles, equipment and personnel</th><th scope="col">Aircraft on the ground</th><th scope="col">Aircraft in flight</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Steady green</th><td>Cleared to cross, proceed or go</td><td>Cleared for takeoff</td><td>Cleared to land</td></tr>
+   <tr><th scope="row">Flashing green</th><td>Not applicable</td><td>Cleared for taxi</td><td>Return for landing (to be followed by steady green at the proper time)</td></tr>
+   <tr><th scope="row">Steady red</th><td>STOP</td><td>STOP</td><td>Give way to other aircraft and continue circling</td></tr>
+   <tr><th scope="row">Flashing red</th><td>Clear the taxiway/runway</td><td>Taxi clear of the runway in use</td><td>Airport unsafe, do not land</td></tr>
+   <tr><th scope="row">Flashing white</th><td>Return to starting point on airport</td><td>Return to starting point on airport</td><td>Not applicable</td></tr>
+   <tr><th scope="row">Alternating red and green</th><td>Exercise extreme caution</td><td>Exercise extreme caution</td><td>Exercise extreme caution</td></tr>
+  </tbody>
+ </table></div>
+ <section class="lesson figure-lesson" data-lesson="lightgun" aria-labelledby="gun-title">
+  <h3 id="gun-title" class="fig-title">Figure 12 — Light gun signals from the tower</h3>
+  <fieldset class="inline"><legend>You are</legend>
+   <label><input type="radio" name="who" value="ground" checked /> An aircraft on the ground</label>
+   <label><input type="radio" name="who" value="air" /> An aircraft in flight</label>
+   <label><input type="radio" name="who" value="vehicle" /> A vehicle or person</label>
+  </fieldset>
+  <div class="gun-row">
+   <svg class="gun" viewBox="0 0 120 120" aria-hidden="true">
+    <rect x="30" y="58" width="60" height="58" class="bldg" />
+    <rect x="20" y="38" width="80" height="22" class="bldg" />
+    <circle cx="60" cy="49" r="9" class="gun-lamp off" data-gun />
+   </svg>
+   <p class="gun-label" data-gun-label aria-live="polite"></p>
+  </div>
+  <p>What does the signal mean to you?</p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Another signal</button></div>
+  <p class="no-js">Interactive figure unavailable. Use the table above.</p>
+  <p class="fig-caption">The lamp flashes about once a second and its signal is named beside it. If your system asks for reduced motion the lamp does not flash.</p>
+ </section>
+
+ <h2 id="terms">Airfield terms</h2>
+ <dl class="jargon">
+  <div><dt>Runway designator</dt><dd>The whole number nearest one-tenth of a runway's magnetic direction, with L, C or R for parallels.</dd></div>
+  <div><dt>Threshold</dt><dd>The beginning of that portion of the runway usable for landing.</dd></div>
+  <div><dt>Displaced threshold</dt><dd>A threshold not at the beginning of the pavement; the pavement before it may be used for takeoff and for landing from the other direction.</dd></div>
+  <div><dt>Aiming point</dt><dd>Two broad white stripes either side of the centerline, about 1,000 ft from the landing threshold.</dd></div>
+  <div><dt>Touchdown zone markings</dt><dd>Pairs of one, two and three bars coding distance from the threshold in 500 ft steps.</dd></div>
+  <div><dt>Holding position marking</dt><dd>Four yellow lines across a taxiway, two solid and two dashed; aircraft hold on the solid side.</dd></div>
+  <div><dt>Mandatory instruction sign</dt><dd>A red sign with a white inscription, marking a runway or critical area entrance or a no-entry area.</dd></div>
+  <div><dt>Location sign</dt><dd>A black sign with a yellow inscription and border, telling you which taxiway or runway you are on.</dd></div>
+  <div><dt>Caution zone</dt><dd>The last 2,000 ft, or half the runway if less, of an instrument runway, where edge lights are yellow.</dd></div>
+  <div><dt>PAPI</dt><dd>A row of two or four red-and-white light units beside the runway showing the approach angle.</dd></div>
+  <div><dt>Crosswind component</dt><dd>The part of the wind blowing across the runway: wind speed times the sine of the angle between wind and runway.</dd></div>
+  <div><dt>Tetrahedron</dt><dd>A landing direction indicator whose small end points in the direction of landing.</dd></div>
+  <div><dt>Downwind leg</dt><dd>The pattern leg parallel to the landing runway, flown opposite to the landing direction.</dd></div>
+  <div><dt>Base leg</dt><dd>The pattern leg at right angles to the runway off its approach end, from downwind to the extended centerline.</dd></div>
+  <div><dt>Upwind leg</dt><dd>An extension of the departure leg used for separation, spacing or sequencing.</dd></div>
+  <div><dt>Break</dt><dd>The point in an overhead maneuver where the first 180° turn begins.</dd></div>
+  <div><dt>Initial</dt><dd>The initial approach of an overhead maneuver, 3 to 5 miles long, flown toward the break.</dd></div>
+ </dl>
+ <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
+  <h3 id="terms-title">Quiz: name the term</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next term</button></div>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <details><summary>A runway's centerline points 004° magnetic. What is it numbered, and what is its other end?</summary><p>Runway 36, since 0.4 rounds to 0 and north is written 36. The other end points 184°: runway 18.</p></details>
+ <details><summary>You are approaching three parallel runways numbered 27. Which one is on your left?</summary><p>27L. Seen from the other end it is 9R.</p></details>
+ <details><summary>A 100 ft wide runway: how many threshold stripes?</summary><p>Eight.</p></details>
+ <details><summary>You are taxiing toward a runway and see two solid and two dashed yellow lines. Which side must you stop on?</summary><p>The side with the solid lines, which is yours as you approach from the taxiway. Do not cross without a clearance.</p></details>
+ <details><summary>After landing you stop with your tail just over the dashed lines. Are you clear of the runway?</summary><p>No. All parts of the aircraft must cross the holding position marking, the solid lines included, before you are clear.</p></details>
+ <details><summary>The sign beside you is black with a yellow "B" and a yellow border. What does it tell you?</summary><p>You are on taxiway B. It is a location sign.</p></details>
+ <details><summary>The edge lights ahead have turned yellow. What does that mean?</summary><p>You are in the caution zone of an instrument runway: the last 2,000 ft, or half the runway if that is less.</p></details>
+ <details><summary>On approach, the PAPI shows three red and one white. What do you do?</summary><p>You are slightly low. The usual technique, which is teaching guidance rather than AIM text, is to reduce your rate of descent until you regain two white and two red.</p></details>
+ <details><summary>Wind 240° at 15 kt, runways 27 and 18. Which is in use, and how much crosswind?</summary><p>Runway 27, 30° off the wind (runway 18 is 60° off). Crosswind 15 × sin 30° = 7.5 kt from the left.</p></details>
+ <details><summary>Where and how do you join the pattern?</summary><p>At pattern altitude, at 45° to the downwind leg, abeam the runway midpoint.</p></details>
+ <details><summary>An overhead pattern's conventional pattern altitude is 1,000 ft AGL. What is the lowest altitude for the overhead?</summary><p>1,500 ft AGL: at least 500 ft above the conventional pattern.</p></details>
+ <details><summary>You are taxiing without a radio and the tower shows you a flashing green. What does it mean?</summary><p>Cleared for taxi. A steady green would clear you for takeoff.</p></details>
+ <details><summary>You are 15 miles from a towered airfield. Who do you call first, and what do you have ready?</summary><p>The tower, about 15 miles out, having already listened to the ATIS so you can say you have it. Inside the surface area you keep two-way contact with the tower.</p></details>
+ <details><summary>You have just landed at a towered field and cleared the runway. When do you change to ground?</summary><p>Only when the tower tells you to. Then change immediately and ask ground for taxi, stating where you are.</p></details>
+ <details><summary>Ten miles from a non-towered field. What do you say, and to whom?</summary><p>Self-announce on the CTAF to the other traffic: airport name, call sign and type, position, altitude and intentions, ending with the airport name again. Nobody will clear you to land.</p></details>
+ <details><summary>Departing a non-towered field: when do you talk?</summary><p>Monitor the CTAF from engine start. Announce before taxi, and before entering the runway announce the runway and your direction of flight. Keep monitoring after departure.</p></details>
+
+ <h2 id="sources">Sources and applicability</h2>
+ <p id="source-aim2"><strong>[1] Federal Aviation Administration, Aeronautical Information Manual (AIM), Chapter 2, Aeronautical Lighting and Other Airport Visual Aids:</strong> <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap2_section_1.html">Section 1, Airport Lighting Aids</a> and <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap2_section_3.html">Section 3, Airport Marking Aids and Signs</a> (faa.gov, current online edition). Inspected 25 October 2026: ¶2-1-2 to 2-1-10; ¶2-3-2 to 2-3-13 with Tables 2-3-1 and 2-3-2. US government work.</p>
+ <p id="source-aim2b">The PAPI indications are depicted only in AIM FIG 2-1-5, an image; the angles given with Figure 7 are from that figure as commonly reproduced and have not been checked against text.</p>
+ <p id="source-aim4"><strong>[2] FAA, AIM, Chapter 4, Section 3, Airport Operations:</strong> <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap4_section_3.html">faa.gov</a>. Inspected 25 October 2026: ¶4-3-2, 4-3-3, 4-3-4, 4-3-6, 4-3-13 (light signal table), 4-3-14, 4-3-15, 4-3-18 and 4-3-21.</p>
+ <p id="source-pcg"><strong>[3] FAA, Pilot/Controller Glossary:</strong> <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/glossary-o.html">"Overhead maneuver" (O)</a>; <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/glossary-t.html">"Threshold", "Traffic pattern" and "Tetrahedron" (T)</a> (faa.gov). Inspected 25 October 2026.</p>
+ <p id="source-afh"><strong>[4] FAA, Airplane Flying Handbook (FAA-H-8083-3C), Chapter 8, Airport Traffic Patterns:</strong> <a href="https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/09_afh_ch8.pdf">PDF (faa.gov)</a>, pp. 8-1 to 8-4. Inspected 25 October 2026.</p>
+ <p id="source-ac"><strong>[5] FAA, Advisory Circular AC 90-66C, Non-Towered Airport Flight Operations, 6 June 2023:</strong> <a href="https://www.faa.gov/documentlibrary/media/advisory_circular/ac_90-66c.pdf">PDF (faa.gov)</a>, ¶9.3, 9.5, 9.6, 9.8, 9.8.1, 9.11.1, 9.11.2, 10.1, 10.3, 10.4, 11.3 and 11.8, and Appendix B. Inspected 25 October 2026.</p>
+ <p id="source-atc"><strong>[6] FAA Order JO 7110.65, Air Traffic Control, ¶3-10-12, Overhead Maneuver:</strong> <a href="https://www.faa.gov/air_traffic/publications/atpubs/atc_html/chap3_section_10.html">faa.gov</a>. Inspected 25 October 2026.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/airfield-ops-faa-evidence.md">FAA airfield evidence</a>.</p>
+ <p>Figures 1–12 are original line drawings, not reproductions of any FAA figure, and are not to scale except where a caption says so. The wind, PAPI and overhead figures use the simple models described with them.</p>
+ <p class="note">Applicability: US (FAA) standards for civil airports, as published online on the inspection date. ICAO states and military airfields differ in detail, and every airfield's own published procedures take precedence. This revision is Drafted pending independent source-backed review.</p>
+</SiteLayout>
+<script>import '../../../lessons/airfield-ops/lesson-ui.mjs';</script>
+<style>
+  .contents ol { columns: 2; column-gap: 2rem; padding-left: 1.5rem; }
+  .contents li { break-inside: avoid; }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--color-border); margin-block: 1rem; }
+  .table-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  caption { padding: 0.5rem 0.75rem; text-align: left; color: var(--color-muted); font-size: 0.9rem; }
+  table :global(th), table :global(td) { padding: 0.45rem 0.75rem; border-top: 1px solid var(--color-border); text-align: left; vertical-align: top; }
+  thead th { background: var(--color-surface); }
+  table :global(tr.chosen th), table :global(tr.chosen td) { background: var(--color-surface); font-weight: 700; }
+  .note { padding: 0.75rem 1rem; border-left: 0.25rem solid var(--color-border); background: var(--color-surface); }
+  .lesson { margin-block: 1.5rem; padding: 1rem; border: 1px solid var(--color-text); }
+  .lesson h3 { margin-top: 0; }
+  .lesson h4 { margin: 1rem 0 0.5rem; }
+  .controls { display: grid; gap: 0.6rem; align-content: start; margin-bottom: 0.75rem; }
+  .controls.row { grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); align-items: end; }
+  .controls label { display: grid; gap: 0.2rem; font-weight: 700; }
+  .controls label.check { display: flex; align-items: center; gap: 0.4rem; min-height: 2.75rem; font-weight: 400; }
+  .controls label[hidden] { display: none; }
+  .controls output { font-weight: 400; font-variant-numeric: tabular-nums; }
+  select { min-height: 2.75rem; font: inherit; }
+  fieldset { margin: 0 0 0.75rem; padding: 0.5rem 0.75rem; border: 1px solid var(--color-border); }
+  legend { font-weight: 700; }
+  fieldset.inline { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; }
+  fieldset label { display: flex; align-items: center; gap: 0.4rem; min-height: 2.75rem; }
+  input[type="range"] { min-height: 2.75rem; width: 100%; }
+  input:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .lesson :global(button) { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: #fff; background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
+  .lesson :global(button + button), .lesson :global(button[aria-pressed="false"]) { color: var(--color-text); background: #fff; }
+  .lesson :global(button[aria-pressed="true"]) { color: #fff; background: var(--color-link); border-color: var(--color-link); }
+  .lesson :global([data-choices] button) { color: var(--color-text); background: #fff; }
+  .lesson :global(button:disabled) { cursor: default; opacity: 0.7; }
+  .lesson :global(button:focus-visible) { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+  .feedback { font-weight: 700; min-height: 1.6em; }
+  .feedback p { margin: 0.2rem 0; }
+  .lesson:not(.ready) .buttons, .lesson:not(.ready) .controls, .lesson:not(.ready) fieldset, .lesson:not(.ready) svg:empty,
+  .lesson:not(.ready) .call, .lesson:not(.ready) .sign-quiz, .lesson:not(.ready) .gun-row, .lesson:not(.ready) .beacon-row { display: none; }
+  .lesson.ready .no-js { display: none; }
+  .no-js { font-weight: 700; }
+  .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+  @media (min-width: 64rem) {
+    .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
+  }
+  .fig-scroll { overflow-x: auto; }
+  .fig-scroll :global(svg) { min-width: 36rem; }
+  .fig-title { font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 2px solid var(--color-text); padding-bottom: 0.3rem; }
+  .fig-caption { color: var(--color-muted); font-size: 0.9rem; }
+  .callouts.plain { padding-left: 0; list-style: none; }
+  .callouts.plain li { border-left: 0.25rem solid transparent; padding: 0.25rem 0.5rem; }
+  .callouts.plain li.active { border-left-color: var(--color-link); background: var(--color-surface); }
+  .callouts.plain p { margin: 0.25rem 0; }
+  dl.jargon { display: grid; gap: 0.4rem; }
+  dl.jargon div { display: grid; grid-template-columns: minmax(8rem, 12rem) 1fr; gap: 0.75rem; border-top: 1px solid var(--color-border); padding-top: 0.4rem; }
+  dl.jargon dt { font-weight: 700; }
+  dl.jargon dd { margin: 0; }
+  .quiz-lesson .task { font-style: italic; }
+  .sign-gallery :global(.sign-button) { display: grid; justify-items: center; gap: 0.3rem; padding: 0.5rem; font-weight: 400; font-size: 0.85rem; color: var(--color-text); background: #fff; }
+  .sign-gallery :global(.sign-button[aria-pressed="true"]) { color: var(--color-text); background: var(--color-surface); outline: 3px solid var(--color-link); }
+  .sign-shown { min-height: 3.5rem; margin-bottom: 0.5rem; }
+  .step-list :global(button) { font-weight: 400; }
+  .call { min-height: 9rem; margin-block: 0.75rem; padding: 0.75rem 1rem; border-left: 0.25rem solid var(--color-link); background: var(--color-surface); }
+  .call :global(p) { margin: 0.3rem 0; }
+  .call :global(.call-head) { font-size: 0.85rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-muted); }
+  .call :global(.you), .call :global(.them) { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.95rem; }
+  .call :global(.call-note) { font-size: 0.95rem; }
+  .gun-row, .beacon-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+  .gun { width: 7rem; height: 7rem; }
+  .gun-label { font-weight: 700; min-height: 1.6em; }
+  .beacon-lamp { width: 2.5rem; height: 2.5rem; flex: none; }
+  .beacon-strip { max-width: 22rem; }
+  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
+  :global(.natops .frame) { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
+  :global(.natops .lbl) { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
+  :global(.natops .lbl.small) { font-size: 10px; }
+  :global(.natops .lbl.rev) { fill: #f4f6f8; }
+  :global(.natops .ln) { fill: none; stroke: var(--color-text); stroke-width: 1.8; }
+  :global(.natops .ln.heavy) { stroke-width: 2.6; }
+  :global(.natops .ln.dashed) { stroke-dasharray: 7 4; }
+  :global(.natops .ln.on-path) { stroke: var(--color-link); }
+  :global(.natops .thin) { fill: none; stroke: var(--color-text); stroke-width: 1; }
+  :global(.natops .fixmark) { fill: var(--color-text); }
+  :global(.natops .pointer) { fill: var(--color-link); }
+  :global(.natops .acft) { fill: var(--color-link); stroke: #fff; stroke-width: 0.8; }
+  :global(.natops .los) { fill: none; stroke: var(--color-link); stroke-width: 1.2; stroke-dasharray: 2 3; }
+  :global(.natops .track) { fill: none; stroke: var(--color-link); stroke-width: 2.4; }
+  :global(.natops .leg.active .track) { stroke-width: 5; }
+  :global(.natops .leg.active .lbl) { fill: var(--color-link); }
+  :global(.natops .rb-datum) { fill: none; stroke: var(--color-border); stroke-width: 1; stroke-dasharray: 3 3; }
+  :global(.natops .grass) { fill: #eef0ea; }
+  :global(.natops .rwy) { fill: #50555b; }
+  :global(.natops .rwy-cl) { fill: none; stroke: #fff; stroke-width: 1.6; stroke-dasharray: 10 7; }
+  :global(.natops .rwy-num) { fill: #fff; font: 700 18px Arial, Helvetica, sans-serif; }
+  :global(.natops .paint) { fill: #fff; }
+  :global(.natops .paint-line) { fill: none; stroke: #fff; stroke-width: 2; }
+  :global(.natops .paint-yellow) { fill: #f2c200; }
+  :global(.natops .paint-yellow-line) { fill: none; stroke: #f2c200; stroke-width: 2.4; }
+  :global(.natops .paint-yellow-line.thin-paint) { stroke-width: 1.4; }
+  :global(.natops .paint-yellow-line.dashed-paint) { stroke-dasharray: 8 6; }
+  :global(.natops .twy) { fill: none; stroke: #8a8f94; stroke-width: 12; }
+  :global(.natops .twy-cl) { fill: none; stroke: #f2c200; stroke-width: 1.4; }
+  :global(.natops .hold-solid) { fill: none; stroke: #f2c200; stroke-width: 1.6; }
+  :global(.natops .hold-dash) { fill: none; stroke: #f2c200; stroke-width: 1.6; stroke-dasharray: 3 2; }
+  :global(.natops .apron) { fill: #c9ccd0; stroke: var(--color-text); stroke-width: 1; }
+  :global(.bldg) { fill: #fff; stroke: var(--color-text); stroke-width: 1.6; }
+  :global(.natops .beacon) { fill: #2e8540; stroke: var(--color-text); stroke-width: 1.2; }
+  :global(.natops .sock) { fill: #e87722; stroke: var(--color-text); stroke-width: 1; }
+  :global(.natops .tetra) { fill: #fff; stroke: var(--color-text); stroke-width: 1.6; }
+  :global(.natops [data-part].active .ln), :global(.natops [data-part].active .thin), :global(.natops [data-part].active .bldg) { stroke: var(--color-link); stroke-width: 3; }
+  :global(.natops [data-part].active .rwy), :global(.natops [data-part].active .apron) { stroke: var(--color-link); stroke-width: 4; }
+  :global(.natops [data-part].active .twy) { stroke: var(--color-link); }
+  :global(.natops [data-part].active .lbl) { fill: var(--color-link); }
+  :global(.natops [data-part].active .rwy-num) { fill: #ffe27a; }
+  :global(.natops [data-part].active .hold-solid), :global(.natops [data-part].active .hold-dash) { stroke-width: 3.2; }
+  :global(.natops [data-part].active .sock), :global(.natops [data-part].active .beacon) { stroke: var(--color-link); stroke-width: 3; }
+  :global(.sign-red) { fill: #c8102e; }
+  :global(.sign-black) { fill: #111; }
+  :global(.sign-yellow) { fill: #f2c200; stroke: #111; stroke-width: 1; }
+  :global(.sign-border) { fill: none; stroke: #f2c200; stroke-width: 2; }
+  :global(.sign-ring) { fill: none; stroke: #fff; stroke-width: 3; }
+  :global(.sign-txt) { font-family: Arial, Helvetica, sans-serif; font-weight: 700; }
+  :global(.sign-txt.white) { fill: #fff; }
+  :global(.sign-txt.yellow) { fill: #f2c200; }
+  :global(.sign-txt.black) { fill: #111; }
+  :global(.night) { fill: #0d1620; }
+  :global(.natops .rwy-night) { fill: #2a3138; }
+  :global(.lt) { stroke: none; }
+  :global(.lt.white), :global(.lt-box.white), :global(.lt-lamp.white), :global(.gun-lamp.white) { fill: #fffbe8; }
+  :global(.lt.yellow) { fill: #ffd23f; }
+  :global(.lt.red), :global(.lt-box.red), :global(.gun-lamp.red) { fill: #ff3b30; }
+  :global(.lt.green), :global(.lt-box.green), :global(.lt-lamp.green), :global(.gun-lamp.green) { fill: #34c759; }
+  :global(.lt.blue) { fill: #3d8bff; }
+  :global(.lt-box) { stroke: var(--color-text); stroke-width: 1; }
+  :global(.lt-box.off), :global(.lt-lamp.off), :global(.gun-lamp.off) { fill: #2a3138; }
+  :global(.lt-lamp), :global(.gun-lamp) { stroke: var(--color-text); stroke-width: 1.5; }
+  :global(.natops .night-acft) { fill: #8fc1ff; stroke: none; }
+</style>
