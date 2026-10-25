@@ -110,6 +110,17 @@
     "summary": "The Warthog: a straight-wing, armoured close air support jet built around the 30 mm GAU-8 cannon."
   },
   {
+    "id": "encyclopedia.aircraft.ajs-37",
+    "slug": "ajs-37",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "AJS 37 Viggen",
+    "designation": "Saab AJS 37",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A Swedish canard-delta attack aircraft built to fly from road bases, with a thrust reverser and anti-ship missiles."
+  },
+  {
     "id": "encyclopedia.aircraft.av-8b",
     "slug": "av-8b",
     "category": "aircraft",
@@ -119,6 +130,28 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "A vectored-thrust jump jet: vertical or short take-off, flown by the US Marines for close air support."
+  },
+  {
+    "id": "encyclopedia.aircraft.c-101",
+    "slug": "c-101",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "C-101 Aviojet",
+    "designation": "CASA C-101EB",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Spain's two-seat jet trainer with an internal weapons bay."
+  },
+  {
+    "id": "encyclopedia.aircraft.c-130j",
+    "slug": "c-130j",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "C-130J Super Hercules",
+    "designation": "Lockheed Martin C-130J",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The modernised four-turboprop tactical transport: new engines, glass cockpit, three crew."
   },
   {
     "id": "encyclopedia.aircraft.f-4",
@@ -218,5 +251,60 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "A carrier-capable fighter and attack aircraft that one pilot can switch between roles on the same sortie."
+  },
+  {
+    "id": "encyclopedia.aircraft.jf-17",
+    "slug": "jf-17",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "JF-17 Thunder",
+    "designation": "PAC/CAC JF-17",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A lightweight Pakistani–Chinese multirole fighter powered by the RD-93."
+  },
+  {
+    "id": "encyclopedia.aircraft.l-39",
+    "slug": "l-39",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "L-39 Albatros",
+    "designation": "Aero L-39C/ZA",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Warsaw Pact's standard jet trainer, with armed light-attack versions."
+  },
+  {
+    "id": "encyclopedia.aircraft.mb-339",
+    "slug": "mb-339",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "MB-339",
+    "designation": "Aermacchi MB-339A",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Italy's two-seat jet trainer and light attack aircraft, flown by the Frecce Tricolori."
+  },
+  {
+    "id": "encyclopedia.aircraft.m-2000c",
+    "slug": "m-2000c",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "Mirage 2000C",
+    "designation": "Dassault Mirage 2000C",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "France's fly-by-wire delta interceptor, armed with Super 530D and Magic II missiles."
+  },
+  {
+    "id": "encyclopedia.aircraft.mirage-f1",
+    "slug": "mirage-f1",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "Mirage F1",
+    "designation": "Dassault Mirage F1C/CE",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A swept-wing French fighter sold to eleven countries and flown in many wars."
   }
 ]
