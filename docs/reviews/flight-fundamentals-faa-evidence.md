@@ -19,8 +19,9 @@ the reviewer.
 
 **Cited pages for the review reader.** Each chapter is its own PDF and is
 expected to begin at the chapter's first printed page, so physical page N is
-printed page `<chapter>-N`. That mapping and the hashes could not be confirmed:
-the authoring session's network proxy refuses faa.gov for direct downloads.
+printed page `<chapter>-N`; the SME packet for revision 052daaa confirmed this for
+every record. Hashes are not declared: the authoring session's network proxy
+refuses faa.gov for direct downloads.
 The blocks declare only the cited pages, to keep the review packet inside the
 reviewer's context; check that the cited printed pages fall inside what the
 packet extracts.
@@ -47,7 +48,7 @@ pages: 1-8 (4-1 to 4-8); 18 (4-18)
 
 ```review-sources
 source: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/06_afh_ch5.pdf
-pages: 1 (5-1); 8 (5-8); 12 (5-12); 15 (5-15); 19-24 (5-19 to 5-24)
+pages: 1 (5-1); 8-9 (5-8 to 5-9); 12 (5-12); 15 (5-15); 19-24 (5-19 to 5-24)
 ```
 
 **Retrieval limitation.** Passages were read on 25 October 2026 through a web
@@ -58,6 +59,8 @@ chapter 3 could not be fetched and is not cited. Page attributions come from
 the extractor's printed-page markers and may be off by one page; the module
 cites ranges where the markers and the PHAK table of contents disagree
 (for example parasite and induced drag, TOC pp. 5-6–5-7, extractor p. 5-8).
+The SME review of 052daaa moved the AFH 60° bank / 41% passage from p. 5-8 to
+p. 5-9 (it sits between the 5-8 and 5-9 footers).
 Quotations are extractor-read; check each against independently retrieved
 text, and treat a wording mismatch as a finding against this record.
 
@@ -103,7 +106,8 @@ text, and treat a wording mismatch as a finding against this record.
 | 4-7 | ES = h + V²/2g | Energy; Figure 9 |
 | 4-8 | Airplane "cruising at 100 knots and 6,000 feet" and one at 240 kt and 4,000 ft have the same energy height (6,500 ft); either could zoom to 6,500 ft | Energy; Figure 9; tests |
 | 5-1 | An upset is an event that unintentionally exceeds normal flight parameters: "Pitch attitude greater than 25°, nose up"; "Pitch attitude greater than 10°, nose down"; bank greater than 45°; inappropriate airspeeds | Stalls |
-| 5-8 | "it is possible to stall the wing at any airspeed, at any flight attitude, and at any power setting"; "level 60° banked turn, the load factor is 2G"; stall speed "41 percent higher than the 1G stall speed"; coordinated when "the ball is centered in the slip/skid indicator" | Turns; stalls; controls; tests |
+| 5-8 | Coordinated when "the ball is centered in the slip/skid indicator" | Controls |
+| 5-9 | "it is possible to stall the wing at any airspeed, at any flight attitude, and at any power setting"; "level 60° banked turn, the load factor is 2G"; stall speed "41 percent higher than the 1G stall speed" | Turns; stalls; tests |
 | 5-12 | "It is possible to exceed the critical AOA at any airspeed, at any attitude, and at any power setting" | Stalls |
 | 5-15 | "the most important action to an impending stall or a full stall is to reduce the AOA" | Stalls |
 | 5-19 | "Stalls encountered any time the G-load exceeds +1G are called" accelerated stalls; demonstrated in steep turns at about 45°; not above VA or VO; "VA is the maximum speed at which the positive design load limit can be imposed" | Stalls; envelope; terms |
@@ -118,7 +122,7 @@ Pure functions in `src/lessons/flight-fundamentals/lesson-model.mjs`, tested in
 Standard flight mechanics, not taken from the handbooks:
 
 - **Level turn (Figure 7).** n = 1/cos φ; r = V²/(g tan φ); ω = g tan φ/V;
-  stall speed × √n. Cross-checked to AFH p. 5-8: 60° gives 2 G and +41%.
+  stall speed × √n. Cross-checked to AFH p. 5-9: 60° gives 2 G and +41%.
 - **Lift (Figures 2–3).** L = ½ρV²S·CL, as PHAK p. 5-4. The CL–α curve is
   illustrative (zero lift −2°, 0.1/deg, CLmax 1.6 at 16°), labelled as such.
 - **Drag (Figure 4).** Dp = qS·CD0, Di = kW²/(qS), k = 1/(πe·AR); minimum where

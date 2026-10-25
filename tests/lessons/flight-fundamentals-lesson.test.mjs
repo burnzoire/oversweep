@@ -11,14 +11,14 @@ const near = (actual, expected, tolerance, label) =>
 
 test('load factor in a level turn is 1 / cos(bank)', () => {
   near(loadFactor(0), 1, 1e-12, '0°');
-  near(loadFactor(60), 2, 1e-12, '60°'); // AFH p. 5-8: a level 60° turn is 2 G
+  near(loadFactor(60), 2, 1e-12, '60°'); // AFH p. 5-9: a level 60° turn is 2 G
   near(loadFactor(45), Math.SQRT2, 1e-12, '45°');
   assert.equal(loadFactor(90), null);
   assert.equal(loadFactor(-5), null);
 });
 
 test('stall speed rises with the square root of load factor', () => {
-  // AFH p. 5-8: at 2 G the stall speed is about 41 percent above the 1 G value.
+  // AFH p. 5-9: at 2 G the stall speed is about 41 percent above the 1 G value.
   near(stallSpeedAt(50, 2) / 50, 1.41421, 1e-5, '2 G');
   near(stallSpeedAt(50, 4), 100, 1e-12, '4 G doubles it');
   assert.equal(stallSpeedAt(50, 0), null);
