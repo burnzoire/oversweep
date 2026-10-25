@@ -14,17 +14,17 @@ long AIM HTML sections may exceed the review packet's per-source budget, so late
 paragraphs (for example 4-3-13 to 4-3-21) may be cut from the packet; the source
 coverage list will say so.
 
-**Cited pages for the review reader.** The two PDFs are short; the blocks ask for
-all of their pages.
+**Cited pages for the review reader.** The blocks ask only for
+the pages the module cites, to keep the review packet under the reviewer's prompt limit.
 
 ```review-sources
 source: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/09_afh_ch8.pdf
-pages: 1-7 (8-1 to 8-7)
+pages: 1-4 (8-1 to 8-4)
 ```
 
 ```review-sources
 source: https://www.faa.gov/documentlibrary/media/advisory_circular/ac_90-66c.pdf
-pages: 1-28
+pages: 2 (2); 5-9 (5 to 9); 12-15 (12 to 15); 25 (B-1)
 ```
 
 ## Sources
