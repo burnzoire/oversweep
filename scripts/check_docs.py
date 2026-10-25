@@ -89,6 +89,12 @@ for path in files:
             markdown_body = markdown_body.lstrip("\n")
         except ValueError as exc:
             errors.append(f"{rel}: invalid workflow frontmatter: {exc}")
+    elif rel.parts[0] == "content":
+        # Content records take their title from their registry and are
+        # rendered under the page's own heading, so they start at level 2.
+        if not body.startswith("---\n") or "\n---\n" not in body[4:]:
+            errors.append(f"{rel}: content record needs frontmatter")
+        markdown_body = "# " + body
     if not markdown_body.startswith("# ") and path.parent.name != "ISSUE_TEMPLATE":
         errors.append(f"{rel}: missing document title")
     if "ISSUE_REGISTER_PLACEHOLDER" in body:

@@ -1,0 +1,95 @@
+---
+import type { Envelope } from '../../data/encyclopedia';
+import { fittingScale, kmToNm, mToFt, region, scales, type Scale } from '../../lib/envelope';
+
+interface Item { slug: string; label: string; name: string; envelope: Envelope }
+interface Props { items: Item[]; highlight?: string; title: string; defaultScale?: string }
+const { items, highlight, title, defaultScale } = Astro.props;
+const focus = items.find((i) => i.slug === highlight);
+const initial = defaultScale ?? (focus ? fittingScale(focus.envelope).id : 'medium');
+
+const W = 640, H = 400, L = 64, R = 624, T = 24, B = 344;
+const fmt = (n: number) => n.toFixed(1);
+
+function draw(scale: Scale) {
+  const x = (km: number) => L + (kmToNm(km) / scale.maxNm) * (R - L);
+  const y = (km: number) => B - (mToFt(km * 1000) / 1000 / scale.maxKft) * (B - T);
+  const path = (pts: [number, number][]) => pts.map(([a, b], i) => `${i ? 'L' : 'M'}${fmt(x(a))} ${fmt(y(b))}`).join(' ');
+  const ticksX = Array.from({ length: Math.floor(scale.maxNm / scale.stepNm) + 1 }, (_, i) => i * scale.stepNm);
+  const ticksY = Array.from({ length: Math.floor(scale.maxKft / scale.stepKft) + 1 }, (_, i) => i * scale.stepKft);
+  const shapes = items.map((item) => {
+    const e = item.envelope;
+    const on = item.slug === highlight;
+    const reg = region(e);
+    const labelAt = (km: number, hKm: number) => {
+      const px = x(km), clipped = px > R - 6;
+      return { x: clipped ? R - 6 : px + 4, y: Math.max(y(hKm) - 4, T + 12), anchor: clipped ? 'end' : 'start', text: clipped ? `${item.label} ›` : item.label };
+    };
+    if (!reg) {
+      return { item, on, band: { x1: x(e.minRangeKm ?? 0), x2: Math.min(x(e.maxRangeKm), R) }, label: { ...labelAt(e.maxRangeKm, 0), y: B - 12, text: `${item.label} (ceiling not given)` } };
+    }
+    const top = reg.outer[reg.outer.length - 1];
+    return {
+      item, on,
+      fill: `${path([...reg.outer, ...reg.inner])} Z`,
+      outer: path(reg.outer),
+      top: path([top, reg.inner[0]]),
+      inner: path(reg.inner),
+      bottom: path([reg.inner[reg.inner.length - 1], reg.outer[0]]),
+      innerDashed: e.minRangeKm === null,
+      bottomDashed: e.minAltM === null,
+      label: labelAt(top[0], top[1]),
+    };
+  });
+  return { scale, ticksX, ticksY, x, y, shapes: shapes.sort((a, b) => Number(a.on) - Number(b.on)) };
+}
+const views = scales.map(draw);
+const figId = `env-${highlight ?? 'all'}`;
+---
+<section class="lesson figure-lesson envelope-figure" data-envelope data-highlight={highlight} aria-labelledby={`${figId}-title`}>
+  <h3 id={`${figId}-title`} class="fig-title">{title}</h3>
+  <div class="buttons" role="group" aria-label="Figure scale">
+    {scales.map((s) => <button type="button" data-scale-button={s.id} aria-pressed={s.id === initial ? "true" : "false"}>{s.label}</button>)}
+  </div>
+  {views.map((v) => (
+    <div class="fig-scroll" data-scale={v.scale.id} hidden={v.scale.id !== initial} role="region" aria-label={`${v.scale.label}; scrolls sideways on narrow screens`} tabindex="0">
+      <svg class="natops" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Side view of published engagement limits, ${v.scale.label.toLowerCase()}`}>
+        <defs><clipPath id={`${figId}-${v.scale.id}-clip`}><rect x={L} y={T} width={R - L} height={B - T} /></clipPath></defs>
+        {v.ticksY.map((k) => <g><line class="env-grid" x1={L} x2={R} y1={B - (k / v.scale.maxKft) * (B - T)} y2={B - (k / v.scale.maxKft) * (B - T)} /><text class="lbl small" x={L - 6} y={B - (k / v.scale.maxKft) * (B - T) + 4} text-anchor="end">{k}</text></g>)}
+        {v.ticksX.map((n) => <g><line class="env-grid" y1={T} y2={B} x1={L + (n / v.scale.maxNm) * (R - L)} x2={L + (n / v.scale.maxNm) * (R - L)} /><text class="lbl small" y={B + 16} x={L + (n / v.scale.maxNm) * (R - L)} text-anchor="middle">{n}</text></g>)}
+        <g clip-path={`url(#${figId}-${v.scale.id}-clip)`}>
+          {v.shapes.map((s) => s.band ? (
+            <g class:list={['env', { on: s.on }]} data-env={s.item.slug}>
+              <line class="env-band" x1={s.band.x1} x2={s.band.x2} y1={B - 3} y2={B - 3} />
+            </g>
+          ) : (
+            <g class:list={['env', { on: s.on }]} data-env={s.item.slug}>
+              <path class="env-fill" d={s.fill} />
+              <path class="env-edge" d={s.outer} /><path class="env-edge" d={s.top} />
+              <path class:list={['env-edge', { dashed: s.innerDashed }]} d={s.inner} />
+              <path class:list={['env-edge', { dashed: s.bottomDashed }]} d={s.bottom} />
+            </g>
+          ))}
+        </g>
+        {v.shapes.map((s) => <text class:list={['lbl', 'env-label', { on: s.on }]} x={s.label.x} y={s.label.y} text-anchor={s.label.anchor}>{s.label.text}</text>)}
+        <rect class="frame" x={L} y={T} width={R - L} height={B - T} />
+        <text class="lbl" x={(L + R) / 2} y={H - 18} text-anchor="middle">RANGE FROM LAUNCHER (NM)</text>
+        <text class="lbl" x={16} y={(T + B) / 2} text-anchor="middle" transform={`rotate(-90 16 ${(T + B) / 2})`}>ALTITUDE (THOUSANDS OF FT)</text>
+      </svg>
+    </div>
+  ))}
+  <slot />
+</section>
+
+<script>
+  for (const fig of document.querySelectorAll<HTMLElement>('[data-envelope]')) {
+    const buttons = [...fig.querySelectorAll<HTMLButtonElement>('[data-scale-button]')];
+    for (const button of buttons) {
+      button.addEventListener('click', () => {
+        for (const b of buttons) b.setAttribute('aria-pressed', String(b === button));
+        for (const view of fig.querySelectorAll<HTMLElement>('[data-scale]')) view.hidden = view.dataset.scale !== button.dataset.scaleButton;
+      });
+    }
+    fig.classList.add('ready');
+  }
+</script>

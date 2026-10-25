@@ -1,0 +1,82 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import EnvelopeFigure from '../../../components/encyclopedia/EnvelopeFigure.astro';
+import RwrFigure from '../../../components/encyclopedia/RwrFigure.astro';
+import BatteryFigure from '../../../components/encyclopedia/BatteryFigure.astro';
+import { categoryRecords, includedRecords, recordContent, recordRoute, type EncyclopediaRecord } from '../../../data/encyclopedia';
+import { categoryTitle } from '../../../data/availability';
+import { kmToNm, mToFt } from '../../../lib/envelope';
+import { sitePath } from '../../../lib/paths';
+import '../../../styles/encyclopedia.css';
+
+export function getStaticPaths() {
+  return includedRecords.map((record) => ({ params: { category: record.category, record: record.slug }, props: { record } }));
+}
+
+const { record } = Astro.props as { record: EncyclopediaRecord };
+const { frontmatter: data, Content } = recordContent(record);
+const siblings = categoryRecords(record.category);
+const category = categoryTitle(record.category);
+const cite = (ns: number[]) => ns.map((n) => `[${n}]`).join(' ');
+const sourceFor = (pattern: RegExp) => data.sources.find((s) => pattern.test(s.url));
+const rwrSource = sourceFor(/heatblur/);
+const label = (r: EncyclopediaRecord) => r.title.split(' ')[0].replace(/^SA-/, '');
+const items = siblings.map((r) => ({ slug: r.slug, label: label(r), name: r.title, envelope: recordContent(r).frontmatter.envelope }));
+const e = data.envelope;
+const nm = (km: number) => kmToNm(km).toFixed(km < 10 ? 1 : 0);
+const ft = (m: number) => { const f = mToFt(m); const step = f < 1000 ? 10 : 100; return Math.round(f / step) * step; };
+const n = (v: number) => v.toLocaleString('en-GB');
+const span = (lo: string | null, hi: string | null) => lo === null ? `up to ${hi}; minimum not given` : hi === null ? `from ${lo}; maximum not given` : `${lo}–${hi}`;
+const range = span(e.minRangeKm === null ? null : `${n(e.minRangeKm)} km (${nm(e.minRangeKm)} NM)`, `${n(e.maxRangeKm)} km (${nm(e.maxRangeKm)} NM)`);
+const alt = span(e.minAltM === null ? null : `${n(e.minAltM)} m (${n(ft(e.minAltM))} ft)`, e.maxAltM === null ? null : `${n(e.maxAltM)} m (${n(ft(e.maxAltM))} ft)`);
+---
+<SiteLayout title={record.title} activeSection="encyclopedia"
+  description={`${record.title} (${record.designation}): ${record.summary}`}
+  breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: category, href: sitePath(`encyclopedia/${record.category}/`) }, { label: record.title }]}>
+  <div class="ency">
+    <nav class="record-nav" aria-label={`${category} records`}>
+      <ol>{siblings.map((r) => <li>{r.slug === record.slug ? <span aria-current="page">{r.title.split(' ')[0]}</span> : <a href={sitePath(recordRoute(r))}>{r.title.split(' ')[0]}</a>}</li>)}</ol>
+    </nav>
+    <section class="status-panel" data-record-id={record.id} data-record-revision={record.revision}>
+      <h2>{record.maturity}</h2>
+      <p>Record revision {record.revision} · {record.summary}</p>
+      <p>Real-world system as described in public sources. Figures vary between variants and sources, so differences are shown beside the number they affect. Simulator implementations may differ.</p>
+    </section>
+
+    <section class="data-plate" aria-labelledby="plate-title">
+      <h2 id="plate-title">{data.nato} · {data.designation}</h2>
+      <dl>
+        <div><dt>Role</dt><dd>{data.role}</dd></div>
+        <div><dt>In service</dt><dd>{data.inService}</dd></div>
+        <div><dt>Guidance</dt><dd>{data.guidance}</dd></div>
+        <div><dt>Range</dt><dd>{range} {cite(e.cite)}</dd></div>
+        <div><dt>Altitude</dt><dd>{alt} {cite(e.cite)}</dd></div>
+        <div><dt>Mobility</dt><dd>{data.mobility}</dd></div>
+        <div><dt>Radars</dt><dd>{data.radars.length ? <ul>{data.radars.map((r) => <li><strong>{r.name}{r.nato && ` “${r.nato}”`}</strong>{r.band && ` (${r.band} band)`}: {r.role}</li>)}</ul> : 'None: infrared-guided'}</dd></div>
+        <div><dt>RWR symbol</dt><dd>{data.rwr.length ? data.rwr.map((s) => <span><span class="symbol">{s.symbol}</span>{s.emitter} </span>) : 'None'}{rwrSource && data.rwr.length > 0 && ` [${rwrSource.n}]`}</dd></div>
+      </dl>
+    </section>
+
+    <EnvelopeFigure items={items} highlight={record.slug} title={`Figure 1 — ${data.nato} engagement limits (side view)`}>
+      <p class="fig-caption">{e.basis} The shaded region combines the published minimum and maximum range, treated as slant range from the launcher, with the minimum and maximum altitude. Real launch zones are smaller and change with target speed, aspect and altitude. Dashed edges mark limits the cited sources do not give. Other single-digit SAMs are drawn faintly for comparison, labelled by SA number. Vertical scale exaggerated.</p>
+    </EnvelopeFigure>
+
+    <div class="record-body"><Content /></div>
+
+    <RwrFigure symbols={data.rwr} name={data.nato} cite={rwrSource ? `[${rwrSource.n}]` : ''}>
+      <Fragment slot="none">{data.rwrNote}</Fragment>
+    </RwrFigure>
+
+    {data.battery && <BatteryFigure battery={data.battery} name={data.nato} cite={cite([data.sources[0].n])} />}
+
+    <section class="sources" aria-labelledby="sources-title">
+      <h2 id="sources-title">Sources</h2>
+      <ol>
+        {data.sources.map((s) => (
+          <li id={`source-${s.n}`} value={s.n}><cite>{s.title}</cite>. {s.publisher}{s.date && `, ${s.date}`}. <a href={s.url}>{s.url}</a> (accessed {s.accessed}).{s.note && ` ${s.note}`}</li>
+        ))}
+      </ol>
+      <p class="note">Wikipedia articles are secondary sources and can change; they are cited with the date they were read. The Heatblur manual describes the DCS F-14's AN/ALR-67, not every aircraft's radar warning receiver.</p>
+    </section>
+  </div>
+</SiteLayout>

@@ -1,0 +1,36 @@
+---
+interface Props { symbols: { symbol: string; emitter: string }[]; name: string; cite: string }
+const { symbols, name, cite } = Astro.props;
+// Search-only radars cannot guide a missile, so they sit in the non-lethal inner
+// band; track radars are drawn in the lethal middle band, as if in range but not
+// yet engaging. Bearings are arbitrary.
+const search = (s: { emitter: string }) => /search/i.test(s.emitter) && !/track/i.test(s.emitter);
+const C = 160, rings = [56, 100, 140];
+const placed = symbols.map((s, i) => {
+  const r = search(s) ? 34 : 78;
+  const bearing = (35 + i * 70) * (Math.PI / 180);
+  return { ...s, x: C + r * Math.sin(bearing), y: C - r * Math.cos(bearing) };
+});
+---
+<section class="lesson figure-lesson rwr-figure" aria-labelledby="rwr-title">
+  <h3 id="rwr-title" class="fig-title">Figure 2 — {name} on a radar warning receiver</h3>
+  {symbols.length ? (
+    <div class="rwr-layout">
+      <svg class="natops rwr" viewBox="0 0 320 320" role="img" aria-label={`Radar warning display showing ${symbols.map((s) => s.symbol).join(' and ')}`}>
+        <rect class="rwr-glass" x="4" y="4" width="312" height="312" rx="10" />
+        {rings.map((r) => <circle class="rwr-ring" cx={C} cy={C} r={r} />)}
+        <path class="rwr-own" d={`M${C} ${C - 12} L${C + 3} ${C + 6} L${C + 10} ${C + 9} L${C + 3} ${C + 9} L${C} ${C + 13} L${C - 3} ${C + 9} L${C - 10} ${C + 9} L${C - 3} ${C + 6} Z`} />
+        <text class="rwr-band" x={C} y={C - rings[0] + 12} text-anchor="middle">NON-LETHAL</text>
+        <text class="rwr-band" x={C} y={C - rings[1] + 12} text-anchor="middle">LETHAL</text>
+        <text class="rwr-band" x={C} y={C - rings[2] + 12} text-anchor="middle">CRITICAL</text>
+        {placed.map((s) => <text class="rwr-sym" x={s.x} y={s.y + 7} text-anchor="middle">{s.symbol}</text>)}
+      </svg>
+      <dl class="rwr-key">
+        {symbols.map((s) => <div><dt>{s.symbol}</dt><dd>{s.emitter}</dd></div>)}
+      </dl>
+    </div>
+  ) : (
+    <p class="rwr-none"><strong>No symbol.</strong> <slot name="none" /></p>
+  )}
+  {symbols.length > 0 && <p class="fig-caption">Layout after the DCS F-14 AN/ALR-67 description {cite}: the inner band shows emitters that cannot engage you, the middle band systems within lethal range, and the outer band imminent threats; a symbol flashes when its radar is engaging. Search radars are drawn in the inner band and track radars in the middle band. Bearings are arbitrary. Other aircraft and RWRs use different symbols.</p>}
+</section>
