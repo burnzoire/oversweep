@@ -49,6 +49,18 @@ text and treat any mismatch as a finding):
 - F-5 (FAS): Skoshi Tiger 1965; IFA winner 20 November 1970; Navy adversary use
   at about a third of F/A-18 operating cost; F-5E ceiling 51,800 ft.
 
+## Narrative text and photographs
+
+- Record bodies are written as narrative history (revision 1 of each record
+  was rewritten before merge). Every paragraph still ends with its citation,
+  and anecdotes (first flights, notable sorties, records) come from the cited
+  articles' development and operational-history sections.
+- Each record leads with a public-domain photograph from Wikimedia Commons
+  (US military photographs), and most add a second. The caption is written
+  from the Commons file description; the credit names the photographer,
+  licence and Commons page. Files are resized to 1,280 px wide and served
+  from `public/encyclopedia/aircraft/`.
+
 ## Modelling choices
 
 - **One variant per record**, named on the data plate. Where the cited sources
