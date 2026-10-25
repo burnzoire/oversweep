@@ -109,6 +109,44 @@ export function papi(angle, path = 3) {
   return { white, lights, label };
 }
 
+// Navy optical landing system (IFLOLS) at a naval air station, NAVEDTRA 14342A
+// pp. 4-25 and 5-52: a yellow "meatball" seen against a horizontal bar of green
+// datum lights. "The ball rises above the datum lights as the pilot rises above
+// the glide slope" and slides off the top of the lens box "when the pilot is
+// more than 3/4 degree above the glide slope"; a red lens in the bottom cell
+// warns of a low ball. The glide slope itself is "as determined by the lens
+// settings". Assumptions, flagged on the page: the ball moves in proportion to
+// the angular error, the lens spans 3/4° below the glide slope as well as above
+// it, and the red bottom cell is the lowest fifth of that span.
+export const LENS_HALF = 0.75; // degrees either side of the glide slope
+export const RED_CELL = 0.2; // fraction of the lens span, at the bottom
+export function meatball(angle, glideSlope = 3.5) {
+  if (!Number.isFinite(angle) || !Number.isFinite(glideSlope)) return null;
+  const error = angle - glideSlope;
+  // position: −1 at the bottom of the lens box, 0 on the datum, +1 at the top.
+  const position = error / LENS_HALF;
+  const visible = Math.abs(position) <= 1;
+  const red = visible && position < -1 + 2 * RED_CELL;
+  const label = !visible ? (position > 0 ? 'Ball off the top: well high' : 'Ball off the bottom: well low')
+    : red ? 'Red ball: low' : Math.abs(error) < 0.05 ? 'Centered ball: on glide slope'
+      : position > 0 ? 'Ball above the datum: high' : 'Ball below the datum: low';
+  return { error, position: Math.max(-1, Math.min(1, position)), visible, red, label };
+}
+
+// Arresting gear across a runway. NAVEDTRA 14342A p. 4-9: "10-foot-diameter
+// retroreflective yellow disks" painted in a line across the runway at the
+// pendant cable, and signs with "large yellow circles on a black background"
+// on both sides of the runway. AIM 2-3-14.2: circles "30 feet on center" across
+// the entire runway width.
+export const GEAR_DISK = 10; // ft diameter
+export const GEAR_SPACING = 30; // ft on center
+export function gearDisks(width) {
+  if (!(width > 0)) return null;
+  const n = Math.floor((width - GEAR_DISK) / GEAR_SPACING) + 1;
+  const span = (n - 1) * GEAR_SPACING;
+  return [...Array(n)].map((_, i) => -span / 2 + i * GEAR_SPACING);
+}
+
 // Glide path geometry: height above the touchdown point at a distance, or the
 // angle from a height and distance.
 export const heightOnPath = (distanceFt, angle) => distanceFt * Math.tan(rad(angle));
@@ -217,15 +255,87 @@ export function runwayLights({ length, remaining }) {
   };
 }
 
-// Who to call, and when, arriving at and leaving an airfield. Towered calls
+// Who to call, and when, arriving at and leaving an airfield. Navy field calls
+// follow the format of the VT-10 Hollywood Script (CNATRA), a full T-6A sortie
+// of radio calls at a naval air station: preset UHF channels, the squadron's
+// base frequency, course rules and the overhead break. Towered calls
 // follow AIM 4-3-2, 4-3-14, 4-3-18 and 4-3-21; non-towered (CTAF) calls follow
 // AC 90-66C ¶9 to 10. The wording is an illustrative example in the formats
 // those paragraphs give; the controller's replies are typical, not quoted.
 // `at` is a distance in NM on the way in or out, or a spot on the airfield.
-// `label` names a step where the spot alone does not. `cite` holds [source, place] pairs: aim4 is AIM chapter 4 section 3, ac is AC 90-66C.
+// `label` names a step where the spot alone does not. `cite` holds [source, place] pairs: hw is the Hollywood Script (page), nav is NAVEDTRA 14342A, aim4 is AIM chapter 4 section 3, ac is AC 90-66C.
 export const AIRFIELD = 'Cedar';
 export const CALLSIGN = 'Navy 405';
+export const NAVY_CALLSIGN = 'KATT 11';
 export const RADIO_CALLS = {
+  'navy-inbound': [
+    { id: 'atis', at: { nm: 25 }, station: 'ATIS', freq: 'UHF 1, ATIS (listen only)',
+      you: null, them: '"Cedar Field information Bravo… landing runway two seven… advise on initial contact you have information Bravo."',
+      note: 'Copy the ATIS before the first call so every later call can quote its letter. Navy squadrons fly with the field\'s frequencies set on numbered UHF preset channels, so a controller can say "Button 4" instead of a frequency.',
+      cite: [['hw', '19']] },
+    { id: 'course-rules', at: { nm: 20 }, station: 'Approach', freq: 'UHF 6, Approach',
+      you: '"Approach, KATT 11, three thousand five hundred, information Bravo, request course rules."',
+      them: '"KATT 11, squawk zero one three four."',
+      note: 'Coming home, ask Approach for the course rules: the field\'s published VFR arrival route to the initial, with its reporting points and altitudes.',
+      cite: [['hw', '31']] },
+    { id: 'point', at: { nm: 10 }, station: 'Approach', freq: 'UHF 6, Approach',
+      you: '"Approach, KATT 11, Point Golf in sight."',
+      them: '"KATT 11, contact Cedar Tower Button 4."',
+      note: 'Report the course rules reporting point in sight. Approach hands you to the tower by preset channel: "Button 4" is preset 4, tower.',
+      cite: [['hw', '32']] },
+    { id: 'initial', at: { nm: 4 }, station: 'Cedar Tower', freq: 'UHF 4, Tower',
+      you: '"Cedar Tower, KATT 11, Point Golf for the break."',
+      them: '"KATT 11, report the numbers, runway two seven."',
+      note: 'On the initial: the straight run of 3 to 5 miles down the extended centerline, flown 500 ft above the standard pattern altitude. Read back what the tower asks for.',
+      cite: [['hw', '32'], ['nav', '9-13']] },
+    { id: 'numbers', at: { spot: 'break' }, station: 'Cedar Tower', freq: 'UHF 4, Tower',
+      you: '"Cedar Tower, KATT 11, numbers two seven."',
+      them: '"KATT 11, left break approved."',
+      note: 'Over the runway numbers: the break point is normally just above the landing threshold. With the break approved, turn 180° onto downwind.',
+      cite: [['hw', '32'], ['nav', '9-13']] },
+    { id: 'one-eighty', at: { spot: 'abeam' }, station: 'Cedar Tower', freq: 'UHF 4, Tower',
+      you: '"Cedar Tower, KATT 11, one eighty, gear, stop."',
+      them: '"KATT 11, wind two six zero at eight, runway two seven, cleared to land."',
+      note: 'At the 180, the start of the turn to final, say where you are (the script\'s call allows abeam, 180, 90 or final), then "gear" and "stop". The script does not define them; read in context, the gear is down and the landing is a full stop. If you are not sure the gear is down and locked, tell the tower: it can call you by for a low pass and a visual check.',
+      cite: [['hw', '33–34'], ['nav', '9-6']] },
+    { id: 'rollout', at: { spot: 'exit' }, station: 'Cedar Tower', freq: 'UHF 4, Tower',
+      you: '"KATT 11, wilco."',
+      them: '"KATT 11, turn left next taxiway, contact ground when clear."',
+      theyFirst: true,
+      note: 'Stay with tower until clear of the runway, then change to ground.',
+      cite: [['hw', '34'], ['aim4', '4-3-14']] },
+    { id: 'taxi-in', at: { spot: 'clear' }, station: 'Cedar Ground', freq: 'UHF 3, Ground',
+      you: '"Cedar Ground, KATT 11, clear of runway two seven, taxi to my line."',
+      them: '"KATT 11, taxi to your line via Alpha."',
+      note: 'Taxi back to the squadron line, then make the last call to the squadron on its base frequency: "KATT Base, KATT 11 in and up."',
+      cite: [['hw', '34–35']] },
+  ],
+  'navy-outbound': [
+    { id: 'atis', label: 'ATIS, on the line', at: { spot: 'ramp' }, station: 'ATIS', freq: 'UHF 1, ATIS (listen only)',
+      you: null, them: '"Cedar Field information Charlie… departing runway two seven…"',
+      note: 'Copy the ATIS first.',
+      cite: [['hw', '19']] },
+    { id: 'base', label: 'Base: taxi outbound', at: { spot: 'ramp' }, station: 'KATT Base', freq: 'UHF 19, squadron base',
+      you: '"KATT Base, KATT 11 taxi outbound, side number zero zero zero."',
+      them: '"KATT 11, side number zero zero zero, base has you outbound."',
+      note: 'A military call with no civil equivalent: tell your own squadron which aircraft you have and that you are taxiing.',
+      cite: [['hw', '20']] },
+    { id: 'ground', label: 'Ground: taxi', at: { spot: 'ramp' }, station: 'Cedar Ground', freq: 'UHF 3, Ground',
+      you: '"Cedar Ground, KATT 11, taxi, information Charlie."',
+      them: '"KATT 11, runway two seven, taxi via Alpha."',
+      note: 'Station, call sign, request and the ATIS letter. An IFR departure copies its clearance first, on clearance delivery (UHF 2).',
+      cite: [['hw', '20–21']] },
+    { id: 'takeoff', at: { spot: 'hold' }, station: 'Cedar Tower', freq: 'UHF 4, Tower',
+      you: '"Cedar Tower, KATT 11, takeoff I-F-R."',
+      them: '"KATT 11, wind two six zero at eight, runway two seven, cleared for takeoff, switch to Departure."',
+      note: 'At the hold short, after a last "going flying" call to base. Read back the takeoff clearance with the runway; "switching" acknowledges the frequency change.',
+      cite: [['hw', '25']] },
+    { id: 'departure', at: { nm: 5 }, station: 'Departure', freq: 'UHF 6, Departure',
+      you: '"Departure, KATT 11, passing one thousand five hundred for three thousand."',
+      them: '"KATT 11, radar contact, climb and maintain one zero thousand."',
+      note: 'Check in climbing: the altitude you are passing and the altitude you are climbing to.',
+      cite: [['hw', '27']] },
+  ],
   'towered-inbound': [
     { id: 'atis', at: { nm: 20 }, station: 'ATIS', freq: 'ATIS frequency (listen only)',
       you: null, them: '"Cedar information Bravo… wind two six zero at eight… landing and departing runway two seven… advise on initial contact you have information Bravo."',
@@ -333,4 +443,6 @@ export const RADIO_CALLS = {
       cite: [['ac', '10.4.3'], ['ac', '11.8']] },
   ],
 };
-export const radioCalls = (towered, direction) => RADIO_CALLS[`${towered ? 'towered' : 'nontowered'}-${direction}`] ?? null;
+// `field` is 'navy', 'towered' or 'nontowered'; true and false stand for towered and non-towered.
+export const radioCalls = (field, direction) =>
+  RADIO_CALLS[`${field === true ? 'towered' : field === false ? 'nontowered' : field}-${direction}`] ?? null;
