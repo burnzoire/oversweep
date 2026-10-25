@@ -4,6 +4,7 @@ import {
   approachProfile, eatPlan, entryPath, finalCorrection, marshalFix, norm, pointToPoint, profileAltitude,
   reciprocal, timeEnroute, turnAmount, turnSeconds,
 } from './lesson-model.mjs';
+import { termQuiz } from '../shared/quick-quiz.mjs';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const C = 160; // SVG centre for 320 × 320 plots
@@ -585,33 +586,8 @@ function setupComms(root) {
 }
 
 /* ---------- Radio terms quiz ---------- */
-function setupJargon(root) {
-  // The term list sits just before the quiz section.
-  const terms = [...document.querySelectorAll('dl.jargon > div')].map((d) => ({
-    term: d.querySelector('dt').textContent.trim(), meaning: d.querySelector('dd').textContent.trim(),
-  }));
-  const prompt = root.querySelector('[data-prompt]'), choices = root.querySelector('[data-choices]');
-  const out = root.querySelector('[data-result]');
-  let score = 0, asked = 0;
-  function ask() {
-    const pool = [...terms].sort(() => Math.random() - 0.5).slice(0, 4);
-    const answer = pool[randomInt(0, pool.length - 1)];
-    // Hide the term itself if a definition repeats it.
-    prompt.textContent = answer.meaning.replace(new RegExp(answer.term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'), '—');
-    choices.replaceChildren(...pool.map((t) => {
-      const b = Object.assign(document.createElement('button'), { type: 'button', textContent: t.term });
-      b.addEventListener('click', () => {
-        asked++;
-        if (t === answer) score++;
-        out.textContent = `${t === answer ? 'Correct' : `Not quite: that was ${answer.term}`}. ${score} of ${asked}.`;
-        for (const c of choices.children) c.disabled = true;
-      });
-      return b;
-    }));
-  }
-  root.querySelector('[data-new]').addEventListener('click', () => { out.textContent = ''; ask(); });
-  ask();
-}
+// The term list sits just before the quiz section.
+const setupJargon = (root) => termQuiz(root, { hideTerm: true });
 
 const blocks = {
   navigation: setupNavigation, entry: setupEntry, eat: setupEat, quiz: setupQuiz,
