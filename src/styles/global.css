@@ -118,7 +118,7 @@ summary:focus-visible {
 
 .brand-mark {
   flex: none;
-  width: 1.7rem;
+  width: 2.1rem;
   height: 3.3rem;
   fill: var(--color-accent);
 }
@@ -559,7 +559,7 @@ h2 {
 }
 
 .footer-brand .brand-mark {
-  width: 1rem;
+  width: 1.2rem;
   height: 1.9rem;
   fill: var(--color-ink);
 }

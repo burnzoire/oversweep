@@ -92,8 +92,8 @@ non-text boundaries against their actual backgrounds when UI is implemented.
 ## Brand and availability (implemented)
 
 The header is a flight-deck ink band (`#111a24`) with a deck-yellow (`#ffc20e`)
-rule and mark: a plan-view F-14 Tomcat silhouette with its wings in the 75°
-oversweep (deck stowage) position, also used as the favicon. Yellow is decorative and only sits
+rule and mark: a plan-view F-14 Tomcat silhouette with its wings overswept for
+deck stowage, traced from the owner's reference drawing, also used as the favicon. Yellow is decorative and only sits
 on ink; pages stay white with black type. Navigation is derived from the
 registries in `src/data/availability.ts`: a section, subject or category with
 nothing published is shown dimmed and unlinked rather than labelled "coming
