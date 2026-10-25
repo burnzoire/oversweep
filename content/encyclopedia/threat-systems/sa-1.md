@@ -26,6 +26,17 @@ battery:
     - { kind: launcher, label: "inner-ring launch sites", count: 24 }
     - { kind: launcher, label: "outer-ring launch sites", count: 32 }
 rwrNote: "The cited F-14 AN/ALR-67 threat table [2] has no SA-1 or Yo-Yo entry."
+photo:
+  src: "encyclopedia/threat-systems/sa-1.jpg"
+  width: 500
+  height: 667
+  alt: "A slender S-25 missile standing upright on a stand above a camouflage-painted concrete wall, against a pale sky."
+  caption: "An S-25 missile on display near site 30 of the Kapustin Yar test range, Russia. No public-domain photo of an operational SA-1 site was found."
+  author: "Kopwyh"
+  date: "28 February 2007"
+  licence: "Public domain, released by the photographer"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:S-25_Berkut_Kapustin_Yar.JPG"
+  accessed: "2026-10-25"
 sources:
   - n: 1
     title: "S-25 Berkut"

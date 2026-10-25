@@ -29,6 +29,17 @@ battery:
   items:
     - { kind: radar, label: "SNR-75 Fan Song", count: 1 }
     - { kind: launcher, label: "single-rail launchers", count: 6, missiles: 1 }
+photo:
+  src: "encyclopedia/threat-systems/sa-2.jpg"
+  width: 1280
+  height: 885
+  alt: "Aerial reconnaissance photo of a North Vietnamese SA-2 site: launch positions joined by a looping road, with the radar area labelled and an enlarged inset of a launcher."
+  caption: "A North Vietnamese SA-2 site photographed by a US Air Force reconnaissance aircraft in August 1965. The labels are the Air Force's."
+  author: "US Air Force (National Museum of the USAF photo 090605-F-1234P-001)"
+  date: "August 1965"
+  licence: "Public domain, work of the US federal government"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:S-75_battery_in_NVietnam_1965.jpg"
+  accessed: "2026-10-25"
 sources:
   - n: 1
     title: "S-75 Dvina"

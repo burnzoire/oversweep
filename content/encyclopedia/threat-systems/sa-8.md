@@ -26,6 +26,17 @@ battery:
   items:
     - { kind: launcher, label: "TELARs with Land Roll radar (Osa-AK)", count: 4, missiles: 6 }
     - { kind: reload, label: "reload vehicles, 18 missiles between them", count: 2 }
+photo:
+  src: "encyclopedia/threat-systems/sa-8.jpg"
+  width: 1280
+  height: 942
+  alt: "A six-wheeled SA-8 vehicle with its radar and missile launcher on the roof, parked in a field, with a second SA-8 behind it."
+  caption: "Two SA-8 Gecko vehicles, each carrying its own radars and missiles, in a US Department of Defense photo (still DF-ST-83-04926)."
+  author: "US Department of Defense"
+  date: "1 August 1982"
+  licence: "Public domain, work of the US federal government"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Soviet_OSA_SAM.JPEG"
+  accessed: "2026-10-25"
 sources:
   - n: 1
     title: "9K33 Osa"

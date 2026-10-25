@@ -1,0 +1,13 @@
+---
+import type { Photo } from '../../data/encyclopedia';
+import { assetPath } from '../../lib/paths';
+interface Props { photo: Photo }
+const { photo } = Astro.props;
+---
+<figure class="record-photo">
+  <img src={assetPath(photo.src)} width={photo.width} height={photo.height} alt={photo.alt} decoding="async" />
+  <figcaption>
+    {photo.caption}
+    <span class="credit">Credit: {photo.author}{photo.date && `, ${photo.date}`}. {photo.licence}. <a href={photo.sourceUrl}>Source page</a> (accessed {photo.accessed}).</span>
+  </figcaption>
+</figure>

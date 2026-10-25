@@ -1,9 +1,16 @@
-# Airfield Operations module revision 1 — FAA source evidence
+# Airfield Operations module revision 2 — Navy and FAA source evidence
 
 Short, paragraph-specific excerpts supporting the claims in the Airfield
 Operations module (`src/pages/manual/airfield-operations/[module].astro`). They
 are review evidence, not a copy of the publications, and not instructions to the
-reviewer. All sources are US government works published on faa.gov.
+reviewer. Revision 2 makes the module military-first for all US services (Navy, Air
+Force, Marine Corps, Army): the military sources below are primary, and the FAA
+sources, which military fields share for most markings, signs, lights and tower
+rules, are supplementary. On the page the sources are numbered [1] NAVEDTRA
+14342A, [2] VT-10 Hollywood Script, [3] 14 FTW (Columbus AFB) collision
+avoidance guide, [4] JBSA MACA handbook, [5] FM 3-04.300, [6] NAVAIR
+expeditionary airfields, then [7]–[12] for the FAA sources in the order listed
+below (both AIM chapter 2 sections are [7]).
 
 **Retrieval limitation.** Passages were read on 25 October 2026 through a web
 text-extraction tool (the authoring session's proxy refuses direct downloads from
@@ -14,20 +21,81 @@ long AIM HTML sections may exceed the review packet's per-source budget, so late
 paragraphs (for example 4-3-13 to 4-3-21) may be cut from the packet; the source
 coverage list will say so.
 
-**Cited pages for the review reader.** The blocks ask only for
-the pages the module cites, to keep the review packet under the reviewer's prompt limit.
+**Sources for the review reader.** The reader fetches at most eight URLs, declared
+ones first. Revision 2 declares the Navy pages that carry the new military
+content, plus the AIM section with the shared markings and the arresting gear
+paragraph. The AIM 2-1 and 4-3 pages, the Pilot/Controller Glossary, the AFH
+chapter, AC 90-66C and JO 7110.65 are not fetched for this revision; their claims
+are unchanged from revision 1, which the gate checked at b987282 (PR #67), and
+rest on the quotations below. The Hollywood Script is on cnatra.navy.mil, which
+the gate's runners cannot reach, so it is not declared. Sources [3]–[6] are on
+hosts outside the gate's allow-list (flytupelo.com, jbsa.mil, irp.fas.org,
+navair.navy.mil), so their claims are unverified by the gate.
 
 ```review-sources
-source: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/09_afh_ch8.pdf
-pages: 1-4 (8-1 to 8-4)
+source: https://navyaviation.tpub.com/14342A/Overhead-Approach-Pattern-Components-327.html
+source: https://navyaviation.tpub.com/14342A/Optical-Landing-System-179.html
+source: https://navyaviation.tpub.com/14342A/Optical-Landing-Systems-240.html
+source: https://navyaviation.tpub.com/14342A/Arresting-Gear-Signs-And-Markings-163.html
+source: https://navyaviation.tpub.com/14342A/Traffic-Patterns-325.html
+source: https://navyaviation.tpub.com/14342A/Landing-Gear-Checks-320.html
+source: https://navyaviation.tpub.com/14342A/Runway-Use-And-Conditions-322.html
+source: https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap2_section_3.html
 ```
 
-```review-sources
-source: https://www.faa.gov/documentlibrary/media/advisory_circular/ac_90-66c.pdf
-pages: 2 (2); 5-9 (5 to 9); 12-15 (12 to 15); 25 (B-1)
-```
+## Military sources
 
-## Sources
+1. NAVEDTRA 14342A, Air Traffic Controller (Navy rate training manual), on
+   navyaviation.tpub.com, printed pages 4-9, 4-25, 5-52, 9-6, 9-8 to 9-13 and
+   9-18 (URLs on the module page). Read 25 October 2026 through the same text
+   extractor; the edition date is not shown on the pages read.
+2. VT-10 "T-6A Checklist Study Guide ('Hollywood Script')", May 2022 —
+   https://www.cnatra.navy.mil/tw6/vt10/assets/docs/training/hollywood-script.pdf,
+   radio calls pp. 19–35 (the same extraction the Radio Procedures module uses).
+
+3. 14th Flying Training Wing Safety Office, "Columbus Collision Avoidance",
+   October 2013 —
+   https://flytupelo.com/wp-content/uploads/2020/12/MACA-Booklet.pdf
+4. Joint Base San Antonio, "Midair Collision Avoidance (MACA) Handbook" —
+   https://www.jbsa.mil/Portals/102/Documents/Safety/JBSA-MACA_Pamphlet_2024.pdf
+5. FM 3-04.300, Airfield and Flight Operations Procedures, 12 August 2008, C1
+   21 April 2010 — https://irp.fas.org/doddir/army/fm3-04-300.pdf (extractor
+   read through ¶3-29 only).
+6. NAVAIR, "Expeditionary Airfields" —
+   https://www.navair.navy.mil/product/expeditionary-airfields-0
+
+### Claim map: Air Force, Army, Marine Corps
+
+| Source, place | Passage (extractor-read) | Module use |
+| --- | --- | --- |
+| 14 FTW, Aircraft at Columbus | T-6 pattern southwest out to 5 NM, surface to 3,200 ft MSL, "under the control of a Runway Supervisory Unit (RSU)", on a different frequency from the tower; T-1 and T-38 patterns to the northeast out to about 10 NM | Pattern; Talking; terms |
+| 14 FTW, Military Traffic Pattern | Military pattern "differs from the standard civilian VFR traffic pattern in several areas"; flies to "INITIAL which is roughly 4NM from the runway, aligned with the centerline"; over the runway at "1000' - 1500' AGL"; breaks in a hard turn to lose airspeed onto the inside downwind within 1.5 NM; "they can 'pull closed' to enter the INSIDE DOWNWIND"; VFR pattern "similar to the civilian pattern with the exception of the entry from the 45-entry to downwind"; crosswind "1NM past the runway" | Pattern; Overhead; terms; checks |
+| JBSA MACA, p. 2 | "many military aircraft are using a UHF radio to speak with controllers and other aircraft" | Talking |
+| JBSA MACA, Kelly Field | "The F-16s operate a military overhead pattern ... flown at 2700 feet MSL"; C-5 visual box pattern 2,200–2,700 ft MSL; F-16 SFO patterns with "extremely high rates of climb and descent near the runway"; SFOs "simulate the failure of the aircraft's one (and only) engine, starts at a high altitude" | Pattern; Overhead; terms |
+| JBSA MACA, ELP | T-6s practice emergency landing patterns at listed civil fields; "T-6s will fly low approaches when practicing at non-towered airfields"; "T-6 crews will monitor the appropriate CTAF and make appropriate position reports" | Pattern; Talking |
+| FM 3-04.300 ¶1-19 | Personnel near runways must know "the ATC light gun signals contained in the aeronautical information manual"; cites FAA 7110.65 | Overview note |
+| FM 3-04.300 ¶3-9, App. C | "Helipads are constructed for aircraft that do not require a runway to become airborne"; Table C-3 helipads and hoverpoints; Figure C-2 / Table C-4 rotary-wing landing lanes (titles read; table text not reached) | Pattern (helicopters) |
+| NAVAIR EAF | EAF is "a shore-based, aviation support system that permits rapid deployment and recovery of aircraft within range of ground forces"; can be a grass landing zone for helicopters; supports fleet Marine forces; products include AM-2 matting, M-31 expeditionary arresting gear, airfield lighting and terminal guidance | Markings (arresting gear); terms |
+| AIM 4-3-3 (helicopter note) | Helicopters may fly a pattern like the fixed-wing one at 500 ft AGL and closer to the runway, or on the opposite side where airspeed requires or for practice autorotations if local policy permits; landings away from the runway avoid the fixed-wing flow | Pattern (helicopters); checks |
+| AIM 4-3-17 | Taxi, hover taxi and air taxi; hovering above 25 ft AGL on request; air taxi preferred, below 100 ft AGL unless requested or instructed; takeoff and landing clearances away from runways; no downwind takeoff over 5 kt tailwind unless requested | Talking; terms |
+
+### Claim map: Navy
+
+| Source, page | Passage (extractor-read) | Module use |
+| --- | --- | --- |
+| 14342A p. 4-9 | Arresting gear signs "have large yellow circles on a black background", on both sides of the runway; "10-foot-diameter retroreflective yellow disks" painted in a line across the runway mark the pendant cable | Markings; Figure 3 |
+| 14342A p. 4-25 | "The OLS provides glide slope information independent of other visual aids"; no centerline alignment; IFLOLS at many naval air stations for FCLP; meatball "Yellow line of lights referred to as the "meatball" or "ball.""; datum: "Horizontal bar of green lights"; wave-off: "Flashing red lights that inform the pilot to execute a missed approach", LSO-operated; cut lights: "Green lights above the source lights" to acknowledge a NORDO aircraft; "installed abeam the touchdown point along the left side of a runway" | Glide slope; Figure 7; Ground; terms |
+| 14342A p. 5-52 | "The ball rises above the datum lights as the pilot rises above the glide slope"; slides off the top "when the pilot is more than 3/4 degree above the glide slope"; off the bottom well below; "a warning of low ball that has a RED lens installed in the bottom cell of the lens box"; glide slope "as determined by the lens settings" | Glide slope; Figure 7 |
+| 14342A p. 9-6 | Pilot unsure gear is down and locked "must notify the control tower"; low pass in front of the tower for a visual check; results relayed; if doubt remains, alert crash and rescue; "The pilot should then make a precautionary landing"; aircraft not turned off the runway until ground personnel check | Talking (Navy fields); Figure 11 |
+| 14342A pp. 9-8 to 9-9 | "select the runway most nearly aligned with the wind" at 5 kt or more; calm-wind runway under 5 kt; issue wind direction and velocity with the runway; "calm" only when under 3 kt; local runway use programs; another runway if operationally advantageous or requested, stating the runway number; "An aircraft in distress has the right of way over all other air traffic." | Wind; Talking |
+| 14342A p. 9-10 | Table 9-1, ATC light signal meanings, the same as AIM 4-3-13 for aircraft | Ground; Figure 12 |
+| 14342A p. 9-11 | Two types of traffic pattern at each airfield, standard and overhead; left flow normally, right when required; "The standard traffic pattern is used throughout the Navy."; components upwind, crosswind, downwind, base, final; altitudes vary with location and mission | Pattern |
+| 14342A p. 9-12 | Downwind entry at a 45° angle to the downwind leg; leg definitions | Pattern |
+| 14342A p. 9-13 | "The overhead approach pattern is a series of predetermined maneuvers prescribed for VFR arrival of military aircraft"; components "initial approach, break point, "the 180," and final approach"; initial follows the extended centerline, "varies in length from 3 to 5 miles", "500 feet above the elevation of the standard traffic pattern"; break point "normally just above the landing threshold", 180° turn onto downwind | Overhead; Figures 10, 11 |
+| 14342A p. 9-18 | Tower rules "are contained in Air Traffic Control, FAA Order 7110.65"; facility manuals cover local operations | Overview note |
+| Hollywood pp. 19–35 | ATIS UHF 1; clearance UHF 2; base UHF 19 "KATT Base, KATT 11 taxi outbound, side number 000"; ground "taxi, information (ATIS letter)"; "going flying"; tower "takeoff IFR", "switch to Departure"; departure "passing (altitude) for 3000"; approach "request course rules", "Point Golf in sight", "contact Sherman Tower Button 4"; tower "Point Golf for the break", "report the numbers", "numbers 7 right", "right break approved"; "(abeam, 180, 90 or final), gear, stop", "cleared to land"; ground "clear of the active, taxi to my line"; base "in and up" | Talking (Navy fields); Figure 11 |
+
+## Supplementary FAA sources
 
 1. AIM Chapter 2, Section 1, Airport Lighting Aids —
    https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap2_section_1.html
@@ -58,6 +126,7 @@ pages: 2 (2); 5-9 (5 to 9); 12-15 (12 to 15); 25 (B-1)
 | AIM 2-3-3.9 | "A demarcation bar is 3 feet (1m) wide and yellow"; chevrons "show pavement areas aligned with the runway that are unusable for landing, takeoff, and taxiing" | Markings; Figure 3 |
 | AIM 2-3-4.2–4.3 | Taxiway centerline "a single continuous yellow line, 6 inches (15 cm) to 12 inches (30 cm) in width"; enhanced centerline dashes "for a maximum of 150 feet prior to a runway holding position marking"; edge markings continuous or dashed double yellow | Holding; Figure 4 |
 | AIM 2-3-5.1–5.4 | Holding position: "four yellow lines, two solid and two dashed"; "The solid lines are always on the side where the aircraft must hold."; on runways for LAHSO; ILS critical area marking; surface-painted signs where the holding position is wider than 200 ft, left of the centerline | Holding; Figure 4 |
+| AIM 2-3-14 | Emergency arresting gear "generally consists of pendant cables supported over the runway surface by rubber "donuts""; most in overruns, some across operational areas near runway ends; runway markings "10 feet diameter solid circles painted "identification yellow," 30 feet on center" across the entire runway width | Markings; Figure 3 |
 | AIM 2-3-6.4–6.5 | Closed runways: yellow crosses at each end (temporary); also at 1,000 ft intervals (permanent) | Markings |
 | AIM 2-3-8 | Mandatory signs "have a red background with a white inscription"; holding position sign "15-33" example; ILS sign; no entry sign for one-way taxiways or roads that could be mistaken for taxiways | Signs; Figure 5 |
 | AIM 2-3-9 | Location sign "black background with a yellow inscription and yellow border" | Signs; Figure 5 |
@@ -93,6 +162,19 @@ pages: 2 (2); 5-9 (5 to 9); 12-15 (12 to 15); 25 (B-1)
 
 ## Unverified or illustrative items, flagged on the page
 
+- IFLOLS: the 3.5° default lens setting is an example (the manual gives no
+  angle); the ball's proportional movement, a lens span of 3/4° below as well as
+  above, and the red bottom cell as the lowest fifth are the module's assumptions.
+- "The 180" is named but not described in 14342A; the module reads it, with the
+  Hollywood landing call, as the final 180° turn, takes the 180 position as the
+  start of that turn and the 90 as its midpoint, and says so.
+- The Navy field calls are the Hollywood Script's formats moved to the made-up
+  "Cedar" field with runway 27 and a left break; replies are typical wording.
+  "Gear" and "stop" are read in context (gear down, full stop), as the Radio
+  Procedures module also says.
+- The arresting gear cable in Figure 3 is drawn 1,800 ft past the threshold for
+  illustration; the disk count is the most that fit at 30 ft centers.
+
 - PAPI indication angles (3.5°, 3.2°, 3.0°, 2.8°, 2.5°) appear only in AIM FIG 2-1-5,
   an image; the unit transition angles (2°30′, 2°50′, 3°10′, 3°30′) and the light
   order are the module's assumption. The caption says so.
@@ -110,6 +192,12 @@ pages: 2 (2); 5-9 (5 to 9); 12-15 (12 to 15); 25 (B-1)
   caption says to use aircraft and field numbers.
 
 ## Models and independent reference cases
+
+- IFLOLS ball: position = (angle − glide slope) ÷ 0.75°; visible while |position| ≤ 1;
+  red below −0.6. 3.875° on a 3.5° slope: 0.5 (half way up); 4.26°: off the top;
+  3.0°: −0.667, red; 3.2°: −0.4, not red.
+- Arresting gear disks: n = floor((W − 10) ÷ 30) + 1, centred. 150 ft: 5 disks at
+  0, ±30, ±60 ft; 200 ft: 7.
 
 `src/lessons/airfield-ops/lesson-model.mjs`, tested in
 `tests/lessons/airfield-ops-lesson.test.mjs` with hand-derived values:

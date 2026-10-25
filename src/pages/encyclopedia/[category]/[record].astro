@@ -3,6 +3,7 @@ import SiteLayout from '../../../layouts/SiteLayout.astro';
 import EnvelopeFigure from '../../../components/encyclopedia/EnvelopeFigure.astro';
 import RwrFigure from '../../../components/encyclopedia/RwrFigure.astro';
 import BatteryFigure from '../../../components/encyclopedia/BatteryFigure.astro';
+import RecordPhoto from '../../../components/encyclopedia/RecordPhoto.astro';
 import Cited from '../../../components/encyclopedia/Cited.astro';
 import { categoryRecords, includedRecords, recordContent, recordRoute, type EncyclopediaRecord } from '../../../data/encyclopedia';
 import { categoryTitle } from '../../../data/availability';
@@ -58,6 +59,8 @@ const alt = span(e.minAltM === null ? null : `${n(e.minAltM)} m (${n(ft(e.minAlt
         <div><dt>RWR symbol</dt><dd>{data.rwr.length ? data.rwr.map((s) => <span><span class="symbol">{s.symbol}</span>{s.emitter} </span>) : 'None'}{rwrSource && data.rwr.length > 0 && <> <Cited text={`[${rwrSource.n}]`} /></>}</dd></div>
       </dl>
     </section>
+
+    {data.photo && <RecordPhoto photo={data.photo} />}
 
     <EnvelopeFigure items={items} highlight={record.slug} title={`Figure 1 — ${data.nato} engagement limits (side view)`}>
       <p class="fig-caption"><Cited text={e.basis} /> The shaded region combines the published minimum and maximum range, treated as slant range from the launcher, with the minimum and maximum altitude. Real launch zones are smaller and change with target speed, aspect and altitude. Dashed edges mark limits the cited sources do not give. Other single-digit SAMs are drawn faintly for comparison, labelled by SA number. Each scale prints its vertical exaggeration.</p>

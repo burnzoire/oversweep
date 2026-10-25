@@ -1,10 +1,11 @@
 // Presentation for the Airfield Operations module's interactive blocks. All
 // numbers come from lesson-model.mjs; this file only reads inputs and draws.
 import {
-  LIGHT_SIGNALS, NM, SM, TOUCHDOWN_GROUPS, baseBearing, ends, heightOnPath, markingsFor,
-  norm, overhead, papi, parallelNames, pathAngle, pattern, radioCalls, runwayForWind, runwayLights, thresholdStripes,
+  GEAR_DISK, LENS_HALF, LIGHT_SIGNALS, NM, RED_CELL, SM, TOUCHDOWN_GROUPS, baseBearing, ends, gearDisks, heightOnPath, markingsFor,
+  meatball, norm, overhead, papi, parallelNames, pathAngle, pattern, radioCalls, runwayForWind, runwayLights, thresholdStripes,
   windComponents,
 } from './lesson-model.mjs';
+import { quickQuiz, termQuiz } from '../shared/quick-quiz.mjs';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const rad = (d) => d * Math.PI / 180;
@@ -109,7 +110,7 @@ function setupMarkings(root) {
   function draw() {
     const type = checked(root, 'rtype');
     const width = Number(f.width.value);
-    const displaced = f.displaced.checked, blast = f.blast.checked;
+    const displaced = f.displaced.checked, blast = f.blast.checked, gear = f.gear.checked;
     f.jet.closest('label').hidden = type !== 'visual';
     f.intl.closest('label').hidden = type !== 'visual';
     const marks = markingsFor(type, { international: f.intl.checked, jet4000: f.jet.checked });
@@ -160,6 +161,17 @@ function setupMarkings(root) {
       }
     }
     if (has('sides')) for (const s of [-1, 1]) svg.append(el('rect', { x: X(T), y: Y(s * (hw - 2)) - 1.5, width: (3600 - T) * sx, height: 3, class: 'paint' }));
+    // Arresting gear: a line of yellow disks across the runway at the pendant, and a sign each side.
+    const gearAt = T + GEAR_AT;
+    if (gear) {
+      for (const yft of gearDisks(width)) svg.append(el('ellipse', { cx: X(gearAt), cy: Y(yft), rx: Math.max(1.5, GEAR_DISK / 2 * sx), ry: GEAR_DISK / 2 * sy, class: 'paint-yellow' }));
+      svg.append(el('path', { d: `M${X(gearAt)} ${Y(-hw)} V${Y(hw)}`, class: 'thin' }));
+      for (const s of [-1, 1]) {
+        const y = s < 0 ? Y(-hw) - 26 : Y(hw) + 8;
+        svg.append(el('rect', { x: X(gearAt) - 9, y, width: 18, height: 18, class: 'sign-black' }), el('circle', { cx: X(gearAt), cy: y + 9, r: 6, class: 'paint-yellow' }));
+      }
+      svg.append(el('text', { x: X(gearAt) + 14, y: Y(-hw) - 12, class: 'lbl small' }, 'ARRESTING GEAR PENDANT'));
+    }
     // Distance scale from the landing threshold.
     for (let ft = 0; ft <= 3000; ft += 500) {
       svg.append(el('path', { d: `M${X(T + ft)} ${Y(hw) + 12} v8`, class: 'thin' }));
@@ -174,6 +186,7 @@ function setupMarkings(root) {
     out.replaceChildren(...para([
       `${type[0].toUpperCase()}${type.slice(1)} runway: ${marks.map((m) => names[m]).join(', ')}.`,
       displaced ? 'Displaced threshold: white arrows lead along the centreline to a white threshold bar. The pavement behind it can be used to take off in either direction and to land from the opposite direction, but not to land over in this direction.' : '',
+      gear ? `Arresting gear: a line of 10 ft yellow disks, ${gearDisks(width).length} across this ${width} ft runway at 30 ft centers, marks the pendant cable, with a yellow-circle-on-black sign each side. The cable sits on the runway here; most gear is in the overruns.` : '',
       blast ? 'Blast pad: yellow chevrons mark pavement aligned with the runway that cannot be used for landing, takeoff or taxiing; a yellow demarcation bar separates it from the runway.' : '',
     ].filter(Boolean)));
   }
@@ -181,6 +194,9 @@ function setupMarkings(root) {
   root.addEventListener('change', draw);
   draw();
 }
+
+// Pendant position for the drawing only: each field publishes its own gear locations.
+const GEAR_AT = 1800;
 
 /* ---------- Figure 4: holding position ---------- */
 function setupHold(root) {
@@ -275,27 +291,20 @@ function setupSigns(root) {
   }
   // Quiz: which kind of sign is this?
   const quiz = root.querySelector('[data-quiz]');
-  const shown = quiz.querySelector('[data-sign]'), choices = quiz.querySelector('[data-choices]'), result = quiz.querySelector('[data-quiz-result]');
   const kinds = [...new Set(SIGNS.map((s) => s.kind))];
-  let score = 0, asked = 0;
-  function ask() {
-    const s = SIGNS[Math.floor(Math.random() * SIGNS.length)];
-    shown.replaceChildren(signSvg(s, 1.4));
-    shown.setAttribute('aria-label', `Sign with ${s.bg.replace('sign-', '')} background${s.text ? `, reading ${s.text}` : ', with a circle and bar symbol'}`);
-    result.textContent = '';
-    choices.replaceChildren(...kinds.map((k) => {
-      const b = Object.assign(document.createElement('button'), { type: 'button', textContent: k });
-      b.addEventListener('click', () => {
-        asked++;
-        if (k === s.kind) score++;
-        result.textContent = `${k === s.kind ? 'Correct' : `Not quite: it is a ${s.kind.toLowerCase()} sign`}. ${s.meaning} ${score} of ${asked}.`;
-        for (const c of choices.children) c.disabled = true;
-      });
-      return b;
-    }));
-  }
-  quiz.querySelector('[data-new]').addEventListener('click', ask);
-  ask();
+  quickQuiz({
+    prompt: quiz.querySelector('[data-sign]'), choices: quiz.querySelector('[data-choices]'),
+    result: quiz.querySelector('[data-quiz-result]'), next: quiz.querySelector('[data-new]'),
+  }, {
+    items: SIGNS,
+    show: (s, shown) => {
+      shown.replaceChildren(signSvg(s, 1.4));
+      shown.setAttribute('aria-label', `Sign with ${s.bg.replace('sign-', '')} background${s.text ? `, reading ${s.text}` : ', with a circle and bar symbol'}`);
+    },
+    options: () => kinds,
+    isRight: (s, k) => k === s.kind,
+    feedback: (s, k, right) => `${right ? 'Correct' : `Not quite: it is a ${s.kind.toLowerCase()} sign`}. ${s.meaning}`,
+  });
 }
 
 /* ---------- Figure 6: lighting at night ---------- */
@@ -382,39 +391,69 @@ function setupPapi(root) {
   function draw() {
     const dist = Number(f.dist.value) * NM / 10; // tenths of a nautical mile
     const height = Number(f.height.value);
+    const lens = checked(root, 'ind') === 'iflols';
+    const gs = Number(f.gs.value) / 10;
+    f.gs.closest('label').hidden = !lens;
     setOut(root, 'dist', `${(dist / NM).toFixed(1)} NM`);
     setOut(root, 'height', `${r0(height)} ft`);
+    setOut(root, 'gs', `${gs.toFixed(1)}°`);
     const angle = pathAngle(height, dist);
     const p = papi(angle);
+    const b = meatball(angle, gs);
     // Side view: distance 0–4 NM → 600 px; height 0–1,500 ft → 260 px (vertical exaggerated).
     const sx = 560 / (4 * NM), sy = 260 / 1500, gx = 600, gy = 330;
     const X = (ft) => gx - ft * sx, Y = (ft) => gy - ft * sy;
     svg.replaceChildren(el('rect', { x: 1, y: 1, width: 638, height: 398, class: 'frame' }));
     svg.append(el('path', { d: `M20 ${gy} H630`, class: 'ln heavy' }));
     svg.append(el('rect', { x: gx - 4, y: gy - 3, width: 34, height: 3, class: 'fixmark' }));
-    for (const [deg, cls, lbl] of [[3, 'ln', '3.0° GLIDE PATH'], [3.5, 'ln dashed', '3.5°'], [2.5, 'ln dashed', '2.5°']]) {
+    const lines = lens
+      ? [[gs, 'ln', `${gs.toFixed(1)}° GLIDE SLOPE`], [gs + LENS_HALF, 'ln dashed', `+${LENS_HALF}°`], [gs - LENS_HALF, 'ln dashed', `−${LENS_HALF}°`]]
+      : [[3, 'ln', '3.0° GLIDE PATH'], [3.5, 'ln dashed', '3.5°'], [2.5, 'ln dashed', '2.5°']];
+    for (const [deg, cls, lbl] of lines) {
       const end = 4 * NM;
       svg.append(el('path', { d: `M${X(0)} ${Y(0)} L${X(end)} ${Y(heightOnPath(end, deg))}`, class: cls }));
-      svg.append(el('text', { x: X(end) + 4, y: Y(heightOnPath(end, deg)) - 4, class: 'lbl small' }, lbl));
+      const at = 3.6 * NM; // labels inside the frame, clear of the title and the light box
+      svg.append(el('text', { x: X(at), y: Y(heightOnPath(at, deg)) - 6, class: 'lbl small' }, lbl));
     }
     for (let nm = 1; nm <= 4; nm++) svg.append(el('path', { d: `M${X(nm * NM)} ${gy} v6`, class: 'thin' }), el('text', { x: X(nm * NM), y: gy + 20, 'text-anchor': 'middle', class: 'lbl small' }, `${nm} NM`));
     for (const ft of [500, 1000, 1500]) svg.append(el('path', { d: `M${X(0)} ${Y(ft)} h-6`, class: 'thin' }), el('text', { x: X(0) - 10, y: Y(ft) + 4, 'text-anchor': 'end', class: 'lbl small' }, `${r0(ft)} FT`));
     svg.append(el('path', { d: SIDE, class: 'acft', transform: `translate(${X(dist)} ${Y(height)}) rotate(${Math.min(12, angle ?? 0)}) scale(1.2)` }));
     svg.append(el('path', { d: `M${X(dist)} ${Y(height)} L${X(0)} ${Y(0)}`, class: 'los' }));
-    // What the pilot sees: four PAPI boxes.
-    const box = el('g', { transform: 'translate(250 52)' });
-    box.append(el('rect', { x: 0, y: 0, width: 190, height: 70, class: 'night' }));
-    p.lights.forEach((c, i) => box.append(el('circle', { cx: 32 + i * 42, cy: 30, r: 13, class: `lt ${c}` })));
-    box.append(el('text', { x: 95, y: 62, 'text-anchor': 'middle', class: 'lbl small rev' }, p.label.toUpperCase()));
-    svg.append(box, el('text', { x: 250, y: 44, class: 'lbl small' }, 'PAPI AS SEEN FROM THE COCKPIT'));
+    if (lens) {
+      // What the pilot sees: the lens box with the ball, green datum bars, red wave-off and green cut lights (both off).
+      const box = el('g', { transform: 'translate(200 42)' });
+      box.append(el('rect', { x: 0, y: 0, width: 230, height: 96, class: 'night' }));
+      const cx = 115, top = 14, h = 60, cy = top + h / 2;
+      box.append(el('rect', { x: cx - 14, y: top, width: 28, height: h, class: 'lt-box off' }));
+      box.append(el('rect', { x: cx - 14, y: top + h * (1 - RED_CELL), width: 28, height: h * RED_CELL, class: 'thin' }));
+      for (const sgn of [-1, 1]) {
+        for (let i = 0; i < 5; i++) box.append(el('circle', { cx: cx + sgn * (30 + i * 12), cy, r: 4, class: 'lt green' }));
+        for (const dy of [-12, 0, 12]) box.append(el('circle', { cx: cx + sgn * 24, cy: cy + dy - 14, r: 3, class: 'lt-lamp off' }));
+      }
+      for (const dx of [-8, 0, 8]) box.append(el('circle', { cx: cx + dx, cy: top - 7, r: 3, class: 'lt-lamp off' }));
+      if (b.visible) box.append(el('circle', { cx, cy: cy - b.position * (h / 2 - 6), r: 6, class: `lt ${b.red ? 'red' : 'yellow'}` }));
+      box.append(el('text', { x: cx, y: 90, 'text-anchor': 'middle', class: 'lbl small rev' }, b.label.toUpperCase()));
+      svg.append(box, el('text', { x: 200, y: 37, class: 'lbl small' }, 'IFLOLS AS SEEN FROM THE COCKPIT'));
+    } else {
+      // What the pilot sees: four PAPI boxes.
+      const box = el('g', { transform: 'translate(250 52)' });
+      box.append(el('rect', { x: 0, y: 0, width: 190, height: 70, class: 'night' }));
+      p.lights.forEach((c, i) => box.append(el('circle', { cx: 32 + i * 42, cy: 30, r: 13, class: `lt ${c}` })));
+      box.append(el('text', { x: 95, y: 62, 'text-anchor': 'middle', class: 'lbl small rev' }, p.label.toUpperCase()));
+      svg.append(box, el('text', { x: 250, y: 44, class: 'lbl small' }, 'PAPI AS SEEN FROM THE COCKPIT'));
+    }
     svg.append(el('text', { x: 14, y: 24, class: 'lbl small' }, `SIDE VIEW · VERTICAL SCALE EXAGGERATED ABOUT ${Math.round(sy / sx)}×`));
-    const on3 = heightOnPath(dist, 3);
+    const ref = lens ? gs : 3;
+    const onPath = heightOnPath(dist, ref);
     out.replaceChildren(...para([
-      `You are ${angle.toFixed(2)}° above the PAPI: ${p.white} white and ${4 - p.white} red, "${p.label.toLowerCase()}".`,
-      `On a 3° path at ${(dist / NM).toFixed(1)} NM you would be about ${r10(on3)} ft above the touchdown point (${height > on3 ? `${r10(height - on3)} ft high` : height < on3 ? `${r10(on3 - height)} ft low` : 'on it'}).`,
+      lens
+        ? `You are ${angle.toFixed(2)}° above the lens, ${Math.abs(b.error).toFixed(2)}° ${b.error >= 0 ? 'above' : 'below'} the ${gs.toFixed(1)}° glide slope: ${b.label.toLowerCase()}.`
+        : `You are ${angle.toFixed(2)}° above the PAPI: ${p.white} white and ${4 - p.white} red, "${p.label.toLowerCase()}".`,
+      `On a ${ref.toFixed(1)}° path at ${(dist / NM).toFixed(1)} NM you would be about ${r10(onPath)} ft above the touchdown point (${height > onPath ? `${r10(height - onPath)} ft high` : height < onPath ? `${r10(onPath - height)} ft low` : 'on it'}).`,
     ]));
   }
   root.addEventListener('input', draw);
+  root.addEventListener('change', draw);
   draw();
 }
 
@@ -645,6 +684,8 @@ function setupOverhead(root) {
     mark(start, 0, 'INITIAL', 18, 'start');
     mark(breakAt, 0, 'BREAK', 18);
     mark(-extend, 0, 'ROLL-OUT', 18, 'end');
+    mark(-extend, -2 * r, 'THE 180', 16, 'middle');
+    mark(-extend - r, -r, 'THE 90', 4, 'end');
     svg.append(el('text', { x: Math.min(440, Math.max(200, X((breakAt - extend) / 2))), y: Math.max(40, Y(-2 * r) - 8), 'text-anchor': 'middle', class: 'lbl small' }, `DOWNWIND ${r10(o.spacing)} FT (2 × TURN RADIUS) FROM THE RUNWAY`));
     svg.append(el('text', { x: 14, y: 24, class: 'lbl small' }, `PLAN VIEW · LEFT BREAK OVER RUNWAY 9 · ${r0(L)} FT RUNWAY · NO WIND`));
     // Side view (bottom): height along the flown path, break to roll-out descending linearly.
@@ -664,8 +705,8 @@ function setupOverhead(root) {
     const ok = (b) => (b ? '✓' : '✗');
     out.replaceChildren(...para([
       `Break turn: ${bank}° of bank at ${speed} kt is ${o.load.toFixed(1)} G, a ${r10(o.radius)} ft radius at ${o.rate.toFixed(1)}° per second; each 180° takes ${(180 / o.rate).toFixed(0)} s. Break to roll-out: ${(o.seconds).toFixed(0)} s.`,
-      `${ok(o.initialOk)} Initial approach ${(initial / NM).toFixed(1)} NM to the break (the glossary: 3 to 5 miles).`,
-      `Overhead flown at ${r0(o.breakAlt)} ft AGL, the glossary's minimum of 500 ft above the 1,000 ft conventional pattern.`,
+      `${ok(o.initialOk)} Initial approach ${(initial / NM).toFixed(1)} NM to the break (NAVEDTRA 14342A and the glossary: 3 to 5 miles).`,
+      `Initial flown at ${r0(o.breakAlt)} ft AGL, 500 ft above the 1,000 ft standard pattern used here.${where === 'approach' ? ' Break over the landing threshold, the normal Navy break point.' : ''}`,
       `${ok(o.rolloutOk)} Roll-out ${r0(o.rollout)} ft before the threshold (not less than 1/4 mile, ${r0(SM / 4)} ft).`,
       `Roll-out drawn at ${o.rollHeight} ft above the ground, the glossary's minimum.`,
     ]));
@@ -681,13 +722,13 @@ function setupLightGun(root) {
   const what = root.querySelector('[data-gun-label]');
   const choices = root.querySelector('[data-choices]');
   const out = root.querySelector('[data-result]');
-  let timer = 0, current = null, score = 0, asked = 0;
+  let timer = 0;
   const who = () => checked(root, 'who');
   const pattern = {
     'steady-green': ['green'], 'flashing-green': ['green', 'off'], 'steady-red': ['red'], 'flashing-red': ['red', 'off'],
     'flashing-white': ['white', 'off'], alternating: ['red', 'green'],
   };
-  function show(signal) {
+  function show(signal, label) {
     clearInterval(timer);
     const seq = pattern[signal.id];
     let i = 0;
@@ -695,35 +736,20 @@ function setupLightGun(root) {
     step();
     if (seq.length > 1 && !reduceMotion()) timer = setInterval(step, 500);
     // The lamp is decorative; the signal's name is the accessible prompt.
-    what.textContent = signal.colour;
+    label.textContent = signal.colour;
   }
-  function ask() {
-    const role = who();
-    const pool = LIGHT_SIGNALS.filter((s) => s[role] !== 'Not applicable');
-    current = pool[Math.floor(Math.random() * pool.length)];
-    show(current);
-    out.textContent = '';
-    const meanings = [...new Set(pool.map((s) => s[role]))];
-    choices.replaceChildren(...meanings.map((m) => {
-      const b = Object.assign(document.createElement('button'), { type: 'button', textContent: m });
-      b.addEventListener('click', () => {
-        asked++;
-        const right = m === current[role];
-        if (right) score++;
-        out.textContent = `${right ? 'Correct' : 'Not quite'}: ${current.colour.toLowerCase()} means "${current[role]}" ${{ ground: 'to an aircraft on the ground', air: 'to an aircraft in flight', vehicle: 'to vehicles, equipment and personnel' }[role]}. ${score} of ${asked}.`;
-        what.textContent = current.colour;
-        for (const c of choices.children) c.disabled = true;
-      });
-      return b;
-    }));
-  }
-  root.querySelector('[data-new]').addEventListener('click', ask);
-  root.addEventListener('change', ask);
-  ask();
+  const quiz = quickQuiz({ prompt: what, choices, result: out, next: root.querySelector('[data-new]') }, {
+    items: () => LIGHT_SIGNALS.filter((s) => s[who()] !== 'Not applicable'),
+    show,
+    options: () => [...new Set(LIGHT_SIGNALS.map((s) => s[who()]).filter((m) => m !== 'Not applicable'))],
+    isRight: (signal, m) => m === signal[who()],
+    feedback: (signal, m, right) => `${right ? 'Correct' : 'Not quite'}: ${signal.colour.toLowerCase()} means "${signal[who()]}" ${{ ground: 'to an aircraft on the ground', air: 'to an aircraft in flight', vehicle: 'to vehicles, equipment and personnel' }[who()]}.`,
+  });
+  root.addEventListener('change', quiz.restart);
 }
 
 /* ---------- Figure 11: radio calls in and out ---------- */
-const SOURCE_NO = { aim4: [2, 'source-aim4'], ac: [5, 'source-ac'] };
+const SOURCE_NO = { nav: [1, 'source-navedtra'], hw: [2, 'source-hollywood'], aim4: [8, 'source-aim4'], ac: [11, 'source-ac'] };
 function setupRadio(root) {
   const svg = root.querySelector('svg');
   const list = root.querySelector('[data-steps]');
@@ -736,13 +762,15 @@ function setupRadio(root) {
   const spots = {
     ramp: [455, 50, 90], hold: [600, 92, 180], entry: [452, 199, 45], downwind: [505, 180, 90],
     base: [610, 152, 0], final: [597, 120, 270], exit: [440, 120, 270], clear: [430, 88, 0],
+    break: [588, 120, 270], abeam: [600, 164, 90],
   };
-  const PLACES = { ramp: 'On the ramp', hold: 'Holding short', entry: 'Entering the pattern', downwind: 'Downwind', base: 'Base', final: 'Final', exit: 'Rolling out', clear: 'Clear of the runway' };
+  const PLACES = { ramp: 'On the ramp', hold: 'Holding short', entry: 'Entering the pattern', downwind: 'Downwind', base: 'Base', final: 'Final', exit: 'Rolling out', clear: 'Clear of the runway', break: 'The break', abeam: 'The 180' };
   const place = (c) => c.label ?? (c.at.nm !== undefined ? `${c.at.nm} NM` : PLACES[c.at.spot]);
-  const calls = () => radioCalls(checked(root, 'field') === 'towered', checked(root, 'dir'));
+  const calls = () => radioCalls(checked(root, 'field'), checked(root, 'dir'));
   function draw() {
     const cs = calls(), c = cs[step];
-    const towered = checked(root, 'field') === 'towered', outbound = checked(root, 'dir') === 'outbound';
+    const field = checked(root, 'field'), navy = field === 'navy';
+    const towered = field !== 'nontowered', outbound = checked(root, 'dir') === 'outbound';
     svg.replaceChildren(el('rect', { x: 1, y: 1, width: 638, height: 223, class: 'frame' }));
     // Strip.
     svg.append(el('text', { x: 20, y: 40, class: 'lbl small' }, outbound ? 'DISTANCE OUT (NM)' : 'DISTANCE TO GO (NM)'));
@@ -751,13 +779,13 @@ function setupRadio(root) {
       svg.append(el('path', { d: `M${sx(nm)} ${SY - 5} V${SY + 5}`, class: 'ln' }));
       svg.append(el('text', { x: sx(nm), y: SY + 20, 'text-anchor': 'middle', class: 'lbl small' }, nm));
     }
-    const mark = towered ? [15, 'TOWER: INITIAL CALL ~15 NM'] : [10, 'CTAF: SELF-ANNOUNCE ~10 NM'];
+    const mark = navy ? [5, 'INITIAL: 3 TO 5 NM, TO THE BREAK'] : towered ? [15, 'TOWER: INITIAL CALL ~15 NM'] : [10, 'CTAF: SELF-ANNOUNCE ~10 NM'];
     svg.append(el('path', { d: `M${sx(mark[0])} ${SY - 24} V${SY + 5}`, class: 'ln dashed' }));
     svg.append(el('text', { x: 20, y: SY - 28, class: 'lbl small' }, mark[1]));
     // Airfield close-up.
     svg.append(el('rect', { x: 320, y: 12, width: 310, height: 202, class: 'grass' }));
     svg.append(el('rect', { x: 320, y: 12, width: 310, height: 202, class: 'thin' }));
-    svg.append(el('text', { x: 326, y: 27, class: 'lbl small' }, towered ? 'TOWERED AIRFIELD (ENLARGED)' : 'NON-TOWERED AIRFIELD (ENLARGED)'));
+    svg.append(el('text', { x: 326, y: 27, class: 'lbl small' }, navy ? 'NAVY FIELD (ENLARGED)' : towered ? 'TOWERED AIRFIELD (ENLARGED)' : 'NON-TOWERED AIRFIELD (ENLARGED)'));
     svg.append(el('path', { d: 'M430 62 V110 M510 50 H600 V120 H582', class: 'twy' }));
     svg.append(el('rect', { x: 400, y: 36, width: 110, height: 26, class: 'apron' }));
     svg.append(el('rect', { x: 360, y: 110, width: 222, height: 20, class: 'rwy' }));
@@ -766,8 +794,14 @@ function setupRadio(root) {
       svg.append(el('rect', { x: 343, y: 44, width: 14, height: 26, class: 'bldg' }), el('rect', { x: 338, y: 36, width: 24, height: 9, class: 'bldg' }));
       svg.append(el('text', { x: 350, y: 84, 'text-anchor': 'middle', class: 'lbl small' }, 'TWR'));
     }
-    svg.append(el('path', { d: 'M345 180 H610 V120 H584', class: 'rb-datum' }));
-    svg.append(el('text', { x: 326, y: 207, class: 'lbl small' }, 'LEFT TRAFFIC, RUNWAY 27'));
+    if (navy) {
+      // Overhead: initial down the centerline, left break over the numbers, downwind, the 180 onto final.
+      svg.append(el('path', { d: 'M628 120 H582 A22 22 0 0 0 582 164 H602 A22 22 0 0 0 602 120', class: 'rb-datum' }));
+      svg.append(el('text', { x: 326, y: 207, class: 'lbl small' }, 'OVERHEAD, LEFT BREAK, RUNWAY 27'));
+    } else {
+      svg.append(el('path', { d: 'M345 180 H610 V120 H584', class: 'rb-datum' }));
+      svg.append(el('text', { x: 326, y: 207, class: 'lbl small' }, 'LEFT TRAFFIC, RUNWAY 27'));
+    }
     // Aircraft.
     let x, y, h;
     if (c.at.nm !== undefined) [x, y, h] = [sx(c.at.nm), SY, outbound ? 270 : 90];
@@ -814,31 +848,7 @@ function setupRadio(root) {
 }
 
 /* ---------- Term quiz ---------- */
-function setupTerms(root) {
-  const terms = [...document.querySelectorAll('dl.jargon > div')].map((d) => ({
-    term: d.querySelector('dt').textContent.trim(), meaning: d.querySelector('dd').textContent.trim(),
-  }));
-  const prompt = root.querySelector('[data-prompt]'), choices = root.querySelector('[data-choices]');
-  const out = root.querySelector('[data-result]');
-  let score = 0, asked = 0;
-  function ask() {
-    const pool = [...terms].sort(() => Math.random() - 0.5).slice(0, 4);
-    const answer = pool[Math.floor(Math.random() * pool.length)];
-    prompt.textContent = answer.meaning;
-    choices.replaceChildren(...pool.map((t) => {
-      const b = Object.assign(document.createElement('button'), { type: 'button', textContent: t.term });
-      b.addEventListener('click', () => {
-        asked++;
-        if (t === answer) score++;
-        out.textContent = `${t === answer ? 'Correct' : `Not quite: that was ${answer.term}`}. ${score} of ${asked}.`;
-        for (const c of choices.children) c.disabled = true;
-      });
-      return b;
-    }));
-  }
-  root.querySelector('[data-new]').addEventListener('click', () => { out.textContent = ''; ask(); });
-  ask();
-}
+const setupTerms = (root) => termQuiz(root);
 
 const blocks = {
   aerodrome: setupCallouts, numbers: setupNumbers, markings: setupMarkings, hold: setupHold, signs: setupSigns,
