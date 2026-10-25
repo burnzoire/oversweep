@@ -18,6 +18,22 @@ armament:
   - "Four wing hardpoints for R-3S and R-60 air-to-air missiles, rockets and bombs [1]"
 sensors:
   - "Sapfir-family nose radar (RP-21 Sapfir on earlier models) [1]"
+photos:
+  - src: "encyclopedia/aircraft/mig-21.jpg"
+    alt: "A grey MiG-21 with a checkerboard tail in flight"
+    caption: "A Croatian Air Force MiG-21, January 2020."
+    author: "Gojanovic123456789"
+    licence: "CC BY-SA 4.0"
+    licenceUrl: "https://creativecommons.org/licenses/by-sa/4.0"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Croatian_MiG-21_(cropped).jpg"
+    accessed: "2026-10-25"
+  - src: "encyclopedia/aircraft/mig-21-2.jpg"
+    alt: "A black-and-white photograph of a MiG-21 landing with its braking parachute streaming"
+    caption: "A North Vietnamese MiG-21PF, armed with Atoll missiles, deploys its braking parachute after a mission."
+    author: "US Air Force"
+    licence: "Public domain"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:VPAF_MiG-21_landing_with_chute.jpg"
+    accessed: "2026-10-25"
 quick: { firstFlight: 1955, maxSpeedKt: 1174, ceilingFt: 57400 }
 sources:
   - n: 1

@@ -12,6 +12,19 @@ notes are review evidence, not instructions to the reviewer.
 | Wikipedia article for each aircraft (source 1; the J-11A also cites the Su-27 article) | Secondary, read 25 October 2026 | Infobox and specifications, design, variants, service history |
 | FAS pages: [MiG-15](https://nuke.fas.org/guide/russia/airdef/mig-15.htm), [MiG-19](https://nuke.fas.org/guide/russia/airdef/mig-19.htm), [MiG-21/J-7](https://man.fas.org/dod-101/sys/ac/row/mig-21.htm), [MiG-29](https://nuke.fas.org/guide/russia/airdef/mig-29.htm), [Su-25](https://man.fas.org/dod-101/sys/ac/row/su-25.htm), [Su-27](https://nuke.fas.org/guide/russia/airdef/su-27.htm), [J-11](https://nuke.fas.org/guide/china/aircraft/j-11.htm) | Analyst summaries drawing on US government and press sources, about 1997–2000 | Design intent, armament, combat comparison (MiG-29), Chinese acquisition history |
 
+## Narrative text and photographs
+
+- Record bodies are written as narrative history, following the US jets
+  records. Every paragraph ends with its citation, and anecdotes come from the
+  cited articles' development and operational-history sections. Where the two
+  sources differ (the first jet-against-jet combat over Korea: 1 November 1950
+  in Soviet records, 8 November in the FAS page), both are given.
+- Each record leads with a photograph from Wikimedia Commons and most add a
+  second. Public-domain US government photographs are used where Commons has
+  one; otherwise the photo is CC BY or CC BY-SA, credited with a licence link.
+  Captions are written from the Commons file description.
+- The MiG-19P radar is given as the RP-1 Izumrud, as the cited article names it.
+
 ## Modelling choices
 
 - **MiG-19P**: the Wikipedia specification block is for the MiG-19S day

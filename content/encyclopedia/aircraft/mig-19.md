@@ -18,6 +18,22 @@ armament:
   - "Unguided rockets, bombs and drop tanks on underwing pylons [1] [2]"
 sensors:
   - "RP-1 Izumrud radar, with antennas in the intake centre body and upper lip (MiG-19P) [1]"
+photos:
+  - src: "encyclopedia/aircraft/mig-19.jpg"
+    alt: "A MiG-19S in brown and green camouflage parked on tarmac"
+    caption: "A MiG-19S at the National Museum of the United States Air Force, Dayton, Ohio."
+    author: "US Air Force"
+    licence: "Public domain"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Mikoyan-Gurevich_MiG-19S_Farmer_USAF.jpg"
+    accessed: "2026-10-25"
+  - src: "encyclopedia/aircraft/mig-19-2.jpg"
+    alt: "A grey camouflaged Shenyang J-6A parked on sand among other museum aircraft"
+    caption: "A Shenyang J-6A, the Chinese-built version of the radar-equipped MiG-19PF, on display in a US museum."
+    author: "Mike LaChance from Crowley, Tx, USA"
+    licence: "CC BY 2.0"
+    licenceUrl: "https://creativecommons.org/licenses/by/2.0"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Shenyang_J-6A_Farmer_(33524210828).jpg"
+    accessed: "2026-10-25"
 quick: { firstFlight: 1952, maxSpeedKt: 784, ceilingFt: 57400 }
 sources:
   - n: 1

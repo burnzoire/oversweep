@@ -16,6 +16,28 @@ range: "Ferry range 2,520 km (1,361 NM) at 12,000 m with two 600 L drop tanks [1
 armament:
   - "One 37 mm N-37 cannon and two 23 mm NR-23 cannon [1] [2]"
   - "Rockets or up to 2,000 lb of bombs [2]"
+photos:
+  - src: "encyclopedia/aircraft/mig-15.jpg"
+    alt: "A black-and-white photograph of a MiG-15 parked on a runway, marked U.S. Air Force with the number 616"
+    caption: "The MiG-15bis that No Kum-sok flew to South Korea in September 1953, in US Air Force markings for flight testing."
+    author: "US Air Force"
+    licence: "Public domain"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:USAF_MiG-15.jpg"
+    accessed: "2026-10-25"
+  - src: "encyclopedia/aircraft/mig-15-2.jpg"
+    alt: "A MiG-15 parked on an airfield, seen through a window as soldiers walk towards it"
+    caption: "No Kum-sok's MiG-15bis at Kimpo, South Korea, about five minutes after it landed on 21 September 1953."
+    author: "US Air Force"
+    licence: "Public domain"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:MiG-15_at_Kimpo_AB_Sept_1953.jpg"
+    accessed: "2026-10-25"
+  - src: "encyclopedia/aircraft/mig-15-3.jpg"
+    alt: "A grainy gun-camera frame of a MiG-15 from behind, over hills"
+    caption: "Gun-camera film from Captain Manuel \"Pete\" Fernandez's F-86 Sabre shows a MiG-15 under attack over Korea, 1952–53."
+    author: "US Air Force"
+    licence: "Public domain"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:MiG-15_being_hit_over_Korea_c1953.jpg"
+    accessed: "2026-10-25"
 quick: { firstFlight: 1947, maxSpeedKt: 581, ceilingFt: 50900 }
 sources:
   - n: 1

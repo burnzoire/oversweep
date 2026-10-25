@@ -20,6 +20,21 @@ sensors:
   - "N019 Sapfir-29 look-down/shoot-down pulse-Doppler radar (9.12) [1]"
   - "Infrared search and track (IRST) and laser rangefinder in front of the canopy [1]"
   - "Shchel helmet-mounted sight for off-boresight R-73 shots [1] [2]"
+photos:
+  - src: "encyclopedia/aircraft/mig-29.jpg"
+    alt: "A grey German MiG-29 flying in formation between two US Air Force F-16s over mountains"
+    caption: "Two US Air Force F-16Cs from Aviano fly with a German Luftwaffe MiG-29A of Jagdgeschwader 73, May 1995."
+    author: "SrA Tana R. Hamilton, US Air Force"
+    licence: "Public domain"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:USAF_F-16s_Luftwaffe_MiG-29_1995.jpeg"
+    accessed: "2026-10-25"
+  - src: "encyclopedia/aircraft/mig-29-2.jpg"
+    alt: "The nose and wing of a parked Romanian MiG-29 with a cover over its canopy"
+    caption: "A Romanian MiG-29 under guard at Mihail Kogălniceanu Air Base, April 2003."
+    author: "SrA LaKisha Croley, US Air Force"
+    licence: "Public domain"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:MiG-29_Fulcrum_at_Mihail_Kogalniceanu_airbase.JPEG"
+    accessed: "2026-10-25"
 quick: { firstFlight: 1977, maxSpeedKt: 1323, ceilingFt: 59100 }
 sources:
   - n: 1
