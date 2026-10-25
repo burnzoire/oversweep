@@ -1,12 +1,14 @@
 ---
-import { recordRoute, type EncyclopediaRecord } from '../../data/encyclopedia';
-import { sitePath } from '../../lib/paths';
-interface Props { record: EncyclopediaRecord; headingLevel?: 2 | 3 }
-const { record, headingLevel = 3 } = Astro.props;
+import { recordRoute, type EncyclopediaRecord, type Photo } from '../../data/encyclopedia';
+import { assetPath, sitePath } from '../../lib/paths';
+// `photo` adds a thumbnail; it is decorative because the title follows it.
+interface Props { record: EncyclopediaRecord; headingLevel?: 2 | 3; photo?: Photo }
+const { record, headingLevel = 3, photo } = Astro.props;
 const Heading = (headingLevel === 2 ? 'h2' : 'h3') as 'h2' | 'h3';
 const local = record.publication !== 'published';
 ---
 <section class="entry-card" data-record-id={record.id} data-record-revision={record.revision}>
+  {photo && <img class="entry-thumb" src={assetPath(photo.src)} alt="" loading="lazy" decoding="async" />}
   <p class="entry-kicker">{record.designation}</p>
   <Heading class="entry-title"><a href={sitePath(recordRoute(record))}>{record.title}</a></Heading>
   <p class="entry-objective">{record.summary}</p>

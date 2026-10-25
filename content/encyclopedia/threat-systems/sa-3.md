@@ -29,6 +29,17 @@ battery:
 rwr:
   - { symbol: "3", emitter: "SA-3 Goa Low Blow track radar (S-125)" }
   - { symbol: "FF", emitter: "SA-2, SA-3 and SA-5 Flat Face search radar (S-125 P-19)" }
+photo:
+  src: "encyclopedia/threat-systems/sa-3.jpg"
+  width: 1280
+  height: 844
+  alt: "A soldier stands beside an SA-3 launcher holding a missile, dug into a sandbagged revetment in the desert."
+  caption: "An Egyptian missile site captured by Israeli forces during the October 1973 war, with an SA-3 launcher in its revetment. From the CIA booklet on intelligence in the 1973 war."
+  author: "Central Intelligence Agency"
+  date: "October 1973"
+  licence: "Public domain, work of the US federal government"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Egyptian_Missile_Site_-_Flickr_-_The_Central_Intelligence_Agency.jpg"
+  accessed: "2026-10-25"
 sources:
   - n: 1
     title: "S-125 Neva/Pechora"

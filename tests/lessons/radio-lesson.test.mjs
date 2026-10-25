@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
-  PHONETIC, altitude, callSign, checkCall, checkReadback, codePath, direction, frequency, lostCommsAltitudes,
-  lostCommsRoute, mach, safeOrder, speed, spell, squawk, time, transmit,
+  BREVITY, PHONETIC, altitude, callSign, checkCall, checkReadback, codePath, direction, frequency, lostCommsAltitudes,
+  lostCommsRoute, mach, safeOrder, speed, spell, squawk, time, shareFrequency, BUSY_FREQUENCY, YOUR_CALL,
 } from '../../src/lessons/radio/lesson-model.mjs';
 
 // Expected strings are the AIM 4-2 examples, written out by hand.
@@ -101,10 +101,42 @@ test('lost comms route priority and highest altitude per segment (6-4-1c)', () =
   assert.deepEqual(segs.map((s) => [s.altitude, s.source]), [[5000, 'assigned'], [6000, 'minimum'], [8000, 'expected']]);
 });
 
-test('transmission collides with a busy interval', () => {
-  const busy = [[2, 5], [9, 12]];
-  assert.equal(transmit(busy, 5.5, 3).blocked, false);
-  assert.equal(transmit(busy, 7, 3).blocked, true);
+// Figure 1's traffic, untouched: Approach 0.4–3.8, Navy 405 4.4–6.8, Army
+// 26019 10.0–13.8, ... REACH 451 owes a reply from 28.7 and answers at 35.7.
+const run = (...keys) => shareFrequency(BUSY_FREQUENCY, keys, YOUR_CALL);
+const kinds = (...keys) => run(...keys).results.map((r) => r.kind);
+
+test('a call into a quiet frequency with no reply owed is clear, and later stations wait for it', () => {
+  assert.deepEqual(kinds(7), ['clear']);
+  const { log } = run(7);
+  const army = log.find((x) => x.who === '26019');
+  const answer = log.find((x) => x.words === YOUR_CALL.answer.words);
+  // Army 26019 would have keyed at 10.0, inside your call; it heard you and went after the answer.
+  assert.ok(answer.start >= 10 && army.start > answer.end);
+  assert.ok(log.every((x) => !x.garbled));
+});
+
+test('keying over a transmission in progress loses both, and the other call is repeated', () => {
+  assert.deepEqual(kinds(10.3), ['busy']);
+  const { log } = run(10.3);
+  assert.equal(log.filter((x) => x.who === '26019' && x.words.includes('request')).length, 2);
+  assert.ok(log.find((x) => x.who === '26019').garbled);
+});
+
+test('a reply owed makes silence not clear', () => {
+  assert.deepEqual(kinds(4), ['stepped']); // readback due at 4.4
+  assert.deepEqual(kinds(30), ['cut-in']); // REACH 451 owes a reply
+  assert.equal(run(30).log.find((x) => x.start > 30 && x.who === 'APP').words, YOUR_CALL.standBy.words);
+});
+
+test('only a station keying within the reaction time can double with you', () => {
+  assert.deepEqual(kinds(9.8), ['doubled']); // Army keys 0.2 s later
+  assert.deepEqual(kinds(9.4), ['clear']); // 0.6 s: it hears you and waits
+});
+
+test('calling again before your answer comes is too soon', () => {
+  assert.deepEqual(kinds(7, 10.5), ['clear', 'too-soon']);
+  assert.deepEqual(kinds(7, 13), ['clear', 'clear']);
 });
 
 // Navy sortie: expectations written by hand from the VT-10 script, pp. 19–35.
@@ -155,4 +187,14 @@ test('a Navy takeoff readback needs only the call sign and runway', () => {
   assert.equal(checkReadback(clearance, ['id', 'rwy']).ok, true);
   assert.deepEqual(checkReadback(clearance, ['id', 'rwy', 'freq']).extra, ['freq']);
   assert.deepEqual(checkReadback(clearance, ['rwy']).missing, ['id']);
+});
+
+test('brevity words are unique, defined and page-cited', () => {
+  const words = BREVITY.map((b) => b.word);
+  assert.equal(new Set(words).size, words.length);
+  for (const b of BREVITY) {
+    assert(b.meaning.length > 10, b.word);
+    assert.match(b.page, /^\d+$/, b.word);
+  }
+  for (const w of ['Knock-it-off', 'Bingo', 'Joker', 'No joy', 'Popeye']) assert(words.includes(w), w);
 });

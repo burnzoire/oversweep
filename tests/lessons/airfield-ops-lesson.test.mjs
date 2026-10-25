@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
-  AIRFIELD, NM, RADIO_CALLS, SM, baseBearing, designator, ends, heightOnPath, lightSignal, markingsFor, overhead, papi,
+  AIRFIELD, NAVY_CALLSIGN, NM, RADIO_CALLS, SM, baseBearing, designator, ends, gearDisks, heightOnPath, lightSignal, markingsFor,
+  meatball, overhead, papi,
   parallelNames, pathAngle, pattern, radioCalls, runwayForWind, runwayLights, thresholdStripes, turn, windComponents,
 } from '../../src/lessons/airfield-ops/lesson-model.mjs';
 
@@ -200,4 +201,45 @@ test('CTAF self-announcements follow AC 90-66C', () => {
     // ¶10.3: avoid "to" and "for".
     assert(!/\b(to|for)\b/i.test(said), said);
   }
+});
+
+test('IFLOLS meatball follows NAVEDTRA 14342A', () => {
+  // p. 5-52: the ball rises above the datum as the pilot rises above the glide slope,
+  // and slides off the top more than 3/4 degree above it.
+  assert.equal(meatball(3.5, 3.5).position, 0);
+  assert.match(meatball(3.5, 3.5).label, /on glide slope/);
+  assert(meatball(3.8, 3.5).position > 0);
+  near(meatball(3.875, 3.5).position, 0.5, 1e-9, 'half way up');
+  assert.equal(meatball(4.25, 3.5).visible, true);
+  assert.equal(meatball(4.26, 3.5).visible, false);
+  assert.match(meatball(4.4, 3.5).label, /off the top/);
+  // Low: below the datum, then red in the bottom cell (lowest fifth: below −0.45°).
+  assert.equal(meatball(3.2, 3.5).red, false);
+  assert.equal(meatball(3.0, 3.5).red, true);
+  assert.equal(meatball(Number.NaN, 3.5), null);
+});
+
+test('arresting gear disks: 10 ft circles 30 ft on center across the runway', () => {
+  // AIM 2-3-14.2 and NAVEDTRA p. 4-9. 150 ft: floor((150 − 10) / 30) + 1 = 5 disks, at 0 and ±30, ±60 ft.
+  assert.deepEqual(gearDisks(150), [-60, -30, 0, 30, 60]);
+  assert.equal(gearDisks(200).length, 7);
+  assert.equal(gearDisks(0), null);
+});
+
+test('Navy field calls follow the overhead and the Hollywood Script order', () => {
+  const inbound = radioCalls('navy', 'inbound');
+  const ids = inbound.map((c) => c.id);
+  // Course rules before tower; the initial, the numbers and the 180 in that order.
+  assert(ids.indexOf('course-rules') < ids.indexOf('initial'));
+  assert(ids.indexOf('initial') < ids.indexOf('numbers') && ids.indexOf('numbers') < ids.indexOf('one-eighty'));
+  const initial = inbound.find((c) => c.id === 'initial');
+  assert(initial.at.nm >= 3 && initial.at.nm <= 5, 'initial is 3 to 5 miles');
+  assert.match(inbound.find((c) => c.id === 'one-eighty').you, /gear/);
+  assert.match(inbound.find((c) => c.id === 'one-eighty').them, /cleared to land/);
+  // Tower hands off to ground only after landing.
+  const toGround = inbound.findIndex((c) => c.station === 'Cedar Ground');
+  assert.match(inbound[toGround - 1].them, /contact ground/);
+  for (const c of [...inbound, ...radioCalls('navy', 'outbound')]) if (c.you) assert(c.you.includes(NAVY_CALLSIGN), c.you);
+  assert.deepEqual(radioCalls('navy', 'outbound').filter((c) => c.you).map((c) => c.station),
+    ['KATT Base', 'Cedar Ground', 'Cedar Tower', 'Departure']);
 });

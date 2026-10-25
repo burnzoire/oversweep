@@ -23,6 +23,17 @@ battery:
   pattern: group
   items:
     - { kind: launcher, label: "BRDM-2-based launcher", count: 1, missiles: 4 }
+photo:
+  src: "encyclopedia/threat-systems/sa-9.jpg"
+  width: 1280
+  height: 964
+  alt: "A column of SA-9 vehicles on a dirt track, each a four-wheeled BRDM-2 with four missile boxes on a turret."
+  caption: "SA-9 Gaskin launchers on BRDM-2 vehicles in Polish service, in a US Department of Defense photo (still DF-ST-83-04921)."
+  author: "US Department of Defense"
+  date: "about 1982"
+  licence: "Public domain, work of the US federal government"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Soviet_SA-9_Gaskin.jpg"
+  accessed: "2026-10-25"
 sources:
   - n: 1
     title: "9K31 Strela-1"

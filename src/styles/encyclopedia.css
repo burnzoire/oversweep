@@ -7,6 +7,11 @@
 .ency .record-nav a:hover { background: var(--color-surface); }
 .ency .record-nav [aria-current="page"] { color: var(--color-ink-text); background: var(--color-ink); border-color: var(--color-ink); box-shadow: inset 0 -3px 0 var(--color-accent); }
 
+.ency .record-photo { margin: 1.25rem 0; border: 2px solid var(--color-text); background: #fff; }
+.ency .record-photo img { display: block; width: 100%; height: auto; max-height: 28rem; object-fit: contain; background: var(--color-ink); }
+.ency .record-photo figcaption { padding: 0.5rem 0.75rem; border-top: 3px solid var(--color-accent); font-size: 0.9rem; }
+.ency .record-photo .credit { display: block; margin-top: 0.2rem; color: var(--color-muted); }
+
 .ency .data-plate { margin: 1.25rem 0; border: 2px solid var(--color-text); background: #fff; }
 .ency .data-plate h2 { margin: 0; padding: 0.4rem 0.75rem; font-size: 0.95rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-ink-text); background: var(--color-ink); border-bottom: 3px solid var(--color-accent); }
 .ency .data-plate dl { display: grid; margin: 0; }
@@ -91,3 +96,10 @@
 @media (min-width: 48rem) {
   .ency .record-grid { grid-template-columns: repeat(3, 1fr); }
 }
+
+.ency .photo { margin: 0 0 1.25rem; border: 1px solid var(--color-border); background: #fff; }
+.ency .photo img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; background: var(--color-surface); }
+.ency .photo figcaption { padding: 0.55rem 0.75rem; font-size: 0.95rem; }
+.ency .photo .credit { display: block; margin-top: 0.25rem; color: var(--color-muted); font-size: 0.82rem; }
+.ency .photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 1rem; margin: 1.5rem 0; }
+.ency .photo-grid .photo { margin: 0; }

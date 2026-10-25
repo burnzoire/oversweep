@@ -73,6 +73,21 @@ test('a record page must render its text', async () => {
   assert(problems.some(p => p.includes('has no record text')));
 });
 
+test('a record photo must be a site file with alt text and a credit', async () => {
+  const page = 'encyclopedia/example/thing/index.html';
+  const photo = (img, credit = '<span class="credit">Credit: US Air Force. Public domain. <a href="https://commons.wikimedia.org/wiki/File:X.jpg">Source page</a></span>') =>
+    ({ ...complete, [page]: complete[page] + `<figure class="record-photo">${img}<figcaption>A site. ${credit}</figcaption></figure>` });
+  const good = photo('<img src="/encyclopedia/example/thing.jpg" alt="A missile site">');
+  assert.deepEqual(await check({ ...good, 'encyclopedia/example/thing.jpg': 'jpeg' }), []);
+  let problems = await check(good);
+  assert(problems.some(p => p.includes('is not a file in the site')));
+  problems = await check({ ...photo('<img src="https://upload.wikimedia.org/x.jpg" alt="A missile site">') });
+  assert(problems.some(p => p.includes('is not a file in the site')));
+  problems = await check({ ...photo('<img src="/encyclopedia/example/thing.jpg" alt="">', ''), 'encyclopedia/example/thing.jpg': 'jpeg' });
+  assert(problems.some(p => p.includes('no alt text')));
+  assert(problems.some(p => p.includes('not credited')));
+});
+
 test('an excluded record must not appear anywhere in normal output', async () => {
   const problems = await check({ 'index.html': `<a ${tag}></a>` }, { record: { publication: 'excluded' } });
   assert(problems.some(p => p.includes('referenced in index.html')));

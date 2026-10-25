@@ -2,7 +2,8 @@
 // and conversions come from lesson-model.mjs; this file reads inputs and draws.
 import {
   ELEMENT_LABEL, LIGHT_SIGNALS, ROUTE_RULES, SORTIE, SPECIAL_CODES, altitude, callSign, checkCall, checkReadback,
-  direction, frequency, lostCommsAltitudes, lostCommsRoute, mach, safeOrder, speed, spell, squawk, time, transmit,
+  direction, frequency, lostCommsAltitudes, lostCommsRoute, mach, safeOrder, speed, spell, squawk, time, shareFrequency,
+  BUSY_FREQUENCY, YOUR_CALL, YOU,
 } from './lesson-model.mjs';
 import { quickQuiz, shuffle, withDistractors } from '../shared/quick-quiz.mjs';
 
@@ -70,78 +71,85 @@ function setupSortie(root) {
   draw();
 }
 
-/* ---------- Figure 1: find a gap ---------- */
-// Invented traffic on one approach frequency: [start s, end s, station, words].
-const TRAFFIC = [
-  [0, 3.6, 'APP', 'Navy 405, turn left heading 270'], [4.1, 6.6, '405', 'Left 270, Navy 405'],
-  [10, 13.4, 'APP', 'KATT 23, descend and maintain 4,000'], [13.9, 16.6, 'K23', 'KATT 23, down to 4,000'],
-  [21, 25, '55G', 'Approach, Bonanza 55G, request ILS'], [25.6, 28.6, 'APP', 'Bonanza 55G, expect vectors ILS'],
-  [34, 37.4, 'APP', 'Navy 405, contact tower 120.1'], [37.9, 40, '405', 'Tower 120.1, Navy 405'],
-];
-const CALL = 3;
+/* ---------- Figure 1: share a busy frequency ---------- */
+// The traffic reacts to you (shareFrequency): you only ever see what has
+// already been said, as on a real radio.
+const SPAN = 70;
+const VERDICT = {
+  clear: 'Clear: the frequency was quiet and nobody owed a reply. Approach answers you, and the stations that had not keyed yet heard you and waited their turn.',
+  busy: 'Blocked: someone was already talking. Your call and theirs are both lost, and they have to say it again. Listen before you transmit.',
+  doubled: 'Blocked: another station keyed at the same instant, before either of you could hear the other. It happens; nobody is at fault. Both calls are lost, and each of you waits a few seconds and calls again.',
+  stepped: 'Blocked: a reply was owed and you keyed just as it started. You stepped on it, and both calls are lost. After a controller’s instruction or a request, wait for the answer before you call.',
+  'cut-in': 'Cut in: the frequency was quiet, but the exchange was not finished: a reply was still owed. The station that owed it heard you and held, so Approach tells you to stand by and finishes that exchange first.',
+  'too-soon': 'Too soon: you called again before Approach had answered you. After you release the button, wait a few seconds before calling again.',
+};
 function setupGap(root) {
   const svg = root.querySelector('svg'), out = root.querySelector('[data-result]');
   const slider = root.querySelector('[name="t"]'), shown = root.querySelector('output[for="t"]');
-  const play = root.querySelector('[data-play]');
-  const busy = TRAFFIC.map(([a, b]) => [a, b]);
-  const x = (t) => 40 + t * 14;
-  let mine = [], timer = null, last = 0;
+  const play = root.querySelector('[data-play]'), heard = root.querySelector('[data-heard]');
+  const x = (t) => 40 + t * (560 / SPAN);
+  let keys = [], timer = null, last = 0, run = shareFrequency(BUSY_FREQUENCY, [], YOUR_CALL);
+  const label = (tx) => (tx.who === YOU ? 'KATT 31 (you)' : tx.who === 'APP' ? 'Approach' : tx.words.match(/(Navy|Army|REACH) \d+/)[0]);
   function draw() {
     const t = +slider.value;
     shown.textContent = `${t.toFixed(1)} s`;
     svg.replaceChildren();
     svg.append(el('text', { x: 40, y: 24, class: 'lbl' }, 'FREQUENCY'), el('text', { x: 40, y: 154, class: 'lbl' }, 'YOU'));
     svg.append(el('line', { x1: 40, y1: 100, x2: 600, y2: 100, class: 'thin' }), el('line', { x1: 40, y1: 190, x2: 600, y2: 190, class: 'thin' }));
-    for (let s = 0; s <= 40; s += 5) {
+    for (let s = 0; s <= SPAN; s += 10) {
       svg.append(el('line', { x1: x(s), y1: 196, x2: x(s), y2: 202, class: 'thin' }), el('text', { x: x(s), y: 216, class: 'lbl small', 'text-anchor': 'middle' }, `${s}`));
     }
     svg.append(el('text', { x: 600, y: 236, class: 'lbl small', 'text-anchor': 'end' }, 'seconds'));
-    TRAFFIC.forEach(([a, b, who, words], i) => {
-      const y = i % 2 ? 62 : 36;
-      svg.append(el('rect', { x: x(a), y: 70, width: x(b) - x(a), height: 30, class: `busy${who === 'APP' ? ' atc' : ''}` }));
-      svg.append(el('text', { x: x(a) + 3, y: 90, class: 'lbl small' }, who));
-      if (t >= a && t <= b) svg.append(el('text', { x: Math.min(x(a), 360), y, class: 'lbl' }, `“${words}”`));
-    });
-    for (const m of mine) {
-      svg.append(el('rect', { x: x(m.t), y: 160, width: CALL * 14, height: 30, class: `mine${m.blocked ? ' bad' : ''}` }));
-      svg.append(el('text', { x: x(m.t) + 3, y: 180, class: 'lbl small inv' }, m.blocked ? 'BLOCKED' : 'CLEAR'));
+    if (t < SPAN) svg.append(el('rect', { x: x(t), y: 44, width: x(SPAN) - x(t), height: 150, class: 'unheard' }));
+    const past = run.log.filter((tx) => tx.start < t);
+    for (const tx of past) {
+      const w = x(Math.min(tx.end, t)) - x(tx.start), mine = tx.who === YOU;
+      const cls = mine ? `mine${tx.garbled ? ' bad' : ''}` : `busy${tx.who === 'APP' ? ' atc' : ''}${tx.garbled ? ' bad' : ''}`;
+      svg.append(el('rect', { x: x(tx.start), y: mine ? 160 : 70, width: w, height: 30, class: cls }));
+      if (w > 18) svg.append(el('text', { x: x(tx.start) + 3, y: mine ? 180 : 90, class: `lbl small${mine ? ' inv' : ''}` }, tx.garbled ? '✕' : mine ? 'K31' : tx.who));
+      if (t <= tx.end) svg.append(el('text', { x: Math.min(x(tx.start), 300), y: 62, class: 'lbl' }, `“${tx.garbled ? '(garbled)' : tx.words}”`));
     }
     svg.append(el('line', { x1: x(t), y1: 44, x2: x(t), y2: 196, class: 'cursor' }));
+    svg.append(el('text', { x: Math.min(x(t) + 4, 560), y: 40, class: 'lbl small' }, 'NOW'));
+    heard.replaceChildren(...past.map((tx) => {
+      const li = document.createElement('li');
+      li.textContent = `${tx.start.toFixed(1)} s, ${label(tx)}: ${tx.garbled ? '(garbled)' : `“${tx.words}”`}${tx.repeat ? ' (said again)' : ''}`;
+      return li;
+    }));
   }
   function stop() { clearInterval(timer); timer = null; play.textContent = 'Play'; }
   play.addEventListener('click', () => {
     if (timer) return stop();
-    if (+slider.value >= 40) slider.value = 0;
+    if (+slider.value >= SPAN) slider.value = 0;
     play.textContent = 'Pause';
     last = performance.now();
     timer = setInterval(() => {
       const now = performance.now();
-      const t = Math.min(40, +slider.value + (now - last) / 1000);
+      const t = Math.min(SPAN, +slider.value + (now - last) / 1000);
       last = now;
       slider.value = t;
       draw();
-      if (t >= 40) stop();
+      if (t >= SPAN) stop();
     }, 100);
   });
   slider.addEventListener('input', draw);
   root.querySelector('[data-key]').addEventListener('click', () => {
     const t = +slider.value;
-    if (t + CALL > 40) { out.replaceChildren(para('Too late in the window: rewind and try again.')); return; }
-    const r = transmit(busy, t, CALL);
-    mine.push({ t, blocked: r.blocked });
-    const lines = [];
-    if (r.blocked) lines.push(para(`Blocked: your call from ${t.toFixed(1)} s overlaps a transmission from ${r.with[0]} to ${r.with[1]} s. Both callers will have to repeat.`, 'bad'));
-    else {
-      lines.push(para(`Clear: your call from ${t.toFixed(1)} to ${(t + CALL).toFixed(1)} s fits a gap.`));
-      const prev = TRAFFIC.filter(([, b]) => b <= t).at(-1);
-      if (prev && prev[2] === 'APP' && t - prev[1] < 1.5)
-        lines.push(para('But the controller has just called an aircraft. Its reply is due: leave room for it.'));
-    }
-    lines.push(para(`${mine.filter((m) => !m.blocked).length} clear, ${mine.filter((m) => m.blocked).length} blocked.`));
+    if (t + 3 > SPAN) { out.replaceChildren(para('Too late in the window: rewind and try again.')); return; }
+    const mine = run.log.find((tx) => tx.who === YOU && tx.start <= t && t < tx.end);
+    if (mine) { out.replaceChildren(para('You are still transmitting.')); return; }
+    // Calls after the new one are undone: the frequency would have gone differently.
+    keys = [...keys.filter((k) => k < t), t];
+    run = shareFrequency(BUSY_FREQUENCY, keys, YOUR_CALL);
+    const r = run.results.at(-1);
+    const lines = [para(`You at ${t.toFixed(1)} s: “${YOUR_CALL.call}”`), para(VERDICT[r.kind], r.blocked || r.kind !== 'clear' ? 'bad' : undefined)];
+    lines.push(para(`${run.results.filter((x) => x.kind === 'clear').length} clear, ${run.results.filter((x) => x.kind !== 'clear').length} not.`));
     out.replaceChildren(...lines);
     draw();
   });
-  root.querySelector('[data-reset]').addEventListener('click', () => { mine = []; out.replaceChildren(); stop(); slider.value = 0; draw(); });
+  root.querySelector('[data-reset]').addEventListener('click', () => {
+    keys = []; run = shareFrequency(BUSY_FREQUENCY, [], YOUR_CALL); out.replaceChildren(); stop(); slider.value = 0; draw();
+  });
   draw();
 }
 

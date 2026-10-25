@@ -25,6 +25,17 @@ battery:
   pattern: group
   items:
     - { kind: launcher, label: "2P24 launcher on a tracked chassis", count: 1, missiles: 2 }
+photo:
+  src: "encyclopedia/threat-systems/sa-4.jpg"
+  width: 1114
+  height: 1000
+  alt: "Tracked SA-4 launch vehicles in the field, each carrying two large missiles raised at a steep angle."
+  caption: "SA-4 Ganef launch vehicles, each carrying two missiles, in a US Department of Defense photo (still DF-ST-83-04925)."
+  author: "US Department of Defense"
+  date: "1 August 1982"
+  licence: "Public domain, work of the US federal government"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:SA-4_Ganef_SAM.JPEG"
+  accessed: "2026-10-25"
 sources:
   - n: 1
     title: "2K11 Krug"

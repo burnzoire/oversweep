@@ -226,14 +226,78 @@ export const DISTRESS_ORDER = [
   'Fuel remaining in minutes', 'Number of people on board', 'Any other useful information',
 ];
 
-/* ---------- Transmission timing (AIM 4-2-2) ---------- */
-// A shared frequency as a list of [start, end] busy intervals, seconds. A key
-// press at `t` held for `length` collides if it overlaps any busy interval.
-export function transmit(busy, t, length) {
-  const end = t + length;
-  const hit = busy.find(([a, b]) => t < b && end > a);
-  return hit ? { blocked: true, with: hit } : { blocked: false };
+/* ---------- Sharing a frequency (AIM 4-2-1, 4-2-2) ---------- */
+// A frequency as a queue of transmissions, each { who, words, len, pause, due }:
+// len is how long it lasts and pause the silence before it, both in seconds;
+// due is true when a reply or readback is owed after it. The queue is not a
+// recording: a station that has not keyed yet hears you and waits its turn.
+// Only a station keying within REACTION of you cannot have heard you.
+export const REACTION = 0.5;
+export const YOU = 'YOU';
+// Lays the queue out around your key presses (seconds). Returns the log of
+// what went out, in order, and one result per key press:
+//   clear     frequency quiet and no reply owed: the call is heard and answered
+//   busy      someone was already talking: both calls are lost
+//   doubled   someone keyed at the same instant: both lost, nobody's fault
+//   stepped   you keyed as an owed reply started: both lost
+//   cut-in    you keyed into the pause before an owed reply: heard, but you
+//             interrupted an exchange and are told to stand by
+//   too-soon  you called again before your own answer came
+export function shareFrequency(script, keys, { call, answer, standBy }) {
+  const queue = script.map((s) => ({ ...s }));
+  const log = [], results = [];
+  let cursor = 0;
+  const place = (item) => {
+    const start = cursor + item.pause;
+    const tx = { ...item, start, end: start + item.len };
+    log.push(tx);
+    cursor = tx.end;
+  };
+  for (const t of [...keys].sort((a, b) => a - b)) {
+    const mine = log.findLast((x) => x.who === YOU);
+    if (mine && t < mine.end) continue;
+    while (queue.length && cursor + queue[0].pause < t + REACTION) place(queue.shift());
+    const hits = log.filter((x) => x.end > t);
+    const last = log.findLast((x) => x.end <= t);
+    let kind;
+    if (hits.some((x) => x.start <= t)) kind = 'busy';
+    else if (last?.who === YOU && !last.garbled) kind = 'too-soon';
+    else if (last?.due) kind = hits.length ? 'stepped' : 'cut-in';
+    else kind = hits.length ? 'doubled' : 'clear';
+    const blocked = hits.length > 0;
+    for (const x of hits) x.garbled = true;
+    log.push({ who: YOU, words: call, len: 3, pause: 0, start: t, end: t + 3, due: !blocked, garbled: blocked });
+    cursor = Math.max(t + 3, ...hits.map((x) => x.end));
+    if (blocked) queue.unshift(...hits.map(({ start, end, garbled, ...x }) => ({ ...x, pause: 1, repeat: true })));
+    else if (kind === 'clear') queue.unshift({ ...answer, pause: 0.8 });
+    else if (kind === 'cut-in') queue.unshift({ ...standBy, pause: 0.6 });
+    results.push({ t, kind, blocked, with: hits.map((x) => x.who) });
+  }
+  while (queue.length) place(queue.shift());
+  return { log, results };
 }
+
+// Figure 1's approach frequency, as it runs if you never key: constructed
+// traffic from three services. Approach owes nothing after a readback; after
+// an instruction or a request a reply is owed (AIM 4-2-1: acknowledge each
+// ATC communication). REACH 451 is slow to answer, so its silence is not clear.
+export const BUSY_FREQUENCY = [
+  { who: 'APP', words: 'Navy 405, turn left heading 270.', len: 3.4, pause: 0.4, due: true },
+  { who: '405', words: 'Left 270, Navy 405.', len: 2.4, pause: 0.6, due: false },
+  { who: '26019', words: 'Approach, Army 26019, request descent.', len: 3.8, pause: 3.2, due: true },
+  { who: 'APP', words: 'Army 26019, descend and maintain 3,000.', len: 3.6, pause: 0.6, due: true },
+  { who: '26019', words: 'Down to 3,000, Army 26019.', len: 2.6, pause: 0.7, due: false },
+  { who: 'APP', words: 'REACH 451, turn right heading 090.', len: 3.4, pause: 4, due: true },
+  { who: 'APP', words: 'REACH 451, Approach, how do you hear?', len: 3.2, pause: 3, due: true },
+  { who: '451', words: 'Loud and clear, right 090, REACH 451.', len: 3, pause: 0.8, due: false },
+  { who: 'APP', words: 'Navy 405, contact Tower, Button 4.', len: 3.6, pause: 4.5, due: true },
+  { who: '405', words: 'Button 4, Navy 405.', len: 2.2, pause: 0.6, due: false },
+];
+export const YOUR_CALL = {
+  call: 'Approach, KATT 31, level 6,000.',
+  answer: { who: 'APP', words: 'KATT 31, Approach, roger.', len: 2.2, due: false },
+  standBy: { who: 'APP', words: 'KATT 31, stand by.', len: 1.6, due: false },
+};
 
 /* ---------- A Navy training sortie (VT-10 "Hollywood Script", May 2022) ---------- */
 // One sortie's calls in order, as the script gives them. radio: the band and
@@ -288,3 +352,24 @@ export const TRAINING_CALLS = [
   { call: 'Blind', meaning: 'I cannot see my wingman anywhere. Said with your call sign, then turn away from the predicted collision bearing.', page: '3-3' },
   { call: 'No joy', meaning: 'I cannot see the threat aircraft my wingman described.', page: '3-3' },
 ];
+
+// Multi-service brevity codes (ATP 1-02.1 / MCRP 3-30B.1 / NTTP 6-02.1 /
+// AFTTP 3-2.5, 25 April 2025): one list shared by the Army, Marine Corps, Navy
+// and Air Force. `page` is the page of the 2025 edition.
+export const BREVITY = [
+  { word: 'Knock-it-off', meaning: 'Cease all air combat maneuvers, attacks, activities or exercises (training use only).', page: '26' },
+  { word: 'Abort', meaning: 'Cease action, or terminate the attack before weapons release, the event or the mission.', page: '2' },
+  { word: 'Blind', meaning: 'No visual contact with a friendly aircraft, ship or ground position. Opposite of visual.', page: '5' },
+  { word: 'No joy', meaning: 'Aircrew does not have visual contact with the target or bandit. Opposite of tally.', page: '31' },
+  { word: 'Padlocked', meaning: 'Aircrew cannot take their eyes off an aircraft, ground target or surface position without risk of losing tally or visual.', page: '32' },
+  { word: 'Joker', meaning: 'A fuel state above bingo at which separation, bugout or event termination should begin.', page: '25' },
+  { word: 'Bingo', meaning: 'The prebriefed fuel state needed for recovery.', page: '5' },
+  { word: 'Push', meaning: 'Switch to the designated frequency; no acknowledgment required.', page: '35' },
+  { word: 'Fence in / fence out', meaning: 'Set cockpit switches as appropriate before entering or exiting the combat area.', page: '18' },
+  { word: 'Buster', meaning: 'Fly at maximum continuous speed.', page: '7' },
+  { word: 'Popeye', meaning: 'Flying in clouds or an area of reduced visibility.', page: '34' },
+  { word: 'Pigeons', meaning: 'Bearing (magnetic) and range (nautical miles) to home plate.', page: '33' },
+  { word: 'Bogey', meaning: 'A contact whose identity is unknown.', page: '6' },
+  { word: 'Bandit', meaning: 'Positively identified as an enemy in accordance with theater ID criteria.', page: '4' },
+];
+
