@@ -1,0 +1,101 @@
+[
+  {
+    "id": "encyclopedia.threat-systems.sa-1",
+    "slug": "sa-1",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-1 Guild",
+    "designation": "S-25 Berkut",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The first Soviet SAM: 56 fixed sites in two rings around Moscow, command-guided."
+  },
+  {
+    "id": "encyclopedia.threat-systems.sa-2",
+    "slug": "sa-2",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-2 Guideline",
+    "designation": "S-75 Dvina",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The classic six-launcher site around a Fan Song radar: radio-command-guided, and the SAM US crews met over North Vietnam."
+  },
+  {
+    "id": "encyclopedia.threat-systems.sa-3",
+    "slug": "sa-3",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-3 Goa",
+    "designation": "S-125 Neva/Pechora",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Command-guided by the Low Blow radar from two- or four-missile launchers; the system that downed an F-117."
+  },
+  {
+    "id": "encyclopedia.threat-systems.sa-4",
+    "slug": "sa-4",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-4 Ganef",
+    "designation": "2K11 Krug",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A tracked, ramjet-powered army SAM carrying two missiles per launcher."
+  },
+  {
+    "id": "encyclopedia.threat-systems.sa-5",
+    "slug": "sa-5",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-5 Gammon",
+    "designation": "S-200",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A very long-range strategic SAM guided by the Square Pair continuous-wave radar."
+  },
+  {
+    "id": "encyclopedia.threat-systems.sa-6",
+    "slug": "sa-6",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-6 Gainful",
+    "designation": "2K12 Kub",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A mobile tracked battery: one Straight Flush radar, four three-missile launchers, semi-active homing."
+  },
+  {
+    "id": "encyclopedia.threat-systems.sa-7",
+    "slug": "sa-7",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-7 Grail",
+    "designation": "9K32 Strela-2",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A shoulder-fired, rear-aspect infrared missile: nothing on the RWR, and flares proved highly effective against it."
+  },
+  {
+    "id": "encyclopedia.threat-systems.sa-8",
+    "slug": "sa-8",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-8 Gecko",
+    "designation": "9K33 Osa",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "An amphibious six-wheeled vehicle carrying its own Land Roll radar and missiles: a self-contained short-range SAM."
+  },
+  {
+    "id": "encyclopedia.threat-systems.sa-9",
+    "slug": "sa-9",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-9 Gaskin",
+    "designation": "9K31 Strela-1",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Four infrared missiles on a BRDM-2 scout car with a passive detector: nothing for a radar warning receiver to see, short range."
+  }
+]

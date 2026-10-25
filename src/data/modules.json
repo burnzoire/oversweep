@@ -11,6 +11,17 @@
     "applicability": "Aircraft-agnostic concepts illustrated with US Navy T-45C training figures; type-specific numbers belong to that training example."
   },
   {
+    "id": "module.radio-procedures",
+    "slug": "radio-procedures",
+    "subject": "radio-communications",
+    "revision": 1,
+    "title": "Radio Procedures and Phraseology",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Speak and understand air–ground radio: technique, the phonetic alphabet and numbers, contact calls, acknowledgements and readbacks, formation check-ins, emergency calls, transponder codes and what to do when the radio fails.",
+    "applicability": "US FAA phraseology from the Aeronautical Information Manual, with a US Navy training squadron's formation calls; other countries and services differ in detail."
+  },
+  {
     "id": "module.principles-of-flight",
     "slug": "principles-of-flight",
     "subject": "flight-fundamentals",

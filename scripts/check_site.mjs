@@ -69,7 +69,7 @@ for (const [filename, html] of pages) {
   const relativePage = path.relative(output, filename).split(path.sep).join("/");
   assert.doesNotMatch(html, /coming soon/i, `${relativePage} should dim unavailable destinations, not label them Coming soon`);
   if (emptyPages.has(filename))
-    assert.doesNotMatch(html, /data-(?:module|experience)-id=/, `${relativePage} lists content but is marked empty`);
+    assert.doesNotMatch(html, /data-(?:module|experience|record)-id=/, `${relativePage} lists content but is marked empty`);
 }
 
 for (const [filename, html] of pages) {

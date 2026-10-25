@@ -1,0 +1,14 @@
+---
+import { recordRoute, type EncyclopediaRecord } from '../../data/encyclopedia';
+import { sitePath } from '../../lib/paths';
+interface Props { record: EncyclopediaRecord; headingLevel?: 2 | 3 }
+const { record, headingLevel = 3 } = Astro.props;
+const Heading = (headingLevel === 2 ? 'h2' : 'h3') as 'h2' | 'h3';
+const local = record.publication !== 'published';
+---
+<section class="entry-card" data-record-id={record.id} data-record-revision={record.revision}>
+  <p class="entry-kicker">{record.designation}</p>
+  <Heading class="entry-title"><a href={sitePath(recordRoute(record))}>{record.title}</a></Heading>
+  <p class="entry-objective">{record.summary}</p>
+  <p class="entry-meta"><span class="maturity">{record.maturity}</span> · Record revision {record.revision}{local && ' · Local review only'}</p>
+</section>
