@@ -110,6 +110,17 @@
     "summary": "The Warthog: a straight-wing, armoured close air support jet built around the 30 mm GAU-8 cannon."
   },
   {
+    "id": "encyclopedia.aircraft.ah-64d",
+    "slug": "ah-64d",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "AH-64D Apache Longbow",
+    "designation": "Boeing AH-64D Apache Longbow",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The US Army's twin-engine attack helicopter, flown from Panama and Desert Storm to Afghanistan; the Longbow adds a mast-mounted radar."
+  },
+  {
     "id": "encyclopedia.aircraft.ajs-37",
     "slug": "ajs-37",
     "category": "aircraft",
@@ -152,6 +163,17 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "The modernised four-turboprop tactical transport: new engines, glass cockpit, three crew."
+  },
+  {
+    "id": "encyclopedia.aircraft.ch-47f",
+    "slug": "ch-47f",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "CH-47F Chinook",
+    "designation": "Boeing CH-47F Chinook",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The tandem-rotor heavy-lift helicopter that has carried troops, guns and supplies for every war since Vietnam."
   },
   {
     "id": "encyclopedia.aircraft.f-4",
@@ -275,6 +297,17 @@
     "summary": "A lightweight Pakistani–Chinese multirole fighter powered by the RD-93."
   },
   {
+    "id": "encyclopedia.aircraft.ka-50",
+    "slug": "ka-50",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "Ka-50 Black Shark",
+    "designation": "Kamov Ka-50",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A single-seat Russian attack helicopter with coaxial rotors and the first helicopter ejection seat in service."
+  },
+  {
     "id": "encyclopedia.aircraft.l-39",
     "slug": "l-39",
     "category": "aircraft",
@@ -295,6 +328,28 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "Italy's two-seat jet trainer and light attack aircraft, flown by the Frecce Tricolori."
+  },
+  {
+    "id": "encyclopedia.aircraft.mi-8mtv2",
+    "slug": "mi-8mtv2",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "Mi-8MTV-2 Hip",
+    "designation": "Mil Mi-8MTV-2",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The armed transport version of the Mi-8, the most-produced helicopter in the world."
+  },
+  {
+    "id": "encyclopedia.aircraft.mi-24p",
+    "slug": "mi-24p",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "Mi-24P Hind-F",
+    "designation": "Mil Mi-24P",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Soviet gunship that could also carry eight troops; the Mi-24P has a fixed twin-barrel 30 mm cannon."
   },
   {
     "id": "encyclopedia.aircraft.mig-15",
@@ -363,6 +418,28 @@
     "summary": "A swept-wing French fighter sold to eleven countries and flown in many wars."
   },
   {
+    "id": "encyclopedia.aircraft.oh-58d",
+    "slug": "oh-58d",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "OH-58D Kiowa Warrior",
+    "designation": "Bell OH-58D Kiowa Warrior",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The US Army's armed scout helicopter, with its ball-shaped sight above the rotor, flown from the Persian Gulf to Afghanistan."
+  },
+  {
+    "id": "encyclopedia.aircraft.sa342",
+    "slug": "sa342",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "SA 342 Gazelle",
+    "designation": "Aérospatiale SA 342M Gazelle",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The light Franco-British helicopter that introduced the fenestron tail fan; the SA 342M hunts tanks with HOT missiles."
+  },
+  {
     "id": "encyclopedia.aircraft.su-25",
     "slug": "su-25",
     "category": "aircraft",
@@ -394,5 +471,16 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "The carrier-based Flanker: canards, folding wings and a ski-jump launch from Admiral Kuznetsov."
+  },
+  {
+    "id": "encyclopedia.aircraft.uh-1h",
+    "slug": "uh-1h",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "UH-1H Huey",
+    "designation": "Bell UH-1H Iroquois",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The utility helicopter that defined the Vietnam War and served every US armed service; more than 16,000 built."
   }
 ]
