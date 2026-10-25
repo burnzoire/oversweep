@@ -14,22 +14,22 @@
     "id": "module.radio-procedures",
     "slug": "radio-procedures",
     "subject": "radio-communications",
-    "revision": 1,
+    "revision": 2,
     "title": "Radio Procedures and Phraseology",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "objective": "Speak and understand air–ground radio: technique, the phonetic alphabet and numbers, contact calls, acknowledgements and readbacks, formation check-ins, emergency calls, transponder codes and what to do when the radio fails.",
-    "applicability": "US FAA phraseology from the Aeronautical Information Manual, with a US Navy training squadron's formation calls; other countries and services differ in detail."
+    "objective": "Speak and understand military air–ground radio: a Navy training sortie's calls, call signs and preset channels, formation check-ins and training-rule calls, then the FAA technique, phonetic alphabet and numbers, contact calls, readbacks, emergency calls, transponder codes and what to do when the radio fails.",
+    "applicability": "For US military pilots: US Navy training squadron scripts and instructions first, with the FAA Aeronautical Information Manual as the supplementary US civil rule set; units, other services and other countries differ in detail."
   },
   {
     "id": "module.principles-of-flight",
     "slug": "principles-of-flight",
     "subject": "flight-fundamentals",
-    "revision": 1,
+    "revision": 2,
     "title": "Principles of Flight",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "objective": "Understand the four forces, lift and angle of attack, drag, control and stability, turns and load factor, stalls and energy well enough to explain what the airplane is doing and why.",
-    "applicability": "Aircraft-agnostic fixed-wing principles from the FAA handbooks; worked numbers use an invented example airplane."
+    "objective": "Understand the four forces, lift and angle of attack, drag, control and stability, turns and load factor, stalls, the maneuvering envelope and energy well enough to explain what a military jet is doing and why.",
+    "applicability": "For military pilots: fixed-wing principles from Navy aerodynamics texts, with FAA handbooks as supplementary sources; worked numbers use an invented jet trainer, with US Navy T-45 training figures where cited."
   }
 ]

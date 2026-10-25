@@ -106,3 +106,53 @@ test('transmission collides with a busy interval', () => {
   assert.equal(transmit(busy, 5.5, 3).blocked, false);
   assert.equal(transmit(busy, 7, 3).blocked, true);
 });
+
+// Navy sortie: expectations written by hand from the VT-10 script, pp. 19–35.
+import { SORTIE, TRAINING_CALLS } from '../../src/lessons/radio/lesson-model.mjs';
+
+test('Navy sortie runs ATIS, clearance, base, ground, tower, departure in that order', () => {
+  const first = (phase) => SORTIE.findIndex((c) => c.phase === phase);
+  assert.deepEqual(['ATIS', 'Clearance', 'Base', 'Ground', 'Tower', 'Departure'].map(first), [0, 1, 2, 3, 5, 6]);
+  assert.equal(SORTIE.at(-1).station, 'KATT Base');
+  assert.equal(SORTIE.length, 17);
+});
+
+test('every Navy initial call names the station first, then KATT 11', () => {
+  for (const c of SORTIE.filter((x) => x.call)) {
+    assert.ok(c.call.startsWith(`${c.station}, KATT 11`), c.call);
+  }
+});
+
+test('every Navy readback starts with the call sign; takeoff and landing readbacks carry the runway', () => {
+  for (const c of SORTIE.filter((x) => x.readback)) assert.ok(c.readback.startsWith('KATT 11, '), c.readback);
+  const takeoff = SORTIE.find((c) => /cleared for takeoff/.test(c.reply));
+  const landing = SORTIE.find((c) => /cleared to land/.test(c.reply));
+  assert.match(takeoff.readback, /Runway 7 right/);
+  assert.match(landing.readback, /7 Right/);
+});
+
+test('preset channels are consistent through the sortie', () => {
+  const channels = (station) => new Set(SORTIE.filter((c) => c.station === station).map((c) => c.radio));
+  assert.deepEqual([...channels('Sherman Tower')], ['UHF 4']);
+  assert.deepEqual([...channels('Sherman Ground')], ['UHF 3']);
+  assert.deepEqual([...channels('KATT Base')], ['UHF 19']);
+  // IFR is cancelled with approach on VHF 5; the course-rules call is on UHF 6.
+  assert.deepEqual([...channels('Pensacola Approach')].sort(), ['UHF 6', 'VHF 5']);
+});
+
+test('the Navy clearance and ground calls are in AIM 4-2-3 order', () => {
+  assert.equal(checkCall(['facility', 'identification', 'request']).ok, true);
+  assert.equal(checkCall(['identification', 'facility', 'request']).ok, false);
+});
+
+test('training-rule calls cover the P-1289 safety words', () => {
+  assert.deepEqual(TRAINING_CALLS.map((t) => t.call), ['Knock it off', 'Terminate', 'Fight’s on', 'Blind', 'No joy']);
+  assert.ok(TRAINING_CALLS.every((t) => /^\d-\d+$/.test(t.page)));
+});
+
+test('a Navy takeoff readback needs only the call sign and runway', () => {
+  const clearance = [{ id: 'id', kind: 'identification' }, { id: 'wind', kind: 'wind' }, { id: 'rwy', kind: 'runway' }, { id: 'freq', kind: 'frequency' }];
+  assert.equal(checkReadback(clearance, ['id', 'rwy']).ok, true);
+  assert.deepEqual(checkReadback(clearance, ['id', 'rwy', 'freq']).extra, ['freq']);
+  assert.deepEqual(checkReadback(clearance, ['rwy']).missing, ['id']);
+});

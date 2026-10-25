@@ -1,7 +1,7 @@
 // Presentation for the Radio Communications module's interactive blocks. Rules
 // and conversions come from lesson-model.mjs; this file reads inputs and draws.
 import {
-  ELEMENT_LABEL, LIGHT_SIGNALS, ROUTE_RULES, SPECIAL_CODES, altitude, callSign, checkCall, checkReadback,
+  ELEMENT_LABEL, LIGHT_SIGNALS, ROUTE_RULES, SORTIE, SPECIAL_CODES, altitude, callSign, checkCall, checkReadback,
   direction, frequency, lostCommsAltitudes, lostCommsRoute, mach, safeOrder, speed, spell, squawk, time, transmit,
 } from './lesson-model.mjs';
 
@@ -31,11 +31,50 @@ function button(text, onClick) {
 const SIDE = 'M-14 -1 L8 -3 L15 0 L8 3 L-14 2 Z M-14 -1 L-17 -9 L-12 -9 L-8 -2 Z';
 const side = (x, y, cls, scale = 1) => el('path', { d: SIDE, class: cls, transform: `translate(${x} ${y}) scale(${scale})` });
 
+/* ---------- Sortie figure: a Navy training sortie, call by call ---------- */
+// Height band of each phase on the drawn profile (not to scale).
+const PHASE_Y = { ATIS: 230, Clearance: 230, Base: 230, Ground: 230, Tower: 230, Departure: 130, Area: 70, Cancel: 70, Approach: 130, Break: 180, Landing: 205, Rollout: 230 };
+function setupSortie(root) {
+  const svg = root.querySelector('svg'), out = root.querySelector('[data-result]');
+  const prev = root.querySelector('[data-prev]'), next = root.querySelector('[data-next]');
+  const x = (k) => 40 + k * (560 / (SORTIE.length - 1));
+  const y = (k) => PHASE_Y[SORTIE[k].phase] - (SORTIE[k].phase === 'Tower' && k > 8 ? 60 : 0);
+  let i = 0;
+  function draw() {
+    const s = SORTIE[i];
+    svg.replaceChildren();
+    svg.append(el('line', { x1: 20, y1: 242, x2: 620, y2: 242, class: 'ln' }), el('text', { x: 24, y: 258, class: 'lbl small' }, 'SHERMAN FIELD'));
+    svg.append(el('text', { x: 616, y: 258, class: 'lbl small', 'text-anchor': 'end' }, 'PROFILE NOT TO SCALE'));
+    svg.append(el('path', { d: SORTIE.map((_, k) => `${k ? 'L' : 'M'}${x(k)} ${y(k)}`).join(' '), class: 'thin dotted' }));
+    SORTIE.forEach((c, k) => {
+      svg.append(el('circle', { cx: x(k), cy: y(k), r: k === i ? 6 : 3.5, class: k === i ? 'pointer' : k < i ? 'dot done' : 'dot' }));
+    });
+    svg.append(side(x(i), y(i) - 18, 'acft', 1.3));
+    svg.append(el('text', { x: Math.min(560, Math.max(80, x(i))), y: y(i) - 34, class: 'lbl on', 'text-anchor': 'middle' }, s.phase.toUpperCase()));
+    // Radio control head.
+    svg.append(el('rect', { x: 24, y: 268, width: 190, height: 28, class: 'box on' }));
+    svg.append(el('text', { x: 34, y: 287, class: 'lbl inv' }, `${s.radio.replace(' ', ' CH ')}`));
+    svg.append(el('text', { x: 230, y: 287, class: 'lbl' }, s.station.toUpperCase()));
+    svg.append(el('text', { x: 616, y: 287, class: 'lbl small', 'text-anchor': 'end' }, `CALL ${i + 1} OF ${SORTIE.length}`));
+    const lines = [];
+    if (s.call) lines.push(para(`KATT 11: “${s.call}”`));
+    if (s.reply) lines.push(para(`${s.station}: “${s.reply}”`));
+    if (s.readback) lines.push(para(`KATT 11: “${s.readback}”`));
+    lines.push(para(`${s.note} (Script p. ${s.page}.)`, 'derived'));
+    out.replaceChildren(...lines);
+    prev.disabled = i === 0;
+    next.disabled = i === SORTIE.length - 1;
+  }
+  prev.addEventListener('click', () => { i = Math.max(0, i - 1); draw(); });
+  next.addEventListener('click', () => { i = Math.min(SORTIE.length - 1, i + 1); draw(); });
+  draw();
+}
+
 /* ---------- Figure 1: find a gap ---------- */
 // Invented traffic on one approach frequency: [start s, end s, station, words].
 const TRAFFIC = [
   [0, 3.6, 'APP', 'Navy 405, turn left heading 270'], [4.1, 6.6, '405', 'Left 270, Navy 405'],
-  [10, 13.4, 'APP', 'Cessna 34A, descend and maintain 4,000'], [13.9, 16.6, '34A', 'Down to 4,000, Cessna 34A'],
+  [10, 13.4, 'APP', 'KATT 23, descend and maintain 4,000'], [13.9, 16.6, 'K23', 'KATT 23, down to 4,000'],
   [21, 25, '55G', 'Approach, Bonanza 55G, request ILS'], [25.6, 28.6, 'APP', 'Bonanza 55G, expect vectors ILS'],
   [34, 37.4, 'APP', 'Navy 405, contact tower 120.1'], [37.9, 40, '405', 'Tower 120.1, Navy 405'],
 ];
@@ -187,6 +226,12 @@ function setupSay(root) {
 
 /* ---------- Figure 4: build the call ---------- */
 const CALLS = [
+  { prompt: 'You are KATT 11 at Sherman Field with an IFR flight plan on request. Call clearance delivery to copy your clearance.',
+    pieces: [['facility', 'Sherman Clearance'], ['identification', 'KATT 11'], ['request', 'IFR, NPA 630, on request, ready to copy']],
+    extra: [['side number 000', 'The side number goes to the squadron on its base frequency, not to clearance delivery.']] },
+  { prompt: 'You are KATT 11, have copied ATIS information Alfa, and are ready to taxi. Call ground control.',
+    pieces: [['facility', 'Sherman Ground'], ['identification', 'KATT 11'], ['request', 'taxi, information Alfa']],
+    extra: [['KATT Base', 'KATT Base is the squadron’s own frequency; the controlling agency on the ground is Sherman Ground.']] },
   { prompt: 'You are on the south ramp at Columbia with an IFR flight plan to Memphis. Call ground control.',
     pieces: [['facility', 'Columbia Ground'], ['identification', 'Cessna Three One Six Zero Foxtrot'], ['position', 'south ramp'], ['request', 'I-F-R Memphis']],
     extra: [['Cessna Six Zero Foxtrot', 'Never abbreviate a call sign on initial contact.']] },
@@ -266,8 +311,41 @@ function setupWords(root) {
   ask();
 }
 
+/* ---------- Training-rule calls quiz (P-1289) ---------- */
+const TRAINING_CASES = [
+  ['Mid-set, your fuel reaches the briefed bingo.', 'Knock it off'],
+  ['The set is over and you are the bandit.', 'Knock it off'],
+  ['You see the other aircraft rocking its wings.', 'Knock it off'],
+  ['You have lost sight of your wingman.', 'Blind'],
+  ['Your wingman describes a bandit at your left ten o’clock. You cannot see it.', 'No joy'],
+  ['As lead, you need to pause a drill briefly for an administrative reason.', 'Terminate'],
+  ['As lead, both aircraft are set up and you are ready to start the engagement.', 'Fight’s on'],
+];
+const TRAINING_POOL = ['Knock it off', 'Terminate', 'Fight’s on', 'Blind', 'No joy'];
+function setupTraining(root) {
+  const prompt = root.querySelector('[data-prompt]'), choices = root.querySelector('[data-choices]');
+  const out = root.querySelector('[data-result]');
+  let score = 0, asked = 0, order = shuffle(TRAINING_CASES), i = 0;
+  function ask() {
+    const [situation, answer] = order[i++ % order.length];
+    prompt.textContent = situation;
+    choices.replaceChildren(...shuffle(TRAINING_POOL).map((w) => button(w, () => {
+      asked++;
+      if (w === answer) score++;
+      out.textContent = `${w === answer ? 'Correct' : `Not quite: “${answer}”.`} ${score} of ${asked}.`;
+      for (const c of choices.children) c.disabled = true;
+    })));
+  }
+  root.querySelector('[data-new]').addEventListener('click', () => { out.textContent = ''; ask(); });
+  ask();
+}
+
 /* ---------- Figure 5: readback ---------- */
 const READBACKS = [
+  { parts: [['id', 'identification', 'KATT 11'], ['wind', 'wind', 'wind 060 at 8'], ['rwy', 'runway', 'Runway 7 right, cleared for takeoff'], ['freq', 'frequency', 'switch to Departure']],
+    readback: 'KATT 11, cleared for takeoff Runway 7 right, switching.' },
+  { parts: [['id', 'identification', 'KATT 11'], ['rc', 'radar', 'radar contact'], ['alt', 'altitude', 'climb and maintain 10,000']],
+    readback: 'KATT 11, continuing to 10,000.' },
   { parts: [['id', 'identification', 'United Twelve'], ['alt', 'altitude', 'climb and maintain flight level three three zero']],
     readback: 'Climbing to flight level three three zero, United Twelve.' },
   { parts: [['id', 'identification', 'Navy Four Zero Five'], ['hdg', 'vector', 'turn right heading zero niner zero'], ['alt', 'altitude', 'descend and maintain three thousand'], ['set', 'altimeter', 'altimeter two niner niner two']],
@@ -504,7 +582,7 @@ function setupLost(root) {
   draw();
 }
 
-const blocks = { gap: setupGap, bands: setupBands, say: setupSay, call: setupCall, words: setupWords, readback: setupReadback, flight: setupFlight, squawk: setupSquawk, light: setupLight, lost: setupLost };
+const blocks = { sortie: setupSortie, gap: setupGap, bands: setupBands, say: setupSay, call: setupCall, words: setupWords, training: setupTraining, readback: setupReadback, flight: setupFlight, squawk: setupSquawk, light: setupLight, lost: setupLost };
 for (const root of document.querySelectorAll('[data-lesson]')) {
   blocks[root.dataset.lesson]?.(root);
   root.classList.add('ready');
