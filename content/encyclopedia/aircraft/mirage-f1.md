@@ -1,5 +1,6 @@
 ---
 group: jet
+short: Mirage F1
 name: Mirage F1C
 variant: "Mirage F1C and export F1CE/F1EE [1]"
 role: "Interceptor and multirole fighter [1]; F1CT close air support and F1CR reconnaissance [2]"

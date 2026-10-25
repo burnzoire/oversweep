@@ -1,5 +1,6 @@
 ---
 group: jet
+short: AJS 37
 name: AJS 37 Viggen
 variant: "AJS 37, the 1990s multirole upgrade of the AJ 37 attack Viggen; performance figures are for the JA 37 [1]"
 role: "Attack, reconnaissance and fighter (multirole) [1] [2]"
