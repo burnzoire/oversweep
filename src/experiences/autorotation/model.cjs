@@ -103,10 +103,10 @@
     const stallLimit = HELI.stallCtSigma * HELI.solidity;
     // Once rotor rpm has decayed past recovery the blades stay stalled and
     // the rotor gives only a fraction of its thrust.
-    const stalled = ct > stallLimit || Boolean(state.rotorLost);
-    const ctUsed = Math.min(ct, stallLimit) * (state.rotorLost ? 0.3 : 1);
+    const stalled = Math.abs(ct) > stallLimit || Boolean(state.rotorLost);
+    const ctUsed = clamp(ct, -stallLimit, stallLimit) * (state.rotorLost ? 0.3 : 1);
     // Past the stall the blades keep the drag of the higher angle of attack.
-    const stallDrag = stalled ? 1 + 30 * (ct / stallLimit - 1) : 1;
+    const stallDrag = Math.abs(ct) > stallLimit ? Math.min(10, 1 + 30 * (Math.abs(ct) / stallLimit - 1)) : 1;
     const cp0 = HELI.solidity * HELI.profileDrag / 8 * (1 + 4.6 * mu * mu) * stallDrag;
     const cp = ctUsed * (lc + HELI.inducedFactor * li) + cp0;
     const scale = RHO * area * tip * tip;
@@ -180,8 +180,11 @@
     } else {
       state.engineRpm = Math.max(0, state.engineRpm - 35 * dt);
     }
+    // A lost rotor's stalled blades only slow it further; otherwise the rpm
+    // change per step is bounded so a near-stopped rotor cannot diverge.
     const domega = (engine - r.power - accessory) / (HELI.inertia * omega);
-    state.rpm = Math.max(0, state.rpm + domega / omega100 * 100 * dt);
+    const drpm = state.rotorLost ? -20 * dt : clamp(domega / omega100 * 100 * dt, -5, 5);
+    state.rpm = Math.max(0, state.rpm + drpm);
     if (!state.engine) {
       state.minRpm = Math.min(state.minRpm ?? 100, state.rpm);
       state.maxRpm = Math.max(state.maxRpm ?? 100, state.rpm);
