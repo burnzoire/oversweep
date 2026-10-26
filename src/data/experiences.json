@@ -29,5 +29,38 @@
       "revision": 2,
       "maturity": "Drafted \u2014 not technically validated"
     }
+  },
+  {
+    "id": "experience.autorotation",
+    "manualId": "manual.autorotation",
+    "slug": "autorotation",
+    "subject": "flight-fundamentals",
+    "revision": 1,
+    "title": "Autorotation \u2014 engine failure exercise",
+    "maturity": "Drafted \u2014 not technically validated",
+    "publication": "published",
+    "launch": "window",
+    "objective": "Fly a helicopter engine failure to the ground in a side view: lower the collective, set the autorotation airspeed, keep rotor rpm in the green, then flare, level and cushion.",
+    "applicability": "Invented light single-engine helicopter over flat ground in calm wind; educational flight model, not any real type.",
+    "prerequisites": [
+      "Collective and cyclic",
+      "Rotor rpm",
+      "Autorotation regions",
+      "Height\u2013velocity diagram"
+    ],
+    "assets": [
+      "frame-guard.js",
+      "app.js",
+      "style.css",
+      "model.cjs"
+    ],
+    "module": {
+      "title": "Autorotation Practice",
+      "objective": "Understand what an engine failure does to a helicopter's rotor and the sequence that answers it, entry, steady descent, flare and touchdown, and how the right first cyclic input depends on the speed you start from; then fly it in a standalone exercise.",
+      "applicability": "Single-rotor helicopters with a freewheeling unit, for military pilots of every service; each type's flight manual gives its own autorotation airspeed, rotor rpm and technique.",
+      "revision": 1,
+      "maturity": "Drafted \u2014 not technically validated",
+      "group": "Rotor wing"
+    }
   }
 ]

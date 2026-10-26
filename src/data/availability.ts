@@ -32,6 +32,7 @@ const fromExperience = (e: Experience): Entry => ({
   href: experienceRoute(e),
   subject: e.subject,
   trainer: { title: e.title, href: experienceFrame(e), experience: e },
+  group: e.module && 'group' in e.module ? e.module.group : undefined,
 });
 
 const fromModule = (m: Module): Entry => ({
@@ -53,10 +54,12 @@ export const manualEntries: Entry[] = [
 
 export const subjectEntries = (slug: string) => manualEntries.filter((entry) => entry.subject === slug);
 // A subject's entries in registry order, gathered under their group names;
-// one unnamed group when the subject does not use groups.
+// one unnamed group when the subject does not use groups. Modules come before
+// the practice modules that carry a trainer, so a group opens with its theory.
 export function subjectGroups(slug: string) {
   const groups = new Map<string | undefined, Entry[]>();
-  for (const entry of subjectEntries(slug)) groups.set(entry.group, [...(groups.get(entry.group) ?? []), entry]);
+  const entries = subjectEntries(slug);
+  for (const entry of [...entries.filter((e) => !e.trainer), ...entries.filter((e) => e.trainer)]) groups.set(entry.group, [...(groups.get(entry.group) ?? []), entry]);
   return [...groups].map(([title, entries]) => ({ title, entries }));
 }
 export const subjectHasContent = (slug: string) => subjectEntries(slug).length > 0;

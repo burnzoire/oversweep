@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Autorotation · Engine failure exercise</title>
+<meta name="description" content="A profile-view autorotation exercise for an invented light helicopter. Educational model, not validated, not operational guidance.">
+<link rel="stylesheet" href="style.css">
+<script src="frame-guard.js"></script>
+</head>
+<body>
+<div class="draft-status" role="note">DRAFTED — NOT TECHNICALLY VALIDATED · INVENTED HELICOPTER · NOT OPERATIONAL GUIDANCE · <a href="../../manual/flight-fundamentals/autorotation/#sources" target="_top">Scope and sources</a></div>
+<header>
+  <div class="brand"><span class="insignia" aria-hidden="true">A</span><div><h1>AUTOROTATION</h1><p>ENGINE FAILURE EXERCISE · PROFILE VIEW</p></div></div>
+  <div class="header-actions">
+    <label class="switch"><input id="instructor" type="checkbox" checked> Instructor</label>
+    <label class="switch"><input id="sound" type="checkbox" checked> Low rpm horn</label>
+    <button id="controlsHelp" type="button">Controls</button>
+    <button id="gamepadSetup" type="button">Joystick</button>
+    <button id="newRun" type="button">New run</button>
+  </div>
+</header>
+<main id="mainApp">
+  <section class="scene" aria-label="Side view of the helicopter and the ground">
+    <canvas id="scene" aria-hidden="true"></canvas>
+    <p id="prompt" class="prompt" role="status" aria-live="polite"></p>
+    <p id="countdown" class="countdown" aria-live="assertive"></p>
+    <p id="caution" class="caution" hidden>ENGINE OUT</p>
+  </section>
+  <section class="panel" aria-label="Instruments and controls">
+    <div class="lever" data-lever="collective">
+      <span class="lever-label" id="collectiveLabel">Collective<small>UP</small></span>
+      <div class="lever-track" id="collectiveTrack" role="slider" tabindex="0" aria-labelledby="collectiveLabel" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-orientation="vertical"><span class="lever-handle"></span></div>
+      <span class="lever-end">DOWN</span>
+    </div>
+    <div class="instruments">
+      <canvas id="dials" aria-hidden="true"></canvas>
+      <p class="readout" id="readout" aria-live="off"></p>
+    </div>
+    <div class="lever" data-lever="cyclic">
+      <span class="lever-label" id="cyclicLabel">Cyclic<small>FWD</small></span>
+      <div class="lever-track" id="cyclicTrack" role="slider" tabindex="0" aria-labelledby="cyclicLabel" aria-valuemin="-100" aria-valuemax="100" aria-valuenow="0" aria-orientation="vertical"><span class="lever-handle"></span></div>
+      <span class="lever-end">AFT</span>
+    </div>
+  </section>
+</main>
+
+<dialog id="setup" aria-labelledby="setupTitle">
+  <h2 id="setupTitle">Set up the engine failure</h2>
+  <p>You are flying an invented light single-engine helicopter over flat ground, in calm wind. Choose where the engine fails, then fly the autorotation to the ground.</p>
+  <div class="presets" role="group" aria-label="Presets">
+    <button type="button" data-preset="1000,90,60">Cruise · 1,000 ft · 90 kt</button>
+    <button type="button" data-preset="700,60,60">Practice · 700 ft · 60 kt</button>
+    <button type="button" data-preset="1500,0,60">Hover · 1,500 ft · 0 kt</button>
+    <button type="button" data-preset="300,0,60">Low hover · 300 ft · 0 kt</button>
+    <button type="button" data-preset="60,100,60">Low and fast · 60 ft · 100 kt</button>
+  </div>
+  <label class="setting">Fuel <output id="fuelOut"></output><input id="fuel" type="range" min="0" max="100" step="5" value="60"></label>
+  <label class="setting">Height above the ground <output id="altOut"></output><input id="alt" type="range" min="50" max="3000" step="50" value="1000"></label>
+  <label class="setting">Forward speed <output id="speedOut"></output><input id="speed" type="range" min="0" max="120" step="5" value="90"></label>
+  <label class="switch"><input id="surprise" type="checkbox"> Surprise failure (no countdown, some time in the first 10 seconds)</label>
+  <p class="hint">Fuel sets the weight: more fuel, a heavier helicopter and a higher rotor rpm with the collective down. Starting slow and low puts you in the area a height–velocity diagram tells you to avoid.</p>
+  <div class="dialog-actions"><button type="button" id="showControls">Controls</button><button type="button" class="primary" id="start">Start</button></div>
+</dialog>
+
+<dialog id="controls" aria-labelledby="controlsTitle">
+  <h2 id="controlsTitle">Controls</h2>
+  <p>Only the collective and the fore-and-aft cyclic matter in a side view. The cyclic sets a pitch attitude and stays where you leave it.</p>
+  <table>
+    <thead><tr><th scope="col">Control</th><th scope="col">Keyboard</th><th scope="col">Mouse or touch</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Collective up</th><td><kbd>Shift</kbd> or <kbd>W</kbd> (hold)</td><td rowspan="2">Drag the left lever</td></tr>
+      <tr><th scope="row">Collective down</th><td><kbd>Ctrl</kbd> or <kbd>S</kbd> (hold)</td></tr>
+      <tr><th scope="row">Cyclic forward (nose down)</th><td><kbd>↑</kbd> (hold)</td><td rowspan="2">Drag the right lever</td></tr>
+      <tr><th scope="row">Cyclic aft (nose up)</th><td><kbd>↓</kbd> (hold)</td></tr>
+      <tr><th scope="row">Pause</th><td><kbd>Space</kbd> or <kbd>P</kbd></td><td>—</td></tr>
+      <tr><th scope="row">Start or fly again</th><td><kbd>Enter</kbd></td><td>—</td></tr>
+    </tbody>
+  </table>
+  <p>On a Mac, <kbd>Ctrl</kbd> with the up or down arrow is a Mission Control shortcut, so use <kbd>S</kbd> for collective down there. On Windows, pressing <kbd>Shift</kbd> five times in a row can open Sticky Keys; hold it instead of tapping, or use <kbd>W</kbd>.</p>
+  <p>A joystick, throttle or game controller works too: select <b>Joystick</b> and move the axis you want for each control.</p>
+  <div class="dialog-actions"><button type="button" class="primary" id="closeControls">Close</button></div>
+</dialog>
+
+<dialog id="gamepad" aria-labelledby="gamepadTitle">
+  <h2 id="gamepadTitle">Joystick and throttle</h2>
+  <p id="gamepadStatus">Connect a controller and press any of its buttons.</p>
+  <div class="bind-row"><span>Collective</span><b id="collectiveBinding">Not set</b><button type="button" id="bindCollective">Set</button><label class="switch"><input id="invertCollective" type="checkbox"> Invert</label></div>
+  <div class="bind-row"><span>Cyclic, fore and aft</span><b id="cyclicBinding">Not set</b><button type="button" id="bindCyclic">Set</button><label class="switch"><input id="invertCyclic" type="checkbox"> Invert</label></div>
+  <p class="hint">Select Set, then move that lever or stick through its travel. The axis sets the control's position directly, so a throttle lever suits the collective and a stick the cyclic. A self-centring thumbstick holds the collective at mid travel when you let go.</p>
+  <div class="dialog-actions"><button type="button" id="clearBindings">Clear</button><button type="button" class="primary" id="closeGamepad">Close</button></div>
+</dialog>
+
+<dialog id="debrief" aria-labelledby="debriefTitle">
+  <h2 id="debriefTitle">Debrief</h2>
+  <p id="debriefResult" class="result"></p>
+  <ul id="debriefItems" class="debrief-items"></ul>
+  <dl id="debriefStats" class="stats"></dl>
+  <p class="hint">Limits and cues belong to this invented helicopter and exercise. A real helicopter's flight manual gives its own autorotation airspeed, rotor rpm range and flare technique.</p>
+  <div class="dialog-actions"><button type="button" id="changeSettings">Change settings</button><button type="button" class="primary" id="again">Fly again</button></div>
+</dialog>
+
+<script src="model.cjs"></script>
+<script src="app.js"></script>
+</body>
+</html>

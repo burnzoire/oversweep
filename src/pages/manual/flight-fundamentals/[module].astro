@@ -1,15 +1,20 @@
 ---
 import FixedWing from './_FixedWing.astro';
 import RotorWing from './_RotorWing.astro';
+import Autorotation from './_Autorotation.astro';
 import { includedModules } from '../../../data/modules';
+import { includedExperiences } from '../../../data/experiences';
 import '../../../styles/flight-fundamentals.css';
 // Flight Fundamentals is split by wing type: one module page each for fixed
 // and rotor wings. Each page is its own component, kept beside this route so
 // the SME review reads it (the underscore keeps Astro from routing it); this
-// route emits only the modules the registry includes in the build.
-const pages = { 'principles-of-flight': FixedWing, 'rotor-wing': RotorWing };
+// route emits only the modules the registry includes in the build. The
+// autorotation practice module comes from the experience registry, since it
+// launches a trainer.
+const pages = { 'principles-of-flight': FixedWing, 'rotor-wing': RotorWing, autorotation: Autorotation };
 export function getStaticPaths() {
-  return includedModules.filter((m) => m.subject === 'flight-fundamentals').map((m) => ({ params: { module: m.slug } }));
+  return [...includedModules, ...includedExperiences]
+    .filter((m) => m.subject === 'flight-fundamentals').map((m) => ({ params: { module: m.slug } }));
 }
 const { module } = Astro.params;
 const Page = pages[module as keyof typeof pages];
