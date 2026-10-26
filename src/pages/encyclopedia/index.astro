@@ -1,35 +1,48 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
-import RecordCard from "../../components/encyclopedia/RecordCard.astro";
 import { encyclopediaCategories } from "../../data/catalogue";
 import { categoryHasContent } from "../../data/availability";
-import { categoryRecords } from "../../data/encyclopedia";
-import { sitePath } from "../../lib/paths";
+import { categoryRecords, recordContent, type Photo } from "../../data/encyclopedia";
+import { assetPath, sitePath } from "../../lib/paths";
 
-const available = encyclopediaCategories.filter((c) => categoryHasContent(c.slug));
-const empty = available.length === 0;
+// The landing page is a map of categories, not a list of records: each category
+// with records links to its own page, and empty ones are dimmed, unlinked and
+// listed after those with records so open categories lead the grid.
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
+const cover = (slug: string): Photo | undefined => {
+  for (const record of categoryRecords(slug)) {
+    const data = recordContent(record).frontmatter as { photo?: Photo; photos?: Photo[] };
+    const photo = data.photos?.[0] ?? data.photo;
+    if (photo) return photo;
+  }
+};
+const categories = encyclopediaCategories.map((category) => ({
+  ...category,
+  available: categoryHasContent(category.slug),
+  count: categoryRecords(category.slug).length,
+  cover: cover(category.slug),
+})).sort((a, b) => Number(b.available) - Number(a.available));
+const empty = !categories.some((c) => c.available);
 ---
 
 <SiteLayout title="Encyclopedia" activeSection="encyclopedia" isSectionIndex empty={empty}>
   {empty ? (
     <p class="empty-note">No encyclopedia records are published yet. Start with the <a href={sitePath("manual/")}>Manual</a> instead.</p>
   ) : (
-    <>
-      <p class="lead">Structured reference records with their sources: what a system is, how it works and how to recognise it. Every record states its review status. Categories without records yet are dimmed below.</p>
-      {available.map((category) => (
-        <section class="subject-group" aria-labelledby={`category-${category.slug}`}>
-          <h2 id={`category-${category.slug}`}><a href={sitePath(`encyclopedia/${category.slug}/`)}>{category.title}</a></h2>
-          <div class="entry-grid">
-            {categoryRecords(category.slug).map((record) => <RecordCard record={record} />)}
-          </div>
-        </section>
-      ))}
-    </>
+    <p class="lead">Structured reference records with their sources: what a system is, how it works and how to recognise it. Every record states its review status. Choose a category; categories without records yet are dimmed.</p>
   )}
-  <section class="planned" aria-labelledby="planned-title">
-    <h2 id="planned-title">{empty ? "Planned categories" : "Other categories"}</h2>
-    <ul class="planned-list">
-      {encyclopediaCategories.filter((c) => !categoryHasContent(c.slug)).map((category) => <li>{category.title}</li>)}
-    </ul>
-  </section>
+  <ul class="card-grid category-grid">
+    {categories.map((category) => (
+      <li class:list={["collection-card", "category-card", { unavailable: !category.available }]}>
+        {category.available && category.cover && <img class="category-cover" src={assetPath(category.cover.src)} alt="" loading="lazy" decoding="async" />}
+        <h2>
+          {category.available
+            ? <a href={sitePath(`encyclopedia/${category.slug}/`)}>{category.title}</a>
+            : <>{category.title}<span class="visually-hidden"> (nothing published yet)</span></>}
+        </h2>
+        <p>{category.summary}</p>
+        <p class="collection-status">{category.available ? plural(category.count, "record") : "Nothing published yet"}</p>
+      </li>
+    ))}
+  </ul>
 </SiteLayout>
