@@ -47,11 +47,11 @@
     "id": "module.air-navigation",
     "slug": "air-navigation",
     "subject": "navigation",
-    "revision": 1,
+    "revision": 2,
     "title": "Air Navigation",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "objective": "Fix and describe a position, turn true courses into compass headings and correct for wind, then navigate by TACAN, VOR and DME (radials, intercepts, arcs and point-to-point), by GPS and inertial systems (waypoints, offsets and direct-to), and cross-check them.",
+    "objective": "Read the HSI as a picture, set up and fly a TACAN or VOR course, correct for wind, intercept courses inbound and outbound, fly DME arcs, point to point and waypoint routes, and cross-check them, with positions, headings and the navigation aids as background.",
     "applicability": "For military pilots of every service: US Navy training publications first, with the FAA AIM and Pilot's Handbook as the supplementary US civil rule set and an Army field manual for the military grid. Worked examples use the T-45C training jet's displays; your aircraft's flight manual (NATOPS or your service's equivalent) governs its systems."
   }
 ]

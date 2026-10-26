@@ -457,3 +457,106 @@ export function routeFlight({ waypoints, groundSpeed = 300, bank = 30, flyOver =
   }
   return { step, directTo, state, turnRate: rate };
 }
+
+/* ---------- Flying a course on the HSI ---------- */
+
+/**
+ * The simplified HSI drawn by the figures: the CDI bar's half-length and the
+ * dot spacing, both as fractions of the rose radius.
+ */
+export const HSI_BAR = Object.freeze({ halfLength: 0.55, dot: 0.18 });
+
+/**
+ * Signed distance from the line of a course through the station, in NM:
+ * positive when the course line is to the right of an aircraft flying the
+ * course's direction (the same sense as the CDI bar).
+ */
+export function crossTrack({ x, y }, course) {
+  return -(x * Math.cos(course * D) - y * Math.sin(course * D));
+}
+
+export const PILOT_MODES = Object.freeze({
+  hold: 'Hold heading',
+  homing: 'Homing: bearing pointer on the nose',
+  track: 'Track the course',
+  method: 'FTI intercept method, then track',
+});
+
+/**
+ * Fly an aircraft against one TACAN/VOR course, one simulated second per
+ * step. The station is at the origin and positions are in NM (x east, y
+ * north); all directions are magnetic with no variation. The simulated pilot
+ * turns at a half standard rate, 1.5°/s, the FTI's rate for intercepts, and
+ * through the cone of confusion (within 1 NM of the station) holds heading.
+ *
+ * Modes: `hold` keeps the heading bug; `homing` keeps the bearing pointer's
+ * head on the nose; `track` crabs into the wind and steers off any cross-track
+ * error; `method` turns to the FTI intercept heading (`method` names an
+ * INTERCEPT_METHODS key), holds it, starts the turn onto the course where a
+ * 1.5°/s turn rolls out on it, then tracks.
+ */
+export function courseFlight({ course, radial, dme, heading, tas = 250, windFrom = 0, windSpeed = 0, mode = 'hold', method = 'thirty', rate = 1.5 }) {
+  for (const [name, v] of [['Course', course], ['Radial', radial], ['Range', dme], ['Heading', heading], ['True airspeed', tas]]) finite(name, v);
+  if (!PILOT_MODES[mode]) throw new RangeError('Unknown pilot mode.');
+  const p = tacanPosition({ radial, dme });
+  const wind = { x: -windSpeed * Math.sin(windFrom * D), y: -windSpeed * Math.cos(windFrom * D) };
+  const s = { x: p.x, y: p.y, heading: norm(heading), bug: norm(heading), course: norm(course), t: 0, phase: 'start', interceptHeading: null };
+  if (mode === 'method') {
+    const icpt = interceptHeading({ method, course, radial });
+    s.interceptHeading = icpt.heading;
+    s.phase = icpt.onCourse ? 'track' : 'intercept';
+  }
+  // Heading that makes good a ground track, from the wind triangle.
+  const headingFor = (track) => {
+    if (!windSpeed) return norm(track);
+    try { return windTriangle({ course: track, tas, windFrom, windSpeed }).heading; } catch { return norm(track); }
+  };
+  const radius = () => (tas / 3600) / (rate * D);
+  function state() {
+    const { radial: r, range } = fixOf(s);
+    const view = hsi({ radial: r, course: s.course });
+    const vx = tas * Math.sin(s.heading * D) + wind.x, vy = tas * Math.cos(s.heading * D) + wind.y;
+    return {
+      x: s.x, y: s.y, t: s.t, heading: s.heading, bug: s.bug, course: s.course, phase: s.phase, mode,
+      radial: r, range, ...view, xtk: crossTrack(s, s.course),
+      groundSpeed: Math.hypot(vx, vy), track: norm(Math.atan2(vx, vy) / D), drift: diff(norm(Math.atan2(vx, vy) / D), s.heading),
+      cone: range < 1, interceptHeading: s.interceptHeading,
+    };
+  }
+  function want(st) {
+    if (st.cone && mode !== 'hold') return s.heading;
+    const trackFix = () => headingFor(norm(s.course - Math.max(-30, Math.min(30, st.xtk * -30))));
+    switch (mode) {
+      case 'hold': return s.bug;
+      case 'homing': return st.head;
+      case 'track': return trackFix();
+      case 'method': {
+        if (s.phase === 'intercept') {
+          const angle = Math.abs(diff(s.interceptHeading, s.course));
+          const lead = radius() * (1 - Math.cos(angle * D));
+          const closing = Math.sign(st.xtk) === Math.sign(diff(s.heading, s.course));
+          if (Math.abs(diff(s.heading, s.interceptHeading)) < 1 && closing && Math.abs(st.xtk) <= lead + 0.02) s.phase = 'rollout';
+          else return s.interceptHeading;
+        }
+        if (s.phase === 'rollout' && Math.abs(diff(s.heading, headingFor(s.course))) < 2) s.phase = 'track';
+        return s.phase === 'rollout' ? headingFor(s.course) : trackFix();
+      }
+    }
+  }
+  function step() {
+    const st = state();
+    const turn = diff(want(st), s.heading);
+    s.heading = norm(s.heading + Math.max(-rate, Math.min(rate, turn)));
+    if (s.phase === 'start') s.phase = 'flying';
+    const vx = tas * Math.sin(s.heading * D) + wind.x, vy = tas * Math.cos(s.heading * D) + wind.y;
+    s.x += vx / 3600;
+    s.y += vy / 3600;
+    s.t += 1;
+    return state();
+  }
+  return {
+    step, state,
+    setBug(h) { finite('Heading', h); s.bug = norm(h); return state(); },
+    setCourse(c) { finite('Course', c); s.course = norm(c); return state(); },
+  };
+}

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
-  ARC_LEAD_TABLE, anticipation, arcLeads, chordArc, diff, fixOf, formatDD, formatDM, formatDMS, groundSpeedCheck,
+  ARC_LEAD_TABLE, anticipation, arcLeads, chordArc, courseFlight, crossTrack, diff, fixOf, formatDD, formatDM, formatDMS, groundSpeedCheck,
   gsCheckValid, headings, hsi, interceptHeading, latitudeBand, leadNm, legGeometry, minutesFor, parseCoordinate,
   pointToPoint, radialSpacing, relativeBearing, resolution, routeFlight, slantRange, tacanPosition, toMGRS, toUTM,
   turnRadius, utmZone, windTriangle,
@@ -245,4 +245,61 @@ test('route flight sequences waypoints and flies direct-to', () => {
   near(d.xtk, 0, 1e-9);
   near(d.desiredTrack, d.bearing, 1e-9);
   near(d.timeToGo, d.distance / 300 * 3600, 1e-9);
+});
+
+const fly = (opts, seconds) => { const f = courseFlight(opts); let s = f.state(); for (let i = 0; i < seconds; i++) s = f.step(); return s; };
+
+test('cross-track has the CDI bar\'s sense', () => {
+  // West of the inbound 360 course line: the course is to the right.
+  assert.ok(crossTrack({ x: -2, y: -10 }, 360) > 0);
+  assert.ok(crossTrack({ x: 2, y: -10 }, 360) < 0);
+  near(crossTrack({ x: -2, y: -10 }, 360), 2, 1e-12);
+  assert.equal(Math.sign(crossTrack(tacanPosition({ radial: 200, dme: 20 }), 360)), Math.sign(hsi({ radial: 200, course: 360 }).deviation));
+});
+
+test('course flight: FTI method intercepts and tracks the course', () => {
+  const start = courseFlight({ course: 360, radial: 210, dme: 25, heading: 360, mode: 'method', method: 'thirty' }).state();
+  assert.equal(start.interceptHeading, 60);
+  assert.equal(start.phase, 'intercept');
+  const s = fly({ course: 360, radial: 210, dme: 25, heading: 360, mode: 'method', method: 'thirty' }, 520);
+  assert.equal(s.phase, 'track');
+  near(s.xtk, 0, 0.05);
+  near(diff(s.heading, 360), 0, 1);
+  // The roll-out finishes on the course, without a large overshoot.
+  const f = courseFlight({ course: 360, radial: 210, dme: 25, heading: 360, mode: 'method', method: 'thirty' });
+  let worst = 0;
+  for (let i = 0; i < 520; i++) worst = Math.min(worst, f.step().xtk);
+  assert.ok(worst > -0.1, `overshoot ${worst}`);
+});
+
+test('course flight: homing curves downwind, tracking holds the course', () => {
+  const opts = { course: 360, radial: 180, dme: 20, heading: 360, windFrom: 270, windSpeed: 40 };
+  const f = courseFlight({ ...opts, mode: 'homing' });
+  let s = f.state(), widest = 0;
+  while (s.range > 1.2 && s.t < 600) { s = f.step(); widest = Math.min(widest, s.xtk); }
+  assert.ok(widest < -1, `homing stayed within ${widest} NM`);
+  const t = courseFlight({ ...opts, mode: 'track' });
+  let off = 0;
+  for (let i = 0; i < 300; i++) off = Math.max(off, Math.abs(t.step().xtk));
+  assert.ok(off < 0.1, `tracking wandered ${off} NM`);
+});
+
+test('course flight: station passage flips TO to FROM on the same course', () => {
+  const f = courseFlight({ course: 360, radial: 180, dme: 8, heading: 360, mode: 'track' });
+  assert.equal(f.state().toFrom, 'TO');
+  let s;
+  for (let i = 0; i < 260; i++) s = f.step();
+  assert.equal(s.toFrom, 'FROM');
+  near(s.radial, 0, 2);
+  near(s.xtk, 0, 0.1);
+});
+
+test('course flight: hold mode turns to the heading bug at a half standard rate', () => {
+  const f = courseFlight({ course: 360, radial: 210, dme: 20, heading: 360, mode: 'hold' });
+  f.setBug(30);
+  near(f.step().heading, 1.5, 1e-9);
+  let s;
+  for (let i = 0; i < 30; i++) s = f.step();
+  near(s.heading, 30, 1e-9);
+  assert.throws(() => courseFlight({ course: 360, radial: 0, dme: 5, heading: 0, mode: 'nope' }), RangeError);
 });

@@ -1,4 +1,4 @@
-# Air Navigation, revision 1 — source evidence
+# Air Navigation, revision 2 — source evidence
 
 Short, page-specific excerpts supporting the claims in the Navigation module
 (`src/pages/manual/navigation/[module].astro`) and its models
@@ -14,7 +14,15 @@ Printed page numbers are the sources' own.
 
 **Military sources first.** [1] NAVEDTRA 14342A and [2] CNATRA P-1204 are the
 primary sources; [3] FM 3-25.26 is cited only for the military grid. The FAA
-AIM [4] and PHAK [5] are supplementary.
+AIM [4], PHAK [5] and Instrument Flying Handbook [6] are supplementary.
+
+**Revision 2 (26 October 2026).** Practical flying moved ahead of the
+background; a new Figure 1 animates a plan view beside the HSI; new sections
+"Setting up a course" and "Flying to and from a station". [6] was added for
+the HSI-as-plan-view description, TO/FROM, wind bracketing, station passage and
+outbound tracking. The FAA PDF is about 68 MB, too large for the review packet,
+so it is not declared and is expected to stay unverified by it; its excerpts are
+recorded below.
 
 **Review packet limits.** The packet fetches at most eight URLs, declared
 sources first, then in order of appearance. The module links, in order: six
@@ -155,3 +163,18 @@ Declared above; physical page = printed page (16-n is physical page n).
 | 16-10 | Definitions of course, heading, track, drift angle, WCA, airspeed, GS | Direction; Terms |
 | 16-13 | "Dead reckoning is navigation solely by means of computations based on time, airspeed, distance, and direction." | Wind |
 | 16-14 to 16-15 | Example: TC 090°, wind "40 knots from the northeast (045°)", TAS 120 kt; "the WCA is 14° and the wind is from the left; therefore, subtract 14° from TC of 090°, making the TH 076°"; "(88 NMPH or 88 knots)"; "220 NM, divide by the GS of 88 knots, which gives 2.5 hours" | Wind; Figure 3; tests |
+
+## [6] FAA Instrument Flying Handbook, FAA-H-8083-15B
+
+Downloaded 26 October 2026 from
+https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/FAA-H-8083-15B.pdf
+and extracted with `pdftotext`. Printed page 5-23 is PDF page 118 and 9-14 is
+PDF page 257.
+
+| Page | Passage | Module use |
+| --- | --- | --- |
+| 5-23 | "This gives the pilot a pictorial presentation: the fixed aircraft symbol and course deviation bar display the aircraft relative to the selected course, as though the pilot were above the aircraft looking down."; "When the indicator points to the head of the course arrow, it shows that the course selected, if properly intercepted and flown, takes the aircraft to the selected facility." | Reading the HSI; Setting up a course |
+| 9-14 | "If the CDI moves off center to the left, follow the needle by correcting course to the left, beginning with a 20° correction."; "a left deflection of the needle indicates a crosswind component from the left. If the amount of correction brings the needle back to center, decrease the left course correction by half." | Flying to and from a station (wind) |
+| 9-14 | "If the movement is rapid or fluctuating, this is an indication of impending station passage"; "If the VOR is set to the reciprocal of the intended course, the CDI reflects reverse sensing ... To avoid this reverse sensing situation, set the VOR to agree with the intended course." | Station passage; Setting up a course |
+| 9-14 | "The track is intercepted by either flying over the station or establishing an intercept heading. The magnetic course of the desired radial is entered under the index using the OBS and the intercept heading held until the CDI centers."; course interception: "Hold this heading constant until the CDI center ... (With practice in judging the varying rates of closure with the course centerline, pilots learn to lead the turn to prevent overshooting the course.)" | Outbound; Intercepts |
+
