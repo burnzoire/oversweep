@@ -1,16 +1,17 @@
 // Presentation for the Air Navigation module's interactive figures. Geometry
 // and rules come from lesson-model.mjs; this file reads inputs and draws.
 import {
-  ARC_LEAD_TABLE, INTERCEPT_METHODS, arcLeads, chordArc, diff, fixOf, formatDD, formatDM, formatDMS, headings, hsi,
-  interceptHeading, leadNm, norm, parseCoordinate, pointToPoint, radialSpacing, relativeBearing, resolution,
-  routeFlight, slantRange, tacanPosition, toMGRS, toUTM, windTriangle,
+  ARC_LEAD_TABLE, HSI_BAR, arcLeads, courseFlight, chordArc, diff, formatDD, formatDM, formatDMS, headings, hsi,
+  norm, parseCoordinate, pointToPoint, relativeBearing, resolution,
+  routeFlight, tacanPosition, toMGRS, toUTM, windTriangle,
 } from './lesson-model.mjs';
 import { quickQuiz, termQuiz, withDistractors } from '../shared/quick-quiz.mjs';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const D = Math.PI / 180;
 const r0 = (v) => Math.round(v).toLocaleString('en-US');
-const deg3 = (v) => String(Math.round(norm(v)) % 360).padStart(3, '0');
+// North is written 360, as headings, courses and radials are.
+const deg3 = (v) => String(Math.round(norm(v)) % 360 || 360).padStart(3, '0');
 // Hours:minutes or minutes:seconds, rounded as a whole so 59.6 never prints as :60.
 const clock = (units) => { const t = Math.round(units * 60); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`; };
 const reduceMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
@@ -267,7 +268,9 @@ function setupWind(root) {
 }
 
 /* ---------- HSI drawing shared by Figure 4 and its quiz ---------- */
-function drawHsi(svg, cx, cy, r, { heading, radial, course, dme, toFrom = true }) {
+// Optional extras: `bug` draws the heading bug, `track` the ground-track
+// marker, and `aim` a sight line from the aircraft to the top of the CDI bar.
+function drawHsi(svg, cx, cy, r, { heading, radial, course, dme, toFrom = true, bug, track, aim = false }) {
   const view = hsi({ radial, course });
   rose(svg, cx, cy, r, heading);
   // Lubber line and fixed aircraft.
@@ -283,7 +286,7 @@ function drawHsi(svg, cx, cy, r, { heading, radial, course, dme, toFrom = true }
   svg.append(el('rect', { x: -5, y: -3, width: 10, height: 6, class: 'box on', transform: `translate(${tx} ${ty}) rotate(${view.tail - heading})` }));
   // Course arrow and CDI bar, rotated to the selected course.
   const g = el('g', { transform: `rotate(${course - heading} ${cx} ${cy})` });
-  const L = r * 0.55, dot = r * 0.18;
+  const L = r * HSI_BAR.halfLength, dot = r * HSI_BAR.dot;
   g.append(el('line', { x1: cx, y1: cy - r + 14, x2: cx, y2: cy - L - 4, class: 'ln heavy' }));
   g.append(el('path', { d: `M${cx} ${cy - r + 10} L${cx - 6} ${cy - r + 22} L${cx + 6} ${cy - r + 22} Z`, class: 'fill' }));
   g.append(el('line', { x1: cx, y1: cy + L + 4, x2: cx, y2: cy + r - 14, class: 'ln heavy' }));
@@ -294,47 +297,24 @@ function drawHsi(svg, cx, cy, r, { heading, radial, course, dme, toFrom = true }
     g.append(el('path', { d: view.toFrom === 'TO' ? `M${cx + dot * 1.5} ${y - 7} l7 12 l-14 0 Z` : `M${cx + dot * 1.5} ${y + 7} l7 -12 l-14 0 Z`, class: 'fill' }));
   }
   svg.append(g);
+  if (aim) {
+    // The top end of the bar, in screen space after the course rotation.
+    const a = (course - heading) * D, bx = view.dots * dot, by = -L;
+    const ex = cx + bx * Math.cos(a) - by * Math.sin(a), ey = cy + bx * Math.sin(a) + by * Math.cos(a);
+    svg.append(el('line', { x1: cx, y1: cy - 14, x2: ex, y2: ey, class: 'thin dotted' }), el('circle', { cx: ex, cy: ey, r: 5, class: 'thin' }));
+  }
+  if (bug !== undefined) {
+    const [bx, by] = polar(cx, cy, r + 1, bug, heading);
+    svg.append(el('path', { d: 'M-7 0 L-7 -7 L-3 -7 L0 -3 L3 -7 L7 -7 L7 0 Z', class: 'box on', transform: `translate(${bx} ${by}) rotate(${bug - heading})` }));
+  }
+  if (track !== undefined) {
+    const [gx, gy] = polar(cx, cy, r - 30, track, heading);
+    svg.append(el('path', { d: 'M0 -6 L5 0 L0 6 L-5 0 Z', class: 'box', transform: `translate(${gx} ${gy})` }));
+  }
   svg.append(jet(cx, cy, 0, 'acft', 1.3));
   svg.append(el('text', { x: cx - r, y: cy - r - 6, class: 'lbl small mono' }, `CRS ${deg3(course)}`));
   if (dme !== undefined) svg.append(el('text', { x: cx + r, y: cy - r - 6, class: 'lbl small mono', 'text-anchor': 'end' }, `${dme.toFixed(1)} NM`));
   return view;
-}
-
-/* ---------- Figure 4: where am I? ---------- */
-function setupHsi(root) {
-  const svg = root.querySelector('svg'), out = root.querySelector('[data-result]');
-  function draw() {
-    const radial = num(root, 'radial'), dme = num(root, 'dme'), heading = num(root, 'hdg'), course = num(root, 'crs'), alt = num(root, 'alt');
-    show(root, 'radial', `${deg3(radial)}°`); show(root, 'dme', `${dme} NM`); show(root, 'hdg', `${deg3(heading)}°`);
-    show(root, 'crs', `${deg3(course)}°`); show(root, 'alt', `${r0(alt)} ft`);
-    const slant = slantRange(dme, alt);
-    svg.replaceChildren();
-    // Plan view, north up.
-    const cx = 160, cy = 165, scale = 125 / 60;
-    svg.append(el('circle', { cx, cy, r: 125, class: 'grid' }), el('circle', { cx, cy, r: 62.5, class: 'grid' }));
-    svg.append(el('text', { x: cx + 4, y: cy - 128, class: 'lbl small' }, 'N · 60 NM'), el('text', { x: cx + 4, y: cy - 66, class: 'lbl small' }, '30'));
-    // Selected course drawn through the station.
-    const [c1x, c1y] = polar(cx, cy, 140, course), [c2x, c2y] = polar(cx, cy, 140, course + 180);
-    svg.append(el('line', { x1: c2x, y1: c2y, x2: c1x, y2: c1y, class: 'ln dashed' }));
-    svg.append(el('text', { x: c1x, y: c1y, class: 'lbl small', 'text-anchor': 'middle' }, `CRS ${deg3(course)}`));
-    const [px, py] = polar(cx, cy, dme * scale, radial);
-    svg.append(el('line', { x1: cx, y1: cy, x2: px, y2: py, class: 'ln on' }));
-    station(svg, cx, cy, 'TACAN');
-    svg.append(jet(px, py, heading, 'acft', 1.2));
-    svg.append(el('text', { x: px + 12, y: py + 18, class: 'lbl small on' }, `R-${deg3(radial)}`));
-    const view = drawHsi(svg, 480, 165, 120, { heading, radial, course, dme: slant });
-    svg.append(el('text', { x: 20, y: 316, class: 'lbl small' }, 'PLAN VIEW, NORTH UP'), el('text', { x: 480, y: 316, class: 'lbl small', 'text-anchor': 'middle' }, 'HSI, HEADING UP'));
-    const side = Math.abs(view.deviation) < 0.5 ? 'centred' : `${Math.abs(view.deviation).toFixed(0)}° ${view.deviation > 0 ? 'right' : 'left'}${view.fullScale ? ' (full scale)' : ''}`;
-    const lines = [
-      para(`You are on the ${deg3(radial)} radial at ${dme} NM: the tail of the bearing pointer shows ${deg3(view.tail)}, the head ${deg3(view.head)}, the course to the station.`),
-      para(`With ${deg3(course)} set the HSI shows ${view.toFrom} and the course bar ${side}; the bar sits on the side the course lies, whatever your heading.`),
-      para(`DME reads ${slant.toFixed(1)} NM slant range at ${r0(alt)} ft${alt / 1000 > dme ? ': more than your ground distance, so a timed ground speed check here would mislead' : ''}.`, 'derived'),
-    ];
-    if (dme < 2) lines.push(para('Close to the station: expect the TACAN bearing to swing through the cone of confusion; TACAN station passage is minimum DME.', 'derived'));
-    out.replaceChildren(...lines);
-  }
-  root.querySelectorAll('input').forEach((i) => i.addEventListener('input', draw));
-  draw();
 }
 
 // Read the HSI: preset positions, one question each.
@@ -362,71 +342,164 @@ function setupHsiQuiz(root) {
   });
 }
 
-/* ---------- Figure 5: intercept a course ---------- */
-function setupIntercept(root) {
-  const svg = root.querySelector('svg'), out = root.querySelector('[data-result]'), method = field(root, 'method');
-  function draw() {
-    const m = method.value, course = num(root, 'crs'), radial = num(root, 'radial'), dme = num(root, 'dme'), gs = num(root, 'gs');
-    show(root, 'crs', `${deg3(course)}°`); show(root, 'radial', `${deg3(radial)}°`); show(root, 'dme', `${dme} NM`); show(root, 'gs', `${gs} kt`);
-    const spec = INTERCEPT_METHODS[m];
-    const icpt = interceptHeading({ method: m, course, radial });
-    svg.replaceChildren();
-    const cx = 230, cy = 165, scale = 140 / 40;
-    svg.append(el('circle', { cx, cy, r: 140, class: 'grid' }), el('text', { x: cx + 4, y: cy - 144, class: 'lbl small' }, 'N · 40 NM'));
-    // The desired course line: inbound along the reciprocal radial, outbound along the radial.
-    const courseRadial = spec.inbound ? norm(course + 180) : course;
-    const [ex, ey] = polar(cx, cy, 150, courseRadial);
-    svg.append(el('line', { x1: cx, y1: cy, x2: ex, y2: ey, class: 'ln heavy' }));
-    const mid = polar(cx, cy, 75, courseRadial);
-    arrow(svg, ...polar(cx, cy, 95, courseRadial), ...polar(cx, cy, spec.inbound ? 70 : 120, courseRadial), 'ln');
-    svg.append(el('text', { x: ex, y: ey + (ey > cy ? 14 : -6), class: 'lbl small', 'text-anchor': 'middle' }, `R-${deg3(courseRadial)}`));
-    station(svg, cx, cy, 'TACAN');
-    const p = tacanPosition({ radial, dme });
-    const P = [cx + p.x * scale, cy - p.y * scale];
-    const lines = [];
-    if (icpt.onCourse) {
-      svg.append(jet(...P, course, 'acft', 1.2));
-      out.replaceChildren(para('You are already on the course line: turn to the course and track it.'));
-      return;
-    }
-    // Intercept leg, the turn onto course (radius 1% of ground speed) and the lead point.
-    const v = [Math.sin(icpt.heading * D), Math.cos(icpt.heading * D)], u = [Math.sin(courseRadial * D), Math.cos(courseRadial * D)];
-    const cross = (a, b) => a[0] * b[1] - a[1] * b[0];
-    const t = -cross([p.x, p.y], u) / cross(v, u);
-    const meets = Number.isFinite(t) && t > 0 && t < 120;
-    const lead = leadNm(gs, icpt.angle);
-    if (meets) {
-      const X = { x: p.x + t * v[0], y: p.y + t * v[1] };
-      const R = gs / 100, th = icpt.angle * D, a = Math.min(t, R * Math.tan(th / 2));
-      const S = { x: X.x - a * v[0], y: X.y - a * v[1] };
-      const along = spec.inbound ? -1 : 1; // course direction along the radial line u
-      const dirOut = [u[0] * along, u[1] * along];
-      // Roll out on the course in the direction it is flown.
-      const head = Math.sign(diff(course, icpt.heading)) || 1;
-      const Rend = { x: X.x + a * dirOut[0], y: X.y + a * dirOut[1] };
-      const scr = (q) => [cx + q.x * scale, cy - q.y * scale];
-      svg.append(el('line', { x1: P[0], y1: P[1], x2: scr(S)[0], y2: scr(S)[1], class: 'flown' }));
-      const r = R * Math.tan(th / 2) <= t ? R : a / Math.tan(th / 2);
-      svg.append(el('path', { d: `M${scr(S).join(' ')} A${r * scale} ${r * scale} 0 0 ${head > 0 ? 1 : 0} ${scr(Rend).join(' ')}`, class: 'flown' }));
-      svg.append(el('line', { x1: scr(X)[0], y1: scr(X)[1], x2: P[0], y2: P[1], class: 'thin dotted' }));
-      svg.append(el('circle', { cx: scr(S)[0], cy: scr(S)[1], r: 4, class: 'pointer' }));
-      svg.append(el('text', { x: scr(S)[0] + 8, y: scr(S)[1] - 6, class: 'lbl small on' }, 'TURN'));
-    }
-    svg.append(jet(...P, icpt.heading, 'acft', 1.2));
-    const X0 = 450;
-    [['METHOD', spec.label.split(' (')[0].toUpperCase()], ['BEARING POINTER', `HEAD ${deg3(radial + 180)} · TAIL ${deg3(radial)}`], ['INTERCEPT HEADING', `${deg3(icpt.heading)}°`],
-      ['INTERCEPT ANGLE', `${icpt.angle.toFixed(0)}°`], ['LEAD (FTI RULE)', `${lead.nm.toFixed(1)} NM`], ['= RADIALS AT THIS DME', (lead.nm / radialSpacing(dme)).toFixed(0)]]
-      .forEach(([k, val], i) => {
-        svg.append(el('text', { x: X0, y: 34 + i * 46, class: 'lbl small' }, k), el('text', { x: X0, y: 56 + i * 46, class: `lbl${i === 2 ? ' big on' : ''} mono` }, val));
-      });
-    lines.push(para(`${spec.inbound ? `Look from the course ${deg3(course)} to the head of the pointer ${deg3(radial + 180)}` : `Look from the tail of the pointer ${deg3(radial)} to the course ${deg3(course)}`}, then ${m === 'thirty' ? '30°' : m === 'fortyfive' ? '45°' : `as many degrees again (${Math.min(icpt.off, 45).toFixed(0)}°, at most 45°)`} beyond: heading ${deg3(icpt.heading)}°.`));
-    lines.push(para(`Lead: 1% of ${gs} kt is ${(gs / 100).toFixed(1)} NM for a 90° intercept; for ${icpt.angle.toFixed(0)}° use ${lead.label}, ${lead.nm.toFixed(1)} NM. At ${dme} NM the radials are ${radialSpacing(dme).toFixed(2)} NM apart.`, 'derived'));
-    if (!icpt.valid) lines.push(para('This intercept is steeper than 90°: the FTI limits the intercept angle to 90°. Choose another method or turn to a 90° intercept.', 'bad'));
-    else if (!meets) lines.push(para('On this heading you would not meet the course line ahead of you. Check the method suits where you are: inbound methods for courses to the station, outbound methods for courses from it.', 'bad'));
-    out.replaceChildren(...lines);
+/* ---------- Figure 4: watch the HSI fly ---------- */
+// Each scene starts the same simulated aircraft somewhere against one course.
+// `until` ends a scene early (homing would otherwise circle the station).
+const WIND = { windFrom: 270, windSpeed: 40 };
+const FLY_SCENES = [
+  { id: 'cross', label: 'Fly across the course', course: 360, radial: 215, dme: 18, heading: 60, mode: 'hold', seconds: 420,
+    intro: 'Holding heading 060 across the inbound 360 course. Watch the bar: it stays on the side the course is, comes alive within 10°, centres as you cross, then moves to the other side.' },
+  { id: 'thirty', label: '30° method', course: 360, radial: 210, dme: 25, heading: 360, mode: 'method', method: 'thirty', seconds: 520,
+    intro: 'On the 210 radial, inbound course 360 set. The pointer head reads 030; 30° beyond it is the intercept heading, 060.' },
+  { id: 'double', label: 'Double the angle', course: 360, radial: 200, dme: 20, heading: 360, mode: 'method', method: 'double', seconds: 440,
+    intro: 'On the 200 radial: the pointer head (020) is 20° from the course, so turn 20° beyond it, to 040.' },
+  { id: 'picture', label: 'Aim at the top of the bar', course: 360, radial: 200, dme: 20, heading: 360, mode: 'picture', seconds: 440,
+    intro: 'The nose goes on the top end of the bar. While the bar is pinned that is about 33°; as it centres the intercept angle shrinks by itself.' },
+  { id: 'pictureWind', label: 'Top of the bar, crosswind', course: 360, radial: 200, dme: 20, heading: 360, mode: 'picture', seconds: 520, range: 15, ...WIND,
+    intro: 'The same, with a 40 kt wind from the west. Watch where it settles.' },
+  { id: 'pictureTrack', label: 'Top of the bar, ground-track marker', course: 360, radial: 200, dme: 20, heading: 360, mode: 'pictureTrack', seconds: 520, range: 15, ...WIND,
+    intro: 'The same wind, but now the ground-track marker (the diamond) goes on the top of the bar, so the crab is built in.' },
+  { id: 'homing', label: 'Homing in a crosswind', course: 360, radial: 180, dme: 20, heading: 360, mode: 'homing', seconds: 600, range: 12, until: (s) => s.range < 1.2, ...WIND,
+    intro: 'Bearing pointer kept on the nose, no wind correction, 40 kt from the west. The aircraft gets there, but on a curved path that drifts off the course.' },
+  { id: 'track', label: 'Tracking in a crosswind', course: 360, radial: 180, dme: 20, heading: 360, mode: 'track', seconds: 320, range: 12, ...WIND,
+    intro: 'Same wind, tracking instead: the ground-track marker held on the course, the nose crabbed into the wind.' },
+  { id: 'passage', label: 'Station passage', course: 360, radial: 180, dme: 8, heading: 360, mode: 'track', seconds: 260, range: 12,
+    intro: 'Tracking inbound on 360 with 360 still set. Over the station the bearing pointer swings, the TO arrow becomes FROM, and the same course takes you outbound.' },
+  { id: 'outbound', label: '45° method outbound', course: 60, radial: 30, dme: 5, heading: 30, mode: 'method', method: 'fortyfive', seconds: 420, range: 20,
+    intro: 'Outbound on the 030 radial, cleared to the 060 radial outbound. Look from the pointer tail (030) to the course (060) and 45° beyond: 105.' },
+  { id: 'manual', label: 'Fly it yourself', course: 360, radial: 210, dme: 20, heading: 360, mode: 'hold', seconds: 1200,
+    intro: 'You have the aircraft. Set the heading bug with the buttons (or the arrow keys on the figure) and intercept the inbound 360 course.' },
+];
+const PHASE_TEXT = {
+  intercept: (s) => `Holding the intercept heading, ${deg3(s.interceptHeading)}.`,
+  rollout: (s) => `Lead point: turning onto ${deg3(s.course)} so the turn finishes on the course.`,
+};
+function setupFly(root) {
+  const svg = root.querySelector('svg'), out = root.querySelector('[data-result]');
+  const play = root.querySelector('[data-play]'), scenes = root.querySelector('[data-scenes]'), steer = root.querySelector('[data-steer]');
+  let scene = FLY_SCENES[1], sim, trail, frame = null, last = 0, carry = 0, said = '';
+  const headingUp = () => root.querySelector('[name="view"]:checked').value === 'up';
+  const speed = () => num(root, 'speed');
+  const finished = () => { const s = sim.state(); return s.t >= scene.seconds || Math.hypot(s.x, s.y) > 45 || scene.until?.(s); };
+  function load(next) {
+    stop();
+    scene = next;
+    sim = courseFlight(scene);
+    trail = [sim.state()];
+    said = '';
+    scenes.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.scene === scene.id)));
+    steer.hidden = scene.id !== 'manual';
+    draw();
   }
+  // What is happening now, in words; announced only when it changes.
+  function narrate(s) {
+    const lines = [scene.intro];
+    let now;
+    if (s.cone) now = 'Over the station: the bearing pointer swings and the TO/FROM arrow flips. Hold heading until it settles.';
+    else if (PHASE_TEXT[s.phase] && scene.mode === 'method') now = PHASE_TEXT[s.phase](s);
+    else if (scene.mode.startsWith('picture') && Math.abs(s.deviation) >= 0.25) now = `${s.fullScale ? 'Bar pinned at full scale' : 'Bar alive'}: the top of the bar is ${Math.abs(s.aim).toFixed(0)}° ${s.aim > 0 ? 'right' : 'left'} of the course, so the ${scene.mode === 'pictureTrack' ? 'ground track' : 'nose'} points there.`;
+    else if (s.fullScale) now = 'Bar pinned at full scale: you are 10° or more off the course.';
+    else if (Math.abs(s.deviation) < 0.25) now = `Bar centred: on the course${Math.abs(s.drift) >= 1 ? `, crabbing ${Math.abs(s.drift).toFixed(0)}° into the wind` : ''}.`;
+    else now = `Bar alive: ${Math.abs(s.deviation).toFixed(1)}° off, course to the ${s.deviation > 0 ? 'right' : 'left'}.`;
+    if (finished()) now = summary(s);
+    if (now !== said) { said = now; out.replaceChildren(...lines.map((t) => para(t, 'derived')), para(now)); }
+  }
+  function summary(s) {
+    if (scene.id === 'homing') return `Homing reached the station from the ${deg3(s.radial)} radial, not along the course: the path curved downwind.`;
+    if (scene.id === 'pictureWind') return `Settled ${Math.abs(s.xtk).toFixed(1)} NM downwind of the course with the bar ${Math.abs(s.dots).toFixed(1)} dot out: there the angle to the top of the bar is used up as crab against the wind, so nothing is left to close the course. Use the ground-track marker, or add crab, to centre it.`;
+    if (Math.abs(s.xtk) < 0.1) return `Established on ${deg3(s.course)}${Math.abs(s.drift) >= 1 ? ` with ${Math.abs(s.drift).toFixed(0)}° of crab` : ''}, ${s.toFrom} the station at ${s.range.toFixed(1)} NM.`;
+    return `${Math.abs(s.xtk).toFixed(1)} NM ${s.xtk > 0 ? 'left' : 'right'} of the course line.`;
+  }
+  function draw() {
+    const s = sim.state();
+    svg.replaceChildren();
+    // Plan view: station-centred and north up, or aircraft-centred and heading up like the HSI.
+    // Side by side when there is room, plan view above the HSI on a phone.
+    const narrow = root.clientWidth < 560, ring = scene.range ?? 25;
+    svg.setAttribute('viewBox', narrow ? '0 0 330 690' : '0 0 640 335');
+    const cx = 165, cy = 170, R = 140, k = R / ring, up = headingUp() ? s.heading : 0;
+    const hx = narrow ? 165 : 470, hy = narrow ? 510 : 170, foot = narrow ? 680 : 326;
+    const ox = headingUp() ? s.x : 0, oy = headingUp() ? s.y : 0;
+    const scr = (q) => { const dx = (q.x - ox) * k, dy = (q.y - oy) * k, a = -up * D; return [cx + dx * Math.cos(a) + dy * Math.sin(a), cy + dx * Math.sin(a) - dy * Math.cos(a)]; };
+    const clip = el('clipPath', { id: 'fly-clip' });
+    clip.append(el('circle', { cx, cy, r: R }));
+    svg.append(clip);
+    const g = el('g', { 'clip-path': 'url(#fly-clip)' });
+    svg.append(el('circle', { cx, cy, r: R, class: 'frame' }));
+    const far = (dir, n) => scr({ x: n * Math.sin(dir * D), y: n * Math.cos(dir * D) });
+    const [a1, b1] = far(s.course, 80), [a2, b2] = far(s.course + 180, 80);
+    g.append(el('line', { x1: a2, y1: b2, x2: a1, y2: b1, class: 'ln heavy' }));
+    [-30, -15, 15, 30].forEach((n) => { const [mx, my] = far(s.course + 180, n); g.append(el('path', { d: 'M0 -7 L5 3 L-5 3 Z', class: 'fill', transform: `translate(${mx} ${my}) rotate(${s.course - up})` })); });
+    // The ±10° wedge where the bar is alive, either side of the course.
+    for (const side of [-10, 10]) {
+      const [p1, q1] = far(s.course + 180 + side, 80), [p2, q2] = far(s.course + side, 80);
+      g.append(el('line', { x1: p1, y1: q1, x2: p2, y2: q2, class: 'thin dotted' }));
+    }
+    g.append(el('path', { d: `M${trail.map((q) => scr(q).join(' ')).join(' L')}`, class: 'flown' }));
+    const [sx, sy] = scr({ x: 0, y: 0 });
+    station(g, sx, sy, 'TACAN');
+    svg.append(g);
+    svg.append(jet(...scr(s), s.heading - up, 'acft', 1.2));
+    const [nx, ny] = polar(cx, cy, R + 10, 0, up);
+    svg.append(el('text', { x: nx, y: ny + 4, class: 'lbl', 'text-anchor': 'middle' }, 'N'));
+    if (scene.windSpeed) {
+      const wx = 30, wy = 30, toward = scene.windFrom + 180 - up;
+      arrow(svg, ...polar(wx, wy, 16, toward + 180), ...polar(wx, wy, 16, toward), 'ln');
+      svg.append(el('text', { x: wx - 22, y: wy + 30, class: 'lbl small' }, `WIND ${deg3(scene.windFrom)}/${scene.windSpeed}`));
+    }
+    svg.append(el('text', { x: narrow ? 165 : 20, y: narrow ? 334 : foot, class: 'lbl small', 'text-anchor': narrow ? 'middle' : 'start' }, `PLAN VIEW, ${headingUp() ? 'HEADING' : 'NORTH'} UP · ${ring} NM RING`));
+    // HSI, heading up.
+    const showBug = scene.mode === 'hold', showTrack = true, aim = scene.mode.startsWith('picture');
+    drawHsi(svg, hx, hy, 120, { heading: s.heading, radial: s.radial, course: s.course, dme: s.range, bug: showBug ? s.bug : undefined, track: showTrack ? s.track : undefined, aim });
+    svg.append(el('text', { x: hx, y: foot, class: 'lbl small', 'text-anchor': 'middle' }, `HSI · HDG ${deg3(s.heading)} · GS ${r0(s.groundSpeed)} KT · ${clock(s.t / 60)}`));
+    narrate(s);
+  }
+  function run(seconds) {
+    for (let i = 0; i < seconds && !finished(); i++) {
+      sim.step();
+      if (sim.state().t % 4 === 0) trail.push(sim.state());
+    }
+    trail.push(sim.state());
+    draw();
+  }
+  function tick(now) {
+    const dt = Math.min(0.1, (now - last) / 1000);
+    last = now;
+    carry += dt * speed();
+    const whole = Math.floor(carry);
+    carry -= whole;
+    if (whole) run(whole);
+    if (finished()) return stop();
+    frame = requestAnimationFrame(tick);
+  }
+  function stop() { if (frame) cancelAnimationFrame(frame); frame = null; play.textContent = 'Play'; }
+  play.addEventListener('click', () => {
+    if (frame) return stop();
+    if (finished()) load(scene);
+    if (reduceMotion()) { run(60); return; }
+    play.textContent = 'Pause';
+    last = performance.now();
+    carry = 0;
+    frame = requestAnimationFrame(tick);
+  });
+  root.querySelector('[data-step]').addEventListener('click', () => { stop(); if (finished()) load(scene); run(10); });
+  root.querySelector('[data-reset]').addEventListener('click', () => load(scene));
+  for (const sc of FLY_SCENES) {
+    const b = Object.assign(document.createElement('button'), { type: 'button', textContent: sc.label });
+    b.dataset.scene = sc.id;
+    b.addEventListener('click', () => { load(sc); });
+    scenes.append(b);
+  }
+  const turnBug = (by) => { if (scene.mode !== 'hold') return; sim.setBug(sim.state().bug + by); if (!frame && !finished()) run(0); else draw(); };
+  steer.querySelectorAll('[data-turn]').forEach((b) => b.addEventListener('click', () => turnBug(+b.dataset.turn)));
+  root.addEventListener('keydown', (e) => {
+    if (scene.id !== 'manual' || !['ArrowLeft', 'ArrowRight'].includes(e.key) || e.target.matches('input, select')) return;
+    e.preventDefault();
+    turnBug(e.key === 'ArrowLeft' ? -5 : 5);
+  });
   root.querySelectorAll('input, select').forEach((i) => i.addEventListener('input', draw));
-  draw();
+  window.addEventListener('resize', () => { if (!frame) draw(); });
+  load(scene);
 }
 
 /* ---------- Figure 6: DME arcs ---------- */
@@ -618,7 +691,7 @@ function setupRoute(root) {
 
 function setupTerms(root) { termQuiz(root, { hideTerm: true }); }
 
-const blocks = { coords: setupCoords, compass: setupCompass, wind: setupWind, hsi: setupHsi, 'hsi-quiz': setupHsiQuiz, intercept: setupIntercept, arc: setupArc, p2p: setupP2p, route: setupRoute, terms: setupTerms };
+const blocks = { coords: setupCoords, compass: setupCompass, wind: setupWind, fly: setupFly, 'hsi-quiz': setupHsiQuiz, arc: setupArc, p2p: setupP2p, route: setupRoute, terms: setupTerms };
 for (const root of document.querySelectorAll('[data-lesson]')) {
   blocks[root.dataset.lesson]?.(root);
   root.classList.add('ready');
