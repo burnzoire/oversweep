@@ -56,7 +56,7 @@ sources:
 
 ## Too heavy, too light, then just right
 
-In the late 1950s the US Army wanted a turbine-powered helicopter to replace its piston-engined CH-37, but it could not decide how big it should be. One faction wanted a tactical transport for a squad of about 15 troops; another wanted something big enough to lift artillery and even the Pershing missile. Vertol's tandem-rotor V-107 was judged too heavy for assault and too light for transport. The Army gave the assault role to the smaller UH-1 Huey, the Marines took the V-107 as the CH-46 Sea Knight, and Vertol enlarged the design into the Model 114. It made its first hovering flight on 21 September 1961 and was named **Chinook**, after the Chinook people of the Pacific Northwest. [[1]](#source-1)
+In the late 1950s the US Army wanted a turbine-powered helicopter to replace its piston-engined CH-37, but it could not decide how big it should be. One faction wanted a tactical transport for a squad of about 15 troops; another wanted something big enough to lift artillery and even the Pershing missile. Vertol's tandem-rotor V-107 was judged too heavy for assault and too light for transport. The Army gave the assault role to the smaller [UH-1 Huey](record:uh-1h), the Marines took the V-107 as the CH-46 Sea Knight, and Vertol enlarged the design into the Model 114. It made its first hovering flight on 21 September 1961 and was named **Chinook**, after the Chinook people of the Pacific Northwest. [[1]](#source-1)
 
 ## Two rotors, no tail rotor
 

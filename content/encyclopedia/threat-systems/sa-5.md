@@ -71,13 +71,13 @@ Source: [[1]](#source-1). Figure 1 uses the S-200V. The export 5V28E missile car
 
 ## How it engages
 
-The 5N62 **Square Pair** is an H-band continuous-wave radar that both tracks targets and illuminates them. Early warning comes from the A-band P-14 **Tall King C**, height finding from the PRV-17 **Odd Group**, and the E/F-band P-35 **Bar Lock** is also associated with the system. [[1]](#source-1)
+The 5N62 **Square Pair** is an H-band continuous-wave radar that both tracks targets and illuminates them. [Early warning](term:early-warning) comes from the A-band P-14 **Tall King C**, height finding from the PRV-17 **Odd Group**, and the E/F-band P-35 **Bar Lock** is also associated with the system. [[1]](#source-1)
 
 **Unverified here:** that the missile homes semi-actively on the Square Pair's illumination. It follows from the radar's role, but the source text reviewed for this revision does not state the guidance law.
 
 ## On the radar warning receiver
 
-In the DCS F-14, the AN/ALR-67 shows the Square Pair track radar as **5**, and lists two search radars with the SA-5: the Flat Face (**FF**, also used with the SA-2 and SA-3) and the Tin Shield (**TS**). [[2]](#source-2) Neither search radar is in the S-200 radar list above, which comes from [[1]](#source-1).
+In the DCS F-14, the AN/ALR-67 shows the Square Pair track radar as **5**, and lists two search radars with the SA-5: the Flat Face (**FF**, also used with the [SA-2](record:sa-2) and [SA-3](record:sa-3)) and the Tin Shield (**TS**). [[2]](#source-2) Neither search radar is in the S-200 radar list above, which comes from [[1]](#source-1).
 
 ## History
 

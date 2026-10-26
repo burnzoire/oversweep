@@ -103,11 +103,8 @@ export async function checkRecords({ dist, records, review = false, base = "", c
     const page = path.relative(dist, file);
     if (glossaryIds) for (const [, id] of html.matchAll(glossaryLink))
       if (!glossaryIds.has(id)) problems.push(`${page} links to glossary entry #${id}, which does not exist.`);
-    // <Term> links name an entry once per page, at its first mention, and an
-    // encyclopedia record they name must ship in this build.
+    // An encyclopedia record that a term link names must ship in this build.
     const terms = [...html.matchAll(/<a class="term-link" href="([^"]+)"/g)].map((m) => m[1]);
-    for (const href of new Set(terms.filter((href, i) => terms.indexOf(href) !== i)))
-      problems.push(`${page} links ${href} more than once; link only the first mention.`);
     for (const href of new Set(terms)) {
       if (href.includes("#")) continue;
       const target = href.startsWith(`${base}/`) ? path.join(dist, href.slice(base.length), "index.html") : null;

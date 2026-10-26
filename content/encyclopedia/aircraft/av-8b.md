@@ -15,7 +15,7 @@ ceiling: "Not given in the cited sources"
 range: "Combat radius 300 NM; ferry range 1,800 NM [1]; high-speed low-level combat radius greater than 142 NM [2]"
 armament:
   - "One 25 mm GAU-12 Equalizer five-barrel rotary cannon in an underfuselage pod, 300 rounds [1] [2]"
-  - "Up to 9,000 lb on seven stations; standard loads six Mk 82 bombs or four AIM-9 Sidewinders [2]"
+  - "Up to 9,000 lb on seven stations; standard loads six [Mk 82](record:mk-82) bombs or four AIM-9 Sidewinders [2]"
   - "AGM-65 Maverick, laser- and GPS-guided bombs and rockets [1]"
 sensors:
   - "Navigation forward-looking infrared and night-vision-goggle-compatible cockpit on the Night Attack [1]"
@@ -57,7 +57,7 @@ The first Harriers proved that a combat jet could take off and land like a helic
 
 Everything depends on one engine. The Pegasus turbofan exhausts through four nozzles, two each side, that the pilot can rotate. Pointed down, they lift the aircraft straight up; pointed aft, they push it forward like any other jet; set in between, they give a short rolling take-off, which lets the aircraft lift far more weight than it could vertically. [[1]](#source-1) That freedom let the Marines base their own jets on amphibious assault ships and on rough forward sites ashore, close to the troops they supported. [[1]](#source-1)
 
-The price was a demanding aircraft. Take-off and landing are the most dangerous moments of any flight, and Harriers spend more time in them than most. In Marine service the AV-8B's accident rate was about three times that of the Corps' F/A-18s, and some in the military called it a "widow maker". Later analysis blamed much of that record on cuts to senior maintenance staff, pilot error and senior officers who did not understand the aircraft. [[1]](#source-1)
+The price was a demanding aircraft. Take-off and landing are the most dangerous moments of any flight, and Harriers spend more time in them than most. In Marine service the AV-8B's accident rate was about three times that of the Corps' [F/A-18s](record:fa-18c), and some in the military called it a "widow maker". Later analysis blamed much of that record on cuts to senior maintenance staff, pilot error and senior officers who did not understand the aircraft. [[1]](#source-1)
 
 ## Night Attack and radar
 
@@ -65,8 +65,8 @@ Upgrades gave it night-attack equipment, as the **AV-8B(NA)**, and then an APG-6
 
 ## Into action
 
-The AV-8B's war began on the morning of 17 January 1991, when an OV-10 forward air controller called for help against Iraqi artillery shelling the Saudi town of Khafji. During the Gulf War 86 Harriers flew 3,380 sorties with an availability rate above 90 per cent; five were lost to surface-to-air missiles. General Norman Schwarzkopf later named the AV-8B among seven weapons that played a crucial role in the war, alongside the F-117 and the AH-64 Apache. [[1]](#source-1)
+The AV-8B's war began on the morning of 17 January 1991, when an OV-10 [forward air controller](term:fac) called for help against Iraqi artillery shelling the Saudi town of Khafji. During the Gulf War 86 Harriers flew 3,380 [sorties](term:sortie) with an availability rate above 90 per cent; five were lost to surface-to-air missiles. General Norman Schwarzkopf later named the AV-8B among seven weapons that played a crucial role in the war, alongside the F-117 and the [AH-64 Apache](record:ah-64d). [[1]](#source-1)
 
-Marine Harriers went on to fly over Kosovo, Afghanistan and Iraq, where the street fighting around Fallujah demanded extreme precision, and over Libya in 2011. [[1]](#source-1) Their worst single day came on 14 September 2012, when a Taliban raid on Camp Bastion in Afghanistan destroyed six AV-8Bs of VMFA-211 on the ground and badly damaged two more, described as the worst loss of US airpower in a single incident since the Vietnam War. [[1]](#source-1) Near the end, in the Red Sea in 2024, a Harrier modified for air defence was reported to have shot down seven Houthi attack drones. [[1]](#source-1)
+Marine Harriers went on to fly over Kosovo, Afghanistan and Iraq, where the street fighting around Fallujah demanded extreme precision, and over Libya in 2011. [[1]](#source-1) Their worst single day came on 14 September 2012, when a Taliban raid on Camp Bastion in Afghanistan destroyed six AV-8Bs of VMFA-211 on the ground and badly damaged two more, described as the worst loss of US airpower in a single incident since the Vietnam War. [[1]](#source-1) Near the end, in the Red Sea in 2024, a Harrier modified for [air defence](term:air-defense) was reported to have shot down seven Houthi attack drones. [[1]](#source-1)
 
 The Marine Corps retired its Harriers in June 2026, replacing them with the F-35B. Spain and Italy fly their own AV-8Bs from their carriers. [[1]](#source-1)

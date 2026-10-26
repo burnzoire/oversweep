@@ -66,7 +66,7 @@ The 9A33 transporter-erector-launcher-and-radar (TELAR) rides on a six-wheeled B
 
 ## How it engages
 
-The missile is command guided for its whole flight. [[1]](#source-1) [[2]](#source-2) From detection to launch takes about 26 seconds. The missile reaches about Mach 2.4, peaking near Mach 3; the 9M33 and 9M33M2 carry a 19 kg warhead. [[1]](#source-1)
+The missile is command guided for its whole flight. [[1]](#source-1) [[2]](#source-2) From detection to launch takes about 26 seconds. The missile reaches about [Mach](term:mach-number) 2.4, peaking near [Mach](term:mach-number) 3; the 9M33 and 9M33M2 carry a 19 kg warhead. [[1]](#source-1)
 
 ## Envelope
 
@@ -84,4 +84,4 @@ In the DCS F-14, the AN/ALR-67 shows the Land Roll search and track radar as **8
 
 ## History
 
-An SA-8 shot down an Israeli F-4 over Lebanon on 24 July 1982. On 3 October 1987, at the Battle of Cuito Cuanavale, a South African unit captured an intact Osa. Iraq fielded the system in the 1991 Gulf War. [[1]](#source-1)
+An SA-8 shot down an Israeli [F-4](record:f-4) over Lebanon on 24 July 1982. On 3 October 1987, at the Battle of Cuito Cuanavale, a South African unit captured an intact Osa. Iraq fielded the system in the 1991 Gulf War. [[1]](#source-1)

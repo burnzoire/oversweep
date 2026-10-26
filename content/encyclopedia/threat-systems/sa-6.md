@@ -63,11 +63,11 @@ The 2K12 Kub, NATO reporting name **SA-6 Gainful**, was accepted into Soviet ser
 
 A battery has one 1S91 radar vehicle, four tracked transporter-erector-launchers (TELs) on the GM-578 chassis, each carrying three missiles, and four trucks each carrying three spare missiles and a crane. [[1]](#source-1) The 1998 Army handout lists four launch vehicles, one **Straight Flush** radar vehicle and two reload vehicles per battery. [[2]](#source-2)
 
-The 1S91 **Straight Flush** is a 25 kW G/H-band radar. It acquires targets at 75 km, begins illumination and guidance at 28 km, performs identification friend or foe (IFF) and includes an optical sight. [[1]](#source-1)
+The 1S91 **Straight Flush** is a 25 kW G/H-band radar. It acquires targets at 75 km, begins illumination and guidance at 28 km, performs identification friend or foe ([IFF](term:iff)) and includes an optical sight. [[1]](#source-1)
 
 ## How it engages
 
-The missile flies on command guidance, then homes semi-actively on the target lit by the 1S91's continuous-wave illuminator. [[1]](#source-1) The Army handout describes its guidance as semi-active radar. [[2]](#source-2) Propulsion is an integral rocket-ramjet: once the solid rocket motor burns out, its empty casing becomes the ramjet's combustion chamber. The warhead weighs 56 kg and top speed is about Mach 2.8. [[1]](#source-1)
+The missile flies on command guidance, then homes semi-actively on the target lit by the 1S91's continuous-wave illuminator. [[1]](#source-1) The Army handout describes its guidance as semi-active radar. [[2]](#source-2) Propulsion is an integral rocket-ramjet: once the solid rocket motor burns out, its empty casing becomes the ramjet's combustion chamber. The warhead weighs 56 kg and top speed is about [Mach](term:mach-number) 2.8. [[1]](#source-1)
 
 ## Envelope
 
@@ -79,4 +79,4 @@ In the DCS F-14, the AN/ALR-67 shows the Straight Flush as **6**. [[3]](#source-
 
 ## History
 
-In the 1973 Yom Kippur War, Egyptian and Syrian Kub batteries surprised the Israeli Air Force; the system caused the most Israeli losses of any Egyptian anti-aircraft missile, many of them A-4 Skyhawks and F-4 Phantoms. In 1995, Bosnian Serb forces using modified Kub systems shot down Scott O'Grady's F-16 over Bosnia. [[1]](#source-1)
+In the 1973 Yom Kippur War, Egyptian and Syrian Kub batteries surprised the Israeli Air Force; the system caused the most Israeli losses of any Egyptian anti-aircraft missile, many of them A-4 Skyhawks and [F-4 Phantoms](record:f-4). In 1995, Bosnian Serb forces using modified Kub systems shot down Scott O'Grady's [F-16](record:f-16) over Bosnia. [[1]](#source-1)

@@ -64,7 +64,7 @@ Its famous wing solved two conflicting needs. It had to be thin for low drag, ye
 
 ## The Battle of Britain
 
-The first Spitfire reached No. 19 Squadron at Duxford on 4 August 1938, and 400 were in service when war broke out. [[1]](#source-1) [[3]](#source-3) In the Battle of Britain in 1940 the more numerous Hurricane did most of the fighting against the bombers, while Spitfires, with their higher performance, were sent where possible against the German escort fighters; Spitfire squadrons lost fewer aircraft and scored more victories for each loss. The legend grew all the same, helped by a "Spitfire Fund" that let the public buy fighters. [[1]](#source-1)
+The first Spitfire reached No. 19 Squadron at Duxford on 4 August 1938, and 400 were in service when war broke out. [[1]](#source-1) [[3]](#source-3) In the Battle of Britain in 1940 the more numerous Hurricane did most of the fighting against the bombers, while Spitfires, with their higher performance, were sent where possible against the German escort fighters; Spitfire [squadrons](term:squadron) lost fewer aircraft and scored more victories for each loss. The legend grew all the same, helped by a "Spitfire Fund" that let the public buy fighters. [[1]](#source-1)
 
 ## The Mark IX answers the Fw 190
 
@@ -74,6 +74,6 @@ The **LF Mk IX**, with the Merlin 66 rated for lower altitudes, became the most 
 
 ## Everywhere, for everyone
 
-Spitfires defended Malta, served with the Soviet air defence forces, and fought the Japanese over Burma and northern Australia. [[1]](#source-1) Americans flew them too: the 4th Fighter Group, formed from the RAF's Eagle Squadrons of American volunteers, kept its Spitfires until March 1943. [[1]](#source-1) Famous Spitfire pilots included "Johnnie" Johnson, with 34 victories, Douglas Bader, "Paddy" Finucane, Canada's George Beurling and South Africa's "Sailor" Malan. [[1]](#source-1) Unarmed photo-reconnaissance Spitfires photographed German radar sites and the V-weapon base at Peenemünde, and one, in a test dive in 1944, reached Mach 0.92, the fastest ever recorded for a piston-engined aircraft. [[1]](#source-1)
+Spitfires defended Malta, served with the Soviet [air defence](term:air-defense) forces, and fought the Japanese over Burma and northern Australia. [[1]](#source-1) Americans flew them too: the 4th Fighter Group, formed from the RAF's Eagle Squadrons of American volunteers, kept its Spitfires until March 1943. [[1]](#source-1) Famous Spitfire pilots included "Johnnie" Johnson, with 34 victories, Douglas Bader, "Paddy" Finucane, Canada's George Beurling and South Africa's "Sailor" Malan. [[1]](#source-1) Unarmed photo-reconnaissance Spitfires photographed German radar sites and the V-weapon base at Peenemünde, and one, in a test dive in 1944, reached [Mach](term:mach-number) 0.92, the fastest ever recorded for a piston-engined aircraft. [[1]](#source-1)
 
 When the last one rolled out in February 1948, 20,351 Spitfires had been built. It was the only British fighter built continuously before, during and after the war. [[1]](#source-1) [[3]](#source-3)

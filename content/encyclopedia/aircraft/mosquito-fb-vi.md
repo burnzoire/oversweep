@@ -55,7 +55,7 @@ The fuselage was built in two halves, each a sandwich of birch plywood around a 
 
 ## Faster than a Spitfire
 
-Geoffrey de Havilland Jr. first flew the prototype from Hatfield on 25 November 1940. In tests in early 1941 it outpaced a Spitfire, reaching 392 mph against the fighter's 360. [[1]](#source-1) It was nicknamed the **Wooden Wonder** or simply the **Mossie**, and in 1941 it was one of the fastest operational aircraft in the world. [[1]](#source-1)
+Geoffrey de Havilland Jr. first flew the prototype from Hatfield on 25 November 1940. In tests in early 1941 it outpaced a [Spitfire](record:spitfire-ix), reaching 392 mph against the fighter's 360. [[1]](#source-1) It was nicknamed the **Wooden Wonder** or simply the **Mossie**, and in 1941 it was one of the fastest operational aircraft in the world. [[1]](#source-1)
 
 ## Göring off the air
 

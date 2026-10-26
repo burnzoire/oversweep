@@ -1,0 +1,24 @@
+---
+// The preview behaviour for term links, from <Term> and from encyclopedia text.
+---
+<script>
+  // Keep a preview inside the window, and let Escape hide it until the pointer
+  // or focus moves on (WCAG 1.4.13).
+  const place = (ref: Element) => {
+    const tip = ref.querySelector<HTMLElement>('.term-tip');
+    if (!tip) return;
+    ref.classList.remove('term-dismissed');
+    tip.style.setProperty('--shift', '0px');
+    const box = tip.getBoundingClientRect();
+    const over = box.right - (document.documentElement.clientWidth - 8);
+    if (over > 0) tip.style.setProperty('--shift', `${-Math.min(over, box.left - 8)}px`);
+  };
+  for (const ref of document.querySelectorAll('.term-ref')) {
+    ref.addEventListener('pointerenter', () => place(ref));
+    ref.addEventListener('focusin', () => place(ref));
+  }
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    for (const ref of document.querySelectorAll('.term-ref:hover, .term-ref:focus-within')) ref.classList.add('term-dismissed');
+  });
+</script>

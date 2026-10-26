@@ -56,11 +56,11 @@ The S-25 Berkut, NATO reporting name **SA-1 Guild**, was the first Soviet surfac
 
 ## Where it stood
 
-The SA-1 was never a field system. It defended Moscow alone, from two rings of fixed launch sites around the city: 24 launch sites in the inner ring and 32 in the outer ring. Everywhere else, the Soviet Union relied on the mobile S-75 (SA-2) instead. [[1]](#source-1)
+The SA-1 was never a field system. It defended Moscow alone, from two rings of fixed launch sites around the city: 24 launch sites in the inner ring and 32 in the outer ring. Everywhere else, the Soviet Union relied on the mobile [S-75](record:sa-2) ([SA-2](record:sa-2)) instead. [[1]](#source-1)
 
 ## How it engages
 
-The missile used **command guidance**: it was steered by commands from the ground rather than by a seeker of its own. A liquid-propellant rocket motor gave it a top speed of Mach 2.5, and a 250 kg (550 lb) high-explosive fragmentation warhead was set off by impact or proximity fuzes. The published operational range is 32–40 km (17–22 NM) with a flight ceiling of 20 km (65,600 ft). [[1]](#source-1)
+The missile used **command guidance**: it was steered by commands from the ground rather than by a seeker of its own. A liquid-propellant rocket motor gave it a top speed of [Mach](term:mach-number) 2.5, and a 250 kg (550 lb) high-explosive fragmentation warhead was set off by impact or [proximity fuzes](term:proximity-fuze). The published operational range is 32–40 km (17–22 NM) with a flight ceiling of 20 km (65,600 ft). [[1]](#source-1)
 
 Its radars, by NATO name, were the B-200 **Yo-Yo** fire-control radar (E band, 150 km), the A-100 **Gage** acquisition radar (E band, 300 km) and the P-14 **Tall King** early-warning radar (A band, 550 km). [[1]](#source-1)
 

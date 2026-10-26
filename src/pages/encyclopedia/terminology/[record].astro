@@ -1,4 +1,5 @@
 ---
+import LinkedText from '../../../components/LinkedText.astro';
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import TermSense from '../../../components/encyclopedia/TermSense.astro';
 import { categoryRecords, recordRoute, termSlug, terminologyContent, type EncyclopediaRecord } from '../../../data/encyclopedia';
@@ -32,7 +33,7 @@ const terms = [...data.terms].sort((a, b) => a.term.localeCompare(b.term, 'en', 
       <p>Definitions are quoted or closely paraphrased from the source named with each word. Meanings change between editions and theatres; the brief and the current publications take precedence.</p>
     </section>
 
-    <div class="record-body"><Content /></div>
+    <div class="record-body"><LinkedText><Content /></LinkedText></div>
 
     <h2 id="terms">{terms.length} terms</h2>
     <dl class="terms">

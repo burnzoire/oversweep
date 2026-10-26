@@ -1,12 +1,18 @@
 ---
+import { linkText } from '../../data/links';
+import TermBehaviour from '../TermBehaviour.astro';
 // Renders text whose "[n]" markers refer to the record's numbered sources as
 // links to them, so the output checks can resolve every citation. `base` points
 // the links at another page's source list, as the terminology glossary does.
+// A "[F/A-18 Hornet](record:fa-18c)" or "[fuzes](term:fuze)" in the text
+// becomes a term link, as in encyclopedia markdown.
 interface Props { text?: string; base?: string }
 const { base = '' } = Astro.props;
-const parts = (Astro.props.text ?? '').split(/(\[\d+\])/);
+const parts = (Astro.props.text ?? '').split(/(\[\d+\]|\[[^\]]+\]\((?:term|record):[^)]*\))/);
 ---
 {parts.map((part) => {
   const n = part.match(/^\[(\d+)\]$/)?.[1];
-  return n ? <a href={`${base}#source-${n}`}>[{n}]</a> : part;
-})}
+  if (n) return <a href={`${base}#source-${n}`}>[{n}]</a>;
+  const link = part.match(/^\[([^\]]+)\]\((term|record):([^)]*)\)$/);
+  return link ? <Fragment set:html={linkText(link[1], link[2], link[3])} /> : part;
+})}{parts.length > 1 && <TermBehaviour />}
