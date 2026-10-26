@@ -126,3 +126,14 @@ test('links into the terminology glossary must land on an entry', async () => {
   const problems = await check(linked('joker'));
   assert(problems.some(p => p.includes('#joker, which does not exist')));
 });
+
+test('term links name an existing entry, once per page', async () => {
+  const glossary = { 'encyclopedia/terminology/index.html': '<div class="term" id="bingo"></div>' };
+  const term = (href) => `<span class="term-ref"><a class="term-link" href="${href}" aria-describedby="t">x</a></span>`;
+  const page = (...hrefs) => ({ ...complete, ...glossary, 'manual/radio/index.html': hrefs.map(term).join(' ') });
+  assert.deepEqual(await check(page('/encyclopedia/terminology/#bingo', '/encyclopedia/example/thing/')), []);
+  const twice = await check(page('/encyclopedia/terminology/#bingo', '/encyclopedia/terminology/#bingo'));
+  assert(twice.some(p => p.includes('more than once')));
+  const missing = await check(page('/encyclopedia/example/other/'));
+  assert(missing.some(p => p.includes('/encyclopedia/example/other/, which is not a page')));
+});
