@@ -18,6 +18,9 @@ export interface Entry {
   // Set for modules with a standalone trainer, which opens in its own window.
   trainer?: { title: string; href: string; experience: Experience };
   module?: Module;
+  // A subject can split its modules into groups (Flight Fundamentals: fixed
+  // and rotor wing); the subject page lists each group under its own heading.
+  group?: string;
 }
 
 const fromExperience = (e: Experience): Entry => ({
@@ -40,6 +43,7 @@ const fromModule = (m: Module): Entry => ({
   href: moduleRoute(m),
   subject: m.subject,
   module: m,
+  group: 'group' in m ? m.group : undefined,
 });
 
 export const manualEntries: Entry[] = [
@@ -48,6 +52,13 @@ export const manualEntries: Entry[] = [
 ];
 
 export const subjectEntries = (slug: string) => manualEntries.filter((entry) => entry.subject === slug);
+// A subject's entries in registry order, gathered under their group names;
+// one unnamed group when the subject does not use groups.
+export function subjectGroups(slug: string) {
+  const groups = new Map<string | undefined, Entry[]>();
+  for (const entry of subjectEntries(slug)) groups.set(entry.group, [...(groups.get(entry.group) ?? []), entry]);
+  return [...groups].map(([title, entries]) => ({ title, entries }));
+}
 export const subjectHasContent = (slug: string) => subjectEntries(slug).length > 0;
 export const subjectTitle = (slug: string) => manualSubjects.find((s) => s.slug === slug)?.title ?? slug;
 

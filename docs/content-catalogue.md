@@ -10,7 +10,7 @@ Types are composable blocks: Reference (guidance/diagrams/tables), Interactive
 
 | Subject | Description and illustrative entries | Proposed content types |
 | --- | --- | --- |
-| Flight Fundamentals | Lift, drag, energy, turns; rate and radius relationships | Reference, Interactive, Exploratory |
+| Flight Fundamentals | Fixed wing: lift, drag, energy, turns; rate and radius relationships. Rotor wing: blade aerodynamics, controls, hover power, forward flight, rotor hazards, autorotation | Reference, Interactive, Exploratory |
 | Airfield Operations | Aerodrome geometry, traffic patterns, ground procedures | Reference, Interactive, Trainer |
 | Radio Communications | Phraseology, clearances and procedural exchanges | Reference, Exploratory, Trainer |
 | Navigation | Position, bearings, dead reckoning and Bullseye spatial orientation | Reference, Interactive, Trainer |

@@ -36,12 +36,25 @@
     "id": "module.principles-of-flight",
     "slug": "principles-of-flight",
     "subject": "flight-fundamentals",
-    "revision": 3,
-    "title": "Principles of Flight",
+    "group": "Fixed wing",
+    "revision": 4,
+    "title": "Fixed-Wing Principles of Flight",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "objective": "Understand the four forces, lift and angle of attack, drag, control and stability, turns and load factor, stalls, the maneuvering envelope, energy and rotor-wing aerodynamics well enough to explain what a military jet or helicopter is doing and why.",
-    "applicability": "For military pilots of every service: fixed- and rotary-wing principles from Navy aerodynamics texts and the Army's Fundamentals of Flight, with FAA handbooks as supplementary sources; worked numbers use an invented jet trainer and rotor, with US Navy T-45 training figures where cited."
+    "objective": "Understand the four forces, lift and angle of attack, drag, control and stability, turns and load factor, stalls, the maneuvering envelope and energy well enough to explain what a military jet is doing and why.",
+    "applicability": "For military pilots of every service: fixed-wing principles from Navy aerodynamics texts and its T-45 jet syllabus, with FAA handbooks as supplementary sources; worked numbers use an invented jet trainer, with US Navy T-45 training figures where cited."
+  },
+  {
+    "id": "module.rotor-wing",
+    "slug": "rotor-wing",
+    "subject": "flight-fundamentals",
+    "group": "Rotor wing",
+    "revision": 1,
+    "title": "Rotor-Wing Principles of Flight",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Understand how a helicopter's rotor makes lift and is controlled, from the blade's own relative wind, the collective, cyclic and pedals and the rotor systems to hover power, forward flight and dissymmetry of lift, then its hazards (retreating blade stall, vortex ring state, dynamic rollover, low G, low rotor rpm, loss of tail rotor effectiveness) and autorotation, well enough to explain what the rotor is doing and why.",
+    "applicability": "For military helicopter pilots of every service: the Navy's Aerodynamics for Naval Aviators and the Army's Fundamentals of Flight first, with the FAA Helicopter Flying Handbook as the supplementary source for most hazards; worked numbers use an invented utility helicopter. The type's operator's manual or NATOPS governs."
   },
   {
     "id": "module.air-navigation",

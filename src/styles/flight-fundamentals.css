@@ -1,0 +1,76 @@
+/* Flight Fundamentals module pages: layout, interactive figures and the
+   NATOPS-style drawing classes the figure scripts emit. */
+  .contents ol { columns: 2; column-gap: 2rem; padding-left: 1.5rem; }
+  .contents li { break-inside: avoid; }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--color-border); margin-block: 1rem; }
+  .table-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  caption { padding: 0.5rem 0.75rem; text-align: left; color: var(--color-muted); font-size: 0.9rem; }
+  th, td { padding: 0.45rem 0.75rem; border-top: 1px solid var(--color-border); text-align: left; vertical-align: top; }
+  thead th { background: var(--color-surface); }
+  .note { padding: 0.75rem 1rem; border-left: 0.25rem solid var(--color-border); background: var(--color-surface); }
+  .lesson { margin-block: 1.5rem; padding: 1rem; border: 2px solid var(--color-text); width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+  @media (min-width: 64rem) {
+    .lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
+  }
+  .lesson h3 { margin-top: 0; }
+  .controls { display: grid; gap: 0.6rem; align-content: start; margin-bottom: 0.75rem; }
+  .controls.row { grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); align-items: end; }
+  .controls label { display: grid; gap: 0.2rem; font-weight: 700; }
+  .controls output { font-weight: 400; font-variant-numeric: tabular-nums; }
+  fieldset { margin: 0 0 0.75rem; padding: 0.5rem 0.75rem; border: 1px solid var(--color-border); }
+  legend { font-weight: 700; }
+  fieldset.inline { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; }
+  fieldset label { display: flex; align-items: center; gap: 0.4rem; min-height: 2.75rem; }
+  input[type="range"] { min-height: 2.75rem; width: 100%; }
+  input:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+  .feedback { font-weight: 700; min-height: 1.6em; }
+  .feedback p { margin: 0.2rem 0; }
+  .lesson:not(.ready) .controls, .lesson:not(.ready) fieldset, .lesson:not(.ready) .fig-scroll { display: none; }
+  .lesson.ready .no-js { display: none; }
+  .no-js { font-weight: 700; }
+  .fig-scroll { overflow-x: auto; }
+  .fig-scroll svg { min-width: 36rem; }
+  .fig-title { font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 2px solid var(--color-text); padding-bottom: 0.3rem; }
+  .fig-caption { color: var(--color-muted); font-size: 0.9rem; }
+  dl.jargon { display: grid; gap: 0.4rem; }
+  dl.jargon div { display: grid; grid-template-columns: minmax(8rem, 12rem) 1fr; gap: 0.75rem; border-top: 1px solid var(--color-border); padding-top: 0.4rem; }
+  dl.jargon dt { font-weight: 700; }
+  dl.jargon dd { margin: 0; }
+  svg.natops { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
+  .natops .frame { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
+  .natops .lbl { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
+  .natops .lbl.small { font-size: 10px; }
+  .natops .lbl.on { fill: var(--color-link); }
+  .natops .ln { fill: none; stroke: var(--color-text); stroke-width: 1.8; }
+  .natops .ln.heavy { stroke-width: 3.4; }
+  .natops .ln.dashed { stroke-dasharray: 7 4; }
+  .natops .ln.centreline { stroke-dasharray: 14 4 3 4; stroke-width: 1.4; }
+  .natops .axis-line { stroke: var(--color-link); stroke-width: 2; }
+  .natops .thin { fill: none; stroke: var(--color-text); stroke-width: 1; }
+  .natops .thin.dotted { stroke-dasharray: 2 3; }
+  .natops .grid { stroke: #dde0e3; stroke-width: 1; }
+  .natops .fixmark { fill: var(--color-text); }
+  .natops .own { fill: var(--color-link); stroke: var(--color-link); stroke-width: 1; }
+  .natops .angle { fill: none; stroke: var(--color-link); stroke-width: 1.6; }
+  .natops .zone { fill: #e4e6e8; stroke: none; }
+  .natops .zone.hatch { fill: #f1e3e3; }
+  .natops .track { fill: none; stroke: var(--color-link); stroke-width: 2.6; }
+  .natops .ghost { fill: none; stroke: #9aa1a8; stroke-width: 1.2; stroke-dasharray: 4 3; }
+  .natops .mark-line { stroke: var(--color-text); stroke-width: 1.4; stroke-dasharray: 4 3; }
+  .natops .mark-line.on { stroke: var(--color-link); }
+  .natops .pointer { fill: var(--color-link); stroke: #fff; stroke-width: 2; }
+  .natops .dot { fill: #fff; stroke: var(--color-text); stroke-width: 1.6; }
+  .natops .dim { stroke: var(--color-text); stroke-width: 1.2; }
+  .natops .section { fill: #f4f5f6; stroke: var(--color-text); stroke-width: 2.2; stroke-linejoin: round; }
+  .natops .stream { fill: none; stroke: #8a9199; stroke-width: 1.2; }
+  .natops .stream.turbulent { stroke: var(--color-text); stroke-width: 1.4; }
+  .natops .plate { fill: #fff; stroke: var(--color-text); stroke-width: 1.4; stroke-linejoin: round; }
+  .natops .plate.active { fill: #cfe0f0; stroke: var(--color-link); stroke-width: 2.2; }
+  .natops .vec line { stroke-width: 2.6; }
+  .natops .vec.lift line, .natops .vec.thrust line { stroke: var(--color-link); }
+  .natops .vec.lift .head, .natops .vec.thrust .head { fill: var(--color-link); }
+  .natops .vec.weight line, .natops .vec.drag line, .natops .vec.wind line { stroke: var(--color-text); }
+  .natops .vec.weight .head, .natops .vec.drag .head, .natops .vec.wind .head { fill: var(--color-text); }
+  .natops .vec.component line { stroke: #6b7279; stroke-width: 1.6; stroke-dasharray: 5 3; }
+  .natops .vec.component .head { fill: #6b7279; }
