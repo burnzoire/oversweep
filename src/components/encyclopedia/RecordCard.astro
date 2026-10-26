@@ -9,7 +9,7 @@ const Heading = (headingLevel === 2 ? 'h2' : 'h3') as 'h2' | 'h3';
 const local = record.publication !== 'published';
 ---
 <section class="entry-card" data-era={era} data-record-id={record.id} data-record-revision={record.revision}>
-  {photo && <img class="entry-thumb" src={assetPath(photo.src)} alt="" loading="lazy" decoding="async" />}
+  {photo && <img class:list={['entry-thumb', { contain: photo.fit === 'contain' }]} src={assetPath(photo.src)} alt="" loading="lazy" decoding="async" />}
   <p class="entry-kicker">{record.designation}</p>
   <Heading class="entry-title"><a href={sitePath(recordRoute(record))}>{record.title}</a></Heading>
   <p class="entry-objective">{record.summary}</p>

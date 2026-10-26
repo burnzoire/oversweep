@@ -89,7 +89,7 @@
 .ency .natops .bat-missile { stroke: var(--color-text); stroke-width: 3.2; stroke-linecap: round; }
 
 .ency .sources ol { padding-left: 1.5rem; }
-.ency .sources li { margin-block: 0.4rem; }
+.ency .sources li { margin-block: 0.4rem; overflow-wrap: anywhere; }
 .ency .sources li:target { background: #fff6d6; }
 
 @media (max-width: 30rem) {
@@ -102,6 +102,7 @@
 
 .ency .photo { margin: 0 0 1.25rem; border: 1px solid var(--color-border); background: #fff; }
 .ency .photo img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; background: var(--color-surface); }
+.ency .photo.contain img { object-fit: contain; background: #fff; }
 .ency .photo figcaption { padding: 0.55rem 0.75rem; font-size: 0.95rem; }
 .ency .photo .credit { display: block; margin-top: 0.25rem; color: var(--color-muted); font-size: 0.82rem; }
 .ency .photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 1rem; margin: 1.5rem 0; }

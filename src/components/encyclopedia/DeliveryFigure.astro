@@ -1,0 +1,48 @@
+---
+// Four schematic side views of how unguided weapons are released: level, dive,
+// loft and retarded low-level. Shapes are illustrative, not to scale; the
+// caption slot carries the cited description.
+interface Props { title: string }
+const { title } = Astro.props;
+
+const W = 300, H = 170, G = 150;
+type Panel = { title: string; aircraft: string; weapon: string; release: [number, number]; target: number; note: string };
+const panels: Panel[] = [
+  { title: 'LEVEL', aircraft: 'M20 40 L280 40', weapon: 'M90 40 Q180 40 220 150', release: [90, 40], target: 220, note: 'BOMB CARRIES ON FORWARD' },
+  { title: 'DIVE', aircraft: 'M30 20 L150 100 Q185 130 235 80', weapon: 'M150 100 Q180 124 200 150', release: [150, 100], target: 200, note: 'STEEPER, SHORTER FALL' },
+  { title: 'LOFT (TOSS)', aircraft: 'M20 135 L80 135 Q110 135 125 105 Q140 70 105 50', weapon: 'M125 105 Q185 0 265 150', release: [125, 105], target: 265, note: 'RELEASED IN THE CLIMB' },
+  { title: 'RETARDED, LOW LEVEL', aircraft: 'M20 120 L280 120', weapon: 'M100 120 Q130 122 140 150', release: [100, 120], target: 140, note: 'DRAG SLOWS THE BOMB' },
+];
+const at = (i: number) => ({ x: (i % 2) * (W + 20) + 10, y: Math.floor(i / 2) * (H + 20) + 10 });
+---
+<section class="lesson figure-lesson delivery-figure" aria-labelledby="delivery-fig-title">
+  <h3 id="delivery-fig-title" class="fig-title">{title}</h3>
+  <div class="fig-scroll" role="region" aria-label="Delivery profiles figure; scrolls sideways on narrow screens" tabindex="0">
+    <svg class="natops" viewBox={`0 0 ${2 * W + 40} ${2 * H + 70}`} role="img" aria-label="Four side views: a level release, a dive release, a loft release in a climb and a retarded release at low level, each showing the aircraft's path and the weapon's path to the target">
+      {panels.map((p, i) => {
+        const { x, y } = at(i);
+        return (
+          <g transform={`translate(${x} ${y})`}>
+            <rect class="frame" x="0" y="0" width={W} height={H} />
+            <text class="lbl" x="8" y="16">{p.title}</text>
+            <line class="ln" x1="0" x2={W} y1={G} y2={G} />
+            <path class="ln" d={p.aircraft} />
+            <path class="ln dashed" d={p.weapon} />
+            <circle class="fixmark" cx={p.release[0]} cy={p.release[1]} r="3.5" />
+            <text class="lbl small" x={p.release[0] - 6} y={p.release[1] - 7} text-anchor="end">R</text>
+            <path class="fixmark" d={`M${p.target - 7} ${G} L${p.target} ${G - 10} L${p.target + 7} ${G} Z`} />
+            <text class="lbl small" x={W - 8} y={H - 6} text-anchor="end">{p.note}</text>
+          </g>
+        );
+      })}
+      <g transform={`translate(10 ${2 * H + 50})`}>
+        <line class="ln" x1="0" x2="34" y1="-4" y2="-4" /><text class="lbl small" x="40" y="0">AIRCRAFT</text>
+        <line class="ln dashed" x1="120" x2="154" y1="-4" y2="-4" /><text class="lbl small" x="160" y="0">WEAPON</text>
+        <circle class="fixmark" cx="246" cy="-4" r="3.5" /><text class="lbl small" x="256" y="0">R RELEASE</text>
+        <path class="fixmark" d="M343 0 L350 -10 L357 0 Z" /><text class="lbl small" x="364" y="0">TARGET</text>
+        <text class="lbl small" x={2 * W + 20} y="0" text-anchor="end">SCHEMATIC, NOT TO SCALE</text>
+      </g>
+    </svg>
+  </div>
+  <slot />
+</section>
