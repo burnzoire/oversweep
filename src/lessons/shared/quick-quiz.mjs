@@ -90,7 +90,8 @@ export function quickQuiz(ui, spec) {
 // The "name the term" quiz over a page's glossary list (dl.jargon).
 export function termQuiz(root, { hideTerm = false } = {}) {
   const terms = [...document.querySelectorAll('dl.jargon > div')].map((d) => ({
-    term: d.querySelector('dt').textContent.trim(), meaning: d.querySelector('dd').textContent.trim(),
+    // A <Term> link's hidden preview is not part of the word.
+    term: (d.querySelector('dt .term-link') ?? d.querySelector('dt')).textContent.trim(), meaning: d.querySelector('dd').textContent.trim(),
   }));
   quickQuiz({
     prompt: root.querySelector('[data-prompt]'), choices: root.querySelector('[data-choices]'),
