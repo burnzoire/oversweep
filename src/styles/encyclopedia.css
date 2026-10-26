@@ -43,6 +43,9 @@
 .ency button { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: var(--color-text); background: #fff; border: 1px solid var(--color-text); cursor: pointer; }
 .ency button[aria-pressed="true"] { color: #fff; background: var(--color-link); border-color: var(--color-link); }
 .ency button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+/* Era filter on the aircraft list: `hidden` must win over the flex and grid displays. */
+.ency .era-filter { margin: 0 0 0.5rem; }
+.ency .era-filter[hidden], .ency [data-era][hidden], .ency .aircraft-group[hidden] { display: none; }
 
 .ency svg.natops { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
 .ency .natops .frame { fill: none; stroke: var(--color-text); stroke-width: 1.5; }

@@ -129,6 +129,21 @@ export const aircraftGroups = [
   { slug: 'helicopter', title: 'Helicopters' },
 ] as const;
 
+// Eras for the aircraft list filter, in display order, set by `era` on each
+// aircraft registry entry. Early jets are the first jet generation, retired
+// from front-line service.
+export const aircraftEras = [
+  { slug: 'modern', title: 'Modern' },
+  { slug: 'early-jet', title: 'Early jets' },
+  { slug: 'wwii', title: 'Second World War' },
+] as const;
+export type AircraftEra = (typeof aircraftEras)[number]['slug'];
+export const aircraftEra = (r: EncyclopediaRecord): AircraftEra => {
+  const era = aircraftEras.find((e) => e.slug === (r as { era?: string }).era);
+  if (!era) throw new Error(`Aircraft record ${r.id} has no valid era`);
+  return era.slug;
+};
+
 type RecordFile<T extends Record<string, any> = ThreatData> = MarkdownInstance<T>;
 const files = import.meta.glob<RecordFile<Record<string, unknown>>>('/content/encyclopedia/*/*.md', { eager: true });
 

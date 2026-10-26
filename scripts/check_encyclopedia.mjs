@@ -66,6 +66,9 @@ export async function checkRecords({ dist, records, review = false, base = "", c
     }
     if (pages["category index"] && !sections["category index"]?.body.includes(`href="${base}/${route(r)}"`))
       problems.push(`${r.id}: category index does not link to ${base}/${route(r)}.`);
+    // Aircraft cards carry their era so the list's era filter can show or hide them.
+    if (r.category === "aircraft" && pages["category index"] && !sections["category index"]?.tag.includes(`data-era="${r.era}"`))
+      problems.push(`${r.id}: category index card has no data-era="${r.era}".`);
     // Every record shows where its facts come from, and every citation resolves.
     if (pages.page) {
       const anchors = new Set([...pages.page.matchAll(/\bid="(source-\d+)"/g)].map((m) => m[1]));
