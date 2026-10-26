@@ -88,6 +88,9 @@ export async function checkRecords({ dist, records, review = false, base = "", c
       }
     }
   }
+  // The landing page is a grid of categories; records are listed only on their category's page.
+  const landing = await read("encyclopedia/index.html");
+  if (landing?.includes("data-record-id=")) problems.push("encyclopedia/index.html lists records; it should only show categories.");
   if (excluded.length) {
     for (const file of await filesIn(dist)) {
       const text = await readFile(file, "utf8");

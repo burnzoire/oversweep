@@ -112,3 +112,9 @@ test('every registered record has a content file in the repository', async () =>
   assert(records.length > 0);
   for (const r of records) await import('node:fs/promises').then(fs => fs.access(path.join(root, contentFile(r))));
 });
+
+test('the encyclopedia landing shows categories, not records', async () => {
+  const problems = await check({ ...complete, 'encyclopedia/index.html': `<section ${tag}>${record.maturity}</section>` });
+  assert(problems.some(p => p.includes('encyclopedia/index.html lists records')));
+  assert.deepEqual(await check({ ...complete, 'encyclopedia/index.html': '<ul class="category-grid"></ul>' }), []);
+});

@@ -14,12 +14,13 @@ export const manualSubjects = [
   { slug: "abnormal-operations", title: "Abnormal Operations" },
 ] as const;
 
+// `summary` describes the category on the Encyclopedia landing grid.
 export const encyclopediaCategories = [
-  { slug: "aircraft", title: "Aircraft" },
-  { slug: "ordnance", title: "Ordnance" },
-  { slug: "threat-systems", title: "Threat Systems" },
-  { slug: "radar-sensors", title: "Radar & Sensors" },
-  { slug: "airfields-carriers", title: "Airfields & Carriers" },
-  { slug: "terminology", title: "Terminology" },
-  { slug: "reference-data", title: "Reference Data" },
+  { slug: "aircraft", title: "Aircraft", summary: "Fighters, attack aircraft, trainers, transports and helicopters: role, performance, armament and service history." },
+  { slug: "ordnance", title: "Ordnance", summary: "Missiles, bombs, rockets and guns: how they are guided, their reach and how they are employed." },
+  { slug: "threat-systems", title: "Threat Systems", summary: "Surface-to-air missile systems: radars, guidance, engagement limits and what they show on a radar warning receiver." },
+  { slug: "radar-sensors", title: "Radar & Sensors", summary: "Airborne radars, targeting pods and warning receivers: what they detect and how." },
+  { slug: "airfields-carriers", title: "Airfields & Carriers", summary: "Air bases and aircraft carriers: layout, lighting and recovery equipment." },
+  { slug: "terminology", title: "Terminology", summary: "Brevity words, abbreviations and terms used across the services." },
+  { slug: "reference-data", title: "Reference Data", summary: "Tables pilots look things up in: units, conversions and codes." },
 ] as const;
