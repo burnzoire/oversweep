@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
 import { getModule, includedModules } from '../../../data/modules';
 import { sitePath } from '../../../lib/paths';
 import Term from '../../../components/Term.astro';
@@ -305,23 +306,10 @@ const radio = sitePath('manual/radio-communications/radio-procedures/');
  <p>An inertial reference unit uses gyros and accelerometers to give attitude, position and velocity. Once aligned with a known position it computes position continuously, but its accuracy decays with time: this is drift. An inertial navigation system (INS) adds a navigation computer and flies a programmed series of waypoints. <a href="#source-aim">{a('1-1-15')}</a> Inertial systems are often coupled with GPS or DME/DME to improve overall performance. <a href="#source-aim">{a('1-2-1')}</a> The T-45C's Global Positioning/Inertial Navigation Assembly (GINA) is such a system: it feeds the HSI's waypoint, offset, ground speed and wind information. <a href="#source-p1204">{fti('12, 71')}</a> An inertial system is self-contained, so it keeps navigating without GPS, but its error grows from the last good update; with GPS it is corrected continuously.</p>
 
  <h2 id="terms">Terms</h2>
- <dl class="jargon">
-  <div><dt>Radial</dt><dd>A magnetic bearing from a VOR or TACAN station; the radial you are on is under the tail of the bearing pointer.</dd></div>
-  <div><dt>Relative bearing</dt><dd>The angle clockwise from the aircraft's nose to an object.</dd></div>
-  <div><dt>Track</dt><dd>The actual path of the aircraft over the ground.</dd></div>
-  <div><dt>Drift angle</dt><dd>The angle between where the nose points and the path over the ground.</dd></div>
-  <div><dt>Variation</dt><dd>The angle between true north and magnetic north at a place.</dd></div>
-  <div><dt>Deviation</dt><dd>Compass error caused by the aircraft's own magnetic fields; it changes with heading.</dd></div>
-  <div><dt>Slant range</dt><dd>What DME measures: the straight-line distance to the station, including height.</dd></div>
-  <div><dt>Lead point</dt><dd>Where you start the turn so you roll out on the course or arc; 1% of ground speed for a 90° turn.</dd></div>
-  <div><dt>Station passage</dt><dd>Crossing over the station: for TACAN, the point of minimum DME.</dd></div>
-  <div><dt>Homing</dt><dd>Keeping the bearing pointer on the nose; in a crosswind it flies a curved path.</dd></div>
-  <div><dt>Fly-by waypoint</dt><dd>A point where the turn to the next course starts before the point is reached.</dd></div>
-  <div><dt>Direct to fix</dt><dd>A leg from wherever the aircraft is straight to the next waypoint.</dd></div>
-  <div><dt>RAIM</dt><dd>A GPS receiver's own check of its solution, using a satellite beyond those needed.</dd></div>
-  <div><dt>Drift</dt><dd>The growing position error of an inertial system since its last alignment or update.</dd></div>
-  <div><dt>Grid zone designation</dt><dd>The zone number and latitude band letter that begin an MGRS reference.</dd></div>
- </dl>
+ <GlossaryList items={[
+  'Radial', 'Relative bearing', 'Track', 'Drift angle', 'Variation', 'Deviation', 'Slant range', 'Lead point',
+  'Station passage', 'Homing', 'Fly-by waypoint', 'Direct to fix', 'RAIM', 'Drift', 'Grid zone designation',
+ ]} />
  <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
   <h3 id="terms-title">Quiz: name the term</h3>
   <p class="task" data-prompt aria-live="polite"></p>

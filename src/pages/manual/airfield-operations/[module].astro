@@ -1,10 +1,10 @@
 ---
 import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
 import { getModule, includedModules } from '../../../data/modules';
 import { sitePath } from '../../../lib/paths';
 import Term from '../../../components/Term.astro';
 import AerodromeFigure from '../../../components/airfield-ops/AerodromeFigure.astro';
-import { TERMS } from '../../../lessons/airfield-ops/terms.mjs';
 const mod = getModule('airfield-basics');
 export function getStaticPaths() { return includedModules.some(m => m.slug === 'airfield-basics') ? [{ params: { module: 'airfield-basics' } }] : []; }
 const contents = [
@@ -431,9 +431,15 @@ const aim2 = cite(7), aim4 = cite(8), pcg = cite(9), afh = cite(10), ac = cite(1
  </section>
 
  <h2 id="terms">Airfield terms</h2>
- <dl class="jargon">
-  {TERMS.map(([term, meaning]) => <div><dt>{term}</dt><dd>{meaning}</dd></div>)}
- </dl>
+ <GlossaryList items={[
+  'Runway designator', 'Threshold', 'Displaced threshold', 'Aiming point', 'Touchdown zone markings', 'Holding position marking',
+  'Mandatory instruction sign', 'Location sign', 'Caution zone', 'PAPI', 'Crosswind component', 'Tetrahedron',
+  'Downwind leg', 'Base leg', 'Upwind leg', 'Break point', 'Initial', 'The 180', 'Inside downwind', 'Pull closed', 'RSU', 'SFO',
+  'Air taxi', 'Expeditionary airfield',
+  // No readable source defines course rules yet, so it keeps the module's own wording, unlinked.
+  { label: 'Course rules', meaning: "A Navy field's published VFR arrival and departure routes, reporting points and altitudes." },
+  { id: 'Ball', label: 'Meatball', set: 'Carrier' }, 'Datum lights', 'Wave-off lights', 'FCLP', 'Arresting gear',
+ ]} />
  <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
   <h3 id="terms-title">Quiz: name the term</h3>
   <p class="task" data-prompt aria-live="polite"></p>

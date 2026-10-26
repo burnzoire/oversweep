@@ -5,8 +5,10 @@ import type { Source, Term } from '../../data/encyclopedia';
 // the meaning is shown on the glossary, so its citations reach that set's sources.
 interface Props { term: Term; usage: string; sources: Source[]; base?: string; set?: { title: string; href: string } }
 const { term, usage, sources, base = '', set } = Astro.props;
-// Pilot/Controller Glossary sections are letters; other sources have printed pages.
-const where = (page?: string) => !page ? '' : /^[A-Z](, [A-Z])*$/.test(page) ? `, ${page.includes(',') ? 'letters' : 'letter'} ${page}` : `, ${/[,–]/.test(page) ? 'pp.' : 'p.'} ${page}`;
+// Pilot/Controller Glossary sections are letters; paragraphs (¶) and named
+// sections print as given; other sources have printed pages.
+const where = (page?: string) => !page ? '' : /^[A-Z](, [A-Z])*$/.test(page) ? `, ${page.includes(',') ? 'letters' : 'letter'} ${page}`
+  : /^¶|[a-z]/.test(page) ? `, ${page}` : `, ${/[,–]/.test(page) ? 'pp.' : 'p.'} ${page}`;
 const short = (n: number) => sources.find((s) => s.n === n)?.title.split(',')[0] ?? `Source ${n}`;
 ---
 <dd class="term-sense">

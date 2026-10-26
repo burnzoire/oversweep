@@ -23,8 +23,8 @@ terms:
     cite: [{ n: 3, page: "A-1" }]
   - term: Bullseye
     definition: A term referring to the Independent Landing Monitor (ILM).
-    note: "Unrelated to the multi-service brevity word BULLSEYE, a reference point for positions given by bearing and range. [4]"
-    cite: [{ n: 1, page: "11-2" }]
+    note: "Navy carrier training calls the instrument carrier landing system (ICLS) display “bullseye”, as in “fly the bullseye”. [3] Unrelated to the multi-service brevity word BULLSEYE, a reference point for positions given by bearing and range. [4]"
+    cite: [{ n: 1, page: "11-2" }, { n: 3, page: "1-10" }]
   - term: Buster
     definition: An order given to an aircraft to proceed at maximum speed.
     note: "Navy carrier training adds “generally for an immediate Charlie”. [3] The multi-service brevity word BUSTER is maximum continuous speed (military power), and GATE is afterburner. [4]"
@@ -117,6 +117,45 @@ terms:
   - term: Zip Lip
     definition: A condition that may be prescribed for flight operations during daylight VMC under which positive communications control is waived. Radio transmissions are held to the minimum necessary for flight safety.
     cite: [{ n: 1, page: "11-9" }]
+  - term: Alibis
+    definition: Aircraft maintenance discrepancies, passed to the Strike controller at check-in for relay to the squadron's ready room.
+    usage: Navy carrier training
+    cite: [{ n: 3, page: "2-11" }]
+  - term: Button
+    definition: "A frequency selection, as in “Approach button 18”."
+    usage: Navy carrier training
+    cite: [{ n: 3, page: "2-21" }]
+  - term: CCA
+    expansion: Carrier control area
+    definition: All airspace within 50 nautical miles of the carrier; the carrier air traffic control center controls airborne aircraft within it that are not under the control of the tower.
+    usage: Navy carrier training
+    note: "P-816 also uses CCA for a carrier controlled approach, the ACLS Mode III talk-down, which is akin to a ground-controlled approach. [3]"
+    cite: [{ n: 3, page: "1-3" }]
+  - term: Commencing
+    definition: The report a pilot makes on leaving the marshal fix to start the approach, with the altimeter setting and fuel state.
+    usage: Navy carrier training
+    cite: [{ n: 3, page: "2-26–2-27" }]
+  - term: Low state
+    definition: The lowest fuel state in the flight, given at the Strike and Marshal check-ins.
+    usage: Navy carrier training
+    cite: [{ n: 3, page: "2-11–2-12" }]
+  - term: Needles
+    definition: The approach guidance display of the automated carrier landing system (ACLS), shown to the aircrew on a crosshair display.
+    usage: Navy carrier training
+    cite: [{ n: 3, page: "1-10" }]
+  - term: Paddles
+    definition: The call sign for the landing signal officer (LSO).
+    usage: Navy carrier training
+    note: "LSOs are qualified pilots who use radio calls to bring aircraft safely aboard. [3]"
+    cite: [{ n: 3, page: "A-5" }, { n: 3, page: "1-2" }]
+  - term: Red Crown
+    definition: The carrier strike group's air defense controller, the first check-in after the mission, which passes instructions and hands the flight to Strike.
+    usage: Navy carrier training
+    cite: [{ n: 3, page: "2-11" }]
+  - term: State
+    definition: "Fuel state, as in “state 2.2”."
+    usage: Navy carrier training
+    cite: [{ n: 3, page: "2-18" }]
 sources:
   - n: 1
     title: "NAVEDTRA 14342A, Air Traffic Controller, chapter 11, Table 11-1: Shipboard operations terms and definitions"
@@ -136,7 +175,7 @@ sources:
     date: "Revision 28 January 2014, Change 1 of 9 February 2018"
     url: "https://murphysys.com/dcs/P-816.pdf"
     accessed: "2026-10-26"
-    note: "Appendix A glossary, pp. A-1 to A-6; waveoff and cut lights pp. 1-12 to 1-13; ball call p. 2-18. A training publication for one aircraft, cited for the meaning of carrier terms."
+    note: "Appendix A glossary, pp. A-1 to A-6; LSOs p. 1-2; carrier control area p. 1-3; ACLS needles p. 1-10; waveoff and cut lights pp. 1-12 to 1-13; Red Crown, Strike and Marshal check-ins pp. 2-11 to 2-12; ball call and fuel state p. 2-18; frequency buttons p. 2-21; commencing pp. 2-26 to 2-27. A training publication for one aircraft, cited for the meaning of carrier terms."
   - n: 4
     title: "ATP 1-02.1 / MCRP 3-30B.1 / NTTP 6-02.1 / AFTTP 3-2.5, Brevity: Multi-Service Tactics, Techniques, and Procedures for Multi-Service Brevity Codes"
     publisher: "Air Land Sea Application Center for the US Army, Marine Corps, Navy and Air Force"

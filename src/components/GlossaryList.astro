@@ -1,0 +1,21 @@
+---
+import { termSense } from '../data/links';
+// A module's terms list, rendered from the Terminology glossary so each
+// definition is written once. An item is a glossary word, or { id, label, set }
+// to show it under another label or pick one set's meaning. An item the
+// glossary cannot source yet gives its own { label, meaning } and stays unlinked.
+// Every listed word links to its entry, even if the page's prose linked it
+// earlier; the list is an index, not a mention.
+type Item = string | { id: string; label?: string; set?: string } | { label: string; meaning: string };
+interface Props { items: Item[] }
+const rows = Astro.props.items.map((item) => {
+  if (typeof item === 'string') return { label: item, ...termSense(item) };
+  if ('meaning' in item) return { label: item.label, href: undefined, definition: item.meaning };
+  return { label: item.label ?? item.id, ...termSense(item.id, item.set) };
+});
+---
+<dl class="jargon">
+  {rows.map((row) => (
+    <div><dt>{row.href ? <a class="term-list-link" href={row.href} set:html={row.label} /> : <Fragment set:html={row.label} />}</dt><dd>{row.definition}</dd></div>
+  ))}
+</dl>
