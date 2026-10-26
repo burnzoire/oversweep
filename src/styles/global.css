@@ -9,6 +9,7 @@
   --color-muted: #595959;
   --color-border: #767676;
   --color-link: #005a9c;
+  --color-term: #0b6bcb;
   --color-focus: #005fcc;
   --color-surface: #f5f6f7;
   /* Brand: a flight-deck ink band with a deck-yellow mark. Yellow is decorative
@@ -693,6 +694,21 @@ h2 {
    short preview; on touch screens it is a plain link. */
 .term-ref {
   position: relative;
+}
+
+/* Term links drop the underline so a page with a link at every mention stays
+   readable. Without it they rely on colour, so --color-term keeps 3:1 contrast
+   with body text (and 4.5:1 with the page), and the underline returns on hover
+   and focus (WCAG technique G183). */
+.term-link {
+  color: var(--color-term);
+  text-decoration: none;
+}
+
+.term-link:hover,
+.term-link:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 0.14em;
 }
 
 .term-tip {
