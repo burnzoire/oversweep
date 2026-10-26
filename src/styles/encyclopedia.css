@@ -107,3 +107,32 @@
 .ency .photo .credit { display: block; margin-top: 0.25rem; color: var(--color-muted); font-size: 0.82rem; }
 .ency .photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 1rem; margin: 1.5rem 0; }
 .ency .photo-grid .photo { margin: 0; }
+
+/* Terminology: set pages and the A–Z glossary. `hidden` must win over the grid displays. */
+.ency .terms { margin: 0 0 1.5rem; }
+.ency .term { display: grid; grid-template-columns: minmax(8rem, 13rem) 1fr; gap: 0.25rem 1.25rem; padding: 0.75rem 0; border-top: 1px solid var(--color-border); scroll-margin-top: 1rem; }
+.ency .term:target { background: #fff6d6; box-shadow: 0 0 0 0.5rem #fff6d6; }
+.ency .term dt { font-weight: 700; overflow-wrap: anywhere; }
+.ency .term-word { font-size: 1.05rem; letter-spacing: 0.02em; }
+.ency .term-form { font-weight: 400; color: var(--color-muted); }
+.ency .term-sense { grid-column: 2; margin: 0; }
+.ency .term-sense + .term-sense { padding-top: 0.6rem; border-top: 1px dashed var(--color-border); }
+.ency .term-sense p { margin: 0.2rem 0; }
+.ency .term-set { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+.ency .term-meta, .ency .term-source { font-size: 0.88rem; color: var(--color-muted); }
+.ency .term-note { padding-left: 0.6rem; border-left: 3px solid var(--color-accent); }
+.ency .glossary-tools { margin: 0 0 1rem; }
+.ency .glossary-tools label { display: block; font-weight: 700; margin-bottom: 0.3rem; }
+.ency .glossary-tools input { box-sizing: border-box; width: min(100%, 28rem); min-height: 2.75rem; padding: 0.4rem 0.7rem; font: inherit; border: 1px solid var(--color-text); margin-bottom: 0.75rem; }
+.ency .glossary-tools input:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+.ency .term-count { margin: 0; color: var(--color-muted); font-size: 0.9rem; }
+.ency .letter-nav ol { display: flex; flex-wrap: wrap; gap: 0.3rem; padding: 0; margin: 0 0 0.5rem; list-style: none; }
+.ency .letter-nav a { display: inline-flex; align-items: center; justify-content: center; min-width: 2.75rem; min-height: 2.75rem; border: 1px solid var(--color-border); font-weight: 700; text-decoration: none; background: #fff; }
+.ency .letter-nav a:hover { background: var(--color-surface); }
+.ency .letter { margin: 1.25rem 0 0; padding-bottom: 0.2rem; border-bottom: 2px solid var(--color-text); font-size: 1.3rem; }
+.ency .glossary-tools[hidden], .ency .term[hidden], .ency .letter-group[hidden], .ency .term-empty[hidden] { display: none; }
+
+@media (max-width: 36rem) {
+  .ency .term { grid-template-columns: 1fr; }
+  .ency .term-sense { grid-column: 1; }
+}

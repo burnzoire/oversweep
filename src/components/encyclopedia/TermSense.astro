@@ -1,0 +1,18 @@
+---
+import Cited from './Cited.astro';
+import type { Source, Term } from '../../data/encyclopedia';
+// One meaning of a word from one terminology set. `base` is the set page when
+// the meaning is shown on the glossary, so its citations reach that set's sources.
+interface Props { term: Term; usage: string; sources: Source[]; base?: string; set?: { title: string; href: string } }
+const { term, usage, sources, base = '', set } = Astro.props;
+// Pilot/Controller Glossary sections are letters; other sources have printed pages.
+const where = (page?: string) => !page ? '' : /^[A-Z](, [A-Z])*$/.test(page) ? `, ${page.includes(',') ? 'letters' : 'letter'} ${page}` : `, ${/[,–]/.test(page) ? 'pp.' : 'p.'} ${page}`;
+const short = (n: number) => sources.find((s) => s.n === n)?.title.split(',')[0] ?? `Source ${n}`;
+---
+<dd class="term-sense">
+  {set && <p class="term-set"><a href={set.href}>{set.title}</a></p>}
+  <p class="term-def">{term.expansion && <strong>{term.expansion}. </strong>}<Cited text={term.definition} base={base} /></p>
+  <p class="term-meta">{term.usage ?? usage}{term.domains && ` · ${term.domains.join(', ')}`}</p>
+  {term.note && <p class="term-note"><Cited text={term.note} base={base} /></p>}
+  <p class="term-source">Source: {term.cite.map((c, i) => <>{i > 0 && '; '}<a href={`${base}#source-${c.n}`}>[{c.n}]</a> {short(c.n)}{where(c.page)}</>)}</p>
+</dd>

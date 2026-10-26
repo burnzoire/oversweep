@@ -2,6 +2,7 @@
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import { getModule, includedModules } from '../../../data/modules';
 import { sitePath } from '../../../lib/paths';
+import { glossaryHref } from '../../../data/encyclopedia';
 import { PHONETIC, LIGHT_SIGNALS, DISTRESS_ORDER, TRAINING_CALLS, BREVITY } from '../../../lessons/radio/lesson-model.mjs';
 const radio = getModule('radio-procedures');
 export function getStaticPaths() { return includedModules.some(m => m.slug === 'radio-procedures') ? [{ params: { module: 'radio-procedures' } }] : []; }
@@ -21,6 +22,8 @@ const h = pp(1), f = pp(2), b = pp(3), br = pp(4), jb = pp(5);
 const a = (para: string) => `[6, ${para.includes('–') || para.includes(',') ? 'paras' : 'para'} ${para}]`;
 const g = (term: string) => `[7, ${term}]`;
 const bfm = sitePath('manual/air-combat/bfm/');
+// Brevity and training calls link to their Terminology glossary entry where it has one.
+const glossary = glossaryHref;
 const morse = (m: string) => m.replaceAll('.', '·').replaceAll('-', '–');
 const caseIii = sitePath('manual/naval-operations/case-iii/');
 const airfield = sitePath('manual/airfield-operations/airfield-basics/');
@@ -265,10 +268,10 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
  <p>If a wingman loses its radio in formation, it gets lead's attention and signals by hand: patting the oxygen mask means it cannot talk, patting the ear of the helmet means it cannot hear, each followed by a thumbs-down. <a href="#source-formsup">{f('6')}</a></p>
 
  <h2 id="training">Brevity and training-rule calls</h2>
- <p>Tactical calls use <strong>brevity words</strong>: short code words with fixed meanings, published jointly by the Army, Marine Corps, Navy and Air Force (ATP 1-02.1, MCRP 3-30B.1, NTTP 6-02.1, AFTTP 3-2.5), so a pilot from any service means the same thing by them. <a href="#source-brevity">{br('i')}</a> A selection:</p>
- <dl class="jargon">{BREVITY.map(t => <div><dt>{t.word}</dt><dd>{t.meaning} <a href="#source-brevity">{br(t.page)}</a></dd></div>)}</dl>
+ <p>Tactical calls use <strong>brevity words</strong>: short code words with fixed meanings, published jointly by the Army, Marine Corps, Navy and Air Force (ATP 1-02.1, MCRP 3-30B.1, NTTP 6-02.1, AFTTP 3-2.5), so a pilot from any service means the same thing by them. <a href="#source-brevity">{br('i')}</a> A selection, each linked to its entry in the <a href={sitePath('encyclopedia/terminology/brevity/')}>brevity words</a> glossary:</p>
+ <dl class="jargon">{BREVITY.map(t => <div><dt>{glossary(t.word) ? <a href={glossary(t.word)}>{t.word}</a> : t.word}</dt><dd>{t.meaning} <a href="#source-brevity">{br(t.page)}</a></dd></div>)}</dl>
  <p>Air combat training adds a small set of calls whose job is safety: they stop, start and deconflict an engagement, and every player must know them before the first set. Each service's training rules set them; the examples here come from the Navy's T-45 basic fighter maneuvering (BFM) instruction, CNATRA P-1289. The training rules "shall be strictly observed", and they start with 500 feet of separation between all aircraft at all times. <a href="#source-p1289">{b('3-1–3-2')}</a></p>
- <dl class="jargon">{TRAINING_CALLS.map(t => <div><dt>{t.call}</dt><dd>{t.meaning} <a href="#source-p1289">{b(t.page)}</a></dd></div>)}</dl>
+ <dl class="jargon">{TRAINING_CALLS.map(t => <div><dt>{glossary(t.call) ? <a href={glossary(t.call)}>{t.call}</a> : t.call}</dt><dd>{t.meaning} <a href="#source-p1289">{b(t.page)}</a></dd></div>)}</dl>
  <p>"Knock it off" ends each set as well as any unsafe one: the instructor (dual) or bandit (solo) calls it at the end of every set, and both aircraft acknowledge. <a href="#source-p1289">{b('2-4')}</a> Passing head-on, the pass is called so both pilots go the same way: "high", "low", "right-to-right" or "left-to-left". <a href="#source-p1289">{b('3-4')}</a> The maneuvers themselves are in the <a href={bfm}>BFM module</a>.</p>
  <section class="lesson quiz-lesson" data-lesson="training" aria-labelledby="training-title">
   <h3 id="training-title">Quiz: which training call?</h3>

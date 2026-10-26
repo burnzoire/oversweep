@@ -1,0 +1,67 @@
+---
+import RecordCard from './RecordCard.astro';
+import TermSense from './TermSense.astro';
+import { categoryRecords, recordRoute, termSlug, terminologyContent, type Term } from '../../data/encyclopedia';
+import { sitePath } from '../../lib/paths';
+
+// The Terminology category page: every set's words merged into one A–Z list.
+// A word defined by more than one set (BINGO, PIGEONS) is one entry with each
+// meaning under its set's name. Without JavaScript the filters stay hidden and
+// every word is listed.
+const sets = categoryRecords('terminology').map((record) => ({ record, data: terminologyContent(record).frontmatter, href: sitePath(recordRoute(record)) }));
+const entries = new Map<string, { slug: string; word: string; form?: string; senses: { term: Term; set: (typeof sets)[number] }[] }>();
+for (const set of sets) {
+  for (const term of set.data.terms) {
+    const slug = termSlug(term.term);
+    const entry = entries.get(slug) ?? entries.set(slug, { slug, word: term.term, form: term.form, senses: [] }).get(slug)!;
+    entry.senses.push({ term, set });
+  }
+}
+const sorted = [...entries.values()].sort((a, b) => a.word.localeCompare(b.word, 'en', { sensitivity: 'base' }));
+// An entry differs when two sets define it, or a note compares it with NATO, ICAO or another service's use.
+const differs = (entry: (typeof sorted)[number]) =>
+  entry.senses.length > 1 || entry.senses.some(({ term }) => /NATO|ICAO|Navy|Air Force|Marine|Army|carrier|airfield/.test(term.note ?? ''));
+const letters = [...new Set(sorted.map((e) => e.word[0].toUpperCase()))];
+// Text the search box matches: the word, its expansion and its definitions.
+const haystack = (entry: (typeof sorted)[number]) =>
+  [entry.word, ...entry.senses.flatMap(({ term }) => [term.expansion ?? '', term.definition])].join(' ').toLowerCase().replace(/\[\d+\]/g, '');
+---
+<p class="lead">Brevity words, joint terms and abbreviations, airfield and air traffic words, and carrier terms, from the US joint and multi-service publications first. Each word gives its definition, who uses it and its source. Where NATO, ICAO or another service uses a word differently, the entry says how, and a word that two sources define differently shows both meanings.</p>
+<h2>Term sets</h2>
+<div class="entry-grid record-grid">
+  {sets.map(({ record }) => <RecordCard record={record} />)}
+</div>
+
+<h2 id="glossary">All terms A–Z</h2>
+<div class="glossary-tools" hidden>
+  <label for="term-search">Find a term</label>
+  <input id="term-search" type="search" autocomplete="off" spellcheck="false" placeholder="Word, abbreviation or meaning" />
+  <div class="buttons" role="group" aria-label="Show terms from">
+    <button type="button" data-term-filter="all" aria-pressed="true">All</button>
+    {sets.map(({ record, data }) => <button type="button" data-term-filter={record.slug} aria-pressed="false">{data.short}</button>)}
+    <button type="button" data-term-filter="differs" aria-pressed="false">Usage differs</button>
+  </div>
+  <p class="term-count" aria-live="polite" data-term-count></p>
+</div>
+<nav class="letter-nav" aria-label="Letters">
+  <ol>{letters.map((l) => <li><a href={`#letter-${l.toLowerCase()}`}>{l}</a></li>)}</ol>
+</nav>
+{letters.map((letter) => (
+  <section class="letter-group" aria-labelledby={`letter-${letter.toLowerCase()}`}>
+    <h3 id={`letter-${letter.toLowerCase()}`} class="letter">{letter}</h3>
+    <dl class="terms">
+      {sorted.filter((e) => e.word[0].toUpperCase() === letter).map((entry) => (
+        <div class="term" id={entry.slug} data-term-sets={entry.senses.map(({ set }) => set.record.slug).join(' ')} data-term-differs={differs(entry) ? '' : undefined} data-term-text={haystack(entry)}>
+          <dt><span class="term-word">{entry.word}</span>{entry.form && <span class="term-form"> {entry.form}</span>}</dt>
+          {entry.senses.map(({ term, set }) => (
+            <TermSense term={term} usage={set.data.usage} sources={set.data.sources} base={`${set.href}`} set={{ title: set.record.title, href: `${set.href}#${entry.slug}` }} />
+          ))}
+        </div>
+      ))}
+    </dl>
+  </section>
+))}
+<p class="term-empty note" hidden data-term-empty>No term matches. Try a shorter word, or show all sets.</p>
+<p class="note">Bracketed numbers cite the sources listed on each set's page; select a set's name above a meaning to read the set's introduction and full source list.</p>
+
+<script>import "../../scripts/term-filter.mjs";</script>

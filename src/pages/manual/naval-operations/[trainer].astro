@@ -2,10 +2,13 @@
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import { getExperience, includedExperiences, experienceFrame } from '../../../data/experiences';
 import { sitePath } from '../../../lib/paths';
+import { glossaryHref } from '../../../data/encyclopedia';
 import RecoveryOverview from '../../../components/case-iii/RecoveryOverview.astro';
 import TurnIndicator from '../../../components/case-iii/TurnIndicator.astro';
 import LensFigure from '../../../components/case-iii/LensFigure.astro';
 const caseIII = getExperience('case-iii');
+// Links a word to its Terminology glossary entry; the build fails if it has none.
+const term = (word: string) => { const href = glossaryHref(word); if (!href) throw new Error(`No glossary entry for ${word}`); return href; };
 export function getStaticPaths() { return includedExperiences.some(e => e.slug === 'case-iii') ? [{ params: { trainer: 'case-iii' } }] : []; }
 const recoveryModule = caseIII.module;
 const trainerHref = sitePath(experienceFrame(caseIII));
@@ -34,7 +37,7 @@ const contents = [
  </nav>
  <h2 id="overview">Purpose and learning objectives</h2>
  <p>Case III provides an instrument recovery to the carrier at night and in weather requiring instrument procedures. It connects a sequenced marshal hold to an instrument approach and the final visual landing task. The general controller-training text assigns selection of the recovery case to the Air Officer; the P-816 account calls this role the Air Boss. <a href="#source-general">[2, p. 11-21]</a> <a href="#source-p816">[1, pp. 2-3–2-4, 2-22–2-25]</a></p>
- <p>By the end, you should be able to explain the recovery phases; distinguish a radial, inbound course, base recovery course and final bearing; interpret a marshal clearance; explain why timing and configuration matter; and distinguish a landing, bolter and waveoff.</p>
+ <p>By the end, you should be able to explain the recovery phases; distinguish a radial, inbound course, <a href={term('Base Recovery Course (BRC)')}>base recovery course</a> and <a href={term('Final Bearing')}>final bearing</a>; interpret a <a href={term('Marshal')}>marshal</a> clearance; explain why timing and configuration matter; and distinguish a landing, <a href={term('Bolter')}>bolter</a> and <a href={term('Waveoff')}>waveoff</a>.</p>
  <p class="note">This is a conceptual reference, not an aircraft checklist. Exact speeds, configuration, approach aids, minima and missed-approach instructions depend on the aircraft, equipment, applicable procedure and clearance. The source is a T-45C training publication: its aircraft actions are not universal.</p>
  <h2 id="picture">The whole recovery at a glance</h2>
  <p>Figure 1 follows one aircraft through the historical CV-1 Case III example in [1], from the first check-in to the ball call, with the bolter or waveoff re-entry. Select a number to highlight that part of the figure. The numbered text is the explanation; the figure only places it. Numbers such as 1,200 ft or 150 kt belong to that T-45C training example, not to every aircraft.</p>

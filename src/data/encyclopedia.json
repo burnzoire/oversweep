@@ -881,5 +881,49 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "The 5 in 'Holy Moses' rocket of the Second World War and Korea, fired from Thunderbolts, Corsairs and Skyraiders."
+  },
+  {
+    "id": "encyclopedia.terminology.brevity",
+    "slug": "brevity",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Brevity words",
+    "designation": "ATP 1-02.1 / MCRP 3-30B.1 / NTTP 6-02.1 / AFTTP 3-2.5",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The multi-service radio code words shared by the Army, Marine Corps, Navy and Air Force, with where NATO's meaning may differ."
+  },
+  {
+    "id": "encyclopedia.terminology.joint-terms",
+    "slug": "joint-terms",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Joint terms and abbreviations",
+    "designation": "DoD Dictionary (JP 1-02)",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "CAS, SEAD, CAP, JTAC, ROE and the other joint terms of briefings and tasking, and the words each service uses differently."
+  },
+  {
+    "id": "encyclopedia.terminology.airfield-atc",
+    "slug": "airfield-atc",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Airfield and ATC terms",
+    "designation": "FAA Pilot/Controller Glossary · NAVEDTRA 14342A",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The traffic pattern, the military overhead pattern and the standard radio words, with ICAO's definitions where they differ."
+  },
+  {
+    "id": "encyclopedia.terminology.carrier",
+    "slug": "carrier",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Carrier terms",
+    "designation": "NAVEDTRA 14342A · CNATRA P-816",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Marshal, platform, the groove and the ball: the Navy's shipboard words, and where they differ from the brevity list."
   }
 ]
