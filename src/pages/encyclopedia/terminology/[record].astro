@@ -1,0 +1,56 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import TermSense from '../../../components/encyclopedia/TermSense.astro';
+import { categoryRecords, recordRoute, termSlug, terminologyContent, type EncyclopediaRecord } from '../../../data/encyclopedia';
+import { categoryTitle } from '../../../data/availability';
+import { sitePath } from '../../../lib/paths';
+import '../../../styles/encyclopedia.css';
+
+export function getStaticPaths() {
+  return categoryRecords('terminology').map((record) => ({ params: { record: record.slug }, props: { record } }));
+}
+
+const { record } = Astro.props as { record: EncyclopediaRecord };
+const { frontmatter: data, Content } = terminologyContent(record);
+const category = categoryTitle(record.category);
+const siblings = categoryRecords('terminology');
+const terms = [...data.terms].sort((a, b) => a.term.localeCompare(b.term, 'en', { sensitivity: 'base' }));
+---
+<SiteLayout title={record.title} activeSection="encyclopedia"
+  description={`${record.title}: ${record.summary}`}
+  breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: category, href: sitePath('encyclopedia/terminology/') }, { label: record.title }]}>
+  <div class="ency terminology">
+    <nav class="record-nav" aria-label="Terminology sets">
+      <ol>
+        <li><a href={sitePath('encyclopedia/terminology/')}>All terms A–Z</a></li>
+        {siblings.map((r) => <li>{r.slug === record.slug ? <span aria-current="page">{terminologyContent(r).frontmatter.short}</span> : <a href={sitePath(recordRoute(r))}>{terminologyContent(r).frontmatter.short}</a>}</li>)}
+      </ol>
+    </nav>
+    <section class="status-panel" data-record-id={record.id} data-record-revision={record.revision}>
+      <h2>{record.maturity}</h2>
+      <p>Record revision {record.revision} · {record.summary}</p>
+      <p>Definitions are quoted or closely paraphrased from the source named with each word. Meanings change between editions and theatres; the brief and the current publications take precedence.</p>
+    </section>
+
+    <div class="record-body"><Content /></div>
+
+    <h2 id="terms">{terms.length} terms</h2>
+    <dl class="terms">
+      {terms.map((term) => (
+        <div class="term" id={termSlug(term.term)}>
+          <dt><span class="term-word">{term.term}</span>{term.form && <span class="term-form"> {term.form}</span>}</dt>
+          <TermSense term={term} usage={data.usage} sources={data.sources} />
+        </div>
+      ))}
+    </dl>
+
+    <section class="sources" aria-labelledby="sources-title">
+      <h2 id="sources-title">Sources</h2>
+      <ol>
+        {data.sources.map((s) => (
+          <li id={`source-${s.n}`} value={s.n}><cite>{s.title}</cite>. {s.publisher}{s.date && `, ${s.date}`}. <a href={s.url}>{s.url}</a> (accessed {s.accessed}).{s.note && ` ${s.note}`}</li>
+        ))}
+      </ol>
+    </section>
+  </div>
+</SiteLayout>

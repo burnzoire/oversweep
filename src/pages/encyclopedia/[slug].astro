@@ -4,6 +4,7 @@ import RecordCard from "../../components/encyclopedia/RecordCard.astro";
 import EnvelopeFigure from "../../components/encyclopedia/EnvelopeFigure.astro";
 import DeliveryFigure from "../../components/encyclopedia/DeliveryFigure.astro";
 import Cited from "../../components/encyclopedia/Cited.astro";
+import Glossary from "../../components/encyclopedia/Glossary.astro";
 import { encyclopediaCategories } from "../../data/catalogue";
 import { sectionHasContent } from "../../data/availability";
 import { aircraftContent, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, recordRoute, type Source } from "../../data/encyclopedia";
@@ -150,6 +151,8 @@ const deliverySources: Source[] = [
             </ol>
           </section>
         </>
+      ) : category.slug === "terminology" ? (
+        <Glossary />
       ) : (
         <>
           <h2>Records</h2>

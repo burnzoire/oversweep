@@ -1,6 +1,7 @@
 import type { MarkdownInstance } from 'astro';
 import registry from './encyclopedia.json';
 import { reviewTrainers } from './experiences';
+import { sitePath } from '../lib/paths';
 
 // Encyclopedia records. Like modules, `publication` decides whether a record
 // ships in normal builds and is independent of `maturity`, which is always
@@ -170,6 +171,40 @@ export interface OrdnanceData {
   sources: Source[];
 }
 
+// Terminology records are glossary sets, one per source family (brevity
+// words, joint terms, airfield terms, carrier terms). The category page merges
+// every set into one A–Z list, so a word defined differently by two sources
+// shows both meanings side by side.
+export interface Term {
+  // The word as the source prints it, such as "BINGO" or "MERGE(D)".
+  term: string;
+  // Fill-ins the source prints after the word, such as "[direction]".
+  form?: string;
+  // What an abbreviation stands for.
+  expansion?: string;
+  definition: string;
+  // Who uses the word, when it differs from the set's `usage`.
+  usage?: string;
+  // Brevity domains from the publication's key, such as "Air-to-air".
+  domains?: string[];
+  // How the meaning differs between services, NATO or ICAO, with [n] citations.
+  note?: string;
+  cite: { n: number; page?: string }[];
+}
+
+export interface TerminologyData {
+  // Short name for the glossary filter buttons.
+  short: string;
+  usage: string;
+  terms: Term[];
+  sources: Source[];
+}
+
+// The anchor of a word on the glossary and set pages: "MERGE(D)" is merged,
+// "Feet Wet/Dry" is feet-wet-dry. Words sharing an anchor are one glossary entry.
+export const termSlug = (term: string) =>
+  term.toLowerCase().replace(/[()]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
 // Eras for the aircraft list filter, in display order, set by `era` on each
 // aircraft registry entry. Early jets are the first jet generation, retired
 // from front-line service.
@@ -197,9 +232,19 @@ function contentFile(r: EncyclopediaRecord) {
 export const recordContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile;
 export const aircraftContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AircraftData>;
 export const ordnanceContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<OrdnanceData>;
+export const terminologyContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<TerminologyData>;
 
 export function getRecord(category: string, slug: string): EncyclopediaRecord {
   const found = records.find(r => r.category === category && r.slug === slug);
   if (!found) throw new Error(`Unregistered encyclopedia record: ${category}/${slug}`);
   return found;
 }
+
+// Module pages link a word where it first appears to its Terminology glossary
+// entry. A phrase such as "Fence in / fence out" falls back to its first word;
+// a word with no entry gets no link, so pages never link to a missing anchor.
+const glossarySlugs = new Set(categoryRecords('terminology').flatMap((r) => terminologyContent(r).frontmatter.terms.map((t) => termSlug(t.term))));
+export const glossaryHref = (word: string) => {
+  const slug = [termSlug(word), termSlug(word.split(/[ /]/)[0])].find((s) => glossarySlugs.has(s));
+  return slug ? `${sitePath('encyclopedia/terminology/')}#${slug}` : undefined;
+};

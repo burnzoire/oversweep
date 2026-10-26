@@ -118,3 +118,11 @@ test('the encyclopedia landing shows categories, not records', async () => {
   assert(problems.some(p => p.includes('encyclopedia/index.html lists records')));
   assert.deepEqual(await check({ ...complete, 'encyclopedia/index.html': '<ul class="category-grid"></ul>' }), []);
 });
+
+test('links into the terminology glossary must land on an entry', async () => {
+  const glossary = { 'encyclopedia/terminology/index.html': '<div class="term" id="bingo"></div>' };
+  const linked = (id) => ({ ...complete, ...glossary, 'manual/radio/index.html': `<a href="/encyclopedia/terminology/#${id}">Bingo</a>` });
+  assert.deepEqual(await check(linked('bingo')), []);
+  const problems = await check(linked('joker'));
+  assert(problems.some(p => p.includes('#joker, which does not exist')));
+});

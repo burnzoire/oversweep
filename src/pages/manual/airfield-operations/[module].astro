@@ -2,6 +2,7 @@
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import { getModule, includedModules } from '../../../data/modules';
 import { sitePath } from '../../../lib/paths';
+import { glossaryHref } from '../../../data/encyclopedia';
 import AerodromeFigure from '../../../components/airfield-ops/AerodromeFigure.astro';
 import { TERMS } from '../../../lessons/airfield-ops/terms.mjs';
 const mod = getModule('airfield-basics');
@@ -17,6 +18,8 @@ const contents = [
 // Source markers: [n, ¶ or p.]; military sources [1]–[6], then FAA [7]–[12].
 const cite = (n: number) => (where: string) => `[${n}, ${where}]`;
 const radioHref = sitePath('manual/radio-communications/radio-procedures/');
+// Links a word to its Terminology glossary entry; the build fails if it has none.
+const term = (word: string) => { const href = glossaryHref(word); if (!href) throw new Error(`No glossary entry for ${word}`); return href; };
 const nav = cite(1), hw = cite(2), cbm = cite(3), jbsa = cite(4), fm = cite(5), eaf = cite(6);
 const aim2 = cite(7), aim4 = cite(8), pcg = cite(9), afh = cite(10), ac = cite(11), atc = cite(12);
 ---
@@ -314,9 +317,9 @@ const aim2 = cite(7), aim4 = cite(8), pcg = cite(9), afh = cite(10), ac = cite(1
  <h2 id="overhead">The overhead maneuver</h2>
  <p>"The overhead approach pattern is a series of predetermined maneuvers prescribed for VFR arrival of military aircraft," often flown in formation. It lets high-performance aircraft enter the terminal area alongside slower aircraft flying the standard pattern. The Navy's manual lists its components: <a href="#source-navedtra">{nav('9-13')}</a></p>
  <ol>
-  <li><strong>Initial approach</strong>: a line of flight along the extended centerline of the landing runway, 3 to 5 miles long, normally flown 500 ft above the standard traffic pattern altitude.</li>
-  <li><strong>Break point</strong>: normally just above the landing threshold, where the aircraft turns 180°, left or right with the traffic flow, onto the downwind leg.</li>
-  <li><strong>"The 180"</strong>: the manual names this component without describing it. Read with the training script, it is the final 180° turn from downwind to final: the script's landing call names the pilot's position as abeam, the 180, the 90 or final, then reports the gear. <a href="#source-hollywood">{hw('33–34')}</a> This module takes the 180 as the start of that turn and the 90 as its midpoint, an interpretation the sources do not spell out.</li>
+  <li><strong><a href={term('Initial')}>Initial approach</a></strong>: a line of flight along the extended centerline of the landing runway, 3 to 5 miles long, normally flown 500 ft above the standard traffic pattern altitude.</li>
+  <li><strong><a href={term('Break point')}>Break point</a></strong>: normally just above the landing threshold, where the aircraft turns 180°, left or right with the traffic flow, onto the downwind leg.</li>
+  <li><strong><a href={term('The 180')}>"The 180"</a></strong>: after the downwind leg, a second 180° turn puts the aircraft on final approach; it stays at traffic pattern altitude until that turn starts. <a href="#source-navedtra">{nav('9-14')}</a> The training script's landing call names the pilot's position as abeam, the 180, the 90 or final, then reports the gear. <a href="#source-hollywood">{hw('33–34')}</a> This module takes the 180 as the start of that turn and the 90 as its midpoint, an interpretation the sources do not spell out.</li>
   <li><strong>Final approach</strong>: along the extended centerline to the runway.</li>
  </ol>
  <p>The Air Force flies the same maneuver with its own words. At Columbus AFB the aircraft flies to <strong>initial</strong>, about 4 NM out on the runway centerline, crosses the runway at 1,000 to 1,500 ft AGL and "breaks" in a hard turn to lose airspeed onto the <strong>inside downwind</strong>, within 1.5 NM of the runway. After a touch-and-go or low approach a pilot can <strong>pull closed</strong>: climb and turn straight back onto the inside downwind instead of flying the whole pattern again. <a href="#source-cbm">{cbm('Military traffic pattern')}</a> Altitudes are local: San Antonio's F-16s fly their overhead at 2,700 ft MSL. <a href="#source-jbsa">{jbsa('Kelly Field')}</a></p>
@@ -468,7 +471,7 @@ const aim2 = cite(7), aim4 = cite(8), pcg = cite(9), afh = cite(10), ac = cite(1
 
  <h2 id="sources">Sources and applicability</h2>
  <h3>Military sources</h3>
- <p id="source-navedtra"><strong>[1] Naval Education and Training Command, NAVEDTRA 14342A, Air Traffic Controller</strong> (Navy rate training manual), as published online on <a href="https://navyaviation.tpub.com/14342A/">navyaviation.tpub.com</a>. Inspected 25 October 2026, printed pages 4-9 (arresting gear), 4-25 (optical landing system), 5-52 (IFLOLS), 9-6 (landing gear checks), 9-8 to 9-9 (runway use, priority), 9-10 (light gun), 9-11 to 9-13 (traffic patterns, overhead) and 9-18; page links are in the review evidence. A US Navy training manual, reproduced by a third-party site; the edition date is not shown on the pages read.</p>
+ <p id="source-navedtra"><strong>[1] Naval Education and Training Command, NAVEDTRA 14342A, Air Traffic Controller</strong> (Navy rate training manual), as published online on <a href="https://navyaviation.tpub.com/14342A/">navyaviation.tpub.com</a>. Inspected 25 October 2026, printed pages 4-9 (arresting gear), 4-25 (optical landing system), 5-52 (IFLOLS), 9-6 (landing gear checks), 9-8 to 9-9 (runway use, priority), 9-10 (light gun), 9-11 to 9-14 (traffic patterns, overhead) and 9-18; page links are in the review evidence. A US Navy training manual, reproduced by a third-party site; the edition date is not shown on the pages read.</p>
  <p id="source-hollywood"><strong>[2] Training Squadron TEN (VT-10), "T-6A Checklist Study Guide ('Hollywood Script')", enclosure (1) to TRARONTENNOTE 3710, May 2022.</strong> <a href="https://www.cnatra.navy.mil/tw6/vt10/assets/docs/training/hollywood-script.pdf">Read the script (cnatra.navy.mil)</a>. Inspected 25 October 2026: radio calls pp. 19–35. Used for the format of Navy field calls; the review gate cannot reach this host, so claims resting on it are unverified.</p>
  <p id="source-cbm"><strong>[3] 14th Flying Training Wing Safety Office, Columbus Air Force Base, "Columbus Collision Avoidance: A guide to Columbus Air Force Base and the surrounding area", October 2013.</strong> <a href="https://flytupelo.com/wp-content/uploads/2020/12/MACA-Booklet.pdf">PDF, as hosted by Tupelo Regional Airport</a>. Inspected 25 October 2026: "Aircraft at Columbus" and "Military Traffic Pattern" sections. An Air Force wing's guide for civil pilots; dated, so treat its numbers as an example.</p>
  <p id="source-jbsa"><strong>[4] Joint Base San Antonio, "Midair Collision Avoidance (MACA) Handbook".</strong> <a href="https://www.jbsa.mil/Portals/102/Documents/Safety/JBSA-MACA_Pamphlet_2024.pdf">PDF (jbsa.mil)</a>. Inspected 25 October 2026: p. 2, the JBSA-Kelly Field and emergency landing pattern (ELP) sections.</p>

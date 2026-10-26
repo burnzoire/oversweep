@@ -1,10 +1,12 @@
 ---
 // Renders text whose "[n]" markers refer to the record's numbered sources as
-// links to them, so the output checks can resolve every citation.
-interface Props { text?: string }
+// links to them, so the output checks can resolve every citation. `base` points
+// the links at another page's source list, as the terminology glossary does.
+interface Props { text?: string; base?: string }
+const { base = '' } = Astro.props;
 const parts = (Astro.props.text ?? '').split(/(\[\d+\])/);
 ---
 {parts.map((part) => {
   const n = part.match(/^\[(\d+)\]$/)?.[1];
-  return n ? <a href={`#source-${n}`}>[{n}]</a> : part;
+  return n ? <a href={`${base}#source-${n}`}>[{n}]</a> : part;
 })}

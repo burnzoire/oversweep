@@ -94,6 +94,16 @@ export async function checkRecords({ dist, records, review = false, base = "", c
   // The landing page is a grid of categories; records are listed only on their category's page.
   const landing = await read("encyclopedia/index.html");
   if (landing?.includes("data-record-id=")) problems.push("encyclopedia/index.html lists records; it should only show categories.");
+  // Module pages link words to the Terminology glossary; every link must land on an entry.
+  const glossary = await read("encyclopedia/terminology/index.html");
+  if (glossary !== null) {
+    const ids = new Set([...glossary.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]));
+    const link = new RegExp(`href="${escape(base)}/encyclopedia/terminology/#([^"]+)"`, "g");
+    for (const file of (await filesIn(dist)).filter((f) => f.endsWith(".html"))) {
+      for (const [, id] of (await readFile(file, "utf8")).matchAll(link))
+        if (!ids.has(id)) problems.push(`${path.relative(dist, file)} links to glossary entry #${id}, which does not exist.`);
+    }
+  }
   if (excluded.length) {
     for (const file of await filesIn(dist)) {
       const text = await readFile(file, "utf8");
