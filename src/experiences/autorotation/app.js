@@ -273,7 +273,7 @@
     // Ground posts for a sense of speed, labelled in metres along the ground.
     const step = scale > 6 ? 10 : scale > 1.5 ? 50 : 200;
     ctx.font = '10px monospace'; ctx.fillStyle = '#5c5a44'; ctx.strokeStyle = '#6f6c50'; ctx.lineWidth = 1;
-    for (let x = Math.floor(camX / step) * step; x < camX + w / scale; x += step) {
+    for (let x = Math.floor(camX / step) * step, n = 0; x < camX + w / scale && n < 500; x += step, n++) {
       const px = sx(x), big = x % (step * 5) === 0;
       ctx.beginPath(); ctx.moveTo(px, groundY); ctx.lineTo(px, groundY + (big ? 12 : 6)); ctx.stroke();
       if (big) ctx.fillText(`${Math.round(x)} m`, px + 3, groundY + 22);
@@ -284,7 +284,7 @@
     const ftScale = scale * M.FT;
     const ladder = [10, 50, 100, 250, 500, 1000].find(v => v * ftScale > 28) || 1000;
     ctx.fillStyle = 'rgba(32,34,31,.7)'; ctx.strokeStyle = 'rgba(32,34,31,.35)';
-    for (let f = ladder; sy(f * M.FT) > 10; f += ladder) {
+    for (let f = ladder, n = 0; sy(f * M.FT) > 10 && n < 100; f += ladder, n++) {
       const y = sy(f * M.FT);
       ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(10, y); ctx.stroke();
       ctx.fillText(`${f} ft`, 13, y + 3);

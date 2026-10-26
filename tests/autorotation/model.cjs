@@ -80,4 +80,20 @@ assert.equal(M.grade({ sink: 450, groundspeed: 10, pitch: 3 }).result, 'marginal
 assert.equal(M.grade({ sink: 200, groundspeed: 10, pitch: 3 }, { rotorLost: true }).result, 'failed');
 assert.deepEqual(fly({ altitudeFt: 800, speedKt: 70 }).touchdown, fly({ altitudeFt: 800, speedKt: 70 }).touchdown);
 
-console.log('Autorotation model: descent-rate curve, rpm control, trim, rpm decay, textbook and H/V landings, grading: PASS.');
+// A stalled, stopped rotor must never make the state diverge: any control
+// input, from any start, keeps every value finite and bounded until touchdown.
+let seed = 7;
+const rand = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
+for (let run = 0; run < 60; run++) {
+  const s = M.failEngine(M.newState({ altitudeFt: 300 + rand() * 2700, speedKt: rand() * 120, fuel: rand() }));
+  let input = { collective: 0, cyclic: 0 };
+  for (let i = 0; i < 4000 && !s.onGround; i++) {
+    if (i % 10 === 0) input = { collective: rand(), cyclic: rand() * 2 - 1 };
+    M.step(s, input, 0.05);
+    for (const k of ['x', 'h', 'u', 'w', 'rpm', 'pitch']) assert(Number.isFinite(s[k]), `run ${run} step ${i}: ${k} = ${s[k]}`);
+    assert(Math.abs(s.u) < 150 && s.h < 2000 && s.rpm < 200, `run ${run} step ${i}: ${JSON.stringify(s)}`);
+  }
+  assert(s.onGround, `run ${run} never landed`);
+}
+
+console.log('Autorotation model: descent-rate curve, rpm control, trim, rpm decay, textbook and H/V landings, grading, no divergence with a lost rotor: PASS.');
