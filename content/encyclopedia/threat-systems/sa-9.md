@@ -58,7 +58,7 @@ The BRDM-2's turret is replaced by four launcher boxes [[2]](#source-2) holding 
 
 ## How it engages
 
-The seeker is an uncooled lead sulphide (PbS) detector using **photocontrast** homing: it tracks the shadow a target makes against the sky's background radiation. That only works against clear sky or solid overcast, at least 20° from the sun and at least 2° above the horizon. [[1]](#source-1) The Army handout lists passive infrared guidance and rear aspect. [[2]](#source-2) The missile can engage targets receding at up to 220 m/s or approaching at up to 310 m/s. Its warhead is primarily a direct-hit design with contact and magnetic fuzes and a backup optical proximity fuze; the 9M31M raised it from 2.6 to 3 kg. [[1]](#source-1)
+The seeker is an uncooled lead sulphide (PbS) detector using **photocontrast** homing: it tracks the shadow a target makes against the sky's background radiation. That only works against clear sky or solid overcast, at least 20° from the sun and at least 2° above the horizon. [[1]](#source-1) The Army handout lists passive infrared guidance and rear aspect. [[2]](#source-2) The missile can engage targets receding at up to 220 m/s or approaching at up to 310 m/s. Its warhead is primarily a direct-hit design with contact and magnetic [fuzes](term:fuze) and a backup optical [proximity fuze](term:proximity-fuze); the 9M31M raised it from 2.6 to 3 kg. [[1]](#source-1)
 
 ## Envelope
 

@@ -9,11 +9,11 @@ weight: "134 lb (61 kg) [1]"
 dimensions: "Length 68 in (1.73 m); diameter 5 in (127 mm) [1]"
 warhead: "Mk 4 general-purpose head with 7.5–7.6 lb of TNT or Composition B, or Mk 2 armour-piercing head; post-war proximity-fuzed, smoke, anti-submarine and shaped-charge heads [1]"
 guidance: "None"
-fuzing: "Base fuze, with an optional nose fuze; later a proximity fuze [1]"
+fuzing: "Base [fuze](term:fuze), with an optional nose [fuze](term:fuze); later a [proximity fuze](term:proximity-fuze) [1]"
 delivery: "Fired singly, in pairs or in a rapid salvo; 1,375 ft/s plus the speed of the launching aircraft [1]"
 carriers:
-  - "Second World War: P-47D Thunderbolt, F4U Corsair, F6F Hellcat, TBF/TBM Avenger, SB2C Helldiver, P-38 Lightning, PBJ Mitchell, PV-2 Harpoon [1]"
-  - "Korean War: AD Skyraider, F-51D Mustang, F9F Panther [1]"
+  - "Second World War: [P-47D Thunderbolt](record:p-47d), [F4U Corsair](record:f4u-1d), F6F Hellcat, TBF/TBM Avenger, SB2C Helldiver, P-38 Lightning, PBJ Mitchell, PV-2 Harpoon [1]"
+  - "Korean War: AD Skyraider, F-51D [Mustang](record:p-51d), F9F Panther [1]"
 variants:
   - "RAM: an oversized 6.5 in shaped-charge head on the HVAR motor [1]"
 photos:
@@ -51,7 +51,7 @@ Rockets entered aircraft armament in the Second World War because they offered a
 
 ## From Normandy to Okinawa
 
-Testing finished by D-Day, and Navy HVARs were soon airlifted to France and loaded on Ninth Air Force P-47D Thunderbolts supporting the break-out from Normandy. [[1]](#source-1) An HVAR could penetrate 4 ft of reinforced concrete, and it was used against shipping, pillboxes, gun positions, fuel and ammunition dumps, tanks, locomotives and bunkers. After victory in Europe, Navy Corsairs and Avengers made the heaviest use of it in the Pacific. [[1]](#source-1) More than a million were made during the war. [[1]](#source-1)
+Testing finished by D-Day, and Navy HVARs were soon airlifted to France and loaded on Ninth Air Force [P-47D](record:p-47d) Thunderbolts supporting the break-out from Normandy. [[1]](#source-1) An HVAR could penetrate 4 ft of reinforced concrete, and it was used against shipping, pillboxes, gun positions, fuel and ammunition dumps, tanks, locomotives and bunkers. After victory in Europe, Navy Corsairs and Avengers made the heaviest use of it in the Pacific. [[1]](#source-1) More than a million were made during the war. [[1]](#source-1)
 
 ## Korea
 

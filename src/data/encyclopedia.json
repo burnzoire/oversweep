@@ -897,12 +897,12 @@
     "id": "encyclopedia.terminology.joint-terms",
     "slug": "joint-terms",
     "category": "terminology",
-    "revision": 1,
+    "revision": 2,
     "title": "Joint terms and abbreviations",
     "designation": "DoD Dictionary (JP 1-02)",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "CAS, SEAD, CAP, JTAC, ROE and the other joint terms of briefings and tasking, and the words each service uses differently."
+    "summary": "CAS, SEAD, JTAC and ROE, the missions from strike to counterair, the air defenses aircraft face, and the words each service uses differently."
   },
   {
     "id": "encyclopedia.terminology.airfield-atc",
@@ -941,12 +941,12 @@
     "id": "encyclopedia.terminology.flight",
     "slug": "flight",
     "category": "terminology",
-    "revision": 1,
+    "revision": 2,
     "title": "Flight terms",
     "designation": "NAVWEPS 00-80T-80 · FM 3-04.203 · FAA handbooks",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "Lift, drag, load factor, corner speed and energy for the wing, and ETL, vortex ring state and autorotation for the rotor."
+    "summary": "Lift, drag, load factor, corner speed, Mach number and the afterburner for the jet, and ETL, vortex ring state and autorotation for the rotor."
   },
   {
     "id": "encyclopedia.terminology.navigation",
@@ -958,5 +958,16 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "Radials, bearings, variation and deviation, station passage, waypoints, RAIM and the military grid."
+  },
+  {
+    "id": "encyclopedia.terminology.weapons",
+    "slug": "weapons",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Weapons terms",
+    "designation": "NAVEDTRA 14313 · JP 1-02",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Fuzes, low-drag and retarded bombs, rockets, guided missiles, laser-guided weapons, and the chaff and flares that decoy a threat."
   }
 ]

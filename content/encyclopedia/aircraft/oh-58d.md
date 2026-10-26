@@ -17,7 +17,7 @@ range: "260 km (140 NM); endurance two hours [1] [2]"
 armament:
   - "Two universal weapons pylons [1] [2]"
   - "One .50 calibre (12.7 mm) M3P or M296 heavy machine gun [1] [2]"
-  - "One seven-tube pod of 70 mm Hydra 70 or APKWS rockets [1] [2]"
+  - "One seven-tube pod of 70 mm [Hydra 70](record:hydra-70) or APKWS rockets [1] [2]"
   - "Two AGM-114 Hellfire missiles; Air-to-Air Stinger (ATAS) missiles for self-defence [1] [2]"
 sensors:
   - "Mast-Mounted Sight above the rotor: television camera, thermal imager and laser rangefinder/designator [1] [2]"
@@ -59,15 +59,15 @@ The first OH-58A was handed over in May 1969, and three months later Kiowas were
 
 ## A beach ball above the rotor
 
-By the 1970s the Army wanted a scout that could find targets by day, by night and in bad weather for its coming AH-64 Apaches. With no money for an all-new helicopter, it chose in 1979 to upgrade the airframes it already had, and in September 1981 Bell won the Army Helicopter Improvement Program (AHIP) with a heavily modified OH-58. The first prototype flew on 6 October 1983, and the OH-58D entered service in 1985. [[1]](#source-1)
+By the 1970s the Army wanted a scout that could find targets by day, by night and in bad weather for its coming [AH-64](record:ah-64d) Apaches. With no money for an all-new helicopter, it chose in 1979 to upgrade the airframes it already had, and in September 1981 Bell won the Army Helicopter Improvement Program (AHIP) with a heavily modified OH-58. The first prototype flew on 6 October 1983, and the OH-58D entered service in 1985. [[1]](#source-1)
 
-Its signature is the **Mast-Mounted Sight**, a ball perched on top of the rotor mast that looks like a beach ball. Inside a stabilised mount are a television camera, a thermal imager and a laser rangefinder and designator. By day or night and in poor weather, the crew can find a target, work out its exact position and mark it with the laser, and the data bus passes the target straight to precision-guided weapons. [[1]](#source-1) [[2]](#source-2) The Navy liked the sight so much that it chose it for use on its ships. [[2]](#source-2)
+Its signature is the **Mast-Mounted Sight**, a ball perched on top of the rotor mast that looks like a beach ball. Inside a stabilised mount are a television camera, a thermal imager and a laser rangefinder and designator. By day or night and in poor weather, the crew can find a target, work out its exact position and mark it with the laser, and the data bus passes the target straight to [precision-guided](term:pgm) weapons. [[1]](#source-1) [[2]](#source-2) The Navy liked the sight so much that it chose it for use on its ships. [[2]](#source-2)
 
 ## Born on a barge in the Gulf
 
 The Kiowa Warrior was armed in a hurry. In 1987, during the Iran–Iraq War, Iranian gunboats were attacking tankers in the Persian Gulf at night, and the US needed a small armed scout to hunt them. The armed version was developed in under 100 days. [[2]](#source-2) In February 1988 two of the new helicopters landed on the *Wimbrown VII*, a barge anchored in the Gulf as a mobile sea base, to escort tankers in Operation Prime Chance. Army crews took Navy training in deck landings and underwater escape before they went. [[1]](#source-1)
 
-That experience convinced the Army to arm the whole fleet. From May 1991 every new OH-58D was built as a **Kiowa Warrior** with a weapons pylon on each side for Hellfire missiles, rockets, Stinger air-to-air missiles and a .50 calibre machine gun, and the earlier aircraft were converted. [[1]](#source-1) [[2]](#source-2) All that equipment had a cost: the helicopter grew so heavy that, if its engine failed, it came down faster in autorotation and slid further on landing, and the Army had to add a safety programme with a more powerful engine and crash-resistant seats. [[2]](#source-2)
+That experience convinced the Army to arm the whole fleet. From May 1991 every new OH-58D was built as a **Kiowa Warrior** with a weapons pylon on each side for Hellfire missiles, rockets, Stinger air-to-air missiles and a .50 calibre machine gun, and the earlier aircraft were converted. [[1]](#source-1) [[2]](#source-2) All that equipment had a cost: the helicopter grew so heavy that, if its engine failed, it came down faster in [autorotation](term:autorotation) and slid further on landing, and the Army had to add a safety programme with a more powerful engine and crash-resistant seats. [[2]](#source-2)
 
 ## Desert Storm to the DMZ
 

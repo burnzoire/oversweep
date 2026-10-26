@@ -76,12 +76,12 @@ A solid-fuel booster launches the missile and drops away after about six seconds
 
 ## Envelope
 
-The museum gives a minimum range of 5 miles, a maximum effective range of about 19 miles, a maximum slant range of 27 miles (about 4.3, 16.5 and 23.5 NM) and a ceiling of about 60,000 ft, with a speed of Mach 3.5 and a 288 lb blast-fragmentation warhead. [[2]](#source-2) Figure 1 uses those figures. Other published figures differ: the S-75 article gives 45 km (24 NM), a flight altitude of 25,000 m in its summary and about 20,000 m in its text, and a 195 kg warhead. [[1]](#source-1) Treat any single SA-2 number as variant-dependent.
+The museum gives a minimum range of 5 miles, a maximum effective range of about 19 miles, a maximum slant range of 27 miles (about 4.3, 16.5 and 23.5 NM) and a ceiling of about 60,000 ft, with a speed of [Mach](term:mach-number) 3.5 and a 288 lb blast-fragmentation warhead. [[2]](#source-2) Figure 1 uses those figures. Other published figures differ: the S-75 article gives 45 km (24 NM), a flight altitude of 25,000 m in its summary and about 20,000 m in its text, and a 195 kg warhead. [[1]](#source-1) Treat any single SA-2 number as variant-dependent.
 
 ## On the radar warning receiver
 
-In the DCS F-14, the AN/ALR-67 shows the Fan Song track radar as **2** and the Flat Face search radar, used with the SA-2, SA-3 and SA-5, as **FF**. [[3]](#source-3)
+In the DCS F-14, the AN/ALR-67 shows the Fan Song track radar as **2** and the Flat Face search radar, used with the SA-2, [SA-3](record:sa-3) and [SA-5](record:sa-5), as **FF**. [[3]](#source-3)
 
 ## History
 
-An S-75 shot down Francis Gary Powers' U-2 near Sverdlovsk on 1 May 1960, and another downed Maj. Rudolf Anderson's U-2 over Cuba on 27 October 1962. [[1]](#source-1) [[2]](#source-2) Over North Vietnam, an S-75 shot down a USAF F-4C on 24 July 1965, the first US aircraft lost to a SAM in that war. In eleven days of Operation Linebacker II in December 1972, 266 missiles were fired at B-52s and 15 B-52s were lost. [[1]](#source-1)
+An S-75 shot down Francis Gary Powers' U-2 near Sverdlovsk on 1 May 1960, and another downed Maj. Rudolf Anderson's U-2 over Cuba on 27 October 1962. [[1]](#source-1) [[2]](#source-2) Over North Vietnam, an S-75 shot down a USAF [F-4C](record:f-4) on 24 July 1965, the first US aircraft lost to a SAM in that war. In eleven days of Operation Linebacker II in December 1972, 266 missiles were fired at B-52s and 15 B-52s were lost. [[1]](#source-1)

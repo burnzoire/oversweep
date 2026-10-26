@@ -15,7 +15,7 @@ maxSpeed: "250 km/h (135 kt) [1]"
 ceiling: "5,000 m (16,400 ft) [1]"
 range: "495 km (267 NM); ferry range 960 km (518 NM) [1]"
 armament:
-  - "Six hardpoints for up to 4,000 kg of 57 mm S-5 rocket pods, bombs or anti-tank missiles [1] [2]"
+  - "Six hardpoints for up to 4,000 kg of 57 mm [S-5](record:s-5) rocket pods, bombs or anti-tank missiles [1] [2]"
   - "One or two side-mounted PK machine guns; gunship versions add a 12.7 mm machine gun in the nose [1] [2]"
   - "Cabin for 24 troops, or 12 stretchers, or 4,000 kg of cargo; up to 3 t on an external sling [1] [2]"
 photos:
@@ -55,7 +55,7 @@ The Soviet military had argued it did not need a new helicopter at all. Mil had 
 
 ## Inspired by the Huey
 
-The army showed little interest until the Bell UH-1's role in Vietnam made headlines, showing how helicopters could move troops swiftly in and out of battle. Then a troop-carrying version was rushed into production, and the Mi-8 entered Soviet service in 1967. NATO named it the **Hip**. [[1]](#source-1)
+The army showed little interest until the Bell [UH-1](record:uh-1h)'s role in Vietnam made headlines, showing how helicopters could move troops swiftly in and out of battle. Then a troop-carrying version was rushed into production, and the Mi-8 entered Soviet service in 1967. NATO named it the **Hip**. [[1]](#source-1)
 
 Its long, bus-like fuselage holds 24 troops or 12 stretchers, and a sling under it can carry loads of up to three tonnes. [[1]](#source-1) [[2]](#source-2) The two engines share the load, and if one fails the other automatically increases its output so the helicopter can keep flying, depending on its weight. [[2]](#source-2) Armed versions carry rocket pods, bombs and anti-tank missiles on racks on either side of the fuselage, so the same machine can carry troops and support them with fire. [[1]](#source-1) [[2]](#source-2)
 

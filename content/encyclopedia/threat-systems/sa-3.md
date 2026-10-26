@@ -63,7 +63,7 @@ Missiles are typically deployed on fixed turrets holding two or four, but can al
 
 ## How it engages
 
-Like the S-75, the S-125 uses radio command guidance. [[1]](#source-1) The first missile, the V-600 (5V24), reaches about Mach 3 to 3.5, has a range of about 15 km and carries a 60 kg high-explosive warhead. The later V-601 (5V27) carries a 70 kg warhead. [[1]](#source-1)
+Like the [S-75](record:sa-2), the S-125 uses radio command guidance. [[1]](#source-1) The first missile, the V-600 (5V24), reaches about [Mach](term:mach-number) 3 to 3.5, has a range of about 15 km and carries a 60 kg high-explosive warhead. The later V-601 (5V27) carries a 70 kg warhead. [[1]](#source-1)
 
 ## Envelope
 
@@ -71,8 +71,8 @@ Published V-601 figures vary. The S-125 article gives intercept altitudes of 100
 
 ## On the radar warning receiver
 
-In the DCS F-14, the AN/ALR-67 shows the Low Blow track radar as **3** and the Flat Face search radar as **FF**; the table identifies that radar as the P-19 used with the S-125. [[2]](#source-2) A Flat Face alone does not tell you which of the SA-2, SA-3 or SA-5 it is working with.
+In the DCS F-14, the AN/ALR-67 shows the Low Blow track radar as **3** and the Flat Face search radar as **FF**; the table identifies that radar as the P-19 used with the S-125. [[2]](#source-2) A Flat Face alone does not tell you which of the [SA-2](record:sa-2), SA-3 or [SA-5](record:sa-5) it is working with.
 
 ## History
 
-An S-125 shot down a USAF F-16 south of Baghdad on 19 January 1991. On 27 March 1999, during the Kosovo War, a Yugoslav S-125 battery shot down an F-117 Nighthawk, the only recorded downing of a stealth aircraft. [[1]](#source-1)
+An S-125 shot down a USAF [F-16](record:f-16) south of Baghdad on 19 January 1991. On 27 March 1999, during the Kosovo War, a Yugoslav S-125 battery shot down an F-117 Nighthawk, the only recorded downing of a stealth aircraft. [[1]](#source-1)

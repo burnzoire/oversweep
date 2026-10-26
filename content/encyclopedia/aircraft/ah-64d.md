@@ -15,7 +15,7 @@ ceiling: "20,000 ft [1]"
 range: "257 NM with the Longbow radar; ferry range 1,024 NM [1]; combat radius about 150 km, or about 300 km with one external tank [2]"
 armament:
   - "One 30 mm M230 Chain Gun under the nose, 1,200 rounds [1] [2]"
-  - "Four stub-wing pylons for up to 16 AGM-114 Hellfire missiles or up to 76 Hydra 70 rockets, or a mix [1] [2]"
+  - "Four stub-wing pylons for up to 16 AGM-114 Hellfire missiles or up to 76 [Hydra 70](record:hydra-70) rockets, or a mix [1] [2]"
   - "AIM-92 Stinger air-to-air missiles on wingtip stations (Longbow) [1]"
 sensors:
   - "AN/APG-78 Longbow fire-control radar in a dome above the main rotor; tracks up to 128 targets and engages up to 16 [1]"
@@ -72,6 +72,6 @@ The **AH-64D Apache Longbow** was approved in 1990 and first flew on 15 April 19
 
 ## Lessons and longevity
 
-Not every deployment went well. In 1999, 24 Apaches sent to Albania for the Kosovo campaign needed 550 C-17 flights to move their equipment, and none flew a combat mission against Yugoslav air defences. On 24 March 2003, during the invasion of Iraq, Iraqi tank crews set a "flak trap" near Karbala that damaged 31 Apaches and brought one down, and the Army concluded that its supposed "flying tanks" were highly vulnerable to small-arms fire and stopped sending them on deep attacks. [[1]](#source-1)
+Not every deployment went well. In 1999, 24 Apaches sent to Albania for the Kosovo campaign needed 550 C-17 flights to move their equipment, and none flew a combat mission against Yugoslav [air defences](term:air-defense). On 24 March 2003, during the invasion of Iraq, Iraqi tank crews set a "flak trap" near Karbala that damaged 31 Apaches and brought one down, and the Army concluded that its supposed "flying tanks" were highly vulnerable to small-arms fire and stopped sending them on deep attacks. [[1]](#source-1)
 
-In Afghanistan, though, the Apache was the only Army aircraft able to give accurate close air support during Operation Anaconda in 2002, often taking fire and being quickly repaired. Its successor, the AH-64E Guardian, entered service in 2013, and by 2024 more than 2,700 Apaches had been delivered to the US Army and 18 other nations, among them Britain, Israel, Japan, the Netherlands and Saudi Arabia. [[1]](#source-1)
+In Afghanistan, though, the Apache was the only Army aircraft able to give accurate [close air support](term:cas) during Operation Anaconda in 2002, often taking fire and being quickly repaired. Its successor, the AH-64E Guardian, entered service in 2013, and by 2024 more than 2,700 Apaches had been delivered to the US Army and 18 other nations, among them Britain, Israel, Japan, the Netherlands and Saudi Arabia. [[1]](#source-1)

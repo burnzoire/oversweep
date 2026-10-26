@@ -15,7 +15,7 @@ maxSpeed: "285 km/h (154 kt) at sea level; cruise 190 km/h [1]"
 ceiling: "4,000 m (13,100 ft) [1]"
 range: "550 km (297 NM) at 500 m [1]"
 armament:
-  - "None on the trainer; the Yak-52B light attack version carries two UB-32-57 pods of S-5 rockets [1]"
+  - "None on the trainer; the Yak-52B light attack version carries two UB-32-57 pods of [S-5](record:s-5) rockets [1]"
   - "In Ukraine, a gunner in the rear seat has engaged drones at close range [1]"
 photos:
   - src: "encyclopedia/aircraft/yak-52-2.jpg"
@@ -55,4 +55,4 @@ The Yak-52's nine-cylinder radial engine and fuel system can keep running upside
 
 ## An unarmed drone hunter
 
-Production moved to Romania under a COMECON agreement, and Aerostar built the Iak-52 there from 1977 to 1998. [[1]](#source-1) Nearly half a century after its first flight the Yak-52 found an unexpected military role. In the Russian invasion of Ukraine, Ukrainian Yak-52s have hunted Russian reconnaissance drones, shooting down an Orlan-10 over Odesa in April 2024. Its slow stall speed lets it follow a drone closely while a gunner in the rear seat fires at it, and images suggest at least one has downed as many as eight. [[1]](#source-1)
+Production moved to Romania under a COMECON agreement, and Aerostar built the Iak-52 there from 1977 to 1998. [[1]](#source-1) Nearly half a century after its first flight the Yak-52 found an unexpected military role. In the Russian invasion of Ukraine, Ukrainian Yak-52s have hunted Russian [reconnaissance](term:reconnaissance) drones, shooting down an Orlan-10 over Odesa in April 2024. Its slow stall speed lets it follow a drone closely while a gunner in the rear seat fires at it, and images suggest at least one has downed as many as eight. [[1]](#source-1)

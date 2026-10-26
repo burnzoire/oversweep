@@ -1,0 +1,8 @@
+---
+import { linkMarkdown } from '../data/links';
+import TermBehaviour from './TermBehaviour.astro';
+// Encyclopedia text with its term: and record: links turned into term links
+// (see linkMarkdown in src/data/links.ts).
+const html = linkMarkdown(await Astro.slots.render('default'));
+---
+<Fragment set:html={html} /><TermBehaviour />
