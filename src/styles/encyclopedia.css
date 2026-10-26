@@ -100,7 +100,7 @@
   .ency .record-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
-.ency .photo { margin: 0 0 1.25rem; border: 1px solid var(--color-border); background: #fff; }
+.ency .photo { max-width: 56rem; margin: 0 0 1.25rem; border: 1px solid var(--color-border); background: #fff; }
 .ency .photo img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; background: var(--color-surface); }
 .ency .photo.contain img { object-fit: contain; background: #fff; }
 .ency .photo figcaption { padding: 0.55rem 0.75rem; font-size: 0.95rem; }

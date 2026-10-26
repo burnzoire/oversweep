@@ -18,7 +18,10 @@
   --color-ink-muted: #b8c2cc;
   --color-accent: #ffc20e;
   --color-unavailable: #767676;
-  --measure-page: 72rem;
+  /* The page shell is wide so figures, tables and card grids can use desktop
+     screens; running text keeps a readable line length via --measure-prose. */
+  --measure-page: 80rem;
+  --measure-prose: 72ch;
 }
 
 * {
@@ -268,15 +271,14 @@ h2 {
 
 .page-content {
   min-width: 0;
-  max-width: 68ch;
 }
 
 .page-content > :first-child {
   margin-top: 0;
 }
 
-.page-content p {
-  max-width: 68ch;
+.page-content :is(p, li, dd, blockquote) {
+  max-width: var(--measure-prose);
 }
 
 .subject-nav {
@@ -331,6 +333,7 @@ h2 {
 }
 
 .status-panel {
+  max-width: calc(var(--measure-prose) + 2.35rem);
   padding: 1rem;
   border: 1px solid var(--color-border);
   border-left: 0.35rem solid var(--color-text);
@@ -465,7 +468,7 @@ h2 {
 
 .entry-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
   gap: 1rem;
   margin: 1.25rem 0;
 }
