@@ -269,8 +269,8 @@ function setupWind(root) {
 
 /* ---------- HSI drawing shared by Figure 4 and its quiz ---------- */
 // Optional extras: `bug` draws the heading bug, `track` the ground-track
-// marker, and `aim` a sight line from the aircraft to the top of the CDI bar.
-function drawHsi(svg, cx, cy, r, { heading, radial, course, dme, toFrom = true, bug, track, aim = false }) {
+// marker.
+function drawHsi(svg, cx, cy, r, { heading, radial, course, dme, toFrom = true, bug, track }) {
   const view = hsi({ radial, course });
   rose(svg, cx, cy, r, heading);
   // Lubber line and fixed aircraft.
@@ -297,12 +297,6 @@ function drawHsi(svg, cx, cy, r, { heading, radial, course, dme, toFrom = true, 
     g.append(el('path', { d: view.toFrom === 'TO' ? `M${cx + dot * 1.5} ${y - 7} l7 12 l-14 0 Z` : `M${cx + dot * 1.5} ${y + 7} l7 -12 l-14 0 Z`, class: 'fill' }));
   }
   svg.append(g);
-  if (aim) {
-    // The top end of the bar, in screen space after the course rotation.
-    const a = (course - heading) * D, bx = view.dots * dot, by = -L;
-    const ex = cx + bx * Math.cos(a) - by * Math.sin(a), ey = cy + bx * Math.sin(a) + by * Math.cos(a);
-    svg.append(el('line', { x1: cx, y1: cy - 14, x2: ex, y2: ey, class: 'thin dotted' }), el('circle', { cx: ex, cy: ey, r: 5, class: 'thin' }));
-  }
   if (bug !== undefined) {
     const [bx, by] = polar(cx, cy, r + 1, bug, heading);
     svg.append(el('path', { d: 'M-7 0 L-7 -7 L-3 -7 L0 -3 L3 -7 L7 -7 L7 0 Z', class: 'box on', transform: `translate(${bx} ${by}) rotate(${bug - heading})` }));
@@ -353,12 +347,6 @@ const FLY_SCENES = [
     intro: 'On the 210 radial, inbound course 360 set. The pointer head reads 030; 30° beyond it is the intercept heading, 060.' },
   { id: 'double', label: 'Double the angle', course: 360, radial: 200, dme: 20, heading: 360, mode: 'method', method: 'double', seconds: 440,
     intro: 'On the 200 radial: the pointer head (020) is 20° from the course, so turn 20° beyond it, to 040.' },
-  { id: 'picture', label: 'Aim at the top of the bar', course: 360, radial: 200, dme: 20, heading: 360, mode: 'picture', seconds: 440,
-    intro: 'The nose goes on the top end of the bar. While the bar is pinned that is about 33°; as it centres the intercept angle shrinks by itself.' },
-  { id: 'pictureWind', label: 'Top of the bar, crosswind', course: 360, radial: 200, dme: 20, heading: 360, mode: 'picture', seconds: 520, range: 15, ...WIND,
-    intro: 'The same, with a 40 kt wind from the west. Watch where it settles.' },
-  { id: 'pictureTrack', label: 'Top of the bar, ground-track marker', course: 360, radial: 200, dme: 20, heading: 360, mode: 'pictureTrack', seconds: 520, range: 15, ...WIND,
-    intro: 'The same wind, but now the ground-track marker (the diamond) goes on the top of the bar, so the crab is built in.' },
   { id: 'homing', label: 'Homing in a crosswind', course: 360, radial: 180, dme: 20, heading: 360, mode: 'homing', seconds: 600, range: 12, until: (s) => s.range < 1.2, ...WIND,
     intro: 'Bearing pointer kept on the nose, no wind correction, 40 kt from the west. The aircraft gets there, but on a curved path that drifts off the course.' },
   { id: 'track', label: 'Tracking in a crosswind', course: 360, radial: 180, dme: 20, heading: 360, mode: 'track', seconds: 320, range: 12, ...WIND,
@@ -397,7 +385,6 @@ function setupFly(root) {
     let now;
     if (s.cone) now = 'Over the station: the bearing pointer swings and the TO/FROM arrow flips. Hold heading until it settles.';
     else if (PHASE_TEXT[s.phase] && scene.mode === 'method') now = PHASE_TEXT[s.phase](s);
-    else if (scene.mode.startsWith('picture') && Math.abs(s.deviation) >= 0.25) now = `${s.fullScale ? 'Bar pinned at full scale' : 'Bar alive'}: the top of the bar is ${Math.abs(s.aim).toFixed(0)}° ${s.aim > 0 ? 'right' : 'left'} of the course, so the ${scene.mode === 'pictureTrack' ? 'ground track' : 'nose'} points there.`;
     else if (s.fullScale) now = 'Bar pinned at full scale: you are 10° or more off the course.';
     else if (Math.abs(s.deviation) < 0.25) now = `Bar centred: on the course${Math.abs(s.drift) >= 1 ? `, crabbing ${Math.abs(s.drift).toFixed(0)}° into the wind` : ''}.`;
     else now = `Bar alive: ${Math.abs(s.deviation).toFixed(1)}° off, course to the ${s.deviation > 0 ? 'right' : 'left'}.`;
@@ -406,7 +393,6 @@ function setupFly(root) {
   }
   function summary(s) {
     if (scene.id === 'homing') return `Homing reached the station from the ${deg3(s.radial)} radial, not along the course: the path curved downwind.`;
-    if (scene.id === 'pictureWind') return `Settled ${Math.abs(s.xtk).toFixed(1)} NM downwind of the course with the bar ${Math.abs(s.dots).toFixed(1)} dot out: there the angle to the top of the bar is used up as crab against the wind, so nothing is left to close the course. Use the ground-track marker, or add crab, to centre it.`;
     if (Math.abs(s.xtk) < 0.1) return `Established on ${deg3(s.course)}${Math.abs(s.drift) >= 1 ? ` with ${Math.abs(s.drift).toFixed(0)}° of crab` : ''}, ${s.toFrom} the station at ${s.range.toFixed(1)} NM.`;
     return `${Math.abs(s.xtk).toFixed(1)} NM ${s.xtk > 0 ? 'left' : 'right'} of the course line.`;
   }
@@ -449,8 +435,8 @@ function setupFly(root) {
     }
     svg.append(el('text', { x: narrow ? 165 : 20, y: narrow ? 334 : foot, class: 'lbl small', 'text-anchor': narrow ? 'middle' : 'start' }, `PLAN VIEW, ${headingUp() ? 'HEADING' : 'NORTH'} UP · ${ring} NM RING`));
     // HSI, heading up.
-    const showBug = scene.mode === 'hold', showTrack = true, aim = scene.mode.startsWith('picture');
-    drawHsi(svg, hx, hy, 120, { heading: s.heading, radial: s.radial, course: s.course, dme: s.range, bug: showBug ? s.bug : undefined, track: showTrack ? s.track : undefined, aim });
+    const showBug = scene.mode === 'hold';
+    drawHsi(svg, hx, hy, 120, { heading: s.heading, radial: s.radial, course: s.course, dme: s.range, bug: showBug ? s.bug : undefined, track: s.track });
     svg.append(el('text', { x: hx, y: foot, class: 'lbl small', 'text-anchor': 'middle' }, `HSI · HDG ${deg3(s.heading)} · GS ${r0(s.groundSpeed)} KT · ${clock(s.t / 60)}`));
     narrate(s);
   }

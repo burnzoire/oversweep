@@ -18,15 +18,11 @@ AIM [4], PHAK [5] and Instrument Flying Handbook [6] are supplementary.
 
 **Revision 2 (26 October 2026).** Practical flying moved ahead of the
 background; a new Figure 1 animates a plan view beside the HSI; new sections
-"Setting up a course" and "Flying to and from a station"; the "aim at the top of
-the bar" technique added. [6] was added for the HSI-as-plan-view description,
-TO/FROM, wind bracketing, station passage and outbound tracking. The FAA PDF is
-about 68 MB, too large for the review packet, so it is not declared and is
-expected to stay unverified by it; its excerpts are recorded below. The
-technique is labelled in the module as a pilot technique that none of the cited
-publications describe; its angles (about 33°, 18° and 9° at 2, 1 and ½ dots)
-are computed from the module's own drawn HSI (`HSI_BAR`, `barAimAngle`), not
-taken from a source.
+"Setting up a course" and "Flying to and from a station". [6] was added for
+the HSI-as-plan-view description, TO/FROM, wind bracketing, station passage and
+outbound tracking. The FAA PDF is about 68 MB, too large for the review packet,
+so it is not declared and is expected to stay unverified by it; its excerpts are
+recorded below.
 
 **Review packet limits.** The packet fetches at most eight URLs, declared
 sources first, then in order of appearance. The module links, in order: six
@@ -177,7 +173,7 @@ PDF page 257.
 
 | Page | Passage | Module use |
 | --- | --- | --- |
-| 5-23 | "This gives the pilot a pictorial presentation: the fixed aircraft symbol and course deviation bar display the aircraft relative to the selected course, as though the pilot were above the aircraft looking down."; "When the indicator points to the head of the course arrow, it shows that the course selected, if properly intercepted and flown, takes the aircraft to the selected facility." | Reading the HSI; Setting up a course; Technique |
+| 5-23 | "This gives the pilot a pictorial presentation: the fixed aircraft symbol and course deviation bar display the aircraft relative to the selected course, as though the pilot were above the aircraft looking down."; "When the indicator points to the head of the course arrow, it shows that the course selected, if properly intercepted and flown, takes the aircraft to the selected facility." | Reading the HSI; Setting up a course |
 | 9-14 | "If the CDI moves off center to the left, follow the needle by correcting course to the left, beginning with a 20° correction."; "a left deflection of the needle indicates a crosswind component from the left. If the amount of correction brings the needle back to center, decrease the left course correction by half." | Flying to and from a station (wind) |
 | 9-14 | "If the movement is rapid or fluctuating, this is an indication of impending station passage"; "If the VOR is set to the reciprocal of the intended course, the CDI reflects reverse sensing ... To avoid this reverse sensing situation, set the VOR to agree with the intended course." | Station passage; Setting up a course |
 | 9-14 | "The track is intercepted by either flying over the station or establishing an intercept heading. The magnetic course of the desired radial is entered under the index using the OBS and the intercept heading held until the CDI centers."; course interception: "Hold this heading constant until the CDI center ... (With practice in judging the varying rates of closure with the course centerline, pilots learn to lead the turn to prevent overshooting the course.)" | Outbound; Intercepts |

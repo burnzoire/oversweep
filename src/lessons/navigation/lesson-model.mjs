@@ -462,18 +462,9 @@ export function routeFlight({ waypoints, groundSpeed = 300, bank = 30, flyOver =
 
 /**
  * The simplified HSI drawn by the figures: the CDI bar's half-length and the
- * dot spacing, both as fractions of the rose radius. The "aim at the top of
- * the bar" picture depends on their ratio.
+ * dot spacing, both as fractions of the rose radius.
  */
 export const HSI_BAR = Object.freeze({ halfLength: 0.55, dot: 0.18 });
-
-/**
- * Heading change toward the course when the nose is pointed at the top end
- * of the deflected CDI bar: the bar is drawn `dots` dots off the course
- * arrow's axis and reaches `halfLength` ahead of the centre, so the angle is
- * atan(offset / halfLength). Signed like `dots` (positive: course to the right).
- */
-export const barAimAngle = (dots) => Math.atan((dots * HSI_BAR.dot) / HSI_BAR.halfLength) / D;
 
 /**
  * Signed distance from the line of a course through the station, in NM:
@@ -489,8 +480,6 @@ export const PILOT_MODES = Object.freeze({
   homing: 'Homing: bearing pointer on the nose',
   track: 'Track the course',
   method: 'FTI intercept method, then track',
-  picture: 'Aim the nose at the top of the bar',
-  pictureTrack: 'Aim the ground-track marker at the top of the bar',
 });
 
 /**
@@ -504,8 +493,7 @@ export const PILOT_MODES = Object.freeze({
  * head on the nose; `track` crabs into the wind and steers off any cross-track
  * error; `method` turns to the FTI intercept heading (`method` names an
  * INTERCEPT_METHODS key), holds it, starts the turn onto the course where a
- * 1.5°/s turn rolls out on it, then tracks; `picture` points the nose at the
- * top end of the CDI bar; `pictureTrack` puts the ground track there instead.
+ * 1.5°/s turn rolls out on it, then tracks.
  */
 export function courseFlight({ course, radial, dme, heading, tas = 250, windFrom = 0, windSpeed = 0, mode = 'hold', method = 'thirty', rate = 1.5 }) {
   for (const [name, v] of [['Course', course], ['Radial', radial], ['Range', dme], ['Heading', heading], ['True airspeed', tas]]) finite(name, v);
@@ -532,7 +520,7 @@ export function courseFlight({ course, radial, dme, heading, tas = 250, windFrom
       x: s.x, y: s.y, t: s.t, heading: s.heading, bug: s.bug, course: s.course, phase: s.phase, mode,
       radial: r, range, ...view, xtk: crossTrack(s, s.course),
       groundSpeed: Math.hypot(vx, vy), track: norm(Math.atan2(vx, vy) / D), drift: diff(norm(Math.atan2(vx, vy) / D), s.heading),
-      cone: range < 1, aim: barAimAngle(view.dots), interceptHeading: s.interceptHeading,
+      cone: range < 1, interceptHeading: s.interceptHeading,
     };
   }
   function want(st) {
@@ -542,8 +530,6 @@ export function courseFlight({ course, radial, dme, heading, tas = 250, windFrom
       case 'hold': return s.bug;
       case 'homing': return st.head;
       case 'track': return trackFix();
-      case 'picture': return norm(s.course + st.aim);
-      case 'pictureTrack': return headingFor(norm(s.course + st.aim));
       case 'method': {
         if (s.phase === 'intercept') {
           const angle = Math.abs(diff(s.interceptHeading, s.course));

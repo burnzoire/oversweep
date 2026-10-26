@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
-  ARC_LEAD_TABLE, anticipation, arcLeads, barAimAngle, chordArc, courseFlight, crossTrack, diff, fixOf, formatDD, formatDM, formatDMS, groundSpeedCheck,
+  ARC_LEAD_TABLE, anticipation, arcLeads, chordArc, courseFlight, crossTrack, diff, fixOf, formatDD, formatDM, formatDMS, groundSpeedCheck,
   gsCheckValid, headings, hsi, interceptHeading, latitudeBand, leadNm, legGeometry, minutesFor, parseCoordinate,
   pointToPoint, radialSpacing, relativeBearing, resolution, routeFlight, slantRange, tacanPosition, toMGRS, toUTM,
   turnRadius, utmZone, windTriangle,
@@ -257,14 +257,6 @@ test('cross-track has the CDI bar\'s sense', () => {
   assert.equal(Math.sign(crossTrack(tacanPosition({ radial: 200, dme: 20 }), 360)), Math.sign(hsi({ radial: 200, course: 360 }).deviation));
 });
 
-test('top-of-the-bar angles on the drawn HSI', () => {
-  near(barAimAngle(2), 33.2, 0.1);
-  near(barAimAngle(1), 18.1, 0.1);
-  near(barAimAngle(0.5), 9.3, 0.1);
-  near(barAimAngle(-2), -33.2, 0.1);
-  assert.equal(barAimAngle(0), 0);
-});
-
 test('course flight: FTI method intercepts and tracks the course', () => {
   const start = courseFlight({ course: 360, radial: 210, dme: 25, heading: 360, mode: 'method', method: 'thirty' }).state();
   assert.equal(start.interceptHeading, 60);
@@ -278,19 +270,6 @@ test('course flight: FTI method intercepts and tracks the course', () => {
   let worst = 0;
   for (let i = 0; i < 520; i++) worst = Math.min(worst, f.step().xtk);
   assert.ok(worst > -0.1, `overshoot ${worst}`);
-});
-
-test('course flight: the top of the bar centres with no wind, settles downwind in a crosswind', () => {
-  const calm = fly({ course: 360, radial: 200, dme: 20, heading: 360, mode: 'picture' }, 440);
-  near(calm.xtk, 0, 0.05);
-  const windy = fly({ course: 360, radial: 200, dme: 20, heading: 360, mode: 'picture', windFrom: 270, windSpeed: 40 }, 520);
-  // A west wind leaves it east of the course: the course is to the left.
-  assert.ok(windy.xtk < -0.3, `xtk ${windy.xtk}`);
-  // The bar is left out, pointing the nose into the wind, but not centred.
-  assert.ok(windy.dots < -0.2 && windy.aim < 0, `dots ${windy.dots}`);
-  const marker = fly({ course: 360, radial: 200, dme: 20, heading: 360, mode: 'pictureTrack', windFrom: 270, windSpeed: 40 }, 520);
-  near(marker.xtk, 0, 0.05);
-  near(diff(marker.track, 0), 0, 0.5);
 });
 
 test('course flight: homing curves downwind, tracking holds the course', () => {
