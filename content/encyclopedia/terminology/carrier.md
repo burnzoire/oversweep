@@ -15,16 +15,24 @@ terms:
     cite: [{ n: 1, page: "11-2" }]
   - term: Bingo
     definition: "An order to proceed to and land at the field specified by the use of a bingo profile. The aircraft is in an emergency or fuel critical situation."
-    note: "Navy carrier training defines Bingo as the minimum fuel state required to divert safely to the nearest suitable field. [3] In the multi-service brevity list BINGO is the pre-briefed fuel state needed for recovery, which need not mean a divert. [4]"
-    cite: [{ n: 1, page: "11-2" }, { n: 3, page: "A-1" }]
+    note: "In the multi-service brevity list BINGO is the pre-briefed fuel state needed for recovery, which need not mean a divert. [4]"
+    cite: [{ n: 1, page: "11-2" }]
+  - term: Bingo
+    definition: The minimum fuel state required to divert safely to the nearest suitable field. Bingo is an emergency situation; the bingo fuel state depends on the aircraft type.
+    usage: Navy carrier training
+    cite: [{ n: 3, page: "A-1" }]
   - term: Bolter
     definition: A touchdown on the carrier in which the arresting hook does not engage the arresting wires.
     usage: Navy carrier training
     cite: [{ n: 3, page: "A-1" }]
   - term: Bullseye
     definition: A term referring to the Independent Landing Monitor (ILM).
-    note: "Navy carrier training calls the instrument carrier landing system (ICLS) display “bullseye”, as in “fly the bullseye”. [3] Unrelated to the multi-service brevity word BULLSEYE, a reference point for positions given by bearing and range. [4]"
-    cite: [{ n: 1, page: "11-2" }, { n: 3, page: "1-10" }]
+    note: "Unrelated to the multi-service brevity word BULLSEYE, a reference point for positions given by bearing and range. [4]"
+    cite: [{ n: 1, page: "11-2" }]
+  - term: Bullseye
+    definition: "The instrument carrier landing system (ICLS) display. A controller who loses the ACLS lock directs “fly the bullseye” until the lock is regained."
+    usage: Navy carrier training
+    cite: [{ n: 3, page: "1-10" }, { n: 3, page: "2-23" }]
   - term: Buster
     definition: An order given to an aircraft to proceed at maximum speed.
     note: "Navy carrier training adds “generally for an immediate Charlie”. [3] The multi-service brevity word BUSTER is maximum continuous speed (military power), and GATE is afterburner. [4]"
@@ -35,8 +43,11 @@ terms:
     cite: [{ n: 1, page: "11-9" }, { n: 3, page: "A-2" }]
   - term: Charlie
     definition: "Signal for aircraft to land aboard the ship. A number suffix indicates time delay before landing."
-    note: "Navy carrier training gives “Charlie five” as an example: be at the ramp in five minutes. [3]"
-    cite: [{ n: 1, page: "11-3" }, { n: 3, page: "A-2" }]
+    cite: [{ n: 1, page: "11-3" }]
+  - term: Charlie
+    definition: "The time the first aircraft is expected at the ramp. A “Charlie” or “Charlie on arrival” call is a directive to enter the pattern now; “Charlie five” means be at the ramp in five minutes."
+    usage: Navy carrier training
+    cite: [{ n: 3, page: "A-2" }]
   - term: Cherubs
     definition: Altitude in hundreds of feet (applies only to helicopters).
     cite: [{ n: 1, page: "11-3" }]
