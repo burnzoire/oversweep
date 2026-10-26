@@ -107,7 +107,8 @@
     "designation": "Fairchild Republic A-10A/C",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The Warthog: a straight-wing, armoured close air support jet built around the 30 mm GAU-8 cannon."
+    "summary": "The Warthog: a straight-wing, armoured close air support jet built around the 30 mm GAU-8 cannon.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.ah-64d",
@@ -118,7 +119,8 @@
     "designation": "Boeing AH-64D Apache Longbow",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The US Army's twin-engine attack helicopter, flown from Panama and Desert Storm to Afghanistan; the Longbow adds a mast-mounted radar."
+    "summary": "The US Army's twin-engine attack helicopter, flown from Panama and Desert Storm to Afghanistan; the Longbow adds a mast-mounted radar.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.ajs-37",
@@ -129,7 +131,8 @@
     "designation": "Saab AJS 37",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "A Swedish canard-delta attack aircraft built to fly from road bases, with a thrust reverser and anti-ship missiles."
+    "summary": "A Swedish canard-delta attack aircraft built to fly from road bases, with a thrust reverser and anti-ship missiles.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.av-8b",
@@ -140,7 +143,8 @@
     "designation": "McDonnell Douglas AV-8B(NA)",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "A vectored-thrust jump jet: vertical or short take-off, flown by the US Marines for close air support."
+    "summary": "A vectored-thrust jump jet: vertical or short take-off, flown by the US Marines for close air support.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.bf-109k-4",
@@ -151,7 +155,8 @@
     "designation": "Messerschmitt Bf 109 K-4",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The final production version of the most-produced fighter in history, Germany's standard fighter throughout the war."
+    "summary": "The final production version of the most-produced fighter in history, Germany's standard fighter throughout the war.",
+    "era": "wwii"
   },
   {
     "id": "encyclopedia.aircraft.c-101",
@@ -162,7 +167,8 @@
     "designation": "CASA C-101EB",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "Spain's two-seat jet trainer with an internal weapons bay."
+    "summary": "Spain's two-seat jet trainer with an internal weapons bay.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.c-130j",
@@ -173,7 +179,8 @@
     "designation": "Lockheed Martin C-130J",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The modernised four-turboprop tactical transport: new engines, glass cockpit, three crew."
+    "summary": "The modernised four-turboprop tactical transport: new engines, glass cockpit, three crew.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.ch-47f",
@@ -184,7 +191,8 @@
     "designation": "Boeing CH-47F Chinook",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The tandem-rotor heavy-lift helicopter that has carried troops, guns and supplies for every war since Vietnam."
+    "summary": "The tandem-rotor heavy-lift helicopter that has carried troops, guns and supplies for every war since Vietnam.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.christen-eagle-ii",
@@ -195,7 +203,8 @@
     "designation": "Christen Eagle II",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "A two-seat kit-built aerobatic biplane, flown by the Eagles Aerobatic Team."
+    "summary": "A two-seat kit-built aerobatic biplane, flown by the Eagles Aerobatic Team.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.f4u-1d",
@@ -206,7 +215,8 @@
     "designation": "Vought F4U-1D Corsair",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The bent-wing Navy and Marine fighter of the Pacific war, with a kill ratio better than 11 to 1."
+    "summary": "The bent-wing Navy and Marine fighter of the Pacific war, with a kill ratio better than 11 to 1.",
+    "era": "wwii"
   },
   {
     "id": "encyclopedia.aircraft.f-4",
@@ -217,7 +227,8 @@
     "designation": "McDonnell Douglas F-4E",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The big two-seat Cold War fighter-bomber; the F-4E added an internal gun and slats after Vietnam."
+    "summary": "The big two-seat Cold War fighter-bomber; the F-4E added an internal gun and slats after Vietnam.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.f-5",
@@ -228,7 +239,8 @@
     "designation": "Northrop F-5E",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "A small, cheap supersonic fighter for US allies, and a long-serving adversary aircraft that stands in for the MiG-21."
+    "summary": "A small, cheap supersonic fighter for US allies, and a long-serving adversary aircraft that stands in for the MiG-21.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.f-14",
@@ -239,7 +251,8 @@
     "designation": "Grumman F-14A/B",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The Navy's swing-wing fleet defence fighter: two crew, AWG-9 radar and AIM-54 Phoenix."
+    "summary": "The Navy's swing-wing fleet defence fighter: two crew, AWG-9 radar and AIM-54 Phoenix.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.f-15c",
@@ -250,7 +263,8 @@
     "designation": "McDonnell Douglas F-15C",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "A twin-engine air superiority fighter with more than 104 air-to-air victories and no losses."
+    "summary": "A twin-engine air superiority fighter with more than 104 air-to-air victories and no losses.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.f-15e",
@@ -261,7 +275,8 @@
     "designation": "McDonnell Douglas F-15E",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The two-seat, long-range, all-weather strike derivative of the Eagle."
+    "summary": "The two-seat, long-range, all-weather strike derivative of the Eagle.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.f-16",
@@ -272,7 +287,8 @@
     "designation": "General Dynamics F-16C",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "A single-engine multirole fighter: fly-by-wire, 9 g, and the US Air Force's main strike and SEAD aircraft."
+    "summary": "A single-engine multirole fighter: fly-by-wire, 9 g, and the US Air Force's main strike and SEAD aircraft.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.f-86",
@@ -283,7 +299,8 @@
     "designation": "North American F-86F",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The swept-wing day fighter that met the MiG-15 over Korea."
+    "summary": "The swept-wing day fighter that met the MiG-15 over Korea.",
+    "era": "early-jet"
   },
   {
     "id": "encyclopedia.aircraft.f-100",
@@ -294,7 +311,8 @@
     "designation": "North American F-100D",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The first US Air Force fighter supersonic in level flight; a fighter-bomber and fast FAC in Vietnam."
+    "summary": "The first US Air Force fighter supersonic in level flight; a fighter-bomber and fast FAC in Vietnam.",
+    "era": "early-jet"
   },
   {
     "id": "encyclopedia.aircraft.fa-18c",
@@ -305,7 +323,8 @@
     "designation": "McDonnell Douglas F/A-18C",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "A carrier-capable fighter and attack aircraft that one pilot can switch between roles on the same sortie."
+    "summary": "A carrier-capable fighter and attack aircraft that one pilot can switch between roles on the same sortie.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.fw-190a-8",
@@ -316,7 +335,8 @@
     "designation": "Focke-Wulf Fw 190 A-8",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "Kurt Tank's radial-engined fighter, armoured and up-gunned in the A-8 to attack American heavy bombers."
+    "summary": "Kurt Tank's radial-engined fighter, armoured and up-gunned in the A-8 to attack American heavy bombers.",
+    "era": "wwii"
   },
   {
     "id": "encyclopedia.aircraft.fw-190d-9",
@@ -327,7 +347,8 @@
     "designation": "Focke-Wulf Fw 190 D-9",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The long-nosed, Jumo-powered Fw 190 that entered service in late 1944."
+    "summary": "The long-nosed, Jumo-powered Fw 190 that entered service in late 1944.",
+    "era": "wwii"
   },
   {
     "id": "encyclopedia.aircraft.i-16",
@@ -338,7 +359,8 @@
     "designation": "Polikarpov I-16 Type 24",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The first front-line monoplane fighter with retractable gear, flown in Spain, China, Mongolia and in 1941."
+    "summary": "The first front-line monoplane fighter with retractable gear, flown in Spain, China, Mongolia and in 1941.",
+    "era": "wwii"
   },
   {
     "id": "encyclopedia.aircraft.j-11a",
@@ -349,7 +371,8 @@
     "designation": "Shenyang J-11A",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "China's licence-assembled Su-27SK, with new displays and the R-77 missile."
+    "summary": "China's licence-assembled Su-27SK, with new displays and the R-77 missile.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.jf-17",
@@ -360,7 +383,8 @@
     "designation": "PAC/CAC JF-17",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "A lightweight Pakistani–Chinese multirole fighter powered by the RD-93."
+    "summary": "A lightweight Pakistani–Chinese multirole fighter powered by the RD-93.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.ka-50",
@@ -371,7 +395,8 @@
     "designation": "Kamov Ka-50",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "A single-seat Russian attack helicopter with coaxial rotors and the first helicopter ejection seat in service."
+    "summary": "A single-seat Russian attack helicopter with coaxial rotors and the first helicopter ejection seat in service.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.l-39",
@@ -382,7 +407,8 @@
     "designation": "Aero L-39C/ZA",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The Warsaw Pact's standard jet trainer, with armed light-attack versions."
+    "summary": "The Warsaw Pact's standard jet trainer, with armed light-attack versions.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.la-7",
@@ -393,7 +419,8 @@
     "designation": "Lavochkin La-7",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The refined Soviet radial-engined fighter of 1944–45, flown by the top Soviet ace Ivan Kozhedub."
+    "summary": "The refined Soviet radial-engined fighter of 1944–45, flown by the top Soviet ace Ivan Kozhedub.",
+    "era": "wwii"
   },
   {
     "id": "encyclopedia.aircraft.mb-339",
@@ -404,7 +431,8 @@
     "designation": "Aermacchi MB-339A",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "Italy's two-seat jet trainer and light attack aircraft, flown by the Frecce Tricolori."
+    "summary": "Italy's two-seat jet trainer and light attack aircraft, flown by the Frecce Tricolori.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.mi-8mtv2",
@@ -415,7 +443,8 @@
     "designation": "Mil Mi-8MTV-2",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The armed transport version of the Mi-8, the most-produced helicopter in the world."
+    "summary": "The armed transport version of the Mi-8, the most-produced helicopter in the world.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.mi-24p",
@@ -426,7 +455,8 @@
     "designation": "Mil Mi-24P",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The Soviet gunship that could also carry eight troops; the Mi-24P has a fixed twin-barrel 30 mm cannon."
+    "summary": "The Soviet gunship that could also carry eight troops; the Mi-24P has a fixed twin-barrel 30 mm cannon.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.mig-15",
@@ -437,7 +467,8 @@
     "designation": "Mikoyan-Gurevich MiG-15bis",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The Soviet swept-wing jet fighter that shocked UN air forces over Korea, armed with 37 mm and 23 mm cannon."
+    "summary": "The Soviet swept-wing jet fighter that shocked UN air forces over Korea, armed with 37 mm and 23 mm cannon.",
+    "era": "early-jet"
   },
   {
     "id": "encyclopedia.aircraft.mig-19",
@@ -448,7 +479,8 @@
     "designation": "Mikoyan-Gurevich MiG-19P",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The first Soviet fighter supersonic in level flight; the MiG-19P added radar for all-weather interception."
+    "summary": "The first Soviet fighter supersonic in level flight; the MiG-19P added radar for all-weather interception.",
+    "era": "early-jet"
   },
   {
     "id": "encyclopedia.aircraft.mig-21",
@@ -459,7 +491,8 @@
     "designation": "Mikoyan-Gurevich MiG-21bis",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The small delta-wing Mach 2 fighter: the most-produced supersonic jet in history."
+    "summary": "The small delta-wing Mach 2 fighter: the most-produced supersonic jet in history.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.mig-29",
@@ -470,7 +503,8 @@
     "designation": "Mikoyan MiG-29A/S",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "A twin-engine Soviet fighter with a helmet sight and R-73 missiles, built to counter the F-15 and F-16."
+    "summary": "A twin-engine Soviet fighter with a helmet sight and R-73 missiles, built to counter the F-15 and F-16.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.m-2000c",
@@ -481,7 +515,8 @@
     "designation": "Dassault Mirage 2000C",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "France's fly-by-wire delta interceptor, armed with Super 530D and Magic II missiles."
+    "summary": "France's fly-by-wire delta interceptor, armed with Super 530D and Magic II missiles.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.mirage-f1",
@@ -492,7 +527,8 @@
     "designation": "Dassault Mirage F1C/CE",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "A swept-wing French fighter sold to eleven countries and flown in many wars."
+    "summary": "A swept-wing French fighter sold to eleven countries and flown in many wars.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.mosquito-fb-vi",
@@ -503,7 +539,8 @@
     "designation": "de Havilland Mosquito FB Mk VI",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The fast wooden twin-engined fighter-bomber that needed no defensive guns."
+    "summary": "The fast wooden twin-engined fighter-bomber that needed no defensive guns.",
+    "era": "wwii"
   },
   {
     "id": "encyclopedia.aircraft.oh-58d",
@@ -514,7 +551,8 @@
     "designation": "Bell OH-58D Kiowa Warrior",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The US Army's armed scout helicopter, with its ball-shaped sight above the rotor, flown from the Persian Gulf to Afghanistan."
+    "summary": "The US Army's armed scout helicopter, with its ball-shaped sight above the rotor, flown from the Persian Gulf to Afghanistan.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.p-47d",
@@ -525,7 +563,8 @@
     "designation": "Republic P-47D Thunderbolt",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The heaviest single-engined fighter of the war: eight .50 calibre guns, a turbosupercharged radial, and a fearsome fighter-bomber."
+    "summary": "The heaviest single-engined fighter of the war: eight .50 calibre guns, a turbosupercharged radial, and a fearsome fighter-bomber.",
+    "era": "wwii"
   },
   {
     "id": "encyclopedia.aircraft.p-51d",
@@ -536,7 +575,8 @@
     "designation": "North American P-51D Mustang",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The long-range escort fighter that took US bombers to Berlin and back; Merlin-powered, with six .50 calibre guns."
+    "summary": "The long-range escort fighter that took US bombers to Berlin and back; Merlin-powered, with six .50 calibre guns.",
+    "era": "wwii"
   },
   {
     "id": "encyclopedia.aircraft.sa342",
@@ -547,7 +587,8 @@
     "designation": "Aérospatiale SA 342M Gazelle",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The light Franco-British helicopter that introduced the fenestron tail fan; the SA 342M hunts tanks with HOT missiles."
+    "summary": "The light Franco-British helicopter that introduced the fenestron tail fan; the SA 342M hunts tanks with HOT missiles.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.spitfire-ix",
@@ -558,7 +599,8 @@
     "designation": "Supermarine Spitfire LF Mk IX",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The elliptical-winged British fighter; the Merlin 66-powered Mark IX answered the Fw 190."
+    "summary": "The elliptical-winged British fighter; the Merlin 66-powered Mark IX answered the Fw 190.",
+    "era": "wwii"
   },
   {
     "id": "encyclopedia.aircraft.su-25",
@@ -569,7 +611,8 @@
     "designation": "Sukhoi Su-25/Su-25T",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "An armoured Soviet close air support jet; the Su-25T adds Vikhr anti-tank missiles."
+    "summary": "An armoured Soviet close air support jet; the Su-25T adds Vikhr anti-tank missiles.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.su-27",
@@ -580,7 +623,8 @@
     "designation": "Sukhoi Su-27S",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "A large, long-range Soviet air superiority fighter with ten missile stations."
+    "summary": "A large, long-range Soviet air superiority fighter with ten missile stations.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.su-33",
@@ -591,7 +635,8 @@
     "designation": "Sukhoi Su-33",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The carrier-based Flanker: canards, folding wings and a ski-jump launch from Admiral Kuznetsov."
+    "summary": "The carrier-based Flanker: canards, folding wings and a ski-jump launch from Admiral Kuznetsov.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.uh-1h",
@@ -602,7 +647,8 @@
     "designation": "Bell UH-1H Iroquois",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The utility helicopter that defined the Vietnam War and served every US armed service; more than 16,000 built."
+    "summary": "The utility helicopter that defined the Vietnam War and served every US armed service; more than 16,000 built.",
+    "era": "modern"
   },
   {
     "id": "encyclopedia.aircraft.yak-52",
@@ -613,6 +659,7 @@
     "designation": "Yakovlev Yak-52",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "A Soviet aerobatic primary trainer, built in Romania, that has also hunted drones over Ukraine."
+    "summary": "A Soviet aerobatic primary trainer, built in Romania, that has also hunted drones over Ukraine.",
+    "era": "modern"
   }
 ]

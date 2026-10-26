@@ -4,7 +4,7 @@ import RecordCard from "../../components/encyclopedia/RecordCard.astro";
 import EnvelopeFigure from "../../components/encyclopedia/EnvelopeFigure.astro";
 import { encyclopediaCategories } from "../../data/catalogue";
 import { sectionHasContent } from "../../data/availability";
-import { aircraftContent, aircraftGroups, categoryRecords, recordContent, recordRoute } from "../../data/encyclopedia";
+import { aircraftContent, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, recordContent, recordRoute } from "../../data/encyclopedia";
 import { sitePath } from "../../lib/paths";
 import "../../styles/encyclopedia.css";
 
@@ -22,10 +22,15 @@ const label = (title: string) => title.split(" ")[0].replace(/^SA-/, "");
 // Citation numbers belong to each record's own source list, so the table drops them.
 const plain = (text: string) => text.replace(/\s*\[\d+\]/g, "");
 const km = (value: number) => `${Number(value.toFixed(1)).toLocaleString("en-GB")} km`;
-// Aircraft are listed by group (jets, propeller aircraft, helicopters).
-const aircraft = category.slug === "aircraft"
-  ? aircraftGroups.map((group) => ({ group, records: categoryRecords("aircraft").map((record) => ({ record, data: aircraftContent(record).frontmatter })).filter(({ data }) => data.group === group.slug) })).filter(({ records }) => records.length > 0)
+// Aircraft are listed by group (jets, propeller aircraft, helicopters), newest era first.
+const eraOrder = (era: string) => aircraftEras.findIndex((e) => e.slug === era);
+const aircraftRecords = category.slug === "aircraft"
+  ? categoryRecords("aircraft").map((record) => ({ record, era: aircraftEra(record), data: aircraftContent(record).frontmatter }))
   : [];
+const aircraft = aircraftGroups
+  .map((group) => ({ group, records: aircraftRecords.filter(({ data }) => data.group === group.slug).sort((a, b) => eraOrder(a.era) - eraOrder(b.era)) }))
+  .filter(({ records }) => records.length > 0);
+const eraCounts = aircraftEras.map((era) => ({ era, count: aircraftRecords.filter((r) => r.era === era.slug).length })).filter(({ count }) => count > 0);
 const n = (value: number) => value.toLocaleString("en-GB");
 ---
 
@@ -49,24 +54,28 @@ const n = (value: number) => value.toLocaleString("en-GB");
       )}
       {category.slug === "aircraft" ? (
         <>
-          <p class="lead">Military aircraft from the Second World War to today: fighters, attack aircraft, trainers, a transport and helicopters. Each record gives the aircraft's role, the variant its figures describe, performance, armament and service history, with sources.</p>
+          <p class="lead">Military aircraft from the Second World War to today: fighters, attack aircraft, trainers, a transport and helicopters. The Second World War aircraft are here for their history; use the era buttons to show only the aircraft you need. Each record gives the aircraft's role, the variant its figures describe, performance, armament and service history, with sources.</p>
+          <div class="buttons era-filter" role="group" aria-label="Show aircraft by era" hidden>
+            <button type="button" data-era-filter="all" aria-pressed="true">All ({aircraftRecords.length})</button>
+            {eraCounts.map(({ era, count }) => <button type="button" data-era-filter={era.slug} aria-pressed="false">{era.title} ({count})</button>)}
+          </div>
           {aircraft.map(({ group, records }) => (
-            <>
+            <div class="aircraft-group">
               <h2>{group.title}</h2>
               <div class="entry-grid record-grid">
-                {records.map(({ record, data }) => <RecordCard record={record} photo={data.photos[0]} />)}
+                {records.map(({ record, era, data }) => <RecordCard record={record} photo={data.photos[0]} era={era} />)}
               </div>
-            </>
+            </div>
           ))}
           <h2>Quick reference</h2>
           <div class="table-scroll" role="region" aria-label="Aircraft quick reference table, scrolls sideways on narrow screens" tabindex="0">
             <table>
               <thead><tr><th scope="col">Aircraft</th><th scope="col">Role</th><th scope="col">First flight</th><th scope="col">Max speed</th><th scope="col">Ceiling</th></tr></thead>
               {aircraft.map(({ group, records }) => (
-                <tbody>
+                <tbody class="aircraft-group">
                   <tr><th scope="rowgroup" colspan="5">{group.title}</th></tr>
-                  {records.map(({ record, data }) => (
-                    <tr>
+                  {records.map(({ record, era, data }) => (
+                    <tr data-era={era}>
                       <th scope="row"><a href={sitePath(recordRoute(record))}>{record.title}</a><br /><span class="entry-kicker">{record.designation}</span></th>
                       <td>{plain(data.role)}</td>
                       <td>{data.quick.firstFlight}</td>
@@ -117,3 +126,5 @@ const n = (value: number) => value.toLocaleString("en-GB");
     </div>
   )}
 </SiteLayout>
+
+<script>import "../../scripts/era-filter.mjs";</script>
