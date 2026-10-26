@@ -59,7 +59,7 @@ On 17 January 1991, the first day of the Gulf War, four Navy Hornets launched fr
 
 The Hornet began as a runner-up. Northrop's twin-engined YF-17 lost the US Air Force Lightweight Fighter competition to the YF-16. [[1]](#source-1) But the Navy, ordered by Congress to find something cheaper than the [F-14](record:f-14), doubted that a single-engined fighter on narrow landing gear could be adapted to carrier life, and on 2 May 1975 it picked the YF-17 instead. [[1]](#source-1) McDonnell Douglas and Northrop then rebuilt it for the sea: more fuel, larger wings, a wider rear fuselage and the first fully digital fly-by-wire system in a production fighter. On 1 March 1977 the Secretary of the Navy named it the Hornet. [[1]](#source-1)
 
-The first F/A-18A was rolled out on 13 September 1978, painted with "Navy" on one side and "Marines" on the other, because both services would fly it. [[1]](#source-1) It entered service with Marine [squadron](term:squadron) VMFA-314 on 7 January 1983, and with the Navy in 1984, replacing [F-4](record:f-4) Phantoms and A-7 Corsairs. Early reports said the Hornet was extraordinarily reliable, a big change from the [Phantom](record:f-4). [[1]](#source-1)
+The first F/A-18A was rolled out on 13 September 1978, painted with "Navy" on one side and "Marines" on the other, because both services would fly it. [[1]](#source-1) It entered service with Marine [squadron](term:squadron) VMFA-314 on 7 January 1983, and with the Navy in 1984, replacing [F-4 Phantoms](record:f-4) and A-7 Corsairs. Early reports said the Hornet was extraordinarily reliable, a big change from the [Phantom](record:f-4). [[1]](#source-1)
 
 ## One pilot, two jobs
 

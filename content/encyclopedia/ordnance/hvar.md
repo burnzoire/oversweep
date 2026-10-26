@@ -55,6 +55,6 @@ Testing finished by D-Day, and Navy HVARs were soon airlifted to France and load
 
 ## Korea
 
-The HVAR stayed in production until 1955 and saw wide use in Korea. Navy AD Skyraiders often carried a dozen, Air Force F-51D Mustangs carried six or ten, and Navy F9F Panther jets carried six alongside their cannon. [[1]](#source-1) Its targets ranged from bunkers and coastal guns to ships, bridges and even destroyers. [[1]](#source-1)
+The HVAR stayed in production until 1955 and saw wide use in Korea. Navy AD Skyraiders often carried a dozen, Air Force F-51D [Mustangs](record:p-51d) carried six or ten, and Navy F9F Panther jets carried six alongside their cannon. [[1]](#source-1) Its targets ranged from bunkers and coastal guns to ships, bridges and even destroyers. [[1]](#source-1)
 
 The HVAR demanded skill. It rewarded experienced pilots and disappointed those used to aiming roughly and walking their gunfire onto a target: it needed accurate alignment before firing and a good judgement of range. [[1]](#source-1) It remained in the Navy's inventory until the mid-1960s. [[1]](#source-1)

@@ -79,4 +79,4 @@ In the DCS F-14, the AN/ALR-67 shows the Straight Flush as **6**. [[3]](#source-
 
 ## History
 
-In the 1973 Yom Kippur War, Egyptian and Syrian Kub batteries surprised the Israeli Air Force; the system caused the most Israeli losses of any Egyptian anti-aircraft missile, many of them A-4 Skyhawks and [F-4](record:f-4) Phantoms. In 1995, Bosnian Serb forces using modified Kub systems shot down Scott O'Grady's [F-16](record:f-16) over Bosnia. [[1]](#source-1)
+In the 1973 Yom Kippur War, Egyptian and Syrian Kub batteries surprised the Israeli Air Force; the system caused the most Israeli losses of any Egyptian anti-aircraft missile, many of them A-4 Skyhawks and [F-4 Phantoms](record:f-4). In 1995, Bosnian Serb forces using modified Kub systems shot down Scott O'Grady's [F-16](record:f-16) over Bosnia. [[1]](#source-1)

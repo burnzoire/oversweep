@@ -57,7 +57,7 @@ The first Harriers proved that a combat jet could take off and land like a helic
 
 Everything depends on one engine. The Pegasus turbofan exhausts through four nozzles, two each side, that the pilot can rotate. Pointed down, they lift the aircraft straight up; pointed aft, they push it forward like any other jet; set in between, they give a short rolling take-off, which lets the aircraft lift far more weight than it could vertically. [[1]](#source-1) That freedom let the Marines base their own jets on amphibious assault ships and on rough forward sites ashore, close to the troops they supported. [[1]](#source-1)
 
-The price was a demanding aircraft. Take-off and landing are the most dangerous moments of any flight, and Harriers spend more time in them than most. In Marine service the AV-8B's accident rate was about three times that of the Corps' F/A-18s, and some in the military called it a "widow maker". Later analysis blamed much of that record on cuts to senior maintenance staff, pilot error and senior officers who did not understand the aircraft. [[1]](#source-1)
+The price was a demanding aircraft. Take-off and landing are the most dangerous moments of any flight, and Harriers spend more time in them than most. In Marine service the AV-8B's accident rate was about three times that of the Corps' [F/A-18s](record:fa-18c), and some in the military called it a "widow maker". Later analysis blamed much of that record on cuts to senior maintenance staff, pilot error and senior officers who did not understand the aircraft. [[1]](#source-1)
 
 ## Night Attack and radar
 
