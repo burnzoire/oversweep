@@ -168,12 +168,13 @@ Declared above; physical page = printed page (16-n is physical page n).
 
 Downloaded 26 October 2026 from
 https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/FAA-H-8083-15B.pdf
-and extracted with `pdftotext`. Printed page 5-23 is PDF page 118 and 9-14 is
+and extracted with `pdftotext`. Printed page 5-23 is PDF page 118, 9-13 is PDF page 256 and 9-14 is
 PDF page 257.
 
 | Page | Passage | Module use |
 | --- | --- | --- |
 | 5-23 | "This gives the pilot a pictorial presentation: the fixed aircraft symbol and course deviation bar display the aircraft relative to the selected course, as though the pilot were above the aircraft looking down."; "When the indicator points to the head of the course arrow, it shows that the course selected, if properly intercepted and flown, takes the aircraft to the selected facility." | Reading the HSI; Setting up a course |
+| 9-13 | "Full needle deflection from the center position to either side of the dial indicates the aircraft is 12° or more off course, assuming normal needle sensitivity. The outer edge of the center circle is 2° off course; with each dot representing an additional 2°." | Reading the dots |
 | 9-14 | "If the CDI moves off center to the left, follow the needle by correcting course to the left, beginning with a 20° correction."; "a left deflection of the needle indicates a crosswind component from the left. If the amount of correction brings the needle back to center, decrease the left course correction by half." | Flying to and from a station (wind) |
 | 9-14 | "If the movement is rapid or fluctuating, this is an indication of impending station passage"; "If the VOR is set to the reciprocal of the intended course, the CDI reflects reverse sensing ... To avoid this reverse sensing situation, set the VOR to agree with the intended course." | Station passage; Setting up a course |
 | 9-14 | "The track is intercepted by either flying over the station or establishing an intercept heading. The magnetic course of the desired radial is entered under the index using the OBS and the intercept heading held until the CDI centers."; course interception: "Hold this heading constant until the CDI center ... (With practice in judging the varying rates of closure with the course centerline, pilots learn to lead the turn to prevent overshooting the course.)" | Outbound; Intercepts |
