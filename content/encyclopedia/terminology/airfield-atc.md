@@ -168,7 +168,7 @@ terms:
   - term: Datum lights
     definition: The horizontal bar of green lights either side of the optical landing system's lens box, the reference the meatball is read against.
     usage: Navy airfields and carriers
-    cite: [{ n: 10, page: "5-52" }]
+    cite: [{ n: 10, page: "4-25, 5-52" }]
   - term: Displaced threshold
     definition: A threshold that is located at a point on the runway other than the designated beginning of the runway.
     note: "The pavement before a displaced threshold is available for takeoff, and for landing from the opposite direction. [6]"
@@ -201,6 +201,11 @@ terms:
   - term: Mandatory instruction sign
     definition: A sign with a red background and white inscription. It marks the entrance to a runway or critical area, or an area aircraft may not enter.
     cite: [{ n: 6, page: "¶2-3-8" }]
+  - term: Meatball
+    definition: The yellow light of the optical landing system, read against the datum lights to see where the aircraft is on the glide slope. It rises above the datum lights as the pilot rises above the glide slope.
+    usage: Navy airfields and carriers
+    note: "The pilot's report that it is in sight is the ball call; see Ball in the carrier terms."
+    cite: [{ n: 10, page: "4-25, 5-52" }]
   - term: Negative
     definition: "“No,” or “permission not granted,” or “that is not correct.”"
     cite: [{ n: 1, page: "N" }]
@@ -222,7 +227,7 @@ terms:
     expansion: Runway supervisory unit
     definition: A unit by the runway that runs an Air Force training base's trainer pattern on its own frequency, alongside the tower.
     usage: Air Force pilot training
-    cite: [{ n: 7, page: "Military traffic pattern" }]
+    cite: [{ n: 7, page: "Military traffic pattern; T-6" }]
   - term: Runway designator
     definition: The number at each end of a runway, the whole number nearest one-tenth of its magnetic direction, with L, C or R added for parallel runways.
     cite: [{ n: 6, page: "¶2-3-3.2" }]
@@ -304,7 +309,7 @@ sources:
     date: "October 2013"
     url: "https://flytupelo.com/wp-content/uploads/2020/12/MACA-Booklet.pdf"
     accessed: "2026-10-25"
-    note: "The \"Military Traffic Pattern\" section. An Air Force wing's guide for civil pilots; dated, so its numbers are an example."
+    note: "The \"Military Traffic Pattern\" and T-6 sections. An Air Force wing's guide for civil pilots; dated, so its numbers are an example."
   - n: 8
     title: "Midair Collision Avoidance (MACA) Handbook"
     publisher: "Joint Base San Antonio"

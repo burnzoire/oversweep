@@ -36,14 +36,15 @@ for (const set of sets) {
 }
 
 // One meaning of a glossary word in full, for a module's terms list: the set
-// named by its short name ("Carrier"), or the word's first set. Citations are
+// named by its short name ("Carrier"), narrowed by `usage` where a set
+// gives a word two meanings, or the word's first set. Citations are
 // dropped; the list links each word to its entry, which carries them.
-export function termSense(word: string, set?: string) {
+export function termSense(word: string, set?: string, usage?: string) {
   const slug = termSlug(word);
-  const sense = glossary.get(slug)?.senses.find((s) => !set || s.set === set);
+  const sense = glossary.get(slug)?.senses.find((s) => (!set || s.set === set) && (!usage || s.term.usage === usage));
   if (!sense) throw new Error(`No glossary entry for "${word}"${set ? ` in ${set}` : ''}`);
   const { term } = sense;
-  return { href: `${sitePath('encyclopedia/terminology/')}#${slug}`, definition: `${term.expansion ? `${term.expansion}. ` : ''}${term.definition}`.replace(/\s*\[\d+\]/g, '') };
+  return { href: `${sitePath('encyclopedia/terminology/')}#${slug}`, expansion: term.expansion, definition: term.definition.replace(/\s*\[\d+\]/g, '') };
 }
 
 // A glossary word, by the word itself ("Final Bearing") or its anchor
