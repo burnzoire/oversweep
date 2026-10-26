@@ -6,11 +6,10 @@ import { recordTarget, termTarget, type LinkTarget } from '../data/links';
 //   <Term>bingo</Term>                  glossary word, taken from the text
 //   <Term id="Final Bearing">final bearing</Term>
 //   <Term record="f-14">F-14</Term>     aircraft, ordnance or threat system
-// `preview={false}` keeps just the link, for lists that print a meaning beside the word.
 // Link only a word's first mention on a page; check_encyclopedia fails a page
 // that links the same entry twice, or links an entry that does not exist.
-interface Props { id?: string; record?: string; preview?: boolean }
-const { id, record, preview = true } = Astro.props;
+interface Props { id?: string; record?: string }
+const { id, record } = Astro.props;
 const text = (await Astro.slots.render('default')).replace(/<[^>]+>/g, '').trim();
 let target: LinkTarget | undefined;
 if (record) target = recordTarget(record);
@@ -21,7 +20,7 @@ else {
 // One link per entry per page, so the entry's anchor makes a unique id.
 const tipId = target && `tip-${target.href.replace(/^.*\/encyclopedia\//, '').replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '')}`;
 ---
-{target && !preview ? <a class="term-link" href={target.href}><slot /></a> : target ? (
+{target ? (
   <span class="term-ref"><a class="term-link" href={target.href} aria-describedby={tipId}><slot /></a><span class="term-tip" role="tooltip" id={tipId}>
     <span class="term-tip-head"><strong>{target.title}</strong> <span class="term-tip-kind">{target.kind}</span></span>
     {target.lines.map((line) => <span class="term-tip-line">{line.label && <span class="term-tip-label">{line.label}: </span>}{line.text}</span>)}

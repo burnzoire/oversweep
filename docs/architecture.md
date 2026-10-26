@@ -45,7 +45,10 @@ aircraft, weapon or threat system with `<Term>` (src/components/Term.astro): the
 link and its hover preview are built from the glossary or encyclopedia record, so
 a definition is written once. Link a word's first mention on a page only;
 `check_encyclopedia` fails a page that links one entry twice or links a missing
-entry, and the build fails on a `<Term>` id with no record.
+entry, and the build fails on a `<Term>` id with no record. A module's terms list
+is `<GlossaryList>` (src/components/GlossaryList.astro): each row's definition is
+read from the glossary and its word links to the entry, so add a missing term to
+the Terminology content rather than writing its meaning on the page.
 
 ## Future infrastructure
 

@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
 import { getExperience, includedExperiences, experienceFrame } from '../../../data/experiences';
 import { sitePath } from '../../../lib/paths';
 import Term from '../../../components/Term.astro';
@@ -331,26 +332,11 @@ const contents = [
 
  <h2 id="jargon">Radio terms</h2>
  <p>Brevity words carry a whole idea in one word. These are the terms as the source uses them, with the page that shows it. Try the quiz once you have read them.</p>
- <dl class="jargon">
-  <div><dt>Mother</dt><dd>The ship itself. [1, p. 1-10]</dd></div>
-  <div><dt>Paddles</dt><dd>The landing signal officers (LSOs): qualified pilots who use radio calls to bring aircraft safely aboard. [1, p. 1-2]</dd></div>
-  <div><dt>Angels</dt><dd>Altitude in thousands of feet, as in the source's example where angels 8 is 8,000 ft. [1, p. 2-19]</dd></div>
-  <div><dt>State</dt><dd>Fuel state, as in “state 2.2”. [1, p. 2-18]</dd></div>
-  <div><dt>Low state</dt><dd>The lowest fuel state in the flight, given at the Strike and Marshal check-ins. [1, pp. 2-11–2-12]</dd></div>
-  <div><dt>Button</dt><dd>A frequency selection, as in “Approach button 18”. [1, p. 2-21]</dd></div>
-  <div><dt>Needles</dt><dd>The ACLS approach guidance display. [1, p. 1-10]</dd></div>
-  <div><dt>Bullseye</dt><dd>The ICLS, the instrument carrier landing system. [1, p. 1-10]</dd></div>
-  <div><dt>Ball</dt><dd>The optical landing system's glideslope cue, and the call that reports seeing it. [1, pp. 1-11, 2-25]</dd></div>
-  <div><dt><Term>Clara</Term></dt><dd>The call made when the ball is not visible. [1, p. 2-18]</dd></div>
-  <div><dt><Term>Charlie</Term></dt><dd>Charlie time: when launches are complete and recovery begins. [1, p. 2-17]</dd></div>
-  <div><dt>Red Crown</dt><dd>The carrier strike group's air defence controller, the first check-in after the mission. [1, p. 2-11]</dd></div>
-  <div><dt>Alibis</dt><dd>Aircraft maintenance discrepancies, passed to Strike for the ready room. [1, p. 2-11]</dd></div>
-  <div><dt>CCA</dt><dd>Carrier control area: all airspace within 50 NM of the carrier. [1, p. 1-3]</dd></div>
-  <div><dt>Platform</dt><dd>The 5,000 ft reporting point, normally about 20 NM out, where the descent rate reduces. [1, pp. 2-23, A-5]</dd></div>
-  <div><dt>Commencing</dt><dd>The report that you are leaving marshal to start the approach. [1, pp. 2-26–2-27]</dd></div>
-  <div><dt>Bingo</dt><dd>A fuel state that leaves enough to fly to the bingo field with a set reserve, depending on aircraft type. [1, p. A-1]</dd></div>
-  <div><dt>Bolter</dt><dd>A touchdown in which the hook does not engage the arresting wires. [1, p. A-1]</dd></div>
- </dl>
+ <GlossaryList items={[
+  'Mother', 'Paddles', { id: 'Angels', set: 'Carrier' }, 'State', 'Low state', 'Button', 'Needles',
+  { id: 'Bullseye', set: 'Carrier' }, { id: 'Ball', set: 'Carrier' }, 'Clara', 'Charlie', 'Red Crown', 'Alibis', 'CCA',
+  'Platform', 'Commencing', { id: 'Bingo', set: 'Carrier' }, 'Bolter',
+ ]} />
  <section class="lesson quiz-lesson" data-lesson="jargon" aria-labelledby="jargon-title">
   <h3 id="jargon-title">Quiz: name the term</h3>
   <p class="task" data-prompt aria-live="polite"></p>

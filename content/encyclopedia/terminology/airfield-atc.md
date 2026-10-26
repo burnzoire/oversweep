@@ -146,6 +146,119 @@ terms:
   - term: Wilco
     definition: I have received your message, understand it, and will comply with it.
     cite: [{ n: 1, page: "W" }]
+  - term: Acknowledge
+    definition: Let me know that you have received and understood this message.
+    cite: [{ n: 1, page: "A" }]
+  - term: Advise intentions
+    definition: Tell me what you plan to do.
+    cite: [{ n: 1, page: "A" }]
+  - term: Aiming point
+    definition: Two broad white stripes, one each side of the runway centerline, approximately 1,000 feet from the landing threshold.
+    cite: [{ n: 6, page: "¶2-3-3.4" }]
+  - term: Arresting gear
+    definition: A pendant cable across a military runway that an aircraft's tailhook engages to stop it. A line of yellow retroreflective disks is painted across the runway at the cable, and yellow-circle signs mark it.
+    usage: Military airfields
+    cite: [{ n: 10, page: "4-9" }]
+  - term: Caution zone
+    definition: The last 2,000 feet of an instrument runway, or half the runway length if less, where the runway edge lights are yellow instead of white.
+    cite: [{ n: 6, page: "¶2-1-4.2" }]
+  - term: Crosswind component
+    definition: The wind component measured in knots at 90 degrees to the longitudinal axis of the runway.
+    cite: [{ n: 1, page: "C" }]
+  - term: Datum lights
+    definition: The horizontal bar of green lights either side of the optical landing system's lens box, the reference the meatball is read against.
+    usage: Navy airfields and carriers
+    cite: [{ n: 10, page: "5-52" }]
+  - term: Displaced threshold
+    definition: A threshold that is located at a point on the runway other than the designated beginning of the runway.
+    note: "The pavement before a displaced threshold is available for takeoff, and for landing from the opposite direction. [6]"
+    cite: [{ n: 1, page: "D" }, { n: 6, page: "¶2-3-3.8" }]
+  - term: Expeditionary airfield
+    definition: A Marine Corps airfield built in the field. It can range from a grass landing zone for helicopters to AM-2 aluminum matting with M-31 expeditionary arresting gear, its own lighting and terminal guidance.
+    usage: Marine Corps
+    cite: [{ n: 9 }]
+  - term: FCLP
+    expansion: Field carrier landing practice
+    definition: Carrier-style approaches flown to a runway equipped with an optical landing system, worked by a landing signal officer.
+    usage: Navy and Marine Corps
+    cite: [{ n: 10, page: "4-25" }]
+  - term: Holding position marking
+    definition: "Four yellow lines across a taxiway, two solid and two dashed. The solid lines are always on the side where the aircraft must hold."
+    cite: [{ n: 6, page: "¶2-3-5.1" }]
+  - term: I say again
+    definition: The message will be repeated.
+    cite: [{ n: 1, page: "I" }]
+  - term: Immediately
+    definition: Used by ATC or pilots when such action compliance is required to avoid an imminent situation.
+    cite: [{ n: 1, page: "I" }]
+  - term: Inside downwind
+    definition: The downwind leg reached by the break or by pulling closed, within about 1.5 nautical miles of the runway.
+    usage: Air Force pilot training
+    cite: [{ n: 7, page: "Military traffic pattern" }]
+  - term: Location sign
+    definition: A sign with a black background, yellow inscription and yellow border. A taxiway location sign tells the pilot which taxiway the aircraft is on.
+    cite: [{ n: 6, page: "¶2-3-9" }]
+  - term: Mandatory instruction sign
+    definition: A sign with a red background and white inscription. It marks the entrance to a runway or critical area, or an area aircraft may not enter.
+    cite: [{ n: 6, page: "¶2-3-8" }]
+  - term: Negative
+    definition: "“No,” or “permission not granted,” or “that is not correct.”"
+    cite: [{ n: 1, page: "N" }]
+  - term: Negative contact
+    definition: Used by pilots to inform ATC that previously issued traffic is not in sight, which may be followed by a request for help avoiding it; or that they were unable to contact ATC on a particular frequency.
+    cite: [{ n: 1, page: "N" }]
+  - term: PAPI
+    expansion: Precision approach path indicator
+    definition: A visual glide slope indicator of two or four light units in a single row, normally on the left side of the runway. Each unit shows red or white depending on whether the aircraft is below or above its angle.
+    cite: [{ n: 6, page: "¶2-1-2.2" }]
+  - term: Pull closed
+    definition: Climb and turn straight back onto the inside downwind after a touch-and-go or low approach, instead of flying the whole pattern again.
+    usage: Air Force pilot training
+    cite: [{ n: 7, page: "Military traffic pattern" }]
+  - term: Read back
+    definition: Repeat my message back to me.
+    cite: [{ n: 1, page: "R" }]
+  - term: RSU
+    expansion: Runway supervisory unit
+    definition: A unit by the runway that runs an Air Force training base's trainer pattern on its own frequency, alongside the tower.
+    usage: Air Force pilot training
+    cite: [{ n: 7, page: "Military traffic pattern" }]
+  - term: Runway designator
+    definition: The number at each end of a runway, the whole number nearest one-tenth of its magnetic direction, with L, C or R added for parallel runways.
+    cite: [{ n: 6, page: "¶2-3-3.2" }]
+  - term: SFO
+    expansion: Simulated flameout
+    definition: A practice engine-out pattern flown by single-engine jets and trainers, a glide from high altitude to the runway with a very high rate of descent. Also called an emergency landing pattern (ELP).
+    usage: Air Force
+    cite: [{ n: 8, page: "Kelly Field; ELP" }]
+  - term: Speak slower
+    definition: Used in verbal communications as a request to reduce speech rate.
+    cite: [{ n: 1, page: "S" }]
+  - term: Stand by
+    definition: The controller or pilot must pause for a few seconds, usually to attend to other duties of a higher priority. Also means to wait, as in “stand by for clearance.” The caller should reestablish contact if a delay is lengthy. “Stand by” is not an approval or denial.
+    cite: [{ n: 1, page: "S" }]
+  - term: Tetrahedron
+    definition: A device normally located on uncontrolled airports and used as a landing direction indicator. The small end of a tetrahedron points in the direction of landing. At controlled airports, the tetrahedron, if installed, should be disregarded because tower instructions supersede the indicator.
+    cite: [{ n: 1, page: "T" }]
+  - term: Threshold
+    definition: The beginning of that portion of the runway usable for landing.
+    cite: [{ n: 1, page: "T" }]
+  - term: Touchdown zone markings
+    definition: Groups of one, two and three bars in pairs either side of the runway centerline, coded to give distance from the threshold in 500-foot increments.
+    cite: [{ n: 6, page: "¶2-3-3.5" }]
+  - term: Unable
+    definition: Indicates inability to comply with a specific instruction, request, or clearance.
+    cite: [{ n: 1, page: "U" }]
+  - term: Verify
+    definition: Request confirmation of information; e.g., “verify assigned altitude.”
+    cite: [{ n: 1, page: "V" }]
+  - term: Wave-off lights
+    definition: Flashing red lights on the optical landing system, worked by the landing signal officer, that tell the pilot to go around.
+    usage: Navy airfields and carriers
+    cite: [{ n: 10, page: "4-25" }]
+  - term: Words twice
+    definition: "As a request: “Communication is difficult. Please say every phrase twice.” As information: “Since communications are difficult, every phrase in this message will be spoken twice.”"
+    cite: [{ n: 1, page: "W" }]
 sources:
   - n: 1
     title: "Pilot/Controller Glossary"
@@ -179,6 +292,36 @@ sources:
     url: "https://murphysys.com/dcs/P-816.pdf"
     accessed: "2026-10-26"
     note: "Appendix A glossary, Landing Signals Officer, p. A-4."
+  - n: 6
+    title: "Aeronautical Information Manual, chapter 2: Aeronautical Lighting and Other Airport Visual Aids"
+    publisher: "Federal Aviation Administration"
+    url: "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap2_section_3.html"
+    accessed: "2026-10-25"
+    note: "Section 1, Airport Lighting Aids (¶2-1-2, 2-1-4) and section 3, Airport Marking Aids and Signs (¶2-3-3 to 2-3-9), current online edition. Cited by paragraph."
+  - n: 7
+    title: "Columbus Collision Avoidance: A guide to Columbus Air Force Base and the surrounding area"
+    publisher: "14th Flying Training Wing Safety Office, Columbus Air Force Base (PDF hosted by Tupelo Regional Airport)"
+    date: "October 2013"
+    url: "https://flytupelo.com/wp-content/uploads/2020/12/MACA-Booklet.pdf"
+    accessed: "2026-10-25"
+    note: "The \"Military Traffic Pattern\" section. An Air Force wing's guide for civil pilots; dated, so its numbers are an example."
+  - n: 8
+    title: "Midair Collision Avoidance (MACA) Handbook"
+    publisher: "Joint Base San Antonio"
+    url: "https://www.jbsa.mil/Portals/102/Documents/Safety/JBSA-MACA_Pamphlet_2024.pdf"
+    accessed: "2026-10-25"
+    note: "The JBSA-Kelly Field and emergency landing pattern (ELP) sections."
+  - n: 9
+    title: "Expeditionary Airfields"
+    publisher: "Naval Air Systems Command"
+    url: "https://www.navair.navy.mil/product/expeditionary-airfields-0"
+    accessed: "2026-10-25"
+  - n: 10
+    title: "NAVEDTRA 14342A, Air Traffic Controller, chapters 4 and 5: Airfield equipment and optical landing systems"
+    publisher: "US Navy, Naval Education and Training Professional Development and Technology Center (copy hosted by Integrated Publishing)"
+    url: "https://navyaviation.tpub.com/14342A/"
+    accessed: "2026-10-25"
+    note: "Printed pages 4-9 (arresting gear), 4-25 (optical landing system at naval air stations) and 5-52 (IFLOLS)."
 ---
 
 ## Words of the airfield
@@ -186,5 +329,7 @@ sources:
 These are the words of the airfield: the traffic pattern, the military overhead pattern and the standard radio words pilots and controllers use on the frequency. Most come from the FAA's Pilot/Controller Glossary, which compiles the terms used in the US air traffic control system; a few, such as MARSA, apply only to military aircraft. [[1]](#source-1)
 
 The overhead pattern is military. Its parts, the initial, the break point, the 180 and final approach, are defined from the Navy's air traffic controller manual, which explains that it lets fighters and some trainers enter the terminal area alongside slower aircraft flying the standard pattern. [[2]](#source-2) Helicopter movements such as hover taxi and air taxi are defined for helicopters and VTOL aircraft of any service. [[1]](#source-1)
+
+Runway markings, signs and lights are defined from the FAA's Aeronautical Information Manual, the shared US standard that military fields also use. [[6]](#source-6) Words particular to one service are marked: the Air Force's inside downwind, pull closed, runway supervisory unit and simulated flameout, from two of its pilot training bases; [[7]](#source-7) [[8]](#source-8) the Marine Corps' expeditionary airfields; [[9]](#source-9) and the optical landing system and arresting gear of naval air stations. [[10]](#source-10)
 
 **Other countries.** Because flying is international, the FAA glossary also prints the ICAO definition of a term wherever it differs from the FAA's. [[1]](#source-1) Those differences are quoted in the notes here: ceiling, flight level, ATIS, NOTAM, IFR and the traffic pattern, which ICAO calls the aerodrome traffic circuit.

@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
 import { getModule, includedModules } from '../../../data/modules';
 import { sitePath } from '../../../lib/paths';
 import FlowFigure from '../../../components/bfm/FlowFigure.astro';
@@ -201,27 +202,11 @@ const p = cite(1), q = cite(2);
  <p>The source contrasts two gun reticle modes. The lead-angle-computing mode is for non-maneuvering targets at 1,000 ft and is not used in its syllabus; the real-time gunsight (RTGS) is for tracking a maneuvering target by keeping the pipper ahead of it. <a href="#source-p1289">{p('5-8–5-9')}</a> In the snap shot drill, adjust the pull until the bandit fills three-quarters to all of the pipper (about a 1,000–1,500 ft shot) and squeeze the trigger as the bandit crosses the canopy bow, holding it until he passes through the <Term id="HUD">head-up display</Term>. If the shooter would violate the 500 ft bubble, either aircraft calls "skip it". <a href="#source-p1289">{p('5-9–5-12')}</a> For training kill assessment, two valid snap shots, or one second of cumulative tracking, equal a kill. <a href="#source-p1289">{p('2-5')}</a></p>
 
  <h2 id="terms">BFM terms</h2>
- <dl class="jargon">
-  <div><dt>3/9 line</dt><dd>An imaginary line through an aircraft's wingtips, at right angles to its flight path; behind it is generally offensive.</dd></div>
-  <div><dt>Bubble</dt><dd>The turn an aircraft scribes at maximum performance; it cannot turn inside it.</dd></div>
-  <div><dt>Post</dt><dd>The centre point of the turn circle.</dd></div>
-  <div><dt>Plane of motion</dt><dd>The two-dimensional plane in which the turn circle lies.</dd></div>
-  <div><dt>Control zone</dt><dd>A cone-like area 2,000 to 4,000 ft behind a maneuvering aircraft.</dd></div>
-  <div><dt>Target aspect</dt><dd>The angular difference between the bandit's nose and your aircraft.</dd></div>
-  <div><dt>Lag pursuit</dt><dd>Nose or lift vector aft of the adversary, to manage range, angles and closure.</dd></div>
-  <div><dt>Lead pursuit</dt><dd>Nose or lift vector in front of the adversary, to employ weapons or close distance.</dd></div>
-  <div><dt>Corner airspeed</dt><dd>The airspeed that gives the best instantaneous turn performance, with the highest bleed rate.</dd></div>
-  <div><dt>Radial G</dt><dd>The combination of load factor and gravity: the total turn performance.</dd></div>
-  <div><dt>Energy excursion</dt><dd>The conscious sacrifice of airspeed for angles.</dd></div>
-  <div><dt>Two-circle flow</dt><dd>A nose-to-tail rate fight, usually won by the aircraft with the higher turn rate at its corner speed.</dd></div>
-  <div><dt>One-circle flow</dt><dd>A nose-to-nose radius fight, won by the aircraft with the smaller turn radius.</dd></div>
-  <div><dt>Split-S</dt><dd>A pure nose-low maneuver: roll inverted and pull through to level flight on the reverse heading.</dd></div>
-  <div><dt>High yo-yo</dt><dd>A lag maneuver out of the bandit's plane of motion, trading airspeed for altitude to reduce angle off and closure.</dd></div>
-  <div><dt>Low yo-yo</dt><dd>Nose down inside the bandit's turn and in front of it, then back up toward it approaching weapons range.</dd></div>
-  <div><dt>Rolling scissors</dt><dd>A neutral fight with both aircraft inside each other's bubble, rolling over the top of each other.</dd></div>
-  <div><dt>Flat scissors</dt><dd>A slow-speed, high-AOA radius fight of S turns, each aircraft trying to reduce its travel downrange.</dd></div>
-  <div><dt>Hard deck</dt><dd>The training floor: at least 10,000 ft above ground level in the T-45 rules.</dd></div>
- </dl>
+ <GlossaryList items={[
+  '3/9 line', 'Bubble', 'Post', 'Plane of motion', 'Control zone', 'Target aspect', 'Lag pursuit', 'Lead pursuit',
+  'Corner airspeed', 'Radial G', 'Energy excursion', 'Two-circle flow', 'One-circle flow', 'Split-S', 'High yo-yo',
+  'Low yo-yo', 'Rolling scissors', 'Flat scissors', 'Hard deck',
+ ]} />
  <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
   <h3 id="terms-title">Quiz: name the term</h3>
   <p class="task" data-prompt aria-live="polite"></p>

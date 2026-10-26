@@ -908,22 +908,55 @@
     "id": "encyclopedia.terminology.airfield-atc",
     "slug": "airfield-atc",
     "category": "terminology",
-    "revision": 1,
+    "revision": 2,
     "title": "Airfield and ATC terms",
-    "designation": "FAA Pilot/Controller Glossary · NAVEDTRA 14342A",
+    "designation": "FAA Pilot/Controller Glossary · AIM · NAVEDTRA 14342A",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The traffic pattern, the military overhead pattern and the standard radio words, with ICAO's definitions where they differ."
+    "summary": "Runway markings and signs, the traffic pattern, the military overhead pattern and the standard radio words, with ICAO's definitions where they differ."
   },
   {
     "id": "encyclopedia.terminology.carrier",
     "slug": "carrier",
     "category": "terminology",
-    "revision": 1,
+    "revision": 2,
     "title": "Carrier terms",
     "designation": "NAVEDTRA 14342A · CNATRA P-816",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "Marshal, platform, the groove and the ball: the Navy's shipboard words, and where they differ from the brevity list."
+  },
+  {
+    "id": "encyclopedia.terminology.air-combat",
+    "slug": "air-combat",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Air combat terms",
+    "designation": "CNATRA P-1289 · P-1218",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The 3/9 line, the bubble, pursuit curves, corner airspeed and the yo-yos and scissors of basic fighter maneuvers."
+  },
+  {
+    "id": "encyclopedia.terminology.flight",
+    "slug": "flight",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Flight terms",
+    "designation": "NAVWEPS 00-80T-80 · FM 3-04.203 · FAA handbooks",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Lift, drag, load factor, corner speed and energy for the wing, and ETL, vortex ring state and autorotation for the rotor."
+  },
+  {
+    "id": "encyclopedia.terminology.navigation",
+    "slug": "navigation",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Navigation terms",
+    "designation": "NAVEDTRA 14342A · CNATRA P-1204 · AIM",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Radials, bearings, variation and deviation, station passage, waypoints, RAIM and the military grid."
   }
 ]

@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
 import { getModule, includedModules } from '../../../data/modules';
 import { sitePath } from '../../../lib/paths';
 import Term from '../../../components/Term.astro';
@@ -243,31 +244,15 @@ const bfm = sitePath('manual/air-combat/bfm/'), caseIii = sitePath('manual/naval
  <p>An engine failure does not stop the rotor. Lower the collective at once: that must be done immediately, and it keeps the rotor turning on the upward flow of air as the helicopter descends. <a href="#source-hfh">{h('11-2')}</a> In the autorotating rotor, the middle of the blade, normally 25 to 70 percent of the radius, is the driving region that turns it; the outer 30 percent is the driven region, held back by drag; and the inner 25 percent is stalled. <a href="#source-hfh">{h('2-26')}</a> Near the ground a flare with aft cyclic cuts forward speed and the rate of descent before touchdown. <a href="#source-hfh">{h('11-4')}</a> The type's flight manual gives its autorotation airspeeds and rotor rpm limits.</p>
 
  <h2 id="terms">Terms</h2>
- <dl class="jargon">
-  <div><dt>Angle of attack (AOA)</dt><dd>The acute angle between the chord line and the relative wind.</dd></div>
-  <div><dt>Critical angle of attack</dt><dd>The angle of maximum lift (CL<sub>max</sub>); beyond it the wing stalls.</dd></div>
-  <div><dt>Units (AOA)</dt><dd>How the T-45 and other Navy trainers display angle of attack: a type-specific scale, not degrees. The T-45 reaches CL<sub>max</sub> at 21 units.</dd></div>
-  <div><dt>On-speed</dt><dd>The target approach angle of attack shown on the indexer, flown on a carrier approach.</dd></div>
-  <div><dt>Chord line</dt><dd>A straight line joining the leading and trailing edges of an airfoil.</dd></div>
-  <div><dt>Camber</dt><dd>The curvature of an airfoil, traced by the mean camber line.</dd></div>
-  <div><dt>Parasite drag</dt><dd>Form, interference and skin friction drag; grows with the square of airspeed.</dd></div>
-  <div><dt>Induced drag</dt><dd>Drag that comes with making lift; varies inversely with the square of airspeed.</dd></div>
-  <div><dt>L/D<sub>max</sub></dt><dd>The best lift-to-drag ratio, where total drag is least.</dd></div>
-  <div><dt>Load factor</dt><dd>Lift divided by weight, felt as G; 1 ÷ cos(bank) in a level, coordinated turn.</dd></div>
-  <div><dt>Corner speed</dt><dd>The speed where the stall boundary meets the limit load: the best instantaneous turn. The civil handbooks' maneuvering speed, V<sub>A</sub>.</dd></div>
-  <div><dt>Lift-limit / load-limit pull</dt><dd>Below corner speed, pull to the buffet (lift limit); above it, pull to the G limit (load limit).</dd></div>
-  <div><dt>Excess thrust</dt><dd>Thrust available minus thrust required; positive excess thrust climbs, accelerates, or both.</dd></div>
-  <div><dt>Stabilator</dt><dd>A one-piece moving horizontal tail used instead of a stabilizer and elevator, as on the F/A-18.</dd></div>
-  <div><dt>Adverse yaw</dt><dd>Yaw opposite to the direction of bank when rolling, from differential aileron drag.</dd></div>
-  <div><dt>Energy height (E<sub>S</sub>)</dt><dd>h + V² ÷ 2g: altitude plus the altitude the airspeed could ideally buy.</dd></div>
-  <div><dt>Ground effect</dt><dd>The reduction in induced drag when flying within about a wingspan of the surface; for a rotor, the efficiency gain within about one rotor diameter.</dd></div>
-  <div><dt>Dissymmetry of lift</dt><dd>The difference in lift between the advancing and retreating halves of a rotor disk in forward flight; flapping compensates for it.</dd></div>
-  <div><dt>Effective translational lift (ETL)</dt><dd>The extra rotor efficiency once the disk outruns its own vortices, between about 16 and 24 kt.</dd></div>
-  <div><dt>Retreating blade stall</dt><dd>Stall of the retreating blade at high forward speed; reduce collective.</dd></div>
-  <div><dt>Vortex ring state</dt><dd>A powered, near-vertical descent below ETL in which the rotor settles into its own downwash.</dd></div>
-  <div><dt>Dynamic rollover</dt><dd>A roll about a skid or wheel in contact with the ground that cyclic can no longer stop; reduce collective.</dd></div>
-  <div><dt>Autorotation</dt><dd>Descent with the rotor driven by the upward airflow instead of the engine; entered by lowering the collective.</dd></div>
- </dl>
+ <GlossaryList items={[
+  { id: 'AOA', label: 'Angle of attack (AOA)' }, 'Critical angle of attack', { id: 'Units', label: 'Units (AOA)' },
+  // No readable source defines on-speed yet, so it keeps the module's own wording, unlinked.
+  { label: 'On-speed', meaning: 'The target approach angle of attack shown on the indexer, flown on a carrier approach.' },
+  'Chord line', 'Camber', 'Parasite drag', 'Induced drag', { id: 'L/Dmax', label: 'L/D<sub>max</sub>' }, 'Load factor', 'Corner speed',
+  { id: 'Lift-limit and load-limit pull', label: 'Lift-limit / load-limit pull' }, 'Excess thrust', 'Stabilator', 'Adverse yaw',
+  { id: 'Energy height', label: 'Energy height (E<sub>S</sub>)' }, 'Ground effect', 'Dissymmetry of lift',
+  'Effective translational lift (ETL)', 'Retreating blade stall', 'Vortex ring state', 'Dynamic rollover', 'Autorotation',
+ ]} />
 
  <h2 id="check">Check your understanding</h2>
  <details><summary>Below corner speed you pull as hard as you can. What limits the turn, and what do you feel?</summary><p>Lift: the wing reaches CL<sub>max</sub> before the G limit. You feel buffet; in the T-45 a lift-limit pull is flown at 19–21 units.</p></details>
