@@ -1,71 +1,10 @@
-// Presentation for the Flight Fundamentals module's interactive figures. All
+// Presentation for the Fixed-Wing Principles of Flight module's interactive figures. All
 // numbers come from lesson-model.mjs; this file only reads inputs and draws.
 import {
   AIRFOIL, EXAMPLE, alphaFor, clMaxOf, dragPolar, energyHeight, levelTurn, liftCoefficient, maneuveringSpeed,
-  maxLoadFactor, requiredCl, ROTOR, rotorSpeeds, speedAt, stabilityResponse, stallSpeed, stallSpeedAt, steadyPath,
+  maxLoadFactor, requiredCl, speedAt, stabilityResponse, stallSpeed, stallSpeedAt, steadyPath,
 } from './lesson-model.mjs';
-
-const SVG = 'http://www.w3.org/2000/svg';
-const rad = (d) => d * Math.PI / 180;
-const r0 = (v) => Math.round(v).toLocaleString('en-US');
-const f1 = (v) => v.toFixed(1);
-const f2 = (v) => v.toFixed(2);
-
-function el(name, attrs = {}, text) {
-  const node = document.createElementNS(SVG, name);
-  for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, String(v));
-  if (text !== undefined) node.textContent = text;
-  return node;
-}
-const frame = (w, h) => el('rect', { x: 1, y: 1, width: w - 2, height: h - 2, class: 'frame' });
-const label = (x, y, text, cls = 'lbl', extra = {}) => el('text', { x, y, class: cls, ...extra }, text);
-const fields = (root) => Object.fromEntries([...root.querySelectorAll('[name]')].map((i) => [i.name, i]));
-const setOut = (root, name, text) => { const o = root.querySelector(`output[for="${name}"]`); if (o) o.textContent = text; };
-const say = (out, lines) => out.replaceChildren(...lines.map((t) => Object.assign(document.createElement('p'), { textContent: t })));
-
-// Arrow from (x1, y1) to (x2, y2) with a filled head; nothing for a zero vector.
-function arrow(x1, y1, x2, y2, cls) {
-  const g = el('g', { class: `vec ${cls}` });
-  const len = Math.hypot(x2 - x1, y2 - y1);
-  if (len < 1) return g;
-  const ux = (x2 - x1) / len, uy = (y2 - y1) / len, h = Math.min(10, len * 0.5);
-  g.append(
-    el('line', { x1, y1, x2: x2 - ux * h * 0.8, y2: y2 - uy * h * 0.8 }),
-    el('path', { d: `M${x2} ${y2} L${x2 - ux * h - uy * h * 0.45} ${y2 - uy * h + ux * h * 0.45} L${x2 - ux * h + uy * h * 0.45} ${y2 - uy * h - ux * h * 0.45}Z`, class: 'head' }),
-  );
-  return g;
-}
-
-// A plotting box: maps data to screen and draws the axes, grid and labels.
-function plot(svg, { x, y, w, h, xr, yr, xticks, yticks, xlabel, ylabel, xfmt = r0, yfmt = r0 }) {
-  const X = (v) => x + (v - xr[0]) / (xr[1] - xr[0]) * w;
-  const Y = (v) => y + h - (v - yr[0]) / (yr[1] - yr[0]) * h;
-  for (const t of xticks) {
-    svg.append(el('line', { x1: X(t), y1: y, x2: X(t), y2: y + h, class: 'grid' }));
-    svg.append(label(X(t), y + h + 15, xfmt(t), 'lbl small', { 'text-anchor': 'middle' }));
-  }
-  for (const t of yticks) {
-    svg.append(el('line', { x1: x, y1: Y(t), x2: x + w, y2: Y(t), class: 'grid' }));
-    svg.append(label(x - 6, Y(t) + 4, yfmt(t), 'lbl small', { 'text-anchor': 'end' }));
-  }
-  svg.append(el('rect', { x, y, width: w, height: h, class: 'thin' }));
-  svg.append(label(x + w / 2, y + h + 32, xlabel, 'lbl small', { 'text-anchor': 'middle' }));
-  svg.append(label(x - 44, y + h / 2, ylabel, 'lbl small', { 'text-anchor': 'middle', transform: `rotate(-90 ${x - 44} ${y + h / 2})` }));
-  const path = (fn, from, to, n = 120) => {
-    // Samples outside the plot are left out, and the line restarts where it
-    // comes back in, so a curve is clipped rather than flattened at the edge.
-    let d = '', pen = false;
-    for (let i = 0; i <= n; i++) {
-      const v = from + (to - from) * i / n, r = fn(v);
-      if (r === null || !Number.isFinite(r) || r < yr[0] || r > yr[1]) { pen = false; continue; }
-      d += `${pen ? 'L' : 'M'}${X(v).toFixed(1)} ${Y(r).toFixed(1)}`;
-      pen = true;
-    }
-    return d;
-  };
-  return { X, Y, path };
-}
-const range = (a, b, step) => Array.from({ length: Math.floor((b - a) / step + 1e-9) + 1 }, (_, i) => a + i * step);
+import { arrow, el, f1, f2, fields, frame, label, plot, r0, rad, range, say, setOut } from './figure-kit.mjs';
 
 // Side-view outline, nose to +x, fin up, about 60 units long; rotated to pitch.
 const SIDE = 'M30 0 L22 -4 L8 -6 L-24 -3 L-30 -16 L-24 -16 L-14 -4 L-14 3 L22 4 Z M2 -1 L-10 -1 L-12 2 L4 2 Z';
@@ -542,65 +481,9 @@ function setupEnergy(root) {
   draw();
 }
 
-/* ---------- Figure 10: dissymmetry of lift ---------- */
-function setupRotor(root) {
-  const f = fields(root), svg = root.querySelector('svg'), out = root.querySelector('[data-result]');
-  const cx = 170, cy = 200, R = 140, PX = 0.2; // disk centre and radius; arrow px per knot
-  function draw() {
-    const speed = Number(f.speed.value);
-    setOut(root, 'speed', `${speed} kt`);
-    const s = rotorSpeeds({ speed });
-    svg.replaceChildren(frame(660, 380));
-    // Top view: nose up, rotor turning counterclockwise, so the advancing blade is on the right.
-    svg.append(el('circle', { cx, cy, r: R, class: 'thin' }));
-    const rr = s.reverseRadius / ROTOR.radius * R;
-    if (rr > 0.5) {
-      svg.append(el('circle', { cx: cx - rr / 2, cy, r: rr / 2, class: 'zone hatch' }));
-    }
-    svg.append(el('line', { x1: cx - R, y1: cy, x2: cx + R, y2: cy, class: 'ln dashed' }));
-    // Rotation arrow outside the disk: counterclockwise, so the top of the disk moves left.
-    const ra = R + 14, a1 = rad(60), a2 = rad(115);
-    svg.append(el('path', { d: `M${cx + ra * Math.cos(a1)} ${cy - ra * Math.sin(a1)} A${ra} ${ra} 0 0 0 ${cx + ra * Math.cos(a2)} ${cy - ra * Math.sin(a2)}`, class: 'thin' }));
-    svg.append(arrow(cx + ra * Math.cos(rad(105)), cy - ra * Math.sin(rad(105)), cx + ra * Math.cos(a2), cy - ra * Math.sin(a2), 'component'));
-    svg.append(label(cx, 24, 'FLIGHT DIRECTION ↑', 'lbl small', { 'text-anchor': 'middle' }));
-    svg.append(label(cx + R, cy + R + 6, 'ADVANCING SIDE', 'lbl small', { 'text-anchor': 'end' }));
-    svg.append(label(cx - R, cy + R + 6, 'RETREATING SIDE', 'lbl small'));
-    // Blade airspeed at four stations on each side: forward on the right, aft on the left.
-    const omega = s.tip / ROTOR.radius; // knots per foot of radius
-    for (const k of [0.25, 0.5, 0.75, 1]) {
-      const r = k * ROTOR.radius, x = k * R;
-      const adv = omega * r + speed, ret = omega * r - speed;
-      svg.append(arrow(cx + x, cy, cx + x, cy - adv * PX, 'lift'));
-      svg.append(arrow(cx - x, cy, cx - x, cy + ret * PX, ret < 0 ? 'drag' : 'lift'));
-    }
-    if (rr > 0.5) svg.append(label(cx - R + 24, cy - 40, 'SHADED: REVERSE FLOW', 'lbl small'));
-    // Spanwise airspeed: negative where the air meets the retreating blade from behind.
-    const box = plot(svg, { x: 400, y: 40, w: 230, h: 270, xr: [-1, 1], yr: [-200, 700], xticks: [-1, -0.5, 0, 0.5, 1], yticks: range(-200, 700, 100), xlabel: 'SPAN: RETREATING TIP – HUB – ADVANCING TIP', ylabel: 'BLADE AIRSPEED (KT), < 0 REVERSE', xfmt: (v) => (v === 0 ? 'HUB' : `${Math.abs(v)} R`) });
-    svg.append(el('line', { x1: box.X(-1), y1: box.Y(0), x2: box.X(1), y2: box.Y(0), class: 'mark-line' }));
-    // Each half is a straight line: Ω r + V on the advancing side, Ω r − V on the retreating side.
-    svg.append(el('path', { d: box.path((v) => omega * ROTOR.radius * -v - speed, -1, 0), class: 'track' }));
-    svg.append(el('path', { d: box.path((v) => omega * ROTOR.radius * v + speed, 0, 1), class: 'track' }));
-    svg.append(el('path', { d: box.path((v) => omega * ROTOR.radius * Math.abs(v), -1, 1), class: 'ghost' }));
-    svg.append(el('circle', { cx: box.X(1), cy: box.Y(s.advancing), r: 5, class: 'pointer' }));
-    svg.append(el('circle', { cx: box.X(-1), cy: box.Y(s.retreating), r: 5, class: 'pointer' }));
-    svg.append(label(14, 370, `EXAMPLE ROTOR ${ROTOR.radius} FT RADIUS, ${ROTOR.rpm} RPM (INVENTED). FAINT LINE: HOVER`, 'lbl small'));
-    say(out, [
-      speed === 0
-        ? `In a hover both sides meet the air at the same speed: ${r0(s.tip)} kt at the tips. Lift is even across the disk.`
-        : `At ${speed} kt the advancing tip meets the air at ${r0(s.advancing)} kt and the retreating tip at ${r0(s.retreating)} kt.`,
-      s.tipLiftRatio === null
-        ? 'The whole retreating blade is in reverse flow: far outside any helicopter\'s envelope.'
-        : speed === 0 ? 'Move the slider to fly forward.' : `At the same blade angle the advancing tip would make about ${f1(s.tipLiftRatio)} times the lift of the retreating tip. Flapping evens it out: the advancing blade flaps up, losing angle of attack, and the retreating blade flaps down, gaining it.`,
-      speed === 0 ? '' : `Inboard of ${f1(s.reverseRadius)} ft on the retreating side the air meets the blade from its trailing edge (advance ratio ${f2(s.mu)}). The faster you fly, the more angle of attack the retreating blade needs, until it stalls.`,
-    ].filter(Boolean));
-  }
-  root.addEventListener('input', draw);
-  draw();
-}
-
 const SETUP = {
   forces: setupForces, airfoil: setupAirfoil, 'lift-speed': setupLiftSpeed, drag: setupDrag, axes: setupAxes,
-  stability: setupStability, turn: setupTurn, envelope: setupEnvelope, energy: setupEnergy, rotor: setupRotor,
+  stability: setupStability, turn: setupTurn, envelope: setupEnvelope, energy: setupEnergy,
 };
 for (const root of document.querySelectorAll('[data-lesson]')) {
   const setup = SETUP[root.dataset.lesson];

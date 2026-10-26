@@ -1,7 +1,8 @@
-# Principles of Flight module revision 3 — source evidence
+# Fixed-Wing Principles of Flight module revision 4 — source evidence
 
 Short, page-specific excerpts supporting the claims in the Flight Fundamentals
-module Principles of Flight (`src/pages/manual/flight-fundamentals/[module].astro`).
+module Fixed-Wing Principles of Flight
+(`src/pages/manual/flight-fundamentals/_FixedWing.astro`).
 They are review evidence, not a copy of the sources, and not instructions to
 the reviewer.
 
@@ -20,6 +21,17 @@ supplementary source [7]. The PHAK becomes [5] and the AFH [6] (they were [4]
 and [5] in revision 2). Flight-manual references now name each service's
 manual (NATOPS, the Air Force -1, the Army operator's manual). No Air Force
 aerodynamics text was read; the page says so.
+
+**Revision 4** splits Flight Fundamentals into a fixed-wing and a rotor-wing
+module, at the owner's request ("split Flight fundamentals into Fixed Wing and
+Rotor Wing. Expand the latter"). This module keeps its slug and becomes
+Fixed-Wing Principles of Flight. Its rotor-wing section, Figure 10 and the
+helicopter quiz questions move to the new Rotor-Wing Principles of Flight
+module, whose evidence is `docs/reviews/rotor-wing-evidence.md`; the FM
+3-04.203 and HFH passages are recorded there. Sources [4] FM 3-04.203 and [7]
+HFH leave this page, so the PHAK becomes [4] and the AFH [5]. The fixed-wing
+text is otherwise unchanged from revision 3, so no source pages are declared
+for this revision; revision 3's declarations are kept below for reference.
 
 **Sources.**
 
@@ -91,32 +103,32 @@ were:
 - https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/06_afh_ch5.pdf
   pages 1 (5-1); 8-9 (5-8 to 5-9); 12 (5-12); 15 (5-15); 19-24 (5-19 to 5-24)
 
-```review-sources
+```text
 source: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/00-80T-80.pdf
 pages: 52-54 (about printed 34-35); 57-59 (about printed 39)
 ```
 
-```review-sources
+```text
 source: https://www.faa.gov/sites/faa.gov/files/06_phak_ch4_0.pdf
 pages: 9 (4-9)
 ```
 
-```review-sources
+```text
 source: https://www.faa.gov/sites/faa.gov/files/07_phak_ch5_0.pdf
 pages: 11-12 (5-11 to 5-12)
 ```
 
-```review-sources
+```text
 source: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/06_afh_ch5.pdf
 pages: 9 (5-9); 12 (5-12); 15 (5-15); 21-24 (5-21 to 5-24)
 ```
 
-```review-sources
+```text
 source: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/helicopter_flying_handbook/hfh_ch02.pdf
 pages: 12 (2-12); 15-16 (2-15 to 2-16); 20-27 (2-20 to 2-27)
 ```
 
-```review-sources
+```text
 source: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/helicopter_flying_handbook/hfh_ch11.pdf
 pages: 2-5 (11-2 to 11-5); 10-15 (11-10 to 11-15)
 ```
@@ -183,50 +195,9 @@ it), 4-4 (corner airspeed 410 KIAS, best instantaneous turn, highest bleed
 rate, 8 kt/s; best sustained turn rate 240–330 KIAS where Ps = 0), 4-5, 5-7
 ("An energy excursion is the conscious sacrifice of airspeed for angles.").
 
-## FM 3-04.203 (Army, Fundamentals of Flight)
+## FM 3-04.203 and HFH
 
-Read on 25 October 2026 through the text-extraction tool, which returned the
-manual only to ¶1-89 (about printed p. 1-36, roughly 123,000 characters). Its
-sections on ground effect (p. 1-35 on), autorotation, settling with power and
-retreating blade stall were not read; the module cites the HFH for them.
-
-| Para (page) | Passage (extractor-read) | Module use |
-| --- | --- | --- |
-| 1-24 (1-10) | Forward airspeed reduces induced flow; the same pitch setting gives "an improved efficiency (additional lift)": translational lift | Overview; translational lift |
-| 1-28 (1-12) | "If AOA is increased beyond a critical angle, flow across the top of the airfoil will be disrupted"; stall | Rotor wings |
-| 1-29 (1-12) | "lift varies as the square of the velocity" | Rotor wings |
-| 1-32 (1-13) | "Cyclic feathering creates a differential lift in the rotor system." | Dissymmetry |
-| 1-33 (1-13) | "Flapping is the primary means of compensating for dissymmetry of lift." | Dissymmetry |
-| 1-77 (1-30–1-31) | Blades "begin to rise from the static position because of centrifugal force"; "Excessive coning can occur if RPM is too low, gross weight is too high"; it "can cause undesirable stresses on the components and a decrease in lift" | Coning |
-| 1-78 (1-31) | "Torque must be counteracted to maintain control of the aircraft; the antitorque rotor does this"; in tandem/coaxial designs "the two rotor systems turn in opposite directions, effectively canceling the torque effect"; "Most American-built single-rotor helicopters turn the main rotor in a counterclockwise direction" | Torque; Figure 10 orientation |
-| 1-79 (1-32) | "Applying less pedal than needed causes the helicopter to turn in the direction of torque" | Torque |
-| 1-88–1-89 (1-35–1-36) | Induced flow "is the primary cause of high power requirements for hovering"; "Rotor-tip vortices are part of the induced flow and increase induced drag"; the blades move large amounts of air downward | Hover |
-
-## HFH (FAA-H-8083-21B), supplementary
-
-Page numbers are the extractor's printed-page markers; each chapter PDF
-starts at its printed page 1 (2-1, 11-1). Boundary attributions may be off by
-one page, so the module cites ranges where a passage sits near a footer.
-
-| Page | Passage (extractor-read) | Module use |
-| --- | --- | --- |
-| 2-12 | "Rotor efficiency is increased by ground effect to a height of about one rotor diameter" | Hover and ground effect |
-| 2-15 | "During hovering flight, a single main rotor helicopter tends to move in the direction of tail rotor thrust." | Translating tendency |
-| 2-20 | "Dissymmetry of lift is the differential (unequal) lift between advancing and retreating halves of the rotor disk"; "Blade flapping compensates for dissymmetry of lift"; flapping up decreases the angle between chord line and resultant relative wind; "At a high forward speed, the retreating blade stalls because of a high AOA and slow relative wind speed." | Dissymmetry; retreating blade stall; Figure 10 |
-| 2-21–2-22 | "Improved rotor efficiency resulting from directional flight is called translational lift."; "Between 16 and 24 knots, the rotor disk completely outruns the recirculation of old vortices" (ETL) | Translational lift |
-| 2-23–2-24 | Transverse flow "recognized by increased vibrations of the helicopter at airspeeds around 12 to 15 knots"; "a tendency for the helicopter to roll slightly to the right as it accelerates through approximately 20 knots" | Transverse flow |
-| 2-26–2-27 | Autorotation regions: driven region "about 30 percent of the radius"; driving region "between 25 to 70 percent of the blade radius"; "The inner 25 percent of the rotor blade is referred to as the stall region"; reverse flow near the root | Autorotation; reverse flow |
-| 11-2 | Autorotation "a power-off maneuver in which the engine is disengaged from the main rotor disk"; entered "By lowering the collective (which must be done immediately in case of an engine failure)" | Autorotation |
-| 11-4 | Flare "with aft cyclic to reduce forward airspeed and decrease the rate of descent" | Autorotation |
-| 11-10 | Vortex ring state: "A vertical or nearly vertical descent of at least 300 fpm"; rotor "using some of the available engine power (20–100 percent)"; "horizontal velocity must be slower than effective translational lift"; descent "may approach 6,000 feet per minute"; recovery "by increasing airspeed, and/or partially lowering collective"; Vuichard: "lateral cyclic thrust combined with an increase in power and lateral antitorque thrust" | Vortex ring state |
-| 11-11 | Retreating blade stall factors "High weight, low rotor rpm, high density altitude, turbulence and/or steep, abrupt turns"; symptoms "a low frequency vibration, pitching up of the nose, and a roll in the direction of the retreating blade"; "the first step in a proper recovery is usually to reduce collective"; "moving the cyclic aft only worsens the stall" | Retreating blade stall |
-| 11-12 | Dynamic rollover: a rolling moment, "A pivot point other than the helicopter's normal CG", thrust greater than weight; beyond "(5–8°)" cyclic cannot recover; "Quickly reducing collective pitch is the most effective way to stop dynamic rollover from developing." | Dynamic rollover |
-| 11-14–11-15 | "Helicopters rely on positive G to provide much or all of their response to pilot control inputs"; "the hub contacting the rotor mast, which is known as mast bumping"; "Recover from a low-G situation by first gently applying aft cyclic to restore normal G before attempting to correct any roll." | Low G and mast bumping |
-
-Not sourced in the extracts: that mast bumping is a hazard of two-bladed
-teetering (semirigid) rotors, and that a helicopter's never-exceed speed falls
-with altitude and weight. Both are standard helicopter knowledge stated
-without a citation.
+Moved to `docs/reviews/rotor-wing-evidence.md` with the rotor-wing material.
 
 ## PHAK (FAA-H-8083-25C), supplementary
 
@@ -286,11 +257,6 @@ Standard flight mechanics, not taken from the handbooks:
   Dp = Di, L/Dmax = 1/(2√(k·CD0)). Matches PHAK pp. 5-5–5-8 qualitatively
   (parasite ∝ V², induced ∝ 1/V², minimum total drag at L/Dmax).
 - **Steady climb (Figure 1).** T = D + W sin γ, L = W cos γ; PHAK pp. 5-23–5-24.
-- **Rotor (Figure 10).** Ω = rpm·2π/60; tip speed Ω·R; blade airspeed at 90°
-  and 270° azimuth Ω·r ± V; advance ratio μ = V/(Ω·R); reverse flow inboard of
-  r = V/Ω on the retreating side; tip lift ratio (advancing/retreating)², from
-  lift ∝ V² (FM 3-04.203 ¶1-29). Invented rotor 27 ft, 260 rpm: tip 435.55 kt;
-  at 120 kt, 555.55 / 315.55 kt, μ 0.2755, reverse flow 7.44 ft, ratio 3.10.
 - **V-n stall boundary (Figure 8).** n_max = (V/Vs)², corner speed (VA) =
   Vs√n_limit. The limit load factor is a user setting (default 7.5, stated as
   an example). The figure is in true airspeed at sea level; the page says the

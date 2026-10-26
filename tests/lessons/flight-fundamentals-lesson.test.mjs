@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
-  EXAMPLE, ROTOR, alphaFor, clMaxOf, dragPolar, energyHeight, levelTurn, lift, liftCoefficient, loadFactor,
-  maneuveringSpeed, maxLoadFactor, requiredCl, rotorSpeeds, speedAt, stabilityResponse, stallSpeed, stallSpeedAt, steadyPath,
+  EXAMPLE, alphaFor, clMaxOf, dragPolar, energyHeight, levelTurn, lift, liftCoefficient, loadFactor,
+  maneuveringSpeed, maxLoadFactor, requiredCl, speedAt, stabilityResponse, stallSpeed, stallSpeedAt, steadyPath,
 } from '../../src/lessons/flight-fundamentals/lesson-model.mjs';
 
 // Expected values are derived by hand, not by calling the model.
@@ -120,23 +120,4 @@ test('stability responses', () => {
   assert(Math.abs(stabilityResponse({ kind: 'dynamic-positive', t: 8 })) < 0.2);
   assert(Math.abs(stabilityResponse({ kind: 'dynamic-negative', t: 8 })) > 2);
   assert.equal(stabilityResponse({ kind: 'x', t: 1 }), null);
-});
-
-test('rotor speeds: tip speed, dissymmetry and reverse flow', () => {
-  // 260 rpm = 27.227 rad/s; × 27 ft = 735.1 ft/s = 435.55 kt.
-  assert.deepEqual(ROTOR, { radius: 27, rpm: 260 });
-  const hover = rotorSpeeds({ speed: 0 });
-  near(hover.tip, 435.55, 0.01, 'tip speed');
-  near(hover.tipLiftRatio, 1, 1e-12, 'hover: even lift');
-  near(hover.reverseRadius, 0, 1e-12, 'hover: no reverse flow');
-  const s = rotorSpeeds({ speed: 120 });
-  near(s.advancing, 555.55, 0.01, 'advancing tip');
-  near(s.retreating, 315.55, 0.01, 'retreating tip');
-  near(s.mu, 0.2755, 0.0001, 'advance ratio 120 / 435.55');
-  near(s.reverseRadius, 7.44, 0.01, 'reverse flow radius 202.5 ft/s / 27.23 rad/s');
-  near(s.tipLiftRatio, 3.10, 0.01, '(555.55 / 315.55)²');
-  const past = rotorSpeeds({ speed: 500 });
-  assert.equal(past.tipLiftRatio, null);
-  assert.equal(past.reverseRadius, 27);
-  assert.equal(rotorSpeeds({ speed: -1 }), null);
 });

@@ -2,7 +2,7 @@
 import EntryCard from "../../components/EntryCard.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { manualSubjects } from "../../data/catalogue";
-import { subjectEntries } from "../../data/availability";
+import { subjectEntries, subjectGroups } from "../../data/availability";
 import { sitePath } from "../../lib/paths";
 
 export function getStaticPaths() {
@@ -14,6 +14,7 @@ export function getStaticPaths() {
 
 const { subject } = Astro.props;
 const entries = subjectEntries(subject.slug);
+const groups = subjectGroups(subject.slug);
 ---
 
 <SiteLayout
@@ -27,6 +28,11 @@ const entries = subjectEntries(subject.slug);
   ]}
 >
   {entries.length > 0
-    ? entries.map((entry) => <EntryCard entry={entry} />)
+    ? groups.map((group) => group.title
+      ? <section class="subject-group" aria-labelledby={`group-${group.title.toLowerCase().replace(/\W+/g, '-')}`}>
+          <h2 id={`group-${group.title.toLowerCase().replace(/\W+/g, '-')}`}>{group.title}</h2>
+          {group.entries.map((entry) => <EntryCard entry={entry} headingLevel={3} />)}
+        </section>
+      : group.entries.map((entry) => <EntryCard entry={entry} />))
     : <p class="empty-note">No {subject.title.toLowerCase()} modules are published yet. Subjects with modules are linked in the subject list, or see <a href={sitePath("manual/")}>everything in the Manual</a>.</p>}
 </SiteLayout>
