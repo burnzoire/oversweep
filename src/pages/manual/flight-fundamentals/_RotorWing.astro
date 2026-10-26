@@ -2,6 +2,7 @@
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import GlossaryList from '../../../components/GlossaryList.astro';
 import { getModule } from '../../../data/modules';
+import { includedExperiences, experienceRoute } from '../../../data/experiences';
 import { sitePath } from '../../../lib/paths';
 import Term from '../../../components/Term.astro';
 const mod = getModule('rotor-wing');
@@ -23,6 +24,8 @@ const n = cite(1), h = cite(3);
 const fm = (paras: string) => `[2, ${paras.includes(',') || paras.includes('–') ? '¶¶' : '¶'} ${paras}]`;
 const fixed = sitePath('manual/flight-fundamentals/principles-of-flight/');
 const airfield = sitePath('manual/airfield-operations/airfield-basics/');
+const autorotationPractice = includedExperiences.find((e) => e.slug === 'autorotation');
+const practice = autorotationPractice && sitePath(experienceRoute(autorotationPractice));
 ---
 <SiteLayout title={mod.title} activeSection="manual" activeSubject="flight-fundamentals" compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Flight Fundamentals',href:sitePath('manual/flight-fundamentals/')},{label:mod.title}]}>
@@ -197,6 +200,7 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
  <p>Near the ground the pilot flares with aft cyclic to slow down, which also raises the rpm, and the collective keeps rpm in limits. <a href="#source-hfh">{h('2-26')}</a> The last cushion comes from the energy stored in the spinning rotor: raising the collective converts it into a brief burst of lift. <a href="#source-navweps">{n('408–409')}</a> <a href="#source-hfh">{h('11-2')}</a> A rotor with little stored energy loses rpm fast after the failure, which leaves the pilot less time to lower the collective. <a href="#source-navweps">{n('408')}</a></p>
  <h3>The height–velocity diagram</h3>
  <p>Some combinations of height and airspeed leave too little time, height or speed to enter a steady autorotation. The flight manual's <Term id="Height/velocity diagram">height–velocity diagram</Term> shades them. Low and slow, high above a survivable drop but well below autorotation speed, there is not enough height to accelerate; the 1965 Navy text put the minimum at about 300 feet for most small helicopters and 500 to 600 feet for larger ones. Fast and close to the ground, there is too little time to flare before hitting the ground or striking the tail. <a href="#source-hfh">{h('7-2–7-3')}</a> <a href="#source-navweps">{n('409')}</a> The diagram applies only within its gross weight and density altitude, and multiengine helicopters that can fly on one engine do not show the fast, low area. <a href="#source-hfh">{h('7-3–7-4')}</a> The usual safe takeoff stays out of the shaded areas by accelerating close to the ground and climbing as speed approaches a safe autorotation speed. <a href="#source-hfh">{h('7-3')}</a></p>
+ {practice && <p>The entry, descent, flare and touchdown are taken step by step in <a href={practice}>Autorotation Practice</a>, which ends in a standalone engine failure exercise.</p>}
 
  <h2 id="terms">Terms</h2>
  <GlossaryList items={[
