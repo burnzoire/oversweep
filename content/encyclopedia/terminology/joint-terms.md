@@ -155,6 +155,47 @@ terms:
     definition: "1. An Air Force unit composed normally of one primary mission group and the necessary supporting organizations. 2. A fleet air wing is the basic organizational and administrative unit for naval-, land-, and tender-based aviation. 3. A balanced Marine Corps task organization of aircraft groups and squadrons, together with appropriate command, air control, administrative, service, and maintenance units."
     note: "The Air Force, Navy and Marine Corps each mean a different organization by a wing. The dictionary's fourth meaning is a flank unit of a ground force. [1]"
     cite: [{ n: 1, page: "259" }]
+  - term: Air assault
+    definition: The movement of friendly assault forces by rotary-wing aircraft to engage and destroy enemy forces or to seize and hold key terrain.
+    cite: [{ n: 1, page: "5" }]
+  - term: Air defense
+    definition: Defensive measures designed to destroy attacking enemy aircraft or missiles in the atmosphere, or to nullify or reduce the effectiveness of such attack.
+    cite: [{ n: 1, page: "6" }]
+  - term: ADA
+    expansion: Air defense artillery
+    definition: Weapons and equipment for actively combating air targets from the ground.
+    cite: [{ n: 1, page: "6" }]
+  - term: Counterair
+    definition: A mission that integrates offensive and defensive operations to attain and maintain a desired degree of air superiority and protection by neutralizing or destroying enemy aircraft and missiles, both before and after launch.
+    note: "It is made up of offensive counterair (OCA) and defensive counterair (DCA). [1]"
+    cite: [{ n: 1, page: "51" }]
+  - term: EA
+    expansion: Electronic attack
+    definition: Division of electronic warfare involving the use of electromagnetic energy, directed energy, or antiradiation weapons to attack personnel, facilities, or equipment with the intent of degrading, neutralizing, or destroying enemy combat capability.
+    cite: [{ n: 1, page: "75" }]
+  - term: Early warning
+    definition: Early notification of the launch or approach of unknown weapons or weapons carriers.
+    note: "The dictionary also abbreviates it EW, the abbreviation of electronic warfare. [1]"
+    cite: [{ n: 1, page: "73" }]
+  - term: Electromagnetic jamming
+    definition: "The deliberate radiation, reradiation, or reflection of electromagnetic energy for the purpose of preventing or reducing an enemy's effective use of the electromagnetic spectrum, and with the intent of degrading or neutralizing the enemy's combat capability."
+    cite: [{ n: 1, page: "74" }]
+  - term: Fighter escort
+    definition: An offensive counterair operation providing dedicated protection sorties by air-to-air capable fighters in support of other offensive air and air support missions over enemy territory, or in a defensive counterair role to protect high value airborne assets.
+    cite: [{ n: 1, page: "85" }]
+  - term: Fighter sweep
+    definition: An offensive mission by fighter aircraft to seek out and destroy enemy aircraft or targets of opportunity in a designated area.
+    cite: [{ n: 1, page: "86" }]
+  - term: Reconnaissance
+    definition: A mission undertaken to obtain, by visual observation or other detection methods, information about the activities and resources of an enemy or adversary, or to secure data concerning the meteorological, hydrographic, or geographic characteristics of a particular area.
+    cite: [{ n: 1, page: "198" }]
+  - term: STOL
+    expansion: Short takeoff and landing
+    definition: The ability of an aircraft to clear a 50-foot (15 meters) obstacle within 1,500 feet (450 meters) of commencing takeoff or in landing, to stop within 1,500 feet (450 meters) after passing over a 50-foot (15 meters) obstacle.
+    cite: [{ n: 1, page: "217" }]
+  - term: Strike
+    definition: An attack to damage or destroy an objective or a capability.
+    cite: [{ n: 1, page: "227" }]
 sources:
   - n: 1
     title: "JP 1-02, Department of Defense Dictionary of Military and Associated Terms"
@@ -162,7 +203,7 @@ sources:
     date: "8 November 2010, as amended through 15 January 2016"
     url: "https://schoolresources.militaryfamilies.psu.edu/wp-content/uploads/2017/08/department_of_defense_dictionary_of_military_and_associated_terms.pdf"
     accessed: "2026-10-26"
-    note: "Copy hosted by Penn State's Clearinghouse for Military Family Readiness. Preface p. i; terms by printed page. Later editions, published as the DOD Dictionary of Military and Associated Terms, may word some entries differently."
+    note: "Copy hosted by Penn State's Clearinghouse for Military Family Readiness. Preface p. i; terms by printed page, pp. 5 to 229. Later editions, published as the DOD Dictionary of Military and Associated Terms, may word some entries differently."
   - n: 2
     title: "ATP 1-02.1 / MCRP 3-30B.1 / NTTP 6-02.1 / AFTTP 3-2.5, Brevity: Multi-Service Tactics, Techniques, and Procedures for Multi-Service Brevity Codes"
     publisher: "Air Land Sea Application Center for the US Army, Marine Corps, Navy and Air Force"
@@ -183,5 +224,7 @@ sources:
 These are the joint terms and abbreviations a military pilot meets in briefings, tasking and doctrine. The definitions come from the Department of Defense dictionary, which sets the standard terminology for every service and for joint operations, so the Army, Marine Corps, Navy and Air Force share them. [[1]](#source-1)
 
 A few words mean different things to different services, and the dictionary says so. A **flight** is the Air Force's basic tactical unit of four or more aircraft, but to the Navy and Marine Corps any group of aircraft on a common mission. A **wing** is a different organization in each of the Air Force, Navy and Marine Corps. Those differences are shown in each word's note. [[1]](#source-1)
+
+The set also gives the dictionary's words for the missions aircraft fly, from strike, reconnaissance and air assault to counterair, fighter sweeps and escorts, and for the air defenses they face and the electronic attack used against them. [[1]](#source-1) Chaff, decoys and guided weapons are in the weapons terms.
 
 Two flying terms that mean the same to civil and military pilots, angle of attack and head-up display, are defined from the FAA's handbook. [[3]](#source-3) The dictionary quoted is the 2016 amendment of JP 1-02. Later editions may word some entries differently, so check the current DOD Dictionary for a term's latest wording. [[1]](#source-1)

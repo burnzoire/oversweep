@@ -10,7 +10,7 @@ crew: "1 (SK 37 trainer: 2) [1] [2]"
 firstFlight: "8 February 1967 [1]"
 inService: "21 June 1971 (AJ 37) [1]; AJS 37 upgrade announced in May 1991 [1]"
 status: "Retired; the last Viggens (SK 37E) left Swedish service on 26 June 2007. 329 built [1] [2]"
-powerplant: "One Volvo RM8 afterburning turbofan with thrust reverser; RM8B (JA 37) 125 kN (28,100 lbf) with afterburner [1]"
+powerplant: "One Volvo RM8 [afterburning](term:afterburner) turbofan with thrust reverser; RM8B (JA 37) 125 kN (28,100 lbf) with [afterburner](term:afterburner) [1]"
 maxSpeed: "Mach 2.1, 2,231 km/h (1,205 kt) at 36,100 ft (JA 37) [1]"
 ceiling: "18,000 m (59,000 ft) (JA 37) [1]"
 range: "Ferry range 1,820 km (983 NM) on internal fuel (JA 37) [1]"
@@ -54,9 +54,9 @@ sources:
 
 ## An air force that hides on roads
 
-Neutral Sweden planned to survive a Soviet attack by scattering its air force. Under the Bas 60 system of the late 1950s, and its successor Bas 90, aircraft would disperse in wartime across many bases, including stretches of ordinary road used as runways, some only 800 m long. Damaged runways would have to be used too. [[1]](#source-1) The aircraft that replaced the Lansen attack jet and the Draken fighter therefore had to be supersonic at low level, reach Mach 2 at height, land short without flaring, stop hard, steer accurately on icy roads in a crosswind, and be easy to repair by mechanics with little training. [[1]](#source-1) Saab studied more than 100 layouts before settling on the design. [[1]](#source-1)
+Neutral Sweden planned to survive a Soviet attack by scattering its air force. Under the Bas 60 system of the late 1950s, and its successor Bas 90, aircraft would disperse in wartime across many bases, including stretches of ordinary road used as runways, some only 800 m long. Damaged runways would have to be used too. [[1]](#source-1) The aircraft that replaced the Lansen attack jet and the Draken fighter therefore had to be [supersonic](term:supersonic) at low level, reach [Mach](term:mach-number) 2 at height, land short without flaring, stop hard, steer accurately on icy roads in a crosswind, and be easy to repair by mechanics with little training. [[1]](#source-1) Saab studied more than 100 layouts before settling on the design. [[1]](#source-1)
 
-The answer was a delta wing with a fixed foreplane, carrying flaps, ahead of and above it. [[2]](#source-2) The engine, the Volvo RM8, was a heavily reworked licence-built version of the Pratt & Whitney JT8D airliner engine, with a Swedish afterburner. It was the second operational afterburning turbofan and the first fitted with a thrust reverser. The reverser could be selected in the air and fired automatically when the nose wheel touched down, and together with the wing it let the Viggen operate from 500 m strips with minimal support. [[1]](#source-1) The first of seven prototypes flew on 8 February 1967. [[1]](#source-1)
+The answer was a delta wing with a fixed foreplane, carrying flaps, ahead of and above it. [[2]](#source-2) The engine, the Volvo RM8, was a heavily reworked licence-built version of the Pratt & Whitney JT8D airliner engine, with a Swedish [afterburner](term:afterburner). It was the second operational [afterburning](term:afterburner) turbofan and the first fitted with a thrust reverser. The reverser could be selected in the air and fired automatically when the nose wheel touched down, and together with the wing it let the Viggen operate from 500 m strips with minimal support. [[1]](#source-1) The first of seven prototypes flew on 8 February 1967. [[1]](#source-1)
 
 Five conscripts and one chief mechanic could look after a Viggen, and refuelling and rearming took less than ten minutes. [[1]](#source-1) Low over Sweden, its most persistent enemy was birds, and the air force paid close attention to their migration routes. [[1]](#source-1)
 
@@ -68,6 +68,6 @@ In May 1991 Sweden announced an upgrade of AJ 37, SF 37 and SH 37 aircraft to a 
 
 ## Locking on to the Blackbird
 
-The Viggen never went to war, but its pilots did something no one else is acknowledged to have done. In the mid-1980s US SR-71 Blackbirds flew routine, predictable routes over the Baltic, and Swedish JA 37 pilots achieved radar lock on them many times, despite heavy jamming, by feeding their fire-control computers with positions from ground radar. The favourite spot was the narrow strip of international airspace between the islands of Öland and Gotland that the SR-71 used on its way home. [[1]](#source-1)
+The Viggen never went to war, but its pilots did something no one else is acknowledged to have done. In the mid-1980s US SR-71 Blackbirds flew routine, predictable routes over the Baltic, and Swedish JA 37 pilots achieved radar lock on them many times, despite heavy [jamming](term:electromagnetic-jamming), by feeding their fire-control computers with positions from ground radar. The favourite spot was the narrow strip of international airspace between the islands of Öland and Gotland that the SR-71 used on its way home. [[1]](#source-1)
 
-The JAS 39 Gripen replaced the Viggen from the mid-1990s. The last front-line Viggen was retired on 25 November 2005, and a few kept flying for electronic warfare training until June 2007. [[1]](#source-1)
+The JAS 39 Gripen replaced the Viggen from the mid-1990s. The last front-line Viggen was retired on 25 November 2005, and a few kept flying for [electronic warfare](term:ew) training until June 2007. [[1]](#source-1)

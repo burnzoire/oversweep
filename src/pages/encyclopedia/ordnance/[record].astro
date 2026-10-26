@@ -1,4 +1,5 @@
 ---
+import LinkedText from '../../../components/LinkedText.astro';
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import Cited from '../../../components/encyclopedia/Cited.astro';
 import PhotoFigure from '../../../components/encyclopedia/PhotoFigure.astro';
@@ -55,7 +56,7 @@ const plate: [string, string | undefined][] = [
       </dl>
     </section>
 
-    <div class="record-body"><Content /></div>
+    <div class="record-body"><LinkedText><Content /></LinkedText></div>
     {morePhotos.length > 0 && <div class="photo-grid">{morePhotos.map((photo) => <PhotoFigure photo={photo} />)}</div>}
 
     <section class="sources" aria-labelledby="sources-title">

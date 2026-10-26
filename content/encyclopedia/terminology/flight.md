@@ -137,6 +137,27 @@ terms:
   - term: Vortex ring state
     definition: "Also called settling with power: a vertical or nearly vertical descent of at least 300 feet per minute, with the rotor using some engine power and horizontal speed below ETL, in which the rotor settles into its own downwash. Adding power makes it worse."
     cite: [{ n: 7, page: "11-10" }]
+  - term: Afterburner
+    definition: An additional combustion area aft of the turbine section of a turbojet, with fuel nozzles and flameholders, that burns fuel in the engine's large excess of air. It adds only 10 to 20 percent to the engine's weight but 40 to 60 percent to its static sea-level thrust, at least doubling its specific fuel consumption, so its use is limited to short periods.
+    note: "The engine needs a variable exhaust nozzle that opens as the afterburner lights. The afterburner is most common on interceptor, fighter and other high-speed aircraft. [1]"
+    cite: [{ n: 1, page: "129–131" }]
+  - term: Mach number
+    form: "(M)"
+    definition: The ratio of the true airspeed to the speed of sound. All compressibility effects depend on it.
+    note: "The speed of sound at standard sea level is 661 knots, and it falls with temperature. [1]"
+    cite: [{ n: 1, page: "202" }]
+  - term: Subsonic
+    definition: "The regime of flight below about Mach 0.75, in which the airflow on all parts of the aircraft is most likely subsonic."
+    cite: [{ n: 1, page: "204" }]
+  - term: Supersonic
+    definition: "The regime of flight from about Mach 1.20 to 5.00, with definite supersonic flow on all parts of the aircraft. Above Mach 5.00 is hypersonic."
+    cite: [{ n: 1, page: "204" }]
+  - term: Transonic
+    definition: "The regime of flight from about Mach 0.75 to 1.20, in which the flow over the aircraft is likely to be partly subsonic and partly supersonic."
+    cite: [{ n: 1, page: "204" }]
+  - term: Turboprop
+    definition: A gas turbine that drives a propeller through extra turbine stages, which extract most of the exhaust gas energy as shaft power. Working on a much greater mass flow, it is more efficient than the turbojet in subsonic flight; jet thrust gives only 15 to 25 percent of its total thrust.
+    cite: [{ n: 1, page: "131" }]
 sources:
   - n: 1
     title: "NAVWEPS 00-80T-80, Aerodynamics for Naval Aviators"
@@ -190,4 +211,4 @@ sources:
 
 These are the words of how aircraft fly: the wing and angle of attack, drag, control, turns and energy, and the rotor. Military training texts come first, from the Navy's aerodynamics books and its T-45 fighter syllabus to the Army's fundamentals of flight for helicopter crews. [[1]](#source-1) [[2]](#source-2) [[3]](#source-3) [[4]](#source-4)
 
-The FAA's handbooks describe the same physics for civil pilots and are cited where they state a point more directly, above all for helicopter hazards. [[5]](#source-5) [[6]](#source-6) [[7]](#source-7) Angle of attack itself is in the joint terms.
+The FAA's handbooks describe the same physics for civil pilots and are cited where they state a point more directly, above all for helicopter hazards. [[5]](#source-5) [[6]](#source-6) [[7]](#source-7) Angle of attack itself is in the joint terms. The Navy's aerodynamics book also gives the words of speed and the jet engine: Mach number, the regimes of flight, the afterburner and the turboprop. [[1]](#source-1)

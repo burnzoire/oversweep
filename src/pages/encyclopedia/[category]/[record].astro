@@ -1,4 +1,5 @@
 ---
+import LinkedText from '../../../components/LinkedText.astro';
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import EnvelopeFigure from '../../../components/encyclopedia/EnvelopeFigure.astro';
 import RwrFigure from '../../../components/encyclopedia/RwrFigure.astro';
@@ -66,7 +67,7 @@ const alt = span(e.minAltM === null ? null : `${n(e.minAltM)} m (${n(ft(e.minAlt
       <p class="fig-caption"><Cited text={e.basis} /> The shaded region combines the published minimum and maximum range, treated as slant range from the launcher, with the minimum and maximum altitude. Real launch zones are smaller and change with target speed, aspect and altitude. Dashed edges mark limits the cited sources do not give. Other single-digit SAMs are drawn faintly for comparison, labelled by SA number. Each scale prints its vertical exaggeration.</p>
     </EnvelopeFigure>
 
-    <div class="record-body"><Content /></div>
+    <div class="record-body"><LinkedText><Content /></LinkedText></div>
 
     <RwrFigure symbols={data.rwr} name={data.nato} cite={rwrSource ? `[${rwrSource.n}]` : ''}>
       <Fragment slot="none"><Cited text={data.rwrNote} /></Fragment>

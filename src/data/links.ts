@@ -75,3 +75,41 @@ export function recordTarget(ref: string): LinkTarget | undefined {
   if (!includedRecords.includes(r)) return undefined;
   return { href: sitePath(recordRoute(r)), title: r.title, kind: categoryNames[r.category] ?? r.category, lines: [{ text: previewText(r.summary) }], more: 0 };
 }
+
+const escapeHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+// The link and preview markup for one mention, shared by <Term> and by
+// encyclopedia text, so both render alike. `inner` is the mention's HTML.
+let tips = 0;
+export function termMarkup(target: LinkTarget, inner: string) {
+  const id = `tip-${++tips}`;
+  const lines = target.lines.map((l) => `<span class="term-tip-line">${l.label ? `<span class="term-tip-label">${escapeHtml(l.label)}: </span>` : ''}${escapeHtml(l.text)}</span>`).join('');
+  const more = target.more > 0 ? `<span class="term-tip-more">${target.more} more ${target.more === 1 ? 'meaning' : 'meanings'} in the glossary</span>` : '';
+  return `<span class="term-ref"><a class="term-link" href="${escapeHtml(target.href)}" aria-describedby="${id}">${inner}</a><span class="term-tip" role="tooltip" id="${id}"><span class="term-tip-head"><strong>${escapeHtml(target.title)}</strong> <span class="term-tip-kind">${escapeHtml(target.kind)}</span></span>${lines}${more}</span></span>`;
+}
+
+// Encyclopedia text is markdown, so it marks a link with a pseudo-URL:
+//   [bingo](term:)            glossary word, taken from the text
+//   [final bearing](term:final-bearing)
+//   [F-14](record:f-14)       aircraft, ordnance or threat system
+// Each becomes the same link and preview as <Term>. A record left out of the
+// build becomes plain text; an unknown word or record fails the build.
+export function linkMarkdown(html: string) {
+  return html.replace(/<a href="(term|record):([^"]*)">([\s\S]*?)<\/a>/g, (_, kind: string, ref: string, inner: string) => {
+    const text = inner.replace(/<[^>]+>/g, '').trim();
+    const word = decodeURIComponent(ref) || text;
+    if (kind === 'record') {
+      const target = recordTarget(word);
+      return target ? termMarkup(target, inner) : inner;
+    }
+    const target = termTarget(word);
+    if (!target) throw new Error(`Encyclopedia text: no glossary entry for "${word}"`);
+    return termMarkup(target, inner);
+  });
+}
+
+// One term: or record: link written in a record's data field, such as an
+// aircraft's armament, as plain text in; markup out.
+export function linkText(label: string, kind: string, ref: string) {
+  return linkMarkdown(`<a href="${kind}:${ref}">${escapeHtml(label)}</a>`);
+}

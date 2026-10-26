@@ -57,11 +57,11 @@ The 2K11 Krug, NATO reporting name **SA-4 Ganef** (after a Yiddish word), is a S
 
 Each 2P24 launcher is a tracked vehicle on the GM-123 chassis carrying two missiles on a turntable that rotates through 360° and elevates to 70°. [[1]](#source-1) A SAM battalion has three batteries plus a command battery; a regiment has two battalions and a brigade three. [[1]](#source-1)
 
-The 1S32 fire-control and guidance radar is an H-band continuous-wave radar with a range of 128 km. Early warning comes from the E-band P-40 **Long Track** (175 km), which passes target data to the Krug by radio datalink, and height finding from the E-band PRV-9 **Thin Skin** (240 km). [[1]](#source-1)
+The 1S32 fire-control and guidance radar is an H-band continuous-wave radar with a range of 128 km. [Early warning](term:early-warning) comes from the E-band P-40 **Long Track** (175 km), which passes target data to the Krug by radio datalink, and height finding from the E-band PRV-9 **Thin Skin** (240 km). [[1]](#source-1)
 
 ## How it engages
 
-Solid-fuel boosters launch the missile, and a liquid-fuelled ramjet sustainer then takes over, for speeds up to Mach 4. It carries a 135 kg (300 lb) fragmentation warhead. The effective range is 50–55 km (27–30 NM), depending on version, and possible engagement altitudes run from 100 m to 27 km (330 to 88,600 ft). [[1]](#source-1) Optical tracking can be used for guidance in heavy electronic countermeasures (ECM), and in its three-point mode the Krug can home on a jamming target. [[1]](#source-1)
+Solid-fuel boosters launch the missile, and a liquid-fuelled ramjet sustainer then takes over, for speeds up to [Mach](term:mach-number) 4. It carries a 135 kg (300 lb) fragmentation warhead. The effective range is 50–55 km (27–30 NM), depending on version, and possible engagement altitudes run from 100 m to 27 km (330 to 88,600 ft). [[1]](#source-1) Optical tracking can be used for guidance in heavy electronic countermeasures (ECM), and in its three-point mode the Krug can home on a [jamming](term:electromagnetic-jamming) target. [[1]](#source-1)
 
 **Unverified here:** that the missile is radio-command guided with semi-active radar homing at the end, illuminated by the 1S32, and that NATO calls the 1S32 **Pat Hand**. Both are widely published, but neither is stated in the source text reviewed for this revision.
 

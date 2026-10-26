@@ -12,7 +12,7 @@ guidance: "The bomb falls unguided; each Skeet searches for vehicles with infrar
 fuzing: "A Skeet that finds no target self-destructs about 50 ft above the ground, with a back-up timer, for an unexploded-ordnance rate below 1 per cent [1]"
 delivery: "From 200 to 20,000 ft above ground level at 250 to 650 kt [1]"
 carriers:
-  - "US Air Force: A-10, F-15E, F-16, B-1B, B-52H, F-111 [1]"
+  - "US Air Force: [A-10](record:a-10), [F-15E](record:f-15e), [F-16](record:f-16), B-1B, B-52H, F-111 [1]"
   - "Indian Air Force SEPECAT Jaguar (CBU-105) [1]"
 variants:
   - "CBU-105: CBU-97 with the Wind Corrected Munitions Dispenser tail kit [1]"
