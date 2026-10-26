@@ -1,0 +1,71 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import Cited from '../../../components/encyclopedia/Cited.astro';
+import PhotoFigure from '../../../components/encyclopedia/PhotoFigure.astro';
+import { categoryRecords, ordnanceContent, ordnanceGroups, recordRoute, type EncyclopediaRecord } from '../../../data/encyclopedia';
+import { categoryTitle } from '../../../data/availability';
+import { sitePath } from '../../../lib/paths';
+import '../../../styles/encyclopedia.css';
+
+export function getStaticPaths() {
+  return categoryRecords('ordnance').map((record) => ({ params: { record: record.slug }, props: { record } }));
+}
+
+const { record } = Astro.props as { record: EncyclopediaRecord };
+const { frontmatter: data, Content } = ordnanceContent(record);
+const category = categoryTitle(record.category);
+const group = ordnanceGroups.find((g) => g.slug === data.group)!;
+// The record nav lists the weapons of the same group, so it stays short.
+const siblings = categoryRecords('ordnance').filter((r) => ordnanceContent(r).frontmatter.group === data.group);
+const [leadPhoto, ...morePhotos] = data.photos;
+const label = (r: EncyclopediaRecord) => ordnanceContent(r).frontmatter.short ?? r.title;
+const plate: [string, string | undefined][] = [
+  ['Type', data.type],
+  ['Origin', data.origin],
+  ['In service', data.inService],
+  ['Weight', data.weight],
+  ['Dimensions', data.dimensions],
+  ['Warhead or payload', data.warhead],
+  ['Guidance', data.guidance],
+  ['Fuzing', data.fuzing],
+  ['Delivery', data.delivery],
+  ['Range', data.range],
+];
+---
+<SiteLayout title={record.title} activeSection="encyclopedia"
+  description={`${record.title} (${record.designation}): ${record.summary}`}
+  breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: category, href: sitePath('encyclopedia/ordnance/') }, { label: record.title }]}>
+  <div class="ency ordnance">
+    <nav class="record-nav" aria-label={`${group.title} records`}>
+      <ol>{siblings.map((r) => <li>{r.slug === record.slug ? <span aria-current="page">{label(r)}</span> : <a href={sitePath(recordRoute(r))}>{label(r)}</a>}</li>)}</ol>
+    </nav>
+    {leadPhoto && <PhotoFigure photo={leadPhoto} lead />}
+    <section class="status-panel" data-record-id={record.id} data-record-revision={record.revision}>
+      <h2>{record.maturity}</h2>
+      <p>Record revision {record.revision} · {record.summary}</p>
+      <p>Real-world weapon as described in public sources. Weights and dimensions change with the fins, fuzes and variant fitted; the data plate names the variants its figures describe, and differences are noted beside the number they affect. The record describes the weapon; it is not a guide to employing it.</p>
+    </section>
+
+    <section class="data-plate" aria-labelledby="plate-title">
+      <h2 id="plate-title">{data.name} · {record.designation}</h2>
+      <dl>
+        {plate.filter(([, text]) => text).map(([term, text]) => <div><dt>{term}</dt><dd><Cited text={text} /></dd></div>)}
+        <div><dt>Carried by</dt><dd><ul>{data.carriers.map((c) => <li><Cited text={c} /></li>)}</ul></dd></div>
+        {data.variants && <div><dt>Variants</dt><dd><ul>{data.variants.map((v) => <li><Cited text={v} /></li>)}</ul></dd></div>}
+      </dl>
+    </section>
+
+    <div class="record-body"><Content /></div>
+    {morePhotos.length > 0 && <div class="photo-grid">{morePhotos.map((photo) => <PhotoFigure photo={photo} />)}</div>}
+
+    <section class="sources" aria-labelledby="sources-title">
+      <h2 id="sources-title">Sources</h2>
+      <ol>
+        {data.sources.map((s) => (
+          <li id={`source-${s.n}`} value={s.n}><cite>{s.title}</cite>. {s.publisher}{s.date && `, ${s.date}`}. <a href={s.url}>{s.url}</a> (accessed {s.accessed}).{s.note && ` ${s.note}`}</li>
+        ))}
+      </ol>
+      <p class="note">Wikipedia articles are secondary sources and can change; they are cited with the date they were read. NAVEDTRA training manuals and budget justification exhibits are official US publications, but each describes the weapons in service when it was written.</p>
+    </section>
+  </div>
+</SiteLayout>

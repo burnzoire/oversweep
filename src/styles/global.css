@@ -484,6 +484,11 @@ h2 {
   margin-bottom: 0;
 }
 
+.entry-card > .entry-thumb.contain {
+  object-fit: contain;
+  background: #fff;
+}
+
 .entry-card > .entry-thumb {
   display: block;
   width: calc(100% + 2.5rem);

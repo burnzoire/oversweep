@@ -94,6 +94,9 @@ export interface Photo {
   licenceUrl?: string;
   sourceUrl: string;
   accessed: string;
+  // 'contain' shows the whole picture instead of cropping it to the frame,
+  // for long, thin subjects such as a bomb photographed side on.
+  fit?: 'contain';
 }
 
 // Aircraft records: the data plate gives cited text for the variant named in
@@ -129,6 +132,44 @@ export const aircraftGroups = [
   { slug: 'helicopter', title: 'Helicopters' },
 ] as const;
 
+// Groups on the ordnance list, in display order. Groups without records are
+// not shown, so later ordnance batches only add records.
+export const ordnanceGroups = [
+  { slug: 'air-to-air', title: 'Air-to-air missiles' },
+  { slug: 'guided-air-to-ground', title: 'Guided air-to-ground weapons' },
+  { slug: 'gun', title: 'Aircraft guns' },
+  { slug: 'bomb', title: 'General-purpose bombs' },
+  { slug: 'cluster', title: 'Cluster bombs' },
+  { slug: 'fire-practice', title: 'Fire bombs and practice bombs' },
+  { slug: 'rocket', title: 'Rockets' },
+] as const;
+
+// Ordnance records: the data plate gives cited text for the weapon and the
+// variants it names; `quick` holds the comparison table's columns: weight in
+// kilograms and the year or decade the weapon entered service.
+export interface OrdnanceData {
+  group: (typeof ordnanceGroups)[number]['slug'];
+  // Short label for the record nav when the title's first word is not enough.
+  short?: string;
+  name: string;
+  type: string;
+  origin: string;
+  inService: string;
+  weight: string;
+  dimensions: string;
+  warhead: string;
+  guidance: string;
+  fuzing: string;
+  delivery: string;
+  range?: string;
+  carriers: string[];
+  variants?: string[];
+  // The first photo leads the page; the others follow the record text.
+  photos: Photo[];
+  quick: { introduced: string | null; weightKg: number | null };
+  sources: Source[];
+}
+
 // Eras for the aircraft list filter, in display order, set by `era` on each
 // aircraft registry entry. Early jets are the first jet generation, retired
 // from front-line service.
@@ -155,6 +196,7 @@ function contentFile(r: EncyclopediaRecord) {
 
 export const recordContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile;
 export const aircraftContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AircraftData>;
+export const ordnanceContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<OrdnanceData>;
 
 export function getRecord(category: string, slug: string): EncyclopediaRecord {
   const found = records.find(r => r.category === category && r.slug === slug);

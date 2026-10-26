@@ -2,9 +2,11 @@
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import RecordCard from "../../components/encyclopedia/RecordCard.astro";
 import EnvelopeFigure from "../../components/encyclopedia/EnvelopeFigure.astro";
+import DeliveryFigure from "../../components/encyclopedia/DeliveryFigure.astro";
+import Cited from "../../components/encyclopedia/Cited.astro";
 import { encyclopediaCategories } from "../../data/catalogue";
 import { sectionHasContent } from "../../data/availability";
-import { aircraftContent, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, recordContent, recordRoute } from "../../data/encyclopedia";
+import { aircraftContent, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, recordRoute, type Source } from "../../data/encyclopedia";
 import { sitePath } from "../../lib/paths";
 import "../../styles/encyclopedia.css";
 
@@ -32,6 +34,21 @@ const aircraft = aircraftGroups
   .filter(({ records }) => records.length > 0);
 const eraCounts = aircraftEras.map((era) => ({ era, count: aircraftRecords.filter((r) => r.era === era.slug).length })).filter(({ count }) => count > 0);
 const n = (value: number) => value.toLocaleString("en-GB");
+// Ordnance is listed by group (bombs, cluster bombs, rockets and so on).
+const ordnanceRecords = category.slug === "ordnance"
+  ? categoryRecords("ordnance").map((record) => ({ record, data: ordnanceContent(record).frontmatter }))
+  : [];
+const ordnance = ordnanceGroups
+  .map((group) => ({ group, records: ordnanceRecords.filter(({ data }) => data.group === group.slug) }))
+  .filter(({ records }) => records.length > 0);
+const weight = (kg: number) => `${n(kg)} kg (${n(Math.round(kg * 2.20462))} lb)`;
+// Sources for the delivery figure on the ordnance page; records cite their own.
+const deliverySources: Source[] = [
+  { n: 1, title: "Aviation Ordnanceman, NAVEDTRA 14313, chapter 1: Bombs, fuzes and associated components", publisher: "US Navy, Naval Education and Training Professional Development and Technology Center (copy hosted by Integrated Publishing)", url: "https://navyaviation.tpub.com/14313/css/Bsu-85-B-Air-Inflatable-Retarder-36.htm", accessed: "2026-10-26", note: "Printed page 1-26: Snakeye retarded, unretarded and in-flight selection modes." },
+  { n: 2, title: "Toss bombing", publisher: "Wikipedia (secondary source)", url: "https://en.wikipedia.org/wiki/Toss_bombing", accessed: "2026-10-26" },
+  { n: 3, title: "Dive bomber", publisher: "Wikipedia (secondary source)", url: "https://en.wikipedia.org/wiki/Dive_bomber", accessed: "2026-10-26" },
+  { n: 4, title: "Unguided bomb", publisher: "Wikipedia (secondary source)", url: "https://en.wikipedia.org/wiki/Unguided_bomb", accessed: "2026-10-26" },
+];
 ---
 
 <SiteLayout
@@ -88,6 +105,50 @@ const n = (value: number) => value.toLocaleString("en-GB");
             </table>
           </div>
           <p class="note">Speeds are true airspeed at the altitude given on each record, for the variant named there; each record cites its sources and notes other published figures.</p>
+        </>
+      ) : category.slug === "ordnance" ? (
+        <>
+          <p class="lead">Weapons carried by military aircraft of every service. This first set covers unguided weapons: the US Mark 80 general-purpose bombs and their Soviet counterparts, cluster bombs, fire and practice bombs, and air-to-ground rockets from the Second World War to today. Each record gives the weapon's weight, warhead, fuzing, how it is delivered and which aircraft carry it, with sources.</p>
+          {ordnance.map(({ group, records }) => (
+            <div class="aircraft-group">
+              <h2>{group.title}</h2>
+              <div class="entry-grid record-grid">
+                {records.map(({ record, data }) => <RecordCard record={record} photo={data.photos[0]} />)}
+              </div>
+            </div>
+          ))}
+          <h2>How unguided weapons are delivered</h2>
+          <DeliveryFigure title="Figure 1 — Delivery profiles (side view)">
+            <p class="fig-caption">An unguided bomb follows a ballistic path from the moment it leaves the aircraft, so where and how it is released decides where it lands. <Cited text="[4]" /> In a <strong>level</strong> release the bomb leaves at the aircraft's own speed and carries on forward as it falls, so at low level the bomb and the aircraft arrive over the target together. <Cited text="[1]" /> In a <strong>dive</strong> the aircraft points at the target, which shortens and straightens the bomb's fall and makes aiming over the nose easier; the aircraft must then pull out. <Cited text="[3]" /> In a <strong>loft</strong> or toss the aircraft approaches low, pulls up and releases in the climb, typically between 20° and 75° above the horizon, so the bomb is thrown forward and the aircraft need not overfly the target. <Cited text="[2]" /> A <strong>retarded</strong> bomb opens fins, a parachute or a ballute after release; the drag slows it so that an aircraft bombing from low level is clear of the blast and fragments when the bomb arrives. <Cited text="[1] [4]" /></p>
+          </DeliveryFigure>
+          <h2>Quick reference</h2>
+          <div class="table-scroll" role="region" aria-label="Ordnance quick reference table, scrolls sideways on narrow screens" tabindex="0">
+            <table>
+              <thead><tr><th scope="col">Weapon</th><th scope="col">Type</th><th scope="col">Weight</th><th scope="col">Entered service</th></tr></thead>
+              {ordnance.map(({ group, records }) => (
+                <tbody>
+                  <tr><th scope="rowgroup" colspan="4">{group.title}</th></tr>
+                  {records.map(({ record, data }) => (
+                    <tr>
+                      <th scope="row"><a href={sitePath(recordRoute(record))}>{record.title}</a><br /><span class="entry-kicker">{record.designation}</span></th>
+                      <td>{plain(data.type)}</td>
+                      <td>{data.quick.weightKg === null ? "not given" : weight(data.quick.weightKg)}</td>
+                      <td>{data.quick.introduced ?? "not given"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              ))}
+            </table>
+          </div>
+          <p class="note">Weights are for the variant named on each record, rounded; a rocket's weight is one complete round. Each record cites its sources and notes other published figures.</p>
+          <section class="sources" aria-labelledby="sources-title">
+            <h2 id="sources-title">Sources for Figure 1</h2>
+            <ol>
+              {deliverySources.map((s) => (
+                <li id={`source-${s.n}`} value={s.n}><cite>{s.title}</cite>. {s.publisher}. <a href={s.url}>{s.url}</a> (accessed {s.accessed}).{s.note && ` ${s.note}`}</li>
+              ))}
+            </ol>
+          </section>
         </>
       ) : (
         <>
