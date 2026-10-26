@@ -117,13 +117,17 @@
     const pads = navigator.getGamepads ? [...navigator.getGamepads()].filter(Boolean) : [];
     $('gamepadStatus').textContent = pads.length ? `Connected: ${pads.map(p => p.id).join(', ')}` : 'Connect a controller and press any of its buttons.';
     if (binding) {
-      for (const p of pads) p.axes.forEach((v, axis) => {
-        const base = binding.base[p.index]?.[axis] ?? 0;
-        if (binding && Math.abs(v - base) > 0.5) {
-          bindings[binding.control] = { pad: p.index, axis, invert: $(binding.control === 'collective' ? 'invertCollective' : 'invertCyclic').checked };
-          write('bindings', bindings); binding = null; showBindings();
-        }
-      });
+      // A controller first seen after Set was pressed (browsers reveal each
+      // one on its first input) takes its resting axes as its baseline.
+      for (const p of pads) {
+        const base = binding.base[p.index] ??= [...p.axes];
+        const axis = p.axes.findIndex((v, i) => Math.abs(v - (base[i] ?? v)) > 0.5);
+        if (axis < 0) continue;
+        bindings[binding.control] = { pad: p.index, axis, invert: $(binding.control === 'collective' ? 'invertCollective' : 'invertCyclic').checked };
+        delete lastAxes[binding.control];
+        write('bindings', bindings); binding = null; showBindings();
+        break;
+      }
       return;
     }
     for (const control of ['collective', 'cyclic']) {
@@ -153,6 +157,8 @@
   /* ---------- the loop ---------- */
 
   function frame(now) {
+    // Schedule the next frame first, so one bad frame cannot stop the loop.
+    requestAnimationFrame(frame);
     const dt = Math.min(0.05, (now - (lastFrame || now)) / 1000);
     lastFrame = now;
     pollGamepads();
@@ -169,7 +175,6 @@
     drawDials();
     showControls();
     showPrompt();
-    requestAnimationFrame(frame);
   }
 
   function record() {
