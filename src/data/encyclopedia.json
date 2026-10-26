@@ -253,6 +253,17 @@
     "summary": "A carrier-capable fighter and attack aircraft that one pilot can switch between roles on the same sortie."
   },
   {
+    "id": "encyclopedia.aircraft.j-11a",
+    "slug": "j-11a",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "J-11A",
+    "designation": "Shenyang J-11A",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "China's licence-assembled Su-27SK, with new displays and the R-77 missile."
+  },
+  {
     "id": "encyclopedia.aircraft.jf-17",
     "slug": "jf-17",
     "category": "aircraft",
@@ -286,6 +297,50 @@
     "summary": "Italy's two-seat jet trainer and light attack aircraft, flown by the Frecce Tricolori."
   },
   {
+    "id": "encyclopedia.aircraft.mig-15",
+    "slug": "mig-15",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "MiG-15",
+    "designation": "Mikoyan-Gurevich MiG-15bis",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Soviet swept-wing jet fighter that shocked UN air forces over Korea, armed with 37 mm and 23 mm cannon."
+  },
+  {
+    "id": "encyclopedia.aircraft.mig-19",
+    "slug": "mig-19",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "MiG-19",
+    "designation": "Mikoyan-Gurevich MiG-19P",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The first Soviet fighter supersonic in level flight; the MiG-19P added radar for all-weather interception."
+  },
+  {
+    "id": "encyclopedia.aircraft.mig-21",
+    "slug": "mig-21",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "MiG-21",
+    "designation": "Mikoyan-Gurevich MiG-21bis",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The small delta-wing Mach 2 fighter: the most-produced supersonic jet in history."
+  },
+  {
+    "id": "encyclopedia.aircraft.mig-29",
+    "slug": "mig-29",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "MiG-29 Fulcrum",
+    "designation": "Mikoyan MiG-29A/S",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A twin-engine Soviet fighter with a helmet sight and R-73 missiles, built to counter the F-15 and F-16."
+  },
+  {
     "id": "encyclopedia.aircraft.m-2000c",
     "slug": "m-2000c",
     "category": "aircraft",
@@ -306,5 +361,38 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "A swept-wing French fighter sold to eleven countries and flown in many wars."
+  },
+  {
+    "id": "encyclopedia.aircraft.su-25",
+    "slug": "su-25",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "Su-25 Frogfoot",
+    "designation": "Sukhoi Su-25/Su-25T",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "An armoured Soviet close air support jet; the Su-25T adds Vikhr anti-tank missiles."
+  },
+  {
+    "id": "encyclopedia.aircraft.su-27",
+    "slug": "su-27",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "Su-27 Flanker",
+    "designation": "Sukhoi Su-27S",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A large, long-range Soviet air superiority fighter with ten missile stations."
+  },
+  {
+    "id": "encyclopedia.aircraft.su-33",
+    "slug": "su-33",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "Su-33 Flanker-D",
+    "designation": "Sukhoi Su-33",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The carrier-based Flanker: canards, folding wings and a ski-jump launch from Admiral Kuznetsov."
   }
 ]
