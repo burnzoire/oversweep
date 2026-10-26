@@ -40,6 +40,13 @@ example schema/records. Content metadata covers the fields in content standards,
 stable IDs, cross-references, block dependencies and validation revision. Keep
 facts in a single record rather than copying values into model code and prose.
 
+Cross-references follow the same rule. A module page links a key word or an
+aircraft, weapon or threat system with `<Term>` (src/components/Term.astro): the
+link and its hover preview are built from the glossary or encyclopedia record, so
+a definition is written once. Link a word's first mention on a page only;
+`check_encyclopedia` fails a page that links one entry twice or links a missing
+entry, and the build fails on a `<Term>` id with no record.
+
 ## Future infrastructure
 
 Generate search from eligible content; assess Pagefind-style static indexing versus

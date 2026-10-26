@@ -96,12 +96,22 @@ export async function checkRecords({ dist, records, review = false, base = "", c
   if (landing?.includes("data-record-id=")) problems.push("encyclopedia/index.html lists records; it should only show categories.");
   // Module pages link words to the Terminology glossary; every link must land on an entry.
   const glossary = await read("encyclopedia/terminology/index.html");
-  if (glossary !== null) {
-    const ids = new Set([...glossary.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]));
-    const link = new RegExp(`href="${escape(base)}/encyclopedia/terminology/#([^"]+)"`, "g");
-    for (const file of (await filesIn(dist)).filter((f) => f.endsWith(".html"))) {
-      for (const [, id] of (await readFile(file, "utf8")).matchAll(link))
-        if (!ids.has(id)) problems.push(`${path.relative(dist, file)} links to glossary entry #${id}, which does not exist.`);
+  const glossaryIds = glossary === null ? null : new Set([...glossary.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]));
+  const glossaryLink = new RegExp(`href="${escape(base)}/encyclopedia/terminology/#([^"]+)"`, "g");
+  for (const file of (await filesIn(dist)).filter((f) => f.endsWith(".html"))) {
+    const html = await readFile(file, "utf8");
+    const page = path.relative(dist, file);
+    if (glossaryIds) for (const [, id] of html.matchAll(glossaryLink))
+      if (!glossaryIds.has(id)) problems.push(`${page} links to glossary entry #${id}, which does not exist.`);
+    // <Term> links name an entry once per page, at its first mention, and an
+    // encyclopedia record they name must ship in this build.
+    const terms = [...html.matchAll(/<a class="term-link" href="([^"]+)"/g)].map((m) => m[1]);
+    for (const href of new Set(terms.filter((href, i) => terms.indexOf(href) !== i)))
+      problems.push(`${page} links ${href} more than once; link only the first mention.`);
+    for (const href of new Set(terms)) {
+      if (href.includes("#")) continue;
+      const target = href.startsWith(`${base}/`) ? path.join(dist, href.slice(base.length), "index.html") : null;
+      if (!target || await access(target).then(() => false, () => true)) problems.push(`${page} links ${href}, which is not a page in the site.`);
     }
   }
   if (excluded.length) {

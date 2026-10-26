@@ -2,13 +2,11 @@
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import { getExperience, includedExperiences, experienceFrame } from '../../../data/experiences';
 import { sitePath } from '../../../lib/paths';
-import { glossaryHref } from '../../../data/encyclopedia';
+import Term from '../../../components/Term.astro';
 import RecoveryOverview from '../../../components/case-iii/RecoveryOverview.astro';
 import TurnIndicator from '../../../components/case-iii/TurnIndicator.astro';
 import LensFigure from '../../../components/case-iii/LensFigure.astro';
 const caseIII = getExperience('case-iii');
-// Links a word to its Terminology glossary entry; the build fails if it has none.
-const term = (word: string) => { const href = glossaryHref(word); if (!href) throw new Error(`No glossary entry for ${word}`); return href; };
 export function getStaticPaths() { return includedExperiences.some(e => e.slug === 'case-iii') ? [{ params: { trainer: 'case-iii' } }] : []; }
 const recoveryModule = caseIII.module;
 const trainerHref = sitePath(experienceFrame(caseIII));
@@ -36,8 +34,8 @@ const contents = [
   <ol>{contents.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol>
  </nav>
  <h2 id="overview">Purpose and learning objectives</h2>
- <p>Case III provides an instrument recovery to the carrier at night and in weather requiring instrument procedures. It connects a sequenced marshal hold to an instrument approach and the final visual landing task. The general controller-training text assigns selection of the recovery case to the Air Officer; the P-816 account calls this role the Air Boss. <a href="#source-general">[2, p. 11-21]</a> <a href="#source-p816">[1, pp. 2-3–2-4, 2-22–2-25]</a></p>
- <p>By the end, you should be able to explain the recovery phases; distinguish a radial, inbound course, <a href={term('Base Recovery Course (BRC)')}>base recovery course</a> and <a href={term('Final Bearing')}>final bearing</a>; interpret a <a href={term('Marshal')}>marshal</a> clearance; explain why timing and configuration matter; and distinguish a landing, <a href={term('Bolter')}>bolter</a> and <a href={term('Waveoff')}>waveoff</a>.</p>
+ <p><Term id="Case I, II and III">Case III</Term> provides an instrument recovery to the carrier at night and in weather requiring instrument procedures. It connects a sequenced marshal hold to an instrument approach and the final visual landing task. The general controller-training text assigns selection of the recovery case to the Air Officer; the P-816 account calls this role the Air Boss. <a href="#source-general">[2, p. 11-21]</a> <a href="#source-p816">[1, pp. 2-3–2-4, 2-22–2-25]</a></p>
+ <p>By the end, you should be able to explain the recovery phases; distinguish a radial, inbound course, <Term id="Base Recovery Course (BRC)">base recovery course</Term> and <Term id="Final Bearing">final bearing</Term>; interpret a <Term id="Marshal">marshal</Term> clearance; explain why timing and configuration matter; and distinguish a landing, <Term id="Bolter">bolter</Term> and <Term id="Waveoff">waveoff</Term>.</p>
  <p class="note">This is a conceptual reference, not an aircraft checklist. Exact speeds, configuration, approach aids, minima and missed-approach instructions depend on the aircraft, equipment, applicable procedure and clearance. The source is a T-45C training publication: its aircraft actions are not universal.</p>
  <h2 id="picture">The whole recovery at a glance</h2>
  <p>Figure 1 follows one aircraft through the historical CV-1 Case III example in [1], from the first check-in to the ball call, with the bolter or waveoff re-entry. Select a number to highlight that part of the figure. The numbered text is the explanation; the figure only places it. Numbers such as 1,200 ft or 150 kt belong to that T-45C training example, not to every aircraft.</p>
@@ -46,17 +44,17 @@ const contents = [
   <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><RecoveryOverview /></div>
   <ol class="callouts">
    <li data-callout-item="1"><button type="button" aria-pressed="false">Red Crown, then Strike</button><p>After the mission, check in with Red Crown, the carrier strike group's air defence controller, giving call sign, position and altitude. Red Crown passes instructions and hands you to Strike; that handoff should occur before you enter the 50 NM carrier control area (CCA). The Strike check-in adds the flight's low fuel state. <a href="#source-p816">[1, pp. 1-3, 2-11]</a></p></li>
-   <li data-callout-item="2"><button type="button" aria-pressed="false">Marshal check-in</button><p>Once inside the CCA, Strike hands you to Marshal. Check in with call sign, position, altitude and low state. Marshal assigns the recovery case and holding instructions, including altitude, and passes weather, altimeter, BRC and bingo information. <a href="#source-p816">[1, p. 2-12]</a></p></li>
-   <li data-callout-item="3"><button type="button" aria-pressed="false">The marshal fix</button><p>In this source the fix is ideally on the 180 radial relative to BRC and generally within 30° of it. Its DME is the assigned altitude in angels plus 15: angels 8 (8,000 ft) gives 23 DME. The lowest assignment for jet and turboprop aircraft is 6,000 ft. <a href="#source-p816">[1, p. 2-19]</a> The general controller text references its 180 radial to the expected final bearing instead, so read the radial from your clearance. <a href="#source-general">[2, p. 11-33]</a></p></li>
+   <li data-callout-item="2"><button type="button" aria-pressed="false">Marshal check-in</button><p>Once inside the CCA, Strike hands you to Marshal. Check in with call sign, position, altitude and low state. Marshal assigns the recovery case and holding instructions, including altitude, and passes weather, altimeter, BRC and <Term id="Bingo">bingo</Term> information. <a href="#source-p816">[1, p. 2-12]</a></p></li>
+   <li data-callout-item="3"><button type="button" aria-pressed="false">The marshal fix</button><p>In this source the fix is ideally on the 180 radial relative to BRC and generally within 30° of it. Its DME is the assigned altitude in <Term id="Angels">angels</Term> plus 15: angels 8 (8,000 ft) gives 23 DME. The lowest assignment for jet and turboprop aircraft is 6,000 ft. <a href="#source-p816">[1, p. 2-19]</a> The general controller text references its 180 radial to the expected final bearing instead, so read the radial from your clearance. <a href="#source-general">[2, p. 11-33]</a></p></li>
    <li data-callout-item="4"><button type="button" aria-pressed="false">Holding</button><p>A six-minute left-hand pattern of two-minute turns and one-minute legs. Aircraft in the stack are separated by 1,000 ft and must be established at their assigned altitude by 10 NM from the stack. Arrive at the fix on airspeed (250 kt) ready to commence at EAT plus or minus 10 seconds, and tell Marshal when established. <a href="#source-p816">[1, pp. 2-20, 2-26]</a></p></li>
    <li data-callout-item="5"><button type="button" aria-pressed="false">Commence</button><p>Leave the fix at EAT and call “commencing” with the altimeter setting and fuel state. Establish a 4,000 ft/min descent at 250 KIAS. <a href="#source-p816">[1, pp. 2-23, 2-27]</a></p></li>
-   <li data-callout-item="6"><button type="button" aria-pressed="false">Handoff to Approach</button><p>Marshal hands you to the final controller during the penetration, ideally before platform. In the source dialogue the call is “switch Approach, button 18”, and you check in on the new frequency with your fuel state. <a href="#source-p816">[1, pp. 2-26–2-27]</a></p></li>
+   <li data-callout-item="6"><button type="button" aria-pressed="false">Handoff to Approach</button><p>Marshal hands you to the final controller during the penetration, ideally before <Term id="Platform">platform</Term>. In the source dialogue the call is “switch Approach, button 18”, and you check in on the new frequency with your fuel state. <a href="#source-p816">[1, pp. 2-26–2-27]</a></p></li>
    <li data-callout-item="7"><button type="button" aria-pressed="false">Platform</button><p>At 5,000 ft, normally about 20 NM from the ship, reduce the descent to 2,000 ft/min and report “platform”. <a href="#source-p816">[1, pp. 2-23, 2-27, A-5]</a></p></li>
    <li data-callout-item="8"><button type="button" aria-pressed="false">Correct to final bearing</button><p>If the marshal radial is not the reciprocal of the final bearing, correct at 20 DME: gradually when the final bearing is within 10° of that reciprocal, otherwise with a 30° correction. If not established on final bearing by 12 miles, fly the 12-mile arc until you intercept it. <a href="#source-p816">[1, p. 2-23]</a></p></li>
    <li data-callout-item="9"><button type="button" aria-pressed="false">Level off and configure</button><p>Level at 1,200 ft. In the T-45C example, landing checks start at 10 DME, the gear is down no later than 8 DME, and the aircraft crosses 6 DME at 150 kt before slowing to final approach speed. Configuration and speeds come from your own aircraft's procedure. <a href="#source-p816">[1, p. 2-23]</a></p></li>
-   <li data-callout-item="10"><button type="button" aria-pressed="false">ACLS lock-on</button><p>ACLS lock-on occurs between 8 and 4 DME. Approach asks you to “say needles” and compares your reply with the radar before directing “fly your needles”. If they disagree, the controller breaks lock and directs “fly the bullseye” (ICLS) until a new lock. <a href="#source-p816">[1, p. 2-23]</a></p></li>
-   <li data-callout-item="11"><button type="button" aria-pressed="false">Call the ball</button><p>At three-quarters of a mile the controller instructs you to call the ball. Transition from the instrument scan to the optical landing cue while the approach is still monitored; the LSO answers “Roger ball”. <a href="#source-p816">[1, pp. 2-25, 2-27]</a></p></li>
-   <li data-callout-item="12"><button type="button" aria-pressed="false">Bolter or waveoff</button><p>Climb as the procedure directs, turn downwind when instructed by Approach, do the landing checks, report fuel state abeam the ship and expect a turn back to final 4–8 NM past abeam. The figure does not say which side the downwind is on; Approach assigns it. <a href="#source-p816">[1, p. 2-25]</a></p></li>
+   <li data-callout-item="10"><button type="button" aria-pressed="false">ACLS lock-on</button><p>ACLS lock-on occurs between 8 and 4 DME. Approach asks you to “say needles” and compares your reply with the radar before directing “fly your needles”. If they disagree, the controller breaks lock and directs “fly the <Term id="Bullseye">bullseye</Term>” (ICLS) until a new lock. <a href="#source-p816">[1, p. 2-23]</a></p></li>
+   <li data-callout-item="11"><button type="button" aria-pressed="false">Call the ball</button><p>At three-quarters of a mile the controller instructs you to call the <Term id="Ball">ball</Term>. Transition from the instrument scan to the optical landing cue while the approach is still monitored; the <Term id="Landing Signal Officer (LSO)">LSO</Term> answers “<Term id="Roger Ball">Roger ball</Term>”. <a href="#source-p816">[1, pp. 2-25, 2-27]</a></p></li>
+   <li data-callout-item="12"><button type="button" aria-pressed="false">Bolter or waveoff</button><p>Climb as the procedure directs, turn downwind when instructed by Approach, do the landing checks, report fuel state <Term>abeam</Term> the ship and expect a turn back to final 4–8 NM past abeam. The figure does not say which side the downwind is on; Approach assigns it. <a href="#source-p816">[1, p. 2-25]</a></p></li>
   </ol>
  </section>
  <h2 id="sequence">Recovery sequence</h2>
@@ -125,7 +123,7 @@ const contents = [
  </figure>
  <p>The first two definitions describe the geometry used below; BRC and final bearing are defined in <a href="#source-p816">[1, glossary pp. A-1, A-3]</a>. The general Navy controller text also defines final bearing as the extended landing-area centreline. <a href="#source-general">[2, p. 11-32]</a> Do not substitute BRC for final bearing or assume the marshal radial is always reciprocal to either. The published CV-1 example explicitly provides for correction from the marshal radial to final bearing. <a href="#source-p816">[1, p. 2-23]</a></p>
  <h2 id="tacan">Navigate to the fix</h2>
- <p>TACAN (tactical air navigation) provides bearing and DME (distance measuring equipment) range. Position yourself and the fix on a station-centred plot, then find the direction from your position to the fix. Flying the assigned radial as a heading does not solve this point-to-point problem.</p>
+ <p><Term id="TACAN">TACAN (tactical air navigation)</Term> provides bearing and DME (distance measuring equipment) range. Position yourself and the fix on a station-centred plot, then find the direction from your position to the fix. Flying the assigned radial as a heading does not solve this point-to-point problem.</p>
  <p>In this educational calculation, bearings are magnetic, north is up and range is in nautical miles (NM). We use a flat plane, horizontal range and no wind; actual DME is slant range. Heading equals track only under the no-wind assumption. The fix is constrained to lie opposite BRC for this exercise; actual clearance geometry can differ.</p>
   <section class="lesson" data-lesson="navigation" aria-labelledby="nav-title">
     <h3 id="nav-title">Practise: heading to the marshal fix</h3>
@@ -197,7 +195,7 @@ const contents = [
 
  <h2 id="turns">Timed turns on the turn needle</h2>
  <p>Holding is flown by the clock, so its turns are flown at a known rate. In the source's pattern each 180° turn takes two minutes: 180° ÷ 120 s = 1.5° per second. <a href="#source-p816">[1, p. 2-20]</a> A turn needle shows the rate of turn directly, so you can hold a rate without chasing the heading. Heading change = rate × time; time = heading change ÷ rate.</p>
- <p>The scale differs between instruments. The DCS F-14 manual by Heatblur states that one needle deflection corresponds to a 360° turn in four minutes: 360° ÷ 240 s = 1.5° per second, the same rate as the marshal turn. <a href="#source-heatblur">[4]</a> That is simulator documentation for the DCS F-14 module, not the aircraft's NATOPS. For comparison, the FAA's civil holding turns are 3° per second, 30° of bank or 25° of bank with a flight director, whichever needs the least bank. <a href="#source-aim">[3, 5-3-8 j 8]</a></p>
+ <p>The scale differs between instruments. The DCS <Term record="f-14">F-14</Term> manual by Heatblur states that one needle deflection corresponds to a 360° turn in four minutes: 360° ÷ 240 s = 1.5° per second, the same rate as the marshal turn. <a href="#source-heatblur">[4]</a> That is simulator documentation for the DCS F-14 module, not the aircraft's NATOPS. For comparison, the FAA's civil holding turns are 3° per second, 30° of bank or 25° of bank with a flight director, whichever needs the least bank. <a href="#source-aim">[3, 5-3-8 j 8]</a></p>
  <section class="lesson bleed" data-lesson="turn" aria-labelledby="turn-title">
   <h3 id="turn-title">Practise: fly a timed turn</h3>
   <p>Work out how long the turn takes, start it, and roll out when your time is up. The heading card turns at the selected rate; the needle shows the deflection. The faster speeds compress the clock for practice only.</p>
@@ -228,7 +226,7 @@ const contents = [
    <TurnIndicator />
   </div>
   <p class="feedback" data-result role="status" aria-live="polite">Worked example: a 90° turn at one F-14 needle width (1.5°/s) takes 90 ÷ 1.5 = 60 s; a 180° marshal turn takes 2:00.</p>
-  <p class="note">The 2-width option assumes the pointer scale is linear (3°/s); the manual states only the one-width value. F/A-18 and other aircraft are added only when a source the review can read states their indicator's scale.</p>
+  <p class="note">The 2-width option assumes the pointer scale is linear (3°/s); the manual states only the one-width value. <Term record="fa-18c">F/A-18</Term> and other aircraft are added only when a source the review can read states their indicator's scale.</p>
   <noscript><p>The turn practice needs JavaScript. The worked example above shows the calculation.</p></noscript>
  </section>
  <h2 id="penetration">Commence and platform</h2>
@@ -343,8 +341,8 @@ const contents = [
   <div><dt>Needles</dt><dd>The ACLS approach guidance display. [1, p. 1-10]</dd></div>
   <div><dt>Bullseye</dt><dd>The ICLS, the instrument carrier landing system. [1, p. 1-10]</dd></div>
   <div><dt>Ball</dt><dd>The optical landing system's glideslope cue, and the call that reports seeing it. [1, pp. 1-11, 2-25]</dd></div>
-  <div><dt>Clara</dt><dd>The call made when the ball is not visible. [1, p. 2-18]</dd></div>
-  <div><dt>Charlie</dt><dd>Charlie time: when launches are complete and recovery begins. [1, p. 2-17]</dd></div>
+  <div><dt><Term>Clara</Term></dt><dd>The call made when the ball is not visible. [1, p. 2-18]</dd></div>
+  <div><dt><Term>Charlie</Term></dt><dd>Charlie time: when launches are complete and recovery begins. [1, p. 2-17]</dd></div>
   <div><dt>Red Crown</dt><dd>The carrier strike group's air defence controller, the first check-in after the mission. [1, p. 2-11]</dd></div>
   <div><dt>Alibis</dt><dd>Aircraft maintenance discrepancies, passed to Strike for the ready room. [1, p. 2-11]</dd></div>
   <div><dt>CCA</dt><dd>Carrier control area: all airspace within 50 NM of the carrier. [1, p. 1-3]</dd></div>

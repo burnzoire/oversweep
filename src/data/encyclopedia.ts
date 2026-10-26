@@ -1,7 +1,6 @@
 import type { MarkdownInstance } from 'astro';
 import registry from './encyclopedia.json';
 import { reviewTrainers } from './experiences';
-import { sitePath } from '../lib/paths';
 
 // Encyclopedia records. Like modules, `publication` decides whether a record
 // ships in normal builds and is independent of `maturity`, which is always
@@ -239,12 +238,3 @@ export function getRecord(category: string, slug: string): EncyclopediaRecord {
   if (!found) throw new Error(`Unregistered encyclopedia record: ${category}/${slug}`);
   return found;
 }
-
-// Module pages link a word where it first appears to its Terminology glossary
-// entry. A phrase such as "Fence in / fence out" falls back to its first word;
-// a word with no entry gets no link, so pages never link to a missing anchor.
-const glossarySlugs = new Set(categoryRecords('terminology').flatMap((r) => terminologyContent(r).frontmatter.terms.map((t) => termSlug(t.term))));
-export const glossaryHref = (word: string) => {
-  const slug = [termSlug(word), termSlug(word.split(/[ /]/)[0])].find((s) => glossarySlugs.has(s));
-  return slug ? `${sitePath('encyclopedia/terminology/')}#${slug}` : undefined;
-};

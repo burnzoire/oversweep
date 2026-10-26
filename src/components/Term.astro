@@ -1,0 +1,51 @@
+---
+import { recordTarget, termTarget, type LinkTarget } from '../data/links';
+// A key word linked to its glossary or encyclopedia entry, with a short
+// preview on hover or keyboard focus. The preview is built from the entry
+// itself, so a definition is written once and every page follows it.
+//   <Term>bingo</Term>                  glossary word, taken from the text
+//   <Term id="Final Bearing">final bearing</Term>
+//   <Term record="f-14">F-14</Term>     aircraft, ordnance or threat system
+// Link only a word's first mention on a page; check_encyclopedia fails a page
+// that links the same entry twice, or links an entry that does not exist.
+interface Props { id?: string; record?: string }
+const { id, record } = Astro.props;
+const text = (await Astro.slots.render('default')).replace(/<[^>]+>/g, '').trim();
+let target: LinkTarget | undefined;
+if (record) target = recordTarget(record);
+else {
+  target = termTarget(id ?? text);
+  if (!target) throw new Error(`<Term>: no glossary entry for "${id ?? text}"`);
+}
+// One link per entry per page, so the entry's anchor makes a unique id.
+const tipId = target && `tip-${target.href.replace(/^.*\/encyclopedia\//, '').replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '')}`;
+---
+{target ? (
+  <span class="term-ref"><a class="term-link" href={target.href} aria-describedby={tipId}><slot /></a><span class="term-tip" role="tooltip" id={tipId}>
+    <span class="term-tip-head"><strong>{target.title}</strong> <span class="term-tip-kind">{target.kind}</span></span>
+    {target.lines.map((line) => <span class="term-tip-line">{line.label && <span class="term-tip-label">{line.label}: </span>}{line.text}</span>)}
+    {target.more > 0 && <span class="term-tip-more">{target.more} more {target.more === 1 ? 'meaning' : 'meanings'} in the glossary</span>}
+  </span></span>
+) : <slot />}
+
+<script>
+  // Keep a preview inside the window, and let Escape hide it until the pointer
+  // or focus moves on (WCAG 1.4.13).
+  const place = (ref: Element) => {
+    const tip = ref.querySelector<HTMLElement>('.term-tip');
+    if (!tip) return;
+    ref.classList.remove('term-dismissed');
+    tip.style.setProperty('--shift', '0px');
+    const box = tip.getBoundingClientRect();
+    const over = box.right - (document.documentElement.clientWidth - 8);
+    if (over > 0) tip.style.setProperty('--shift', `${-Math.min(over, box.left - 8)}px`);
+  };
+  for (const ref of document.querySelectorAll('.term-ref')) {
+    ref.addEventListener('pointerenter', () => place(ref));
+    ref.addEventListener('focusin', () => place(ref));
+  }
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    for (const ref of document.querySelectorAll('.term-ref:hover, .term-ref:focus-within')) ref.classList.add('term-dismissed');
+  });
+</script>

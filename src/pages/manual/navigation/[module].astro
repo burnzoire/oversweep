@@ -2,6 +2,7 @@
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import { getModule, includedModules } from '../../../data/modules';
 import { sitePath } from '../../../lib/paths';
+import Term from '../../../components/Term.astro';
 import { ARC_LEAD_TABLE, INTERCEPT_METHODS } from '../../../lessons/navigation/lesson-model.mjs';
 const nav = getModule('air-navigation');
 export function getStaticPaths() { return includedModules.some(m => m.slug === 'air-navigation') ? [{ params: { module: 'air-navigation' } }] : []; }
@@ -36,7 +37,7 @@ const radio = sitePath('manual/radio-communications/radio-procedures/');
 
  <h2 id="overview">Purpose and learning objectives</h2>
  <p>This module is about getting the aircraft where it needs to go: setting a course on the horizontal situation indicator (HSI), flying to and from a station, intercepting a course, flying DME arcs and point to point, and following waypoints. The Navy's instrument syllabus teaches it after aircraft control, as the skill of identifying your position relative to navigation aids and then flying airways on real cross-country flights. Its rule for all of it is "Aviate, Navigate, Communicate": fly the aircraft first, and do not let navigation take attention from basic airwork. <a href="#source-p1204">{fti('1')}</a> How positions, headings and the navigation aids themselves work is collected at the end, under <a href="#background">Background</a>.</p>
- <p>By the end you should be able to: read where you are and where the course is from the HSI picture; tune, identify and set up a course; fly to and from a TACAN or VOR station and correct for wind; intercept a course inbound or outbound with the right lead; join, fly and leave a DME arc; fly point to point; fly waypoints and go direct to one; and cross-check one source against another.</p>
+ <p>By the end you should be able to: read where you are and where the course is from the HSI picture; tune, identify and set up a course; fly to and from a <Term>TACAN</Term> or VOR station and correct for wind; intercept a course inbound or outbound with the right lead; join, fly and leave a DME arc; fly point to point; fly waypoints and go direct to one; and cross-check one source against another.</p>
  <p class="note">This is a reference, not a substitute for your aircraft's NATOPS or service flight manual, your unit's procedures, or current flight information publications. Worked examples use the T-45C training jet's displays from the Navy's instrument flight training instruction; other aircraft present the same information differently. Holding and instrument approaches belong to instrument flight; the carrier version of point-to-point TACAN navigation is in the <a href={`${caseIii}#tacan`}>Case III module</a>. Weapons-quality target coordinates, with elevation and datum checks for weapons delivery, are outside this module.</p>
 
  <h2 id="hsi">Reading the HSI</h2>
@@ -79,7 +80,7 @@ const radio = sitePath('manual/radio-communications/radio-procedures/');
 
  <h2 id="setup">Setting up a course</h2>
  <ol class="steps">
-  <li><strong>Tune and identify.</strong> Select the TACAN channel or VOR frequency and listen to the identifier before you use it. The identifier is the only positive identification of a VOR; during maintenance it may send T-E-S-T or nothing. <a href="#source-aim">{a('1-1-3')}</a> Disregard an aid that a NOTAM says is unusable, however good it looks. <a href="#source-aim">{a('1-1-1')}</a></li>
+  <li><strong>Tune and identify.</strong> Select the TACAN channel or VOR frequency and listen to the identifier before you use it. The identifier is the only positive identification of a VOR; during maintenance it may send T-E-S-T or nothing. <a href="#source-aim">{a('1-1-3')}</a> Disregard an aid that a <Term>NOTAM</Term> says is unusable, however good it looks. <a href="#source-aim">{a('1-1-1')}</a></li>
   <li><strong>Find yourself.</strong> The tail of the bearing pointer is the radial you are on; its head is the bearing to the station. <a href="#source-p1204">{fti('12–13')}</a></li>
   <li><strong>Set the course the way you will fly it.</strong> Set the inbound course to fly to the station and the radial to fly away from it. Set to the reciprocal, a CDI reverses its sense; set the course to agree with the way you intend to fly and it never does. <a href="#source-ifh">{ifh('9-14')}</a></li>
   <li><strong>Check TO or FROM.</strong> TO, pointing at the head of the course arrow, means the course takes you to the station if you intercept and fly it; FROM means it takes you away. <a href="#source-ifh">{ifh('5-23')}</a></li>

@@ -684,3 +684,75 @@ h2 {
 .button [aria-hidden="true"] {
   margin-left: 0.35rem;
 }
+
+/* Term links (src/components/Term.astro): a word linked to its glossary or
+   encyclopedia entry. On devices with a mouse, hovering or focusing it shows a
+   short preview; on touch screens it is a plain link. */
+.term-ref {
+  position: relative;
+}
+
+.term-tip {
+  display: none;
+  position: absolute;
+  z-index: 20;
+  top: 100%;
+  left: 0;
+  width: max-content;
+  max-width: min(22rem, calc(100vw - 1rem));
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+  color: var(--color-text);
+  background: #fff;
+  box-shadow: 0 0.25rem 0.75rem rgb(17 26 36 / 18%);
+  font-size: 0.875rem;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1.45;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: normal;
+  white-space: normal;
+  transform: translateX(var(--shift, 0px));
+}
+
+.term-tip > span {
+  display: block;
+}
+
+.term-tip > span + span {
+  margin-top: 0.25rem;
+}
+
+.term-tip-kind,
+.term-tip-label,
+.term-tip-more {
+  color: var(--color-muted);
+}
+
+.term-tip-kind {
+  font-size: 0.8125rem;
+}
+
+.term-tip-label {
+  font-weight: 600;
+}
+
+.term-tip-more {
+  font-style: italic;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .term-ref:hover > .term-tip {
+    display: block;
+  }
+}
+
+.term-link:focus-visible + .term-tip {
+  display: block;
+}
+
+.term-ref.term-dismissed > .term-tip {
+  display: none;
+}

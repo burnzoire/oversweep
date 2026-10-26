@@ -2,7 +2,8 @@
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import { getModule, includedModules } from '../../../data/modules';
 import { sitePath } from '../../../lib/paths';
-import { glossaryHref } from '../../../data/encyclopedia';
+import Term from '../../../components/Term.astro';
+import { termTarget } from '../../../data/links';
 import { PHONETIC, LIGHT_SIGNALS, DISTRESS_ORDER, TRAINING_CALLS, BREVITY } from '../../../lessons/radio/lesson-model.mjs';
 const radio = getModule('radio-procedures');
 export function getStaticPaths() { return includedModules.some(m => m.slug === 'radio-procedures') ? [{ params: { module: 'radio-procedures' } }] : []; }
@@ -21,9 +22,9 @@ const pp = (n: number) => (page: string) => `[${n}, ${page.includes('–') || pa
 const h = pp(1), f = pp(2), b = pp(3), br = pp(4), jb = pp(5);
 const a = (para: string) => `[6, ${para.includes('–') || para.includes(',') ? 'paras' : 'para'} ${para}]`;
 const g = (term: string) => `[7, ${term}]`;
+// Training calls the brevity list already links stay plain: one link per word per page.
+const brevityLinks = new Set(BREVITY.map(t => termTarget(t.word)?.href));
 const bfm = sitePath('manual/air-combat/bfm/');
-// Brevity and training calls link to their Terminology glossary entry where it has one.
-const glossary = glossaryHref;
 const morse = (m: string) => m.replaceAll('.', '·').replaceAll('-', '–');
 const caseIii = sitePath('manual/naval-operations/case-iii/');
 const airfield = sitePath('manual/airfield-operations/airfield-basics/');
@@ -32,7 +33,7 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Radio Communications',href:sitePath('manual/radio-communications/')},{label:radio.title}]}>
  <section class="status-panel" data-module-id={radio.id} data-module-revision={radio.revision}>
   <h2>{radio.maturity}</h2>
-  <p>Module revision {radio.revision} · Air–ground voice radio for pilots: how to transmit, how to say letters and numbers, how to make and answer calls, and what to do in an emergency or when the radio fails. Written for military pilots of every US service: military practice first (the multi-service brevity words shared by the Army, Marine Corps, Navy and Air Force, UHF and preset channels, and a worked Navy training sortie with its formation check-ins and training-rule calls), then the Federal Aviation Administration (FAA) rules that every military aircraft follows in US airspace.</p>
+  <p>Module revision {radio.revision} · Air–ground voice radio for pilots: how to transmit, how to say letters and numbers, how to make and answer calls, and what to do in an emergency or when the radio fails. Written for military pilots of every US service: military practice first (the multi-service brevity words shared by the Army, Marine Corps, Navy and Air Force, UHF and preset channels, and a worked Navy training <Term>sortie</Term> with its formation check-ins and training-rule calls), then the Federal Aviation Administration (FAA) rules that every military aircraft follows in US airspace.</p>
   <p>Every figure is interactive. Step through a training sortie call by call, build calls, convert numbers into radio words, read back clearances, set a transponder without tripping an emergency code, and fly a lost-communications route.</p>
  </section>
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
@@ -40,15 +41,15 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
  </nav>
 
  <h2 id="overview">Purpose and learning objectives</h2>
- <p>A military pilot's radio work has a joint layer and a local one. The brevity words are common to all four services, and many military aircraft talk to controllers on UHF, which most civil aircraft cannot hear. <a href="#source-brevity">{br('i')}</a> <a href="#source-jbsa">{jb('2')}</a> The calls around the airfield are set by each service, wing, squadron and base. This module's worked example is one Navy training squadron's: a day on the radio runs from the squadron's base frequency to clearance, ground, tower, departure, the working area and back, mostly on preset UHF channels, with a short call sign that changes from flight to flight. <a href="#source-hollywood">{h('19–35')}</a> Inside US airspace those calls follow the FAA's rules, so this module teaches both: the military flow first, then the FAA phraseology underneath it. Radio is the critical link between pilots and air traffic control (ATC). The FAA's Aeronautical Information Manual (AIM) asks pilots to keep transmissions brief, to acknowledge each ATC communication with the aircraft's call sign, and to prefer standard phraseology over jargon and slang. <a href="#source-aim">{a('4-2-1')}</a> Good radio work is mostly listening: knowing what was said, to whom, and what you must do about it.</p>
+ <p>A military pilot's radio work has a joint layer and a local one. The brevity words are common to all four services, and many military aircraft talk to controllers on UHF, which most civil aircraft cannot hear. <a href="#source-brevity">{br('i')}</a> <a href="#source-jbsa">{jb('2')}</a> The calls around the airfield are set by each service, wing, <Term>squadron</Term> and base. This module's worked example is one Navy training squadron's: a day on the radio runs from the squadron's base frequency to clearance, ground, tower, departure, the working area and back, mostly on preset UHF channels, with a short call sign that changes from flight to flight. <a href="#source-hollywood">{h('19–35')}</a> Inside US airspace those calls follow the FAA's rules, so this module teaches both: the military flow first, then the FAA phraseology underneath it. Radio is the critical link between pilots and air traffic control (ATC). The FAA's Aeronautical Information Manual (AIM) asks pilots to keep transmissions brief, to acknowledge each ATC communication with the aircraft's call sign, and to prefer standard phraseology over jargon and slang. <a href="#source-aim">{a('4-2-1')}</a> Good radio work is mostly listening: knowing what was said, to whom, and what you must do about it.</p>
  <p>By the end you should be able to: use the multi-service brevity words and the training-rule calls that stop and start an engagement; follow a training sortie's calls from the squadron base frequency to the break and back; transmit cleanly without blocking the frequency; spell with the phonetic alphabet; say altitudes, headings, speeds, frequencies and times the way the AIM does; make an initial call in the right order; choose the right acknowledgement word; read back the parts of a clearance that must be read back; follow a formation check-in and frequency push; make a distress call; change a transponder code without passing through an emergency code; and fly the AIM's lost-communications rules.</p>
  <p class="note">This is a reference, not a substitute for your aircraft's flight manual (NATOPS, -1 or operator's manual), your service's, wing's and squadron's procedures, or the current AIM. The sortie and formation examples come from Navy training squadrons because their scripts are published; Air Force, Army and Marine Corps units use the same FAA phraseology in US airspace with their own local procedures, and frequencies, channels, call signs and local calls differ by unit and base. Ships and other countries use additional or different procedures. Carrier recovery communications are in the <a href={`${caseIii}#radio`}>Case III module's radio section</a>, which steps through a Case III approach call by call. Who to call, and when, around a military field and at civil towered and non-towered airfields, with the overhead break and pattern they go with, is in <a href={`${airfield}#talk`}>Airfield Operations</a>.</p>
 
  <h2 id="technique">Radio technique</h2>
  <p>The AIM's radio technique comes down to six habits. <a href="#source-aim">{a('4-2-2')}</a></p>
  <ol class="steps">
-  <li><strong>Listen before you transmit.</strong> Much of what you need may come from ATIS or from monitoring the frequency. If you hear someone else talking, keying your transmitter is futile: you will probably jam their receivers and make them repeat their call. After changing frequency, pause and listen to make sure it is clear.</li>
-  <li><strong>Think before keying your transmitter.</strong> Know what you want to say; write a long message, such as an IFR position report, down first.</li>
+  <li><strong>Listen before you transmit.</strong> Much of what you need may come from <Term>ATIS</Term> or from monitoring the frequency. If you hear someone else talking, keying your transmitter is futile: you will probably jam their receivers and make them repeat their call. After changing frequency, pause and listen to make sure it is clear.</li>
+  <li><strong>Think before keying your transmitter.</strong> Know what you want to say; write a long message, such as an <Term>IFR</Term> position report, down first.</li>
   <li><strong>Press, pause, then speak.</strong> Hold the microphone close to your lips; a slight pause after pressing the button may be necessary to be sure the first word is transmitted. Speak in a normal, conversational tone.</li>
   <li><strong>Wait before calling again.</strong> After releasing the button, wait a few seconds before calling again: the controller may be writing down your call sign, looking for your flight plan, or working another frequency.</li>
   <li><strong>Listen to your receiver.</strong> Be alert to the sounds, or the lack of sounds, in your receiver; check the volume and frequency, and make sure your microphone is not stuck on transmit. A stuck microphone can block a frequency for long periods.</li>
@@ -101,7 +102,7 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
  <p>The AIM's rules for numbers: <a href="#source-aim">{a('4-2-8–4-2-12')}</a></p>
  <ul>
   <li><strong>Hundreds and thousands.</strong> Round hundreds and thousands up to 9,900 are spoken as words ("four thousand five hundred"). Above 9,900, the digits before "thousand" are spoken separately ("one zero thousand"). Airway and jet route numbers are spoken as letters and words (V12 is "Victor Twelve"). Other numbers are spoken digit by digit. A decimal point is "point"; ICAO uses "decimal", and the FAA accepts it from pilots required to use it.</li>
-  <li><strong>Altitudes.</strong> Below 18,000 ft mean sea level (MSL), say the thousands and hundreds: "one two thousand five hundred". At and above 18,000 ft (flight level 180), say "flight level" and three digits.</li>
+  <li><strong>Altitudes.</strong> Below 18,000 ft mean sea level (MSL), say the thousands and hundreds: "one two thousand five hundred". At and above 18,000 ft (<Term>flight level</Term> 180), say "flight level" and three digits.</li>
   <li><strong>Directions.</strong> Bearings, courses, headings and wind directions are three digits and magnetic; add "true" when it applies.</li>
   <li><strong>Speeds.</strong> Digit by digit, then "knots". Mach numbers: "Mach" and the digits with "point".</li>
   <li><strong>Time.</strong> Coordinated Universal Time (UTC) on the 24-hour clock, digit by digit; "Zulu" may be used to denote UTC.</li>
@@ -211,14 +212,14 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
  </section>
 
  <h2 id="words">Words that do the work</h2>
- <p>A few procedure words carry precise meanings. Using the right one saves a transmission; using the wrong one can mislead. <strong>Roger</strong> means only that you received the whole transmission: it must not answer a yes-or-no question. <a href="#source-pcg">{g('ROGER')}</a></p>
+ <p>A few procedure words carry precise meanings. Using the right one saves a transmission; using the wrong one can mislead. <strong><Term>Roger</Term></strong> means only that you received the whole transmission: it must not answer a yes-or-no question. <a href="#source-pcg">{g('ROGER')}</a></p>
  <dl class="jargon">
   <div><dt>Roger</dt><dd>I have received all of your last transmission. Not an answer to a question needing a yes or no.</dd></div>
-  <div><dt>Wilco</dt><dd>I have received your message, understand it, and will comply with it.</dd></div>
-  <div><dt>Affirmative</dt><dd>Yes.</dd></div>
+  <div><dt><Term>Wilco</Term></dt><dd>I have received your message, understand it, and will comply with it.</dd></div>
+  <div><dt><Term>Affirmative</Term></dt><dd>Yes.</dd></div>
   <div><dt>Negative</dt><dd>No; or permission not granted; or that is not correct.</dd></div>
   <div><dt>Unable</dt><dd>Indicates inability to comply with a specific instruction, request or clearance.</dd></div>
-  <div><dt>Say again</dt><dd>Used to request a repeat of the last transmission.</dd></div>
+  <div><dt><Term>Say again</Term></dt><dd>Used to request a repeat of the last transmission.</dd></div>
   <div><dt>I say again</dt><dd>The message will be repeated.</dd></div>
   <div><dt>Stand by</dt><dd>The controller or pilot must pause for a few seconds, usually to attend to other duties of a higher priority.</dd></div>
   <div><dt>Read back</dt><dd>Repeat my message back to me.</dd></div>
@@ -269,9 +270,9 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
 
  <h2 id="training">Brevity and training-rule calls</h2>
  <p>Tactical calls use <strong>brevity words</strong>: short code words with fixed meanings, published jointly by the Army, Marine Corps, Navy and Air Force (ATP 1-02.1, MCRP 3-30B.1, NTTP 6-02.1, AFTTP 3-2.5), so a pilot from any service means the same thing by them. <a href="#source-brevity">{br('i')}</a> A selection, each linked to its entry in the <a href={sitePath('encyclopedia/terminology/brevity/')}>brevity words</a> glossary:</p>
- <dl class="jargon">{BREVITY.map(t => <div><dt>{glossary(t.word) ? <a href={glossary(t.word)}>{t.word}</a> : t.word}</dt><dd>{t.meaning} <a href="#source-brevity">{br(t.page)}</a></dd></div>)}</dl>
+ <dl class="jargon">{BREVITY.map(t => <div><dt>{termTarget(t.word) ? <Term id={t.word}>{t.word}</Term> : t.word}</dt><dd>{t.meaning} <a href="#source-brevity">{br(t.page)}</a></dd></div>)}</dl>
  <p>Air combat training adds a small set of calls whose job is safety: they stop, start and deconflict an engagement, and every player must know them before the first set. Each service's training rules set them; the examples here come from the Navy's T-45 basic fighter maneuvering (BFM) instruction, CNATRA P-1289. The training rules "shall be strictly observed", and they start with 500 feet of separation between all aircraft at all times. <a href="#source-p1289">{b('3-1–3-2')}</a></p>
- <dl class="jargon">{TRAINING_CALLS.map(t => <div><dt>{glossary(t.call) ? <a href={glossary(t.call)}>{t.call}</a> : t.call}</dt><dd>{t.meaning} <a href="#source-p1289">{b(t.page)}</a></dd></div>)}</dl>
+ <dl class="jargon">{TRAINING_CALLS.map(t => <div><dt>{termTarget(t.call) && !brevityLinks.has(termTarget(t.call)!.href) ? <Term id={t.call}>{t.call}</Term> : t.call}</dt><dd>{t.meaning} <a href="#source-p1289">{b(t.page)}</a></dd></div>)}</dl>
  <p>"Knock it off" ends each set as well as any unsafe one: the instructor (dual) or bandit (solo) calls it at the end of every set, and both aircraft acknowledge. <a href="#source-p1289">{b('2-4')}</a> Passing head-on, the pass is called so both pilots go the same way: "high", "low", "right-to-right" or "left-to-left". <a href="#source-p1289">{b('3-4')}</a> The maneuvers themselves are in the <a href={bfm}>BFM module</a>.</p>
  <section class="lesson quiz-lesson" data-lesson="training" aria-labelledby="training-title">
   <h3 id="training-title">Quiz: which training call?</h3>
@@ -282,12 +283,12 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
  </section>
 
  <h2 id="emergency">Distress and urgency</h2>
- <p>Distress communications have absolute priority over all others; urgency communications come next. A distress call begins with <strong>MAYDAY</strong>, preferably said three times; an urgency call uses <strong>PAN-PAN</strong> in the same way. <a href="#source-aim">{a('6-3-1')}</a> Make the first call on the frequency in use, and do not change frequency or ground station unless absolutely necessary. <a href="#source-aim">{a('6-3-1, 6-3-2')}</a> Transmit as many of these items as you need, preferably in this order: <a href="#source-aim">{a('6-3-2')}</a></p>
+ <p>Distress communications have absolute priority over all others; urgency communications come next. A distress call begins with <strong><Term id="Mayday">MAYDAY</Term></strong>, preferably said three times; an urgency call uses <strong><Term id="Pan-pan">PAN-PAN</Term></strong> in the same way. <a href="#source-aim">{a('6-3-1')}</a> Make the first call on the frequency in use, and do not change frequency or ground station unless absolutely necessary. <a href="#source-aim">{a('6-3-1, 6-3-2')}</a> Transmit as many of these items as you need, preferably in this order: <a href="#source-aim">{a('6-3-2')}</a></p>
  <ol class="call-order distress">{DISTRESS_ORDER.map(item => <li>{item}</li>)}</ol>
- <p>While you are in radio contact, keep the assigned transponder code unless ATC tells you otherwise. If you cannot immediately reach an ATC facility, squawk code 7700 with altitude reporting (Mode C). <a href="#source-aim">{a('6-3-2')}</a></p>
+ <p>While you are in radio contact, keep the assigned transponder code unless ATC tells you otherwise. If you cannot immediately reach an ATC facility, <Term id="Squawk">squawk</Term> code 7700 with altitude reporting (Mode C). <a href="#source-aim">{a('6-3-2')}</a></p>
 
  <h2 id="transponder">Transponder codes</h2>
- <p>A transponder answers radar with a four-digit code. Unless ATC assigns one, a visual flight rules (VFR) aircraft squawks <strong>1200</strong>. Three codes are special: <strong>7500</strong> is the hijack code, <strong>7600</strong> signals two-way radio failure, and <strong>7700</strong> signals an emergency; 7600 and 7700 trigger special indications in automated facilities. When changing codes routinely, avoid passing through 7500, 7600 or 7700: to change from 2700 to 7200, first select 2200, then 7200. <a href="#source-aim">{a('4-1-20')}</a></p>
+ <p>A transponder answers radar with a four-digit code. Unless ATC assigns one, a <Term id="VFR">visual flight rules (VFR)</Term> aircraft squawks <strong>1200</strong>. Three codes are special: <strong>7500</strong> is the hijack code, <strong>7600</strong> signals two-way radio failure, and <strong>7700</strong> signals an emergency; 7600 and 7700 trigger special indications in automated facilities. When changing codes routinely, avoid passing through 7500, 7600 or 7700: to change from 2700 to 7200, first select 2200, then 7200. <a href="#source-aim">{a('4-1-20')}</a></p>
  <section class="lesson figure-lesson" data-lesson="squawk" aria-labelledby="sq-title">
   <h3 id="sq-title" class="fig-title">Figure 8 — Change the code without an alarm</h3>
   <p class="task" data-prompt aria-live="polite"></p>
@@ -302,7 +303,7 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
 
  <h2 id="nordo">When the radio fails</h2>
  <h3>At a towered airport</h3>
- <p>Arriving with the <strong>receiver</strong> inoperative, remain outside or above the Class D surface area until you have determined the direction and flow of traffic, then advise the tower of your aircraft type, position, altitude and intention to land, and request light signals. About 3 to 5 miles out, advise your position and join the traffic pattern, watching the tower for light signals. With the <strong>transmitter</strong> inoperative, monitor the tower frequency, and acknowledge tower transmissions or light signals by rocking your wings in daylight, or by blinking the landing or navigation lights at night. <a href="#source-aim">{a('4-2-13')}</a></p>
+ <p>Arriving with the <strong>receiver</strong> inoperative, remain outside or above the Class D surface area until you have determined the direction and flow of traffic, then advise the tower of your aircraft type, position, altitude and intention to land, and request light signals. About 3 to 5 miles out, advise your position and join the <Term>traffic pattern</Term>, watching the tower for light signals. With the <strong>transmitter</strong> inoperative, monitor the tower frequency, and acknowledge tower transmissions or light signals by rocking your wings in daylight, or by blinking the landing or navigation lights at night. <a href="#source-aim">{a('4-2-13')}</a></p>
  <div class="table-scroll" role="region" aria-label="Tower light gun signals" tabindex="0"><table>
   <caption>Airport traffic control tower light gun signals <a href="#source-aim">{a('4-3-13')}</a></caption>
   <thead><tr><th scope="col">Signal</th><th scope="col">Aircraft on the ground</th><th scope="col">Aircraft in flight</th></tr></thead>
