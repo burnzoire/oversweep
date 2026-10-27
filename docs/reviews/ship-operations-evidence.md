@@ -15,7 +15,7 @@ treat a wording mismatch as a finding against this record.
 
 **Military sources first.** [1] CNATRA P-1211, [2] NAVEDTRA 14342A,
 [3] NAVEDTRA 14310 and [4] FM 1-564 are the primary sources. [5]–[7] FAS and
-[8] and [10] Wikipedia and [11] Naval Gazing are secondary, used for ship and aircraft facts; [9] Seapower is
+[8] and [10] Wikipedia, [11] Naval Gazing and [13] the Lexicans blog are secondary, used for ship and aircraft facts; [9] Seapower is
 a 2024 news report cited for current Army deck landing training.
 
 **Age.** P-1211 is dated (7-01) and FM 1-564 is the 1997 edition; the page
@@ -23,7 +23,7 @@ says so where it uses them, and its DLQ figure says current rules may differ.
 
 **Review packet limits.** navyaviation.tpub.com ([2], [3]) is on the packet's
 host list. navyflightmanuals.tpub.com ([1]), everyspec.com ([4]), fas.org
-([5]–[7]), en.wikipedia.org ([8], [10]), seapowermagazine.org ([9]) and navalgazing.net ([11]) are not, so
+([5]–[7]), en.wikipedia.org ([8], [10]), seapowermagazine.org ([9]), navalgazing.net ([11]), faculty.nps.edu ([12]) and thelexicans.wordpress.com ([13]) are not, so
 those are expected to stay unverified by it; their excerpts are recorded here.
 JP 3-04 (jcs.mil), army.mil and navy.mil pages returned HTTP 403 from the
 authoring environment and are not used.
@@ -104,3 +104,11 @@ Used for the Figure 1 deck plan only. "length of 1,092 ft overall and 1,040 ft a
 ## [11] Naval Gazing, "The Nimitz Class"
 
 Used for the Figure 1 deck plan. Figure 1 is traced from the page's overhead photograph, captioned "A deck view of Nimitz showing catapults, elevators and arrestor wires", scaled to the 1,092 ft length. "The resulting ship was 1,092' long overall ... from her 4.5-acre flight deck." "Fixed-wing airplanes are launched using four steam catapults, two in the bow and two on the port side, in the path of the angled landing area. Any airplane which fails to snag one of the four arresting wires aft simply flies off to try again". The hangar deck "is reached by four elevators, two on either side of the landing area aft and two more on the starboard side forward of the island." Jet blast deflector, lens and LSO platform positions are read from the photograph and are approximate.
+
+## [12] Rowe, "Automated Trend Analysis for Navy-Carrier Landing Attempts", NPS, I/ITSEC 2012
+
+Used for the real comment examples, the typed marks and the extra fleet codes. "Results are shown on a sample of 85,571 passes representing about 20% of the current Navy records". "For example, \"(LO)SLOIC-AR\" means that an aircraft was slow and a little low, both when approaching the carrier and just at the edge of the carrier deck; the parentheses mean the lowness was only a little, and the hyphen means the comment applies to the period between being \"in close\" and \"at the ramp\"." Table 1 grammar: "e(code1-code2 loc) → e(code1 loc) <space> e(code2 loc) Loc is a location; hyphen means \"to\""; "e(_code_) → e(code) Mark emphasis"; "e([code]) → e(code) Mark missed communication"; "Interpret dot as \"on\"". "\"NEP/COIM LO IN CLOSE HALF FLAPS THRUST CAUTION\" gets transformed ultimately to \"NEP.COIM LOIC HALF+FLAPS ENG+PROBLEM\"". "for the LSO pass comments of \"HCDAR EWIT\", atomic comments \"H\", \"CD\", \"AR\", and \"EWIT\" were extracted". "Example variant abbreviations are \"EWI\", \"EZW/IT\", and \"EASYWITHIT\" for \"EWIT\"". "3-point touchdown -> 3pts". "Additional codes were observed that probably should standardized, like LTR (\"left to right\"), NELR (\"not enough left rudder\"), TMLR (\"too much left rudder\") ... TOB (\"talking on the ball\")".
+
+## [13] "lex", "Landing grades", 2004, reposted on The Lexicans, 2017
+
+Used for one worked pass. "The LSO's use shorthand to grade a pass – something written down as: (OK) OC NEP-BC /IM (NEP-CDIC) SDAR LOBDRIW 2, would translate into, \"Fair pass: over-controlled a little not enough power on the ball call, fly through up in the middle, a little not enough power on the come-down in close, settle/decel at the ramp, low, flat, drift right in the wires. Two-wire.\"" BC, DR and / are read from this translation. The page notes that the post reads SD as settle/decel where P-1211's SD is spotted deck.
