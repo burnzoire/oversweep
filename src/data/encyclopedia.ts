@@ -157,11 +157,19 @@ export interface OrdnanceData {
   inService: string;
   weight: string;
   dimensions: string;
-  warhead: string;
-  guidance: string;
-  fuzing: string;
-  delivery: string;
+  // Bombs, rockets and missiles fill the warhead to delivery rows; guns leave
+  // them out and fill the gun rows instead.
+  warhead?: string;
+  guidance?: string;
+  motor?: string;
+  fuzing?: string;
+  delivery?: string;
   range?: string;
+  calibre?: string;
+  action?: string;
+  rateOfFire?: string;
+  muzzleVelocity?: string;
+  ammunition?: string;
   carriers: string[];
   variants?: string[];
   // The first photo leads the page; the others follow the record text.
