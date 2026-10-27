@@ -52,36 +52,38 @@ const DECK = [
   [1092, -38], [1086, -42], [820, -57], [740, -109], [136, -109], [133, -83], [52, -77], [33, -53], [0, -53],
 ];
 // Elevators: 1 and 2 on the starboard side forward of the island, 3 on the
-// starboard side aft of it and 4 on the port side aft.
+// starboard side aft of it and 4 on the port side aft, each traced from its
+// painted outline with the cut corner it has.
 const ELEVATORS = [
-  { n: 1, x: [554, 643], y: [-56, -109] },
-  { n: 2, x: [395, 482], y: [-56, -109] },
-  { n: 3, x: [141, 213], y: [-52, -103] },
-  { n: 4, x: [151, 217], y: [117, 74] },
+  { n: 1, at: [592, -78], pts: [[553, -52], [628, -52], [629, -85], [642, -109], [553, -109]] },
+  { n: 2, at: [431, -78], pts: [[398, -52], [458, -52], [460, -82], [474, -109], [398, -109]] },
+  { n: 3, at: [177, -78], pts: [[142, -49], [205, -49], [213, -57], [213, -109], [142, -109]] },
+  { n: 4, at: [184, 97], pts: [[152, 74], [212, 74], [228, 120], [152, 120]] },
 ];
 const rect = ([x0, x1], [y0, y1]) => [[x0, y0], [x1, y0], [x1, y1], [x0, y1]];
 function deckParts() {
-  const seg = (p, q, cls = 'part') => { const [a, b] = [dp(p), dp(q)]; return el('line', { class: cls, x1: a[0], y1: a[1], x2: b[0], y2: b[1] }); };
-  const label = (p, s, anchor = 'middle', dy = 0) => { const [x, y] = dp(p); return el('text', { class: 'lbl small', x, y: y + dy, 'text-anchor': anchor }, s); };
+  // Lines on the deck are clipped to its edge.
+  const seg = (p, q, cls = 'part') => { const [a, b] = [dp(p), dp(q)]; return el('line', { class: cls, x1: a[0], y1: a[1], x2: b[0], y2: b[1], ...(cls.includes('heavy') ? {} : { 'clip-path': 'url(#deck-clip)' }) }); };
+  const label = (p, s, anchor = 'middle', dy = 0, onDeck = true) => { const [x, y] = dp(p); return el('text', { class: onDeck ? 'lbl small halo' : 'lbl small', x, y: y + dy, 'text-anchor': anchor }, s); };
   const box = (cls, corners) => el('polygon', { class: cls, points: pts(corners.map(dp)) });
   return {
     angle: [seg(la(0), la(770)), label(la(380, 0), 'Angled deck centerline, 9°', 'start', 12)],
     wires: [167, 205, 242, 279].map((d) => seg(la(d, -34), la(d, 34))).concat(label(la(223, -46), 'Wires 1–4', 'middle', 6)),
     foul: [seg(la(0, 32), la(770, 32), 'part dashed'), seg(la(0, -32), la(770, -32), 'part dashed'), label(la(110, 32), 'Foul line', 'middle', -4)],
-    ramp: [seg([0, 53], [0, -53], 'part heavy'), label([0, -53], 'Ramp', 'start', 12)],
-    lens: [box('partfill', rect([328, 344], [138, 128])), label([336, 146], 'Lens', 'middle', -4)],
-    lso: [box('partfill', rect([35, 55], [80, 66])), label([45, 88], 'LSO', 'middle', -4)],
+    ramp: [seg([0, 53], [0, -53], 'part heavy'), label([0, -53], 'Ramp', 'start', 12, false)],
+    lens: [box('partfill', rect([328, 344], [138, 128])), label([336, 146], 'Lens', 'middle', -4, false)],
+    lso: [box('partfill', rect([35, 55], [80, 66])), label([45, 88], 'LSO', 'middle', -4, false)],
     cats: [
-      seg([700, -49], [1078, -26]), label([1000, -40], 'Cat 1', 'middle', 12),
+      seg([700, -49], [1078, -26]), label([960, -32], 'Cat 1', 'middle', -4),
       seg([700, 23], [1061, 30]), label([1000, 33], 'Cat 2', 'middle', -4),
-      seg([346, 67], [803, 80]), label([650, 76], 'Cat 3', 'middle', 12),
-      seg([293, 108], [720, 126]), label([560, 121], 'Cat 4', 'middle', -4),
+      seg([345, 67], [650, 96]), label([560, 87], 'Cat 3', 'middle', -3),
+      seg([330, 110], [650, 112]), label([560, 131], 'Cat 4', 'middle', -4, false),
     ],
     jbd: [
       box('partfill', rect([628, 643], [37, 2])), box('partfill', rect([640, 657], [-37, -72])),
       box('partfill', rect([277, 293], [118, 94])), box('partfill', rect([328, 346], [84, 50])),
     ],
-    island: [box('partfill', rect([250, 375], [-72, -109])), label([312, -120], 'Island (PriFly)', 'middle', 6)],
+    island: [box('partfill', rect([250, 375], [-72, -109])), label([312, -120], 'Island (PriFly)', 'middle', 6, false)],
   };
 }
 function setupDeck(root) {
@@ -90,12 +92,15 @@ function setupDeck(root) {
   const parts = deckParts();
   const groups = {};
   const bar = [dp([0, -150]), dp([200, -150])];
+  const clip = el('clipPath', { id: 'deck-clip' });
+  clip.append(el('polygon', { points: pts(DECK.map(dp)) }));
   svg.replaceChildren(
     el('rect', { class: 'frame', x: 1, y: 1, width: 638, height: 298 }),
     el('polygon', { class: 'deck', points: pts(DECK.map(dp)) }),
+    clip,
     ...ELEVATORS.flatMap((e) => {
-      const [x, y] = dp([(e.x[0] + e.x[1]) / 2, (e.y[0] + e.y[1]) / 2]);
-      return [el('polygon', { class: 'elevator', points: pts(rect(e.x, e.y).map(dp)) }), el('text', { class: 'lbl small', x, y: y + 4, 'text-anchor': 'middle' }, `Elev. ${e.n}`)];
+      const [x, y] = dp(e.at);
+      return [el('polygon', { class: 'elevator', points: pts(e.pts.map(dp)) }), el('text', { class: 'lbl small halo', x, y: y + 4, 'text-anchor': 'middle' }, `Elev. ${e.n}`)];
     }),
     el('line', { class: 'thin dotted', x1: dp([0, 0])[0], y1: dp([0, 0])[1], x2: dp([1092, 0])[0], y2: dp([1092, 0])[1] }),
     el('text', { class: 'lbl small', x: 630, y: 22, 'text-anchor': 'end' }, 'Bow →'),
@@ -104,13 +109,20 @@ function setupDeck(root) {
     ...[0, 100, 200].map((f) => el('line', { class: 'thin', x1: dp([f, 0])[0], y1: bar[0][1] - 4, x2: dp([f, 0])[0], y2: bar[0][1] + 4 })),
     el('text', { class: 'lbl small', x: bar[1][0] + 6, y: bar[0][1] + 4 }, '200 ft'),
   );
+  // Labels go above every line, with a halo in the deck's colour, so no line
+  // runs through a word.
+  const labels = el('g');
   for (const [id, nodes] of Object.entries(parts)) {
     const g = el('g', { 'data-part': id });
-    g.append(...nodes);
-    g.addEventListener('click', () => select(id));
+    const words = el('g');
+    g.append(...nodes.filter((n) => n.tagName !== 'text'));
+    words.append(...nodes.filter((n) => n.tagName === 'text'));
+    for (const n of [g, words]) n.addEventListener('click', () => select(id));
     groups[id] = g;
     svg.append(g);
+    labels.append(words);
   }
+  svg.append(labels);
   function select(id) {
     for (const li of items) {
       const on = li.dataset.part === id && !li.classList.contains('on');
