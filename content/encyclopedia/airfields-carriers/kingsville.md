@@ -54,8 +54,14 @@ sources:
     accessed: "2026-10-27"
 ---
 
+## Role today
+
 Kingsville trains the Navy's and Marine Corps' strike pilots. [[1]](#source-1) Training Air Wing Two flies the [T-45 Goshawk](record:t-45) there, and its students, along with tactical jet students from some NATO and allied nations, learn to fly a carrier-capable jet before they move on to fleet aircraft. [[1]](#source-1) The wing was the first in the Navy to operate the T-45, which replaced both the T-2 Buckeye and the TA-4 Skyhawk in the strike pipeline, and it began taking the glass-cockpit T-45C in 2005. [[1]](#source-1)
 
+## History
+
 The station was commissioned on 4 July 1942 as an auxiliary field of NAS Corpus Christi and trained pilots for the Second World War. [[1]](#source-1) It reopened as an auxiliary field in the Korean War, when its first jet training class began on 15 July, and became Naval Air Station Kingsville in 1968. [[1]](#source-1) Besides flight training, the station runs its own air traffic control, bombing ranges, aerial targets and outlying fields, including Naval Auxiliary Landing Field Orange Grove. [[1]](#source-1)
+
+## The airfield
 
 The airfield has four 8,000 ft runways in two crossing pairs, all with E-28 [arresting gear](term:) near both ends. [[2]](#source-2) [[3]](#source-3) The FAA data lists an optical landing system and [wave-off lights](term:) at most runway ends, the equipment a runway needs for [field carrier landing practice](term:FCLP). [[2]](#source-2)

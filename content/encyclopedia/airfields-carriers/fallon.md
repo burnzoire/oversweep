@@ -60,8 +60,14 @@ sources:
     accessed: "2026-10-27"
 ---
 
+## Role today
+
 Fallon is the Navy's main school for air-to-air and air-to-ground combat. [[1]](#source-1) It is home to the Naval Aviation Warfighting Development Center, whose schools include the Navy Fighter Weapons School, better known as TOPGUN, and visiting carrier air wings train there before they deploy. [[1]](#source-1) The ranges of the Fallon Range Training Complex spread across the Lahontan and Dixie valleys and cover some 240,000 acres; Dixie Valley holds a simulated air defence network of about 20 radar sites. [[1]](#source-1)
 
+## History
+
 The airfield was built in 1942 as part of the defences of the West Coast, and the Navy soon took it over for training. [[1]](#source-1) Apart from 1946 to 1951, when the Bureau of Indian Affairs used it, it has trained naval aviators ever since. [[1]](#source-1) Through the Vietnam War, squadrons rotated through what was then a Naval Auxiliary Air Station before joining their carriers, and on 1 January 1972 the Navy made it a full naval air station. [[1]](#source-1) TOPGUN moved here from NAS Miramar in 1996, when Miramar passed to the Marine Corps, and the Naval Strike and Air Warfare Center formed that year from TOPGUN, Strike University and the airborne early warning school TOPDOME. [[1]](#source-1) The Navy Reserve adversary squadron VFC-13 came from Miramar at the same time. [[1]](#source-1) The field is named Van Voorhis Field for Commander Bruce Van Voorhis (1908–1943), who was awarded the Medal of Honor after his death. [[1]](#source-1)
+
+## The airfield
 
 At 3,935 ft, Fallon is the highest field in this section, and its main runway, 13R/31L, is 14,001 ft long. [[2]](#source-2) The parallel runways run 133° and 313° magnetic, with a crosswind runway, 07/25, across their southern ends. [[3]](#source-3) Each runway has E-28 [arresting gear](term:) near both ends. [[3]](#source-3) The base also kept its own search and rescue helicopter team from 1972; since 2022 the Navy Rotary Wing Weapons School has taken over the role. [[1]](#source-1)

@@ -59,10 +59,16 @@ sources:
     accessed: "2026-10-27"
 ---
 
+## Role today
+
 Fort Rucker is the home of Army aviation. [[1]](#source-1) Every Army aviator learns to fly here, and all Army aviation training has been done at Fort Rucker since 1973, along with the training of Air Force and allied helicopter pilots and crews. [[1]](#source-1) The post holds the US Army Aviation Center of Excellence, which covers aviation training, doctrine and testing, as well as the Army Aviation Museum. [[1]](#source-1) Because so many aviators are warrant officers, the Warrant Officer Candidate School is here too, and aviation warrant officers stay on for flight school before they receive their wings. [[1]](#source-1)
+
+## Training fields
 
 Training is spread over several fields. [[1]](#source-1) At Cairns Army Airfield, 1st Battalion, 223rd Aviation Regiment teaches new pilots on the UH-72 Lakota, which replaced the TH-67 Creek trainer, the last of which retired in 2021. [[1]](#source-1) Advanced training happens at the heliports: AH-64E Apache training from Hanchey Army Heliport, UH-60 Black Hawk combat and night training from Lowe and Shell, and [CH-47](record:ch-47f) Chinook training from Knox. [[1]](#source-1) The Air Force's 23rd Flying Training Squadron trains its helicopter pilots at Cairns, in the TH-1H. [[4]](#source-4)
 
 Cairns is the Army's busiest airfield, with about 240,000 aircraft movements a year; its tower may launch 70 to 120 aircraft in the morning and afternoon and 50 or 60 more at night. [[4]](#source-4) The field was built in 1942 as Ozark Army Airfield, a wartime training field; it was released by the Air Force after the war, used in 1949 to film the airfield scenes of *Twelve O'Clock High*, and taken over by the Army in 1952. [[4]](#source-4) It was renamed in 1959 for Major General Bogardus S. Cairns, commander of the Aviation Center, who was killed in an H-13 helicopter crash near the post in December 1958. [[4]](#source-4)
+
+## Name
 
 The post itself has changed its name twice in recent years: it was Fort Novosel, for Medal of Honor helicopter pilot Michael J. Novosel, from April 2023, and became Fort Rucker again on 11 June 2025, now named for Captain Edward W. Rucker, a First World War aviator. [[1]](#source-1) Cairns' two runways are about 4,500 and 5,000 ft long, and most of its diagram is helicopter parking rows, numbered landing spots and pads. [[2]](#source-2) [[3]](#source-3)

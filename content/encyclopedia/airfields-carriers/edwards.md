@@ -83,8 +83,14 @@ sources:
     accessed: "2026-10-27"
 ---
 
+## Role today
+
 Edwards is the Air Force's flight test centre. [[1]](#source-1) It is home to the Air Force Test Center, the US Air Force Test Pilot School and NASA's Armstrong Flight Research Center, and the 412th Test Wing tests the Air Force's aircraft, weapons and software there; its 412th Operations Group flies some 90 aircraft of more than 30 designs. [[1]](#source-1) Aircraft builders run their own test programmes from the base as well. [[1]](#source-1)
 
+## History
+
 The base exists because of Rogers Dry Lake. [[1]](#source-1) In 1932 Lt. Col. Henry "Hap" Arnold began buying land beside what was then Muroc Dry Lake for a bombing range, and from 1935 crews from March Field bombed targets laid out on the desert. [[1]](#source-1) Arnold called the lake bed "level as a billiard table", a natural runway for testing aircraft, and in 1942 America's first jet, the Bell XP-59 Airacomet, flew from its north shore. [[1]](#source-1) On 14 October 1947 Captain Chuck Yeager flew the Bell X-1 past the speed of sound here. [[1]](#source-1) The base was renamed in 1949 for Captain Glen Edwards, a test pilot killed in the crash of the Northrop YB-49 flying wing near Muroc in 1948, and the Test Pilot School moved in from Wright Field in 1951. [[1]](#source-1) The X-15, the lifting bodies and the first Space Shuttle landings followed, and Edwards stayed the Shuttle's main landing site until 1991. [[1]](#source-1)
+
+## The airfield
 
 The main runway, 05R/23L, is 15,024 ft long and 300 ft wide; when the base's 15,000 ft runway was built in the 1940s it was completed in a single pour of concrete. [[1]](#source-1) [[2]](#source-2) The lake bed beyond it carries several more marked runways, the longest, 17/35, nearly 29,500 ft long, laid out around a compass rose; the FAA warns that their charted positions may be out by more than 600 ft. [[4]](#source-4) Both main runways have BAK-12B [arresting gear](term:) near each end. [[3]](#source-3)

@@ -63,10 +63,16 @@ sources:
     accessed: "2026-10-27"
 ---
 
+## Role today
+
 Nellis calls itself the "Home of the Fighter Pilot" and is the Air Force's centre for advanced combat training. [[1]](#source-1) Its main unit, the US Air Force Warfare Center, runs exercises that bring strike packages from across the Air Force together with Army, Navy and Marine Corps units and allied air forces, chiefly Red Flag and Green Flag-West, flown over the Nevada Test and Training Range north of the base. [[1]](#source-1) Range traffic works with "Nellis Control" for the restricted areas and the Desert MOA. [[2]](#source-2)
+
+## History
 
 The field began as a Western Air Express mail strip that the City of Las Vegas bought in January 1941 and split between the Army and the city. [[1]](#source-1) Las Vegas Army Airfield opened on 20 December 1941 as a flexible gunnery school and trained more than 45,000 B-17 gunners in the Second World War. [[1]](#source-1) After a spell as a [P-51](record:p-51d) pilot training base it was named in 1950 for 1st Lt. William Harrell Nellis, killed in action in Europe in 1944, and the Fighter Weapons School formed there in 1954. [[1]](#source-1) The school struggled with its [F-86s](record:f-86) in the mid-1950s; under Tactical Air Command from 1958 it moved to graduate-level weapons training on the [F-100](record:f-100), F-105 and [F-4](record:f-4). [[1]](#source-1)
 
 From the 1970s Nellis added the pieces of modern combat training: aggressor squadrons flying dissimilar aircraft, the 4477th "Red Eagles" flying MiGs from the Tonopah Test Range, and Red Flag itself, run by the 57th wing from 1979. [[1]](#source-1) The Weapons School now teaches instructors for most Air Force combat aircraft, from fighters to the B-1, B-52 and rescue helicopters, and the Thunderbirds have flown from Nellis since 1956. [[1]](#source-1)
+
+## The airfield
 
 The airfield has two parallel concrete runways about 10,000 ft long, with ramp space for up to 300 aircraft, room for the large exercise deployments. [[1]](#source-1) [[2]](#source-2) The runways run 041° and 221° true. [[2]](#source-2) Both have [arresting gear](term:) near each end, and [PAPIs](term:PAPI) set for a 3° glide path serve all four ends. [[2]](#source-2) [[3]](#source-3)

@@ -76,8 +76,14 @@ sources:
     note: "South Field: https://aeronav.faa.gov/d-tpp/2610/01909AD.PDF"
 ---
 
+## Role today
+
 Whiting Field is one of the Navy's two primary pilot training bases, with NAS Corpus Christi, and it is two airfields that share one support base. [[1]](#source-1) North Field is used only for primary training in the T-6B Texan II, flown by students of the Navy, Marine Corps, Coast Guard and Air Force on the joint primary syllabus, along with allied students. [[1]](#source-1) South Field is the advanced helicopter school: Navy, Marine Corps, Coast Guard and allied students fly the TH-73A Thrasher there, and US students who finish it are designated naval aviators. [[1]](#source-1) The station also has outlying fields in Santa Rosa County and near Navarre. [[1]](#source-1)
 
+## History
+
 Naval Auxiliary Air Station Whiting Field was commissioned on 16 July 1943 and named for Captain Kenneth Whiting, Naval Aviator No. 16, who learned to fly under Orville Wright in 1914 and helped convert the collier Jupiter into the Navy's first aircraft carrier, USS Langley. [[1]](#source-1) Jet training arrived in 1949 with eight TO-1 Shooting Stars, and the Blue Angels made Whiting their headquarters in 1955. [[1]](#source-1) The first TH-73A Thrasher, an Italian-designed helicopter, reached Training Air Wing Five on 6 August 2021. [[1]](#source-1)
+
+## The airfield
 
 Both fields have the same pattern of two crossing runways, each about 6,000 ft by 200 ft. [[2]](#source-2) [[3]](#source-3) North Field's [TACAN](term:) serves both, and each field has an ILS, North on runway 14 and South on runway 32. [[2]](#source-2) [[3]](#source-3) South Field's diagram marks helicopter landing spots along the runways and on six pads beside them. [[4]](#source-4)

@@ -67,10 +67,16 @@ sources:
     accessed: "2026-10-27"
 ---
 
+## Role today
+
 Andersen is the most important US air base west of Hawaii. [[1]](#source-1) It is one of the Air Force's four forward operating locations for bombers and the only base in the Western Pacific that can permanently support the heavy bombers, the B-1B, B-2 and B-52. [[1]](#source-1) Guam's almost unrestricted airspace and the bombing range on Farallon de Medinilla, an island 184 miles north, make it a good place to train. [[1]](#source-1) Its host, the 36th Wing, flies no aircraft of its own; it supports the Air Force and foreign units that deploy there. [[1]](#source-1)
+
+## History
 
 The base began as North Field, the first airfield built on Guam after its liberation in 1944. [[1]](#source-1) With Northwest Field it had four main runways and revetments for more than 200 B-29s, and from early 1945 the 314th Bombardment Wing flew its raids on Japan from here. [[1]](#source-1) It was named for Brigadier General James Roy Andersen, lost in the crash of a B-24 between Kwajalein and Johnston Island in February 1945. [[1]](#source-1)
 
 In the Vietnam War Andersen launched the B-52 raids of Operation Arc Light from 1965, and in the eleven days of Linebacker II in December 1972 more than 150 B-52s flew 729 sorties against North Vietnam from Andersen and U-Tapao in Thailand. [[1]](#source-1) The 54th Weather Reconnaissance Squadron flew WC-130s from Andersen into typhoons from the 1960s to 1987. [[1]](#source-1) From 2004 to April 2020, B-1Bs, B-2s and B-52s took turns to keep a continuous bomber presence on Guam; bombers still deploy there as needed. [[1]](#source-1)
+
+## The airfield
 
 The airfield is 617 ft above sea level. [[2]](#source-2) Its two parallel runways are 10,528 and 11,200 ft long, each with BAK-12 [arresting gear](term:) near both ends, and three of the four runway ends have an ILS. [[2]](#source-2) [[3]](#source-3)

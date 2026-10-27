@@ -64,10 +64,16 @@ sources:
     accessed: "2026-10-27"
 ---
 
+## Role today
+
 Pensacola is where naval aviation began, and it is still where most naval aviators and naval flight officers start. [[1]](#source-1) Every Navy, Marine Corps and Coast Guard officer heading for flight training begins here, and Training Air Wing Six at Forrest Sherman Field trains all the Navy's and Marine Corps' naval flight officers. [[1]](#source-1) The Air Force trains all its combat systems officers here too, in its own 479th Flying Training Group. [[1]](#source-1) Some 131 aircraft fly from Sherman Field, about 110,000 operations a year. [[1]](#source-1)
+
+## History
 
 The site was a Navy Yard from 1826. [[1]](#source-1) After the yard closed in 1911, a board under Captain Washington Irving Chambers recommended an aviation training station at Pensacola, and on 20 January 1914 the aviation unit from Annapolis arrived aboard the former battleship USS Mississippi: nine officers, 23 enlisted men and seven aircraft. [[1]](#source-1) The first flight was on 2 February 1914. [[1]](#source-1) When the United States entered the First World War, Pensacola was still the Navy's only air station, and by the armistice it had trained 1,000 naval aviators, with seaplanes, airships and kite balloons housed along a mile of beach. [[1]](#source-1) Between the wars it was known as the "Annapolis of the Air", and in the Second World War it trained 1,100 cadets a month. [[1]](#source-1)
 
 Jets needed more than the 3,100 ft runway of the old Chevalier Field, so Forrest Sherman Field opened on the western side of the station in 1954, named for the late Chief of Naval Operations, and the Blue Angels moved in from Corpus Christi soon after. [[1]](#source-1) The station was badly damaged by Hurricane Ivan in 2004, when nearly every building was hit, and was rebuilt. [[1]](#source-1) The National Naval Aviation Museum stands beside the airfield. [[1]](#source-1) [[3]](#source-3)
+
+## The airfield
 
 Sherman Field sits almost at sea level, at 28 ft, with two parallel runways and a third crossing them, each about 7,000 to 8,000 ft long and 200 ft wide. [[2]](#source-2) E-28 [arresting gear](term:) is marked on all three. [[3]](#source-3) The field's [TACAN](term:) and ILS serve the training traffic, and the TACAN runs only during field hours. [[2]](#source-2)

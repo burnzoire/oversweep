@@ -45,10 +45,16 @@ sources:
     note: "Row for EGUL: threshold latitude and longitude, length and width."
 ---
 
+## Role today
+
 Lakenheath is a Royal Air Force station that hosts only US Air Force units. [[1]](#source-1) Its host is the 48th Fighter Wing, the "Liberty Wing", of US Air Forces in Europe – Air Forces Africa, which flies the [F-15E Strike Eagle](record:f-15e) and, since December 2021, the F-35A Lightning II. [[1]](#source-1)
+
+## History
 
 The heath was a Royal Flying Corps bombing range in the First World War. [[1]](#source-1) In 1940 the Air Ministry made Lakenheath a decoy for nearby RAF Mildenhall, and in 1941 it got surfaced runways and became a satellite of Mildenhall for Short Stirling bombers of No. 149 Squadron. [[1]](#source-1) In 1944 the bombers left so the airfield could be rebuilt for very heavy bombers, and from July 1948 Strategic Air Command B-29s deployed there as the Cold War began. [[1]](#source-1) In 1956 the CIA briefly formed its U-2 Detachment A at Lakenheath before moving it to Wiesbaden. [[1]](#source-1)
 
 The 48th arrived from France on 15 January 1960, flying [F-100s](record:f-100), after President de Gaulle ordered nuclear-capable forces out of the country. [[1]](#source-1) It flew F-4D Phantoms from the early 1970s and F-111Fs from 1977, and in April 1986 its F-111s flew the long-range strike on Libya, Operation El Dorado Canyon. [[1]](#source-1) The F-15E replaced the F-111 from 1992, and F-15C air-superiority Eagles flew from Lakenheath until April 2022, ending 45 years of continuous USAF F-15 Eagle air-superiority operations in Europe. [[1]](#source-1) In 2015 the Defense Department chose Lakenheath for 54 F-35As in two squadrons; the 495th Fighter Squadron reactivated as the first of them in October 2021. [[1]](#source-1)
+
+## The airfield
 
 The airfield has one runway, 05/23, 9,000 ft by 150 ft, drawn in Figure 1 from its threshold coordinates. [[1]](#source-1) [[2]](#source-2)

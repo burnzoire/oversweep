@@ -38,10 +38,16 @@ sources:
     accessed: "2026-10-27"
 ---
 
+## Role today
+
 Al Udeid, southwest of Doha, is the largest US military base in the Middle East, with about 10,000 military personnel in 2026. [[1]](#source-1) It is a Qatari base: it is the main headquarters of the Qatar Emiri Air Force, and it also hosts the US Air Force, the Royal Air Force and other foreign forces. [[1]](#source-1) The forward headquarters of US Central Command, the headquarters of US Air Forces Central and the 379th Air Expeditionary Wing are there, and with Qatar's other facilities it is a hub for command, logistics and basing across Central Command's area, overseeing US air operations over Iraq, Afghanistan and Syria. [[1]](#source-1)
+
+## History
 
 Qatar built the base in 1996 at a cost of more than $1 billion, when its own air force was small, after a defence cooperation agreement with the United States that followed the 1991 Gulf War. [[1]](#source-1) The US Air Force first used it, then in secret, in late September 2001, to position aircraft for operations over Afghanistan; the base was acknowledged in March 2002. [[1]](#source-1) In April 2003, early in the Iraq War, the US Combat Air Operations Center for the Middle East moved there from Prince Sultan Air Base in Saudi Arabia. [[1]](#source-1)
 
 In the 2003 invasion of Iraq the RAF's Al Udeid Wing, with Tornado GR4s, flew 268 sorties between 20 March and 15 April, and 14 Australian F/A-18 Hornets flew over 670 sorties, 350 of them in combat over Iraq. [[1]](#source-1) Since 2014 it has been the headquarters for British air strikes against ISIS, Operation Shader. [[1]](#source-1) In June 2017 it hosted more than 11,000 US and coalition personnel and over 100 operational aircraft. [[1]](#source-1) On 23 June 2025 Iran fired missiles at the base in retaliation for US strikes on its nuclear sites; Qatar reported no casualties. [[1]](#source-1)
+
+## The airfield
 
 The airfield has two parallel runways, each 3,750 m (12,303 ft) long. [[1]](#source-1)

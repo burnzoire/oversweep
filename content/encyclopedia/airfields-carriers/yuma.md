@@ -65,8 +65,14 @@ sources:
     note: "Runway 17/35 is on the diagram but not in the airport data read the same day."
 ---
 
+## Role today
+
 Yuma is the busiest air station in the Marine Corps. [[1]](#source-1) Its desert weather allows flying almost all year, and the station sits beside large air-to-ground ranges, the Chocolate Mountain Aerial Gunnery Range and the western Barry M. Goldwater Range, with restricted airspace over them; it also runs an auxiliary airfield on the Goldwater range. [[1]](#source-1) Marine Aviation Weapons and Tactics Squadron 1 trains all the Marine Corps' tactical aviation units from here, above all through the Weapons and Tactics Instructor course, and VMFT-401 flies adversaries for every US service and for allied air forces. [[1]](#source-1)
 
+## History
+
 The field began in 1928 as Fly Field, named for Colonel Benjamin F. Fly, who had recommended the site. [[1]](#source-1) In the Second World War it became Yuma Army Airfield, a flying school on AT-6s and later B-26 Marauders, with a flexible gunnery school. [[1]](#source-1) The Air Force reopened it in 1954 for Air Defense Command's interceptor crews, who came for two weeks at a time to fire rockets at towed targets, and named it Vincent Air Force Base in 1956. [[1]](#source-1) The base passed to the Navy in 1959 and to the Marine Corps soon after, and it became Marine Corps Air Station Yuma on 20 July 1962. [[1]](#source-1) It was home to the Marine Corps' [F-4](record:f-4) training squadron in the 1960s and 1970s and then to the Pacific [AV-8B Harrier II](record:av-8b) force, and the Marine Corps' first operational F-35B arrived on 16 November 2012. [[1]](#source-1)
+
+## The airfield
 
 The Marines share the airfield with Yuma International Airport, whose terminal is on the north side. [[1]](#source-1) [[3]](#source-3) Its main runway, 03L/21R, is 13,300 ft long, and three of the four runways have E-28 [arresting gear](term:). [[2]](#source-2) [[3]](#source-3) The diagram also marks five VTOL pads. [[3]](#source-3)
