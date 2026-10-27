@@ -639,6 +639,18 @@
     "era": "modern"
   },
   {
+    "id": "encyclopedia.aircraft.t-45",
+    "slug": "t-45",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "T-45 Goshawk",
+    "designation": "McDonnell Douglas/Boeing T-45C",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The carrier-capable Hawk derivative in which Navy and Marine Corps strike pilots learn jets.",
+    "era": "modern"
+  },
+  {
     "id": "encyclopedia.aircraft.uh-1h",
     "slug": "uh-1h",
     "category": "aircraft",

@@ -66,5 +66,16 @@
     "publication": "published",
     "objective": "Read the HSI as a picture, set up and fly a TACAN or VOR course, correct for wind, intercept courses inbound and outbound, fly DME arcs, point to point and waypoint routes, and cross-check them, with positions, headings and the navigation aids as background.",
     "applicability": "For military pilots of every service: US Navy training publications first, with the FAA AIM and Pilot's Handbook as the supplementary US civil rule set and an Army field manual for the military grid. Worked examples use the T-45C training jet's displays; your aircraft's flight manual (NATOPS or your service's equivalent) governs its systems."
+  },
+  {
+    "id": "module.weapons-delivery",
+    "slug": "weapons-delivery",
+    "subject": "air-to-ground-operations",
+    "revision": 1,
+    "title": "Weapons Delivery",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Understand how an unguided weapon is delivered: the level, dive, loft and pop-up attacks and when each is used, the bombing triangle and the sight, release parameters and what an error in each does to the hit, bombing tables, low- and high-drag weapons, fuze arming and fragmentation, computed and manual sights, and the offset pop-up attack from the run-in to the recovery.",
+    "applicability": "For military pilots of every service flying fixed-wing attack: the US Navy's T-45 weapons and operational navigation training instructions first, with sim manuals (DCS) for computed modes. Worked numbers are T-45 training-pattern numbers with practice bombs; your aircraft's tactical manual and your unit's rules govern."
   }
 ]
