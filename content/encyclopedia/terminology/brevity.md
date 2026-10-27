@@ -1,6 +1,14 @@
 ---
 short: Brevity
 usage: Army, Marine Corps, Navy and Air Force
+photo:
+  src: "encyclopedia/terminology/brevity.jpg"
+  alt: "Three airmen in desert flight suits and headsets working at consoles inside an AWACS aircraft"
+  caption: "E-3B Sentry crew members control coalition aircraft during airstrikes over northern Iraq, 2 October 2014."
+  author: "Senior Airman Matthew Bruch, US Air Force"
+  licence: "Public domain"
+  sourceUrl: "https://commons.wikimedia.org/wiki/File:Airstrikes_in_Syria_141002-F-UL677-288.jpg"
+  accessed: "2026-10-27"
 terms:
   - term: ABORT
     definition: Cease action or terminate the attack prior to weapons release or event or mission.
