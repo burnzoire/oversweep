@@ -35,29 +35,53 @@ function text(node) {
   return copy.textContent.replace(/\s+/g, ' ').trim();
 }
 
-// Figure 1: a schematic plan of a carrier's flight deck, bow to the right and
-// port at the top. Each part is a group the callouts below highlight.
-const ANGLE = -10 * Math.PI / 180;
-const along = (x0, y0, d, off = 0) => [x0 + d * Math.cos(ANGLE) - off * Math.sin(ANGLE), y0 + d * Math.sin(ANGLE) + off * Math.cos(ANGLE)];
+// Figure 1: a Nimitz-class flight deck in plan, bow to the right and port at
+// the top. Coordinates are in feet: x forward from the round-down, y to port
+// of the centerline. The class is 1,092 ft long and 252 ft wide overall with
+// the landing area angled 9° to port; the places of the elevators, lens and
+// LSO platform are approximate. Each part is a group the callouts highlight.
+const DK = 0.52, DX = 34, DY = 158;
+const dp = ([x, y]) => [DX + x * DK, DY - y * DK];
+// Along the landing area: d ft up the angled centerline from the ramp, off ft
+// to port of it.
+const la = (d, off = 0) => {
+  const c = Math.cos(9 * Math.PI / 180), s = Math.sin(9 * Math.PI / 180);
+  return [d * c - off * s, -12 + d * s + off * c];
+};
+const DECK = [
+  [0, -78], [0, 42], [60, 48], [200, 60], [290, 72], [360, 126], [790, 150], [850, 108],
+  [1000, 82], [1070, 58], [1092, 30], [1092, -26], [1060, -60], [960, -86], [880, -102],
+  [120, -102], [40, -92],
+];
+const ELEVATORS = [
+  { n: 1, pts: [[880, -102], [950, -102], [950, -126], [880, -126]] },
+  { n: 2, pts: [[750, -102], [820, -102], [820, -126], [750, -126]] },
+  { n: 3, pts: [[500, -102], [570, -102], [570, -126], [500, -126]] },
+  { n: 4, pts: [[205, 61], [275, 69], [272, 94], [202, 86]] },
+];
 function deckParts() {
-  const A = [52, 182];
-  const c = (d, off) => along(A[0], A[1], d, off);
-  const line = (p, q, cls = 'part') => el('line', { class: cls, x1: p[0], y1: p[1], x2: q[0], y2: q[1] });
+  const seg = (p, q, cls = 'part') => { const [a, b] = [dp(p), dp(q)]; return el('line', { class: cls, x1: a[0], y1: a[1], x2: b[0], y2: b[1] }); };
+  const label = (p, s, anchor = 'middle', dy = 0) => { const [x, y] = dp(p); return el('text', { class: 'lbl small', x, y: y + dy, 'text-anchor': anchor }, s); };
+  const box = (cls, corners) => el('polygon', { class: cls, points: pts(corners.map(dp)) });
+  const cat = (p, q, n, at) => [seg(p, q), label(at, `Cat ${n}`, 'middle', 3)];
   return {
-    angle: [line(c(0, 0), c(380, 0)), el('text', { class: 'lbl small', x: c(240, 44)[0], y: c(240, 44)[1], 'text-anchor': 'middle' }, 'Landing area centerline')],
-    wires: [55, 80, 105, 130].map((d) => line(c(d, -20), c(d, 20))).concat(el('text', { class: 'lbl small', x: c(92, 34)[0], y: c(92, 34)[1] + 6, 'text-anchor': 'middle' }, 'Wires 1–4')),
-    foul: [line(c(0, -26), c(380, -26), 'part dashed'), line(c(0, 26), c(380, 26), 'part dashed')],
-    ramp: [el('path', { class: 'part', d: 'M44 132 Q36 165 44 206' }), el('text', { class: 'lbl small', x: 12, y: 126 }, 'Ramp')],
-    lens: [el('rect', { class: 'partfill', x: 190, y: 92, width: 10, height: 14 }), el('text', { class: 'lbl small', x: 182, y: 84, 'text-anchor': 'end' }, 'Lens')],
-    lso: [el('rect', { class: 'partfill', x: 78, y: 120, width: 16, height: 8 }), el('text', { class: 'lbl small', x: 70, y: 116, 'text-anchor': 'middle' }, 'LSO')],
+    angle: [seg(la(0), la(760)), label(la(380, -20), 'Landing area, 9°', 'middle', 4)],
+    wires: [150, 190, 230, 270].map((d) => seg(la(d, -36), la(d, 36))).concat(label(la(210, -52), 'Wires 1–4', 'middle', 4)),
+    foul: [seg(la(0, 36), la(760, 36), 'part dashed'), seg(la(0, -40), la(760, -40), 'part dashed'), label(la(600, -54), 'Foul line', 'middle', 4)],
+    ramp: [seg([0, -78], [0, 42], 'part heavy'), label([-6, 50], 'Ramp', 'start', -6)],
+    lens: [box('partfill', [[388, 127], [410, 128], [410, 138], [388, 137]]), label([399, 142], 'Lens', 'middle', -4)],
+    lso: [box('partfill', [[70, 47], [105, 50], [105, 60], [70, 57]]), label([87, 64], 'LSO', 'middle', -4)],
     cats: [
-      line([430, 152], [598, 152]), line([430, 182], [590, 182]),
-      line(c(250, -8), c(370, -8)), line(c(260, 14), c(380, 14)),
-      el('text', { class: 'lbl small', x: 520, y: 146, 'text-anchor': 'middle' }, 'Bow catapults'),
-      el('text', { class: 'lbl small', x: c(300, -40)[0], y: c(300, -40)[1], 'text-anchor': 'middle' }, 'Waist catapults'),
+      ...cat([800, -34], [1080, -40], 1, [940, -52]),
+      ...cat([800, 4], [1075, 16], 2, [940, 24]),
+      ...cat(la(480, -14), la(745, -14), 3, la(612, -27)),
+      ...cat(la(470, 18), la(740, 18), 4, la(605, 30)),
     ],
-    jbd: [line([424, 146], [424, 158], 'part heavy'), line([424, 176], [424, 188], 'part heavy'), line(c(244, -14), c(244, -2), 'part heavy'), line(c(254, 8), c(254, 20), 'part heavy')],
-    island: [el('rect', { class: 'partfill', x: 360, y: 212, width: 60, height: 14 }), el('text', { class: 'lbl small', x: 390, y: 244, 'text-anchor': 'middle' }, 'Island')],
+    jbd: [
+      seg([780, -46], [780, -22], 'part heavy'), seg([780, -8], [780, 16], 'part heavy'),
+      seg(la(462, -26), la(462, -2), 'part heavy'), seg(la(452, 6), la(452, 30), 'part heavy'),
+    ],
+    island: [box('partfill', [[600, -84], [730, -84], [730, -102], [600, -102]]), label([665, -112], 'Island (PriFly)', 'middle', 6)],
   };
 }
 function setupDeck(root) {
@@ -65,12 +89,22 @@ function setupDeck(root) {
   const items = [...root.querySelectorAll('li[data-part]')];
   const parts = deckParts();
   const groups = {};
+  const bar = [dp([0, -170]), dp([200, -170])];
   svg.replaceChildren(
     el('rect', { class: 'frame', x: 1, y: 1, width: 638, height: 298 }),
-    el('polygon', { class: 'deck', points: pts([[40, 128], [140, 116], [210, 72], [400, 52], [420, 70], [470, 120], [580, 132], [618, 162], [600, 194], [520, 222], [300, 230], [120, 226], [40, 210]]) }),
-    el('text', { class: 'lbl small', x: 600, y: 24, 'text-anchor': 'end' }, 'Bow →'),
-    el('text', { class: 'lbl small', x: 30, y: 24 }, 'Port side at the top'),
-    el('text', { class: 'lbl small', x: 30, y: 286 }, 'Schematic, not to scale'),
+    el('polygon', { class: 'deck', points: pts(DECK.map(dp)) }),
+    ...ELEVATORS.flatMap((e) => {
+      const c = e.pts.reduce((a, p) => [a[0] + p[0] / 4, a[1] + p[1] / 4], [0, 0]);
+      const [x, y] = dp(c);
+      return [el('polygon', { class: 'deck', points: pts(e.pts.map(dp)) }), el('text', { class: 'lbl small', x, y: y + 4, 'text-anchor': 'middle' }, String(e.n))];
+    }),
+    el('line', { class: 'thin dotted', x1: dp([0, 0])[0], y1: dp([0, 0])[1], x2: dp([1092, 0])[0], y2: dp([1092, 0])[1] }),
+    el('text', { class: 'lbl small', x: 630, y: 22, 'text-anchor': 'end' }, 'Bow →'),
+    el('text', { class: 'lbl small', x: 12, y: 22 }, 'NIMITZ CLASS: 1,092 ft long, 252 ft wide · port side at the top'),
+    el('text', { class: 'lbl small', x: dp([1000, -150])[0], y: dp([1000, -150])[1], 'text-anchor': 'middle' }, 'Elevators 1–4'),
+    el('line', { class: 'ln', x1: bar[0][0], y1: bar[0][1], x2: bar[1][0], y2: bar[1][1] }),
+    ...[0, 100, 200].map((f) => el('line', { class: 'thin', x1: dp([f, 0])[0], y1: bar[0][1] - 4, x2: dp([f, 0])[0], y2: bar[0][1] + 4 })),
+    el('text', { class: 'lbl small', x: bar[1][0] + 6, y: bar[0][1] + 4 }, '200 ft'),
   );
   for (const [id, nodes] of Object.entries(parts)) {
     const g = el('g', { 'data-part': id });
@@ -119,41 +153,95 @@ function setupCalls(root) {
   });
 }
 
-// Figure 2: the pattern stepper. The carrier pattern shows a plan above a
-// profile; the Charlie pattern a plan only, since its source gives no heights.
-const PATTERNS = {
+// Figure 2: the pattern stepper, drawn as an oblique view in the manner of
+// the training instruction's pattern figure: the flight path as a ribbon,
+// its track on the water below it, and each position called out. Positions
+// are in NM (x ahead along the BRC, y to port) and heights in ft.
+function smooth(points) {
+  // Catmull-Rom through screen points, as cubic Béziers.
+  if (points.length < 3) return `M${points.map((p) => p.map((v) => v.toFixed(1)).join(' ')).join(' L')}`;
+  let d = `M${points[0][0].toFixed(1)} ${points[0][1].toFixed(1)}`;
+  for (let i = 0; i < points.length - 1; i += 1) {
+    const p0 = points[Math.max(0, i - 1)], p1 = points[i], p2 = points[i + 1], p3 = points[Math.min(points.length - 1, i + 2)];
+    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+    const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+    d += ` C${c1.map((v) => v.toFixed(1)).join(' ')} ${c2.map((v) => v.toFixed(1)).join(' ')} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+  }
+  return d;
+}
+const joined = (path) => path.flatMap((seg, i) => (i ? seg.pts.slice(1) : seg.pts));
+// A ship's deck outline in its own units (fraction of length ahead of the
+// stern, fraction of length to port), drawn exaggerated in size.
+const CARRIER_SHAPE = DECK.map(([x, y]) => [x / 1092, y / 1092]);
+const ISLAND_SHAPE = [[600, -84], [730, -84], [730, -102], [600, -102]].map(([x, y]) => [x / 1092, y / 1092]);
+const AMPHIB_SHAPE = [[0, -0.06], [0, 0.06], [0.88, 0.06], [1, 0.02], [1, -0.02], [0.88, -0.06], [0.62, -0.06], [0.62, -0.085], [0.42, -0.085], [0.42, -0.06]];
+
+const VIEWS = {
   case1: {
     path: CASE_I,
-    X: (x) => 40 + (x + 3.5) * 108, Y: (y) => 170 - y * 130, PY: (h) => 365 - h * 0.12,
-    ship: [[-0.1, -0.035], [0.12, -0.035], [0.16, 0], [0.12, 0.035], [-0.1, 0.035]],
-    grid: (s) => [
-      el('text', { class: 'lbl', x: 12, y: 20 }, 'PLAN'),
-      el('line', { class: 'thin dotted', x1: s.X(-3.5), y1: s.Y(0), x2: s.X(1.7), y2: s.Y(0) }),
-      el('text', { class: 'lbl small', x: s.X(-3.4), y: s.Y(0) - 8 }, 'Base recovery course →'),
-      ...[-3, -2, -1, 1].map((nm) => el('text', { class: 'lbl small', x: s.X(nm), y: 226, 'text-anchor': 'middle' }, `${Math.abs(nm)} NM ${nm < 0 ? 'astern' : 'ahead'}`)),
-      el('text', { class: 'lbl', x: 12, y: 244 }, 'PROFILE (height exaggerated)'),
-      el('line', { class: 'ln heavy', x1: 10, y1: s.PY(0), x2: 630, y2: s.PY(0) }),
-      ...[400, 800].flatMap((ft) => [
-        el('line', { class: 'grid', x1: 10, y1: s.PY(ft), x2: 630, y2: s.PY(ft) }),
-        el('text', { class: 'lbl small', x: 14, y: s.PY(ft) - 4 }, `${ft} ft`),
-      ]),
-    ],
+    // The initial is drawn from 2.2 NM astern to keep the figure compact.
+    drawn: CASE_I.map((seg) => (seg.id === 'initial' ? { ...seg, pts: [[-2.2, -0.25, 800], [0, -0.2, 800]] } : seg)),
+    // Oblique view from above the ship's starboard quarter, as in the training
+    // instruction's figure: ahead runs right, port away up the page, height up.
+    P: ([x, y, h = 0]) => [380 + x * 90 - y * 50, 300 - x * 30 - y * 130 - h * 0.06],
+    ship: { shape: CARRIER_SHAPE, island: ISLAND_SHAPE, at: [-0.04, 0], len: 0.8 },
+    title: 'CASE I CARRIER PATTERN (T-45)',
+    note: 'Heights exaggerated; ship drawn larger than scale; the ship sails ahead during the pattern.',
+    callouts: {
+      initial: { at: [-1.4, -0.24, 800], dx: -40, dy: 20, lines: ['INITIAL', '3 NM astern, 800 ft', '250–300 KIAS'] },
+      break: { at: [1.45, 0.1, 800], dx: 30, dy: -100, lines: ['BREAK', 'Over or past the bow', '70–80° AOB, 15 s apart'] },
+      downwind: { at: [0.6, 1.0, 600], dx: 10, dy: -46, lines: ['DOWNWIND', '600 ft, on speed', 'Landing checks'] },
+      abeam: { at: [0, 1.0, 600], dx: -80, dy: -40, lines: ['ABEAM (180)', '0.9–1.1 NM abeam', '27–30° AOB, 200–300 fpm'] },
+      ninety: { at: [-0.62, 0.6, 450], dx: -90, dy: -20, lines: ['90', '450 ft', '500 fpm'] },
+      fortyfive: { at: [-0.82, 0.25, 340], dx: -90, dy: 4, lines: ['45', '325–375 ft', 'Acquire the ball'] },
+      groove: { at: [-0.45, 0.08, 180], dx: 10, dy: 50, lines: ['GROOVE', '15–18 s, ball call'] },
+      touchdown: { at: [0, 0, 0], dx: 110, dy: 36, lines: ['TOUCHDOWN', 'Full power'] },
+    },
   },
   charlie: {
-    path: CHARLIE,
-    X: (x) => 320 + x * 300, Y: (y) => 130 - y * 165,
-    ship: [[-0.28, -0.05], [0.18, -0.05], [0.26, 0], [0.18, 0.05], [-0.28, 0.05]],
-    grid: (s) => [
-      el('text', { class: 'lbl', x: 12, y: 20 }, 'PLAN'),
-      el('line', { class: 'thin dotted', x1: s.X(-1), y1: s.Y(0), x2: s.X(1), y2: s.Y(0) }),
-      el('text', { class: 'lbl small', x: s.X(1), y: s.Y(0) + 26, 'text-anchor': 'end' }, 'Base recovery course →'),
-      el('text', { class: 'lbl small', x: 14, y: 36 }, 'Port side'),
-      el('text', { class: 'lbl small', x: 14, y: 370 }, 'Starboard side'),
-      el('text', { class: 'lbl small', x: s.X(0), y: s.Y(-1) + 4, 'text-anchor': 'middle' }, 'Starboard Delta (holding)'),
-      el('text', { class: 'lbl small', x: s.X(-0.28), y: s.Y(0) + 22 }, 'Amphibious assault ship'),
-    ],
+    path: CHARLIE.map((seg) => ({ ...seg, pts: seg.pts.map(([x, y]) => [x, y, 0]) })),
+    P: ([x, y, h = 0]) => [330 + x * 140 - y * 50, 190 - x * 40 - y * 110 - h * 0.06],
+    ship: { shape: AMPHIB_SHAPE, at: [-0.3, 0], len: 0.45 },
+    title: 'HELICOPTER CHARLIE PATTERN, PORT SPOT (AMPHIBIOUS SHIP)',
+    note: 'Track over the water only: the Army manual gives no pattern heights. Ship drawn larger than scale.',
+    callouts: {
+      delta: { at: [0.75, -1], dx: 40, dy: 40, lines: ['STARBOARD DELTA', '1 NM to starboard, 300 ft', 'Right-hand racetrack'] },
+      upwind: { at: [0.3, 0.15], dx: 90, dy: -50, lines: ['UPWIND', 'Port side, parallel to the BRC'] },
+      downwind: { at: [0.3, 0.6], dx: 40, dy: -40, lines: ['DOWNWIND', 'Back toward the stern'] },
+      turn: { at: [-0.3, 0.42], dx: -60, dy: -30, lines: ['TURN IN', 'No later than abeam the spot'] },
+      fortyfive: { at: [-0.15, 0.15], dx: -70, dy: 40, lines: ['45° LINE', 'LSE picks you up'] },
+      spot: { at: [0, 0], dx: -60, dy: 90, lines: ['SPOT', "Hover, land on the LSE's signals"] },
+    },
   },
 };
+VIEWS.charlie.drawn = VIEWS.charlie.path;
+
+function drawShip(s) {
+  const { shape, at, len } = s.ship;
+  const deck = shape.map(([u, v]) => s.P([at[0] + u * len, at[1] + v * len]));
+  const stern = s.P([at[0], at[1]]);
+  const wake = [[-0.9, -0.05], [-0.9, 0.05]].map(([u, v]) => s.P([at[0] + u * len * 2, at[1] + v * len * 3]));
+  return [
+    el('path', { class: 'wake', d: `M${stern[0]} ${stern[1]} L${wake[0][0]} ${wake[0][1]} M${stern[0]} ${stern[1]} L${wake[1][0]} ${wake[1][1]}` }),
+    el('polygon', { class: 'deck', points: pts(deck) }),
+    ...(s.ship.island ? [el('polygon', { class: 'fill', points: pts(s.ship.island.map(([u, v]) => s.P([at[0] + u * len, at[1] + v * len]))) })] : []),
+  ];
+}
+function callout(s, c, on) {
+  const [ax, ay] = s.P(c.at);
+  const ty = ay + c.dy;
+  const right = c.dx < 0;
+  const anchor = right ? 'end' : 'start';
+  const w = Math.max(...c.lines.map((l) => l.length)) * 5.6;
+  const tx = right ? Math.max(ax + c.dx, w + 10) : Math.min(ax + c.dx, 630 - w);
+  const g = el('g', { class: on ? 'callout on' : 'callout' });
+  g.append(
+    el('line', { class: 'thin', x1: ax, y1: ay, x2: tx, y2: ty }),
+    el('line', { class: on ? 'ln on' : 'ln', x1: tx, y1: ty, x2: right ? tx - w : tx + w, y2: ty }),
+    ...c.lines.map((line, i) => el('text', { class: i ? 'lbl small' : 'lbl', x: right ? tx - 2 : tx + 2, y: i ? ty + 4 + i * 12 : ty - 4, 'text-anchor': anchor }, line)),
+  );
+  return g;
+}
 function setupPattern(root) {
   const svg = root.querySelector('svg');
   const out = root.querySelector('[data-result]');
@@ -172,27 +260,59 @@ function setupPattern(root) {
     chips.replaceChildren(...buttons);
   }
   function draw() {
-    const s = PATTERNS[mode];
+    const s = VIEWS[mode];
     const list = steps();
     const id = list[current].dataset.step;
     const at = s.path.findIndex((seg) => seg.id === id);
-    const cls = (i) => (i === at ? 'ln heavy on' : i < at ? 'ln' : 'ln dashed');
+    const route = mode === 'charlie' ? s.drawn.slice(1) : s.drawn;
+    const track = (segs) => smooth(joined(segs).map(([x, y]) => s.P([x, y, 0])));
+    const ribbon = (segs) => smooth(joined(segs).map((p) => s.P(p)));
+    const body = [];
+    // Track on the water, and drop lines from the path at each position.
+    body.push(el('path', { class: 'thin dotted', d: track(route) }));
+    if (mode === 'charlie') body.push(el('path', { class: 'thin dotted', d: track([s.drawn[0]]) }));
+    if (mode === 'case1') {
+      for (const seg of s.drawn) {
+        const p = seg.pts[seg.pts.length - 1];
+        const [x1, y1] = s.P(p), [x2, y2] = s.P([p[0], p[1], 0]);
+        body.push(el('line', { class: 'thin dotted', x1, y1, x2, y2 }));
+      }
+    }
+    body.push(...drawShip(s));
+    // The ribbon: a wide dark stroke under a narrower white one; flown
+    // segments solid, the current one in colour.
+    const draws = mode === 'charlie' ? [[s.drawn[0]], route] : [route];
+    for (const segs of draws) {
+      body.push(el('path', { class: 'ribbon-edge', d: ribbon(segs) }), el('path', { class: 'ribbon', d: ribbon(segs) }));
+    }
+    if (at >= 0) body.push(el('path', { class: 'ribbon-on', d: ribbon([s.drawn[at]]) }));
+    const seg = s.drawn[at];
+    const [ex, ey] = s.P(seg.pts[seg.pts.length - 1]);
+    body.push(el('circle', { class: 'mine', cx: ex, cy: ey, r: 5 }));
+    for (const [key, c] of Object.entries(s.callouts)) body.push(callout(s, c, key === id));
     svg.replaceChildren(
       el('rect', { class: 'frame', x: 1, y: 1, width: 638, height: 378 }),
-      ...s.grid(s),
-      el('polygon', { class: 'deck', points: pts(s.ship.map(([x, y]) => [s.X(x), s.Y(y)])) }),
-      ...s.path.flatMap((seg, i) => [
-        el('polyline', { class: cls(i), points: pts(seg.pts.map(([x, y]) => [s.X(x), s.Y(y)])) }),
-        ...(s.PY ? [el('polyline', { class: cls(i), points: pts(seg.pts.map(([x, , h]) => [s.X(x), s.PY(h)])) })] : []),
-      ]),
+      el('text', { class: 'lbl', x: 12, y: 20 }, s.title),
+      el('line', { class: 'ln', x1: 12, y1: 25, x2: 12 + s.title.length * 7.2, y2: 25 }),
+      ...windArrow(),
+      ...body,
+      el('text', { class: 'lbl small', x: 12, y: 42 }, s.note),
     );
-    const seg = s.path[at];
-    const [x, y, h] = seg.pts[seg.pts.length - 1];
-    svg.append(el('circle', { class: 'mine', cx: s.X(x), cy: s.Y(y), r: 6 }));
-    if (s.PY) svg.append(el('circle', { class: 'mine', cx: s.X(x), cy: s.PY(h), r: 6 }));
     list.forEach((li, i) => li.classList.toggle('on', i === current));
     buttons.forEach((b, i) => b.setAttribute('aria-pressed', String(i === current)));
     out.replaceChildren(para(`Step ${current + 1} of ${list.length}: ${text(list[current].querySelector('strong')).replace(/[.,]$/, '')}. The step is highlighted in the list.`));
+  }
+  // An arrow along the BRC, the ship's heading, in the figure's top right.
+  function windArrow() {
+    const s = VIEWS[mode];
+    const [ax, ay] = s.P([0, 0]), [bx, by] = s.P([1, 0]);
+    const n = Math.hypot(bx - ax, by - ay), ux = (bx - ax) / n, uy = (by - ay) / n;
+    const x0 = 560, y0 = 262, x1 = x0 + ux * 44, y1 = y0 + uy * 44;
+    return [
+      el('line', { class: 'ln heavy', x1: x0, y1: y0, x2: x1, y2: y1 }),
+      el('path', { class: 'fill', d: `M${x1 + ux * 8} ${y1 + uy * 8} L${x1 - uy * 6} ${y1 + ux * 6} L${x1 + uy * 6} ${y1 - ux * 6} Z` }),
+      el('text', { class: 'lbl small', x: x0, y: y0 + 18, 'text-anchor': 'middle' }, 'BRC'),
+    ];
   }
   function stop() { clearInterval(timer); timer = null; play.textContent = 'Play'; }
   play.addEventListener('click', () => {

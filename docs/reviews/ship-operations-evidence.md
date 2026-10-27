@@ -15,7 +15,7 @@ treat a wording mismatch as a finding against this record.
 
 **Military sources first.** [1] CNATRA P-1211, [2] NAVEDTRA 14342A,
 [3] NAVEDTRA 14310 and [4] FM 1-564 are the primary sources. [5]–[7] FAS and
-[8] Wikipedia are secondary, used for ship and aircraft facts; [9] Seapower is
+[8] and [10] Wikipedia are secondary, used for ship and aircraft facts; [9] Seapower is
 a 2024 news report cited for current Army deck landing training.
 
 **Age.** P-1211 is dated (7-01) and FM 1-564 is the 1997 edition; the page
@@ -23,7 +23,7 @@ says so where it uses them, and its DLQ figure says current rules may differ.
 
 **Review packet limits.** navyaviation.tpub.com ([2], [3]) is on the packet's
 host list. navyflightmanuals.tpub.com ([1]), everyspec.com ([4]), fas.org
-([5]–[7]), en.wikipedia.org ([8]) and seapowermagazine.org ([9]) are not, so
+([5]–[7]), en.wikipedia.org ([8], [10]) and seapowermagazine.org ([9]) are not, so
 those are expected to stay unverified by it; their excerpts are recorded here.
 JP 3-04 (jcs.mil), army.mil and navy.mil pages returned HTTP 403 from the
 authoring environment and are not used.
@@ -92,3 +92,7 @@ authoring environment and are not used.
 ## [9] Seapower, "U.S. Army Assault Helicopters Conduct Deck Landings on USNS DAHL", 2024
 
 The article reports 2nd Combat Aviation Brigade UH-60M crews making deck landing qualification landings on the prepositioning ship USNS Dahl off South Korea.
+
+## [10] Wikipedia, "Nimitz-class aircraft carrier"
+
+Used for the Figure 1 deck plan only. "length of 1,092 ft overall and 1,040 ft at the waterline, with a beam of 252 ft overall and 134 ft at the waterline". "The flight deck is angled at nine degrees". "Four steam catapults are used to launch fixed-wing aircraft, and four arrestor wires are used for recovery. The two newest carriers, Ronald Reagan and George H. W. Bush, have only three arrestor wires each, as the fourth was used infrequently on earlier ships". "Four large elevators transport aircraft between the flight deck and the hangars below." The places of the elevators, lens and LSO platform in the figure are approximate and not taken from a source.
