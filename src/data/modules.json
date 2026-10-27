@@ -77,5 +77,16 @@
     "publication": "published",
     "objective": "Understand how an unguided weapon is delivered: the level, dive, loft and pop-up attacks and when each is used, the bombing triangle and the sight, release parameters and what an error in each does to the hit, bombing tables, low- and high-drag weapons, fuze arming and fragmentation, computed and manual sights, and the offset pop-up attack from the run-in to the recovery.",
     "applicability": "For military pilots of every service flying fixed-wing attack: the US Navy's T-45 weapons and operational navigation training instructions first, with sim manuals (DCS) for computed modes. Worked numbers are T-45 training-pattern numbers with practice bombs; your aircraft's tactical manual and your unit's rules govern."
+  },
+  {
+    "id": "module.ship-operations",
+    "slug": "ship-operations",
+    "subject": "naval-operations",
+    "revision": 1,
+    "title": "Carrier and Amphibious Ship Operations",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Understand how aircraft operate from ships: the carrier's flight deck, catapults and arresting gear, who wears which jersey, the launch, Case I, II and III recoveries, the Case I pattern, the lens and the ball, LSO calls and grades, bolters, waveoffs, tanking and bingo, then amphibious assault ship operations for helicopters, tiltrotors and the AV-8B, and Army deck landing qualification.",
+    "applicability": "For military pilots of every service who fly from or train on ships: Navy and Marine Corps carrier aviation from Navy training publications, Navy and Marine Corps amphibious ship procedures from the Navy's air traffic control manual, and Army helicopter shipboard operations from the Army's own field manual. Worked numbers are T-45 carrier qualification numbers; the ship's and the aircraft's NATOPS or service manuals govern."
   }
 ]
