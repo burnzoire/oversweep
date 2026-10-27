@@ -1,7 +1,7 @@
 // Presentation for the Carrier and Amphibious Ship Operations module's figures
 // and quizzes. Numbers and rules come from lesson-model.mjs; this file reads
 // inputs and draws.
-import { CASE_I, CHARLIE, FT_PER_NM, LENSES, ballPicture, dlqStatus, lensThickness, readComment } from './lesson-model.mjs';
+import { CASE_I, CHARLIE, FT_PER_NM, LENSES, ballPicture, dlqStatus, lensThickness, readComment, splitPass } from './lesson-model.mjs';
 import { quickQuiz, termQuiz, withDistractors } from '../shared/quick-quiz.mjs';
 
 const SVG = 'http://www.w3.org/2000/svg';
@@ -166,23 +166,54 @@ function setupCodes(root) {
 function setupDecode(root) {
   const input = root.querySelector('[data-comment]');
   const out = root.querySelector('[data-result]');
-  const codes = new Map(codeRows().map((r) => [r.key, r.answer]));
-  const word = (t, i) => {
-    const m = t.meaning.split(/[:,]/)[0];
-    const s = i ? m.charAt(0).toLowerCase() + m.slice(1) : m;
-    return t.slight ? `${i ? 'slightly' : 'Slightly'} ${s.charAt(0).toLowerCase()}${s.slice(1)}` : s;
+  const picks = root.querySelector('[data-picks]');
+  const rows = codeRows();
+  const codes = new Map(rows.map((r) => [r.key, r.answer]));
+  const places = new Set(rows.filter((r) => r.kind === 'where').map((r) => r.key));
+  const lower = (m) => m.charAt(0).toLowerCase() + m.slice(1);
+  const word = (t) => {
+    const m = lower(t.meaning.split(/[:,]/)[0]);
+    const slight = t.slight && !places.has(t.code) ? 'slightly ' : '';
+    return `${slight}${m}${t.strong ? ' (emphasis)' : ''}${t.missed ? ' (call not answered)' : ''}`;
   };
+  // A place belongs to the symbol before it ("slow in close"), and symbols
+  // joined by a dot or hyphen read as one phrase; the rest are listed.
+  function sentence(r) {
+    let text = '';
+    r.forEach((t, i) => {
+      if (t.link) text += t.meaning ? ` ${t.meaning} ` : ' – ';
+      else text += `${!i || r[i - 1].link ? '' : places.has(t.code) ? ' ' : ', '}${word(t)}`;
+    });
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  }
   function draw() {
-    const readings = readComment(input.value, codes);
+    const { grade, wire, comment } = splitPass(input.value);
     if (!input.value.trim()) { out.replaceChildren(para('Type a comment.')); return; }
-    if (!readings.length) { out.replaceChildren(para('That string does not split into the symbols in the tables. Drawn symbols and the square and circle marks cannot be typed.')); return; }
-    out.replaceChildren(...readings.map((r, n) => {
+    const readings = readComment(comment, codes, 4, places);
+    const head = [grade && `Grade ${grade}.`, wire && `Wire ${wire}.`].filter(Boolean).join(' ');
+    if (!readings.length) { out.replaceChildren(...[head && para(head), para('That string does not split into the symbols in the tables. Drawn symbols and circles cannot be typed.')].filter(Boolean)); return; }
+    out.replaceChildren(...(head ? [para(head)] : []), ...readings.map((r, n) => {
       const p = document.createElement('p');
-      const codesText = r.map((t) => (t.slight ? `(${t.code})` : t.code)).join(' · ');
-      p.append(Object.assign(document.createElement('strong'), { textContent: `${readings.length > 1 ? `Reading ${n + 1}: ` : ''}${codesText}` }), ` — ${r.map(word).join(', ')}.`);
+      const codesText = r.map((t) => (t.link ? t.code : t.slight ? `(${t.code})` : t.missed ? `[${t.code}]` : t.strong ? `_${t.code}_` : t.code)).join(' · ');
+      p.append(Object.assign(document.createElement('strong'), { textContent: `${readings.length > 1 ? `Reading ${n + 1}: ` : ''}${codesText}` }), ` — ${sentence(r)}.`);
       return p;
     }));
+    const own = says.get(input.value.trim());
+    if (own) out.append(para(`The source's reading: ${own}`, 'source-reading'));
   }
+  const examples = [...document.querySelectorAll('[data-examples] [data-example]')].map((li) => li.dataset.example);
+  // The source's own reading of a picked example, without its code or citations.
+  const says = new Map([...document.querySelectorAll('[data-examples] [data-example]')].map((li) => {
+    const copy = li.cloneNode(true);
+    copy.querySelector('code')?.remove();
+    copy.querySelectorAll('a, .term-tip').forEach((n) => n.remove());
+    return [li.dataset.example, copy.textContent.replace(/\s+/g, ' ').trim()];
+  }));
+  picks.replaceChildren(...examples.map((ex) => {
+    const btn = Object.assign(document.createElement('button'), { type: 'button', textContent: ex });
+    btn.addEventListener('click', () => { input.value = ex; draw(); });
+    return btn;
+  }));
   input.addEventListener('input', draw);
   draw();
 }

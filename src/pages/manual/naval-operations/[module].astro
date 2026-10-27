@@ -243,15 +243,18 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
    <tr><th scope="row">A square around a symbol</th><td>The pilot did not answer a call</td></tr>
    <tr><th scope="row">A circle around a symbol</th><td>The pilot answered a call too slowly</td></tr>
    <tr><th scope="row"><code>OC</code> before a symbol, the O over the C</th><td>Overcontrolled</td></tr>
-   <tr><th scope="row">A mark between two symbols</th><td>“On”</td></tr>
+   <tr><th scope="row">A dot between two symbols, <code>NEP.COIM</code></th><td>“On”: not enough power on the come-on in the middle <a href="#source-p1211">{cq('12')}</a> <a href="#source-nps">[12]</a></td></tr>
+   <tr><th scope="row">A hyphen between two places, <code>IC-AR</code></th><td>“To”: from in close to at the ramp <a href="#source-nps">[12]</a></td></tr>
+   <tr><th scope="row">Typed: <code>_H_</code>, <code>[P]</code></th><td>Underscores stand for the underline, square brackets for the square: an unanswered call <a href="#source-nps">[12]</a></td></tr>
    <tr><th scope="row"><code>A</code></th><td>APC/AUTO approach</td></tr>
    <tr><th scope="row"><code>A</code>, marked</th><td>An APC/AUTO approach downgraded to manual</td></tr>
    <tr><th scope="row"><code>M</code></th><td>Manual approach in an aircraft with APC</td></tr>
    <tr><th scope="row"><code>I</code></th><td>Mode 1 ACLS approach, recorded in the grade column</td></tr>
   </tbody>
  </table></div>
- <div class="table-scroll" role="region" aria-label="What the aircraft did" tabindex="0"><table data-codes>
-  <caption>What the aircraft did <a href="#source-p1211">{cq('12–13')}</a></caption>
+ <div class="code-cols">
+ <div class="table-scroll" role="region" aria-label="What the aircraft did, AA to ND" tabindex="0"><table data-codes>
+  <caption>What the aircraft did, AA to ND <a href="#source-p1211">{cq('12–13')}</a></caption>
   <thead><tr><th scope="col">Symbol</th><th scope="col">Meaning</th></tr></thead>
   <tbody>
    <tr data-code="AA" data-kind="fault"><th scope="row"><code>AA</code></th><td data-meaning>Angling approach</td></tr>
@@ -285,6 +288,12 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
    <tr data-code="LUL" data-kind="fault"><th scope="row"><code>LUL</code></th><td data-meaning>Lined up left</td></tr>
    <tr data-code="LUR" data-kind="fault"><th scope="row"><code>LUR</code></th><td data-meaning>Lined up right</td></tr>
    <tr data-code="ND" data-kind="fault"><th scope="row"><code>ND</code></th><td data-meaning>Nosedown</td></tr>
+  </tbody>
+ </table></div>
+ <div class="table-scroll" role="region" aria-label="What the aircraft did, NEA to TWA" tabindex="0"><table data-codes>
+  <caption>NEA to TWA</caption>
+  <thead><tr><th scope="col">Symbol</th><th scope="col">Meaning</th></tr></thead>
+  <tbody>
    <tr data-code="NEA" data-kind="fault"><th scope="row"><code>NEA</code></th><td data-meaning>Not enough attitude</td></tr>
    <tr data-code="NELR" data-kind="fault"><th scope="row"><code>NELR</code></th><td data-meaning>Not enough left rudder</td></tr>
    <tr data-code="NEP" data-kind="fault"><th scope="row"><code>NEP</code></th><td data-meaning>Not enough power</td></tr>
@@ -317,11 +326,37 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
    <tr data-code="TWA" data-kind="fault"><th scope="row"><code>TWA</code></th><td data-meaning>Too wide abeam</td></tr>
   </tbody>
  </table></div>
+ </div>
+ <p>Real comments also use symbols the training instruction does not list. A Naval Postgraduate School study of 85,571 Navy passes found LSOs writing many such codes, and recommended standardizing some of them. <a href="#source-nps">[12]</a> The ones in the examples below are:</p>
+ <div class="table-scroll" role="region" aria-label="Other symbols in fleet comments" tabindex="0"><table data-codes>
+  <caption>Other symbols in fleet comments</caption>
+  <thead><tr><th scope="col">Symbol</th><th scope="col">Meaning</th></tr></thead>
+  <tbody>
+   <tr data-code="OC" data-kind="fleet"><th scope="row"><code>OC</code></th><td><span data-meaning>Overcontrolled, written before a symbol</span> <a href="#source-p1211">{cq('12')}</a></td></tr>
+   <tr data-code="BC" data-kind="fleet"><th scope="row"><code>BC</code></th><td><span data-meaning>Ball call</span> <a href="#source-lex">[13]</a></td></tr>
+   <tr data-code="DR" data-kind="fleet"><th scope="row"><code>DR</code></th><td><span data-meaning>Drift right</span> <a href="#source-lex">[13]</a></td></tr>
+   <tr data-code="/" data-kind="fleet"><th scope="row"><code>/</code></th><td><span data-meaning>Fly through up the glideslope, typed for the drawn symbol</span> <a href="#source-lex">[13]</a></td></tr>
+   <tr data-code="EWIT" data-kind="fleet"><th scope="row"><code>EWIT</code></th><td><span data-meaning>Easy with it</span> <a href="#source-nps">[12]</a></td></tr>
+   <tr data-code="3PTS" data-kind="fleet"><th scope="row"><code>3PTS</code></th><td><span data-meaning>Landed on three points</span> <a href="#source-nps">[12]</a></td></tr>
+   <tr data-code="LTR" data-kind="fleet"><th scope="row"><code>LTR</code></th><td><span data-meaning>Left to right</span> <a href="#source-nps">[12]</a></td></tr>
+   <tr data-code="TMLR" data-kind="fleet"><th scope="row"><code>TMLR</code></th><td><span data-meaning>Too much left rudder</span> <a href="#source-nps">[12]</a></td></tr>
+   <tr data-code="TOB" data-kind="fleet"><th scope="row"><code>TOB</code></th><td><span data-meaning>Talking on the ball</span> <a href="#source-nps">[12]</a></td></tr>
+  </tbody>
+ </table></div>
  <p>Some symbols are small drawings rather than letters: landed left wing down, landed right wing down and landed nose first are each drawn as the aircraft with marks for where it touched; landed on three points is three dots; over the top is an arc with an arrow; and flying up or down through the glideslope is two crossed lines, the arrowhead showing which way. <a href="#source-p1211">{cq('12–13')}</a></p>
+ <h4 id="lso-examples">Real comments</h4>
+ <p>These come from real passes. Each shows the source's own reading.</p>
+ <ul class="lso-examples" data-examples>
+  <li data-example="(OK) OC NEP-BC /IM (NEP-CDIC) SDAR LOBDRIW 2"><code>(OK) OC NEP-BC /IM (NEP-CDIC) SDAR LOBDRIW 2</code> “Fair pass: over-controlled a little not enough power on the ball call, fly through up in the middle, a little not enough power on the come-down in close, settle/decel at the ramp, low, flat, drift right in the wires. Two-wire.” <a href="#source-lex">[13]</a> Here <code>SD</code> is read as settle and decelerate; in the training instruction <code>SD</code> is spotted deck, <code>S</code> settle and <code>DEC</code> decelerate. <a href="#source-p1211">{cq('12–13')}</a></li>
+  <li data-example="(LO)SLOIC-AR"><code>(LO)SLOIC-AR</code> “An aircraft was slow and a little low, both when approaching the carrier and just at the edge of the carrier deck; the parentheses mean the lowness was only a little, and the hyphen means the comment applies to the period between being ‘in close’ and ‘at the ramp’.” <a href="#source-nps">[12]</a></li>
+  <li data-example="HCDAR EWIT"><code>HCDAR EWIT</code> The study splits this pass's comment into <code>H</code>, <code>CD</code>, <code>AR</code> and <code>EWIT</code>: high, coming down at the ramp, and easy with it. <a href="#source-nps">[12]</a> <a href="#source-p1211">{cq('12')}</a></li>
+  <li data-example="NEP.COIM LOIC"><code>NEP.COIM LOIC</code> An LSO's “NEP/COIM LO IN CLOSE”, as the study standardized it: not enough power on the come-on in the middle, low in close. <a href="#source-nps">[12]</a> <a href="#source-p1211">{cq('12–13')}</a></li>
+ </ul>
  <section class="lesson" data-lesson="decode" aria-labelledby="decode-title">
   <h3 id="decode-title">Read a comment</h3>
-  <p class="task">Type an LSO comment made of the symbols above, such as <code>EGIW</code> or <code>(LO)IC</code>, and the reader splits it into symbols. Some strings split more than one way; then it shows each.</p>
-  <div class="controls"><label>Comment <input type="text" data-comment value="EGIW" autocomplete="off" autocapitalize="characters" spellcheck="false" size="16"></label></div>
+  <p class="task">Pick a real comment, or type one made of the symbols above, and the reader splits it into symbols. Some strings split more than one way; then it shows each.</p>
+  <div class="buttons" data-picks></div>
+  <div class="controls"><label>Comment <input type="text" data-comment value="(LO)SLOIC-AR" autocomplete="off" autocapitalize="characters" spellcheck="false" size="40"></label></div>
   <div class="result" data-result role="status" aria-live="polite"></div>
  </section>
  <section class="lesson quiz-lesson" data-lesson="codes" aria-labelledby="codes-title">
@@ -429,6 +464,8 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
  <p id="source-dahl"><strong>[9] Grady T. Fontana, “U.S. Army Assault Helicopters Conduct Deck Landings on USNS Dahl”, Seapower, 12 March 2024.</strong> <a href="https://seapowermagazine.org/u-s-army-assault-helicopters-conduct-deck-landings-on-usns-dahl/">Read the article</a>, 27 October 2026; a Military Sealift Command news release.</p>
  <p id="source-wiki-nimitz"><strong>[10] Wikipedia, “Nimitz-class aircraft carrier”.</strong> <a href="https://en.wikipedia.org/wiki/Nimitz-class_aircraft_carrier">Read the article</a>, 27 October 2026: length 1,092 ft and beam 252 ft overall, flight deck angled at nine degrees, four steam catapults, four arresting wires (three on the last two ships) and four elevators. A secondary source, used for the deck plan only.</p>
 <p id="source-navalgazing"><strong>[11] Naval Gazing, “The Nimitz Class”.</strong> <a href="https://www.navalgazing.net/The-Nimitz-Class">Read the page</a>, 27 October 2026: its overhead photograph of the deck, which Figure 1 is traced from, and its account of the four catapults, four wires and four elevators. A secondary source.</p>
+<p id="source-nps"><strong>[12] Neil C. Rowe, “Automated Trend Analysis for Navy-Carrier Landing Attempts”, Interservice/Industry Training, Simulation and Education Conference (I/ITSEC), 2012, U.S. Naval Postgraduate School.</strong> <a href="https://faculty.nps.edu/ncrowe/rowe_itsec12_paper12247.htm">Read the paper</a>, 27 October 2026: the grammar of LSO comments, real comment strings, and codes found in 85,571 recorded Navy passes.</p>
+<p id="source-lex"><strong>[13] “lex”, “Landing grades”, 7 September 2004, reposted on The Lexicans, 21 January 2017.</strong> <a href="https://thelexicans.wordpress.com/2017/01/21/landing-grades/">Read the post</a>, 27 October 2026. A naval aviator's blog, a secondary source, cited for one worked pass and its reading.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/ship-operations-evidence.md">ship operations evidence</a>.</p>
  <p>Figures 1 to 4 are original drawings, not reproductions of any publication's figures.</p>
  <p class="note">Applicability: written for military pilots of every service. Carrier procedures and numbers are the <Term record="t-45">T-45</Term>'s from a 2001 Navy carrier qualification instruction [1]; ship and air traffic procedures come from a Navy controller training manual [2] and the Army procedures from a 1997 field manual [4], so details will have changed. Air Force crews who land on Navy ships fall under the same Army–Air Force–Navy agreement as the Army [4]; no Air Force manual was read for this revision. The ship's air operations manual, the CV and LHA/LHD NATOPS manuals, your aircraft's flight manual and your service's rules govern. The <a href={caseIII}>Case III Recoveries</a> module covers the instrument recovery; the <a href={airfield}>airfield module</a> covers the shore-based Navy optical landing system and field carrier landing practice.</p>
@@ -486,6 +523,11 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   .fig-caption { color: var(--color-muted); font-size: 0.9rem; }
   .quiz-lesson .task { font-style: italic; }
   .table-scroll { overflow-x: auto; border: 1px solid var(--color-border); }
+  .lso-examples li { margin-bottom: 0.6rem; }
+  [data-comment] { width: 100%; max-width: 32rem; box-sizing: border-box; }
+  :global(.source-reading) { border-left: 0.25rem solid var(--color-border); padding-left: 0.75rem; }
+  .lso-examples code { font-weight: 700; margin-right: 0.35rem; }
+  .code-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 0 1rem; align-items: start; }
   .table-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
   @media (max-width: 40rem) {
     .contents ol { columns: 1; }

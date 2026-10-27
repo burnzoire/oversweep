@@ -145,41 +145,77 @@ export function dlqStatus({ deck, mode = 'day', in90 = 0, in180 = 0, in9mo = 0, 
 }
 
 /**
- * Every way to read an LSO comment string as a run of grading symbols
- * (P-1211 Figures 7 and 8, pp. 12-13). `codes` maps each lettered symbol to
- * its meaning. Brackets around symbols mean "slightly". Spaces are ignored.
- * Returns up to `limit` readings, fewest symbols first; each reading is a list
- * of { code, meaning, slight }. An empty list means the string doesn't parse.
+ * Every way to read an LSO comment string as a run of grading symbols.
+ * `codes` maps each lettered symbol to its meaning (P-1211 Figures 7 and 8,
+ * pp. 12-13, plus any others the caller lists). Marks follow P-1211 and the
+ * grammar in Rowe, "Automated Trend Analysis for Navy-Carrier Landing
+ * Attempts" (NPS, 2012): (x) slightly, _x_ emphasis, [x] a call not
+ * answered, a dot between symbols "on" and a hyphen "to". Words split at
+ * spaces are read separately. Returns up to `limit` readings, fewest symbols
+ * first; each is a list of { code, meaning, slight, strong, missed, link }.
+ * The hyphen reads "to" only between two of the `places` (X, IM, IC...);
+ * elsewhere its meaning is left blank.
+ * An empty list means the string doesn't parse.
  */
-export function readComment(input, codes, limit = 4) {
-  const s = String(input).toUpperCase().replace(/\s+/g, '');
+export function readComment(input, codes, limit = 4, places = new Set()) {
   const keys = [...codes.keys()].map((k) => k.toUpperCase());
   const meaning = new Map([...codes].map(([k, v]) => [k.toUpperCase(), v]));
-  const memo = new Map();
-  // All readings of s[i, end), with a cap so a long string can't blow up.
-  function from(i, end) {
-    const key = `${i}:${end}`;
-    if (memo.has(key)) return memo.get(key);
-    let out = [];
-    if (i === end) out = [[]];
-    else if (s[i] === '(') {
-      const close = s.indexOf(')', i + 1);
-      if (close > i + 1 && close < end) {
-        for (const inner of from(i + 1, close)) {
-          for (const rest of from(close + 1, end)) out.push([...inner.map((t) => ({ ...t, slight: true })), ...rest]);
+  const CAP = 64;
+  const marks = { '(': [')', 'slight'], _: ['_', 'strong'], '[': [']', 'missed'] };
+  const links = { '-': 'to', '.': 'on' };
+  function readWord(s) {
+    const memo = new Map();
+    // All readings of s[i, end).
+    function from(i, end) {
+      const key = `${i}:${end}`;
+      if (memo.has(key)) return memo.get(key);
+      let out = [];
+      if (i === end) out = [[]];
+      else {
+        const mark = marks[s[i]];
+        const close = mark ? s.indexOf(mark[0], i + 1) : -1;
+        if (mark && close > i + 1 && close < end) {
+          for (const inner of from(i + 1, close)) {
+            for (const rest of from(close + 1, end)) out.push([...inner.map((t) => (t.link ? t : { ...t, [mark[1]]: true })), ...rest]);
+          }
+        }
+        if (links[s[i]] && i > 0) {
+          for (const rest of from(i + 1, end)) out.push([{ code: s[i], meaning: links[s[i]], link: true }, ...rest]);
+        }
+        for (const k of keys) {
+          if (k.length <= end - i && s.startsWith(k, i)) {
+            for (const rest of from(i + k.length, end)) out.push([{ code: k, meaning: meaning.get(k) }, ...rest]);
+          }
         }
       }
-    } else {
-      for (const k of keys) {
-        if (k.length <= end - i && s.startsWith(k, i)) {
-          for (const rest of from(i + k.length, end)) out.push([{ code: k, meaning: meaning.get(k), slight: false }, ...rest]);
-        }
-      }
+      out = out.slice(0, CAP);
+      memo.set(key, out);
+      return out;
     }
-    out = out.slice(0, 64);
-    memo.set(key, out);
-    return out;
+    return from(0, s.length).sort((a, b) => a.length - b.length);
   }
-  if (!s) return [];
-  return from(0, s.length).sort((a, b) => a.length - b.length).slice(0, limit);
+  const words = String(input).toUpperCase().trim().split(/\s+/).filter(Boolean);
+  if (!words.length) return [];
+  let all = [[]];
+  for (const w of words) {
+    const these = readWord(w);
+    if (!these.length) return [];
+    all = all.flatMap((a) => these.map((b) => [...a, ...b])).sort((a, b) => a.length - b.length).slice(0, CAP);
+  }
+  const place = (t) => t && places.has(t.code);
+  return all.slice(0, limit).map((r) => r.map((t, i) => (t.code === '-' ? { ...t, meaning: place(r[i - 1]) && place(r[i + 1]) ? 'to' : '' } : t)));
+}
+
+/**
+ * Splits a whole pass as an LSO writes it into the grade in front (OK, (OK),
+ * _OK_, WO and the other lettered P-1211 p. 11 grades; B and C are left to
+ * the comment, where they are symbols too), the comment, and a wire
+ * number (1-4) at the end, when they are there.
+ */
+export function splitPass(input) {
+  const words = String(input).trim().split(/\s+/).filter(Boolean);
+  const grades = ['_OK_', 'OK', '(OK)', '--', 'PWO', 'WO', 'OWO', 'TWO', 'WOFD', 'NC'];
+  const grade = words.length > 1 && grades.includes(words[0].toUpperCase()) ? words.shift().toUpperCase() : null;
+  const wire = words.length > 1 && /^[1-4]$/.test(words[words.length - 1]) ? Number(words.pop()) : null;
+  return { grade, wire, comment: words.join(' ') };
 }
