@@ -36,52 +36,52 @@ function text(node) {
 }
 
 // Figure 1: a Nimitz-class flight deck in plan, bow to the right and port at
-// the top. Coordinates are in feet: x forward from the round-down, y to port
-// of the centerline. The class is 1,092 ft long and 252 ft wide overall with
-// the landing area angled 9° to port; the places of the elevators, lens and
-// LSO platform are approximate. Each part is a group the callouts highlight.
-const DK = 0.52, DX = 34, DY = 158;
+// the top, traced from an overhead photograph of USS Nimitz and scaled to the
+// class's 1,092 ft length. Coordinates are in feet: x forward from the ramp,
+// y to port of the centerline. Each part is a group the callouts highlight.
+const DK = 0.52, DX = 34, DY = 162;
 const dp = ([x, y]) => [DX + x * DK, DY - y * DK];
-// Along the landing area: d ft up the angled centerline from the ramp, off ft
-// to port of it.
+// The landing area's centerline, angled 9° to port from near the starboard
+// side of the ramp. la(d, off): d ft up it, off ft to port of it.
 const la = (d, off = 0) => {
   const c = Math.cos(9 * Math.PI / 180), s = Math.sin(9 * Math.PI / 180);
   return [d * c - off * s, -12 + d * s + off * c];
 };
 const DECK = [
-  [0, -78], [0, 42], [60, 48], [200, 60], [290, 72], [360, 126], [790, 150], [850, 108],
-  [1000, 82], [1070, 58], [1092, 30], [1092, -26], [1060, -60], [960, -86], [880, -102],
-  [120, -102], [40, -92],
+  [0, 53], [121, 68], [150, 120], [720, 130], [814, 72], [1066, 52], [1086, 43], [1092, 38],
+  [1092, -38], [1086, -42], [820, -57], [740, -109], [136, -109], [133, -83], [52, -77], [33, -53], [0, -53],
 ];
+// Elevators: 1 and 2 on the starboard side forward of the island, 3 on the
+// starboard side aft of it and 4 on the port side aft.
 const ELEVATORS = [
-  { n: 1, pts: [[880, -102], [950, -102], [950, -126], [880, -126]] },
-  { n: 2, pts: [[750, -102], [820, -102], [820, -126], [750, -126]] },
-  { n: 3, pts: [[500, -102], [570, -102], [570, -126], [500, -126]] },
-  { n: 4, pts: [[205, 61], [275, 69], [272, 94], [202, 86]] },
+  { n: 1, x: [554, 643], y: [-56, -109] },
+  { n: 2, x: [395, 482], y: [-56, -109] },
+  { n: 3, x: [141, 213], y: [-52, -103] },
+  { n: 4, x: [151, 217], y: [117, 74] },
 ];
+const rect = ([x0, x1], [y0, y1]) => [[x0, y0], [x1, y0], [x1, y1], [x0, y1]];
 function deckParts() {
   const seg = (p, q, cls = 'part') => { const [a, b] = [dp(p), dp(q)]; return el('line', { class: cls, x1: a[0], y1: a[1], x2: b[0], y2: b[1] }); };
   const label = (p, s, anchor = 'middle', dy = 0) => { const [x, y] = dp(p); return el('text', { class: 'lbl small', x, y: y + dy, 'text-anchor': anchor }, s); };
   const box = (cls, corners) => el('polygon', { class: cls, points: pts(corners.map(dp)) });
-  const cat = (p, q, n, at) => [seg(p, q), label(at, `Cat ${n}`, 'middle', 3)];
   return {
-    angle: [seg(la(0), la(760)), label(la(380, -20), 'Landing area, 9°', 'middle', 4)],
-    wires: [150, 190, 230, 270].map((d) => seg(la(d, -36), la(d, 36))).concat(label(la(210, -52), 'Wires 1–4', 'middle', 4)),
-    foul: [seg(la(0, 36), la(760, 36), 'part dashed'), seg(la(0, -40), la(760, -40), 'part dashed'), label(la(600, -54), 'Foul line', 'middle', 4)],
-    ramp: [seg([0, -78], [0, 42], 'part heavy'), label([-6, 50], 'Ramp', 'start', -6)],
-    lens: [box('partfill', [[388, 127], [410, 128], [410, 138], [388, 137]]), label([399, 142], 'Lens', 'middle', -4)],
-    lso: [box('partfill', [[70, 47], [105, 50], [105, 60], [70, 57]]), label([87, 64], 'LSO', 'middle', -4)],
+    angle: [seg(la(0), la(770)), label(la(380, 0), 'Angled deck centerline, 9°', 'start', 12)],
+    wires: [167, 205, 242, 279].map((d) => seg(la(d, -34), la(d, 34))).concat(label(la(223, -46), 'Wires 1–4', 'middle', 6)),
+    foul: [seg(la(0, 32), la(770, 32), 'part dashed'), seg(la(0, -32), la(770, -32), 'part dashed'), label(la(110, 32), 'Foul line', 'middle', -4)],
+    ramp: [seg([0, 53], [0, -53], 'part heavy'), label([0, -53], 'Ramp', 'start', 12)],
+    lens: [box('partfill', rect([328, 344], [138, 128])), label([336, 146], 'Lens', 'middle', -4)],
+    lso: [box('partfill', rect([35, 55], [80, 66])), label([45, 88], 'LSO', 'middle', -4)],
     cats: [
-      ...cat([800, -34], [1080, -40], 1, [940, -52]),
-      ...cat([800, 4], [1075, 16], 2, [940, 24]),
-      ...cat(la(480, -14), la(745, -14), 3, la(612, -27)),
-      ...cat(la(470, 18), la(740, 18), 4, la(605, 30)),
+      seg([700, -49], [1078, -26]), label([1000, -40], 'Cat 1', 'middle', 12),
+      seg([700, 23], [1061, 30]), label([1000, 33], 'Cat 2', 'middle', -4),
+      seg([346, 67], [803, 80]), label([650, 76], 'Cat 3', 'middle', 12),
+      seg([293, 108], [720, 126]), label([560, 121], 'Cat 4', 'middle', -4),
     ],
     jbd: [
-      seg([780, -46], [780, -22], 'part heavy'), seg([780, -8], [780, 16], 'part heavy'),
-      seg(la(462, -26), la(462, -2), 'part heavy'), seg(la(452, 6), la(452, 30), 'part heavy'),
+      box('partfill', rect([628, 643], [37, 2])), box('partfill', rect([640, 657], [-37, -72])),
+      box('partfill', rect([277, 293], [118, 94])), box('partfill', rect([328, 346], [84, 50])),
     ],
-    island: [box('partfill', [[600, -84], [730, -84], [730, -102], [600, -102]]), label([665, -112], 'Island (PriFly)', 'middle', 6)],
+    island: [box('partfill', rect([250, 375], [-72, -109])), label([312, -120], 'Island (PriFly)', 'middle', 6)],
   };
 }
 function setupDeck(root) {
@@ -89,19 +89,17 @@ function setupDeck(root) {
   const items = [...root.querySelectorAll('li[data-part]')];
   const parts = deckParts();
   const groups = {};
-  const bar = [dp([0, -170]), dp([200, -170])];
+  const bar = [dp([0, -150]), dp([200, -150])];
   svg.replaceChildren(
     el('rect', { class: 'frame', x: 1, y: 1, width: 638, height: 298 }),
     el('polygon', { class: 'deck', points: pts(DECK.map(dp)) }),
     ...ELEVATORS.flatMap((e) => {
-      const c = e.pts.reduce((a, p) => [a[0] + p[0] / 4, a[1] + p[1] / 4], [0, 0]);
-      const [x, y] = dp(c);
-      return [el('polygon', { class: 'deck', points: pts(e.pts.map(dp)) }), el('text', { class: 'lbl small', x, y: y + 4, 'text-anchor': 'middle' }, String(e.n))];
+      const [x, y] = dp([(e.x[0] + e.x[1]) / 2, (e.y[0] + e.y[1]) / 2]);
+      return [el('polygon', { class: 'elevator', points: pts(rect(e.x, e.y).map(dp)) }), el('text', { class: 'lbl small', x, y: y + 4, 'text-anchor': 'middle' }, `Elev. ${e.n}`)];
     }),
     el('line', { class: 'thin dotted', x1: dp([0, 0])[0], y1: dp([0, 0])[1], x2: dp([1092, 0])[0], y2: dp([1092, 0])[1] }),
     el('text', { class: 'lbl small', x: 630, y: 22, 'text-anchor': 'end' }, 'Bow →'),
-    el('text', { class: 'lbl small', x: 12, y: 22 }, 'NIMITZ CLASS: 1,092 ft long, 252 ft wide · port side at the top'),
-    el('text', { class: 'lbl small', x: dp([1000, -150])[0], y: dp([1000, -150])[1], 'text-anchor': 'middle' }, 'Elevators 1–4'),
+    el('text', { class: 'lbl small', x: 12, y: 22 }, 'NIMITZ CLASS, 1,092 ft · port side at the top · dotted line: ship centerline'),
     el('line', { class: 'ln', x1: bar[0][0], y1: bar[0][1], x2: bar[1][0], y2: bar[1][1] }),
     ...[0, 100, 200].map((f) => el('line', { class: 'thin', x1: dp([f, 0])[0], y1: bar[0][1] - 4, x2: dp([f, 0])[0], y2: bar[0][1] + 4 })),
     el('text', { class: 'lbl small', x: bar[1][0] + 6, y: bar[0][1] + 4 }, '200 ft'),
@@ -153,92 +151,94 @@ function setupCalls(root) {
   });
 }
 
-// Figure 2: the pattern stepper, drawn as an oblique view in the manner of
-// the training instruction's pattern figure: the flight path as a ribbon,
-// its track on the water below it, and each position called out. Positions
-// are in NM (x ahead along the BRC, y to port) and heights in ft.
-function smooth(points) {
-  // Catmull-Rom through screen points, as cubic Béziers.
-  if (points.length < 3) return `M${points.map((p) => p.map((v) => v.toFixed(1)).join(' ')).join(' L')}`;
-  let d = `M${points[0][0].toFixed(1)} ${points[0][1].toFixed(1)}`;
-  for (let i = 0; i < points.length - 1; i += 1) {
-    const p0 = points[Math.max(0, i - 1)], p1 = points[i], p2 = points[i + 1], p3 = points[Math.min(points.length - 1, i + 2)];
-    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
-    const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
-    d += ` C${c1.map((v) => v.toFixed(1)).join(' ')} ${c2.map((v) => v.toFixed(1)).join(' ')} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+// Figure 2: the pattern stepper, drawn as a low oblique view from the ship's
+// starboard quarter so that height reads straight up the page: the flight
+// path as a smooth ribbon, drop lines to its track on the water, and the
+// training instruction's numbers at each position. Positions are in NM (x
+// ahead along the BRC, y to port) and heights in ft.
+
+// A Catmull-Rom spline through 3-D waypoints, sampled densely, each sample
+// tagged with the index of the segment (pattern step) it belongs to.
+function spline(path) {
+  const way = [], tag = [];
+  path.forEach((seg, i) => seg.pts.forEach((p, j) => { if (i && !j) return; way.push(p.length === 3 ? p : [...p, 0]); tag.push(j === 0 && i ? i - 1 : i); }));
+  const out = [];
+  for (let k = 0; k < way.length - 1; k += 1) {
+    const p0 = way[Math.max(0, k - 1)], p1 = way[k], p2 = way[k + 1], p3 = way[Math.min(way.length - 1, k + 2)];
+    for (let t = 0; t < 1; t += 0.1) {
+      const t2 = t * t, t3 = t2 * t;
+      const p = [0, 1, 2].map((d) => 0.5 * (2 * p1[d] + (-p0[d] + p2[d]) * t + (2 * p0[d] - 5 * p1[d] + 4 * p2[d] - p3[d]) * t2 + (-p0[d] + 3 * p1[d] - 3 * p2[d] + p3[d]) * t3));
+      out.push({ p, seg: tag[k + 1] });
+    }
   }
-  return d;
+  out.push({ p: way[way.length - 1], seg: path.length - 1 });
+  return out;
 }
-const joined = (path) => path.flatMap((seg, i) => (i ? seg.pts.slice(1) : seg.pts));
-// A ship's deck outline in its own units (fraction of length ahead of the
-// stern, fraction of length to port), drawn exaggerated in size.
-const CARRIER_SHAPE = DECK.map(([x, y]) => [x / 1092, y / 1092]);
-const ISLAND_SHAPE = [[600, -84], [730, -84], [730, -102], [600, -102]].map(([x, y]) => [x / 1092, y / 1092]);
-const AMPHIB_SHAPE = [[0, -0.06], [0, 0.06], [0.88, 0.06], [1, 0.02], [1, -0.02], [0.88, -0.06], [0.62, -0.06], [0.62, -0.085], [0.42, -0.085], [0.42, -0.06]];
+const line2d = (list) => `M${list.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join(' L')}`;
 
 const VIEWS = {
   case1: {
     path: CASE_I,
-    // The initial is drawn from 2.2 NM astern to keep the figure compact.
-    drawn: CASE_I.map((seg) => (seg.id === 'initial' ? { ...seg, pts: [[-2.2, -0.25, 800], [0, -0.2, 800]] } : seg)),
-    // Oblique view from above the ship's starboard quarter, as in the training
-    // instruction's figure: ahead runs right, port away up the page, height up.
-    P: ([x, y, h = 0]) => [380 + x * 90 - y * 50, 300 - x * 30 - y * 130 - h * 0.06],
-    ship: { shape: CARRIER_SHAPE, island: ISLAND_SHAPE, at: [-0.04, 0], len: 0.8 },
+    drawn: CASE_I.map((seg) => (seg.id === 'initial' ? { ...seg, pts: [[-1.6, -0.22, 800], ...seg.pts.filter(([x]) => x > -1.6)] } : seg)),
+    P: ([x, y, h = 0]) => [385 - y * 250 + x * 40, 305 - x * 38 - h * 0.24],
     title: 'CASE I CARRIER PATTERN (T-45)',
-    note: 'Heights exaggerated; ship drawn larger than scale; the ship sails ahead during the pattern.',
-    callouts: {
-      initial: { at: [-1.4, -0.24, 800], dx: -40, dy: 20, lines: ['INITIAL', '3 NM astern, 800 ft', '250–300 KIAS'] },
-      break: { at: [1.45, 0.1, 800], dx: 30, dy: -100, lines: ['BREAK', 'Over or past the bow', '70–80° AOB, 15 s apart'] },
-      downwind: { at: [0.6, 1.0, 600], dx: 10, dy: -46, lines: ['DOWNWIND', '600 ft, on speed', 'Landing checks'] },
-      abeam: { at: [0, 1.0, 600], dx: -80, dy: -40, lines: ['ABEAM (180)', '0.9–1.1 NM abeam', '27–30° AOB, 200–300 fpm'] },
-      ninety: { at: [-0.62, 0.6, 450], dx: -90, dy: -20, lines: ['90', '450 ft', '500 fpm'] },
-      fortyfive: { at: [-0.82, 0.25, 340], dx: -90, dy: 4, lines: ['45', '325–375 ft', 'Acquire the ball'] },
-      groove: { at: [-0.45, 0.08, 180], dx: 10, dy: 50, lines: ['GROOVE', '15–18 s, ball call'] },
-      touchdown: { at: [0, 0, 0], dx: 110, dy: 36, lines: ['TOUCHDOWN', 'Full power'] },
-    },
+    note: 'Seen from astern. Heights exaggerated; ship drawn larger than scale; the ship sails ahead during the pattern.',
+    marks: [
+      { id: 'initial', at: [-1.2, -0.22, 800], h: '800 ft', lines: ['INITIAL', '3 NM astern', '250–300 KIAS'], dx: 110, dy: 6 },
+      { id: 'break', at: [1.0, -0.18, 800], h: '800 ft', lines: ['BREAK', 'Over or past the bow', '70–80° AOB, 15 s apart'], dx: 70, dy: 4 },
+      { id: 'downwind', at: [0.5, 1.0, 620], h: '', lines: ['DOWNWIND', 'On speed, landing checks'], dx: 50, dy: 10 },
+      { id: 'abeam', at: [0, 1.0, 600], h: '600 ft', lines: ['ABEAM (180)', '0.9–1.1 NM abeam', '27–30° AOB'], dx: -24, dy: 26 },
+      { id: 'ninety', at: [-0.6, 0.62, 450], h: '450 ft', lines: ['90', '500 fpm'], dx: -66, dy: 62 },
+      { id: 'fortyfive', at: [-0.86, 0.28, 350], h: '325–375 ft', lines: ['45', 'Acquire the ball'], dx: -60, dy: 92 },
+      { id: 'groove', at: [-0.6, 0.03, 220], h: '', lines: ['GROOVE', '15–18 s, ball call'], dx: 150, dy: 10 },
+      { id: 'touchdown', at: [0, 0, 0], h: '', lines: ['TOUCHDOWN', 'Full power'], dx: 120, dy: 50 },
+    ],
   },
   charlie: {
-    path: CHARLIE.map((seg) => ({ ...seg, pts: seg.pts.map(([x, y]) => [x, y, 0]) })),
-    P: ([x, y, h = 0]) => [330 + x * 140 - y * 50, 190 - x * 40 - y * 110 - h * 0.06],
-    ship: { shape: AMPHIB_SHAPE, at: [-0.3, 0], len: 0.45 },
+    path: CHARLIE,
+    drawn: CHARLIE,
+    P: ([x, y]) => [330 - y * 170 + x * 60, 250 - x * 110],
     title: 'HELICOPTER CHARLIE PATTERN, PORT SPOT (AMPHIBIOUS SHIP)',
-    note: 'Track over the water only: the Army manual gives no pattern heights. Ship drawn larger than scale.',
-    callouts: {
-      delta: { at: [0.75, -1], dx: 40, dy: 40, lines: ['STARBOARD DELTA', '1 NM to starboard, 300 ft', 'Right-hand racetrack'] },
-      upwind: { at: [0.3, 0.15], dx: 90, dy: -50, lines: ['UPWIND', 'Port side, parallel to the BRC'] },
-      downwind: { at: [0.3, 0.6], dx: 40, dy: -40, lines: ['DOWNWIND', 'Back toward the stern'] },
-      turn: { at: [-0.3, 0.42], dx: -60, dy: -30, lines: ['TURN IN', 'No later than abeam the spot'] },
-      fortyfive: { at: [-0.15, 0.15], dx: -70, dy: 40, lines: ['45° LINE', 'LSE picks you up'] },
-      spot: { at: [0, 0], dx: -60, dy: 90, lines: ['SPOT', "Hover, land on the LSE's signals"] },
-    },
+    note: 'Seen from astern, over the water: the Army manual gives no pattern heights. Ship drawn larger than scale.',
+    marks: [
+      { id: 'delta', at: [0.75, -1], lines: ['STARBOARD DELTA', '1 NM to starboard, 300 ft'], dx: 30, dy: -40 },
+      { id: 'upwind', at: [0.3, 0.15], lines: ['UPWIND', 'Parallel to the BRC'], dx: 30, dy: -120 },
+      { id: 'downwind', at: [0.4, 0.6], lines: ['DOWNWIND', 'Back toward the stern'], dx: -40, dy: -40 },
+      { id: 'turn', at: [-0.28, 0.48], lines: ['TURN IN', 'No later than abeam the spot'], dx: -40, dy: 40 },
+      { id: 'fortyfive', at: [-0.15, 0.15], lines: ['45° LINE', 'LSE picks you up'], dx: 40, dy: 90 },
+      { id: 'spot', at: [0, 0], lines: ['SPOT', 'Land on the', "LSE's signals"], dx: 26, dy: 40 },
+    ],
   },
 };
-VIEWS.charlie.drawn = VIEWS.charlie.path;
 
-function drawShip(s) {
-  const { shape, at, len } = s.ship;
-  const deck = shape.map(([u, v]) => s.P([at[0] + u * len, at[1] + v * len]));
-  const stern = s.P([at[0], at[1]]);
-  const wake = [[-0.9, -0.05], [-0.9, 0.05]].map(([u, v]) => s.P([at[0] + u * len * 2, at[1] + v * len * 3]));
+// The ship seen from astern: hull and deck on the water, the island standing
+// up from the starboard edge.
+function drawShip(s, mode) {
+  const L = 0.6, W = 1.25;
+  const outline = mode === 'case1' ? DECK : [[0, 53], [700, 53], [844, 15], [844, -15], [700, -53], [0, -53]];
+  const at = ([x, y]) => s.P([-0.05 + x / 1092 * L, y / 1092 * L * W]);
+  const deck = outline.map(at);
+  const isl = mode === 'case1' ? [[250, -95], [375, -95]] : [[380, -45], [560, -45]];
+  const [a, b] = isl.map(at);
+  const stern = at([0, 0]), wake = s.P([-0.05 - L * 1.4, 0]);
   return [
-    el('path', { class: 'wake', d: `M${stern[0]} ${stern[1]} L${wake[0][0]} ${wake[0][1]} M${stern[0]} ${stern[1]} L${wake[1][0]} ${wake[1][1]}` }),
+    el('path', { class: 'wake', d: `M${stern[0] - 8} ${stern[1]} L${wake[0] - 14} ${wake[1]} M${stern[0] + 8} ${stern[1]} L${wake[0] + 14} ${wake[1]}` }),
+    el('polygon', { class: 'hull', points: pts(deck.map(([x, y]) => [x, y + 6])) }),
     el('polygon', { class: 'deck', points: pts(deck) }),
-    ...(s.ship.island ? [el('polygon', { class: 'fill', points: pts(s.ship.island.map(([u, v]) => s.P([at[0] + u * len, at[1] + v * len]))) })] : []),
+    el('polygon', { class: 'fill', points: pts([a, b, [b[0], b[1] - 18], [a[0], a[1] - 22]]) }),
   ];
 }
-function callout(s, c, on) {
-  const [ax, ay] = s.P(c.at);
-  const ty = ay + c.dy;
-  const right = c.dx < 0;
-  const anchor = right ? 'end' : 'start';
-  const w = Math.max(...c.lines.map((l) => l.length)) * 5.6;
-  const tx = right ? Math.max(ax + c.dx, w + 10) : Math.min(ax + c.dx, 630 - w);
+function callout(s, m, on) {
+  const [ax, ay] = s.P(m.at);
+  const right = m.dx < 0;
+  const w = Math.max(...m.lines.map((l) => l.length)) * 5.8 + 4;
+  const tx = right ? Math.max(ax + m.dx, w + 10) : Math.min(ax + m.dx, 630 - w);
+  const ty = Math.max(54, Math.min(372 - m.lines.length * 12, ay + m.dy));
   const g = el('g', { class: on ? 'callout on' : 'callout' });
   g.append(
     el('line', { class: 'thin', x1: ax, y1: ay, x2: tx, y2: ty }),
     el('line', { class: on ? 'ln on' : 'ln', x1: tx, y1: ty, x2: right ? tx - w : tx + w, y2: ty }),
-    ...c.lines.map((line, i) => el('text', { class: i ? 'lbl small' : 'lbl', x: right ? tx - 2 : tx + 2, y: i ? ty + 4 + i * 12 : ty - 4, 'text-anchor': anchor }, line)),
+    ...m.lines.map((text, i) => el('text', { class: i ? 'lbl small' : 'lbl', x: right ? tx - 2 : tx + 2, y: i ? ty + 2 + i * 12 : ty - 4, 'text-anchor': right ? 'end' : 'start' }, text)),
   );
   return g;
 }
@@ -263,55 +263,50 @@ function setupPattern(root) {
     const s = VIEWS[mode];
     const list = steps();
     const id = list[current].dataset.step;
-    const at = s.path.findIndex((seg) => seg.id === id);
-    const route = mode === 'charlie' ? s.drawn.slice(1) : s.drawn;
-    const track = (segs) => smooth(joined(segs).map(([x, y]) => s.P([x, y, 0])));
-    const ribbon = (segs) => smooth(joined(segs).map((p) => s.P(p)));
+    const at = s.drawn.findIndex((seg) => seg.id === id);
+    // The Charlie pattern's Delta is a separate holding pattern.
+    const parts = mode === 'charlie' ? [[0, s.drawn.slice(0, 1)], [1, s.drawn.slice(1)]] : [[0, s.drawn]];
     const body = [];
-    // Track on the water, and drop lines from the path at each position.
-    body.push(el('path', { class: 'thin dotted', d: track(route) }));
-    if (mode === 'charlie') body.push(el('path', { class: 'thin dotted', d: track([s.drawn[0]]) }));
-    if (mode === 'case1') {
-      for (const seg of s.drawn) {
-        const p = seg.pts[seg.pts.length - 1];
-        const [x1, y1] = s.P(p), [x2, y2] = s.P([p[0], p[1], 0]);
-        body.push(el('line', { class: 'thin dotted', x1, y1, x2, y2 }));
-      }
+    const ribbons = [];
+    for (const [offset, segs] of parts) {
+      const samples = spline(segs).map((q) => ({ ...q, seg: q.seg + offset }));
+      body.push(el('path', { class: 'track', d: line2d(samples.map((q) => s.P([q.p[0], q.p[1], 0]))) }));
+      ribbons.push(el('path', { class: 'ribbon-edge', d: line2d(samples.map((q) => s.P(q.p))) }), el('path', { class: 'ribbon', d: line2d(samples.map((q) => s.P(q.p))) }));
+      const mine = samples.filter((q, i) => q.seg === at || samples[i + 1]?.seg === at);
+      if (mine.length > 1) ribbons.push(el('path', { class: 'ribbon-on', d: line2d(mine.map((q) => s.P(q.p))) }));
     }
-    body.push(...drawShip(s));
-    // The ribbon: a wide dark stroke under a narrower white one; flown
-    // segments solid, the current one in colour.
-    const draws = mode === 'charlie' ? [[s.drawn[0]], route] : [route];
-    for (const segs of draws) {
-      body.push(el('path', { class: 'ribbon-edge', d: ribbon(segs) }), el('path', { class: 'ribbon', d: ribbon(segs) }));
+    // Drop lines and height tags at each position.
+    for (const m of s.marks) {
+      if (!m.at[2]) continue;
+      const [x1, y1] = s.P(m.at), [x2, y2] = s.P([m.at[0], m.at[1], 0]);
+      body.push(el('line', { class: m.id === id ? 'drop on' : 'drop', x1, y1, x2, y2 }), el('circle', { class: 'fill', cx: x2, cy: y2, r: 1.8 }));
+      if (m.h) body.push(el('text', { class: m.id === id ? 'lbl small hon' : 'lbl small', x: x2 + 4, y: (y1 + y2) / 2 + 4 }, m.h));
     }
-    if (at >= 0) body.push(el('path', { class: 'ribbon-on', d: ribbon([s.drawn[at]]) }));
-    const seg = s.drawn[at];
-    const [ex, ey] = s.P(seg.pts[seg.pts.length - 1]);
-    body.push(el('circle', { class: 'mine', cx: ex, cy: ey, r: 5 }));
-    for (const [key, c] of Object.entries(s.callouts)) body.push(callout(s, c, key === id));
+    const mark = s.marks.find((m) => m.id === id);
+    const [mx, my] = s.P(mark.at);
     svg.replaceChildren(
       el('rect', { class: 'frame', x: 1, y: 1, width: 638, height: 378 }),
       el('text', { class: 'lbl', x: 12, y: 20 }, s.title),
-      el('line', { class: 'ln', x1: 12, y1: 25, x2: 12 + s.title.length * 7.2, y2: 25 }),
-      ...windArrow(),
+      el('line', { class: 'ln', x1: 12, y1: 25, x2: 12 + s.title.length * 7.3, y2: 25 }),
+      el('text', { class: 'lbl small', x: 12, y: 40 }, s.note),
+      ...brcLine(s),
       ...body,
-      el('text', { class: 'lbl small', x: 12, y: 42 }, s.note),
+      ...drawShip(s, mode),
+      ...ribbons,
+      el('circle', { class: 'mine', cx: mx, cy: my, r: 5 }),
+      ...s.marks.map((m) => callout(s, m, m.id === id)),
     );
     list.forEach((li, i) => li.classList.toggle('on', i === current));
     buttons.forEach((b, i) => b.setAttribute('aria-pressed', String(i === current)));
     out.replaceChildren(para(`Step ${current + 1} of ${list.length}: ${text(list[current].querySelector('strong')).replace(/[.,]$/, '')}. The step is highlighted in the list.`));
   }
-  // An arrow along the BRC, the ship's heading, in the figure's top right.
-  function windArrow() {
-    const s = VIEWS[mode];
-    const [ax, ay] = s.P([0, 0]), [bx, by] = s.P([1, 0]);
-    const n = Math.hypot(bx - ax, by - ay), ux = (bx - ax) / n, uy = (by - ay) / n;
-    const x0 = 560, y0 = 262, x1 = x0 + ux * 44, y1 = y0 + uy * 44;
+  // The BRC drawn on the water through the ship, with an arrow ahead.
+  function brcLine(s) {
+    const [ax, ay] = s.P([mode === 'case1' ? -1.7 : -0.9, 0]), [bx, by] = s.P([mode === 'case1' ? 1.9 : 1.0, 0]);
     return [
-      el('line', { class: 'ln heavy', x1: x0, y1: y0, x2: x1, y2: y1 }),
-      el('path', { class: 'fill', d: `M${x1 + ux * 8} ${y1 + uy * 8} L${x1 - uy * 6} ${y1 + ux * 6} L${x1 + uy * 6} ${y1 - ux * 6} Z` }),
-      el('text', { class: 'lbl small', x: x0, y: y0 + 18, 'text-anchor': 'middle' }, 'BRC'),
+      el('line', { class: 'thin dotted', x1: ax, y1: ay, x2: bx, y2: by }),
+      el('path', { class: 'fill', d: `M${bx} ${by} l${(bx - ax) / Math.hypot(bx - ax, by - ay) * 10} ${(by - ay) / Math.hypot(bx - ax, by - ay) * 10} l-4 4 z` }),
+      el('text', { class: 'lbl small', x: bx + 8, y: by + 4 }, 'BRC'),
     ];
   }
   function stop() { clearInterval(timer); timer = null; play.textContent = 'Play'; }

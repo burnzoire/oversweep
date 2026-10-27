@@ -52,7 +52,12 @@ test('pattern paths join up and end at the landing spot', () => {
   assert.ok(CASE_I.find((s) => s.id === 'touchdown').pts.some(([x, y, h]) => x === 0 && y === 0 && h === 0));
   assert.deepEqual(CHARLIE.at(-1).pts.at(-1), [0, 0]);
   assert.equal(CASE_I[0].pts[0][2], 800);
-  assert.equal(CASE_I.find((s) => s.id === 'downwind').pts[0][2], 600);
+  // P-1211: 600 ft at the abeam, 450 ft at the 90, 325-375 ft at the 45.
+  assert.equal(CASE_I.find((s) => s.id === 'abeam').pts[0][2], 600);
+  assert.equal(CASE_I.find((s) => s.id === 'ninety').pts[0][2], 450);
+  const at45 = CASE_I.find((s) => s.id === 'fortyfive').pts[0][2];
+  assert.ok(at45 >= 325 && at45 <= 375);
+  assert.ok(CASE_I.flatMap((s) => s.pts).every(([, , h]) => h <= 800));
   assert.equal(planOf(CHARLIE).length, CHARLIE.reduce((n, s) => n + s.pts.length, 0));
 });
 

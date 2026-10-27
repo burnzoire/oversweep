@@ -46,17 +46,20 @@ export function ballPicture(heightFt, rangeFt, lens = LENSES.FLOLS) {
 }
 
 // Figure 2: the T-45 Case I carrier pattern (P-1211 Figure 19 and pp. 30-33)
-// as a schematic, x along the BRC in NM (positive ahead of the ship's landing
-// spot), y in NM to port, height in ft. The ship moves; the figure does not.
+// as waypoints, x along the BRC in NM (positive ahead of the landing spot), y
+// in NM to port, height in ft: initial 3 NM astern at 800 ft, break over or
+// past the bow, 600 ft downwind 0.9-1.1 NM abeam, 450 ft at the 90, 325-375
+// ft at the 45, then the groove to touchdown. Positions between those the
+// FTI gives are interpolated. The ship moves; the figure does not.
 export const CASE_I = [
-  { id: 'initial', pts: [[-3.4, -0.25, 800], [-3, -0.25, 800], [0, -0.2, 800]] },
-  { id: 'break', pts: [[0, -0.2, 800], [1.2, -0.2, 800], [1.5, 0.15, 800], [1.3, 0.6, 700], [1.0, 1.0, 600]] },
-  { id: 'downwind', pts: [[1.0, 1.0, 600], [0.4, 1.0, 600], [0, 1.0, 600]] },
-  { id: 'abeam', pts: [[0, 1.0, 600], [-0.25, 0.98, 560], [-0.45, 0.85, 500]] },
-  { id: 'ninety', pts: [[-0.45, 0.85, 500], [-0.6, 0.62, 450], [-0.72, 0.45, 400]] },
-  { id: 'fortyfive', pts: [[-0.72, 0.45, 400], [-0.8, 0.3, 350], [-0.86, 0.17, 320]] },
-  { id: 'groove', pts: [[-0.86, 0.17, 320], [-0.5, 0.09, 190], [-0.08, 0.015, 30]] },
-  { id: 'touchdown', pts: [[-0.08, 0.015, 30], [0, 0, 0], [0.12, 0, 0]] },
+  { id: 'initial', pts: [[-3, -0.22, 800], [-1.5, -0.22, 800], [0, -0.2, 800], [1.0, -0.18, 800]] },
+  { id: 'break', pts: [[1.0, -0.18, 800], [1.42, 0, 795], [1.6, 0.41, 770], [1.42, 0.82, 720], [1.0, 1.0, 680]] },
+  { id: 'downwind', pts: [[1.0, 1.0, 680], [0.5, 1.0, 620], [0, 1.0, 600]] },
+  { id: 'abeam', pts: [[0, 1.0, 600], [-0.32, 0.92, 530], [-0.6, 0.62, 450]] },
+  { id: 'ninety', pts: [[-0.6, 0.62, 450], [-0.8, 0.42, 390], [-0.86, 0.28, 350]] },
+  { id: 'fortyfive', pts: [[-0.86, 0.28, 350], [-0.85, 0.13, 305], [-0.75, 0.04, 270]] },
+  { id: 'groove', pts: [[-0.75, 0.04, 270], [-0.4, 0.02, 145], [-0.04, 0.002, 15]] },
+  { id: 'touchdown', pts: [[-0.04, 0.002, 15], [0, 0, 0], [0.1, 0, 0]] },
 ];
 
 // A racetrack centred on the BRC at y, straights from −half to +half NM,
