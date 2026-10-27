@@ -143,3 +143,43 @@ export function dlqStatus({ deck, mode = 'day', in90 = 0, in180 = 0, in9mo = 0, 
   }
   return { status: 'current', needs: [] };
 }
+
+/**
+ * Every way to read an LSO comment string as a run of grading symbols
+ * (P-1211 Figures 7 and 8, pp. 12-13). `codes` maps each lettered symbol to
+ * its meaning. Brackets around symbols mean "slightly". Spaces are ignored.
+ * Returns up to `limit` readings, fewest symbols first; each reading is a list
+ * of { code, meaning, slight }. An empty list means the string doesn't parse.
+ */
+export function readComment(input, codes, limit = 4) {
+  const s = String(input).toUpperCase().replace(/\s+/g, '');
+  const keys = [...codes.keys()].map((k) => k.toUpperCase());
+  const meaning = new Map([...codes].map(([k, v]) => [k.toUpperCase(), v]));
+  const memo = new Map();
+  // All readings of s[i, end), with a cap so a long string can't blow up.
+  function from(i, end) {
+    const key = `${i}:${end}`;
+    if (memo.has(key)) return memo.get(key);
+    let out = [];
+    if (i === end) out = [[]];
+    else if (s[i] === '(') {
+      const close = s.indexOf(')', i + 1);
+      if (close > i + 1 && close < end) {
+        for (const inner of from(i + 1, close)) {
+          for (const rest of from(close + 1, end)) out.push([...inner.map((t) => ({ ...t, slight: true })), ...rest]);
+        }
+      }
+    } else {
+      for (const k of keys) {
+        if (k.length <= end - i && s.startsWith(k, i)) {
+          for (const rest of from(i + k.length, end)) out.push([{ code: k, meaning: meaning.get(k), slight: false }, ...rest]);
+        }
+      }
+    }
+    out = out.slice(0, 64);
+    memo.set(key, out);
+    return out;
+  }
+  if (!s) return [];
+  return from(0, s.length).sort((a, b) => a.length - b.length).slice(0, limit);
+}

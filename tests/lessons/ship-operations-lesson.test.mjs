@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import {
-  CASE_I, CHARLIE, DLQ_RULES, FT_PER_NM, LENSES, ballPicture, dlqStatus, lensThickness, planOf,
+  CASE_I, CHARLIE, DLQ_RULES, FT_PER_NM, LENSES, ballPicture, dlqStatus, lensThickness, planOf, readComment,
 } from '../../src/lessons/ship-operations/lesson-model.mjs';
 
 const near = (actual, expected, tolerance, message) =>
@@ -97,4 +97,24 @@ test('deck landing currency rejects bad input', () => {
   assert.throws(() => dlqStatus({ deck: 'multi', in9mo: NaN }), RangeError);
   assert.throws(() => dlqStatus({ deck: 'raft' }), RangeError);
   assert.throws(() => dlqStatus({ deck: 'multi', mode: 'dusk', in9mo: 5 }), RangeError);
+});
+
+test('LSO comments split into the grading symbols', () => {
+  const codes = new Map([['EG', 'Eased gun'], ['IW', 'In the wires'], ['LO', 'Low'], ['IC', 'In close'], ['S', 'Settle'], ['SLO', 'Slow'], ['F', 'Fast'], ['X', 'At the start'], ['L-R', 'Left to right']]);
+  assert.deepEqual(readComment('EGIW', codes).map((r) => r.map((t) => t.code)), [['EG', 'IW']]);
+  assert.deepEqual(readComment('egiw', codes)[0].map((t) => t.meaning), ['Eased gun', 'In the wires']);
+  const slight = readComment('(F)X', codes);
+  assert.deepEqual(slight[0].map((t) => [t.code, t.slight]), [['F', true], ['X', false]]);
+  // Two readings, fewest symbols first.
+  assert.deepEqual(readComment('SLOIC', codes).map((r) => r.map((t) => t.code)), [['SLO', 'IC'], ['S', 'LO', 'IC']]);
+  assert.deepEqual(readComment('L-R IC', codes)[0].map((t) => t.code), ['L-R', 'IC']);
+  assert.deepEqual(readComment('QQ', codes), []);
+  assert.deepEqual(readComment('', codes), []);
+});
+
+test('the page lists every lettered symbol in P-1211 Figures 7 and 8', () => {
+  const page = readFileSync(new URL('../../src/pages/manual/naval-operations/[module].astro', import.meta.url), 'utf8');
+  const listed = new Set([...page.matchAll(/data-code="([^"]+)"/g)].map((m) => m[1]));
+  for (const code of ['EG', 'IW', 'LO', 'IC', 'X', 'IM', 'AR', 'TL', 'OW', 'AW', 'IT', 'OT', 'NERD', 'TMRD', 'COCO', 'OSCB', 'L-R', 'R-L', 'LUL', 'LUR', 'TWA', 'TCA']) assert.ok(listed.has(code), code);
+  assert.equal(listed.size, 71);
 });
