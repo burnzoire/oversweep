@@ -1,4 +1,10 @@
 ---
+kind: base
+theatre: nevada
+sims:
+  - sim: dcs
+    product: "DCS: Nevada Test and Training Range map [4]"
+    notes: "Nellis is one of the map's detailed airbases. [4]"
 group: air-force
 short: Nellis
 name: Nellis Air Force Base
@@ -60,6 +66,11 @@ sources:
     publisher: "Federal Aviation Administration, digital Terminal Procedures Publication"
     date: "cycle 2610, 1–29 October 2026"
     url: "https://aeronav.faa.gov/d-tpp/2610/00227AD.PDF"
+    accessed: "2026-10-27"
+  - n: 4
+    title: "DCS: Nevada Test and Training Range Map"
+    publisher: "Eagle Dynamics (product page)"
+    url: "https://www.digitalcombatsimulator.com/en/shop/terrains/nttr_terrain/"
     accessed: "2026-10-27"
 ---
 

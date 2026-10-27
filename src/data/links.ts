@@ -1,4 +1,4 @@
-import { categoryRecords, includedRecords, records, recordRoute, termSlug, terminologyContent, type Term } from './encyclopedia';
+import { airfieldContent, categoryRecords, includedRecords, records, recordRoute, termSlug, terminologyContent, type Term } from './encyclopedia';
 import { sitePath } from '../lib/paths';
 
 // What a <Term> link shows: where it goes and a short preview, built from the
@@ -15,6 +15,8 @@ export interface LinkTarget {
 }
 
 const categoryNames: Record<string, string> = { aircraft: 'Aircraft', ordnance: 'Ordnance', 'threat-systems': 'Threat system', 'airfields-carriers': 'Air base' };
+const kindOf = (r: (typeof records)[number]) =>
+  r.category === 'airfields-carriers' && airfieldContent(r).frontmatter.kind === 'theatre' ? 'Theatre' : categoryNames[r.category] ?? r.category;
 
 // Previews are a reminder, not the entry: citations are dropped and a long
 // definition is cut at a word boundary.
@@ -73,7 +75,7 @@ export function recordTarget(ref: string): LinkTarget | undefined {
   if (found.length !== 1) throw new Error(found.length ? `Encyclopedia slug "${ref}" is ambiguous; use category/slug` : `No encyclopedia record "${ref}"`);
   const r = found[0];
   if (!includedRecords.includes(r)) return undefined;
-  return { href: sitePath(recordRoute(r)), title: r.title, kind: categoryNames[r.category] ?? r.category, lines: [{ text: previewText(r.summary) }], more: 0 };
+  return { href: sitePath(recordRoute(r)), title: r.title, kind: kindOf(r), lines: [{ text: previewText(r.summary) }], more: 0 };
 }
 
 const escapeHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');

@@ -1,4 +1,6 @@
 ---
+kind: base
+sims: []
 group: navy
 short: Pensacola
 name: Naval Air Station Pensacola (Forrest Sherman Field)

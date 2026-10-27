@@ -1,4 +1,6 @@
 ---
+kind: base
+sims: []
 group: navy
 short: Kingsville
 name: Naval Air Station Kingsville

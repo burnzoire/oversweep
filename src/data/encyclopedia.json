@@ -1632,6 +1632,39 @@
     "summary": "Fuzes, low-drag and retarded bombs, rockets, guided missiles, laser-guided weapons, and the chaff and flares that decoy a threat."
   },
   {
+    "id": "encyclopedia.airfields-carriers.nevada",
+    "slug": "nevada",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Nevada Test and Training Range",
+    "designation": "Theatre · DCS",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Air Force's largest training range and home of Red Flag, outside Las Vegas: nuclear tests, Area 51 and the F-117's secret years."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.mariana-islands",
+    "slug": "mariana-islands",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Mariana Islands",
+    "designation": "Theatre · DCS",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Guam, Saipan and Tinian: the 1944 invasion and B-29 bases of the Pacific War, and today the US bomber and submarine hub in the western Pacific."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.syria",
+    "slug": "syria",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Syria and the eastern Mediterranean",
+    "designation": "Theatre · DCS",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Syria, Lebanon, Cyprus and their neighbours: the 1973 and 1982 air wars, the campaign against the Islamic State, and Incirlik, Akrotiri and Khmeimim."
+  },
+  {
     "id": "encyclopedia.airfields-carriers.nellis",
     "slug": "nellis",
     "category": "airfields-carriers",

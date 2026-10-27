@@ -1,4 +1,6 @@
 ---
+kind: base
+sims: []
 group: navy
 short: Fallon
 name: Naval Air Station Fallon (Van Voorhis Field)

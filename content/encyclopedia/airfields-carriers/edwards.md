@@ -1,4 +1,6 @@
 ---
+kind: base
+sims: []
 group: air-force
 short: Edwards
 name: Edwards Air Force Base

@@ -178,14 +178,13 @@ export interface OrdnanceData {
   sources: Source[];
 }
 
-// Groups on the Airfields & Carriers list, in display order. Air bases are
-// grouped by the service that runs them; groups without records are not shown,
-// so the carrier batch only adds groups and records.
+// The services that run the bases on the Airfields & Carriers list, shown as
+// a label on each base; the list itself is grouped by theatre.
 export const airfieldGroups = [
-  { slug: 'air-force', title: 'Air Force bases' },
-  { slug: 'navy', title: 'Naval air stations' },
-  { slug: 'marine-corps', title: 'Marine Corps air stations' },
-  { slug: 'army', title: 'Army airfields' },
+  { slug: 'air-force', title: 'Air Force base' },
+  { slug: 'navy', title: 'Naval air station' },
+  { slug: 'marine-corps', title: 'Marine Corps air station' },
+  { slug: 'army', title: 'Army airfield' },
 ] as const;
 
 // An official chart reproduced as an image, such as an FAA airport diagram.
@@ -208,9 +207,55 @@ export interface RunwayLine {
   ends: [[number, number], [number, number]];
 }
 
+// Simulators whose theatres the Airfields & Carriers records are grouped by.
+export const sims = {
+  dcs: 'DCS World',
+  bms: 'Falcon BMS',
+  falcon4: 'Falcon 4.0 / Allied Force',
+} as const;
+export type Sim = keyof typeof sims;
+
+// Where a sim represents a theatre or base: `product` names the map or
+// theatre, as cited text with [n] markers; `notes` says what it covers.
+export interface SimCoverage {
+  sim: Sim;
+  product: string;
+  notes?: string;
+}
+
+// A cited way a sim differs from the real place, such as a frequency, a name
+// or a facility that has since closed.
+export interface SimDifference {
+  sim: Sim;
+  topic: string;
+  text: string;
+}
+
+// Theatre records group the bases a sim map covers. Their order on the list
+// is their order in the registry. The body has the sections Era, Historical
+// significance and Forces deployed.
+export interface TheatreData {
+  kind: 'theatre';
+  short?: string;
+  name: string;
+  // When the theatre is set, as cited text, such as "Present day [2]".
+  era: string;
+  region: string;
+  sims: SimCoverage[];
+  simDifferences?: SimDifference[];
+  photos: Photo[];
+  sources: Source[];
+}
+
 // Air base records: the data plate gives cited text; `quick` holds the
-// comparison table's columns.
+// comparison table's columns. `theatre` names the theatre record whose sim map
+// covers the base; bases no sim covers leave it out and are listed after the
+// theatres. `group` is the service that runs the base, shown as a label.
 export interface AirbaseData {
+  kind: 'base';
+  theatre?: string;
+  sims: SimCoverage[];
+  simDifferences?: SimDifference[];
   group: (typeof airfieldGroups)[number]['slug'];
   // Short label for the record nav when the title is too long.
   short?: string;
@@ -296,7 +341,22 @@ export const recordContent = (r: EncyclopediaRecord) => contentFile(r) as unknow
 export const aircraftContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AircraftData>;
 export const ordnanceContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<OrdnanceData>;
 export const terminologyContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<TerminologyData>;
-export const airbaseContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AirbaseData>;
+export const airfieldContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AirbaseData | TheatreData>;
+
+// The Airfields & Carriers list: theatres in registry order, each with the
+// bases its sim maps cover, then the bases no sim covers.
+export function theatreList() {
+  const entries = categoryRecords('airfields-carriers').map((record) => ({ record, data: airfieldContent(record).frontmatter }));
+  const bases = entries.filter((e): e is { record: EncyclopediaRecord; data: AirbaseData } => e.data.kind === 'base');
+  const theatres = entries
+    .filter((e): e is { record: EncyclopediaRecord; data: TheatreData } => e.data.kind === 'theatre')
+    .map((t) => ({ ...t, bases: bases.filter((b) => b.data.theatre === t.record.slug) }));
+  for (const b of bases) {
+    if (b.data.theatre && !theatres.some((t) => t.record.slug === b.data.theatre))
+      throw new Error(`Air base ${b.record.id} names unknown theatre "${b.data.theatre}"`);
+  }
+  return { theatres, outside: bases.filter((b) => !b.data.theatre) };
+}
 
 export function getRecord(category: string, slug: string): EncyclopediaRecord {
   const found = records.find(r => r.category === category && r.slug === slug);

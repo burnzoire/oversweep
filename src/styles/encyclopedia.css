@@ -145,3 +145,10 @@
   .ency .term { grid-template-columns: 1fr; }
   .ency .term-sense { grid-column: 1; }
 }
+
+.ency .sim-panel { margin: 1.25rem 0; padding: 0.75rem 1rem; border-left: 4px solid var(--color-accent); background: var(--color-surface, #f6f7f8); }
+.ency .sim-panel h2 { margin: 0 0 0.4rem; font-size: 1.1rem; }
+.ency .sim-panel h3 { margin: 0.9rem 0 0.3rem; font-size: 1rem; }
+.ency .sim-panel ul { margin: 0; padding-left: 1.1rem; }
+.ency .sim-panel li + li { margin-top: 0.3rem; }
+.ency .theatre-meta { margin: -0.25rem 0 0.75rem; color: var(--color-muted); }

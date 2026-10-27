@@ -1,4 +1,10 @@
 ---
+kind: base
+theatre: syria
+sims:
+  - sim: dcs
+    product: "DCS: Syria map [3]"
+    notes: "Incirlik is one of the large military airbases the map recreates in detail. [3]"
 group: air-force
 short: Incirlik
 name: Incirlik Air Base
@@ -44,6 +50,11 @@ sources:
     url: "https://davidmegginson.github.io/ourairports-data/runways.csv"
     accessed: "2026-10-27"
     note: "Row for LTAG: threshold latitude and longitude, length and width."
+  - n: 3
+    title: "DCS: Syria Map"
+    publisher: "Eagle Dynamics and Ugra Media (product page)"
+    url: "https://www.digitalcombatsimulator.com/en/shop/terrains/syria_terrain/"
+    accessed: "2026-10-27"
 ---
 
 ## Role today

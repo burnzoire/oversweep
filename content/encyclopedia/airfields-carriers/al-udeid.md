@@ -1,4 +1,6 @@
 ---
+kind: base
+sims: []
 group: air-force
 short: Al Udeid
 name: Al Udeid Air Base

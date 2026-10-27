@@ -20,7 +20,7 @@ export const encyclopediaCategories = [
   { slug: "ordnance", title: "Ordnance", summary: "Missiles, bombs, rockets and guns: how they are guided, their reach and how they are employed." },
   { slug: "threat-systems", title: "Threat Systems", summary: "Surface-to-air missile systems: radars, guidance, engagement limits and what they show on a radar warning receiver." },
   { slug: "radar-sensors", title: "Radar & Sensors", summary: "Airborne radars, targeting pods and warning receivers: what they detect and how." },
-  { slug: "airfields-carriers", title: "Airfields & Carriers", summary: "Air bases and aircraft carriers: layout, lighting and recovery equipment." },
+  { slug: "airfields-carriers", title: "Airfields & Carriers", summary: "DCS and Falcon BMS theatres and their air bases: era, history, forces deployed, and what the sims get right." },
   { slug: "terminology", title: "Terminology", summary: "Brevity words, abbreviations and terms used across the services." },
   { slug: "reference-data", title: "Reference Data", summary: "Tables pilots look things up in: units, conversions and codes." },
 ] as const;

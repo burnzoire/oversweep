@@ -1,4 +1,14 @@
 ---
+kind: base
+theatre: mariana-islands
+sims:
+  - sim: dcs
+    product: "DCS: Marianas map [4]"
+    notes: "Andersen is the map's main airbase. [4] The separate Marianas 1944 map shows Guam under Japanese control in early 1944 [6], before North Field was built. [1]"
+simDifferences:
+  - sim: dcs
+    topic: "ILS"
+    text: "DCS's airfield data gives Andersen no ILS on any runway [5]; the FAA lists ILS approaches to runways 06R, 24L and 24R. [2]"
 group: air-force
 short: Andersen
 name: Andersen Air Force Base
@@ -64,6 +74,22 @@ sources:
     publisher: "Federal Aviation Administration, digital Terminal Procedures Publication"
     date: "Pacific, 3 September–29 October 2026"
     url: "https://aeronav.faa.gov/d-tpp/2610/02147AD.PDF"
+    accessed: "2026-10-27"
+  - n: 4
+    title: "DCS: Marianas Map"
+    publisher: "Eagle Dynamics (product page)"
+    url: "https://www.digitalcombatsimulator.com/en/shop/terrains/marianas_terrain/"
+    accessed: "2026-10-27"
+  - n: 5
+    title: "pydcs terrain data: Mariana Islands airports (airports.py)"
+    publisher: "pydcs, an open-source Python library for building DCS World missions"
+    url: "https://github.com/pydcs/dcs/blob/master/dcs/terrain/marianaislands/airports.py"
+    accessed: "2026-10-27"
+    note: "Andersen AFB entry: runways 06L/24R and 06R/24L, each approach with an empty list of runway beacons."
+  - n: 6
+    title: "DCS: Marianas WWII Map"
+    publisher: "Eagle Dynamics (product page)"
+    url: "https://www.digitalcombatsimulator.com/en/shop/terrains/marianas_wwii_terrain/"
     accessed: "2026-10-27"
 ---
 

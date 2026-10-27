@@ -1,4 +1,6 @@
 ---
+kind: base
+sims: []
 group: marine-corps
 short: Yuma
 name: Marine Corps Air Station Yuma

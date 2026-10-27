@@ -1,4 +1,6 @@
 ---
+kind: base
+sims: []
 group: navy
 short: Whiting Field
 name: Naval Air Station Whiting Field

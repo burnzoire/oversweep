@@ -1,4 +1,6 @@
 ---
+kind: base
+sims: []
 group: army
 short: Fort Rucker
 name: Fort Rucker (Cairns Army Airfield)

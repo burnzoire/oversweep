@@ -1,4 +1,10 @@
 ---
+kind: base
+sims: []
+simDifferences:
+  - sim: bms
+    topic: "Name"
+    text: "Falcon BMS's Korea theatre has an airbase charted as Fukuoka / Kadena on the Japanese main islands, not on Okinawa. The person who maintained Falcon's airbase data says MicroProse named it Kadena in the original Falcon 4.0, which was geographically wrong, and it was renamed as the best geographically correct compromise. [3]"
 group: air-force
 short: Kadena
 name: Kadena Air Base
@@ -48,6 +54,12 @@ sources:
     url: "https://davidmegginson.github.io/ourairports-data/runways.csv"
     accessed: "2026-10-27"
     note: "Rows for RODN: threshold latitude and longitude, length and width of each runway."
+  - n: 3
+    title: "Chart error in Japan airfield"
+    publisher: "Falcon BMS forum (community discussion)"
+    url: "https://forum.falcon-bms.com/topic/17513/chart-error-in-japan-airfield/1"
+    accessed: "2026-10-27"
+    note: "Reply by Red Dog, who maintained Falcon's airbase and navigation data, on why the BMS chart shows Fukuoka / Kadena on mainland Japan."
 ---
 
 ## Role today

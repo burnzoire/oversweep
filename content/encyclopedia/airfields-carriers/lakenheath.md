@@ -1,4 +1,6 @@
 ---
+kind: base
+sims: []
 group: air-force
 short: Lakenheath
 name: RAF Lakenheath
