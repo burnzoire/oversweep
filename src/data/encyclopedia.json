@@ -99,6 +99,116 @@
     "summary": "Four infrared missiles on a BRDM-2 scout car with a passive detector: nothing for a radar warning receiver to see, short range."
   },
   {
+    "id": "encyclopedia.threat-systems.sa-10",
+    "slug": "sa-10",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-10 Grumble",
+    "designation": "S-300P family",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A long-range, vertically launched SAM: Flap Lid fire control, Clam Shell low-altitude and Big Bird search radars."
+  },
+  {
+    "id": "encyclopedia.threat-systems.sa-11",
+    "slug": "sa-11",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-11 Gadfly",
+    "designation": "9K37 Buk",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The SA-6's successor: each tracked launcher carries its own Fire Dome radar and four semi-active homing missiles."
+  },
+  {
+    "id": "encyclopedia.threat-systems.sa-12",
+    "slug": "sa-12",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-12 Gladiator / Giant",
+    "designation": "9K81 S-300V",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The army's tracked long-range system, with separate missiles against aircraft (Gladiator) and ballistic missiles (Giant)."
+  },
+  {
+    "id": "encyclopedia.threat-systems.sa-13",
+    "slug": "sa-13",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-13 Gopher",
+    "designation": "9K35 Strela-10",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Four infrared missiles on a tracked MT-LB with a range-only radar: a short-range, low-altitude SAM meant mainly for helicopters."
+  },
+  {
+    "id": "encyclopedia.threat-systems.sa-14",
+    "slug": "sa-14",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-14 Gremlin",
+    "designation": "9K34 Strela-3",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A shoulder-fired missile with a cooled infrared seeker: harder to decoy than the SA-7, with limited head-on capability."
+  },
+  {
+    "id": "encyclopedia.threat-systems.sa-15",
+    "slug": "sa-15",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-15 Gauntlet",
+    "designation": "9K330 Tor",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A tracked, self-contained vehicle with its own Scrum Half radars and eight vertically launched command-guided missiles."
+  },
+  {
+    "id": "encyclopedia.threat-systems.sa-16",
+    "slug": "sa-16",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-16 Gimlet",
+    "designation": "9K310 Igla-1",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The simplified first Igla: a shoulder-fired infrared missile with optional IFF, credited with Gulf War and Kosovo hits."
+  },
+  {
+    "id": "encyclopedia.threat-systems.sa-17",
+    "slug": "sa-17",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-17 Grizzly",
+    "designation": "9K37M1-2 Buk-M1-2",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Buk with the 9M317 missile: a larger envelope against aircraft and the ability to engage ballistic missiles."
+  },
+  {
+    "id": "encyclopedia.threat-systems.sa-18",
+    "slug": "sa-18",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-18 Grouse",
+    "designation": "9K38 Igla",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The full Igla: a shoulder-fired missile whose infrared and ultraviolet seeker resists flares, with head-on capability."
+  },
+  {
+    "id": "encyclopedia.threat-systems.sa-19",
+    "slug": "sa-19",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "SA-19 Grison",
+    "designation": "2K22 Tunguska",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Twin 30 mm cannon and eight command-guided missiles on one tracked vehicle with its own Hot Shot radar."
+  },
+  {
     "id": "encyclopedia.aircraft.a-10",
     "slug": "a-10",
     "category": "aircraft",
