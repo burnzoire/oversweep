@@ -204,15 +204,133 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
    <tr><th scope="row">OK, underlined</th><td>5</td><td>A perfect pass</td></tr>
    <tr><th scope="row">OK</th><td>4</td><td>Reasonable deviations with good corrections</td></tr>
    <tr><th scope="row">(OK)</th><td>3</td><td>A fair pass, reasonable deviations</td></tr>
-   <tr><th scope="row">B</th><td>2.5</td><td>Bolter</td></tr>
+   <tr><th scope="row">B</th><td>2.5</td><td>Bolter (written as a B with a diagonal arrow)</td></tr>
    <tr><th scope="row">— (no grade)</th><td>2</td><td>Below average but safe</td></tr>
    <tr><th scope="row">PWO</th><td>2</td><td>Pattern waveoff</td></tr>
    <tr><th scope="row">WO</th><td>1</td><td>Waveoff: not set up for a safe approach</td></tr>
-   <tr><th scope="row">C</th><td>0</td><td>Cut pass: unsafe, gross deviations inside the waveoff window</td></tr>
-   <tr><th scope="row">WOFD, TWO</th><td>No count</td><td>Waveoff for a foul deck; a practice waveoff</td></tr>
+   <tr><th scope="row">C</th><td>0</td><td>Cut pass: unsafe, gross deviations inside the waveoff window (written as a C with a horizontal arrow)</td></tr>
+   <tr><th scope="row">OWO</th><td>2</td><td>Own waveoff, taken although clearance to land (Roger ball or cut lights) was received</td></tr>
+   <tr><th scope="row">OWO</th><td>No count</td><td>Own waveoff, taken because clearance to land was not received</td></tr>
+   <tr><th scope="row">TWO</th><td>No count</td><td>Test waveoff, flown in field carrier landing practice to show the technique</td></tr>
+   <tr><th scope="row">WOFD</th><td>No count</td><td>Waveoff for a foul deck</td></tr>
+   <tr><th scope="row">NC</th><td>No count</td><td>No count, written in the grade column</td></tr>
   </tbody>
  </table></div>
- <p>The comments are a shorthand: each fault has a symbol and each part of the groove a position, X at the start, IM in the middle, IC in close and AR at the ramp, with brackets meaning “a little” and underlining meaning “a lot”. So “LOIC” is low in close and “(F)X” a little fast at the start. <a href="#source-p1211">{cq('12–13')}</a></p>
+ <h3 id="lso-comments">Reading the LSO's comments</h3>
+ <p>The grade comes with comments in the LSO's shorthand, written on the pilot performance record. <a href="#source-p1211">{cq('11–12')}</a> A comment is a run of symbols: what the aircraft did, usually followed by where in the pass it happened, with marks that make a symbol milder, stronger or say how a call was answered. <a href="#source-p1211">{cq('12–13')}</a> So <code>EGIW</code> reads “eased gun in the wires”: a large power reduction in close or at the ramp, which the training instruction calls unsafe and never an acceptable correction, because a high “come down” ends in a hard landing, blown tires and possible structural damage. <a href="#source-p1211">{cq('13, 21')}</a> <code>LOIC</code> is low in close, and <code>(F)X</code> slightly fast at the start. <a href="#source-p1211">{cq('12–13')}</a> The tables below give every symbol in the instruction's two figures. The instruction itself calls its grading list partial. <a href="#source-p1211">{cq('11')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Where in the pass" tabindex="0"><table data-codes>
+  <caption>Where in the pass <a href="#source-p1211">{cq('13')}</a></caption>
+  <thead><tr><th scope="col">Symbol</th><th scope="col">Meaning</th></tr></thead>
+  <tbody>
+   <tr data-code="X" data-kind="where"><th scope="row"><code>X</code></th><td data-meaning>At the start: the first third of the glideslope</td></tr>
+   <tr data-code="IM" data-kind="where"><th scope="row"><code>IM</code></th><td data-meaning>In the middle: the middle third of the glideslope</td></tr>
+   <tr data-code="IC" data-kind="where"><th scope="row"><code>IC</code></th><td data-meaning>In close: the last third of the glideslope</td></tr>
+   <tr data-code="AR" data-kind="where"><th scope="row"><code>AR</code></th><td data-meaning>At the ramp</td></tr>
+   <tr data-code="TL" data-kind="where"><th scope="row"><code>TL</code></th><td data-meaning>To land</td></tr>
+   <tr data-code="IW" data-kind="where"><th scope="row"><code>IW</code></th><td data-meaning>In the wires</td></tr>
+   <tr data-code="OW" data-kind="where"><th scope="row"><code>OW</code></th><td data-meaning>Over the wires</td></tr>
+   <tr data-code="AW" data-kind="where"><th scope="row"><code>AW</code></th><td data-meaning>All the way</td></tr>
+   <tr data-code="IT" data-kind="where"><th scope="row"><code>IT</code></th><td data-meaning>In the turn</td></tr>
+   <tr data-code="OT" data-kind="where"><th scope="row"><code>OT</code></th><td data-meaning>Out of the turn, as the aircraft starts to roll wings level</td></tr>
+  </tbody>
+ </table></div>
+ <div class="table-scroll" role="region" aria-label="Marks and modifiers" tabindex="0"><table>
+  <caption>Marks and modifiers <a href="#source-p1211">{cq('12–13')}</a></caption>
+  <thead><tr><th scope="col">Mark</th><th scope="col">Meaning</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Brackets, <code>( )</code></th><td>Slightly: <code>(F)</code> is slightly fast</td></tr>
+   <tr><th scope="row">Underline</th><td>Emphasis</td></tr>
+   <tr><th scope="row">A square around a symbol</th><td>The pilot did not answer a call</td></tr>
+   <tr><th scope="row">A circle around a symbol</th><td>The pilot answered a call too slowly</td></tr>
+   <tr><th scope="row"><code>OC</code> before a symbol, the O over the C</th><td>Overcontrolled</td></tr>
+   <tr><th scope="row">A mark between two symbols</th><td>“On”</td></tr>
+   <tr><th scope="row"><code>A</code></th><td>APC/AUTO approach</td></tr>
+   <tr><th scope="row"><code>A</code>, marked</th><td>An APC/AUTO approach downgraded to manual</td></tr>
+   <tr><th scope="row"><code>M</code></th><td>Manual approach in an aircraft with APC</td></tr>
+   <tr><th scope="row"><code>I</code></th><td>Mode 1 ACLS approach, recorded in the grade column</td></tr>
+  </tbody>
+ </table></div>
+ <div class="table-scroll" role="region" aria-label="What the aircraft did" tabindex="0"><table data-codes>
+  <caption>What the aircraft did <a href="#source-p1211">{cq('12–13')}</a></caption>
+  <thead><tr><th scope="col">Symbol</th><th scope="col">Meaning</th></tr></thead>
+  <tbody>
+   <tr data-code="AA" data-kind="fault"><th scope="row"><code>AA</code></th><td data-meaning>Angling approach</td></tr>
+   <tr data-code="ACC" data-kind="fault"><th scope="row"><code>ACC</code></th><td data-meaning>Accelerate</td></tr>
+   <tr data-code="AFU" data-kind="fault"><th scope="row"><code>AFU</code></th><td data-meaning>All fouled up</td></tr>
+   <tr data-code="B" data-kind="fault"><th scope="row"><code>B</code></th><td data-meaning>Flat glideslope</td></tr>
+   <tr data-code="C" data-kind="fault"><th scope="row"><code>C</code></th><td data-meaning>Climbing</td></tr>
+   <tr data-code="CB" data-kind="fault"><th scope="row"><code>CB</code></th><td data-meaning>Coming back to the left</td></tr>
+   <tr data-code="CD" data-kind="fault"><th scope="row"><code>CD</code></th><td data-meaning>Coming down</td></tr>
+   <tr data-code="CH" data-kind="fault"><th scope="row"><code>CH</code></th><td data-meaning>Chased</td></tr>
+   <tr data-code="CO" data-kind="fault"><th scope="row"><code>CO</code></th><td data-meaning>Come-on</td></tr>
+   <tr data-code="COCO" data-kind="fault"><th scope="row"><code>COCO</code></th><td data-meaning>Climbed on come-on</td></tr>
+   <tr data-code="CPD" data-kind="fault"><th scope="row"><code>CPD</code></th><td data-meaning>Chased pitching deck</td></tr>
+   <tr data-code="CU" data-kind="fault"><th scope="row"><code>CU</code></th><td data-meaning>Cocked-up</td></tr>
+   <tr data-code="DEC" data-kind="fault"><th scope="row"><code>DEC</code></th><td data-meaning>Decelerate</td></tr>
+   <tr data-code="DFD" data-kind="fault"><th scope="row"><code>DFD</code></th><td data-meaning>Dived for deck</td></tr>
+   <tr data-code="DLW" data-kind="fault"><th scope="row"><code>DLW</code></th><td data-meaning>Dropped left wing</td></tr>
+   <tr data-code="DN" data-kind="fault"><th scope="row"><code>DN</code></th><td data-meaning>Dropped nose</td></tr>
+   <tr data-code="DRW" data-kind="fault"><th scope="row"><code>DRW</code></th><td data-meaning>Dropped right wing</td></tr>
+   <tr data-code="EG" data-kind="fault"><th scope="row"><code>EG</code></th><td data-meaning>Eased gun</td></tr>
+   <tr data-code="F" data-kind="fault"><th scope="row"><code>F</code></th><td data-meaning>Fast</td></tr>
+   <tr data-code="FD" data-kind="fault"><th scope="row"><code>FD</code></th><td data-meaning>Fouled deck</td></tr>
+   <tr data-code="GLI" data-kind="fault"><th scope="row"><code>GLI</code></th><td data-meaning>Gliding approach</td></tr>
+   <tr data-code="H" data-kind="fault"><th scope="row"><code>H</code></th><td data-meaning>High</td></tr>
+   <tr data-code="LIG" data-kind="fault"><th scope="row"><code>LIG</code></th><td data-meaning>Long in the groove</td></tr>
+   <tr data-code="LLU" data-kind="fault"><th scope="row"><code>LLU</code></th><td data-meaning>Late lineup</td></tr>
+   <tr data-code="LL" data-kind="fault"><th scope="row"><code>LL</code></th><td data-meaning>Landed left</td></tr>
+   <tr data-code="LO" data-kind="fault"><th scope="row"><code>LO</code></th><td data-meaning>Low</td></tr>
+   <tr data-code="L-R" data-kind="fault"><th scope="row"><code>L-R</code></th><td data-meaning>Left to right</td></tr>
+   <tr data-code="LR" data-kind="fault"><th scope="row"><code>LR</code></th><td data-meaning>Landed right</td></tr>
+   <tr data-code="LUL" data-kind="fault"><th scope="row"><code>LUL</code></th><td data-meaning>Lined up left</td></tr>
+   <tr data-code="LUR" data-kind="fault"><th scope="row"><code>LUR</code></th><td data-meaning>Lined up right</td></tr>
+   <tr data-code="ND" data-kind="fault"><th scope="row"><code>ND</code></th><td data-meaning>Nosedown</td></tr>
+   <tr data-code="NEA" data-kind="fault"><th scope="row"><code>NEA</code></th><td data-meaning>Not enough attitude</td></tr>
+   <tr data-code="NELR" data-kind="fault"><th scope="row"><code>NELR</code></th><td data-meaning>Not enough left rudder</td></tr>
+   <tr data-code="NEP" data-kind="fault"><th scope="row"><code>NEP</code></th><td data-meaning>Not enough power</td></tr>
+   <tr data-code="NERD" data-kind="fault"><th scope="row"><code>NERD</code></th><td data-meaning>Not enough rate of descent</td></tr>
+   <tr data-code="NERR" data-kind="fault"><th scope="row"><code>NERR</code></th><td data-meaning>Not enough right rudder</td></tr>
+   <tr data-code="NESA" data-kind="fault"><th scope="row"><code>NESA</code></th><td data-meaning>Not enough straight away</td></tr>
+   <tr data-code="NH" data-kind="fault"><th scope="row"><code>NH</code></th><td data-meaning>No hook</td></tr>
+   <tr data-code="NLU" data-kind="fault"><th scope="row"><code>NLU</code></th><td data-meaning>Not lined up</td></tr>
+   <tr data-code="NSU" data-kind="fault"><th scope="row"><code>NSU</code></th><td data-meaning>Not set up</td></tr>
+   <tr data-code="OS" data-kind="fault"><th scope="row"><code>OS</code></th><td data-meaning>Overshoot</td></tr>
+   <tr data-code="OSCB" data-kind="fault"><th scope="row"><code>OSCB</code></th><td data-meaning>Overshot coming back</td></tr>
+   <tr data-code="P" data-kind="fault"><th scope="row"><code>P</code></th><td data-meaning>Power</td></tr>
+   <tr data-code="PD" data-kind="fault"><th scope="row"><code>PD</code></th><td data-meaning>Pitching deck</td></tr>
+   <tr data-code="PNU" data-kind="fault"><th scope="row"><code>PNU</code></th><td data-meaning>Pulled nose up</td></tr>
+   <tr data-code="ROT" data-kind="fault"><th scope="row"><code>ROT</code></th><td data-meaning>Rotate</td></tr>
+   <tr data-code="RUF" data-kind="fault"><th scope="row"><code>RUF</code></th><td data-meaning>Rough</td></tr>
+   <tr data-code="R-L" data-kind="fault"><th scope="row"><code>R-L</code></th><td data-meaning>Right to left</td></tr>
+   <tr data-code="S" data-kind="fault"><th scope="row"><code>S</code></th><td data-meaning>Settle</td></tr>
+   <tr data-code="SD" data-kind="fault"><th scope="row"><code>SD</code></th><td data-meaning>Spotted deck</td></tr>
+   <tr data-code="SHT" data-kind="fault"><th scope="row"><code>SHT</code></th><td data-meaning>Ship in turn</td></tr>
+   <tr data-code="SLO" data-kind="fault"><th scope="row"><code>SLO</code></th><td data-meaning>Slow</td></tr>
+   <tr data-code="SRD" data-kind="fault"><th scope="row"><code>SRD</code></th><td data-meaning>Stopped rate of descent</td></tr>
+   <tr data-code="ST" data-kind="fault"><th scope="row"><code>ST</code></th><td data-meaning>Steep turn</td></tr>
+   <tr data-code="TCA" data-kind="fault"><th scope="row"><code>TCA</code></th><td data-meaning>Too close abeam</td></tr>
+   <tr data-code="TMA" data-kind="fault"><th scope="row"><code>TMA</code></th><td data-meaning>Too much attitude</td></tr>
+   <tr data-code="TMRD" data-kind="fault"><th scope="row"><code>TMRD</code></th><td data-meaning>Too much rate of descent</td></tr>
+   <tr data-code="TTL" data-kind="fault"><th scope="row"><code>TTL</code></th><td data-meaning>Turned too late</td></tr>
+   <tr data-code="TTM" data-kind="fault"><th scope="row"><code>TTM</code></th><td data-meaning>Turned too much</td></tr>
+   <tr data-code="TTS" data-kind="fault"><th scope="row"><code>TTS</code></th><td data-meaning>Turned too soon</td></tr>
+   <tr data-code="TWA" data-kind="fault"><th scope="row"><code>TWA</code></th><td data-meaning>Too wide abeam</td></tr>
+  </tbody>
+ </table></div>
+ <p>Some symbols are small drawings rather than letters: landed left wing down, landed right wing down and landed nose first are each drawn as the aircraft with marks for where it touched; landed on three points is three dots; over the top is an arc with an arrow; and flying up or down through the glideslope is two crossed lines, the arrowhead showing which way. <a href="#source-p1211">{cq('12–13')}</a></p>
+ <section class="lesson" data-lesson="decode" aria-labelledby="decode-title">
+  <h3 id="decode-title">Read a comment</h3>
+  <p class="task">Type an LSO comment made of the symbols above, such as <code>EGIW</code> or <code>(LO)IC</code>, and the reader splits it into symbols. Some strings split more than one way; then it shows each.</p>
+  <div class="controls"><label>Comment <input type="text" data-comment value="EGIW" autocomplete="off" autocapitalize="characters" spellcheck="false" size="16"></label></div>
+  <div class="result" data-result role="status" aria-live="polite"></div>
+ </section>
+ <section class="lesson quiz-lesson" data-lesson="codes" aria-labelledby="codes-title">
+  <h3 id="codes-title">Quiz: read the LSO's symbols</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next symbol</button></div>
+ </section>
 
  <h2 id="outcomes">Arrestment, bolter, waveoff and Delta</h2>
  <p><strong>Arrestment.</strong> Fly the approach exactly as for a touch-and-go, ball to touchdown, and go to full power as the wheels touch: never anticipate the wire. Hold full power until the jet stops and the yellow shirt at about the 1 to 2 o'clock signals power back, then brakes off for the <Term id="Pull back">pull back</Term>, which lets the wire slip off the hook, and hook up. Braking during the pull back can tip the jet onto its tail. <a href="#source-p1211">{cq('34')}</a> Then follow the yellow shirts clear of the landing area, past the <Term id="Foul line">foul line</Term>, with no more than 70% power. <a href="#source-p1211">{cq('35')}</a></p>
@@ -299,7 +417,7 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
 
  <h2 id="sources">Sources and applicability</h2>
  <h3>Military sources</h3>
- <p id="source-p1211"><strong>[1] Chief of Naval Air Training, CNATRA P-1211, Flight Training Instruction, Carrier Qualification, T-45, (7-01), with changes 1 to 3.</strong> Read on the Integrated Publishing mirror, <a href="https://navyflightmanuals.tpub.com/P-1211/">navyflightmanuals.tpub.com/P-1211/</a>, 27 October 2026, by printed page: <a href="https://navyflightmanuals.tpub.com/P-1211/Component-Description-18.htm">the lens (p. 3)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Landing-Signal-Officer-Continued-P-12110026-26.htm">LSO calls and grades (p. 11)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/45-Degree-Position-33.htm">the start and the groove (p. 18)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Marshal-Procedures-Case-1-43.htm">Case I marshal (p. 28)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Abeam-180-Position-48.htm">the carrier pattern (p. 33)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Touch-And-Go-Bolter-49.htm">bolter, waveoff and arrestment (p. 34)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Flight-Deck-Procedures-50.htm">deck personnel (p. 35)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Catapult-Procedures-Continued-56.htm">catapult procedures (p. 41)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Emergency-Procedures-P-12110060-60.htm">bingo (p. 45)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Glossary-P-12110080-80.htm">glossary (pp. 65–69)</a>. Also cited: pp. 1–2, 5–6, 8–10, 12–13, 19–23, 27, 29–32, 36, 40, 42–44, 46–47.</p>
+ <p id="source-p1211"><strong>[1] Chief of Naval Air Training, CNATRA P-1211, Flight Training Instruction, Carrier Qualification, T-45, (7-01), with changes 1 to 3.</strong> Read on the Integrated Publishing mirror, <a href="https://navyflightmanuals.tpub.com/P-1211/">navyflightmanuals.tpub.com/P-1211/</a>, 27 October 2026, by printed page: <a href="https://navyflightmanuals.tpub.com/P-1211/Component-Description-18.htm">the lens (p. 3)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Landing-Signal-Officer-Continued-P-12110026-26.htm">LSO calls and grades (p. 11)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Figure-7-Lso-Grading-Symbols-1-Of-2-27.htm">LSO grading symbols (p. 12)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Figure-7-Lso-Grading-Symbols-2-Of-2-28.htm">LSO grading symbols, continued (p. 13)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Under-Powered-36.htm">glideslope corrections and the eased gun (p. 21)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/45-Degree-Position-33.htm">the start and the groove (p. 18)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Marshal-Procedures-Case-1-43.htm">Case I marshal (p. 28)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Abeam-180-Position-48.htm">the carrier pattern (p. 33)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Touch-And-Go-Bolter-49.htm">bolter, waveoff and arrestment (p. 34)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Flight-Deck-Procedures-50.htm">deck personnel (p. 35)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Catapult-Procedures-Continued-56.htm">catapult procedures (p. 41)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Emergency-Procedures-P-12110060-60.htm">bingo (p. 45)</a>; <a href="https://navyflightmanuals.tpub.com/P-1211/Glossary-P-12110080-80.htm">glossary (pp. 65–69)</a>. Also cited: pp. 1–2, 5–6, 8–10, 19–20, 22–23, 27, 29–32, 36, 40, 42–44, 46–47.</p>
  <p id="source-atc"><strong>[2] US Navy, Air Traffic Controller, NAVEDTRA 14342A, chapter 11, Shipboard Operations.</strong> Read on <a href="https://navyaviation.tpub.com/14342A/Chapter-11-Shipboard-Operations-357.html">navyaviation.tpub.com/14342A/</a>, 27 October 2026, by printed page: <a href="https://navyaviation.tpub.com/14342A/Table-11-4-Weather-Criteria-For-Departures-And-Recoveries-378.html">recovery cases (p. 11-22)</a>; <a href="https://navyaviation.tpub.com/14342A/Table-11-10-Departure-Procedures-386.html">carrier departures (p. 11-30)</a>; <a href="https://navyaviation.tpub.com/14342A/Delta-Signal-Composition-399.html">Delta and tankers (p. 11-43)</a>; <a href="https://navyaviation.tpub.com/14342A/Figure-11-7-Tanking-Pattern-404.html">the tanking pattern (p. 11-48)</a>; <a href="https://navyaviation.tpub.com/14342A/Amphibious-Atc-Scope-405.html">amphibious control (p. 11-49)</a>; <a href="https://navyaviation.tpub.com/14342A/Case-Of-Departure-And-Recovery-413.html">amphibious cases (p. 11-57)</a>; <a href="https://navyaviation.tpub.com/14342A/Fixed-Wing-Approach-Procedures-Under-Case-Ii-Conditions-432.html">AV-8 approach procedures (p. 11-76)</a>; <a href="https://navyaviation.tpub.com/14342A/Fixed-Wing-Night-Aided-Recovery-Procedures-Under-Case-I-Conditions-439.html">fixed-wing Case I (p. 11-83)</a>. Also cited: pp. 11-2–11-9, 11-21, 11-42, 11-44–11-46, 11-62–11-68, 11-81, 11-84–11-85.</p>
  <p id="source-abe"><strong>[3] US Navy, Aviation Boatswain's Mate E, NAVEDTRA 14310.</strong> Read on navyaviation.tpub.com/14310/, 27 October 2026: <a href="https://navyaviation.tpub.com/14310/css/Chapter-3-Mk-7-Aircraft-Recovery-Equipment-71.htm">arresting gear (p. 3-1)</a>; <a href="https://navyaviation.tpub.com/14310/css/Chapter-4-Steam-Powered-Catapults-135.htm">steam catapults (p. 4-1)</a>; <a href="https://navyaviation.tpub.com/14310/css/Chapter-5-Associated-Launching-Equipment-203.htm">jet blast deflectors (p. 5-1)</a>. Also cited: pp. 3-3, 3-31, 5-15.</p>
  <p id="source-fm1564"><strong>[4] Headquarters, Department of the Army, FM 1-564, Shipboard Operations, 29 June 1997.</strong> Approved for public release. <a href="https://everyspec.com/ARMY/FM-Field-Manual/FM_1-564_1997_13873/">Copy on EverySpec</a>, read 27 October 2026, by printed page: pp. 1-1, 1-9, 1-11–1-14, 2-4, 5-2, 5-15–5-19, D-12, F-1–F-3.</p>

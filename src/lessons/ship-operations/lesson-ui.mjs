@@ -1,7 +1,7 @@
 // Presentation for the Carrier and Amphibious Ship Operations module's figures
 // and quizzes. Numbers and rules come from lesson-model.mjs; this file reads
 // inputs and draws.
-import { CASE_I, CHARLIE, FT_PER_NM, LENSES, ballPicture, dlqStatus, lensThickness } from './lesson-model.mjs';
+import { CASE_I, CHARLIE, FT_PER_NM, LENSES, ballPicture, dlqStatus, lensThickness, readComment } from './lesson-model.mjs';
 import { quickQuiz, termQuiz, withDistractors } from '../shared/quick-quiz.mjs';
 
 const SVG = 'http://www.w3.org/2000/svg';
@@ -153,6 +153,38 @@ function setupJerseys(root) {
     right: (q) => `Correct: ${q.key.toLowerCase()}.`,
     wrong: (q) => `Not quite. ${q.key}: ${q.answer}.`,
   });
+}
+// The LSO's lettered grading symbols, read from the tables on the page.
+const codeRows = () => [...document.querySelectorAll('[data-codes] tr[data-code]')].map((tr) => ({ key: tr.dataset.code, kind: tr.dataset.kind, answer: text(tr.querySelector('[data-meaning]')) }));
+function setupCodes(root) {
+  tableQuiz(root, codeRows(), {
+    ask: (q) => `What does the LSO's symbol ${q.key} mean?`,
+    right: (q) => `Correct: ${q.key} is ${q.answer.toLowerCase()}.`,
+    wrong: (q) => `Not quite. ${q.key}: ${q.answer}.`,
+  });
+}
+function setupDecode(root) {
+  const input = root.querySelector('[data-comment]');
+  const out = root.querySelector('[data-result]');
+  const codes = new Map(codeRows().map((r) => [r.key, r.answer]));
+  const word = (t, i) => {
+    const m = t.meaning.split(/[:,]/)[0];
+    const s = i ? m.charAt(0).toLowerCase() + m.slice(1) : m;
+    return t.slight ? `${i ? 'slightly' : 'Slightly'} ${s.charAt(0).toLowerCase()}${s.slice(1)}` : s;
+  };
+  function draw() {
+    const readings = readComment(input.value, codes);
+    if (!input.value.trim()) { out.replaceChildren(para('Type a comment.')); return; }
+    if (!readings.length) { out.replaceChildren(para('That string does not split into the symbols in the tables. Drawn symbols and the square and circle marks cannot be typed.')); return; }
+    out.replaceChildren(...readings.map((r, n) => {
+      const p = document.createElement('p');
+      const codesText = r.map((t) => (t.slight ? `(${t.code})` : t.code)).join(' · ');
+      p.append(Object.assign(document.createElement('strong'), { textContent: `${readings.length > 1 ? `Reading ${n + 1}: ` : ''}${codesText}` }), ` — ${r.map(word).join(', ')}.`);
+      return p;
+    }));
+  }
+  input.addEventListener('input', draw);
+  draw();
 }
 function setupCalls(root) {
   const rows = [...document.querySelectorAll('[data-calls] tr')].filter((tr) => tr.querySelector('[data-call]')).map((tr) => ({ key: text(tr.querySelector('[data-call]')), answer: text(tr.querySelector('[data-action]')) }));
@@ -413,7 +445,7 @@ function setupDlq(root) {
 
 function setupTerms(root) { termQuiz(root, { hideTerm: true }); }
 
-const blocks = { deck: setupDeck, jerseys: setupJerseys, pattern: setupPattern, wedge: setupWedge, calls: setupCalls, dlq: setupDlq, terms: setupTerms };
+const blocks = { deck: setupDeck, jerseys: setupJerseys, pattern: setupPattern, wedge: setupWedge, calls: setupCalls, codes: setupCodes, decode: setupDecode, dlq: setupDlq, terms: setupTerms };
 for (const root of document.querySelectorAll('[data-lesson]')) {
   blocks[root.dataset.lesson]?.(root);
   root.classList.add('ready');
