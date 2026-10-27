@@ -109,7 +109,7 @@ const deliverySources: Source[] = [
         </>
       ) : category.slug === "ordnance" ? (
         <>
-          <p class="lead">Weapons carried by military aircraft of every service. So far it covers air-to-air missiles and aircraft guns from the 1950s to today, and unguided weapons: the US Mark 80 general-purpose bombs and their Soviet counterparts, cluster bombs, fire and practice bombs, and air-to-ground rockets from the Second World War on. Each record gives the weapon's weight, warhead or ammunition, guidance or fuzing, and which aircraft carry it, with sources. Published missile ranges are best cases, and each missile record says what its figure depends on.</p>
+          <p class="lead">Weapons carried by military aircraft of every service. So far it covers air-to-air missiles and aircraft guns from the 1950s to today; guided air-to-ground weapons, from laser-guided bombs and GPS kits to anti-radiation, anti-ship and anti-tank missiles; and unguided weapons: the US Mark 80 general-purpose bombs and their Soviet counterparts, cluster bombs, fire and practice bombs, and air-to-ground rockets from the Second World War on. Each record gives the weapon's weight, warhead or ammunition, guidance or fuzing, and which aircraft carry it, with sources. Published air-to-air missile ranges are best cases, and each air-to-air record says what its figure depends on.</p>
           {ordnance.map(({ group, records }) => (
             <div class="aircraft-group">
               <h2>{group.title}</h2>
