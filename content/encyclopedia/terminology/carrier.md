@@ -167,6 +167,127 @@ terms:
     definition: "Fuel state, as in “state 2.2”."
     usage: Navy carrier training
     cite: [{ n: 3, page: "2-18" }]
+  - term: Air Boss
+    definition: The officer, located in PriFly, in charge of all flight deck and tower operations within 10 nautical miles of the ship.
+    usage: Navy carrier training
+    note: "The Navy's controller manual calls the same officer the Air Officer, who sets the case of departure and recovery. [1]"
+    cite: [{ n: 5, page: "65" }]
+  - term: Axial winds
+    definition: "Winds down the ship's long axis created by its forward movement. They cause a right-to-left crosswind across the angled deck."
+    usage: Navy carrier training
+    cite: [{ n: 5, page: "65" }]
+  - term: Cut lights
+    definition: "Green lights mounted in a row above the lens box and controlled by the LSO. Under zip lip, EMCON or a radio failure they clear the pilot to land in place of “Roger ball”; lit again they call for power, and alternated with the waveoff lights they signal bingo."
+    usage: Navy carrier training
+    cite: [{ n: 5, page: "3, 23, 66" }]
+  - term: Foul deck
+    definition: The landing area is not free of all obstructions, or the flight deck is not ready to recover aircraft.
+    usage: Navy carrier training
+    cite: [{ n: 5, page: "66" }]
+  - term: Foul line
+    definition: A line painted on both sides of a carrier's landing area marking the minimum area that must be free of obstructions for the deck to be clear.
+    usage: Navy carrier training
+    cite: [{ n: 5, page: "66" }]
+  - term: Fresnel lens optical landing system (FLOLS)
+    expansion: Fresnel lens optical landing system
+    definition: "The pilot's landing aid that projects the meatball: a box of five light cells, the bottom one red, between rows of green datum lights, with cut lights above and waveoff lights each side. Its cells cover 1.5° vertically."
+    usage: Navy carrier training
+    note: "The improved Fresnel lens (IFLOLS) has twelve cells over 1.7° and can be read out to 1.5 NM, against 0.75 NM for the FLOLS. [5]"
+    cite: [{ n: 5, page: "3, 6, 66" }]
+  - term: Holdback
+    definition: A metal fitting that holds the aircraft on the catapult and is designed to break or release at a preset force during the catapult stroke.
+    usage: Navy carrier training
+    cite: [{ n: 5, page: "67" }]
+  - term: Hold-down
+    definition: The fuel state at which an aircraft will be refueled on deck before its next launch.
+    usage: Navy carrier training
+    cite: [{ n: 5, page: "45, 67" }]
+  - term: Hook to ramp
+    definition: The clearance between the aircraft's hook point and the flight deck as the aircraft crosses the ramp.
+    usage: Navy carrier training
+    cite: [{ n: 5, page: "67" }]
+  - term: Jet blast deflector (JBD)
+    expansion: Jet blast deflector
+    definition: "A hydraulically raised, water-cooled deck panel behind each catapult that protects people, equipment and other aircraft from the exhaust of the aircraft on the catapult."
+    usage: Navy carrier training
+    cite: [{ n: 5, page: "67" }, { n: 7, page: "5-1" }]
+  - term: Launch bar
+    definition: The metal arm on the nose gear that attaches to the catapult shuttle for a catapult launch.
+    usage: Navy carrier training
+    cite: [{ n: 5, page: "67, 69" }]
+  - term: Shuttle
+    definition: The part of the catapult that the launch bar attaches to and that pulls the aircraft down the catapult track.
+    usage: Navy carrier training
+    cite: [{ n: 5, page: "69" }]
+  - term: Tension
+    definition: "The step of the catapult launch in which the shuttle is moved forward to take up the slack. The pilot goes to full power on the tension signal."
+    usage: Navy carrier training
+    cite: [{ n: 5, page: "40, 69" }]
+  - term: Suspend
+    definition: "Stop the catapult launch sequence. A pilot suspends by calling “suspend, suspend, suspend” and shaking the head; the catapult officer signals it with wrists crossed above the head."
+    usage: Navy carrier training
+    cite: [{ n: 5, page: "40, 43, 69" }]
+  - term: Pull back
+    definition: "After an arrestment, the wire is partly pulled back so the pilot can raise the tailhook."
+    usage: Navy carrier training
+    cite: [{ n: 5, page: "68" }]
+  - term: Plane guard
+    definition: "The rescue helicopter or ship assigned during launch and recovery, usually a helicopter in the starboard Delta or a ship three miles astern."
+    usage: Navy carrier training
+    cite: [{ n: 5, page: "68" }]
+  - term: Ramp
+    definition: The aft end of the flight deck, or the downwind end of the runway or platform used for practice.
+    usage: Navy carrier training
+    cite: [{ n: 5, page: "68" }]
+  - term: Starboard Delta
+    definition: A holding pattern on the starboard side of the ship, with right-hand turns, used by helicopters and carrier onboard delivery aircraft.
+    usage: Navy carrier training
+    note: "P-1211 gives 500 ft; the Navy's controller manual has helicopters hold at 300 ft or below, and the Army's shipboard manual puts the helicopter starboard Delta one mile to starboard at 300 ft. [5] [1] [6]"
+    cite: [{ n: 5, page: "69" }, { n: 1, page: "11-8" }, { n: 6, page: "5-2" }]
+  - term: Wind-over-deck
+    definition: The wind across the flight deck, made up of the natural wind and the wind from the ship's own movement.
+    usage: Navy carrier training
+    cite: [{ n: 5, page: "69" }]
+  - term: Hawk
+    definition: An order to a tanker pilot to keep a low-state aircraft on approach in sight and be ready to join it at once if it bolters or waves off.
+    note: "In the T-45 carrier qualification glossary HAWK is instead a lead safety instructor watching over students (“hawking chicks”). [5]"
+    cite: [{ n: 8, page: "11-44" }]
+  - term: Give
+    definition: The amount of fuel a tanker has to transfer to other aircraft.
+    cite: [{ n: 8, page: "11-44" }]
+  - term: Sweet
+    definition: "The tanker's refueling system is working. Its opposite, sour, means the tanker's fuel package will not transfer."
+    cite: [{ n: 8, page: "11-44" }]
+  - term: Landing Signal Enlisted (LSE)
+    expansion: Landing signal enlisted
+    definition: "The flight deck crew member who, under the Air Officer, gives a helicopter pilot visual signals for takeoff, approach and landing, directs the aircraft to its deck spot and controls the deck crew around it. Only the wave-off and hold signals are mandatory; the rest are advisory."
+    cite: [{ n: 6, page: "2-4, F-2–F-3" }]
+  - term: Deck landing qualification (DLQ)
+    expansion: Deck landing qualification
+    definition: The training and landings that qualify an aviator to land on a ship's flight deck, and the currency that keeps the qualification valid.
+    note: "For Army aviators the rules come from a 1988 Army, Air Force and Navy agreement. [6]"
+    cite: [{ n: 6, page: "1-11–1-13, Glossary" }]
+  - term: Field deck landing practice (FDLP)
+    expansion: Field deck landing practice
+    definition: Practice landings ashore to a spot painted with ship flight deck markings, flown before deck landing qualification at sea.
+    cite: [{ n: 6, page: "1-12, 1-14, Glossary" }]
+  - term: Charlie pattern
+    definition: The landing pattern for aircraft cleared to land aboard an amphibious ship or carrier, a left-hand racetrack on the ship's port side whose upwind leg parallels the BRC.
+    cite: [{ n: 6, page: "5-15" }]
+  - term: Jetborne flight
+    definition: Very slow flight supported by engine thrust alone, for fixed-wing aircraft.
+    cite: [{ n: 1, page: "11-5" }]
+  - term: VSTOL
+    definition: An aircraft, other than a helicopter, whose flight characteristics allow vertical and short takeoffs and landings.
+    cite: [{ n: 1, page: "11-8" }]
+  - term: CATCC
+    expansion: Carrier air traffic control center
+    definition: The carrier's central agency for the status of all its air operations and the control of airborne aircraft other than those controlled by the combat direction center and the Air Officer.
+    cite: [{ n: 1, page: "11-3" }]
+  - term: AATCC
+    expansion: Amphibious air traffic control center
+    definition: The air traffic control agency of an amphibious assault ship (LHA or LHD), which controls departing and recovering aircraft, provides instrument approach and departure control, and keeps track of airborne helicopters in an amphibious assault.
+    cite: [{ n: 1, page: "11-2" }]
 sources:
   - n: 1
     title: "NAVEDTRA 14342A, Air Traffic Controller, chapter 11, Table 11-1: Shipboard operations terms and definitions"
@@ -194,6 +315,32 @@ sources:
     url: "https://irp.fas.org/doddir/army/atp1-02-1.pdf"
     accessed: "2026-10-26"
     note: "Table 2: ANGELS p. 3, BINGO p. 5, BULLSEYE and BUSTER p. 8, CHICK(S) p. 11, GATE p. 21, PIGEONS p. 35. See the brevity words for the full entries."
+  - n: 5
+    title: "CNATRA P-1211, Flight Training Instruction, Carrier Qualification, T-45"
+    publisher: "Naval Air Training Command (copy hosted by Integrated Publishing)"
+    date: "(7-01), with changes 1 to 3"
+    url: "https://navyflightmanuals.tpub.com/P-1211/"
+    accessed: "2026-10-27"
+    note: "Glossary pp. 65 to 69; lens pp. 3 and 6; hold-down p. 45; catapult signals and suspend pp. 40 and 43. Printed page numbers: the copy's page files run printed page plus 15."
+  - n: 6
+    title: "FM 1-564, Shipboard Operations"
+    publisher: "Headquarters, Department of the Army (copy hosted by EverySpec)"
+    date: "29 June 1997"
+    url: "https://everyspec.com/ARMY/FM-Field-Manual/FM_1-564_1997_13873/"
+    accessed: "2026-10-27"
+    note: "Approved for public release. Landing signal enlisted p. 2-4 and appendix F; deck landing qualification pp. 1-11 to 1-14; starboard Delta p. 5-2; Charlie pattern p. 5-15. The Army's current shipboard manual may differ."
+  - n: 7
+    title: "NAVEDTRA 14310, Aviation Boatswain's Mate E"
+    publisher: "US Navy, Naval Education and Training Professional Development and Technology Center (copy hosted by Integrated Publishing)"
+    url: "https://navyaviation.tpub.com/14310/css/Chapter-5-Associated-Launching-Equipment-203.htm"
+    accessed: "2026-10-27"
+    note: "Printed page 5-1: jet blast deflectors."
+  - n: 8
+    title: "NAVEDTRA 14342A, Air Traffic Controller, chapter 11, Table 11-15: Tanking terms"
+    publisher: "US Navy, Naval Education and Training Professional Development and Technology Center (copy hosted by Integrated Publishing)"
+    url: "https://navyaviation.tpub.com/14342A/Tanking-Terms-400.html"
+    accessed: "2026-10-27"
+    note: "Printed pages 11-44 and 11-45."
 ---
 
 ## The carrier vocabulary
@@ -203,3 +350,5 @@ Carrier aviation has its own vocabulary. These are the words a pilot hears in th
 Several of these words are also multi-service brevity words with a different meaning. Bingo is the clearest case: aboard ship it is an order to divert to a shore field, while the brevity word is only a pre-briefed fuel state. Buster, Bullseye, Chicks and Pigeons differ too. Each note says how. [[1]](#source-1) [[3]](#source-3) [[4]](#source-4)
 
 The Navy glossary covers amphibious assault ships (LHA and LHD) as well as carriers; where the two differ, as for the 10-nm and 12-nm fixes after platform, both are given. [[1]](#source-1)
+
+The flight deck words, from the catapult's holdback and shuttle to the foul line and the lens, come from the Navy's T-45 carrier qualification glossary, and the tanker words from the controller manual's tanking table. [[5]](#source-5) [[8]](#source-8) Helicopter deck words such as the LSE, the Charlie pattern and deck landing qualification come from the Army's shipboard operations manual, written for Army crews landing on Navy ships. [[6]](#source-6)
