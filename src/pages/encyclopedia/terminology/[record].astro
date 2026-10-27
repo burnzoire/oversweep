@@ -1,6 +1,7 @@
 ---
 import LinkedText from '../../../components/LinkedText.astro';
 import SiteLayout from '../../../layouts/SiteLayout.astro';
+import PhotoFigure from '../../../components/encyclopedia/PhotoFigure.astro';
 import TermSense from '../../../components/encyclopedia/TermSense.astro';
 import { categoryRecords, recordRoute, termSlug, terminologyContent, type EncyclopediaRecord } from '../../../data/encyclopedia';
 import { categoryTitle } from '../../../data/availability';
@@ -27,6 +28,7 @@ const terms = [...data.terms].sort((a, b) => a.term.localeCompare(b.term, 'en', 
         {siblings.map((r) => <li>{r.slug === record.slug ? <span aria-current="page">{terminologyContent(r).frontmatter.short}</span> : <a href={sitePath(recordRoute(r))}>{terminologyContent(r).frontmatter.short}</a>}</li>)}
       </ol>
     </nav>
+    {data.photo && <PhotoFigure photo={data.photo} lead />}
     <section class="status-panel" data-record-id={record.id} data-record-revision={record.revision}>
       <h2>{record.maturity}</h2>
       <p>Record revision {record.revision} · {record.summary}</p>
