@@ -7,7 +7,7 @@ import Cited from "../../components/encyclopedia/Cited.astro";
 import Glossary from "../../components/encyclopedia/Glossary.astro";
 import { encyclopediaCategories } from "../../data/catalogue";
 import { sectionHasContent } from "../../data/availability";
-import { aircraftContent, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, recordRoute, type Source } from "../../data/encyclopedia";
+import { airbaseContent, airfieldGroups, aircraftContent, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, recordRoute, type Source } from "../../data/encyclopedia";
 import { sitePath } from "../../lib/paths";
 import "../../styles/encyclopedia.css";
 
@@ -42,6 +42,14 @@ const ordnanceRecords = category.slug === "ordnance"
 const ordnance = ordnanceGroups
   .map((group) => ({ group, records: ordnanceRecords.filter(({ data }) => data.group === group.slug) }))
   .filter(({ records }) => records.length > 0);
+// Air bases are listed by the service that runs them.
+const airbaseRecords = category.slug === "airfields-carriers"
+  ? categoryRecords("airfields-carriers").map((record) => ({ record, data: airbaseContent(record).frontmatter }))
+  : [];
+const airbases = airfieldGroups
+  .map((group) => ({ group, records: airbaseRecords.filter(({ data }) => data.group === group.slug) }))
+  .filter(({ records }) => records.length > 0);
+const ft = (feet: number) => `${n(feet)} ft (${n(Math.round(feet * 0.3048))} m)`;
 const weight = (kg: number) => `${n(kg)} kg (${n(Math.round(kg * 2.20462))} lb)`;
 // Sources for the delivery figure on the ordnance page; records cite their own.
 const deliverySources: Source[] = [
@@ -150,6 +158,39 @@ const deliverySources: Source[] = [
               ))}
             </ol>
           </section>
+        </>
+      ) : category.slug === "airfields-carriers" ? (
+        <>
+          <p class="lead">Military air bases of every service: Air Force bases, naval air stations, a Marine Corps air station and the Army's aviation school, at home and overseas. Each record gives the field's runways, arresting gear, navaids and based units, with its history and sources; US fields show the FAA airport diagram, and overseas fields a runway plan drawn from published coordinates.</p>
+          {airbases.map(({ group, records }) => (
+            <div class="aircraft-group">
+              <h2>{group.title}</h2>
+              <div class="entry-grid record-grid">
+                {records.map(({ record, data }) => <RecordCard record={record} photo={data.photos[0]} />)}
+              </div>
+            </div>
+          ))}
+          <h2>Quick reference</h2>
+          <div class="table-scroll" role="region" aria-label="Air base quick reference table, scrolls sideways on narrow screens" tabindex="0">
+            <table>
+              <thead><tr><th scope="col">Base</th><th scope="col">Location</th><th scope="col">Opened</th><th scope="col">Longest runway</th><th scope="col">Elevation</th></tr></thead>
+              {airbases.map(({ group, records }) => (
+                <tbody>
+                  <tr><th scope="rowgroup" colspan="5">{group.title}</th></tr>
+                  {records.map(({ record, data }) => (
+                    <tr>
+                      <th scope="row"><a href={sitePath(recordRoute(record))}>{record.title}</a><br /><span class="entry-kicker">{record.designation}</span></th>
+                      <td>{plain(data.location)}</td>
+                      <td>{data.quick.opened}</td>
+                      <td>{ft(data.quick.longestRunwayFt)}</td>
+                      <td>{ft(data.quick.elevationFt)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              ))}
+            </table>
+          </div>
+          <p class="note">The longest runway is the longest paved runway in the cited airport data; Edwards' longest, on the Rogers Dry Lake bed, is unpaved. Elevations are the official field elevation. Each record cites its sources.</p>
         </>
       ) : category.slug === "terminology" ? (
         <Glossary />

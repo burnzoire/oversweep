@@ -1,0 +1,88 @@
+---
+import LinkedText from '../../../components/LinkedText.astro';
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import Cited from '../../../components/encyclopedia/Cited.astro';
+import PhotoFigure from '../../../components/encyclopedia/PhotoFigure.astro';
+import RunwayFigure from '../../../components/encyclopedia/RunwayFigure.astro';
+import { airbaseContent, airfieldGroups, categoryRecords, recordRoute, type EncyclopediaRecord } from '../../../data/encyclopedia';
+import { categoryTitle } from '../../../data/availability';
+import { assetPath, sitePath } from '../../../lib/paths';
+import '../../../styles/encyclopedia.css';
+
+export function getStaticPaths() {
+  return categoryRecords('airfields-carriers').map((record) => ({ params: { record: record.slug }, props: { record } }));
+}
+
+const { record } = Astro.props as { record: EncyclopediaRecord };
+const { frontmatter: data, Content } = airbaseContent(record);
+const category = categoryTitle(record.category);
+const group = airfieldGroups.find((g) => g.slug === data.group)!;
+// The record nav lists the fields of the same service, so it stays short.
+const siblings = categoryRecords('airfields-carriers').filter((r) => airbaseContent(r).frontmatter.group === data.group);
+const [leadPhoto, ...morePhotos] = data.photos;
+const label = (r: EncyclopediaRecord) => airbaseContent(r).frontmatter.short ?? r.title;
+const plate: [string, string | undefined][] = [
+  ['Location', data.location],
+  ['Operated by', data.operator],
+  ['Opened', data.opened],
+  ['Elevation', data.elevation],
+  ['Arresting gear', data.arrestingGear],
+];
+---
+<SiteLayout title={record.title} activeSection="encyclopedia"
+  description={`${record.title} (${record.designation}): ${record.summary}`}
+  breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: category, href: sitePath('encyclopedia/airfields-carriers/') }, { label: record.title }]}>
+  <div class="ency airfield">
+    <nav class="record-nav" aria-label={`${group.title} records`}>
+      <ol>{siblings.map((r) => <li>{r.slug === record.slug ? <span aria-current="page">{label(r)}</span> : <a href={sitePath(recordRoute(r))}>{label(r)}</a>}</li>)}</ol>
+    </nav>
+    {leadPhoto && <PhotoFigure photo={leadPhoto} lead />}
+    <section class="status-panel" data-record-id={record.id} data-record-revision={record.revision}>
+      <h2>{record.maturity}</h2>
+      <p>Record revision {record.revision} · {record.summary}</p>
+      <p>Real-world air base as described in public sources. Runways, lighting, navaids and based units change; the figures here are from the sources and dates cited, and the charts are not for navigation. Use current official publications for flight planning.</p>
+    </section>
+
+    <section class="data-plate" aria-labelledby="plate-title">
+      <h2 id="plate-title">{data.name} · {record.designation}</h2>
+      <dl>
+        {plate.filter(([, text]) => text).map(([term, text]) => <div><dt>{term}</dt><dd><Cited text={text} /></dd></div>)}
+        <div><dt>Runways</dt><dd><ul>{data.runways.map((r) => <li><Cited text={r} /></li>)}</ul></dd></div>
+        {data.navaids && <div><dt>Navaids</dt><dd><ul>{data.navaids.map((n) => <li><Cited text={n} /></li>)}</ul></dd></div>}
+        <div><dt>Based units</dt><dd><ul>{data.units.map((u) => <li><Cited text={u} /></li>)}</ul></dd></div>
+      </dl>
+    </section>
+
+    {data.charts && (
+      <div class="chart-grid">
+        {data.charts.map((c, i) => (
+          <figure class="chart">
+            <img src={assetPath(c.src)} alt={c.alt} loading="lazy" decoding="async" />
+            <figcaption>
+              <strong>Figure {i + 1}.</strong> {c.caption}
+              <span class="credit">{c.chart}. {c.publisher}; public domain, via <a href={c.sourceUrl}>aeronav.faa.gov</a> (accessed {c.accessed}). Not for navigation.</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    )}
+    {data.runwayPlan && (
+      <RunwayFigure title={`Figure 1 — Runways at ${data.name} (plan view, to scale)`} runways={data.runwayPlan.runways} name={data.name}>
+        <p class="fig-caption">Runways drawn to scale between their published threshold coordinates, true north up. Taxiways, aprons and buildings are not drawn. <Cited text={data.runwayPlan.cite} /> Not for navigation.</p>
+      </RunwayFigure>
+    )}
+
+    <div class="record-body"><LinkedText><Content /></LinkedText></div>
+    {morePhotos.length > 0 && <div class="photo-grid">{morePhotos.map((photo) => <PhotoFigure photo={photo} />)}</div>}
+
+    <section class="sources" aria-labelledby="sources-title">
+      <h2 id="sources-title">Sources</h2>
+      <ol>
+        {data.sources.map((s) => (
+          <li id={`source-${s.n}`} value={s.n}><cite>{s.title}</cite>. {s.publisher}{s.date && `, ${s.date}`}. <a href={s.url}>{s.url}</a> (accessed {s.accessed}).{s.note && ` ${s.note}`}</li>
+        ))}
+      </ol>
+      <p class="note">Wikipedia articles are secondary sources and can change; they are cited with the date they were read. FAA airport data and diagrams are official but are reissued every 28 or 56 days; each is cited with the edition read.</p>
+    </section>
+  </div>
+</SiteLayout>

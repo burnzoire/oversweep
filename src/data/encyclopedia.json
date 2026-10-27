@@ -1630,5 +1630,148 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "Fuzes, low-drag and retarded bombs, rockets, guided missiles, laser-guided weapons, and the chaff and flares that decoy a threat."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.nellis",
+    "slug": "nellis",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Nellis Air Force Base",
+    "designation": "KLSV",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Air Force's centre for advanced combat training: home of the Weapons School, Red Flag and the Thunderbirds, outside Las Vegas."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.edwards",
+    "slug": "edwards",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Edwards Air Force Base",
+    "designation": "KEDW",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Air Force's flight test centre beside Rogers Dry Lake, where the X-1 broke the sound barrier and the Space Shuttle first landed."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.andersen",
+    "slug": "andersen",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Andersen Air Force Base",
+    "designation": "PGUA",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Guam's bomber base: B-29s against Japan, B-52s over Vietnam and today the forward base for the heavy bombers in the Western Pacific."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.kadena",
+    "slug": "kadena",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Kadena Air Base",
+    "designation": "RODN",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Keystone of the Pacific on Okinawa: the largest US Air Force base in East Asia and home of the 18th Wing."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.lakenheath",
+    "slug": "lakenheath",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "RAF Lakenheath",
+    "designation": "EGUL",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "An RAF station in Suffolk that hosts only US units: the 48th Fighter Wing, with F-15Es and F-35As."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.incirlik",
+    "slug": "incirlik",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Incirlik Air Base",
+    "designation": "LTAG",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A Turkish air base near Adana shared with the US Air Force: Cold War U-2 base, Gulf War northern front and home of the 39th Air Base Wing."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.al-udeid",
+    "slug": "al-udeid",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Al Udeid Air Base",
+    "designation": "OTBH",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Qatar's main air base and the largest US military base in the Middle East, with Central Command's forward headquarters and air operations centre."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.fallon",
+    "slug": "fallon",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Naval Air Station Fallon",
+    "designation": "KNFL",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Navy's air combat school in the Nevada desert: home of TOPGUN and of the ranges where carrier air wings train before deploying."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.pensacola",
+    "slug": "pensacola",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Naval Air Station Pensacola",
+    "designation": "KNPA",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Navy's first air station, opened in 1914: where naval aviators and flight officers start training, and home of the Blue Angels."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.whiting-field",
+    "slug": "whiting-field",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Naval Air Station Whiting Field",
+    "designation": "KNSE / KNDZ",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Two training fields in Florida sharing one base: primary training in the T-6B at North Field and helicopter training at South Field."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.kingsville",
+    "slug": "kingsville",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Naval Air Station Kingsville",
+    "designation": "KNQI",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Strike pilot training in the T-45 Goshawk on four 8,000 ft runways in South Texas."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.yuma",
+    "slug": "yuma",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Marine Corps Air Station Yuma",
+    "designation": "KNYL",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Marine Corps' busiest air station: F-35B squadrons, the Weapons and Tactics Instructor course and desert ranges, sharing its field with Yuma International."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.fort-rucker",
+    "slug": "fort-rucker",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Fort Rucker",
+    "designation": "KOZR",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The home of Army aviation in Alabama, where every Army aviator learns to fly; its Cairns Army Airfield is the Army's busiest."
   }
 ]

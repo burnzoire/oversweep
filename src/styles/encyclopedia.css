@@ -108,6 +108,15 @@
 .ency .photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 1rem; margin: 1.5rem 0; }
 .ency .photo-grid .photo { margin: 0; }
 
+/* Airfields: official charts are shown whole at a readable size, and drawn runways solid. */
+.ency .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); gap: 1rem; margin: 1.5rem 0; }
+.ency .chart { max-width: 40rem; margin: 0; border: 1px solid var(--color-border); background: #fff; }
+.ency .chart img { display: block; width: 100%; height: auto; }
+.ency .chart figcaption { padding: 0.55rem 0.75rem; font-size: 0.95rem; border-top: 1px solid var(--color-border); }
+.ency .chart .credit { display: block; margin-top: 0.25rem; color: var(--color-muted); font-size: 0.82rem; }
+.ency .natops .runway { fill: var(--color-text); }
+.ency .runway-figure { max-width: 48rem; }
+
 /* Terminology: set pages and the A–Z glossary. `hidden` must win over the grid displays. */
 .ency .terms { margin: 0 0 1.5rem; }
 .ency .term { display: grid; grid-template-columns: minmax(8rem, 13rem) 1fr; gap: 0.25rem 1.25rem; padding: 0.75rem 0; border-top: 1px solid var(--color-border); scroll-margin-top: 1rem; }

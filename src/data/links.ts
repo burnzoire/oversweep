@@ -14,7 +14,7 @@ export interface LinkTarget {
   more: number;
 }
 
-const categoryNames: Record<string, string> = { aircraft: 'Aircraft', ordnance: 'Ordnance', 'threat-systems': 'Threat system' };
+const categoryNames: Record<string, string> = { aircraft: 'Aircraft', ordnance: 'Ordnance', 'threat-systems': 'Threat system', 'airfields-carriers': 'Air base' };
 
 // Previews are a reminder, not the entry: citations are dropped and a long
 // definition is cut at a word boundary.

@@ -178,6 +178,62 @@ export interface OrdnanceData {
   sources: Source[];
 }
 
+// Groups on the Airfields & Carriers list, in display order. Air bases are
+// grouped by the service that runs them; groups without records are not shown,
+// so the carrier batch only adds groups and records.
+export const airfieldGroups = [
+  { slug: 'air-force', title: 'Air Force bases' },
+  { slug: 'navy', title: 'Naval air stations' },
+  { slug: 'marine-corps', title: 'Marine Corps air stations' },
+  { slug: 'army', title: 'Army airfields' },
+] as const;
+
+// An official chart reproduced as an image, such as an FAA airport diagram.
+// `chart` names the edition, since charts are reissued every few weeks.
+export interface Chart {
+  src: string;
+  alt: string;
+  caption: string;
+  chart: string;
+  publisher: string;
+  sourceUrl: string;
+  accessed: string;
+}
+
+// A runway drawn to scale from its published threshold coordinates, for
+// fields with no public airport diagram: [latitude, longitude] in degrees.
+export interface RunwayLine {
+  id: string;
+  widthFt: number;
+  ends: [[number, number], [number, number]];
+}
+
+// Air base records: the data plate gives cited text; `quick` holds the
+// comparison table's columns.
+export interface AirbaseData {
+  group: (typeof airfieldGroups)[number]['slug'];
+  // Short label for the record nav when the title is too long.
+  short?: string;
+  name: string;
+  location: string;
+  operator: string;
+  opened: string;
+  elevation: string;
+  runways: string[];
+  arrestingGear?: string;
+  navaids?: string[];
+  units: string[];
+  // FAA airport diagrams for US fields; `runwayPlan` draws the runways of
+  // fields without one, from the coordinates its `cite` names. (Astro reserves
+  // the frontmatter key `layout`.)
+  charts?: Chart[];
+  runwayPlan?: { runways: RunwayLine[]; cite: string };
+  // The first photo leads the page; the others follow the record text.
+  photos: Photo[];
+  quick: { opened: number; elevationFt: number; longestRunwayFt: number };
+  sources: Source[];
+}
+
 // Terminology records are glossary sets, one per source family (brevity
 // words, joint terms, airfield terms, carrier terms). The category page merges
 // every set into one A–Z list, so a word defined differently by two sources
@@ -240,6 +296,7 @@ export const recordContent = (r: EncyclopediaRecord) => contentFile(r) as unknow
 export const aircraftContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AircraftData>;
 export const ordnanceContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<OrdnanceData>;
 export const terminologyContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<TerminologyData>;
+export const airbaseContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AirbaseData>;
 
 export function getRecord(category: string, slug: string): EncyclopediaRecord {
   const found = records.find(r => r.category === category && r.slug === slug);
