@@ -250,8 +250,9 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
    <tr><th scope="row"><code>I</code></th><td>Mode 1 ACLS approach, recorded in the grade column</td></tr>
   </tbody>
  </table></div>
- <div class="table-scroll" role="region" aria-label="What the aircraft did" tabindex="0"><table data-codes>
-  <caption>What the aircraft did <a href="#source-p1211">{cq('12–13')}</a></caption>
+ <div class="code-cols">
+ <div class="table-scroll" role="region" aria-label="What the aircraft did, AA to ND" tabindex="0"><table data-codes>
+  <caption>What the aircraft did, AA to ND <a href="#source-p1211">{cq('12–13')}</a></caption>
   <thead><tr><th scope="col">Symbol</th><th scope="col">Meaning</th></tr></thead>
   <tbody>
    <tr data-code="AA" data-kind="fault"><th scope="row"><code>AA</code></th><td data-meaning>Angling approach</td></tr>
@@ -285,6 +286,12 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
    <tr data-code="LUL" data-kind="fault"><th scope="row"><code>LUL</code></th><td data-meaning>Lined up left</td></tr>
    <tr data-code="LUR" data-kind="fault"><th scope="row"><code>LUR</code></th><td data-meaning>Lined up right</td></tr>
    <tr data-code="ND" data-kind="fault"><th scope="row"><code>ND</code></th><td data-meaning>Nosedown</td></tr>
+  </tbody>
+ </table></div>
+ <div class="table-scroll" role="region" aria-label="What the aircraft did, NEA to TWA" tabindex="0"><table data-codes>
+  <caption>NEA to TWA</caption>
+  <thead><tr><th scope="col">Symbol</th><th scope="col">Meaning</th></tr></thead>
+  <tbody>
    <tr data-code="NEA" data-kind="fault"><th scope="row"><code>NEA</code></th><td data-meaning>Not enough attitude</td></tr>
    <tr data-code="NELR" data-kind="fault"><th scope="row"><code>NELR</code></th><td data-meaning>Not enough left rudder</td></tr>
    <tr data-code="NEP" data-kind="fault"><th scope="row"><code>NEP</code></th><td data-meaning>Not enough power</td></tr>
@@ -317,6 +324,7 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
    <tr data-code="TWA" data-kind="fault"><th scope="row"><code>TWA</code></th><td data-meaning>Too wide abeam</td></tr>
   </tbody>
  </table></div>
+ </div>
  <p>Some symbols are small drawings rather than letters: landed left wing down, landed right wing down and landed nose first are each drawn as the aircraft with marks for where it touched; landed on three points is three dots; over the top is an arc with an arrow; and flying up or down through the glideslope is two crossed lines, the arrowhead showing which way. <a href="#source-p1211">{cq('12–13')}</a></p>
  <section class="lesson" data-lesson="decode" aria-labelledby="decode-title">
   <h3 id="decode-title">Read a comment</h3>
@@ -486,6 +494,7 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   .fig-caption { color: var(--color-muted); font-size: 0.9rem; }
   .quiz-lesson .task { font-style: italic; }
   .table-scroll { overflow-x: auto; border: 1px solid var(--color-border); }
+  .code-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 0 1rem; align-items: start; }
   .table-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
   @media (max-width: 40rem) {
     .contents ol { columns: 1; }
