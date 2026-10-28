@@ -35,6 +35,13 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Saab_viggen_underside.jpg"
     accessed: "2026-10-25"
 quick: { firstFlight: 1967, maxSpeedKt: 1205, ceilingFt: 59000 }
+purchase:
+  - sim: dcs
+    product: "DCS: AJS-37 Viggen"
+    by: "Heatblur Simulations"
+    links:
+      - { store: "Heatblur Store", url: "https://store.heatblur.com/products/dcs-ajs37-viggen" }
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/viggen/" }
 sources:
   - n: 1
     title: "Saab 37 Viggen"

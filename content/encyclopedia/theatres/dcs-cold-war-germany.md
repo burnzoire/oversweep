@@ -9,6 +9,12 @@ area: "About 980 × 800 km of West and East Germany, Poland, Czechoslovakia and 
 theatres: [europe]
 differences:
   - { topic: "Borders and bases", text: "The map shows the 1980s, not today: East and West Germany, Czechoslovakia, the militarised inner German border and Cold War airfields such as Hahn, Bitburg and Sembach. [1] Hahn was handed back to Germany in 1993 [2], Bitburg in 1994 [3], and Sembach has been a US Army post since 2012. [4]" }
+purchase:
+  - sim: dcs
+    product: "DCS: Cold War Germany Map"
+    by: "Ugra Media"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/terrains/cold_war_germany_terrain/" }
 sources:
   - n: 1
     title: "DCS: Cold War Germany"

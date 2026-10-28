@@ -41,6 +41,18 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Chinook_Vietnam_105mm.jpg"
     accessed: "2026-10-25"
 quick: { firstFlight: 1961, maxSpeedKt: 170, ceilingFt: 20000 }
+purchase:
+  - sim: dcs
+    product: "DCS: CH-47F"
+    by: "Eagle Dynamics"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/ch-47f/" }
+  - sim: msfs
+    product: "CH47D (the earlier D model)"
+    by: "Miltech Simulations"
+    links:
+      - { store: "Miltech Simulations", url: "https://www.miltechsimulations.com/products/miltech-simulations-ch47d" }
+      - { store: "Orbx", url: "https://orbxdirect.com/product/miltech-ch47d-msfs" }
 sources:
   - n: 1
     title: "Boeing CH-47 Chinook"

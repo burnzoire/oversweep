@@ -7,6 +7,12 @@ publisher: "Eagle Dynamics"
 setting: { era: modern, text: "The present-day Strait of Hormuz [1]" }
 area: "About 200,000 km² centred on the Strait of Hormuz: southern Iran, the UAE, northern Oman and Qeshm Island [1]"
 theatres: [middle-east]
+purchase:
+  - sim: dcs
+    product: "DCS: Persian Gulf Map"
+    by: "Eagle Dynamics"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/terrains/persiangulf_terrain/" }
 sources:
   - n: 1
     title: "DCS: Persian Gulf Map"

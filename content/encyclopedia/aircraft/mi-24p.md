@@ -35,6 +35,12 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:82nd_Airborne_Division_inspect_an_Iraqi_MIL_Mi-24_Hind-D.jpg"
     accessed: "2026-10-25"
 quick: { firstFlight: 1969, maxSpeedKt: 173, ceilingFt: 18900 }
+purchase:
+  - sim: dcs
+    product: "DCS: Mi-24P Hind"
+    by: "Eagle Dynamics"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/hind/" }
 sources:
   - n: 1
     title: "Mil Mi-24"

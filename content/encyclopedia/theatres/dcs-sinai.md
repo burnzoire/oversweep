@@ -7,6 +7,12 @@ publisher: "OnReTech, for Eagle Dynamics"
 setting: { era: modern, text: "Present-day airfields, with military bases meant for re-enacting the Arab–Israeli wars as well as modern and \"what-if\" campaigns [1]" }
 area: "About 1,500 × 1,000 km, detailed over 700 × 700 km: the whole Sinai Peninsula, eastern Egypt and the Nile Delta, southern Israel, western Jordan and Saudi Arabia, the Gaza Strip and the West Bank [1]"
 theatres: [middle-east]
+purchase:
+  - sim: dcs
+    product: "DCS: Sinai Map"
+    by: "OnReTech"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/terrains/sinai_terrain/" }
 sources:
   - n: 1
     title: "DCS: Sinai Map"

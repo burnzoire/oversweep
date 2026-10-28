@@ -9,6 +9,13 @@ area: "About 1,400 km east to west by 1,000 km north to south, some 1,350,000 km
 theatres: [europe]
 differences:
   - { topic: "Period", text: "The map shows the region as it is today but keeps some late-Cold War features, such as operational road runways and fully functioning Russian air bases, to widen the missions it can hold. [1]" }
+purchase:
+  - sim: dcs
+    product: "DCS: Kola Map"
+    by: "Orbx"
+    links:
+      - { store: "Orbx", url: "https://orbxdirect.com/product/orbx-kola-dcs" }
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/terrains/kola_terrain/" }
 sources:
   - n: 1
     title: "DCS: Kola Map"

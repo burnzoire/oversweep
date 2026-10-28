@@ -1,0 +1,27 @@
+---
+import { purchaseChecked, purchaseSims } from '../../data/purchase.mjs';
+import type { Purchase } from '../../data/encyclopedia';
+// The data plate's "Purchase" row: one line per sim product, with its store
+// links as buttons, or a note when it is free or no longer sold.
+interface Props { purchases?: Purchase[] }
+const { purchases = [] } = Astro.props;
+---
+{purchases.length > 0 && (
+  <div class="purchase-row">
+    <dt>Purchase</dt>
+    <dd>
+      <ul class="purchase-list">
+        {purchases.map((p) => (
+          <li>
+            <span class="purchase-sim">{purchaseSims[p.sim]}</span>
+            <span class="purchase-product">{p.product}</span> <span class="purchase-by">by {p.by}</span>
+            {p.free && <span class="purchase-note purchase-free">{p.free}</span>}
+            {p.unavailable && <span class="purchase-note">{p.unavailable}</span>}
+            {p.links && <span class="purchase-links">{p.links.map((l) => <a class="purchase-link" href={l.url} rel="noopener">{l.store}</a>)}</span>}
+          </li>
+        ))}
+      </ul>
+      <p class="purchase-checked">Store pages checked {purchaseChecked}. Prices and availability change.</p>
+    </dd>
+  </div>
+)}

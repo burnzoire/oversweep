@@ -37,6 +37,12 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Apache_Longbow_DVIDS549015.jpg"
     accessed: "2026-10-25"
 quick: { firstFlight: 1975, maxSpeedKt: 158, ceilingFt: 20000 }
+purchase:
+  - sim: dcs
+    product: "DCS: AH-64D"
+    by: "Eagle Dynamics"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/ah-64d/" }
 sources:
   - n: 1
     title: "Boeing AH-64 Apache"

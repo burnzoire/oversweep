@@ -13,6 +13,15 @@ differences:
   - { topic: "Approach and departure", text: "Approach and departure share one frequency at every airbase, although the ATC menu has separate pages for each. [3]" }
   - { topic: "Read-back", text: "There is no mandatory read-back of instructions; AI controllers often give the next instruction straight away, so a read-back is likely to be stepped on. [3]" }
   - { topic: "Navaids", text: "BMS models only TACANs and ILS. Real civil VOR-DMEs appear as TACANs, and unlike in real life no ILS has its own DME: distance in TCN/ILS mode is to the TACAN, which can be 1 or 2 nm or more from the runway threshold. [3]" }
+purchase:
+  - sim: bms
+    product: "Falcon BMS, with this add-on theatre"
+    by: "Benchmark Sims and the theatre team"
+    free: "Free, but Falcon BMS only installs over a bought copy of Falcon 4.0; the theatre is a free add-on"
+    links:
+      - { store: "Falcon BMS", url: "https://www.falcon-bms.com/" }
+      - { store: "Falcon 4.0 on Steam", url: "https://store.steampowered.com/app/429530/" }
+      - { store: "Falcon Collection on GOG", url: "https://www.gog.com/en/game/falcon_collection" }
 sources:
   - n: 1
     title: "Israel Theater Of Operations v1.08.1.1"

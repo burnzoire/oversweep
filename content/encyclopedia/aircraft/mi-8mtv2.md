@@ -34,6 +34,12 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Two_Iraqi_Mil_Mi-17-V5_Hip_Helicopters.jpg"
     accessed: "2026-10-25"
 quick: { firstFlight: 1961, maxSpeedKt: 135, ceilingFt: 16400 }
+purchase:
+  - sim: dcs
+    product: "DCS: Mi-8MTV2 Magnificent Eight"
+    by: "Belsimtek"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/dcs_mi8mtv2_magnificent_eight/" }
 sources:
   - n: 1
     title: "Mil Mi-8"

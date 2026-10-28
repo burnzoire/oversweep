@@ -7,6 +7,12 @@ publisher: "Eagle Dynamics"
 setting: { era: modern, text: "Battles spanning the last 40 years, from the Soviet operations of the 1980s to the 20 years of the war on terror [1]" }
 area: "About 471,000 km² of south-western Afghanistan, around Kandahar, Herat and Camp Bastion [1]"
 theatres: [central-asia]
+purchase:
+  - sim: dcs
+    product: "DCS: Southwest Afghanistan Map"
+    by: "Eagle Dynamics"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/terrains/southwest_afghanistan_terrain/" }
 sources:
   - n: 1
     title: "DCS: Southwest Afghanistan"

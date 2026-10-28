@@ -13,6 +13,15 @@ differences:
   - { topic: "Read-back", text: "There is no mandatory read-back of instructions; AI controllers often give the next instruction straight away, so a read-back is likely to be stepped on. [3]" }
   - { topic: "Navaids", text: "BMS models only TACANs and ILS. Real civil VOR-DMEs appear as TACANs, and unlike in real life no ILS has its own DME: distance in TCN/ILS mode is to the TACAN, which can be 1 or 2 nm or more from the runway threshold. [3]" }
   - { topic: "TACAN data", text: "BMS TACAN channels and ranges match real-world data, but the work began in the Falcon SP days, so stations changed since then may differ. [3]" }
+purchase:
+  - sim: bms
+    product: "Falcon BMS"
+    by: "Benchmark Sims"
+    free: "Free, but Falcon BMS only installs over a bought copy of Falcon 4.0"
+    links:
+      - { store: "Falcon BMS", url: "https://www.falcon-bms.com/" }
+      - { store: "Falcon 4.0 on Steam", url: "https://store.steampowered.com/app/429530/" }
+      - { store: "Falcon Collection on GOG", url: "https://www.gog.com/en/game/falcon_collection" }
 sources:
   - n: 1
     title: "Falcon BMS"

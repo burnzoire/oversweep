@@ -7,6 +7,12 @@ publisher: "Eagle Dynamics"
 setting: { era: modern, text: "Battles spanning the last 40 years, from the Soviet operations of the 1980s to the 20 years of the war on terror [1]" }
 area: "About 650,000 km² of eastern Afghanistan around Kabul, Bagram, Gardez, Jalalabad and Khost [1]"
 theatres: [central-asia]
+purchase:
+  - sim: dcs
+    product: "DCS: East Afghanistan Map"
+    by: "Eagle Dynamics"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/terrains/east_afghanistan_terrain/" }
 sources:
   - n: 1
     title: "DCS: East Afghanistan"

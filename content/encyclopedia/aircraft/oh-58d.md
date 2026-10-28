@@ -38,6 +38,12 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:OH-58D_1st_Squadron,_17th_Cavalry_Regiment_(cropped).jpg"
     accessed: "2026-10-25"
 quick: { firstFlight: 1983, maxSpeedKt: 129, ceilingFt: 15000 }
+purchase:
+  - sim: dcs
+    product: "DCS: OH-58D Kiowa Warrior"
+    by: "Polychop Simulations"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/kiowa/" }
 sources:
   - n: 1
     title: "Bell OH-58 Kiowa"

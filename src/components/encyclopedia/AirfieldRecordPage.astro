@@ -3,6 +3,7 @@ import LinkedText from '../LinkedText.astro';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import Cited from './Cited.astro';
 import PhotoFigure from './PhotoFigure.astro';
+import PurchaseRow from './PurchaseRow.astro';
 import RunwayFigure from './RunwayFigure.astro';
 import AirfieldPlanFigure from './AirfieldPlanFigure.astro';
 import { ilsLines, navaidLines, runwayLines, towerLines, towerNote } from '../../data/map-airfield-text';
@@ -247,6 +248,7 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
             <div><dt>Setting</dt><dd>{eras[m.setting.era]}{periodText(m.setting) && `, ${periodText(m.setting)}`}: <Cited text={m.setting.text} /></dd></div>
             <div><dt>Area</dt><dd><Cited text={m.area} /></dd></div>
             <div><dt>Real-world theatre</dt><dd>{map.theatres.length ? map.theatres.map((x, i) => <>{i > 0 && ', '}<a href={link(x.record)}>{x.record.title}</a></>) : 'No theatre record yet'}</dd></div>
+            <PurchaseRow purchases={m.purchase} />
           </dl>
         </section>
         {mapTable && (
