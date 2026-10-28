@@ -47,6 +47,7 @@ const requiredRoutes = [
     "threat-systems",
     "radar-sensors",
     "airfields-carriers",
+    "theatres",
     "terminology",
     "reference-data",
   ].map((slug) => `encyclopedia/${slug}`),

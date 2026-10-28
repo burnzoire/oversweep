@@ -1,0 +1,11 @@
+---
+import AirfieldRecordPage from '../../../components/encyclopedia/AirfieldRecordPage.astro';
+import { categoryRecords, type EncyclopediaRecord } from '../../../data/encyclopedia';
+
+export function getStaticPaths() {
+  return categoryRecords('airfields-carriers').map((record) => ({ params: { record: record.slug }, props: { record } }));
+}
+
+const { record } = Astro.props as { record: EncyclopediaRecord };
+---
+<AirfieldRecordPage record={record} />

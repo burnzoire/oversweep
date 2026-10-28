@@ -1,0 +1,695 @@
+{
+ "map": "dcs-nevada",
+ "source": {
+  "title": "dcs-world-schema reference data: Nevada airbases, beacons and navaids",
+  "publisher": "dcs-world-schema, open-source data extracted by running DCS World 2.9.30.28536 (extracted 2026-10-04)",
+  "url": "https://github.com/YoloWingPixie/dcs-world-schema/tree/c3091e6c08fb8167e26145d0e33c10e4140c6fe7/dcs-world-reference/latest/airbases/Nevada",
+  "commit": "c3091e6c08fb8167e26145d0e33c10e4140c6fe7",
+  "dcsVersion": "2.9.30.28536",
+  "beacons": true,
+  "radioFallback": {
+   "title": "pydcs terrain data: nevada airports (airports.py)",
+   "url": "https://github.com/pydcs/dcs/blob/5ddcc63a2dcd661e16b14f7aa43219b93044855d/dcs/terrain/nevada/airports.py"
+  }
+ },
+ "airfields": [
+  {
+   "name": "Beatty",
+   "elevationFt": 3148,
+   "lat": 36.861,
+   "lon": -116.7864,
+   "runways": [
+    {
+     "name": "16/34",
+     "lengthFt": 5380,
+     "ends": [
+      {
+       "name": "16",
+       "heading": 168
+      },
+      {
+       "name": "34",
+       "heading": 348
+      }
+     ]
+    }
+   ],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Boulder City",
+   "elevationFt": 2163,
+   "lat": 35.9487,
+   "lon": -114.8618,
+   "runways": [
+    {
+     "name": "09/27L",
+     "lengthFt": 4613,
+     "ends": [
+      {
+       "name": "27L",
+       "heading": 269
+      },
+      {
+       "name": "09",
+       "heading": 89
+      }
+     ]
+    },
+    {
+     "name": "15/33",
+     "lengthFt": 3702,
+     "ends": [
+      {
+       "name": "33",
+       "heading": 334
+      },
+      {
+       "name": "15",
+       "heading": 154
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 118.05,
+    "uhf": 250.1,
+    "vhfLow": 38.75,
+    "hf": 3.925
+   },
+   "navaids": [],
+   "approaches": [],
+   "radioSource": "pydcs"
+  },
+  {
+   "name": "Creech",
+   "elevationFt": 3126,
+   "lat": 36.5838,
+   "lon": -115.6764,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 6100,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 81
+      },
+      {
+       "name": "26",
+       "heading": 261
+      }
+     ]
+    },
+    {
+     "name": "13/31",
+     "lengthFt": 4064,
+     "ends": [
+      {
+       "name": "13",
+       "heading": 135
+      },
+      {
+       "name": "31",
+       "heading": 315
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 118.3,
+    "uhf": 360.6
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "INS",
+     "channel": 87
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "08",
+     "callsign": "ICRR",
+     "frequency": 108.7
+    },
+    {
+     "type": "ILS",
+     "runway": "13",
+     "callsign": "ICRS",
+     "frequency": 108.5
+    }
+   ]
+  },
+  {
+   "name": "Echo Bay",
+   "elevationFt": 1526,
+   "lat": 36.3111,
+   "lon": -114.4639,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 3228,
+     "ends": [
+      {
+       "name": "06",
+       "heading": 68
+      },
+      {
+       "name": "24",
+       "heading": 248
+      }
+     ]
+    }
+   ],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Groom Lake",
+   "elevationFt": 4475,
+   "lat": 37.2332,
+   "lon": -115.7923,
+   "runways": [
+    {
+     "name": "14/32",
+     "lengthFt": 11008,
+     "ends": [
+      {
+       "name": "32",
+       "heading": 326
+      },
+      {
+       "name": "14",
+       "heading": 146
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 118.0,
+    "uhf": 250.05,
+    "vhfLow": 38.6,
+    "hf": 3.85
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "GRL",
+     "channel": 18
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "32",
+     "callsign": "GLRI",
+     "frequency": 109.3
+    }
+   ],
+   "radioSource": "pydcs"
+  },
+  {
+   "name": "Henderson Executive",
+   "elevationFt": 2487,
+   "lat": 35.974,
+   "lon": -115.1331,
+   "runways": [
+    {
+     "name": "17L/35R",
+     "lengthFt": 4753,
+     "ends": [
+      {
+       "name": "35R",
+       "heading": 350
+      },
+      {
+       "name": "17L",
+       "heading": 170
+      }
+     ]
+    },
+    {
+     "name": "17R/35L",
+     "lengthFt": 5999,
+     "ends": [
+      {
+       "name": "35L",
+       "heading": 350
+      },
+      {
+       "name": "17R",
+       "heading": 170
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 125.1
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Jean",
+   "elevationFt": 2824,
+   "lat": 35.7692,
+   "lon": -115.3296,
+   "runways": [
+    {
+     "name": "02L/20R",
+     "lengthFt": 4053,
+     "ends": [
+      {
+       "name": "20R",
+       "heading": 201
+      },
+      {
+       "name": "02L",
+       "heading": 20
+      }
+     ]
+    },
+    {
+     "name": "02R/20L",
+     "lengthFt": 3437,
+     "ends": [
+      {
+       "name": "20L",
+       "heading": 201
+      },
+      {
+       "name": "02R",
+       "heading": 21
+      }
+     ]
+    }
+   ],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Laughlin",
+   "elevationFt": 656,
+   "lat": 35.1561,
+   "lon": -114.5595,
+   "runways": [
+    {
+     "name": "16/34",
+     "lengthFt": 7139,
+     "ends": [
+      {
+       "name": "16",
+       "heading": 166
+      },
+      {
+       "name": "34",
+       "heading": 346
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 123.9
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Lincoln County",
+   "elevationFt": 4815,
+   "lat": 37.7874,
+   "lon": -114.4199,
+   "runways": [
+    {
+     "name": "17/35",
+     "lengthFt": 4408,
+     "ends": [
+      {
+       "name": "17",
+       "heading": 171
+      },
+      {
+       "name": "35",
+       "heading": 351
+      }
+     ]
+    }
+   ],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "McCarran International",
+   "elevationFt": 2104,
+   "lat": 36.0764,
+   "lon": -115.1446,
+   "runways": [
+    {
+     "name": "07L/25R",
+     "lengthFt": 10377,
+     "ends": [
+      {
+       "name": "07L",
+       "heading": 79
+      },
+      {
+       "name": "25R",
+       "heading": 259
+      }
+     ]
+    },
+    {
+     "name": "07R/25L",
+     "lengthFt": 10008,
+     "ends": [
+      {
+       "name": "07R",
+       "heading": 79
+      },
+      {
+       "name": "25L",
+       "heading": 259
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 119.9,
+    "uhf": 257.8
+   },
+   "navaids": [
+    {
+     "type": "VORTAC",
+     "callsign": "LAS",
+     "channel": 116,
+     "band": "X",
+     "frequency": 116.9,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "",
+     "callsign": "I-RLE",
+     "frequency": 111.75
+    },
+    {
+     "type": "ILS",
+     "runway": "25R",
+     "callsign": "I-LAS",
+     "frequency": 110.3
+    }
+   ]
+  },
+  {
+   "name": "Mesquite",
+   "elevationFt": 1859,
+   "lat": 36.8331,
+   "lon": -114.0559,
+   "runways": [
+    {
+     "name": "01/19",
+     "lengthFt": 4938,
+     "ends": [
+      {
+       "name": "01",
+       "heading": 18
+      },
+      {
+       "name": "19",
+       "heading": 198
+      }
+     ]
+    }
+   ],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Mina",
+   "elevationFt": 4559,
+   "lat": 38.3798,
+   "lon": -118.0967,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 4223,
+     "ends": [
+      {
+       "name": "31",
+       "heading": 320
+      },
+      {
+       "name": "13",
+       "heading": 140
+      }
+     ]
+    }
+   ],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Nellis",
+   "elevationFt": 1843,
+   "lat": 36.2352,
+   "lon": -115.033,
+   "runways": [
+    {
+     "name": "03L/21R",
+     "lengthFt": 9454,
+     "ends": [
+      {
+       "name": "03L",
+       "heading": 30
+      },
+      {
+       "name": "21R",
+       "heading": 210
+      }
+     ]
+    },
+    {
+     "name": "03R/21L",
+     "lengthFt": 9438,
+     "ends": [
+      {
+       "name": "03R",
+       "heading": 30
+      },
+      {
+       "name": "21L",
+       "heading": 210
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 132.55,
+    "uhf": 327.0
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "LSV",
+     "channel": 12
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "21L",
+     "callsign": "IDIQ",
+     "frequency": 109.1
+    }
+   ]
+  },
+  {
+   "name": "North Las Vegas",
+   "elevationFt": 2229,
+   "lat": 36.2135,
+   "lon": -115.1948,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 4734,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 257
+      },
+      {
+       "name": "07",
+       "heading": 77
+      }
+     ]
+    },
+    {
+     "name": "12L/30R",
+     "lengthFt": 3338,
+     "ends": [
+      {
+       "name": "12L",
+       "heading": 123
+      },
+      {
+       "name": "30R",
+       "heading": 303
+      }
+     ]
+    },
+    {
+     "name": "12R/30L",
+     "lengthFt": 4471,
+     "ends": [
+      {
+       "name": "30L",
+       "heading": 303
+      },
+      {
+       "name": "12R",
+       "heading": 123
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 125.7,
+    "uhf": 360.75
+   },
+   "navaids": [],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "12L",
+     "callsign": "I-HWG",
+     "frequency": 110.7
+    }
+   ]
+  },
+  {
+   "name": "Pahute Mesa",
+   "elevationFt": 5058,
+   "lat": 37.102,
+   "lon": -116.3128,
+   "runways": [
+    {
+     "name": "18/36",
+     "lengthFt": 5420,
+     "ends": [
+      {
+       "name": "36",
+       "heading": 2
+      },
+      {
+       "name": "18",
+       "heading": 182
+      }
+     ]
+    }
+   ],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Tonopah",
+   "elevationFt": 5391,
+   "lat": 38.0624,
+   "lon": -117.0833,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 5315,
+     "ends": [
+      {
+       "name": "29",
+       "heading": 293
+      },
+      {
+       "name": "11",
+       "heading": 113
+      }
+     ]
+    },
+    {
+     "name": "15/33",
+     "lengthFt": 6716,
+     "ends": [
+      {
+       "name": "33",
+       "heading": 333
+      },
+      {
+       "name": "15",
+       "heading": 153
+      }
+     ]
+    }
+   ],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Tonopah Test Range",
+   "elevationFt": 5534,
+   "lat": 37.7989,
+   "lon": -116.7808,
+   "runways": [
+    {
+     "name": "14/32",
+     "lengthFt": 11633,
+     "ends": [
+      {
+       "name": "32",
+       "heading": 326
+      },
+      {
+       "name": "14",
+       "heading": 146
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 124.75,
+    "uhf": 257.95
+   },
+   "navaids": [
+    {
+     "type": "VORTAC",
+     "callsign": "TQQ",
+     "channel": 77,
+     "band": "X",
+     "frequency": 113.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "14",
+     "callsign": "I-RVP",
+     "frequency": 108.3
+    },
+    {
+     "type": "ILS",
+     "runway": "32",
+     "callsign": "I-UVV",
+     "frequency": 111.7
+    }
+   ]
+  }
+ ]
+}

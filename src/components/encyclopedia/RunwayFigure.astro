@@ -1,0 +1,67 @@
+---
+import type { RunwayLine } from '../../data/encyclopedia';
+// A field's runways in plan view, true north up, drawn to scale from their
+// published threshold coordinates. Taxiways, aprons and buildings are not
+// drawn; the caption slot carries the cited description.
+interface Props { title: string; runways: RunwayLine[]; name: string }
+const { title, runways, name } = Astro.props;
+
+// Metres east and north of the runways' mean position; over a few kilometres a
+// flat projection is well within the drawing's precision.
+const all = runways.flatMap((r) => r.ends);
+const lat0 = all.reduce((s, [lat]) => s + lat, 0) / all.length;
+const lon0 = all.reduce((s, [, lon]) => s + lon, 0) / all.length;
+const M_PER_DEG_LAT = 111_132;
+const mPerDegLon = M_PER_DEG_LAT * Math.cos((lat0 * Math.PI) / 180);
+const local = ([lat, lon]: [number, number]) => ({ x: (lon - lon0) * mPerDegLon, y: (lat - lat0) * M_PER_DEG_LAT });
+
+const W = 640, H = 420, PAD = 60;
+const pts = all.map(local);
+const span = Math.max(Math.max(...pts.map((p) => p.x)) - Math.min(...pts.map((p) => p.x)), (Math.max(...pts.map((p) => p.y)) - Math.min(...pts.map((p) => p.y))) * ((W - 2 * PAD) / (H - 2 * PAD)));
+const scale = (W - 2 * PAD) / span;
+const cx = (Math.max(...pts.map((p) => p.x)) + Math.min(...pts.map((p) => p.x))) / 2;
+const cy = (Math.max(...pts.map((p) => p.y)) + Math.min(...pts.map((p) => p.y))) / 2;
+const sx = (x: number) => W / 2 + (x - cx) * scale;
+const sy = (y: number) => H / 2 - (y - cy) * scale;
+
+const drawn = runways.map((r) => {
+  const [a, b] = r.ends.map(local);
+  const len = Math.hypot(b.x - a.x, b.y - a.y);
+  const ux = (b.x - a.x) / len, uy = (b.y - a.y) / len;
+  // Half the width, drawn no thinner than 3 px so a narrow runway stays visible.
+  const half = Math.max((r.widthFt * 0.3048) / 2, 1.5 / scale);
+  const corner = (p: { x: number; y: number }, side: number) => `${sx(p.x - uy * half * side)},${sy(p.y + ux * half * side)}`;
+  const [endA, endB] = r.id.split('/');
+  // Each end's designator sits just beyond its threshold, on the centreline.
+  const label = (p: { x: number; y: number }, out: number) => ({ x: sx(p.x) + ux * out * 16, y: sy(p.y) - uy * out * 16 + 4 });
+  return { id: r.id, points: [corner(a, 1), corner(b, 1), corner(b, -1), corner(a, -1)].join(' '), labels: [{ text: endA, ...label(a, -1) }, { text: endB, ...label(b, 1) }], lengthFt: Math.round(len / 0.3048) };
+});
+
+// A scale bar of a round number of kilometres, about a fifth of the drawing.
+const barKm = [0.5, 1, 2, 5].find((km) => km * 1000 * scale >= (W - 2 * PAD) / 6) ?? 5;
+const bar = barKm * 1000 * scale;
+const n = (v: number) => v.toLocaleString('en-GB');
+---
+<section class="lesson figure-lesson runway-figure" aria-labelledby="runway-fig-title">
+  <h3 id="runway-fig-title" class="fig-title">{title}</h3>
+  <div class="fig-scroll" role="region" aria-label="Runway layout figure; scrolls sideways on narrow screens" tabindex="0">
+    <svg class="natops" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Plan view of the runways at ${name}, true north up: ${drawn.map((r) => `runway ${r.id}, about ${n(r.lengthFt)} feet`).join('; ')}`}>
+      <rect class="frame" x="0" y="0" width={W} height={H} />
+      {drawn.map((r) => (
+        <g>
+          <polygon class="runway" points={r.points} />
+          {r.labels.map((l) => <text class="lbl" x={l.x} y={l.y} text-anchor="middle">{l.text}</text>)}
+        </g>
+      ))}
+      <g transform={`translate(${W - 34} 30)`}>
+        <path class="ln" d="M0 34 L0 0 M-6 10 L0 0 L6 10" />
+        <text class="lbl" x="0" y="50" text-anchor="middle">N</text>
+      </g>
+      <g transform={`translate(20 ${H - 24})`}>
+        <path class="ln" d={`M0 -5 L0 0 L${bar} 0 L${bar} -5`} />
+        <text class="lbl" x={bar / 2} y="16" text-anchor="middle">{barKm} km</text>
+      </g>
+    </svg>
+  </div>
+  <slot />
+</section>

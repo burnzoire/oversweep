@@ -1,6 +1,7 @@
 import type { MarkdownInstance } from 'astro';
 import registry from './encyclopedia.json';
 import { reviewTrainers } from './experiences';
+import { airfieldRoles, basings, branches, coverageStatuses, eras, nations, sims, validateCatalogue } from './airfield-model.mjs';
 
 // Encyclopedia records. Like modules, `publication` decides whether a record
 // ships in normal builds and is independent of `maturity`, which is always
@@ -178,6 +179,135 @@ export interface OrdnanceData {
   sources: Source[];
 }
 
+// An official chart reproduced as an image, such as an FAA airport diagram.
+// `chart` names the edition, since charts are reissued every few weeks.
+export interface Chart {
+  src: string;
+  alt: string;
+  caption: string;
+  chart: string;
+  publisher: string;
+  sourceUrl: string;
+  accessed: string;
+}
+
+// A runway drawn to scale from its published threshold coordinates, for
+// fields with no public airport diagram: [latitude, longitude] in degrees.
+export interface RunwayLine {
+  id: string;
+  widthFt: number;
+  ends: [[number, number], [number, number]];
+}
+
+// Airfields & Carriers records. The model, its controlled lists and the
+// validation the build runs are in airfield-model.mjs; these types describe
+// the frontmatter it checks. Dates are "YYYY", "YYYY-MM" or "YYYY-MM-DD".
+export type Nation = keyof typeof nations;
+export type Branch = keyof typeof branches;
+export type Sim = keyof typeof sims;
+
+// When a fact applies: `from` and `to` bound it; `asOf` is when a source
+// described it as current; `ended` marks a past period with no known end.
+// All are optional, and none means no date is known.
+export interface Period { from?: string; to?: string; asOf?: string; ended?: boolean }
+
+export interface AirfieldName extends Period { name: string; former?: boolean; cite: string }
+export interface Operator extends Period { name: string; detail?: string; nation: Nation; branch: Branch; cite: string }
+export interface Unit extends Period {
+  name: string;
+  nation: Nation;
+  branch: Branch;
+  // Left out when the sources do not say whether the unit is based or visiting.
+  basing?: keyof typeof basings;
+  aircraft?: string[];
+  cite: string;
+}
+export interface Runway {
+  id: string;
+  // A second field of the same base, such as "South Field".
+  field?: string;
+  lengthFt: number | null;
+  widthFt?: number;
+  surface?: string;
+  unpaved?: boolean;
+  note?: string;
+  cite: string;
+}
+export interface SimDifference { topic: string; text: string }
+
+// How one sim map shows the airfield. A map the airfield does not list has
+// not been checked; `unchecked` keeps a sourced remark without a claim.
+export interface MapCoverage {
+  map: string;
+  status: keyof typeof coverageStatuses;
+  inSimName?: string;
+  checked: string;
+  cite?: string;
+  note?: string;
+  facts?: string[];
+  differences?: SimDifference[];
+}
+
+export interface AirfieldData {
+  kind: 'airfield';
+  short?: string;
+  name: string;
+  status: 'active' | 'closed';
+  names?: AirfieldName[];
+  identifiers?: { icao?: string; iata?: string; faa?: string; others?: string[] };
+  country: Nation;
+  location: string;
+  coordinates: { lat: number; lon: number; cite: string };
+  elevationFt: number;
+  elevationCite: string;
+  opened: { year: number; text: string };
+  closed?: { year: number; text: string };
+  roles: (keyof typeof airfieldRoles)[];
+  operators: Operator[];
+  units?: Unit[];
+  facilities: { asOf?: string; runways: Runway[]; arresting?: string[]; navaids?: string[]; other?: string[] };
+  theatres?: string[];
+  maps?: MapCoverage[];
+  // FAA airport diagrams for US fields; `runwayPlan` draws the runways of
+  // fields without one, from the coordinates its `cite` names. (Astro reserves
+  // the frontmatter key `layout`.)
+  charts?: Chart[];
+  runwayPlan?: { runways: RunwayLine[]; cite: string };
+  // The first photo leads the page; the others follow the record text.
+  photos: Photo[];
+  sources: Source[];
+}
+
+// A real-world region. Its airfields and maps are found from their records.
+// The body has the sections Historical significance and Forces deployed.
+export interface TheatreData {
+  kind: 'theatre';
+  short?: string;
+  name: string;
+  region: string;
+  countries: Nation[];
+  photos: Photo[];
+  sources: Source[];
+}
+
+// One simulator map: its own coverage and historical setting. The body has a
+// Coverage section.
+export interface MapData {
+  kind: 'map';
+  sim: Sim;
+  short: string;
+  name: string;
+  publisher: string;
+  setting: Period & { era: keyof typeof eras; text: string };
+  area: string;
+  theatres?: string[];
+  differences?: SimDifference[];
+  photos?: Photo[];
+  sources: Source[];
+}
+
+export type AirfieldCatalogueData = AirfieldData | TheatreData | MapData;
+
 // Terminology records are glossary sets, one per source family (brevity
 // words, joint terms, airfield terms, carrier terms). The category page merges
 // every set into one A–Z list, so a word defined differently by two sources
@@ -242,6 +372,65 @@ export const recordContent = (r: EncyclopediaRecord) => contentFile(r) as unknow
 export const aircraftContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AircraftData>;
 export const ordnanceContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<OrdnanceData>;
 export const terminologyContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<TerminologyData>;
+export const airfieldContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AirfieldCatalogueData>;
+
+type Entry<T> = { record: EncyclopediaRecord; data: T };
+
+// One DCS map's airfields, as scripts/import_map_airfields.py writes them.
+export interface MapAirfieldTable {
+  map: string;
+  source: { title: string; publisher: string; url: string; commit: string; beacons: boolean; radioFallback?: { title: string; url: string } | null };
+  airfields: {
+    name: string;
+    elevationFt?: number;
+    lat?: number;
+    lon?: number;
+    runways: { name: string; lengthFt?: number; ends: { name: string; heading: number }[] }[];
+    radio: { vhf?: number; uhf?: number; vhfLow?: number; hf?: number };
+    radioSource?: 'pydcs';
+    navaids: { type: string; callsign?: string; channel?: number; band?: 'X' | 'Y'; frequency?: number; unit?: 'kHz' | 'MHz' }[];
+    approaches: { type: string; runway: string; callsign?: string; frequency?: number; channel?: number }[];
+  }[];
+}
+
+export interface AirfieldEntry extends Entry<AirfieldData> { theatres: Entry<TheatreData>[]; maps: (Entry<MapData> & { coverage: MapCoverage })[] }
+export interface TheatreEntry extends Entry<TheatreData> { airfields: AirfieldEntry[]; maps: MapEntry[] }
+export interface MapEntry extends Entry<MapData> { theatres: Entry<TheatreData>[]; airfields: { airfield: AirfieldEntry; coverage: MapCoverage }[] }
+
+// The categories whose records make up the airfield catalogue.
+export const airfieldCategories = ['airfields-carriers', 'theatres'];
+
+// The airfield catalogue, validated once per build: every record in the
+// Airfields & Carriers and Theatres categories (theatres and their sim maps), resolved into airfields, theatres and maps with their
+// relationships both ways. Throws, failing the build, on any problem.
+let catalogue: { airfields: AirfieldEntry[]; theatres: TheatreEntry[]; maps: MapEntry[] } | undefined;
+export function airfieldCatalogue() {
+  if (catalogue) return catalogue;
+  // Validate every registered record, published or not, so a draft cannot hide a broken link.
+  const all = records.filter((r) => airfieldCategories.includes(r.category)).map((record) => ({ record, data: airfieldContent(record).frontmatter }));
+  const problems = validateCatalogue(all.map(({ record, data }) => ({ slug: record.slug, data })));
+  if (problems.length) throw new Error(`Airfield, theatre and sim map records are invalid:\n- ${problems.join('\n- ')}`);
+  const shipped = all.filter(({ record }) => includedRecords.includes(record));
+  const ofKind = <T extends AirfieldCatalogueData>(kind: T['kind']) => shipped.filter((e): e is Entry<T> => e.data.kind === kind);
+  const theatreEntries = ofKind<TheatreData>('theatre');
+  const mapEntries = ofKind<MapData>('map');
+  const airfields: AirfieldEntry[] = ofKind<AirfieldData>('airfield').map((e) => ({
+    ...e,
+    theatres: theatreEntries.filter((t) => e.data.theatres?.includes(t.record.slug)),
+    maps: (e.data.maps ?? []).flatMap((coverage) => mapEntries.filter((m) => m.record.slug === coverage.map).map((m) => ({ ...m, coverage }))),
+  }));
+  const maps: MapEntry[] = mapEntries.map((m) => ({
+    ...m,
+    theatres: theatreEntries.filter((t) => m.data.theatres?.includes(t.record.slug)),
+    airfields: airfields.flatMap((airfield) => airfield.maps.filter((x) => x.record === m.record).map(({ coverage }) => ({ airfield, coverage }))),
+  }));
+  const theatres: TheatreEntry[] = theatreEntries.map((t) => ({
+    ...t,
+    airfields: airfields.filter((a) => a.theatres.some((x) => x.record === t.record)),
+    maps: maps.filter((m) => m.theatres.some((x) => x.record === t.record)),
+  }));
+  return (catalogue = { airfields, theatres, maps });
+}
 
 export function getRecord(category: string, slug: string): EncyclopediaRecord {
   const found = records.find(r => r.category === category && r.slug === slug);
