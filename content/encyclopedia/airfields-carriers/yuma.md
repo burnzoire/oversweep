@@ -1,27 +1,45 @@
 ---
-kind: base
-sims: []
-group: marine-corps
+kind: airfield
 short: Yuma
 name: Marine Corps Air Station Yuma
-location: "Yuma, Arizona, United States [1] [2]"
-operator: "US Marine Corps; the airfield is shared with Yuma International Airport [1] [2]"
-opened: "1928, as Fly Field; Marine Corps since 1959, and Marine Corps Air Station Yuma from 20 July 1962 [1]"
-elevation: "213 ft (65 m) [2]"
-runways:
-  - "03L/21R: 13,300 × 200 ft (4,054 × 61 m), concrete [2]"
-  - "03R/21L: 9,240 × 150 ft (2,816 × 46 m), asphalt and concrete [2]"
-  - "08/26: 6,146 × 150 ft (1,873 × 46 m), asphalt [2]"
-  - "17/35: 5,710 × 150 ft (1,740 × 46 m) [3]"
-arrestingGear: "E-28 on runways 03L/21R, 03R/21L and 17/35 [3]"
-navaids:
-  - "[TACAN](term:) NYL, on the field [2]"
-  - "ILS runway 21R (I-YUM) [2]"
+status: active
+names:
+  - { name: "Yuma International Airport", cite: "[1] [2]" }
+  - { name: "Fly Field", former: true, from: "1928", ended: true, cite: "[1]" }
+  - { name: "Yuma Army Airfield", former: true, ended: true, cite: "[1]" }
+  - { name: "Vincent Air Force Base", former: true, from: "1956", to: "1959", cite: "[1]" }
+identifiers: { icao: KNYL, iata: YUM, faa: NYL }
+country: us
+location: "Yuma, Arizona [1] [2]"
+coordinates: { lat: 32.6509, lon: -114.6094, cite: "[4]" }
+elevationFt: 213
+elevationCite: "[2]"
+opened: { year: 1928, text: "1928, as Fly Field; Marine Corps since 1959, and Marine Corps Air Station Yuma from 20 July 1962 [1]" }
+roles: [fighter, weapons-school, test, civil-airport]
+operators:
+  - { name: "US Marine Corps", nation: us, branch: marines, from: "1959", cite: "[1]" }
+  - { name: "Yuma International Airport", detail: "shares the airfield; its terminal is on the north side", nation: us, branch: civil, cite: "[1] [3]" }
 units:
-  - "Marine Aircraft Group 13, with four F-35B Lightning II squadrons: VMFA-122, VMFA-211, VMFA-214 and VMFA-225 [1]"
-  - "Marine Aviation Weapons and Tactics Squadron 1 (MAWTS-1), which runs the Weapons and Tactics Instructor course [1]"
-  - "Marine Operational Test and Evaluation Squadron 1 (VMX-1) [1]"
-  - "Marine Fighter Training Squadron 401 (VMFT-401), a reserve adversary squadron [1]"
+  - { name: "Marine Aircraft Group 13: VMFA-122, VMFA-211, VMFA-214 and VMFA-225", nation: us, branch: marines, basing: permanent, aircraft: ["F-35B Lightning II"], asOf: "2026-10", cite: "[1]" }
+  - { name: "Marine Aviation Weapons and Tactics Squadron 1 (MAWTS-1), which runs the Weapons and Tactics Instructor course", nation: us, branch: marines, basing: permanent, asOf: "2026-10", cite: "[1]" }
+  - { name: "Marine Operational Test and Evaluation Squadron 1 (VMX-1)", nation: us, branch: marines, basing: permanent, asOf: "2026-10", cite: "[1]" }
+  - { name: "Marine Fighter Training Squadron 401 (VMFT-401), a reserve adversary squadron", nation: us, branch: marines, basing: permanent, asOf: "2026-10", cite: "[1]" }
+facilities:
+  asOf: "2026-10"
+  runways:
+    - { id: "03L/21R", lengthFt: 13300, widthFt: 200, surface: "concrete", cite: "[2]" }
+    - { id: "03R/21L", lengthFt: 9240, widthFt: 150, surface: "asphalt and concrete", cite: "[2]" }
+    - { id: "08/26", lengthFt: 6146, widthFt: 150, surface: "asphalt", cite: "[2]" }
+    - { id: "17/35", lengthFt: 5710, widthFt: 150, cite: "[3]" }
+  arresting:
+    - "E-28 on runways 03L/21R, 03R/21L and 17/35 [3]"
+  navaids:
+    - "[TACAN](term:) NYL, on the field [2]"
+    - "ILS runway 21R (I-YUM) [2]"
+  other:
+    - "Five VTOL pads [3]"
+    - "Beside the Chocolate Mountain Aerial Gunnery Range and the western Barry M. Goldwater Range, with an auxiliary airfield on the Goldwater range [1]"
+theatres: []
 charts:
   - src: "encyclopedia/airfields-carriers/yuma-diagram.png"
     alt: "FAA airport diagram of MCAS Yuma and Yuma International: two parallel runways running south-west to north-east, crossed by a north–south and an east–west runway, with hangars, VTOL pads and combat aircraft loading areas marked"
@@ -45,7 +63,6 @@ photos:
     licence: "Public domain"
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Yumaaaf-1943.jpg"
     accessed: "2026-10-27"
-quick: { opened: 1928, elevationFt: 213, longestRunwayFt: 13300 }
 sources:
   - n: 1
     title: "Marine Corps Air Station Yuma"
@@ -65,6 +82,12 @@ sources:
     url: "https://aeronav.faa.gov/d-tpp/2610/00511AD.PDF"
     accessed: "2026-10-27"
     note: "Runway 17/35 is on the diagram but not in the airport data read the same day."
+  - n: 4
+    title: "Airport data, KNYL"
+    publisher: "OurAirports open data (public domain, community-maintained)"
+    url: "https://davidmegginson.github.io/ourairports-data/airports.csv"
+    accessed: "2026-10-28"
+    note: "Row for KNYL: latitude, longitude and identifiers."
 ---
 
 ## Role today
@@ -74,7 +97,3 @@ Yuma is the busiest air station in the Marine Corps. [[1]](#source-1) Its desert
 ## History
 
 The field began in 1928 as Fly Field, named for Colonel Benjamin F. Fly, who had recommended the site. [[1]](#source-1) In the Second World War it became Yuma Army Airfield, a flying school on AT-6s and later B-26 Marauders, with a flexible gunnery school. [[1]](#source-1) The Air Force reopened it in 1954 for Air Defense Command's interceptor crews, who came for two weeks at a time to fire rockets at towed targets, and named it Vincent Air Force Base in 1956. [[1]](#source-1) The base passed to the Navy in 1959 and to the Marine Corps soon after, and it became Marine Corps Air Station Yuma on 20 July 1962. [[1]](#source-1) It was home to the Marine Corps' [F-4](record:f-4) training squadron in the 1960s and 1970s and then to the Pacific [AV-8B Harrier II](record:av-8b) force, and the Marine Corps' first operational F-35B arrived on 16 November 2012. [[1]](#source-1)
-
-## The airfield
-
-The Marines share the airfield with Yuma International Airport, whose terminal is on the north side. [[1]](#source-1) [[3]](#source-3) Its main runway, 03L/21R, is 13,300 ft long, and three of the four runways have E-28 [arresting gear](term:). [[2]](#source-2) [[3]](#source-3) The diagram also marks five VTOL pads. [[3]](#source-3)

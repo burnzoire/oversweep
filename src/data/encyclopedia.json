@@ -1637,7 +1637,7 @@
     "category": "airfields-carriers",
     "revision": 1,
     "title": "Nevada Test and Training Range",
-    "designation": "Theatre · DCS",
+    "designation": "Theatre",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "The Air Force's largest training range and home of Red Flag, outside Las Vegas: nuclear tests, Area 51 and the F-117's secret years."
@@ -1648,7 +1648,7 @@
     "category": "airfields-carriers",
     "revision": 1,
     "title": "Mariana Islands",
-    "designation": "Theatre · DCS",
+    "designation": "Theatre",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "Guam, Saipan and Tinian: the 1944 invasion and B-29 bases of the Pacific War, and today the US bomber and submarine hub in the western Pacific."
@@ -1659,7 +1659,7 @@
     "category": "airfields-carriers",
     "revision": 1,
     "title": "Syria and the eastern Mediterranean",
-    "designation": "Theatre · DCS",
+    "designation": "Theatre",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "Syria, Lebanon, Cyprus and their neighbours: the 1973 and 1982 air wars, the campaign against the Islamic State, and Incirlik, Akrotiri and Khmeimim."
@@ -1806,5 +1806,104 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "The home of Army aviation in Alabama, where every Army aviator learns to fly; its Cairns Army Airfield is the Army's busiest."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.saipan",
+    "slug": "saipan",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Saipan International Airport",
+    "designation": "PGSN",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Japanese Aslito Field captured in June 1944 and rebuilt as Isely Field for B-29s against Japan, now the Northern Mariana Islands' civil airport."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.akrotiri",
+    "slug": "akrotiri",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "RAF Akrotiri",
+    "designation": "LCRA",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Britain's air base on Cyprus since 1955: Suez, CENTO's Canberras and Vulcans, US U-2s, and strikes over Iraq, Syria and Yemen."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.dcs-nevada",
+    "slug": "dcs-nevada",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "DCS: Nevada Test and Training Range",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The present-day Nellis ranges and Las Vegas, home of Red Flag, with 17 airfields."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.dcs-marianas",
+    "slug": "dcs-marianas",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "DCS: Marianas",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Guam, Rota, Tinian and Saipan in the present day, around Andersen Air Force Base, with wide ocean for carrier operations."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.dcs-marianas-1944",
+    "slug": "dcs-marianas-1944",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "DCS: Marianas 1944",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Marianas under Japanese control in June–August 1944, with period airfields such as Aslito, Ushi Point and Orote."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.dcs-syria",
+    "slug": "dcs-syria",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "DCS: Syria",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The eastern Mediterranean from Cyprus to Damascus: Incirlik, Akrotiri, Khmeimim and Israeli bases, for modern and historical missions."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.dcs-persian-gulf",
+    "slug": "dcs-persian-gulf",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "DCS: Persian Gulf",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Strait of Hormuz today, with airbases in Iran, the UAE and Oman."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.dcs-the-channel",
+    "slug": "dcs-the-channel",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "DCS: The Channel",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "South-eastern England and northern France in the Second World War, from 1940 to 1945."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.bms-korea",
+    "slug": "bms-korea",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Falcon BMS: Korea",
+    "designation": "Falcon BMS map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Falcon 4.0's Korean Peninsula theatre, carried on by Falcon BMS: a modern war between North and South Korea."
   }
 ]

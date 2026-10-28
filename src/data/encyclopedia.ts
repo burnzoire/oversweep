@@ -1,6 +1,7 @@
 import type { MarkdownInstance } from 'astro';
 import registry from './encyclopedia.json';
 import { reviewTrainers } from './experiences';
+import { airfieldRoles, basings, branches, coverageStatuses, eras, nations, sims, validateCatalogue } from './airfield-model.mjs';
 
 // Encyclopedia records. Like modules, `publication` decides whether a record
 // ships in normal builds and is independent of `maturity`, which is always
@@ -178,15 +179,6 @@ export interface OrdnanceData {
   sources: Source[];
 }
 
-// The services that run the bases on the Airfields & Carriers list, shown as
-// a label on each base; the list itself is grouped by theatre.
-export const airfieldGroups = [
-  { slug: 'air-force', title: 'Air Force base' },
-  { slug: 'navy', title: 'Naval air station' },
-  { slug: 'marine-corps', title: 'Marine Corps air station' },
-  { slug: 'army', title: 'Army airfield' },
-] as const;
-
 // An official chart reproduced as an image, such as an FAA airport diagram.
 // `chart` names the edition, since charts are reissued every few weeks.
 export interface Chart {
@@ -207,67 +199,75 @@ export interface RunwayLine {
   ends: [[number, number], [number, number]];
 }
 
-// Simulators whose theatres the Airfields & Carriers records are grouped by.
-export const sims = {
-  dcs: 'DCS World',
-  bms: 'Falcon BMS',
-  falcon4: 'Falcon 4.0 / Allied Force',
-} as const;
+// Airfields & Carriers records. The model, its controlled lists and the
+// validation the build runs are in airfield-model.mjs; these types describe
+// the frontmatter it checks. Dates are "YYYY", "YYYY-MM" or "YYYY-MM-DD".
+export type Nation = keyof typeof nations;
+export type Branch = keyof typeof branches;
 export type Sim = keyof typeof sims;
 
-// Where a sim represents a theatre or base: `product` names the map or
-// theatre, as cited text with [n] markers; `notes` says what it covers.
-export interface SimCoverage {
-  sim: Sim;
-  product: string;
-  notes?: string;
+// When a fact applies: `from` and `to` bound it; `asOf` is when a source
+// described it as current; `ended` marks a past period with no known end.
+// All are optional, and none means no date is known.
+export interface Period { from?: string; to?: string; asOf?: string; ended?: boolean }
+
+export interface AirfieldName extends Period { name: string; former?: boolean; cite: string }
+export interface Operator extends Period { name: string; detail?: string; nation: Nation; branch: Branch; cite: string }
+export interface Unit extends Period {
+  name: string;
+  nation: Nation;
+  branch: Branch;
+  // Left out when the sources do not say whether the unit is based or visiting.
+  basing?: keyof typeof basings;
+  aircraft?: string[];
+  cite: string;
+}
+export interface Runway {
+  id: string;
+  // A second field of the same base, such as "South Field".
+  field?: string;
+  lengthFt: number | null;
+  widthFt?: number;
+  surface?: string;
+  unpaved?: boolean;
+  note?: string;
+  cite: string;
+}
+export interface SimDifference { topic: string; text: string }
+
+// How one sim map shows the airfield. A map the airfield does not list has
+// not been checked; `unchecked` keeps a sourced remark without a claim.
+export interface MapCoverage {
+  map: string;
+  status: keyof typeof coverageStatuses;
+  inSimName?: string;
+  checked: string;
+  cite?: string;
+  note?: string;
+  facts?: string[];
+  differences?: SimDifference[];
 }
 
-// A cited way a sim differs from the real place, such as a frequency, a name
-// or a facility that has since closed.
-export interface SimDifference {
-  sim: Sim;
-  topic: string;
-  text: string;
-}
-
-// Theatre records group the bases a sim map covers. Their order on the list
-// is their order in the registry. The body has the sections Era, Historical
-// significance and Forces deployed.
-export interface TheatreData {
-  kind: 'theatre';
+export interface AirfieldData {
+  kind: 'airfield';
   short?: string;
   name: string;
-  // When the theatre is set, as cited text, such as "Present day [2]".
-  era: string;
-  region: string;
-  sims: SimCoverage[];
-  simDifferences?: SimDifference[];
-  photos: Photo[];
-  sources: Source[];
-}
-
-// Air base records: the data plate gives cited text; `quick` holds the
-// comparison table's columns. `theatre` names the theatre record whose sim map
-// covers the base; bases no sim covers leave it out and are listed after the
-// theatres. `group` is the service that runs the base, shown as a label.
-export interface AirbaseData {
-  kind: 'base';
-  theatre?: string;
-  sims: SimCoverage[];
-  simDifferences?: SimDifference[];
-  group: (typeof airfieldGroups)[number]['slug'];
-  // Short label for the record nav when the title is too long.
-  short?: string;
-  name: string;
+  status: 'active' | 'closed';
+  names?: AirfieldName[];
+  identifiers?: { icao?: string; iata?: string; faa?: string; others?: string[] };
+  country: Nation;
   location: string;
-  operator: string;
-  opened: string;
-  elevation: string;
-  runways: string[];
-  arrestingGear?: string;
-  navaids?: string[];
-  units: string[];
+  coordinates: { lat: number; lon: number; cite: string };
+  elevationFt: number;
+  elevationCite: string;
+  opened: { year: number; text: string };
+  closed?: { year: number; text: string };
+  roles: (keyof typeof airfieldRoles)[];
+  operators: Operator[];
+  units?: Unit[];
+  facilities: { asOf?: string; runways: Runway[]; arresting?: string[]; navaids?: string[]; other?: string[] };
+  theatres?: string[];
+  maps?: MapCoverage[];
   // FAA airport diagrams for US fields; `runwayPlan` draws the runways of
   // fields without one, from the coordinates its `cite` names. (Astro reserves
   // the frontmatter key `layout`.)
@@ -275,9 +275,38 @@ export interface AirbaseData {
   runwayPlan?: { runways: RunwayLine[]; cite: string };
   // The first photo leads the page; the others follow the record text.
   photos: Photo[];
-  quick: { opened: number; elevationFt: number; longestRunwayFt: number };
   sources: Source[];
 }
+
+// A real-world region. Its airfields and maps are found from their records.
+// The body has the sections Historical significance and Forces deployed.
+export interface TheatreData {
+  kind: 'theatre';
+  short?: string;
+  name: string;
+  region: string;
+  countries: Nation[];
+  photos: Photo[];
+  sources: Source[];
+}
+
+// One simulator map: its own coverage and historical setting. The body has a
+// Coverage section.
+export interface MapData {
+  kind: 'map';
+  sim: Sim;
+  short: string;
+  name: string;
+  publisher: string;
+  setting: Period & { era: keyof typeof eras; text: string };
+  area: string;
+  theatres?: string[];
+  differences?: SimDifference[];
+  photos?: Photo[];
+  sources: Source[];
+}
+
+export type AirfieldCatalogueData = AirfieldData | TheatreData | MapData;
 
 // Terminology records are glossary sets, one per source family (brevity
 // words, joint terms, airfield terms, carrier terms). The category page merges
@@ -343,21 +372,43 @@ export const recordContent = (r: EncyclopediaRecord) => contentFile(r) as unknow
 export const aircraftContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AircraftData>;
 export const ordnanceContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<OrdnanceData>;
 export const terminologyContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<TerminologyData>;
-export const airfieldContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AirbaseData | TheatreData>;
+export const airfieldContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AirfieldCatalogueData>;
 
-// The Airfields & Carriers list: theatres in registry order, each with the
-// bases its sim maps cover, then the bases no sim covers.
-export function theatreList() {
-  const entries = categoryRecords('airfields-carriers').map((record) => ({ record, data: airfieldContent(record).frontmatter }));
-  const bases = entries.filter((e): e is { record: EncyclopediaRecord; data: AirbaseData } => e.data.kind === 'base');
-  const theatres = entries
-    .filter((e): e is { record: EncyclopediaRecord; data: TheatreData } => e.data.kind === 'theatre')
-    .map((t) => ({ ...t, bases: bases.filter((b) => b.data.theatre === t.record.slug) }));
-  for (const b of bases) {
-    if (b.data.theatre && !theatres.some((t) => t.record.slug === b.data.theatre))
-      throw new Error(`Air base ${b.record.id} names unknown theatre "${b.data.theatre}"`);
-  }
-  return { theatres, outside: bases.filter((b) => !b.data.theatre) };
+type Entry<T> = { record: EncyclopediaRecord; data: T };
+export interface AirfieldEntry extends Entry<AirfieldData> { theatres: Entry<TheatreData>[]; maps: (Entry<MapData> & { coverage: MapCoverage })[] }
+export interface TheatreEntry extends Entry<TheatreData> { airfields: AirfieldEntry[]; maps: Entry<MapData>[] }
+export interface MapEntry extends Entry<MapData> { theatres: Entry<TheatreData>[]; airfields: { airfield: AirfieldEntry; coverage: MapCoverage }[] }
+
+// The Airfields & Carriers catalogue, validated once per build: every record
+// in the category, resolved into airfields, theatres and maps with their
+// relationships both ways. Throws, failing the build, on any problem.
+let catalogue: { airfields: AirfieldEntry[]; theatres: TheatreEntry[]; maps: MapEntry[] } | undefined;
+export function airfieldCatalogue() {
+  if (catalogue) return catalogue;
+  // Validate every registered record, published or not, so a draft cannot hide a broken link.
+  const all = records.filter((r) => r.category === 'airfields-carriers').map((record) => ({ record, data: airfieldContent(record).frontmatter }));
+  const problems = validateCatalogue(all.map(({ record, data }) => ({ slug: record.slug, data })));
+  if (problems.length) throw new Error(`Airfields & Carriers records are invalid:\n- ${problems.join('\n- ')}`);
+  const shipped = all.filter(({ record }) => includedRecords.includes(record));
+  const ofKind = <T extends AirfieldCatalogueData>(kind: T['kind']) => shipped.filter((e): e is Entry<T> => e.data.kind === kind);
+  const theatreEntries = ofKind<TheatreData>('theatre');
+  const mapEntries = ofKind<MapData>('map');
+  const airfields: AirfieldEntry[] = ofKind<AirfieldData>('airfield').map((e) => ({
+    ...e,
+    theatres: theatreEntries.filter((t) => e.data.theatres?.includes(t.record.slug)),
+    maps: (e.data.maps ?? []).flatMap((coverage) => mapEntries.filter((m) => m.record.slug === coverage.map).map((m) => ({ ...m, coverage }))),
+  }));
+  const maps: MapEntry[] = mapEntries.map((m) => ({
+    ...m,
+    theatres: theatreEntries.filter((t) => m.data.theatres?.includes(t.record.slug)),
+    airfields: airfields.flatMap((airfield) => airfield.maps.filter((x) => x.record === m.record).map(({ coverage }) => ({ airfield, coverage }))),
+  }));
+  const theatres: TheatreEntry[] = theatreEntries.map((t) => ({
+    ...t,
+    airfields: airfields.filter((a) => a.theatres.some((x) => x.record === t.record)),
+    maps: maps.filter((m) => m.theatres.some((x) => x.record === t.record)),
+  }));
+  return (catalogue = { airfields, theatres, maps });
 }
 
 export function getRecord(category: string, slug: string): EncyclopediaRecord {

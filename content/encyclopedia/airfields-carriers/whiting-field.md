@@ -1,24 +1,39 @@
 ---
-kind: base
-sims: []
-group: navy
+kind: airfield
 short: Whiting Field
 name: Naval Air Station Whiting Field
-location: "Milton, Florida, United States [1] [2]"
-operator: "US Navy [1] [2]"
-opened: "16 July 1943, as Naval Auxiliary Air Station Whiting Field [1]"
-elevation: "North Field 199 ft (61 m); South Field 177 ft (54 m) [2] [3]"
-runways:
-  - "North Field 05/23: 6,003 × 200 ft (1,830 × 61 m), asphalt [2]"
-  - "North Field 14/32: 6,001 × 200 ft (1,829 × 61 m), asphalt [2]"
-  - "South Field 05/23: 5,996 × 200 ft (1,828 × 61 m), asphalt [3]"
-  - "South Field 14/32: 6,002 × 200 ft (1,829 × 61 m), asphalt [3]"
-navaids:
-  - "[TACAN](term:) NSE, on North Field [2]"
-  - "ILS/DME runway 14 at North Field (I-NSE) and runway 32 at South Field (I-NDZ) [2] [3]"
+status: active
+names:
+  - { name: "Naval Auxiliary Air Station Whiting Field", former: true, from: "1943-07-16", ended: true, cite: "[1]" }
+  - { name: "North Field", cite: "[2]" }
+  - { name: "South Field", cite: "[3]" }
+identifiers: { icao: KNSE, faa: NSE, others: ["KNDZ", "NDZ"] }
+country: us
+location: "Milton, Florida; two airfields, North Field and South Field [1] [2] [3]"
+coordinates: { lat: 30.7242, lon: -87.0219, cite: "[5]" }
+elevationFt: 199
+elevationCite: "[2]"
+opened: { year: 1943, text: "16 July 1943, as Naval Auxiliary Air Station Whiting Field [1]" }
+roles: [flight-training, rotary]
+operators:
+  - { name: "US Navy", nation: us, branch: navy, cite: "[1] [2]" }
 units:
-  - "Training Air Wing Five: primary flight training in the T-6B Texan II at North Field, and advanced helicopter training in the TH-73A Thrasher at South Field [1]"
-  - "Students of the Navy, Marine Corps, Coast Guard and Air Force, and of allied nations [1]"
+  - { name: "Training Air Wing Five: primary flight training at North Field and advanced helicopter training at South Field", nation: us, branch: navy, basing: permanent, aircraft: ["T-6B Texan II", "TH-73A Thrasher"], asOf: "2026-10", cite: "[1]" }
+  - { name: "Students of the Navy, Marine Corps, Coast Guard and Air Force, and of allied nations", nation: us, branch: joint, asOf: "2026-10", cite: "[1]" }
+facilities:
+  asOf: "2026-10"
+  runways:
+    - { id: "05/23", field: "North Field", lengthFt: 6003, widthFt: 200, surface: "asphalt", cite: "[2]" }
+    - { id: "14/32", field: "North Field", lengthFt: 6001, widthFt: 200, surface: "asphalt", cite: "[2]" }
+    - { id: "05/23", field: "South Field", lengthFt: 5996, widthFt: 200, surface: "asphalt", cite: "[3]" }
+    - { id: "14/32", field: "South Field", lengthFt: 6002, widthFt: 200, surface: "asphalt", cite: "[3]" }
+  navaids:
+    - "[TACAN](term:) NSE, on North Field, serving both fields [2]"
+    - "ILS/DME runway 14 at North Field (I-NSE) and runway 32 at South Field (I-NDZ) [2] [3]"
+  other:
+    - "South Field elevation 177 ft [3]"
+    - "Helicopter landing spots along South Field's runways and on six pads beside them [4]"
+theatres: []
 charts:
   - src: "encyclopedia/airfields-carriers/whiting-north-diagram.png"
     alt: "FAA airport diagram of Whiting Field North: two runways crossing in an X, with the control tower, base operations and parking rows to the south"
@@ -50,7 +65,6 @@ photos:
     licenceUrl: "https://creativecommons.org/licenses/by-sa/4.0/"
     sourceUrl: "https://commons.wikimedia.org/wiki/File:T-28Bs_from_VT-2_Whiting_field_1967.jpg"
     accessed: "2026-10-27"
-quick: { opened: 1943, elevationFt: 199, longestRunwayFt: 6003 }
 sources:
   - n: 1
     title: "Naval Air Station Whiting Field"
@@ -76,6 +90,12 @@ sources:
     url: "https://aeronav.faa.gov/d-tpp/2610/00602AD.PDF"
     accessed: "2026-10-27"
     note: "South Field: https://aeronav.faa.gov/d-tpp/2610/01909AD.PDF"
+  - n: 5
+    title: "Airport data, KNSE"
+    publisher: "OurAirports open data (public domain, community-maintained)"
+    url: "https://davidmegginson.github.io/ourairports-data/airports.csv"
+    accessed: "2026-10-28"
+    note: "Row for KNSE, North Field: latitude, longitude and identifiers."
 ---
 
 ## Role today
@@ -85,7 +105,3 @@ Whiting Field is one of the Navy's two primary pilot training bases, with NAS Co
 ## History
 
 Naval Auxiliary Air Station Whiting Field was commissioned on 16 July 1943 and named for Captain Kenneth Whiting, Naval Aviator No. 16, who learned to fly under Orville Wright in 1914 and helped convert the collier Jupiter into the Navy's first aircraft carrier, USS Langley. [[1]](#source-1) Jet training arrived in 1949 with eight TO-1 Shooting Stars, and the Blue Angels made Whiting their headquarters in 1955. [[1]](#source-1) The first TH-73A Thrasher, an Italian-designed helicopter, reached Training Air Wing Five on 6 August 2021. [[1]](#source-1)
-
-## The airfield
-
-Both fields have the same pattern of two crossing runways, each about 6,000 ft by 200 ft. [[2]](#source-2) [[3]](#source-3) North Field's [TACAN](term:) serves both, and each field has an ILS, North on runway 14 and South on runway 32. [[2]](#source-2) [[3]](#source-3) South Field's diagram marks helicopter landing spots along the runways and on six pads beside them. [[4]](#source-4)

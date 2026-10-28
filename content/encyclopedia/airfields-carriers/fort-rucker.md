@@ -1,24 +1,39 @@
 ---
-kind: base
-sims: []
-group: army
+kind: airfield
 short: Fort Rucker
 name: Fort Rucker (Cairns Army Airfield)
-location: "Dale County, Alabama, United States [1] [2]"
-operator: "US Army [1] [2]"
-opened: "Camp Rucker opened on 1 May 1942; its airfield, Ozark Army Airfield, was built from September 1942 and became Cairns Army Airfield in January 1959 [1] [4]"
-elevation: "301 ft (92 m) at Cairns Army Airfield [2]"
-runways:
-  - "06/24: 4,546 × 150 ft (1,386 × 46 m), asphalt [2]"
-  - "18/36: 5,025 × 150 ft (1,532 × 46 m), asphalt [2]"
-navaids:
-  - "Cairns VOR/DME (OZR), on the field [2]"
-  - "ILS/DME runway 06 (I-OZR, channel 34X) [2]"
+status: active
+names:
+  - { name: "Cairns Army Airfield", from: "1959-01", cite: "[1] [4]" }
+  - { name: "Ozark Army Airfield", former: true, from: "1942", to: "1959-01", cite: "[4]" }
+  - { name: "Fort Novosel", former: true, from: "2023-04", to: "2025-06-11", cite: "[1]" }
+identifiers: { icao: KOZR, faa: OZR }
+country: us
+location: "Dale County, Alabama [1] [2]"
+coordinates: { lat: 31.2757, lon: -85.7134, cite: "[5]" }
+elevationFt: 301
+elevationCite: "[2]"
+opened: { year: 1942, text: "Camp Rucker opened on 1 May 1942; its airfield, Ozark Army Airfield, was built from September 1942 and became Cairns Army Airfield in January 1959 [1] [4]" }
+roles: [flight-training, rotary]
+operators:
+  - { name: "US Army", nation: us, branch: army, from: "1952", cite: "[1] [4]" }
 units:
-  - "US Army Aviation Center of Excellence, with the 1st and 110th Aviation Brigades [1]"
-  - "At Cairns: 1st Battalion, 223rd Aviation Regiment, flying the UH-72 Lakota for introductory helicopter training [1]"
-  - "US Air Force 23rd Flying Training Squadron, which trains Air Force helicopter pilots [1] [4]"
-  - "The Warrant Officer Candidate School and Warrant Officer Career College [1]"
+  - { name: "US Army Aviation Center of Excellence, with the 1st and 110th Aviation Brigades", nation: us, branch: army, basing: permanent, asOf: "2026-10", cite: "[1]" }
+  - { name: "1st Battalion, 223rd Aviation Regiment, for introductory helicopter training at Cairns", nation: us, branch: army, basing: permanent, aircraft: ["UH-72 Lakota"], asOf: "2026-10", cite: "[1]" }
+  - { name: "23rd Flying Training Squadron, which trains Air Force helicopter pilots", nation: us, branch: air-force, basing: permanent, aircraft: ["TH-1H"], asOf: "2026-10", cite: "[1] [4]" }
+  - { name: "The Warrant Officer Candidate School and Warrant Officer Career College", nation: us, branch: army, basing: permanent, asOf: "2026-10", cite: "[1]" }
+facilities:
+  asOf: "2026-10"
+  runways:
+    - { id: "06/24", lengthFt: 4546, widthFt: 150, surface: "asphalt", cite: "[2]" }
+    - { id: "18/36", lengthFt: 5025, widthFt: 150, surface: "asphalt", cite: "[2]" }
+  navaids:
+    - "Cairns VOR/DME (OZR), on the field [2]"
+    - "ILS/DME runway 06 (I-OZR, channel 34X) [2]"
+  other:
+    - "Helicopter parking rows, numbered landing spots and pads cover most of the airfield [3]"
+    - "Advanced training from the post's heliports: Hanchey, Lowe, Shell and Knox [1]"
+theatres: []
 charts:
   - src: "encyclopedia/airfields-carriers/fort-rucker-diagram.png"
     alt: "FAA airport diagram of Cairns Army Airfield: a north–south runway crossed by a south-west to north-east runway, surrounded by many helicopter parking rows, numbered spots and helipads"
@@ -35,7 +50,6 @@ photos:
     licence: "Public domain"
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Cairns_Army_Airfield.jpg"
     accessed: "2026-10-27"
-quick: { opened: 1942, elevationFt: 301, longestRunwayFt: 5025 }
 sources:
   - n: 1
     title: "Fort Rucker"
@@ -59,6 +73,12 @@ sources:
     publisher: "Wikipedia (secondary source)"
     url: "https://en.wikipedia.org/wiki/Cairns_Army_Airfield"
     accessed: "2026-10-27"
+  - n: 5
+    title: "Airport data, KOZR"
+    publisher: "OurAirports open data (public domain, community-maintained)"
+    url: "https://davidmegginson.github.io/ourairports-data/airports.csv"
+    accessed: "2026-10-28"
+    note: "Row for KOZR: latitude, longitude and identifiers."
 ---
 
 ## Role today
@@ -73,4 +93,4 @@ Cairns is the Army's busiest airfield, with about 240,000 aircraft movements a y
 
 ## Name
 
-The post itself has changed its name twice in recent years: it was Fort Novosel, for Medal of Honor helicopter pilot Michael J. Novosel, from April 2023, and became Fort Rucker again on 11 June 2025, now named for Captain Edward W. Rucker, a First World War aviator. [[1]](#source-1) Cairns' two runways are about 4,500 and 5,000 ft long, and most of its diagram is helicopter parking rows, numbered landing spots and pads. [[2]](#source-2) [[3]](#source-3)
+The post itself has changed its name twice in recent years: it was Fort Novosel, for Medal of Honor helicopter pilot Michael J. Novosel, from April 2023, and became Fort Rucker again on 11 June 2025, now named for Captain Edward W. Rucker, a First World War aviator. [[1]](#source-1)

@@ -1,26 +1,44 @@
 ---
-kind: base
-sims: []
-group: air-force
+kind: airfield
 short: Edwards
 name: Edwards Air Force Base
-location: "Kern County, California, United States [1] [2]"
-operator: "US Air Force, Air Force Materiel Command [1]"
-opened: "1933, as the Muroc bombing and gunnery range; named Edwards Air Force Base in December 1949 [1]"
-elevation: "2,311 ft (704 m) [2]"
-runways:
-  - "05R/23L: 15,024 × 300 ft (4,579 × 91 m), concrete [2]"
-  - "05L/23R: 12,000 × 200 ft (3,658 × 61 m), asphalt [2]"
-  - "07/25 at South Base: 8,000 × 50 ft (2,438 × 15 m), concrete [2]"
-  - "Marked runways on the Rogers Dry Lake bed, the longest, 17/35, 29,487 × 300 ft (8,988 × 91 m) [4]"
-arrestingGear: "BAK-12B near each end of the two main runways [3]; the departure-end cable is raised on the active runway, and the approach-end cable needs 20 minutes' notice [2]"
-navaids:
-  - "ILS runway 23L (I-EDW) [2]"
-  - "Edwards VORTAC (EDW), 8.8 NM from the field [2]"
+status: active
+names:
+  - { name: "Muroc", former: true, to: "1949-12", cite: "[1]" }
+identifiers: { icao: KEDW, iata: EDW, faa: EDW }
+country: us
+location: "Kern County, California [1] [2]"
+coordinates: { lat: 34.9108, lon: -117.8864, cite: "[6]" }
+elevationFt: 2311
+elevationCite: "[2]"
+opened: { year: 1933, text: "1933, as the Muroc bombing and gunnery range; named Edwards Air Force Base in December 1949 [1]" }
+roles: [test]
+operators:
+  - { name: "US Air Force", detail: "Air Force Materiel Command", nation: us, branch: air-force, cite: "[1]" }
 units:
-  - "Air Force Test Center, and its 412th Test Wing, which runs the base and flies the Air Force's test aircraft [1]"
-  - "US Air Force Test Pilot School [1]"
-  - "NASA Armstrong Flight Research Center [1]"
+  - { name: "Air Force Test Center and its 412th Test Wing, which runs the base and flies the Air Force's test aircraft", nation: us, branch: air-force, basing: permanent, asOf: "2026-10", cite: "[1]" }
+  - { name: "US Air Force Test Pilot School", nation: us, branch: air-force, basing: permanent, asOf: "2026-10", cite: "[1]" }
+  - { name: "NASA Armstrong Flight Research Center", nation: us, branch: government, basing: permanent, asOf: "2026-10", cite: "[1]" }
+facilities:
+  asOf: "2026-10"
+  runways:
+    - { id: "05R/23L", lengthFt: 15024, widthFt: 300, surface: "concrete", cite: "[2]" }
+    - { id: "05L/23R", lengthFt: 12000, widthFt: 200, surface: "asphalt", cite: "[2]" }
+    - { id: "07/25", field: "South Base", lengthFt: 8000, widthFt: 50, surface: "concrete", cite: "[2]" }
+    - { id: "17/35", field: "Rogers Dry Lake", lengthFt: 29487, widthFt: 300, surface: "dry lake bed", unpaved: true, note: "the longest of several marked lake-bed runways", cite: "[4]" }
+  arresting:
+    - "BAK-12B near each end of the two main runways [3]; the departure-end cable is raised on the active runway, and the approach-end cable needs 20 minutes' notice [2]"
+  navaids:
+    - "ILS runway 23L (I-EDW) [2]"
+    - "Edwards VORTAC (EDW), 8.8 NM from the field [2]"
+  other:
+    - "The lake-bed runways are laid out around a compass rose; the FAA warns that their charted positions may be out by more than 600 ft [4]"
+theatres: []
+maps:
+  - map: dcs-nevada
+    status: absent
+    checked: "2026-10-27"
+    cite: "[5]"
 charts:
   - src: "encyclopedia/airfields-carriers/edwards-diagram.png"
     alt: "FAA airport diagram of the main base at Edwards AFB: two parallel runways running south-west to north-east, with the flight line, control tower and base operations along the north-west side"
@@ -58,7 +76,6 @@ photos:
     licence: "Public domain"
     sourceUrl: "https://commons.wikimedia.org/wiki/File:F-35_at_Edwards.jpg"
     accessed: "2026-10-27"
-quick: { opened: 1933, elevationFt: 2311, longestRunwayFt: 15024 }
 sources:
   - n: 1
     title: "Edwards Air Force Base"
@@ -83,6 +100,18 @@ sources:
     date: "cycle 2610, 1–29 October 2026"
     url: "https://aeronav.faa.gov/d-tpp/2610/00500ADROGERSLAKEBED.PDF"
     accessed: "2026-10-27"
+  - n: 5
+    title: "pydcs terrain data: Nevada airports (airports.py)"
+    publisher: "pydcs, an open-source Python library for building DCS World missions, whose terrain data mirrors the game's"
+    url: "https://github.com/pydcs/dcs/blob/5ddcc63a2dcd661e16b14f7aa43219b93044855d/dcs/terrain/nevada/airports.py"
+    accessed: "2026-10-27"
+    note: "The Nevada map lists 17 airfields; Edwards is not among them."
+  - n: 6
+    title: "Airport data, KEDW"
+    publisher: "OurAirports open data (public domain, community-maintained)"
+    url: "https://davidmegginson.github.io/ourairports-data/airports.csv"
+    accessed: "2026-10-28"
+    note: "Row for KEDW: latitude, longitude and identifiers."
 ---
 
 ## Role today
@@ -92,7 +121,3 @@ Edwards is the Air Force's flight test centre. [[1]](#source-1) It is home to th
 ## History
 
 The base exists because of Rogers Dry Lake. [[1]](#source-1) In 1932 Lt. Col. Henry "Hap" Arnold began buying land beside what was then Muroc Dry Lake for a bombing range, and from 1935 crews from March Field bombed targets laid out on the desert. [[1]](#source-1) Arnold called the lake bed "level as a billiard table", a natural runway for testing aircraft, and in 1942 America's first jet, the Bell XP-59 Airacomet, flew from its north shore. [[1]](#source-1) On 14 October 1947 Captain Chuck Yeager flew the Bell X-1 past the speed of sound here. [[1]](#source-1) The base was renamed in 1949 for Captain Glen Edwards, a test pilot killed in the crash of the Northrop YB-49 flying wing near Muroc in 1948, and the Test Pilot School moved in from Wright Field in 1951. [[1]](#source-1) The X-15, the lifting bodies and the first Space Shuttle landings followed, and Edwards stayed the Shuttle's main landing site until 1991. [[1]](#source-1)
-
-## The airfield
-
-The main runway, 05R/23L, is 15,024 ft long and 300 ft wide; when the base's 15,000 ft runway was built in the 1940s it was completed in a single pour of concrete. [[1]](#source-1) [[2]](#source-2) The lake bed beyond it carries several more marked runways, the longest, 17/35, nearly 29,500 ft long, laid out around a compass rose; the FAA warns that their charted positions may be out by more than 600 ft. [[4]](#source-4) Both main runways have BAK-12B [arresting gear](term:) near each end. [[3]](#source-3)

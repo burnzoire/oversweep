@@ -1,31 +1,57 @@
 ---
-kind: base
-theatre: mariana-islands
-sims:
-  - sim: dcs
-    product: "DCS: Marianas map [4]"
-    notes: "Andersen is the map's main airbase. [4] The separate Marianas 1944 map shows Guam under Japanese control in early 1944 [6], before North Field was built. [1]"
-simDifferences:
-  - sim: dcs
-    topic: "ILS"
-    text: "DCS's airfield data gives Andersen no ILS on any runway [5]; the FAA lists ILS approaches to runways 06R, 24L and 24R. [2]"
-group: air-force
+kind: airfield
 short: Andersen
 name: Andersen Air Force Base
-location: "Yigo, Guam (US territory) [1] [2]"
-operator: "US Air Force, Pacific Air Forces; managed with Naval Base Guam by Joint Region Marianas [1]"
-opened: "3 December 1944, as North Field [1]"
-elevation: "617 ft (188 m) [2]"
-runways:
-  - "06L/24R: 10,528 × 200 ft (3,209 × 61 m), asphalt and concrete [2]"
-  - "06R/24L: 11,200 × 200 ft (3,414 × 61 m), asphalt and concrete [2]"
-arrestingGear: "BAK-12 near each end of both runways [3]; the approach-end cables on 06L and 06R need 30 minutes' notice [2]"
-navaids:
-  - "[TACAN](term:) UAM, on the field [2]"
-  - "ILS runways 06R, 24L and 24R [2]"
+status: active
+names:
+  - { name: "North Field", former: true, from: "1944", ended: true, cite: "[1]" }
+identifiers: { icao: PGUA, iata: UAM, faa: UAM }
+country: guam
+location: "Yigo, Guam [1] [2]"
+coordinates: { lat: 13.5840, lon: 144.9300, cite: "[7]" }
+elevationFt: 617
+elevationCite: "[2]"
+opened: { year: 1944, text: "3 December 1944, as North Field [1]" }
+roles: [bomber, staging]
+operators:
+  - { name: "US Air Force", detail: "Pacific Air Forces", nation: us, branch: air-force, cite: "[1]" }
+  - { name: "Joint Region Marianas", detail: "manages the base with Naval Base Guam", nation: us, branch: joint, cite: "[1]" }
 units:
-  - "36th Wing, the host wing, which supports deployed Air Force and visiting foreign units [1]"
-  - "Rotational bomber deployments: B-1B, B-2 and B-52 [1]"
+  - { name: "36th Wing, the host wing, which flies no aircraft of its own and supports deployed Air Force and visiting foreign units", nation: us, branch: air-force, basing: permanent, asOf: "2026-10", cite: "[1]" }
+  - { name: "Continuous bomber presence: bomber squadrons taking turns on Guam", nation: us, branch: air-force, basing: rotational, aircraft: ["B-1B", "B-2", "B-52"], from: "2004", to: "2020-04", cite: "[1]" }
+  - { name: "Bomber task force deployments, as needed", nation: us, branch: air-force, basing: deployed, aircraft: ["B-1B", "B-2", "B-52"], from: "2020-04", cite: "[1]" }
+  - { name: "B-52 force for Operation Linebacker II, with U-Tapao in Thailand: more than 150 aircraft", nation: us, branch: air-force, basing: deployed, aircraft: ["B-52"], from: "1972-12", to: "1972-12", cite: "[1]" }
+  - { name: "314th Bombardment Wing", nation: us, branch: air-force, basing: permanent, aircraft: ["B-29"], asOf: "1945", ended: true, cite: "[1]" }
+facilities:
+  asOf: "2026-10"
+  runways:
+    - { id: "06L/24R", lengthFt: 10528, widthFt: 200, surface: "asphalt and concrete", cite: "[2]" }
+    - { id: "06R/24L", lengthFt: 11200, widthFt: 200, surface: "asphalt and concrete", cite: "[2]" }
+  arresting:
+    - "BAK-12 near each end of both runways [3]; the approach-end cables on 06L and 06R need 30 minutes' notice [2]"
+  navaids:
+    - "[TACAN](term:) UAM, on the field [2]"
+    - "ILS runways 06R, 24L and 24R [2]"
+  other:
+    - "Northwest Field, a historic airfield beside the base, now used for training [1]"
+theatres: [mariana-islands]
+maps:
+  - map: dcs-marianas
+    status: represented
+    inSimName: "Andersen AFB"
+    checked: "2026-10-27"
+    cite: "[4] [5]"
+    facts:
+      - "The map's main airbase [4]"
+      - "Runways 06L/24R and 06R/24L [5]"
+      - "Tower 126.2 MHz VHF and 250.1 MHz UHF [5]; the FAA lists the tower on 126.2 MHz [2]"
+    differences:
+      - { topic: "ILS", text: "DCS's airfield data gives Andersen no ILS on any runway [5]; the FAA lists ILS approaches to runways 06R, 24L and 24R. [2]" }
+  - map: dcs-marianas-1944
+    status: unchecked
+    checked: "2026-10-27"
+    note: "The map shows Guam under Japanese control in the summer of 1944 [6], before North Field was built. [1]"
+    cite: "[1] [6]"
 charts:
   - src: "encyclopedia/airfields-carriers/andersen-diagram.png"
     alt: "FAA airport diagram of Andersen AFB: two long parallel runways running south-west to north-east, with numbered north and south ramps along them and arresting gear marked near each end"
@@ -56,7 +82,6 @@ photos:
     licence: "Public domain"
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Aerial_view_of_North_Field,_Guam,_on_1_August_1945_(80-G-331916).jpg"
     accessed: "2026-10-27"
-quick: { opened: 1944, elevationFt: 617, longestRunwayFt: 11200 }
 sources:
   - n: 1
     title: "Andersen Air Force Base"
@@ -83,14 +108,20 @@ sources:
   - n: 5
     title: "pydcs terrain data: Mariana Islands airports (airports.py)"
     publisher: "pydcs, an open-source Python library for building DCS World missions"
-    url: "https://github.com/pydcs/dcs/blob/master/dcs/terrain/marianaislands/airports.py"
+    url: "https://github.com/pydcs/dcs/blob/5ddcc63a2dcd661e16b14f7aa43219b93044855d/dcs/terrain/marianaislands/airports.py"
     accessed: "2026-10-27"
-    note: "Andersen AFB entry: runways 06L/24R and 06R/24L, each approach with an empty list of runway beacons."
+    note: "Andersen AFB entry: ATC radios, and runways 06L/24R and 06R/24L, each approach with an empty list of runway beacons."
   - n: 6
     title: "DCS: Marianas WWII Map"
     publisher: "Eagle Dynamics (product page)"
     url: "https://www.digitalcombatsimulator.com/en/shop/terrains/marianas_wwii_terrain/"
     accessed: "2026-10-27"
+  - n: 7
+    title: "Airport data, PGUA"
+    publisher: "OurAirports open data (public domain, community-maintained)"
+    url: "https://davidmegginson.github.io/ourairports-data/airports.csv"
+    accessed: "2026-10-28"
+    note: "Row for PGUA: latitude, longitude and identifiers."
 ---
 
 ## Role today
@@ -102,7 +133,3 @@ Andersen is the most important US air base west of Hawaii. [[1]](#source-1) It i
 The base began as North Field, the first airfield built on Guam after its liberation in 1944. [[1]](#source-1) With Northwest Field it had four main runways and revetments for more than 200 B-29s, and from early 1945 the 314th Bombardment Wing flew its raids on Japan from here. [[1]](#source-1) It was named for Brigadier General James Roy Andersen, lost in the crash of a B-24 between Kwajalein and Johnston Island in February 1945. [[1]](#source-1)
 
 In the Vietnam War Andersen launched the B-52 raids of Operation Arc Light from 1965, and in the eleven days of Linebacker II in December 1972 more than 150 B-52s flew 729 sorties against North Vietnam from Andersen and U-Tapao in Thailand. [[1]](#source-1) The 54th Weather Reconnaissance Squadron flew WC-130s from Andersen into typhoons from the 1960s to 1987. [[1]](#source-1) From 2004 to April 2020, B-1Bs, B-2s and B-52s took turns to keep a continuous bomber presence on Guam; bombers still deploy there as needed. [[1]](#source-1)
-
-## The airfield
-
-The airfield is 617 ft above sea level. [[2]](#source-2) Its two parallel runways are 10,528 and 11,200 ft long, each with BAK-12 [arresting gear](term:) near both ends, and three of the four runway ends have an ILS. [[2]](#source-2) [[3]](#source-3)

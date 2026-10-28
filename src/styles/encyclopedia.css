@@ -152,3 +152,43 @@
 .ency .sim-panel ul { margin: 0; padding-left: 1.1rem; }
 .ency .sim-panel li + li { margin-top: 0.3rem; }
 .ency .theatre-meta { margin: -0.25rem 0 0.75rem; color: var(--color-muted); }
+
+/* Airfields: the index's search and filters, card facts, and the record's sections. */
+.ency .airfield-filter { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); gap: 0.75rem 1rem; align-items: end; margin: 0 0 0.75rem; padding: 0.9rem 1rem; border: 1px solid var(--color-border); background: var(--color-surface, #f6f7f8); }
+.ency .airfield-filter .filter-search { grid-column: 1 / -1; }
+.ency .airfield-filter label { display: block; font-weight: 700; margin-bottom: 0.3rem; }
+.ency .airfield-filter input, .ency .airfield-filter select { box-sizing: border-box; width: 100%; min-height: 2.75rem; padding: 0.4rem 0.6rem; font: inherit; border: 1px solid var(--color-text); background: #fff; }
+.ency .airfield-filter input:focus-visible, .ency .airfield-filter select:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+.ency .airfield-filter .filter-count, .ency .airfield-filter .filter-empty { grid-column: 1 / -1; margin: 0; color: var(--color-muted); font-size: 0.9rem; }
+.ency .airfield-filter[hidden], .ency [data-airfield][hidden], .ency .filter-empty[hidden] { display: none; }
+.ency .card-facts { display: grid; gap: 0.2rem; margin: 0 0 0.6rem; font-size: 0.9rem; }
+.ency .card-facts > div { display: grid; grid-template-columns: 5.5rem 1fr; gap: 0.5rem; }
+.ency .card-facts dt { font-weight: 700; color: var(--color-muted); }
+.ency .card-facts dd { margin: 0; }
+.ency .card-list { font-size: 0.9rem; }
+.ency .units, .ency .facilities { margin: 1.5rem 0; }
+.ency .units h3 { margin: 1rem 0 0.4rem; font-size: 1rem; }
+.ency .units th .entry-kicker, .ency .facilities th .entry-kicker { display: block; font-size: 0.72rem; }
+.ency .runway-note { display: block; font-weight: 400; font-size: 0.85rem; color: var(--color-muted); }
+.ency .facility-list { display: grid; margin: 1rem 0 0; border-top: 1px solid var(--color-border); }
+.ency .facility-list > div { display: grid; grid-template-columns: minmax(7rem, 11rem) 1fr; gap: 0.75rem; padding: 0.45rem 0; border-bottom: 1px solid var(--color-border); }
+.ency .facility-list dt { font-weight: 700; }
+.ency .facility-list dd { margin: 0; }
+.ency .facility-list ul { margin: 0; padding-left: 1.1rem; }
+.ency .coverage { padding: 0.5rem 0 0.75rem; border-bottom: 1px solid var(--color-border); }
+.ency .coverage h3 { margin: 0.25rem 0; }
+.ency .coverage h3 .entry-kicker { display: block; font-size: 0.75rem; }
+.ency .coverage h4 { margin: 0.6rem 0 0.25rem; font-size: 0.95rem; }
+.ency .coverage p { margin: 0.25rem 0; }
+.ency .coverage-absent > p:first-of-type strong { color: var(--color-muted); }
+
+@media (max-width: 36rem) {
+  .ency .facility-list > div { grid-template-columns: 1fr; gap: 0.1rem; }
+}
+.ency .unit-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--color-border); }
+.ency .unit-list > li { padding: 0.55rem 0; border-bottom: 1px solid var(--color-border); }
+.ency .unit-name { margin: 0 0 0.25rem; font-weight: 700; }
+.ency .unit-facts { display: flex; flex-wrap: wrap; gap: 0.15rem 1.25rem; margin: 0; font-size: 0.92rem; }
+.ency .unit-facts > div { display: flex; gap: 0.35rem; }
+.ency .unit-facts dt { color: var(--color-muted); font-weight: 700; }
+.ency .unit-facts dd { margin: 0; }
