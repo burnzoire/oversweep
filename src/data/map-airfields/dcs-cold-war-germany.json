@@ -1,0 +1,6071 @@
+{
+ "map": "dcs-cold-war-germany",
+ "source": {
+  "title": "dcs-world-schema reference data: GermanyCW airbases, beacons and navaids",
+  "publisher": "dcs-world-schema, open-source data extracted by running DCS World 2.9.30.28536 (extracted 2026-10-04)",
+  "url": "https://github.com/YoloWingPixie/dcs-world-schema/tree/c3091e6c08fb8167e26145d0e33c10e4140c6fe7/dcs-world-reference/latest/airbases/GermanyCW",
+  "commit": "c3091e6c08fb8167e26145d0e33c10e4140c6fe7",
+  "dcsVersion": "2.9.30.28536",
+  "beacons": true,
+  "radioFallback": null
+ },
+ "airfields": [
+  {
+   "name": "Adelsheim",
+   "elevationFt": 1199,
+   "lat": 49.3692,
+   "lon": 9.4401,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 7272,
+     "ends": [
+      {
+       "name": "05",
+       "heading": 50
+      },
+      {
+       "name": "23",
+       "heading": 230
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 5.0,
+    "vhfLow": 42.0,
+    "vhf": 118.0,
+    "uhf": 256.15
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Airracing Frankfurt",
+   "elevationFt": 278,
+   "lat": 50.0082,
+   "lon": 8.0987,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 2822,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 61
+      },
+      {
+       "name": "25",
+       "heading": 241
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.0,
+    "vhfLow": 41.05,
+    "vhf": 118.4,
+    "uhf": 252.65
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Airracing Koblenz",
+   "elevationFt": 1056,
+   "lat": 50.292,
+   "lon": 7.8304,
+   "runways": [
+    {
+     "name": "15/33",
+     "lengthFt": 2822,
+     "ends": [
+      {
+       "name": "33",
+       "heading": 320
+      },
+      {
+       "name": "15",
+       "heading": 140
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.275,
+    "vhfLow": 39.45,
+    "vhf": 118.25,
+    "uhf": 251.05
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Airracing Lubeck",
+   "elevationFt": 28,
+   "lat": 53.7117,
+   "lon": 10.7666,
+   "runways": [
+    {
+     "name": "17/35",
+     "lengthFt": 2822,
+     "ends": [
+      {
+       "name": "35",
+       "heading": 332
+      },
+      {
+       "name": "17",
+       "heading": 152
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.475,
+    "vhfLow": 41.0,
+    "vhf": 118.35,
+    "uhf": 252.6
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Allstedt",
+   "elevationFt": 932,
+   "lat": 51.3806,
+   "lon": 11.4465,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 8015,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 247
+      },
+      {
+       "name": "07",
+       "heading": 67
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.5,
+    "vhfLow": 39.9,
+    "vhf": 132.5,
+    "uhf": 251.5
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "B",
+     "channel": 0,
+     "frequency": 740,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "BZ",
+     "channel": 0,
+     "frequency": 365,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "CLH",
+     "frequency": 419,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "L",
+     "channel": 0,
+     "frequency": 740,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "LU",
+     "channel": 0,
+     "frequency": 365,
+     "unit": "kHz"
+    },
+    {
+     "type": "RSBN",
+     "callsign": "AL",
+     "channel": 38
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Altes Lager",
+   "elevationFt": 312,
+   "lat": 51.9955,
+   "lon": 12.9838,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 7838,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 91
+      },
+      {
+       "name": "28",
+       "heading": 271
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.75,
+    "vhfLow": 42.2,
+    "vhf": 122.5,
+    "uhf": 253.8
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "AR",
+     "channel": 24
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Bad Durkheim",
+   "elevationFt": 348,
+   "lat": 49.4727,
+   "lon": 8.1949,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 2127,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 73
+      },
+      {
+       "name": "26",
+       "heading": 253
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.975,
+    "vhfLow": 41.45,
+    "vhf": 134.5,
+    "uhf": 253.05
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Barth",
+   "elevationFt": 21,
+   "lat": 54.3382,
+   "lon": 12.7097,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 3212,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 85
+      },
+      {
+       "name": "27",
+       "heading": 265
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.625,
+    "vhfLow": 41.8,
+    "vhf": 124.1,
+    "uhf": 254.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Bienenfarm",
+   "elevationFt": 98,
+   "lat": 52.6586,
+   "lon": 12.7471,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 2945,
+     "ends": [
+      {
+       "name": "30",
+       "heading": 296
+      },
+      {
+       "name": "12",
+       "heading": 116
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.025,
+    "vhfLow": 38.95,
+    "vhf": 134.7,
+    "uhf": 250.55
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Bindersleben",
+   "elevationFt": 1014,
+   "lat": 50.9795,
+   "lon": 10.9623,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 6418,
+     "ends": [
+      {
+       "name": "28",
+       "heading": 273
+      },
+      {
+       "name": "10",
+       "heading": 93
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.7,
+    "vhfLow": 40.3,
+    "vhf": 122.1,
+    "uhf": 251.9
+   },
+   "navaids": [],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "28",
+     "callsign": "IRF",
+     "frequency": 109.9
+    }
+   ]
+  },
+  {
+   "name": "Bitburg",
+   "elevationFt": 1211,
+   "lat": 49.9447,
+   "lon": 6.5642,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 7582,
+     "ends": [
+      {
+       "name": "24",
+       "heading": 232
+      },
+      {
+       "name": "06",
+       "heading": 52
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.325,
+    "vhfLow": 40.95,
+    "vhf": 118.7,
+    "uhf": 252.55
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "BIT",
+     "channel": 56
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "24",
+     "callsign": "IBIT",
+     "frequency": 111.9
+    }
+   ]
+  },
+  {
+   "name": "Bornholm",
+   "elevationFt": 49,
+   "lat": 55.0634,
+   "lon": 14.759,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 6449,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 108
+      },
+      {
+       "name": "29",
+       "heading": 288
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.775,
+    "vhfLow": 42.15,
+    "vhf": 118.35,
+    "uhf": 257.8
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "FAU",
+     "frequency": 334,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "ROE",
+     "channel": 57,
+     "band": "X",
+     "frequency": 112.0,
+     "unit": "MHz"
+    },
+    {
+     "type": "VOR",
+     "callsign": "ROE",
+     "frequency": 112.0,
+     "unit": "MHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "IAR",
+     "channel": 30,
+     "frequency": 112.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "11",
+     "callsign": "IAR",
+     "frequency": 109.35
+    },
+    {
+     "type": "ILS",
+     "runway": "29",
+     "callsign": "IRE",
+     "frequency": 110.3
+    }
+   ]
+  },
+  {
+   "name": "Brand",
+   "elevationFt": 164,
+   "lat": 52.0368,
+   "lon": 13.7464,
+   "runways": [
+    {
+     "name": "09L/27R",
+     "lengthFt": 7513,
+     "ends": [
+      {
+       "name": "27R",
+       "heading": 270
+      },
+      {
+       "name": "09L",
+       "heading": 90
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.8,
+    "vhfLow": 42.2,
+    "vhf": 122.3,
+    "uhf": 255.1
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "ZB",
+     "channel": 5
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Brandis",
+   "elevationFt": 509,
+   "lat": 51.3283,
+   "lon": 12.6564,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 6448,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 250
+      },
+      {
+       "name": "08",
+       "heading": 70
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.9,
+    "vhfLow": 42.25,
+    "vhf": 118.15,
+    "uhf": 255.15
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Braunschweig",
+   "elevationFt": 273,
+   "lat": 52.3191,
+   "lon": 10.5539,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 4442,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 261
+      },
+      {
+       "name": "08",
+       "heading": 81
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.925,
+    "vhfLow": 38.75,
+    "vhf": 120.05,
+    "uhf": 250.35
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "HLI",
+     "frequency": 404,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "26",
+     "callsign": "BWG",
+     "frequency": 111.1
+    }
+   ]
+  },
+  {
+   "name": "Bremen",
+   "elevationFt": 41,
+   "lat": 53.0469,
+   "lon": 8.7883,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 6013,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 84
+      },
+      {
+       "name": "27",
+       "heading": 264
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.225,
+    "vhfLow": 41.7,
+    "vhf": 118.45,
+    "uhf": 254.1
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "BMN",
+     "channel": 121,
+     "band": "Y",
+     "frequency": 117.45,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "09",
+     "callsign": "IBRE",
+     "frequency": 110.3
+    },
+    {
+     "type": "ILS",
+     "runway": "27",
+     "callsign": "IBRW",
+     "frequency": 110.9
+    }
+   ]
+  },
+  {
+   "name": "Briest",
+   "elevationFt": 115,
+   "lat": 52.4376,
+   "lon": 12.4539,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 7907,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 248
+      },
+      {
+       "name": "07",
+       "heading": 68
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.175,
+    "vhfLow": 40.2,
+    "vhf": 135.55,
+    "uhf": 254.15
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "UT",
+     "channel": 9
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Buchel",
+   "elevationFt": 1509,
+   "lat": 50.1741,
+   "lon": 7.0638,
+   "runways": [
+    {
+     "name": "03/21",
+     "lengthFt": 7981,
+     "ends": [
+      {
+       "name": "03",
+       "heading": 26
+      },
+      {
+       "name": "21",
+       "heading": 206
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.575,
+    "vhfLow": 41.3,
+    "vhf": 122.1,
+    "uhf": 252.9
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "BUE",
+     "channel": 118
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Buckeburg",
+   "elevationFt": 193,
+   "lat": 52.2786,
+   "lon": 9.0833,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 5470,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 74
+      },
+      {
+       "name": "26",
+       "heading": 254
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.9,
+    "vhfLow": 39.55,
+    "vhf": 118.05,
+    "uhf": 254.2
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "BYC",
+     "frequency": 368,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Celle",
+   "elevationFt": 126,
+   "lat": 52.5914,
+   "lon": 10.0243,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 6803,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 257
+      },
+      {
+       "name": "08",
+       "heading": 77
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.075,
+    "vhfLow": 41.9,
+    "vhf": 122.1,
+    "uhf": 254.6
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "CEL",
+     "frequency": 311,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Chojna",
+   "elevationFt": 176,
+   "lat": 52.9396,
+   "lon": 14.422,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 7203,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 267
+      },
+      {
+       "name": "09",
+       "heading": 86
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 5.0,
+    "vhfLow": 38.4,
+    "vhf": 118.0,
+    "uhf": 225.0
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "AT",
+     "channel": 43
+    }
+   ],
+   "approaches": [
+    {
+     "type": "PRMG",
+     "runway": "09",
+     "callsign": "AJ",
+     "channel": 41
+    },
+    {
+     "type": "PRMG",
+     "runway": "27",
+     "callsign": "AT",
+     "channel": 41
+    }
+   ]
+  },
+  {
+   "name": "Cochstedt",
+   "elevationFt": 569,
+   "lat": 51.8559,
+   "lon": 11.4179,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 8075,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 73
+      },
+      {
+       "name": "26",
+       "heading": 253
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.125,
+    "vhfLow": 38.45,
+    "vhf": 126.0,
+    "uhf": 254.7
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Cologne",
+   "elevationFt": 236,
+   "lat": 50.8679,
+   "lon": 7.1475,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 7354,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 61
+      },
+      {
+       "name": "25",
+       "heading": 241
+      }
+     ]
+    },
+    {
+     "name": "14L/32R",
+     "lengthFt": 9701,
+     "ends": [
+      {
+       "name": "14L",
+       "heading": 134
+      },
+      {
+       "name": "32R",
+       "heading": 314
+      }
+     ]
+    },
+    {
+     "name": "14R/32L",
+     "lengthFt": 5337,
+     "ends": [
+      {
+       "name": "14R",
+       "heading": 134
+      },
+      {
+       "name": "32L",
+       "heading": 314
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.925,
+    "vhfLow": 42.3,
+    "vhf": 119.7,
+    "uhf": 255.2
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "KBO",
+     "frequency": 112.15,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "14L",
+     "callsign": "IKES",
+     "frequency": 110.9
+    },
+    {
+     "type": "ILS",
+     "runway": "25",
+     "callsign": "DLW",
+     "frequency": 109.1
+    },
+    {
+     "type": "ILS",
+     "runway": "32R",
+     "callsign": "IKEN",
+     "frequency": 111.1
+    }
+   ]
+  },
+  {
+   "name": "Damgarten",
+   "elevationFt": 26,
+   "lat": 54.264,
+   "lon": 12.4442,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 7733,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 67
+      },
+      {
+       "name": "25",
+       "heading": 247
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.0,
+    "vhfLow": 38.9,
+    "vhf": 127.1,
+    "uhf": 250.5
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "MA",
+     "channel": 32
+    }
+   ],
+   "approaches": [
+    {
+     "type": "PRMG",
+     "runway": "07",
+     "callsign": "MA",
+     "channel": 34
+    },
+    {
+     "type": "PRMG",
+     "runway": "25",
+     "callsign": "MO",
+     "channel": 34
+    }
+   ]
+  },
+  {
+   "name": "Dedelow",
+   "elevationFt": 176,
+   "lat": 53.3555,
+   "lon": 13.7851,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 3534,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 90
+      },
+      {
+       "name": "28",
+       "heading": 270
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.85,
+    "vhfLow": 38.6,
+    "vhf": 119.0,
+    "uhf": 250.2
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Dessau",
+   "elevationFt": 195,
+   "lat": 51.8317,
+   "lon": 12.1931,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 7309,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 86
+      },
+      {
+       "name": "27",
+       "heading": 266
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.825,
+    "vhfLow": 41.3,
+    "vhf": 127.5,
+    "uhf": 254.4
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Dusseldorf",
+   "elevationFt": 121,
+   "lat": 51.287,
+   "lon": 6.7677,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 6749,
+     "ends": [
+      {
+       "name": "05",
+       "heading": 49
+      },
+      {
+       "name": "23",
+       "heading": 230
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.1,
+    "vhfLow": 42.4,
+    "vhf": 118.3,
+    "uhf": 255.25
+   },
+   "navaids": [
+    {
+     "type": "VOR",
+     "callsign": "DUS",
+     "frequency": 115.15,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "05",
+     "callsign": "IDSE",
+     "frequency": 111.5
+    },
+    {
+     "type": "ILS",
+     "runway": "23",
+     "callsign": "IDSW",
+     "frequency": 109.9
+    }
+   ]
+  },
+  {
+   "name": "Falkenberg",
+   "elevationFt": 285,
+   "lat": 51.5465,
+   "lon": 13.2161,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 9401,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 255
+      },
+      {
+       "name": "08",
+       "heading": 75
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.1,
+    "vhfLow": 42.35,
+    "vhf": 118.4,
+    "uhf": 255.3
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "B",
+     "frequency": 938,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "BL",
+     "frequency": 462,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "BL",
+     "frequency": 462,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "S",
+     "frequency": 938,
+     "unit": "kHz"
+    },
+    {
+     "type": "RSBN",
+     "callsign": "BL",
+     "channel": 34
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Fassberg",
+   "elevationFt": 254,
+   "lat": 52.9194,
+   "lon": 10.1848,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 8145,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 83
+      },
+      {
+       "name": "27",
+       "heading": 263
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.25,
+    "vhfLow": 39.4,
+    "vhf": 122.1,
+    "uhf": 251.0
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "FSB",
+     "frequency": 284,
+     "unit": "kHz"
+    },
+    {
+     "type": "VORTAC",
+     "callsign": "FSB",
+     "channel": 95,
+     "frequency": 110.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Finow",
+   "elevationFt": 111,
+   "lat": 52.8271,
+   "lon": 13.694,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 8048,
+     "ends": [
+      {
+       "name": "28",
+       "heading": 275
+      },
+      {
+       "name": "10",
+       "heading": 95
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.3,
+    "vhfLow": 39.5,
+    "vhf": 125.8,
+    "uhf": 251.1
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Frankfurt",
+   "elevationFt": 328,
+   "lat": 50.0404,
+   "lon": 8.5673,
+   "runways": [
+    {
+     "name": "07L/25R",
+     "lengthFt": 13538,
+     "ends": [
+      {
+       "name": "25R",
+       "heading": 246
+      },
+      {
+       "name": "07L",
+       "heading": 66
+      }
+     ]
+    },
+    {
+     "name": "07R/25L",
+     "lengthFt": 12467,
+     "ends": [
+      {
+       "name": "25L",
+       "heading": 246
+      },
+      {
+       "name": "07R",
+       "heading": 66
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.675,
+    "vhfLow": 40.25,
+    "vhf": 127.3,
+    "uhf": 251.85
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "FFM",
+     "frequency": 320,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "FR",
+     "frequency": 297,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "FW",
+     "frequency": 382,
+     "unit": "kHz"
+    },
+    {
+     "type": "VORTAC",
+     "callsign": "FFM",
+     "channel": 89,
+     "band": "X",
+     "frequency": 114.2,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "07L",
+     "callsign": "IFM",
+     "frequency": 110.7
+    },
+    {
+     "type": "ILS",
+     "runway": "07R",
+     "callsign": "DLF",
+     "frequency": 109.5
+    },
+    {
+     "type": "ILS",
+     "runway": "25L",
+     "callsign": "IRF",
+     "frequency": 111.1
+    },
+    {
+     "type": "ILS",
+     "runway": "25R",
+     "callsign": "RHM",
+     "frequency": 110.1
+    }
+   ]
+  },
+  {
+   "name": "Fritzlar",
+   "elevationFt": 552,
+   "lat": 51.1146,
+   "lon": 9.2858,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 2894,
+     "ends": [
+      {
+       "name": "30",
+       "heading": 295
+      },
+      {
+       "name": "12",
+       "heading": 115
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.425,
+    "vhfLow": 39.75,
+    "vhf": 126.5,
+    "uhf": 251.35
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "FTZ",
+     "frequency": 468,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Fulda",
+   "elevationFt": 937,
+   "lat": 50.5399,
+   "lon": 9.643,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 1890,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 259
+      },
+      {
+       "name": "09",
+       "heading": 79
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.75,
+    "vhfLow": 40.4,
+    "vhf": 126.0,
+    "uhf": 252.0
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "FDA",
+     "frequency": 441,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Gardelegen",
+   "elevationFt": 183,
+   "lat": 52.5295,
+   "lon": 11.3501,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 3539,
+     "ends": [
+      {
+       "name": "29",
+       "heading": 284
+      },
+      {
+       "name": "11",
+       "heading": 104
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.075,
+    "vhfLow": 39.05,
+    "vhf": 119.0,
+    "uhf": 250.65
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "GN",
+     "channel": 36
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Garz",
+   "elevationFt": 66,
+   "lat": 53.8785,
+   "lon": 14.1535,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 6438,
+     "ends": [
+      {
+       "name": "28",
+       "heading": 280
+      },
+      {
+       "name": "10",
+       "heading": 100
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.325,
+    "vhfLow": 39.55,
+    "vhf": 132.8,
+    "uhf": 251.15
+   },
+   "navaids": [],
+   "approaches": [
+    {
+     "type": "PRMG",
+     "runway": "10",
+     "callsign": "GA",
+     "channel": 38
+    },
+    {
+     "type": "PRMG",
+     "runway": "28",
+     "callsign": "GZ",
+     "channel": 38
+    }
+   ]
+  },
+  {
+   "name": "Gatow",
+   "elevationFt": 136,
+   "lat": 52.4753,
+   "lon": 13.1381,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 5834,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 254
+      },
+      {
+       "name": "08",
+       "heading": 74
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.4,
+    "vhfLow": 39.7,
+    "vhf": 122.1,
+    "uhf": 251.3
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "GW",
+     "frequency": 370,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "HVL",
+     "frequency": 113.3,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "26",
+     "callsign": "GWW",
+     "frequency": 108.9
+    }
+   ]
+  },
+  {
+   "name": "Gelnhausen",
+   "elevationFt": 417,
+   "lat": 50.1963,
+   "lon": 9.167,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 3562,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 77
+      },
+      {
+       "name": "27",
+       "heading": 257
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.95,
+    "vhfLow": 41.5,
+    "vhf": 119.0,
+    "uhf": 253.1
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Giebelstadt",
+   "elevationFt": 953,
+   "lat": 49.6479,
+   "lon": 9.9647,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 5843,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 74
+      },
+      {
+       "name": "26",
+       "heading": 254
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.55,
+    "vhfLow": 40.0,
+    "vhf": 135.9,
+    "uhf": 251.6
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "GBL",
+     "frequency": 507,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "GBL",
+     "channel": 47
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Glindbruchkippe",
+   "elevationFt": 159,
+   "lat": 52.3238,
+   "lon": 10.1805,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 3556,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 91
+      },
+      {
+       "name": "28",
+       "heading": 271
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.1,
+    "vhfLow": 39.1,
+    "vhf": 119.0,
+    "uhf": 250.7
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Gross Mohrdorf",
+   "elevationFt": 10,
+   "lat": 54.3832,
+   "lon": 12.9123,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 7584,
+     "ends": [
+      {
+       "name": "13",
+       "heading": 120
+      },
+      {
+       "name": "31",
+       "heading": 300
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.7,
+    "vhfLow": 40.35,
+    "vhf": 127.0,
+    "uhf": 254.25
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Grosse Wiese",
+   "elevationFt": 278,
+   "lat": 52.1369,
+   "lon": 10.5708,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 2536,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 249
+      },
+      {
+       "name": "08",
+       "heading": 69
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.375,
+    "vhfLow": 39.65,
+    "vhf": 134.6,
+    "uhf": 251.25
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Gutersloh",
+   "elevationFt": 213,
+   "lat": 51.9228,
+   "lon": 8.3041,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 6031,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 87
+      },
+      {
+       "name": "27",
+       "heading": 267
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.85,
+    "vhfLow": 40.6,
+    "vhf": 122.1,
+    "uhf": 252.2
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "GS",
+     "frequency": 412,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "GSO",
+     "channel": 108
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "27",
+     "callsign": "GS",
+     "frequency": 110.7
+    }
+   ]
+  },
+  {
+   "name": "H FRG 01",
+   "elevationFt": 277,
+   "lat": 52.2661,
+   "lon": 10.6156,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 02",
+   "elevationFt": 10,
+   "lat": 53.8786,
+   "lon": 10.6425,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 03",
+   "elevationFt": 121,
+   "lat": 53.6442,
+   "lon": 10.1401,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 04",
+   "elevationFt": 96,
+   "lat": 53.4422,
+   "lon": 10.5179,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 05",
+   "elevationFt": 213,
+   "lat": 53.1593,
+   "lon": 10.9483,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 06",
+   "elevationFt": 13,
+   "lat": 53.0727,
+   "lon": 8.9079,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 07",
+   "elevationFt": 33,
+   "lat": 53.1155,
+   "lon": 11.184,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 08",
+   "elevationFt": 190,
+   "lat": 52.606,
+   "lon": 10.6305,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 09",
+   "elevationFt": 230,
+   "lat": 52.5182,
+   "lon": 10.8443,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 10",
+   "elevationFt": 215,
+   "lat": 52.3862,
+   "lon": 9.771,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 11",
+   "elevationFt": 230,
+   "lat": 52.8054,
+   "lon": 10.0511,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 12",
+   "elevationFt": 151,
+   "lat": 53.6757,
+   "lon": 10.8007,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 13",
+   "elevationFt": 293,
+   "lat": 52.0314,
+   "lon": 8.5831,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 14",
+   "elevationFt": 197,
+   "lat": 52.4647,
+   "lon": 13.2231,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 15",
+   "elevationFt": 161,
+   "lat": 52.6035,
+   "lon": 13.3149,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 16",
+   "elevationFt": 344,
+   "lat": 52.1103,
+   "lon": 9.4446,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 17",
+   "elevationFt": 85,
+   "lat": 53.151,
+   "lon": 9.4813,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 18",
+   "elevationFt": 172,
+   "lat": 54.1506,
+   "lon": 10.5524,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 19",
+   "elevationFt": 10,
+   "lat": 53.4646,
+   "lon": 9.9082,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 20",
+   "elevationFt": 1979,
+   "lat": 51.7133,
+   "lon": 10.5891,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 21",
+   "elevationFt": 367,
+   "lat": 52.3358,
+   "lon": 10.6394,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 23",
+   "elevationFt": 249,
+   "lat": 52.948,
+   "lon": 10.1155,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 25",
+   "elevationFt": 1332,
+   "lat": 50.7241,
+   "lon": 9.9319,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 27",
+   "elevationFt": 579,
+   "lat": 51.3234,
+   "lon": 9.4771,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 30",
+   "elevationFt": 1601,
+   "lat": 50.0196,
+   "lon": 7.349,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 31",
+   "elevationFt": 1400,
+   "lat": 49.9201,
+   "lon": 7.293,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 32",
+   "elevationFt": 1022,
+   "lat": 49.4747,
+   "lon": 7.8815,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 34",
+   "elevationFt": 265,
+   "lat": 50.4165,
+   "lon": 7.4418,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 38",
+   "elevationFt": 1408,
+   "lat": 50.518,
+   "lon": 9.1347,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 39",
+   "elevationFt": 1059,
+   "lat": 50.5773,
+   "lon": 9.6956,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 40",
+   "elevationFt": 279,
+   "lat": 50.3741,
+   "lon": 7.584,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 41",
+   "elevationFt": 790,
+   "lat": 49.7933,
+   "lon": 9.985,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 42",
+   "elevationFt": 745,
+   "lat": 49.8282,
+   "lon": 9.8874,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 43",
+   "elevationFt": 1046,
+   "lat": 49.7601,
+   "lon": 9.4911,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 44",
+   "elevationFt": 421,
+   "lat": 49.9441,
+   "lon": 8.9162,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 45",
+   "elevationFt": 1290,
+   "lat": 49.7446,
+   "lon": 9.0717,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 46",
+   "elevationFt": 1050,
+   "lat": 50.0509,
+   "lon": 9.8238,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 47",
+   "elevationFt": 1403,
+   "lat": 49.5761,
+   "lon": 9.3499,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 48",
+   "elevationFt": 1161,
+   "lat": 49.922,
+   "lon": 6.6771,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 49",
+   "elevationFt": 344,
+   "lat": 50.0694,
+   "lon": 8.5659,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 50",
+   "elevationFt": 266,
+   "lat": 52.8318,
+   "lon": 9.7753,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H FRG 51",
+   "elevationFt": 1444,
+   "lat": 49.6135,
+   "lon": 7.3811,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 01",
+   "elevationFt": 176,
+   "lat": 53.4381,
+   "lon": 11.1448,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 02",
+   "elevationFt": 75,
+   "lat": 52.6188,
+   "lon": 12.3561,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 03",
+   "elevationFt": 236,
+   "lat": 53.1121,
+   "lon": 13.5265,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 04",
+   "elevationFt": 230,
+   "lat": 53.5241,
+   "lon": 13.3203,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 05",
+   "elevationFt": 54,
+   "lat": 53.6385,
+   "lon": 13.8971,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 06",
+   "elevationFt": 120,
+   "lat": 52.4145,
+   "lon": 12.5345,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 07",
+   "elevationFt": 66,
+   "lat": 52.9845,
+   "lon": 11.7031,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 08",
+   "elevationFt": 246,
+   "lat": 52.7072,
+   "lon": 13.5433,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 09",
+   "elevationFt": 82,
+   "lat": 53.8673,
+   "lon": 13.1156,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 10",
+   "elevationFt": 127,
+   "lat": 52.5046,
+   "lon": 13.5247,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 11",
+   "elevationFt": 144,
+   "lat": 52.3854,
+   "lon": 13.6113,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 12",
+   "elevationFt": 290,
+   "lat": 52.4848,
+   "lon": 11.5964,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 13",
+   "elevationFt": 236,
+   "lat": 53.6092,
+   "lon": 12.2062,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 14",
+   "elevationFt": 184,
+   "lat": 53.044,
+   "lon": 13.382,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 15",
+   "elevationFt": 303,
+   "lat": 52.1862,
+   "lon": 12.1791,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 16",
+   "elevationFt": 246,
+   "lat": 52.2212,
+   "lon": 11.7811,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 17",
+   "elevationFt": 74,
+   "lat": 53.9001,
+   "lon": 11.3872,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 18",
+   "elevationFt": 757,
+   "lat": 51.8481,
+   "lon": 10.7666,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 19",
+   "elevationFt": 436,
+   "lat": 51.8459,
+   "lon": 11.2938,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 21",
+   "elevationFt": 49,
+   "lat": 54.281,
+   "lon": 12.5186,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 22",
+   "elevationFt": 179,
+   "lat": 52.0706,
+   "lon": 13.0891,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 24",
+   "elevationFt": 179,
+   "lat": 52.1666,
+   "lon": 13.4842,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 25",
+   "elevationFt": 705,
+   "lat": 51.1387,
+   "lon": 11.7723,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 26",
+   "elevationFt": 347,
+   "lat": 51.4939,
+   "lon": 11.9075,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 30",
+   "elevationFt": 180,
+   "lat": 54.5105,
+   "lon": 13.6182,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 31",
+   "elevationFt": 16,
+   "lat": 54.3689,
+   "lon": 13.0857,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 32",
+   "elevationFt": 148,
+   "lat": 54.3474,
+   "lon": 13.4555,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 33",
+   "elevationFt": 1230,
+   "lat": 50.8592,
+   "lon": 10.7431,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H GDR 34",
+   "elevationFt": 249,
+   "lat": 53.0725,
+   "lon": 12.6297,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med FRG 01",
+   "elevationFt": 10,
+   "lat": 53.848,
+   "lon": 10.6884,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med FRG 02",
+   "elevationFt": 46,
+   "lat": 53.5613,
+   "lon": 10.0246,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med FRG 04",
+   "elevationFt": 90,
+   "lat": 53.2523,
+   "lon": 10.3982,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med FRG 06",
+   "elevationFt": 189,
+   "lat": 52.2964,
+   "lon": 8.8912,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med FRG 11",
+   "elevationFt": 394,
+   "lat": 51.7303,
+   "lon": 8.7782,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med FRG 12",
+   "elevationFt": 1870,
+   "lat": 51.8172,
+   "lon": 10.3362,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med FRG 13",
+   "elevationFt": 916,
+   "lat": 49.4527,
+   "lon": 7.7671,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med FRG 14",
+   "elevationFt": 787,
+   "lat": 50.9747,
+   "lon": 9.8047,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med FRG 15",
+   "elevationFt": 791,
+   "lat": 51.257,
+   "lon": 9.3797,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med FRG 16",
+   "elevationFt": 732,
+   "lat": 51.5529,
+   "lon": 8.3321,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med FRG 17",
+   "elevationFt": 758,
+   "lat": 51.3992,
+   "lon": 9.6598,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med FRG 21",
+   "elevationFt": 746,
+   "lat": 49.2461,
+   "lon": 7.3652,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med FRG 24",
+   "elevationFt": 810,
+   "lat": 51.5542,
+   "lon": 8.5684,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med FRG 26",
+   "elevationFt": 512,
+   "lat": 49.9275,
+   "lon": 6.8398,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med FRG 27",
+   "elevationFt": 550,
+   "lat": 50.0773,
+   "lon": 8.2163,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med FRG 29",
+   "elevationFt": 1158,
+   "lat": 49.4025,
+   "lon": 7.5586,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med GDR 01",
+   "elevationFt": 79,
+   "lat": 54.0933,
+   "lon": 12.0887,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med GDR 02",
+   "elevationFt": 52,
+   "lat": 54.3024,
+   "lon": 13.072,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med GDR 03",
+   "elevationFt": 10,
+   "lat": 54.0909,
+   "lon": 13.3761,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med GDR 08",
+   "elevationFt": 148,
+   "lat": 52.271,
+   "lon": 11.8782,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med GDR 09",
+   "elevationFt": 149,
+   "lat": 52.1624,
+   "lon": 11.633,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med GDR 10",
+   "elevationFt": 230,
+   "lat": 51.9598,
+   "lon": 12.1009,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med GDR 11",
+   "elevationFt": 1575,
+   "lat": 51.7709,
+   "lon": 10.7905,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med GDR 12",
+   "elevationFt": 755,
+   "lat": 50.9879,
+   "lon": 10.3164,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med GDR 13",
+   "elevationFt": 748,
+   "lat": 51.2893,
+   "lon": 10.7434,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med GDR 14",
+   "elevationFt": 843,
+   "lat": 50.8091,
+   "lon": 10.2187,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Med GDR 16",
+   "elevationFt": 614,
+   "lat": 50.8861,
+   "lon": 11.6173,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Radar FRG 02",
+   "elevationFt": 2820,
+   "lat": 50.2333,
+   "lon": 8.4579,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Radar GDR 01",
+   "elevationFt": 3744,
+   "lat": 51.7998,
+   "lon": 10.6125,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Radar GDR 02",
+   "elevationFt": 2605,
+   "lat": 50.5718,
+   "lon": 10.0852,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Radar GDR 03",
+   "elevationFt": 1591,
+   "lat": 51.1078,
+   "lon": 10.1937,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Radar GDR 04",
+   "elevationFt": 1929,
+   "lat": 51.624,
+   "lon": 10.7242,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Radar GDR 05",
+   "elevationFt": 895,
+   "lat": 52.0064,
+   "lon": 10.7235,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Radar GDR 06",
+   "elevationFt": 427,
+   "lat": 52.3254,
+   "lon": 11.4556,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Radar GDR 07",
+   "elevationFt": 88,
+   "lat": 53.2802,
+   "lon": 11.0811,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Radar GDR 08",
+   "elevationFt": 387,
+   "lat": 52.7919,
+   "lon": 10.8113,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H Radar GDR 09",
+   "elevationFt": 285,
+   "lat": 52.494,
+   "lon": 14.0886,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Hahn",
+   "elevationFt": 1621,
+   "lat": 49.9485,
+   "lon": 7.2639,
+   "runways": [
+    {
+     "name": "03/21",
+     "lengthFt": 7157,
+     "ends": [
+      {
+       "name": "21",
+       "heading": 209
+      },
+      {
+       "name": "03",
+       "heading": 29
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.45,
+    "vhfLow": 39.8,
+    "vhf": 119.5,
+    "uhf": 251.4
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "HAH",
+     "channel": 24,
+     "frequency": 482.0,
+     "unit": "MHz"
+    },
+    {
+     "type": "VOR",
+     "callsign": "HAH",
+     "frequency": 113.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "03",
+     "callsign": "IHAE",
+     "frequency": 109.3
+    },
+    {
+     "type": "ILS",
+     "runway": "21",
+     "callsign": "IHAW",
+     "frequency": 111.3
+    }
+   ]
+  },
+  {
+   "name": "Haina",
+   "elevationFt": 1018,
+   "lat": 50.9917,
+   "lon": 10.4796,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 7091,
+     "ends": [
+      {
+       "name": "28",
+       "heading": 280
+      },
+      {
+       "name": "10",
+       "heading": 100
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.625,
+    "vhfLow": 40.15,
+    "vhf": 119.75,
+    "uhf": 251.75
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Hamburg",
+   "elevationFt": 73,
+   "lat": 53.6268,
+   "lon": 9.9813,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 9678,
+     "ends": [
+      {
+       "name": "23",
+       "heading": 226
+      },
+      {
+       "name": "05",
+       "heading": 46
+      }
+     ]
+    },
+    {
+     "name": "15/33",
+     "lengthFt": 10689,
+     "ends": [
+      {
+       "name": "33",
+       "heading": 329
+      },
+      {
+       "name": "15",
+       "heading": 149
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.925,
+    "vhfLow": 40.75,
+    "vhf": 126.85,
+    "uhf": 252.35
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "ALF",
+     "channel": 105,
+     "band": "X",
+     "frequency": 115.8,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "05",
+     "callsign": "IHHE",
+     "frequency": 110.5
+    },
+    {
+     "type": "ILS",
+     "runway": "15",
+     "callsign": "IHHS",
+     "frequency": 111.35
+    },
+    {
+     "type": "ILS",
+     "runway": "23",
+     "callsign": "IHHW",
+     "frequency": 111.5
+    },
+    {
+     "type": "ILS",
+     "runway": "33",
+     "callsign": "IHHN",
+     "frequency": 109.9
+    }
+   ]
+  },
+  {
+   "name": "Hamburg Finkenwerder",
+   "elevationFt": 10,
+   "lat": 53.5341,
+   "lon": 9.8329,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 5852,
+     "ends": [
+      {
+       "name": "05",
+       "heading": 47
+      },
+      {
+       "name": "23",
+       "heading": 227
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.95,
+    "vhfLow": 40.8,
+    "vhf": 123.2,
+    "uhf": 252.4
+   },
+   "navaids": [],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "05",
+     "callsign": "IHFW",
+     "frequency": 108.5
+    },
+    {
+     "type": "ILS",
+     "runway": "23",
+     "callsign": "IHFE",
+     "frequency": 110.7
+    }
+   ]
+  },
+  {
+   "name": "Hannover",
+   "elevationFt": 168,
+   "lat": 52.4545,
+   "lon": 9.6938,
+   "runways": [
+    {
+     "name": "09L/27R",
+     "lengthFt": 8683,
+     "ends": [
+      {
+       "name": "27R",
+       "heading": 268
+      },
+      {
+       "name": "09L",
+       "heading": 88
+      }
+     ]
+    },
+    {
+     "name": "09R/27L",
+     "lengthFt": 7501,
+     "ends": [
+      {
+       "name": "27L",
+       "heading": 268
+      },
+      {
+       "name": "09R",
+       "heading": 88
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.525,
+    "vhfLow": 40.85,
+    "vhf": 120.2,
+    "uhf": 252.45
+   },
+   "navaids": [
+    {
+     "type": "DME",
+     "callsign": "HAD",
+     "channel": 86
+    },
+    {
+     "type": "NDB",
+     "callsign": "HA",
+     "frequency": 320,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "HAE",
+     "frequency": 332,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "HW",
+     "frequency": 358,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "09L",
+     "callsign": "IHNW",
+     "frequency": 108.9
+    },
+    {
+     "type": "ILS",
+     "runway": "09R",
+     "callsign": "IHSW",
+     "frequency": 109.5
+    },
+    {
+     "type": "ILS",
+     "runway": "27L",
+     "callsign": "IHSE",
+     "frequency": 108.7
+    },
+    {
+     "type": "ILS",
+     "runway": "27R",
+     "callsign": "IHNE",
+     "frequency": 108.3
+    }
+   ]
+  },
+  {
+   "name": "Hasselfelde",
+   "elevationFt": 1619,
+   "lat": 51.7054,
+   "lon": 10.8787,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 3325,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 261
+      },
+      {
+       "name": "09",
+       "heading": 81
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.35,
+    "vhfLow": 39.6,
+    "vhf": 119.0,
+    "uhf": 251.2
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Heidelberg",
+   "elevationFt": 346,
+   "lat": 49.3935,
+   "lon": 8.6521,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 3304,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 257
+      },
+      {
+       "name": "08",
+       "heading": 77
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.85,
+    "vhfLow": 42.0,
+    "vhf": 142.2,
+    "uhf": 257.8
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "HDL",
+     "frequency": 417,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Herrenteich",
+   "elevationFt": 305,
+   "lat": 49.3435,
+   "lon": 8.4899,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 2910,
+     "ends": [
+      {
+       "name": "06",
+       "heading": 36
+      },
+      {
+       "name": "24",
+       "heading": 216
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.3,
+    "vhfLow": 41.55,
+    "vhf": 127.4,
+    "uhf": 253.15
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Hildesheim",
+   "elevationFt": 322,
+   "lat": 52.1798,
+   "lon": 9.9458,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 3872,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 250
+      },
+      {
+       "name": "07",
+       "heading": 70
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.15,
+    "vhfLow": 39.2,
+    "vhf": 118.3,
+    "uhf": 250.8
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Hockenheim",
+   "elevationFt": 323,
+   "lat": 49.3253,
+   "lon": 8.5275,
+   "runways": [
+    {
+     "name": "15/33",
+     "lengthFt": 2779,
+     "ends": [
+      {
+       "name": "33",
+       "heading": 319
+      },
+      {
+       "name": "15",
+       "heading": 139
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.05,
+    "vhfLow": 41.6,
+    "vhf": 134.6,
+    "uhf": 253.2
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Holzdorf",
+   "elevationFt": 245,
+   "lat": 51.7678,
+   "lon": 13.1697,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 8731,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 268
+      },
+      {
+       "name": "09",
+       "heading": 88
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.225,
+    "vhfLow": 39.35,
+    "vhf": 118.2,
+    "uhf": 250.95
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "HX",
+     "channel": 33
+    }
+   ],
+   "approaches": [
+    {
+     "type": "PRMG",
+     "runway": "09",
+     "callsign": "HO",
+     "channel": 31
+    },
+    {
+     "type": "PRMG",
+     "runway": "27",
+     "callsign": "HX",
+     "channel": 31
+    }
+   ]
+  },
+  {
+   "name": "Kammermark",
+   "elevationFt": 287,
+   "lat": 53.196,
+   "lon": 12.165,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 3541,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 73
+      },
+      {
+       "name": "26",
+       "heading": 253
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.875,
+    "vhfLow": 38.65,
+    "vhf": 119.0,
+    "uhf": 250.25
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Kastrup",
+   "elevationFt": 25,
+   "lat": 55.6192,
+   "lon": 12.6524,
+   "runways": [
+    {
+     "name": "04L/22R",
+     "lengthFt": 9201,
+     "ends": [
+      {
+       "name": "04L",
+       "heading": 36
+      },
+      {
+       "name": "22R",
+       "heading": 216
+      }
+     ]
+    },
+    {
+     "name": "04R/22L",
+     "lengthFt": 10257,
+     "ends": [
+      {
+       "name": "04R",
+       "heading": 36
+      },
+      {
+       "name": "22L",
+       "heading": 216
+      }
+     ]
+    },
+    {
+     "name": "12/30",
+     "lengthFt": 6196,
+     "ends": [
+      {
+       "name": "30",
+       "heading": 298
+      },
+      {
+       "name": "12",
+       "heading": 118
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.15,
+    "vhfLow": 39.65,
+    "vhf": 118.1,
+    "uhf": 255.4
+   },
+   "navaids": [
+    {
+     "type": "DME",
+     "callsign": "CH",
+     "channel": 42,
+     "band": "X",
+     "frequency": 110.5,
+     "unit": "MHz"
+    },
+    {
+     "type": "DME",
+     "callsign": "KA",
+     "channel": 36,
+     "band": "X",
+     "frequency": 109.9,
+     "unit": "MHz"
+    },
+    {
+     "type": "DME",
+     "callsign": "KLK",
+     "channel": 46,
+     "band": "X",
+     "frequency": 110.9,
+     "unit": "MHz"
+    },
+    {
+     "type": "DME",
+     "callsign": "NE",
+     "channel": 30,
+     "band": "X",
+     "frequency": 109.3,
+     "unit": "MHz"
+    },
+    {
+     "type": "DME",
+     "callsign": "OXS",
+     "channel": 32,
+     "frequency": 110.5,
+     "unit": "MHz"
+    },
+    {
+     "type": "DME",
+     "callsign": "OY",
+     "channel": 26,
+     "band": "X",
+     "frequency": 108.9,
+     "unit": "MHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "KAS",
+     "frequency": 340,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR",
+     "callsign": "KAS",
+     "frequency": 112.5,
+     "unit": "MHz"
+    },
+    {
+     "type": "VORTAC",
+     "callsign": "KAS",
+     "channel": 72,
+     "band": "X",
+     "frequency": 112.5,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "04L",
+     "callsign": "CH",
+     "frequency": 110.5
+    },
+    {
+     "type": "ILS",
+     "runway": "04R",
+     "callsign": "NE",
+     "frequency": 109.3
+    },
+    {
+     "type": "ILS",
+     "runway": "12",
+     "callsign": "KA",
+     "frequency": 109.9
+    },
+    {
+     "type": "ILS",
+     "runway": "22L",
+     "callsign": "OXS",
+     "frequency": 109.5
+    },
+    {
+     "type": "ILS",
+     "runway": "22R",
+     "callsign": "KLK",
+     "frequency": 110.9
+    },
+    {
+     "type": "ILS",
+     "runway": "30",
+     "callsign": "OY",
+     "frequency": 108.9
+    }
+   ]
+  },
+  {
+   "name": "Kiel",
+   "elevationFt": 36,
+   "lat": 54.3795,
+   "lon": 10.1447,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 3736,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 78
+      },
+      {
+       "name": "26",
+       "heading": 258
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.625,
+    "vhfLow": 41.85,
+    "vhf": 119.9,
+    "uhf": 255.45
+   },
+   "navaids": [
+    {
+     "type": "DME",
+     "callsign": "KHD",
+     "channel": 109
+    },
+    {
+     "type": "NDB",
+     "callsign": "KIL",
+     "frequency": 384,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "08",
+     "callsign": "IKHE",
+     "frequency": 109.5
+    },
+    {
+     "type": "ILS",
+     "runway": "26",
+     "callsign": "IKHW",
+     "frequency": 109.55
+    }
+   ]
+  },
+  {
+   "name": "Kothen",
+   "elevationFt": 284,
+   "lat": 51.7214,
+   "lon": 11.9615,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 7992,
+     "ends": [
+      {
+       "name": "28",
+       "heading": 264
+      },
+      {
+       "name": "10",
+       "heading": 84
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.25,
+    "vhfLow": 39.8,
+    "vhf": 125.9,
+    "uhf": 254.35
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "KT",
+     "channel": 35
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Laage",
+   "elevationFt": 115,
+   "lat": 53.9181,
+   "lon": 12.2794,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 8131,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 93
+      },
+      {
+       "name": "28",
+       "heading": 273
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.65,
+    "vhfLow": 41.1,
+    "vhf": 129.5,
+    "uhf": 252.7
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "LR",
+     "channel": 40
+    }
+   ],
+   "approaches": [
+    {
+     "type": "PRMG",
+     "runway": "10",
+     "callsign": "LR",
+     "channel": 38
+    }
+   ]
+  },
+  {
+   "name": "Landstuhl",
+   "elevationFt": 1182,
+   "lat": 49.4031,
+   "lon": 7.5363,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 33,
+     "ends": [
+      {
+       "name": "31",
+       "heading": 281
+      },
+      {
+       "name": "13",
+       "heading": 101
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.75,
+    "vhfLow": 38.45,
+    "vhf": 138.6,
+    "uhf": 266.65
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Langenselbold",
+   "elevationFt": 391,
+   "lat": 50.1746,
+   "lon": 9.0633,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 2910,
+     "ends": [
+      {
+       "name": "24",
+       "heading": 233
+      },
+      {
+       "name": "06",
+       "heading": 53
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.875,
+    "vhfLow": 41.65,
+    "vhf": 126.1,
+    "uhf": 253.25
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Larz",
+   "elevationFt": 209,
+   "lat": 53.3064,
+   "lon": 12.7525,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 7653,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 70
+      },
+      {
+       "name": "26",
+       "heading": 250
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.45,
+    "vhfLow": 41.15,
+    "vhf": 129.9,
+    "uhf": 252.75
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "LZ",
+     "channel": 37
+    }
+   ],
+   "approaches": [
+    {
+     "type": "PRMG",
+     "runway": "08",
+     "callsign": "LZ",
+     "channel": 39
+    },
+    {
+     "type": "PRMG",
+     "runway": "26",
+     "callsign": "BA",
+     "channel": 39
+    }
+   ]
+  },
+  {
+   "name": "Leipzig Mockau",
+   "elevationFt": 415,
+   "lat": 51.3938,
+   "lon": 12.408,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 4796,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 238
+      },
+      {
+       "name": "07",
+       "heading": 58
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.8,
+    "vhfLow": 41.35,
+    "vhf": 119.75,
+    "uhf": 252.95
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Lubeck",
+   "elevationFt": 70,
+   "lat": 53.8049,
+   "lon": 10.7169,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 6837,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 68
+      },
+      {
+       "name": "25",
+       "heading": 248
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.825,
+    "vhfLow": 41.6,
+    "vhf": 128.7,
+    "uhf": 254.3
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "LYE",
+     "frequency": 394,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Luneburg",
+   "elevationFt": 148,
+   "lat": 53.2485,
+   "lon": 10.4595,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 1949,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 249
+      },
+      {
+       "name": "08",
+       "heading": 69
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.35,
+    "vhfLow": 41.45,
+    "vhf": 136.5,
+    "uhf": 254.55
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Mahlwinkel",
+   "elevationFt": 156,
+   "lat": 52.3883,
+   "lon": 11.8264,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 8078,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 266
+      },
+      {
+       "name": "09",
+       "heading": 86
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.775,
+    "vhfLow": 41.2,
+    "vhf": 126.1,
+    "uhf": 252.8
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "MK",
+     "channel": 6
+    }
+   ],
+   "approaches": [
+    {
+     "type": "PRMG",
+     "runway": "09",
+     "callsign": "MK",
+     "channel": 8
+    },
+    {
+     "type": "PRMG",
+     "runway": "27",
+     "callsign": "ML",
+     "channel": 8
+    }
+   ]
+  },
+  {
+   "name": "Mainz Finthen",
+   "elevationFt": 722,
+   "lat": 49.9691,
+   "lon": 8.1479,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 3120,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 71
+      },
+      {
+       "name": "26",
+       "heading": 251
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.1,
+    "vhfLow": 38.8,
+    "vhf": 124.0,
+    "uhf": 230.0
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "FY",
+     "frequency": 470,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Marxwalde",
+   "elevationFt": 49,
+   "lat": 52.613,
+   "lon": 14.2427,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 7280,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 259
+      },
+      {
+       "name": "08",
+       "heading": 79
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 5.0,
+    "vhfLow": 41.85,
+    "vhf": 120.5,
+    "uhf": 255.65
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "B",
+     "channel": 0,
+     "frequency": 958,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "BU",
+     "channel": 0,
+     "frequency": 472,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "U",
+     "channel": 0,
+     "frequency": 958,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "UB",
+     "channel": 0,
+     "frequency": 472,
+     "unit": "kHz"
+    },
+    {
+     "type": "RSBN",
+     "callsign": "BU",
+     "channel": 31
+    }
+   ],
+   "approaches": [
+    {
+     "type": "PRMG",
+     "runway": "08",
+     "callsign": "NE",
+     "channel": 29
+    },
+    {
+     "type": "PRMG",
+     "runway": "26",
+     "callsign": "BU",
+     "channel": 29
+    }
+   ]
+  },
+  {
+   "name": "Mendig",
+   "elevationFt": 601,
+   "lat": 50.366,
+   "lon": 7.3156,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 5265,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 252
+      },
+      {
+       "name": "08",
+       "heading": 72
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.8,
+    "vhfLow": 40.5,
+    "vhf": 122.1,
+    "uhf": 252.1
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "NMN",
+     "frequency": 331,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Merseburg",
+   "elevationFt": 340,
+   "lat": 51.364,
+   "lon": 11.95,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 8026,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 71
+      },
+      {
+       "name": "26",
+       "heading": 251
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.825,
+    "vhfLow": 40.55,
+    "vhf": 127.2,
+    "uhf": 252.15
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "DK",
+     "channel": 23
+    }
+   ],
+   "approaches": [
+    {
+     "type": "PRMG",
+     "runway": "08",
+     "callsign": "DK",
+     "channel": 25
+    },
+    {
+     "type": "PRMG",
+     "runway": "26",
+     "callsign": "DG",
+     "channel": 25
+    }
+   ]
+  },
+  {
+   "name": "Neubrandenburg",
+   "elevationFt": 177,
+   "lat": 53.6022,
+   "lon": 13.3061,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 6743,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 83
+      },
+      {
+       "name": "27",
+       "heading": 263
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.275,
+    "vhfLow": 41.4,
+    "vhf": 124.5,
+    "uhf": 253.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Neuruppin",
+   "elevationFt": 148,
+   "lat": 52.9411,
+   "lon": 12.7869,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 7772,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 93
+      },
+      {
+       "name": "28",
+       "heading": 273
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.875,
+    "vhfLow": 41.85,
+    "vhf": 123.5,
+    "uhf": 253.45
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Nordholz",
+   "elevationFt": 39,
+   "lat": 53.7676,
+   "lon": 8.6585,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 7628,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 255
+      },
+      {
+       "name": "08",
+       "heading": 75
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.75,
+    "vhfLow": 40.85,
+    "vhf": 142.9,
+    "uhf": 315.7
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "NDO",
+     "frequency": 372,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "26",
+     "callsign": null,
+     "frequency": 111.9
+    }
+   ]
+  },
+  {
+   "name": "Northeim",
+   "elevationFt": 49,
+   "lat": 52.9843,
+   "lon": 11.2371,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 2945,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 258
+      },
+      {
+       "name": "09",
+       "heading": 78
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.15,
+    "vhfLow": 41.25,
+    "vhf": 134.6,
+    "uhf": 254.65
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Norvenich",
+   "elevationFt": 296,
+   "lat": 50.8313,
+   "lon": 6.6586,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 7829,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 64
+      },
+      {
+       "name": "25",
+       "heading": 244
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 5.0,
+    "vhfLow": 41.2,
+    "vhf": 123.0,
+    "uhf": 365.0
+   },
+   "navaids": [
+    {
+     "type": "VORTAC",
+     "callsign": "NOR",
+     "channel": 77,
+     "frequency": 116.2,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Ober-Morlen",
+   "elevationFt": 715,
+   "lat": 50.3624,
+   "lon": 8.7122,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 2639,
+     "ends": [
+      {
+       "name": "24",
+       "heading": 224
+      },
+      {
+       "name": "06",
+       "heading": 44
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.4,
+    "vhfLow": 41.75,
+    "vhf": 134.6,
+    "uhf": 253.35
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Obermehler Schlotheim",
+   "elevationFt": 889,
+   "lat": 51.2677,
+   "lon": 10.6348,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 4540,
+     "ends": [
+      {
+       "name": "29",
+       "heading": 286
+      },
+      {
+       "name": "11",
+       "heading": 106
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.775,
+    "vhfLow": 40.45,
+    "vhf": 122.9,
+    "uhf": 252.05
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Oranienburg",
+   "elevationFt": 108,
+   "lat": 52.7249,
+   "lon": 13.2169,
+   "runways": [
+    {
+     "name": "16/34",
+     "lengthFt": 7445,
+     "ends": [
+      {
+       "name": "34",
+       "heading": 333
+      },
+      {
+       "name": "16",
+       "heading": 153
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.65,
+    "vhfLow": 41.2,
+    "vhf": 124.0,
+    "uhf": 365.5
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Parchim",
+   "elevationFt": 171,
+   "lat": 53.4279,
+   "lon": 11.7866,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 8292,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 60
+      },
+      {
+       "name": "25",
+       "heading": 240
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.775,
+    "vhfLow": 39.85,
+    "vhf": 129.0,
+    "uhf": 254.45
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "PM",
+     "channel": 20
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Peenemunde",
+   "elevationFt": 23,
+   "lat": 54.1587,
+   "lon": 13.7736,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 7709,
+     "ends": [
+      {
+       "name": "13",
+       "heading": 131
+      },
+      {
+       "name": "31",
+       "heading": 311
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.675,
+    "vhfLow": 41.95,
+    "vhf": 124.0,
+    "uhf": 253.55
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "NE",
+     "channel": 16
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Perwenitz",
+   "elevationFt": 135,
+   "lat": 52.6756,
+   "lon": 13.0069,
+   "runways": [
+    {
+     "name": "01/19",
+     "lengthFt": 7708,
+     "ends": [
+      {
+       "name": "01",
+       "heading": 1
+      },
+      {
+       "name": "19",
+       "heading": 181
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 5.0,
+    "vhfLow": 42.0,
+    "vhf": 118.0,
+    "uhf": 255.85
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Pferdsfeld",
+   "elevationFt": 1313,
+   "lat": 49.8551,
+   "lon": 7.6047,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 7614,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 82
+      },
+      {
+       "name": "27",
+       "heading": 262
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.85,
+    "vhfLow": 41.25,
+    "vhf": 132.65,
+    "uhf": 252.85
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "PFF",
+     "frequency": 394,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "PFF",
+     "channel": 77
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Pinnow",
+   "elevationFt": 149,
+   "lat": 53.6165,
+   "lon": 11.5631,
+   "runways": [
+    {
+     "name": "02/20",
+     "lengthFt": 3540,
+     "ends": [
+      {
+       "name": "20",
+       "heading": 186
+      },
+      {
+       "name": "02",
+       "heading": 6
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.05,
+    "vhfLow": 39.0,
+    "vhf": 119.0,
+    "uhf": 250.6
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Pottschutthohe",
+   "elevationFt": 1099,
+   "lat": 49.2645,
+   "lon": 7.4888,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 1957,
+     "ends": [
+      {
+       "name": "06",
+       "heading": 45
+      },
+      {
+       "name": "24",
+       "heading": 225
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.025,
+    "vhfLow": 41.8,
+    "vhf": 134.6,
+    "uhf": 253.4
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Ramstein",
+   "elevationFt": 805,
+   "lat": 49.4369,
+   "lon": 7.6001,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 7494,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 263
+      },
+      {
+       "name": "09",
+       "heading": 83
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.725,
+    "vhfLow": 40.35,
+    "vhf": 133.2,
+    "uhf": 251.95
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "RMS",
+     "channel": 81
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "09",
+     "callsign": "IREL",
+     "frequency": 111.5
+    },
+    {
+     "type": "ILS",
+     "runway": "27",
+     "callsign": "IRWR",
+     "frequency": 110.75
+    }
+   ]
+  },
+  {
+   "name": "Revinge",
+   "elevationFt": 58,
+   "lat": 55.7288,
+   "lon": 13.4273,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 6586,
+     "ends": [
+      {
+       "name": "29",
+       "heading": 281
+      },
+      {
+       "name": "11",
+       "heading": 101
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.775,
+    "vhfLow": 40.25,
+    "vhf": 142.9,
+    "uhf": 315.7
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Rinteln",
+   "elevationFt": 174,
+   "lat": 52.1747,
+   "lon": 9.0529,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 1957,
+     "ends": [
+      {
+       "name": "12",
+       "heading": 108
+      },
+      {
+       "name": "30",
+       "heading": 288
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.2,
+    "vhfLow": 39.3,
+    "vhf": 134.8,
+    "uhf": 250.9
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Schkeuditz",
+   "elevationFt": 421,
+   "lat": 51.415,
+   "lon": 12.2272,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 8076,
+     "ends": [
+      {
+       "name": "29",
+       "heading": 281
+      },
+      {
+       "name": "11",
+       "heading": 101
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.9,
+    "vhfLow": 40.7,
+    "vhf": 129.0,
+    "uhf": 252.3
+   },
+   "navaids": [],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "29",
+     "callsign": "IMA",
+     "frequency": 110.3
+    }
+   ]
+  },
+  {
+   "name": "Schonefeld",
+   "elevationFt": 142,
+   "lat": 52.3842,
+   "lon": 13.5344,
+   "runways": [
+    {
+     "name": "07L/25R",
+     "lengthFt": 9232,
+     "ends": [
+      {
+       "name": "25R",
+       "heading": 244
+      },
+      {
+       "name": "07L",
+       "heading": 64
+      }
+     ]
+    },
+    {
+     "name": "07R/25L",
+     "lengthFt": 9579,
+     "ends": [
+      {
+       "name": "25L",
+       "heading": 244
+      },
+      {
+       "name": "07R",
+       "heading": 64
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.55,
+    "vhfLow": 42.0,
+    "vhf": 121.3,
+    "uhf": 253.6
+   },
+   "navaids": [],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "07R",
+     "callsign": "MVR",
+     "frequency": 110.7
+    },
+    {
+     "type": "ILS",
+     "runway": "25L",
+     "callsign": "SLL",
+     "frequency": 109.9
+    },
+    {
+     "type": "ILS",
+     "runway": "25R",
+     "callsign": "SLL",
+     "frequency": 110.3
+    }
+   ]
+  },
+  {
+   "name": "Schweinfurt",
+   "elevationFt": 753,
+   "lat": 50.0489,
+   "lon": 10.1697,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 2034,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 260
+      },
+      {
+       "name": "09",
+       "heading": 80
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.6,
+    "vhfLow": 40.1,
+    "vhf": 119.95,
+    "uhf": 251.7
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "SCF",
+     "frequency": 363,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Sembach",
+   "elevationFt": 1022,
+   "lat": 49.5062,
+   "lon": 7.8634,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 7841,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 240
+      },
+      {
+       "name": "07",
+       "heading": 60
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.475,
+    "vhfLow": 39.85,
+    "vhf": 121.5,
+    "uhf": 251.45
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "SEX",
+     "frequency": 428,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "SEM",
+     "channel": 28
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Sittensen",
+   "elevationFt": 125,
+   "lat": 53.321,
+   "lon": 9.5829,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 3658,
+     "ends": [
+      {
+       "name": "06",
+       "heading": 50
+      },
+      {
+       "name": "24",
+       "heading": 230
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 5.0,
+    "vhfLow": 42.0,
+    "vhf": 118.0,
+    "uhf": 255.9
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Spangdahlem",
+   "elevationFt": 984,
+   "lat": 49.9766,
+   "lon": 6.6988,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 9861,
+     "ends": [
+      {
+       "name": "23",
+       "heading": 221
+      },
+      {
+       "name": "05",
+       "heading": 41
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.65,
+    "vhfLow": 40.2,
+    "vhf": 122.2,
+    "uhf": 251.8
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "SPA",
+     "channel": 32
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "05",
+     "callsign": "ISPE",
+     "frequency": 109.15
+    },
+    {
+     "type": "ILS",
+     "runway": "23",
+     "callsign": "ISPA",
+     "frequency": 108.1
+    }
+   ]
+  },
+  {
+   "name": "Sperenberg",
+   "elevationFt": 184,
+   "lat": 52.1369,
+   "lon": 13.306,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 8085,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 89
+      },
+      {
+       "name": "27",
+       "heading": 269
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.8,
+    "vhfLow": 38.5,
+    "vhf": 123.1,
+    "uhf": 250.1
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "CH",
+     "frequency": 254,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "ChC",
+     "frequency": 221,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "N",
+     "frequency": 254,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "NZ",
+     "frequency": 221,
+     "unit": "kHz"
+    },
+    {
+     "type": "RSBN",
+     "callsign": "SR",
+     "channel": 28
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Sprendlingen",
+   "elevationFt": 396,
+   "lat": 49.871,
+   "lon": 7.9599,
+   "runways": [
+    {
+     "name": "15/33",
+     "lengthFt": 4854,
+     "ends": [
+      {
+       "name": "33",
+       "heading": 325
+      },
+      {
+       "name": "15",
+       "heading": 145
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 5.0,
+    "vhfLow": 42.0,
+    "vhf": 118.0,
+    "uhf": 255.95
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Stendal",
+   "elevationFt": 122,
+   "lat": 52.6291,
+   "lon": 11.8199,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 6250,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 77
+      },
+      {
+       "name": "26",
+       "heading": 257
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.6,
+    "vhfLow": 42.05,
+    "vhf": 122.0,
+    "uhf": 253.65
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Sturup",
+   "elevationFt": 217,
+   "lat": 55.5357,
+   "lon": 13.3764,
+   "runways": [
+    {
+     "name": "17/35",
+     "lengthFt": 9004,
+     "ends": [
+      {
+       "name": "17",
+       "heading": 168
+      },
+      {
+       "name": "35",
+       "heading": 348
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 5.0,
+    "vhfLow": 39.9,
+    "vhf": 118.8,
+    "uhf": 255.6
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "NS",
+     "frequency": 351,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "SS",
+     "frequency": 420,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR",
+     "callsign": "SUP",
+     "channel": 77,
+     "frequency": 113.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "17",
+     "callsign": "SMS",
+     "frequency": 111.9
+    },
+    {
+     "type": "ILS",
+     "runway": "35",
+     "callsign": "SMS",
+     "frequency": 108.1
+    }
+   ]
+  },
+  {
+   "name": "Szczecin-Goleniow",
+   "elevationFt": 98,
+   "lat": 53.5848,
+   "lon": 14.9023,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 6350,
+     "ends": [
+      {
+       "name": "31",
+       "heading": 305
+      },
+      {
+       "name": "13",
+       "heading": 125
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.7,
+    "vhfLow": 42.0,
+    "vhf": 121.25,
+    "uhf": 256.1
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Tagra",
+   "elevationFt": 115,
+   "lat": 55.6009,
+   "lon": 13.7141,
+   "runways": [
+    {
+     "name": "15/33",
+     "lengthFt": 5414,
+     "ends": [
+      {
+       "name": "33",
+       "heading": 316
+      },
+      {
+       "name": "15",
+       "heading": 136
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 5.0,
+    "vhfLow": 42.0,
+    "vhf": 118.0,
+    "uhf": 255.9
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Tegel",
+   "elevationFt": 116,
+   "lat": 52.5584,
+   "lon": 13.2929,
+   "runways": [
+    {
+     "name": "08L/26R",
+     "lengthFt": 9663,
+     "ends": [
+      {
+       "name": "26R",
+       "heading": 256
+      },
+      {
+       "name": "08L",
+       "heading": 76
+      }
+     ]
+    },
+    {
+     "name": "08R/26L",
+     "lengthFt": 7687,
+     "ends": [
+      {
+       "name": "26L",
+       "heading": 256
+      },
+      {
+       "name": "08R",
+       "heading": 76
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.75,
+    "vhfLow": 42.1,
+    "vhf": 124.5,
+    "uhf": 253.7
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "DLS",
+     "frequency": 414,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "GL",
+     "frequency": 322,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "RW",
+     "frequency": 392,
+     "unit": "kHz"
+    },
+    {
+     "type": "VORTAC",
+     "callsign": "TGL",
+     "channel": 70,
+     "band": "X",
+     "frequency": 112.3,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "",
+     "callsign": "ITLE",
+     "frequency": 109.1
+    },
+    {
+     "type": "ILS",
+     "runway": "08R",
+     "callsign": "ITGE",
+     "frequency": 108.5
+    },
+    {
+     "type": "ILS",
+     "runway": "26R",
+     "callsign": "ITGW",
+     "frequency": 109.3
+    },
+    {
+     "type": "ILS",
+     "runway": "26R",
+     "callsign": "ITLW",
+     "frequency": 110.1
+    }
+   ]
+  },
+  {
+   "name": "Tempelhof",
+   "elevationFt": 154,
+   "lat": 52.4711,
+   "lon": 13.4043,
+   "runways": [
+    {
+     "name": "09L/27R",
+     "lengthFt": 6071,
+     "ends": [
+      {
+       "name": "09L",
+       "heading": 81
+      },
+      {
+       "name": "27R",
+       "heading": 261
+      }
+     ]
+    },
+    {
+     "name": "09R/27L",
+     "lengthFt": 6517,
+     "ends": [
+      {
+       "name": "09R",
+       "heading": 83
+      },
+      {
+       "name": "27L",
+       "heading": 263
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.85,
+    "vhfLow": 42.15,
+    "vhf": 119.5,
+    "uhf": 253.75
+   },
+   "navaids": [
+    {
+     "type": "VORTAC",
+     "callsign": "TOF",
+     "channel": 88,
+     "band": "X",
+     "frequency": 114.1,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "09R",
+     "callsign": "IDBR",
+     "frequency": 109.7
+    },
+    {
+     "type": "ILS",
+     "runway": "27L",
+     "callsign": "IDLB",
+     "frequency": 109.5
+    }
+   ]
+  },
+  {
+   "name": "Templin",
+   "elevationFt": 242,
+   "lat": 53.032,
+   "lon": 13.5426,
+   "runways": [
+    {
+     "name": "01/19",
+     "lengthFt": 7645,
+     "ends": [
+      {
+       "name": "01",
+       "heading": 9
+      },
+      {
+       "name": "19",
+       "heading": 189
+      }
+     ]
+    },
+    {
+     "name": "09/27",
+     "lengthFt": 11263,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 264
+      },
+      {
+       "name": "09",
+       "heading": 84
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.575,
+    "vhfLow": 40.05,
+    "vhf": 128.0,
+    "uhf": 251.65
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "LD",
+     "channel": 15
+    }
+   ],
+   "approaches": [
+    {
+     "type": "PRMG",
+     "runway": "09",
+     "callsign": "PG",
+     "channel": 17
+    },
+    {
+     "type": "PRMG",
+     "runway": "27",
+     "callsign": "IK",
+     "channel": 17
+    }
+   ]
+  },
+  {
+   "name": "Thurland",
+   "elevationFt": 282,
+   "lat": 51.6964,
+   "lon": 12.2102,
+   "runways": [
+    {
+     "name": "18/36",
+     "lengthFt": 7272,
+     "ends": [
+      {
+       "name": "36",
+       "heading": 2
+      },
+      {
+       "name": "18",
+       "heading": 182
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 5.0,
+    "vhfLow": 42.0,
+    "vhf": 118.0,
+    "uhf": 256.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Tutow",
+   "elevationFt": 7,
+   "lat": 53.9218,
+   "lon": 13.2191,
+   "runways": [
+    {
+     "name": "17/35",
+     "lengthFt": 7115,
+     "ends": [
+      {
+       "name": "17",
+       "heading": 164
+      },
+      {
+       "name": "35",
+       "heading": 344
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.425,
+    "vhfLow": 42.25,
+    "vhf": 125.5,
+    "uhf": 253.85
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Uelzen",
+   "elevationFt": 251,
+   "lat": 52.9836,
+   "lon": 10.4645,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 3470,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 262
+      },
+      {
+       "name": "09",
+       "heading": 82
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.825,
+    "vhfLow": 38.55,
+    "vhf": 119.1,
+    "uhf": 250.15
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Uetersen",
+   "elevationFt": 23,
+   "lat": 53.6465,
+   "lon": 9.704,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 3537,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 269
+      },
+      {
+       "name": "09",
+       "heading": 89
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.5,
+    "vhfLow": 41.55,
+    "vhf": 119.0,
+    "uhf": 254.5
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Ummern",
+   "elevationFt": 219,
+   "lat": 52.6205,
+   "lon": 10.411,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 1957,
+     "ends": [
+      {
+       "name": "31",
+       "heading": 301
+      },
+      {
+       "name": "13",
+       "heading": 120
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.125,
+    "vhfLow": 39.15,
+    "vhf": 134.2,
+    "uhf": 250.75
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Verden-Scharnhorst",
+   "elevationFt": 134,
+   "lat": 52.9658,
+   "lon": 9.2806,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 1931,
+     "ends": [
+      {
+       "name": "13",
+       "heading": 122
+      },
+      {
+       "name": "31",
+       "heading": 302
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.175,
+    "vhfLow": 39.25,
+    "vhf": 127.7,
+    "uhf": 250.85
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Walldorf",
+   "elevationFt": 363,
+   "lat": 49.3037,
+   "lon": 8.6614,
+   "runways": [
+    {
+     "name": "01/19",
+     "lengthFt": 2639,
+     "ends": [
+      {
+       "name": "01",
+       "heading": 356
+      },
+      {
+       "name": "19",
+       "heading": 176
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.925,
+    "vhfLow": 41.7,
+    "vhf": 134.6,
+    "uhf": 253.3
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Waren Vielist",
+   "elevationFt": 262,
+   "lat": 53.5659,
+   "lon": 12.6538,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 2639,
+     "ends": [
+      {
+       "name": "24",
+       "heading": 225
+      },
+      {
+       "name": "06",
+       "heading": 45
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.975,
+    "vhfLow": 38.85,
+    "vhf": 134.8,
+    "uhf": 250.45
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Werneuchen",
+   "elevationFt": 259,
+   "lat": 52.6318,
+   "lon": 13.7688,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 7895,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 79
+      },
+      {
+       "name": "26",
+       "heading": 259
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.2,
+    "vhfLow": 42.3,
+    "vhf": 122.6,
+    "uhf": 253.9
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "WC",
+     "channel": 4
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Weser Wumme",
+   "elevationFt": 82,
+   "lat": 53.0561,
+   "lon": 9.2083,
+   "runways": [
+    {
+     "name": "01/19",
+     "lengthFt": 3562,
+     "ends": [
+      {
+       "name": "19",
+       "heading": 173
+      },
+      {
+       "name": "01",
+       "heading": 353
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.9,
+    "vhfLow": 38.7,
+    "vhf": 119.0,
+    "uhf": 250.3
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Wiesbaden",
+   "elevationFt": 453,
+   "lat": 50.0498,
+   "lon": 8.3256,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 6997,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 70
+      },
+      {
+       "name": "26",
+       "heading": 250
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.875,
+    "vhfLow": 40.65,
+    "vhf": 118.1,
+    "uhf": 252.25
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "WIB",
+     "frequency": 399,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "WBD",
+     "channel": 88
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Wismar",
+   "elevationFt": 32,
+   "lat": 53.9144,
+   "lon": 11.5024,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 1947,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 76
+      },
+      {
+       "name": "27",
+       "heading": 256
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.95,
+    "vhfLow": 38.8,
+    "vhf": 134.3,
+    "uhf": 250.4
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Wittstock",
+   "elevationFt": 224,
+   "lat": 53.2024,
+   "lon": 12.523,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 7831,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 250
+      },
+      {
+       "name": "08",
+       "heading": 70
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.725,
+    "vhfLow": 40.9,
+    "vhf": 118.5,
+    "uhf": 252.5
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "GJ",
+     "channel": 22
+    }
+   ],
+   "approaches": [
+    {
+     "type": "PRMG",
+     "runway": "08",
+     "callsign": "GO",
+     "channel": 24
+    },
+    {
+     "type": "PRMG",
+     "runway": "26",
+     "callsign": "GJ",
+     "channel": 24
+    }
+   ]
+  },
+  {
+   "name": "Worms",
+   "elevationFt": 275,
+   "lat": 49.6065,
+   "lon": 8.3654,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 1899,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 241
+      },
+      {
+       "name": "07",
+       "heading": 61
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.95,
+    "vhfLow": 41.9,
+    "vhf": 127.1,
+    "uhf": 253.5
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Wunstorf",
+   "elevationFt": 161,
+   "lat": 52.4573,
+   "lon": 9.4271,
+   "runways": [
+    {
+     "name": "03/21",
+     "lengthFt": 5185,
+     "ends": [
+      {
+       "name": "21",
+       "heading": 203
+      },
+      {
+       "name": "03",
+       "heading": 23
+      }
+     ]
+    },
+    {
+     "name": "08/26",
+     "lengthFt": 5962,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 258
+      },
+      {
+       "name": "08",
+       "heading": 78
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.8,
+    "vhfLow": 39.95,
+    "vhf": 121.1,
+    "uhf": 253.95
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "WUN",
+     "frequency": 419,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "WUN",
+     "channel": 116,
+     "frequency": 114.85,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "26",
+     "callsign": "WUH",
+     "frequency": 109.7
+    }
+   ]
+  },
+  {
+   "name": "Zerbst",
+   "elevationFt": 250,
+   "lat": 51.9996,
+   "lon": 12.1443,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 8019,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 60
+      },
+      {
+       "name": "25",
+       "heading": 240
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.9,
+    "vhfLow": 40.95,
+    "vhf": 119.8,
+    "uhf": 254.05
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "KJ",
+     "channel": 17
+    }
+   ],
+   "approaches": [
+    {
+     "type": "PRMG",
+     "runway": "07",
+     "callsign": "ZB",
+     "channel": 19
+    },
+    {
+     "type": "PRMG",
+     "runway": "25",
+     "callsign": "KJ",
+     "channel": 19
+    }
+   ]
+  },
+  {
+   "name": "Zollschen",
+   "elevationFt": 392,
+   "lat": 51.2664,
+   "lon": 12.1,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 5154,
+     "ends": [
+      {
+       "name": "05",
+       "heading": 44
+      },
+      {
+       "name": "23",
+       "heading": 224
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 5.0,
+    "vhfLow": 42.0,
+    "vhf": 118.0,
+    "uhf": 256.05
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Zweibrucken",
+   "elevationFt": 1076,
+   "lat": 49.2096,
+   "lon": 7.4009,
+   "runways": [
+    {
+     "name": "03/21",
+     "lengthFt": 7844,
+     "ends": [
+      {
+       "name": "03",
+       "heading": 27
+      },
+      {
+       "name": "21",
+       "heading": 207
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.525,
+    "vhfLow": 39.95,
+    "vhf": 123.0,
+    "uhf": 251.55
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "ZBU",
+     "channel": 48,
+     "frequency": 362.3,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "03",
+     "callsign": "IZBU",
+     "frequency": 111.1
+    }
+   ]
+  }
+ ]
+}

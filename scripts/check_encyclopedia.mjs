@@ -81,8 +81,8 @@ export async function checkRecords({ dist, records, review = false, base = "", c
       if (!/class="record-body"[^>]*>\s*<[a-z]/.test(pages.page)) problems.push(`${r.id}: page has no record text.`);
       // Aircraft, ordnance, airfield and theatre records lead with a credited photograph (check_site checks the file ships).
       // Sim map records are exempt: product screenshots are not freely licensed.
-      const simMap = r.category === "airfields-carriers" && /^kind: map$/m.test(await readFile(path.join(contentRoot, contentFile(r)), "utf8").catch(() => ""));
-      if (["aircraft", "ordnance", "airfields-carriers"].includes(r.category) && !simMap && !/<figure class="photo lead\b[^"]*"[\s\S]*?class="credit"/.test(pages.page)) problems.push(`${r.id}: page has no credited lead photo.`);
+      const simMap = r.category === "theatres" && /^kind: map$/m.test(await readFile(path.join(contentRoot, contentFile(r)), "utf8").catch(() => ""));
+      if (["aircraft", "ordnance", "airfields-carriers", "theatres"].includes(r.category) && !simMap && !/<figure class="photo lead\b[^"]*"[\s\S]*?class="credit"/.test(pages.page)) problems.push(`${r.id}: page has no credited lead photo.`);
       // A photo must be self-hosted, described for screen readers and credited.
       for (const [figure] of pages.page.matchAll(/<figure class="record-photo"[\s\S]*?<\/figure>/g)) {
         const src = figure.match(/<img\b[^>]*\bsrc="([^"]*)"/)?.[1] ?? "";

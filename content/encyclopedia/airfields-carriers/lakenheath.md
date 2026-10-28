@@ -23,7 +23,7 @@ units:
 facilities:
   runways:
     - { id: "05/23", lengthFt: 9000, widthFt: 150, surface: "concrete and asphalt", cite: "[1] [2]" }
-theatres: []
+theatres: [europe]
 maps:
   - map: dcs-the-channel
     status: absent
@@ -36,13 +36,6 @@ runwayPlan:
     - { id: "05/23", widthFt: 150, ends: [[52.402500, 0.544383], [52.416401, 0.577647]] }
 photos:
   - src: "encyclopedia/airfields-carriers/lakenheath.jpg"
-    alt: "A grey F-35A Lightning II rolling along a runway with its landing gear down, trees and a building behind"
-    caption: "The first F-35A of the 495th Fighter Squadron lands at RAF Lakenheath, 15 December 2021."
-    author: "Senior Airman Koby I. Saunders, US Air Force"
-    licence: "Public domain"
-    sourceUrl: "https://commons.wikimedia.org/wiki/File:Lockheed_Martin_F-35A_Lightning_II_of_the_495th_Fighter_Squadron_lands_at_Royal_Air_Force_Lakenheath,_15_December_2021_(211215-F-AF202-0317).JPG"
-    accessed: "2026-10-27"
-  - src: "encyclopedia/airfields-carriers/lakenheath-2.jpg"
     alt: "Aerial photograph of an airfield with a single long runway, aircraft shelters and base buildings, surrounded by pine forest and fields"
     caption: "RAF Lakenheath and Thetford Forest from the air, August 2017."
     author: "Chris, via geograph.org.uk"

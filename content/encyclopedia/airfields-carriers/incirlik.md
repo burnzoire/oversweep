@@ -28,7 +28,7 @@ facilities:
     - { id: "05/23", lengthFt: 10000, widthFt: 148, surface: "concrete", cite: "[1] [2]" }
   other:
     - "About 57 hardened aircraft shelters [1]"
-theatres: [syria]
+theatres: [middle-east]
 maps:
   - map: dcs-syria
     status: represented
@@ -45,18 +45,18 @@ runwayPlan:
     - { id: "05/23", widthFt: 148, ends: [[36.993698, 35.412201], [37.010300, 35.439499]] }
 photos:
   - src: "encyclopedia/airfields-carriers/incirlik.jpg"
-    alt: "A grey Turkish Air Force KC-135 tanker on a taxiway beyond a strip of grass, seen from the side, with trees and a water tower behind"
-    caption: "A Turkish Air Force KC-135 Stratotanker of the 10th Tanker Base at Incirlik, May 2020."
-    author: "Tech. Sgt. Christopher Holmes, US Air Force"
-    licence: "Public domain"
-    sourceUrl: "https://commons.wikimedia.org/wiki/File:Turkish_KC-135s_integrate_with_Bomber_Task_Force_for_first_time.jpg"
-    accessed: "2026-10-27"
-  - src: "encyclopedia/airfields-carriers/incirlik-2.jpg"
     alt: "Aerial photograph looking down on an air base with a long runway, taxiways and scattered aircraft shelters among fields"
     caption: "Incirlik Air Base from overhead, 2 November 1987."
     author: "Master Sgt. Patrick Nugent, US Air Force"
     licence: "Public domain"
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Incirlik_Air_Base_overhead_1987.jpg"
+    accessed: "2026-10-27"
+  - src: "encyclopedia/airfields-carriers/incirlik-2.jpg"
+    alt: "A grey Turkish Air Force KC-135 tanker on a taxiway beyond a strip of grass, seen from the side, with trees and a water tower behind"
+    caption: "A Turkish Air Force KC-135 Stratotanker of the 10th Tanker Base at Incirlik, May 2020."
+    author: "Tech. Sgt. Christopher Holmes, US Air Force"
+    licence: "Public domain"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Turkish_KC-135s_integrate_with_Bomber_Task_Force_for_first_time.jpg"
     accessed: "2026-10-27"
 sources:
   - n: 1

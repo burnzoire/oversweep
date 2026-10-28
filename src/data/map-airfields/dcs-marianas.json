@@ -1,0 +1,313 @@
+{
+ "map": "dcs-marianas",
+ "source": {
+  "title": "dcs-world-schema reference data: MarianaIslands airbases, beacons and navaids",
+  "publisher": "dcs-world-schema, open-source data extracted by running DCS World 2.9.30.28536 (extracted 2026-10-04)",
+  "url": "https://github.com/YoloWingPixie/dcs-world-schema/tree/c3091e6c08fb8167e26145d0e33c10e4140c6fe7/dcs-world-reference/latest/airbases/MarianaIslands",
+  "commit": "c3091e6c08fb8167e26145d0e33c10e4140c6fe7",
+  "dcsVersion": "2.9.30.28536",
+  "beacons": true,
+  "radioFallback": {
+   "title": "pydcs terrain data: marianaislands airports (airports.py)",
+   "url": "https://github.com/pydcs/dcs/blob/5ddcc63a2dcd661e16b14f7aa43219b93044855d/dcs/terrain/marianaislands/airports.py"
+  }
+ },
+ "airfields": [
+  {
+   "name": "Andersen AFB",
+   "elevationFt": 548,
+   "lat": 13.5817,
+   "lon": 144.9311,
+   "runways": [
+    {
+     "name": "06L/24R",
+     "lengthFt": 9788,
+     "ends": [
+      {
+       "name": "06L",
+       "heading": 65
+      },
+      {
+       "name": "24R",
+       "heading": 245
+      }
+     ]
+    },
+    {
+     "name": "06R/24L",
+     "lengthFt": 10489,
+     "ends": [
+      {
+       "name": "06R",
+       "heading": 65
+      },
+      {
+       "name": "24L",
+       "heading": 245
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.85,
+    "vhfLow": 38.6,
+    "vhf": 126.2,
+    "uhf": 250.1
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "UAM",
+     "channel": 54
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "06L",
+     "callsign": "IAND",
+     "frequency": 109.3
+    },
+    {
+     "type": "ILS",
+     "runway": "06R",
+     "callsign": "IUAM",
+     "frequency": 110.1
+    },
+    {
+     "type": "ILS",
+     "runway": "24L",
+     "callsign": "IPMY",
+     "frequency": 110.15
+    },
+    {
+     "type": "ILS",
+     "runway": "24R",
+     "callsign": "IYIG",
+     "frequency": 109.35
+    }
+   ]
+  },
+  {
+   "name": "Antonio B. Won Pat Intl",
+   "elevationFt": 255,
+   "lat": 13.4848,
+   "lon": 144.7968,
+   "runways": [
+    {
+     "name": "06L/24R",
+     "lengthFt": 9359,
+     "ends": [
+      {
+       "name": "06L",
+       "heading": 64
+      },
+      {
+       "name": "24R",
+       "heading": 244
+      }
+     ]
+    },
+    {
+     "name": "06R/24L",
+     "lengthFt": 8135,
+     "ends": [
+      {
+       "name": "06R",
+       "heading": 64
+      },
+      {
+       "name": "24L",
+       "heading": 244
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.825,
+    "vhfLow": 38.55,
+    "vhf": 118.1,
+    "uhf": 340.2
+   },
+   "navaids": [],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "06L",
+     "callsign": "IAWD",
+     "frequency": 110.9
+    },
+    {
+     "type": "ILS",
+     "runway": "06L",
+     "callsign": "IGUM",
+     "frequency": 110.3
+    }
+   ]
+  },
+  {
+   "name": "North West Field",
+   "elevationFt": 522,
+   "lat": 13.6253,
+   "lon": 144.8584,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Olf Orote",
+   "elevationFt": 93,
+   "lat": 13.4382,
+   "lon": 144.6422,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 3452,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 246
+      },
+      {
+       "name": "07",
+       "heading": 66
+      }
+     ]
+    }
+   ],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Pagan Airstrip",
+   "elevationFt": 49,
+   "lat": 18.1232,
+   "lon": 145.7631,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 1625,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 112
+      },
+      {
+       "name": "29",
+       "heading": 292
+      }
+     ]
+    }
+   ],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Rota Intl",
+   "elevationFt": 569,
+   "lat": 14.1744,
+   "lon": 145.2411,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 6106,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 92
+      },
+      {
+       "name": "27",
+       "heading": 272
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.75,
+    "vhfLow": 38.4,
+    "vhf": 123.6,
+    "uhf": 250.0
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "GRO",
+     "frequency": 332,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Saipan Intl",
+   "elevationFt": 213,
+   "lat": 15.1189,
+   "lon": 145.7291,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 7790,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 68
+      },
+      {
+       "name": "25",
+       "heading": 248
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.775,
+    "vhfLow": 38.45,
+    "vhf": 125.7,
+    "uhf": 256.9
+   },
+   "navaids": [],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "07",
+     "callsign": "IGSN",
+     "frequency": 109.9
+    }
+   ]
+  },
+  {
+   "name": "Tinian Intl",
+   "elevationFt": 260,
+   "lat": 14.9992,
+   "lon": 145.6192,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 7778,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 79
+      },
+      {
+       "name": "26",
+       "heading": 259
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.8,
+    "vhfLow": 38.5,
+    "vhf": 123.65,
+    "uhf": 250.05
+   },
+   "navaids": [],
+   "approaches": []
+  }
+ ]
+}

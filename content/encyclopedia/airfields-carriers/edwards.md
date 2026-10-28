@@ -33,7 +33,7 @@ facilities:
     - "Edwards VORTAC (EDW), 8.8 NM from the field [2]"
   other:
     - "The lake-bed runways are laid out around a compass rose; the FAA warns that their charted positions may be out by more than 600 ft [4]"
-theatres: []
+theatres: [north-america]
 maps:
   - map: dcs-nevada
     status: absent
@@ -68,13 +68,6 @@ photos:
     author: "United States Geological Survey"
     licence: "Public domain"
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Edwards_Air_Force_Base_-_Rogers_Dry_Lake_CA_2006.jpg"
-    accessed: "2026-10-27"
-  - src: "encyclopedia/airfields-carriers/edwards-3.jpg"
-    alt: "A grey F-35 lifting off a desert runway with its landing gear still down"
-    caption: "AA-1, the first F-35, takes off from Edwards on an air-start test flight with the F-35 Integrated Test Force, 23 October 2008."
-    author: "Senior Airman Julius Delos Reyes, US Air Force"
-    licence: "Public domain"
-    sourceUrl: "https://commons.wikimedia.org/wiki/File:F-35_at_Edwards.jpg"
     accessed: "2026-10-27"
 sources:
   - n: 1

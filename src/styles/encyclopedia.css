@@ -192,3 +192,17 @@
 .ency .unit-facts > div { display: flex; gap: 0.35rem; }
 .ency .unit-facts dt { color: var(--color-muted); font-weight: 700; }
 .ency .unit-facts dd { margin: 0; }
+
+/* Theatres index: a jump list, then each theatre with its sim maps under it. */
+.theatre-jump ul { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; padding: 0; list-style: none; }
+.theatre-group { margin-top: 2.5rem; }
+.theatre-group h3 { margin-top: 1.5rem; }
+
+/* A DCS map's full airfield table. */
+.map-airfields { margin-top: 2rem; }
+.map-airfield-table td, .map-airfield-table th { white-space: nowrap; }
+.map-airfield-table .entry-kicker { margin-left: 0.4rem; }
+.pad-list { margin-top: 1rem; }
+.pad-list summary { cursor: pointer; font-weight: 600; }
+.map-airfield-table .cell-line { display: block; }
+.map-airfield-table .cell-note { display: block; font-size: 0.8em; font-weight: 400; color: var(--muted, #5b6470); }

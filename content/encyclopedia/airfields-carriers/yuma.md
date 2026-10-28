@@ -39,7 +39,7 @@ facilities:
   other:
     - "Five VTOL pads [3]"
     - "Beside the Chocolate Mountain Aerial Gunnery Range and the western Barry M. Goldwater Range, with an auxiliary airfield on the Goldwater range [1]"
-theatres: []
+theatres: [north-america]
 charts:
   - src: "encyclopedia/airfields-carriers/yuma-diagram.png"
     alt: "FAA airport diagram of MCAS Yuma and Yuma International: two parallel runways running south-west to north-east, crossed by a north–south and an east–west runway, with hangars, VTOL pads and combat aircraft loading areas marked"

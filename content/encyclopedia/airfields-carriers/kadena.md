@@ -26,7 +26,7 @@ facilities:
   runways:
     - { id: "05R/23L", lengthFt: 12100, widthFt: 200, surface: "asphalt and concrete", cite: "[1] [2]" }
     - { id: "05L/23R", lengthFt: 12100, widthFt: 300, surface: "asphalt and concrete", cite: "[1] [2]" }
-theatres: []
+theatres: [east-asia-pacific]
 maps:
   - map: bms-korea
     status: unchecked
@@ -40,19 +40,19 @@ runwayPlan:
     - { id: "05R/23L", widthFt: 200, ends: [[26.344000, 127.754997], [26.365000, 127.783997]] }
 photos:
   - src: "encyclopedia/airfields-carriers/kadena.jpg"
-    alt: "Rows of F-15 Eagles lined up across a runway behind an HH-60 helicopter, with an E-3 Sentry at the back of the line"
-    caption: "An elephant walk of 18th Wing aircraft on the runway at Kadena, 12 April 2017."
-    author: "Senior Airman John Linzmeier, US Air Force"
-    licence: "Public domain"
-    sourceUrl: "https://commons.wikimedia.org/wiki/File:Elephant_walk_at_Kadena_Air_Base_(2).jpg"
-    accessed: "2026-10-27"
-  - src: "encyclopedia/airfields-carriers/kadena-2.jpg"
     alt: "High aerial photograph of central Okinawa: an air base with two long parallel runways among dense towns, with the sea on both sides"
     caption: "Kadena Air Base from the air, 26 May 2010."
     author: "Sonata, Japanese Wikipedia"
     licence: "CC BY-SA 3.0"
     licenceUrl: "https://creativecommons.org/licenses/by-sa/3.0/"
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Kadena_Air_Base_20100526.jpg"
+    accessed: "2026-10-27"
+  - src: "encyclopedia/airfields-carriers/kadena-2.jpg"
+    alt: "Rows of F-15 Eagles lined up across a runway behind an HH-60 helicopter, with an E-3 Sentry at the back of the line"
+    caption: "An elephant walk of 18th Wing aircraft on the runway at Kadena, 12 April 2017."
+    author: "Senior Airman John Linzmeier, US Air Force"
+    licence: "Public domain"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Elephant_walk_at_Kadena_Air_Base_(2).jpg"
     accessed: "2026-10-27"
 sources:
   - n: 1

@@ -32,7 +32,7 @@ facilities:
     - "[TACAN](term:) NFL, on the field [2]"
   other:
     - "The Fallon Range Training Complex, some 240,000 acres in the Lahontan and Dixie valleys, with a simulated air defence network of about 20 radar sites [1]"
-theatres: []
+theatres: [north-america]
 maps:
   - map: dcs-nevada
     status: absent
@@ -48,12 +48,12 @@ charts:
     accessed: "2026-10-27"
 photos:
   - src: "encyclopedia/airfields-carriers/fallon.jpg"
-    alt: "An F-16 in flight low over bare desert mountains"
-    caption: "An F-16 of the South Carolina Air National Guard's 157th Fighter Squadron takes off from NAS Fallon for a training sortie, November 2014."
-    author: "Tech. Sgt. Caycee Watson, US Air National Guard"
+    alt: "Black-and-white aerial photograph of a long main runway with a parallel runway and taxiways on a flat desert plain, surrounded by irrigated fields"
+    caption: "Naval Air Station Fallon from the air, 2 June 1988."
+    author: "Bob Lawson, US Navy"
     licence: "Public domain"
-    sourceUrl: "https://commons.wikimedia.org/wiki/File:Naval_Air_Station_Fallon_TDY_141112-Z-WT236-013.jpg"
-    accessed: "2026-10-27"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:1988_Aerial_view_of_NAS_Fallon.jpg"
+    accessed: "2026-10-28"
   - src: "encyclopedia/airfields-carriers/fallon-2.jpg"
     alt: "A US Navy F-16A in grey camouflage parked on a ramp with its canopy open, seen from the front, with a control tower behind"
     caption: "A Navy F-16A of the Naval Strike and Air Warfare Center, the predecessor of today's Warfighting Development Center, at Fallon in the 2000s."

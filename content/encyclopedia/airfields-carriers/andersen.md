@@ -34,7 +34,7 @@ facilities:
     - "ILS runways 06R, 24L and 24R [2]"
   other:
     - "Northwest Field, a historic airfield beside the base, now used for training [1]"
-theatres: [mariana-islands]
+theatres: [east-asia-pacific]
 maps:
   - map: dcs-marianas
     status: represented

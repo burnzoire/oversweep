@@ -375,20 +375,41 @@ export const terminologyContent = (r: EncyclopediaRecord) => contentFile(r) as u
 export const airfieldContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AirfieldCatalogueData>;
 
 type Entry<T> = { record: EncyclopediaRecord; data: T };
+
+// One DCS map's airfields, as scripts/import_map_airfields.py writes them.
+export interface MapAirfieldTable {
+  map: string;
+  source: { title: string; publisher: string; url: string; commit: string; beacons: boolean; radioFallback?: { title: string; url: string } | null };
+  airfields: {
+    name: string;
+    elevationFt?: number;
+    lat?: number;
+    lon?: number;
+    runways: { name: string; lengthFt?: number; ends: { name: string; heading: number }[] }[];
+    radio: { vhf?: number; uhf?: number; vhfLow?: number; hf?: number };
+    radioSource?: 'pydcs';
+    navaids: { type: string; callsign?: string; channel?: number; band?: 'X' | 'Y'; frequency?: number; unit?: 'kHz' | 'MHz' }[];
+    approaches: { type: string; runway: string; callsign?: string; frequency?: number; channel?: number }[];
+  }[];
+}
+
 export interface AirfieldEntry extends Entry<AirfieldData> { theatres: Entry<TheatreData>[]; maps: (Entry<MapData> & { coverage: MapCoverage })[] }
-export interface TheatreEntry extends Entry<TheatreData> { airfields: AirfieldEntry[]; maps: Entry<MapData>[] }
+export interface TheatreEntry extends Entry<TheatreData> { airfields: AirfieldEntry[]; maps: MapEntry[] }
 export interface MapEntry extends Entry<MapData> { theatres: Entry<TheatreData>[]; airfields: { airfield: AirfieldEntry; coverage: MapCoverage }[] }
 
-// The Airfields & Carriers catalogue, validated once per build: every record
-// in the category, resolved into airfields, theatres and maps with their
+// The categories whose records make up the airfield catalogue.
+export const airfieldCategories = ['airfields-carriers', 'theatres'];
+
+// The airfield catalogue, validated once per build: every record in the
+// Airfields & Carriers and Theatres categories (theatres and their sim maps), resolved into airfields, theatres and maps with their
 // relationships both ways. Throws, failing the build, on any problem.
 let catalogue: { airfields: AirfieldEntry[]; theatres: TheatreEntry[]; maps: MapEntry[] } | undefined;
 export function airfieldCatalogue() {
   if (catalogue) return catalogue;
   // Validate every registered record, published or not, so a draft cannot hide a broken link.
-  const all = records.filter((r) => r.category === 'airfields-carriers').map((record) => ({ record, data: airfieldContent(record).frontmatter }));
+  const all = records.filter((r) => airfieldCategories.includes(r.category)).map((record) => ({ record, data: airfieldContent(record).frontmatter }));
   const problems = validateCatalogue(all.map(({ record, data }) => ({ slug: record.slug, data })));
-  if (problems.length) throw new Error(`Airfields & Carriers records are invalid:\n- ${problems.join('\n- ')}`);
+  if (problems.length) throw new Error(`Airfield, theatre and sim map records are invalid:\n- ${problems.join('\n- ')}`);
   const shipped = all.filter(({ record }) => includedRecords.includes(record));
   const ofKind = <T extends AirfieldCatalogueData>(kind: T['kind']) => shipped.filter((e): e is Entry<T> => e.data.kind === kind);
   const theatreEntries = ofKind<TheatreData>('theatre');

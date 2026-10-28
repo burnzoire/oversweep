@@ -32,7 +32,7 @@ facilities:
   other:
     - "Optical landing system and [wave-off lights](term:) at most runway ends, the equipment a runway needs for [field carrier landing practice](term:FCLP) [2]"
     - "Naval Auxiliary Landing Field Orange Grove, a satellite field run by the station [1]"
-theatres: []
+theatres: [north-america]
 charts:
   - src: "encyclopedia/airfields-carriers/kingsville-diagram.png"
     alt: "FAA airport diagram of NAS Kingsville: two pairs of parallel runways, one pair running north–south and one running north-west to south-east, crossing each other, with E-28 arresting gear marked near every runway end"
