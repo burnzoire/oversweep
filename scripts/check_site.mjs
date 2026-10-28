@@ -42,9 +42,10 @@ const requiredRoutes = [
     "abnormal-operations",
   ].map((slug) => `manual/${slug}`),
   "encyclopedia",
+  "encyclopedia/carriers",
   "encyclopedia/locations/carriers",
   "encyclopedia/locations/theatres",
-  ...carrierRegistry.map((entry) => `encyclopedia/locations/carriers/${entry.slug}`),
+  ...carrierRegistry.flatMap((entry) => [`encyclopedia/carriers/${entry.slug}`, `encyclopedia/locations/carriers/${entry.slug}`]),
   ...[
     "aircraft",
     "ordnance",

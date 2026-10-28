@@ -20,4 +20,4 @@ export interface Carrier {
 export const carriers = registry as Carrier[];
 const problems = validateCarriers(carriers);
 if (problems.length) throw new Error(`Invalid carrier catalogue:\n${problems.join('\n')}`);
-export const carrierRoute = (carrier: Carrier) => `encyclopedia/locations/carriers/${carrier.slug}/`;
+export const carrierRoute = (carrier: Carrier) => `encyclopedia/carriers/${carrier.slug}/`;

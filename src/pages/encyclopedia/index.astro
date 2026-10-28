@@ -20,7 +20,7 @@ const cover = (slug: string): Photo | undefined => {
 const categories = encyclopediaCategories.map((category) => ({
   ...category,
   available: categoryHasContent(category.slug),
-  count: categoryRecords(category.slug).length + (category.slug === 'locations' ? carriers.length : 0),
+  count: categoryRecords(category.slug).length + (category.slug === 'carriers' ? carriers.length : 0),
   cover: cover(category.slug),
 })).sort((a, b) => Number(b.available) - Number(a.available));
 const empty = !categories.some((c) => c.available);

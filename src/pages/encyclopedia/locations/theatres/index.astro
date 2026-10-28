@@ -9,7 +9,7 @@ const list = [...theatres].sort((a, b) => a.record.title.localeCompare(b.record.
 ---
 <SiteLayout title="Theatres" activeSection="encyclopedia" breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: 'Locations', href: sitePath('encyclopedia/locations/') }, { label: 'Theatres' }]}>
   <div class="ency">
-    <nav class="theatre-jump" aria-label="Locations"><ul><li><a href={sitePath('encyclopedia/locations/')}>All locations</a></li><li><span aria-current="page">Theatres</span></li><li><a href={sitePath('encyclopedia/locations/carriers/')}>Carriers</a></li></ul></nav>
+    <nav class="theatre-jump" aria-label="Locations"><ul><li><a href={sitePath('encyclopedia/locations/')}>All locations</a></li><li><span aria-current="page">Theatres</span></li></ul></nav>
     <p class="lead">Real-world regions, their military history, and the simulator maps set within them. Map pages retain their coverage, purchase or access links, and airfield reference tables.</p>
     <nav class="theatre-jump" aria-label="Browse theatres"><ul>{list.map((entry) => <li><a href={`#${entry.record.slug}`}>{entry.record.title}</a></li>)}</ul></nav>
     {list.map((entry) => <section class="theatre-group" aria-labelledby={entry.record.slug}>

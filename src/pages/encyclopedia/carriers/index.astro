@@ -1,19 +1,19 @@
 ---
-import SiteLayout from '../../../../layouts/SiteLayout.astro';
-import CarrierModuleLink from '../../../../components/encyclopedia/CarrierModuleLink.astro';
-import { carriers, carrierRoute } from '../../../../data/carriers';
-import { carrierAsOf, carrierDate, carrierEntryDate, carrierEntryLabel, carrierMaturity, carrierSearchText } from '../../../../data/carrier-model.mjs';
-import { sitePath } from '../../../../lib/paths';
-import '../../../../styles/encyclopedia.css';
-import '../../../../styles/carriers.css';
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import CarrierModuleLink from '../../../components/encyclopedia/CarrierModuleLink.astro';
+import { carriers, carrierRoute } from '../../../data/carriers';
+import { carrierAsOf, carrierDate, carrierEntryDate, carrierEntryLabel, carrierMaturity, carrierSearchText } from '../../../data/carrier-model.mjs';
+import { sitePath } from '../../../lib/paths';
+import '../../../styles/encyclopedia.css';
+import '../../../styles/carriers.css';
 const list = [...carriers].sort((a, b) => carrierEntryDate(a).localeCompare(carrierEntryDate(b)) || a.name.localeCompare(b.name));
 const classes = [...new Set(list.map((entry) => entry.class))].sort();
 const origins = [...new Set(list.map((entry) => entry.origin))].sort();
 const operators = [...new Set(list.flatMap((entry) => entry.operators))].sort();
 ---
-<SiteLayout title="Carriers" activeSection="encyclopedia" breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: 'Locations', href: sitePath('encyclopedia/locations/') }, { label: 'Carriers' }]}>
+<SiteLayout title="Carriers" activeSection="encyclopedia" breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: 'Carriers' }]}>
   <div class="ency carriers">
-    <nav class="theatre-jump" aria-label="Locations"><ul><li><a href={sitePath('encyclopedia/locations/')}>All locations</a></li><li><a href={sitePath('encyclopedia/locations/theatres/')}>Theatres</a></li><li><span aria-current="page">Carriers</span></li></ul></nav>
+    <nav class="theatre-jump" aria-label="Encyclopedia"><ul><li><a href={sitePath('encyclopedia/')}>All categories</a></li><li><a href={sitePath('encyclopedia/locations/')}>Locations</a></li><li><span aria-current="page">Carriers</span></li></ul></nav>
     <p class="lead">Aircraft carriers completed after the Second World War, with one record per hull across changes of name and navy.</p>
     <CarrierModuleLink />
     <section class="status-panel" aria-labelledby="carrier-scope-title">
@@ -43,4 +43,4 @@ const operators = [...new Set(list.flatMap((entry) => entry.operators))].sort();
     </div>
   </div>
 </SiteLayout>
-<script>import '../../../../scripts/carrier-filter.mjs';</script>
+<script>import '../../../scripts/carrier-filter.mjs';</script>

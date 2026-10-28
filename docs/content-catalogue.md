@@ -32,7 +32,8 @@ Types are composable blocks: Reference (guidance/diagrams/tables), Interactive
 | Ordnance | Weapons, roles, limitations and applicable platforms | Encyclopedia |
 | Threat Systems | Identification, capabilities and documented limitations | Encyclopedia |
 | Radar & Sensors | Sensor terminology, system records and concept links | Encyclopedia |
-| Locations | Theatres, simulator maps, airfields and carriers, with type-specific facilities, history and simulator coverage | Encyclopedia |
+| Locations | Theatres, simulator maps and airfields, with facilities, history and simulator coverage | Encyclopedia |
+| Carriers | Aircraft carrier hulls, classes, names and operator histories | Encyclopedia |
 | Terminology | Acronyms and precise definitions linked from lessons | Encyclopedia |
 | Reference Data | Sourced tables, units and reusable constants | Encyclopedia |
 
@@ -52,11 +53,13 @@ multiple subjects. URL slugs and detailed information architecture remain provis
 
 ## Carrier inventory
 
-Locations includes sibling Theatres and Carriers browse pages. Carrier records
-live once per physical hull in `src/data/carriers.json`; transfers and renamings
-are aliases and operators on that record. The dedicated index and Locations
-search read the same registry. Each hull has its own page, dated source list and
-visible Drafted status, and links to the existing Naval Operations ship module.
+Carriers is an Encyclopedia category alongside Aircraft, Ordnance and Locations,
+at `/encyclopedia/carriers/`. Theatres and airfields remain under Locations.
+Carrier records live once per physical hull in `src/data/carriers.json`; transfers
+and renamings are aliases and operators on that record. Each hull has its own
+page, dated source list and visible Drafted status, and links to the existing
+Naval Operations ship module. Former Locations carrier URLs redirect to the
+canonical category and records while retaining query parameters and fragments.
 
 The post-war boundary is completion after 2 September 1945. First carrier
 commission is the proxy where separate completion is not documented; a carrier

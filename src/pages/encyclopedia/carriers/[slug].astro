@@ -1,16 +1,16 @@
 ---
-import SiteLayout from '../../../../layouts/SiteLayout.astro';
-import CarrierModuleLink from '../../../../components/encyclopedia/CarrierModuleLink.astro';
-import { carriers, carrierRoute, type Carrier } from '../../../../data/carriers';
-import { carrierDate, carrierEntryDate, carrierEntryLabel, carrierMaturity } from '../../../../data/carrier-model.mjs';
-import { sitePath } from '../../../../lib/paths';
-import '../../../../styles/encyclopedia.css';
-import '../../../../styles/carriers.css';
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import CarrierModuleLink from '../../../components/encyclopedia/CarrierModuleLink.astro';
+import { carriers, carrierRoute, type Carrier } from '../../../data/carriers';
+import { carrierDate, carrierEntryDate, carrierEntryLabel, carrierMaturity } from '../../../data/carrier-model.mjs';
+import { sitePath } from '../../../lib/paths';
+import '../../../styles/encyclopedia.css';
+import '../../../styles/carriers.css';
 export function getStaticPaths() { return carriers.map((carrier) => ({ params: { slug: carrier.slug }, props: { carrier } })); }
 const { carrier } = Astro.props as { carrier: Carrier };
 const classmates = carriers.filter((entry) => entry.class === carrier.class && entry !== carrier);
 ---
-<SiteLayout title={carrier.name} activeSection="encyclopedia" description={carrier.summary} breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: 'Locations', href: sitePath('encyclopedia/locations/') }, { label: 'Carriers', href: sitePath('encyclopedia/locations/carriers/') }, { label: carrier.name }]}>
+<SiteLayout title={carrier.name} activeSection="encyclopedia" description={carrier.summary} breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: 'Carriers', href: sitePath('encyclopedia/carriers/') }, { label: carrier.name }]}>
   <article class="ency carriers" data-carrier-record={carrier.slug}>
     <section class="status-panel"><h2>{carrierMaturity}</h2><p>Historical reference record. The sources below cover the ship's identity, completion or carrier commission, and operator history.</p></section>
     <p class="lead">{carrier.summary}</p>

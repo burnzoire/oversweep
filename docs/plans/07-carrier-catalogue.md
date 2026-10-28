@@ -1,6 +1,24 @@
 # Post-WWII carrier catalogue
 
-Delivery branch: `codex/carrier-catalogue`. One physical hull per record in `src/data/carriers.json`; generated under Locations / Carriers. The index links the existing Carrier and Amphibious Ship Operations module and sits beside a dedicated Theatres browse page. Carrier records also participate in shared Locations search.
+Delivery branch: `codex/carrier-catalogue`. One physical hull per record in `src/data/carriers.json`; generated under Encyclopedia / Carriers. The index links the existing Carrier and Amphibious Ship Operations module. Carriers is a separate Encyclopedia category; Theatres and airfields stay under Locations.
+
+## Navigation revision
+
+The owner revised the information architecture after the initial implementation:
+Carriers is now an Encyclopedia category at `/encyclopedia/carriers/`, alongside
+Aircraft, Ordnance and Locations. Carrier record breadcrumbs are Encyclopedia /
+Carriers / ship. Carriers no longer contribute to Locations search, counts or
+menus. Theatres stays under Locations, and Naval Operations module links remain.
+All 92 source records are unchanged. The former `/encyclopedia/locations/carriers/`
+URLs redirect to their canonical replacements, preserving query strings and fragments.
+This navigation revision passed `npm run check` (214 tests, zero Astro errors),
+`npm run check:review` at `/oversweep`, `npm run check:dev`, documentation and
+whitespace checks. Production output contains 516 pages including 93 carrier
+redirects. Independent code review and seven focused carrier tests found no
+blockers; the registry remains byte-identical. Chromium at 1280, 768 and 390 px
+verified the category counts, canonical pages, module links, search, sorting,
+keyboard focus and both index/record redirects with query strings and fragments.
+The following original implementation/review notes retain their historical context.
 
 ## Inventory and evidence
 

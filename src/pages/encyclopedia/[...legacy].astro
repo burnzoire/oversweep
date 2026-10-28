@@ -1,14 +1,18 @@
 ---
 import { includedRecords } from '../../data/encyclopedia';
+import { carriers, carrierRoute } from '../../data/carriers';
 import { sitePath } from '../../lib/paths';
 export function getStaticPaths() {
-  return ['airfields-carriers', 'theatres'].flatMap((category) => [
+  return [...['airfields-carriers', 'theatres'].flatMap((category) => [
     { params: { legacy: `${category}` }, props: { target: 'encyclopedia/locations/' } },
     ...includedRecords.filter((r) => r.category === 'locations' && r.id.startsWith(`encyclopedia.${category}.`)).map((r) => ({ params: { legacy: `${category}/${r.slug}` }, props: { target: `encyclopedia/locations/${r.slug}/` } })),
-  ]);
+  ]),
+    { params: { legacy: 'locations/carriers' }, props: { target: 'encyclopedia/carriers/' } },
+    ...carriers.map((carrier) => ({ params: { legacy: `locations/carriers/${carrier.slug}` }, props: { target: carrierRoute(carrier) } })),
+  ];
 }
 const target = sitePath(Astro.props.target);
 ---
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width" /><title>Locations — Oversweep</title><meta http-equiv="refresh" content={`0;url=${target}`} /><link rel="canonical" href={target} /></head>
-<body><p>This page has moved to <a href={target}>Locations</a>.</p><script is:inline define:vars={{ target }}>location.replace(target + location.search + location.hash);</script></body></html>
+<html lang="en"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width" /><title>Page moved — Oversweep</title><meta http-equiv="refresh" content={`0;url=${target}`} /><link rel="canonical" href={target} /></head>
+<body><p>This page has moved to <a href={target}>the new page</a>.</p><script is:inline define:vars={{ target }}>location.replace(target + location.search + location.hash);</script></body></html>
