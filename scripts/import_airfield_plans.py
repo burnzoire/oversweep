@@ -10,7 +10,7 @@ included) within that many degrees of the point.
 Finds the OSM aerodrome at the airfield reference point with Nominatim,
 downloads the map data over its bounding box from the main OSM API, and keeps
 the aeroway features inside the aerodrome area: runways, taxiways, aprons,
-hangars, terminals and helipads. Lines are simplified to about 2 m and coordinates rounded to six
+hangars, terminals and helipads, including disused and abandoned ones. Lines are simplified to about 2 m and coordinates rounded to six
 decimal places. Writes src/data/airfield-plans/<slug>.json with the source,
 the retrieval date and the ODbL licence, which the figure credits.
 """
@@ -185,18 +185,21 @@ def main():
         aid, arings, atags = min(aerodromes, key=lambda a: span(a[1]))
         within = lambda pts: sum(any(inside(p, r[:-1]) for r in arings) for p in pts) * 2 >= len(pts)
 
+    # A field out of use may tag its paving disused:aeroway or abandoned:aeroway.
+    aeroway = lambda t: t.get('aeroway') or t.get('disused:aeroway') or t.get('abandoned:aeroway')
     features = []
     seen = set()
     for oid, rings, t in areas:
-        kind = t.get('aeroway')
+        kind = aeroway(t)
         if kind in DRAWN and kind not in ('runway', 'taxiway') and within(rings[0]):
             seen.add(oid)
             features.append({'type': kind, 'area': True, **({'ref': t['ref']} if t.get('ref') else {}), 'rings': [[[round(a, 6), round(b, 6)] for a, b in simplify(r)] for r in rings]})
     for wid, (pts, t) in ways.items():
-        kind = t.get('aeroway')
+        kind = aeroway(t)
         if kind not in ('runway', 'taxiway') or not within(pts):
             continue
-        closed = len(pts) > 3 and pts[0] == pts[-1] and t.get('area') == 'yes'
+        # A closed runway way is its outline, even when untagged as an area.
+        closed = len(pts) > 3 and pts[0] == pts[-1] and (t.get('area') == 'yes' or kind == 'runway')
         f = {'type': kind, 'area': closed}
         if t.get('ref'):
             f['ref'] = t['ref']

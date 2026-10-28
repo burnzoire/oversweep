@@ -39,7 +39,7 @@ sources:
   - n: 1
     title: "Krymsk air base"
     publisher: "Wikipedia (secondary source)"
-    url: "https://en.wikipedia.org/wiki/Krymsk_(air_base)"
+    url: "https://en.wikipedia.org/wiki/Krymsk_air_base"
     accessed: "2026-10-28"
   - n: 2
     title: "Крымск (аэродром) (Krymsk airfield)"

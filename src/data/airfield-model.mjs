@@ -231,10 +231,11 @@ function checkAirfield(rec, ctx, problems) {
     checkPeriod(n, `${where} name "${n.name}"`, problems);
   });
 
-  // A closed field has no role today, and an abandoned one may have no
-  // published operator history.
+  // An abandoned field may have no published operator history.
   const closed = data.status === 'closed';
-  if (!Array.isArray(data.roles) || (data.roles.length === 0 && !closed)) problems.push(`${where}: roles are missing.`);
+  // Roles may be empty where the sources describe no current role, as for a
+  // closed field or one whose use is unsettled after a war.
+  if (!Array.isArray(data.roles)) problems.push(`${where}: roles must be a list.`);
   for (const r of data.roles ?? []) if (!airfieldRoles[r]) problems.push(`${where}: unknown role "${r}".`);
 
   if (data.operators === undefined ? !closed : !Array.isArray(data.operators) || (data.operators.length === 0 && !closed)) problems.push(`${where}: operators are missing.`);

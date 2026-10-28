@@ -35,9 +35,9 @@ maps:
 photos: []
 sources:
   - n: 1
-    title: "Sukhumi Babushara Airport"
+    title: "Sukhum International Airport"
     publisher: "Wikipedia (secondary source)"
-    url: "https://en.wikipedia.org/wiki/Sukhumi_Babushara_Airport"
+    url: "https://en.wikipedia.org/wiki/Sukhum_International_Airport"
     accessed: "2026-10-28"
   - n: 2
     title: "Сухум (аэропорт) (Sukhum airport)"
