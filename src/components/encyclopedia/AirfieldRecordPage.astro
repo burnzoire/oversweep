@@ -4,6 +4,7 @@ import SiteLayout from '../../layouts/SiteLayout.astro';
 import Cited from './Cited.astro';
 import PhotoFigure from './PhotoFigure.astro';
 import RunwayFigure from './RunwayFigure.astro';
+import { ilsLines, navaidLines, runwayLines, towerLines, towerNote } from '../../data/map-airfield-text';
 import { airfieldCatalogue, airfieldContent, mapAirfieldAnchor, mapAirfieldTables, recordRoute, type AirfieldData, type EncyclopediaRecord, type MapData, type Period, type TheatreData } from '../../data/encyclopedia';
 import { airfieldRoles, basings, branches, coverageStatuses, currentUse, dateText, eras, hasEnded, nations, periodText, sims, useLabels } from '../../data/airfield-model.mjs';
 import { categoryTitle } from '../../data/availability';
@@ -62,12 +63,6 @@ const mapTable = map && mapAirfieldTables().find((x) => x.map === record.slug);
 const recordFor = (name: string) => map?.airfields.find((x) => x.coverage.status === 'represented' && x.coverage.inSimName === name)?.airfield.record;
 const runwayFields = mapTable?.airfields.filter((x) => x.runways.length) ?? [];
 const padFields = mapTable?.airfields.filter((x) => !x.runways.length) ?? [];
-// TACAN and DME channels carry an X or Y band; RSBN and PRMG channels do not.
-const dmeTypes = ['TACAN', 'VORTAC', 'VOR-DME', 'DME'];
-// A channel with its band; * marks a band assumed to be X (see the table note).
-const channelText = (type: string, channel: number, band?: string) =>
-  !dmeTypes.includes(type) ? `ch ${channel}` : band ? `${channel}${band}` : `${channel}X*`;
-const freq = (value: number | null | undefined) => value ? (Number.isInteger(value) ? value.toFixed(1) : String(+value.toFixed(3))) : '—';
 const ids = a?.identifiers;
 const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.iata}`, ids.faa && `FAA ${ids.faa}`, ...(ids.others ?? [])].filter(Boolean).join(' · ');
 ---
@@ -261,15 +256,15 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
                       <tr id={mapAirfieldAnchor(x.name)}>
                         <th scope="row">{r ? <a href={link(r)}>{x.name}</a> : x.name}{x.lat !== undefined && x.lon !== undefined && <span class="cell-note">{coord(x.lat, 'N', 'S')}, {coord(x.lon, 'E', 'W')}</span>}</th>
                         {mapTable.source.beacons && <td>{x.elevationFt === undefined ? '—' : `${n(x.elevationFt)} ft`}</td>}
-                        <td>{x.runways.map((rw) => <span class="cell-line">{rw.ends.map((e) => `${e.name} (${String(e.heading).padStart(3, '0')}°)`).join(' / ')}{rw.lengthFt && `, ${n(rw.lengthFt)} ft`}</span>)}</td>
+                        <td>{runwayLines(x).map((t) => <span class="cell-line">{t}</span>)}</td>
                         <td>{radio.vhf || radio.uhf ? <>
-                          {[radio.vhf && `VHF ${freq(radio.vhf)}`, radio.uhf && `UHF ${freq(radio.uhf)}`].filter(Boolean).map((t) => <span class="cell-line">{t}</span>)}
-                          {(radio.vhfLow || radio.hf) && <span class="cell-note">{[radio.vhfLow && `low VHF ${freq(radio.vhfLow)}`, radio.hf && `HF ${freq(radio.hf)}`].filter(Boolean).join(' · ')}</span>}
+                          {towerLines(x).map((t) => <span class="cell-line">{t}</span>)}
+                          {towerNote(x) && <span class="cell-note">{towerNote(x)}</span>}
                           {x.radioSource && <span class="cell-note">from pydcs †</span>}
                         </> : '—'}</td>
                         {mapTable.source.beacons && <>
-                          <td>{x.navaids.length ? x.navaids.map((v) => <span class="cell-line">{v.type} {[v.channel !== undefined && channelText(v.type, v.channel, v.band), v.frequency !== undefined && `${v.unit === 'kHz' ? v.frequency : freq(v.frequency)} ${v.unit}`].filter(Boolean).join(', ')}{v.callsign && ` (${v.callsign})`}</span>) : '—'}</td>
-                          <td>{x.approaches.length ? x.approaches.map((v) => <span class="cell-line">{v.type === 'PRMG' ? 'PRMG ' : ''}{v.runway || 'runway not given'}: {v.frequency !== undefined ? freq(v.frequency) : `ch ${v.channel}`}{v.callsign && ` (${v.callsign})`}</span>) : '—'}</td>
+                          <td>{x.navaids.length ? navaidLines(x).map((t) => <span class="cell-line">{t}</span>) : '—'}</td>
+                          <td>{x.approaches.length ? ilsLines(x).map((t) => <span class="cell-line">{t}</span>) : '—'}</td>
                         </>}
                       </tr>
                     );

@@ -204,5 +204,6 @@
 .map-airfield-table .entry-kicker { margin-left: 0.4rem; }
 .pad-list { margin-top: 1rem; }
 .pad-list summary { cursor: pointer; font-weight: 600; }
+.ency .sim-airfield-table { min-width: 64rem; }
 .map-airfield-table .cell-line, .sim-airfield-table .cell-line { display: block; }
 .map-airfield-table .cell-note, .sim-airfield-table .cell-note { display: block; font-size: 0.8em; font-weight: 400; color: var(--muted, #5b6470); }

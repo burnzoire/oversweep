@@ -1,6 +1,6 @@
 // Airfield index search and filters: a name, former name or identifier, and
-// a country, theatre, sim map and service. Cards, comparison rows and the
-// rows of every sim airfield carry the matching data-* attributes. Without JavaScript the form stays hidden and
+// a country, theatre, sim map and service. Cards and the rows of the table of
+// every represented airfield carry the matching data-* attributes. Without JavaScript the form stays hidden and
 // every airfield is listed. The choices are kept in the URL query.
 const form = document.querySelector('.airfield-filter');
 

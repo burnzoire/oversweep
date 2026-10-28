@@ -442,7 +442,7 @@ export const mapAirfieldTables = () => Object.values(mapTableFiles);
 export interface SimAirfield {
   name: string;
   names: string[];
-  maps: { map: MapEntry; name: string }[];
+  maps: { map: MapEntry; name: string; field: MapAirfieldTable['airfields'][number]; source: MapAirfieldTable['source'] }[];
   record?: AirfieldEntry;
   theatres: Entry<TheatreData>[];
   longestFt?: number;
@@ -476,7 +476,7 @@ export function simAirfields(): SimAirfield[] {
       group.record ??= record;
       group.keys.add(key(field.name));
       group.mapSlugs.add(table.map);
-      group.maps.push({ map, name: field.name });
+      group.maps.push({ map, name: field.name, field, source: table.source });
       group.lengths.push(...field.runways.flatMap((r) => r.lengthFt ?? []));
     }
   }
