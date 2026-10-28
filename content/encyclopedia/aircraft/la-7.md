@@ -25,6 +25,12 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Lavochkin_LA-7_pic1.JPG"
     accessed: "2026-10-25"
 quick: { firstFlight: 1944, maxSpeedKt: 357, ceilingFt: 34300 }
+purchase:
+  - sim: dcs
+    product: "DCS: La-7"
+    by: "OctopusG"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/la-7/" }
 sources:
   - n: 1
     title: "Lavochkin La-7"

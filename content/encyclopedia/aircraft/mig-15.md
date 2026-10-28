@@ -39,6 +39,22 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:MiG-15_being_hit_over_Korea_c1953.jpg"
     accessed: "2026-10-25"
 quick: { firstFlight: 1947, maxSpeedKt: 581, ceilingFt: 50900 }
+purchase:
+  - sim: dcs
+    product: "DCS: MiG-15bis"
+    by: "Belsimtek"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/mig15bis/" }
+  - sim: dcs
+    product: "MiG-15bis Flaming Cliffs"
+    by: "Eagle Dynamics"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/mig-15bis_flaming_cliffs/" }
+  - sim: msfs
+    product: "MiG-15 Bis"
+    by: "Bear Studios"
+    links:
+      - { store: "Just Flight", url: "https://www.justflight.com/product/bear-studios-mig-15-msfs" }
 sources:
   - n: 1
     title: "Mikoyan-Gurevich MiG-15"

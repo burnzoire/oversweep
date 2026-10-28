@@ -38,6 +38,17 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Supermarine_Spitfire_IX_G-LFIX_-_Flying_Legends_2016_(28123071802).jpg"
     accessed: "2026-10-25"
 quick: { firstFlight: 1936, maxSpeedKt: 351, ceilingFt: null }
+purchase:
+  - sim: dcs
+    product: "DCS: Spitfire LF Mk. IX"
+    by: "Eagle Dynamics"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/spitfire/" }
+  - sim: msfs
+    product: "Spitfire L.F Mk IXc"
+    by: "FlyingIron Simulations"
+    links:
+      - { store: "FlyingIron", url: "https://flyingironsimulations.com/products/spitfire-l-f-mk-ixc-for-microsoft-flight-simulator" }
 sources:
   - n: 1
     title: "Supermarine Spitfire"

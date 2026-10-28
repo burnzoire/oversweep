@@ -7,6 +7,13 @@ publisher: "Eagle Dynamics"
 setting: { era: modern, text: "Set in the present [1]" }
 area: "About 1,500 × 1,500 km, mostly ocean for naval operations, with Guam, Rota, Tinian, Saipan and the smaller islands [1]"
 theatres: [east-asia-pacific]
+purchase:
+  - sim: dcs
+    product: "DCS: Marianas Map"
+    by: "Eagle Dynamics"
+    free: "Free: every DCS World player can download it"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/terrains/marianas_terrain/" }
 sources:
   - n: 1
     title: "DCS: Marianas Map"

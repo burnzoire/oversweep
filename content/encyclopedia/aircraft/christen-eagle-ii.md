@@ -34,6 +34,12 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Cavanaugh_Flight_Museum_December_2019_12_(Christen_Eagle_II).jpg"
     accessed: "2026-10-25"
 quick: { firstFlight: 1977, maxSpeedKt: 160, ceilingFt: 17000 }
+purchase:
+  - sim: dcs
+    product: "DCS: Christen Eagle II"
+    by: "Magnitude 3"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/christen_eagle/" }
 sources:
   - n: 1
     title: "Aviat Eagle (Christen Eagle)"

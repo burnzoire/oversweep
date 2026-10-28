@@ -17,6 +17,8 @@
 // every relationship, and returns a list of problems; the site build throws
 // on any, so a broken record cannot ship.
 
+import { validatePurchases } from './purchase.mjs';
+
 // Countries and territories, for an airfield's location and for the nation an
 // operator or unit belongs to. Keys are stable slugs, not ISO codes, so places
 // such as the UK Sovereign Base Areas on Cyprus can be named for what they are.
@@ -308,6 +310,7 @@ function checkMap(rec, ctx, problems) {
   const nums = checkSources(data, where, problems);
   required(data, ['name', 'short', 'publisher'], where, problems);
   if (!sims[data.sim]) problems.push(`${where}: sim "${data.sim}" is unknown.`);
+  problems.push(...validatePurchases(data.purchase, where));
   const s = data.setting;
   if (!s || !eras[s.era]) problems.push(`${where}: setting.era must be one of ${Object.keys(eras).join(', ')}.`);
   else {

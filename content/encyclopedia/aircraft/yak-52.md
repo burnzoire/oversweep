@@ -35,6 +35,12 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Yakovlev_Yak-52_warbird_performing_aerobatics.jpg"
     accessed: "2026-10-25"
 quick: { firstFlight: 1976, maxSpeedKt: 154, ceilingFt: 13100 }
+purchase:
+  - sim: dcs
+    product: "DCS: Yak-52"
+    by: "Eagle Dynamics"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/yak52/" }
 sources:
   - n: 1
     title: "Yakovlev Yak-52"

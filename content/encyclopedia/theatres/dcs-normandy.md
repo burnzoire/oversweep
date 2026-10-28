@@ -7,6 +7,12 @@ publisher: "Ugra Media, for Eagle Dynamics"
 setting: { era: wwii, from: "1944", to: "1944", text: "The main battles of Operation Overlord, from D-Day to the liberation of Paris [1]" }
 area: "About 400 × 600 km of southern England and northern and central France, including London and Paris [1]"
 theatres: [europe]
+purchase:
+  - sim: dcs
+    product: "DCS: Normandy 2.0 Map"
+    by: "Ugra Media"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/terrains/normandy_2.0_terrain/" }
 sources:
   - n: 1
     title: "DCS: Normandy 2.0 Map"

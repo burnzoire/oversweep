@@ -34,6 +34,17 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:De_Havilland_DH.98_Mosquito_FB_Mk.VI.jpg"
     accessed: "2026-10-25"
 quick: { firstFlight: 1940, maxSpeedKt: 334, ceilingFt: 37000 }
+purchase:
+  - sim: dcs
+    product: "DCS: Mosquito FB VI"
+    by: "Eagle Dynamics"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/mosquito/" }
+  - sim: msfs
+    product: "DH98 B Mk IV Mosquito (the bomber version)"
+    by: "Aeroplane Heaven"
+    links:
+      - { store: "Orbx", url: "https://orbxdirect.com/product/aeroplaneheaven-mosquito" }
 sources:
   - n: 1
     title: "de Havilland Mosquito"

@@ -9,6 +9,12 @@ area: "About 1,000 × 900 km: much of Syria, all of Cyprus and Lebanon, and part
 theatres: [middle-east]
 differences:
   - { topic: "Harab Isk", text: "DCS reproduces the US helicopter base at Harab-Ishq, in the Lafarge cement plant [1]; US forces closed it and destroyed it with their own strikes when they withdrew from northern Syria in October 2019. [2]" }
+purchase:
+  - sim: dcs
+    product: "DCS: Syria Map"
+    by: "Ugra Media"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/terrains/syria_terrain/" }
 sources:
   - n: 1
     title: "DCS: Syria Map"

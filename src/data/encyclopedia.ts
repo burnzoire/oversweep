@@ -2,6 +2,7 @@ import type { MarkdownInstance } from 'astro';
 import registry from './encyclopedia.json';
 import { reviewTrainers } from './experiences';
 import { airfieldRoles, basings, branches, coverageStatuses, eras, nations, sims, validateCatalogue } from './airfield-model.mjs';
+import { purchaseSims, validatePurchases } from './purchase.mjs';
 
 // Encyclopedia records. Like modules, `publication` decides whether a record
 // ships in normal builds and is independent of `maturity`, which is always
@@ -100,6 +101,17 @@ export interface Photo {
   fit?: 'contain';
 }
 
+// One sim product behind an aircraft or map record, rendered as the data
+// plate's Purchase row (rules in purchase.mjs).
+export interface Purchase {
+  sim: keyof typeof purchaseSims;
+  product: string;
+  by: string;
+  links?: { store: string; url: string }[];
+  free?: string;
+  unavailable?: string;
+}
+
 // Aircraft records: the data plate gives cited text for the variant named in
 // `variant`; `quick` holds plain numbers for the category's comparison table.
 export interface AircraftData {
@@ -124,6 +136,7 @@ export interface AircraftData {
   // The first photo leads the page; the others follow the record text.
   photos: Photo[];
   quick: { firstFlight: number; maxSpeedKt: number | null; ceilingFt: number | null };
+  purchase?: Purchase[];
   sources: Source[];
 }
 
@@ -303,6 +316,7 @@ export interface MapData {
   theatres?: string[];
   differences?: SimDifference[];
   photos?: Photo[];
+  purchase?: Purchase[];
   sources: Source[];
 }
 
@@ -369,7 +383,12 @@ function contentFile(r: EncyclopediaRecord) {
 }
 
 export const recordContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile;
-export const aircraftContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AircraftData>;
+export const aircraftContent = (r: EncyclopediaRecord) => {
+  const file = contentFile(r) as unknown as RecordFile<AircraftData>;
+  const problems = validatePurchases(file.frontmatter.purchase, `aircraft ${r.slug}`);
+  if (problems.length) throw new Error(problems.join('\n'));
+  return file;
+};
 export const ordnanceContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<OrdnanceData>;
 export const terminologyContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<TerminologyData>;
 export const airfieldContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AirfieldCatalogueData>;

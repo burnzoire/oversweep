@@ -7,6 +7,12 @@ publisher: "Specter Studios, for Eagle Dynamics"
 setting: { era: modern, text: "No period is stated; the map depicts the terrain of Argentina, Chile and the Falkland Islands [1]" }
 area: "Over 3.1 million km² of Argentina, Chile and the Falkland Islands, from the Andes and Patagonia to Stanley [1]"
 theatres: [south-atlantic]
+purchase:
+  - sim: dcs
+    product: "DCS: South Atlantic Map"
+    by: "Specter Studios"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/terrains/south_atlantic_terrain/" }
 sources:
   - n: 1
     title: "DCS: South Atlantic"

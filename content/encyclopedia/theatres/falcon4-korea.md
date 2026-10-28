@@ -7,6 +7,13 @@ publisher: "MicroProse (Falcon 4.0, 1998); Lead Pursuit (Falcon 4.0: Allied Forc
 setting: { era: modern, text: "Falcon 4.0's story begins in the early 1990s with a North Korean invasion of the South [1]; Allied Force's campaigns can use data from 1999, 2005 or a projected 2010 [2]" }
 area: "The Korean Peninsula, with an airbase in Japan, which plays no part in the war [1]"
 theatres: [east-asia-pacific]
+purchase:
+  - sim: falcon4
+    product: "Falcon 4.0"
+    by: "MicroProse"
+    links:
+      - { store: "Steam", url: "https://store.steampowered.com/app/429530/" }
+      - { store: "GOG (in the Falcon Collection)", url: "https://www.gog.com/en/game/falcon_collection" }
 sources:
   - n: 1
     title: "Falcon 4.0"

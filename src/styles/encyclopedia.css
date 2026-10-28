@@ -20,6 +20,19 @@
 .ency .data-plate dt { font-weight: 700; }
 .ency .data-plate dd { margin: 0; }
 .ency .data-plate ul { margin: 0; padding-left: 1.1rem; }
+.ency .data-plate .purchase-list { list-style: none; padding: 0; }
+.ency .purchase-list li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.5rem; padding: 0.3rem 0; border-top: 1px dashed var(--color-border); }
+.ency .purchase-list li:first-child { border-top: 0; padding-top: 0; }
+.ency .purchase-sim { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-muted); }
+.ency .purchase-product { font-weight: 700; }
+.ency .purchase-by { color: var(--color-muted); }
+.ency .purchase-note { flex-basis: 100%; font-size: 0.9rem; }
+.ency .purchase-free { font-weight: 700; }
+.ency .purchase-links { display: flex; flex-basis: 100%; flex-wrap: wrap; gap: 0.4rem; }
+.ency .purchase-link { display: inline-block; padding: 0.15rem 0.6rem; border: 2px solid var(--color-ink); font-size: 0.85rem; font-weight: 700; text-decoration: none; color: var(--color-ink); background: var(--color-accent); }
+.ency .purchase-link:hover { color: var(--color-ink-text); background: var(--color-ink); }
+.ency .purchase-link:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+.ency .purchase-checked { margin: 0.35rem 0 0; font-size: 0.8rem; color: var(--color-muted); }
 .ency .data-plate .symbol { display: inline-block; min-width: 1.6rem; padding: 0 0.3rem; margin-right: 0.3rem; font: 700 0.95rem/1.5 "Courier New", monospace; text-align: center; color: #38e07b; background: #0d1a12; }
 
 .ency .table-scroll { overflow-x: auto; border: 1px solid var(--color-border); margin: 1rem 0; }

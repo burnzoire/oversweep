@@ -40,6 +40,17 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:UH-1H_VNAF_in_flight_1971.jpg"
     accessed: "2026-10-25"
 quick: { firstFlight: 1956, maxSpeedKt: 110, ceilingFt: 12600 }
+purchase:
+  - sim: dcs
+    product: "DCS: UH-1H Huey"
+    by: "Belsimtek"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/dcs_uh1h_huey/" }
+  - sim: msfs
+    product: "UH-1H Huey"
+    by: "Taog's Hangar"
+    links:
+      - { store: "Taog's Hangar", url: "https://www.taogshangar.com/huey" }
 sources:
   - n: 1
     title: "Bell UH-1 Iroquois"

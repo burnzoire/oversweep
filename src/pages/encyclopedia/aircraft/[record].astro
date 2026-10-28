@@ -3,6 +3,7 @@ import LinkedText from '../../../components/LinkedText.astro';
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import Cited from '../../../components/encyclopedia/Cited.astro';
 import PhotoFigure from '../../../components/encyclopedia/PhotoFigure.astro';
+import PurchaseRow from '../../../components/encyclopedia/PurchaseRow.astro';
 import { aircraftContent, aircraftGroups, categoryRecords, recordRoute, type EncyclopediaRecord } from '../../../data/encyclopedia';
 import { categoryTitle } from '../../../data/availability';
 import { sitePath } from '../../../lib/paths';
@@ -55,6 +56,7 @@ const plate: [string, string][] = [
         {plate.map(([term, text]) => <div><dt>{term}</dt><dd><Cited text={text} /></dd></div>)}
         <div><dt>Armament</dt><dd><ul>{data.armament.map((a) => <li><Cited text={a} /></li>)}</ul></dd></div>
         {data.sensors && <div><dt>Sensors and avionics</dt><dd><ul>{data.sensors.map((s) => <li><Cited text={s} /></li>)}</ul></dd></div>}
+        <PurchaseRow purchases={data.purchase} />
       </dl>
     </section>
 

@@ -7,6 +7,12 @@ publisher: "Eagle Dynamics"
 setting: { era: modern, text: "No single period: its missions and campaigns span different eras and conflicts, historical and hypothetical [1]" }
 area: "The whole of Iraq, from the southern deserts to the northern mountains, with a separately sold Northern Iraq region around Mosul and Kirkuk [1] [2]"
 theatres: [middle-east]
+purchase:
+  - sim: dcs
+    product: "DCS: Iraq Map"
+    by: "Eagle Dynamics"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/terrains/iraq_terrain/" }
 sources:
   - n: 1
     title: "DCS: Iraq"

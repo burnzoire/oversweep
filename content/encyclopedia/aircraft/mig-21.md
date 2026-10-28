@@ -35,6 +35,12 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:VPAF_MiG-21_landing_with_chute.jpg"
     accessed: "2026-10-25"
 quick: { firstFlight: 1955, maxSpeedKt: 1174, ceilingFt: 57400 }
+purchase:
+  - sim: dcs
+    product: "DCS: MiG-21bis"
+    by: "Magnitude 3"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/mig21bis/" }
 sources:
   - n: 1
     title: "Mikoyan-Gurevich MiG-21"

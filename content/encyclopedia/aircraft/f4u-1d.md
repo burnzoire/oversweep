@@ -34,6 +34,12 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:NASM_-_Vought_F4U-1D_Corsair_-_side.jpg"
     accessed: "2026-10-25"
 quick: { firstFlight: 1940, maxSpeedKt: 369, ceilingFt: 41500 }
+purchase:
+  - sim: dcs
+    product: "DCS: F4U-1D Corsair"
+    by: "Magnitude 3"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/corsair/" }
 sources:
   - n: 1
     title: "Vought F4U Corsair"

@@ -38,6 +38,12 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:F-18C_Hornet_of_VFA-136_in_flight_1992.JPEG"
     accessed: "2026-10-25"
 quick: { firstFlight: 1978, maxSpeedKt: 1034, ceilingFt: 50000 }
+purchase:
+  - sim: dcs
+    product: "DCS: F/A-18C"
+    by: "Eagle Dynamics"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/hornet/" }
 sources:
   - n: 1
     title: "McDonnell Douglas F/A-18 Hornet"

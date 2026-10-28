@@ -36,6 +36,17 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:MiG-29_Fulcrum_at_Mihail_Kogalniceanu_airbase.JPEG"
     accessed: "2026-10-25"
 quick: { firstFlight: 1977, maxSpeedKt: 1323, ceilingFt: 59100 }
+purchase:
+  - sim: dcs
+    product: "DCS: MiG-29A Fulcrum"
+    by: "Eagle Dynamics"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/fulcrum/" }
+  - sim: dcs
+    product: "MiG-29 Flaming Cliffs"
+    by: "Eagle Dynamics"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/mig-29_flaming_cliffs/" }
 sources:
   - n: 1
     title: "Mikoyan MiG-29"

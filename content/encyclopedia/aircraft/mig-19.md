@@ -35,6 +35,11 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Shenyang_J-6A_Farmer_(33524210828).jpg"
     accessed: "2026-10-25"
 quick: { firstFlight: 1952, maxSpeedKt: 784, ceilingFt: 57400 }
+purchase:
+  - sim: dcs
+    product: "DCS: MiG-19P Farmer"
+    by: "RAZBAM"
+    unavailable: "Not on sale: the DCS Store lists this RAZBAM module as not available"
 sources:
   - n: 1
     title: "Mikoyan-Gurevich MiG-19"
