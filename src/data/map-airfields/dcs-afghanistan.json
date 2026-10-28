@@ -1,0 +1,930 @@
+{
+ "map": "dcs-afghanistan",
+ "source": {
+  "title": "dcs-world-schema reference data: Afghanistan airbases, beacons and navaids",
+  "publisher": "dcs-world-schema, open-source data extracted by running DCS World 2.9.30.28536 (extracted 2026-10-04)",
+  "url": "https://github.com/YoloWingPixie/dcs-world-schema/tree/c3091e6c08fb8167e26145d0e33c10e4140c6fe7/dcs-world-reference/latest/airbases/Afghanistan",
+  "commit": "c3091e6c08fb8167e26145d0e33c10e4140c6fe7",
+  "dcsVersion": "2.9.30.28536",
+  "beacons": true,
+  "radioFallback": {
+   "title": "pydcs terrain data: afghanistan airports (airports.py)",
+   "url": "https://github.com/pydcs/dcs/blob/5ddcc63a2dcd661e16b14f7aa43219b93044855d/dcs/terrain/afghanistan/airports.py"
+  }
+ },
+ "airfields": [
+  {
+   "name": "Bagram",
+   "elevationFt": 4895,
+   "lat": 34.9457,
+   "lon": 69.2659,
+   "runways": [
+    {
+     "name": "03L/21R",
+     "lengthFt": 8941,
+     "ends": [
+      {
+       "name": "21R",
+       "heading": 206
+      },
+      {
+       "name": "03L",
+       "heading": 26
+      }
+     ]
+    },
+    {
+     "name": "03R/21L",
+     "lengthFt": 11117,
+     "ends": [
+      {
+       "name": "21L",
+       "heading": 206
+      },
+      {
+       "name": "03R",
+       "heading": 26
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.125,
+    "vhfLow": 39.15,
+    "vhf": 120.1,
+    "uhf": 325.75
+   },
+   "navaids": [
+    {
+     "type": "VORTAC",
+     "callsign": "BGM",
+     "channel": 74,
+     "band": "X",
+     "frequency": 112.7,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Bamyan",
+   "elevationFt": 8496,
+   "lat": 34.8089,
+   "lon": 67.8168,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 6250,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 66
+      },
+      {
+       "name": "25",
+       "heading": 246
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.325,
+    "vhfLow": 39.55,
+    "vhf": 118.55,
+    "uhf": 250.65
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Bost",
+   "elevationFt": 2549,
+   "lat": 31.5598,
+   "lon": 64.3648,
+   "runways": [
+    {
+     "name": "01/19",
+     "lengthFt": 5758,
+     "ends": [
+      {
+       "name": "01",
+       "heading": 5
+      },
+      {
+       "name": "19",
+       "heading": 185
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.05,
+    "vhfLow": 39.0,
+    "vhf": 131.25,
+    "uhf": 243.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Camp Bastion",
+   "elevationFt": 2894,
+   "lat": 31.8502,
+   "lon": 64.2237,
+   "runways": [
+    {
+     "name": "01/19",
+     "lengthFt": 10647,
+     "ends": [
+      {
+       "name": "01",
+       "heading": 7
+      },
+      {
+       "name": "19",
+       "heading": 187
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.9,
+    "vhfLow": 38.7,
+    "vhf": 123.3,
+    "uhf": 250.1
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "BS",
+     "frequency": 423,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "BAS",
+     "channel": 98,
+     "band": "X",
+     "frequency": 115.1,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Camp Bastion Heliport",
+   "elevationFt": 2906,
+   "lat": 31.8554,
+   "lon": 64.2132,
+   "runways": [
+    {
+     "name": "01/19",
+     "lengthFt": 1271,
+     "ends": [
+      {
+       "name": "01",
+       "heading": 7
+      },
+      {
+       "name": "19",
+       "heading": 187
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.1,
+    "vhfLow": 39.1,
+    "vhf": 118.2,
+    "uhf": 250.2
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Chaghcharan",
+   "elevationFt": 7435,
+   "lat": 34.5265,
+   "lon": 65.2713,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 5709,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 243
+      },
+      {
+       "name": "07",
+       "heading": 63
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.825,
+    "vhfLow": 38.55,
+    "vhf": 118.0,
+    "uhf": 250.05
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Dwyer",
+   "elevationFt": 2405,
+   "lat": 31.0919,
+   "lon": 64.067,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 7459,
+     "ends": [
+      {
+       "name": "05",
+       "heading": 48
+      },
+      {
+       "name": "23",
+       "heading": 228
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.775,
+    "vhfLow": 38.45,
+    "vhf": 121.75,
+    "uhf": 343.0
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "ADY",
+     "channel": 46
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Farah",
+   "elevationFt": 2226,
+   "lat": 32.3633,
+   "lon": 62.1677,
+   "runways": [
+    {
+     "name": "15/33",
+     "lengthFt": 6990,
+     "ends": [
+      {
+       "name": "33",
+       "heading": 327
+      },
+      {
+       "name": "15",
+       "heading": 147
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.975,
+    "vhfLow": 38.85,
+    "vhf": 118.1,
+    "uhf": 250.3
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "FOB Camp Dubs",
+   "elevationFt": 6128,
+   "lat": 34.4552,
+   "lon": 69.1075,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "FOB Clark",
+   "elevationFt": 4541,
+   "lat": 33.3453,
+   "lon": 69.7299,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "FOB Salerno",
+   "elevationFt": 3789,
+   "lat": 33.3634,
+   "lon": 69.9552,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 2149,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 265
+      },
+      {
+       "name": "08",
+       "heading": 85
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.275,
+    "vhfLow": 39.45,
+    "vhf": 121.5,
+    "uhf": 243.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "FOB Thunder",
+   "elevationFt": 7865,
+   "lat": 33.5724,
+   "lon": 69.2769,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Gardez",
+   "elevationFt": 7785,
+   "lat": 33.6281,
+   "lon": 69.2375,
+   "runways": [
+    {
+     "name": "03/21",
+     "lengthFt": 5428,
+     "ends": [
+      {
+       "name": "03",
+       "heading": 24
+      },
+      {
+       "name": "21",
+       "heading": 204
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.35,
+    "vhfLow": 39.6,
+    "vhf": 118.6,
+    "uhf": 250.7
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Ghazni Heliport",
+   "elevationFt": 7126,
+   "lat": 33.5046,
+   "lon": 68.4142,
+   "runways": [
+    {
+     "name": "17/35",
+     "lengthFt": 1215,
+     "ends": [
+      {
+       "name": "35",
+       "heading": 353
+      },
+      {
+       "name": "17",
+       "heading": 173
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.3,
+    "vhfLow": 39.5,
+    "vhf": 118.45,
+    "uhf": 250.55
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Herat",
+   "elevationFt": 3237,
+   "lat": 34.2079,
+   "lon": 62.2279,
+   "runways": [
+    {
+     "name": "18/36",
+     "lengthFt": 8919,
+     "ends": [
+      {
+       "name": "18",
+       "heading": 183
+      },
+      {
+       "name": "36",
+       "heading": 3
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.75,
+    "vhfLow": 38.4,
+    "vhf": 123.35,
+    "uhf": 240.3
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "HRT",
+     "frequency": 412,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "HRT",
+     "channel": 54
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "AHR",
+     "channel": 109,
+     "band": "X",
+     "frequency": 116.2,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Jalalabad",
+   "elevationFt": 1841,
+   "lat": 34.4002,
+   "lon": 70.4981,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 6221,
+     "ends": [
+      {
+       "name": "13",
+       "heading": 128
+      },
+      {
+       "name": "31",
+       "heading": 308
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.25,
+    "vhfLow": 39.4,
+    "vhf": 129.7,
+    "uhf": 231.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Kabul",
+   "elevationFt": 5869,
+   "lat": 34.5658,
+   "lon": 69.2127,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 10393,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 104
+      },
+      {
+       "name": "29",
+       "heading": 284
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.2,
+    "vhfLow": 39.3,
+    "vhf": 120.6,
+    "uhf": 284.25
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "OKB",
+     "channel": 65,
+     "frequency": 133.8,
+     "unit": "MHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "KBL",
+     "channel": 57,
+     "band": "X",
+     "frequency": 112.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Kandahar",
+   "elevationFt": 3323,
+   "lat": 31.5058,
+   "lon": 65.8477,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 9780,
+     "ends": [
+      {
+       "name": "23",
+       "heading": 232
+      },
+      {
+       "name": "05",
+       "heading": 52
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.025,
+    "vhfLow": 38.95,
+    "vhf": 125.5,
+    "uhf": 360.2
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "KAF",
+     "channel": 75
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "KDR",
+     "channel": 107,
+     "band": "X",
+     "frequency": 116.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Kandahar Heliport",
+   "elevationFt": 3337,
+   "lat": 31.5207,
+   "lon": 65.8458,
+   "runways": [
+    {
+     "name": "05L/23R",
+     "lengthFt": 718,
+     "ends": [
+      {
+       "name": "23R",
+       "heading": 232
+      },
+      {
+       "name": "05L",
+       "heading": 52
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.95,
+    "vhfLow": 38.8,
+    "vhf": 119.5,
+    "uhf": 300.2
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Khost",
+   "elevationFt": 3768,
+   "lat": 33.3331,
+   "lon": 69.951,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 5619,
+     "ends": [
+      {
+       "name": "23",
+       "heading": 239
+      },
+      {
+       "name": "05",
+       "heading": 59
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.225,
+    "vhfLow": 39.35,
+    "vhf": 118.4,
+    "uhf": 250.5
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Maymana Zahiraddin Faryabi",
+   "elevationFt": 2730,
+   "lat": 35.9307,
+   "lon": 64.7609,
+   "runways": [
+    {
+     "name": "14/32",
+     "lengthFt": 5542,
+     "ends": [
+      {
+       "name": "32",
+       "heading": 319
+      },
+      {
+       "name": "14",
+       "heading": 139
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.875,
+    "vhfLow": 38.65,
+    "vhf": 118.15,
+    "uhf": 250.15
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Nimroz",
+   "elevationFt": 1585,
+   "lat": 30.9635,
+   "lon": 62.0607,
+   "runways": [
+    {
+     "name": "14/32",
+     "lengthFt": 6944,
+     "ends": [
+      {
+       "name": "14",
+       "heading": 137
+      },
+      {
+       "name": "32",
+       "heading": 317
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.85,
+    "vhfLow": 38.6,
+    "vhf": 118.05,
+    "uhf": 250.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Qala i Naw",
+   "elevationFt": 2953,
+   "lat": 34.9858,
+   "lon": 63.1177,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 6114,
+     "ends": [
+      {
+       "name": "22",
+       "heading": 216
+      },
+      {
+       "name": "04",
+       "heading": 36
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.0,
+    "vhfLow": 38.9,
+    "vhf": 118.35,
+    "uhf": 250.35
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Sharana",
+   "elevationFt": 7344,
+   "lat": 33.1258,
+   "lon": 68.8385,
+   "runways": [
+    {
+     "name": "14/32",
+     "lengthFt": 4045,
+     "ends": [
+      {
+       "name": "32",
+       "heading": 322
+      },
+      {
+       "name": "14",
+       "heading": 142
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.175,
+    "vhfLow": 39.25,
+    "vhf": 118.3,
+    "uhf": 250.45
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Shindand",
+   "elevationFt": 3750,
+   "lat": 33.3927,
+   "lon": 62.2611,
+   "runways": [
+    {
+     "name": "18/36",
+     "lengthFt": 7032,
+     "ends": [
+      {
+       "name": "36",
+       "heading": 358
+      },
+      {
+       "name": "18",
+       "heading": 178
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.8,
+    "vhfLow": 38.5,
+    "vhf": 134.75,
+    "uhf": 265.65
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "ASD",
+     "channel": 48,
+     "band": "X",
+     "frequency": 111.1,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Shindand Heliport",
+   "elevationFt": 3804,
+   "lat": 33.4078,
+   "lon": 62.2683,
+   "runways": [
+    {
+     "name": "18/36",
+     "lengthFt": 688,
+     "ends": [
+      {
+       "name": "36",
+       "heading": 358
+      },
+      {
+       "name": "18",
+       "heading": 178
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.925,
+    "vhfLow": 38.75,
+    "vhf": 121.5,
+    "uhf": 344.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Tarinkot",
+   "elevationFt": 4415,
+   "lat": 32.6051,
+   "lon": 65.8642,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 5903,
+     "ends": [
+      {
+       "name": "12",
+       "heading": 121
+      },
+      {
+       "name": "30",
+       "heading": 301
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.075,
+    "vhfLow": 39.05,
+    "vhf": 128.0,
+    "uhf": 250.4
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Urgoon Heliport",
+   "elevationFt": 7483,
+   "lat": 32.9375,
+   "lon": 69.1517,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 1096,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 92
+      },
+      {
+       "name": "27",
+       "heading": 272
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.15,
+    "vhfLow": 39.2,
+    "vhf": 118.25,
+    "uhf": 250.25
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Zaranj",
+   "elevationFt": 1608,
+   "lat": 30.9728,
+   "lon": 61.8658,
+   "runways": [
+    {
+     "name": "01/19",
+     "lengthFt": 5176,
+     "ends": [
+      {
+       "name": "01",
+       "heading": 342
+      },
+      {
+       "name": "19",
+       "heading": 162
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.425,
+    "vhfLow": 39.75,
+    "vhf": 118.5,
+    "uhf": 250.6
+   },
+   "navaids": [],
+   "approaches": []
+  }
+ ]
+}

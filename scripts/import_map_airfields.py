@@ -37,6 +37,14 @@ MAPS = {
     "dcs-nevada": ("schema", "Nevada", "nevada"),
     "dcs-marianas": ("schema", "MarianaIslands", "marianaislands"),
     "dcs-marianas-1944": ("schema", "MarianaIslandsWWII", None),
+    "dcs-caucasus": ("schema", "Caucasus", "caucasus"),
+    "dcs-sinai": ("schema", "SinaiMap", "sinai"),
+    "dcs-kola": ("schema", "Kola", "kola"),
+    "dcs-afghanistan": ("schema", "Afghanistan", "afghanistan"),
+    "dcs-iraq": ("schema", "Iraq", None),
+    "dcs-cold-war-germany": ("schema", "GermanyCW", None),
+    "dcs-normandy": ("schema", "Normandy", "normandy"),
+    "dcs-south-atlantic": ("schema", "Falklands", "falklands"),
     # Not in dcs-world-schema at the pinned commit.
     "dcs-the-channel": ("pydcs", "thechannel", "thechannel"),
 }

@@ -1,0 +1,1081 @@
+{
+ "map": "dcs-south-atlantic",
+ "source": {
+  "title": "dcs-world-schema reference data: Falklands airbases, beacons and navaids",
+  "publisher": "dcs-world-schema, open-source data extracted by running DCS World 2.9.30.28536 (extracted 2026-10-04)",
+  "url": "https://github.com/YoloWingPixie/dcs-world-schema/tree/c3091e6c08fb8167e26145d0e33c10e4140c6fe7/dcs-world-reference/latest/airbases/Falklands",
+  "commit": "c3091e6c08fb8167e26145d0e33c10e4140c6fe7",
+  "dcsVersion": "2.9.30.28536",
+  "beacons": true,
+  "radioFallback": {
+   "title": "pydcs terrain data: falklands airports (airports.py)",
+   "url": "https://github.com/pydcs/dcs/blob/5ddcc63a2dcd661e16b14f7aa43219b93044855d/dcs/terrain/falklands/airports.py"
+  }
+ },
+ "airfields": [
+  {
+   "name": "Almirante Schroeders",
+   "elevationFt": 161,
+   "lat": -53.6069,
+   "lon": -70.4762,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 3595,
+     "ends": [
+      {
+       "name": "22",
+       "heading": 220
+      },
+      {
+       "name": "04",
+       "heading": 40
+      }
+     ]
+    },
+    {
+     "name": "12/30",
+     "lengthFt": 4628,
+     "ends": [
+      {
+       "name": "12",
+       "heading": 125
+      },
+      {
+       "name": "30",
+       "heading": 305
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.0,
+    "vhfLow": 38.6,
+    "vhf": 118.25,
+    "uhf": 229.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Comandante Luis Piedrabuena",
+   "elevationFt": 70,
+   "lat": -49.995,
+   "lon": -68.9514,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 3505,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 260
+      },
+      {
+       "name": "08",
+       "heading": 80
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.9,
+    "vhfLow": 38.7,
+    "vhf": 122.1,
+    "uhf": 250.3
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Cullen",
+   "elevationFt": 135,
+   "lat": -52.8851,
+   "lon": -68.412,
+   "runways": [
+    {
+     "name": "07/26",
+     "lengthFt": 3864,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 241
+      },
+      {
+       "name": "07",
+       "heading": 61
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.15,
+    "vhfLow": 38.8,
+    "vhf": 119.1,
+    "uhf": 231.5
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "El Calafate",
+   "elevationFt": 661,
+   "lat": -50.2802,
+   "lon": -72.0527,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 7579,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 253
+      },
+      {
+       "name": "07",
+       "heading": 73
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.85,
+    "vhfLow": 38.6,
+    "vhf": 119.95,
+    "uhf": 250.2
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "ECA",
+     "channel": 94,
+     "band": "X",
+     "frequency": 114.7,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "25",
+     "callsign": "ec",
+     "frequency": 108.9
+    }
+   ]
+  },
+  {
+   "name": "Franco Bianco",
+   "elevationFt": 105,
+   "lat": -52.7366,
+   "lon": -69.3338,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 5008,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 75
+      },
+      {
+       "name": "25",
+       "heading": 255
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.05,
+    "vhfLow": 39.0,
+    "vhf": 128.5,
+    "uhf": 250.6
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Gobernador Gregores",
+   "elevationFt": 1168,
+   "lat": -48.7832,
+   "lon": -70.148,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 8672,
+     "ends": [
+      {
+       "name": "28",
+       "heading": 274
+      },
+      {
+       "name": "10",
+       "heading": 94
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.1,
+    "vhfLow": 39.1,
+    "vhf": 118.1,
+    "uhf": 250.7
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Goose Green",
+   "elevationFt": 60,
+   "lat": -51.8198,
+   "lon": -58.9802,
+   "runways": [
+    {
+     "name": "14/32",
+     "lengthFt": 1977,
+     "ends": [
+      {
+       "name": "14",
+       "heading": 138
+      },
+      {
+       "name": "32",
+       "heading": 318
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.075,
+    "vhfLow": 39.05,
+    "vhf": 126.0,
+    "uhf": 250.65
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Gull Point",
+   "elevationFt": 4,
+   "lat": -52.1794,
+   "lon": -58.8607,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 1065,
+     "ends": [
+      {
+       "name": "22",
+       "heading": 215
+      },
+      {
+       "name": "04",
+       "heading": 35
+      }
+     ]
+    },
+    {
+     "name": "15/33",
+     "lengthFt": 1352,
+     "ends": [
+      {
+       "name": "15",
+       "heading": 151
+      },
+      {
+       "name": "33",
+       "heading": 331
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.45,
+    "vhfLow": 39.5,
+    "vhf": 126.5,
+    "uhf": 234.5
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Hipico Flying Club",
+   "elevationFt": 935,
+   "lat": -48.7567,
+   "lon": -70.2313,
+   "runways": [
+    {
+     "name": "01/19",
+     "lengthFt": 2304,
+     "ends": [
+      {
+       "name": "01",
+       "heading": 11
+      },
+      {
+       "name": "19",
+       "heading": 191
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.5,
+    "vhfLow": 39.6,
+    "vhf": 131.5,
+    "uhf": 235.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Mount Pleasant",
+   "elevationFt": 207,
+   "lat": -51.8207,
+   "lon": -58.4577,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 4284,
+     "ends": [
+      {
+       "name": "23",
+       "heading": 232
+      },
+      {
+       "name": "05",
+       "heading": 52
+      }
+     ]
+    },
+    {
+     "name": "10/28",
+     "lengthFt": 6763,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 103
+      },
+      {
+       "name": "28",
+       "heading": 283
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.15,
+    "vhfLow": 39.2,
+    "vhf": 133.35,
+    "uhf": 250.8
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "MP",
+     "frequency": 380,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "MPA",
+     "channel": 59,
+     "band": "X",
+     "frequency": 112.2,
+     "unit": "MHz"
+    },
+    {
+     "type": "VOR",
+     "callsign": "MTP",
+     "channel": 94,
+     "frequency": 114.7,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "28",
+     "callsign": "imp",
+     "frequency": 111.9
+    }
+   ]
+  },
+  {
+   "name": "O'Higgins",
+   "elevationFt": 888,
+   "lat": -48.469,
+   "lon": -72.5633,
+   "runways": [
+    {
+     "name": "16/34",
+     "lengthFt": 3968,
+     "ends": [
+      {
+       "name": "34",
+       "heading": 338
+      },
+      {
+       "name": "16",
+       "heading": 158
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.125,
+    "vhfLow": 39.15,
+    "vhf": 118.25,
+    "uhf": 250.75
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Pampa Guanaco",
+   "elevationFt": 520,
+   "lat": -54.05,
+   "lon": -68.809,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 2350,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 258
+      },
+      {
+       "name": "08",
+       "heading": 78
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.75,
+    "vhfLow": 38.4,
+    "vhf": 118.0,
+    "uhf": 250.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Port Stanley",
+   "elevationFt": 69,
+   "lat": -51.6859,
+   "lon": -57.7778,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 4389,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 267
+      },
+      {
+       "name": "09",
+       "heading": 87
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.975,
+    "vhfLow": 38.85,
+    "vhf": 118.1,
+    "uhf": 250.45
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "SA",
+     "frequency": 305,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR",
+     "callsign": "DFO",
+     "frequency": 113.3,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Porvenir",
+   "elevationFt": 106,
+   "lat": -53.2537,
+   "lon": -70.3193,
+   "runways": [
+    {
+     "name": "03/21",
+     "lengthFt": 2621,
+     "ends": [
+      {
+       "name": "21",
+       "heading": 214
+      },
+      {
+       "name": "03",
+       "heading": 34
+      }
+     ]
+    },
+    {
+     "name": "09/27",
+     "lengthFt": 7821,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 98
+      },
+      {
+       "name": "27",
+       "heading": 278
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.95,
+    "vhfLow": 38.8,
+    "vhf": 126.7,
+    "uhf": 250.4
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Puerto Natales",
+   "elevationFt": 217,
+   "lat": -51.6707,
+   "lon": -72.5282,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 5282,
+     "ends": [
+      {
+       "name": "28",
+       "heading": 287
+      },
+      {
+       "name": "10",
+       "heading": 107
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.825,
+    "vhfLow": 38.55,
+    "vhf": 128.1,
+    "uhf": 250.15
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "PNT",
+     "channel": 106,
+     "band": "X",
+     "frequency": 115.9,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Puerto Santa Cruz",
+   "elevationFt": 364,
+   "lat": -50.017,
+   "lon": -68.5791,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 5639,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 69
+      },
+      {
+       "name": "25",
+       "heading": 249
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.875,
+    "vhfLow": 38.65,
+    "vhf": 118.6,
+    "uhf": 250.25
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Puerto Williams",
+   "elevationFt": 66,
+   "lat": -54.931,
+   "lon": -67.6262,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 4312,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 80
+      },
+      {
+       "name": "26",
+       "heading": 260
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.8,
+    "vhfLow": 38.5,
+    "vhf": 118.5,
+    "uhf": 250.1
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "PWL",
+     "channel": 96,
+     "band": "X",
+     "frequency": 114.9,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Punta Arenas",
+   "elevationFt": 112,
+   "lat": -53.0055,
+   "lon": -70.8569,
+   "runways": [
+    {
+     "name": "01/19",
+     "lengthFt": 4607,
+     "ends": [
+      {
+       "name": "19",
+       "heading": 196
+      },
+      {
+       "name": "01",
+       "heading": 16
+      }
+     ]
+    },
+    {
+     "name": "07/25",
+     "lengthFt": 8979,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 256
+      },
+      {
+       "name": "07",
+       "heading": 76
+      }
+     ]
+    },
+    {
+     "name": "12/30",
+     "lengthFt": 6835,
+     "ends": [
+      {
+       "name": "30",
+       "heading": 307
+      },
+      {
+       "name": "12",
+       "heading": 127
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.3,
+    "vhfLow": 39.5,
+    "vhf": 118.7,
+    "uhf": 251.1
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "NAS",
+     "frequency": 270,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "NAS",
+     "frequency": 114.1,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "25",
+     "callsign": "INAS",
+     "frequency": 109.9
+    }
+   ]
+  },
+  {
+   "name": "Rio Chico",
+   "elevationFt": 75,
+   "lat": -51.669,
+   "lon": -69.2661,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 3239,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 84
+      },
+      {
+       "name": "26",
+       "heading": 264
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.025,
+    "vhfLow": 38.95,
+    "vhf": 118.2,
+    "uhf": 250.55
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Rio Gallegos",
+   "elevationFt": 57,
+   "lat": -51.6089,
+   "lon": -69.3123,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 10586,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 255
+      },
+      {
+       "name": "07",
+       "heading": 75
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.2,
+    "vhfLow": 39.3,
+    "vhf": 119.1,
+    "uhf": 250.9
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "GAL",
+     "channel": 114,
+     "band": "X",
+     "frequency": 116.7,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "25",
+     "callsign": "gl",
+     "frequency": 110.3
+    }
+   ]
+  },
+  {
+   "name": "Rio Grande",
+   "elevationFt": 52,
+   "lat": -53.7776,
+   "lon": -67.7499,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 5923,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 77
+      },
+      {
+       "name": "26",
+       "heading": 257
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.225,
+    "vhfLow": 39.35,
+    "vhf": 118.3,
+    "uhf": 250.95
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "P",
+     "frequency": 265,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "gra",
+     "channel": 31,
+     "frequency": 1000,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "GRA",
+     "channel": 120,
+     "band": "X",
+     "frequency": 117.3,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "26",
+     "callsign": "gr",
+     "frequency": 109.5
+    }
+   ]
+  },
+  {
+   "name": "Rio Turbio",
+   "elevationFt": 896,
+   "lat": -51.6051,
+   "lon": -72.2198,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 5058,
+     "ends": [
+      {
+       "name": "24",
+       "heading": 238
+      },
+      {
+       "name": "06",
+       "heading": 58
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.0,
+    "vhfLow": 38.9,
+    "vhf": 118.1,
+    "uhf": 250.5
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "BIO",
+     "frequency": 205,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "San Carlos FOB",
+   "elevationFt": 63,
+   "lat": -51.5013,
+   "lon": -59.0049,
+   "runways": [
+    {
+     "name": "11/27",
+     "lengthFt": 1080,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 287
+      },
+      {
+       "name": "11",
+       "heading": 107
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.175,
+    "vhfLow": 39.25,
+    "vhf": 134.35,
+    "uhf": 250.85
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "San Julian",
+   "elevationFt": 144,
+   "lat": -49.3067,
+   "lon": -67.8027,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 6219,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 251
+      },
+      {
+       "name": "07",
+       "heading": 71
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.775,
+    "vhfLow": 38.45,
+    "vhf": 118.05,
+    "uhf": 250.05
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": null,
+     "frequency": 117.7,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Tolhuin",
+   "elevationFt": 355,
+   "lat": -54.4996,
+   "lon": -67.1724,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 3297,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 75
+      },
+      {
+       "name": "25",
+       "heading": 255
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.925,
+    "vhfLow": 38.75,
+    "vhf": 118.15,
+    "uhf": 250.35
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Ushuaia",
+   "elevationFt": 61,
+   "lat": -54.8433,
+   "lon": -68.2958,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 7631,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 74
+      },
+      {
+       "name": "25",
+       "heading": 254
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.25,
+    "vhfLow": 39.4,
+    "vhf": 118.1,
+    "uhf": 251.0
+   },
+   "navaids": [
+    {
+     "type": "VOR",
+     "callsign": "USU",
+     "channel": 84,
+     "frequency": 113.7,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "25",
+     "callsign": "us",
+     "frequency": 111.3
+    }
+   ]
+  },
+  {
+   "name": "Ushuaia Helo Port",
+   "elevationFt": 42,
+   "lat": -54.8228,
+   "lon": -68.3042,
+   "runways": [
+    {
+     "name": "16/34",
+     "lengthFt": 5076,
+     "ends": [
+      {
+       "name": "16",
+       "heading": 167
+      },
+      {
+       "name": "34",
+       "heading": 347
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.275,
+    "vhfLow": 39.45,
+    "vhf": 118.5,
+    "uhf": 251.05
+   },
+   "navaids": [],
+   "approaches": []
+  }
+ ]
+}

@@ -1,0 +1,923 @@
+{
+ "map": "dcs-caucasus",
+ "source": {
+  "title": "dcs-world-schema reference data: Caucasus airbases, beacons and navaids",
+  "publisher": "dcs-world-schema, open-source data extracted by running DCS World 2.9.30.28536 (extracted 2026-10-04)",
+  "url": "https://github.com/YoloWingPixie/dcs-world-schema/tree/c3091e6c08fb8167e26145d0e33c10e4140c6fe7/dcs-world-reference/latest/airbases/Caucasus",
+  "commit": "c3091e6c08fb8167e26145d0e33c10e4140c6fe7",
+  "dcsVersion": "2.9.30.28536",
+  "beacons": true,
+  "radioFallback": {
+   "title": "pydcs terrain data: caucasus airports (airports.py)",
+   "url": "https://github.com/pydcs/dcs/blob/5ddcc63a2dcd661e16b14f7aa43219b93044855d/dcs/terrain/caucasus/airports.py"
+  }
+ },
+ "airfields": [
+  {
+   "name": "Anapa-Vityazevo",
+   "elevationFt": 141,
+   "lat": 45.0049,
+   "lon": 37.3478,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 8624,
+     "ends": [
+      {
+       "name": "22",
+       "heading": 217
+      },
+      {
+       "name": "04",
+       "heading": 37
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.75,
+    "vhfLow": 38.4,
+    "vhf": 121.0,
+    "uhf": 250.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Batumi",
+   "elevationFt": 33,
+   "lat": 41.6096,
+   "lon": 41.6002,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 6793,
+     "ends": [
+      {
+       "name": "31",
+       "heading": 305
+      },
+      {
+       "name": "13",
+       "heading": 124
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.25,
+    "vhfLow": 40.4,
+    "vhf": 131.0,
+    "uhf": 260.0
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "LU",
+     "frequency": 430,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "BTM",
+     "channel": 16,
+     "band": "X",
+     "frequency": 977.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "13",
+     "callsign": "ILU",
+     "frequency": 110.3
+    }
+   ]
+  },
+  {
+   "name": "Beslan",
+   "elevationFt": 1722,
+   "lat": 43.2057,
+   "lon": 44.6058,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 9327,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 94
+      },
+      {
+       "name": "28",
+       "heading": 274
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.75,
+    "vhfLow": 42.4,
+    "vhf": 141.0,
+    "uhf": 270.0
+   },
+   "navaids": [],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "10",
+     "callsign": "ICH",
+     "frequency": 110.5
+    }
+   ]
+  },
+  {
+   "name": "Gelendzhik",
+   "elevationFt": 72,
+   "lat": 44.5729,
+   "lon": 38.0116,
+   "runways": [
+    {
+     "name": "01/19",
+     "lengthFt": 5452,
+     "ends": [
+      {
+       "name": "01",
+       "heading": 36
+      },
+      {
+       "name": "19",
+       "heading": 216
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.0,
+    "vhfLow": 39.4,
+    "vhf": 126.0,
+    "uhf": 255.0
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "GN",
+     "frequency": 1000,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR",
+     "callsign": "GN",
+     "channel": 90,
+     "frequency": 114.3,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Gudauta",
+   "elevationFt": 69,
+   "lat": 43.1143,
+   "lon": 40.5697,
+   "runways": [
+    {
+     "name": "15/33",
+     "lengthFt": 7840,
+     "ends": [
+      {
+       "name": "15",
+       "heading": 149
+      },
+      {
+       "name": "33",
+       "heading": 329
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.2,
+    "vhfLow": 40.2,
+    "vhf": 130.0,
+    "uhf": 259.0
+   },
+   "navaids": [
+    {
+     "type": "NDB with marker",
+     "callsign": "XC",
+     "frequency": 395,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Kobuleti",
+   "elevationFt": 59,
+   "lat": 41.9299,
+   "lon": 41.8633,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 7407,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 249
+      },
+      {
+       "name": "07",
+       "heading": 69
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.35,
+    "vhfLow": 40.8,
+    "vhf": 133.0,
+    "uhf": 262.0
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "KBL",
+     "channel": 67,
+     "band": "X",
+     "frequency": 1154.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "07",
+     "callsign": "IKB",
+     "frequency": 111.5
+    }
+   ]
+  },
+  {
+   "name": "Krasnodar-Center",
+   "elevationFt": 98,
+   "lat": 45.0869,
+   "lon": 38.94,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 7659,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 83
+      },
+      {
+       "name": "27",
+       "heading": 263
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.8,
+    "vhfLow": 38.6,
+    "vhf": 122.0,
+    "uhf": 251.0
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "MB",
+     "channel": 40
+    }
+   ],
+   "approaches": [
+    {
+     "type": "PRMG",
+     "runway": "09",
+     "callsign": "MB",
+     "channel": 38
+    }
+   ]
+  },
+  {
+   "name": "Krasnodar-Pashkovsky",
+   "elevationFt": 112,
+   "lat": 45.038,
+   "lon": 39.1881,
+   "runways": [
+    {
+     "name": "05R/23L",
+     "lengthFt": 9739,
+     "ends": [
+      {
+       "name": "23L",
+       "heading": 224
+      },
+      {
+       "name": "05R",
+       "heading": 44
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.1,
+    "vhfLow": 39.8,
+    "vhf": 128.0,
+    "uhf": 257.0
+   },
+   "navaids": [
+    {
+     "type": "VOR",
+     "callsign": "KN",
+     "channel": 105,
+     "frequency": 115.8,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Krymsk",
+   "elevationFt": 66,
+   "lat": 44.9679,
+   "lon": 37.995,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 6733,
+     "ends": [
+      {
+       "name": "04",
+       "heading": 35
+      },
+      {
+       "name": "22",
+       "heading": 215
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.9,
+    "vhfLow": 39.0,
+    "vhf": 124.0,
+    "uhf": 253.0
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "KW",
+     "channel": 28
+    }
+   ],
+   "approaches": [
+    {
+     "type": "PRMG",
+     "runway": "04",
+     "callsign": "OX",
+     "channel": 26
+    },
+    {
+     "type": "PRMG",
+     "runway": "22",
+     "callsign": "KW",
+     "channel": 26
+    }
+   ]
+  },
+  {
+   "name": "Kutaisi",
+   "elevationFt": 148,
+   "lat": 42.1776,
+   "lon": 42.4813,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 7936,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 253
+      },
+      {
+       "name": "07",
+       "heading": 73
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.4,
+    "vhfLow": 41.0,
+    "vhf": 134.0,
+    "uhf": 263.0
+   },
+   "navaids": [
+    {
+     "type": "NDB with marker",
+     "callsign": "TI",
+     "frequency": 477,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "KTS",
+     "channel": 44,
+     "band": "X",
+     "frequency": 1005.0,
+     "unit": "MHz"
+    },
+    {
+     "type": "VOR",
+     "callsign": "KT",
+     "channel": 83,
+     "frequency": 113.6,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "07",
+     "callsign": "IKS",
+     "frequency": 109.75
+    }
+   ]
+  },
+  {
+   "name": "Maykop-Khanskaya",
+   "elevationFt": 591,
+   "lat": 44.6813,
+   "lon": 40.0353,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 10196,
+     "ends": [
+      {
+       "name": "04",
+       "heading": 36
+      },
+      {
+       "name": "22",
+       "heading": 216
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.95,
+    "vhfLow": 39.2,
+    "vhf": 125.0,
+    "uhf": 254.0
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "DG",
+     "channel": 34
+    }
+   ],
+   "approaches": [
+    {
+     "type": "PRMG",
+     "runway": "04",
+     "callsign": "DG",
+     "channel": 36
+    }
+   ]
+  },
+  {
+   "name": "Mineralnye Vody",
+   "elevationFt": 1050,
+   "lat": 44.2279,
+   "lon": 43.0812,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 12316,
+     "ends": [
+      {
+       "name": "30",
+       "heading": 295
+      },
+      {
+       "name": "12",
+       "heading": 115
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.45,
+    "vhfLow": 41.2,
+    "vhf": 135.0,
+    "uhf": 264.0
+   },
+   "navaids": [
+    {
+     "type": "VOR",
+     "callsign": "MN",
+     "channel": 118,
+     "frequency": 117.1,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "12",
+     "callsign": "IMD",
+     "frequency": 111.7
+    },
+    {
+     "type": "ILS",
+     "runway": "30",
+     "callsign": "IMW",
+     "frequency": 109.3
+    }
+   ]
+  },
+  {
+   "name": "Mozdok",
+   "elevationFt": 507,
+   "lat": 43.7917,
+   "lon": 44.6058,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 7734,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 263
+      },
+      {
+       "name": "08",
+       "heading": 83
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.55,
+    "vhfLow": 41.6,
+    "vhf": 137.0,
+    "uhf": 266.0
+   },
+   "navaids": [
+    {
+     "type": "RSBN",
+     "callsign": "MZ",
+     "channel": 20
+    }
+   ],
+   "approaches": [
+    {
+     "type": "PRMG",
+     "runway": "08",
+     "callsign": "MZ",
+     "channel": 22
+    },
+    {
+     "type": "PRMG",
+     "runway": "26",
+     "callsign": "MK",
+     "channel": 22
+    }
+   ]
+  },
+  {
+   "name": "Nalchik",
+   "elevationFt": 1411,
+   "lat": 43.514,
+   "lon": 43.6365,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 6721,
+     "ends": [
+      {
+       "name": "06",
+       "heading": 55
+      },
+      {
+       "name": "24",
+       "heading": 235
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.5,
+    "vhfLow": 41.4,
+    "vhf": 136.0,
+    "uhf": 265.0
+   },
+   "navaids": [],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "24",
+     "callsign": "INL",
+     "frequency": 110.5
+    }
+   ]
+  },
+  {
+   "name": "Novorossiysk",
+   "elevationFt": 131,
+   "lat": 44.6681,
+   "lon": 37.7783,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 5639,
+     "ends": [
+      {
+       "name": "22",
+       "heading": 218
+      },
+      {
+       "name": "04",
+       "heading": 38
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.85,
+    "vhfLow": 38.8,
+    "vhf": 123.0,
+    "uhf": 252.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Senaki-Kolkhi",
+   "elevationFt": 43,
+   "lat": 42.2408,
+   "lon": 42.048,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 7256,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 274
+      },
+      {
+       "name": "09",
+       "heading": 94
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.3,
+    "vhfLow": 40.6,
+    "vhf": 132.0,
+    "uhf": 261.0
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "TSK",
+     "channel": 31,
+     "band": "X",
+     "frequency": 992.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "09",
+     "callsign": "ITS",
+     "frequency": 108.9
+    }
+   ]
+  },
+  {
+   "name": "Sochi-Adler",
+   "elevationFt": 98,
+   "lat": 43.4444,
+   "lon": 39.9411,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 9687,
+     "ends": [
+      {
+       "name": "06",
+       "heading": 59
+      },
+      {
+       "name": "24",
+       "heading": 239
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.05,
+    "vhfLow": 39.6,
+    "vhf": 127.0,
+    "uhf": 256.0
+   },
+   "navaids": [
+    {
+     "type": "NDB with marker",
+     "callsign": "CO",
+     "frequency": 761,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "06",
+     "callsign": "ISO",
+     "frequency": 111.1
+    }
+   ]
+  },
+  {
+   "name": "Soganlug",
+   "elevationFt": 1483,
+   "lat": 41.6495,
+   "lon": 44.9384,
+   "runways": [
+    {
+     "name": "14/32",
+     "lengthFt": 7872,
+     "ends": [
+      {
+       "name": "32",
+       "heading": 313
+      },
+      {
+       "name": "14",
+       "heading": 133
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.65,
+    "vhfLow": 42.0,
+    "vhf": 139.0,
+    "uhf": 268.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Sukhumi-Babushara",
+   "elevationFt": 43,
+   "lat": 42.8611,
+   "lon": 41.125,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 11218,
+     "ends": [
+      {
+       "name": "30",
+       "heading": 295
+      },
+      {
+       "name": "12",
+       "heading": 115
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.15,
+    "vhfLow": 40.0,
+    "vhf": 129.0,
+    "uhf": 258.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Tbilisi-Lochini",
+   "elevationFt": 1574,
+   "lat": 41.667,
+   "lon": 44.9563,
+   "runways": [
+    {
+     "name": "13R/31L",
+     "lengthFt": 7692,
+     "ends": [
+      {
+       "name": "13R",
+       "heading": 129
+      },
+      {
+       "name": "31L",
+       "heading": 309
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.6,
+    "vhfLow": 41.8,
+    "vhf": 138.0,
+    "uhf": 267.0
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "GTB",
+     "channel": 25,
+     "band": "X",
+     "frequency": 986.0,
+     "unit": "MHz"
+    },
+    {
+     "type": "VOR",
+     "callsign": "TB",
+     "channel": 84,
+     "frequency": 113.7,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "13R",
+     "callsign": "IVP",
+     "frequency": 110.3
+    },
+    {
+     "type": "ILS",
+     "runway": "31L",
+     "callsign": "INA",
+     "frequency": 108.9
+    }
+   ]
+  },
+  {
+   "name": "Vaziani",
+   "elevationFt": 1524,
+   "lat": 41.629,
+   "lon": 45.0272,
+   "runways": [
+    {
+     "name": "13R/31L",
+     "lengthFt": 7843,
+     "ends": [
+      {
+       "name": "13R",
+       "heading": 137
+      },
+      {
+       "name": "31L",
+       "heading": 317
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.7,
+    "vhfLow": 42.2,
+    "vhf": 140.0,
+    "uhf": 269.0
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "VAS",
+     "channel": 22,
+     "band": "X",
+     "frequency": 983.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "13R",
+     "callsign": "IVZ",
+     "frequency": 108.75
+    },
+    {
+     "type": "ILS",
+     "runway": "31L",
+     "callsign": "IVI",
+     "frequency": 108.75
+    }
+   ]
+  }
+ ]
+}

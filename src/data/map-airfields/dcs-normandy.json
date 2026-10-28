@@ -1,0 +1,3286 @@
+{
+ "map": "dcs-normandy",
+ "source": {
+  "title": "dcs-world-schema reference data: Normandy airbases, beacons and navaids",
+  "publisher": "dcs-world-schema, open-source data extracted by running DCS World 2.9.30.28536 (extracted 2026-10-04)",
+  "url": "https://github.com/YoloWingPixie/dcs-world-schema/tree/c3091e6c08fb8167e26145d0e33c10e4140c6fe7/dcs-world-reference/latest/airbases/Normandy",
+  "commit": "c3091e6c08fb8167e26145d0e33c10e4140c6fe7",
+  "dcsVersion": "2.9.30.28536",
+  "beacons": true,
+  "radioFallback": {
+   "title": "pydcs terrain data: normandy airports (airports.py)",
+   "url": "https://github.com/pydcs/dcs/blob/5ddcc63a2dcd661e16b14f7aa43219b93044855d/dcs/terrain/normandy/airports.py"
+  }
+ },
+ "airfields": [
+  {
+   "name": "Abbeville Drucat",
+   "elevationFt": 215,
+   "lat": 50.1381,
+   "lon": 1.8379,
+   "runways": [
+    {
+     "name": "02/20",
+     "lengthFt": 4868,
+     "ends": [
+      {
+       "name": "20",
+       "heading": 200
+      },
+      {
+       "name": "02",
+       "heading": 20
+      }
+     ]
+    },
+    {
+     "name": "08/26",
+     "lengthFt": 4995,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 267
+      },
+      {
+       "name": "08",
+       "heading": 87
+      }
+     ]
+    },
+    {
+     "name": "13/31",
+     "lengthFt": 3870,
+     "ends": [
+      {
+       "name": "31",
+       "heading": 308
+      },
+      {
+       "name": "13",
+       "heading": 128
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.55,
+    "vhfLow": 41.9,
+    "vhf": 118.05,
+    "uhf": 253.5
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Alderney",
+   "elevationFt": 210,
+   "lat": 49.7068,
+   "lon": -2.2146,
+   "runways": [
+    {
+     "name": "03/21",
+     "lengthFt": 1721,
+     "ends": [
+      {
+       "name": "03",
+       "heading": 26
+      },
+      {
+       "name": "21",
+       "heading": 206
+      }
+     ]
+    },
+    {
+     "name": "08/26",
+     "lengthFt": 2610,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 79
+      },
+      {
+       "name": "26",
+       "heading": 259
+      }
+     ]
+    },
+    {
+     "name": "13/31",
+     "lengthFt": 2533,
+     "ends": [
+      {
+       "name": "13",
+       "heading": 133
+      },
+      {
+       "name": "31",
+       "heading": 313
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.775,
+    "vhfLow": 42.4,
+    "vhf": 122.05,
+    "uhf": 254.2
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Amiens-Glisy",
+   "elevationFt": 212,
+   "lat": 49.872,
+   "lon": 2.3904,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 5098,
+     "ends": [
+      {
+       "name": "22",
+       "heading": 223
+      },
+      {
+       "name": "04",
+       "heading": 43
+      }
+     ]
+    },
+    {
+     "name": "11/29",
+     "lengthFt": 4193,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 114
+      },
+      {
+       "name": "29",
+       "heading": 294
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.475,
+    "vhfLow": 38.4,
+    "vhf": 120.8,
+    "uhf": 252.6
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Argentan",
+   "elevationFt": 610,
+   "lat": 48.7688,
+   "lon": -0.0304,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 3282,
+     "ends": [
+      {
+       "name": "30",
+       "heading": 298
+      },
+      {
+       "name": "12",
+       "heading": 118
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.35,
+    "vhfLow": 39.65,
+    "vhf": 119.4,
+    "uhf": 251.2
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Avranches Le Val-Saint-Pere",
+   "elevationFt": 47,
+   "lat": 48.6681,
+   "lon": -1.3806,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 3216,
+     "ends": [
+      {
+       "name": "13",
+       "heading": 126
+      },
+      {
+       "name": "31",
+       "heading": 306
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.2,
+    "vhfLow": 41.35,
+    "vhf": 121.15,
+    "uhf": 252.95
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Azeville",
+   "elevationFt": 75,
+   "lat": 49.481,
+   "lon": -1.3176,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 3549,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 70
+      },
+      {
+       "name": "25",
+       "heading": 250
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.875,
+    "vhfLow": 38.7,
+    "vhf": 118.35,
+    "uhf": 250.25
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Barville",
+   "elevationFt": 463,
+   "lat": 48.4801,
+   "lon": 0.314,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 4274,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 277
+      },
+      {
+       "name": "09",
+       "heading": 97
+      }
+     ]
+    },
+    {
+     "name": "15/33",
+     "lengthFt": 4217,
+     "ends": [
+      {
+       "name": "33",
+       "heading": 328
+      },
+      {
+       "name": "15",
+       "heading": 148
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.4,
+    "vhfLow": 39.75,
+    "vhf": 119.5,
+    "uhf": 251.3
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Bazenville",
+   "elevationFt": 200,
+   "lat": 49.304,
+   "lon": -0.5647,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 3801,
+     "ends": [
+      {
+       "name": "05",
+       "heading": 54
+      },
+      {
+       "name": "23",
+       "heading": 234
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.025,
+    "vhfLow": 39.0,
+    "vhf": 118.7,
+    "uhf": 250.55
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Beaumont-le-Roger",
+   "elevationFt": 489,
+   "lat": 49.0964,
+   "lon": 0.7969,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 2750,
+     "ends": [
+      {
+       "name": "23",
+       "heading": 232
+      },
+      {
+       "name": "05",
+       "heading": 52
+      }
+     ]
+    },
+    {
+     "name": "08/26",
+     "lengthFt": 2089,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 264
+      },
+      {
+       "name": "08",
+       "heading": 84
+      }
+     ]
+    },
+    {
+     "name": "14/32",
+     "lengthFt": 2544,
+     "ends": [
+      {
+       "name": "32",
+       "heading": 323
+      },
+      {
+       "name": "14",
+       "heading": 143
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.25,
+    "vhfLow": 41.45,
+    "vhf": 121.25,
+    "uhf": 253.05
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Beauvais-Tille",
+   "elevationFt": 331,
+   "lat": 49.4542,
+   "lon": 2.1132,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 5348,
+     "ends": [
+      {
+       "name": "22",
+       "heading": 220
+      },
+      {
+       "name": "04",
+       "heading": 40
+      }
+     ]
+    },
+    {
+     "name": "12/30",
+     "lengthFt": 4918,
+     "ends": [
+      {
+       "name": "12",
+       "heading": 122
+      },
+      {
+       "name": "30",
+       "heading": 302
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.675,
+    "vhfLow": 40.3,
+    "vhf": 120.05,
+    "uhf": 251.85
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Bembridg",
+   "elevationFt": 82,
+   "lat": 50.6785,
+   "lon": -1.1108,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 3281,
+     "ends": [
+      {
+       "name": "30",
+       "heading": 297
+      },
+      {
+       "name": "12",
+       "heading": 117
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.35,
+    "vhfLow": 42.35,
+    "vhf": 123.0,
+    "uhf": 360.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Beny-sur-Mer",
+   "elevationFt": 199,
+   "lat": 49.298,
+   "lon": -0.4266,
+   "runways": [
+    {
+     "name": "17/35",
+     "lengthFt": 3156,
+     "ends": [
+      {
+       "name": "35",
+       "heading": 353
+      },
+      {
+       "name": "17",
+       "heading": 173
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.075,
+    "vhfLow": 39.1,
+    "vhf": 118.8,
+    "uhf": 250.65
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Bernay Saint Martin",
+   "elevationFt": 498,
+   "lat": 49.1044,
+   "lon": 0.5984,
+   "runways": [
+    {
+     "name": "18/36",
+     "lengthFt": 3183,
+     "ends": [
+      {
+       "name": "18",
+       "heading": 181
+      },
+      {
+       "name": "36",
+       "heading": 1
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.325,
+    "vhfLow": 41.55,
+    "vhf": 121.35,
+    "uhf": 253.15
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Beuzeville",
+   "elevationFt": 114,
+   "lat": 49.4205,
+   "lon": -1.2986,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 3841,
+     "ends": [
+      {
+       "name": "05",
+       "heading": 49
+      },
+      {
+       "name": "23",
+       "heading": 229
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.85,
+    "vhfLow": 38.65,
+    "vhf": 118.3,
+    "uhf": 250.2
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Biggin Hill",
+   "elevationFt": 568,
+   "lat": 51.33,
+   "lon": 0.0316,
+   "runways": [
+    {
+     "name": "02/20",
+     "lengthFt": 4619,
+     "ends": [
+      {
+       "name": "20",
+       "heading": 205
+      },
+      {
+       "name": "02",
+       "heading": 25
+      }
+     ]
+    },
+    {
+     "name": "10/28",
+     "lengthFt": 2674,
+     "ends": [
+      {
+       "name": "28",
+       "heading": 284
+      },
+      {
+       "name": "10",
+       "heading": 104
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.4,
+    "vhfLow": 41.7,
+    "vhf": 134.8,
+    "uhf": 253.3
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Biniville",
+   "elevationFt": 107,
+   "lat": 49.4367,
+   "lon": -1.469,
+   "runways": [
+    {
+     "name": "14/32",
+     "lengthFt": 3384,
+     "ends": [
+      {
+       "name": "32",
+       "heading": 321
+      },
+      {
+       "name": "14",
+       "heading": 141
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.75,
+    "vhfLow": 38.45,
+    "vhf": 118.0,
+    "uhf": 250.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Broglie",
+   "elevationFt": 595,
+   "lat": 49.0156,
+   "lon": 0.4989,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 3282,
+     "ends": [
+      {
+       "name": "30",
+       "heading": 299
+      },
+      {
+       "name": "12",
+       "heading": 119
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.3,
+    "vhfLow": 41.5,
+    "vhf": 121.3,
+    "uhf": 253.1
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Brucheville",
+   "elevationFt": 46,
+   "lat": 49.3687,
+   "lon": -1.2158,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 3669,
+     "ends": [
+      {
+       "name": "24",
+       "heading": 246
+      },
+      {
+       "name": "06",
+       "heading": 66
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.725,
+    "vhfLow": 41.05,
+    "vhf": 120.85,
+    "uhf": 252.65
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Cardonville",
+   "elevationFt": 102,
+   "lat": 49.351,
+   "lon": -1.051,
+   "runways": [
+    {
+     "name": "15/33",
+     "lengthFt": 4542,
+     "ends": [
+      {
+       "name": "15",
+       "heading": 155
+      },
+      {
+       "name": "33",
+       "heading": 335
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.775,
+    "vhfLow": 38.5,
+    "vhf": 118.1,
+    "uhf": 250.05
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Carpiquet",
+   "elevationFt": 187,
+   "lat": 49.1751,
+   "lon": -0.4545,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 5115,
+     "ends": [
+      {
+       "name": "12",
+       "heading": 124
+      },
+      {
+       "name": "30",
+       "heading": 304
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.975,
+    "vhfLow": 38.9,
+    "vhf": 118.6,
+    "uhf": 250.45
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Chailey",
+   "elevationFt": 95,
+   "lat": 50.9525,
+   "lon": -0.0474,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 4154,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 254
+      },
+      {
+       "name": "07",
+       "heading": 74
+      }
+     ]
+    },
+    {
+     "name": "15/33",
+     "lengthFt": 3384,
+     "ends": [
+      {
+       "name": "15",
+       "heading": 152
+      },
+      {
+       "name": "33",
+       "heading": 332
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.2,
+    "vhfLow": 39.35,
+    "vhf": 119.05,
+    "uhf": 250.9
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Chippelle",
+   "elevationFt": 125,
+   "lat": 49.2419,
+   "lon": -0.9717,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 4643,
+     "ends": [
+      {
+       "name": "24",
+       "heading": 240
+      },
+      {
+       "name": "06",
+       "heading": 60
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.825,
+    "vhfLow": 38.6,
+    "vhf": 118.2,
+    "uhf": 250.15
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Conches",
+   "elevationFt": 541,
+   "lat": 48.9348,
+   "lon": 0.9613,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 4844,
+     "ends": [
+      {
+       "name": "22",
+       "heading": 224
+      },
+      {
+       "name": "04",
+       "heading": 44
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.575,
+    "vhfLow": 40.1,
+    "vhf": 119.85,
+    "uhf": 251.65
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Cormeilles-en-Vexin",
+   "elevationFt": 312,
+   "lat": 49.0933,
+   "lon": 2.0354,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 5097,
+     "ends": [
+      {
+       "name": "22",
+       "heading": 221
+      },
+      {
+       "name": "04",
+       "heading": 41
+      }
+     ]
+    },
+    {
+     "name": "11/29",
+     "lengthFt": 4917,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 116
+      },
+      {
+       "name": "29",
+       "heading": 296
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.7,
+    "vhfLow": 40.35,
+    "vhf": 120.1,
+    "uhf": 251.9
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Creil",
+   "elevationFt": 269,
+   "lat": 49.2528,
+   "lon": 2.5059,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 7362,
+     "ends": [
+      {
+       "name": "24",
+       "heading": 243
+      },
+      {
+       "name": "06",
+       "heading": 63
+      }
+     ]
+    },
+    {
+     "name": "13/31",
+     "lengthFt": 3770,
+     "ends": [
+      {
+       "name": "31",
+       "heading": 312
+      },
+      {
+       "name": "13",
+       "heading": 132
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.725,
+    "vhfLow": 40.4,
+    "vhf": 120.15,
+    "uhf": 251.95
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Cretteville",
+   "elevationFt": 95,
+   "lat": 49.3366,
+   "lon": -1.3794,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 4595,
+     "ends": [
+      {
+       "name": "31",
+       "heading": 310
+      },
+      {
+       "name": "13",
+       "heading": 130
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.55,
+    "vhfLow": 40.05,
+    "vhf": 119.8,
+    "uhf": 251.6
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Cricqueville-en-Bessin",
+   "elevationFt": 81,
+   "lat": 49.3646,
+   "lon": -1.0069,
+   "runways": [
+    {
+     "name": "17/35",
+     "lengthFt": 3460,
+     "ends": [
+      {
+       "name": "35",
+       "heading": 353
+      },
+      {
+       "name": "17",
+       "heading": 173
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.675,
+    "vhfLow": 42.15,
+    "vhf": 121.7,
+    "uhf": 253.75
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Deanland",
+   "elevationFt": 95,
+   "lat": 50.8843,
+   "lon": 0.1614,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 3372,
+     "ends": [
+      {
+       "name": "23",
+       "heading": 235
+      },
+      {
+       "name": "05",
+       "heading": 55
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.925,
+    "vhfLow": 40.8,
+    "vhf": 120.55,
+    "uhf": 252.35
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Deauville",
+   "elevationFt": 459,
+   "lat": 49.3643,
+   "lon": 0.1572,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 2838,
+     "ends": [
+      {
+       "name": "12",
+       "heading": 116
+      },
+      {
+       "name": "30",
+       "heading": 296
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.65,
+    "vhfLow": 41.2,
+    "vhf": 121.0,
+    "uhf": 252.8
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Detling",
+   "elevationFt": 558,
+   "lat": 51.3058,
+   "lon": 0.6016,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 3564,
+     "ends": [
+      {
+       "name": "04",
+       "heading": 42
+      },
+      {
+       "name": "22",
+       "heading": 222
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.425,
+    "vhfLow": 41.8,
+    "vhf": 118.45,
+    "uhf": 253.4
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Deux Jumeaux",
+   "elevationFt": 124,
+   "lat": 49.3473,
+   "lon": -0.9808,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 4629,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 105
+      },
+      {
+       "name": "28",
+       "heading": 285
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.8,
+    "vhfLow": 38.55,
+    "vhf": 118.15,
+    "uhf": 250.1
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Dinan-Trelivan",
+   "elevationFt": 377,
+   "lat": 48.4434,
+   "lon": -2.1031,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 2509,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 70
+      },
+      {
+       "name": "25",
+       "heading": 250
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.8,
+    "vhfLow": 40.55,
+    "vhf": 120.3,
+    "uhf": 252.1
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Dunkirk-Mardyck",
+   "elevationFt": 26,
+   "lat": 51.0304,
+   "lon": 2.257,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 4094,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 81
+      },
+      {
+       "name": "26",
+       "heading": 261
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.85,
+    "vhfLow": 42.1,
+    "vhf": 132.45,
+    "uhf": 253.7
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Eastchurch",
+   "elevationFt": 34,
+   "lat": 51.3904,
+   "lon": 0.8479,
+   "runways": [
+    {
+     "name": "02/20",
+     "lengthFt": 2235,
+     "ends": [
+      {
+       "name": "20",
+       "heading": 204
+      },
+      {
+       "name": "02",
+       "heading": 24
+      }
+     ]
+    },
+    {
+     "name": "10/28",
+     "lengthFt": 2624,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 109
+      },
+      {
+       "name": "28",
+       "heading": 289
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.575,
+    "vhfLow": 42.25,
+    "vhf": 119.25,
+    "uhf": 253.85
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Essay",
+   "elevationFt": 507,
+   "lat": 48.5205,
+   "lon": 0.2577,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 3384,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 276
+      },
+      {
+       "name": "09",
+       "heading": 96
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.425,
+    "vhfLow": 39.8,
+    "vhf": 119.55,
+    "uhf": 251.35
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Evreux",
+   "elevationFt": 423,
+   "lat": 49.0238,
+   "lon": 1.2133,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 5102,
+     "ends": [
+      {
+       "name": "22",
+       "heading": 216
+      },
+      {
+       "name": "04",
+       "heading": 36
+      }
+     ]
+    },
+    {
+     "name": "16/34",
+     "lengthFt": 5078,
+     "ends": [
+      {
+       "name": "16",
+       "heading": 166
+      },
+      {
+       "name": "34",
+       "heading": 346
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.175,
+    "vhfLow": 39.3,
+    "vhf": 119.0,
+    "uhf": 250.85
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Farnborough",
+   "elevationFt": 246,
+   "lat": 51.2787,
+   "lon": -0.7747,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 4677,
+     "ends": [
+      {
+       "name": "24",
+       "heading": 241
+      },
+      {
+       "name": "06",
+       "heading": 61
+      }
+     ]
+    },
+    {
+     "name": "17/35",
+     "lengthFt": 3631,
+     "ends": [
+      {
+       "name": "17",
+       "heading": 173
+      },
+      {
+       "name": "35",
+       "heading": 353
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.875,
+    "vhfLow": 40.7,
+    "vhf": 120.45,
+    "uhf": 252.25
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Fecamp-Benouville",
+   "elevationFt": 295,
+   "lat": 49.7463,
+   "lon": 0.3561,
+   "runways": [
+    {
+     "name": "18/36",
+     "lengthFt": 3183,
+     "ends": [
+      {
+       "name": "18",
+       "heading": 181
+      },
+      {
+       "name": "36",
+       "heading": 1
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.85,
+    "vhfLow": 40.65,
+    "vhf": 120.4,
+    "uhf": 252.2
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Flers",
+   "elevationFt": 662,
+   "lat": 48.7492,
+   "lon": -0.5956,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 3215,
+     "ends": [
+      {
+       "name": "23",
+       "heading": 233
+      },
+      {
+       "name": "05",
+       "heading": 53
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.6,
+    "vhfLow": 41.3,
+    "vhf": 121.1,
+    "uhf": 252.9
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Ford",
+   "elevationFt": 29,
+   "lat": 50.8185,
+   "lon": -0.5912,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 5635,
+     "ends": [
+      {
+       "name": "23",
+       "heading": 238
+      },
+      {
+       "name": "05",
+       "heading": 58
+      }
+     ]
+    },
+    {
+     "name": "14/32",
+     "lengthFt": 4003,
+     "ends": [
+      {
+       "name": "14",
+       "heading": 144
+      },
+      {
+       "name": "32",
+       "heading": 324
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.325,
+    "vhfLow": 39.6,
+    "vhf": 119.35,
+    "uhf": 251.15
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Friston",
+   "elevationFt": 309,
+   "lat": 50.7617,
+   "lon": 0.1715,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 3216,
+     "ends": [
+      {
+       "name": "06",
+       "heading": 61
+      },
+      {
+       "name": "24",
+       "heading": 241
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.9,
+    "vhfLow": 40.75,
+    "vhf": 120.5,
+    "uhf": 252.3
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Funtington",
+   "elevationFt": 125,
+   "lat": 50.8682,
+   "lon": -0.8691,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 6038,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 86
+      },
+      {
+       "name": "27",
+       "heading": 266
+      }
+     ]
+    },
+    {
+     "name": "15/33",
+     "lengthFt": 4344,
+     "ends": [
+      {
+       "name": "33",
+       "heading": 331
+      },
+      {
+       "name": "15",
+       "heading": 151
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.25,
+    "vhfLow": 39.45,
+    "vhf": 119.15,
+    "uhf": 251.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Goulet",
+   "elevationFt": 617,
+   "lat": 48.7497,
+   "lon": -0.1115,
+   "runways": [
+    {
+     "name": "03/21",
+     "lengthFt": 3284,
+     "ends": [
+      {
+       "name": "03",
+       "heading": 28
+      },
+      {
+       "name": "21",
+       "heading": 208
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.375,
+    "vhfLow": 39.7,
+    "vhf": 119.45,
+    "uhf": 251.25
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Gravesend",
+   "elevationFt": 178,
+   "lat": 51.4181,
+   "lon": 0.3967,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 2117,
+     "ends": [
+      {
+       "name": "24",
+       "heading": 237
+      },
+      {
+       "name": "06",
+       "heading": 57
+      }
+     ]
+    },
+    {
+     "name": "18/36",
+     "lengthFt": 5160,
+     "ends": [
+      {
+       "name": "18",
+       "heading": 179
+      },
+      {
+       "name": "36",
+       "heading": 359
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.775,
+    "vhfLow": 41.4,
+    "vhf": 121.2,
+    "uhf": 253.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Guernsey",
+   "elevationFt": 253,
+   "lat": 49.4358,
+   "lon": -2.596,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 2721,
+     "ends": [
+      {
+       "name": "29",
+       "heading": 292
+      },
+      {
+       "name": "11",
+       "heading": 112
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 5.0,
+    "vhfLow": 42.3,
+    "vhf": 118.25,
+    "uhf": 254.1
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Guyancourt",
+   "elevationFt": 525,
+   "lat": 48.7587,
+   "lon": 2.0799,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 2750,
+     "ends": [
+      {
+       "name": "04",
+       "heading": 44
+      },
+      {
+       "name": "22",
+       "heading": 224
+      }
+     ]
+    },
+    {
+     "name": "07/25",
+     "lengthFt": 2089,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 76
+      },
+      {
+       "name": "25",
+       "heading": 256
+      }
+     ]
+    },
+    {
+     "name": "13/31",
+     "lengthFt": 2544,
+     "ends": [
+      {
+       "name": "13",
+       "heading": 135
+      },
+      {
+       "name": "31",
+       "heading": 315
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.75,
+    "vhfLow": 40.45,
+    "vhf": 120.2,
+    "uhf": 252.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Hauterive",
+   "elevationFt": 476,
+   "lat": 48.4999,
+   "lon": 0.2001,
+   "runways": [
+    {
+     "name": "14/32",
+     "lengthFt": 3284,
+     "ends": [
+      {
+       "name": "14",
+       "heading": 143
+      },
+      {
+       "name": "32",
+       "heading": 323
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.45,
+    "vhfLow": 39.85,
+    "vhf": 119.6,
+    "uhf": 251.4
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Hawkinge",
+   "elevationFt": 543,
+   "lat": 51.1117,
+   "lon": 1.1581,
+   "runways": [
+    {
+     "name": "01/19",
+     "lengthFt": 2926,
+     "ends": [
+      {
+       "name": "19",
+       "heading": 195
+      },
+      {
+       "name": "01",
+       "heading": 15
+      }
+     ]
+    },
+    {
+     "name": "04/22",
+     "lengthFt": 3348,
+     "ends": [
+      {
+       "name": "04",
+       "heading": 43
+      },
+      {
+       "name": "22",
+       "heading": 223
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.825,
+    "vhfLow": 42.3,
+    "vhf": 121.8,
+    "uhf": 253.9
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Headcorn",
+   "elevationFt": 110,
+   "lat": 51.1829,
+   "lon": 0.6887,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 3982,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 88
+      },
+      {
+       "name": "27",
+       "heading": 268
+      }
+     ]
+    },
+    {
+     "name": "18/36",
+     "lengthFt": 3309,
+     "ends": [
+      {
+       "name": "36",
+       "heading": 7
+      },
+      {
+       "name": "18",
+       "heading": 187
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.15,
+    "vhfLow": 42.4,
+    "vhf": 122.1,
+    "uhf": 254.25
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Heathrow",
+   "elevationFt": 89,
+   "lat": 51.4776,
+   "lon": -0.4549,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 8593,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 89
+      },
+      {
+       "name": "28",
+       "heading": 269
+      }
+     ]
+    }
+   ],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "High Halden",
+   "elevationFt": 104,
+   "lat": 51.1246,
+   "lon": 0.7056,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 4036,
+     "ends": [
+      {
+       "name": "22",
+       "heading": 207
+      },
+      {
+       "name": "04",
+       "heading": 27
+      }
+     ]
+    },
+    {
+     "name": "11/29",
+     "lengthFt": 3569,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 98
+      },
+      {
+       "name": "29",
+       "heading": 278
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.375,
+    "vhfLow": 42.05,
+    "vhf": 121.65,
+    "uhf": 253.65
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Holmsley South",
+   "elevationFt": 197,
+   "lat": 50.7901,
+   "lon": -1.701,
+   "runways": [
+    {
+     "name": "05/25",
+     "lengthFt": 5809,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 235
+      },
+      {
+       "name": "05",
+       "heading": 55
+      }
+     ]
+    },
+    {
+     "name": "11/29",
+     "lengthFt": 3940,
+     "ends": [
+      {
+       "name": "29",
+       "heading": 291
+      },
+      {
+       "name": "11",
+       "heading": 111
+      }
+     ]
+    },
+    {
+     "name": "17/35",
+     "lengthFt": 3862,
+     "ends": [
+      {
+       "name": "35",
+       "heading": 350
+      },
+      {
+       "name": "17",
+       "heading": 170
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.85,
+    "vhfLow": 41.9,
+    "vhf": 122.6,
+    "uhf": 254.4
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Jersey",
+   "elevationFt": 248,
+   "lat": 49.2077,
+   "lon": -2.1997,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 2773,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 83
+      },
+      {
+       "name": "26",
+       "heading": 263
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.8,
+    "vhfLow": 42.2,
+    "vhf": 122.0,
+    "uhf": 254.15
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Kenley",
+   "elevationFt": 561,
+   "lat": 51.3042,
+   "lon": -0.0969,
+   "runways": [
+    {
+     "name": "02/20",
+     "lengthFt": 2793,
+     "ends": [
+      {
+       "name": "02",
+       "heading": 22
+      },
+      {
+       "name": "20",
+       "heading": 202
+      }
+     ]
+    },
+    {
+     "name": "12/30",
+     "lengthFt": 1911,
+     "ends": [
+      {
+       "name": "12",
+       "heading": 122
+      },
+      {
+       "name": "30",
+       "heading": 302
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.65,
+    "vhfLow": 40.25,
+    "vhf": 120.0,
+    "uhf": 251.8
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Lantheuil",
+   "elevationFt": 175,
+   "lat": 49.2715,
+   "lon": -0.5384,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 3597,
+     "ends": [
+      {
+       "name": "06",
+       "heading": 61
+      },
+      {
+       "name": "24",
+       "heading": 241
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.15,
+    "vhfLow": 39.25,
+    "vhf": 118.95,
+    "uhf": 250.8
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Lashenden",
+   "elevationFt": 66,
+   "lat": 51.1563,
+   "lon": 0.6444,
+   "runways": [
+    {
+     "name": "03/21",
+     "lengthFt": 3101,
+     "ends": [
+      {
+       "name": "21",
+       "heading": 179
+      },
+      {
+       "name": "03",
+       "heading": 359
+      }
+     ]
+    },
+    {
+     "name": "11/29",
+     "lengthFt": 4224,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 103
+      },
+      {
+       "name": "29",
+       "heading": 283
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.35,
+    "vhfLow": 42.2,
+    "vhf": 121.75,
+    "uhf": 253.8
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Le Molay",
+   "elevationFt": 105,
+   "lat": 49.2615,
+   "lon": -0.8817,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 3841,
+     "ends": [
+      {
+       "name": "04",
+       "heading": 42
+      },
+      {
+       "name": "22",
+       "heading": 222
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.925,
+    "vhfLow": 38.8,
+    "vhf": 118.5,
+    "uhf": 250.35
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Lessay",
+   "elevationFt": 66,
+   "lat": 49.2022,
+   "lon": -1.5083,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 4585,
+     "ends": [
+      {
+       "name": "24",
+       "heading": 243
+      },
+      {
+       "name": "06",
+       "heading": 63
+      }
+     ]
+    },
+    {
+     "name": "12/30",
+     "lengthFt": 5080,
+     "ends": [
+      {
+       "name": "12",
+       "heading": 124
+      },
+      {
+       "name": "30",
+       "heading": 304
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.7,
+    "vhfLow": 42.1,
+    "vhf": 121.85,
+    "uhf": 253.95
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Lignerolles",
+   "elevationFt": 405,
+   "lat": 49.1751,
+   "lon": -0.7889,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 3653,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 111
+      },
+      {
+       "name": "29",
+       "heading": 291
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.275,
+    "vhfLow": 39.5,
+    "vhf": 119.2,
+    "uhf": 251.05
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Longues-sur-Mer",
+   "elevationFt": 225,
+   "lat": 49.3427,
+   "lon": -0.7062,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 3156,
+     "ends": [
+      {
+       "name": "30",
+       "heading": 301
+      },
+      {
+       "name": "12",
+       "heading": 121
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.95,
+    "vhfLow": 38.85,
+    "vhf": 118.55,
+    "uhf": 250.4
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Lonrai",
+   "elevationFt": 515,
+   "lat": 48.4677,
+   "lon": 0.0374,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 4015,
+     "ends": [
+      {
+       "name": "06",
+       "heading": 61
+      },
+      {
+       "name": "24",
+       "heading": 241
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.775,
+    "vhfLow": 40.5,
+    "vhf": 120.25,
+    "uhf": 252.05
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Lymington",
+   "elevationFt": 20,
+   "lat": 50.7625,
+   "lon": -1.5143,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 4154,
+     "ends": [
+      {
+       "name": "06",
+       "heading": 58
+      },
+      {
+       "name": "24",
+       "heading": 238
+      }
+     ]
+    },
+    {
+     "name": "14/32",
+     "lengthFt": 3384,
+     "ends": [
+      {
+       "name": "14",
+       "heading": 137
+      },
+      {
+       "name": "32",
+       "heading": 317
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.475,
+    "vhfLow": 39.9,
+    "vhf": 119.65,
+    "uhf": 251.45
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Lympne",
+   "elevationFt": 214,
+   "lat": 51.0829,
+   "lon": 1.0194,
+   "runways": [
+    {
+     "name": "02/20",
+     "lengthFt": 3669,
+     "ends": [
+      {
+       "name": "02",
+       "heading": 21
+      },
+      {
+       "name": "20",
+       "heading": 201
+      }
+     ]
+    },
+    {
+     "name": "11/29",
+     "lengthFt": 2721,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 112
+      },
+      {
+       "name": "29",
+       "heading": 292
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.5,
+    "vhfLow": 41.85,
+    "vhf": 121.5,
+    "uhf": 253.45
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Manston",
+   "elevationFt": 157,
+   "lat": 51.3424,
+   "lon": 1.3462,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 8621,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 100
+      },
+      {
+       "name": "29",
+       "heading": 280
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.45,
+    "vhfLow": 41.75,
+    "vhf": 118.25,
+    "uhf": 253.35
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Maupertus",
+   "elevationFt": 441,
+   "lat": 49.6498,
+   "lon": -1.467,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 4795,
+     "ends": [
+      {
+       "name": "28",
+       "heading": 281
+      },
+      {
+       "name": "10",
+       "heading": 101
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.825,
+    "vhfLow": 40.6,
+    "vhf": 120.35,
+    "uhf": 252.15
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Meautis",
+   "elevationFt": 83,
+   "lat": 49.2832,
+   "lon": -1.3002,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 3951,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 260
+      },
+      {
+       "name": "08",
+       "heading": 80
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.75,
+    "vhfLow": 41.6,
+    "vhf": 121.4,
+    "uhf": 253.2
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Merville Calonne",
+   "elevationFt": 131,
+   "lat": 50.6206,
+   "lon": 2.6535,
+   "runways": [
+    {
+     "name": "03/21",
+     "lengthFt": 4478,
+     "ends": [
+      {
+       "name": "21",
+       "heading": 216
+      },
+      {
+       "name": "03",
+       "heading": 36
+      }
+     ]
+    },
+    {
+     "name": "07/25",
+     "lengthFt": 4286,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 256
+      },
+      {
+       "name": "07",
+       "heading": 76
+      }
+     ]
+    },
+    {
+     "name": "14/32",
+     "lengthFt": 4721,
+     "ends": [
+      {
+       "name": "32",
+       "heading": 319
+      },
+      {
+       "name": "14",
+       "heading": 139
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.825,
+    "vhfLow": 42.0,
+    "vhf": 121.6,
+    "uhf": 253.6
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Needs Oar Point",
+   "elevationFt": 20,
+   "lat": 50.7717,
+   "lon": -1.4345,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 4255,
+     "ends": [
+      {
+       "name": "06",
+       "heading": 61
+      },
+      {
+       "name": "24",
+       "heading": 241
+      }
+     ]
+    },
+    {
+     "name": "17/35",
+     "lengthFt": 4649,
+     "ends": [
+      {
+       "name": "17",
+       "heading": 170
+      },
+      {
+       "name": "35",
+       "heading": 350
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.225,
+    "vhfLow": 39.4,
+    "vhf": 119.1,
+    "uhf": 250.95
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Northolt",
+   "elevationFt": 131,
+   "lat": 51.5528,
+   "lon": -0.4193,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 4715,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 248
+      },
+      {
+       "name": "08",
+       "heading": 68
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.1,
+    "vhfLow": 41.6,
+    "vhf": 122.5,
+    "uhf": 254.35
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Odiham",
+   "elevationFt": 366,
+   "lat": 51.2344,
+   "lon": -0.9417,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 4800,
+     "ends": [
+      {
+       "name": "28",
+       "heading": 276
+      },
+      {
+       "name": "10",
+       "heading": 96
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.525,
+    "vhfLow": 40.0,
+    "vhf": 119.75,
+    "uhf": 251.55
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Orly",
+   "elevationFt": 272,
+   "lat": 48.7351,
+   "lon": 2.3918,
+   "runways": [
+    {
+     "name": "01/19",
+     "lengthFt": 3852,
+     "ends": [
+      {
+       "name": "01",
+       "heading": 16
+      },
+      {
+       "name": "19",
+       "heading": 196
+      }
+     ]
+    },
+    {
+     "name": "07/25",
+     "lengthFt": 3228,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 70
+      },
+      {
+       "name": "25",
+       "heading": 250
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.525,
+    "vhfLow": 40.95,
+    "vhf": 120.7,
+    "uhf": 252.5
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Picauville",
+   "elevationFt": 73,
+   "lat": 49.3964,
+   "lon": -1.4112,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 3841,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 110
+      },
+      {
+       "name": "29",
+       "heading": 290
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.9,
+    "vhfLow": 38.75,
+    "vhf": 118.4,
+    "uhf": 250.3
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Poix",
+   "elevationFt": 547,
+   "lat": 49.8189,
+   "lon": 1.9773,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 5081,
+     "ends": [
+      {
+       "name": "04",
+       "heading": 41
+      },
+      {
+       "name": "22",
+       "heading": 221
+      }
+     ]
+    },
+    {
+     "name": "09/27",
+     "lengthFt": 5108,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 272
+      },
+      {
+       "name": "09",
+       "heading": 92
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.8,
+    "vhfLow": 40.9,
+    "vhf": 120.65,
+    "uhf": 252.45
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Ronai",
+   "elevationFt": 860,
+   "lat": 48.8234,
+   "lon": -0.1612,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 4270,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 254
+      },
+      {
+       "name": "07",
+       "heading": 74
+      }
+     ]
+    },
+    {
+     "name": "12/30",
+     "lengthFt": 4234,
+     "ends": [
+      {
+       "name": "30",
+       "heading": 305
+      },
+      {
+       "name": "12",
+       "heading": 125
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.875,
+    "vhfLow": 41.1,
+    "vhf": 120.9,
+    "uhf": 252.7
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Rouen-Boos",
+   "elevationFt": 494,
+   "lat": 49.3872,
+   "lon": 1.179,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 3215,
+     "ends": [
+      {
+       "name": "22",
+       "heading": 219
+      },
+      {
+       "name": "04",
+       "heading": 39
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.225,
+    "vhfLow": 41.15,
+    "vhf": 120.95,
+    "uhf": 252.75
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Rucqueville",
+   "elevationFt": 193,
+   "lat": 49.2514,
+   "lon": -0.5803,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 4561,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 91
+      },
+      {
+       "name": "27",
+       "heading": 271
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.1,
+    "vhfLow": 39.15,
+    "vhf": 118.85,
+    "uhf": 250.7
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Saint Pierre du Mont",
+   "elevationFt": 103,
+   "lat": 49.3905,
+   "lon": -0.9571,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 4736,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 273
+      },
+      {
+       "name": "09",
+       "heading": 93
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.0,
+    "vhfLow": 38.95,
+    "vhf": 118.65,
+    "uhf": 250.5
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Saint-Andre-de-lEure",
+   "elevationFt": 473,
+   "lat": 48.8913,
+   "lon": 1.2683,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 4566,
+     "ends": [
+      {
+       "name": "23",
+       "heading": 230
+      },
+      {
+       "name": "05",
+       "heading": 50
+      }
+     ]
+    },
+    {
+     "name": "13/31",
+     "lengthFt": 4992,
+     "ends": [
+      {
+       "name": "13",
+       "heading": 129
+      },
+      {
+       "name": "31",
+       "heading": 309
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.925,
+    "vhfLow": 41.65,
+    "vhf": 121.45,
+    "uhf": 253.25
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Saint-Aubin",
+   "elevationFt": 327,
+   "lat": 49.885,
+   "lon": 1.0804,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 2888,
+     "ends": [
+      {
+       "name": "30",
+       "heading": 305
+      },
+      {
+       "name": "12",
+       "heading": 125
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.75,
+    "vhfLow": 41.25,
+    "vhf": 121.05,
+    "uhf": 252.85
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Saint-Omer Wizernes",
+   "elevationFt": 213,
+   "lat": 50.7288,
+   "lon": 2.2323,
+   "runways": [
+    {
+     "name": "03/21",
+     "lengthFt": 1674,
+     "ends": [
+      {
+       "name": "21",
+       "heading": 212
+      },
+      {
+       "name": "03",
+       "heading": 32
+      }
+     ]
+    },
+    {
+     "name": "09/27",
+     "lengthFt": 1913,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 272
+      },
+      {
+       "name": "09",
+       "heading": 92
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.9,
+    "vhfLow": 41.95,
+    "vhf": 121.55,
+    "uhf": 253.55
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Saint-Pol-Bryas",
+   "elevationFt": 444,
+   "lat": 50.3967,
+   "lon": 2.3507,
+   "runways": [
+    {
+     "name": "03/20",
+     "lengthFt": 2889,
+     "ends": [
+      {
+       "name": "20",
+       "heading": 207
+      },
+      {
+       "name": "03",
+       "heading": 27
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.025,
+    "vhfLow": 41.4,
+    "vhf": 122.15,
+    "uhf": 254.3
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Sainte-Croix-sur-Mer",
+   "elevationFt": 160,
+   "lat": 49.3203,
+   "lon": -0.5172,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 3841,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 91
+      },
+      {
+       "name": "27",
+       "heading": 271
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.05,
+    "vhfLow": 39.05,
+    "vhf": 118.75,
+    "uhf": 250.6
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Sainte-Laurent-sur-Mer",
+   "elevationFt": 62,
+   "lat": 49.3645,
+   "lon": -0.8735,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 4561,
+     "ends": [
+      {
+       "name": "29",
+       "heading": 288
+      },
+      {
+       "name": "11",
+       "heading": 108
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.9,
+    "vhfLow": 42.0,
+    "vhf": 121.9,
+    "uhf": 254.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Sommervieu",
+   "elevationFt": 187,
+   "lat": 49.3002,
+   "lon": -0.671,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 3841,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 87
+      },
+      {
+       "name": "27",
+       "heading": 267
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.125,
+    "vhfLow": 39.2,
+    "vhf": 118.9,
+    "uhf": 250.75
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Stoney Cross",
+   "elevationFt": 384,
+   "lat": 50.9148,
+   "lon": -1.6532,
+   "runways": [
+    {
+     "name": "01/19",
+     "lengthFt": 4582,
+     "ends": [
+      {
+       "name": "19",
+       "heading": 181
+      },
+      {
+       "name": "01",
+       "heading": 1
+      }
+     ]
+    },
+    {
+     "name": "06/24",
+     "lengthFt": 5648,
+     "ends": [
+      {
+       "name": "06",
+       "heading": 63
+      },
+      {
+       "name": "24",
+       "heading": 243
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.625,
+    "vhfLow": 41.0,
+    "vhf": 120.75,
+    "uhf": 252.55
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Tangmere",
+   "elevationFt": 48,
+   "lat": 50.8458,
+   "lon": -0.7019,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 5580,
+     "ends": [
+      {
+       "name": "06",
+       "heading": 63
+      },
+      {
+       "name": "24",
+       "heading": 243
+      }
+     ]
+    },
+    {
+     "name": "16/34",
+     "lengthFt": 4201,
+     "ends": [
+      {
+       "name": "34",
+       "heading": 333
+      },
+      {
+       "name": "16",
+       "heading": 153
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.3,
+    "vhfLow": 39.55,
+    "vhf": 119.3,
+    "uhf": 251.1
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Triqueville",
+   "elevationFt": 404,
+   "lat": 49.3362,
+   "lon": 0.4583,
+   "runways": [
+    {
+     "name": "15/34",
+     "lengthFt": 3216,
+     "ends": [
+      {
+       "name": "34",
+       "heading": 340
+      },
+      {
+       "name": "15",
+       "heading": 160
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.95,
+    "vhfLow": 40.85,
+    "vhf": 120.6,
+    "uhf": 252.4
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Villacoublay",
+   "elevationFt": 558,
+   "lat": 48.7673,
+   "lon": 2.205,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 3711,
+     "ends": [
+      {
+       "name": "30",
+       "heading": 305
+      },
+      {
+       "name": "12",
+       "heading": 125
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.625,
+    "vhfLow": 40.2,
+    "vhf": 119.95,
+    "uhf": 251.75
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Vrigny",
+   "elevationFt": 591,
+   "lat": 48.6723,
+   "lon": -0.0022,
+   "runways": [
+    {
+     "name": "14/32",
+     "lengthFt": 3284,
+     "ends": [
+      {
+       "name": "14",
+       "heading": 136
+      },
+      {
+       "name": "32",
+       "heading": 316
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.5,
+    "vhfLow": 39.95,
+    "vhf": 119.7,
+    "uhf": 251.5
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "West Malling",
+   "elevationFt": 305,
+   "lat": 51.2704,
+   "lon": 0.4047,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 5037,
+     "ends": [
+      {
+       "name": "24",
+       "heading": 245
+      },
+      {
+       "name": "06",
+       "heading": 65
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.6,
+    "vhfLow": 40.15,
+    "vhf": 119.9,
+    "uhf": 251.7
+   },
+   "navaids": [],
+   "approaches": []
+  }
+ ]
+}

@@ -1640,7 +1640,7 @@
     "designation": "Theatre",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The Levant, the eastern Mediterranean and the Persian Gulf: the Yom Kippur War, Mole Cricket 19, Inherent Resolve and Russia in Syria."
+    "summary": "The Levant, Sinai, Iraq and the Persian Gulf: the Arab–Israeli wars, the Tanker War, the Gulf War, Iraq and Inherent Resolve, and Russia in Syria."
   },
   {
     "id": "encyclopedia.theatres.europe",
@@ -1651,7 +1651,7 @@
     "designation": "Theatre",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "From the English Channel to the Kola Peninsula: the Battle of Britain, the Normandy invasion and its advanced landing grounds."
+    "summary": "From the English Channel to the Kola Peninsula: the Battle of Britain and Normandy, the Cold War in Germany, the Balkan air campaigns, the Aegean and the High North."
   },
   {
     "id": "encyclopedia.theatres.east-asia-pacific",
@@ -1674,6 +1674,39 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "US home ranges, led by the Nevada Test and Training Range: Red Flag, nuclear tests, Area 51 and the F-117’s secret years."
+  },
+  {
+    "id": "encyclopedia.theatres.caucasus",
+    "slug": "caucasus",
+    "category": "theatres",
+    "revision": 1,
+    "title": "The Caucasus",
+    "designation": "Theatre",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Georgia and southern Russia: the 1942 Caucasus campaign, the Abkhazia and 2008 Russo-Georgian wars, Vaziani, Mozdok and the Black Sea Fleet."
+  },
+  {
+    "id": "encyclopedia.theatres.central-asia",
+    "slug": "central-asia",
+    "category": "theatres",
+    "revision": 1,
+    "title": "Central Asia",
+    "designation": "Theatre",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Afghanistan: the Soviet war of the 1980s and the 2001–2021 war, Bagram, Kandahar, Camp Bastion and the Helmand FOBs."
+  },
+  {
+    "id": "encyclopedia.theatres.south-atlantic",
+    "slug": "south-atlantic",
+    "category": "theatres",
+    "revision": 1,
+    "title": "The South Atlantic",
+    "designation": "Theatre",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The 1982 Falklands War, the Black Buck raids and Exocet attacks, and RAF Mount Pleasant today."
   },
   {
     "id": "encyclopedia.airfields-carriers.nellis",
@@ -1916,5 +1949,192 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "Falcon 4.0's Korean Peninsula theatre, carried on by Falcon BMS: a modern war between North and South Korea."
+  },
+  {
+    "id": "encyclopedia.theatres.dcs-caucasus",
+    "slug": "dcs-caucasus",
+    "category": "theatres",
+    "revision": 1,
+    "title": "DCS: Caucasus",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "DCS World's free map of Georgia and southern Russia from Anapa to Tbilisi, with 21 airfields."
+  },
+  {
+    "id": "encyclopedia.theatres.dcs-sinai",
+    "slug": "dcs-sinai",
+    "category": "theatres",
+    "revision": 1,
+    "title": "DCS: Sinai",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Sinai, the Suez Canal and southern Israel, with Egyptian and Israeli air bases for the Arab–Israeli wars and modern missions."
+  },
+  {
+    "id": "encyclopedia.theatres.dcs-kola",
+    "slug": "dcs-kola",
+    "category": "theatres",
+    "revision": 1,
+    "title": "DCS: Kola",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Arctic Norway, Sweden, Finland and the Kola Peninsula, present day with late-Cold War allowances, 37 airfields."
+  },
+  {
+    "id": "encyclopedia.theatres.dcs-afghanistan",
+    "slug": "dcs-afghanistan",
+    "category": "theatres",
+    "revision": 1,
+    "title": "DCS: Afghanistan",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "All of Afghanistan in early access, region by region, from Kandahar and Camp Bastion to Bagram and FOB Salerno."
+  },
+  {
+    "id": "encyclopedia.theatres.dcs-southwest-afghanistan",
+    "slug": "dcs-southwest-afghanistan",
+    "category": "theatres",
+    "revision": 1,
+    "title": "DCS: Southwest Afghanistan",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Kandahar, Herat and Camp Bastion region of DCS: Afghanistan, sold separately, with 12 airfields."
+  },
+  {
+    "id": "encyclopedia.theatres.dcs-east-afghanistan",
+    "slug": "dcs-east-afghanistan",
+    "category": "theatres",
+    "revision": 1,
+    "title": "DCS: East Afghanistan",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Kabul and Bagram region of DCS: Afghanistan, sold separately, with 10 airfields and heliports."
+  },
+  {
+    "id": "encyclopedia.theatres.dcs-iraq",
+    "slug": "dcs-iraq",
+    "category": "theatres",
+    "revision": 1,
+    "title": "DCS: Iraq",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The whole of Iraq in early access, with a separate Northern Iraq region around Mosul and Kirkuk."
+  },
+  {
+    "id": "encyclopedia.theatres.dcs-iraq-north",
+    "slug": "dcs-iraq-north",
+    "category": "theatres",
+    "revision": 1,
+    "title": "DCS: Iraq North",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The northern region of DCS: Iraq, sold separately: Baghdad to Mosul and Kirkuk, with 13 airfields."
+  },
+  {
+    "id": "encyclopedia.theatres.dcs-cold-war-germany",
+    "slug": "dcs-cold-war-germany",
+    "category": "theatres",
+    "revision": 1,
+    "title": "DCS: Cold War Germany",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "1980s Germany and its neighbours around the Fulda Gap, with more than 100 military airfields and heliports, in early access."
+  },
+  {
+    "id": "encyclopedia.theatres.dcs-normandy",
+    "slug": "dcs-normandy",
+    "category": "theatres",
+    "revision": 1,
+    "title": "DCS: Normandy 2.0",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Southern England and northern France for Operation Overlord, London to Paris, with about 90 airfields."
+  },
+  {
+    "id": "encyclopedia.theatres.dcs-south-atlantic",
+    "slug": "dcs-south-atlantic",
+    "category": "theatres",
+    "revision": 1,
+    "title": "DCS: South Atlantic",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Argentina, Chile and the Falkland Islands over 3.1 million km², with 26 airfields."
+  },
+  {
+    "id": "encyclopedia.theatres.bms-balkans",
+    "slug": "bms-balkans",
+    "category": "theatres",
+    "revision": 1,
+    "title": "Falcon BMS: Balkans",
+    "designation": "Falcon BMS map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The official BMS Balkans theatre, with 1995-era and Link 16-era campaigns."
+  },
+  {
+    "id": "encyclopedia.theatres.bms-hellenic",
+    "slug": "bms-hellenic",
+    "category": "theatres",
+    "revision": 1,
+    "title": "Falcon BMS: Hellenic",
+    "designation": "Falcon BMS map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The official BMS Hellenic theatre: Greece, Turkey and the Aegean."
+  },
+  {
+    "id": "encyclopedia.theatres.bms-israel",
+    "slug": "bms-israel",
+    "category": "theatres",
+    "revision": 1,
+    "title": "Falcon BMS: Israel",
+    "designation": "Falcon BMS map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The official BMS Israel theatre, 131 airbases and airstrips on a map shifted north, with the F-35I."
+  },
+  {
+    "id": "encyclopedia.theatres.bms-falklands",
+    "slug": "bms-falklands",
+    "category": "theatres",
+    "revision": 1,
+    "title": "Falcon BMS: Falklands",
+    "designation": "Falcon BMS map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The official BMS Falklands theatre: East and West Falkland and RAF Mount Pleasant."
+  },
+  {
+    "id": "encyclopedia.theatres.falcon4-korea",
+    "slug": "falcon4-korea",
+    "category": "theatres",
+    "revision": 1,
+    "title": "Falcon 4.0: Korea",
+    "designation": "Falcon 4.0 map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The original 1998 Falcon 4.0 Korean war, carried into Allied Force in 2005."
+  },
+  {
+    "id": "encyclopedia.theatres.falcon4-balkans",
+    "slug": "falcon4-balkans",
+    "category": "theatres",
+    "revision": 1,
+    "title": "Falcon 4.0: Allied Force – Balkans",
+    "designation": "Falcon 4.0 map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Allied Force's 2005 Balkans battlefield, with 1999, 2005 and 2010 timelines."
   }
 ]

@@ -1,0 +1,948 @@
+{
+ "map": "dcs-iraq",
+ "source": {
+  "title": "dcs-world-schema reference data: Iraq airbases, beacons and navaids",
+  "publisher": "dcs-world-schema, open-source data extracted by running DCS World 2.9.30.28536 (extracted 2026-10-04)",
+  "url": "https://github.com/YoloWingPixie/dcs-world-schema/tree/c3091e6c08fb8167e26145d0e33c10e4140c6fe7/dcs-world-reference/latest/airbases/Iraq",
+  "commit": "c3091e6c08fb8167e26145d0e33c10e4140c6fe7",
+  "dcsVersion": "2.9.30.28536",
+  "beacons": true,
+  "radioFallback": null
+ },
+ "airfields": [
+  {
+   "name": "Al-Asad Airbase",
+   "elevationFt": 568,
+   "lat": 33.7812,
+   "lon": 42.4276,
+   "runways": [
+    {
+     "name": "09L/27R",
+     "lengthFt": 12196,
+     "ends": [
+      {
+       "name": "09L",
+       "heading": 84
+      },
+      {
+       "name": "27R",
+       "heading": 264
+      }
+     ]
+    },
+    {
+     "name": "09R/27L",
+     "lengthFt": 12360,
+     "ends": [
+      {
+       "name": "09R",
+       "heading": 83
+      },
+      {
+       "name": "27L",
+       "heading": 263
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.9,
+    "vhfLow": 38.7,
+    "vhf": 131.2,
+    "uhf": 363.7
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "RAA",
+     "channel": 80
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "09L",
+     "callsign": "IRAA",
+     "frequency": 108.8
+    },
+    {
+     "type": "ILS",
+     "runway": "27R",
+     "callsign": "ISAD",
+     "frequency": 108.9
+    }
+   ]
+  },
+  {
+   "name": "Al-Kut Airport",
+   "elevationFt": 40,
+   "lat": 32.4839,
+   "lon": 45.7556,
+   "runways": [
+    {
+     "name": "11L/29R",
+     "lengthFt": 8216,
+     "ends": [
+      {
+       "name": "11L",
+       "heading": 104
+      },
+      {
+       "name": "29R",
+       "heading": 284
+      }
+     ]
+    },
+    {
+     "name": "11R/29L",
+     "lengthFt": 8554,
+     "ends": [
+      {
+       "name": "11R",
+       "heading": 104
+      },
+      {
+       "name": "29L",
+       "heading": 284
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.2,
+    "vhfLow": 39.3,
+    "vhf": 135.5,
+    "uhf": 250.85
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Al-Sahra Airport",
+   "elevationFt": 418,
+   "lat": 34.6679,
+   "lon": 43.5364,
+   "runways": [
+    {
+     "name": "14L/32R",
+     "lengthFt": 5335,
+     "ends": [
+      {
+       "name": "14L",
+       "heading": 137
+      },
+      {
+       "name": "32R",
+       "heading": 317
+      }
+     ]
+    },
+    {
+     "name": "14R/32L",
+     "lengthFt": 7582,
+     "ends": [
+      {
+       "name": "14R",
+       "heading": 137
+      },
+      {
+       "name": "32L",
+       "heading": 317
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.825,
+    "vhfLow": 38.55,
+    "vhf": 118.05,
+    "uhf": 250.15
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "TKT",
+     "frequency": 1669,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Al-Salam Airbase",
+   "elevationFt": 67,
+   "lat": 33.2789,
+   "lon": 44.4943,
+   "runways": [
+    {
+     "name": "15/33",
+     "lengthFt": 7201,
+     "ends": [
+      {
+       "name": "15",
+       "heading": 142
+      },
+      {
+       "name": "33",
+       "heading": 322
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.875,
+    "vhfLow": 38.65,
+    "vhf": 118.1,
+    "uhf": 250.25
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Al-Taji Airport",
+   "elevationFt": 107,
+   "lat": 33.5238,
+   "lon": 44.2568,
+   "runways": [
+    {
+     "name": "16/34",
+     "lengthFt": 5162,
+     "ends": [
+      {
+       "name": "34",
+       "heading": 336
+      },
+      {
+       "name": "16",
+       "heading": 156
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.075,
+    "vhfLow": 39.05,
+    "vhf": 126.0,
+    "uhf": 250.6
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "TAJI",
+     "frequency": 1650,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Al-Taquddum Airport",
+   "elevationFt": 254,
+   "lat": 33.3392,
+   "lon": 43.5985,
+   "runways": [
+    {
+     "name": "12L/30R",
+     "lengthFt": 9718,
+     "ends": [
+      {
+       "name": "12L",
+       "heading": 115
+      },
+      {
+       "name": "30R",
+       "heading": 295
+      }
+     ]
+    },
+    {
+     "name": "12R/30L",
+     "lengthFt": 10864,
+     "ends": [
+      {
+       "name": "12R",
+       "heading": 115
+      },
+      {
+       "name": "30L",
+       "heading": 295
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.85,
+    "vhfLow": 38.6,
+    "vhf": 135.7,
+    "uhf": 250.2
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "MAT",
+     "channel": 70
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Baghdad International Airport",
+   "elevationFt": 96,
+   "lat": 33.2558,
+   "lon": 44.2256,
+   "runways": [
+    {
+     "name": "15L/33R",
+     "lengthFt": 11839,
+     "ends": [
+      {
+       "name": "15L",
+       "heading": 145
+      },
+      {
+       "name": "33R",
+       "heading": 325
+      }
+     ]
+    },
+    {
+     "name": "15R/33L",
+     "lengthFt": 9811,
+     "ends": [
+      {
+       "name": "15R",
+       "heading": 145
+      },
+      {
+       "name": "33L",
+       "heading": 325
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.925,
+    "vhfLow": 38.75,
+    "vhf": 118.9,
+    "uhf": 250.3
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "BAP",
+     "channel": 64,
+     "frequency": 121.7,
+     "unit": "MHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "BGD",
+     "channel": 76,
+     "band": "X",
+     "frequency": 112.9,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "15L",
+     "callsign": "IYDB",
+     "frequency": 110.7
+    },
+    {
+     "type": "ILS",
+     "runway": "15R",
+     "callsign": "ITAK",
+     "frequency": 110.9
+    },
+    {
+     "type": "ILS",
+     "runway": "33L",
+     "callsign": "INHA",
+     "frequency": 110.3
+    },
+    {
+     "type": "ILS",
+     "runway": "33R",
+     "callsign": "IYCA",
+     "frequency": 110.1
+    }
+   ]
+  },
+  {
+   "name": "Balad Airbase",
+   "elevationFt": 144,
+   "lat": 33.9428,
+   "lon": 44.3671,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 8652,
+     "ends": [
+      {
+       "name": "12",
+       "heading": 121
+      },
+      {
+       "name": "30",
+       "heading": 301
+      }
+     ]
+    },
+    {
+     "name": "14/32",
+     "lengthFt": 8482,
+     "ends": [
+      {
+       "name": "14",
+       "heading": 141
+      },
+      {
+       "name": "32",
+       "heading": 321
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.05,
+    "vhfLow": 39.0,
+    "vhf": 119.8,
+    "uhf": 250.55
+   },
+   "navaids": [
+    {
+     "type": "VORTAC",
+     "callsign": "BLD",
+     "channel": 93,
+     "band": "X",
+     "frequency": 114.6,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "14",
+     "callsign": "IANC",
+     "frequency": 109.95
+    },
+    {
+     "type": "ILS",
+     "runway": "32",
+     "callsign": "IBLD",
+     "frequency": 109.9
+    }
+   ]
+  },
+  {
+   "name": "Bashur Airport",
+   "elevationFt": 2029,
+   "lat": 36.5345,
+   "lon": 44.3392,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 5266,
+     "ends": [
+      {
+       "name": "13",
+       "heading": 133
+      },
+      {
+       "name": "31",
+       "heading": 313
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.975,
+    "vhfLow": 38.85,
+    "vhf": 118.8,
+    "uhf": 250.4
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "ORB",
+     "channel": 47
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Erbil International Airport",
+   "elevationFt": 1226,
+   "lat": 36.2383,
+   "lon": 43.9467,
+   "runways": [
+    {
+     "name": "15/33R",
+     "lengthFt": 7824,
+     "ends": [
+      {
+       "name": "15",
+       "heading": 146
+      },
+      {
+       "name": "33R",
+       "heading": 326
+      }
+     ]
+    },
+    {
+     "name": "18/36",
+     "lengthFt": 14586,
+     "ends": [
+      {
+       "name": "18",
+       "heading": 175
+      },
+      {
+       "name": "36",
+       "heading": 355
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.95,
+    "vhfLow": 38.8,
+    "vhf": 128.8,
+    "uhf": 250.35
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "RER",
+     "channel": 110,
+     "band": "X",
+     "frequency": 116.3,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "15",
+     "callsign": "IRER",
+     "frequency": 109.3
+    },
+    {
+     "type": "ILS",
+     "runway": "18",
+     "callsign": "IREA",
+     "frequency": 109.2
+    },
+    {
+     "type": "ILS",
+     "runway": "36",
+     "callsign": "IREB",
+     "frequency": 109.7
+    }
+   ]
+  },
+  {
+   "name": "H-2 Airbase",
+   "elevationFt": 2071,
+   "lat": 33.3563,
+   "lon": 40.5885,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 9352,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 108
+      },
+      {
+       "name": "29",
+       "heading": 288
+      }
+     ]
+    },
+    {
+     "name": "16/34",
+     "lengthFt": 5637,
+     "ends": [
+      {
+       "name": "16",
+       "heading": 158
+      },
+      {
+       "name": "34",
+       "heading": 338
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.1,
+    "vhfLow": 39.1,
+    "vhf": 118.15,
+    "uhf": 250.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H-3 Main Airbase",
+   "elevationFt": 2542,
+   "lat": 32.9362,
+   "lon": 39.7457,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 7820,
+     "ends": [
+      {
+       "name": "06",
+       "heading": 60
+      },
+      {
+       "name": "24",
+       "heading": 240
+      }
+     ]
+    },
+    {
+     "name": "11/29",
+     "lengthFt": 7964,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 107
+      },
+      {
+       "name": "29",
+       "heading": 287
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.125,
+    "vhfLow": 39.15,
+    "vhf": 118.2,
+    "uhf": 250.7
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H-3 Northwest Airbase",
+   "elevationFt": 2551,
+   "lat": 33.0764,
+   "lon": 39.5958,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 6746,
+     "ends": [
+      {
+       "name": "12",
+       "heading": 117
+      },
+      {
+       "name": "30",
+       "heading": 297
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.175,
+    "vhfLow": 39.25,
+    "vhf": 118.3,
+    "uhf": 250.8
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H-3 Southwest Airbase",
+   "elevationFt": 2652,
+   "lat": 32.7438,
+   "lon": 39.6014,
+   "runways": [
+    {
+     "name": "10/29",
+     "lengthFt": 5763,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 116
+      },
+      {
+       "name": "29",
+       "heading": 296
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.15,
+    "vhfLow": 39.2,
+    "vhf": 118.25,
+    "uhf": 250.75
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "K1 Base",
+   "elevationFt": 973,
+   "lat": 35.5127,
+   "lon": 44.2843,
+   "runways": [
+    {
+     "name": "14/32",
+     "lengthFt": 5004,
+     "ends": [
+      {
+       "name": "14",
+       "heading": 136
+      },
+      {
+       "name": "32",
+       "heading": 316
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.8,
+    "vhfLow": 38.5,
+    "vhf": 118.0,
+    "uhf": 250.1
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Kharg Airfield",
+   "elevationFt": 16,
+   "lat": 29.2609,
+   "lon": 50.3218,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 6539,
+     "ends": [
+      {
+       "name": "13",
+       "heading": 131
+      },
+      {
+       "name": "31",
+       "heading": 311
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.225,
+    "vhfLow": 39.35,
+    "vhf": 122.1,
+    "uhf": 325.0
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "KHG",
+     "channel": 81,
+     "band": "X",
+     "frequency": 113.4,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Kirkuk International Airport",
+   "elevationFt": 1027,
+   "lat": 35.4711,
+   "lon": 44.3446,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 5613,
+     "ends": [
+      {
+       "name": "13",
+       "heading": 128
+      },
+      {
+       "name": "31",
+       "heading": 308
+      }
+     ]
+    },
+    {
+     "name": "14/32",
+     "lengthFt": 6246,
+     "ends": [
+      {
+       "name": "14",
+       "heading": 140
+      },
+      {
+       "name": "32",
+       "heading": 320
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.775,
+    "vhfLow": 38.45,
+    "vhf": 125.55,
+    "uhf": 250.05
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "KRK",
+     "channel": 86
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "KIR",
+     "channel": 49,
+     "band": "X",
+     "frequency": 111.2,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "31",
+     "callsign": "ISAD",
+     "frequency": 109.1
+    }
+   ]
+  },
+  {
+   "name": "Mosul International Airport",
+   "elevationFt": 742,
+   "lat": 36.3064,
+   "lon": 43.1471,
+   "runways": [
+    {
+     "name": "15/33",
+     "lengthFt": 6708,
+     "ends": [
+      {
+       "name": "15",
+       "heading": 152
+      },
+      {
+       "name": "33",
+       "heading": 332
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.75,
+    "vhfLow": 38.4,
+    "vhf": 119.0,
+    "uhf": 250.65
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Qayyarah Airfield West",
+   "elevationFt": 706,
+   "lat": 35.7658,
+   "lon": 43.1223,
+   "runways": [
+    {
+     "name": "15/33",
+     "lengthFt": 9981,
+     "ends": [
+      {
+       "name": "15",
+       "heading": 147
+      },
+      {
+       "name": "33",
+       "heading": 327
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.0,
+    "vhfLow": 38.9,
+    "vhf": 122.2,
+    "uhf": 250.45
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "QYW",
+     "channel": 72
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Sulaimaniyah International Airport",
+   "elevationFt": 2408,
+   "lat": 35.5608,
+   "lon": 45.3148,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 10157,
+     "ends": [
+      {
+       "name": "13",
+       "heading": 128
+      },
+      {
+       "name": "31",
+       "heading": 308
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.025,
+    "vhfLow": 38.95,
+    "vhf": 121.7,
+    "uhf": 250.5
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "SUL",
+     "channel": 117,
+     "band": "X",
+     "frequency": 117.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "13",
+     "callsign": "NGA",
+     "frequency": 111.1
+    },
+    {
+     "type": "ILS",
+     "runway": "31",
+     "callsign": "SUL",
+     "frequency": 111.7
+    }
+   ]
+  }
+ ]
+}
