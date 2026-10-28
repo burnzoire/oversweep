@@ -304,6 +304,8 @@ export interface TerminologyData {
   // Short name for the glossary filter buttons.
   short: string;
   usage: string;
+  // Leads the set page; the first set's photo is also the category's cover.
+  photo?: Photo;
   terms: Term[];
   sources: Source[];
 }
