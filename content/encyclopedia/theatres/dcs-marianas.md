@@ -6,7 +6,7 @@ name: "DCS: Marianas"
 publisher: "Eagle Dynamics"
 setting: { era: modern, text: "Set in the present [1]" }
 area: "About 1,500 × 1,500 km, mostly ocean for naval operations, with Guam, Rota, Tinian, Saipan and the smaller islands [1]"
-theatres: [mariana-islands]
+theatres: [east-asia-pacific]
 sources:
   - n: 1
     title: "DCS: Marianas Map"

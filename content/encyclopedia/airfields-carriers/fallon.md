@@ -32,7 +32,7 @@ facilities:
     - "[TACAN](term:) NFL, on the field [2]"
   other:
     - "The Fallon Range Training Complex, some 240,000 acres in the Lahontan and Dixie valleys, with a simulated air defence network of about 20 radar sites [1]"
-theatres: []
+theatres: [north-america]
 maps:
   - map: dcs-nevada
     status: absent

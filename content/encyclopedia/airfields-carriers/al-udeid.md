@@ -26,7 +26,7 @@ facilities:
   runways:
     - { id: "16L/34R", lengthFt: 12303, surface: "asphalt", cite: "[1]" }
     - { id: "16R/34L", lengthFt: 12303, cite: "[1]" }
-theatres: []
+theatres: [middle-east]
 maps:
   - map: dcs-persian-gulf
     status: absent

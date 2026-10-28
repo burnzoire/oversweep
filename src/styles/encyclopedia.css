@@ -192,3 +192,8 @@
 .ency .unit-facts > div { display: flex; gap: 0.35rem; }
 .ency .unit-facts dt { color: var(--color-muted); font-weight: 700; }
 .ency .unit-facts dd { margin: 0; }
+
+/* Theatres index: a jump list, then each theatre with its sim maps under it. */
+.theatre-jump ul { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; padding: 0; list-style: none; }
+.theatre-group { margin-top: 2.5rem; }
+.theatre-group h3 { margin-top: 1.5rem; }

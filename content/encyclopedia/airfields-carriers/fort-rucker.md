@@ -33,7 +33,7 @@ facilities:
   other:
     - "Helicopter parking rows, numbered landing spots and pads cover most of the airfield [3]"
     - "Advanced training from the post's heliports: Hanchey, Lowe, Shell and Knox [1]"
-theatres: []
+theatres: [north-america]
 charts:
   - src: "encyclopedia/airfields-carriers/fort-rucker-diagram.png"
     alt: "FAA airport diagram of Cairns Army Airfield: a north–south runway crossed by a south-west to north-east runway, surrounded by many helicopter parking rows, numbered spots and helipads"

@@ -6,7 +6,7 @@ name: "DCS: Nevada Test and Training Range"
 publisher: "Eagle Dynamics"
 setting: { era: modern, text: "The range as it is today, home of Red Flag [1]" }
 area: "366,000 km² of Nevada, Utah, Arizona and California, with the whole NTTR airspace and its sub-ranges marked [1]"
-theatres: [nevada]
+theatres: [north-america]
 differences:
   - { topic: "Las Vegas airport name", text: "DCS still calls Las Vegas's airport McCarran International [2]; Clark County renamed it Harry Reid International Airport in December 2021. [3]" }
 sources:

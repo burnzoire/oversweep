@@ -33,7 +33,7 @@ facilities:
     - "[PAPIs](term:PAPI) set for a 3° glide path at all four runway ends [2] [3]"
   other:
     - "Ramp space for up to 300 aircraft, for large exercise deployments [1]"
-theatres: [nevada]
+theatres: [north-america]
 maps:
   - map: dcs-nevada
     status: represented

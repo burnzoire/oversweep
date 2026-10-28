@@ -14,7 +14,7 @@ import '../../../styles/encyclopedia.css';
 
 export function getStaticPaths() {
   // Aircraft, ordnance, terminology and airfield records have their own pages under src/pages/encyclopedia/.
-  return includedRecords.filter((record) => !['aircraft', 'ordnance', 'terminology', 'airfields-carriers'].includes(record.category)).map((record) => ({ params: { category: record.category, record: record.slug }, props: { record } }));
+  return includedRecords.filter((record) => !['aircraft', 'ordnance', 'terminology', 'airfields-carriers', 'theatres'].includes(record.category)).map((record) => ({ params: { category: record.category, record: record.slug }, props: { record } }));
 }
 
 const { record } = Astro.props as { record: EncyclopediaRecord };

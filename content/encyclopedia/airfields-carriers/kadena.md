@@ -26,7 +26,7 @@ facilities:
   runways:
     - { id: "05R/23L", lengthFt: 12100, widthFt: 200, surface: "asphalt and concrete", cite: "[1] [2]" }
     - { id: "05L/23R", lengthFt: 12100, widthFt: 300, surface: "asphalt and concrete", cite: "[1] [2]" }
-theatres: []
+theatres: [east-asia-pacific]
 maps:
   - map: bms-korea
     status: unchecked

@@ -28,7 +28,7 @@ facilities:
     - { id: "05/23", lengthFt: 10000, widthFt: 148, surface: "concrete", cite: "[1] [2]" }
   other:
     - "About 57 hardened aircraft shelters [1]"
-theatres: [syria]
+theatres: [middle-east]
 maps:
   - map: dcs-syria
     status: represented

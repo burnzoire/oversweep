@@ -33,7 +33,7 @@ facilities:
     - "Edwards VORTAC (EDW), 8.8 NM from the field [2]"
   other:
     - "The lake-bed runways are laid out around a compass rose; the FAA warns that their charted positions may be out by more than 600 ft [4]"
-theatres: []
+theatres: [north-america]
 maps:
   - map: dcs-nevada
     status: absent

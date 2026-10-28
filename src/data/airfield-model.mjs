@@ -1,10 +1,13 @@
-// The Airfields & Carriers catalogue model, shared by the site build and the
-// tests. Three kinds of record live in content/encyclopedia/airfields-carriers:
+// The airfield catalogue model, shared by the site build and the tests. Three
+// kinds of record make it up:
 //
 // - `airfield`: one real-world airfield, whatever any simulator does with it.
-// - `theatre`: a real-world region with its own military history.
+//   These live in content/encyclopedia/airfields-carriers.
+// - `theatre`: a broad real-world region, such as the Middle East, with a
+//   section of military history for each part of it.
 // - `map`: one simulator's representation of a place, with its own coverage
-//   and historical setting.
+//   and historical setting, listed under its theatre.
+//   Theatres and maps live in content/encyclopedia/theatres.
 //
 // An airfield names the theatres it belongs to and, for each sim map someone
 // has checked, whether the map represents it. A map that an airfield does not
@@ -34,6 +37,9 @@ export const nations = {
   syria: { name: 'Syria' },
   lebanon: { name: 'Lebanon' },
   israel: { name: 'Israel' },
+  france: { name: 'France' },
+  'south-korea': { name: 'South Korea' },
+  'north-korea': { name: 'North Korea' },
 };
 
 // The broad kind of organisation an operator or unit is, in any country.

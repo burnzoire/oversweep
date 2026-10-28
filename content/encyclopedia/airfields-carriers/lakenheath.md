@@ -23,7 +23,7 @@ units:
 facilities:
   runways:
     - { id: "05/23", lengthFt: 9000, widthFt: 150, surface: "concrete and asphalt", cite: "[1] [2]" }
-theatres: []
+theatres: [europe]
 maps:
   - map: dcs-the-channel
     status: absent

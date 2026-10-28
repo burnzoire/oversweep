@@ -5,12 +5,17 @@ import { fileURLToPath } from 'node:url';
 import { parse } from 'yaml';
 import { currentUse, longestRunwayFt, periodText, searchTerms, validateCatalogue } from '../../src/data/airfield-model.mjs';
 
-const dir = fileURLToPath(new URL('../../content/encyclopedia/airfields-carriers/', import.meta.url));
+// Airfields live in one category; theatres and their sim maps in another.
+const categories = ['airfields-carriers', 'theatres'];
 const registry = JSON.parse(readFileSync(fileURLToPath(new URL('../../src/data/encyclopedia.json', import.meta.url)), 'utf8'));
-const content = readdirSync(dir).filter((f) => f.endsWith('.md')).map((f) => ({
-  slug: f.replace(/\.md$/, ''),
-  data: parse(readFileSync(dir + f, 'utf8').split('---\n')[1]),
-}));
+const content = categories.flatMap((category) => {
+  const dir = fileURLToPath(new URL(`../../content/encyclopedia/${category}/`, import.meta.url));
+  return readdirSync(dir).filter((f) => f.endsWith('.md')).map((f) => ({
+    category,
+    slug: f.replace(/\.md$/, ''),
+    data: parse(readFileSync(dir + f, 'utf8').split('---\n')[1]),
+  }));
+});
 const bySlug = (slug) => content.find((e) => e.slug === slug).data;
 
 // The smallest valid catalogue: one theatre, one map and one airfield.
@@ -90,10 +95,16 @@ test('derived values: longest paved runway, current use, periods and search term
   for (const word of ['isely field', 'aslito', 'pgsn', 'spn', 'gsn']) assert.ok(terms.includes(word), word);
 });
 
-test('the real Airfields & Carriers content is valid and registered', () => {
+test('the real airfield, theatre and sim map content is valid and registered', () => {
   assert.deepEqual(validateCatalogue(content), []);
-  const registered = registry.filter((r) => r.category === 'airfields-carriers').map((r) => r.slug).sort();
-  assert.deepEqual(content.map((e) => e.slug).sort(), registered);
+  for (const category of categories) {
+    const registered = registry.filter((r) => r.category === category).map((r) => r.slug).sort();
+    assert.deepEqual(content.filter((e) => e.category === category).map((e) => e.slug).sort(), registered, category);
+  }
+  // Airfields sit in their category, theatres and maps in the other.
+  for (const e of content) assert.equal(e.category === 'airfields-carriers', e.data.kind === 'airfield', e.slug);
+  // Every sim map is listed under a theatre.
+  for (const e of content.filter((x) => x.data.kind === 'map')) assert.ok(e.data.theatres?.length, e.slug);
 });
 
 test('representative cases: international, historical and multi-map', () => {

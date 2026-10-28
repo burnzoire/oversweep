@@ -6,7 +6,7 @@ name: "Falcon BMS: Korea"
 publisher: "Benchmark Sims"
 setting: { era: modern, text: "A full-scale modern war on the Korean Peninsula; Falcon 4.0's campaign began with a North Korean invasion in the early 1990s [2], and BMS describes its setting as a 2000 warfare era [1]" }
 area: "The Korean Peninsula, with an airbase in Japan [2]"
-theatres: []
+theatres: [east-asia-pacific]
 sources:
   - n: 1
     title: "Falcon BMS"

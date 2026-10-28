@@ -26,7 +26,7 @@ facilities:
     - { id: "10/28", lengthFt: 9006, widthFt: 148, surface: "grooved asphalt concrete", note: "2,745 × 45 m as published", cite: "[1]" }
   arresting:
     - "Hydraulic arrester gear, installed when the runway, taxiways and aprons were resurfaced between 2015 and March 2017 [1]"
-theatres: [syria]
+theatres: [middle-east]
 maps:
   - map: dcs-syria
     status: represented

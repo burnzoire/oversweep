@@ -15,9 +15,9 @@ export interface LinkTarget {
 }
 
 const categoryNames: Record<string, string> = { aircraft: 'Aircraft', ordnance: 'Ordnance', 'threat-systems': 'Threat system', 'airfields-carriers': 'Airfield' };
-const airfieldKinds = { airfield: 'Airfield', theatre: 'Theatre', map: 'Sim map' };
+const theatreKinds = { airfield: 'Airfield', theatre: 'Theatre', map: 'Sim map' };
 const kindOf = (r: (typeof records)[number]) =>
-  r.category === 'airfields-carriers' ? airfieldKinds[airfieldContent(r).frontmatter.kind] : categoryNames[r.category] ?? r.category;
+  r.category === 'theatres' ? theatreKinds[airfieldContent(r).frontmatter.kind] : categoryNames[r.category] ?? r.category;
 
 // Previews are a reminder, not the entry: citations are dropped and a long
 // definition is cut at a word boundary.

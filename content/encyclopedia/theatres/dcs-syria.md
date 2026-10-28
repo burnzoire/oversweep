@@ -6,7 +6,7 @@ name: "DCS: Syria"
 publisher: "Ugra Media, for Eagle Dynamics"
 setting: { era: modern, text: "Present-day bases, but its makers say it supports missions from modern times to historical reenactments [1]" }
 area: "About 1,000 × 900 km: much of Syria, all of Cyprus and Lebanon, and parts of Israel, Turkey, Jordan and Iraq, with enough of the eastern Mediterranean for carrier operations [1]"
-theatres: [syria]
+theatres: [middle-east]
 differences:
   - { topic: "Harab Isk", text: "DCS reproduces the US helicopter base at Harab-Ishq, in the Lafarge cement plant [1]; US forces closed it and destroyed it with their own strikes when they withdrew from northern Syria in October 2019. [2]" }
 sources:

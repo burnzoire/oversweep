@@ -376,19 +376,22 @@ export const airfieldContent = (r: EncyclopediaRecord) => contentFile(r) as unkn
 
 type Entry<T> = { record: EncyclopediaRecord; data: T };
 export interface AirfieldEntry extends Entry<AirfieldData> { theatres: Entry<TheatreData>[]; maps: (Entry<MapData> & { coverage: MapCoverage })[] }
-export interface TheatreEntry extends Entry<TheatreData> { airfields: AirfieldEntry[]; maps: Entry<MapData>[] }
+export interface TheatreEntry extends Entry<TheatreData> { airfields: AirfieldEntry[]; maps: MapEntry[] }
 export interface MapEntry extends Entry<MapData> { theatres: Entry<TheatreData>[]; airfields: { airfield: AirfieldEntry; coverage: MapCoverage }[] }
 
-// The Airfields & Carriers catalogue, validated once per build: every record
-// in the category, resolved into airfields, theatres and maps with their
+// The categories whose records make up the airfield catalogue.
+export const airfieldCategories = ['airfields-carriers', 'theatres'];
+
+// The airfield catalogue, validated once per build: every record in the
+// Airfields & Carriers and Theatres categories (theatres and their sim maps), resolved into airfields, theatres and maps with their
 // relationships both ways. Throws, failing the build, on any problem.
 let catalogue: { airfields: AirfieldEntry[]; theatres: TheatreEntry[]; maps: MapEntry[] } | undefined;
 export function airfieldCatalogue() {
   if (catalogue) return catalogue;
   // Validate every registered record, published or not, so a draft cannot hide a broken link.
-  const all = records.filter((r) => r.category === 'airfields-carriers').map((record) => ({ record, data: airfieldContent(record).frontmatter }));
+  const all = records.filter((r) => airfieldCategories.includes(r.category)).map((record) => ({ record, data: airfieldContent(record).frontmatter }));
   const problems = validateCatalogue(all.map(({ record, data }) => ({ slug: record.slug, data })));
-  if (problems.length) throw new Error(`Airfields & Carriers records are invalid:\n- ${problems.join('\n- ')}`);
+  if (problems.length) throw new Error(`Airfield, theatre and sim map records are invalid:\n- ${problems.join('\n- ')}`);
   const shipped = all.filter(({ record }) => includedRecords.includes(record));
   const ofKind = <T extends AirfieldCatalogueData>(kind: T['kind']) => shipped.filter((e): e is Entry<T> => e.data.kind === kind);
   const theatreEntries = ofKind<TheatreData>('theatre');

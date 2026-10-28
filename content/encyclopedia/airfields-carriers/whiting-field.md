@@ -33,7 +33,7 @@ facilities:
   other:
     - "South Field elevation 177 ft [3]"
     - "Helicopter landing spots along South Field's runways and on six pads beside them [4]"
-theatres: []
+theatres: [north-america]
 charts:
   - src: "encyclopedia/airfields-carriers/whiting-north-diagram.png"
     alt: "FAA airport diagram of Whiting Field North: two runways crossing in an X, with the control tower, base operations and parking rows to the south"

@@ -32,7 +32,7 @@ facilities:
   other:
     - "Saipan Tower on 125.7 and 256.9 MHz; approach and departure service from Guam CERAP [2]"
     - "Surviving Second World War facilities form the Isely Field Historic District, part of a National Historic Landmark District [1]"
-theatres: [mariana-islands]
+theatres: [east-asia-pacific]
 maps:
   - map: dcs-marianas
     status: represented

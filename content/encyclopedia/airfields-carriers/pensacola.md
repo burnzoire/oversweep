@@ -31,7 +31,7 @@ facilities:
   navaids:
     - "[TACAN](term:) NPA, on the field; it operates only during field hours [2]"
     - "ILS/DME runway 07L (I-NPA, channel 30X) [2]"
-theatres: []
+theatres: [north-america]
 charts:
   - src: "encyclopedia/airfields-carriers/pensacola-diagram.png"
     alt: "FAA airport diagram of NAS Pensacola: two parallel runways running from south-west to north-east, crossed by a third runway running north–south, with the museum hangar, the Blue Angels ramp and transient parking marked"

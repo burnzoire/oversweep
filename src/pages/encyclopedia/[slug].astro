@@ -44,8 +44,13 @@ const ordnance = ordnanceGroups
   .map((group) => ({ group, records: ordnanceRecords.filter(({ data }) => data.group === group.slug) }))
   .filter(({ records }) => records.length > 0);
 // Airfields are one index, searchable and filtered by country, theatre, sim
-// map and service; theatres and sim maps follow as their own lists.
-const airfieldData = category.slug === "airfields-carriers" ? airfieldCatalogue() : undefined;
+// map and service. Theatres list their sim maps under each one.
+const airfieldData = ["airfields-carriers", "theatres"].includes(category.slug) ? airfieldCatalogue() : undefined;
+const unplacedMaps = airfieldData?.maps.filter((x) => !x.theatres.length) ?? [];
+const mapCount = (m: NonNullable<typeof airfieldData>["maps"][number]) => {
+  const here = m.airfields.filter((y) => y.coverage.status === "represented").length;
+  return `${here} ${here === 1 ? "airfield" : "airfields"} here represented, ${m.airfields.filter((y) => y.coverage.status === "absent").length} confirmed absent`;
+};
 const byTitle = <T extends { record: { title: string } }>(list: T[]) => [...list].sort((a, b) => a.record.title.localeCompare(b.record.title, "en"));
 const airfieldIndex = airfieldData ? byTitle(airfieldData.airfields).map((entry) => {
   const { record, data } = entry;
@@ -182,7 +187,7 @@ const deliverySources: Source[] = [
         </>
       ) : category.slug === "airfields-carriers" && airfieldData ? (
         <>
-          <p class="lead">Real-world military airfields of every service and country, each with its names and identifiers, its role and the units based there over time, its runways and facilities, and how each sim map represents it. Theatres give the history of a region; sim maps give what DCS World and Falcon BMS cover and when they are set. Coverage is only claimed where a source confirms it: an airfield with no map listed has not been checked yet.</p>
+          <p class="lead">Real-world military airfields of every service and country, each with its names and identifiers, its role and the units based there over time, its runways and facilities, and how each sim map represents it. Coverage is only claimed where a source confirms it: an airfield with no map listed has not been checked yet.</p>
           <h2 id="airfield-index">Airfield index</h2>
           <form class="airfield-filter" role="search" aria-label="Find an airfield" hidden>
             <div class="filter-field filter-search">
@@ -255,25 +260,42 @@ const deliverySources: Source[] = [
             </table>
           </div>
           <p class="note">Figures come from each airfield's record, which cites them. Edwards' longest runway, on the Rogers Dry Lake bed, is unpaved and not counted. "Confirmed absent" means a source shows the map does not include the airfield; maps not listed have not been checked.</p>
-          <h2 id="theatres">Theatres</h2>
-          <p>Real-world regions with their own military history, and the airfields and sim maps in each.</p>
-          <div class="entry-grid record-grid">
-            {byTitle(airfieldData.theatres).map((x) => (
-              <RecordCard record={x.record} photo={x.data.photos[0]}>
-                <p class="card-list"><strong>Airfields:</strong> {x.airfields.map((y, i) => <>{i > 0 && ", "}<a href={sitePath(recordRoute(y.record))}>{y.data.short ?? y.record.title}</a></>)}</p>
-                <p class="card-list"><strong>Sim maps:</strong> {x.maps.length ? x.maps.map((y, i) => <>{i > 0 && ", "}<a href={sitePath(recordRoute(y.record))}>{y.data.name}</a></>) : "none recorded"}</p>
-              </RecordCard>
-            ))}
-          </div>
-          <h2 id="sim-maps">Sim maps</h2>
-          <p>Each map is one simulator's representation of a place, with its own coverage and setting. A map's page lists the airfields checked against it.</p>
-          <div class="entry-grid record-grid">
-            {airfieldData.maps.map((x) => (
-              <RecordCard record={x.record}>
-                <p class="card-list"><strong>{sims[x.data.sim]}</strong> · {eras[x.data.setting.era]} · {((r, gone) => `${r} ${r === 1 ? "airfield" : "airfields"} here represented, ${gone} confirmed absent`)(x.airfields.filter((y) => y.coverage.status === "represented").length, x.airfields.filter((y) => y.coverage.status === "absent").length)}</p>
-              </RecordCard>
-            ))}
-          </div>
+          <p>Each airfield belongs to a broad theatre, such as the Middle East. <a href={sitePath("encyclopedia/theatres/")}>Theatres</a> give each region's military history and list its DCS World and Falcon BMS maps.</p>
+        </>
+      ) : category.slug === "theatres" && airfieldData ? (
+        <>
+          <p class="lead">Broad real-world regions, each with its military history, the sim maps set there and the airfields in this encyclopedia. A sim map is one simulator's representation of part of a theatre, with its own coverage and setting; its page lists the airfields checked against it.</p>
+          <nav class="theatre-jump" aria-label="Theatres">
+            <ul>{byTitle(airfieldData.theatres).map((x) => <li><a href={`#${x.record.slug}`}>{x.record.title}</a></li>)}</ul>
+          </nav>
+          {byTitle(airfieldData.theatres).map((x) => (
+            <section class="theatre-group" aria-labelledby={x.record.slug}>
+              <h2 id={x.record.slug}>{x.record.title}</h2>
+              <div class="entry-grid record-grid">
+                <RecordCard record={x.record} photo={x.data.photos[0]}>
+                  <p class="card-list"><strong>Airfields:</strong> {x.airfields.length ? x.airfields.map((y, i) => <>{i > 0 && ", "}<a href={sitePath(recordRoute(y.record))}>{y.data.short ?? y.record.title}</a></>) : "none recorded yet"}</p>
+                </RecordCard>
+              </div>
+              <h3>Sim maps in {x.record.title}</h3>
+              {x.maps.length ? (
+                <div class="entry-grid record-grid">
+                  {x.maps.map((y) => <RecordCard record={y.record}>
+                    <p class="card-list"><strong>{sims[y.data.sim]}</strong> · {eras[y.data.setting.era]} · {mapCount(y)}</p>
+                  </RecordCard>)}
+                </div>
+              ) : <p>No sim map record is set here yet.</p>}
+            </section>
+          ))}
+          {unplacedMaps.length > 0 && (
+            <section class="theatre-group" aria-labelledby="unplaced-maps">
+              <h2 id="unplaced-maps">Sim maps not yet placed in a theatre</h2>
+              <div class="entry-grid record-grid">
+                {unplacedMaps.map((y) => <RecordCard record={y.record}>
+                    <p class="card-list"><strong>{sims[y.data.sim]}</strong> · {eras[y.data.setting.era]} · {mapCount(y)}</p>
+                  </RecordCard>)}
+              </div>
+            </section>
+          )}
         </>
       ) : category.slug === "terminology" ? (
         <Glossary />
