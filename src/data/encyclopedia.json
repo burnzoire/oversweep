@@ -2083,6 +2083,28 @@
     "summary": "All of Afghanistan in early access, region by region, from Kandahar and Camp Bastion to Bagram and FOB Salerno."
   },
   {
+    "id": "encyclopedia.airfields-carriers.dcs-southwest-afghanistan",
+    "slug": "dcs-southwest-afghanistan",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "DCS: Southwest Afghanistan",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Kandahar, Herat and Camp Bastion region of DCS: Afghanistan, sold separately, with 12 airfields."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.dcs-east-afghanistan",
+    "slug": "dcs-east-afghanistan",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "DCS: East Afghanistan",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Kabul and Bagram region of DCS: Afghanistan, sold separately, with 10 airfields and heliports."
+  },
+  {
     "id": "encyclopedia.airfields-carriers.dcs-iraq",
     "slug": "dcs-iraq",
     "category": "airfields-carriers",
@@ -2092,6 +2114,17 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "The whole of Iraq in early access, with a separate Northern Iraq region around Mosul and Kirkuk."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.dcs-iraq-north",
+    "slug": "dcs-iraq-north",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "DCS: Iraq North",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The northern region of DCS: Iraq, sold separately: Baghdad to Mosul and Kirkuk, with 13 airfields."
   },
   {
     "id": "encyclopedia.airfields-carriers.dcs-cold-war-germany",
