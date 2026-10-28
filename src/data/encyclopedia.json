@@ -1665,6 +1665,83 @@
     "summary": "Syria, Lebanon, Cyprus and their neighbours: the 1973 and 1982 air wars, the campaign against the Islamic State, and Incirlik, Akrotiri and Khmeimim."
   },
   {
+    "id": "encyclopedia.airfields-carriers.caucasus",
+    "slug": "caucasus",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "The Caucasus and the eastern Black Sea",
+    "designation": "Theatre",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Georgia and southern Russia: the 1942 battle for the oil fields, the wars in Abkhazia and South Ossetia, and Vaziani, Mozdok and Krymsk."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.persian-gulf",
+    "slug": "persian-gulf",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "The Persian Gulf and the Strait of Hormuz",
+    "designation": "Theatre",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The tanker war, Earnest Will and Praying Mantis, Iran Air 655, and Al Dhafra, Al Udeid and Bandar Abbas."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.sinai",
+    "slug": "sinai",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "The Sinai Peninsula and the Suez Canal",
+    "designation": "Theatre",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The 1956, 1967 and 1973 wars, Israel's withdrawal and the Negev bases that replaced Sinai's, and the Multinational Force and Observers."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.kola",
+    "slug": "kola",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "The Kola Peninsula and the High North",
+    "designation": "Theatre",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Russia's Northern Fleet and its Kola bases, Norway's northern air stations, Sweden's road bases and the Nordic NATO accessions."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.afghanistan",
+    "slug": "afghanistan",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Afghanistan",
+    "designation": "Theatre",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Soviet war of the 1980s and the 2001–2021 war: Bagram, Kandahar, Camp Bastion, Camp Dwyer and Shindand."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.iraq",
+    "slug": "iraq",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Iraq",
+    "designation": "Theatre",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Desert Storm, the no-fly zones, the 2003 war and Inherent Resolve: Balad, Al Asad, Tallil and Al Taqaddum."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.central-europe",
+    "slug": "central-europe",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Germany and Central Europe",
+    "designation": "Theatre",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Cold War front line: the Fulda Gap, V and VII Corps, the Berlin airlift and Reforger, and Ramstein, Spangdahlem, Bitburg and Hahn."
+  },
+  {
     "id": "encyclopedia.airfields-carriers.nellis",
     "slug": "nellis",
     "category": "airfields-carriers",
@@ -1894,6 +1971,72 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "South-eastern England and northern France in the Second World War, from 1940 to 1945."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.dcs-caucasus",
+    "slug": "dcs-caucasus",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "DCS: Caucasus",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "DCS World's free map of Georgia and southern Russia from Anapa to Tbilisi, with 21 airfields."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.dcs-sinai",
+    "slug": "dcs-sinai",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "DCS: Sinai",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Sinai, the Suez Canal and southern Israel, with Egyptian and Israeli air bases for the Arab–Israeli wars and modern missions."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.dcs-kola",
+    "slug": "dcs-kola",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "DCS: Kola",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Arctic Norway, Sweden, Finland and the Kola Peninsula, present day with late-Cold War allowances, 37 airfields."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.dcs-afghanistan",
+    "slug": "dcs-afghanistan",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "DCS: Afghanistan",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "All of Afghanistan in early access, region by region, from Kandahar and Camp Bastion to Bagram and FOB Salerno."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.dcs-iraq",
+    "slug": "dcs-iraq",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "DCS: Iraq",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The whole of Iraq in early access, with a separate Northern Iraq region around Mosul and Kirkuk."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.dcs-cold-war-germany",
+    "slug": "dcs-cold-war-germany",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "DCS: Cold War Germany",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "1980s Germany and its neighbours around the Fulda Gap, with more than 100 military airfields and heliports, in early access."
   },
   {
     "id": "encyclopedia.airfields-carriers.bms-korea",

@@ -6,7 +6,7 @@ name: "DCS: Persian Gulf"
 publisher: "Eagle Dynamics"
 setting: { era: modern, text: "The present-day Strait of Hormuz [1]" }
 area: "About 200,000 km² centred on the Strait of Hormuz: southern Iran, the UAE, northern Oman and Qeshm Island [1]"
-theatres: []
+theatres: [persian-gulf]
 sources:
   - n: 1
     title: "DCS: Persian Gulf Map"
