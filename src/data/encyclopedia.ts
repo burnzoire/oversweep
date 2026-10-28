@@ -388,7 +388,7 @@ export interface MapAirfieldTable {
     runways: { name: string; lengthFt?: number; ends: { name: string; heading: number }[] }[];
     radio: { vhf?: number; uhf?: number; vhfLow?: number; hf?: number };
     radioSource?: 'pydcs';
-    navaids: { type: string; callsign?: string; channel?: number; frequency?: number; unit?: 'kHz' | 'MHz' }[];
+    navaids: { type: string; callsign?: string; channel?: number; band?: 'X' | 'Y'; frequency?: number; unit?: 'kHz' | 'MHz' }[];
     approaches: { type: string; runway: string; callsign?: string; frequency?: number; channel?: number }[];
   }[];
 }

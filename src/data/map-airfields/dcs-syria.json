@@ -168,6 +168,7 @@
      "type": "TACAN",
      "callsign": "AKR",
      "channel": 107,
+     "band": "X",
      "frequency": 116.0,
      "unit": "MHz"
     }
@@ -843,6 +844,7 @@
      "type": "TACAN",
      "callsign": "DIY",
      "channel": 37,
+     "band": "X",
      "frequency": 110.0,
      "unit": "MHz"
     }
@@ -1024,6 +1026,7 @@
      "type": "VOR-DME",
      "callsign": "GZP",
      "channel": 89,
+     "band": "X",
      "frequency": 114.2,
      "unit": "MHz"
     }
@@ -1515,6 +1518,7 @@
      "type": "VORTAC",
      "callsign": "BRA",
      "channel": 96,
+     "band": "X",
      "frequency": 114.9,
      "unit": "MHz"
     }
@@ -1581,6 +1585,7 @@
      "type": "VORTAC",
      "callsign": "HZR",
      "channel": 106,
+     "band": "X",
      "frequency": 115.9,
      "unit": "MHz"
     }
@@ -3315,6 +3320,7 @@
      "type": "DME",
      "callsign": "IKNY",
      "channel": 26,
+     "band": "X",
      "frequency": 108.9,
      "unit": "MHz"
     },
@@ -3328,6 +3334,7 @@
      "type": "TACAN",
      "callsign": "KON",
      "channel": 88,
+     "band": "X",
      "frequency": 114.1,
      "unit": "MHz"
     },
@@ -3335,6 +3342,7 @@
      "type": "VOR-DME",
      "callsign": "KNY",
      "channel": 49,
+     "band": "X",
      "frequency": 111.2,
      "unit": "MHz"
     }
@@ -4101,6 +4109,7 @@
      "type": "VORTAC",
      "callsign": "ABC",
      "channel": 106,
+     "band": "X",
      "frequency": 115.9,
      "unit": "MHz"
     }
@@ -4210,6 +4219,7 @@
      "type": "VORTAC",
      "callsign": "RMD",
      "channel": 84,
+     "band": "X",
      "frequency": 113.7,
      "unit": "MHz"
     }
@@ -4388,6 +4398,7 @@
      "type": "VOR-DME",
      "callsign": "GAP",
      "channel": 79,
+     "band": "X",
      "frequency": 113.2,
      "unit": "MHz"
     }

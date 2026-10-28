@@ -63,6 +63,11 @@ const mapTable = map && Object.values(mapTables).find((x) => x.map === record.sl
 const recordFor = (name: string) => map?.airfields.find((x) => x.coverage.status === 'represented' && x.coverage.inSimName === name)?.airfield.record;
 const runwayFields = mapTable?.airfields.filter((x) => x.runways.length) ?? [];
 const padFields = mapTable?.airfields.filter((x) => !x.runways.length) ?? [];
+// TACAN and DME channels carry an X or Y band; RSBN and PRMG channels do not.
+const dmeTypes = ['TACAN', 'VORTAC', 'VOR-DME', 'DME'];
+// A channel with its band; * marks a band assumed to be X (see the table note).
+const channelText = (type: string, channel: number, band?: string) =>
+  !dmeTypes.includes(type) ? `ch ${channel}` : band ? `${channel}${band}` : `${channel}X*`;
 const freq = (value: number | null | undefined) => value ? (Number.isInteger(value) ? value.toFixed(1) : String(+value.toFixed(3))) : '—';
 const ids = a?.identifiers;
 const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.iata}`, ids.faa && `FAA ${ids.faa}`, ...(ids.others ?? [])].filter(Boolean).join(' · ');
@@ -264,7 +269,7 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
                           {x.radioSource && <span class="cell-note">from pydcs †</span>}
                         </> : '—'}</td>
                         {mapTable.source.beacons && <>
-                          <td>{x.navaids.length ? x.navaids.map((v) => <span class="cell-line">{v.type} {[v.channel !== undefined && `ch ${v.channel}`, v.frequency !== undefined && `${v.unit === 'kHz' ? v.frequency : freq(v.frequency)} ${v.unit}`].filter(Boolean).join(', ')}{v.callsign && ` (${v.callsign})`}</span>) : '—'}</td>
+                          <td>{x.navaids.length ? x.navaids.map((v) => <span class="cell-line">{v.type} {[v.channel !== undefined && channelText(v.type, v.channel, v.band), v.frequency !== undefined && `${v.unit === 'kHz' ? v.frequency : freq(v.frequency)} ${v.unit}`].filter(Boolean).join(', ')}{v.callsign && ` (${v.callsign})`}</span>) : '—'}</td>
                           <td>{x.approaches.length ? x.approaches.map((v) => <span class="cell-line">{v.type === 'PRMG' ? 'PRMG ' : ''}{v.runway || 'runway not given'}: {v.frequency !== undefined ? freq(v.frequency) : `ch ${v.channel}`}{v.callsign && ` (${v.callsign})`}</span>) : '—'}</td>
                         </>}
                       </tr>
@@ -280,7 +285,7 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
               </details>
             )}
             <p class="note">Source: <a href={mapTable.source.url}>{mapTable.source.title}</a>, {mapTable.source.publisher}, at commit {mapTable.source.commit.slice(0, 7)}.{mapTable.source.radioFallback && <> † Where that data gives an airfield no tower radio, the frequencies come from <a href={mapTable.source.radioFallback.url}>{mapTable.source.radioFallback.title}</a>, an open-source library whose terrain data mirrors the game's.</>} {mapTable.source.beacons
-              ? 'Runway headings are magnetic, as the game computes them; lengths and elevations are converted from metres. TACAN channels are given as the game lists them, without the X or Y band. A dash means the game gives none.'
+              ? 'Runway headings are magnetic, as the game computes them; lengths and elevations are converted from metres. The game gives TACAN and DME channels no X or Y band. Where a beacon’s listed frequency is the reply or paired VHF frequency of one band (ICAO Annex 10 channel plan), that band is shown. * marks an assumed X: the game lists no frequency that settles it, and every ground TACAN whose frequency does settle it is X. A dash means the game gives none.'
               : 'This data has no elevations, runway lengths or navaid details; runway headings are as it gives them. A dash means it gives no tower frequency.'}</p>
           </section>
         )}

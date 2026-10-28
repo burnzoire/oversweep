@@ -389,6 +389,7 @@
      "type": "VORTAC",
      "callsign": "LAS",
      "channel": 116,
+     "band": "X",
      "frequency": 116.9,
      "unit": "MHz"
     }
@@ -670,6 +671,7 @@
      "type": "VORTAC",
      "callsign": "TQQ",
      "channel": 77,
+     "band": "X",
      "frequency": 113.0,
      "unit": "MHz"
     }

@@ -14,6 +14,14 @@ countries:
 - iraq
 - qatar
 photos:
+- src: encyclopedia/theatres/middle-east.jpg
+  alt: Two Israeli Air Force F-16 fighters in brown desert camouflage flying low past the sandstone cliffs of a desert crater
+  caption: Israeli Air Force F-16A Netz fighters fly low through Ramon Crater in the Negev Desert, May 2012.
+  author: Israel Defense Forces
+  licence: CC BY-SA 2.0
+  licenceUrl: https://creativecommons.org/licenses/by-sa/2.0/
+  sourceUrl: https://commons.wikimedia.org/wiki/File:Flickr_-_Israel_Defense_Forces_-_Flying_Past_Ramon_Crater.jpg
+  accessed: '2026-10-28'
 - src: encyclopedia/theatres/syria.jpg
   alt: Two aircraft carriers steaming side by side on a deep blue sea, with cruisers and destroyers spread out ahead of them
   caption: The USS Dwight D. Eisenhower and USS Gerald R. Ford carrier strike groups in the eastern Mediterranean, 3 November 2023.

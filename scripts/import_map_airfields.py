@@ -58,6 +58,35 @@ BEACON_LABELS = {
 }
 
 
+DME_TYPES = {"BEACON_TYPE_TACAN", "BEACON_TYPE_VORTAC", "BEACON_TYPE_VOR_DME", "BEACON_TYPE_DME"}
+
+
+def tacan_band(channel: int, hz: int | None) -> str | None:
+    """The X or Y band a TACAN/DME channel's listed frequency shows, or None.
+
+    DCS gives no band, but a beacon's frequency is either the channel's
+    reply frequency or its paired VHF frequency, which differ between the
+    bands (ICAO Annex 10 Volume I, Chapter 3, Table A, as dcs-world-schema's
+    tools/datamine/overlays.yaml sets out): interrogation is 1025 MHz plus
+    (channel - 1); X replies 63 MHz below it on channels 1-63 and above it
+    on 64-126, Y the other way round; channels 17-59 pair with 108.00 MHz
+    and 70-126 with 112.30 MHz in 0.1 MHz steps, Y 0.05 MHz above X.
+    """
+    if not hz:
+        return None
+    f = hz / 1e6
+    if f > 900:
+        interrogation = 1025 + channel - 1
+        below, above = interrogation - 63, interrogation + 63
+        x, y = (below, above) if channel <= 63 else (above, below)
+        return "X" if abs(f - x) < 0.01 else "Y" if abs(f - y) < 0.01 else None
+    first, base = (17, 108.0) if 17 <= channel <= 59 else (70, 112.3) if 70 <= channel <= 126 else (None, None)
+    if first is None:
+        return None
+    paired = base + (channel - first) * 0.1
+    return "X" if abs(f - paired) < 0.001 else "Y" if abs(f - paired - 0.05) < 0.001 else None
+
+
 def checkout(repo: str, commit: str, paths: list[str]) -> pathlib.Path:
     """Fetch only `paths` of `repo` at `commit` into a temporary directory."""
     target = pathlib.Path(tempfile.mkdtemp(prefix="map-airfields-"))
@@ -107,6 +136,9 @@ def schema_airfields(root: pathlib.Path, terrain: str) -> list[dict]:
             aid = {"type": BEACON_LABELS[b["typeName"]], "callsign": b.get("callsign")}
             if "channel" in b:
                 aid["channel"] = b["channel"]
+                band = tacan_band(b["channel"], b.get("frequencyHz"))
+                if band and b["typeName"] in DME_TYPES:
+                    aid["band"] = band
             if b.get("frequencyHz"):
                 hz = b["frequencyHz"]
                 aid["frequency"] = round(hz / 1e3) if hz < 3e6 else mhz(hz)

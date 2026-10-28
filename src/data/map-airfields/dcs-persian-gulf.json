@@ -195,6 +195,7 @@
      "type": "VORTAC",
      "callsign": "MA",
      "channel": 96,
+     "band": "X",
      "frequency": 114.9,
      "unit": "MHz"
     }
@@ -295,6 +296,7 @@
      "type": "TACAN",
      "callsign": "MIN",
      "channel": 99,
+     "band": "X",
      "frequency": 115.2,
      "unit": "MHz"
     }
@@ -389,6 +391,7 @@
      "type": "VOR-DME",
      "callsign": "BND",
      "channel": 119,
+     "band": "X",
      "frequency": 117.2,
      "unit": "MHz"
     }
@@ -437,6 +440,7 @@
      "type": "VOR-DME",
      "callsign": "LEN",
      "channel": 95,
+     "band": "X",
      "frequency": 114.8,
      "unit": "MHz"
     }
@@ -587,6 +591,7 @@
      "type": "VOR-DME",
      "callsign": "FJV",
      "channel": 85,
+     "band": "X",
      "frequency": 113.8,
      "unit": "MHz"
     }
@@ -629,6 +634,7 @@
      "type": "TACAN",
      "callsign": "HDR",
      "channel": 47,
+     "band": "X",
      "frequency": 111.0,
      "unit": "MHz"
     }
@@ -718,6 +724,7 @@
      "type": "VOR-DME",
      "callsign": "KER",
      "channel": 57,
+     "band": "X",
      "frequency": 112.0,
      "unit": "MHz"
     }
@@ -887,6 +894,7 @@
      "type": "VOR-DME",
      "callsign": "LVA",
      "channel": 115,
+     "band": "Y",
      "frequency": 116.85,
      "unit": "MHz"
     }
@@ -922,6 +930,7 @@
      "type": "VORTAC",
      "callsign": "OMLW",
      "channel": 121,
+     "band": "X",
      "frequency": 117.4,
      "unit": "MHz"
     }
@@ -1022,6 +1031,7 @@
      "type": "VOR-DME",
      "callsign": "OMRK",
      "channel": 83,
+     "band": "X",
      "frequency": 113.6,
      "unit": "MHz"
     }
@@ -1166,6 +1176,7 @@
      "type": "TACAN",
      "callsign": "SYZ1",
      "channel": 94,
+     "band": "X",
      "frequency": 114.7,
      "unit": "MHz"
     },
@@ -1173,6 +1184,7 @@
      "type": "VOR-DME",
      "callsign": "SYZ",
      "channel": 125,
+     "band": "X",
      "frequency": 117.8,
      "unit": "MHz"
     }
@@ -1305,6 +1317,7 @@
      "type": "TACAN",
      "callsign": "KCK",
      "channel": 89,
+     "band": "X",
      "frequency": 114.2,
      "unit": "MHz"
     }
