@@ -89,7 +89,7 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
     {a && airfield && (
       <>
         <section class="data-plate" aria-labelledby="where-title">
-          <h2 id="where-title">Where it is and what it is called</h2>
+          <h2 id="where-title">Location and identity</h2>
           <dl>
             <div><dt>Location</dt><dd><Cited text={a.location} /></dd></div>
             <div><dt>Country or territory</dt><dd>{nation(a.country)}</dd></div>
@@ -111,7 +111,7 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
         </section>
 
         <section class="data-plate" aria-labelledby="role-title">
-          <h2 id="role-title">Role and who uses it</h2>
+          <h2 id="role-title">Role and operators</h2>
           <dl>
             <div><dt>Status</dt><dd>{a.status === 'active' ? 'Active' : 'Closed'} · {useLabels[use!]}</dd></div>
             <div><dt>Roles today</dt><dd>{a.roles.length ? a.roles.map((r) => airfieldRoles[r]).join(' · ') : a.status === 'closed' ? 'None' : 'None documented in the sources consulted'}</dd></div>
@@ -230,7 +230,7 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
           </dl>
         </section>
         <section class="sim-panel" aria-labelledby="sims-title">
-          <h2 id="sims-title">Sim maps of this theatre</h2>
+          <h2 id="sims-title">Sim maps</h2>
           {theatre.maps.length
             ? <ul>{theatre.maps.map((x) => <li><a href={link(x.record)}>{x.data.name}</a> ({sims[x.data.sim]}): {plain(x.data.setting.text)}</li>)}</ul>
             : <p>No sim map record covers this theatre yet.</p>}
@@ -253,7 +253,7 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
         </section>
         {mapTable && (
           <section class="map-airfields" aria-labelledby="map-airfields-title">
-            <h2 id="map-airfields-title">Airfields on this map</h2>
+            <h2 id="map-airfields-title">Airfields</h2>
             <p>Every airfield with a runway in {m.short}'s data from the game: {runwayFields.length} airfields{padFields.length > 0 && `, plus ${padFields.length} helipads and other landing sites listed below`}. Names link to this encyclopedia's entry where there is one.</p>
             <div class="table-scroll" role="region" aria-label={`Airfields on ${m.name}, scrolls sideways on narrow screens`} tabindex="0">
               <table class="map-airfield-table">
@@ -294,7 +294,7 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
           </section>
         )}
         <section class="sim-panel" aria-labelledby="sims-title">
-          <h2 id="sims-title">Encyclopedia airfields checked against this map</h2>
+          <h2 id="sims-title">Airfield coverage</h2>
           {map.airfields.length ? (
             <div class="table-scroll" role="region" aria-label="Airfields checked against this map, scrolls sideways on narrow screens" tabindex="0">
               <table>
