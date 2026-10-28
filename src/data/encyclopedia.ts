@@ -260,10 +260,10 @@ export interface AirfieldData {
   coordinates: { lat: number; lon: number; cite: string };
   elevationFt: number;
   elevationCite: string;
-  opened: { year: number; text: string };
-  closed?: { year: number; text: string };
+  opened: { year?: number; text: string };
+  closed?: { year?: number; text: string };
   roles: (keyof typeof airfieldRoles)[];
-  operators: Operator[];
+  operators?: Operator[];
   units?: Unit[];
   facilities: { asOf?: string; runways: Runway[]; arresting?: string[]; navaids?: string[]; other?: string[] };
   theatres?: string[];
@@ -408,7 +408,7 @@ export function airfieldCatalogue() {
   if (catalogue) return catalogue;
   // Validate every registered record, published or not, so a draft cannot hide a broken link.
   const all = records.filter((r) => airfieldCategories.includes(r.category)).map((record) => ({ record, data: airfieldContent(record).frontmatter }));
-  const problems = validateCatalogue(all.map(({ record, data }) => ({ slug: record.slug, data })));
+  const problems = validateCatalogue(all.map(({ record, data }) => ({ slug: record.slug, data })), { plans: new Set(Object.values(planFiles).map((p) => p.record)) });
   if (problems.length) throw new Error(`Airfield, theatre and sim map records are invalid:\n- ${problems.join('\n- ')}`);
   const shipped = all.filter(({ record }) => includedRecords.includes(record));
   const ofKind = <T extends AirfieldCatalogueData>(kind: T['kind']) => shipped.filter((e): e is Entry<T> => e.data.kind === kind);
@@ -431,6 +431,17 @@ export function airfieldCatalogue() {
   }));
   return (catalogue = { airfields, theatres, maps });
 }
+
+// An airfield map's geometry from OpenStreetMap, as
+// scripts/import_airfield_plans.py writes it: [latitude, longitude] pairs.
+export interface AirfieldPlan {
+  record: string;
+  source: { title: string; publisher: string; url: string; api: string; licence: string; licenceUrl: string; retrieved: string };
+  aerodrome: { name?: string; rings: [number, number][][] };
+  features: { type: 'runway' | 'taxiway' | 'apron' | 'hangar' | 'terminal' | 'helipad'; area: boolean; ref?: string; widthM?: number; surface?: string; line?: [number, number][]; rings?: [number, number][][] }[];
+}
+const planFiles = import.meta.glob<AirfieldPlan>('./airfield-plans/*.json', { eager: true, import: 'default' });
+export const airfieldPlan = (slug: string) => Object.values(planFiles).find((p) => p.record === slug);
 
 // The id of an airfield's row in its map's "Airfields on this map" table.
 export const mapAirfieldAnchor = (name: string) => `af-${name.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;

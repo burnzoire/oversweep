@@ -56,12 +56,12 @@ const byTitle = <T extends { record: { title: string } }>(list: T[]) => [...list
 const airfieldIndex = airfieldData ? byTitle(airfieldData.airfields).map((entry) => {
   const { record, data } = entry;
   const represented = entry.maps.filter((x) => x.coverage.status === "represented");
-  const services = [...new Set(data.operators.filter((o) => !o.to).map((o) => o.branch))];
+  const services = [...new Set((data.operators ?? []).filter((o) => !o.to).map((o) => o.branch))];
   return {
     ...entry,
     represented,
     services,
-    use: currentUse(data.operators),
+    use: currentUse(data.operators ?? []),
     aliases: (data.names ?? []).map((x) => x.name),
     filter: {
       search: searchTerms(record.slug, data, represented.flatMap((x) => x.coverage.inSimName ?? [])),
@@ -246,7 +246,7 @@ const deliverySources: Source[] = [
                   <div><dt>Where</dt><dd>{nations[a.data.country].name}</dd></div>
                   {a.aliases.length > 0 && <div><dt>Also</dt><dd>{a.aliases.join(" · ")}</dd></div>}
                   <div><dt>Use</dt><dd>{useLabels[a.use]}</dd></div>
-                  <div><dt>Roles</dt><dd>{a.data.roles.map((r) => airfieldRoles[r]).join(", ")}</dd></div>
+                  <div><dt>Roles</dt><dd>{a.data.roles.length ? a.data.roles.map((r) => airfieldRoles[r]).join(", ") : "None"}</dd></div>
                   <div><dt>Represented in</dt><dd>{a.represented.length ? a.represented.map((x, i) => <>{i > 0 && ", "}<a href={sitePath(recordRoute(x.record))}>{x.data.name}</a></>)
                     : a.maps.some((x) => x.coverage.status === "absent") ? <>No map checked so far; not on {a.maps.filter((x) => x.coverage.status === "absent").map((x, i) => <>{i > 0 && ", "}<a href={sitePath(recordRoute(x.record))}>{x.data.name}</a></>)}</>
                     : "No map checked yet"}</dd></div>

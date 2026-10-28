@@ -96,7 +96,8 @@ test('derived values: longest paved runway, current use, periods and search term
 });
 
 test('the real airfield, theatre and sim map content is valid and registered', () => {
-  assert.deepEqual(validateCatalogue(content), []);
+  const plans = new Set(readdirSync(fileURLToPath(new URL('../../src/data/airfield-plans/', import.meta.url))).map((f) => f.replace(/\.json$/, '')));
+  assert.deepEqual(validateCatalogue(content, { plans }), []);
   for (const category of categories) {
     const registered = registry.filter((r) => r.category === category).map((r) => r.slug).sort();
     assert.deepEqual(content.filter((e) => e.category === category).map((e) => e.slug).sort(), registered, category);
