@@ -2,12 +2,12 @@
 // kinds of record make it up:
 //
 // - `airfield`: one real-world airfield, whatever any simulator does with it.
-//   These live in content/encyclopedia/airfields-carriers.
+//   These live in content/encyclopedia/locations.
 // - `theatre`: a broad real-world region, such as the Middle East, with a
 //   section of military history for each part of it.
 // - `map`: one simulator's representation of a place, with its own coverage
 //   and historical setting, listed under its theatre.
-//   Theatres and maps live in content/encyclopedia/theatres.
+//   Theatres and maps live in content/encyclopedia/locations.
 //
 // An airfield names the theatres it belongs to and, for each sim map someone
 // has checked, whether the map represents it. A map that an airfield does not

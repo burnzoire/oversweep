@@ -5,8 +5,8 @@ import { fileURLToPath } from 'node:url';
 import { parse } from 'yaml';
 import { currentUse, longestRunwayFt, periodText, searchTerms, validateCatalogue } from '../../src/data/airfield-model.mjs';
 
-// Airfields live in one category; theatres and their sim maps in another.
-const categories = ['airfields-carriers', 'theatres'];
+// Distinct record kinds share one Locations category.
+const categories = ['locations'];
 const registry = JSON.parse(readFileSync(fileURLToPath(new URL('../../src/data/encyclopedia.json', import.meta.url)), 'utf8'));
 const content = categories.flatMap((category) => {
   const dir = fileURLToPath(new URL(`../../content/encyclopedia/${category}/`, import.meta.url));
@@ -102,8 +102,7 @@ test('the real airfield, theatre and sim map content is valid and registered', (
     const registered = registry.filter((r) => r.category === category).map((r) => r.slug).sort();
     assert.deepEqual(content.filter((e) => e.category === category).map((e) => e.slug).sort(), registered, category);
   }
-  // Airfields sit in their category, theatres and maps in the other.
-  for (const e of content) assert.equal(e.category === 'airfields-carriers', e.data.kind === 'airfield', e.slug);
+  for (const e of content) assert.ok(['airfield', 'theatre', 'map'].includes(e.data.kind), e.slug);
   // Every sim map is listed under a theatre.
   for (const e of content.filter((x) => x.data.kind === 'map')) assert.ok(e.data.theatres?.length, e.slug);
 });

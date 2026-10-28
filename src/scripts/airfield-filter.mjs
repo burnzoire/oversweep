@@ -5,40 +5,42 @@
 const form = document.querySelector('.airfield-filter');
 
 if (form) {
-  const items = [...document.querySelectorAll('.ency [data-airfield]')];
+  const items = [...document.querySelectorAll('.ency [data-location], .ency [data-airfield]')];
   const cards = items.filter((item) => item.matches('.entry-card'));
+  const recordCount = new Set(cards.map((card) => card.dataset.recordId)).size;
   const rows = items.filter((item) => item.matches('.sim-airfield'));
   // A table the filters leave empty is hidden rather than shown as a bare header.
   const tables = [...document.querySelectorAll('.ency .table-scroll')].filter((t) => t.querySelector('[data-airfield]'));
   const count = form.querySelector('.filter-count');
   const empty = form.querySelector('.filter-empty');
-  const fields = ['q', 'country', 'theatre', 'map', 'service'];
+  const fields = ['q', 'kind', 'country', 'theatre', 'map', 'service'];
   // Each select matches one space-separated attribute.
-  const lists = { country: 'country', theatre: 'theatres', map: 'maps', service: 'services' };
+  const lists = { kind: 'kind', country: 'country', theatre: 'theatres', map: 'maps', service: 'services' };
 
   const apply = () => {
     const query = form.elements.q.value.trim().toLowerCase();
-    let shown = 0;
+    const shownRecords = new Set();
     let shownRows = 0;
     for (const item of items) {
       const matches = (!query || item.dataset.search.includes(query))
         && Object.entries(lists).every(([field, attribute]) => {
           const value = form.elements[field].value;
-          return !value || item.dataset[attribute].split(' ').includes(value);
+          return !value || (item.dataset[attribute] ?? (attribute === 'kind' ? 'airfield' : '')).split(' ').includes(value);
         });
       item.hidden = !matches;
-      if (matches && cards.includes(item)) shown += 1;
+      if (matches && cards.includes(item)) shownRecords.add(item.dataset.recordId);
       if (matches && rows.includes(item)) shownRows += 1;
     }
     for (const table of tables) table.hidden = ![...table.querySelectorAll('[data-airfield]')].some((row) => !row.hidden);
+    for (const group of document.querySelectorAll('[data-location-group]')) group.hidden = ![...group.querySelectorAll('[data-location], [data-airfield]')].some((card) => !card.hidden);
     // Two lists: the airfields with a full record (the cards) and every airfield
     // on the sim maps (the table below them), which includes recorded ones.
     const filtered = query || Object.keys(lists).some((field) => form.elements[field].value);
     const sims = rows.length ? `the sim maps hold ${rows.length} airfields in all` : '';
     count.textContent = !filtered
-      ? `${cards.length} airfields have a full record so far${sims && `; ${sims}`}.`
-      : `Matching: ${shown} of the ${cards.length} full records${rows.length ? `, and ${shownRows} of the ${rows.length} airfields on the sim maps` : ''}.`;
-    empty.hidden = shown + shownRows > 0;
+      ? `${recordCount} locations have a full record so far${sims && `; ${sims}`}.`
+      : `Matching: ${shownRecords.size} of the ${recordCount} location records${rows.length ? `, and ${shownRows} of the ${rows.length} airfields on the sim maps` : ''}.`;
+    empty.hidden = shownRecords.size + shownRows > 0;
     const url = new URL(location.href);
     for (const field of fields) {
       const value = form.elements[field].value.trim();

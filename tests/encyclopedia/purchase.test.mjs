@@ -14,7 +14,7 @@ const read = (category) => {
   }));
 };
 const aircraft = read('aircraft');
-const maps = read('theatres').filter((e) => e.data.kind === 'map');
+const maps = read('locations').filter((e) => e.data.kind === 'map');
 
 test('every aircraft and sim map has a valid purchase list', () => {
   for (const { slug, data } of [...aircraft, ...maps]) {

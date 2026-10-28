@@ -175,9 +175,10 @@
 .ency .airfield-filter .filter-count, .ency .airfield-filter .filter-empty { grid-column: 1 / -1; margin: 0; color: var(--color-muted); font-size: 0.9rem; }
 .ency .airfield-filter[hidden], .ency [data-airfield][hidden], .ency .filter-empty[hidden] { display: none; }
 .ency .card-facts { display: grid; gap: 0.2rem; margin: 0 0 0.6rem; font-size: 0.9rem; }
-.ency .card-facts > div { display: grid; grid-template-columns: 5.5rem 1fr; gap: 0.5rem; }
+.ency .airfield-index { grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); }
+.ency .card-facts > div { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: 0.5rem; }
 .ency .card-facts dt { font-weight: 700; color: var(--color-muted); }
-.ency .card-facts dd { margin: 0; }
+.ency .card-facts dd { margin: 0; overflow-wrap: anywhere; }
 .ency .card-list { font-size: 0.9rem; }
 .ency .units, .ency .facilities { margin: 1.5rem 0; }
 .ency .units h3 { margin: 1rem 0 0.4rem; font-size: 1rem; }
@@ -238,3 +239,5 @@
 .ency .plan-key .swatch-building { background: #7d838a; border-color: #7d838a; }
 .ency .plan-key .swatch-helipad { background: #fff; border-color: #2b2f33; }
 .ency .plan-key .swatch-boundary { background: #f6f7f4; border: 1px dashed #8a8f94; }
+
+.ency [data-location][hidden], .ency [data-location-group][hidden] { display: none; }
