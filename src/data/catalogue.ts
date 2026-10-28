@@ -20,8 +20,7 @@ export const encyclopediaCategories = [
   { slug: "ordnance", title: "Ordnance", summary: "Missiles, bombs, rockets and guns: how they are guided, their reach and how they are employed." },
   { slug: "threat-systems", title: "Threat Systems", summary: "Surface-to-air missile systems: radars, guidance, engagement limits and what they show on a radar warning receiver." },
   { slug: "radar-sensors", title: "Radar & Sensors", summary: "Airborne radars, targeting pods and warning receivers: what they detect and how." },
-  { slug: "airfields-carriers", title: "Airfields & Carriers", summary: "Real-world airfields of every service and country: names, units over time, runways and facilities, and how sim maps represent them." },
-  { slug: "theatres", title: "Theatres", summary: "Broad regions such as the Middle East and their military history, with the DCS World and Falcon BMS maps of each and the airfields they represent." },
+  { slug: "locations", title: "Locations", summary: "Theatres, simulator maps, airfields and carriers: geography, military history, facilities and simulator coverage." },
   { slug: "terminology", title: "Terminology", summary: "Brevity words, abbreviations and terms used across the services." },
   { slug: "reference-data", title: "Reference Data", summary: "Tables pilots look things up in: units, conversions and codes." },
 ] as const;

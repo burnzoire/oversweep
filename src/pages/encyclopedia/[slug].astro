@@ -46,7 +46,7 @@ const ordnance = ordnanceGroups
   .filter(({ records }) => records.length > 0);
 // Airfields are one index, searchable and filtered by country, theatre, sim
 // map and service. Theatres list their sim maps under each one.
-const airfieldData = ["airfields-carriers", "theatres"].includes(category.slug) ? airfieldCatalogue() : undefined;
+const airfieldData = category.slug === "locations" ? airfieldCatalogue() : undefined;
 const unplacedMaps = airfieldData?.maps.filter((x) => !x.theatres.length) ?? [];
 const mapCount = (m: NonNullable<typeof airfieldData>["maps"][number]) => {
   const here = m.airfields.filter((y) => y.coverage.status === "represented").length;
@@ -73,7 +73,7 @@ const airfieldIndex = airfieldData ? byTitle(airfieldData.airfields).map((entry)
   };
 }) : [];
 // Every airfield on every sim map, with or without a record yet.
-const simIndex = category.slug === "airfields-carriers" && airfieldData ? simAirfields().map((x) => {
+const simIndex = category.slug === "locations" && airfieldData ? simAirfields().map((x) => {
   const indexed = airfieldIndex.find((a) => a.record === x.record?.record);
   return {
     ...x,
@@ -86,6 +86,14 @@ const simIndex = category.slug === "airfields-carriers" && airfieldData ? simAir
     },
   };
 }) : [];
+const locationFilter = (entry: NonNullable<typeof airfieldData>["theatres"][number] | NonNullable<typeof airfieldData>["maps"][number], kind: string) => ({
+  location: "", kind,
+  search: [entry.record.title, entry.record.designation, entry.record.summary, entry.data.name, "short" in entry.data ? entry.data.short : ""].join(" | ").toLowerCase(),
+  country: "",
+  theatres: ("theatres" in entry ? entry.theatres.map((t) => t.record.slug) : [entry.record.slug]).join(" "),
+  maps: ("maps" in entry ? entry.maps.map((m) => m.record.slug) : [entry.record.slug]).join(" "),
+  services: "",
+});
 const usedNations = [...new Set(airfieldIndex.map((a) => a.data.country))].sort((a, b) => nations[a].name.localeCompare(nations[b].name));
 const usedServices = Object.keys(branches).filter((b) => airfieldIndex.some((a) => a.services.includes(b as keyof typeof branches))) as (keyof typeof branches)[];
 const mapName = (x: { data: { name: string } }) => x.data.name;
@@ -199,17 +207,19 @@ const deliverySources: Source[] = [
             </ol>
           </section>
         </>
-      ) : category.slug === "airfields-carriers" && airfieldData ? (
+      ) : category.slug === "locations" && airfieldData ? (
         <>
-          <p class="lead">Real-world military airfields of every service and country, each with its names and identifiers, its role and the units based there over time, its runways and facilities, and how each sim map represents it. Coverage is only claimed where a source confirms it: an airfield with no map listed has not been checked yet.</p>
-          <h2 id="airfield-index">Airfield index</h2>
-          <form class="airfield-filter" role="search" aria-label="Find an airfield" hidden>
+          <p class="lead">Theatres and their military history, simulator maps, and real-world airfields with their names, units, runways and facilities. Browse by region or find a location below. Carriers will appear here when records are available. An airfield with no map listed has not been checked yet.</p>
+          <nav class="theatre-jump" aria-label="Browse locations"><ul><li><a href="#airfield-index">Airfields</a></li><li><a href="#sim-airfields">Every represented airfield</a></li><li><a href="#theatres-maps">Theatres and sim maps</a></li></ul></nav>
+          <h2 id="airfield-index">Find a location</h2>
+          <form class="airfield-filter" role="search" aria-label="Find a location" hidden>
             <div class="filter-field filter-search">
-              <label for="airfield-q">Name, former name or identifier</label>
+              <label for="airfield-q">Location name, former name or identifier</label>
               <input id="airfield-q" name="q" type="search" autocomplete="off" placeholder="e.g. Isely, KLSV or Batumi" />
             </div>
+            <div class="filter-field"><label for="location-kind">Type</label><select id="location-kind" name="kind"><option value="">All locations</option><option value="airfield">Airfields</option><option value="theatre">Theatres</option><option value="map">Sim maps</option></select></div>
             <div class="filter-field">
-              <label for="airfield-country">Country or territory</label>
+              <label for="airfield-country">Country or territory (airfields)</label>
               <select id="airfield-country" name="country">
                 <option value="">Any</option>
                 {usedNations.map((c) => <option value={c}>{nations[c].name}</option>)}
@@ -223,25 +233,27 @@ const deliverySources: Source[] = [
               </select>
             </div>
             <div class="filter-field">
-              <label for="airfield-map">Represented on sim map</label>
+              <label for="airfield-map">Sim map</label>
               <select id="airfield-map" name="map">
                 <option value="">Any, or none checked</option>
                 {airfieldData.maps.map((x) => <option value={x.record.slug}>{mapName(x)}</option>)}
               </select>
             </div>
             <div class="filter-field">
-              <label for="airfield-service">Service</label>
+              <label for="airfield-service">Service (airfields)</label>
               <select id="airfield-service" name="service">
                 <option value="">Any</option>
                 {usedServices.map((b) => <option value={b}>{branches[b]}</option>)}
               </select>
             </div>
             <p class="filter-count" aria-live="polite"></p>
-            <p class="filter-empty" hidden>No airfield matches. Clear a filter or try another name.</p>
+            <p class="filter-empty" hidden>No location matches. Clear a filter or try another name.</p>
           </form>
+          <section data-location-group>
+          <h2>Airfields</h2>
           <div class="entry-grid record-grid airfield-index">
             {airfieldIndex.map((a) => (
-              <RecordCard record={a.record} photo={a.data.photos[0]} filter={{ ...a.filter, airfield: "" }}>
+              <RecordCard record={a.record} photo={a.data.photos[0]} filter={{ ...a.filter, airfield: "", location: "", kind: "airfield" }}>
                 <dl class="card-facts">
                   <div><dt>Where</dt><dd>{nations[a.data.country].name}</dd></div>
                   {a.aliases.length > 0 && <div><dt>Also</dt><dd>{a.aliases.join(" · ")}</dd></div>}
@@ -254,6 +266,8 @@ const deliverySources: Source[] = [
               </RecordCard>
             ))}
           </div>
+          </section>
+          <section data-location-group>
           <h2 id="sim-airfields">Every represented airfield</h2>
           <p>Every airfield with a runway on each DCS World map, with its runways, tower frequencies, navaids and ILS as the game has them. An airfield on more than one map gets a line for each map. {simIndex.filter((x) => x.record).length} of {simIndex.length} have a full record so far; more are being added theatre by theatre, the major military bases first.</p>
           <div class="table-scroll" role="region" aria-label="Every represented airfield, scrolls sideways on narrow screens" tabindex="0">
@@ -275,26 +289,25 @@ const deliverySources: Source[] = [
             </table>
           </div>
           <p class="note">Source: each map's game data, cited on its map page: <a href="https://github.com/YoloWingPixie/dcs-world-schema">dcs-world-schema</a>, extracted by running DCS World, with <a href="https://github.com/pydcs/dcs">pydcs</a> for The Channel and for tower radios the extraction lacks. These are the game's values, not the real airfield's: runway headings are magnetic as the game computes them. The game gives TACAN channels no X or Y band; where a beacon's listed frequency settles it, the band is shown, and * marks an assumed X. A dash means the game gives none. Not for real-world navigation.</p>
-          <p>Each airfield belongs to a broad theatre, such as the Middle East. <a href={sitePath("encyclopedia/theatres/")}>Theatres</a> give each region's military history and list its DCS World and Falcon BMS maps.</p>
-        </>
-      ) : category.slug === "theatres" && airfieldData ? (
-        <>
-          <p class="lead">Broad real-world regions, each with its military history, the sim maps set there and the airfields in this encyclopedia. A sim map is one simulator's representation of part of a theatre, with its own coverage and setting; its page lists the airfields checked against it.</p>
+          </section>
+          <section data-location-group>
+          <h2 id="theatres-maps">Theatres and sim maps</h2>
+          <p>Broad real-world regions and the simulator maps set there. Each map has its own coverage and setting.</p>
           <nav class="theatre-jump" aria-label="Theatres">
             <ul>{byTitle(airfieldData.theatres).map((x) => <li><a href={`#${x.record.slug}`}>{x.record.title}</a></li>)}</ul>
           </nav>
           {byTitle(airfieldData.theatres).map((x) => (
-            <section class="theatre-group" aria-labelledby={x.record.slug}>
+            <section class="theatre-group" data-location-group aria-labelledby={x.record.slug}>
               <h2 id={x.record.slug}>{x.record.title}</h2>
               <div class="entry-grid record-grid">
-                <RecordCard record={x.record} photo={x.data.photos[0]}>
+                <RecordCard record={x.record} photo={x.data.photos[0]} filter={locationFilter(x, "theatre")}>
                   <p class="card-list"><strong>Airfields:</strong> {x.airfields.length ? x.airfields.map((y, i) => <>{i > 0 && ", "}<a href={sitePath(recordRoute(y.record))}>{y.data.short ?? y.record.title}</a></>) : "none recorded yet"}</p>
                 </RecordCard>
               </div>
               <h3>Sim maps in {x.record.title}</h3>
               {x.maps.length ? (
                 <div class="entry-grid record-grid">
-                  {x.maps.map((y) => <RecordCard record={y.record}>
+                  {x.maps.map((y) => <RecordCard record={y.record} filter={locationFilter(y, "map")}>
                     <p class="card-list"><strong>{sims[y.data.sim]}</strong> · {eras[y.data.setting.era]} · {mapCount(y)}</p>
                   </RecordCard>)}
                 </div>
@@ -305,12 +318,13 @@ const deliverySources: Source[] = [
             <section class="theatre-group" aria-labelledby="unplaced-maps">
               <h2 id="unplaced-maps">Sim maps not yet placed in a theatre</h2>
               <div class="entry-grid record-grid">
-                {unplacedMaps.map((y) => <RecordCard record={y.record}>
+                {unplacedMaps.map((y) => <RecordCard record={y.record} filter={locationFilter(y, "map")}>
                     <p class="card-list"><strong>{sims[y.data.sim]}</strong> · {eras[y.data.setting.era]} · {mapCount(y)}</p>
                   </RecordCard>)}
               </div>
             </section>
           )}
+          </section>
         </>
       ) : category.slug === "terminology" ? (
         <Glossary />

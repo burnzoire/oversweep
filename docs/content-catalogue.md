@@ -32,7 +32,7 @@ Types are composable blocks: Reference (guidance/diagrams/tables), Interactive
 | Ordnance | Weapons, roles, limitations and applicable platforms | Encyclopedia |
 | Threat Systems | Identification, capabilities and documented limitations | Encyclopedia |
 | Radar & Sensors | Sensor terminology, system records and concept links | Encyclopedia |
-| Airfields & Carriers | Layouts, facilities and versioned reference records | Encyclopedia |
+| Locations | Theatres, simulator maps, airfields and carriers, with type-specific facilities, history and simulator coverage | Encyclopedia |
 | Terminology | Acronyms and precise definitions linked from lessons | Encyclopedia |
 | Reference Data | Sourced tables, units and reusable constants | Encyclopedia |
 

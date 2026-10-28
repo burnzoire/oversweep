@@ -416,11 +416,11 @@ export interface AirfieldEntry extends Entry<AirfieldData> { theatres: Entry<The
 export interface TheatreEntry extends Entry<TheatreData> { airfields: AirfieldEntry[]; maps: MapEntry[] }
 export interface MapEntry extends Entry<MapData> { theatres: Entry<TheatreData>[]; airfields: { airfield: AirfieldEntry; coverage: MapCoverage }[] }
 
-// The categories whose records make up the airfield catalogue.
-export const airfieldCategories = ['airfields-carriers', 'theatres'];
+// Locations holds distinct airfield, theatre and sim map record kinds.
+export const airfieldCategories = ['locations'];
 
 // The airfield catalogue, validated once per build: every record in the
-// Airfields & Carriers and Theatres categories (theatres and their sim maps), resolved into airfields, theatres and maps with their
+// Locations category, resolved into airfields, theatres and maps with their
 // relationships both ways. Throws, failing the build, on any problem.
 let catalogue: { airfields: AirfieldEntry[]; theatres: TheatreEntry[]; maps: MapEntry[] } | undefined;
 export function airfieldCatalogue() {

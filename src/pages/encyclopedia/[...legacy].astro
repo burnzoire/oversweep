@@ -1,0 +1,14 @@
+---
+import { includedRecords } from '../../data/encyclopedia';
+import { sitePath } from '../../lib/paths';
+export function getStaticPaths() {
+  return ['airfields-carriers', 'theatres'].flatMap((category) => [
+    { params: { legacy: `${category}` }, props: { target: 'encyclopedia/locations/' } },
+    ...includedRecords.filter((r) => r.category === 'locations' && r.id.startsWith(`encyclopedia.${category}.`)).map((r) => ({ params: { legacy: `${category}/${r.slug}` }, props: { target: `encyclopedia/locations/${r.slug}/` } })),
+  ]);
+}
+const target = sitePath(Astro.props.target);
+---
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width" /><title>Locations — Oversweep</title><meta http-equiv="refresh" content={`0;url=${target}`} /><link rel="canonical" href={target} /></head>
+<body><p>This page has moved to <a href={target}>Locations</a>.</p><script is:inline define:vars={{ target }}>location.replace(target + location.search + location.hash);</script></body></html>

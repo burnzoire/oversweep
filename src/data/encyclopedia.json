@@ -1634,7 +1634,7 @@
   {
     "id": "encyclopedia.theatres.middle-east",
     "slug": "middle-east",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "Middle East",
     "designation": "Theatre",
@@ -1645,7 +1645,7 @@
   {
     "id": "encyclopedia.theatres.europe",
     "slug": "europe",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "Europe",
     "designation": "Theatre",
@@ -1656,7 +1656,7 @@
   {
     "id": "encyclopedia.theatres.east-asia-pacific",
     "slug": "east-asia-pacific",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "East Asia and the Pacific",
     "designation": "Theatre",
@@ -1667,7 +1667,7 @@
   {
     "id": "encyclopedia.theatres.north-america",
     "slug": "north-america",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "North America",
     "designation": "Theatre",
@@ -1678,7 +1678,7 @@
   {
     "id": "encyclopedia.theatres.caucasus",
     "slug": "caucasus",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "The Caucasus",
     "designation": "Theatre",
@@ -1689,7 +1689,7 @@
   {
     "id": "encyclopedia.theatres.central-asia",
     "slug": "central-asia",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "Central Asia",
     "designation": "Theatre",
@@ -1700,7 +1700,7 @@
   {
     "id": "encyclopedia.theatres.south-atlantic",
     "slug": "south-atlantic",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "The South Atlantic",
     "designation": "Theatre",
@@ -1711,7 +1711,7 @@
   {
     "id": "encyclopedia.airfields-carriers.nellis",
     "slug": "nellis",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Nellis Air Force Base",
     "designation": "KLSV",
@@ -1722,7 +1722,7 @@
   {
     "id": "encyclopedia.airfields-carriers.edwards",
     "slug": "edwards",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Edwards Air Force Base",
     "designation": "KEDW",
@@ -1733,7 +1733,7 @@
   {
     "id": "encyclopedia.airfields-carriers.andersen",
     "slug": "andersen",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Andersen Air Force Base",
     "designation": "PGUA",
@@ -1744,7 +1744,7 @@
   {
     "id": "encyclopedia.airfields-carriers.kadena",
     "slug": "kadena",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Kadena Air Base",
     "designation": "RODN",
@@ -1755,7 +1755,7 @@
   {
     "id": "encyclopedia.airfields-carriers.lakenheath",
     "slug": "lakenheath",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "RAF Lakenheath",
     "designation": "EGUL",
@@ -1766,7 +1766,7 @@
   {
     "id": "encyclopedia.airfields-carriers.incirlik",
     "slug": "incirlik",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Incirlik Air Base",
     "designation": "LTAG",
@@ -1777,7 +1777,7 @@
   {
     "id": "encyclopedia.airfields-carriers.al-udeid",
     "slug": "al-udeid",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Al Udeid Air Base",
     "designation": "OTBH",
@@ -1788,7 +1788,7 @@
   {
     "id": "encyclopedia.airfields-carriers.fallon",
     "slug": "fallon",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Naval Air Station Fallon",
     "designation": "KNFL",
@@ -1799,7 +1799,7 @@
   {
     "id": "encyclopedia.airfields-carriers.pensacola",
     "slug": "pensacola",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Naval Air Station Pensacola",
     "designation": "KNPA",
@@ -1810,7 +1810,7 @@
   {
     "id": "encyclopedia.airfields-carriers.whiting-field",
     "slug": "whiting-field",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Naval Air Station Whiting Field",
     "designation": "KNSE / KNDZ",
@@ -1821,7 +1821,7 @@
   {
     "id": "encyclopedia.airfields-carriers.kingsville",
     "slug": "kingsville",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Naval Air Station Kingsville",
     "designation": "KNQI",
@@ -1832,7 +1832,7 @@
   {
     "id": "encyclopedia.airfields-carriers.yuma",
     "slug": "yuma",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Marine Corps Air Station Yuma",
     "designation": "KNYL",
@@ -1843,7 +1843,7 @@
   {
     "id": "encyclopedia.airfields-carriers.fort-rucker",
     "slug": "fort-rucker",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Fort Rucker",
     "designation": "KOZR",
@@ -1854,7 +1854,7 @@
   {
     "id": "encyclopedia.airfields-carriers.saipan",
     "slug": "saipan",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Saipan International Airport",
     "designation": "PGSN",
@@ -1865,7 +1865,7 @@
   {
     "id": "encyclopedia.airfields-carriers.akrotiri",
     "slug": "akrotiri",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "RAF Akrotiri",
     "designation": "LCRA",
@@ -1876,7 +1876,7 @@
   {
     "id": "encyclopedia.airfields-carriers.batumi",
     "slug": "batumi",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Batumi International Airport",
     "designation": "UGSB",
@@ -1887,7 +1887,7 @@
   {
     "id": "encyclopedia.airfields-carriers.kobuleti",
     "slug": "kobuleti",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Ozurgeti Air Base (Kobuleti)",
     "designation": "GE-0007",
@@ -1898,7 +1898,7 @@
   {
     "id": "encyclopedia.airfields-carriers.kutaisi",
     "slug": "kutaisi",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Kutaisi International Airport",
     "designation": "UGKO",
@@ -1909,7 +1909,7 @@
   {
     "id": "encyclopedia.airfields-carriers.senaki",
     "slug": "senaki",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Senaki Air Base",
     "designation": "GE-0010",
@@ -1920,7 +1920,7 @@
   {
     "id": "encyclopedia.airfields-carriers.vaziani",
     "slug": "vaziani",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Vaziani Air Base",
     "designation": "UG27",
@@ -1931,7 +1931,7 @@
   {
     "id": "encyclopedia.airfields-carriers.tbilisi",
     "slug": "tbilisi",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Tbilisi International Airport",
     "designation": "UGTB",
@@ -1942,7 +1942,7 @@
   {
     "id": "encyclopedia.airfields-carriers.gudauta",
     "slug": "gudauta",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Gudauta (Bombora) Air Base",
     "designation": "UG0U",
@@ -1953,7 +1953,7 @@
   {
     "id": "encyclopedia.airfields-carriers.sukhumi",
     "slug": "sukhumi",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Sukhum International Airport (Babushara)",
     "designation": "UGSS",
@@ -1964,7 +1964,7 @@
   {
     "id": "encyclopedia.airfields-carriers.sochi",
     "slug": "sochi",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Sochi International Airport",
     "designation": "URSS",
@@ -1975,7 +1975,7 @@
   {
     "id": "encyclopedia.airfields-carriers.anapa",
     "slug": "anapa",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Anapa (Vityazevo) International Airport",
     "designation": "URKA",
@@ -1986,7 +1986,7 @@
   {
     "id": "encyclopedia.airfields-carriers.gelendzhik",
     "slug": "gelendzhik",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Gelendzhik Airport",
     "designation": "URKG",
@@ -1997,7 +1997,7 @@
   {
     "id": "encyclopedia.airfields-carriers.krymsk",
     "slug": "krymsk",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Krymsk Air Base",
     "designation": "RU-0089",
@@ -2008,7 +2008,7 @@
   {
     "id": "encyclopedia.airfields-carriers.krasnodar-center",
     "slug": "krasnodar-center",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Krasnodar Tsentralny",
     "designation": "XRKL",
@@ -2019,7 +2019,7 @@
   {
     "id": "encyclopedia.airfields-carriers.mozdok",
     "slug": "mozdok",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Mozdok Air Base",
     "designation": "URMF",
@@ -2030,7 +2030,7 @@
   {
     "id": "encyclopedia.airfields-carriers.beslan",
     "slug": "beslan",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Vladikavkaz (Beslan) International Airport",
     "designation": "URMO",
@@ -2041,7 +2041,7 @@
   {
     "id": "encyclopedia.airfields-carriers.ramat-david",
     "slug": "ramat-david",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Ramat David Airbase",
     "designation": "LLRD",
@@ -2052,7 +2052,7 @@
   {
     "id": "encyclopedia.airfields-carriers.khmeimim",
     "slug": "khmeimim",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Khmeimim Air Base",
     "designation": "OSLK",
@@ -2063,7 +2063,7 @@
   {
     "id": "encyclopedia.airfields-carriers.damascus",
     "slug": "damascus",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Damascus International Airport",
     "designation": "OSDI",
@@ -2074,7 +2074,7 @@
   {
     "id": "encyclopedia.airfields-carriers.aleppo",
     "slug": "aleppo",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Aleppo International Airport",
     "designation": "OSAP",
@@ -2085,7 +2085,7 @@
   {
     "id": "encyclopedia.airfields-carriers.abu-al-duhur",
     "slug": "abu-al-duhur",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Abu al-Duhur Air Base",
     "designation": "OS57",
@@ -2096,7 +2096,7 @@
   {
     "id": "encyclopedia.airfields-carriers.hama",
     "slug": "hama",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Hama Air Base",
     "designation": "OS58",
@@ -2107,7 +2107,7 @@
   {
     "id": "encyclopedia.airfields-carriers.taftanaz",
     "slug": "taftanaz",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Taftanaz Air Base",
     "designation": "SY-0001",
@@ -2118,7 +2118,7 @@
   {
     "id": "encyclopedia.airfields-carriers.jirah",
     "slug": "jirah",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Jirah Air Base",
     "designation": "OS62",
@@ -2129,7 +2129,7 @@
   {
     "id": "encyclopedia.airfields-carriers.tabqa",
     "slug": "tabqa",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Tabqa Air Base",
     "designation": "SY-0035",
@@ -2140,7 +2140,7 @@
   {
     "id": "encyclopedia.airfields-carriers.palmyra",
     "slug": "palmyra",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Palmyra Airport",
     "designation": "OSPR",
@@ -2151,7 +2151,7 @@
   {
     "id": "encyclopedia.airfields-carriers.tiyas",
     "slug": "tiyas",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Tiyas Air Base",
     "designation": "OS72",
@@ -2162,7 +2162,7 @@
   {
     "id": "encyclopedia.airfields-carriers.beirut",
     "slug": "beirut",
-    "category": "airfields-carriers",
+    "category": "locations",
     "revision": 1,
     "title": "Beirut–Rafic Hariri International Airport",
     "designation": "OLBA",
@@ -2173,7 +2173,7 @@
   {
     "id": "encyclopedia.theatres.dcs-nevada",
     "slug": "dcs-nevada",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "DCS: Nevada Test and Training Range",
     "designation": "DCS World map",
@@ -2184,7 +2184,7 @@
   {
     "id": "encyclopedia.theatres.dcs-marianas",
     "slug": "dcs-marianas",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "DCS: Marianas",
     "designation": "DCS World map",
@@ -2195,7 +2195,7 @@
   {
     "id": "encyclopedia.theatres.dcs-marianas-1944",
     "slug": "dcs-marianas-1944",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "DCS: Marianas 1944",
     "designation": "DCS World map",
@@ -2206,7 +2206,7 @@
   {
     "id": "encyclopedia.theatres.dcs-syria",
     "slug": "dcs-syria",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "DCS: Syria",
     "designation": "DCS World map",
@@ -2217,7 +2217,7 @@
   {
     "id": "encyclopedia.theatres.dcs-persian-gulf",
     "slug": "dcs-persian-gulf",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "DCS: Persian Gulf",
     "designation": "DCS World map",
@@ -2228,7 +2228,7 @@
   {
     "id": "encyclopedia.theatres.dcs-the-channel",
     "slug": "dcs-the-channel",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "DCS: The Channel",
     "designation": "DCS World map",
@@ -2239,7 +2239,7 @@
   {
     "id": "encyclopedia.theatres.bms-korea",
     "slug": "bms-korea",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "Falcon BMS: Korea",
     "designation": "Falcon BMS map",
@@ -2250,7 +2250,7 @@
   {
     "id": "encyclopedia.theatres.dcs-caucasus",
     "slug": "dcs-caucasus",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "DCS: Caucasus",
     "designation": "DCS World map",
@@ -2261,7 +2261,7 @@
   {
     "id": "encyclopedia.theatres.dcs-sinai",
     "slug": "dcs-sinai",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "DCS: Sinai",
     "designation": "DCS World map",
@@ -2272,7 +2272,7 @@
   {
     "id": "encyclopedia.theatres.dcs-kola",
     "slug": "dcs-kola",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "DCS: Kola",
     "designation": "DCS World map",
@@ -2283,7 +2283,7 @@
   {
     "id": "encyclopedia.theatres.dcs-afghanistan",
     "slug": "dcs-afghanistan",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "DCS: Afghanistan",
     "designation": "DCS World map",
@@ -2294,7 +2294,7 @@
   {
     "id": "encyclopedia.theatres.dcs-southwest-afghanistan",
     "slug": "dcs-southwest-afghanistan",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "DCS: Southwest Afghanistan",
     "designation": "DCS World map",
@@ -2305,7 +2305,7 @@
   {
     "id": "encyclopedia.theatres.dcs-east-afghanistan",
     "slug": "dcs-east-afghanistan",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "DCS: East Afghanistan",
     "designation": "DCS World map",
@@ -2316,7 +2316,7 @@
   {
     "id": "encyclopedia.theatres.dcs-iraq",
     "slug": "dcs-iraq",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "DCS: Iraq",
     "designation": "DCS World map",
@@ -2327,7 +2327,7 @@
   {
     "id": "encyclopedia.theatres.dcs-iraq-north",
     "slug": "dcs-iraq-north",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "DCS: Iraq North",
     "designation": "DCS World map",
@@ -2338,7 +2338,7 @@
   {
     "id": "encyclopedia.theatres.dcs-cold-war-germany",
     "slug": "dcs-cold-war-germany",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "DCS: Cold War Germany",
     "designation": "DCS World map",
@@ -2349,7 +2349,7 @@
   {
     "id": "encyclopedia.theatres.dcs-normandy",
     "slug": "dcs-normandy",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "DCS: Normandy 2.0",
     "designation": "DCS World map",
@@ -2360,7 +2360,7 @@
   {
     "id": "encyclopedia.theatres.dcs-south-atlantic",
     "slug": "dcs-south-atlantic",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "DCS: South Atlantic",
     "designation": "DCS World map",
@@ -2371,7 +2371,7 @@
   {
     "id": "encyclopedia.theatres.bms-balkans",
     "slug": "bms-balkans",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "Falcon BMS: Balkans",
     "designation": "Falcon BMS map",
@@ -2382,7 +2382,7 @@
   {
     "id": "encyclopedia.theatres.bms-hellenic",
     "slug": "bms-hellenic",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "Falcon BMS: Hellenic",
     "designation": "Falcon BMS map",
@@ -2393,7 +2393,7 @@
   {
     "id": "encyclopedia.theatres.bms-israel",
     "slug": "bms-israel",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "Falcon BMS: Israel",
     "designation": "Falcon BMS map",
@@ -2404,7 +2404,7 @@
   {
     "id": "encyclopedia.theatres.bms-falklands",
     "slug": "bms-falklands",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "Falcon BMS: Falklands",
     "designation": "Falcon BMS map",
@@ -2415,7 +2415,7 @@
   {
     "id": "encyclopedia.theatres.falcon4-korea",
     "slug": "falcon4-korea",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "Falcon 4.0: Korea",
     "designation": "Falcon 4.0 map",
@@ -2426,7 +2426,7 @@
   {
     "id": "encyclopedia.theatres.falcon4-balkans",
     "slug": "falcon4-balkans",
-    "category": "theatres",
+    "category": "locations",
     "revision": 1,
     "title": "Falcon 4.0: Allied Force – Balkans",
     "designation": "Falcon 4.0 map",
