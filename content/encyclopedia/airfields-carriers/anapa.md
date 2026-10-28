@@ -44,7 +44,7 @@ sources:
   - n: 1
     title: "Anapa International Airport"
     publisher: "Wikipedia (secondary source)"
-    url: "https://en.wikipedia.org/wiki/Anapa_Airport"
+    url: "https://en.wikipedia.org/wiki/Anapa_International_Airport"
     accessed: "2026-10-28"
   - n: 2
     title: "Витязево (аэропорт) (Vityazevo airport)"

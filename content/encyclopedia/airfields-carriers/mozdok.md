@@ -37,7 +37,7 @@ sources:
   - n: 1
     title: "Mozdok Air Base"
     publisher: "Wikipedia (secondary source)"
-    url: "https://en.wikipedia.org/wiki/Mozdok_(air_base)"
+    url: "https://en.wikipedia.org/wiki/Mozdok_Air_Base"
     accessed: "2026-10-28"
     note: "A short article: infobox runways and elevation, and the helicopter detachment."
   - n: 2

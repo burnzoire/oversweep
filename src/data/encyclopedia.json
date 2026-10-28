@@ -2039,6 +2039,138 @@
     "summary": "North Ossetia's only airport, near Beslan, dating from 1936."
   },
   {
+    "id": "encyclopedia.airfields-carriers.ramat-david",
+    "slug": "ramat-david",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Ramat David Airbase",
+    "designation": "LLRD",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Israel's northernmost fighter base: RAF Ramat David from 1942, the first jet squadron, Osirak, and every F-16C/D Barak since 2021."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.khmeimim",
+    "slug": "khmeimim",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Khmeimim Air Base",
+    "designation": "OSLK",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The air base Russia built beside Latakia airport in 2015 to run its Syrian intervention, the target of the first drone-swarm attack."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.damascus",
+    "slug": "damascus",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Damascus International Airport",
+    "designation": "OSDI",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Syria's busiest airport, struck repeatedly by Israel in 2022–2023 and reopened to the world in January 2025."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.aleppo",
+    "slug": "aleppo",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Aleppo International Airport",
+    "designation": "OSAP",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Aleppo's airport, back to KLM in 1924: closed by the civil war, struck by Israel, and taken in the 2024 offensive."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.abu-al-duhur",
+    "slug": "abu-al-duhur",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Abu al-Duhur Air Base",
+    "designation": "OS57",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A major Syrian Air Force base in Idlib, wrecked in the civil war and struck by Israel in August 2026."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.hama",
+    "slug": "hama",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Hama Air Base",
+    "designation": "OS58",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A Syrian Air Force base west of Hama, used heavily in the civil war until opposition forces took it in December 2024."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.taftanaz",
+    "slug": "taftanaz",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Taftanaz Air Base",
+    "designation": "SY-0001",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A Syrian Air Force helicopter base in Idlib, overrun by rebels in January 2013 and a Turkish post in 2020."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.jirah",
+    "slug": "jirah",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Jirah Air Base",
+    "designation": "OS62",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A small Syrian Air Force base in Aleppo Governorate, held in turn by rebels, the Islamic State, the army and the SDF."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.tabqa",
+    "slug": "tabqa",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Tabqa Air Base",
+    "designation": "SY-0035",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Syrian government's last stronghold in Raqqa Governorate, lost to the Islamic State in 2014 and taken by the SDF in 2017."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.palmyra",
+    "slug": "palmyra",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Palmyra Airport",
+    "designation": "OSPR",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Palmyra's military airport, fought over by the Islamic State and the Syrian army from 2015 to 2017."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.tiyas",
+    "slug": "tiyas",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Tiyas Air Base",
+    "designation": "OS72",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "T-4, Syria's largest air base: MiG-25s and Su-24s, Iranian drones, Israeli strikes and Turkish ambitions."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.beirut",
+    "slug": "beirut",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Beirut–Rafic Hariri International Airport",
+    "designation": "OLBA",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Lebanon's only working commercial airport: the 1968 Israeli raid, the 1983 barracks bombing and the 2006 runway strikes."
+  },
+  {
     "id": "encyclopedia.theatres.dcs-nevada",
     "slug": "dcs-nevada",
     "category": "theatres",

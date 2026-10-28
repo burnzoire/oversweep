@@ -114,7 +114,7 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
           <h2 id="role-title">Role and who uses it</h2>
           <dl>
             <div><dt>Status</dt><dd>{a.status === 'active' ? 'Active' : 'Closed'} · {useLabels[use!]}</dd></div>
-            <div><dt>Roles today</dt><dd>{a.roles.length ? a.roles.map((r) => airfieldRoles[r]).join(' · ') : 'None'}</dd></div>
+            <div><dt>Roles today</dt><dd>{a.roles.length ? a.roles.map((r) => airfieldRoles[r]).join(' · ') : a.status === 'closed' ? 'None' : 'None documented in the sources consulted'}</dd></div>
             <div><dt>Operators</dt><dd>{a.operators?.length ? <ul>{a.operators.map((o) => (
               <li><strong>{o.name}</strong>{o.detail && `, ${o.detail}`} · {nation(o.nation)}, {branches[o.branch].toLowerCase()} · {periodText(o) ?? 'current; start date not given'} <Cited text={o.cite} /></li>
             ))}</ul> : 'None found in the sources consulted'}</dd></div>
@@ -184,7 +184,7 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
           )}
           {plan && (
             <AirfieldPlanFigure title={`Figure 1 — Airfield map of ${a.name} (to scale)`} plan={plan} name={a.name}>
-              <p class="fig-caption">{plan.aerodrome.rings.length ? 'Runways, taxiways, aprons and buildings inside the airfield boundary' : 'The runways and aprons that remain mapped at this disused field'}, true north up, drawn from <a href={plan.source.url}>OpenStreetMap</a> data retrieved {plan.source.retrieved}. Widths come from the map data or, where it gives none, a typical 45 m runway and 18 m taxiway. Map data © OpenStreetMap contributors, available under the <a href={plan.source.licenceUrl}>{plan.source.licence}</a>. Community-mapped, not an official aerodrome chart, and not for navigation.</p>
+              <p class="fig-caption">{plan.aerodrome.rings.length ? 'Runways, taxiways, aprons and buildings inside the airfield boundary' : a!.status === 'closed' ? 'The runways and aprons that remain mapped at this disused field' : 'Runways, taxiways, aprons and buildings mapped at the airfield, which OpenStreetMap gives no boundary'}, true north up, drawn from <a href={plan.source.url}>OpenStreetMap</a> data retrieved {plan.source.retrieved}. Widths come from the map data or, where it gives none, a typical 45 m runway and 18 m taxiway. Map data © OpenStreetMap contributors, available under the <a href={plan.source.licenceUrl}>{plan.source.licence}</a>. Community-mapped, not an official aerodrome chart, and not for navigation.</p>
             </AirfieldPlanFigure>
           )}
           {!plan && a.runwayPlan && (
