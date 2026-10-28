@@ -271,7 +271,7 @@ From 2014 a US-led coalition fought the Islamic State over Syria and Iraq in Ope
 
 ### Historical significance
 
-During the Iran–Iraq War both sides attacked merchant shipping in the gulf and the Strait of Hormuz: from 1981 to 1988 Iraq made 283 attacks and Iran 168. [[8]](#source-8) From 24 July 1987 the US Navy escorted reflagged Kuwaiti tankers in Operation Earnest Will, the largest naval convoy operation since the Second World War, with Air Force AWACS overhead and Army special-operations helicopters of the 160th Special Operations Aviation Regiment hunting attackers at night. [[9]](#source-9)
+During the Iran–Iraq War both sides attacked merchant shipping in the gulf and the Strait of Hormuz: from 1981 to 1988 Iraq made 283 attacks and Iran 168. [[8]](#source-8) From 24 July 1987 the US Navy escorted reflagged Kuwaiti tankers in Operation Earnest Will, the largest naval convoy operation since the Second World War, with Air Force AWACS overhead and Army special-operations helicopters of the 160th Special Operations Aviation Regiment, the Nightstalkers, hunting attackers. [[9]](#source-9)
 
 When the frigate USS Samuel B. Roberts struck an Iranian mine on 14 April 1988, the United States answered four days later with Operation Praying Mantis, which destroyed, damaged or sank two Iranian oil platforms, two frigates, a fast-attack craft, several armed boats and two fighters. It was the largest of the US Navy's five major surface engagements since the Second World War and saw its first exchange of anti-ship missiles with opposing ships. [[10]](#source-10) On 3 July 1988 the cruiser USS Vincennes shot down Iran Air Flight 655 shortly after it left Bandar Abbas, killing all 290 people on board; the US said the crew took the Airbus A300 for an Iranian F-14. [[11]](#source-11)
 
@@ -280,13 +280,13 @@ When the frigate USS Samuel B. Roberts struck an Iranian mine on 14 April 1988, 
 - **Al Dhafra Air Base**, south of Abu Dhabi: headquarters of the UAE Air Force's Western Air Command, with F-16E/F Desert Falcons and Mirage 2000-9s. [[12]](#source-12) Since January 2002 it has hosted the US Air Force's 380th Air Expeditionary Wing, which has flown the [F-15C](record:f-15c), [F-15E](record:f-15e), F-22, KC-10, E-3 AWACS, U-2 and RQ-4; the first USAF F-35s sent to the Middle East arrived there in April 2019. France has had its own detachment there since 2008. [[12]](#source-12)
 - **[Al Udeid Air Base](record:al-udeid)**, Qatar, on the gulf's southern shore.
 - **Bandar Abbas**, Iran: a joint civil and military airport beside Iran's main naval port on the strait. [[11]](#source-11) [[13]](#source-13)
-- **Carriers**: Praying Mantis was flown by Carrier Air Wing 11 from USS Enterprise, and the convoys of Earnest Will drew on carrier battle groups and surface action groups of the Third, Sixth and Seventh Fleets, mostly on their normal six-month deployments. [[9]](#source-9) [[10]](#source-10)
+- **Carriers**: Praying Mantis was flown by Carrier Air Wing 11 from USS Enterprise, and the convoys of Earnest Will drew on carrier battle groups and surface action groups of the Third, Sixth and Seventh Fleets, for parts of their normal six-month deployments. [[9]](#source-9) [[10]](#source-10)
 
 ## Iraq
 
 ### Historical significance
 
-After Iraq invaded Kuwait on 2 August 1990, a 42-nation coalition built up its forces in Operation Desert Shield and, from 17 January 1991, fought Operation Desert Storm, which ended with the liberation of Kuwait on 28 February. [[14]](#source-14) The US Army's VII Corps, with 1,487 tanks and 146,321 troops, was the coalition's main combat formation, and the 1st and 2nd Marine Divisions drove on Kuwait City. [[14]](#source-14)
+After Iraq invaded Kuwait on 2 August 1990, a 42-nation coalition built up its forces in Operation Desert Shield and, from 17 January 1991, fought Operation Desert Storm, which ended with the liberation of Kuwait on 28 February. [[14]](#source-14) The US Army's VII Corps, with 1,487 tanks and 146,321 troops, was the coalition's main combat formation, and the 1st and 2nd Marine Divisions fought for Kuwait International Airport. [[14]](#source-14)
 
 For the next twelve years coalition aircraft patrolled no-fly zones: Operation Southern Watch south of the 32nd parallel, later the 33rd, from August 1992 to March 2003, and Operation Northern Watch above the 36th parallel from 1997. [[16]](#source-16) [[15]](#source-15) The US-led invasion of March 2003 overthrew Saddam Hussein's government and was followed by an insurgency; US forces left in 2011 but returned in 2014 to lead the coalition against the Islamic State in Operation Inherent Resolve. [[17]](#source-17) [[18]](#source-18)
 
@@ -302,13 +302,13 @@ For the next twelve years coalition aircraft patrolled no-fly zones: Operation S
 
 ### Historical significance
 
-The Sinai has been fought over in three Arab–Israeli wars. In the Suez Crisis of 1956 Israel invaded on 29 October to reopen the Straits of Tiran, and Britain and France joined two days later to try to regain the canal, until pressure from the United States, the Soviet Union and the United Nations forced them out. [[23]](#source-23) At 07:45 on 5 June 1967 the Israeli Air Force opened the Six-Day War with Operation Focus, which destroyed most of the Egyptian Air Force on the ground and put 18 Egyptian airfields out of action; by noon about 450 Egyptian, Jordanian and Syrian aircraft had been destroyed. [[24]](#source-24) In October 1973 Egypt crossed the Suez Canal in Operation Badr, before Israel halted its advance and crossed the canal in turn. [[25]](#source-25)
+The Sinai has been fought over in three Arab–Israeli wars. In the Suez Crisis of 1956 Israel invaded on 29 October to reopen the Straits of Tiran, and Britain and France joined two days later to try to regain the canal and depose Nasser, until pressure from the United States, the Soviet Union and the United Nations forced them out. [[23]](#source-23) At 07:45 on 5 June 1967 the Israeli Air Force opened the Six-Day War with Operation Focus, which destroyed most of the Egyptian Air Force on the ground and put 18 Egyptian airfields out of action; by noon about 450 Egyptian, Jordanian and Syrian aircraft had been destroyed. [[24]](#source-24) In October 1973 Egypt crossed the Suez Canal in Operation Badr; Israel halted the Egyptian advance and, from 15 October, crossed the canal itself. [[25]](#source-25)
 
-The 1979 peace treaty, signed in Washington on 26 March, returned the Sinai to Egypt. [[26]](#source-26) Israel gave up its four air bases there, among them Etzion and Eitam, and US companies built Ramon, Nevatim and Ovda in the Negev to replace them between 1979 and 1982. [[27]](#source-27) Before it left, Israel launched the June 1981 raid on Iraq's Osirak reactor, Operation Opera, from Etzion. [[28]](#source-28)
+The 1979 peace treaty, signed in Washington on 26 March, returned the Sinai to Egypt. [[26]](#source-26) Israel gave up its four air bases there, among them Etzion and Eitam, and new bases at Ramon, Nevatim and Ovda in the Negev, built mainly by US companies, replaced them. [[27]](#source-27) Before it left, Israel launched the June 1981 raid on Iraq's Osirak reactor, Operation Opera, from Etzion. [[28]](#source-28)
 
 ### Forces deployed
 
-- **Multinational Force and Observers**: set up outside the UN by a protocol of 3 August 1981 to oversee the treaty, with a US infantry battalion and the 1st US Support Battalion (Task Force Sinai) alongside battalions from Fiji and Colombia. [[29]](#source-29) Its North Camp at el Gorah was attacked by militants in September 2012, and by 2016 most of its duties had moved to the south of the peninsula. [[29]](#source-29)
+- **Multinational Force and Observers**: set up outside the UN by a protocol of 3 August 1981 to oversee the treaty, with a US infantry battalion and the 1st US Support Battalion (Task Force Sinai) alongside battalions from Fiji and Colombia. [[29]](#source-29) Its North Camp at el Gorah was attacked by militants in September 2012, and by September 2016 its duties other than observing had moved to the south of the peninsula. [[29]](#source-29)
 - **Ramon Airbase**, Negev: home of three Israeli F-16I Sufa squadrons, whose jets took part in the 2007 strike on a Syrian reactor. [[27]](#source-27)
 - **Ovda Airbase**, north of Eilat: hosted the international Blue Flag exercise every two years until 2021 and the Israeli aggressor squadron until 2025. [[30]](#source-30)
 
@@ -316,13 +316,13 @@ The 1979 peace treaty, signed in Washington on 26 March, returned the Sinai to E
 
 ### Historical significance
 
-On 7 June 1981 Israeli Air Force [F-16](record:f-16)As escorted by F-15As destroyed Iraq's unfinished Osirak nuclear reactor near Baghdad in Operation Opera. They took off from Etzion Airbase in the Sinai and flew unchallenged through Jordanian and Saudi airspace. [[31]](#source-31) A year later, on 6 June 1982, Israel invaded southern Lebanon to drive out the Palestine Liberation Organization, and its forces briefly clashed with the Syrian Army in the north-east of the country. [[32]](#source-32)
+On 7 June 1981 Israeli Air Force [F-16](record:f-16)As escorted by F-15As destroyed Iraq's unfinished Osirak nuclear reactor near Baghdad in Operation Opera. They took off from Etzion Airbase in the Sinai and flew unchallenged through Jordanian and Saudi airspace. [[31]](#source-31) A year later, on 6 June 1982, Israel invaded southern Lebanon to destroy the Palestine Liberation Organization there, and its forces briefly clashed with the Syrian Army in the north-east of the country. [[32]](#source-32)
 
 On 13 April 2024 Iran launched about 170 drones, more than 30 cruise missiles and more than 120 ballistic missiles at Israel. The United States coordinated the multinational defence from the Combined Air Operations Center at [Al Udeid](record:al-udeid) in Qatar, and US aircraft reportedly destroyed more than 80 of the Iranian weapons. [[33]](#source-33) A senior US official said five ballistic missiles hit Nevatim, damaging a C-130, an unused runway and empty storage buildings, and four hit Ramon; the overall damage was minimal. [[33]](#source-33)
 
 ### Forces deployed
 
-- **Nevatim**, Negev: built between 1979 and 1982, with Ramon and Ovda, mainly by US companies, to replace the four Israeli bases in the Sinai given up after the Camp David Accords. [[35]](#source-35) Its first eight F-35I Adir stealth fighters were declared operational in December 2017, and in May 2018 Israel said it had become the first country to use the F-35 in combat. No. 116 Squadron reopened there with the F-35I in November 2019. [[34]](#source-34)
+- **Nevatim**, Negev: built from 1980 and opened in October 1983, as the Israeli Air Force moved out of its Sinai bases after the Camp David Accords. [[35]](#source-35) Its first eight F-35I Adir stealth fighters were declared operational in December 2017, and in May 2018 Israel said it had become the first country to use the F-35 in combat. No. 116 Squadron reopened there with the F-35I in November 2019. [[34]](#source-34)
 - **Ramon**, near Mitzpe Ramon in the Negev: built at the same time as Nevatim and Ovda. [[35]](#source-35)
 - **Ramat David**, Jezreel Valley: the northernmost Israeli Air Force base with fighter jets and drones, with three runways of about 2.5 km each. [[36]](#source-36)
 - **Hatzerim**, near Beersheba: besides operational fighter squadrons, it houses the IAF Flight Academy and the IAF Aerobatic Team. [[37]](#source-37)

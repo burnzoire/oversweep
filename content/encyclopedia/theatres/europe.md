@@ -272,13 +272,13 @@ Operation Overlord, the Allied invasion of German-occupied Western Europe, opene
 
 The Fulda Gap, two corridors of lowland between the Hesse–Thuringia stretch of the inner German border and Frankfurt, was seen throughout the Cold War as a route by which Soviet and Warsaw Pact tanks might drive in a surprise attack to seize crossings of the Rhine. [[8]](#source-8) Its defence was the mission of the US V Corps, with armored cavalry watching the border: the 14th Armored Cavalry Regiment from 1951 to 1972 and then the 11th, whose task in war was to delay an attack until the corps' divisions could deploy. [[8]](#source-8) Observation Post Alpha, near Rasdorf, overlooked the gap until the army left it in 1991. [[9]](#source-9)
 
-In 1948–1949 the Soviet blockade of West Berlin was answered by an airlift flown from bases such as Wiesbaden and Rhein-Main. [[17]](#source-17) From 1969 to 1993 NATO's annual Reforger exercises practised flying and shipping reinforcements from North America to West Germany in a crisis. [[10]](#source-10)
+In 1948–1949 the Soviet blockade of West Berlin was answered by an airlift flown from bases such as Wiesbaden and Rhein-Main. [[17]](#source-17) From 1969 to 1993 NATO's annual Reforger exercises practised deploying forces quickly from North America to West Germany, using military airlift, sealift and civil reserve aircraft, in case of war. [[10]](#source-10)
 
 ### Forces deployed
 
-- **US Army**: V Corps defended the Fulda Gap from Frankfurt [[8]](#source-8), and VII Corps was headquartered at Kelley Barracks in Stuttgart from 1951 until it went to the Gulf War in 1990–1991 and was inactivated in 1992. [[11]](#source-11)
+- **US Army**: V Corps held the Fulda Gap, with US forces headquartered at Frankfurt [[8]](#source-8), and VII Corps was headquartered at Kelley Barracks in Stuttgart from 1951 until it went to the Gulf War in 1990–1991 and was inactivated in 1992. [[11]](#source-11)
 - **Ramstein Air Base**: built between 1951 and 1953 and today the headquarters of US Air Forces in Europe – Air Forces Africa and NATO's Allied Air Command. [[12]](#source-12)
-- **Spangdahlem Air Base**: in November 1983 its 52nd Tactical Fighter Wing became the only all-defence-suppression wing outside the United States, pairing [F-4E](record:f-4) and F-4G Phantoms as Wild Weasel hunter-killer teams; [F-16C](record:f-16)s replaced the F-4Es from 1987. [[13]](#source-13)
+- **Spangdahlem Air Base**: in November 1983 its 52nd Tactical Fighter Wing became the only all-defence-suppression wing outside the United States, pairing [F-4E](record:f-4) and F-4G Phantoms as Wild Weasel hunter-killer teams; [F-16C](record:f-16)s began replacing its Phantoms in 1987, while F-4Gs stayed until 1994. [[13]](#source-13)
 - **Bitburg Air Base**: home of the 36th Tactical Fighter Wing from 1952 until it was returned to Germany on 1 October 1994. [[14]](#source-14)
 - **Hahn Air Base**: home of the 50th Tactical Fighter Wing, inactivated in 1991, before the base was handed over in September 1993. [[15]](#source-15)
 - **Sembach**: a front-line NATO base for US reconnaissance, close-air-support and tactical air control units during the Cold War, and a US Army post since 2012. [[16]](#source-16)
@@ -297,7 +297,7 @@ From 24 March to 10 June 1999, Operation Allied Force bombed the Federal Republi
 - **Carriers**: in 1999 the US Navy sent a task force with USS Theodore Roosevelt and an amphibious assault ship, the Royal Navy HMS Invincible with Sea Harriers, the French Navy Foch and the Italian Navy Giuseppe Garibaldi. [[20]](#source-20)
 - **Albania**: a battalion of US Army [AH-64](record:ah-64d) Apaches from the 11th Aviation Regiment deployed in 1999, and a battalion of the 82nd Airborne Division's 505th Parachute Infantry Regiment secured Tirana airfield and the Apache refuelling sites. [[20]](#source-20)
 - **Camp Bondsteel**, Kosovo: the headquarters of the Kosovo Force (KFOR) and its US Army-led Regional Command-East; 52 helipads were built on its west side in August 1999. [[22]](#source-22)
-- **Tuzla**, Bosnia and Herzegovina: placed under the UN Protection Force in 1992, the airfield became the main hub of NATO's Implementation Force (IFOR) from 1996. [[23]](#source-23)
+- **Tuzla**, Bosnia and Herzegovina: placed under the UN Protection Force in 1992, the airfield became the main hub of the NATO-led Implementation Force (IFOR) from 1996. [[23]](#source-23)
 
 ## Greece, Turkey and the Aegean
 
@@ -307,21 +307,21 @@ Since the 1970s Greece and Turkey have disputed sovereignty and rights in the Ae
 
 ### Forces deployed
 
-- **Souda Bay**, Crete: the Hellenic Navy's second-largest naval base and NATO's largest and most prominent in the eastern Mediterranean, with the only deep-water port in southern Europe and the Mediterranean able to take supercarriers. Known to NATO as Naval Support Activity Souda Bay, it has had the US Navy's expeditionary mobile base USS Hershel "Woody" Williams deployed there since 2020. [[27]](#source-27)
-- **Andravida Air Base**, Elis: home of the Hellenic Air Force's 117th Combat Wing and of the air force's Air Tactics Center. The wing was formed in May 1969 to receive the [F-4E](record:f-4) Phantom. [[28]](#source-28)
+- **Souda Bay**, Crete: the Hellenic Navy's second-largest naval base by number of warships and NATO's largest and most prominent in the eastern Mediterranean, with the only deep-water port in southern Europe and the Mediterranean able to take supercarriers. Known to NATO as Naval Support Activity Souda Bay, it has had the US Navy's expeditionary mobile base USS Hershel "Woody" Williams deployed there since 2020. [[27]](#source-27)
+- **Andravida Air Base**, Elis: home of the Hellenic Air Force's 117th Combat Wing and of the air force's Air Tactics Center. The unit, a combat group since 1961, became a full combat wing in May 1969 and was chosen to receive the [F-4E](record:f-4) Phantom. [[28]](#source-28)
 - **Larissa Air Base**, Thessaly: home of the Hellenic Air Force's 110th Combat Wing; its runways have no ILS. USAF MQ-9 Reaper drones were based there temporarily from May 2018. [[29]](#source-29)
 
 ## The Kola Peninsula and the High North
 
 ### Historical significance
 
-The Kola Peninsula is the home of Russia's Northern Fleet, which in the Soviet era operated more than 200 submarines, from diesel-electric boats to nuclear ballistic-missile submarines; since 2014 the fleet has also commanded all Russian forces in the Murmansk and Arkhangelsk regions and on the Arctic islands. [[30]](#source-30)
+The Kola Peninsula is the home of Russia's Northern Fleet, which in the Soviet era operated more than 200 submarines, from diesel-electric boats to nuclear ballistic-missile submarines; from December 2014 it was the core of a joint command over all Russian forces in the Murmansk and Arkhangelsk regions and on the Arctic islands, until in March 2024 it was placed directly under the Russian Navy's senior command. [[30]](#source-30)
 
-The Nordic neighbours prepared for war in their own ways. Sweden's air force planned to disperse its squadrons across many wartime bases, including stretches of road, so that an attacker could not destroy it on the ground; the Bas 90 system grew out of that idea in the 1970s and 1980s, and Israel's destruction of the Egyptian Air Force on its airfields in 1967 was taken as proof of it. [[35]](#source-35) Finland, neutral throughout the Cold War, joined NATO on 4 April 2023, and Sweden followed on 7 March 2024. [[36]](#source-36) [[37]](#source-37)
+The Nordic neighbours prepared for war in their own ways. Sweden's air force planned to disperse its squadrons across many wartime bases, including stretches of road, so that an attacker would find it hard to destroy on the ground; the Bas 90 system grew out of that idea in the 1970s and 1980s, and Israel's destruction of the Egyptian Air Force on its airfields in 1967 was taken as validation of it. [[35]](#source-35) Finland, neutral throughout the Cold War, joined NATO on 4 April 2023, and Sweden followed on 7 March 2024. [[36]](#source-36) [[37]](#source-37)
 
 ### Forces deployed
 
-- **Severomorsk**, on the Kola Bay north-east of Murmansk: the main base and administrative centre of the Northern Fleet. [[31]](#source-31)
-- **Olenya**, 92 km south of Murmansk: long the headquarters of a naval reconnaissance air division, now a Long-Range Aviation base whose 3,500 m runway is the longest on the peninsula. [[32]](#source-32)
+- **Severomorsk**, on the Kola Bay north-east of Murmansk: the main naval base and main administrative base of the Northern Fleet. [[31]](#source-31)
+- **Olenya**, 92 km south of Murmansk: headquarters at various times of five naval reconnaissance air units, and by 2020 a Long-Range Aviation base whose 3,500 m runway is the longest on the peninsula. [[32]](#source-32)
 - **Bodø**, Norway: the main air station of northern Norway, home of NATO's quick reaction alert until 2022, when the mission passed to F-35s at Evenes. Its [F-16](record:f-16) squadrons moved to Ørland in 2023; a search-and-rescue detachment remains. [[33]](#source-33)
-- **Andøya**, Norway: base of the Norwegian P-3C Orions until 30 June 2023, when 333 Squadron moved to Evenes; Norway's defence ministry has named it a permanent reception base for allied forces. [[34]](#source-34)
+- **Andøya**, Norway: base of the Norwegian P-3C Orions until 30 June 2023, when 333 Squadron moved to Evenes; a 2022 defence white paper planned it as a permanent reception base for allied forces. [[34]](#source-34)

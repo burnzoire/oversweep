@@ -23,6 +23,6 @@ sources:
 
 ## Coverage
 
-The Caucasus is DCS World's free map and its oldest theatre. It runs for more than 720 km from Anapa to Tbilisi and takes in the Black Sea beaches and subtropics, the Caucasus Range up to Mount Elbrus at 5,600 m, and the steppes and forests to the north. [[1]](#source-1) It has 21 airfields, among them the international airports of Sochi-Adler, Mineralnye Vody and Tbilisi-Lochini. [[1]](#source-1) The airfield list mixes Russian military fields such as Krymsk, Maykop and Mozdok with Georgian ones such as Senaki-Kolkhi, Kutaisi and Vaziani. [[2]](#source-2)
+The Caucasus is DCS World's free map. It runs for more than 720 km from Anapa to Tbilisi and takes in the Black Sea beaches and subtropics, the Caucasus Range up to Mount Elbrus at 5,600 m, and the steppes and forests to the north. [[1]](#source-1) It has 21 airfields, among them the international airports of Sochi-Adler, Mineralnye Vody and Tbilisi-Lochini. [[1]](#source-1) The airfield list mixes Russian military fields such as Krymsk, Maykop and Mozdok with Georgian ones such as Senaki-Kolkhi, Kutaisi and Vaziani. [[2]](#source-2)
 
 Its makers point to the region's history, from the Second World War battles in the Kuban and the North Caucasus to the conflicts in Abkhazia and South Ossetia, and say the map suits both realistic and hypothetical operations. [[1]](#source-1)

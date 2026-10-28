@@ -33,4 +33,4 @@ sources:
 
 ## Coverage
 
-Hellenic Theater Operations (HTO) is one of the four official Falcon BMS theatres, installed separately from the base game. [[2]](#source-2) Version 1.0.3, for BMS 4.38.1.1, lists work on Greek airfields such as Souda, Kasteli, Kozani, Kastoria and Almyros, Turkish ones such as Çorlu, Balıkesir, Uşak and Yenişehir, and fields in neighbouring countries such as Bezmer, Krumovo, Kukës, Kuçova and Ohrid. Some airbases are fully rendered with physically based materials, and it adds Greek liveries for the AH-64, OH-58 and P-3C. [[1]](#source-1)
+Hellenic Theater Operations (HTO) is one of the official Falcon BMS theatres, installed separately from the base game. [[2]](#source-2) Version 1.0.3, for BMS 4.38.1.1, lists work on Greek airfields such as Souda, Kasteli, Kozani, Kastoria and Almyros, Turkish ones such as Çorlu, Balıkesir, Uşak and Yenişehir, and fields in neighbouring countries such as Bezmer, Krumovo, Kukës, Kuçova and Ohrid. Some airbases are fully rendered with physically based materials, and it adds Greek liveries for the AH-64, OH-58 and P-3C. [[1]](#source-1)

@@ -8,7 +8,7 @@ setting: { era: modern, text: "No period is stated; its forces are modern, inclu
 area: "Israel and its neighbours, including Egypt, Syria and Cyprus, on a new map shifted about 200 km north of earlier Israeli theatres, with 131 airbases and airstrips [1]"
 theatres: [middle-east]
 differences:
-  - { topic: "Objectives and airbases", text: "The release describes its dedicated objectives for Israel and Egypt as hand-placed and semi-accurate, and says only around 70 of its 131 airbases and airstrips were accurately placed with the available models. [1]" }
+  - { topic: "Objectives and airbases", text: "The release gives Israel and Egypt dedicated objectives but places the rest by hand and only semi-accurately, and says only around 70 of its 131 airbases and airstrips were accurately placed with the available models. [1]" }
   - { topic: "ATC frequencies", text: "All airbase ATC frequencies are UHF only, to avoid splitting every frequency between VHF and UHF; towers keep an old VHF placeholder that pilots are told to ignore, and only the ATIS is on VHF. [3]" }
   - { topic: "Approach and departure", text: "Approach and departure share one frequency at every airbase, although the ATC menu has separate pages for each. [3]" }
   - { topic: "Read-back", text: "There is no mandatory read-back of instructions; AI controllers often give the next instruction straight away, so a read-back is likely to be stepped on. [3]" }
@@ -34,4 +34,4 @@ sources:
 
 ## Coverage
 
-Israel Theater of Operations (ITO) is one of the four official Falcon BMS theatres, installed separately from the base game. [[2]](#source-2) Its new terrain moved the map about 200 km north of earlier Israeli theatres and added 131 airbases and airstrips. Version 1.08.1.1, for BMS 4.38.1, added a dedicated F-35I Adir and improved hardened aircraft shelters at Israeli bases such as Ramat David and Hatzerim. Its objectives include Israeli ports, naval bases, refineries and power plants, and Syrian power plants. Six campaigns were converted from earlier versions. [[1]](#source-1)
+Israel Theater of Operations (ITO) is one of the official Falcon BMS theatres, installed separately from the base game. [[2]](#source-2) Its new terrain moved the map about 200 km north of earlier Israeli theatres and added 131 airbases and airstrips. Versions 1.08.1 and 1.08.1.1, for BMS 4.38.1, improved the hardened aircraft shelters at Israeli bases such as Ramat David and Hatzerim and added a dedicated F-35I Adir. Its objectives include Israeli ports, naval bases, refineries and power plants, and Syrian power plants. Six campaigns were converted from earlier versions. [[1]](#source-1)
