@@ -6,7 +6,7 @@ name: "DCS: The Channel"
 publisher: "Eagle Dynamics"
 setting: { era: wwii, from: "1940", to: "1945", text: "The Second World War in Europe between 1940 and 1945 [1]" }
 area: "About 40,000 km² of south-eastern England and north-eastern France around the English Channel [1]"
-theatres: []
+theatres: [normandy-channel]
 sources:
   - n: 1
     title: "DCS: The Channel Map"

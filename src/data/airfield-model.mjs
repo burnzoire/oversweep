@@ -51,6 +51,22 @@ export const nations = {
   netherlands: { name: 'Netherlands' },
   belgium: { name: 'Belgium' },
   denmark: { name: 'Denmark' },
+  france: { name: 'France' },
+  argentina: { name: 'Argentina' },
+  chile: { name: 'Chile' },
+  'falkland-islands': { name: 'Falkland Islands', note: 'UK overseas territory, claimed by Argentina' },
+  'south-korea': { name: 'South Korea' },
+  'north-korea': { name: 'North Korea' },
+  italy: { name: 'Italy' },
+  serbia: { name: 'Serbia' },
+  'bosnia-and-herzegovina': { name: 'Bosnia and Herzegovina' },
+  croatia: { name: 'Croatia' },
+  montenegro: { name: 'Montenegro' },
+  kosovo: { name: 'Kosovo', note: 'independence not recognised by Serbia' },
+  albania: { name: 'Albania' },
+  'north-macedonia': { name: 'North Macedonia' },
+  greece: { name: 'Greece' },
+  bulgaria: { name: 'Bulgaria' },
 };
 
 // The broad kind of organisation an operator or unit is, in any country.

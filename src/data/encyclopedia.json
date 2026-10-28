@@ -1742,6 +1742,72 @@
     "summary": "The Cold War front line: the Fulda Gap, V and VII Corps, the Berlin airlift and Reforger, and Ramstein, Spangdahlem, Bitburg and Hahn."
   },
   {
+    "id": "encyclopedia.airfields-carriers.normandy-channel",
+    "slug": "normandy-channel",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Normandy and the English Channel",
+    "designation": "Theatre",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Battle of Britain, D-Day and the Normandy campaign, the Ninth Air Force and the advanced landing grounds built behind the beaches."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.south-atlantic",
+    "slug": "south-atlantic",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "The South Atlantic and the Falkland Islands",
+    "designation": "Theatre",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The 1982 Falklands War, the Black Buck raids and Exocet attacks, and RAF Mount Pleasant today."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.korea",
+    "slug": "korea",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "The Korean Peninsula",
+    "designation": "Theatre",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Korean War and the armistice line, with US and South Korean forces at Osan, Kunsan and Camp Humphreys."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.balkans",
+    "slug": "balkans",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "The Balkans and the Adriatic",
+    "designation": "Theatre",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Deny Flight, Deliberate Force and Allied Force, Aviano, the 1999 carriers, Camp Bondsteel and Tuzla."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.hellenic",
+    "slug": "hellenic",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Greece, Turkey and the Aegean",
+    "designation": "Theatre",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Aegean dispute and Cyprus, Souda Bay and the Hellenic Air Force wings at Andravida and Larissa."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.israel",
+    "slug": "israel",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Israel and the Levant",
+    "designation": "Theatre",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Operation Opera, the 1982 Lebanon War, the April 2024 Iranian strikes and Israel's Negev and northern air bases."
+  },
+  {
     "id": "encyclopedia.airfields-carriers.nellis",
     "slug": "nellis",
     "category": "airfields-carriers",
@@ -2039,6 +2105,28 @@
     "summary": "1980s Germany and its neighbours around the Fulda Gap, with more than 100 military airfields and heliports, in early access."
   },
   {
+    "id": "encyclopedia.airfields-carriers.dcs-normandy",
+    "slug": "dcs-normandy",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "DCS: Normandy 2.0",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Southern England and northern France for Operation Overlord, London to Paris, with about 90 airfields."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.dcs-south-atlantic",
+    "slug": "dcs-south-atlantic",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "DCS: South Atlantic",
+    "designation": "DCS World map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Argentina, Chile and the Falkland Islands over 3.1 million km², with 26 airfields."
+  },
+  {
     "id": "encyclopedia.airfields-carriers.bms-korea",
     "slug": "bms-korea",
     "category": "airfields-carriers",
@@ -2048,5 +2136,71 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "Falcon 4.0's Korean Peninsula theatre, carried on by Falcon BMS: a modern war between North and South Korea."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.bms-balkans",
+    "slug": "bms-balkans",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Falcon BMS: Balkans",
+    "designation": "Falcon BMS map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The official BMS Balkans theatre, with 1995-era and Link 16-era campaigns."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.bms-hellenic",
+    "slug": "bms-hellenic",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Falcon BMS: Hellenic",
+    "designation": "Falcon BMS map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The official BMS Hellenic theatre: Greece, Turkey and the Aegean."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.bms-israel",
+    "slug": "bms-israel",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Falcon BMS: Israel",
+    "designation": "Falcon BMS map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The official BMS Israel theatre, 131 airbases and airstrips on a map shifted north, with the F-35I."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.bms-falklands",
+    "slug": "bms-falklands",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Falcon BMS: Falklands",
+    "designation": "Falcon BMS map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The official BMS Falklands theatre: East and West Falkland and RAF Mount Pleasant."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.falcon4-korea",
+    "slug": "falcon4-korea",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Falcon 4.0: Korea",
+    "designation": "Falcon 4.0 map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The original 1998 Falcon 4.0 Korean war, carried into Allied Force in 2005."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.falcon4-balkans",
+    "slug": "falcon4-balkans",
+    "category": "airfields-carriers",
+    "revision": 1,
+    "title": "Falcon 4.0: Allied Force – Balkans",
+    "designation": "Falcon 4.0 map",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Allied Force's 2005 Balkans battlefield, with 1999, 2005 and 2010 timelines."
   }
 ]
