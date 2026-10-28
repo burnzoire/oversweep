@@ -1,0 +1,10 @@
+.carrier-filter { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: 1rem; margin: 1.5rem 0; padding: 1rem; border: 1px solid var(--color-border); background: var(--color-surface); }
+.carrier-search, .carrier-count, .carrier-empty { grid-column: 1 / -1; }
+.carrier-filter label { display: block; font-weight: 700; margin-bottom: 0.3rem; }
+.carrier-filter input, .carrier-filter select { box-sizing: border-box; width: 100%; min-height: 2.75rem; padding: 0.4rem 0.6rem; font: inherit; color: var(--color-text); background: #fff; border: 1px solid var(--color-text); }
+.carrier-filter input:focus-visible, .carrier-filter select:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+.carrier-filter p { margin: 0; }
+.carrier-filter[hidden], .carrier-empty[hidden], .carriers [data-carrier][hidden] { display: none; }
+.carrier-table th, .carrier-table td { min-width: 8rem; vertical-align: top; }
+.carrier-table th:first-child { min-width: 15rem; }
+.carrier-detail { display: block; margin-top: 0.2rem; font-size: 0.9rem; font-weight: 400; color: var(--color-muted); }

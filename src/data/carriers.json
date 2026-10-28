@@ -1,0 +1,2561 @@
+[
+  {
+    "slug": "uss-saidor",
+    "name": "USS Saidor",
+    "hull": "CVE-117",
+    "class": "Commencement Bay",
+    "origin": "United States",
+    "commissioned": "1945-09-04",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Saidor"
+    ],
+    "summary": "A Commencement Bay-class escort aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Saidor (CVE-117) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/s/saidor.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-midway",
+    "name": "USS Midway",
+    "hull": "CV-41",
+    "class": "Midway",
+    "origin": "United States",
+    "commissioned": "1945-09-10",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Midway"
+    ],
+    "summary": "A Midway-class aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Midway (CV-41) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/browse-by-topic/ships/aircraft-carriers/uss-midway.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-point-cruz",
+    "name": "USS Point Cruz",
+    "hull": "CVE-119",
+    "class": "Commencement Bay",
+    "origin": "United States",
+    "commissioned": "1945-10-16",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Point Cruz"
+    ],
+    "summary": "A Commencement Bay-class escort aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Point Cruz (CVE-119) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/p/point-cruz.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "hms-perseus-r51",
+    "name": "HMS Perseus",
+    "hull": "R51",
+    "class": "Colossus",
+    "origin": "United Kingdom",
+    "commissioned": "1945-10-19",
+    "operators": [
+      "Royal Navy"
+    ],
+    "aliases": [
+      "HMS Edgar"
+    ],
+    "classification": "Aircraft-maintenance carrier",
+    "summary": "Completed as an aircraft-maintenance carrier, rather than a normal operational flying carrier. Later used for steam-catapult trials.",
+    "sources": [
+      {
+        "title": "HMS Perseus",
+        "publisher": "Royal Navy Research Archive (secondary historical compilation)",
+        "url": "https://www.royalnavyresearcharchive.org.uk/BPF-EIF/Ships/PERSEUS.htm",
+        "accessed": "2026-10-29",
+        "note": "Commissioning on 19 October 1945; completed as aircraft-maintenance carrier without normal flying operations."
+      }
+    ]
+  },
+  {
+    "slug": "uss-rendova",
+    "name": "USS Rendova",
+    "hull": "CVE-114",
+    "class": "Commencement Bay",
+    "origin": "United States",
+    "commissioned": "1945-10-22",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Rendova"
+    ],
+    "summary": "A Commencement Bay-class escort aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Rendova (CVE-114) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/r/rendova.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-franklin-d-roosevelt",
+    "name": "USS Franklin D. Roosevelt",
+    "hull": "CV-42",
+    "class": "Midway",
+    "origin": "United States",
+    "commissioned": "1945-10-27",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Franklin D. Roosevelt"
+    ],
+    "summary": "A Midway-class aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Franklin D. Roosevelt (CV-42) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/f/franklin-d-roosevelt-cvb-42.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-badoeng-strait",
+    "name": "USS Badoeng Strait",
+    "hull": "CVE-116",
+    "class": "Commencement Bay",
+    "origin": "United States",
+    "commissioned": "1945-11-14",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Badoeng Strait"
+    ],
+    "summary": "A Commencement Bay-class escort aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Badoeng Strait (CVE-116) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/b/badoeng-strait.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-princeton",
+    "name": "USS Princeton",
+    "hull": "CV-37",
+    "class": "Essex",
+    "origin": "United States",
+    "commissioned": "1945-11-18",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Princeton",
+      "LPH-5"
+    ],
+    "summary": "An Essex-class carrier, later converted to the helicopter assault role as LPH-5.",
+    "sources": [
+      {
+        "title": "Princeton (CV-37) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/content/history/nhhc/research/histories/ship-histories/danfs/p/princeton-v.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-mindoro",
+    "name": "USS Mindoro",
+    "hull": "CVE-120",
+    "class": "Commencement Bay",
+    "origin": "United States",
+    "commissioned": "1945-12-04",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Mindoro"
+    ],
+    "summary": "A Commencement Bay-class escort aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Mindoro (CVE-120) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/m/mindoro-iii.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-tarawa",
+    "name": "USS Tarawa",
+    "hull": "CV-40",
+    "class": "Essex",
+    "origin": "United States",
+    "commissioned": "1945-12-08",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Tarawa"
+    ],
+    "summary": "A Essex-class aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Tarawa (CV-40) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/content/history/nhhc/research/histories/ship-histories/danfs/t/tarawa-i.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      },
+      {
+        "title": "Princeton V (CV-37)",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/p/princeton-v.html",
+        "accessed": "2026-10-29",
+        "note": "Essex-class family context. Tarawa DANFS uses the long-hull Ticonderoga subclass name."
+      },
+      {
+        "title": "USS Leyte (CV-32, later CVA-32, CVS-32, and AVT-10)",
+        "publisher": "National Museum of the United States Navy",
+        "url": "https://www.history.navy.mil/content/history/museums/nmusn/explore/photography/ships-us/ships-usn-l/uss-leyte-cv-32-avt-10.html",
+        "accessed": "2026-10-29",
+        "note": "Explains Ticonderoga as the Essex long-hull class terminology used in DANFS; no separate hull is created for a subclass or refit."
+      }
+    ]
+  },
+  {
+    "slug": "hmcs-warrior-r31",
+    "name": "HMCS Warrior",
+    "hull": "R31",
+    "class": "Colossus",
+    "origin": "United Kingdom",
+    "commissioned": "1946",
+    "operators": [
+      "Royal Canadian Navy",
+      "Royal Navy",
+      "Argentine Navy"
+    ],
+    "aliases": [
+      "HMS Brave",
+      "HMS Warrior",
+      "ARA Independencia"
+    ],
+    "classification": "Light fleet carrier",
+    "summary": "British-built carrier first operated by Canada, then Britain, and later Argentina as Independencia.",
+    "sources": [
+      {
+        "title": "A History of Canadian Naval Aviation, 1918–1962",
+        "publisher": "Department of National Defence, Canada",
+        "url": "https://www.canada.ca/content/dam/themes/defence/caf/militaryhistory/dhh/official/book-1965-naval-aviation-en.pdf",
+        "accessed": "2026-10-29",
+        "note": "HMCS Warrior chapter; Canadian service, return to Royal Navy and transfer to Argentina as Independencia. Commissioning year only because exact dates differ across accounts."
+      }
+    ]
+  },
+  {
+    "slug": "hms-theseus-r64",
+    "name": "HMS Theseus",
+    "hull": "R64",
+    "class": "Colossus",
+    "origin": "United Kingdom",
+    "commissioned": "1946",
+    "operators": [
+      "Royal Navy"
+    ],
+    "aliases": [],
+    "classification": "Light fleet carrier",
+    "summary": "Light fleet carrier completed after the war; later employed as a commando carrier during the Suez operation.",
+    "sources": [
+      {
+        "title": "HMS Theseus (64)",
+        "publisher": "uboat.net (secondary ship history)",
+        "url": "https://www.uboat.net/allies/warships/ship/3242.html",
+        "accessed": "2026-10-29",
+        "note": "Identity, class and commissioning in 1946. Exact date differs from completion date in other accounts; year used."
+      }
+    ]
+  },
+  {
+    "slug": "hms-triumph-r16",
+    "name": "HMS Triumph",
+    "hull": "R16",
+    "class": "Colossus",
+    "origin": "United Kingdom",
+    "commissioned": "1946",
+    "operators": [
+      "Royal Navy"
+    ],
+    "aliases": [],
+    "classification": "Light fleet carrier",
+    "summary": "Light fleet carrier later converted to a heavy repair ship.",
+    "sources": [
+      {
+        "title": "Warship Wednesday: HMS Triumph",
+        "publisher": "Chatham Historic Dockyard Trust",
+        "url": "https://thedockyard.co.uk/news/warship-wednesday-hms-triumph/",
+        "accessed": "2026-10-29",
+        "note": "Class, builder and 1946 first commission. Other histories give a different day in May; year used."
+      }
+    ]
+  },
+  {
+    "slug": "uss-palau",
+    "name": "USS Palau",
+    "hull": "CVE-122",
+    "class": "Commencement Bay",
+    "origin": "United States",
+    "commissioned": "1946-01-15",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Palau"
+    ],
+    "summary": "A Commencement Bay-class escort aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Palau (CVE-122) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/p/palau.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-sicily",
+    "name": "USS Sicily",
+    "hull": "CVE-118",
+    "class": "Commencement Bay",
+    "origin": "United States",
+    "commissioned": "1946-02-27",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Sicily"
+    ],
+    "summary": "A Commencement Bay-class escort aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Sicily (CVE-118) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/s/sicily.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-kearsarge",
+    "name": "USS Kearsarge",
+    "hull": "CV-33",
+    "class": "Essex",
+    "origin": "United States",
+    "commissioned": "1946-03-02",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Kearsarge"
+    ],
+    "summary": "A Essex-class aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Kearsarge (CV-33) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/our-collections/photography/us-navy-ships/alphabetical-listing/k/uss-kearsarge--cv-33-cva-33-cvs-33-0.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      },
+      {
+        "title": "USS Leyte (CV-32, later CVA-32, CVS-32, and AVT-10)",
+        "publisher": "National Museum of the United States Navy",
+        "url": "https://www.history.navy.mil/content/history/museums/nmusn/explore/photography/ships-us/ships-usn-l/uss-leyte-cv-32-avt-10.html",
+        "accessed": "2026-10-29",
+        "note": "Explains Ticonderoga as the Essex long-hull class terminology used in DANFS; no separate hull is created for a subclass or refit."
+      }
+    ]
+  },
+  {
+    "slug": "uss-leyte",
+    "name": "USS Leyte",
+    "hull": "CV-32",
+    "class": "Essex",
+    "origin": "United States",
+    "commissioned": "1946-04-11",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Leyte"
+    ],
+    "summary": "A Essex-class aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Leyte (CV-32) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/l/leyte-iii.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-philippine-sea",
+    "name": "USS Philippine Sea",
+    "hull": "CV-47",
+    "class": "Essex",
+    "origin": "United States",
+    "commissioned": "1946-05-11",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Philippine Sea"
+    ],
+    "summary": "A Essex-class aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Philippine Sea (CV-47) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/p/philippine-sea.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-saipan",
+    "name": "USS Saipan",
+    "hull": "CVL-48",
+    "class": "Saipan",
+    "origin": "United States",
+    "commissioned": "1946-07-14",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Saipan",
+      "Arlington",
+      "AGMR-2"
+    ],
+    "summary": "A Saipan-class light aircraft carrier; later renamed Arlington after conversion to a communications relay ship.",
+    "sources": [
+      {
+        "title": "Saipan (CVL-48) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/s/saipan-i.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "rabaul",
+    "name": "Rabaul",
+    "hull": "CVE-121",
+    "class": "Commencement Bay",
+    "origin": "United States",
+    "commissioned": null,
+    "operators": [],
+    "aliases": [
+      "Rabaul"
+    ],
+    "summary": "A Commencement Bay-class escort carrier completed and delivered on 30 August 1946, then placed directly in reserve without commissioning.",
+    "sources": [
+      {
+        "title": "Rabaul (CVE-121) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/r/rabaul.html",
+        "accessed": "2026-10-29",
+        "note": "Identity, class, completion and delivery on 30 August 1946; explicitly records that the ship never entered active service."
+      }
+    ],
+    "completed": "1946-08-30"
+  },
+  {
+    "slug": "uss-valley-forge",
+    "name": "USS Valley Forge",
+    "hull": "CV-45",
+    "class": "Essex",
+    "origin": "United States",
+    "commissioned": "1946-11-03",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Valley Forge",
+      "LPH-8"
+    ],
+    "summary": "An Essex-class carrier, later converted to the helicopter assault role as LPH-8.",
+    "sources": [
+      {
+        "title": "Valley Forge (CV-45) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/content/history/nhhc/research/histories/ship-histories/danfs/v/valley-forge-cv-45.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      },
+      {
+        "title": "USS Leyte (CV-32, later CVA-32, CVS-32, and AVT-10)",
+        "publisher": "National Museum of the United States Navy",
+        "url": "https://www.history.navy.mil/content/history/museums/nmusn/explore/photography/ships-us/ships-usn-l/uss-leyte-cv-32-avt-10.html",
+        "accessed": "2026-10-29",
+        "note": "Explains Ticonderoga as the Essex long-hull class terminology used in DANFS; no separate hull is created for a subclass or refit."
+      }
+    ]
+  },
+  {
+    "slug": "uss-wright",
+    "name": "USS Wright",
+    "hull": "CVL-49",
+    "class": "Saipan",
+    "origin": "United States",
+    "commissioned": "1947-02-09",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Wright",
+      "CC-2"
+    ],
+    "summary": "A Saipan-class light aircraft carrier; later converted to the command ship Wright (CC-2).",
+    "sources": [
+      {
+        "title": "Wright (CVL-49) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/w/wright-ii.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-coral-sea",
+    "name": "USS Coral Sea",
+    "hull": "CV-43",
+    "class": "Midway",
+    "origin": "United States",
+    "commissioned": "1947-10-01",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Coral Sea"
+    ],
+    "summary": "A Midway-class aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Coral Sea (CV-43) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/c/coral-sea.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "hmcs-magnificent-cvl21",
+    "name": "HMCS Magnificent",
+    "hull": "CVL 21",
+    "class": "Majestic",
+    "origin": "United Kingdom",
+    "commissioned": "1948-04-07",
+    "operators": [
+      "Royal Canadian Navy"
+    ],
+    "aliases": [
+      "HMS Magnificent"
+    ],
+    "classification": "Light fleet carrier",
+    "summary": "Majestic-class light fleet carrier loaned to Canada; returned to British custody after Canadian service.",
+    "sources": [
+      {
+        "title": "HMCS Magnificent",
+        "publisher": "CFB Esquimalt Naval and Military Museum",
+        "url": "https://navalandmilitarymuseum.org/archives/articles/hmcs-magnificent/",
+        "accessed": "2026-10-29",
+        "note": "First commission 7 April 1948 and Canadian service; return to Royal Navy after paying off, without subsequent operational commission."
+      }
+    ]
+  },
+  {
+    "slug": "hmas-sydney-r17",
+    "name": "HMAS Sydney (III)",
+    "hull": "R17",
+    "class": "Majestic",
+    "origin": "United Kingdom",
+    "commissioned": "1948-12-16",
+    "operators": [
+      "Royal Australian Navy"
+    ],
+    "aliases": [
+      "HMS Terrible"
+    ],
+    "classification": "Light fleet carrier",
+    "summary": "British-built Majestic-class carrier completed for Australia; later served as a fast troop transport.",
+    "sources": [
+      {
+        "title": "The establishment of the Fleet Air Arm",
+        "publisher": "Royal Australian Navy",
+        "url": "https://www.navy.gov.au/about-navy/history/history-milestones/establishment-fleet-air-arm",
+        "accessed": "2026-10-29",
+        "note": "Terrible renamed Sydney; commissioned at Devonport on 16 December 1948. Used instead of the inconsistent introductory date on the Sea Power Centre ship page."
+      },
+      {
+        "title": "HMAS Sydney (III)",
+        "publisher": "Sea Power Centre, Royal Australian Navy",
+        "url": "https://seapower.navy.gov.au/history/units/hmas-sydney-iii",
+        "accessed": "2026-10-29",
+        "note": "Class, pennant, builder and role. The introduction gives 5 February 1949 but the specification table and RAN FAA history give 16 December 1948; commissioning year follows the latter."
+      }
+    ]
+  },
+  {
+    "slug": "uss-oriskany",
+    "name": "USS Oriskany",
+    "hull": "CV-34",
+    "class": "Essex",
+    "origin": "United States",
+    "commissioned": "1950-09-25",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Oriskany"
+    ],
+    "summary": "A Essex-class aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Oriskany (CV-34) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/content/history/nhhc/research/histories/ship-histories/danfs/o/oriskany.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "hms-eagle-r05",
+    "name": "HMS Eagle",
+    "hull": "R05",
+    "class": "Audacious",
+    "origin": "United Kingdom",
+    "commissioned": null,
+    "operators": [
+      "Royal Navy"
+    ],
+    "aliases": [
+      "HMS Audacious"
+    ],
+    "classification": "Fleet carrier",
+    "summary": "Audacious-class fleet carrier completed in October 1951.",
+    "sources": [
+      {
+        "title": "HMS Eagle (1946), Admiralty model",
+        "publisher": "Royal Museums Greenwich",
+        "url": "https://www.rmg.co.uk/collections/objects/rmgc-object-67566",
+        "accessed": "2026-10-29",
+        "note": "Admiralty model plaque states completed October 1951; class and identity."
+      },
+      {
+        "title": "Eagle fleet aircraft carriers",
+        "publisher": "Navypedia (secondary historical compilation)",
+        "url": "https://www.navypedia.org/ships/uk/brit_cv1_eagle51.htm",
+        "accessed": "2026-10-29",
+        "note": "Audacious-class names, pennants and completed hull inventory."
+      }
+    ],
+    "completed": "1951"
+  },
+  {
+    "slug": "hms-centaur-r06",
+    "name": "HMS Centaur",
+    "hull": "R06",
+    "class": "Centaur",
+    "origin": "United Kingdom",
+    "commissioned": "1953",
+    "operators": [
+      "Royal Navy"
+    ],
+    "aliases": [],
+    "classification": "Light fleet carrier",
+    "summary": "The first completed carrier of the Centaur class.",
+    "sources": [
+      {
+        "title": "Centaur light fleet aircraft carriers",
+        "publisher": "Navypedia (secondary historical compilation)",
+        "url": "https://www.navypedia.org/ships/uk/brit_cv1_centaur.htm",
+        "accessed": "2026-10-29",
+        "note": "Class member names, pennants and completion years. Exact-day commissioning conflicts exist; catalogue uses year."
+      }
+    ]
+  },
+  {
+    "slug": "hms-albion-r07",
+    "name": "HMS Albion",
+    "hull": "R07",
+    "class": "Centaur",
+    "origin": "United Kingdom",
+    "commissioned": "1954",
+    "operators": [
+      "Royal Navy"
+    ],
+    "aliases": [],
+    "classification": "Light fleet carrier",
+    "summary": "Centaur-class carrier later converted for commando helicopter operations.",
+    "sources": [
+      {
+        "title": "Centaur light fleet aircraft carriers",
+        "publisher": "Navypedia (secondary historical compilation)",
+        "url": "https://www.navypedia.org/ships/uk/brit_cv1_centaur.htm",
+        "accessed": "2026-10-29",
+        "note": "Class member names, pennants and completion years. Exact-day commissioning conflicts exist; catalogue uses year."
+      }
+    ]
+  },
+  {
+    "slug": "hms-bulwark-r08",
+    "name": "HMS Bulwark",
+    "hull": "R08",
+    "class": "Centaur",
+    "origin": "United Kingdom",
+    "commissioned": "1954",
+    "operators": [
+      "Royal Navy"
+    ],
+    "aliases": [],
+    "classification": "Light fleet carrier",
+    "summary": "Centaur-class carrier later converted for commando helicopter operations.",
+    "sources": [
+      {
+        "title": "Centaur light fleet aircraft carriers",
+        "publisher": "Navypedia (secondary historical compilation)",
+        "url": "https://www.navypedia.org/ships/uk/brit_cv1_centaur.htm",
+        "accessed": "2026-10-29",
+        "note": "Class member names, pennants and completion years. Exact-day commissioning conflicts exist; catalogue uses year."
+      }
+    ]
+  },
+  {
+    "slug": "hms-ark-royal-r09",
+    "name": "HMS Ark Royal (R09)",
+    "hull": "R09",
+    "class": "Audacious",
+    "origin": "United Kingdom",
+    "commissioned": "1955-02-25",
+    "operators": [
+      "Royal Navy"
+    ],
+    "aliases": [
+      "HMS Irresistible"
+    ],
+    "classification": "Fleet carrier",
+    "summary": "Audacious-class carrier commissioned in 1955; distinct from the later Invincible-class Ark Royal.",
+    "sources": [
+      {
+        "title": "On this 25 February 1955",
+        "publisher": "Fleet Air Arm Officers Association",
+        "url": "https://fleetairarmoa.com/on-this-25-february-1955/",
+        "accessed": "2026-10-29",
+        "note": "HMS Ark Royal IV commissioning, 25 February 1955."
+      },
+      {
+        "title": "Eagle fleet aircraft carriers",
+        "publisher": "Navypedia (secondary historical compilation)",
+        "url": "https://www.navypedia.org/ships/uk/brit_cv1_eagle51.htm",
+        "accessed": "2026-10-29",
+        "note": "Audacious-class names, pennants and completed hull inventory."
+      }
+    ]
+  },
+  {
+    "slug": "uss-forrestal",
+    "name": "USS Forrestal",
+    "hull": "CV-59",
+    "class": "Forrestal",
+    "origin": "United States",
+    "commissioned": "1955-10-01",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Forrestal"
+    ],
+    "summary": "A Forrestal-class aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Forrestal (CV-59) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/f/forrestal-cva-59.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "hmas-melbourne-r21",
+    "name": "HMAS Melbourne (II)",
+    "hull": "R21",
+    "class": "Majestic",
+    "origin": "United Kingdom",
+    "commissioned": "1955-10-28",
+    "operators": [
+      "Royal Australian Navy"
+    ],
+    "aliases": [
+      "HMS Majestic"
+    ],
+    "classification": "Light fleet carrier",
+    "summary": "Completed for Australia to a modified Majestic-class design.",
+    "sources": [
+      {
+        "title": "HMAS Melbourne (II)",
+        "publisher": "Sea Power Centre, Royal Australian Navy",
+        "url": "https://seapower.navy.gov.au/history/units/hmas-melbourne-ii",
+        "accessed": "2026-10-29",
+        "note": "Majestic completed as Melbourne; first commission 28 October 1955."
+      }
+    ]
+  },
+  {
+    "slug": "uss-saratoga",
+    "name": "USS Saratoga",
+    "hull": "CV-60",
+    "class": "Forrestal",
+    "origin": "United States",
+    "commissioned": "1956-04-14",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Saratoga"
+    ],
+    "summary": "A Forrestal-class aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Saratoga (CV-60) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/s/saratoga-vi.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "hmcs-bonaventure-cvl22",
+    "name": "HMCS Bonaventure",
+    "hull": "CVL 22",
+    "class": "Majestic",
+    "origin": "United Kingdom",
+    "commissioned": "1957-01-17",
+    "operators": [
+      "Royal Canadian Navy"
+    ],
+    "aliases": [
+      "HMS Powerful"
+    ],
+    "classification": "Light fleet carrier",
+    "summary": "Unfinished Powerful was completed for Canada as Bonaventure with an angled flight deck.",
+    "sources": [
+      {
+        "title": "HMCS Bonaventure",
+        "publisher": "Royal Canadian Navy",
+        "url": "https://www.canada.ca/en/navy/services/history/ships-histories/bonaventure.html",
+        "accessed": "2026-10-29",
+        "note": "Majestic-class carrier completed as Bonaventure, originally Powerful; commissioned January 1957."
+      }
+    ]
+  },
+  {
+    "slug": "uss-ranger",
+    "name": "USS Ranger",
+    "hull": "CV-61",
+    "class": "Forrestal",
+    "origin": "United States",
+    "commissioned": "1957-08-10",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Ranger"
+    ],
+    "summary": "A Forrestal-class aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Ranger (CV-61) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/r/ranger-x.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-independence",
+    "name": "USS Independence",
+    "hull": "CV-62",
+    "class": "Forrestal",
+    "origin": "United States",
+    "commissioned": "1959-01-10",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Independence"
+    ],
+    "summary": "A Forrestal-class aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Independence (CV-62) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/i/independence-v.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "hms-hermes-r12",
+    "name": "HMS Hermes",
+    "hull": "R12",
+    "class": "Centaur",
+    "origin": "United Kingdom",
+    "commissioned": "1959-11-18",
+    "operators": [
+      "Royal Navy",
+      "Indian Navy"
+    ],
+    "aliases": [
+      "HMS Elephant",
+      "INS Viraat"
+    ],
+    "classification": "Light fleet carrier",
+    "summary": "British carrier later acquired by India and commissioned as Viraat in 1987.",
+    "sources": [
+      {
+        "title": "History of Aircraft Carriers in India",
+        "publisher": "Press Information Bureau, Government of India",
+        "url": "https://www.pib.gov.in/FeaturesDeatils.aspx?NoteId=151135&lang=2&reg=3",
+        "accessed": "2026-10-29",
+        "note": "Vikrant (R11), ex-Hercules, commissioned 4 March 1961; Hermes/Viraat identity and British service from 1959. Broader superlative claims in this article are not adopted."
+      },
+      {
+        "title": "Centaur light fleet aircraft carriers",
+        "publisher": "Navypedia (secondary historical compilation)",
+        "url": "https://www.navypedia.org/ships/uk/brit_cv1_centaur.htm",
+        "accessed": "2026-10-29",
+        "note": "Class member names, pennants and completion years. Exact-day commissioning conflicts exist; catalogue uses year."
+      }
+    ]
+  },
+  {
+    "slug": "ins-vikrant-r11",
+    "name": "INS Vikrant (R11)",
+    "hull": "R11",
+    "class": "Majestic",
+    "origin": "United Kingdom",
+    "commissioned": "1961-03-04",
+    "operators": [
+      "Indian Navy"
+    ],
+    "aliases": [
+      "HMS Hercules"
+    ],
+    "classification": "Light fleet carrier",
+    "summary": "The unfinished Hercules was completed for India as its first aircraft carrier, Vikrant.",
+    "sources": [
+      {
+        "title": "History of Aircraft Carriers in India",
+        "publisher": "Press Information Bureau, Government of India",
+        "url": "https://www.pib.gov.in/FeaturesDeatils.aspx?NoteId=151135&lang=2&reg=3",
+        "accessed": "2026-10-29",
+        "note": "Vikrant (R11), ex-Hercules, commissioned 4 March 1961; Hermes/Viraat identity and British service from 1959. Broader superlative claims in this article are not adopted."
+      }
+    ]
+  },
+  {
+    "slug": "uss-kitty-hawk",
+    "name": "USS Kitty Hawk",
+    "hull": "CV-63",
+    "class": "Kitty Hawk",
+    "origin": "United States",
+    "commissioned": "1961-04-29",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Kitty Hawk"
+    ],
+    "summary": "A Kitty Hawk-class aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Kitty Hawk (CV-63) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/k/kitty-hawk-cva-63-ii.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-iwo-jima",
+    "name": "USS Iwo Jima",
+    "hull": "LPH-2",
+    "class": "Iwo Jima",
+    "origin": "United States",
+    "commissioned": "1961-08-26",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Iwo Jima"
+    ],
+    "summary": "An Iwo Jima-class purpose-built helicopter assault carrier, designated LPH by the United States Navy.",
+    "sources": [
+      {
+        "title": "Iwo Jima (LPH-2) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/i/iwo-jima.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-constellation",
+    "name": "USS Constellation",
+    "hull": "CV-64",
+    "class": "Kitty Hawk",
+    "origin": "United States",
+    "commissioned": "1961-10-27",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Constellation"
+    ],
+    "summary": "A Kitty Hawk-class aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Constellation (CV-64) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/c/constellation-iii.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "clemenceau",
+    "name": "Clemenceau",
+    "hull": "R98",
+    "class": "Clemenceau",
+    "origin": "France",
+    "commissioned": "1961-11-22",
+    "operators": [
+      "French Navy"
+    ],
+    "aliases": [],
+    "summary": "French-built fleet aircraft carrier and lead ship of the Clemenceau class.",
+    "sources": [
+      {
+        "title": "Porte-avions Clemenceau (1954–1998)",
+        "publisher": "Service historique de la Défense",
+        "url": "https://www.servicehistorique.sga.defense.gouv.fr/en/node/954925",
+        "accessed": "2026-10-29",
+        "note": "Admitted to active service 22 November 1961."
+      },
+      {
+        "title": "History of French aircraft carriers",
+        "publisher": "French Senate",
+        "url": "https://www.senat.fr/rap/r19-559/r19-559_mono.html",
+        "accessed": "2026-10-29",
+        "note": "Government history: French construction, Clemenceau 1961, Foch 1963 and transfer to Brazil."
+      }
+    ]
+  },
+  {
+    "slug": "uss-enterprise",
+    "name": "USS Enterprise",
+    "hull": "CVN-65",
+    "class": "Enterprise",
+    "origin": "United States",
+    "commissioned": "1961-11-25",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Enterprise"
+    ],
+    "summary": "The United States Navy's first nuclear-powered aircraft carrier and the sole ship of the Enterprise class.",
+    "sources": [
+      {
+        "title": "Enterprise (CVN-65) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/e/enterprise-cvan-65-viii-1961-1965.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-okinawa",
+    "name": "USS Okinawa",
+    "hull": "LPH-3",
+    "class": "Iwo Jima",
+    "origin": "United States",
+    "commissioned": "1962-04-14",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Okinawa"
+    ],
+    "summary": "An Iwo Jima-class purpose-built helicopter assault carrier, designated LPH by the United States Navy.",
+    "sources": [
+      {
+        "title": "Okinawa (LPH-3) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/o/okinawa-ii.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "foch",
+    "name": "Foch / São Paulo",
+    "hull": "R99 / A12",
+    "class": "Clemenceau",
+    "origin": "France",
+    "commissioned": "1963-07-15",
+    "operators": [
+      "French Navy",
+      "Brazilian Navy"
+    ],
+    "aliases": [
+      "Foch",
+      "São Paulo",
+      "Sao Paulo"
+    ],
+    "summary": "Completed as Foch for France; transferred to Brazil in 2000 and renamed São Paulo. These names identify one physical hull.",
+    "sources": [
+      {
+        "title": "En savoir plus sur ces 4 bâtiments de la marine",
+        "publisher": "French Ministry of Armed Forces",
+        "url": "https://www.memoiredeshommes.defense.gouv.fr/arts-et-sciences-militaires-2/engins-militaires/albums-photographiques-de-la-construction-navale/en-savoir-plus-sur-ces-4-batiments-de-la-marine",
+        "accessed": "2026-10-29",
+        "note": "Foch: service date, sistership, construction and Brazilian transfer."
+      },
+      {
+        "title": "History of French aircraft carriers",
+        "publisher": "French Senate",
+        "url": "https://www.senat.fr/rap/r19-559/r19-559_mono.html",
+        "accessed": "2026-10-29",
+        "note": "Government history: French construction, Clemenceau 1961, Foch 1963 and transfer to Brazil."
+      }
+    ]
+  },
+  {
+    "slug": "uss-guadalcanal",
+    "name": "USS Guadalcanal",
+    "hull": "LPH-7",
+    "class": "Iwo Jima",
+    "origin": "United States",
+    "commissioned": "1963-07-20",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Guadalcanal"
+    ],
+    "summary": "An Iwo Jima-class purpose-built helicopter assault carrier, designated LPH by the United States Navy.",
+    "sources": [
+      {
+        "title": "Guadalcanal (LPH-7) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/g/guadalcanal-ii.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "jeanne-d-arc",
+    "name": "Jeanne d’Arc",
+    "hull": "R97",
+    "class": "Jeanne d’Arc",
+    "origin": "France",
+    "commissioned": "1964-07-16",
+    "operators": [
+      "French Navy"
+    ],
+    "aliases": [
+      "La Résolue",
+      "Jeanne d Arc"
+    ],
+    "summary": "Dedicated helicopter carrier and naval training ship; included as a helicopter carrier rather than a conventional fixed-wing carrier.",
+    "sources": [
+      {
+        "title": "PH Jeanne d’Arc — Journaux de bord",
+        "publisher": "French Navy",
+        "url": "https://archives.defense.gouv.fr/content/download/156662/1589944/version/1/file/PH%2BJeanne%2Bd/%27Arc%2B-%2BJournaux%2Bde%2Bbord%2B%EF%80%A2%2BMarine%2Bnationale%2B-%2BPage1.pdf",
+        "accessed": "2026-10-29",
+        "note": "Type porte-hélicoptères, R97, service 16 July 1964, training and helicopter roles."
+      },
+      {
+        "title": "Jeanne d’Arc (Porte-hélicoptères)",
+        "publisher": "Bibliothèque nationale de France",
+        "url": "https://catalogue.bnf.fr/ark%3A/12148/cb17760665t",
+        "accessed": "2026-10-29",
+        "note": "Ship identity and provisional name La Résolue."
+      }
+    ],
+    "classification": "Helicopter carrier / training cruiser"
+  },
+  {
+    "slug": "uss-guam",
+    "name": "USS Guam",
+    "hull": "LPH-9",
+    "class": "Iwo Jima",
+    "origin": "United States",
+    "commissioned": "1965-01-16",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Guam"
+    ],
+    "summary": "An Iwo Jima-class purpose-built helicopter assault carrier, designated LPH by the United States Navy.",
+    "sources": [
+      {
+        "title": "Guam (LPH-9) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/g/guam-iii.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-america",
+    "name": "USS America",
+    "hull": "CV-66",
+    "class": "Kitty Hawk",
+    "origin": "United States",
+    "commissioned": "1965-01-23",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "America"
+    ],
+    "summary": "A Kitty Hawk-class aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "America (CV-66) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/a/america-iii.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-tripoli",
+    "name": "USS Tripoli",
+    "hull": "LPH-10",
+    "class": "Iwo Jima",
+    "origin": "United States",
+    "commissioned": "1966-08-06",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Tripoli"
+    ],
+    "summary": "An Iwo Jima-class purpose-built helicopter assault carrier, designated LPH by the United States Navy.",
+    "sources": [
+      {
+        "title": "Tripoli (LPH-10) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/content/history/nhhc/research/histories/ship-histories/danfs/t/tripoli-lph-10-ii.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "moskva-carrier",
+    "name": "Moskva",
+    "hull": "Project 1123 — Moskva",
+    "class": "Moskva",
+    "origin": "Soviet Union",
+    "commissioned": "1967-12-25",
+    "operators": [
+      "Soviet Navy",
+      "Russian Navy"
+    ],
+    "aliases": [],
+    "summary": "Soviet anti-submarine helicopter cruiser; included for its dedicated helicopter-carrier role. Not the later Slava-class cruiser of the same name.",
+    "sources": [
+      {
+        "title": "Project 1123 anti-submarine cruisers",
+        "publisher": "RussianShips.info (secondary specialist reference)",
+        "url": "https://russianships.info/boevye/1123.htm",
+        "accessed": "2026-10-29",
+        "note": "Ship roster, construction, service dates. Not an official naval source; date detail remains secondary-source-supported."
+      },
+      {
+        "title": "MCM-0039-1970",
+        "publisher": "NATO Military Committee archives",
+        "url": "https://archives.nato.int/uploads/r/nato-archives-online/9/d/9/9d9c5dd697a3a9bc3252b475c619e35aed14c7cac1913638eb87009f46f97ba1/MCM-0039-1970_ENG_NHQO70000219E.pdf",
+        "accessed": "2026-10-29",
+        "note": "Contemporary official assessment describes Moskva as a helicopter ship and Leningrad as its second-class member."
+      }
+    ],
+    "classification": "Anti-submarine helicopter cruiser"
+  },
+  {
+    "slug": "uss-john-f-kennedy",
+    "name": "USS John F. Kennedy",
+    "hull": "CV-67",
+    "class": "John F. Kennedy",
+    "origin": "United States",
+    "commissioned": "1968-09-07",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "John F. Kennedy"
+    ],
+    "summary": "The final conventionally powered aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "John F. Kennedy (CV-67) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/browse-by-topic/ships/aircraft-carriers/uss-john-f-kennedy.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-new-orleans",
+    "name": "USS New Orleans",
+    "hull": "LPH-11",
+    "class": "Iwo Jima",
+    "origin": "United States",
+    "commissioned": "1968-11-16",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "New Orleans"
+    ],
+    "summary": "An Iwo Jima-class purpose-built helicopter assault carrier, designated LPH by the United States Navy.",
+    "sources": [
+      {
+        "title": "New Orleans (LPH-11) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/research/histories/ship-histories/danfs/n/new-orleans-iii.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "leningrad",
+    "name": "Leningrad",
+    "hull": "Project 1123 — Leningrad",
+    "class": "Moskva",
+    "origin": "Soviet Union",
+    "commissioned": "1969-06-02",
+    "operators": [
+      "Soviet Navy"
+    ],
+    "aliases": [],
+    "summary": "Second completed Moskva-class anti-submarine helicopter cruiser. Listed service date follows RussianShips.info; other histories distinguish earlier flag-raising and acceptance milestones.",
+    "sources": [
+      {
+        "title": "Project 1123 anti-submarine cruisers",
+        "publisher": "RussianShips.info (secondary specialist reference)",
+        "url": "https://russianships.info/boevye/1123.htm",
+        "accessed": "2026-10-29",
+        "note": "Ship roster, construction, service dates. Not an official naval source; date detail remains secondary-source-supported."
+      },
+      {
+        "title": "MCM-0039-1970",
+        "publisher": "NATO Military Committee archives",
+        "url": "https://archives.nato.int/uploads/r/nato-archives-online/9/d/9/9d9c5dd697a3a9bc3252b475c619e35aed14c7cac1913638eb87009f46f97ba1/MCM-0039-1970_ENG_NHQO70000219E.pdf",
+        "accessed": "2026-10-29",
+        "note": "Contemporary official assessment describes Moskva as a helicopter ship and Leningrad as its second-class member."
+      }
+    ],
+    "classification": "Anti-submarine helicopter cruiser"
+  },
+  {
+    "slug": "uss-inchon",
+    "name": "USS Inchon",
+    "hull": "LPH-12",
+    "class": "Iwo Jima",
+    "origin": "United States",
+    "commissioned": "1970-06-20",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Inchon"
+    ],
+    "summary": "An Iwo Jima-class purpose-built helicopter assault carrier, designated LPH by the United States Navy.",
+    "sources": [
+      {
+        "title": "Inchon (LPH-12) — ship history",
+        "publisher": "Naval History and Heritage Command",
+        "url": "https://www.history.navy.mil/content/history/nhhc/research/histories/ship-histories/danfs/i/inchon-i.html",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      }
+    ]
+  },
+  {
+    "slug": "uss-nimitz",
+    "name": "USS Nimitz",
+    "hull": "CVN-68",
+    "class": "Nimitz",
+    "origin": "United States",
+    "commissioned": "1975-05-03",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Nimitz"
+    ],
+    "summary": "A Nimitz-class nuclear-powered aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Nimitz (CVN-68) — ship history",
+        "publisher": "United States Navy",
+        "url": "https://www.airpac.navy.mil/Organization/USS-Nimitz-CVN-68/About-Us/History/",
+        "accessed": "2026-10-29",
+        "note": "Identity and first commissioning date; later deployment and homeport details are not treated as current status."
+      },
+      {
+        "title": "Important Links and Info — Nimitz-class characteristics",
+        "publisher": "United States Naval Air Forces, Pacific",
+        "url": "https://www.airpac.navy.mil/Organization/Distinguished-Visitor-Info/Important-Links-and-Info/",
+        "accessed": "2026-10-29",
+        "note": "Nimitz-class roster, nuclear propulsion and Newport News, Virginia construction; homeports and deployment status are not reproduced."
+      }
+    ]
+  },
+  {
+    "slug": "kiev",
+    "name": "Kiev",
+    "hull": "Project 1143 — Kiev",
+    "class": "Kiev",
+    "origin": "Soviet Union",
+    "commissioned": "1975-12-28",
+    "operators": [
+      "Soviet Navy",
+      "Russian Navy"
+    ],
+    "aliases": [
+      "Kyiv"
+    ],
+    "summary": "Soviet-built Kiev-class aviation cruiser combining a flight deck for aircraft with cruiser armament.",
+    "sources": [
+      {
+        "title": "Kiev Class Aircraft Carriers — Class Overview",
+        "publisher": "MaritimeQuest (secondary specialist reference)",
+        "url": "https://www.maritimequest.com/warship_directory/russia/aircraft_carriers/kiev_class_overview.htm",
+        "accessed": "2026-10-29",
+        "note": "Identity, builders, class and original commissioning dates; 2007 article is not used for current status."
+      }
+    ],
+    "classification": "Heavy aircraft-carrying cruiser"
+  },
+  {
+    "slug": "uss-dwight-d-eisenhower",
+    "name": "USS Dwight D. Eisenhower",
+    "hull": "CVN-69",
+    "class": "Nimitz",
+    "origin": "United States",
+    "commissioned": "1977-10-18",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Dwight D. Eisenhower"
+    ],
+    "summary": "A Nimitz-class nuclear-powered aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Dwight D. Eisenhower (CVN-69) — ship history",
+        "publisher": "United States Navy",
+        "url": "https://www.airlant.usff.navy.mil/Organization/Aircraft-Carriers/USS-Dwight-D-Eisenhower-CVN-69/Command-History/",
+        "accessed": "2026-10-29",
+        "note": "Identity and first commissioning date; later deployment and homeport details are not treated as current status."
+      },
+      {
+        "title": "Important Links and Info — Nimitz-class characteristics",
+        "publisher": "United States Naval Air Forces, Pacific",
+        "url": "https://www.airpac.navy.mil/Organization/Distinguished-Visitor-Info/Important-Links-and-Info/",
+        "accessed": "2026-10-29",
+        "note": "Nimitz-class roster, nuclear propulsion and Newport News, Virginia construction; homeports and deployment status are not reproduced."
+      }
+    ]
+  },
+  {
+    "slug": "minsk",
+    "name": "Minsk",
+    "hull": "Project 1143 — Minsk",
+    "class": "Kiev",
+    "origin": "Soviet Union",
+    "commissioned": "1978-09-27",
+    "operators": [
+      "Soviet Navy",
+      "Russian Navy"
+    ],
+    "aliases": [],
+    "summary": "Second Kiev-class aviation cruiser, completed for the Soviet Navy in 1978.",
+    "sources": [
+      {
+        "title": "Kiev Class Aircraft Carriers — Class Overview",
+        "publisher": "MaritimeQuest (secondary specialist reference)",
+        "url": "https://www.maritimequest.com/warship_directory/russia/aircraft_carriers/kiev_class_overview.htm",
+        "accessed": "2026-10-29",
+        "note": "Identity, builders, class and original commissioning dates; 2007 article is not used for current status."
+      }
+    ],
+    "classification": "Heavy aircraft-carrying cruiser"
+  },
+  {
+    "slug": "hms-invincible-r05",
+    "name": "HMS Invincible",
+    "hull": "R05",
+    "class": "Invincible",
+    "origin": "United Kingdom",
+    "commissioned": "1980",
+    "operators": [
+      "Royal Navy"
+    ],
+    "aliases": [],
+    "classification": "Light aircraft carrier",
+    "summary": "First ship of the three-carrier Invincible class.",
+    "sources": [
+      {
+        "title": "Invincible Class Carriers, ministerial statement, 10 September 2012",
+        "publisher": "UK Parliament, Hansard",
+        "url": "https://hansard.parliament.uk/Commons/2012-09-10/debates/1209102000005/InvincibleClassCarriers",
+        "accessed": "2026-10-29",
+        "note": "Names, class and in-service years: Invincible 1980, Illustrious 1982, Ark Royal 1985."
+      },
+      {
+        "title": "Invincible support carriers",
+        "publisher": "Navypedia (secondary historical compilation)",
+        "url": "https://www.navypedia.org/ships/uk/brit_cv_invincible.htm",
+        "accessed": "2026-10-29",
+        "note": "Pennants, British builders and commissioning dates."
+      }
+    ]
+  },
+  {
+    "slug": "novorossiysk",
+    "name": "Novorossiysk",
+    "hull": "Project 1143.3 — Novorossiysk",
+    "class": "Kiev",
+    "origin": "Soviet Union",
+    "commissioned": "1982",
+    "operators": [
+      "Soviet Navy",
+      "Russian Navy"
+    ],
+    "aliases": [
+      "Novorossiisk"
+    ],
+    "summary": "Kiev-class aviation cruiser completed in 1982. Only the year is used because secondary sources differ on acceptance and commissioning dates.",
+    "sources": [
+      {
+        "title": "Kiev Class Aircraft Carriers — Class Overview",
+        "publisher": "MaritimeQuest (secondary specialist reference)",
+        "url": "https://www.maritimequest.com/warship_directory/russia/aircraft_carriers/kiev_class_overview.htm",
+        "accessed": "2026-10-29",
+        "note": "Identity, builders, class and original commissioning dates; 2007 article is not used for current status."
+      },
+      {
+        "title": "Novorossiysk ship history",
+        "publisher": "8th Squadron veterans’ historical site (secondary)",
+        "url": "https://www.8eskadra.ru/index.php?Itemid=149&id=49&option=com_content&view=article",
+        "accessed": "2026-10-29",
+        "note": "Records 14 August 1982 entry into service; MaritimeQuest gives September 1982."
+      }
+    ],
+    "classification": "Heavy aircraft-carrying cruiser"
+  },
+  {
+    "slug": "uss-carl-vinson",
+    "name": "USS Carl Vinson",
+    "hull": "CVN-70",
+    "class": "Nimitz",
+    "origin": "United States",
+    "commissioned": "1982-03-13",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Carl Vinson"
+    ],
+    "summary": "A Nimitz-class nuclear-powered aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Carl Vinson (CVN-70) — ship history",
+        "publisher": "United States Navy",
+        "url": "https://www.navy.mil/DesktopModules/ArticleCS/Print.aspx?Article=2966410&ModuleId=523&PortalId=1",
+        "accessed": "2026-10-29",
+        "note": "Identity and first commissioning date; later deployment and homeport details are not treated as current status."
+      },
+      {
+        "title": "Important Links and Info — Nimitz-class characteristics",
+        "publisher": "United States Naval Air Forces, Pacific",
+        "url": "https://www.airpac.navy.mil/Organization/Distinguished-Visitor-Info/Important-Links-and-Info/",
+        "accessed": "2026-10-29",
+        "note": "Nimitz-class roster, nuclear propulsion and Newport News, Virginia construction; homeports and deployment status are not reproduced."
+      }
+    ]
+  },
+  {
+    "slug": "hms-illustrious-r06",
+    "name": "HMS Illustrious",
+    "hull": "R06",
+    "class": "Invincible",
+    "origin": "United Kingdom",
+    "commissioned": "1982-06-20",
+    "operators": [
+      "Royal Navy"
+    ],
+    "aliases": [],
+    "classification": "Light aircraft carrier",
+    "summary": "Second Invincible-class carrier, commissioned at sea during its deployment towards the Falklands.",
+    "sources": [
+      {
+        "title": "Sailors’ pride on new aircraft carrier as Illustrious leaves Portsmouth",
+        "publisher": "Royal Navy",
+        "url": "https://www.royalnavy.mod.uk/news/2016/december/07/161207-pride-on-new-carrier-as-illustrious-leaves-portsmouth",
+        "accessed": "2026-10-29",
+        "note": "Illustrious built by Swan Hunter; commissioned at sea on 20 June 1982."
+      },
+      {
+        "title": "Invincible support carriers",
+        "publisher": "Navypedia (secondary historical compilation)",
+        "url": "https://www.navypedia.org/ships/uk/brit_cv_invincible.htm",
+        "accessed": "2026-10-29",
+        "note": "Pennants, British builders and commissioning dates."
+      }
+    ]
+  },
+  {
+    "slug": "giuseppe-garibaldi",
+    "name": "Giuseppe Garibaldi / Sriwijaya",
+    "hull": "551 / 100",
+    "class": "Giuseppe Garibaldi",
+    "origin": "Italy",
+    "commissioned": "1985",
+    "operators": [
+      "Italian Navy",
+      "Indonesian Navy"
+    ],
+    "aliases": [
+      "Giuseppe Garibaldi",
+      "KRI Sriwijaya",
+      "Sriwijaya-100"
+    ],
+    "summary": "Italian aircraft-carrying cruiser completed in 1985; commissioned into the Indonesian Navy as KRI Sriwijaya-100 on 24 September 2026.",
+    "sources": [
+      {
+        "title": "Da Nave Garibaldi a Nave Trieste",
+        "publisher": "Italian Navy",
+        "url": "https://www.marina.difesa.it/media-cultura/Notiziario-online/Pagine/20250327_DA-NAVE-GARIBALDI-A-NAVE-TRIESTE.aspx",
+        "accessed": "2026-10-29",
+        "note": "Search-index extract confirms entry into service in 1985; full-page retrieval timed out."
+      },
+      {
+        "title": "KRI Sriwijaya-100 Resmi Memperkuat Kekuatan Pertahanan Maritim Indonesia",
+        "publisher": "Indonesian Ministry of Defence",
+        "url": "https://www.kemhan.go.id/2026/09/24/kri-sriwijaya-100-resmi-memperkuat-kekuatan-pertahanan-maritim-indonesia.html",
+        "accessed": "2026-10-29",
+        "note": "Lines 117–120 identify ex-Garibaldi, Italian construction, 24 September 2026 Indonesian commissioning."
+      }
+    ],
+    "classification": "Aircraft-carrying cruiser / STOVL carrier"
+  },
+  {
+    "slug": "hms-ark-royal-r07",
+    "name": "HMS Ark Royal (R07)",
+    "hull": "R07",
+    "class": "Invincible",
+    "origin": "United Kingdom",
+    "commissioned": "1985",
+    "operators": [
+      "Royal Navy"
+    ],
+    "aliases": [],
+    "classification": "Light aircraft carrier",
+    "summary": "Third Invincible-class carrier, distinct from the earlier Audacious-class Ark Royal.",
+    "sources": [
+      {
+        "title": "Invincible Class Carriers, ministerial statement, 10 September 2012",
+        "publisher": "UK Parliament, Hansard",
+        "url": "https://hansard.parliament.uk/Commons/2012-09-10/debates/1209102000005/InvincibleClassCarriers",
+        "accessed": "2026-10-29",
+        "note": "Names, class and in-service years: Invincible 1980, Illustrious 1982, Ark Royal 1985."
+      },
+      {
+        "title": "Invincible support carriers",
+        "publisher": "Navypedia (secondary historical compilation)",
+        "url": "https://www.navypedia.org/ships/uk/brit_cv_invincible.htm",
+        "accessed": "2026-10-29",
+        "note": "Pennants, British builders and commissioning dates."
+      }
+    ]
+  },
+  {
+    "slug": "uss-theodore-roosevelt",
+    "name": "USS Theodore Roosevelt",
+    "hull": "CVN-71",
+    "class": "Nimitz",
+    "origin": "United States",
+    "commissioned": "1986-10-25",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Theodore Roosevelt"
+    ],
+    "summary": "A Nimitz-class nuclear-powered aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Theodore Roosevelt (CVN-71) — ship history",
+        "publisher": "United States Navy",
+        "url": "https://www.history.navy.mil/content/dam/nhhc/research/archives/command-operation-reports/ship-command-operation-reports/t/theodore-roosevelt-cvn-71-i/1986.pdf",
+        "accessed": "2026-10-29",
+        "note": "Identity and first commissioning date; later deployment and homeport details are not treated as current status."
+      },
+      {
+        "title": "Important Links and Info — Nimitz-class characteristics",
+        "publisher": "United States Naval Air Forces, Pacific",
+        "url": "https://www.airpac.navy.mil/Organization/Distinguished-Visitor-Info/Important-Links-and-Info/",
+        "accessed": "2026-10-29",
+        "note": "Nimitz-class roster, nuclear propulsion and Newport News, Virginia construction; homeports and deployment status are not reproduced."
+      }
+    ]
+  },
+  {
+    "slug": "baku-vikramaditya",
+    "name": "Baku / Admiral Gorshkov / Vikramaditya",
+    "hull": "Project 1143.4 / R33 — Baku",
+    "class": "Modified Kiev",
+    "origin": "Soviet Union",
+    "commissioned": "1987-12-11",
+    "operators": [
+      "Soviet Navy",
+      "Russian Navy",
+      "Indian Navy"
+    ],
+    "aliases": [
+      "Baku",
+      "Admiral Gorshkov",
+      "Admiral Flota Sovetskogo Soyuza Gorshkov",
+      "INS Vikramaditya"
+    ],
+    "summary": "Completed as Baku, later renamed Admiral Gorshkov; rebuilt and commissioned into India as INS Vikramaditya on 16 November 2013. One hull, not three carriers.",
+    "sources": [
+      {
+        "title": "Baku heavy aircraft-carrying cruiser (Project 1143.4)",
+        "publisher": "Navypedia (secondary specialist reference)",
+        "url": "https://www.navypedia.org/ships/russia/ru_cv_baku.htm",
+        "accessed": "2026-10-29",
+        "note": "Original 11 December 1987 date, class, rename and transfer."
+      },
+      {
+        "title": "INS Vikramaditya",
+        "publisher": "Government of India, Ministry of Defence",
+        "url": "https://www.pib.gov.in/newsite/PrintRelease.aspx?lang=2&reg=48&relid=101191",
+        "accessed": "2026-10-29",
+        "note": "Indian commissioning 16 November 2013."
+      },
+      {
+        "title": "INS Vikramaditya — Indian Navy’s Biggest Ship",
+        "publisher": "Government of India, Press Information Bureau",
+        "url": "https://www.pib.gov.in/FeaturesDeatils.aspx?NoteId=151135&lang=2&reg=3",
+        "accessed": "2026-10-29",
+        "note": "Identifies ex-Admiral Gorshkov and Indian carrier role."
+      }
+    ],
+    "classification": "Aircraft-carrying cruiser, converted to STOBAR carrier"
+  },
+  {
+    "slug": "principe-de-asturias",
+    "name": "Príncipe de Asturias",
+    "hull": "R11",
+    "class": "Príncipe de Asturias",
+    "origin": "Spain",
+    "commissioned": "1988-05-30",
+    "operators": [
+      "Spanish Navy"
+    ],
+    "aliases": [
+      "Principe de Asturias"
+    ],
+    "summary": "Spanish-built aircraft carrier delivered to the Spanish Navy on 30 May 1988.",
+    "sources": [
+      {
+        "title": "Relevo de mando del portaaviones Príncipe de Asturias",
+        "publisher": "Spanish Navy",
+        "url": "https://armada.defensa.gob.es/ArmadaPortal/page/Portal/ArmadaEspannola/conocenosnoticias/prefLang-es/00noticias--2009--09--NT-202-Relevo-Comandante-PDA-es?_pageAction=selectItem&_pageNum=300&_selectedNodeID=256010&paramNo=000000",
+        "accessed": "2026-10-29",
+        "note": "Identity and delivery date."
+      },
+      {
+        "title": "Tres siglos — Spanish naval construction",
+        "publisher": "Spanish Navy, Revista General de Marina",
+        "url": "https://armada.defensa.gob.es/archivo/rgm/2012/08/cap05.pdf",
+        "accessed": "2026-10-29",
+        "note": "Carrier construction and relationship to Thai carrier contract."
+      }
+    ]
+  },
+  {
+    "slug": "uss-abraham-lincoln",
+    "name": "USS Abraham Lincoln",
+    "hull": "CVN-72",
+    "class": "Nimitz",
+    "origin": "United States",
+    "commissioned": "1989-11-11",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Abraham Lincoln"
+    ],
+    "summary": "A Nimitz-class nuclear-powered aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Abraham Lincoln (CVN-72) — ship history",
+        "publisher": "United States Navy",
+        "url": "https://www.history.navy.mil/content/dam/nhhc/research/archives/command-operation-reports/ship-command-operation-reports/a/abraham-lincoln-cvn-72-ii/pdf/1991.pdf",
+        "accessed": "2026-10-29",
+        "note": "Identity and first commissioning date; later deployment and homeport details are not treated as current status."
+      },
+      {
+        "title": "Important Links and Info — Nimitz-class characteristics",
+        "publisher": "United States Naval Air Forces, Pacific",
+        "url": "https://www.airpac.navy.mil/Organization/Distinguished-Visitor-Info/Important-Links-and-Info/",
+        "accessed": "2026-10-29",
+        "note": "Nimitz-class roster, nuclear propulsion and Newport News, Virginia construction; homeports and deployment status are not reproduced."
+      }
+    ]
+  },
+  {
+    "slug": "admiral-kuznetsov",
+    "name": "Admiral Kuznetsov",
+    "hull": "Project 1143.5 — Admiral Kuznetsov",
+    "class": "Kuznetsov",
+    "origin": "Soviet Union",
+    "commissioned": "1991",
+    "operators": [
+      "Soviet Navy",
+      "Russian Navy"
+    ],
+    "aliases": [
+      "Admiral Flota Sovetskogo Soyuza Kuznetsov",
+      "Tbilisi",
+      "Leonid Brezhnev"
+    ],
+    "summary": "Soviet-built carrier completed around the dissolution of the Soviet Union. The listed year follows the contemporary US Navy commissioning assessment; other accounts date acceptance to December 1990.",
+    "sources": [
+      {
+        "title": "Soviet Naval Developments",
+        "publisher": "US Navy, Office of Naval Intelligence",
+        "url": "https://www.govinfo.gov/content/pkg/GOVPUB-D201-PURL-LPS106117/pdf/GOVPUB-D201-PURL-LPS106117.pdf",
+        "accessed": "2026-10-29",
+        "note": "Search-index excerpt states commissioned January 1991. Full PDF retrieval exceeded web-tool size; no operational specifications taken from it."
+      },
+      {
+        "title": "Russian aircraft carrier Admiral Kuznetsov",
+        "publisher": "Wikipedia (secondary source)",
+        "url": "https://en.wikipedia.org/wiki/Russian_aircraft_carrier_Admiral_Kuznetsov",
+        "accessed": "2026-10-29",
+        "note": "Secondary identity, class and former names; date accounts differ."
+      }
+    ],
+    "classification": "Heavy aircraft-carrying cruiser / STOBAR carrier"
+  },
+  {
+    "slug": "uss-george-washington",
+    "name": "USS George Washington",
+    "hull": "CVN-73",
+    "class": "Nimitz",
+    "origin": "United States",
+    "commissioned": "1992-07-04",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "George Washington"
+    ],
+    "summary": "A Nimitz-class nuclear-powered aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "George Washington (CVN-73) — ship history",
+        "publisher": "United States Navy",
+        "url": "https://www.cpf.navy.mil/Newsroom/News/Article/2754281/george-washington-celebrates-20-years-of-service/",
+        "accessed": "2026-10-29",
+        "note": "Identity and first commissioning date; later deployment and homeport details are not treated as current status."
+      },
+      {
+        "title": "Important Links and Info — Nimitz-class characteristics",
+        "publisher": "United States Naval Air Forces, Pacific",
+        "url": "https://www.airpac.navy.mil/Organization/Distinguished-Visitor-Info/Important-Links-and-Info/",
+        "accessed": "2026-10-29",
+        "note": "Nimitz-class roster, nuclear propulsion and Newport News, Virginia construction; homeports and deployment status are not reproduced."
+      }
+    ]
+  },
+  {
+    "slug": "uss-john-c-stennis",
+    "name": "USS John C. Stennis",
+    "hull": "CVN-74",
+    "class": "Nimitz",
+    "origin": "United States",
+    "commissioned": "1995-12-09",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "John C. Stennis"
+    ],
+    "summary": "A Nimitz-class nuclear-powered aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "John C. Stennis (CVN-74) — ship history",
+        "publisher": "United States Navy",
+        "url": "https://www.navy.mil/Press-Office/Press-Releases/display-pressreleases/Article/2251590/looking-ahead-through-the-past/",
+        "accessed": "2026-10-29",
+        "note": "Identity and first commissioning date; later deployment and homeport details are not treated as current status."
+      },
+      {
+        "title": "Important Links and Info — Nimitz-class characteristics",
+        "publisher": "United States Naval Air Forces, Pacific",
+        "url": "https://www.airpac.navy.mil/Organization/Distinguished-Visitor-Info/Important-Links-and-Info/",
+        "accessed": "2026-10-29",
+        "note": "Nimitz-class roster, nuclear propulsion and Newport News, Virginia construction; homeports and deployment status are not reproduced."
+      }
+    ]
+  },
+  {
+    "slug": "chakri-naruebet",
+    "name": "HTMS Chakri Naruebet",
+    "hull": "911",
+    "class": "Chakri Naruebet",
+    "origin": "Spain",
+    "commissioned": "1997-03-20",
+    "operators": [
+      "Royal Thai Navy"
+    ],
+    "aliases": [],
+    "summary": "Spanish-built helicopter carrier for Thailand. The Royal Thai Navy records commissioning on 20 March 1997.",
+    "sources": [
+      {
+        "title": "Helicopter carrier fleet history",
+        "publisher": "Royal Thai Navy",
+        "url": "https://www.navy.mi.th/d27a5f387f42a51a45571d50a464df1e",
+        "accessed": "2026-10-29",
+        "note": "Builder Bazán, Spain; commissioning 20 March 2540 Buddhist Era = 1997; Thai text."
+      },
+      {
+        "title": "History of HTMS Chakri Naruebet",
+        "publisher": "Thailand Ministry of Higher Education, Science, Research and Innovation",
+        "url": "https://www.stkc.go.th/stiarticle/%E0%B9%80%E0%B8%9B%E0%B8%B4%E0%B8%94%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%A7%E0%B8%B1%E0%B8%95%E0%B8%B4-%E2%80%98%E0%B9%80%E0%B8%A3%E0%B8%B7%E0%B8%AD%E0%B8%AB%E0%B8%A5%E0%B8%A7%E0%B8%87%E0%B8%88%E0%B8%B1%E0%B8%81%E0%B8%A3%E0%B8%B5%E0%B8%99%E0%B8%A4%E0%B9%80%E0%B8%9A%E0%B8%A8%E0%B8%A3%E2%80%99-%E0%B8%9C%E0%B8%B9%E0%B9%89%E0%B9%80%E0%B8%9B%E0%B9%87%E0%B8%99%E0%B9%83%E0%B8%AB%E0%B8%8D%E0%B9%88%E0%B9%81%E0%B8%AB%E0%B9%88%E0%B8%87%E0%B8%A3%E0%B8%B2%E0%B8%8A%E0%B8%A7%E0%B8%87%E0%B8%A8%E0%B9%8C%E0%B8%88%E0%B8%B1%E0%B8%81%E0%B8%A3%E0%B8%B5",
+        "accessed": "2026-10-29",
+        "note": "Government history confirms number 911 and the Navy date; not the 27 March date in some secondary accounts."
+      }
+    ],
+    "classification": "Helicopter / STOVL carrier"
+  },
+  {
+    "slug": "hms-ocean-l12",
+    "name": "HMS Ocean",
+    "hull": "L12",
+    "class": "Ocean",
+    "origin": "United Kingdom",
+    "commissioned": "1998",
+    "operators": [
+      "Royal Navy",
+      "Brazilian Navy"
+    ],
+    "aliases": [
+      "PHM Atlântico",
+      "NAM Atlântico",
+      "Atlântico"
+    ],
+    "classification": "Helicopter carrier",
+    "summary": "Dedicated helicopter and commando carrier transferred to Brazil in 2018 and renamed Atlântico.",
+    "sources": [
+      {
+        "title": "Navio-Aeródromo Multipropósito: A140 Atlântico",
+        "publisher": "Brazilian Navy",
+        "url": "https://www.marinha.mil.br/meios-navais/navio-aerodromo-multiproposito",
+        "accessed": "2026-10-29",
+        "note": "British builders, September 1998 commission as Ocean, Brazilian service from 29 June 2018 as Atlântico."
+      },
+      {
+        "title": "HMS Ocean enters Plymouth for last time under the White Ensign",
+        "publisher": "Royal Navy",
+        "url": "https://www.royalnavy.mod.uk/news/2018/february/09/180209-hms-ocean-enters-plymouth-for-last-time",
+        "accessed": "2026-10-29",
+        "note": "Explicitly identifies Ocean as amphibious helicopter and commando carrier; service entry 1998."
+      }
+    ]
+  },
+  {
+    "slug": "uss-harry-s-truman",
+    "name": "USS Harry S. Truman",
+    "hull": "CVN-75",
+    "class": "Nimitz",
+    "origin": "United States",
+    "commissioned": "1998-07-25",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Harry S. Truman"
+    ],
+    "summary": "A Nimitz-class nuclear-powered aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Harry S. Truman (CVN-75) — ship history",
+        "publisher": "United States Navy",
+        "url": "https://www.history.navy.mil/content/dam/nhhc/research/archives/command-operation-reports/ship-command-operation-reports/h/harry-s-truman-cvn-75-i/pdf/1998.pdf",
+        "accessed": "2026-10-29",
+        "note": "Identity and first commissioning date; later deployment and homeport details are not treated as current status."
+      },
+      {
+        "title": "Important Links and Info — Nimitz-class characteristics",
+        "publisher": "United States Naval Air Forces, Pacific",
+        "url": "https://www.airpac.navy.mil/Organization/Distinguished-Visitor-Info/Important-Links-and-Info/",
+        "accessed": "2026-10-29",
+        "note": "Nimitz-class roster, nuclear propulsion and Newport News, Virginia construction; homeports and deployment status are not reproduced."
+      }
+    ]
+  },
+  {
+    "slug": "charles-de-gaulle",
+    "name": "Charles de Gaulle",
+    "hull": "R91",
+    "class": "Charles de Gaulle",
+    "origin": "France",
+    "commissioned": "2001-05-18",
+    "operators": [
+      "French Navy"
+    ],
+    "aliases": [],
+    "summary": "French nuclear-powered aircraft carrier admitted to active service in 2001.",
+    "sources": [
+      {
+        "title": "25 ans de service particulièrement actifs pour le porte-avions Charles de Gaulle",
+        "publisher": "French Ministry of Armed Forces",
+        "url": "https://www.defense.gouv.fr/marine/actualites/25-ans-service-particulierement-actifs-porte-avions-charles-gaulle",
+        "accessed": "2026-10-29",
+        "note": "Active-service admission 18 May 2001; nuclear propulsion."
+      },
+      {
+        "title": "History of French aircraft carriers",
+        "publisher": "French Senate",
+        "url": "https://www.senat.fr/rap/r19-559/r19-559_mono.html",
+        "accessed": "2026-10-29",
+        "note": "Government history: French construction, Clemenceau 1961, Foch 1963 and transfer to Brazil."
+      }
+    ]
+  },
+  {
+    "slug": "uss-ronald-reagan",
+    "name": "USS Ronald Reagan",
+    "hull": "CVN-76",
+    "class": "Nimitz",
+    "origin": "United States",
+    "commissioned": "2003-07-12",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Ronald Reagan"
+    ],
+    "summary": "A Nimitz-class nuclear-powered aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "Ronald Reagan (CVN-76) — ship history",
+        "publisher": "United States Navy",
+        "url": "https://www.airpac.navy.mil/Organization/USS-Ronald-Reagan-CVN-76/About-Us/History/quot/",
+        "accessed": "2026-10-29",
+        "note": "Identity and first commissioning date; later deployment and homeport details are not treated as current status."
+      },
+      {
+        "title": "Important Links and Info — Nimitz-class characteristics",
+        "publisher": "United States Naval Air Forces, Pacific",
+        "url": "https://www.airpac.navy.mil/Organization/Distinguished-Visitor-Info/Important-Links-and-Info/",
+        "accessed": "2026-10-29",
+        "note": "Nimitz-class roster, nuclear propulsion and Newport News, Virginia construction; homeports and deployment status are not reproduced."
+      }
+    ]
+  },
+  {
+    "slug": "cavour",
+    "name": "Cavour",
+    "hull": "550",
+    "class": "Cavour",
+    "origin": "Italy",
+    "operators": [
+      "Italian Navy"
+    ],
+    "aliases": [],
+    "summary": "Italian STOVL aircraft carrier delivered in March 2008; received its battle ensign on 10 June 2009. The listed date is delivery, not the later ceremony.",
+    "sources": [
+      {
+        "title": "CVH550 Portaerei Cavour — Generalità",
+        "publisher": "Italian Navy",
+        "url": "https://www.marina.difesa.it/noi-siamo-la-marina/pilastro-operativo/mezzi/forze-navali/Documents/-CAVOUR-20150506.pdf",
+        "accessed": "2026-10-29",
+        "note": "Delivered March 2008."
+      },
+      {
+        "title": "Cavour",
+        "publisher": "Fincantieri",
+        "url": "https://www.fincantieri.com/en/business/products/naval-vessels/aircraft-carriers-and-amphibious-ships/Cavour",
+        "accessed": "2026-10-29",
+        "note": "Builder confirms delivery year 2008."
+      },
+      {
+        "title": "Taranto, la portaerei Cavour esce dal bacino di carenaggio",
+        "publisher": "Italian Navy",
+        "url": "https://www.marina.difesa.it/media-cultura/press-room/comunicati/Pagine/2019_075.aspx",
+        "accessed": "2026-10-29",
+        "note": "Battle ensign ceremony 10 June 2009."
+      }
+    ],
+    "classification": "STOVL carrier",
+    "completed": "2008",
+    "commissioned": null
+  },
+  {
+    "slug": "uss-george-h-w-bush",
+    "name": "USS George H.W. Bush",
+    "hull": "CVN-77",
+    "class": "Nimitz",
+    "origin": "United States",
+    "commissioned": "2009-01-10",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "George H.W. Bush"
+    ],
+    "summary": "A Nimitz-class nuclear-powered aircraft carrier built for the United States Navy.",
+    "sources": [
+      {
+        "title": "George H.W. Bush (CVN-77) — ship history",
+        "publisher": "United States Navy",
+        "url": "https://www.airlant.usff.navy.mil/Organization/Aircraft-Carriers/USS-George-HW-Bush-CVN-77/Command-History/",
+        "accessed": "2026-10-29",
+        "note": "Identity and first commissioning date; later deployment and homeport details are not treated as current status."
+      },
+      {
+        "title": "Important Links and Info — Nimitz-class characteristics",
+        "publisher": "United States Naval Air Forces, Pacific",
+        "url": "https://www.airpac.navy.mil/Organization/Distinguished-Visitor-Info/Important-Links-and-Info/",
+        "accessed": "2026-10-29",
+        "note": "Nimitz-class roster, nuclear propulsion and Newport News, Virginia construction; homeports and deployment status are not reproduced."
+      }
+    ]
+  },
+  {
+    "slug": "hyuga",
+    "name": "JS Hyūga",
+    "hull": "DDH181",
+    "class": "Hyūga",
+    "origin": "Japan",
+    "commissioned": "2009-03-18",
+    "operators": [
+      "Japan Maritime Self-Defense Force"
+    ],
+    "aliases": [
+      "Hyuga"
+    ],
+    "summary": "Full-length aviation-deck helicopter ship officially designated a helicopter destroyer (DDH). Included as a dedicated helicopter-carrier design.",
+    "sources": [
+      {
+        "title": "JS HYUGA DDH181 ship pamphlet",
+        "publisher": "Japan Maritime Self-Defense Force",
+        "url": "https://www.mod.go.jp/msdf/ccf3/gre/hyg/pamphlet.pdf",
+        "accessed": "2026-10-29",
+        "note": "Ship identity and 18 March 2009 commissioning; DDH helicopter-destroyer designation."
+      }
+    ],
+    "classification": "Helicopter destroyer (DDH)"
+  },
+  {
+    "slug": "ise",
+    "name": "JS Ise",
+    "hull": "DDH182",
+    "class": "Hyūga",
+    "origin": "Japan",
+    "commissioned": "2011-03-16",
+    "operators": [
+      "Japan Maritime Self-Defense Force"
+    ],
+    "aliases": [],
+    "summary": "Second Hyūga-class full-length aviation-deck helicopter destroyer; delivered to Japan on 16 March 2011.",
+    "sources": [
+      {
+        "title": "Delivery ceremony and flag presentation for Ise",
+        "publisher": "IHI, shipbuilder",
+        "url": "https://www.ihi.co.jp/all_news/2010/other/1190129_1746.html",
+        "accessed": "2026-10-29",
+        "note": "Primary builder release dated16 March2011 identifies DDH and delivery."
+      },
+      {
+        "title": "JMSDF Order of Battle",
+        "publisher": "J-HangarSpace (secondary specialist reference)",
+        "url": "https://www.j-hangarspace.jp/jmsdf-order-of-battle",
+        "accessed": "2026-10-29",
+        "note": "Class and hull182; original commissioning month/year."
+      }
+    ],
+    "classification": "Helicopter destroyer (DDH)"
+  },
+  {
+    "slug": "liaoning",
+    "name": "Liaoning",
+    "hull": "16",
+    "class": "Kuznetsov-derived (Type 001)",
+    "origin": "Soviet Union / China",
+    "commissioned": "2012-09-25",
+    "operators": [
+      "People’s Liberation Army Navy"
+    ],
+    "aliases": [
+      "Varyag",
+      "Riga"
+    ],
+    "summary": "Soviet-built unfinished hull completed in China and commissioned as Liaoning in 2012. Varyag is a former name of this hull, not another completed carrier.",
+    "sources": [
+      {
+        "title": "PLA Navy celebrates its 75th birthday",
+        "publisher": "Chinese Ministry of National Defense",
+        "url": "https://eng.mod.gov.cn/xb/News_213114/Features/16303089.html",
+        "accessed": "2026-10-29",
+        "note": "Liaoning commissioning 25 September 2012; Shandong commissioning 17 December 2019."
+      },
+      {
+        "title": "Liaoning / Varyag aircraft carrier",
+        "publisher": "SinoDefence, reproduced by IndraStra (secondary)",
+        "url": "https://www.indrastra.com/2015/09/FEATURED-Liaoning-Varyag-Aircraft-Carrier-by-David-Xia-264.html",
+        "accessed": "2026-10-29",
+        "note": "Hull origin, unfinished transfer, class and former names."
+      }
+    ],
+    "classification": "STOBAR carrier"
+  },
+  {
+    "slug": "izumo",
+    "name": "JS Izumo",
+    "hull": "DDH183",
+    "class": "Izumo",
+    "origin": "Japan",
+    "commissioned": "2015-03-25",
+    "operators": [
+      "Japan Maritime Self-Defense Force"
+    ],
+    "aliases": [],
+    "summary": "Lead Izumo-class full-length aviation-deck ship, officially designated a helicopter destroyer.",
+    "sources": [
+      {
+        "title": "Izumo-class ships",
+        "publisher": "Japan Maritime Self-Defense Force",
+        "url": "https://www.mod.go.jp/msdf/en/equipment/ships/ddh/izumo/",
+        "accessed": "2026-10-29",
+        "note": "Official class list names Izumo DDH183 and Kaga DDH184."
+      },
+      {
+        "title": "Delivery of Izumo",
+        "publisher": "Japan Marine United, shipbuilder",
+        "url": "https://www.jmuc.co.jp/news/assets/ddhizumo_delivery.pdf",
+        "accessed": "2026-10-29",
+        "note": "Primary delivery release 25 March2015."
+      }
+    ],
+    "classification": "Helicopter destroyer (DDH)"
+  },
+  {
+    "slug": "kaga",
+    "name": "JS Kaga",
+    "hull": "DDH184",
+    "class": "Izumo",
+    "origin": "Japan",
+    "commissioned": "2017-03-22",
+    "operators": [
+      "Japan Maritime Self-Defense Force"
+    ],
+    "aliases": [],
+    "summary": "Second Izumo-class full-length aviation-deck ship, officially designated a helicopter destroyer; commissioned on 22 March 2017.",
+    "sources": [
+      {
+        "title": "Izumo-class ships",
+        "publisher": "Japan Maritime Self-Defense Force",
+        "url": "https://www.mod.go.jp/msdf/en/equipment/ships/ddh/izumo/",
+        "accessed": "2026-10-29",
+        "note": "Official class list names Izumo DDH183 and Kaga DDH184."
+      },
+      {
+        "title": "Delivery and self-defense-ship flag presentation: Kaga",
+        "publisher": "Japan Maritime Self-Defense Force",
+        "url": "https://www.mod.go.jp/msdf/operation/hikiwatashi/h28/",
+        "accessed": "2026-10-29",
+        "note": "Date, hull184 and class; explains flag ceremony is commissioning."
+      }
+    ],
+    "classification": "Helicopter destroyer (DDH)"
+  },
+  {
+    "slug": "uss-gerald-r-ford",
+    "name": "USS Gerald R. Ford",
+    "hull": "CVN-78",
+    "class": "Gerald R. Ford",
+    "origin": "United States",
+    "commissioned": "2017-07-22",
+    "operators": [
+      "United States Navy"
+    ],
+    "aliases": [
+      "Gerald R. Ford"
+    ],
+    "summary": "The lead ship of the Gerald R. Ford class of nuclear-powered aircraft carriers.",
+    "sources": [
+      {
+        "title": "Gerald R. Ford (CVN-78) — ship history",
+        "publisher": "United States Navy",
+        "url": "https://www.airlant.usff.navy.mil/Organization/Aircraft-Carriers/USS-Gerald-R-Ford-CVN-78/Command-History/lang/en/",
+        "accessed": "2026-10-29",
+        "note": "Ship identity, class, US construction and first commissioning date; later service details are not treated as current status."
+      },
+      {
+        "title": "Aircraft Carriers — CVN",
+        "publisher": "United States Navy",
+        "url": "https://www.navy.mil/Resources/Fact-Files/Display-FactFiles/article/2169795/",
+        "accessed": "2026-10-29",
+        "note": "Class identity and nuclear-powered aircraft carrier role."
+      }
+    ]
+  },
+  {
+    "slug": "hms-queen-elizabeth-r08",
+    "name": "HMS Queen Elizabeth",
+    "hull": "R08",
+    "class": "Queen Elizabeth",
+    "origin": "United Kingdom",
+    "commissioned": "2017-12-07",
+    "operators": [
+      "Royal Navy"
+    ],
+    "aliases": [],
+    "classification": "Aircraft carrier",
+    "summary": "First Queen Elizabeth-class aircraft carrier, commissioned at Portsmouth in 2017.",
+    "sources": [
+      {
+        "title": "Her Majesty The Queen welcomes HMS Queen Elizabeth into the Royal Navy fleet",
+        "publisher": "Royal Navy",
+        "url": "https://www.royalnavy.mod.uk/news/2017/december/07/171207-queen-welcomes-royal-navys-largest-ever-ship-into-the-fleet",
+        "accessed": "2026-10-29",
+        "note": "Commissioning on 7 December 2017; Queen Elizabeth-class, UK construction and aircraft role."
+      }
+    ]
+  },
+  {
+    "slug": "hms-prince-of-wales-r09",
+    "name": "HMS Prince of Wales",
+    "hull": "R09",
+    "class": "Queen Elizabeth",
+    "origin": "United Kingdom",
+    "commissioned": "2019-12-10",
+    "operators": [
+      "Royal Navy"
+    ],
+    "aliases": [],
+    "classification": "Aircraft carrier",
+    "summary": "Second Queen Elizabeth-class aircraft carrier, commissioned at Portsmouth in 2019.",
+    "sources": [
+      {
+        "title": "Commissioning day for HMS Prince of Wales",
+        "publisher": "Royal Navy",
+        "url": "https://www.royalnavy.mod.uk/news/2019/december/10/191210-hms-prince-of-wales-commissioning",
+        "accessed": "2026-10-29",
+        "note": "Commissioning on 10 December 2019; British construction and carrier identity."
+      }
+    ]
+  },
+  {
+    "slug": "shandong",
+    "name": "Shandong",
+    "hull": "17",
+    "class": "Shandong",
+    "origin": "China",
+    "commissioned": "2019-12-17",
+    "operators": [
+      "People’s Liberation Army Navy"
+    ],
+    "aliases": [],
+    "summary": "China’s first domestically built aircraft carrier, commissioned in December 2019.",
+    "sources": [
+      {
+        "title": "PLA Navy celebrates its 75th birthday",
+        "publisher": "Chinese Ministry of National Defense",
+        "url": "https://eng.mod.gov.cn/xb/News_213114/Features/16303089.html",
+        "accessed": "2026-10-29",
+        "note": "Liaoning commissioning 25 September 2012; Shandong commissioning 17 December 2019."
+      },
+      {
+        "title": "Aircraft carrier Shandong improves comprehensive combat capability",
+        "publisher": "Chinese Ministry of National Defense",
+        "url": "https://eng.mod.gov.cn/xb/News_213114/TopStories/16362406.html",
+        "accessed": "2026-10-29",
+        "note": "Name, hull 17, domestic construction and service date."
+      }
+    ]
+  },
+  {
+    "slug": "vikrant-2022",
+    "name": "INS Vikrant",
+    "hull": "R11",
+    "class": "Vikrant",
+    "origin": "India",
+    "commissioned": "2022-09-02",
+    "operators": [
+      "Indian Navy"
+    ],
+    "aliases": [],
+    "summary": "Indian-designed and Indian-built aircraft carrier commissioned on 2 September 2022. A different hull from the British-built earlier INS Vikrant.",
+    "sources": [
+      {
+        "title": "PM commissions the first indigenous aircraft carrier as INS Vikrant",
+        "publisher": "Prime Minister of India",
+        "url": "https://www.pmindia.gov.in/en/news_updates/pm-commissions-the-first-indigenous-aircraft-carrier-as-ins-vikrant/",
+        "accessed": "2026-10-29",
+        "note": "Design, builder and commissioning date."
+      },
+      {
+        "title": "India’s indigenous aircraft carrier",
+        "publisher": "Government of India, Press Information Bureau",
+        "url": "https://www.pib.gov.in/PressNoteDetails.aspx?ModuleId=3&NoteId=155692&id=155692&lang=2&reg=48",
+        "accessed": "2026-10-29",
+        "note": "Modern Vikrant versus previous same-name carrier."
+      }
+    ]
+  },
+  {
+    "slug": "shahid-bahman-bagheri",
+    "name": "Shahid Bahman Bagheri",
+    "hull": "C110-4",
+    "class": "Shahid Bahman Bagheri",
+    "origin": "Iran",
+    "commissioned": "2025-02-06",
+    "operators": [
+      "Islamic Revolutionary Guard Corps Navy"
+    ],
+    "aliases": [
+      "Shahid Bagheri",
+      "Perarin"
+    ],
+    "summary": "Commercial container ship converted in Iran into a dedicated fixed-wing drone and helicopter carrier, inducted on 6 February 2025. The date is the completed carrier conversion, not construction of the original merchant hull.",
+    "sources": [
+      {
+        "title": "IRGC Navy commissions fixed-wing UAV carrier",
+        "publisher": "Janes (secondary defence reporting)",
+        "url": "https://www.janes.com/defence-intelligence-insights/defence-news/sea/irgc-navy-commissions-fixed-wing-uav-carrier",
+        "accessed": "2026-10-29",
+        "note": "Date, hullC110-4, commercial conversion and aviation role; reports commissioning attended by IRGC Navy commander."
+      },
+      {
+        "title": "Iran accepts delivery of homegrown drone carrier Shahid Bahman Bagheri",
+        "publisher": "Naval News (secondary defence reporting)",
+        "url": "https://www.navalnews.com/naval-news/2025/02/iran-accepts-delivery-of-homegrown-drone-carrier-shahid-bahman-bagheri/",
+        "accessed": "2026-10-29",
+        "note": "6 February2025 delivery and dedicated drone/helicopter carrier conversion; official performance claims not adopted."
+      }
+    ],
+    "classification": "Uncrewed-aircraft / helicopter carrier conversion"
+  },
+  {
+    "slug": "fujian",
+    "name": "Fujian",
+    "hull": "18",
+    "class": "Fujian",
+    "origin": "China",
+    "commissioned": "2025-11-05",
+    "operators": [
+      "People’s Liberation Army Navy"
+    ],
+    "aliases": [],
+    "summary": "China’s third aircraft carrier, commissioned on 5 November 2025; its flight deck uses electromagnetic catapults.",
+    "sources": [
+      {
+        "title": "Latest View of China’s 3rd Aircraft Carrier Fujian",
+        "publisher": "Chinese Ministry of National Defense",
+        "url": "https://eng.mod.gov.cn/2025xb/D/V/16420957.html",
+        "accessed": "2026-10-29",
+        "note": "Commissioning date and hull18."
+      },
+      {
+        "title": "Commissioning of the first electromagnetic-catapult aircraft carrier",
+        "publisher": "Chinese Ministry of National Defense",
+        "url": "https://www.mod.gov.cn/gfbw/sy/rt/16420347.html",
+        "accessed": "2026-10-29",
+        "note": "Primary commissioning report identifies Chinese design and construction and catapults."
+      }
+    ],
+    "classification": "CATOBAR carrier"
+  }
+]

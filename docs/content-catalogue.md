@@ -49,3 +49,20 @@ Use stable IDs and cross-links: for example Naval Operations links to carrier an
 aircraft records; Radar links to sensor records; Bullseye belongs to Navigation
 and is discoverable from Radio Communications. Avoid duplicating a procedure in
 multiple subjects. URL slugs and detailed information architecture remain provisional.
+
+## Carrier inventory
+
+Locations includes sibling Theatres and Carriers browse pages. Carrier records
+live once per physical hull in `src/data/carriers.json`; transfers and renamings
+are aliases and operators on that record. The dedicated index and Locations
+search read the same registry. Each hull has its own page, dated source list and
+visible Drafted status, and links to the existing Naval Operations ship module.
+
+The post-war boundary is completion after 2 September 1945. First carrier
+commission is the proxy where separate completion is not documented; a carrier
+completed but never commissioned can record completion without a commission.
+Conversions are counted when they first become carriers, not when an existing
+carrier is refitted. Cancelled or unfinished ships and general amphibious assault
+ships are outside this inventory. A recorded year preserves the source's limited
+date precision rather than inventing a day. `carrier-model.mjs` validates records
+at build time; source accuracy and inventory completeness still require review.

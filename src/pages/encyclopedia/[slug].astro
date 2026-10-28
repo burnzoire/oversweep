@@ -11,6 +11,8 @@ import { ilsLines, navaidLines, runwayLines, towerLines, towerNote } from "../..
 import { airfieldCatalogue, aircraftContent, mapAirfieldAnchor, simAirfields, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, recordRoute, type Source } from "../../data/encyclopedia";
 import { sitePath } from "../../lib/paths";
 import { airfieldRoles, branches, currentUse, eras, nations, searchTerms, sims, useLabels } from "../../data/airfield-model.mjs";
+import { carriers, carrierRoute } from "../../data/carriers";
+import { carrierDate, carrierEntryDate, carrierMaturity, carrierSearchText } from "../../data/carrier-model.mjs";
 import "../../styles/encyclopedia.css";
 
 export function getStaticPaths() {
@@ -209,15 +211,15 @@ const deliverySources: Source[] = [
         </>
       ) : category.slug === "locations" && airfieldData ? (
         <>
-          <p class="lead">Theatres and their military history, simulator maps, and real-world airfields with their names, units, runways and facilities. Browse by region or find a location below. Carriers will appear here when records are available. An airfield with no map listed has not been checked yet.</p>
-          <nav class="theatre-jump" aria-label="Browse locations"><ul><li><a href="#airfield-index">Airfields</a></li><li><a href="#sim-airfields">Every represented airfield</a></li><li><a href="#theatres-maps">Theatres and sim maps</a></li></ul></nav>
+          <p class="lead">Theatres, simulator maps, airfields and carriers. Browse a region, explore carrier hulls and their operator history, or find an airfield below. An airfield with no map listed has not been checked yet.</p>
+          <nav class="theatre-jump" aria-label="Browse locations"><ul><li><a href="#airfield-index">Airfields</a></li><li><a href={sitePath('encyclopedia/locations/theatres/')}>Theatres</a></li><li><a href={sitePath('encyclopedia/locations/carriers/')}>Carriers</a></li><li><a href="#sim-airfields">Every represented airfield</a></li><li><a href="#theatres-maps">Theatres and sim maps</a></li></ul></nav>
           <h2 id="airfield-index">Find a location</h2>
           <form class="airfield-filter" role="search" aria-label="Find a location" hidden>
             <div class="filter-field filter-search">
               <label for="airfield-q">Location name, former name or identifier</label>
               <input id="airfield-q" name="q" type="search" autocomplete="off" placeholder="e.g. Isely, KLSV or Batumi" />
             </div>
-            <div class="filter-field"><label for="location-kind">Type</label><select id="location-kind" name="kind"><option value="">All locations</option><option value="airfield">Airfields</option><option value="theatre">Theatres</option><option value="map">Sim maps</option></select></div>
+            <div class="filter-field"><label for="location-kind">Type</label><select id="location-kind" name="kind"><option value="">All locations</option><option value="airfield">Airfields</option><option value="theatre">Theatres</option><option value="map">Sim maps</option><option value="carrier">Carriers</option></select></div>
             <div class="filter-field">
               <label for="airfield-country">Country or territory (airfields)</label>
               <select id="airfield-country" name="country">
@@ -249,6 +251,7 @@ const deliverySources: Source[] = [
             <p class="filter-count" aria-live="polite"></p>
             <p class="filter-empty" hidden>No location matches. Clear a filter or try another name.</p>
           </form>
+
           <section data-location-group>
           <h2>Airfields</h2>
           <div class="entry-grid record-grid airfield-index">
@@ -325,6 +328,19 @@ const deliverySources: Source[] = [
             </section>
           )}
           </section>
+          {carriers.length > 0 && <section data-location-group>
+            <h2>Carriers</h2>
+            <p><a href={sitePath('encyclopedia/locations/carriers/')}>Browse all carriers</a> by class, country, navy or completion date.</p>
+            <div class="entry-grid">
+              {carriers.map((carrier) => <section class="entry-card" data-location data-kind="carrier" data-record-id={`encyclopedia.carriers.${carrier.slug}`} data-search={carrierSearchText(carrier)} data-country="" data-theatres="" data-maps="" data-services="">
+                <p class="entry-kicker">{carrier.hull} · {carrier.class}</p>
+                <h3 class="entry-title"><a href={sitePath(carrierRoute(carrier))}>{carrier.name}</a></h3>
+                <p class="entry-objective">{carrier.summary}</p>
+                <p>{carrier.origin} · {carrierDate(carrierEntryDate(carrier))}</p>
+                <p class="entry-meta"><span class="maturity">{carrierMaturity}</span></p>
+              </section>)}
+            </div>
+          </section>}
         </>
       ) : category.slug === "terminology" ? (
         <Glossary />
