@@ -432,6 +432,68 @@ export function airfieldCatalogue() {
   return (catalogue = { airfields, theatres, maps });
 }
 
+// The id of an airfield's row in its map's "Airfields on this map" table.
+export const mapAirfieldAnchor = (name: string) => `af-${name.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
+
+const mapTableFiles = import.meta.glob<MapAirfieldTable>('./map-airfields/*.json', { eager: true, import: 'default' });
+export const mapAirfieldTables = () => Object.values(mapTableFiles);
+
+// One real airfield as the sims show it, gathered from every map table.
+export interface SimAirfield {
+  name: string;
+  names: string[];
+  maps: { map: MapEntry; name: string }[];
+  record?: AirfieldEntry;
+  theatres: Entry<TheatreData>[];
+  longestFt?: number;
+}
+
+// Every airfield with a runway on every map, one entry per airfield. Entries
+// on two maps less than 3 km apart are the same airfield; where a table gives
+// no coordinates (The Channel), the same name on another map is. An airfield
+// record claims the entries named in its represented map coverage.
+let simList: SimAirfield[] | undefined;
+export function simAirfields(): SimAirfield[] {
+  if (simList) return simList;
+  const { airfields, maps } = airfieldCatalogue();
+  const key = (name: string) => mapAirfieldAnchor(name);
+  const km = (a: { lat: number; lon: number }, b: { lat: number; lon: number }) => {
+    const rad = Math.PI / 180;
+    const x = (b.lon - a.lon) * rad * Math.cos(((a.lat + b.lat) / 2) * rad);
+    return Math.hypot(x, (b.lat - a.lat) * rad) * 6371;
+  };
+  const groups: { at?: { lat: number; lon: number }; keys: Set<string>; mapSlugs: Set<string>; record?: AirfieldEntry; maps: SimAirfield['maps']; lengths: number[] }[] = [];
+  for (const table of mapAirfieldTables()) {
+    const map = maps.find((m) => m.record.slug === table.map);
+    if (!map) continue;
+    for (const field of table.airfields.filter((x) => x.runways.length)) {
+      const at = field.lat !== undefined && field.lon !== undefined ? { lat: field.lat, lon: field.lon } : undefined;
+      const record = airfields.find((a) => a.maps.some((x) => x.record === map.record && x.coverage.status === 'represented' && x.coverage.inSimName === field.name));
+      let group = groups.find((g) => !g.mapSlugs.has(table.map)
+        && (record && g.record ? record === g.record : at && g.at ? km(at, g.at) < 3 : g.keys.has(key(field.name))));
+      if (!group) groups.push((group = { at, keys: new Set(), mapSlugs: new Set(), maps: [], lengths: [] }));
+      group.at ??= at;
+      group.record ??= record;
+      group.keys.add(key(field.name));
+      group.mapSlugs.add(table.map);
+      group.maps.push({ map, name: field.name });
+      group.lengths.push(...field.runways.flatMap((r) => r.lengthFt ?? []));
+    }
+  }
+  simList = groups.map((g) => {
+    const names = [...new Set(g.maps.map((x) => x.name))];
+    return {
+      name: g.record?.record.title ?? names[0],
+      names,
+      maps: g.maps,
+      record: g.record,
+      theatres: [...new Set(g.maps.flatMap((x) => x.map.theatres))],
+      longestFt: g.lengths.length ? Math.max(...g.lengths) : undefined,
+    };
+  }).sort((a, b) => a.name.localeCompare(b.name, 'en'));
+  return simList;
+}
+
 export function getRecord(category: string, slug: string): EncyclopediaRecord {
   const found = records.find(r => r.category === category && r.slug === slug);
   if (!found) throw new Error(`Unregistered encyclopedia record: ${category}/${slug}`);

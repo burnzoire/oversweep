@@ -7,7 +7,7 @@ import Cited from "../../components/encyclopedia/Cited.astro";
 import Glossary from "../../components/encyclopedia/Glossary.astro";
 import { encyclopediaCategories } from "../../data/catalogue";
 import { sectionHasContent } from "../../data/availability";
-import { airfieldCatalogue, aircraftContent, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, recordRoute, type Source } from "../../data/encyclopedia";
+import { airfieldCatalogue, aircraftContent, mapAirfieldAnchor, simAirfields, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, recordRoute, type Source } from "../../data/encyclopedia";
 import { sitePath } from "../../lib/paths";
 import { airfieldRoles, branches, coverageStatuses, currentUse, eras, longestRunwayFt, nations, searchTerms, sims, useLabels } from "../../data/airfield-model.mjs";
 import "../../styles/encyclopedia.css";
@@ -69,6 +69,20 @@ const airfieldIndex = airfieldData ? byTitle(airfieldData.airfields).map((entry)
       theatres: entry.theatres.map((x) => x.record.slug).join(" "),
       maps: represented.map((x) => x.record.slug).join(" "),
       services: services.join(" "),
+    },
+  };
+}) : [];
+// Every airfield on every sim map, with or without a record yet.
+const simIndex = category.slug === "airfields-carriers" && airfieldData ? simAirfields().map((x) => {
+  const indexed = airfieldIndex.find((a) => a.record === x.record?.record);
+  return {
+    ...x,
+    filter: {
+      search: [indexed?.filter.search, ...x.names].filter(Boolean).join(" | ").toLowerCase(),
+      country: indexed?.filter.country ?? "",
+      theatres: x.theatres.map((t) => t.record.slug).join(" "),
+      maps: [...new Set(x.maps.map((m) => m.map.record.slug))].join(" "),
+      services: indexed?.filter.services ?? "",
     },
   };
 }) : [];
@@ -192,7 +206,7 @@ const deliverySources: Source[] = [
           <form class="airfield-filter" role="search" aria-label="Find an airfield" hidden>
             <div class="filter-field filter-search">
               <label for="airfield-q">Name, former name or identifier</label>
-              <input id="airfield-q" name="q" type="search" autocomplete="off" placeholder="e.g. Isely, KLSV or Adana" />
+              <input id="airfield-q" name="q" type="search" autocomplete="off" placeholder="e.g. Isely, KLSV or Batumi" />
             </div>
             <div class="filter-field">
               <label for="airfield-country">Country or territory</label>
@@ -260,6 +274,24 @@ const deliverySources: Source[] = [
             </table>
           </div>
           <p class="note">Figures come from each airfield's record, which cites them. Edwards' longest runway, on the Rogers Dry Lake bed, is unpaved and not counted. "Confirmed absent" means a source shows the map does not include the airfield; maps not listed have not been checked.</p>
+          <h2 id="sim-airfields">Every airfield in the sims</h2>
+          <p>Each DCS World map's airfields with a runway, from the game's own data. An airfield on more than one map has one row. Rows link to each map's table of runways, radio frequencies and navaids. {simIndex.filter((x) => x.record).length} of {simIndex.length} have a full record so far; more are being added theatre by theatre, the major military bases first.</p>
+          <div class="table-scroll" role="region" aria-label="Every sim airfield, scrolls sideways on narrow screens" tabindex="0">
+            <table class="airfield-table sim-airfield-table">
+              <thead><tr><th scope="col">Airfield</th><th scope="col">Sim maps and in-game names</th><th scope="col">Theatre</th><th scope="col">Longest runway in game</th></tr></thead>
+              <tbody>
+                {simIndex.map((x) => (
+                  <tr class="sim-airfield" data-airfield {...Object.fromEntries(Object.entries(x.filter).map(([k, v]) => [`data-${k}`, v]))}>
+                    <th scope="row">{x.record ? <a href={sitePath(recordRoute(x.record.record))}>{x.name}</a> : <>{x.name}<span class="cell-note">record not written yet</span></>}</th>
+                    <td>{x.maps.map((m) => <span class="cell-line"><a href={`${sitePath(recordRoute(m.map.record))}#${mapAirfieldAnchor(m.name)}`}>{m.map.data.name}</a>{m.name !== x.name && `: ${m.name}`}</span>)}</td>
+                    <td>{x.theatres.length ? x.theatres.map((t) => t.record.title).join(", ") : "—"}</td>
+                    <td>{x.longestFt === undefined ? "not given" : ft(x.longestFt)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="note">Source: each map's table, which cites the game data it comes from. Runway lengths are the game's, not the real airfield's.</p>
           <p>Each airfield belongs to a broad theatre, such as the Middle East. <a href={sitePath("encyclopedia/theatres/")}>Theatres</a> give each region's military history and list its DCS World and Falcon BMS maps.</p>
         </>
       ) : category.slug === "theatres" && airfieldData ? (

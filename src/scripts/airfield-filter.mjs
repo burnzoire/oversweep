@@ -1,12 +1,15 @@
 // Airfield index search and filters: a name, former name or identifier, and
-// a country, theatre, sim map and service. Cards and comparison rows carry the
-// matching data-* attributes. Without JavaScript the form stays hidden and
+// a country, theatre, sim map and service. Cards, comparison rows and the
+// rows of every sim airfield carry the matching data-* attributes. Without JavaScript the form stays hidden and
 // every airfield is listed. The choices are kept in the URL query.
 const form = document.querySelector('.airfield-filter');
 
 if (form) {
   const items = [...document.querySelectorAll('.ency [data-airfield]')];
   const cards = items.filter((item) => item.matches('.entry-card'));
+  const rows = items.filter((item) => item.matches('.sim-airfield'));
+  // A table the filters leave empty is hidden rather than shown as a bare header.
+  const tables = [...document.querySelectorAll('.ency .table-scroll')].filter((t) => t.querySelector('[data-airfield]'));
   const count = form.querySelector('.filter-count');
   const empty = form.querySelector('.filter-empty');
   const fields = ['q', 'country', 'theatre', 'map', 'service'];
@@ -16,6 +19,7 @@ if (form) {
   const apply = () => {
     const query = form.elements.q.value.trim().toLowerCase();
     let shown = 0;
+    let shownRows = 0;
     for (const item of items) {
       const matches = (!query || item.dataset.search.includes(query))
         && Object.entries(lists).every(([field, attribute]) => {
@@ -24,9 +28,12 @@ if (form) {
         });
       item.hidden = !matches;
       if (matches && cards.includes(item)) shown += 1;
+      if (matches && rows.includes(item)) shownRows += 1;
     }
-    count.textContent = `Showing ${shown} of ${cards.length} airfields.`;
-    empty.hidden = shown > 0;
+    for (const table of tables) table.hidden = ![...table.querySelectorAll('[data-airfield]')].some((row) => !row.hidden);
+    count.textContent = `Showing ${shown} of ${cards.length} airfield records`
+      + (rows.length ? ` and ${shownRows} of ${rows.length} airfields in the sims.` : '.');
+    empty.hidden = shown + shownRows > 0;
     const url = new URL(location.href);
     for (const field of fields) {
       const value = form.elements[field].value.trim();
