@@ -1,0 +1,98 @@
+---
+import type { AirfieldPlan } from '../../data/encyclopedia';
+// An airfield map from OpenStreetMap: the aerodrome boundary, aprons,
+// taxiways, runways and buildings, true north up and to scale. Widths come
+// from each feature's width tag, or a typical width where it has none.
+interface Props { title: string; plan: AirfieldPlan; name: string }
+const { title, plan, name } = Astro.props;
+
+type LL = [number, number];
+// A disused field may have no aerodrome boundary left; centre on its features then.
+const boundary = plan.aerodrome.rings.length ? plan.aerodrome.rings.flat() : plan.features.flatMap((f) => f.line ?? f.rings!.flat());
+const lat0 = boundary.reduce((s, [lat]) => s + lat, 0) / boundary.length;
+const lon0 = boundary.reduce((s, [, lon]) => s + lon, 0) / boundary.length;
+const M_PER_DEG_LAT = 111_132;
+const mPerDegLon = M_PER_DEG_LAT * Math.cos((lat0 * Math.PI) / 180);
+const local = ([lat, lon]: LL) => ({ x: (lon - lon0) * mPerDegLon, y: (lat - lat0) * M_PER_DEG_LAT });
+
+// Fit the runways, taxiways and aprons into a frame 720 wide, as tall as their
+// shape needs; a boundary drawn round a wider base is clipped to the frame.
+const pts = plan.features.filter((f) => ['runway', 'taxiway', 'apron'].includes(f.type)).flatMap((f) => f.line ?? f.rings!.flat()).map(local);
+const minX = Math.min(...pts.map((p) => p.x)), maxX = Math.max(...pts.map((p) => p.x));
+const minY = Math.min(...pts.map((p) => p.y)), maxY = Math.max(...pts.map((p) => p.y));
+const W = 720, PAD = 48;
+const scale = (W - 2 * PAD) / (maxX - minX);
+const H = Math.round(Math.min(Math.max((maxY - minY) * scale + 2 * PAD, 300), 900));
+const fit = Math.min(scale, (H - 2 * PAD) / (maxY - minY));
+const sx = (x: number) => W / 2 + (x - (minX + maxX) / 2) * fit;
+const sy = (y: number) => H / 2 - (y - (minY + maxY) / 2) * fit;
+const path = (line: LL[], close = false) => line.map((p, i) => { const q = local(p); return `${i ? 'L' : 'M'}${sx(q.x).toFixed(1)} ${sy(q.y).toFixed(1)}`; }).join(' ') + (close ? ' Z' : '');
+const area = (rings: LL[][]) => rings.map((r) => path(r, true)).join(' ');
+// Typical widths in metres where a feature gives none, drawn no thinner than 1.5 px.
+const stroke = (f: { type: string; widthM?: number }) => Math.max((f.widthM ?? (f.type === 'runway' ? 45 : 18)) * fit, 1.5);
+
+const runways = plan.features.filter((f) => f.type === 'runway');
+// Each runway's end designators sit just beyond its ends, on the centreline.
+const runwayLabels = runways.filter((f) => f.line && f.ref?.includes('/')).flatMap((f) => {
+  const line = f.line!;
+  const a = local(line[0]), b = local(line[line.length - 1]);
+  const len = Math.hypot(b.x - a.x, b.y - a.y);
+  const ux = (b.x - a.x) / len, uy = (b.y - a.y) / len;
+  const [ra, rb] = f.ref!.split('/');
+  // OSM draws a runway either way; the lower designator is the end whose heading points along the way.
+  const heading = ((Math.atan2(ux, uy) * 180) / Math.PI + 360) % 360;
+  const aIsFirst = Math.abs(((Number.parseInt(ra) * 10 - heading + 540) % 360) - 180) < 90;
+  const [atA, atB] = aIsFirst ? [ra, rb] : [rb, ra];
+  return [
+    { text: atA, x: sx(a.x) - ux * 16, y: sy(a.y) + uy * 16 + 4 },
+    { text: atB, x: sx(b.x) + ux * 16, y: sy(b.y) - uy * 16 + 4 },
+  ];
+});
+// One label per taxiway name, at the middle of its longest drawn piece.
+const byRef = new Map<string, LL[][]>();
+for (const f of plan.features) if (f.type === 'taxiway' && f.line && f.ref && f.ref.length <= 4) byRef.set(f.ref, [...(byRef.get(f.ref) ?? []), f.line]);
+const taxiLabels = [...byRef].map(([text, lines]) => {
+  const longest = [...lines].sort((p, q) => q.length - p.length)[0];
+  const mid = local(longest[Math.floor(longest.length / 2)]);
+  return { text, x: sx(mid.x), y: sy(mid.y) };
+});
+const barKm = [0.25, 0.5, 1, 2].find((km) => km * 1000 * fit >= (W - 2 * PAD) / 6) ?? 2;
+const bar = barKm * 1000 * fit;
+const has = (type: string) => plan.features.some((f) => f.type === type);
+// The north arrow goes top right, or top left if a runway designator is there.
+const arrowX = runwayLabels.some((l) => l.x > W - 70 && l.y < 90) ? 30 : W - 30;
+---
+<section class="lesson figure-lesson airfield-plan" aria-labelledby="plan-fig-title">
+  <h3 id="plan-fig-title" class="fig-title">{title}</h3>
+  <div class="fig-scroll" role="region" aria-label="Airfield map figure; scrolls sideways on narrow screens" tabindex="0">
+    <svg class="natops plan" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Map of ${name}, true north up, showing ${runways.length} ${runways.length === 1 ? 'runway' : 'runways'}${runways.some((f) => f.ref) ? ` (${runways.flatMap((f) => f.ref ?? []).join(', ')})` : ''}, its taxiways and aprons`}>
+      <defs><clipPath id="plan-clip"><rect x="0" y="0" width={W} height={H} /></clipPath></defs>
+      <g clip-path="url(#plan-clip)"><path class="plan-boundary" d={area(plan.aerodrome.rings)} /></g>
+      <rect class="frame" x="0" y="0" width={W} height={H} />
+      {plan.features.filter((f) => f.type === 'apron').map((f) => <path class="plan-apron" d={area(f.rings!)} />)}
+      {plan.features.filter((f) => f.type === 'taxiway').map((f) => f.line ? <path class="plan-taxiway" d={path(f.line)} stroke-width={stroke(f)} /> : <path class="plan-apron" d={area(f.rings!)} />)}
+      {runways.map((f) => f.line ? <path class="plan-runway" d={path(f.line)} stroke-width={stroke(f)} /> : <path class="plan-runway-area" d={area(f.rings!)} />)}
+      {plan.features.filter((f) => ['hangar', 'terminal'].includes(f.type)).map((f) => <path class="plan-building" d={area(f.rings!)} />)}
+      {plan.features.filter((f) => f.type === 'helipad').map((f) => <path class="plan-helipad" d={area(f.rings!)} />)}
+      {taxiLabels.map((l) => <text class="plan-taxi-label" x={l.x} y={l.y + 3} text-anchor="middle">{l.text}</text>)}
+      {runwayLabels.map((l) => <text class="lbl" x={l.x} y={l.y} text-anchor="middle">{l.text}</text>)}
+      <g transform={`translate(${arrowX} 24)`}>
+        <path class="ln" d="M0 30 L0 0 M-6 10 L0 0 L6 10" />
+        <text class="lbl" x="0" y="46" text-anchor="middle">N</text>
+      </g>
+      <g transform={`translate(18 ${H - 20})`}>
+        <path class="ln" d={`M0 -5 L0 0 L${bar} 0 L${bar} -5`} />
+        <text class="lbl" x={bar / 2} y="14" text-anchor="middle">{barKm < 1 ? `${barKm * 1000} m` : `${barKm} km`}</text>
+      </g>
+    </svg>
+  </div>
+  <ul class="plan-key" aria-label="Key">
+    <li><span class="swatch swatch-runway"></span>Runway</li>
+    {has('taxiway') && <li><span class="swatch swatch-taxiway"></span>Taxiway{taxiLabels.length > 0 && ', with its name'}</li>}
+    {has('apron') && <li><span class="swatch swatch-apron"></span>Apron</li>}
+    {(has('hangar') || has('terminal')) && <li><span class="swatch swatch-building"></span>Hangar or terminal</li>}
+    {has('helipad') && <li><span class="swatch swatch-helipad"></span>Helipad</li>}
+    {plan.aerodrome.rings.length > 0 && <li><span class="swatch swatch-boundary"></span>Airfield boundary</li>}
+  </ul>
+  <slot />
+</section>

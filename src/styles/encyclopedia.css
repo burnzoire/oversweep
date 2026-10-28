@@ -217,5 +217,24 @@
 .map-airfield-table .entry-kicker { margin-left: 0.4rem; }
 .pad-list { margin-top: 1rem; }
 .pad-list summary { cursor: pointer; font-weight: 600; }
+.ency .sim-airfield-table { min-width: 64rem; }
 .map-airfield-table .cell-line, .sim-airfield-table .cell-line { display: block; }
 .map-airfield-table .cell-note, .sim-airfield-table .cell-note { display: block; font-size: 0.8em; font-weight: 400; color: var(--muted, #5b6470); }
+/* Airfield maps drawn from OpenStreetMap. */
+.ency .natops.plan .plan-boundary { fill: #f6f7f4; stroke: #8a8f94; stroke-width: 1.2; stroke-dasharray: 6 4; }
+.ency .natops.plan .plan-apron { fill: #dfe2e5; stroke: #c4c8cc; stroke-width: 0.6; }
+.ency .natops.plan .plan-taxiway { fill: none; stroke: #b5bac0; stroke-linecap: round; stroke-linejoin: round; }
+.ency .natops.plan .plan-runway { fill: none; stroke: #2b2f33; stroke-linecap: butt; }
+.ency .natops.plan .plan-runway-area { fill: #2b2f33; }
+.ency .natops.plan .plan-building { fill: #7d838a; }
+.ency .natops.plan .plan-helipad { fill: #fff; stroke: #2b2f33; stroke-width: 1; }
+.ency .natops.plan .plan-taxi-label { fill: #1a1d20; font: 700 9px Arial, Helvetica, sans-serif; paint-order: stroke; stroke: #fff; stroke-width: 2.5px; stroke-linejoin: round; }
+.ency .plan-key { display: flex; flex-wrap: wrap; gap: 0.35rem 1.1rem; list-style: none; padding: 0; margin: 0.6rem 0 0; font-size: 0.85rem; }
+.ency .plan-key li { display: flex; align-items: center; gap: 0.4rem; }
+.ency .plan-key .swatch { display: inline-block; width: 1.4rem; height: 0.7rem; border: 1px solid #c4c8cc; }
+.ency .plan-key .swatch-runway { background: #2b2f33; border-color: #2b2f33; }
+.ency .plan-key .swatch-taxiway { background: #b5bac0; }
+.ency .plan-key .swatch-apron { background: #dfe2e5; }
+.ency .plan-key .swatch-building { background: #7d838a; border-color: #7d838a; }
+.ency .plan-key .swatch-helipad { background: #fff; border-color: #2b2f33; }
+.ency .plan-key .swatch-boundary { background: #f6f7f4; border: 1px dashed #8a8f94; }

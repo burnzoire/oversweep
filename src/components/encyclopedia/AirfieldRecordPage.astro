@@ -5,7 +5,9 @@ import Cited from './Cited.astro';
 import PhotoFigure from './PhotoFigure.astro';
 import PurchaseRow from './PurchaseRow.astro';
 import RunwayFigure from './RunwayFigure.astro';
-import { airfieldCatalogue, airfieldContent, mapAirfieldAnchor, mapAirfieldTables, recordRoute, type AirfieldData, type EncyclopediaRecord, type MapData, type Period, type TheatreData } from '../../data/encyclopedia';
+import AirfieldPlanFigure from './AirfieldPlanFigure.astro';
+import { ilsLines, navaidLines, runwayLines, towerLines, towerNote } from '../../data/map-airfield-text';
+import { airfieldCatalogue, airfieldContent, airfieldPlan, mapAirfieldAnchor, mapAirfieldTables, recordRoute, type AirfieldData, type EncyclopediaRecord, type MapData, type Period, type TheatreData } from '../../data/encyclopedia';
 import { airfieldRoles, basings, branches, coverageStatuses, currentUse, dateText, eras, hasEnded, nations, periodText, sims, useLabels } from '../../data/airfield-model.mjs';
 import { categoryTitle } from '../../data/availability';
 import { assetPath, sitePath } from '../../lib/paths';
@@ -22,6 +24,8 @@ const airfield = frontmatter.kind === 'airfield' ? airfields.find((a) => a.recor
 const theatre = frontmatter.kind === 'theatre' ? theatres.find((t) => t.record === record)! : undefined;
 const map = frontmatter.kind === 'map' ? maps.find((m) => m.record === record)! : undefined;
 const a = airfield?.data as AirfieldData | undefined;
+// The OpenStreetMap airfield map, where one has been imported; it replaces the runway-only plan.
+const plan = a && airfieldPlan(record.slug);
 const t = theatre?.data as TheatreData | undefined;
 const m = map?.data as MapData | undefined;
 
@@ -52,7 +56,7 @@ const sources = frontmatter.sources;
 // Airfield facts, with time-sensitive lists split into now and then.
 const currentUnits = (a?.units ?? []).filter((u) => !hasEnded(u));
 const pastUnits = (a?.units ?? []).filter(hasEnded);
-const use = a && currentUse(a.operators);
+const use = a && currentUse(a.operators ?? []);
 const checkedMaps = airfield?.maps ?? [];
 const representedMaps = checkedMaps.filter((x) => x.coverage.status === 'represented');
 // Maps of the airfield's theatres that nobody has checked it against yet.
@@ -63,12 +67,6 @@ const mapTable = map && mapAirfieldTables().find((x) => x.map === record.slug);
 const recordFor = (name: string) => map?.airfields.find((x) => x.coverage.status === 'represented' && x.coverage.inSimName === name)?.airfield.record;
 const runwayFields = mapTable?.airfields.filter((x) => x.runways.length) ?? [];
 const padFields = mapTable?.airfields.filter((x) => !x.runways.length) ?? [];
-// TACAN and DME channels carry an X or Y band; RSBN and PRMG channels do not.
-const dmeTypes = ['TACAN', 'VORTAC', 'VOR-DME', 'DME'];
-// A channel with its band; * marks a band assumed to be X (see the table note).
-const channelText = (type: string, channel: number, band?: string) =>
-  !dmeTypes.includes(type) ? `ch ${channel}` : band ? `${channel}${band}` : `${channel}X*`;
-const freq = (value: number | null | undefined) => value ? (Number.isInteger(value) ? value.toFixed(1) : String(+value.toFixed(3))) : '—';
 const ids = a?.identifiers;
 const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.iata}`, ids.faa && `FAA ${ids.faa}`, ...(ids.others ?? [])].filter(Boolean).join(' · ');
 ---
@@ -116,10 +114,10 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
           <h2 id="role-title">Role and who uses it</h2>
           <dl>
             <div><dt>Status</dt><dd>{a.status === 'active' ? 'Active' : 'Closed'} · {useLabels[use!]}</dd></div>
-            <div><dt>Roles today</dt><dd>{a.roles.map((r) => airfieldRoles[r]).join(' · ')}</dd></div>
-            <div><dt>Operators</dt><dd><ul>{a.operators.map((o) => (
+            <div><dt>Roles today</dt><dd>{a.roles.length ? a.roles.map((r) => airfieldRoles[r]).join(' · ') : 'None'}</dd></div>
+            <div><dt>Operators</dt><dd>{a.operators?.length ? <ul>{a.operators.map((o) => (
               <li><strong>{o.name}</strong>{o.detail && `, ${o.detail}`} · {nation(o.nation)}, {branches[o.branch].toLowerCase()} · {periodText(o) ?? 'current; start date not given'} <Cited text={o.cite} /></li>
-            ))}</ul></dd></div>
+            ))}</ul> : 'None found in the sources consulted'}</dd></div>
           </dl>
         </section>
 
@@ -184,7 +182,12 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
               ))}
             </div>
           )}
-          {a.runwayPlan && (
+          {plan && (
+            <AirfieldPlanFigure title={`Figure 1 — Airfield map of ${a.name} (to scale)`} plan={plan} name={a.name}>
+              <p class="fig-caption">{plan.aerodrome.rings.length ? 'Runways, taxiways, aprons and buildings inside the airfield boundary' : 'The runways and aprons that remain mapped at this disused field'}, true north up, drawn from <a href={plan.source.url}>OpenStreetMap</a> data retrieved {plan.source.retrieved}. Widths come from the map data or, where it gives none, a typical 45 m runway and 18 m taxiway. Map data © OpenStreetMap contributors, available under the <a href={plan.source.licenceUrl}>{plan.source.licence}</a>. Community-mapped, not an official aerodrome chart, and not for navigation.</p>
+            </AirfieldPlanFigure>
+          )}
+          {!plan && a.runwayPlan && (
             <RunwayFigure title={`Figure 1 — Runways at ${a.name} (plan view, to scale)`} runways={a.runwayPlan.runways} name={a.name}>
               <p class="fig-caption">Runways drawn to scale between their published threshold coordinates, true north up. Taxiways, aprons and buildings are not drawn. <Cited text={a.runwayPlan.cite} /> Not for navigation.</p>
             </RunwayFigure>
@@ -263,15 +266,15 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
                       <tr id={mapAirfieldAnchor(x.name)}>
                         <th scope="row">{r ? <a href={link(r)}>{x.name}</a> : x.name}{x.lat !== undefined && x.lon !== undefined && <span class="cell-note">{coord(x.lat, 'N', 'S')}, {coord(x.lon, 'E', 'W')}</span>}</th>
                         {mapTable.source.beacons && <td>{x.elevationFt === undefined ? '—' : `${n(x.elevationFt)} ft`}</td>}
-                        <td>{x.runways.map((rw) => <span class="cell-line">{rw.ends.map((e) => `${e.name} (${String(e.heading).padStart(3, '0')}°)`).join(' / ')}{rw.lengthFt && `, ${n(rw.lengthFt)} ft`}</span>)}</td>
+                        <td>{runwayLines(x).map((t) => <span class="cell-line">{t}</span>)}</td>
                         <td>{radio.vhf || radio.uhf ? <>
-                          {[radio.vhf && `VHF ${freq(radio.vhf)}`, radio.uhf && `UHF ${freq(radio.uhf)}`].filter(Boolean).map((t) => <span class="cell-line">{t}</span>)}
-                          {(radio.vhfLow || radio.hf) && <span class="cell-note">{[radio.vhfLow && `low VHF ${freq(radio.vhfLow)}`, radio.hf && `HF ${freq(radio.hf)}`].filter(Boolean).join(' · ')}</span>}
+                          {towerLines(x).map((t) => <span class="cell-line">{t}</span>)}
+                          {towerNote(x) && <span class="cell-note">{towerNote(x)}</span>}
                           {x.radioSource && <span class="cell-note">from pydcs †</span>}
                         </> : '—'}</td>
                         {mapTable.source.beacons && <>
-                          <td>{x.navaids.length ? x.navaids.map((v) => <span class="cell-line">{v.type} {[v.channel !== undefined && channelText(v.type, v.channel, v.band), v.frequency !== undefined && `${v.unit === 'kHz' ? v.frequency : freq(v.frequency)} ${v.unit}`].filter(Boolean).join(', ')}{v.callsign && ` (${v.callsign})`}</span>) : '—'}</td>
-                          <td>{x.approaches.length ? x.approaches.map((v) => <span class="cell-line">{v.type === 'PRMG' ? 'PRMG ' : ''}{v.runway || 'runway not given'}: {v.frequency !== undefined ? freq(v.frequency) : `ch ${v.channel}`}{v.callsign && ` (${v.callsign})`}</span>) : '—'}</td>
+                          <td>{x.navaids.length ? navaidLines(x).map((t) => <span class="cell-line">{t}</span>) : '—'}</td>
+                          <td>{x.approaches.length ? ilsLines(x).map((t) => <span class="cell-line">{t}</span>) : '—'}</td>
                         </>}
                       </tr>
                     );

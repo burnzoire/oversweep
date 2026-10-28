@@ -7,9 +7,10 @@ import Cited from "../../components/encyclopedia/Cited.astro";
 import Glossary from "../../components/encyclopedia/Glossary.astro";
 import { encyclopediaCategories } from "../../data/catalogue";
 import { sectionHasContent } from "../../data/availability";
+import { ilsLines, navaidLines, runwayLines, towerLines, towerNote } from "../../data/map-airfield-text";
 import { airfieldCatalogue, aircraftContent, mapAirfieldAnchor, simAirfields, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, recordRoute, type Source } from "../../data/encyclopedia";
 import { sitePath } from "../../lib/paths";
-import { airfieldRoles, branches, coverageStatuses, currentUse, eras, longestRunwayFt, nations, searchTerms, sims, useLabels } from "../../data/airfield-model.mjs";
+import { airfieldRoles, branches, currentUse, eras, nations, searchTerms, sims, useLabels } from "../../data/airfield-model.mjs";
 import "../../styles/encyclopedia.css";
 
 export function getStaticPaths() {
@@ -55,13 +56,12 @@ const byTitle = <T extends { record: { title: string } }>(list: T[]) => [...list
 const airfieldIndex = airfieldData ? byTitle(airfieldData.airfields).map((entry) => {
   const { record, data } = entry;
   const represented = entry.maps.filter((x) => x.coverage.status === "represented");
-  const services = [...new Set(data.operators.filter((o) => !o.to).map((o) => o.branch))];
+  const services = [...new Set((data.operators ?? []).filter((o) => !o.to).map((o) => o.branch))];
   return {
     ...entry,
     represented,
     services,
-    longest: longestRunwayFt(data.facilities.runways),
-    use: currentUse(data.operators),
+    use: currentUse(data.operators ?? []),
     aliases: (data.names ?? []).map((x) => x.name),
     filter: {
       search: searchTerms(record.slug, data, represented.flatMap((x) => x.coverage.inSimName ?? [])),
@@ -246,7 +246,7 @@ const deliverySources: Source[] = [
                   <div><dt>Where</dt><dd>{nations[a.data.country].name}</dd></div>
                   {a.aliases.length > 0 && <div><dt>Also</dt><dd>{a.aliases.join(" · ")}</dd></div>}
                   <div><dt>Use</dt><dd>{useLabels[a.use]}</dd></div>
-                  <div><dt>Roles</dt><dd>{a.data.roles.map((r) => airfieldRoles[r]).join(", ")}</dd></div>
+                  <div><dt>Roles</dt><dd>{a.data.roles.length ? a.data.roles.map((r) => airfieldRoles[r]).join(", ") : "None"}</dd></div>
                   <div><dt>Represented in</dt><dd>{a.represented.length ? a.represented.map((x, i) => <>{i > 0 && ", "}<a href={sitePath(recordRoute(x.record))}>{x.data.name}</a></>)
                     : a.maps.some((x) => x.coverage.status === "absent") ? <>No map checked so far; not on {a.maps.filter((x) => x.coverage.status === "absent").map((x, i) => <>{i > 0 && ", "}<a href={sitePath(recordRoute(x.record))}>{x.data.name}</a></>)}</>
                     : "No map checked yet"}</dd></div>
@@ -254,44 +254,27 @@ const deliverySources: Source[] = [
               </RecordCard>
             ))}
           </div>
-          <h2>Compare airfields</h2>
-          <div class="table-scroll" role="region" aria-label="Airfield comparison table, scrolls sideways on narrow screens" tabindex="0">
-            <table class="airfield-table">
-              <thead><tr><th scope="col">Airfield</th><th scope="col">Country or territory</th><th scope="col">Use</th><th scope="col">Opened</th><th scope="col">Longest paved runway</th><th scope="col">Elevation</th><th scope="col">Sim maps</th></tr></thead>
-              <tbody>
-                {airfieldIndex.map((a) => (
-                  <tr data-airfield {...Object.fromEntries(Object.entries(a.filter).map(([k, v]) => [`data-${k}`, v]))}>
-                    <th scope="row"><a href={sitePath(recordRoute(a.record))}>{a.record.title}</a><br /><span class="entry-kicker">{a.record.designation}</span></th>
-                    <td>{nations[a.data.country].name}</td>
-                    <td>{useLabels[a.use]}</td>
-                    <td>{a.data.opened.year}</td>
-                    <td>{a.longest === null ? "not given" : ft(a.longest)}</td>
-                    <td>{ft(a.data.elevationFt)}</td>
-                    <td>{a.maps.length ? a.maps.map((x, i) => <>{i > 0 && "; "}<a href={sitePath(recordRoute(x.record))}>{x.data.name}</a>: {coverageStatuses[x.coverage.status].toLowerCase()}</>) : "none checked"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p class="note">Figures come from each airfield's record, which cites them. Edwards' longest runway, on the Rogers Dry Lake bed, is unpaved and not counted. "Confirmed absent" means a source shows the map does not include the airfield; maps not listed have not been checked.</p>
-          <h2 id="sim-airfields">Every airfield in the sims</h2>
-          <p>Each DCS World map's airfields with a runway, from the game's own data. An airfield on more than one map has one row. Rows link to each map's table of runways, radio frequencies and navaids. {simIndex.filter((x) => x.record).length} of {simIndex.length} have a full record so far; more are being added theatre by theatre, the major military bases first.</p>
-          <div class="table-scroll" role="region" aria-label="Every sim airfield, scrolls sideways on narrow screens" tabindex="0">
+          <h2 id="sim-airfields">Every represented airfield</h2>
+          <p>Every airfield with a runway on each DCS World map, with its runways, tower frequencies, navaids and ILS as the game has them. An airfield on more than one map gets a line for each map. {simIndex.filter((x) => x.record).length} of {simIndex.length} have a full record so far; more are being added theatre by theatre, the major military bases first.</p>
+          <div class="table-scroll" role="region" aria-label="Every represented airfield, scrolls sideways on narrow screens" tabindex="0">
             <table class="airfield-table sim-airfield-table">
-              <thead><tr><th scope="col">Airfield</th><th scope="col">Sim maps and in-game names</th><th scope="col">Theatre</th><th scope="col">Longest runway in game</th></tr></thead>
+              <thead><tr><th scope="col">Airfield</th><th scope="col">Map and name in the sim</th><th scope="col">Elevation</th><th scope="col">Runways (magnetic)</th><th scope="col">Tower (MHz)</th><th scope="col">TACAN, VOR and NDB</th><th scope="col">ILS</th></tr></thead>
               <tbody>
-                {simIndex.map((x) => (
-                  <tr class="sim-airfield" data-airfield {...Object.fromEntries(Object.entries(x.filter).map(([k, v]) => [`data-${k}`, v]))}>
-                    <th scope="row">{x.record ? <a href={sitePath(recordRoute(x.record.record))}>{x.name}</a> : <>{x.name}<span class="cell-note">record not written yet</span></>}</th>
-                    <td>{x.maps.map((m) => <span class="cell-line"><a href={`${sitePath(recordRoute(m.map.record))}#${mapAirfieldAnchor(m.name)}`}>{m.map.data.name}</a>{m.name !== x.name && `: ${m.name}`}</span>)}</td>
-                    <td>{x.theatres.length ? x.theatres.map((t) => t.record.title).join(", ") : "—"}</td>
-                    <td>{x.longestFt === undefined ? "not given" : ft(x.longestFt)}</td>
+                {simIndex.flatMap((x) => x.maps.map((m, i) => (
+                  <tr class={i === 0 ? "sim-airfield" : "sim-airfield-more"} data-airfield {...Object.fromEntries(Object.entries(x.filter).map(([k, v]) => [`data-${k}`, v]))}>
+                    {i === 0 && <th scope="row" rowspan={x.maps.length}>{x.record ? <a href={sitePath(recordRoute(x.record.record))}>{x.name}</a> : x.name}<span class="cell-note">{x.theatres.map((t) => t.record.title).join(", ")}{!x.record && " · record not written yet"}</span></th>}
+                    <td><a href={`${sitePath(recordRoute(m.map.record))}#${mapAirfieldAnchor(m.name)}`}>{m.map.data.name}</a>{m.name !== x.name && <span class="cell-note">as {m.name}</span>}</td>
+                    <td>{m.field.elevationFt === undefined ? "—" : `${n(m.field.elevationFt)} ft`}</td>
+                    <td>{runwayLines(m.field).map((t) => <span class="cell-line">{t}</span>)}</td>
+                    <td>{towerLines(m.field).length ? <>{towerLines(m.field).map((t) => <span class="cell-line">{t}</span>)}{towerNote(m.field) && <span class="cell-note">{towerNote(m.field)}</span>}{m.field.radioSource && <span class="cell-note">from pydcs</span>}</> : "—"}</td>
+                    <td>{m.source.beacons ? (navaidLines(m.field).length ? navaidLines(m.field).map((t) => <span class="cell-line">{t}</span>) : "—") : "not in this data"}</td>
+                    <td>{m.source.beacons ? (ilsLines(m.field).length ? ilsLines(m.field).map((t) => <span class="cell-line">{t}</span>) : "—") : "not in this data"}</td>
                   </tr>
-                ))}
+                )))}
               </tbody>
             </table>
           </div>
-          <p class="note">Source: each map's table, which cites the game data it comes from. Runway lengths are the game's, not the real airfield's.</p>
+          <p class="note">Source: each map's game data, cited on its map page: <a href="https://github.com/YoloWingPixie/dcs-world-schema">dcs-world-schema</a>, extracted by running DCS World, with <a href="https://github.com/pydcs/dcs">pydcs</a> for The Channel and for tower radios the extraction lacks. These are the game's values, not the real airfield's: runway headings are magnetic as the game computes them. The game gives TACAN channels no X or Y band; where a beacon's listed frequency settles it, the band is shown, and * marks an assumed X. A dash means the game gives none. Not for real-world navigation.</p>
           <p>Each airfield belongs to a broad theatre, such as the Middle East. <a href={sitePath("encyclopedia/theatres/")}>Theatres</a> give each region's military history and list its DCS World and Falcon BMS maps.</p>
         </>
       ) : category.slug === "theatres" && airfieldData ? (

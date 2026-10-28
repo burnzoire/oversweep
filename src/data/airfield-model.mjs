@@ -43,7 +43,9 @@ export const nations = {
   'south-korea': { name: 'South Korea' },
   'north-korea': { name: 'North Korea' },
   georgia: { name: 'Georgia' },
+  abkhazia: { name: 'Abkhazia', note: 'breakaway region of Georgia' },
   russia: { name: 'Russia' },
+  'soviet-union': { name: 'Soviet Union', note: 'until 1991' },
   iran: { name: 'Iran' },
   uae: { name: 'United Arab Emirates' },
   oman: { name: 'Oman' },
@@ -183,10 +185,11 @@ function cited(text, label, where, sourceNumbers, problems) {
   checkCites(text, sourceNumbers, `${where} ${label}`, problems);
 }
 
-function checkPhotos(data, where, problems, { lead }) {
+function checkPhotos(data, where, problems, { lead, map = false }) {
   const photos = data.photos ?? [];
   if (!Array.isArray(photos)) return problems.push(`${where}: photos must be a list.`);
-  if (lead && photos.length === 0) problems.push(`${where}: needs a credited lead photo.`);
+  // An airfield with no freely licensed photo found yet may lead with its airfield map.
+  if (lead && photos.length === 0 && !map) problems.push(`${where}: needs a credited lead photo or an airfield map.`);
   photos.forEach((p, i) => {
     for (const key of ['src', 'alt', 'caption', 'author', 'licence', 'sourceUrl', 'accessed']) if (!isText(p[key])) problems.push(`${where}: photo ${i + 1} has no ${key}.`);
   });
@@ -205,9 +208,19 @@ function checkAirfield(rec, ctx, problems) {
   else cited(c.cite, 'coordinates cite', where, nums, problems);
   if (!isNumber(data.elevationFt)) problems.push(`${where}: elevationFt is missing.`);
   cited(data.elevationCite, 'elevationCite', where, nums, problems);
-  if (!data.opened || !Number.isInteger(data.opened.year)) problems.push(`${where}: opened.year is missing.`);
-  else cited(data.opened.text, 'opened.text', where, nums, problems);
-  if (data.status === 'closed' && !(data.closed && Number.isInteger(data.closed.year))) problems.push(`${where}: a closed airfield needs closed.year.`);
+  // Opening dates of old military fields are often unpublished: the year is
+  // optional, but the cited text must say what is known.
+  if (!data.opened || !isText(data.opened.text)) problems.push(`${where}: opened.text is missing.`);
+  else {
+    // Without a year the text may only say that no date was found.
+    if (data.opened.year !== undefined) cited(data.opened.text, 'opened.text', where, nums, problems);
+    if (data.opened.year !== undefined && !Number.isInteger(data.opened.year)) problems.push(`${where}: opened.year must be a whole year.`);
+  }
+  if (data.status === 'closed' && !(data.closed && isText(data.closed.text))) problems.push(`${where}: a closed airfield needs closed.text.`);
+  else if (data.closed) {
+    cited(data.closed.text, 'closed.text', where, nums, problems);
+    if (data.closed.year !== undefined && !Number.isInteger(data.closed.year)) problems.push(`${where}: closed.year must be a whole year.`);
+  }
 
   const ids = data.identifiers ?? {};
   for (const [key, pattern] of Object.entries({ icao: /^[A-Z]{4}$/, iata: /^[A-Z]{3}$/, faa: /^[A-Z0-9]{3,4}$/ }))
@@ -220,10 +233,13 @@ function checkAirfield(rec, ctx, problems) {
     checkPeriod(n, `${where} name "${n.name}"`, problems);
   });
 
-  if (!Array.isArray(data.roles) || data.roles.length === 0) problems.push(`${where}: roles are missing.`);
+  // A closed field has no role today, and an abandoned one may have no
+  // published operator history.
+  const closed = data.status === 'closed';
+  if (!Array.isArray(data.roles) || (data.roles.length === 0 && !closed)) problems.push(`${where}: roles are missing.`);
   for (const r of data.roles ?? []) if (!airfieldRoles[r]) problems.push(`${where}: unknown role "${r}".`);
 
-  if (!Array.isArray(data.operators) || data.operators.length === 0) problems.push(`${where}: operators are missing.`);
+  if (data.operators === undefined ? !closed : !Array.isArray(data.operators) || (data.operators.length === 0 && !closed)) problems.push(`${where}: operators are missing.`);
   (data.operators ?? []).forEach((o, i) => {
     const at = `${where} operator ${o.name ?? i}`;
     if (!isText(o.name)) problems.push(`${at}: name is missing.`);
@@ -290,7 +306,7 @@ function checkAirfield(rec, ctx, problems) {
     for (const r of data.runwayPlan.runways ?? [])
       if (!isText(r.id) || !isNumber(r.widthFt) || r.ends?.length !== 2 || !r.ends.flat().every(isNumber)) problems.push(`${where}: runwayPlan runway ${r.id} needs an id, a width and two [lat, lon] ends.`);
   }
-  checkPhotos(data, where, problems, { lead: true });
+  checkPhotos(data, where, problems, { lead: true, map: ctx.plans.has(rec.slug) });
 }
 
 function checkTheatre(rec, problems) {
@@ -329,11 +345,12 @@ function checkMap(rec, ctx, problems) {
 
 // `entries` are { slug, data } for every record in the category, data being
 // the content file's frontmatter. Returns a list of problems, empty when valid.
-export function validateCatalogue(entries) {
+// `plans` holds the slugs of airfields that have an airfield map (src/data/airfield-plans).
+export function validateCatalogue(entries, { plans = new Set() } = {}) {
   const problems = [];
   const byKind = (kind) => entries.filter((e) => e.data?.kind === kind);
   for (const e of entries) if (!['airfield', 'theatre', 'map'].includes(e.data?.kind)) problems.push(`${e.slug}: kind must be airfield, theatre or map.`);
-  const ctx = { theatres: new Set(byKind('theatre').map((e) => e.slug)), maps: new Set(byKind('map').map((e) => e.slug)) };
+  const ctx = { theatres: new Set(byKind('theatre').map((e) => e.slug)), maps: new Set(byKind('map').map((e) => e.slug)), plans };
   for (const e of byKind('airfield')) checkAirfield(e, ctx, problems);
   for (const e of byKind('theatre')) checkTheatre(e, problems);
   for (const e of byKind('map')) checkMap(e, ctx, problems);
