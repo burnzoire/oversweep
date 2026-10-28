@@ -61,14 +61,6 @@ photos:
     licenceUrl: "https://creativecommons.org/licenses/by-sa/2.0/"
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Nellis_Air_Force_Base,_Las_Vegas,_Nevada_(14017031619).jpg"
     accessed: "2026-10-27"
-  - src: "encyclopedia/airfields-carriers/nellis-2.jpg"
-    alt: "A grey F-15E Strike Eagle in flight against a clear blue sky, its landing gear retracted"
-    caption: "An F-15E Strike Eagle of the 17th Weapons Squadron departs Nellis during a Red Flag exercise, July 2023."
-    author: "Piemags Aviation"
-    licence: "CC BY-SA 4.0"
-    licenceUrl: "https://creativecommons.org/licenses/by-sa/4.0/"
-    sourceUrl: "https://commons.wikimedia.org/wiki/File:McDonnell_Douglas_F-15E_Strike_Eagle_90-0261_departing_Nellis_Air_Force_Base,_July_2023.jpg"
-    accessed: "2026-10-27"
 sources:
   - n: 1
     title: "Nellis Air Force Base"

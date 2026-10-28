@@ -1,3689 +1,4874 @@
 {
  "map": "dcs-syria",
  "source": {
-  "title": "pydcs terrain data: syria airports (airports.py)",
-  "publisher": "pydcs, an open-source Python library for building DCS World missions, whose terrain data mirrors the game's",
-  "url": "https://github.com/pydcs/dcs/blob/5ddcc63a2dcd661e16b14f7aa43219b93044855d/dcs/terrain/syria/airports.py",
-  "commit": "5ddcc63a2dcd661e16b14f7aa43219b93044855d"
+  "title": "dcs-world-schema reference data: Syria airbases, beacons and navaids",
+  "publisher": "dcs-world-schema, open-source data extracted by running DCS World 2.9.30.28536 (extracted 2026-10-04)",
+  "url": "https://github.com/YoloWingPixie/dcs-world-schema/tree/c3091e6c08fb8167e26145d0e33c10e4140c6fe7/dcs-world-reference/latest/airbases/Syria",
+  "commit": "c3091e6c08fb8167e26145d0e33c10e4140c6fe7",
+  "dcsVersion": "2.9.30.28536",
+  "beacons": true,
+  "radioFallback": {
+   "title": "pydcs terrain data: syria airports (airports.py)",
+   "url": "https://github.com/pydcs/dcs/blob/5ddcc63a2dcd661e16b14f7aa43219b93044855d/dcs/terrain/syria/airports.py"
+  }
  },
  "airfields": [
   {
+   "name": "Abu al-Duhur",
+   "elevationFt": 820,
+   "lat": 35.7323,
+   "lon": 37.1041,
    "runways": [
     {
-     "name": "27-09",
+     "name": "09/27",
+     "lengthFt": 8730,
      "ends": [
       {
        "name": "27",
-       "heading": 270,
-       "beacons": 0
+       "heading": 267
       },
       {
        "name": "09",
-       "heading": 90,
-       "beacons": 0
+       "heading": 87
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 1,
-   "name": "Abu al-Duhur",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.5,
+   "radio": {
+    "hf": 4.025,
+    "vhfLow": 38.95,
     "vhf": 122.2,
-    "fm": 38.95,
-    "hf": 4.025
-   }
+    "uhf": 250.5
+   },
+   "navaids": [],
+   "approaches": []
   },
   {
+   "name": "Adana Sakirpasa",
+   "elevationFt": 56,
+   "lat": 36.9819,
+   "lon": 35.2801,
    "runways": [
     {
-     "name": "23-05",
+     "name": "05/23",
+     "lengthFt": 8182,
      "ends": [
       {
        "name": "23",
-       "heading": 230,
-       "beacons": 0
+       "heading": 228
       },
       {
        "name": "05",
-       "heading": 50,
-       "beacons": 2
+       "heading": 48
       }
      ]
     }
    ],
-   "airfieldBeacons": 2,
-   "id": 2,
-   "name": "Adana Sakirpasa",
-   "civilian": true,
-   "atc": {
-    "uhf": 251.25,
+   "radio": {
+    "hf": 4.4,
+    "vhfLow": 39.7,
     "vhf": 121.1,
-    "fm": 39.7,
-    "hf": 4.4
-   }
+    "uhf": 251.25
+   },
+   "navaids": [
+    {
+     "type": "NDB with marker",
+     "callsign": "ADN",
+     "frequency": 395,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "ADA",
+     "frequency": 112.7,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "05",
+     "callsign": "IADA",
+     "frequency": 108.7
+    }
+   ]
   },
   {
+   "name": "Adiyaman",
+   "elevationFt": 2147,
+   "lat": 37.7313,
+   "lon": 38.4689,
    "runways": [
     {
-     "name": "04-22",
+     "name": "04/22",
+     "lengthFt": 6373,
      "ends": [
       {
        "name": "04",
-       "heading": 40,
-       "beacons": 2
+       "heading": 43
       },
       {
        "name": "22",
-       "heading": 220,
-       "beacons": 0
+       "heading": 223
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 219,
-   "name": "Adiyaman",
-   "civilian": false,
-   "atc": {
-    "uhf": 243.0,
+   "radio": {
+    "hf": 5.0,
+    "vhfLow": 41.85,
     "vhf": 121.5,
-    "fm": 41.85,
-    "hf": 5.0
-   }
+    "uhf": 243.0
+   },
+   "navaids": [],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "04",
+     "callsign": "KHD",
+     "frequency": 113.6
+    }
+   ]
   },
   {
-   "runways": [
-    {
-     "name": "10-28",
-     "ends": [
-      {
-       "name": "10",
-       "heading": 100,
-       "beacons": 0
-      },
-      {
-       "name": "28",
-       "heading": 280,
-       "beacons": 2
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 2,
-   "id": 44,
    "name": "Akrotiri",
-   "civilian": false,
-   "atc": {
-    "uhf": 252.0,
-    "vhf": 128.0,
-    "fm": 40.45,
-    "hf": 4.775
-   }
-  },
-  {
+   "elevationFt": 69,
+   "lat": 34.5904,
+   "lon": 32.9878,
    "runways": [
     {
-     "name": "28-10",
+     "name": "10/28",
+     "lengthFt": 8276,
      "ends": [
       {
-       "name": "28",
-       "heading": 280,
-       "beacons": 0
+       "name": "10",
+       "heading": 102
       },
       {
-       "name": "10",
-       "heading": 100,
-       "beacons": 0
+       "name": "28",
+       "heading": 282
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 3,
-   "name": "Al Qusayr",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.8,
-    "vhf": 119.2,
-    "fm": 40.25,
-    "hf": 4.675
-   }
+   "radio": {
+    "hf": 4.775,
+    "vhfLow": 40.45,
+    "vhf": 128.0,
+    "uhf": 252.0
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "AK",
+     "frequency": 365,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "AKR",
+     "channel": 107,
+     "frequency": 116.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "28",
+     "callsign": "IAK",
+     "frequency": 109.7
+    }
+   ]
   },
   {
+   "name": "Al Qusayr",
+   "elevationFt": 1729,
+   "lat": 34.5693,
+   "lon": 36.5715,
    "runways": [
     {
-     "name": "24-06",
+     "name": "10/28",
+     "lengthFt": 8585,
+     "ends": [
+      {
+       "name": "28",
+       "heading": 275
+      },
+      {
+       "name": "10",
+       "heading": 95
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.675,
+    "vhfLow": 40.25,
+    "vhf": 119.2,
+    "uhf": 251.8
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Al-Dumayr",
+   "elevationFt": 2067,
+   "lat": 33.6097,
+   "lon": 36.7491,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 9546,
      "ends": [
       {
        "name": "24",
-       "heading": 240,
-       "beacons": 0
+       "heading": 239
       },
       {
        "name": "06",
-       "heading": 60,
-       "beacons": 0
+       "heading": 59
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 9,
-   "name": "Al-Dumayr",
-   "civilian": false,
-   "atc": {
-    "uhf": 253.35,
+   "radio": {
+    "hf": 4.85,
+    "vhfLow": 41.8,
     "vhf": 120.3,
-    "fm": 41.8,
-    "hf": 4.85
-   }
+    "uhf": 253.35
+   },
+   "navaids": [],
+   "approaches": []
   },
   {
+   "name": "Aleppo",
+   "elevationFt": 1254,
+   "lat": 36.1806,
+   "lon": 37.2244,
    "runways": [
     {
-     "name": "27-09",
+     "name": "09/27",
+     "lengthFt": 8332,
      "ends": [
       {
        "name": "27",
-       "heading": 270,
-       "beacons": 0
+       "heading": 271
       },
       {
        "name": "09",
-       "heading": 90,
-       "beacons": 0
+       "heading": 91
       }
      ]
     }
    ],
-   "airfieldBeacons": 3,
-   "id": 27,
-   "name": "Aleppo",
-   "civilian": true,
-   "atc": {
-    "uhf": 251.1,
+   "radio": {
+    "hf": 4.325,
+    "vhfLow": 39.55,
     "vhf": 119.1,
-    "fm": 39.55,
-    "hf": 4.325
-   }
+    "uhf": 251.1
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "ALE",
+     "frequency": 396,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "MER",
+     "frequency": 365,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "ALE",
+     "frequency": 114.5,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
   },
   {
+   "name": "An Nasiriyah",
+   "elevationFt": 2737,
+   "lat": 33.9186,
+   "lon": 36.8658,
    "runways": [
     {
-     "name": "22-04",
+     "name": "04/22",
+     "lengthFt": 8172,
      "ends": [
       {
        "name": "22",
-       "heading": 220,
-       "beacons": 0
+       "heading": 218
       },
       {
        "name": "04",
-       "heading": 40,
-       "beacons": 0
+       "heading": 38
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 4,
-   "name": "An Nasiriyah",
-   "civilian": false,
-   "atc": {
-    "uhf": 252.3,
+   "radio": {
+    "hf": 4.925,
+    "vhfLow": 40.75,
     "vhf": 122.3,
-    "fm": 40.75,
-    "hf": 4.925
-   }
+    "uhf": 252.3
+   },
+   "navaids": [],
+   "approaches": []
   },
   {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 63,
    "name": "At Tanf",
-   "civilian": false,
-   "atc": {
-    "uhf": 252.9,
+   "elevationFt": 2329,
+   "lat": 33.5065,
+   "lon": 38.6149,
+   "runways": [],
+   "radio": {
+    "hf": 4.875,
+    "vhfLow": 41.35,
     "vhf": 121.1,
-    "fm": 41.35,
-    "hf": 4.875
-   }
+    "uhf": 252.9
+   },
+   "navaids": [],
+   "approaches": []
   },
   {
+   "name": "Bassel Al-Assad",
+   "elevationFt": 94,
+   "lat": 35.4038,
+   "lon": 35.9502,
    "runways": [
     {
-     "name": "17R-35L",
-     "ends": [
-      {
-       "name": "17R",
-       "heading": 170,
-       "beacons": 2
-      },
-      {
-       "name": "35L",
-       "heading": 350,
-       "beacons": 0
-      }
-     ]
-    },
-    {
-     "name": "17L-35R",
+     "name": "17L/35R",
+     "lengthFt": 6568,
      "ends": [
       {
        "name": "17L",
-       "heading": 170,
-       "beacons": 0
+       "heading": 171
       },
       {
        "name": "35R",
-       "heading": 350,
-       "beacons": 2
+       "heading": 351
+      }
+     ]
+    },
+    {
+     "name": "17R/35L",
+     "lengthFt": 8677,
+     "ends": [
+      {
+       "name": "17R",
+       "heading": 171
+      },
+      {
+       "name": "35L",
+       "heading": 351
       }
      ]
     }
    ],
-   "airfieldBeacons": 4,
-   "id": 21,
-   "name": "Bassel Al-Assad",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.6,
+   "radio": {
+    "hf": 4.075,
+    "vhfLow": 39.05,
     "vhf": 118.1,
-    "fm": 39.05,
-    "hf": 4.075
-   }
-  },
-  {
-   "runways": [
+    "uhf": 250.6
+   },
+   "navaids": [
     {
-     "name": "17-35",
-     "ends": [
-      {
-       "name": "17",
-       "heading": 170,
-       "beacons": 0
-      },
-      {
-       "name": "35",
-       "heading": 350,
-       "beacons": 0
-      }
-     ]
+     "type": "DME",
+     "callsign": "IBA",
+     "frequency": 109.1,
+     "unit": "MHz"
     },
     {
-     "name": "21-03",
+     "type": "NDB",
+     "callsign": "LTK",
+     "frequency": 414,
+     "unit": "kHz"
+    },
+    {
+     "type": "RSBN",
+     "callsign": "LTK",
+     "channel": 7
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "LTK",
+     "frequency": 114.8,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "17R",
+     "callsign": "IBA",
+     "frequency": 109.1
+    },
+    {
+     "type": "PRMG",
+     "runway": "35R",
+     "callsign": "LTK",
+     "channel": 9
+    }
+   ]
+  },
+  {
+   "name": "Beirut-Rafic Hariri",
+   "elevationFt": 39,
+   "lat": 33.8251,
+   "lon": 35.483,
+   "runways": [
+    {
+     "name": "03/21",
+     "lengthFt": 6620,
      "ends": [
       {
        "name": "21",
-       "heading": 210,
-       "beacons": 0
+       "heading": 208
       },
       {
        "name": "03",
-       "heading": 30,
-       "beacons": 0
+       "heading": 28
       }
      ]
     },
     {
-     "name": "34-16",
+     "name": "16/34",
+     "lengthFt": 9463,
      "ends": [
       {
        "name": "34",
-       "heading": 340,
-       "beacons": 0
+       "heading": 342
       },
       {
        "name": "16",
-       "heading": 160,
-       "beacons": 2
+       "heading": 162
+      }
+     ]
+    },
+    {
+     "name": "17/35",
+     "lengthFt": 7116,
+     "ends": [
+      {
+       "name": "17",
+       "heading": 172
+      },
+      {
+       "name": "35",
+       "heading": 352
       }
      ]
     }
    ],
-   "airfieldBeacons": 2,
-   "id": 6,
-   "name": "Beirut-Rafic Hariri",
-   "civilian": true,
-   "atc": {
-    "uhf": 253.2,
+   "radio": {
+    "hf": 4.325,
+    "vhfLow": 41.65,
     "vhf": 118.9,
-    "fm": 41.65,
-    "hf": 4.325
-   }
+    "uhf": 253.2
+   },
+   "navaids": [
+    {
+     "type": "NDB with marker",
+     "callsign": "BOD",
+     "frequency": 351,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "KAD",
+     "frequency": 112.6,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "03",
+     "callsign": "IKK",
+     "frequency": 110.7
+    },
+    {
+     "type": "ILS",
+     "runway": "16",
+     "callsign": "BIL",
+     "frequency": 109.5
+    },
+    {
+     "type": "ILS",
+     "runway": "16",
+     "callsign": "IBB",
+     "frequency": 110.1
+    }
+   ]
   },
   {
+   "name": "Ben Gurion",
+   "elevationFt": 91,
+   "lat": 32.0061,
+   "lon": 34.8824,
    "runways": [
     {
-     "name": "21-03",
+     "name": "03/21",
+     "lengthFt": 8846,
      "ends": [
       {
        "name": "21",
-       "heading": 210,
-       "beacons": 2
+       "heading": 204
       },
       {
        "name": "03",
-       "heading": 30,
-       "beacons": 0
+       "heading": 24
       }
      ]
     },
     {
-     "name": "26-08",
+     "name": "08/26",
+     "lengthFt": 9754,
      "ends": [
       {
        "name": "26",
-       "heading": 260,
-       "beacons": 3
+       "heading": 255
       },
       {
        "name": "08",
-       "heading": 80,
-       "beacons": 1
+       "heading": 75
       }
      ]
     },
     {
-     "name": "12-30",
+     "name": "12/30",
+     "lengthFt": 8491,
      "ends": [
       {
        "name": "12",
-       "heading": 120,
-       "beacons": 2
+       "heading": 117
       },
       {
        "name": "30",
-       "heading": 300,
-       "beacons": 2
+       "heading": 297
       }
      ]
     }
    ],
-   "airfieldBeacons": 1,
-   "id": 221,
-   "name": "Ben Gurion",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.7,
+   "radio": {
+    "hf": 4.125,
+    "vhfLow": 39.15,
     "vhf": 134.6,
-    "fm": 39.15,
-    "hf": 4.125
-   }
-  },
-  {
-   "runways": [
+    "uhf": 250.7
+   },
+   "navaids": [
     {
-     "name": "21L-03R",
-     "ends": [
-      {
-       "name": "21L",
-       "heading": 210,
-       "beacons": 1
-      },
-      {
-       "name": "03R",
-       "heading": 30,
-       "beacons": 1
-      }
-     ]
+     "type": "VOR-DME",
+     "callsign": "BGN",
+     "frequency": 113.5,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "08",
+     "callsign": "BA",
+     "frequency": 110.9
     },
     {
-     "name": "21R-03L",
+     "type": "ILS",
+     "runway": "12",
+     "callsign": "BG",
+     "frequency": 110.3
+    },
+    {
+     "type": "ILS",
+     "runway": "21",
+     "callsign": "BN",
+     "frequency": 109.7
+    },
+    {
+     "type": "ILS",
+     "runway": "26",
+     "callsign": "BA",
+     "frequency": 108.7
+    },
+    {
+     "type": "ILS",
+     "runway": "30",
+     "callsign": "BD",
+     "frequency": 111.9
+    }
+   ]
+  },
+  {
+   "name": "Chukurova",
+   "elevationFt": 10,
+   "lat": 36.8927,
+   "lon": 35.0693,
+   "runways": [
+    {
+     "name": "03L/21R",
+     "lengthFt": 11215,
      "ends": [
       {
        "name": "21R",
-       "heading": 210,
-       "beacons": 0
+       "heading": 206
       },
       {
        "name": "03L",
-       "heading": 30,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 2,
-   "id": 90,
-   "name": "Chukurova",
-   "civilian": false,
-   "atc": {
-    "uhf": 245.0,
-    "vhf": 120.8,
-    "fm": 38.4,
-    "hf": 4.25
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "05R-23L",
-     "ends": [
-      {
-       "name": "05R",
-       "heading": 50,
-       "beacons": 2
-      },
-      {
-       "name": "23L",
-       "heading": 230,
-       "beacons": 0
+       "heading": 26
       }
      ]
     },
     {
-     "name": "05L-23R",
+     "name": "03R/21L",
+     "lengthFt": 11210,
+     "ends": [
+      {
+       "name": "21L",
+       "heading": 206
+      },
+      {
+       "name": "03R",
+       "heading": 26
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.25,
+    "vhfLow": 38.4,
+    "vhf": 120.8,
+    "uhf": 245.0
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "CKR",
+     "frequency": 320.0,
+     "unit": "MHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "CKR",
+     "frequency": 113.7,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "03R",
+     "callsign": "ICKU",
+     "frequency": 329.75
+    },
+    {
+     "type": "ILS",
+     "runway": "21L",
+     "callsign": "ICKR",
+     "frequency": 333.95
+    }
+   ]
+  },
+  {
+   "name": "Damascus",
+   "elevationFt": 2008,
+   "lat": 33.4255,
+   "lon": 36.5185,
+   "runways": [
+    {
+     "name": "05L/23R",
+     "lengthFt": 11424,
      "ends": [
       {
        "name": "05L",
-       "heading": 50,
-       "beacons": 0
+       "heading": 43
       },
       {
        "name": "23R",
-       "heading": 230,
-       "beacons": 2
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 3,
-   "id": 7,
-   "name": "Damascus",
-   "civilian": false,
-   "atc": {
-    "uhf": 253.25,
-    "vhf": 118.5,
-    "fm": 41.7,
-    "hf": 4.9
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "10-28",
-     "ends": [
-      {
-       "name": "10",
-       "heading": 100,
-       "beacons": 0
-      },
-      {
-       "name": "28",
-       "heading": 280,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 2,
-   "id": 42,
-   "name": "Deir ez-Zor",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.95,
-    "vhf": 118.1,
-    "fm": 40.4,
-    "hf": 4.75
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "34R-16L",
-     "ends": [
-      {
-       "name": "34R",
-       "heading": 340,
-       "beacons": 2
-      },
-      {
-       "name": "16L",
-       "heading": 160,
-       "beacons": 2
+       "heading": 223
       }
      ]
     },
     {
-     "name": "34L-16R",
-     "ends": [
-      {
-       "name": "34L",
-       "heading": 340,
-       "beacons": 0
-      },
-      {
-       "name": "16R",
-       "heading": 160,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 2,
-   "id": 217,
-   "name": "Diyarbakir",
-   "civilian": false,
-   "atc": {
-    "uhf": 225.0,
-    "vhf": 132.4,
-    "fm": 38.9,
-    "hf": 3.8
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "11-29",
-     "ends": [
-      {
-       "name": "11",
-       "heading": 110,
-       "beacons": 0
-      },
-      {
-       "name": "29",
-       "heading": 290,
-       "beacons": 2
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 1,
-   "id": 49,
-   "name": "Ercan",
-   "civilian": true,
-   "atc": {
-    "uhf": 252.25,
-    "vhf": 120.2,
-    "fm": 40.7,
-    "hf": 4.9
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "09-27",
-     "ends": [
-      {
-       "name": "09",
-       "heading": 90,
-       "beacons": 0
-      },
-      {
-       "name": "27",
-       "heading": 270,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 10,
-   "name": "Eyn Shemer",
-   "civilian": true,
-   "atc": {
-    "uhf": 250.05,
-    "vhf": 123.4,
-    "fm": 38.45,
-    "hf": 3.775
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "10-28",
-     "ends": [
-      {
-       "name": "10",
-       "heading": 100,
-       "beacons": 0
-      },
-      {
-       "name": "28",
-       "heading": 280,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 2,
-   "id": 11,
-   "name": "Gaziantep",
-   "civilian": true,
-   "atc": {
-    "uhf": 250.1,
-    "vhf": 120.1,
-    "fm": 38.5,
-    "hf": 3.8
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "08-26",
-     "ends": [
-      {
-       "name": "08",
-       "heading": 80,
-       "beacons": 2
-      },
-      {
-       "name": "26",
-       "heading": 260,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 2,
-   "id": 41,
-   "name": "Gazipasa",
-   "civilian": true,
-   "atc": {
-    "uhf": 251.9,
-    "vhf": 119.25,
-    "fm": 40.35,
-    "hf": 4.725
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "09-27",
-     "ends": [
-      {
-       "name": "09",
-       "heading": 90,
-       "beacons": 0
-      },
-      {
-       "name": "27",
-       "heading": 270,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 2,
-   "id": 50,
-   "name": "Gecitkale",
-   "civilian": false,
-   "atc": {
-    "uhf": 252.35,
-    "vhf": 120.0,
-    "fm": 40.8,
-    "hf": 4.95
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "01-19",
-     "ends": [
-      {
-       "name": "01",
-       "heading": 10,
-       "beacons": 0
-      },
-      {
-       "name": "19",
-       "heading": 190,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 216,
-   "name": "Gulechoba",
-   "civilian": false
-  },
-  {
-   "runways": [
-    {
-     "name": "06-24",
-     "ends": [
-      {
-       "name": "06",
-       "heading": 60,
-       "beacons": 0
-      },
-      {
-       "name": "24",
-       "heading": 240,
-       "beacons": 0
-      }
-     ]
-    },
-    {
-     "name": "11-29",
-     "ends": [
-      {
-       "name": "11",
-       "heading": 110,
-       "beacons": 0
-      },
-      {
-       "name": "29",
-       "heading": 290,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 53,
-   "name": "H3",
-   "civilian": false,
-   "atc": {
-    "uhf": 252.5,
-    "vhf": 122.0,
-    "fm": 40.95,
-    "hf": 4.725
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "30-12",
-     "ends": [
-      {
-       "name": "30",
-       "heading": 300,
-       "beacons": 0
-      },
-      {
-       "name": "12",
-       "heading": 120,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 54,
-   "name": "H3 Northwest",
-   "civilian": false,
-   "atc": {
-    "uhf": 252.55,
-    "vhf": 122.1,
-    "fm": 41.0,
-    "hf": 4.825
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "30-12",
-     "ends": [
-      {
-       "name": "30",
-       "heading": 300,
-       "beacons": 0
-      },
-      {
-       "name": "12",
-       "heading": 120,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 55,
-   "name": "H3 Southwest",
-   "civilian": false,
-   "atc": {
-    "uhf": 252.6,
-    "vhf": 122.4,
-    "fm": 41.05,
-    "hf": 4.775
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "28-10",
-     "ends": [
-      {
-       "name": "28",
-       "heading": 280,
-       "beacons": 0
-      },
-      {
-       "name": "10",
-       "heading": 100,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 12,
-   "name": "H4",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.15,
-    "vhf": 122.6,
-    "fm": 38.55,
-    "hf": 3.825
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "10-28",
-     "ends": [
-      {
-       "name": "10",
-       "heading": 100,
-       "beacons": 0
-      },
-      {
-       "name": "28",
-       "heading": 280,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 61,
-   "name": "H4 Emergency",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.0,
-    "vhf": 118.5,
-    "fm": 40.0,
-    "hf": 4.5
-   }
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 138,
-   "name": "H_med_orig_01",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 137,
-   "name": "H_med_orig_02",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 136,
-   "name": "H_med_orig_03",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 135,
-   "name": "H_med_orig_04",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 134,
-   "name": "H_med_orig_05",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 133,
-   "name": "H_med_orig_06",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 132,
-   "name": "H_med_orig_07",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 131,
-   "name": "H_med_orig_08",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 182,
-   "name": "H_med_orig_09",
-   "civilian": true
-  },
-  {
-   "runways": [
-    {
-     "name": "34-16",
-     "ends": [
-      {
-       "name": "34",
-       "heading": 340,
-       "beacons": 0
-      },
-      {
-       "name": "16",
-       "heading": 160,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 13,
-   "name": "Haifa",
-   "civilian": true,
-   "atc": {
-    "uhf": 250.2,
-    "vhf": 127.8,
-    "fm": 38.6,
-    "hf": 3.85
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "27-09",
-     "ends": [
-      {
-       "name": "27",
-       "heading": 270,
-       "beacons": 0
-      },
-      {
-       "name": "09",
-       "heading": 90,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 14,
-   "name": "Hama",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.25,
-    "vhf": 118.05,
-    "fm": 38.65,
-    "hf": 3.875
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "22-04",
-     "ends": [
-      {
-       "name": "22",
-       "heading": 220,
-       "beacons": 0
-      },
-      {
-       "name": "04",
-       "heading": 40,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 2,
-   "id": 15,
-   "name": "Hatay",
-   "civilian": true,
-   "atc": {
-    "uhf": 250.3,
-    "vhf": 128.5,
-    "fm": 38.7,
-    "hf": 3.9
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "10R-28L",
-     "ends": [
-      {
-       "name": "10R",
-       "heading": 100,
-       "beacons": 0
-      },
-      {
-       "name": "28L",
-       "heading": 280,
-       "beacons": 0
-      }
-     ]
-    },
-    {
-     "name": "10L-28R",
-     "ends": [
-      {
-       "name": "10L",
-       "heading": 100,
-       "beacons": 0
-      },
-      {
-       "name": "28R",
-       "heading": 280,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 1,
-   "id": 81,
-   "name": "Hatzerim",
-   "civilian": false,
-   "atc": {
-    "uhf": 259.0,
-    "vhf": 128.2,
-    "fm": 41.95,
-    "hf": 4.975
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "11-29",
-     "ends": [
-      {
-       "name": "11",
-       "heading": 110,
-       "beacons": 0
-      },
-      {
-       "name": "29",
-       "heading": 290,
-       "beacons": 0
-      }
-     ]
-    },
-    {
-     "name": "29-11",
-     "ends": [
-      {
-       "name": "29",
-       "heading": 290,
-       "beacons": 0
-      },
-      {
-       "name": "11",
-       "heading": 110,
-       "beacons": 0
-      }
-     ]
-    },
-    {
-     "name": "23-05",
-     "ends": [
-      {
-       "name": "23",
-       "heading": 230,
-       "beacons": 0
-      },
-      {
-       "name": "05",
-       "heading": 50,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 1,
-   "id": 222,
-   "name": "Hatzor",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.75,
-    "vhf": 125.75,
-    "fm": 39.2,
-    "hf": 4.15
-   }
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 69,
-   "name": "HC01",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 70,
-   "name": "HC02",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 71,
-   "name": "HC03",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 72,
-   "name": "HC04",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 73,
-   "name": "HC05",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 74,
-   "name": "HC06",
-   "civilian": false
-  },
-  {
-   "runways": [
-    {
-     "name": "28-10",
-     "ends": [
-      {
-       "name": "28",
-       "heading": 280,
-       "beacons": 0
-      },
-      {
-       "name": "10",
-       "heading": 100,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 66,
-   "name": "Herzliya",
-   "civilian": true,
-   "atc": {
-    "uhf": 253.05,
-    "vhf": 122.2,
-    "fm": 41.5,
-    "hf": 4.6
-   }
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 79,
-   "name": "HI01",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 80,
-   "name": "HI02",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 82,
-   "name": "HI03",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 83,
-   "name": "HI05",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 84,
-   "name": "HI06",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 85,
-   "name": "HI07",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 76,
-   "name": "HI08",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 77,
-   "name": "HI09",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 86,
-   "name": "HI11",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 87,
-   "name": "HI12",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 116,
-   "name": "HI13",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 115,
-   "name": "HI14",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 114,
-   "name": "HI15",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 113,
-   "name": "HI16",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 112,
-   "name": "HI17",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 186,
-   "name": "HI18",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 193,
-   "name": "HI20",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 199,
-   "name": "HI21",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 198,
-   "name": "HI22",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 197,
-   "name": "HI23",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 196,
-   "name": "HI24",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 195,
-   "name": "HI25",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 194,
-   "name": "HI26",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 203,
-   "name": "HJ01",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 202,
-   "name": "HJ02",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 201,
-   "name": "HJ03",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 200,
-   "name": "HJ04",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 208,
-   "name": "HL01",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 207,
-   "name": "HL02",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 206,
-   "name": "HL03",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 205,
-   "name": "HL04",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 204,
-   "name": "HL05",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 157,
-   "name": "HL06",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 155,
-   "name": "HL07",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 154,
-   "name": "HL08",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 153,
-   "name": "HL09",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 152,
-   "name": "HL10",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 151,
-   "name": "HL11",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 148,
-   "name": "HL12",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 147,
-   "name": "HL13",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 129,
-   "name": "HMed00",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 128,
-   "name": "HMed01",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 127,
-   "name": "HMed02",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 126,
-   "name": "HMed03",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 125,
-   "name": "HMed04",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 124,
-   "name": "HMed05",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 123,
-   "name": "HMed06",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 122,
-   "name": "HMed07",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 121,
-   "name": "HMed08",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 120,
-   "name": "HMed09",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 119,
-   "name": "HMed10",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 130,
-   "name": "HMed11",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 176,
-   "name": "HMed12",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 175,
-   "name": "HMed13",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 174,
-   "name": "HMed14",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 173,
-   "name": "HMed15",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 172,
-   "name": "HMed16",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 171,
-   "name": "HMed17",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 170,
-   "name": "HMed18",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 169,
-   "name": "HMed19",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 168,
-   "name": "HMed20",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 167,
-   "name": "HMed21",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 166,
-   "name": "HMed22",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 165,
-   "name": "HMed23",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 164,
-   "name": "HMed24",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 163,
-   "name": "HMed25",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 162,
-   "name": "HMed26",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 161,
-   "name": "HMed27",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 160,
-   "name": "HMed28",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 159,
-   "name": "HMed29",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 158,
-   "name": "HMed30",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 181,
-   "name": "HOil01",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 180,
-   "name": "HOil02",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 179,
-   "name": "HOil03",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 178,
-   "name": "HOil04",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 177,
-   "name": "HOil05",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 211,
-   "name": "HOil06",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 89,
-   "name": "HS02",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 187,
-   "name": "HS03",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 184,
-   "name": "HS04",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 92,
-   "name": "HS05",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 93,
-   "name": "HS06",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 185,
-   "name": "HS07",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 94,
-   "name": "HS08",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 95,
-   "name": "HS09",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 96,
-   "name": "HS10",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 97,
-   "name": "HS11",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 105,
-   "name": "HS12",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 104,
-   "name": "HS13",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 103,
-   "name": "HS14",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 102,
-   "name": "HS15",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 101,
-   "name": "HS16",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 100,
-   "name": "HS17",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 99,
-   "name": "HS18",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 98,
-   "name": "HS19",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 111,
-   "name": "HS20",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 110,
-   "name": "HS21",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 109,
-   "name": "HS22",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 108,
-   "name": "HS23",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 107,
-   "name": "HS24",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 106,
-   "name": "HS25",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 145,
-   "name": "HS26",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 156,
-   "name": "HS27",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 189,
-   "name": "HS28",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 190,
-   "name": "HS29",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 191,
-   "name": "HS30",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 210,
-   "name": "HS31",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 209,
-   "name": "HS32",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 118,
-   "name": "HS33",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 183,
-   "name": "HS34",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 150,
-   "name": "HS35",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 188,
-   "name": "HS36",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 215,
-   "name": "HS37",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 214,
-   "name": "HS38",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 213,
-   "name": "HS39",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 212,
-   "name": "HS40",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 149,
-   "name": "HS41",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 146,
-   "name": "HS42",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 144,
-   "name": "HStad01",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 143,
-   "name": "HStad02",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 142,
-   "name": "HStad03",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 141,
-   "name": "HStad04",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 140,
-   "name": "HStad05",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 139,
-   "name": "HStad06",
-   "civilian": true
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 117,
-   "name": "HT01",
-   "civilian": false
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 192,
-   "name": "HT02",
-   "civilian": false
-  },
-  {
-   "runways": [
-    {
-     "name": "05-23",
-     "ends": [
-      {
-       "name": "05",
-       "heading": 50,
-       "beacons": 2
-      },
-      {
-       "name": "23",
-       "heading": 230,
-       "beacons": 2
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 1,
-   "id": 16,
-   "name": "Incirlik",
-   "civilian": false,
-   "atc": {
-    "uhf": 360.1,
-    "vhf": 122.1,
-    "fm": 38.75,
-    "hf": 3.925
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "10-28",
-     "ends": [
-      {
-       "name": "10",
-       "heading": 100,
-       "beacons": 0
-      },
-      {
-       "name": "28",
-       "heading": 280,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 17,
-   "name": "Jirah",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.35,
-    "vhf": 118.1,
-    "fm": 38.8,
-    "hf": 3.95
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "25-07",
-     "ends": [
-      {
-       "name": "25",
-       "heading": 250,
-       "beacons": 0
-      },
-      {
-       "name": "07",
-       "heading": 70,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 75,
-   "name": "Kahramanmaras",
-   "civilian": false,
-   "atc": {
-    "uhf": 225.0,
-    "vhf": 118.75,
-    "fm": 38.4,
-    "hf": 3.75
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "10-28",
-     "ends": [
-      {
-       "name": "10",
-       "heading": 100,
-       "beacons": 0
-      },
-      {
-       "name": "28",
-       "heading": 280,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 88,
-   "name": "Kedem",
-   "civilian": false,
-   "atc": {
-    "uhf": 256.0,
-    "vhf": 119.0,
-    "fm": 41.9,
-    "hf": 3.75
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "07-25",
-     "ends": [
-      {
-       "name": "07",
-       "heading": 70,
-       "beacons": 0
-      },
-      {
-       "name": "25",
-       "heading": 250,
-       "beacons": 0
-      }
-     ]
-    },
-    {
-     "name": "15-33",
-     "ends": [
-      {
-       "name": "15",
-       "heading": 150,
-       "beacons": 0
-      },
-      {
-       "name": "33",
-       "heading": 330,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 18,
-   "name": "Khalkhalah",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.4,
-    "vhf": 122.5,
-    "fm": 38.85,
-    "hf": 3.975
-   }
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 59,
-   "name": "Kharab Ishk",
-   "civilian": false,
-   "atc": {
-    "uhf": 252.75,
-    "vhf": 122.2,
-    "fm": 41.2,
-    "hf": 4.175
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "31-13",
-     "ends": [
-      {
-       "name": "31",
-       "heading": 310,
-       "beacons": 0
-      },
-      {
-       "name": "13",
-       "heading": 130,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 65,
-   "name": "King Abdullah II",
-   "civilian": false,
-   "atc": {
-    "uhf": 253.0,
-    "vhf": 118.4,
-    "fm": 41.45,
-    "hf": 3.9
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "31-13",
-     "ends": [
-      {
-       "name": "31",
-       "heading": 310,
-       "beacons": 0
-      },
-      {
-       "name": "13",
-       "heading": 130,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 19,
-   "name": "King Hussein Air College",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.45,
-    "vhf": 118.3,
-    "fm": 38.9,
-    "hf": 4.0
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "24-06",
-     "ends": [
-      {
-       "name": "24",
-       "heading": 240,
-       "beacons": 0
-      },
-      {
-       "name": "06",
-       "heading": 60,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 45,
-   "name": "Kingsfield",
-   "civilian": false,
-   "atc": {
-    "uhf": 252.05,
-    "vhf": 121.0,
-    "fm": 40.5,
-    "hf": 4.8
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "03-21",
-     "ends": [
-      {
-       "name": "03",
-       "heading": 30,
-       "beacons": 0
-      },
-      {
-       "name": "21",
-       "heading": 210,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 20,
-   "name": "Kiryat Shmona",
-   "civilian": true,
-   "atc": {
-    "uhf": 250.55,
-    "vhf": 118.4,
-    "fm": 39.0,
-    "hf": 4.05
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "01L-19R",
-     "ends": [
-      {
-       "name": "01L",
-       "heading": 10,
-       "beacons": 3
-      },
-      {
-       "name": "19R",
-       "heading": 190,
-       "beacons": 0
-      }
-     ]
-    },
-    {
-     "name": "01R-19L",
-     "ends": [
-      {
-       "name": "01R",
-       "heading": 10,
-       "beacons": 0
-      },
-      {
-       "name": "19L",
-       "heading": 190,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 3,
-   "id": 218,
-   "name": "Konya",
-   "civilian": false,
-   "atc": {
-    "uhf": 225.0,
-    "vhf": 132.4,
-    "fm": 38.9,
-    "hf": 3.8
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "10-28",
-     "ends": [
-      {
-       "name": "10",
-       "heading": 100,
-       "beacons": 0
-      },
-      {
-       "name": "28",
-       "heading": 280,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 31,
-   "name": "Kuweires",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.35,
-    "vhf": 120.5,
-    "fm": 39.8,
-    "hf": 4.45
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "17-35",
-     "ends": [
-      {
-       "name": "17",
-       "heading": 170,
-       "beacons": 0
-      },
-      {
-       "name": "35",
-       "heading": 350,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 48,
-   "name": "Lakatamia",
-   "civilian": false,
-   "atc": {
-    "uhf": 252.2,
-    "vhf": 120.2,
-    "fm": 40.65,
-    "hf": 4.875
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "04-22",
-     "ends": [
-      {
-       "name": "04",
-       "heading": 40,
-       "beacons": 0
-      },
-      {
-       "name": "22",
-       "heading": 220,
-       "beacons": 2
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 2,
-   "id": 47,
-   "name": "Larnaca",
-   "civilian": true,
-   "atc": {
-    "uhf": 252.15,
-    "vhf": 121.2,
-    "fm": 40.6,
-    "hf": 4.85
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "08-26",
-     "ends": [
-      {
-       "name": "08",
-       "heading": 80,
-       "beacons": 0
-      },
-      {
-       "name": "26",
-       "heading": 260,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 22,
-   "name": "Marj as Sultan North",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.85,
-    "vhf": 122.7,
-    "fm": 39.3,
-    "hf": 4.2
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "09-27",
-     "ends": [
-      {
-       "name": "09",
-       "heading": 90,
-       "beacons": 0
-      },
-      {
-       "name": "27",
-       "heading": 270,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 8,
-   "name": "Marj as Sultan South",
-   "civilian": false,
-   "atc": {
-    "uhf": 253.3,
-    "vhf": 122.9,
-    "fm": 41.75,
-    "hf": 4.95
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "06L-24R",
-     "ends": [
-      {
-       "name": "06L",
-       "heading": 60,
-       "beacons": 0
-      },
-      {
-       "name": "24R",
-       "heading": 240,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 23,
-   "name": "Marj Ruhayyil",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.9,
-    "vhf": 120.8,
-    "fm": 39.35,
-    "hf": 4.225
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "24-06",
-     "ends": [
-      {
-       "name": "24",
-       "heading": 240,
-       "beacons": 0
-      },
-      {
-       "name": "06",
-       "heading": 60,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 67,
-   "name": "Marka",
-   "civilian": false,
-   "atc": {
-    "uhf": 253.1,
-    "vhf": 118.1,
-    "fm": 41.55,
-    "hf": 3.95
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "09-27",
-     "ends": [
-      {
-       "name": "09",
-       "heading": 90,
-       "beacons": 0
-      },
-      {
-       "name": "27",
-       "heading": 270,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 24,
-   "name": "Megiddo",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.95,
-    "vhf": 119.9,
-    "fm": 39.4,
-    "hf": 4.25
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "24-06",
-     "ends": [
-      {
-       "name": "24",
-       "heading": 240,
-       "beacons": 0
-      },
-      {
-       "name": "06",
-       "heading": 60,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 1,
-   "id": 25,
-   "name": "Mezzeh",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.0,
-    "vhf": 120.7,
-    "fm": 39.45,
-    "hf": 4.275
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "04-22",
-     "ends": [
-      {
-       "name": "04",
-       "heading": 40,
-       "beacons": 0
-      },
-      {
-       "name": "22",
-       "heading": 220,
-       "beacons": 0
-      }
-     ]
-    },
-    {
-     "name": "10-28",
-     "ends": [
-      {
-       "name": "10",
-       "heading": 100,
-       "beacons": 0
-      },
-      {
-       "name": "28",
-       "heading": 280,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 26,
-   "name": "Minakh",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.05,
-    "vhf": 120.6,
-    "fm": 39.5,
-    "hf": 4.3
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "31-13",
-     "ends": [
-      {
-       "name": "31",
-       "heading": 310,
-       "beacons": 2
-      },
-      {
-       "name": "13",
-       "heading": 130,
-       "beacons": 0
-      }
-     ]
-    },
-    {
-     "name": "26-08",
-     "ends": [
-      {
-       "name": "26",
-       "heading": 260,
-       "beacons": 2
-      },
-      {
-       "name": "08",
-       "heading": 80,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 68,
-   "name": "Muwaffaq Salti",
-   "civilian": false,
-   "atc": {
-    "uhf": 253.15,
-    "vhf": 120.5,
-    "fm": 41.6,
-    "hf": 4.45
-   }
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 52,
-   "name": "Naqoura",
-   "civilian": false,
-   "atc": {
-    "uhf": 252.45,
-    "vhf": 122.0,
-    "fm": 40.9,
-    "hf": 3.8
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "25-07",
-     "ends": [
-      {
-       "name": "25",
-       "heading": 250,
-       "beacons": 1
-      },
-      {
-       "name": "07",
-       "heading": 70,
-       "beacons": 1
-      }
-     ]
-    },
-    {
-     "name": "26R-08L",
-     "ends": [
-      {
-       "name": "26R",
-       "heading": 260,
-       "beacons": 1
-      },
-      {
-       "name": "08L",
-       "heading": 80,
-       "beacons": 1
-      }
-     ]
-    },
-    {
-     "name": "26L-08R",
-     "ends": [
-      {
-       "name": "26L",
-       "heading": 260,
-       "beacons": 0
-      },
-      {
-       "name": "08R",
-       "heading": 80,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 2,
-   "id": 62,
-   "name": "Nevatim",
-   "civilian": false,
-   "atc": {
-    "uhf": 225.0,
-    "vhf": 132.4,
-    "fm": 38.9,
-    "hf": 3.8
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "03L-21R",
-     "ends": [
-      {
-       "name": "03L",
-       "heading": 30,
-       "beacons": 0
-      },
-      {
-       "name": "21R",
-       "heading": 210,
-       "beacons": 0
-      }
-     ]
-    },
-    {
-     "name": "03R-21L",
-     "ends": [
-      {
-       "name": "03R",
-       "heading": 30,
-       "beacons": 0
-      },
-      {
-       "name": "21L",
-       "heading": 210,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 223,
-   "name": "Palmachim",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.8,
-    "vhf": 118.25,
-    "fm": 39.25,
-    "hf": 4.175
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "26-08",
-     "ends": [
-      {
-       "name": "26",
-       "heading": 260,
-       "beacons": 0
-      },
-      {
-       "name": "08",
-       "heading": 80,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 2,
-   "id": 28,
-   "name": "Palmyra",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.15,
-    "vhf": 121.9,
-    "fm": 39.6,
-    "hf": 4.35
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "11-29",
-     "ends": [
-      {
-       "name": "11",
-       "heading": 110,
-       "beacons": 0
-      },
-      {
-       "name": "29",
-       "heading": 290,
-       "beacons": 2
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 4,
-   "id": 46,
-   "name": "Paphos",
-   "civilian": false,
-   "atc": {
-    "uhf": 252.1,
-    "vhf": 119.9,
-    "fm": 40.55,
-    "hf": 4.825
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "16-34",
-     "ends": [
-      {
-       "name": "16",
-       "heading": 160,
-       "beacons": 0
-      },
-      {
-       "name": "34",
-       "heading": 340,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 51,
-   "name": "Pinarbashi",
-   "civilian": false,
-   "atc": {
-    "uhf": 252.4,
-    "vhf": 121.0,
-    "fm": 40.85,
-    "hf": 4.75
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "13-31",
-     "ends": [
-      {
-       "name": "13",
-       "heading": 130,
-       "beacons": 0
-      },
-      {
-       "name": "31",
-       "heading": 310,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 3,
-   "id": 64,
-   "name": "Prince Hassan",
-   "civilian": false,
-   "atc": {
-    "uhf": 252.95,
-    "vhf": 122.6,
-    "fm": 41.4,
-    "hf": 4.3
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "05-23",
-     "ends": [
-      {
-       "name": "05",
-       "heading": 50,
-       "beacons": 0
-      },
-      {
-       "name": "23",
-       "heading": 230,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 29,
-   "name": "Qabr as Sitt",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.2,
-    "vhf": 122.6,
-    "fm": 39.65,
-    "hf": 4.375
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "11-29",
-     "ends": [
-      {
-       "name": "11",
-       "heading": 110,
-       "beacons": 0
-      },
-      {
-       "name": "29",
-       "heading": 290,
-       "beacons": 0
-      }
-     ]
-    },
-    {
-     "name": "09-27",
-     "ends": [
-      {
-       "name": "09",
-       "heading": 90,
-       "beacons": 0
-      },
-      {
-       "name": "27",
-       "heading": 270,
-       "beacons": 0
-      }
-     ]
-    },
-    {
-     "name": "33-15",
-     "ends": [
-      {
-       "name": "33",
-       "heading": 330,
-       "beacons": 2
-      },
-      {
-       "name": "15",
-       "heading": 150,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 2,
-   "id": 30,
-   "name": "Ramat David",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.3,
-    "vhf": 118.6,
-    "fm": 39.75,
-    "hf": 4.425
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "04-22",
-     "ends": [
-      {
-       "name": "04",
-       "heading": 40,
-       "beacons": 0
-      },
-      {
-       "name": "22",
-       "heading": 220,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 32,
-   "name": "Rayak",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.4,
-    "vhf": 124.4,
-    "fm": 39.85,
-    "hf": 4.475
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "06-24",
-     "ends": [
-      {
-       "name": "06",
-       "heading": 60,
-       "beacons": 0
-      },
-      {
-       "name": "24",
-       "heading": 240,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 33,
-   "name": "Rene Mouawad",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.45,
-    "vhf": 121.0,
-    "fm": 39.9,
-    "hf": 4.5
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "33-15",
-     "ends": [
-      {
-       "name": "33",
-       "heading": 330,
-       "beacons": 0
-      },
-      {
-       "name": "15",
-       "heading": 150,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 1,
-   "id": 34,
-   "name": "Rosh Pina",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.5,
-    "vhf": 118.45,
-    "fm": 39.95,
-    "hf": 4.525
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "27-09",
-     "ends": [
-      {
-       "name": "27",
-       "heading": 270,
-       "beacons": 0
-      },
-      {
-       "name": "09",
-       "heading": 90,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 57,
-   "name": "Ruwayshid",
-   "civilian": false,
-   "atc": {
-    "uhf": 252.65,
-    "vhf": 122.1,
-    "fm": 41.1,
-    "hf": 4.4
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "22-04",
-     "ends": [
-      {
-       "name": "22",
-       "heading": 220,
-       "beacons": 0
-      },
-      {
-       "name": "04",
-       "heading": 40,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 4,
-   "id": 58,
-   "name": "Sanliurfa",
-   "civilian": true,
-   "atc": {
-    "uhf": 252.7,
-    "vhf": 118.4,
-    "fm": 41.15,
-    "hf": 4.15
-   }
-  },
-  {
-   "runways": [],
-   "airfieldBeacons": 0,
-   "id": 224,
-   "name": "Sanliurfa Heliport",
-   "civilian": false
-  },
-  {
-   "runways": [
-    {
-     "name": "08-26",
-     "ends": [
-      {
-       "name": "08",
-       "heading": 80,
-       "beacons": 0
-      },
-      {
-       "name": "26",
-       "heading": 260,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 35,
-   "name": "Sayqal",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.55,
-    "vhf": 120.4,
-    "fm": 40.0,
-    "hf": 4.55
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "11-29",
-     "ends": [
-      {
-       "name": "11",
-       "heading": 110,
-       "beacons": 0
-      },
-      {
-       "name": "29",
-       "heading": 290,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 36,
-   "name": "Shayrat",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.6,
-    "vhf": 120.2,
-    "fm": 40.05,
-    "hf": 4.575
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "04-22",
-     "ends": [
-      {
-       "name": "04",
-       "heading": 40,
-       "beacons": 0
-      },
-      {
-       "name": "22",
-       "heading": 220,
-       "beacons": 0
-      }
-     ]
-    },
-    {
-     "name": "31-13",
-     "ends": [
-      {
-       "name": "31",
-       "heading": 310,
-       "beacons": 0
-      },
-      {
-       "name": "13",
-       "heading": 130,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 225,
-   "name": "T2",
-   "civilian": false,
-   "atc": {
-    "uhf": 255.0,
-    "vhf": 123.5,
-    "fm": 42.0,
-    "hf": 3.85
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "28-10",
-     "ends": [
-      {
-       "name": "28",
-       "heading": 280,
-       "beacons": 0
-      },
-      {
-       "name": "10",
-       "heading": 100,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 226,
-   "name": "T3",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.9,
-    "vhf": 119.25,
-    "fm": 40.35,
-    "hf": 4.725
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "09-27",
-     "ends": [
-      {
-       "name": "09",
-       "heading": 90,
-       "beacons": 0
-      },
-      {
-       "name": "27",
-       "heading": 270,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 37,
-   "name": "Tabqa",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.65,
-    "vhf": 118.5,
-    "fm": 40.1,
-    "hf": 4.6
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "28-10",
-     "ends": [
-      {
-       "name": "28",
-       "heading": 280,
-       "beacons": 0
-      },
-      {
-       "name": "10",
-       "heading": 100,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 38,
-   "name": "Taftanaz",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.7,
-    "vhf": 122.8,
-    "fm": 40.15,
-    "hf": 4.625
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "10-28",
-     "ends": [
-      {
-       "name": "10",
-       "heading": 100,
-       "beacons": 0
-      },
-      {
-       "name": "28",
-       "heading": 280,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 60,
-   "name": "Tal Siman",
-   "civilian": false,
-   "atc": {
-    "uhf": 252.85,
-    "vhf": 121.9,
-    "fm": 41.3,
-    "hf": 4.1
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "18-36",
-     "ends": [
-      {
-       "name": "18",
-       "heading": 180,
-       "beacons": 0
-      },
-      {
-       "name": "36",
-       "heading": 360,
-       "beacons": 2
-      }
-     ]
-    },
-    {
-     "name": "33-15",
-     "ends": [
-      {
-       "name": "33",
-       "heading": 330,
-       "beacons": 0
-      },
-      {
-       "name": "15",
-       "heading": 150,
-       "beacons": 0
-      }
-     ]
-    },
-    {
-     "name": "33-15",
-     "ends": [
-      {
-       "name": "33",
-       "heading": 330,
-       "beacons": 0
-      },
-      {
-       "name": "15",
-       "heading": 150,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 1,
-   "id": 220,
-   "name": "Tel Nof",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.65,
-    "vhf": 128.1,
-    "fm": 39.1,
-    "hf": 4.1
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "32-14",
-     "ends": [
-      {
-       "name": "32",
-       "heading": 320,
-       "beacons": 0
-      },
-      {
-       "name": "14",
-       "heading": 140,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 1,
-   "id": 91,
-   "name": "Teyman",
-   "civilian": false,
-   "atc": {
-    "uhf": 255.0,
-    "vhf": 123.5,
-    "fm": 42.0,
-    "hf": 3.85
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "05R-23L",
+     "name": "05R/23L",
+     "lengthFt": 11295,
      "ends": [
       {
        "name": "05R",
-       "heading": 50,
-       "beacons": 0
+       "heading": 43
       },
       {
        "name": "23L",
-       "heading": 230,
-       "beacons": 0
+       "heading": 223
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 5,
-   "name": "Tha'lah",
-   "civilian": false,
-   "atc": {
-    "uhf": 252.8,
-    "vhf": 118.0,
-    "fm": 41.25,
-    "hf": 3.925
-   }
-  },
-  {
-   "runways": [
+   "radio": {
+    "hf": 4.9,
+    "vhfLow": 41.7,
+    "vhf": 118.5,
+    "uhf": 253.25
+   },
+   "navaids": [
     {
-     "name": "09-27",
-     "ends": [
-      {
-       "name": "09",
-       "heading": 90,
-       "beacons": 0
-      },
-      {
-       "name": "27",
-       "heading": 270,
-       "beacons": 0
-      }
-     ]
+     "type": "NDB",
+     "callsign": "ABD",
+     "frequency": 264,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "DAL",
+     "frequency": 342,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "DAM",
+     "frequency": 116.0,
+     "unit": "MHz"
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 39,
-   "name": "Tiyas",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.75,
-    "vhf": 120.5,
-    "fm": 40.2,
-    "hf": 4.65
-   }
-  },
-  {
-   "runways": [
+   "approaches": [
     {
-     "name": "20-02",
-     "ends": [
-      {
-       "name": "20",
-       "heading": 200,
-       "beacons": 0
-      },
-      {
-       "name": "02",
-       "heading": 20,
-       "beacons": 0
-      }
-     ]
+     "type": "ILS",
+     "runway": "05R",
+     "callsign": "DAML",
+     "frequency": 111.1
+    },
+    {
+     "type": "ILS",
+     "runway": "23R",
+     "callsign": "IDA",
+     "frequency": 109.9
     }
-   ],
-   "airfieldBeacons": 1,
-   "id": 40,
-   "name": "Wujah Al Hajar",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.85,
-    "vhf": 120.5,
-    "fm": 40.3,
-    "hf": 4.7
-   }
+   ]
   },
   {
+   "name": "Deir ez-Zor",
+   "elevationFt": 694,
+   "lat": 35.2854,
+   "lon": 40.1761,
    "runways": [
     {
-     "name": "10-28",
+     "name": "10/28",
+     "lengthFt": 9339,
      "ends": [
       {
        "name": "10",
-       "heading": 100,
-       "beacons": 0
+       "heading": 104
       },
       {
        "name": "28",
-       "heading": 280,
-       "beacons": 0
+       "heading": 285
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 56,
-   "name": "Zarqa",
-   "civilian": false,
-   "atc": {
-    "uhf": 252.1,
+   "radio": {
+    "hf": 4.75,
+    "vhfLow": 40.4,
+    "vhf": 118.1,
+    "uhf": 251.95
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "DRZ",
+     "frequency": 295,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "DRZ",
+     "frequency": 117.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Diyarbakir",
+   "elevationFt": 2211,
+   "lat": 37.8933,
+   "lon": 40.1987,
+   "runways": [
+    {
+     "name": "16L/34R",
+     "lengthFt": 11430,
+     "ends": [
+      {
+       "name": "34R",
+       "heading": 337
+      },
+      {
+       "name": "16L",
+       "heading": 157
+      }
+     ]
+    },
+    {
+     "name": "16R/34L",
+     "lengthFt": 11434,
+     "ends": [
+      {
+       "name": "34L",
+       "heading": 337
+      },
+      {
+       "name": "16R",
+       "heading": 157
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.8,
+    "vhfLow": 38.9,
+    "vhf": 132.4,
+    "uhf": 225.0
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "DYB",
+     "frequency": 330,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "DIY",
+     "channel": 37,
+     "frequency": 110.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "16L",
+     "callsign": "IDD",
+     "frequency": 109.4
+    },
+    {
+     "type": "ILS",
+     "runway": "34R",
+     "callsign": "IDI",
+     "frequency": 109.2
+    }
+   ]
+  },
+  {
+   "name": "Ercan",
+   "elevationFt": 380,
+   "lat": 35.1496,
+   "lon": 33.5125,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 9365,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 106
+      },
+      {
+       "name": "29",
+       "heading": 286
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.9,
+    "vhfLow": 40.7,
+    "vhf": 120.2,
+    "uhf": 252.25
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "ECN",
+     "frequency": 117.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "29",
+     "callsign": "IECR",
+     "frequency": 108.3
+    }
+   ]
+  },
+  {
+   "name": "Eyn Shemer",
+   "elevationFt": 101,
+   "lat": 32.4409,
+   "lon": 35.007,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 4826,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 93
+      },
+      {
+       "name": "27",
+       "heading": 273
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.775,
+    "vhfLow": 38.45,
+    "vhf": 123.4,
+    "uhf": 250.05
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Gaziantep",
+   "elevationFt": 2237,
+   "lat": 36.9481,
+   "lon": 37.4783,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 9495,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 99
+      },
+      {
+       "name": "28",
+       "heading": 279
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.8,
+    "vhfLow": 38.5,
+    "vhf": 120.1,
+    "uhf": 250.1
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "GAZ",
+     "frequency": 432,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "GAZ",
+     "frequency": 116.7,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "28",
+     "callsign": "IGNP",
+     "frequency": 109.1
+    }
+   ]
+  },
+  {
+   "name": "Gazipasa",
+   "elevationFt": 79,
+   "lat": 36.2989,
+   "lon": 32.2976,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 6885,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 76
+      },
+      {
+       "name": "26",
+       "heading": 256
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.725,
+    "vhfLow": 40.35,
+    "vhf": 119.25,
+    "uhf": 251.9
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "GZP",
+     "frequency": 316,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "GZP",
+     "channel": 89,
+     "frequency": 114.2,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "08",
+     "callsign": "IGZP",
+     "frequency": 108.5
+    }
+   ]
+  },
+  {
+   "name": "Gecitkale",
+   "elevationFt": 148,
+   "lat": 35.236,
+   "lon": 33.7209,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 8156,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 85
+      },
+      {
+       "name": "27",
+       "heading": 265
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.95,
+    "vhfLow": 40.8,
+    "vhf": 120.0,
+    "uhf": 252.35
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "GKE",
+     "frequency": 435,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "GKE",
+     "frequency": 114.3,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Gulechoba",
+   "elevationFt": 2546,
+   "lat": 38.012,
+   "lon": 39.9547,
+   "runways": [
+    {
+     "name": "01/19",
+     "lengthFt": 4483,
+     "ends": [
+      {
+       "name": "01",
+       "heading": 6
+      },
+      {
+       "name": "19",
+       "heading": 186
+      }
+     ]
+    }
+   ],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H3",
+   "elevationFt": 2549,
+   "lat": 32.9362,
+   "lon": 39.7458,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 7931,
+     "ends": [
+      {
+       "name": "06",
+       "heading": 60
+      },
+      {
+       "name": "24",
+       "heading": 240
+      }
+     ]
+    },
+    {
+     "name": "11/29",
+     "lengthFt": 8832,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 107
+      },
+      {
+       "name": "29",
+       "heading": 287
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.725,
+    "vhfLow": 40.95,
+    "vhf": 122.0,
+    "uhf": 252.5
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H3 Northwest",
+   "elevationFt": 2576,
+   "lat": 33.076,
+   "lon": 39.5966,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 7377,
+     "ends": [
+      {
+       "name": "30",
+       "heading": 297
+      },
+      {
+       "name": "12",
+       "heading": 117
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.825,
+    "vhfLow": 41.0,
+    "vhf": 122.1,
+    "uhf": 252.55
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H3 Southwest",
+   "elevationFt": 2671,
+   "lat": 32.7433,
+   "lon": 39.6024,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 7073,
+     "ends": [
+      {
+       "name": "30",
+       "heading": 296
+      },
+      {
+       "name": "12",
+       "heading": 116
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.775,
+    "vhfLow": 41.05,
+    "vhf": 122.4,
+    "uhf": 252.6
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H4",
+   "elevationFt": 2257,
+   "lat": 32.5393,
+   "lon": 38.1951,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 7179,
+     "ends": [
+      {
+       "name": "28",
+       "heading": 278
+      },
+      {
+       "name": "10",
+       "heading": 98
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.825,
+    "vhfLow": 38.55,
+    "vhf": 122.6,
+    "uhf": 250.15
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H4 Emergency",
+   "elevationFt": 2502,
+   "lat": 32.3863,
+   "lon": 37.7817,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 4069,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 85
+      },
+      {
+       "name": "28",
+       "heading": 265
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.5,
+    "vhfLow": 40.0,
+    "vhf": 118.5,
+    "uhf": 250.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H_med_orig_01",
+   "elevationFt": 72,
+   "lat": 37.0116,
+   "lon": 35.3526,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H_med_orig_02",
+   "elevationFt": 479,
+   "lat": 34.788,
+   "lon": 32.4453,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H_med_orig_03",
+   "elevationFt": 85,
+   "lat": 34.9214,
+   "lon": 33.6043,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H_med_orig_04",
+   "elevationFt": 425,
+   "lat": 34.708,
+   "lon": 32.9819,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H_med_orig_05",
+   "elevationFt": 925,
+   "lat": 32.7855,
+   "lon": 34.9806,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H_med_orig_06",
+   "elevationFt": 587,
+   "lat": 35.128,
+   "lon": 33.3786,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H_med_orig_07",
+   "elevationFt": 14,
+   "lat": 32.8335,
+   "lon": 34.9868,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H_med_orig_08",
+   "elevationFt": 167,
+   "lat": 33.893,
+   "lon": 35.523,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "H_med_orig_09",
+   "elevationFt": 98,
+   "lat": 37.0281,
+   "lon": 35.3519,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Haifa",
+   "elevationFt": 20,
+   "lat": 32.8107,
+   "lon": 35.0435,
+   "runways": [
+    {
+     "name": "16/34",
+     "lengthFt": 3253,
+     "ends": [
+      {
+       "name": "34",
+       "heading": 335
+      },
+      {
+       "name": "16",
+       "heading": 155
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.85,
+    "vhfLow": 38.6,
+    "vhf": 127.8,
+    "uhf": 250.2
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Hama",
+   "elevationFt": 984,
+   "lat": 35.118,
+   "lon": 36.7124,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 7958,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 273
+      },
+      {
+       "name": "09",
+       "heading": 93
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.875,
+    "vhfLow": 38.65,
+    "vhf": 118.05,
+    "uhf": 250.25
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Hatay",
+   "elevationFt": 228,
+   "lat": 36.3623,
+   "lon": 36.2874,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 9053,
+     "ends": [
+      {
+       "name": "22",
+       "heading": 217
+      },
+      {
+       "name": "04",
+       "heading": 37
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.9,
+    "vhfLow": 38.7,
+    "vhf": 128.5,
+    "uhf": 250.3
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "HTY",
+     "frequency": 336,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "HTY",
+     "frequency": 112.05,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "04",
+     "callsign": "IHAT",
+     "frequency": 108.9
+    }
+   ]
+  },
+  {
+   "name": "Hatzerim",
+   "elevationFt": 708,
+   "lat": 31.2388,
+   "lon": 34.6577,
+   "runways": [
+    {
+     "name": "10L/28R",
+     "lengthFt": 6922,
+     "ends": [
+      {
+       "name": "10L",
+       "heading": 100
+      },
+      {
+       "name": "28R",
+       "heading": 280
+      }
+     ]
+    },
+    {
+     "name": "10R/28L",
+     "lengthFt": 6846,
+     "ends": [
+      {
+       "name": "10R",
+       "heading": 100
+      },
+      {
+       "name": "28L",
+       "heading": 280
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.975,
+    "vhfLow": 41.95,
+    "vhf": 128.2,
+    "uhf": 259.0
+   },
+   "navaids": [
+    {
+     "type": "VORTAC",
+     "callsign": "BRA",
+     "channel": 96,
+     "frequency": 114.9,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Hatzor",
+   "elevationFt": 110,
+   "lat": 31.7604,
+   "lon": 34.7253,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 7518,
+     "ends": [
+      {
+       "name": "23",
+       "heading": 229
+      },
+      {
+       "name": "05",
+       "heading": 49
+      }
+     ]
+    },
+    {
+     "name": "11L/29R",
+     "lengthFt": 7037,
+     "ends": [
+      {
+       "name": "29R",
+       "heading": 287
+      },
+      {
+       "name": "11L",
+       "heading": 107
+      }
+     ]
+    },
+    {
+     "name": "11R/29L",
+     "lengthFt": 7495,
+     "ends": [
+      {
+       "name": "11R",
+       "heading": 107
+      },
+      {
+       "name": "29L",
+       "heading": 287
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.15,
+    "vhfLow": 39.2,
+    "vhf": 125.75,
+    "uhf": 250.75
+   },
+   "navaids": [
+    {
+     "type": "VORTAC",
+     "callsign": "HZR",
+     "channel": 106,
+     "frequency": 115.9,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "05",
+     "callsign": "HZR",
+     "frequency": 108.5
+    }
+   ]
+  },
+  {
+   "name": "HC01",
+   "elevationFt": 85,
+   "lat": 34.9242,
+   "lon": 33.6037,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HC02",
+   "elevationFt": 302,
+   "lat": 34.8308,
+   "lon": 33.4782,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HC03",
+   "elevationFt": 1870,
+   "lat": 35.3119,
+   "lon": 33.2901,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HC04",
+   "elevationFt": 994,
+   "lat": 35.2672,
+   "lon": 33.4959,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HC05",
+   "elevationFt": 82,
+   "lat": 35.0939,
+   "lon": 33.8858,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HC06",
+   "elevationFt": 115,
+   "lat": 35.084,
+   "lon": 33.8972,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Herzliya",
+   "elevationFt": 118,
+   "lat": 32.1794,
+   "lon": 34.8379,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 4114,
+     "ends": [
+      {
+       "name": "28",
+       "heading": 284
+      },
+      {
+       "name": "10",
+       "heading": 104
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.6,
+    "vhfLow": 41.5,
+    "vhf": 122.2,
+    "uhf": 253.05
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI01",
+   "elevationFt": 1198,
+   "lat": 32.8822,
+   "lon": 35.719,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI02",
+   "elevationFt": 802,
+   "lat": 32.9377,
+   "lon": 35.5687,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI03",
+   "elevationFt": 1047,
+   "lat": 32.8056,
+   "lon": 35.4016,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI05",
+   "elevationFt": 1253,
+   "lat": 32.8081,
+   "lon": 35.4253,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI06",
+   "elevationFt": 197,
+   "lat": 32.6062,
+   "lon": 34.973,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI07",
+   "elevationFt": 417,
+   "lat": 32.8231,
+   "lon": 35.4362,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI08",
+   "elevationFt": 1253,
+   "lat": 32.9619,
+   "lon": 35.5501,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI09",
+   "elevationFt": 2950,
+   "lat": 32.9821,
+   "lon": 35.5147,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI11",
+   "elevationFt": 2346,
+   "lat": 32.9948,
+   "lon": 35.4841,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI12",
+   "elevationFt": 1394,
+   "lat": 33.0171,
+   "lon": 35.7045,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI13",
+   "elevationFt": 1427,
+   "lat": 32.9833,
+   "lon": 35.7271,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI14",
+   "elevationFt": 692,
+   "lat": 32.7629,
+   "lon": 35.3027,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI15",
+   "elevationFt": 1037,
+   "lat": 33.0105,
+   "lon": 35.663,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI16",
+   "elevationFt": 651,
+   "lat": 32.9455,
+   "lon": 35.2046,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI17",
+   "elevationFt": 886,
+   "lat": 32.624,
+   "lon": 35.3791,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI18",
+   "elevationFt": 157,
+   "lat": 32.4679,
+   "lon": 35.0232,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI20",
+   "elevationFt": 3755,
+   "lat": 32.9993,
+   "lon": 35.4075,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI21",
+   "elevationFt": 892,
+   "lat": 32.7611,
+   "lon": 35.4006,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI22",
+   "elevationFt": 89,
+   "lat": 32.0876,
+   "lon": 34.9198,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI23",
+   "elevationFt": 728,
+   "lat": 31.7475,
+   "lon": 34.9357,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI24",
+   "elevationFt": 66,
+   "lat": 32.1435,
+   "lon": 34.8153,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI25",
+   "elevationFt": 377,
+   "lat": 33.1829,
+   "lon": 35.2343,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HI26",
+   "elevationFt": 49,
+   "lat": 32.0848,
+   "lon": 34.7812,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HJ01",
+   "elevationFt": 2503,
+   "lat": 33.3138,
+   "lon": 38.7027,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HJ02",
+   "elevationFt": 1772,
+   "lat": 32.5867,
+   "lon": 35.9246,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HJ03",
+   "elevationFt": 1919,
+   "lat": 32.4842,
+   "lon": 36.0659,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HJ04",
+   "elevationFt": 1919,
+   "lat": 32.4765,
+   "lon": 36.0633,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HL01",
+   "elevationFt": 33,
+   "lat": 33.2655,
+   "lon": 35.2163,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HL02",
+   "elevationFt": 52,
+   "lat": 33.1694,
+   "lon": 35.187,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HL03",
+   "elevationFt": 1867,
+   "lat": 33.1828,
+   "lon": 35.4958,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HL04",
+   "elevationFt": 2598,
+   "lat": 33.1326,
+   "lon": 35.3933,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HL05",
+   "elevationFt": 1046,
+   "lat": 33.1538,
+   "lon": 35.1964,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HL06",
+   "elevationFt": 1181,
+   "lat": 33.3059,
+   "lon": 35.541,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HL07",
+   "elevationFt": 1440,
+   "lat": 33.2622,
+   "lon": 35.4185,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HL08",
+   "elevationFt": 1411,
+   "lat": 33.2038,
+   "lon": 35.3531,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HL09",
+   "elevationFt": 2010,
+   "lat": 34.3652,
+   "lon": 36.5121,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HL10",
+   "elevationFt": 4921,
+   "lat": 34.2644,
+   "lon": 36.4832,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HL11",
+   "elevationFt": 4633,
+   "lat": 33.7099,
+   "lon": 35.9667,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HL12",
+   "elevationFt": 1247,
+   "lat": 33.1737,
+   "lon": 35.2753,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HL13",
+   "elevationFt": 2051,
+   "lat": 33.1382,
+   "lon": 35.5045,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed00",
+   "elevationFt": 203,
+   "lat": 36.5762,
+   "lon": 36.1989,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed01",
+   "elevationFt": 164,
+   "lat": 34.975,
+   "lon": 33.848,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed02",
+   "elevationFt": 797,
+   "lat": 35.9559,
+   "lon": 38.9893,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed03",
+   "elevationFt": 79,
+   "lat": 35.5167,
+   "lon": 35.7912,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed04",
+   "elevationFt": 394,
+   "lat": 37.0529,
+   "lon": 35.2788,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed05",
+   "elevationFt": 623,
+   "lat": 35.1443,
+   "lon": 33.3539,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed06",
+   "elevationFt": 955,
+   "lat": 35.1465,
+   "lon": 36.7534,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed07",
+   "elevationFt": 89,
+   "lat": 35.3333,
+   "lon": 33.3243,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed08",
+   "elevationFt": 121,
+   "lat": 35.344,
+   "lon": 33.1948,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed09",
+   "elevationFt": 49,
+   "lat": 35.0043,
+   "lon": 34.0591,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed10",
+   "elevationFt": 387,
+   "lat": 33.2074,
+   "lon": 35.5712,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed11",
+   "elevationFt": 1621,
+   "lat": 32.5706,
+   "lon": 35.8462,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed12",
+   "elevationFt": 3182,
+   "lat": 31.9932,
+   "lon": 35.89,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed13",
+   "elevationFt": 236,
+   "lat": 32.1818,
+   "lon": 34.9788,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed14",
+   "elevationFt": 26,
+   "lat": 34.8838,
+   "lon": 35.887,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed15",
+   "elevationFt": 302,
+   "lat": 36.2062,
+   "lon": 36.1524,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed16",
+   "elevationFt": 1690,
+   "lat": 34.7207,
+   "lon": 36.733,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed17",
+   "elevationFt": 2215,
+   "lat": 33.5236,
+   "lon": 36.3549,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed18",
+   "elevationFt": 1270,
+   "lat": 32.7082,
+   "lon": 35.3021,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed19",
+   "elevationFt": 52,
+   "lat": 32.821,
+   "lon": 34.9906,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed20",
+   "elevationFt": 187,
+   "lat": 32.1653,
+   "lon": 34.8454,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed21",
+   "elevationFt": 2290,
+   "lat": 33.456,
+   "lon": 36.2352,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed22",
+   "elevationFt": 2874,
+   "lat": 31.8816,
+   "lon": 36.0098,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed23",
+   "elevationFt": 328,
+   "lat": 34.6921,
+   "lon": 32.9603,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed24",
+   "elevationFt": 108,
+   "lat": 33.8935,
+   "lon": 35.5673,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed25",
+   "elevationFt": 2533,
+   "lat": 31.7194,
+   "lon": 35.7978,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed26",
+   "elevationFt": 1493,
+   "lat": 36.194,
+   "lon": 37.0979,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed27",
+   "elevationFt": 1144,
+   "lat": 35.9607,
+   "lon": 38.0418,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed28",
+   "elevationFt": 1348,
+   "lat": 34.5581,
+   "lon": 38.2787,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed29",
+   "elevationFt": 719,
+   "lat": 35.3388,
+   "lon": 40.1294,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HMed30",
+   "elevationFt": 2894,
+   "lat": 37.0507,
+   "lon": 37.3898,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HOil01",
+   "elevationFt": 1841,
+   "lat": 34.6028,
+   "lon": 37.9017,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HOil02",
+   "elevationFt": 1289,
+   "lat": 35.3378,
+   "lon": 39.7608,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HOil03",
+   "elevationFt": 978,
+   "lat": 35.1911,
+   "lon": 39.903,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HOil04",
+   "elevationFt": 958,
+   "lat": 35.1941,
+   "lon": 40.0818,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HOil05",
+   "elevationFt": 719,
+   "lat": 35.3288,
+   "lon": 40.1055,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HOil06",
+   "elevationFt": 1722,
+   "lat": 32.114,
+   "lon": 36.1062,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS02",
+   "elevationFt": 883,
+   "lat": 35.3386,
+   "lon": 36.0743,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS03",
+   "elevationFt": 1957,
+   "lat": 34.6697,
+   "lon": 38.2983,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS04",
+   "elevationFt": 1123,
+   "lat": 35.791,
+   "lon": 37.7263,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS05",
+   "elevationFt": 1123,
+   "lat": 35.7891,
+   "lon": 37.7248,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS06",
+   "elevationFt": 2805,
+   "lat": 33.279,
+   "lon": 36.0853,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS07",
+   "elevationFt": 1916,
+   "lat": 34.6577,
+   "lon": 38.2892,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS08",
+   "elevationFt": 1906,
+   "lat": 34.6448,
+   "lon": 36.7436,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS09",
+   "elevationFt": 1224,
+   "lat": 36.0604,
+   "lon": 37.3431,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS10",
+   "elevationFt": 1224,
+   "lat": 36.0507,
+   "lon": 37.3323,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS11",
+   "elevationFt": 2356,
+   "lat": 33.3863,
+   "lon": 36.2727,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS12",
+   "elevationFt": 2642,
+   "lat": 33.4295,
+   "lon": 36.1187,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS13",
+   "elevationFt": 2567,
+   "lat": 33.7457,
+   "lon": 36.8035,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS14",
+   "elevationFt": 3120,
+   "lat": 33.4554,
+   "lon": 36.0871,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS15",
+   "elevationFt": 2149,
+   "lat": 33.3946,
+   "lon": 36.3597,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS16",
+   "elevationFt": 1447,
+   "lat": 35.9878,
+   "lon": 37.4143,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS17",
+   "elevationFt": 1870,
+   "lat": 34.627,
+   "lon": 38.2429,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS18",
+   "elevationFt": 1601,
+   "lat": 34.6109,
+   "lon": 38.253,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS19",
+   "elevationFt": 2198,
+   "lat": 33.4157,
+   "lon": 36.2845,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS20",
+   "elevationFt": 1988,
+   "lat": 33.3535,
+   "lon": 36.4848,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS21",
+   "elevationFt": 2510,
+   "lat": 33.4117,
+   "lon": 36.1917,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS22",
+   "elevationFt": 3135,
+   "lat": 33.7079,
+   "lon": 36.6729,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS23",
+   "elevationFt": 2215,
+   "lat": 33.182,
+   "lon": 36.572,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS24",
+   "elevationFt": 2156,
+   "lat": 33.4448,
+   "lon": 36.3099,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS25",
+   "elevationFt": 2912,
+   "lat": 33.4576,
+   "lon": 36.1308,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS26",
+   "elevationFt": 2555,
+   "lat": 33.0469,
+   "lon": 39.6083,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS27",
+   "elevationFt": 4998,
+   "lat": 33.4276,
+   "lon": 35.9349,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS28",
+   "elevationFt": 2405,
+   "lat": 33.275,
+   "lon": 36.2702,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS29",
+   "elevationFt": 3009,
+   "lat": 33.2517,
+   "lon": 36.271,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS30",
+   "elevationFt": 2543,
+   "lat": 33.2812,
+   "lon": 36.2642,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS31",
+   "elevationFt": 3564,
+   "lat": 33.733,
+   "lon": 36.509,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS32",
+   "elevationFt": 1969,
+   "lat": 32.0759,
+   "lon": 36.1446,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS33",
+   "elevationFt": 108,
+   "lat": 33.0352,
+   "lon": 35.1386,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS34",
+   "elevationFt": 1093,
+   "lat": 34.9275,
+   "lon": 35.992,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS35",
+   "elevationFt": 4564,
+   "lat": 33.8041,
+   "lon": 36.1498,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS36",
+   "elevationFt": 2444,
+   "lat": 33.2347,
+   "lon": 36.1488,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS37",
+   "elevationFt": 2011,
+   "lat": 33.5522,
+   "lon": 36.4472,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS38",
+   "elevationFt": 2083,
+   "lat": 32.4383,
+   "lon": 36.0192,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS39",
+   "elevationFt": 141,
+   "lat": 32.587,
+   "lon": 35.3998,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS40",
+   "elevationFt": 1650,
+   "lat": 32.8252,
+   "lon": 35.9962,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS41",
+   "elevationFt": 1276,
+   "lat": 32.7579,
+   "lon": 35.8979,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HS42",
+   "elevationFt": 1201,
+   "lat": 32.7461,
+   "lon": 35.8796,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HStad01",
+   "elevationFt": 79,
+   "lat": 36.9991,
+   "lon": 35.3296,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HStad02",
+   "elevationFt": 597,
+   "lat": 35.1461,
+   "lon": 33.3141,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HStad03",
+   "elevationFt": 1266,
+   "lat": 36.216,
+   "lon": 37.1567,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HStad04",
+   "elevationFt": 30,
+   "lat": 35.5605,
+   "lon": 35.7444,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HStad05",
+   "elevationFt": 981,
+   "lat": 35.1168,
+   "lon": 36.7619,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HStad06",
+   "elevationFt": 2274,
+   "lat": 33.5282,
+   "lon": 36.2982,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HT01",
+   "elevationFt": 51,
+   "lat": 36.8482,
+   "lon": 34.7214,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "HT02",
+   "elevationFt": 102,
+   "lat": 37.0197,
+   "lon": 35.3436,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Incirlik",
+   "elevationFt": 191,
+   "lat": 37.002,
+   "lon": 35.4261,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 9663,
+     "ends": [
+      {
+       "name": "05",
+       "heading": 47
+      },
+      {
+       "name": "23",
+       "heading": 227
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.925,
+    "vhfLow": 38.75,
+    "vhf": 122.1,
+    "uhf": 360.1
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "DAN",
+     "channel": 21
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "05",
+     "callsign": "IDAN",
+     "frequency": 109.3
+    },
+    {
+     "type": "ILS",
+     "runway": "23",
+     "callsign": "IDNA",
+     "frequency": 111.7
+    }
+   ]
+  },
+  {
+   "name": "Jirah",
+   "elevationFt": 1158,
+   "lat": 36.0969,
+   "lon": 37.9365,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 9414,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 95
+      },
+      {
+       "name": "28",
+       "heading": 275
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.95,
+    "vhfLow": 38.8,
+    "vhf": 118.1,
+    "uhf": 250.35
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Kahramanmaras",
+   "elevationFt": 1569,
+   "lat": 37.5385,
+   "lon": 36.9524,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 5932,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 249
+      },
+      {
+       "name": "07",
+       "heading": 69
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.75,
+    "vhfLow": 38.4,
+    "vhf": 118.75,
+    "uhf": 225.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Kedem",
+   "elevationFt": 639,
+   "lat": 31.2605,
+   "lon": 34.6405,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 4782,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 100
+      },
+      {
+       "name": "28",
+       "heading": 280
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.75,
+    "vhfLow": 41.9,
+    "vhf": 119.0,
+    "uhf": 256.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Khalkhalah",
+   "elevationFt": 2323,
+   "lat": 33.0784,
+   "lon": 36.5411,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 7920,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 70
+      },
+      {
+       "name": "25",
+       "heading": 250
+      }
+     ]
+    },
+    {
+     "name": "15/33",
+     "lengthFt": 8248,
+     "ends": [
+      {
+       "name": "15",
+       "heading": 145
+      },
+      {
+       "name": "33",
+       "heading": 325
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.975,
+    "vhfLow": 38.85,
+    "vhf": 122.5,
+    "uhf": 250.4
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Kharab Ishk",
+   "elevationFt": 1415,
+   "lat": 36.5469,
+   "lon": 38.5875,
+   "runways": [],
+   "radio": {
+    "hf": 4.175,
+    "vhfLow": 41.2,
+    "vhf": 122.2,
+    "uhf": 252.75
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "King Abdullah II",
+   "elevationFt": 2297,
+   "lat": 32.0055,
+   "lon": 36.2237,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 7044,
+     "ends": [
+      {
+       "name": "31",
+       "heading": 305
+      },
+      {
+       "name": "13",
+       "heading": 125
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.9,
+    "vhfLow": 41.45,
+    "vhf": 118.4,
+    "uhf": 253.0
+   },
+   "navaids": [],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "31",
+     "callsign": null,
+     "frequency": 109.1
+    }
+   ]
+  },
+  {
+   "name": "King Hussein Air College",
+   "elevationFt": 2205,
+   "lat": 32.3567,
+   "lon": 36.2599,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 8595,
+     "ends": [
+      {
+       "name": "31",
+       "heading": 306
+      },
+      {
+       "name": "13",
+       "heading": 126
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.0,
+    "vhfLow": 38.9,
+    "vhf": 118.3,
+    "uhf": 250.45
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Kingsfield",
+   "elevationFt": 276,
+   "lat": 35.0148,
+   "lon": 33.717,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 3069,
+     "ends": [
+      {
+       "name": "24",
+       "heading": 235
+      },
+      {
+       "name": "06",
+       "heading": 55
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.8,
+    "vhfLow": 40.5,
+    "vhf": 121.0,
+    "uhf": 252.05
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Kiryat Shmona",
+   "elevationFt": 341,
+   "lat": 33.2158,
+   "lon": 35.5958,
+   "runways": [
+    {
+     "name": "03/21",
+     "lengthFt": 3259,
+     "ends": [
+      {
+       "name": "03",
+       "heading": 31
+      },
+      {
+       "name": "21",
+       "heading": 211
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.05,
+    "vhfLow": 39.0,
+    "vhf": 118.4,
+    "uhf": 250.55
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Konya",
+   "elevationFt": 3407,
+   "lat": 37.9777,
+   "lon": 32.5615,
+   "runways": [
+    {
+     "name": "01L/19R",
+     "lengthFt": 9600,
+     "ends": [
+      {
+       "name": "01L",
+       "heading": 11
+      },
+      {
+       "name": "19R",
+       "heading": 191
+      }
+     ]
+    },
+    {
+     "name": "01R/19L",
+     "lengthFt": 9598,
+     "ends": [
+      {
+       "name": "01R",
+       "heading": 11
+      },
+      {
+       "name": "19L",
+       "heading": 191
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.8,
+    "vhfLow": 38.9,
+    "vhf": 132.4,
+    "uhf": 225.0
+   },
+   "navaids": [
+    {
+     "type": "DME",
+     "callsign": "IKNY",
+     "channel": 26,
+     "frequency": 108.9,
+     "unit": "MHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "KNY",
+     "frequency": 390,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "KON",
+     "channel": 88,
+     "frequency": 114.1,
+     "unit": "MHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "KNY",
+     "channel": 49,
+     "frequency": 111.2,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "",
+     "callsign": "IKNY",
+     "frequency": 108.9
+    }
+   ]
+  },
+  {
+   "name": "Kuweires",
+   "elevationFt": 1186,
+   "lat": 36.1875,
+   "lon": 37.5815,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 6663,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 95
+      },
+      {
+       "name": "28",
+       "heading": 275
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.45,
+    "vhfLow": 39.8,
+    "vhf": 120.5,
+    "uhf": 251.35
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Lakatamia",
+   "elevationFt": 758,
+   "lat": 35.1046,
+   "lon": 33.3217,
+   "runways": [
+    {
+     "name": "17/35",
+     "lengthFt": 1230,
+     "ends": [
+      {
+       "name": "17",
+       "heading": 166
+      },
+      {
+       "name": "35",
+       "heading": 346
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.875,
+    "vhfLow": 40.65,
+    "vhf": 120.2,
+    "uhf": 252.2
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Larnaca",
+   "elevationFt": 16,
+   "lat": 34.8732,
+   "lon": 33.6232,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 8009,
+     "ends": [
+      {
+       "name": "04",
+       "heading": 40
+      },
+      {
+       "name": "22",
+       "heading": 220
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.85,
+    "vhfLow": 40.6,
+    "vhf": 121.2,
+    "uhf": 252.15
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "LCA",
+     "frequency": 432,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "LCA",
+     "frequency": 112.8,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "22",
+     "callsign": "ILC",
+     "frequency": 110.3
+    }
+   ]
+  },
+  {
+   "name": "Marj as Sultan North",
+   "elevationFt": 2007,
+   "lat": 33.5003,
+   "lon": 36.4671,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 476,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 74
+      },
+      {
+       "name": "26",
+       "heading": 254
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.2,
+    "vhfLow": 39.3,
+    "vhf": 122.7,
+    "uhf": 250.85
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Marj as Sultan South",
+   "elevationFt": 2006,
+   "lat": 33.4872,
+   "lon": 36.4754,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 559,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 84
+      },
+      {
+       "name": "27",
+       "heading": 264
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.95,
+    "vhfLow": 41.75,
+    "vhf": 122.9,
+    "uhf": 253.3
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Marj Ruhayyil",
+   "elevationFt": 2161,
+   "lat": 33.2888,
+   "lon": 36.4554,
+   "runways": [
+    {
+     "name": "06L/24R",
+     "lengthFt": 7577,
+     "ends": [
+      {
+       "name": "06L",
+       "heading": 57
+      },
+      {
+       "name": "24R",
+       "heading": 237
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.225,
+    "vhfLow": 39.35,
+    "vhf": 120.8,
+    "uhf": 250.9
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Marka",
+   "elevationFt": 2493,
+   "lat": 31.9728,
+   "lon": 35.9917,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 10422,
+     "ends": [
+      {
+       "name": "24",
+       "heading": 239
+      },
+      {
+       "name": "06",
+       "heading": 59
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.95,
+    "vhfLow": 41.55,
+    "vhf": 118.1,
+    "uhf": 253.1
+   },
+   "navaids": [],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "24",
+     "callsign": "IAMN",
+     "frequency": 109.5
+    }
+   ]
+  },
+  {
+   "name": "Megiddo",
+   "elevationFt": 180,
+   "lat": 32.5971,
+   "lon": 35.2301,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 6098,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 86
+      },
+      {
+       "name": "27",
+       "heading": 266
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.25,
+    "vhfLow": 39.4,
     "vhf": 119.9,
-    "fm": 40.55,
-    "hf": 4.825
-   }
+    "uhf": 250.95
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Mezzeh",
+   "elevationFt": 2363,
+   "lat": 33.4778,
+   "lon": 36.2242,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 7522,
+     "ends": [
+      {
+       "name": "24",
+       "heading": 235
+      },
+      {
+       "name": "06",
+       "heading": 55
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.275,
+    "vhfLow": 39.45,
+    "vhf": 120.7,
+    "uhf": 251.0
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "MEZ",
+     "frequency": 358,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Minakh",
+   "elevationFt": 1614,
+   "lat": 36.5214,
+   "lon": 37.0413,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 3073,
+     "ends": [
+      {
+       "name": "04",
+       "heading": 35
+      },
+      {
+       "name": "22",
+       "heading": 215
+      }
+     ]
+    },
+    {
+     "name": "10/28",
+     "lengthFt": 4649,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 95
+      },
+      {
+       "name": "28",
+       "heading": 275
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.3,
+    "vhfLow": 39.5,
+    "vhf": 120.6,
+    "uhf": 251.05
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Muwaffaq Salti",
+   "elevationFt": 1636,
+   "lat": 31.8176,
+   "lon": 36.7787,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 7598,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 255
+      },
+      {
+       "name": "08",
+       "heading": 75
+      }
+     ]
+    },
+    {
+     "name": "13/31",
+     "lengthFt": 8692,
+     "ends": [
+      {
+       "name": "31",
+       "heading": 306
+      },
+      {
+       "name": "13",
+       "heading": 126
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.45,
+    "vhfLow": 41.6,
+    "vhf": 120.5,
+    "uhf": 253.15
+   },
+   "navaids": [],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "26",
+     "callsign": "IGHS",
+     "frequency": 109.7
+    },
+    {
+     "type": "ILS",
+     "runway": "31",
+     "callsign": "IGHI",
+     "frequency": 108.9
+    }
+   ]
+  },
+  {
+   "name": "Naqoura",
+   "elevationFt": 344,
+   "lat": 33.1079,
+   "lon": 35.1273,
+   "runways": [],
+   "radio": {
+    "hf": 3.8,
+    "vhfLow": 40.9,
+    "vhf": 122.0,
+    "uhf": 252.45
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Nevatim",
+   "elevationFt": 1378,
+   "lat": 31.2084,
+   "lon": 35.0121,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 12212,
+     "ends": [
+      {
+       "name": "25",
+       "heading": 252
+      },
+      {
+       "name": "07",
+       "heading": 72
+      }
+     ]
+    },
+    {
+     "name": "08L/26R",
+     "lengthFt": 8237,
+     "ends": [
+      {
+       "name": "26R",
+       "heading": 252
+      },
+      {
+       "name": "08L",
+       "heading": 72
+      }
+     ]
+    },
+    {
+     "name": "08R/26L",
+     "lengthFt": 10764,
+     "ends": [
+      {
+       "name": "26L",
+       "heading": 252
+      },
+      {
+       "name": "08R",
+       "heading": 72
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.8,
+    "vhfLow": 38.9,
+    "vhf": 132.4,
+    "uhf": 225.0
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "BSA",
+     "frequency": 114.3,
+     "unit": "MHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "NGV",
+     "frequency": 111.5,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "07",
+     "callsign": "GR",
+     "frequency": 111.5
+    },
+    {
+     "type": "ILS",
+     "runway": "08L",
+     "callsign": "GR",
+     "frequency": 108.3
+    }
+   ]
+  },
+  {
+   "name": "Nicosia",
+   "elevationFt": 689,
+   "lat": 35.1527,
+   "lon": 33.2751,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 5498,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 83
+      },
+      {
+       "name": "27",
+       "heading": 263
+      }
+     ]
+    },
+    {
+     "name": "14/32",
+     "lengthFt": 7721,
+     "ends": [
+      {
+       "name": "32",
+       "heading": 320
+      },
+      {
+       "name": "14",
+       "heading": 140
+      }
+     ]
+    }
+   ],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Palmachim",
+   "elevationFt": 45,
+   "lat": 31.9028,
+   "lon": 34.6934,
+   "runways": [
+    {
+     "name": "03L/21R",
+     "lengthFt": 3996,
+     "ends": [
+      {
+       "name": "03L",
+       "heading": 20
+      },
+      {
+       "name": "21R",
+       "heading": 200
+      }
+     ]
+    },
+    {
+     "name": "03R/21L",
+     "lengthFt": 6426,
+     "ends": [
+      {
+       "name": "03R",
+       "heading": 20
+      },
+      {
+       "name": "21L",
+       "heading": 200
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.175,
+    "vhfLow": 39.25,
+    "vhf": 118.25,
+    "uhf": 250.8
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Palmyra",
+   "elevationFt": 1292,
+   "lat": 34.5573,
+   "lon": 38.3168,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 9093,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 259
+      },
+      {
+       "name": "08",
+       "heading": 79
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.35,
+    "vhfLow": 39.6,
+    "vhf": 121.9,
+    "uhf": 251.15
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "PAL",
+     "frequency": 337,
+     "unit": "kHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "PLR",
+     "frequency": 363,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Paphos",
+   "elevationFt": 85,
+   "lat": 34.7182,
+   "lon": 32.4848,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 8425,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 105
+      },
+      {
+       "name": "29",
+       "heading": 285
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.825,
+    "vhfLow": 40.55,
+    "vhf": 119.9,
+    "uhf": 252.1
+   },
+   "navaids": [
+    {
+     "type": "DME",
+     "callsign": "IPA",
+     "frequency": 108.9,
+     "unit": "MHz"
+    },
+    {
+     "type": "NDB",
+     "callsign": "PHA",
+     "frequency": 328,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "PHA",
+     "channel": 79
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "PHA",
+     "frequency": 117.9,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "29",
+     "callsign": "IPA",
+     "frequency": 108.9
+    }
+   ]
+  },
+  {
+   "name": "Pinarbashi",
+   "elevationFt": 771,
+   "lat": 35.2738,
+   "lon": 33.2682,
+   "runways": [
+    {
+     "name": "16/34",
+     "lengthFt": 3365,
+     "ends": [
+      {
+       "name": "16",
+       "heading": 159
+      },
+      {
+       "name": "34",
+       "heading": 339
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.75,
+    "vhfLow": 40.85,
+    "vhf": 121.0,
+    "uhf": 252.4
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Prince Hassan",
+   "elevationFt": 2165,
+   "lat": 32.1607,
+   "lon": 37.1494,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 9314,
+     "ends": [
+      {
+       "name": "13",
+       "heading": 126
+      },
+      {
+       "name": "31",
+       "heading": 306
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.3,
+    "vhfLow": 41.4,
+    "vhf": 122.6,
+    "uhf": 252.95
+   },
+   "navaids": [
+    {
+     "type": "VORTAC",
+     "callsign": "ABC",
+     "channel": 106,
+     "frequency": 115.9,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "31",
+     "callsign": "ABC",
+     "frequency": 111.7
+    }
+   ]
+  },
+  {
+   "name": "Qabr as Sitt",
+   "elevationFt": 2134,
+   "lat": 33.4587,
+   "lon": 36.3577,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 497,
+     "ends": [
+      {
+       "name": "05",
+       "heading": 52
+      },
+      {
+       "name": "23",
+       "heading": 232
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.375,
+    "vhfLow": 39.65,
+    "vhf": 122.6,
+    "uhf": 251.2
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Ramat David",
+   "elevationFt": 130,
+   "lat": 32.6664,
+   "lon": 35.1842,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 7443,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 82
+      },
+      {
+       "name": "27",
+       "heading": 262
+      }
+     ]
+    },
+    {
+     "name": "11/29",
+     "lengthFt": 7533,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 103
+      },
+      {
+       "name": "29",
+       "heading": 283
+      }
+     ]
+    },
+    {
+     "name": "15/33",
+     "lengthFt": 7613,
+     "ends": [
+      {
+       "name": "33",
+       "heading": 320
+      },
+      {
+       "name": "15",
+       "heading": 140
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.425,
+    "vhfLow": 39.75,
+    "vhf": 118.6,
+    "uhf": 251.3
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "RMD",
+     "frequency": 368,
+     "unit": "kHz"
+    },
+    {
+     "type": "VORTAC",
+     "callsign": "RMD",
+     "channel": 84,
+     "frequency": 113.7,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "33",
+     "callsign": "RMD",
+     "frequency": 111.1
+    }
+   ]
+  },
+  {
+   "name": "Rayak",
+   "elevationFt": 2976,
+   "lat": 33.8511,
+   "lon": 35.9873,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 8699,
+     "ends": [
+      {
+       "name": "04",
+       "heading": 40
+      },
+      {
+       "name": "22",
+       "heading": 220
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.475,
+    "vhfLow": 39.85,
+    "vhf": 124.4,
+    "uhf": 251.4
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Rene Mouawad",
+   "elevationFt": 16,
+   "lat": 34.5893,
+   "lon": 36.0114,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 8615,
+     "ends": [
+      {
+       "name": "06",
+       "heading": 56
+      },
+      {
+       "name": "24",
+       "heading": 236
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.5,
+    "vhfLow": 39.9,
+    "vhf": 121.0,
+    "uhf": 251.45
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Rosh Pina",
+   "elevationFt": 868,
+   "lat": 32.9826,
+   "lon": 35.5707,
+   "runways": [
+    {
+     "name": "15/33",
+     "lengthFt": 2711,
+     "ends": [
+      {
+       "name": "33",
+       "heading": 325
+      },
+      {
+       "name": "15",
+       "heading": 145
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.525,
+    "vhfLow": 39.95,
+    "vhf": 118.45,
+    "uhf": 251.5
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "ROP",
+     "frequency": 115.3,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Ruwayshid",
+   "elevationFt": 2977,
+   "lat": 32.405,
+   "lon": 39.1305,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 7274,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 271
+      },
+      {
+       "name": "09",
+       "heading": 91
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.4,
+    "vhfLow": 41.1,
+    "vhf": 122.1,
+    "uhf": 252.65
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Sanliurfa",
+   "elevationFt": 2703,
+   "lat": 37.4481,
+   "lon": 38.8984,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 12321,
+     "ends": [
+      {
+       "name": "22",
+       "heading": 216
+      },
+      {
+       "name": "04",
+       "heading": 36
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.15,
+    "vhfLow": 41.15,
+    "vhf": 118.4,
+    "uhf": 252.7
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "GAP",
+     "frequency": 391,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "GAP",
+     "channel": 79,
+     "frequency": 113.2,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "04",
+     "callsign": "ISUR",
+     "frequency": 111.9
+    }
+   ]
+  },
+  {
+   "name": "Sanliurfa Heliport",
+   "elevationFt": 1965,
+   "lat": 37.1865,
+   "lon": 38.7916,
+   "runways": [],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Sayqal",
+   "elevationFt": 2274,
+   "lat": 33.6798,
+   "lon": 37.2171,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 7935,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 84
+      },
+      {
+       "name": "26",
+       "heading": 265
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.55,
+    "vhfLow": 40.0,
+    "vhf": 120.4,
+    "uhf": 251.55
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Shayrat",
+   "elevationFt": 2638,
+   "lat": 34.4902,
+   "lon": 36.9076,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 8553,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 106
+      },
+      {
+       "name": "29",
+       "heading": 286
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.575,
+    "vhfLow": 40.05,
+    "vhf": 120.2,
+    "uhf": 251.6
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "T2",
+   "elevationFt": 1283,
+   "lat": 34.3898,
+   "lon": 40.1535,
+   "runways": [
+    {
+     "name": "04/22",
+     "lengthFt": 3492,
+     "ends": [
+      {
+       "name": "04",
+       "heading": 35
+      },
+      {
+       "name": "22",
+       "heading": 215
+      }
+     ]
+    },
+    {
+     "name": "13/31",
+     "lengthFt": 3436,
+     "ends": [
+      {
+       "name": "31",
+       "heading": 305
+      },
+      {
+       "name": "13",
+       "heading": 125
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.85,
+    "vhfLow": 42.0,
+    "vhf": 123.5,
+    "uhf": 255.0
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "T3",
+   "elevationFt": 1274,
+   "lat": 34.529,
+   "lon": 38.7294,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 6068,
+     "ends": [
+      {
+       "name": "28",
+       "heading": 277
+      },
+      {
+       "name": "10",
+       "heading": 97
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.725,
+    "vhfLow": 40.35,
+    "vhf": 119.25,
+    "uhf": 251.9
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Tabqa",
+   "elevationFt": 1099,
+   "lat": 35.7547,
+   "lon": 38.5664,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 9036,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 87
+      },
+      {
+       "name": "27",
+       "heading": 267
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.6,
+    "vhfLow": 40.1,
+    "vhf": 118.5,
+    "uhf": 251.65
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Taftanaz",
+   "elevationFt": 1020,
+   "lat": 35.9741,
+   "lon": 36.7814,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 2705,
+     "ends": [
+      {
+       "name": "28",
+       "heading": 274
+      },
+      {
+       "name": "10",
+       "heading": 94
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.625,
+    "vhfLow": 40.15,
+    "vhf": 122.8,
+    "uhf": 251.7
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Tal Siman",
+   "elevationFt": 981,
+   "lat": 36.2624,
+   "lon": 38.9283,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 2616,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 97
+      },
+      {
+       "name": "28",
+       "heading": 277
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.1,
+    "vhfLow": 41.3,
+    "vhf": 121.9,
+    "uhf": 252.85
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Tel Nof",
+   "elevationFt": 180,
+   "lat": 31.8384,
+   "lon": 34.8326,
+   "runways": [
+    {
+     "name": "15L/33R",
+     "lengthFt": 7107,
+     "ends": [
+      {
+       "name": "33R",
+       "heading": 326
+      },
+      {
+       "name": "15L",
+       "heading": 146
+      }
+     ]
+    },
+    {
+     "name": "15R/33L",
+     "lengthFt": 7114,
+     "ends": [
+      {
+       "name": "33L",
+       "heading": 326
+      },
+      {
+       "name": "15R",
+       "heading": 146
+      }
+     ]
+    },
+    {
+     "name": "18/36",
+     "lengthFt": 7338,
+     "ends": [
+      {
+       "name": "18",
+       "heading": 178
+      },
+      {
+       "name": "36",
+       "heading": 358
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.1,
+    "vhfLow": 39.1,
+    "vhf": 128.1,
+    "uhf": 250.65
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "AKR",
+     "channel": 87
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "36",
+     "callsign": "AKR",
+     "frequency": 109.1
+    }
+   ]
+  },
+  {
+   "name": "Teyman",
+   "elevationFt": 574,
+   "lat": 31.287,
+   "lon": 34.7228,
+   "runways": [
+    {
+     "name": "14/32",
+     "lengthFt": 3132,
+     "ends": [
+      {
+       "name": "32",
+       "heading": 312
+      },
+      {
+       "name": "14",
+       "heading": 132
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.85,
+    "vhfLow": 42.0,
+    "vhf": 123.5,
+    "uhf": 255.0
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "BSA",
+     "frequency": 114.3,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Tha'lah",
+   "elevationFt": 2405,
+   "lat": 32.704,
+   "lon": 36.4138,
+   "runways": [
+    {
+     "name": "05R/23L",
+     "lengthFt": 8025,
+     "ends": [
+      {
+       "name": "05R",
+       "heading": 51
+      },
+      {
+       "name": "23L",
+       "heading": 231
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.925,
+    "vhfLow": 41.25,
+    "vhf": 118.0,
+    "uhf": 252.8
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Tiyas",
+   "elevationFt": 1798,
+   "lat": 34.5226,
+   "lon": 37.6301,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 9420,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 84
+      },
+      {
+       "name": "27",
+       "heading": 264
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.65,
+    "vhfLow": 40.2,
+    "vhf": 120.5,
+    "uhf": 251.75
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Wujah Al Hajar",
+   "elevationFt": 650,
+   "lat": 34.2813,
+   "lon": 35.6801,
+   "runways": [
+    {
+     "name": "02/20",
+     "lengthFt": 4717,
+     "ends": [
+      {
+       "name": "20",
+       "heading": 202
+      },
+      {
+       "name": "02",
+       "heading": 22
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.7,
+    "vhfLow": 40.3,
+    "vhf": 120.5,
+    "uhf": 251.85
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "CAK",
+     "frequency": 116.2,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Zarqa",
+   "elevationFt": 2135,
+   "lat": 32.0258,
+   "lon": 36.1437,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 5933,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 101
+      },
+      {
+       "name": "28",
+       "heading": 281
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.825,
+    "vhfLow": 40.55,
+    "vhf": 119.9,
+    "uhf": 252.1
+   },
+   "navaids": [],
+   "approaches": []
   }
  ]
 }

@@ -1,0 +1,344 @@
+{
+ "map": "dcs-marianas-1944",
+ "source": {
+  "title": "dcs-world-schema reference data: MarianaIslandsWWII airbases, beacons and navaids",
+  "publisher": "dcs-world-schema, open-source data extracted by running DCS World 2.9.30.28536 (extracted 2026-10-04)",
+  "url": "https://github.com/YoloWingPixie/dcs-world-schema/tree/c3091e6c08fb8167e26145d0e33c10e4140c6fe7/dcs-world-reference/latest/airbases/MarianaIslandsWWII",
+  "commit": "c3091e6c08fb8167e26145d0e33c10e4140c6fe7",
+  "dcsVersion": "2.9.30.28536",
+  "beacons": true,
+  "radioFallback": null
+ },
+ "airfields": [
+  {
+   "name": "Agana",
+   "elevationFt": 258,
+   "lat": 13.4825,
+   "lon": 144.7897,
+   "runways": [
+    {
+     "name": "07/25",
+     "lengthFt": 4435,
+     "ends": [
+      {
+       "name": "07",
+       "heading": 68
+      },
+      {
+       "name": "25",
+       "heading": 248
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.8,
+    "vhfLow": 38.5,
+    "vhf": 118.1,
+    "uhf": 250.1
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Airfield 3",
+   "elevationFt": 99,
+   "lat": 15.068,
+   "lon": 145.6347,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 2485,
+     "ends": [
+      {
+       "name": "10",
+       "heading": 97
+      },
+      {
+       "name": "28",
+       "heading": 277
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.85,
+    "vhfLow": 38.6,
+    "vhf": 118.2,
+    "uhf": 250.2
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Charon Kanoa",
+   "elevationFt": 11,
+   "lat": 15.1605,
+   "lon": 145.7059,
+   "runways": [
+    {
+     "name": "03/21",
+     "lengthFt": 3663,
+     "ends": [
+      {
+       "name": "03",
+       "heading": 33
+      },
+      {
+       "name": "21",
+       "heading": 213
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.875,
+    "vhfLow": 38.65,
+    "vhf": 118.25,
+    "uhf": 250.25
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Gurguan Point",
+   "elevationFt": 280,
+   "lat": 15.0019,
+   "lon": 145.5988,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 3191,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 91
+      },
+      {
+       "name": "27",
+       "heading": 271
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.9,
+    "vhfLow": 38.7,
+    "vhf": 118.3,
+    "uhf": 250.3
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Isley",
+   "elevationFt": 199,
+   "lat": 15.1196,
+   "lon": 145.7262,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 2663,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 91
+      },
+      {
+       "name": "27",
+       "heading": 271
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.925,
+    "vhfLow": 38.75,
+    "vhf": 118.35,
+    "uhf": 250.35
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Kagman",
+   "elevationFt": 230,
+   "lat": 15.1676,
+   "lon": 145.7735,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 3319,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 91
+      },
+      {
+       "name": "27",
+       "heading": 271
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.95,
+    "vhfLow": 38.8,
+    "vhf": 118.4,
+    "uhf": 250.4
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Marpi",
+   "elevationFt": 148,
+   "lat": 15.2818,
+   "lon": 145.8125,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 2571,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 112
+      },
+      {
+       "name": "29",
+       "heading": 292
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.975,
+    "vhfLow": 38.85,
+    "vhf": 118.45,
+    "uhf": 250.45
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Orote",
+   "elevationFt": 82,
+   "lat": 13.4374,
+   "lon": 144.6393,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 4417,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 111
+      },
+      {
+       "name": "29",
+       "heading": 291
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.825,
+    "vhfLow": 38.55,
+    "vhf": 118.15,
+    "uhf": 250.15
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Pagan",
+   "elevationFt": 49,
+   "lat": 18.1236,
+   "lon": 145.7649,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 2124,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 102
+      },
+      {
+       "name": "29",
+       "heading": 282
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.775,
+    "vhfLow": 38.45,
+    "vhf": 118.05,
+    "uhf": 250.05
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Rota",
+   "elevationFt": 595,
+   "lat": 14.1744,
+   "lon": 145.242,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 3374,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 92
+      },
+      {
+       "name": "27",
+       "heading": 272
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 4.0,
+    "vhfLow": 38.9,
+    "vhf": 118.5,
+    "uhf": 250.5
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Ushi",
+   "elevationFt": 91,
+   "lat": 15.0782,
+   "lon": 145.6367,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 3232,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 95
+      },
+      {
+       "name": "27",
+       "heading": 275
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "hf": 3.75,
+    "vhfLow": 38.4,
+    "vhf": 118.0,
+    "uhf": 250.0
+   },
+   "navaids": [],
+   "approaches": []
+  }
+ ]
+}

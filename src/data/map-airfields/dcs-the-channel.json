@@ -4,506 +4,451 @@
   "title": "pydcs terrain data: thechannel airports (airports.py)",
   "publisher": "pydcs, an open-source Python library for building DCS World missions, whose terrain data mirrors the game's",
   "url": "https://github.com/pydcs/dcs/blob/5ddcc63a2dcd661e16b14f7aa43219b93044855d/dcs/terrain/thechannel/airports.py",
-  "commit": "5ddcc63a2dcd661e16b14f7aa43219b93044855d"
+  "commit": "5ddcc63a2dcd661e16b14f7aa43219b93044855d",
+  "beacons": false
  },
  "airfields": [
   {
    "runways": [
     {
-     "name": "27-09",
+     "name": "27/09",
      "ends": [
       {
        "name": "27",
-       "heading": 270,
-       "beacons": 0
+       "heading": 270
       },
       {
        "name": "09",
-       "heading": 90,
-       "beacons": 0
+       "heading": 90
       }
      ]
     },
     {
-     "name": "20-02",
+     "name": "20/02",
      "ends": [
       {
        "name": "20",
-       "heading": 200,
-       "beacons": 0
+       "heading": 200
       },
       {
        "name": "02",
-       "heading": 20,
-       "beacons": 0
+       "heading": 20
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 1,
-   "name": "Abbeville Drucat",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.25,
+   "radio": {
     "vhf": 118.25,
-    "fm": 38.65,
+    "uhf": 250.25,
+    "vhfLow": 38.65,
     "hf": 3.875
-   }
+   },
+   "navaids": [],
+   "approaches": [],
+   "name": "Abbeville Drucat"
   },
   {
    "runways": [
     {
-     "name": "30-12",
+     "name": "30/12",
      "ends": [
       {
        "name": "30",
-       "heading": 300,
-       "beacons": 0
+       "heading": 300
       },
       {
        "name": "12",
-       "heading": 120,
-       "beacons": 0
+       "heading": 120
       }
      ]
     },
     {
-     "name": "22-04",
+     "name": "22/04",
      "ends": [
       {
        "name": "22",
-       "heading": 220,
-       "beacons": 0
+       "heading": 220
       },
       {
        "name": "04",
-       "heading": 40,
-       "beacons": 0
+       "heading": 40
       }
      ]
     },
     {
-     "name": "23-05",
+     "name": "23/05",
      "ends": [
       {
        "name": "23",
-       "heading": 230,
-       "beacons": 0
+       "heading": 230
       },
       {
        "name": "05",
-       "heading": 50,
-       "beacons": 0
+       "heading": 50
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 14,
-   "name": "Biggin Hill",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.2,
+   "radio": {
     "vhf": 118.2,
-    "fm": 38.6,
+    "uhf": 250.2,
+    "vhfLow": 38.6,
     "hf": 3.85
-   }
+   },
+   "navaids": [],
+   "approaches": [],
+   "name": "Biggin Hill"
   },
   {
    "runways": [
     {
-     "name": "23-05",
+     "name": "23/05",
      "ends": [
       {
        "name": "23",
-       "heading": 230,
-       "beacons": 0
+       "heading": 230
       },
       {
        "name": "05",
-       "heading": 50,
-       "beacons": 0
+       "heading": 50
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 8,
-   "name": "Detling",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.6,
+   "radio": {
     "vhf": 118.6,
-    "fm": 39.0,
+    "uhf": 250.6,
+    "vhfLow": 39.0,
     "hf": 4.05
-   }
+   },
+   "navaids": [],
+   "approaches": [],
+   "name": "Detling"
   },
   {
    "runways": [
     {
-     "name": "08-26",
+     "name": "08/26",
      "ends": [
       {
        "name": "08",
-       "heading": 80,
-       "beacons": 0
+       "heading": 80
       },
       {
        "name": "26",
-       "heading": 260,
-       "beacons": 0
+       "heading": 260
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 4,
-   "name": "Dunkirk Mardyck",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.4,
+   "radio": {
     "vhf": 118.4,
-    "fm": 38.8,
+    "uhf": 250.4,
+    "vhfLow": 38.8,
     "hf": 3.95
-   }
+   },
+   "navaids": [],
+   "approaches": [],
+   "name": "Dunkirk Mardyck"
   },
   {
    "runways": [
     {
-     "name": "02-20",
+     "name": "02/20",
      "ends": [
       {
        "name": "02",
-       "heading": 20,
-       "beacons": 0
+       "heading": 20
       },
       {
        "name": "20",
-       "heading": 200,
-       "beacons": 0
+       "heading": 200
       }
      ]
     },
     {
-     "name": "28-10",
+     "name": "28/10",
      "ends": [
       {
        "name": "28",
-       "heading": 280,
-       "beacons": 0
+       "heading": 280
       },
       {
        "name": "10",
-       "heading": 100,
-       "beacons": 0
+       "heading": 100
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 10,
-   "name": "Eastchurch",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.05,
+   "radio": {
     "vhf": 118.05,
-    "fm": 38.45,
+    "uhf": 250.05,
+    "vhfLow": 38.45,
     "hf": 3.775
-   }
+   },
+   "navaids": [],
+   "approaches": [],
+   "name": "Eastchurch"
   },
   {
    "runways": [
     {
-     "name": "22-04",
+     "name": "22/04",
      "ends": [
       {
        "name": "22",
-       "heading": 220,
-       "beacons": 0
+       "heading": 220
       },
       {
        "name": "04",
-       "heading": 40,
-       "beacons": 0
+       "heading": 40
       }
      ]
     },
     {
-     "name": "19-01",
+     "name": "19/01",
      "ends": [
       {
        "name": "19",
-       "heading": 190,
-       "beacons": 0
+       "heading": 190
       },
       {
        "name": "01",
-       "heading": 10,
-       "beacons": 0
+       "heading": 10
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 6,
-   "name": "Hawkinge",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.5,
+   "radio": {
     "vhf": 118.5,
-    "fm": 38.9,
+    "uhf": 250.5,
+    "vhfLow": 38.9,
     "hf": 4.0
-   }
+   },
+   "navaids": [],
+   "approaches": [],
+   "name": "Hawkinge"
   },
   {
    "runways": [
     {
-     "name": "01-19",
+     "name": "01/19",
      "ends": [
       {
        "name": "01",
-       "heading": 10,
-       "beacons": 0
+       "heading": 10
       },
       {
        "name": "19",
-       "heading": 190,
-       "beacons": 0
+       "heading": 190
       }
      ]
     },
     {
-     "name": "10-29",
+     "name": "10/29",
      "ends": [
       {
        "name": "10",
-       "heading": 100,
-       "beacons": 0
+       "heading": 100
       },
       {
        "name": "29",
-       "heading": 290,
-       "beacons": 0
+       "heading": 290
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 13,
-   "name": "Headcorn",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.15,
+   "radio": {
     "vhf": 118.15,
-    "fm": 38.55,
+    "uhf": 250.15,
+    "vhfLow": 38.55,
     "hf": 3.825
-   }
+   },
+   "navaids": [],
+   "approaches": [],
+   "name": "Headcorn"
   },
   {
    "runways": [
     {
-     "name": "22-04",
+     "name": "22/04",
      "ends": [
       {
        "name": "22",
-       "heading": 220,
-       "beacons": 0
+       "heading": 220
       },
       {
        "name": "04",
-       "heading": 40,
-       "beacons": 0
+       "heading": 40
       }
      ]
     },
     {
-     "name": "11-29",
+     "name": "11/29",
      "ends": [
       {
        "name": "11",
-       "heading": 110,
-       "beacons": 0
+       "heading": 110
       },
       {
        "name": "29",
-       "heading": 290,
-       "beacons": 0
+       "heading": 290
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 12,
-   "name": "High Halden",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.1,
+   "radio": {
     "vhf": 118.1,
-    "fm": 38.5,
+    "uhf": 250.1,
+    "vhfLow": 38.5,
     "hf": 3.8
-   }
+   },
+   "navaids": [],
+   "approaches": [],
+   "name": "High Halden"
   },
   {
    "runways": [
     {
-     "name": "13-31",
+     "name": "13/31",
      "ends": [
       {
        "name": "13",
-       "heading": 130,
-       "beacons": 0
+       "heading": 130
       },
       {
        "name": "31",
-       "heading": 310,
-       "beacons": 0
+       "heading": 310
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 7,
-   "name": "Lympne",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.55,
+   "radio": {
     "vhf": 118.55,
-    "fm": 38.95,
+    "uhf": 250.55,
+    "vhfLow": 38.95,
     "hf": 4.025
-   }
+   },
+   "navaids": [],
+   "approaches": [],
+   "name": "Lympne"
   },
   {
    "runways": [
     {
-     "name": "04-23",
+     "name": "04/23",
      "ends": [
       {
        "name": "04",
-       "heading": 40,
-       "beacons": 0
+       "heading": 40
       },
       {
        "name": "23",
-       "heading": 230,
-       "beacons": 0
+       "heading": 230
       }
      ]
     },
     {
-     "name": "10-28",
+     "name": "10/28",
      "ends": [
       {
        "name": "10",
-       "heading": 100,
-       "beacons": 0
+       "heading": 100
       },
       {
        "name": "28",
-       "heading": 280,
-       "beacons": 0
+       "heading": 280
       }
      ]
     },
     {
-     "name": "10-28",
+     "name": "10/28",
      "ends": [
       {
        "name": "10",
-       "heading": 100,
-       "beacons": 0
+       "heading": 100
       },
       {
        "name": "28",
-       "heading": 280,
-       "beacons": 0
+       "heading": 280
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 5,
-   "name": "Manston",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.45,
+   "radio": {
     "vhf": 118.45,
-    "fm": 38.85,
+    "uhf": 250.45,
+    "vhfLow": 38.85,
     "hf": 3.975
-   }
+   },
+   "navaids": [],
+   "approaches": [],
+   "name": "Manston"
   },
   {
    "runways": [
     {
-     "name": "26-08",
+     "name": "26/08",
      "ends": [
       {
        "name": "26",
-       "heading": 260,
-       "beacons": 0
+       "heading": 260
       },
       {
        "name": "08",
-       "heading": 80,
-       "beacons": 0
+       "heading": 80
       }
      ]
     },
     {
-     "name": "32-14",
+     "name": "32/14",
      "ends": [
       {
        "name": "32",
-       "heading": 320,
-       "beacons": 0
+       "heading": 320
       },
       {
        "name": "14",
-       "heading": 140,
-       "beacons": 0
+       "heading": 140
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 2,
-   "name": "Merville Calonne",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.3,
+   "radio": {
     "vhf": 118.3,
-    "fm": 38.7,
+    "uhf": 250.3,
+    "vhfLow": 38.7,
     "hf": 3.9
-   }
+   },
+   "navaids": [],
+   "approaches": [],
+   "name": "Merville Calonne"
   },
   {
    "runways": [
     {
-     "name": "08-26",
+     "name": "08/26",
      "ends": [
       {
        "name": "08",
-       "heading": 80,
-       "beacons": 0
+       "heading": 80
       },
       {
        "name": "26",
-       "heading": 260,
-       "beacons": 0
+       "heading": 260
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 3,
-   "name": "Saint Omer Longuenesse",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.35,
+   "radio": {
     "vhf": 118.35,
-    "fm": 38.75,
+    "uhf": 250.35,
+    "vhfLow": 38.75,
     "hf": 3.925
-   }
+   },
+   "navaids": [],
+   "approaches": [],
+   "name": "Saint Omer Longuenesse"
   }
  ]
 }

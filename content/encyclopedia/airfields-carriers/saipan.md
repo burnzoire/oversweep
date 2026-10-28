@@ -47,27 +47,28 @@ maps:
       - { topic: "ILS", text: "DCS lists no runway beacons for either end of runway 07-25 [5]; the FAA lists an ILS/DME on runway 07. [2]" }
   - map: dcs-marianas-1944
     status: represented
-    inSimName: "Aslito"
+    inSimName: "Isley"
     checked: "2026-10-28"
-    cite: "[4]"
+    cite: "[4] [7]"
     facts:
+      - "Named Isley in the game's own airfield data, although the product page calls the map's Saipan airfield Aslito [4] [7]"
       - "Shown as a Japanese airfield in early 1944, with wooden revetments, sandbagged searchlights and minimal radio aids; navigation is by compass and coastal landmarks [4]"
       - "The map's period, 15 June to 10 August 1944, spans the field's capture on 18 June and its first weeks as Isely Field [1] [4]"
 photos:
   - src: "encyclopedia/airfields-carriers/saipan.jpg"
-    alt: "Black-and-white photograph of a large crowd of servicemen around a polished four-engined B-29 bomber parked on a coral airfield, with trucks in the foreground"
-    caption: "A B-29 Superfortress of the 498th Bombardment Group at Isely Field, Saipan, between September 1944 and April 1945."
-    author: "US Marine Corps"
-    licence: "Public domain"
-    sourceUrl: "https://commons.wikimedia.org/wiki/File:Boeing_B-29_Superfortress_of_the_498th_at_Isely_Field,_Saipan,_circa_in_late_1944_(74237464).jpg"
-    accessed: "2026-10-28"
-  - src: "encyclopedia/airfields-carriers/saipan-2.jpg"
     alt: "An airport terminal with red pagoda-style roofs and jet bridges beyond a wide concrete apron, seen past the wingtip of a small aircraft"
     caption: "The terminal at Saipan International Airport from the apron, 21 November 2016."
     author: "Edward Russell"
     licence: "CC BY 2.0"
     licenceUrl: "https://creativecommons.org/licenses/by/2.0/"
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Saipan_International_airport_(31037379131).jpg"
+    accessed: "2026-10-28"
+  - src: "encyclopedia/airfields-carriers/saipan-2.jpg"
+    alt: "Black-and-white photograph of a large crowd of servicemen around a polished four-engined B-29 bomber parked on a coral airfield, with trucks in the foreground"
+    caption: "A B-29 Superfortress of the 498th Bombardment Group at Isely Field, Saipan, between September 1944 and April 1945."
+    author: "US Marine Corps"
+    licence: "Public domain"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Boeing_B-29_Superfortress_of_the_498th_at_Isely_Field,_Saipan,_circa_in_late_1944_(74237464).jpg"
     accessed: "2026-10-28"
 sources:
   - n: 1
@@ -103,6 +104,11 @@ sources:
     url: "https://davidmegginson.github.io/ourairports-data/airports.csv"
     accessed: "2026-10-28"
     note: "Row for PGSN: latitude, longitude and identifiers."
+  - n: 7
+    title: "dcs-world-schema reference data: MarianaIslandsWWII airbases (Isley.json)"
+    publisher: "dcs-world-schema, open-source data extracted by running DCS World 2.9.30.28536"
+    url: "https://github.com/YoloWingPixie/dcs-world-schema/blob/c3091e6c08fb8167e26145d0e33c10e4140c6fe7/dcs-world-reference/latest/airbases/MarianaIslandsWWII/Isley.json"
+    accessed: "2026-10-28"
 ---
 
 ## Role today

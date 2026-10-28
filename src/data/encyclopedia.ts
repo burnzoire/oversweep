@@ -376,20 +376,23 @@ export const airfieldContent = (r: EncyclopediaRecord) => contentFile(r) as unkn
 
 type Entry<T> = { record: EncyclopediaRecord; data: T };
 
-// One DCS map's airfields, as scripts/import_pydcs_airfields.py writes them.
+// One DCS map's airfields, as scripts/import_map_airfields.py writes them.
 export interface MapAirfieldTable {
   map: string;
-  source: { title: string; publisher: string; url: string; commit: string };
+  source: { title: string; publisher: string; url: string; commit: string; beacons: boolean; radioFallback?: { title: string; url: string } | null };
   airfields: {
-    id: number;
     name: string;
-    civilian: boolean;
-    tacan?: string;
-    atc?: { uhf: number | null; vhf: number | null; fm: number | null; hf: number | null };
-    runways: { name: string; ends: { name: string; heading: number; beacons: number }[] }[];
-    airfieldBeacons: number;
+    elevationFt?: number;
+    lat?: number;
+    lon?: number;
+    runways: { name: string; lengthFt?: number; ends: { name: string; heading: number }[] }[];
+    radio: { vhf?: number; uhf?: number; vhfLow?: number; hf?: number };
+    radioSource?: 'pydcs';
+    navaids: { type: string; callsign?: string; channel?: number; frequency?: number; unit?: 'kHz' | 'MHz' }[];
+    approaches: { type: string; runway: string; callsign?: string; frequency?: number; channel?: number }[];
   }[];
 }
+
 export interface AirfieldEntry extends Entry<AirfieldData> { theatres: Entry<TheatreData>[]; maps: (Entry<MapData> & { coverage: MapCoverage })[] }
 export interface TheatreEntry extends Entry<TheatreData> { airfields: AirfieldEntry[]; maps: MapEntry[] }
 export interface MapEntry extends Entry<MapData> { theatres: Entry<TheatreData>[]; airfields: { airfield: AirfieldEntry; coverage: MapCoverage }[] }

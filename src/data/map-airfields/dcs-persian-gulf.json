@@ -1,945 +1,1315 @@
 {
  "map": "dcs-persian-gulf",
  "source": {
-  "title": "pydcs terrain data: persiangulf airports (airports.py)",
-  "publisher": "pydcs, an open-source Python library for building DCS World missions, whose terrain data mirrors the game's",
-  "url": "https://github.com/pydcs/dcs/blob/5ddcc63a2dcd661e16b14f7aa43219b93044855d/dcs/terrain/persiangulf/airports.py",
-  "commit": "5ddcc63a2dcd661e16b14f7aa43219b93044855d"
+  "title": "dcs-world-schema reference data: PersianGulf airbases, beacons and navaids",
+  "publisher": "dcs-world-schema, open-source data extracted by running DCS World 2.9.30.28536 (extracted 2026-10-04)",
+  "url": "https://github.com/YoloWingPixie/dcs-world-schema/tree/c3091e6c08fb8167e26145d0e33c10e4140c6fe7/dcs-world-reference/latest/airbases/PersianGulf",
+  "commit": "c3091e6c08fb8167e26145d0e33c10e4140c6fe7",
+  "dcsVersion": "2.9.30.28536",
+  "beacons": true,
+  "radioFallback": {
+   "title": "pydcs terrain data: persiangulf airports (airports.py)",
+   "url": "https://github.com/pydcs/dcs/blob/5ddcc63a2dcd661e16b14f7aa43219b93044855d/dcs/terrain/persiangulf/airports.py"
+  }
  },
  "airfields": [
   {
-   "runways": [
-    {
-     "name": "31-13",
-     "ends": [
-      {
-       "name": "31",
-       "heading": 310,
-       "beacons": 0
-      },
-      {
-       "name": "13",
-       "heading": 130,
-       "beacons": 0
-      }
-     ]
-    },
-    {
-     "name": "13-31",
-     "ends": [
-      {
-       "name": "13",
-       "heading": 130,
-       "beacons": 0
-      },
-      {
-       "name": "31",
-       "heading": 310,
-       "beacons": 0
-      }
-     ]
-    },
-    {
-     "name": "13-31",
-     "ends": [
-      {
-       "name": "13",
-       "heading": 130,
-       "beacons": 0
-      },
-      {
-       "name": "31",
-       "heading": 310,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 2,
-   "id": 22,
    "name": "Abu Dhabi Intl",
-   "civilian": true,
-   "atc": {
-    "uhf": 250.55,
-    "vhf": 119.2,
-    "fm": 39.0,
-    "hf": 4.05
-   }
-  },
-  {
+   "elevationFt": 92,
+   "lat": 24.4537,
+   "lon": 54.6543,
    "runways": [
     {
-     "name": "08-26",
-     "ends": [
-      {
-       "name": "08",
-       "heading": 80,
-       "beacons": 0
-      },
-      {
-       "name": "26",
-       "heading": 260,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 1,
-   "id": 1,
-   "name": "Abu Musa Island",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.4,
-    "vhf": 122.9,
-    "fm": 38.85,
-    "hf": 3.975
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "19-1",
-     "ends": [
-      {
-       "name": "19",
-       "heading": 190,
-       "beacons": 0
-      },
-      {
-       "name": "1",
-       "heading": 10,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 1,
-   "id": 25,
-   "name": "Al Ain Intl",
-   "civilian": true,
-   "atc": {
-    "uhf": 250.7,
-    "vhf": 119.85,
-    "fm": 39.15,
-    "hf": 4.125
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "13R-31L",
-     "ends": [
-      {
-       "name": "13R",
-       "heading": 130,
-       "beacons": 2
-      },
-      {
-       "name": "31L",
-       "heading": 310,
-       "beacons": 2
-      }
-     ]
-    },
-    {
-     "name": "13L-31R",
+     "name": "13L/31R",
+     "lengthFt": 12818,
      "ends": [
       {
        "name": "13L",
-       "heading": 130,
-       "beacons": 2
+       "heading": 126
       },
       {
        "name": "31R",
-       "heading": 310,
-       "beacons": 2
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 1,
-   "id": 4,
-   "name": "Al Dhafra AFB",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.1,
-    "vhf": 126.5,
-    "fm": 39.5,
-    "hf": 4.3
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "30-12",
-     "ends": [
-      {
-       "name": "30",
-       "heading": 300,
-       "beacons": 2
-      },
-      {
-       "name": "12",
-       "heading": 120,
-       "beacons": 2
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 6,
-   "name": "Al Maktoum Intl",
-   "civilian": true,
-   "atc": {
-    "uhf": 251.2,
-    "vhf": 118.6,
-    "fm": 39.6,
-    "hf": 4.35
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "27-09",
-     "ends": [
-      {
-       "name": "27",
-       "heading": 270,
-       "beacons": 2
-      },
-      {
-       "name": "09",
-       "heading": 90,
-       "beacons": 2
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 1,
-   "id": 12,
-   "name": "Al Minhad AFB",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.1,
-    "vhf": 118.55,
-    "fm": 38.5,
-    "hf": 3.8
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "13-31",
-     "ends": [
-      {
-       "name": "13",
-       "heading": 130,
-       "beacons": 0
-      },
-      {
-       "name": "31",
-       "heading": 310,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 1,
-   "id": 23,
-   "name": "Al-Bateen",
-   "civilian": true,
-   "atc": {
-    "uhf": 250.6,
-    "vhf": 119.9,
-    "fm": 39.05,
-    "hf": 4.075
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "03R-21L",
-     "ends": [
-      {
-       "name": "03R",
-       "heading": 30,
-       "beacons": 0
-      },
-      {
-       "name": "21L",
-       "heading": 210,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 3,
-   "id": 2,
-   "name": "Bandar Abbas Intl",
-   "civilian": true,
-   "atc": {
-    "uhf": 251.0,
-    "vhf": 118.1,
-    "fm": 39.4,
-    "hf": 4.25
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "08-26",
-     "ends": [
-      {
-       "name": "08",
-       "heading": 80,
-       "beacons": 0
-      },
-      {
-       "name": "26",
-       "heading": 260,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 2,
-   "id": 3,
-   "name": "Bandar Lengeh",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.05,
-    "vhf": 121.7,
-    "fm": 39.45,
-    "hf": 4.275
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "6-24",
-     "ends": [
-      {
-       "name": "6",
-       "heading": 60,
-       "beacons": 0
-      },
-      {
-       "name": "24",
-       "heading": 240,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 3,
-   "id": 21,
-   "name": "Bandar-e-Jask",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.5,
-    "vhf": 118.15,
-    "fm": 38.95,
-    "hf": 4.025
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "30L-12R",
-     "ends": [
-      {
-       "name": "30L",
-       "heading": 300,
-       "beacons": 2
-      },
-      {
-       "name": "12R",
-       "heading": 120,
-       "beacons": 2
+       "heading": 306
       }
      ]
     },
     {
-     "name": "30R-12L",
+     "name": "13R/31L",
+     "lengthFt": 9946,
      "ends": [
       {
-       "name": "30R",
-       "heading": 300,
-       "beacons": 2
+       "name": "31L",
+       "heading": 306
       },
       {
-       "name": "12L",
-       "heading": 120,
-       "beacons": 2
+       "name": "13R",
+       "heading": 126
+      }
+     ]
+    },
+    {
+     "name": "13R/31L",
+     "lengthFt": 2419,
+     "ends": [
+      {
+       "name": "13R",
+       "heading": 126
+      },
+      {
+       "name": "31L",
+       "heading": 306
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 5,
-   "name": "Dubai Intl",
-   "civilian": true,
-   "atc": {
-    "uhf": 251.15,
-    "vhf": 118.75,
-    "fm": 39.55,
-    "hf": 4.325
-   }
-  },
-  {
-   "runways": [
+   "radio": {
+    "vhf": 119.2
+   },
+   "navaids": [
     {
-     "name": "29-11",
-     "ends": [
-      {
-       "name": "29",
-       "heading": 290,
-       "beacons": 2
-      },
-      {
-       "name": "11",
-       "heading": 110,
-       "beacons": 0
-      }
-     ]
+     "type": "DME",
+     "callsign": "ADV",
+     "channel": 119,
+     "frequency": 114.25,
+     "unit": "MHz"
+    },
+    {
+     "type": "VOR",
+     "callsign": "ADV",
+     "frequency": 114.25,
+     "unit": "MHz"
     }
    ],
-   "airfieldBeacons": 1,
-   "id": 7,
-   "name": "Fujairah Intl",
-   "civilian": true,
-   "atc": {
-    "uhf": 251.25,
-    "vhf": 124.6,
-    "fm": 39.65,
-    "hf": 4.375
-   }
+   "approaches": []
   },
   {
+   "name": "Abu Musa Island",
+   "elevationFt": 16,
+   "lat": 25.876,
+   "lon": 55.0329,
    "runways": [
     {
-     "name": "26-08",
+     "name": "08/26",
+     "lengthFt": 7616,
      "ends": [
-      {
-       "name": "26",
-       "heading": 260,
-       "beacons": 0
-      },
       {
        "name": "08",
-       "heading": 80,
-       "beacons": 2
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 1,
-   "id": 9,
-   "name": "Havadarya",
-   "civilian": false,
-   "atc": {
-    "uhf": 251.3,
-    "vhf": 123.15,
-    "fm": 39.7,
-    "hf": 4.4
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "13-31",
-     "ends": [
-      {
-       "name": "13",
-       "heading": 130,
-       "beacons": 0
+       "heading": 81
       },
       {
-       "name": "31",
-       "heading": 310,
-       "beacons": 0
+       "name": "26",
+       "heading": 261
       }
      ]
     }
    ],
-   "airfieldBeacons": 1,
-   "id": 27,
-   "name": "Jiroft",
-   "civilian": true,
-   "atc": {
-    "uhf": 250.85,
-    "vhf": 136.0,
-    "fm": 39.25,
-    "hf": 4.175
-   }
-  },
-  {
-   "runways": [
+   "radio": {
+    "vhf": 122.9
+   },
+   "navaids": [
     {
-     "name": "34-16",
-     "ends": [
-      {
-       "name": "34",
-       "heading": 340,
-       "beacons": 0
-      },
-      {
-       "name": "16",
-       "heading": 160,
-       "beacons": 0
-      }
-     ]
+     "type": "DME",
+     "callsign": "ABM",
+     "channel": 101,
+     "frequency": 285,
+     "unit": "kHz"
     }
    ],
-   "airfieldBeacons": 3,
-   "id": 18,
-   "name": "Kerman",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.3,
-    "vhf": 118.25,
-    "fm": 38.75,
-    "hf": 3.925
-   }
+   "approaches": []
   },
   {
+   "name": "Al Ain Intl",
+   "elevationFt": 814,
+   "lat": 24.2614,
+   "lon": 55.6092,
    "runways": [
     {
-     "name": "19-01",
+     "name": "01/19",
+     "lengthFt": 11268,
      "ends": [
       {
        "name": "19",
-       "heading": 190,
-       "beacons": 2
+       "heading": 185
       },
       {
        "name": "01",
-       "heading": 10,
-       "beacons": 0
+       "heading": 5
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 10,
-   "name": "Khasab",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.0,
-    "vhf": 124.35,
-    "fm": 38.4,
-    "hf": 3.75
-   }
+   "radio": {
+    "vhf": 119.85
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "ALN",
+     "channel": 119,
+     "frequency": 112.6,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
   },
   {
+   "name": "Al Dhafra AFB",
+   "elevationFt": 52,
+   "lat": 24.2483,
+   "lon": 54.5477,
    "runways": [
     {
-     "name": "10-28",
+     "name": "13L/31R",
+     "lengthFt": 11404,
      "ends": [
       {
-       "name": "10",
-       "heading": 100,
-       "beacons": 0
+       "name": "13L",
+       "heading": 125
       },
       {
-       "name": "28",
-       "heading": 280,
-       "beacons": 0
+       "name": "31R",
+       "heading": 305
       }
      ]
     },
     {
-     "name": "10-28",
+     "name": "13R/31L",
+     "lengthFt": 11531,
      "ends": [
       {
-       "name": "10",
-       "heading": 100,
-       "beacons": 0
+       "name": "13R",
+       "heading": 125
       },
       {
-       "name": "28",
-       "heading": 280,
-       "beacons": 0
+       "name": "31L",
+       "heading": 305
       }
      ]
     }
    ],
-   "airfieldBeacons": 2,
-   "id": 24,
-   "name": "Kish Intl",
-   "civilian": true,
-   "atc": {
-    "uhf": 250.65,
-    "vhf": 121.65,
-    "fm": 39.1,
-    "hf": 4.1
-   }
-  },
-  {
-   "runways": [
+   "radio": {
+    "vhf": 126.5
+   },
+   "navaids": [
     {
-     "name": "09-27",
-     "ends": [
-      {
-       "name": "09",
-       "heading": 90,
-       "beacons": 0
-      },
-      {
-       "name": "27",
-       "heading": 270,
-       "beacons": 0
-      }
-     ]
+     "type": "VORTAC",
+     "callsign": "MA",
+     "channel": 96,
+     "frequency": 114.9,
+     "unit": "MHz"
     }
    ],
-   "airfieldBeacons": 2,
-   "id": 11,
-   "name": "Lar",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.05,
-    "vhf": 127.35,
-    "fm": 38.45,
-    "hf": 3.775
-   }
-  },
-  {
-   "runways": [
+   "approaches": [
     {
-     "name": "11-29",
-     "ends": [
-      {
-       "name": "11",
-       "heading": 110,
-       "beacons": 0
-      },
-      {
-       "name": "29",
-       "heading": 290,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 2,
-   "id": 26,
-   "name": "Lavan Island",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.75,
-    "vhf": 128.55,
-    "fm": 39.2,
-    "hf": 4.15
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "13-31",
-     "ends": [
-      {
-       "name": "13",
-       "heading": 130,
-       "beacons": 0
-      },
-      {
-       "name": "31",
-       "heading": 310,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 1,
-   "id": 29,
-   "name": "Liwa AFB",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.95,
-    "vhf": 119.3,
-    "fm": 39.35,
-    "hf": 4.225
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "23-05",
-     "ends": [
-      {
-       "name": "23",
-       "heading": 230,
-       "beacons": 0
-      },
-      {
-       "name": "05",
-       "heading": 50,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 2,
-   "id": 13,
-   "name": "Qeshm Island",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.15,
-    "vhf": 118.05,
-    "fm": 38.55,
-    "hf": 3.825
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "35-17",
-     "ends": [
-      {
-       "name": "35",
-       "heading": 350,
-       "beacons": 0
-      },
-      {
-       "name": "17",
-       "heading": 170,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 1,
-   "id": 28,
-   "name": "Ras Al Khaimah Intl",
-   "civilian": true,
-   "atc": {
-    "uhf": 250.9,
-    "vhf": 121.6,
-    "fm": 39.3,
-    "hf": 4.2
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "16-34",
-     "ends": [
-      {
-       "name": "16",
-       "heading": 160,
-       "beacons": 0
-      },
-      {
-       "name": "34",
-       "heading": 340,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 1,
-   "id": 20,
-   "name": "Sas Al Nakheel",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.45,
-    "vhf": 128.9,
-    "fm": 38.9,
-    "hf": 4.0
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "30L-12R",
-     "ends": [
-      {
-       "name": "30L",
-       "heading": 300,
-       "beacons": 0
-      },
-      {
-       "name": "12R",
-       "heading": 120,
-       "beacons": 0
-      }
-     ]
+     "type": "ILS",
+     "runway": "13L",
+     "callsign": "IMA",
+     "frequency": 111.1
     },
     {
-     "name": "30R-12L",
-     "ends": [
-      {
-       "name": "30R",
-       "heading": 300,
-       "beacons": 2
-      },
-      {
-       "name": "12L",
-       "heading": 120,
-       "beacons": 2
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 14,
-   "name": "Sharjah Intl",
-   "civilian": true,
-   "atc": {
-    "uhf": 250.2,
-    "vhf": 118.6,
-    "fm": 38.6,
-    "hf": 3.85
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "29L-11R",
-     "ends": [
-      {
-       "name": "29L",
-       "heading": 290,
-       "beacons": 2
-      },
-      {
-       "name": "11R",
-       "heading": 110,
-       "beacons": 0
-      }
-     ]
+     "type": "ILS",
+     "runway": "13R",
+     "callsign": "LMA",
+     "frequency": 108.7
     },
     {
-     "name": "29R-11L",
-     "ends": [
-      {
-       "name": "29R",
-       "heading": 290,
-       "beacons": 0
-      },
-      {
-       "name": "11L",
-       "heading": 110,
-       "beacons": 0
-      }
-     ]
+     "type": "ILS",
+     "runway": "31L",
+     "callsign": "RMA",
+     "frequency": 108.7
+    },
+    {
+     "type": "ILS",
+     "runway": "31R",
+     "callsign": "MMA",
+     "frequency": 109.1
     }
-   ],
-   "airfieldBeacons": 3,
-   "id": 19,
-   "name": "Shiraz Intl",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.35,
-    "vhf": 121.9,
-    "fm": 38.8,
-    "hf": 3.95
-   }
+   ]
   },
   {
+   "name": "Al Maktoum Intl",
+   "elevationFt": 123,
+   "lat": 24.8971,
+   "lon": 55.1602,
    "runways": [
     {
-     "name": "28-10",
-     "ends": [
-      {
-       "name": "28",
-       "heading": 280,
-       "beacons": 0
-      },
-      {
-       "name": "10",
-       "heading": 100,
-       "beacons": 0
-      }
-     ]
-    }
-   ],
-   "airfieldBeacons": 0,
-   "id": 17,
-   "name": "Sir Abu Nuayr",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.8,
-    "vhf": 118.0,
-    "fm": 38.7,
-    "hf": 3.9
-   }
-  },
-  {
-   "runways": [
-    {
-     "name": "30-12",
+     "name": "12/30",
+     "lengthFt": 11501,
      "ends": [
       {
        "name": "30",
-       "heading": 300,
-       "beacons": 0
+       "heading": 299
       },
       {
        "name": "12",
-       "heading": 120,
-       "beacons": 0
+       "heading": 119
       }
      ]
     }
    ],
-   "airfieldBeacons": 2,
-   "id": 15,
-   "name": "Sirri Island",
-   "civilian": false,
-   "atc": {
-    "uhf": 250.25,
-    "vhf": 135.05,
-    "fm": 38.65,
-    "hf": 3.875
-   }
+   "radio": {
+    "vhf": 118.6
+   },
+   "navaids": [],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "12",
+     "callsign": "IJEA",
+     "frequency": 111.75
+    },
+    {
+     "type": "ILS",
+     "runway": "30",
+     "callsign": "IJWA",
+     "frequency": 109.75
+    }
+   ]
   },
   {
+   "name": "Al Minhad AFB",
+   "elevationFt": 180,
+   "lat": 25.0269,
+   "lon": 55.3658,
    "runways": [
     {
-     "name": "03-21",
+     "name": "09/27",
+     "lengthFt": 11866,
      "ends": [
       {
-       "name": "03",
-       "heading": 30,
-       "beacons": 0
+       "name": "27",
+       "heading": 267
       },
       {
-       "name": "21",
-       "heading": 210,
-       "beacons": 0
+       "name": "09",
+       "heading": 87
       }
      ]
     }
    ],
-   "airfieldBeacons": 0,
-   "id": 8,
-   "name": "Tunb Island AFB",
-   "civilian": false
+   "radio": {
+    "vhf": 118.55
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "MIN",
+     "channel": 99,
+     "frequency": 115.2,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "09",
+     "callsign": "IMNW",
+     "frequency": 110.7
+    },
+    {
+     "type": "ILS",
+     "runway": "27",
+     "callsign": "IMNR",
+     "frequency": 110.75
+    }
+   ]
   },
   {
+   "name": "Al-Bateen",
+   "elevationFt": 12,
+   "lat": 24.4281,
+   "lon": 54.4586,
    "runways": [
     {
-     "name": "26-08",
+     "name": "13/31",
+     "lengthFt": 6808,
+     "ends": [
+      {
+       "name": "13",
+       "heading": 126
+      },
+      {
+       "name": "31",
+       "heading": 306
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 119.9
+   },
+   "navaids": [
+    {
+     "type": "VOR",
+     "callsign": "ALB",
+     "channel": 119,
+     "frequency": 114.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Bandar Abbas Intl",
+   "elevationFt": 17,
+   "lat": 27.2177,
+   "lon": 56.379,
+   "runways": [
+    {
+     "name": "03R/21L",
+     "lengthFt": 11640,
+     "ends": [
+      {
+       "name": "03R",
+       "heading": 25
+      },
+      {
+       "name": "21L",
+       "heading": 205
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 118.1
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "BND",
+     "frequency": 250,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "BND",
+     "channel": 78
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "BND",
+     "channel": 119,
+     "frequency": 117.2,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "21L",
+     "callsign": "IBND",
+     "frequency": 109.9
+    }
+   ]
+  },
+  {
+   "name": "Bandar Lengeh",
+   "elevationFt": 76,
+   "lat": 26.5323,
+   "lon": 54.8247,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 7626,
+     "ends": [
+      {
+       "name": "08",
+       "heading": 78
+      },
+      {
+       "name": "26",
+       "heading": 258
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 121.7
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "LEN",
+     "frequency": 408,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "LEN",
+     "channel": 95,
+     "frequency": 114.8,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Bandar-e-Jask",
+   "elevationFt": 26,
+   "lat": 25.6547,
+   "lon": 57.8014,
+   "runways": [
+    {
+     "name": "06/24",
+     "lengthFt": 6843,
+     "ends": [
+      {
+       "name": "06",
+       "heading": 60
+      },
+      {
+       "name": "24",
+       "heading": 240
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 118.15,
+    "uhf": 250.5,
+    "vhfLow": 38.95,
+    "hf": 4.025
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "JSK",
+     "frequency": 349,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "JSK",
+     "channel": 110
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "KHM",
+     "frequency": 116.3,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [],
+   "radioSource": "pydcs"
+  },
+  {
+   "name": "Dubai Intl",
+   "elevationFt": 16,
+   "lat": 25.2564,
+   "lon": 55.3653,
+   "runways": [
+    {
+     "name": "12L/30R",
+     "lengthFt": 10990,
+     "ends": [
+      {
+       "name": "30R",
+       "heading": 299
+      },
+      {
+       "name": "12L",
+       "heading": 119
+      }
+     ]
+    },
+    {
+     "name": "12R/30L",
+     "lengthFt": 11018,
+     "ends": [
+      {
+       "name": "30L",
+       "heading": 299
+      },
+      {
+       "name": "12R",
+       "heading": 119
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 118.75
+   },
+   "navaids": [],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "12L",
+     "callsign": "IDBR",
+     "frequency": 110.1
+    },
+    {
+     "type": "ILS",
+     "runway": "12R",
+     "callsign": "IDBW",
+     "frequency": 109.5
+    },
+    {
+     "type": "ILS",
+     "runway": "30R",
+     "callsign": "IDBE",
+     "frequency": 111.3
+    },
+    {
+     "type": "ILS",
+     "runway": "30R",
+     "callsign": "IDBL",
+     "frequency": 110.9
+    }
+   ]
+  },
+  {
+   "name": "Fujairah Intl",
+   "elevationFt": 102,
+   "lat": 25.1109,
+   "lon": 56.3274,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 9437,
+     "ends": [
+      {
+       "name": "29",
+       "heading": 290
+      },
+      {
+       "name": "11",
+       "heading": 110
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 124.6
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "FJV",
+     "channel": 85,
+     "frequency": 113.8,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "29",
+     "callsign": "IFJR",
+     "frequency": 111.5
+    }
+   ]
+  },
+  {
+   "name": "Havadarya",
+   "elevationFt": 51,
+   "lat": 27.1582,
+   "lon": 56.172,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 7301,
      "ends": [
       {
        "name": "26",
-       "heading": 260,
-       "beacons": 0
+       "heading": 256
       },
       {
        "name": "08",
-       "heading": 80,
-       "beacons": 0
+       "heading": 76
       }
      ]
     }
    ],
-   "airfieldBeacons": 1,
-   "id": 16,
+   "radio": {
+    "vhf": 123.15
+   },
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "HDR",
+     "channel": 47,
+     "frequency": 111.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "08",
+     "callsign": "IBHD",
+     "frequency": 108.9
+    }
+   ]
+  },
+  {
+   "name": "Jiroft",
+   "elevationFt": 2664,
+   "lat": 28.7235,
+   "lon": 57.6751,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 9160,
+     "ends": [
+      {
+       "name": "13",
+       "heading": 126
+      },
+      {
+       "name": "31",
+       "heading": 306
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 136.0
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "JIR",
+     "frequency": 276,
+     "unit": "kHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Kerman",
+   "elevationFt": 5746,
+   "lat": 30.2731,
+   "lon": 56.9516,
+   "runways": [
+    {
+     "name": "16/34",
+     "lengthFt": 11982,
+     "ends": [
+      {
+       "name": "34",
+       "heading": 335
+      },
+      {
+       "name": "16",
+       "heading": 155
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 118.25
+   },
+   "navaids": [
+    {
+     "type": "DME",
+     "callsign": "KER",
+     "frequency": 290.0,
+     "unit": "MHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "KER",
+     "channel": 97,
+     "frequency": 122.5,
+     "unit": "MHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "KER",
+     "channel": 57,
+     "frequency": 112.0,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Khasab",
+   "elevationFt": 74,
+   "lat": 26.1698,
+   "lon": 56.2402,
+   "runways": [
+    {
+     "name": "01/19",
+     "lengthFt": 7513,
+     "ends": [
+      {
+       "name": "19",
+       "heading": 191
+      },
+      {
+       "name": "01",
+       "heading": 11
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 124.35
+   },
+   "navaids": [],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "19",
+     "callsign": "IBKS",
+     "frequency": 110.3
+    }
+   ]
+  },
+  {
+   "name": "Kish Intl",
+   "elevationFt": 115,
+   "lat": 26.5281,
+   "lon": 53.981,
+   "runways": [
+    {
+     "name": "10L/28R",
+     "lengthFt": 10617,
+     "ends": [
+      {
+       "name": "10L",
+       "heading": 92
+      },
+      {
+       "name": "28R",
+       "heading": 272
+      }
+     ]
+    },
+    {
+     "name": "10R/28L",
+     "lengthFt": 10288,
+     "ends": [
+      {
+       "name": "10R",
+       "heading": 92
+      },
+      {
+       "name": "28L",
+       "heading": 272
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 121.65
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "KIH",
+     "frequency": 201,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "KIH",
+     "channel": 112
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Lar",
+   "elevationFt": 2636,
+   "lat": 27.6747,
+   "lon": 54.3831,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 9601,
+     "ends": [
+      {
+       "name": "09",
+       "heading": 86
+      },
+      {
+       "name": "27",
+       "heading": 266
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 127.35
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "OISL",
+     "frequency": 224,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "LAR",
+     "frequency": 117.9,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Lavan Island",
+   "elevationFt": 75,
+   "lat": 26.8111,
+   "lon": 53.3533,
+   "runways": [
+    {
+     "name": "11/29",
+     "lengthFt": 8234,
+     "ends": [
+      {
+       "name": "11",
+       "heading": 108
+      },
+      {
+       "name": "29",
+       "heading": 288
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 128.55
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "LVA",
+     "channel": 0,
+     "frequency": 310,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "LVA",
+     "channel": 115,
+     "frequency": 116.85,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Liwa AFB",
+   "elevationFt": 400,
+   "lat": 23.6508,
+   "lon": 53.8244,
+   "runways": [
+    {
+     "name": "13/31",
+     "lengthFt": 10769,
+     "ends": [
+      {
+       "name": "13",
+       "heading": 129
+      },
+      {
+       "name": "31",
+       "heading": 309
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 119.3
+   },
+   "navaids": [
+    {
+     "type": "VORTAC",
+     "callsign": "OMLW",
+     "channel": 121,
+     "frequency": 117.4,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Qeshm Island",
+   "elevationFt": 17,
+   "lat": 26.7547,
+   "lon": 55.9024,
+   "runways": [
+    {
+     "name": "05/23",
+     "lengthFt": 13288,
+     "ends": [
+      {
+       "name": "23",
+       "heading": 227
+      },
+      {
+       "name": "05",
+       "heading": 47
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 118.05
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "KHM",
+     "frequency": 233,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "KHM",
+     "frequency": 117.1,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Quasoura_airport",
+   "elevationFt": 330,
+   "lat": 22.7761,
+   "lon": 55.0633,
+   "runways": [
+    {
+     "name": "09/27",
+     "lengthFt": 9323,
+     "ends": [
+      {
+       "name": "27",
+       "heading": 267
+      },
+      {
+       "name": "09",
+       "heading": 87
+      }
+     ]
+    }
+   ],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Ras Al Khaimah Intl",
+   "elevationFt": 71,
+   "lat": 25.6135,
+   "lon": 55.9388,
+   "runways": [
+    {
+     "name": "17/35",
+     "lengthFt": 8407,
+     "ends": [
+      {
+       "name": "35",
+       "heading": 343
+      },
+      {
+       "name": "17",
+       "heading": 163
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 121.6
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "OMRK",
+     "channel": 83,
+     "frequency": 113.6,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Sas Al Nakheel",
+   "elevationFt": 10,
+   "lat": 24.4411,
+   "lon": 54.517,
+   "runways": [
+    {
+     "name": "16/34",
+     "lengthFt": 5387,
+     "ends": [
+      {
+       "name": "16",
+       "heading": 159
+      },
+      {
+       "name": "34",
+       "heading": 339
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 128.9
+   },
+   "navaids": [
+    {
+     "type": "VOR-DME",
+     "callsign": "SAS",
+     "channel": 119,
+     "frequency": 128.925,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Sharjah Intl",
+   "elevationFt": 98,
+   "lat": 25.3307,
+   "lon": 55.5183,
+   "runways": [
+    {
+     "name": "12L/30R",
+     "lengthFt": 10389,
+     "ends": [
+      {
+       "name": "30R",
+       "heading": 300
+      },
+      {
+       "name": "12L",
+       "heading": 120
+      }
+     ]
+    },
+    {
+     "name": "12R/30L",
+     "lengthFt": 10535,
+     "ends": [
+      {
+       "name": "30L",
+       "heading": 300
+      },
+      {
+       "name": "12R",
+       "heading": 120
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 118.6
+   },
+   "navaids": [],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "",
+     "callsign": "ISRE",
+     "frequency": 108.55
+    },
+    {
+     "type": "ILS",
+     "runway": "30R",
+     "callsign": "ISHW",
+     "frequency": 111.95
+    }
+   ]
+  },
+  {
+   "name": "Shiraz Intl",
+   "elevationFt": 4879,
+   "lat": 29.5409,
+   "lon": 52.5911,
+   "runways": [
+    {
+     "name": "11L/29R",
+     "lengthFt": 13271,
+     "ends": [
+      {
+       "name": "29R",
+       "heading": 291
+      },
+      {
+       "name": "11L",
+       "heading": 111
+      }
+     ]
+    },
+    {
+     "name": "11R/29L",
+     "lengthFt": 13206,
+     "ends": [
+      {
+       "name": "29L",
+       "heading": 291
+      },
+      {
+       "name": "11R",
+       "heading": 111
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 121.9
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "SR",
+     "frequency": 205,
+     "unit": "kHz"
+    },
+    {
+     "type": "TACAN",
+     "callsign": "SYZ1",
+     "channel": 94,
+     "frequency": 114.7,
+     "unit": "MHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "SYZ",
+     "channel": 125,
+     "frequency": 117.8,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": [
+    {
+     "type": "ILS",
+     "runway": "29L",
+     "callsign": "ISYZ",
+     "frequency": 108.5
+    }
+   ]
+  },
+  {
+   "name": "Sir Abu Nuayr",
+   "elevationFt": 25,
+   "lat": 25.2169,
+   "lon": 54.2336,
+   "runways": [
+    {
+     "name": "10/28",
+     "lengthFt": 2230,
+     "ends": [
+      {
+       "name": "28",
+       "heading": 276
+      },
+      {
+       "name": "10",
+       "heading": 96
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "uhf": 250.8
+   },
+   "navaids": [],
+   "approaches": []
+  },
+  {
+   "name": "Sirri Island",
+   "elevationFt": 14,
+   "lat": 25.9096,
+   "lon": 54.5393,
+   "runways": [
+    {
+     "name": "12/30",
+     "lengthFt": 7444,
+     "ends": [
+      {
+       "name": "30",
+       "heading": 304
+      },
+      {
+       "name": "12",
+       "heading": 124
+      }
+     ]
+    }
+   ],
+   "radio": {
+    "vhf": 135.05
+   },
+   "navaids": [
+    {
+     "type": "NDB",
+     "callsign": "SIR",
+     "frequency": 300,
+     "unit": "kHz"
+    },
+    {
+     "type": "VOR-DME",
+     "callsign": "SIR",
+     "frequency": 113.75,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
+  },
+  {
+   "name": "Tunb Island AFB",
+   "elevationFt": 43,
+   "lat": 26.2589,
+   "lon": 55.3158,
+   "runways": [
+    {
+     "name": "03/21",
+     "lengthFt": 6100,
+     "ends": [
+      {
+       "name": "03",
+       "heading": 25
+      },
+      {
+       "name": "21",
+       "heading": 205
+      }
+     ]
+    }
+   ],
+   "radio": {},
+   "navaids": [],
+   "approaches": []
+  },
+  {
    "name": "Tunb Kochak",
-   "civilian": false
+   "elevationFt": 16,
+   "lat": 26.2433,
+   "lon": 55.1456,
+   "runways": [
+    {
+     "name": "08/26",
+     "lengthFt": 2482,
+     "ends": [
+      {
+       "name": "26",
+       "heading": 258
+      },
+      {
+       "name": "08",
+       "heading": 78
+      }
+     ]
+    }
+   ],
+   "radio": {},
+   "navaids": [
+    {
+     "type": "TACAN",
+     "callsign": "KCK",
+     "channel": 89,
+     "frequency": 114.2,
+     "unit": "MHz"
+    }
+   ],
+   "approaches": []
   }
  ]
 }

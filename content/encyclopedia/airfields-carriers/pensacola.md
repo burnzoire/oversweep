@@ -42,6 +42,13 @@ charts:
     accessed: "2026-10-27"
 photos:
   - src: "encyclopedia/airfields-carriers/pensacola.jpg"
+    alt: "Black-and-white aerial photograph of a naval air station on a peninsula: hangars and buildings along the waterfront, an aircraft carrier moored at a pier, and an airfield to one side"
+    caption: "NAS Pensacola from the air around 1964, with the training carrier USS Lexington at the pier and Chevalier Field to the right."
+    author: "US Department of Defense, from All Hands magazine, May 1964"
+    licence: "Public domain"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Aerial_view_of_NAS_Pensacola_c1964.jpg"
+    accessed: "2026-10-28"
+  - src: "encyclopedia/airfields-carriers/pensacola-3.jpg"
     alt: "Six blue and gold Blue Angels Super Hornets in a delta formation, breaking upward over a coastline and a bay"
     caption: "The Blue Angels' first Super Hornet delta formation over NAS Pensacola, their home field, in January 2021."
     author: "US Navy Flight Demonstration Squadron public affairs"

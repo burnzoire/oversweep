@@ -57,14 +57,6 @@ photos:
     licence: "Public domain"
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Aerial_view_of_the_U.S._Naval_Air_Station_Whiting_Field,_Florida_(USA),_on_29_March_2021_(210329-N-QF733-0002).JPG"
     accessed: "2026-10-27"
-  - src: "encyclopedia/airfields-carriers/whiting-field-2.jpg"
-    alt: "Two orange and white T-28B trainers flying in echelon above green countryside"
-    caption: "Two T-28B Trojans of Training Squadron 2 (VT-2) from Whiting Field on a formation training flight, 1967."
-    author: "Summerdrought"
-    licence: "CC BY-SA 4.0"
-    licenceUrl: "https://creativecommons.org/licenses/by-sa/4.0/"
-    sourceUrl: "https://commons.wikimedia.org/wiki/File:T-28Bs_from_VT-2_Whiting_field_1967.jpg"
-    accessed: "2026-10-27"
 sources:
   - n: 1
     title: "Naval Air Station Whiting Field"

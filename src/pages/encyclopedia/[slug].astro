@@ -233,9 +233,9 @@ const deliverySources: Source[] = [
                   {a.aliases.length > 0 && <div><dt>Also</dt><dd>{a.aliases.join(" · ")}</dd></div>}
                   <div><dt>Use</dt><dd>{useLabels[a.use]}</dd></div>
                   <div><dt>Roles</dt><dd>{a.data.roles.map((r) => airfieldRoles[r]).join(", ")}</dd></div>
-                  <div><dt>In the sims</dt><dd>{a.represented.length ? a.represented.map((x) => x.data.name).join(", ")
-                    : a.maps.some((x) => x.coverage.status === "absent") ? `Not on ${a.maps.filter((x) => x.coverage.status === "absent").map((x) => x.data.name).join(", ")}`
-                    : "Not checked yet"}</dd></div>
+                  <div><dt>Represented in</dt><dd>{a.represented.length ? a.represented.map((x, i) => <>{i > 0 && ", "}<a href={sitePath(recordRoute(x.record))}>{x.data.name}</a></>)
+                    : a.maps.some((x) => x.coverage.status === "absent") ? <>No map checked so far; not on {a.maps.filter((x) => x.coverage.status === "absent").map((x, i) => <>{i > 0 && ", "}<a href={sitePath(recordRoute(x.record))}>{x.data.name}</a></>)}</>
+                    : "No map checked yet"}</dd></div>
                 </dl>
               </RecordCard>
             ))}
@@ -253,7 +253,7 @@ const deliverySources: Source[] = [
                     <td>{a.data.opened.year}</td>
                     <td>{a.longest === null ? "not given" : ft(a.longest)}</td>
                     <td>{ft(a.data.elevationFt)}</td>
-                    <td>{a.maps.length ? a.maps.map((x) => `${x.data.name}: ${coverageStatuses[x.coverage.status].toLowerCase()}`).join("; ") : "none checked"}</td>
+                    <td>{a.maps.length ? a.maps.map((x, i) => <>{i > 0 && "; "}<a href={sitePath(recordRoute(x.record))}>{x.data.name}</a>: {coverageStatuses[x.coverage.status].toLowerCase()}</>) : "none checked"}</td>
                   </tr>
                 ))}
               </tbody>
