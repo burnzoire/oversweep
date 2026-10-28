@@ -4,7 +4,7 @@ import SiteLayout from '../../layouts/SiteLayout.astro';
 import Cited from './Cited.astro';
 import PhotoFigure from './PhotoFigure.astro';
 import RunwayFigure from './RunwayFigure.astro';
-import { airfieldCatalogue, airfieldContent, recordRoute, type AirfieldData, type EncyclopediaRecord, type MapData, type Period, type TheatreData } from '../../data/encyclopedia';
+import { airfieldCatalogue, airfieldContent, recordRoute, type AirfieldData, type EncyclopediaRecord, type MapData, type MapAirfieldTable, type Period, type TheatreData } from '../../data/encyclopedia';
 import { airfieldRoles, basings, branches, coverageStatuses, currentUse, dateText, eras, hasEnded, nations, periodText, sims, useLabels } from '../../data/airfield-model.mjs';
 import { categoryTitle } from '../../data/availability';
 import { assetPath, sitePath } from '../../lib/paths';
@@ -55,6 +55,14 @@ const use = a && currentUse(a.operators);
 const checkedMaps = airfield?.maps ?? [];
 // Maps of the airfield's theatres that nobody has checked it against yet.
 const uncheckedMaps = airfield ? maps.filter((x) => x.theatres.some((th) => airfield.theatres.some((at) => at.record === th.record)) && !checkedMaps.some((c) => c.record === x.record)) : [];
+// Every airfield on a DCS map, generated from pydcs by
+// scripts/import_pydcs_airfields.py; rows link to records that name the map.
+const mapTables = import.meta.glob<MapAirfieldTable>('../../data/map-airfields/*.json', { eager: true, import: 'default' });
+const mapTable = map && Object.values(mapTables).find((x) => x.map === record.slug);
+const recordFor = (name: string) => map?.airfields.find((x) => x.coverage.status === 'represented' && x.coverage.inSimName === name)?.airfield.record;
+const runwayFields = mapTable?.airfields.filter((x) => x.runways.length) ?? [];
+const padFields = mapTable?.airfields.filter((x) => !x.runways.length) ?? [];
+const freq = (value: number | null | undefined) => value ? (Number.isInteger(value) ? value.toFixed(1) : String(+value.toFixed(3))) : '—';
 const ids = a?.identifiers;
 const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.iata}`, ids.faa && `FAA ${ids.faa}`, ...(ids.others ?? [])].filter(Boolean).join(' · ');
 ---
@@ -232,8 +240,43 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
             <div><dt>Real-world theatre</dt><dd>{map.theatres.length ? map.theatres.map((x, i) => <>{i > 0 && ', '}<a href={link(x.record)}>{x.record.title}</a></>) : 'No theatre record yet'}</dd></div>
           </dl>
         </section>
+        {mapTable && (
+          <section class="map-airfields" aria-labelledby="map-airfields-title">
+            <h2 id="map-airfields-title">Airfields on this map</h2>
+            <p>Every airfield with a runway in {m.short}'s terrain data: {runwayFields.length} airfields{padFields.length > 0 && `, plus ${padFields.length} helipads and other landing sites listed below`}. Frequencies are the tower's, in MHz. Names link to this encyclopedia's entry where there is one.</p>
+            <div class="table-scroll" role="region" aria-label={`Airfields on ${m.name}, scrolls sideways on narrow screens`} tabindex="0">
+              <table class="map-airfield-table">
+                <thead><tr><th scope="col">Airfield</th><th scope="col">Runways (heading)</th><th scope="col">VHF</th><th scope="col">UHF</th><th scope="col">FM</th><th scope="col">HF</th><th scope="col">Runway beacons</th></tr></thead>
+                <tbody>
+                  {runwayFields.map((x) => {
+                    const r = recordFor(x.name);
+                    const beacons = x.runways.flatMap((rw) => rw.ends.filter((e) => e.beacons).map((e) => `${e.name}: ${e.beacons}`));
+                    return (
+                      <tr>
+                        <th scope="row">{r ? <a href={link(r)}>{x.name}</a> : x.name}{x.civilian && <span class="entry-kicker"> Civil</span>}</th>
+                        <td>{x.runways.map((rw, i) => <>{i > 0 && <br />}{rw.ends.map((e) => `${e.name} (${String(e.heading).padStart(3, '0')}°)`).join(' / ')}</>)}</td>
+                        <td>{freq(x.atc?.vhf)}</td>
+                        <td>{freq(x.atc?.uhf)}</td>
+                        <td>{freq(x.atc?.fm)}</td>
+                        <td>{freq(x.atc?.hf)}</td>
+                        <td>{beacons.length ? beacons.join(', ') : 'none listed'}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            {padFields.length > 0 && (
+              <details class="pad-list">
+                <summary>{padFields.length} helipads and other landing sites without a runway</summary>
+                <p>{padFields.map((x) => x.name).join(' · ')}</p>
+              </details>
+            )}
+            <p class="note">Source: <a href={mapTable.source.url}>{mapTable.source.title}</a>, {mapTable.source.publisher}, at commit {mapTable.source.commit.slice(0, 7)}. A dash means the sim gives that airfield no tower frequency on that band. The data counts each runway end's beacons, such as an ILS, but not their types or frequencies, so those are not shown here. Headings are as the data gives them, rounded to the degree.</p>
+          </section>
+        )}
         <section class="sim-panel" aria-labelledby="sims-title">
-          <h2 id="sims-title">Airfields checked against this map</h2>
+          <h2 id="sims-title">Encyclopedia airfields checked against this map</h2>
           {map.airfields.length ? (
             <div class="table-scroll" role="region" aria-label="Airfields checked against this map, scrolls sideways on narrow screens" tabindex="0">
               <table>

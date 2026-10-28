@@ -122,3 +122,17 @@ test('representative cases: international, historical and multi-map', () => {
   // A base with no map checked is not claimed to be absent from any.
   assert.equal(bySlug('pensacola').maps, undefined);
 });
+
+test('generated DCS map tables belong to map records and contain every represented airfield', () => {
+  const tableDir = fileURLToPath(new URL('../../src/data/map-airfields/', import.meta.url));
+  for (const file of readdirSync(tableDir).filter((f) => f.endsWith('.json'))) {
+    const table = JSON.parse(readFileSync(tableDir + file, 'utf8'));
+    assert.equal(file, `${table.map}.json`);
+    assert.equal(content.find((e) => e.slug === table.map)?.data.kind, 'map', table.map);
+    assert.match(table.source.url, new RegExp(table.source.commit));
+    const names = new Set(table.airfields.map((a) => a.name));
+    for (const e of content.filter((x) => x.data.kind === 'airfield'))
+      for (const m of (e.data.maps ?? []).filter((x) => x.map === table.map && x.status === 'represented'))
+        assert.ok(names.has(m.inSimName), `${e.slug}: "${m.inSimName}" is not in ${file}`);
+  }
+});

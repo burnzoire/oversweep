@@ -1,0 +1,945 @@
+{
+ "map": "dcs-persian-gulf",
+ "source": {
+  "title": "pydcs terrain data: persiangulf airports (airports.py)",
+  "publisher": "pydcs, an open-source Python library for building DCS World missions, whose terrain data mirrors the game's",
+  "url": "https://github.com/pydcs/dcs/blob/5ddcc63a2dcd661e16b14f7aa43219b93044855d/dcs/terrain/persiangulf/airports.py",
+  "commit": "5ddcc63a2dcd661e16b14f7aa43219b93044855d"
+ },
+ "airfields": [
+  {
+   "runways": [
+    {
+     "name": "31-13",
+     "ends": [
+      {
+       "name": "31",
+       "heading": 310,
+       "beacons": 0
+      },
+      {
+       "name": "13",
+       "heading": 130,
+       "beacons": 0
+      }
+     ]
+    },
+    {
+     "name": "13-31",
+     "ends": [
+      {
+       "name": "13",
+       "heading": 130,
+       "beacons": 0
+      },
+      {
+       "name": "31",
+       "heading": 310,
+       "beacons": 0
+      }
+     ]
+    },
+    {
+     "name": "13-31",
+     "ends": [
+      {
+       "name": "13",
+       "heading": 130,
+       "beacons": 0
+      },
+      {
+       "name": "31",
+       "heading": 310,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 2,
+   "id": 22,
+   "name": "Abu Dhabi Intl",
+   "civilian": true,
+   "atc": {
+    "uhf": 250.55,
+    "vhf": 119.2,
+    "fm": 39.0,
+    "hf": 4.05
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "08-26",
+     "ends": [
+      {
+       "name": "08",
+       "heading": 80,
+       "beacons": 0
+      },
+      {
+       "name": "26",
+       "heading": 260,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 1,
+   "id": 1,
+   "name": "Abu Musa Island",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.4,
+    "vhf": 122.9,
+    "fm": 38.85,
+    "hf": 3.975
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "19-1",
+     "ends": [
+      {
+       "name": "19",
+       "heading": 190,
+       "beacons": 0
+      },
+      {
+       "name": "1",
+       "heading": 10,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 1,
+   "id": 25,
+   "name": "Al Ain Intl",
+   "civilian": true,
+   "atc": {
+    "uhf": 250.7,
+    "vhf": 119.85,
+    "fm": 39.15,
+    "hf": 4.125
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "13R-31L",
+     "ends": [
+      {
+       "name": "13R",
+       "heading": 130,
+       "beacons": 2
+      },
+      {
+       "name": "31L",
+       "heading": 310,
+       "beacons": 2
+      }
+     ]
+    },
+    {
+     "name": "13L-31R",
+     "ends": [
+      {
+       "name": "13L",
+       "heading": 130,
+       "beacons": 2
+      },
+      {
+       "name": "31R",
+       "heading": 310,
+       "beacons": 2
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 1,
+   "id": 4,
+   "name": "Al Dhafra AFB",
+   "civilian": false,
+   "atc": {
+    "uhf": 251.1,
+    "vhf": 126.5,
+    "fm": 39.5,
+    "hf": 4.3
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "30-12",
+     "ends": [
+      {
+       "name": "30",
+       "heading": 300,
+       "beacons": 2
+      },
+      {
+       "name": "12",
+       "heading": 120,
+       "beacons": 2
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 6,
+   "name": "Al Maktoum Intl",
+   "civilian": true,
+   "atc": {
+    "uhf": 251.2,
+    "vhf": 118.6,
+    "fm": 39.6,
+    "hf": 4.35
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "27-09",
+     "ends": [
+      {
+       "name": "27",
+       "heading": 270,
+       "beacons": 2
+      },
+      {
+       "name": "09",
+       "heading": 90,
+       "beacons": 2
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 1,
+   "id": 12,
+   "name": "Al Minhad AFB",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.1,
+    "vhf": 118.55,
+    "fm": 38.5,
+    "hf": 3.8
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "13-31",
+     "ends": [
+      {
+       "name": "13",
+       "heading": 130,
+       "beacons": 0
+      },
+      {
+       "name": "31",
+       "heading": 310,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 1,
+   "id": 23,
+   "name": "Al-Bateen",
+   "civilian": true,
+   "atc": {
+    "uhf": 250.6,
+    "vhf": 119.9,
+    "fm": 39.05,
+    "hf": 4.075
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "03R-21L",
+     "ends": [
+      {
+       "name": "03R",
+       "heading": 30,
+       "beacons": 0
+      },
+      {
+       "name": "21L",
+       "heading": 210,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 3,
+   "id": 2,
+   "name": "Bandar Abbas Intl",
+   "civilian": true,
+   "atc": {
+    "uhf": 251.0,
+    "vhf": 118.1,
+    "fm": 39.4,
+    "hf": 4.25
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "08-26",
+     "ends": [
+      {
+       "name": "08",
+       "heading": 80,
+       "beacons": 0
+      },
+      {
+       "name": "26",
+       "heading": 260,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 2,
+   "id": 3,
+   "name": "Bandar Lengeh",
+   "civilian": false,
+   "atc": {
+    "uhf": 251.05,
+    "vhf": 121.7,
+    "fm": 39.45,
+    "hf": 4.275
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "6-24",
+     "ends": [
+      {
+       "name": "6",
+       "heading": 60,
+       "beacons": 0
+      },
+      {
+       "name": "24",
+       "heading": 240,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 3,
+   "id": 21,
+   "name": "Bandar-e-Jask",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.5,
+    "vhf": 118.15,
+    "fm": 38.95,
+    "hf": 4.025
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "30L-12R",
+     "ends": [
+      {
+       "name": "30L",
+       "heading": 300,
+       "beacons": 2
+      },
+      {
+       "name": "12R",
+       "heading": 120,
+       "beacons": 2
+      }
+     ]
+    },
+    {
+     "name": "30R-12L",
+     "ends": [
+      {
+       "name": "30R",
+       "heading": 300,
+       "beacons": 2
+      },
+      {
+       "name": "12L",
+       "heading": 120,
+       "beacons": 2
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 5,
+   "name": "Dubai Intl",
+   "civilian": true,
+   "atc": {
+    "uhf": 251.15,
+    "vhf": 118.75,
+    "fm": 39.55,
+    "hf": 4.325
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "29-11",
+     "ends": [
+      {
+       "name": "29",
+       "heading": 290,
+       "beacons": 2
+      },
+      {
+       "name": "11",
+       "heading": 110,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 1,
+   "id": 7,
+   "name": "Fujairah Intl",
+   "civilian": true,
+   "atc": {
+    "uhf": 251.25,
+    "vhf": 124.6,
+    "fm": 39.65,
+    "hf": 4.375
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "26-08",
+     "ends": [
+      {
+       "name": "26",
+       "heading": 260,
+       "beacons": 0
+      },
+      {
+       "name": "08",
+       "heading": 80,
+       "beacons": 2
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 1,
+   "id": 9,
+   "name": "Havadarya",
+   "civilian": false,
+   "atc": {
+    "uhf": 251.3,
+    "vhf": 123.15,
+    "fm": 39.7,
+    "hf": 4.4
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "13-31",
+     "ends": [
+      {
+       "name": "13",
+       "heading": 130,
+       "beacons": 0
+      },
+      {
+       "name": "31",
+       "heading": 310,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 1,
+   "id": 27,
+   "name": "Jiroft",
+   "civilian": true,
+   "atc": {
+    "uhf": 250.85,
+    "vhf": 136.0,
+    "fm": 39.25,
+    "hf": 4.175
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "34-16",
+     "ends": [
+      {
+       "name": "34",
+       "heading": 340,
+       "beacons": 0
+      },
+      {
+       "name": "16",
+       "heading": 160,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 3,
+   "id": 18,
+   "name": "Kerman",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.3,
+    "vhf": 118.25,
+    "fm": 38.75,
+    "hf": 3.925
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "19-01",
+     "ends": [
+      {
+       "name": "19",
+       "heading": 190,
+       "beacons": 2
+      },
+      {
+       "name": "01",
+       "heading": 10,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 10,
+   "name": "Khasab",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.0,
+    "vhf": 124.35,
+    "fm": 38.4,
+    "hf": 3.75
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "10-28",
+     "ends": [
+      {
+       "name": "10",
+       "heading": 100,
+       "beacons": 0
+      },
+      {
+       "name": "28",
+       "heading": 280,
+       "beacons": 0
+      }
+     ]
+    },
+    {
+     "name": "10-28",
+     "ends": [
+      {
+       "name": "10",
+       "heading": 100,
+       "beacons": 0
+      },
+      {
+       "name": "28",
+       "heading": 280,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 2,
+   "id": 24,
+   "name": "Kish Intl",
+   "civilian": true,
+   "atc": {
+    "uhf": 250.65,
+    "vhf": 121.65,
+    "fm": 39.1,
+    "hf": 4.1
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "09-27",
+     "ends": [
+      {
+       "name": "09",
+       "heading": 90,
+       "beacons": 0
+      },
+      {
+       "name": "27",
+       "heading": 270,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 2,
+   "id": 11,
+   "name": "Lar",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.05,
+    "vhf": 127.35,
+    "fm": 38.45,
+    "hf": 3.775
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "11-29",
+     "ends": [
+      {
+       "name": "11",
+       "heading": 110,
+       "beacons": 0
+      },
+      {
+       "name": "29",
+       "heading": 290,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 2,
+   "id": 26,
+   "name": "Lavan Island",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.75,
+    "vhf": 128.55,
+    "fm": 39.2,
+    "hf": 4.15
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "13-31",
+     "ends": [
+      {
+       "name": "13",
+       "heading": 130,
+       "beacons": 0
+      },
+      {
+       "name": "31",
+       "heading": 310,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 1,
+   "id": 29,
+   "name": "Liwa AFB",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.95,
+    "vhf": 119.3,
+    "fm": 39.35,
+    "hf": 4.225
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "23-05",
+     "ends": [
+      {
+       "name": "23",
+       "heading": 230,
+       "beacons": 0
+      },
+      {
+       "name": "05",
+       "heading": 50,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 2,
+   "id": 13,
+   "name": "Qeshm Island",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.15,
+    "vhf": 118.05,
+    "fm": 38.55,
+    "hf": 3.825
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "35-17",
+     "ends": [
+      {
+       "name": "35",
+       "heading": 350,
+       "beacons": 0
+      },
+      {
+       "name": "17",
+       "heading": 170,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 1,
+   "id": 28,
+   "name": "Ras Al Khaimah Intl",
+   "civilian": true,
+   "atc": {
+    "uhf": 250.9,
+    "vhf": 121.6,
+    "fm": 39.3,
+    "hf": 4.2
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "16-34",
+     "ends": [
+      {
+       "name": "16",
+       "heading": 160,
+       "beacons": 0
+      },
+      {
+       "name": "34",
+       "heading": 340,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 1,
+   "id": 20,
+   "name": "Sas Al Nakheel",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.45,
+    "vhf": 128.9,
+    "fm": 38.9,
+    "hf": 4.0
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "30L-12R",
+     "ends": [
+      {
+       "name": "30L",
+       "heading": 300,
+       "beacons": 0
+      },
+      {
+       "name": "12R",
+       "heading": 120,
+       "beacons": 0
+      }
+     ]
+    },
+    {
+     "name": "30R-12L",
+     "ends": [
+      {
+       "name": "30R",
+       "heading": 300,
+       "beacons": 2
+      },
+      {
+       "name": "12L",
+       "heading": 120,
+       "beacons": 2
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 14,
+   "name": "Sharjah Intl",
+   "civilian": true,
+   "atc": {
+    "uhf": 250.2,
+    "vhf": 118.6,
+    "fm": 38.6,
+    "hf": 3.85
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "29L-11R",
+     "ends": [
+      {
+       "name": "29L",
+       "heading": 290,
+       "beacons": 2
+      },
+      {
+       "name": "11R",
+       "heading": 110,
+       "beacons": 0
+      }
+     ]
+    },
+    {
+     "name": "29R-11L",
+     "ends": [
+      {
+       "name": "29R",
+       "heading": 290,
+       "beacons": 0
+      },
+      {
+       "name": "11L",
+       "heading": 110,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 3,
+   "id": 19,
+   "name": "Shiraz Intl",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.35,
+    "vhf": 121.9,
+    "fm": 38.8,
+    "hf": 3.95
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "28-10",
+     "ends": [
+      {
+       "name": "28",
+       "heading": 280,
+       "beacons": 0
+      },
+      {
+       "name": "10",
+       "heading": 100,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 17,
+   "name": "Sir Abu Nuayr",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.8,
+    "vhf": 118.0,
+    "fm": 38.7,
+    "hf": 3.9
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "30-12",
+     "ends": [
+      {
+       "name": "30",
+       "heading": 300,
+       "beacons": 0
+      },
+      {
+       "name": "12",
+       "heading": 120,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 2,
+   "id": 15,
+   "name": "Sirri Island",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.25,
+    "vhf": 135.05,
+    "fm": 38.65,
+    "hf": 3.875
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "03-21",
+     "ends": [
+      {
+       "name": "03",
+       "heading": 30,
+       "beacons": 0
+      },
+      {
+       "name": "21",
+       "heading": 210,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 8,
+   "name": "Tunb Island AFB",
+   "civilian": false
+  },
+  {
+   "runways": [
+    {
+     "name": "26-08",
+     "ends": [
+      {
+       "name": "26",
+       "heading": 260,
+       "beacons": 0
+      },
+      {
+       "name": "08",
+       "heading": 80,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 1,
+   "id": 16,
+   "name": "Tunb Kochak",
+   "civilian": false
+  }
+ ]
+}

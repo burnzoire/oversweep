@@ -1,0 +1,239 @@
+{
+ "map": "dcs-marianas",
+ "source": {
+  "title": "pydcs terrain data: marianaislands airports (airports.py)",
+  "publisher": "pydcs, an open-source Python library for building DCS World missions, whose terrain data mirrors the game's",
+  "url": "https://github.com/pydcs/dcs/blob/5ddcc63a2dcd661e16b14f7aa43219b93044855d/dcs/terrain/marianaislands/airports.py",
+  "commit": "5ddcc63a2dcd661e16b14f7aa43219b93044855d"
+ },
+ "airfields": [
+  {
+   "runways": [
+    {
+     "name": "06L-24R",
+     "ends": [
+      {
+       "name": "06L",
+       "heading": 60,
+       "beacons": 0
+      },
+      {
+       "name": "24R",
+       "heading": 240,
+       "beacons": 0
+      }
+     ]
+    },
+    {
+     "name": "06R-24L",
+     "ends": [
+      {
+       "name": "06R",
+       "heading": 60,
+       "beacons": 0
+      },
+      {
+       "name": "24L",
+       "heading": 240,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 1,
+   "id": 6,
+   "name": "Andersen AFB",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.1,
+    "vhf": 126.2,
+    "fm": 38.6,
+    "hf": 3.85
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "06R-24L",
+     "ends": [
+      {
+       "name": "06R",
+       "heading": 60,
+       "beacons": 0
+      },
+      {
+       "name": "24L",
+       "heading": 240,
+       "beacons": 0
+      }
+     ]
+    },
+    {
+     "name": "06L-24R",
+     "ends": [
+      {
+       "name": "06L",
+       "heading": 60,
+       "beacons": 0
+      },
+      {
+       "name": "24R",
+       "heading": 240,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 4,
+   "name": "Antonio B. Won Pat Intl",
+   "civilian": true,
+   "atc": {
+    "uhf": 340.2,
+    "vhf": 118.1,
+    "fm": 38.55,
+    "hf": 3.825
+   }
+  },
+  {
+   "runways": [],
+   "airfieldBeacons": 0,
+   "id": 8,
+   "name": "North West Field",
+   "civilian": false
+  },
+  {
+   "runways": [
+    {
+     "name": "25-7",
+     "ends": [
+      {
+       "name": "25",
+       "heading": 250,
+       "beacons": 0
+      },
+      {
+       "name": "7",
+       "heading": 70,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 5,
+   "name": "Olf Orote",
+   "civilian": false
+  },
+  {
+   "runways": [
+    {
+     "name": "11-29",
+     "ends": [
+      {
+       "name": "11",
+       "heading": 110,
+       "beacons": 0
+      },
+      {
+       "name": "29",
+       "heading": 290,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 7,
+   "name": "Pagan Airstrip",
+   "civilian": false
+  },
+  {
+   "runways": [
+    {
+     "name": "9-27",
+     "ends": [
+      {
+       "name": "9",
+       "heading": 90,
+       "beacons": 0
+      },
+      {
+       "name": "27",
+       "heading": 270,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 1,
+   "id": 1,
+   "name": "Rota Intl",
+   "civilian": true,
+   "atc": {
+    "uhf": 250.0,
+    "vhf": 123.6,
+    "fm": 38.4,
+    "hf": 3.75
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "07-25",
+     "ends": [
+      {
+       "name": "07",
+       "heading": 70,
+       "beacons": 0
+      },
+      {
+       "name": "25",
+       "heading": 250,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 2,
+   "name": "Saipan Intl",
+   "civilian": true,
+   "atc": {
+    "uhf": 256.9,
+    "vhf": 125.7,
+    "fm": 38.45,
+    "hf": 3.775
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "08-26",
+     "ends": [
+      {
+       "name": "08",
+       "heading": 80,
+       "beacons": 0
+      },
+      {
+       "name": "26",
+       "heading": 260,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 3,
+   "name": "Tinian Intl",
+   "civilian": true,
+   "atc": {
+    "uhf": 250.05,
+    "vhf": 123.65,
+    "fm": 38.5,
+    "hf": 3.8
+   }
+  }
+ ]
+}

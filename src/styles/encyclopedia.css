@@ -197,3 +197,10 @@
 .theatre-jump ul { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; padding: 0; list-style: none; }
 .theatre-group { margin-top: 2.5rem; }
 .theatre-group h3 { margin-top: 1.5rem; }
+
+/* A DCS map's full airfield table. */
+.map-airfields { margin-top: 2rem; }
+.map-airfield-table td, .map-airfield-table th { white-space: nowrap; }
+.map-airfield-table .entry-kicker { margin-left: 0.4rem; }
+.pad-list { margin-top: 1rem; }
+.pad-list summary { cursor: pointer; font-weight: 600; }

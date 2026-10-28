@@ -375,6 +375,21 @@ export const terminologyContent = (r: EncyclopediaRecord) => contentFile(r) as u
 export const airfieldContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AirfieldCatalogueData>;
 
 type Entry<T> = { record: EncyclopediaRecord; data: T };
+
+// One DCS map's airfields, as scripts/import_pydcs_airfields.py writes them.
+export interface MapAirfieldTable {
+  map: string;
+  source: { title: string; publisher: string; url: string; commit: string };
+  airfields: {
+    id: number;
+    name: string;
+    civilian: boolean;
+    tacan?: string;
+    atc?: { uhf: number | null; vhf: number | null; fm: number | null; hf: number | null };
+    runways: { name: string; ends: { name: string; heading: number; beacons: number }[] }[];
+    airfieldBeacons: number;
+  }[];
+}
 export interface AirfieldEntry extends Entry<AirfieldData> { theatres: Entry<TheatreData>[]; maps: (Entry<MapData> & { coverage: MapCoverage })[] }
 export interface TheatreEntry extends Entry<TheatreData> { airfields: AirfieldEntry[]; maps: MapEntry[] }
 export interface MapEntry extends Entry<MapData> { theatres: Entry<TheatreData>[]; airfields: { airfield: AirfieldEntry; coverage: MapCoverage }[] }

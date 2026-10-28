@@ -1,0 +1,509 @@
+{
+ "map": "dcs-the-channel",
+ "source": {
+  "title": "pydcs terrain data: thechannel airports (airports.py)",
+  "publisher": "pydcs, an open-source Python library for building DCS World missions, whose terrain data mirrors the game's",
+  "url": "https://github.com/pydcs/dcs/blob/5ddcc63a2dcd661e16b14f7aa43219b93044855d/dcs/terrain/thechannel/airports.py",
+  "commit": "5ddcc63a2dcd661e16b14f7aa43219b93044855d"
+ },
+ "airfields": [
+  {
+   "runways": [
+    {
+     "name": "27-09",
+     "ends": [
+      {
+       "name": "27",
+       "heading": 270,
+       "beacons": 0
+      },
+      {
+       "name": "09",
+       "heading": 90,
+       "beacons": 0
+      }
+     ]
+    },
+    {
+     "name": "20-02",
+     "ends": [
+      {
+       "name": "20",
+       "heading": 200,
+       "beacons": 0
+      },
+      {
+       "name": "02",
+       "heading": 20,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 1,
+   "name": "Abbeville Drucat",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.25,
+    "vhf": 118.25,
+    "fm": 38.65,
+    "hf": 3.875
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "30-12",
+     "ends": [
+      {
+       "name": "30",
+       "heading": 300,
+       "beacons": 0
+      },
+      {
+       "name": "12",
+       "heading": 120,
+       "beacons": 0
+      }
+     ]
+    },
+    {
+     "name": "22-04",
+     "ends": [
+      {
+       "name": "22",
+       "heading": 220,
+       "beacons": 0
+      },
+      {
+       "name": "04",
+       "heading": 40,
+       "beacons": 0
+      }
+     ]
+    },
+    {
+     "name": "23-05",
+     "ends": [
+      {
+       "name": "23",
+       "heading": 230,
+       "beacons": 0
+      },
+      {
+       "name": "05",
+       "heading": 50,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 14,
+   "name": "Biggin Hill",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.2,
+    "vhf": 118.2,
+    "fm": 38.6,
+    "hf": 3.85
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "23-05",
+     "ends": [
+      {
+       "name": "23",
+       "heading": 230,
+       "beacons": 0
+      },
+      {
+       "name": "05",
+       "heading": 50,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 8,
+   "name": "Detling",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.6,
+    "vhf": 118.6,
+    "fm": 39.0,
+    "hf": 4.05
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "08-26",
+     "ends": [
+      {
+       "name": "08",
+       "heading": 80,
+       "beacons": 0
+      },
+      {
+       "name": "26",
+       "heading": 260,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 4,
+   "name": "Dunkirk Mardyck",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.4,
+    "vhf": 118.4,
+    "fm": 38.8,
+    "hf": 3.95
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "02-20",
+     "ends": [
+      {
+       "name": "02",
+       "heading": 20,
+       "beacons": 0
+      },
+      {
+       "name": "20",
+       "heading": 200,
+       "beacons": 0
+      }
+     ]
+    },
+    {
+     "name": "28-10",
+     "ends": [
+      {
+       "name": "28",
+       "heading": 280,
+       "beacons": 0
+      },
+      {
+       "name": "10",
+       "heading": 100,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 10,
+   "name": "Eastchurch",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.05,
+    "vhf": 118.05,
+    "fm": 38.45,
+    "hf": 3.775
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "22-04",
+     "ends": [
+      {
+       "name": "22",
+       "heading": 220,
+       "beacons": 0
+      },
+      {
+       "name": "04",
+       "heading": 40,
+       "beacons": 0
+      }
+     ]
+    },
+    {
+     "name": "19-01",
+     "ends": [
+      {
+       "name": "19",
+       "heading": 190,
+       "beacons": 0
+      },
+      {
+       "name": "01",
+       "heading": 10,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 6,
+   "name": "Hawkinge",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.5,
+    "vhf": 118.5,
+    "fm": 38.9,
+    "hf": 4.0
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "01-19",
+     "ends": [
+      {
+       "name": "01",
+       "heading": 10,
+       "beacons": 0
+      },
+      {
+       "name": "19",
+       "heading": 190,
+       "beacons": 0
+      }
+     ]
+    },
+    {
+     "name": "10-29",
+     "ends": [
+      {
+       "name": "10",
+       "heading": 100,
+       "beacons": 0
+      },
+      {
+       "name": "29",
+       "heading": 290,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 13,
+   "name": "Headcorn",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.15,
+    "vhf": 118.15,
+    "fm": 38.55,
+    "hf": 3.825
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "22-04",
+     "ends": [
+      {
+       "name": "22",
+       "heading": 220,
+       "beacons": 0
+      },
+      {
+       "name": "04",
+       "heading": 40,
+       "beacons": 0
+      }
+     ]
+    },
+    {
+     "name": "11-29",
+     "ends": [
+      {
+       "name": "11",
+       "heading": 110,
+       "beacons": 0
+      },
+      {
+       "name": "29",
+       "heading": 290,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 12,
+   "name": "High Halden",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.1,
+    "vhf": 118.1,
+    "fm": 38.5,
+    "hf": 3.8
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "13-31",
+     "ends": [
+      {
+       "name": "13",
+       "heading": 130,
+       "beacons": 0
+      },
+      {
+       "name": "31",
+       "heading": 310,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 7,
+   "name": "Lympne",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.55,
+    "vhf": 118.55,
+    "fm": 38.95,
+    "hf": 4.025
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "04-23",
+     "ends": [
+      {
+       "name": "04",
+       "heading": 40,
+       "beacons": 0
+      },
+      {
+       "name": "23",
+       "heading": 230,
+       "beacons": 0
+      }
+     ]
+    },
+    {
+     "name": "10-28",
+     "ends": [
+      {
+       "name": "10",
+       "heading": 100,
+       "beacons": 0
+      },
+      {
+       "name": "28",
+       "heading": 280,
+       "beacons": 0
+      }
+     ]
+    },
+    {
+     "name": "10-28",
+     "ends": [
+      {
+       "name": "10",
+       "heading": 100,
+       "beacons": 0
+      },
+      {
+       "name": "28",
+       "heading": 280,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 5,
+   "name": "Manston",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.45,
+    "vhf": 118.45,
+    "fm": 38.85,
+    "hf": 3.975
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "26-08",
+     "ends": [
+      {
+       "name": "26",
+       "heading": 260,
+       "beacons": 0
+      },
+      {
+       "name": "08",
+       "heading": 80,
+       "beacons": 0
+      }
+     ]
+    },
+    {
+     "name": "32-14",
+     "ends": [
+      {
+       "name": "32",
+       "heading": 320,
+       "beacons": 0
+      },
+      {
+       "name": "14",
+       "heading": 140,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 2,
+   "name": "Merville Calonne",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.3,
+    "vhf": 118.3,
+    "fm": 38.7,
+    "hf": 3.9
+   }
+  },
+  {
+   "runways": [
+    {
+     "name": "08-26",
+     "ends": [
+      {
+       "name": "08",
+       "heading": 80,
+       "beacons": 0
+      },
+      {
+       "name": "26",
+       "heading": 260,
+       "beacons": 0
+      }
+     ]
+    }
+   ],
+   "airfieldBeacons": 0,
+   "id": 3,
+   "name": "Saint Omer Longuenesse",
+   "civilian": false,
+   "atc": {
+    "uhf": 250.35,
+    "vhf": 118.35,
+    "fm": 38.75,
+    "hf": 3.925
+   }
+  }
+ ]
+}
