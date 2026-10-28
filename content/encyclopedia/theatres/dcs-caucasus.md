@@ -7,6 +7,13 @@ publisher: "Eagle Dynamics"
 setting: { era: modern, text: "The present day, though its makers say it suits realistic and hypothetical operations of any period [1]" }
 area: "More than 720 km of the eastern Black Sea coast from Anapa to Tbilisi: southern Russia, the Kuban, the Caucasus Range, western Georgia, Abkhazia and Adjara [1]"
 theatres: [caucasus]
+purchase:
+  - sim: dcs
+    product: "DCS: Caucasus Map"
+    by: "Eagle Dynamics"
+    free: "Free: comes with the free DCS World download"
+    links:
+      - { store: "DCS World", url: "https://www.digitalcombatsimulator.com/en/products/world/" }
 sources:
   - n: 1
     title: "DCS: Caucasus Map"

@@ -7,6 +7,13 @@ publisher: "Eagle Dynamics"
 setting: { era: wwii, from: "1944-06-15", to: "1944-08-10", text: "The islands under Japanese control just before the US landings of Operation Forager, for missions between 15 June and 10 August 1944 [1]" }
 area: "About 1,500 × 1,500 km, with Saipan, Tinian, Guam, Rota and Pagan as they stood in early 1944 [1]"
 theatres: [east-asia-pacific]
+purchase:
+  - sim: dcs
+    product: "DCS: Marianas WWII Map"
+    by: "Eagle Dynamics"
+    free: "Free: every DCS World player can download it"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/terrains/marianas_wwii_terrain/" }
 sources:
   - n: 1
     title: "DCS: Marianas WWII Map"

@@ -7,6 +7,12 @@ publisher: "Eagle Dynamics"
 setting: { era: modern, text: "Battles of the last 40 years, from the Soviet war of the 1980s to the 20 years of the War on Terror [1]" }
 area: "All of Afghanistan and small parts of its neighbours, about 2,290,000 km², sold as Southwest, East and North regions [1] [2]"
 theatres: [central-asia]
+purchase:
+  - sim: dcs
+    product: "DCS: Afghanistan Map"
+    by: "Eagle Dynamics"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/terrains/afghanistan_terrain/" }
 sources:
   - n: 1
     title: "DCS: Afghanistan"

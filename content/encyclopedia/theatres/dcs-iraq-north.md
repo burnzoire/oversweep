@@ -7,6 +7,12 @@ publisher: "Eagle Dynamics"
 setting: { era: modern, text: "Missions reflecting historical conflicts and modern-day scenarios [1]" }
 area: "About 322,000 km² of northern Iraq, including Baghdad, Mosul, Kirkuk, Erbil and Sulaymaniyah [1]"
 theatres: [middle-east]
+purchase:
+  - sim: dcs
+    product: "DCS: Iraq North Map"
+    by: "Eagle Dynamics"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/terrains/iraq_north_terrain/" }
 sources:
   - n: 1
     title: "DCS: Iraq North"

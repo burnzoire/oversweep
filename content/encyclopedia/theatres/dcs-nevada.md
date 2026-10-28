@@ -9,6 +9,12 @@ area: "366,000 km² of Nevada, Utah, Arizona and California, with the whole NTTR
 theatres: [north-america]
 differences:
   - { topic: "Las Vegas airport name", text: "DCS still calls Las Vegas's airport McCarran International [2]; Clark County renamed it Harry Reid International Airport in December 2021. [3]" }
+purchase:
+  - sim: dcs
+    product: "DCS: Nevada Test and Training Range Map"
+    by: "Eagle Dynamics"
+    links:
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/terrains/nttr_terrain/" }
 sources:
   - n: 1
     title: "DCS: Nevada Test and Training Range Map"

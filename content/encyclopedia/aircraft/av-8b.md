@@ -36,6 +36,16 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:AV-8B_Harrier_II_of_VMA-214_launches_from_Prince_Sultan_Air_Base.jpg"
     accessed: "2026-10-25"
 quick: { firstFlight: 1981, maxSpeedKt: 585, ceilingFt: null }
+purchase:
+  - sim: dcs
+    product: "DCS: AV-8B Night Attack V/STOL"
+    by: "RAZBAM"
+    unavailable: "Not on sale: the DCS Store lists this RAZBAM module as not available"
+  - sim: msfs
+    product: "AV-8B Harrier II"
+    by: "DC Designs"
+    links:
+      - { store: "Just Flight", url: "https://www.justflight.com/product/dc-designs-av8b-harrier-ii" }
 sources:
   - n: 1
     title: "McDonnell Douglas AV-8B Harrier II"

@@ -38,6 +38,13 @@ photos:
     sourceUrl: "https://commons.wikimedia.org/wiki/File:Dassault_Mirage_F1CR_604_118CF_(9355378298).jpg"
     accessed: "2026-10-25"
 quick: { firstFlight: 1966, maxSpeedKt: 1262, ceilingFt: 65600 }
+purchase:
+  - sim: dcs
+    product: "DCS: Mirage F1"
+    by: "Aerges Engineering"
+    links:
+      - { store: "Aerges", url: "https://aergesengineering.com/index.php/mirage-f1/" }
+      - { store: "DCS Store", url: "https://www.digitalcombatsimulator.com/en/shop/modules/mirage/" }
 sources:
   - n: 1
     title: "Dassault Mirage F1"

@@ -9,6 +9,11 @@ area: "The Balkans [1]"
 theatres: [europe]
 differences:
   - { topic: "Campaign", text: "The Balkan campaign has NATO repelling a Serbian invasion of Albania. [1] The real Operation Allied Force of 1999 was a NATO air campaign against Yugoslavia over Kosovo. [2]" }
+purchase:
+  - sim: falcon4
+    product: "Falcon 4.0: Allied Force"
+    by: "Lead Pursuit"
+    unavailable: "Not on sale: neither Steam nor GOG sells Allied Force; Falcon BMS covers the Balkans for free"
 sources:
   - n: 1
     title: "Falcon 4.0: Allied Force"
