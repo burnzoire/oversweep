@@ -31,8 +31,13 @@ if (form) {
       if (matches && rows.includes(item)) shownRows += 1;
     }
     for (const table of tables) table.hidden = ![...table.querySelectorAll('[data-airfield]')].some((row) => !row.hidden);
-    count.textContent = `Showing ${shown} of ${cards.length} airfield records`
-      + (rows.length ? ` and ${shownRows} of ${rows.length} airfields in the sims.` : '.');
+    // Two lists: the airfields with a full record (the cards) and every airfield
+    // on the sim maps (the table below them), which includes recorded ones.
+    const filtered = query || Object.keys(lists).some((field) => form.elements[field].value);
+    const sims = rows.length ? `the sim maps hold ${rows.length} airfields in all` : '';
+    count.textContent = !filtered
+      ? `${cards.length} airfields have a full record so far${sims && `; ${sims}`}.`
+      : `Matching: ${shown} of the ${cards.length} full records${rows.length ? `, and ${shownRows} of the ${rows.length} airfields on the sim maps` : ''}.`;
     empty.hidden = shown + shownRows > 0;
     const url = new URL(location.href);
     for (const field of fields) {
