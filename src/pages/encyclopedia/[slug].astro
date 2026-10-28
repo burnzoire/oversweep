@@ -14,7 +14,7 @@ import { airfieldRoles, branches, currentUse, eras, nations, searchTerms, sims, 
 import "../../styles/encyclopedia.css";
 
 export function getStaticPaths() {
-  return encyclopediaCategories.map((category) => ({
+  return encyclopediaCategories.filter((category) => category.slug !== "carriers").map((category) => ({
     params: { slug: category.slug },
     props: { category },
   }));
@@ -209,8 +209,8 @@ const deliverySources: Source[] = [
         </>
       ) : category.slug === "locations" && airfieldData ? (
         <>
-          <p class="lead">Theatres and their military history, simulator maps, and real-world airfields with their names, units, runways and facilities. Browse by region or find a location below. Carriers will appear here when records are available. An airfield with no map listed has not been checked yet.</p>
-          <nav class="theatre-jump" aria-label="Browse locations"><ul><li><a href="#airfield-index">Airfields</a></li><li><a href="#sim-airfields">Every represented airfield</a></li><li><a href="#theatres-maps">Theatres and sim maps</a></li></ul></nav>
+          <p class="lead">Theatres, simulator maps and airfields. Browse a region or find an airfield below. An airfield with no map listed has not been checked yet.</p>
+          <nav class="theatre-jump" aria-label="Browse locations"><ul><li><a href="#airfield-index">Airfields</a></li><li><a href={sitePath('encyclopedia/locations/theatres/')}>Theatres</a></li><li><a href="#sim-airfields">Every represented airfield</a></li><li><a href="#theatres-maps">Theatres and sim maps</a></li></ul></nav>
           <h2 id="airfield-index">Find a location</h2>
           <form class="airfield-filter" role="search" aria-label="Find a location" hidden>
             <div class="filter-field filter-search">
@@ -249,6 +249,7 @@ const deliverySources: Source[] = [
             <p class="filter-count" aria-live="polite"></p>
             <p class="filter-empty" hidden>No location matches. Clear a filter or try another name.</p>
           </form>
+
           <section data-location-group>
           <h2>Airfields</h2>
           <div class="entry-grid record-grid airfield-index">

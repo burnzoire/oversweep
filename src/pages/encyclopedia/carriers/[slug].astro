@@ -1,0 +1,31 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import CarrierModuleLink from '../../../components/encyclopedia/CarrierModuleLink.astro';
+import { carriers, carrierRoute, type Carrier } from '../../../data/carriers';
+import { carrierDate, carrierEntryDate, carrierEntryLabel, carrierMaturity } from '../../../data/carrier-model.mjs';
+import { sitePath } from '../../../lib/paths';
+import '../../../styles/encyclopedia.css';
+import '../../../styles/carriers.css';
+export function getStaticPaths() { return carriers.map((carrier) => ({ params: { slug: carrier.slug }, props: { carrier } })); }
+const { carrier } = Astro.props as { carrier: Carrier };
+const classmates = carriers.filter((entry) => entry.class === carrier.class && entry !== carrier);
+---
+<SiteLayout title={carrier.name} activeSection="encyclopedia" description={carrier.summary} breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: 'Carriers', href: sitePath('encyclopedia/carriers/') }, { label: carrier.name }]}>
+  <article class="ency carriers" data-carrier-record={carrier.slug}>
+    <section class="status-panel"><h2>{carrierMaturity}</h2><p>Historical reference record. The sources below cover the ship's identity, completion or carrier commission, and operator history.</p></section>
+    <p class="lead">{carrier.summary}</p>
+    <section class="data-plate" aria-labelledby="carrier-identity"><h2 id="carrier-identity">Identity</h2><dl>
+      <div><dt>Identifier</dt><dd>{carrier.hull}</dd></div>
+      <div><dt>Class</dt><dd>{carrier.class}</dd></div>
+      <div><dt>Built / converted in</dt><dd>{carrier.origin}</dd></div>
+      <div><dt>{carrierEntryLabel(carrier)}</dt><dd><time datetime={carrierEntryDate(carrier)}>{carrierDate(carrierEntryDate(carrier))}</time></dd></div>
+      {carrier.completed && carrier.commissioned && <div><dt>Carrier commission</dt><dd><time datetime={carrier.commissioned}>{carrierDate(carrier.commissioned)}</time></dd></div>}
+      {carrier.classification && <div><dt>Classification</dt><dd>{carrier.classification}</dd></div>}
+      <div><dt>Operators</dt><dd>{carrier.operators.length ? carrier.operators.join(' · ') : 'No commissioned service'}</dd></div>
+      {carrier.aliases.length > 0 && <div><dt>Other names</dt><dd>{carrier.aliases.join(' · ')}</dd></div>}
+    </dl></section>
+    <CarrierModuleLink />
+    {classmates.length > 0 && <section aria-labelledby="carrier-classmates"><h2 id="carrier-classmates">Other {carrier.class} carriers</h2><ul>{classmates.map((entry) => <li><a href={sitePath(carrierRoute(entry))}>{entry.name}</a> · {entry.hull}</li>)}</ul></section>}
+    <section class="sources" aria-labelledby="carrier-sources"><h2 id="carrier-sources">Sources</h2><ol>{carrier.sources.map((source, index) => <li id={`source-${index + 1}`}><a href={source.url}>{source.title}</a> — {source.publisher}. Accessed <time datetime={source.accessed}>{carrierDate(source.accessed)}</time>. {source.note}</li>)}</ol></section>
+  </article>
+</SiteLayout>

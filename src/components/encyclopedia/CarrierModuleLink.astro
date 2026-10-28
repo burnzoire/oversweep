@@ -1,0 +1,10 @@
+---
+import { getModule, includedModules, moduleRoute } from '../../data/modules';
+import { sitePath } from '../../lib/paths';
+const module = getModule('ship-operations');
+const available = includedModules.some((entry) => entry.id === module.id);
+---
+<aside class="sim-panel" aria-labelledby="carrier-learning-title">
+  <h2 id="carrier-learning-title">Naval Operations</h2>
+  <p>For flight-deck procedures, launches and recoveries, see {available ? <a href={sitePath(moduleRoute(module))}>{module.title}</a> : <a href={sitePath('manual/naval-operations/')}>Naval Operations</a>}. The module states its own sources, scope and review status.</p>
+</aside>

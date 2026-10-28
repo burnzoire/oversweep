@@ -1,0 +1,46 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import CarrierModuleLink from '../../../components/encyclopedia/CarrierModuleLink.astro';
+import { carriers, carrierRoute } from '../../../data/carriers';
+import { carrierAsOf, carrierDate, carrierEntryDate, carrierEntryLabel, carrierMaturity, carrierSearchText } from '../../../data/carrier-model.mjs';
+import { sitePath } from '../../../lib/paths';
+import '../../../styles/encyclopedia.css';
+import '../../../styles/carriers.css';
+const list = [...carriers].sort((a, b) => carrierEntryDate(a).localeCompare(carrierEntryDate(b)) || a.name.localeCompare(b.name));
+const classes = [...new Set(list.map((entry) => entry.class))].sort();
+const origins = [...new Set(list.map((entry) => entry.origin))].sort();
+const operators = [...new Set(list.flatMap((entry) => entry.operators))].sort();
+---
+<SiteLayout title="Carriers" activeSection="encyclopedia" breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: 'Carriers' }]}>
+  <div class="ency carriers">
+    <nav class="theatre-jump" aria-label="Encyclopedia"><ul><li><a href={sitePath('encyclopedia/')}>All categories</a></li><li><a href={sitePath('encyclopedia/locations/')}>Locations</a></li><li><span aria-current="page">Carriers</span></li></ul></nav>
+    <p class="lead">Aircraft carriers completed after the Second World War, with one record per hull across changes of name and navy.</p>
+    <CarrierModuleLink />
+    <section class="status-panel" aria-labelledby="carrier-scope-title">
+      <h2 id="carrier-scope-title">Scope</h2>
+      <p>Completed after 2 September 1945, including completed carrier conversions and helicopter carriers. First carrier commission is used when a separate completion date is not documented. Ships already completed as carriers by that date, later refits, cancelled projects, unfinished ships and general amphibious assault ships are excluded. A year alone means the source gives only that precision. Official ship classifications are noted on individual records.</p>
+      <details><summary>Ship types</summary><p>Includes fleet, light and escort carriers, aircraft-maintenance carriers, dedicated helicopter carriers, full-length aviation-deck helicopter destroyers, the Moskva class and Jeanne d’Arc. Official designations are retained. Missile cruisers with smaller helicopter facilities, including Andrea Doria, Caio Duilio and Vittorio Veneto, are excluded. General amphibious assault ships such as the Wasp class, Juan Carlos I, Trieste and Anadolu are also excluded.</p></details>
+      <p><strong>{carrierMaturity}</strong> · {carriers.length} hull records · Coverage checked {carrierDate(carrierAsOf)}. Sources and any coverage limitations are listed on each record.</p>
+    </section>
+    <form class="carrier-filter" role="search" aria-label="Find a carrier" hidden>
+      <div class="carrier-search"><label for="carrier-q">Name, hull number or former name</label><input id="carrier-q" name="q" type="search" autocomplete="off" placeholder="e.g. Midway, R 11 or Vikramaditya" /></div>
+      <div><label for="carrier-origin">Built / converted in</label><select id="carrier-origin" name="origin"><option value="">All countries</option>{origins.map((value) => <option value={value}>{value}</option>)}</select></div>
+      <div><label for="carrier-class">Class</label><select id="carrier-class" name="class"><option value="">All classes</option>{classes.map((value) => <option value={value}>{value}</option>)}</select></div>
+      <div><label for="carrier-operator">Navy</label><select id="carrier-operator" name="operator"><option value="">All operators</option>{operators.map((value) => <option value={value}>{value}</option>)}</select></div>
+      <div><label for="carrier-sort">Order</label><select id="carrier-sort" name="sort"><option value="date">Completion / first service: oldest first</option><option value="newest">Completion / first service: newest first</option><option value="name">Name</option></select></div>
+      <p class="carrier-count" aria-live="polite"></p>
+      <p class="carrier-empty" hidden>No carrier matches. Clear a filter or try another name.</p>
+    </form>
+    <div class="table-scroll" role="region" aria-label="Carrier catalogue, scrolls sideways on narrow screens" tabindex="0">
+      <table class="carrier-table">
+        <caption>{carriers.length} carrier hulls, ordered by completion or first carrier commission</caption>
+        <thead><tr><th scope="col">Carrier</th><th scope="col">Class</th><th scope="col">Built / converted in</th><th scope="col">Completion / commission</th><th scope="col">Operators</th></tr></thead>
+        <tbody>{list.map((carrier) => <tr data-carrier data-search={carrierSearchText(carrier)} data-origin={carrier.origin} data-class={carrier.class} data-operators={JSON.stringify(carrier.operators)} data-date={carrierEntryDate(carrier)} data-name={carrier.name}>
+          <th scope="row"><a href={sitePath(carrierRoute(carrier))}>{carrier.name}</a><span class="carrier-detail">{carrier.hull}</span>{carrier.aliases.length > 0 && <span class="carrier-detail">Also: {carrier.aliases.join(' · ')}</span>}</th>
+          <td>{carrier.class}</td><td>{carrier.origin}</td><td><time datetime={carrierEntryDate(carrier)}>{carrierDate(carrierEntryDate(carrier))}</time><span class="carrier-detail">{carrierEntryLabel(carrier)}</span></td><td>{carrier.operators.length ? carrier.operators.join(' · ') : 'No commissioned service'}</td>
+        </tr>)}</tbody>
+      </table>
+    </div>
+  </div>
+</SiteLayout>
+<script>import '../../../scripts/carrier-filter.mjs';</script>

@@ -1,0 +1,22 @@
+---
+import SiteLayout from '../../../../layouts/SiteLayout.astro';
+import RecordCard from '../../../../components/encyclopedia/RecordCard.astro';
+import { airfieldCatalogue, recordRoute } from '../../../../data/encyclopedia';
+import { sitePath } from '../../../../lib/paths';
+import '../../../../styles/encyclopedia.css';
+const { theatres } = airfieldCatalogue();
+const list = [...theatres].sort((a, b) => a.record.title.localeCompare(b.record.title));
+---
+<SiteLayout title="Theatres" activeSection="encyclopedia" breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: 'Locations', href: sitePath('encyclopedia/locations/') }, { label: 'Theatres' }]}>
+  <div class="ency">
+    <nav class="theatre-jump" aria-label="Locations"><ul><li><a href={sitePath('encyclopedia/locations/')}>All locations</a></li><li><span aria-current="page">Theatres</span></li></ul></nav>
+    <p class="lead">Real-world regions, their military history, and the simulator maps set within them. Map pages retain their coverage, purchase or access links, and airfield reference tables.</p>
+    <nav class="theatre-jump" aria-label="Browse theatres"><ul>{list.map((entry) => <li><a href={`#${entry.record.slug}`}>{entry.record.title}</a></li>)}</ul></nav>
+    {list.map((entry) => <section class="theatre-group" aria-labelledby={entry.record.slug}>
+      <h2 id={entry.record.slug}>{entry.record.title}</h2>
+      <div class="entry-grid"><RecordCard record={entry.record} photo={entry.data.photos[0]} /></div>
+      <h3>Sim maps</h3>
+      {entry.maps.length ? <ul>{entry.maps.map((map) => <li><a href={sitePath(recordRoute(map.record))}>{map.data.name}</a></li>)}</ul> : <p>No simulator map recorded.</p>}
+    </section>)}
+  </div>
+</SiteLayout>

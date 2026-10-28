@@ -32,7 +32,8 @@ Types are composable blocks: Reference (guidance/diagrams/tables), Interactive
 | Ordnance | Weapons, roles, limitations and applicable platforms | Encyclopedia |
 | Threat Systems | Identification, capabilities and documented limitations | Encyclopedia |
 | Radar & Sensors | Sensor terminology, system records and concept links | Encyclopedia |
-| Locations | Theatres, simulator maps, airfields and carriers, with type-specific facilities, history and simulator coverage | Encyclopedia |
+| Locations | Theatres, simulator maps and airfields, with facilities, history and simulator coverage | Encyclopedia |
+| Carriers | Aircraft carrier hulls, classes, names and operator histories | Encyclopedia |
 | Terminology | Acronyms and precise definitions linked from lessons | Encyclopedia |
 | Reference Data | Sourced tables, units and reusable constants | Encyclopedia |
 
@@ -49,3 +50,22 @@ Use stable IDs and cross-links: for example Naval Operations links to carrier an
 aircraft records; Radar links to sensor records; Bullseye belongs to Navigation
 and is discoverable from Radio Communications. Avoid duplicating a procedure in
 multiple subjects. URL slugs and detailed information architecture remain provisional.
+
+## Carrier inventory
+
+Carriers is an Encyclopedia category alongside Aircraft, Ordnance and Locations,
+at `/encyclopedia/carriers/`. Theatres and airfields remain under Locations.
+Carrier records live once per physical hull in `src/data/carriers.json`; transfers
+and renamings are aliases and operators on that record. Each hull has its own
+page, dated source list and visible Drafted status, and links to the existing
+Naval Operations ship module. Former Locations carrier URLs redirect to the
+canonical category and records while retaining query parameters and fragments.
+
+The post-war boundary is completion after 2 September 1945. First carrier
+commission is the proxy where separate completion is not documented; a carrier
+completed but never commissioned can record completion without a commission.
+Conversions are counted when they first become carriers, not when an existing
+carrier is refitted. Cancelled or unfinished ships and general amphibious assault
+ships are outside this inventory. A recorded year preserves the source's limited
+date precision rather than inventing a day. `carrier-model.mjs` validates records
+at build time; source accuracy and inventory completeness still require review.

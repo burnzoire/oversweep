@@ -2,6 +2,7 @@ import { encyclopediaCategories, manualSubjects } from './catalogue';
 import { experienceFrame, experienceRoute, includedExperiences, type Experience } from './experiences';
 import { includedModules, moduleRoute, type Module } from './modules';
 import { categoryRecords } from './encyclopedia';
+import { carriers } from './carriers';
 
 // What a reader can actually open, derived from the registries. Navigation shows
 // destinations without content dimmed and unlinked, so readers only follow links
@@ -65,7 +66,7 @@ export function subjectGroups(slug: string) {
 export const subjectHasContent = (slug: string) => subjectEntries(slug).length > 0;
 export const subjectTitle = (slug: string) => manualSubjects.find((s) => s.slug === slug)?.title ?? slug;
 
-export const categoryHasContent = (slug: string) => categoryRecords(slug).length > 0;
+export const categoryHasContent = (slug: string) => (slug === 'carriers' ? carriers.length : categoryRecords(slug).length) > 0;
 export const categoryTitle = (slug: string) => encyclopediaCategories.find((c) => c.slug === slug)?.title ?? slug;
 
 export const sectionHasContent = {

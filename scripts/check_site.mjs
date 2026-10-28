@@ -7,6 +7,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const output = path.join(root, "dist");
 const basePath = (process.argv[2] ?? "/").replace(/\/+$/, "");
 const base = `${basePath}/`;
+const carrierRegistry = JSON.parse(await readFile(path.join(root, 'src/data/carriers.json'), 'utf8'));
 
 async function filesIn(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -41,6 +42,10 @@ const requiredRoutes = [
     "abnormal-operations",
   ].map((slug) => `manual/${slug}`),
   "encyclopedia",
+  "encyclopedia/carriers",
+  "encyclopedia/locations/carriers",
+  "encyclopedia/locations/theatres",
+  ...carrierRegistry.flatMap((entry) => [`encyclopedia/carriers/${entry.slug}`, `encyclopedia/locations/carriers/${entry.slug}`]),
   ...[
     "aircraft",
     "ordnance",

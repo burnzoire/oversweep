@@ -3,6 +3,7 @@ import SiteLayout from "../../layouts/SiteLayout.astro";
 import { encyclopediaCategories } from "../../data/catalogue";
 import { categoryHasContent } from "../../data/availability";
 import { categoryRecords, recordContent, type Photo } from "../../data/encyclopedia";
+import { carriers } from "../../data/carriers";
 import { assetPath, sitePath } from "../../lib/paths";
 
 // The landing page is a map of categories, not a list of records: each category
@@ -19,7 +20,7 @@ const cover = (slug: string): Photo | undefined => {
 const categories = encyclopediaCategories.map((category) => ({
   ...category,
   available: categoryHasContent(category.slug),
-  count: categoryRecords(category.slug).length,
+  count: categoryRecords(category.slug).length + (category.slug === 'carriers' ? carriers.length : 0),
   cover: cover(category.slug),
 })).sort((a, b) => Number(b.available) - Number(a.available));
 const empty = !categories.some((c) => c.available);
