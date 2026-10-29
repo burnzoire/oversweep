@@ -4,6 +4,7 @@ import { encyclopediaCategories } from "../../data/catalogue";
 import { categoryHasContent } from "../../data/availability";
 import { categoryRecords, recordContent, type Photo } from "../../data/encyclopedia";
 import { carriers } from "../../data/carriers";
+import carrierCover from "../../data/carrier-cover.json";
 import { assetPath, sitePath } from "../../lib/paths";
 
 // The landing page is a map of categories, not a list of records: each category
@@ -11,6 +12,7 @@ import { assetPath, sitePath } from "../../lib/paths";
 // listed after those with records so open categories lead the grid.
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
 const cover = (slug: string): Photo | undefined => {
+  if (slug === 'carriers') return carrierCover;
   for (const record of categoryRecords(slug)) {
     const data = recordContent(record).frontmatter as { photo?: Photo; photos?: Photo[] };
     const photo = data.photos?.[0] ?? data.photo;

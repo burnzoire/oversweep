@@ -2,6 +2,7 @@
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import CarrierModuleLink from '../../../components/encyclopedia/CarrierModuleLink.astro';
 import { carriers, carrierRoute } from '../../../data/carriers';
+import carrierCover from '../../../data/carrier-cover.json';
 import { carrierAsOf, carrierDate, carrierEntryDate, carrierEntryLabel, carrierMaturity, carrierSearchText } from '../../../data/carrier-model.mjs';
 import { sitePath } from '../../../lib/paths';
 import '../../../styles/encyclopedia.css';
@@ -41,6 +42,7 @@ const operators = [...new Set(list.flatMap((entry) => entry.operators))].sort();
         </tr>)}</tbody>
       </table>
     </div>
+    <p class="note">Category photograph: <a href={carrierCover.sourceUrl}>{carrierCover.caption}</a> {carrierCover.author} · {carrierCover.licence}.</p>
   </div>
 </SiteLayout>
 <script>import '../../../scripts/carrier-filter.mjs';</script>
