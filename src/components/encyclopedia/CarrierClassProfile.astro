@@ -1,0 +1,18 @@
+---
+import type { CarrierClassProfile } from '../../data/carrier-profiles';
+import { carrierDate, carrierMaturity } from '../../data/carrier-model.mjs';
+import { carrierClassRoute } from '../../data/carrier-profile-model.mjs';
+import { sitePath } from '../../lib/paths';
+import Citations from './CarrierProfileCitations.astro';
+import Sources from './CarrierProfileSources.astro';
+interface Props { profile: CarrierClassProfile; linkToClass?: boolean }
+const { profile, linkToClass = false } = Astro.props;
+---
+<section class="carrier-class-profile" data-class-profile={profile.slug} aria-labelledby="class-profile-title">
+  <h2 id="class-profile-title">{linkToClass ? <a href={sitePath(carrierClassRoute(profile))}>{profile.name} profile</a> : `${profile.name} profile`}</h2>
+  <p class="note"><strong>{carrierMaturity}</strong> · Reference snapshot <time datetime={profile.asOf}>{carrierDate(profile.asOf)}</time>. Class characteristics describe the cited baseline; individual ships and refits may differ.</p>
+  <p>{profile.summary} <Citations cites={profile.summaryCites} sources={profile.sources} namespace="class" /></p>
+  <dl class="profile-facts">{profile.facts.map((fact) => <div><dt>{fact.label}</dt><dd>{fact.value} <Citations cites={fact.cites} sources={profile.sources} namespace="class" /></dd></div>)}</dl>
+  {profile.sections.map((section) => <section><h3>{section.title}</h3><p>{section.text} <Citations cites={section.cites} sources={profile.sources} namespace="class" /></p></section>)}
+  <Sources sources={profile.sources} namespace="class" title="Class profile sources" />
+</section>

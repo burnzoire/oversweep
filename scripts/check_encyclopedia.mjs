@@ -1,5 +1,6 @@
 import { access, readdir, readFile } from "node:fs/promises";
 import path from "node:path";
+import { checkCarrierProfiles } from "./check_carrier_profiles.mjs";
 import { fileURLToPath } from "node:url";
 
 // Generated-output checks for every registered encyclopedia record. Published
@@ -133,6 +134,8 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.a
   const base = (process.argv.find((a) => a.startsWith("--base="))?.slice(7) ?? "").replace(/\/+$/, "");
   const records = await loadRecords();
   const problems = await checkRecords({ dist: path.join(root, "dist"), records, review, base });
+  const [profiles, carriers] = await Promise.all(['carrier-profiles.json', 'carriers.json'].map(async (filename) => JSON.parse(await readFile(path.join(root, 'src/data', filename), 'utf8'))));
+  problems.push(...await checkCarrierProfiles({ dist: path.join(root, 'dist'), profiles, carriers, base }));
   if (problems.length) {
     console.error(problems.map((p) => `- ${p}`).join("\n"));
     process.exit(1);

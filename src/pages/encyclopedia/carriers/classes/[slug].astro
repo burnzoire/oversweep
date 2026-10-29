@@ -1,0 +1,20 @@
+---
+import SiteLayout from '../../../../layouts/SiteLayout.astro';
+import CarrierModuleLink from '../../../../components/encyclopedia/CarrierModuleLink.astro';
+import ClassProfile from '../../../../components/encyclopedia/CarrierClassProfile.astro';
+import { carriers, carrierRoute } from '../../../../data/carriers';
+import { carrierProfiles, type CarrierClassProfile } from '../../../../data/carrier-profiles';
+import { sitePath } from '../../../../lib/paths';
+import '../../../../styles/encyclopedia.css';
+import '../../../../styles/carriers.css';
+export function getStaticPaths() { return carrierProfiles.classes.map((profile) => ({ params: { slug: profile.slug }, props: { profile } })); }
+const { profile } = Astro.props as { profile: CarrierClassProfile };
+const members = carriers.filter((carrier) => carrier.class === profile.registryClass);
+---
+<SiteLayout title={profile.name} activeSection="encyclopedia" description={profile.summary} breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: 'Carriers', href: sitePath('encyclopedia/carriers/') }, { label: profile.name }]}>
+  <article class="ency carriers">
+    <ClassProfile profile={profile} />
+    <section aria-labelledby="class-members"><h2 id="class-members">Ships in the catalogue</h2><ul>{members.map((carrier) => <li><a href={sitePath(carrierRoute(carrier))}>{carrier.name}</a> · {carrier.hull}</li>)}</ul></section>
+    <CarrierModuleLink />
+  </article>
+</SiteLayout>

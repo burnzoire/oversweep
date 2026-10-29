@@ -1,0 +1,6 @@
+---
+import type { ProfileSource } from '../../data/carrier-profiles';
+interface Props { cites: string[]; sources: ProfileSource[]; namespace: string; hrefPrefix?: string }
+const { cites, sources, namespace, hrefPrefix = '' } = Astro.props;
+---
+<span class="profile-citations">{cites.map((id) => <a href={`${hrefPrefix}#${namespace}-source-${id}`} aria-label={`Source: ${sources.find((source) => source.id === id)?.title}`}>[{sources.findIndex((source) => source.id === id) + 1}]</a>)}</span>

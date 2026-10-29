@@ -1,0 +1,15 @@
+---
+import type { CarrierShipProfile } from '../../data/carrier-profiles';
+import { carrierDate, carrierMaturity } from '../../data/carrier-model.mjs';
+import Citations from './CarrierProfileCitations.astro';
+import Sources from './CarrierProfileSources.astro';
+interface Props { profile: CarrierShipProfile }
+const { profile } = Astro.props;
+---
+<section class="carrier-history" data-ship-profile={profile.carrier} aria-labelledby="history-title">
+  <h2 id="history-title">Ship history</h2>
+  <p class="note"><strong>{carrierMaturity}</strong>. Selected historical milestones; these entries do not establish current operational status.</p>
+  <p>{profile.overview.text} <Citations cites={profile.overview.cites} sources={profile.sources} namespace="history" /></p>
+  <ol class="carrier-milestones">{profile.milestones.map((milestone) => <li><time datetime={milestone.date}>{carrierDate(milestone.date)}</time><p>{milestone.text} <Citations cites={milestone.cites} sources={profile.sources} namespace="history" /></p></li>)}</ol>
+  <Sources sources={profile.sources} namespace="history" title="Ship history sources" />
+</section>
