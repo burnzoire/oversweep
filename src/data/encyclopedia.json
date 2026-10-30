@@ -1173,12 +1173,12 @@
     "id": "encyclopedia.ordnance.gau-8",
     "slug": "gau-8",
     "category": "ordnance",
-    "revision": 1,
+    "revision": 2,
     "title": "GAU-8 Avenger",
     "designation": "GAU-8/A",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "The A-10's seven-barrel 30 mm tank-killing gun, so heavy that the aircraft was built around it."
+    "summary": "The A-10’s seven-barrel cannon: rotary operation, ammunition, aircraft integration and the meaning of its published firing figures."
   },
   {
     "id": "encyclopedia.ordnance.gau-12",

@@ -75,13 +75,13 @@ sources:
 
 ## Role today
 
-Batumi is Georgia's international airport on the Black Sea coast, one of the country's three international airports with Tbilisi and Kutaisi. [[1]](#source-1) Its terminal opened on 26 May 2007 and was enlarged between 2019 and 2021 to handle 1.2 million passengers a year. [[1]](#source-1) It has no based military flying unit today.
+Batumi is Georgia's international airport on the Black Sea coast, one of the country's three international airports with [Tbilisi](record:tbilisi) and [Kutaisi](record:kutaisi). [[1]](#source-1) Its terminal opened on 26 May 2007 and was enlarged between 2019 and 2021 to handle 1.2 million passengers a year. [[1]](#source-1) It has no based military flying unit today.
 
 ## History
 
-The airfield was military first. A Soviet fighter regiment, the 35th, was based there from August 1940 with I-153 biplanes and defended the Batumi area through the Second World War, flying MiG-3s, LaGG-3s and Lend-Lease Hurricanes, Kittyhawks and Spitfires before moving to Tbilisi in 1944. [[2]](#source-2) The 833rd Fighter Regiment of the Air Defence Forces followed from February 1946 with Yak-9s and Spitfires, then MiG-15s and MiG-17s, until it left for East Germany in October 1953. [[2]](#source-2) The 705th Guards Fighter Regiment arrived in its place, took over MiG-17s from a regiment at nearby Kobuleti, and flew them until it was disbanded at Batumi in June 1960 as the Soviet armed forces were cut. [[2]](#source-2)
+The airfield was military first. A Soviet fighter regiment, the 35th, was based there from August 1940 with I-153 biplanes and defended the Batumi area through the Second World War, flying MiG-3s, LaGG-3s and Lend-Lease Hurricanes, Kittyhawks and Spitfires before moving to Tbilisi in 1944. [[2]](#source-2) The 833rd Fighter Regiment of the [Air Defence](term:air-defense) Forces followed from February 1946 with Yak-9s and Spitfires, then [MiG-15s](record:mig-15) and MiG-17s, until it left for East Germany in October 1953. [[2]](#source-2) The 705th Guards Fighter Regiment arrived in its place, took over MiG-17s from a regiment at nearby [Kobuleti](record:kobuleti), and flew them until it was disbanded at Batumi in June 1960 as the Soviet armed forces were cut. [[2]](#source-2)
 
-On 25 October 2000 an Il-18 returning personnel and families to Russia's 12th Military Base in Batumi flew into Mount Mtirala north-east of the city on its final approach, killing all 84 aboard; the cause was a navigation error by the crew and inadequate control by air traffic services. [[1]](#source-1) A Yak-40 on a flight from Yerevan had struck the same mountain while going around in 1975. [[2]](#source-2)
+On 25 October 2000 an Il-18 returning personnel and families to Russia's 12th Military Base in Batumi flew into Mount Mtirala north-east of the city on its [final approach](term:final-approach), killing all 84 aboard; the cause was a navigation error by the crew and inadequate control by air traffic services. [[1]](#source-1) A Yak-40 on a flight from Yerevan had struck the same mountain while [going around](term:go-around) in 1975. [[2]](#source-2)
 
 ## The airfield
 

@@ -262,7 +262,7 @@ Operation Overlord, the Allied invasion of German-occupied Western Europe, opene
 
 ### Forces deployed
 
-- **US Ninth Air Force**: its IX and XIX Air Support Commands became IX and XIX Tactical Air Commands on 18 April 1944. Between 1 May and D-Day it flew about 35,000 sorties against airfields, rail yards and coastal guns, and by early August most of its fighter and bomber groups had moved to bases in France. [[6]](#source-6)
+- **US Ninth Air Force**: its IX and XIX Air Support Commands became IX and XIX Tactical Air Commands on 18 April 1944. Between 1 May and D-Day it flew about 35,000 [sorties](term:sortie) against airfields, rail yards and coastal guns, and by early August most of its fighter and bomber groups had moved to bases in France. [[6]](#source-6)
 - **Advanced landing grounds (ALGs)**: the RAF Second Tactical Air Force's Airfield Construction Service built the British ALGs. In the American sector they were built by the 16 aviation engineer battalions of IX Engineer Command. A-1 Saint-Pierre-du-Mont was declared operational on 13 June 1944 and A-3 Cardonville on 14 June, followed by A-2 Cricqueville-en-Bessin on 19 June. Pierced steel planking reached the bridgehead in July 1944. By 15 September, US engineers had more than 80 ALGs in operation and British engineers 76. [[7]](#source-7) Kent had ALGs of its own before the invasion, among them High Halden (AAF-411). [[7]](#source-7)
 - **RAF Manston**: later in the war it was home to Hawker Typhoon attack aircraft and to No. 616 Squadron, the first Meteor jet squadron, from 21 July 1944 to 21 January 1945. [[2]](#source-2)
 
@@ -281,15 +281,15 @@ In 1948–1949 the Soviet blockade of West Berlin was answered by an airlift flo
 - **Spangdahlem Air Base**: in November 1983 its 52nd Tactical Fighter Wing became the only all-defence-suppression wing outside the United States, pairing [F-4E](record:f-4) and F-4G Phantoms as Wild Weasel hunter-killer teams; [F-16C](record:f-16)s began replacing its Phantoms in 1987, while F-4Gs stayed until 1994. [[13]](#source-13)
 - **Bitburg Air Base**: home of the 36th Tactical Fighter Wing from 1952 until it was returned to Germany on 1 October 1994. [[14]](#source-14)
 - **Hahn Air Base**: home of the 50th Tactical Fighter Wing, inactivated in 1991, before the base was handed over in September 1993. [[15]](#source-15)
-- **Sembach**: a front-line NATO base for US reconnaissance, close-air-support and tactical air control units during the Cold War, and a US Army post since 2012. [[16]](#source-16)
+- **Sembach**: a front-line NATO base for US [reconnaissance](term:reconnaissance), [close-air-support](term:cas) and tactical air control units during the Cold War, and a US Army post since 2012. [[16]](#source-16)
 
 ## The Balkans and the Adriatic
 
 ### Historical significance
 
-NATO fought the first combat of its history over the Balkans. Operation Deny Flight began on 12 April 1993 to enforce the UN no-fly zone over Bosnia and Herzegovina and grew to include close air support for UN troops and air strikes. On 28 February 1994, USAF F-16s shot down four of six Serb J-21 Jastreb jets over Banja Luka, the first combat engagement in NATO's history. [[18]](#source-18) In Operation Deliberate Force, from 30 August to 20 September 1995, about 400 aircraft from 15 nations struck 338 Bosnian Serb targets with 1,026 bombs, 708 of them precision-guided. [[19]](#source-19)
+NATO fought the first combat of its history over the Balkans. Operation Deny Flight began on 12 April 1993 to enforce the UN no-fly zone over Bosnia and Herzegovina and grew to include [close air support](term:cas) for UN troops and air strikes. On 28 February 1994, USAF F-16s shot down four of six Serb J-21 Jastreb jets over Banja Luka, the first combat engagement in NATO's history. [[18]](#source-18) In Operation Deliberate Force, from 30 August to 20 September 1995, about 400 aircraft from 15 nations struck 338 Bosnian Serb targets with 1,026 bombs, 708 of them [precision-guided](term:pgm). [[19]](#source-19)
 
-From 24 March to 10 June 1999, Operation Allied Force bombed the Federal Republic of Yugoslavia over Kosovo. About 1,000 aircraft flew from bases in Italy and Germany and from carriers in the Adriatic, controlled from a NATO Combined Air Operations Centre at Vicenza, and flew over 38,000 combat missions. [[20]](#source-20) Serbian SA-3 batteries shot down an F-117 Nighthawk on 27 March and, on 2 May, the F-16 of Lt. Col. David Goldfein, commander of the 555th Fighter Squadron; both pilots were rescued. [[20]](#source-20)
+From 24 March to 10 June 1999, Operation Allied Force bombed the Federal Republic of Yugoslavia over Kosovo. About 1,000 aircraft flew from bases in Italy and Germany and from carriers in the Adriatic, controlled from a NATO Combined Air Operations Centre at Vicenza, and flew over 38,000 combat missions. [[20]](#source-20) Serbian [SA-3](record:sa-3) batteries shot down an F-117 Nighthawk on 27 March and, on 2 May, the F-16 of Lt. Col. David Goldfein, commander of the 555th Fighter Squadron; both pilots were rescued. [[20]](#source-20)
 
 ### Forces deployed
 
@@ -322,6 +322,6 @@ The Nordic neighbours prepared for war in their own ways. Sweden's air force pla
 ### Forces deployed
 
 - **Severomorsk**, on the Kola Bay north-east of Murmansk: the main naval base and main administrative base of the Northern Fleet. [[31]](#source-31)
-- **Olenya**, 92 km south of Murmansk: headquarters at various times of five naval reconnaissance air units, and by 2020 a Long-Range Aviation base whose 3,500 m runway is the longest on the peninsula. [[32]](#source-32)
-- **Bodø**, Norway: the main air station of northern Norway, home of NATO's quick reaction alert until 2022, when the mission passed to F-35s at Evenes. Its [F-16](record:f-16) squadrons moved to Ørland in 2023; a search-and-rescue detachment remains. [[33]](#source-33)
+- **Olenya**, 92 km south of Murmansk: headquarters at various times of five naval [reconnaissance](term:reconnaissance) air units, and by 2020 a Long-Range Aviation base whose 3,500 m runway is the longest on the peninsula. [[32]](#source-32)
+- **Bodø**, Norway: the main air station of northern Norway, home of NATO's quick reaction alert until 2022, when the mission passed to F-35s at Evenes. Its [F-16](record:f-16) squadrons moved to Ørland in 2023; a [search-and-rescue](term:sar) detachment remains. [[33]](#source-33)
 - **Andøya**, Norway: base of the Norwegian P-3C Orions until 30 June 2023, when 333 Squadron moved to Evenes; a 2022 defence white paper planned it as a permanent reception base for allied forces. [[34]](#source-34)

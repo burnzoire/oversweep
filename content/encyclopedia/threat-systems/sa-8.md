@@ -80,7 +80,7 @@ Source: [[1]](#source-1). The 1998 Army handout gives 12 km for the SA-8a and 15
 
 ## On the radar warning receiver
 
-In the DCS F-14, the AN/ALR-67 shows the Land Roll search and track radar as **8**. [[3]](#source-3)
+In the DCS [F-14](record:f-14), the AN/ALR-67 shows the Land Roll search and track radar as **8**. [[3]](#source-3)
 
 ## History
 

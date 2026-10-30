@@ -61,7 +61,7 @@ sources:
 
 ## An air force that hides on roads
 
-Neutral Sweden planned to survive a Soviet attack by scattering its air force. Under the Bas 60 system of the late 1950s, and its successor Bas 90, aircraft would disperse in wartime across many bases, including stretches of ordinary road used as runways, some only 800 m long. Damaged runways would have to be used too. [[1]](#source-1) The aircraft that replaced the Lansen attack jet and the Draken fighter therefore had to be [supersonic](term:supersonic) at low level, reach [Mach](term:mach-number) 2 at height, land short without flaring, stop hard, steer accurately on icy roads in a crosswind, and be easy to repair by mechanics with little training. [[1]](#source-1) Saab studied more than 100 layouts before settling on the design. [[1]](#source-1)
+Neutral Sweden planned to survive a Soviet attack by scattering its air force. Under the Bas 60 system of the late 1950s, and its successor Bas 90, aircraft would disperse in wartime across many bases, including stretches of ordinary road used as runways, some only 800 m long. Damaged runways would have to be used too. [[1]](#source-1) The aircraft that replaced the Lansen attack jet and the Draken fighter therefore had to be [supersonic](term:supersonic) at low level, reach [Mach](term:mach-number) 2 at height, land short without flaring, stop hard, steer accurately on icy roads in a [crosswind](term:crosswind-component), and be easy to repair by mechanics with little training. [[1]](#source-1) Saab studied more than 100 layouts before settling on the design. [[1]](#source-1)
 
 The answer was a delta wing with a fixed foreplane, carrying flaps, ahead of and above it. [[2]](#source-2) The engine, the Volvo RM8, was a heavily reworked licence-built version of the Pratt & Whitney JT8D airliner engine, with a Swedish [afterburner](term:afterburner). It was the second operational [afterburning](term:afterburner) turbofan and the first fitted with a thrust reverser. The reverser could be selected in the air and fired automatically when the nose wheel touched down, and together with the wing it let the Viggen operate from 500 m strips with minimal support. [[1]](#source-1) The first of seven prototypes flew on 8 February 1967. [[1]](#source-1)
 
@@ -69,7 +69,7 @@ Five conscripts and one chief mechanic could look after a Viggen, and refuelling
 
 ## Ship killer
 
-The first production AJ 37, the attack version, reached the Skaraborg Wing in July 1971. [[1]](#source-1) It was built to attack an invasion fleet: its main load was two RB 04E anti-ship missiles on the inboard wing pylons, with an optional third on the centreline, and RB 05 air-to-surface missiles could go on the fuselage pylons. [[1]](#source-1) Reconnaissance versions and the JA 37 fighter followed, and the last of 329 Viggens was delivered in 1990. [[2]](#source-2)
+The first production AJ 37, the attack version, reached the Skaraborg Wing in July 1971. [[1]](#source-1) It was built to attack an invasion fleet: its main load was two [RB 04E](record:rb-04) anti-ship missiles on the inboard wing pylons, with an optional third on the centreline, and [RB 05](record:rb-05) air-to-surface missiles could go on the fuselage pylons. [[1]](#source-1) Reconnaissance versions and the JA 37 fighter followed, and the last of 329 Viggens was delivered in 1990. [[2]](#source-2)
 
 In May 1991 Sweden announced an upgrade of AJ 37, SF 37 and SH 37 aircraft to a common multirole standard, the **AJS 37**; 48 airframes were converted. [[1]](#source-1)
 

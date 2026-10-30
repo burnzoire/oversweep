@@ -48,7 +48,7 @@ sources:
 
 ## The small laser bomb
 
-The GBU-12 is a 500 lb [Mk 82](record:mk-82) with a nose-mounted laser seeker and guidance fins added. [[1]](#source-1) Its roots are in the Vietnam War, when the Air Force wanted a lighter, more manoeuvrable laser-guided bomb able to hit moving targets on the Ho Chi Minh trail. [[1]](#source-1) It entered service in 1976, and "Paveway II" names the guidance kit, not the bomb. [[1]](#source-1)
+The GBU-12 is a 500 lb [Mk 82](record:mk-82) with a nose-mounted laser seeker and guidance fins added. [[1]](#source-1) Its roots are in the Vietnam War, when the Air Force wanted a lighter, more manoeuvrable [laser-guided bomb](term:lgw) able to hit moving targets on the Ho Chi Minh trail. [[1]](#source-1) It entered service in 1976, and "Paveway II" names the guidance kit, not the bomb. [[1]](#source-1)
 
 ## Bang-bang guidance
 

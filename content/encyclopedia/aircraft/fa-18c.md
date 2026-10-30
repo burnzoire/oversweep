@@ -59,7 +59,7 @@ sources:
 
 ## Forty seconds over Iraq
 
-On 17 January 1991, the first day of the Gulf War, four Navy Hornets launched from USS *Saratoga* in the Red Sea to bomb an Iraqi airfield. Each carried four 2,000 lb bombs. On the way in, an E-2C radar aircraft warned them of approaching Iraqi [MiG-21s](record:mig-21). Lieutenant Commander Mark Fox and Lieutenant Nick Mongilio shot both MiGs down with Sparrow and Sidewinder missiles; just 40 seconds passed between the MiGs appearing on the E-2's radar and both going down. Then the Hornets carried on, bombed their target and flew back to the carrier. [[1]](#source-1) That one [sortie](term:sortie) is the whole idea of the aircraft: a fighter and an attack aircraft in the same airframe, hence the name **F/A-18**. [[1]](#source-1)
+On 17 January 1991, the first day of the Gulf War, four Navy Hornets launched from USS *Saratoga* in the Red Sea to bomb an Iraqi airfield. Each carried four 2,000 lb bombs. On the way in, an E-2C radar aircraft warned them of approaching Iraqi [MiG-21s](record:mig-21). Lieutenant Commander Mark Fox and Lieutenant Nick Mongilio shot both MiGs down with [Sparrow](record:aim-7) and [Sidewinder](record:aim-9) missiles; just 40 seconds passed between the MiGs appearing on the E-2's radar and both going down. Then the Hornets carried on, bombed their target and flew back to the carrier. [[1]](#source-1) That one [sortie](term:sortie) is the whole idea of the aircraft: a fighter and an attack aircraft in the same airframe, hence the name **F/A-18**. [[1]](#source-1)
 
 ## The loser that won
 
@@ -69,7 +69,7 @@ The first F/A-18A was rolled out on 13 September 1978, painted with "Navy" on on
 
 ## One pilot, two jobs
 
-The Hornet was designed around versatile avionics, multifunction cockpit displays and excellent handling at high angles of attack. [[1]](#source-1) In the F/A-18C, the APG-73 radar and targeting pods let a single pilot switch between air-to-air and air-to-ground work on the same [sortie](term:sortie), and an M61A1 gun sits in the nose. [[1]](#source-1) It can fly fighter escort, fleet [air defence](term:air-defense), [suppression of enemy air defences](term:sead), [interdiction](term:air-interdiction), [close air support](term:cas) and [reconnaissance](term:reconnaissance). [[1]](#source-1) The two-seat F/A-18D carries either a weapon systems officer or a second set of controls for training. [[2]](#source-2)
+The Hornet was designed around versatile avionics, multifunction cockpit displays and excellent handling at high [angles of attack](term:aoa). [[1]](#source-1) In the F/A-18C, the APG-73 radar and targeting pods let a single pilot switch between air-to-air and air-to-ground work on the same [sortie](term:sortie), and an [M61A1](record:m61) gun sits in the nose. [[1]](#source-1) It can fly fighter escort, fleet [air defence](term:air-defense), [suppression of enemy air defences](term:sead), [interdiction](term:air-interdiction), [close air support](term:cas) and [reconnaissance](term:reconnaissance). [[1]](#source-1) The two-seat F/A-18D carries either a weapon systems officer or a second set of controls for training. [[2]](#source-2)
 
 ## In action
 

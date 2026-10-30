@@ -66,7 +66,7 @@ Hughes Helicopters' YAH-64 first flew on 30 September 1975, a day before Bell's 
 
 The pilot sits behind and above the co-pilot/gunner, and either can fly the aircraft or fire its weapons. The crew compartment and rotor blades were designed to survive hits from 23 mm rounds, about 2,500 lb of protection is built into the airframe, the fuel system self-seals, and a transparent blast shield between the two seats is meant to ensure that at least one crew member survives a direct hit. [[1]](#source-1)
 
-Its most famous feature is the IHADSS helmet sight. Either crew member can slave the 30 mm chain gun under the nose to their helmet, so that the gun points wherever they look. Sensors in the nose give day TV, thermal imaging and a laser to guide Hellfire missiles, and with them the Apache was designed to fight by day, by night and in bad weather. [[1]](#source-1) [[2]](#source-2)
+Its most famous feature is the IHADSS helmet sight. Either crew member can slave the 30 mm chain gun under the nose to their helmet, so that the gun points wherever they look. Sensors in the nose give day TV, thermal imaging and a laser to guide [Hellfire](record:agm-114) missiles, and with them the Apache was designed to fight by day, by night and in bad weather. [[1]](#source-1) [[2]](#source-2)
 
 ## Panama and the desert
 

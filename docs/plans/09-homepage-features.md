@@ -45,20 +45,20 @@ no numbered pillars or repeated navigation cards.
 | 19 | [SA-19 Grison](../../content/encyclopedia/threat-systems/sa-19.md) | threat-systems |
 | 20 | [Central Asia](../../content/encyclopedia/locations/central-asia.md) | locations |
 | 21 | [MiG-21](../../content/encyclopedia/aircraft/mig-21.md) | aircraft |
-| 22 | [K-13 (R-3) "Atoll"](../../content/encyclopedia/ordnance/r-3.md) | ordnance |
+| 22 | [AIM-9 Sidewinder](../../content/encyclopedia/ordnance/aim-9.md) | ordnance |
 | 23 | [SA-3 Goa](../../content/encyclopedia/threat-systems/sa-3.md) | threat-systems |
 | 24 | [Europe](../../content/encyclopedia/locations/europe.md) | locations |
 | 25 | [F-4 Phantom II](../../content/encyclopedia/aircraft/f-4.md) | aircraft |
 | 26 | [AIM-7 Sparrow](../../content/encyclopedia/ordnance/aim-7.md) | ordnance |
-| 27 | [SA-5 Gammon](../../content/encyclopedia/threat-systems/sa-5.md) | threat-systems |
+| 27 | [SA-17 Grizzly](../../content/encyclopedia/threat-systems/sa-17.md) | threat-systems |
 | 28 | [Incirlik Air Base](../../content/encyclopedia/locations/incirlik.md) | locations |
 | 29 | [Mirage 2000C](../../content/encyclopedia/aircraft/m-2000c.md) | aircraft |
-| 30 | [R.550 Magic](../../content/encyclopedia/ordnance/magic-2.md) | ordnance |
+| 30 | [Hydra 70 (2.75 in) rocket](../../content/encyclopedia/ordnance/hydra-70.md) | ordnance |
 | 31 | [SA-11 Gadfly](../../content/encyclopedia/threat-systems/sa-11.md) | threat-systems |
 | 32 | [RAF Akrotiri](../../content/encyclopedia/locations/akrotiri.md) | locations |
 | 33 | [AV-8B Harrier II](../../content/encyclopedia/aircraft/av-8b.md) | aircraft |
 | 34 | [GBU-12 Paveway II laser-guided bomb](../../content/encyclopedia/ordnance/gbu-12.md) | ordnance |
-| 35 | [SA-15 Gauntlet](../../content/encyclopedia/threat-systems/sa-15.md) | threat-systems |
+| 35 | [SA-14 Gremlin](../../content/encyclopedia/threat-systems/sa-14.md) | threat-systems |
 | 36 | [The South Atlantic](../../content/encyclopedia/locations/south-atlantic.md) | locations |
 | 37 | [Su-27 Flanker](../../content/encyclopedia/aircraft/su-27.md) | aircraft |
 | 38 | [R-27 "Alamo"](../../content/encyclopedia/ordnance/r-27.md) | ordnance |
@@ -67,13 +67,13 @@ no numbered pillars or repeated navigation cards.
 | 41 | [P-51D Mustang](../../content/encyclopedia/aircraft/p-51d.md) | aircraft |
 | 42 | [High Velocity Aircraft Rocket (HVAR)](../../content/encyclopedia/ordnance/hvar.md) | ordnance |
 | 43 | [Spitfire LF Mk IX](../../content/encyclopedia/aircraft/spitfire-ix.md) | aircraft |
-| 44 | [Edwards Air Force Base](../../content/encyclopedia/locations/edwards.md) | locations |
+| 44 | [Saipan International Airport](../../content/encyclopedia/locations/saipan.md) | locations |
 | 45 | [Mi-24P Hind-F](../../content/encyclopedia/aircraft/mi-24p.md) | aircraft |
 | 46 | [9K114 Shturm](../../content/encyclopedia/ordnance/9k114.md) | ordnance |
 | 47 | [Ka-50 Black Shark](../../content/encyclopedia/aircraft/ka-50.md) | aircraft |
 | 48 | [Batumi International Airport](../../content/encyclopedia/locations/batumi.md) | locations |
 | 49 | [AJS 37 Viggen](../../content/encyclopedia/aircraft/ajs-37.md) | aircraft |
-| 50 | [RBS 15 anti-ship missile](../../content/encyclopedia/ordnance/rbs-15.md) | ordnance |
+| 50 | [Joint Direct Attack Munition](../../content/encyclopedia/ordnance/jdam.md) | ordnance |
 | 51 | [F-15E Strike Eagle](../../content/encyclopedia/aircraft/f-15e.md) | aircraft |
 | 52 | [Naval Air Station Fallon](../../content/encyclopedia/locations/fallon.md) | locations |
 
@@ -116,3 +116,7 @@ The owner requested a fresh homepage design after reviewing the pillar layout.
 The new revision uses a dark learning introduction with two linked navigation
 rows, then a white editorial section for the weekly article. No individual
 learning modules or trainer exercises are listed on the homepage.
+
+The rotation and contextual links were reviewed in the [featured-article editorial audit](10-featured-article-audit.md).
+
+The rotation and contextual links were reviewed in the [featured-article editorial audit](10-featured-article-audit.md).

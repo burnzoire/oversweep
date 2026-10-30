@@ -76,11 +76,11 @@ A solid-fuel booster launches the missile and drops away after about six seconds
 
 ## Envelope
 
-The museum gives a minimum range of 5 miles, a maximum effective range of about 19 miles, a maximum slant range of 27 miles (about 4.3, 16.5 and 23.5 NM) and a ceiling of about 60,000 ft, with a speed of [Mach](term:mach-number) 3.5 and a 288 lb blast-fragmentation warhead. [[2]](#source-2) Figure 1 uses those figures. Other published figures differ: the S-75 article gives 45 km (24 NM), a flight altitude of 25,000 m in its summary and about 20,000 m in its text, and a 195 kg warhead. [[1]](#source-1) Treat any single SA-2 number as variant-dependent.
+The museum gives a minimum range of 5 miles, a maximum effective range of about 19 miles, a maximum [slant range](term:slant-range) of 27 miles (about 4.3, 16.5 and 23.5 NM) and a ceiling of about 60,000 ft, with a speed of [Mach](term:mach-number) 3.5 and a 288 lb blast-fragmentation warhead. [[2]](#source-2) Figure 1 uses those figures. Other published figures differ: the S-75 article gives 45 km (24 NM), a flight altitude of 25,000 m in its summary and about 20,000 m in its text, and a 195 kg warhead. [[1]](#source-1) Treat any single SA-2 number as variant-dependent.
 
 ## On the radar warning receiver
 
-In the DCS F-14, the AN/ALR-67 shows the Fan Song track radar as **2** and the Flat Face search radar, used with the SA-2, [SA-3](record:sa-3) and [SA-5](record:sa-5), as **FF**. [[3]](#source-3)
+In the DCS [F-14](record:f-14), the AN/ALR-67 shows the Fan Song track radar as **2** and the Flat Face search radar, used with the SA-2, [SA-3](record:sa-3) and [SA-5](record:sa-5), as **FF**. [[3]](#source-3)
 
 ## History
 
