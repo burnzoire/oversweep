@@ -7,6 +7,12 @@ publisher: "Eagle Dynamics"
 setting: { era: modern, text: "The present day, though its makers say it suits realistic and hypothetical operations of any period [1]" }
 area: "More than 720 km of the eastern Black Sea coast from Anapa to Tbilisi: southern Russia, the Kuban, the Caucasus Range, western Georgia, Abkhazia and Adjara [1]"
 theatres: [caucasus]
+overview:
+  src: encyclopedia/maps/dcs-caucasus-overview.png
+  width: 1800
+  height: 1472
+  alt: "Eastern Black Sea and Caucasus overview showing all 21 DCS Caucasus runway airfields, from Anapa-Vityazevo to Batumi and Tbilisi."
+  caption: "DCS: Caucasus airfields from the same versioned simulator data as the table. Present-day OpenStreetMap geography; illustrative extent, not a verified DCS terrain boundary."
 purchase:
   - sim: dcs
     product: "DCS: Caucasus Map"
