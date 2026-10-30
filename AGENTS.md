@@ -66,15 +66,3 @@ Report actual changes, evidence, next steps and genuine blockers, not percentage
 Opening a PR is In Review; Complete requires delivered criteria, applicable checks,
 review and authorised merge. Keep aviation content maturity separate. No secrets
 or restricted/copyrighted manual dumps. See docs/development.md for details.
-
-## New content and cross-links
-
-When authoring or expanding content, always look for useful opportunities to
-reference the Encyclopedia with the existing `Term` component (or the supported
-term syntax in Markdown) and to cross-link related Manual modules. Inspect the
-existing entries and routes first; use canonical destinations and the established
-base-path helpers. Link concepts, aircraft, systems and procedures where the
-reference helps the reader understand the current passage or continue learning.
-Keep links relevant and natural; avoid repeating the same link throughout a
-section or inventing entries just to add links. Include this cross-link pass in
-content self-review.
