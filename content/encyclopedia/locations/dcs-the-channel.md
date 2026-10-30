@@ -1,5 +1,7 @@
 ---
 kind: map
+mapView:
+  bounds: [[49.7, -0.8], [51.6, 3]]
 sim: dcs
 short: The Channel
 name: "DCS: The Channel"

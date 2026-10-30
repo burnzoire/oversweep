@@ -1,5 +1,7 @@
 ---
 kind: map
+mapView:
+  bounds: [[32.5, 42], [37.5, 46.5]]
 sim: dcs
 short: Iraq North
 name: "DCS: Iraq North"

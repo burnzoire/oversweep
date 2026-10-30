@@ -317,6 +317,7 @@ export interface MapData {
   kind: 'map';
   overview?: TheatreOverview;
   interactiveMap?: boolean;
+  mapView?: { bounds: [[number, number], [number, number]] };
   sim: Sim;
   short: string;
   name: string;

@@ -47,3 +47,23 @@ found no blockers, including optional-fallback paths and coordinate range checks
 Documentation/whitespace checks passed. Browser rendering remains unverified after
 the preceding browser connection failures. Local checks use Node 24 rather than
 supported Node 22; configured CI remains necessary.
+
+PR 2 implementation: `mapView.bounds` sets an illustrative initial geographic
+viewport for BMS Korea/Balkans/Hellenic/Israel/Falklands, Falcon 4.0 Korea/Balkans,
+The Channel, East Afghanistan, Southwest Afghanistan and Iraq North. These
+latitude/longitude view rectangles are chosen to frame the regions named in each
+record, not sourced simulator boundary polygons. No table is aliased from a wider
+or different simulator edition. Every page without positioned fields displays
+"Geographic overview only" and the missing-coordinate limitation; it has pan/zoom,
+reset and an OSM link, with no empty selector or fabricated airfield marker.
+On pages with coordinates, markers and popups retain their source data and behavior.
+All pages retain visible OSM attribution and current-geography limitations.
+
+PR 2 verification: `npm run check` passed all 220 tests, Astro/TypeScript and
+production output checks. Generated-page inspection confirmed eleven valid ordered
+view rectangles, zero invented marker payloads, visible limitation notes, no empty
+selectors and external OSM fallback links; Syria retains its 80 markers. The
+`/oversweep` review build, documentation/whitespace checks and independent review
+cover this revision. Browser verification remains unavailable; Node 24 versus
+supported Node 22 remains the same CI limitation. No geographic or aviation
+validation, merge or deployment is claimed.

@@ -1,5 +1,7 @@
 ---
 kind: map
+mapView:
+  bounds: [[38, 12], [47, 24]]
 sim: bms
 short: Balkans
 name: "Falcon BMS: Balkans"

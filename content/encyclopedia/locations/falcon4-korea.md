@@ -1,5 +1,7 @@
 ---
 kind: map
+mapView:
+  bounds: [[33, 124], [43, 132]]
 sim: falcon4
 short: Falcon 4.0 Korea
 name: "Falcon 4.0: Korea"

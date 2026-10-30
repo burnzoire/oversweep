@@ -1,5 +1,7 @@
 ---
 kind: map
+mapView:
+  bounds: [[29, 33], [37, 39]]
 sim: bms
 short: Israel
 name: "Falcon BMS: Israel"

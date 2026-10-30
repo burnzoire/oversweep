@@ -252,22 +252,22 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
             <PurchaseRow purchases={m.purchase} />
           </dl>
         </section>
-        {(m.overview || m.interactiveMap) && mapTable && <TheatreMap name={m.name} overview={m.overview} source={mapTable.source.url}
+        {(m.overview || m.interactiveMap || m.mapView) && (mapTable || m.mapView) && <TheatreMap name={m.name} overview={m.overview} bounds={m.mapView?.bounds} source={mapTable?.source.url ?? m.sources[0].url}
           fields={runwayFields.flatMap(field => {
             if (!Number.isFinite(field.lat) || !Number.isFinite(field.lon)) return [];
             const r = recordFor(field.name);
             return [{ name: field.name, lat: field.lat!, lon: field.lon!, recordHref: r ? link(r) : undefined,
               rows: [
                 { label: 'Coordinates', lines: [`${coord(field.lat!, 'N', 'S')}, ${coord(field.lon!, 'E', 'W')}`] },
-                ...(mapTable.source.beacons ? [{ label: 'Elevation', lines: [field.elevationFt === undefined ? '—' : `${n(field.elevationFt)} ft`] }] : []),
+                ...(mapTable?.source.beacons ? [{ label: 'Elevation', lines: [field.elevationFt === undefined ? '—' : `${n(field.elevationFt)} ft`] }] : []),
                 { label: 'Runways', lines: runwayLines(field) },
                 { label: 'Tower (MHz)', lines: field.radio.vhf || field.radio.uhf ? [...towerLines(field), ...(towerNote(field) ? [towerNote(field)] : []), ...(field.radioSource ? ['Radio source: pydcs'] : [])] : ['—'] },
-                ...(mapTable.source.beacons ? [
+                ...(mapTable?.source.beacons ? [
                   { label: 'TACAN, VOR and NDB', lines: navaidLines(field) },
                   { label: 'ILS', lines: ilsLines(field) },
                 ] : []),
               ],
-              notes: mapTable.source.beacons ? ['Runway headings are magnetic.', ...(navaidLines(field).some(line => line.includes('X*')) ? ['* X band assumed; source data does not settle the band.'] : [])] : [],
+              notes: mapTable?.source.beacons ? ['Runway headings are magnetic.', ...(navaidLines(field).some(line => line.includes('X*')) ? ['* X band assumed; source data does not settle the band.'] : [])] : [],
             }];
           })} />}
         {mapTable && (
