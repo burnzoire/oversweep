@@ -1,0 +1,106 @@
+---
+import type { TheatreOverview } from '../../data/encyclopedia';
+import { assetPath } from '../../lib/paths';
+interface Field { name: string; lat: number; lon: number; href: string; recordHref?: string }
+interface Props { name: string; overview: TheatreOverview; fields: Field[]; source: string }
+const { name, overview, fields, source } = Astro.props;
+---
+<section class="theatre-map" aria-label={`${name} interactive airfield map`} data-theatre-map data-fields={JSON.stringify(fields)}>
+  <h2>Map</h2>
+  <p>Explore the map or select an airfield. Markers open its reference links. Present-day OpenStreetMap geography; no exact simulator terrain boundary is shown.</p>
+  <div class="map-tools" hidden>
+    <label>Find an airfield <select aria-label="Find an airfield"><option value="">Choose an airfield</option>{fields.map((field, i) => <option value={i}>{field.name}</option>)}</select></label>
+    <button type="button">Show all airfields</button>
+  </div>
+  <div class="map-canvas" role="region" aria-label={`${name}: pan with arrow keys; zoom using plus and minus`} hidden></div>
+  <p class="map-status" role="status">The interactive map is loading. The static overview and airfield table are available below.</p>
+  <p class="map-source">Airfield overlay: <a href={source}>the same versioned simulator data as the table below</a>. <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors · ODbL</a>.</p>
+  <details class="map-fallback" open>
+    <summary>Static overview</summary>
+    <figure class="theatre-overview">
+      <a href={assetPath(overview.src)} aria-label={`Open full-size static map of ${name}`}><img src={assetPath(overview.src)} width={overview.width} height={overview.height} alt={overview.alt} loading="lazy" decoding="async" /></a>
+      <figcaption>{overview.caption}<span class="credit">Map: Oversweep. © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>; <a href="https://creativecommons.org/licenses/by-sa/2.0/">static map tiles CC BY-SA 2.0</a>. <a href={assetPath(overview.src)}>Open full-size static map</a>.</span></figcaption>
+    </figure>
+  </details>
+</section>
+<script>
+  import 'leaflet/dist/leaflet.css';
+  interface Field { name: string; lat: number; lon: number; href: string; recordHref?: string }
+  for (const root of document.querySelectorAll<HTMLElement>('[data-theatre-map]')) {
+    const start = async () => {
+      const status = root.querySelector<HTMLElement>('.map-status')!;
+      const canvas = root.querySelector<HTMLElement>('.map-canvas')!;
+      const fallback = root.querySelector<HTMLDetailsElement>('.map-fallback')!;
+      try {
+        const L = await import('leaflet');
+        const fields: Field[] = JSON.parse(root.dataset.fields!);
+        if (!fields.length) throw new Error('No positioned airfields');
+        canvas.hidden = false;
+        const map = L.map(canvas, { scrollWheelZoom: false, maxZoom: 14, minZoom: 5 });
+        const bounds = L.latLngBounds(fields.map(f => [f.lat, f.lon]));
+        const reset = () => map.fitBounds(bounds, { padding: [30, 30], maxZoom: 7 });
+        reset();
+        const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
+        });
+        tiles.on('tileerror', () => {
+          status.textContent = 'Some map tiles could not load. Airfield markers, the static overview and the table remain available.';
+          fallback.open = true;
+        });
+        tiles.addTo(map);
+        const markers = fields.map(field => {
+          const popup = document.createElement('div');
+          const title = document.createElement('strong');
+          title.textContent = field.name;
+          popup.append(title);
+          const addLink = (href: string, label: string) => {
+            const p = document.createElement('p');
+            const a = document.createElement('a');
+            a.href = href; a.textContent = label; p.append(a); popup.append(p);
+          };
+          if (field.recordHref) addLink(field.recordHref, 'Open airfield entry');
+          addLink(field.href, 'View simulator reference');
+          return L.marker([field.lat, field.lon], {
+            title: field.name, alt: field.name, keyboard: true,
+            icon: L.divIcon({ className: 'theatre-airfield-marker', html: '<span aria-hidden="true">✈</span>', iconSize: [28, 28], iconAnchor: [14, 14] }),
+          }).bindPopup(popup).bindTooltip(field.name, { direction: 'top' }).addTo(map);
+        });
+        const select = root.querySelector<HTMLSelectElement>('select')!;
+        select.addEventListener('change', () => {
+          if (select.value === '') return;
+          const i = Number(select.value), field = fields[i];
+          map.setView([field.lat, field.lon], 10); markers[i].openPopup();
+        });
+        root.querySelector('button')!.addEventListener('click', () => { reset(); select.value = ''; map.closePopup(); });
+        root.querySelector<HTMLElement>('.map-tools')!.hidden = false;
+        fallback.open = false;
+        status.textContent = `${fields.length} runway airfields. Drag to pan, use the zoom buttons, or choose an airfield above.`;
+        new ResizeObserver(() => map.invalidateSize()).observe(canvas);
+      } catch {
+        canvas.hidden = true;
+        fallback.open = true;
+        status.textContent = 'The interactive map is unavailable. Use the static overview or the linked airfield table below.';
+      }
+    };
+    // Request tiles only once the reader reaches this map, with normal browser caching.
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) { observer.disconnect(); void start(); }
+    });
+    observer.observe(root);
+  }
+</script>
+<style is:global>
+  .theatre-map { margin: 1.5rem 0; }
+  .theatre-map .map-tools { display: flex; flex-wrap: wrap; align-items: end; gap: 0.75rem; margin-bottom: 0.75rem; }
+  .theatre-map .map-tools[hidden], .theatre-map .map-canvas[hidden] { display: none; }
+  .theatre-map .map-tools label { display: grid; gap: 0.3rem; max-width: 100%; }
+  .theatre-map select { max-width: 100%; padding: 0.5rem; font: inherit; }
+  .theatre-map button { padding: 0.5rem 0.75rem; font: inherit; cursor: pointer; }
+  .theatre-map .map-canvas { height: clamp(360px, 65vh, 640px); border: 1px solid var(--color-border); isolation: isolate; }
+  .theatre-map .leaflet-tile-pane { filter: grayscale(0.85) saturate(0.3); }
+  .theatre-map .theatre-airfield-marker { display: grid; place-items: center; border: 2px solid #214b59; border-radius: 50%; background: #fff; color: #214b59; font-size: 18px; }
+  .theatre-map .theatre-airfield-marker:focus-visible { outline: 3px solid #111; outline-offset: 3px; }
+  .theatre-map .map-source, .theatre-map .map-status { font-size: 0.9rem; }
+  .theatre-map .map-fallback summary { cursor: pointer; }
+</style>

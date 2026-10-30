@@ -3,6 +3,7 @@ import LinkedText from '../LinkedText.astro';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import Cited from './Cited.astro';
 import PhotoFigure from './PhotoFigure.astro';
+import TheatreMap from './TheatreMap.astro';
 import PurchaseRow from './PurchaseRow.astro';
 import RunwayFigure from './RunwayFigure.astro';
 import AirfieldPlanFigure from './AirfieldPlanFigure.astro';
@@ -251,6 +252,12 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
             <PurchaseRow purchases={m.purchase} />
           </dl>
         </section>
+        {m.overview && mapTable && <TheatreMap name={m.name} overview={m.overview} source={mapTable.source.url}
+          fields={runwayFields.flatMap(field => {
+            if (!Number.isFinite(field.lat) || !Number.isFinite(field.lon)) return [];
+            const r = recordFor(field.name);
+            return [{ name: field.name, lat: field.lat!, lon: field.lon!, href: `#${mapAirfieldAnchor(field.name)}`, recordHref: r ? link(r) : undefined }];
+          })} />}
         {mapTable && (
           <section class="map-airfields" aria-labelledby="map-airfields-title">
             <h2 id="map-airfields-title">Airfields</h2>

@@ -7,6 +7,12 @@ publisher: "Ugra Media, for Eagle Dynamics"
 setting: { era: modern, text: "Present-day bases, but its makers say it supports missions from modern times to historical reenactments [1]" }
 area: "About 1,000 × 900 km: much of Syria, all of Cyprus and Lebanon, and parts of Israel, Turkey, Jordan and Iraq, with enough of the eastern Mediterranean for carrier operations [1]"
 theatres: [middle-east]
+overview:
+  src: encyclopedia/maps/dcs-syria-overview.png
+  width: 1800
+  height: 1639
+  alt: "Eastern Mediterranean overview showing Cyprus, southern Turkey, Syria, Lebanon, Israel, Jordan and western Iraq, with 22 labelled DCS Syria airfields and other runway airfields marked as dots."
+  caption: "Selected airfields on DCS: Syria. Present-day OpenStreetMap geography; illustrative extent, not a verified DCS terrain boundary. Airfield positions are from a pydcs export and may differ from the current simulator or the table below."
 differences:
   - { topic: "Harab Isk", text: "DCS reproduces the US helicopter base at Harab-Ishq, in the Lafarge cement plant [1]; US forces closed it and destroyed it with their own strikes when they withdrew from northern Syria in October 2019. [2]" }
 purchase:

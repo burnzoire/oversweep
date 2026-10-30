@@ -305,8 +305,17 @@ export interface TheatreData {
 
 // One simulator map: its own coverage and historical setting. The body has a
 // Coverage section.
+export interface TheatreOverview {
+  src: string;
+  width: number;
+  height: number;
+  alt: string;
+  caption: string;
+}
+
 export interface MapData {
   kind: 'map';
+  overview?: TheatreOverview;
   sim: Sim;
   short: string;
   name: string;
