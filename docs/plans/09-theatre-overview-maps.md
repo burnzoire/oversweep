@@ -6,7 +6,7 @@ maps belong in subsequent focused PRs.
 
 ## Implementation
 
-The optional overview field enables `TheatreMap.astro` for Syria only. Leaflet
+The optional overview field enables `TheatreMap.astro` for Syria and Caucasus. Leaflet
 1.9.4 is bundled locally through npm; the browser requests OSM standard tiles only
 when the reader reaches the map. Native browser caching and Referer are retained;
 there is no tile prefetching, proxy, archive or offline feature. Visible attribution
@@ -93,3 +93,31 @@ to its real entry, and no table URLs remain in marker payloads. The review build
 passes at `/oversweep`; independent implementation review and whitespace/docs
 checks cover this follow-up. Browser rendering remains unverified because the
 available browser could not reach the local server during the original session.
+
+## Caucasus rollout and dropdown inset
+
+The owner approved the corrected Syria popups and requested the same treatment
+for Caucasus. Caucasus now uses the shared interactive map, selector, reset button
+and popup data flow for all 21 runway airfields. Its static fallback uses those
+same pinned dcs-world-schema coordinates (DCS 2.9.30.28536, commit c3091e6), rather
+than an independent coordinate export. Modern geography and illustrative-extent
+limitations remain visible. No changes to simulator data or content maturity.
+
+Asset: `public/encyclopedia/maps/dcs-caucasus-overview.png`, 1800 × 1472.
+Created 30 October 2026 from the single requested OSM standard-tile viewport,
+zoom 7, with embedded OSM attribution. The same ODbL data / CC BY-SA 2.0 tile
+licensing described above applies. No tile archive is shipped.
+
+The shared selector replaces the platform-native arrow with a small SVG chevron,
+inset 0.75 rem from the right edge and with 2.5 rem text clearance. This applies to
+both maps while retaining the native select element and keyboard interaction.
+
+Caucasus verification: 220 tests and production checks passed; the final review
+build passed at `/oversweep`. Generated HTML checks confirm 21 Caucasus and 80
+Syria marker payloads, real entry destinations, no table-link payloads, and both
+base-prefixed fallback images. Static image visually inspected; labels fit the
+frame. Independent review caught a shared-padding shorthand overriding select
+text clearance; the select-only rule now follows the shared control rule and
+re-review found no blockers. Documentation and whitespace checks passed. Browser
+rendering remains unverified; existing Node 24 versus supported Node 22 limitation
+still applies. No merge or deployment performed.

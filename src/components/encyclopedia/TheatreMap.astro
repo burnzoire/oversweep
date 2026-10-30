@@ -111,8 +111,8 @@ const { name, overview, fields, source } = Astro.props;
   .theatre-map .map-tools { display: flex; flex-wrap: wrap; align-items: end; gap: 0.75rem; margin-bottom: 0.75rem; }
   .theatre-map .map-tools[hidden], .theatre-map .map-canvas[hidden] { display: none; }
   .theatre-map .map-tools label { display: grid; gap: 0.3rem; max-width: 100%; }
-  .theatre-map .map-tools select { width: 100%; max-width: 100%; }
-  .theatre-map .map-tools select, .theatre-map .map-tools button { box-sizing: border-box; height: 2.75rem; min-height: 2.75rem; margin: 0; padding: 0.4rem 0.75rem; border: 1px solid var(--color-text); border-radius: 0; background: #fff; font: inherit; line-height: 1.2; }
+  .theatre-map .map-tools select, .theatre-map .map-tools button { box-sizing: border-box; height: 2.75rem; min-height: 2.75rem; margin: 0; padding: 0.4rem 0.75rem; border: 1px solid var(--color-text); border-radius: 0; background-color: #fff; font: inherit; line-height: 1.2; }
+  .theatre-map .map-tools select { width: 100%; max-width: 100%; appearance: none; padding-right: 2.5rem; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='m3 6 5 5 5-5' fill='none' stroke='%23171717' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 1rem; }
   .theatre-map .map-tools button { cursor: pointer; white-space: nowrap; }
   .theatre-map .map-canvas { height: clamp(360px, 65vh, 640px); border: 1px solid var(--color-border); isolation: isolate; }
   .theatre-map .leaflet-tile-pane { filter: grayscale(0.85) saturate(0.3); }
