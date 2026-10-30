@@ -13,14 +13,12 @@ on page load, once per minute and when returning to the tab, so GitHub Pages
 needs no weekly rebuild or scheduled job. Without JavaScript the build-time
 selection remains readable, with its original source credit and working links.
 
-The homepage uses a two-thirds learning / one-third encyclopedia desktop grid.
-The left column introduces learning and provides two collection-level CTAs:
-learning modules and trainers. Individual modules and trainer launch cards are
-omitted. The right column contains a compact, illustrated weekly article.
-Below 45rem the feature follows learning in a single column. Existing sources,
-credits and review status are retained.
- No new aviation claims or
-review-status changes are introduced.
+The homepage opens with one learning-led introduction and two prominent,
+collection-level navigation routes: modules and trainers. A separate editorial
+section below highlights the weekly encyclopedia article and links to the full
+reference collection. Both sections stack on narrow screens. The design uses
+no numbered pillars or repeated navigation cards.
+
 
 ## Annual schedule
 
@@ -105,3 +103,16 @@ layout, a compact right-hand feature and retained photo credit/review status.
 `npm run check` passed (224 tests, Astro/TypeScript, production build and output
 checks); documentation and whitespace checks passed. Independent review found
 no blockers. Mobile stacking is implemented but was not visually inspected.
+
+### Three-pillar revision
+
+The owner approved three matching collection CTAs with the weekly article
+separated below them. This replaces the prior two-column homepage hierarchy.
+No individual modules or trainer exercises are listed on the homepage.
+
+### Editorial redesign
+
+The owner requested a fresh homepage design after reviewing the pillar layout.
+The new revision uses a dark learning introduction with two linked navigation
+rows, then a white editorial section for the weekly article. No individual
+learning modules or trainer exercises are listed on the homepage.
