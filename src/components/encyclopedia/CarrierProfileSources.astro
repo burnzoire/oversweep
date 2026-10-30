@@ -1,0 +1,7 @@
+---
+import type { ProfileSource } from '../../data/carrier-profiles';
+import { carrierDate } from '../../data/carrier-model.mjs';
+interface Props { sources: ProfileSource[]; namespace: string; title: string }
+const { sources, namespace, title } = Astro.props;
+---
+<section class="sources" aria-labelledby={`${namespace}-sources`}><h2 id={`${namespace}-sources`}>{title}</h2><ol>{sources.map((source) => <li id={`${namespace}-source-${source.id}`}><a href={source.url}>{source.title}</a> — {source.publisher}. Accessed <time datetime={source.accessed}>{carrierDate(source.accessed)}</time>. {source.note}</li>)}</ol></section>

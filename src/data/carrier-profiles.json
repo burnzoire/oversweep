@@ -1,0 +1,1098 @@
+{
+  "classes": [
+    {
+      "slug": "nimitz",
+      "name": "Nimitz class",
+      "registryClass": "Nimitz",
+      "maturity": "Drafted",
+      "summary": "U.S. nuclear-powered aircraft carriers combining a large aviation deck, steam catapults and arrested recovery to operate an embarked carrier air wing.",
+      "asOf": "2026-10-29",
+      "facts": [
+        {
+          "label": "Length",
+          "value": "Approximately 333 m (Navy reference: 1,092 ft).",
+          "cites": [
+            "nimitz-characteristics"
+          ]
+        },
+        {
+          "label": "Hull beam",
+          "value": "Approximately 40.8 m (Navy reference: 134 ft); distinct from flight-deck width.",
+          "cites": [
+            "nimitz-characteristics"
+          ]
+        },
+        {
+          "label": "Flight-deck width",
+          "value": "Approximately 76.8 m (Navy reference: 252 ft).",
+          "cites": [
+            "nimitz-characteristics"
+          ]
+        },
+        {
+          "label": "Flight-deck area",
+          "value": "Approximately 18,200 m² (NAVSEA 2020 reference: 4.5 acres).",
+          "cites": [
+            "navsea-sna2020"
+          ]
+        },
+        {
+          "label": "Nuclear propulsion",
+          "value": "Two nuclear reactors.",
+          "cites": [
+            "nimitz-characteristics"
+          ]
+        },
+        {
+          "label": "Propeller shafts",
+          "value": "Four shafts.",
+          "cites": [
+            "nimitz-characteristics"
+          ]
+        },
+        {
+          "label": "Published speed",
+          "value": "More than 30 kn (approximately 56 km/h); Navy class reference figure.",
+          "cites": [
+            "nimitz-characteristics"
+          ]
+        },
+        {
+          "label": "Launch equipment",
+          "value": "Four steam catapults in the NAVSEA 2020 class comparison.",
+          "cites": [
+            "navsea-sna2020"
+          ]
+        },
+        {
+          "label": "Aircraft elevators",
+          "value": "Four in the NAVSEA 2020 class comparison.",
+          "cites": [
+            "navsea-sna2020"
+          ]
+        },
+        {
+          "label": "Hangar arrangement",
+          "value": "Three bays in the NAVSEA 2020 class comparison.",
+          "cites": [
+            "navsea-sna2020"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "title": "Flight deck and aviation facilities",
+          "text": "NAVSEA’s 2020 comparison describes a 4.5-acre flight deck, three hangar bays and four aircraft elevators. These are class reference features; individual ships have received different modernization work during their service lives.",
+          "cites": [
+            "navsea-sna2020"
+          ]
+        },
+        {
+          "title": "Steam catapult launch",
+          "text": "Steam pressure drives pistons connected to the catapult shuttle, accelerating the attached aircraft along the launch track. Nimitz-class ships have four steam catapults.",
+          "cites": [
+            "frcsw-catapult",
+            "navsea-sna2020"
+          ]
+        },
+        {
+          "title": "Arrested recovery",
+          "text": "The Naval Air Systems Command (NAVAIR) identifies the Mark-7 (Mk-7) Mod 3 and Mod 4 as Nimitz-class arresting-gear designs. The class uses arrested recovery for its carrier fixed-wing aircraft.",
+          "cites": [
+            "navair-mk7"
+          ]
+        },
+        {
+          "title": "Air wing roles",
+          "text": "The Navy’s 2017 carrier-strike-group instruction groups air-wing capabilities into strike fighters, airborne early warning, electronic warfare and helicopters. Helicopter roles include search and rescue, logistics, surface warfare and anti-submarine warfare. These role categories describe the breadth of aviation support; they do not fix a ship’s embarked aircraft mix in 2026.",
+          "cites": [
+            "opnav-airwing"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "nimitz-characteristics",
+          "title": "Important Links and Info — General Characteristics, Nimitz class",
+          "publisher": "Naval Air Force, U.S. Pacific Fleet",
+          "url": "https://www.airpac.navy.mil/Organization/Distinguished-Visitor-Info/Important-Links-and-Info/",
+          "accessed": "2026-10-29",
+          "note": "Official indexed source text inspected; direct page fetch was blocked. Historical facts only; no current status inferred. Dimensions are approximate class reference figures; no displacement, manning or embarked-aircraft total adopted."
+        },
+        {
+          "id": "navsea-sna2020",
+          "title": "Gerald R. Ford Class — More Capable, SNA 2020 briefing",
+          "publisher": "Naval Sea Systems Command",
+          "url": "https://www.navsea.navy.mil/Portals/103/Documents/Exhibits/SNA2020/SNA2020-CVN79-80-81-CaptPhilipMalone.pdf?ver=2020-01-17-113410-113",
+          "accessed": "2026-10-29",
+          "note": "Official indexed source text inspected; direct page fetch was blocked. Historical facts only; no current status inferred. Page 4 class-comparison table; used only for four steam catapults, four aircraft elevators, three hangar bays and 4.5-acre flight deck. Comparative sortie rates and air-wing totals excluded."
+        },
+        {
+          "id": "navair-mk7",
+          "title": "Advanced Arresting Gear (AAG)",
+          "publisher": "Naval Air Systems Command",
+          "url": "https://www.navair.navy.mil/product/advanced-arresting-gear-aag",
+          "accessed": "2026-10-29",
+          "note": "Description paragraphs 1–2 identify Mk-7 Mod 3 and Mod 4 on Nimitz-class carriers; page also discusses Ford-class AAG. No number of deck wires inferred."
+        },
+        {
+          "id": "frcsw-catapult",
+          "title": "FRCSW Almanac, Volume 5, Issue 6 — New Lathes Spinning Up",
+          "publisher": "Fleet Readiness Center Southwest / NAVAIR",
+          "url": "https://www.navair.navy.mil/comfrc/sites/g/files/jejdrs631/files/2019-05/Vol%205-6%20Jun%2012_0.pdf",
+          "accessed": "2026-10-29",
+          "note": "June 2012 issue, printed pages 4–5 (PDF pages 4–5), steam catapult piston/shuttle explanation. Full PDF text inspected."
+        },
+        {
+          "id": "opnav-airwing",
+          "title": "OPNAVINST 3501.316C — Carrier Strike Group mission/organization",
+          "publisher": "Department of the Navy",
+          "url": "https://www.secnav.navy.mil/doni/Directives/03000%20Naval%20Operations%20and%20Readiness/03-500%20Training%20and%20Readiness%20Services/3501.316C.pdf",
+          "accessed": "2026-10-29",
+          "note": "Official indexed source text inspected; direct page fetch was blocked. Historical facts only; no current status inferred. 2017 instruction, air-wing organization subparagraph d(1)–(4). Used for role categories, not a 2026 aircraft allocation."
+        }
+      ],
+      "summaryCites": [
+        "nimitz-characteristics",
+        "navsea-sna2020",
+        "navair-mk7",
+        "opnav-airwing"
+      ]
+    },
+    {
+      "slug": "gerald-r-ford",
+      "name": "Gerald R. Ford class",
+      "registryClass": "Gerald R. Ford",
+      "summary": "Nuclear-powered fleet carriers that replace steam catapults with electromagnetic launch and use a new digitally controlled arresting system. The lead ship introduced the systems at sea before its first deployment.",
+      "summaryCites": [
+        "emals",
+        "aag",
+        "first-deployment"
+      ],
+      "asOf": "2026-10-29",
+      "facts": [
+        {
+          "label": "Builder",
+          "value": "HII Newport News Shipbuilding, Virginia, United States",
+          "cites": [
+            "command-history"
+          ]
+        },
+        {
+          "label": "Propulsion",
+          "value": "Two nuclear reactors driving four shafts",
+          "cites": [
+            "command-history"
+          ]
+        },
+        {
+          "label": "Lead-ship length",
+          "value": "About 337 m (1,106 ft), using CVN-78 command-history figures",
+          "cites": [
+            "command-history"
+          ]
+        },
+        {
+          "label": "Lead-ship flight-deck width",
+          "value": "About 78 m (256 ft)",
+          "cites": [
+            "command-history"
+          ]
+        },
+        {
+          "label": "Full-load displacement",
+          "value": "Approximately 101,600 tonnes (100,000 long tons), published for CVN-78",
+          "cites": [
+            "command-history"
+          ]
+        },
+        {
+          "label": "Published speed",
+          "value": "More than 30 kn, as published in the CVN-78 command history",
+          "cites": [
+            "command-history"
+          ]
+        },
+        {
+          "label": "Published complement",
+          "value": "4,539 including ship, air wing and staff in the Ford media kit; a reference figure rather than a live crew count",
+          "cites": [
+            "media-kit"
+          ]
+        },
+        {
+          "label": "Published aircraft figure",
+          "value": "75+ in the Ford media kit; an air-wing reference figure, not a guaranteed embarkation or fixed maximum",
+          "cites": [
+            "media-kit"
+          ]
+        },
+        {
+          "label": "Aircraft elevators",
+          "value": "Three between hangar and flight deck; Nimitz-class ships have four",
+          "cites": [
+            "aircraft-elevators"
+          ]
+        },
+        {
+          "label": "Weapons elevators",
+          "value": "Eleven Advanced Weapons Elevators on CVN-78",
+          "cites": [
+            "weapons-elevators"
+          ]
+        },
+        {
+          "label": "Launch system",
+          "value": "Electromagnetic Aircraft Launch System (EMALS)",
+          "cites": [
+            "emals"
+          ]
+        },
+        {
+          "label": "Recovery system",
+          "value": "Advanced Arresting Gear (AAG)",
+          "cites": [
+            "aag"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "title": "Launch and recovery",
+          "text": "The Electromagnetic Aircraft Launch System (EMALS) converts stored kinetic energy into electrically controlled catapult launch power. Advanced Arresting Gear (AAG) uses energy absorbers, power conditioning and digital controls to arrest landing aircraft. The Naval Air Systems Command (NAVAIR) describes both systems as designed to support a broad range of aircraft.",
+          "cites": [
+            "emals",
+            "aag"
+          ]
+        },
+        {
+          "title": "Flight deck and logistics",
+          "text": "The Ford design uses three aircraft elevators rather than Nimitz’s four. Separate Advanced Weapons Elevators move ordnance towards the flight deck using electromagnetic motors. All eleven weapons elevators on Gerald R. Ford had been turned over to the crew by 22 December 2021.",
+          "cites": [
+            "aircraft-elevators",
+            "weapons-elevators"
+          ]
+        },
+        {
+          "title": "Air wing and roles",
+          "text": "The ship supports a mixed carrier air wing. During 2022 workups, Carrier Air Wing 8 (CVW-8) operated Super Hornets, Hawkeyes, Growlers and MH-60R/S helicopters from Ford. Its inaugural deployment combined Atlantic operations with allied training. This is a dated example of the air wing’s aviation roles; the aircraft mix varies between deployments.",
+          "cites": [
+            "airwing-2022",
+            "first-deployment"
+          ]
+        },
+        {
+          "title": "Differences within the class",
+          "text": "Radar fit differs within the class. Gerald R. Ford was built with Dual Band Radar; the Navy specified Enterprise Air Surveillance Radar for John F. Kennedy. The dimensions and complement figures above identify the lead-ship or published reference baseline to which they apply.",
+          "cites": [
+            "radar-variants",
+            "command-history",
+            "media-kit"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "command-history",
+          "title": "USS Gerald R. Ford: Command History & Facts",
+          "publisher": "Commander, Naval Air Force Atlantic",
+          "url": "https://www.airlant.usff.navy.mil/Organization/Aircraft-Carriers/USS-Gerald-R-Ford-CVN-78/Command-History/",
+          "accessed": "2026-10-29",
+          "note": "Official indexed command facts inspected; direct page returned HTTP 403. Gives CVN-78 length 1,106 ft, flight-deck width 256 ft, full-load displacement 100,000 long tons, propulsion, speed, builder and construction milestones. Some older generic Navy sheets list 1,092 ft; this profile uses the ship-specific command value."
+        },
+        {
+          "id": "media-kit",
+          "title": "USS Gerald R. Ford (CVN 78): Media Kit",
+          "publisher": "US Navy / Naval History and Heritage Command",
+          "url": "https://www.history.navy.mil/content/dam/nhhc/news-and-events/multimedia%20gallery/New%20Infographics/Ford%20Media%20Kit-2.pdf",
+          "accessed": "2026-10-29",
+          "note": "Official indexed Quick Facts inspected. Complement 4,539 includes ship, air wing and staff; aircraft figure 75+ is a published reference figure, not an observed embarkation or a fixed maximum."
+        },
+        {
+          "id": "emals",
+          "title": "Electromagnetic Aircraft Launch System (EMALS)",
+          "publisher": "Naval Air Systems Command",
+          "url": "https://www.navair.navy.mil/product/Electromagnetic-Aircraft-Launch-System-EMALS",
+          "accessed": "2026-10-29",
+          "note": "Full page inspected, Description paragraphs. Stored kinetic energy, electrical conversion and computer control; expanded aircraft envelope is design intent, not certification of every aircraft."
+        },
+        {
+          "id": "aag",
+          "title": "Advanced Arresting Gear (AAG)",
+          "publisher": "Naval Air Systems Command",
+          "url": "https://www.navair.navy.mil/product/advanced-arresting-gear-aag",
+          "accessed": "2026-10-29",
+          "note": "Full page inspected, Description and Specifications. Energy absorbers, power conditioning and digital controls; follow-on to Mk-7. Reliability and aircraft-envelope statements are design objectives, not measured rates."
+        },
+        {
+          "id": "aircraft-elevators",
+          "title": "Final Aircraft Elevator Installed on Gerald R. Ford (CVN 78)",
+          "publisher": "Huntington Ingalls Industries",
+          "url": "https://www.hii.com/news/photo-release-final-aircraft-elevator-installed-on-gerald-r-ford-cvn-78",
+          "accessed": "2026-10-29",
+          "note": "15 August 2013 builder release, full page inspected. Three aircraft elevators versus four on Nimitz; their layout is part of the redesigned flight deck."
+        },
+        {
+          "id": "weapons-elevators",
+          "title": "Advanced Weapons Elevators Completed aboard USS Gerald R. Ford",
+          "publisher": "Naval Sea Systems Command",
+          "url": "https://www.navsea.navy.mil/Media/News/Article/2883053/advanced-weapons-elevators-completed-aboard-uss-gerald-r-ford-cvn-78/",
+          "accessed": "2026-10-29",
+          "note": "23 December 2021 release; official indexed narrative inspected, direct page returned HTTP 403. Eleventh and final elevator turned over on 22 December 2021; electromagnetic motors replace hydraulic systems."
+        },
+        {
+          "id": "radar-variants",
+          "title": "Navy Continues to Enhance Combat Capability on Second Ford-Class Carrier",
+          "publisher": "US Navy / Naval Sea Systems Command",
+          "url": "https://www.navy.mil/Press-Office/Press-Releases/display-pressreleases/Article/2403821/navy-continues-to-enhance-combat-capability-on-second-ford-class-carrier-uss-jo/",
+          "accessed": "2026-10-29",
+          "note": "3 November 2020 release; full indexed official text inspected, direct page returned HTTP 403. CVN-78 has Dual Band Radar; EASR specified for CVN-79. Its superseded delivery forecast is not adopted."
+        },
+        {
+          "id": "airwing-2022",
+          "title": "Making History on USS Gerald R. Ford as Deployment Nears",
+          "publisher": "Naval Aviation News / US Strategic Command",
+          "url": "https://www.stratcom.mil/Media/News/News-Article-View/Article/3179395/making-history-on-uss-gerald-r-ford-as-deployment-nears/",
+          "accessed": "2026-10-29",
+          "note": "2022 official article, indexed text inspected. Workups list F/A-18E/F, E-2, EA-18G, MH-60R and MH-60S, with Carrier Air Wing 8. Historical example, not a present assignment."
+        },
+        {
+          "id": "first-deployment",
+          "title": "Gerald R. Ford Carrier Strike Group Departs for First Deployment",
+          "publisher": "US Navy / USS Gerald R. Ford Public Affairs",
+          "url": "https://www.navy.mil/Press-Office/News-Stories/article/3179931/gerald-r-ford-carrier-strike-group-departs-for-first-deployment/",
+          "accessed": "2026-10-29",
+          "note": "5 October 2022 release; official indexed narrative inspected, direct page returned HTTP 403. Departure occurred 4 October, with CVW-8 for Atlantic operations and training with NATO allies and partners."
+        }
+      ]
+    }
+  ],
+  "ships": [
+    {
+      "carrier": "uss-nimitz",
+      "maturity": "Drafted",
+      "overview": {
+        "text": "The class namesake entered service in 1975. Its career includes Arabian Sea operations supporting tanker protection and a later role in introducing the F-35C to carrier operations.",
+        "cites": [
+          "nimitz-2018",
+          "nimitz-history",
+          "nimitz-f35"
+        ]
+      },
+      "milestones": [
+        {
+          "date": "1968-06-22",
+          "text": "Keel laid at Newport News.",
+          "cites": [
+            "nimitz-2018"
+          ]
+        },
+        {
+          "date": "1975-05-03",
+          "text": "Commissioned at Naval Station Norfolk.",
+          "cites": [
+            "nimitz-2018"
+          ]
+        },
+        {
+          "date": "1988",
+          "text": "Began North Arabian Sea operations in October supporting Operation Earnest Will.",
+          "cites": [
+            "nimitz-history"
+          ]
+        },
+        {
+          "date": "2014-11-03",
+          "text": "Hosted the F-35C’s first arrested landing aboard an aircraft carrier during developmental testing.",
+          "cites": [
+            "nimitz-f35"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "nimitz-2018",
+          "title": "Nimitz: 50 Years of Teamwork and Tradition",
+          "publisher": "USS Nimitz Public Affairs / United States Navy",
+          "url": "https://www.navy.mil/Press-Office/Press-Releases/display-pressreleases/Article/2248168/nimitz-50-years-of-teamwork-and-tradition/",
+          "accessed": "2026-10-29",
+          "note": "Official indexed source text inspected; direct page fetch was blocked. Historical facts only; no current status inferred. 2018 retrospective; keel and commissioning passages."
+        },
+        {
+          "id": "nimitz-history",
+          "title": "USS Nimitz — History",
+          "publisher": "Naval Air Force, U.S. Pacific Fleet",
+          "url": "https://www.airpac.navy.mil/Organization/USS-Nimitz-CVN-68/About-Us/History/",
+          "accessed": "2026-10-29",
+          "note": "Official indexed source text inspected; direct page fetch was blocked. Historical facts only; no current status inferred. October 1988 Earnest Will and November 2014 F-35C passages inspected. The page’s February 1991/Desert Storm wording was not adopted because timing is ambiguous."
+        },
+        {
+          "id": "nimitz-f35",
+          "title": "F-35C Completes First Arrested Landing aboard Aircraft Carrier",
+          "publisher": "Commander, Naval Air Forces Public Affairs / Department of the Navy CIO CHIPS",
+          "url": "https://www.doncio.navy.mil/%28ihrdskba1fnrhrefglh55tqs%29/CHIPS/ArticleDetails.aspx?ID=5699",
+          "accessed": "2026-10-29",
+          "note": "4 November 2014 report; indexed complete report inspected. Describes first F-35C arrested carrier landing, not first operational deployment."
+        }
+      ]
+    },
+    {
+      "carrier": "uss-dwight-d-eisenhower",
+      "maturity": "Drafted",
+      "overview": {
+        "text": "The second Nimitz-class carrier entered service in 1977. Beyond carrier air operations, Eisenhower demonstrated a joint transport role by embarking Army forces for the 1994 intervention in Haiti.",
+        "cites": [
+          "eisenhower-history"
+        ]
+      },
+      "milestones": [
+        {
+          "date": "1977-10-18",
+          "text": "Commissioned under Capt. William E. Ramsey.",
+          "cites": [
+            "eisenhower-history"
+          ]
+        },
+        {
+          "date": "1990",
+          "text": "Operated in the Red Sea following Iraq’s invasion of Kuwait, including maritime interception supporting the United Nations embargo.",
+          "cites": [
+            "eisenhower-history"
+          ]
+        },
+        {
+          "date": "1994",
+          "text": "In September, embarked soldiers and equipment of the Army’s 10th Mountain Division for Operation Uphold Democracy off Haiti.",
+          "cites": [
+            "eisenhower-history"
+          ]
+        },
+        {
+          "date": "2001-05-24",
+          "text": "Began its midlife refueling and complex overhaul at Newport News; returned to Naval Station Norfolk on 25 January 2005.",
+          "cites": [
+            "eisenhower-history"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "eisenhower-history",
+          "title": "USS Dwight D. Eisenhower — Command History",
+          "publisher": "Commander, Naval Air Force Atlantic",
+          "url": "https://www.airlant.usff.navy.mil/Organization/Aircraft-Carriers/USS-Dwight-D-Eisenhower-CVN-69/Command-History/",
+          "accessed": "2026-10-29",
+          "note": "Official indexed source text inspected; direct page fetch was blocked. Historical facts only; no current status inferred. Commissioning, 1990 Red Sea operations, September 1994 Army embarkation and May 2001–January 2005 refueling overhaul passages."
+        }
+      ]
+    },
+    {
+      "carrier": "uss-carl-vinson",
+      "maturity": "Drafted",
+      "overview": {
+        "text": "Commissioned in 1982 as the third Nimitz-class carrier, Carl Vinson has served in humanitarian relief as well as aviation deployments, including the 2021 introduction of F-35C and CMV-22B aircraft to an operational carrier-strike-group deployment.",
+        "cites": [
+          "vinson-commission",
+          "vinson-humanitarian",
+          "vinson-2021"
+        ]
+      },
+      "milestones": [
+        {
+          "date": "1982-03-13",
+          "text": "Commissioned at Newport News after more than seven years of construction.",
+          "cites": [
+            "vinson-commission"
+          ]
+        },
+        {
+          "date": "2010",
+          "text": "Supported the Haiti earthquake response as part of Operation Unified Response.",
+          "cites": [
+            "vinson-humanitarian"
+          ]
+        },
+        {
+          "date": "2021-08-02",
+          "text": "Departed San Diego with the first carrier-strike-group deployment to include both F-35C Lightning II and CMV-22B Osprey aircraft.",
+          "cites": [
+            "vinson-2021"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "vinson-commission",
+          "title": "USS Carl Vinson Celebrates 40th Commissioning Anniversary",
+          "publisher": "USS Carl Vinson Public Affairs / United States Navy",
+          "url": "https://www.navy.mil/DesktopModules/ArticleCS/Print.aspx?Article=2966410&ModuleId=523&PortalId=1",
+          "accessed": "2026-10-29",
+          "note": "Official indexed source text inspected; direct page fetch was blocked. Historical facts only; no current status inferred. 15 March 2022 report; third-of-ten class position and 13 March 1982 commissioning only. Its mistaken identification of Carl Vinson as a senator is not adopted."
+        },
+        {
+          "id": "vinson-humanitarian",
+          "title": "The Navy’s Humanitarian Mission",
+          "publisher": "Naval History and Heritage Command",
+          "url": "https://www.history.navy.mil/browse-by-topic/disasters-and-phenomena/humanitarian-mission.html",
+          "accessed": "2026-10-29",
+          "note": "Official indexed source text inspected; direct page fetch was blocked. Historical facts only; no current status inferred. Haiti 2010 response passage and Operation Unified Response caption."
+        },
+        {
+          "id": "vinson-2021",
+          "title": "Carl Vinson Carrier Strike Group departs on deployment",
+          "publisher": "U.S. 3rd Fleet Public Affairs / U.S. Pacific Fleet",
+          "url": "https://www.cpf.navy.mil/Newsroom/News/Article/2726615/carl-vinson-carrier-strike-group-departs-on-deployment/",
+          "accessed": "2026-10-29",
+          "note": "Official indexed source text inspected; direct page fetch was blocked. Historical facts only; no current status inferred. 2 August 2021 departure and first strike-group deployment with F-35C and CMV-22B; no present air-wing assignment inferred."
+        }
+      ]
+    },
+    {
+      "carrier": "uss-theodore-roosevelt",
+      "maturity": "Drafted",
+      "overview": {
+        "text": "Theodore Roosevelt entered service in 1986 and flew combat strikes during Desert Storm in 1991. Its 2013 redelivery followed a midlife overhaul covering reactor refueling and modernization of propulsion, combat and aviation support systems.",
+        "cites": [
+          "roosevelt-1987",
+          "roosevelt-desert-storm",
+          "roosevelt-rcoh"
+        ]
+      },
+      "milestones": [
+        {
+          "date": "1986-10-25",
+          "text": "Commissioned with Capt. Paul W. Parcells as its first commanding officer.",
+          "cites": [
+            "roosevelt-1987"
+          ]
+        },
+        {
+          "date": "1991-01-19",
+          "text": "Entered the Persian Gulf and launched its first combat strike of Operation Desert Storm that evening.",
+          "cites": [
+            "roosevelt-desert-storm"
+          ]
+        },
+        {
+          "date": "2013-08-29",
+          "text": "Redelivered to the Navy after successful sea trials concluding its refueling and complex overhaul.",
+          "cites": [
+            "roosevelt-rcoh"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "roosevelt-1987",
+          "title": "USS Theodore Roosevelt — Command History for 1987",
+          "publisher": "United States Navy / Naval History and Heritage Command",
+          "url": "https://www.history.navy.mil/content/dam/nhhc/research/archives/command-operation-reports/ship-command-operation-reports/t/theodore-roosevelt-cvn-71-i/1987.pdf",
+          "accessed": "2026-10-29",
+          "note": "Official indexed source text inspected; direct page fetch was blocked. Historical facts only; no current status inferred. Change-of-command narrative explicitly records commissioning on 25 October 1986."
+        },
+        {
+          "id": "roosevelt-desert-storm",
+          "title": "VF-84 in Desert Storm: Letters From Home",
+          "publisher": "Naval Air Station Pensacola / DVIDS",
+          "url": "https://www.dvidshub.net/news/printable/420141",
+          "accessed": "2026-10-29",
+          "note": "6 May 2022 report; full text inspected, paragraphs on 19 January first strike and 19 January–27 February sorties. Anecdotal quotations and sortie totals not reproduced."
+        },
+        {
+          "id": "roosevelt-rcoh",
+          "title": "Newport News Shipbuilding Redelivers Aircraft Carrier USS Theodore Roosevelt (CVN 71) Following Refueling and Complex Overhaul",
+          "publisher": "Huntington Ingalls Industries",
+          "url": "https://www.hii.com/news/photo-release-newport-news-shipbuilding-redelivers-aircraft-carrier-uss-theodore-roosevelt-cvn-71-following-refueling-and-complex-overhaul",
+          "accessed": "2026-10-29",
+          "note": "29 August 2013 builder release; main report paragraphs 1–5 fully inspected. Fourth Nimitz-class RCOH, successful sea trials, reactor and aviation-system work."
+        }
+      ]
+    },
+    {
+      "carrier": "uss-abraham-lincoln",
+      "maturity": "Drafted",
+      "overview": {
+        "text": "Abraham Lincoln’s early service paired carrier air operations with disaster response: it supported evacuation after Mount Pinatubo’s eruption on its first deployment and later delivered aid after the 2004 Indian Ocean tsunami.",
+        "cites": [
+          "lincoln-history"
+        ]
+      },
+      "milestones": [
+        {
+          "date": "1989-11-11",
+          "text": "Commissioned at Norfolk, Virginia.",
+          "cites": [
+            "lincoln-history"
+          ]
+        },
+        {
+          "date": "1991",
+          "text": "Diverted during its maiden deployment to support Operation Fiery Vigil evacuations after Mount Pinatubo erupted in the Philippines.",
+          "cites": [
+            "lincoln-history"
+          ]
+        },
+        {
+          "date": "2004",
+          "text": "Diverted after the December tsunami to Operation Unified Assistance, delivering supplies and aid in Southeast Asia before returning in March 2005.",
+          "cites": [
+            "lincoln-history"
+          ]
+        },
+        {
+          "date": "2017-05-12",
+          "text": "Redelivered to the Navy after sea trials, completing the refueling and complex overhaul that began in March 2013.",
+          "cites": [
+            "rcoh-redelivery",
+            "rcoh-completion"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "lincoln-history",
+          "title": "USS Abraham Lincoln — History",
+          "publisher": "Naval Air Force, U.S. Pacific Fleet",
+          "url": "https://www.airpac.navy.mil/Organization/USS-Abraham-Lincoln-CVN-72/About-Us/History/",
+          "accessed": "2026-10-29",
+          "note": "Official indexed source text inspected; direct page fetch was blocked. Historical facts only; no current status inferred. Commissioning, 1991 Fiery Vigil, 2004–2005 Unified Assistance and 2013–2017 RCOH passages. Historical homeports and the page’s stale “currently” wording are not used as present status."
+        },
+        {
+          "id": "rcoh-redelivery",
+          "title": "Huntington Ingalls Industries Redelivers Aircraft Carrier USS Abraham Lincoln to US Navy",
+          "publisher": "Huntington Ingalls Industries",
+          "url": "https://www.hii.com/news/video-release-huntington-ingalls-industries-redelivers-aircraft-carrier-uss-abraham-lincoln-to-u-s-navy",
+          "accessed": "2026-10-29",
+          "note": "12 May 2017 contemporary builder release. Establishes redelivery/completion date; the later command-history August entry is not used for this milestone."
+        },
+        {
+          "id": "rcoh-completion",
+          "title": "Lincoln Achieves Redelivery",
+          "publisher": "US Navy",
+          "url": "https://www.navy.mil/Press-Office/Press-Releases/display-pressreleases/Article/2252045/lincoln-achieves-redelivery/",
+          "accessed": "2026-10-29",
+          "note": "12 May 2017 contemporary release; full indexed official narrative inspected. Dates completion/redelivery to 12 May and start to March 2013. This is preferred to the apparent August-date error in the later command history."
+        }
+      ]
+    },
+    {
+      "carrier": "uss-george-washington",
+      "overview": {
+        "text": "George Washington combined post-September 11 air-defense and combat-support deployments with a pioneering role as the first nuclear-powered carrier forward-deployed to Japan in 2008. Its midlife refueling and complex overhaul concluded in May 2023.",
+        "cites": [
+          "gw-30-years",
+          "gw-rcoh-completed"
+        ]
+      },
+      "milestones": [
+        {
+          "date": "2001",
+          "text": "In September, deployed to New York City to provide air defense after the September 11 attacks.",
+          "cites": [
+            "gw-30-years"
+          ]
+        },
+        {
+          "date": "2008",
+          "text": "Became the first nuclear-powered aircraft carrier forward-deployed to Japan. A fire during its transfer voyage required repairs in San Diego.",
+          "cites": [
+            "gw-30-years"
+          ]
+        },
+        {
+          "date": "2017-08-04",
+          "text": "Entered refueling and complex overhaul at Newport News Shipbuilding.",
+          "cites": [
+            "gw-rcoh-completed"
+          ]
+        },
+        {
+          "date": "2023-05-25",
+          "text": "Completed its refueling and complex overhaul and was redelivered to the Navy after sea trials.",
+          "cites": [
+            "gw-rcoh-completed"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "gw-30-years",
+          "title": "USS George Washington celebrates 30 years of service",
+          "publisher": "U.S. Fleet Forces Command",
+          "url": "https://www.usff.navy.mil/press-room/news-stories/article/3086940/uss-george-washington-celebrates-30-years-of-service/",
+          "accessed": "2026-10-29",
+          "note": "Retrieved official text via web search; direct open returned HTTP 403."
+        },
+        {
+          "id": "gw-rcoh-completed",
+          "title": "Refueling Complex Overhaul Completed on USS George Washington (CVN 73)",
+          "publisher": "Naval Sea Systems Command",
+          "url": "https://www.navsea.navy.mil/Media/News/Article-View/Article/3408374/refueling-complex-overhaul-completed-on-uss-george-washington-cvn-73/",
+          "accessed": "2026-10-29",
+          "note": "Retrieved official text via web search; direct open returned HTTP 403."
+        }
+      ]
+    },
+    {
+      "carrier": "uss-john-c-stennis",
+      "overview": {
+        "text": "John C. Stennis began its deployment career with a Persian Gulf voyage in 1998 and subsequently supported combat operations in Afghanistan. Its midlife refueling and complex overhaul began in 2021; undocking in April 2024 marked a transition to further installation and testing at an outfitting berth.",
+        "cites": [
+          "stennis-past",
+          "stennis-vfa146",
+          "stennis-rcoh-start",
+          "stennis-undock"
+        ]
+      },
+      "milestones": [
+        {
+          "date": "1998-02-26",
+          "text": "Departed on its first deployment to the Persian Gulf.",
+          "cites": [
+            "stennis-past"
+          ]
+        },
+        {
+          "date": "2001-11-12",
+          "text": "Deployed with Carrier Air Wing Nine for combat operations over Afghanistan in support of Operation Enduring Freedom, two months earlier than planned.",
+          "cites": [
+            "stennis-vfa146"
+          ]
+        },
+        {
+          "date": "2021-05-06",
+          "text": "Transited from Norfolk to Newport News Shipbuilding to begin refueling and complex overhaul.",
+          "cites": [
+            "stennis-rcoh-start"
+          ]
+        },
+        {
+          "date": "2024-04-08",
+          "text": "Left dry dock and moved to an outfitting berth for the next phase of refueling and complex overhaul.",
+          "cites": [
+            "stennis-undock"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "stennis-past",
+          "title": "Looking Ahead through the Past",
+          "publisher": "United States Navy",
+          "url": "https://www.navy.mil/Press-Office/Press-Releases/display-pressreleases/Article/2251590/looking-ahead-through-the-past/",
+          "accessed": "2026-10-29",
+          "note": "Retrieved official text via web search; direct open returned HTTP 403."
+        },
+        {
+          "id": "stennis-vfa146",
+          "title": "Strike Fighter Squadron 146 — History",
+          "publisher": "Naval Air Force, U.S. Pacific Fleet",
+          "url": "https://www.airpac.navy.mil/Organization/Strike-Fighter-Squadron-VFA-146/About-Us/History/",
+          "accessed": "2026-10-29",
+          "note": "Retrieved official squadron history text via web search."
+        },
+        {
+          "id": "stennis-rcoh-start",
+          "title": "USS John C. Stennis departed Norfolk for Newport News to begin RCOH",
+          "publisher": "United States Navy",
+          "url": "https://www.navy.mil/Press-Office/News-Stories/display-news/Article/2605550/uss-john-c-stennis-departed-norfolk-for-newport-news-to-begin-rcoh/",
+          "accessed": "2026-10-29",
+          "note": "Retrieved official article text via web search."
+        },
+        {
+          "id": "stennis-undock",
+          "title": "USS John C. Stennis (CVN 74) leaves dry dock, begins second phase of Refueling and Complex Overhaul",
+          "publisher": "Naval Sea Systems Command",
+          "url": "https://www.navsea.navy.mil/Media/News/Article-View/Article/3735487/uss-john-c-stennis-cvn-74-leaves-dry-dock-begins-second-phase-of-refueling-and/",
+          "accessed": "2026-10-29",
+          "note": "Retrieved official text via web search; direct open returned HTTP 403."
+        }
+      ]
+    },
+    {
+      "carrier": "uss-harry-s-truman",
+      "overview": {
+        "text": "Harry S. Truman supported Southern Watch on its first deployment, launched combat missions over Iraq in 2003 and served as a helicopter relief platform after Hurricane Katrina. The ship also hosted early carrier trials of the E-2D Advanced Hawkeye.",
+        "cites": [
+          "truman-command-history"
+        ]
+      },
+      "milestones": [
+        {
+          "date": "2000-11-28",
+          "text": "Departed on its maiden deployment; its embarked air wing supported Operation Southern Watch before the ship returned in May 2001.",
+          "cites": [
+            "truman-command-history"
+          ]
+        },
+        {
+          "date": "2003-03-19",
+          "text": "Its air wing launched its first Operation Iraqi Freedom combat missions from the eastern Mediterranean.",
+          "cites": [
+            "truman-command-history"
+          ]
+        },
+        {
+          "date": "2005",
+          "text": "In September, embarked detachments from 13 helicopter squadrons and served as Joint Task Force Gulf Coast flagship during Hurricane Katrina relief.",
+          "cites": [
+            "truman-command-history"
+          ]
+        },
+        {
+          "date": "2011",
+          "text": "In February, hosted the E-2D Advanced Hawkeye’s first carrier takeoff.",
+          "cites": [
+            "truman-command-history"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "truman-command-history",
+          "title": "USS Harry S. Truman — Command History",
+          "publisher": "Naval Air Force Atlantic",
+          "url": "https://www.airlant.usff.navy.mil/Organization/Aircraft-Carriers/USS-Harry-S-Truman-CVN-75/Command-History/www.safehelpline.org/",
+          "accessed": "2026-10-29",
+          "note": "Official page opened successfully at this unusual indexed URL; canonical Command-History URL returned 403."
+        }
+      ]
+    },
+    {
+      "carrier": "uss-ronald-reagan",
+      "overview": {
+        "text": "Ronald Reagan reached the Pacific by sailing around South America in 2004, then began combat-support deployments in 2006. Its 2011 Operation Tomodachi work included helicopter refueling and relief support after Japan’s earthquake and tsunami; in 2015 it began the journey to take over the forward-deployed carrier role.",
+        "cites": [
+          "reagan-history"
+        ]
+      },
+      "milestones": [
+        {
+          "date": "2004-05-27",
+          "text": "Departed Norfolk on a voyage around South America to its new San Diego homeport.",
+          "cites": [
+            "reagan-history"
+          ]
+        },
+        {
+          "date": "2006-01-04",
+          "text": "Departed San Diego on its maiden deployment, supporting Operations Iraqi Freedom and Enduring Freedom.",
+          "cites": [
+            "reagan-history"
+          ]
+        },
+        {
+          "date": "2011",
+          "text": "In March, arrived off eastern Honshu as a helicopter refueling platform for rescue and recovery following Japan’s earthquake and tsunami.",
+          "cites": [
+            "reagan-history"
+          ]
+        },
+        {
+          "date": "2015-08-31",
+          "text": "Departed for the U.S. 7th Fleet area to assume the forward-deployed aircraft carrier role.",
+          "cites": [
+            "reagan-history"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "reagan-history",
+          "title": "History of USS Ronald Reagan (CVN 76)",
+          "publisher": "Naval Air Force, U.S. Pacific Fleet",
+          "url": "https://www.airpac.navy.mil/Organization/USS-Ronald-Reagan-CVN-76/About-Us/History/quot/",
+          "accessed": "2026-10-29",
+          "note": "Retrieved official text via web search; direct open returned HTTP 403."
+        }
+      ]
+    },
+    {
+      "carrier": "uss-george-h-w-bush",
+      "overview": {
+        "text": "George H.W. Bush supported Operations Enduring Freedom and New Dawn during its first deployment in 2011. In 2013 it became a major test platform for unmanned carrier aviation, hosting the X-47B demonstrator’s first carrier catapult launch and arrested landing.",
+        "cites": [
+          "bush-command-history",
+          "bush-ucas-timeline",
+          "bush-x47-landing"
+        ]
+      },
+      "milestones": [
+        {
+          "date": "2011-05-11",
+          "text": "Began its maiden deployment, supporting Operations Enduring Freedom and New Dawn and taking part in Exercise Saxon Warrior.",
+          "cites": [
+            "bush-command-history"
+          ]
+        },
+        {
+          "date": "2012-07-25",
+          "text": "Began a planned incremental availability at Norfolk Naval Shipyard for technical upgrades.",
+          "cites": [
+            "bush-command-history"
+          ]
+        },
+        {
+          "date": "2013-05-14",
+          "text": "Hosted the X-47B demonstrator’s first catapult launch from an aircraft carrier at sea.",
+          "cites": [
+            "bush-ucas-timeline"
+          ]
+        },
+        {
+          "date": "2013-07-10",
+          "text": "Hosted the first arrested landing by an unmanned aircraft aboard a modern aircraft carrier, using the X-47B demonstrator.",
+          "cites": [
+            "bush-x47-landing"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "bush-command-history",
+          "title": "USS George H.W. Bush — Command History",
+          "publisher": "Naval Air Force Atlantic",
+          "url": "https://www.airlant.usff.navy.mil/Organization/Aircraft-Carriers/USS-George-HW-Bush-CVN-77/Command-History/",
+          "accessed": "2026-10-29",
+          "note": "Retrieved official text via web search; direct open returned HTTP 403."
+        },
+        {
+          "id": "bush-ucas-timeline",
+          "title": "UCAS demo timeline: How unmanned carrier aviation arrived to where it is today",
+          "publisher": "Naval Air Systems Command",
+          "url": "https://www.navair.navy.mil/node/20426",
+          "accessed": "2026-10-29",
+          "note": "Official page opened successfully; dated July 22, 2013."
+        },
+        {
+          "id": "bush-x47-landing",
+          "title": "Unmanned X-47B makes historic landing aboard USS George H.W. Bush",
+          "publisher": "Naval Air Systems Command",
+          "url": "https://www.navair.navy.mil/node/20401",
+          "accessed": "2026-10-29",
+          "note": "Official page opened successfully; dated July 10, 2013."
+        }
+      ]
+    },
+    {
+      "carrier": "uss-gerald-r-ford",
+      "overview": {
+        "text": "The lead Ford-class ship was both a fleet carrier and the first seagoing installation of its new launch and arresting systems. Its post-commissioning programme progressed through first fixed-wing flight operations, shock trials and completion of weapons elevators before the inaugural Atlantic deployment in 2022.",
+        "cites": [
+          "first-flight-ops",
+          "shock-trials",
+          "weapons-elevators",
+          "first-deployment"
+        ]
+      },
+      "milestones": [
+        {
+          "date": "2009",
+          "text": "Keel laid at Newport News in November.",
+          "cites": [
+            "command-history"
+          ]
+        },
+        {
+          "date": "2013-11-09",
+          "text": "Christened at Newport News.",
+          "cites": [
+            "command-history"
+          ]
+        },
+        {
+          "date": "2017-07-22",
+          "text": "Commissioned as USS Gerald R. Ford (CVN-78).",
+          "cites": [
+            "command-history"
+          ]
+        },
+        {
+          "date": "2017-07-28",
+          "text": "An F/A-18F from Air Test and Evaluation Squadron 23 (VX-23) made the first arrested landing and catapult launch aboard the ship, using AAG and EMALS.",
+          "cites": [
+            "first-flight-ops"
+          ]
+        },
+        {
+          "date": "2021-08-08",
+          "text": "Completed Full Ship Shock Trials with the third explosive event of the series.",
+          "cites": [
+            "shock-trials"
+          ]
+        },
+        {
+          "date": "2021-12-22",
+          "text": "The eleventh and final Advanced Weapons Elevator was turned over to the crew.",
+          "cites": [
+            "weapons-elevators"
+          ]
+        },
+        {
+          "date": "2022-10-04",
+          "text": "Departed Norfolk for its first deployment, with Carrier Air Wing 8 (CVW-8) for Atlantic training alongside allies and partners.",
+          "cites": [
+            "first-deployment"
+          ]
+        },
+        {
+          "date": "2022-11-26",
+          "text": "Returned from its inaugural Atlantic deployment after exercises and port visits with allies and partners.",
+          "cites": [
+            "first-return"
+          ]
+        }
+      ],
+      "sources": [
+        {
+          "id": "command-history",
+          "title": "USS Gerald R. Ford: Command History & Facts",
+          "publisher": "Commander, Naval Air Force Atlantic",
+          "url": "https://www.airlant.usff.navy.mil/Organization/Aircraft-Carriers/USS-Gerald-R-Ford-CVN-78/Command-History/",
+          "accessed": "2026-10-29",
+          "note": "Official indexed command facts inspected; direct page returned HTTP 403. Gives CVN-78 length 1,106 ft, flight-deck width 256 ft, full-load displacement 100,000 long tons, propulsion, speed, builder and construction milestones. Some older generic Navy sheets list 1,092 ft; this profile uses the ship-specific command value."
+        },
+        {
+          "id": "first-flight-ops",
+          "title": "USS Gerald R. Ford Completes First Arrested Landing and Launch",
+          "publisher": "US Navy",
+          "url": "https://www.navy.mil/Press-Office/Press-Releases/display-pressreleases/Article/2252477/uss-gerald-r-ford-completes-first-arrested-landing-and-launch/",
+          "accessed": "2026-10-29",
+          "note": "Official indexed narrative inspected; direct page returned HTTP 403. First shipboard fixed-wing recovery and launch, 28 July 2017, with VX-23 F/A-18F using AAG and EMALS."
+        },
+        {
+          "id": "shock-trials",
+          "title": "USS Gerald R. Ford Conducts Final Explosive Event, Completing Full Ship Shock Trials",
+          "publisher": "US Navy / Program Executive Office Aircraft Carriers",
+          "url": "https://www.navy.mil/Press-Office/News-Stories/Article/2723519/uss-gerald-r-ford-conducts-final-explosive-event-completing-full-ship-shock-tri/",
+          "accessed": "2026-10-29",
+          "note": "8 August 2021 release; official indexed narrative inspected, direct page returned HTTP 403. Third explosive event completed the shock-trial series. No blast parameters or survivability threshold is inferred."
+        },
+        {
+          "id": "weapons-elevators",
+          "title": "Advanced Weapons Elevators Completed aboard USS Gerald R. Ford",
+          "publisher": "Naval Sea Systems Command",
+          "url": "https://www.navsea.navy.mil/Media/News/Article/2883053/advanced-weapons-elevators-completed-aboard-uss-gerald-r-ford-cvn-78/",
+          "accessed": "2026-10-29",
+          "note": "23 December 2021 release; official indexed narrative inspected, direct page returned HTTP 403. Eleventh and final elevator turned over on 22 December 2021; electromagnetic motors replace hydraulic systems."
+        },
+        {
+          "id": "first-deployment",
+          "title": "Gerald R. Ford Carrier Strike Group Departs for First Deployment",
+          "publisher": "US Navy / USS Gerald R. Ford Public Affairs",
+          "url": "https://www.navy.mil/Press-Office/News-Stories/article/3179931/gerald-r-ford-carrier-strike-group-departs-for-first-deployment/",
+          "accessed": "2026-10-29",
+          "note": "5 October 2022 release; official indexed narrative inspected, direct page returned HTTP 403. Departure occurred 4 October, with CVW-8 for Atlantic operations and training with NATO allies and partners."
+        },
+        {
+          "id": "first-return",
+          "title": "Ford Executes First Deployment",
+          "publisher": "Naval Aviation News / Commander, US 2nd Fleet",
+          "url": "https://navalaviationnews.navy.mil/Editorial-Staff-Tools/Article-Submission/Article-Display/Article/3238492/ford-executes-first-deployment/",
+          "accessed": "2026-10-29",
+          "note": "21 December 2022 release, indexed official narrative inspected. Inaugural deployment returned to Norfolk on 26 November 2022. No current homeport or deployment status inferred."
+        }
+      ]
+    }
+  ]
+}

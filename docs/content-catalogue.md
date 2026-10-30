@@ -69,3 +69,9 @@ carrier is refitted. Cancelled or unfinished ships and general amphibious assaul
 ships are outside this inventory. A recorded year preserves the source's limited
 date precision rather than inventing a day. `carrier-model.mjs` validates records
 at build time; source accuracy and inventory completeness still require review.
+
+
+The Nimitz and Gerald R. Ford classes also have shared, cited class profiles and
+individual histories for all eleven completed hulls in those classes. This
+enrichment lives in `src/data/carrier-profiles.json`; it does not duplicate hull
+identities or alter their inventory. See [profile scope and review evidence](plans/08-major-carrier-profiles.md).

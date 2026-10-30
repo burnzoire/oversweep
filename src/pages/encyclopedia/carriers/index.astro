@@ -1,7 +1,10 @@
 ---
 import SiteLayout from '../../../layouts/SiteLayout.astro';
+import ProfileCitations from '../../../components/encyclopedia/CarrierProfileCitations.astro';
 import CarrierModuleLink from '../../../components/encyclopedia/CarrierModuleLink.astro';
 import { carriers, carrierRoute } from '../../../data/carriers';
+import { carrierProfiles, classProfileFor } from '../../../data/carrier-profiles';
+import { carrierClassRoute } from '../../../data/carrier-profile-model.mjs';
 import carrierCover from '../../../data/carrier-cover.json';
 import { carrierAsOf, carrierDate, carrierEntryDate, carrierEntryLabel, carrierMaturity, carrierSearchText } from '../../../data/carrier-model.mjs';
 import { sitePath } from '../../../lib/paths';
@@ -23,6 +26,7 @@ const operators = [...new Set(list.flatMap((entry) => entry.operators))].sort();
       <details><summary>Ship types</summary><p>Includes fleet, light and escort carriers, aircraft-maintenance carriers, dedicated helicopter carriers, full-length aviation-deck helicopter destroyers, the Moskva class and Jeanne d’Arc. Official designations are retained. Missile cruisers with smaller helicopter facilities, including Andrea Doria, Caio Duilio and Vittorio Veneto, are excluded. General amphibious assault ships such as the Wasp class, Juan Carlos I, Trieste and Anadolu are also excluded.</p></details>
       <p><strong>{carrierMaturity}</strong> · {carriers.length} hull records · Coverage checked {carrierDate(carrierAsOf)}. Sources and any coverage limitations are listed on each record.</p>
     </section>
+    {carrierProfiles.classes.length > 0 && <section aria-labelledby="carrier-class-profiles"><h2 id="carrier-class-profiles">Class profiles</h2><p>Shared design characteristics and individual ship histories. {carrierMaturity}.</p><div class="carrier-class-cards">{carrierProfiles.classes.map((profile) => <article><h3><a href={sitePath(carrierClassRoute(profile))}>{profile.name}</a></h3><p>{profile.summary} <ProfileCitations cites={profile.summaryCites} sources={profile.sources} namespace="class" hrefPrefix={sitePath(carrierClassRoute(profile))} /></p></article>)}</div></section>}
     <form class="carrier-filter" role="search" aria-label="Find a carrier" hidden>
       <div class="carrier-search"><label for="carrier-q">Name, hull number or former name</label><input id="carrier-q" name="q" type="search" autocomplete="off" placeholder="e.g. Midway, R 11 or Vikramaditya" /></div>
       <div><label for="carrier-origin">Built / converted in</label><select id="carrier-origin" name="origin"><option value="">All countries</option>{origins.map((value) => <option value={value}>{value}</option>)}</select></div>
@@ -38,7 +42,7 @@ const operators = [...new Set(list.flatMap((entry) => entry.operators))].sort();
         <thead><tr><th scope="col">Carrier</th><th scope="col">Class</th><th scope="col">Built / converted in</th><th scope="col">Completion / commission</th><th scope="col">Operators</th></tr></thead>
         <tbody>{list.map((carrier) => <tr data-carrier data-search={carrierSearchText(carrier)} data-origin={carrier.origin} data-class={carrier.class} data-operators={JSON.stringify(carrier.operators)} data-date={carrierEntryDate(carrier)} data-name={carrier.name}>
           <th scope="row"><a href={sitePath(carrierRoute(carrier))}>{carrier.name}</a><span class="carrier-detail">{carrier.hull}</span>{carrier.aliases.length > 0 && <span class="carrier-detail">Also: {carrier.aliases.join(' · ')}</span>}</th>
-          <td>{carrier.class}</td><td>{carrier.origin}</td><td><time datetime={carrierEntryDate(carrier)}>{carrierDate(carrierEntryDate(carrier))}</time><span class="carrier-detail">{carrierEntryLabel(carrier)}</span></td><td>{carrier.operators.length ? carrier.operators.join(' · ') : 'No commissioned service'}</td>
+          <td>{classProfileFor(carrier.class) ? <a href={sitePath(carrierClassRoute(classProfileFor(carrier.class)!))}>{carrier.class}</a> : carrier.class}</td><td>{carrier.origin}</td><td><time datetime={carrierEntryDate(carrier)}>{carrierDate(carrierEntryDate(carrier))}</time><span class="carrier-detail">{carrierEntryLabel(carrier)}</span></td><td>{carrier.operators.length ? carrier.operators.join(' · ') : 'No commissioned service'}</td>
         </tr>)}</tbody>
       </table>
     </div>
