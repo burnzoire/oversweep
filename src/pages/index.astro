@@ -1,59 +1,73 @@
 ---
+import FeaturedArticle from "../components/FeaturedArticle.astro";
 import EntryCard from "../components/EntryCard.astro";
 import SiteLayout from "../layouts/SiteLayout.astro";
 import { encyclopediaCategories, manualSubjects } from "../data/catalogue";
-import { manualEntries, sectionHasContent, subjectHasContent } from "../data/availability";
+import { categoryHasContent, manualEntries, subjectHasContent } from "../data/availability";
 import { includedExperiences } from "../data/experiences";
-import { includedRecords } from "../data/encyclopedia";
 import { sitePath } from "../lib/paths";
+
+const startingEntries = [manualEntries.find(e => e.trainer), ...manualEntries.filter(e => !e.trainer).slice(0, 2)].filter((e): e is NonNullable<typeof e> => Boolean(e));
+const browseCategories = encyclopediaCategories.filter(c => categoryHasContent(c.slug));
 
 const subjectCount = manualSubjects.filter((s) => subjectHasContent(s.slug)).length;
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
-const collections = [
-  {
-    title: "Manual",
-    description: "Subject-organised modules with interactive figures, sources and knowledge checks.",
-    status: `${plural(manualEntries.length, "module")} in ${plural(subjectCount, "subject")}`,
-    path: "manual/",
-    available: sectionHasContent.manual,
-  },
-  {
-    title: "Training Library",
-    description: "Standalone exercises that let you practise what a module teaches.",
-    status: plural(includedExperiences.length, "exercise"),
-    path: "training/",
-    available: sectionHasContent.training,
-  },
-  {
-    title: "Encyclopedia",
-    description: `Aircraft, ordnance, sensors and terminology records across ${encyclopediaCategories.length} categories.`,
-    status: includedRecords.length ? plural(includedRecords.length, "record") : "Nothing published yet",
-    path: "encyclopedia/",
-    available: sectionHasContent.encyclopedia,
-  },
-];
+const trainerEntries = manualEntries.filter(entry => entry.trainer);
 ---
 
 <SiteLayout title="The Interactive Flight Reference" activeSection="home" isHomePage customHeading>
   <section class="hero" aria-labelledby="hero-title">
     <h1 id="hero-title">The Interactive Flight Reference</h1>
-    <p class="lead">Understand how it actually works. Oversweep explains carrier recoveries, air combat geometry and more with figures you can move, every claim tied to the training publication it comes from.</p>
+    <p class="lead">Understand the concepts. Learn the procedures. Practise the flying. Work through learning modules with interactive figures, then put your knowledge into practice with standalone trainers.</p>
+    <div class="hero-actions">
+      <a class="button" href={sitePath('manual/')}>Explore learning modules →</a>
+      <a class="training-link" href={sitePath('training/')}>Open the trainers →</a>
+    </div>
+    <p class="learning-status">{plural(manualEntries.length, 'module')} across {plural(subjectCount, 'subject')} · {plural(includedExperiences.length, 'exercise')}</p>
   </section>
 
-  <h2>Start here</h2>
+  <div class="section-heading"><h2>Learning modules</h2><a href={sitePath('manual/')}>All modules →</a></div>
   <div class="entry-grid">
-    {manualEntries.map((entry) => <EntryCard entry={entry} showSubject headingLevel={3} />)}
+    {startingEntries.map((entry) => <EntryCard entry={entry} showSubject headingLevel={3} />)}
   </div>
 
-  <h2>Browse the collections</h2>
-  <ul class="card-grid">
-    {collections.map((collection) => (
-      <li class:list={["collection-card", { unavailable: !collection.available }]}>
-        <h3>{collection.title}</h3>
-        <p>{collection.description}</p>
-        <p class="collection-status">{collection.status}</p>
-        {collection.available && <a href={sitePath(collection.path)}>Open the {collection.title}</a>}
-      </li>
-    ))}
-  </ul>
+  <section class="trainer-section" aria-labelledby="trainers-title">
+    <div class="section-heading"><h2 id="trainers-title">Put it into practice</h2><a href={sitePath('training/')}>All trainers →</a></div>
+    <div class="entry-grid">
+      {trainerEntries.map(entry => <EntryCard entry={entry} focus="trainer" showSubject headingLevel={3} />)}
+    </div>
+  </section>
+
+  <section class="reference-section" aria-labelledby="reference-title">
+    <h2 id="reference-title">Explore further</h2>
+    <p class="reference-intro">The encyclopedia supports your learning with aircraft, weapons, threats and locations. Discover a different article each week.</p>
+    <FeaturedArticle />
+
+    <section class="encyclopedia-browse" aria-labelledby="browse-title">
+      <h3 id="browse-title">Browse the encyclopedia</h3>
+      <ul class="browse-links">
+        {browseCategories.map(category => <li><a href={sitePath(`encyclopedia/${category.slug}/`)}>{category.title} <span aria-hidden="true">↗</span></a></li>)}
+      </ul>
+    </section>
+
+  </section>
 </SiteLayout>
+
+<style>
+  .hero { padding-block: 1rem 0; }
+  .hero h1 { max-width: 24ch; font-size: clamp(2rem, 4vw, 3.3rem); letter-spacing: -.035em; line-height: 1.08; }
+  .hero .lead { max-width: 64ch; }
+  .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.5rem; margin-top: 1.5rem; }
+  .training-link { display: inline-flex; align-items: center; min-height: 2.75rem; font-weight: 650; }
+  .learning-status { color: var(--color-muted); font-size: .85rem; margin-bottom: 2.5rem; }
+  .trainer-section { margin-block: 3rem; }
+  .reference-section { border-top: 1px solid #c8cdd2; padding-top: 1.5rem; margin-top: 3rem; }
+  .reference-intro { color: var(--color-muted); max-width: 70ch; }
+  .encyclopedia-browse { margin-block: 2rem 3rem; }
+  .browse-links { display: flex; flex-wrap: wrap; gap: .6rem; padding: 0; list-style: none; }
+  .browse-links a { display: flex; align-items: center; gap: 1.5rem; min-height: 2.75rem; padding: .5rem 1rem; border: 1px solid #c8cdd2; color: var(--color-ink); text-decoration: none; }
+  .browse-links a:hover { background: var(--color-surface); border-color: var(--color-ink); }
+  .browse-links span { color: var(--color-muted); }
+  .section-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .5rem 2rem; margin-bottom: 1rem; }
+  .section-heading h2 { margin: 0; }
+</style>

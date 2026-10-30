@@ -1,0 +1,94 @@
+---
+import schedule from '../data/featured-articles.json';
+import { featuredWeek } from '../data/featured-week.mjs';
+import { records, recordContent, recordRoute, type Photo } from '../data/encyclopedia';
+import { categoryTitle } from '../data/availability';
+import { assetPath, sitePath } from '../lib/paths';
+
+if (schedule.length !== 52 || new Set(schedule).size !== 52) throw new Error('Weekly features need 52 distinct articles');
+const features = schedule.map(id => {
+  const record = records.find(r => r.id === id && r.publication === 'published');
+  if (!record) throw new Error(`Weekly feature is not published: ${id}`);
+  const data = recordContent(record).frontmatter as { photo?: Photo; photos?: Photo[] };
+  const photo = data.photos?.[0] ?? data.photo;
+  if (!photo) throw new Error(`Weekly feature needs a credited photograph: ${id}`);
+  return { title: record.title, summary: record.summary, maturity: record.maturity,
+    category: categoryTitle(record.category), href: sitePath(recordRoute(record)),
+    photo: { ...photo, src: assetPath(photo.src) } };
+});
+const feature = features[featuredWeek() - 1];
+---
+<section class="weekly-feature" aria-labelledby="featured-title" data-weekly-feature>
+  <figure>
+    <img data-feature-image src={feature.photo.src} alt={feature.photo.alt} width={feature.photo.width} height={feature.photo.height} fetchpriority="high" style={`object-fit: ${feature.photo.fit ?? 'cover'}`} />
+    <figcaption>
+      Photo: <span data-feature-author>{feature.photo.author}</span> ·
+      <a data-feature-licence href={feature.photo.licenceUrl} hidden={!feature.photo.licenceUrl}>{feature.photo.licence}</a>
+      <span data-feature-licence-text hidden={Boolean(feature.photo.licenceUrl)}>{feature.photo.licence}</span>
+      · <a data-feature-credit href={feature.photo.sourceUrl}>Source</a>
+    </figcaption>
+  </figure>
+  <div class="feature-copy">
+    <p class="feature-kicker">From the encyclopedia · Featured this week</p>
+    <p class="feature-category" data-feature-category>{feature.category}</p>
+    <h3 id="featured-title"><a data-feature-title href={feature.href}>{feature.title}</a></h3>
+    <p class="feature-summary" data-feature-summary>{feature.summary}</p>
+    <p class="feature-maturity" data-feature-maturity>{feature.maturity}</p>
+    <a class="button" data-feature-link href={feature.href}>Explore the article <span aria-hidden="true">→</span></a>
+    <p class="feature-note">A different article every week. <a href={sitePath('encyclopedia/')}>Browse the encyclopedia</a></p>
+  </div>
+</section>
+<script type="application/json" id="weekly-feature-data" set:html={JSON.stringify(features).replace(/</g, '\\u003c')} />
+<script>
+  import { featuredWeek } from '../data/featured-week.mjs';
+  const root = document.querySelector<HTMLElement>('[data-weekly-feature]');
+  const data = document.getElementById('weekly-feature-data');
+  if (root && data?.textContent) {
+    const features = JSON.parse(data.textContent);
+    let shown = 0;
+    const update = () => {
+      const week = featuredWeek();
+      if (week === shown) return;
+      const feature = features[week - 1];
+      const image = root.querySelector<HTMLImageElement>('[data-feature-image]')!;
+      image.src = feature.photo.src;
+      image.alt = feature.photo.alt;
+      image.style.objectFit = feature.photo.fit ?? 'cover';
+      for (const [key, value] of Object.entries({ category: feature.category, title: feature.title, summary: feature.summary, maturity: feature.maturity })) {
+        root.querySelector(`[data-feature-${key}]`)!.textContent = String(value);
+      }
+      for (const key of ['title', 'link']) root.querySelector<HTMLAnchorElement>(`[data-feature-${key}]`)!.href = feature.href;
+      const credit = root.querySelector<HTMLAnchorElement>('[data-feature-credit]')!;
+      credit.href = feature.photo.sourceUrl;
+      root.querySelector('[data-feature-author]')!.textContent = feature.photo.author;
+      const licence = root.querySelector<HTMLAnchorElement>('[data-feature-licence]')!;
+      const licenceText = root.querySelector<HTMLElement>('[data-feature-licence-text]')!;
+      licence.textContent = licenceText.textContent = feature.photo.licence;
+      licence.hidden = !feature.photo.licenceUrl;
+      licenceText.hidden = Boolean(feature.photo.licenceUrl);
+      if (feature.photo.licenceUrl) licence.href = feature.photo.licenceUrl;
+      else licence.removeAttribute('href');
+      shown = week;
+    };
+    update();
+    // Also update a tab left open across the weekly boundary.
+    setInterval(update, 60000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) update(); });
+  }
+</script>
+<style>
+  .weekly-feature { display: grid; grid-template-columns: 1fr 1.4fr; margin-block: 2rem 3rem; border: 1px solid #d4d9dd; background: #f5f6f7; }
+  figure { margin: 0; min-width: 0; background: #e6e9ec; display: flex; flex-direction: column; }
+  img { display: block; width: 100%; height: 100%; min-height: 15rem; max-height: 23rem; aspect-ratio: 4 / 3; }
+  figcaption { padding: .4rem .8rem; font-size: .7rem; background: #fff; overflow-wrap: anywhere; }
+  .feature-copy { padding: clamp(1.25rem, 3vw, 2.5rem); align-self: center; min-width: 0; }
+  .feature-kicker { text-transform: uppercase; font-size: .7rem; letter-spacing: .1em; font-weight: 750; margin: 0 0 1.5rem; }
+  .feature-category { margin: 0; color: var(--color-muted); font-size: .85rem; }
+  h3 { margin: .25rem 0 1rem; font-size: clamp(1.8rem, 3vw, 2.6rem); line-height: 1.1; }
+  h3 a { color: var(--color-ink); text-decoration: none; }
+  h3 a:hover { text-decoration: underline; }
+  .feature-summary { font-size: 1.1rem; }
+  .feature-maturity, .feature-note { font-size: .8rem; color: var(--color-muted); }
+  .feature-note { margin-bottom: 0; }
+  @media (max-width: 45rem) { .weekly-feature { grid-template-columns: 1fr; } img { min-height: 0; max-height: 23rem; height: auto; } }
+</style>
