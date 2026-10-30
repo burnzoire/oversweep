@@ -3,6 +3,7 @@ import SiteLayout from '../../../layouts/SiteLayout.astro';
 import { getExperience, experienceFrame } from '../../../data/experiences';
 import { sitePath } from '../../../lib/paths';
 import Term from '../../../components/Term.astro';
+import AutorotationFigure from '../../../components/flight-fundamentals/AutorotationFigure.astro';
 const exercise = getExperience('autorotation');
 const mod = exercise.module;
 const trainerHref = sitePath(experienceFrame(exercise));
@@ -49,9 +50,13 @@ const n = cite(1), h = cite(2);
  <h3>Low and fast</h3>
  <p>Close to the ground at high speed the danger is time: the pilot may not react with a flare in time to prevent a high-speed impact. If airspeed is above the ideal autorotation speed, a pilot's instinct is usually to flare, converting speed into height and raising rotor rpm. <a href="#source-hfh">{h('7-3')}</a> The Navy text adds that flaring from high speed without letting the tail rotor strike the ground, or touching down too fast, is hard for the average pilot. <a href="#source-navweps">{n('408')}</a></p>
 
+ <AutorotationFigure kind="entry" />
+
  <h2 id="descent">The steady descent: airspeed and rotor rpm</h2>
  <p>Bank angle, density altitude, gross weight, rotor rpm, trim and airspeed all affect the rate of descent; the pilot controls it mainly with airspeed and rotor rpm. <a href="#source-hfh">{h('11-2')}</a> As in a gliding airplane, there are two speeds to know. The speed for the minimum rate of descent is the usual best autorotation speed; a faster speed, where a line from the origin touches the curve of descent rate against airspeed, gives the greatest glide distance. A helicopter autorotates at a higher speed when it is heavier or descending into a headwind. <a href="#source-navweps">{n('407')}</a> The handbook adds a slightly higher speed for heavy loads, high density altitude or gusty winds, and a slightly lower one for light loads and low density altitude. <a href="#source-hfh">{h('11-2–11-3')}</a></p>
  <p>Rotor rpm is managed with the collective. Raising it lowers rpm and lowering it raises rpm. If rpm builds too high, raise the collective just enough to bring it back into the normal range, then lower it again to hold it there; hold the increase too long and rpm can decay rapidly. <a href="#source-hfh">{h('11-3')}</a> Aft cyclic raises rpm, which a small collective increase then controls; a large collective increase makes the rpm decay fast and leads to "chasing the rpm". <a href="#source-hfh">{h('11-4')}</a> If rpm has dropped below acceptable limits, a moderately quick aft cyclic movement, which may be combined with a turn, helps rebuild it, without overspeeding the rotor. <a href="#source-hfh">{h('11-3')}</a> Heavier helicopters may need more collective to hold rpm down. <a href="#source-hfh">{h('11-2')}</a> Rpm builds whenever G is applied to the rotor, usually in a turn and in the flare. <a href="#source-hfh">{h('11-6–11-7')}</a></p>
+
+ <AutorotationFigure kind="rpm" />
 
  <h2 id="landing">Flare, level and cushion</h2>
  <p>The only energy left at the bottom to stop the descent is the kinetic energy stored in the turning rotor, and a helicopter descending fast needs more of it than one descending slowly. That is why autorotations at very low or very high airspeed are more critical than those at the minimum-descent speed. <a href="#source-hfh">{h('11-2')}</a> Enough rotational energy must remain to add collective pitch and reduce the rate of descent before the helicopter touches down. <a href="#source-navweps">{n('408')}</a></p>
@@ -61,6 +66,8 @@ const n = cite(1), h = cite(2);
   <li><strong>Cushion.</strong> Raise the collective to let the helicopter settle; this spends some of the rotor's kinetic energy slowing the descent. Touch down in a level attitude. <a href="#source-hfh">{h('11-5')}</a> Cushion the helicopter onto the surface rather than holding it off: using up all the rotor energy to stay airborne usually ends in a hard landing. <a href="#source-hfh">{h('11-5')}</a></li>
  </ol>
  <p>The timing of the flare and of the collective matters most when touching down slowly, especially with a low-inertia rotor. Too much collective too early uses up the rotor's energy and leaves little or no cushion, and a hard landing. It is generally better to accept more ground run than a harder landing at minimum groundspeed. <a href="#source-hfh">{h('11-4')}</a> After touching down, don't try to stop the ground run with aft cyclic, which can bring the main rotor blades into the tail boom. <a href="#source-hfh">{h('11-5')}</a></p>
+
+ <AutorotationFigure kind="landing" />
 
  <h2 id="errors">Common errors</h2>
  <p>The handbook lists these, among others, for the straight-in autorotation: <a href="#source-hfh">{h('11-5')}</a></p>
