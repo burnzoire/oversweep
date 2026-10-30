@@ -1,11 +1,15 @@
 ---
+import FeaturedArticle from "../components/FeaturedArticle.astro";
 import EntryCard from "../components/EntryCard.astro";
 import SiteLayout from "../layouts/SiteLayout.astro";
 import { encyclopediaCategories, manualSubjects } from "../data/catalogue";
-import { manualEntries, sectionHasContent, subjectHasContent } from "../data/availability";
+import { categoryHasContent, manualEntries, sectionHasContent, subjectHasContent } from "../data/availability";
 import { includedExperiences } from "../data/experiences";
 import { includedRecords } from "../data/encyclopedia";
 import { sitePath } from "../lib/paths";
+
+const startingEntries = [manualEntries.find(e => e.trainer), ...manualEntries.filter(e => !e.trainer).slice(0, 2)].filter((e): e is NonNullable<typeof e> => Boolean(e));
+const browseCategories = encyclopediaCategories.filter(c => categoryHasContent(c.slug));
 
 const subjectCount = manualSubjects.filter((s) => subjectHasContent(s.slug)).length;
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
@@ -37,12 +41,21 @@ const collections = [
 <SiteLayout title="The Interactive Flight Reference" activeSection="home" isHomePage customHeading>
   <section class="hero" aria-labelledby="hero-title">
     <h1 id="hero-title">The Interactive Flight Reference</h1>
-    <p class="lead">Understand how it actually works. Oversweep explains carrier recoveries, air combat geometry and more with figures you can move, every claim tied to the training publication it comes from.</p>
+    <p class="lead">Know the aircraft. Understand the systems. Practise the flying. Explore sourced reference articles and learn with interactive figures and exercises.</p>
   </section>
 
-  <h2>Start here</h2>
+  <FeaturedArticle />
+
+  <section class="encyclopedia-browse" aria-labelledby="browse-title">
+    <h2 id="browse-title">Explore the encyclopedia</h2>
+    <ul class="browse-links">
+      {browseCategories.map(category => <li><a href={sitePath(`encyclopedia/${category.slug}/`)}>{category.title} <span aria-hidden="true">↗</span></a></li>)}
+    </ul>
+  </section>
+
+  <div class="section-heading"><h2>Learn something new</h2><a href={sitePath('manual/')}>All modules →</a></div>
   <div class="entry-grid">
-    {manualEntries.map((entry) => <EntryCard entry={entry} showSubject headingLevel={3} />)}
+    {startingEntries.map((entry) => <EntryCard entry={entry} showSubject headingLevel={3} />)}
   </div>
 
   <h2>Browse the collections</h2>
@@ -57,3 +70,16 @@ const collections = [
     ))}
   </ul>
 </SiteLayout>
+
+<style>
+  .hero { padding-block: 1rem 0; }
+  .hero h1 { max-width: 24ch; font-size: clamp(2rem, 4vw, 3.3rem); letter-spacing: -.035em; line-height: 1.08; }
+  .hero .lead { max-width: 64ch; }
+  .encyclopedia-browse { margin-block: 2rem 3rem; }
+  .browse-links { display: flex; flex-wrap: wrap; gap: .6rem; padding: 0; list-style: none; }
+  .browse-links a { display: flex; align-items: center; gap: 1.5rem; min-height: 2.75rem; padding: .5rem 1rem; border: 1px solid #c8cdd2; color: var(--color-ink); text-decoration: none; }
+  .browse-links a:hover { background: var(--color-surface); border-color: var(--color-ink); }
+  .browse-links span { color: var(--color-muted); }
+  .section-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .5rem 2rem; margin-bottom: 1rem; }
+  .section-heading h2 { margin: 0; }
+</style>
