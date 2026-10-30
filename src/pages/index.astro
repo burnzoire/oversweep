@@ -1,71 +1,65 @@
 ---
 import FeaturedArticle from "../components/FeaturedArticle.astro";
 import SiteLayout from "../layouts/SiteLayout.astro";
-import { manualSubjects } from "../data/catalogue";
-import { manualEntries, subjectHasContent } from "../data/availability";
-import { includedRecords } from "../data/encyclopedia";
-import { carriers } from "../data/carriers";
+import { manualEntries } from "../data/availability";
 import { includedExperiences } from "../data/experiences";
 import { sitePath } from "../lib/paths";
-
-const subjectCount = manualSubjects.filter(s => subjectHasContent(s.slug)).length;
-const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
 ---
 
 <SiteLayout title="The Interactive Flight Reference" activeSection="home" isHomePage customHeading>
-  <div class="home-content">
-    <section class="learning" aria-labelledby="hero-title">
-      <header class="hero">
-        <p class="home-kicker">Learn. Practise. Explore.</p>
-        <h1 id="hero-title">The Interactive Flight Reference</h1>
-        <p class="lead">Build your understanding of military aviation with learning modules, interactive figures and practical trainers.</p>
-      </header>
-
-      <div class="learning-paths">
-        <section class="learning-path modules" aria-labelledby="modules-title">
-          <p class="path-kicker">01 / Learn</p>
-          <h2 id="modules-title">Learning modules</h2>
-          <p>Work through the concepts and procedures with interactive figures, knowledge checks and visible sources.</p>
-          <p class="path-count">{plural(manualEntries.length, 'module')} · {plural(subjectCount, 'subject')}</p>
-          <a class="path-link" href={sitePath('manual/')}>Explore the modules <span aria-hidden="true">→</span></a>
-        </section>
-        <section class="learning-path trainers" aria-labelledby="trainers-title">
-          <p class="path-kicker">02 / Practise</p>
-          <h2 id="trainers-title">Trainers</h2>
-          <p>Put your knowledge to work in standalone exercises, with feedback to help you improve.</p>
-          <p class="path-count">{plural(includedExperiences.length, 'exercise')}</p>
-          <a class="path-link" href={sitePath('training/')}>Open the trainers <span aria-hidden="true">→</span></a>
-        </section>
-        <section class="learning-path explore" aria-labelledby="explore-title">
-          <p class="path-kicker">03 / Explore</p>
-          <h2 id="explore-title">Encyclopedia</h2>
-          <p>Look up aircraft, weapons, threats and locations, with sources and links to related learning.</p>
-          <p class="path-count">{plural(includedRecords.length + carriers.length, 'record')}</p>
-          <a class="path-link" href={sitePath('encyclopedia/')}>Browse the encyclopedia <span aria-hidden="true">→</span></a>
-        </section>
-      </div>
-    </section>
-
-    <div class="reference">
-      <FeaturedArticle />
+  <section class="learning-intro" aria-labelledby="home-title">
+    <div class="intro-copy">
+      <p class="eyebrow">The interactive flight reference</p>
+      <h1 id="home-title">Understand flight.<br />Put it into practice.</h1>
+      <p class="introduction">Military aviation, explained through learning modules, interactive figures and practical exercises. Built for simulator pilots.</p>
+      <p class="intro-footnote">Read the explanation. Work with the figures. Test your understanding.</p>
     </div>
-  </div>
+    <nav class="learning-routes" aria-label="Start learning">
+      <a class="learning-route" href={sitePath('manual/')}>
+        <span class="route-meta">Learn · {manualEntries.length} modules</span>
+        <span class="route-title">Learning modules <span aria-hidden="true">↗</span></span>
+        <span class="route-description">Understand the principles and procedures, with interactive figures and knowledge checks.</span>
+      </a>
+      <a class="learning-route" href={sitePath('training/')}>
+        <span class="route-meta">Practise · {includedExperiences.length} exercises</span>
+        <span class="route-title">Trainers <span aria-hidden="true">↗</span></span>
+        <span class="route-description">Apply what you have learned in standalone exercises with feedback.</span>
+      </a>
+    </nav>
+  </section>
+
+  <section class="reference-section" aria-labelledby="reference-heading">
+    <header class="reference-heading">
+      <div>
+        <p class="eyebrow">Look a little closer</p>
+        <h2 id="reference-heading">From the encyclopedia</h2>
+      </div>
+      <a class="reference-browse" href={sitePath('encyclopedia/')}>Browse all reference articles <span aria-hidden="true">↗</span></a>
+    </header>
+    <FeaturedArticle />
+  </section>
 </SiteLayout>
 
 <style>
-  .home-content { padding-block: 1.5rem 3rem; }
-  .learning, .reference { min-width: 0; }
-  .hero { padding: 0; margin-bottom: 2.5rem; }
-  .home-kicker, .path-kicker { text-transform: uppercase; letter-spacing: .12em; font-size: .75rem; font-weight: 750; }
-  .home-kicker { margin: 0 0 1.25rem; color: var(--color-muted); }
-  .hero h1 { max-width: 24ch; font-size: clamp(2rem, 4vw, 3.75rem); line-height: 1.08; letter-spacing: -.035em; margin: 0 0 1.25rem; }
-  .hero .lead { max-width: 62ch; margin: 0; }
-  .learning-paths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
-  .learning-path { display: flex; flex-direction: column; padding: clamp(1.25rem, 2vw, 2rem); border: 1px solid #c8cdd2; border-top: 3px solid var(--color-ink); background: #fff; }
-  .learning-path h2 { margin: .5rem 0 1rem; font-size: 1.5rem; line-height: 1.2; }
-  .learning-path p { margin-top: 0; }
-  .path-count { font-size: .8rem; color: var(--color-muted); }
-  .path-link { display: flex; align-items: center; justify-content: space-between; gap: .75rem; min-height: 2.75rem; margin-top: auto; font-weight: 700; }
-  .reference { margin-top: 2rem; }
-  @media (max-width: 50rem) { .learning-paths { grid-template-columns: 1fr; } }
+  .learning-intro { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); padding: clamp(1.5rem, 4vw, 3.5rem); color: #f4f6f8; background: var(--color-ink); margin-block: .5rem 3.5rem; }
+  .intro-copy { align-self: center; min-width: 0; padding-block: .5rem; }
+  .eyebrow { margin: 0 0 1.5rem; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; }
+  .intro-copy .eyebrow { color: var(--color-accent); }
+  h1 { color: inherit; font-size: clamp(2.25rem, 4.3vw, 3.8rem); line-height: 1.06; letter-spacing: -.04em; max-width: 18ch; }
+  .introduction { color: #dce2e8; font-size: 1.05rem; max-width: 43ch; margin: 1.5rem 0; }
+  .intro-footnote { font-size: .8rem; color: var(--color-ink-muted); margin: 0; max-width: 40ch; }
+  .learning-routes { min-width: 0; align-self: center; }
+  .learning-route { display: block; padding-block: 1.5rem; border-top: 1px solid #56616e; color: inherit; text-decoration: none; }
+  .learning-route:last-child { border-bottom: 1px solid #56616e; }
+  .learning-route:focus-visible { outline-color: var(--color-accent); }
+  .route-meta { display: block; color: var(--color-ink-muted); text-transform: uppercase; letter-spacing: .09em; font-size: .7rem; }
+  .route-title { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-block: .5rem .65rem; font-size: clamp(1.4rem, 2.4vw, 2rem); font-weight: 650; line-height: 1.2; }
+  .route-title > span { color: var(--color-accent); font-size: 1.4rem; }
+  .learning-route:hover .route-title { text-decoration: underline; text-underline-offset: .2em; }
+  .route-description { display: block; max-width: 38ch; color: #dce2e8; font-size: .9rem; }
+  .reference-heading { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
+  .reference-heading .eyebrow { color: var(--color-muted); margin-bottom: .5rem; }
+  .reference-heading h2 { font-size: 1.6rem; letter-spacing: -.025em; margin: 0; }
+  .reference-browse { display: inline-flex; align-items: center; min-height: 2.75rem; gap: 1rem; font-size: .85rem; }
+  @media (max-width: 50rem) { .learning-intro { grid-template-columns: 1fr; gap: 2rem; } .learning-routes { width: 100%; } }
 </style>
