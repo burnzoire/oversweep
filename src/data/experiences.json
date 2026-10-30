@@ -58,7 +58,7 @@
       "title": "Autorotation Practice",
       "objective": "Understand what an engine failure does to a helicopter's rotor and the sequence that answers it, entry, steady descent, flare and touchdown, and how the right first cyclic input depends on the speed you start from; then fly it in a standalone exercise.",
       "applicability": "Single-rotor helicopters with a freewheeling unit, for military pilots of every service; each type's flight manual gives its own autorotation airspeed, rotor rpm and technique.",
-      "revision": 2,
+      "revision": 1,
       "maturity": "Drafted \u2014 not technically validated",
       "group": "Rotor wing"
     }
