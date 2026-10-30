@@ -1,5 +1,7 @@
 ---
 kind: map
+mapView:
+  bounds: [[33, 124], [43, 132]]
 sim: bms
 short: Korea
 name: "Falcon BMS: Korea"

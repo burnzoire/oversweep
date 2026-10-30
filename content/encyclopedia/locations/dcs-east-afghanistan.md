@@ -1,5 +1,7 @@
 ---
 kind: map
+mapView:
+  bounds: [[32, 67], [36.5, 71.5]]
 sim: dcs
 short: East Afghanistan
 name: "DCS: East Afghanistan"

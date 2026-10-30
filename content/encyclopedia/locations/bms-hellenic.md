@@ -1,5 +1,7 @@
 ---
 kind: map
+mapView:
+  bounds: [[34, 19], [43, 30]]
 sim: bms
 short: Hellenic
 name: "Falcon BMS: Hellenic"

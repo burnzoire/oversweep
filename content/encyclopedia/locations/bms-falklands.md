@@ -1,5 +1,7 @@
 ---
 kind: map
+mapView:
+  bounds: [[-52.6, -62], [-50.5, -57]]
 sim: bms
 short: Falklands
 name: "Falcon BMS: Falklands"

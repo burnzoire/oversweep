@@ -1,5 +1,7 @@
 ---
 kind: map
+mapView:
+  bounds: [[38, 12], [47, 24]]
 sim: falcon4
 short: Allied Force Balkans
 name: "Falcon 4.0: Allied Force – Balkans"

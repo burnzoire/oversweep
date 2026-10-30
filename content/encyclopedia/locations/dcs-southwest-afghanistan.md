@@ -1,5 +1,7 @@
 ---
 kind: map
+mapView:
+  bounds: [[29.5, 60], [35.3, 67.7]]
 sim: dcs
 short: Southwest Afghanistan
 name: "DCS: Southwest Afghanistan"

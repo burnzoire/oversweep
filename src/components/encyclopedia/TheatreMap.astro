@@ -2,19 +2,23 @@
 import type { TheatreOverview } from '../../data/encyclopedia';
 import { assetPath } from '../../lib/paths';
 interface Field { name: string; lat: number; lon: number; recordHref?: string; rows: { label: string; lines: string[] }[]; notes: string[] }
-interface Props { name: string; overview?: TheatreOverview; fields: Field[]; source: string }
-const { name, overview, fields, source } = Astro.props;
+interface Props { name: string; overview?: TheatreOverview; fields: Field[]; source: string; bounds?: [[number, number], [number, number]] }
+const { name, overview, fields, source, bounds } = Astro.props;
+const view = bounds ?? [[Math.min(...fields.map(f => f.lat)), Math.min(...fields.map(f => f.lon))], [Math.max(...fields.map(f => f.lat)), Math.max(...fields.map(f => f.lon))]];
+const center = [(view[0][0] + view[1][0]) / 2, (view[0][1] + view[1][1]) / 2];
+const osmUrl = `https://www.openstreetmap.org/#map=6/${center[0].toFixed(4)}/${center[1].toFixed(4)}`;
 ---
-<section class="theatre-map" aria-label={`${name} interactive airfield map`} data-theatre-map data-fields={JSON.stringify(fields)}>
+<section class="theatre-map" aria-label={`${name} interactive airfield map`} data-theatre-map data-fields={JSON.stringify(fields)} data-bounds={JSON.stringify(bounds)}>
   <h2>Map</h2>
   <p>Explore the map or select an airfield. Markers show runway, radio and navigation data. Present-day OpenStreetMap geography; no exact simulator terrain boundary is shown. Airfield markers follow the simulator data, including on historical maps; the basemap does not depict their historical surroundings.</p>
+  {!fields.length && <p class="map-data-note">Geographic overview only: versioned simulator airfield coordinates are not available in this catalogue for this map. No airfield markers or simulator coverage boundary are shown.</p>}
   <div class="map-tools" hidden>
-    <label>Find an airfield <select aria-label="Find an airfield"><option value="">Choose an airfield</option>{fields.map((field, i) => <option value={i}>{field.name}</option>)}</select></label>
-    <button type="button">Show all airfields</button>
+    {fields.length > 0 && <label>Find an airfield <select aria-label="Find an airfield"><option value="">Choose an airfield</option>{fields.map((field, i) => <option value={i}>{field.name}</option>)}</select></label>}
+    <button type="button">{fields.length ? 'Show all airfields' : 'Reset view'}</button>
   </div>
   <div class="map-canvas" role="region" aria-label={`${name}: pan with arrow keys; zoom using plus and minus`} hidden></div>
-  <p class="map-status" role="status">The interactive map is loading. The airfield reference table remains available below.</p>
-  <p class="map-source">Airfield overlay: <a href={source}>the same versioned simulator data as the table below</a>. <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors · ODbL</a>.</p>
+  <p class="map-status" role="status">The interactive map is loading. The OpenStreetMap link below remains available.</p>
+  <p class="map-source">{fields.length ? 'Airfield overlay:' : 'Region context:'} <a href={source}>{fields.length ? 'Versioned simulator data' : 'Map source'}</a>. <a href={osmUrl}>Open region on OpenStreetMap</a>. <a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors · ODbL</a>.</p>
   {overview && <details class="map-fallback" open>
     <summary>Static overview</summary>
     <figure class="theatre-overview">
@@ -22,7 +26,7 @@ const { name, overview, fields, source } = Astro.props;
       <figcaption>{overview.caption}<span class="credit">Map: Oversweep. © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>; <a href="https://creativecommons.org/licenses/by-sa/2.0/">static map tiles CC BY-SA 2.0</a>. <a href={assetPath(overview.src)}>Open full-size static map</a>.</span></figcaption>
     </figure>
   </details>}
-  {!overview && <noscript><p>The interactive map requires JavaScript. The airfield reference table below remains available.</p></noscript>}
+  {!overview && <noscript><p>The interactive map requires JavaScript. Use the OpenStreetMap link above; any airfield table below remains available.</p></noscript>}
 </section>
 <script>
   import 'leaflet/dist/leaflet.css';
@@ -35,10 +39,11 @@ const { name, overview, fields, source } = Astro.props;
       try {
         const L = await import('leaflet');
         const fields: Field[] = JSON.parse(root.dataset.fields!);
-        if (!fields.length) throw new Error('No positioned airfields');
+        const view: [[number, number], [number, number]] | undefined = root.dataset.bounds ? JSON.parse(root.dataset.bounds) : undefined;
+        if (!fields.length && !view) throw new Error('No map view');
         canvas.hidden = false;
         const map = L.map(canvas, { scrollWheelZoom: false, maxZoom: 14, minZoom: 2 });
-        const bounds = L.latLngBounds(fields.map(f => [f.lat, f.lon]));
+        const bounds = L.latLngBounds(view ?? fields.map(f => [f.lat, f.lon]));
         const reset = () => map.fitBounds(bounds, { padding: [30, 30], maxZoom: 7 });
         reset();
         const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -46,7 +51,7 @@ const { name, overview, fields, source } = Astro.props;
           attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>',
         });
         tiles.on('tileerror', () => {
-          status.textContent = 'Some map tiles could not load. Airfield markers and the reference table remain available.';
+          status.textContent = 'Some map tiles could not load. Use the OpenStreetMap link or any reference table below.';
           if (fallback) fallback.open = true;
         });
         tiles.addTo(map);
@@ -83,21 +88,21 @@ const { name, overview, fields, source } = Astro.props;
             icon: L.divIcon({ className: 'theatre-airfield-marker', html: '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path transform="translate(0.5 0)" fill="currentColor" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>', iconSize: [28, 28], iconAnchor: [14, 14] }),
           }).bindPopup(popup, { maxWidth: 360, maxHeight: 250, minWidth: 240 }).bindTooltip(field.name, { direction: 'top' }).addTo(map);
         });
-        const select = root.querySelector<HTMLSelectElement>('select')!;
-        select.addEventListener('change', () => {
+        const select = root.querySelector<HTMLSelectElement>('select');
+        select?.addEventListener('change', () => {
           if (select.value === '') return;
           const i = Number(select.value), field = fields[i];
           map.setView([field.lat, field.lon], 10); markers[i].openPopup();
         });
-        root.querySelector('button')!.addEventListener('click', () => { reset(); select.value = ''; map.closePopup(); });
+        root.querySelector('button')!.addEventListener('click', () => { reset(); if (select) select.value = ''; map.closePopup(); });
         root.querySelector<HTMLElement>('.map-tools')!.hidden = false;
         if (fallback) fallback.open = false;
-        status.textContent = `${fields.length} runway airfields. Drag to pan, use the zoom buttons, or choose an airfield above.`;
+        status.textContent = fields.length ? `${fields.length} runway airfields. Drag to pan, use the zoom buttons, or choose an airfield above.` : 'Geographic overview. Drag to pan or use the zoom buttons. Simulator airfield positions are not yet available.';
         new ResizeObserver(() => map.invalidateSize()).observe(canvas);
       } catch {
         canvas.hidden = true;
         if (fallback) fallback.open = true;
-        status.textContent = 'The interactive map is unavailable. Use the airfield reference table below.';
+        status.textContent = 'The interactive map is unavailable. Use the OpenStreetMap link or any reference table below.';
       }
     };
     // Request tiles only once the reader reaches this map, with normal browser caching.
