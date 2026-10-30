@@ -210,7 +210,19 @@ const deliverySources: Source[] = [
       ) : category.slug === "locations" && airfieldData ? (
         <>
           <p class="lead">Theatres, simulator maps and airfields. Browse a region or find an airfield below. An airfield with no map listed has not been checked yet.</p>
-          <nav class="theatre-jump" aria-label="Browse locations"><ul><li><a href="#airfield-index">Airfields</a></li><li><a href={sitePath('encyclopedia/locations/theatres/')}>Theatres</a></li><li><a href="#sim-airfields">Every represented airfield</a></li><li><a href="#theatres-maps">Theatres and sim maps</a></li></ul></nav>
+          <nav class="theatre-jump" aria-label="Browse locations"><ul><li><a href="#browse-theatres">Theatres</a></li><li><a href="#airfield-index">Find a location</a></li><li><a href="#sim-airfields">Every represented airfield</a></li><li><a href="#theatres-maps">Theatres and sim maps</a></li></ul></nav>
+          <section aria-labelledby="browse-theatres">
+            <h2 id="browse-theatres">Browse theatres</h2>
+            <p>Explore a region, then choose a simulator map for its setting and airfields.</p>
+            <div class="entry-grid record-grid">
+              {byTitle(airfieldData.theatres).map((x) => (
+                <RecordCard record={x.record} photo={x.data.photos[0]}>
+                  <p class="card-list"><strong>{x.maps.length} {x.maps.length === 1 ? "map" : "maps"} represented</strong></p>
+                  {x.maps.length > 0 && <ul class="card-list">{x.maps.map((m) => <li><a href={sitePath(recordRoute(m.record))}>{m.data.name}</a> <span class="cell-note">{sims[m.data.sim]}</span></li>)}</ul>}
+                </RecordCard>
+              ))}
+            </div>
+          </section>
           <h2 id="airfield-index">Find a location</h2>
           <form class="airfield-filter" role="search" aria-label="Find a location" hidden>
             <div class="filter-field filter-search">
