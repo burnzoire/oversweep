@@ -16,23 +16,32 @@ import { sitePath } from "../lib/paths";
     </div>
     <nav class="learning-routes" aria-label="Start learning">
       <a class="learning-route" href={sitePath('manual/')}>
+        <svg class="route-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 8c-4-3-8-3-13-2v20c5-1 9-1 13 2 4-3 8-3 13-2V6c-5-1-9-1-13 2Z"/><path d="M16 8v20M7 11c2-.3 4 0 6 1M7 16c2-.3 4 0 6 1M20 12c2-1 4-1.3 6-1M20 17c2-1 4-1.3 6-1"/></svg>
+        <span class="route-body">
         <span class="route-meta">Learn · {manualEntries.length} modules</span>
         <span class="route-title">Learning modules <span aria-hidden="true">↗</span></span>
         <span class="route-description">Understand the principles and procedures, with interactive figures and knowledge checks.</span>
+        </span>
       </a>
       <a class="learning-route" href={sitePath('training/')}>
+        <svg class="route-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="26" height="26" rx="4"/><circle cx="16" cy="16" r="9"/><path d="M16 7v3M7 16h3M22 16h3M10 10l2 2M22 10l-2 2M16 16l5-5M12 23h8"/><circle cx="16" cy="16" r="1"/></svg>
+        <span class="route-body">
         <span class="route-meta">Practise · {includedExperiences.length} exercises</span>
         <span class="route-title">Trainers <span aria-hidden="true">↗</span></span>
         <span class="route-description">Apply what you have learned in standalone exercises with feedback.</span>
+        </span>
       </a>
     </nav>
   </section>
 
   <section class="reference-section" aria-labelledby="reference-heading">
     <header class="reference-heading">
-      <div>
+      <div class="reference-label">
+        <svg class="reference-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="16" cy="16" r="12"/><path d="m21 11-3 7-7 3 3-7 7-3ZM16 1v3M16 28v3M1 16h3M28 16h3"/></svg>
+        <div>
         <p class="eyebrow">Look a little closer</p>
         <h2 id="reference-heading">From the encyclopedia</h2>
+        </div>
       </div>
       <a class="reference-browse" href={sitePath('encyclopedia/')}>Browse all reference articles <span aria-hidden="true">↗</span></a>
     </header>
@@ -49,7 +58,11 @@ import { sitePath } from "../lib/paths";
   .introduction { color: #dce2e8; font-size: 1.05rem; max-width: 43ch; margin: 1.5rem 0; }
   .intro-footnote { font-size: .8rem; color: var(--color-ink-muted); margin: 0; max-width: 40ch; }
   .learning-routes { min-width: 0; align-self: center; }
-  .learning-route { display: block; padding-block: 1.5rem; border-top: 1px solid #56616e; color: inherit; text-decoration: none; }
+  .learning-route { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr); gap: 1rem; padding-block: 1.5rem; border-top: 1px solid #56616e; color: inherit; text-decoration: none; }
+  .route-icon { width: 2.5rem; height: 2.5rem; color: var(--color-accent); margin-top: .15rem; }
+  .route-body { display: block; min-width: 0; }
+  .reference-label { display: flex; align-items: center; gap: 1rem; }
+  .reference-icon { width: 2.5rem; height: 2.5rem; flex: none; color: var(--color-ink); }
   .learning-route:last-child { border-bottom: 1px solid #56616e; }
   .learning-route:focus-visible { outline-color: var(--color-accent); }
   .route-meta { display: block; color: var(--color-ink-muted); text-transform: uppercase; letter-spacing: .09em; font-size: .7rem; }
