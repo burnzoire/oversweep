@@ -31,7 +31,7 @@ const feature = features[featuredWeek() - 1];
   <div class="feature-copy">
     <p class="feature-kicker">From the encyclopedia · Featured this week</p>
     <p class="feature-category" data-feature-category>{feature.category}</p>
-    <h2 id="featured-title"><a data-feature-title href={feature.href}>{feature.title}</a></h2>
+    <h3 id="featured-title"><a data-feature-title href={feature.href}>{feature.title}</a></h3>
     <p class="feature-summary" data-feature-summary>{feature.summary}</p>
     <p class="feature-maturity" data-feature-maturity>{feature.maturity}</p>
     <a class="button" data-feature-link href={feature.href}>Explore the article <span aria-hidden="true">→</span></a>
@@ -77,16 +77,16 @@ const feature = features[featuredWeek() - 1];
   }
 </script>
 <style>
-  .weekly-feature { display: grid; grid-template-columns: 1.2fr 1fr; margin-block: 2rem 3rem; border: 1px solid #d4d9dd; background: #f5f6f7; }
+  .weekly-feature { display: grid; grid-template-columns: 1fr 1.4fr; margin-block: 2rem 3rem; border: 1px solid #d4d9dd; background: #f5f6f7; }
   figure { margin: 0; min-width: 0; background: #e6e9ec; display: flex; flex-direction: column; }
-  img { display: block; width: 100%; height: 100%; min-height: 20rem; max-height: 32rem; aspect-ratio: 4 / 3; }
+  img { display: block; width: 100%; height: 100%; min-height: 15rem; max-height: 23rem; aspect-ratio: 4 / 3; }
   figcaption { padding: .4rem .8rem; font-size: .7rem; background: #fff; overflow-wrap: anywhere; }
   .feature-copy { padding: clamp(1.25rem, 3vw, 2.5rem); align-self: center; min-width: 0; }
   .feature-kicker { text-transform: uppercase; font-size: .7rem; letter-spacing: .1em; font-weight: 750; margin: 0 0 1.5rem; }
   .feature-category { margin: 0; color: var(--color-muted); font-size: .85rem; }
-  h2 { margin: .25rem 0 1rem; font-size: clamp(1.8rem, 3vw, 2.6rem); line-height: 1.1; }
-  h2 a { color: var(--color-ink); text-decoration: none; }
-  h2 a:hover { text-decoration: underline; }
+  h3 { margin: .25rem 0 1rem; font-size: clamp(1.8rem, 3vw, 2.6rem); line-height: 1.1; }
+  h3 a { color: var(--color-ink); text-decoration: none; }
+  h3 a:hover { text-decoration: underline; }
   .feature-summary { font-size: 1.1rem; }
   .feature-maturity, .feature-note { font-size: .8rem; color: var(--color-muted); }
   .feature-note { margin-bottom: 0; }

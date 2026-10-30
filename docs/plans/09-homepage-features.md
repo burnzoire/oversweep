@@ -13,9 +13,10 @@ on page load, once per minute and when returning to the tab, so GitHub Pages
 needs no weekly rebuild or scheduled job. Without JavaScript the build-time
 selection remains readable, with its original source credit and working links.
 
-The other homepage changes shorten the introduction, provide direct category
-links and show three existing modules, including a trainer-linked module. The
-full Manual and Training Library remain accessible. No new aviation claims or
+Learning is the primary homepage hierarchy: module/trainer actions in the hero,
+three learning modules, then a dedicated trainer section with launch controls.
+The weekly article and encyclopedia browsing follow as secondary supporting
+reference material. The encyclopedia image has a smaller desktop footprint. No new aviation claims or
 review-status changes are introduced.
 
 ## Annual schedule
