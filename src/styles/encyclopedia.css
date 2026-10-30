@@ -241,3 +241,9 @@
 .ency .plan-key .swatch-boundary { background: #f6f7f4; border: 1px dashed #8a8f94; }
 
 .ency [data-location][hidden], .ency [data-location-group][hidden] { display: none; }
+
+/* Theatre overviews retain the complete chart at every viewport size. */
+.ency .theatre-overview { margin: 1.5rem 0; border: 1px solid var(--color-border); }
+.ency .theatre-overview img { display: block; width: 100%; height: auto; }
+.ency .theatre-overview figcaption { padding: 0.75rem; font-size: 0.9rem; }
+.ency .theatre-overview .credit { display: block; margin-top: 0.4rem; color: var(--color-muted); }

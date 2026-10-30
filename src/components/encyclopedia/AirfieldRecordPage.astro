@@ -251,6 +251,17 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
             <PurchaseRow purchases={m.purchase} />
           </dl>
         </section>
+        {m.overview && (
+          <figure class="theatre-overview">
+            <a href={assetPath(m.overview.src)} aria-label={`Open full-size map of ${m.name}`}>
+              <img src={assetPath(m.overview.src)} width={m.overview.width} height={m.overview.height} alt={m.overview.alt} loading="lazy" decoding="async" />
+            </a>
+            <figcaption>
+              {m.overview.caption}
+              <span class="credit">Map: Oversweep. © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> (data under ODbL); <a href="https://creativecommons.org/licenses/by-sa/2.0/">map tiles CC BY-SA 2.0</a>. <a href={assetPath(m.overview.src)}>Open full-size map</a>.</span>
+            </figcaption>
+          </figure>
+        )}
         {mapTable && (
           <section class="map-airfields" aria-labelledby="map-airfields-title">
             <h2 id="map-airfields-title">Airfields</h2>
