@@ -4,8 +4,9 @@ import { checkCarrierProfiles } from "./check_carrier_profiles.mjs";
 import { fileURLToPath } from "node:url";
 
 // Generated-output checks for every registered encyclopedia record. Published
-// records must ship their page and category listing with visible maturity and
-// revision, list their sources, credit any photo, and have a content file; excluded records must
+// records must ship their page with visible maturity and revision, and a category
+// card (or a direct link for simulator maps). They must list sources, credit any
+// photo, and have a content file; excluded records must
 // not leak into normal builds. `--review` treats every entry as included.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -55,17 +56,21 @@ export async function checkRecords({ dist, records, review = false, base = "", c
       if (await read(`${route(r)}index.html`) !== null) problems.push(`${r.id} is excluded but ${route(r)}index.html was emitted.`);
       continue;
     }
+    const simMap = r.category === "locations" && /^kind: map$/m.test(await readFile(path.join(contentRoot, contentFile(r)), "utf8").catch(() => ""));
     const revision = `data-record-revision="${r.revision}"`;
     const pages = { page: await read(`${route(r)}index.html`), "category index": await read(`encyclopedia/${r.category}/index.html`) };
     const sections = {};
     for (const [name, html] of Object.entries(pages)) {
       if (html === null) { problems.push(`${r.id}: ${name} is missing.`); continue; }
+      // Simulator maps are direct links in theatre browse cards; their own pages
+      // retain the full revision and maturity checks.
+      if (name === "category index" && simMap) continue;
       const section = sections[name] = recordSection(html, r.id);
       if (!section || !section.tag.includes(revision))
         problems.push(`${r.id}: ${name} lacks the registered id or revision ${r.revision}.`);
       if (!section?.body.includes(r.maturity)) problems.push(`${r.id}: ${name} does not show maturity "${r.maturity}".`);
     }
-    if (pages["category index"] && !sections["category index"]?.body.includes(`href="${base}/${route(r)}"`))
+    if (pages["category index"] && !(simMap ? pages["category index"] : sections["category index"]?.body)?.includes(`href="${base}/${route(r)}"`))
       problems.push(`${r.id}: category index does not link to ${base}/${route(r)}.`);
     // Aircraft cards carry their era so the list's era filter can show or hide them.
     if (r.category === "aircraft" && pages["category index"] && !sections["category index"]?.tag.includes(`data-era="${r.era}"`))
@@ -82,7 +87,6 @@ export async function checkRecords({ dist, records, review = false, base = "", c
       if (!/class="record-body"[^>]*>\s*<[a-z]/.test(pages.page)) problems.push(`${r.id}: page has no record text.`);
       // Aircraft, ordnance, airfield and theatre records lead with a credited photograph (check_site checks the file ships).
       // Sim map records are exempt: product screenshots are not freely licensed.
-      const simMap = r.category === "locations" && /^kind: map$/m.test(await readFile(path.join(contentRoot, contentFile(r)), "utf8").catch(() => ""));
       // An airfield with no freely licensed photo found yet may lead with its airfield map instead.
       const airfieldMap = r.category === "locations" && /class="lesson figure-lesson airfield-plan"/.test(pages.page);
       if (["aircraft", "ordnance", "locations"].includes(r.category) && !simMap && !airfieldMap && !/<figure class="photo lead\b[^"]*"[\s\S]*?class="credit"/.test(pages.page)) problems.push(`${r.id}: page has no credited lead photo.`);

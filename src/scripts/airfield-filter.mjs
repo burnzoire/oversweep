@@ -13,9 +13,9 @@ if (form) {
   const tables = [...document.querySelectorAll('.ency .table-scroll')].filter((t) => t.querySelector('[data-airfield]'));
   const count = form.querySelector('.filter-count');
   const empty = form.querySelector('.filter-empty');
-  const fields = ['q', 'kind', 'country', 'theatre', 'map', 'service'];
+  const fields = ['q', 'country', 'theatre', 'map', 'service'];
   // Each select matches one space-separated attribute.
-  const lists = { kind: 'kind', country: 'country', theatre: 'theatres', map: 'maps', service: 'services' };
+  const lists = { country: 'country', theatre: 'theatres', map: 'maps', service: 'services' };
 
   const apply = () => {
     const query = form.elements.q.value.trim().toLowerCase();
@@ -42,6 +42,7 @@ if (form) {
       : `Matching: ${shownRecords.size} of the ${recordCount} location records${rows.length ? `, and ${shownRows} of the ${rows.length} airfields on the sim maps` : ''}.`;
     empty.hidden = shownRecords.size + shownRows > 0;
     const url = new URL(location.href);
+    url.searchParams.delete('kind');
     for (const field of fields) {
       const value = form.elements[field].value.trim();
       if (value) url.searchParams.set(field, value);

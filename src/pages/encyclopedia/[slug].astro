@@ -10,7 +10,7 @@ import { sectionHasContent } from "../../data/availability";
 import { ilsLines, navaidLines, runwayLines, towerLines, towerNote } from "../../data/map-airfield-text";
 import { airfieldCatalogue, aircraftContent, mapAirfieldAnchor, simAirfields, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, recordRoute, type Source } from "../../data/encyclopedia";
 import { sitePath } from "../../lib/paths";
-import { airfieldRoles, branches, currentUse, eras, nations, searchTerms, sims, useLabels } from "../../data/airfield-model.mjs";
+import { airfieldRoles, branches, currentUse, nations, searchTerms, sims, useLabels } from "../../data/airfield-model.mjs";
 import "../../styles/encyclopedia.css";
 
 export function getStaticPaths() {
@@ -47,11 +47,6 @@ const ordnance = ordnanceGroups
 // Airfields are one index, searchable and filtered by country, theatre, sim
 // map and service. Theatres list their sim maps under each one.
 const airfieldData = category.slug === "locations" ? airfieldCatalogue() : undefined;
-const unplacedMaps = airfieldData?.maps.filter((x) => !x.theatres.length) ?? [];
-const mapCount = (m: NonNullable<typeof airfieldData>["maps"][number]) => {
-  const here = m.airfields.filter((y) => y.coverage.status === "represented").length;
-  return `${here} ${here === 1 ? "airfield" : "airfields"} here represented, ${m.airfields.filter((y) => y.coverage.status === "absent").length} confirmed absent`;
-};
 const byTitle = <T extends { record: { title: string } }>(list: T[]) => [...list].sort((a, b) => a.record.title.localeCompare(b.record.title, "en"));
 const airfieldIndex = airfieldData ? byTitle(airfieldData.airfields).map((entry) => {
   const { record, data } = entry;
@@ -86,14 +81,6 @@ const simIndex = category.slug === "locations" && airfieldData ? simAirfields().
     },
   };
 }) : [];
-const locationFilter = (entry: NonNullable<typeof airfieldData>["theatres"][number] | NonNullable<typeof airfieldData>["maps"][number], kind: string) => ({
-  location: "", kind,
-  search: [entry.record.title, entry.record.designation, entry.record.summary, entry.data.name, "short" in entry.data ? entry.data.short : ""].join(" | ").toLowerCase(),
-  country: "",
-  theatres: ("theatres" in entry ? entry.theatres.map((t) => t.record.slug) : [entry.record.slug]).join(" "),
-  maps: ("maps" in entry ? entry.maps.map((m) => m.record.slug) : [entry.record.slug]).join(" "),
-  services: "",
-});
 const usedNations = [...new Set(airfieldIndex.map((a) => a.data.country))].sort((a, b) => nations[a].name.localeCompare(nations[b].name));
 const usedServices = Object.keys(branches).filter((b) => airfieldIndex.some((a) => a.services.includes(b as keyof typeof branches))) as (keyof typeof branches)[];
 const mapName = (x: { data: { name: string } }) => x.data.name;
@@ -210,7 +197,7 @@ const deliverySources: Source[] = [
       ) : category.slug === "locations" && airfieldData ? (
         <>
           <p class="lead">Theatres, simulator maps and airfields. Browse a region or find an airfield below. An airfield with no map listed has not been checked yet.</p>
-          <nav class="theatre-jump" aria-label="Browse locations"><ul><li><a href="#browse-theatres">Theatres</a></li><li><a href="#airfield-index">Find a location</a></li><li><a href="#sim-airfields">Every represented airfield</a></li><li><a href="#theatres-maps">Theatres and sim maps</a></li></ul></nav>
+          <nav class="theatre-jump" aria-label="Browse locations"><ul><li><a href="#browse-theatres">Theatres</a></li><li><a href="#airfield-index">Find a location</a></li><li><a href="#sim-airfields">Every represented airfield</a></li></ul></nav>
           <section aria-labelledby="browse-theatres">
             <h2 id="browse-theatres">Browse theatres</h2>
             <p>Explore a region, then choose a simulator map for its setting and airfields.</p>
@@ -229,7 +216,6 @@ const deliverySources: Source[] = [
               <label for="airfield-q">Location name, former name or identifier</label>
               <input id="airfield-q" name="q" type="search" autocomplete="off" placeholder="e.g. Isely, KLSV or Batumi" />
             </div>
-            <div class="filter-field"><label for="location-kind">Type</label><select id="location-kind" name="kind"><option value="">All locations</option><option value="airfield">Airfields</option><option value="theatre">Theatres</option><option value="map">Sim maps</option></select></div>
             <div class="filter-field">
               <label for="airfield-country">Country or territory (airfields)</label>
               <select id="airfield-country" name="country">
@@ -303,41 +289,7 @@ const deliverySources: Source[] = [
           </div>
           <p class="note">Source: each map's game data, cited on its map page: <a href="https://github.com/YoloWingPixie/dcs-world-schema">dcs-world-schema</a>, extracted by running DCS World, with <a href="https://github.com/pydcs/dcs">pydcs</a> for The Channel and for tower radios the extraction lacks. These are the game's values, not the real airfield's: runway headings are magnetic as the game computes them. The game gives TACAN channels no X or Y band; where a beacon's listed frequency settles it, the band is shown, and * marks an assumed X. A dash means the game gives none. Not for real-world navigation.</p>
           </section>
-          <section data-location-group>
-          <h2 id="theatres-maps">Theatres and sim maps</h2>
-          <p>Broad real-world regions and the simulator maps set there. Each map has its own coverage and setting.</p>
-          <nav class="theatre-jump" aria-label="Theatres">
-            <ul>{byTitle(airfieldData.theatres).map((x) => <li><a href={`#${x.record.slug}`}>{x.record.title}</a></li>)}</ul>
-          </nav>
-          {byTitle(airfieldData.theatres).map((x) => (
-            <section class="theatre-group" data-location-group aria-labelledby={x.record.slug}>
-              <h2 id={x.record.slug}>{x.record.title}</h2>
-              <div class="entry-grid record-grid">
-                <RecordCard record={x.record} photo={x.data.photos[0]} filter={locationFilter(x, "theatre")}>
-                  <p class="card-list"><strong>Airfields:</strong> {x.airfields.length ? x.airfields.map((y, i) => <>{i > 0 && ", "}<a href={sitePath(recordRoute(y.record))}>{y.data.short ?? y.record.title}</a></>) : "none recorded yet"}</p>
-                </RecordCard>
-              </div>
-              <h3>Sim maps in {x.record.title}</h3>
-              {x.maps.length ? (
-                <div class="entry-grid record-grid">
-                  {x.maps.map((y) => <RecordCard record={y.record} filter={locationFilter(y, "map")}>
-                    <p class="card-list"><strong>{sims[y.data.sim]}</strong> · {eras[y.data.setting.era]} · {mapCount(y)}</p>
-                  </RecordCard>)}
-                </div>
-              ) : <p>No sim map record is set here yet.</p>}
-            </section>
-          ))}
-          {unplacedMaps.length > 0 && (
-            <section class="theatre-group" aria-labelledby="unplaced-maps">
-              <h2 id="unplaced-maps">Sim maps not yet placed in a theatre</h2>
-              <div class="entry-grid record-grid">
-                {unplacedMaps.map((y) => <RecordCard record={y.record} filter={locationFilter(y, "map")}>
-                    <p class="card-list"><strong>{sims[y.data.sim]}</strong> · {eras[y.data.setting.era]} · {mapCount(y)}</p>
-                  </RecordCard>)}
-              </div>
-            </section>
-          )}
-          </section>
+
         </>
       ) : category.slug === "terminology" ? (
         <Glossary />
