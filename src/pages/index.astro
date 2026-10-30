@@ -1,73 +1,68 @@
 ---
 import FeaturedArticle from "../components/FeaturedArticle.astro";
-import EntryCard from "../components/EntryCard.astro";
 import SiteLayout from "../layouts/SiteLayout.astro";
-import { encyclopediaCategories, manualSubjects } from "../data/catalogue";
-import { categoryHasContent, manualEntries, subjectHasContent } from "../data/availability";
+import { manualSubjects } from "../data/catalogue";
+import { manualEntries, subjectHasContent } from "../data/availability";
 import { includedExperiences } from "../data/experiences";
 import { sitePath } from "../lib/paths";
 
-const startingEntries = [manualEntries.find(e => e.trainer), ...manualEntries.filter(e => !e.trainer).slice(0, 2)].filter((e): e is NonNullable<typeof e> => Boolean(e));
-const browseCategories = encyclopediaCategories.filter(c => categoryHasContent(c.slug));
-
-const subjectCount = manualSubjects.filter((s) => subjectHasContent(s.slug)).length;
+const subjectCount = manualSubjects.filter(s => subjectHasContent(s.slug)).length;
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
-const trainerEntries = manualEntries.filter(entry => entry.trainer);
 ---
 
 <SiteLayout title="The Interactive Flight Reference" activeSection="home" isHomePage customHeading>
-  <section class="hero" aria-labelledby="hero-title">
-    <h1 id="hero-title">The Interactive Flight Reference</h1>
-    <p class="lead">Understand the concepts. Learn the procedures. Practise the flying. Work through learning modules with interactive figures, then put your knowledge into practice with standalone trainers.</p>
-    <div class="hero-actions">
-      <a class="button" href={sitePath('manual/')}>Explore learning modules →</a>
-      <a class="training-link" href={sitePath('training/')}>Open the trainers →</a>
-    </div>
-    <p class="learning-status">{plural(manualEntries.length, 'module')} across {plural(subjectCount, 'subject')} · {plural(includedExperiences.length, 'exercise')}</p>
-  </section>
+  <div class="home-columns">
+    <section class="learning" aria-labelledby="hero-title">
+      <header class="hero">
+        <p class="home-kicker">Learn. Understand. Practise.</p>
+        <h1 id="hero-title">The Interactive<br />Flight Reference</h1>
+        <p class="lead">Build your understanding of military aviation with learning modules, interactive figures and practical trainers.</p>
+      </header>
 
-  <div class="section-heading"><h2>Learning modules</h2><a href={sitePath('manual/')}>All modules →</a></div>
-  <div class="entry-grid">
-    {startingEntries.map((entry) => <EntryCard entry={entry} showSubject headingLevel={3} />)}
-  </div>
-
-  <section class="trainer-section" aria-labelledby="trainers-title">
-    <div class="section-heading"><h2 id="trainers-title">Put it into practice</h2><a href={sitePath('training/')}>All trainers →</a></div>
-    <div class="entry-grid">
-      {trainerEntries.map(entry => <EntryCard entry={entry} focus="trainer" showSubject headingLevel={3} />)}
-    </div>
-  </section>
-
-  <section class="reference-section" aria-labelledby="reference-title">
-    <h2 id="reference-title">Explore further</h2>
-    <p class="reference-intro">The encyclopedia supports your learning with aircraft, weapons, threats and locations. Discover a different article each week.</p>
-    <FeaturedArticle />
-
-    <section class="encyclopedia-browse" aria-labelledby="browse-title">
-      <h3 id="browse-title">Browse the encyclopedia</h3>
-      <ul class="browse-links">
-        {browseCategories.map(category => <li><a href={sitePath(`encyclopedia/${category.slug}/`)}>{category.title} <span aria-hidden="true">↗</span></a></li>)}
-      </ul>
+      <div class="learning-paths">
+        <section class="learning-path modules" aria-labelledby="modules-title">
+          <p class="path-kicker">01 / Learn</p>
+          <h2 id="modules-title">Learning modules</h2>
+          <p>Work through the concepts and procedures with interactive figures, knowledge checks and visible sources.</p>
+          <p class="path-count">{plural(manualEntries.length, 'module')} · {plural(subjectCount, 'subject')}</p>
+          <a class="path-link" href={sitePath('manual/')}>Explore the modules <span aria-hidden="true">→</span></a>
+        </section>
+        <section class="learning-path trainers" aria-labelledby="trainers-title">
+          <p class="path-kicker">02 / Practise</p>
+          <h2 id="trainers-title">Trainers</h2>
+          <p>Put your knowledge to work in standalone exercises, with feedback to help you improve.</p>
+          <p class="path-count">{plural(includedExperiences.length, 'exercise')}</p>
+          <a class="path-link" href={sitePath('training/')}>Open the trainers <span aria-hidden="true">→</span></a>
+        </section>
+      </div>
     </section>
 
-  </section>
+    <aside class="reference" aria-label="Featured encyclopedia article">
+      <FeaturedArticle />
+    </aside>
+  </div>
 </SiteLayout>
 
 <style>
-  .hero { padding-block: 1rem 0; }
-  .hero h1 { max-width: 24ch; font-size: clamp(2rem, 4vw, 3.3rem); letter-spacing: -.035em; line-height: 1.08; }
-  .hero .lead { max-width: 64ch; }
-  .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.5rem; margin-top: 1.5rem; }
-  .training-link { display: inline-flex; align-items: center; min-height: 2.75rem; font-weight: 650; }
-  .learning-status { color: var(--color-muted); font-size: .85rem; margin-bottom: 2.5rem; }
-  .trainer-section { margin-block: 3rem; }
-  .reference-section { border-top: 1px solid #c8cdd2; padding-top: 1.5rem; margin-top: 3rem; }
-  .reference-intro { color: var(--color-muted); max-width: 70ch; }
-  .encyclopedia-browse { margin-block: 2rem 3rem; }
-  .browse-links { display: flex; flex-wrap: wrap; gap: .6rem; padding: 0; list-style: none; }
-  .browse-links a { display: flex; align-items: center; gap: 1.5rem; min-height: 2.75rem; padding: .5rem 1rem; border: 1px solid #c8cdd2; color: var(--color-ink); text-decoration: none; }
-  .browse-links a:hover { background: var(--color-surface); border-color: var(--color-ink); }
-  .browse-links span { color: var(--color-muted); }
-  .section-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .5rem 2rem; margin-bottom: 1rem; }
-  .section-heading h2 { margin: 0; }
+  .home-columns { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: clamp(1.5rem, 3vw, 3rem); align-items: start; padding-block: 1.5rem 3rem; }
+  .learning, .reference { min-width: 0; }
+  .hero { padding: 0; margin-bottom: 2.5rem; }
+  .home-kicker, .path-kicker { text-transform: uppercase; letter-spacing: .12em; font-size: .75rem; font-weight: 750; }
+  .home-kicker { margin: 0 0 1.25rem; color: var(--color-muted); }
+  .hero h1 { font-size: clamp(2rem, 4vw, 3.75rem); line-height: 1.08; letter-spacing: -.035em; margin: 0 0 1.25rem; }
+  .hero .lead { max-width: 50ch; margin: 0; }
+  .learning-paths { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+  .learning-path { display: flex; flex-direction: column; padding: clamp(1.25rem, 2vw, 2rem); border: 1px solid #c8cdd2; border-top: 3px solid var(--color-ink); }
+  .learning-path h2 { margin: .5rem 0 1rem; font-size: 1.5rem; line-height: 1.2; }
+  .learning-path p { margin-top: 0; }
+  .modules { color: var(--color-ink-text); background: var(--color-ink); border-color: var(--color-ink); border-top-color: var(--color-accent); }
+  .modules h2 { color: inherit; }
+  .modules .path-kicker { color: var(--color-accent); }
+  .path-count { font-size: .8rem; color: var(--color-muted); }
+  .modules .path-count { color: var(--color-ink-muted); }
+  .path-link { display: flex; align-items: center; justify-content: space-between; gap: .75rem; min-height: 2.75rem; margin-top: auto; font-weight: 700; }
+  .modules .path-link { color: var(--color-ink-text); }
+  .modules .path-link:focus-visible { outline-color: var(--color-accent); }
+  @media (max-width: 60rem) { .learning-paths { grid-template-columns: 1fr; } }
+  @media (max-width: 45rem) { .home-columns { grid-template-columns: 1fr; gap: 2.5rem; } .hero h1 { font-size: clamp(2rem, 7vw, 3rem); } }
 </style>
