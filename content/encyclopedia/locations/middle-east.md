@@ -257,15 +257,15 @@ sources:
 
 The region has seen some of the largest air battles since the Second World War. In the Yom Kippur War of October 1973, Syria attacked Israeli positions on the Golan Heights while Egypt crossed the Suez Canal; Israel pushed the Syrians back and counter-attacked towards Damascus. [[2]](#source-2) On 9 June 1982, early in the Lebanon War, the Israeli Air Force's Operation Mole Cricket 19 destroyed 29 of the 30 Syrian surface-to-air missile batteries in Lebanon's Beqaa Valley and shot down 82 to 86 aircraft, the first time a Western-equipped air force destroyed a Soviet-built SAM network. [[3]](#source-3)
 
-From 2014 a US-led coalition fought the Islamic State over Syria and Iraq in Operation Inherent Resolve; by August 2019 it had flown more than 34,000 strikes, about 80% of them by the United States. [[1]](#source-1) Russia intervened on the Syrian government's side from 2015, flying from Khmeimim, until the Assad government fell in December 2024. [[5]](#source-5)
+From 2014 a US-led coalition fought the Islamic State over Syria and Iraq in Operation Inherent Resolve; by August 2019 it had flown more than 34,000 strikes, about 80% of them by the United States. [[1]](#source-1) Russia intervened on the Syrian government's side from 2015, flying from [Khmeimim](record:khmeimim), until the Assad government fell in December 2024. [[5]](#source-5)
 
 ### Forces deployed
 
 - **[Incirlik Air Base](record:incirlik)**, Turkey: Turkish base shared with the US Air Force.
 - **[RAF Akrotiri](record:akrotiri)**, Cyprus: a British base since the 1950s, used in the Suez Crisis in 1956, for the US strike on Libya in 1986, for strikes on the Islamic State from 2014 and for the 2018 missile strikes on Syria. [[4]](#source-4)
-- **Khmeimim**, near Latakia: a Syrian air base operated by Russia under a 2015 treaty, flying Su-24, Su-25 and Su-34 strike aircraft, supplied through Russia's naval base at Tartus. [[5]](#source-5)
+- **[Khmeimim](record:khmeimim)**, near Latakia: a Syrian air base operated by Russia under a 2015 treaty, flying Su-24, [Su-25](record:su-25) and Su-34 strike aircraft, supplied through Russia's naval base at Tartus. [[5]](#source-5)
 - **US bases in Syria** for Inherent Resolve were mostly in the north-east, including the Rmelan airbase and al-Tanf in the south-east. Some, such as Harab Isk, were closed in the 2019 withdrawal. [[1]](#source-1)
-- **Carriers**: the Russian carrier Admiral Kuznetsov launched 420 sorties during the Aleppo offensive in November 2016. [[6]](#source-6) After the Hamas attack on Israel in October 2023, the US sent the Gerald R. Ford carrier strike group to the eastern Mediterranean, and later the Dwight D. Eisenhower group as well. [[7]](#source-7)
+- **Carriers**: the Russian carrier Admiral Kuznetsov launched 420 [sorties](term:sortie) during the Aleppo offensive in November 2016. [[6]](#source-6) After the Hamas attack on Israel in October 2023, the US sent the Gerald R. Ford carrier strike group to the eastern Mediterranean, and later the Dwight D. Eisenhower group as well. [[7]](#source-7)
 
 ## The Persian Gulf and the Strait of Hormuz
 
@@ -273,7 +273,7 @@ From 2014 a US-led coalition fought the Islamic State over Syria and Iraq in Ope
 
 During the Iran–Iraq War both sides attacked merchant shipping in the gulf and the Strait of Hormuz: from 1981 to 1988 Iraq made 283 attacks and Iran 168. [[8]](#source-8) From 24 July 1987 the US Navy escorted reflagged Kuwaiti tankers in Operation Earnest Will, the largest naval convoy operation since the Second World War, with Air Force AWACS overhead and Army special-operations helicopters of the 160th Special Operations Aviation Regiment, the Nightstalkers, hunting attackers. [[9]](#source-9)
 
-When the frigate USS Samuel B. Roberts struck an Iranian mine on 14 April 1988, the United States answered four days later with Operation Praying Mantis, which destroyed, damaged or sank two Iranian oil platforms, two frigates, a fast-attack craft, several armed boats and two fighters. It was the largest of the US Navy's five major surface engagements since the Second World War and saw its first exchange of anti-ship missiles with opposing ships. [[10]](#source-10) On 3 July 1988 the cruiser USS Vincennes shot down Iran Air Flight 655 shortly after it left Bandar Abbas, killing all 290 people on board; the US said the crew took the Airbus A300 for an Iranian F-14. [[11]](#source-11)
+When the frigate USS Samuel B. Roberts struck an Iranian mine on 14 April 1988, the United States answered four days later with Operation Praying Mantis, which destroyed, damaged or sank two Iranian oil platforms, two frigates, a fast-attack craft, several armed boats and two fighters. It was the largest of the US Navy's five major surface engagements since the Second World War and saw its first exchange of anti-ship missiles with opposing ships. [[10]](#source-10) On 3 July 1988 the cruiser USS Vincennes shot down Iran Air Flight 655 shortly after it left Bandar Abbas, killing all 290 people on board; the US said the crew took the Airbus A300 for an Iranian [F-14](record:f-14). [[11]](#source-11)
 
 ### Forces deployed
 
@@ -324,5 +324,5 @@ On 13 April 2024 Iran launched about 170 drones, more than 30 cruise missiles an
 
 - **Nevatim**, Negev: built from 1980 and opened in October 1983, as the Israeli Air Force moved out of its Sinai bases after the Camp David Accords. [[35]](#source-35) Its first eight F-35I Adir stealth fighters were declared operational in December 2017, and in May 2018 Israel said it had become the first country to use the F-35 in combat. No. 116 Squadron reopened there with the F-35I in November 2019. [[34]](#source-34)
 - **Ramon**, near Mitzpe Ramon in the Negev: built at the same time as Nevatim and Ovda. [[35]](#source-35)
-- **Ramat David**, Jezreel Valley: the northernmost Israeli Air Force base with fighter jets and drones, with three runways of about 2.5 km each. [[36]](#source-36)
+- **[Ramat David](record:ramat-david)**, Jezreel Valley: the northernmost Israeli Air Force base with fighter jets and drones, with three runways of about 2.5 km each. [[36]](#source-36)
 - **Hatzerim**, near Beersheba: besides operational fighter squadrons, it houses the IAF Flight Academy and the IAF Aerobatic Team. [[37]](#source-37)

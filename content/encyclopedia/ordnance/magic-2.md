@@ -44,8 +44,8 @@ sources:
 
 ## A French Sidewinder rival
 
-Matra designed the R.550 Magic in 1965 to compete with the American [Sidewinder](record:aim-9), as a lighter short-range missile to replace the heavy R.530, and made it fit the Sidewinder's launch hardware. [[1]](#source-1) A Gloster Meteor test aircraft used one to shoot down a target drone in January 1965, and the missile was in mass production from 1967 for the French Air Force and Navy. [[1]](#source-1) The Magic 2 replaced it from 1986. [[1]](#source-1) Its name is a backronym for *Missile Auto-Guidé Interception et Combat*. [[1]](#source-1)
+Matra designed the R.550 Magic in 1965 to compete with the American [Sidewinder](record:aim-9), as a lighter short-range [missile](term:guided-missile) to replace the heavy R.530, and made it fit the Sidewinder's launch hardware. [[1]](#source-1) A Gloster Meteor test aircraft used one to shoot down a target drone in January 1965, and the missile was in mass production from 1967 for the French Air Force and Navy. [[1]](#source-1) The Magic 2 replaced it from 1986. [[1]](#source-1) Its name is a backronym for *Missile Auto-Guidé Interception et Combat*. [[1]](#source-1)
 
 ## Combat
 
-On 8 October 1996 a Greek [Mirage 2000](record:m-2000c) shot down a Turkish F-16D over the Aegean with a Magic 2; the Turkish pilot died and the other crew member was rescued. [[1]](#source-1)
+On 8 October 1996 a Greek [Mirage 2000](record:m-2000c) shot down a Turkish [F-16D](record:f-16) over the Aegean with a Magic 2; the Turkish pilot died and the other crew member was rescued. [[1]](#source-1)

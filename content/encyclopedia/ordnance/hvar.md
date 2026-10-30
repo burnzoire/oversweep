@@ -47,11 +47,11 @@ sources:
 
 ## A faster rocket
 
-Rockets entered aircraft armament in the Second World War because they offered a heavy blow with no recoil, and because a rocket fired at close range was more accurate than a bomb dropped from high altitude. [[2]](#source-2) The first American 5 in aircraft rocket had a 5 in warhead on an underpowered motor only 3.25 in across. Engineers at Caltech wanted a faster rocket with a flatter trajectory, which would be easier to aim, and designed the HVAR with a full 5 in motor. It carried almost three times the propellant, and its speed gain roughly doubled. [[1]](#source-1)
+[Rockets](term:rocket) entered aircraft armament in the Second World War because they offered a heavy blow with no recoil, and because a rocket fired at close range was more accurate than a bomb dropped from high altitude. [[2]](#source-2) The first American 5 in aircraft rocket had a 5 in warhead on an underpowered motor only 3.25 in across. Engineers at Caltech wanted a faster rocket with a flatter trajectory, which would be easier to aim, and designed the HVAR with a full 5 in motor. It carried almost three times the propellant, and its speed gain roughly doubled. [[1]](#source-1)
 
 ## From Normandy to Okinawa
 
-Testing finished by D-Day, and Navy HVARs were soon airlifted to France and loaded on Ninth Air Force [P-47D](record:p-47d) Thunderbolts supporting the break-out from Normandy. [[1]](#source-1) An HVAR could penetrate 4 ft of reinforced concrete, and it was used against shipping, pillboxes, gun positions, fuel and ammunition dumps, tanks, locomotives and bunkers. After victory in Europe, Navy Corsairs and Avengers made the heaviest use of it in the Pacific. [[1]](#source-1) More than a million were made during the war. [[1]](#source-1)
+Testing finished by D-Day, and Navy HVARs were soon airlifted to France and loaded on Ninth Air Force [P-47D](record:p-47d) Thunderbolts supporting the break-out from Normandy. [[1]](#source-1) An HVAR could penetrate 4 ft of reinforced concrete, and it was used against shipping, pillboxes, gun positions, fuel and ammunition dumps, tanks, locomotives and bunkers. After victory in Europe, Navy [Corsairs](record:f4u-1d) and Avengers made the heaviest use of it in the Pacific. [[1]](#source-1) More than a million were made during the war. [[1]](#source-1)
 
 ## Korea
 

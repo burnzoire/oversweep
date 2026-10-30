@@ -71,7 +71,7 @@ Published V-601 figures vary. The S-125 article gives intercept altitudes of 100
 
 ## On the radar warning receiver
 
-In the DCS F-14, the AN/ALR-67 shows the Low Blow track radar as **3** and the Flat Face search radar as **FF**; the table identifies that radar as the P-19 used with the S-125. [[2]](#source-2) A Flat Face alone does not tell you which of the [SA-2](record:sa-2), SA-3 or [SA-5](record:sa-5) it is working with.
+In the DCS [F-14](record:f-14), the AN/ALR-67 shows the Low Blow track radar as **3** and the Flat Face search radar as **FF**; the table identifies that radar as the P-19 used with the S-125. [[2]](#source-2) A Flat Face alone does not tell you which of the [SA-2](record:sa-2), SA-3 or [SA-5](record:sa-5) it is working with.
 
 ## History
 

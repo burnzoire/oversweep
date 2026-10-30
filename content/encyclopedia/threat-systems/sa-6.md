@@ -67,7 +67,7 @@ The 1S91 **Straight Flush** is a 25 kW G/H-band radar. It acquires targets at 75
 
 ## How it engages
 
-The missile flies on command guidance, then homes semi-actively on the target lit by the 1S91's continuous-wave illuminator. [[1]](#source-1) The Army handout describes its guidance as semi-active radar. [[2]](#source-2) Propulsion is an integral rocket-ramjet: once the solid rocket motor burns out, its empty casing becomes the ramjet's combustion chamber. The warhead weighs 56 kg and top speed is about [Mach](term:mach-number) 2.8. [[1]](#source-1)
+The missile flies on command guidance, then [homes](term:homing) semi-actively on the target lit by the 1S91's continuous-wave illuminator. [[1]](#source-1) The Army handout describes its guidance as semi-active radar. [[2]](#source-2) Propulsion is an integral rocket-ramjet: once the solid rocket motor burns out, its empty casing becomes the ramjet's combustion chamber. The warhead weighs 56 kg and top speed is about [Mach](term:mach-number) 2.8. [[1]](#source-1)
 
 ## Envelope
 
@@ -75,7 +75,7 @@ The missile's effective range is 4–24 km (2.2–13 NM) and its effective altit
 
 ## On the radar warning receiver
 
-In the DCS F-14, the AN/ALR-67 shows the Straight Flush as **6**. [[3]](#source-3)
+In the DCS [F-14](record:f-14), the AN/ALR-67 shows the Straight Flush as **6**. [[3]](#source-3)
 
 ## History
 

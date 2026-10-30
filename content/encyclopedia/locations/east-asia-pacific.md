@@ -70,8 +70,8 @@ North Korea invaded South Korea on 25 June 1950. China and the Soviet Union back
 
 ### Forces deployed
 
-- **Osan Air Base (K-55)**, Pyeongtaek: the 839th Aviation Engineer Battalion, joined by the 840th and 841st, began laying its runway on 9 July 1952. [[2]](#source-2) Today it hosts the headquarters of Seventh Air Force, the air component of US Forces Korea and Combined Forces Command, and the 51st Fighter Wing, the Air Force's most forward-deployed permanently based wing, with about 48 [A-10](record:a-10)s and [F-16](record:f-16)s. [[2]](#source-2)
-- **Kunsan Air Base**: home of the 8th Fighter Wing, "The Wolf Pack", with about 45 F-16s, and of the Republic of Korea Air Force's 38th Fighter Group. With Osan it is one of the two major Air Force installations of US Forces Korea. [[3]](#source-3)
+- **Osan Air Base (K-55)**, Pyeongtaek: the 839th Aviation Engineer Battalion, joined by the 840th and 841st, began laying its runway on 9 July 1952. [[2]](#source-2) Today it hosts the headquarters of Seventh Air Force, the air component of US Forces Korea and Combined Forces Command, and the 51st Fighter Wing, the Air Force's most forward-deployed permanently based [wing](term:wing), with about 48 [A-10](record:a-10)s and [F-16](record:f-16)s. [[2]](#source-2)
+- **Kunsan Air Base**: home of the 8th Fighter Wing, "The Wolf Pack", with about 45 [F-16s](record:f-16), and of the Republic of Korea Air Force's 38th Fighter Group. With Osan it is one of the two major Air Force installations of US Forces Korea. [[3]](#source-3)
 - **Camp Humphreys**, Pyeongtaek: a US Army garrison with Desiderio Army Airfield, the busiest US Army airfield in Asia, and the 2nd Combat Aviation Brigade. The headquarters of US Forces Korea and the United Nations Command moved there by 2018, and by around 2020 it had become the largest US overseas military base. [[4]](#source-4)
 
 ## Mariana Islands

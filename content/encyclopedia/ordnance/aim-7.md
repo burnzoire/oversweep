@@ -45,10 +45,12 @@ sources:
 
 ## Riding the fighter's radar
 
-The Sparrow was the West's main beyond-visual-range missile from the late 1950s until the 1990s, used by the US Air Force, Navy and Marine Corps and many other air arms. [[1]](#source-1) The Navy's ordnance manual describes the AIM-7F/M as a supersonic, all-weather, semi-active missile. It carries no radar transmitter of its own: its target seeker receives the radar energy that the launching aircraft beams at the target and that the target reflects. [[2]](#source-2) The call for a semi-active radar shot is "[Fox](term:fox) One".
+The Sparrow was the West's main beyond-visual-range missile from the late 1950s until the 1990s, used by the US Air Force, Navy and Marine Corps and many other air arms. [[1]](#source-1) The Navy's ordnance manual describes the AIM-7F/M as a [supersonic](term:supersonic), all-weather, semi-active missile. It carries no radar transmitter of its own: its target seeker receives the radar energy that the launching aircraft beams at the target and that the target reflects. [[2]](#source-2) The call for a semi-active radar shot is "[Fox](term:fox) One".
 
 That design ties the fighter to the fight. The launching aircraft's radar has to stay pointed at the target until the missile arrives, so the pilot keeps flying toward the enemy, who may get close enough to fire a heat-seeker in the meantime. [[1]](#source-1)
 
 ## Vietnam to the Gulf
 
 Over Vietnam the Sparrow's record was disappointing. Wikipedia puts it down to unreliable missiles in a tropical climate, limited training in fighter-versus-fighter combat, and rules of engagement that mostly ruled out beyond-visual-range shots. [[1]](#source-1) The AIM-7F of 1976 brought solid-state electronics, a dual-stage motor and a larger warhead, and the AIM-7M of 1982 a new inverse monopulse seeker. In the 1991 Gulf War, 30 of 44 Sparrows fired hit their targets, and 19 of the kills were beyond visual range. [[1]](#source-1)
+
+Related entries: [AIM-120 AMRAAM](record:aim-120) and [R-27 Alamo](record:r-27).

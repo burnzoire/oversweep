@@ -42,7 +42,7 @@ sources:
 
 ## A missile for the fleet
 
-The Phoenix was built for one job: stopping massed Soviet bombers and their cruise missiles before they could reach a carrier group. [[1]](#source-1) The Navy's ordnance manual calls the AIM-54C a long-range air-intercept missile for the [F-14](record:f-14), used with its AWG-9 airborne missile control system. One aircraft can launch up to six, guided at the same time against widely separated targets, and the missile also has dogfight, anti-jamming and anti-cruise-missile capabilities. [[2]](#source-2) It is big for an air-to-air missile: 13 ft long, 15 in across and about 1,020 lb. Beyond that, the manual says, its description is classified. [[2]](#source-2)
+The Phoenix was built for one job: stopping massed Soviet bombers and their [cruise missiles](term:guided-missile) before they could reach a carrier group. [[1]](#source-1) The Navy's ordnance manual calls the AIM-54C a long-range air-intercept missile for the [F-14](record:f-14), used with its AWG-9 airborne missile control system. One aircraft can launch up to six, guided at the same time against widely separated targets, and the missile also has dogfight, anti-jamming and anti-cruise-missile capabilities. [[2]](#source-2) It is big for an [air-to-air missile](term:guided-missile): 13 ft long, 15 in across and about 1,020 lb. Beyond that, the manual says, its description is classified. [[2]](#source-2)
 
 The pairing of the Phoenix with the AWG-9 made it the first air weapon system that could engage several targets at once. Because the missile turns on its own radar for the final run, firing it was called "[Fox](term:fox) Three". [[1]](#source-1)
 

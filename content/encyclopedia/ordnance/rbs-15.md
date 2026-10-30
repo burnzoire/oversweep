@@ -42,4 +42,4 @@ The RBS 15 grew out of a 1978 Saab proposal called "RB 04 Turbo": a development 
 
 ## In the air
 
-The air-launched RBS 15F has been fired only from Swedish fighters: the [AJS 37 and AJ 37 Viggen](record:ajs-37) and the JAS 39 Gripen. [[1]](#source-1) It is a subsonic, fire-and-forget missile, and later versions have reached much longer ranges and gained the ability to attack land targets. [[1]](#source-1)
+The air-launched RBS 15F has been fired only from Swedish fighters: the [AJS 37 and AJ 37 Viggen](record:ajs-37) and the JAS 39 Gripen. [[1]](#source-1) It is a [subsonic](term:subsonic), fire-and-forget missile, and later versions have reached much longer ranges and gained the ability to attack land targets. [[1]](#source-1)

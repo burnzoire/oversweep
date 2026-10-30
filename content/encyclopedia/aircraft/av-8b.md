@@ -61,7 +61,7 @@ sources:
 
 ## The jump jet grows up
 
-The first Harriers proved that a combat jet could take off and land like a helicopter, but they paid for it. In a short take-off the US Marine Corps' AV-8A carried less than half the bomb load of the smaller A-4 Skyhawk, and over a shorter radius. [[1]](#source-1) In 1973 Hawker Siddeley and McDonnell Douglas set out to double the Harrier's payload and range, starting with a bigger Pegasus engine. Britain left the project for budget reasons in 1975, so McDonnell Douglas carried on alone and rebuilt the design as the AV-8B: a larger composite wing with an extra weapons station on each side, a raised cockpit, a new fuselage and an improved Pegasus. [[1]](#source-1) Britain rejoined in 1981, and the AV-8B first flew in November 1981. The Marines declared it ready for operations with VMA-331 in January 1985. [[1]](#source-1)
+The first Harriers proved that a combat jet could take off and land like a helicopter, but they paid for it. In a [short take-off](term:stol) the US Marine Corps' AV-8A carried less than half the bomb load of the smaller A-4 Skyhawk, and over a shorter radius. [[1]](#source-1) In 1973 Hawker Siddeley and McDonnell Douglas set out to double the Harrier's payload and range, starting with a bigger Pegasus engine. Britain left the project for budget reasons in 1975, so McDonnell Douglas carried on alone and rebuilt the design as the AV-8B: a larger composite wing with an extra weapons station on each side, a raised cockpit, a new fuselage and an improved Pegasus. [[1]](#source-1) Britain rejoined in 1981, and the AV-8B first flew in November 1981. The Marines declared it ready for operations with VMA-331 in January 1985. [[1]](#source-1)
 
 ## How a Harrier flies
 
@@ -71,7 +71,7 @@ The price was a demanding aircraft. Take-off and landing are the most dangerous 
 
 ## Night Attack and radar
 
-Upgrades gave it night-attack equipment, as the **AV-8B(NA)**, and then an APG-65 radar in the **Harrier II Plus**. [[1]](#source-1) The Night Attack aircraft fly with the uprated Pegasus F402-RR-408 of about 22,200 lb thrust. [[2]](#source-2) The gun is a 25 mm GAU-12 split between two pods under the fuselage, one holding the gun and the other its ammunition. [[1]](#source-1)
+Upgrades gave it night-attack equipment, as the **AV-8B(NA)**, and then an APG-65 radar in the **Harrier II Plus**. [[1]](#source-1) The Night Attack aircraft fly with the uprated Pegasus F402-RR-408 of about 22,200 lb thrust. [[2]](#source-2) The gun is a 25 mm [GAU-12](record:gau-12) split between two pods under the fuselage, one holding the gun and the other its ammunition. [[1]](#source-1)
 
 ## Into action
 

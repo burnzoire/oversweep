@@ -43,7 +43,7 @@ sources:
 
 ## Homing on radar
 
-The HARM is a supersonic missile that homes on the transmissions of surface-to-air radars, built to replace the [AGM-45 Shrike](record:agm-45) and the AGM-78 Standard ARM. [[1]](#source-1) It can detect, attack and destroy a radar antenna or transmitter with little input from the crew, and can pick a single target out of many emitters. [[1]](#source-1) [[2]](#source-2) A fixed antenna and seeker in the nose feed a proportional guidance system, and a smokeless dual-thrust rocket motor drives it at more than Mach 2. [[1]](#source-1) [[2]](#source-2) It is a weapon for the suppression of enemy air defences, [SEAD](term:sead).
+The HARM is a [supersonic](term:supersonic) missile that [homes](term:homing) on the transmissions of surface-to-air radars, built to replace the [AGM-45 Shrike](record:agm-45) and the AGM-78 Standard ARM. [[1]](#source-1) It can detect, attack and destroy a radar antenna or transmitter with little input from the crew, and can pick a single target out of many emitters. [[1]](#source-1) [[2]](#source-2) A fixed antenna and seeker in the nose feed a proportional guidance system, and a smokeless dual-thrust rocket motor drives it at more than [Mach](term:mach-number) 2. [[1]](#source-1) [[2]](#source-2) It is a weapon for the suppression of enemy air defences, [SEAD](term:sead).
 
 ## Three modes
 

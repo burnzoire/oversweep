@@ -62,7 +62,7 @@ sources:
 
 The Soviet Union fought in Afghanistan from December 1979 to February 1989 alongside the communist-led Afghan army against the mujahideen, who were backed above all by Pakistan and by the United States through Operation Cyclone. Most of the fighting was in the countryside, while the Soviets held the cities; between one and three million Afghans died. [[1]](#source-1)
 
-After the attacks of 11 September 2001 a US-led coalition invaded in Operation Enduring Freedom. [[2]](#source-2) The first strikes, on 7 October 2001, combined B-1, B-2 and B-52 bombers, carrier-based [F-14](record:f-14) Tomcats and [F/A-18](record:fa-18c) Hornets and Tomahawk cruise missiles from US and British ships and submarines. [[3]](#source-3) The war that followed against the Taliban insurgency became the longest in US history, and it ended when the Taliban retook the country in 2021. [[2]](#source-2)
+After the attacks of 11 September 2001 a US-led coalition invaded in Operation Enduring Freedom. [[2]](#source-2) The first [strikes](term:strike), on 7 October 2001, combined B-1, B-2 and B-52 bombers, carrier-based [F-14](record:f-14) Tomcats and [F/A-18](record:fa-18c) Hornets and Tomahawk cruise missiles from US and British ships and submarines. [[3]](#source-3) The war that followed against the Taliban insurgency became the longest in US history, and it ended when the Taliban retook the country in 2021. [[2]](#source-2)
 
 ### Forces deployed
 

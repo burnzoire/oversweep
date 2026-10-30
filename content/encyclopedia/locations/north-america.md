@@ -45,6 +45,6 @@ The range is where much of modern US air combat training took shape. Red Flag wa
 - **Creech Air Force Base**, formerly Indian Springs: flies remotely piloted aircraft on missions around the world, and is the Thunderbirds' training site and one of the range's two emergency divert fields. [[3]](#source-3)
 - **Tonopah Test Range Airport**: a 12,000 ft runway with more than fifty hangars, run by Air Combat Command. [[2]](#source-2)
 - **Groom Lake**, Area 51, on the range's north-east edge. [[1]](#source-1)
-- **Army air defence**: sites east of the range host Patriot communications exercises. [[1]](#source-1)
+- **Army [air defence](term:air-defense)**: sites east of the range host Patriot communications exercises. [[1]](#source-1)
 
 The range is landlocked, so no carriers operate in this theatre.

@@ -76,3 +76,13 @@ test('browser selection replaces stale text, photo, links, credit and maturity t
   week = 44; tick(); verify(); // Timer crosses Monday; licence link appears.
   week = 45; events.visibilitychange(); verify(); // Returning tab; link removed.
 });
+
+test('featured reading has contextual terms and paths to related content', () => {
+  for (const id of schedule) {
+    const record = records.find(r => r.id === id);
+    const text = readFileSync(new URL(`../../content/encyclopedia/${record.category}/${record.slug}.md`, import.meta.url), 'utf8');
+    const body = text.split('---').slice(2).join('---');
+    assert.match(body, /\]\(term:[^)]+\)/, `${id}: glossary context`);
+    assert.match(body, /\]\((?:record:|https:\/\/www\.oversweep\.com\/manual\/)/, `${id}: onward reading`);
+  }
+});

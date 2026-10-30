@@ -42,4 +42,4 @@ The GAU-8 was developed alongside the A-X competition that produced the [A-10](r
 
 ## The numbers
 
-The gun alone weighs 620 lb, but with its drum, feed and a full load of ammunition the system weighs 4,029 lb and runs 19 ft from muzzle to the back of the ammunition system. The drum holds up to 1,174 rounds, and two independent hydraulic systems drive it. [[1]](#source-1) Its armour-piercing incendiary rounds leave the barrel at about 1,013 m/s. [[1]](#source-1) Some of its technology went into the 25 mm [GAU-12](record:gau-12) of the AV-8B Harrier II. [[1]](#source-1)
+The gun alone weighs 620 lb, but with its drum, feed and a full load of ammunition the system weighs 4,029 lb and runs 19 ft from muzzle to the back of the ammunition system. The drum holds up to 1,174 rounds, and two independent hydraulic systems drive it. [[1]](#source-1) Its armour-piercing incendiary rounds leave the barrel at about 1,013 m/s. [[1]](#source-1) Some of its technology went into the 25 mm [GAU-12](record:gau-12) of the [AV-8B Harrier II](record:av-8b). [[1]](#source-1)
