@@ -3,6 +3,8 @@ import FeaturedArticle from "../components/FeaturedArticle.astro";
 import SiteLayout from "../layouts/SiteLayout.astro";
 import { manualSubjects } from "../data/catalogue";
 import { manualEntries, subjectHasContent } from "../data/availability";
+import { includedRecords } from "../data/encyclopedia";
+import { carriers } from "../data/carriers";
 import { includedExperiences } from "../data/experiences";
 import { sitePath } from "../lib/paths";
 
@@ -11,11 +13,11 @@ const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
 ---
 
 <SiteLayout title="The Interactive Flight Reference" activeSection="home" isHomePage customHeading>
-  <div class="home-columns">
+  <div class="home-content">
     <section class="learning" aria-labelledby="hero-title">
       <header class="hero">
-        <p class="home-kicker">Learn. Understand. Practise.</p>
-        <h1 id="hero-title">The Interactive<br />Flight Reference</h1>
+        <p class="home-kicker">Learn. Practise. Explore.</p>
+        <h1 id="hero-title">The Interactive Flight Reference</h1>
         <p class="lead">Build your understanding of military aviation with learning modules, interactive figures and practical trainers.</p>
       </header>
 
@@ -34,35 +36,36 @@ const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
           <p class="path-count">{plural(includedExperiences.length, 'exercise')}</p>
           <a class="path-link" href={sitePath('training/')}>Open the trainers <span aria-hidden="true">→</span></a>
         </section>
+        <section class="learning-path explore" aria-labelledby="explore-title">
+          <p class="path-kicker">03 / Explore</p>
+          <h2 id="explore-title">Encyclopedia</h2>
+          <p>Look up aircraft, weapons, threats and locations, with sources and links to related learning.</p>
+          <p class="path-count">{plural(includedRecords.length + carriers.length, 'record')}</p>
+          <a class="path-link" href={sitePath('encyclopedia/')}>Browse the encyclopedia <span aria-hidden="true">→</span></a>
+        </section>
       </div>
     </section>
 
-    <aside class="reference" aria-label="Featured encyclopedia article">
+    <div class="reference">
       <FeaturedArticle />
-    </aside>
+    </div>
   </div>
 </SiteLayout>
 
 <style>
-  .home-columns { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: clamp(1.5rem, 3vw, 3rem); align-items: start; padding-block: 1.5rem 3rem; }
+  .home-content { padding-block: 1.5rem 3rem; }
   .learning, .reference { min-width: 0; }
   .hero { padding: 0; margin-bottom: 2.5rem; }
   .home-kicker, .path-kicker { text-transform: uppercase; letter-spacing: .12em; font-size: .75rem; font-weight: 750; }
   .home-kicker { margin: 0 0 1.25rem; color: var(--color-muted); }
-  .hero h1 { font-size: clamp(2rem, 4vw, 3.75rem); line-height: 1.08; letter-spacing: -.035em; margin: 0 0 1.25rem; }
-  .hero .lead { max-width: 50ch; margin: 0; }
-  .learning-paths { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
-  .learning-path { display: flex; flex-direction: column; padding: clamp(1.25rem, 2vw, 2rem); border: 1px solid #c8cdd2; border-top: 3px solid var(--color-ink); }
+  .hero h1 { max-width: 24ch; font-size: clamp(2rem, 4vw, 3.75rem); line-height: 1.08; letter-spacing: -.035em; margin: 0 0 1.25rem; }
+  .hero .lead { max-width: 62ch; margin: 0; }
+  .learning-paths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
+  .learning-path { display: flex; flex-direction: column; padding: clamp(1.25rem, 2vw, 2rem); border: 1px solid #c8cdd2; border-top: 3px solid var(--color-ink); background: #fff; }
   .learning-path h2 { margin: .5rem 0 1rem; font-size: 1.5rem; line-height: 1.2; }
   .learning-path p { margin-top: 0; }
-  .modules { color: var(--color-ink-text); background: var(--color-ink); border-color: var(--color-ink); border-top-color: var(--color-accent); }
-  .modules h2 { color: inherit; }
-  .modules .path-kicker { color: var(--color-accent); }
   .path-count { font-size: .8rem; color: var(--color-muted); }
-  .modules .path-count { color: var(--color-ink-muted); }
   .path-link { display: flex; align-items: center; justify-content: space-between; gap: .75rem; min-height: 2.75rem; margin-top: auto; font-weight: 700; }
-  .modules .path-link { color: var(--color-ink-text); }
-  .modules .path-link:focus-visible { outline-color: var(--color-accent); }
-  @media (max-width: 60rem) { .learning-paths { grid-template-columns: 1fr; } }
-  @media (max-width: 45rem) { .home-columns { grid-template-columns: 1fr; gap: 2.5rem; } .hero h1 { font-size: clamp(2rem, 7vw, 3rem); } }
+  .reference { margin-top: 2rem; }
+  @media (max-width: 50rem) { .learning-paths { grid-template-columns: 1fr; } }
 </style>
