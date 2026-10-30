@@ -1,62 +1,74 @@
 # Theatre overview maps — Syria first
 
-Owner request: apply the approved OpenStreetMap Syria prototype now; other maps
-belong in subsequent focused PRs. Interactive overlays are outside this change.
+Owner request: embed an interactive OpenStreetMap map on DCS: Syria, with airfield
+links, and retain the approved static prototype as a fallback. Remaining simulator
+maps belong in subsequent focused PRs.
 
-## Plan and implementation
+## Implementation
 
-Add an optional typed overview to simulator map records, render it above the
-airfield table, and supply the approved Syria PNG. Preserve the entire image on
-small screens and link to its full resolution. Other records render unchanged.
-The image has 22 labelled runway airfields and dots for other runway airfields.
+The optional overview field enables `TheatreMap.astro` for Syria only. Leaflet
+1.9.4 is bundled locally through npm; the browser requests OSM standard tiles only
+when the reader reaches the map. Native browser caching and Referer are retained;
+there is no tile prefetching, proxy, archive or offline feature. Visible attribution
+links to OSM's copyright/ODbL page. The muted tile treatment leaves overlays intact.
 
-## Provenance and limitations
+Markers use finite WGS84 coordinates from the same versioned data as the existing
+Syria table, not airport coordinates from OSM. Only runway airfields are included.
+Each popup links its simulator table row; a full encyclopedia entry is linked only
+where the existing catalogue explicitly associates one with that in-sim name.
+The native airfield selector provides an alternative to finding a marker. Controls
+support pan/zoom and reset; scroll-wheel zoom is disabled to preserve page scroll.
 
-Asset: `public/encyclopedia/maps/dcs-syria-overview.png` (1800 × 1639).
-Created for and visually approved by the owner on 30 October 2026.
-The muted basemap uses OpenStreetMap standard raster tiles fetched for the single
-requested viewport at zoom 7 (24 tiles), with visible attribution embedded in the
-image. No tile archive or offline map feature is included. OSM data is ODbL;
-standard cartography tiles are CC BY-SA 2.0. The resulting adapted map image retains
-CC BY-SA 2.0 attribution; repository MIT licensing does not supersede these rights.
+The static map is visible without JavaScript and collapses after initialization.
+It remains expandable and reopens if tile loading fails. Initialization errors hide
+the failed canvas and leave the static overview and airfield table available.
+The map height adapts to the viewport; markers are keyboard-focusable and popup
+text is constructed with DOM nodes rather than interpolated HTML.
 
+## Sources and limitations
+
+The interactive overlay uses `src/data/map-airfields/dcs-syria.json`, which cites
+DCS World 2.9.30.28536 and the pinned dcs-world-schema extraction. The on-page source
+link points to that same record's source. OSM supplies modern geography, not
+historical simulator geography or political control. The viewport fits the
+positioned runway fields and does not claim an exact DCS terrain boundary.
+Existing content maturity remains unchanged.
+
+- https://leafletjs.com/examples/quick-start/
 - https://www.openstreetmap.org/copyright
 - https://operations.osmfoundation.org/policies/tiles/
+
+Static fallback: `public/encyclopedia/maps/dcs-syria-overview.png` (1800 × 1639),
+created for and visually approved by the owner on 30 October 2026. Its muted OSM
+standard tiles were fetched for the single requested viewport at zoom 7 (24 tiles).
+OSM data is ODbL; standard cartography tiles are CC BY-SA 2.0. The adapted static
+image retains attribution; repository MIT licensing does not supersede it.
+Static prototype airfield positions came from the pydcs Syria airport/projection
+master snapshot available during creation, not a pinned DCS release, and may
+differ from the interactive overlay/table. That limitation is visible beside it.
+
 - https://creativecommons.org/licenses/by-sa/2.0/
 - https://github.com/pydcs/dcs/tree/master/dcs/terrain/syria
 
-Airfield positions were read from the pydcs Syria airport export and converted
-from its transverse Mercator projection to WGS84. The prototype used the upstream
-master snapshot available during creation, not a pinned DCS release. It is a
-visual overview, not a navigation chart or independently validated terrain map.
-The current page's airfield table remains authoritative for its own cited version.
-The geographic viewport is illustrative, not the verified DCS terrain boundary.
-The basemap is modern; no historical accuracy or current political control is
-asserted. These limits are stated beside the image. Existing content maturity
-is unchanged.
+## Subsequent PRs
 
-## Later PRs
-
-Apply this approach to remaining simulator maps in subsequent PRs, checking each
-map's coordinates, extent, version and era before adding its overview. Do not
-reuse Syria's bounds or imply modern OSM features existed in historical settings.
-Keep simulator airfield positions separate from the geographic basemap so future
-clickable overlays can link existing encyclopedia records.
+Apply this interactive approach to remaining simulator maps in separate PRs,
+checking each map's coordinates, sources, extent and era. Do not reuse Syria's
+bounds or imply modern OSM features existed in historical settings.
 
 ## Verification
 
-- `npm run check`: 220 tests passed, Astro zero errors/warnings, TypeScript and
-  production build/output checks passed (518 pages).
-- `npm run check:review`: passed at `/oversweep`; inspected emitted Syria HTML
-  to verify the prefixed image and full-size links. Restored production output.
-- `python3 scripts/check_docs.py`: passed; `git diff --check`: passed.
-- The approved image was visually inspected. Independent fresh-context agent
-  `review_syria` inspected the complete implementation and PNG: no blockers;
-  base paths, dimensions, alt text, responsive rules and attribution checked.
-  This was implementation review, not aviation validation or legal advice.
-- Local checks ran on available Node 24.22.1, outside the repository's supported
-  Node 22 range; CI on the configured version remains necessary.
-- Connected-browser setup did not respond during this session. Rendered page
-  desktop/tablet/mobile and keyboard interaction checks were not completed.
-  Responsive styling preserves the full image and the full-size link is a native
-  focusable anchor, but these are code observations, not browser-test results.
+- `npm run check`: 220 tests passed; Astro zero errors/warnings; TypeScript,
+  production build (518 pages) and output checks passed.
+- `npm run check:review`: passed under `/oversweep`.
+- Generated HTML inspection checks marker coordinates and table anchors, existing
+  record destinations, Syria-only activation and base-prefixed fallback links.
+- `python3 scripts/check_docs.py` and `git diff --check`: passed.
+- Independent fresh-context agent `review_syria` reviewed the interactive diff,
+  source data flow, popup safety, fallback, OSM usage and accessibility hooks;
+  no blocking findings. No independent aviation validation is claimed.
+- Local checks use available Node 24.22.1, outside the supported Node 22 range;
+  configured CI remains necessary.
+- Connected-browser setup timed out; the fallback browser could not reach the
+  running local preview server (connection refused). Rendered desktop/tablet/mobile,
+  live tile loading, keyboard and popup interactions remain unverified in-browser.
