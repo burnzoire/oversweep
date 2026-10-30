@@ -1,13 +1,13 @@
 ---
 import type { TheatreOverview } from '../../data/encyclopedia';
 import { assetPath } from '../../lib/paths';
-interface Field { name: string; lat: number; lon: number; href: string; recordHref?: string }
+interface Field { name: string; lat: number; lon: number; recordHref?: string; rows: { label: string; lines: string[] }[]; notes: string[] }
 interface Props { name: string; overview: TheatreOverview; fields: Field[]; source: string }
 const { name, overview, fields, source } = Astro.props;
 ---
 <section class="theatre-map" aria-label={`${name} interactive airfield map`} data-theatre-map data-fields={JSON.stringify(fields)}>
   <h2>Map</h2>
-  <p>Explore the map or select an airfield. Markers open its reference links. Present-day OpenStreetMap geography; no exact simulator terrain boundary is shown.</p>
+  <p>Explore the map or select an airfield. Markers show runway, radio and navigation data. Present-day OpenStreetMap geography; no exact simulator terrain boundary is shown.</p>
   <div class="map-tools" hidden>
     <label>Find an airfield <select aria-label="Find an airfield"><option value="">Choose an airfield</option>{fields.map((field, i) => <option value={i}>{field.name}</option>)}</select></label>
     <button type="button">Show all airfields</button>
@@ -25,7 +25,7 @@ const { name, overview, fields, source } = Astro.props;
 </section>
 <script>
   import 'leaflet/dist/leaflet.css';
-  interface Field { name: string; lat: number; lon: number; href: string; recordHref?: string }
+  interface Field { name: string; lat: number; lon: number; recordHref?: string; rows: { label: string; lines: string[] }[]; notes: string[] }
   for (const root of document.querySelectorAll<HTMLElement>('[data-theatre-map]')) {
     const start = async () => {
       const status = root.querySelector<HTMLElement>('.map-status')!;
@@ -51,20 +51,36 @@ const { name, overview, fields, source } = Astro.props;
         tiles.addTo(map);
         const markers = fields.map(field => {
           const popup = document.createElement('div');
-          const title = document.createElement('strong');
-          title.textContent = field.name;
+          popup.className = 'airfield-popup';
+          popup.tabIndex = 0;
+          popup.setAttribute('role', 'region');
+          popup.setAttribute('aria-label', `${field.name} airfield data`);
+          popup.addEventListener('keydown', event => {
+            if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End'].includes(event.key)) event.stopPropagation();
+          });
+          const title = document.createElement('h3');
+          if (field.recordHref) {
+            const link = document.createElement('a');
+            link.href = field.recordHref; link.textContent = field.name; title.append(link);
+          } else title.textContent = field.name;
           popup.append(title);
-          const addLink = (href: string, label: string) => {
-            const p = document.createElement('p');
-            const a = document.createElement('a');
-            a.href = href; a.textContent = label; p.append(a); popup.append(p);
-          };
-          if (field.recordHref) addLink(field.recordHref, 'Open airfield entry');
-          addLink(field.href, 'View simulator reference');
+          const data = document.createElement('dl');
+          for (const row of field.rows) {
+            const label = document.createElement('dt'); label.textContent = row.label;
+            const value = document.createElement('dd');
+            for (const line of row.lines.length ? row.lines : ['—']) {
+              const item = document.createElement('div'); item.textContent = line; value.append(item);
+            }
+            data.append(label, value);
+          }
+          popup.append(data);
+          for (const note of field.notes) {
+            const p = document.createElement('p'); p.className = 'popup-note'; p.textContent = note; popup.append(p);
+          }
           return L.marker([field.lat, field.lon], {
             title: field.name, alt: field.name, keyboard: true,
-            icon: L.divIcon({ className: 'theatre-airfield-marker', html: '<span aria-hidden="true">✈</span>', iconSize: [28, 28], iconAnchor: [14, 14] }),
-          }).bindPopup(popup).bindTooltip(field.name, { direction: 'top' }).addTo(map);
+            icon: L.divIcon({ className: 'theatre-airfield-marker', html: '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path transform="translate(0.5 0)" fill="currentColor" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>', iconSize: [28, 28], iconAnchor: [14, 14] }),
+          }).bindPopup(popup, { maxWidth: 360, maxHeight: 250, minWidth: 240 }).bindTooltip(field.name, { direction: 'top' }).addTo(map);
         });
         const select = root.querySelector<HTMLSelectElement>('select')!;
         select.addEventListener('change', () => {
@@ -95,11 +111,18 @@ const { name, overview, fields, source } = Astro.props;
   .theatre-map .map-tools { display: flex; flex-wrap: wrap; align-items: end; gap: 0.75rem; margin-bottom: 0.75rem; }
   .theatre-map .map-tools[hidden], .theatre-map .map-canvas[hidden] { display: none; }
   .theatre-map .map-tools label { display: grid; gap: 0.3rem; max-width: 100%; }
-  .theatre-map select { max-width: 100%; padding: 0.5rem; font: inherit; }
-  .theatre-map button { padding: 0.5rem 0.75rem; font: inherit; cursor: pointer; }
+  .theatre-map .map-tools select { width: 100%; max-width: 100%; }
+  .theatre-map .map-tools select, .theatre-map .map-tools button { box-sizing: border-box; height: 2.75rem; min-height: 2.75rem; margin: 0; padding: 0.4rem 0.75rem; border: 1px solid var(--color-text); border-radius: 0; background: #fff; font: inherit; line-height: 1.2; }
+  .theatre-map .map-tools button { cursor: pointer; white-space: nowrap; }
   .theatre-map .map-canvas { height: clamp(360px, 65vh, 640px); border: 1px solid var(--color-border); isolation: isolate; }
   .theatre-map .leaflet-tile-pane { filter: grayscale(0.85) saturate(0.3); }
-  .theatre-map .theatre-airfield-marker { display: grid; place-items: center; border: 2px solid #214b59; border-radius: 50%; background: #fff; color: #214b59; font-size: 18px; }
+  .theatre-map .theatre-airfield-marker { display: flex; align-items: center; justify-content: center; padding: 0; line-height: 0; border: 2px solid #214b59; border-radius: 50%; background: #fff; color: #214b59; font-size: 18px; }
+  .theatre-map .theatre-airfield-marker svg { display: block; width: 18px; height: 18px; flex: none; }
+  .theatre-map .airfield-popup h3 { margin: 0 0 0.6rem; font-size: 1rem; line-height: 1.3; }
+  .theatre-map .airfield-popup dl { display: grid; grid-template-columns: minmax(0, 1fr); margin: 0; font-size: 0.85rem; line-height: 1.4; }
+  .theatre-map .airfield-popup dt { margin-top: 0.5rem; font-weight: 700; }
+  .theatre-map .airfield-popup dd { margin: 0; overflow-wrap: anywhere; }
+  .theatre-map .airfield-popup .popup-note { margin: 0.6rem 0 0; font-size: 0.75rem; }
   .theatre-map .theatre-airfield-marker:focus-visible { outline: 3px solid #111; outline-offset: 3px; }
   .theatre-map .map-source, .theatre-map .map-status { font-size: 0.9rem; }
   .theatre-map .map-fallback summary { cursor: pointer; }

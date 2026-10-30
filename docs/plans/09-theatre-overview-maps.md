@@ -14,8 +14,11 @@ links to OSM's copyright/ODbL page. The muted tile treatment leaves overlays int
 
 Markers use finite WGS84 coordinates from the same versioned data as the existing
 Syria table, not airport coordinates from OSM. Only runway airfields are included.
-Each popup links its simulator table row; a full encyclopedia entry is linked only
-where the existing catalogue explicitly associates one with that in-sim name.
+Each popup displays the table's coordinates, elevation, runways, tower radios,
+navaids and ILS using the same formatters. Its name links to the full encyclopedia
+entry only where the catalogue explicitly associates one with that in-sim name;
+otherwise the name is plain text. There is no popup link to the table. Magnetic
+heading, assumed-band and radio-fallback notes accompany the relevant data.
 The native airfield selector provides an alternative to finding a marker. Controls
 support pan/zoom and reset; scroll-wheel zoom is disabled to preserve page scroll.
 
@@ -72,3 +75,21 @@ bounds or imply modern OSM features existed in historical settings.
 - Connected-browser setup timed out; the fallback browser could not reach the
   running local preview server (connection refused). Rendered desktop/tablet/mobile,
   live tile loading, keyboard and popup interactions remain unverified in-browser.
+
+## Popup and alignment follow-up
+
+After the initial PR merged, the owner supplied a screenshot showing icon and
+control alignment problems and requested the table data inside each popup.
+The marker now uses a fixed-size centred SVG instead of a font-dependent aircraft
+glyph. The dropdown and reset button share explicit heights, line heights, border
+and padding rules. Popups use linked names and compact definition lists, with a
+scrollable height limit for dense records. The data region is keyboard-focusable;
+scroll keys retain native scrolling without moving the map. Text is still built with safe DOM nodes.
+No source data, navigation values or content maturity were changed.
+
+Follow-up verification: all 220 tests and production checks pass. Generated-page
+inspection confirms all 80 payloads match the displayed table text, Akrotiri links
+to its real entry, and no table URLs remain in marker payloads. The review build
+passes at `/oversweep`; independent implementation review and whitespace/docs
+checks cover this follow-up. Browser rendering remains unverified because the
+available browser could not reach the local server during the original session.
