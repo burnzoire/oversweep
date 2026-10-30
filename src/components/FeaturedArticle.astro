@@ -19,6 +19,7 @@ const features = schedule.map(id => {
 const feature = features[featuredWeek() - 1];
 ---
 <section class="weekly-feature" aria-labelledby="featured-title" data-weekly-feature>
+  <p class="feature-kicker">Featured this week</p>
   <figure>
     <img data-feature-image src={feature.photo.src} alt={feature.photo.alt} width={feature.photo.width} height={feature.photo.height} fetchpriority="high" style={`object-fit: ${feature.photo.fit ?? 'cover'}`} />
     <figcaption>
@@ -29,9 +30,8 @@ const feature = features[featuredWeek() - 1];
     </figcaption>
   </figure>
   <div class="feature-copy">
-    <p class="feature-kicker">From the encyclopedia · Featured this week</p>
-    <p class="feature-category" data-feature-category>{feature.category}</p>
-    <h3 id="featured-title"><a data-feature-title href={feature.href}>{feature.title}</a></h3>
+    <p class="feature-category">Encyclopedia · <span data-feature-category>{feature.category}</span></p>
+    <h2 id="featured-title"><a data-feature-title href={feature.href}>{feature.title}</a></h2>
     <p class="feature-summary" data-feature-summary>{feature.summary}</p>
     <p class="feature-maturity" data-feature-maturity>{feature.maturity}</p>
     <a class="button" data-feature-link href={feature.href}>Explore the article <span aria-hidden="true">→</span></a>
@@ -77,18 +77,18 @@ const feature = features[featuredWeek() - 1];
   }
 </script>
 <style>
-  .weekly-feature { display: grid; grid-template-columns: 1fr 1.4fr; margin-block: 2rem 3rem; border: 1px solid #d4d9dd; background: #f5f6f7; }
-  figure { margin: 0; min-width: 0; background: #e6e9ec; display: flex; flex-direction: column; }
-  img { display: block; width: 100%; height: 100%; min-height: 15rem; max-height: 23rem; aspect-ratio: 4 / 3; }
-  figcaption { padding: .4rem .8rem; font-size: .7rem; background: #fff; overflow-wrap: anywhere; }
-  .feature-copy { padding: clamp(1.25rem, 3vw, 2.5rem); align-self: center; min-width: 0; }
-  .feature-kicker { text-transform: uppercase; font-size: .7rem; letter-spacing: .1em; font-weight: 750; margin: 0 0 1.5rem; }
-  .feature-category { margin: 0; color: var(--color-muted); font-size: .85rem; }
-  h3 { margin: .25rem 0 1rem; font-size: clamp(1.8rem, 3vw, 2.6rem); line-height: 1.1; }
-  h3 a { color: var(--color-ink); text-decoration: none; }
-  h3 a:hover { text-decoration: underline; }
-  .feature-summary { font-size: 1.1rem; }
-  .feature-maturity, .feature-note { font-size: .8rem; color: var(--color-muted); }
+  .weekly-feature { margin: 0; border: 1px solid #d4d9dd; background: #f5f6f7; }
+  .feature-kicker { padding: 1rem 1.25rem; margin: 0; text-transform: uppercase; font-size: .7rem; letter-spacing: .1em; font-weight: 750; }
+  figure { margin: 0; min-width: 0; background: #e6e9ec; }
+  img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; }
+  figcaption { padding: .4rem .75rem; font-size: .7rem; background: #fff; overflow-wrap: anywhere; }
+  .feature-copy { padding: 1.25rem; min-width: 0; }
+  .feature-category { margin: 0; color: var(--color-muted); font-size: .75rem; }
+  h2 { margin: .5rem 0 .75rem; font-size: clamp(1.3rem, 2vw, 1.7rem); line-height: 1.15; }
+  h2 a { color: var(--color-ink); text-decoration: none; }
+  h2 a:hover { text-decoration: underline; }
+  .feature-summary { font-size: .95rem; }
+  .feature-maturity, .feature-note { font-size: .75rem; color: var(--color-muted); }
   .feature-note { margin-bottom: 0; }
-  @media (max-width: 45rem) { .weekly-feature { grid-template-columns: 1fr; } img { min-height: 0; max-height: 23rem; height: auto; } }
+  .button { font-size: .85rem; }
 </style>

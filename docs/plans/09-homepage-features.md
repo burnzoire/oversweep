@@ -13,10 +13,13 @@ on page load, once per minute and when returning to the tab, so GitHub Pages
 needs no weekly rebuild or scheduled job. Without JavaScript the build-time
 selection remains readable, with its original source credit and working links.
 
-Learning is the primary homepage hierarchy: module/trainer actions in the hero,
-three learning modules, then a dedicated trainer section with launch controls.
-The weekly article and encyclopedia browsing follow as secondary supporting
-reference material. The encyclopedia image has a smaller desktop footprint. No new aviation claims or
+The homepage uses a two-thirds learning / one-third encyclopedia desktop grid.
+The left column introduces learning and provides two collection-level CTAs:
+learning modules and trainers. Individual modules and trainer launch cards are
+omitted. The right column contains a compact, illustrated weekly article.
+Below 45rem the feature follows learning in a single column. Existing sources,
+credits and review status are retained.
+ No new aviation claims or
 review-status changes are introduced.
 
 ## Annual schedule
@@ -93,3 +96,12 @@ review-status changes are introduced.
   initial and client-updated credits now retain it. Re-review of the final change
   and feature tests found no remaining blockers. No aviation content is authored
   or revalidated in this presentation change.
+
+### Two-column homepage revision
+
+The owner requested a 2:1 desktop split with collection CTAs rather than
+individual module or trainer cards. The final desktop preview confirms that
+layout, a compact right-hand feature and retained photo credit/review status.
+`npm run check` passed (224 tests, Astro/TypeScript, production build and output
+checks); documentation and whitespace checks passed. Independent review found
+no blockers. Mobile stacking is implemented but was not visually inspected.
