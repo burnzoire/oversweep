@@ -1,5 +1,6 @@
 ---
 kind: map
+interactiveMap: true
 sim: dcs
 short: Cold War Germany
 name: "DCS: Cold War Germany"
