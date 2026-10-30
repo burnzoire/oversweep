@@ -100,3 +100,19 @@ record.
 | 11-4 | Flare "with aft cyclic to reduce forward airspeed and decrease the rate of descent"; "neither so abruptly that it causes the helicopter to climb, nor so slowly that it fails to arrest the descent, which may allow the helicopter to settle so rapidly that the tail rotor strikes the ground"; "the proper flare attitude is that resulting in a groundspeed of a slow run"; forward cyclic to landing attitude, "landing gear height ... approximately 3–15 feet AGL"; "avoid an excessive nose high and tail low attitude below 10 feet" | Landing steps; exercise cues |
 | 11-5 | Collective "uses some of the kinetic energy in the rotor disk to help slow the descent rate"; "Touch down in a level flight attitude"; "Do not try to stop the forward ground run with aft cyclic, as the main rotor blades can strike the tail boom"; "Holding the helicopter in the air by using all of the rotor rpm kinetic energy usually causes the helicopter to have a hard landing"; common errors 1, 3, 4, 5 and 6 | Landing; common errors |
 | 11-6–11-7 | "Rotor rpm will build anytime 'G' forces are applied to the rotor system. Usually, this occurs in the turn to the course line and during the deceleration flare." | Descent |
+
+## Module revision 2 — interactive diagrams
+
+Adds three native-radio SVG schematics alongside the existing entry, rotor rpm
+and landing explanations. The exercise and its numerical model are unchanged.
+Entry states follow HFH pp. 11-3–11-4 and 7-3; collective tendencies follow
+pp. 11-3–11-4; flare, level and cushion follow pp. 11-4–11-5, as mapped above.
+Paths, attitudes and arrow lengths are illustrative, with no performance scale,
+timing, speeds or prescribed heights. No new quantitative aviation claim is made.
+
+Fresh-context code/accessibility and consistency review: `/root/review` in the
+30 October 2026 Work session. Findings addressed: label the direction arrows,
+associate radio controls with panel IDs, increment the Manual module revision
+without changing the exercise revision. This is not independent source-backed
+aviation validation; maturity remains Drafted. Browser visual/interaction checks
+were not performed in this session.
