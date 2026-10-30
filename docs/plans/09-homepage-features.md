@@ -37,7 +37,7 @@ no numbered pillars or repeated navigation cards.
 | 11 | [SA-10 Grumble](../../content/encyclopedia/threat-systems/sa-10.md) | threat-systems |
 | 12 | [East Asia and the Pacific](../../content/encyclopedia/locations/east-asia-pacific.md) | locations |
 | 13 | [A-10 Thunderbolt II](../../content/encyclopedia/aircraft/a-10.md) | aircraft |
-| 14 | [Mark 82 general-purpose bomb](../../content/encyclopedia/ordnance/mk-82.md) | ordnance |
+| 14 | [GAU-8 Avenger](../../content/encyclopedia/ordnance/gau-8.md) | ordnance |
 | 15 | [SA-8 Gecko](../../content/encyclopedia/threat-systems/sa-8.md) | threat-systems |
 | 16 | [Nellis Air Force Base](../../content/encyclopedia/locations/nellis.md) | locations |
 | 17 | [AH-64D Apache Longbow](../../content/encyclopedia/aircraft/ah-64d.md) | aircraft |

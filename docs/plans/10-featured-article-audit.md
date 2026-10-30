@@ -2,13 +2,12 @@
 
 Scope: all 52 original weekly selections and the replacement candidates. Each body was read for explanatory substance, contextual glossary opportunities and paths to related content. Short articles were retained when they explain a mechanism, limitation or coherent history; length alone was not a pass/fail rule.
 
-This is an editorial and navigation review, not a new factual validation. Existing prose, citations, frontmatter and maturity are retained. Added links are contextual; the AIM-7 related-reading sentence adds navigation rather than a technical claim. Existing Drafted status remains visible. Khmeimim and Ramat David were inspected but rejected as feature replacements because neither has a credited lead photograph. Saipan was then read in full and selected instead. No source conflicts were resolved or hidden.
+This is an editorial and navigation review, not a new factual validation. The initial pass retained factual prose, citations, frontmatter and maturity. The subsequent GAU-8 revision below adds sourced technical prose and manufacturer references; its maturity remains Drafted. Added links are contextual; the AIM-7 related-reading sentence adds navigation rather than a technical claim. Existing Drafted status remains visible. Khmeimim and Ramat David were inspected but rejected as feature replacements because neither has a credited lead photograph. Saipan was then read in full and selected instead. No source conflicts were resolved or hidden.
 
 ## Rotation changes
 
 | Week | Previous selection | Replacement | Reason |
 | --- | --- | --- | --- |
-| 14 | GAU-8 Avenger | Mark 82 general-purpose bomb | A short gun specification and development summary; Mk 82 adds guidance, delivery and safety context. |
 | 22 | K-13 (R-3) "Atoll" | AIM-9 Sidewinder | Origin anecdote and brief use history; AIM-9 explains seeker mechanics, limitations and development. |
 | 27 | SA-5 Gammon | SA-17 Grizzly | Explicit unresolved guidance-law claim; SA-17 has a more complete guidance, organisation and history account. |
 | 30 | R.550 Magic | Hydra 70 (2.75 in) rocket | Brief origin and combat account with little mechanism; Hydra 70 explains development, operation and uses. |
@@ -35,7 +34,7 @@ Counts refer to links in the prose body, not data plates, automatic lists or nav
 | 11 | [SA-10 Grumble](../../content/encyclopedia/threat-systems/sa-10.md) | 566 | 4 | 2 | Retain: system composition, engagement and identification context |
 | 12 | [East Asia and the Pacific](../../content/encyclopedia/locations/east-asia-pacific.md) | 506 | 1 | 5 | Retain: coherent geography, history or operational context |
 | 13 | [A-10 Thunderbolt II](../../content/encyclopedia/aircraft/a-10.md) | 794 | 4 | 4 | Retain: substantive design and service narrative |
-| 14 | [Mark 82 general-purpose bomb](../../content/encyclopedia/ordnance/mk-82.md) | 514 | 3 | 2 | Replacement: reviewed alongside the original |
+| 14 | [GAU-8 Avenger](../../content/encyclopedia/ordnance/gau-8.md) | 634 | 1 | 6 | Retain and improve: rotary mechanism, ammunition, dispersion and installation context |
 | 15 | [SA-8 Gecko](../../content/encyclopedia/threat-systems/sa-8.md) | 341 | 2 | 2 | Retain: system composition, engagement and identification context |
 | 16 | [Nellis Air Force Base](../../content/encyclopedia/locations/nellis.md) | 282 | 2 | 5 | Retain: coherent geography, history or operational context |
 | 17 | [AH-64D Apache Longbow](../../content/encyclopedia/aircraft/ah-64d.md) | 693 | 2 | 1 | Retain: substantive design and service narrative |
@@ -109,7 +108,7 @@ All 16 read in full. Editorial/link audit only; no factual verification or matur
 | AIM-54 Phoenix | Retain. Compact but explains fleet-defence purpose, AWG-9 multi-target system, active terminal guidance and service contrast. | Added guided-missile glossary links to existing missile descriptions; existing Fox and F-14 links retained. |
 | AGM-88 HARM | Retain. Explains homing, operating modes, targeting platform and combat risks. | Added supersonic, homing and Mach glossary links; existing platform, Shrike and S-200 record links retained. |
 | AIM-120 AMRAAM | Retain. Clear inertial/update/active seeker explanation and component breakdown. | Added rocket and fuze term links and F-16D platform cross-link. |
-| GAU-8 Avenger | Replace with Mk 82. Current article is mostly size, weight and system numbers; little on mechanism or employment. | Existing body gained AV-8B record cross-link. Mk 82 candidate reviewed: explains aerodynamic origins, interchangeable tails/fuzes/guidance, retarded delivery, carrier-deck protection and lower-collateral variants. Candidate already has GBU-12/JDAM links; added retarded-delivery glossary link. |
+| GAU-8 Avenger | Retain and expand at owner request. The short article needed improvement, not replacement. | Added manufacturer-backed sections on mechanism, ammunition, rate/dispersion and installation; existing A-10, M61, GAU-12 and Harrier links retained, plus CAS and Manual reading. |
 | AGM-114 Hellfire | Retain. Contrasts laser and millimetre-wave versions, designation options and platform use. | Added PGM glossary link; existing laser-guidance and Apache links retained. |
 | R-3 / K-13 | Replace with AIM-9 Sidewinder. Reverse-engineering anecdote and short use history dominate, while the existing Sidewinder article explains seeker limits, cooling, guidance/control, fuze and combat development. | AIM-9 candidate reviewed and gained supersonic glossary link; existing homing, Fox, proximity-fuze and aircraft links retained. R-3 already cross-links AIM-9/MiG-21; no glossary link forced into unmatched wording. |
 | AIM-7 Sparrow | Retain. Explains semi-active guidance and its tactical constraint, then connects development to combat results. | Added supersonic term and a plain related-entry pair to AIM-120/R-27 (no new technical claim). |
@@ -163,3 +162,30 @@ all final selections have contextual terminology and onward reading; output chec
 resolve glossary anchors and related-record pages. Documentation and whitespace
 checks passed. No new browser visual audit or source-level technical validation
 was performed in this link-editing pass.
+
+
+## GAU-8 revision 2
+
+GAU-8 remains at week 14. The original recommendation to replace it was rejected
+by the owner; six other rotation changes remain. The gun article now explains
+rotary operation, gun-versus-installation weight, ammunition roles, generic
+manufacturer specifications versus installed firing rate, dispersion and recoil.
+It retains its photograph and Drafted status. The registry revision and summary
+are updated. Manufacturer material is paraphrased; no brochures are copied into
+the repository. The pre-existing history/installation claims still cite their
+secondary source and are not newly technically validated.
+
+| New claim group | Evidence inspected |
+| --- | --- |
+| Each barrel has its own bolt, firing once per revolution; distributed loading | Source 2, mechanism paragraphs |
+| Generic drive/feed options and maximum rate versus A-10 figures | Source 2, technical specifications; existing source 1 for installed rate |
+| HEI/API/TP roles and ballistic matching | Source 4, ammunition descriptions |
+| 5 mrad diameter, 80-percent circle; 44.5 kN recoil; Goalkeeper application | Source 3, page 1, specifications and application paragraphs |
+| Approximate 5 m diameter at 1,000 m | Independent geometry: 0.005 radians × 1,000 m = 5 m; not combat prediction |
+
+Independent source-backed review retrieved sources 2–4 and supported the new
+claims. The reviewer requested an explicit source-3 citation for external power;
+that citation is now present. Independent geometry gives
+2 × 1,000 × tan(0.005 / 2) = 5.0000104 m, consistent with the stated approximate
+5 m result. The inherited source-1 claims/frontmatter remain outside that
+validation scope, so the article remains Drafted rather than Technically Validated.
