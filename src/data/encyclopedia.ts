@@ -316,6 +316,7 @@ export interface TheatreOverview {
 export interface MapData {
   kind: 'map';
   overview?: TheatreOverview;
+  interactiveMap?: boolean;
   sim: Sim;
   short: string;
   name: string;

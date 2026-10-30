@@ -1,5 +1,6 @@
 ---
 kind: map
+interactiveMap: true
 sim: dcs
 short: Iraq
 name: "DCS: Iraq"

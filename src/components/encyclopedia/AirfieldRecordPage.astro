@@ -252,7 +252,7 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
             <PurchaseRow purchases={m.purchase} />
           </dl>
         </section>
-        {m.overview && mapTable && <TheatreMap name={m.name} overview={m.overview} source={mapTable.source.url}
+        {(m.overview || m.interactiveMap) && mapTable && <TheatreMap name={m.name} overview={m.overview} source={mapTable.source.url}
           fields={runwayFields.flatMap(field => {
             if (!Number.isFinite(field.lat) || !Number.isFinite(field.lon)) return [];
             const r = recordFor(field.name);

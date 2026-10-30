@@ -1,5 +1,6 @@
 ---
 kind: map
+interactiveMap: true
 sim: dcs
 short: Normandy 2.0
 name: "DCS: Normandy 2.0"

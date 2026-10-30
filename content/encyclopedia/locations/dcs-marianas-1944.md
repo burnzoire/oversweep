@@ -1,5 +1,6 @@
 ---
 kind: map
+interactiveMap: true
 sim: dcs
 short: Marianas 1944
 name: "DCS: Marianas 1944"

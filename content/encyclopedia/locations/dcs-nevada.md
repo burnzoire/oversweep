@@ -1,5 +1,6 @@
 ---
 kind: map
+interactiveMap: true
 sim: dcs
 short: Nevada
 name: "DCS: Nevada Test and Training Range"
