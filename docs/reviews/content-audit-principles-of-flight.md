@@ -33,3 +33,9 @@ Also check cross-links to relevant encyclopedia terms, aircraft and ordnance whe
 ## Priority
 
 **P1 editorial restructuring** for a clearer first-pass learning path; retain useful reference depth. Any substantive procedure edits require separate SME validation.
+
+## 5. Flight simulator relevance and differences
+
+Separate physical principles from aircraft-specific simulator flight models, instrument indications and unmodelled/approximate aerodynamic effects.
+
+**Review action:** establish what is modelled, simplified, absent or unverified, citing the specific simulator, module, version and source/test. Keep real-world facts primary and put simulator-only behaviour in the established visually distinct sim-specific treatment where applicable. **Fidelity verification pending; no unsupported feature-absence claim is made here.**
