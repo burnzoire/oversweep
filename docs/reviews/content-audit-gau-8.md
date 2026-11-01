@@ -38,3 +38,9 @@ After reading, the reader should be able to:
 ## Priority
 
 **P2 — editorial polish.** Preserve depth and featured placement. No substantive technical changes without SME validation.
+
+## 5. Flight simulator relevance and differences
+
+For DCS A-10 modules, check represented gun firing modes, ammunition and effects, dispersion and damage modelling against version-specific evidence; do not imply physical fidelity without verification.
+
+**Review action:** establish what is modelled, simplified, absent or unverified, citing the specific simulator, module, version and source/test. Keep real-world facts primary and put simulator-only behaviour in the established visually distinct sim-specific treatment where applicable. **Fidelity verification pending; no unsupported feature-absence claim is made here.**
