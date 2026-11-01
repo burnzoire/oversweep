@@ -1,60 +1,65 @@
-# Oversweep editorial content audit — register
+# Oversweep content audit — coverage and findings
 
-Date: 2026-11-02  
-Status: **20 individual reviews completed; 219 encyclopedia records remain**.
+Updated: 2026-11-02. Based on the published registries `src/data/modules.json`, nested `src/data/experiences.json[*].module` and `src/data/encyclopedia.json`.
 
-## Method
+**Progress: 62 / 239 individual reviews (25.9%).** All 10 manual modules are reviewed, and 52 of 229 encyclopedia articles. **177 encyclopedia records remain.** No content-page rewrites have been made.
 
-Each reviewed page was read from repository source. Assessments address:
-1. Length and the difference between valuable reference depth and repetition.
-2. Existing imagery/interactivity and *specific* missing learning aids.
-3. Observable learning outcomes.
-4. Material omissions, applicability and useful cross-links.
-5. **Flight simulator relevance:** what this subject means in DCS, Falcon BMS and other applicable sims; what is implemented, simplified, missing or unknown, grounded in specific module and version evidence.
+## Five review questions
 
-The reviews are editorial, **not** independent aviation SME validation, and source-level inspection is **not** a rendered browser test. Proposed diagrams must be checked for visual quality and lawful source rights. Existing `docs/reviews/*-evidence.md` are separate technical evidence reviews.
+1. **Length:** Is prose repetitive, longer than appropriate or missing enough explanation?
+2. **Imagery/interactivity:** Do existing photos, diagrams and interactions help, and what specific additional aid would improve learning?
+3. **Learning outcomes:** What should a reader be able to identify, explain or apply?
+4. **Completeness:** What important distinctions, links, sources, time periods or limitations are missing?
+5. **Flight simulation:** What matters in DCS, Falcon BMS or relevant sims, and what is **modelled**, **simplified**, **not modelled** or **unverified**? Require sim/module/version and credible evidence for a fidelity or absence claim.
 
-## Simulator fidelity and presentation standard
+Existing simulator-specific presentation: `.sim-panel` in `src/styles/encyclopedia.css`, used by `AirfieldRecordPage.astro`. Preserve real-world facts as the primary explanation, with visually distinct simulator-specific sections. Simulator terrain is not presumed to match real or historical geometry; modern OSM is not proof of a historical map state. Oversweep trainers are separate models and not equivalent to DCS/BMS.
 
-Each review must assess simulator relevance even when the article is primarily real-world reference material. Distinguish: **real-world fact/procedure**; **simulator-implemented behaviour** (name the sim, module, version and verification basis); **known simplification or omission**; and **unknown/unverified** (do not present as unsupported absence). Where a sim lacks a real procedure or system, make that distinction useful to a reader trying to practise it. Do not assume that DCS or BMS implements a real-world feature just because an aircraft or weapon is present. Do not conflate the separate Oversweep trainers' models with any simulator's flight model.
+Reviews are source-inspection editorial findings, **not** rendered-browser QA, external sourcing validation or aviation SME signoff. Simulator fidelity prompts are flagged pending verification. Technical changes must follow normal SME review.
 
-**Existing presentation:** the encyclopedia already has a `.sim-panel` treatment in `src/styles/encyclopedia.css`, used by `src/components/encyclopedia/AirfieldRecordPage.astro`. Prefer reusing this visual distinction instead of introducing new promotional blocks or another component style. Check the rendered output before prescribing its use on manual pages, where the existing styling may differ. Simulator-specific callouts should supplement, not interrupt, the primary real-world explanation.
+## Modules — 10/10
 
-**Review status:** this fifth criterion was added after the first editorial pass. Earlier reviews remain editorially complete for criteria 1–4 but simulator fidelity must be assessed and marked separately before they are considered five-criterion complete. In particular, existing sim references are not proof of simulation fidelity.
+- [BFM](content-audit-bfm.md)
+- [Airfield operations](content-audit-airfield-basics.md)
+- [Radio procedures](content-audit-radio-procedures.md)
+- [Fixed-wing fundamentals](content-audit-principles-of-flight.md)
+- [Rotor-wing fundamentals](content-audit-rotor-wing.md)
+- [Navigation](content-audit-air-navigation.md)
+- [Weapons delivery](content-audit-weapons-delivery.md)
+- [Ship operations](content-audit-ship-operations.md)
+- [Case III](content-audit-case-iii.md)
+- [Autorotation](content-audit-autorotation.md)
 
-## Modules — 10 of 10 reviewed
+## Encyclopedia — 52/229
 
-| Module | Review |
-| --- | --- |
-| BFM | [Review](content-audit-bfm.md) |
-| The Airfield and the Traffic Pattern | [Review](content-audit-airfield-basics.md) |
-| Radio Procedures | [Review](content-audit-radio-procedures.md) |
-| Fixed-Wing Principles of Flight | [Review](content-audit-principles-of-flight.md) |
-| Rotor-Wing Principles of Flight | [Review](content-audit-rotor-wing.md) |
-| Air Navigation | [Review](content-audit-air-navigation.md) |
-| Weapons Delivery | [Review](content-audit-weapons-delivery.md) |
-| Carrier and Amphibious Ship Operations | [Review](content-audit-ship-operations.md) |
-| Case III Recoveries | [Review](content-audit-case-iii.md) |
-| Autorotation Practice | [Review](content-audit-autorotation.md) |
+| Category | Reviewed | Pending |
+| --- | ---: | ---: |
+| Aircraft | 12 | 36 |
+| Ordnance | 12 | 57 |
+| Threat systems | 19 | 0 |
+| Locations | 9 | 76 |
+| Terminology | 0 | 8 |
 
-## Encyclopedia — 10 of 229 reviewed
+### Reviewed records
 
-| Category | Completed |
-| --- | --- |
-| Aircraft (1) | [A-10](content-audit-a-10.md) |
-| Ordnance (1) | [GAU-8](content-audit-gau-8.md) |
-| Threat systems (8) | [SA-1](content-audit-threat-systems-sa-1.md), [SA-2](content-audit-sa-2.md), [SA-3](content-audit-threat-systems-sa-3.md), [SA-4](content-audit-threat-systems-sa-4.md), [SA-5](content-audit-threat-systems-sa-5.md), [SA-6](content-audit-threat-systems-sa-6.md), [SA-7](content-audit-threat-systems-sa-7.md), [SA-8](content-audit-threat-systems-sa-8.md) |
+**Aircraft (12/48):** [a-10](content-audit-a-10.md), [f-14](content-audit-aircraft-f-14.md), [fa-18c](content-audit-aircraft-fa-18c.md), [f-16](content-audit-aircraft-f-16.md), [ah-64d](content-audit-aircraft-ah-64d.md), [mig-21](content-audit-aircraft-mig-21.md), [f-4](content-audit-aircraft-f-4.md), [m-2000c](content-audit-aircraft-m-2000c.md), [av-8b](content-audit-aircraft-av-8b.md), [su-27](content-audit-aircraft-su-27.md), [p-51d](content-audit-aircraft-p-51d.md), [spitfire-ix](content-audit-aircraft-spitfire-ix.md).
 
-**219 encyclopedia records remain unreviewed:** 47 aircraft, 68 ordnance, 11 threat systems, 8 terminology sets and 85 locations. The large Locations category includes records with historically sensitive simulator/real-world distinctions.
+**Ordnance (12/69):** [gau-8](content-audit-gau-8.md), [aim-54](content-audit-ordnance-aim-54.md), [agm-88](content-audit-ordnance-agm-88.md), [aim-120](content-audit-ordnance-aim-120.md), [agm-114](content-audit-ordnance-agm-114.md), [aim-9](content-audit-ordnance-aim-9.md), [aim-7](content-audit-ordnance-aim-7.md), [hydra-70](content-audit-ordnance-hydra-70.md), [gbu-12](content-audit-ordnance-gbu-12.md), [r-27](content-audit-ordnance-r-27.md), [jdam](content-audit-ordnance-jdam.md), [hvar](content-audit-ordnance-hvar.md).
 
-## Main findings so far
+**Threat systems (19/19):** [sa-1](content-audit-threat-systems-sa-1.md), [sa-2](content-audit-sa-2.md), [sa-3](content-audit-threat-systems-sa-3.md), [sa-4](content-audit-threat-systems-sa-4.md), [sa-5](content-audit-threat-systems-sa-5.md), [sa-6](content-audit-threat-systems-sa-6.md), [sa-7](content-audit-threat-systems-sa-7.md), [sa-8](content-audit-threat-systems-sa-8.md), [sa-9](content-audit-threat-systems-sa-9.md), [sa-10](content-audit-threat-systems-sa-10.md), [sa-11](content-audit-threat-systems-sa-11.md), [sa-12](content-audit-threat-systems-sa-12.md), [sa-13](content-audit-threat-systems-sa-13.md), [sa-14](content-audit-threat-systems-sa-14.md), [sa-15](content-audit-threat-systems-sa-15.md), [sa-16](content-audit-threat-systems-sa-16.md), [sa-17](content-audit-threat-systems-sa-17.md), [sa-18](content-audit-threat-systems-sa-18.md), [sa-19](content-audit-threat-systems-sa-19.md).
 
-- **P1:** Rework the *learning path* for long-form modules rather than deleting necessary technical depth. In particular: BFM, Case III, rotor/fixed-wing fundamentals, and ship operations contain broad topic spans.
-- **P1:** Autorotation prose needs a more scannable phase summary; any new illustration needs substantially better visual QA than the reverted attempt.
-- **P1:** Check dated claims and variant distinctions in the A-10 article.
-- **P2:** GAU-8 is already strong. Keep it featured; reduce repeated specification figures and prefer one installation schematic.
-- **P2:** Threat profiles are generally reference material; shorten only repetitious sections, retaining source-bounded envelopes and emitter descriptions.
+**Locations (9/85):** [incirlik](content-audit-locations-incirlik.md), [akrotiri](content-audit-locations-akrotiri.md), [saipan](content-audit-locations-saipan.md), [batumi](content-audit-locations-batumi.md), [fallon](content-audit-locations-fallon.md), [nellis](content-audit-locations-nellis.md), [dcs-syria](content-audit-locations-dcs-syria.md), [dcs-caucasus](content-audit-locations-dcs-caucasus.md), [bms-korea](content-audit-locations-bms-korea.md).
+
+## Highest-value findings
+
+- **Module structure (P1):** BFM, Case III, fundamentals and ship operations need a clearer first-pass progression before wholesale cutting of reference content.
+- **Autorotation (P1):** shorten dense prose and use a clear conceptual sequence. Previously reverted diagrams mean visual QA is a prerequisite, not an optional polish step.
+- **Simulator boundaries (P1):** current real-world descriptions must not imply every DCS/BMS version simulates the same system. Scope the claim to exact variants and implementations; unknown is not absent.
+- **Featured aircraft (P1/P2):** some lead with historical anecdotes at the expense of design, systems, variants and sim applications; tighten opening narrative while preserving worthwhile history.
+- **Weapons guidance (P2):** AIM-54, AIM-120, AGM-114, GBU-12 and R-27 would benefit from compact variant/guidance-phase comparisons rather than expanded prose or mini-games.
+- **Threats (P2):** all 19 SA-series articles now have individual editorial reviews; preserve radar/seeker/envelope distinctions. Cross-article disputes (e.g. SA-14 versus SA-18 loss attribution) need independent sourcing.
+- **Locations (P1/P2):** label temporary units and current data by date, and separate real facilities from DCS/BMS map-specific runway and navigation information. Avoid using present-day OSM as a historic simulator airfield diagram.
+- **GAU-8 (P2):** retain flagship detail and featured placement, trim duplicate plate statistics and consider an installation schematic.
 
 ## Remaining work
 
-Do not create placeholder per-record 'reviews' from catalogue metadata alone. Read the content Markdown (and rendered page when assessing imagery), then write a review containing decisions grounded in that page. Prioritise featured articles and other high-traffic records, but eventually cover every published encyclopedia record. Review documents should be indexed here.
+Next: remaining featured-linked locations/airfields; the rest of aircraft and ordnance; terminology sets; then all other locations. Each outstanding record requires an individual review grounded in its source and, when assessing actual visual quality, a rendered-page check. Do not create per-record placeholders or mark simulator implementation as verified without evidence.
