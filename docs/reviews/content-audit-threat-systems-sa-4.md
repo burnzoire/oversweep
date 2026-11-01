@@ -37,3 +37,9 @@ These are **proposed editorial outcomes**, not a claim that every outcome is alr
 ## Recommendation
 
 **Editorial triage only.** Review the longest block and applicability first; preserve technical detail. This document does not certify source correctness or rendered visual quality.
+
+## 5. Flight-simulator relevance and differences
+
+Verify the DCS (and BMS where applicable) representation of this **specific** SA-4 system, including radar detection/tracking, guidance or seeker, missile envelope, RWR indications, battery composition and mission-editor availability. Identify capabilities that are simplified or absent only when evidenced for the named simulator version; treat untested features as **unknown**, not absent.
+
+**Follow-up verification required:** Present verified simulator-specific information separately using the existing sim-panel visual convention where appropriate. The real-world profile must not silently imply equivalent simulator fidelity.
