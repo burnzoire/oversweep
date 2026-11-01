@@ -114,7 +114,7 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
         <section class="data-plate" aria-labelledby="role-title">
           <h2 id="role-title">Role and operators</h2>
           <dl>
-            <div><dt>Status</dt><dd>{a.status === 'active' ? 'Active' : 'Closed'} · {useLabels[use!]}</dd></div>
+            <div><dt>Status</dt><dd>{a.status === 'active' ? 'Active' : 'Closed'} · {a.status === 'active' && !a.operators?.length ? 'operator not named in the sources consulted' : useLabels[use!]}</dd></div>
             <div><dt>Roles today</dt><dd>{a.roles.length ? a.roles.map((r) => airfieldRoles[r]).join(' · ') : a.status === 'closed' ? 'None' : 'None documented in the sources consulted'}</dd></div>
             <div><dt>Operators</dt><dd>{a.operators?.length ? <ul>{a.operators.map((o) => (
               <li><strong>{o.name}</strong>{o.detail && `, ${o.detail}`} · {nation(o.nation)}, {branches[o.branch].toLowerCase()} · {periodText(o) ?? 'current; start date not given'} <Cited text={o.cite} /></li>

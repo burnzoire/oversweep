@@ -240,7 +240,8 @@ function checkAirfield(rec, ctx, problems) {
   if (!Array.isArray(data.roles)) problems.push(`${where}: roles must be a list.`);
   for (const r of data.roles ?? []) if (!airfieldRoles[r]) problems.push(`${where}: unknown role "${r}".`);
 
-  if (data.operators === undefined ? !closed : !Array.isArray(data.operators) || (data.operators.length === 0 && !closed)) problems.push(`${where}: operators are missing.`);
+  // An active field may have an empty list too, where no source names who runs it.
+  if (data.operators === undefined ? !closed : !Array.isArray(data.operators)) problems.push(`${where}: operators are missing.`);
   (data.operators ?? []).forEach((o, i) => {
     const at = `${where} operator ${o.name ?? i}`;
     if (!isText(o.name)) problems.push(`${at}: name is missing.`);
