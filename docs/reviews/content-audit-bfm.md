@@ -1,0 +1,28 @@
+# Editorial audit — Basic Fighter Maneuvers
+
+- Source: `src/pages/manual/air-combat/[module].astro` (BFM route)
+- Reviewed: 2026-11-02
+- Type: Editorial / learning design, not a technical SME validation
+
+## 1. Is it too long?
+
+**Yes, for a single learning pass.** The page contains fourteen top-level navigation entries and extensive discussion of geometry, pursuit, performance, the vertical, 1-circle/2-circle flow, overshoots and guns. Preserve technical depth as reference material, but make the first-pass path explicit: geometry → pursuit/closure → turn performance → fight flow. Condense repeated caveats and figures' prose into consistent captions, without omitting model assumptions.
+
+## 2. Imagery / interactivity
+
+**Already strong.** The code has interactive geometry and pursuit figures and references additional flow/overshoot components. Do not request a generic new trainer or redundant graphics. Focus on whether each figure has a one-sentence question ('What changes when…?') and a short interpretation of its result, with accessible static fallback. Verify rendered accessibility separately.
+
+## 3. Learning outcomes
+
+Reader should be able to determine positional advantage from 3/9-line/aspect geometry, differentiate lead/pure/lag pursuit, explain corner speed and load-versus-lift-limited turns, distinguish 1-circle/2-circle outcomes, understand vertical energy trade-offs, and recognise overshoots and gun-employment geometry. The explicit objectives already cover these skills; they may be too numerous for a single module and deserve a short 'core' versus 'advanced' distinction.
+
+## 4. Missing important content
+
+- A compact recap/checklist tying the figures together into a BFM decision sequence, without prescribing aircraft-specific tactics.
+- Stronger separation between source-specific T-45 training-rule numbers and general BFM concepts.
+- Make defensive/high-aspect/section BFM exclusions conspicuous as scope rather than implying comprehensive BFM instruction.
+- Check the existing 'Check your understanding' questions against each core outcome before adding more interaction.
+
+## Priority
+
+**P1 — structure and reading path; no new interactive components.**
