@@ -26,3 +26,9 @@ Readers should be able to explain the A-10's close-air-support role, the aircraf
 ## Priority
 
 **P1 — dated claims and variant clarity; P2 — tighten narrative.**
+
+## 5. Flight simulator relevance and differences
+
+Distinguish DCS A-10A from A-10C II and clarify which systems/variants are flyable. Real-world survivability and upgrade history are not necessarily simulated.
+
+**Review action:** establish what is modelled, simplified, absent or unverified, citing the specific simulator, module, version and source/test. Keep real-world facts primary and put simulator-only behaviour in the established visually distinct sim-specific treatment where applicable. **Fidelity verification pending; no unsupported feature-absence claim is made here.**
