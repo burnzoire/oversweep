@@ -26,3 +26,9 @@ Identify why rotor RPM falls after power loss; explain the immediate collective 
 ## Priority
 
 **P1 — shorten and restructure prose; P2 — carefully reviewed static figure.**
+
+## 5. Flight simulator relevance and differences
+
+Compare the separate Oversweep exercise model with the implemented rotor inertia, RPM decay, engine failure and touchdown behaviours of each relevant DCS helicopter module.
+
+**Review action:** establish what is modelled, simplified, absent or unverified, citing the specific simulator, module, version and source/test. Keep real-world facts primary and put simulator-only behaviour in the established visually distinct sim-specific treatment where applicable. **Fidelity verification pending; no unsupported feature-absence claim is made here.**
