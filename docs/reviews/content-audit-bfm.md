@@ -26,3 +26,9 @@ Reader should be able to determine positional advantage from 3/9-line/aspect geo
 ## Priority
 
 **P1 — structure and reading path; no new interactive components.**
+
+## 5. Flight simulator relevance and differences
+
+DCS/BMS energy and pursuit behaviour depend on aircraft flight models and mission setups; real-world T-45 performance numbers and training rules are not generic sim limits.
+
+**Review action:** establish what is modelled, simplified, absent or unverified, citing the specific simulator, module, version and source/test. Keep real-world facts primary and put simulator-only behaviour in the established visually distinct sim-specific treatment where applicable. **Fidelity verification pending; no unsupported feature-absence claim is made here.**
