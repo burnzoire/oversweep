@@ -2171,6 +2171,138 @@
     "summary": "Lebanon's only working commercial airport: the 1968 Israeli raid, the 1983 barracks bombing and the 2006 runway strikes."
   },
   {
+    "id": "encyclopedia.airfields-carriers.al-dhafra",
+    "slug": "al-dhafra",
+    "category": "locations",
+    "revision": 1,
+    "title": "Al Dhafra Air Base",
+    "designation": "OMAM",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The UAE Air Force's Western Air Command base, home to its F-16E/Fs and Mirage 2000-9s, the USAF's 380th Air Expeditionary Wing and French Rafales."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.al-minhad",
+    "slug": "al-minhad",
+    "category": "locations",
+    "revision": 1,
+    "title": "Al Minhad Air Base",
+    "designation": "OMDM",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A UAE Air Force base south of Dubai, Australia's main logistics hub in the Middle East and home to Britain's Donnelly Lines."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.khasab",
+    "slug": "khasab",
+    "category": "locations",
+    "revision": 1,
+    "title": "Khasab Airport",
+    "designation": "OOKB",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Oman's public and military airport in a mountain valley at Khasab, capital of Musandam on the Strait of Hormuz."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.fujairah",
+    "slug": "fujairah",
+    "category": "locations",
+    "revision": 1,
+    "title": "Fujairah International Airport",
+    "designation": "OMFJ",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Fujairah's airport since 1987, with an aviation academy and a second runway opened in 2022."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.dubai",
+    "slug": "dubai",
+    "category": "locations",
+    "revision": 1,
+    "title": "Dubai International Airport",
+    "designation": "OMDB",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The world's busiest airport for international passengers, opened on a sand runway in 1960 and hit by Iranian strikes in 2026."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.sharjah",
+    "slug": "sharjah",
+    "category": "locations",
+    "revision": 1,
+    "title": "Sharjah International Airport",
+    "designation": "OMSJ",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Air Arabia's base and a major cargo hub, successor to RAF Sharjah, and an A-10 base in Desert Storm."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.bandar-abbas",
+    "slug": "bandar-abbas",
+    "category": "locations",
+    "revision": 1,
+    "title": "Bandar Abbas International Airport",
+    "designation": "OIKB",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A joint civil and military airport shared by Iran's air force, navy aviation and Revolutionary Guard; Iran Air 655 took off from it in 1988."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.bandar-lengeh",
+    "slug": "bandar-lengeh",
+    "category": "locations",
+    "revision": 1,
+    "title": "Bandar Lengeh Airport",
+    "designation": "OIBL",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A domestic civil and Iranian Navy aviation airport in Hormozgan, international until the early 1980s."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.lar",
+    "slug": "lar",
+    "category": "locations",
+    "revision": 1,
+    "title": "Larestan International Airport",
+    "designation": "OISL",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Lar's airport, open since 1983 at about 800 m elevation, international since the Gulf War."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.qeshm",
+    "slug": "qeshm",
+    "category": "locations",
+    "revision": 1,
+    "title": "Qeshm International Airport",
+    "designation": "OIKQ",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The airport of Qeshm Island since 1997, with a 4.2 km runway and flights to the UAE and Tehran."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.kish",
+    "slug": "kish",
+    "category": "locations",
+    "revision": 1,
+    "title": "Kish International Airport",
+    "designation": "OIBK",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Kish Island's resort gateway, designed for Concorde before the revolution and host of the Iran Kish Air Show."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.sirri",
+    "slug": "sirri",
+    "category": "locations",
+    "revision": 1,
+    "title": "Sirri Island Airport",
+    "designation": "OIBS",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "An uncontrolled single-runway airfield on Iran's oil island of Sirri, where US forces struck a platform in Operation Praying Mantis."
+  },
+  {
     "id": "encyclopedia.theatres.dcs-nevada",
     "slug": "dcs-nevada",
     "category": "locations",
