@@ -2,7 +2,7 @@
 
 Updated: 2026-11-02. Based on the published registries `src/data/modules.json`, nested `src/data/experiences.json[*].module` and `src/data/encyclopedia.json`.
 
-**Progress: 62 / 239 individual reviews (25.9%).** All 10 manual modules are reviewed, and 52 of 229 encyclopedia articles. **177 encyclopedia records remain.** No content-page rewrites have been made.
+**Progress: 70 / 239 individual reviews (29.3%).** All 10 manual modules are reviewed, and 60 of 229 encyclopedia articles. **169 encyclopedia records remain.** No content-page rewrites have been made.
 
 ## Five review questions
 
@@ -37,7 +37,7 @@ Reviews are source-inspection editorial findings, **not** rendered-browser QA, e
 | Ordnance | 12 | 57 |
 | Threat systems | 19 | 0 |
 | Locations | 9 | 76 |
-| Terminology | 0 | 8 |
+| Terminology | 8 | 0 |
 
 ### Reviewed records
 
@@ -49,6 +49,8 @@ Reviews are source-inspection editorial findings, **not** rendered-browser QA, e
 
 **Locations (9/85):** [incirlik](content-audit-locations-incirlik.md), [akrotiri](content-audit-locations-akrotiri.md), [saipan](content-audit-locations-saipan.md), [batumi](content-audit-locations-batumi.md), [fallon](content-audit-locations-fallon.md), [nellis](content-audit-locations-nellis.md), [dcs-syria](content-audit-locations-dcs-syria.md), [dcs-caucasus](content-audit-locations-dcs-caucasus.md), [bms-korea](content-audit-locations-bms-korea.md).
 
+**Terminology (8/8):** [brevity](content-audit-terminology-brevity.md), [joint-terms](content-audit-terminology-joint-terms.md), [airfield-atc](content-audit-terminology-airfield-atc.md), [carrier](content-audit-terminology-carrier.md), [air-combat](content-audit-terminology-air-combat.md), [flight](content-audit-terminology-flight.md), [navigation](content-audit-terminology-navigation.md), [weapons](content-audit-terminology-weapons.md).
+
 ## Highest-value findings
 
 - **Module structure (P1):** BFM, Case III, fundamentals and ship operations need a clearer first-pass progression before wholesale cutting of reference content.
@@ -57,9 +59,10 @@ Reviews are source-inspection editorial findings, **not** rendered-browser QA, e
 - **Featured aircraft (P1/P2):** some lead with historical anecdotes at the expense of design, systems, variants and sim applications; tighten opening narrative while preserving worthwhile history.
 - **Weapons guidance (P2):** AIM-54, AIM-120, AGM-114, GBU-12 and R-27 would benefit from compact variant/guidance-phase comparisons rather than expanded prose or mini-games.
 - **Threats (P2):** all 19 SA-series articles now have individual editorial reviews; preserve radar/seeker/envelope distinctions. Cross-article disputes (e.g. SA-14 versus SA-18 loss attribution) need independent sourcing.
+- **Terminology (P2):** preserve formal definitions; improve alphabetical retrieval, cross-links, context and term disambiguation rather than reducing definition word counts.
 - **Locations (P1/P2):** label temporary units and current data by date, and separate real facilities from DCS/BMS map-specific runway and navigation information. Avoid using present-day OSM as a historic simulator airfield diagram.
 - **GAU-8 (P2):** retain flagship detail and featured placement, trim duplicate plate statistics and consider an installation schematic.
 
 ## Remaining work
 
-Next: remaining featured-linked locations/airfields; the rest of aircraft and ordnance; terminology sets; then all other locations. Each outstanding record requires an individual review grounded in its source and, when assessing actual visual quality, a rendered-page check. Do not create per-record placeholders or mark simulator implementation as verified without evidence.
+Next: remaining featured-linked locations/airfields; the rest of aircraft and ordnance; then all other locations. All terminology sets and all SA-series threat profiles now have individual reviews. Each outstanding record requires an individual review grounded in its source and, when assessing actual visual quality, a rendered-page check. Do not create per-record placeholders or mark simulator implementation as verified without evidence.
