@@ -10,8 +10,17 @@ Each reviewed page was read from repository source. Assessments address:
 2. Existing imagery/interactivity and *specific* missing learning aids.
 3. Observable learning outcomes.
 4. Material omissions, applicability and useful cross-links.
+5. **Flight simulator relevance:** what this subject means in DCS, Falcon BMS and other applicable sims; what is implemented, simplified, missing or unknown, grounded in specific module and version evidence.
 
 The reviews are editorial, **not** independent aviation SME validation, and source-level inspection is **not** a rendered browser test. Proposed diagrams must be checked for visual quality and lawful source rights. Existing `docs/reviews/*-evidence.md` are separate technical evidence reviews.
+
+## Simulator fidelity and presentation standard
+
+Each review must assess simulator relevance even when the article is primarily real-world reference material. Distinguish: **real-world fact/procedure**; **simulator-implemented behaviour** (name the sim, module, version and verification basis); **known simplification or omission**; and **unknown/unverified** (do not present as unsupported absence). Where a sim lacks a real procedure or system, make that distinction useful to a reader trying to practise it. Do not assume that DCS or BMS implements a real-world feature just because an aircraft or weapon is present. Do not conflate the separate Oversweep trainers' models with any simulator's flight model.
+
+**Existing presentation:** the encyclopedia already has a `.sim-panel` treatment in `src/styles/encyclopedia.css`, used by `src/components/encyclopedia/AirfieldRecordPage.astro`. Prefer reusing this visual distinction instead of introducing new promotional blocks or another component style. Check the rendered output before prescribing its use on manual pages, where the existing styling may differ. Simulator-specific callouts should supplement, not interrupt, the primary real-world explanation.
+
+**Review status:** this fifth criterion was added after the first editorial pass. Earlier reviews remain editorially complete for criteria 1–4 but simulator fidelity must be assessed and marked separately before they are considered five-criterion complete. In particular, existing sim references are not proof of simulation fidelity.
 
 ## Modules — 10 of 10 reviewed
 
