@@ -26,3 +26,9 @@ Readers should be able to identify the SA-2/S-75 and its guidance method; recogn
 ## Priority
 
 **P2 — presentation and applicability**, not trimming.
+
+## 5. Flight simulator relevance and differences
+
+RWR details already refer to DCS F-14. Verify the DCS SA-2 variant, radar states, site composition, guidance and countermeasure model separately from real-world S-75 capabilities.
+
+**Review action:** establish what is modelled, simplified, absent or unverified, citing the specific simulator, module, version and source/test. Keep real-world facts primary and put simulator-only behaviour in the established visually distinct sim-specific treatment where applicable. **Fidelity verification pending; no unsupported feature-absence claim is made here.**
