@@ -17,6 +17,11 @@ source: https://www.cnatra.navy.mil/tw4/vt35/assets/docs/training/tacform-fti-ma
 pages: 1-3
 ```
 
+```review-sources
+source: https://www.cnatra.navy.mil/tw4/vt35/assets/docs/training/tiltrotor-form-procedures.pdf
+pages: 13-16; 24-50; 52-67; 69-79
+```
+
 **Retrieval.** All sources were read on 2 November 2026 and reduced to text
 with Poppler `pdftotext -layout`; the AIM page was downloaded as HTML. Quotations come from
 that text, so check each against independently retrieved source text, and treat a
@@ -68,7 +73,7 @@ page numbers; by heading.
 | --- | --- | --- |
 | Tactical Formation Types | "two types … Combat Cruise and Combat Spread"; mutual support: "each aircraft is in a position to increase the other's situational awareness, provide fire support, and clear the other of threats and obstacles" | Positions |
 | Combat Cruise | "area aft of 10 degrees forward of abeam on either side of Lead aircraft, though between 30-45 degree bearings is preferred. Avoid extended flight in the area from trail to the 30 degree bearing (5 to 7 o'clock) … 0.3-1.0 NM" | Figure 1; table |
-| Combat Spread | "+/- 10 degrees of bearing from the abeam … 0.3-2.0 NM … 0.7 NM is ideal in the T-44" | Figure 1; table |
+| Combat Spread | "+/- 10 degrees of bearing from the abeam … 0.3-2.0 NM … 0.7 NM is ideal in the T-44". The T-44C brief (p. 15) gives 0.5–2.0 NM, 1.0 NM optimal; the page follows the handout and names both | Figure 1; table |
 | Basic Principles | "DASH-2 IS ALWAYS RESPONSIBLE FOR SEPARATION." | Positions |
 | Tac-Turns | 60–120°; "The aircraft on the outside initiates the maneuver … The inside aircraft waits until the outside aircraft's nose is pointing at their aircraft (approximately the 5 or 7 o'clock position)" | Tactical table |
 | Shackle | "regain position if he finds himself with excessive separation or sucked. Both aircraft turn towards each other (30-45 degrees heading change)"; "the aircraft with the most S.A. will call 'Resume'" | Tactical table |
@@ -89,7 +94,7 @@ and comes out of the extractor in fragments.
 | Breakup & Rendezvous | "USE 20-30 AOB WITH CONSTANT POWER SETTING TO ESTABLISH 60 BEARING LINE" | Rendezvous |
 | Lead Change | "DO NOT REPORT ESTABLISHED UNTIL YOU ARE AT 9-10 O'CLOCK POSITION ON OTHER AIRCRAFT"; "WING IS RESPONSIBLE FOR SEPARATION AT ALL TIMES" | Maneuvers table |
 | TACFORM – Maneuver Contracts | "All maneuvers are called from Combat Spread ONLY"; "Command of execution is when Dash-2 says 'TWO'" | Comms; Tactical |
-| Cross Turn; Dig / Pinch; Check Turn | Cross: 120–240°, "Hard Turn executed towards other element aircraft"; Dig/Pinch: "Adjust lateral separation … while maintaining course … 45° AOB for 30° Heading change"; Check: "heading changes of 45° or less … simultaneous, no change of sides" | Tactical table |
+| Cross Turn; Dig / Pinch; Check Turn | Cross: 120–240°, "Hard Turn executed towards other element aircraft"; Dig/Pinch: "Adjust lateral separation … while maintaining course … 45° AOB for 30° Heading change"; Check (brief p. 65): "heading changes of 45° or less … simultaneous, no change of sides". The TACFORM handout says "minor heading changes (up to 30 degrees)"; the page gives both | Tactical table |
 | Contracts (cont) | "Element aircraft will not continue a maneuver unless visual contact is established by at least one aircraft"; "expect a: 'visual / continue' or 'blind / terminate'" | Tactical |
 | RTB / Safety Procedures | Underrun: "1. Increase step-down 2. Keep lead in sight. 3. Level the wings (it's ok for relative motion to move you outside lead's turn vs. belly-up 4. Reduce power to idle to avoid passing ahead of lead. 5. Transmit 'underrunning.' 6. When relative motion is under control, join in the assigned posn. (Lower, level, idle, call)" | Underrun table; quiz |
 | Coordinating Instructions: Lost Sight | "WING TRANSMITS 'LOST SIGHT' or 'TWO'S BLIND' AND ALTITUDE"; "IN LEVEL FLIGHT – WING INCREASES STEP-DOWN 500 FEET" | Lost sight |

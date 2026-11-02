@@ -21,13 +21,13 @@ export const FORMATIONS = [
   {
     id: 'combat-cruise', name: 'Combat cruise', bearing: [-10, 90], prefer: [30, 45], avoid: [60, 90], range: [0.3, 1.0], scale: 1.2,
     use: 'Most flexibility for each aircraft: manoeuvre, lookout and terrain masking.',
-    note: 'Anywhere aft of 10° forward of abeam, 30–45° preferred; not for long within 30° of trail (60–90° aft of the wingline, 5 to 7 o’clock). 0.3–1.0 NM.',
+    note: 'Anywhere aft of 10° forward of abeam, 30–45° preferred; not for long “from trail to the 30 degree bearing (5 to 7 o’clock)”, read as within 30° of trail (60–90° aft of the wingline). 0.3–1.0 NM.',
     cite: [3, 'Combat Cruise'],
   },
   {
     id: 'combat-spread', name: 'Combat spread', bearing: [-10, 10], range: [0.3, 2.0], scale: 2.2,
     use: 'Open terrain and maximum lookout: each aircraft clears the other’s six. Tactical turns are flown from here.',
-    note: 'Within 10° of abeam, 0.3–2.0 NM depending on conditions (0.7 NM ideal in the T-44C).',
+    note: 'Within 10° of abeam, 0.3–2.0 NM depending on conditions, 0.7 NM ideal (TACFORM handout; the T-44C brief gives 0.5–2.0 NM, 1.0 NM optimal).',
     cite: [3, 'Combat Spread'],
   },
 ];
