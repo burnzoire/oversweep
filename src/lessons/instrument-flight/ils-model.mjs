@@ -57,7 +57,7 @@ export const feetPerDot = (range) => ({
  */
 export function ilsLimits({ loc, gs }) {
   if (Math.abs(loc) >= 2) return { ok: false, rule: 'Full-scale localizer: discontinue the approach.' };
-  if (gs >= 1) return { ok: false, rule: 'More than one dot low: do not descend below localizer minimums until back within limits.' };
+  if (gs > 1) return { ok: false, rule: 'More than one dot low: do not descend below localizer minimums until back within limits.' };
   if (gs <= -2) return { ok: false, rule: 'Full scale (two dots) high: do not descend below localizer minimums until back within limits.' };
   return { ok: true, rule: 'Within limits: you may continue to the DA.' };
 }

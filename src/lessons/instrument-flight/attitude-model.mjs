@@ -95,6 +95,8 @@ export const UNUSUAL = Object.freeze([
     id: 'inverted', label: 'Inverted dive',
     state: { pitch: -30, bank: 160, speed: 360, vsi: -7000, power: 70 },
     answer: 'Roll upright to wings level first, no back pressure until under 90° of bank',
+    // A diving recovery that rolls level before pulling is also right here.
+    also: ['Power back, roll wings level, then pull to the horizon'],
     why: 'Diving and past 90° of bank. Roll toward the sky pointer to get upright and wings level; pulling now would steepen the dive. Then pull to level flight.',
   },
   {

@@ -24,6 +24,7 @@ test('turn rate is g·tan(bank)/speed: 30° at 250 kt is about 2.5°/s; standard
 
 test('every unusual attitude picture has its own recovery, and the hub returns between spokes', () => {
   assert.equal(new Set(RECOVERIES).size, UNUSUAL.length);
+  for (const u of UNUSUAL) for (const a of u.also ?? []) assert.ok(RECOVERIES.includes(a) && a !== u.answer, `${u.id}: ${a}`);
   const order = hubAndSpoke(2);
   order.forEach((x, i) => assert.equal(x === 'adi', i % 2 === 0));
 });
@@ -47,6 +48,7 @@ test('the same error in feet is more dots close in', () => {
 test('ILS limits (AFMAN 11-217 p. 210): full-scale localizer, one dot low, two dots high', () => {
   assert.equal(ilsLimits({ loc: 2, gs: 0 }).ok, false);
   assert.equal(ilsLimits({ loc: 0, gs: 1.2 }).ok, false);
+  assert.equal(ilsLimits({ loc: 0, gs: 1 }).ok, true, 'exactly one dot low is within limits');
   assert.equal(ilsLimits({ loc: 0, gs: -2 }).ok, false);
   assert.equal(ilsLimits({ loc: 0.5, gs: 0.8 }).ok, true);
   assert.equal(ilsLimits({ loc: 0, gs: -1.5 }).ok, true);

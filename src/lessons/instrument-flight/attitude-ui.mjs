@@ -64,9 +64,13 @@ function setupPanel(root) {
 function setupScan(root) {
   const svg = root.querySelector('svg'), out = root.querySelector('[data-result]');
   const buttons = [...root.querySelectorAll('[data-mode]')];
-  // Fixation: the unnoticed bank lets the nose drop a little as well.
   const names = { adi: 'attitude indicator', alt: 'altimeter', hsi: 'heading', asi: 'airspeed', vsi: 'vertical speed', turn: 'turn and slip' };
-  let mode = 'hub', s, k, held, order;
+  const pause = root.querySelector('[data-pause]');
+  // Reduced motion: start paused; Play runs it on request.
+  let mode = 'hub', s, k, held, order, paused = reduceMotion();
+  const setPaused = (v) => { paused = v; pause.textContent = v ? 'Play' : 'Pause'; pause.setAttribute('aria-pressed', String(v)); };
+  setPaused(paused);
+  pause.addEventListener('click', () => setPaused(!paused));
   function start(m) {
     mode = m;
     for (const b of buttons) b.setAttribute('aria-pressed', String(b.dataset.mode === m));
@@ -76,17 +80,19 @@ function setupScan(root) {
   start('hub');
   for (const b of buttons) b.addEventListener('click', () => start(b.dataset.mode));
   const dwell = reduceMotion() ? 2 : 0.8;
-  loop(root, (dt) => {
+  loop(root, (frame) => {
+    const dt = paused ? 0 : frame;
     held += dt;
     if (held >= dwell) { held = 0; k = (k + 1) % order.length; }
     // The hub-and-spoke pilot catches every drift at once. The fixated pilot
-    // stares at the altimeter while a slow bank creeps in unnoticed.
+    // stares at the altimeter while a slow bank creeps in unnoticed, and the
+    // nose drops a little with it.
     const fixated = mode === 'fix';
     const elapsed = s.t;
     const input = fixated
       ? { pitch: levelTrim(s.speed).pitch - Math.min(4, elapsed * 0.25), bank: Math.min(25, elapsed * 1.6), power: 70 }
       : { pitch: levelTrim(s.speed).pitch, bank: 0, power: 70 };
-    s = step(s, input, dt);
+    if (dt) s = step(s, input, dt);
     if (fixated && elapsed > 20) start('fix');
     const now = fixated ? 'alt' : order[k];
     drawPanel(svg, s, { highlight: now, groups: false });
@@ -97,6 +103,16 @@ function setupScan(root) {
 }
 
 /* ---------- Figure 3: unusual attitudes ---------- */
+// The readings in words, for the figure's accessible name. No recovery.
+function describe(st) {
+  const bank = Math.abs(st.bank);
+  const adi = st.adiFailed
+    ? `Attitude indicator showing an OFF flag, with a picture of ${Math.abs(st.pitch)}° nose ${st.pitch < 0 ? 'down' : 'up'} and ${bank}° of bank`
+    : `Attitude indicator: ${Math.abs(st.pitch)}° nose ${st.pitch < 0 ? 'down' : 'up'}, ${bank}° of bank ${st.bank < 0 ? 'left' : 'right'}${bank > 90 ? ', past inverted' : ''}`;
+  const turn = Math.abs(st.rate) < 0.2 ? 'turn needle centred' : `turn needle ${st.rate < 0 ? 'left' : 'right'}`;
+  return `${adi}. Airspeed ${r0(st.speed)} knots, altimeter ${r0(st.altitude)} ft, vertical speed ${st.vsi === 0 ? 'zero' : `${r0(Math.abs(st.vsi))} ft a minute ${st.vsi < 0 ? 'down' : 'up'}`}, ${turn}, power ${Math.round(st.power)}%.`;
+}
+
 function setupUnusual(root) {
   const svg = root.querySelector('svg');
   const ui = { prompt: root.querySelector('[data-prompt]'), choices: root.querySelector('[data-choices]'), result: root.querySelector('[data-result]'), next: root.querySelector('[data-new]') };
@@ -106,11 +122,12 @@ function setupUnusual(root) {
       const st = initialState({ ...q.state, altitude: 8000, heading: 210 });
       if (!q.state.adiFailed) st.rate = (1091 * Math.tan(Math.max(-80, Math.min(80, q.state.bank)) * Math.PI / 180)) / q.state.speed;
       drawPanel(svg, st, { groups: false });
+      svg.setAttribute('aria-label', describe(st));
       prompt.textContent = 'You look up from the chart to this panel. What first?';
     },
     options: () => shuffle(RECOVERIES),
     label: (o) => o,
-    isRight: (q, o) => o === q.answer,
+    isRight: (q, o) => o === q.answer || (q.also ?? []).includes(o),
     feedback: (q, o, right) => `${right ? 'Correct' : 'Not quite'}: ${q.label.toLowerCase()}. ${q.why}`,
   });
 }
