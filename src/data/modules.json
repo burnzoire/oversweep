@@ -90,6 +90,17 @@
     "applicability": "For military pilots of every service, fixed- and rotary-wing: the Air Force instrument flight procedures manual and the Navy's instrument training instructions first, as generic procedure, with the FAA Aeronautical Information Manual as the supplementary US rule set. Army instrument publications could not be read for this revision; your service's instrument rules, the aircraft's flight manual and current flight information publications govern."
   },
   {
+    "id": "module.two-ship-formation",
+    "slug": "two-ship-formation",
+    "subject": "formation-flying",
+    "revision": 1,
+    "title": "Two-Ship Formation",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Fly as a section: know the parade, cruise, combat cruise and combat spread positions, hold parade by its checkpoints in altitude, bearing, closure order, make the flight's check-ins and frequency changes, fly the breakup and rendezvous and recover from an underrun, run the lost sight and blind procedures, use the lead's lights at night, and recognise the tactical turns.",
+    "applicability": "For military pilots of every service: the Navy training command's T-6B and T-44C formation material as generic technique, with type numbers as examples and the FAA's lighting rule as a supplement. Air Force and Army formation publications and helicopter formations are not yet covered; your service's formation rules, unit procedures and the aircraft's flight manual govern."
+  },
+  {
     "id": "module.weapons-delivery",
     "slug": "weapons-delivery",
     "subject": "air-to-ground-operations",

@@ -1632,6 +1632,17 @@
     "summary": "The control and performance concept, the crosscheck, the illusions of spatial disorientation, holding, and the fixes and altitudes of an instrument approach."
   },
   {
+    "id": "encyclopedia.terminology.formation",
+    "slug": "formation",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Formation terms",
+    "designation": "CNATRA VT-6 · VT-35",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Parade, cruise and combat spread, the parade checkpoints, acute and sucked, the rendezvous and underrun, lost sight and the tactical turns."
+  },
+  {
     "id": "encyclopedia.terminology.weapons",
     "slug": "weapons",
     "category": "terminology",

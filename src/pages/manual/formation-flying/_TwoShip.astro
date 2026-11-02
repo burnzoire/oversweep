@@ -1,0 +1,313 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
+import { getModule } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import Term from '../../../components/Term.astro';
+import '../../../styles/instrument-flight.css';
+import '../../../styles/formation.css';
+const mod = getModule('two-ship-formation');
+// The first-pass path, then reference material for when it is needed.
+const core = [
+ ['example', 'One formation sortie, start to finish'], ['positions', 'Where the wingman flies'], ['parade', 'Parade: three checkpoints'],
+ ['comms', 'Talking as a flight'], ['rendezvous', 'Breakup, rendezvous and underruns'], ['lost', 'Lost sight and blind'], ['recap', 'Key points'],
+];
+const reference = [
+ ['lights', 'Lights at night'], ['maneuvers', 'Crossunders, lead changes and the break'], ['tactical', 'Tactical formation maneuvers'],
+ ['sims', 'In the sim'], ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+];
+// [1] VT-6 Formation Supplement, by printed page. [2] FAA AIM 4-3-23,
+// supplementary. [3] VT-35 TACFORM handout and [4] VT-35 tiltrotor
+// formation procedures brief, by section or slide title. [5] DCS F/A-18C
+// and [6] DCS F-16C guides, sim crossover only.
+const pp = (n: number) => (page: string) => `[${n}, ${/[–,]/.test(page) ? 'pp.' : 'p.'} ${page}]`;
+const fs = pp(1), f18 = pp(5), f16 = pp(6);
+const tf = (s: string) => `[3, ${s}]`, tr = (s: string) => `[4, ${s}]`;
+const aim = '[2, ¶4-3-23]';
+const glossary = sitePath('encyclopedia/terminology/formation/');
+const instruments = sitePath('manual/instrument-flight/attitude-instrument-flying/');
+---
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="formation-flying" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Formation Flying',href:sitePath('manual/formation-flying/')},{label:mod.title}]}>
+ <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
+  <h2>{mod.maturity}</h2>
+  <p>Module revision {mod.revision} · Two aircraft flying as one: the formations, the parade sight picture, the flight's radio and hand signals, the breakup and rendezvous, lost sight, lights at night and tactical turns. From the Navy training command's formation material for the T-6B and T-44C, as generic technique, with the FAA's lighting rule as a supplement.</p>
+  <p>Figure 1 shows where the wingman flies in each formation; Figure 2 puts you in the wing position behind a real airframe, the T-6B, to line up its three checkpoints; Figure 3 is the lead's lights at night.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
+ </nav>
+
+ <p class="lede">Military aircraft fight in formation: a <Term>section</Term> of two can bring more power to bear, sooner and with more mutual support, than single aircraft. Flying it well comes down to a scan of known checkpoints on the lead and small, constant, relaxed control inputs. <a href="#source-formsup">{fs('1')}</a></p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>name the administrative and tactical formations and where the wingman flies in each;</li>
+  <li>hold <Term>parade</Term> by its checkpoints in the order altitude, bearing, closure, and say whether you are <Term>acute</Term>, <Term>sucked</Term>, high or low;</li>
+  <li>make the flight's check-ins and frequency changes, and answer a lead's call;</li>
+  <li>describe the <Term>breakup and rendezvous</Term> and recover from an <Term>underrun</Term>;</li>
+  <li>run the <Term>lost sight</Term> and <Term>BLIND</Term> procedures, and use the lead's lights at night.</li>
+ </ol>
+ <p class="note">This is a reference, not a qualification. The procedures come from the Navy's primary and multi-engine training squadrons, given here in generic form; the T-6B and T-44C numbers are examples from those aircraft, not standards for every type. Your service's formation rules, your unit's standard procedures and the aircraft's flight manual govern. The Air Force and Army formation publications could not be retrieved for this revision.</p>
+
+ <h2 id="example">One formation sortie, start to finish</h2>
+ <p>A two-ship of T-6Bs, call sign Angry, flies a basic formation sortie the way the VT-6 supplement lays it out. The sequence and the calls are the supplement's; the details between them are illustrative. Each step links to the section that explains it.</p>
+ <ol class="exchange script">
+  <li><span class="who">Brief</span> <span class="said">The flight lead briefs everything from the walk to shutdown, including every radio call and hand signal. Tactical frequencies are read from the kneeboard card and checked by each crew. <a href="#source-formsup">{fs('2')}</a> <a class="step" href="#comms">Comms</a></span></li>
+  <li><span class="who">Before taxi</span> <span class="said">Lead: “Angry, check Victor.” Wing: “Angry 1-2, with (ATIS code).” Neither aircraft leaves the tactical frequency unless lead directs it. <a href="#source-formsup">{fs('2–3')}</a> <a class="step" href="#comms">Check-in</a></span></li>
+  <li><span class="who">Takeoff</span> <span class="said">Interval takeoff. Lead climbs at a set power and speed and limits bank; wing joins with a limit on closure, a <Term>running rendezvous</Term>. <a href="#source-formsup">{fs('3, 8')}</a> <a class="step" href="#rendezvous">Rendezvous</a></span></li>
+  <li><span class="who">In the area</span> <span class="said">Parade, parade turns into and away from the wing, a <Term>crossunder</Term>, more turns, another crossunder. <a href="#source-formsup">{fs('8')}</a> <a class="step" href="#parade">Parade</a></span></li>
+  <li><span class="who">Ops check</span> <span class="said">Lead directs it; wing goes first: “Angry 1-2, (fuel), good G’s.” Lead resets the <Term>JOKER</Term> fuel. <a href="#source-formsup">{fs('4')}</a> <a class="step" href="#comms">Ops check</a></span></li>
+  <li><span class="who">Breakup</span> <span class="said">Lead turns away; wing breaks as lead approaches the <Term>3/9 line</Term>, then rejoins by radius of turn, not by power. <a href="#source-formsup">{fs('4')}</a> <a class="step" href="#rendezvous">Breakup and rendezvous</a></span></li>
+  <li><span class="who">Lead change</span> <span class="said">The wingman takes the lead and the sequence repeats. <a href="#source-formsup">{fs('4, 8')}</a> <a class="step" href="#maneuvers">Lead change</a></span></li>
+  <li><span class="who">Home</span> <span class="said">Wing goes to <Term>cruise</Term> for the transit, back to parade on the correct side for the break, breaks after lead passes the 3/9 line, and calls “good brakes” on rollout. <a href="#source-formsup">{fs('5, 9')}</a> <a class="step" href="#maneuvers">The break</a></span></li>
+ </ol>
+ <p class="key"><strong>Key point:</strong> every phase has a brief, a known position and a known call, so the wingman always knows where to be and what comes next.</p>
+
+ <h2 id="positions">Where the wingman flies</h2>
+ <p>Parade and cruise are administrative formations: tight, for weather, controlled airspace and the break. The tactical formations, combat cruise and <Term>combat spread</Term>, open the flight up for mutual support, with each aircraft placed to add to the other’s awareness and clear it of threats and obstacles. <a href="#source-tr">{tr('Formation Types')}</a> <a href="#source-tf">{tf('Tactical Formation Types')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="positions" aria-labelledby="pos-title">
+  <h3 id="pos-title" class="fig-title">Figure 1 — The formations from above</h3>
+  <p class="no-js">This figure needs JavaScript. The table below gives the same positions.</p>
+  <div class="buttons" data-choices></div>
+  <div class="fig-scroll"><svg class="form" role="img" aria-label="Formations from above"></svg></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <p class="fig-caption">Bearings measured aft of the lead’s wingline. The numbers are the T-44C training values, shown for the shape of each formation; a faster aircraft flies the same shapes wider.</p>
+ </section>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>The two-ship formations (T-44C example values) <a href="#source-tr">{tr('Formation Types')}</a> <a href="#source-tf">{tf('Combat Cruise; Combat Spread')}</a></caption>
+  <thead><tr><th>Formation</th><th>Where the wingman flies</th><th>What it is for</th></tr></thead>
+  <tbody>
+   <tr><td>Parade</td><td>A fixed bearing and distance, held by checkpoints on the lead</td><td>Airshows and coming in for the break; an administrative formation with little flexibility (wing asks before crossing under)</td></tr>
+   <tr><td>Cruise</td><td>Between the 30° and 45° bearings on either side, 0 to 0.2 NM, moving by radius of turn</td><td>Transits through controlled airspace, keeping the formation tight and away from other aircraft</td></tr>
+   <tr><td>Combat cruise</td><td>Anywhere aft of 10° forward of abeam, 30–45° preferred, 0.3–1.0 NM; not lingering “from trail to the 30 degree bearing (5 to 7 o’clock)”, read here as within 30° of trail</td><td>Flexibility, lookout and terrain masking</td></tr>
+   <tr><td>Combat spread</td><td>Within 10° of abeam, 0.3–2.0 NM (TACFORM handout; the T-44C brief gives 0.5–2.0 NM, 1.0 NM optimal)</td><td>Open terrain, or when lookout matters most; tactical maneuvers are called from here</td></tr>
+  </tbody>
+ </table></div>
+ <p>In every formation the wingman is responsible for separation, and lead flies to make the wingman’s job possible. <a href="#source-tf">{tf('Basic Principles')}</a> <a href="#source-tr">{tr('TACFORM – Basic Principles')}</a></p>
+ <p class="key"><strong>Key point:</strong> the closer the formation, the more the wingman flies the lead instead of the aircraft; whatever the formation, separation is the wingman’s job.</p>
+
+ <h2 id="parade">Parade: three checkpoints</h2>
+ <p>In parade the wingman holds position by lining up pairs of features on the lead, called checkpoints, and corrects them in a fixed order: <strong>A</strong>ltitude (step-down), <strong>B</strong>earing, then <strong>C</strong>losure. On the T-6B the checkpoints are: <a href="#source-formsup">{fs('8')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>T-6B parade checkpoints, in correction order <a href="#source-formsup">{fs('8')}</a></caption>
+  <thead><tr><th>Order</th><th>What it sets</th><th>Line up</th></tr></thead>
+  <tbody>
+   <tr><td>A — Altitude</td><td><Term>Step-down</Term></td><td>Lead’s inboard exhaust stack fully visible and tangent to the bottom leading edge of the wing</td></tr>
+   <tr><td>B — Bearing</td><td><Term>Bearing line</Term></td><td>Lower UHF antenna over the inboard aileron cutout on the opposite wing</td></tr>
+   <tr><td>C — Closure</td><td>Separation along the bearing line</td><td>Edge of lead’s prop arc on the pitot tube</td></tr>
+  </tbody>
+ </table></div>
+ <section class="lesson figure-lesson" data-lesson="sight" aria-labelledby="sight-title">
+  <h3 id="sight-title" class="fig-title">Figure 2 — The parade sight picture behind a T-6B</h3>
+  <p class="no-js">This figure needs JavaScript. The table above gives the checkpoints.</p>
+  <div class="fig-scroll"><svg class="form" role="img" aria-label="The lead T-6B seen from the right parade position, with a top view and a view from behind"></svg></div>
+  <div class="controls">
+   <div class="buttons" role="group" aria-label="Move the wingman">
+    <button type="button" data-nudge="forward">Forward</button><button type="button" data-nudge="aft">Aft</button>
+    <button type="button" data-nudge="in">In</button><button type="button" data-nudge="out">Out</button>
+    <button type="button" data-nudge="up">Up</button><button type="button" data-nudge="down">Down</button>
+    <button type="button" data-reset>Back in parade</button>
+   </div>
+   <label><input type="checkbox" name="marks" checked> Show checkpoints</label>
+  </div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <p class="fig-caption">Green: the pair is lined up; red: it is not. The outline is a simplified T-6B scaled to its published size, and the positions of the antenna, cutout, stack and pitot tube on it are estimates, so the figure finds the point where the three pairs line up as nearly as the outline allows. In the side views the ring is parade and the red dot is you. One press moves about half a metre.</p>
+ </section>
+ <ul>
+  <li><strong>The order matters.</strong> Altitude first, because a step-down error changes every other picture. In the rendezvous, altitude is held by keeping the lead on the horizon, and poor altitude control spoils airspeed and closure. <a href="#source-formsup">{fs('4, 8')}</a></li>
+  <li><strong>Small, constant, relaxed inputs.</strong> Inputs in parade are finer than on an instrument approach: fingertips and toes, power changing a few percent all the time. Each correction has three parts: start the change, stop it, hold the new position. <a href="#source-formsup">{fs('1')}</a></li>
+  <li><strong>Keep the scan moving.</strong> Move the eyes between known checkpoints, hub and spoke, without committing to any one, and use the lead’s apparent size. Parade is never static. From too far away, the wingman cannot see the lead’s small changes in time. <a href="#source-formsup">{fs('1–2, 8')}</a></li>
+  <li><strong>Acute and sucked.</strong> Ahead of the bearing line is acute; behind it is sucked. Instructors show both, corrected with power and with aileron, and stepped up and down. <a href="#source-formsup">{fs('8')}</a></li>
+ </ul>
+ <p>Other types have their own checkpoints, and the same pairs show each error. In the T-44C’s starboard parade the lead’s horizontal stabilizer sits on the UHF antenna and the vertical stabilizer runs through the star on the fuselage: <a href="#source-tr">{tr('Starboard Parade')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>T-44C starboard parade: what each error looks like <a href="#source-tr">{tr('Starboard Parade')}</a></caption>
+  <thead><tr><th>Position</th><th>Horizontal stabilizer and UHF antenna</th><th>Vertical stabilizer and star</th></tr></thead>
+  <tbody>
+   <tr><td>In parade</td><td>Stabilizer on the antenna</td><td>Through the star</td></tr>
+   <tr><td>Acute</td><td>A gap between them</td><td>Outside the star</td></tr>
+   <tr><td>Sucked</td><td>Stabilizer ahead of and covering the antenna</td><td>Inside the star</td></tr>
+   <tr><td>High</td><td>Stabilizer below the antenna</td><td>—</td></tr>
+  </tbody>
+ </table></div>
+ <p>The pairs differ from type to type, but the method is the same: two features that move apart when you drift tell you which way you have gone.</p>
+ <p class="key"><strong>Key point:</strong> fix altitude, then bearing, then closure, each by its pair of checkpoints, with small inputs and a moving scan.</p>
+
+ <h2 id="comms">Talking as a flight</h2>
+ <p>Every aircraft checks in on a briefed tactical frequency and stays on it unless lead directs a change. Check-ins and pushes are never made on ATC, area common or CTAF frequencies, so the flight does not crowd a busy one. Lead talks for the flight; wing answers with its own call sign. <a href="#source-formsup">{fs('2')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Call signs in a VT-6 flight <a href="#source-formsup">{fs('2')}</a></caption>
+  <thead><tr><th>Name</th><th>Example</th><th>Used for</th></tr></thead>
+  <tbody>
+   <tr><td>Flight tactical call sign</td><td>Angry</td><td>Lead’s calls to the whole flight</td></tr>
+   <tr><td>Individual tactical call sign</td><td>Angry 1-1, Angry 1-2</td><td>Each aircraft; the designated flight lead stays 1-1 even when flying wing</td></tr>
+   <tr><td>ATC call sign</td><td>Squadron call sign and the flight leader’s side number</td><td>Talking to air traffic control</td></tr>
+  </tbody>
+ </table></div>
+ <p>Changing frequency so the flight is never off the air: <a href="#source-formsup">{fs('10')}</a></p>
+ <ol class="exchange">
+  <li><span class="who">Lead (VHF tactical)</span> <span class="said">“Angry, push UHF TAC.”</span></li>
+  <li><span class="who">Lead (UHF tactical)</span> <span class="said">“Angry.”</span></li>
+  <li><span class="who">Wing</span> <span class="said">“Angry 1-2.”</span></li>
+  <li><span class="who">Lead</span> <span class="said">“Angry, push VHF (frequency).” No check-in follows: the new frequency is the working one.</span></li>
+ </ol>
+ <ul>
+  <li><strong>Brevity.</strong> In tactical maneuvering, lead names the maneuver and the rollout heading, and the maneuver starts when Dash-2 answers “Two.” <a href="#source-tr">{tr('TACFORM – Maneuver Contracts')}</a> <Term>PUSH</Term>, <Term>VISUAL</Term> and <Term>BLIND</Term> carry their brevity meanings.</li>
+  <li><strong>Hand signals.</strong> Signals do what the radio would: the integrity check before takeoff is a thumbs up from wing, returned by lead. A student says each signal sequence aloud on the intercom: “Wingman in position, area clear. Crossunder signal, ready now… ready look… signal acknowledged.” <a href="#source-formsup">{fs('3')}</a></li>
+  <li><strong>No radio.</strong> The <Term>NORDO</Term> aircraft pats its oxygen mask (“can’t talk”) or helmet ear (“can’t hear”), then thumbs down. <a href="#source-formsup">{fs('6')}</a></li>
+  <li><strong>Fuel.</strong> At the first ops check, the joker is reset to halfway between the lowest fuel state and <Term>BINGO</Term>, so each aircraft gets equal time as wing. <a href="#source-formsup">{fs('4')}</a></li>
+ </ul>
+ <section class="lesson quiz-lesson" data-lesson="calls" aria-labelledby="calls-title">
+  <h3 id="calls-title">Quiz: what do you say?</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next call</button></div>
+ </section>
+ <p class="key"><strong>Key point:</strong> one tactical frequency, never left without lead’s say-so; lead calls the flight, wing answers with its own call sign.</p>
+
+ <h2 id="rendezvous">Breakup, rendezvous and underruns</h2>
+ <p>The breakup and rendezvous separates the section and joins it again with both aircraft at the same speed. The rendezvous works by radius of turn: wing cuts inside lead’s turn to close, rather than adding power. <a href="#source-formsup">{fs('4')}</a></p>
+ <ol class="steps">
+  <li><strong>Breakup.</strong> Lead turns away. Wing breaks as lead approaches the 3/9 line abeam the wing’s leading edge; at about 3–4 G each, that gives enough separation. A common technique is a three-second count, but the trigger is the 3/9 line. <a href="#source-formsup">{fs('4')}</a></li>
+  <li><strong>Join.</strong> Wing turns to get on a bearing line inside lead’s turn, holds altitude with lead on the horizon, and lets the geometry give closure. The T-44C uses 20–30° of bank and a constant power setting to set a 60° bearing line. <a href="#source-formsup">{fs('4')}</a> <a href="#source-tr">{tr('Breakup & Rendezvous')}</a></li>
+  <li><strong>Underrun.</strong> If wing passes under and ahead of lead with too much closure, wing calls the underrun, lead acknowledges, and wing joins on the outside of the turn. <a href="#source-formsup">{fs('4, 9')}</a></li>
+ </ol>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Underrun: lower, level, idle, call <a href="#source-tr">{tr('RTB / Safety Procedures')}</a></caption>
+  <thead><tr><th>Step</th><th>Why</th></tr></thead>
+  <tbody>
+   <tr><td>1. Increase step-down</td><td>Clears the lead vertically</td></tr>
+   <tr><td>2. Keep lead in sight</td><td>Without sight the procedure becomes lost sight</td></tr>
+   <tr><td>3. Level the wings</td><td>It is fine for relative motion to carry you outside lead’s turn, rather than going belly-up to lead</td></tr>
+   <tr><td>4. Power to idle</td><td>Stops you passing ahead of lead</td></tr>
+   <tr><td>5. Transmit “underrunning”</td><td>Lead knows where you are</td></tr>
+   <tr><td>6. Join in the assigned position</td><td>Once relative motion is under control</td></tr>
+  </tbody>
+ </table></div>
+ <p class="key"><strong>Key point:</strong> rendezvous with geometry, not power; if the closure gets away, lower, level, idle, call.</p>
+
+ <h2 id="lost">Lost sight and blind</h2>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Lost sight and blind compared <a href="#source-formsup">{fs('7')}</a></caption>
+  <thead><tr><th></th><th>Lost sight</th><th>Blind</th></tr></thead>
+  <tbody>
+   <tr><td>When</td><td>In cloud (IMC); only the wing can lose sight, since lead is on instruments</td><td>In clear air: wing cannot see lead</td></tr>
+   <tr><td>Wing’s call</td><td>“Angry 1-2, lost sight, (altitude)”</td><td>“Angry 1-2, blind, (altitude)”</td></tr>
+   <tr><td>First actions</td><td>Instrument scan for aircraft control, the call, and about 10% power reduction, all nearly at once</td><td>Lead talks wing onto lead’s position with the clock code</td></tr>
+   <tr><td>If it does not work</td><td>The rest of the procedure is in the formation flight training instruction, which is not public</td><td>If both are blind, lead assigns altitudes at least 500 ft apart without crossing, then a briefed rejoin, low to high</td></tr>
+  </tbody>
+ </table></div>
+ <p>Wing does not know, at first, whether the flight is turning, climbing or descending, which is why the power comes off at once. In a turn into the wing, the lost-sight call can include a command, such as “lead roll out”, rather than relying on lead to know which side the wing is on. <a href="#source-formsup">{fs('7–8')}</a> In the T-44C, a wingman who loses sight in level flight steps down 500 ft. <a href="#source-tr">{tr('Coordinating Instructions: Lost Sight')}</a> The instrument scan itself is in <a href={instruments}>Attitude Instrument Flying</a>.</p>
+ <p class="key"><strong>Key point:</strong> lost sight is instruments, call and about 10% less power; blind is a call and a talk-on, then altitude separation if both aircraft are blind.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>Parade and cruise are tight administrative formations; combat cruise and combat spread are tactical. In all of them, separation is the wingman’s job.</li>
+  <li>Parade is held by checkpoint pairs on the lead, corrected altitude, then bearing, then closure.</li>
+  <li>The flight lives on one tactical frequency. Lead calls for the flight; wing answers with its own call sign.</li>
+  <li>The rendezvous uses radius of turn, not power. An underrun is lower, level, idle, call.</li>
+  <li>Lost sight (in cloud) is instruments, call and a smooth power reduction of about 10%, together; blind (in clear air) is a call and a talk-on.</li>
+ </ul>
+
+ <h2 id="lights">Lights at night</h2>
+ <p>At night the lead is a set of lights. US rules, in US airspace, require position lights from sunset to sunrise and an operating anti-collision system day and night. The pilot may turn the anti-collision lights off when their output is a hazard, and strobes off in flight when they reflect off cloud. <a href="#source-aim">{aim}</a> Many military aircraft also carry <Term>formation lights</Term>. The figure places them on an F/A-18C as the DCS F/A-18C guide does, which lists eight. <a href="#source-f18">{f18('61')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="lights" aria-labelledby="lights-title">
+  <h3 id="lights-title" class="fig-title">Figure 3 — The lead’s lights at night (F/A-18C)</h3>
+  <p class="no-js">This figure needs JavaScript.</p>
+  <div class="fig-scroll"><svg class="form" role="img" aria-label="An F/A-18C seen from the wing position at night"></svg></div>
+  <div class="controls">
+   <fieldset><legend>Position</legend>
+    <label><input type="radio" name="position" value="off"> Off</label><label><input type="radio" name="position" value="dim"> Dim</label><label><input type="radio" name="position" value="bright" checked> Bright</label></fieldset>
+   <fieldset><legend>Formation</legend>
+    <label><input type="radio" name="formation" value="off"> Off</label><label><input type="radio" name="formation" value="dim" checked> Dim</label><label><input type="radio" name="formation" value="bright"> Bright</label></fieldset>
+   <label><input type="checkbox" name="strobe" checked> Strobes</label>
+  </div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <p class="fig-caption">Light positions from the DCS guide’s description: formation strips on the wingtips, the outboard sides of the fins, the aft fuselage below the fins and the forward fuselage ahead of the LEX; red anti-collision strobes on the outboard fins; a white position light below the right fin tip. The guide lists three red and three green position lights per side without placing them, so only the wingtip pair is drawn.</p>
+ </section>
+ <p class="note">When to set which light in formation (who goes dim, who turns strobes off) is set by your service’s rules and the flight lead’s brief. The sources read for this revision do not give a generic rule, so the module does not give one.</p>
+
+ <h2 id="maneuvers">Crossunders, lead changes and the break</h2>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Parade maneuvers <a href="#source-formsup">{fs('5–6, 9')}</a> <a href="#source-tr">{tr('Crossunder; Lead Change')}</a></caption>
+  <thead><tr><th>Maneuver</th><th>How it is flown</th><th>Common errors and limits</th></tr></thead>
+  <tbody>
+   <tr><td>Crossunder</td><td>Wing increases step-down (double step-down), turns 3–5° to slide under the lead, and moves up into the same position on the other side</td><td>Getting too far in trail of lead; stopping the cross too soon</td></tr>
+   <tr><td>Lead change</td><td>Signalled by hand or, for an admin change, by radio: “Angry 1-2 has the lead on the left.” The new lead drives forward; it does not report established until at the 9–10 o’clock position on the other aircraft (T-44C)</td><td>Wing is responsible for separation throughout; in VT-6 training, admin lead changes are flown only by instructors; no lead change inside the VFR entry point if lead is NORDO</td></tr>
+   <tr><td>The break</td><td>Wing breaks no earlier than lead passing wing’s 3/9 line (about 3 seconds), holds lead on the horizon, uses lag pursuit to set spacing, and rolls out behind or outside lead’s downwind</td><td>Inside lead’s downwind shrinks the spacing at the 180; the T-6B wants at least 1,500 ft nose to tail</td></tr>
+   <tr><td>Rollout</td><td>Both aircraft stay on the centerline; below 80 kt, wing calls “good brakes”, which lets lead exit early</td><td>Don’t call it without the braking to follow lead off the runway</td></tr>
+  </tbody>
+ </table></div>
+ <p>Emergencies: the old rule “bleeder is the leader” gives the lead to the aircraft with the malfunction, since it may need a lower speed or a forced landing. A NORDO or degraded aircraft may not be the best lead, because it cannot navigate, talk to ATC or clear for the flight. The choice depends on the situation and the airspace. <a href="#source-formsup">{fs('6')}</a></p>
+
+ <h2 id="tactical">Tactical formation maneuvers</h2>
+ <p>Tactical maneuvers start from combat spread, with lead calling the maneuver and the rollout heading. <a href="#source-tf">{tf('Maneuvers')}</a> <a href="#source-tr">{tr('TACFORM – Maneuver Contracts')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Tactical formation maneuvers <a href="#source-tf">{tf('Maneuvers')}</a> <a href="#source-tr">{tr('Tac-Turns – Check Turn')}</a></caption>
+  <thead><tr><th>Call</th><th>Heading change</th><th>What happens</th></tr></thead>
+  <tbody>
+   <tr><td><Term>Tac turn</Term> (“tac left 090”)</td><td>60–120°</td><td>The aircraft on the outside turns first; the inside aircraft turns when the other’s nose points at it (about 5 or 7 o’clock). Wing rolls out in spread.</td></tr>
+   <tr><td><Term>Shackle</Term></td><td>About 30–45° each, toward each other</td><td>The aircraft cross and change sides; used to let a sucked or wide wingman regain position. The aircraft with the most awareness calls “Resume.”</td></tr>
+   <tr><td><Term>Pump</Term></td><td>90°</td><td>Stops travel toward a threat or obstacle at once; wing ends in trail and stays there until the next pump.</td></tr>
+   <tr><td><Term>Hook turn</Term></td><td>120–240°</td><td>Both turn the same way at once and change sides; the aircraft on the inside loses sight until the rollout.</td></tr>
+   <tr><td>Cross turn</td><td>120–240°</td><td>A hard turn toward the other aircraft</td></tr>
+   <tr><td>Dig / pinch</td><td>About 30°, then back</td><td>Opens or closes lateral separation while keeping the course</td></tr>
+   <tr><td>Check turn</td><td>Minor changes: up to 30° in the TACFORM handout, 45° or less in the T-44C brief</td><td>Both turn together; no change of sides. The outside aircraft tends to fall sucked, fixed with a shackle or a little power.</td></tr>
+  </tbody>
+ </table></div>
+ <p>No maneuver continues unless at least one aircraft is visual. A blind call is answered with “visual, continue” or “blind, terminate.” <a href="#source-tr">{tr('Contracts (cont)')}</a></p>
+
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p><strong>Lights.</strong> The DCS F/A-18C guide places the formation lights as in Figure 3, with a FORMATION knob from OFF to BRT and a STROBE switch, all under the exterior lights master switch on the left throttle. <a href="#source-f18">{f18('61, 75')}</a> The DCS F-16C guide has a FORM knob for the wingtip red and green and white fuselage formation lights, a POSITION FLASH/STEADY switch, an ANTI-COLL knob with seven flash patterns, and a MASTER knob with covert modes. <a href="#source-f16">{f16('69–70')}</a> What the real aircraft’s lighting panels do was not checked against their flight manuals.</p>
+  <p><strong>What the guides do not cover.</strong> Neither guide describes parade checkpoints, the rendezvous or formation radio calls, so nothing is claimed about how the sims treat them. Other DCS aircraft and Falcon BMS were not checked.</p>
+  <p><strong>To practise:</strong> with a friend, brief and fly the sequence in the opening example. Pick checkpoints on your lead’s airframe the way Figure 2 does, two features per axis, and say the A-B-C corrections out loud. Fly the call quiz’s calls on your tactical frequency.</p>
+ </section>
+
+ <h2 id="terms">Terms</h2>
+ <p>Every word is in the <a href={glossary}>formation terms</a>.</p>
+ <GlossaryList items={[
+  'Parade', 'Cruise', 'Combat spread', 'Step-down', 'Bearing line', 'Acute', 'Sucked', 'Running rendezvous', 'Breakup and rendezvous', 'Underrun',
+  'Crossunder', 'Lost sight', 'NORDO', 'Formation lights', 'Tac turn', 'Shackle', 'Pump', 'Hook turn',
+ ]} />
+ <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
+  <h3 id="terms-title">Quiz: name the term</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next term</button></div>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <p>One or more questions for each outcome at the top of the page; Figure 1 covers outcome 1, Figure 2 outcome 2, the call quiz outcome 3 and Figure 3 outcome 5.</p>
+ <details><summary><span class="outcome">Outcome 1</span> Lead takes the flight through controlled airspace, then into a valley where you both want lookout and room to manoeuvre. Which formations?</summary><p>Cruise through controlled airspace; combat cruise for the valley, which gives flexibility and terrain masking. Combat spread suits open terrain and maximum lookout.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> In combat cruise you have drifted to lead’s 6 o’clock. Why move?</summary><p>The source says to avoid long periods within 30° of trail (5 to 7 o’clock): that area is for transit only. Return to the preferred 30–45° bearings.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> In parade the antenna has moved forward of the aileron cutout and the stack is buried below the wing. What do you fix first?</summary><p>Altitude first: you are high (stack not visible), so step down until the stack sits on the wing’s leading edge. Then fix the bearing: you are off the bearing line, acute or sucked depending on which way the antenna has moved.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> Why can’t you fly good parade from further out?</summary><p>At a distance you cannot pick up the lead’s small changes, so your corrections become large and late. Small distances mean small inputs.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Lead says “Angry, push UHF TAC.” What do you do?</summary><p>Change to the UHF tactical frequency. When lead says “Angry” there, answer “Angry 1-2.”</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Where may the flight do its check-ins?</summary><p>Only on its tactical frequency, never on ATC, area common or CTAF frequencies.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> During the rendezvous you are closing fast. Should you pull the power back?</summary><p>Not as the first tool: the rendezvous is flown by radius of turn, with power left alone unless the instructor directs otherwise. If you pass under and ahead of lead, it is an underrun: step down, keep sight, level the wings, idle, call “underrunning”, then join outside.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> When does wing start the breakup turn?</summary><p>As lead approaches the 3/9 line abeam the leading edge of the wing; the three-second count is only a technique.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> In cloud you lose sight of lead in a turn toward you. What do you do and say?</summary><p>Go to instruments, call “lost sight” with your altitude, and take off about 10% power, all at once. In a turn into you, add a command such as “lead roll out” to make separation quickly.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> In a night formation, the lead’s strobes are reflecting off the cloud you are flying in. What does the US rule allow?</summary><p>The pilot may turn the strobes off in flight when they reflect off cloud, and turn the anti-collision lights off when their output is a hazard.</p></details>
+
+ <h2 id="sources">Sources and applicability</h2>
+ <h3>Military sources</h3>
+ <p id="source-formsup"><strong>[1] Training Squadron SIX (VT-6), Formation Supplement (FORMSUP), June 2022.</strong> <a href="https://www.cnatra.navy.mil/tw5/vt6/assets/docs/university/formsup.pdf">cnatra.navy.mil</a>, read 2 November 2026 by printed page (pp. 1–11). A T-6B primary training squadron’s supplement to the Navy’s primary formation flight training instruction, which could not be found on a public host.</p>
+ <p id="source-tf"><strong>[3] Training Squadron THREE FIVE (VT-35), TACFORM (tiltrotor only), handout, undated.</strong> <a href="https://www.cnatra.navy.mil/tw4/vt35/assets/docs/training/tacform-fti-maneuvers.pdf">cnatra.navy.mil</a>, read 2 November 2026; cited by section heading, since the handout has no page numbers. T-44C multi-engine training for tiltrotor students.</p>
+ <p id="source-tr"><strong>[4] VT-35, Tiltrotor Formation and Aerial Refueling Procedures, F0201/F0301 brief, updated 29 September 2021.</strong> <a href="https://www.cnatra.navy.mil/tw4/vt35/assets/docs/training/tiltrotor-form-procedures.pdf">cnatra.navy.mil</a>, read 2 November 2026; cited by slide title. References MAWTS-1 courseware and the MV-22 maneuver guide.</p>
+ <h3>Supplementary FAA source</h3>
+ <p id="source-aim"><strong>[2] FAA, Aeronautical Information Manual, ¶4-3-23, Use of Aircraft Lights.</strong> <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap4_section_3.html">faa.gov</a>, read 2 November 2026. US rule (14 CFR 91.209); other nations’ rules differ.</p>
+ <h3>Sim sources</h3>
+ <p id="source-f18"><strong>[5] Eagle Dynamics, DCS: F/A-18C Early Access Guide (English), updated 24 March 2024.</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 2 November 2026, pp. 61 and 75. A sim manual, cited for Figure 3’s light positions and the In the sim panel.</p>
+ <p id="source-f16"><strong>[6] Eagle Dynamics, DCS: F-16C Viper Early Access Guide (English), updated 16 August 2026.</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 2 November 2026, pp. 69–70. A sim manual, cited only for the In the sim panel.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/formation-evidence.md">formation evidence</a>.</p>
+ <p>Figures 1 to 3 and the opening sortie are original drawings and examples, not reproductions of any publication’s figure. The T-6B and F/A-18C outlines are simplified shapes scaled to published dimensions.</p>
+ <p class="note">Applicability: written for pilots of every service. The procedures come from Navy primary and multi-engine training (T-6B and T-44C, the latter for Marine tiltrotor students), given in generic form, with type numbers marked as examples. The Navy’s primary formation flight training instruction, Air Force formation guidance (AFMAN 11-248 returned 403) and Army formation publications could not be read for this revision, and helicopter formations are not yet covered. Your service’s rules, your unit’s standard procedures and the aircraft’s flight manual govern.</p>
+
+</SiteLayout>
+<script>import '../../../lessons/formation/lesson-ui.mjs'; import '../../../lessons/formation/sight-ui.mjs';</script>
