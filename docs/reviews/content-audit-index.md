@@ -4,6 +4,8 @@ Updated: 2026-11-02. Based on the published registries `src/data/modules.json`, 
 
 **Progress: 71 / 240 individual reviews (29.3%).** All 11 manual modules are reviewed, and 60 of 229 encyclopedia articles. **169 encyclopedia records remain.** The Close Air Support audit was applied as a benchmark rewrite (revision 2); no other content pages have been rewritten.
 
+To apply an audit to a page, follow the [module page playbook](content-audit-playbook.md), learned from the Close Air Support benchmark; new modules follow it too.
+
 ## Five review questions
 
 1. **Length:** Is prose repetitive, longer than appropriate or missing enough explanation?

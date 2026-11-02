@@ -53,6 +53,9 @@ checks suffice. If an independent reviewer is unavailable, disclose that limitat
 for the owner's PR review rather than stopping routine work. Self-review is never
 independent review. Re-review material changes after findings are addressed.
 
+New and rewritten manual modules follow docs/reviews/content-audit-playbook.md
+(page structure, sim panel and review lessons) from the first draft.
+
 Aviation validation follows docs/content-standards.md: independent, source-backed
 aviation SME agent review can satisfy Technically Validated; no human aviation
 reviewer is required. Authors cannot self-validate. Record the exact revision,

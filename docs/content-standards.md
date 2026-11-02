@@ -79,3 +79,16 @@ CI alone cannot establish factual correctness.
 Define acronyms on first use; use consistent terminology and step numbering.
 Keep standard procedures separate from aircraft and simulator notes. Make source
 limitations and known disagreements visible beside the affected content.
+
+## Page structure for modules
+
+Every new module, and every rewrite of an existing one, follows the
+[module page playbook](reviews/content-audit-playbook.md). In short:
+
+- open with one worked example of the whole procedure;
+- split the contents into a core sequence and reference;
+- use tables for comparisons and exchanges for call sequences;
+- end each core section with a scoped key point, and number the learning outcomes;
+- add an "In the sim" panel from a sim manual that was actually read.
+
+Its review lessons apply when drafting, not only when auditing.
