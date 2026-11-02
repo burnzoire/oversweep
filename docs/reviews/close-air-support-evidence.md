@@ -75,3 +75,17 @@ only its format is from the source (Figure V-9).
 - pp. V-54 to V-55: "Faction 31, off, one away, 27 seconds"; CAS with non-JTAC personnel.
 - pp. V-55 to V-58: FAC(A) check-in and capabilities; BRIEF, STACK, MARK, CONTROL; "As always, the JTAC retains abort authority"; "Bengal 61 has stack and mark, Titus maintains brief and control"; "your brief, stack, mark, and control".
 - pp. GL-8 to GL-14: ACA, ASOC, DASC, FAC, FAC(A), GTL, JFO, JTAC, PLA, TACP, TAC(A), TLE, TRP, terminal attack control.
+
+## Revision 2 additions
+
+**Opening exchange.** The "one attack, start to finish" exchange is invented, like Figure 1, and uses the same brief. Its call formats are from the pages already listed: routing "maintain" (pp. V-14 to V-15), check-in order (pp. V-15 to V-17), friendlies in general terms "east of the 94 easting" (p. V-18), game plan (pp. V-20 to V-21), readback correct (p. V-33), "CONTACT the mark" and "from the mark, east 50" (p. V-40), "The third vehicle is your target" (p. V-34), "IN heading 360" (pp. III-44 to III-45), CLEARED HOT (p. III-40), "off, one away" (p. V-54), BDA for the flight (p. V-49) and the 30-second Type 1 interval (p. V-4). Its mission number, "2 by A-10C", position and playtime are made up.
+
+## DCS: A-10C II Tank Killer Flight Manual (Eagle Dynamics, 2023)
+
+**Retrieval.** DCS_A-10C_II_Flight_Manual_EN.pdf (814 PDF pages, created 11 July 2023), downloaded 2 November 2026 from the link on https://www.digitalcombatsimulator.com/en/downloads/documentation/dcs-warthog_2_flight_manual_en/ and reduced to text with pdftotext. Page numbers are the manual's printed footer pages. A sim manual: cited only for the module's In the sim panel, never for real-world procedure.
+
+- p. 784: "Type 1 ... This is the most common and restrictive of the three types. Type 1 is most often used when friendly forces are "danger close"." "Any unit can be assigned as a JTAC (including aircraft like a Predator)". Radio menu "Press F4 to select JTACs"; Easy Communications sets radio and frequency.
+- p. 785: check-in sends "Your mission number", "Location from Initial Point (IP) and your altitude", "What you are armed with", "How long you are available". "the JTAC will reply with the terminal control type (1, 2 or 3) ... and then ask if you are available for the 9-line"; "F1 Ready to copy"; remarks "generally include the weapon to use, weather information, and/or attack headings"; "read back the target location and elevation, and other data if applicable such as final attack heading"; digital 9-line on the MSG page and "a small, red triangle will appear on the TAD".
+- p. 786: coordinate only: "the JTAC will clear you to engage", "F1 Attack Complete"; smoke: "IP Inbound", "within 10 nm of the target, the target will be marked with white smoke", "mark is on the deck", "Contact the Mark", "In", "clear you in hot. If not, he will abort the attack", "Off"; laser code "1688 as default".
+- p. 787: "Laser On", LSS/LST search, "Spot"; IR pointer needs NVG, "options for "Pulse" and "Rope""; Repeat Brief, What is my target?, Contact, Request BDA.
+- p. 788: "Unable to comply", "Check Out".

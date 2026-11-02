@@ -2,7 +2,7 @@
 
 Updated: 2026-11-02. Based on the published registries `src/data/modules.json`, nested `src/data/experiences.json[*].module` and `src/data/encyclopedia.json`.
 
-**Progress: 70 / 239 individual reviews (29.3%).** All 10 manual modules are reviewed, and 60 of 229 encyclopedia articles. **169 encyclopedia records remain.** No content-page rewrites have been made.
+**Progress: 71 / 240 individual reviews (29.3%).** All 11 manual modules are reviewed, and 60 of 229 encyclopedia articles. **169 encyclopedia records remain.** The Close Air Support audit was applied as a benchmark rewrite (revision 2); no other content pages have been rewritten.
 
 ## Five review questions
 
@@ -16,7 +16,7 @@ Existing simulator-specific presentation: `.sim-panel` in `src/styles/encycloped
 
 Reviews are source-inspection editorial findings, **not** rendered-browser QA, external sourcing validation or aviation SME signoff. Simulator fidelity prompts are flagged pending verification. Technical changes must follow normal SME review.
 
-## Modules — 10/10
+## Modules — 11/11
 
 - [BFM](content-audit-bfm.md)
 - [Airfield operations](content-audit-airfield-basics.md)
@@ -25,6 +25,7 @@ Reviews are source-inspection editorial findings, **not** rendered-browser QA, e
 - [Rotor-wing fundamentals](content-audit-rotor-wing.md)
 - [Navigation](content-audit-air-navigation.md)
 - [Weapons delivery](content-audit-weapons-delivery.md)
+- [Close air support](content-audit-close-air-support.md) — findings applied in module revision 2 as a benchmark
 - [Ship operations](content-audit-ship-operations.md)
 - [Case III](content-audit-case-iii.md)
 - [Autorotation](content-audit-autorotation.md)
