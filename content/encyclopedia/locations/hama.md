@@ -24,11 +24,9 @@ maps:
     checked: "2026-10-28"
     cite: "[3]"
     facts:
-      - "Runway 09/27, 7,958 ft [3]"
+      - "Runway 09/27 [3]"
       - "Tower 118.05 MHz VHF and 250.25 MHz UHF [3]"
       - "No navaids or instrument approaches [3]"
-    differences:
-      - { topic: "Runway length", text: "The game's runway is 7,958 ft long [3]; the real one is 9,130 ft. [1] [2]" }
 photos: []
 sources:
   - n: 1

@@ -25,7 +25,7 @@ maps:
     checked: "2026-10-28"
     cite: "[3]"
     facts:
-      - "Runway 08/26, 7,626 ft [3]"
+      - "Runway 08/26 [3]"
       - "Tower 121.7 MHz VHF [3]"
       - "VOR-DME LEN, channel 95X and 114.8 MHz, and an NDB (LEN) [3]"
 photos: []

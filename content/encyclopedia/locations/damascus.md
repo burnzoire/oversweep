@@ -27,7 +27,7 @@ maps:
     checked: "2026-10-28"
     cite: "[3]"
     facts:
-      - "Runways 05L/23R (11,424 ft) and 05R/23L (11,295 ft) [3]"
+      - "Runways 05L/23R and 05R/23L [3]"
       - "Tower 118.5 MHz VHF and 253.25 MHz UHF [3]"
       - "VOR-DME DAM on 116.0 MHz, NDBs ABD and DAL, and ILS approaches to runway 05R, 111.1 MHz (DAML), and runway 23R, 109.9 MHz (IDA) [3]"
   - map: dcs-sinai
@@ -36,7 +36,7 @@ maps:
     checked: "2026-10-28"
     cite: "[4]"
     facts:
-      - "Runways 05L/23R (11,215 ft) and 05R/23L (11,092 ft) [4]"
+      - "Runways 05L/23R and 05R/23L [4]"
       - "Tower 118.5 MHz VHF and 226.1 MHz UHF [4]"
       - "VOR-DME DAM on 116.0 MHz (channel 107X), NDBs ABD and DAL, and the same two ILS approaches as on the Syria map [4]"
 photos: []

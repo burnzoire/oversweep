@@ -27,7 +27,7 @@ maps:
     checked: "2026-10-28"
     cite: "[3]"
     facts:
-      - "Runway 08/26, 9,093 ft [3]"
+      - "Runway 08/26 [3]"
       - "Tower 121.9 MHz VHF and 251.15 MHz UHF [3]"
       - "NDBs PAL and PLR [3]"
 photos: []

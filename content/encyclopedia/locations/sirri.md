@@ -25,7 +25,7 @@ maps:
     checked: "2026-10-28"
     cite: "[3]"
     facts:
-      - "Runway 12/30, 7,444 ft [3]"
+      - "Runway 12/30 [3]"
       - "Tower 135.05 MHz VHF [3]"
       - "VOR-DME SIR on 113.75 MHz and an NDB (SIR) [3]"
     differences:

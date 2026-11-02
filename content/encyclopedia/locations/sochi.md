@@ -32,7 +32,7 @@ maps:
     checked: "2026-10-28"
     cite: "[4]"
     facts:
-      - "Runway 06/24, 9,687 ft [4]"
+      - "Runway 06/24 [4]"
       - "Tower 127.0 MHz VHF and 256.0 MHz UHF [4]"
       - "An NDB with marker (CO) and an ILS on runway 06, 111.1 MHz (ISO) [4]"
     differences:

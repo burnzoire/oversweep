@@ -37,7 +37,6 @@ maps:
       - "TACAN 16X (BTM), an NDB (LU) and an ILS on runway 13, 110.3 MHz (ILU) [4]"
     differences:
       - { topic: "Runway designators", text: "The game numbers the runway 13/31 [4]; the real runway is published as 12/30. [1] [3]" }
-      - { topic: "Runway length", text: "The game's runway is 6,793 ft long [4], against 8,202 ft (2,500 m) published for the real one. [1]" }
 photos:
   - src: "encyclopedia/airfields-carriers/batumi.jpg"
     alt: "A Turkish Airlines airliner about to touch down on the runway, seen across long grass and a wire fence, with green wooded mountains behind"

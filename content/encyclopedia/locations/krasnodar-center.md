@@ -30,7 +30,7 @@ maps:
     checked: "2026-10-28"
     cite: "[4]"
     facts:
-      - "Runway 09/27, 7,659 ft [4]"
+      - "Runway 09/27 [4]"
       - "Tower 122.0 MHz VHF and 251.0 MHz UHF [4]"
       - "RSBN channel 40 and PRMG channel 38 (both MB), with outer and inner NDBs [4]"
     differences:

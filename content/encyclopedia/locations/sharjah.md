@@ -26,7 +26,7 @@ maps:
     checked: "2026-10-28"
     cite: "[3]"
     facts:
-      - "Runways 12L/30R (10,389 ft) and 12R/30L (10,535 ft) [3]"
+      - "Runways 12L/30R and 12R/30L [3]"
       - "Tower 118.6 MHz VHF [3]"
       - "Two ILS approaches, ISRE on 108.55 MHz and ISHW on runway 30R, 111.95 MHz [3]"
     differences:

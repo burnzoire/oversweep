@@ -37,7 +37,7 @@ maps:
     checked: "2026-10-28"
     cite: "[4]"
     facts:
-      - "Runways 17L/35R (6,568 ft) and 17R/35L (8,677 ft) [4]"
+      - "Runways 17L/35R and 17R/35L [4]"
       - "Tower 118.1 MHz VHF and 250.6 MHz UHF [4]"
       - "VOR-DME LTK on 114.8 MHz, an NDB (LTK), RSBN channel 7, an ILS on runway 17R, 109.1 MHz (IBA), and PRMG channel 9 on runway 35R [4]"
     differences:

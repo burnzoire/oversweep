@@ -28,11 +28,9 @@ maps:
     checked: "2026-10-28"
     cite: "[3]"
     facts:
-      - "Runways 03/21 (6,620 ft), 16/34 (9,463 ft) and 17/35 (7,116 ft) [3]"
+      - "Runways 03/21, 16/34 and 17/35 [3]"
       - "Tower 118.9 MHz VHF and 253.2 MHz UHF [3]"
       - "VOR-DME KAD on 112.6 MHz, an NDB (BOD), and ILS approaches to runway 03 (IKK, 110.7 MHz) and runway 16 (BIL, 109.5 MHz, and IBB, 110.1 MHz) [3]"
-    differences:
-      - { topic: "Runway lengths", text: "The game's runways are 6,620 to 9,463 ft long [3]; the real ones are 10,663 to 12,467 ft, and 03/21, the shortest in the game, is the longest in reality. [2]" }
 photos:
   - src: "encyclopedia/airfields-carriers/beirut.jpg"
     alt: "A long low terminal building with a control tower on top, seen across a wide empty apron under a pink evening sky, with floodlight masts to the left"

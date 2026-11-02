@@ -26,7 +26,7 @@ maps:
     checked: "2026-10-28"
     cite: "[4]"
     facts:
-      - "Runway 10/28, 9,327 ft [4]"
+      - "Runway 10/28 [4]"
       - "Tower 141.0 MHz VHF and 270.0 MHz UHF [4]"
       - "NDBs CX and C, and an ILS on runway 10, 110.5 MHz (ICH) [4]"
     differences:

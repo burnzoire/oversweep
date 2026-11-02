@@ -29,7 +29,7 @@ maps:
     checked: "2026-10-28"
     cite: "[5]"
     facts:
-      - "Runway 09/27, 9,036 ft [5]"
+      - "Runway 09/27 [5]"
       - "Tower 118.5 MHz VHF and 251.65 MHz UHF [5]"
       - "No navaids or instrument approaches [5]"
 photos: []

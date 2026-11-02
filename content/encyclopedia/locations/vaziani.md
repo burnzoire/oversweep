@@ -28,7 +28,7 @@ maps:
     checked: "2026-10-28"
     cite: "[4]"
     facts:
-      - "Runway 13R/31L, 7,843 ft [4]"
+      - "Runway 13R/31L [4]"
       - "Tower 140.0 MHz VHF and 269.0 MHz UHF [4]"
       - "TACAN 22X (VAS), with an ILS at each end of the runway on 108.75 MHz (IVZ on 13R, IVI on 31L) [4]"
     differences:

@@ -29,7 +29,7 @@ maps:
     checked: "2026-10-28"
     cite: "[4]"
     facts:
-      - "Runway 12/30, 11,218 ft [4]"
+      - "Runway 12/30 [4]"
       - "Tower 129.0 MHz VHF and 258.0 MHz UHF [4]"
       - "NDBs AV and A [4]"
 photos: []

@@ -24,7 +24,7 @@ maps:
     checked: "2026-10-28"
     cite: "[3]"
     facts:
-      - "Runway 05/23, 13,288 ft [3]"
+      - "Runway 05/23 [3]"
       - "Tower 118.05 MHz VHF [3]"
       - "VOR-DME KHM on 117.1 MHz and an NDB (KHM) [3]"
 photos: []

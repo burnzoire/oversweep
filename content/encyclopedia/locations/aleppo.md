@@ -24,11 +24,9 @@ maps:
     checked: "2026-10-28"
     cite: "[3]"
     facts:
-      - "Runway 09/27, 8,332 ft [3]"
+      - "Runway 09/27 [3]"
       - "Tower 119.1 MHz VHF and 251.1 MHz UHF [3]"
       - "VOR-DME ALE on 114.5 MHz and NDBs ALE and MER [3]"
-    differences:
-      - { topic: "Runway length", text: "The game's runway is 8,332 ft long [3]; the real one is 9,547 ft. [1]" }
 photos: []
 sources:
   - n: 1

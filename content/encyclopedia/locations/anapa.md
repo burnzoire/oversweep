@@ -28,7 +28,7 @@ maps:
     checked: "2026-10-28"
     cite: "[4]"
     facts:
-      - "Runway 04/22, 8,624 ft [4]"
+      - "Runway 04/22 [4]"
       - "Tower 121.0 MHz VHF and 250.0 MHz UHF [4]"
       - "Outer and inner NDBs at each end: AP and P, AN and N [4]"
 photos:

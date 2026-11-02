@@ -26,7 +26,7 @@ maps:
     checked: "2026-10-28"
     cite: "[4]"
     facts:
-      - "Runway 07/25, 7,407 ft [4]"
+      - "Runway 07/25 [4]"
       - "Tower 133.0 MHz VHF and 262.0 MHz UHF [4]"
       - "TACAN 67X (KBL), NDBs KT and T, and an ILS on runway 07, 111.5 MHz (IKB) [4]"
     differences:

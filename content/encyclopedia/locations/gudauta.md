@@ -32,11 +32,9 @@ maps:
     checked: "2026-10-28"
     cite: "[4]"
     facts:
-      - "Runway 15/33, 7,840 ft [4]"
+      - "Runway 15/33 [4]"
       - "Tower 130.0 MHz VHF and 259.0 MHz UHF [4]"
       - "One NDB with marker (XC) [4]"
-    differences:
-      - { topic: "Runway length", text: "The game's runway is 7,840 ft long [4], against 3,000 m (9,843 ft) published for the real one. [2]" }
 photos: []
 sources:
   - n: 1

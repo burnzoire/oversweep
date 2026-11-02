@@ -24,7 +24,7 @@ maps:
     checked: "2026-10-28"
     cite: "[3]"
     facts:
-      - "Runway 01/19, 7,513 ft [3]"
+      - "Runway 01/19 [3]"
       - "Tower 124.35 MHz VHF [3]"
       - "An ILS on runway 19, 110.3 MHz (IBKS) [3]"
 photos:

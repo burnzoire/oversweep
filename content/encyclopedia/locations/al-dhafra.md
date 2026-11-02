@@ -36,7 +36,7 @@ maps:
     checked: "2026-10-28"
     cite: "[3]"
     facts:
-      - "Runways 13L/31R (11,404 ft) and 13R/31L (11,531 ft) [3]"
+      - "Runways 13L/31R and 13R/31L [3]"
       - "Tower 126.5 MHz VHF [3]"
       - "VORTAC MA, channel 96X and 114.9 MHz, and ILS approaches to all four runway ends [3]"
 photos: []

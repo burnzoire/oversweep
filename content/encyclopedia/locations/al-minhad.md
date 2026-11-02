@@ -35,11 +35,9 @@ maps:
     checked: "2026-10-28"
     cite: "[3]"
     facts:
-      - "Runway 09/27, 11,866 ft [3]"
+      - "Runway 09/27 [3]"
       - "Tower 118.55 MHz VHF [3]"
       - "TACAN MIN, channel 99X, and ILS approaches to runway 09 (IMNW, 110.7 MHz) and runway 27 (IMNR, 110.75 MHz) [3]"
-    differences:
-      - { topic: "Runway length", text: "The game's runway is 11,866 ft long [3]; the real one is 3,932 m, about 12,900 ft. [1] [2]" }
 photos: []
 sources:
   - n: 1
