@@ -44,11 +44,10 @@ maps:
     checked: "2026-11-01"
     cite: "[3]"
     facts:
-      - "Runways 06L/24R (9,359 ft) and 06R/24L (8,135 ft) [3]"
+      - "Runways 06L/24R and 06R/24L [3]"
       - "Tower 118.1 MHz VHF and 340.2 MHz UHF [3], the frequencies the FAA lists for Agana Tower [2]"
       - "ILS approaches IGUM (110.3 MHz) and IAWD (110.9 MHz), both listed for runway 06L [3]"
     differences:
-      - { topic: "Runway lengths", text: "The game's runways are 9,359 and 8,135 ft long [3]; the FAA lists 12,014 and 10,014 ft. [2]" }
       - { topic: "ILS runways", text: "The game lists both ILS approaches for runway 06L [3]; the FAA has I-AWD on runway 06R. [2]" }
 photos: []
 sources:

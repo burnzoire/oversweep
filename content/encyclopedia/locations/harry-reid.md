@@ -40,7 +40,7 @@ maps:
     cite: "[3]"
     facts:
       - "Named by the airport's pre-2021 name, McCarran International [3]"
-      - "Runways 07L/25R (10,377 ft) and 07R/25L (10,008 ft) [3]"
+      - "Runways 07L/25R and 07R/25L [3]"
       - "Tower 119.9 MHz VHF and 257.8 MHz UHF [3], the frequencies the FAA lists for the east–west runways [2]"
       - "VORTAC LAS on channel 116X (116.9 MHz), and an ILS (I-LAS, 110.3 MHz) to runway 25R [3]"
     differences:

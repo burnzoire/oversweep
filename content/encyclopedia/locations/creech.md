@@ -22,7 +22,7 @@ units:
   - { name: "556th Test and Evaluation Squadron (53rd Wing) and 26th Weapons Squadron (US Air Force Weapons School)", nation: us, branch: air-force, basing: permanent, aircraft: ["MQ-9A"], asOf: "2026-10", cite: "[1]" }
   - { name: "78th and 91st Attack Squadrons, 926th Wing (Air Force Reserve)", nation: us, branch: air-force, basing: permanent, aircraft: ["MQ-9A"], asOf: "2026-10", cite: "[1]" }
   - { name: "Joint Unmanned Aircraft Systems Center of Excellence", nation: us, branch: joint, basing: permanent, from: "2005-10", cite: "[1]" }
-  - { name: "No. 39 Squadron, Royal Air Force", nation: uk, branch: air-force, basing: permanent, aircraft: ["MQ-9A"], asOf: "2026-10", cite: "[1]" }
+  - { name: "No. 39 Squadron, Royal Air Force", nation: uk, branch: air-force, basing: permanent, aircraft: ["MQ-9A"], from: "2007-03", to: "2022-07", cite: "[1] [4]" }
 facilities:
   asOf: "2026-10"
   runways:
@@ -43,11 +43,9 @@ maps:
     checked: "2026-11-01"
     cite: "[3]"
     facts:
-      - "Runways 08/26 (6,100 ft) and 13/31 (4,064 ft) [3]"
+      - "Runways 08/26 and 13/31 [3]"
       - "Tower 118.3 MHz VHF and 360.6 MHz UHF, callsign Indian Springs [3]"
       - "TACAN INS on channel 87X, and ILS approaches to runways 08 (ICRR, 108.7 MHz) and 13 (ICRS, 108.5 MHz) [3]"
-    differences:
-      - { topic: "Runway lengths", text: "The game's runways are 6,100 and 4,064 ft long [3]; the FAA lists 9,002 and 5,476 ft. [2]" }
 photos: []
 sources:
   - n: 1
@@ -68,17 +66,23 @@ sources:
     url: "https://github.com/YoloWingPixie/dcs-world-schema/blob/c3091e6c08fb8167e26145d0e33c10e4140c6fe7/dcs-world-reference/latest/airbases/Nevada/Creech.json"
     accessed: "2026-11-01"
     note: "With its beacon files, as tabled on the DCS: Nevada map page."
+  - n: 4
+    title: "No. 39 Squadron RAF"
+    publisher: "Wikipedia (secondary source)"
+    url: "https://en.wikipedia.org/wiki/No._39_Squadron_RAF"
+    accessed: "2026-11-02"
+    note: "Disbandment in July 2022, when its Reaper ground control system returned from Creech to RAF Waddington."
 ---
 
 ## Role today
 
-Creech Air Force Base is the US Air Force's main home for remotely piloted aircraft. The 432nd Wing flies the MQ-9A Reaper and the RQ-170A Sentinel from here, alongside a test squadron, a Weapons School squadron, two Air Force Reserve squadrons and the Royal Air Force's No. 39 Squadron. [[1]](#source-1) Crews here fly missions across the world, and the base is also the Thunderbirds' aerial training site and one of two emergency divert airfields for the [Nevada Test and Training Range](record:north-america). [[1]](#source-1)
+Creech Air Force Base is the US Air Force's main home for remotely piloted aircraft. The 432nd Wing flies the MQ-9A Reaper and the RQ-170A Sentinel from here, alongside a test squadron, a Weapons School squadron and two Air Force Reserve squadrons. [[1]](#source-1) Crews here fly missions across the world, and the base is also the Thunderbirds' aerial training site and one of two emergency divert airfields for the [Nevada Test and Training Range](record:north-america). [[1]](#source-1)
 
 ## History
 
 Construction of Indian Springs Airport began in March 1942, and by February 1943 it was a divert field and an air-to-air gunnery training base, flying B-17s and T-6s. [[1]](#source-1) It closed in January 1947, reopened in January 1948, and became Indian Springs Air Force Base in August 1951. [[1]](#source-1) Through the 1950s it supported the Atomic Energy Commission's nuclear tests at the Nevada Proving Grounds, with more than 1,500 people there during test series. [[1]](#source-1)
 
-The base passed to [Nellis](record:nellis) on 1 April 1961 as Indian Springs Air Force Auxiliary Field, and through the 1970s and 1980s its main job was range maintenance. [[1]](#source-1) In 1982 four Thunderbirds T-38s were lost here when they flew into the ground in the diamond formation. [[1]](#source-1) The Royal Air Force formed its first unmanned aircraft flight here in January 2005. [[1]](#source-1)
+The base passed to [Nellis](record:nellis) on 1 April 1961 as Indian Springs Air Force Auxiliary Field, and through the 1970s and 1980s its main job was range maintenance. [[1]](#source-1) In 1982 four Thunderbirds T-38s were lost here when they flew into the ground in the diamond formation. [[1]](#source-1) The Royal Air Force formed its first unmanned aircraft flight here in January 2005; it became part of No. 39 Squadron in March 2007, which flew Reapers from Creech until it disbanded in July 2022. [[1]](#source-1) [[4]](#source-4)
 
 It was renamed Creech Air Force Base on 20 June 2005, after General Wilbur L. Creech, commander of Tactical Air Command from 1978 to 1984. [[1]](#source-1) The first Reaper [squadron](term:squadron), the 42nd Attack Squadron, formed here in November 2006, and the 432nd Wing took over the base on 1 May 2007. [[1]](#source-1)
 

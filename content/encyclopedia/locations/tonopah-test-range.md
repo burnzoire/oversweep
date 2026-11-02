@@ -38,7 +38,7 @@ maps:
     checked: "2026-11-01"
     cite: "[3]"
     facts:
-      - "Runway 14/32, 11,633 ft [3]"
+      - "Runway 14/32 [3]"
       - "Tower 124.75 MHz VHF and 257.95 MHz UHF, callsign Silverbow [3]"
       - "VORTAC TQQ on channel 77X (113.0 MHz), and ILS approaches I-RVP (108.3 MHz) to runway 14 and I-UVV (111.7 MHz) to runway 32 [3]"
     differences:

@@ -36,7 +36,7 @@ maps:
     checked: "2026-11-01"
     cite: "[3] [4]"
     facts:
-      - "Runway 14/32, 11,008 ft [3]"
+      - "Runway 14/32 [3]"
       - "Ground, tower and approach callsign Dreamland [3]"
       - "Radios on 118.0 MHz VHF and 250.05 MHz UHF [4]"
       - "TACAN GRL on channel 18, and an ILS (GLRI, 109.3 MHz) to runway 32 [4]"

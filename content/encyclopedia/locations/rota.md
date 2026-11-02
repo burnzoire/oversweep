@@ -34,11 +34,9 @@ maps:
     checked: "2026-11-01"
     cite: "[3]"
     facts:
-      - "Runway 09/27, 6,106 ft [3]"
+      - "Runway 09/27 [3]"
       - "Radio on 123.6 MHz VHF [3], the frequency the FAA lists for the field [2], and 250.0 MHz UHF [3]"
       - "NDB GRO, 332 kHz [3]"
-    differences:
-      - { topic: "Runway length", text: "The game's runway is 6,106 ft long [3]; the FAA lists 7,000 ft. [2]" }
 photos: []
 sources:
   - n: 1
