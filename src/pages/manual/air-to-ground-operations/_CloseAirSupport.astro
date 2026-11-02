@@ -55,7 +55,7 @@ const say = (id: string) => NINE_LINE.find((l) => l.id === id)!.says.replace(/"/
  <p class="note">This is a reference, not a qualification: only a certified and qualified <Term>JTAC</Term> or <Term>FAC(A)</Term> may control an attack. <a href="#source-jp">{j('I-2')}</a> Flying the delivery itself is in <a href={wd}>Weapons Delivery</a>, and radio technique in <a href={radio}>Radio Procedures</a>. The worked example is invented in the publication's format. The publication quoted is the 2014 edition; theater special instructions (SPINS), your unit's procedures and the current edition govern.</p>
 
  <h2 id="example">One attack, start to finish</h2>
- <p>Here is a whole Type 1 attack by a two-ship, as it might sound on the radio. Gunsmoke 22 is the JTAC; Viper 41 leads the flight. Every call follows a format from the publication, and each step links to the section that explains it. The call signs, places and numbers are invented, and Figure 1 below draws this same brief on a map.</p>
+ <p>Here is a whole Type 1 attack by a two-ship, as it might sound on the radio. Gunsmoke 22 is the JTAC; Viper 41 leads the flight. Every call follows a format from the publication, and each step links to the section that explains it. The call signs, places and numbers are invented. Figure 1 below plays it out on a map, and Figure 2 draws the brief line by line.</p>
  <ol class="exchange script">
   <li><span class="who">JTAC</span> <span class="said">"Viper 41, Gunsmoke 22, maintain Hammer, block 15 to 17." <a class="step" href="#checkin">Routing</a></span></li>
   <li><span class="who">JTAC</span> <span class="said">"Viper 41, send your check-in."</span></li>
@@ -75,6 +75,17 @@ const say = (id: string) => NINE_LINE.find((l) => l.id === id)!.says.replace(/"/
   <li><span class="who">Viper 42</span> <span class="said">Thirty seconds behind, makes its own IN call and gets its own clearance: under Type 1 each attack is cleared on its own.</span></li>
   <li><span class="who">JTAC</span> <span class="said">Battle damage assessment for the flight as it egresses north to Anvil. <a class="step" href="#attack">Assessment</a></span></li>
  </ol>
+ <section class="lesson figure-lesson" data-lesson="play" aria-labelledby="play-title">
+  <h3 id="play-title" class="fig-title">Figure 1 — The attack, played out</h3>
+  <p>Step through the exchange above and watch where the flight is at each call. Switch to Type 3 to see how the attack changes when one clearance covers the whole engagement.</p>
+  <div class="buttons chips" data-types role="group" aria-label="Type of control"></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 210" role="img" aria-label="Plan view of the example attack: the flight checks in east of IP Hammer, holds there for the brief, runs in heading 270 to the target, and egresses north to Anvil"></svg></div>
+  <div class="buttons stepper"><button type="button" data-back>Back</button><button type="button" data-next>Next</button><span data-count role="status" aria-live="polite"></span></div>
+  <p class="no-js">Interactive figure unavailable. The flight checks in 10 NM east of IP Hammer, holds at Hammer for the game plan, the 9-line and the readback, correlates on the smoke, then runs in heading 270. Under Type 1 each aircraft calls IN and is CLEARED HOT on its own; under Type 3 the JTAC says CLEARED TO ENGAGE once, the lead calls COMMENCING ENGAGEMENT and ENGAGEMENT COMPLETE, and no pass needs its own clearance. The flight egresses north to Anvil.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">The opening example, invented in JP 3-09.3's format and drawn to Figure 2's scale. The calls follow the execution template <a href="#source-jp">{j('V-14 to V-50')}</a>; the Type 3 calls are from <a href="#source-jp">{j('III-46')}</a>. The aircraft positions are illustrative, with the second aircraft 30 seconds behind the lead.</p>
+ </section>
+
  <p class="key"><strong>Key point:</strong> every attack follows the same outline: check in, agree the game plan, brief, read back, correlate, attack. This example is Type 1 bomb on target, so the aircrew must see the target and each pass gets its own IN and CLEARED HOT; under <a href="#control">Type 3</a> one CLEARED TO ENGAGE covers several attacks, and in a bomb-on-coordinate attack the aircrew never has to see the target. The sections below take it one step at a time.</p>
 
  <h3 id="flow">The sequence</h3>
@@ -207,16 +218,16 @@ const say = (id: string) => NINE_LINE.find((l) => l.id === id)!.says.replace(/"/
  <h2 id="nineline">The 9-line</h2>
  <p>The <Term>9-line</Term> is the standard brief for fixed- and rotary-wing aircraft, in every threat condition, and it does not dictate tactics. Line numbers are not transmitted, units are standard unless briefed, and lines are never passed piecemeal or out of order. <a href="#source-jp">{j('V-24 to V-26')}</a> It comes at a moderate pace in three transmissions of three lines, because a brief read too fast gets repeated; if lines 1 to 3 are left out, the next transmission starts with "Elevation". <a href="#source-jp">{j('V-26')}</a></p>
  <div class="table-scroll" role="region" aria-label="The 9-line brief" tabindex="0"><table>
-  <caption>The 9-line CAS brief and the example in Figure 1 <a href="#source-jp">{j('V-25 to V-32')}</a></caption>
+  <caption>The 9-line CAS brief and the example in Figure 2 <a href="#source-jp">{j('V-25 to V-32')}</a></caption>
   <thead><tr><th scope="col">Line</th><th scope="col">Item</th><th scope="col">Given as</th><th scope="col">Example</th><th scope="col">Read back</th></tr></thead>
   <tbody>{NINE_LINE.map((l) => <tr><th scope="row">{l.line ?? '—'}</th><td>{l.title}</td><td>{l.unit}</td><td>{l.says}</td><td>{l.readback ? 'Yes' : ''}</td></tr>)}</tbody>
  </table></div>
 
  <section class="lesson figure-lesson" data-lesson="brief" aria-labelledby="brief-title">
-  <h3 id="brief-title" class="fig-title">Figure 1 — A 9-line on the map</h3>
+  <h3 id="brief-title" class="fig-title">Figure 2 — A 9-line on the map</h3>
   <p>Step through the brief from the opening example. Each line lights up what it puts on the map; the last button shows the aircrew's readback. Game plan: "{EXAMPLE.aircraft}, {EXAMPLE.gamePlan}; advise when ready for 9-line."</p>
   <div class="buttons chips" data-steps></div>
-  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 340" role="img" aria-label="Plan view of the example brief: the IP east of the target, the run-in line heading 270, the offset side, the final attack heading window, the friendlies south and the egress north"></svg></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 2, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 340" role="img" aria-label="Plan view of the example brief: the IP east of the target, the run-in line heading 270, the offset side, the final attack heading window, the friendlies south and the egress north"></svg></div>
   <p class="no-js">Interactive figure unavailable. The example: IP Hammer, heading 270 offset right, 8.2 NM; 450 feet, two armored vehicles in a tree line, NV 1234 5678; smoke, south 800, egress north to Anvil block 14 to 16; final attack headings 240 to 300, TOT 1430. Readback: 450 feet, NV 1234 5678, final attack headings 240 to 300, TOT 1430.</p>
   <div class="feedback" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">An invented example in the format of JP 3-09.3 Figure V-9: the call signs, places and numbers are made up. Drawn to scale, north up, with the IP on the reciprocal of line 2 and the friendlies placed from line 8. The attack-heading window is the aircraft headings allowed into the target; the run-in from the IP lies inside it.</p>
@@ -435,7 +446,7 @@ const say = (id: string) => NINE_LINE.find((l) => l.id === id)!.says.replace(/"/
  </section>
 
  <h2 id="check">Check your understanding</h2>
- <p>One or more questions for each outcome at the top of the page; the quizzes and Figure 1 cover copying the brief.</p>
+ <p>One or more questions for each outcome at the top of the page; the quizzes and Figure 2 cover copying the brief.</p>
  <details><summary><span class="outcome">Outcome 1</span> A FAC(A) has been given control. Who can still abort you?</summary><p>The JTAC, who always keeps abort authority; and anyone can call an abort at any time they think it necessary.</p></details>
  <details><summary><span class="outcome">Outcome 2</span> What is the difference between the type of control and the method of attack?</summary><p>The type of control is how the controller reduces the risk and how many attacks it clears; the method of attack is whether the aircraft must acquire the target (BOT) or employs on the coordinates (BOC). Any type goes with either method.</p></details>
  <details><summary><span class="outcome">Outcome 2</span> The JTAC wants to drop a GPS-guided bomb on a coordinate. Can it be controlled as Type 1?</summary><p>It should not be: the aircraft's geometry does not show where a GPS or INS weapon will fly, which is the point of Type 1.</p></details>
@@ -453,7 +464,7 @@ const say = (id: string) => NINE_LINE.find((l) => l.id === id)!.says.replace(/"/
  <h3>Sim source</h3>
  <p id="source-a10"><strong>[2] Eagle Dynamics, DCS: A-10C II Tank Killer Flight Manual (English), July 2023, "F4 JTAC".</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/dcs-warthog_2_flight_manual_en/">Download page</a>, read 2 November 2026, pp. 784–788. A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/close-air-support-evidence.md">close air support evidence</a>.</p>
- <p>Figure 1 and the opening exchange are original, invented examples, not reproductions of any publication's figure.</p>
+ <p>Figures 1 and 2 and the opening exchange are original, invented examples, not reproductions of any publication's figure.</p>
  <p class="note">Applicability: written for aircrew of every service who fly close air support, fixed- or rotary-wing. Everything outside the sim panel is from the joint publication, including how it describes Marine Corps attack helicopter CAS and Army close combat attack; the Army's own aviation manual and the Navy's CAS training instructions could not be read for this revision, so no service-specific rules beyond the joint publication's are included. Theater SPINS, your unit's procedures and the current edition govern. This revision is Drafted pending independent source-backed review.</p>
 </SiteLayout>
 <script>import '../../../lessons/close-air-support/lesson-ui.mjs';</script>
@@ -504,6 +515,9 @@ const say = (id: string) => NINE_LINE.find((l) => l.id === id)!.says.replace(/"/
   .fig-scroll :global(svg) { min-width: 36rem; }
   .fig-title { font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 2px solid var(--color-text); padding-bottom: 0.3rem; }
   .fig-caption { color: var(--color-muted); font-size: 0.9rem; }
+  .stepper { align-items: center; }
+  .stepper [data-count] { font-weight: 700; }
+  :global(.natops .lbl.call) { font-size: 16px; fill: var(--color-link); }
   .quiz-lesson .task { font-style: italic; }
   .table-scroll { overflow-x: auto; border: 1px solid var(--color-border); }
   .table-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }

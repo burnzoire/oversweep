@@ -47,3 +47,20 @@ test('quiz questions have their answer among the options', () => {
   for (const q of CONTROL_QUESTIONS) assert.ok(q.options.includes(q.answer), q.ask);
   assert.equal(new Set(lineQuestions().map((q) => q.answer)).size, NINE_LINE.length);
 });
+
+test('the played example clears each pass under Type 1 and once under Type 3 (p. III-46)', async () => {
+  const { attackSteps } = await import('../../src/lessons/close-air-support/lesson-model.mjs');
+  const calls = (t, word) => attackSteps(t).filter((s) => s.says.includes(word)).length;
+  assert.equal(calls(1, 'CLEARED HOT'), 2);
+  assert.equal(calls(1, 'CLEARED TO ENGAGE'), 0);
+  assert.equal(calls(3, 'CLEARED HOT'), 0);
+  assert.equal(calls(3, 'CLEARED TO ENGAGE'), 1);
+  assert.equal(calls(3, 'COMMENCING ENGAGEMENT'), 1);
+  assert.equal(calls(3, 'ENGAGEMENT COMPLETE'), 1);
+  for (const t of [1, 3]) {
+    const steps = attackSteps(t);
+    assert.ok(steps.findIndex((s) => s.phase === 'Readback') < steps.findIndex((s) => /CLEARED/.test(s.says)), 'cleared only after the readback');
+    assert.ok(steps.findIndex((s) => s.says.includes('TALLY')) < steps.findIndex((s) => /CLEARED/.test(s.says)), 'BOT: tally before clearance');
+  }
+  assert.throws(() => attackSteps(2), RangeError);
+});

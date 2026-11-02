@@ -108,3 +108,48 @@ export const CONTROL_QUESTIONS = [
 export function lineQuestions(brief = NINE_LINE) {
   return brief.map((l) => ({ says: l.says, answer: l.line ? `Line ${l.line}, ${l.title.toLowerCase()}` : 'Remarks and restrictions', item: l }));
 }
+
+// The opening example played out for Figure 1, step by step. Each step is a
+// call on the radio and where the two aircraft are at that moment, in
+// nautical miles east (x) and north (y) of the target. The flow is JP 3-09.3's
+// execution template (pp. V-14 to V-50); Type 3 swaps the per-pass IN and
+// CLEARED HOT for one CLEARED TO ENGAGE and the engagement calls (p. III-46).
+// Positions are illustrative: the second aircraft trails by its 30 seconds.
+export const ATTACK_TYPES = [1, 3];
+export function attackSteps(type = 1) {
+  if (!ATTACK_TYPES.includes(type)) throw new RangeError(`No played example for Type ${type}`);
+  const { jtac, aircraft: lead } = EXAMPLE;
+  const wing = lead.replace(/\d$/, (d) => String(+d + 1));
+  const ip = briefGeometry().ip;
+  const at = (dx, dy = 0) => [ip[0] + dx, ip[1] + dy];
+  const hold = { a: { pos: at(0.6, 0.5), hdg: 0 }, b: { pos: at(1.2, 1.1), hdg: 180 } };
+  const gamePlan = type === 1 ? EXAMPLE.gamePlan : EXAMPLE.gamePlan.replace('Type 1', 'Type 3');
+  const s = (phase, who, says, a, b, extra = {}) => ({ phase, who, says, a, b, show: [], ...extra });
+  const before = [
+    s('Routing', jtac, `"${lead}, ${jtac}, maintain ${EXAMPLE.ip}, block 15 to 17."`, { pos: at(10.1, 0.3), hdg: 270 }, { pos: at(10.6, 1.0), hdg: 270 }, { href: '#checkin', note: 'Routing and safety of flight first: at least a "maintain" instruction.' }),
+    s('Check-in', lead, `"${jtac}, ${lead}, mission 4123, 2 by A-10C, 10 miles east of ${EXAMPLE.ip}, block 15 to 17, four Mk 82, playtime 40 minutes, targeting pods."`, { pos: at(9.4, 0.3), hdg: 270 }, { pos: at(9.9, 1.0), hdg: 270 }, { href: '#checkin', note: 'Given in order, when the controller asks for it.' }),
+    s('Situation update', jtac, 'The threat, and "all friendlies are south of the 56 northing".', { pos: at(5, 0.3), hdg: 270 }, { pos: at(5.5, 1.0), hdg: 270 }, { show: ['northing', 'friendlies'], href: '#checkin', note: 'Cut to what this flight needs. Friendly grids are avoided.' }),
+    s('Game plan', jtac, `"${lead}, ${gamePlan}; advise when ready for 9-line."`, hold.a, hold.b, { show: ['northing'], href: '#control', note: type === 1 ? 'Type 1: the JTAC will watch every aircraft and clear each attack on its own.' : 'Type 3: the JTAC will clear the flight once for several attacks inside the brief\'s restrictions.' }),
+    s('9-line', jtac, 'The three transmissions of three lines, then "final attack headings two four zero to three zero zero, TOT 1430".', hold.a, hold.b, { show: ['northing', 'brief', 'friendlies'], href: '#nineline', note: 'Figure 2 takes the brief line by line.' }),
+    s('Readback', lead, `"${readback()}." ${jtac}: "readback correct."`, hold.a, hold.b, { show: ['northing', 'brief'], href: '#readback', note: 'Elevation, location and every restriction are read back.' }),
+    s('Correlation', lead, `"${lead}, CONTACT the mark."`, { pos: at(-2.5), hdg: 270 }, { pos: at(-0.2), hdg: 270 }, { show: ['northing', 'brief', 'mark'], href: '#correlation', note: 'The smoke lands 30 to 45 seconds before the TOT.' }),
+    s('Correlation', jtac, `"${lead}, from the mark, east 50, the western vehicle is your target." ${lead}: "TALLY."`, { pos: at(-3.4), hdg: 270 }, { pos: at(-1.1), hdg: 270 }, { show: ['northing', 'brief', 'mark', 'target'], href: '#correlation', note: 'Bomb on target: the aircrew must see the target before it can be cleared.' }),
+  ];
+  const off = (who) => `"${who}, off, two away."`;
+  const type1 = [
+    s('Attack', lead, `"${lead}, IN heading 270."`, { pos: [4.2, 0], hdg: 270 }, { pos: [6.7, 0], hdg: 270 }, { show: ['northing', 'brief', 'mark', 'target'], call: 'IN', href: '#attack', note: 'Everyone else now holds their calls until the lead is cleared or aborted.' }),
+    s('Clearance', jtac, `"${lead}, CLEARED HOT."`, { pos: [2.6, 0], hdg: 270 }, { pos: [5.1, 0], hdg: 270 }, { show: ['northing', 'brief', 'mark', 'target'], call: 'CLEARED HOT', href: '#clearance', note: 'Under Type 1 the JTAC sees the aircraft and judges its geometry before clearing it.' }),
+    s('Release', lead, off(lead), { pos: [-0.6, 0.9], hdg: 330 }, { pos: [3.4, 0], hdg: 270 }, { show: ['northing', 'brief', 'target', 'hits1'], href: '#attack' }),
+    s('Attack', wing, `"${wing}, IN heading 270." ${jtac}: "${wing}, CLEARED HOT."`, { pos: [-0.5, 2.2], hdg: 0 }, { pos: [2.6, 0], hdg: 270 }, { show: ['northing', 'brief', 'target', 'hits1'], call: 'CLEARED HOT', href: '#clearance', note: 'Type 1: the second aircraft needs its own IN call and its own clearance.' }),
+    s('Release', wing, off(wing), { pos: [-0.2, 2.8], hdg: 0 }, { pos: [-0.6, 0.9], hdg: 330 }, { show: ['northing', 'brief', 'target', 'hits1', 'hits2'], href: '#attack' }),
+  ];
+  const type3 = [
+    s('Clearance', jtac, `"${lead}, CLEARED TO ENGAGE."`, { pos: [5.6, 0], hdg: 270 }, { pos: [8.1, 0], hdg: 270 }, { show: ['northing', 'brief', 'mark', 'target'], call: 'CLEARED TO ENGAGE', href: '#clearance', note: 'One clearance for several attacks, inside the brief\'s headings and time. The JTAC monitors and keeps abort authority.' }),
+    s('Attack', lead, `"${lead}, COMMENCING ENGAGEMENT."`, { pos: [3.4, 0], hdg: 270 }, { pos: [5.9, 0], hdg: 270 }, { show: ['northing', 'brief', 'mark', 'target'], call: 'COMMENCING ENGAGEMENT', href: '#control', note: 'Called before the first release.' }),
+    s('Release', lead, off(lead), { pos: [-0.6, 0.9], hdg: 330 }, { pos: [3.4, 0], hdg: 270 }, { show: ['northing', 'brief', 'target', 'hits1'], href: '#attack', note: 'No CLEARED HOT for each pass: the clearance already given covers it.' }),
+    s('Release', wing, off(wing), { pos: [-0.2, 2.8], hdg: 0 }, { pos: [-0.6, 0.9], hdg: 330 }, { show: ['northing', 'brief', 'target', 'hits1', 'hits2'], href: '#attack', note: 'The second aircraft attacks under the same clearance. A reattack would need none either while it stands.' }),
+    s('Engagement complete', lead, `"${lead}, ENGAGEMENT COMPLETE."`, { pos: [0.2, 3.3], hdg: 0 }, { pos: [-0.3, 2.0], hdg: 0 }, { show: ['northing', 'brief', 'target', 'hits1', 'hits2'], href: '#control' }),
+  ];
+  const assess = s('Assessment', jtac, 'Battle damage assessment for the flight as it egresses north to Anvil.', { pos: [0.5, 3.6], hdg: 0 }, { pos: [0, 3.2], hdg: 0 }, { show: ['northing', 'brief', 'target', 'hits1', 'hits2', 'egress'], href: '#attack', note: 'Passed for the flight, not for each aircraft.' });
+  return [...before, ...(type === 1 ? type1 : type3), assess];
+}
