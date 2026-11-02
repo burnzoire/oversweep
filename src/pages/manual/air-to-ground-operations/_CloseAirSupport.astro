@@ -4,91 +4,172 @@ import GlossaryList from '../../../components/GlossaryList.astro';
 import { getModule } from '../../../data/modules';
 import { sitePath } from '../../../lib/paths';
 import Term from '../../../components/Term.astro';
-import { CONTROLS, EXAMPLE, NINE_LINE } from '../../../lessons/close-air-support/lesson-model.mjs';
+import { CONTROLS, EXAMPLE, NINE_LINE, readback } from '../../../lessons/close-air-support/lesson-model.mjs';
 const cas = getModule('close-air-support');
-const contents = [
- ['overview', 'Purpose and learning objectives'], ['what', 'What close air support is'], ['who', 'Who controls what'],
- ['control', 'Types of control'], ['method', 'Methods of attack'], ['clearance', 'Clearance calls'], ['flow', 'The flow of a CAS mission'],
- ['checkin', 'Check-in, situation update and game plan'], ['nineline', 'The 9-line brief, line by line'], ['readback', 'Readbacks'],
- ['correlation', 'Correlation, marks and talk-ons'], ['attack', 'The attack, abort and reattack'], ['fratricide', 'Preventing fratricide'],
- ['airframes', 'Fixed- and rotary-wing CAS across the services'], ['fiveline', 'The rotary-wing 5-line'], ['terms', 'Terms'],
- ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+// The first-pass path, then reference material for when it is needed.
+const core = [
+ ['example', 'One attack, start to finish'], ['what', 'What close air support is'], ['who', 'Who controls the attack'],
+ ['control', 'Type of control and method of attack'], ['clearance', 'Clearance calls'], ['checkin', 'Check-in and game plan'],
+ ['nineline', 'The 9-line'], ['readback', 'Readbacks'], ['correlation', 'Correlation'], ['attack', 'IN, cleared hot, abort and reattack'],
+ ['recap', 'Key points'],
 ];
-// One military source: [1] JP 3-09.3, Close Air Support (25 November 2014),
-// cited by printed page.
+const reference = [
+ ['marks', 'Marks, laser and infrared calls'], ['talkon', 'Talk-on technique'], ['fratricide', 'Preventing fratricide'],
+ ['airframes', 'Fixed- and rotary-wing CAS across the services'], ['fiveline', 'The rotary-wing 5-line'], ['sims', 'In the sim'],
+ ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+];
+// [1] JP 3-09.3, Close Air Support (25 November 2014), cited by printed page.
+// [2] DCS: A-10C II Tank Killer flight manual (Eagle Dynamics, 2023), sim crossover only.
 const j = (page: string) => `[1, ${page.includes('to') || page.includes(',') ? 'pp.' : 'p.'} ${page}]`;
 const radio = sitePath('manual/radio-communications/radio-procedures/');
 const wd = sitePath('manual/air-to-ground-operations/weapons-delivery/');
 const glossary = sitePath('encyclopedia/terminology/close-air-support/');
+const lines = NINE_LINE.filter((l) => l.line);
+const say = (id: string) => NINE_LINE.find((l) => l.id === id)!.says.replace(/"/g, '');
 ---
 <SiteLayout title={cas.title} activeSection="manual" activeSubject="air-to-ground-operations" compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Air-to-Ground Operations',href:sitePath('manual/air-to-ground-operations/')},{label:cas.title}]}>
  <section class="status-panel" data-module-id={cas.id} data-module-revision={cas.revision}>
   <h2>{cas.maturity}</h2>
-  <p>Module revision {cas.revision} · How an attack close to friendly troops is controlled and briefed: who the <Term>JTAC</Term> and the <Term>FAC(A)</Term> are and who holds which part of the job, the three types of control and the two methods of attack, the check-in, game plan and <Term>9-line</Term> brief with its readbacks, marks and talk-ons, and the rules that keep bombs off friendly troops. Written for fixed- and rotary-wing aircrew of every service from the joint close air support publication, which the Air Force, Army, Marine Corps and Navy all follow.</p>
-  <p>Figure 1 draws a worked 9-line on a map, one line at a time. Three quizzes check the brief, the types of control and the words.</p>
+  <p>Module revision {cas.revision} · How an attack close to friendly troops is controlled, briefed and cleared, from the cockpit's side. For fixed- and rotary-wing aircrew of every service, from the joint close air support publication.</p>
  </section>
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
-  <ol>{contents.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
  </nav>
 
- <h2 id="overview">Purpose and learning objectives</h2>
- <p>The joint publication calls close air support perhaps the most detailed and continuous integration task the joint force performs, because the air attack has to be synchronized in time, space and purpose with troops who may be very near the target. <a href="#source-jp">{j('I-1')}</a> Most of that integration is done with a small set of standard formats and calls, so that an aircrew from any service can work with a controller from any other. <a href="#source-jp">{j('V-1')}</a> This module teaches those formats from the cockpit's side.</p>
- <p>By the end you should be able to: say who may control a CAS attack and what a <Term>FAC(A)</Term> can take over; choose between <Term>Type 1 control</Term>, <Term>Type 2 control</Term> and <Term>Type 3 control</Term>, and between <Term>BOT</Term> and <Term>BOC</Term>; give a <Term>CAS check-in</Term> in order; copy a <Term>9-line</Term> and say what each line means and its units; give the <Term>mandatory readback</Term>; explain <Term>correlation</Term>, a <Term>talk-on</Term> and the laser and infrared marking calls; use <Term>CLEARED HOT</Term>, <Term>CLEARED TO ENGAGE</Term>, <Term>CONTINUE</Term>, <Term>CONTINUE DRY</Term> and <Term>ABORT</Term> correctly; explain <Term>danger close</Term>; and copy a helicopter <Term>5-line</Term>.</p>
- <p class="note">This is a reference, not a qualification. Only a certified and qualified <Term>JTAC</Term> or <Term>FAC(A)</Term> is authorized to control an attack. <a href="#source-jp">{j('I-2')}</a> How to fly the delivery itself, the dive, the release and the recovery, is in <a href={wd}>Weapons Delivery</a>; how to talk on the radio, including readbacks and the brevity words, is in <a href={radio}>Radio Procedures</a>. The worked brief in Figure 1 is an invented example written in the publication's format: its call signs, places and numbers are made up. The publication quoted is the 2014 edition; theater special instructions (SPINS), your unit's procedures and the current edition govern.</p>
+ <p class="lede">Close air support is a conversation. A controller on the ground and an aircrew overhead, who may never have worked together and may come from different services, have a few minutes to agree on one target, the friendly troops near it and how the attack will be flown. They do it with a small set of standard formats and calls. <a href="#source-jp">{j('I-1, V-1')}</a> Learn those, in order, and the rest of this module is detail.</p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>say who may control a CAS attack and what a <Term>FAC(A)</Term> can take over;</li>
+  <li>tell the type of control from the method of attack;</li>
+  <li>give a <Term>CAS check-in</Term> and copy a <Term>9-line</Term>, with each line's units;</li>
+  <li>give the <Term>mandatory readback</Term>;</li>
+  <li>explain <Term>correlation</Term> and the laser and infrared calls;</li>
+  <li>use the clearance calls and know who can abort;</li>
+  <li>explain <Term>danger close</Term> and why attack headings run parallel to friendly lines;</li>
+  <li>say how helicopter CAS and its <Term>5-line</Term> differ, and why Army attack helicopters are a special case.</li>
+ </ol>
+ <p class="note">This is a reference, not a qualification: only a certified and qualified <Term>JTAC</Term> or <Term>FAC(A)</Term> may control an attack. <a href="#source-jp">{j('I-2')}</a> Flying the delivery itself is in <a href={wd}>Weapons Delivery</a>, and radio technique in <a href={radio}>Radio Procedures</a>. The worked example is invented in the publication's format. The publication quoted is the 2014 edition; theater special instructions (SPINS), your unit's procedures and the current edition govern.</p>
+
+ <h2 id="example">One attack, start to finish</h2>
+ <p>Here is a whole Type 1 attack by a two-ship, as it might sound on the radio. Gunsmoke 22 is the JTAC; Viper 41 leads the flight. Every call follows a format from the publication, and each step links to the section that explains it. The call signs, places and numbers are invented, and Figure 1 below draws this same brief on a map.</p>
+ <ol class="exchange script">
+  <li><span class="who">JTAC</span> <span class="said">"Viper 41, Gunsmoke 22, maintain Hammer, block 15 to 17." <a class="step" href="#checkin">Routing</a></span></li>
+  <li><span class="who">JTAC</span> <span class="said">"Viper 41, send your check-in."</span></li>
+  <li><span class="who">Viper 41</span> <span class="said">"Gunsmoke 22, Viper 41, mission 4123, 2 by A-10C, 10 miles east of Hammer, block 15 to 17, four Mk 82, playtime 40 minutes, targeting pods." <a class="step" href="#checkin">Check-in</a></span></li>
+  <li><span class="who">JTAC</span> <span class="said">A short situation update: the threat, and "all friendlies are south of the 56 northing". <a class="step" href="#checkin">Situation update</a></span></li>
+  <li><span class="who">JTAC</span> <span class="said">"Viper 41, {EXAMPLE.gamePlan}; advise when ready for 9-line." <a class="step" href="#control">Game plan</a></span></li>
+  <li><span class="who">Viper 41</span> <span class="said">"Viper 41, ready to copy."</span></li>
+  <li><span class="who">JTAC</span> <span class="said">"{say('ip')}, {say('heading')}, {say('distance')}." <br/>"{say('elevation')}, {say('description')}, {say('location')}." <br/>"{say('mark')}, {say('friendlies')}, {say('egress')}." <br/>"{say('remarks')}." <a class="step" href="#nineline">9-line</a></span></li>
+  <li><span class="who">Viper 41</span> <span class="said">"{readback()}." <a class="step" href="#readback">Readback</a></span></li>
+  <li><span class="who">JTAC</span> <span class="said">"Viper 41, readback correct."</span></li>
+  <li><span class="who">Viper 41</span> <span class="said">"Viper 41, CONTACT the mark." <a class="step" href="#correlation">Correlation</a></span></li>
+  <li><span class="who">JTAC</span> <span class="said">"Viper 41, from the mark, east 50, the western vehicle is your target."</span></li>
+  <li><span class="who">Viper 41</span> <span class="said">"Viper 41, TALLY."</span></li>
+  <li><span class="who">Viper 41</span> <span class="said">"Viper 41, IN heading 270." <a class="step" href="#attack">Attack</a></span></li>
+  <li><span class="who">JTAC</span> <span class="said">"Viper 41, CLEARED HOT." <a class="step" href="#clearance">Clearance</a></span></li>
+  <li><span class="who">Viper 41</span> <span class="said">"Viper 41, off, two away."</span></li>
+  <li><span class="who">Viper 42</span> <span class="said">Thirty seconds behind, makes its own IN call and gets its own clearance: under Type 1 each attack is cleared on its own.</span></li>
+  <li><span class="who">JTAC</span> <span class="said">Battle damage assessment for the flight as it egresses north to Anvil. <a class="step" href="#attack">Assessment</a></span></li>
+ </ol>
+ <p class="key"><strong>Key point:</strong> every attack follows the same outline: check in, agree the game plan, brief, read back, correlate, attack. This example is Type 1 bomb on target, so the aircrew must see the target and each pass gets its own IN and CLEARED HOT; under <a href="#control">Type 3</a> one CLEARED TO ENGAGE covers several attacks, and in a bomb-on-coordinate attack the aircrew never has to see the target. The sections below take it one step at a time.</p>
+
+ <h3 id="flow">The sequence</h3>
+ <p>The publication's execution template, so that aircrew and controllers can expect the same steps every time: <a href="#source-jp">{j('V-14 to V-50')}</a></p>
+ <ol class="steps">
+  <li><a href="#checkin">Routing and safety of flight</a>: at least a "maintain" instruction, then other aircraft, threats, weather and terrain. "Razor 53, maintain Chevy-Dodge 14-15". <a href="#source-jp">{j('V-14 to V-15')}</a></li>
+  <li><a href="#checkin">Check-in</a>, when the controller asks for it.</li>
+  <li><a href="#checkin">Situation update</a>, cut to what this aircraft needs.</li>
+  <li><a href="#control">Game plan</a>: type of control and method of attack.</li>
+  <li><a href="#nineline">CAS brief</a>: the <Term>9-line</Term>, then remarks and restrictions.</li>
+  <li><a href="#readback">Readbacks</a>.</li>
+  <li><a href="#correlation">Correlation</a>: confirming the aircrew has the right target or mark.</li>
+  <li><a href="#attack">Attack</a>: <Term>IN</Term> call, clearance, release.</li>
+  <li><a href="#attack">Assess</a> the effects, and reattack or rebrief.</li>
+  <li><a href="#attack">Battle damage assessment</a>.</li>
+  <li>Routing and safety of flight again on egress: a point and an altitude block clear of other aircraft and fires. <a href="#source-jp">{j('V-50')}</a></li>
+ </ol>
 
  <h2 id="what">What close air support is</h2>
- <p><Term>CAS</Term> is air action by fixed- and rotary-wing aircraft against hostile targets that are in close proximity to friendly forces and that requires detailed integration of each air mission with the fire and movement of those forces. <a href="#source-jp">{j('I-1')}</a> "Close" is not a distance: it is the need for that detailed integration, because of proximity, fires or movement, that makes an attack CAS. CAS may destroy, disrupt, suppress, fix, harass, neutralize or delay enemy forces. <a href="#source-jp">{j('I-2')}</a></p>
- <p>The ground commanders are the ultimate authority for all supporting fires in their area: the lowest-level ground commander employs the CAS assets unless a higher commander keeps that authority, and decides the target priority, the effects and the timing. <a href="#source-jp">{j('I-3')}</a> Aircrews keep the primary responsibility for weaponeering recommendations and their own employment tactics, while the <Term>JTAC</Term> or <Term>FAC(A)</Term> concentrates on the effects on the target. <a href="#source-jp">{j('I-4')}</a></p>
- <p>The conditions for effective CAS, the publication says, are well-trained people, effective planning and integration, effective command and control, air superiority (especially the suppression of enemy air defenses), target marking or acquisition, streamlined and flexible procedures, and the right ordnance. <a href="#source-jp">{j('I-6')}</a></p>
+ <p><Term>CAS</Term> is air action by fixed- and rotary-wing aircraft against hostile targets in close proximity to friendly forces, which requires detailed integration of each air mission with the fire and movement of those forces. <a href="#source-jp">{j('I-1')}</a> "Close" is not a distance. What makes an attack CAS is the need for that integration, because of proximity, fires or movement. CAS may destroy, disrupt, suppress, fix, harass, neutralize or delay enemy forces. <a href="#source-jp">{j('I-2')}</a></p>
+ <p>The ground commander owns the fires. The lowest-level ground commander employs the CAS assets unless a higher commander keeps that authority, and decides the target priority, effects and timing. <a href="#source-jp">{j('I-3')}</a> Aircrews keep the primary responsibility for weaponeering recommendations and their own tactics; the <Term>JTAC</Term> or <Term>FAC(A)</Term> concentrates on the effect on the target. <a href="#source-jp">{j('I-4')}</a></p>
+ <details class="more"><summary>What makes CAS work well</summary>
+  <p>Well-trained people, effective planning and integration, effective command and control, air superiority (especially suppression of enemy air defenses), target marking or acquisition, streamlined and flexible procedures, and the right ordnance. <a href="#source-jp">{j('I-6')}</a></p>
+ </details>
+ <p class="key"><strong>Key point:</strong> CAS is defined by integration with nearby troops, not by distance, and the ground commander decides what is attacked.</p>
 
- <h2 id="who">Who controls what</h2>
- <p><Term>Terminal attack control</Term> is the authority to control the maneuver of attacking aircraft and to grant them weapons release clearance. A certified and qualified <Term>JTAC</Term> or <Term>FAC(A)</Term> is recognized across the Department of Defense as able and authorized to perform it, whichever service trained them. <a href="#source-jp">{j('I-2')}</a></p>
- <ul>
-  <li><strong>The <Term>JTAC</Term></strong> is a qualified (certified) service member who, from a forward position, directs the action of combat aircraft engaged in close air support. <a href="#source-jp">{j('GL-11')}</a> The supported commander delegates weapons release authority to the JTAC for specific engagements. <a href="#source-jp">{j('III-40')}</a></li>
-  <li><strong>The <Term>FAC(A)</Term></strong> is a specifically trained and qualified aviator, normally an airborne extension of the <Term>TACP</Term>, who controls CAS from the air. <a href="#source-jp">{j('GL-10')}</a> A FAC(A) should say "FAC(A) capable" or "qualified" at check-in. It can provide terminal attack control under all three types, relay radio calls, reconnoiter and recommend weapons, call for artillery, deconflict aircraft and surface fires, mark and talk aircraft on, and pass battle damage assessment. <a href="#source-jp">{j('V-55 to V-57')}</a></li>
-  <li><strong>A <Term>JFO</Term></strong> can request, adjust and control surface-to-surface fires and provide targeting information in support of Type 2 and 3 control by a JTAC or FAC(A). <a href="#source-jp">{j('GL-11')}</a> Anyone else doing <Term>terminal guidance operations</Term>, such as lasing a target or generating a coordinate, has no authority to control or clear aircraft unless qualified as a JTAC or FAC(A). <a href="#source-jp">{j('I-2')}</a></li>
- </ul>
- <p>Before an aircraft reaches the controller, an air control agency usually briefs it from the request: the Air Force's <Term>ASOC</Term>, the Marine Corps' <Term>DASC</Term>, a Marine or Navy tactical air control center, or a <Term>TAC(A)</Term>. <a href="#source-jp">{j('V-3')}</a> <a href="#source-jp">{j('GL-8 to GL-9, GL-13')}</a></p>
- <p><strong>Splitting the job.</strong> When a JTAC and a FAC(A) work together they divide four duties, named by brevity words that each must echo back: <a href="#source-jp">{j('V-57 to V-58')}</a></p>
- <ul>
-  <li><strong>BRIEF</strong>: the FAC(A) passes area updates, CAS briefs and battle damage assessment to the aircraft and copies their check-ins.</li>
-  <li><strong>STACK</strong>: the FAC(A) deconflicts all the CAS aircraft from each other and from surface fires, including holding areas, ingress and egress.</li>
-  <li><strong>MARK</strong>: the FAC(A) marks targets; a talk-on counts as a mark. Marking autonomously, it still calls <Term>IN</Term> before releasing so the JTAC can abort it.</li>
-  <li><strong>CONTROL</strong>: the FAC(A) gives final release authority, if the JTAC delegates it. As always, the JTAC keeps abort authority.</li>
- </ul>
- <p>So a JTAC might say "Bengal 61 has stack and mark, Titus maintains brief and control", or hand a FAC(A) everything: "your brief, stack, mark, and control". Whoever holds final release authority must be stated clearly. <a href="#source-jp">{j('V-57 to V-58')}</a></p>
+ <h2 id="who">Who controls the attack</h2>
+ <p><Term>Terminal attack control</Term> is the authority to control the maneuver of attacking aircraft and to grant weapons release clearance. A certified and qualified <Term>JTAC</Term> or <Term>FAC(A)</Term> is recognized across the Department of Defense as authorized to do it, whichever service trained them. <a href="#source-jp">{j('I-2')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Who does what in a CAS attack" tabindex="0"><table>
+  <caption>Who does what</caption>
+  <thead><tr><th scope="col">Who</th><th scope="col">What they do</th><th scope="col">Can clear an attack?</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>JTAC</Term></th><td>A qualified (certified) service member who, from a forward position, directs aircraft engaged in CAS. <a href="#source-jp">{j('GL-11')}</a> The supported commander delegates weapons release authority to the JTAC for specific engagements. <a href="#source-jp">{j('III-40')}</a></td><td>Yes</td></tr>
+   <tr><th scope="row"><Term>FAC(A)</Term></th><td>A specifically trained and qualified aviator, normally an airborne extension of the <Term>TACP</Term>, controlling CAS from the air. <a href="#source-jp">{j('GL-10')}</a> Says "FAC(A) capable" or "qualified" at check-in; can control under all three types, relay calls, reconnoiter and recommend weapons, call for artillery, deconflict aircraft and fires, mark, talk aircraft on and pass battle damage assessment. <a href="#source-jp">{j('V-55 to V-57')}</a></td><td>Yes</td></tr>
+   <tr><th scope="row"><Term>JFO</Term></th><td>Requests, adjusts and controls surface fires and provides targeting information in support of Type 2 and 3 control by a JTAC or FAC(A). <a href="#source-jp">{j('GL-11')}</a></td><td>No</td></tr>
+   <tr><th scope="row">Anyone doing <Term>terminal guidance operations</Term></th><td>Lasing a target or generating a coordinate, for example. <a href="#source-jp">{j('I-2')}</a></td><td>No, unless also a qualified JTAC or FAC(A)</td></tr>
+   <tr><th scope="row">Air control agency</th><td>Usually briefs the aircraft from the request before it reaches the controller: the Air Force's <Term>ASOC</Term>, the Marine Corps' <Term>DASC</Term>, a Marine or Navy tactical air control center, or a <Term>TAC(A)</Term>. <a href="#source-jp">{j('V-3')}</a> <a href="#source-jp">{j('GL-8 to GL-9, GL-13')}</a></td><td>No</td></tr>
+  </tbody>
+ </table></div>
+ <p><strong>Splitting the job.</strong> A JTAC working with a FAC(A) can hand over any of four duties, named by brevity words each must echo back. Whoever holds final release authority must be stated clearly. <a href="#source-jp">{j('V-57 to V-58')}</a></p>
+ <div class="table-scroll" role="region" aria-label="JTAC and FAC(A) duties" tabindex="0"><table>
+  <caption>The four duties a JTAC can give a FAC(A) <a href="#source-jp">{j('V-57 to V-58')}</a></caption>
+  <thead><tr><th scope="col">Duty</th><th scope="col">The FAC(A)…</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">BRIEF</th><td>passes area updates, CAS briefs and battle damage assessment, and copies check-ins</td></tr>
+   <tr><th scope="row">STACK</th><td>deconflicts the CAS aircraft from each other and from surface fires, including holding, ingress and egress</td></tr>
+   <tr><th scope="row">MARK</th><td>marks targets (a talk-on counts); marking on its own, it still calls <Term>IN</Term> so the JTAC can abort it</td></tr>
+   <tr><th scope="row">CONTROL</th><td>gives final release authority, if the JTAC delegates it; the JTAC always keeps abort authority</td></tr>
+  </tbody>
+ </table></div>
+ <p>So: "Bengal 61 has stack and mark, Titus maintains brief and control", or everything at once: "your brief, stack, mark, and control". <a href="#source-jp">{j('V-57 to V-58')}</a></p>
+ <p class="key"><strong>Key point:</strong> only a JTAC or FAC(A) clears you, and the JTAC can always abort.</p>
 
- <h2 id="control">Types of control</h2>
- <p>The type of control tells everyone how the controller intends to reduce the risk of each attack. It is chosen from the commander's tactical risk assessment and passed in the game plan, before the brief. No level of risk is attached to a type: GPS and digital targeting under Type 2 may reduce risk more than Type 1, and none of the three is ordnance-specific. <a href="#source-jp">{j('III-42 to III-43')}</a></p>
+ <h2 id="control">Type of control and method of attack</h2>
+ <p>The <Term>game plan</Term> answers two separate questions before the brief. <strong>The type of control</strong> is how the controller will reduce the risk of each attack. <strong>The method of attack</strong> is whether the aircraft must see the target. Any type goes with either method. <a href="#source-jp">{j('III-42 to III-43, III-47')}</a></p>
+ <h3>Type of control</h3>
  <div class="table-scroll" role="region" aria-label="Types of terminal attack control" tabindex="0"><table>
   <caption>Types of terminal attack control <a href="#source-jp">{j('I-2, III-43 to III-47')}</a></caption>
   <thead><tr><th scope="col">Type</th><th scope="col">The controller</th><th scope="col">Attacks cleared</th><th scope="col">Clearance</th></tr></thead>
   <tbody>{CONTROLS.map((c) => <tr><th scope="row">Type {c.id}</th><td>{c.needs}</td><td>{c.attacks}</td><td>{c.clearance}</td></tr>)}</tbody>
  </table></div>
- <p><strong><Term>Type 1 control</Term></strong> is for when the best way to protect friendly troops is for the controller to watch each aircraft and predict its weapon's path from its geometry. The controller withholds clearance until the aircraft has finished maneuvering on the target, and may restrict weapons that can fly well off the aircraft's nose. Because a GPS- or INS-guided weapon flies to its coordinates whatever the aircraft's geometry, such weapons should not be controlled under Type 1. <a href="#source-jp">{j('III-43')}</a></p>
- <p><strong><Term>Type 2 control</Term></strong> is for when the controller still controls each attack but cannot see the aircraft at release, or cannot see the target and uses accurate real-time targeting data from another asset. The publication's examples are troops in contact, night, bad weather and high-altitude or standoff weapons. The controller should still try to watch the aircraft. <a href="#source-jp">{j('III-44 to III-45')}</a></p>
- <p><strong><Term>Type 3 control</Term></strong> clears multiple attacks within one engagement, inside restrictions the controller sets, such as a time, a boundary, headings or a target set. After the readback the controller says <Term>CLEARED TO ENGAGE</Term>; the aircrew calls "COMMENCING ENGAGEMENT" before its first release and "ENGAGEMENT COMPLETE" at the end. The controller monitors by every means available and keeps abort authority. <a href="#source-jp">{j('III-46')}</a></p>
- <p>For Types 1 and 2 the steps are the same until the end: the controller acquires the target, passes the game plan and brief; the aircrew checks that the location falls where expected and reads back; the controller correlates; the aircrew calls <Term>IN</Term>; and the controller answers <Term>CLEARED HOT</Term>, <Term>CONTINUE DRY</Term> or <Term>ABORT</Term>. Under Type 1 the controller must see the aircraft and judge its geometry before answering. <a href="#source-jp">{j('III-44 to III-45')}</a> Two types can be in effect at once for different flights, and any change of type has to be made before the IN call, or before COMMENCING ENGAGEMENT under Type 3; after it, the controller aborts and rebriefs. <a href="#source-jp">{j('III-43, III-50')}</a></p>
-
- <h2 id="method">Methods of attack</h2>
- <p>The method of attack is separate from the type of control and is an agreement about one thing: whether the aircraft must acquire the target. Any type of control can go with either method. <a href="#source-jp">{j('III-47')}</a></p>
  <ul>
-  <li><strong><Term>BOT</Term> (bomb on target)</strong>: the aircrew must acquire the target or the intended aimpoint, <Term>TALLY</Term>, <Term>CONTACT</Term> or <Term>CAPTURED</Term>. The coordinates only need to cue the aircrew and support fires approval. Examples: a laser-guided bomb lased by the delivering aircraft, unguided bombs under the weather with the aircrew TALLY, an attack corrected from a mark, and rockets and guns on a positively identified target. Only the lead is required to read back. <a href="#source-jp">{j('III-48 to III-49')}</a></li>
-  <li><strong><Term>BOC</Term> (bomb on coordinate)</strong>: the aircraft employs on the coordinates in the brief and is never required to see the target or the mark. The coordinates must be precise enough for the effect wanted and for fires approval, the aircrew does not change them once read back, and every aircraft delivering ordnance reads back from its weapon or system. Examples: an inertially aided weapon on a fixed coordinate, a laser-guided weapon guided by someone outside the flight, and unguided bombs from medium or high altitude above an overcast. <a href="#source-jp">{j('III-47 to III-48')}</a></li>
+  <li><strong><Term>Type 1 control</Term></strong>: the controller watches each aircraft and predicts the weapon's path from its geometry, withholding clearance until the aircraft has finished maneuvering, and may restrict weapons that can fly well off the nose. A GPS- or INS-guided weapon flies to its coordinates whatever the geometry, so such weapons should not be controlled under Type 1. <a href="#source-jp">{j('III-43')}</a></li>
+  <li><strong><Term>Type 2 control</Term></strong>: the controller still controls each attack but cannot see the aircraft at release, or cannot see the target and uses accurate real-time targeting data from another asset. Examples: troops in contact, night, bad weather, high-altitude or standoff weapons. The controller should still try to watch the aircraft. <a href="#source-jp">{j('III-44 to III-45')}</a></li>
+  <li><strong><Term>Type 3 control</Term></strong>: multiple attacks within one engagement, inside restrictions such as a time, a boundary, headings or a target set. After the readback the controller says <Term>CLEARED TO ENGAGE</Term>; the aircrew calls "COMMENCING ENGAGEMENT" before its first release and "ENGAGEMENT COMPLETE" at the end. The controller monitors and keeps abort authority. <a href="#source-jp">{j('III-46')}</a></li>
  </ul>
- <p>Misusing the two, the publication warns, causes confusion, slows the attack and can lead to fratricide. <a href="#source-jp">{j('III-48')}</a></p>
+ <p><strong>No type is "safer".</strong> The type is chosen from the commander's tactical risk assessment, and no level of risk is attached to it: GPS and digital targeting under Type 2 may reduce risk more than Type 1, and none of the three is ordnance-specific. <a href="#source-jp">{j('III-42 to III-43')}</a> Two types can be in effect at once for different flights. A change of type must be made before the IN call (or COMMENCING ENGAGEMENT under Type 3); after it, the controller aborts and rebriefs. <a href="#source-jp">{j('III-43, III-50')}</a></p>
+ <h3>Method of attack</h3>
+ <div class="table-scroll" role="region" aria-label="Bomb on target and bomb on coordinate compared" tabindex="0"><table>
+  <caption>BOT and BOC compared <a href="#source-jp">{j('III-47 to III-49')}</a></caption>
+  <thead><tr><th scope="col"></th><th scope="col"><Term>BOT</Term> (bomb on target)</th><th scope="col"><Term>BOC</Term> (bomb on coordinate)</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Must the aircrew see the target?</th><td>Yes: <Term>TALLY</Term>, <Term>CONTACT</Term> or <Term>CAPTURED</Term> on the target or aimpoint</td><td>No, never required to see the target or the mark</td></tr>
+   <tr><th scope="row">The coordinates</th><td>Only cue the aircrew and support fires approval</td><td>Must be precise enough for the effect and for fires approval; not changed once read back</td></tr>
+   <tr><th scope="row">Who reads back</th><td>The lead</td><td>Every aircraft delivering ordnance, from its weapon or system</td></tr>
+   <tr><th scope="row">Examples</th><td>An LGB lased by the delivering aircraft; unguided bombs under the weather with the aircrew TALLY; an attack corrected from a mark; rockets and guns on a positively identified target</td><td>An inertially aided weapon on a fixed coordinate; an LGB guided by someone outside the flight; unguided bombs from medium or high altitude above an overcast</td></tr>
+  </tbody>
+ </table></div>
+ <p>Mixing the two up causes confusion, slows the attack and can lead to fratricide. <a href="#source-jp">{j('III-48')}</a></p>
+ <p class="key"><strong>Key point:</strong> type of control is about how the controller manages risk; BOT or BOC is about whether you must see the target. They are independent.</p>
 
  <h2 id="clearance">Clearance calls</h2>
- <p>Weapons release authority lets the controller give these calls, and only these: <a href="#source-jp">{j('III-40 to III-41')}</a></p>
- <ul>
-  <li><strong><Term>ABORT</Term></strong>: cease the attack before weapons release, in any type of control.</li>
-  <li><strong><Term>CLEARED HOT</Term></strong>: Types 1 and 2, clearance to release on this pass. To clear a whole flight the controller adds "flight" after the call sign: "Ragin' 41, flight, CLEARED HOT".</li>
-  <li><strong><Term>CONTINUE</Term></strong>: continue the attack profile; release is not yet granted.</li>
-  <li><strong><Term>CONTINUE DRY</Term></strong>: continue the pass without releasing, as in training or a show of force; under Type 3 it is "Type 3, CONTINUE DRY".</li>
-  <li><strong><Term>CLEARED TO ENGAGE</Term></strong>: Type 3 clearance to attack within the controller's parameters.</li>
- </ul>
- <p class="note">The word CLEARED is used only when ordnance is actually to be delivered, to keep bombs from coming off on dry passes, and nonstandard calls are always avoided. <a href="#source-jp">{j('III-40')}</a></p>
+ <p>Weapons release authority gives the controller these calls, and only these: <a href="#source-jp">{j('III-40 to III-41')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Clearance calls" tabindex="0"><table>
+  <caption>Clearance calls <a href="#source-jp">{j('III-40 to III-41')}</a></caption>
+  <thead><tr><th scope="col">Call</th><th scope="col">Means</th><th scope="col">Used in</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>CLEARED HOT</Term></th><td>Release on this pass. "Ragin' 41, flight, CLEARED HOT" clears the whole flight.</td><td>Types 1 and 2</td></tr>
+   <tr><th scope="row"><Term>CLEARED TO ENGAGE</Term></th><td>Attack within the controller's parameters</td><td>Type 3</td></tr>
+   <tr><th scope="row"><Term>CONTINUE</Term></th><td>Continue the attack profile; release is not yet granted</td><td>All</td></tr>
+   <tr><th scope="row"><Term>CONTINUE DRY</Term></th><td>Continue the pass without releasing, as in training or a show of force ("Type 3, CONTINUE DRY" under Type 3)</td><td>All</td></tr>
+   <tr><th scope="row"><Term>ABORT</Term></th><td>Cease the attack before weapons release</td><td>All</td></tr>
+  </tbody>
+ </table></div>
+ <p class="key"><strong>Key point:</strong> the word CLEARED is used only when ordnance is actually to come off, so a bomb never leaves on a dry pass; nonstandard calls are always avoided. <a href="#source-jp">{j('III-40')}</a></p>
 
  <section class="lesson quiz-lesson" data-lesson="control" aria-labelledby="control-title">
   <h3 id="control-title">Quiz: type of control, method and clearance</h3>
@@ -98,71 +179,63 @@ const glossary = sitePath('encyclopedia/terminology/close-air-support/');
   <div class="buttons"><button type="button" data-new>Next question</button></div>
  </section>
 
- <h2 id="flow">The flow of a CAS mission</h2>
- <p>The publication gives an execution template so that aircrew and controllers can expect the same repeatable sequence from check-in to check-out: <a href="#source-jp">{j('V-14 to V-50')}</a></p>
- <ol class="steps">
-  <li><strong>Routing and safety of flight.</strong> On first contact the controller gives at least a "maintain" instruction, then the other aircraft on station and any immediate threats, weather or terrain: "Razor 53, maintain Chevy-Dodge 14-15". <a href="#source-jp">{j('V-14 to V-15')}</a></li>
-  <li><strong>Check-in</strong>, when the controller asks for it.</li>
-  <li><strong>Situation update</strong>, cut to what this aircraft needs.</li>
-  <li><strong>Game plan</strong>: type of control and method of attack.</li>
-  <li><strong>CAS brief</strong>: the <Term>9-line</Term>, then remarks and restrictions.</li>
-  <li><strong>Readbacks.</strong></li>
-  <li><strong><Term>Correlation</Term></strong>: confirming the aircrew has the right target or mark.</li>
-  <li><strong>Attack</strong>: <Term>IN</Term> call, clearance, release.</li>
-  <li><strong>Assess</strong> the effects, and reattack or rebrief.</li>
-  <li><strong>Battle damage assessment.</strong></li>
-  <li><strong>Routing and safety of flight</strong> again, as the aircraft egresses: a point and an altitude block clear of other aircraft and fires. <a href="#source-jp">{j('V-50')}</a></li>
- </ol>
-
- <h2 id="checkin">Check-in, situation update and game plan</h2>
- <p><strong>The <Term>CAS check-in</Term>.</strong> The controller should be directive about when it wants it ("Latch 65 send your check-in"), and may delay it during an attack in progress or ask only for parts. The aircraft gives, in the order remembered as MNPOPCA: <a href="#source-jp">{j('V-15 to V-17')}</a></p>
- <ol class="steps">
-  <li><strong>Mission number</strong>, from the air tasking order.</li>
-  <li><strong>Number and type of aircraft</strong>: "2 by F/A-18C".</li>
-  <li><strong>Position and altitude</strong>: "Currently 20 nm north of Ford, block 20-21".</li>
-  <li><strong>Ordnance</strong>, with laser codes for laser-guided bombs, the Hellfire model and fuzing options.</li>
-  <li><strong><Term>PLAYTIME</Term></strong> or time on station.</li>
-  <li><strong>Capabilities</strong>: FAC(A), sensors, data link, video downlink code, the situation updates and reference graphics on board.</li>
-  <li><strong><Term>Abort code</Term></strong>. With secure radios none is needed, and ABORT, ABORT, ABORT is the standard; if a code is passed the controller reads it back.</li>
- </ol>
- <p>Aircraft on the air tasking order may check in "as fragged" and keep it short, and a controller unsure of an aircraft's capabilities should ask in plain language now, rather than issue instructions the aircraft cannot support. <a href="#source-jp">{j('V-15, V-17')}</a></p>
- <p><strong>The situation update</strong> builds the aircrew's awareness to the level the mission needs: the surface-to-air threat, the general enemy picture, where the friendlies are (in general terms such as "all friendlies are east of the 94 easting", avoiding friendly grids), artillery that may be a factor, who has clearance authority, the ordnance wanted, and remarks such as hazards and the controller's laser or IR capability. A long update rattled off to an arriving aircrew will probably not be copied, so the controller breaks it into manageable transmissions. On check-in, the aircrew should say whether it already has the latest ground situation. <a href="#source-jp">{j('V-17 to V-20')}</a></p>
- <p><strong>The <Term>game plan</Term></strong> tells everyone how the attack will flow. At a minimum it gives the type of control and the method of attack, and may add the commander's intent, the ordnance and fuzing, the desired effects, the interval and how many grid digits to expect. Any question about capabilities or tactics is cleared up in plain language before the brief is confirmed. <a href="#source-jp">{j('V-20 to V-21')}</a> The publication's examples:</p>
- <ul>
+ <h2 id="checkin">Check-in and game plan</h2>
+ <p>The controller says when it wants the <Term>CAS check-in</Term> ("Latch 65 send your check-in"), and may delay it during an attack in progress or ask only for parts. <a href="#source-jp">{j('V-15 to V-17')}</a> It comes in this order, remembered as MNPOPCA:</p>
+ <div class="table-scroll" role="region" aria-label="The CAS check-in" tabindex="0"><table>
+  <caption>The CAS check-in <a href="#source-jp">{j('V-15 to V-17')}</a></caption>
+  <thead><tr><th scope="col">Item</th><th scope="col">Notes and example</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Mission number</th><td>From the air tasking order</td></tr>
+   <tr><th scope="row">Number and type</th><td>"2 by F/A-18C"</td></tr>
+   <tr><th scope="row">Position and altitude</th><td>"Currently 20 nm north of Ford, block 20-21"</td></tr>
+   <tr><th scope="row">Ordnance</th><td>With laser codes for LGBs, the Hellfire model and fuzing options</td></tr>
+   <tr><th scope="row"><Term>PLAYTIME</Term></th><td>Or time on station</td></tr>
+   <tr><th scope="row">Capabilities</th><td>FAC(A), sensors, data link, video downlink code, situation updates and reference graphics on board</td></tr>
+   <tr><th scope="row"><Term>Abort code</Term></th><td>Not needed with secure radios, where ABORT, ABORT, ABORT is standard; a code passed is read back by the controller</td></tr>
+  </tbody>
+ </table></div>
+ <p>Aircraft on the air tasking order may check in "as fragged" and keep it short. A controller unsure of an aircraft's capabilities should ask in plain language now, rather than issue instructions it cannot support. <a href="#source-jp">{j('V-15, V-17')}</a></p>
+ <p><strong>The situation update</strong> gives the aircrew what the mission needs: the surface-to-air threat, the enemy picture, where the friendlies are in general terms ("all friendlies are east of the 94 easting", not friendly grids), artillery that may be a factor, who has clearance authority, the ordnance wanted, and hazards or the controller's laser and IR capability. A long update rattled off to an arriving aircrew will probably not be copied, so it comes in manageable pieces; on check-in, the aircrew says whether it already has the latest picture. <a href="#source-jp">{j('V-17 to V-20')}</a></p>
+ <p><strong>The game plan</strong> gives at least the type of control and the method of attack, and may add the commander's intent, ordnance and fuzing, effects, the interval and how many grid digits to expect. Questions about capabilities or tactics are settled in plain language before the brief. <a href="#source-jp">{j('V-20 to V-21')}</a></p>
+ <ul class="exchange">
   <li>"Deuce 21, Type 1, bomb on target; advise when ready for 9-line."</li>
-  <li>"Latch 65, Type 2, bomb on coordinate, one GBU-38 instantaneous fusing each aircraft, simultaneous impact, 8-digit grid to follow; advise when ready for 9-line."</li>
+  <li>"Latch 65, Type 2, bomb on coordinate, one GBU-38 instantaneous fusing each aircraft, simultaneous impact, 8-digit grid to follow; advise when ready for 9-line." <a href="#source-jp">{j('V-20 to V-21')}</a></li>
  </ul>
- <p>Aircraft can be timed for <strong>simultaneous</strong> impacts, which limits exposure and the enemy's time to react but leaves no chance to correct or abort between them, or <strong>sequential</strong> ones. The publication's rules of thumb for the interval are 30 seconds for Type 1 control of unguided ordnance, about a minute for laser-guided bombs from medium altitude, and more than two minutes for precision weapons from medium to high altitude. <a href="#source-jp">{j('V-4 to V-5')}</a></p>
+ <p><strong>Simultaneous or sequential.</strong> Simultaneous impacts limit exposure and the enemy's time to react but leave no chance to correct or abort between them. Rules of thumb for a sequential interval: 30 seconds for Type 1 control of unguided ordnance, about a minute for LGBs from medium altitude, more than two minutes for precision weapons from medium to high altitude. <a href="#source-jp">{j('V-4 to V-5')}</a></p>
+ <p class="key"><strong>Key point:</strong> check in short and in order, and get the game plan settled before anyone reads a 9-line.</p>
 
- <h2 id="nineline">The 9-line brief, line by line</h2>
- <p>The <Term>9-line</Term> is the standard brief for fixed- and rotary-wing aircraft. It is used in every threat condition and does not dictate the aircraft's tactics. Line numbers are not transmitted, units are standard unless briefed, and the brief is not passed piecemeal or out of order. <a href="#source-jp">{j('V-24 to V-26')}</a> The controller reads it at a moderate pace in three transmissions of three lines each, because a brief read too fast has to be repeated. If lines 1 to 3 are left out, the next transmission starts with the word "Elevation". <a href="#source-jp">{j('V-26')}</a></p>
+ <h2 id="nineline">The 9-line</h2>
+ <p>The <Term>9-line</Term> is the standard brief for fixed- and rotary-wing aircraft, in every threat condition, and it does not dictate tactics. Line numbers are not transmitted, units are standard unless briefed, and lines are never passed piecemeal or out of order. <a href="#source-jp">{j('V-24 to V-26')}</a> It comes at a moderate pace in three transmissions of three lines, because a brief read too fast gets repeated; if lines 1 to 3 are left out, the next transmission starts with "Elevation". <a href="#source-jp">{j('V-26')}</a></p>
  <div class="table-scroll" role="region" aria-label="The 9-line brief" tabindex="0"><table>
   <caption>The 9-line CAS brief and the example in Figure 1 <a href="#source-jp">{j('V-25 to V-32')}</a></caption>
   <thead><tr><th scope="col">Line</th><th scope="col">Item</th><th scope="col">Given as</th><th scope="col">Example</th><th scope="col">Read back</th></tr></thead>
   <tbody>{NINE_LINE.map((l) => <tr><th scope="row">{l.line ?? '—'}</th><td>{l.title}</td><td>{l.unit}</td><td>{l.says}</td><td>{l.readback ? 'Yes' : ''}</td></tr>)}</tbody>
  </table></div>
- <ul>
-  <li><strong>Line 1, <Term id="Initial point">IP</Term> or <Term id="Battle position">BP</Term>.</strong> The IP is where the run-in starts; for helicopters the BP is where attacks are commenced. A hasty BP is given by its center grid. <a href="#source-jp">{j('V-26')}</a> When the aircraft is attacking from an orbit over the target, lines 1 to 3 can be "from the overhead". <a href="#source-jp">{j('III-75')}</a></li>
-  <li><strong>Line 2, heading and offset.</strong> Degrees magnetic from the IP, or from the center of the BP, to the target, given as three digits: "one eight zero". The <Term>offset direction</Term> is given only if there is a restriction: it is the side of the IP-to-target line the aircrew may maneuver on, from leaving the IP until release or egress. It regulates the attack quadrant without assigning a heading, and keeps aircraft clear of a <Term>GTL</Term> or a threat. <a href="#source-jp">{j('V-26, III-75 to III-76')}</a></li>
-  <li><strong>Line 3, distance.</strong> From the IP to the target in nautical miles, to a tenth, for fixed-wing aircraft; from the center of the BP in meters, to the nearest 100, for attack helicopters. <a href="#source-jp">{j('V-26')}</a></li>
-  <li><strong>Line 4, target elevation</strong>, in feet above mean sea level, read as digits, with "feet" after them to separate it from line 5. Any other datum, such as height above ellipsoid, must be said. Elevation is the hardest part to judge, and steeper impact angles reduce the effect of an error in it. <a href="#source-jp">{j('V-1, V-26 to V-27')}</a></li>
-  <li><strong>Line 5, target description</strong>, specific enough to recognize: "Five APCs in the open". If the commander wants the people inside a building, line 5 says so ("HVT in 2-story building") rather than describing the building. <a href="#source-jp">{j('V-2, V-27')}</a></li>
-  <li><strong>Line 6, target location</strong>: a grid that includes the 100,000-meter square, a latitude and longitude with the format made clear, or an offset from a known point. The number of grid digits is the grid's precision, not its accuracy. For an area target it is the center or the greatest concentration; for a moving target, a point on its route with its direction and speed. The datum must be known, and is confirmed if it is not WGS 84. <a href="#source-jp">{j('V-27 to V-28')}</a></li>
-  <li><strong>Line 7, mark or terminal guidance</strong>: the type of mark, such as smoke, laser or IR, with the laser code; or, when someone else lases for the weapon, their call sign, the word "laser" and the code: "Blackjack laser, code 1688". In a BOC attack with no mark it is "no mark". <a href="#source-jp">{j('V-5, V-30')}</a></li>
-  <li><strong>Line 8, friendlies</strong>: the cardinal or sub-cardinal direction and the distance in meters from the target to the closest friendly position, "South 300". The controller may not be the closest friendly. <a href="#source-jp">{j('V-3, V-30')}</a></li>
-  <li><strong>Line 9, egress</strong>, starting with the word "egress", by direction and control point, with the altitude in numbers rather than "in your block": "Egress North to Moon, block 15-17". <a href="#source-jp">{j('V-30')}</a></li>
- </ul>
- <p><strong>Remarks and restrictions</strong> follow, only those not already briefed. Remarks come first: the <Term>laser target line</Term>, which must be passed whenever a ground laser designator is used; the ordnance or effects wanted; the surface-to-air threat and the suppression plan; other fires; the calls requested, such as IP inbound or <Term>IN</Term> with heading; and hazards, weather and the friendly mark. <a href="#source-jp">{j('V-30 to V-31')}</a> Then the restrictions, every one of which is read back: <Term>danger close</Term> with the commander's initials, airspace coordination areas, <Term id="Final attack heading">final attack headings</Term>, lateral or altitude separation, approval out of the BP for helicopters, and the <Term>TOT</Term> or time to target, which comes last to mark the end of the brief. <a href="#source-jp">{j('V-31 to V-32')}</a> Controllers should choose the least restrictive attack headings that still meet the commander's intent, because overly tight ones slow the attack, hurt survivability and leave aircraft outside parameters. <a href="#source-jp">{j('V-32')}</a></p>
 
  <section class="lesson figure-lesson" data-lesson="brief" aria-labelledby="brief-title">
   <h3 id="brief-title" class="fig-title">Figure 1 — A 9-line on the map</h3>
-  <p>Step through the brief. Each line lights up what it puts on the map; the last button shows the aircrew's readback. Game plan: "{EXAMPLE.aircraft}, {EXAMPLE.gamePlan}; advise when ready for 9-line."</p>
+  <p>Step through the brief from the opening example. Each line lights up what it puts on the map; the last button shows the aircrew's readback. Game plan: "{EXAMPLE.aircraft}, {EXAMPLE.gamePlan}; advise when ready for 9-line."</p>
   <div class="buttons chips" data-steps></div>
   <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 340" role="img" aria-label="Plan view of the example brief: the IP east of the target, the run-in line heading 270, the offset side, the final attack heading window, the friendlies south and the egress north"></svg></div>
   <p class="no-js">Interactive figure unavailable. The example: IP Hammer, heading 270 offset right, 8.2 NM; 450 feet, two armored vehicles in a tree line, NV 1234 5678; smoke, south 800, egress north to Anvil block 14 to 16; final attack headings 240 to 300, TOT 1430. Readback: 450 feet, NV 1234 5678, final attack headings 240 to 300, TOT 1430.</p>
   <div class="feedback" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">An invented example in the format of JP 3-09.3 Figure V-9: the call signs, places and numbers are made up. Drawn to scale, north up, with the IP on the reciprocal of line 2 and the friendlies placed from line 8. The attack-heading window is the aircraft headings allowed into the target; the run-in from the IP lies inside it.</p>
  </section>
+
+ <details class="more"><summary>More on each line</summary>
+ <ul>
+  <li><strong>Line 1, <Term id="Initial point">IP</Term> or <Term id="Battle position">BP</Term>.</strong> The IP is where the run-in starts; for helicopters the BP is where attacks are commenced, and a hasty BP is given by its center grid. <a href="#source-jp">{j('V-26')}</a> When attacking from an orbit over the target, lines 1 to 3 can be "from the overhead". <a href="#source-jp">{j('III-75')}</a></li>
+  <li><strong>Line 2, heading and offset.</strong> Degrees magnetic from the IP (or BP center) to the target, as three digits: "one eight zero". The <Term>offset direction</Term> is given only if restricted: the side of the IP-to-target line the aircrew may maneuver on, from the IP until release or egress. It regulates the attack quadrant without assigning a heading and keeps aircraft clear of a <Term>GTL</Term> or a threat. <a href="#source-jp">{j('V-26, III-75 to III-76')}</a></li>
+  <li><strong>Line 3, distance.</strong> IP to target in nautical miles to a tenth for fixed-wing; BP center to target in meters, to the nearest 100, for attack helicopters. <a href="#source-jp">{j('V-26')}</a></li>
+  <li><strong>Line 4, elevation.</strong> Feet MSL, read as digits with "feet" after to separate it from line 5; any other datum, such as height above ellipsoid, must be said. Elevation is the hardest line to get right, and steeper impact angles reduce the effect of an error in it. <a href="#source-jp">{j('V-1, V-26 to V-27')}</a></li>
+  <li><strong>Line 5, description</strong>, specific enough to recognize: "Five APCs in the open". If the commander wants the people inside a building, line 5 says so ("HVT in 2-story building") rather than describing the building. <a href="#source-jp">{j('V-2, V-27')}</a></li>
+  <li><strong>Line 6, location.</strong> A grid including the 100,000-meter square, a latitude and longitude with the format made clear, or an offset from a known point. The number of digits is the grid's precision, not its accuracy. For an area target, the center or greatest concentration; for a moving target, a point on its route with direction and speed. The datum must be known, and is confirmed if not WGS 84. <a href="#source-jp">{j('V-27 to V-28')}</a></li>
+  <li><strong>Line 7, mark or terminal guidance</strong>: smoke, laser or IR, with the laser code; or, when someone else lases for the weapon, their call sign, "laser" and the code: "Blackjack laser, code 1688". A BOC attack with no mark says "no mark". <a href="#source-jp">{j('V-5, V-30')}</a></li>
+  <li><strong>Line 8, friendlies</strong>: cardinal or sub-cardinal direction and meters from the target to the closest friendly position, "South 300". The controller may not be the closest friendly. <a href="#source-jp">{j('V-3, V-30')}</a></li>
+  <li><strong>Line 9, egress</strong>, starting with "egress", by direction and control point, with the altitude in numbers rather than "in your block": "Egress North to Moon, block 15-17". <a href="#source-jp">{j('V-30')}</a></li>
+  <li><strong>Remarks, then restrictions</strong>, only those not already briefed. Remarks first: the <Term>laser target line</Term> (always passed when a ground designator is used), the ordnance or effects wanted, the surface-to-air threat and suppression plan, other fires, calls requested such as IP inbound or <Term>IN</Term> with heading, and hazards, weather and the friendly mark. <a href="#source-jp">{j('V-30 to V-31')}</a> Then the restrictions, all read back: <Term>danger close</Term> with the commander's initials, airspace coordination areas, <Term id="Final attack heading">final attack headings</Term>, lateral or altitude separation, approval out of the BP for helicopters, and the <Term>TOT</Term> or time to target, last, to mark the end of the brief. <a href="#source-jp">{j('V-31 to V-32')}</a> Controllers choose the least restrictive headings that meet the commander's intent, because tight ones slow the attack, hurt survivability and leave aircraft outside parameters. <a href="#source-jp">{j('V-32')}</a></li>
+ </ul>
+ </details>
 
  <section class="lesson quiz-lesson" data-lesson="lines" aria-labelledby="lines-title">
   <h3 id="lines-title">Quiz: which line is that?</h3>
@@ -171,66 +244,136 @@ const glossary = sitePath('encyclopedia/terminology/close-air-support/');
   <p class="feedback" data-result role="status" aria-live="polite"></p>
   <div class="buttons"><button type="button" data-new>Next line</button></div>
  </section>
+ <p class="key"><strong>Key point:</strong> three transmissions of three lines, then remarks and restrictions, with the TOT last.</p>
 
  <h2 id="readback">Readbacks</h2>
- <p>The <Term>mandatory readback</Term> is <strong>line 4, line 6 and every restriction</strong>. Final attack headings, airspace coordination areas, danger close and times on target are always restrictions and are always read back, and the aircrew reads back anything else the controller asks for. Offsets are restrictions but are read back only if requested. <a href="#source-jp">{j('V-33 to V-34')}</a> In a <Term>BOT</Term> attack the lead reads back; in a <Term>BOC</Term> attack every aircraft delivering ordnance reads back lines 4 and 6 from its weapon or system. An aircraft with a known bad navigation system says so rather than read back from it. <a href="#source-jp">{j('V-33')}</a></p>
- <p>A correct readback is answered "Call sign, readback correct" or "good readback". A wrong one is answered by restating the part in question, with the voice stressing what was wrong: "Deuce 21, be advised, final attack headings 1-8-0 through 2-1-0". <a href="#source-jp">{j('V-33')}</a> NATO controllers, following Allied Tactical Publication 3.3.2.1, pass the line titles before each item and also require line 8 to be read back; aircrew working with them should expect both. <a href="#source-jp">{j('V-26, V-30')}</a> General radio readback technique is in <a href={radio}>Radio Procedures</a>.</p>
-
- <h2 id="correlation">Correlation, marks and talk-ons</h2>
- <p><Term>Correlation</Term> is required on each and every CAS attack. In a <Term>BOC</Term> attack it is complete when the aircraft correctly reads back lines 4 and 6 from its system and the restrictions. In a <Term>BOT</Term> attack the controller marks the target, positions the aircraft to see it and asks questions with unique, distinct answers until satisfied, then says what the target is: "The third vehicle is your target", never just "That's your target". The aircrew answers <Term>TALLY</Term>, <Term>CAPTURED</Term> or <Term>CONTACT</Term>. <a href="#source-jp">{j('V-34')}</a> Correlation is also required with any <Term>third party contributor</Term>, such as a remote observer or another aircraft lasing the target. <a href="#source-jp">{j('V-5')}</a></p>
- <p><strong>Marks.</strong> A mark builds awareness, picks out a target in an array, reduces the chance of fratricide and supports control. <a href="#source-jp">{j('I-7')}</a> The publication's types: <a href="#source-jp">{j('V-6 to V-10')}</a></p>
- <ul>
-  <li><strong>Laser handoff</strong>: a designator's energy for the aircraft's laser spot tracker, day or night, with high confidence if the geometry is right; it needs headings that keep the tracker from locking onto the designator itself.</li>
-  <li><strong>Infrared sparkle</strong>: matching an aircraft's IR pointer to the controller's, or walking the aircraft's sparkle onto the target with spoken directions; night only, and the pointer may give the controller away to an enemy with night vision.</li>
-  <li><strong>Video downlink talk-on</strong>: the controller sees the aircraft's sensor picture.</li>
-  <li><strong>Offset from a <Term>target reference point</Term></strong> or grid reference the aircrew knows.</li>
-  <li><strong>Indirect fire</strong>, such as artillery or mortar smoke, which usually needs a correction and sacrifices surprise; <strong>direct fire</strong> such as tracers or grenades; <strong>data link</strong> tracks; and <strong>marks of opportunity</strong> such as burning vehicles.</li>
+ <p>The <Term>mandatory readback</Term> is <strong>line 4, line 6 and every restriction</strong>. Final attack headings, airspace coordination areas, danger close and times on target are always restrictions and always read back; so is anything else the controller asks for. Offsets are restrictions but read back only if requested. <a href="#source-jp">{j('V-33 to V-34')}</a> In a <Term>BOT</Term> attack the lead reads back; in a <Term>BOC</Term> attack every aircraft delivering ordnance reads back lines 4 and 6 from its weapon or system. An aircraft with a known bad navigation system says so rather than read back from it. <a href="#source-jp">{j('V-33')}</a></p>
+ <ul class="exchange">
+  <li><strong>Correct:</strong> "Call sign, readback correct" or "good readback".</li>
+  <li><strong>Wrong:</strong> the controller restates the part in question, stressing what was wrong: "Deuce 21, be advised, final attack headings 1-8-0 through 2-1-0". <a href="#source-jp">{j('V-33')}</a></li>
  </ul>
- <p>A visual mark is usually timed to land 30 to 45 seconds before the TOT. The aircrew calls "CONTACT the mark", and the controller corrects from it in direction and meters: "Razor 53, from the mark, east 50". Anything used for cueing other than the line 7 mark is not called "the mark" but by another label, such as "lead's hits". <a href="#source-jp">{j('V-40')}</a> Indirect fire marks are most effective within 100 meters of the target and generally effective enough within 300. IR marks start 20 to 30 seconds before the TOT. <a href="#source-jp">{j('III-78, III-80')}</a></p>
- <p><strong>Laser calls.</strong> For a laser mark the aircrew gives a ten-second warning. <a href="#source-jp">{j('III-79')}</a> A laser handoff runs: the controller sends the aircraft inbound on a heading with a <Term>STARE</Term> on the code and the point; the aircrew calls <Term>TEN SECONDS</Term>, then <Term>LASER ON</Term>; the controller answers <Term>LASING</Term> and the code; the aircrew calls <Term>SPOT</Term> and <Term>CEASE LASER</Term> when it has it. Then the controller asks what the aircrew has under its crosshairs and confirms the target, because <Term>SPOT</Term> and <Term>CAPTURED</Term> are not the same and spot jitter or spillover can put the spot slightly off the target. If the aircrew reports <Term>NEGATIVE LASER</Term>, the controller checks the designator, the code and the aircraft's position, and tries again or chooses another mark. <a href="#source-jp">{j('V-35 to V-36')}</a></p>
- <p><strong>Infrared calls.</strong> When the ground marks with an IR pointer the aircrew must call <Term>VISUAL</Term> for the friendly position and <Term>TALLY</Term> or <Term>CONTACT SPARKLE</Term> on every pass before it is cleared: that is the proof it can tell the friendly end of the beam from the target end. The controller may <Term>SNAKE</Term> the beam to help, then <Term>STEADY</Term> it, <Term>CEASE SPARKLE</Term>, or ask the aircraft to <Term>MATCH SPARKLE</Term>. <Term>ROPE</Term>, circling the beam around the aircraft to show the friendly position, can damage night vision devices and is not recommended for helicopters. <a href="#source-jp">{j('III-30, III-80')}</a></p>
- <p><strong>The <Term>talk-on</Term>.</strong> With no mark, or to finish one, the controller describes the target onto the aircrew's eyes or sensors. The publication's advice: <a href="#source-jp">{j('V-40 to V-44')}</a></p>
- <ul>
-  <li>Think about perspective: vertical relief stands out from the ground and from a low helicopter, but not from a fixed-wing aircraft overhead, which sees horizontal relief better; beyond about 15,000 ft of slant range colors cannot be told apart with the naked eye.</li>
-  <li>Go big to small for a visual talk-on, from a feature both can identify; a sensor talk-on in a city may start at a specific intersection instead.</li>
-  <li>Give each step as <Term>FIDO</Term>: from a point, in a direction, a distance, to an object seen, and ask the aircrew to call CONTACT on it: "Razor 53, from the cubby-hole, proceed south across MSR Michigan to the first building and call CONTACT."</li>
-  <li>Use no more than two cardinal directions in a transmission, name features as you go ("that building will be called the bank"), and set a unit of measure.</li>
-  <li>Keep a two-to-one ratio: two directive statements, then a confirming question.</li>
-  <li>Finish with questions only the right target can answer: "Which direction is the lead vehicle facing?"</li>
- </ul>
- <p>For a low-level attack with only seconds to find the target, the controller may give an <strong>enhanced target description</strong> of what the aircrew will see along the attack heading; then the aircrew does not have to call CONTACT. <a href="#source-jp">{j('V-42 to V-43')}</a></p>
+ <p>NATO controllers, following Allied Tactical Publication 3.3.2.1, pass the line titles before each item and also require line 8 to be read back. <a href="#source-jp">{j('V-26, V-30')}</a> General readback technique is in <a href={radio}>Radio Procedures</a>.</p>
+ <p class="key"><strong>Key point:</strong> elevation, location, restrictions. Lead only for BOT; every shooter, from the system, for BOC.</p>
 
- <h2 id="attack">The attack, abort and reattack</h2>
- <p>On the run-in the aircrew makes the calls requested, such as "IP inbound", then <Term>IN</Term>, with the heading or direction if one was restricted: "IN heading 360". The IN call is made in time to be cleared before the release window. <a href="#source-jp">{j('III-44 to III-45')}</a> Once an aircraft calls IN, everyone else holds their calls until the controller has cleared or aborted it, except that anyone can and should call an abort at any time. The tactical air direction net belongs to the controller. <a href="#source-jp">{j('V-46')}</a> After release the aircrew reports off and what it released, as in the publication's example: "Faction 31, off, one away, 27 seconds." <a href="#source-jp">{j('V-54')}</a></p>
- <p><strong>Abort.</strong> The controller shall abort an aircraft not aligned with the correct target, and must abort it if friendly troops may be endangered or for the aircrew's safety. With an <Term>abort code</Term>, the call is "SPIKE 41, NAIL 11, ABORT DELTA, ABORT DELTA, ABORT DELTA"; without one, ABORT, ABORT, ABORT. <a href="#source-jp">{j('V-47')}</a> A <Term>PLA</Term>, steering a guided weapon away after release, is a last resort: only some weapons can do it, the commander must approve it and its impact point before launch, and silence is not consent. <a href="#source-jp">{j('III-41 to III-42')}</a></p>
- <p><strong>Reattack and assessment.</strong> The controller assesses whether the commander's effects were achieved. Under Types 1 and 2 a reattack must be requested and cleared again; under Type 3 the aircraft may reattack while its CLEARED TO ENGAGE stands. Corrections are given in direction and meters from the last impact: "Razor 02, from lead's hits, north 100". For the same target the controller says "CONTINUE for a reattack, restrictions remain the same." <a href="#source-jp">{j('V-48')}</a> The controller passes battle damage assessment for the flight, not each aircraft, as they egress; if that is not possible, at least SUCCESSFUL, UNSUCCESSFUL or UNKNOWN. "If you do not see it, do not report it." <a href="#source-jp">{j('V-49')}</a></p>
- <p><strong>Threats.</strong> When a SAM is launched at a CAS aircraft the pilot breaks and dispenses countermeasures; against AAA the pilot jinks. The controller's mutual support is to call it at once, with the location from the target: "Latch 01, SAM launch southwest of the target." Aircraft shot down in CAS, the publication notes, were usually hit by threats they did not know about. <a href="#source-jp">{j('III-51 to III-52')}</a></p>
+ <h2 id="correlation">Correlation</h2>
+ <p><Term>Correlation</Term> means the controller confirming that the aircrew has the correct target or the correct target data, and it is required on each and every CAS attack. <a href="#source-jp">{j('V-34')}</a></p>
+ <ul>
+  <li><strong>BOC:</strong> complete when the aircraft correctly reads back lines 4 and 6 from its system, and the restrictions.</li>
+  <li><strong>BOT:</strong> the controller marks the target, positions the aircraft to see it and asks questions with unique answers until satisfied, then says what the target is: "The third vehicle is your target", never just "That's your target". The aircrew answers <Term>TALLY</Term>, <Term>CAPTURED</Term> or <Term>CONTACT</Term>. <a href="#source-jp">{j('V-34')}</a></li>
+ </ul>
+ <p>A visual mark usually lands 30 to 45 seconds before the TOT. The aircrew calls "CONTACT the mark", and the controller corrects from it in direction and meters: "Razor 53, from the mark, east 50". Anything else used for cueing is not called "the mark" but something like "lead's hits". <a href="#source-jp">{j('V-40')}</a> Correlation is also needed with any <Term>third party contributor</Term>, such as a remote observer or another aircraft lasing. <a href="#source-jp">{j('V-5')}</a> The marks themselves, and the laser and IR call sequences, are in <a href="#marks">Marks, laser and infrared calls</a>; describing a target with no mark is the <a href="#talkon">talk-on</a>.</p>
+ <p class="key"><strong>Key point:</strong> correlate on every attack: by seeing the target or mark in BOT, by a correct system readback in BOC.</p>
+
+ <h2 id="attack">IN, cleared hot, abort and reattack</h2>
+ <p>On the run-in the aircrew makes the calls requested, such as "IP inbound", then <Term>IN</Term> with the heading or direction if one was restricted, early enough to be cleared before the release window: "IN heading 360". <a href="#source-jp">{j('III-44 to III-45')}</a></p>
+ <p>Once an aircraft calls IN, everyone else holds their calls until it is cleared or aborted, except that anyone can and should call an abort at any time: the tactical air direction net belongs to the controller. <a href="#source-jp">{j('V-46')}</a> After release the aircrew reports off and what it released: "Faction 31, off, one away, 27 seconds." <a href="#source-jp">{j('V-54')}</a></p>
+ <p>For Types 1 and 2 the controller answers IN with <Term>CLEARED HOT</Term>, <Term>CONTINUE DRY</Term> or <Term>ABORT</Term>, and under Type 1 must see the aircraft and judge its geometry first. <a href="#source-jp">{j('III-44 to III-45')}</a></p>
+ <p><strong>Abort.</strong> The controller shall abort an aircraft not aligned with the correct target, and must abort it if friendly troops may be endangered or for the aircrew's safety. <a href="#source-jp">{j('V-47')}</a></p>
+ <ul class="exchange">
+  <li><strong>With an <Term>abort code</Term>:</strong> "SPIKE 41, NAIL 11, ABORT DELTA, ABORT DELTA, ABORT DELTA"</li>
+  <li><strong>Without:</strong> "ABORT, ABORT, ABORT" <a href="#source-jp">{j('V-47')}</a></li>
+ </ul>
+ <p>A <Term>PLA</Term>, steering a guided weapon away after release, is a last resort: only some weapons can do it, the commander must approve it and its impact point before launch, and silence is not consent. <a href="#source-jp">{j('III-41 to III-42')}</a></p>
+ <p><strong>Reattack and assessment.</strong> The controller judges whether the commander's effects were achieved. Under Types 1 and 2 a reattack is requested and cleared again; under Type 3 the aircraft may reattack while its CLEARED TO ENGAGE stands. Corrections come in direction and meters from the last impact: "Razor 02, from lead's hits, north 100"; for the same target, "CONTINUE for a reattack, restrictions remain the same." <a href="#source-jp">{j('V-48')}</a></p>
+ <p><strong>Battle damage assessment</strong> is passed for the flight, not each aircraft, as they egress, or at least SUCCESSFUL, UNSUCCESSFUL or UNKNOWN. "If you do not see it, do not report it." <a href="#source-jp">{j('V-49')}</a></p>
+ <p><strong>Threats.</strong> Against a SAM launch the pilot breaks and dispenses countermeasures; against AAA, jinks. The controller calls it at once with the location from the target: "Latch 01, SAM launch southwest of the target." Aircraft shot down in CAS were usually hit by threats they did not know about. <a href="#source-jp">{j('III-51 to III-52')}</a></p>
+ <p class="key"><strong>Key point:</strong> after an IN call, everyone else holds their calls until that aircraft is cleared or aborted, except that anyone may call abort.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>Only a qualified JTAC or FAC(A) clears an attack; the JTAC keeps abort authority.</li>
+  <li>Type of control (how risk is managed) and method of attack (BOT or BOC) are separate choices in the game plan.</li>
+  <li>Check-in in MNPOPCA order; 9-line in three groups of three, then remarks, restrictions and the TOT last.</li>
+  <li>Read back elevation, location and every restriction.</li>
+  <li>Correlate on every attack. Under Types 1 and 2 each attack is IN, CLEARED HOT (or abort), off; under Type 3 one CLEARED TO ENGAGE covers the engagement, bracketed by COMMENCING ENGAGEMENT and ENGAGEMENT COMPLETE.</li>
+  <li>CLEARED means ordnance comes off; anyone can call ABORT.</li>
+ </ul>
+
+ <h2 id="marks">Marks, laser and infrared calls</h2>
+ <p>A mark builds awareness, picks out a target in an array, reduces the chance of fratricide and supports control. <a href="#source-jp">{j('I-7')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Types of mark" tabindex="0"><table>
+  <caption>Types of mark <a href="#source-jp">{j('V-6 to V-10')}</a></caption>
+  <thead><tr><th scope="col">Mark</th><th scope="col">How it works</th><th scope="col">Watch for</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Laser handoff</th><td>A designator's energy for the aircraft's laser spot tracker, day or night; high confidence with the right geometry</td><td>Needs headings that keep the tracker from locking onto the designator itself</td></tr>
+   <tr><th scope="row">Infrared sparkle</th><td>Matching the aircraft's IR pointer to the controller's, or walking the aircraft's sparkle onto the target by voice</td><td>Night only; the pointer may give the controller away to an enemy with night vision</td></tr>
+   <tr><th scope="row">Video downlink talk-on</th><td>The controller sees the aircraft's sensor picture</td><td></td></tr>
+   <tr><th scope="row">Offset from a <Term>target reference point</Term></th><td>Or from a grid reference the aircrew knows</td><td></td></tr>
+   <tr><th scope="row">Indirect fire</th><td>Artillery or mortar smoke; most effective within 100 m of the target, generally effective enough within 300 m <a href="#source-jp">{j('III-78')}</a></td><td>Usually needs a correction and sacrifices surprise</td></tr>
+   <tr><th scope="row">Direct fire, data link, marks of opportunity</th><td>Tracers or grenades; data link tracks; burning vehicles and the like</td><td></td></tr>
+  </tbody>
+ </table></div>
+ <h3>Laser calls</h3>
+ <p>For a laser mark the aircrew gives a ten-second warning. <a href="#source-jp">{j('III-79')}</a> A laser handoff runs: <a href="#source-jp">{j('V-35 to V-36')}</a></p>
+ <ol class="exchange">
+  <li><span class="who">Controller</span> <span class="said">Sends the aircraft inbound on a heading with a <Term>STARE</Term> on the code and the point.</span></li>
+  <li><span class="who">Aircrew</span> <span class="said"><Term>TEN SECONDS</Term>, then <Term>LASER ON</Term>.</span></li>
+  <li><span class="who">Controller</span> <span class="said"><Term>LASING</Term> and the code.</span></li>
+  <li><span class="who">Aircrew</span> <span class="said"><Term>SPOT</Term> when it has it, and <Term>CEASE LASER</Term>.</span></li>
+  <li><span class="who">Controller</span> <span class="said">Asks what is under the crosshairs and confirms the target.</span></li>
+ </ol>
+ <p><Term>SPOT</Term> is not <Term>CAPTURED</Term>: spot jitter or spillover can put the spot slightly off the target, which is why the controller confirms. On <Term>NEGATIVE LASER</Term>, the controller checks the designator, the code and the aircraft's position, and tries again or picks another mark. <a href="#source-jp">{j('V-35 to V-36')}</a></p>
+ <h3>Infrared calls</h3>
+ <p>When the ground marks with an IR pointer, the aircrew must call <Term>VISUAL</Term> for the friendly position and <Term>TALLY</Term> or <Term>CONTACT SPARKLE</Term> on every pass before it is cleared: proof it can tell the friendly end of the beam from the target end. The controller may <Term>SNAKE</Term> the beam, then <Term>STEADY</Term> it, <Term>CEASE SPARKLE</Term>, or ask the aircraft to <Term>MATCH SPARKLE</Term>. <Term>ROPE</Term>, circling the beam around the aircraft to show the friendly position, can damage night vision devices and is not recommended for helicopters. IR marks start 20 to 30 seconds before the TOT. <a href="#source-jp">{j('III-30, III-80')}</a></p>
+
+ <h2 id="talkon">Talk-on technique</h2>
+ <p>With no mark, or to finish one, the controller describes the target onto the aircrew's eyes or sensors with a <Term>talk-on</Term>: <a href="#source-jp">{j('V-40 to V-44')}</a></p>
+ <ul>
+  <li><strong>Perspective.</strong> Vertical relief stands out from the ground and a low helicopter, but a fixed-wing aircraft overhead sees horizontal relief better; beyond about 15,000 ft slant range colors cannot be told apart by eye.</li>
+  <li><strong>Big to small</strong> for a visual talk-on, from a feature both can identify; a sensor talk-on in a city may start at a specific intersection.</li>
+  <li><strong><Term>FIDO</Term></strong> for each step: from a point, in a direction, a distance, to an object, then ask for CONTACT: "Razor 53, from the cubby-hole, proceed south across MSR Michigan to the first building and call CONTACT."</li>
+  <li><strong>Keep it simple.</strong> No more than two cardinal directions in a transmission; name features as you go ("that building will be called the bank"); set a unit of measure.</li>
+  <li><strong>Two to one.</strong> Two directive statements, then a confirming question.</li>
+  <li><strong>Finish</strong> with questions only the right target can answer: "Which direction is the lead vehicle facing?"</li>
+ </ul>
+ <p>For a low-level attack with only seconds to find the target, the controller may give an <strong>enhanced target description</strong> of what the aircrew will see along the attack heading; the aircrew then does not have to call CONTACT. <a href="#source-jp">{j('V-42 to V-43')}</a></p>
 
  <h2 id="fratricide">Preventing fratricide</h2>
- <p>Friendly fire has occasionally come from malfunctioning weapons, but more often from confusion: misidentified targets, wrong locations or descriptions, locations transmitted or copied wrongly, and lost awareness by anyone in the chain. Every participant must try to identify friendly units, the enemy and civilians before targeting, clearing fires and releasing. <a href="#source-jp">{j('I-10')}</a> The publication's protections, from the brief to the release:</p>
+ <p>Friendly fire has occasionally come from malfunctioning weapons, but more often from confusion: misidentified targets, wrong locations or descriptions, locations sent or copied wrongly, and lost awareness anywhere in the chain. Everyone must try to identify friendly units, the enemy and civilians before targeting, clearing fires and releasing. <a href="#source-jp">{j('I-10')}</a></p>
  <ul>
-  <li><strong>Clearance of fires.</strong> Release authority belongs to the supported commander, who delegates it to the controller for specific engagements; the attack is cleared only through the standard calls, and CLEARED only when ordnance is to come off. <a href="#source-jp">{j('III-40')}</a></li>
-  <li><strong><Term>Danger close</Term>.</strong> <Term id="Risk-estimate distance">Risk-estimate distances</Term> are given for a 0.1 percent (1 in 1,000) probability of incapacitation, and delivery inside that distance is danger close. The supported commander accepts the risk by passing their initials, through the controller, to the attacking aircraft, and danger close is a restriction that is read back. When ordnance is a factor in friendly safety, the weapon's axis of attack should be parallel to the friendly force's axis, so a long or short hit does not land on them. <a href="#source-jp">{j('III-36 to III-37, V-32')}</a></li>
-  <li><strong>Attack headings.</strong> Headings should be as nearly parallel to the <Term>FLOT</Term> as possible, because hits fall long or short along the bomb-fall line, and should not be planned over occupied friendly positions. <a href="#source-jp">{j('V-11')}</a></li>
-  <li><strong><Term>Troops in contact</Term></strong> means friendly forces receiving effective fire. It highlights urgency; it does not dictate a type of control or remove anyone's responsibility to avoid friendly and civilian casualties. <a href="#source-jp">{j('III-36')}</a></li>
-  <li><strong>Friendly locations.</strong> A friendly location must never be used as the target location in a request: fratricide has happened when controllers used friendly locations as routing points for CAS aircraft. Friendly grids are avoided in the situation update. <a href="#source-jp">{j('V-3, V-18')}</a></li>
-  <li><strong>Friendly marking.</strong> Ground forces can show their position with IR position markers, visible only through night vision devices and best flashing, and with GLINT tape; the device should be confirmed by voice with the aircrew. With an IR pointer as the mark, the aircrew must be VISUAL and TALLY or CONTACT SPARKLE before clearance. Marking the friendlies to help the aircrew find the target is the least desirable method and is used only when nothing else works. <a href="#source-jp">{j('III-30, III-81')}</a></li>
-  <li><strong>Without a JTAC.</strong> When no JTAC or FAC(A) is available the aircrew carries more of the integration: it draws the target elevation, location, description, marks, nearest friendlies and restrictions from the ground unit, sets its own restrictions if needed, correlates through dialogue with people not trained in it, and tells them to say "abort" if anything becomes unsafe. <a href="#source-jp">{j('V-54 to V-55')}</a></li>
+  <li><strong>Clearance of fires.</strong> Release authority belongs to the supported commander, who delegates it to the controller for specific engagements; attacks are cleared only with the standard calls, and CLEARED only when ordnance is to come off. <a href="#source-jp">{j('III-40')}</a></li>
+  <li><strong><Term>Danger close</Term>.</strong> <Term id="Risk-estimate distance">Risk-estimate distances</Term> are for a 0.1 percent (1 in 1,000) probability of incapacitation; delivery inside that distance is danger close. The supported commander accepts the risk by passing their initials, through the controller, to the aircraft, and it is a restriction that is read back. When ordnance is a factor in friendly safety, the axis of attack should be parallel to the friendly force's axis, so a long or short hit does not land on them. <a href="#source-jp">{j('III-36 to III-37, V-32')}</a></li>
+  <li><strong>Attack headings.</strong> As nearly parallel to the <Term>FLOT</Term> as possible, because hits fall long or short along the bomb-fall line, and not planned over occupied friendly positions. <a href="#source-jp">{j('V-11')}</a></li>
+  <li><strong><Term>Troops in contact</Term></strong> means friendly forces receiving effective fire. It signals urgency; it does not dictate a type of control or remove anyone's responsibility to avoid friendly and civilian casualties. <a href="#source-jp">{j('III-36')}</a></li>
+  <li><strong>Friendly locations.</strong> Never used as the target location in a request: fratricide has happened when controllers used friendly locations as routing points. Friendly grids are avoided in the situation update. <a href="#source-jp">{j('V-3, V-18')}</a></li>
+  <li><strong>Friendly marking.</strong> IR position markers (visible only through night vision devices, best flashing) and GLINT tape, confirmed by voice with the aircrew. With an IR pointer as the mark, the aircrew must be VISUAL and TALLY or CONTACT SPARKLE before clearance. Marking friendlies to help find the target is the least desirable method, used only when nothing else works. <a href="#source-jp">{j('III-30, III-81')}</a></li>
+  <li><strong>Without a JTAC.</strong> The aircrew carries more of the integration: it gets the target elevation, location, description, marks, nearest friendlies and restrictions from the ground unit, sets its own restrictions if needed, correlates by talking with people not trained in it, and tells them to say "abort" if anything becomes unsafe. <a href="#source-jp">{j('V-54 to V-55')}</a></li>
  </ul>
 
  <h2 id="airframes">Fixed- and rotary-wing CAS across the services</h2>
- <p>Every service organizes, trains and equips for CAS within its roles, so many kinds of aircraft can fly it. <a href="#source-jp">{j('I-2')}</a> CAS fighter and attack aircraft usually fly in groups of two to four: the Air Force calls these <Term id="Flight">flights</Term>, and the Navy and Marine Corps call them <Term id="Section">sections</Term> (two aircraft) or divisions (three to four). Bombers usually fly singly or as two-ships. <a href="#source-jp">{j('I-4 to I-5')}</a></p>
- <p><strong>Fixed-wing.</strong> Speed and range make fixed-wing aircraft flexible, and they carry the full range of unguided, precision, area-denial and forward-firing weapons. <a href="#source-jp">{j('I-5')}</a> The publication divides their tactics by height. Above about 8,000 ft AGL, medium and high altitude keeps the target, marks and other aircraft's hits in view, saves fuel, and keeps clear of AAA and shoulder-launched SAMs, but needs local air superiority and good weather, makes the aircraft harder for the controller to see, and degrades unguided accuracy. <a href="#source-jp">{j('III-84 to III-85')}</a> Below that, low and very low altitude denies the enemy long-range detection and works under low weather, but makes navigation and target acquisition harder and exposes the aircraft to small arms and AAA; the run-in from the IP is the most crucial phase. <a href="#source-jp">{j('III-86 to III-88')}</a> At low altitude the controller marks 30 to 45 seconds before the TOT and gives final corrections from the mark. <a href="#source-jp">{j('III-88')}</a> The deliveries themselves, level, loft, pop-up and dive, are in <a href={wd}>Weapons Delivery</a>.</p>
- <p><strong>Rotary-wing.</strong> Attack helicopters can reposition firepower quickly, carry forward- and off-axis-firing weapons, loiter, fly nap of the earth and work in varied terrain. <a href="#source-jp">{j('I-5')}</a> They move from a holding area to a <Term>battle position</Term>, choose individual firing points and stay masked until the time or the order to attack. <a href="#source-jp">{j('III-93')}</a> They attack with <strong>hovering fire</strong>, best for precision weapons but briefly and from cover; <strong>running fire</strong> in level forward flight, steadier for rockets and guns and a harder target; or <strong>diving fire</strong> from altitude, often from an overhead pattern, which may be the most accurate for unguided weapons but leaves the aircraft exposed. <a href="#source-jp">{j('III-93 to III-94')}</a> Helicopters can often work under ceilings that stop fixed-wing CAS, while fixed-wing aircraft can work above blowing dust that grounds helicopters. <a href="#source-jp">{j('I-8')}</a> Off-axis weapons mean a helicopter need not point at the target, so a controller may give a munition attack azimuth instead of an aircraft heading. <a href="#source-jp">{j('V-11')}</a></p>
+ <p>Every service organizes, trains and equips for CAS within its roles. <a href="#source-jp">{j('I-2')}</a> Fighter and attack aircraft usually fly in groups of two to four: Air Force <Term id="Flight">flights</Term>, Navy and Marine Corps <Term id="Section">sections</Term> (two) or divisions (three to four). Bombers usually fly singly or as two-ships. <a href="#source-jp">{j('I-4 to I-5')}</a></p>
+ <h3>Fixed-wing</h3>
+ <p>Speed and range make fixed-wing aircraft flexible, and they carry the full range of unguided, precision, area-denial and forward-firing weapons. <a href="#source-jp">{j('I-5')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Fixed-wing CAS altitudes compared" tabindex="0"><table>
+  <caption>Fixed-wing tactics by height</caption>
+  <thead><tr><th scope="col"></th><th scope="col">Gains</th><th scope="col">Costs</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Medium and high, above about 8,000 ft AGL <a href="#source-jp">{j('III-84 to III-85')}</a></th><td>Target, marks and others' hits stay in view; saves fuel; clear of AAA and shoulder-launched SAMs</td><td>Needs local air superiority and good weather; harder for the controller to see; degrades unguided accuracy</td></tr>
+   <tr><th scope="row">Low and very low <a href="#source-jp">{j('III-86 to III-88')}</a></th><td>Denies long-range detection; works under low weather</td><td>Harder navigation and target acquisition; exposed to small arms and AAA. The run-in from the IP is the most crucial phase.</td></tr>
+  </tbody>
+ </table></div>
+ <p>At low altitude the controller marks 30 to 45 seconds before the TOT and gives final corrections from the mark. <a href="#source-jp">{j('III-88')}</a> The deliveries themselves, level, loft, pop-up and dive, are in <a href={wd}>Weapons Delivery</a>.</p>
+ <h3>Rotary-wing</h3>
+ <p>Attack helicopters reposition firepower quickly, carry forward- and off-axis-firing weapons, loiter, fly nap of the earth and work in varied terrain. <a href="#source-jp">{j('I-5')}</a> They move from a holding area to a <Term>battle position</Term>, pick individual firing points and stay masked until the time or order to attack. <a href="#source-jp">{j('III-93')}</a> They can often work under ceilings that stop fixed-wing CAS, while fixed-wing aircraft can work above blowing dust that grounds helicopters. <a href="#source-jp">{j('I-8')}</a> Off-axis weapons mean a helicopter need not point at the target, so a controller may give a munition attack azimuth instead of an aircraft heading. <a href="#source-jp">{j('V-11')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Helicopter firing modes" tabindex="0"><table>
+  <caption>Helicopter firing modes <a href="#source-jp">{j('III-93 to III-94')}</a></caption>
+  <thead><tr><th scope="col">Mode</th><th scope="col">Best for</th><th scope="col">Trade-off</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Hovering fire</th><td>Precision weapons</td><td>Only briefly, and from cover</td></tr>
+   <tr><th scope="row">Running fire</th><td>Rockets and guns, steadier in level forward flight</td><td>A harder target than a hover</td></tr>
+   <tr><th scope="row">Diving fire</th><td>Unguided weapons; may be the most accurate, often from an overhead pattern</td><td>Leaves the aircraft exposed</td></tr>
+  </tbody>
+ </table></div>
+ <h3>By service</h3>
  <ul>
-  <li><strong>Marine Corps</strong> attack helicopters are part of the Marine air-ground task force, trained and equipped for CAS, and usually fly in mixed sections of attack and utility helicopters. <a href="#source-jp">{j('I-5')}</a></li>
-  <li><strong>Army</strong> attack helicopters fight as maneuver units of the combined arms team and use <Term>close combat attack</Term> procedures. CCA is not synonymous with CAS, and the Army does not consider its attack helicopters a CAS system, so a controller should not expect Army aircrew to use CAS procedures without further coordination. <a href="#source-jp">{j('I-5, III-89')}</a></li>
-  <li><strong>Special operations</strong> fixed- and rotary-wing aircraft use CAS, CCA, gunship and FAC(A) procedures. <a href="#source-jp">{j('I-5')}</a> A <strong>joint air attack team</strong> combines fixed-wing CAS aircraft and helicopters to find and attack high-priority targets together. <a href="#source-jp">{j('I-5 to I-6')}</a></li>
+  <li><strong>Marine Corps</strong> attack helicopters are part of the Marine air-ground task force, trained and equipped for CAS, usually in mixed sections of attack and utility helicopters. <a href="#source-jp">{j('I-5')}</a></li>
+  <li><strong>Army</strong> attack helicopters fight as maneuver units and use <Term>close combat attack</Term> procedures. CCA is not synonymous with CAS, and the Army does not consider its attack helicopters a CAS system, so a controller should not expect Army aircrew to use CAS procedures without further coordination. <a href="#source-jp">{j('I-5, III-89')}</a></li>
+  <li><strong>Special operations</strong> fixed- and rotary-wing aircraft use CAS, CCA, gunship and FAC(A) procedures. <a href="#source-jp">{j('I-5')}</a> A <strong>joint air attack team</strong> combines fixed-wing CAS aircraft and helicopters against high-priority targets. <a href="#source-jp">{j('I-5 to I-6')}</a></li>
   <li><strong>Unmanned aircraft</strong> can find and mark targets, talk other aircraft on, lase, or attack using CAS procedures. <a href="#source-jp">{j('I-6')}</a> <strong>Bombers</strong> may stay on station eight hours or more and check the target with their own sensors from as far as 40 nautical miles. <a href="#source-jp">{j('III-97')}</a></li>
  </ul>
 
  <h2 id="fiveline">The rotary-wing 5-line</h2>
- <p>The <Term>5-line</Term> is a "friendly-centric" brief that quickly orients helicopters to a target from the friendly position. Its format is the same as the Army's CCA brief and the special operations call for fire, but it is still a CAS brief: passing it is not clearance to fire, so the type of control and method of attack are stated first. It assumes the aircrew can find the friendlies; if not, for example on an unfamiliar battlefield with no clear front line, the controller uses the 9-line. <a href="#source-jp">{j('III-94 to III-95')}</a></p>
+ <p>The <Term>5-line</Term> is a "friendly-centric" brief that quickly orients helicopters to a target from the friendly position. Its format matches the Army's CCA brief and the special operations call for fire, but it is still a CAS brief: passing it is not clearance to fire, so the type of control and method of attack come first. It assumes the aircrew can find the friendlies; if not, for example on an unfamiliar battlefield with no clear front line, the controller uses the 9-line. <a href="#source-jp">{j('III-94 to III-95')}</a></p>
  <ol class="steps">
   <li><strong>Observer, warning order and game plan</strong>: "5-line, Type 2 control, BOT, rockets and guns".</li>
   <li><strong>Friendly location and mark</strong>: a named point rather than a friendly grid, and how it is marked, such as an IR strobe.</li>
@@ -238,7 +381,7 @@ const glossary = sitePath('encyclopedia/terminology/close-air-support/');
   <li><strong>Target description and mark</strong>: type, number, orientation and protection, and how it is marked.</li>
   <li><strong>Remarks and restrictions</strong>, all read back: attack headings, the threat and suppression, airspace coordination areas, danger close and initials, and timing.</li>
  </ol>
- <p>It is passed as one transmission, with long restrictions as a second. The helicopters are expected to push as soon as they have read back, so a TOT must be made clear in the restrictions. With Army or special operations helicopters, which may not know the 5-line's restrictions, the controller adds "At my command" to keep control of the timing. <a href="#source-jp">{j('III-95 to III-96')}</a> The publication's example:</p>
+ <p>It is passed as one transmission, with long restrictions as a second. The helicopters push as soon as they have read back, so a TOT must be made clear in the restrictions; with Army or special operations helicopters, which may not know the 5-line's restrictions, the controller adds "At my command" to keep control of the timing. <a href="#source-jp">{j('III-95 to III-96')}</a> The publication's example:</p>
  <ul class="exchange">
   <li><strong>JTAC:</strong> "Deuce 31, Broadsword 11, 5-line, Type 2 control, BOT, rockets and guns, my position is checkpoint 295 marked by IR strobe, northwest 200, single technical vehicle marked by IR SPARKLE, make all attacks over my right shoulder, left pull, keep all effects of fires west of MSR Clovis."</li>
   <li><strong>Aircraft:</strong> "Deuce 31 copies over your right shoulder, left pull, keep all effects of fires west of MSR Clovis, pushing."</li>
@@ -247,8 +390,36 @@ const glossary = sitePath('encyclopedia/terminology/close-air-support/');
   <li><strong>JTAC:</strong> "Deuce 31 and flight, CLEARED HOT." <a href="#source-jp">{j('III-97')}</a></li>
  </ul>
 
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p>DCS World's AI JTAC follows the same sequence as the real thing, simplified to radio-menu calls. This is how the <Term record="a-10">A-10C II</Term> manual describes it; other DCS aircraft and Falcon BMS were not checked for this revision.</p>
+  <h3>The flow in DCS</h3>
+  <ol class="steps">
+   <li>Open the radio menu, pick <strong>JTACs</strong> (F4) and the JTAC, on the frequency in the briefing unless Easy Communications tunes it for you, and <strong>check in</strong> with your playtime. The automatic check-in sends your mission number, position from the IP and altitude, weapons and playtime. <a href="#source-a10">{'[2, pp. 784–785]'}</a></li>
+   <li>The JTAC replies with the <strong>type of control</strong> and asks if you are ready for the 9-line. Choose <strong>Ready to copy</strong>; it reads the nine lines, then the remarks when you are ready (weapon, weather or attack headings). <a href="#source-a10">{'[2, p. 785]'}</a></li>
+   <li><strong>Read back</strong> the target location and elevation, and anything else applicable, such as the final attack heading. The A-10C II then gets a digital 9-line on its MSG page and a red target triangle on the TAD. <a href="#source-a10">{'[2, p. 785]'}</a></li>
+   <li>What happens next depends on the mark: <a href="#source-a10">{'[2, pp. 786–787]'}</a>
+    <ul>
+     <li><strong>Coordinate only</strong>: the JTAC clears you to engage; call <strong>Attack Complete</strong> when done.</li>
+     <li><strong>Smoke</strong>: call <strong>IP Inbound</strong>; white smoke goes down within 10 NM and the JTAC says "mark is on the deck"; call <strong>Contact the Mark</strong> and take the correction from it; call <strong>In</strong>, get cleared hot or aborted, and call <strong>Off</strong>.</li>
+     <li><strong>Laser</strong> (default code 1688): IP Inbound, <strong>Laser On</strong>, find it with the spot tracker and call <strong>Spot</strong>, then In and Off as above.</li>
+     <li><strong>IR pointer</strong>: as smoke, seen through night vision goggles, with <strong>Pulse</strong> and <strong>Rope</strong> options.</li>
+    </ul>
+   </li>
+   <li>Other calls: Repeat Brief, What is my target?, <strong>Contact</strong> (you report what is at your sensor point and the JTAC confirms or corrects), Request BDA, Unable to comply and Check Out. <a href="#source-a10">{'[2, pp. 787–788]'}</a></li>
+  </ol>
+  <h3>Where it differs from the joint publication</h3>
+  <ul>
+   <li>The check-in leaves out capabilities and the abort code, and the JTAC's reply gives the type of control but the manual does not mention a method of attack. <a href="#source-a10">{'[2, p. 785]'}</a></li>
+   <li>The manual calls Type 1 "the most common and restrictive" type, "most often used when friendly forces are 'danger close'". <a href="#source-a10">{'[2, p. 784]'}</a> The joint publication attaches no level of risk to a type of control. <a href="#source-jp">{j('III-43')}</a></li>
+   <li>The laser sequence is shortened to Laser On and Spot, with no TEN SECONDS, LASING or CEASE LASER. A coordinate attack ends with "Attack Complete" rather than ENGAGEMENT COMPLETE. <a href="#source-a10">{'[2, pp. 786–787]'}</a> <a href="#source-jp">{j('III-46, V-35 to V-36')}</a></li>
+   <li>Not described in the manual, so not claimed either way: FAC(A) duty splits, danger close initials, abort codes and the helicopter 5-line.</li>
+  </ul>
+  <p><strong>To practise:</strong> fly the sequence in this module's order, read back from your system before the JTAC asks, and expect DCS to accept the shortened calls above.</p>
+ </section>
+
  <h2 id="terms">Terms</h2>
- <p>Every CAS word is in the <a href={glossary}>close air support terms</a>; the brevity words such as TALLY and CLEARED HOT are in the <a href={sitePath('encyclopedia/terminology/brevity/')}>brevity words</a>.</p>
+ <p>Every CAS word is in the <a href={glossary}>close air support terms</a>; brevity words such as TALLY and CLEARED HOT are in the <a href={sitePath('encyclopedia/terminology/brevity/')}>brevity words</a>.</p>
  <GlossaryList items={[
   'Terminal attack control', 'Terminal guidance operations', 'Type 1 control', 'Type 2 control', 'Type 3 control', 'BOT', 'BOC', 'Correlation',
   'CAS check-in', 'Game plan', '9-line', '5-line', 'Initial point', 'Battle position', 'Offset direction', 'Final attack heading',
@@ -264,27 +435,47 @@ const glossary = sitePath('encyclopedia/terminology/close-air-support/');
  </section>
 
  <h2 id="check">Check your understanding</h2>
- <details><summary>What must you read back from a 9-line?</summary><p>Line 4 (target elevation), line 6 (target location) and every restriction, which always includes final attack headings, ACAs, danger close and the TOT. The controller may ask for more.</p></details>
- <details><summary>The JTAC wants to drop a GPS-guided bomb on a coordinate. Can it be controlled as Type 1?</summary><p>It should not be: the aircraft's geometry does not show where a GPS or INS weapon will fly, which is the point of Type 1.</p></details>
- <details><summary>What is the difference between the type of control and the method of attack?</summary><p>The type of control is how the controller reduces the risk and how many attacks it clears; the method of attack is whether the aircraft must acquire the target (BOT) or employs on the coordinates (BOC). Any type goes with either method.</p></details>
- <details><summary>Your laser spot tracker shows a spot. Are you CAPTURED?</summary><p>Not necessarily. Call SPOT; the controller then confirms what is under your crosshairs, because spot jitter or spillover can put the spot slightly off the target.</p></details>
- <details><summary>A ground controller is marking the target with an IR pointer. What must you call before you can be cleared?</summary><p>VISUAL for the friendly position and TALLY or CONTACT SPARKLE, on every pass.</p></details>
- <details><summary>What makes an attack danger close, and who accepts the risk?</summary><p>Ordnance delivered inside the 0.1 percent probability-of-incapacitation distance. The supported commander accepts it by passing their initials through the controller; danger close is a restriction and is read back.</p></details>
- <details><summary>A FAC(A) has been given control. Who can still abort you?</summary><p>The JTAC, who always keeps abort authority; and anyone can call an abort at any time they think it necessary.</p></details>
- <details><summary>Why are attack headings planned parallel to the FLOT where possible?</summary><p>Because misses fall long or short along the bomb-fall line, so a heading parallel to the friendly line keeps them from landing on friendly troops.</p></details>
+ <p>One or more questions for each outcome at the top of the page; the quizzes and Figure 1 cover copying the brief.</p>
+ <details><summary><span class="outcome">Outcome 1</span> A FAC(A) has been given control. Who can still abort you?</summary><p>The JTAC, who always keeps abort authority; and anyone can call an abort at any time they think it necessary.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> What is the difference between the type of control and the method of attack?</summary><p>The type of control is how the controller reduces the risk and how many attacks it clears; the method of attack is whether the aircraft must acquire the target (BOT) or employs on the coordinates (BOC). Any type goes with either method.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> The JTAC wants to drop a GPS-guided bomb on a coordinate. Can it be controlled as Type 1?</summary><p>It should not be: the aircraft's geometry does not show where a GPS or INS weapon will fly, which is the point of Type 1.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> What must you read back from a 9-line?</summary><p>Line 4 (target elevation), line 6 (target location) and every restriction, which always includes final attack headings, ACAs, danger close and the TOT. The controller may ask for more.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> Your laser spot tracker shows a spot. Are you CAPTURED?</summary><p>Not necessarily. Call SPOT; the controller then confirms what is under your crosshairs, because spot jitter or spillover can put the spot slightly off the target.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> A ground controller is marking the target with an IR pointer. What must you call before you can be cleared?</summary><p>VISUAL for the friendly position and TALLY or CONTACT SPARKLE, on every pass.</p></details>
+ <details><summary><span class="outcome">Outcome 6</span> When is the word CLEARED used?</summary><p>Only when ordnance is actually to be delivered: CLEARED HOT under Types 1 and 2, CLEARED TO ENGAGE under Type 3. A dry pass is CONTINUE DRY.</p></details>
+ <details><summary><span class="outcome">Outcome 7</span> What makes an attack danger close, and who accepts the risk?</summary><p>Ordnance delivered inside the 0.1 percent probability-of-incapacitation distance. The supported commander accepts it by passing their initials through the controller; danger close is a restriction and is read back.</p></details>
+ <details><summary><span class="outcome">Outcome 7</span> Why are attack headings planned parallel to the FLOT where possible?</summary><p>Because misses fall long or short along the bomb-fall line, so a heading parallel to the friendly line keeps them from landing on friendly troops.</p></details>
+ <details><summary><span class="outcome">Outcome 8</span> A JTAC is working an Army attack helicopter team. Should it expect CAS procedures?</summary><p>Not without further coordination: Army attack helicopters use close combat attack procedures, and the Army does not consider them a CAS system. With Army or special operations helicopters on a 5-line, the controller adds "At my command" to keep control of the timing.</p></details>
 
  <h2 id="sources">Sources and applicability</h2>
  <h3>Military source</h3>
  <p id="source-jp"><strong>[1] US Joint Chiefs of Staff, JP 3-09.3, Close Air Support, 25 November 2014.</strong> <a href="https://irp.fas.org/doddir/dod/jp3_09_3.pdf">Read on the Federation of American Scientists' copy</a>, 1 November 2026, by printed page: chapter I (introduction and fundamentals), pp. I-1 to I-11; troops in contact, risk-estimate distance and danger close, pp. III-36 to III-37; clearance calls and post-launch abort, pp. III-40 to III-42; types of control and methods of attack, pp. III-42 to III-50; threats, pp. III-51 to III-52; marking, laser and infrared brevity and friendly marking, pp. III-30 and III-75 to III-81; aircraft tactics and the rotary-wing 5-line, pp. III-84 to III-97; execution, pp. V-1 to V-58; glossary, pp. GL-8 to GL-14. The joint publication for all four services. A later edition exists on the Joint Chiefs' own site, which could not be read from the authoring environment, so some wording here may have changed.</p>
+ <h3>Sim source</h3>
+ <p id="source-a10"><strong>[2] Eagle Dynamics, DCS: A-10C II Tank Killer Flight Manual (English), July 2023, "F4 JTAC".</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/dcs-warthog_2_flight_manual_en/">Download page</a>, read 2 November 2026, pp. 784–788. A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/close-air-support-evidence.md">close air support evidence</a>.</p>
- <p>Figure 1 is an original drawing of an invented example, not a reproduction of any publication's figure.</p>
- <p class="note">Applicability: written for aircrew of every service who fly close air support, fixed- or rotary-wing. Everything here is from the joint publication, including how it describes Marine Corps attack helicopter CAS and Army close combat attack; the Army's own aviation manual and the Navy's CAS training instructions could not be read for this revision, so no service-specific rules beyond the joint publication's are included. Theater SPINS, your unit's procedures and the current edition govern. This revision is Drafted pending independent source-backed review.</p>
+ <p>Figure 1 and the opening exchange are original, invented examples, not reproductions of any publication's figure.</p>
+ <p class="note">Applicability: written for aircrew of every service who fly close air support, fixed- or rotary-wing. Everything outside the sim panel is from the joint publication, including how it describes Marine Corps attack helicopter CAS and Army close combat attack; the Army's own aviation manual and the Navy's CAS training instructions could not be read for this revision, so no service-specific rules beyond the joint publication's are included. Theater SPINS, your unit's procedures and the current edition govern. This revision is Drafted pending independent source-backed review.</p>
 </SiteLayout>
 <script>import '../../../lessons/close-air-support/lesson-ui.mjs';</script>
 
 <style>
-  .contents ol { columns: 2; column-gap: 2rem; padding-left: 1.5rem; }
-  .contents li { break-inside: avoid; }
+  .contents-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
+  .contents h3 { margin: 0.4rem 0 0.2rem; font-size: 0.95rem; }
+  .contents ol { padding-left: 1.5rem; margin-top: 0; }
+  .lede { font-size: 1.1rem; }
+  .key { padding: 0.6rem 1rem; border-left: 0.25rem solid var(--color-link); background: var(--color-surface); }
+  ul.recap li { margin-block: 0.3rem; }
+  details.more { margin-block: 1rem; padding: 0.5rem 1rem; border: 1px solid var(--color-border); }
+  details.more summary { cursor: pointer; font-weight: 700; }
+  ol.exchange { list-style: none; padding-left: 1rem; border-left: 0.25rem solid var(--color-border); }
+  ol.exchange li { display: grid; grid-template-columns: 5.5rem 1fr; column-gap: 0.75rem; }
+  ol.exchange .who { font-weight: 700; }
+  ol.exchange .step { margin-left: 0.4rem; font-size: 0.85rem; white-space: nowrap; }
+  ol.exchange li { margin-block: 0.4rem; }
+  .outcome { display: inline-block; margin-right: 0.4rem; padding: 0 0.4rem; font-size: 0.8rem; border: 1px solid var(--color-border); color: var(--color-muted); }
+  .sim-panel { margin: 2rem 0; padding: 0.75rem 1.25rem; border-left: 4px solid var(--color-accent); background: var(--color-surface, #f6f7f8); }
+  .sim-panel h2 { margin-top: 0.4rem; }
+  .sim-panel h3 { margin: 1rem 0 0.3rem; font-size: 1rem; }
   table { width: 100%; border-collapse: collapse; }
   caption { padding: 0.5rem 0.75rem; text-align: left; color: var(--color-muted); font-size: 0.9rem; }
   th, td { padding: 0.45rem 0.75rem; border-top: 1px solid var(--color-border); text-align: left; vertical-align: top; }
@@ -317,7 +508,9 @@ const glossary = sitePath('encyclopedia/terminology/close-air-support/');
   .table-scroll { overflow-x: auto; border: 1px solid var(--color-border); }
   .table-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
   @media (max-width: 40rem) {
-    .contents ol { columns: 1; }
+    .contents-groups { grid-template-columns: 1fr; }
+    ol.exchange li { display: block; }
+    ol.exchange .who { display: block; }
   }
   :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
   :global(.natops .frame) { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
