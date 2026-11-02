@@ -1632,6 +1632,17 @@
     "summary": "Fuzes, low-drag and retarded bombs, rockets, guided missiles, laser-guided weapons, and the chaff and flares that decoy a threat."
   },
   {
+    "id": "encyclopedia.terminology.close-air-support",
+    "slug": "close-air-support",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Close air support terms",
+    "designation": "JP 3-09.3",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Types 1, 2 and 3 control, bomb on target and bomb on coordinate, the 9-line and 5-line briefs, readbacks, and the laser and infrared marking calls."
+  },
+  {
     "id": "encyclopedia.theatres.middle-east",
     "slug": "middle-east",
     "category": "locations",
