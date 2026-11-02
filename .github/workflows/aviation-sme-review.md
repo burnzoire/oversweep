@@ -19,6 +19,8 @@ on:
       - ".github/workflows/aviation-sme-review.md"
       - ".github/workflows/aviation-sme-review.lock.yml"
       - ".github/workflows/shared/aviation-sme-review.md"
+  # Same-repo PRs only, so the membership check job is not needed.
+  roles: all
   workflow_dispatch:
     inputs:
       pr_number:
@@ -29,8 +31,6 @@ if: >-
   github.event_name == 'workflow_dispatch' ||
   (contains(github.event.pull_request.labels.*.name, 'sme-review') &&
   (github.event.action != 'labeled' || github.event.label.name == 'sme-review'))
-# Same-repo PRs only, so the membership check job is not needed.
-roles: all
 permissions:
   contents: read
   pull-requests: read
