@@ -25,7 +25,8 @@ the egress proxy; web.archive.org is denied by it). The project owner
 downloaded the Internet Archive copies and uploaded their text on 2 November
 2026; quotations below are from that text, whose page footers give the
 printed page numbers. Both are training command instructions for one
-aircraft type, and the module labels them so.
+aircraft type; the module takes only their generic procedure from them and
+leaves out type-specific numbers (AOA units, airspeeds, configurations).
 
 **Sources that could not be read.** The Navy's NATOPS instrument flight
 manual, and the Army's TC 3-04.4 on armypubs.army.mil (which returned an
@@ -136,10 +137,10 @@ https://web.archive.org/web/20240814201447/https://www.cnatra.navy.mil/local/doc
 | Page | Passage | Module use |
 | --- | --- | --- |
 | 2-17 | "1. Level the wings ... 2. Level the nose ... 3. Center the ball ... 4. Set power for 90 KIAS. 5. Stop any climb or descent and achieve 90 KIAS. 6. Recheck the wings, nose, and ball. 7. Execute a 500 fpm climb or descent to return to the base recovery altitude. 8. Execute a level standard rate turn to base heading."; "During a nose-high unusual attitude, it is acceptable to maintain a small AOB and allow the nose to fall down to the horizon before rolling wings level ... This technique avoids a Low-G pushover" | Unusual attitudes |
-| 2-18 | "It is vital that any rate of descent is arrested during an unusual attitude recovery"; "During unusual attitude recoveries, airspeed should not decrease below 40 KIAS." | Unusual attitudes |
+| 2-18 | "It is vital that any rate of descent is arrested during an unusual attitude recovery"; "During unusual attitude recoveries, airspeed should not decrease below 40 KIAS."; "PNAC verbally notifies the PAC of deviations from established parameters"; "PNAC assumes the controls in a timely manner if the PAC fails to respond to verbal corrections" | Unusual attitudes |
 | 3-19 | "superimpose the appropriate holding entry pie diagram over the HSI ... If the outbound heading falls within five degrees of two entry sectors, either entry may be used. It is preferable to choose a teardrop entry if it is an option"; "turn outbound on the holding side, 30 degrees away from the holding radial. Time outbound for one minute or proceed outbound for the distance required if DME is being used." | Holding |
 | 4-16 | PAR "typically provides a 3-degree glideslope to the published DH"; ASR "the controller provides lateral guidance only" | Radar approaches |
-| 4-17 | "Maintain cruise airspeed until given the instructions "contact final controller." At that time, transition to 90 KIAS final approach speed and complete the Landing Checklist"; "the MAP, which is usually 1 mile from the runway threshold"; "Expect landing clearance to be relayed at three NM"; "Make standard rate turns while being vectored in the instrument pattern and half the standard rate turns on the final"; "A "roger" radio call may acknowledge lost communication and missed approach procedures if the instructions are fully understood ... Always read back landing clearances." | Radar approaches |
+| 4-17 | "Maintain cruise airspeed until given the instructions "contact final controller." At that time, transition to 90 KIAS final approach speed and complete the Landing Checklist"; "the MAP, which is usually 1 mile from the runway threshold"; ""The controller assumes that the pilot maintains the last assigned heading"; "Start and stop turns immediately upon receipt of the controller's instructions"; "Make standard rate turns while being vectored in the instrument pattern and half the standard rate turns on the final"; "A "roger" radio call may acknowledge lost communication and missed approach procedures if the instructions are fully understood ... Always read back landing clearances." | Radar approaches |
 
 ## Invented material
 
