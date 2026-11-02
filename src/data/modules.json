@@ -68,15 +68,26 @@
     "applicability": "For military pilots of every service: US Navy training publications first, with the FAA AIM and Pilot's Handbook as the supplementary US civil rule set and an Army field manual for the military grid. Worked examples use the T-45C training jet's displays; your aircraft's flight manual (NATOPS or your service's equivalent) governs its systems."
   },
   {
-    "id": "module.instrument-flying",
-    "slug": "instrument-flying",
+    "id": "module.attitude-instrument-flying",
+    "slug": "attitude-instrument-flying",
     "subject": "instrument-flight",
     "revision": 1,
-    "title": "Instrument Flying",
+    "title": "Attitude Instrument Flying",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "objective": "Fly the aircraft on instruments with the control and performance concept and a crosscheck, recognize spatial disorientation and recover from unusual attitudes, then fly an instrument sortie: the departure climb, holding and its entries, a high-altitude penetration, non-precision, ILS and radar approaches to minimums, the missed approach, reading the approach plate and lost communications.",
-    "applicability": "For military pilots of every service, fixed- and rotary-wing: the Air Force instrument flight procedures manual first, with the FAA Aeronautical Information Manual as the supplementary US rule set. Navy, Marine Corps and Army instrument publications could not be read for this revision; your service's instrument rules, the aircraft's flight manual and current flight information publications govern."
+    "objective": "Fly the aircraft on instruments alone: read a panel as control and performance instruments, set attitude and power and let the lagging performance instruments catch up, fly a hub-and-spoke crosscheck without fixation or omission, recognize the illusions of spatial disorientation, and verify and recover from unusual attitudes, fixed- or rotary-wing, with or without an attitude indicator.",
+    "applicability": "For military pilots of every service, fixed- and rotary-wing: the Air Force instrument flight procedures manual and the Navy's instrument training instructions, as generic technique, with the FAA Aeronautical Information Manual as the supplementary source for illusions. The figures use a generic panel and an invented flight model. Your service's instrument rules and the aircraft's flight manual govern."
+  },
+  {
+    "id": "module.instrument-procedures",
+    "slug": "instrument-procedures",
+    "subject": "instrument-flight",
+    "revision": 1,
+    "title": "Instrument Procedures",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Fly an instrument sortie: the departure climb, holding and its entries, the approach to minimums, the ILS and how its needles behave, PAR and ASR radar approaches, the missed approach, high-altitude penetrations, reading the approach plate and lost communications.",
+    "applicability": "For military pilots of every service, fixed- and rotary-wing: the Air Force instrument flight procedures manual and the Navy's instrument training instructions first, as generic procedure, with the FAA Aeronautical Information Manual as the supplementary US rule set. Army instrument publications could not be read for this revision; your service's instrument rules, the aircraft's flight manual and current flight information publications govern."
   },
   {
     "id": "module.weapons-delivery",

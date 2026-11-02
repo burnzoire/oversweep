@@ -1,0 +1,132 @@
+/* Shared by the instrument flight module pages (imported, so global to
+   those pages only). */
+.contents-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
+.contents h3 { margin: 0.4rem 0 0.2rem; font-size: 0.95rem; }
+.contents ol { padding-left: 1.5rem; margin-top: 0; }
+.lede { font-size: 1.1rem; }
+.key { padding: 0.6rem 1rem; border-left: 0.25rem solid var(--color-link); background: var(--color-surface); }
+ul.recap li { margin-block: 0.3rem; }
+details.more { margin-block: 1rem; padding: 0.5rem 1rem; border: 1px solid var(--color-border); }
+details.more summary { cursor: pointer; font-weight: 700; }
+ol.exchange { list-style: none; padding-left: 1rem; border-left: 0.25rem solid var(--color-border); }
+ol.exchange li { display: grid; grid-template-columns: 8rem 1fr; column-gap: 0.75rem; margin-block: 0.4rem; }
+ol.exchange .who { font-weight: 700; }
+ol.exchange .step { margin-left: 0.4rem; font-size: 0.85rem; white-space: nowrap; }
+.outcome { display: inline-block; margin-right: 0.4rem; padding: 0 0.4rem; font-size: 0.8rem; border: 1px solid var(--color-border); color: var(--color-muted); }
+.sim-panel { margin: 2rem 0; padding: 0.75rem 1.25rem; border-left: 4px solid var(--color-accent); background: var(--color-surface, #f6f7f8); }
+.sim-panel h2 { margin-top: 0.4rem; }
+.sim-panel h3 { margin: 1rem 0 0.3rem; font-size: 1rem; }
+table { width: 100%; border-collapse: collapse; }
+caption { padding: 0.5rem 0.75rem; text-align: left; color: var(--color-muted); font-size: 0.9rem; }
+th, td { padding: 0.45rem 0.75rem; border-top: 1px solid var(--color-border); text-align: left; vertical-align: top; }
+thead th { background: var(--color-surface); }
+.note { padding: 0.75rem 1rem; border-left: 0.25rem solid var(--color-border); background: var(--color-surface); }
+ol.steps li { margin-block: 0.35rem; }
+.lesson { margin-block: 1.5rem; padding: 1rem; border: 1px solid var(--color-text); }
+.lesson h3 { margin-top: 0; }
+.controls { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; align-items: center; margin-bottom: 0.75rem; }
+.controls fieldset { border: 0; padding: 0; margin: 0; display: flex; gap: 0.75rem; align-items: center; }
+.controls legend { float: left; margin-right: 0.5rem; font-weight: 700; }
+.controls output { display: inline-block; min-width: 2.5rem; font-variant-numeric: tabular-nums; }
+button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+.buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+.lesson button { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: #fff; background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
+.lesson button:disabled { opacity: 0.45; cursor: default; }
+.lesson [data-choices] button { color: var(--color-text); background: #fff; font-weight: 400; text-align: left; }
+.feedback { font-weight: 700; min-height: 1.6em; }
+.feedback p { margin: 0.2rem 0; }
+.feedback .derived { font-weight: 400; }
+.lesson.ready .no-js { display: none; }
+.no-js { font-weight: 700; }
+.figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+@media (min-width: 64rem) {
+  .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
+}
+.fig-scroll { overflow-x: auto; }
+.fig-scroll svg { min-width: 30rem; }
+.fig-title { font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 2px solid var(--color-text); padding-bottom: 0.3rem; }
+.fig-caption { color: var(--color-muted); font-size: 0.9rem; }
+.quiz-lesson .task { font-style: italic; }
+.table-scroll { overflow-x: auto; border: 1px solid var(--color-border); margin-block: 1rem; }
+.table-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+@media (max-width: 40rem) {
+  .contents-groups { grid-template-columns: 1fr; }
+  ol.exchange li { display: block; }
+  ol.exchange .who { display: block; }
+}
+svg.natops { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
+.natops .frame { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
+.natops .lbl { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
+.natops .lbl.small { font-size: 10px; font-weight: 400; }
+.natops .ln { fill: none; stroke: var(--color-text); stroke-width: 1.8; }
+.natops .ln.dashed { stroke-dasharray: 7 4; }
+.natops .ln.on { stroke: var(--color-link); stroke-width: 2.8; }
+.natops .thin { fill: none; stroke: var(--color-text); stroke-width: 1; }
+.natops .thin.dotted { stroke-dasharray: 2 3; }
+.natops .shade { fill: #e6e9ec; stroke: none; }
+.natops .mine.shade { fill: #cfe0f3; stroke: none; }
+.natops .fill { fill: var(--color-text); }
+.lesson:not(.ready) .buttons, .lesson:not(.ready) svg:empty { display: none; }
+
+/* The instrument panel and ILS figures (svg.inst). */
+svg.inst { display: block; width: 100%; height: auto; background: #fff; }
+.fig-scroll svg.inst { min-width: 0; }
+.inst .panel { fill: #2b2f33; }
+.inst .bezel { fill: #15181b; stroke: #50565c; stroke-width: 1.5; }
+.inst .face { fill: #0d0f11; stroke: #50565c; stroke-width: 1; }
+.inst .tick { stroke: #e8eaec; stroke-width: 1.4; }
+.inst .tick.major { stroke-width: 2.4; }
+.inst .num { fill: #f4f5f6; font: 700 13px Arial, Helvetica, sans-serif; }
+.inst .unit { fill: #c9cdd1; font: 700 9px Arial, Helvetica, sans-serif; letter-spacing: 0.05em; }
+.inst .needle { stroke: #fff; stroke-width: 3; stroke-linecap: round; }
+.inst .needle.wide { stroke-width: 6; }
+.inst .window { fill: #000; stroke: #8a9096; }
+.inst .counter { fill: #fff; font: 700 14px ui-monospace, Menlo, Consolas, monospace; }
+.inst .sky { fill: #2f7fc1; }
+.inst .ground { fill: #8a5a2b; }
+.inst .horizon { stroke: #fff; stroke-width: 2.5; }
+.inst .ladder { stroke: #fff; stroke-width: 1.6; }
+.inst .ladnum { fill: #fff; font: 700 10px Arial, Helvetica, sans-serif; }
+.inst .bankmark { stroke: #fff; stroke-width: 2; }
+.inst .bankzero { fill: #fff; }
+.inst .skyptr { fill: #ffb300; stroke: #000; stroke-width: 1; }
+.inst .mini { fill: none; stroke: #ffb300; stroke-width: 5; stroke-linejoin: round; stroke-linecap: round; }
+.inst .minidot { fill: #ffb300; }
+.inst .ilsdot { fill: none; stroke: #fff; stroke-width: 1.4; }
+.inst .ilsbar { stroke: #ff3df5; stroke-width: 3.5; stroke-linecap: round; }
+.inst .flag { fill: #d32f2f; }
+.inst .flagtxt { fill: #fff; font: 700 11px Arial, Helvetica, sans-serif; }
+.inst .tube { fill: none; stroke: #e8eaec; stroke-width: 14; stroke-linecap: round; opacity: 0.25; }
+.inst .ball { fill: #111; stroke: #fff; stroke-width: 1.6; }
+.inst .powerfill { fill: #4caf50; }
+.inst .cap { fill: #f4f5f6; font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.06em; }
+.inst .grp { fill: #9ea4aa; font: 700 9px Arial, Helvetica, sans-serif; letter-spacing: 0.08em; }
+.inst .grp.control { fill: #ffb300; }
+.inst .scanring { fill: none; stroke: #ffeb3b; stroke-width: 5; }
+.inst .dimmer { fill: #000; opacity: 0.55; }
+/* The HSI from shared/hsi.mjs, on the dark panel. */
+.inst .frame { fill: #0d0f11; stroke: #e8eaec; stroke-width: 1.5; }
+.inst .thin { stroke: #e8eaec; stroke-width: 1; fill: none; }
+.inst .lbl { fill: #f4f5f6; font: 700 11px Arial, Helvetica, sans-serif; }
+.inst .lbl.small { font-size: 10px; }
+.inst .ln { fill: none; stroke: #e8eaec; stroke-width: 1.8; }
+.inst .ln.heavy { stroke-width: 3; }
+.inst .fill { fill: #e8eaec; }
+.inst .dot { fill: none; stroke: #fff; stroke-width: 1.4; }
+.inst .cdi { stroke: #ff3df5; stroke-width: 4; stroke-linecap: round; }
+.inst .pointer { fill: #ff3df5; stroke: #000; stroke-width: 1; }
+.inst .box.on { fill: #4fc3f7; stroke: #4fc3f7; }
+.inst .acft { fill: #ffb300; stroke: #ffb300; stroke-width: 1; }
+/* Plan and profile views on white (ILS figure). */
+.inst .view { fill: #fff; stroke: var(--color-text); stroke-width: 1.5; }
+.inst .rwy { fill: #6b7076; }
+.inst .beam { fill: #cfe0f3; stroke: none; }
+.inst .beam.gs { fill: #f6d6f4; }
+.inst .cl { stroke: var(--color-text); stroke-width: 1; stroke-dasharray: 6 4; }
+.inst .track { fill: none; stroke: var(--color-link); stroke-width: 2.5; }
+.inst .me { fill: var(--color-link); }
+.inst .dark { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; }
+.inst .dark.small { font-size: 10px; font-weight: 400; }
+.panel-fig .controls label { display: inline-flex; gap: 0.4rem; align-items: center; }
+.panel-fig .readout { font-variant-numeric: tabular-nums; }
+.lesson button[aria-pressed="true"] { background: var(--color-link); border-color: var(--color-link); }
