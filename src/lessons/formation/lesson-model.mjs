@@ -21,7 +21,7 @@ export const FORMATIONS = [
   {
     id: 'combat-cruise', name: 'Combat cruise', bearing: [-10, 90], prefer: [30, 45], avoid: [60, 90], range: [0.3, 1.0], scale: 1.2,
     use: 'Most flexibility for each aircraft: manoeuvre, lookout and terrain masking.',
-    note: 'Anywhere aft of 10° forward of abeam, 30–45° preferred; not for long between the 30° bearing and trail (5 to 7 o’clock). 0.3–1.0 NM.',
+    note: 'Anywhere aft of 10° forward of abeam, 30–45° preferred; not for long within 30° of trail (60–90° aft of the wingline, 5 to 7 o’clock). 0.3–1.0 NM.',
     cite: [3, 'Combat Cruise'],
   },
   {

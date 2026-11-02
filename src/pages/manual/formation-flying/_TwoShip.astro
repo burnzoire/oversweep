@@ -82,7 +82,7 @@ const instruments = sitePath('manual/instrument-flight/attitude-instrument-flyin
   <tbody>
    <tr><td>Parade</td><td>A fixed bearing and distance, held by checkpoints on the lead</td><td>Airshows and coming in for the break; an administrative formation with little flexibility (wing asks before crossing under)</td></tr>
    <tr><td>Cruise</td><td>Between the 30° and 45° bearings on either side, 0 to 0.2 NM, moving by radius of turn</td><td>Transits through controlled airspace, keeping the formation tight and away from other aircraft</td></tr>
-   <tr><td>Combat cruise</td><td>Anywhere aft of 10° forward of abeam, 30–45° preferred, 0.3–1.0 NM; not lingering near trail (5 to 7 o’clock)</td><td>Flexibility, lookout and terrain masking</td></tr>
+   <tr><td>Combat cruise</td><td>Anywhere aft of 10° forward of abeam, 30–45° preferred, 0.3–1.0 NM; not lingering within 30° of trail (5 to 7 o’clock)</td><td>Flexibility, lookout and terrain masking</td></tr>
    <tr><td>Combat spread</td><td>Within 10° of abeam, 0.3–2.0 NM</td><td>Open terrain, or when lookout matters most; tactical maneuvers are called from here</td></tr>
   </tbody>
  </table></div>
@@ -202,7 +202,7 @@ const instruments = sitePath('manual/instrument-flight/attitude-instrument-flyin
   </tbody>
  </table></div>
  <p>Wing does not know, at first, whether the flight is turning, climbing or descending, which is why the power comes off at once. In a turn into the wing, the lost-sight call can include a command, such as “lead roll out”, rather than relying on lead to know which side the wing is on. <a href="#source-formsup">{fs('7–8')}</a> In the T-44C, a wingman who loses sight in level flight steps down 500 ft. <a href="#source-tr">{tr('Coordinating Instructions: Lost Sight')}</a> The instrument scan itself is in <a href={instruments}>Attitude Instrument Flying</a>.</p>
- <p class="key"><strong>Key point:</strong> lost sight is instruments, call, power off; blind is a call and a talk-on, then altitude separation if both aircraft are blind.</p>
+ <p class="key"><strong>Key point:</strong> lost sight is instruments, call and about 10% less power; blind is a call and a talk-on, then altitude separation if both aircraft are blind.</p>
 
  <h2 id="recap">Key points</h2>
  <ul class="recap">
@@ -210,7 +210,7 @@ const instruments = sitePath('manual/instrument-flight/attitude-instrument-flyin
   <li>Parade is held by checkpoint pairs on the lead, corrected altitude, then bearing, then closure.</li>
   <li>The flight lives on one tactical frequency. Lead calls for the flight; wing answers with its own call sign.</li>
   <li>The rendezvous uses radius of turn, not power. An underrun is lower, level, idle, call.</li>
-  <li>Lost sight (in cloud) is instruments, call and power off together; blind (in clear air) is a call and a talk-on.</li>
+  <li>Lost sight (in cloud) is instruments, call and a smooth power reduction of about 10%, together; blind (in clear air) is a call and a talk-on.</li>
  </ul>
 
  <h2 id="lights">Lights at night</h2>
@@ -285,7 +285,7 @@ const instruments = sitePath('manual/instrument-flight/attitude-instrument-flyin
  <h2 id="check">Check your understanding</h2>
  <p>One or more questions for each outcome at the top of the page; Figure 1 covers outcome 1, Figure 2 outcome 2, the call quiz outcome 3 and Figure 3 outcome 5.</p>
  <details><summary><span class="outcome">Outcome 1</span> Lead takes the flight through controlled airspace, then into a valley where you both want lookout and room to manoeuvre. Which formations?</summary><p>Cruise through controlled airspace; combat cruise for the valley, which gives flexibility and terrain masking. Combat spread suits open terrain and maximum lookout.</p></details>
- <details><summary><span class="outcome">Outcome 1</span> In combat cruise you have drifted to lead’s 6 o’clock. Why move?</summary><p>Near trail is for transit only: from there you cannot see or support lead well. Return to the preferred 30–45° bearings.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> In combat cruise you have drifted to lead’s 6 o’clock. Why move?</summary><p>The source says to avoid long periods within 30° of trail (5 to 7 o’clock): that area is for transit only. Return to the preferred 30–45° bearings.</p></details>
  <details><summary><span class="outcome">Outcome 2</span> In parade the antenna has moved forward of the aileron cutout and the stack is buried below the wing. What do you fix first?</summary><p>Altitude first: you are high (stack not visible), so step down until the stack sits on the wing’s leading edge. Then fix the bearing: you are off the bearing line, acute or sucked depending on which way the antenna has moved.</p></details>
  <details><summary><span class="outcome">Outcome 2</span> Why can’t you fly good parade from further out?</summary><p>At a distance you cannot pick up the lead’s small changes, so your corrections become large and late. Small distances mean small inputs.</p></details>
  <details><summary><span class="outcome">Outcome 3</span> Lead says “Angry, push UHF TAC.” What do you do?</summary><p>Change to the UHF tactical frequency. When lead says “Angry” there, answer “Angry 1-2.”</p></details>

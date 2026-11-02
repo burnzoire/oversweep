@@ -47,3 +47,10 @@ test('formations: bearings ordered, ranges ordered, tactical formations wider th
 test('every call quiz answer is a distinct option', () => {
   assert.equal(new Set(CALL_OPTIONS).size, CALLS.length);
 });
+
+test('a checkpoint behind the eye counts as not lined up instead of crashing', () => {
+  const far = [ref[0] + 14 * 0.5, ref[1] - 16 * 0.5, ref[2]];
+  const errs = checkpointErrors(t6, far);
+  for (const v of Object.values(errs)) assert.ok(Number.isNaN(v) === false);
+  assert.doesNotThrow(() => checkpointErrors(t6, [10, 0.2, 0]));
+});

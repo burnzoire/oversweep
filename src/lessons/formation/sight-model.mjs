@@ -144,7 +144,12 @@ export function sightPicture(frame, eye, { f = 430 } = {}) {
   }
   panels.sort((a, b) => b.depth - a.depth);
   const features = Object.entries(frame.features).map(([id, ft]) => ({ id, ...ft, at: cam.project(ft.at), from: ft.from && cam.project(ft.from) }));
-  const lights = frame.lights.map((l) => ({ ...l, at: l.at && cam.project(l.at), strip: l.strip?.map(cam.project) }));
+  // Lights on the far side of the fuselage and fins are hidden from the
+  // wingman; only the far wingtip, out beyond the fuselage, can show.
+  const hidden = (p) => Math.sign(p[1]) !== Math.sign(eye[1]) && Math.abs(p[1]) < 3.5;
+  const lights = frame.lights.filter((l) => !hidden(l.at ?? l.strip[0]))
+    .map((l) => ({ ...l, at: l.at && cam.project(l.at), strip: l.strip?.map(cam.project) }))
+    .filter((l) => (l.at ?? l.strip.every(Boolean)) && (!l.strip || l.strip.every(Boolean)));
   return { panels, features, lights };
 }
 
@@ -162,14 +167,14 @@ export function checkpointErrors(frame, eye) {
   const cam = camera(eye, frame.center, 1);
   const P = (id) => cam.project(frame.features[id].at);
   return Object.fromEntries(frame.checkpoints.map((c) => {
-    const a = P(c.a);
+    // A point behind the eye cannot be seen, so the pair cannot line up.
+    const a = P(c.a), b = c.b && P(c.b);
+    const line = c.line?.map(cam.project), ring = c.ring?.map(cam.project);
+    if (!a || (c.b && !b) || line?.some((q) => !q) || ring?.some((q) => !q)) return [c.id, Infinity];
     let e;
-    if (c.b) { const b = P(c.b); e = c.over ? Math.abs(a[0] - b[0]) : Math.hypot(a[0] - b[0], a[1] - b[1]); }
-    else if (c.line) e = toSegment(a, cam.project(c.line[0]), cam.project(c.line[1]));
-    else {
-      const ring = c.ring.map(cam.project);
-      e = Math.min(...ring.map((q, i) => toSegment(a, q, ring[(i + 1) % ring.length])));
-    }
+    if (b) e = c.over ? Math.abs(a[0] - b[0]) : Math.hypot(a[0] - b[0], a[1] - b[1]);
+    else if (line) e = toSegment(a, line[0], line[1]);
+    else e = Math.min(...ring.map((q, i) => toSegment(a, q, ring[(i + 1) % ring.length])));
     return [c.id, e / D];
   }));
 }
