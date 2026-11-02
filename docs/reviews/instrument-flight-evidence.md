@@ -19,13 +19,17 @@ primary source. It is superseded by the consolidated AFMAN 11-217 of 10 June
 2019; the official e-publishing copy returned 403, and the Columbus AFB copy
 also returned 403. The FAA AIM [2]–[4] is supplementary.
 
-**Sources that could not be read.** The Navy instrument FTIs (CNATRA P-480,
-TH-73A; P-1204, T-45C) on cnatra.navy.mil and navyflightmanuals.tpub.com
-failed TLS verification at the session's egress proxy (DoD root chain; tpub
-subdomain certificate), and web.archive.org copies were denied by the network
-policy. The Army's TC 3-04.4 on armypubs.army.mil returned an HTML page, not
-the PDF. No Navy, Marine Corps or Army instrument rules are therefore claimed,
-except the Navy airfield holding speed that AFMAN 11-217 itself states.
+**Navy sources.** [6] CNATRA P-1204 (T-45C) and [7] CNATRA P-480 (TH-73A)
+could not be fetched from this session (cnatra.navy.mil and tpub fail TLS at
+the egress proxy; web.archive.org is denied by it). The project owner
+downloaded the Internet Archive copies and uploaded their text on 2 November
+2026; quotations below are from that text, whose page footers give the
+printed page numbers. Both are training command instructions for one
+aircraft type, and the module labels them so.
+
+**Sources that could not be read.** The Navy's NATOPS instrument flight
+manual, and the Army's TC 3-04.4 on armypubs.army.mil (which returned an
+HTML page, not the PDF). No Army instrument rules are claimed.
 
 **Review packet limits.** code7700.com is not on the packet's host list, so
 [1] is expected to stay unverified by it; its excerpts are below. AIM chapter 5
@@ -109,6 +113,33 @@ DCS_A-10C_II_Flight_Manual_EN.pdf from https://www.digitalcombatsimulator.com/en
 | 601 | Holding "Maintain airspeed between 200 and 350 KIAS"; penetration "1,200 to 1,500 ft/min ... -300 feet for every mile traveled"; "level off at 400 ft ... or 600 ft if performing a circling approach" |
 | 602 | "An ILS approach generally starts at 2,000 ft AGL with flaps UP and airspeed around 150 KIAS"; over the outer marker "open speed brakes to 40%, extend the landing gear, lower flaps" |
 | 603 | Outer and inner markers; GCA: "the ATC will provide you with heading, altitude and airspeed data at which to reach the pattern entry point" |
+
+## [6] CNATRA P-1204 (Rev. 09-16, Change 2, 25 March 2021), FTI Instrument, T-45C MPTS and IUT
+
+https://web.archive.org/web/20211009235549/https://www.cnatra.navy.mil/local/docs/pat-pubs/P-1204.pdf
+
+| Page | Passage | Module use |
+| --- | --- | --- |
+| 3-20 | "Controls  Neutralize / Attitude  Analyze and evaluate to determine best recovery / Airspeed  Limit in dives / Bank  Eliminate when nose-low; hold constant when nose-high" | Unusual attitudes |
+| 3-21 | "advance the power to MRT and retract the speed brakes ... If upright, push the nose over to maintain an AOA indication of between 5 and 10 units (you will be between 0 and 1g). Hold this AOA until the nose falls through the horizon, settles slightly below the horizon, and the aircraft accelerates to 150 KIAS. Then, roll wings level, smoothly raise the nose to the horizon (at optimum AOA)"; "If inverted, maintain neutral aileron and rudder and let the nose drop through the horizon ... until the aircraft accelerates to 150 KIAS. Level the wings in the shorter direction ... Do not exceed optimum AOA. During recovery at low speeds, you must be careful not to stall the aircraft." | Unusual attitudes |
+| 3-22 | "With your airspeed above 150 KIAS, retard the throttle to idle ... If airspeed is rapidly increasing, extend the speed brakes as necessary ... Roll the aircraft to wings level in the shortest direction and smoothly pull the nose up to the horizon. Do not attempt to raise the nose and roll wings level at the same time (a "rolling pullout") because this can overstress the aircraft." | Unusual attitudes; check question |
+| 6-7 | "squawk mode 3, code 7600 ... Continue to squawk this code while you still have radio problems or until directed by ATC to change your squawk ... also make "in the blind" calls"; "first try to contact center on the last assigned frequency, then on an appropriate frequency listed in the FLIP Enroute IFR Supplement ... attempt to call the nearest FSS on 255.4 or 122.2, monitor the" | Lost communications |
+| 6-8 | "appropriate VOR frequency ... or as a last resort, transmit on guard"; "squawk ident on your IFF, change your IFF squawk, switch IFF squawk to standby, or by requesting that you execute turns"; "If you are in visual meteorological conditions (VMC) when communications are lost, do not enter IFR conditions if it is possible to descend and land VFR at a suitable field."; route a–d and altitude a–c order | Lost communications |
+| 6-48 | "In the pattern, maintain standard rate turns not to exceed 30 degrees AOB. On final, your AOB should approximate the number of degrees to be turned not to exceed half standard rate (approximately 10 degrees AOB)"; "you are limited to absolute minimums of 200-1/2 when single-piloted" | Radar approaches |
+| 6-49 | "the controller must communicate with you at least once a minute ... If you hear no transmissions for more than 60 seconds, attempt to contact the controller. If you are unable to reestablish contact, then comply with the lost communication instructions"; "LOUD AND CLEAR, THREE DOWN AND LOCKED"; "at least every 5 seconds on a PAR or 15 seconds on an ASR" | Radar approaches |
+| 6-50 | "stay clean and at 200 KIAS until you are within 10 nm of the field and 30 radials of the final approach course"; "USN/USMC controllers will state "PERFORM LANDING CHECKS" on the base leg; this is only a reminder and does not direct the pilot to dirty up. If the controller says, "SLOW TO APPROACH SPEED," the controller is directing this for sequencing and the aircrew must comply or state that they are unable." | Radar approaches |
+
+## [7] CNATRA P-480 (New 05-22), FTI Basic Instrument and Radio Instrument, TH-73A (5 May 2022)
+
+https://web.archive.org/web/20240814201447/https://www.cnatra.navy.mil/local/docs/pat-pubs/P-480.pdf
+
+| Page | Passage | Module use |
+| --- | --- | --- |
+| 2-17 | "1. Level the wings ... 2. Level the nose ... 3. Center the ball ... 4. Set power for 90 KIAS. 5. Stop any climb or descent and achieve 90 KIAS. 6. Recheck the wings, nose, and ball. 7. Execute a 500 fpm climb or descent to return to the base recovery altitude. 8. Execute a level standard rate turn to base heading."; "During a nose-high unusual attitude, it is acceptable to maintain a small AOB and allow the nose to fall down to the horizon before rolling wings level ... This technique avoids a Low-G pushover" | Unusual attitudes |
+| 2-18 | "It is vital that any rate of descent is arrested during an unusual attitude recovery"; "During unusual attitude recoveries, airspeed should not decrease below 40 KIAS." | Unusual attitudes |
+| 3-19 | "superimpose the appropriate holding entry pie diagram over the HSI ... If the outbound heading falls within five degrees of two entry sectors, either entry may be used. It is preferable to choose a teardrop entry if it is an option"; "turn outbound on the holding side, 30 degrees away from the holding radial. Time outbound for one minute or proceed outbound for the distance required if DME is being used." | Holding |
+| 4-16 | PAR "typically provides a 3-degree glideslope to the published DH"; ASR "the controller provides lateral guidance only" | Radar approaches |
+| 4-17 | "Maintain cruise airspeed until given the instructions "contact final controller." At that time, transition to 90 KIAS final approach speed and complete the Landing Checklist"; "the MAP, which is usually 1 mile from the runway threshold"; "Expect landing clearance to be relayed at three NM"; "Make standard rate turns while being vectored in the instrument pattern and half the standard rate turns on the final"; "A "roger" radio call may acknowledge lost communication and missed approach procedures if the instructions are fully understood ... Always read back landing clearances." | Radar approaches |
 
 ## Invented material
 
