@@ -79,6 +79,17 @@
     "applicability": "For military pilots of every service flying fixed-wing attack: the US Navy's T-45 weapons and operational navigation training instructions first, with sim manuals (DCS) for computed modes. Worked numbers are T-45 training-pattern numbers with practice bombs; your aircraft's tactical manual and your unit's rules govern."
   },
   {
+    "id": "module.close-air-support",
+    "slug": "close-air-support",
+    "subject": "air-to-ground-operations",
+    "revision": 1,
+    "title": "Close Air Support",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Understand how a close air support attack is controlled and briefed: who the JTAC and FAC(A) are and who controls what, Types 1, 2 and 3 control and the bomb-on-target and bomb-on-coordinate methods of attack, the check-in, game plan and 9-line brief line by line with its readbacks, correlation, marks and talk-ons, the clearance calls, and how danger close, friendly marking and attack headings prevent fratricide, for fixed- and rotary-wing aircraft of every service.",
+    "applicability": "For military aircrew of every service who fly close air support, fixed- or rotary-wing: the joint close air support publication, which all four services follow, with Marine Corps attack helicopter CAS and Army close combat attack as that publication describes them. Worked briefs are invented examples in its formats; theater special instructions, your unit's procedures and the current edition govern."
+  },
+  {
     "id": "module.ship-operations",
     "slug": "ship-operations",
     "subject": "naval-operations",
