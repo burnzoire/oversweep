@@ -251,6 +251,9 @@ DOD_ROOT_SHA256 = {
     'DoD Root CA 5': '1f4ede9dc2a241f6521bf518424acd49ebe84420e69daf5bac57af1f8ee294a9',
 }
 
+# TrustID Server CA O1, the intermediate cnatra.navy.mil leaves out.
+TRUSTID_O1_SHA256 = '6baab0c433d779fd6a4b6d56d6304d5e6ea5de689fe35a43038a4028f345df60'
+
 
 class DodTrust(unittest.TestCase):
     def test_embedded_roots_are_the_pinned_dod_roots(self):
@@ -258,12 +261,19 @@ class DodTrust(unittest.TestCase):
         digests = sorted(hashlib.sha256(ssl.PEM_cert_to_DER_cert(pem)).hexdigest() for pem in pems)
         self.assertEqual(digests, sorted(DOD_ROOT_SHA256.values()))
 
+    def test_embedded_intermediate_is_the_pinned_identrust_ca(self):
+        pems = re.findall(r'-----BEGIN CERTIFICATE-----.*?-----END CERTIFICATE-----', s.SOURCE_INTERMEDIATE_CAS, re.S)
+        digests = [hashlib.sha256(ssl.PEM_cert_to_DER_cert(pem)).hexdigest() for pem in pems]
+        self.assertEqual(digests, [TRUSTID_O1_SHA256])
+
     def test_source_context_adds_dod_roots_and_keeps_verification(self):
         context = s.source_context()
         self.assertEqual(context.verify_mode, ssl.CERT_REQUIRED)
         self.assertTrue(context.check_hostname)
         names = {value for cert in context.get_ca_certs() for rdn in cert['subject'] for key, value in rdn if key == 'commonName'}
         self.assertTrue(set(DOD_ROOT_SHA256) <= names)
+        self.assertIn('TrustID Server CA O1', names)
+        self.assertFalse(context.verify_flags & ssl.VERIFY_X509_PARTIAL_CHAIN)
 
     def test_sources_use_the_dod_context_and_the_api_does_not(self):
         opener = MagicMock()
