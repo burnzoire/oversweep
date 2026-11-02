@@ -63,6 +63,7 @@ function flyer(start, heading) {
   return {
     get heading() { return h; },
     get points() { return pts; },
+    get pos() { return [x, y]; },
     straight(sec) { const [ux, uy] = unit(h); x += ux * sec; y += uy * sec; pts.push([x, y]); },
     // Turn in direction dir (+1 right, -1 left) until heading `to`, or through
     // `through` degrees when given.
@@ -91,6 +92,27 @@ export function holdingPattern(inbound, turn = 'right') {
   return f.points;
 }
 
+// From the end of an entry, intercept the inbound course (at least 30°, or
+// the current angle if larger) with a lead so the turn rolls out on it, then
+// fly it to the fix. The heading never jumps.
+const R = 180 / (Math.PI * TURN_RATE);
+function joinInbound(f, inbound) {
+  const [ux, uy] = unit(inbound);
+  const cross = () => { const [x, y] = f.pos; return x * uy - y * ux; }; // + right of course
+  if (Math.abs(cross()) > 1) {
+    const toward = cross() > 0 ? -1 : 1; // turn left when right of course
+    const off = diff(inbound, f.heading);
+    if (toward * off < 30) f.turn(toward, inbound + toward * 30);
+    const angle = Math.abs(diff(inbound, f.heading));
+    const lead = R * (1 - Math.cos(angle * D));
+    for (let i = 0; i < 600 && Math.abs(cross()) > lead; i++) f.straight(1);
+    f.turn(-toward, inbound);
+  }
+  // Along the course to the fix; any small residual offset is taken out
+  // over the whole leg.
+  f.to([0, 0]);
+}
+
 // The entry track from the fix until back at the fix, for an AIM entry.
 export function entryTrack(inbound, heading, turn = 'right') {
   const s = turn === 'left' ? -1 : 1;
@@ -114,7 +136,7 @@ export function entryTrack(inbound, heading, turn = 'right') {
     f.straight(LEG_S);
     f.turn(-s, inbound - s * 45);
   }
-  f.to([0, 0]);
+  joinInbound(f, inbound);
   return { entry, points: f.points };
 }
 

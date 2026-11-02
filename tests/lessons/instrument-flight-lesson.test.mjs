@@ -57,3 +57,14 @@ test('rules of thumb: VVI for 3 and 2.5 degrees, drift correction (AFMAN 11-217 
   assert.equal(vviFor(180, 2.5), 700);
   assert.equal(driftCorrection(30, 180), 10);
 });
+
+test('entry tracks keep heading continuity on the way back to the fix', () => {
+  const bearing = ([x1, y1], [x2, y2]) => (Math.atan2(x2 - x1, y2 - y1) * 180 / Math.PI + 360) % 360;
+  for (const turn of ['right', 'left']) for (let h = 5; h <= 360; h += 5) {
+    const pts = entryTrack(360, h, turn).points.filter((p, i, a) => !i || Math.hypot(p[0] - a[i - 1][0], p[1] - a[i - 1][1]) > 0.5);
+    for (let i = 2; i < pts.length; i++) {
+      const d = Math.abs(((bearing(pts[i - 1], pts[i]) - bearing(pts[i - 2], pts[i - 1])) + 540) % 360 - 180);
+      assert.ok(d <= 12, `${turn} heading ${h}: ${d.toFixed(1)}° jump at point ${i}`);
+    }
+  }
+});

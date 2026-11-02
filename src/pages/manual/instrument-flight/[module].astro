@@ -67,7 +67,7 @@ const glossary = sitePath('encyclopedia/terminology/instrument-flight/');
   <li><span class="who">ATC</span> <span class="said">Vectors Vapor 31 off the fix and down toward final, then hands it to the final controller. <a class="step" href="#radar">Radar</a></span></li>
   <li><span class="who">Final controller</span> <span class="said">"Approaching glidepath." Then "Begin descent." Then "On glidepath", "slightly above glidepath" and so on, with range each mile. <a class="step" href="#radar">PAR</a></span></li>
   <li><span class="who">Pilot</span> <span class="said">Repeats headings and altitudes until told "do not acknowledge further transmissions", flies the corrections, and crosschecks the decision altitude. <a class="step" href="#approach">Minimums</a></span></li>
-  <li><span class="who">Pilot</span> <span class="said">At decision altitude, approach lights in sight: "Vapor 31, runway in sight, taking over visual," and lands. Nothing in sight: goes missed at once. <a class="step" href="#missed">Missed approach</a></span></li>
+  <li><span class="who">Pilot</span> <span class="said">At decision altitude, runway in sight: "Vapor 31, runway in sight, taking over visual," and lands. Required visual references not in sight: goes missed at once. <a class="step" href="#missed">Missed approach</a></span></li>
  </ol>
  <p class="key"><strong>Key point:</strong> the sortie is a chain of published limits: a climb gradient, a holding pattern, approach altitudes and a decision altitude or MDA. Each one is a number you can read in advance, so brief them before you need them.</p>
 
@@ -258,7 +258,7 @@ const glossary = sitePath('encyclopedia/terminology/instrument-flight/');
   <li>the runway lights;</li>
   <li>the visual approach slope indicator.</li>
  </ul>
- <p class="key"><strong>Key point:</strong> step down only past each fix, stop at the MDA or DA, and go below it only with the runway environment in sight and in position to land.</p>
+ <p class="key"><strong>Key point:</strong> step down only past each fix. On a non-precision approach, level off at the MDA until the runway environment is in sight or you reach the MAP; on a precision approach, decide at the DA: continue with the runway environment in sight, otherwise go missed.</p>
 
  <h2 id="radar">Radar approaches: PAR and ASR</h2>
  <p>In a radar approach the controller gives you the final approach by voice, from ground radar. A <Term>PAR</Term> gives course, glidepath and range: a precision approach to a decision altitude. An <Term>ASR</Term> gives course and range only: a non-precision approach to an MDA. <a href="#source-afman">{af('219–220')}</a></p>
@@ -282,7 +282,7 @@ const glossary = sitePath('encyclopedia/terminology/instrument-flight/');
  <ul>
   <li><strong>Where.</strong> At the MAP on a non-precision approach, found from the timing block distance, not only the profile view; on a precision approach, at DA or DH. <a href="#source-afman">{af('249')}</a></li>
   <li><strong>When.</strong> Immediately, if at the MAP, DA or DH, or at any time after, you do not have the required visual references. Obstacle clearance assumes you start at the MAP from the DA or MDA and climb at least 200 ft per nautical mile; going around after passing the MAP may lose it. <a href="#source-afman">{af('250')}</a></li>
-  <li><strong>Early.</strong> If you go missed before the MAP, fly the approach to the MAP at or above the DA or DH before turning, unless ATC clears otherwise. Below the MDA, from a circle, or before the MAP, the published missed approach does not necessarily give obstacle clearance; plan for a balked landing in your briefing. <a href="#source-afman">{af('249–250')}</a></li>
+  <li><strong>Early.</strong> If you go missed before the MAP, fly the approach to the MAP at or above the DA or DH (the MDA on a non-precision approach) before turning, unless ATC clears otherwise. Below the MDA, from a circle, or before the MAP, the published missed approach does not necessarily give obstacle clearance; plan for a balked landing in your briefing. <a href="#source-afman">{af('249–250')}</a></li>
   <li><strong>Practice approaches.</strong> For a low approach or touch-and-go, the controller gives climb-out instructions before the FAF. Delay turns until past the departure end and 400 ft above the ground. Practicing under VFR, you are not automatically cleared for the published missed approach. <a href="#source-afman">{af('250')}</a></li>
  </ul>
  <p class="key"><strong>Key point:</strong> go missed at the MAP or DA as soon as the visual references are missing, and fly to the MAP before turning if you start early.</p>
@@ -293,7 +293,7 @@ const glossary = sitePath('encyclopedia/terminology/instrument-flight/');
   <li>Believe the instruments over the body; verify an unusual attitude with a second source before recovering.</li>
   <li>Climb at least 200 ft per nautical mile or the published gradient; no turn below 400 ft above the runway end unless the procedure requires it.</li>
   <li>Choose the holding entry from your heading at the fix; respect the holding speed for the altitude and airfield.</li>
-  <li>Descend only past each fix; stay at the MDA or DA unless the runway environment is in sight and you can land.</li>
+  <li>Descend only past each fix; hold the MDA until the runway environment is in sight or the MAP, and at the DA continue only with the runway environment in sight.</li>
   <li>On a radar approach, read back until told not to; call if the radio is silent for 5 seconds on a PAR final, 15 on an ASR.</li>
   <li>Go missed at the MAP or DA; started early, fly to the MAP before turning.</li>
  </ul>

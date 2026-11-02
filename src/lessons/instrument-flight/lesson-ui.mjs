@@ -112,6 +112,7 @@ function setupEntryQuiz(root) {
       // Hide the answer: no entry track, no highlighted sector.
       svg.querySelectorAll('.ln.on').forEach((n) => n.remove());
       svg.querySelectorAll('.mine').forEach((n) => n.setAttribute('class', 'shade'));
+      svg.querySelectorAll('.shade').forEach((n) => n.setAttribute('opacity', '0.55'));
       prompt.textContent = `Hold on the ${three(q.inbound)} inbound course, ${side(q.turn)} turns. You reach the fix heading ${three(q.heading)}. Which entry does the AIM method give?`;
     },
     options: () => ENTRIES,
