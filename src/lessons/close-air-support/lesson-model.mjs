@@ -140,7 +140,7 @@ export function attackSteps(type = 1) {
     s('Attack', lead, `"${lead}, IN heading 270."`, { pos: [4.2, 0], hdg: 270 }, { pos: [6.7, 0], hdg: 270 }, { show: ['northing', 'brief', 'mark', 'target'], call: 'IN', href: '#attack', note: 'Everyone else now holds their calls until the lead is cleared or aborted.' }),
     s('Clearance', jtac, `"${lead}, CLEARED HOT."`, { pos: [2.6, 0], hdg: 270 }, { pos: [5.1, 0], hdg: 270 }, { show: ['northing', 'brief', 'mark', 'target'], call: 'CLEARED HOT', href: '#clearance', note: 'Under Type 1 the JTAC sees the aircraft and judges its geometry before clearing it.' }),
     s('Release', lead, off(lead), { pos: [-0.6, 0.9], hdg: 330 }, { pos: [3.4, 0], hdg: 270 }, { show: ['northing', 'brief', 'target', 'hits1'], href: '#attack' }),
-    s('Attack', wing, `"${wing}, IN heading 270." ${jtac}: "${wing}, CLEARED HOT."`, { pos: [-0.5, 2.2], hdg: 0 }, { pos: [2.6, 0], hdg: 270 }, { show: ['northing', 'brief', 'target', 'hits1'], call: 'CLEARED HOT', href: '#clearance', note: 'Type 1: the second aircraft needs its own IN call and its own clearance.' }),
+    s('Attack', wing, `"${wing}, IN heading 270." ${jtac}: "${wing}, CLEARED HOT."`, { pos: [-0.5, 2.2], hdg: 0 }, { pos: [2.6, 0], hdg: 270 }, { show: ['northing', 'brief', 'target', 'hits1'], call: 'CLEARED HOT', href: '#clearance', note: 'Here the second aircraft makes its own IN call and gets its own clearance; a controller can also clear the whole flight at once ("Viper 41, flight, CLEARED HOT").' }),
     s('Release', wing, off(wing), { pos: [-0.2, 2.8], hdg: 0 }, { pos: [-0.6, 0.9], hdg: 330 }, { show: ['northing', 'brief', 'target', 'hits1', 'hits2'], href: '#attack' }),
   ];
   const type3 = [
