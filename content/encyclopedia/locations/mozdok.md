@@ -27,7 +27,7 @@ maps:
     checked: "2026-10-28"
     cite: "[4]"
     facts:
-      - "Runway 08/26, 7,734 ft [4]"
+      - "Runway 08/26 [4]"
       - "Tower 137.0 MHz VHF and 266.0 MHz UHF [4]"
       - "RSBN channel 20 (MZ), and PRMG channel 22 at each end with outer and inner NDBs [4]"
     differences:

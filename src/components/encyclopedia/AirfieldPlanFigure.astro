@@ -44,9 +44,18 @@ const runwayLabels = runways.filter((f) => f.line && f.ref?.includes('/')).flatM
   const aIsFirst = Math.abs(((Number.parseInt(ra) * 10 - heading + 540) % 360) - 180) < 90;
   const [atA, atB] = aIsFirst ? [ra, rb] : [rb, ra];
   return [
-    { text: atA, x: sx(a.x) - ux * 16, y: sy(a.y) + uy * 16 + 4 },
-    { text: atB, x: sx(b.x) + ux * 16, y: sy(b.y) - uy * 16 + 4 },
+    { text: atA, x: sx(a.x) - ux * 16, y: sy(a.y) + uy * 16 + 4, dx: -ux, dy: uy },
+    { text: atB, x: sx(b.x) + ux * 16, y: sy(b.y) - uy * 16 + 4, dx: ux, dy: -uy },
   ];
+});
+// Where two runways end at the same spot, slide a later label outward along its own runway until it clears the earlier ones.
+const clash = (p: { text: string; x: number; y: number }, q: { text: string; x: number; y: number }) =>
+  Math.abs(p.x - q.x) * 2 < (p.text.length + q.text.length) * 7.5 && Math.abs(p.y - q.y) < 15;
+runwayLabels.forEach((l, i) => {
+  for (let n = 0; n < 6 && runwayLabels.slice(0, i).some((m) => clash(l, m)); n++) {
+    l.x += l.dx * 14;
+    l.y += l.dy * 14;
+  }
 });
 // One label per taxiway name, at the middle of its longest drawn piece.
 const byRef = new Map<string, LL[][]>();

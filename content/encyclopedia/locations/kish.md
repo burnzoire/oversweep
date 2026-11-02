@@ -25,7 +25,7 @@ maps:
     checked: "2026-10-28"
     cite: "[3]"
     facts:
-      - "Runways 10L/28R (10,617 ft) and 10R/28L (10,288 ft) [3]"
+      - "Runways 10L/28R and 10R/28L [3]"
       - "Tower 121.65 MHz VHF [3]"
       - "TACAN KIH, channel 112, and an NDB (KIH) [3]"
     differences:

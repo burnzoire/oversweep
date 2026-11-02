@@ -30,7 +30,7 @@ maps:
     checked: "2026-10-28"
     cite: "[6]"
     facts:
-      - "Runway 09/27, 7,256 ft [6]"
+      - "Runway 09/27 [6]"
       - "Tower 132.0 MHz VHF and 261.0 MHz UHF [6]"
       - "TACAN 31X (TSK), NDBs BI and B, and an ILS on runway 09, 108.9 MHz (ITS) [6]"
     differences:

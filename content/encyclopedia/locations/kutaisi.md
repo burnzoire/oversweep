@@ -32,7 +32,7 @@ maps:
     checked: "2026-10-28"
     cite: "[4]"
     facts:
-      - "Runway 07/25, 7,936 ft [4]"
+      - "Runway 07/25 [4]"
       - "Tower 134.0 MHz VHF and 263.0 MHz UHF [4]"
       - "TACAN 44X (KTS), VOR KT on 113.6 MHz, an NDB (TI) and an ILS on runway 07, 109.75 MHz (IKS) [4]"
 photos:

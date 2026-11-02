@@ -25,11 +25,9 @@ maps:
     checked: "2026-10-28"
     cite: "[4]"
     facts:
-      - "Runway 01/19, 5,452 ft [4]"
+      - "Runway 01/19 [4]"
       - "Tower 126.0 MHz VHF and 255.0 MHz UHF [4]"
       - "VOR GN on 114.3 MHz and an NDB (GN) [4]"
-    differences:
-      - { topic: "Runway length", text: "The game's runway is 5,452 ft long [4], against 3,100 m (10,171 ft) for the real runway built in the 2000s rebuilding. [2]" }
 photos:
   - src: "encyclopedia/airfields-carriers/gelendzhik.jpg"
     alt: "A long paved runway seen from a hillside, running across grassland towards low buildings with the open Black Sea beyond"

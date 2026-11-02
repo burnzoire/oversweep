@@ -230,6 +230,7 @@
 .ency .natops.plan .plan-building { fill: #7d838a; }
 .ency .natops.plan .plan-helipad { fill: #fff; stroke: #2b2f33; stroke-width: 1; }
 .ency .natops.plan .plan-taxi-label { fill: #1a1d20; font: 700 9px Arial, Helvetica, sans-serif; paint-order: stroke; stroke: #fff; stroke-width: 2.5px; stroke-linejoin: round; }
+.ency .natops.plan .lbl { fill: #1a1d20; paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; }
 .ency .plan-key { display: flex; flex-wrap: wrap; gap: 0.35rem 1.1rem; list-style: none; padding: 0; margin: 0.6rem 0 0; font-size: 0.85rem; }
 .ency .plan-key li { display: flex; align-items: center; gap: 0.4rem; }
 .ency .plan-key .swatch { display: inline-block; width: 1.4rem; height: 0.7rem; border: 1px solid #c4c8cc; }

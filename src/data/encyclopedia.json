@@ -2314,6 +2314,72 @@
     "summary": "An uncontrolled single-runway airfield on Iran's oil island of Sirri, where US forces struck a platform in Operation Praying Mantis."
   },
   {
+    "id": "encyclopedia.airfields-carriers.creech",
+    "slug": "creech",
+    "category": "locations",
+    "revision": 1,
+    "title": "Creech Air Force Base",
+    "designation": "KINS",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The US Air Force's home of the MQ-9 Reaper and RQ-170, at Indian Springs on the edge of the Nevada ranges."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.groom-lake",
+    "slug": "groom-lake",
+    "category": "locations",
+    "revision": 1,
+    "title": "Homey Airport (Groom Lake, Area 51)",
+    "designation": "KXTA",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The classified Air Force test site beside Groom Lake, where the U-2, A-12 and F-117 were tested."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.tonopah-test-range",
+    "slug": "tonopah-test-range",
+    "category": "locations",
+    "revision": 1,
+    "title": "Tonopah Test Range Airport",
+    "designation": "KTNX",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The remote range airfield that hid Constant Peg's MiGs and the first F-117 wing, and now stores the F-117 fleet."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.harry-reid",
+    "slug": "harry-reid",
+    "category": "locations",
+    "revision": 1,
+    "title": "Harry Reid International Airport",
+    "designation": "KLAS",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Las Vegas's airport, McCarran until 2021, with four runways and the Janet terminal for flights to the test sites."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.guam",
+    "slug": "guam",
+    "category": "locations",
+    "revision": 1,
+    "title": "Antonio B. Won Pat International Airport",
+    "designation": "PGUM",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Guam's international airport on the site of Naval Air Station Agana, with two long parallel runways."
+  },
+  {
+    "id": "encyclopedia.airfields-carriers.rota",
+    "slug": "rota",
+    "category": "locations",
+    "revision": 1,
+    "title": "Rota International Airport",
+    "designation": "PGRO",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Rota's commuter airport, a Japanese wartime strip rebuilt by Seabees in 1945 as an emergency field."
+  },
+  {
     "id": "encyclopedia.theatres.dcs-nevada",
     "slug": "dcs-nevada",
     "category": "locations",

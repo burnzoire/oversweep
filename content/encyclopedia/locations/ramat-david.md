@@ -41,22 +41,18 @@ maps:
     checked: "2026-10-28"
     cite: "[3]"
     facts:
-      - "Runways 09/27 (7,443 ft), 11/29 (7,533 ft) and 15/33 (7,613 ft) [3]"
+      - "Runways 09/27, 11/29 and 15/33 [3]"
       - "Tower 118.6 MHz VHF and 251.3 MHz UHF [3]"
       - "VORTAC RMD, channel 84X and 113.7 MHz, an NDB (RMD) and an ILS on runway 33, 111.1 MHz [3]"
-    differences:
-      - { topic: "Runway lengths", text: "The game's three runways are 7,443 to 7,613 ft long [3]; the real ones are 7,895 to 8,550 ft. [2]" }
   - map: dcs-sinai
     status: represented
     inSimName: "Ramat David"
     checked: "2026-10-28"
     cite: "[4]"
     facts:
-      - "Runways 09/27 (6,877 ft), 11/29 (7,318 ft) and 15/33 (7,385 ft) [4]"
+      - "Runways 09/27, 11/29 and 15/33 [4]"
       - "Tower 118.0 MHz VHF and 251.1 MHz UHF [4]"
       - "VORTAC RMD, channel 84X and 113.7 MHz [4]"
-    differences:
-      - { topic: "Runway lengths", text: "The Sinai map's runways are shorter again than on the Syria map, 6,877 to 7,385 ft [4]; the real ones are 7,895 to 8,550 ft. [2]" }
   - map: bms-israel
     status: represented
     inSimName: "Ramat David"

@@ -26,7 +26,7 @@ maps:
     checked: "2026-10-28"
     cite: "[3]"
     facts:
-      - "Runway 09/27, 9,601 ft [3]"
+      - "Runway 09/27 [3]"
       - "Tower 127.35 MHz VHF [3]"
       - "VOR-DME LAR on 117.9 MHz and an NDB (OISL) [3]"
 photos: []

@@ -25,7 +25,7 @@ maps:
     checked: "2026-10-28"
     cite: "[3]"
     facts:
-      - "Runway 11/29, 9,437 ft [3]"
+      - "Runway 11/29 [3]"
       - "Tower 124.6 MHz VHF [3]"
       - "VOR-DME FJV, channel 85X and 113.8 MHz, and an ILS on runway 29, 111.5 MHz (IFJR) [3]"
     differences:

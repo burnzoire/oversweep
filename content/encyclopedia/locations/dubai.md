@@ -27,11 +27,9 @@ maps:
     checked: "2026-10-28"
     cite: "[3]"
     facts:
-      - "Runways 12L/30R (10,990 ft) and 12R/30L (11,018 ft) [3]"
+      - "Runways 12L/30R and 12R/30L [3]"
       - "Tower 118.75 MHz VHF [3]"
       - "ILS approaches to runways 12L, 12R and 30R [3]"
-    differences:
-      - { topic: "Runway lengths", text: "The game's runways are about 11,000 ft long [3]; the real ones are 14,275 and 14,590 ft. [2]" }
 photos:
   - src: "encyclopedia/airfields-carriers/dubai.jpg"
     alt: "View from an airliner window over its engine and wing to the white threshold stripes of a wide runway, with an Emirates airliner in the distance"

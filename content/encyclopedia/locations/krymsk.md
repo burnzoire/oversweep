@@ -29,11 +29,9 @@ maps:
     checked: "2026-10-28"
     cite: "[4]"
     facts:
-      - "Runway 04/22, 6,733 ft [4]"
+      - "Runway 04/22 [4]"
       - "Tower 124.0 MHz VHF and 253.0 MHz UHF [4]"
       - "RSBN channel 28 (KW), and PRMG channel 26 at each end with outer and inner NDBs [4]"
-    differences:
-      - { topic: "Runway length", text: "The game's runway is 6,733 ft long [4], against 3,000 m (9,842 ft) for the real, lengthened one. [2] [3]" }
 photos: []
 sources:
   - n: 1

@@ -14,7 +14,7 @@ hangars, terminals and helipads, including disused and abandoned ones. Lines are
 decimal places. Writes src/data/airfield-plans/<slug>.json with the source,
 the retrieval date and the ODbL licence, which the figure credits.
 """
-import datetime
+import re, datetime
 import hashlib
 import json
 import math
@@ -127,6 +127,62 @@ def simplify(points, tol_m=2.0):
     return [points[m] for m in rec(0, len(points) - 1)]
 
 
+def metres(a, b):
+    """Rough ground distance in metres between two [lat, lon] points."""
+    return math.hypot((a[0] - b[0]) * 111320, (a[1] - b[1]) * 111320 * math.cos(math.radians(a[0])))
+
+
+def tidy_runways(features):
+    """Join runway ways that OSM splits into pieces, and label a close parallel pair once.
+
+    Lake-bed strips such as Groom Lake's are mapped as several ways per runway and as
+    left/right pairs a few tens of metres apart, whose end labels would print on top of
+    each other. Each runway becomes one line, and of a pair only one carries both
+    designators ("03L, 03R"); its twin keeps its name without the slash, so it is drawn
+    and listed but not labelled again.
+    """
+    lines = [f for f in features if f['type'] == 'runway' and 'line' in f]
+    joined = True
+    while joined:
+        joined = False
+        for i, a in enumerate(lines):
+            for b in lines[i + 1:]:
+                if a.get('ref') != b.get('ref'):
+                    continue
+                la, lb = a['line'], b['line']
+                for x, y in ((la, lb), (la, lb[::-1]), (la[::-1], lb), (la[::-1], lb[::-1])):
+                    if metres(x[-1], y[0]) < 15:
+                        a['line'] = x + y[1:]
+                        features.remove(b)
+                        lines.remove(b)
+                        joined = True
+                        break
+                if joined:
+                    break
+            if joined:
+                break
+    # A stub left between two joined pieces duplicates the runway it sits on.
+    for s in [f for f in lines if metres(f['line'][0], f['line'][-1]) < 50]:
+        if any(o is not s and o.get('ref') == s.get('ref') for o in lines):
+            features.remove(s)
+            lines.remove(s)
+    pat = re.compile(r'^(\d+)([LRC])/(\d+)([LRC])( \(closed\))?$')
+    for a in lines:
+        for b in lines:
+            ma, mb = pat.match(a.get('ref', '')), pat.match(b.get('ref', ''))
+            if a is b or not ma or not mb or (ma[1], ma[3]) != (mb[1], mb[3]) or ma[2] == mb[2]:
+                continue
+            mid = lambda l: [(l[0][0] + l[-1][0]) / 2, (l[0][1] + l[-1][1]) / 2]
+            if metres(mid(a['line']), mid(b['line'])) > 150:
+                continue
+            keep, twin = (b, a) if ma[5] and not mb[5] else (a, b)
+            k, w = pat.match(keep['ref']), pat.match(twin['ref'])
+            if not w[5]:
+                keep['ref'] = f'{k[1]}{k[2]}, {w[1]}{w[2]}/{k[3]}{k[4]}, {w[3]}{w[4]}'
+            twin['ref'] = twin['ref'].replace('/', '-')
+    return features
+
+
 def main():
     slug, lat, lon = sys.argv[1], float(sys.argv[2]), float(sys.argv[3])
     box = next((float(a.split('=')[1]) for a in sys.argv[4:] if a.startswith('--box=')), None)
@@ -225,7 +281,7 @@ def main():
             'retrieved': datetime.date.today().isoformat(),
         },
         'aerodrome': {'name': atags.get('name:en') or atags.get('name'), 'rings': [[[round(a, 6), round(b, 6)] for a, b in simplify(r, 5)] for r in arings]},
-        'features': sorted(features, key=lambda f: ['apron', 'taxiway', 'runway', 'hangar', 'terminal', 'helipad'].index(f['type'])),
+        'features': sorted(tidy_runways(features), key=lambda f: ['apron', 'taxiway', 'runway', 'hangar', 'terminal', 'helipad'].index(f['type'])),
     }
     OUT.mkdir(parents=True, exist_ok=True)
     path = OUT / f'{slug}.json'

@@ -27,11 +27,9 @@ maps:
     checked: "2026-10-28"
     cite: "[4]"
     facts:
-      - "Runway 13R/31L, 7,692 ft [4]"
+      - "Runway 13R/31L [4]"
       - "Tower 138.0 MHz VHF and 267.0 MHz UHF [4]"
       - "TACAN 25X (GTB), VOR TB on 113.7 MHz, and ILS on runway 13R, 110.3 MHz (IVP), and on 31L, 108.9 MHz (INA) [4]"
-    differences:
-      - { topic: "Runway length", text: "The game's runway 13R/31L is 7,692 ft long [4], against 9,843 ft (3,000 m) published for the real one. [1]" }
 photos: []
 sources:
   - n: 1
