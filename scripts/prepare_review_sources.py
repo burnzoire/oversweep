@@ -190,6 +190,9 @@ def source_context():
     context = ssl.create_default_context()
     context.load_verify_locations(cadata=DOD_ROOT_CAS)
     context.load_verify_locations(cadata=SOURCE_INTERMEDIATE_CAS)
+    # Python 3.13+ sets partial-chain verification by default, which would let
+    # the intermediate above act as a trust anchor. Require a trusted root.
+    context.verify_flags &= ~ssl.VERIFY_X509_PARTIAL_CHAIN
     return context
 
 

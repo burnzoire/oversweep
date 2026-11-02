@@ -273,6 +273,7 @@ class DodTrust(unittest.TestCase):
         names = {value for cert in context.get_ca_certs() for rdn in cert['subject'] for key, value in rdn if key == 'commonName'}
         self.assertTrue(set(DOD_ROOT_SHA256) <= names)
         self.assertIn('TrustID Server CA O1', names)
+        self.assertFalse(context.verify_flags & ssl.VERIFY_X509_PARTIAL_CHAIN)
 
     def test_sources_use_the_dod_context_and_the_api_does_not(self):
         opener = MagicMock()
