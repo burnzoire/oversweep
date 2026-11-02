@@ -1,0 +1,47 @@
+/* Formation module figures (svg.form). Loaded after instrument-flight.css,
+   which supplies the shared page layout, tables, exchanges and lessons. */
+svg.form { display: block; width: 100%; height: auto; background: #fff; }
+.fig-scroll svg.form { min-width: 0; }
+.form .sky { fill: #cfe3f2; }
+.form .night { fill: #0b1020; }
+.form .view { fill: #fff; stroke: var(--color-text); stroke-width: 1.5; }
+.form .dark { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; }
+.form .dark.small { font-size: 10px; font-weight: 400; }
+.form .tag { fill: #111; font: 700 11px Arial, Helvetica, sans-serif; paint-order: stroke; stroke: #fff; stroke-width: 3px; }
+.form .thin { stroke: #9aa1a8; stroke-width: 1; stroke-dasharray: 3 3; fill: none; }
+.form .panel { stroke: #3b434b; stroke-width: 0.5; stroke-linejoin: round; }
+.form .panel.fuse { fill: #a7b0b8; }
+.form .panel.wing { fill: #8d97a0; }
+.form .panel.fin { fill: #7c868f; }
+.form .panel.canopy { fill: #2b3a4a; }
+.form .panel.prop { fill: rgba(60, 64, 70, 0.12); stroke: rgba(60, 64, 70, 0.35); }
+.form .panel.night { fill: #151b28; stroke: #1f2737; }
+.form .flat { fill: #c5ccd2; stroke: #6b747c; stroke-width: 0.4; }
+.form .flat.canopy { fill: #6b7c8c; }
+.form .feature { fill: none; stroke-width: 2.5; }
+.form circle.feature.ok { fill: #1e8e3e; stroke: #fff; stroke-width: 1.5; }
+.form circle.feature.off { fill: #d93025; stroke: #fff; stroke-width: 1.5; }
+.form line.feature.ok { stroke: #1e8e3e; }
+.form line.feature.off { stroke: #d93025; }
+.form .bearing { stroke: var(--color-link); stroke-width: 1.5; stroke-dasharray: 6 4; }
+.form .ref { fill: none; stroke: var(--color-link); stroke-width: 2; }
+.form .me { fill: #d93025; }
+.form .acft { fill: #8d97a0; stroke: #3b434b; stroke-width: 0.5; }
+.form .acft.lead { fill: var(--color-text); }
+.form .zone { fill: rgba(45, 110, 190, 0.18); stroke: rgba(45, 110, 190, 0.6); stroke-width: 1; }
+.form .zone.prefer { fill: rgba(45, 110, 190, 0.35); }
+.form .zone.avoid { fill: rgba(217, 48, 37, 0.22); stroke: rgba(217, 48, 37, 0.7); }
+.form .scale { stroke: var(--color-text); stroke-width: 3; }
+.form .lamp { stroke-linecap: round; }
+.form line.lamp { stroke-width: 4; }
+.form .lamp.formation { stroke: #7dff9a; fill: #7dff9a; }
+.form .lamp.formation.dim { opacity: 0.45; }
+.form .lamp.position-green { fill: #36ff6b; }
+.form .lamp.position-red { fill: #ff3b30; }
+.form .lamp.position-white { fill: #fff; }
+.form .lamp.dim { opacity: 0.5; }
+.form .lamp.strobe { fill: #ff3b30; animation: strobe 1.2s steps(1) infinite; }
+@keyframes strobe { 0% { opacity: 1; } 12% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .form .lamp.strobe { animation: none; } }
+.lesson [data-choices] button[aria-pressed="true"] { background: var(--color-text); color: #fff; }
+.controls label { margin-right: 0.6rem; }

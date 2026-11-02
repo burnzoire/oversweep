@@ -1,71 +1,72 @@
-// Sight picture figure: the lead as the wingman sees it, beside a top view
-// and a view from behind, with buttons that move the wingman's aircraft.
-// Geometry comes from sight-model.mjs; positions from POSITIONS.
-import { AIRFRAMES, POSITIONS, offsets, onBearing, sightPicture } from './sight-model.mjs';
+// Figure: the parade sight picture. The lead T-6B as the wingman sees it,
+// with the three VT-6 checkpoint pairs marked, a top view and a view from
+// behind. Buttons move the wingman; the readout names the error the way the
+// checkpoints show it. Geometry comes from sight-model.mjs.
+import { AIRFRAMES, checkpointErrors, offsets, sightPicture, solveReference } from './sight-model.mjs';
 import { el } from '../shared/hsi.mjs';
 
-const STEP = 0.6; // metres per button press
-const W = 700, H = 420, VIEW = { w: 450, h: 420 }, SIDE = { x: 460, w: 240, h: 205 };
+const STEP = 0.5; // metres per press
+const W = 700, H = 420, VW = 450, SX = 460, SW = 240, SH = 205;
+const LINED_UP = 1.5; // degrees: what the figure counts as "on" for a checkpoint
+const fmt = (v) => v.map((n) => n.toFixed(1)).join(',');
 
-function pilotsEye(svg, frame, eye) {
-  const g = el('g', { transform: `translate(${VIEW.w / 2} ${VIEW.h / 2})` });
-  svg.append(el('rect', { x: 0, y: 0, width: VIEW.w, height: VIEW.h, class: 'sky' }), g);
-  const { panels, lights } = sightPicture(frame, eye);
-  for (const p of panels) g.append(el('polygon', { points: p.pts.map((q) => q.map((v) => v.toFixed(1)).join(',')).join(' '), class: `panel ${p.cls}` }));
-  for (const l of lights) g.append(el('circle', { cx: l.at[0], cy: l.at[1], r: 3, class: `light ${l.cls}` }));
+function pilotsEye(svg, frame, eye, show) {
+  const g = el('g', { transform: `translate(${VW / 2} ${H / 2})` });
+  svg.append(el('rect', { x: 0, y: 0, width: VW, height: H, class: 'sky' }), g);
+  const { panels, features } = sightPicture(frame, eye);
+  for (const p of panels) g.append(el('polygon', { points: p.pts.map(fmt).join(' '), class: `panel ${p.cls}` }));
+  if (show) {
+    const errs = checkpointErrors(frame, eye);
+    const byId = Object.fromEntries(features.map((f) => [f.id, f]));
+    for (const c of frame.checkpoints) {
+      const ok = errs[c.id] <= LINED_UP;
+      for (const id of [c.a, c.b].filter(Boolean)) {
+        const f = byId[id];
+        if (!f?.at) continue;
+        if (f.from) g.append(el('line', { x1: f.from[0], y1: f.from[1], x2: f.at[0], y2: f.at[1], class: `feature ${ok ? 'ok' : 'off'}` }));
+        g.append(el('circle', { cx: f.at[0], cy: f.at[1], r: 5, class: `feature ${ok ? 'ok' : 'off'}` }));
+        g.append(el('text', { x: f.at[0] + f.dx, y: f.at[1] + f.dy, class: 'tag', 'text-anchor': f.anchor ?? 'start' }, `${c.word[0]}: ${f.label}`));
+      }
+    }
+  }
   svg.append(el('text', { x: 10, y: 18, class: 'dark' }, "WINGMAN'S VIEW"));
 }
 
-// Top view (y right, x up) and rear view (y right, z up), lead at the origin.
-function side(svg, y0, title, frame, eye, ref, horiz, vert) {
-  const k = 4.5, cx = SIDE.x + 70, cy = y0 + SIDE.h / 2 + (title === 'TOP VIEW' ? 20 : 0);
-  svg.append(el('rect', { x: SIDE.x, y: y0, width: SIDE.w, height: SIDE.h, class: 'view' }));
-  svg.append(el('text', { x: SIDE.x + 8, y: y0 + 16, class: 'dark small' }, title));
-  const P = (p) => [cx + horiz(p) * k, cy - vert(p) * k];
-  const g = el('g');
-  for (const p of frame.panels.filter((q) => q.cls !== 'fuse' || title === 'TOP VIEW')) {
-    g.append(el('polygon', { points: p.pts.map((q) => P(q).map((v) => v.toFixed(1)).join(',')).join(' '), class: `flat ${p.cls}` }));
-  }
-  svg.append(g);
-  if (ref) {
-    const r = onBearing(ref, frame), [ax, ay] = P(frame.eye), [bx, by] = P(r);
-    if (title === 'TOP VIEW') svg.append(el('line', { x1: ax, y1: ay, x2: ax + (bx - ax) * 1.4, y2: ay + (by - ay) * 1.4, class: 'bearing' }));
-    svg.append(el('circle', { cx: bx, cy: by, r: 5, class: 'ref' }));
-  }
-  const [ex, ey] = P(eye);
-  svg.append(el('circle', { cx: ex, cy: ey, r: 4, class: 'me' }));
+// Plan (y right, x up) or rear (y right, z up) view, lead at the centre.
+function side(svg, y0, title, frame, eye, ref, h, v) {
+  const k = 9, cx = SX + 70, cy = y0 + SH / 2 + 10;
+  svg.append(el('rect', { x: SX, y: y0, width: SW, height: SH, class: 'view' }));
+  svg.append(el('text', { x: SX + 8, y: y0 + 16, class: 'dark small' }, title));
+  const P = (p) => [cx + h(p) * k, cy - v(p) * k];
+  for (const p of frame.panels.filter((q) => q.cls !== 'prop')) svg.append(el('polygon', { points: p.pts.map((q) => fmt(P(q))).join(' '), class: `flat ${p.cls}` }));
+  const [ax, ay] = P(frame.center), [rx, ry] = P(ref), [ex, ey] = P(eye);
+  if (title === 'TOP VIEW') svg.append(el('line', { x1: ax, y1: ay, x2: ax + (rx - ax) * 1.5, y2: ay + (ry - ay) * 1.5, class: 'bearing' }));
+  svg.append(el('circle', { cx: rx, cy: ry, r: 6, class: 'ref' }), el('circle', { cx: ex, cy: ey, r: 4, class: 'me' }));
 }
 
 function init(root) {
-  const svg = root.querySelector('svg'), out = root.querySelector('[data-result]');
-  let frame = AIRFRAMES[root.dataset.airframe ?? Object.keys(AIRFRAMES)[0]];
-  let ref = POSITIONS[0], eye = onBearing(ref, frame);
+  const svg = root.querySelector('svg'), out = root.querySelector('[data-result]'), marks = root.querySelector('[name="marks"]');
+  const frame = AIRFRAMES['t-6b'], ref = solveReference(frame);
+  let eye = ref.slice();
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   const render = () => {
     svg.replaceChildren();
-    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    pilotsEye(svg, frame, eye);
+    pilotsEye(svg, frame, eye, marks.checked);
     side(svg, 0, 'TOP VIEW', frame, eye, ref, (p) => p[1], (p) => p[0]);
-    side(svg, 215, 'FROM BEHIND', frame, eye, ref, (p) => p[1], (p) => p[2]);
-    const o = offsets(eye, ref, frame);
-    out.textContent = o.words.length ? `${ref.name}: you are ${o.words.join(', ')}.` : `${ref.name}: in position.`;
+    side(svg, H - SH, 'FROM BEHIND', frame, eye, ref, (p) => p[1], (p) => p[2]);
+    const errs = checkpointErrors(frame, eye), o = offsets(eye, ref, frame);
+    const off = frame.checkpoints.filter((c) => errs[c.id] > LINED_UP).map((c) => c.word);
+    out.textContent = o.words.length
+      ? `Out of position: ${o.words.join(', ')}. Checkpoints not lined up: ${off.join(', ') || 'none'}.`
+      : 'In parade: all three checkpoints lined up.';
   };
-  const nudge = { forward: [STEP, 0, 0], aft: [-STEP, 0, 0], in: [0, -STEP, 0], out: [0, STEP, 0], up: [0, 0, STEP], down: [0, 0, -STEP] };
+  const nudge = { forward: [STEP, 0, 0], aft: [-STEP, 0, 0], in: [0, -STEP, 0], out: [0, STEP, 0], up: [0, 0, STEP / 2], down: [0, 0, -STEP / 2] };
   for (const b of root.querySelectorAll('[data-nudge]')) b.addEventListener('click', () => {
-    const d = nudge[b.dataset.nudge];
-    eye = eye.map((v, i) => v + d[i]);
+    eye = eye.map((v, i) => v + nudge[b.dataset.nudge][i]);
     render();
   });
-  const picks = root.querySelector('[data-positions]');
-  for (const p of POSITIONS) {
-    const btn = document.createElement('button');
-    btn.type = 'button'; btn.textContent = p.name;
-    btn.addEventListener('click', () => { ref = p; eye = onBearing(p, frame); render(); });
-    picks.append(btn);
-  }
-  for (const b of root.querySelectorAll('[data-airframe-pick]')) b.addEventListener('click', () => {
-    frame = AIRFRAMES[b.dataset.airframePick]; eye = onBearing(ref, frame); render();
-  });
-  root.querySelector('[data-reset]')?.addEventListener('click', () => { eye = onBearing(ref, frame); render(); });
+  root.querySelector('[data-reset]').addEventListener('click', () => { eye = ref.slice(); render(); });
+  marks.addEventListener('change', render);
   render();
 }
 

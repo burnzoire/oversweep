@@ -1,0 +1,94 @@
+---
+short: Formation
+usage: Pilots of every service flying as a section or division
+terms:
+  - term: Parade
+    definition: The close, fixed formation position, held by lining up checkpoint pairs on the lead rather than by a number. An administrative formation for airshows and the break, with little flexibility; the wingman asks before crossing under.
+    cite: [{ n: 1, page: "8" }, { n: 3, page: "Formation Types" }]
+  - term: Cruise
+    definition: An administrative formation in which the wingman moves between the 30° and 45° bearings on either side of lead, using radius of turn, up to about 0.2 NM in the T-44C. Used through controlled airspace to keep the formation tight and away from other aircraft.
+    cite: [{ n: 3, page: "Formation Types" }]
+  - term: Combat spread
+    definition: A tactical formation with the wingman within 10° of abeam the lead, 0.3–2.0 NM away in the T-44C depending on conditions. Tactical formation maneuvers are called from it.
+    cite: [{ n: 2, page: "Combat Spread" }]
+  - term: Step-down
+    definition: The wingman's height below the lead in parade, the first checkpoint corrected (the A of A-B-C). On the T-6B, set with the lead's inboard exhaust stack fully visible and tangent to the bottom leading edge of the wing.
+    cite: [{ n: 1, page: "8" }]
+  - term: Bearing line
+    definition: The line, angled aft from the lead's wingline, along which the wingman sits in parade; the second checkpoint corrected (B). On the T-6B, set with the lower UHF antenna over the inboard aileron cutout on the opposite wing.
+    cite: [{ n: 1, page: "8" }]
+  - term: Acute
+    definition: Too far forward of the parade position, ahead of the bearing line. In the T-44C it shows as a gap between the lead's horizontal stabilizer and UHF antenna, with the vertical stabilizer outside the star. The opposite of sucked.
+    cite: [{ n: 1, page: "8" }, { n: 3, page: "Starboard Parade: Acute" }]
+  - term: Sucked
+    definition: Too far aft of the parade position, behind the bearing line. In the T-44C the lead's horizontal stabilizer moves ahead of and covers the UHF antenna, with the vertical stabilizer inside the star. The opposite of acute.
+    cite: [{ n: 1, page: "2, 8" }, { n: 3, page: "Starboard Parade: Sucked" }]
+  - term: Running rendezvous
+    definition: The join-up after an interval takeoff, with the lead holding a set power, speed and bank limit while the wingman closes with a limit on closure.
+    cite: [{ n: 1, page: "3, 8" }]
+  - term: Breakup and rendezvous
+    expansion: B&R
+    definition: Separating the section and joining it again. The wingman breaks as the lead approaches the 3/9 line abeam the wing's leading edge, then rejoins by radius of turn rather than by power, with both aircraft at the same speed.
+    cite: [{ n: 1, page: "4" }]
+  - term: Underrun
+    definition: Passing under and ahead of the lead with too much closure during a rendezvous. The recovery is lower, level, idle, call - increase step-down, keep sight, level the wings, power to idle, transmit "underrunning" - then join in the assigned position, normally on the outside of the turn.
+    cite: [{ n: 1, page: "4, 9" }, { n: 3, page: "RTB / Safety Procedures" }]
+  - term: Crossunder
+    definition: The wingman moving from one side of the lead to the other by stepping down and passing under the lead. Common errors are getting too far in trail and stopping the cross too soon.
+    cite: [{ n: 1, page: "9" }, { n: 3, page: "Crossunder" }]
+  - term: Lost sight
+    definition: A wingman losing sight of the lead in cloud. Only the wingman can lose sight, since the lead is on instruments. The wingman goes to instruments, calls "lost sight" with altitude and reduces power about 10%, all nearly at once.
+    cite: [{ n: 1, page: "7" }]
+  - term: NORDO
+    definition: An aircraft without radio communications. In formation it pats the oxygen mask ("can't talk") or the helmet ear ("can't hear"), then gives a thumbs down.
+    cite: [{ n: 1, page: "6" }]
+  - term: Formation lights
+    definition: Exterior lights that show the shape of an aircraft to its formation at night. The DCS F/A-18C guide lists eight, on the wingtips, the outboard sides of the fins, the aft fuselage below the fins and the forward fuselage ahead of the leading-edge extensions.
+    cite: [{ n: 4, page: "61" }]
+  - term: Tac turn
+    definition: A tactical turn of 60-120° from combat spread. The aircraft on the outside of the turn turns first; the inside aircraft turns when the other's nose points at it.
+    cite: [{ n: 2, page: "Tac-Turns" }]
+  - term: Shackle
+    definition: Both aircraft turn about 30-45° toward each other and cross, changing sides; used to let a sucked or wide wingman regain position. The aircraft with the most awareness calls "Resume".
+    cite: [{ n: 2, page: "Shackle" }]
+  - term: Pump
+    definition: A 90° turn by the flight to stop travel toward a threat, obstacle or weather at once. The wingman ends in trail and stays there until another pump.
+    cite: [{ n: 2, page: "Pump" }]
+  - term: Hook turn
+    definition: A 120-240° turn by both aircraft in the same direction at once; they change sides, and the aircraft on the inside loses sight of the other until the rollout.
+    cite: [{ n: 2, page: "Hook Turn" }]
+sources:
+  - n: 1
+    title: "Formation Supplement (FORMSUP)"
+    publisher: "Training Squadron SIX (VT-6), US Navy"
+    date: "June 2022"
+    url: "https://www.cnatra.navy.mil/tw5/vt6/assets/docs/university/formsup.pdf"
+    accessed: "2026-11-02"
+    note: "By printed page. A T-6B primary training squadron's supplement to the Navy's primary formation flight training instruction."
+  - n: 2
+    title: "TACFORM (tiltrotor only)"
+    publisher: "Training Squadron THREE FIVE (VT-35), US Navy"
+    url: "https://www.cnatra.navy.mil/tw4/vt35/assets/docs/training/tacform-fti-maneuvers.pdf"
+    accessed: "2026-11-02"
+    note: "Undated handout without page numbers; cited by section heading. T-44C numbers."
+  - n: 3
+    title: "Tiltrotor Formation and Aerial Refueling Procedures (F0201/F0301)"
+    publisher: "Training Squadron THREE FIVE (VT-35), US Navy"
+    date: "29 September 2021"
+    url: "https://www.cnatra.navy.mil/tw4/vt35/assets/docs/training/tiltrotor-form-procedures.pdf"
+    accessed: "2026-11-02"
+    note: "Briefing slides; cited by slide title."
+  - n: 4
+    title: "DCS: F/A-18C Early Access Guide"
+    publisher: "Eagle Dynamics"
+    date: "24 March 2024"
+    url: "https://www.digitalcombatsimulator.com/en/downloads/documentation/"
+    accessed: "2026-11-02"
+    note: "A sim manual, by printed page."
+---
+
+## The words of formation flying
+
+These are the words of two aircraft flying as one: the formations, the parade checkpoints, the rendezvous and its recovery, losing sight, and the tactical turns. They come from the Navy training command's T-6B and T-44C formation material. [[1]](#source-1) [[2]](#source-2) Type numbers are examples from those aircraft.
+
+BLIND, VISUAL, JOKER, BINGO and PUSH are in the brevity words, and the 3/9 line and lag pursuit in the air combat terms.
