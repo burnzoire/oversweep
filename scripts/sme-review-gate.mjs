@@ -5,7 +5,20 @@ import { fileURLToPath } from "node:url";
 const workflowPath = ".github/workflows/aviation-sme-review.lock.yml";
 const summaryTitle = "Oversweep Aviation SME advisory review";
 export const overrideLabel = "sme-override";
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+// The SME review only runs on PRs with this label; Claude adds it when a PR is ready.
+export const reviewLabel = "sme-review";
+
+// The gate no longer waits for the review. It fails fast, and
+// aviation-sme-review-gate-rerun.yml re-runs it when the review finishes.
+export function pendingReviewMessage({ labels, run }) {
+  if (!labels?.some((label) => label.name === reviewLabel)) {
+    return `No SME review has run for this PR head. Add the \`${reviewLabel}\` label when the PR is ready for review; this check re-runs when the review finishes.`;
+  }
+  if (run && run.status !== "completed") {
+    return "The SME review for this PR head is still running; this check re-runs when it finishes.";
+  }
+  return "No SME review has run for this PR head yet; this check re-runs when the review finishes.";
+}
 
 // Keep in sync with `on.pull_request.paths` in .github/workflows/aviation-sme-review.md;
 // a test checks the two lists match. Code, test, style and registry changes are not
@@ -203,22 +216,18 @@ async function main() {
   const workflow = workflows.workflows?.find((entry) => entry.path === workflowPath);
   if (!workflow) throw new Error(`Could not find the SME workflow at ${workflowPath}.`);
   const runsPath = `/repos/${owner}/${repo}/actions/workflows/${workflow.id}/runs?head_sha=${headSha}&event=pull_request`;
-  const deadline = Date.now() + 20 * 60 * 1000;
-  let run;
-  while (Date.now() < deadline) {
-    const result = await request(apiUrl, token, runsPath);
-    run = result.workflow_runs
-      ?.filter((candidate) =>
-        candidate.path === workflowPath &&
-        candidate.head_sha === headSha &&
-        candidate.event === "pull_request",
-      )
-      .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))[0];
-    if (run?.status === "completed") break;
-    await sleep(15_000);
-  }
+  const runs = await request(apiUrl, token, runsPath);
+  const run = runs.workflow_runs
+    ?.filter((candidate) =>
+      candidate.path === workflowPath &&
+      candidate.head_sha === headSha &&
+      candidate.event === "pull_request" &&
+      candidate.conclusion !== "skipped" &&
+      candidate.conclusion !== "cancelled",
+    )
+    .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))[0];
   if (!run || run.status !== "completed") {
-    await writeSummary("No completed SME review for this PR head appeared within 20 minutes.", false);
+    await writeSummary(pendingReviewMessage({ labels: pullRequest.labels, run }), false);
     process.exitCode = 1;
     return;
   }

@@ -140,6 +140,13 @@ passes them. The agent model is pinned (`claude-sonnet-5.5`) instead of `auto`.
 
 ### Reading and passing the SME gate
 
+The review runs only on PRs labelled `sme-review`. Agents add the label once a
+content PR is ready for review, and every later push re-runs the review. The
+gate does not wait for the review: while no completed review exists for the PR
+head it fails at once and says whether the label is missing or the review is
+still running. When a review finishes, `Re-run SME review gate` re-runs the
+gate for that head so the check shows the real result.
+
 A finding blocks only when a retrieved source contradicts the claim (Medium or
 above), when an unsourced real-world procedure, limit or value is presented as
 fact without an unverified/trainer label (High or above), or when it is Critical.

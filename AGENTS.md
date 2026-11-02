@@ -60,6 +60,14 @@ inspected sources, independent model cases and resolved findings. CI alone does
 not establish aviation correctness. This policy supersedes human-review gates in
 historical plans; those plans are evidence inputs, not additional approval stages.
 
+The Aviation SME review CI runs only on PRs labelled `sme-review`. When a PR
+changes any path listed in `smeReviewPaths` (scripts/sme-review-gate.mjs), add
+the `sme-review` label yourself as soon as the PR's content is ready for review:
+after the initial pushes are done, not while still iterating. Each push after
+that re-runs the review automatically, so batch fixes into one push where you
+can. Until the label is added the gate check stays red and says so. Do not add
+it to PRs that touch none of those paths, and never add `sme-override`.
+
 ## Progress and completion
 
 Report actual changes, evidence, next steps and genuine blockers, not percentages.

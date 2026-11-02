@@ -8,6 +8,7 @@ import {
   parseBlockingFindings,
   parseSourceCoverage,
   smeReviewPaths,
+  pendingReviewMessage,
 } from "../../scripts/sme-review-gate.mjs";
 
 const sha = "02662989f721c9733379c24b1a31e9bfddb9cd4d";
@@ -158,4 +159,10 @@ test("missing, skipped, stale, or failed reports never pass", () => {
     pullRequest: { head: { sha: "3fbc19695c650cf47670b1755017d615ef042b1c" } },
     comments: [{ user: { login: "github-actions[bot]" }, body: readySummary }],
   }).ready, false);
+});
+
+test("pending gate asks for the sme-review label until it is added", () => {
+  assert.match(pendingReviewMessage({ labels: [], run: undefined }), /Add the `sme-review` label/);
+  assert.match(pendingReviewMessage({ labels: [{ name: "sme-review" }], run: { status: "in_progress" } }), /still running/);
+  assert.match(pendingReviewMessage({ labels: [{ name: "sme-review" }], run: undefined }), /re-runs when the review finishes/);
 });
