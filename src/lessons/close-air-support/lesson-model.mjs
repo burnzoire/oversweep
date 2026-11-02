@@ -77,8 +77,10 @@ export function briefGeometry(ex = EXAMPLE) {
 
 /** True when a heading lies inside an attack-heading window, wrapping through north. */
 export function inWindow(heading, [from, to]) {
-  const h = ((heading % 360) + 360) % 360;
-  return from <= to ? h >= from && h <= to : h >= from || h <= to;
+  const norm = (v) => ((v % 360) + 360) % 360;
+  if (to - from >= 360) return true;
+  // Clockwise from `from` to `to`, both ends included: 360 and 0 are north.
+  return norm(heading - from) <= norm(to - from);
 }
 
 // Types of control (JP 3-09.3 pp. I-2, III-42 to III-47) and the clearance each uses.

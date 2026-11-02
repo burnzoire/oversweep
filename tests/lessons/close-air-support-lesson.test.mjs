@@ -36,6 +36,11 @@ test('the run-in heading falls inside the attack-heading window', () => {
   assert.ok(!inWindow(200, EXAMPLE.fah));
   assert.ok(inWindow(10, [330, 30]));
   assert.ok(!inWindow(90, [330, 30]));
+  assert.ok(inWindow(360, [330, 360]));
+  assert.ok(inWindow(0, [330, 360]));
+  assert.ok(inWindow(360, [330, 0]));
+  assert.ok(inWindow(0, [0, 30]) && inWindow(360, [0, 30]));
+  assert.ok(inWindow(123, [0, 360]));
 });
 
 test('quiz questions have their answer among the options', () => {

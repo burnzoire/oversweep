@@ -80,7 +80,7 @@ terms:
     cite: [{ n: 1, page: "V-43" }]
   - term: Final attack heading
     form: "(FAH)"
-    definition: "The heading or window of headings a JTAC or FAC(A) assigns for the attack, to protect ground troops, help acquire the aircraft or the target, limit collateral damage, meet laser safety requirements or coordinate fires. Like every attack geometry given in a CAS brief, it is a restriction and must be read back."
+    definition: "The heading or window of headings a JTAC or FAC(A) assigns for the attack, to protect ground troops, help acquire the aircraft or the target, limit collateral damage, meet laser safety requirements or coordinate fires. It is a restriction and must be read back."
     cite: [{ n: 1, page: "III-76 to III-77" }]
   - term: Game plan
     definition: "A concise statement, passed before the CAS brief, that tells every player how the coming attack will flow. At a minimum it gives the type of control and the method of attack."
