@@ -75,7 +75,7 @@ const say = (id: string) => NINE_LINE.find((l) => l.id === id)!.says.replace(/"/
   <li><span class="who">Viper 42</span> <span class="said">Thirty seconds behind, makes its own IN call and gets its own clearance: under Type 1 each attack is cleared on its own.</span></li>
   <li><span class="who">JTAC</span> <span class="said">Battle damage assessment for the flight as it egresses north to Anvil. <a class="step" href="#attack">Assessment</a></span></li>
  </ol>
- <p class="key"><strong>Key point:</strong> every attack runs the same sequence: check in, agree the game plan, brief, read back, make sure both sides see the same target, then IN, cleared, off. The sections below take it one step at a time.</p>
+ <p class="key"><strong>Key point:</strong> every attack follows the same outline: check in, agree the game plan, brief, read back, correlate, attack. This example is Type 1 bomb on target, so the aircrew must see the target and each pass gets its own IN and CLEARED HOT; under <a href="#control">Type 3</a> one CLEARED TO ENGAGE covers several attacks, and in a bomb-on-coordinate attack the aircrew never has to see the target. The sections below take it one step at a time.</p>
 
  <h3 id="flow">The sequence</h3>
  <p>The publication's execution template, so that aircrew and controllers can expect the same steps every time: <a href="#source-jp">{j('V-14 to V-50')}</a></p>
@@ -86,7 +86,7 @@ const say = (id: string) => NINE_LINE.find((l) => l.id === id)!.says.replace(/"/
   <li><a href="#control">Game plan</a>: type of control and method of attack.</li>
   <li><a href="#nineline">CAS brief</a>: the <Term>9-line</Term>, then remarks and restrictions.</li>
   <li><a href="#readback">Readbacks</a>.</li>
-  <li><a href="#correlation"><Term>Correlation</Term></a>: confirming the aircrew has the right target or mark.</li>
+  <li><a href="#correlation">Correlation</a>: confirming the aircrew has the right target or mark.</li>
   <li><a href="#attack">Attack</a>: <Term>IN</Term> call, clearance, release.</li>
   <li><a href="#attack">Assess</a> the effects, and reattack or rebrief.</li>
   <li><a href="#attack">Battle damage assessment</a>.</li>
@@ -256,13 +256,13 @@ const say = (id: string) => NINE_LINE.find((l) => l.id === id)!.says.replace(/"/
  <p class="key"><strong>Key point:</strong> elevation, location, restrictions. Lead only for BOT; every shooter, from the system, for BOC.</p>
 
  <h2 id="correlation">Correlation</h2>
- <p><Term>Correlation</Term> means the controller and the aircrew agree they are looking at the same target, and it is required on each and every CAS attack. <a href="#source-jp">{j('V-34')}</a></p>
+ <p><Term>Correlation</Term> means the controller confirming that the aircrew has the correct target or the correct target data, and it is required on each and every CAS attack. <a href="#source-jp">{j('V-34')}</a></p>
  <ul>
   <li><strong>BOC:</strong> complete when the aircraft correctly reads back lines 4 and 6 from its system, and the restrictions.</li>
   <li><strong>BOT:</strong> the controller marks the target, positions the aircraft to see it and asks questions with unique answers until satisfied, then says what the target is: "The third vehicle is your target", never just "That's your target". The aircrew answers <Term>TALLY</Term>, <Term>CAPTURED</Term> or <Term>CONTACT</Term>. <a href="#source-jp">{j('V-34')}</a></li>
  </ul>
  <p>A visual mark usually lands 30 to 45 seconds before the TOT. The aircrew calls "CONTACT the mark", and the controller corrects from it in direction and meters: "Razor 53, from the mark, east 50". Anything else used for cueing is not called "the mark" but something like "lead's hits". <a href="#source-jp">{j('V-40')}</a> Correlation is also needed with any <Term>third party contributor</Term>, such as a remote observer or another aircraft lasing. <a href="#source-jp">{j('V-5')}</a> The marks themselves, and the laser and IR call sequences, are in <a href="#marks">Marks, laser and infrared calls</a>; describing a target with no mark is the <a href="#talkon">talk-on</a>.</p>
- <p class="key"><strong>Key point:</strong> never attack until both ends of the radio are sure it is the same target.</p>
+ <p class="key"><strong>Key point:</strong> correlate on every attack: by seeing the target or mark in BOT, by a correct system readback in BOC.</p>
 
  <h2 id="attack">IN, cleared hot, abort and reattack</h2>
  <p>On the run-in the aircrew makes the calls requested, such as "IP inbound", then <Term>IN</Term> with the heading or direction if one was restricted, early enough to be cleared before the release window: "IN heading 360". <a href="#source-jp">{j('III-44 to III-45')}</a></p>
@@ -277,7 +277,7 @@ const say = (id: string) => NINE_LINE.find((l) => l.id === id)!.says.replace(/"/
  <p><strong>Reattack and assessment.</strong> The controller judges whether the commander's effects were achieved. Under Types 1 and 2 a reattack is requested and cleared again; under Type 3 the aircraft may reattack while its CLEARED TO ENGAGE stands. Corrections come in direction and meters from the last impact: "Razor 02, from lead's hits, north 100"; for the same target, "CONTINUE for a reattack, restrictions remain the same." <a href="#source-jp">{j('V-48')}</a></p>
  <p><strong>Battle damage assessment</strong> is passed for the flight, not each aircraft, as they egress, or at least SUCCESSFUL, UNSUCCESSFUL or UNKNOWN. "If you do not see it, do not report it." <a href="#source-jp">{j('V-49')}</a></p>
  <p><strong>Threats.</strong> Against a SAM launch the pilot breaks and dispenses countermeasures; against AAA, jinks. The controller calls it at once with the location from the target: "Latch 01, SAM launch southwest of the target." Aircraft shot down in CAS were usually hit by threats they did not know about. <a href="#source-jp">{j('III-51 to III-52')}</a></p>
- <p class="key"><strong>Key point:</strong> after IN the net is silent except for the clearance, and anyone may call abort.</p>
+ <p class="key"><strong>Key point:</strong> after an IN call, everyone else holds their calls until that aircraft is cleared or aborted, except that anyone may call abort.</p>
 
  <h2 id="recap">Key points</h2>
  <ul class="recap">
@@ -285,7 +285,7 @@ const say = (id: string) => NINE_LINE.find((l) => l.id === id)!.says.replace(/"/
   <li>Type of control (how risk is managed) and method of attack (BOT or BOC) are separate choices in the game plan.</li>
   <li>Check-in in MNPOPCA order; 9-line in three groups of three, then remarks, restrictions and the TOT last.</li>
   <li>Read back elevation, location and every restriction.</li>
-  <li>Correlate on every attack, then IN, cleared, off.</li>
+  <li>Correlate on every attack. Under Types 1 and 2 each attack is IN, CLEARED HOT (or abort), off; under Type 3 one CLEARED TO ENGAGE covers the engagement, bracketed by COMMENCING ENGAGEMENT and ENGAGEMENT COMPLETE.</li>
   <li>CLEARED means ordnance comes off; anyone can call ABORT.</li>
  </ul>
 
