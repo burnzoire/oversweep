@@ -3,7 +3,9 @@ name: Aviation SME PR review
 description: Advisory source-backed review of aviation content changes
 on:
   pull_request:
-    types: [opened, reopened, ready_for_review, synchronize]
+    # Runs only on PRs labelled sme-review (see the `if:` below); once labelled,
+    # every push re-reviews the new head. Claude adds the label when a PR is ready.
+    types: [opened, reopened, ready_for_review, synchronize, labeled]
     # Keep in sync with smeReviewPaths in scripts/sme-review-gate.mjs (tested).
     paths:
       - "content/**"
@@ -23,6 +25,12 @@ on:
         description: Pull request number to review at its current head
         required: true
         type: string
+if: >-
+  github.event_name == 'workflow_dispatch' ||
+  (contains(github.event.pull_request.labels.*.name, 'sme-review') &&
+  (github.event.action != 'labeled' || github.event.label.name == 'sme-review'))
+# Same-repo PRs only, so the membership check job is not needed.
+roles: all
 permissions:
   contents: read
   pull-requests: read
@@ -72,14 +80,14 @@ pre-agent-steps:
       sparse-checkout: scripts/prepare_review_sources.py
       sparse-checkout-cone-mode: false
       persist-credentials: false
-  - name: Install PDF text extractor
-    run: sudo apt-get update -qq && sudo apt-get install --yes --no-install-recommends poppler-utils
   - name: Prepare independently retrieved source text
     env:
       GITHUB_TOKEN: ${{ github.token }}
       REVIEW_REPO: ${{ github.repository }}
       REVIEW_PR: ${{ github.event.pull_request.number || inputs.pr_number }}
       REVIEW_HEAD: ${{ github.event.pull_request.head.sha }}
+      # The preprocessor installs poppler-utils only when a PDF source needs it.
+      REVIEW_INSTALL_POPPLER: "1"
     run: |
       if [ ! -f .review-tooling/scripts/prepare_review_sources.py ]; then
         printf '\nTrusted source preprocessor is absent from the base revision; no PR script was executed. Source-dependent review remains incomplete. Workflow-only changes may be reviewed as aviation-not-applicable.\n' >> /tmp/gh-aw/aw-prompts/prompt.txt
@@ -91,12 +99,8 @@ pre-agent-steps:
         cat /tmp/gh-aw/review-source-evidence.md >> /tmp/gh-aw/aw-prompts/user.txt
       fi
 safe-outputs:
-  threat-detection:
-    engine:
-      id: copilot
-      version: "1.0.98"
-      # Keep the small detection model; it would otherwise inherit the agent's.
-      model: detection
+  # Off for speed: the only output is one PR comment, and the gate reads it as data.
+  threat-detection: false
   allowed-domains: [default-safe-outputs]
   create-issue: false
   report-failed-jobs: false

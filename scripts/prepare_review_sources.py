@@ -8,6 +8,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import signal
 import ssl
 import subprocess
@@ -260,7 +261,17 @@ def pdf_limits():
     resource.setrlimit(resource.RLIMIT_AS, (1024 * 1024**2, 1024 * 1024**2))
 
 
+def ensure_poppler():
+    """Install poppler-utils on first PDF use, so PRs without PDF sources skip apt."""
+    if shutil.which('pdftotext') or os.environ.get('REVIEW_INSTALL_POPPLER') != '1':
+        return
+    for command in (['sudo', 'apt-get', 'update', '-qq'],
+                    ['sudo', 'apt-get', 'install', '--yes', '--no-install-recommends', 'poppler-utils']):
+        subprocess.run(command, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, check=False, timeout=300)
+
+
 def poppler(args, out=None):
+    ensure_poppler()
     return subprocess.run(
         args, stdin=subprocess.DEVNULL,
         stdout=subprocess.PIPE if out is None else subprocess.DEVNULL,
