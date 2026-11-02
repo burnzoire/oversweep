@@ -68,6 +68,17 @@
     "applicability": "For military pilots of every service: US Navy training publications first, with the FAA AIM and Pilot's Handbook as the supplementary US civil rule set and an Army field manual for the military grid. Worked examples use the T-45C training jet's displays; your aircraft's flight manual (NATOPS or your service's equivalent) governs its systems."
   },
   {
+    "id": "module.instrument-flying",
+    "slug": "instrument-flying",
+    "subject": "instrument-flight",
+    "revision": 1,
+    "title": "Instrument Flying",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Fly the aircraft on instruments with the control and performance concept and a crosscheck, recognize spatial disorientation and recover from unusual attitudes, then fly an instrument sortie: the departure climb, holding and its entries, a high-altitude penetration, non-precision, ILS and radar approaches to minimums, the missed approach, reading the approach plate and lost communications.",
+    "applicability": "For military pilots of every service, fixed- and rotary-wing: the Air Force instrument flight procedures manual first, with the FAA Aeronautical Information Manual as the supplementary US rule set. Navy, Marine Corps and Army instrument publications could not be read for this revision; your service's instrument rules, the aircraft's flight manual and current flight information publications govern."
+  },
+  {
     "id": "module.weapons-delivery",
     "slug": "weapons-delivery",
     "subject": "air-to-ground-operations",

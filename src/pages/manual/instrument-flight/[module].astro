@@ -1,0 +1,541 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
+import { getModule, includedModules } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import Term from '../../../components/Term.astro';
+import { HOLDING_SPEEDS } from '../../../lessons/instrument-flight/lesson-model.mjs';
+const mod = getModule('instrument-flying');
+export function getStaticPaths() { return includedModules.some(m => m.slug === 'instrument-flying') ? [{ params: { module: 'instrument-flying' } }] : []; }
+// The first-pass path, then reference material for when it is needed.
+const core = [
+ ['example', 'One sortie in cloud, start to finish'], ['control', 'Control and performance'], ['crosscheck', 'The crosscheck'],
+ ['disorientation', 'Spatial disorientation'], ['unusual', 'Unusual attitudes'], ['departure', 'The departure climb'],
+ ['holding', 'Holding'], ['approach', 'The approach, down to minimums'], ['radar', 'Radar approaches: PAR and ASR'],
+ ['missed', 'The missed approach'], ['recap', 'Key points'],
+];
+const reference = [
+ ['penetration', 'High-altitude approaches'], ['ils', 'Flying the ILS'], ['plate', 'Reading the approach plate'],
+ ['lostcomm', 'Lost communications'], ['rotary', 'Rotary-wing differences'], ['illusions', 'Landing illusions'], ['sims', 'In the sim'],
+ ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+];
+// [1] AFMAN 11-217 Vol 1 (2010) by printed page. Supplementary FAA AIM by
+// paragraph: [2] chapter 5 section 3, [3] chapter 6 section 4, [4] chapter 8
+// section 1. [5] DCS: A-10C II flight manual, sim crossover only.
+// [6] CNATRA P-1204 (T-45C) and [7] CNATRA P-480 (TH-73A), Navy training
+// command instrument FTIs, by printed page.
+const af = (page: string) => `[1, ${/[–,]/.test(page) ? 'pp.' : 'p.'} ${page}]`;
+const aim = (n: number) => (para: string) => `[${n}, ¶${para}]`;
+const a5 = aim(2), a6 = aim(3), a8 = aim(4);
+const pg = (n: number) => (page: string) => `[${n}, ${/[–,]/.test(page) ? 'pp.' : 'p.'} ${page}]`;
+const t45 = pg(6), th73 = pg(7);
+const dcs = (page: string) => `[5, ${/[–,]/.test(page) ? 'pp.' : 'p.'} ${page}]`;
+const nav = sitePath('manual/navigation/air-navigation/');
+const radio = sitePath('manual/radio-communications/radio-procedures/');
+const glossary = sitePath('encyclopedia/terminology/instrument-flight/');
+---
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="instrument-flight" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Instrument Flight',href:sitePath('manual/instrument-flight/')},{label:mod.title}]}>
+ <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
+  <h2>{mod.maturity}</h2>
+  <p>Module revision {mod.revision} · Flying with no horizon: attitude instrument flying, disorientation and unusual attitudes, then a whole instrument sortie from the departure climb through holding to an approach, minimums and the missed approach. For fixed- and rotary-wing pilots of every service, from the Air Force's instrument flight procedures manual, with the FAA's Aeronautical Information Manual as the supplementary source.</p>
+  <p>Figure 1 lets you try any holding entry: pick the holding course, the turn direction and your heading at the fix.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
+ </nav>
+
+ <p class="lede">In cloud, the only horizon is the one on the attitude indicator. Instrument flying is two skills stacked on each other: keeping the aircraft under control from the instruments alone, and flying procedures that keep it clear of the ground and other traffic until the runway appears, or does not. <a href="#source-afman">{af('12')}</a> Learn the first well enough that it takes little attention, and the second becomes a matter of reading the chart and doing what it says.</p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>explain the <Term>control and performance concept</Term> and fly a <Term>crosscheck</Term> without fixating;</li>
+  <li>name the illusions that cause <Term>spatial disorientation</Term> and what each makes a pilot do;</li>
+  <li>verify an <Term>unusual attitude</Term> and recover from it, fixed- or rotary-wing, with or without an attitude indicator;</li>
+  <li>plan an <Term>IFR</Term> departure climb;</li>
+  <li>copy a holding clearance, choose the entry, and fly the timing, speed limits and wind correction;</li>
+  <li>fly an approach to the <Term id="Minimum descent altitude">MDA</Term> or <Term id="Decision altitude">DA</Term> and know when you may go below it;</li>
+  <li>fly a <Term>PAR</Term> or <Term>ASR</Term> approach and a missed approach;</li>
+  <li>read an approach plate and fly the lost communications rules.</li>
+ </ol>
+ <p class="note">This is a reference, not a qualification. The numbers are from the Air Force manual's 2010 edition, the FAA's manual and the Navy's instrument training instructions, written as generic procedure; your service's instrument rules, the aircraft's flight manual (NATOPS or your service's equivalent) and current flight information publications (FLIP) govern. Flying radials and arcs is in <a href={nav}>Air Navigation</a>, and radio technique in <a href={radio}>Radio Procedures</a>.</p>
+
+ <h2 id="example">One sortie in cloud, start to finish</h2>
+ <p>Here is a single jet, Vapor 31, departing into cloud, holding, then landing from a precision radar approach. The call sign, fix, times and numbers are invented; the holding clearance follows the format in the Air Force manual's own example, and each step links to the section that explains it.</p>
+ <ol class="exchange script">
+  <li><span class="who">Pilot</span> <span class="said">Takes off on instruments, climbs at least 200 ft per nautical mile, and holds runway heading until 400 ft above the departure end before turning. <a class="step" href="#departure">Departure</a></span></li>
+  <li><span class="who">ATC</span> <span class="said">"Vapor 31, hold northwest of the 310 radial, 20 DME fix, 10-mile legs, left turns. Expect further clearance at 1725Z, time now 1710Z." <a class="step" href="#holding">Holding</a></span></li>
+  <li><span class="who">Pilot</span> <span class="said">Reads it back, slows to the maximum holding speed or below within 3 minutes of the fix, picks the entry from the heading at the fix, and is established at the first crossing. <a class="step" href="#entries">Entry</a></span></li>
+  <li><span class="who">ATC</span> <span class="said">Vectors Vapor 31 off the fix and down toward final, then hands it to the final controller. <a class="step" href="#radar">Radar</a></span></li>
+  <li><span class="who">Final controller</span> <span class="said">"Approaching glidepath." Then "Begin descent." Then "On glidepath", "slightly above glidepath" and so on, with range each mile. <a class="step" href="#radar">PAR</a></span></li>
+  <li><span class="who">Pilot</span> <span class="said">Repeats headings and altitudes until told "do not acknowledge further transmissions", flies the corrections, and crosschecks the decision altitude. <a class="step" href="#approach">Minimums</a></span></li>
+  <li><span class="who">Pilot</span> <span class="said">At decision altitude, runway in sight: "Vapor 31, runway in sight, taking over visual," and lands. Required visual references not in sight: goes missed at once. <a class="step" href="#missed">Missed approach</a></span></li>
+ </ol>
+ <p class="key"><strong>Key point:</strong> the sortie is a chain of published limits: a climb gradient, a holding pattern, approach altitudes and a decision altitude or MDA. Each one is a number you can read in advance, so brief them before you need them.</p>
+
+ <h2 id="control">Control and performance</h2>
+ <p>Every instrument maneuver is flown the same way: set an attitude and power that will give the performance you want, trim off the control pressure, then check the performance instruments. If the result is off, change attitude or power by a definite amount and check again. Small, smooth corrections with an efficient crosscheck work best. <a href="#source-afman">{af('12–13')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>The three groups of instruments <a href="#source-afman">{af('12')}</a></caption>
+  <thead><tr><th>Group</th><th>What it shows</th><th>Examples</th></tr></thead>
+  <tbody>
+   <tr><td>Control</td><td>Attitude and power, immediately, in amounts you can set</td><td>Attitude indicator (ADI); tachometer, EPR, manifold pressure, fuel flow, torque</td></tr>
+   <tr><td>Performance</td><td>The result of the control input</td><td>Altimeter, airspeed or Mach, vertical velocity, heading, angle of attack, turn and slip</td></tr>
+   <tr><td>Navigation</td><td>Position relative to a facility or fix</td><td>Course indicators, range indicators, glide slope, bearing pointers</td></tr>
+  </tbody>
+ </table></div>
+ <ul>
+  <li><strong>Pitch</strong> is set by moving the miniature aircraft against the artificial horizon, in degrees or bar widths. <strong>Bank</strong> is set against the bank scale, normally marked at 0, 10, 20, 30, 60 and 90°. <a href="#source-afman">{af('13')}</a></li>
+  <li><strong>Power</strong> is set with the throttle, or the collective in a helicopter: learn roughly how far to move it for a given change, set it, crosscheck, then fine-tune, rather than chasing the gauges. <a href="#source-afman">{af('13')}</a></li>
+  <li><strong>Trim</strong>: set the attitude with the controls first, then trim the pressure off. Do not fly the aircraft with trim. Any change of attitude, power or airspeed usually needs a trim change. <a href="#source-afman">{af('13')}</a></li>
+  <li><strong>Turns</strong>: for heading changes of 30° or less, bank about as many degrees as you want to turn; for more, 30° of bank, unless high speed or the flight manual calls for another bank. <a href="#source-afman">{af('19')}</a></li>
+ </ul>
+ <p class="key"><strong>Key point:</strong> attitude plus power gives performance. Fix the attitude or the power, never the altimeter.</p>
+
+ <h2 id="crosscheck">The crosscheck</h2>
+ <p>The <Term>crosscheck</Term> divides your attention between the control and performance instruments, reads them, and corrects what is off. Picture a wheel: the attitude indicator is the hub and the other instruments are the spokes. Go from the attitude indicator out to one instrument, back to the attitude indicator, then out to another. <a href="#source-afman">{af('14')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Two crosscheck errors <a href="#source-afman">{af('14')}</a></caption>
+  <thead><tr><th>Error</th><th>What happens</th><th>The fix</th></tr></thead>
+  <tbody>
+   <tr><td>Watching the performance instruments while moving the controls</td><td>They lag the input, so you overshoot</td><td>Make a small calculated input and let the performance instruments catch up before the next one</td></tr>
+   <tr><td>Fixating on one instrument</td><td>One wandering value, such as altitude, takes all your attention and you lose the others, such as attitude</td><td>Return to the basic hub-and-spoke flow: the attitude is what put you off altitude</td></tr>
+  </tbody>
+ </table></div>
+ <p class="key"><strong>Key point:</strong> always come back to the attitude indicator; it shows a change at once, while the performance instruments lag.</p>
+
+ <h2 id="disorientation">Spatial disorientation</h2>
+ <p>The inner ear senses changes in motion, not steady motion, so a long, gentle turn or acceleration can leave it reporting something false. The FAA lists the illusions below; it says spatial disorientation from them can be prevented only by visual reference to reliable, fixed points on the ground or to the flight instruments. <a href="#source-aim8">{a8('8-1-5')}</a> The Air Force manual's rule is the same in practice: go to the instruments immediately whenever you become disoriented or outside references become unreliable. <a href="#source-afman">{af('26')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Illusions that lead to spatial disorientation <a href="#source-aim8">{a8('8-1-5')}</a></caption>
+  <thead><tr><th>Illusion</th><th>What causes it</th><th>What the disoriented pilot does</th></tr></thead>
+  <tbody>
+   <tr><td><Term>The leans</Term></td><td>An abrupt roll out of a bank entered too slowly for the inner ear to sense</td><td>Feels banked the other way; rolls back into the original bank, or leans toward the false vertical</td></tr>
+   <tr><td><Term>Coriolis illusion</Term></td><td>An abrupt head movement in a prolonged constant-rate turn</td><td>Feels rotation in another axis and maneuvers into a dangerous attitude. The most overwhelming illusion: avoid sudden head movements in long turns under IFR</td></tr>
+   <tr><td>Graveyard spin</td><td>A correct recovery from a spin the inner ear has stopped sensing</td><td>Feels a spin the other way and returns to the original spin</td></tr>
+   <tr><td><Term>Graveyard spiral</Term></td><td>Altitude lost in a coordinated turn the inner ear has stopped sensing</td><td>Thinks the wings are level in a descent and pulls back, tightening the spiral</td></tr>
+   <tr><td><Term>Somatogravic illusion</Term></td><td>Rapid acceleration, as on takeoff, or rapid deceleration</td><td>Acceleration feels nose-up, so pushes nose low; deceleration the reverse, toward a stall</td></tr>
+   <tr><td>Inversion illusion</td><td>An abrupt change from climb to level flight</td><td>Feels like tumbling backwards; pushes abruptly nose low</td></tr>
+   <tr><td>Elevator illusion</td><td>An updraft (or downdraft)</td><td>Feels a climb and pushes nose low (or the reverse)</td></tr>
+   <tr><td>False horizon</td><td>Sloping cloud, an obscured horizon, ground lights mixed with stars, patterns of lights</td><td>Aligns with the wrong horizon</td></tr>
+   <tr><td>Autokinesis</td><td>Staring at a single light in the dark</td><td>The light seems to move; loses control trying to align with it</td></tr>
+  </tbody>
+ </table></div>
+ <p>Night vision goggles add a trap of their own: once you have gone to the instruments for an unusual attitude, do not go back to outside goggle cues until the aircraft is recovered. <a href="#source-afman">{af('26')}</a> Illusions that cause landing errors, such as a narrow or sloping runway, are under <a href="#illusions">Landing illusions</a>.</p>
+ <p class="key"><strong>Key point:</strong> when the body and the instruments disagree, believe the instruments and go to them at once.</p>
+
+ <h2 id="unusual">Unusual attitudes</h2>
+ <p>An <Term>unusual attitude</Term> is one you get into by accident: from turbulence, channelized attention, an instrument failure, inattention, <Term>spatial disorientation</Term>, losing a wingman, or going from visual to instrument conditions. Most are mild, and you recover by setting the right attitude and resuming a normal <Term>crosscheck</Term>. <a href="#source-afman">{af('26')}</a></p>
+ <p><strong>Verify first.</strong> You will notice either an odd picture on the attitude indicator or odd numbers on the performance instruments. Either way, compare the control and performance instruments before you recover, so you do not fly into an unusual attitude by correcting a failed instrument. Use a standby or the other pilot's attitude indicator too; if in any doubt about the attitude indicator, use the attitude-indicator-inoperative recovery. <a href="#source-afman">{af('27')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Recoveries when the flight manual gives none <a href="#source-afman">{af('28–29')}</a></caption>
+  <thead><tr><th>Case</th><th>Diving</th><th>Climbing</th></tr></thead>
+  <tbody>
+   <tr><td>Fixed wing, attitude indicator working</td><td>Adjust power or drag while rolling to wings level, upright, then pull to level flight. No back pressure until under 90° of bank</td><td>Use power and bank to help the pitch and avoid negative G; as the miniature aircraft nears the horizon, set the attitude you want</td></tr>
+   <tr><td>Fixed wing, no attitude indicator</td><td>Climb or dive from airspeed, altimeter and vertical velocity. Roll to center the turn needle, then recover from the dive</td><td>Power as required; if airspeed is low or falling fast, a turn of about standard rate on the needle helps pitch control until level</td></tr>
+   <tr><td>Helicopter, attitude indicator working</td><td>Roll wings level, then set level flight; avoid rolling pullouts if altitude permits</td><td>Within 10° of level: lower the nose and level the wings. Steeper: bank the shorter way toward the nearest 30° index, no more than 30°, and let the nose fall to the horizon</td></tr>
+  </tbody>
+ </table></div>
+ <p><strong>What the recoveries share.</strong> Training instructions for jets and helicopters teach the same pattern under the type-specific numbers: <a href="#source-t45">{t45('3-20–3-22')}</a> <a href="#source-th73">{th73('2-17–2-18')}</a></p>
+ <ul>
+  <li><strong>Neutralize and analyze first.</strong> Center the controls, then read the attitude and performance instruments before choosing a recovery. Limit airspeed in a dive; take the bank out when nose low, hold it when nose high. <a href="#source-t45">{t45('3-20')}</a></li>
+  <li><strong>Nose high:</strong> add power and drag off, unload so the nose falls toward the horizon without pushing into negative G, and wait for flying speed before rolling wings level the shorter way and raising the nose to the horizon. A small bank held while the nose falls keeps G positive. <a href="#source-t45">{t45('3-21')}</a> <a href="#source-th73">{th73('2-17')}</a></li>
+  <li><strong>Nose low:</strong> power back, drag out if speed is building fast, roll wings level, then pull to the horizon. Never roll and pull together (a rolling pullout): it can overstress the airframe. <a href="#source-t45">{t45('3-22')}</a></li>
+  <li><strong>Helicopter:</strong> "level the wings, level the nose, center the ball, set power", then check the vertical speed: a level attitude can still be descending, and the descent must be stopped. Avoid a low-G pushover and do not let airspeed decay. <a href="#source-th73">{th73('2-17–2-18')}</a></li>
+  <li><strong>Two pilots:</strong> the pilot not flying calls the deviations, and takes control if the flying pilot does not respond. <a href="#source-th73">{th73('2-18')}</a></li>
+ </ul>
+ <details class="more"><summary>More on each recovery</summary>
+  <ul>
+   <li><strong>Principles.</strong> Reducing bank in a dive or increasing bank in a climb helps pitch control. On an attitude indicator with the bank pointer at the top (a sky pointer), roll toward the pointer to put it in the upper half of the case to correct an inverted attitude; with the scale at the bottom, roll the way that puts the pitch scale right side up. <a href="#source-afman">{af('27')}</a></li>
+   <li><strong>Suspect the attitude indicator</strong> when control pressures make no change on it, or the performance instruments contradict its picture. With none working, an autopilot not slaved to the failed gyros may be engaged and set to straight and level if the flight manual allows, once airspeed and vertical velocity are back within limits. <a href="#source-afman">{af('28')}</a></li>
+   <li><strong>Level without an attitude indicator.</strong> Center the turn needle; the aircraft is level when the altimeter stops, because the vertical velocity indicator lags past level. Except near vertical, rolling away from the turn needle to center it leaves you upright. <a href="#source-afman">{af('28')}</a></li>
+   <li><strong>Limits.</strong> Unless avoiding a greater emergency, keep bank and power within the aircraft's limits. <a href="#source-afman">{af('28')}</a></li>
+   <li>Helicopter recoveries, including from a hover and from blade stall, are under <a href="#rotary">Rotary-wing differences</a>.</li>
+  </ul>
+ </details>
+ <p class="key"><strong>Key point:</strong> verify with a second source, then recover with the procedure for your aircraft type and for whether the attitude indicator works.</p>
+
+ <h2 id="departure">The departure climb</h2>
+ <p>Published instrument departures protect you from obstacles only if you climb at least as steeply as their design assumes. The Air Force rules: <a href="#source-afman">{af('127–128')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Air Force IFR departure rules <a href="#source-afman">{af('127–128')}</a></caption>
+  <thead><tr><th>Rule</th><th>Value</th></tr></thead>
+  <tbody>
+   <tr><td>Minimum climb gradient</td><td>200 ft per nautical mile, or the published gradient if higher, met with all engines operating</td></tr>
+   <tr><td>First turn</td><td>Not before 400 ft above the departure end of the runway, unless the procedure requires an early turn</td></tr>
+   <tr><td>Multi-engine aircraft</td><td>Normally must meet the gradient with one engine inoperative</td></tr>
+   <tr><td>"See and avoid" instead of a gradient</td><td>Not used by Air Force pilots unless their major command authorizes it</td></tr>
+  </tbody>
+ </table></div>
+ <p>Planning is three steps: choose a valid departure method, find the required climb gradient, and check that the aircraft can meet it. If no obstacle penetrates a 40:1 surface from the end of the runway, the runway has passed a <Term>diverse departure</Term> assessment: climbing at 200 ft per nautical mile you may turn any direction, and no obstacle departure procedure is needed. <a href="#source-afman">{af('128')}</a></p>
+ <p class="key"><strong>Key point:</strong> at least 200 ft per nautical mile, or the published gradient, and no turn below 400 ft unless the procedure says so.</p>
+
+ <h2 id="holding">Holding</h2>
+ <p>A <Term>holding pattern</Term> keeps you at a fix while you wait for further clearance: inbound on the holding course to the fix, a 180° turn, a leg outbound parallel to the course, and another 180° turn back onto it. Standard patterns turn right; nonstandard ones turn left. <a href="#source-afman">{af('151')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>A holding clearance <a href="#source-afman">{af('152')}</a></caption>
+  <thead><tr><th>Item</th><th>Charted pattern</th><th>Pattern not charted</th></tr></thead>
+  <tbody>
+   <tr><td>Direction of holding from the fix</td><td>Given</td><td>Given</td></tr>
+   <tr><td>Holding fix</td><td>Given</td><td>Given</td></tr>
+   <tr><td>Holding course (radial, course, bearing, airway or route)</td><td>"As published"</td><td>Given</td></tr>
+   <tr><td>Leg length</td><td>As published</td><td>Given in miles if DME or RNAV is used</td></tr>
+   <tr><td>Turn direction</td><td>As published</td><td>Given only if left turns</td></tr>
+   <tr><td><Term>EFC</Term></td><td>Given</td><td>Given, with any further delay</td></tr>
+  </tbody>
+ </table></div>
+ <p><strong>Copying it.</strong> Think of the holding direction as a weather wind arrow: the head of the arrow is the fix, and you fly the inbound course to the head. Then draw the rest of the pattern from the instructions. If the fix has more than one published pattern, or you are unsure of the clearance, ask. <a href="#source-afman">{af('152, 157')}</a></p>
+
+ <h3 id="entries">Entries</h3>
+ <p>The entry depends on your heading at the fix compared with the inbound holding course. You are established in holding at your first crossing of the fix. The Air Force manual describes two techniques; either keeps you in the protected airspace. <a href="#source-afman">{af('154–156')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>The two entry techniques <a href="#source-afman">{af('154–156')}</a> <a href="#source-aim5">{a5('5-3-8')}</a></caption>
+  <thead><tr><th>Technique</th><th>How you choose</th><th>What you fly</th></tr></thead>
+  <tbody>
+   <tr><td>AIM method (the FAA's)</td><td>Your heading (±5°) against three sectors, divided by the holding course and the 70° line through the fix</td><td><strong>Parallel</strong>: parallel the holding course outbound on the non-holding side for the leg time or distance, turn toward the holding side, and return to the fix or intercept the course. <strong>Teardrop</strong>: outbound 30° off the course on the holding side, then turn to intercept the inbound course. <strong>Direct</strong>: turn to follow the pattern</td></tr>
+   <tr><td>70 degree method</td><td>Is the inbound holding course within 70° of your heading?</td><td><strong>Yes</strong>: turn outbound the holding direction onto the holding side, then proceed direct or intercept the course to the fix. <strong>No</strong>: turn outbound the shorter way to parallel the holding course; if that leaves you on the non-holding side, parallel or try to intercept the inbound course, then turn toward the holding side. A teardrop may be used if your heading is within 45° of a teardrop course</td></tr>
+  </tbody>
+ </table></div>
+ <p>A quick way to pick an AIM entry is to lay the sector diagram over the heading display as you approach the fix and see which sector the outbound heading falls in. Within 5° of two sectors either entry may be used; one training instruction prefers the teardrop when it is an option. The teardrop leg is 30° off the holding course on the holding side, for one minute or the DME distance. <a href="#source-th73">{th73('3-19')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="hold" aria-labelledby="hold-title">
+  <h3 id="hold-title" class="fig-title">Figure 1 — Holding entries</h3>
+  <p>Set the inbound holding course, the turn direction and your heading at the fix. The plan view shades the sector you arrive from and draws the AIM entry; the text gives the 70 degree method's answer too.</p>
+  <div class="controls row">
+   <label>Inbound course <select name="inbound">{Array.from({ length: 36 }, (_, i) => (i + 1) * 10).map((c) => <option value={c} selected={c === 360}>{String(c).padStart(3, '0')}</option>)}</select></label>
+   <fieldset class="inline"><legend>Turns</legend>
+    <label><input type="radio" name="turn" value="right" checked /> Right (standard)</label>
+    <label><input type="radio" name="turn" value="left" /> Left</label>
+   </fieldset>
+   <label>Heading at the fix <input type="range" name="heading" min="5" max="360" step="5" value="150" /> <output data-heading>150</output></label>
+  </div>
+  <div class="buttons"><button type="button" data-random>Random setup</button></div>
+  <div class="fig-scroll"><svg class="natops" viewBox="0 0 640 350" role="img" aria-label="Plan view of a holding fix, the holding pattern, the entry sectors and the entry the aircraft flies"></svg></div>
+  <p class="no-js">Interactive figure unavailable. Example: holding course 360 inbound, right turns, arriving on heading 150. That heading is 150° from the inbound course, in the teardrop sector, so the AIM method gives a teardrop entry; the 70 degree method gives a parallel.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Schematic: no wind, standard-rate turns and 1-minute legs, after the entry descriptions in AIM paragraph 5-3-8 and the Air Force manual, pp. 154–156; not to any chart's scale or a published pattern's protected airspace. Within 5° of a sector line the AIM accepts either entry.</p>
+ </section>
+ <section class="lesson quiz-lesson" data-lesson="entries" aria-labelledby="entries-title">
+  <h3 id="entries-title">Quiz: which entry?</h3>
+  <div class="fig-scroll quiz-fig"><svg class="natops" viewBox="0 0 640 350" role="img" aria-label="Holding fix and sectors for the question"></svg></div>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next hold</button></div>
+ </section>
+
+ <h3 id="hold-flying">Timing, speed and wind</h3>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Flying the pattern <a href="#source-afman">{af('151, 154, 156')}</a></caption>
+  <thead><tr><th>Item</th><th>Rule</th></tr></thead>
+  <tbody>
+   <tr><td>Inbound leg</td><td>1 minute at or below 14,000 ft MSL; 1½ minutes above. DME and RNAV holds give the outbound leg length; turn inbound at that distance</td></tr>
+   <tr><td>Outbound timing</td><td>Start over or abeam the fix, or wings level outbound if you cannot tell. The first outbound leg is the standard time; adjust later ones to get the inbound time. Inbound timing starts wings level inbound</td></tr>
+   <tr><td>Bank</td><td>3° a second, 30° of bank or the flight director's bank, whichever is least; up to 30° on the entry turn to get the displacement you want</td></tr>
+   <tr><td>Shortening the pattern</td><td>Not without ATC clearance</td></tr>
+  </tbody>
+ </table></div>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Maximum holding speeds <a href="#source-afman">{af('153–154')}</a></caption>
+  <thead><tr><th>Altitude (MSL)</th><th>Maximum</th></tr></thead>
+  <tbody>{HOLDING_SPEEDS.map((s) => <tr><td>{s.band}</td><td>{s.kias} KIAS</td></tr>)}</tbody>
+ </table></div>
+ <p>These maximums come from the procedure design criteria and have nothing to do with the holding speed in your flight manual, which is usually a minimum near maximum endurance. Use the lower of the table and any published maximum. At Air Force airfields the maximum is 310 KIAS and at Navy airfields 230 KIAS unless noted. Slow down to be at or below the maximum when 3 minutes or less from a clearance limit without further clearance. <a href="#source-afman">{af('153–154')}</a></p>
+ <p><strong>Wind.</strong> Correct for drift on both legs. For the drift angle, divide the crosswind by your speed in miles a minute: 30 kt of crosswind at 180 KTAS (3 NM a minute) is 10°. Outbound, triple the inbound correction: 8° left inbound means 24° right outbound. In extreme wind the inbound leg may run over the 1 or 1½ minutes even with no outbound leg; that is allowed. <a href="#source-afman">{af('157–158')}</a></p>
+ <p><strong>Leaving on time.</strong> A 360° turn at 30° of bank takes about 1/100 of your true airspeed in minutes, 3.5 minutes at 350 KTAS; at standard rate it takes 2 minutes. Add the legs to know how long a circuit takes and adjust to leave at the <Term>EFC</Term> or assigned time. <a href="#source-afman">{af('156–157')}</a></p>
+ <p class="key"><strong>Key point:</strong> choose the entry from your heading at the fix, keep the speed at or below the limit for the altitude and airfield, and adjust the outbound leg so the inbound leg is the right length.</p>
+
+ <h2 id="approach">The approach, down to minimums</h2>
+ <p>An instrument approach starts at the initial approach fix and, unless ATC clears otherwise, you fly all of it from there. <a href="#source-afman">{af('171')}</a> From a high-altitude fix that means a penetration descent (see <a href="#penetration">High-altitude approaches</a>); from a low one, a procedure turn, a holding pattern in its place, or radar vectors. The final approach is built from a few parts: <a href="#source-afman">{af('206–208')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Parts of the final approach <a href="#source-afman">{af('206–208')}</a></caption>
+  <thead><tr><th>Part</th><th>What it is</th><th>What you do</th></tr></thead>
+  <tbody>
+   <tr><td><Term>Final approach fix</Term> (FAF)</td><td>Where final begins: a Maltese cross in the profile view</td><td>Cross it at the published altitude, normally at approach speed and in the landing configuration, stable</td></tr>
+   <tr><td><Term>Stepdown fix</Term></td><td>A fix inside the FAF on some non-precision approaches, usually for an obstacle</td><td>Stay at its altitude until you identify it, with one receiver still showing the final approach course</td></tr>
+   <tr><td><Term>Visual descent point</Term> (VDP)</td><td>Where a normal 3° descent from the MDA to touchdown can begin</td><td>Do not leave the MDA before it, even with the runway in sight</td></tr>
+   <tr><td><Term id="Minimum descent altitude">MDA</Term></td><td>The lowest altitude on a non-precision approach</td><td>Level off at it; do not go below without the runway environment</td></tr>
+   <tr><td><Term id="Decision altitude">DA or DH</Term></td><td>The decision point on a precision approach; there is no separate missed approach point</td><td>Runway environment in sight: continue. Not: go missed</td></tr>
+   <tr><td><Term id="Missed approach point">MAP</Term></td><td>The non-precision decision point, no farther than the threshold</td><td>Not visual: go missed</td></tr>
+  </tbody>
+ </table></div>
+ <p><strong>Descent rate.</strong> For a 3° glidepath, vertical velocity is about ground speed × 10 ÷ 2: at 180 kt, 900 ft a minute. For 2½°, subtract 200. Do not descend to the MDA or a stepdown altitude until past the FAF, and arrive at the MDA early enough to find the runway and descend at a normal rate, at or before the VDP. <a href="#source-afman">{af('208')}</a> If no VDP is published, one estimate is height above touchdown ÷ (glidepath × 100): 450 ft ÷ 300 is 1.5 NM. Without one, at an unfamiliar field at night or in low visibility, be very careful leaving the MDA: there may be an obstacle. <a href="#source-afman">{af('207')}</a></p>
+ <p><strong>Below minimums.</strong> You may descend below the MDA, DA or DH only with enough of the runway environment in sight and in position to land safely. Any one of these counts: <a href="#source-afman">{af('209')}</a></p>
+ <ul class="columns">
+  <li>the approach light system, but not below 100 ft above the touchdown zone on the approach lights alone unless the red termination or side row bars are visible;</li>
+  <li>the threshold, its markings or lights;</li>
+  <li>the runway end identifier lights;</li>
+  <li>the touchdown zone, its markings or lights;</li>
+  <li>the runway or its markings;</li>
+  <li>the runway lights;</li>
+  <li>the visual approach slope indicator.</li>
+ </ul>
+ <p class="key"><strong>Key point:</strong> step down only past each fix. On a non-precision approach, level off at the MDA until the runway environment is in sight or you reach the MAP; on a precision approach, decide at the DA: continue with the runway environment in sight, otherwise go missed.</p>
+
+ <h2 id="radar">Radar approaches: PAR and ASR</h2>
+ <p>In a radar approach the controller gives you the final approach by voice, from ground radar. A <Term>PAR</Term> gives course, glidepath and range: a precision approach to a decision altitude. An <Term>ASR</Term> gives course and range only: a non-precision approach to an MDA. <a href="#source-afman">{af('219–220')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>PAR and ASR compared <a href="#source-afman">{af('220–222')}</a></caption>
+  <thead><tr><th></th><th>PAR</th><th>ASR</th></tr></thead>
+  <tbody>
+   <tr><td>Guidance</td><td>Course, glidepath and range</td><td>Course and range each mile; recommended altitudes each mile on request</td></tr>
+   <tr><td>Start of descent</td><td>"Approaching glidepath" 10 to 30 seconds before, then "begin descent"; fly a standard precision descent rate</td><td>"Begin descent" at the descent point; descend to arrive at the MDA in time to see the runway</td></tr>
+   <tr><td>On final</td><td>"On", "above", "below", "well above" and "well below glidepath"</td><td>Course corrections; told when at the MAP</td></tr>
+   <tr><td>Minimums</td><td>DA or DH: go missed if the runway environment is not in sight</td><td>MDA to the MAP; the circling MDA for ASR comes from the FLIP terminal book</td></tr>
+   <tr><td>If no transmission for about</td><td>5 seconds on final</td><td>15 seconds on final</td></tr>
+  </tbody>
+ </table></div>
+ <p><strong>Talking.</strong> Repeat all headings, altitudes and altimeter settings until the final controller says "do not acknowledge further transmissions"; never let a readback cost aircraft control. Guidance stops when you report the runway or approach lights in sight and say you will proceed visually, as in "runway in sight, taking over visual". "Runway in sight" or "visual" alone does not end it. <a href="#source-afman">{af('220, 222')}</a></p>
+ <p><strong>No-gyro.</strong> If the heading indicator fails, ask for a <Term>no-gyro approach</Term>. Start turning on "turn right" or "turn left" and stop on "stop turn", at about standard rate (no more than 30° of bank) until the controller asks for half-standard rate on final. <a href="#source-afman">{af('222')}</a></p>
+ <p><strong>Flying the pattern.</strong> Turn at standard rate (no more than 30° of bank) while being vectored, and at half standard rate on final. Start and stop turns as soon as told; the controller assumes you hold the last heading. Get to final approach speed and finish the landing checklist when handed to the final controller, if not before. A "roger" can acknowledge the lost communications and missed approach instructions if you fully understand them; always read back a landing clearance. <a href="#source-t45">{t45('6-48–6-50')}</a> <a href="#source-th73">{th73('4-17')}</a></p>
+ <p class="key"><strong>Key point:</strong> the radar controller is your final approach course; keep reading back until told not to, and if the radio goes quiet for 5 seconds on a PAR final or 15 on an ASR, call.</p>
+
+ <h2 id="missed">The missed approach</h2>
+ <p>Know the missed approach before you fly the approach: it is designed to take you back up to en route obstacle clearance, sometimes to the start of the approach. A clearance for the approach includes its published missed approach unless ATC gives you another. <a href="#source-afman">{af('249–250')}</a></p>
+ <ul>
+  <li><strong>Where.</strong> At the MAP on a non-precision approach, found from the timing block distance, not only the profile view; on a precision approach, at DA or DH. <a href="#source-afman">{af('249')}</a></li>
+  <li><strong>When.</strong> Immediately, if at the MAP, DA or DH, or at any time after, you do not have the required visual references. Obstacle clearance assumes you start at the MAP from the DA or MDA and climb at least 200 ft per nautical mile; going around after passing the MAP may lose it. <a href="#source-afman">{af('250')}</a></li>
+  <li><strong>Early.</strong> If you go missed before the MAP, fly the approach to the MAP at or above the DA or DH (the MDA on a non-precision approach) before turning, unless ATC clears otherwise. Below the MDA, from a circle, or before the MAP, the published missed approach does not necessarily give obstacle clearance; plan for a balked landing in your briefing. <a href="#source-afman">{af('249–250')}</a></li>
+  <li><strong>Practice approaches.</strong> For a low approach or touch-and-go, the controller gives climb-out instructions before the FAF. Delay turns until past the departure end and 400 ft above the ground. Practicing under VFR, you are not automatically cleared for the published missed approach. <a href="#source-afman">{af('250')}</a></li>
+ </ul>
+ <p class="key"><strong>Key point:</strong> go missed at the MAP or DA as soon as the visual references are missing, and fly to the MAP before turning if you start early.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>Set attitude and power, trim, then crosscheck from the attitude indicator out and back.</li>
+  <li>Believe the instruments over the body; verify an unusual attitude with a second source before recovering.</li>
+  <li>Climb at least 200 ft per nautical mile or the published gradient; no turn below 400 ft above the runway end unless the procedure requires it.</li>
+  <li>Choose the holding entry from your heading at the fix; respect the holding speed for the altitude and airfield.</li>
+  <li>Descend only past each fix; hold the MDA until the runway environment is in sight or the MAP, and at the DA continue only with the runway environment in sight.</li>
+  <li>On a radar approach, read back until told not to; call if the radio is silent for 5 seconds on a PAR final, 15 on an ASR.</li>
+  <li>Go missed at the MAP or DA; started early, fly to the MAP before turning.</li>
+ </ul>
+
+ <h2 id="penetration">High-altitude approaches</h2>
+ <p>A high-altitude approach, or en route descent, takes you from the high-altitude structure to the final approach course at the FAF altitude, configured. ATC normally names the approach; a clearance without one lets you fly any published approach to the field. <a href="#source-afman">{af('171')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Two kinds of penetration <a href="#source-afman">{af('171–174')}</a></caption>
+  <thead><tr><th></th><th>Non-DME teardrop (VOR or NDB)</th><th>Radial (TACAN or VORTAC)</th></tr></thead>
+  <tbody>
+   <tr><td>At the initial approach fix</td><td>On station passage, turn the shorter way to the outbound course</td><td>Turn the shorter way to the approach course; within 90° of it you may lead the turn instead of overflying the fix</td></tr>
+   <tr><td>Start descent</td><td>On a parallel or intercept heading outbound from the fix</td><td>Abeam or past the fix on a parallel or intercept heading; crossing the arc counts as abeam on a DME approach</td></tr>
+   <tr><td>The turn inbound</td><td>A <Term>penetration turn</Term> in the published direction, normally 30° of bank; if no altitude is published, after descending half the height between the IAF and FAF altitudes</td><td>Intercept the course and follow the published altitudes</td></tr>
+   <tr><td>Arriving low or high</td><td>Below the IAF altitude: outbound 15 seconds for each 1,000 ft below before descending. Above: descend to it first, in holding, with clearance</td><td>As for the teardrop</td></tr>
+  </tbody>
+ </table></div>
+ <p>Use a descent gradient of 800 to 1,000 ft per nautical mile (8 to 10°) on a teardrop to stay in protected airspace; a high-altitude approach's initial descent may be up to 1,000 ft per nautical mile, a low-altitude one up to 500. Do not descend below a published penetration-turn completion altitude until established inbound. Be configured at approach speed before the FAF unless the flight manual says otherwise. <a href="#source-afman">{af('105–106, 171–172')}</a></p>
+
+ <h2 id="ils">Flying the ILS</h2>
+ <p>An ILS needs its localizer, glide slope and outer marker (or a published substitute for the marker). If the glide slope fails, the approach becomes a localizer approach without glide path; if the localizer fails, the approach is not authorized. Tune it early and monitor the identifier throughout, and set the published front course even for a back course approach. <a href="#source-afman">{af('209–210')}</a></p>
+ <ul>
+  <li><strong>Range.</strong> The localizer is usable to 18 miles within 10° of the centerline unless the plate says otherwise; the glide slope to 10 miles. <a href="#source-afman">{af('210')}</a></li>
+  <li><strong>Limits.</strong> Discontinue the approach if the localizer is unreliable or shows full-scale deflection on final. Do not go below localizer minimums if you are more than one dot (half scale) below or two dots (full scale) above the glide slope; recapture within those limits and you may continue to the DA. <a href="#source-afman">{af('210')}</a></li>
+  <li><strong>False glide slopes.</strong> A false glide slope signal can appear with everything working and no flags. Confirm your position with other navigation aids where you can. <a href="#source-afman">{af('210')}</a></li>
+ </ul>
+
+ <h2 id="plate">Reading the approach plate</h2>
+ <p>Study the plate before you fly so that on the approach you only fly it. The Air Force manual's checklist: <a href="#source-afman">{af('103–106')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>What to check on the plate <a href="#source-afman">{af('103–106')}</a></caption>
+  <thead><tr><th>Part</th><th>Check</th></tr></thead>
+  <tbody>
+   <tr><td>Plan view</td><td>The ground track and the navigation aids named in the title (they give final guidance); the IAF and what defines it; the holding pattern and whether you can meet its speed at its altitude; lead points; where to configure; the missed approach and its climb gradient and holding speed; feeder routes</td></tr>
+   <tr><td><Term>Minimum safe altitude</Term></td><td>A minimum sector altitude gives 1,000 ft of obstacle clearance within 25 NM of the facility; an emergency safe altitude, mostly on military plates, 1,000 ft (2,000 ft in mountainous areas) within 100 NM. Neither guarantees navigation aid reception</td></tr>
+   <tr><td>Scale</td><td>Inside the inner ring, normally 10 NM (low) or 20 NM (high), the plan view is to scale; outer rings mean only the inner part is</td></tr>
+   <tr><td>Profile view</td><td>Minimum, maximum, mandatory and recommended altitudes, normally before the fix they apply to; descent gradients</td></tr>
+   <tr><td>Landing minimums</td><td>For your aircraft category; your command may set higher ones. Visibility minimums assume all approach lights work, normally ½ mile higher without them. Circling needs both the ceiling and visibility</td></tr>
+   <tr><td>Aerodrome sketch</td><td>Field elevation (highest usable landing surface) and <Term>touchdown zone elevation</Term> (highest point in the first 3,000 ft); runway and lighting; where the navigation aid is; obstructions; the final approach direction, which may be up to 30° off the runway centerline on a straight-in</td></tr>
+   <tr><td>Notes</td><td>Nonstandard criteria or points essential to the approach; "NA" for alternate use applies to military pilots too</td></tr>
+  </tbody>
+ </table></div>
+ <p>If a circling approach shows no ceiling, use the height above airport plus 100 ft, rounded up to the next hundred: 757 ft gives 857, so 900 ft. <a href="#source-afman">{af('106')}</a> US military and civil plates in the United States share the same procedure design criteria, and the FAA's Aeronautical Information Manual describes the same parts of an approach. The Air Force manual's examples are from the DoD FLIP terminal procedures.</p>
+
+ <h2 id="lostcomm">Lost communications</h2>
+ <p><strong>On a radar approach.</strong> Brief a backup approach that suits the weather and your aircraft: with lost communications you are cleared for any published approach unless the controller gave you a lost communications approach. If no transmission is heard for about 1 minute while being vectored to final, 15 seconds on an ASR final or 5 seconds on a PAR final, call. If you cannot regain contact or stay VFR, join the backup approach at the nearest point that allows a normal descent, at the higher of the last assigned altitude and the minimum safe or sector altitude (emergency safe altitude beyond 25 NM), until established on a segment. With no suitable backup, tell the controller your intentions on first contact. <a href="#source-afman">{af('220')}</a></p>
+ <p><strong>En route, in US airspace.</strong> The Air Force manual refers you to FLIP for radio failure; the FAA's rule, 14 CFR 91.185 as quoted in the AIM, is the one ATC plans around: <a href="#source-afman">{af('153')}</a> <a href="#source-aim6">{a6('6-4-1')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Two-way radio failure under IFR <a href="#source-aim6">{a6('6-4-1')}</a></caption>
+  <thead><tr><th>Item</th><th>Rule</th></tr></thead>
+  <tbody>
+   <tr><td>In VFR conditions, or if you meet them</td><td>Continue VFR and land as soon as practicable (not "as soon as possible")</td></tr>
+   <tr><td>Route</td><td>The route last assigned; if being vectored, direct from the failure point to the fix, route or airway in the vector clearance; otherwise the route ATC said to expect; otherwise the route filed</td></tr>
+   <tr><td>Altitude</td><td>The highest, for each route segment, of the last assigned altitude, the minimum IFR altitude, and the altitude ATC said to expect</td></tr>
+   <tr><td>Leaving the clearance limit, if it is a fix an approach begins from</td><td>Start descent or descent and approach as close as possible to the EFC, or with none, to the estimated time of arrival from the filed or amended time en route</td></tr>
+   <tr><td>Leaving the clearance limit, if it is not</td><td>Leave at the EFC, or with none on arrival, go to a fix an approach begins from, and start descent or the approach as close as possible to the estimated time of arrival</td></tr>
+  </tbody>
+ </table></div>
+ <p>Whether a radio failure is an emergency is the pilot's call, and the emergency authority to deviate from any rule still applies. <a href="#source-aim6">{a6('6-4-1')}</a> Outside the United States, use FLIP and the host nation's rules.</p>
+ <p><strong>First actions, anywhere.</strong> Squawk 7600 if the transponder works and keep it until told otherwise, and make calls in the blind in case the transmitter still works. Retry the last frequency, then other published frequencies for the same agency, then other agencies; listen on navigation aids the controller may transmit on; use guard as a last resort. If ATC suspects you can still hear, it may ask you to squawk ident, change or standby the code, or turn. In visual conditions, do not enter cloud if you can descend and land VFR at a suitable field. <a href="#source-t45">{t45('6-7–6-8')}</a></p>
+
+ <h2 id="rotary">Rotary-wing differences</h2>
+ <p>The Air Force manual writes for helicopter pilots alongside fixed-wing ones and calls out these differences: <a href="#source-afman">{af('13, 19–20, 29, 250')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Helicopter instrument flying <a href="#source-afman">{af('13, 19–20, 29, 250')}</a></caption>
+  <thead><tr><th>Topic</th><th>Helicopter rule</th></tr></thead>
+  <tbody>
+   <tr><td>Yaw</td><td>Usually the least stable axis, especially without stability augmentation; power changes yaw the aircraft and can cause vertigo, so anticipate them with smooth pedal</td></tr>
+   <tr><td>Turns</td><td>No more than standard rate (15 to 20° of bank) between 80 and 120 kt; anything faster is a steep turn, practiced at 30°, the maximum bank recommended in instrument conditions</td></tr>
+   <tr><td>Unusual attitude in a hover or at low speed</td><td>Roll wings level smoothly but at once and apply maximum power available; then take off on instruments or hold position on hover instruments. Most common in dust, whiteout, or at night over water</td></tr>
+   <tr><td>Blade stall</td><td>Climbing: reduce collective before correcting attitude. Diving: reduce power and bank before changing pitch. Avoid abnormal positive or negative G</td></tr>
+   <tr><td>Copter-only missed approach</td><td>Based on a climb of at least 400 ft per nautical mile, twice the fixed-wing gradient: 600 ft a minute at 90 kt with no wind</td></tr>
+  </tbody>
+ </table></div>
+
+ <h2 id="illusions">Landing illusions</h2>
+ <p>Other illusions make you misjudge height and distance on the approach. Expect them, use an electronic glide slope or visual approach slope indicator where there is one, and look over an unfamiliar field before landing. <a href="#source-aim8">{a8('8-1-5')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Illusions leading to landing errors <a href="#source-aim8">{a8('8-1-5')}</a></caption>
+  <thead><tr><th>Illusion</th><th>Seems</th><th>Unrecognized, you fly</th></tr></thead>
+  <tbody>
+   <tr><td>Narrower runway than usual</td><td>Higher than you are</td><td>Too low; a wider runway, the reverse</td></tr>
+   <tr><td>Upsloping runway or terrain</td><td>Higher than you are</td><td>Too low; downslope, the reverse</td></tr>
+   <tr><td>Featureless terrain: water, darkness, snow</td><td>Higher than you are</td><td>Too low</td></tr>
+   <tr><td>Rain on the windscreen; haze</td><td>Higher; farther away</td><td>Too low</td></tr>
+   <tr><td>Entering fog</td><td>Pitching up</td><td>A steeper approach, often abruptly</td></tr>
+   <tr><td>Bright runway lights with dark surroundings</td><td>Closer than it is</td><td>Too high</td></tr>
+  </tbody>
+ </table></div>
+
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p>The DCS: A-10C II manual covers flying an ILS and the airfield approaches; this panel is from that manual only. Other DCS aircraft and Falcon BMS were not checked for this revision.</p>
+  <h3>Flying an ILS in DCS</h3>
+  <ol class="steps">
+   <li>Turn on the ILS panel and set the station's frequency (108.10 to 111.95 MHz); the CDU DIVERT page lists airfield ILS frequencies. Press ILS on the navigation mode select panel. <a href="#source-a10">{dcs('573')}</a></li>
+   <li>Fly the localizer and glide slope bars on the ADI to a cross; the marker light and tone show the outer and inner markers. Some runways, the manual's example is Batumi, have one landing direction and no beacons. <a href="#source-a10">{dcs('573–574, 602–603')}</a></li>
+   <li>The manual's ILS starts at 2,000 ft above the ground, flaps up, around 150 KIAS, and configures (speed brakes 40%, gear, flaps down) over the outer marker. <a href="#source-a10">{dcs('602')}</a></li>
+   <li>The manual also describes a TACAN approach (hold, penetration descent, level off, land) and a ground controlled approach, in which ATC gives heading, altitude and airspeed to the pattern entry point. <a href="#source-a10">{dcs('600–603')}</a></li>
+  </ol>
+  <h3>Where it differs from the real-world sources</h3>
+  <ul>
+   <li><strong>Glide slope limits.</strong> The manual's "general rule" is to go missed more than 1 dot low or 2 dots high. <a href="#source-a10">{dcs('574')}</a> In the Air Force manual the same numbers are a limit on descending below localizer minimums, and recapturing within them lets you continue. <a href="#source-afman">{af('210')}</a></li>
+   <li><strong>Holding speed.</strong> The manual's hold is flown at 200 to 350 KIAS. <a href="#source-a10">{dcs('601')}</a> The real maximums are 200 to 265 KIAS by altitude, 310 at Air Force and 230 at Navy airfields unless published otherwise. <a href="#source-afman">{af('153–154')}</a></li>
+   <li><strong>The TACAN approach.</strong> The manual's penetration descends at 1,200 to 1,500 ft a minute, 300 ft for every mile, and levels off at 400 ft (straight-in) or 600 ft (circling). <a href="#source-a10">{dcs('601')}</a> Those are its own numbers, not a published procedure: a real approach flies the plate's altitudes down to its MDA or DA. <a href="#source-afman">{af('171, 206–208')}</a></li>
+   <li>Not described in the manual, so not claimed either way: holding entries, PAR glidepath calls, lost communications, spatial disorientation and unusual attitude recovery.</li>
+  </ul>
+  <p><strong>To practise:</strong> fly Figure 1's entries at a TACAN fix, then an ILS with the real limits above, briefing the missed approach before you start.</p>
+ </section>
+
+ <h2 id="terms">Terms</h2>
+ <p>Every word is in the <a href={glossary}>instrument flight terms</a>; PAR and TACAN are in the airfield and ATC terms.</p>
+ <GlossaryList items={[
+  'Control and performance concept', 'Crosscheck', 'Unusual attitude', 'Spatial disorientation', 'The leans', 'Coriolis illusion', 'Graveyard spiral',
+  'Somatogravic illusion', 'Holding pattern', 'EFC', 'Penetration turn', 'Final approach fix', 'Stepdown fix', 'Visual descent point',
+  'Minimum descent altitude', 'Decision altitude', 'Missed approach point', 'Touchdown zone elevation', 'Minimum safe altitude', 'ASR', 'PAR',
+  'No-gyro approach', 'Diverse departure',
+ ]} />
+ <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
+  <h3 id="terms-title">Quiz: name the term</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next term</button></div>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <p>One or more questions for each outcome at the top of the page; Figure 1 and its quiz cover holding entries.</p>
+ <details><summary><span class="outcome">Outcome 1</span> You keep drifting off altitude and are watching the altimeter more and more. What is wrong, and what is the fix?</summary><p>Fixation. The attitude is what is taking you off altitude, so go back to the hub-and-spoke crosscheck from the attitude indicator, set a small pitch correction, and let the altimeter catch up.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> Why trim only after setting the attitude?</summary><p>Trim relieves control pressure for an attitude you have already set; flying the aircraft with trim is not attitude control.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> In a long, level turn in cloud you look down at a chart. Suddenly you feel the aircraft rolling in another axis. What is it?</summary><p>The Coriolis illusion, from an abrupt head movement in a prolonged constant-rate turn. Go to the instruments and avoid sudden head movements in long turns.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> In a steady descending turn the instruments show altitude falling but you feel wings level. What will the disoriented pilot do?</summary><p>Pull back, tightening the spiral and losing more altitude: the graveyard spiral. Level the wings on the attitude indicator first.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> The attitude indicator shows a steep dive, but the airspeed and altimeter are steady. What do you do?</summary><p>Verify before recovering: the control and performance instruments disagree, so check the standby or other attitude indicator. If in doubt about the attitude indicator, use the attitude-indicator-inoperative procedure.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Fixed wing, diving, inverted. When can you pull?</summary><p>Not until under 90° of bank: roll to wings level and upright while adjusting power or drag, then pull to level flight.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Nose low, wings banked, airspeed building fast. What is the order of the recovery?</summary><p>Neutralize and analyze, power back and drag out, roll wings level, then pull to the horizon. Rolling and pulling together is a rolling pullout and can overstress the airframe.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> The plate gives no climb gradient. What must an Air Force pilot climb at, and when may they turn?</summary><p>At least 200 ft per nautical mile with all engines operating, and no turn until 400 ft above the departure end unless the procedure requires an early turn.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> Holding at 16,000 ft away from a military field, with no published speed. What is the maximum speed, and how long is the inbound leg?</summary><p>265 KIAS, and 1½ minutes inbound, because the hold is above 14,000 ft.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> Inbound you need 5° of right drift correction. What do you hold outbound?</summary><p>15° left: three times the inbound correction, the other way.</p></details>
+ <details><summary><span class="outcome">Outcome 6</span> On a non-precision approach you see the runway at the MDA, before the VDP. May you descend?</summary><p>Not yet: do not leave the MDA before the VDP, even with the runway in sight. At or after it, with the runway environment in sight and in position to land, yes.</p></details>
+ <details><summary><span class="outcome">Outcome 6</span> On an ILS you are two dots low at 500 ft above localizer minimums. Can you continue?</summary><p>Not below localizer minimums while more than one dot low. If you recapture the glide slope within one dot low or two dots high, you may continue to the DA.</p></details>
+ <details><summary><span class="outcome">Outcome 7</span> On a PAR final you hear nothing for five seconds. What do you do?</summary><p>Call the controller. If you cannot reestablish contact and cannot stay VFR, fly your backup approach.</p></details>
+ <details><summary><span class="outcome">Outcome 7</span> You decide to go missed a mile before the MAP. Can you turn right away?</summary><p>No: unless ATC clears otherwise, fly the approach to the MAP at or above the DA or MDA before turning.</p></details>
+ <details><summary><span class="outcome">Outcome 8</span> Your radios fail in cloud. What do you squawk, and what do you try before guard?</summary><p>Squawk 7600 and make calls in the blind. Retry the last frequency, then other published frequencies and agencies; guard is the last resort.</p></details>
+ <details><summary><span class="outcome">Outcome 8</span> The plate shows an emergency safe altitude. What does it give you?</summary><p>At least 1,000 ft of obstacle clearance (2,000 ft in designated mountainous areas) within 100 NM of the facility, for emergency use; not navigation aid reception.</p></details>
+ <details><summary><span class="outcome">Outcome 8</span> Radio failure in cloud, assigned 6,000 ft, told to expect 8,000 ft at the next fix, on a segment where the minimum is 5,000 ft. What altitude?</summary><p>6,000 ft to the fix, then 8,000 ft: the highest of the assigned, minimum and expected altitudes for each segment.</p></details>
+
+ <h2 id="sources">Sources and applicability</h2>
+ <h3>Military sources</h3>
+ <p id="source-afman"><strong>[1] US Air Force, AFMAN 11-217 Volume 1, Instrument Flight Procedures, 22 October 2010.</strong> <a href="https://www.code7700.com/pdfs/usaf/afman11-217v1.pdf">Read on code7700.com's copy</a>, 2 November 2026, by printed page: chapter 1 (pp. 12–15), turns and unusual attitudes (pp. 19–20, 26–29), approach plates (pp. 103–106), departures (pp. 127–128), holding (pp. 151–159), high-altitude approaches (pp. 171–174), final approach, ILS and radar (pp. 206–210, 219–222), missed approach (pp. 249–250). Superseded by the consolidated AFMAN 11-217 of 10 June 2019, which could not be retrieved; numbers may have changed.</p>
+ <p id="source-t45"><strong>[6] Chief of Naval Air Training, CNATRA P-1204 (Rev. 09-16, Change 2 of 25 March 2021), Flight Training Instruction, Instrument, T-45C MPTS and IUT.</strong> <a href="https://web.archive.org/web/20211009235549/https://www.cnatra.navy.mil/local/docs/pat-pubs/P-1204.pdf">Internet Archive copy of cnatra.navy.mil</a> (October 2021 snapshot), read 2 November 2026 by printed page: unusual attitudes (pp. 3-20–3-22), lost communications (pp. 6-7–6-8), GCA (pp. 6-48–6-50). A training command instruction for one aircraft type.</p>
+ <p id="source-th73"><strong>[7] Chief of Naval Air Training, CNATRA P-480 (New 05-22), Flight Training Instruction, Basic Instrument and Radio Instrument, TH-73A, 5 May 2022.</strong> <a href="https://web.archive.org/web/20240814201447/https://www.cnatra.navy.mil/local/docs/pat-pubs/P-480.pdf">Internet Archive copy of cnatra.navy.mil</a> (August 2024 snapshot), read 2 November 2026 by printed page: unusual attitudes (pp. 2-17–2-18), holding (p. 3-19), GCA (pp. 4-16–4-17). A training command instruction for one aircraft type.</p>
+ <h3>Supplementary FAA sources</h3>
+ <p id="source-aim5"><strong>[2] FAA, Aeronautical Information Manual, chapter 5, section 3: En Route Procedures.</strong> <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap5_section_3.html">faa.gov</a>, read 2 November 2026: ¶5-3-8, Holding.</p>
+ <p id="source-aim6"><strong>[3] FAA, Aeronautical Information Manual, chapter 6, section 4: Two-way Radio Communications Failure.</strong> <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap6_section_4.html">faa.gov</a>, read 2 November 2026: ¶6-4-1, quoting 14 CFR 91.185.</p>
+ <p id="source-aim8"><strong>[4] FAA, Aeronautical Information Manual, chapter 8, section 1: Fitness for Flight.</strong> <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap8_section_1.html">faa.gov</a>, read 2 November 2026: ¶8-1-5, Illusions in Flight.</p>
+ <h3>Sim source</h3>
+ <p id="source-a10"><strong>[5] Eagle Dynamics, DCS: A-10C II Tank Killer Flight Manual (English), July 2023.</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/dcs-warthog_2_flight_manual_en/">Download page</a>, read 2 November 2026, pp. 573–574 and 600–603. A sim manual, cited only for the In the sim panel.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/instrument-flight-evidence.md">instrument flight evidence</a>.</p>
+ <p>Figure 1, its quiz and the opening sortie are original, invented examples, not reproductions of any publication's figure.</p>
+ <p class="note">Applicability: written for fixed- and rotary-wing pilots of every service. Everything outside the sim panel is from the Air Force manual, the FAA's manual, or the Navy's instrument training instructions, with type-specific numbers left out: procedures are given in generic form, and your aircraft's numbers come from its flight manual. The Navy's NATOPS instrument flight manual and the Army's instrument publications could not be read for this revision, so no Army rules are included, and Navy rules beyond the training instructions and the Air Force manual's Navy airfield holding speed are not covered. Your service's rules, the aircraft's flight manual and current FLIP govern.</p>
+</SiteLayout>
+<script>import '../../../lessons/instrument-flight/lesson-ui.mjs';</script>
+
+<style>
+  .contents-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
+  .contents h3 { margin: 0.4rem 0 0.2rem; font-size: 0.95rem; }
+  .contents ol { padding-left: 1.5rem; margin-top: 0; }
+  .lede { font-size: 1.1rem; }
+  .key { padding: 0.6rem 1rem; border-left: 0.25rem solid var(--color-link); background: var(--color-surface); }
+  ul.recap li { margin-block: 0.3rem; }
+  details.more { margin-block: 1rem; padding: 0.5rem 1rem; border: 1px solid var(--color-border); }
+  details.more summary { cursor: pointer; font-weight: 700; }
+  ol.exchange { list-style: none; padding-left: 1rem; border-left: 0.25rem solid var(--color-border); }
+  ol.exchange li { display: grid; grid-template-columns: 8rem 1fr; column-gap: 0.75rem; margin-block: 0.4rem; }
+  ol.exchange .who { font-weight: 700; }
+  ol.exchange .step { margin-left: 0.4rem; font-size: 0.85rem; white-space: nowrap; }
+  .outcome { display: inline-block; margin-right: 0.4rem; padding: 0 0.4rem; font-size: 0.8rem; border: 1px solid var(--color-border); color: var(--color-muted); }
+  .sim-panel { margin: 2rem 0; padding: 0.75rem 1.25rem; border-left: 4px solid var(--color-accent); background: var(--color-surface, #f6f7f8); }
+  .sim-panel h2 { margin-top: 0.4rem; }
+  .sim-panel h3 { margin: 1rem 0 0.3rem; font-size: 1rem; }
+  table { width: 100%; border-collapse: collapse; }
+  caption { padding: 0.5rem 0.75rem; text-align: left; color: var(--color-muted); font-size: 0.9rem; }
+  th, td { padding: 0.45rem 0.75rem; border-top: 1px solid var(--color-border); text-align: left; vertical-align: top; }
+  thead th { background: var(--color-surface); }
+  .note { padding: 0.75rem 1rem; border-left: 0.25rem solid var(--color-border); background: var(--color-surface); }
+  ol.steps li { margin-block: 0.35rem; }
+  .lesson { margin-block: 1.5rem; padding: 1rem; border: 1px solid var(--color-text); }
+  .lesson h3 { margin-top: 0; }
+  .controls { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; align-items: center; margin-bottom: 0.75rem; }
+  .controls fieldset { border: 0; padding: 0; margin: 0; display: flex; gap: 0.75rem; align-items: center; }
+  .controls legend { float: left; margin-right: 0.5rem; font-weight: 700; }
+  .controls output { display: inline-block; min-width: 2.5rem; font-variant-numeric: tabular-nums; }
+  button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .lesson :global(button) { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: #fff; background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
+  .lesson :global(button:disabled) { opacity: 0.45; cursor: default; }
+  .lesson [data-choices] :global(button) { color: var(--color-text); background: #fff; font-weight: 400; text-align: left; }
+  .feedback { font-weight: 700; min-height: 1.6em; }
+  .feedback :global(p) { margin: 0.2rem 0; }
+  .feedback :global(.derived) { font-weight: 400; }
+  .lesson.ready .no-js { display: none; }
+  .no-js { font-weight: 700; }
+  .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+  @media (min-width: 64rem) {
+    .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
+  }
+  .fig-scroll { overflow-x: auto; }
+  .fig-scroll :global(svg) { min-width: 30rem; }
+  .fig-title { font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 2px solid var(--color-text); padding-bottom: 0.3rem; }
+  .fig-caption { color: var(--color-muted); font-size: 0.9rem; }
+  .quiz-lesson .task { font-style: italic; }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--color-border); margin-block: 1rem; }
+  .table-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+  @media (max-width: 40rem) {
+    .contents-groups { grid-template-columns: 1fr; }
+    ol.exchange li { display: block; }
+    ol.exchange .who { display: block; }
+  }
+  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
+  :global(.natops .frame) { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
+  :global(.natops .lbl) { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
+  :global(.natops .lbl.small) { font-size: 10px; font-weight: 400; }
+  :global(.natops .ln) { fill: none; stroke: var(--color-text); stroke-width: 1.8; }
+  :global(.natops .ln.dashed) { stroke-dasharray: 7 4; }
+  :global(.natops .ln.on) { stroke: var(--color-link); stroke-width: 2.8; }
+  :global(.natops .thin) { fill: none; stroke: var(--color-text); stroke-width: 1; }
+  :global(.natops .thin.dotted) { stroke-dasharray: 2 3; }
+  :global(.natops .shade) { fill: #e6e9ec; stroke: none; }
+  :global(.natops .mine.shade) { fill: #cfe0f3; stroke: none; }
+  :global(.natops .fill) { fill: var(--color-text); }
+  .lesson:not(.ready) .buttons, .lesson:not(.ready) svg:empty { display: none; }
+</style>

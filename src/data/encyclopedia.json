@@ -1621,6 +1621,17 @@
     "summary": "Radials, bearings, variation and deviation, station passage, waypoints, RAIM and the military grid."
   },
   {
+    "id": "encyclopedia.terminology.instrument-flight",
+    "slug": "instrument-flight",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Instrument flight terms",
+    "designation": "AFMAN 11-217 · AIM",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The control and performance concept, the crosscheck, the illusions of spatial disorientation, holding, and the fixes and altitudes of an instrument approach."
+  },
+  {
     "id": "encyclopedia.terminology.weapons",
     "slug": "weapons",
     "category": "terminology",

@@ -32,6 +32,8 @@ Reviews are source-inspection editorial findings, **not** rendered-browser QA, e
 - [Case III](content-audit-case-iii.md)
 - [Autorotation](content-audit-autorotation.md)
 
+New modules are written to the playbook from the first draft and are not audited separately: Instrument flying (revision 1, PR for issue #97).
+
 ## Encyclopedia — 52/229
 
 | Category | Reviewed | Pending |
