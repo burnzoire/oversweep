@@ -10,7 +10,7 @@ test('the brief has nine numbered lines then remarks, in order', () => {
 
 test('mandatory readback is lines 4 and 6 and the restrictions (JP 3-09.3 p. V-33)', () => {
   assert.deepEqual(NINE_LINE.filter((l) => l.readback).map((l) => l.id), ['elevation', 'location', 'remarks']);
-  assert.equal(readback(), '450 feet, NV 1234 5678, Final attack headings two four zero to three zero zero, TOT 1430');
+  assert.equal(readback(), '450 feet, NV 1234 5678, final attack headings two four zero to three zero zero, TOT 1430');
 });
 
 test('headings are read as three sequential digits', () => {

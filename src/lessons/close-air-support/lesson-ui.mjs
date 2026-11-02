@@ -27,7 +27,7 @@ function setupBrief(root) {
   const out = root.querySelector('[data-result]');
   const chips = root.querySelector('[data-steps]');
   const g = briefGeometry();
-  const K = 55, TX = 110, TY = 200;
+  const K = 50, TX = 175, TY = 200;
   const P = ([x, y]) => [TX + x * K, TY - y * K];
   const anvil = [0, 2.9];
   const steps = [...NINE_LINE.map((l) => ({ ...l, label: l.line ? `Line ${l.line}` : 'Remarks' })), { id: 'readback', label: 'Readback' }];

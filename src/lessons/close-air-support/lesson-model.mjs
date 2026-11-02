@@ -54,7 +54,7 @@ export const NINE_LINE = [
 
 /** The aircrew's mandatory readback for a brief: lines 4 and 6 and every restriction (p. V-33). */
 export function readback(brief = NINE_LINE) {
-  return brief.filter((l) => l.readback).map((l) => l.says.replace(/"/g, '')).join(', ');
+  return brief.filter((l) => l.readback).map((l) => l.says.replace(/"/g, '').replace(/^Final/, 'final')).join(', ');
 }
 
 /**
