@@ -109,7 +109,14 @@ function setupPlay(root) {
   let type = 1, current = 0, steps = attackSteps(type);
   const typeButtons = [1, 3].map((t) => {
     const b = Object.assign(document.createElement('button'), { type: 'button', textContent: `Type ${t}` });
-    b.addEventListener('click', () => { type = t; steps = attackSteps(t); current = Math.min(current, steps.length - 1); draw(); });
+    b.addEventListener('click', () => {
+      // Keep the step while both sequences match; past that, restart at the first call that differs.
+      const was = steps;
+      type = t; steps = attackSteps(t);
+      const same = steps.findIndex((x, i) => x.says !== was[i]?.says);
+      current = Math.min(current, same < 0 ? steps.length - 1 : same);
+      draw();
+    });
     types.append(b);
     return [t, b];
   });
@@ -156,7 +163,7 @@ function setupPlay(root) {
       el('text', { class: 'lbl small', x: ax + 10, y: ay + 4 }, `${EXAMPLE.egress.to}, egress block ${EXAMPLE.egress.block}`),
     );
     if (has('egress')) items.push(el('line', { class: 'ln dashed on', x1: tx, y1: ty, x2: ax, y2: ay + 6 }));
-    if (has('mark')) items.push(el('circle', { class: 'mine', cx: tx + 3, cy: ty - 4, r: 5, opacity: 0.6 }), el('text', { class: 'lbl small', x: tx + 22, y: ty - 14 }, 'Smoke'));
+    if (has('mark')) items.push(el('circle', { class: 'mine', cx: tx - 9, cy: ty, r: 5, opacity: 0.6 }), el('text', { class: 'lbl small', x: tx + 22, y: ty - 14 }, 'Smoke 50 m west (offset enlarged)'));
     for (const [k, dx] of [['hits1', -3], ['hits2', 3]]) if (has(k)) items.push(el('path', { class: 'mine', d: `M${tx + dx} ${ty - 7} l2 5 l5 -1 l-3 4 l3 4 l-5 -1 l-2 5 l-2 -5 l-5 1 l3 -4 l-3 -4 l5 1 z` }));
     items.push(trail('a'), trail('b'), jet(s.a.pos, s.a.hdg, EXAMPLE.aircraft.split(' ')[1], s.who === EXAMPLE.aircraft ? 'mine' : 'fill'), jet(s.b.pos, s.b.hdg, String(+EXAMPLE.aircraft.split(' ')[1] + 1), s.who.endsWith(String(+EXAMPLE.aircraft.split(' ')[1] + 1)) ? 'mine' : 'fill'));
     if (s.call) items.push(el('text', { class: 'lbl call', x: 14, y: 198 }, s.call));
@@ -169,7 +176,14 @@ function setupPlay(root) {
     who.append(Object.assign(document.createElement('strong'), { textContent: `${s.who}: ` }), document.createTextNode(s.says));
     const note = para(s.note ? `${s.note} ` : '', 'derived');
     note.append(link);
-    out.replaceChildren(who, note);
+    const where = (name, { pos: [x, y], hdg }) => {
+      const nm = Math.hypot(x, y), brg = ((Math.atan2(x, y) / D) + 360) % 360;
+      const dirs = ['north', 'northeast', 'east', 'southeast', 'south', 'southwest', 'west', 'northwest'];
+      return `${name} ${nm.toFixed(1)} NM ${dirs[Math.round(brg / 45) % 8]} of the target, heading ${String(Math.round(hdg) || 360).padStart(3, '0')}`;
+    };
+    const num = +EXAMPLE.aircraft.split(' ')[1];
+    const pos = para(`${where(EXAMPLE.aircraft, s.a)}; ${where(EXAMPLE.aircraft.replace(/\d+$/, String(num + 1)), s.b)}.`, 'derived');
+    out.replaceChildren(who, note, pos);
   }
   draw();
 }
