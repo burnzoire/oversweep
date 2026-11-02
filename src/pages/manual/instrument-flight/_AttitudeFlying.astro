@@ -1,0 +1,277 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
+import { getModule } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import Term from '../../../components/Term.astro';
+import '../../../styles/instrument-flight.css';
+const mod = getModule('attitude-instrument-flying');
+// The first-pass path, then reference material for when it is needed.
+const core = [
+ ['example', 'One climb in cloud, start to finish'], ['control', 'Control and performance'], ['crosscheck', 'The crosscheck'],
+ ['disorientation', 'Spatial disorientation'], ['unusual', 'Unusual attitudes'], ['recap', 'Key points'],
+];
+const reference = [
+ ['rotary', 'Helicopters on instruments'], ['illusions', 'Landing illusions'], ['sims', 'In the sim'],
+ ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+];
+// [1] AFMAN 11-217 Vol 1 (2010) by printed page. [2] FAA AIM chapter 8
+// section 1, supplementary. [3] CNATRA P-1204 and [4] CNATRA P-480, Navy
+// training command instrument FTIs, by printed page. [5] DCS: A-10C II flight
+// manual, sim crossover only.
+const pp = (n: number) => (page: string) => `[${n}, ${/[–,]/.test(page) ? 'pp.' : 'p.'} ${page}]`;
+const af = pp(1), t45 = pp(3), th73 = pp(4), dcs = pp(5);
+const a8 = (para: string) => `[2, ¶${para}]`;
+const procedures = sitePath('manual/instrument-flight/instrument-procedures/');
+const glossary = sitePath('encyclopedia/terminology/instrument-flight/');
+---
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="instrument-flight" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Instrument Flight',href:sitePath('manual/instrument-flight/')},{label:mod.title}]}>
+ <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
+  <h2>{mod.maturity}</h2>
+  <p>Module revision {mod.revision} · Flying with no horizon: controlling the aircraft from the instruments alone, the crosscheck, spatial disorientation and unusual attitudes. For fixed- and rotary-wing pilots of every service, from the Air Force's instrument flight procedures manual and the Navy's instrument training instructions, with the FAA's Aeronautical Information Manual as the supplementary source.</p>
+  <p>Figure 1 is a panel you can fly; Figure 2 runs the crosscheck on it; Figure 3 asks you to recover from unusual attitudes. The procedures that follow, from the departure to the missed approach, are in <a href={procedures}>Instrument Procedures</a>.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
+ </nav>
+
+ <p class="lede">In cloud, the only horizon is the one on the attitude indicator. Attitude instrument flying is keeping the aircraft under control from the instruments alone: set an attitude and power, then check what they did. <a href="#source-afman">{af('12')}</a> Learn it well enough that it takes little attention, and the procedures in <a href={procedures}>Instrument Procedures</a> become a matter of reading the chart and doing what it says.</p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>explain the <Term>control and performance concept</Term>, read a panel as control and performance instruments, and fly a <Term>crosscheck</Term> without fixating;</li>
+  <li>name the illusions that cause <Term>spatial disorientation</Term> and what each makes a pilot do;</li>
+  <li>recognise an <Term>unusual attitude</Term> on the panel, verify it, and recover, fixed- or rotary-wing, with or without an attitude indicator.</li>
+ </ol>
+ <p class="note">This is a reference, not a qualification. Procedures are given in generic form from the Air Force manual's 2010 edition, the Navy's instrument training instructions and the FAA's manual; your service's instrument rules and the aircraft's flight manual (NATOPS or your service's equivalent) govern. The panel in the figures is a generic one and its flight model is invented: it shows how the instruments behave, not any aircraft's numbers.</p>
+
+ <h2 id="example">One climb in cloud, start to finish</h2>
+ <p>A single trainer climbs into cloud, levels off, turns, and finds itself in an unusual attitude after a look at the chart. The call sign and numbers are invented; each step links to the section that explains it.</p>
+ <ol class="exchange script">
+  <li><span class="who">Entering cloud</span> <span class="said">The horizon goes. The pilot holds the climb attitude on the attitude indicator and the climb power, and trims off the pressure. <a class="step" href="#control">Control and performance</a></span></li>
+  <li><span class="who">Climbing</span> <span class="said">Eyes go from the attitude indicator to the airspeed and back, to the heading and back, to the vertical speed and back. <a class="step" href="#crosscheck">Crosscheck</a></span></li>
+  <li><span class="who">Level-off</span> <span class="said">Approaching the altitude, the pilot lowers the nose to the level attitude, sets cruise power, trims, and lets the vertical speed and altimeter settle rather than chasing them. <a class="step" href="#control">Lag</a></span></li>
+  <li><span class="who">A long turn</span> <span class="said">After a standard-rate turn the wings come level and the pilot feels banked the other way. The attitude indicator says level, so the pilot believes it. <a class="step" href="#disorientation">The leans</a></span></li>
+  <li><span class="who">Head down</span> <span class="said">A look down at the chart for too long. Looking up: nose low, banked, airspeed building. <a class="step" href="#unusual">Unusual attitudes</a></span></li>
+  <li><span class="who">Recovery</span> <span class="said">A quick check against the standby and the performance instruments confirms it. Power back, roll wings level, then pull to the horizon, and back to the crosscheck. <a class="step" href="#unusual">Recovery</a></span></li>
+ </ol>
+ <p class="key"><strong>Key point:</strong> every step comes back to the attitude indicator: set the attitude there, check the result elsewhere, and return to it.</p>
+
+ <h2 id="control">Control and performance</h2>
+ <p>Every instrument maneuver is flown the same way: set an attitude and power that will give the performance you want, trim off the control pressure, then check the performance instruments. If the result is off, change attitude or power by a definite amount and check again. Small, smooth corrections with an efficient crosscheck work best. <a href="#source-afman">{af('12–13')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>The three groups of instruments <a href="#source-afman">{af('12')}</a></caption>
+  <thead><tr><th>Group</th><th>What it shows</th><th>Examples</th></tr></thead>
+  <tbody>
+   <tr><td>Control</td><td>Attitude and power, immediately, in amounts you can set</td><td>Attitude indicator (ADI); tachometer, EPR, manifold pressure, fuel flow, torque</td></tr>
+   <tr><td>Performance</td><td>The result of the control input</td><td>Altimeter, airspeed or Mach, vertical velocity, heading, angle of attack, turn and slip</td></tr>
+   <tr><td>Navigation</td><td>Position relative to a facility or fix</td><td>Course indicators, range indicators, glide slope, bearing pointers</td></tr>
+  </tbody>
+ </table></div>
+ <ul>
+  <li><strong>Pitch</strong> is set by moving the miniature aircraft against the artificial horizon, in degrees or bar widths. <strong>Bank</strong> is set against the bank scale, normally marked at 0, 10, 20, 30, 60 and 90°. <a href="#source-afman">{af('13')}</a></li>
+  <li><strong>Power</strong> is set with the throttle, or the collective in a helicopter: learn roughly how far to move it for a given change, set it, crosscheck, then fine-tune, rather than chasing the gauges. <a href="#source-afman">{af('13')}</a></li>
+  <li><strong>Trim</strong>: set the attitude with the controls first, then trim the pressure off. Do not fly the aircraft with trim. Any change of attitude, power or airspeed usually needs a trim change. <a href="#source-afman">{af('13')}</a></li>
+  <li><strong>Turns</strong>: for heading changes of 30° or less, bank about as many degrees as you want to turn; for more, 30° of bank, unless high speed or the flight manual calls for another bank. <a href="#source-afman">{af('19')}</a></li>
+ </ul>
+
+ <p><strong>Lag.</strong> The control instruments show a change as you make it; the performance instruments take a moment to settle, and digital displays add a little more delay. Flown smoothly, the lag is negligible. Do not make abrupt control movements in response to a lagging performance instrument without first checking the control instruments; chasing it makes the aircraft erratic and the lag worse. <a href="#source-t45">{t45('1-8–1-9')}</a></p>
+ <section class="lesson figure-lesson panel-fig" data-lesson="panel" aria-labelledby="panel-title">
+  <h3 id="panel-title" class="fig-title">Figure 1 — Control and performance on a generic panel</h3>
+  <p>Set a pitch, bank and power. The attitude indicator and power gauge (the control instruments) move straight away; airspeed, altimeter, vertical speed, turn needle and heading (the performance instruments) follow. Try the level-off: lower the nose to the level attitude and set cruise power, then watch the vertical speed indicator catch up.</p>
+  <div class="controls row">
+   <label for="pitch">Pitch <input type="range" id="pitch" name="pitch" min="-15" max="20" step="0.5" value="3" /> <output for="pitch">+3°</output></label>
+   <label for="bank">Bank <input type="range" id="bank" name="bank" min="-60" max="60" step="5" value="0" /> <output for="bank">0°</output></label>
+   <label for="power">Power <input type="range" id="power" name="power" min="0" max="100" step="5" value="70" /> <output for="power">70%</output></label>
+  </div>
+  <div class="buttons">
+   <button type="button" data-preset="level">Level at 250 kt</button>
+   <button type="button" data-preset="climb">Climb</button>
+   <button type="button" data-preset="descend">Descend</button>
+   <button type="button" data-preset="turn">Standard-rate turn</button>
+   <button type="button" data-preset="reset">Reset</button>
+  </div>
+  <div class="fig-scroll"><svg class="inst" viewBox="0 0 700 470" role="img" aria-label="A generic instrument panel: airspeed, attitude indicator and altimeter across the top, turn and slip, heading and vertical speed below, and a power gauge at the left"></svg></div>
+  <p class="no-js">Interactive figure unavailable. Example: from level flight, raising the nose 5° moves the attitude indicator at once; the vertical speed, altimeter and airspeed change over the next few seconds.</p>
+  <div class="feedback readout" data-result></div>
+  <p class="fig-caption">A generic panel, not any aircraft's: the attitude indicator top centre, airspeed to its left, altimeter to its right and heading below, with turn and slip and vertical speed beside the heading (two columns on a phone). The flight model is an invented jet trainer (250 kt level at 70% power) and is not a stall or spin model; only the turn rate follows real physics, rate = 1,091 × tan(bank) ÷ speed. Tags show which instruments are control and which performance, from the Air Force manual's three groups.</p>
+ </section>
+ <p class="key"><strong>Key point:</strong> attitude plus power gives performance. Fix the attitude or the power, never the altimeter.</p>
+
+ <h2 id="crosscheck">The crosscheck</h2>
+ <p>The <Term>crosscheck</Term> divides your attention between the control and performance instruments, reads them, and corrects what is off. Picture a wheel: the attitude indicator is the hub and the other instruments are the spokes. Go from the attitude indicator out to one instrument, back to the attitude indicator, then out to another. <a href="#source-afman">{af('14')}</a></p>
+ <p>There is no one set order: which instruments matter most depends on the maneuver. What stays the same is that the attitude indicator is the reference you look at most often, with the rest of the time spent quickly confirming performance and position. <a href="#source-t45">{t45('1-8–1-9')}</a> Figure 2 runs the wheel on the generic panel from Figure 1.</p>
+ <section class="lesson figure-lesson panel-fig" data-lesson="scan" aria-labelledby="scan-title">
+  <h3 id="scan-title" class="fig-title">Figure 2 — Hub and spoke, and fixation</h3>
+  <p>The yellow ring is where the pilot is looking. Hub and spoke goes out to one instrument and straight back to the attitude indicator. Fixation stares at the altimeter while a slow bank creeps in.</p>
+  <div class="buttons">
+   <button type="button" data-mode="hub" aria-pressed="true">Hub and spoke</button>
+   <button type="button" data-mode="fix" aria-pressed="false">Fixation</button>
+   <button type="button" data-pause aria-pressed="false">Pause</button>
+  </div>
+  <div class="fig-scroll"><svg class="inst" viewBox="0 0 700 470" role="img" aria-label="The generic panel with a ring showing which instrument the pilot is looking at"></svg></div>
+  <p class="no-js">Interactive figure unavailable. Hub and spoke: attitude, altimeter, attitude, heading, attitude, airspeed, attitude, vertical speed, attitude, turn and slip. Fixation: the eyes stay on the altimeter while the bank grows unseen.</p>
+  <div class="feedback readout" data-result></div>
+  <p class="fig-caption">The order of the spokes is one example; the sources set no fixed order. Invented flight model as in Figure 1.</p>
+ </section>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Crosscheck errors <a href="#source-afman">{af('14')}</a> <a href="#source-t45">{t45('1-8')}</a> <a href="#source-th73">{th73('2-4')}</a></caption>
+  <thead><tr><th>Error</th><th>What happens</th><th>The fix</th></tr></thead>
+  <tbody>
+   <tr><td>Watching the performance instruments while moving the controls</td><td>They lag the input, so you overshoot</td><td>Make a small calculated input and let the performance instruments catch up before the next one</td></tr>
+   <tr><td>Fixation: one instrument too often or too long</td><td>One wandering value, such as altitude, takes all your attention and you lose the others, such as attitude</td><td>Return to the basic hub-and-spoke flow: the attitude is what put you off altitude</td></tr>
+   <tr><td>Omission: an instrument left out</td><td>A helicopter set up in a turn with the ball forgotten can fly straight, out of balance, with the heading not changing</td><td>Bring every instrument the maneuver needs into the scan</td></tr>
+   <tr><td>No scan plan, or misreading an instrument</td><td>The scan wanders and misses what matters for the maneuver</td><td>Know before the maneuver which instruments are primary for it</td></tr>
+  </tbody>
+ </table></div>
+ <p><strong>Rate instruments.</strong> Navy helicopter instrument training separates position instruments (altimeter, heading, course indicators, clock), which show where you are, from rate instruments (airspeed, vertical speed, turn and slip), which show where you are going, and teaches scanning the rate instruments more often to catch an error early: a 300 ft a minute descent on the vertical speed indicator can be stopped before the altimeter shows you below your altitude. Saying the errors you see out loud helps prevent fixation. <a href="#source-th73">{th73('2-2–2-4')}</a></p>
+ <p class="key"><strong>Key point:</strong> always come back to the attitude indicator; it shows a change at once, while the performance instruments lag.</p>
+
+ <h2 id="disorientation">Spatial disorientation</h2>
+ <p>The inner ear senses changes in motion, not steady motion, so a long, gentle turn or acceleration can leave it reporting something false. The FAA lists the illusions below; it says spatial disorientation from them can be prevented only by visual reference to reliable, fixed points on the ground or to the flight instruments. <a href="#source-aim8">{a8('8-1-5')}</a> The Air Force manual's rule is the same in practice: go to the instruments immediately whenever you become disoriented or outside references become unreliable. <a href="#source-afman">{af('26')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Illusions that lead to spatial disorientation <a href="#source-aim8">{a8('8-1-5')}</a></caption>
+  <thead><tr><th>Illusion</th><th>What causes it</th><th>What the disoriented pilot does</th></tr></thead>
+  <tbody>
+   <tr><td><Term>The leans</Term></td><td>An abrupt roll out of a bank entered too slowly for the inner ear to sense</td><td>Feels banked the other way; rolls back into the original bank, or leans toward the false vertical</td></tr>
+   <tr><td><Term>Coriolis illusion</Term></td><td>An abrupt head movement in a prolonged constant-rate turn</td><td>Feels rotation in another axis and maneuvers into a dangerous attitude. The most overwhelming illusion: avoid sudden head movements in long turns under IFR</td></tr>
+   <tr><td>Graveyard spin</td><td>A correct recovery from a spin the inner ear has stopped sensing</td><td>Feels a spin the other way and returns to the original spin</td></tr>
+   <tr><td><Term>Graveyard spiral</Term></td><td>Altitude lost in a coordinated turn the inner ear has stopped sensing</td><td>Thinks the wings are level in a descent and pulls back, tightening the spiral</td></tr>
+   <tr><td><Term>Somatogravic illusion</Term></td><td>Rapid acceleration, as on takeoff, or rapid deceleration</td><td>Acceleration feels nose-up, so pushes nose low; deceleration the reverse, toward a stall</td></tr>
+   <tr><td>Inversion illusion</td><td>An abrupt change from climb to level flight</td><td>Feels like tumbling backwards; pushes abruptly nose low</td></tr>
+   <tr><td>Elevator illusion</td><td>An updraft (or downdraft)</td><td>Feels a climb and pushes nose low (or the reverse)</td></tr>
+   <tr><td>False horizon</td><td>Sloping cloud, an obscured horizon, ground lights mixed with stars, patterns of lights</td><td>Aligns with the wrong horizon</td></tr>
+   <tr><td>Autokinesis</td><td>Staring at a single light in the dark</td><td>The light seems to move; loses control trying to align with it</td></tr>
+  </tbody>
+ </table></div>
+ <p>Night vision goggles add a trap of their own: once you have gone to the instruments for an unusual attitude, do not go back to outside goggle cues until the aircraft is recovered. <a href="#source-afman">{af('26')}</a> Illusions that cause landing errors, such as a narrow or sloping runway, are under <a href="#illusions">Landing illusions</a>.</p>
+ <p class="key"><strong>Key point:</strong> when the body and the instruments disagree, believe the instruments and go to them at once.</p>
+
+ <h2 id="unusual">Unusual attitudes</h2>
+ <p>An <Term>unusual attitude</Term> is one you get into by accident: from turbulence, channelized attention, an instrument failure, inattention, <Term>spatial disorientation</Term>, losing a wingman, or going from visual to instrument conditions. Most are mild, and you recover by setting the right attitude and resuming a normal <Term>crosscheck</Term>. <a href="#source-afman">{af('26')}</a></p>
+ <p><strong>Verify first.</strong> You will notice either an odd picture on the attitude indicator or odd numbers on the performance instruments. Either way, compare the control and performance instruments before you recover, so you do not fly into an unusual attitude by correcting a failed instrument. Use a standby or the other pilot's attitude indicator too; if in any doubt about the attitude indicator, use the attitude-indicator-inoperative recovery. <a href="#source-afman">{af('27')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Recoveries when the flight manual gives none <a href="#source-afman">{af('28–29')}</a></caption>
+  <thead><tr><th>Case</th><th>Diving</th><th>Climbing</th></tr></thead>
+  <tbody>
+   <tr><td>Fixed wing, attitude indicator working</td><td>Adjust power or drag while rolling to wings level, upright, then pull to level flight. No back pressure until under 90° of bank</td><td>Use power and bank to help the pitch and avoid negative G; as the miniature aircraft nears the horizon, set the attitude you want</td></tr>
+   <tr><td>Fixed wing, no attitude indicator</td><td>Climb or dive from airspeed, altimeter and vertical velocity. Roll to center the turn needle, then recover from the dive</td><td>Power as required; if airspeed is low or falling fast, a turn of about standard rate on the needle helps pitch control until level</td></tr>
+   <tr><td>Helicopter, attitude indicator working</td><td>Roll wings level, then set level flight; avoid rolling pullouts if altitude permits</td><td>Within 10° of level: lower the nose and level the wings. Steeper: bank the shorter way toward the nearest 30° index, no more than 30°, and let the nose fall to the horizon</td></tr>
+  </tbody>
+ </table></div>
+ <p><strong>What the recoveries share.</strong> Training instructions for jets and helicopters teach the same pattern under the type-specific numbers: <a href="#source-t45">{t45('3-20–3-22')}</a> <a href="#source-th73">{th73('2-17–2-18')}</a></p>
+ <ul>
+  <li><strong>Neutralize and analyze first.</strong> Center the controls, then read the attitude and performance instruments before choosing a recovery. Limit airspeed in a dive; take the bank out when nose low, hold it when nose high. <a href="#source-t45">{t45('3-20')}</a></li>
+  <li><strong>Nose high:</strong> add power and drag off, unload so the nose falls toward the horizon without pushing into negative G, and wait for flying speed before rolling wings level the shorter way and raising the nose to the horizon. A small bank held while the nose falls keeps G positive. <a href="#source-t45">{t45('3-21')}</a> <a href="#source-th73">{th73('2-17')}</a></li>
+  <li><strong>Nose low:</strong> power back, drag out if speed is building fast, roll wings level, then pull to the horizon. Never roll and pull together (a rolling pullout): it can overstress the airframe. <a href="#source-t45">{t45('3-22')}</a></li>
+  <li><strong>Helicopter:</strong> "level the wings, level the nose, center the ball, set power", then check the vertical speed: a level attitude can still be descending, and the descent must be stopped. Avoid a low-G pushover and do not let airspeed decay. <a href="#source-th73">{th73('2-17–2-18')}</a></li>
+  <li><strong>Two pilots:</strong> the pilot not flying calls the deviations, and takes control if the flying pilot does not respond. <a href="#source-th73">{th73('2-18')}</a></li>
+ </ul>
+ <section class="lesson quiz-lesson figure-lesson panel-fig" data-lesson="unusual" aria-labelledby="ua-title">
+  <h3 id="ua-title" class="fig-title">Figure 3 — Unusual attitudes: what first?</h3>
+  <div class="fig-scroll"><svg class="inst" viewBox="0 0 700 470" role="img" aria-label="The generic panel in an unusual attitude"></svg></div>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next picture</button></div>
+  <p class="fig-caption">Invented pictures on the generic panel; fixed-wing recoveries as in the table and list above. Your flight manual's recovery comes first where it gives one.</p>
+ </section>
+ <details class="more"><summary>More on each recovery</summary>
+  <ul>
+   <li><strong>Principles.</strong> Reducing bank in a dive or increasing bank in a climb helps pitch control. On an attitude indicator with the bank pointer at the top (a sky pointer), roll toward the pointer to put it in the upper half of the case to correct an inverted attitude; with the scale at the bottom, roll the way that puts the pitch scale right side up. <a href="#source-afman">{af('27')}</a></li>
+   <li><strong>Suspect the attitude indicator</strong> when control pressures make no change on it, or the performance instruments contradict its picture. With none working, an autopilot not slaved to the failed gyros may be engaged and set to straight and level if the flight manual allows, once airspeed and vertical velocity are back within limits. <a href="#source-afman">{af('28')}</a></li>
+   <li><strong>Level without an attitude indicator.</strong> Center the turn needle; the aircraft is level when the altimeter stops, because the vertical velocity indicator lags past level. Except near vertical, rolling away from the turn needle to center it leaves you upright. <a href="#source-afman">{af('28')}</a></li>
+   <li><strong>Limits.</strong> Unless avoiding a greater emergency, keep bank and power within the aircraft's limits. <a href="#source-afman">{af('28')}</a></li>
+   <li>Helicopter recoveries, including from a hover and from blade stall, are under <a href="#rotary">Helicopters on instruments</a>.</li>
+  </ul>
+ </details>
+ <p class="key"><strong>Key point:</strong> verify with a second source, then recover with the procedure for your aircraft type and for whether the attitude indicator works.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>Set attitude and power, trim, then crosscheck from the attitude indicator out and back.</li>
+  <li>The control instruments move at once; the performance instruments lag, so make a small correction and let them catch up.</li>
+  <li>No single scan order fits every maneuver, but the attitude indicator is the one you look at most; watch for fixation and omission.</li>
+  <li>Believe the instruments over the body, and go to them at once.</li>
+  <li>Verify an unusual attitude with a second source before recovering; then use the recovery for your aircraft and for whether the attitude indicator works.</li>
+ </ul>
+
+ <h2 id="rotary">Helicopters on instruments</h2>
+ <p>The Air Force manual writes for helicopter pilots alongside fixed-wing ones and calls out these differences: <a href="#source-afman">{af('13, 19–20, 29')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Helicopter instrument flying <a href="#source-afman">{af('13, 19–20, 29')}</a></caption>
+  <thead><tr><th>Topic</th><th>Helicopter rule</th></tr></thead>
+  <tbody>
+   <tr><td>Yaw</td><td>Usually the least stable axis, especially without stability augmentation; power changes yaw the aircraft and can cause vertigo, so anticipate them with smooth pedal</td></tr>
+   <tr><td>Turns</td><td>No more than standard rate (15 to 20° of bank) between 80 and 120 kt; anything faster is a steep turn, practiced at 30°, the maximum bank recommended in instrument conditions</td></tr>
+   <tr><td>Unusual attitude in a hover or at low speed</td><td>Roll wings level smoothly but at once and apply maximum power available; then take off on instruments or hold position on hover instruments. Most common in dust, whiteout, or at night over water</td></tr>
+   <tr><td>Blade stall</td><td>Climbing: reduce collective before correcting attitude. Diving: reduce power and bank before changing pitch. Avoid abnormal positive or negative G</td></tr>
+  </tbody>
+ </table></div>
+ <p><strong>The attitude indicator shows the fuselage.</strong> A helicopter's fuselage moves independently of its rotor disk, and the attitude indicator measures the fuselage, so the attitude it shows is only an estimate of the rotor's. The same attitude and torque will not give the same result every time: weather, centre of gravity and weight change it, and collective changes pitch, roll and yaw. So scan airspeed, the ball, heading and vertical speed alongside the attitude indicator, without fixating on it. <a href="#source-th73">{th73('2-1–2-2')}</a> The copter missed approach climb gradient is in <a href={procedures + '#missed'}>Instrument Procedures</a>.</p>
+
+ <h2 id="illusions">Landing illusions</h2>
+ <p>Other illusions make you misjudge height and distance on the approach. Expect them, use an electronic glide slope or visual approach slope indicator where there is one, and look over an unfamiliar field before landing. <a href="#source-aim8">{a8('8-1-5')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Illusions leading to landing errors <a href="#source-aim8">{a8('8-1-5')}</a></caption>
+  <thead><tr><th>Illusion</th><th>Seems</th><th>Unrecognized, you fly</th></tr></thead>
+  <tbody>
+   <tr><td>Narrower runway than usual</td><td>Higher than you are</td><td>Too low; a wider runway, the reverse</td></tr>
+   <tr><td>Upsloping runway or terrain</td><td>Higher than you are</td><td>Too low; downslope, the reverse</td></tr>
+   <tr><td>Featureless terrain: water, darkness, snow</td><td>Higher than you are</td><td>Too low</td></tr>
+   <tr><td>Rain on the windscreen; haze</td><td>Higher; farther away</td><td>Too low</td></tr>
+   <tr><td>Entering fog</td><td>Pitching up</td><td>A steeper approach, often abruptly</td></tr>
+   <tr><td>Bright runway lights with dark surroundings</td><td>Closer than it is</td><td>Too high</td></tr>
+  </tbody>
+ </table></div>
+
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p>The DCS: A-10C II manual pages read for these modules cover airfield approaches, not attitude instrument flying. <a href="#source-a10">{dcs('573–574, 600–603')}</a> They do not describe the crosscheck, spatial disorientation or unusual attitude recovery, so nothing is claimed either way about how the sim treats them. Other DCS aircraft and Falcon BMS were not checked. The ILS comparison is in the <a href={procedures + '#sims'}>Instrument Procedures sim panel</a>.</p>
+  <p><strong>To practise:</strong> in cloud, or with the outside view blocked, fly Figure 1's climb, level-off and standard-rate turn on the aircraft's own panel, and say out loud the errors you see to keep from fixating.</p>
+ </section>
+
+ <h2 id="terms">Terms</h2>
+ <p>Every word is in the <a href={glossary}>instrument flight terms</a>.</p>
+ <GlossaryList items={[
+  'Control and performance concept', 'Crosscheck', 'Unusual attitude', 'Spatial disorientation', 'The leans', 'Coriolis illusion', 'Graveyard spiral',
+  'Somatogravic illusion',
+ ]} />
+ <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
+  <h3 id="terms-title">Quiz: name the term</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next term</button></div>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <p>One or more questions for each outcome at the top of the page; Figures 1 and 2 cover outcome 1 and Figure 3 outcome 3.</p>
+ <details><summary><span class="outcome">Outcome 1</span> You raise the nose for a climb. The attitude indicator shows the new attitude, but the vertical speed is still near zero. Do you pull more?</summary><p>No. The vertical speed indicator lags; the attitude indicator is the control instrument and already shows the change. Hold the attitude and let the performance instruments catch up before correcting again.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> On the panel in Figure 1, which instruments are control instruments?</summary><p>The attitude indicator and the power gauge. Airspeed, altimeter, vertical speed, turn and slip and heading are performance instruments.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> You keep drifting off altitude and are watching the altimeter more and more. What is wrong, and what is the fix?</summary><p>Fixation. The attitude is what is taking you off altitude, so go back to the hub-and-spoke crosscheck from the attitude indicator, set a small pitch correction, and let the altimeter catch up.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> Why trim only after setting the attitude?</summary><p>Trim relieves control pressure for an attitude you have already set; flying the aircraft with trim is not attitude control.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> In a long, level turn in cloud you look down at a chart. Suddenly you feel the aircraft rolling in another axis. What is it?</summary><p>The Coriolis illusion, from an abrupt head movement in a prolonged constant-rate turn. Go to the instruments and avoid sudden head movements in long turns.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> In a steady descending turn the instruments show altitude falling but you feel wings level. What will the disoriented pilot do?</summary><p>Pull back, tightening the spiral and losing more altitude: the graveyard spiral. Level the wings on the attitude indicator first.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> The attitude indicator shows a steep dive, but the airspeed and altimeter are steady. What do you do?</summary><p>Verify before recovering: the control and performance instruments disagree, so check the standby or other attitude indicator. If in doubt about the attitude indicator, use the attitude-indicator-inoperative procedure.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Fixed wing, diving, inverted. When can you pull?</summary><p>Not until under 90° of bank: roll to wings level and upright while adjusting power or drag, then pull to level flight.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Nose low, wings banked, airspeed building fast. What is the order of the recovery?</summary><p>Neutralize and analyze, power back and drag out, roll wings level, then pull to the horizon. Rolling and pulling together is a rolling pullout and can overstress the airframe.</p></details>
+
+ <h2 id="sources">Sources and applicability</h2>
+ <h3>Military sources</h3>
+ <p id="source-afman"><strong>[1] US Air Force, AFMAN 11-217 Volume 1, Instrument Flight Procedures, 22 October 2010.</strong> <a href="https://www.code7700.com/pdfs/usaf/afman11-217v1.pdf">Read on code7700.com's copy</a>, 2 November 2026, by printed page: chapter 1 (pp. 12–15), turns and unusual attitudes (pp. 19–20, 26–29). Superseded by the consolidated AFMAN 11-217 of 10 June 2019, which could not be retrieved; numbers may have changed.</p>
+ <p id="source-t45"><strong>[3] Chief of Naval Air Training, CNATRA P-1204 (Rev. 09-16, Change 2 of 25 March 2021), Flight Training Instruction, Instrument, T-45C MPTS and IUT.</strong> <a href="https://web.archive.org/web/20211009235549/https://www.cnatra.navy.mil/local/docs/pat-pubs/P-1204.pdf">Internet Archive copy of cnatra.navy.mil</a> (October 2021 snapshot), read 2 November 2026 by printed page: instrument scan (pp. 1-8–1-9), unusual attitudes (pp. 3-20–3-22). A training command instruction for one aircraft type; only its generic technique is used.</p>
+ <p id="source-th73"><strong>[4] Chief of Naval Air Training, CNATRA P-480 (New 05-22), Flight Training Instruction, Basic Instrument and Radio Instrument, TH-73A, 5 May 2022.</strong> <a href="https://web.archive.org/web/20240814201447/https://www.cnatra.navy.mil/local/docs/pat-pubs/P-480.pdf">Internet Archive copy of cnatra.navy.mil</a> (August 2024 snapshot), read 2 November 2026 by printed page: helicopter attitude instrument flight and scan (pp. 2-1–2-4), unusual attitudes (pp. 2-17–2-18). A training command instruction for one aircraft type; only its generic technique is used.</p>
+ <h3>Supplementary FAA source</h3>
+ <p id="source-aim8"><strong>[2] FAA, Aeronautical Information Manual, chapter 8, section 1: Fitness for Flight.</strong> <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap8_section_1.html">faa.gov</a>, read 2 November 2026: ¶8-1-5, Illusions in Flight.</p>
+ <h3>Sim source</h3>
+ <p id="source-a10"><strong>[5] Eagle Dynamics, DCS: A-10C II Tank Killer Flight Manual (English), July 2023.</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/dcs-warthog_2_flight_manual_en/">Download page</a>, read 2 November 2026, pp. 573–574 and 600–603. A sim manual, cited only for the In the sim panel.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/instrument-flight-evidence.md">instrument flight evidence</a>.</p>
+ <p>Figures 1 to 3, the panel, its flight model and the opening climb are original, invented examples, not reproductions of any publication's figure or any aircraft's panel.</p>
+ <p class="note">Applicability: written for fixed- and rotary-wing pilots of every service. Everything outside the sim panel is from the Air Force manual, the Navy's instrument training instructions or the FAA's manual, with type-specific numbers left out: procedures are given in generic form, and your aircraft's numbers come from its flight manual. The Navy's NATOPS instrument flight manual and the Army's instrument publications could not be read for this revision. Your service's rules and the aircraft's flight manual govern.</p>
+
+</SiteLayout>
+<script>import '../../../lessons/instrument-flight/attitude-ui.mjs';</script>
