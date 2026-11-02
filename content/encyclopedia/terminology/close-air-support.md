@@ -153,6 +153,10 @@ terms:
   - term: STEADY
     definition: Stop oscillating the infrared pointer, after a SNAKE or PULSE call.
     cite: [{ n: 1, page: "III-80" }]
+  - term: STARE
+    form: "[laser code, reference point]"
+    definition: "Cue the laser spot search or tracker function on the specified laser code in relation to the specified reference point, such as a steerpoint, a geographic reference, a bearing and range, or a data link point."
+    cite: [{ n: 1, page: "III-79" }]
   - term: TAC(A)
     expansion: Tactical air coordinator (airborne)
     definition: "An officer who coordinates, from an aircraft, the actions of other aircraft engaged in air support of ground or sea forces."
