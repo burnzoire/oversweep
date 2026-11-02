@@ -23,7 +23,7 @@ Make the page easy to read the first time, not a reorganised NATOPS or joint pub
     - where the sim differs from the real-world source (name both and cite both);
     - what the manual does not say, which is claimed neither way;
     - which sims or modules were not checked.
-12. **Bump the module revision** in `src/data/modules.json`, update the evidence record, and mark the module in the audit index as applied.
+12. **Bump the module revision**: in `src/data/modules.json` for a reference-only module, or in `src/data/experiences.json[*].module.revision` for a trainer-backed one such as Case III or Autorotation (see `docs/development.md`). Then update the evidence record, and mark the module in the audit index as applied.
 13. **Show before and after** for a rewrite, or the new page's key sections for a new module. Take screenshots of both builds at the same scroll targets (desktop 1280 px, mobile 390 px) on the `pr-screenshots` branch. Put the measured numbers in the PR body.
 
 ## Review lessons (what the reviewers caught on PR #166)
