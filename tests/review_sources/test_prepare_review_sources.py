@@ -210,6 +210,28 @@ class SourceSafety(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'split the change'):
             s.render(many, 'a' * 40)
 
+    def test_cited_urls_keep_balanced_parentheses(self):
+        self.assertEqual(s.cited_url('https://www.bits.de/a/jp3_01(12).pdf).'), 'https://www.bits.de/a/jp3_01(12).pdf')
+        self.assertEqual(s.cited_url('https://faa.gov/a.pdf),'), 'https://faa.gov/a.pdf')
+
+    def test_records_that_do_not_fit_the_prompt_are_written_whole_to_files(self):
+        records = [(f'PR FILE DATA: {n}', f'{n}' * 100 + 'x' * s.MAX_FILE_CHARS * 2, s.MAX_FILE_CHARS) for n in range(8)]
+        records.append(('SOURCE RETRIEVAL FAILURE: https://faa.gov/a.pdf', 'OSError: x', None))
+        with tempfile.TemporaryDirectory() as directory:
+            text = s.render(records, 'a' * 40, directory)
+            self.assertLessEqual(len(text), s.MAX_OUTPUT)
+            first, last = Path(directory, 'record-001.md'), Path(directory, 'record-008.md')
+            self.assertIn(f'- complete in file {first} (160,100 characters; prompt copy cut) · PR FILE DATA: 0', text)
+            self.assertIn(f'- complete in file {last} (left out of the prompt: packet budget exhausted) · PR FILE DATA: 7', text)
+            self.assertIn(f'The whole record is in {first}; read it there.', text)
+            self.assertIn('7' * 100 + 'x' * s.MAX_FILE_CHARS * 2, last.read_text())
+            self.assertIn('UNTRUSTED DATA', last.read_text())
+            self.assertFalse(Path(directory, 'record-009.md').exists())
+            self.assertIn('1 of 9 records are cut, failed or omitted.', text)
+        with tempfile.TemporaryDirectory() as directory, patch.object(s, 'MAX_FULL_CHARS', 10):
+            text = s.render([('PR FILE DATA: a', 'y' * 50, 20)], 'a' * 40, directory)
+            self.assertIn('- cut at 20 of 50 characters · PR FILE DATA: a', text)
+
     def test_coverage_lists_failures_with_their_reason(self):
         text = s.render([('SOURCE RETRIEVAL FAILURE: https://www.cnatra.navy.mil/a.pdf', 'SSLCertVerificationError: x', None),
                          ('PR FILE DATA: a', 'fine', s.MAX_FILE_CHARS)], 'a' * 40)
