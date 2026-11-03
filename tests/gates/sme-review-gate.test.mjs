@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { readFile } from "node:fs/promises";
 import {
+  evaluateClaudeReview,
   evaluateOverride,
   evaluateSmeResult,
   isSmeReviewRequired,
@@ -161,8 +162,26 @@ test("missing, skipped, stale, or failed reports never pass", () => {
   }).ready, false);
 });
 
-test("pending gate asks for the sme-review label until it is added", () => {
-  assert.match(pendingReviewMessage({ labels: [], run: undefined }), /Add the `sme-review` label/);
+test("pending gate points to the sme-review skill until a review runs", () => {
+  assert.match(pendingReviewMessage({ labels: [], run: undefined }), /sme-review skill/);
   assert.match(pendingReviewMessage({ labels: [{ name: "sme-review" }], run: { status: "in_progress" } }), /still running/);
   assert.match(pendingReviewMessage({ labels: [{ name: "sme-review" }], run: undefined }), /re-runs when the review finishes/);
+});
+
+test("sme-passed passes only when applied through the owner's account after the head was pushed", () => {
+  const labels = [{ name: "sme-passed" }];
+  const labeled = (login, at, app) => ({
+    event: "labeled", label: { name: "sme-passed" }, actor: { login }, created_at: at,
+    ...(app ? { performed_via_github_app: { slug: app } } : {}),
+  });
+  const pushed = "2026-11-03T10:00:00Z";
+  assert.equal(evaluateClaudeReview({ labels: [], events: [], owner: "burnzoire", headPushedAt: pushed }), null);
+  const pass = evaluateClaudeReview({ labels, events: [labeled("burnzoire", "2026-11-03T11:00:00Z", "claude")], owner: "burnzoire", headPushedAt: pushed });
+  assert.equal(pass.ready, true);
+  assert.match(pass.message, /Claude's SME review/);
+  assert.equal(evaluateClaudeReview({ labels, events: [labeled("someone", "2026-11-03T11:00:00Z")], owner: "burnzoire", headPushedAt: pushed }).ready, false);
+  const stale = evaluateClaudeReview({ labels, events: [labeled("burnzoire", "2026-11-03T09:00:00Z", "claude")], owner: "burnzoire", headPushedAt: pushed });
+  assert.equal(stale.ready, false);
+  assert.match(stale.message, /stale/);
+  assert.equal(evaluateClaudeReview({ labels, events: [labeled("burnzoire", "2026-11-03T11:00:00Z")], owner: "burnzoire", headPushedAt: undefined }).ready, false);
 });
