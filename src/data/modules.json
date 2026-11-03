@@ -123,6 +123,17 @@
     "applicability": "For military aircrew of every service who fly close air support, fixed- or rotary-wing: the joint close air support publication, which all four services follow, with Marine Corps attack helicopter CAS and Army close combat attack as that publication describes them. Worked briefs are invented examples in its formats; theater special instructions, your unit's procedures and the current edition govern."
   },
   {
+    "id": "module.sead-dead",
+    "slug": "sead-dead",
+    "subject": "air-to-ground-operations",
+    "revision": 1,
+    "title": "SEAD and DEAD",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Understand the suppression and destruction of enemy air defenses: what SEAD and DEAD are and how they differ, the parts of an integrated air defense system, how the radar horizon, terrain masking, engagement zones and standoff keep aircraft out of reach, the suppression methods (anti-radiation missiles, jamming, chaff, decoys and destructive attack) with their trade-offs, burnthrough and jammer geometry, and how SEAD protects a strike package, for aircrew of every service.",
+    "applicability": "For military aircrew of every service who fly in, or with, a strike package against surface air defenses: the joint counterair publication, which all four services follow, with the electronic warfare principles from the US Naval Academy's weapons systems text. The worked package is an invented example; theater rules of engagement, SPINS, your unit's tactics and the current editions govern."
+  },
+  {
     "id": "module.ship-operations",
     "slug": "ship-operations",
     "subject": "naval-operations",
