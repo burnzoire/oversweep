@@ -213,6 +213,7 @@ class SourceSafety(unittest.TestCase):
     def test_cited_urls_keep_balanced_parentheses(self):
         self.assertEqual(s.cited_url('https://www.bits.de/a/jp3_01(12).pdf).'), 'https://www.bits.de/a/jp3_01(12).pdf')
         self.assertEqual(s.cited_url('https://faa.gov/a.pdf),'), 'https://faa.gov/a.pdf')
+        self.assertEqual(s.cited_url('https://faa.gov/(a)' + ').' * 200_000), 'https://faa.gov/(a)')
 
     def test_records_that_do_not_fit_the_prompt_are_written_whole_to_files(self):
         records = [(f'PR FILE DATA: {n}', f'{n}' * 100 + 'x' * s.MAX_FILE_CHARS * 2, s.MAX_FILE_CHARS) for n in range(8)]

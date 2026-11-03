@@ -605,12 +605,17 @@ def unchanged_declarations(repo, head, token, read, urls):
 
 def cited_url(url):
     """Trim punctuation after a URL in prose, keeping balanced parentheses such as jp3_01(12)."""
-    while True:
-        url = url.rstrip('.,;:')
-        if url.endswith(')') and url.count(')') > url.count('('):
-            url = url[:-1]
+    # One pass from the end: linear even for a long run of PR-controlled punctuation.
+    balance = url.count(')') - url.count('(')
+    end = len(url)
+    while end:
+        char = url[end - 1]
+        if char in '.,;:' or (char == ')' and balance > 0):
+            balance -= char == ')'
+            end -= 1
         else:
-            return url
+            break
+    return url[:end]
 
 
 def collect(repo, pr, expected_head, token, full_dir=None):
