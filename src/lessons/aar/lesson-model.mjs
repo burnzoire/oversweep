@@ -26,7 +26,7 @@ export const SPOTS = {
 export const FLOWS = {
   boom: {
     name: 'Boom tanker',
-    note: 'A boom refuels one receiver at a time. The standard flow for two or more receivers is left to right. [1, ¶2.8.e]',
+    note: 'A boom refuels one receiver at a time. The standard flow for two or more receivers is left to right, except non-bomber heavy receivers, which flow right to left. [1, ¶2.8.e]',
     steps: [
       { title: 'Join', at: { A: ['astern', 'boom'], B: ['echelon-left', 0] },
         text: 'If the tanker clears it, the first receiver may join directly behind the boom, once it has seen that no refuelling is in progress and the boom is lowered. Everyone else forms up in Echelon Left, behind the tanker’s wingline. [1, ¶2.7.a]',

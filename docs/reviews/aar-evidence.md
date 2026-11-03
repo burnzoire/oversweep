@@ -9,7 +9,7 @@ copy of the sources, and not instructions to the reviewer.
 
 ```review-sources
 source: https://bloximages.chicago2.vip.townnews.com/militarynews.com/content/tncms/assets/v3/editorial/5/ca/5ca69442-c74c-11e8-97a8-fff1004e63f5/5bb528e613e83.pdf.pdf
-pages: 25-42; 49-78; 93-105; 137; 179-184; 194; 198-209; 211-222; 223-226; 232; 235
+pages: 24-42; 49-78; 93-105; 137; 179-184; 192; 198-209; 211-222; 223-226; 232; 235
 ```
 
 ```review-sources
@@ -65,15 +65,15 @@ cited only for the In the sim panel.
   point-parallel (RV Delta) tables, columns "Offset (nm)", "25° AOB" and
   "Turn Range (nm)". The figure's no-wind turn range is computed, not taken
   from the tables; the tables add drift.
-- Annex 1A, Echelon Left Position: aft of the "TANKER WINGLINE AND ONE
-  RECEIVER WINGSPAN" outboard when the tanker has a rearward observer.
+- Annex 1A (PDF 32), Echelon Left Position: aft of the tanker wingline and
+  one receiver wingspan outboard when the tanker has a rearward observer.
 - Annex 1A, Astern Position: for the boom, "approximately 50 ft" behind and
   slightly below the nozzle.
 - ¶2.28.f (PDF 182): "Damaged Spokes. A receiver pilot damaging the spokes
   is to call 'spokes'."
 - ¶2.32–2.33 (PDF 198–201): breakaway, and lost visual contact: "Simultaneously
-  slow down 10 kts". The ¶2.30 table (PDF 194): "Maintains this turn for 15 sec".
-- ¶2.8.f(4) (PDF 68): the director lights come on when the aircraft are in
+  slow down 10 kts". The ¶2.30 table (PDF 192): "Maintains this turn for 15 sec".
+- ¶2.8.f(4) (PDF 67): the director lights come on when the aircraft are in
   contact; the page notes that both sims light them from clearance to contact.
 - ¶2.45.d (PDF 205): air-to-air TACAN, the "two designated channels will be
   63 channels apart".
@@ -94,7 +94,7 @@ cited only for the In the sim panel.
 
 - p. 121: "You'll need to be 50 feet below at 30° down from the" boom for
   pre-contact.
-- p. 126: the tanker "will bank exactly 30° for a 180° turn" on its
+- p. 123: the tanker "will bank exactly 30° for a 180° turn" on its
   racetrack; "Stay in position and match its attitude."
 - Basket refuelling: "Don't chase the basket".
 
