@@ -143,5 +143,27 @@
     "publication": "published",
     "objective": "Understand how aircraft operate from ships: the carrier's flight deck, catapults and arresting gear, who wears which jersey, the launch, Case I, II and III recoveries, the Case I pattern, the lens and the ball, LSO calls and grades, bolters, waveoffs, tanking and bingo, then amphibious assault ship operations for helicopters, tiltrotors and the AV-8B, and Army deck landing qualification.",
     "applicability": "For military pilots of every service who fly from or train on ships: Navy and Marine Corps carrier aviation from Navy training publications, Navy and Marine Corps amphibious ship procedures from the Navy's air traffic control manual, and Army helicopter shipboard operations from the Army's own field manual. Worked numbers are T-45 carrier qualification numbers; the ship's and the aircraft's NATOPS or service manuals govern."
+  },
+  {
+    "id": "module.sortie-planning",
+    "slug": "sortie-planning",
+    "subject": "flight-planning",
+    "revision": 1,
+    "title": "Planning a Sortie",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Plan a sortie from its inputs to the card you fly with: the tasking (in a joint operation the ATO, SPINS and ACO), weather, NOTAMs and charts; a nav log from true course through wind correction, variation and deviation to heading, ground speed, time and fuel; the rules of thumb for true airspeed and descent; a fuel ladder with JOKER and BINGO, reserves, alternates and the equal time point; the flight plan forms and kinds of NOTAM.",
+    "applicability": "For pilots of every service: the generic method, with joint air tasking from the joint publication, planning arithmetic from an Air Force manual, and the nav log, forms and NOTAMs from FAA publications that also govern military flights in US airspace. The Navy's and Air Force's general flight rules could not be read for this revision, so service fuel reserves and alternate rules are not given; US civil rules are shown for comparison only. The worked sortie is invented; your service's rules and the aircraft's flight manual govern."
+  },
+  {
+    "id": "module.weather-and-performance",
+    "slug": "weather-and-performance",
+    "subject": "flight-planning",
+    "revision": 1,
+    "title": "Weather and Performance",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Check whether the weather and the aircraft allow a plan: read a standard weather briefing in order, decode a METAR and find the ceiling, read a TAF for your arrival time, work out pressure and density altitude, say what changes takeoff and landing distance, and find the center of gravity from weights and arms.",
+    "applicability": "For pilots of every service: the US METAR and TAF codes and the performance and weight and balance methods from the FAA's handbook, which US military and civil pilots share; other countries' codes differ slightly, and military weather briefing products could not be read for this revision. The jet and loads in the figures are invented; your service's weather rules and the aircraft's flight manual govern."
   }
 ]

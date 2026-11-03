@@ -1,0 +1,16 @@
+---
+import SortiePlanning from './_SortiePlanning.astro';
+import WeatherPerformance from './_WeatherPerformance.astro';
+import { includedModules } from '../../../data/modules';
+// Flight Planning has one page per module, each its own component kept beside
+// this route so the SME review reads it (the underscore keeps Astro from
+// routing it). This route emits only the modules the registry includes.
+const pages = { 'sortie-planning': SortiePlanning, 'weather-and-performance': WeatherPerformance };
+export function getStaticPaths() {
+  return includedModules.filter((m) => m.subject === 'flight-planning').map((m) => ({ params: { module: m.slug } }));
+}
+const { module } = Astro.params;
+const Page = pages[module as keyof typeof pages];
+if (!Page) throw new Error(`No Flight Planning page for module ${module}`);
+---
+<Page />
