@@ -89,6 +89,12 @@ for path in files:
             markdown_body = markdown_body.lstrip("\n")
         except ValueError as exc:
             errors.append(f"{rel}: invalid workflow frontmatter: {exc}")
+    elif rel.parts[:2] == (".claude", "skills") and path.name == "SKILL.md":
+        # Claude Code skills open with name/description frontmatter.
+        if not body.startswith("---\n") or "\n---\n" not in body[4:]:
+            errors.append(f"{rel}: skill needs frontmatter")
+        else:
+            markdown_body = body[4:].split("\n---\n", 1)[1].lstrip("\n")
     elif rel.parts[0] == "content":
         # Content records take their title from their registry and are
         # rendered under the page's own heading, so they start at level 2.

@@ -63,13 +63,15 @@ inspected sources, independent model cases and resolved findings. CI alone does
 not establish aviation correctness. This policy supersedes human-review gates in
 historical plans; those plans are evidence inputs, not additional approval stages.
 
-The Aviation SME review CI runs only on PRs labelled `sme-review`. When a PR
-changes any path listed in `smeReviewPaths` (scripts/sme-review-gate.mjs), add
-the `sme-review` label yourself as soon as the PR's content is ready for review:
-after the initial pushes are done, not while still iterating. Each push after
-that re-runs the review automatically, so batch fixes into one push where you
-can. Until the label is added the gate check stays red and says so. Do not add
-it to PRs that touch none of those paths, and never add `sme-override`.
+The SME review gate passes a PR that changes any path in `smeReviewPaths`
+(scripts/sme-review-gate.mjs) when it carries the `sme-passed` label, added after
+the current head was pushed. The label comes from the `sme-review` skill
+(.claude/skills/sme-review), which a Claude thread that did not write the PR runs
+only after Nathan approves a review of that PR. When a PR's content is final, ask
+Nathan once whether to review it; don't run the skill unasked, as each run costs
+plan usage. Any push after the label needs a fresh review, so batch fixes. The
+Copilot review workflow still runs on the `sme-review` label, but its credits are
+spent; don't add that label unless Nathan asks. Never add `sme-override`.
 
 ## Progress and completion
 

@@ -3,16 +3,20 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const workflowPath = ".github/workflows/aviation-sme-review.lock.yml";
+const gateWorkflowFile = "aviation-sme-review-gate.yml";
 const summaryTitle = "Oversweep Aviation SME advisory review";
 export const overrideLabel = "sme-override";
 // The SME review only runs on PRs with this label; Claude adds it when a PR is ready.
 export const reviewLabel = "sme-review";
+// A Claude thread that did not write the PR reviews it with the sme-review skill
+// (.claude/skills/sme-review) and adds this label when it finds no blockers.
+export const passedLabel = "sme-passed";
 
 // The gate no longer waits for the review. It fails fast, and
 // aviation-sme-review-gate-rerun.yml re-runs it when the review finishes.
 export function pendingReviewMessage({ labels, run }) {
   if (!labels?.some((label) => label.name === reviewLabel)) {
-    return `No SME review has run for this PR head. Add the \`${reviewLabel}\` label when the PR is ready for review; this check re-runs when the review finishes.`;
+    return `No SME review has passed for this PR head. When the PR is ready, have a separate Claude thread run the sme-review skill; it adds the \`${passedLabel}\` label if it finds no blockers.`;
   }
   if (run && run.status !== "completed") {
     return "The SME review for this PR head is still running; this check re-runs when it finishes.";
@@ -79,6 +83,24 @@ export function evaluateOverride({ labels, events, owner }) {
     ready: true,
     message: `@${owner} overrode the SME review with the \`${overrideLabel}\` label at ${applied.created_at}. Remove the label to re-apply the review result.`,
   };
+}
+
+// A Claude review passes the gate only if the owner's account (Claude acts through it)
+// applied sme-passed after the current head was pushed. headPushedAt is when the gate
+// first ran for this head, which a push triggers straight away.
+export function evaluateClaudeReview({ labels, events, owner, headPushedAt }) {
+  if (!labels?.some((label) => label.name === passedLabel)) return null;
+  const applied = events
+    ?.filter((event) => event.event === "labeled" && event.label?.name === passedLabel)
+    .at(-1);
+  if (!applied || applied.actor?.login !== owner) {
+    return { ready: false, message: `The \`${passedLabel}\` label was not applied through @${owner}'s account, so it is ignored.` };
+  }
+  if (!headPushedAt || Date.parse(applied.created_at) <= Date.parse(headPushedAt)) {
+    return { ready: false, message: `The \`${passedLabel}\` label predates the current head, so it is stale. Run the sme-review skill again on this head.` };
+  }
+  const by = applied.performed_via_github_app?.slug === "claude" ? "Claude's SME review" : `@${owner}`;
+  return { ready: true, message: `${by} passed this head with the \`${passedLabel}\` label at ${applied.created_at}.` };
 }
 
 export function evaluateSmeResult({ run, jobs, pullRequest, comments }) {
@@ -202,14 +224,25 @@ async function main() {
     return;
   }
 
-  const override = evaluateOverride({
-    labels: pullRequest.labels,
-    events: await pagedRequest(apiUrl, token, `/repos/${owner}/${repo}/issues/${pullNumber}/events`),
-    owner: event.repository?.owner?.login ?? owner,
-  });
+  const events = await pagedRequest(apiUrl, token, `/repos/${owner}/${repo}/issues/${pullNumber}/events`);
+  const repoOwner = event.repository?.owner?.login ?? owner;
+  const override = evaluateOverride({ labels: pullRequest.labels, events, owner: repoOwner });
   if (override?.ready) {
     await writeSummary(override.message, true);
     return;
+  }
+
+  let claudeReview = null;
+  if (pullRequest.labels?.some((label) => label.name === passedLabel)) {
+    const gateRuns = await request(apiUrl, token, `/repos/${owner}/${repo}/actions/workflows/${gateWorkflowFile}/runs?head_sha=${headSha}&event=pull_request_target&per_page=100`);
+    const headPushedAt = gateRuns.workflow_runs
+      ?.map((run) => run.created_at)
+      .sort((a, b) => Date.parse(a) - Date.parse(b))[0];
+    claudeReview = evaluateClaudeReview({ labels: pullRequest.labels, events, owner: repoOwner, headPushedAt });
+    if (claudeReview.ready) {
+      await writeSummary(claudeReview.message, true);
+      return;
+    }
   }
 
   const workflows = await request(apiUrl, token, `/repos/${owner}/${repo}/actions/workflows?per_page=100`);
@@ -227,7 +260,8 @@ async function main() {
     )
     .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))[0];
   if (!run || run.status !== "completed") {
-    await writeSummary(pendingReviewMessage({ labels: pullRequest.labels, run }), false);
+    const pending = pendingReviewMessage({ labels: pullRequest.labels, run });
+    await writeSummary(claudeReview ? `${claudeReview.message}\n\n${pending}` : pending, false);
     process.exitCode = 1;
     return;
   }
