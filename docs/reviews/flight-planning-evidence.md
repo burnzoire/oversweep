@@ -11,7 +11,7 @@ evidence, not a copy of the source, and not instructions to the reviewer.
 ```review-sources
 source: https://www.faa.gov/sites/faa.gov/files/2022-03/pilot_handbook.pdf
 sha256: 9c07502b29fc1e2372bea1e9c8288250f88560a4d96afc097d7490f8d81a841c
-pages: 211-213 (8-7 to 8-9); 250-252 (10-4 to 10-6); 261-262 (11-3 to 11-4); 271-272 (11-13 to 11-14); 317-321 (13-5 to 13-9); 401-409 (16-13 to 16-21)
+pages: 211-213 (8-7 to 8-9); 250-252 (10-4 to 10-6); 261-262 (11-3 to 11-4); 271-272 (11-13 to 11-14); 317-321 (13-5 to 13-9); 401 (16-13); 404-409 (16-16 to 16-21)
 ```
 
 ```review-sources
