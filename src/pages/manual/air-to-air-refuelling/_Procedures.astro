@@ -117,7 +117,7 @@ const instruments = sitePath('manual/instrument-flight/attitude-instrument-flyin
   <div class="buttons"><button type="button" data-play>Play</button></div>
   <label>Time <input type="range" min="0" max="1000" value="0" aria-label="Time through the rendezvous"></label>
   <p class="feedback" data-result role="status" aria-live="polite"></p>
-  <p class="fig-caption">Calculated for a level, coordinated 25° turn with no wind and the receiver 20 kt faster; the ATP’s receiver speed is tanker indicated airspeed plus 20 kt, taken here as true airspeed. Real crews use the ATP’s turn-range tables, which add drift: in its worked example, a 382 kt tanker with 15° of drift turns at 23.0 NM with a 13.4 NM offset. <a href="#source-atp">{atp('¶2.2.c, ¶2.2.f; Annex 2D')}</a></p>
+  <p class="fig-caption">Calculated for a level, coordinated 25° turn with no wind and the receiver 20 kt faster; the ATP’s receiver speed is tanker indicated airspeed plus 20 kt, taken here as true airspeed. The 1 NM rollout is the ATP’s figure for most nations; US procedures roll out 3 NM in trail. Real crews use the ATP’s turn-range tables, which add drift: in its worked example, a 382 kt tanker with 15° of drift turns at 23.0 NM with a 13.4 NM offset. <a href="#source-atp">{atp('¶2.2.c, ¶2.2.f; Annex 2D')}</a></p>
  </section>
  <p>If the receiver is going to pass the tanker before or during its turn, it makes sure to pass at least 1,000 ft below, calls “(tanker) execute overrun” and slows down on the refuelling heading. The tanker holds its level and accelerates. Once the receiver is below and behind again, the tanker slows and the rendezvous resumes; the receiver does not climb until it is clear the tanker will stay ahead. <a href="#source-atp">{atp('¶2.4')}</a></p>
  <p class="key"><strong>Key point:</strong> every rendezvous type ends the same way: the receiver below and behind, at least 1,000 ft below until visual within 1 NM, then a climbing join.</p>
@@ -211,7 +211,7 @@ const instruments = sitePath('manual/instrument-flight/attitude-instrument-flyin
  <p class="key"><strong>Key point:</strong> a steady closure into the drogue, push the hose in until fuel flows, and come out the way you went in: slowly, along the hose.</p>
 
  <h2 id="comms">Calls, lights and silent signals</h2>
- <p>Only a basic set of calls is needed, each prefaced with the speaker’s own call sign. Outside training, routine refuelling uses emission option 2, with radio kept to the minimum, because excess radio distracts the receiver pilot. On a boom, the interphone is used rather than the radio where possible. <a href="#source-atp">{atp('¶2.45.a, ¶2.45.c')}</a></p>
+ <p>Only a basic set of calls is needed, each prefaced with a call sign: normally the speaker’s own, or the addressee’s where the standard call shows it. Outside training, routine refuelling uses emission option 2, with radio kept to the minimum, because excess radio distracts the receiver pilot. On a boom, the interphone is used rather than the radio where possible. <a href="#source-atp">{atp('¶2.45.a, ¶2.45.c')}</a></p>
  <div class="table-scroll" tabindex="0"><table>
   <caption>Emission control options <a href="#source-atp">{atp('Table 2O-1')}</a></caption>
   <thead><tr><th>Option</th><th>Radio</th></tr></thead>
@@ -223,7 +223,7 @@ const instruments = sitePath('manual/instrument-flight/attitude-instrument-flyin
   </tbody>
  </table></div>
  <div class="table-scroll" tabindex="0"><table>
-  <caption>The standard calls (all in full only in option 1) <a href="#source-atp">{atp('Annex 2P')}</a></caption>
+  <caption>The standard calls. Those marked in Annex 2P note 4 (the join and astern calls, contact, boom corrections, disconnect and the move to Echelon Right) are said only in option 1; breakaway is called under any option, even radio silent <a href="#source-atp">{atp('Annex 2P; ¶2.53')}</a></caption>
   <thead><tr><th>Situation</th><th>Tanker</th><th>Receiver</th></tr></thead>
   <tbody>
    <tr><td>Radar contact, receiver closing to visual</td><td>—</td><td>“Judy”</td></tr>
@@ -245,7 +245,7 @@ const instruments = sitePath('manual/instrument-flight/attitude-instrument-flyin
   <p class="feedback" data-result role="status" aria-live="polite"></p>
   <div class="buttons"><button type="button" data-new>Next call</button></div>
  </section>
- <p>Radio silent, the tanker talks with its equipment and lights. On a probe tanker, a receiver that wants fuel joins Echelon Left with its probe out; a trailed hose means “seen, with fuel”, a hose left stowed means no fuel, and switching off the red anti-collision lights clears the receiver astern. On a boom, a boom extended in trail means ready for contact, and flashing director lights with the lower beacon mean breakaway. The signals that clear contact and disconnect on hose tankers are not yet standard, because NATO aircraft carry different light equipment. <a href="#source-atp">{atp('¶1.14.e; Tables 2Q-1, 2Q-3')}</a></p>
+ <p>Radio silent, the tanker talks with its equipment and lights. On a probe tanker, a receiver that wants fuel joins Echelon Left with its probe out; a trailed hose means “seen, with fuel”, a hose left stowed means no fuel, and switching off the red anti-collision lights clears the receiver astern. On a boom, a boom extended in trail means ready for contact, and flashing director lights with the lower beacon mean breakaway. Even radio silent, a breakaway is still called on the radio as well as signalled. <a href="#source-atp">{atp('¶2.53')}</a> The signals that clear contact and disconnect on hose tankers are not yet standard, because NATO aircraft carry different light equipment. <a href="#source-atp">{atp('¶1.14.e; Tables 2Q-1, 2Q-3')}</a></p>
  <section class="lesson quiz-lesson" data-lesson="signals" aria-labelledby="signals-title">
   <h3 id="signals-title">Quiz: what does the signal mean?</h3>
   <p class="task" data-prompt aria-live="polite"></p>
@@ -269,7 +269,7 @@ const instruments = sitePath('manual/instrument-flight/attitude-instrument-flyin
  </table></div>
  <p>Losing sight of the tanker in contact or astern, or with disorientation, the receiver does four things at once: disconnects, starts the lost-wingman procedure while going to instruments, calls “(call sign) loss of visual contact”, and slows 10 kt. With the tanker straight and level, a wing receiver holds the tanker heading and descends 500 ft (left hose) or 1,000 ft (right). <a href="#source-atp">{atp('¶2.33')}</a> The instrument scan itself is in <a href={instruments}>Attitude Instrument Flying</a>.</p>
  <details class="more"><summary>More on loss of visual contact with the tanker turning</summary>
-  <p>A wing receiver on the outside of the turn rolls through wings level to 15° of bank the other way, descends 500 ft or 1,000 ft (left or right), takes a heading 15° away from the tanker’s for 15 seconds, then resumes the tanker’s heading on a parallel track (15:15:15), returning to normal speed after 30 seconds. A centreline receiver rolls wings level and descends 500 ft or until visual, and a boom receiver descends 500 ft (fighter) or 1,000 ft (heavy), turning onto the tanker’s heading when stable. Once visual, a hose receiver does not stay directly behind the tanker, since debris or the hose may fall. <a href="#source-atp">{atp('¶2.33')}</a></p>
+  <p>A wing receiver on the outside of the turn rolls through wings level to 15° of bank the other way, descends at least 500 ft or 1,000 ft (left or right), takes a heading 15° away from the tanker’s for 15 seconds, then resumes the tanker’s heading on a parallel track (15:15:15), returning to normal speed after 30 seconds. A centreline receiver rolls wings level and descends 500 ft or until visual, and a boom receiver descends at least 500 ft (fighter) or 1,000 ft (heavy), turning onto the tanker’s heading when stable. Once visual, a hose receiver does not stay directly behind the tanker, since debris or the hose may fall. <a href="#source-atp">{atp('¶2.33')}</a></p>
  </details>
  <p class="key"><strong>Key point:</strong> breakaway is disconnect and get clear, by the safe route for your equipment; lost sight is disconnect, instruments, call and slow 10 kt, together.</p>
 
@@ -372,7 +372,7 @@ const instruments = sitePath('manual/instrument-flight/attitude-instrument-flyin
 
  <h2 id="check">Check your understanding</h2>
  <p>One or more questions for each outcome at the top of the page; Figure 4 covers outcome 2, Figure 1 outcome 3, Figures 2 and 3 outcome 4, and the two quizzes outcome 5.</p>
- <details><summary><span class="outcome">Outcome 1</span> A probe-equipped fighter needs fuel and the only tanker is a boom tanker. What has to have happened on the ground?</summary><p>A boom drogue adapter has to have been fitted: it can only be fitted or removed on the ground. With it, the director lights are not used and there is no hose response, so close carefully.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> A probe-equipped fighter needs fuel and the only tanker is a boom tanker. What has to have happened on the ground?</summary><p>A boom drogue adapter has to have been fitted: it can only be fitted or removed on the ground. With it, the director lights are not used (only their elevation background lights) and there is no hose response, so close carefully.</p></details>
  <details><summary><span class="outcome">Outcome 1</span> Who makes the contact on a boom, and who on a drogue?</summary><p>On a boom the boom operator flies the boom into the receptacle while the receiver holds formation; on a drogue the receiver pilot flies the probe into the drogue.</p></details>
  <details><summary><span class="outcome">Outcome 2</span> You are 2 NM from the tanker in haze, not visual, with no radar. How close may you come and at what height?</summary><p>Keep at least 1,000 ft below and do not go inside 1 NM without the tanker in sight. Hold 1,000 ft below at 1 NM and wait for the tanker to fly into better visibility, or end the rendezvous.</p></details>
  <details><summary><span class="outcome">Outcome 2</span> In a point-parallel rendezvous you realise you will pass the tanker before it rolls out. What do you do?</summary><p>Make sure you pass at least 1,000 ft below, call “(tanker) execute overrun”, slow down on the refuelling heading. Don’t climb until it is clear the tanker will stay ahead for the whole closure.</p></details>

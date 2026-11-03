@@ -20,8 +20,9 @@ export const SPOTS = {
 };
 
 // Each tanker type's flow, step by step. `at` maps each receiver (A, B) to
-// a spot; `calls` are the Annex 2P radio calls for that step, said in full
-// only in EMCON option 1 [1, Annex 2P note 4]. Receiver call sign "Hawk 1"
+// a spot; `calls` are the Annex 2P radio calls for that step, the ones marked in
+// note 4 are said only in EMCON option 1; breakaway is called under any
+// option [1, Annex 2P; ¶2.53]. Receiver call sign "Hawk 1"
 // and "Hawk 2" and tanker "Shell 6" are invented.
 export const FLOWS = {
   boom: {

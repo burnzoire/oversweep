@@ -25,7 +25,7 @@ terms:
     definition: Two parallel light arrays under a boom tanker's forward fuselage telling the receiver which way to move to reach and hold the refuelling position. One array gives up and down, the other fore and aft; there are none for azimuth, which the yellow stripe on the tanker's belly gives instead.
     cite: [{ n: 1, page: "¶1.15.a, ¶1.18" }]
   - term: Echelon Left
-    definition: The position where receivers join a tanker and wait before refuelling, normally on the left. On a tanker with a rearward observer it is stepped down, aft of the wingline and one receiver wingspan outboard; on one without, it is level and well forward, so the tanker's pilots can see you.
+    definition: The position where receivers join a tanker and wait before refuelling, normally on the left. On a hose tanker with a rearward observer it is stepped down, aft of the wingline and one receiver wingspan outboard; on one without, it is level and well forward, so the tanker's pilots can see you. On a boom tanker it is left of and slightly behind the tanker's wing.
     cite: [{ n: 1, page: "¶2.5.a; Annex 1A" }]
   - term: Echelon Right
     definition: The area to the right of the tanker, level or slightly above, where receivers reform after refuelling, the first receiver closest to the wing. Receivers leave from it level or climbing.

@@ -50,7 +50,7 @@ cited only for the In the sim panel.
 - ¶1.14.e (PDF 51–52), drogue signal lights: "(c) Green Light. A green light
   signifies fuel is flowing." Red is breakaway or no contact, amber clear
   contact, in the paragraphs above it.
-- ¶1.14.a(5)–(6) (PDF 50–51), hose travel: the fuel valve opens after
+- ¶1.14.a(5)–(6) (PDF 49–50), hose travel: the fuel valve opens after
   typically about 2 m (6 ft) and "a range of movement from the valve open
   position to 7 m (20 ft) forward of this, is typical." Used for `HOSE`.
 - ¶1.18 (PDF 54), tanker reference markings: "Boom tankers have a fluorescent yellow
@@ -79,6 +79,8 @@ cited only for the In the sim panel.
   63 channels apart".
 - ¶2.46 (PDF 206): boom talk-on, "“FORWARD 50”, “UP 4”, “BACK 2”", called at
   "approximately 50 ft from the contact position". Used for `boomCall`.
+- ¶2.53 (PDF 209): a breakaway during radio-silent refuelling is called on
+  the radio as well as signalled.
 - Annexes 2O–2Q (PDF 211–222): emission control options 1 to 4, the radio
   call table, and the silent signals used in both quizzes.
 - ¶3.2.c (PDF 223), helicopters: "normal HAAR airspeed will be 110-115 KIAS."
