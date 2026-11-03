@@ -17,12 +17,18 @@ const reference = [
 // [1] AFMAN 11-217 Vol 3 (2009), by paragraph. [2] JP 3-30 (2010), by printed page.
 // [3] FAA PHAK FAA-H-8083-25B, by printed page. [4] FAA AIM ch. 5 sec. 1, by paragraph.
 // [5] 14 CFR part 91 (US civil rules). [6] Multi-service brevity codes (glossary).
+// [9] AFMAN 11-202V3 and [10] CNAF M-3710.7, service flight rules; [11] DoD FLIP
+// General Planning. Read from copies Nathan uploaded; the review gate cannot fetch
+// them, so their excerpts are in the evidence file.
 // [7] Falcon BMS 4.38 Training Manual and [8] DCS User Manual, sim crossover only.
 const af = (para: string) => `[1, ${para.includes(',') || para.includes('to') ? 'paras' : 'para'} ${para}]`;
 const jp = (page: string) => `[2, ${/to|,/.test(page) ? 'pp.' : 'p.'} ${page}]`;
 const ph = (page: string) => `[3, ${/to|,/.test(page) ? 'pp.' : 'p.'} ${page}]`;
 const aim = (para: string) => `[4, ${para.includes(',') ? 'paras' : 'para'} ${para}]`;
 const cfr = (sec: string) => `[5, § ${sec}]`;
+const afr = (para: string) => `[9, ${/to|,/.test(para) ? 'paras' : 'para'} ${para}]`;
+const cnaf = (para: string) => `[10, ${/to|,/.test(para) ? 'paras' : 'para'} ${para}]`;
+const gp = (page: string) => `[11, p. ${page}]`;
 const nav = sitePath('manual/navigation/air-navigation/');
 const wx = sitePath('manual/flight-planning/weather-and-performance/');
 const instr = sitePath('manual/instrument-flight/instrument-procedures/');
@@ -57,7 +63,7 @@ const lb = (x: number) => `${(Math.round(x / 10) * 10).toLocaleString('en-US')} 
   <li>choose the flight plan form and read the kinds of NOTAM;</li>
   <li>say what goes on the card you carry.</li>
  </ol>
- <p class="note">This module teaches the method, which is the same in every service and aircraft. The worked sortie, its jet and its fuel numbers are invented. Your service's flight rules set the fuel reserves, alternate rules and forms; this revision could not read the Navy's and the Air Force's general flight rules, so their numbers are not given here, and US civil rules appear only as a labelled supplement. How to fly the headings is in <a href={nav}>Air Navigation</a>; reading the weather and working out takeoff performance are in <a href={wx}>Weather and Performance</a>.</p>
+ <p class="note">This module teaches the method, which is the same in every service and aircraft. The worked sortie, its jet and its fuel numbers are invented. Your service's flight rules set the fuel reserves, alternate rules and forms; the Air Force's and the Navy's are compared here as examples, with US civil rules as a labelled supplement. How to fly the headings is in <a href={nav}>Air Navigation</a>; reading the weather and working out takeoff performance are in <a href={wx}>Weather and Performance</a>.</p>
 
  <h2 id="example">One sortie, planned start to finish</h2>
  <p>An invented training sortie: a two-ship from the home field, out through a turn point to a working area, back home, with an alternate field to the southwest. The wind is from 270° at 40 kt and the jet cruises at {SORTIE.tas} knots true. Each step links to the section that explains it.</p>
@@ -144,13 +150,13 @@ const lb = (x: number) => `${(Math.round(x / 10) * 10).toLocaleString('en-US')} 
  <p class="key"><strong>Key point:</strong> BINGO is set by what it takes to recover from where you will be, so it changes with the wind and the weather at home and the alternate; JOKER sits above it to give time to finish and join up.</p>
 
  <h2 id="filing">Flight plans and NOTAMs</h2>
- <p>In US airspace the DoD forms stand in for the FAA's: the <Term>DD Form 175</Term> for the domestic form 7233-1 and the <Term>DD Form 1801</Term> for the international 7233-4. <a href="#source-aim">{aim('5-1-1')}</a> Other countries' airspace has its own rules; your service's flight information publications say which form to use where.</p>
+ <p>In US airspace the DoD forms stand in for the FAA's: the <Term>DD Form 175</Term> for the domestic form 7233-1 and the <Term>DD Form 1801</Term> for the international 7233-4. <a href="#source-aim">{aim('5-1-1')}</a> The DoD flight information publication General Planning says which to use where: the DD 175 within the conterminous US and the Honolulu, Alaskan and San Juan domestic control areas; the DD 1801 for IFR flights leaving US domestic airspace and for flights through Canadian, oceanic or foreign airspace, over international waters or into a coastal air defense identification zone. Where the DD 1801 is not available, the ICAO flight plan is filled in the same way; at a field with no military base operations, the FAA forms may be used instead. <a href="#source-gp">{gp('4-1')}</a> Other countries' airspace has its own rules, set out in the flight information publications.</p>
  <div class="table-scroll" role="region" aria-label="US flight plan forms for military flights" tabindex="0"><table>
   <caption>Which form, in US airspace <a href="#source-aim">{aim('5-1-6, 5-1-7')}</a></caption>
   <thead><tr><th scope="col">Form</th><th scope="col">Use</th></tr></thead>
   <tbody>
    <tr><th scope="row">DD 1801, DoD International Flight Plan</th><td>Recommended for military IFR flights; mandatory for any flight leaving US controlled airspace, requesting routing that needs performance-based navigation, or requesting services that need capabilities filed only on the international form</td></tr>
-   <tr><th scope="row">DD 175, Military Flight Plan</th><td>Allowed for DoD aircraft in US controlled airspace; its items are in the same order as the FAA 7233-1. Flights filed on it may not be given RNAV departures and arrivals</td></tr>
+   <tr><th scope="row">DD 175, Military Flight Plan</th><td>Allowed for DoD aircraft in US controlled airspace; its items are in the same order as the FAA 7233-1. Flights filed on it may not be given RNAV departures and arrivals; to fly RNAV routes, file the DD 1801 <a href="#source-gp">{gp('4-1')}</a></td></tr>
   </tbody>
  </table></div>
  <p>On the international form, ATC issues clearances from the capabilities filed in items 10 and 18, and expects you to use what you file. File IFR plans at least 30 minutes before the estimated departure. <a href="#source-aim">{aim('5-1-6')}</a></p>
@@ -212,18 +218,20 @@ const lb = (x: number) => `${(Math.round(x / 10) * 10).toLocaleString('en-US')} 
  <p>Climb and descent gradients matter on departures and arrivals with a required gradient; those are in <a href={instr}>Instrument Procedures</a>.</p>
 
  <h2 id="reserves">Reserves and alternates</h2>
- <p>How much fuel to land with, and when an alternate is required, are set by your service's flight rules and the aircraft's manual. This revision could not read the Navy's or the Air Force's general flight rules, so their figures are not given. For comparison only, these are the US civil rules every civil pilot plans to; they do not apply to military aircraft.</p>
- <div class="table-scroll" role="region" aria-label="US civil fuel and alternate rules" tabindex="0"><table>
-  <caption>US civil rules, a supplement only <a href="#source-cfr">[5]</a></caption>
-  <thead><tr><th scope="col">Rule</th><th scope="col">Requirement</th></tr></thead>
+ <p>How much fuel to land with, and when an alternate is required, are set by your service's flight rules and the aircraft's manual, and they differ between services and nations. The Air Force's and the Navy's rules are compared below as examples; Army and other nations' rules were not read for this revision. US civil rules are shown last, for comparison only: they do not apply to military aircraft.</p>
+ <div class="table-scroll" role="region" aria-label="Fuel and alternate rules compared" tabindex="0"><table>
+  <caption>Fuel and alternate rules, three examples <a href="#source-afman3">[9]</a> <a href="#source-cnaf">[10]</a> <a href="#source-cfr">[5]</a></caption>
+  <thead><tr><th scope="col">Rule</th><th scope="col">US Air Force</th><th scope="col">US Navy and Marine Corps</th><th scope="col">US civil (comparison)</th></tr></thead>
   <tbody>
-   <tr><th scope="row">VFR fuel {cfr('91.151')}</th><td>Fuel to the first point of intended landing, then 30 minutes by day or 45 at night (airplanes); 20 minutes for rotorcraft</td></tr>
-   <tr><th scope="row">IFR fuel {cfr('91.167')}</th><td>Fuel to the destination, then to the alternate, then 45 minutes at normal cruise (30 for helicopters)</td></tr>
-   <tr><th scope="row">When an alternate is needed {cfr('91.169')}</th><td>Unless the destination has an instrument approach and, from 1 hour before to 1 hour after arrival, the forecast is at least a 2,000 ft ceiling and 3 miles (airplanes)</td></tr>
-   <tr><th scope="row">Alternate weather {cfr('91.169')}</th><td>The alternate minima on its approach, or else 600 ft and 2 miles for a precision approach, 800 ft and 2 miles for a non-precision one, forecast for your arrival time</td></tr>
+   <tr><th scope="row">Fuel to carry</th><td>To the destination, or to the alternate if one is required, plus the reserve; with a visibility-only destination forecast, add an approach and missed approach there {afr('4.20.1 to 4.20.2')}</td><td>To the destination, or to the destination's approach fix and on to the alternate if one is required, plus 10% of the planned fuel {cnaf('4.8.5.1')}</td><td>IFR: to the destination, then the alternate, then 45 minutes {cfr('91.167')}</td></tr>
+   <tr><th scope="row">Reserve</th><td>10% of the planned flight time (at most 45 minutes, 30 for helicopters) or 20 minutes, whichever is greater; turbine aircraft at best endurance at 10,000 ft unless the command sets rates {afr('4.20.3')}</td><td>Never less than 20 minutes after final landing; turbine fixed-wing at maximum endurance at 10,000 ft. The aircraft's NATOPS manual sets type minimums {cnaf('4.8.5.1')}</td><td>VFR: 30 minutes by day, 45 at night (airplanes), 20 for rotorcraft {cfr('91.151')}</td></tr>
+   <tr><th scope="row">Alternate required</th><td>No compatible approach at the destination, or a forecast from 1 hour before to 1 hour after arrival, TEMPO included, below 2,000 ft and 3 miles (helicopters: 1,000 ft or 400 ft above minimums, and 2 miles), or crosswinds beyond the aircraft's limits {afr('4.16.1 to 4.16.2')}</td><td>Destination forecast below 3,000 ft and 3 miles from 1 hour before to 1 hour after arrival {cnaf('4.8.4.3')}</td><td>No approach, or forecast below 2,000 ft and 3 miles, 1 hour either side of arrival {cfr('91.169')}</td></tr>
+   <tr><th scope="row">Alternate weather</th><td>At least 1,000 ft or 500 ft above the lowest compatible minimums, and 2 miles or 1 mile above them, whichever is higher. Not usable if it reports no weather, all its approaches need an unmonitored navaid, or alternate use is not authorised {afr('4.16.4 to 4.16.5')}</td><td>Minimums plus 300 ft and 1 mile (non-precision) or plus 200 ft and ½ mile (precision); 3,000 ft and 3 miles if the destination is forecast below its minimums {cnaf('4.8.4.2 to 4.8.4.3')}</td><td>The approach's alternate minima, or else 600 ft and 2 miles (precision) or 800 ft and 2 miles (non-precision) {cfr('91.169')}</td></tr>
   </tbody>
  </table></div>
+ <p>Both services' manuals also count known traffic delays as time en route <a href="#source-cnaf">{cnaf('4.8.5.3')}</a>, and both call for an equal time point on long legs over water or desolate land where the type cannot refuel in flight <a href="#source-afman3">{afr('4.20.4')}</a>.</p>
  <p>Whichever rules apply, the shape is the same: fuel to the destination, then to an alternate if the weather calls for one, then a reserve. That is the shape of the BINGO in Figure 2.</p>
+ <p class="key"><strong>Key point:</strong> plan to your service's current rules and the aircraft's manual: the numbers differ, but every set adds the destination, the alternate when the forecast needs one, and a reserve.</p>
 
  <h2 id="etp">Long legs: the equal time point</h2>
  <p>On a long leg between suitable fields, as over water, work out the <Term>equal time point</Term>: where it takes as long to turn back as to go on. Compute it for contingencies such as a medical divert, an engine loss or a depressurisation, note it on the chart, and review the diversion fields as you pass it. It is not the midpoint, because it depends on the ground speeds. <a href="#source-afman">{af('13.5.2')}</a></p>
@@ -291,9 +299,12 @@ const lb = (x: number) => `${(Math.round(x / 10) * 10).toLocaleString('en-US')} 
  <h3>Military sources</h3>
  <p id="source-afman"><strong>[1] US Air Force, AFMAN 11-217 Volume 3, Supplemental Flight Information, 23 February 2009, certified current 9 April 2012.</strong> <a href="https://www.code7700.com/pdfs/usaf/afman11-217v3.pdf">Read on Code 7700's copy</a>, 3 November 2026, by paragraph: 3.1 to 3.7.1, the 60-to-1 rule and aviation calculations; 13.5.2, the equal time point. An Air Force manual; the arithmetic applies to any aircraft. A later edition exists on the Air Force e-Publishing site, which could not be read from the authoring environment.</p>
  <p id="source-jp"><strong>[2] US Joint Chiefs of Staff, JP 3-30, Command and Control for Joint Air Operations, 12 January 2010.</strong> <a href="https://www.bits.de/NRANEU/others/jp-doctrine/jp3_30(10).pdf">Read on the Berlin Information-center for Transatlantic Security's copy</a>, 3 November 2026, by printed page: I-3, III-21 to III-26 and GL-6 to GL-7. The joint publication for all four services. Later editions exist.</p>
+ <p id="source-afman3"><strong>[9] US Air Force, AFMAN 11-202 Volume 3, Flight Operations, 10 January 2022, incorporating Change 1 of 25 June 2026.</strong> <a href="https://static.e-publishing.af.mil/production/1/af_a3/publication/afman11-202v3/afman11-202v3.pdf">Published on the Air Force e-Publishing site</a>, which states no releasability restrictions; read 3 November 2026 from a copy supplied for this revision, by paragraph: 4.16, IFR alternate; 4.20, fuel requirements. The Air Force's general flight rules.</p>
+ <p id="source-cnaf"><strong>[10] US Navy, CNAF M-3710.7, NATOPS General Flight and Operating Instructions Manual, 5 May 2016.</strong> Read 3 November 2026 from a copy supplied for this revision, by paragraph: 4.8.4, weather criteria for filing, and 4.8.5, minimum fuel requirements (pp. 4-10 to 4-12). The Navy and Marine Corps general flight rules; summarised in this site's own words, as the manual restricts reproduction for nonmilitary use. Later editions may exist.</p>
+ <p id="source-gp"><strong>[11] National Geospatial-Intelligence Agency, DoD Flight Information Publication General Planning, effective 2 January 2020.</strong> Read 3 November 2026 from a copy supplied for this revision, p. 4-1, use of flight plans. Flight information publications are reissued on a cycle: use the current one.</p>
  <p id="source-brevity"><strong>[6] Air Land Sea Application Center, ATP 1-02.1 / MCRP 3-30B.1 / NTTP 6-02.1 / AFTTP 3-2.5, Multi-Service Brevity Codes, 28 May 2020, Change 1 of 2 April 2021,</strong> pp. 5 (BINGO) and 28 (JOKER), as quoted in the site's <a href={sitePath('encyclopedia/terminology/brevity/')}>brevity words</a>. The brevity publication for all four services; the calls are in <a href={radio}>Radio Procedures</a>.</p>
  <h3>Supplementary sources (US civil)</h3>
- <p id="source-phak"><strong>[3] Federal Aviation Administration, FAA-H-8083-25B, Pilot's Handbook of Aeronautical Knowledge.</strong> <a href="https://www.faa.gov/sites/faa.gov/files/2022-03/pilot_handbook.pdf">PDF</a>, read 3 November 2026, by printed page: 16-13 to 16-21, dead reckoning and flight planning.</p>
+ <p id="source-phak"><strong>[3] Federal Aviation Administration, FAA-H-8083-25B, Pilot's Handbook of Aeronautical Knowledge.</strong> <a href="https://www.faa.gov/sites/faa.gov/files/2022-03/pilot_handbook.pdf">PDF</a>, read 3 November 2026, by printed page: 16-13 and 16-16 to 16-20, dead reckoning and flight planning.</p>
  <p id="source-aim"><strong>[4] Federal Aviation Administration, Aeronautical Information Manual, chapter 5, section 1.</strong> <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap5_section_1.html">Read 3 November 2026</a>, paragraphs 5-1-1, 5-1-3, 5-1-6 and 5-1-7. US airspace rules, including those for military flights in it.</p>
  <p id="source-cfr"><strong>[5] 14 CFR part 91, §§ 91.151, 91.167 and 91.169.</strong> <a href="https://www.law.cornell.edu/cfr/text/14/91.167">Read on the Legal Information Institute's copy of the eCFR</a>, 3 November 2026. US civil rules, shown for comparison only.</p>
  <h3>Sim sources</h3>
@@ -301,7 +312,7 @@ const lb = (x: number) => `${(Math.round(x / 10) * 10).toLocaleString('en-US')} 
  <p id="source-dcs"><strong>[8] Eagle Dynamics, DCS User Manual (English, 2020).</strong> <a href="https://www.digitalcombatsimulator.com/upload/iblock/ed6/87v22jwd1xh51i3rgki944xsf503istq/DCS_User_Manual_EN_2020.pdf">DCS User Manual (PDF)</a>, read 3 November 2026, pp. 65, 109 and 179. A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/flight-planning-evidence.md">Flight Planning evidence</a>.</p>
  <p>Figures 1 to 3 and the worked sortie are original, invented examples, not reproductions of any publication's figure.</p>
- <p class="note">Applicability: written for pilots of every service. The method is generic; joint tasking is from the joint publication, the planning arithmetic from an Air Force manual, and the nav log, forms and NOTAMs from FAA publications that also govern military flights in US airspace. The Navy's and Air Force's general flight rules, the DoD flight information publication General Planning and Army planning publications could not be read for this revision, so service fuel reserves, alternate rules and form details are not given. Your service's rules, the aircraft's flight manual and current flight information publications govern. This revision is Drafted pending independent source-backed review.</p>
+ <p class="note">Applicability: written for pilots of every service. The method is generic; joint tasking is from the joint publication, the planning arithmetic from an Air Force manual, and the nav log, forms and NOTAMs from FAA publications that also govern military flights in US airspace. Service fuel reserve and alternate rules are shown for the Air Force and the Navy as examples; Army planning publications were not read for this revision. Your service's rules, the aircraft's flight manual and current flight information publications govern. This revision is Drafted pending independent source-backed review.</p>
 </SiteLayout>
 
 <script>import '../../../lessons/flight-planning/sortie-ui.mjs';</script>

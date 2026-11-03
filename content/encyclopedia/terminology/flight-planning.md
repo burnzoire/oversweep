@@ -56,6 +56,9 @@ terms:
   - term: DD Form 175
     definition: "The DoD Military Flight Plan, equivalent to the FAA's domestic form 7233-1, with its elements in the same order. In US controlled airspace DoD aircraft may file it, but flights on it may not be eligible for RNAV departures and arrivals."
     cite: [{ n: 4, page: "5-1-6" }, { n: 4, page: "5-1-7" }]
+  - term: DD Form 175-1
+    definition: "The DoD Flight Weather Briefing form, the standard written weather brief. Weather units may use it or a locally derived alternative; a verbal or written brief should cover much of its content."
+    cite: [{ n: 5, page: "1.6.1.2" }]
   - term: Military NOTAM
     definition: "A NOTAM originated by the US Air Force, Army, Marine Corps or Navy about a military or joint-use navigational aid or airport in the National Airspace System, published in the international NOTAM format."
     cite: [{ n: 4, page: "5-1-3" }]
@@ -134,13 +137,20 @@ sources:
     publisher: "Federal Aviation Administration"
     url: "https://www.faa.gov/sites/faa.gov/files/2022-03/pilot_handbook.pdf"
     accessed: "2026-11-03"
-    note: "By printed page: 8-9 airspeeds, 10-4 to 10-5 weight and balance, 11-3 pressure and density altitude, 13-5 to 13-9 weather briefings and reports, 16-13 to 16-21 dead reckoning and flight planning. US civil handbook, cited as the supplementary source."
+    note: "By printed page: 8-9 airspeeds, 10-4 to 10-5 weight and balance, 11-3 pressure and density altitude, 13-5 to 13-9 weather briefings and reports, 16-13 and 16-16 to 16-20 dead reckoning and flight planning. US civil handbook, cited as the supplementary source."
   - n: 4
     title: "Aeronautical Information Manual, chapter 5, section 1: Preflight"
     publisher: "Federal Aviation Administration"
     url: "https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap5_section_1.html"
     accessed: "2026-11-03"
     note: "By paragraph: 5-1-1 preflight preparation, 5-1-3 NOTAMs, 5-1-6 IFR flight plans, 5-1-7 military flight plans. US airspace rules."
+  - n: 5
+    title: "AFH 11-203 Volume 2 / TC 3-04.14-2, Weather for Aircrews — Products and Services"
+    publisher: "US Air Force and US Army"
+    date: "13 August 2015, incorporating Change 5 of 13 December 2022"
+    url: "https://static.e-publishing.af.mil/production/1/af_a3/publication/afh11-203v2/afh11-203v2.pdf"
+    accessed: "2026-11-03"
+    note: "By paragraph: 1.6.1.2, DD Form 175-1. No releasability restrictions. Read from a copy supplied for this revision, as the e-Publishing site refused the authoring environment."
 ---
 
 ## The words of flight planning
