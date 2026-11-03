@@ -20,6 +20,8 @@ const COVER_TEXT = { FEW: '1 to 2 eighths', SCT: '3 to 4 eighths', BKN: '5 to 7 
 const WX = new RegExp(`^(\\+|-|VC)?(${Object.keys(DESCRIPTOR).join('|')})?((?:${Object.keys(PHENOMENA).join('|')})+)$`);
 
 function weatherMeaning(tok) {
+  // +FC is its own code, not a heavy funnel cloud.
+  if (tok === '+FC') return 'Tornado or waterspout';
   const m = WX.exec(tok);
   if (!m) return undefined;
   const ph = m[3].match(/.{2}/g).map((p) => PHENOMENA[p]).join(' and ');
@@ -50,10 +52,12 @@ export function decodeToken(tok, ctx = {}) {
     return { kind: 'wind', text: `Wind ${m[1] === 'VRB' ? 'variable' : `from ${m[1]}° true`} at ${Number(m[2])} kt${m[3] ? `, gusting ${Number(m[3])}` : ''}`, wind: { from: m[1] === 'VRB' ? null : Number(m[1]), kt: Number(m[2]), gust: m[3] ? Number(m[3]) : null } };
   }
   if ((m = /^(\d{3})V(\d{3})$/.exec(tok))) return { kind: 'wind', text: `Wind direction varying between ${m[1]}° and ${m[2]}°` };
-  if ((m = /^(P|M)?(\d+\/\d+|\d+)SM$/.exec(tok))) {
-    const v = m[2].includes('/') ? m[2].split('/').reduce((a, b) => Number(a) / Number(b)) : Number(m[2]);
-    const words = m[2].replace('1/2', '½').replace('3/4', '¾').replace('1/4', '¼');
-    return { kind: 'visibility', text: `Visibility ${m[1] === 'P' ? 'more than ' : m[1] === 'M' ? 'less than ' : ''}${words} statute mile${v > 1 || m[1] === 'P' ? 's' : ''}`, vis: v + (m[1] === 'P' ? 0.1 : 0) };
+  if ((m = /^(P|M)?(?:(\d+) )?(\d+\/\d+|\d+)SM$/.exec(tok))) {
+    const frac = m[3].includes('/') ? m[3].split('/').reduce((a, b) => Number(a) / Number(b)) : Number(m[3]);
+    const v = (m[2] ? Number(m[2]) : 0) + frac;
+    const words = `${m[2] ? m[2] : ''}${m[3].replace('1/2', '½').replace('3/4', '¾').replace('1/4', '¼')}`;
+    const visQ = m[1] === 'P' ? 'more' : m[1] === 'M' ? 'less' : null;
+    return { kind: 'visibility', text: `Visibility ${visQ ? `${visQ} than ` : ''}${words} statute mile${v > 1 || visQ === 'more' ? 's' : ''}`, vis: v, visQ };
   }
   if ((m = /^R(\d{2}[LRC]?)\/(\d{4})FT$/.exec(tok))) return { kind: 'rvr', text: `Runway visual range on runway ${m[1]}: ${fmtFt(Number(m[2]))}` };
   if ((m = /^(FEW|SCT|BKN|OVC)(\d{3})(CB|TCU)?$/.exec(tok))) {
@@ -61,6 +65,7 @@ export function decodeToken(tok, ctx = {}) {
     const type = m[3] === 'CB' ? ', cumulonimbus' : m[3] === 'TCU' ? ', towering cumulus' : '';
     return { kind: 'sky', text: `${COVER[m[1]][0][0].toUpperCase()}${COVER[m[1]][0].slice(1)} (${COVER_TEXT[m[1]]}) at ${fmtFt(ft)} above ground${type}`, layer: { cover: m[1], ft } };
   }
+  if ((m = /^(FEW|SCT|BKN|OVC|VV)\/\/\/$/.exec(tok))) return { kind: 'sky', text: m[1] === 'VV' ? 'Sky obscured, vertical visibility not measured' : `${COVER[m[1]][0][0].toUpperCase()}${COVER[m[1]][0].slice(1)} at a height not measured`, layer: { cover: m[1], ft: null } };
   if ((m = /^VV(\d{3})$/.exec(tok))) return { kind: 'sky', text: `Sky obscured, vertical visibility ${fmtFt(hundreds(m[1]))}`, layer: { cover: 'VV', ft: hundreds(m[1]) } };
   if (tok === 'SKC' || tok === 'CLR') return { kind: 'sky', text: 'Sky clear' };
   if ((m = /^(M?\d{2})\/(M?\d{2})$/.exec(tok))) {
@@ -75,13 +80,28 @@ export function decodeToken(tok, ctx = {}) {
 }
 
 // The ceiling: the lowest broken or overcast layer, or a vertical visibility.
+// null means no ceiling; undefined means unknown (a ceiling layer whose
+// height was not reported, which could be the lowest).
 export function ceilingOf(layers) {
   const c = layers.filter((l) => l.cover === 'BKN' || l.cover === 'OVC' || l.cover === 'VV').map((l) => l.ft);
+  if (c.some((ft) => ft === null)) return undefined;
   return c.length ? Math.min(...c) : null;
 }
 
+// Split a report into groups, keeping a mixed-number visibility ("1 1/2SM")
+// together as one group.
+export function tokenize(text) {
+  const raw = text.trim().toUpperCase().split(/\s+/).filter(Boolean);
+  const out = [];
+  for (let i = 0; i < raw.length; i++) {
+    if (/^\d$/.test(raw[i]) && /^\d\/\dSM$/.test(raw[i + 1] ?? '')) { out.push(`${raw[i]} ${raw[i + 1]}`); i++; } else out.push(raw[i]);
+  }
+  return out;
+}
+const visOf = (parts) => { const p = parts.find((x) => x.vis !== undefined); return p ? { vis: p.vis, visQ: p.visQ } : { vis: null, visQ: null }; };
+
 export function decodeMetar(text) {
-  const toks = text.trim().toUpperCase().split(/\s+/).filter(Boolean);
+  const toks = tokenize(text);
   let remarks = false;
   const parts = toks.map((tok, index) => {
     const d = decodeToken(tok, { remarks, index });
@@ -89,13 +109,13 @@ export function decodeMetar(text) {
     return { tok, ...d };
   });
   const layers = parts.filter((p) => p.layer).map((p) => p.layer);
-  return { parts, ceiling: ceilingOf(layers), vis: parts.find((p) => p.vis !== undefined)?.vis ?? null };
+  return { parts, ceiling: ceilingOf(layers), ...visOf(parts) };
 }
 
 // TAF: split into the base forecast and its change groups, each with its
 // start and end in hours from the start of the valid period.
 export function decodeTaf(text) {
-  const toks = text.trim().toUpperCase().split(/\s+/).filter(Boolean);
+  const toks = tokenize(text);
   const vi = toks.findIndex((t) => /^\d{4}\/\d{4}$/.test(t));
   if (vi < 0) throw new Error('No valid period');
   const [d1, h1, d2, h2] = toks[vi].match(/\d{2}/g).map(Number);
@@ -125,7 +145,7 @@ export function decodeTaf(text) {
   for (const g of groups) {
     g.parts = g.toks.map((tok) => ({ tok, ...decodeToken(tok) }));
     g.ceiling = ceilingOf(g.parts.filter((p) => p.layer).map((p) => p.layer));
-    g.vis = g.parts.find((p) => p.vis !== undefined)?.vis ?? null;
+    Object.assign(g, visOf(g.parts));
   }
   return { station: toks[vi - 2], issued: toks[vi - 1], hours: end, groups };
 }

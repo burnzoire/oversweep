@@ -15,7 +15,8 @@ const html = (tag, props = {}, ...kids) => { const n = Object.assign(document.cr
 const para = (text, cls) => html('p', { textContent: text, className: cls ?? '' });
 const ui = (root) => ({ prompt: root.querySelector('[data-prompt]'), choices: root.querySelector('[data-choices]'), result: root.querySelector('[data-result]'), next: root.querySelector('[data-new]') });
 const ft = (x) => `${Math.round(x).toLocaleString('en-US')} ft`;
-const visText = (v) => (v === null ? 'not given' : v > 6 ? 'over 6 SM' : `${v} SM`);
+const visText = (d) => (d.vis === null ? 'not given' : `${d.visQ ? `${d.visQ} than ` : ''}${Number(d.vis.toFixed(2))} SM`);
+const ceilText = (c, none) => (c === undefined ? 'unknown (a layer height not reported)' : c === null ? none : ft(c));
 
 function bindRanges(root, onChange) {
   const inputs = [...root.querySelectorAll('input[type="range"]')];
@@ -41,7 +42,7 @@ function setupMetar(root) {
     const d = decodeMetar(input.value);
     buttons.forEach(([m, b]) => b.setAttribute('aria-pressed', String(m.text === input.value.trim().toUpperCase())));
     tbody.replaceChildren(...d.parts.map((p) => html('tr', { className: `k-${p.kind}` }, html('th', { scope: 'row', textContent: p.tok }), html('td', { textContent: p.kind }), html('td', { textContent: p.text }))));
-    out.replaceChildren(para(d.parts.length ? `Ceiling: ${d.ceiling === null ? 'none (no broken or overcast layer)' : ft(d.ceiling)}. Visibility: ${visText(d.vis)}.` : 'Type or choose a report.'));
+    out.replaceChildren(para(d.parts.length ? `Ceiling: ${ceilText(d.ceiling, 'none (no broken or overcast layer)')}. Visibility: ${visText(d)}.` : 'Type or choose a report.'));
   }
   input.addEventListener('input', draw);
   input.value = METARS[0].text;
@@ -56,7 +57,7 @@ function setupTaf(root) {
   const get = bindRanges(root, draw);
   const X0 = 40, X1 = 610, start = Number(taf.groups.length && TAF_EXAMPLE.match(/(\d{2})(\d{2})\/\d{4}/)[2]);
   const xOf = (h) => X0 + (h / taf.hours) * (X1 - X0);
-  const label = (g) => `${g.ceiling === null ? 'no ceiling' : `ceiling ${g.ceiling.toLocaleString('en-US')}`}, ${visText(g.vis)}`;
+  const label = (g) => `${g.ceiling === null ? 'no ceiling' : g.ceiling === undefined ? 'ceiling unknown' : `ceiling ${g.ceiling.toLocaleString('en-US')}`}, ${visText(g)}`;
   function draw() {
     const eta = get('taf-eta');
     const items = [el('rect', { class: 'frame', x: 1, y: 1, width: 638, height: 238 }), el('text', { class: 'lbl', x: 14, y: 22 }, `${taf.station} TAF, VALID ${taf.hours} HOURS`)];
@@ -64,12 +65,12 @@ function setupTaf(root) {
     items.push(el('text', { class: 'lbl small', x: X0, y: 48 }, 'PREVAILING (BASE AND FM)'), el('text', { class: 'lbl small', x: X0, y: 128 }, 'TEMPO AND PROB30'));
     for (const g of taf.groups) {
       const prevailing = g.type === 'BASE' || g.type === 'FM';
-      const y = prevailing ? 56 : 136, low = g.ceiling !== null && g.ceiling < 3000 || (g.vis !== null && g.vis < 5);
+      const y = prevailing ? 56 : 136, low = g.ceiling !== null && g.ceiling !== undefined && g.ceiling < 3000 || (g.vis !== null && g.vis < 5);
       items.push(el('rect', { class: low ? 'mine' : 'shade', x: xOf(g.start) + 1, y, width: Math.max(4, xOf(g.end) - xOf(g.start) - 2), height: 46, stroke: 'currentColor', 'stroke-width': 1 }));
       const cls = low ? 'lbl small inv' : 'lbl small';
       items.push(el('text', { class: cls, x: xOf(g.start) + 5, y: y + 18 }, g.type === 'BASE' ? 'Base' : g.type));
       const w = xOf(g.end) - xOf(g.start);
-      if (w > 60) items.push(el('text', { class: cls, x: xOf(g.start) + 5, y: y + 34 }, w > 150 ? label(g) : `${g.ceiling === null ? '—' : g.ceiling.toLocaleString('en-US')} / ${visText(g.vis)}`));
+      if (w > 60) items.push(el('text', { class: cls, x: xOf(g.start) + 5, y: y + 34 }, w > 150 ? label(g) : `${g.ceiling == null ? '—' : g.ceiling.toLocaleString('en-US')} / ${visText(g)}`));
     }
     items.push(el('line', { class: 'ln on', x1: xOf(eta), y1: 34, x2: xOf(eta), y2: 196 }), el('text', { class: 'lbl call', x: xOf(eta), y: 226, 'text-anchor': 'middle' }, `ETA ${String((start + eta) % 24).padStart(2, '0')}00Z`));
     svg.replaceChildren(...items);

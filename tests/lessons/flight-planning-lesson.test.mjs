@@ -80,3 +80,17 @@ test('weight and balance: CG = total moment ÷ total weight', () => {
   assert.ok(balance({ rear: 0 }).tooAft);
   assert.ok(balance({ rear: 0, pod: 100 }).inLimits);
 });
+
+test('decoder: mixed visibility, qualifiers, +FC and unknown ceilings', () => {
+  const ex = decodeMetar('METAR KXYZ 030955Z VRB04KT 1 1/2SM BR SCT005 OVC010 12/11 A3001');
+  near(ex.vis, 1.5, 1e-9);
+  assert.equal(ex.ceiling, 1000);
+  assert.ok(!ex.parts.some((p) => p.kind === 'unknown'));
+  const good = decodeMetar('METAR KXYZ 031455Z 27012KT 10SM FEW040 21/08 A3002');
+  assert.equal(good.vis, 10);
+  assert.equal(good.visQ, null);
+  const low = decodeMetar('METAR KXYZ 030812Z 00000KT M1/4SM FG VV/// 09/09 A2995');
+  assert.equal(low.visQ, 'less');
+  assert.equal(low.ceiling, undefined);
+  assert.equal(decodeMetar('METAR KXYZ 032255Z 31018KT 1SM +FC BKN015 A2968').parts.find((p) => p.tok === '+FC').text, 'Tornado or waterspout');
+});
