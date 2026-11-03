@@ -1357,6 +1357,39 @@
     "summary": "The high-speed anti-radiation missile that hunts air defence radars, announced with the call Magnum."
   },
   {
+    "id": "encyclopedia.ordnance.adm-141",
+    "slug": "adm-141",
+    "category": "ordnance",
+    "revision": 1,
+    "title": "ADM-141 TALD",
+    "designation": "ADM-141",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A gliding decoy that looks like an attacking aircraft to enemy radar, launched by the hundred on Desert Storm's first night."
+  },
+  {
+    "id": "encyclopedia.ordnance.adm-160",
+    "slug": "adm-160",
+    "category": "ordnance",
+    "revision": 1,
+    "title": "ADM-160 MALD",
+    "designation": "ADM-160",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A small jet-powered decoy that imitates aircraft to air defence radars; the MALD-J version jams them too."
+  },
+  {
+    "id": "encyclopedia.ordnance.alarm",
+    "slug": "alarm",
+    "category": "ordnance",
+    "revision": 1,
+    "title": "ALARM",
+    "designation": "ALARM",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Britain's anti-radiation missile, which can loiter under a parachute until a silent radar switches back on."
+  },
+  {
     "id": "encyclopedia.ordnance.agm-45",
     "slug": "agm-45",
     "category": "ordnance",
@@ -1663,6 +1696,17 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "Types 1, 2 and 3 control, bomb on target and bomb on coordinate, the 9-line and 5-line briefs, readbacks, and the laser and infrared marking calls."
+  },
+  {
+    "id": "encyclopedia.terminology.sead",
+    "slug": "sead",
+    "category": "terminology",
+    "revision": 1,
+    "title": "SEAD and DEAD terms",
+    "designation": "JP 3-01 · USNA",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Destructive and disruptive suppression, localized and opportune SEAD, engagement zones, the radar horizon, burnthrough and the jammer geometries."
   },
   {
     "id": "encyclopedia.theatres.middle-east",

@@ -1,0 +1,390 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
+import { getModule } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import Term from '../../../components/Term.astro';
+import { JAMMERS, PACKAGE_STEPS, SCENE, horizonNm } from '../../../lessons/sead/lesson-model.mjs';
+const sead = getModule('sead-dead');
+const core = [
+ ['example', 'One package, start to finish'], ['what', 'What SEAD and DEAD are'], ['iads', 'The air defence you face'],
+ ['avoid', 'Staying out of reach'], ['suppress', 'The suppression methods'], ['package', 'SEAD in a strike package'], ['recap', 'Key points'],
+];
+const reference = [
+ ['arms', 'Anti-radiation missiles and decoys'], ['jamming', 'Jamming in more depth'], ['history', 'SEAD in combat'],
+ ['sims', 'In the sim'], ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+];
+// [1] JP 3-01, Countering Air and Missile Threats (23 March 2012), by printed page.
+// [2] US Naval Academy, Fundamentals of Naval Weapons Systems, ch. 11, by section.
+// [3] Wikipedia, Suppression of Enemy Air Defenses (secondary). [4] Wikipedia, Radar horizon (secondary).
+// [5] DCS F-16C Viper guide and [6] Falcon BMS 4.38 Training Manual, sim crossover only.
+const j = (page: string) => `[1, ${/to|,/.test(page) ? 'pp.' : 'p.'} ${page}]`;
+const u = (sec: string) => `[2, ${sec}]`;
+const wd = sitePath('manual/air-to-ground-operations/weapons-delivery/');
+const cas = sitePath('manual/air-to-ground-operations/close-air-support/');
+const threats = sitePath('encyclopedia/threat-systems/');
+const glossary = sitePath('encyclopedia/terminology/sead/');
+const hz = (ft: number) => horizonNm(ft).toFixed(0);
+---
+<SiteLayout title={sead.title} activeSection="manual" activeSubject="air-to-ground-operations" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Air-to-Ground Operations',href:sitePath('manual/air-to-ground-operations/')},{label:sead.title}]}>
+ <section class="status-panel" data-module-id={sead.id} data-module-revision={sead.revision}>
+  <h2>{sead.maturity}</h2>
+  <p>Module revision {sead.revision} · How surface air defences are avoided, suppressed and destroyed so a strike gets through. For aircrew of every service, from the joint counterair publication.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
+ </nav>
+
+ <p class="lede">A radar-guided surface-to-air missile battery has to see you before it can shoot you. Most of SEAD follows from that: stay where its radars cannot see, blind them, make them waste their attention on things that are not you, make the operators afraid to switch on, or destroy them. You do not have to kill every site. In the 1991 Gulf War the plan was to frighten the operators into leaving their radars off. <a href="#source-jp">{j('IV-4')}</a></p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>say what <Term>SEAD</Term> and <Term>DEAD</Term> are, and name the three categories and the two means of SEAD;</li>
+  <li>list the parts of an <Term>IADS</Term> that SEAD attacks;</li>
+  <li>explain how the <Term>radar horizon</Term>, <Term>terrain masking</Term>, engagement zones and standoff keep an aircraft out of reach;</li>
+  <li>compare the suppression methods: <Term id="ARM">anti-radiation missiles</Term>, jamming, <Term>chaff</Term>, decoys and destructive attack;</li>
+  <li>explain <Term>burnthrough</Term> and the three jammer geometries;</li>
+  <li>describe how SEAD protects a strike package, and why emitter identification and rules of engagement matter.</li>
+ </ol>
+ <p class="note">This module explains principles; one aircraft's or one unit's defensive tactics are outside it. How to fly the attack itself is in <a href={wd}>Weapons Delivery</a>. The worked package is invented. The joint publication quoted is the 2012 edition; theater rules of engagement, special instructions (SPINS), your unit's procedures and the current edition govern.</p>
+
+ <h2 id="example">One package, start to finish</h2>
+ <p>Here is one invented strike against a target inside a SAM battery's reach, flown with localized suppression. Every step is a principle from the sources; the places, numbers and forces are made up. Step through Figure 1 to see where everyone is.</p>
+ <ol class="exchange script">
+  {PACKAGE_STEPS.map((s) => <li><span class="who">{s.phase}</span> <span class="said">{s.text} <a class="step" href={s.href}>Why</a></span></li>)}
+ </ol>
+ <section class="lesson figure-lesson" data-lesson="package" aria-labelledby="package-title">
+  <h3 id="package-title" class="fig-title">Figure 1 — The package, played out</h3>
+  <p>Step through the package above. The shaded circle is the invented battery's engagement zone; a highlighted symbol is a radar transmitting or an aircraft inside the zone.</p>
+  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 320" role="img" aria-label="Plan view: a strike package runs in from the west toward a target inside a SAM battery's engagement zone, with a stand-off jammer to the northwest, a suppression flight, escorts and strikers"></svg></div>
+  <div class="buttons stepper"><button type="button" data-back>Back</button><button type="button" data-next>Next</button><span data-count role="status" aria-live="polite"></span></div>
+  <p class="no-js">Interactive figure unavailable. The package runs in low from the west. A stand-off jammer orbits outside the battery's {SCENE.sam.wezNm} NM engagement zone and jams the early-warning radar. The suppression flight launches decoys, the battery's radar comes on to track them, and the flight fires anti-radiation missiles (MAGNUM). The radar goes silent, the strikers attack the target inside the zone and egress, and later a separate flight destroys the battery with a stand-off weapon.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">An invented example, drawn to scale. Each step's source is given with it; the positions, the battery and its {SCENE.sam.wezNm} NM engagement zone are illustrative, not any real system's.</p>
+ </section>
+ <p class="key"><strong>Key point:</strong> in localized suppression the SEAD effort exists to get one package through one defended area at one time; whether the battery is destroyed or just kept silent, the strikers are protected while they pass.</p>
+
+ <h2 id="what">What SEAD and DEAD are</h2>
+ <p><Term>SEAD</Term> is activity that neutralizes, destroys or temporarily degrades surface-based enemy air defences by destructive or disruptive means. It must be part of all planning and air operations, though how much is needed depends on the objectives, the systems and the threat. <a href="#source-jp">{j('IV-12')}</a> Joint doctrine has two means and three categories:</p>
+ <div class="table-scroll" role="region" aria-label="The two means of SEAD" tabindex="0"><table>
+  <caption>The two means of SEAD <a href="#source-jp">{j('IV-13')}</a></caption>
+  <thead><tr><th scope="col">Means</th><th scope="col">What it does</th><th scope="col">Examples</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>Destructive means</Term></th><td>Destroys the system or its operators</td><td>Anti-radiation missiles, bombs, missiles, artillery, special operations forces</td></tr>
+   <tr><th scope="row"><Term>Disruptive means</Term>, active</th><td>Temporarily denies, degrades, deceives, delays or neutralizes</td><td><Term>EA</Term>, jamming, electromagnetic deception, chaff, flares, decoys, and tactics such as deception, avoidance or evasive flight profiles</td></tr>
+   <tr><th scope="row"><Term>Disruptive means</Term>, passive</th><td>The same, without transmitting or attacking</td><td><Term>EMCON</Term>, camouflage, infrared shielding, warning receivers, stealth</td></tr>
+  </tbody>
+ </table></div>
+ <div class="table-scroll" role="region" aria-label="The three categories of SEAD" tabindex="0"><table>
+  <caption>The three categories of SEAD <a href="#source-jp">{j('IV-13 to IV-15')}</a></caption>
+  <thead><tr><th scope="col">Category</th><th scope="col">Scope</th><th scope="col">Example</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>AOR/JOA-wide suppression</Term></th><td>The whole enemy air defence system, often for the campaign; may have priority over localized suppression</td><td>Destroying command and control nodes, which usually disrupts an IADS most</td></tr>
+   <tr><th scope="row"><Term>Localized suppression</Term></th><td>Specific targets or routes, for a specific time; planned, or immediate (requested much like immediate close air support)</td><td>SEAD aircraft escorting a strike package, as in Figure 1</td></tr>
+   <tr><th scope="row"><Term>Opportune suppression</Term></th><td>Unplanned</td><td>Aircrew self-defense; a target of opportunity; a site that moves from its planned location</td></tr>
+  </tbody>
+ </table></div>
+ <p><Term>DEAD</Term>, destruction of enemy air defences, is used in some contexts for physically destroying air defence targets, while SEAD sorties are those that discourage the enemy from using its radars for fear of losing them. <a href="#source-wiki">[3]</a> Joint doctrine has no separate DEAD category: destruction is SEAD's destructive means. <a href="#source-jp">{j('IV-13')}</a></p>
+ <details class="more"><summary>Who does SEAD</summary>
+  <p>Dedicated aircraft with special detection and electronic countermeasures equipment, expendables and <Term id="ARM">ARMs</Term> are best at it, and in major operations are normally too valuable for missions without a SEAD requirement. Other fighter and multi-role crews are normally trained to support it. Dedicated SEAD forces may be backed by aircraft with guided or unguided munitions. Land forces can use electronic warfare, attack helicopters and direct or indirect fire, including artillery and naval gunfire; special operations forces can attack sites or guide air attacks. <a href="#source-jp">{j('IV-12 to IV-13, IV-15')}</a></p>
+ </details>
+ <p class="key"><strong>Key point:</strong> SEAD is any action, destructive or disruptive, that reduces what surface air defences can do; DEAD is the name some use for its destructive half.</p>
+
+ <section class="lesson quiz-lesson" data-lesson="methods" aria-labelledby="methods-title">
+  <h3 id="methods-title">Quiz: categories, means and methods</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next question</button></div>
+ </section>
+
+ <h2 id="iads">The air defence you face</h2>
+ <p>Air defences are normally tied into an <Term>IADS</Term>, and no two are alike: each adversary's must be studied for its strengths, weaknesses and especially its seams in coverage. <a href="#source-jp">{j('IV-12')}</a> SEAD attacks every part of it: <a href="#source-jp">{j('IV-12')}</a></p>
+ <ul>
+  <li>command and control nodes and centres;</li>
+  <li>SAM sites, and the vehicles and bunkers that carry and store the missiles;</li>
+  <li>anti-aircraft artillery;</li>
+  <li>early-warning, fire-control and ground-controlled intercept radars;</li>
+  <li>the people who operate and maintain them.</li>
+ </ul>
+ <p>A defence is built in layers so that it gets several chances, starting as far out as possible: aircraft, long- and medium-range SAMs, then short-range systems and guns, with early warning, decoys, jammers and chaff of its own. <a href="#source-jp">{j('V-2')}</a> The <a href={threats}>threat systems</a> in the Encyclopedia describe the SAMs you are likely to meet, from the <Term record="sa-2">SA-2</Term> to the <Term record="sa-10">SA-10</Term> and <Term record="sa-15">SA-15</Term>, with their radars and warning-receiver symbols.</p>
+ <p class="key"><strong>Key point:</strong> the radars and the network that links them are what make the missiles dangerous, which is why most SEAD methods aim at the radars and the command nodes.</p>
+
+ <h2 id="avoid">Staying out of reach</h2>
+ <p>The first defence against a SAM is not to be where it can see or reach you. Aircraft may use terrain or the <Term>radar horizon</Term> to hide, and take a longer route if it avoids alerting the defences; that can be worth the fuel, time and lighter weapon load. <a href="#source-usna">{u('11.2.3.4')}</a> Escorts and the aircraft they protect avoid surface air defences altogether where they can. <a href="#source-jp">{j('IV-17')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Ways to stay out of reach" tabindex="0"><table>
+  <caption>Ways to stay out of reach</caption>
+  <thead><tr><th scope="col">Method</th><th scope="col">How it works</th><th scope="col">The cost</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>Radar horizon</Term></th><td>The earth's curve hides a low aircraft from a distant radar. With normal refraction, a radar on a 75 ft mast sees to about 12 miles over the sea, one at a mile up about 102. <a href="#source-rh">[4]</a></td><td>Low flying, where guns and short-range missiles are most dangerous <a href="#source-wiki">[3]</a></td></tr>
+   <tr><th scope="row"><Term>Terrain masking</Term></th><td>A ridge between you and the radar blocks its line of sight <a href="#source-usna">{u('11.2.3.4')}</a></td><td>Needs terrain on the right side, and the same low altitude</td></tr>
+   <tr><th scope="row">Routing</th><td>A non-direct route around the defences <a href="#source-usna">{u('11.2.3.4')}</a></td><td>Flight time, fuel and weapon load</td></tr>
+   <tr><th scope="row">Standoff</th><td>A weapon released from outside the defence's reach, such as the <Term record="agm-154">AGM-154 JSOW</Term>, which threatens all but the longest-range missiles <a href="#source-wiki">[3]</a></td><td>Needs a standoff weapon and good target coordinates</td></tr>
+  </tbody>
+ </table></div>
+ <p>Joint doctrine organises an air defence into engagement zones: a <Term>WEZ</Term> is airspace in which one weapon system is normally responsible for engagements, a <Term>MEZ</Term> one for surface-to-air missiles, split into high- and low-altitude zones and short-range zones inside them. <a href="#source-jp">{j('V-10 to V-11')}</a> Those are friendly air defence terms, but the same idea, the airspace a system can engage, is how you plan around an enemy battery.</p>
+ <section class="lesson figure-lesson" data-lesson="horizon" aria-labelledby="horizon-title">
+  <h3 id="horizon-title" class="fig-title">Figure 2 — Who can see whom</h3>
+  <p>Move the aircraft and change the radar's antenna height. The figure works out the line of sight over a smooth earth, allowing for normal refraction, and with an optional ridge.</p>
+  <div class="controls">
+   <label for="hz-mast">Radar antenna height <output for="hz-mast"></output></label><input id="hz-mast" name="mast" type="range" min="10" max="300" step="10" value="50" />
+   <label for="hz-alt">Your height above the ground <output for="hz-alt"></output></label><input id="hz-alt" name="alt" type="range" min="100" max="10000" step="100" value="1000" />
+   <label for="hz-range">Your range from the radar <output for="hz-range"></output></label><input id="hz-range" name="range" type="range" min="2" max="60" step="1" value="30" />
+   <label class="check"><input id="hz-ridge" name="ridge" type="checkbox" /> A 1,200 ft ridge 12 NM from the radar</label>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 2, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 260" role="img" aria-label="Side view of a radar, the curved ground and an aircraft, with the line of sight between them"></svg></div>
+  <p class="no-js">Interactive figure unavailable. A radar on a 50 ft mast has a horizon of about {hz(50)} NM; an aircraft at 1,000 ft has its own of about {hz(1000)} NM, so over smooth ground the radar sees it out to about {Number(hz(50)) + Number(hz(1000))} NM. At 200 ft the aircraft's horizon is about {hz(200)} NM, and it is hidden beyond about {Number(hz(50)) + Number(hz(200))} NM.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Each horizon is √(2hR) with an effective earth radius R of 4/3 the real one <a href="#source-rh">[4]</a>; two horizons add. Heights are exaggerated on the drawing. Real terrain, ducting and the radar's power and clutter rejection all change the answer; this shows the geometry only.</p>
+ </section>
+ <p class="key"><strong>Key point:</strong> a radar's view is bounded by geometry: low aircraft and terrain hide each other, and standoff weapons let you attack without entering the battery's reach at all.</p>
+
+ <h2 id="suppress">The suppression methods</h2>
+ <p>When you cannot stay out of reach, the defence has to be suppressed. These are the tools joint doctrine names, with the trade-offs from the sources. <a href="#source-jp">{j('IV-12 to IV-13')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Suppression methods compared" tabindex="0"><table>
+  <caption>Suppression methods</caption>
+  <thead><tr><th scope="col">Method</th><th scope="col">What it does</th><th scope="col">Gains</th><th scope="col">Costs and limits</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term id="ARM">Anti-radiation missile</Term></th><td>Homes passively on a radar's transmissions <a href="#source-jp">{j('GL-8')}</a></td><td>A small warhead can destroy the antenna and cripple the system; the threat alone makes operators switch off <a href="#source-wiki">[3]</a></td><td>Early ARMs were defeated by switching off; later ones remember where the source was <a href="#source-wiki">[3]</a></td></tr>
+   <tr><th scope="row">Noise jamming</th><td>Swamps the radar receiver so the echo is lost <a href="#source-usna">{u('11.2.2.5')}</a></td><td>Denies the radar your range</td><td>Shows your bearing and that you are hostile; the radar burns through at short range</td></tr>
+   <tr><th scope="row"><Term>Deception jamming</Term></th><td>Returns false echoes so the radar measures the wrong range or bearing <a href="#source-usna">{u('11.2.2.8')}</a></td><td>Needs much less power than noise jamming</td><td>Needs a sophisticated repeater matched to the radar</td></tr>
+   <tr><th scope="row"><Term>Chaff</Term></th><td>Clouds of metallic dipoles that reflect the radar, as false targets or a corridor <a href="#source-usna">{u('11.2.2.12')}</a></td><td>Cheap; a little can make an echo as large as a bomber</td><td>Radars that reject slow clutter, such as pulse-Doppler, keep tracking a moving target inside it</td></tr>
+   <tr><th scope="row"><Term>Decoy</Term></th><td>An unmanned aircraft, such as the <Term record="adm-141">TALD</Term> or <Term record="adm-160">MALD</Term>, that looks like an attacker to the radar <a href="#source-wiki">[3]</a></td><td>Takes shots meant for manned aircraft and makes radars reveal themselves</td><td>One more thing to carry, plan and time</td></tr>
+   <tr><th scope="row">Destructive attack</th><td>Bombs or missiles on the site, its radars or its command post <a href="#source-jp">{j('IV-13')}</a></td><td>Permanent, until the enemy repairs or replaces it</td><td>The site must be found, and the attacker may have to enter its reach</td></tr>
+  </tbody>
+ </table></div>
+ <p class="key"><strong>Key point:</strong> every method trades something; disruption is temporary, destruction needs the site found and reached, and the methods work best combined, as in Figure 1.</p>
+
+ <h2 id="package">SEAD in a strike package</h2>
+ <p>SEAD assets are often used with other missions, such as air interdiction, offensive counterair attack or airborne operations, whenever surface air defences are a factor. <a href="#source-jp">{j('IV-12')}</a> In localized suppression the SEAD aircraft escort the others through the defended sector. <a href="#source-jp">{j('IV-13')}</a> A package may also have <Term>fighter escort</Term> against enemy fighters; its job is to protect the strikers, not to chase kills, and it must not be drawn off by diversions or decoys. If SAM or AAA threats cannot be avoided, the package needs SEAD support. <a href="#source-jp">{j('IV-16 to IV-17')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Roles in a package" tabindex="0"><table>
+  <caption>Who does what in Figure 1's package</caption>
+  <thead><tr><th scope="col">Role</th><th scope="col">Job</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Strikers</th><td>Attack the package's target</td></tr>
+   <tr><th scope="row">SEAD flight</th><td>Escort the strikers through the defended sector, suppressing the surface air defences that threaten them <a href="#source-jp">{j('IV-13')}</a></td></tr>
+   <tr><th scope="row">Jammer</th><td>Blind early-warning, intercept and tracking radars, and force the system into uncoordinated, autonomous operation <a href="#source-jp">{j('IV-16')}</a></td></tr>
+   <tr><th scope="row">Escort fighters</th><td>Protect the package from enemy fighters <a href="#source-jp">{j('IV-17')}</a></td></tr>
+  </tbody>
+ </table></div>
+ <p><strong>Asking for it.</strong> A unit asking for air support must name the known or suspected air defences that could threaten the mission, and use its own suppression first; what it cannot cover goes up the chain to the joint force air component commander. <a href="#source-jp">{j('IV-14')}</a> Aircrew who find a site they cannot attack, because of mission priorities, weapons or the SEAD rules of engagement, pass it to the agency controlling their mission so someone else can target it. <a href="#source-jp">{j('IV-15')}</a></p>
+ <p><strong>Not hitting friends.</strong> Rules of engagement for opportune suppression exist because SEAD needs correct identification, above all when firing <Term id="ARM">ARMs</Term> at unknown or spurious signals. <a href="#source-jp">{j('IV-14')}</a> Friendly emitters that are not identified to SEAD crews may look unknown or hostile and be engaged, and during intense SEAD friendly forces have been attacked this way; the <Term>JRFL</Term> lists the friendly frequencies to protect. <a href="#source-jp">{j('III-24, A-2')}</a> Self-defense is always allowed: nothing in the rules of engagement limits an aircraft commander's inherent right and obligation to defend the aircraft and nearby US forces. <a href="#source-jp">{j('IV-14')}</a></p>
+ <p class="key"><strong>Key point:</strong> SEAD is planned around the package it protects: the threats on its route, its timing, and positive identification of every emitter before an ARM is fired.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>SEAD neutralizes, destroys or degrades surface air defences by destructive or disruptive means; DEAD is a name for its destructive half. <a href="#what">More</a></li>
+  <li>It comes in three categories: across the whole theater, localized to a package or route, and opportune. <a href="#what">More</a></li>
+  <li>An IADS is its radars, command nodes, weapons and people, linked; SEAD can attack any of them. <a href="#iads">More</a></li>
+  <li>The radar horizon, terrain, routing and standoff keep you out of reach before any suppression is needed. <a href="#avoid">More</a></li>
+  <li>ARMs, jamming, chaff, decoys and destructive attack each trade something, and work best together. <a href="#suppress">More</a></li>
+  <li>In a package, SEAD aircraft escort the strikers through the defended area; every emitter is identified before an ARM is fired. <a href="#package">More</a></li>
+ </ul>
+
+ <h2 id="arms">Anti-radiation missiles and decoys</h2>
+ <p>Anti-radiation missiles carry fairly small warheads, which limits collateral damage but is enough to destroy a radar antenna. <a href="#source-wiki">[3]</a> They need not be the only answer: a laser-guided bomb on a radar antenna achieves the same effect. <a href="#source-wiki">[3]</a> The Encyclopedia has these:</p>
+ <div class="table-scroll" role="region" aria-label="Anti-radiation missiles and decoys in the Encyclopedia" tabindex="0"><table>
+  <caption>Anti-radiation missiles and decoys (details and sources on each record)</caption>
+  <thead><tr><th scope="col">Weapon</th><th scope="col">Origin</th><th scope="col">Notes</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term record="agm-45">AGM-45 Shrike</Term></th><td>United States</td><td>The Vietnam-era ARM, out-ranged by the SA-2 it hunted</td></tr>
+   <tr><th scope="row"><Term record="agm-88">AGM-88 HARM</Term></th><td>United States</td><td>Pre-briefed, target-of-opportunity and self-protect modes; launch called <Term>MAGNUM</Term></td></tr>
+   <tr><th scope="row"><Term record="alarm">ALARM</Term></th><td>United Kingdom</td><td>Can loiter under a parachute until a silent radar transmits again</td></tr>
+   <tr><th scope="row"><Term record="kh-25">Kh-25MP</Term></th><td>Soviet Union</td><td>The anti-radiation member of a modular missile family</td></tr>
+   <tr><th scope="row"><Term record="kh-58">Kh-58</Term></th><td>Soviet Union</td><td>Longer-range ARM, first on the Su-24M</td></tr>
+   <tr><th scope="row"><Term record="kh-31">Kh-31P</Term></th><td>Soviet Union, Russia</td><td>Supersonic ARM</td></tr>
+   <tr><th scope="row"><Term record="adm-141">ADM-141 TALD</Term></th><td>United States, Israel</td><td>Gliding decoy, launched by the hundred on Desert Storm's first night</td></tr>
+   <tr><th scope="row"><Term record="adm-160">ADM-160 MALD</Term></th><td>United States</td><td>Jet-powered decoy; the MALD-J also jams</td></tr>
+  </tbody>
+ </table></div>
+ <p>The US Air Force called its dedicated ARM-carrying SEAD aircraft <Term>Wild Weasel</Term>s, from the F-100F in Vietnam through the F-105G to the <Term record="f-4">F-4G</Term>, which carried the HARM; SAM operators learned to switch off whenever an F-105G was seen, which suppressed the site even when it survived. <a href="#source-wiki">[3]</a> Today's HARM carriers, including <Term record="f-16">F-16s</Term> with the HARM Targeting System pod and the Navy's <Term record="fa-18c">F/A-18</Term>, are listed on the HARM record.</p>
+
+ <h2 id="jamming">Jamming in more depth</h2>
+ <p>Electronic countermeasures do not have to stop a radar tracking to work: delaying a solid track, or making the operator wait a few seconds longer to be sure, can let weapons through. <a href="#source-usna">{u('11.2.2.1')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Noise jamming techniques" tabindex="0"><table>
+  <caption>Noise jamming techniques <a href="#source-usna">{u('11.2.2.6')}</a></caption>
+  <thead><tr><th scope="col">Technique</th><th scope="col">Bandwidth</th><th scope="col">Against</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>Spot jamming</Term></th><td>Narrow, matched to one radar</td><td>One radar, whose frequency must be found first; defeated by <Term>frequency agility</Term></td></tr>
+   <tr><th scope="row"><Term>Barrage jamming</Term></th><td>Wide, often 10% of the centre frequency</td><td>Every radar in the band, with less power on each</td></tr>
+   <tr><th scope="row"><Term>Sweep jamming</Term></th><td>Very wide, swept back and forth</td><td>Many radars at once</td></tr>
+  </tbody>
+ </table></div>
+ <p>A defence that spreads its radars over many frequencies forces the jammers to carry many spot jammers or spread their power thinner. <a href="#source-usna">{u('11.2.2.6')}</a> Whatever the technique, the radar wins at short range, because its echo travels out and back while the jamming travels only one way: the range where the echo overcomes the jamming is <Term>burnthrough</Term>. <a href="#source-usna">{u('11.2.2.4')}</a> Where the jammer flies changes when that happens.</p>
+ <div class="table-scroll" role="region" aria-label="Jammer geometries" tabindex="0"><table>
+  <caption>The three jammer geometries <a href="#source-usna">{u('11.2.2.7')}</a></caption>
+  <thead><tr><th scope="col">Geometry</th><th scope="col">Where the jammer is</th><th scope="col">Trade-off</th></tr></thead>
+  <tbody>
+   {JAMMERS.map((g) => <tr><th scope="row">{g.label} (<Term id={g.id === 'self' ? 'SSJ' : g.id === 'standoff' ? 'SOJ' : 'SFJ'}>{g.id === 'self' ? 'SSJ' : g.id === 'standoff' ? 'SOJ' : 'SFJ'}</Term>)</th><td>{g.id === 'self' ? 'On each attacking aircraft' : g.id === 'standoff' ? 'Outside the enemy weapons\' reach' : 'Between the enemy radars and the attackers'}</td><td>{g.note}</td></tr>)}
+  </tbody>
+ </table></div>
+ <section class="lesson figure-lesson" data-lesson="burn" aria-labelledby="burn-title">
+  <h3 id="burn-title" class="fig-title">Figure 3 — Burnthrough</h3>
+  <p>Pick a jammer geometry. The black line is the attacker's echo at the radar, the blue line the jamming; where they cross, the radar burns through.</p>
+  <div class="buttons chips" data-jammers role="group" aria-label="Jammer geometry"></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 3, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 260" role="img" aria-label="Graph of echo and jamming power at the radar against the attacker's range, with the burnthrough range marked"></svg></div>
+  <p class="no-js">Interactive figure unavailable. With these invented numbers a self-screening jammer holds out to 8 NM; a stand-off jammer 40 NM from the radar protects the attacker only to about 18 NM, and a stand-forward jammer at 15 NM to about 11 NM.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Relative units with invented numbers, from the Naval Academy's burnthrough equation <a href="#source-usna">{u('11.2.2.4')}</a>: the echo falls as 1/R⁴, the jamming as 1/R² from wherever the jammer is. The same jammer power and antenna gain toward the radar are assumed in every case; real jammers, radars and sidelobes differ.</p>
+ </section>
+ <p><strong>Chaff in detail.</strong> A chaff corridor seen from the side hides the aircraft in it, but seen nearly head-on or tail-on the radar can still pick out the first or last echo, the lead aircraft. Chaff fired ahead of the aircraft by rocket makes tracking much harder. <a href="#source-usna">{u('11.2.2.12')}</a></p>
+
+ <h2 id="history">SEAD in combat</h2>
+ <div class="table-scroll" role="region" aria-label="SEAD in combat" tabindex="0"><table>
+  <caption>Lessons from combat <a href="#source-wiki">[3]</a></caption>
+  <thead><tr><th scope="col">War</th><th scope="col">What happened</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Vietnam</th><td>The first dedicated SEAD aircraft; Wild Weasels with Shrike and Standard ARMs; operators switched off when they saw them</td></tr>
+   <tr><th scope="row">Lebanon, 1982</th><td>Israel coordinated jamming and deception with attacks on the Bekaa Valley SAMs; without radar and ground control, Syrian fighters flew blind and lost heavily</td></tr>
+   <tr><th scope="row">Gulf War, 1991</th><td>Helicopters and stealth aircraft opened gaps by destroying radars and control centres; decoys and drones made radars reveal themselves to HARMs; the defences in the south were destroyed in 48 hours. An EA-6B jammed early-warning radars so strikers approached undetected, and forced SAM and AAA sites into autonomous operation <a href="#source-jp">{j('IV-16')}</a></td></tr>
+   <tr><th scope="row">Kosovo, 1999</th><td>Defences proved harder to suppress; mountainous terrain made sites hard to find, some went untouched, and an F-117 was shot down</td></tr>
+   <tr><th scope="row">Iraq, 2003</th><td>Low-altitude missions were deadly because of short-range missiles and guns; stand-off strikes from outside their range were used where possible</td></tr>
+   <tr><th scope="row">Ukraine, from 2022</th><td>Ukrainian MiG-29s fired HARMs at Russian air defences; neither side gained air superiority</td></tr>
+  </tbody>
+ </table></div>
+
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p>DCS World and Falcon BMS both model the F-16C with the AGM-88 HARM and the HARM Targeting System pod. This is how their official manuals describe it; other sim aircraft that carry anti-radiation missiles were not checked for this revision.</p>
+  <h3>DCS: F-16C Viper</h3>
+  <ul>
+   <li>Set the HARM <strong>threat tables</strong> before flight: the missile only detects threats on the selected table, and three default tables cover modern SAMs, AAA and short-range systems, and older SAMs. <a href="#source-f16">[5, p. 657]</a></li>
+   <li><strong>HAS</strong> (HARM as sensor): the missile's own receiver finds radars and you pick one. Only the bearing is known, so the missile does not loft and has less range, and a full scan can take 90 seconds. Operators may cycle their radars; the guide suggests the trade-off of waiting until a radar is guiding a missile at you. <a href="#source-f16">[5, pp. 665–667]</a></li>
+   <li><strong>POS</strong> (position known): pre-planned against a steerpoint at the radar, with three profiles: <strong>EOM</strong> for off-boresight shots with accurate coordinates, <strong>PB</strong> for the longest range on-bearing, <strong>RUK</strong> for poor or bearing-only data. <a href="#source-f16">[5, p. 668]</a></li>
+   <li>The <strong>HTS pod</strong> classifies radars and ranges them passively by triangulation, remembers their locations even after they stop transmitting or are hidden by terrain, and can hand them to other weapons and to wingmen. <a href="#source-f16">[5, p. 525]</a></li>
+  </ul>
+  <h3>Falcon BMS 4.38</h3>
+  <ul>
+   <li>BMS has separate SEAD and DEAD mission types. Its SAM operators play cat-and-mouse with their radars, and a HARM is more likely to miss if its radar goes silent. Search and fire-control radars are separate: destroying the search radar does not stop the site firing, destroying the fire-control radar does. <a href="#source-bms">[6, p. 210]</a></li>
+   <li>Training mission 28 practises SEAD, DEAD and jamming against SA-2, 3, 4, 6 and 11 sites and a KS-19 gun: pre-emptive HARM shots from outside the engagement zone, hunter-killer pairs, loft and pop-up attacks with cluster bombs, and an EA-18G stand-off jammer that only protects its own package. <a href="#source-bms">[6, pp. 372–381]</a></li>
+  </ul>
+  <h3>Where the sims and the real world differ, or say nothing</h3>
+  <ul>
+   <li>BMS's jammer protects completely inside a 40 NM sphere and ignores altitude <a href="#source-bms">[6, p. 379]</a>; in the real world jamming is a contest of power against range, and the attacker burns through closer in, as in <a href="#jamming">Figure 3</a>. <a href="#source-usna">{u('11.2.2.4')}</a></li>
+   <li>BMS recommends flying above 30,000 ft or between 50 and 300 ft AGL for SEAD <a href="#source-bms">[6, p. 375]</a>; that is the sim manual's advice for its threats, not a doctrinal rule.</li>
+   <li>The HARM datalink mode is not implemented in DCS. <a href="#source-f16">[5, p. 657]</a></li>
+   <li>Neither manual covers the joint categories of suppression, requesting SEAD or the friendly-emitter identification rules.</li>
+  </ul>
+  <p><strong>To practise:</strong> fly Figure 1's sequence in BMS's mission 28 or a DCS mission with an AI jammer: plan the threat rings, ingress low behind terrain, then shoot from outside the engagement zone and watch whether the radar stays up.</p>
+ </section>
+
+ <h2 id="terms">Terms</h2>
+ <p>Every term here is in the <a href={glossary}>SEAD and DEAD terms</a>; SEAD, ARM and EA are in the joint terms, chaff and decoy in the weapons terms, and MAGNUM and MUD in the brevity words.</p>
+ <GlossaryList items={[
+  'SEAD', 'DEAD', 'Destructive means', 'Disruptive means', 'AOR/JOA-wide suppression', 'Localized suppression', 'Opportune suppression', 'IADS',
+  'WEZ', 'MEZ', 'Radar horizon', 'Terrain masking', 'ARM', 'MAGNUM', 'MUD', 'Noise jamming', 'Spot jamming', 'Barrage jamming',
+  'Deception jamming', 'Burnthrough', 'SSJ', 'SOJ', 'SFJ', 'HOJ', 'Chaff', 'Decoy', 'JRFL', 'Wild Weasel',
+ ]} />
+ <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
+  <h3 id="terms-title">Quiz: name the term</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next term</button></div>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <p>One or more questions for each outcome at the top of the page; the quiz in <a href="#what">What SEAD and DEAD are</a> and Figures 2 and 3 cover more.</p>
+ <details><summary><span class="outcome">Outcome 1</span> A battery stays silent all through your strike because its crew fears an ARM. Has it been suppressed?</summary><p>Yes. SEAD includes neutralizing or temporarily degrading a defence, and keeping operators from turning their radars on was the 1991 plan.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> A planned strike target's SAM moves before the attack and you engage it where you find it. Which category is that now?</summary><p>Opportune suppression: any movement from targeted locations turns localized suppression into opportune suppression.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> Name four kinds of IADS target besides SAM sites.</summary><p>Any four of: command and control nodes, anti-aircraft artillery, early-warning, fire-control and GCI radars, SAM carriers and storage bunkers, and air defence operators and maintainers.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Why does flying low hide you from a distant radar, and what does it cost?</summary><p>The earth's curve puts you below its radar horizon, and terrain can mask you; but low altitude is where guns and short-range missiles are most dangerous.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> Why carry decoys if you already have anti-radiation missiles?</summary><p>An ARM finds its target by the radar's transmissions. Decoys make radars come on to track them, take shots meant for manned aircraft, and so give the ARMs their targets.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> With the same jammer, why are strikers covered by a stand-off jammer seen sooner than if they carried it themselves?</summary><p>Their echo grows as they close on the radar, but the jamming does not, because the jammer stays far away; so the echo overcomes it at a longer range. In return the stand-off jammer is safe from home-on-jam weapons.</p></details>
+ <details><summary><span class="outcome">Outcome 6</span> Your HARM display shows an unknown emitter near the friendly lines. What does joint doctrine warn about?</summary><p>Friendly emitters not identified to SEAD crews can look unknown or hostile and have been attacked; the rules of engagement require correct identification before firing at unknown or spurious signals, though self-defense is always allowed.</p></details>
+ <details><summary><span class="outcome">Outcome 6</span> Who should hear about a SAM site you saw but could not attack?</summary><p>The agency controlling your mission, which passes it on to whoever can target it.</p></details>
+
+ <h2 id="sources">Sources and applicability</h2>
+ <h3>Military sources</h3>
+ <p id="source-jp"><strong>[1] US Joint Chiefs of Staff, JP 3-01, Countering Air and Missile Threats, 23 March 2012.</strong> <a href="https://www.bits.de/NRANEU/others/jp-doctrine/jp3_01(12).pdf">Read on the Berlin Information-center for Transatlantic Security's copy</a>, 3 November 2026, by printed page: JRFL, p. III-24; offensive counterair and the Gulf War SEAD plan, p. IV-4; SEAD, pp. IV-12 to IV-16; fighter escort, pp. IV-16 to IV-17; layered defence, p. V-2; weapon engagement zones, pp. V-10 to V-11; identification, p. A-2; glossary, pp. GL-8 to GL-18. The joint publication for all four services. A later edition exists on the Joint Chiefs' own site, which could not be read from the authoring environment, so some wording may have changed. It refers to a multi-service SEAD tactics publication, which was not available.</p>
+ <p id="source-usna"><strong>[2] US Naval Academy, Weapons and Systems Engineering Department, Fundamentals of Naval Weapons Systems, chapter 11, Countermeasures.</strong> <a href="https://man.fas.org/dod-101/navy/docs/fun/part11.htm">Read on the Federation of American Scientists' copy</a>, 3 November 2026, by section: 11.2.2 to 11.2.2.12 and 11.2.3.4. A textbook for midshipmen; its principles apply to any service.</p>
+ <h3>Secondary sources</h3>
+ <p id="source-wiki"><strong>[3] Wikipedia, "Suppression of Enemy Air Defenses".</strong> <a href="https://en.wikipedia.org/wiki/Suppression_of_Enemy_Air_Defenses">Read 3 November 2026.</a> Used for the DEAD distinction, history and weapons.</p>
+ <p id="source-rh"><strong>[4] Wikipedia, "Radar horizon".</strong> <a href="https://en.wikipedia.org/wiki/Radar_horizon">Read 3 November 2026.</a> Used for the 4/3 effective earth radius and its examples.</p>
+ <h3>Sim sources</h3>
+ <p id="source-f16"><strong>[5] Eagle Dynamics, DCS: F-16C Viper Early Access Guide (English).</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 3 November 2026, pp. 525, 657 and 665–668. A sim manual, cited only for the In the sim panel.</p>
+ <p id="source-bms"><strong>[6] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 3 November 2026, pp. 210 and 372–381. A sim manual, cited only for the In the sim panel.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/sead-dead-evidence.md">SEAD and DEAD evidence</a>.</p>
+ <p>Figures 1 to 3 and the worked package are original, invented examples, not reproductions of any publication's figure.</p>
+ <p class="note">Applicability: written for aircrew of every service who fly with or against surface air defences. Doctrine is from the joint publication, which all four services follow; no service's own SEAD tactics publication could be read, so no service-specific tactics are included. Theater rules of engagement, SPINS, your unit's procedures and the current editions govern. This revision is Drafted pending independent source-backed review.</p>
+</SiteLayout>
+
+<script>import '../../../lessons/sead/lesson-ui.mjs';</script>
+
+<style>
+  .contents-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
+  .contents h3 { margin: 0.4rem 0 0.2rem; font-size: 0.95rem; }
+  .contents ol { padding-left: 1.5rem; margin-top: 0; }
+  .lede { font-size: 1.1rem; }
+  .key { padding: 0.6rem 1rem; border-left: 0.25rem solid var(--color-link); background: var(--color-surface); }
+  ul.recap li { margin-block: 0.3rem; }
+  details.more { margin-block: 1rem; padding: 0.5rem 1rem; border: 1px solid var(--color-border); }
+  details.more summary { cursor: pointer; font-weight: 700; }
+  ol.exchange { list-style: none; padding-left: 1rem; border-left: 0.25rem solid var(--color-border); }
+  ol.exchange li { display: grid; grid-template-columns: 6.5rem 1fr; column-gap: 0.75rem; margin-block: 0.4rem; }
+  ol.exchange .who { font-weight: 700; }
+  ol.exchange .step { margin-left: 0.4rem; font-size: 0.85rem; white-space: nowrap; }
+  .outcome { display: inline-block; margin-right: 0.4rem; padding: 0 0.4rem; font-size: 0.8rem; border: 1px solid var(--color-border); color: var(--color-muted); }
+  .sim-panel { margin: 2rem 0; padding: 0.75rem 1.25rem; border-left: 4px solid var(--color-accent); background: var(--color-surface, #f6f7f8); }
+  .sim-panel h2 { margin-top: 0.4rem; }
+  .sim-panel h3 { margin: 1rem 0 0.3rem; font-size: 1rem; }
+  table { width: 100%; border-collapse: collapse; }
+  caption { padding: 0.5rem 0.75rem; text-align: left; color: var(--color-muted); font-size: 0.9rem; }
+  th, td { padding: 0.45rem 0.75rem; border-top: 1px solid var(--color-border); text-align: left; vertical-align: top; }
+  thead th { background: var(--color-surface); }
+  .note { padding: 0.75rem 1rem; border-left: 0.25rem solid var(--color-border); background: var(--color-surface); }
+  .lesson { margin-block: 1.5rem; padding: 1rem; border: 1px solid var(--color-text); }
+  .lesson h3 { margin-top: 0; }
+  button:focus-visible, input:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .lesson :global(button) { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: #fff; background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
+  .lesson :global(button:disabled) { opacity: 0.45; cursor: default; }
+  .lesson [data-choices] :global(button), .chips :global(button) { color: var(--color-text); background: #fff; font-weight: 400; text-align: left; }
+  .chips :global(button[aria-pressed="true"]) { color: #fff; background: var(--color-link); border-color: var(--color-link); }
+  .controls { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; align-items: center; margin-bottom: 0.75rem; }
+  .controls input[type="range"] { width: 100%; min-height: 2.75rem; }
+  .controls .check { grid-column: 1 / -1; }
+  .controls output { font-weight: 700; margin-left: 0.3rem; }
+  .feedback { font-weight: 700; min-height: 1.6em; }
+  .feedback :global(p) { margin: 0.2rem 0; }
+  .feedback :global(.derived) { font-weight: 400; }
+  .lesson.ready .no-js { display: none; }
+  .no-js { font-weight: 700; }
+  .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+  @media (min-width: 64rem) {
+    .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
+  }
+  .fig-scroll { overflow-x: auto; }
+  .fig-scroll :global(svg) { min-width: 36rem; }
+  .fig-title { font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 2px solid var(--color-text); padding-bottom: 0.3rem; }
+  .fig-caption { color: var(--color-muted); font-size: 0.9rem; }
+  .stepper { align-items: center; }
+  .stepper [data-count] { font-weight: 700; }
+  .quiz-lesson .task { font-style: italic; }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--color-border); }
+  .table-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+  @media (max-width: 40rem) {
+    .contents-groups { grid-template-columns: 1fr; }
+    ol.exchange li { display: block; }
+    ol.exchange .who { display: block; }
+    .controls { grid-template-columns: 1fr; }
+  }
+  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
+  :global(.natops .frame) { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
+  :global(.natops .lbl) { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
+  :global(.natops .lbl.small) { font-size: 10px; font-weight: 400; }
+  :global(.natops .lbl.call) { font-size: 16px; fill: var(--color-link); }
+  :global(.natops .ln) { fill: none; stroke: var(--color-text); stroke-width: 1.8; }
+  :global(.natops .ln.heavy) { stroke-width: 2.8; }
+  :global(.natops .ln.dashed) { stroke-dasharray: 7 4; }
+  :global(.natops .ln.on), :global(.natops .thin.on) { stroke: var(--color-link); stroke-width: 2.4; }
+  :global(.natops .thin) { fill: none; stroke: var(--color-text); stroke-width: 1; }
+  :global(.natops .thin.dotted) { stroke-dasharray: 2 3; }
+  :global(.natops .shade) { fill: #e6e9ec; stroke: none; }
+  :global(.natops .fill) { fill: var(--color-text); }
+  :global(.natops .mine) { fill: var(--color-link); stroke: var(--color-link); }
+  .lesson:not(.ready) .buttons, .lesson:not(.ready) .controls, .lesson:not(.ready) svg:empty { display: none; }
+</style>
