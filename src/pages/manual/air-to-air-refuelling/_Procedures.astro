@@ -1,0 +1,396 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
+import { getModule } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import Term from '../../../components/Term.astro';
+import '../../../styles/instrument-flight.css';
+import '../../../styles/aar.css';
+const mod = getModule('aar-procedures');
+// The first-pass path, then reference material for when it is needed.
+const core = [
+ ['example', 'One refuelling, start to finish'], ['systems', 'Boom or probe and drogue'], ['rendezvous', 'Meeting the tanker'],
+ ['join', 'Joining and the flow'], ['boom', 'A boom contact'], ['drogue', 'A drogue contact'], ['comms', 'Calls, lights and silent signals'],
+ ['breakaway', 'Breakaway and lost sight'], ['recap', 'Key points'],
+];
+const reference = [
+ ['helicopters', 'Helicopter refuelling'], ['weather', 'Night, weather and wake'], ['planning', 'Planning numbers'], ['tankers', 'Tanker types'],
+ ['sims', 'In the sim'], ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+];
+// [1] NATO ATP-3.3.4.2 Edition C, by paragraph or annex (its page numbers
+// repeat between chapters). [2] DCS F-16C guide and [3] Falcon BMS training
+// manual, by printed page, sim crossover only. Tanker facts are on the
+// encyclopedia records, which carry their own sources.
+const atp = (s: string) => `[1, ${s}]`;
+const pp = (n: number) => (page: string) => `[${n}, ${/[–,]/.test(page) ? 'pp.' : 'p.'} ${page}]`;
+const dcs = pp(2), bms = pp(3);
+const glossary = sitePath('encyclopedia/terminology/aar/');
+const formation = sitePath('manual/formation-flying/two-ship-formation/');
+const instruments = sitePath('manual/instrument-flight/attitude-instrument-flying/');
+---
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="air-to-air-refuelling" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Air-to-Air Refuelling',href:sitePath('manual/air-to-air-refuelling/')},{label:mod.title}]}>
+ <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
+  <h2>{mod.maturity}</h2>
+  <p>Module revision {mod.revision} · Taking fuel from a tanker, boom or probe and drogue: the two systems, the rendezvous, the join and the flow around the tanker, the contact, the calls and light signals, and the breakaway. From NATO’s multinational air-to-air refuelling publication, used by allied air forces of every service.</p>
+  <p>Figure 1 walks the receivers around three kinds of tanker; Figure 2 puts you astern a boom with the director lights; Figure 3 is a drogue contact and the hose travel; Figure 4 flies a point-parallel rendezvous.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
+ </nav>
+
+ <p class="lede">Refuelling in the air is close formation with a purpose. The tanker leads, navigates and sets the pace; the receiver joins from below, waits its turn on the wing, flies a stable position behind the equipment and takes its fuel. It works across nations because everyone flies the same positions and says the same few words. <a href="#source-atp">{atp('¶1.9, ¶2.25, ¶2.45')}</a></p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>tell the <Term>flying boom</Term> from <Term>probe and drogue</Term>, say what each tanker and receiver carries, and what a <Term>boom drogue adapter</Term> changes;</li>
+  <li>explain how tanker and receiver meet: the <Term>ARIP</Term>, <Term>ARCP</Term> and <Term>ARCT</Term>, the rendezvous types and the 1,000 ft rule, and what to do in an <Term>overrun</Term>;</li>
+  <li>fly the flow around a tanker: <Term>Echelon Left</Term>, the <Term>astern position</Term>, contact, <Term>Echelon Right</Term> and leaving;</li>
+  <li>describe how a boom and a drogue contact are made and broken, and read the <Term>pilot director lights</Term> and the hose;</li>
+  <li>make the refuelling calls, read the light and silent signals, and fly a <Term>breakaway</Term> and the loss of visual contact procedure.</li>
+ </ol>
+ <p class="note">This is a reference, not a qualification. The procedures are NATO’s standard ones, given in generic form; each nation’s tanker documents add type limits and differences, and they, your service’s rules and the aircraft’s flight manual govern. The numbers in the figures are examples, labelled where invented.</p>
+
+ <h2 id="example">One refuelling, start to finish</h2>
+ <p>Two probe-equipped fighters, call sign Hawk, meet a tanker with two wing hoses, call sign Shell 6, on a point-parallel rendezvous with full radio (EMCON option 1). The call signs and channel are invented; the sequence and the calls are the ATP’s. Each step links to the section that explains it.</p>
+ <ol class="exchange script">
+  <li><span class="who">Plan</span> <span class="said">The tasking gives the <Term>ARIP</Term>, control point and control time, the levels, the emission option and the air-to-air TACAN pair, 63 channels apart, tanker on the higher. <a href="#source-atp">{atp('¶2.45.d; Annex 1A; Annex 2O')}</a> <a class="step" href="#rendezvous">Meeting</a></span></li>
+  <li><span class="who">15 min out</span> <span class="said">Both set the air-to-air TACAN. Shell 6: “Hawk, Shell 6 for RV Delta, my flight level 230, when cleared your flight level 220, TACAN 37 Yankee, Mode 3 4521.” Hawk answers with the same items, adding “nose cold, switches safe”. <a href="#source-atp">{atp('Annex 2P serials 1–2')}</a> <a class="step" href="#comms">Calls</a></span></li>
+  <li><span class="who">Rendezvous</span> <span class="said">Hawk holds 1,000 ft below. The tanker turns to roll out ahead of the pair. Hawk: “Hawk, Judy,” then “Hawk, visual.” Shell 6: “Hawk, clear join.” <a href="#source-atp">{atp('¶2.2.b, ¶2.2.d; Annex 2D; Annex 2P serials 3–5')}</a> <a class="step" href="#rendezvous">Rendezvous</a></span></li>
+  <li><span class="who">Join</span> <span class="said">A progressive climb to loose Echelon Left, stable with zero closure. Hawk: “Hawk, Echelon Left.” <a href="#source-atp">{atp('¶2.27.a; Annex 2P serial 6')}</a> <a class="step" href="#join">Join</a></span></li>
+  <li><span class="who">Astern</span> <span class="said">Shell 6: “Hawk, clear astern left and right.” Hawk 1 takes the right hose, Hawk 2 the left, each about 5 ft behind its drogue. <a href="#source-atp">{atp('¶2.6.e; Annex 1A; Annex 2P serials 7–8')}</a> <a class="step" href="#join">Flow</a></span></li>
+  <li><span class="who">Contact</span> <span class="said">Shell 6: “Hawk 1, clear contact right.” Hawk 1 flies the probe in and pushes the hose forward until the green light shows fuel flowing; then Hawk 2 is cleared. <a href="#source-atp">{atp('¶1.14.a, ¶2.28.e; Annex 2P serial 9')}</a> <a class="step" href="#drogue">Contact</a></span></li>
+  <li><span class="who">Done</span> <span class="said">Shell 6: “Hawk, disconnect.” Both ease back to full trail together, then “Hawk, go Echelon Right.” Shell 6 passes each the fuel transferred. <a href="#source-atp">{atp('¶2.6.h, ¶2.49; Annex 2P serials 11–17')}</a> <a class="step" href="#join">Reform</a></span></li>
+  <li><span class="who">Leave</span> <span class="said">Shell 6: “Hawk, clear to leave.” The pair departs from the right, level or climbing. <a href="#source-atp">{atp('¶2.10.a; Annex 2P serial 19')}</a></span></li>
+ </ol>
+ <p class="key"><strong>Key point:</strong> from the rendezvous to leaving, the receiver is always in a named position the tanker put it in, and it moves only when cleared.</p>
+
+ <h2 id="systems">Boom or probe and drogue</h2>
+ <p>There are two systems, and they do not fit each other. <a href="#source-atp">{atp('¶1.13')}</a> Some tankers carry both, such as the <Term record="kc-10">KC-10</Term>, which can use either on the same flight. <a href="#source-atp">{atp('¶1.13')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>The two refuelling systems <a href="#source-atp">{atp('¶1.14–¶1.17, ¶2.45')}</a></caption>
+  <thead><tr><th></th><th>Flying boom</th><th>Probe and drogue</th></tr></thead>
+  <tbody>
+   <tr><td>Tanker carries</td><td>A telescopic boom, flown by a boom operator, ending in a nozzle; director lights under the nose</td><td>A hose on a powered drum, ending in a coupling and a cone-shaped drogue; signal lights on each unit</td></tr>
+   <tr><td>Receiver carries</td><td>A receptacle (often a <Term>UARRSI</Term>)</td><td>A probe ending in a fuel nozzle</td></tr>
+   <tr><td>Who makes contact</td><td>The boom operator, while the receiver holds steady formation</td><td>The receiver pilot, flying the probe into the drogue</td></tr>
+   <tr><td>Guidance</td><td>Director lights and the boom operator’s calls or interphone</td><td>The receiver positions itself once cleared astern</td></tr>
+   <tr><td>Fuel flow (typical)</td><td>Up to about 3,650 kg (8,000 lb) a minute</td><td>Pods 870–1,000 kg a minute; integral hoses about 2,300 kg</td></tr>
+   <tr><td>At once</td><td>One receiver</td><td>One per hose: tankers may have a centreline hose, two wing pods, or both</td></tr>
+  </tbody>
+ </table></div>
+ <p>Hose units come in two kinds. A pod is self-contained, needing only fuel and electrical power and usually driving itself with a ram air turbine; large tankers carry one under each wing, and fast jets carry one as a <Term>buddy store</Term>. An integral system sits in the fuselage and trails from a centreline fairing or tunnel. <a href="#source-atp">{atp('¶1.14.b')}</a> A boom can be converted on the ground with a <Term>boom drogue adapter</Term>, 3 m of hose and a hard drogue with no <Term>hose response</Term>, so it is less forgiving of closure. <a href="#source-atp">{atp('¶1.16')}</a> Probe and coupling dimensions are standardized so drogues fit probes whatever the country of manufacture. <a href="#source-atp">{atp('¶1.14.d')}</a></p>
+ <p class="key"><strong>Key point:</strong> on a boom the tanker flies the contact; on a drogue the receiver does. The rest of the procedure, from rendezvous to leaving, is the same.</p>
+
+ <h2 id="rendezvous">Meeting the tanker</h2>
+ <p>Tanker and receiver each time their flight to the <Term>ARIP</Term> so as to arrive over the <Term>ARCP</Term> at the <Term>ARCT</Term>. Whatever the rendezvous, the receiver keeps vertical separation: it joins from below, normally at least 1,000 ft below the tanker, until it is visual and within 1 NM. From below, the view forward and up is better and the receiver can manoeuvre without losing sight. <a href="#source-atp">{atp('¶2.2.b, ¶2.2.d, ¶2.26; Annex 1A')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Not visual by 1 NM: how close you may come <a href="#source-atp">{atp('¶2.2.d')}</a></caption>
+  <thead><tr><th>Receiver’s radar</th><th>Limit, where national rules permit</th></tr></thead>
+  <tbody>
+   <tr><td>None, or weather radar only</td><td>No closer than 1 NM without the tanker in sight</td></tr>
+   <tr><td>Basic intercept radar (search, no lock)</td><td>Climb to 500 ft below and close to ½ NM; lose contact inside 1 NM and descend to 1,000 ft below</td></tr>
+   <tr><td>Intercept radar with lock</td><td>With lock, close at no more than 10 kt overtake inside ½ NM, 500 ft below, to 1,500 ft; not visual by then, stop closing</td></tr>
+  </tbody>
+ </table></div>
+ <p>Still not visual, the receiver holds there until the tanker flies into better visibility, or descends to 1,000 ft below, drops back to 1 NM and waits or ends the rendezvous. <a href="#source-atp">{atp('¶2.2.d(3)')}</a> A receiver short of fuel can ask “(receiver call sign) MARK”, and the tanker brightens its lights, or on some types dumps a little fuel or fires a flare. <a href="#source-atp">{atp('¶2.3')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>The fixed-wing rendezvous types <a href="#source-atp">{atp('¶2.11')}</a></caption>
+  <thead><tr><th>Type</th><th>How it works</th></tr></thead>
+  <tbody>
+   <tr><td>Alpha (<Term>anchor</Term>)</td><td>A radar controller, on the ground, at sea or airborne, vectors the receiver to 1 NM behind and 1,000 ft below a tanker on its anchor pattern</td></tr>
+   <tr><td>Bravo</td><td>Heading-based, using both aircraft’s air-to-air equipment; the tanker controls it</td></tr>
+   <tr><td>Charlie</td><td>Like Bravo, but a receiver with intercept radar takes control once it has the tanker</td></tr>
+   <tr><td>Delta (<Term>point parallel</Term>)</td><td>Receiver on an agreed track, tanker on the reciprocal, offset; the tanker turns in to roll out ahead</td></tr>
+   <tr><td>Echo (timing)</td><td>For combat air patrols, especially under emission control</td></tr>
+   <tr><td>Foxtrot (sequenced)</td><td>Tanker and receivers from the same base: a buddy climb or a tail chase</td></tr>
+   <tr><td>Golf (en route)</td><td>A join on a common track to make good a time, receivers from the same or different bases</td></tr>
+  </tbody>
+ </table></div>
+ <section class="lesson figure-lesson" data-lesson="rv" aria-labelledby="rv-title">
+  <h3 id="rv-title" class="fig-title">Figure 4 — A point-parallel rendezvous from above</h3>
+  <p class="no-js">This figure needs JavaScript. The text below gives the same numbers.</p>
+  <div class="buttons" data-choices></div>
+  <div class="fig-scroll"><svg class="aar" role="img" aria-label="Point-parallel rendezvous seen from above"></svg></div>
+  <div class="buttons"><button type="button" data-play>Play</button></div>
+  <label>Time <input type="range" min="0" max="1000" value="0" aria-label="Time through the rendezvous"></label>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <p class="fig-caption">Calculated for a level, coordinated 25° turn with no wind and the receiver 20 kt faster; the ATP’s receiver speed is tanker indicated airspeed plus 20 kt, taken here as true airspeed. Real crews use the ATP’s turn-range tables, which add drift: in its worked example, a 382 kt tanker with 15° of drift turns at 23.0 NM with a 13.4 NM offset. <a href="#source-atp">{atp('¶2.2.c, ¶2.2.f; Annex 2D')}</a></p>
+ </section>
+ <p>If the receiver is going to pass the tanker before or during its turn, it makes sure to pass at least 1,000 ft below, calls “(tanker) execute overrun” and slows down on the refuelling heading. The tanker holds its level and accelerates. Once the receiver is below and behind again, the tanker slows and the rendezvous resumes; the receiver does not climb until it is clear the tanker will stay ahead. <a href="#source-atp">{atp('¶2.4')}</a></p>
+ <p class="key"><strong>Key point:</strong> every rendezvous type ends the same way: the receiver below and behind, at least 1,000 ft below until visual within 1 NM, then a climbing join.</p>
+
+ <h2 id="join">Joining and the flow</h2>
+ <p>Every probe receiver joins loose <Term>Echelon Left</Term> and stabilizes there first: distance and closure from behind are the hardest things to judge, especially at night, so a direct join behind the tanker is not attempted. A boom tanker may clear its first receiver straight to the boom, once it has seen that no refuelling is going on and the boom is lowered. <a href="#source-atp">{atp('¶2.7.a, ¶2.27')}</a> Where Echelon Left is depends on whether the tanker has someone looking aft: <a href="#source-atp">{atp('¶2.5.a; Annex 1A')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Where Echelon Left is <a href="#source-atp">{atp('Annex 1A, Echelon Left Position')}</a></caption>
+  <thead><tr><th>Tanker</th><th>Echelon Left</th></tr></thead>
+  <tbody>
+   <tr><td>Hose tanker with no rearward observer</td><td>Level with the tanker, at least one receiver wingspan outboard of its wingtip and well forward, ahead of the wingline, so the pilots can see you</td></tr>
+   <tr><td>Hose tanker with a rearward observer</td><td>Stepped down, aft of the wingline, one receiver wingspan outboard</td></tr>
+   <tr><td>Boom tanker</td><td>Left and slightly behind the wing, at least one receiver wingspan clear</td></tr>
+  </tbody>
+ </table></div>
+ <section class="lesson figure-lesson" data-lesson="flow" aria-labelledby="flow-title">
+  <h3 id="flow-title" class="fig-title">Figure 1 — The flow around the tanker</h3>
+  <p class="no-js">This figure needs JavaScript. The text in this section gives the same sequence.</p>
+  <div class="buttons" data-choices></div>
+  <div class="fig-scroll"><svg class="aar" role="img" aria-label="A tanker from above with two receivers"></svg></div>
+  <div class="buttons"><button type="button" data-back>Back</button><button type="button" data-next>Next step</button></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <ol class="exchange" data-calls aria-live="polite"></ol>
+  <p class="fig-caption" data-count></p>
+ </section>
+ <ul>
+  <li><strong>The tanker directs every move,</strong> by radio or, under emission control, by signal. On a boom only one aircraft changes position at a time; on a hose tanker, up to two may move together. Everyone else holds steady where they were put. <a href="#source-atp">{atp('¶2.6.b–c, ¶2.8.b')}</a></li>
+  <li><strong>The airspace you move into is yours to clear.</strong> Moving receivers are mutually responsible for not hitting each other. <a href="#source-atp">{atp('¶2.6.d, ¶2.8.c')}</a></li>
+  <li><strong>The next receiver waits until it sees the last one going</strong> towards Echelon Right before it moves astern. <a href="#source-atp">{atp('¶2.6.k, ¶2.8.i')}</a></li>
+  <li><strong>Leave level or climbing,</strong> never descending without coordination: others are probably joining from below. Heavy boom receivers are the exception: the tanker climbs to the top of the block and the receiver descends to the bottom. <a href="#source-atp">{atp('¶2.10')}</a></li>
+ </ul>
+ <p>Flying the wing itself is close formation, as in <a href={formation}>Two-Ship Formation</a>.</p>
+ <p class="key"><strong>Key point:</strong> join left, wait, move only when cleared, reform right, leave level or climbing.</p>
+
+ <h2 id="boom">A boom contact</h2>
+ <p>Astern a boom, about 50 ft behind and slightly below the nozzle, the receiver stabilizes with zero closure. Under normal emission control the boom operator and receiver then make a numbers-only radio check, such as “25, 57” and “25”; without it, refuelling does not start unless a mission priority or fuel emergency is declared. The standard silent signal clearing a receiver astern is the boom being lowered. <a href="#source-atp">{atp('Annex 1A; ¶2.8.d; Table 2O-1')}</a></p>
+ <ol class="steps">
+  <li><strong>Cleared to contact,</strong> the receiver moves forward and flies steady close formation; wake turbulence can make that harder. <a href="#source-atp">{atp('¶2.8.f(1)')}</a></li>
+  <li><strong>The boom operator flies the boom</strong> towards the receiver with its small wings, then extends the telescoping section until the nozzle seats in the receptacle. A signal through the boom opens the valves and the tanker pumps fuel. <a href="#source-atp">{atp('¶2.8.f(2)–(3)')}</a></li>
+  <li><strong>The director lights</strong> under the tanker’s nose show whether you are too high, too low, too near or too far: one array up and down, one fore and aft. There are none for azimuth; the yellow stripe on the tanker’s belly gives the line. Coloured bands on the telescoping boom match the fore-and-aft array. <a href="#source-atp">{atp('¶1.15.a, ¶1.18, ¶2.8.f(4)')}</a></li>
+  <li><strong>Talk-on, when asked for:</strong> from about 50 ft, the boom operator gives direction, then distance in feet: “Forward 50”, “Up 4”, “Back 2”, and “(tanker) contact” when connected. <a href="#source-atp">{atp('¶2.46')}</a></li>
+  <li><strong>Done,</strong> the valves close and the boom retracts; the receiver drops back and is cleared to Echelon Right. <a href="#source-atp">{atp('¶2.8.g–h')}</a></li>
+ </ol>
+ <section class="lesson figure-lesson" data-lesson="boom" aria-labelledby="boom-title">
+  <h3 id="boom-title" class="fig-title">Figure 2 — Astern to contact on a boom</h3>
+  <p class="no-js">This figure needs JavaScript. The steps above give the same sequence.</p>
+  <div class="fig-scroll"><svg class="aar" role="img" aria-label="A receiver behind a boom tanker, side view"></svg></div>
+  <div class="controls">
+   <div class="buttons" role="group" aria-label="Fly the receiver">
+    <button type="button" data-move="forward">Forward</button><button type="button" data-move="aft">Aft</button>
+    <button type="button" data-move="up">Up</button><button type="button" data-move="down">Down</button>
+    <button type="button" data-clear>Stable astern: request contact</button><button type="button" data-disconnect>Disconnect</button>
+   </div>
+  </div>
+  <p class="said-now" data-said aria-live="polite"></p>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <p class="fig-caption">One press moves 5 ft, or 1 ft within 10 ft of contact. The inset shows the two director-light arrays as five segments each; real lights differ in colour, shape and number from tanker to tanker. The green box is an invented envelope and the inner limit 5 ft ahead of contact is invented too; each tanker’s limits are in its national document. Pass the inner limit and you get a breakaway.</p>
+ </section>
+ <p>The majority of damaged booms come from receivers closing too fast and passing the inner limit. A receiver that does not stabilize astern, or is clearly going to underrun, gets a breakaway; so does one that becomes erratic in the envelope. Don’t try to push the boom in if its telescope fails, and without reliable radio between boom operator and receiver, contacts are made only when operationally necessary. <a href="#source-atp">{atp('¶2.28.h')}</a></p>
+ <p class="key"><strong>Key point:</strong> stable astern with zero closure first, every time; then fly formation on the tanker and let the boom operator make the contact.</p>
+
+ <h2 id="drogue">A drogue contact</h2>
+ <p>From about 5 ft behind the drogue, cleared to contact, the receiver flies the probe into the drogue with a steady, moderate closure. The coupling latches grip the probe and the valves open; the receiver keeps moving forward, pushing the hose back onto its drum. <a href="#source-atp">{atp('¶1.14.a(3)–(4); Annex 1A')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>What the hose does (typical values; each system differs) <a href="#source-atp">{atp('¶1.14.a, ¶1.14.c')}</a></caption>
+  <thead><tr><th>Hose pushed in</th><th>What happens</th></tr></thead>
+  <tbody>
+   <tr><td>0, contact</td><td>Latches grip the probe; the drum’s <Term>hose response</Term> absorbs the impact and damps whip, if closure was not excessive</td></tr>
+   <tr><td>About 2 m (6 ft)</td><td>Enough hose is rewound and the main fuel valve opens: fuel flows</td></tr>
+   <tr><td>Up to about 7 m (20 ft) further</td><td>Fuel still flows; the coloured bands entering the tunnel or fairing mark the best position. On some equipment, pushing further closes the valve</td></tr>
+   <tr><td>Back to full trail</td><td>The receiver makes a small power reduction and drops back slowly; the valve closes, then the latches release the probe</td></tr>
+  </tbody>
+ </table></div>
+ <section class="lesson figure-lesson" data-lesson="drogue" aria-labelledby="drogue-title">
+  <h3 id="drogue-title" class="fig-title">Figure 3 — A drogue contact, side view</h3>
+  <p class="no-js">This figure needs JavaScript. The table above gives the same sequence.</p>
+  <div class="fig-scroll"><svg class="aar" role="img" aria-label="A receiver behind a refuelling pod and drogue"></svg></div>
+  <div class="buttons" role="group" aria-label="Fly the probe">
+   <button type="button" data-slow>Close steadily</button><button type="button" data-fast>Close fast</button>
+   <button type="button" data-in>Push in 1 m</button><button type="button" data-out>Ease back 1 m</button><button type="button" data-break>Breakaway</button>
+  </div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <p class="fig-caption">Signal lights in the NATO standard: red, breakaway or do not make contact; amber, clear contact; green, fuel flowing. Nations vary them. Hose travel uses the ATP’s typical 2 m and 7 m; the shapes are not to scale.</p>
+ </section>
+ <ul>
+  <li><strong>Don’t chase the drogue.</strong> The ATP warns that a probe light can make a receiver pilot chase the drogue and overcontrol, and its helicopter chapter says never to stare at the drogue, for the same reason. <a href="#source-atp">{atp('¶1.14.g; ¶3.9')}</a></li>
+  <li><strong>Straight and level is best.</strong> Ideally every contact and disconnect is in straight and level flight; by day, experienced pilots may make them in steady turns, climbs and descents clear of cloud with stable drogues, but never while the tanker is changing attitude. <a href="#source-atp">{atp('¶2.28.e(4)–(5)')}</a></li>
+  <li><strong>Damaged the drogue:</strong> call <Term>spokes</Term>. If the probe went through the drogue, hold a steady in-contact position until the tanker orders the disconnect. Pieces may be ingested: engines are damaged on 25% of spokes contacts, so a training sortie normally diverts to the nearest suitable airfield. <a href="#source-atp">{atp('¶2.28.f')}</a></li>
+  <li><strong>Can’t get the nozzle out:</strong> hold position and tell the tanker; when ordered, withdraw down the natural line of the hose, throttles fully back if needed, then go straight to echelon. That hose is not used again. <a href="#source-atp">{atp('¶2.28.g')}</a></li>
+ </ul>
+ <p class="key"><strong>Key point:</strong> a steady closure into the drogue, push the hose in until fuel flows, and come out the way you went in: slowly, along the hose.</p>
+
+ <h2 id="comms">Calls, lights and silent signals</h2>
+ <p>Only a basic set of calls is needed, each prefaced with the speaker’s own call sign. Outside training, routine refuelling uses emission option 2, with radio kept to the minimum, because excess radio distracts the receiver pilot. On a boom, the interphone is used rather than the radio where possible. <a href="#source-atp">{atp('¶2.45.a, ¶2.45.c')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Emission control options <a href="#source-atp">{atp('Table 2O-1')}</a></caption>
+  <thead><tr><th>Option</th><th>Radio</th></tr></thead>
+  <tbody>
+   <tr><td>1</td><td>Every emitter allowed: full radio, normally for qualification training</td></tr>
+   <tr><td>2</td><td>The day-to-day standard: a silent formation except for limited calls for the rendezvous and refuelling; on a boom, the numbers-only astern check</td></tr>
+   <tr><td>3</td><td>Radio silent, including the rendezvous and refuelling; other emitters allowed unless prohibited</td></tr>
+   <tr><td>4</td><td>No emitters at all unless the supported plan authorizes them</td></tr>
+  </tbody>
+ </table></div>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>The standard calls (all in full only in option 1) <a href="#source-atp">{atp('Annex 2P')}</a></caption>
+  <thead><tr><th>Situation</th><th>Tanker</th><th>Receiver</th></tr></thead>
+  <tbody>
+   <tr><td>Radar contact, receiver closing to visual</td><td>—</td><td>“Judy”</td></tr>
+   <tr><td>Receiver sees the tanker</td><td>“Clear join”</td><td>“Visual”</td></tr>
+   <tr><td>On the wing</td><td>—</td><td>“Echelon Left”</td></tr>
+   <tr><td>Equipment out</td><td>“Clear astern left / centre / right”</td><td>“Astern left / centre / right”</td></tr>
+   <tr><td>Ready to pass fuel</td><td>“Clear contact” (left or right on a multi-point tanker)</td><td>Acknowledge</td></tr>
+   <tr><td>Closing to boom contact</td><td>“Stabilize”, “Forward”, “Back”, “Up”, “Down”, “Right”, “Left”, “Return to astern”</td><td>Acknowledge</td></tr>
+   <tr><td>Done</td><td>“Disconnect”, then “Go Echelon Right” and the fuel passed</td><td>Acknowledge; “Echelon Right”</td></tr>
+   <tr><td>Damaged drogue</td><td>—</td><td>“Spokes”</td></tr>
+   <tr><td>Emergency separation</td><td>“(Tanker) breakaway, breakaway, breakaway”</td><td>Disconnect</td></tr>
+   <tr><td>Leaving</td><td>“Clear to leave”</td><td>Acknowledge</td></tr>
+  </tbody>
+ </table></div>
+ <section class="lesson quiz-lesson" data-lesson="calls" aria-labelledby="calls-title">
+  <h3 id="calls-title">Quiz: what do you say?</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next call</button></div>
+ </section>
+ <p>Radio silent, the tanker talks with its equipment and lights. On a probe tanker, a receiver that wants fuel joins Echelon Left with its probe out; a trailed hose means “seen, with fuel”, a hose left stowed means no fuel, and switching off the red anti-collision lights clears the receiver astern. On a boom, a boom extended in trail means ready for contact, and flashing director lights with the lower beacon mean breakaway. The signals that clear contact and disconnect on hose tankers are not yet standard, because NATO aircraft carry different light equipment. <a href="#source-atp">{atp('¶1.14.e; Tables 2Q-1, 2Q-3')}</a></p>
+ <section class="lesson quiz-lesson" data-lesson="signals" aria-labelledby="signals-title">
+  <h3 id="signals-title">Quiz: what does the signal mean?</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next signal</button></div>
+ </section>
+ <p>If tanker and receiver lose each other on the refuelling frequency, they try the secondary, then 243.0 MHz (121.5 MHz for some receivers), and move routine traffic off the guard frequency as soon as they can. Tankers keep a listening watch on 243.0 MHz for receivers that don’t know the refuelling frequency. <a href="#source-atp">{atp('¶2.45.e, ¶2.50')}</a></p>
+ <p class="key"><strong>Key point:</strong> few words, own call sign first; radio silent, the hose, the boom and the lights carry the same messages.</p>
+
+ <h2 id="breakaway">Breakaway and lost sight</h2>
+ <p>On “breakaway”, from any tanker, the receiver disconnects at once and gets clear; the separation is the receiver’s job. The tanker holds its heading or bank and its level. <a href="#source-atp">{atp('¶2.32, ¶2.35')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Breakaway actions <a href="#source-atp">{atp('¶2.32')}</a></caption>
+  <thead><tr><th></th><th>Probe and drogue</th><th>Boom or BDA</th></tr></thead>
+  <tbody>
+   <tr><td>Receiver</td><td>Disconnect, move back and out to a safe position clear of the area behind the tanker and outboard of its wing: left hose to the left wing, right hose to the right; centreline to whichever wing has room</td><td>Disconnect and descend at once for vertical separation, dropping aft until the whole tanker is in sight. Lost sight: fighters at least 500 ft below, heavies at least 1,000 ft</td></tr>
+   <tr><td>Tanker</td><td>Holds heading and level; some nations’ tankers accelerate to drogue limiting speed</td><td>Increases power and accelerates; climbs slowly if the boom operator calls “clear to climb”</td></tr>
+   <tr><td>Everyone else</td><td colspan="2">Receivers waiting in echelon stay in formation, and everyone keeps a good lookout</td></tr>
+  </tbody>
+ </table></div>
+ <p>Losing sight of the tanker in contact or astern, or with disorientation, the receiver does four things at once: disconnects, starts the lost-wingman procedure while going to instruments, calls “(call sign) loss of visual contact”, and slows 10 kt. With the tanker straight and level, a wing receiver holds the tanker heading and descends 500 ft (left hose) or 1,000 ft (right). <a href="#source-atp">{atp('¶2.33')}</a> The instrument scan itself is in <a href={instruments}>Attitude Instrument Flying</a>.</p>
+ <details class="more"><summary>More on loss of visual contact with the tanker turning</summary>
+  <p>A wing receiver on the outside of the turn rolls through wings level to 15° of bank the other way, descends 500 ft or 1,000 ft (left or right), takes a heading 15° away from the tanker’s for 15 seconds, then resumes the tanker’s heading on a parallel track (15:15:15), returning to normal speed after 30 seconds. A centreline receiver rolls wings level and descends 500 ft or until visual, and a boom receiver descends 500 ft (fighter) or 1,000 ft (heavy), turning onto the tanker’s heading when stable. Once visual, a hose receiver does not stay directly behind the tanker, since debris or the hose may fall. <a href="#source-atp">{atp('¶2.33')}</a></p>
+ </details>
+ <p class="key"><strong>Key point:</strong> breakaway is disconnect and get clear, by the safe route for your equipment; lost sight is disconnect, instruments, call and slow 10 kt, together.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>On a boom the boom operator makes the contact; on a drogue the receiver does. The two systems are not compatible without a boom drogue adapter.</li>
+  <li>Join from below: at least 1,000 ft below until visual within 1 NM, unless briefed otherwise, then climb to the join.</li>
+  <li>Probe receivers join loose Echelon Left first; a boom may take its first receiver straight astern. Everyone moves only when cleared and reforms in Echelon Right.</li>
+  <li>Stabilize astern with zero closure before every contact. On a drogue, close steadily and push the hose in until fuel flows; on a boom, fly formation on the tanker and use the director lights.</li>
+  <li>Few words, own call sign first, with emission option 2 the routine standard.</li>
+  <li>Breakaway: disconnect and get clear by your equipment’s safe route. Lost sight: disconnect, instruments, call, slow 10 kt.</li>
+ </ul>
+
+ <h2 id="helicopters">Helicopter refuelling</h2>
+ <p>Helicopters refuel by probe and drogue in four stages: rendezvous, join-up, contact and fuel transfer, and post-refuelling. Unlike a fighter, the helicopter does not catch the tanker: the tanker does the manoeuvring, ending ½ NM in trail of the receivers, then joins on them from behind and takes the lead as it passes. <a href="#source-atp">{atp('¶3.4, ¶3.6, ¶3.7')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>What changes for helicopters <a href="#source-atp">{atp('Chapter 3')}</a></caption>
+  <thead><tr><th>Item</th><th>Helicopter AAR</th></tr></thead>
+  <tbody>
+   <tr><td>Speed</td><td>Normally 110–115 KIAS, set by the helicopter’s performance against the tanker’s <a href="#source-atp">{atp('¶3.2.c')}</a></td></tr>
+   <tr><td>Weather</td><td>At least 3 NM visibility for a visual rendezvous, 1 NM for an electronic one; avoid cloud after contact <a href="#source-atp">{atp('¶3.5')}</a></td></tr>
+   <tr><td>Join</td><td>Receiver-low is standard, 300 ft below refuelling altitude, for a left-hose join <a href="#source-atp">{atp('¶3.6.c, ¶3.7')}</a></td></tr>
+   <tr><td>Positions</td><td>Echelon is left or right of the tanker, outboard of the wingtip and slightly above and behind its horizontal stabilizer; the left hose is primary <a href="#source-atp">{atp('Annex 1A; ¶3.9')}</a></td></tr>
+   <tr><td>Crossing over</td><td>Outside the wingtip, 100 ft aft of the stabilizer and at least 50 ft above the fin, avoiding the turbulence behind the tanker <a href="#source-atp">{atp('¶3.8')}</a></td></tr>
+   <tr><td>Night</td><td>No contact attempts in a turn at night unless fuel is an emergency; once in contact, turns are allowed <a href="#source-atp">{atp('¶3.9')}</a></td></tr>
+   <tr><td>Disconnect</td><td>Reduce power and speed, holding the disconnect position 5 to 10 ft above contact, and never descend below it, to keep the rotor clear of the drogue <a href="#source-atp">{atp('¶3.10')}</a></td></tr>
+  </tbody>
+ </table></div>
+ <p>Wing and propeller turbulence can make a helicopter settle: if it settles in contact, disconnect at once, or the rotor may strike the probe. <a href="#source-atp">{atp('¶3.9')}</a> Tankers for helicopters include the <Term record="kc-130j">KC-130J</Term>.</p>
+
+ <h2 id="weather">Night, weather and wake</h2>
+ <ul>
+  <li><strong>Night:</strong> extra caution against disorientation, which tanker wing dihedral and a poor horizon make worse. The tanker may allow contacts and disconnects in steady turns, climbs and descents; a receiver who wants straight and level should say so. <a href="#source-atp">{atp('¶2.28.e(4), (7)')}</a></li>
+  <li><strong>Weather ahead:</strong> the tanker avoids it with navigation turns. In reduced visibility it stays straight and level, or turns at 10° of bank, calling the turn and the rollout heading: “Shell 6, turning right, rollout heading 250.” <a href="#source-atp">{atp('¶2.29.b–c')}</a></li>
+  <li><strong>Night or IMC formation size:</strong> normally no more than 12 receivers on one tanker and 6 in close formation, 3 per wing, with a wing slot kept free for each receiver astern or in contact. Others trail 1 to 1½ NM behind, stepped down 1,000 ft per element. <a href="#source-atp">{atp('¶2.29.d')}</a></li>
+  <li><strong>Wake:</strong> a contact that may be a heavy jet, crossing within 10 NM and within 2,000 ft above the formation, means receivers in contact disconnect and no one connects until it has passed. <a href="#source-atp">{atp('¶2.36')}</a></li>
+ </ul>
+
+ <h2 id="planning">Planning numbers</h2>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Numbers from the ATP <a href="#source-atp">{atp('as cited per row')}</a></caption>
+  <thead><tr><th>Item</th><th>Value</th></tr></thead>
+  <tbody>
+   <tr><td>Altimeter</td><td>1013.2 mb (29.92 in) at or above transition altitude or over water under ICAO rules, else the tanker passes its setting; say “flight level”, “altitude” or “height” to match <a href="#source-atp">{atp('¶2.2.a')}</a></td></tr>
+   <tr><td><Term>Base AAR altitude</Term></td><td>Lowest tanker in the formation; ideally at least 2,000 ft below the receiver’s best refuelling altitude <a href="#source-atp">{atp('Annex 1A')}</a></td></tr>
+   <tr><td>Rendezvous turns</td><td>Planned at 25° of bank; racetracks and orbits to the left unless briefed <a href="#source-atp">{atp('¶2.2.f–g')}</a></td></tr>
+   <tr><td>Anchor pattern</td><td>Left-hand racetrack, 50 NM legs, 7 NM apart for a KC-130 to 20 NM for larger, faster tankers; single tankers 4,000 ft apart <a href="#source-atp">{atp('Annex 2A')}</a></td></tr>
+   <tr><td>Point parallel</td><td>A common track of at least 70 NM from ARIP to ARCP <a href="#source-atp">{atp('Annex 2D')}</a></td></tr>
+   <tr><td>Air-to-air TACAN</td><td>Set 15 min before the control time, channels 63 apart, receiver on the lower; most receivers use Y <a href="#source-atp">{atp('¶2.45.d')}</a></td></tr>
+   <tr><td>Hose lengths</td><td>Pods 15–27 m (50–90 ft); integral hoses about 24 m (80 ft) <a href="#source-atp">{atp('¶1.14.c')}</a></td></tr>
+   <tr><td>Over land</td><td>Routine probe-and-drogue refuelling, including trailing and winding hoses, is not normally done over populated areas, since probe nozzles and even hoses sometimes come off <a href="#source-atp">{atp('¶2.28.b')}</a></td></tr>
+  </tbody>
+ </table></div>
+
+ <h2 id="tankers">Tanker types</h2>
+ <p>Each has its own record in the Encyclopedia.</p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Tankers and what they carry</caption>
+  <thead><tr><th>Tanker</th><th>Boom</th><th>Hoses</th></tr></thead>
+  <tbody>
+   <tr><td><Term record="kc-135">KC-135 Stratotanker</Term></td><td>Yes; a boom drogue adapter fitted on the ground</td><td>Wing pods on multi-point aircraft</td></tr>
+   <tr><td><Term record="kc-10">KC-10 Extender</Term></td><td>Yes</td><td>Centreline hose; wing pods on later aircraft</td></tr>
+   <tr><td><Term record="kc-46">KC-46 Pegasus</Term></td><td>Yes</td><td>Centreline hose and wing pods</td></tr>
+   <tr><td><Term record="a330-mrtt">A330 MRTT</Term></td><td>On some customers’ aircraft</td><td>Wing pods; a fuselage unit on some</td></tr>
+   <tr><td><Term record="kc-130j">KC-130J</Term></td><td>No</td><td>Two wing pods, for jets, tiltrotors and helicopters</td></tr>
+   <tr><td><Term record="il-78">Il-78</Term></td><td>No</td><td>Three pods: two wing, one fuselage</td></tr>
+   <tr><td><Term record="s-3b">S-3B Viking</Term></td><td>No</td><td>Buddy stores</td></tr>
+   <tr><td><Term record="mq-25">MQ-25 Stingray</Term></td><td>No</td><td>A refuelling store, on an unmanned carrier-based tanker</td></tr>
+  </tbody>
+ </table></div>
+
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p><strong>DCS F-16C.</strong> The guide’s sequence matches the real one: call the tanker, join from behind and below with the closure falling off, then the pre-refuelling checklist: master arm and laser off, emitters to standby before the boom, AIR REFUEL switch open 3–5 minutes early if you carry tanks. In what the guide calls pre-contact, the ATP’s astern, you match the tanker’s speed; cleared, move forward with small, slow throttle changes, keeping lined up on the KC-135’s yellow belly stripe. <a href="#source-dcs">{dcs('160–163')}</a> Its advice in contact is to fly formation on the tanker itself, using the centre fuselage at the wing roots as the reference, and not to stare at the boom or the lights. Breakaway is forward stick to descend and throttle back. <a href="#source-dcs">{dcs('164–165')}</a></p>
+  <p><strong>Falcon BMS.</strong> Training mission 4D has KC-10, KC-135 and KC-130 scenarios, and since 4.36 probe-and-drogue refuelling with the F/A-18C, F-15C and other probe receivers on the KC-135, KC/DC-10, KC-130H, C-160 and Il-78M. <a href="#source-bms">{bms('118, 128')}</a> It gives a closure rule of 10 kt per 1,000 ft, never more than 10 kt inside 1,000 ft, and says to fly the boom like fingertip formation, on the tanker rather than the HUD. <a href="#source-bms">{bms('120–122')}</a> Its pod lights match the NATO standard: red not available, amber ready, green fuel flowing; push too far and the basket disconnects. Its basket advice is a constant approach speed and, again, don’t chase the basket. <a href="#source-bms">{bms('128–129')}</a></p>
+  <p><strong>Where the sims and the ATP differ.</strong></p>
+  <ul>
+   <li>Both sims call the boom astern position pre-contact. BMS places it 50 ft below at 30° down from the tanker; the ATP says about 50 ft behind and slightly below the nozzle. <a href="#source-bms">{bms('121')}</a> <a href="#source-atp">{atp('Annex 1A')}</a></li>
+   <li>The director-light colours are described differently: the DCS guide says green is a slight correction and red the boom’s limits, BMS that red is furthest, yellow close and green ideal. The ATP leaves light details to each nation’s documents, so this module claims neither. <a href="#source-dcs">{dcs('163')}</a> <a href="#source-bms">{bms('123')}</a> <a href="#source-atp">{atp('¶1.15.a')}</a></li>
+   <li>The BMS tanker banks 30° in its racetrack turns; the ATP plans rendezvous turns at 25°. <a href="#source-bms">{bms('123')}</a> <a href="#source-atp">{atp('¶2.2.f')}</a></li>
+  </ul>
+  <p><strong>Not checked.</strong> The DCS F/A-18C guide has no refuelling section, so DCS probe-and-drogue refuelling, the DCS AI tankers’ radio calls and flow, and other DCS modules were not checked. Neither sim manual describes Echelon Left waiting, the breakaway routes for each hose or silent signals, so nothing is claimed about them.</p>
+  <p><strong>To practise:</strong> fly the opening example’s calls with a friend as tanker on a separate frequency, join Echelon Left and stabilize before every move, and practise breakaways on the call at a safe height.</p>
+ </section>
+
+ <h2 id="terms">Terms</h2>
+ <p>Every word is in the <a href={glossary}>air-to-air refuelling terms</a>.</p>
+ <GlossaryList items={[
+  'AAR', 'Probe and drogue', 'Flying boom', 'Boom drogue adapter', 'UARRSI', 'Pilot director lights', 'Echelon Left', 'Echelon Right', 'Astern position',
+  'Contact position', 'Wet contact', 'Dry contact', 'Breakaway', 'Spokes', 'Overrun', 'ARIP', 'ARCP', 'ARCT', 'Anchor', 'Point parallel', 'Hose response', 'Buddy store', 'HAAR',
+ ]} />
+ <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
+  <h3 id="terms-title">Quiz: name the term</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next term</button></div>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <p>One or more questions for each outcome at the top of the page; Figure 4 covers outcome 2, Figure 1 outcome 3, Figures 2 and 3 outcome 4, and the two quizzes outcome 5.</p>
+ <details><summary><span class="outcome">Outcome 1</span> A probe-equipped fighter needs fuel and the only tanker is a boom tanker. What has to have happened on the ground?</summary><p>A boom drogue adapter has to have been fitted: it can only be fitted or removed on the ground. With it, the director lights are not used and there is no hose response, so close carefully.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> Who makes the contact on a boom, and who on a drogue?</summary><p>On a boom the boom operator flies the boom into the receptacle while the receiver holds formation; on a drogue the receiver pilot flies the probe into the drogue.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> You are 2 NM from the tanker in haze, not visual, with no radar. How close may you come and at what height?</summary><p>Keep at least 1,000 ft below and do not go inside 1 NM without the tanker in sight. Stabilize there, or descend to 1,000 ft below at 1 NM and wait or end the rendezvous.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> In a point-parallel rendezvous you realise you will pass the tanker before it rolls out. What do you do?</summary><p>Make sure you pass at least 1,000 ft below, call “(tanker) execute overrun”, slow down on the refuelling heading. Don’t climb until it is clear the tanker will stay ahead for the whole closure.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Why join Echelon Left rather than going straight behind a drogue tanker?</summary><p>Distance and closure from behind are the hardest to judge, especially at night; on the wing, errors in line and overtake can be corrected clear of the tanker.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> You have finished and are cleared to leave. Can you descend away?</summary><p>Not without coordination: leave level or climbing, from Echelon Right, because other receivers are likely to be joining from below. Heavy boom receivers are different: the tanker climbs and the receiver descends within the block.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> In contact on a drogue the light goes green. What happened, and how far can you push?</summary><p>You have pushed the hose in far enough, typically about 2 m, to open the fuel valve. Fuel flows over a range of typically about 7 m further; on some equipment pushing beyond it closes the valve.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> Astern a boom you are still closing slowly when the boom operator clears you to contact. What should you have done first?</summary><p>Stabilize with zero closure. Most damaged booms come from receivers closing too fast and passing the inner limit; if you can’t stabilize, expect a breakaway.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> On the right wing hose you hear “Shell 6, breakaway, breakaway, breakaway.” Where do you go?</summary><p>Disconnect immediately, move back and out to the right wing, clear of the area behind the tanker. Getting clear is your responsibility.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> Radio silent, behind a boom tanker, the director lights go out while you are in contact. What does the tanker want?</summary><p>A disconnect and a return to the astern position.</p></details>
+
+ <h2 id="sources">Sources and applicability</h2>
+ <h3>Military source</h3>
+ <p id="source-atp"><strong>[1] NATO Standardization Agency, ATP-3.3.4.2 (ATP-56), Air-to-Air Refuelling, Edition C Version 1, November 2013.</strong> <a href="https://bloximages.chicago2.vip.townnews.com/militarynews.com/content/tncms/assets/v3/editorial/5/ca/5ca69442-c74c-11e8-97a8-fff1004e63f5/5bb528e613e83.pdf.pdf">Copy hosted by militarynews.com</a>, read 3 November 2026: Chapter 1 Section III, Chapter 2 Sections I, IV and V with Annexes 2A, 2D, 2O, 2P and 2Q, Chapter 3 Sections I and II, and the lexicon. Cited by paragraph or annex, because this edition repeats page numbers between chapters. The publication NATO nations agreed under STANAG 3971; its letter of promulgation reserves reproduction, so this page summarizes and cites it. Later editions may exist and could not be read.</p>
+ <h3>Sim sources</h3>
+ <p id="source-dcs"><strong>[2] Eagle Dynamics, DCS: F-16C Viper Early Access Guide (English), updated 16 August 2026.</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 3 November 2026, pp. 160–165. A sim manual, cited only for the In the sim panel.</p>
+ <p id="source-bms"><strong>[3] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">falcon-bms.com</a>, read 3 November 2026, pp. 118–129 (mission 4D). A sim manual, cited only for the In the sim panel.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/aar-evidence.md">air-to-air refuelling evidence</a>.</p>
+ <p>Figures 1 to 4 and the opening example are original drawings and examples, not reproductions of the ATP’s figures. Positions in Figure 1 show the order of the flow, not distances; the boom envelope in Figure 2 is invented; Figure 4 is calculated, not taken from the ATP’s tables.</p>
+ <p class="note">Applicability: written for tanker and receiver crews of every service and nation. The procedures are NATO’s standard multinational ones; national tanker documents, which the ATP calls national annexes or SRDs, add each tanker’s limits, light signals and differences and were not read. US service publications for refuelling could not be read for this revision. Your service’s rules, the tanker’s national documents and the aircraft’s flight manual govern.</p>
+
+</SiteLayout>
+<script>import '../../../lessons/aar/lesson-ui.mjs';</script>

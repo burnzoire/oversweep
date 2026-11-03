@@ -1,0 +1,15 @@
+---
+import Procedures from './_Procedures.astro';
+import { includedModules } from '../../../data/modules';
+// Air-to-Air Refuelling has one page per module, each its own component kept
+// beside this route so the SME review reads it (the underscore keeps Astro
+// from routing it). This route emits only the modules the registry includes.
+const pages = { 'aar-procedures': Procedures };
+export function getStaticPaths() {
+  return includedModules.filter((m) => m.subject === 'air-to-air-refuelling').map((m) => ({ params: { module: m.slug } }));
+}
+const { module } = Astro.params;
+const Page = pages[module as keyof typeof pages];
+if (!Page) throw new Error(`No Air-to-Air Refuelling page for module ${module}`);
+---
+<Page />

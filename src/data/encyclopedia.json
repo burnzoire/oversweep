@@ -785,6 +785,102 @@
     "era": "modern"
   },
   {
+    "id": "encyclopedia.aircraft.kc-135",
+    "slug": "kc-135",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "KC-135 Stratotanker",
+    "designation": "Boeing KC-135",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The US Air Force's long-serving four-jet boom tanker, 803 built from 1955 to 1965 and still in service.",
+    "era": "modern"
+  },
+  {
+    "id": "encyclopedia.aircraft.kc-10",
+    "slug": "kc-10",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "KC-10 Extender",
+    "designation": "McDonnell Douglas KC-10A",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The three-engined DC-10 tanker with both a boom and a hose, retired by the US Air Force in 2024.",
+    "era": "modern"
+  },
+  {
+    "id": "encyclopedia.aircraft.kc-46",
+    "slug": "kc-46",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "KC-46 Pegasus",
+    "designation": "Boeing KC-46A",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Boeing 767-based tanker replacing the KC-135, with a boom, hose and wing pods and a remote vision station.",
+    "era": "modern"
+  },
+  {
+    "id": "encyclopedia.aircraft.a330-mrtt",
+    "slug": "a330-mrtt",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "A330 MRTT",
+    "designation": "Airbus A330 MRTT",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Airbus A330-based tanker-transport flown by many nations, with a boom, wing hose pods or both.",
+    "era": "modern"
+  },
+  {
+    "id": "encyclopedia.aircraft.kc-130j",
+    "slug": "kc-130j",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "KC-130J Hercules",
+    "designation": "Lockheed Martin KC-130J",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Marines' turboprop tanker, slow enough to refuel helicopters and tiltrotors as well as jets.",
+    "era": "modern"
+  },
+  {
+    "id": "encyclopedia.aircraft.il-78",
+    "slug": "il-78",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "Il-78",
+    "designation": "Ilyushin Il-78",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Il-76-based Russian strategic tanker with three hose-and-drogue pods.",
+    "era": "modern"
+  },
+  {
+    "id": "encyclopedia.aircraft.s-3b",
+    "slug": "s-3b",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "S-3B Viking",
+    "designation": "Lockheed S-3B",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The carrier anti-submarine jet that became the US Navy's buddy-store tanker until 2009.",
+    "era": "modern"
+  },
+  {
+    "id": "encyclopedia.aircraft.mq-25",
+    "slug": "mq-25",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "MQ-25 Stingray",
+    "designation": "Boeing MQ-25A",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The US Navy's uncrewed carrier tanker, built to take refuelling off the Super Hornet.",
+    "era": "modern"
+  },
+  {
     "id": "encyclopedia.ordnance.mk-81",
     "slug": "mk-81",
     "category": "ordnance",
@@ -1674,6 +1770,17 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "Parade, cruise and combat spread, the parade checkpoints, acute and sucked, the rendezvous and underrun, lost sight and the tactical turns."
+  },
+  {
+    "id": "encyclopedia.terminology.aar",
+    "slug": "aar",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Air-to-air refuelling terms",
+    "designation": "NATO ATP-3.3.4.2",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Boom and probe-and-drogue, the director lights, the positions around a tanker, the rendezvous points and patterns, breakaway and spokes."
   },
   {
     "id": "encyclopedia.terminology.weapons",

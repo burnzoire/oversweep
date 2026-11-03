@@ -101,6 +101,17 @@
     "applicability": "For military pilots of every service: the Navy training command's T-6B and T-44C formation material as generic technique, with type numbers as examples and the FAA's lighting rule as a supplement. Air Force and Army formation publications and helicopter formations are not yet covered; your service's formation rules, unit procedures and the aircraft's flight manual govern."
   },
   {
+    "id": "module.aar-procedures",
+    "slug": "aar-procedures",
+    "subject": "air-to-air-refuelling",
+    "revision": 1,
+    "title": "Air-to-Air Refuelling Procedures",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Take fuel from a tanker by boom or probe and drogue: tell the two systems apart, meet the tanker on a rendezvous from below, join Echelon Left and follow the flow around the tanker, make a boom or drogue contact and read the director lights and hose, make the refuelling calls and read the light and silent signals, and fly the breakaway and the loss of visual contact procedure, with helicopter refuelling as reference.",
+    "applicability": "For tanker and receiver crews of every service and nation: NATO's standard multinational air-to-air refuelling procedures (ATP-3.3.4.2) in generic form, with sim manuals for the In the sim panel. National tanker documents, which add each tanker's limits and differences, and US service refuelling publications were not read; they, your service's rules and the aircraft's flight manual govern."
+  },
+  {
     "id": "module.weapons-delivery",
     "slug": "weapons-delivery",
     "subject": "air-to-ground-operations",

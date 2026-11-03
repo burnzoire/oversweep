@@ -115,7 +115,7 @@ export interface Purchase {
 // Aircraft records: the data plate gives cited text for the variant named in
 // `variant`; `quick` holds plain numbers for the category's comparison table.
 export interface AircraftData {
-  group: 'jet' | 'propeller' | 'helicopter';
+  group: 'jet' | 'propeller' | 'helicopter' | 'tanker';
   // Short label for the record nav when the title's first word is not enough.
   short?: string;
   name: string;
@@ -133,6 +133,8 @@ export interface AircraftData {
   range: string;
   armament: string[];
   sensors?: string[];
+  // Tankers: the refuelling systems the variant carries.
+  refuelling?: string[];
   // The first photo leads the page; the others follow the record text.
   photos: Photo[];
   quick: { firstFlight: number; maxSpeedKt: number | null; ceilingFt: number | null };
@@ -144,6 +146,7 @@ export const aircraftGroups = [
   { slug: 'jet', title: 'Jet aircraft' },
   { slug: 'propeller', title: 'Propeller aircraft' },
   { slug: 'helicopter', title: 'Helicopters' },
+  { slug: 'tanker', title: 'Tankers' },
 ] as const;
 
 // Groups on the ordnance list, in display order. Groups without records are
