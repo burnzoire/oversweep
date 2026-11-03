@@ -76,12 +76,30 @@ function setupFlow(root) {
 }
 
 /* ---------- Side-view shapes ---------- */
-// A generic fighter in side view, nose left; (0, 0) is the point that
-// matters (receptacle or probe tip), passed as `ref`.
-function fighterSide(x, y, ref) {
-  const shape = 'M0 0 l18 -6 h30 l10 -6 h22 l6 -14 h10 l-2 14 h6 v8 h-10 l-8 6 h-60 z M24 -6 q8 -9 20 -4 z';
-  const [rx, ry] = ref;
-  return el('path', { class: 'acft rx', d: shape, transform: `translate(${x - rx} ${y - ry})` });
+// An F-16 in side view, nose left, traced from a US Air Force photo of an
+// F-16 refuelling from a KC-10 (Wikimedia Commons, public domain; the
+// KC-10 record's photo) and scaled to the figure: 49 ft long at 4.2 px a
+// foot. (0, 0) is the boom receptacle on the spine behind the canopy.
+const F16_BODY = 'M99.0 -21.6 L99.0 -20.2 L96.2 -19.2 L96.2 -16.9 L82.7 3.1 L81.9 8.8 L80.8 9.6 L80.8 13.3 L87.6 15.9 L89.0 17.4 L89.0 24.7 L90.2 25.7 L90.2 28.0 L92.5 35.3 L90.4 36.5 L81.0 35.7 L67.4 28.2 L50.6 28.0 L49.4 34.3 L36.9 35.5 L36.7 32.9 L10.6 33.7 L10.2 32.7 L1.4 31.8 L-0.6 33.3 L-0.6 34.5 L-10.6 33.7 L-17.4 32.1 L-23.1 29.6 L-23.1 27.4 L-18.6 26.1 L-19.0 22.9 L-37.6 21.4 L-50.0 19.0 L-51.2 17.8 L-51.4 13.3 L-53.7 11.8 L-54.1 10.6 L-83.5 9.0 L-97.4 6.9 L-108.0 4.3 L-108.0 3.1 L-100.2 1.0 L-73.1 -3.1 L-61.0 -8.6 L-43.7 -8.2 L-40.6 -7.6 L-39.8 -5.1 L-35.1 -4.9 L-25.1 -2.0 L-22.5 -2.0 L-19.2 -0.6 L-14.1 -0.4 L-3.9 1.6 L1.4 1.0 L6.1 -2.0 L6.3 -5.1 L13.3 -4.9 L15.5 -4.1 L30.2 -3.9 L30.6 -0.6 L32.5 2.4 L42.1 1.6 L42.5 1.0 L47.8 0.6 L51.6 -1.6 L77.8 -20.4 L81.2 -21.2 L81.9 -23.1 L90.8 -23.3 L93.7 -21.8 Z';
+const F16_CANOPY = 'M-40.8 -7.1 L-61.2 -8.6 L-72.7 -3.3 L-40.8 -2.2 Z';
+function boomReceiver(x, y) {
+  const g = el('g', { transform: `translate(${x} ${y})` });
+  g.append(el('path', { class: 'acft rx', d: F16_BODY }), el('path', { class: 'canopy', d: F16_CANOPY }));
+  g.append(el('circle', { class: 'receptacle', cx: 0, cy: 0, r: 2.5 }));
+  return g;
+}
+
+// An F/A-18 in side view, nose left, traced from NASA photo EC02-0294-1
+// (NASA/Lori Losey, 2002, public domain; its buddy store left out) and
+// scaled to Figure 3: about 17 m long at 12 px a metre. (0, 0) is the tip
+// of the extended refuelling probe.
+const FA18_BODY = 'M180.4 34.3 L112.7 34.3 L46.2 30.8 L46.2 28.2 L44.7 27.7 L44.5 24.9 L18.0 22.7 L17.8 24.9 L16.3 25.3 L14.4 22.3 L12.1 22.3 L11.1 24.9 L9.9 24.9 L9.0 21.8 L-9.9 19.6 L-18.5 17.0 L-19.2 15.6 L-14.2 13.0 L8.3 8.0 L17.3 7.1 L24.6 4.5 L28.4 4.5 L29.4 2.6 L34.1 1.2 L34.6 4.0 L36.2 4.3 L36.5 0.9 L48.1 1.9 L60.6 5.2 L63.2 5.2 L65.1 3.3 L67.0 3.3 L67.5 5.7 L79.5 7.1 L83.3 6.4 L84.0 7.8 L92.8 8.5 L93.7 6.2 L95.4 6.2 L95.6 8.5 L97.8 9.5 L102.5 9.7 L103.2 8.8 L104.6 8.5 L105.3 10.4 L118.8 13.0 L128.8 2.6 L128.8 1.7 L129.7 1.4 L142.0 -11.6 L152.4 -11.6 L156.9 -10.7 L157.4 -6.4 L166.9 -5.9 L168.1 -4.7 L160.3 16.1 L159.3 16.8 L159.1 19.9 L169.5 22.0 L180.4 26.5 Z';
+const FA18_CANOPY = 'M56.1 5.0 L44.3 1.2 L30.8 0.9 L19.6 6.2 L53.3 7.3 Z';
+function probeReceiver(x, y) {
+  const g = el('g', { transform: `translate(${x} ${y})` });
+  g.append(el('path', { class: 'acft rx', d: FA18_BODY }), el('path', { class: 'canopy', d: FA18_CANOPY }));
+  g.append(el('line', { class: 'probe', x1: 18.9, y1: 5.0, x2: 0, y2: 0 }));
+  return g;
 }
 
 /* ---------- Figure 2: boom, astern to contact ---------- */
@@ -122,12 +140,12 @@ function setupBoom(root) {
     // The boom: from the tail, telescoped to the receptacle in contact.
     const end = contact ? [rx, ry] : [NOZZLE[0] - 14, NOZZLE[1] - 8];
     svg.append(el('line', { class: 'boom', x1: 248, y1: 34, x2: end[0], y2: end[1] }), el('circle', { class: 'nozzle', cx: end[0], cy: end[1], r: 3 }));
+    svg.append(boomReceiver(rx, ry));
     // Envelope and astern marks (invented sizes).
     svg.append(el('rect', { class: 'envelope', x: NOZZLE[0] - BOOM.envelope.x * PX, y: NOZZLE[1] - BOOM.envelope.z * PX, width: 2 * BOOM.envelope.x * PX, height: 2 * BOOM.envelope.z * PX }));
     svg.append(el('circle', { class: 'astern', cx: NOZZLE[0] + BOOM.astern.x * PX, cy: NOZZLE[1] + BOOM.astern.z * PX, r: 6 }));
-    svg.append(el('text', { class: 'lbl small', x: NOZZLE[0] + BOOM.astern.x * PX, y: NOZZLE[1] + BOOM.astern.z * PX + 22, 'text-anchor': 'middle' }, 'Astern'));
+    svg.append(el('text', { class: 'lbl small', x: NOZZLE[0] + BOOM.astern.x * PX, y: NOZZLE[1] + BOOM.astern.z * PX - 12, 'text-anchor': 'middle' }, 'Astern'));
     svg.append(el('text', { class: 'lbl small', x: NOZZLE[0], y: NOZZLE[1] - BOOM.envelope.z * PX - 6, 'text-anchor': 'middle' }, 'Contact'));
-    svg.append(fighterSide(rx, ry, [42, -10]));
     svg.append(el('circle', { class: 'receptacle', cx: rx, cy: ry, r: 2.5 }));
     // The lights as the receiver reads them, in an inset.
     svg.append(el('rect', { class: 'inset', x: 10, y: 180, width: 110, height: 116 }));
@@ -185,7 +203,7 @@ function setupBoom(root) {
 
 /* ---------- Figure 3: probe and drogue ---------- */
 const MPX = 12; // pixels per metre of hose travel
-const TRAIL = [440, 150]; // the drogue at full trail
+const TRAIL = [420, 150]; // the drogue at full trail
 
 function setupDrogue(root) {
   const svg = root.querySelector('svg'), out = root.querySelector('[data-result]');
@@ -206,9 +224,8 @@ function setupDrogue(root) {
     // The drogue: a cone opening aft.
     svg.append(el('path', { class: 'drogue', d: `M${dx} ${TRAIL[1] - 3} l22 -12 v30 l-22 -12 z` }));
     // The receiver: probe tip in the coupling when engaged, else ~5 ft aft.
-    const tip = engaged ? [dx + 2, TRAIL[1]] : [dx + 2 + 1.5 * MPX + 20, TRAIL[1] + 4];
-    svg.append(fighterSide(tip[0], tip[1] + 14, [-6, -14]));
-    svg.append(el('line', { class: 'probe', x1: tip[0], y1: tip[1], x2: tip[0] + 26, y2: tip[1] + 10 }));
+    const tip = engaged ? [dx + 2, TRAIL[1]] : [dx + 2 + 1.5 * MPX, TRAIL[1] + 2];
+    svg.append(probeReceiver(tip[0], tip[1]));
     svg.append(el('text', { class: 'lbl small', x: 140, y: 74, 'text-anchor': 'middle' }, 'Signal lights'));
     svg.append(el('text', { class: 'lbl small', x: 630, y: 250, 'text-anchor': 'end' }, `Hose pushed in ${push} m${st.fuel && !red ? ' · fuel flowing' : ''}`));
     out.textContent = extra ?? st.text;

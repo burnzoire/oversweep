@@ -14,6 +14,7 @@ svg.aar { display: block; width: 100%; height: auto; background: #fff; }
 .aar .drogue { fill: #f2f2f2; stroke: #2b2f33; stroke-width: 1.5; }
 .aar .acft { stroke: #3b434b; stroke-width: 0.6; }
 .aar .acft.rx { fill: #2d6ebe; }
+.aar .canopy { fill: #cfe3f2; stroke: #3b434b; stroke-width: 0.5; }
 .aar .acft.tk { fill: var(--color-text); }
 .aar .boom { stroke: #3b434b; stroke-width: 6; stroke-linecap: round; }
 .aar .nozzle, .aar .receptacle { fill: #d93025; }
