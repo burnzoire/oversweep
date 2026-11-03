@@ -1,0 +1,385 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
+import { getModule } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import Term from '../../../components/Term.astro';
+import { SORTIE, equalTimePoint, fmtHdg, fmtMin, planSortie } from '../../../lessons/flight-planning/sortie-model.mjs';
+const mod = getModule('sortie-planning');
+const core = [
+ ['example', 'One sortie, planned start to finish'], ['inputs', 'What goes into the plan'], ['route', 'The route and the nav log'],
+ ['fuel', 'Fuel: the ladder, JOKER and BINGO'], ['filing', 'Flight plans and NOTAMs'], ['card', 'What you carry'], ['recap', 'Key points'],
+];
+const reference = [
+ ['tasking', 'Tasking in a joint operation'], ['thumb', 'Rules of thumb'], ['reserves', 'Reserves and alternates'], ['etp', 'Long legs: the equal time point'],
+ ['sims', 'In the sim'], ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+];
+// [1] AFMAN 11-217 Vol 3 (2009), by paragraph. [2] JP 3-30 (2010), by printed page.
+// [3] FAA PHAK FAA-H-8083-25B, by printed page. [4] FAA AIM ch. 5 sec. 1, by paragraph.
+// [5] 14 CFR part 91 (US civil rules). [6] Multi-service brevity codes (glossary).
+// [7] Falcon BMS 4.38 Training Manual and [8] DCS User Manual, sim crossover only.
+const af = (para: string) => `[1, ${para.includes(',') || para.includes('to') ? 'paras' : 'para'} ${para}]`;
+const jp = (page: string) => `[2, ${/to|,/.test(page) ? 'pp.' : 'p.'} ${page}]`;
+const ph = (page: string) => `[3, ${/to|,/.test(page) ? 'pp.' : 'p.'} ${page}]`;
+const aim = (para: string) => `[4, ${para.includes(',') ? 'paras' : 'para'} ${para}]`;
+const cfr = (sec: string) => `[5, § ${sec}]`;
+const nav = sitePath('manual/navigation/air-navigation/');
+const wx = sitePath('manual/flight-planning/weather-and-performance/');
+const instr = sitePath('manual/instrument-flight/instrument-procedures/');
+const radio = sitePath('manual/radio-communications/radio-procedures/');
+const glossary = sitePath('encyclopedia/terminology/flight-planning/');
+const calm = planSortie({ from: 0, kt: 0 });
+const short = (id: string) => (SORTIE.points as Record<string, { short: string }>)[id].short;
+const ex = planSortie({ from: 270, kt: 40 });
+const etp60 = equalTimePoint({ distance: 600, gsReturn: 360, gsContinue: 480 });
+const lb = (x: number) => `${(Math.round(x / 10) * 10).toLocaleString('en-US')} lb`;
+---
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="flight-planning" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Flight Planning',href:sitePath('manual/flight-planning/')},{label:mod.title}]}>
+ <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
+  <h2>{mod.maturity}</h2>
+  <p>Module revision {mod.revision} · How a sortie is planned: the tasking and inputs, the route and nav log, fuel with JOKER and BINGO, the flight plan and NOTAMs, and what goes on your card. For pilots of every service.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
+ </nav>
+
+ <p class="lede">Most of a sortie is flown before engine start. Planning turns a task into numbers you can fly: a heading and a time for every leg, the fuel you should have at every point, the fuel at which you must go home, and somewhere to go if home is closed. Do it on the ground and the airborne work is checking the plan, not inventing it. <a href="#source-phak">{ph('16-17')}</a></p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>list the inputs to a plan: the tasking (in a joint operation the <Term>ATO</Term>, <Term>SPINS</Term> and <Term>ACO</Term>), the weather, the <Term>NOTAM</Term>s, the charts and the aircraft's own data;</li>
+  <li>build a <Term>nav log</Term>: from <Term>true course</Term> through the <Term>wind correction angle</Term> to <Term>true heading</Term>, <Term>magnetic heading</Term> and <Term>compass heading</Term>, then <Term>ground speed</Term>, time and fuel;</li>
+  <li>use the rules of thumb for <Term>true airspeed</Term>, miles per minute and the <Term>descent gradient</Term>;</li>
+  <li>plan the fuel: a fuel ladder, <Term>JOKER</Term> and <Term>BINGO</Term>, the reserve and alternate, and the <Term>equal time point</Term> on a long leg;</li>
+  <li>choose the flight plan form and read the kinds of NOTAM;</li>
+  <li>say what goes on the card you carry.</li>
+ </ol>
+ <p class="note">This module teaches the method, which is the same in every service and aircraft. The worked sortie, its jet and its fuel numbers are invented. Your service's flight rules set the fuel reserves, alternate rules and forms; this revision could not read the Navy's and the Air Force's general flight rules, so their numbers are not given here, and US civil rules appear only as a labelled supplement. How to fly the headings is in <a href={nav}>Air Navigation</a>; reading the weather and working out takeoff performance are in <a href={wx}>Weather and Performance</a>.</p>
+
+ <h2 id="example">One sortie, planned start to finish</h2>
+ <p>An invented training sortie: a two-ship from the home field, out through a turn point to a working area, back home, with an alternate field to the southwest. The wind is from 270° at 40 kt and the jet cruises at {SORTIE.tas} knots true. Each step links to the section that explains it.</p>
+ <ol class="exchange script">
+  <li><span class="who">Tasking</span> <span class="said">The schedule gives the area, the time and the call sign. In an operation this would be a line of the air tasking order, with its special instructions and airspace control order. <a class="step" href="#inputs">Why</a></span></li>
+  <li><span class="who">Weather</span> <span class="said">Home, the area and the alternate are all forecast good enough for the plan, and the forecast wind at cruise altitude is 270° at 40 kt. <a class="step" href={wx}>How</a></span></li>
+  <li><span class="who">NOTAMs</span> <span class="said">Check home, the alternate and the route: a closed runway or an unserviceable TACAN changes the plan before anything else does. <a class="step" href="#filing">Why</a></span></li>
+  <li><span class="who">Route</span> <span class="said">Draw the legs, measure each true course and distance, apply the wind and the {SORTIE.varE}° E variation: the first leg is {fmtHdg(ex.legs[0].mh)}° magnetic for {fmtMin(ex.legs[0].minutes)}, the leg home {fmtHdg(ex.legs[2].mh)}° for {fmtMin(ex.legs[2].minutes)} into the wind. <a class="step" href="#route">How</a></span></li>
+  <li><span class="who">Fuel</span> <span class="said">Work the fuel at each point. BINGO is {lb(ex.bingo)}: enough to fly home from the area, try an approach, divert and land at the alternate with the reserve. JOKER is {lb(ex.joker)}, which gives about {Math.floor(ex.toJoker)} minutes of work in the area. <a class="step" href="#fuel">How</a></span></li>
+  <li><span class="who">Flight plan</span> <span class="said">File the route, times, fuel and alternate on the form your service and the airspace require. <a class="step" href="#filing">Which</a></span></li>
+  <li><span class="who">Card</span> <span class="said">Copy the headings, times, fuel ladder, JOKER and BINGO, frequencies and the alternate's details onto the card you fly with, and brief them. <a class="step" href="#card">What</a></span></li>
+ </ol>
+ <p class="key"><strong>Key point:</strong> the plan is a chain: the tasking and the weather choose the route, the route and wind give the times, the times give the fuel, and the fuel decides how long you can stay and when you must leave.</p>
+
+ <h2 id="inputs">What goes into the plan</h2>
+ <p>Before a flight, collect everything about it, decide whether it can be flown safely, then file. <a href="#source-aim">{aim('5-1-1')}</a> Check the weather first, because it decides whether the flight is possible and which route is best. <a href="#source-phak">{ph('16-17')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Inputs to a plan" tabindex="0"><table>
+  <caption>The inputs</caption>
+  <thead><tr><th scope="col">Input</th><th scope="col">What it gives you</th><th scope="col">Where it comes from</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Tasking</th><td>The mission, time, area, call sign and the rules to follow</td><td>In a joint operation, the <Term>ATO</Term>; all forces follow its <Term>ROE</Term>, the <Term>ACO</Term> and its <Term>SPINS</Term> <a href="#source-jp">{jp('I-3')}</a>. In training, the unit's schedule.</td></tr>
+   <tr><th scope="row">Weather</th><td>Whether the flight is possible, the winds for the log, the alternate decision</td><td>A weather briefing, reports and forecasts (<a href={wx}>Weather and Performance</a>)</td></tr>
+   <tr><th scope="row">NOTAMs</th><td>Closed runways, unserviceable navaids, restrictions and changes since the charts were printed</td><td>The NOTAM system, for every field and route you may use <a href="#source-aim">{aim('5-1-3')}</a></td></tr>
+   <tr><th scope="row">Charts and flight information</th><td>Courses, distances, terrain, obstructions, airspace and airfield data</td><td>Only the latest issue: in the US, sectional and IFR en route charts are reissued every 56 days <a href="#source-aim">{aim('5-1-1')}</a></td></tr>
+   <tr><th scope="row">The aircraft</th><td>Fuel flows, weight and balance, takeoff and landing distances</td><td>The aircraft's flight manual and performance charts <a href="#source-phak">{ph('16-17 to 16-18')}</a></td></tr>
+  </tbody>
+ </table></div>
+ <p class="key"><strong>Key point:</strong> the plan is only as current as its inputs: the latest tasking, weather, NOTAMs and charts, and the aircraft's own numbers.</p>
+
+ <h2 id="route">The route and the nav log</h2>
+ <p>Choose checkpoints that are easy to find, then check the course and both sides of it for airspace with special requirements, terrain and obstructions, and pick an altitude that clears them. <a href="#source-phak">{ph('16-18 to 16-19')}</a> Then work each leg the same way, writing every number in the <Term>nav log</Term>: <a href="#source-phak">{ph('16-16, 16-19 to 16-20')}</a></p>
+ <p class="formula">TC ± WCA = TH ± variation = MH ± deviation = CH</p>
+ <div class="table-scroll" role="region" aria-label="Working one leg" tabindex="0"><table>
+  <caption>Working one leg <a href="#source-phak">{ph('16-16 to 16-20')}</a></caption>
+  <thead><tr><th scope="col">Step</th><th scope="col">What you do</th><th scope="col">The FAA handbook's example</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>True course</Term> and distance</th><td>Measure the line between the points against true north, and its length</td><td>031°, 53 NM</td></tr>
+   <tr><th scope="row"><Term>Wind correction angle</Term></th><td>From the wind triangle: point into the wind; add it if the wind is from the right, subtract if from the left</td><td>Wind 360°/10 kt, TAS 115 kt: 3° left</td></tr>
+   <tr><th scope="row"><Term>True heading</Term></th><td>TC with the WCA applied</td><td>028°</td></tr>
+   <tr><th scope="row"><Term>Magnetic heading</Term></th><td>Apply the <Term>variation</Term> from the chart's isogonic line: subtract east, add west</td><td>7° E: 021°</td></tr>
+   <tr><th scope="row"><Term>Compass heading</Term></th><td>Apply the compass <Term>deviation</Term> card</td><td>+2°: 023°</td></tr>
+   <tr><th scope="row"><Term>Ground speed</Term>, time, fuel</th><td>From the wind triangle; time = distance ÷ GS; fuel = time × fuel flow</td><td>106 kt; 30 min plus 5 for the climb; 4.7 gallons</td></tr>
+  </tbody>
+ </table></div>
+ <section class="lesson figure-lesson" data-lesson="route" aria-labelledby="route-title">
+  <h3 id="route-title" class="fig-title">Figure 1 — The route and its nav log</h3>
+  <p>Change the wind and the true airspeed. The blue tick on each leg is the heading you fly; the log below works every leg, including the divert to the alternate.</p>
+  <div class="controls">
+   <label for="rt-wfrom">Wind from (true) <output for="rt-wfrom"></output></label><input id="rt-wfrom" type="range" min="0" max="350" step="10" value="270" data-unit="deg" />
+   <label for="rt-wkt">Wind speed <output for="rt-wkt"></output></label><input id="rt-wkt" type="range" min="0" max="100" step="5" value="40" data-unit="kt" />
+   <label for="rt-tas">True airspeed <output for="rt-tas"></output></label><input id="rt-tas" type="range" min="240" max="480" step="30" value="360" data-unit="kt" />
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 320" role="img" aria-label="Plan view of the invented route: home field, turn point Alpha, the working area and the alternate field, with the wind arrow and the heading flown on each leg"></svg></div>
+  <div class="fig-scroll" role="region" aria-label="Nav log, scrolls sideways on narrow screens" tabindex="0"><table class="log">
+   <caption>Nav log</caption>
+   <thead><tr><th scope="col">Leg</th><th scope="col">TC</th><th scope="col">WCA</th><th scope="col">TH</th><th scope="col">MH</th><th scope="col">NM</th><th scope="col">GS</th><th scope="col">Time</th></tr></thead>
+   <tbody>{[...calm.legs, calm.altLeg].map((l) => <tr><th scope="row">{short(l.from)} → {short(l.to)}</th><td>{fmtHdg(l.tc)}°</td><td>0°</td><td>{fmtHdg(l.th)}°</td><td>{fmtHdg(l.mh)}°</td><td>{l.dist.toFixed(0)}</td><td>{l.gs.toFixed(0)}</td><td>{fmtMin(l.minutes)}</td></tr>)}</tbody>
+  </table></div>
+  <p class="no-js">Interactive figure unavailable. The table shows the route in still air at {SORTIE.tas} KTAS. With a wind from 270° at 40 kt the leg home becomes {fmtHdg(ex.legs[2].mh)}° magnetic at {ex.legs[2].gs.toFixed(0)} kt and takes {fmtMin(ex.legs[2].minutes)} instead of {fmtMin(calm.legs[2].minutes)}.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">An invented route and jet, drawn to scale; the method is the FAA handbook's <a href="#source-phak">{ph('16-16 to 16-20')}</a>. Headings are rounded to the degree and times to the minute, as a log is written. Deviation is left out, because it belongs to one aircraft's compass.</p>
+ </section>
+ <p>In the air, note the heading and time at each checkpoint and adjust heading, ground speed and time as the trip goes on. <a href="#source-phak">{ph('16-20')}</a> Flying the headings and checking them against the navaids is <a href={nav}>Air Navigation</a>'s subject.</p>
+ <p class="key"><strong>Key point:</strong> every leg goes through the same chain, true course to compass heading and distance to time; the wind changes both the heading and the time, so it changes the fuel too.</p>
+
+ <h2 id="fuel">Fuel: the ladder, JOKER and BINGO</h2>
+ <p>Work out the fuel burned at the planned altitude and power, and compare it with the time for the flight so that refuelling can be planned. <a href="#source-phak">{ph('16-18')}</a> Written against the route, that gives a fuel ladder: the fuel you should have at each checkpoint. In the air, a reading below the ladder tells you early that the plan is not working.</p>
+ <p>Two fuel states are briefed and called on the radio. <Term>BINGO</Term> is the fuel state needed for recovery; <Term>JOKER</Term> is a fuel state above BINGO at which separation, bugout or the end of the event should begin. <a href="#source-brevity">[6, pp. 5, 28]</a> How BINGO is built is up to the plan and your service's rules; in the example it is everything needed to get home from the farthest point, fail to land there, divert, and land at the alternate with the reserve still in the tanks.</p>
+ <section class="lesson figure-lesson" data-lesson="ladder" aria-labelledby="ladder-title">
+  <h3 id="ladder-title" class="fig-title">Figure 2 — The fuel ladder</h3>
+  <p>The same plan as Figure 1: change the wind there and watch the ladder, BINGO and the time in the area move.</p>
+  <div class="fig-scroll" role="region" aria-label="Figure 2, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 320" role="img" aria-label="Graph of fuel remaining against time for the invented sortie, with horizontal lines at JOKER, BINGO and the reserve"></svg></div>
+  <p class="no-js">Interactive figure unavailable. In still air the jet reaches the area with {lb(calm.atArea)}. BINGO is {lb(calm.bingo)} and JOKER {lb(calm.joker)}, so it can work about {Math.floor(calm.toJoker)} minutes before JOKER, and it lands home with about {lb(calm.landHome)}.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Invented numbers: {SORTIE.fuel.start.toLocaleString('en-US')} lb at start, {SORTIE.fuel.taxiTakeoff} lb to take off, {SORTIE.fuel.cruiseFlow} lb/min in cruise and {SORTIE.fuel.areaFlow} in the area, {SORTIE.fuel.approach} lb per approach, a {SORTIE.fuel.reserve} lb reserve and a {SORTIE.fuel.jokerMargin} lb JOKER margin. Real values come from the aircraft's performance data and your service's rules.</p>
+ </section>
+ <section class="lesson quiz-lesson" data-lesson="plan" aria-labelledby="plan-title">
+  <h3 id="plan-title">Quiz: plan it</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next question</button></div>
+ </section>
+ <p class="key"><strong>Key point:</strong> BINGO is set by what it takes to recover from where you will be, so it changes with the wind and the weather at home and the alternate; JOKER sits above it to give time to finish and join up.</p>
+
+ <h2 id="filing">Flight plans and NOTAMs</h2>
+ <p>In US airspace the DoD forms stand in for the FAA's: the <Term>DD Form 175</Term> for the domestic form 7233-1 and the <Term>DD Form 1801</Term> for the international 7233-4. <a href="#source-aim">{aim('5-1-1')}</a> Other countries' airspace has its own rules; your service's flight information publications say which form to use where.</p>
+ <div class="table-scroll" role="region" aria-label="US flight plan forms for military flights" tabindex="0"><table>
+  <caption>Which form, in US airspace <a href="#source-aim">{aim('5-1-6, 5-1-7')}</a></caption>
+  <thead><tr><th scope="col">Form</th><th scope="col">Use</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">DD 1801, DoD International Flight Plan</th><td>Recommended for military IFR flights; mandatory for any flight leaving US controlled airspace, requesting routing that needs performance-based navigation, or requesting services that need capabilities filed only on the international form</td></tr>
+   <tr><th scope="row">DD 175, Military Flight Plan</th><td>Allowed for DoD aircraft in US controlled airspace; its items are in the same order as the FAA 7233-1. Flights filed on it may not be given RNAV departures and arrivals</td></tr>
+  </tbody>
+ </table></div>
+ <p>On the international form, ATC issues clearances from the capabilities filed in items 10 and 18, and expects you to use what you file. File IFR plans at least 30 minutes before the estimated departure. <a href="#source-aim">{aim('5-1-6')}</a></p>
+ <p><strong>NOTAMs.</strong> Review the NOTAMs for every field and route segment, including the center's area you will fly through; a briefer may not give them all unless asked. <a href="#source-aim">{aim('5-1-1, 5-1-3')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Kinds of NOTAM" tabindex="0"><table>
+  <caption>Kinds of NOTAM in the US system <a href="#source-aim">{aim('5-1-3')}</a></caption>
+  <thead><tr><th scope="col">Kind</th><th scope="col">Covers</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Domestic, NOTAM (D)</th><td>Navaids, public-use airports, seaplane bases and heliports: taxiway closures, people and equipment near or crossing runways, and airport lighting that does not affect approach criteria</td></tr>
+   <tr><th scope="row"><Term>FDC NOTAM</Term></th><td>Regulatory information: amendments to approach procedures and charts, temporary flight restrictions</td></tr>
+   <tr><th scope="row">International</th><td>Published in ICAO format and distributed to other countries</td></tr>
+   <tr><th scope="row"><Term>Military NOTAM</Term></th><td>Originated by the Air Force, Army, Marine Corps or Navy for military or joint-use navaids and airports, in the international format</td></tr>
+  </tbody>
+ </table></div>
+ <p class="key"><strong>Key point:</strong> file on the form the airspace and your service require, with the capabilities you will actually use, and read the NOTAMs for every field and route segment, military ones included.</p>
+
+ <h2 id="card">What you carry</h2>
+ <p>The plan only helps in the air if it is in front of you. The FAA handbook's example carries a planning sheet and a flight log with the course, headings, distances, ground speed, times and fuel for every leg and checkpoint. <a href="#source-phak">{ph('16-19')}</a> Falcon BMS's training manual lists what one practice sortie needs on top of the route: each field's TACAN channel, runways, ILS frequency and elevation, the ATIS, ground, tower and approach frequencies, the alternate's, and the active training areas. <a href="#source-bms">[7, p. 66]</a> Units have their own card formats; whatever the format, it holds your numbers, not the ones you could work out later.</p>
+ <p class="key"><strong>Key point:</strong> carry every number you would otherwise have to work out in the air: headings, times, the fuel ladder, JOKER and BINGO, and each field's frequencies and approach data, the alternate's included.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>The plan starts from current inputs: the tasking, the weather, NOTAMs, the latest charts and the aircraft's data. <a href="#inputs">More</a></li>
+  <li>Each leg runs true course → WCA → true heading → variation → magnetic heading → deviation → compass heading, then distance ÷ ground speed for time. <a href="#route">More</a></li>
+  <li>The fuel ladder says what you should have at each point; BINGO is the fuel needed to recover, JOKER a briefed state above it. <a href="#fuel">More</a></li>
+  <li>The wind changes headings, times and fuel, so it changes BINGO and the time you can stay. <a href="#fuel">More</a></li>
+  <li>File the right form for the airspace, and read every NOTAM for every field and segment. <a href="#filing">More</a></li>
+  <li>Carry your numbers on a card. <a href="#card">More</a></li>
+ </ul>
+
+ <h2 id="tasking">Tasking in a joint operation</h2>
+ <p>In a joint operation the joint force air component commander's air tasking order assigns sorties, capabilities and forces to targets and missions, normally with call signs, targets and controlling agencies. <a href="#source-jp">{jp('GL-7')}</a> It is produced by a time-driven cycle of six stages: <a href="#source-jp">{jp('III-21')}</a></p>
+ <div class="table-scroll" role="region" aria-label="The joint air tasking cycle" tabindex="0"><table>
+  <caption>The joint air tasking cycle <a href="#source-jp">{jp('III-21 to III-26')}</a></caption>
+  <thead><tr><th scope="col">Stage</th><th scope="col">What happens</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">1. Objectives, effects and guidance</th><td>The commander's direction for the air effort</td></tr>
+   <tr><th scope="row">2. Target development</th><td>Targets are found and prioritised</td></tr>
+   <tr><th scope="row">3. Weaponeering and allocation</th><td>Weapons and forces are matched to targets</td></tr>
+   <tr><th scope="row">4. ATO production and dissemination</th><td>The ATO, SPINS and ACO are finalised in enough detail for every listed mission to be planned and flown</td></tr>
+   <tr><th scope="row">5. Execution planning and force execution</th><td>Units plan and fly; the air operations center can redirect sorties before launch or once airborne</td></tr>
+   <tr><th scope="row">6. Assessment</th><td>Results feed the next cycle</td></tr>
+  </tbody>
+ </table></div>
+ <p>The airspace control and air defence instructions in the SPINS and ACO must let combat go on without undue restriction while keeping the airspace safe and orderly, and they direct identification and engagement procedures and rules of engagement. The detail should be very explicit when forces fly from different bases or on composite missions. <a href="#source-jp">{jp('III-26')}</a> If a sortie is redirected, check that it has the right weapons and fuzes for the new target. <a href="#source-jp">{jp('III-26')}</a></p>
+
+ <h2 id="thumb">Rules of thumb</h2>
+ <p>The Air Force's instrument manual gives quick arithmetic worth doing on the ground and carrying into the air. It is a technique: valid as long as you hold speed, bank or pitch constant. <a href="#source-afman">{af('3.1, 3.3')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Rules of thumb" tabindex="0"><table>
+  <caption>Planning arithmetic <a href="#source-afman">{af('3.5.1 to 3.7.1')}</a></caption>
+  <thead><tr><th scope="col">To find</th><th scope="col">Rule</th><th scope="col">Example</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Miles per minute</th><td>TAS ÷ 60; or true Mach × 10</td><td>420 KTAS = 7 NM/min; Mach 0.5 ≈ 5 NM/min</td></tr>
+   <tr><th scope="row"><Term>True airspeed</Term> from indicated</th><td>Add 2% per 1,000 ft; or add half the flight level</td><td>250 KIAS at 10,000 ft ≈ 300 KTAS</td></tr>
+   <tr><th scope="row">Rate of climb or descent</th><td>NM/min × gradient in ft/NM (1° of pitch ≈ 100 ft/NM)</td><td>5 NM/min on 300 ft/NM = 1,500 ft/min</td></tr>
+   <tr><th scope="row">Where to start down</th><td>Altitude to lose ÷ <Term>descent gradient</Term></td><td>FL 300 to 6,000 ft at 300 ft/NM: 80 NM out</td></tr>
+  </tbody>
+ </table></div>
+ <p>Climb and descent gradients matter on departures and arrivals with a required gradient; those are in <a href={instr}>Instrument Procedures</a>.</p>
+
+ <h2 id="reserves">Reserves and alternates</h2>
+ <p>How much fuel to land with, and when an alternate is required, are set by your service's flight rules and the aircraft's manual. This revision could not read the Navy's or the Air Force's general flight rules, so their figures are not given. For comparison only, these are the US civil rules every civil pilot plans to; they do not apply to military aircraft.</p>
+ <div class="table-scroll" role="region" aria-label="US civil fuel and alternate rules" tabindex="0"><table>
+  <caption>US civil rules, a supplement only <a href="#source-cfr">[5]</a></caption>
+  <thead><tr><th scope="col">Rule</th><th scope="col">Requirement</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">VFR fuel {cfr('91.151')}</th><td>Fuel to the first point of intended landing, then 30 minutes by day or 45 at night (airplanes); 20 minutes for rotorcraft</td></tr>
+   <tr><th scope="row">IFR fuel {cfr('91.167')}</th><td>Fuel to the destination, then to the alternate, then 45 minutes at normal cruise (30 for helicopters)</td></tr>
+   <tr><th scope="row">When an alternate is needed {cfr('91.169')}</th><td>Unless the destination has an instrument approach and, from 1 hour before to 1 hour after arrival, the forecast is at least a 2,000 ft ceiling and 3 miles (airplanes)</td></tr>
+   <tr><th scope="row">Alternate weather {cfr('91.169')}</th><td>The alternate minima on its approach, or else 600 ft and 2 miles for a precision approach, 800 ft and 2 miles for a non-precision one, forecast for your arrival time</td></tr>
+  </tbody>
+ </table></div>
+ <p>Whichever rules apply, the shape is the same: fuel to the destination, then to an alternate if the weather calls for one, then a reserve. That is the shape of the BINGO in Figure 2.</p>
+
+ <h2 id="etp">Long legs: the equal time point</h2>
+ <p>On a long leg between suitable fields, as over water, work out the <Term>equal time point</Term>: where it takes as long to turn back as to go on. Compute it for contingencies such as a medical divert, an engine loss or a depressurisation, note it on the chart, and review the diversion fields as you pass it. It is not the midpoint, because it depends on the ground speeds. <a href="#source-afman">{af('13.5.2')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="etp" aria-labelledby="etp-title">
+  <h3 id="etp-title" class="fig-title">Figure 3 — The equal time point</h3>
+  <p>Move the wind. A wind toward the field ahead is a tailwind going on and a headwind turning back.</p>
+  <div class="controls">
+   <label for="etp-wind">Wind component toward the field ahead <output for="etp-wind"></output></label><input id="etp-wind" type="range" min="-100" max="100" step="10" value="60" data-unit="kt" />
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 3, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 240" role="img" aria-label="A leg between two fields with the midpoint and the equal time point marked"></svg></div>
+  <p class="no-js">Interactive figure unavailable. On a 600 NM leg at 420 KTAS, a 60 kt tailwind going on puts the equal time point {etp60.toFixed(0)} NM from the field behind, short of the 300 NM midpoint.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">The formula is the Air Force manual's <a href="#source-afman">{af('13.5.2')}</a>; the leg and speeds are invented. The manual advises a second ETP with the winds at 10,000 ft, where you would fly after a depressurisation or engine loss, with that altitude's speed and fuel flow.</p>
+ </section>
+
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p>Falcon BMS and DCS World both have a mission planning screen; this is what their official manuals say about it. Other sims and individual DCS aircraft modules were not checked for this revision.</p>
+  <h3>Falcon BMS 4.38</h3>
+  <ul>
+   <li>The planning screen draws the route and turns a flight plan or a leg <strong>red</strong> when something is wrong: not enough fuel for the distances, a timing problem or a steerpoint problem. A plan must be white before you fly it. <a href="#source-bms">[7, p. 66]</a></li>
+   <li>A <strong>ruler</strong> gives the distance and the headings both ways between any two points, and the <strong>alternate</strong> is the steerpoint after the last one of the route. <a href="#source-bms">[7, p. 66]</a></li>
+   <li>Field data such as TACAN channels and frequencies is not on the map; the manual has you plan it and points to its data card tool. <a href="#source-bms">[7, p. 66]</a></li>
+   <li>In the F-16 you set the fuel warning on the BINGO page; the first training sortie has you set it to the JOKER level, so the jet calls "BINGO BINGO" when you reach it. <a href="#source-bms">[7, p. 41]</a></li>
+  </ul>
+  <h3>DCS World</h3>
+  <ul>
+   <li>The <strong>Mission Planner</strong> button on the briefing screen opens the mission so you can view it in detail and edit your flight's route and weapons. <a href="#source-dcs">[8, p. 65]</a></li>
+   <li>In the mission editor each waypoint has a speed and an ETA; lock one and the editor works out the other from the distance between waypoints. <a href="#source-dcs">[8, p. 179]</a></li>
+   <li>You can add your own <strong>kneeboard</strong> pages, such as briefings and procedures, as images in a Kneeboard folder for each aircraft; they appear at the end of the standard pages. <a href="#source-dcs">[8, p. 109]</a></li>
+  </ul>
+  <h3>Where the sims and the real world differ, or say nothing</h3>
+  <ul>
+   <li>Neither manual covers flight plan forms or NOTAMs; BMS's flight plan check stands in for a fuel ladder, but it does not show JOKER, BINGO or the reserve behind them.</li>
+   <li>Neither manual covers the wind correction or variation: the sims fly the route from the jet's navigation system, so a hand-worked log is a cross-check, not the primary means.</li>
+  </ul>
+  <p><strong>To practise:</strong> rebuild Figure 1's method for your next sim mission: measure the legs with the BMS ruler or the DCS planner, take the briefed wind, work headings, times and a fuel ladder by hand, set your BINGO, and put the numbers on a kneeboard page.</p>
+ </section>
+
+ <h2 id="terms">Terms</h2>
+ <p>Every term here is in the <a href={glossary}>flight planning terms</a>, except JOKER and BINGO, which are brevity words, ATO, which is in the joint terms, and NOTAM, variation and deviation, which are in the airfield and navigation terms.</p>
+ <GlossaryList items={[
+  'ATO', 'SPINS', 'ACO', 'NOTAM', 'Military NOTAM', 'FDC NOTAM', 'DD Form 1801', 'DD Form 175', 'Nav log', 'Dead reckoning', 'True course', 'Wind correction angle',
+  'True heading', 'Variation', 'Magnetic heading', 'Deviation', 'Compass heading', 'True airspeed', 'Ground speed', 'Descent gradient', 'JOKER', 'BINGO', 'Equal time point',
+ ]} />
+ <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
+  <h3 id="terms-title">Quiz: name the term</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next term</button></div>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <p>One or more questions for each outcome; the quiz in <a href="#fuel">Fuel</a> and Figures 1 to 3 cover more.</p>
+ <details><summary><span class="outcome">Outcome 1</span> Name five inputs to a plan.</summary><p>The tasking (in an operation, the ATO with its SPINS and ACO), the weather, the NOTAMs, the latest charts and flight information, and the aircraft's own fuel, weight and performance data.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> True course 120°, the wind gives 5° left correction, variation 10° W. What is the magnetic heading?</summary><p>True heading 115° (left is subtracted), then add west variation: 125° magnetic.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> Why does a headwind on the way home cost more than it saves on the way out with the same wind behind you?</summary><p>You spend longer flying into it than you gain flying with it, because time is distance ÷ ground speed; in Figure 1 the extra minutes home outweigh those saved going out.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> At Mach 0.6, about how many miles a minute are you covering, and what rate of descent does a 3° (300 ft/NM) path need?</summary><p>About 6 NM/min, so about 1,800 ft/min.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> The weather at home goes down and the alternate moves farther away. What happens to BINGO?</summary><p>It goes up, because BINGO is the fuel to recover from where you are, including the divert; JOKER moves up with it and the time in the area shrinks.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> You file a DD 175 and ask for an RNAV departure. What may happen?</summary><p>You may not be given it: flights on the DD 175 may not be eligible for RNAV SIDs and STARs; file the DD 1801 with your capabilities in items 10 and 18.</p></details>
+ <details><summary><span class="outcome">Outcome 6</span> Besides the route, what does a card need for each field you may land at?</summary><p>Its TACAN or navaid, runways, approach frequencies and elevation, and the ATIS, ground, tower and approach frequencies, for the alternate as well as home.</p></details>
+
+ <h2 id="sources">Sources and applicability</h2>
+ <h3>Military sources</h3>
+ <p id="source-afman"><strong>[1] US Air Force, AFMAN 11-217 Volume 3, Supplemental Flight Information, 23 February 2009, certified current 9 April 2012.</strong> <a href="https://www.code7700.com/pdfs/usaf/afman11-217v3.pdf">Read on Code 7700's copy</a>, 3 November 2026, by paragraph: 3.1 to 3.7.1, the 60-to-1 rule and aviation calculations; 13.5.2, the equal time point. An Air Force manual; the arithmetic applies to any aircraft. A later edition exists on the Air Force e-Publishing site, which could not be read from the authoring environment.</p>
+ <p id="source-jp"><strong>[2] US Joint Chiefs of Staff, JP 3-30, Command and Control for Joint Air Operations, 12 January 2010.</strong> <a href="https://www.bits.de/NRANEU/others/jp-doctrine/jp3_30(10).pdf">Read on the Berlin Information-center for Transatlantic Security's copy</a>, 3 November 2026, by printed page: I-3, III-21 to III-26 and GL-6 to GL-7. The joint publication for all four services. Later editions exist.</p>
+ <p id="source-brevity"><strong>[6] Air Land Sea Application Center, ATP 1-02.1 / MCRP 3-30B.1 / NTTP 6-02.1 / AFTTP 3-2.5, Multi-Service Brevity Codes, 28 May 2020, Change 1 of 2 April 2021,</strong> pp. 5 (BINGO) and 28 (JOKER), as quoted in the site's <a href={sitePath('encyclopedia/terminology/brevity/')}>brevity words</a>. The brevity publication for all four services; the calls are in <a href={radio}>Radio Procedures</a>.</p>
+ <h3>Supplementary sources (US civil)</h3>
+ <p id="source-phak"><strong>[3] Federal Aviation Administration, FAA-H-8083-25B, Pilot's Handbook of Aeronautical Knowledge.</strong> <a href="https://www.faa.gov/sites/faa.gov/files/2022-03/pilot_handbook.pdf">PDF</a>, read 3 November 2026, by printed page: 16-13 to 16-21, dead reckoning and flight planning.</p>
+ <p id="source-aim"><strong>[4] Federal Aviation Administration, Aeronautical Information Manual, chapter 5, section 1.</strong> <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap5_section_1.html">Read 3 November 2026</a>, paragraphs 5-1-1, 5-1-3, 5-1-6 and 5-1-7. US airspace rules, including those for military flights in it.</p>
+ <p id="source-cfr"><strong>[5] 14 CFR part 91, §§ 91.151, 91.167 and 91.169.</strong> <a href="https://www.law.cornell.edu/cfr/text/14/91.167">Read on the Legal Information Institute's copy of the eCFR</a>, 3 November 2026. US civil rules, shown for comparison only.</p>
+ <h3>Sim sources</h3>
+ <p id="source-bms"><strong>[7] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 3 November 2026, pp. 41 and 66. A sim manual, cited for the In the sim panel and the card's contents.</p>
+ <p id="source-dcs"><strong>[8] Eagle Dynamics, DCS User Manual (English, 2020).</strong> <a href="https://www.digitalcombatsimulator.com/upload/iblock/ed6/87v22jwd1xh51i3rgki944xsf503istq/DCS_User_Manual_EN_2020.pdf">DCS User Manual (PDF)</a>, read 3 November 2026, pp. 65, 109 and 179. A sim manual, cited only for the In the sim panel.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/flight-planning-evidence.md">Flight Planning evidence</a>.</p>
+ <p>Figures 1 to 3 and the worked sortie are original, invented examples, not reproductions of any publication's figure.</p>
+ <p class="note">Applicability: written for pilots of every service. The method is generic; joint tasking is from the joint publication, the planning arithmetic from an Air Force manual, and the nav log, forms and NOTAMs from FAA publications that also govern military flights in US airspace. The Navy's and Air Force's general flight rules, the DoD flight information publication General Planning and Army planning publications could not be read for this revision, so service fuel reserves, alternate rules and form details are not given. Your service's rules, the aircraft's flight manual and current flight information publications govern. This revision is Drafted pending independent source-backed review.</p>
+</SiteLayout>
+
+<script>import '../../../lessons/flight-planning/sortie-ui.mjs';</script>
+
+<style>
+  .contents-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
+  .contents h3 { margin: 0.4rem 0 0.2rem; font-size: 0.95rem; }
+  .contents ol { padding-left: 1.5rem; margin-top: 0; }
+  .lede { font-size: 1.1rem; }
+  .key { padding: 0.6rem 1rem; border-left: 0.25rem solid var(--color-link); background: var(--color-surface); }
+  ul.recap li { margin-block: 0.3rem; }
+  details.more { margin-block: 1rem; padding: 0.5rem 1rem; border: 1px solid var(--color-border); }
+  details.more summary { cursor: pointer; font-weight: 700; }
+  ol.exchange { list-style: none; padding-left: 1rem; border-left: 0.25rem solid var(--color-border); }
+  ol.exchange li { display: grid; grid-template-columns: 6.5rem 1fr; column-gap: 0.75rem; margin-block: 0.4rem; }
+  ol.exchange .who { font-weight: 700; }
+  ol.exchange .step { margin-left: 0.4rem; font-size: 0.85rem; white-space: nowrap; }
+  .outcome { display: inline-block; margin-right: 0.4rem; padding: 0 0.4rem; font-size: 0.8rem; border: 1px solid var(--color-border); color: var(--color-muted); }
+  .sim-panel { margin: 2rem 0; padding: 0.75rem 1.25rem; border-left: 4px solid var(--color-accent); background: var(--color-surface, #f6f7f8); }
+  .sim-panel h2 { margin-top: 0.4rem; }
+  .sim-panel h3 { margin: 1rem 0 0.3rem; font-size: 1rem; }
+  table { width: 100%; border-collapse: collapse; }
+  caption { padding: 0.5rem 0.75rem; text-align: left; color: var(--color-muted); font-size: 0.9rem; }
+  th, td { padding: 0.45rem 0.75rem; border-top: 1px solid var(--color-border); text-align: left; vertical-align: top; }
+  thead th { background: var(--color-surface); }
+  .note { padding: 0.75rem 1rem; border-left: 0.25rem solid var(--color-border); background: var(--color-surface); }
+  .lesson { margin-block: 1.5rem; padding: 1rem; border: 1px solid var(--color-text); }
+  .lesson h3 { margin-top: 0; }
+  button:focus-visible, input:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .lesson :global(button) { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: #fff; background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
+  .lesson :global(button:disabled) { opacity: 0.45; cursor: default; }
+  .lesson [data-choices] :global(button), .chips :global(button) { color: var(--color-text); background: #fff; font-weight: 400; text-align: left; }
+  .chips :global(button[aria-pressed="true"]) { color: #fff; background: var(--color-link); border-color: var(--color-link); }
+  .controls { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; align-items: center; margin-bottom: 0.75rem; }
+  .controls input[type="range"] { width: 100%; min-height: 2.75rem; }
+  .controls .check { grid-column: 1 / -1; }
+  .controls output { font-weight: 700; margin-left: 0.3rem; }
+  .feedback { font-weight: 700; min-height: 1.6em; }
+  .feedback :global(p) { margin: 0.2rem 0; }
+  .feedback :global(.derived) { font-weight: 400; }
+  .lesson.ready .no-js { display: none; }
+  .no-js { font-weight: 700; }
+  .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+  @media (min-width: 64rem) {
+    .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
+  }
+  .fig-scroll { overflow-x: auto; }
+  .fig-scroll :global(svg) { min-width: 36rem; }
+  .fig-title { font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 2px solid var(--color-text); padding-bottom: 0.3rem; }
+  .fig-caption { color: var(--color-muted); font-size: 0.9rem; }
+  .stepper { align-items: center; }
+  .stepper [data-count] { font-weight: 700; }
+  .quiz-lesson .task { font-style: italic; }
+  .formula { font-family: ui-monospace, monospace; font-weight: 700; padding: 0.5rem 1rem; background: var(--color-surface); }
+  table.log { margin-top: 0.75rem; font-variant-numeric: tabular-nums; }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--color-border); }
+  .table-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+  @media (max-width: 40rem) {
+    .contents-groups { grid-template-columns: 1fr; }
+    ol.exchange li { display: block; }
+    ol.exchange .who { display: block; }
+    .controls { grid-template-columns: 1fr; }
+  }
+  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
+  :global(.natops .frame) { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
+  :global(.natops .lbl) { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
+  :global(.natops .lbl.small) { font-size: 10px; font-weight: 400; }
+  :global(.natops .lbl.inv) { fill: #fff; }
+  :global(.natops .lbl.call) { font-size: 16px; fill: var(--color-link); }
+  :global(.natops .ln) { fill: none; stroke: var(--color-text); stroke-width: 1.8; }
+  :global(.natops .ln.heavy) { stroke-width: 2.8; }
+  :global(.natops .ln.dashed) { stroke-dasharray: 7 4; }
+  :global(.natops .ln.on), :global(.natops .thin.on) { stroke: var(--color-link); stroke-width: 2.4; }
+  :global(.natops .thin) { fill: none; stroke: var(--color-text); stroke-width: 1; }
+  :global(.natops .thin.dotted) { stroke-dasharray: 2 3; }
+  :global(.natops .shade) { fill: #e6e9ec; stroke: none; }
+  :global(.natops .fill) { fill: var(--color-text); }
+  :global(.natops .mine) { fill: var(--color-link); stroke: var(--color-link); }
+  .lesson:not(.ready) .buttons, .lesson:not(.ready) .controls, .lesson:not(.ready) svg:empty { display: none; }
+</style>

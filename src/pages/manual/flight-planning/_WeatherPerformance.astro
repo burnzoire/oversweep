@@ -1,0 +1,362 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
+import { getModule } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import Term from '../../../components/Term.astro';
+import { LOADING, METARS, balance, decodeMetar, densityAltitude, pressureAltitude } from '../../../lessons/flight-planning/weather-model.mjs';
+const mod = getModule('weather-and-performance');
+const core = [
+ ['example', 'One check, start to finish'], ['brief', 'The weather brief'], ['metar', 'Reading a METAR'], ['taf', 'Reading a TAF'],
+ ['density', 'Density altitude'], ['takeoff', 'Takeoff and landing distance'], ['balance', 'Weight and balance'], ['recap', 'Key points'],
+];
+const reference = [
+ ['codes', 'METAR weather codes'], ['pirep', 'Pilot reports'], ['sims', 'In the sim'], ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+];
+// [1] FAA PHAK FAA-H-8083-25B, by printed page. [2] 14 CFR part 91 (US civil rules).
+// [3] Falcon BMS 4.38 User Manual and [4] DCS User Manual, sim crossover only.
+const ph = (page: string) => `[1, ${/to|,/.test(page) ? 'pp.' : 'p.'} ${page}]`;
+const sortie = sitePath('manual/flight-planning/sortie-planning/');
+const glossary = sitePath('encyclopedia/terminology/flight-planning/');
+const airfield = sitePath('manual/airfield-operations/airfield-basics/');
+const ggg = decodeMetar(METARS[0].text);
+const hotPa = pressureAltitude(5000, 29.80);
+const hotDa = densityAltitude(hotPa, 35);
+const wb = balance({});
+const solo = balance({ rear: 0 });
+const ft = (x: number) => `${Math.round(x).toLocaleString('en-US')} ft`;
+---
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="flight-planning" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Flight Planning',href:sitePath('manual/flight-planning/')},{label:mod.title}]}>
+ <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
+  <h2>{mod.maturity}</h2>
+  <p>Module revision {mod.revision} · Reading the weather for a plan and working out what the aircraft can do: the briefing, METAR and TAF, density altitude, takeoff and landing distance, and weight and balance.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
+ </nav>
+
+ <p class="lede">Two questions decide whether a plan can be flown: will the weather let you go and come back, and can the aircraft do it, from this runway, on this day, at this weight? The first is answered from the weather brief and the reports and forecasts in it, the second from the aircraft's performance charts. Both start from a few codes and one idea: air that is thinner than standard makes every aircraft perform as if the field were higher. <a href="#source-phak">{ph('11-3, 13-5')}</a></p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>say what a <Term>standard briefing</Term> contains and in what order;</li>
+  <li>decode a <Term>METAR</Term>: wind, visibility, weather, cloud, temperature and altimeter, and find the <Term>ceiling</Term>;</li>
+  <li>read a <Term>TAF</Term> with its <Term>FM</Term>, <Term>TEMPO</Term> and <Term>PROB30</Term> groups and say what it forecasts for your arrival time;</li>
+  <li>work out <Term>pressure altitude</Term> and <Term>density altitude</Term>, and say what raises takeoff and landing distance;</li>
+  <li>find the <Term>center of gravity</Term> from weights and <Term id="Moment arm">arms</Term>, and say why it must stay within limits.</li>
+ </ol>
+ <p class="note">The codes and methods here are the US ones in the FAA's handbook, which US military reports use too; other countries modify the METAR code slightly, for example in units. <a href="#source-phak">{ph('13-6')}</a> Military crews also get briefings from their service's weather units; the Air Force and Army weather handbook could not be read for this revision. The jet, airfields and loads in the figures are invented; your aircraft's flight manual and your service's weather rules govern. Fuel reserves and alternates are in <a href={sortie}>Planning a Sortie</a>.</p>
+
+ <h2 id="example">One check, start to finish</h2>
+ <p>An invented check before the sortie in <a href={sortie}>Planning a Sortie</a>, from a home field at 5,000 ft on a hot afternoon. Each step links to the section that explains it.</p>
+ <ol class="exchange script">
+  <li><span class="who">Brief</span> <span class="said">Get a standard briefing for the route, home and the alternate: adverse conditions first, then the synopsis, current weather and forecasts. <a class="step" href="#brief">Why</a></span></li>
+  <li><span class="who">Report</span> <span class="said">Home's METAR: wind from 270° at 12 kt, 10 miles, a few clouds at 4,000 ft, 35 °C, altimeter 29.80. No ceiling. <a class="step" href="#metar">How</a></span></li>
+  <li><span class="who">Forecast</span> <span class="said">Read the TAF for your arrival time, not for now: a temporary thunderstorm in your landing hour changes the plan. <a class="step" href="#taf">How</a></span></li>
+  <li><span class="who">Density altitude</span> <span class="said">5,000 ft field, altimeter 29.80: pressure altitude {ft(hotPa)}. At 35 °C the density altitude is about {ft(hotDa)}: the jet will take off as if from a field that high. <a class="step" href="#density">How</a></span></li>
+  <li><span class="who">Distances</span> <span class="said">Enter the flight manual's takeoff chart with that pressure altitude, temperature and weight, and compare the distance with the runway. <a class="step" href="#takeoff">Why</a></span></li>
+  <li><span class="who">Balance</span> <span class="said">Add up the weights and moments: {wb.weight.toLocaleString('en-US')} lb with the CG at {wb.cg.toFixed(1)} in, inside the {LOADING.limits.fwd}–{LOADING.limits.aft} in limits. <a class="step" href="#balance">How</a></span></li>
+ </ol>
+ <p class="key"><strong>Key point:</strong> check the weather for when you will be there, and the aircraft's performance for the air it will actually fly in, before you commit to the plan.</p>
+
+ <h2 id="brief">The weather brief</h2>
+ <p>Check the weather before the rest of the plan, because it decides whether the flight is possible and which route is best. <a href="#source-phak">{ph('16-17')}</a> The FAA's <Term>standard briefing</Term> gives its items in a fixed order, which is a good order to read any brief in: <a href="#source-phak">{ph('13-5')}</a></p>
+ <div class="table-scroll" role="region" aria-label="The standard briefing" tabindex="0"><table>
+  <caption>The standard briefing, in order <a href="#source-phak">{ph('13-5')}</a></caption>
+  <thead><tr><th scope="col">#</th><th scope="col">Item</th><th scope="col">What it tells you</th></tr></thead>
+  <tbody>
+   <tr><td>1</td><th scope="row">Adverse conditions</th><td>Thunderstorms, icing, airfield closures: anything that may cancel or reroute the flight</td></tr>
+   <tr><td>2</td><th scope="row">VFR flight not recommended</th><td>When VFR flight looks doubtful; the decision stays the pilot's</td></tr>
+   <tr><td>3</td><th scope="row">Synopsis</th><td>Fronts and the major weather systems</td></tr>
+   <tr><td>4</td><th scope="row">Current conditions</th><td>Ceilings, visibility, winds and temperatures (left out if departure is over 2 hours away)</td></tr>
+   <tr><td>5–6</td><th scope="row">En route and destination forecasts</th><td>The route, and the destination at your ETA</td></tr>
+   <tr><td>7</td><th scope="row">Winds and temperatures aloft</th><td>The winds for your nav log</td></tr>
+   <tr><td>8–10</td><th scope="row">NOTAMs, ATC delays, other information</th><td>What has changed, and the frequencies you need</td></tr>
+  </tbody>
+ </table></div>
+ <p>An outlook briefing, for a departure 6 hours or more away, gives trends for early planning; get a standard briefing before you go. <a href="#source-phak">{ph('13-5')}</a></p>
+ <p class="key"><strong>Key point:</strong> read a brief in the order it is given: what could stop the flight first, the big picture, then the numbers for each place and time you will be.</p>
+
+ <h2 id="metar">Reading a METAR</h2>
+ <p>A <Term>METAR</Term> is an observation of the current surface weather in a standard international format, issued on a schedule, with a <Term>SPECI</Term> between reports when the weather changes fast. <a href="#source-phak">{ph('13-6')}</a> Its groups always come in the same order:</p>
+ <div class="table-scroll" role="region" aria-label="METAR groups" tabindex="0"><table>
+  <caption>The groups of a METAR, using the FAA handbook's example <a href="#source-phak">{ph('13-6 to 13-7')}</a></caption>
+  <thead><tr><th scope="col">Group</th><th scope="col">Example</th><th scope="col">How to read it</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Type and station</th><td>METAR KGGG</td><td>Routine report (SPECI for a special), four-letter ICAO identifier</td></tr>
+   <tr><th scope="row">Time</th><td>161753Z</td><td>Day of the month, then the time in UTC</td></tr>
+   <tr><th scope="row">Modifier</th><td>AUTO</td><td>Automated station; COR for a corrected report</td></tr>
+   <tr><th scope="row">Wind</th><td>14021G26KT</td><td>Direction it blows from in degrees true, speed in knots, G and the peak gust; VRB if variable</td></tr>
+   <tr><th scope="row">Visibility</th><td>3/4SM</td><td>Prevailing visibility in statute miles, then any <Term>RVR</Term></td></tr>
+   <tr><th scope="row">Weather</th><td>+TSRA BR</td><td>Intensity, descriptor, phenomenon (see <a href="#codes">the codes</a>)</td></tr>
+   <tr><th scope="row">Sky</th><td>BKN008 OVC012CB</td><td>Cover in eighths, base in hundreds of feet above ground, CB or TCU; VV for an obscured sky</td></tr>
+   <tr><th scope="row">Temperature and dew point</th><td>18/17</td><td>°C; M means minus</td></tr>
+   <tr><th scope="row">Altimeter</th><td>A2970</td><td>Inches of mercury</td></tr>
+   <tr><th scope="row">Remarks</th><td>RMK PRESFR</td><td>Anything else: here, pressure falling rapidly</td></tr>
+  </tbody>
+ </table></div>
+ <section class="lesson figure-lesson" data-lesson="metar" aria-labelledby="metar-title">
+  <h3 id="metar-title" class="fig-title">Figure 1 — Decode a METAR</h3>
+  <p>Choose a report or type one. Each group is decoded, and the ceiling is the lowest broken or overcast layer or vertical visibility.</p>
+  <div class="buttons chips" data-examples role="group" aria-label="Example reports"></div>
+  <label class="field" for="metar-text">Report</label>
+  <input id="metar-text" class="report" type="text" spellcheck="false" autocomplete="off" />
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <div class="table-scroll" role="region" aria-label="Decoded report" tabindex="0"><table class="decode">
+   <thead><tr><th scope="col">Group</th><th scope="col">Kind</th><th scope="col">Meaning</th></tr></thead>
+   <tbody>{ggg.parts.map((p: { tok: string; kind: string; text: string }) => <tr><th scope="row">{p.tok}</th><td>{p.kind}</td><td>{p.text}</td></tr>)}</tbody>
+  </table></div>
+  <p class="no-js">Interactive figure unavailable. The table decodes the FAA handbook's example: ceiling {ggg.ceiling?.toLocaleString('en-US')} ft, visibility ¾ mile in a thunderstorm with heavy rain.</p>
+  <p class="fig-caption">The decoder follows the US code in the FAA handbook <a href="#source-phak">{ph('13-6 to 13-7')}</a>; groups from other countries' variants are flagged as not decoded. The first example is the handbook's; the others are invented.</p>
+ </section>
+ <p class="key"><strong>Key point:</strong> a METAR is read left to right in a fixed order; the ceiling is the lowest broken or overcast layer, and heights are above the ground, not sea level.</p>
+
+ <h2 id="taf">Reading a TAF</h2>
+ <p>A <Term>TAF</Term> forecasts the weather within five statute miles of an airport for 24 or 30 hours, in the METAR's codes. It is issued four times a day, at 0000Z, 0600Z, 1200Z and 1800Z, or amended. After the station and time of issue comes the valid period, then the base forecast, then change groups. <a href="#source-phak">{ph('13-9')}</a></p>
+ <div class="table-scroll" role="region" aria-label="TAF change groups" tabindex="0"><table>
+  <caption>TAF change groups <a href="#source-phak">{ph('13-9')}</a></caption>
+  <thead><tr><th scope="col">Group</th><th scope="col">Meaning</th><th scope="col">Example</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>FM</Term></th><td>From this time, a rapid and significant change, usually within an hour; the new conditions hold until the next FM</td><td>FM1500: from 1500Z</td></tr>
+   <tr><th scope="row"><Term>TEMPO</Term></th><td>Temporary fluctuations expected to last less than an hour, within the period given</td><td>TEMPO 1112/1114: between 1200Z and 1400Z on the 11th</td></tr>
+   <tr><th scope="row"><Term>PROB30</Term></th><td>A 30% probability of thunderstorms and precipitation in the period; not used in the first 6 hours</td><td>PROB30 1200/1204</td></tr>
+  </tbody>
+ </table></div>
+ <section class="lesson figure-lesson" data-lesson="taf" aria-labelledby="taf-title">
+  <h3 id="taf-title" class="fig-title">Figure 2 — A TAF on a timeline</h3>
+  <p>Move your arrival time. The top row is the prevailing forecast, the bottom row the temporary and probable changes; blue marks a ceiling below 3,000 ft or visibility below 5 miles.</p>
+  <div class="controls">
+   <label for="taf-eta">Hours after the start of the forecast <output for="taf-eta"></output></label><input id="taf-eta" type="range" min="0" max="23" step="1" value="13" data-unit="h" />
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 2, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 240" role="img" aria-label="Timeline of the example TAF's base forecast, FM groups, TEMPO groups and PROB30 group over its 24-hour valid period"></svg></div>
+  <p class="no-js">Interactive figure unavailable. From 0000Z on the 12th the forecast is broken at 8,000 ft and over 6 miles, with a 30% chance until 0400Z of 3 miles in thunderstorms and rain with cumulonimbus at 3,000 ft.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">The FAA handbook's example TAF for Pierre, South Dakota <a href="#source-phak">{ph('13-9')}</a>. Its printed code leaves out the base forecast that its explanation gives (wind from 150° at 12 kt, over 6 miles, broken at 9,000 ft); the figure puts it back. The blue threshold is only a highlight for the figure, not a rule.</p>
+ </section>
+ <p>Compare the forecast for your arrival time with the weather you need, and with your service's rules for when an alternate is required and what weather it must have; <a href={sortie}>Planning a Sortie</a> shows the US civil rules for comparison.</p>
+ <p class="key"><strong>Key point:</strong> read a TAF for the hour you will be there: the prevailing group in force then, plus any TEMPO or PROB30 that covers it.</p>
+
+ <h2 id="density">Density altitude</h2>
+ <p>Aircraft performance is measured against the standard atmosphere. <Term>Pressure altitude</Term> is the height above the standard datum plane, where pressure is 29.92 inches: what the altimeter reads set to 29.92. <Term>Density altitude</Term> is pressure altitude corrected for nonstandard temperature: the altitude in the standard atmosphere with the same density. The higher it is, the worse the aircraft performs. <a href="#source-phak">{ph('11-3')}</a></p>
+ <p>Find pressure altitude from the field elevation and the altimeter setting, with the handbook's correction table or by setting 29.92 on the altimeter. <a href="#source-phak">{ph('11-4')}</a> Then compare the temperature with standard, which falls about 2 °C per 1,000 ft from 15 °C at sea level: warmer than standard puts density altitude above pressure altitude. At a 5,048 ft field, standard temperature is about 5 °C; at 30 °C the density altitude is 7,855 ft, and at −25 °C it is 1,232 ft. <a href="#source-phak">{ph('8-7, 11-3')}</a> Elevation, temperature and humidity all work the same way on performance: the higher they are, the longer the takeoff and landing rolls. <a href="#source-phak">{ph('16-18')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="density" aria-labelledby="density-title">
+  <h3 id="density-title" class="fig-title">Figure 3 — Three altitudes for one airfield</h3>
+  <div class="controls">
+   <label for="da-elev">Field elevation <output for="da-elev"></output></label><input id="da-elev" type="range" min="0" max="8000" step="100" value="5000" data-unit="ft" />
+   <label for="da-alt">Altimeter setting <output for="da-alt"></output></label><input id="da-alt" type="range" min="29.00" max="30.60" step="0.02" value="29.80" data-unit="in" data-fmt="alt" />
+   <label for="da-oat">Temperature <output for="da-oat"></output></label><input id="da-oat" type="range" min="-30" max="50" step="1" value="35" data-unit="°C" />
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 3, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 240" role="img" aria-label="Altitude scale showing the field elevation, the pressure altitude and the density altitude"></svg></div>
+  <p class="no-js">Interactive figure unavailable. A 5,000 ft field with the altimeter at 29.80 has a pressure altitude of {ft(hotPa)}; at 35 °C its density altitude is about {ft(hotDa)}.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Pressure altitude uses the FAA handbook's altimeter correction table <a href="#source-phak">{ph('11-4')}</a>; density altitude is computed from the standard atmosphere for dry air and reproduces the handbook's 7,855 ft and 1,232 ft examples <a href="#source-phak">{ph('8-7')}</a>. Humidity, which raises density altitude further, is left out.</p>
+ </section>
+ <p class="key"><strong>Key point:</strong> pressure altitude comes from the altimeter setting and density altitude from the temperature; above-standard temperature puts the aircraft higher than the field, in performance terms.</p>
+
+ <h2 id="takeoff">Takeoff and landing distance</h2>
+ <p>Take the takeoff and landing distances from the aircraft's charts for the calculated weight, the field's elevation and the temperature, and compare them with the runway available. The heavier the load and the higher the elevation, temperature or humidity, the longer the takeoff and landing rolls and the lower the rate of climb. <a href="#source-phak">{ph('16-18')}</a></p>
+ <div class="table-scroll" role="region" aria-label="What changes takeoff and landing distance" tabindex="0"><table>
+  <caption>What changes the distances <a href="#source-phak">{ph('11-13 to 11-14, 16-18')}</a></caption>
+  <thead><tr><th scope="col">Factor</th><th scope="col">Takeoff</th><th scope="col">Landing</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Higher weight, elevation, temperature or humidity</th><td>Longer, and a lower climb rate</td><td>Longer</td></tr>
+   <tr><th scope="row">Upsloping runway</th><td>Longer ground run</td><td>Usually shorter roll</td></tr>
+   <tr><th scope="row">Downsloping runway</th><td>Shorter</td><td>Longer</td></tr>
+   <tr><th scope="row">Wet or icy runway</th><td>—</td><td>Less braking; dynamic hydroplaning can remove braking and directional control</td></tr>
+  </tbody>
+ </table></div>
+ <p>Hydroplaning starts at about nine times the square root of the main tyre pressure in psi, in knots, and once started can continue well below that speed. <a href="#source-phak">{ph('11-14')}</a> Runway slope and surface are in the airfield directory. <a href="#source-phak">{ph('11-13')}</a> The runway markings and arresting gear are in <a href={airfield}>The Airfield and the Traffic Pattern</a>.</p>
+ <p class="key"><strong>Key point:</strong> the distances come from the aircraft's own charts for today's weight, pressure altitude and temperature; the runway's slope and surface then make them longer or shorter.</p>
+
+ <h2 id="balance">Weight and balance</h2>
+ <p>The total weight is the empty weight plus everything loaded; the harder part is that it must balance about a <Term>center of gravity</Term> inside the manufacturer's limits. <a href="#source-phak">{ph('10-5')}</a> Each item's <Term>moment</Term> is its weight times its <Term>moment arm</Term>, the distance from the <Term>datum</Term>; the CG is the total moment divided by the total weight. <a href="#source-phak">{ph('10-4 to 10-6')}</a> Use the latest weight and balance data for the airframe, because modifications change it. <a href="#source-phak">{ph('16-18')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="balance" aria-labelledby="balance-title">
+  <h3 id="balance-title" class="fig-title">Figure 4 — Loading an invented trainer</h3>
+  <p>Change the loads. Fly it solo with full fuel and see where the CG goes; then put weight in the nose pod.</p>
+  <div class="controls">
+   {LOADING.items.map((it) => <><label for={`wb-${it.id}`}>{it.label}, arm {it.arm} in <output for={`wb-${it.id}`}></output></label><input id={`wb-${it.id}`} type="range" min={it.min} max={it.max} step={it.step} value={it.value} data-unit="lb" /></>)}
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 4, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 240" role="img" aria-label="Side view of an invented trainer with the datum, each load at its arm, the CG limits and the computed center of gravity"></svg></div>
+  <p class="no-js">Interactive figure unavailable. Two crew and full fuel: {wb.weight.toLocaleString('en-US')} lb, CG {wb.cg.toFixed(1)} in. Solo: CG {solo.cg.toFixed(1)} in, aft of the {LOADING.limits.aft} in limit, because the rear-seat weight was forward of the CG.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">An invented aircraft: its empty weight {LOADING.empty.weight.toLocaleString('en-US')} lb at {LOADING.empty.arm} in, arms and limits are made up. The method is the FAA handbook's <a href="#source-phak">{ph('10-4 to 10-6')}</a>; a real aircraft's limits come from its flight manual.</p>
+ </section>
+ <section class="lesson quiz-lesson" data-lesson="wx" aria-labelledby="wx-title">
+  <h3 id="wx-title">Quiz: weather and performance</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next question</button></div>
+ </section>
+ <p class="key"><strong>Key point:</strong> the CG is total moment ÷ total weight; adding, removing or burning anything moves it toward or away from that item's arm.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>Read a brief in its order: adverse conditions first, then the picture, then the numbers. <a href="#brief">More</a></li>
+  <li>A METAR's groups come in a fixed order; the ceiling is the lowest broken or overcast layer, above ground. <a href="#metar">More</a></li>
+  <li>Read the TAF for your arrival time, prevailing group plus any TEMPO or PROB30. <a href="#taf">More</a></li>
+  <li>Density altitude is pressure altitude corrected for temperature; high, hot and humid make it higher and performance worse. <a href="#density">More</a></li>
+  <li>Take distances from the aircraft's charts for today's conditions and compare them with the runway. <a href="#takeoff">More</a></li>
+  <li>CG = total moment ÷ total weight, and it must stay inside the limits. <a href="#balance">More</a></li>
+ </ul>
+
+ <h2 id="codes">METAR weather codes</h2>
+ <p>A weather group is built from these columns in order: intensity, then descriptor, then the phenomena; heavy rain showers is +SHRA. <a href="#source-phak">{ph('13-7')}</a></p>
+ <div class="table-scroll" role="region" aria-label="METAR weather codes" tabindex="0"><table>
+  <caption>Weather codes <a href="#source-phak">{ph('13-7')}</a></caption>
+  <thead><tr><th scope="col">Intensity or proximity</th><th scope="col">Descriptor</th><th scope="col">Precipitation</th><th scope="col">Obscuration</th><th scope="col">Other</th></tr></thead>
+  <tbody>
+   <tr><td>− light</td><td>MI shallow</td><td>DZ drizzle</td><td>BR mist</td><td>PO dust or sand whirls</td></tr>
+   <tr><td>(none) moderate</td><td>BC patches</td><td>RA rain</td><td>FG fog</td><td>SQ squalls</td></tr>
+   <tr><td>+ heavy</td><td>DR low drifting</td><td>SN snow</td><td>FU smoke</td><td>FC funnel cloud</td></tr>
+   <tr><td>VC in the vicinity</td><td>BL blowing</td><td>SG snow grains</td><td>DU dust</td><td>+FC tornado or waterspout</td></tr>
+   <tr><td></td><td>SH showers</td><td>IC ice crystals</td><td>SA sand</td><td>SS sandstorm</td></tr>
+   <tr><td></td><td>TS thunderstorm</td><td>PL ice pellets</td><td>HZ haze</td><td>DS dust storm</td></tr>
+   <tr><td></td><td>FZ freezing</td><td>GR hail</td><td>PY spray</td><td></td></tr>
+   <tr><td></td><td>PR partial</td><td>GS small hail or snow pellets</td><td>VA volcanic ash</td><td></td></tr>
+   <tr><td></td><td></td><td>UP unknown (automated stations)</td><td></td><td></td></tr>
+  </tbody>
+ </table></div>
+ <p>Sky cover is reported in eighths: FEW 1 to 2, SCT 3 to 4, BKN 5 to 7, OVC 8. Automated stations do not report clouds above 12,000 ft. <a href="#source-phak">{ph('13-7')}</a></p>
+
+ <h2 id="pirep">Pilot reports</h2>
+ <p>A <Term>PIREP</Term> gives what no other source can: the real bases and tops of cloud, wind shear, turbulence and icing. When the ceiling is below 5,000 ft or visibility 5 miles or less, US ATC facilities must ask pilots for them. <a href="#source-phak">{ph('13-8')}</a> A report needs at least its first five items, the nearest station, the report type (UA routine, UUA urgent), location, time and altitude, plus one weather phenomenon. <a href="#source-phak">{ph('13-8')}</a></p>
+
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p>This is what the official manuals of Falcon BMS and DCS World say about weather and performance; other sims and individual DCS aircraft modules were not checked for this revision.</p>
+  <h3>Falcon BMS 4.38</h3>
+  <ul>
+   <li>Weather is set per mission or campaign from four basic types, sunny, fair, poor and inclement, with temperature, pressure, turbulence, wind and cloud for each, and can change over time or follow a map model. <a href="#source-bms">[3, p. 48]</a></li>
+   <li>The briefing page shows a weather report with the predicted weather at takeoff, over the target at the time on target, and at landing; the manual says to check the ATIS near your base for the latest. <a href="#source-bms">[3, p. 55]</a></li>
+  </ul>
+  <h3>DCS World</h3>
+  <ul>
+   <li>The mission editor sets the sea-level temperature, and the manual notes that air temperature affects aircraft performance. <a href="#source-dcs">[4, p. 112]</a></li>
+   <li>The 2020 manual describes cloud density on a 0 to 10 scale, where 1 to 8 are scattered and 9 and 10 a solid deck, and QNH in millimetres of mercury. <a href="#source-dcs">[4, pp. 112–113]</a></li>
+  </ul>
+  <h3>Where the sims and the real world differ, or say nothing</h3>
+  <ul>
+   <li>DCS's 0 to 10 cloud density is not the METAR's eighths: there is no direct conversion in the manual, so read the cloud on the briefing as the sim's own scale. <a href="#source-dcs">[4, p. 112]</a> <a href="#source-phak">{ph('13-7')}</a></li>
+   <li>Neither manual describes METAR or TAF output or a performance calculation; use the mission's temperature, field elevation and pressure with Figure 3 and your module's own takeoff charts.</li>
+  </ul>
+  <p><strong>To practise:</strong> before a hot-day sim mission, take the briefed temperature and pressure, work the density altitude in Figure 3, and look up the takeoff distance in your module's manual before you taxi.</p>
+ </section>
+
+ <h2 id="terms">Terms</h2>
+ <p>Every term here is in the <a href={glossary}>flight planning terms</a>, except ceiling, which is in the airfield and ATC terms.</p>
+ <GlossaryList items={[
+  'Standard briefing', 'METAR', 'SPECI', 'Ceiling', 'RVR', 'TAF', 'FM', 'TEMPO', 'PROB30', 'PIREP', 'Pressure altitude', 'Density altitude', 'Datum', 'Moment arm', 'Moment', 'Center of gravity',
+ ]} />
+ <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
+  <h3 id="terms-title">Quiz: name the term</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next term</button></div>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <p>One or more questions for each outcome; the quiz in <a href="#balance">Weight and balance</a> and Figures 1 to 4 cover more.</p>
+ <details><summary><span class="outcome">Outcome 1</span> Your departure is 8 hours away. Which briefing, and what then?</summary><p>An outlook briefing for trends now, then a standard briefing close to departure.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> Decode VRB04KT 1 1/2SM BR SCT005 OVC010 12/11 A3001 down to the ceiling.</summary><p>Wind variable at 4 kt, visibility 1½ miles in mist, scattered at 500 ft, overcast at 1,000 ft: the ceiling is 1,000 ft, because a scattered layer is not a ceiling.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> In Figure 2's TAF, what could you meet arriving at 0200Z on the 12th?</summary><p>Prevailing: broken at 8,000 ft and over 6 miles; but there is a 30% chance of 3 miles in thunderstorms and rain with cumulonimbus at 3,000 ft until 0400Z.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> Same field, same altimeter setting, but 20 °C warmer. What happens to pressure altitude and density altitude?</summary><p>Pressure altitude is unchanged; density altitude rises, so takeoff and landing distances grow and climb rate falls.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> Why might a downsloping runway be good for takeoff but bad for landing?</summary><p>Downslope helps acceleration on takeoff but lengthens the landing roll.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> In Figure 4, why does the CG move aft when the rear seat is empty?</summary><p>The rear-seat load sits forward of the CG, at {LOADING.items[1].arm} in; removing it takes away forward moment, so the balance point moves aft.</p></details>
+
+ <h2 id="sources">Sources and applicability</h2>
+ <h3>Sources (US civil, shared by US military pilots)</h3>
+ <p id="source-phak"><strong>[1] Federal Aviation Administration, FAA-H-8083-25B, Pilot's Handbook of Aeronautical Knowledge.</strong> <a href="https://www.faa.gov/sites/faa.gov/files/2022-03/pilot_handbook.pdf">PDF</a>, read 3 November 2026, by printed page: 8-7, 10-4 to 10-6, 11-3 to 11-4, 11-13 to 11-14, 13-5 to 13-9 and 16-17 to 16-18.</p>
+ <p id="source-cfr"><strong>[2] 14 CFR part 91.</strong> The US civil fuel and alternate rules are summarised, with their source, in <a href={`${sortie}#reserves`}>Planning a Sortie</a>.</p>
+ <h3>Sim sources</h3>
+ <p id="source-bms"><strong>[3] Benchmark Sims, Falcon BMS 4.38 User Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-User-Manual.pdf">PDF</a>, read 3 November 2026, pp. 48 and 55. A sim manual, cited only for the In the sim panel.</p>
+ <p id="source-dcs"><strong>[4] Eagle Dynamics, DCS User Manual (English, 2020).</strong> <a href="https://www.digitalcombatsimulator.com/upload/iblock/ed6/87v22jwd1xh51i3rgki944xsf503istq/DCS_User_Manual_EN_2020.pdf">DCS User Manual (PDF)</a>, read 3 November 2026, pp. 112–113. A sim manual, cited only for the In the sim panel; later DCS versions changed the weather editor.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/flight-planning-evidence.md">Flight Planning evidence</a>.</p>
+ <p>Figures 1 to 4 use the FAA handbook's examples where stated; the other reports, the airfields, the trainer and its loads are invented.</p>
+ <p class="note">Applicability: written for pilots of every service. The METAR and TAF codes and the performance methods are those of the FAA handbook, used by US military and civil pilots alike; other countries' codes differ slightly. Military weather briefing products and the Air Force and Army weather handbook could not be read for this revision. Your service's weather rules, its weather unit's products and the aircraft's flight manual govern. This revision is Drafted pending independent source-backed review.</p>
+</SiteLayout>
+
+<script>import '../../../lessons/flight-planning/weather-ui.mjs';</script>
+
+<style>
+  .contents-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
+  .contents h3 { margin: 0.4rem 0 0.2rem; font-size: 0.95rem; }
+  .contents ol { padding-left: 1.5rem; margin-top: 0; }
+  .lede { font-size: 1.1rem; }
+  .key { padding: 0.6rem 1rem; border-left: 0.25rem solid var(--color-link); background: var(--color-surface); }
+  ul.recap li { margin-block: 0.3rem; }
+  details.more { margin-block: 1rem; padding: 0.5rem 1rem; border: 1px solid var(--color-border); }
+  details.more summary { cursor: pointer; font-weight: 700; }
+  ol.exchange { list-style: none; padding-left: 1rem; border-left: 0.25rem solid var(--color-border); }
+  ol.exchange li { display: grid; grid-template-columns: 6.5rem 1fr; column-gap: 0.75rem; margin-block: 0.4rem; }
+  ol.exchange .who { font-weight: 700; }
+  ol.exchange .step { margin-left: 0.4rem; font-size: 0.85rem; white-space: nowrap; }
+  .outcome { display: inline-block; margin-right: 0.4rem; padding: 0 0.4rem; font-size: 0.8rem; border: 1px solid var(--color-border); color: var(--color-muted); }
+  .sim-panel { margin: 2rem 0; padding: 0.75rem 1.25rem; border-left: 4px solid var(--color-accent); background: var(--color-surface, #f6f7f8); }
+  .sim-panel h2 { margin-top: 0.4rem; }
+  .sim-panel h3 { margin: 1rem 0 0.3rem; font-size: 1rem; }
+  table { width: 100%; border-collapse: collapse; }
+  caption { padding: 0.5rem 0.75rem; text-align: left; color: var(--color-muted); font-size: 0.9rem; }
+  th, td { padding: 0.45rem 0.75rem; border-top: 1px solid var(--color-border); text-align: left; vertical-align: top; }
+  thead th { background: var(--color-surface); }
+  .note { padding: 0.75rem 1rem; border-left: 0.25rem solid var(--color-border); background: var(--color-surface); }
+  .lesson { margin-block: 1.5rem; padding: 1rem; border: 1px solid var(--color-text); }
+  .lesson h3 { margin-top: 0; }
+  button:focus-visible, input:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .lesson :global(button) { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: #fff; background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
+  .lesson :global(button:disabled) { opacity: 0.45; cursor: default; }
+  .lesson [data-choices] :global(button), .chips :global(button) { color: var(--color-text); background: #fff; font-weight: 400; text-align: left; }
+  .chips :global(button[aria-pressed="true"]) { color: #fff; background: var(--color-link); border-color: var(--color-link); }
+  .controls { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; align-items: center; margin-bottom: 0.75rem; }
+  .controls input[type="range"] { width: 100%; min-height: 2.75rem; }
+  .controls .check { grid-column: 1 / -1; }
+  .controls output { font-weight: 700; margin-left: 0.3rem; }
+  .feedback { font-weight: 700; min-height: 1.6em; }
+  .feedback :global(p) { margin: 0.2rem 0; }
+  .feedback :global(.derived) { font-weight: 400; }
+  .lesson.ready .no-js { display: none; }
+  .no-js { font-weight: 700; }
+  .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+  @media (min-width: 64rem) {
+    .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
+  }
+  .fig-scroll { overflow-x: auto; }
+  .fig-scroll :global(svg) { min-width: 36rem; }
+  .fig-title { font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 2px solid var(--color-text); padding-bottom: 0.3rem; }
+  .fig-caption { color: var(--color-muted); font-size: 0.9rem; }
+  .stepper { align-items: center; }
+  .stepper [data-count] { font-weight: 700; }
+  .quiz-lesson .task { font-style: italic; }
+  .field { display: block; font-weight: 700; margin-top: 0.5rem; }
+  input.report { width: 100%; box-sizing: border-box; min-height: 2.75rem; padding: 0.4rem 0.6rem; font: 1rem ui-monospace, monospace; border: 1px solid var(--color-text); margin-bottom: 0.5rem; }
+  table.decode th { font-family: ui-monospace, monospace; white-space: nowrap; }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--color-border); }
+  .table-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+  @media (max-width: 40rem) {
+    .contents-groups { grid-template-columns: 1fr; }
+    ol.exchange li { display: block; }
+    ol.exchange .who { display: block; }
+    .controls { grid-template-columns: 1fr; }
+  }
+  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
+  :global(.natops .frame) { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
+  :global(.natops .lbl) { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
+  :global(.natops .lbl.small) { font-size: 10px; font-weight: 400; }
+  :global(.natops .lbl.inv) { fill: #fff; }
+  :global(.natops .lbl.call) { font-size: 16px; fill: var(--color-link); }
+  :global(.natops .ln) { fill: none; stroke: var(--color-text); stroke-width: 1.8; }
+  :global(.natops .ln.heavy) { stroke-width: 2.8; }
+  :global(.natops .ln.dashed) { stroke-dasharray: 7 4; }
+  :global(.natops .ln.on), :global(.natops .thin.on) { stroke: var(--color-link); stroke-width: 2.4; }
+  :global(.natops .thin) { fill: none; stroke: var(--color-text); stroke-width: 1; }
+  :global(.natops .thin.dotted) { stroke-dasharray: 2 3; }
+  :global(.natops .shade) { fill: #e6e9ec; stroke: none; }
+  :global(.natops .fill) { fill: var(--color-text); }
+  :global(.natops .mine) { fill: var(--color-link); stroke: var(--color-link); }
+  .lesson:not(.ready) .buttons, .lesson:not(.ready) .controls, .lesson:not(.ready) svg:empty { display: none; }
+</style>

@@ -1709,6 +1709,17 @@
     "summary": "Destructive and disruptive suppression, localized and opportune SEAD, engagement zones, the radar horizon, burnthrough and the jammer geometries."
   },
   {
+    "id": "encyclopedia.terminology.flight-planning",
+    "slug": "flight-planning",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Flight planning terms",
+    "designation": "JP 3-30 · AFMAN 11-217 · FAA",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Air tasking and special instructions, the nav log's headings and speeds, the equal time point, US flight plan forms and NOTAMs, METAR and TAF codes, density altitude and weight and balance."
+  },
+  {
     "id": "encyclopedia.theatres.middle-east",
     "slug": "middle-east",
     "category": "locations",
