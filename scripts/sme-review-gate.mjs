@@ -8,15 +8,15 @@ const summaryTitle = "Oversweep Aviation SME advisory review";
 export const overrideLabel = "sme-override";
 // The SME review only runs on PRs with this label; Claude adds it when a PR is ready.
 export const reviewLabel = "sme-review";
-// A Claude thread that did not write the PR reviews it with the sme-review skill
-// (.claude/skills/sme-review) and adds this label when it finds no blockers.
+// The sme-review skill (.claude/skills/sme-review) has an independent reviewer
+// agent review the PR and adds this label when it finds no blockers.
 export const passedLabel = "sme-passed";
 
 // The gate no longer waits for the review. It fails fast, and
 // aviation-sme-review-gate-rerun.yml re-runs it when the review finishes.
 export function pendingReviewMessage({ labels, run }) {
   if (!labels?.some((label) => label.name === reviewLabel)) {
-    return `No SME review has passed for this PR head. When the PR is ready, have a separate Claude thread run the sme-review skill; it adds the \`${passedLabel}\` label if it finds no blockers.`;
+    return `No SME review has passed for this PR head. When the PR is ready and Nathan approves a review, run the sme-review skill; it adds the \`${passedLabel}\` label if it finds no blockers.`;
   }
   if (run && run.status !== "completed") {
     return "The SME review for this PR head is still running; this check re-runs when it finishes.";

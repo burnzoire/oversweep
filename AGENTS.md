@@ -66,8 +66,9 @@ historical plans; those plans are evidence inputs, not additional approval stage
 The SME review gate passes a PR that changes any path in `smeReviewPaths`
 (scripts/sme-review-gate.mjs) when it carries the `sme-passed` label, added after
 the current head was pushed. The label comes from the `sme-review` skill
-(.claude/skills/sme-review), which a Claude thread that did not write the PR runs
-only after Nathan approves a review of that PR. When a PR's content is final, ask
+(.claude/skills/sme-review), run only after Nathan approves a review of that PR;
+the skill has the read-only `aviation-sme-reviewer` agent (.claude/agents) do the
+review without authoring context. When a PR's content is final, ask
 Nathan once whether to review it; don't run the skill unasked, as each run costs
 plan usage. Any push after the label needs a fresh review, so batch fixes. The
 Copilot review workflow still runs on the `sme-review` label, but its credits are
