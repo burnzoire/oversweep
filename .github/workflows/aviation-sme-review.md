@@ -98,7 +98,12 @@ pre-agent-steps:
         printf '\nTrusted source preprocessor is absent from the base revision; no PR script was executed. Source-dependent review remains incomplete. Workflow-only changes may be reviewed as aviation-not-applicable.\n' >> /tmp/gh-aw/aw-prompts/prompt.txt
         exit 0
       fi
-      python3 .review-tooling/scripts/prepare_review_sources.py --repo "$REVIEW_REPO" --pr "$REVIEW_PR" --expected-head "$REVIEW_HEAD" --output /tmp/gh-aw/review-source-evidence.md --full-dir /tmp/gh-aw/review-sources
+      # A base revision older than --full-dir still runs, without the whole-record files.
+      full_dir=()
+      if grep -q -- '--full-dir' .review-tooling/scripts/prepare_review_sources.py; then
+        full_dir=(--full-dir /tmp/gh-aw/review-sources)
+      fi
+      python3 .review-tooling/scripts/prepare_review_sources.py --repo "$REVIEW_REPO" --pr "$REVIEW_PR" --expected-head "$REVIEW_HEAD" --output /tmp/gh-aw/review-source-evidence.md "${full_dir[@]}"
       cat /tmp/gh-aw/review-source-evidence.md >> /tmp/gh-aw/aw-prompts/prompt.txt
       if [ -f /tmp/gh-aw/aw-prompts/user.txt ]; then
         cat /tmp/gh-aw/review-source-evidence.md >> /tmp/gh-aw/aw-prompts/user.txt
