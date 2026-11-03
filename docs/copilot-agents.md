@@ -284,3 +284,12 @@ size and output, separates GitHub authentication from public fetches, and checks
 the PR head again. Foundation checks run its stdlib unit tests. The documented
 Navy controller-training mirror `navyaviation.tpub.com` is also allowed. Live
 retrieval requires the trusted workflow change on main before reviewing #47.
+
+A record too long for the reviewer's prompt (about 128k tokens) is no longer only
+cut: the preprocessor also writes it whole to `/tmp/gh-aw/review-sources/`, the
+coverage line names that file, and the reviewer reads it with its file tools.
+Other limits: 12 sources, 200 cited pages (24 ranges) per source, 30 opening
+pages for an undeclared PDF, 40 changed files (lesson and experience scripts
+included) and 400 unchanged evidence files scanned for page declarations.
+Readable hosts also include `navyflightmanuals.tpub.com`, English Wikipedia,
+FAS, bits.de and Falcon BMS documentation.
