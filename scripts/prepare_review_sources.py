@@ -63,6 +63,8 @@ SOURCE_HOSTS = frozenset({
     'fas.org', 'man.fas.org', 'irp.fas.org', 'nuke.fas.org',
     'bits.de', 'www.bits.de',
     'falcon-bms.com', 'www.falcon-bms.com', 'cdn.falcon-bms.com',
+    # A public copy of NATO ATP-3.3.4.2 (air-to-air refuelling).
+    'bloximages.chicago2.vip.townnews.com',
 })
 # .navy.mil hosts such as cnatra.navy.mil chain to DoD roots, which public CA
 # bundles leave out. These are added to (never replace) the default store for

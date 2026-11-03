@@ -14,10 +14,13 @@ const read = (category) => {
   }));
 };
 const aircraft = read('aircraft');
+const tankers = aircraft.filter((a) => a.data.group === 'tanker');
 const maps = read('locations').filter((e) => e.data.kind === 'map');
 
+// Tanker records describe the aircraft sim pilots refuel from, which no sim
+// sells as a flyable product, so they may leave the row out.
 test('every aircraft and sim map has a valid purchase list', () => {
-  for (const { slug, data } of [...aircraft, ...maps]) {
+  for (const { slug, data } of [...aircraft.filter((a) => a.data.group !== 'tanker'), ...maps]) {
     assert.ok(data.purchase?.length, `${slug} has no purchase entries`);
     assert.deepEqual(validatePurchases(data.purchase, slug), []);
   }
@@ -42,4 +45,8 @@ test('an entry is sold, free or not on sale', () => {
   assert.equal(validatePurchases([{ ...base, unavailable: 'Gone', links: [{ store: 'S', url: 'https://example.org' }] }], 'x').length, 1);
   assert.equal(validatePurchases([{ ...base, sim: 'xplane', unavailable: 'Gone' }], 'x').length, 1);
   assert.equal(validatePurchases([{ ...base, links: [{ store: 'S', url: 'http://example.org' }] }], 'x').length, 1);
+});
+
+test('a tanker record that does list a purchase lists a valid one', () => {
+  for (const { slug, data } of tankers) assert.deepEqual(validatePurchases(data.purchase, slug), []);
 });
