@@ -15,6 +15,10 @@ const reference = [
 ];
 // [1] FAA PHAK FAA-H-8083-25B, by printed page. [2] 14 CFR part 91 (US civil rules).
 // [3] Falcon BMS 4.38 User Manual and [4] DCS User Manual, sim crossover only.
+// [5] AFH 11-203V2 / TC 3-04.14-2 and [6] CNAF M-3710.7: military weather briefs,
+// read from copies Nathan uploaded (excerpts in the evidence file).
+const afh = (para: string) => `[5, para ${para}]`;
+const cnaf = (para: string) => `[6, para ${para}]`;
 const ph = (page: string) => `[1, ${/to|,/.test(page) ? 'pp.' : 'p.'} ${page}]`;
 const sortie = sitePath('manual/flight-planning/sortie-planning/');
 const glossary = sitePath('encyclopedia/terminology/flight-planning/');
@@ -48,7 +52,7 @@ const ft = (x: number) => `${Math.round(x).toLocaleString('en-US')} ft`;
   <li>work out <Term>pressure altitude</Term> and <Term>density altitude</Term>, and say what raises takeoff and landing distance;</li>
   <li>find the <Term>center of gravity</Term> from weights and <Term id="Moment arm">arms</Term>, and say why it must stay within limits.</li>
  </ol>
- <p class="note">The codes and methods here are the US ones in the FAA's handbook, which US military reports use too; other countries modify the METAR code slightly, for example in units. <a href="#source-phak">{ph('13-6')}</a> Military crews also get briefings from their service's weather units; the Air Force and Army weather handbook could not be read for this revision. The jet, airfields and loads in the figures are invented; your aircraft's flight manual and your service's weather rules govern. Fuel reserves and alternates are in <a href={sortie}>Planning a Sortie</a>.</p>
+ <p class="note">The codes and methods here are the US ones in the FAA's handbook, which US military reports use too; other countries modify the METAR code slightly, for example in units. <a href="#source-phak">{ph('13-6')}</a> Military crews get their briefs from their service's weather units, as described below. The jet, airfields and loads in the figures are invented; your aircraft's flight manual and your service's weather rules govern. Fuel reserves and alternates are in <a href={sortie}>Planning a Sortie</a>.</p>
 
  <h2 id="example">One check, start to finish</h2>
  <p>An invented check before the sortie in <a href={sortie}>Planning a Sortie</a>, from a home field at 5,000 ft on a hot afternoon. Each step links to the section that explains it.</p>
@@ -63,7 +67,9 @@ const ft = (x: number) => `${Math.round(x).toLocaleString('en-US')} ft`;
  <p class="key"><strong>Key point:</strong> check the weather for when you will be there, and the aircraft's performance for the air it will actually fly in, before you commit to the plan.</p>
 
  <h2 id="brief">The weather brief</h2>
- <p>Check the weather before the rest of the plan, because it decides whether the flight is possible and which route is best. <a href="#source-phak">{ph('16-17')}</a> The FAA's <Term>standard briefing</Term> gives its items in a fixed order, which is a good order to read any brief in: <a href="#source-phak">{ph('13-5')}</a></p>
+ <p>Check the weather before the rest of the plan, because it decides whether the flight is possible and which route is best. <a href="#source-phak">{ph('16-17')}</a></p>
+ <p><strong>Military briefs.</strong> Air Force and Army crews go to the base weather flight, or the regional operational weather squadron when away from home, and turn to other DoD, US Government and, last, foreign weather services only when those are unavailable; the standard written brief is the <Term>DD Form 175-1</Term>, Flight Weather Briefing, and a unit's mission forecast may stand in for it on local flights. <a href="#source-afh">{afh('1.6.1')}</a> Naval aviators with any part of the route forecast in instrument conditions get a flight route brief from a DoD-qualified forecaster or approved service. <a href="#source-cnaf">{cnaf('4.8.3')}</a> When you ask for one, give your name and that you are aircrew, the aircraft and call sign, the route with any stops, low levels or ranges, the altitude, departure, arrival and return times, the destination and alternates, and how to send the brief; a weather squadron needs at least 2 hours' notice. <a href="#source-afh">{afh('1.6.1.3')}</a></p>
+ <p>The FAA's <Term>standard briefing</Term> gives its items in a fixed order, which is a good order to read any brief in: <a href="#source-phak">{ph('13-5')}</a></p>
  <div class="table-scroll" role="region" aria-label="The standard briefing" tabindex="0"><table>
   <caption>The standard briefing, in order <a href="#source-phak">{ph('13-5')}</a></caption>
   <thead><tr><th scope="col">#</th><th scope="col">Item</th><th scope="col">What it tells you</th></tr></thead>
@@ -272,12 +278,15 @@ const ft = (x: number) => `${Math.round(x).toLocaleString('en-US')} ft`;
  <h3>Sources (US civil, shared by US military pilots)</h3>
  <p id="source-phak"><strong>[1] Federal Aviation Administration, FAA-H-8083-25B, Pilot's Handbook of Aeronautical Knowledge.</strong> <a href="https://www.faa.gov/sites/faa.gov/files/2022-03/pilot_handbook.pdf">PDF</a>, read 3 November 2026, by printed page: 8-7, 10-4 to 10-6, 11-3 to 11-4, 11-13 to 11-14, 13-5 to 13-9 and 16-17 to 16-18.</p>
  <p id="source-cfr"><strong>[2] 14 CFR part 91.</strong> The US civil fuel and alternate rules are summarised, with their source, in <a href={`${sortie}#reserves`}>Planning a Sortie</a>.</p>
+ <h3>Military sources</h3>
+ <p id="source-afh"><strong>[5] US Air Force and US Army, AFH 11-203 Volume 2 / TC 3-04.14-2, Weather for Aircrews — Products and Services, 13 August 2015, incorporating Change 5 of 13 December 2022.</strong> <a href="https://static.e-publishing.af.mil/production/1/af_a3/publication/afh11-203v2/afh11-203v2.pdf">Published on the Air Force e-Publishing site</a>, which states no releasability restrictions; read 3 November 2026 from a copy supplied for this revision, paragraphs 1.6.1 to 1.6.1.3 and Tables 1.1 and 1.2.</p>
+ <p id="source-cnaf"><strong>[6] US Navy, CNAF M-3710.7, NATOPS General Flight and Operating Instructions Manual, 5 May 2016.</strong> Read 3 November 2026 from a copy supplied for this revision, paragraph 4.8.3, flight route weather briefing; summarised in this site's own words. Later editions may exist.</p>
  <h3>Sim sources</h3>
  <p id="source-bms"><strong>[3] Benchmark Sims, Falcon BMS 4.38 User Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-User-Manual.pdf">PDF</a>, read 3 November 2026, pp. 48 and 55. A sim manual, cited only for the In the sim panel.</p>
  <p id="source-dcs"><strong>[4] Eagle Dynamics, DCS User Manual (English, 2020).</strong> <a href="https://www.digitalcombatsimulator.com/upload/iblock/ed6/87v22jwd1xh51i3rgki944xsf503istq/DCS_User_Manual_EN_2020.pdf">DCS User Manual (PDF)</a>, read 3 November 2026, pp. 112–113. A sim manual, cited only for the In the sim panel; later DCS versions changed the weather editor.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/flight-planning-evidence.md">Flight Planning evidence</a>.</p>
  <p>Figures 1 to 4 use the FAA handbook's examples where stated; the other reports, the airfields, the trainer and its loads are invented.</p>
- <p class="note">Applicability: written for pilots of every service. The METAR and TAF codes and the performance methods are those of the FAA handbook, used by US military and civil pilots alike; other countries' codes differ slightly. Military weather briefing products and the Air Force and Army weather handbook could not be read for this revision. Your service's weather rules, its weather unit's products and the aircraft's flight manual govern. This revision is Drafted pending independent source-backed review.</p>
+ <p class="note">Applicability: written for pilots of every service. The METAR and TAF codes and the performance methods are those of the FAA handbook, used by US military and civil pilots alike; other countries' codes differ slightly. Military weather briefs are from the Air Force and Army weather handbook and the Navy's general flight rules. Your service's weather rules, its weather unit's products and the aircraft's flight manual govern. This revision is Drafted pending independent source-backed review.</p>
 </SiteLayout>
 
 <script>import '../../../lessons/flight-planning/weather-ui.mjs';</script>

@@ -32,7 +32,7 @@ Reviews are source-inspection editorial findings, **not** rendered-browser QA, e
 - [Case III](content-audit-case-iii.md)
 - [Autorotation](content-audit-autorotation.md)
 
-New modules are written to the playbook from the first draft and are not audited separately: Instrument flying (revision 1, PR for issue #97), since split into Attitude Instrument Flying and Instrument Procedures (both revision 1). Two-Ship Formation (revision 1, issue #99) likewise.
+New modules are written to the playbook from the first draft and are not audited separately: Instrument flying (revision 1, PR for issue #97), since split into Attitude Instrument Flying and Instrument Procedures (both revision 1). Two-Ship Formation (revision 1, issue #99), SEAD and DEAD (revision 1, issue #124), and Planning a Sortie and Weather and Performance (both revision 1, issue #98) likewise.
 
 ## Encyclopedia — 52/229
 
