@@ -9,7 +9,7 @@ copy of the sources, and not instructions to the reviewer.
 
 ```review-sources
 source: https://bloximages.chicago2.vip.townnews.com/militarynews.com/content/tncms/assets/v3/editorial/5/ca/5ca69442-c74c-11e8-97a8-fff1004e63f5/5bb528e613e83.pdf.pdf
-pages: 49-60; 72-78; 93-96; 179-184; 198-209; 211-222; 223-226; 232; 235
+pages: 25-42; 49-78; 93-105; 137; 179-184; 194; 198-209; 211-222; 223-226; 232; 235
 ```
 
 ```review-sources
@@ -56,9 +56,11 @@ cited only for the In the sim panel.
 - ¶1.18 (PDF 54), tanker reference markings: "Boom tankers have a fluorescent yellow
   stripe on the bottom" of the fuselage, the azimuth reference the director
   lights do not give.
-- ¶2.2 (PDF 55), rendezvous: the receiver is "established at 1,000 ft below
-  the assigned base air refuelling" altitude; tankers "are not to exceed 25°
-  AOB" in the rendezvous turn.
+- ¶2.2 (PDF 55–58), rendezvous: 1,000 ft separation until visual and within
+  1 NM; ¶2.2.f takes 25° of bank as the planning figure, flown "whenever
+  possible". Annex 2A ¶2.A.2.c(1) (PDF 75): the receiver is "established at
+  1,000 ft below the assigned base air refuelling" altitude; PDF 137 (another
+  annex): tankers "are not to exceed 25° AOB".
 - ¶2.11 (PDF 72) and Annex 2D (PDF 93–96): the rendezvous types and the
   point-parallel (RV Delta) tables, columns "Offset (nm)", "25° AOB" and
   "Turn Range (nm)". The figure's no-wind turn range is computed, not taken
@@ -70,7 +72,9 @@ cited only for the In the sim panel.
 - ¶2.28.f (PDF 182): "Damaged Spokes. A receiver pilot damaging the spokes
   is to call 'spokes'."
 - ¶2.32–2.33 (PDF 198–201): breakaway, and lost visual contact: "Simultaneously
-  slow down 10 kts", "Maintains this turn for 15 sec".
+  slow down 10 kts". The ¶2.30 table (PDF 194): "Maintains this turn for 15 sec".
+- ¶2.8.f(4) (PDF 68): the director lights come on when the aircraft are in
+  contact; the page notes that both sims light them from clearance to contact.
 - ¶2.45.d (PDF 205): air-to-air TACAN, the "two designated channels will be
   63 channels apart".
 - ¶2.46 (PDF 206): boom talk-on, "“FORWARD 50”, “UP 4”, “BACK 2”", called at

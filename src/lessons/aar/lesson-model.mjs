@@ -1,7 +1,7 @@
 // Data and geometry for the Air-to-Air Refuelling Procedures figures and
 // quizzes, without the DOM. [1] is NATO ATP-3.3.4.2 (ATP-56) Edition C
-// Version 1, cited by paragraph or annex table; [3] the DCS F-16C guide and
-// [4] the Falcon BMS training manual, sim only.
+// Version 1, cited by paragraph or annex table; [2] the DCS F-16C guide and
+// [3] the Falcon BMS training manual, sim only.
 
 const G = 9.80665, KT = 1852 / 3600;
 
@@ -149,7 +149,7 @@ export function hoseState(push, engaged) {
   if (!engaged) return { light: 'amber', fuel: false, text: 'Astern, about 5 ft behind the drogue, zero closure. Amber: clear contact.' };
   if (push < HOSE.valveOpen) return { light: 'amber', fuel: false, text: `In contact, hose pushed in ${push} m. Keep moving forward: the fuel valve opens after about ${HOSE.valveOpen} m of travel.` };
   if (push <= HOSE.valveOpen + HOSE.range) return { light: 'green', fuel: true, text: `Hose pushed in ${push} m. Green: fuel is flowing. The coloured hose bands entering the tunnel or fairing mark the best refuelling position.` };
-  return { light: 'amber', fuel: false, text: `Hose pushed in ${push} m: beyond the typical range. On some equipment the fuel valve closes if the hose is pushed in too far; ease back.` };
+  return { light: 'amber', fuel: false, text: `Hose pushed in ${push} m: beyond the typical range. On some equipment the fuel valve closes if the hose is pushed in too far, and the figure stops the flow here to show it; ease back.` };
 }
 
 /* ---------- Figure 4: the point-parallel rendezvous (RV Delta) ---------- */

@@ -146,7 +146,7 @@ function setupBoom(root) {
       return [atAstern ? 'Stabilized astern with zero closure. Ask to be cleared.' : 'Fly back to the astern position and stabilize.', null];
     }
     const call = boomCall(pos);
-    return [`Cleared to contact: the director lights now show your error. ${call ? '' : 'On the spot: hold it while the boom operator flies the boom in.'}`, call ? `Boom operator: “${call}.”` : null];
+    return [`Cleared to contact: the director lights now show your error, as in the sims. ${call ? '' : 'On the spot: hold it while the boom operator flies the boom in.'}`, call ? `Boom operator: “${call}.”` : null];
   };
   const move = (dx, dz) => {
     if (breakaway) return;
