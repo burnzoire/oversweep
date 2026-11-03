@@ -79,9 +79,10 @@ function setupFlow(root) {
 // An F-16 in side view, nose left, traced from a US Air Force photo of an
 // F-16 refuelling from a KC-10 (Wikimedia Commons, public domain; the
 // KC-10 record's photo) and scaled to the figure: 49 ft long at 4.2 px a
-// foot. (0, 0) is the boom receptacle on the spine behind the canopy.
-const F16_BODY = 'M99.0 -21.6 L99.0 -20.2 L96.2 -19.2 L96.2 -16.9 L82.7 3.1 L81.9 8.8 L80.8 9.6 L80.8 13.3 L87.6 15.9 L89.0 17.4 L89.0 24.7 L90.2 25.7 L90.2 28.0 L92.5 35.3 L90.4 36.5 L81.0 35.7 L67.4 28.2 L50.6 28.0 L49.4 34.3 L36.9 35.5 L36.7 32.9 L10.6 33.7 L10.2 32.7 L1.4 31.8 L-0.6 33.3 L-0.6 34.5 L-10.6 33.7 L-17.4 32.1 L-23.1 29.6 L-23.1 27.4 L-18.6 26.1 L-19.0 22.9 L-37.6 21.4 L-50.0 19.0 L-51.2 17.8 L-51.4 13.3 L-53.7 11.8 L-54.1 10.6 L-83.5 9.0 L-97.4 6.9 L-108.0 4.3 L-108.0 3.1 L-100.2 1.0 L-73.1 -3.1 L-61.0 -8.6 L-43.7 -8.2 L-40.6 -7.6 L-39.8 -5.1 L-35.1 -4.9 L-25.1 -2.0 L-22.5 -2.0 L-19.2 -0.6 L-14.1 -0.4 L-3.9 1.6 L1.4 1.0 L6.1 -2.0 L6.3 -5.1 L13.3 -4.9 L15.5 -4.1 L30.2 -3.9 L30.6 -0.6 L32.5 2.4 L42.1 1.6 L42.5 1.0 L47.8 0.6 L51.6 -1.6 L77.8 -20.4 L81.2 -21.2 L81.9 -23.1 L90.8 -23.3 L93.7 -21.8 Z';
-const F16_CANOPY = 'M-40.8 -7.1 L-61.2 -8.6 L-72.7 -3.3 L-40.8 -2.2 Z';
+// foot. The bubble canopy is drawn as a smooth curve over the traced
+// outline. (0, 0) is the boom receptacle on the spine behind the canopy.
+const F16_BODY = 'M99.0 -21.6 L99.0 -20.2 L96.2 -19.2 L96.2 -16.9 L82.7 3.1 L81.9 8.8 L80.8 9.6 L80.8 13.3 L87.6 15.9 L89.0 17.4 L89.0 24.7 L90.2 25.7 L90.2 28.0 L92.5 35.3 L90.4 36.5 L81.0 35.7 L67.4 28.2 L50.6 28.0 L49.4 34.3 L36.9 35.5 L36.7 32.9 L10.6 33.7 L10.2 32.7 L1.4 31.8 L-0.6 33.3 L-0.6 34.5 L-10.6 33.7 L-17.4 32.1 L-23.1 29.6 L-23.1 27.4 L-18.6 26.1 L-19.0 22.9 L-37.6 21.4 L-50.0 19.0 L-51.2 17.8 L-51.4 13.3 L-53.7 11.8 L-54.1 10.6 L-83.5 9.0 L-97.4 6.9 L-108.0 4.3 L-108.0 3.1 L-100.2 1.0 L-77 -2.5 C-75 -16 -47 -19 -35 -5 L-25.1 -2.0 L-22.5 -2.0 L-19.2 -0.6 L-14.1 -0.4 L-3.9 1.6 L1.4 1.0 L6.1 -2.0 L6.3 -5.1 L13.3 -4.9 L15.5 -4.1 L30.2 -3.9 L30.6 -0.6 L32.5 2.4 L42.1 1.6 L42.5 1.0 L47.8 0.6 L51.6 -1.6 L77.8 -20.4 L81.2 -21.2 L81.9 -23.1 L90.8 -23.3 L93.7 -21.8 Z';
+const F16_CANOPY = 'M-77 -2.5 C-75 -16 -47 -19 -35 -5 Q-56 -1 -77 -2.5 Z';
 function boomReceiver(x, y) {
   const g = el('g', { transform: `translate(${x} ${y})` });
   g.append(el('path', { class: 'acft rx', d: F16_BODY }), el('path', { class: 'canopy', d: F16_CANOPY }));
