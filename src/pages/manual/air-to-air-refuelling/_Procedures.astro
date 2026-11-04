@@ -25,6 +25,7 @@ const atp = (s: string) => `[1, ${s}]`;
 const pp = (n: number) => (page: string) => `[${n}, ${/[–,]/.test(page) ? 'pp.' : 'p.'} ${page}]`;
 const dcs = pp(2), bms = pp(3);
 const glossary = sitePath('encyclopedia/terminology/aar/');
+const nav = sitePath('manual/navigation/air-navigation/');
 const formation = sitePath('manual/formation-flying/two-ship-formation/');
 const instruments = sitePath('manual/instrument-flight/attitude-instrument-flying/');
 ---
@@ -57,7 +58,7 @@ const instruments = sitePath('manual/instrument-flight/attitude-instrument-flyin
  <p>Two probe-equipped fighters, call sign Hawk, meet a tanker with two wing hoses, call sign Shell 6, on a point-parallel rendezvous with full radio (EMCON option 1). The call signs and channel are invented; the sequence and the calls are the ATP’s. Each step links to the section that explains it.</p>
  <ol class="exchange script">
   <li><span class="who">Plan</span> <span class="said">The tasking gives the <Term>ARIP</Term>, control point and control time, the levels, the emission option and the air-to-air TACAN pair, 63 channels apart, tanker on the higher. <a href="#source-atp">{atp('¶2.45.d; Annex 1A; Annex 2O')}</a> <a class="step" href="#rendezvous">Meeting</a></span></li>
-  <li><span class="who">15 min out</span> <span class="said">Both set the air-to-air TACAN. Shell 6: “Hawk, Shell 6 for RV Delta, my flight level 230, when cleared your flight level 220, TACAN 37 Yankee, Mode 3 4521.” Hawk answers with the same items, adding “nose cold, switches safe”. <a href="#source-atp">{atp('Annex 2P serials 1–2')}</a> <a class="step" href="#comms">Calls</a></span></li>
+  <li><span class="who">15 min out</span> <span class="said">Both set the <a href={`${nav}#aa-tacan`}>air-to-air TACAN</a>. Shell 6: “Hawk, Shell 6 for RV Delta, my flight level 230, when cleared your flight level 220, TACAN 37 Yankee, Mode 3 4521.” Hawk sets 37Y and Shell 6 the channel 63 higher, 100Y. Hawk answers with its own level, the TACAN and Mode 3, adding “nose cold, switches safe”. <a href="#source-atp">{atp('¶2.45.d; Annex 2P serials 1–2')}</a> <a class="step" href="#comms">Calls</a></span></li>
   <li><span class="who">Rendezvous</span> <span class="said">Hawk holds 1,000 ft below. The tanker turns to roll out ahead of the pair. Hawk: “Hawk, Judy,” then “Hawk, visual.” Shell 6: “Hawk, clear join.” <a href="#source-atp">{atp('¶2.2.b, ¶2.2.d; Annex 2D; Annex 2P serials 3–5')}</a> <a class="step" href="#rendezvous">Rendezvous</a></span></li>
   <li><span class="who">Join</span> <span class="said">A progressive climb to loose Echelon Left, stable with zero closure. Hawk: “Hawk, Echelon Left.” <a href="#source-atp">{atp('¶2.27.a; Annex 2P serial 6')}</a> <a class="step" href="#join">Join</a></span></li>
   <li><span class="who">Astern</span> <span class="said">Shell 6: “Hawk, clear astern left and right.” Hawk 1 takes the right hose, Hawk 2 the left, each about 5 ft behind its drogue. <a href="#source-atp">{atp('¶2.6.e; Annex 1A; Annex 2P serials 7–8')}</a> <a class="step" href="#join">Flow</a></span></li>
@@ -318,7 +319,7 @@ const instruments = sitePath('manual/instrument-flight/attitude-instrument-flyin
    <tr><td>Rendezvous turns</td><td>Planned at 25° of bank; racetracks and orbits to the left unless briefed <a href="#source-atp">{atp('¶2.2.f–g')}</a></td></tr>
    <tr><td>Anchor pattern</td><td>Left-hand racetrack, 50 NM legs, 7 NM apart for a KC-130 to 20 NM for larger, faster tankers; single tankers 4,000 ft apart <a href="#source-atp">{atp('Annex 2A')}</a></td></tr>
    <tr><td>Point parallel</td><td>A common track of at least 70 NM from ARIP to ARCP <a href="#source-atp">{atp('Annex 2D')}</a></td></tr>
-   <tr><td>Air-to-air TACAN</td><td>Set 15 min before the control time, channels 63 apart, receiver on the lower; most receivers use Y <a href="#source-atp">{atp('¶2.45.d')}</a></td></tr>
+   <tr><td><a href={`${nav}#aa-tacan`}>Air-to-air TACAN</a></td><td>Set 15 min before the control time, channels 63 apart, receiver on the lower; most receivers use Y <a href="#source-atp">{atp('¶2.45.d')}</a></td></tr>
    <tr><td>Hose lengths</td><td>Pods 15–27 m (50–90 ft); integral hoses about 24 m (80 ft) <a href="#source-atp">{atp('¶1.14.c')}</a></td></tr>
    <tr><td>Over land</td><td>Routine probe-and-drogue refuelling, including trailing and winding hoses, is not normally done over populated areas, since probe nozzles and even hoses sometimes come off <a href="#source-atp">{atp('¶2.28.b')}</a></td></tr>
   </tbody>

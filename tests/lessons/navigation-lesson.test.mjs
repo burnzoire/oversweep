@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
-  ARC_LEAD_TABLE, anticipation, arcLeads, chordArc, courseFlight, crossTrack, diff, fixOf, formatDD, formatDM, formatDMS, groundSpeedCheck,
+  ARC_LEAD_TABLE, aaTacanPair, anticipation, arcLeads, chordArc, courseFlight, crossTrack, diff, fixOf, formatDD, formatDM, formatDMS, groundSpeedCheck,
   gsCheckValid, headings, hsi, interceptHeading, latitudeBand, leadNm, legGeometry, minutesFor, parseCoordinate,
   pointToPoint, radialSpacing, relativeBearing, resolution, routeFlight, slantRange, tacanPosition, toMGRS, toUTM,
   turnRadius, utmZone, windTriangle,
@@ -302,4 +302,15 @@ test('course flight: hold mode turns to the heading bug at a half standard rate'
   for (let i = 0; i < 30; i++) s = f.step();
   near(s.heading, 30, 1e-9);
   assert.throws(() => courseFlight({ course: 360, radial: 0, dme: 5, heading: 0, mode: 'nope' }), RangeError);
+});
+
+test('air-to-air TACAN channels pair 63 apart', () => {
+  assert.equal(aaTacanPair(37), 100);
+  assert.equal(aaTacanPair(100), 37);
+  assert.equal(aaTacanPair(1), 64);
+  assert.equal(aaTacanPair(63), 126);
+  assert.equal(aaTacanPair(64), 1);
+  for (let c = 1; c <= 126; c++) assert.equal(aaTacanPair(aaTacanPair(c)), c);
+  assert.throws(() => aaTacanPair(0), RangeError);
+  assert.throws(() => aaTacanPair(127), RangeError);
 });

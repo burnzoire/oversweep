@@ -560,3 +560,10 @@ export function courseFlight({ course, radial, dme, heading, tas = 250, windFrom
     setCourse(c) { finite('Course', c); s.course = norm(c); return state(); },
   };
 }
+
+// Air-to-air TACAN: two aircraft tune channels 63 apart in the same band
+// (NATO ATP-3.3.4.2 ¶2.45.d). Returns the paired channel for 1–126.
+export function aaTacanPair(channel) {
+  if (!Number.isInteger(channel) || channel < 1 || channel > 126) throw new RangeError('TACAN channels run 1 to 126');
+  return channel <= 63 ? channel + 63 : channel - 63;
+}
