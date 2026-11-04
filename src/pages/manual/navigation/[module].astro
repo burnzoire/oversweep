@@ -137,6 +137,21 @@ const aar = sitePath('manual/air-to-air-refuelling/aar-procedures/');
  <p><Term id="TACAN">TACAN</Term>'s distance function also works between two aircraft. In air-to-air (A/A) mode each set measures the <Term id="Slant range">slant range</Term> to the other. Aircraft use it to find a tanker on a rendezvous and to measure separation within a formation. <a href="#source-atp">{atp('¶2.45.d; Annex 2C ¶2.C.2.d(4)')}</a> Equipment that gives range alone is the minimum for a rendezvous flown by instruments; radar or an IFF interrogator gives range and bearing. <a href="#source-atp">{atp('¶3.5.b')}</a></p>
  <p><strong>Setting a pair.</strong> The two aircraft tune channels 63 apart, one each. In air refuelling the receiver takes the lower channel and the tanker the higher; one aircraft per receiver formation tunes it, 15 minutes before the control time, and leaves it in A/A until it reaches the astern or Echelon Left position. Most receivers use the Y channels but some have only X, so the tanker sets the band the receiver can use. <a href="#source-atp">{atp('¶2.45.d; Annex 2P serial 1')}</a> A receiver told “set A/A TACAN 37 Yankee” sets 37Y, and the tanker is on 100Y. In a formation of tankers, each pair is assigned separately and the aircraft in front takes the higher channel. <a href="#source-atp">{atp('Annex 2H ¶2.H.5.f(5)')}</a> The refuelling rendezvous that uses this range is in the <a href={`${aar}#rendezvous`}>air-to-air refuelling module</a>.</p>
  <p><strong>In short.</strong> Air-to-air TACAN gives the range between two aircraft on channels 63 apart in the same band; in refuelling the receiver takes the lower channel.</p>
+ <section class="lesson figure-lesson" data-lesson="aa-tacan" aria-labelledby="aat-title">
+  <h3 id="aat-title" class="fig-title">Figure 3 — Pick a channel, see its pair</h3>
+  <p>Choose your air-to-air channel and band. The figure shows the channel the other aircraft must set, which of you takes the lower channel, and where the pair sits among the 126 channels.</p>
+  <div class="controls row">
+   <label for="t-ch">Channel <output for="ch"></output><input id="t-ch" name="ch" type="range" min="1" max="126" step="1" value="37" /></label>
+   <fieldset class="inline"><legend>Band</legend>
+    <label><input type="radio" name="band" value="X" /> X</label>
+    <label><input type="radio" name="band" value="Y" checked /> Y</label>
+   </fieldset>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 3, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 245" role="img" aria-label="A receiver behind a tanker with their paired TACAN channels, above the 126 channels laid out as two rows of 63 so that each column is a pair"></svg></div>
+  <p class="no-js">Interactive figure unavailable. Channels pair 63 apart in the same band: 37Y pairs with 100Y, and the receiver takes the lower.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Pairing and roles from the ATP <a href="#source-atp">{atp('¶2.45.d; Annex 2H ¶2.H.5.f(5)')}</a>. Plan view not to scale. A real sortie uses the pair in the tasking, clear of ground and ship stations in use nearby.</p>
+ </section>
  <section class="sim-panel" aria-labelledby="aa-tacan-sims">
   <h3 id="aa-tacan-sims">In the sim</h3>
   <p><strong>DCS F-16C.</strong> The TACAN has three modes: REC (bearing only), T/R (bearing and distance) and A/A TR, which gives distance between two TACAN-equipped aircraft. Set both to A/A TR on channels exactly 63 apart in the same band, for example 1Y and 64Y; each then shows the range to the other. The guide lists the 63 pairs, usable in either band, and warns to keep clear of channels used by ground or ship stations in the area. <a href="#source-dcs16">{d16('239–240')}</a></p>
@@ -153,7 +168,7 @@ const aar = sitePath('manual/air-to-air-refuelling/aar-procedures/');
  </ol>
  <p>With a waypoint system, waypoint offset navigation does the work: select the waypoint that is the NAVAID defining the fix and enter the fix's bearing and range from it. Steering then goes to the offset point. On the T-45C range runs 0.0–99.9 NM and bearing 000–359.9°; changing the waypoint's position clears its offset. <a href="#source-p1204">{fti('79')}</a> The Case III module uses the same geometry to reach the <a href={`${caseIii}#tacan`}>marshal fix</a>.</p>
  <section class="lesson figure-lesson" data-lesson="p2p" aria-labelledby="p2p-title">
-  <h3 id="p2p-title" class="fig-title">Figure 3 — Point to point on the HSI</h3>
+  <h3 id="p2p-title" class="fig-title">Figure 4 — Point to point on the HSI</h3>
   <p>Set your fix and the target fix. Estimate the course with the plotting-board method, then check it.</p>
   <div class="controls row">
    <label for="p-fr">Your radial <input id="p-fr" name="fr" type="number" min="0" max="359" step="1" value="90" inputmode="numeric" /></label>
@@ -163,7 +178,7 @@ const aar = sitePath('manual/air-to-air-refuelling/aar-procedures/');
    <label for="p-guess">Your course estimate <input id="p-guess" name="guess" type="number" min="0" max="359" step="1" inputmode="numeric" /></label>
   </div>
   <div class="buttons"><button type="button" data-check>Check estimate</button><button type="button" data-reveal>Reveal</button><button type="button" data-new>New problem</button></div>
-  <div class="fig-scroll" role="region" aria-label="Figure 3, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 300" role="img" aria-label="Compass rose used as a plotting board with your fix, the target fix and the course between them"></svg></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 4, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 300" role="img" aria-label="Compass rose used as a plotting board with your fix, the target fix and the course between them"></svg></div>
   <p class="no-js">Interactive figure unavailable. Worked example: from the 090 <Term id="Radial">radial</Term> at 30 DME to the 180 <Term id="Radial">radial</Term> at 21 DME, the course is about 235° for 36.6 NM.</p>
   <div class="feedback" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">Flat-earth geometry with horizontal range and no wind, as in the Case III module.</p>
@@ -179,7 +194,7 @@ const aar = sitePath('manual/air-to-air-refuelling/aar-procedures/');
  <p><strong>On the T-45C,</strong> the selected steering, whether <Term id="TACAN">TACAN</Term>, VOR, waypoint or waypoint offset, drives the HSI's bearing pointer and data block. With waypoint steering the CDI shows cross-track distance: full scale is ±4.0 NM with the gear up and ±0.3 NM with the gear down. A sequential steering string of two or more waypoints can be drawn as a dashed line. <a href="#source-p1204">{fti('12–13')}</a> Waypoints come from the mission data loader, whose 200 stored points can be transferred into the tactical waypoints and must then be compared to check the transfer, or are entered by hand as latitude, longitude, elevation and <Term id="Variation">magnetic variation</Term>. <a href="#source-p1204">{fti('79–80')}</a> Other aircraft name and lay out the same functions differently; your NATOPS manual governs.</p>
  <p>Check the database: it must be current for instrument use, and waypoints must match the chart's names, order and logical positions. Manual entry of waypoints by latitude and longitude is not permitted for approach procedures. <a href="#source-aim">{a('1-1-17')}</a></p>
  <section class="lesson figure-lesson" data-lesson="route" aria-labelledby="route-title">
-  <h3 id="route-title" class="fig-title">Figure 4 — Fly a waypoint route, then go direct</h3>
+  <h3 id="route-title" class="fig-title">Figure 5 — Fly a waypoint route, then go direct</h3>
   <p>Fly the route and watch the steering data. Switch between fly-by and fly-over waypoints to see turn anticipation, and press a direct-to button at any time to fly a <Term id="Direct to fix">direct-to-fix</Term> leg from where you are.</p>
   <div class="buttons"><button type="button" data-play>Fly</button><button type="button" data-step>Step 1 min</button><button type="button" data-reset>Reset</button></div>
   <div class="buttons" data-direct></div>
@@ -190,7 +205,7 @@ const aar = sitePath('manual/air-to-air-refuelling/aar-procedures/');
    </fieldset>
    <label for="r-gs">Ground speed <output for="gs"></output><input id="r-gs" name="gs" type="range" min="200" max="480" step="20" value="360" /></label>
   </div>
-  <div class="fig-scroll" role="region" aria-label="Figure 4, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 335" role="img" aria-label="Plan view of a five-waypoint route, the aircraft's flown track, and a data block with bearing, distance, time to go and cross-track error"></svg></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 5, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 335" role="img" aria-label="Plan view of a five-waypoint route, the aircraft's flown track, and a data block with bearing, distance, time to go and cross-track error"></svg></div>
   <p class="no-js">Interactive figure unavailable. <Term id="Fly-by waypoint">Fly-by waypoints</Term> turn inside the corner; fly-over waypoints overshoot it and re-intercept the next leg. A direct-to leg starts from the present position.</p>
   <div class="feedback" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">Constructed route and steering model: no wind, 30° bank turns, a simple cross-track steering law. Real systems differ in turn anticipation and steering; the CDI scale is the T-45C's gear-up scale.</p>
@@ -227,7 +242,7 @@ const aar = sitePath('manual/air-to-air-refuelling/aar-procedures/');
  <p>Coordinates are written as one continuous number, without spaces or punctuation, and the 100,000-metre square letters must always be included. Locations are normally reported to 100 m (six digits) and targets to 10 m (eight digits); GPS receivers give 4-, 6-, 8- and 10-digit references. <a href="#source-fm">{fm('4-21, J-2')}</a> The polar areas use the Universal Polar Stereographic (UPS) grid and its letters A, B, Y and Z instead. <a href="#source-fm">{fm('4-13')}</a></p>
  <p><strong>Datum.</strong> Every coordinate is relative to a horizontal datum. Check the datum note on every chart, and that a receiver uses the same datum as the chart: UTM coordinates of the same point computed on different datums can differ by as much as 900 metres. <a href="#source-fm">{fm('3-3')}</a></p>
  <section class="lesson figure-lesson" data-lesson="coords" aria-labelledby="coords-title">
-  <h3 id="coords-title" class="fig-title">Figure 5 — One position, four ways</h3>
+  <h3 id="coords-title" class="fig-title">Figure 6 — One position, four ways</h3>
   <p>Type a latitude and longitude in any format (30.35, N30 21.0 or 30 21 00 N), choose the precision, and compare. The panels zoom from the 100,000-metre square into the squares the MGRS digits name.</p>
   <div class="buttons"><button type="button" data-preset="example">Example</button><button type="button" data-preset="equator">0°, 0°</button><button type="button" data-preset="south">Southern hemisphere</button><button type="button" data-preset="north">60°N</button></div>
   <div class="controls row">
@@ -241,7 +256,7 @@ const aar = sitePath('manual/air-to-air-refuelling/aar-procedures/');
    <thead><tr><th scope="col">Format</th><th scope="col">Position</th><th scope="col">Size of the last digit</th></tr></thead>
    <tbody></tbody>
   </table></div>
-  <div class="fig-scroll" role="region" aria-label="Figure 5, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 245" role="img" aria-label="Three nested grid squares, 100 km, 10 km and 1 km, with the position marked"></svg></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 6, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 245" role="img" aria-label="Three nested grid squares, 100 km, 10 km and 1 km, with the position marked"></svg></div>
   <p class="no-js">Interactive figure unavailable. N30°21.00' W087°19.20' is N30°21'00" W087°19'12", N30.3500° W087.3200°, and MGRS 16R DU 69245 57612.</p>
   <div class="feedback derived" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">MGRS is computed on the WGS 84 ellipsoid with the standard lettering; the figure omits the polar UPS grid. The example point is arbitrary. Sizes use one minute of latitude = 1 NM = 1,852 m.</p>
@@ -256,7 +271,7 @@ const aar = sitePath('manual/air-to-air-refuelling/aar-procedures/');
  </ul>
  <p><strong>Heading, course, track and bearing</strong> are different things. Heading is where the nose points. Course is the intended path over the ground; track is the actual path; the angle between heading and track is drift. A bearing is the direction from the aircraft to an object. <a href="#source-phak">{ph('16-9–16-10')}</a> A <Term id="Relative bearing">relative bearing</Term> is measured clockwise from the aircraft's nose to the object, so an object directly behind is at 180 on any heading; a true bearing is measured from true north. Heading plus <Term id="Relative bearing">relative bearing</Term> gives the true bearing. <a href="#source-navedtra">{nv('2-11–2-13')}</a></p>
  <section class="lesson figure-lesson" data-lesson="compass" aria-labelledby="compass-title">
-  <h3 id="compass-title" class="fig-title">Figure 6 — From true to compass, and relative bearing</h3>
+  <h3 id="compass-title" class="fig-title">Figure 7 — From true to compass, and relative bearing</h3>
   <p>Set the true heading, the local <Term id="Variation">variation</Term> and the deviation card's correction, then place an object by its true bearing.</p>
   <div class="controls row">
    <label for="cmp-th">True heading <output for="th"></output><input id="cmp-th" name="th" type="range" min="0" max="359" step="1" value="60" /></label>
@@ -264,7 +279,7 @@ const aar = sitePath('manual/air-to-air-refuelling/aar-procedures/');
    <label for="cmp-dev">Deviation correction <output for="dev"></output><input id="cmp-dev" name="dev" type="range" min="-5" max="5" step="1" value="2" /></label>
    <label for="cmp-tb">True bearing to the object <output for="tb"></output><input id="cmp-tb" name="tb" type="range" min="0" max="359" step="1" value="280" /></label>
   </div>
-  <div class="fig-scroll" role="region" aria-label="Figure 6, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 320" role="img" aria-label="Compass rose with true and magnetic north, the aircraft's heading, the bearing to an object and the headings and bearings it gives"></svg></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 7, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 320" role="img" aria-label="Compass rose with true and magnetic north, the aircraft's heading, the bearing to an object and the headings and bearings it gives"></svg></div>
   <p class="no-js">Interactive figure unavailable. Example: true heading 060°, <Term id="Variation">variation</Term> 9° east, deviation +2°: magnetic 051°, compass 053°. An object at true bearing 280° is at <Term id="Relative bearing">relative bearing</Term> 220°.</p>
   <div class="feedback" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">Constructed example; a real deviation card gives a different correction on each heading.</p>
@@ -274,7 +289,7 @@ const aar = sitePath('manual/air-to-air-refuelling/aar-procedures/');
  <p>Dead reckoning is navigation by computation from time, airspeed, distance and direction; corrected for wind, it gives the heading to fly and the ground speed (GS). <a href="#source-phak">{ph('16-13')}</a> An aircraft moves through the air, and the air moves over the ground: at 120 kt true airspeed (TAS) with a 20 kt tailwind the ground speed is 140 kt; with a 20 kt headwind it is 100 kt; with a crosswind the aircraft drifts. To stay on course, head into the wind by the wind correction angle (WCA). <a href="#source-phak">{ph('16-9')}</a></p>
  <p>The wind triangle solves it: one hour of airspeed along the heading plus one hour of wind gives the track and ground speed. The PHAK's example: true course 090°, wind from 045° at 40 kt, TAS 120 kt gives a WCA of 14° left, a true heading of 076° and a ground speed of 88 kt, so 220 NM takes 2 hours 30 minutes. <a href="#source-phak">{ph('16-14–16-15')}</a> In flight the T-45C shows the same thing directly: its HSI shows ground speed, wind and a ground-track marker, and the angle between the lubber line and the ground-track marker is the crab angle. To hold a course, turn until the ground-track marker sits under the bearing pointer. <a href="#source-p1204">{fti('12, 65')}</a></p>
  <section class="lesson figure-lesson" data-lesson="wind" aria-labelledby="wind-title">
-  <h3 id="wind-title" class="fig-title">Figure 7 — Solve the wind triangle</h3>
+  <h3 id="wind-title" class="fig-title">Figure 8 — Solve the wind triangle</h3>
   <p>Set the course, airspeed and wind. The triangle shows one hour of each motion: wind (dashed), airspeed along the heading, and the resulting track and ground speed.</p>
   <div class="buttons"><button type="button" data-phak>PHAK example</button></div>
   <div class="controls row">
@@ -285,7 +300,7 @@ const aar = sitePath('manual/air-to-air-refuelling/aar-procedures/');
    <label for="w-var">Variation <output for="var"></output><input id="w-var" name="var" type="range" min="-20" max="20" step="1" value="0" /></label>
    <label for="w-dist">Distance <output for="dist"></output><input id="w-dist" name="dist" type="range" min="10" max="500" step="10" value="220" /></label>
   </div>
-  <div class="fig-scroll" role="region" aria-label="Figure 7, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 300" role="img" aria-label="Wind triangle of wind, airspeed and ground speed vectors with the heading and ground speed it gives"></svg></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 8, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 300" role="img" aria-label="Wind triangle of wind, airspeed and ground speed vectors with the heading and ground speed it gives"></svg></div>
   <p class="no-js">Interactive figure unavailable. The PHAK example: course 090°, wind 045° at 40 kt, TAS 120 kt: heading 076°, ground speed 88 kt.</p>
   <div class="feedback" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">The figure solves the triangle exactly; a flight computer or the drawing method gives the same answer to the nearest degree and knot. Wind and course must use the same north.</p>
@@ -367,6 +382,7 @@ const aar = sitePath('manual/air-to-air-refuelling/aar-procedures/');
 <script>import '../../../lessons/navigation/lesson-ui.mjs';</script>
 
 <style>
+  .sim-panel { margin: 1rem 0; padding: 0.25rem 1rem; border-left: 4px solid var(--color-link); background: #f4f7fa; }
   .contents ol { columns: 2; column-gap: 2rem; padding-left: 1.5rem; }
   .contents li { break-inside: avoid; }
   table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }

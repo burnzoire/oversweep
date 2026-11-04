@@ -1,7 +1,7 @@
 // Presentation for the Air Navigation module's interactive figures. Geometry
 // and rules come from lesson-model.mjs; this file reads inputs and draws.
 import {
-  ARC_LEAD_TABLE, arcLeads, courseFlight, chordArc, diff, formatDD, formatDM, formatDMS, headings,
+  ARC_LEAD_TABLE, aaTacanPair, arcLeads, courseFlight, chordArc, diff, formatDD, formatDM, formatDMS, headings,
   norm, parseCoordinate, pointToPoint, relativeBearing, resolution,
   routeFlight, tacanPosition, toMGRS, toUTM, windTriangle,
 } from './lesson-model.mjs';
@@ -609,9 +609,61 @@ function setupRoute(root) {
   reset();
 }
 
+/* ---------- Air-to-air TACAN: pick a channel, see its pair ---------- */
+function setupAaTacan(root) {
+  const svg = root.querySelector('svg'), out = root.querySelector('[data-result]');
+  const X0 = 96, W = 8, Y1 = 150, Y2 = 172, H = 18;
+  function draw() {
+    const ch = num(root, 'ch'), band = root.querySelector('[name="band"]:checked')?.value ?? 'Y';
+    const pair = aaTacanPair(ch), lo = Math.min(ch, pair), hi = Math.max(ch, pair);
+    show(root, 'ch', `${ch}${band}`);
+    svg.replaceChildren();
+    // Plan view: the receiver (lower channel) behind, the tanker (higher) ahead.
+    const rx = 190, ry = 104, tx = 450, ty = 88;
+    svg.append(el('line', { x1: rx + 16, y1: ry - 3, x2: tx - 26, y2: ty + 3, class: 'ln dashed on' }));
+    svg.append(el('text', { x: (rx + tx) / 2, y: (ry + ty) / 2 + 20, class: 'lbl small on', 'text-anchor': 'middle' }, 'SLANT RANGE, SHOWN IN BOTH'));
+    svg.append(jet(tx, ty, 90, 'acft other', 1.7), jet(rx, ry, 90, 'acft', 1.0));
+    const tag = (x, y, text, sub, mine) => {
+      svg.append(el('rect', { x: x - 34, y: y - 15, width: 68, height: 20, class: `box${mine ? ' on' : ''}` }));
+      svg.append(el('text', { x, y: y, class: `lbl${mine ? ' inv' : ''}`, 'text-anchor': 'middle' }, text));
+      svg.append(el('text', { x, y: y + 18, class: 'lbl small', 'text-anchor': 'middle' }, sub));
+    };
+    tag(rx, 34, `${lo}${band}`, 'RECEIVER · LOWER', ch === lo);
+    tag(tx, 34, `${hi}${band}`, 'TANKER · HIGHER', ch === hi);
+    // The 126 channels as two rows of 63: each column is a pair.
+    svg.append(el('text', { x: X0 - 8, y: Y1 + 13, class: 'lbl small', 'text-anchor': 'end' }, '1–63'));
+    svg.append(el('text', { x: X0 - 8, y: Y2 + 13, class: 'lbl small', 'text-anchor': 'end' }, '64–126'));
+    for (let k = 1; k <= 63; k++) {
+      const x = X0 + (k - 1) * W, on = k === lo;
+      svg.append(el('rect', { x, y: Y1, width: W - 1, height: H, class: `box${on ? ' on' : ' dim'}` }));
+      svg.append(el('rect', { x, y: Y2, width: W - 1, height: H, class: `box${on ? ' on' : ' dim'}` }));
+      if (k === 1 || k % 10 === 0 || k === 63) {
+        svg.append(el('text', { x: x + W / 2, y: Y1 - 5, class: 'lbl small', 'text-anchor': 'middle' }, String(k)));
+        svg.append(el('text', { x: x + W / 2, y: Y2 + H + 13, class: 'lbl small', 'text-anchor': 'middle' }, String(k + 63)));
+      }
+    }
+    const cx = X0 + (lo - 1) * W + W / 2;
+    svg.append(el('text', { x: X0 + 63 * W + 10, y: Y1 + 13, class: 'lbl on' }, `${lo}${band}`));
+    svg.append(el('text', { x: X0 + 63 * W + 10, y: Y2 + 13, class: 'lbl on' }, `${hi}${band}`));
+    svg.append(el('line', { x1: cx, y1: Y1 + H, x2: cx, y2: Y2, class: 'ln on' }));
+    svg.append(el('text', { x: 20, y: 236, class: 'lbl small' }, `EACH COLUMN IS A PAIR: +63, SAME BAND (${band})`));
+    const role = ch === lo
+      ? `${ch} is the lower channel: in air refuelling the receiver sets it, and in a formation of tankers the aircraft behind.`
+      : `${ch} is the higher channel: in air refuelling the tanker sets it, and in a formation of tankers the aircraft in front.`;
+    const msgs = [para(`${ch}${band} pairs with ${pair}${band}. ${role}`)];
+    msgs.push(para(band === 'X'
+      ? 'Both aircraft must be in the X band. Some receivers have only X, which is why the tanker sets the band the receiver can use.'
+      : 'Both aircraft must be in the Y band, which most receivers use.', 'derived'));
+    if ([lo, hi].some((c) => c === 68 || c === 69)) msgs.push(para('In DCS, the F/A-18C guide says to avoid channels 68 and 69, which conflict with its datalink.', 'derived'));
+    out.replaceChildren(...msgs);
+  }
+  root.querySelectorAll('input').forEach((i) => i.addEventListener('input', draw));
+  draw();
+}
+
 function setupTerms(root) { termQuiz(root, { hideTerm: true }); }
 
-const blocks = { coords: setupCoords, compass: setupCompass, wind: setupWind, fly: setupFly, 'hsi-quiz': setupHsiQuiz, arc: setupArc, p2p: setupP2p, route: setupRoute, terms: setupTerms };
+const blocks = { coords: setupCoords, compass: setupCompass, wind: setupWind, fly: setupFly, 'hsi-quiz': setupHsiQuiz, arc: setupArc, p2p: setupP2p, route: setupRoute, 'aa-tacan': setupAaTacan, terms: setupTerms };
 for (const root of document.querySelectorAll('[data-lesson]')) {
   blocks[root.dataset.lesson]?.(root);
   root.classList.add('ready');
