@@ -10,7 +10,7 @@ export function getStaticPaths() { return includedModules.some(m => m.slug === '
 const contents = [
  ['overview', 'Purpose and learning objectives'], ['hsi', 'Reading the HSI'], ['setup', 'Setting up a course'],
  ['tracking', 'Flying to and from a station'], ['intercepts', 'Intercepting a course'],
- ['dme', 'Using distance: ground speed and arcs'], ['p2p', 'Point to point'], ['waypoints', 'Waypoints, offsets and direct-to'],
+ ['dme', 'Using distance: ground speed and arcs'], ['aa-tacan', 'Air-to-air TACAN'], ['p2p', 'Point to point'], ['waypoints', 'Waypoints, offsets and direct-to'],
  ['crosscheck', 'Cross-checking and degraded navigation'], ['background', 'Background'], ['earth', 'Position on the earth'],
  ['coords', 'Writing a position'], ['direction', 'Direction: true, magnetic and compass'], ['wind', 'Dead reckoning and the wind triangle'],
  ['navaids', 'Radio navigation aids'], ['fixes', 'Fixes'], ['gps', 'Satellite navigation'], ['ins', 'Inertial navigation'],
@@ -19,11 +19,16 @@ const contents = [
 // Military sources first: [1] NAVEDTRA 14342A page, [2] CNATRA P-1204 page,
 // [3] FM 3-25.26 page. Supplementary FAA sources: [4] AIM paragraph,
 // [5] Pilot's Handbook (PHAK) page, [6] Instrument Flying Handbook page.
+// Added for air-to-air TACAN: [7] NATO ATP-3.3.4.2 paragraph (military),
+// and sim manuals [8] DCS F-16C, [9] DCS F/A-18C, [10] Falcon BMS pages.
 const pp = (n: number) => (page: string) => `[${n}, ${page.includes('–') || page.includes(',') ? 'pp.' : 'p.'} ${page}]`;
 const nv = pp(1), fti = pp(2), fm = pp(3), ph = pp(5), ifh = pp(6);
+const atp = (s: string) => `[7, ${s}]`;
+const d16 = pp(8), d18 = pp(9), bms = pp(10);
 const a = (para: string) => `[4, ${para.includes('–') || para.includes(',') ? 'paras' : 'para'} ${para}]`;
 const caseIii = sitePath('manual/naval-operations/case-iii/');
 const radio = sitePath('manual/radio-communications/radio-procedures/');
+const aar = sitePath('manual/air-to-air-refuelling/aar-procedures/');
 ---
 <SiteLayout title={nav.title} activeSection="manual" activeSubject="navigation" compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Navigation',href:sitePath('manual/navigation/')},{label:nav.title}]}>
@@ -128,6 +133,16 @@ const radio = sitePath('manual/radio-communications/radio-procedures/');
   <p class="fig-caption">No wind. Chord turns are drawn as instant. The DME band the chords fly is computed geometry, not an FTI figure.</p>
  </section>
 
+ <h2 id="aa-tacan">Air-to-air TACAN</h2>
+ <p><Term id="TACAN">TACAN</Term>'s distance function also works between two aircraft. In air-to-air (A/A) mode each set measures the <Term id="Slant range">slant range</Term> to the other. Aircraft use it to find a tanker on a rendezvous and to measure separation within a formation. <a href="#source-atp">{atp('¶2.45.d; Annex 2C ¶2.C.2.d(4)')}</a> Equipment that gives range alone is the minimum for a rendezvous flown by instruments; radar or an IFF interrogator gives range and bearing. <a href="#source-atp">{atp('¶3.5.b')}</a></p>
+ <p><strong>Setting a pair.</strong> The two aircraft tune channels 63 apart, one each. In air refuelling the receiver takes the lower channel and the tanker the higher; one aircraft per receiver formation tunes it, 15 minutes before the control time, and leaves it in A/A until it reaches the astern or Echelon Left position. Most receivers use the Y channels but some have only X, so the tanker sets the band the receiver can use. <a href="#source-atp">{atp('¶2.45.d; Annex 2P serial 1')}</a> A receiver told “set A/A TACAN 37 Yankee” sets 37Y, and the tanker is on 100Y. In a formation of tankers, each pair is assigned separately and the aircraft in front takes the higher channel. <a href="#source-atp">{atp('Annex 2H ¶2.H.5.f(5)')}</a> The refuelling rendezvous that uses this range is in the <a href={`${aar}#rendezvous`}>air-to-air refuelling module</a>.</p>
+ <p><strong>In short.</strong> Air-to-air TACAN gives the range between two aircraft on channels 63 apart in the same band; in refuelling the receiver takes the lower channel.</p>
+ <section class="sim-panel" aria-labelledby="aa-tacan-sims">
+  <h3 id="aa-tacan-sims">In the sim</h3>
+  <p><strong>DCS F-16C.</strong> The TACAN has three modes: REC (bearing only), T/R (bearing and distance) and A/A TR, which gives distance between two TACAN-equipped aircraft. Set both to A/A TR on channels exactly 63 apart in the same band, for example 1Y and 64Y; each then shows the range to the other. The guide lists the 63 pairs, usable in either band, and warns to keep clear of channels used by ground or ship stations in the area. <a href="#source-dcs16">{d16('239–240')}</a></p>
+  <p><strong>DCS F/A-18C.</strong> The UFC's A/A mode computes range to up to five airborne TACAN stations. For the “yardstick” used to find and keep formation, one aircraft sets a channel from 1 to 63, X or Y, and the others the channel 63 higher; avoid channels in use by airfields and carriers, and 68 and 69, which conflict with the datalink. There is no bearing, so the HSI needle spins. <a href="#source-dcs18">{d18('136–138')}</a></p>
+  <p><strong>Falcon BMS.</strong> In the F-16, enter 0 on the T-ILS page to toggle the band and dobber right to switch to TCN A-A. The KC-135 and KC-130H give distance only, with the bearing pointer spinning; the KC-10 gives distance and bearing. <a href="#source-bms">{bms('119')}</a></p>
+ </section>
  <h2 id="p2p">Point to point</h2>
  <p>Cleared direct to a fix, you can use radar vectors, traditional point-to-point navigation or waypoint offset navigation. <a href="#source-p1204">{fti('76')}</a> The traditional method uses the HSI as a plotting board: <a href="#source-p1204">{fti('77–78')}</a></p>
  <ol class="steps">
@@ -326,6 +341,7 @@ const radio = sitePath('manual/radio-communications/radio-procedures/');
  <details><summary>Joining a 12 DME arc outbound at 250 kt: when do you turn?</summary><p>At 9.5 DME: 12 minus 1% of 250.</p></details>
  <details><summary>On the inbound course, the bar starts drifting left. What do you do?</summary><p>A crosswind from the left: turn left about 20°, and when the bar centres take out half the correction.</p></details>
  <details><summary>On a T-45C with TACAN steering, the bar sits one dot right at 30 NM from the station. How far off course are you?</summary><p>About 2½ NM: one dot is 5°, and at 30 NM the radials are about ½ NM apart. The course is to your right.</p></details>
+ <details><summary>Your tanker tells you to set A/A TACAN 37 Yankee. What does it set, and what will you read?</summary><p>The tanker is 63 channels higher in the same band, 100Y. You read the slant range to the tanker.</p></details>
  <details><summary>Which MGRS reference is more precise, 16S GL 0182 or 16S GL 012823?</summary><p>The six-digit one, to 100 m; four digits name a 1,000 m square.</p></details>
  <details><summary>Your GPS position and a TACAN fix disagree by several miles. What do you do?</summary><p>Suspect the GPS (interference or spoofing is possible), navigate on the conventional aid, and tell ATC about the apparent GPS problem.</p></details>
  <details><summary>Why fly a fly-over waypoint differently from a fly-by one?</summary><p>You must cross a fly-over waypoint before turning, so you overshoot and re-intercept the next leg; at a fly-by waypoint the turn starts early and cuts inside.</p></details>
@@ -335,11 +351,16 @@ const radio = sitePath('manual/radio-communications/radio-procedures/');
  <p id="source-navedtra"><strong>[1] US Navy, Air Traffic Controller, NAVEDTRA 14342A, chapter 2, Air Navigation and Aids to Air Navigation.</strong> Read on the Integrated Publishing mirror (navyaviation.tpub.com), 25 October 2026: <a href="https://navyaviation.tpub.com/14342A/Table-2-2-Geographic-Coordinates-81.html">geographic coordinates (p. 2-4)</a>; <a href="https://navyaviation.tpub.com/14342A/Units-Of-Measurement-84.html">units of measurement (p. 2-7)</a>; <a href="https://navyaviation.tpub.com/14342A/Vhf-Uhf-Omnidirectional-Ranges-104.html">NDB limits and VOR (p. 2-27)</a>; <a href="https://navyaviation.tpub.com/14342A/Tactical-Air-Navigation-Tacan-System-105.html">VOR and TACAN (p. 2-28)</a>; <a href="https://navyaviation.tpub.com/14342A/Distance-Measuring-Equipment-106.html">VORTAC and DME (p. 2-29)</a>; <a href="https://navyaviation.tpub.com/14342A/Global-Positioning-System-110.html">GPS (p. 2-33)</a>. Also cited from the same chapter: pp. 2-1 to 2-3, 2-5, 2-6, 2-10 to 2-14, 2-24, 2-26 and 2-30. A Navy controller-training course, cited for navigation fundamentals and NAVAIDs.</p>
  <p id="source-p1204"><strong>[2] Naval Air Training Command, CNATRA P-1204, Flight Training Instruction, Instrument Flight, T-45C (TS, ADV and IUT), (4-01) Original.</strong> Read on the Integrated Publishing mirror, navyflightmanuals.tpub.com/P-1204/, 25 October 2026: pp. 1, 12–13 (HSI), 64–80 (proceeding direct, intercepts, ground speed checks, arcs, point-to-point, waypoint offsets and GPS data). The edition read is an older revision of the T-45C instrument FTI; current CNATRA revisions may differ.</p>
  <p id="source-fm"><strong>[3] Headquarters, Department of the Army, FM 3-25.26, Map Reading and Land Navigation, 20 July 2001.</strong> Approved for public release. Read from an archive.org copy, 25 October 2026: p. 3-3 (datum note), 4-12 to 4-13 and 4-21 to 4-23 (MGRS), J-2 (GPS coordinate formats). Cited for the military grid, which all US services share.</p>
+ <p id="source-atp"><strong>[7] NATO, ATP-3.3.4.2 (ATP-56), Air-to-Air Refuelling, Edition C Version 1, November 2013.</strong> <a href="https://bloximages.chicago2.vip.townnews.com/militarynews.com/content/tncms/assets/v3/editorial/5/ca/5ca69442-c74c-11e8-97a8-fff1004e63f5/5bb528e613e83.pdf.pdf">Public copy (militarynews.com)</a>, read 4 November 2026: ¶2.45.d, ¶3.5.b, Annex 2C ¶2.C.2.d(4), Annex 2H ¶2.H.5.f(5) and Annex 2P serial 1. The allied air-refuelling procedure; national documents may differ. Cited by paragraph because its page numbers restart in each chapter.</p>
  <h3>Supplementary: FAA sources</h3>
  <p id="source-aim"><strong>[4] Federal Aviation Administration, Aeronautical Information Manual (AIM), current edition as published online.</strong> Inspected 25 October 2026 on faa.gov: <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap1_section_2.html">chapter 1, section 2, Performance-Based Navigation and Area Navigation</a> (paras 1-2-1, 1-2-3, 1-2-4); <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap1_section_1.html">chapter 1, section 1, Air Navigation Aids</a> (paras 1-1-1 to 1-1-8, 1-1-15, 1-1-17).</p>
  <p id="source-phak"><strong>[5] Federal Aviation Administration, Pilot's Handbook of Aeronautical Knowledge, FAA-H-8083-25C, chapter 16, Navigation.</strong> <a href="https://www.faa.gov/sites/faa.gov/files/18_phak_ch16.pdf">Read the chapter (faa.gov)</a>. Inspected 25 October 2026: pp. 16-5 to 16-15.</p>
  <p id="source-ifh"><strong>[6] Federal Aviation Administration, Instrument Flying Handbook, FAA-H-8083-15B.</strong> <a href="https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/FAA-H-8083-15B.pdf">Read the handbook (faa.gov)</a>. Inspected 26 October 2026: p. 5-23 (the HSI as a view from above, TO/FROM), p. 9-13 (VOR CDI dot scale) and p. 9-14 (tracking, wind bracketing, station passage, course interception).</p>
- <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/air-navigation-evidence.md">air navigation evidence</a>.</p>
+
+ <h3>Sim manuals</h3>
+ <p id="source-dcs16"><strong>[8] Eagle Dynamics, DCS: F-16C Viper Early Access Guide (English), updated 16 August 2026.</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 4 November 2026, pp. 239–240. Cited only for the In the sim panel.</p>
+ <p id="source-dcs18"><strong>[9] Eagle Dynamics, DCS: F/A-18C Early Access Guide (English), updated 24 March 2024.</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 4 November 2026, pp. 136–138. Cited only for the In the sim panel.</p>
+ <p id="source-bms"><strong>[10] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">falcon-bms.com</a>, read 4 November 2026, p. 119. Cited only for the In the sim panel.</p> <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/air-navigation-evidence.md">air navigation evidence</a>.</p>
  <p>Figures 1–7 are original drawings and constructed examples, not reproductions of any publication's figures. Routes, positions and winds in constructed examples are invented.</p>
  <p class="note">Applicability: written for US military pilots. The Navy sources [1, 2] are training publications, one a controller course and one a training-aircraft instruction from an earlier revision; your NATOPS or service flight manual, unit procedures and current flight information publications govern. The Army manual [3] is cited only for the military grid. The FAA AIM, PHAK and Instrument Flying Handbook [4–6] are the US civil references that military aircraft also follow in the National Airspace System. This revision is Drafted pending independent source-backed review.</p>
 </SiteLayout>
