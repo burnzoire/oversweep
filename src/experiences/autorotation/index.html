@@ -85,8 +85,7 @@
 <dialog id="gamepad" aria-labelledby="gamepadTitle">
   <h2 id="gamepadTitle">Joystick and throttle</h2>
   <p id="gamepadStatus">Connect a controller and press any of its buttons.</p>
-  <div class="bind-row"><span>Collective</span><b id="collectiveBinding">Not set</b><button type="button" id="bindCollective">Set</button><label class="switch"><input id="invertCollective" type="checkbox"> Invert</label></div>
-  <div class="bind-row"><span>Cyclic, fore and aft</span><b id="cyclicBinding">Not set</b><button type="button" id="bindCyclic">Set</button><label class="switch"><input id="invertCyclic" type="checkbox"> Invert</label></div>
+  <div id="bindRows"></div>
   <p class="hint">Select Set, then move that lever or stick through its travel. The axis sets the control's position directly, so a throttle lever suits the collective and a stick the cyclic. A self-centring thumbstick holds the collective at mid travel when you let go.</p>
   <div class="dialog-actions"><button type="button" id="clearBindings">Clear</button><button type="button" class="primary" id="closeGamepad">Close</button></div>
 </dialog>
@@ -101,6 +100,7 @@
 </dialog>
 
 <script src="model.cjs"></script>
-<script src="app.js"></script>
+<link rel="modulepreload" href="lessons/shared/axis-bindings.mjs">
+<script type="module" src="app.js"></script>
 </body>
 </html>

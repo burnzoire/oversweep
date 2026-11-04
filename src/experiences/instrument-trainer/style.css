@@ -57,6 +57,8 @@ th,td{border-top:1px solid var(--line);padding:6px 8px;text-align:left;vertical-
 .scrub{display:flex;align-items:center;gap:8px;margin-top:6px}
 .scrub input{flex:1}
 .scrub output{font:12px monospace;min-width:4.5em}
+.bind-row{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;margin:10px 0}
+.bind-row b{font:12px monospace}
 .frame-notice{padding:24px;font-size:15px}
 @media (max-width:720px){
   header{padding:10px 14px}

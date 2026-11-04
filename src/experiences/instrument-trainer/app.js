@@ -7,6 +7,7 @@
 import { RUN, advance, autoPower, decide, driftCorrection, goMissed, grade, newRun, windComponents } from './lessons/instrument-flight/ils-trainer-model.mjs';
 import { ilsViews } from './lessons/instrument-flight/ils-views.mjs';
 import { drawPanel } from './lessons/shared/instruments.mjs';
+import { createAxisBindings } from './lessons/shared/axis-bindings.mjs';
 
 if (!window.oversweepFramed) {
   const $ = (id) => document.getElementById(id);
@@ -165,8 +166,24 @@ if (!window.oversweepFramed) {
     b.addEventListener('contextmenu', (e) => e.preventDefault());
   }
 
+  // Bound axes (joystick, HOTAS, game controller): the stick commands roll
+  // and pitch rates, so centred holds the attitude; the throttle sets power.
+  const axes = createAxisBindings({
+    controls: [
+      { id: 'pitch', label: 'Stick, fore and aft' },
+      { id: 'roll', label: 'Stick, left and right', raw: true },
+      { id: 'power', label: 'Throttle' },
+    ],
+    rows: $('bindRows'), status: $('gamepadStatus'), storeKey: STORE + 'bindings',
+  });
+  const stick = { pitch: 0, roll: 0, power: undefined };
+  const STICK_DZ = 0.06;
+  const dz = (v) => Math.abs(v) < STICK_DZ ? 0 : (v - Math.sign(v) * STICK_DZ) / (1 - STICK_DZ);
+
+  // An unbound standard-layout game controller keeps its default mapping;
+  // any other device (a HOTAS, say) does nothing until its axes are set.
   function readPad() {
-    const gp = [...(navigator.getGamepads?.() ?? [])].find(Boolean);
+    const gp = [...(navigator.getGamepads?.() ?? [])].find((p) => p && p.mapping === 'standard');
     if (!gp) return null;
     const dz = (v) => Math.abs(v) < 0.12 ? 0 : (v - Math.sign(v) * 0.12) / 0.88;
     const pressed = gp.buttons.map((b) => b.pressed);
@@ -180,7 +197,11 @@ if (!window.oversweepFramed) {
 
   function steer(dt) {
     const on = (name) => keys.has(name) || held.has(name);
-    const g = readPad();
+    const moved = axes.poll();
+    for (const id of ['pitch', 'roll']) if (moved[id] !== undefined) stick[id] = dz(moved[id]);
+    if (moved.power !== undefined) stick.power = (1 + moved.power) / 2 * 100;
+    const anyBound = ['pitch', 'roll', 'power'].some(axes.bound);
+    const g = readPad(); // its buttons always work; its sticks only when nothing is bound
     if (g?.a) { if (phase === 'decision') choose('land'); else if ($('brief').open || $('debrief').open) { setup(); begin(); } }
     if (g?.b) choose('missed');
     if (g?.start) togglePause();
@@ -188,12 +209,15 @@ if (!window.oversweepFramed) {
     target.pitch += ((on('nose-up') ? 1 : 0) - (on('nose-down') ? 1 : 0)) * PITCH_RATE * dt;
     target.bank += ((on('right') ? 1 : 0) - (on('left') ? 1 : 0)) * BANK_RATE * dt;
     target.power += ((on('power-up') ? 1 : 0) - (on('power-down') ? 1 : 0)) * POWER_RATE * dt;
-    if (g && pad.active) {
+    if (g && pad.active && !anyBound) {
       target.pitch += g.y * PITCH_RATE * 1.5 * dt;
       // The stick commands bank directly: centred, wings level.
       if (!on('left') && !on('right')) target.bank = g.x * MAX_BANK;
       target.power += g.power * POWER_RATE * dt;
     }
+    if (axes.bound('pitch')) target.pitch -= stick.pitch * PITCH_RATE * 1.5 * dt; // forward: nose down
+    if (axes.bound('roll')) target.bank += stick.roll * BANK_RATE * 1.5 * dt;
+    if (axes.bound('power') && moved.power !== undefined) target.power = stick.power;
     target.pitch = clamp(target.pitch, -15, 25);
     target.bank = clamp(target.bank, -MAX_BANK, MAX_BANK);
     target.power = clamp(target.power, 0, 100);
@@ -238,6 +262,9 @@ if (!window.oversweepFramed) {
   $('missed').addEventListener('click', () => choose('missed'));
   $('goAround').addEventListener('click', () => choose('missed'));
   $('controlsHelp').addEventListener('click', () => $('controls').showModal());
+  $('gamepadSetup').addEventListener('click', () => { if (phase === 'flying' && !paused) togglePause(); axes.render(); $('gamepad').showModal(); });
+  $('closeGamepad').addEventListener('click', () => { axes.cancel(); $('gamepad').close(); });
+  $('clearBindings').addEventListener('click', () => axes.clear());
   $('showControls').addEventListener('click', () => $('controls').showModal());
   $('closeControls').addEventListener('click', () => $('controls').close());
   $('debrief').addEventListener('close', stopReplay);

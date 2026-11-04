@@ -2,6 +2,8 @@
  * instruments, instructor cues and the debrief. The flight model is in
  * model.cjs; every number here that is not from it is display or input tuning.
  */
+import { createAxisBindings } from './lessons/shared/axis-bindings.mjs';
+
 (function () {
   'use strict';
   if (window.oversweepFramed) return;
@@ -16,9 +18,8 @@
   const write = (key, value) => { try { localStorage.setItem(STORE + key, JSON.stringify(value)); } catch {} };
 
   const settings = Object.assign({ fuel: 60, alt: 1000, speed: 90, surprise: false }, read('settings', {}));
-  let bindings = read('bindings', {});
   let state, phase = 'setup', failAt = 3, paused = false, trail = [], stats = {}, lastFrame = 0, camH = 60;
-  let binding = null, lastAxes = {}, audio = null, horn = null;
+  let audio = null, horn = null;
   const input = { collective: 0.5, cyclic: 0 };
   const keys = new Set();
 
@@ -113,45 +114,15 @@
 
   // Joystick axes set positions directly, and only when they move, so the
   // keys and levers still work with a controller connected.
+  const axes = createAxisBindings({
+    controls: [{ id: 'collective', label: 'Collective' }, { id: 'cyclic', label: 'Cyclic, fore and aft' }],
+    rows: $('bindRows'), status: $('gamepadStatus'), storeKey: STORE + 'bindings',
+  });
   function pollGamepads() {
-    const pads = navigator.getGamepads ? [...navigator.getGamepads()].filter(Boolean) : [];
-    $('gamepadStatus').textContent = pads.length ? `Connected: ${pads.map(p => p.id).join(', ')}` : 'Connect a controller and press any of its buttons.';
-    if (binding) {
-      // A controller first seen after Set was pressed (browsers reveal each
-      // one on its first input) takes its resting axes as its baseline.
-      for (const p of pads) {
-        const base = binding.base[p.index] ??= [...p.axes];
-        const axis = p.axes.findIndex((v, i) => Math.abs(v - (base[i] ?? v)) > 0.5);
-        if (axis < 0) continue;
-        bindings[binding.control] = { pad: p.index, axis, invert: $(binding.control === 'collective' ? 'invertCollective' : 'invertCyclic').checked };
-        delete lastAxes[binding.control];
-        write('bindings', bindings); binding = null; showBindings();
-        break;
-      }
-      return;
-    }
-    for (const control of ['collective', 'cyclic']) {
-      const b = bindings[control]; if (!b) continue;
-      const pad = pads.find(p => p.index === b.pad); if (!pad || pad.axes[b.axis] === undefined) continue;
-      const v = pad.axes[b.axis], key = control;
-      if (lastAxes[key] !== undefined && Math.abs(v - lastAxes[key]) < 0.01) continue;
-      lastAxes[key] = v;
-      if (!controlsLive()) continue;
-      const s = b.invert ? v : -v;   // pushed forward or up reads -1 on most devices
-      input[control] = control === 'collective' ? (1 + s) / 2 : s;
-    }
-  }
-  function startBinding(control) {
-    const pads = navigator.getGamepads ? [...navigator.getGamepads()].filter(Boolean) : [];
-    binding = { control, base: Object.fromEntries(pads.map(p => [p.index, [...p.axes]])) };
-    $(control + 'Binding').textContent = 'Move it now…';
-  }
-  function showBindings() {
-    for (const control of ['collective', 'cyclic']) {
-      const b = bindings[control];
-      $(control + 'Binding').textContent = b ? `Controller ${b.pad + 1}, axis ${b.axis + 1}` : 'Not set';
-      $(control === 'collective' ? 'invertCollective' : 'invertCyclic').checked = Boolean(b?.invert);
-    }
+    const moved = axes.poll();
+    if (!controlsLive()) return;
+    if (moved.collective !== undefined) input.collective = (1 + moved.collective) / 2;
+    if (moved.cyclic !== undefined) input.cyclic = moved.cyclic;
   }
 
   /* ---------- the loop ---------- */
@@ -454,13 +425,9 @@
   $('controlsHelp').onclick = () => { if (phase === 'flying' || phase === 'countdown') paused = true; $('controls').showModal(); };
   $('showControls').onclick = () => $('controls').showModal();
   $('closeControls').onclick = () => $('controls').close();
-  $('gamepadSetup').onclick = () => { if (phase === 'flying' || phase === 'countdown') paused = true; showBindings(); $('gamepad').showModal(); };
-  $('closeGamepad').onclick = () => { binding = null; showBindings(); $('gamepad').close(); };
-  $('bindCollective').onclick = () => startBinding('collective');
-  $('bindCyclic').onclick = () => startBinding('cyclic');
-  for (const [id, control] of [['invertCollective', 'collective'], ['invertCyclic', 'cyclic']])
-    $(id).addEventListener('change', () => { if (bindings[control]) { bindings[control].invert = $(id).checked; write('bindings', bindings); } });
-  $('clearBindings').onclick = () => { bindings = {}; write('bindings', bindings); showBindings(); };
+  $('gamepadSetup').onclick = () => { if (phase === 'flying' || phase === 'countdown') paused = true; axes.render(); $('gamepad').showModal(); };
+  $('closeGamepad').onclick = () => { axes.cancel(); $('gamepad').close(); };
+  $('clearBindings').onclick = () => axes.clear();
   $('sound').addEventListener('change', () => { if ($('sound').checked) startAudio(); else setHorn(false); });
   $('setup').addEventListener('cancel', e => { if (!state) e.preventDefault(); });
 
