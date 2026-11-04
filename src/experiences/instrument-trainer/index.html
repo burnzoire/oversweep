@@ -14,6 +14,7 @@
 <link rel="modulepreload" href="lessons/shared/instruments.mjs">
 <link rel="modulepreload" href="lessons/shared/hsi.mjs">
 <link rel="modulepreload" href="lessons/shared/axis-bindings.mjs">
+<link rel="modulepreload" href="lessons/instrument-flight/windscreen.mjs">
 <link rel="modulepreload" href="lessons/navigation/lesson-model.mjs">
 <link rel="modulepreload" href="lessons/case-iii/lesson-model.mjs">
 <script src="frame-guard.js"></script>
@@ -33,7 +34,8 @@
 </header>
 <main id="mainApp">
   <p id="card" class="card" aria-label="Approach card"></p>
-  <section class="cockpit" aria-label="Instrument panel">
+  <section class="cockpit" aria-label="Windscreen and instrument panel">
+    <svg id="windscreen" class="windscreen" role="img" aria-label="Windscreen: in cloud"></svg>
     <svg id="panel" class="inst" role="img" aria-label="Instrument panel: attitude with ILS bars, airspeed, altimeter, turn and slip, HSI with localizer and glide slope, vertical speed and power"></svg>
     <p id="prompt" class="prompt" role="status" aria-live="polite"></p>
     <div id="decision" class="decision" hidden>
@@ -52,7 +54,7 @@
 <dialog id="brief" aria-labelledby="briefTitle">
   <h2 id="briefTitle">Hand-fly the ILS</h2>
   <p>You are on vectors to an ILS in cloud, level below the glide slope and a little off the localizer, at 140 knots with the gear and flaps down. Intercept the localizer, capture the glide slope, and fly both needles down to the decision altitude with nothing but the panel.</p>
-  <p>Each run has a different wind, and you are not told it: find the heading that holds the localizer. At the DA you will either see the runway environment or not. Then decide at once: land or go missed.</p>
+  <p>Each run has a different wind, and you are not told it: find the heading that holds the localizer. Fly the panel all the way down: the windscreen above it shows only cloud until the DA. There, look up. Either the approach lights and runway are in sight or you are still in cloud. Then decide at once: land or go missed.</p>
   <ul class="limits">
     <li>Full-scale localizer on final: discontinue the approach (go missed).</li>
     <li>Do not descend below localizer minimums if more than one dot low or two dots high on the glide slope.</li>
@@ -100,6 +102,7 @@
     <div class="replay">
       <h3>Replay</h3>
       <svg id="replayViews" class="inst views" role="img" aria-label="Plan and profile views of the flown approach"></svg>
+      <svg id="replayWindscreen" class="windscreen" role="img" aria-label="Windscreen at the replay time"></svg>
       <svg id="replayPanel" class="inst" role="img" aria-label="The instrument panel at the replay time"></svg>
       <div class="scrub"><button type="button" id="replayPlay">Play</button><input id="replayTime" type="range" min="0" max="1" step="1" value="0" aria-label="Replay time"><output id="replayOut" for="replayTime"></output></div>
     </div>

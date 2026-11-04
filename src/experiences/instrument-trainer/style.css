@@ -20,8 +20,12 @@ header{padding:12px 24px;display:flex;align-items:center;justify-content:space-b
 .switch{display:inline-flex;align-items:center;gap:7px;font-size:12px}
 main{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 12px 16px;gap:10px}
 .card{margin:0;font:12px ui-monospace,Menlo,Consolas,monospace;letter-spacing:.5px;text-align:center;border:1px solid var(--ink);background:#fff;padding:6px 12px;max-width:min(980px,100%)}
-.cockpit{position:relative;width:min(980px,100%)}
-#panel{display:block;width:100%;height:auto;max-height:calc(100vh - 230px);border-radius:4px}
+.cockpit{position:relative;width:min(980px,100%);background:#2b2f33;border-radius:14px 14px 4px 4px}
+#panel{display:block;width:100%;height:auto;max-height:calc(100vh - 340px);border-radius:0 0 4px 4px}
+.windscreen{display:block;width:100%;height:auto;border:6px solid #2a2d2b;border-bottom:0;border-radius:14px 14px 0 0;background:#9da2a6}
+.ws-cloud{fill:#a9adb0}.ws-sky{fill:#8e959a}.ws-ground{fill:#3f463c}.ws-runway{fill:#2b2d2c}
+.ws-als{fill:#fff6d8}.ws-thr{fill:#3ddc6a}.ws-edge{fill:#f4f1e6}
+.replay .windscreen{margin-top:6px;border-width:4px}
 .prompt{position:absolute;left:50%;top:8px;transform:translateX(-50%);margin:0;max-width:min(560px,92%);background:rgba(250,250,247,.94);border:1px solid var(--ink);padding:6px 12px;font-size:14px;font-weight:700;text-align:center}
 .prompt:empty{display:none}
 .decision{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--paper);border:2px solid var(--ink);padding:14px 18px;text-align:center;max-width:92%}
@@ -53,7 +57,7 @@ th,td{border-top:1px solid var(--line);padding:6px 8px;text-align:left;vertical-
 .stats dt{color:var(--muted)}.stats dd{margin:0;font-variant-numeric:tabular-nums}
 .replay svg{display:block;width:100%;height:auto}
 .replay svg.views{background:#fff}
-.replay #replayPanel{margin-top:6px}
+.replay #replayPanel{margin-top:0}
 .scrub{display:flex;align-items:center;gap:8px;margin-top:6px}
 .scrub input{flex:1}
 .scrub output{font:12px monospace;min-width:4.5em}

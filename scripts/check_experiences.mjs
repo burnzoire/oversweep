@@ -71,7 +71,9 @@ export async function checkExperiences({ dist, experiences, review = false, base
       problems.push(`${e.id}: wrapper does not embed ${base}/${frame(e)}.`);
     for (const asset of e.assets) {
       if (!(await read(frame(e) + asset))?.trim()) problems.push(`${e.id}: asset ${asset} is missing or empty.`);
-      if (pages.frame && !pages.frame.includes(`"${asset}"`)) problems.push(`${e.id}: frame does not reference ${asset}.`);
+      // Linked bare or with its content hash (`app.js?v=…`).
+      if (pages.frame && !new RegExp(`"${asset.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(\\?v=[0-9a-f]+)?"`).test(pages.frame))
+        problems.push(`${e.id}: frame does not reference ${asset}.`);
     }
   }
   // Fail closed for excluded entries across every output file, not just known routes.

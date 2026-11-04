@@ -1,5 +1,6 @@
 import { resolve } from 'node:path';
 import { readFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import { includedExperiences } from '../data/experiences';
 
 const types: Record<string, string> = {
@@ -28,11 +29,33 @@ export function sharedAssetPaths(extension: string) {
     .map(asset => ({ params: { experience: e.slug, path: asset.slice(0, -extension.length) } })));
 }
 
+const assetFile = (slug: string, asset: string) =>
+  isShared(asset) ? resolve(process.cwd(), 'src', asset) : resolve(process.cwd(), 'src/experiences', slug, asset);
+
+/**
+ * Give every asset link in a frame a content hash (`app.js?v=1a2b3c4d`),
+ * so a browser that cached the previous deploy (GitHub Pages allows ten
+ * minutes) cannot pair a new page with an old script. Links in the HTML get
+ * the query directly; an import map does the same for module imports,
+ * which resolve to the bare URL. `base` is the frame's absolute path.
+ */
+export async function versionAssets(html: string, slug: string, assets: string[], base: string) {
+  const hashes = new Map<string, string>();
+  for (const asset of assets) {
+    hashes.set(asset, createHash('sha256').update(await readFile(assetFile(slug, asset))).digest('hex').slice(0, 10));
+  }
+  const versioned = (asset: string) => `${asset}?v=${hashes.get(asset)}`;
+  const imports = Object.fromEntries([...hashes.keys()].filter(a => /\.m?js$/.test(a)).map(a => [base + a, base + versioned(a)]));
+  const map = `<script type="importmap">${JSON.stringify({ imports })}</script>`;
+  return html
+    .replace(/\b(href|src)="([^"?#]+)"/g, (whole, attr, url) => hashes.has(url) ? `${attr}="${versioned(url)}"` : whole)
+    .replace(/(<base [^>]*>)/, `$1${map}`);
+}
+
 export async function serveAsset(slug: string | undefined, asset: string) {
   const experience = includedExperiences.find(e => e.slug === slug);
   const extension = asset.slice(asset.lastIndexOf('.'));
   if (!experience || !experience.assets.includes(asset) || !types[extension]) return new Response(null, { status: 404 });
   if (isShared(asset) && (asset.includes('..') || !sharedRoots.some(r => asset.startsWith(r)))) return new Response(null, { status: 404 });
-  const file = isShared(asset) ? resolve(process.cwd(), 'src', asset) : resolve(process.cwd(), 'src/experiences', experience.slug, asset);
-  return new Response(await readFile(file, 'utf8'), { headers: { 'Content-Type': types[extension] } });
+  return new Response(await readFile(assetFile(experience.slug, asset), 'utf8'), { headers: { 'Content-Type': types[extension] } });
 }

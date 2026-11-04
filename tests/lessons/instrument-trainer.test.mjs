@@ -128,3 +128,20 @@ test('auto power holds the approach speed through a level-off and a descent', ()
   for (let i = 0; i < 600 && run.phase === 'flying'; i++) advance(run, { pitch: descent.pitch, bank: 0, power: autoPower(run, 0.05) }, 0.05);
   assert.ok(Math.abs(run.s.speed - RUN.speed) < 1.5, `descending ${run.s.speed}`);
 });
+
+test('windscreen: on the centreline and glide path the runway is ahead, below the horizon', async () => {
+  const { project, SCREEN, visibilityAt } = await import('../../src/lessons/instrument-flight/windscreen.mjs');
+  const at = { range: 2860 / 6076, right: 0, height: 200, pitch: 6.5, bank: 0, heading: 90, course: 90 };
+  const thr = project(at, 0, 0), horizon = project({ ...at, height: 0 }, 1e7, 0);
+  assert.ok(Math.abs(thr[0] - SCREEN.width / 2) < 0.5, 'centred');
+  assert.ok(thr[1] > horizon[1] && thr[1] < SCREEN.height, 'below the horizon and on the screen');
+  // Right of the centreline: the runway appears to the left.
+  assert.ok(project({ ...at, right: 200 }, 0, 0)[0] < SCREEN.width / 2);
+  // Right bank raises the right side of the horizon.
+  const banked = { ...at, height: 0, bank: 15 };
+  assert.ok(project(banked, 1e7, 1e6)[1] < project(banked, 1e7, -1e6)[1]);
+  assert.equal(project(at, -4000, 0), null, 'behind the eye');
+  assert.equal(visibilityAt(RUN.da, false, RUN.da), 0);
+  assert.equal(visibilityAt(RUN.da, true, RUN.da), 1);
+  assert.equal(visibilityAt(RUN.da + 200, true, RUN.da), 0);
+});
