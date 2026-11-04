@@ -72,7 +72,7 @@ export function createAxisBindings({ controls, rows, status, storeKey }) {
       }
       status.textContent = list.length
         ? list.map((p) => `${p.index + 1}. ${p.id.replace(/\s*\(.*\)\s*$/, '')}${now - seen[p.index].moved < 1000 ? '  ← moving' : ''}`).join('\n')
-          + (list.length >= 4 ? '\nChrome and Edge show only four devices. If your stick is missing, use Firefox or unplug some devices.' : '')
+          + (list.length >= 4 ? '\nA browser shows only so many devices (some stop at four, others at eight). If yours is missing, unplug a device you do not need here.' : '')
         : 'No controller seen yet. Press any button on it; browsers reveal each device on its first input.';
     }
     const out = {};
