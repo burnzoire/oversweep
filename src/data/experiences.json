@@ -35,7 +35,7 @@
     "manualId": "manual.autorotation",
     "slug": "autorotation",
     "subject": "flight-fundamentals",
-    "revision": 1,
+    "revision": 2,
     "title": "Autorotation \u2014 engine failure exercise",
     "maturity": "Drafted \u2014 not technically validated",
     "publication": "published",
@@ -52,7 +52,8 @@
       "frame-guard.js",
       "app.js",
       "style.css",
-      "model.cjs"
+      "model.cjs",
+      "lessons/shared/axis-bindings.mjs"
     ],
     "module": {
       "title": "Autorotation Practice",
@@ -68,7 +69,7 @@
     "manualId": "manual.instrument-trainer",
     "slug": "instrument-trainer",
     "subject": "instrument-flight",
-    "revision": 1,
+    "revision": 2,
     "title": "Instrument trainer \u2014 hand-flown ILS",
     "maturity": "Drafted \u2014 not technically validated",
     "publication": "published",
@@ -93,7 +94,8 @@
       "lessons/shared/instruments.mjs",
       "lessons/shared/hsi.mjs",
       "lessons/navigation/lesson-model.mjs",
-      "lessons/case-iii/lesson-model.mjs"
+      "lessons/case-iii/lesson-model.mjs",
+      "lessons/shared/axis-bindings.mjs"
     ],
     "module": {
       "title": "Instrument Trainer",

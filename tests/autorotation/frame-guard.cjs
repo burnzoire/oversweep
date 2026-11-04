@@ -9,7 +9,10 @@ const ctx = vm.createContext({
   document: { createElement: element, addEventListener(type, fn) { if (type === 'DOMContentLoaded') ready = fn; }, body: { replaceChildren(n) { shown = n; } } },
   requestAnimationFrame() { frames++; }, console,
 });
-for (const f of ['frame-guard.js', 'app.js']) vm.runInContext(fs.readFileSync('src/experiences/autorotation/' + f, 'utf8'), ctx);
+// app.js is an ES module; its one import is stubbed so it runs as a script here.
+const source = (f) => fs.readFileSync('src/experiences/autorotation/' + f, 'utf8')
+  .replace(/^import \{ createAxisBindings \} from .*$/m, 'const createAxisBindings = () => { throw new Error("framed exercise must not bind axes"); };');
+for (const f of ['frame-guard.js', 'app.js']) vm.runInContext(source(f), ctx);
 ready();
 assert.equal(frames, 0, 'framed exercise must not start');
 const link = shown.parts.find(p => p && p.target);
