@@ -188,9 +188,10 @@ export const CONTROL = new Set(['adi', 'power']);
 /**
  * Draw the whole panel from a flight state. `highlight` rings one
  * instrument (the crosscheck), `groups` tags each instrument control or
- * performance, `ils` adds needles to the ADI and HSI.
+ * performance, `ils` adds needles to the ADI and HSI, `dme` a distance on
+ * the HSI.
  */
-export function drawPanel(svg, s, { highlight, groups = true, ils, course, dimmed = [] } = {}) {
+export function drawPanel(svg, s, { highlight, groups = true, ils, course, dme, dimmed = [] } = {}) {
   const at = isNarrow(svg) ? PANEL_NARROW : PANEL;
   svg.setAttribute('viewBox', `0 0 ${at.width} ${at.height}`);
   svg.replaceChildren(el('rect', { x: 0, y: 0, width: at.width, height: at.height, class: 'panel' }));
@@ -206,6 +207,7 @@ export function drawPanel(svg, s, { highlight, groups = true, ils, course, dimme
   turnSlip(svg, at.turn.cx, at.turn.cy, at.turn.r, s.rate, s.slip ?? 0);
   const hsiOpts = { heading: s.heading, course: course ?? s.bug ?? s.heading, toFrom: false, dots: ils?.loc ?? 0, gs: ils?.gs };
   if (s.bug !== undefined) hsiOpts.bug = s.bug;
+  if (dme !== undefined) hsiOpts.dme = dme;
   drawHsi(svg, at.hsi.cx, at.hsi.cy, at.hsi.r, hsiOpts);
   for (const key of ['asi', 'adi', 'alt', 'turn', 'hsi', 'vsi']) {
     const p = at[key];

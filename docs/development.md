@@ -86,6 +86,14 @@ specific experience. Each entry declares `publication` separately from `maturity
   (`OVERSWEEP_REVIEW_TRAINERS=1 npm run check:review`). The production check fails
   if any output file references it.
 
+An asset whose name has a folder in it, such as
+`lessons/shared/instruments.mjs` or `styles/instrument-panel.css`, is shared
+site code read from that path under `src/` (only `lessons/` and `styles/`)
+and served at the same path under the frame, so a trainer can import the
+Manual's own figure modules and their relative imports still resolve. List
+every module in the import chain, and reference each from the frame (for
+example with `<link rel="modulepreload">`).
+
 An entry's optional `launch` says how the Manual page presents it. The default,
 `embed`, requires an `<iframe>` of the trainer frame. `window` is for experiences
 too busy to share a page: the Manual page must link to the frame with

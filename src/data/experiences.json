@@ -62,5 +62,45 @@
       "maturity": "Drafted \u2014 not technically validated",
       "group": "Rotor wing"
     }
+  },
+  {
+    "id": "experience.instrument-trainer",
+    "manualId": "manual.instrument-trainer",
+    "slug": "instrument-trainer",
+    "subject": "instrument-flight",
+    "revision": 1,
+    "title": "Instrument trainer \u2014 hand-flown ILS",
+    "maturity": "Drafted \u2014 not technically validated",
+    "publication": "published",
+    "launch": "window",
+    "objective": "Hand-fly an ILS from the localizer intercept to the decision altitude with only the instrument panel, finding the drift correction for an unknown wind, and make the land or go-missed decision at the DA.",
+    "applicability": "Invented generic jet on an invented ILS, flown with a keyboard, game controller or on-screen controls; educational model, not any real type or procedure.",
+    "prerequisites": [
+      "The basic T and the crosscheck",
+      "Control and performance",
+      "ILS needles and their limits",
+      "Decision altitude"
+    ],
+    "assets": [
+      "frame-guard.js",
+      "app.js",
+      "style.css",
+      "styles/instrument-panel.css",
+      "lessons/instrument-flight/ils-trainer-model.mjs",
+      "lessons/instrument-flight/attitude-model.mjs",
+      "lessons/instrument-flight/ils-model.mjs",
+      "lessons/instrument-flight/ils-views.mjs",
+      "lessons/shared/instruments.mjs",
+      "lessons/shared/hsi.mjs",
+      "lessons/navigation/lesson-model.mjs",
+      "lessons/case-iii/lesson-model.mjs"
+    ],
+    "module": {
+      "title": "Instrument Trainer",
+      "objective": "Practise instrument flying on a generic panel with nothing outside the window. The first exercise is the hand-flown ILS: intercept, track both needles to the DA, respect the needle limits, and decide.",
+      "applicability": "Generic instrument procedures for military pilots of every service; your service's instrument manual, the aircraft's flight manual and the published procedure govern real approaches.",
+      "revision": 1,
+      "maturity": "Drafted \u2014 not technically validated"
+    }
   }
 ]

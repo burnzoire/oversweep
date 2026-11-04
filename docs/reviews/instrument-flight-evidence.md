@@ -186,3 +186,21 @@ The split added more invented material, all labelled on the pages:
   threshold, and a 200 ft DA are invented; the needle scaling is P-1204
   p. 1-2 and the dots and limits AFMAN p. 210. The scripted approach's
   heading corrections stay within 5°, after P-1204 p. 6-62.
+
+## Instrument Trainer (issue #169)
+
+The Instrument Trainer module page (`_InstrumentTrainer.astro`) and its
+hand-flown ILS exercise use only excerpts already recorded above: AFMAN
+pp. 157–158 (drift), 208 (descent rate), 209–210 (runway environment, ILS
+limits) and 250 (missed approach), and P-1204 pp. 1-2 (needle scaling) and
+6-62 (localizer corrections). The needle geometry is `ils-model.mjs`.
+
+Invented for the exercise (`ils-trainer-model.mjs`, all labelled on the page
+and in the trainer): the aircraft is `attitude-model.mjs` at 140 KIAS with
+three times the clean drag for gear and flaps; the field elevation (400 ft),
+localizer minimums (400 ft above the touchdown zone) and DA (200 ft above);
+the start (3.8–4.4 NM, 0.6–1.6 dots off the localizer, 0.6–1.3 dots below
+the glide slope, 20–30° intercept); winds up to 25 kt; the runway environment
+in sight on 60% of runs; 3 seconds to decide; and "in position to land"
+meaning within one dot on both needles at the DA, since AFMAN p. 209 gives
+no number. True airspeed is taken as indicated; no turbulence.

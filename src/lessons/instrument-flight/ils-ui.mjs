@@ -1,65 +1,17 @@
 // Flying the ILS figure: plan and profile views of the approach beside an
 // HSI and an attitude indicator whose needles are driven by the aircraft's
 // position. Geometry comes from ils-model.mjs.
-import { ILS, FT_PER_NM, feetPerDot, glideSlopeHeight, ilsLimits, needles, scriptedApproach } from './ils-model.mjs';
+import { feetPerDot, glideSlopeHeight, ilsLimits, needles, scriptedApproach } from './ils-model.mjs';
 import { adi, isNarrow } from '../shared/instruments.mjs';
 import { drawHsi, el } from '../shared/hsi.mjs';
+import { PLAN, PROF, ilsViews } from './ils-views.mjs';
+
+const views = ilsViews();
 
 const D = Math.PI / 180;
 const r0 = (v) => Math.round(v).toLocaleString('en-US');
 const dots = (v) => `${Math.abs(v).toFixed(1)} dot${Math.abs(v).toFixed(1) === '1.0' ? '' : 's'}`;
 const reduceMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-
-// Views: plan above profile, both with the threshold at x = TX.
-const X0 = 16, TX = 380, MAXNM = 10.5, PX_NM = (TX - X0) / MAXNM;
-const sx = (range) => TX - range * PX_NM; // range in NM before the threshold
-const RWY_PX = (ILS.runway / FT_PER_NM) * PX_NM;
-const PLAN = { y: 20, h: 190, mid: 115, ftPx: 55 / 2500 };
-const PROF = { y: 236, h: 214, base: 430, ftPx: 180 / 3400 };
-
-function views(svg, pos, trail) {
-  const g = el('g');
-  // Plan view.
-  g.append(el('rect', { x: 2, y: PLAN.y, width: 440, height: PLAN.h, class: 'view' }));
-  g.append(el('text', { x: 10, y: PLAN.y + 16, class: 'dark' }, 'PLAN VIEW'));
-  g.append(el('text', { x: 436, y: PLAN.y + 16, class: 'dark small', 'text-anchor': 'end' }, 'Sideways scale stretched'));
-  const locX = TX + RWY_PX + (ILS.locBeyond / FT_PER_NM) * PX_NM;
-  const half = (range) => Math.tan(ILS.locFullScale * D) * (range * FT_PER_NM + ILS.runway + ILS.locBeyond) * PLAN.ftPx;
-  g.append(el('path', { class: 'beam', d: `M${locX} ${PLAN.mid} L${sx(MAXNM)} ${PLAN.mid - half(MAXNM)} L${sx(MAXNM)} ${PLAN.mid + half(MAXNM)} Z` }));
-  g.append(el('line', { x1: sx(MAXNM), y1: PLAN.mid, x2: locX, y2: PLAN.mid, class: 'cl' }));
-  g.append(el('rect', { x: TX, y: PLAN.mid - 4, width: RWY_PX, height: 8, class: 'rwy' }));
-  g.append(el('circle', { cx: locX, cy: PLAN.mid, r: 3, class: 'me' }));
-  g.append(el('text', { x: locX - 4, y: PLAN.mid - 10, class: 'dark small', 'text-anchor': 'end' }, 'LOCALIZER'));
-  g.append(el('text', { x: sx(5), y: PLAN.mid + half(5) + 14, class: 'dark small', 'text-anchor': 'middle' }, 'Localizer full scale: 2.5° each side'));
-  // Profile view.
-  g.append(el('rect', { x: 2, y: PROF.y, width: 440, height: PROF.h, class: 'view' }));
-  g.append(el('text', { x: 10, y: PROF.y + 16, class: 'dark' }, 'PROFILE'));
-  g.append(el('text', { x: 436, y: PROF.y + 16, class: 'dark small', 'text-anchor': 'end' }, 'Height scale stretched'));
-  const gsX = TX + (ILS.gsAbeam / FT_PER_NM) * PX_NM;
-  const hy = (h) => PROF.base - h * PROF.ftPx;
-  const edge = (range, ang) => hy(Math.tan(ang * D) * (range * FT_PER_NM + ILS.gsAbeam));
-  const far = 8.5;
-  g.append(el('path', { class: 'beam gs', d: `M${gsX} ${PROF.base} L${sx(far)} ${edge(far, ILS.glideSlope + ILS.gsFullScale)} L${sx(far)} ${edge(far, ILS.glideSlope - ILS.gsFullScale)} Z` }));
-  g.append(el('line', { x1: gsX, y1: PROF.base, x2: sx(far), y2: edge(far, ILS.glideSlope), class: 'cl' }));
-  g.append(el('line', { x1: 2, y1: PROF.base, x2: 442, y2: PROF.base, class: 'cl' }));
-  g.append(el('rect', { x: TX, y: PROF.base - 1, width: RWY_PX, height: 4, class: 'rwy' }));
-  g.append(el('text', { x: sx(4.2), y: edge(4.2, ILS.glideSlope - ILS.gsFullScale) + 22, class: 'dark small' }, '3° glide slope, full scale 0.7° each side'));
-  // DA line, an invented example.
-  g.append(el('line', { x1: sx(1.2), y1: hy(ILS.daHeight), x2: TX + 20, y2: hy(ILS.daHeight), class: 'cl' }));
-  g.append(el('text', { x: sx(1.2) - 4, y: hy(ILS.daHeight) + 4, class: 'dark small', 'text-anchor': 'end' }, 'DA 200 ft (example)'));
-  for (const nm of [2, 4, 6, 8, 10]) {
-    g.append(el('line', { x1: sx(nm), y1: PROF.base, x2: sx(nm), y2: PROF.base + 5, class: 'cl' }));
-    g.append(el('text', { x: sx(nm), y: PROF.base + 16, class: 'dark small', 'text-anchor': 'middle' }, `${nm} NM`));
-  }
-  // Trail and aircraft.
-  if (trail?.length > 1) {
-    g.append(el('path', { class: 'track', d: trail.map((p, i) => `${i ? 'L' : 'M'}${sx(p.range).toFixed(1)} ${(PLAN.mid + p.right * PLAN.ftPx).toFixed(1)}`).join(' ') }));
-    g.append(el('path', { class: 'track', d: trail.map((p, i) => `${i ? 'L' : 'M'}${sx(p.range).toFixed(1)} ${hy(p.height).toFixed(1)}`).join(' ') }));
-  }
-  g.append(el('circle', { cx: sx(pos.range), cy: PLAN.mid + pos.right * PLAN.ftPx, r: 6, class: 'me' }));
-  g.append(el('circle', { cx: sx(pos.range), cy: hy(pos.height), r: 6, class: 'me' }));
-  svg.append(g);
-}
 
 function draw(svg, pos, trail) {
   const n = needles(pos);
