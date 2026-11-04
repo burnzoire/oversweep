@@ -145,6 +145,18 @@ export function advance(run, input, dt) {
   return run;
 }
 
+/**
+ * The optional auto power assist: sets the power that holds the approach
+ * speed (proportional plus integral on the airspeed error), so a beginner
+ * flies pitch for the glide path only. An exercise assist, not a model of
+ * any aircraft's autothrottle. Returns the power to use.
+ */
+export function autoPower(run, dt) {
+  const err = RUN.speed - run.s.speed;
+  run.autoI = clamp((run.autoI ?? run.s.power) + 1.5 * err * dt, 0, 100);
+  return clamp(run.autoI + 4 * err, 0, 100);
+}
+
 /** The pilot goes missed before the DA. */
 export function goMissed(run) {
   if (run.phase !== 'flying') return run;

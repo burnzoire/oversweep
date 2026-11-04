@@ -4,7 +4,7 @@
  * lessons/instrument-flight/ils-trainer-model.mjs; the panel and the views
  * are the instrument flight pages' own. Rates here are input tuning only.
  */
-import { RUN, advance, decide, driftCorrection, goMissed, grade, newRun, windComponents } from './lessons/instrument-flight/ils-trainer-model.mjs';
+import { RUN, advance, autoPower, decide, driftCorrection, goMissed, grade, newRun, windComponents } from './lessons/instrument-flight/ils-trainer-model.mjs';
 import { ilsViews } from './lessons/instrument-flight/ils-views.mjs';
 import { drawPanel } from './lessons/shared/instruments.mjs';
 
@@ -24,8 +24,10 @@ if (!window.oversweepFramed) {
   const held = new Set();
   const target = { pitch: 0, bank: 0, power: 0 };
   let pad = { active: false, buttons: [] };
-  $('invert').checked = read('invert', false);
-  $('invert').addEventListener('change', () => write('invert', $('invert').checked));
+  for (const id of ['invert', 'autoPower']) {
+    $(id).checked = read(id, false);
+    $(id).addEventListener('change', () => write(id, $(id).checked));
+  }
 
   /* ---------- runs ---------- */
 
@@ -84,6 +86,7 @@ if (!window.oversweepFramed) {
       [run.decision === 'early-missed' ? 'When you went missed' : 'At the DA', `${at.range.toFixed(2)} NM, localizer ${Math.abs(at.loc).toFixed(1)}, glide slope ${dots(at.gs)} dots`],
       ['Airspeed', `${Math.round(run.speedRange[0])}–${Math.round(run.speedRange[1])} kt (target ${RUN.speed})`],
       ['Runway environment at the DA', run.visual ? 'in sight' : 'not in sight'],
+      ['Auto power', run.autoUsed ? 'used' : 'not used'],
     ];
     $('debriefStats').replaceChildren(...rows.flatMap(([k, v]) => {
       const dt = document.createElement('dt'), dd = document.createElement('dd'); dt.textContent = k; dd.textContent = v; return [dt, dd];
@@ -194,6 +197,7 @@ if (!window.oversweepFramed) {
     target.pitch = clamp(target.pitch, -15, 25);
     target.bank = clamp(target.bank, -MAX_BANK, MAX_BANK);
     target.power = clamp(target.power, 0, 100);
+    if ($('autoPower').checked) { target.power = autoPower(run, dt); run.autoUsed = true; }
   }
 
   function togglePause() {

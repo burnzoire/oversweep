@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { RUN, advance, decide, driftCorrection, goMissed, grade, newRun, windComponents } from '../../src/lessons/instrument-flight/ils-trainer-model.mjs';
+import { RUN, advance, autoPower, decide, driftCorrection, goMissed, grade, newRun, windComponents } from '../../src/lessons/instrument-flight/ils-trainer-model.mjs';
 import { levelTrim } from '../../src/lessons/instrument-flight/attitude-model.mjs';
 
 const level = levelTrim(RUN.speed, { dragK: RUN.dragK });
@@ -119,4 +119,12 @@ test('fuzz: random inputs never produce non-finite state', () => {
     for (let i = 0; i < 4000 && run.phase === 'flying'; i++) advance(run, { pitch: -15 + r() * 40, bank: -30 + r() * 60, power: r() * 100 }, 0.02 + r() * 0.08);
     for (const v of [run.pos.range, run.pos.right, run.pos.height, run.s.speed, run.s.heading]) assert.ok(Number.isFinite(v));
   }
+});
+
+test('auto power holds the approach speed through a level-off and a descent', () => {
+  const run = newRun(13);
+  for (let i = 0; i < 600; i++) advance(run, { pitch: level.pitch, bank: 0, power: autoPower(run, 0.05) }, 0.05);
+  assert.ok(Math.abs(run.s.speed - RUN.speed) < 1, `level ${run.s.speed}`);
+  for (let i = 0; i < 600 && run.phase === 'flying'; i++) advance(run, { pitch: descent.pitch, bank: 0, power: autoPower(run, 0.05) }, 0.05);
+  assert.ok(Math.abs(run.s.speed - RUN.speed) < 1.5, `descending ${run.s.speed}`);
 });
