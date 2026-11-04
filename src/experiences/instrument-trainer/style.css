@@ -75,3 +75,4 @@ th,td{border-top:1px solid var(--line);padding:6px 8px;text-align:left;vertical-
   .pad-group span{text-align:center}
   .pad button{min-width:0;padding:8px 4px}
 }
+#gamepadStatus{white-space:pre-wrap;font:11px ui-monospace,Menlo,Consolas,monospace;background:#fff;border:1px solid var(--line);padding:6px 8px;max-height:9em;overflow:auto}

@@ -22,7 +22,7 @@ const pads = () => (navigator.getGamepads ? [...navigator.getGamepads()].filter(
 export function createAxisBindings({ controls, rows, status, storeKey }) {
   const read = () => { try { return JSON.parse(localStorage.getItem(storeKey)) || {}; } catch { return {}; } };
   const write = () => { try { localStorage.setItem(storeKey, JSON.stringify(bindings)); } catch { /* private window */ } };
-  let bindings = read(), binding = null;
+  let bindings = read(), binding = null, shownAt = -Infinity;
   const last = {};
   const els = {};
 
@@ -58,7 +58,14 @@ export function createAxisBindings({ controls, rows, status, storeKey }) {
 
   function poll() {
     const list = pads();
-    if (status) status.textContent = list.length ? `Connected: ${list.map((p) => p.id).join(', ')}` : 'Connect a controller and press any of its buttons.';
+    if (status && status.closest('dialog')?.open !== false && performance.now() - shownAt > 100) {
+      shownAt = performance.now();
+      // Every device the browser exposes, with its axes live, so a pilot can
+      // see whether their stick is visible at all and which axis moves.
+      status.textContent = list.length
+        ? list.map((p) => `Controller ${p.index + 1}: ${p.id}\n  axes ${p.axes.map((v, i) => `${i + 1}:${v >= 0 ? '+' : ''}${v.toFixed(2)}`).join(' ') || 'none'}`).join('\n')
+        : 'No controller seen yet. Press any button on it; browsers reveal each device on its first input.';
+    }
     const out = {};
     if (binding) {
       // A controller first seen after Set was pressed (browsers reveal each
