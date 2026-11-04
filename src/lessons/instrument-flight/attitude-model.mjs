@@ -55,7 +55,8 @@ export function step(s, input, dt) {
   const power = clamp(input.power ?? s.power, 0, 100);
   // Flight path: pitch less the angle of attack the speed needs.
   const gamma = clamp(pitch - aoaFor(s.speed, bank), -90, 90);
-  const accel = TRAINER.thrustAccel * (power / 100) - drag * s.speed ** 2 - G_KT * Math.sin(gamma * D);
+  // `s.drag` scales the drag, for gear and flaps down (default 1, clean).
+  const accel = TRAINER.thrustAccel * (power / 100) - drag * (s.drag ?? 1) * s.speed ** 2 - G_KT * Math.sin(gamma * D);
   const speed = clamp(s.speed + accel * dt, TRAINER.minSpeed, TRAINER.maxSpeed);
   const vs = speed * FPM_PER_KT * Math.sin(gamma * D);
   const vsi = s.vsi + (vs - s.vsi) * Math.min(1, dt / TRAINER.vsiLag);
@@ -68,9 +69,14 @@ export function step(s, input, dt) {
   };
 }
 
-// Power and pitch for level flight at a speed (power in percent).
-export function levelTrim(speed) {
-  return { pitch: aoaFor(speed), power: clamp((drag * speed ** 2 * 100) / TRAINER.thrustAccel, 0, 100) };
+// Power and pitch for a steady flight path at a speed (power in percent):
+// level by default, or `gamma` degrees (negative descending), with drag
+// scaled by `dragK` as in `s.drag`.
+export function levelTrim(speed, { gamma = 0, dragK = 1 } = {}) {
+  return {
+    pitch: aoaFor(speed) + gamma,
+    power: clamp(((drag * dragK * speed ** 2 + G_KT * Math.sin(gamma * D)) * 100) / TRAINER.thrustAccel, 0, 100),
+  };
 }
 
 /* ---------- Unusual attitudes ---------- */

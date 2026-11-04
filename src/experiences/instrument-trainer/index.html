@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Instrument trainer · Hand-flown ILS</title>
+<meta name="description" content="Hand-fly an ILS to the decision altitude on a generic instrument panel, with a random wind and start. Educational model, not validated, not operational guidance.">
+<link rel="stylesheet" href="styles/instrument-panel.css">
+<link rel="stylesheet" href="style.css">
+<link rel="modulepreload" href="lessons/instrument-flight/ils-trainer-model.mjs">
+<link rel="modulepreload" href="lessons/instrument-flight/attitude-model.mjs">
+<link rel="modulepreload" href="lessons/instrument-flight/ils-model.mjs">
+<link rel="modulepreload" href="lessons/instrument-flight/ils-views.mjs">
+<link rel="modulepreload" href="lessons/shared/instruments.mjs">
+<link rel="modulepreload" href="lessons/shared/hsi.mjs">
+<link rel="modulepreload" href="lessons/navigation/lesson-model.mjs">
+<link rel="modulepreload" href="lessons/case-iii/lesson-model.mjs">
+<script src="frame-guard.js"></script>
+</head>
+<body>
+<div class="draft-status" role="note">DRAFTED — NOT TECHNICALLY VALIDATED · INVENTED AIRCRAFT AND APPROACH · NOT OPERATIONAL GUIDANCE · <a href="../../manual/instrument-flight/instrument-trainer/#sources" target="_top">Scope and sources</a></div>
+<header>
+  <div class="brand"><span class="insignia" aria-hidden="true">I</span><div><h1>INSTRUMENT TRAINER</h1><p>HAND-FLOWN ILS · INSTRUMENTS ONLY</p></div></div>
+  <div class="header-actions">
+    <label class="switch" title="Holds 140 knots for you, so you fly pitch for the glide path only"><input id="autoPower" type="checkbox"> Auto power</label>
+    <label class="switch"><input id="invert" type="checkbox"> Invert pitch keys</label>
+    <button id="pause" type="button">Pause</button>
+    <button id="controlsHelp" type="button">Controls</button>
+    <button id="newRun" type="button">New run</button>
+  </div>
+</header>
+<main id="mainApp">
+  <p id="card" class="card" aria-label="Approach card"></p>
+  <section class="cockpit" aria-label="Instrument panel">
+    <svg id="panel" class="inst" role="img" aria-label="Instrument panel: attitude with ILS bars, airspeed, altimeter, turn and slip, HSI with localizer and glide slope, vertical speed and power"></svg>
+    <p id="prompt" class="prompt" role="status" aria-live="polite"></p>
+    <div id="decision" class="decision" hidden>
+      <p id="decisionText"></p>
+      <div><button type="button" class="primary" id="land">Land <kbd>L</kbd></button><button type="button" id="missed">Go missed <kbd>G</kbd></button></div>
+    </div>
+  </section>
+  <section class="pad" aria-label="On-screen controls">
+    <div class="pad-group"><span>Pitch</span><button type="button" data-hold="nose-up" aria-label="Nose up">▲ Nose up</button><button type="button" data-hold="nose-down" aria-label="Nose down">▼ Nose down</button></div>
+    <div class="pad-group"><span>Bank</span><button type="button" data-hold="left" aria-label="Bank left">◀ Left</button><button type="button" data-hold="right" aria-label="Bank right">Right ▶</button></div>
+    <div class="pad-group"><span>Power</span><button type="button" data-hold="power-up" aria-label="More power">+ More</button><button type="button" data-hold="power-down" aria-label="Less power">− Less</button></div>
+    <div class="pad-group"><button type="button" id="goAround">Go missed <kbd>G</kbd></button></div>
+  </section>
+</main>
+
+<dialog id="brief" aria-labelledby="briefTitle">
+  <h2 id="briefTitle">Hand-fly the ILS</h2>
+  <p>You are on vectors to an ILS in cloud, level below the glide slope and a little off the localizer, at 140 knots with the gear and flaps down. Intercept the localizer, capture the glide slope, and fly both needles down to the decision altitude with nothing but the panel.</p>
+  <p>Each run has a different wind, and you are not told it: find the heading that holds the localizer. At the DA you will either see the runway environment or not. Then decide at once: land or go missed.</p>
+  <ul class="limits">
+    <li>Full-scale localizer on final: discontinue the approach (go missed).</li>
+    <li>Do not descend below localizer minimums if more than one dot low or two dots high on the glide slope.</li>
+    <li>At the DA, land only with the runway environment in sight and in position to land. In this exercise, in position means within one dot on both needles.</li>
+  </ul>
+  <p class="hint">The aircraft, the approach and its minimums are invented for the exercise. The run lasts about 90 seconds.</p>
+  <div class="dialog-actions"><button type="button" id="showControls">Controls</button><button type="button" class="primary" id="start" autofocus>Start <kbd>Enter</kbd></button></div>
+</dialog>
+
+<dialog id="controls" aria-labelledby="controlsTitle">
+  <h2 id="controlsTitle">Controls</h2>
+  <p>The aircraft holds the attitude you leave it in, so make a change, stop, and watch the performance instruments follow.</p>
+  <table>
+    <thead><tr><th scope="col">Control</th><th scope="col">Keyboard</th><th scope="col">Game controller</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Nose down / nose up</th><td><kbd>↑</kbd> / <kbd>↓</kbd> (hold; tap for small changes)</td><td>Left stick forward / back</td></tr>
+      <tr><th scope="row">Bank left / right</th><td><kbd>←</kbd> / <kbd>→</kbd> (hold; bank stays where you leave it)</td><td>Left stick left / right (bank follows the stick, up to 30°)</td></tr>
+      <tr><th scope="row">Power more / less</th><td><kbd>W</kbd> / <kbd>S</kbd> (hold)</td><td>Right / left trigger</td></tr>
+      <tr><th scope="row">Go missed</th><td><kbd>G</kbd></td><td>B</td></tr>
+      <tr><th scope="row">Land (at the DA)</th><td><kbd>L</kbd></td><td>A</td></tr>
+      <tr><th scope="row">Pause</th><td><kbd>Space</kbd> or <kbd>P</kbd></td><td>Start</td></tr>
+      <tr><th scope="row">Start or fly again</th><td><kbd>Enter</kbd></td><td>A</td></tr>
+    </tbody>
+  </table>
+  <p>On a phone or with a mouse, press and hold the buttons below the panel. <b>Invert pitch keys</b> swaps <kbd>↑</kbd> and <kbd>↓</kbd>. <b>Auto power</b> holds 140 knots for you, so you only fly the attitude: a learning assist, not part of the technique. Turn it off once tracking the needles is easy. The HSI's distance is to the runway threshold, a simplification for the exercise: a real ILS DME usually measures from its own antenna.</p>
+  <div class="dialog-actions"><button type="button" class="primary" id="closeControls">Close</button></div>
+</dialog>
+
+<dialog id="debrief" aria-labelledby="debriefTitle">
+  <h2 id="debriefTitle">Debrief</h2>
+  <div class="debrief-grid">
+    <div>
+      <p id="debriefResult" class="result"></p>
+      <ul id="debriefItems" class="debrief-items"></ul>
+      <dl id="debriefStats" class="stats"></dl>
+    </div>
+    <div class="replay">
+      <h3>Replay</h3>
+      <svg id="replayViews" class="inst views" role="img" aria-label="Plan and profile views of the flown approach"></svg>
+      <svg id="replayPanel" class="inst" role="img" aria-label="The instrument panel at the replay time"></svg>
+      <div class="scrub"><button type="button" id="replayPlay">Play</button><input id="replayTime" type="range" min="0" max="1" step="1" value="0" aria-label="Replay time"><output id="replayOut" for="replayTime"></output></div>
+    </div>
+  </div>
+  <p class="hint">The aircraft, the approach, its minimums and the "in position" rule are invented for this exercise. Fly real approaches to your service's rules and the published procedure.</p>
+  <div class="dialog-actions"><button type="button" class="primary" id="again" autofocus>Fly again <kbd>Enter</kbd></button></div>
+</dialog>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 /* Shared by the instrument flight module pages (imported, so global to
    those pages only). */
+@import './instrument-panel.css';
 .contents-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
 .contents h3 { margin: 0.4rem 0 0.2rem; font-size: 0.95rem; }
 .contents ol { padding-left: 1.5rem; margin-top: 0; }
@@ -68,65 +69,6 @@ svg.natops { display: block; width: 100%; height: auto; color: var(--color-text)
 .natops .fill { fill: var(--color-text); }
 .lesson:not(.ready) .buttons, .lesson:not(.ready) svg:empty { display: none; }
 
-/* The instrument panel and ILS figures (svg.inst). */
-svg.inst { display: block; width: 100%; height: auto; background: #fff; }
-.fig-scroll svg.inst { min-width: 0; }
-.inst .panel { fill: #2b2f33; }
-.inst .bezel { fill: #15181b; stroke: #50565c; stroke-width: 1.5; }
-.inst .face { fill: #0d0f11; stroke: #50565c; stroke-width: 1; }
-.inst .tick { stroke: #e8eaec; stroke-width: 1.4; }
-.inst .tick.major { stroke-width: 2.4; }
-.inst .num { fill: #f4f5f6; font: 700 13px Arial, Helvetica, sans-serif; }
-.inst .unit { fill: #c9cdd1; font: 700 9px Arial, Helvetica, sans-serif; letter-spacing: 0.05em; }
-.inst .needle { stroke: #fff; stroke-width: 3; stroke-linecap: round; }
-.inst .needle.wide { stroke-width: 6; }
-.inst .window { fill: #000; stroke: #8a9096; }
-.inst .counter { fill: #fff; font: 700 14px ui-monospace, Menlo, Consolas, monospace; }
-.inst .sky { fill: #2f7fc1; }
-.inst .ground { fill: #8a5a2b; }
-.inst .horizon { stroke: #fff; stroke-width: 2.5; }
-.inst .ladder { stroke: #fff; stroke-width: 1.6; }
-.inst .ladnum { fill: #fff; font: 700 10px Arial, Helvetica, sans-serif; }
-.inst .bankmark { stroke: #fff; stroke-width: 2; }
-.inst .bankzero { fill: #fff; }
-.inst .skyptr { fill: #ffb300; stroke: #000; stroke-width: 1; }
-.inst .mini { fill: none; stroke: #ffb300; stroke-width: 5; stroke-linejoin: round; stroke-linecap: round; }
-.inst .minidot { fill: #ffb300; }
-.inst .ilsdot { fill: none; stroke: #fff; stroke-width: 1.4; }
-.inst .ilsbar { stroke: #ff3df5; stroke-width: 3.5; stroke-linecap: round; }
-.inst .flag { fill: #d32f2f; }
-.inst .flagtxt { fill: #fff; font: 700 11px Arial, Helvetica, sans-serif; }
-.inst .tube { fill: none; stroke: #e8eaec; stroke-width: 14; stroke-linecap: round; opacity: 0.25; }
-.inst .ball { fill: #111; stroke: #fff; stroke-width: 1.6; }
-.inst .powerfill { fill: #4caf50; }
-.inst .cap { fill: #f4f5f6; font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.06em; }
-.inst .grp { fill: #9ea4aa; font: 700 9px Arial, Helvetica, sans-serif; letter-spacing: 0.08em; }
-.inst .grp.control { fill: #ffb300; }
-.inst .scanring { fill: none; stroke: #ffeb3b; stroke-width: 5; }
-.inst .dimmer { fill: #000; opacity: 0.55; }
-/* The HSI from shared/hsi.mjs, on the dark panel. */
-.inst .frame { fill: #0d0f11; stroke: #e8eaec; stroke-width: 1.5; }
-.inst .thin { stroke: #e8eaec; stroke-width: 1; fill: none; }
-.inst .lbl { fill: #f4f5f6; font: 700 11px Arial, Helvetica, sans-serif; }
-.inst .lbl.small { font-size: 10px; }
-.inst .ln { fill: none; stroke: #e8eaec; stroke-width: 1.8; }
-.inst .ln.heavy { stroke-width: 3; }
-.inst .fill { fill: #e8eaec; }
-.inst .dot { fill: none; stroke: #fff; stroke-width: 1.4; }
-.inst .cdi { stroke: #ff3df5; stroke-width: 4; stroke-linecap: round; }
-.inst .pointer { fill: #ff3df5; stroke: #000; stroke-width: 1; }
-.inst .box.on { fill: #4fc3f7; stroke: #4fc3f7; }
-.inst .acft { fill: #ffb300; stroke: #ffb300; stroke-width: 1; }
-/* Plan and profile views on white (ILS figure). */
-.inst .view { fill: #fff; stroke: var(--color-text); stroke-width: 1.5; }
-.inst .rwy { fill: #6b7076; }
-.inst .beam { fill: #cfe0f3; stroke: none; }
-.inst .beam.gs { fill: #f6d6f4; }
-.inst .cl { stroke: var(--color-text); stroke-width: 1; stroke-dasharray: 6 4; }
-.inst .track { fill: none; stroke: var(--color-link); stroke-width: 2.5; }
-.inst .me { fill: var(--color-link); }
-.inst .dark { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; }
-.inst .dark.small { font-size: 10px; font-weight: 400; }
 .panel-fig .controls label { display: inline-flex; gap: 0.4rem; align-items: center; }
 .panel-fig .readout { font-variant-numeric: tabular-nums; }
 .lesson button[aria-pressed="true"] { background: var(--color-link); border-color: var(--color-link); }
