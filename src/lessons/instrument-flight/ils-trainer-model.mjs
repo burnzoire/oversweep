@@ -99,8 +99,10 @@ const bust = (run, rule) => {
 /** The limits the needles break right now (AFMAN 11-217 Vol 1, p. 210). */
 export function limitsNow(run) {
   const n = run.needles, out = [];
+  // The localizer limit applies once you have been established on it; the
+  // glide slope limits once both needles have been within one dot.
+  if (run.locCapturedAt !== undefined && Math.abs(n.loc) >= 2) out.push('full-scale localizer');
   if (run.capturedAt === undefined) return out;
-  if (Math.abs(n.loc) >= 2) out.push('full-scale localizer');
   if (run.pos.height < RUN.locMins) {
     if (n.gs > 1) out.push('more than one dot low below localizer minimums');
     if (n.gs <= -2) out.push('full scale high below localizer minimums');
@@ -131,6 +133,7 @@ export function advance(run, input, dt) {
   run.needles = n;
   const within = Math.abs(n.loc) <= 1 && Math.abs(n.gs) <= 1;
   if (run.capturedAt === undefined && within) run.capturedAt = run.t;
+  if (run.locCapturedAt === undefined && Math.abs(n.loc) <= 1) run.locCapturedAt = run.t;
   if (run.capturedAt !== undefined) {
     run.tracked += dt;
     if (within) run.inside += dt;

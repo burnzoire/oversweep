@@ -83,7 +83,7 @@ test('the decision: land only in sight and in position; late or wrong is a wrong
 
 test('limits: full-scale localizer is a broken limit, and going missed on it is right', () => {
   const run = newRun(5);
-  run.capturedAt = 0;
+  run.capturedAt = 0; run.locCapturedAt = 0;
   run.pos.right += 6000 * Math.sign(run.pos.right || 1);
   advance(run, run.input, 0.05);
   assert.ok(run.busts.some((b) => b.rule === 'full-scale localizer'));

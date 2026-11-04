@@ -98,7 +98,7 @@
     "module": {
       "title": "Instrument Trainer",
       "objective": "Practise instrument flying on a generic panel with nothing outside the window. The first exercise is the hand-flown ILS: intercept, track both needles to the DA, respect the needle limits, and decide.",
-      "applicability": "Generic instrument procedures for military pilots of every service; your service's instrument manual, the aircraft's flight manual and the published procedure govern real approaches.",
+      "applicability": "Generic instrument procedures for military fixed-wing pilots of every service; your service's instrument manual, the aircraft's flight manual and the published procedure govern real approaches.",
       "revision": 1,
       "maturity": "Drafted \u2014 not technically validated"
     }
