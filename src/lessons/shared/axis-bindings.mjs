@@ -22,7 +22,8 @@ const pads = () => (navigator.getGamepads ? [...navigator.getGamepads()].filter(
 export function createAxisBindings({ controls, rows, status, storeKey }) {
   const read = () => { try { return JSON.parse(localStorage.getItem(storeKey)) || {}; } catch { return {}; } };
   const write = () => { try { localStorage.setItem(storeKey, JSON.stringify(bindings)); } catch { /* private window */ } };
-  let bindings = read(), binding = null;
+  let bindings = read(), binding = null, shownAt = -Infinity;
+  const seen = {};
   const last = {};
   const els = {};
 
@@ -58,7 +59,22 @@ export function createAxisBindings({ controls, rows, status, storeKey }) {
 
   function poll() {
     const list = pads();
-    if (status) status.textContent = list.length ? `Connected: ${list.map((p) => p.id).join(', ')}` : 'Connect a controller and press any of its buttons.';
+    if (status && status.closest('dialog')?.open !== false && performance.now() - shownAt > 100) {
+      shownAt = performance.now();
+      // Every device the browser exposes, one name per line, with a mark on
+      // the one being moved, so a pilot can see whether their stick is
+      // visible at all.
+      const now = performance.now();
+      for (const p of list) {
+        const prev = seen[p.index];
+        if (prev && p.axes.some((v, i) => Math.abs(v - (prev.axes[i] ?? v)) > 0.05)) prev.moved = now;
+        seen[p.index] = { axes: [...p.axes], moved: prev?.moved ?? -Infinity };
+      }
+      status.textContent = list.length
+        ? list.map((p) => `${p.index + 1}. ${p.id.replace(/\s*\(.*\)\s*$/, '')}${now - seen[p.index].moved < 1000 ? '  ← moving' : ''}`).join('\n')
+          + (list.length >= 4 ? '\nChrome and Edge show only four devices. If your stick is missing, use Firefox or unplug some devices.' : '')
+        : 'No controller seen yet. Press any button on it; browsers reveal each device on its first input.';
+    }
     const out = {};
     if (binding) {
       // A controller first seen after Set was pressed (browsers reveal each

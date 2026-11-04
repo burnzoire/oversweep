@@ -28,7 +28,6 @@ export const RUN = Object.freeze({
   intercept: [20, 30], // degrees of intercept heading
   windKt: [0, 25],
   visualChance: 0.6, // chance the runway environment is in sight at the DA
-  decisionSeconds: 3, // time to decide at the DA
   sampleEvery: 0.25, // s between recorded samples
 });
 
@@ -202,7 +201,7 @@ export function grade(run) {
       : inPosition(at) ? 'runway environment in sight and within one dot on both needles'
         : 'runway environment in sight, but not in position to land (more than one dot off)';
     correct = run.decision === should;
-    if (run.decision === 'late') items.push(['bad', `No decision in ${RUN.decisionSeconds} seconds: at the DA it is immediate. You should have ${should === 'land' ? 'continued to land' : 'gone missed'} (${why}).`]);
+    if (run.decision === 'late') items.push(['bad', `No decision at the DA, where it is immediate. You should have ${should === 'land' ? 'continued to land' : 'gone missed'} (${why}).`]);
     else items.push([correct ? 'good' : 'bad', `${correct ? 'Right' : 'Wrong'} decision: you ${run.decision === 'land' ? 'continued to land' : 'went missed'} with ${why}.`]);
   }
   for (const b of run.busts) {

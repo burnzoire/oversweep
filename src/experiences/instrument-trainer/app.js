@@ -21,7 +21,7 @@ if (!window.oversweepFramed) {
   const STEP = 0.02;
   const views = ilsViews({ maxNm: 4.6, far: 4.3, labelNm: [3, 3.7], ticks: [1, 2, 3, 4], daFrom: 0.9, daLabel: `DA ${RUN.tdze + RUN.da} (${RUN.da})` });
 
-  let run, phase = 'brief', paused = false, last = 0, drawn = 0, decisionLeft = 0, graded;
+  let run, phase = 'brief', paused = false, last = 0, drawn = 0, graded;
   const keys = new Set();
   const held = new Set();
   const target = { pitch: 0, bank: 0, power: 0 };
@@ -52,7 +52,6 @@ if (!window.oversweepFramed) {
   }
   function atDecision() {
     phase = 'decision';
-    decisionLeft = RUN.decisionSeconds;
     $('decisionText').textContent = 'DA: look up. Land or go missed?';
     $('decision').hidden = false;
     prompt('');
@@ -255,10 +254,7 @@ if (!window.oversweepFramed) {
       for (let t = 0; t < dt - 1e-9; t += STEP) advance(run, target, Math.min(STEP, dt - t));
       if (run.phase === 'decision') atDecision();
       else if (run.phase === 'done') finish();
-    } else if (phase === 'decision') {
-      decisionLeft -= dt;
-      if (decisionLeft <= 0) { decide(run, 'late'); finish(); }
-    }
+    } // At the DA the run waits for the call: a browser pilot needs time to look up and find the key.
     if (now - drawn > 33 && run) { drawn = now; draw(); }
   }
 

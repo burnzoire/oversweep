@@ -76,3 +76,4 @@ kbd{font:11px monospace;border:1px solid var(--line);border-bottom-width:2px;bor
   .caution{top:auto;bottom:22%;right:8px}
   .switch{font-size:11px}
 }
+#gamepadStatus{white-space:pre-wrap;font:11px ui-monospace,Menlo,Consolas,monospace;background:#fff;border:1px solid var(--line);padding:6px 8px;max-height:9em;overflow:auto}
