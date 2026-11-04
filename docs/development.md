@@ -94,6 +94,12 @@ Manual's own figure modules and their relative imports still resolve. List
 every module in the import chain, and reference each from the frame (for
 example with `<link rel="modulepreload">`).
 
+The frame route gives each asset link a content hash (`app.js?v=…`) and adds
+an import map that does the same for module imports, so a browser holding the
+previous deploy's scripts (GitHub Pages lets it cache them for ten minutes)
+always loads a matching set. Write plain relative links in the frame's HTML;
+the hash is added at build time.
+
 An entry's optional `launch` says how the Manual page presents it. The default,
 `embed`, requires an `<iframe>` of the trainer frame. `window` is for experiences
 too busy to share a page: the Manual page must link to the frame with

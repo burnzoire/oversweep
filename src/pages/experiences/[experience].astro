@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { includedExperiences, experienceFrame, type Experience } from '../../data/experiences';
 import { sitePath } from '../../lib/paths';
+import { versionAssets } from '../../lib/experience-assets';
 export function getStaticPaths() {
   return includedExperiences.map(experience => ({ params: { experience: experience.slug }, props: { experience } }));
 }
@@ -10,7 +11,8 @@ const { experience } = Astro.props as { experience: Experience };
 // A real page route, not a dynamic index.html endpoint: Astro normalizes index
 // URLs in development. The base keeps authored asset links valid at either base.
 const source = await readFile(resolve(process.cwd(), 'src/experiences', experience.slug, 'index.html'), 'utf8');
-const html = source.replace('<head>', `<head><base href="${sitePath(experienceFrame(experience))}">`)
-  .replace('<body>', `<body data-experience-id="${experience.id}" data-experience-revision="${experience.revision}">`);
+const base = sitePath(experienceFrame(experience));
+const html = await versionAssets(source.replace('<head>', `<head><base href="${base}">`)
+  .replace('<body>', `<body data-experience-id="${experience.id}" data-experience-revision="${experience.revision}">`), experience.slug, experience.assets, base);
 ---
 <Fragment set:html={html} />

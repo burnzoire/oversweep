@@ -8,6 +8,7 @@ import { RUN, advance, autoPower, decide, driftCorrection, goMissed, grade, newR
 import { ilsViews } from './lessons/instrument-flight/ils-views.mjs';
 import { drawPanel } from './lessons/shared/instruments.mjs';
 import { createAxisBindings } from './lessons/shared/axis-bindings.mjs';
+import { drawWindscreen, visibilityAt } from './lessons/instrument-flight/windscreen.mjs';
 
 if (!window.oversweepFramed) {
   const $ = (id) => document.getElementById(id);
@@ -52,7 +53,7 @@ if (!window.oversweepFramed) {
   function atDecision() {
     phase = 'decision';
     decisionLeft = RUN.decisionSeconds;
-    $('decisionText').textContent = run.visual ? 'DA: approach lights in sight.' : 'DA: no visual references, still in cloud.';
+    $('decisionText').textContent = 'DA: look up. Land or go missed?';
     $('decision').hidden = false;
     prompt('');
   }
@@ -113,6 +114,7 @@ if (!window.oversweepFramed) {
       marks.push({ ...c, text: 'capture' });
     }
     views(svg, p, samples.slice(0, i + 1), { marks });
+    windscreen($('replayWindscreen'), p);
     drawPanel($('replayPanel'), p, { groups: false, ils: { loc: p.loc, gs: p.gs }, course: run.course, dme: p.range });
     $('replayOut').textContent = `${p.t.toFixed(0)} s`;
   }
@@ -234,8 +236,14 @@ if (!window.oversweepFramed) {
   /* ---------- the loop ---------- */
 
   function prompt(text) { $('prompt').textContent = text; }
+  function windscreen(svg, at) {
+    const v = visibilityAt(at.height, run.visual, RUN.da);
+    drawWindscreen(svg, { ...at, course: run.course }, v);
+    svg.setAttribute('aria-label', v >= 1 ? 'Windscreen: approach lights and runway in sight' : v > 0 ? 'Windscreen: breaking out of cloud' : 'Windscreen: in cloud');
+  }
   function draw() {
     if (!run) return;
+    windscreen($('windscreen'), { ...run.s, ...run.pos });
     drawPanel($('panel'), run.s, { groups: false, ils: run.needles, course: run.course, dme: run.pos.range });
   }
   function frame(now) {
