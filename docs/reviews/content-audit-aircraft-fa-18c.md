@@ -25,3 +25,5 @@ Clarify F/A-18C versus Super Hornet and date-sensitive fleet service claims, wit
 DCS F/A-18C aircraft systems and carrier/ATC features need version-specific fidelity and omission notes.
 
 Mark real-world versus sim-specific information distinctly, using existing sim-panel conventions when supported. Require named simulator, module/version and evidence before claiming **modelled**, **simplified** or **not modelled**; otherwise mark **unverified**.
+
+**Applied (2026-11-05):** no change in this pass: the Super Hornet distinction and fleet dates need current primary sources.

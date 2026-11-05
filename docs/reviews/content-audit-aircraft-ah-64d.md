@@ -34,3 +34,5 @@ DCS AH-64D sensors, radar, data sharing and cooperative AI crew model are versio
 ## Editorial action
 
 Prioritise the factual distinctions above. Preserve useful technical reference details and cross-links, while removing redundant narrative before adding new content. Changes to technical claims require independent aviation SME evidence review.
+
+**Applied (2026-11-05):** no change in this pass: the A/D/E split and Longbow-by-configuration need sourced research.

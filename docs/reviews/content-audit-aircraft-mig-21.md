@@ -34,3 +34,5 @@ DCS MiG-21bis and BMS/third-party representations are not all MiG-21 variants; v
 ## Editorial action
 
 Prioritise the factual distinctions above. Preserve useful technical reference details and cross-links, while removing redundant narrative before adding new content. Changes to technical claims require independent aviation SME evidence review.
+
+**Applied (2026-11-05):** no change needed for the date: the August 2025 retirement is stated with its date. Variant-per-spec attribution needs sourced research.
