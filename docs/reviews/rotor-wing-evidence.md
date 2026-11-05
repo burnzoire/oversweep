@@ -207,3 +207,17 @@ the page. Standard rotor theory, not taken from the handbooks:
   band 16–24 kt (HFH 2-22).
 - **Autorotation (Figure 6).** HFH 2-26 region sizes; the movement per
   collective step is illustrative and labelled so.
+
+## [4] DCS UH-1H Huey Flight Manual, chapter 3 (revision 2, In the sim panel only)
+
+https://www.digitalcombatsimulator.com/upload/iblock/7c7/DCS%20UH-1H%20Flight%20Manual_EN.pdf,
+read 5 November 2026. Printed page numbers (PDF page minus 2).
+
+| Page | Passage (extractor-read, abridged) | Module use |
+| --- | --- | --- |
+| 27 | "the stall of a rotor blade limits the high-speed potential of a helicopter"; the retreating blade's angle of attack "must be increased to equalize lift" | Sim panel: retreating blade stall |
+| 28 | Fig. 3.9: "Helicopter pitches up and rolls left"; "Correction for stall: Reduce collective pitch, Neutralize cyclic"; "If the cyclic is held forward and the collective is not reduced, the stall will become aggravated" | Sim panel: retreating blade stall |
+| 28 | Settling with power: "a vertical, or nearly vertical, descent of at least 300 feet per minute with low forward airspeed"; "using some of the available engine power (from 20 to 100 percent)" | Sim panel: vortex ring state |
+| 30 | "Recovery may be initiated during the early stages of power settling by putting on a large amount of excess power"; "Recovery can be accomplished by lowering collective pitch and increasing forward speed (pushing the cyclic forward)" | Sim panel: vortex ring state |
+| 31 | "At approximately 40 km/h, the rotor system receives enough free, undisturbed air ... lift noticeably improves and the helicopter begins to climb" | Sim panel: translational lift |
+| 34 | "the horizontal velocity is under 10 knots"; ground effect "at a height of no more than approximately one-half the main rotor diameter"; "Translational lift is achieved at approximately 18 knots" | Sim panel |

@@ -24,7 +24,7 @@ Reviews are source-inspection editorial findings, **not** rendered-browser QA, e
 - [Airfield operations](content-audit-airfield-basics.md)
 - [Radio procedures](content-audit-radio-procedures.md)
 - [Fixed-wing fundamentals](content-audit-principles-of-flight.md)
-- [Rotor-wing fundamentals](content-audit-rotor-wing.md)
+- [Rotor-wing fundamentals](content-audit-rotor-wing.md) — applied in module revision 2 (aerodynamics core, hazards table, DCS UH-1H sim panel)
 - [Navigation](content-audit-air-navigation.md)
 - [Weapons delivery](content-audit-weapons-delivery.md)
 - [Close air support](content-audit-close-air-support.md) — findings applied in module revision 2 as a benchmark
