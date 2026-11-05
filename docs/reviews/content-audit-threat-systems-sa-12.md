@@ -34,3 +34,5 @@ DCS/BMS may represent only selected S-300V components. Record which units and RW
 ## Recommended disposition
 
 Retain meaningful technical content. Make the specific edits above before generic shortening; source-changing revisions require aviation SME review.
+
+**Applied (2026-11-05):** the RWR section now says the missing ALR-67 entry is a gap in one table, not evidence that the radars go undetected. Variant 9M82/9M83 data was not re-researched.

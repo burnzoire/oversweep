@@ -34,3 +34,5 @@ Check DCS vehicle/missile representation, passive detection, horizon and sun-bac
 ## Recommended disposition
 
 Retain meaningful technical content. Make the specific edits above before generic shortening; source-changing revisions require aviation SME review.
+
+**Applied (2026-11-05):** the overview now says the infrared guidance is the photocontrast form described under How it engages, so the two sections agree. Range disagreements between sources were not researched.

@@ -25,3 +25,5 @@ Clearly distinguish four- and eight-missile versions. Keep DCS F-14 RWR '19' spe
 Verify DCS implementations of radar/optical modes, gun/missile effects and data links before assigning fidelity status.
 
 Mark real-world versus sim-specific information distinctly, using existing sim-panel conventions when supported. Require named simulator, module/version and evidence before claiming **modelled**, **simplified** or **not modelled**; otherwise mark **unverified**.
+
+**Applied (2026-11-05):** no change needed: the four- and eight-missile versions are already separate, and the RWR symbol is already scoped to the DCS F-14.

@@ -52,7 +52,7 @@ The 9K32 Strela-2, NATO reporting name **SA-7 Grail**, is a shoulder-fired infra
 
 ## How it engages
 
-The missile homes passively on infrared with an uncooled lead sulphide seeker that sees wavelengths below 2.8 µm, through a 1.9° field of view, and can track at 9° per second. [[1]](#source-1) Against jets, that seeker only allows rear-aspect shots. The original could only engage from the rear hemisphere and guided poorly against natural or man-made background infrared sources, and flares proved a highly effective countermeasure against both versions. [[1]](#source-1) The Army handout also lists the SA-7 as passive infrared, rear aspect. [[2]](#source-2)
+The missile [homes](term:homing) passively on infrared with an uncooled lead sulphide seeker that sees wavelengths below 2.8 µm, through a 1.9° field of view, and can track at 9° per second. [[1]](#source-1) Against jets, that seeker only allows rear-aspect shots. The original could only engage from the rear hemisphere and guided poorly against natural or man-made background infrared sources, and flares proved a highly effective countermeasure against both versions. [[1]](#source-1) The Army handout also lists the SA-7 as passive infrared, rear aspect. [[2]](#source-2)
 
 The Strela-2M's higher-thrust motor raised slant range from 3.4 to 4.2 km and the ceiling from 1.5 to 2.3 km, and its guidance could engage approaching helicopters and propeller aircraft (but not jets). [[1]](#source-1) Top missile speed is 430 m/s for the Strela-2 and 500 m/s for the Strela-2M. The missile weighs 9.8 kg and carries a 1.15 kg blast-fragmentation warhead with 370 g of explosive (the article also gives 1.17 kg). [[1]](#source-1)
 

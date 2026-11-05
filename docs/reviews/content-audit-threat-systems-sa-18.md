@@ -34,3 +34,5 @@ Verify DCS/BMS SA-18 availability and IR/UV flare-resistance model before descri
 ## Recommended disposition
 
 Retain meaningful technical content. Make the specific edits above before generic shortening; source-changing revisions require aviation SME review.
+
+**Applied (2026-11-05):** the 1994 Sea Harrier loss is now marked as disputed, matching the SA-14 page.

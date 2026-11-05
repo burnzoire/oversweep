@@ -34,3 +34,5 @@ Verify the actual DCS Buk model and which SA-17 systems exist, their radar modes
 ## Recommended disposition
 
 Retain meaningful technical content. Make the specific edits above before generic shortening; source-changing revisions require aviation SME review.
+
+**Applied (2026-11-05):** no change needed: the RWR note already says the ALR-67 table lists these radars only as SA-11.

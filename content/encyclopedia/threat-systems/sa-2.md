@@ -80,7 +80,7 @@ The museum gives a minimum range of 5 miles, a maximum effective range of about 
 
 ## On the radar warning receiver
 
-In the DCS [F-14](record:f-14), the AN/ALR-67 shows the Fan Song track radar as **2** and the Flat Face search radar, used with the SA-2, [SA-3](record:sa-3) and [SA-5](record:sa-5), as **FF**. [[3]](#source-3)
+In the DCS [F-14](record:f-14), the AN/ALR-67 shows the Fan Song track radar as **2** and the Flat Face search radar, used with the SA-2, [SA-3](record:sa-3) and [SA-5](record:sa-5), as **FF**. [[3]](#source-3) Those symbols are the DCS F-14 module's display; other aircraft, and other sims, label the same radars in their own way.
 
 ## History
 

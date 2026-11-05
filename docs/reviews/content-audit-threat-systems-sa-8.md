@@ -43,3 +43,5 @@ These are **proposed editorial outcomes**, not a claim that every outcome is alr
 Verify the DCS (and BMS where applicable) representation of this **specific** SA-8 system, including radar detection/tracking, guidance or seeker, missile envelope, RWR indications, battery composition and mission-editor availability. Identify capabilities that are simplified or absent only when evidenced for the named simulator version; treat untested features as **unknown**, not absent.
 
 **Follow-up verification required:** Present verified simulator-specific information separately using the existing sim-panel visual convention where appropriate. The real-world profile must not silently imply equivalent simulator fidelity.
+
+**Applied (2026-11-05):** no change in this pass. Variant and era provenance for each figure needs a sourced SME pass; the record's existing citations and RWR scoping were left as they are.

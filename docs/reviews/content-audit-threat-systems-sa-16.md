@@ -25,3 +25,5 @@ Hit probability figures need conditions and citation clarity; keep uncertain com
 Check whether SA-16 is implemented distinctly from SA-18 in DCS/BMS. Do not equate similar names with identical behaviour.
 
 Mark real-world versus sim-specific information distinctly, using existing sim-panel conventions when supported. Require named simulator, module/version and evidence before claiming **modelled**, **simplified** or **not modelled**; otherwise mark **unverified**.
+
+**Applied (2026-11-05):** no change in this pass: hit probabilities and combat attributions already carry citations; adding conditions needs the primary source.
