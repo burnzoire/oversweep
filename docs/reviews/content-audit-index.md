@@ -26,7 +26,7 @@ Reviews are source-inspection editorial findings, **not** rendered-browser QA, e
 - [Fixed-wing fundamentals](content-audit-principles-of-flight.md)
 - [Rotor-wing fundamentals](content-audit-rotor-wing.md)
 - [Navigation](content-audit-air-navigation.md)
-- [Weapons delivery](content-audit-weapons-delivery.md)
+- [Weapons delivery](content-audit-weapons-delivery.md) — applied in module revision 2 (bomb-run core, delivery-types table, sim panel)
 - [Close air support](content-audit-close-air-support.md) — findings applied in module revision 2 as a benchmark
 - [Ship operations](content-audit-ship-operations.md)
 - [Case III](content-audit-case-iii.md)
