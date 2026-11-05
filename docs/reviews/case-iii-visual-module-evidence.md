@@ -178,3 +178,18 @@ Hand-derived; also encoded as tests in `tests/lessons/case-iii-lesson.test.mjs`.
   the course by about 0.65 NM and corrects onto it before the fix.
 - **Timed turn.** 90° at 1.5°/s = 60 s; 180° = 120 s, matching P-816's
   two-minute turns.
+
+## [5] DCS Supercarrier Operations Guide (module revision 3, In the sim panel only)
+
+https://www.digitalcombatsimulator.com/upload/iblock/e1b/430ooc582lpb0npynbsewan6omd5ohvs/DCS_Supercarrier_Operations_Guide_EN.pdf,
+updated 20 November 2024, read 5 November 2026. Printed page numbers.
+
+| Page | Passage (extractor-read, abridged) | Module use |
+| --- | --- | --- |
+| 75 | "At 10 nm from the carrier, configure for landing. You will reduce speed to pass 6 miles from the carrier at 150 KIAS" | Overview, differs from p. 79 |
+| 76 | "At 50 miles or closer, you will select 'INBOUND'"; Marshal: "CASE II/III recovery, CV-1 approach, expected BRC ... marshal mother's [RADIAL] radial, [DISTANCE] DME, angels [ALTITUDE]. Expected approach time is [TIME]"; "one nautical mile for every 1,000 feet of altitude, plus 15"; "at the directed altitude and within 20 miles of the marshal stack, you will select 'ESTABLISHED'" | Check-in, the stack |
+| 77 | "6-minute left-hand turns: two minutes turns and one-minute legs"; "one aircraft for Case III ... 1,000 feet of separation. The lowest flight in the stack will land next"; "minimum intervals of 60 seconds"; "descend at 4,000 feet per minute (fpm) at 250 knots until 5,000 feet altitude, at which point the descent rate is reduced to 2,000 fpm" | Holding and commence |
+| 78 | "Shortly after leaving the marshal stack, you will be handed off to the Approach controller"; "select 'CHECK IN'"; "At 5,000 feet AGL you will select 'PLATFORM'"; "When your aircraft intercepts final landing bearing, approach will transmit: [SIDE NUMBER] fly bullseye." | Approach |
+| 79 | "At 10 nm, you should begin to reduce your speed and at 8 nm, you should configure for landing. At 6 nm, the aircraft should be on-speed"; Long Range Laser Lineup System on the stern | Final |
+| 80 | "At around 6 nm, aircraft equipped with the Automated Carrier Landing System will acquire ACLS lock"; "say needles"; "Concur, Fly Mode 2" | Final |
+| 81 | "At ¾ nm, the approach controller directs the pilot to 'call the ball'"; "[AIRCRAFT TYPE] BALL, [FUEL STATE]"; "Roger ball, [WIND OVER DECK SPEED]" | The ball |

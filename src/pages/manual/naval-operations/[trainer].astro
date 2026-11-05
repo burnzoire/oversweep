@@ -11,15 +11,28 @@ const caseIII = getExperience('case-iii');
 export function getStaticPaths() { return includedExperiences.some(e => e.slug === 'case-iii') ? [{ params: { trainer: 'case-iii' } }] : []; }
 const recoveryModule = caseIII.module;
 const trainerHref = sitePath(experienceFrame(caseIII));
-const contents = [
- ['overview', 'Purpose and learning objectives'], ['picture', 'The whole recovery at a glance'],
- ['sequence', 'Recovery sequence'], ['clearance', 'Arrival, handoffs and marshal clearance'],
- ['geometry', 'Bearings and the landing area'], ['tacan', 'Navigate to the fix'],
- ['holding', 'Marshal and timing'], ['entry', 'Joining the hold'], ['turns', 'Timed turns on the turn needle'],
- ['penetration', 'Commence and platform'], ['profile', 'The approach profile'],
- ['final', 'Final approach and the ball'], ['radio', 'Communications'], ['jargon', 'Radio terms'],
- ['outcomes', 'Bolter and waveoff'],
- ['check', 'Check your understanding'], ['launch', 'Practice: Tomcat exercise'],
+const shipOps = sitePath('manual/naval-operations/ship-operations/');
+const core = [
+ ['picture', 'The whole recovery at a glance'],
+ ['sequence', 'Four phases and their handoffs'],
+ ['clearance', 'Arrival and the marshal clearance'],
+ ['geometry', 'Bearings and the landing area'],
+ ['holding', 'Marshal and timing'],
+ ['penetration', 'Commence and platform'],
+ ['profile', 'The approach profile'],
+ ['final', 'Final approach and the ball'],
+ ['outcomes', 'Landing, bolter and waveoff'],
+ ['recap', 'Key points'],
+];
+const reference = [
+ ['tacan', 'Navigate to the fix'],
+ ['entry', 'Joining the hold'],
+ ['turns', 'Timed turns on the turn needle'],
+ ['radio', 'Communications'],
+ ['jargon', 'Radio terms'],
+ ['sims', 'In the sim'],
+ ['check', 'Check your understanding'],
+ ['launch', 'Practice: Tomcat exercise'],
  ['sources', 'Sources and applicability'],
 ];
 ---
@@ -32,12 +45,22 @@ const contents = [
   <p>Read the recovery sequence, explore the navigation geometry, then practise selected skills in the optional standalone Tomcat exercise.</p>
  </section>
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
-  <ol>{contents.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
  </nav>
- <h2 id="overview">Purpose and learning objectives</h2>
- <p><Term id="Case I, II and III">Case III</Term> provides an instrument recovery to the carrier at night and in weather requiring instrument procedures. It connects a sequenced <Term id="Marshal">marshal</Term> hold to an instrument approach and the final visual landing task. The general controller-training text assigns selection of the recovery case to the Air Officer; the P-816 account calls this role the Air Boss. <a href="#source-general">[2, p. 11-21]</a> <a href="#source-p816">[1, pp. 2-3–2-4, 2-22–2-25]</a></p>
- <p>By the end, you should be able to explain the recovery phases; distinguish a <Term id="Radial">radial</Term>, inbound course, <Term id="Base Recovery Course (BRC)">base recovery course</Term> and <Term id="Final Bearing">final bearing</Term>; interpret a <Term id="Marshal">marshal</Term> clearance; explain why timing and configuration matter; and distinguish a landing, <Term id="Bolter">bolter</Term> and <Term id="Waveoff">waveoff</Term>.</p>
+ <p class="lede"><Term id="Case I, II and III">Case III</Term> provides an instrument recovery to the carrier at night and in weather requiring instrument procedures. It connects a sequenced <Term id="Marshal">marshal</Term> hold to an instrument approach and the final visual landing task. The general controller-training text assigns selection of the recovery case to the Air Officer; the P-816 account calls this role the Air Boss. <a href="#source-general">[2, p. 11-21]</a> <a href="#source-p816">[1, pp. 2-3–2-4, 2-22–2-25]</a></p>
+ <p>The core sequence follows one aircraft in four phases: arrival and <Term id="Marshal">marshal</Term>, holding and commence, approach and final, and the landing outcome. The navigation, holding-entry, turn-rate and radio practice are in the reference half. The ship, the deck and the Case I pattern are explained in <a href={shipOps}>Ship Operations</a>. By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>name each <Term id="Case I, II and III">Case III</Term> phase and the controller who hands you on to the next;</li>
+  <li>distinguish a TACAN <Term id="Radial">radial</Term>, an inbound course, the <Term id="Base Recovery Course (BRC)">BRC</Term> and the <Term id="Final Bearing">final bearing</Term>;</li>
+  <li>read a <Term id="Marshal">marshal</Term> clearance and explain how its altitude, DME and expected approach time fit together;</li>
+  <li>explain the steps from commence to <Term id="Platform">platform</Term>, the approach and the <Term id="Ball">ball</Term>;</li>
+  <li>distinguish an arrestment, a <Term id="Bolter">bolter</Term> and a <Term id="Waveoff">waveoff</Term>, and say how the recovery continues after each.</li>
+ </ol>
  <p class="note">This is a conceptual reference, not an aircraft checklist. Exact speeds, configuration, approach aids, minima and missed-approach instructions depend on the aircraft, equipment, applicable procedure and clearance. The source is a T-45C training publication: its aircraft actions are not universal.</p>
+
  <h2 id="picture">The whole recovery at a glance</h2>
  <p>Figure 1 follows one aircraft through the historical CV-1 <Term id="Case I, II and III">Case III</Term> example in [1], from the first check-in to the <Term id="Ball">ball</Term> call, with the <Term id="Bolter">bolter</Term> or <Term id="Waveoff">waveoff</Term> re-entry. Select a number to highlight that part of the figure. The numbered text is the explanation; the figure only places it. Numbers such as 1,200 ft or 150 kt belong to that T-45C training example, not to every aircraft.</p>
  <section class="lesson figure-lesson" data-lesson="overview" aria-labelledby="overview-title">
@@ -58,19 +81,22 @@ const contents = [
    <li data-callout-item="12"><button type="button" aria-pressed="false">Bolter or waveoff</button><p>Climb as the procedure directs, turn downwind when instructed by Approach, do the landing checks, report fuel <Term id="State">state</Term> <Term>abeam</Term> the ship and expect a turn back to final 4–8 NM past <Term id="Abeam">abeam</Term>. The figure does not say which side the downwind is on; Approach assigns it. <a href="#source-p816">[1, p. 2-25]</a></p></li>
   </ol>
  </section>
- <h2 id="sequence">Recovery sequence</h2>
- <div class="table-scroll" role="region" aria-label="Recovery sequence" tabindex="0"><table>
- <caption>Conceptual sequence based on [1], §204. Read the phase explanations before the exercise.</caption>
- <thead><tr><th scope="col">Phase</th><th scope="col">Purpose</th><th scope="col">Understand before continuing</th></tr></thead>
+ <p class="key"><strong>Key point:</strong> Case III is a chain: Red Crown, Strike, Marshal, Approach and the LSO each hand you to the next, and the instrument approach ends with a visual landing on the ball.</p>
+
+ <h2 id="sequence">Four phases and their handoffs</h2>
+ <p>Each phase ends with a handoff, and each handoff tells you what comes next. The example values are from the T-45C training publication [1]; your aircraft's procedure and your clearance give yours.</p>
+ <div class="table-scroll" role="region" aria-label="Case III phases and handoffs" tabindex="0"><table>
+ <caption>Case III phases and handoffs, based on [1], §204</caption>
+ <thead><tr><th scope="col">Phase</th><th scope="col">Controller</th><th scope="col">What you do</th><th scope="col">Example in [1]</th><th scope="col">What happens next</th></tr></thead>
  <tbody>
- <tr><th scope="row">Arrival</th><td>Receive the recovery plan.</td><td>Clearance, weather, fuel and available approach.</td></tr>
- <tr><th scope="row">Marshal</th><td>Separate and sequence arrivals.</td><td>Fix, altitude, holding pattern and expected approach time.</td></tr>
- <tr><th scope="row">Commence</th><td>Leave marshal in the assigned sequence.</td><td>Time, inbound course and descent profile.</td></tr>
- <tr><th scope="row">Penetration</th><td>Descend toward the instrument final.</td><td>Platform, level-off and correction to final bearing.</td></tr>
- <tr><th scope="row">Final</th><td>Follow approach guidance, then transition to landing cues.</td><td>Configuration, guidance validity and landing signal officer calls.</td></tr>
- <tr><th scope="row">Recovery outcome</th><td>Arrest or safely re-enter the recovery.</td><td>Applicable bolter/waveoff procedure and controller instructions.</td></tr>
+ <tr><th scope="row">1. Arrival and marshal</th><td><Term id="Red Crown">Red Crown</Term>, then Strike, then Marshal</td><td>Check in, read back the clearance, fly to the fix.</td><td>Strike before the 50 NM <Term id="CCA">CCA</Term>; fix at <Term id="Angels">angels</Term> + 15 DME. <a href="#source-p816">[1, pp. 1-3, 2-11–2-12, 2-19]</a></td><td>You hold at the fix under Marshal.</td></tr>
+ <tr><th scope="row">2. Holding and commence</th><td>Marshal</td><td>Report established, hold, leave the fix at your expected approach time.</td><td>Six-minute left-hand pattern; commence at EAT ±10 s, 4,000 ft/min at 250 KIAS. <a href="#source-p816">[1, pp. 2-20, 2-23]</a></td><td>Marshal switches you to Approach during the descent.</td></tr>
+ <tr><th scope="row">3. Approach and final</th><td>Approach (the final controller)</td><td>Report <Term id="Platform">platform</Term>, correct to the <Term id="Final Bearing">final bearing</Term>, configure, follow the approach guidance.</td><td><Term id="Platform">Platform</Term> at 5,000 ft; level at 1,200 ft; ACLS lock at 8–4 DME. <a href="#source-p816">[1, pp. 2-23, 2-27]</a></td><td>At ¾ mile Approach asks you to call the <Term id="Ball">ball</Term>.</td></tr>
+ <tr><th scope="row">4. The landing outcome</th><td><Term id="Landing Signal Officer (LSO)">LSO</Term></td><td>Fly the <Term id="Ball">ball</Term> to the deck.</td><td>"<Term id="Roger Ball">Roger ball</Term>"; a <Term id="Waveoff">waveoff</Term> is mandatory. <a href="#source-p816">[1, pp. 2-17, 2-25]</a></td><td>A wire stops you; after a <Term id="Bolter">bolter</Term> or <Term id="Waveoff">waveoff</Term>, Approach takes you round again.</td></tr>
  </tbody></table></div>
- <h2 id="clearance">Arrival, handoffs and marshal clearance</h2>
+ <p class="key"><strong>Key point:</strong> four phases, four handoffs; knowing who you talk to next tells you what the next task is.</p>
+
+ <h2 id="clearance">Arrival and the marshal clearance</h2>
  <p>The general Navy controller-training text lists the recovery case, approach type, expected <Term id="Final Bearing">final bearing</Term>, altimeter, <Term id="Marshal">marshal</Term> instructions, expected approach time (EAT), approach frequency and time check, with vector/stack information as needed. <a href="#source-general">[2, p. 11-32]</a> The P-816 training example also includes weather and relevant divert/fuel information, and reports when established and <Term id="Commencing">commencing</Term>. <a href="#source-p816">[1, pp. 2-26–2-27]</a> Read the clearance as a connected plan: <em>where</em> to wait, <em>at what altitude</em>, <em>when</em> to leave, and <em>which approach</em> follows.</p>
  <p>Fuel planning remains active throughout the recovery. A delayed approach consumes fuel; a <Term id="Bolter">bolter</Term> or <Term id="Waveoff">waveoff</Term> adds another circuit. The module does not prescribe a common fuel ladder: the source explicitly makes <Term id="Bingo">bingo</Term> fuel dependent on aircraft type. <a href="#source-p816">[1, p. A-1]</a></p>
  <section class="lesson bleed" data-lesson="stack" aria-labelledby="stack-title">
@@ -100,6 +126,8 @@ const contents = [
   <p class="fig-caption">Figure 2 — Marshal stack, side view. Slots at <Term id="Angels">angels</Term> 6–14 follow the source's <Term id="Angels">angels</Term> + 15 rule; the dashed line is the CV-1 example descent in Figure 4. Vertical spacing is exaggerated.</p>
   <noscript><p>The decoder and stack figure need JavaScript. The phrase list above gives every meaning.</p></noscript>
  </section>
+ <p class="key"><strong>Key point:</strong> the clearance tells you where to wait, at what altitude, when to leave and which approach follows; fuel stays part of the plan throughout.</p>
+
  <h2 id="geometry">Bearings and the landing area</h2>
  <dl>
  <dt><strong>Radial</strong></dt><dd>A bearing <em>from</em> the navigation station. <Term id="Radial">Radial</Term> plus range locates a fix; it is not a heading from your present position to that fix.</dd>
@@ -123,6 +151,97 @@ const contents = [
   <figcaption>Figure 3 — BRC and final bearing. The ship steams on BRC; you land along the angled landing area, so your final bearing is the direction of its centreline. [1, pp. A-1, A-3; 2, p. 11-32]</figcaption>
  </figure>
  <p>The first two definitions describe the geometry used below; BRC and <Term id="Final Bearing">final bearing</Term> are defined in <a href="#source-p816">[1, glossary pp. A-1, A-3]</a>. The general Navy controller text also defines <Term id="Final Bearing">final bearing</Term> as the extended landing-area centreline. <a href="#source-general">[2, p. 11-32]</a> Do not substitute BRC for <Term id="Final Bearing">final bearing</Term> or assume the <Term id="Marshal">marshal</Term> <Term id="Radial">radial</Term> is always reciprocal to either. The published CV-1 example explicitly provides for correction from the <Term id="Marshal">marshal</Term> <Term id="Radial">radial</Term> to <Term id="Final Bearing">final bearing</Term>. <a href="#source-p816">[1, p. 2-23]</a></p>
+ <p class="key"><strong>Key point:</strong> the ship steams on the BRC but you land along the final bearing; the marshal radial need not be reciprocal to either.</p>
+
+ <h2 id="holding">Marshal and timing</h2>
+ <p>Marshal is a sequencing and separation system, not just an orbit near the ship. The assigned <Term id="Radial">radial</Term>, range and altitude define your place in it. Plan to arrive at the fix ready to commence at EAT. Reaching the right position at the wrong time loses the intended sequence. The source describes managing the hold to reach the fix on time and reporting a time discrepancy. <a href="#source-p816">[1, pp. 2-19–2-20]</a></p>
+ <p>The general controller-training text describes a six-minute left-hand jet/turboprop <Term id="Marshal">marshal</Term> pattern. <a href="#source-general">[2, p. 11-33]</a> The historical pattern in [1] gives its timing as: two two-minute turns plus two one-minute legs. Holding speed is tied to fuel conservation or the aircraft’s specified holding speed. These are the source's documented parameters, not a universal four-minute instrument hold or a common airspeed for every aircraft. <a href="#source-p816">[1, p. 2-20]</a></p>
+ <p><strong>Timing check:</strong> two turns × 2 min + two legs × 1 min = 6 min. Two circuits = 12 min. That arithmetic explains a pattern's duration; it does not authorise arbitrary leg extensions or leaving a clearance early. Confirm an amended plan with the controller when the assigned timing cannot be met.</p>
+ <p class="key"><strong>Key point:</strong> marshal is a timing system: be at the fix, on altitude and on speed, ready to leave at your expected approach time.</p>
+
+ <h2 id="penetration">Commence and platform</h2>
+ <p><Term id="Commencing">Commencing</Term> marks the transition from holding to the approach. The penetration combines descent, course management and controller handoff. <Term id="Platform">Platform</Term> is the reporting point in the approach where the descent rate changes. The source glossary places it normally at 5,000 ft and about 20 NM from the ship, so it is both an altitude and a position. <a href="#source-p816">[1, p. A-5]</a> The published CV-1 profile in [1] uses 250 KIAS and 4,000 ft/min initially, reducing descent at 5,000 ft to 2,000 ft/min, then levelling at 1,200 ft. These values illustrate that source's profile, not aircraft limitations. <a href="#source-p816">[1, p. 2-23]</a></p>
+ <p>Keep lateral and vertical tasks separate: descending correctly does not establish you on <Term id="Final Bearing">final bearing</Term>. When the <Term id="Marshal">marshal</Term> <Term id="Radial">radial</Term> is offset, the source provides an intercept/arc procedure. Use the actual published approach and clearance rather than steering directly at the ship or applying a fixed deck-angle subtraction. Handoff should ideally occur before <Term id="Platform">platform</Term>; check in on the assigned frequency. <a href="#source-p816">[1, pp. 2-23, 2-26]</a></p>
+ <p class="key"><strong>Key point:</strong> commence starts the descent and platform slows it; getting the descent right does not put you on the final bearing, so fly both.</p>
+
+ <h2 id="profile">The approach profile</h2>
+ <p>Figure 4 joins the source's numbers into one side view: commence at the fix, 4,000 ft/min to <Term id="Platform">platform</Term>, 2,000 ft/min to 1,200 ft, level flight, then the self-contained GCA check altitudes to the ship. <a href="#source-p816">[1, pp. 2-19, 2-23, 2-25]</a> Choose a <Term id="Marshal">marshal</Term> altitude and fly the aircraft down the profile, or drag the position slider.</p>
+ <p>The profile is a simplified educational model. It assumes no wind and a groundspeed equal to the 250 kt figure, so each minute covers 250 ÷ 60 ≈ 4.17 NM. A 4,000 ft/min descent then loses 4,000 ÷ 4.17 = 960 ft per NM, and 2,000 ft/min loses 480 ft per NM. From <Term id="Angels">angels</Term> 7 at 22 DME, the 2,000 ft down to <Term id="Platform">platform</Term> takes 2,000 ÷ 960 ≈ 2.08 NM, reaching <Term id="Platform">platform</Term> at about 19.9 DME. The next 3,800 ft at 480 ft per NM takes about 7.92 NM, levelling at about 12.0 DME. Rate changes are instant, and the GCA check altitudes are joined as a straight 400 ft per NM line.</p>
+ <p>True airspeed above sea level is higher than 250 KIAS, so a real aircraft covers more distance in each minute.</p>
+ <section class="lesson figure-lesson" data-lesson="profile" aria-labelledby="profile-title">
+  <h3 id="profile-title" class="fig-title">Figure 4 — CV-1 example approach profile (side view)</h3>
+  <div class="controls row">
+   <label>Marshal altitude <output data-angels-value>Angels 7 · fix 22 DME</output><input name="angels" type="range" min="6" max="14" step="1" value="7" /></label>
+   <label>Aircraft position (NM from ship)<input name="pos" type="range" min="0" max="22" step="0.25" value="22" /></label>
+   <div class="buttons"><button type="button" data-play aria-pressed="false">Fly it</button></div>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 4, scrolls sideways on narrow screens" tabindex="0"><svg viewBox="0 0 720 300" class="natops profile-fig" role="img" aria-label="Approach profile"></svg></div>
+  <div class="feedback" data-readout role="status" aria-live="polite"></div>
+  <div class="table-scroll" role="region" aria-label="Key points in the example profile" tabindex="0"><table class="profile-table">
+   <caption>Key points in the CV-1 example for angels 7. Ranges marked ≈ come from the model above; the rest are source values. T-45C configuration points are that aircraft's procedure.</caption>
+   <thead><tr><th scope="col">NM</th><th scope="col">Altitude</th><th scope="col">What happens</th><th scope="col">Source</th></tr></thead>
+   <tbody>
+    <tr data-dme="fix"><td data-cell>22</td><td data-cell>7,000 ft</td><td data-cell="what">Commence at EAT: “commencing”, 4,000 ft/min at 250 KIAS. Marshal hands you to Approach during the penetration, ideally before platform.</td><td>[1, pp. 2-20, 2-23, 2-26]</td></tr>
+    <tr data-dme="20"><td data-cell>20</td><td>—</td><td data-cell="what">Correct to final bearing if it is not the marshal radial's reciprocal: gradual within 10°, otherwise 30°.</td><td>[1, p. 2-23]</td></tr>
+    <tr data-dme="platform"><td data-cell>≈19.9</td><td>5,000 ft</td><td data-cell="what">Platform: reduce to 2,000 ft/min and report “platform”.</td><td>[1, pp. 2-23, 2-27]</td></tr>
+    <tr data-dme="level"><td data-cell>≈12.0</td><td>1,200 ft</td><td data-cell="what">Level off at 1,200 ft. Not on final bearing by 12 miles: fly the 12-mile arc.</td><td>[1, p. 2-23]</td></tr>
+    <tr data-dme="10"><td data-cell>10</td><td>1,200 ft</td><td data-cell="what">T-45C: start the landing checks.</td><td>[1, p. 2-23]</td></tr>
+    <tr data-dme="8"><td data-cell>8</td><td>1,200 ft</td><td data-cell="what">T-45C: gear down no later than here. ACLS lock-on from here to 4 DME; “say needles”.</td><td>[1, p. 2-23]</td></tr>
+    <tr data-dme="6"><td data-cell>6</td><td>1,200 ft</td><td data-cell="what">T-45C: cross at 150 kt, then slow to final approach speed.</td><td>[1, p. 2-23]</td></tr>
+    <tr data-dme="3"><td data-cell>3</td><td>1,200 ft</td><td data-cell="what">Self-contained GCA check: 1,200 ft at 3 NM.</td><td>[1, p. 2-25]</td></tr>
+    <tr data-dme="2"><td data-cell>2</td><td>800 ft</td><td data-cell="what">GCA check: 800 ft at 2 NM.</td><td>[1, p. 2-25]</td></tr>
+    <tr data-dme="1"><td data-cell>1</td><td>400 ft</td><td data-cell="what">GCA check: 400 ft at 1 NM.</td><td>[1, p. 2-25]</td></tr>
+    <tr data-dme="0.75"><td data-cell>¾</td><td>≈300 ft</td><td data-cell="what">“Call the ball”; transition to the optical cue; the LSO answers “Roger ball”.</td><td>[1, pp. 2-25, 2-27]</td></tr>
+    <tr data-dme="0.5"><td data-cell>½</td><td>200 ft</td><td data-cell="what">GCA check: 200 ft at 0.5 NM.</td><td>[1, p. 2-25]</td></tr>
+   </tbody>
+  </table></div>
+  <noscript><p>The profile figure needs JavaScript. The table lists the same points.</p></noscript>
+ </section>
+ <p class="key"><strong>Key point:</strong> in the example profile, the fix, platform and the 1,200 ft level-off are joined by two descent rates; your aircraft's procedure gives its own values.</p>
+
+ <h2 id="final">Final approach and the ball</h2>
+ <p>Arrive configured and ready for the <Term id="Final approach">final approach</Term>, using the aircraft's landing checks and limits. Gear, flaps, approach speed and <Term id="AOA">angle of attack</Term> belong to the aircraft procedure. The Tomcat's controls and exercise gates are not module-wide rules.</p>
+ <p>The source describes automatic carrier landing system (ACLS) lock-on and comparison with instrument carrier landing system (ICLS) indications before following ACLS <Term id="Needles">needles</Term>. Those exchanges require that equipment and a valid lock; the words “fly <Term id="Needles">needles</Term>” and “fly <Term id="Bullseye">bullseye</Term>” are not interchangeable generic commands. <a href="#source-p816">[1, p. 2-23]</a></p>
+ <p>The <Term id="Ball">ball</Term> is the optical landing system's glideslope cue. <a href="#source-p816">[1, p. 1-11]</a> In the source's example, the controller requests the <Term id="Ball">ball</Term> call at three-quarter mile. The pilot transitions from an instrument scan to outside landing cues while the landing signal officer (<Term id="Landing Signal Officer (LSO)">LSO</Term>) monitors the final landing task. Continue to monitor the approach during this transition. <a href="#source-p816">[1, p. 2-25]</a></p>
+ <section class="lesson figure-lesson" data-lesson="lens" aria-labelledby="lens-title">
+  <h3 id="lens-title" class="fig-title">Figure 5 — Reading the ball</h3>
+  <p>The source's lens has ten green <Term id="Datum lights">datum lights</Term> each side, four green cut lights above, and <Term id="Waveoff">waveoff</Term> lights. <a href="#source-p816">[1, pp. 1-12–1-13]</a> Move the aircraft above or below the glidepath and watch the <Term id="Ball">ball</Term> against the <Term id="Datum lights">datum lights</Term>.</p>
+  <div class="lesson-grid wide">
+   <div class="controls">
+    <label>Aircraft relative to glidepath<input name="glide" type="range" min="-3" max="3" step="1" value="0" aria-describedby="glide-scale" /></label>
+    <p id="glide-scale" class="derived">Left: low · centre: on glidepath · right: high</p>
+    <div class="buttons"><button type="button" data-waveoff aria-pressed="false">Waveoff lights</button></div>
+   </div>
+   <LensFigure />
+  </div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <ul class="ball-states">
+   <li data-ball-state="on">Ball level with the <Term id="Datum lights">datum lights</Term>: on glidepath. [1, p. 1-11]</li>
+   <li data-ball-state="high">Ball above the <Term id="Datum lights">datum lights</Term>: a high <Term id="Ball">ball</Term>, above the glidepath. [1, pp. 1-11, 1-13]</li>
+   <li data-ball-state="low">Ball below the <Term id="Datum lights">datum lights</Term>: below the glidepath. [1, p. 1-13]</li>
+   <li data-ball-state="red">A red lens is visible: the aircraft is dangerously low. [1, p. 1-12]</li>
+   <li data-ball-state="waveoff"><Term id="Waveoff">Waveoff</Term> lights illuminated: execute a <Term id="Waveoff">waveoff</Term> immediately. <Term id="Waveoff">Waveoffs</Term> are mandatory, whether signalled by radio or by the lights. [1, pp. 1-13, 2-17]</li>
+  </ul>
+  <p class="fig-caption">Not to scale. The steps on the slider are illustrative positions, not glidepath angles; cell heights and light counts other than the datum and cut lights are not from the source.</p>
+ </section>
+ <p class="key"><strong>Key point:</strong> arrive configured for your aircraft, follow guidance only while it is valid, and change from the instrument scan to the ball at about ¾ mile.</p>
+
+ <h2 id="outcomes">Landing, bolter and waveoff</h2>
+ <p>The historical training account distinguishes arrestment through engagement of the <Term id="Arresting gear">arresting gear</Term> from a <Term id="Bolter">bolter</Term>, a touchdown without arresting-hook engagement. A <Term id="Waveoff">waveoff</Term> discontinues the landing attempt. The <Term id="Landing Signal Officer (LSO)">LSO</Term> can direct it by radio or signal it with the <Term id="Waveoff">waveoff</Term> lights. Compliance with either signal is mandatory in the source procedure. <a href="#source-p816">[1, pp. 2-17, A-1]</a></p>
+ <p>In the historical <Term id="Case I, II and III">Case III</Term> training example, recovery continues under instrument approach control after a <Term id="Bolter">bolter</Term> or <Term id="Waveoff">waveoff</Term>. The source describes climbing, a controller-directed downwind, landing checks, an <Term id="Abeam">abeam</Term> fuel-state report and another turn to final. That example uses an instrument re-entry rather than its Case I visual circuit. Aircraft-specific climb, speed, gear/flap actions and lost-communication procedures must come from the applicable procedure; this module does not generalise the T-45C instructions to other aircraft. <a href="#source-p816">[1, pp. 2-25–2-26]</a></p>
+ <p class="key"><strong>Key point:</strong> a waveoff is mandatory; after a bolter or waveoff in Case III, Approach brings you round again on instruments, not into the Case I pattern.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>Four phases, each ending in a handoff: Marshal, Approach, the LSO, then the outcome. <a href="#sequence">More</a></li>
+  <li>Read a clearance as where, how high, when and which approach. <a href="#clearance">More</a></li>
+  <li>BRC is the ship's heading; the final bearing is the landing area's. <a href="#geometry">More</a></li>
+  <li>Be at the fix ready to commence on time. <a href="#holding">More</a></li>
+  <li>Platform slows the descent; correct to the final bearing separately. <a href="#penetration">More</a></li>
+  <li>Call the ball at ¾ mile; a waveoff is mandatory. <a href="#final">More</a></li>
+  <li>Bolter or waveoff: Approach takes you round again. <a href="#outcomes">More</a></li>
+ </ul>
+
  <h2 id="tacan">Navigate to the fix</h2>
  <p><Term id="TACAN">TACAN (tactical air navigation)</Term> provides bearing and DME (distance measuring equipment) range. Position yourself and the fix on a station-centred plot, then find the direction from your position to the fix. Flying the assigned <Term id="Radial">radial</Term> as a heading does not solve this point-to-point problem.</p>
  <p>In this educational calculation, bearings are magnetic, north is up and range is in nautical miles (NM). We use a flat plane, horizontal range and no wind; actual DME is <Term id="Slant range">slant range</Term>. Heading equals track only under the no-wind assumption. The fix is constrained to lie opposite BRC for this exercise; actual clearance geometry can differ.</p>
@@ -155,10 +274,6 @@ const contents = [
   </details>
 
 
- <h2 id="holding">Marshal and timing</h2>
- <p>Marshal is a sequencing and separation system, not just an orbit near the ship. The assigned <Term id="Radial">radial</Term>, range and altitude define your place in it. Plan to arrive at the fix ready to commence at EAT. Reaching the right position at the wrong time loses the intended sequence. The source describes managing the hold to reach the fix on time and reporting a time discrepancy. <a href="#source-p816">[1, pp. 2-19–2-20]</a></p>
- <p>The general controller-training text describes a six-minute left-hand jet/turboprop <Term id="Marshal">marshal</Term> pattern. <a href="#source-general">[2, p. 11-33]</a> The historical pattern in [1] gives its timing as: two two-minute turns plus two one-minute legs. Holding speed is tied to fuel conservation or the aircraft’s specified holding speed. These are the source's documented parameters, not a universal four-minute instrument hold or a common airspeed for every aircraft. <a href="#source-p816">[1, p. 2-20]</a></p>
- <p><strong>Timing check:</strong> two turns × 2 min + two legs × 1 min = 6 min. Two circuits = 12 min. That arithmetic explains a pattern's duration; it does not authorise arbitrary leg extensions or leaving a clearance early. Confirm an amended plan with the controller when the assigned timing cannot be met.</p>
  <h2 id="entry">Joining the hold</h2>
  <p>The source sets the conditions for joining <Term id="Marshal">marshal</Term> rather than a turn technique: be established at the assigned altitude by 10 NM from the stack, and reach the fix on airspeed ready to commence at EAT plus or minus 10 seconds. <a href="#source-p816">[1, p. 2-20]</a> It does not describe an entry turn for the pattern. A general instrument technique for joining any racetrack is the FAA's three holding entries. <a href="#source-aim">[3, 5-3-8 j 3]</a></p>
  <ul>
@@ -170,7 +285,8 @@ const contents = [
  <p class="note"><strong>Applicability:</strong> these are FAA civil instrument holding entries, practised here as a general instrument skill. They are not a Navy <Term id="Marshal">marshal</Term> requirement in [1].</p>
  <section class="lesson" data-lesson="entry" aria-labelledby="entry-title">
   <h3 id="entry-title">Practise: fly an entry</h3>
-  <p>Set the hold, the inbound course and your heading at the fix, then pick an entry. The plot draws the racetrack, your arrival and the flown path. It is a no-wind sketch at 250 kt. The racetrack uses the source's two-minute 180° turns and one-minute legs. The entry turns use the AIM's holding turn: 3° per second, 30° of bank, or 25° of bank with a flight director, whichever needs the least bank. <a href="#source-aim">[3, 5-3-8 j 8]</a> At 250 kt, 3° per second would need about 34° of bank, so the 30° limit applies; a coordinated level turn at 30° of bank is g·tan 30° ÷ speed ≈ 2.5° per second. The flight-director option is not modelled. The plot turns the short way where the AIM names no direction, and cuts the inbound course at no more than 45°, an angle the AIM does not give. Legs stay at one minute. Where the turn back is too wide to roll out on the course, the path crosses it and corrects; where the entry does not line up by the fix, it corrects on the first circuit of the racetrack, as in any hold.</p>
+  <p>Set the hold, the inbound course and your heading at the fix, then pick an entry. The plot draws the racetrack, your arrival and the flown path. It is a no-wind sketch at 250 kt.</p>
+  <p>The racetrack uses the source's two-minute 180° turns and one-minute legs. The entry turns use the AIM's holding turn: 3° per second, 30° of bank, or 25° of bank with a flight director, whichever needs the least bank. <a href="#source-aim">[3, 5-3-8 j 8]</a> At 250 kt, 3° per second would need about 34° of bank, so the 30° limit applies; a coordinated level turn at 30° of bank is g·tan 30° ÷ speed ≈ 2.5° per second. The flight-director option is not modelled. The plot turns the short way where the AIM names no direction, and cuts the inbound course at no more than 45°, an angle the AIM does not give. Legs stay at one minute. Where the turn back is too wide to roll out on the course, the path crosses it and corrects; where the entry does not line up by the fix, it corrects on the first circuit of the racetrack, as in any hold.</p>
   <div class="lesson-grid">
    <div class="controls">
     <fieldset class="inline">
@@ -230,66 +346,7 @@ const contents = [
   <p class="note">The 2-width option assumes the pointer scale is linear (3°/s); the manual states only the one-width value. <Term record="fa-18c">F/A-18</Term> and other aircraft are added only when a source the review can read states their indicator's scale.</p>
   <noscript><p>The turn practice needs JavaScript. The worked example above shows the calculation.</p></noscript>
  </section>
- <h2 id="penetration">Commence and platform</h2>
- <p><Term id="Commencing">Commencing</Term> marks the transition from holding to the approach. The penetration combines descent, course management and controller handoff. <Term id="Platform">Platform</Term> is the reporting point in the approach where the descent rate changes. The source glossary places it normally at 5,000 ft and about 20 NM from the ship, so it is both an altitude and a position. <a href="#source-p816">[1, p. A-5]</a> The published CV-1 profile in [1] uses 250 KIAS and 4,000 ft/min initially, reducing descent at 5,000 ft to 2,000 ft/min, then levelling at 1,200 ft. These values illustrate that source's profile, not aircraft limitations. <a href="#source-p816">[1, p. 2-23]</a></p>
- <p>Keep lateral and vertical tasks separate: descending correctly does not establish you on <Term id="Final Bearing">final bearing</Term>. When the <Term id="Marshal">marshal</Term> <Term id="Radial">radial</Term> is offset, the source provides an intercept/arc procedure. Use the actual published approach and clearance rather than steering directly at the ship or applying a fixed deck-angle subtraction. Handoff should ideally occur before <Term id="Platform">platform</Term>; check in on the assigned frequency. <a href="#source-p816">[1, pp. 2-23, 2-26]</a></p>
- <h2 id="profile">The approach profile</h2>
- <p>Figure 4 joins the source's numbers into one side view: commence at the fix, 4,000 ft/min to <Term id="Platform">platform</Term>, 2,000 ft/min to 1,200 ft, level flight, then the self-contained GCA check altitudes to the ship. <a href="#source-p816">[1, pp. 2-19, 2-23, 2-25]</a> Choose a <Term id="Marshal">marshal</Term> altitude and fly the aircraft down the profile, or drag the position slider.</p>
- <p>The profile is a simplified educational model. It assumes no wind and a groundspeed equal to the 250 kt figure, so each minute covers 250 ÷ 60 ≈ 4.17 NM. A 4,000 ft/min descent then loses 4,000 ÷ 4.17 = 960 ft per NM, and 2,000 ft/min loses 480 ft per NM. From <Term id="Angels">angels</Term> 7 at 22 DME, the 2,000 ft down to <Term id="Platform">platform</Term> takes 2,000 ÷ 960 ≈ 2.08 NM, reaching <Term id="Platform">platform</Term> at about 19.9 DME. The next 3,800 ft at 480 ft per NM takes about 7.92 NM, levelling at about 12.0 DME. Rate changes are instant, and the GCA check altitudes are joined as a straight 400 ft per NM line. True airspeed above sea level is higher than 250 KIAS, so a real aircraft covers more distance in each minute.</p>
- <section class="lesson figure-lesson" data-lesson="profile" aria-labelledby="profile-title">
-  <h3 id="profile-title" class="fig-title">Figure 4 — CV-1 example approach profile (side view)</h3>
-  <div class="controls row">
-   <label>Marshal altitude <output data-angels-value>Angels 7 · fix 22 DME</output><input name="angels" type="range" min="6" max="14" step="1" value="7" /></label>
-   <label>Aircraft position (NM from ship)<input name="pos" type="range" min="0" max="22" step="0.25" value="22" /></label>
-   <div class="buttons"><button type="button" data-play aria-pressed="false">Fly it</button></div>
-  </div>
-  <div class="fig-scroll" role="region" aria-label="Figure 4, scrolls sideways on narrow screens" tabindex="0"><svg viewBox="0 0 720 300" class="natops profile-fig" role="img" aria-label="Approach profile"></svg></div>
-  <div class="feedback" data-readout role="status" aria-live="polite"></div>
-  <div class="table-scroll" role="region" aria-label="Key points in the example profile" tabindex="0"><table class="profile-table">
-   <caption>Key points in the CV-1 example for angels 7. Ranges marked ≈ come from the model above; the rest are source values. T-45C configuration points are that aircraft's procedure.</caption>
-   <thead><tr><th scope="col">NM</th><th scope="col">Altitude</th><th scope="col">What happens</th><th scope="col">Source</th></tr></thead>
-   <tbody>
-    <tr data-dme="fix"><td data-cell>22</td><td data-cell>7,000 ft</td><td data-cell="what">Commence at EAT: “commencing”, 4,000 ft/min at 250 KIAS. Marshal hands you to Approach during the penetration, ideally before platform.</td><td>[1, pp. 2-20, 2-23, 2-26]</td></tr>
-    <tr data-dme="20"><td data-cell>20</td><td>—</td><td data-cell="what">Correct to final bearing if it is not the marshal radial's reciprocal: gradual within 10°, otherwise 30°.</td><td>[1, p. 2-23]</td></tr>
-    <tr data-dme="platform"><td data-cell>≈19.9</td><td>5,000 ft</td><td data-cell="what">Platform: reduce to 2,000 ft/min and report “platform”.</td><td>[1, pp. 2-23, 2-27]</td></tr>
-    <tr data-dme="level"><td data-cell>≈12.0</td><td>1,200 ft</td><td data-cell="what">Level off at 1,200 ft. Not on final bearing by 12 miles: fly the 12-mile arc.</td><td>[1, p. 2-23]</td></tr>
-    <tr data-dme="10"><td data-cell>10</td><td>1,200 ft</td><td data-cell="what">T-45C: start the landing checks.</td><td>[1, p. 2-23]</td></tr>
-    <tr data-dme="8"><td data-cell>8</td><td>1,200 ft</td><td data-cell="what">T-45C: gear down no later than here. ACLS lock-on from here to 4 DME; “say needles”.</td><td>[1, p. 2-23]</td></tr>
-    <tr data-dme="6"><td data-cell>6</td><td>1,200 ft</td><td data-cell="what">T-45C: cross at 150 kt, then slow to final approach speed.</td><td>[1, p. 2-23]</td></tr>
-    <tr data-dme="3"><td data-cell>3</td><td>1,200 ft</td><td data-cell="what">Self-contained GCA check: 1,200 ft at 3 NM.</td><td>[1, p. 2-25]</td></tr>
-    <tr data-dme="2"><td data-cell>2</td><td>800 ft</td><td data-cell="what">GCA check: 800 ft at 2 NM.</td><td>[1, p. 2-25]</td></tr>
-    <tr data-dme="1"><td data-cell>1</td><td>400 ft</td><td data-cell="what">GCA check: 400 ft at 1 NM.</td><td>[1, p. 2-25]</td></tr>
-    <tr data-dme="0.75"><td data-cell>¾</td><td>≈300 ft</td><td data-cell="what">“Call the ball”; transition to the optical cue; the LSO answers “Roger ball”.</td><td>[1, pp. 2-25, 2-27]</td></tr>
-    <tr data-dme="0.5"><td data-cell>½</td><td>200 ft</td><td data-cell="what">GCA check: 200 ft at 0.5 NM.</td><td>[1, p. 2-25]</td></tr>
-   </tbody>
-  </table></div>
-  <noscript><p>The profile figure needs JavaScript. The table lists the same points.</p></noscript>
- </section>
- <h2 id="final">Final approach and the ball</h2>
- <p>Arrive configured and ready for the <Term id="Final approach">final approach</Term>, using the aircraft's landing checks and limits. Gear, flaps, approach speed and <Term id="AOA">angle of attack</Term> belong to the aircraft procedure. The Tomcat's controls and exercise gates are not module-wide rules.</p>
- <p>The source describes automatic carrier landing system (ACLS) lock-on and comparison with instrument carrier landing system (ICLS) indications before following ACLS <Term id="Needles">needles</Term>. Those exchanges require that equipment and a valid lock; the words “fly <Term id="Needles">needles</Term>” and “fly <Term id="Bullseye">bullseye</Term>” are not interchangeable generic commands. <a href="#source-p816">[1, p. 2-23]</a></p>
- <p>The <Term id="Ball">ball</Term> is the optical landing system's glideslope cue. <a href="#source-p816">[1, p. 1-11]</a> In the source's example, the controller requests the <Term id="Ball">ball</Term> call at three-quarter mile. The pilot transitions from an instrument scan to outside landing cues while the landing signal officer (<Term id="Landing Signal Officer (LSO)">LSO</Term>) monitors the final landing task. Continue to monitor the approach during this transition. <a href="#source-p816">[1, p. 2-25]</a></p>
- <section class="lesson figure-lesson" data-lesson="lens" aria-labelledby="lens-title">
-  <h3 id="lens-title" class="fig-title">Figure 5 — Reading the ball</h3>
-  <p>The source's lens has ten green <Term id="Datum lights">datum lights</Term> each side, four green cut lights above, and <Term id="Waveoff">waveoff</Term> lights. <a href="#source-p816">[1, pp. 1-12–1-13]</a> Move the aircraft above or below the glidepath and watch the <Term id="Ball">ball</Term> against the <Term id="Datum lights">datum lights</Term>.</p>
-  <div class="lesson-grid wide">
-   <div class="controls">
-    <label>Aircraft relative to glidepath<input name="glide" type="range" min="-3" max="3" step="1" value="0" aria-describedby="glide-scale" /></label>
-    <p id="glide-scale" class="derived">Left: low · centre: on glidepath · right: high</p>
-    <div class="buttons"><button type="button" data-waveoff aria-pressed="false">Waveoff lights</button></div>
-   </div>
-   <LensFigure />
-  </div>
-  <p class="feedback" data-result role="status" aria-live="polite"></p>
-  <ul class="ball-states">
-   <li data-ball-state="on">Ball level with the <Term id="Datum lights">datum lights</Term>: on glidepath. [1, p. 1-11]</li>
-   <li data-ball-state="high">Ball above the <Term id="Datum lights">datum lights</Term>: a high <Term id="Ball">ball</Term>, above the glidepath. [1, pp. 1-11, 1-13]</li>
-   <li data-ball-state="low">Ball below the <Term id="Datum lights">datum lights</Term>: below the glidepath. [1, p. 1-13]</li>
-   <li data-ball-state="red">A red lens is visible: the aircraft is dangerously low. [1, p. 1-12]</li>
-   <li data-ball-state="waveoff"><Term id="Waveoff">Waveoff</Term> lights illuminated: execute a <Term id="Waveoff">waveoff</Term> immediately. <Term id="Waveoff">Waveoffs</Term> are mandatory, whether signalled by radio or by the lights. [1, pp. 1-13, 2-17]</li>
-  </ul>
-  <p class="fig-caption">Not to scale. The steps on the slider are illustrative positions, not glidepath angles; cell heights and light counts other than the datum and cut lights are not from the source.</p>
- </section>
+
  <h2 id="radio">Communications: channels, handoffs and calls</h2>
  <p>Each controller owns one stage of the recovery, and each handoff moves you to a new frequency. The ladder shows the order in the source; the dialogue below is its <Term id="Case I, II and III">Case III</Term> example for aircraft 405, call by call. <a href="#source-p816">[1, pp. 2-11–2-12, 2-26–2-27]</a> Know what each call achieves before memorising its wording: these are one training publication's examples, not a universal script.</p>
  <section class="lesson bleed" data-lesson="comms" aria-labelledby="comms-title">
@@ -344,18 +401,38 @@ const contents = [
   <p class="feedback" data-result role="status" aria-live="polite"></p>
   <div class="buttons"><button type="button" data-new>Next term</button></div>
  </section>
- <h2 id="outcomes">Landing, bolter and waveoff</h2>
- <p>The historical training account distinguishes arrestment through engagement of the <Term id="Arresting gear">arresting gear</Term> from a <Term id="Bolter">bolter</Term>, a touchdown without arresting-hook engagement. A <Term id="Waveoff">waveoff</Term> discontinues the landing attempt. The <Term id="Landing Signal Officer (LSO)">LSO</Term> can direct it by radio or signal it with the <Term id="Waveoff">waveoff</Term> lights. Compliance with either signal is mandatory in the source procedure. <a href="#source-p816">[1, pp. 2-17, A-1]</a></p>
- <p>In the historical <Term id="Case I, II and III">Case III</Term> training example, recovery continues under instrument approach control after a <Term id="Bolter">bolter</Term> or <Term id="Waveoff">waveoff</Term>. The source describes climbing, a controller-directed downwind, landing checks, an <Term id="Abeam">abeam</Term> fuel-state report and another turn to final. That example uses an instrument re-entry rather than its Case I visual circuit. Aircraft-specific climb, speed, gear/flap actions and lost-communication procedures must come from the applicable procedure; this module does not generalise the T-45C instructions to other aircraft. <a href="#source-p816">[1, pp. 2-25–2-26]</a></p>
+
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p>Only the DCS Supercarrier Operations Guide was read for this panel. Its Case III recovery follows the same four phases, flown through the ATC carrier radio menu. A few of its numbers and calls differ from the training publication's. <a href="#source-sc">[5, p. 75]</a></p>
+  <div class="table-scroll" role="region" aria-label="DCS Supercarrier Case III compared with this module" tabindex="0"><table>
+   <caption>DCS Supercarrier Case III compared with this module</caption>
+   <thead><tr><th scope="col">Phase</th><th scope="col">DCS Supercarrier guide</th><th scope="col">This module ([1])</th></tr></thead>
+   <tbody>
+    <tr><th scope="row">Check-in</th><td>Select "Inbound" at 50 NM or closer; Marshal gives the case, CV-1 approach, BRC, altimeter, <Term id="Marshal">marshal</Term> <Term id="Radial">radial</Term>, DME, <Term id="Angels">angels</Term> and approach time. <a href="#source-sc">[5, p. 76]</a></td><td>Red Crown and Strike first, then Marshal with the same fields. <a href="#source-p816">[1, pp. 2-11–2-12]</a></td></tr>
+    <tr><th scope="row">The stack</th><td><Term id="Angels">Angels</Term> + 15 DME, from 6,000 ft. Select "Established" at the assigned altitude within 20 NM of the stack. One aircraft per flight; the lowest lands next. <a href="#source-sc">[5, p. 76–77]</a></td><td>The same DME rule; established at altitude by 10 NM from the stack. <a href="#source-p816">[1, pp. 2-19–2-20]</a></td></tr>
+    <tr><th scope="row">Holding and commence</th><td>Six-minute left-hand pattern, 1,000 ft apart; aircraft push at least 60 seconds apart. 4,000 ft/min at 250 kt to 5,000 ft, then 2,000 ft/min. <a href="#source-sc">[5, p. 77]</a></td><td>The same pattern and descent. <a href="#source-p816">[1, pp. 2-20, 2-23]</a></td></tr>
+    <tr><th scope="row">Approach</th><td>"Switch approach" shortly after leaving the stack; "Check in", then "Platform" at 5,000 ft. Approach says "fly bullseye" when you intercept the final bearing. <a href="#source-sc">[5, p. 78]</a></td><td>Handoff ideally before platform. "Fly the bullseye" is the ICLS fallback when the ACLS <Term id="Needles">needles</Term> disagree. <a href="#source-p816">[1, pp. 2-23, 2-26–2-27]</a></td></tr>
+    <tr><th scope="row">Final</th><td>Slow from 10 NM, configure at 8 NM, on speed at 6 NM; laser lineup lights on the stern. ACLS lock at about 6 NM, "say <Term id="Needles">needles</Term>", then "Concur, fly Mode 2". <a href="#source-sc">[5, p. 79–80]</a></td><td>T-45C: gear down by 8 DME, 150 kt at 6 DME; ACLS lock at 8–4 DME. <a href="#source-p816">[1, p. 2-23]</a></td></tr>
+    <tr><th scope="row">The ball</th><td>"Call the ball" at ¾ NM; the reply gives type and fuel, and "Roger ball" adds the wind over the deck. <a href="#source-sc">[5, p. 81]</a></td><td>The same ¾ mile call. <a href="#source-p816">[1, pp. 2-25, 2-27]</a></td></tr>
+   </tbody>
+  </table></div>
+  <p>The guide's own overview gives a different final: configure at 10 NM and pass 6 NM at 150 KIAS. <a href="#source-sc">[5, p. 75]</a> Use the aircraft module's manual for your configuration.</p>
+  <p><strong>Not checked.</strong> The guide's bolter and waveoff re-entry, its Case II recovery and the LSO station were not compared, and no claim is made about how closely DCS models ACLS, the lens or the wires. The Tomcat exercise below is Oversweep's own model, not DCS.</p>
+ </section>
+
  <h2 id="check">Check your understanding</h2>
- <p>Before practising, explain these without looking back:</p>
- <details><summary>Why are BRC and final bearing different?</summary><p>BRC describes ship heading; final bearing describes the angled landing-area centreline. Use the assigned final bearing.</p></details>
- <details><summary>Does 21 DME mean you are at the marshal fix?</summary><p>No. Range alone defines a ring. You also need the assigned radial and altitude.</p></details>
- <details><summary>Is platform only an altitude?</summary><p>No. In the source profile it is a reporting point normally at 5,000 ft and about 20 NM from the ship, where the descent rate reduces to 2,000 ft/min.</p></details>
- <details><summary>When should Marshal hand you to Approach?</summary><p>During the penetration, ideally before platform. Check in on the new button with your fuel state.</p></details>
- <details><summary>How long does a 90° turn take at one F-14 needle width?</summary><p>One width is 360° in four minutes, 1.5° per second, so 90° takes 60 seconds. The marshal pattern's 180° turns take two minutes at the same rate.</p></details>
- <details><summary>What does a ball below the datum lights mean?</summary><p>You are below the glidepath. A red lens means dangerously low; waveoff lights mean wave off immediately.</p></details>
- <details><summary>Does a bolter mean you can join the Case I visual pattern?</summary><p>No. Follow the applicable Case III bolter procedure and controller instructions.</p></details>
+ <p>Before practising, explain these without looking back. Each question is tagged with the outcome it checks.</p>
+ <details><summary><span class="outcome">Outcome 1</span> Who do you talk to before Marshal, and when do you switch?</summary><p>Red Crown, then Strike. In the source, Red Crown hands you to Strike before the 50 NM carrier control area, and Strike hands you to Marshal inside it.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Marshal assigns angels 9. How far from the ship is your fix?</summary><p>24 DME: angels plus 15. You also need the assigned radial to find it, and the clearance's expected approach time tells you when to leave.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> Why are BRC and final bearing different?</summary><p>BRC describes ship heading; final bearing describes the angled landing-area centreline. Use the assigned final bearing.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Does 21 DME mean you are at the marshal fix?</summary><p>No. Range alone defines a ring. You also need the assigned radial and altitude.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> Is platform only an altitude?</summary><p>No. In the source profile it is a reporting point normally at 5,000 ft and about 20 NM from the ship, where the descent rate reduces to 2,000 ft/min.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> When should Marshal hand you to Approach?</summary><p>During the penetration, ideally before platform. Check in on the new button with your fuel state.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> How long does a 90° turn take at one F-14 needle width?</summary><p>One width is 360° in four minutes, 1.5° per second, so 90° takes 60 seconds. The marshal pattern's 180° turns take two minutes at the same rate.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> What does a ball below the datum lights mean?</summary><p>You are below the glidepath. A red lens means dangerously low; waveoff lights mean wave off immediately.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> What is the difference between a bolter and a waveoff?</summary><p>A bolter is a touchdown without the hook catching a wire; a waveoff discontinues the landing before touchdown, and obeying it is mandatory.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> Does a bolter mean you can join the Case I visual pattern?</summary><p>No. Follow the applicable Case III bolter procedure and controller instructions.</p></details>
  <h2 id="launch">Practice: Tomcat recovery exercise</h2>
  <section class="status-panel" data-experience-id={caseIII.id} data-experience-revision={caseIII.revision}>
  <h3>{caseIII.title}</h3><p>{caseIII.maturity} · Exercise revision {caseIII.revision}</p>
@@ -370,6 +447,8 @@ const contents = [
  <p id="source-general"><strong>[2] US Navy, NAVEDTRA 14342A, Air Traffic Controller, chapter 11, Shipboard Operations, pp. 11-2, 11-21, 11-32–11-33.</strong> <a href="https://navyaviation.tpub.com/14342A/Aircraft-Recovery-Information-388.html">Read the Navy-authored general carrier-control passage (HTML mirror)</a>. Supports control roles, clearance fields, type-dependent marshal fix, BRC/final-bearing definitions and a jet/turboprop marshal example; it does not establish aircraft-specific handling or current operational authority.</p>
  <p id="source-aim"><strong>[3] Federal Aviation Administration, Aeronautical Information Manual, chapter 5, section 3, paragraph 5-3-8 “Holding”.</strong> <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap5_section_3.html">Read the AIM section (faa.gov)</a>. Inspected 24 October 2026: entry procedures 5-3-8 j 3 (a)–(e), including the nonstandard-pattern note; holding turn rate and bank 5-3-8 j 8. US civil instrument holding, cited for a general instrument technique (the entries and the entry turn rate in the practice) and a comparison rate; it does not establish Navy marshal procedure.</p>
  <p id="source-heatblur"><strong>[4] Heatblur Simulations, DCS: F-14 Tomcat manual, “Center Panel”, Turn-and-Slip Indicator.</strong> <a href="https://f14.manuals.heatblur.se/f14ab/cockpit/pilot/center_panel.html">Read the manual page (heatblur.se)</a>; source text at <a href="https://github.com/Heatblur-Simulations/f-14-manual/blob/49bbd9a144c32033bd3b3d98f04b113c58f22fa0/src/f14bu/cockpit/pilot/center_panel.md">commit 49bbd9a</a>. Inspected 24 October 2026: one needle deflection corresponds to a 360° turn in four minutes. Simulator-module documentation for the DCS F-14, not the aircraft's NATOPS; module version not verified.</p>
+ <h3>Sim source</h3>
+ <p id="source-sc"><strong>[5] Eagle Dynamics, DCS: Supercarrier Operations Guide.</strong> Updated 20 November 2024. <a href="https://www.digitalcombatsimulator.com/upload/iblock/e1b/430ooc582lpb0npynbsewan6omd5ohvs/DCS_Supercarrier_Operations_Guide_EN.pdf">PDF</a>, read 5 November 2026, pp. 75–81 (Case III recovery). A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific source excerpts and provenance are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/case-iii-p816-evidence.md">P-816 evidence</a> and <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/case-iii-general-source.md">general carrier-control evidence</a> and <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/case-iii-visual-module-evidence.md">figure, communications and turn-needle evidence</a>. The module's conceptual structure is aircraft-agnostic; published profile numbers, reporting examples and handling sequences remain attributed to their documented contexts.</p>
  <p class="note"><strong>Source conflict:</strong> this edition gives different <Term id="Case I, II and III">Case III</Term> visibility thresholds in its weather-criteria section (p. 2-4) and recovery section (p. 2-22). Exact weather minima are therefore unresolved here. This module teaches the night/instrument-recovery purpose without asserting a numerical threshold. It remains Drafted pending independent source-backed review.</p>
  <p>Figures 1–5 are original line drawings, not reproductions of any manual figure. They are not to scale; every label repeats a value stated in the text beside it with its source. The profile, stack and turn practice use the simplified models described with them.</p>
@@ -378,8 +457,24 @@ const contents = [
 </SiteLayout>
 <script>import '../../../lessons/case-iii/lesson-ui.mjs';</script>
 <style>
+  .contents-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
+  .contents h3 { margin: 0.4rem 0 0.2rem; font-size: 0.95rem; }
+  .lede { font-size: 1.1rem; }
+  .key { padding: 0.6rem 1rem; border-left: 0.25rem solid var(--color-link); background: var(--color-surface); }
+  ul.recap li { margin-block: 0.3rem; }
+  details.more { margin-block: 1rem; padding: 0.5rem 1rem; border: 1px solid var(--color-border); }
+  details.more summary { cursor: pointer; font-weight: 700; }
+  ol.exchange { list-style: none; padding-left: 1rem; border-left: 0.25rem solid var(--color-border); }
+  ol.exchange li { display: grid; grid-template-columns: 7.5rem 1fr; column-gap: 0.75rem; margin-block: 0.4rem; }
+  ol.exchange .who { font-weight: 700; }
+  ol.exchange .step { margin-left: 0.4rem; font-size: 0.85rem; white-space: nowrap; }
+  .outcome { display: inline-block; margin-right: 0.4rem; padding: 0 0.4rem; font-size: 0.8rem; border: 1px solid var(--color-border); color: var(--color-muted); }
+  .sim-panel { margin: 2rem 0; padding: 0.75rem 1.25rem; border-left: 4px solid var(--color-accent); background: var(--color-surface, #f6f7f8); }
+  .sim-panel h2 { margin-top: 0.4rem; }
+  .sim-panel h3 { margin: 1rem 0 0.3rem; font-size: 1rem; }
+  @media (max-width: 40rem) { .contents-groups { grid-template-columns: 1fr; } ol.exchange li { display: block; } }
   code { overflow-wrap: anywhere; }
-  .contents ol { columns: 2; column-gap: 2rem; padding-left: 1.5rem; }
+  .contents ol { padding-left: 1.5rem; margin-top: 0; }
   .contents li { break-inside: avoid; }
   .table-scroll { overflow-x: auto; border: 1px solid var(--color-border); }
   .table-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
