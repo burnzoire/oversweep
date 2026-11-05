@@ -34,3 +34,5 @@ DCS F-14 AIM-54A/C, radar track, loft, active seeker and AI-target behaviour are
 ## Editorial action
 
 Prioritise the factual distinctions above. Preserve useful technical reference details and cross-links, while removing redundant narrative before adding new content. Changes to technical claims require independent aviation SME evidence review.
+
+**Applied (2026-11-05):** no change in this pass: AIM-54A/C distinctions and combat-record attribution need sources beyond the single secondary one.

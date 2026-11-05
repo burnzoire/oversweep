@@ -34,3 +34,5 @@ Use a distinct sim-specific panel as appropriate. Verify each simulation claim a
 ## Editorial disposition
 
 Tighten repetition; preserve distinguishing technical explanations, source caveats and cross-links. Do not change aviation claims without SME review.
+
+**Applied (2026-11-05):** the record now opens by separating the 5 in HVAR from the later 2.75 in FFAR and Hydra 70.

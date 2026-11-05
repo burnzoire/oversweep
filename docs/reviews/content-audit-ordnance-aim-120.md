@@ -34,3 +34,5 @@ DCS/BMS datalink guidance, active transition, loft and jamming/countermeasure mo
 ## Editorial action
 
 Prioritise the factual distinctions above. Preserve useful technical reference details and cross-links, while removing redundant narrative before adding new content. Changes to technical claims require independent aviation SME evidence review.
+
+**Applied (2026-11-05):** the fire-and-forget section now says it means the crew stops guiding the missile, not that a hit is assured, and that it flies on launch data and any updates until its radar finds the target. Variant specifications were not researched.

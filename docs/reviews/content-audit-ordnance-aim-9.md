@@ -34,3 +34,5 @@ DCS and BMS represent different AIM-9 variants with aircraft-specific cueing/HMD
 ## Editorial action
 
 Prioritise the factual distinctions above. Preserve useful technical reference details and cross-links, while removing redundant narrative before adding new content. Changes to technical claims require independent aviation SME evidence review.
+
+**Applied (2026-11-05):** no change in this pass: per-variant seeker and Pk context need sourced research.

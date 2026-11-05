@@ -10,7 +10,7 @@ dimensions: "19 ft (5.8 m) from the muzzle to the back of the ammunition system 
 range: "Effective range about 4,000 ft (1,220 m); maximum over 12,000 ft [1]"
 calibre: "30 mm, firing the 30 × 173 mm cartridge [1]"
 action: "Electrically controlled and driven by twin hydraulic motors from two independent hydraulic systems [1]"
-rateOfFire: "About 3,900 rounds per minute [1]"
+rateOfFire: "About 3,900 rounds per minute as installed in the A-10 [1]; 4,200 is the manufacturer's gun maximum [2]"
 muzzleVelocity: "1,013 m/s (3,324 ft/s) with armour-piercing incendiary rounds [1]"
 ammunition: "Linkless; the drum holds 1,174 rounds, and 1,150 is the usual load [1]"
 carriers:
