@@ -179,3 +179,13 @@ PDF page 257.
 | 9-14 | "If the movement is rapid or fluctuating, this is an indication of impending station passage"; "If the VOR is set to the reciprocal of the intended course, the CDI reflects reverse sensing ... To avoid this reverse sensing situation, set the VOR to agree with the intended course." | Station passage; Setting up a course |
 | 9-14 | "The track is intercepted by either flying over the station or establishing an intercept heading. The magnetic course of the desired radial is entered under the index using the OBS and the intercept heading held until the CDI centers."; course interception: "Hold this heading constant until the CDI center ... (With practice in judging the varying rates of closure with the course centerline, pilots learn to lead the turn to prevent overshooting the course.)" | Outbound; Intercepts |
 
+## [10] Falcon BMS 4.38.1 Training Manual, navigation mission (revision 3, In the sim panel only)
+
+Read 5 November 2026. Page numbers are the printed page footers.
+
+| Page | Passage (extractor-read, abridged) | Module use |
+| --- | --- | --- |
+| 68 | "When selected as the active steerpoint the circle in the HSD turns solid"; "The HUD indicates the direction of the selected steerpoint with the Great Circle Steering Cue"; "Distance and ETE to the selected steerpoint are displayed" | Sim panel: waypoints |
+| 69 | "The aircraft can automatically switch to the next steerpoint as you approach the active steerpoint (default off)"; MAN to AUTO on the STPT page | Sim panel: waypoints |
+| 70 | "Depending on the position of the INSTR MODE knob the HSI will indicate navigation information related to the active TACAN station (TCN & TCN/ILS positions) or the active steerpoint (NAV & NAV/ILS positions)"; "The CDI can be used to intercept radials relative to NAVAIDS or steerpoints" | Sim panel: HSI source |
+| 71 | "As we overfly WOLF IAF (STPT 4) we check the INS coordinates against the IAF on the Gunsan approach charts. WWOLF is R090° DME 15 from Gunsan TACAN"; the difference "equates to just under 1 Nm"; "Coordinates can be changed in the INS using the STPT page" | Sim panel: cross-check |
