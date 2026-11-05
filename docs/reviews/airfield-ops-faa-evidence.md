@@ -215,3 +215,15 @@ source: https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap2_secti
   (≥ 1,320 ft).
 - Runway lights: 8,000 ft runway, 1,500 ft remaining → yellow edge, alternating
   centerline; 3,000 ft runway caution zone 1,500 ft.
+
+## Falcon BMS 4.38.1 Training Manual (revision 3, sim panel only)
+
+Read 5 November 2026 from https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf. Printed page numbers.
+
+| Page | Passage (extractor-read) | Module use |
+| --- | --- | --- |
+| 47 | "The airport diagram should help to plot your route to the holding point. All BMS charts are located in the Docs\03 KTO Charts folder"; "generally you should stay below 25 kts in straight lines and 10 kts in turns" | Sim panel: taxi |
+| 49 | "Upon arriving at EOR, the Ground Controller will call you and instruct you to switch to the Tower frequency"; "The aircraft systems are unable to give you the wind speed and direction while the aircraft is on the ground ... look at the windsocks at each runway end"; "Tower will then instruct you to hold short runway 36, line up and wait, or clear you to take-off." | Sim panel: wind, takeoff |
+| 82–83 | "Most runways in BMS are equipped with a visual landing aid system called Precision Approach Path Indicator or PAPI"; "The more red lights are visible from the landing aircraft, the lower you are on the glideslope"; "The optimal glide slope is thus flown when 2 red and 2 white lights are seen" | Sim panel: PAPI |
+| 85 | Overhead requests granted when "Flight conditions must be VFR" and "All aircraft in the flight must be within 15 Nm of flight lead"; "It is important to make this initial contact before the break point"; "Speed is 300 kts, altitude 1500 ft AGL and the flight aligned with the runway axis"; lead reports the break with "t t 5" | Sim panel: overhead |
+| 86 | "A good cue for single-ship training is to wait for the opposite landing threshold (RWY 18 in this case) to disappear under your aircraft's nose. In a 4-ship scenario, lead ... should start his break much sooner"; "The direction of the break may be published on the airport visual charts or stated in the airport SOPs." | Sim panel: break point |
