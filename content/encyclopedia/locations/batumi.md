@@ -74,7 +74,7 @@ sources:
 
 ## Role today
 
-Batumi is Georgia's international airport on the Black Sea coast, one of the country's three international airports with [Tbilisi](record:tbilisi) and [Kutaisi](record:kutaisi). [[1]](#source-1) Its terminal opened on 26 May 2007 and was enlarged between 2019 and 2021 to handle 1.2 million passengers a year. [[1]](#source-1) It has no based military flying unit today.
+Batumi is Georgia's international airport on the Black Sea coast, one of the country's three international airports with [Tbilisi](record:tbilisi) and [Kutaisi](record:kutaisi). [[1]](#source-1) Its terminal opened on 26 May 2007 and was enlarged between 2019 and 2021 to handle 1.2 million passengers a year. [[1]](#source-1) As of October 2026, when its sources were read, it had no based military flying unit.
 
 ## History
 

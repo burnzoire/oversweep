@@ -32,3 +32,5 @@ DCS Syria representation may differ in runway layout, ramps, TACAN/ILS and facil
 ## Recommendation
 
 Prioritise applicability, date boundaries, and useful airfield/map cross-links before length-based editing. Preserve real-world historical context as a reference, separate from simulator-specific differences.
+
+**Applied (2026-11-05):** no change needed: every unit now carries an asOf month and a permanent or deployed basing, so the roster is dated and temporary detachments are separated.

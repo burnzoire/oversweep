@@ -32,3 +32,5 @@ This page is itself sim-specific: make DCS product/version, coverage and terrain
 ## Recommendation
 
 Prioritise applicability, date boundaries, and useful airfield/map cross-links before length-based editing. Preserve real-world historical context as a reference, separate from simulator-specific differences.
+
+**Applied (2026-11-05):** no change in this pass: map version and bounds need the map's documentation.

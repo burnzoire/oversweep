@@ -32,3 +32,5 @@ This is a BMS-specific map. State what is implemented in the terrain, what comes
 ## Recommendation
 
 Prioritise applicability, date boundaries, and useful airfield/map cross-links before length-based editing. Preserve real-world historical context as a reference, separate from simulator-specific differences.
+
+**Applied (2026-11-05):** no change in this pass: BMS version and campaign-date notes need the BMS documentation.

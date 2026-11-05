@@ -32,3 +32,5 @@ DCS Caucasus Batumi is not necessarily the current real-world runway/taxiway lay
 ## Recommendation
 
 Prioritise applicability, date boundaries, and useful airfield/map cross-links before length-based editing. Preserve real-world historical context as a reference, separate from simulator-specific differences.
+
+**Applied (2026-11-05):** the 'no based flying unit today' claim now carries its as-of date. Runway, elevation and navaids already come from dated sources; a mission-designer approach summary was not added.
