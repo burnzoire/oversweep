@@ -124,3 +124,18 @@ https://navyflightmanuals.tpub.com/P-1218/High-Yo-Yo-P-12180039-39.htm
 - Figure 8's yo-yo and scissors geometry (start positions, climb and dive
   heights, loop sizes) is chosen for illustration; the sources describe the
   maneuvers in words, without numbers for these.
+
+## Falcon BMS 4.38.1 Training Manual (revision 3, sim panel only)
+
+Read 5 November 2026 from https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf, section 19.1 and Mission 19. Printed page numbers.
+
+| Page | Passage (extractor-read) | Module use |
+| --- | --- | --- |
+| 316 | "MISSION 19: GUN & HMCS/AIM-9X (TR_BMS_19_Guns)"; "At mission start your aircraft will be placed in an offensive situation against a Q-5 Fantan. The initial goal is to use the cannon to shoot it down" | Sim panel |
+| 317 | Pursuit table: LEAD and PURE "Decrease separation", "Increase AOT", "Increase closure", "Decrease energy"; LAG "Increase/maintain separation", "Decrease/maintain AOT", "Decrease/maintain closure", "Increase/maintain energy" | Sim panel |
+| 319 | "Check that you are in range of your selected weapon (inside the WEZ)"; "Go Lead pursuit"; "Check your closure rate (don't overshoot!)"; "Pull the trigger." | Sim panel |
+| 320 | "A key determinant in winning the roller is to strive to get your nose up when you are at the bottom before the bandit can get his nose down when he is on the top"; "Offensively if you find yourself in a roller you have made a mistake." | Sim panel |
+| 321 | One circle fight: "The trick to win a one circle fight to reduce your turn radius. The only way to reduce your radius is to reduce your speed." | Sim panel |
+| 322 | Two circle fight: "Whoever has the greater turn rate will win. To increase your turn rate, you have to increase your speed."; F-16: "Tightest turn (constant): ~ 160kts / 2.1G", "Tightest turn (max): ~ 200kts / 3.5G", "Fastest turn (constant): ~ 500kts / 7.8G", "Fastest turn (max): ~ 400kts / 8.5G", "Plateau: 340-440kts / 4.5 - 6.5G" | Sim panel |
+
+The CNATRA P-1289 link returned a "not found" page on 5 November 2026; the module still cites the copy inspected on 24 October 2026.
