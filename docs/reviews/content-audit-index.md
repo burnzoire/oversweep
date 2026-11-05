@@ -28,7 +28,7 @@ Reviews are source-inspection editorial findings, **not** rendered-browser QA, e
 - [Navigation](content-audit-air-navigation.md)
 - [Weapons delivery](content-audit-weapons-delivery.md)
 - [Close air support](content-audit-close-air-support.md) — findings applied in module revision 2 as a benchmark
-- [Ship operations](content-audit-ship-operations.md) — applied in module revision 2 (Case I core, branches in reference, Supercarrier sim panel)
+- [Ship operations](content-audit-ship-operations.md)
 - [Case III](content-audit-case-iii.md)
 - [Autorotation](content-audit-autorotation.md)
 
