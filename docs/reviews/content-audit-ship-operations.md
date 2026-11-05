@@ -12,11 +12,15 @@ This combines flight deck organisation, launch, multiple recovery cases, LSO out
 
 **Suggested action:** Edit the first-pass path and duplicated introductory material before shortening technically necessary reference explanations. Track actual rendered prose reading length separately.
 
+**Applied (revision 2):** the core sequence is the fixed-wing carrier path (worked example, ships, deck, jerseys, launch, cases, Case I, the lens, LSO calls, arrestment and bolter, Key points). Tanking and the branches for other ships and aircraft (amphibious ships, helicopters aboard ship, Army deck landing qualification, the AV-8B) are in Reference, named as branches in the overview. The overview became a lede and a numbered outcomes list, and long paragraphs were split. Nothing sourced was cut.
+
 ## 2. Imagery and interactivity
 
 Deck plan, Case I pattern, glideslope and LSO activities already exist. Improve figure-to-prose cross-reference and summary, not extra controls.
 
 Source contains approximately 5 figure-title markers; this count is only a structural indicator and **not** a browser-rendered inventory. Verify the actual rendered diagrams and mobile fallbacks before recommending additional components.
+
+**Applied (revision 2):** no new figures; the worked example links each step to the section and figure it relies on.
 
 ## 3. Learning outcomes
 
@@ -24,11 +28,15 @@ Identify deck control roles; describe launch flow, distinguish Case I/II/III, in
 
 **Check:** The overview and end-of-module questions should both cover these outcomes; split broad objectives into observable questions where necessary.
 
+**Applied (revision 2):** five numbered outcomes; every question is tagged to one, with a new question for outcome 1 (who may move an aircraft).
+
 ## 4. Important omissions or opportunities
 
 Avoid duplicating the dedicated Case III module; make it a concise overview and direct readers there. Confirm aircraft- and ship-specific procedures remain clearly bounded.
 
 Also check cross-links to relevant encyclopedia terms, aircraft and ordnance where they improve comprehension, and distinguish general principles from T-45/FAA/service-specific examples.
+
+**Applied (revision 2):** Case III stays a short overview with a link to its own module, as before. The worked example labels the T-45 numbers as that training jet's.
 
 ## Priority
 
@@ -39,3 +47,5 @@ Also check cross-links to relevant encyclopedia terms, aircraft and ordnance whe
 Identify the applicable DCS/BMS modules, which relevant real-world concepts they model, which they simplify or omit, and how a reader can practise the relevant learning outcomes. Check aircraft/version-specific behaviour rather than treating simulator systems as universally accurate.
 
 **Follow-up verification required:** Distinguish real-world facts, simulator-implemented behaviour, known simplifications/omissions and unknowns. Cite a specific simulator/module/version and test or source before asserting fidelity or absence. Present verified sim-only information in the existing visually distinct sim-specific panel convention where applicable. Do not conflate Oversweep's educational models with DCS or BMS.
+
+**Applied (revision 2):** an "In the sim" panel from the DCS Supercarrier Operations Guide (pp. 63–71), comparing its Case I recovery with the T-45 instruction: the same sequence, with 2,000 ft lowest holding, 1¼–1½ NM abeam and a 3.6° glidepath. Amphibious ships, helicopters and the AV-8B in any sim were not checked.

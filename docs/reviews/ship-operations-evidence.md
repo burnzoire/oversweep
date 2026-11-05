@@ -112,3 +112,17 @@ Used for the real comment examples, the typed marks and the extra fleet codes. "
 ## [13] "lex", "Landing grades", 2004, reposted on The Lexicans, 2017
 
 Used for one worked pass. "The LSO's use shorthand to grade a pass – something written down as: (OK) OC NEP-BC /IM (NEP-CDIC) SDAR LOBDRIW 2, would translate into, \"Fair pass: over-controlled a little not enough power on the ball call, fly through up in the middle, a little not enough power on the come-down in close, settle/decel at the ramp, low, flat, drift right in the wires. Two-wire.\"" BC, DR and / are read from this translation. The page notes that the post reads SD as settle/decel where P-1211's SD is spotted deck.
+
+## [14] DCS Supercarrier Operations Guide (revision 2, In the sim panel only)
+
+https://www.digitalcombatsimulator.com/upload/iblock/e1b/430ooc582lpb0npynbsewan6omd5ohvs/DCS_Supercarrier_Operations_Guide_EN.pdf,
+read 5 November 2026. Printed page numbers.
+
+| Page | Passage (extractor-read, abridged) | Module use |
+| --- | --- | --- |
+| 64 | "At 50 miles or closer, you should select 'INBOUND'"; Marshal: "CASE I recovery expected BRC is [HEADING]. Report a see me at 10"; holding altitudes "in 1,000-foot increments starting at 2,000 feet above the carrier" | Check-in; holding |
+| 65 | "The overhead holding pattern is a left-hand pattern"; "remain within 5 nm of the carrier and no lower than 2,000 feet AGL"; "climbs must be accomplished between points 1 and 3 while any descents must be accomplished between points 3 and 1" | Holding |
+| 67 | "A 15-20 second break interval will correspond to a proper 40-60 second landing interval"; "Break altitude is 800 feet, and all breaks will be level"; "pattern altitude of 600 feet"; "1 ¼ to 1 ½ miles generally allows a smooth entry" | Break and downwind |
+| 68 | "rolling out wings level ¾ nm astern"; ball call "[SIDE NUMBER] [Ball] [FUEL STATE]"; "If you do not have the ball in sight, select 'CLARA'" | Groove and ball |
+| 69 | "deviation from localizer centerline and 3.6-degree glidepath" | Groove and ball |
+| 71 | "Do not anticipate an arrested landing ... advance the power to max"; "The LSO will grade each landing and display the results" | Touchdown |

@@ -8,13 +8,29 @@ const so = getModule('ship-operations');
 // Naval Operations also holds the Case III practice module, routed by
 // [trainer].astro; this route emits only the trainer-less module.
 export function getStaticPaths() { return includedModules.some(m => m.slug === 'ship-operations') ? [{ params: { module: 'ship-operations' } }] : []; }
-const contents = [
- ['overview', 'Purpose and learning objectives'], ['ships', 'The ships and who controls the air'], ['deck', 'The carrier flight deck'],
- ['jerseys', 'Who wears which jersey'], ['launch', 'The catapult launch'], ['cases', 'Case I, II and III'],
- ['case1', 'The Case I recovery'], ['lens', 'The lens and the ball'], ['lso', 'LSO calls and grades'],
- ['outcomes', 'Arrestment, bolter, waveoff and Delta'], ['fuel', 'Tanking and bingo'], ['amphib', 'Amphibious assault ships'],
- ['helo', 'Helicopters aboard ship'], ['dlq', 'Army deck landing qualification'], ['stovl', 'STOVL: the AV-8B aboard ship'],
- ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+const core = [
+ ['example', 'One Case I pass'],
+ ['ships', 'The ships and who controls the air'],
+ ['deck', 'The carrier flight deck'],
+ ['jerseys', 'Who wears which jersey'],
+ ['launch', 'The catapult launch'],
+ ['cases', 'Case I, II and III'],
+ ['case1', 'The Case I recovery'],
+ ['lens', 'The lens and the ball'],
+ ['lso', 'LSO calls and grades'],
+ ['outcomes', 'Arrestment, bolter, waveoff and Delta'],
+ ['recap', 'Key points'],
+];
+const reference = [
+ ['fuel', 'Tanking and bingo'],
+ ['amphib', 'Amphibious assault ships'],
+ ['helo', 'Helicopters aboard ship'],
+ ['dlq', 'Army deck landing qualification'],
+ ['stovl', 'STOVL: the AV-8B aboard ship'],
+ ['sims', 'In the sim'],
+ ['terms', 'Terms'],
+ ['check', 'Check your understanding'],
+ ['sources', 'Sources and applicability'],
 ];
 // Military sources first: [1] CNATRA P-1211 (T-45 Carrier Qualification FTI)
 // printed page, [2] NAVEDTRA 14342A chapter 11, [3] NAVEDTRA 14310,
@@ -22,6 +38,8 @@ const contents = [
 // classes, [7] FAS AV-8B, [8] Wikipedia, Harrier jump jet, [9] Seapower.
 const pp = (n: number) => (page: string) => `[${n}, ${page.includes('–') || page.includes(',') ? 'pp.' : 'p.'} ${page}]`;
 const cq = pp(1), atc = pp(2), abe = pp(3), fm = pp(4);
+// Sim source, In the sim panel only: [14] DCS Supercarrier Operations Guide page.
+const sc = pp(14);
 const caseIII = sitePath('manual/naval-operations/case-iii/');
 const airfield = sitePath('manual/airfield-operations/airfield-basics/');
 const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
@@ -34,17 +52,42 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   <p>Figure 1 labels a carrier's flight deck; Figure 2 steps through the Case I pattern and a helicopter's Charlie pattern; Figure 3 shows why the ball gets more sensitive in close; Figure 4 checks Army deck landing currency.</p>
  </section>
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
-  <ol>{contents.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
  </nav>
 
- <h2 id="overview">Purpose and learning objectives</h2>
- <p>Landing a jet on a carrier is what the Navy's carrier qualification instruction calls the thing that sets a Navy-trained jet pilot apart, and the most demanding phase of training: weeks of preparation for a few moments at the ship. <a href="#source-p1211">{cq('1')}</a> Ships carry far more than carrier jets, though. Marine Corps helicopters, tiltrotors and jump jets fly from amphibious assault ships, and Army aviation has flown missions from Navy and Coast Guard ships in nearly every major operation since the Second World War, from medical evacuation and resupply to attack helicopter operations. <a href="#source-fm1564">{fm('1-1')}</a></p>
- <p>By the end you should be able to name the parts of a carrier's flight deck and what the arresting gear and catapult do; read the flight deck by jersey colour; describe a catapult launch; say which recovery case the weather calls for; fly the Case I pattern position by position; read the ball and explain why corrections shrink in close; answer the <Term id="Landing Signal Officer (LSO)">LSO</Term>'s calls and read a grade; fly a <Term>bolter</Term>, a <Term>waveoff</Term> and a <Term>Delta</Term>; explain tanking and <Term>bingo</Term>; describe a helicopter's <Term id="Charlie pattern">Charlie pattern</Term> and the <Term id="Landing Signal Enlisted (LSE)">LSE</Term>'s role; work out Army deck landing currency; and explain how a jump jet operates from an amphibious ship.</p>
+ <p class="lede">Landing a jet on a carrier is what the Navy's carrier qualification instruction calls the thing that sets a Navy-trained jet pilot apart, and the most demanding phase of training: weeks of preparation for a few moments at the ship. <a href="#source-p1211">{cq('1')}</a> Ships carry far more than carrier jets, though. Marine Corps helicopters, tiltrotors and jump jets fly from amphibious assault ships, and Army aviation has flown missions from Navy and Coast Guard ships in nearly every major operation since the Second World War, from medical evacuation and resupply to attack helicopter operations. <a href="#source-fm1564">{fm('1-1')}</a></p>
+ <p>The core sequence follows a carrier jet from the deck to the wire. Other ships and aircraft are branches in the reference half: amphibious assault ships, helicopters aboard ship, Army deck landing qualification and the AV-8B. By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>name the parts of a carrier's flight deck and what the arresting gear and catapult do, and read the deck by jersey colour;</li>
+  <li>describe a catapult launch, and say which recovery case the weather calls for;</li>
+  <li>fly the Case I pattern position by position, read the <Term>ball</Term>, and explain why corrections shrink in close;</li>
+  <li>answer the <Term id="Landing Signal Officer (LSO)">LSO</Term>'s calls, read a grade, fly a <Term>bolter</Term>, a <Term>waveoff</Term> and a <Term>Delta</Term>, and explain tanking and <Term>bingo</Term>;</li>
+  <li>describe a helicopter's <Term id="Charlie pattern">Charlie pattern</Term> and the <Term id="Landing Signal Enlisted (LSE)">LSE</Term>'s role, work out Army deck landing currency, and explain how a jump jet operates from an amphibious ship.</li>
+ </ol>
  <p class="note">This is a reference, not a NATOPS manual or a syllabus. Carrier numbers are the <Term record="t-45">T-45</Term> training jet's, from its 2001 carrier qualification instruction; the ship and air traffic procedures come from a Navy controller training manual, and the Army procedures from a 1997 field manual. Current ship, air wing and service manuals govern and may differ. The instrument recovery has its own module, <a href={caseIII}>Case III Recoveries</a>.</p>
 
+ <h2 id="example">One Case I pass</h2>
+ <p>Here is one day pass to the carrier in the <Term record="t-45">T-45</Term>, using its carrier qualification instruction's numbers. They are that training jet's, not every aircraft's; each step links to its section.</p>
+ <ol class="exchange script">
+  <li><span class="who">The case</span> <span class="said">The ship reports 3,000 ft and 5 NM or better: Case I. <a class="step" href="#cases">Why</a></span></li>
+  <li><span class="who">Marshal</span> <span class="said">Check in, get the holding altitude and BRC, and call "see you at ten" with the ship in sight. Hold overhead; on "<Term>Charlie</Term>", leave the stack. <a class="step" href="#case1">Why</a></span></li>
+  <li><span class="who">Initial</span> <span class="said">3 NM astern at 800 ft and 250–300 KIAS, just outboard of the starboard side, parallel to the BRC. <a class="step" href="#case1">Why</a></span></li>
+  <li><span class="who">Break</span> <span class="said">Over or past the bow, break left at 70–80° of bank, level; descend to 600 ft downwind and configure. <a class="step" href="#case1">Why</a></span></li>
+  <li><span class="who">The 180</span> <span class="said">0.9–1.1 NM abeam, turn at 27–30° of bank, descending; the ship is moving away, so keep the turn in. <a class="step" href="#case1">Why</a></span></li>
+  <li><span class="who">Groove</span> <span class="said">Wings level on the angled deck's centerline, call the ball: side number, type, "ball", fuel state. <a class="step" href="#lso">Why</a></span></li>
+  <li><span class="who">The ball</span> <span class="said">Keep it centred against the datum lights; the wedge narrows as you close, so corrections get smaller, and never accept a low ball. <a class="step" href="#lens">Why</a></span></li>
+  <li><span class="who">Touchdown</span> <span class="said">Full power as the wheels touch. A wire stops you; no wire is a <Term>bolter</Term>, and you are already flying away. <a class="step" href="#outcomes">Why</a></span></li>
+ </ol>
+ <p class="key"><strong>Key point:</strong> weather picks the case; in Case I you hold overhead, break into a 600 ft pattern, fly the ball to the deck and go to full power on touchdown, wire or not.</p>
+
  <h2 id="ships">The ships and who controls the air</h2>
- <p>Three kinds of ship carry aircraft in these sources. <strong>Aircraft carriers</strong> (CV and CVN) launch and recover fixed-wing jets with catapults and arresting gear; a Nimitz-class carrier has four of each and can launch as many as four aircraft a minute. <a href="#source-fas-cvn">[5]</a> <strong>Amphibious assault ships</strong> (LHA and LHD) carry a Marine landing force, its helicopters and its jump jets, with a well deck in the stern for landing craft; the Tarawa-class LHA's full-length flight deck can handle ten helicopters at once as well as the <Term record="av-8b">AV-8 Harrier</Term>, and the Wasp-class LHD that followed it carries two more helicopters and three air-cushion landing craft. <a href="#source-fas-amphib">[6]</a> <strong>Single- and dual-spot ships</strong>, such as frigates with one landing spot aft, take helicopters only, and the Army calls landing on them the most demanding deck landing training. <a href="#source-fm1564">{fm('1-11, 1-13')}</a></p>
+ <p>Three kinds of ship carry aircraft in these sources. <strong>Aircraft carriers</strong> (CV and CVN) launch and recover fixed-wing jets with catapults and arresting gear; a Nimitz-class carrier has four of each and can launch as many as four aircraft a minute. <a href="#source-fas-cvn">[5]</a></p>
+ <p><strong>Amphibious assault ships</strong> (LHA and LHD) carry a Marine landing force, its helicopters and its jump jets, with a well deck in the stern for landing craft; the Tarawa-class LHA's full-length flight deck can handle ten helicopters at once as well as the <Term record="av-8b">AV-8 Harrier</Term>, and the Wasp-class LHD that followed it carries two more helicopters and three air-cushion landing craft. <a href="#source-fas-amphib">[6]</a> <strong>Single- and dual-spot ships</strong>, such as frigates with one landing spot aft, take helicopters only, and the Army calls landing on them the most demanding deck landing training. <a href="#source-fm1564">{fm('1-11, 1-13')}</a></p>
  <p>Around each ship sit two pieces of airspace. The <strong>control area</strong> is a circle of 50 miles radius from the surface up, run by the carrier's <Term id="CATCC">CATCC</Term> or the amphibious ship's <Term id="AATCC">AATCC</Term>; the <strong>control zone</strong> is the inner 5 miles up to 2,500 ft, the responsibility of the Air Officer in visual conditions. <a href="#source-atc">{atc('11-2–11-3')}</a> The Air Officer, the <Term id="Air Boss">Air Boss</Term> to aircrew, works from <Term id="Primary Flight Control (PriFly)">PriFly</Term> high in the island, watches the deck and the pattern and sets the case of departure and recovery from the weather. <a href="#source-p1211">{cq('65')}</a> <a href="#source-atc">{atc('11-7, 11-21')}</a></p>
+ <p class="key"><strong>Key point:</strong> each ship controls a 50-mile area around it, and the Air Officer sets the case of departure and recovery from the weather.</p>
 
  <h2 id="deck">The carrier flight deck</h2>
  <p>Ashore the same jets need runways of 5,000 to 8,000 ft; on a carrier they stop within 350 ft of touching down. <a href="#source-abe">{abe('3-1')}</a> The deck does it with two machines at opposite ends, and with a landing area angled away from the bow so that a jet that misses the wires can fly off again without hitting the aircraft parked forward.</p>
@@ -64,6 +107,7 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
    <li data-part="island"><button type="button" aria-pressed="false">Island and PriFly</button><p>The island holds the bridge and, seven stories above the deck, Primary Flight Control. <a href="#source-fas-cvn">[5]</a> The <Term id="Air Boss">Air Boss</Term> there runs the deck and every aircraft within 10 miles. <a href="#source-p1211">{cq('65')}</a></p></li>
   </ol>
  </section>
+ <p class="key"><strong>Key point:</strong> catapults and arresting gear stop and start jets in a few hundred feet, and the angled landing area lets a jet that misses the wires fly off again without hitting the aircraft parked forward.</p>
 
  <h2 id="jerseys">Who wears which jersey</h2>
  <p>On a deck this busy nobody has time to ask. Every crew member's job shows in the colour of the jersey and helmet, and only the yellow shirts may move an aircraft. <a href="#source-p1211">{cq('35')}</a> The Navy and the Coast Guard use the same colours, and the Army's shipboard manual teaches them to Army crews. <a href="#source-fm1564">{fm('F-1')}</a></p>
@@ -88,6 +132,7 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   <p class="feedback" data-result role="status" aria-live="polite"></p>
   <div class="buttons"><button type="button" data-new>Next</button></div>
  </section>
+ <p class="key"><strong>Key point:</strong> the jersey colour tells you each crew member's job, and only the yellow shirts may move an aircraft.</p>
 
  <h2 id="launch">The catapult launch</h2>
  <p>In the T-45, the launch runs like this. The pilot taxis to the catapult behind yellow shirts, finishes the takeoff checklist and confirms the aircraft's gross weight on the weight board, rounded up to the next 500 lb, before crossing the <Term id="Jet blast deflector (JBD)">jet blast deflector</Term>; a weight more than 1,000 lb wrong goes to the tower by radio. <a href="#source-p1211">{cq('35, 40')}</a> Then: <a href="#source-p1211">{cq('41–43')}</a></p>
@@ -99,6 +144,7 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   <li><strong><Term>Suspend</Term>.</strong> If anything is wrong before the launch, the pilot calls “suspend, suspend, suspend” and shakes the head, and keeps full power until the catapult officer walks in front of the wing and gives the throttle-back signal. In tension, hands stay below the canopy rails so that no gesture looks like a salute.</li>
  </ol>
  <p>On the deck side, the <Term id="Launch bar">launch bar</Term> rides a guide track that steers it into the shuttle's spreader automatically, so fewer people have to stand near the nose gear during hookup. <a href="#source-abe">{abe('5-15')}</a> Out of the catapult, a Case I jet stays at 500 ft parallel to the ship's course to 7 NM before climbing; in Case II it arcs at 10 NM to its departure radial if it cannot climb visually, and in Case III it climbs straight ahead at 300 kt through 5 NM at 1,500 ft or above before arcing. <a href="#source-atc">{atc('11-30')}</a> <a href="#source-p1211">{cq('43–44')}</a></p>
+ <p class="key"><strong>Key point:</strong> in tension the pilot goes to full power, and the salute hands control to the catapult officer, who fires the launch; until then, "suspend" stops it.</p>
 
  <h2 id="cases">Case I, II and III</h2>
  <p>Weather decides how a ship launches and recovers its aircraft. The Air Officer picks the case; Case III is used at night, from half an hour after sunset to half an hour before sunrise, whatever the weather. <a href="#source-atc">{atc('11-21–11-22')}</a> Amphibious ships give helicopters lower limits: <a href="#source-atc">{atc('11-9, 11-22, 11-57')}</a></p>
@@ -112,9 +158,11 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   </tbody>
  </table></div>
  <p>A Case I recovery holds overhead the ship and enters the pattern at the break. A Case II recovery is a controlled descent through cloud to the break and the visual pattern, never by more than a section of two in the T-45 instruction. A Case III recovery is an instrument approach all the way to the <Term>ball</Term>. <a href="#source-p1211">{cq('29, 65')}</a> The cases also limit each other: after a Case III launch only a Case III recovery may follow, and during a Case I recovery the ship launches only Case I or II. <a href="#source-atc">{atc('11-22')}</a> The <a href={caseIII}>Case III Recoveries</a> module covers the marshal stack, the approach and its controllers in depth.</p>
+ <p class="key"><strong>Key point:</strong> Case I is 3,000 ft and 5 NM or better, Case II 1,000 ft and 5 NM, Case III anything worse, and every night.</p>
 
  <h2 id="case1">The Case I recovery</h2>
- <p>Inbound in visual weather, the T-45 flight leader checks in with Marshal: call sign, number in flight, position, altitude, <Term>low state</Term> and lineup. Marshal gives the case, a holding altitude, the ship's weather and altimeter, the <Term id="Base Recovery Course (BRC)">BRC</Term>, <Term>bingo</Term> information and an expected approach time, and asks for a “see me”; with the ship in sight the leader calls “see you at ten”, or at the distance shown. <a href="#source-p1211">{cq('28')}</a> The flight holds overhead in a counterclockwise circle no more than 5 NM across, tangent to the BRC with the ship at its 3 o'clock, no lower than 1,500 ft and separated from other flights by at least 1,000 ft. It descends only while abeam and aft of the ship, and on a “<Term>Charlie</Term>” it leaves the stack and heads for the initial. <a href="#source-p1211">{cq('29')}</a> <a href="#source-atc">{atc('11-7')}</a></p>
+ <p>Inbound in visual weather, the T-45 flight leader checks in with Marshal: call sign, number in flight, position, altitude, <Term>low state</Term> and lineup. Marshal gives the case, a holding altitude, the ship's weather and altimeter, the <Term id="Base Recovery Course (BRC)">BRC</Term>, <Term>bingo</Term> information and an expected approach time, and asks for a “see me”; with the ship in sight the leader calls “see you at ten”, or at the distance shown. <a href="#source-p1211">{cq('28')}</a></p>
+ <p>The flight holds overhead in a counterclockwise circle no more than 5 NM across, tangent to the BRC with the ship at its 3 o'clock, no lower than 1,500 ft and separated from other flights by at least 1,000 ft. It descends only while abeam and aft of the ship, and on a “<Term>Charlie</Term>” it leaves the stack and heads for the initial. <a href="#source-p1211">{cq('29')}</a> <a href="#source-atc">{atc('11-7')}</a></p>
  <section class="lesson figure-lesson" data-lesson="pattern" aria-labelledby="pattern-title">
   <h3 id="pattern-title" class="fig-title">Figure 2 — The Case I pattern and the helicopter Charlie pattern</h3>
   <fieldset class="inline"><legend>Pattern</legend>
@@ -147,9 +195,11 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   <p class="fig-caption">Seen from astern and a little above, so that height reads straight up the page: the flight path is a smooth ribbon, its track is drawn on the water, and a drop line at each position shows its height from the T-45 carrier qualification instruction. Heights are exaggerated and the ship is drawn larger than scale. The Charlie pattern is shown as a track only, since the Army manual gives no pattern heights. The ship moves ahead during the pattern; the figure holds it still.</p>
  </section>
  <p>Case II starts the same check-in but holds at a fix on the ship's aft BRC at a distance of the holding altitude in thousands of feet plus 15. Cleared in, the T-45 descends at 250 KIAS and 4,000–6,000 ft/min to <Term>platform</Term> at 5,000 ft, slows its descent, levels at about 1,200 ft at 10 NM and arrives at 800 ft for the break and the normal pattern. <a href="#source-p1211">{cq('29–30')}</a></p>
+ <p class="key"><strong>Key point:</strong> the Case I pattern is flown at the ship's pace: initial at 800 ft, break, 600 ft downwind, a turn from abeam that keeps in, and a short groove.</p>
 
  <h2 id="lens">The lens and the ball</h2>
- <p>The Fresnel lens (<Term id="Fresnel lens optical landing system (FLOLS)">FLOLS</Term>) is a box 1 ft wide and 4 ft high of five light cells, the top four amber and the bottom one red, with a row of green <Term id="Datum lights">datum lights</Term> each side, four green <Term id="Cut lights">cut lights</Term> above and red <Term id="Wave-off lights">waveoff lights</Term> on each side. Each cell projects a bar of light that looks like a ball, the <Term>meatball</Term>; level with the datum lights you are on the glideslope, above them high, below them low, and a red ball is dangerously low. Never accept a low ball. <a href="#source-p1211">{cq('2–3')}</a> The red waveoff lights, worked by the LSO, mean wave off now; the cut lights clear a pilot to land when radios are silent and call for power when lit again, and cut and waveoff lights flashing alternately mean go to your divert field. <a href="#source-p1211">{cq('3, 23')}</a></p>
+ <p>The Fresnel lens (<Term id="Fresnel lens optical landing system (FLOLS)">FLOLS</Term>) is a box 1 ft wide and 4 ft high of five light cells, the top four amber and the bottom one red, with a row of green <Term id="Datum lights">datum lights</Term> each side, four green <Term id="Cut lights">cut lights</Term> above and red <Term id="Wave-off lights">waveoff lights</Term> on each side. Each cell projects a bar of light that looks like a ball, the <Term>meatball</Term>; level with the datum lights you are on the glideslope, above them high, below them low, and a red ball is dangerously low.</p>
+ <p>Never accept a low ball. <a href="#source-p1211">{cq('2–3')}</a> The red waveoff lights, worked by the LSO, mean wave off now; the cut lights clear a pilot to land when radios are silent and call for power when lit again, and cut and waveoff lights flashing alternately mean go to your divert field. <a href="#source-p1211">{cq('3, 23')}</a></p>
  <p>The cells together cover 1.5°, a wedge of light that the ball can be seen in from ¾° above to ¾° below the glideslope and about 20° either side of the centerline. Because it is a wedge, it narrows as you close: the training instruction's figure draws it 180 ft thick at a mile and only 15 ft thick at the <Term>ramp</Term>, so a correction that would barely move the ball at the start sends it off the lens in close. <a href="#source-p1211">{cq('3, 5')}</a> The improved lens (IFLOLS) has twelve cells over 1.7° and can be read out to 1.5 NM; the same error looks bigger on it, so beware of overcontrolling. <a href="#source-p1211">{cq('6, 8')}</a> The glideslope at the T-45's practice field is 3.25°. <a href="#source-p1211">{cq('18')}</a></p>
  <section class="lesson figure-lesson" data-lesson="wedge" aria-labelledby="wedge-title">
   <h3 id="wedge-title" class="fig-title">Figure 3 — The glideslope is a wedge</h3>
@@ -167,7 +217,9 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   <div class="feedback" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">Geometry only: the angle off the glideslope is the height error over the range, and the ball's place on the lens is that angle over half the lens's coverage. Real lenses, ship motion and stabilization are not modelled. Coverage from P-1211 pp. 3 and 6; the instruction's own figure draws a 1.7° wedge.</p>
  </section>
- <p>Correcting takes three moves, says the instruction: for a high ball, less power to start down and the nose adjusted to hold on-speed angle of attack; as the ball centres, power back on to stop it; then a third adjustment to hold it. Low is the dangerous one: add power, and do not take it off again until the ball is centred. In close, stop a rising ball rather than chase it down; a big power reduction at the ramp, a “cut” or “eased gun”, gives a hard landing and is never acceptable. <a href="#source-p1211">{cq('20–22')}</a> At the ship, a low ball needs a bigger power addition than at the field because of the wind over the deck, and the centerline keeps moving right as the ship sails, so scan lineup all the way to touchdown. <a href="#source-p1211">{cq('31, 33')}</a></p>
+ <p>Correcting takes three moves, says the instruction: for a high ball, less power to start down and the nose adjusted to hold on-speed angle of attack; as the ball centres, power back on to stop it; then a third adjustment to hold it. Low is the dangerous one: add power, and do not take it off again until the ball is centred.</p>
+ <p>In close, stop a rising ball rather than chase it down; a big power reduction at the ramp, a “cut” or “eased gun”, gives a hard landing and is never acceptable. <a href="#source-p1211">{cq('20–22')}</a> At the ship, a low ball needs a bigger power addition than at the field because of the wind over the deck, and the centerline keeps moving right as the ship sails, so scan lineup all the way to touchdown. <a href="#source-p1211">{cq('31, 33')}</a></p>
+ <p class="key"><strong>Key point:</strong> the ball shows where you are in a wedge of light that narrows as you close, so a correction that is right at a mile is far too big at the ramp.</p>
 
  <h2 id="lso">LSO calls and grades</h2>
  <p>The <Term id="Landing Signal Officer (LSO)">LSO</Term>, call sign <Term>Paddles</Term>, is responsible for recovering fixed-wing aircraft safely aboard and for training pilots to land there, and grades and debriefs every pass. <a href="#source-p1211">{cq('9')}</a> The calls are short, standard and come in three kinds: <strong>informative</strong> calls say what is happening, <strong>advisory</strong> calls warn of what is about to, and <strong>imperative</strong> calls order an action and must be obeyed at once. Being slow to answer a call at the ship can end a pilot's qualification. <a href="#source-p1211">{cq('9–11, 34')}</a></p>
@@ -217,7 +269,8 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   </tbody>
  </table></div>
  <h3 id="lso-comments">Reading the LSO's comments</h3>
- <p>The grade comes with comments in the LSO's shorthand, written on the pilot performance record. <a href="#source-p1211">{cq('11–12')}</a> A comment is a run of symbols: what the aircraft did, usually followed by where in the pass it happened, with marks that make a symbol milder, stronger or say how a call was answered. <a href="#source-p1211">{cq('12–13')}</a> So <code>EGIW</code> reads “eased gun in the wires”: a large power reduction in close or at the ramp, which the training instruction calls unsafe and never an acceptable correction, because a high “come down” ends in a hard landing, blown tires and possible structural damage. <a href="#source-p1211">{cq('13, 21')}</a> <code>LOIC</code> is low in close, and <code>(F)X</code> slightly fast at the start. <a href="#source-p1211">{cq('12–13')}</a> The tables below give every symbol in the instruction's two figures. The instruction itself calls its grading list partial. <a href="#source-p1211">{cq('11')}</a></p>
+ <p>The grade comes with comments in the LSO's shorthand, written on the pilot performance record. <a href="#source-p1211">{cq('11–12')}</a> A comment is a run of symbols: what the aircraft did, usually followed by where in the pass it happened, with marks that make a symbol milder, stronger or say how a call was answered. <a href="#source-p1211">{cq('12–13')}</a></p>
+ <p>So <code>EGIW</code> reads “eased gun in the wires”: a large power reduction in close or at the ramp, which the training instruction calls unsafe and never an acceptable correction, because a high “come down” ends in a hard landing, blown tires and possible structural damage. <a href="#source-p1211">{cq('13, 21')}</a> <code>LOIC</code> is low in close, and <code>(F)X</code> slightly fast at the start. <a href="#source-p1211">{cq('12–13')}</a> The tables below give every symbol in the instruction's two figures. The instruction itself calls its grading list partial. <a href="#source-p1211">{cq('11')}</a></p>
  <div class="table-scroll" role="region" aria-label="Where in the pass" tabindex="0"><table data-codes>
   <caption>Where in the pass <a href="#source-p1211">{cq('13')}</a></caption>
   <thead><tr><th scope="col">Symbol</th><th scope="col">Meaning</th></tr></thead>
@@ -366,16 +419,31 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   <p class="feedback" data-result role="status" aria-live="polite"></p>
   <div class="buttons"><button type="button" data-new>Next symbol</button></div>
  </section>
+ <p class="key"><strong>Key point:</strong> LSO calls run from informative to imperative; an imperative call, such as "power" or a waveoff, is obeyed at once.</p>
 
  <h2 id="outcomes">Arrestment, bolter, waveoff and Delta</h2>
  <p><strong>Arrestment.</strong> Fly the approach exactly as for a touch-and-go, ball to touchdown, and go to full power as the wheels touch: never anticipate the wire. Hold full power until the jet stops and the yellow shirt at about the 1 to 2 o'clock signals power back, then brakes off for the <Term id="Pull back">pull back</Term>, which lets the wire slip off the hook, and hook up. Braking during the pull back can tip the jet onto its tail. <a href="#source-p1211">{cq('34')}</a> Then follow the yellow shirts clear of the landing area, past the <Term id="Foul line">foul line</Term>, with no more than 70% power. <a href="#source-p1211">{cq('35')}</a></p>
  <p><strong><Term>Bolter</Term>.</strong> A touchdown in which the hook catches no wire. Because the pilot went to full power on touchdown, the jet is already flying: speed brakes in, rotate to optimum angle of attack, climb, and abeam the bow make a small turn right to parallel the BRC without crossing the bow, climb to 600 ft and turn downwind with the interval. <a href="#source-p1211">{cq('34, 65')}</a></p>
  <p><strong><Term>Waveoff</Term>.</strong> Mandatory, by voice or by the red lights. Full power, speed brakes in, hold landing attitude, level the wings and climb straight up the angled deck, then turn parallel to the BRC abeam the bow. A <Term>waveoff</Term> may come for a <Term id="Foul deck">foul deck</Term>, winds out of limits or an approach that is not safe. A student may only take a waveoff unasked when the ball call has not been answered by the middle of the groove, and never in close. <a href="#source-p1211">{cq('18–19, 34')}</a></p>
- <p><strong><Term>Delta</Term>.</strong> When the deck cannot take aircraft, after a foul deck or a run of bolters, the ship delays the recovery. PriFly signals it in Case I; in the pattern the T-45 holds at pattern altitude in the landing configuration at 130 KIAS with speed brakes in (“Delta Easy”), and the first aircraft to reach the 180 when cleared resumes the approach. <a href="#source-atc">{atc('11-43')}</a> <a href="#source-p1211">{cq('34, 66')}</a> In Case II and III, CATCC gives a Delta with the delay in minutes, always even and never less than four: aircraft in marshal keep holding, those that have started down above 7,000 ft level at the next lower odd altitude and hold at their altitude in thousands plus 15 miles, and those at or below 7,000 ft continue. <a href="#source-atc">{atc('11-43')}</a></p>
+ <p><strong><Term>Delta</Term>.</strong> When the deck cannot take aircraft, after a foul deck or a run of bolters, the ship delays the recovery. PriFly signals it in Case I; in the pattern the T-45 holds at pattern altitude in the landing configuration at 130 KIAS with speed brakes in (“Delta Easy”), and the first aircraft to reach the 180 when cleared resumes the approach. <a href="#source-atc">{atc('11-43')}</a> <a href="#source-p1211">{cq('34, 66')}</a></p>
+ <p>In Case II and III, CATCC gives a Delta with the delay in minutes, always even and never less than four: aircraft in marshal keep holding, those that have started down above 7,000 ft level at the next lower odd altitude and hold at their altitude in thousands plus 15 miles, and those at or below 7,000 ft continue. <a href="#source-atc">{atc('11-43')}</a></p>
+ <p class="key"><strong>Key point:</strong> go to full power on every touchdown: a wire stops you, a bolter flies away, and a waveoff is mandatory.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>Only the yellow shirts move an aircraft. <a href="#jerseys">More</a></li>
+  <li>Weather picks the case; night is always Case III. <a href="#cases">More</a></li>
+  <li>Case I: hold overhead, initial at 800 ft, break, 600 ft downwind, keep the turn in. <a href="#case1">More</a></li>
+  <li>The lens is a narrowing wedge: smaller corrections in close; never a low ball. <a href="#lens">More</a></li>
+  <li>Imperative LSO calls and waveoffs are obeyed at once. <a href="#lso">More</a></li>
+  <li>Full power on every touchdown. <a href="#outcomes">More</a></li>
+ </ul>
 
  <h2 id="fuel">Tanking and bingo</h2>
- <p>Fuel matters most when the ship is the only runway within reach. A recovery tanker, normally the one just launched, orbits the ship in a left-hand circle within 5 NM at no less than 1,500 ft by day and 2,500 ft at night in visual weather, flashing a green light while its refueling package is <Term>sweet</Term>. <a href="#source-atc">{atc('11-43–11-46')}</a> Departure control keeps track of its <Term>give</Term> and the low-state aircraft. When a jet is short of fuel the controller can tell the tanker to <Term>hawk</Term> it, positioning to be at its 2 o'clock if it bolters or waves off, or pass “<Term id="Trick or Treat">trick or treat</Term>” with the fuel it will need. Tanking is flown as a racetrack 3 to 5 miles abeam the ship and finished by 6 miles astern, which puts the receiver back in position for the approach. <a href="#source-atc">{atc('11-44–11-48')}</a></p>
- <p><strong><Term>Bingo</Term></strong> at the ship is not a fuel warning but an order: you are at emergency fuel and must fly to the shore field now. Marshal gives the <Term>pigeons</Term>, the bearing and distance to the divert field, and the bingo fuel at check-in, and updates them; write them down and check the ship's figures against your own chart. <a href="#source-p1211">{cq('45')}</a> When bingo comes, turn and climb at once, clean, at full power on the planned profile, tell the ship but do not wait for an answer, squawk 7700, and descend at idle from the planned point. The T-45's profile arrives overhead with 300–500 lb, enough for one more circuit. <a href="#source-p1211">{cq('45–47')}</a> Below a set fuel state, <Term id="Hold-down">hold-down</Term>, a jet is refueled on deck before it may launch again. <a href="#source-p1211">{cq('45')}</a></p>
+ <p>Fuel matters most when the ship is the only runway within reach. A recovery tanker, normally the one just launched, orbits the ship in a left-hand circle within 5 NM at no less than 1,500 ft by day and 2,500 ft at night in visual weather, flashing a green light while its refueling package is <Term>sweet</Term>. <a href="#source-atc">{atc('11-43–11-46')}</a> Departure control keeps track of its <Term>give</Term> and the low-state aircraft.</p>
+ <p>When a jet is short of fuel the controller can tell the tanker to <Term>hawk</Term> it, positioning to be at its 2 o'clock if it bolters or waves off, or pass “<Term id="Trick or Treat">trick or treat</Term>” with the fuel it will need. Tanking is flown as a racetrack 3 to 5 miles abeam the ship and finished by 6 miles astern, which puts the receiver back in position for the approach. <a href="#source-atc">{atc('11-44–11-48')}</a></p>
+ <p><strong><Term>Bingo</Term></strong> at the ship is not a fuel warning but an order: you are at emergency fuel and must fly to the shore field now. Marshal gives the <Term>pigeons</Term>, the bearing and distance to the divert field, and the bingo fuel at check-in, and updates them; write them down and check the ship's figures against your own chart. <a href="#source-p1211">{cq('45')}</a></p>
+ <p>When bingo comes, turn and climb at once, clean, at full power on the planned profile, tell the ship but do not wait for an answer, squawk 7700, and descend at idle from the planned point. The T-45's profile arrives overhead with 300–500 lb, enough for one more circuit. <a href="#source-p1211">{cq('45–47')}</a> Below a set fuel state, <Term id="Hold-down">hold-down</Term>, a jet is refueled on deck before it may launch again. <a href="#source-p1211">{cq('45')}</a></p>
 
  <h2 id="amphib">Amphibious assault ships</h2>
  <p>On an LHA or LHD, the <Term id="AATCC">AATCC</Term> controls aircraft in the 50-mile control area, <Term id="Primary Flight Control (PriFly)">PriFly</Term> controls the 5-mile control zone visually, and an embarked tactical air control squadron directs missions over the beach. <a href="#source-atc">{atc('11-49')}</a> Arriving aircraft check in with the lowest fuel state, in pounds for jets and hours and minutes for helicopters, and with souls on board; they report “see you” when they see the ship and switch to PriFly at 5 miles in visual weather. <a href="#source-atc">{atc('11-66–11-67')}</a> In marshal, helicopters are separated by 500 ft and jets by 1,000 ft. <a href="#source-atc">{atc('11-68')}</a> Tiltrotor crews may fly either helicopter or fixed-wing procedures and prefer to stay in airplane mode as long as possible for fuel, survivability and comfort. <a href="#source-atc">{atc('11-66')}</a></p>
@@ -383,7 +451,8 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
 
  <h2 id="helo">Helicopters aboard ship</h2>
  <p>Helicopter pilots of every service fly to the deck under the same rules. In visual weather the flight holds in a <Term>Delta</Term> pattern near the ship, plans its descent to meet the recovery time, and lands from the <Term id="Charlie pattern">Charlie pattern</Term>, Figure 2's second pattern. <a href="#source-fm1564">{fm('5-15')}</a> At night the helicopter Case I pattern is a left-hand pattern on the port side, extended downwind so the turn to final is finished before the descent, with a straight-in final on the visual landing aids. <a href="#source-atc">{atc('11-81')}</a> A carrier normally takes its helicopters after its jets. <a href="#source-atc">{atc('11-42')}</a></p>
- <p>The <Term id="Landing Signal Enlisted (LSE)">LSE</Term> brings the helicopter to its spot with hand signals, sees that it is started, launched, recovered and shut down safely, and that every tie-down is off before liftoff and on after landing. Only the LSE's wave-off and hold signals are orders; the rest are advice. <a href="#source-fm1564">{fm('2-4')}</a> A helicopter waves off on the LSE's or PriFly's call, on losing radio contact or sight of the LSE, or whenever the pilot judges the approach unsafe, then calls “waving off” parallel to the BRC and re-enters the pattern. <a href="#source-fm1564">{fm('5-19')}</a> Ships are not normally turned during a recovery, because the turn can take the helicopter outside its wind and roll limits. <a href="#source-fm1564">{fm('5-16')}</a> The Army manual prefers 10 kt of relative wind or less from any direction for taking off and landing. <a href="#source-fm1564">{fm('D-12')}</a> How a rotor behaves in a hover and close to obstacles is covered in <a href={rotor}>Rotor-Wing Principles of Flight</a>.</p>
+ <p>The <Term id="Landing Signal Enlisted (LSE)">LSE</Term> brings the helicopter to its spot with hand signals, sees that it is started, launched, recovered and shut down safely, and that every tie-down is off before liftoff and on after landing. Only the LSE's wave-off and hold signals are orders; the rest are advice. <a href="#source-fm1564">{fm('2-4')}</a> A helicopter waves off on the LSE's or PriFly's call, on losing radio contact or sight of the LSE, or whenever the pilot judges the approach unsafe, then calls “waving off” parallel to the BRC and re-enters the pattern. <a href="#source-fm1564">{fm('5-19')}</a></p>
+ <p>Ships are not normally turned during a recovery, because the turn can take the helicopter outside its wind and roll limits. <a href="#source-fm1564">{fm('5-16')}</a> The Army manual prefers 10 kt of relative wind or less from any direction for taking off and landing. <a href="#source-fm1564">{fm('D-12')}</a> How a rotor behaves in a hover and close to obstacles is covered in <a href={rotor}>Rotor-Wing Principles of Flight</a>.</p>
 
  <h2 id="dlq">Army deck landing qualification</h2>
  <p>Army pilots who land on ships must be deck landing qualified and current, or be under instruction. In the Army's 1997 manual the rules came from a 1988 agreement between the Army, the Air Force and the Navy, and the manual tells units to confirm them before training. <a href="#source-fm1564">{fm('1-1, 1-9')}</a> Each qualification starts with ground school and with <Term id="Field deck landing practice (FDLP)">field deck landing practice</Term> ashore, to a spot painted with ship markings, before the landings at sea. <a href="#source-fm1564">{fm('1-11, 1-14')}</a></p>
@@ -421,8 +490,27 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
  </section>
 
  <h2 id="stovl">STOVL: the AV-8B aboard ship</h2>
- <p>The <Term record="av-8b">AV-8B Harrier II</Term> gave the Marine Corps a jet that needs neither catapult nor wire: a <Term id="VSTOL">VSTOL</Term> aircraft, able to take off and land vertically or in a short distance, so it can work from amphibious ships and small sites ashore close to the troops it supports. <a href="#source-fas-av8">[7]</a> <a href="#source-atc">{atc('11-8')}</a> Its engine's four nozzles swivel from straight back to straight down. It can take off vertically only below its maximum weight, so for a real load of fuel and weapons it makes a short takeoff instead, rotating the nozzles partly down at about 65 kt so that wing lift adds to jet lift; that is why it is usually flown as a short-takeoff, vertical-landing (STOVL) jet. <a href="#source-wiki-harrier">[8]</a> The FAS figures show the difference: about 3,000 kg of useful load for a vertical takeoff against more than 7,700 kg for a short one. <a href="#source-fas-av8">[7]</a> In the hover and at very low speed the wind must enter the intake from straight ahead, or the nose is pushed sideways and the aircraft can roll out of control, and the transitions to and from the hover take great skill, especially in a crosswind. <a href="#source-wiki-harrier">[8]</a> <Term id="Jetborne flight">Jetborne flight</Term> is the controllers' term for that slow flight on engine thrust alone. <a href="#source-atc">{atc('11-5')}</a></p>
- <p>The Navy's amphibious procedures for fixed-wing aircraft are headed “AV-8 approach procedures”. <a href="#source-atc">{atc('11-76')}</a> In Case I the jet arrives at an initial point 3 miles astern at 800 ft, wings level and parallel to the BRC, and breaks no more than 5 miles ahead of the ship. On a night aided recovery it flies up the starboard side to a level break at 800 ft, is abeam at 1.0–1.3 DME, passes the 90 at 650 ft, rolls into the groove at 1.3–1.5 DME and 500–550 ft and follows a 3° glideslope to abeam the landing spot, decelerating along the port side one plane-width from the deck edge. <a href="#source-atc">{atc('11-83–11-84')}</a> In Case III it leaves marshal at 250 kt and 4,000–6,000 ft/min, and arrives at the 12-mile gate at 1,200 ft, where it configures to land; the controllers keep positive control until the LSO takes over. <a href="#source-atc">{atc('11-76, 11-85')}</a> The Harrier's own landing is operationally a near-vertical one with some forward speed. <a href="#source-wiki-harrier">[8]</a> The F-35B, the STOVL version of the F-35, has since replaced the AV-8B in Marine Corps service. <a href="#source-wiki-harrier">[8]</a></p>
+ <p>The <Term record="av-8b">AV-8B Harrier II</Term> gave the Marine Corps a jet that needs neither catapult nor wire: a <Term id="VSTOL">VSTOL</Term> aircraft, able to take off and land vertically or in a short distance, so it can work from amphibious ships and small sites ashore close to the troops it supports. <a href="#source-fas-av8">[7]</a> <a href="#source-atc">{atc('11-8')}</a> Its engine's four nozzles swivel from straight back to straight down. It can take off vertically only below its maximum weight, so for a real load of fuel and weapons it makes a short takeoff instead, rotating the nozzles partly down at about 65 kt so that wing lift adds to jet lift; that is why it is usually flown as a short-takeoff, vertical-landing (STOVL) jet. <a href="#source-wiki-harrier">[8]</a></p>
+ <p>The FAS figures show the difference: about 3,000 kg of useful load for a vertical takeoff against more than 7,700 kg for a short one. <a href="#source-fas-av8">[7]</a> In the hover and at very low speed the wind must enter the intake from straight ahead, or the nose is pushed sideways and the aircraft can roll out of control, and the transitions to and from the hover take great skill, especially in a crosswind. <a href="#source-wiki-harrier">[8]</a> <Term id="Jetborne flight">Jetborne flight</Term> is the controllers' term for that slow flight on engine thrust alone. <a href="#source-atc">{atc('11-5')}</a></p>
+ <p>The Navy's amphibious procedures for fixed-wing aircraft are headed “AV-8 approach procedures”. <a href="#source-atc">{atc('11-76')}</a> In Case I the jet arrives at an initial point 3 miles astern at 800 ft, wings level and parallel to the BRC, and breaks no more than 5 miles ahead of the ship. On a night aided recovery it flies up the starboard side to a level break at 800 ft, is abeam at 1.0–1.3 DME, passes the 90 at 650 ft, rolls into the groove at 1.3–1.5 DME and 500–550 ft and follows a 3° glideslope to abeam the landing spot, decelerating along the port side one plane-width from the deck edge. <a href="#source-atc">{atc('11-83–11-84')}</a></p>
+ <p>In Case III it leaves marshal at 250 kt and 4,000–6,000 ft/min, and arrives at the 12-mile gate at 1,200 ft, where it configures to land; the controllers keep positive control until the LSO takes over. <a href="#source-atc">{atc('11-76, 11-85')}</a> The Harrier's own landing is operationally a near-vertical one with some forward speed. <a href="#source-wiki-harrier">[8]</a> The F-35B, the STOVL version of the F-35, has since replaced the AV-8B in Marine Corps service. <a href="#source-wiki-harrier">[8]</a></p>
+
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p>Only the DCS Supercarrier Operations Guide was read for this panel. Its Case I recovery follows the same sequence as this module, flown through an ATC radio menu, with a few different numbers from the T-45 instruction's.</p>
+  <div class="table-scroll" role="region" aria-label="DCS Supercarrier Case I compared with this module" tabindex="0"><table>
+   <caption>DCS Supercarrier Case I compared with this module</caption>
+   <thead><tr><th scope="col">Phase</th><th scope="col">DCS Supercarrier guide</th><th scope="col">This module (T-45)</th></tr></thead>
+   <tbody>
+    <tr><th scope="row">Check-in</th><td>Select "Inbound" at 50 NM or closer; Marshal gives the weather, Case I and the BRC and asks for "see you at 10". <a href="#source-sc">{sc('64')}</a></td><td>The same calls. <a href="#source-p1211">{cq('28')}</a></td></tr>
+    <tr><th scope="row">Holding</th><td>Left-hand, within 5 NM, no lower than 2,000 ft, in 1,000 ft steps; climb between points 1 and 3, descend between 3 and 1. <a href="#source-sc">{sc('64–65')}</a></td><td>Counterclockwise, within 5 NM, no lower than 1,500 ft; descend only abeam and aft. <a href="#source-p1211">{cq('29')}</a></td></tr>
+    <tr><th scope="row">Break and downwind</th><td>Level break at 800 ft after "kiss off", 15–20 seconds apart for a 40–60 second landing interval; 600 ft downwind, 1¼ to 1½ NM abeam. <a href="#source-sc">{sc('67')}</a></td><td>800 ft initial, 15 seconds between breaks, 600 ft downwind, 0.9–1.1 NM abeam. <a href="#source-p1211">{cq('30–33')}</a></td></tr>
+    <tr><th scope="row">Groove and ball</th><td>Roll out ¾ NM astern; call the ball with fuel state, or "Clara". Glidepath 3.6°. <a href="#source-sc">{sc('68–69')}</a></td><td>Ball call with side number, type and fuel; 3.25° at the T-45's practice field. <a href="#source-p1211">{cq('18, 33')}</a></td></tr>
+    <tr><th scope="row">Touchdown</th><td>Do not anticipate the wire: full power until stopped. The LSO's grade is shown on screen. <a href="#source-sc">{sc('71')}</a></td><td>The same. <a href="#source-p1211">{cq('34')}</a></td></tr>
+   </tbody>
+  </table></div>
+  <p><strong>Not checked.</strong> The guide's catapult, Case II and LSO station chapters were not compared, and no claim is made about how closely DCS models the lens, the wires or the deck crew. Amphibious ships, helicopters aboard ship and the AV-8B in any sim were not checked. The <a href={caseIII}>Case III module</a> covers the guide's instrument recovery.</p>
+ </section>
 
  <h2 id="terms">Terms</h2>
  <GlossaryList items={[
@@ -440,15 +528,16 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
  </section>
 
  <h2 id="check">Check your understanding</h2>
- <details><summary>The ship reports a 2,000 ft ceiling and 5 miles. Which case, and how will you recover?</summary><p>Case II: a controlled descent through the cloud to the break, then the normal visual pattern.</p></details>
- <details><summary>Why is the carrier pattern flown parallel to the ship's heading when the landing area is angled?</summary><p>The pattern is set from the BRC; the angled deck's centerline, the final bearing, is about 10° off it, and you line up on it as you roll into the groove.</p></details>
- <details><summary>Your hook catches a wire. When do you reduce power?</summary><p>Only when the jet has stopped and the yellow shirt signals power back. You go to full power on touchdown in case of a bolter.</p></details>
- <details><summary>The ball is 20 ft high at a mile, then 20 ft high just short of the ramp. Why does the second look so much worse?</summary><p>The lens's light is a wedge: 20 ft at a mile is a small angle, but the same 20 ft near the ramp is several times the angle and can put the ball off the top of the lens.</p></details>
- <details><summary>What do the cut and waveoff lights mean when they flash alternately?</summary><p>Bingo: go to your divert field.</p></details>
- <details><summary>A helicopter on final loses sight of the LSE. What now?</summary><p>Wave off, call “waving off” parallel to the BRC and re-enter the pattern.</p></details>
- <details><summary>Which LSE signals must a helicopter pilot obey?</summary><p>Wave-off and hold. The others are advisory.</p></details>
- <details><summary>Under FM 1-564, an Army pilot last made four single-spot landings 120 days ago. Current?</summary><p>No, but within 180 days: a refresher with a current DLQ pilot, 4 field deck landings and then 6 shipboard landings within ten days.</p></details>
- <details><summary>Why does an AV-8B make a short takeoff instead of a vertical one when it carries a full load?</summary><p>It can only lift off vertically below its maximum weight. A short takeoff adds wing lift to jet lift and lets it carry much more fuel and weapons.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> Who may move an aircraft on the flight deck?</summary><p>Only the yellow shirts: aircraft directors, the catapult and arresting gear officers, the flight deck officer and the helicopter LSE.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> The ship reports a 2,000 ft ceiling and 5 miles. Which case, and how will you recover?</summary><p>Case II: a controlled descent through the cloud to the break, then the normal visual pattern.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Why is the carrier pattern flown parallel to the ship's heading when the landing area is angled?</summary><p>The pattern is set from the BRC; the angled deck's centerline, the final bearing, is about 10° off it, and you line up on it as you roll into the groove.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> Your hook catches a wire. When do you reduce power?</summary><p>Only when the jet has stopped and the yellow shirt signals power back. You go to full power on touchdown in case of a bolter.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> The ball is 20 ft high at a mile, then 20 ft high just short of the ramp. Why does the second look so much worse?</summary><p>The lens's light is a wedge: 20 ft at a mile is a small angle, but the same 20 ft near the ramp is several times the angle and can put the ball off the top of the lens.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> What do the cut and waveoff lights mean when they flash alternately?</summary><p>Bingo: go to your divert field.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> A helicopter on final loses sight of the LSE. What now?</summary><p>Wave off, call “waving off” parallel to the BRC and re-enter the pattern.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> Which LSE signals must a helicopter pilot obey?</summary><p>Wave-off and hold. The others are advisory.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> Under FM 1-564, an Army pilot last made four single-spot landings 120 days ago. Current?</summary><p>No, but within 180 days: a refresher with a current DLQ pilot, 4 field deck landings and then 6 shipboard landings within ten days.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> Why does an AV-8B make a short takeoff instead of a vertical one when it carries a full load?</summary><p>It can only lift off vertically below its maximum weight. A short takeoff adds wing lift to jet lift and lets it carry much more fuel and weapons.</p></details>
 
  <h2 id="sources">Sources and applicability</h2>
  <h3>Military sources</h3>
@@ -466,6 +555,8 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
 <p id="source-navalgazing"><strong>[11] Naval Gazing, “The Nimitz Class”.</strong> <a href="https://www.navalgazing.net/The-Nimitz-Class">Read the page</a>, 27 October 2026: its overhead photograph of the deck, which Figure 1 is traced from, and its account of the four catapults, four wires and four elevators. A secondary source.</p>
 <p id="source-nps"><strong>[12] Neil C. Rowe, “Automated Trend Analysis for Navy-Carrier Landing Attempts”, Interservice/Industry Training, Simulation and Education Conference (I/ITSEC), 2012, U.S. Naval Postgraduate School.</strong> <a href="https://faculty.nps.edu/ncrowe/rowe_itsec12_paper12247.htm">Read the paper</a>, 27 October 2026: the grammar of LSO comments, real comment strings, and codes found in 85,571 recorded Navy passes.</p>
 <p id="source-lex"><strong>[13] “lex”, “Landing grades”, 7 September 2004, reposted on The Lexicans, 21 January 2017.</strong> <a href="https://thelexicans.wordpress.com/2017/01/21/landing-grades/">Read the post</a>, 27 October 2026. A naval aviator's blog, a secondary source, cited for one worked pass and its reading.</p>
+ <h3>Sim source</h3>
+ <p id="source-sc"><strong>[14] Eagle Dynamics, DCS: Supercarrier Operations Guide.</strong> <a href="https://www.digitalcombatsimulator.com/upload/iblock/e1b/430ooc582lpb0npynbsewan6omd5ohvs/DCS_Supercarrier_Operations_Guide_EN.pdf">PDF</a>, read 5 November 2026, pp. 63–71 (Case I recovery). A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/ship-operations-evidence.md">ship operations evidence</a>.</p>
  <p>Figures 1 to 4 are original drawings, not reproductions of any publication's figures.</p>
  <p class="note">Applicability: written for military pilots of every service. Carrier procedures and numbers are the <Term record="t-45">T-45</Term>'s from a 2001 Navy carrier qualification instruction [1]; ship and air traffic procedures come from a Navy controller training manual [2] and the Army procedures from a 1997 field manual [4], so details will have changed. Air Force crews who land on Navy ships fall under the same Army–Air Force–Navy agreement as the Army [4]; no Air Force manual was read for this revision. The ship's air operations manual, the CV and LHA/LHD NATOPS manuals, your aircraft's flight manual and your service's rules govern. The <a href={caseIII}>Case III Recoveries</a> module covers the instrument recovery; the <a href={airfield}>airfield module</a> covers the shore-based Navy optical landing system and field carrier landing practice.</p>
@@ -473,7 +564,23 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
 <script>import '../../../lessons/ship-operations/lesson-ui.mjs';</script>
 
 <style>
-  .contents ol { columns: 2; column-gap: 2rem; padding-left: 1.5rem; }
+  .contents-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
+  .contents h3 { margin: 0.4rem 0 0.2rem; font-size: 0.95rem; }
+  .lede { font-size: 1.1rem; }
+  .key { padding: 0.6rem 1rem; border-left: 0.25rem solid var(--color-link); background: var(--color-surface); }
+  ul.recap li { margin-block: 0.3rem; }
+  details.more { margin-block: 1rem; padding: 0.5rem 1rem; border: 1px solid var(--color-border); }
+  details.more summary { cursor: pointer; font-weight: 700; }
+  ol.exchange { list-style: none; padding-left: 1rem; border-left: 0.25rem solid var(--color-border); }
+  ol.exchange li { display: grid; grid-template-columns: 7.5rem 1fr; column-gap: 0.75rem; margin-block: 0.4rem; }
+  ol.exchange .who { font-weight: 700; }
+  ol.exchange .step { margin-left: 0.4rem; font-size: 0.85rem; white-space: nowrap; }
+  .outcome { display: inline-block; margin-right: 0.4rem; padding: 0 0.4rem; font-size: 0.8rem; border: 1px solid var(--color-border); color: var(--color-muted); }
+  .sim-panel { margin: 2rem 0; padding: 0.75rem 1.25rem; border-left: 4px solid var(--color-accent); background: var(--color-surface, #f6f7f8); }
+  .sim-panel h2 { margin-top: 0.4rem; }
+  .sim-panel h3 { margin: 1rem 0 0.3rem; font-size: 1rem; }
+  @media (max-width: 40rem) { .contents-groups { grid-template-columns: 1fr; } ol.exchange li { display: block; } }
+  .contents ol { padding-left: 1.5rem; margin-top: 0; }
   .contents li { break-inside: avoid; }
   table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
   caption { padding: 0.5rem 0.75rem; text-align: left; color: var(--color-muted); font-size: 0.9rem; }
