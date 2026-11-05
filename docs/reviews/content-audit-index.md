@@ -22,7 +22,7 @@ Reviews are source-inspection editorial findings, **not** rendered-browser QA, e
 
 - [BFM](content-audit-bfm.md)
 - [Airfield operations](content-audit-airfield-basics.md)
-- [Radio procedures](content-audit-radio-procedures.md) — applied in module revision 5 (exchange-first core, outcomes, BMS sim panel)
+- [Radio procedures](content-audit-radio-procedures.md)
 - [Fixed-wing fundamentals](content-audit-principles-of-flight.md)
 - [Rotor-wing fundamentals](content-audit-rotor-wing.md)
 - [Navigation](content-audit-air-navigation.md)
@@ -32,7 +32,7 @@ Reviews are source-inspection editorial findings, **not** rendered-browser QA, e
 - [Case III](content-audit-case-iii.md)
 - [Autorotation](content-audit-autorotation.md)
 
-New modules are written to the playbook from the first draft and are not audited separately: Instrument flying (revision 1, PR for issue #97), since split into Attitude Instrument Flying and Instrument Procedures (both revision 1). Two-Ship Formation (revision 1, issue #99) likewise.
+New modules are written to the playbook from the first draft and are not audited separately: Instrument flying (revision 1, PR for issue #97), since split into Attitude Instrument Flying and Instrument Procedures (both revision 1). Two-Ship Formation (revision 1, issue #99), SEAD and DEAD (revision 1, issue #124), Planning a Sortie and Weather and Performance (both revision 1, issue #98), and Air-to-Air Refuelling Procedures (revision 1, issue #100) likewise.
 
 ## Encyclopedia — 52/229
 
