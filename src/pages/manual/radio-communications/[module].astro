@@ -8,21 +8,38 @@ import { termTarget } from '../../../data/links';
 import { PHONETIC, LIGHT_SIGNALS, DISTRESS_ORDER, TRAINING_CALLS, BREVITY } from '../../../lessons/radio/lesson-model.mjs';
 const radio = getModule('radio-procedures');
 export function getStaticPaths() { return includedModules.some(m => m.slug === 'radio-procedures') ? [{ params: { module: 'radio-procedures' } }] : []; }
-const contents = [
- ['overview', 'Purpose and learning objectives'], ['technique', 'Radio technique'], ['bands', 'Bands and emergency frequencies'],
- ['alphabet', 'The phonetic alphabet'], ['numbers', 'Numbers on the radio'], ['callsigns', 'Call signs'],
- ['sortie', 'A training sortie, call by call'], ['contact', 'Making contact'], ['words', 'Words that do the work'],
- ['readback', 'Acknowledgement and readback'], ['flight', 'Flight check-ins and frequency changes'],
- ['training', 'Brevity and training-rule calls'], ['emergency', 'Distress and urgency'], ['transponder', 'Transponder codes'],
- ['nordo', 'When the radio fails'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+const core = [
+ ['example', 'One exchange, start to finish'],
+ ['technique', 'Radio technique'],
+ ['contact', 'Making contact'],
+ ['words', 'Words that do the work'],
+ ['readback', 'Acknowledgement and readback'],
+ ['sortie', 'A training sortie, call by call'],
+ ['emergency', 'Distress and urgency'],
+ ['transponder', 'Transponder codes'],
+ ['nordo', 'When the radio fails'],
+ ['recap', 'Key points'],
+];
+const reference = [
+ ['bands', 'Bands and emergency frequencies'],
+ ['alphabet', 'The phonetic alphabet'],
+ ['numbers', 'Numbers on the radio'],
+ ['callsigns', 'Call signs'],
+ ['flight', 'Flight check-ins and frequency changes'],
+ ['training', 'Brevity and training-rule calls'],
+ ['sims', 'In the sim'],
+ ['check', 'Check your understanding'],
+ ['sources', 'Sources and applicability'],
 ];
 // Military sources first: [1] VT-10 "Hollywood Script" page, [2] VT-6 FORMSUP
 // page, [3] CNATRA P-1289 page, [4] multi-service brevity codes page, [5] JBSA
 // MACA handbook. Supplementary FAA sources: [6] AIM paragraph, [7] P/CG term.
+// Sim source, In the sim panel only: [8] Falcon BMS 4.38.1 Training Manual page.
 const pp = (n: number) => (page: string) => `[${n}, ${page.includes('–') || page.includes(',') ? 'pp.' : 'p.'} ${page}]`;
 const h = pp(1), f = pp(2), b = pp(3), br = pp(4), jb = pp(5);
 const a = (para: string) => `[6, ${para.includes('–') || para.includes(',') ? 'paras' : 'para'} ${para}]`;
 const g = (term: string) => `[7, ${term}]`;
+const bms = (pages: string) => `[8, ${/–|,/.test(pages) ? 'pp.' : 'p.'} ${pages}]`;
 const bfm = sitePath('manual/air-combat/bfm/');
 const morse = (m: string) => m.replaceAll('.', '·').replaceAll('-', '–');
 const caseIii = sitePath('manual/naval-operations/case-iii/');
@@ -33,16 +50,39 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
  <section class="status-panel" data-module-id={radio.id} data-module-revision={radio.revision}>
   <h2>{radio.maturity}</h2>
   <p>Module revision {radio.revision} · Air–ground voice radio for pilots: how to transmit, how to say letters and numbers, how to make and answer calls, and what to do in an emergency or when the radio fails. Written for military pilots of every US service: military practice first (the multi-service brevity words shared by the Army, Marine Corps, Navy and Air Force, UHF and preset channels, and a worked Navy training <Term>sortie</Term> with its formation check-ins and training-rule calls), then the Federal Aviation Administration (FAA) rules that every military aircraft follows in US airspace.</p>
-  <p>Every figure is interactive. Step through a training <Term id="Sortie">sortie</Term> call by call, build calls, convert numbers into radio words, <Term id="Read back">read back</Term> clearances, set a transponder without tripping an emergency code, and fly a lost-communications route.</p>
+  <p>Every figure is interactive. The core sequence runs from one exchange to a whole sortie and what to do when things go wrong; bands, spelling, numbers, call signs, formation and brevity calls are in the reference half. Step through a training <Term id="Sortie">sortie</Term> call by call, build calls, convert numbers into radio words, <Term id="Read back">read back</Term> clearances, set a transponder without tripping an emergency code, and fly a lost-communications route.</p>
  </section>
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
-  <ol>{contents.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
  </nav>
 
- <h2 id="overview">Purpose and learning objectives</h2>
- <p>A military pilot's radio work has a joint layer and a local one. The brevity words are common to all four services, and many military aircraft talk to controllers on UHF, which most civil aircraft cannot hear. <a href="#source-brevity">{br('i')}</a> <a href="#source-jbsa">{jb('2')}</a> The calls around the airfield are set by each service, wing, <Term>squadron</Term> and base. This module's worked example is one Navy training <Term id="Squadron">squadron</Term>'s: a day on the radio runs from the <Term id="Squadron">squadron</Term>'s base frequency to clearance, ground, tower, departure, the working area and back, mostly on preset UHF channels, with a short call sign that changes from flight to flight. <a href="#source-hollywood">{h('19–35')}</a> Inside US airspace those calls follow the FAA's rules, so this module teaches both: the military flow first, then the FAA phraseology underneath it. Radio is the critical link between pilots and air traffic control (ATC). The FAA's Aeronautical Information Manual (AIM) asks pilots to keep transmissions brief, to acknowledge each ATC communication with the aircraft's call sign, and to prefer standard phraseology over jargon and slang. <a href="#source-aim">{a('4-2-1')}</a> Good radio work is mostly listening: knowing what was said, to whom, and what you must do about it.</p>
- <p>By the end you should be able to: use the multi-service brevity words and the training-rule calls that stop and start an engagement; follow a training <Term id="Sortie">sortie</Term>'s calls from the <Term id="Squadron">squadron</Term> base frequency to the break and back; transmit cleanly without blocking the frequency; spell with the phonetic alphabet; say altitudes, headings, speeds, frequencies and times the way the AIM does; make an initial call in the right order; choose the right acknowledgement word; <Term id="Read back">read back</Term> the parts of a clearance that must be <Term id="Read back">read back</Term>; follow a formation check-in and frequency push; make a distress call; change a transponder code without passing through an emergency code; and fly the AIM's lost-communications rules.</p>
- <p class="note">This is a reference, not a substitute for your aircraft's flight manual (NATOPS, -1 or operator's manual), your service's, wing's and <Term id="Squadron">squadron</Term>'s procedures, or the current AIM. The <Term id="Sortie">sortie</Term> and formation examples come from Navy training <Term id="Squadron">squadrons</Term> because their scripts are published; Air Force, Army and Marine Corps units use the same FAA phraseology in US airspace with their own local procedures, and frequencies, channels, call signs and local calls differ by unit and base. Ships and other countries use additional or different procedures. Carrier recovery communications are in the <a href={`${caseIii}#radio`}>Case III module's radio section</a>, which steps through a Case III approach call by call. Who to call, and when, around a military field and at civil towered and non-towered airfields, with the overhead break and pattern they go with, is in <a href={`${airfield}#talk`}>Airfield Operations</a>.</p>
+ <p class="lede">A military pilot's radio work has a joint layer and a local one. The brevity words are common to all four services, and many military aircraft talk to controllers on UHF, which most civil aircraft cannot hear. <a href="#source-brevity">{br('i')}</a> <a href="#source-jbsa">{jb('2')}</a> The calls around the airfield are set by each service, wing, <Term>squadron</Term> and base. This module's worked example is one Navy training <Term id="Squadron">squadron</Term>'s: a day on the radio runs from the <Term id="Squadron">squadron</Term>'s base frequency to clearance, ground, tower, departure, the working area and back, mostly on preset UHF channels, with a short call sign that changes from flight to flight. <a href="#source-hollywood">{h('19–35')}</a></p>
+ <p>Inside US airspace those calls follow the FAA's rules, so this module teaches both: the military flow first, then the FAA phraseology underneath it. Radio is the critical link between pilots and air traffic control (ATC). The FAA's Aeronautical Information Manual (AIM) asks pilots to keep transmissions brief, to acknowledge each ATC communication with the aircraft's call sign, and to prefer standard phraseology over jargon and slang. <a href="#source-aim">{a('4-2-1')}</a> Good radio work is mostly listening: knowing what was said, to whom, and what you must do about it.</p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>transmit without blocking the frequency, and make an initial call with its parts in the right order;</li>
+  <li>spell with the phonetic alphabet, and say altitudes, headings, speeds, frequencies and times the way the AIM does;</li>
+  <li>choose the right acknowledgement word, and <Term id="Read back">read back</Term> the parts of a clearance that must be <Term id="Read back">read back</Term>;</li>
+  <li>follow a training <Term id="Sortie">sortie</Term>'s calls from frequency to frequency, a formation's check-in and push, and the multi-service brevity and training-rule calls;</li>
+  <li>make a distress or urgency call, change a transponder code without passing through an emergency code, and fly the AIM's lost-communications rules.</li>
+ </ol>
+ <p class="note">This is a reference, not a substitute for your aircraft's flight manual (NATOPS, -1 or operator's manual), your service's, wing's and <Term id="Squadron">squadron</Term>'s procedures, or the current AIM. The <Term id="Sortie">sortie</Term> and formation examples come from Navy training <Term id="Squadron">squadrons</Term> because their scripts are published; Air Force, Army and Marine Corps units use the same FAA phraseology in US airspace with their own local procedures, and frequencies, channels, call signs and local calls differ by unit and base.</p>
+ <p class="note">Ships and other countries use additional or different procedures. Carrier recovery communications are in the <a href={`${caseIii}#radio`}>Case III module's radio section</a>, which steps through a Case III approach call by call. Who to call, and when, around a military field and at civil towered and non-towered airfields, with the overhead break and pattern they go with, is in <a href={`${airfield}#talk`}>Airfield Operations</a>.</p>
+
+ <h2 id="example">One exchange, start to finish</h2>
+ <p>Here is one exchange from the published Navy script used in this module: a student in a T-6A, call sign KATT 11, at the hold short with the before-takeoff checks done. <a href="#source-hollywood">{h('25, 27')}</a> Each line says who is talking, on which channel, and what the other side owes in reply.</p>
+ <ol class="exchange script">
+  <li><span class="who">You, UHF 4</span> <span class="said">Switch to tower and listen first. Someone may be answering an instruction you did not hear; key only when the frequency is quiet and no reply is owed. <a class="step" href="#technique">Why</a></span></li>
+  <li><span class="who">You to Tower</span> <span class="said">"Sherman Tower, KATT 11, takeoff IFR." Facility, your call sign, your request: the order of every initial call. <a class="step" href="#contact">Why</a></span></li>
+  <li><span class="who">Tower to you</span> <span class="said">"KATT 11, wind 060 at 8, Runway 7 right, cleared for takeoff, switch to Departure." A runway assignment, so a readback is owed. <a class="step" href="#readback">Why</a></span></li>
+  <li><span class="who">You to Tower</span> <span class="said">"KATT 11, cleared for takeoff Runway 7 right, switching." Call sign and runway; the wind is not read back, and "Roger" alone would not do. <a class="step" href="#readback">Why</a></span></li>
+  <li><span class="who">You, UHF 6</span> <span class="said">Change to Departure and check in climbing: "KATT 11, passing (altitude) for 3000." Departure answers "radar contact" and the next clearance. <a class="step" href="#sortie">Why</a></span></li>
+  <li><span class="who">If it fails</span> <span class="said">An emergency: MAYDAY on the frequency in use. A dead radio: <Term id="Squawk">squawk</Term> 7600 and fly the AIM's route and altitude rules. <a class="step" href="#emergency">Why</a></span></li>
+ </ol>
+ <p class="key"><strong>Key point:</strong> listen, call in the order facility, call sign, request, then answer every instruction with your call sign and a readback of the runway, altitudes and headings in it. The sections below take each step in turn.</p>
 
  <h2 id="technique">Radio technique</h2>
  <p>The AIM's radio technique comes down to six habits. <a href="#source-aim">{a('4-2-2')}</a></p>
@@ -68,20 +108,180 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
   <div class="feedback" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">Constructed illustration: the calls and timings are invented, and a station keying within half a second of you is taken not to have heard you. A call over someone already talking is futile and makes them repeat. <a href="#source-aim">{a('4-2-2')}</a> Waiting for an owed reply follows from acknowledging each ATC call <a href="#source-aim">{a('4-2-1')}</a>; the AIM does not spell it out.</p>
  </section>
+ <p class="key"><strong>Key point:</strong> listen before you key: if a controller has just given an instruction, its answer is owed, and the pause before it is not yours.</p>
+
+ <h2 id="contact">Making contact</h2>
+ <p>An initial call has up to five parts, in this order: <a href="#source-aim">{a('4-2-3')}</a></p>
+ <ol class="call-order">
+  <li>The name of the facility you are calling.</li>
+  <li>Your full aircraft identification, as filed in the flight plan.</li>
+  <li>Your position, when you are on the airport surface.</li>
+  <li>The type of message to follow, or your request if it is short.</li>
+  <li>"Over", if required.</li>
+ </ol>
+ <p>The Navy script's calls follow the same order: "Sherman Ground, KATT 11, taxi, information (<Term id="ATIS">ATIS</Term> letter)" is facility, identification and request, with the <Term id="ATIS">ATIS</Term> code at the end. <a href="#source-hollywood">{h('21')}</a> The AIM's examples are "New York Radio, Mooney Three One One Echo" and "Columbia Ground, Cessna Three One Six Zero Foxtrot, south ramp, I-F-R Memphis". After contact is established, use the same format, combining the call-up and the message in one transmission.</p>
+ <p><Term id="Acknowledge">Acknowledge</Term> every call-up or clearance unless told otherwise, and acknowledge a frequency change: "United Two Twenty-Two on one three four point five". Change to the new frequency as soon as possible unless told to change at a time, fix or altitude. <a href="#source-aim">{a('4-2-3')}</a> If the airport has <Term id="ATIS">automatic terminal information service</Term> (<Term id="ATIS">ATIS</Term>), say you have it on initial contact, using its code word: "have information Sierra". <a href="#source-aim">{a('4-1-13')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="call" aria-labelledby="call-title">
+  <h3 id="call-title" class="fig-title">Figure 2 — Build the initial call</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <p>Select the pieces in the order you would say them.</p>
+  <div class="buttons chips" data-choices></div>
+  <ol class="built" data-built aria-label="Your call so far"></ol>
+  <div class="buttons"><button type="button" data-check>Check the call</button><button type="button" data-undo>Undo</button><button type="button" data-next>Next situation</button></div>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="no-js">Interactive figure unavailable. Order: facility, full identification, position on the airport surface, request. For example: "Columbia Ground, Cessna Three One Six Zero Foxtrot, south ramp, I-F-R Memphis."</p>
+  <p class="fig-caption">The first two situations are from the VT-10 script; the third and fourth are the AIM's examples; the last is constructed. The script's ground call has no position element; away from home field, add your position on the airport surface as the AIM asks.</p>
+ </section>
+ <p class="key"><strong>Key point:</strong> an initial call goes facility, full call sign, position on the airport surface, then the request or the type of message.</p>
+
+ <h2 id="words">Words that do the work</h2>
+ <p>A few procedure words carry precise meanings. Using the right one saves a transmission; using the wrong one can mislead. <strong><Term>Roger</Term></strong> means only that you received the whole transmission: it must not answer a yes-or-no question. <a href="#source-pcg">{g('ROGER')}</a></p>
+ <GlossaryList items={[
+  { id: 'Roger', set: 'Airfield and ATC' }, 'Wilco', 'Affirmative', 'Negative', 'Unable', 'Say again', 'I say again',
+  'Stand by', 'Read back', 'Verify', 'Acknowledge', 'Advise intentions', 'Immediately', 'Negative contact',
+  'Words twice', 'Speak slower', 'Over', 'Out',
+ ]} />
+ <p class="fig-caption">Definitions from the Pilot/Controller Glossary. <a href="#source-pcg">{g('entries as listed')}</a></p>
+ <section class="lesson quiz-lesson" data-lesson="words" aria-labelledby="words-title">
+  <h3 id="words-title">Quiz: which word?</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next situation</button></div>
+ </section>
+ <p class="key"><strong>Key point:</strong> "Roger" means only that you received the transmission; answer a question with "Affirmative" or "Negative", and agree to comply with "Wilco".</p>
+
+ <h2 id="readback">Acknowledgement and readback</h2>
+ <p>Include the aircraft identification in every readback and acknowledgement. <Term id="Read back">Read back</Term> the parts of ATC clearances and instructions that contain altitude assignments, vectors or runway assignments, as a means of mutual verification, and read altitudes, altitude restrictions and vectors back in the order they were given. Do not <Term id="Read back">read back</Term> charted procedures unless the controller specifically states them. An initial readback of a taxi, departure or landing clearance should include the runway. <a href="#source-aim">{a('4-4-7')}</a> The AIM's examples: "Climbing to <Term id="Flight level">Flight Level</Term> three three zero, United Twelve" and "November Five Charlie Tango, roger, cleared to land runway nine left". <a href="#source-aim">{a('4-4-7')}</a> On an <Term id="IFR">instrument flight rules</Term> (<Term id="IFR">IFR</Term>) flight, make a written record of your clearance. <a href="#source-aim">{a('4-4-7')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="readback" aria-labelledby="rb-title">
+  <h3 id="rb-title" class="fig-title">Figure 3 — Read back the clearance</h3>
+  <p>The controller's transmission is split into its parts. Select every part you must <Term id="Read back">read back</Term>, then check.</p>
+  <blockquote class="atc" data-clearance></blockquote>
+  <div class="buttons chips" data-parts></div>
+  <div class="buttons"><button type="button" data-check>Check readback</button><button type="button" data-next>Next instruction</button></div>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="no-js">Interactive figure unavailable. For "KATT 11, wind 060 at 8, Runway 7 right, cleared for takeoff, switch to Departure", <Term id="Read back">read back</Term> the runway with your call sign: "KATT 11, cleared for takeoff Runway 7 right, switching."</p>
+  <p class="fig-caption">The checker requires the parts AIM 4-4-7 lists: identification, altitude assignments and restrictions, vectors, and runway assignments. Reading back more is not marked wrong, but is shown. The first two instructions and their readbacks are from the VT-10 script; the third and fifth are adapted from the AIM's examples; the others are constructed.</p>
+ </section>
+ <p class="key"><strong>Key point:</strong> every readback carries your call sign; read back altitudes, altitude restrictions, vectors and runway assignments, in the order given.</p>
+
+ <h2 id="sortie">A training sortie, call by call</h2>
+ <p>The worked example is the Navy's, because its script is published. Other services' training wings publish their own local calls, and all of them work the same kinds of ATC facility under the FAA rules below. Training Squadron TEN (VT-10) gives its students a "Hollywood Script": every checklist and radio call of a T-6A training flight from Sherman Field, Naval Air Station Pensacola, in order. <a href="#source-hollywood">{h('1, 19–35')}</a> It shows the shape of a Navy <Term id="Sortie">sortie</Term> on the radio:</p>
+ <ol class="steps">
+  <li><strong>Copy <Term id="ATIS">ATIS</Term>, then get the clearance.</strong> <Term id="ATIS">ATIS</Term> on UHF 1, then clearance delivery on UHF 2: "Sherman Clearance, KATT 11, <Term id="IFR">IFR</Term>, NPA 630, on request, ready to copy." The clearance is <Term id="Read back">read back</Term>, and clearance delivery answers "KATT 11, readback correct." <a href="#source-hollywood">{h('19–20')}</a></li>
+  <li><strong>Tell the <Term id="Squadron">squadron</Term>.</strong> On the <Term id="Squadron">squadron</Term> base frequency (UHF 19): "KATT Base, KATT 11 taxi outbound, side number 000"; before takeoff, "KATT Base, KATT 11 going flying." <a href="#source-hollywood">{h('20, 25')}</a></li>
+  <li><strong>Ground, then tower.</strong> "Sherman Ground, KATT 11, taxi, information (<Term id="ATIS">ATIS</Term> letter)"; later, on UHF 4, "Sherman Tower, KATT 11, takeoff <Term id="IFR">IFR</Term>." The takeoff readback carries the runway and ends "switching": "KATT 11, cleared for takeoff Runway 7 right, switching." <a href="#source-hollywood">{h('21, 25')}</a></li>
+  <li><strong>Departure and the working area.</strong> Check in climbing with the altitude you are passing and the altitude you are climbing to. Departure clears the flight to its working area, a military operations area (MOA), with "frequency change approved"; the MOA common frequency that follows is a safety-of-flight frequency used by departure, so there is no check-in. <a href="#source-hollywood">{h('27–29')}</a></li>
+  <li><strong>Come home on course rules.</strong> Cancel <Term id="IFR">IFR</Term> when done in the area, copy <Term id="ATIS">ATIS</Term>, then "Pensacola Approach, KATT 11, 3500, information Bravo, request course rules." Approach hands the aircraft to tower at the entry point: "contact Sherman Tower Button 4." <a href="#source-hollywood">{h('30–32')}</a></li>
+  <li><strong>Break, land, and check back in.</strong> "Sherman Tower, KATT 11, Point Golf for the break"; "numbers 7 right"; tower: "right break approved". In the pattern, the position call ends with "gear, stop", and tower clears the aircraft to land. Stay with tower until clear of the runway, taxi back with ground, and finish on base: "KATT Base, KATT 11 in and up." <a href="#source-hollywood">{h('32–35')}</a></li>
+ </ol>
+ <p>Notice the readbacks: the script puts the call sign first ("KATT 11, cleared to land 7 Right"). The AIM asks for the call sign in every readback and its examples put it at either end, so both satisfy the FAA rule. <a href="#source-hollywood">{h('34')}</a> <a href="#source-aim">{a('4-4-7')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="sortie" aria-labelledby="sortie-title">
+  <h3 id="sortie-title" class="fig-title">Figure 4 — A Navy training sortie, call by call</h3>
+  <p>Step through the calls. The drawing shows where the aircraft is on its <Term id="Sortie">sortie</Term> and which preset channel is up; the text gives the call, the reply and the readback.</p>
+  <div class="buttons"><button type="button" data-prev>Previous call</button><button type="button" data-next>Next call</button></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 4, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 300" role="img" aria-label="Side profile of the sortie from the ramp to the working area and back, the aircraft's position, the selected radio channel and the station called"></svg></div>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="no-js">Interactive figure unavailable. The calls in order: <Term id="ATIS">ATIS</Term> (UHF 1); Sherman Clearance (UHF 2); KATT Base (UHF 19), taxi outbound; Sherman Ground (UHF 3), taxi with the <Term id="ATIS">ATIS</Term> letter; KATT Base, going flying; Sherman Tower (UHF 4), takeoff <Term id="IFR">IFR</Term>; Pensacola Departure (UHF 6), passing for 3000; cleared to the MOA, then MOA Common (UHF 16) with no check-in; Pensacola Approach on VHF 5, cancel <Term id="IFR">IFR</Term>; Pensacola Approach (UHF 6), request course rules; Point Golf in sight, contact Sherman Tower Button 4; Sherman Tower, Point Golf for the break, numbers, break approved, gear, stop, cleared to land; Sherman Ground (UHF 3), taxi to the line; KATT Base, in and up.</p>
+  <p class="fig-caption">The calls are VT-10's script for one T-6A <Term id="Sortie">sortie</Term>, lightly abridged; call sign, channels and places are the script's. Other <Term id="Squadron">squadrons</Term>, bases and aircraft use their own frequencies, entry points and calls. Profile heights are not to scale.</p>
+ </section>
+ <p class="key"><strong>Key point:</strong> a sortie is a chain of frequencies, each worked with the same order of call; the channel card and the controller's handoff tell you the next one.</p>
+
+ <h2 id="emergency">Distress and urgency</h2>
+ <p>Distress communications have absolute priority over all others; urgency communications come next. A distress call begins with <strong><Term id="Mayday">MAYDAY</Term></strong>, preferably said three times; an urgency call uses <strong><Term id="Pan-pan">PAN-PAN</Term></strong> in the same way. <a href="#source-aim">{a('6-3-1')}</a> Make the first call on the frequency in use, and do not change frequency or ground station unless absolutely necessary. <a href="#source-aim">{a('6-3-1, 6-3-2')}</a> Transmit as many of these items as you need, preferably in this order: <a href="#source-aim">{a('6-3-2')}</a></p>
+ <ol class="call-order distress">{DISTRESS_ORDER.map(item => <li>{item}</li>)}</ol>
+ <p>While you are in radio contact, keep the assigned transponder code unless ATC tells you otherwise. If you cannot immediately reach an ATC facility, <Term id="Squawk">squawk</Term> code 7700 with altitude reporting (Mode C). <a href="#source-aim">{a('6-3-2')}</a></p>
+ <p class="key"><strong>Key point:</strong> MAYDAY for distress, PAN-PAN for urgency, each preferably three times, first on the frequency you are already on.</p>
+
+ <h2 id="transponder">Transponder codes</h2>
+ <p>A transponder answers radar with a four-digit code. Unless ATC assigns one, a <Term id="VFR">visual flight rules (VFR)</Term> aircraft <Term id="Squawk">squawks</Term> <strong>1200</strong>. Three codes are special: <strong>7500</strong> is the hijack code, <strong>7600</strong> signals two-way radio failure, and <strong>7700</strong> signals an emergency; 7600 and 7700 trigger special indications in automated facilities. When changing codes routinely, avoid passing through 7500, 7600 or 7700: to change from 2700 to 7200, first select 2200, then 7200. <a href="#source-aim">{a('4-1-20')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="squawk" aria-labelledby="sq-title">
+  <h3 id="sq-title" class="fig-title">Figure 5 — Change the code without an alarm</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <p>Each knob sets one digit. Every turn changes the code the transponder sends, so plan the order.</p>
+  <div class="squawk" data-knobs></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 5, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 110" role="img" aria-label="Transponder code window and the codes sent so far"></svg></div>
+  <div class="buttons"><button type="button" data-hint>Show a safe order</button><button type="button" data-next>Next change</button></div>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="no-js">Interactive figure unavailable. From 2700 to 7200, change the second digit first (2200), then the first (7200); setting the first digit first would send 7700.</p>
+  <p class="fig-caption">Each knob step is treated as one code sent. Real transponders differ in how and when a new code takes effect.</p>
+ </section>
+ <p class="key"><strong>Key point:</strong> 7500 hijack, 7600 radio failure, 7700 emergency: when changing code, turn the knobs in an order that never passes through one of them.</p>
+
+ <h2 id="nordo">When the radio fails</h2>
+ <h3>At a towered airport</h3>
+ <p>Arriving with the <strong>receiver</strong> inoperative, remain outside or above the Class D surface area until you have determined the direction and flow of traffic, then advise the tower of your aircraft type, position, altitude and intention to land, and request light signals. About 3 to 5 miles out, advise your position and join the <Term>traffic pattern</Term>, watching the tower for light signals. With the <strong>transmitter</strong> inoperative, monitor the tower frequency, and acknowledge tower transmissions or light signals by rocking your wings in daylight, or by blinking the landing or navigation lights at night. <a href="#source-aim">{a('4-2-13')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Tower light gun signals" tabindex="0"><table>
+  <caption>Airport traffic control tower light gun signals <a href="#source-aim">{a('4-3-13')}</a></caption>
+  <thead><tr><th scope="col">Signal</th><th scope="col">Aircraft on the ground</th><th scope="col">Aircraft in flight</th></tr></thead>
+  <tbody>{LIGHT_SIGNALS.map(s => <tr><th scope="row">{s.id.replace('-', ' ').replace('alternating', 'alternating red and green').replace(/^./, c => c.toUpperCase())}</th><td>{s.ground}</td><td>{s.flight}</td></tr>)}</tbody>
+ </table></div>
+ <section class="lesson figure-lesson" data-lesson="light" aria-labelledby="light-title">
+  <h3 id="light-title" class="fig-title">Figure 6 — Read the light gun</h3>
+  <fieldset class="inline"><legend>You are</legend>
+   <label><input type="radio" name="where" value="flight" checked /> In flight</label>
+   <label><input type="radio" name="where" value="ground" /> On the ground</label>
+  </fieldset>
+  <div class="buttons"><button type="button" data-flash>Show a signal</button></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 6, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 260" role="img" aria-label="Control tower aiming a light gun at your aircraft"></svg></div>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="no-js">Interactive figure unavailable. Use the table above: for example, a flashing green signal to an aircraft in flight means return for landing, to be followed by steady green at the proper time.</p>
+  <p class="fig-caption">With reduced motion set, flashing signals are shown as a dashed ring instead of blinking.</p>
+ </section>
+
+ <h3>In instrument conditions</h3>
+ <p>If two-way radio communication fails in <Term id="VFR">VFR</Term> conditions, or <Term id="VFR">VFR</Term> conditions are met after the failure, continue the flight under <Term id="VFR">VFR</Term> and land as soon as practicable. In <Term id="IFR">IFR</Term> conditions, fly the route and altitude below. <a href="#source-aim">{a('6-4-1')}</a> <Term id="Squawk">Squawk</Term> 7600, and remember that you may not be in radar coverage. <a href="#source-aim">{a('6-4-2')}</a></p>
+ <ul>
+  <li><strong>Route</strong>, the first of these that applies: the route assigned in the last ATC clearance received; if being radar vectored, direct from the point of radio failure to the fix, route or airway specified in the vector clearance; without an assigned route, the route ATC has advised may be expected in a further clearance; otherwise, the route filed in the flight plan.</li>
+  <li><strong>Altitude</strong>, for the route segment being flown, the highest of: the altitude or <Term id="Flight level">flight level</Term> assigned in the last ATC clearance received; the minimum altitude for <Term id="IFR">IFR</Term> operations; and the altitude or <Term id="Flight level">flight level</Term> ATC has advised may be expected in a further clearance, once you reach the time or fix at which ATC said to expect it.</li>
+  <li><strong>Leaving the clearance limit.</strong> If the limit is a fix from which an approach begins, start descent or descent and approach as close as possible to the expect-further-clearance time if you received one; if not, as close as possible to the estimated time of arrival from the filed or amended estimated time en route. If the limit is not an approach fix, leave it at the expect-further-clearance time if you received one, or on arrival if not, and proceed to a fix from which an approach begins; then start descent or descent and approach as close as possible to the estimated time of arrival calculated from the filed or amended estimated time en route.</li>
+ </ul>
+ <p class="fig-caption">All three rules: <a href="#source-aim">{a('6-4-1')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="lost" aria-labelledby="lost-title">
+  <h3 id="lost-title" class="fig-title">Figure 7 — Lost communications: route and altitude</h3>
+  <fieldset class="inline"><legend>When the radio failed</legend>
+   <label><input type="checkbox" name="vectored" /> Being radar vectored</label>
+   <label><input type="checkbox" name="assigned" checked /> Route assigned</label>
+   <label><input type="checkbox" name="expectRoute" /> Told to expect a route</label>
+  </fieldset>
+  <div class="controls row">
+   <label for="lost-assigned">Last assigned altitude <output for="assigned"></output><input id="lost-assigned" name="assignedAlt" type="range" min="3000" max="12000" step="1000" value="5000" /></label>
+   <label for="lost-expected">Expected altitude <output for="expected"></output><input id="lost-expected" name="expected" type="range" min="0" max="12000" step="1000" value="9000" /></label>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 7, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 360" role="img" aria-label="Route rule chosen, and a side view of four route segments with their minimum altitudes and the altitude to fly"></svg></div>
+  <p class="no-js">Interactive figure unavailable. With a route assigned, fly it. Assigned 5,000 ft, segment minimums 3,000, 7,000, 4,000 and 2,000 ft, and 9,000 ft expected from the third segment: fly 5,000, 7,000, 9,000 and 9,000 ft.</p>
+  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Illustrative segments and minimum altitudes. The expected altitude applies from the third segment, standing in for "expect 9,000 ten minutes after the fix"; set it to zero for no expected altitude. In the AIM, an expected altitude counts once you reach the time or place ATC said to expect it.</p>
+ </section>
+ <p class="key"><strong>Key point:</strong> with the radio dead, squawk 7600; in VFR conditions land as soon as practicable, in IFR fly the AIM's route and highest-applicable altitude rules.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>Listen first; never key into the pause where a reply is owed. <a href="#technique">More</a></li>
+  <li>Initial call: facility, full call sign, position on the surface, request. <a href="#contact">More</a></li>
+  <li>"Roger" is received, "Wilco" is will comply, "Affirmative" and "Negative" answer questions. <a href="#words">More</a></li>
+  <li>Read back altitudes, vectors and runways in order, with your call sign. <a href="#readback">More</a></li>
+  <li>Each frequency in a sortie is worked the same way; the handoff names the next one. <a href="#sortie">More</a></li>
+  <li>MAYDAY or PAN-PAN on the frequency in use; 121.5 and 243.0 if needed. <a href="#emergency">More</a></li>
+  <li>7500, 7600, 7700 are special; never pass through them when changing code. <a href="#transponder">More</a></li>
+  <li>Radio failure: squawk 7600; VFR, land as soon as practicable; IFR, fly the AIM's route and altitude rules. <a href="#nordo">More</a></li>
+ </ul>
 
  <h2 id="bands">Bands and emergency frequencies</h2>
  <p>Military air–ground voice uses the <strong>ultrahigh frequency (UHF)</strong> band, 300 to 3,000 MHz, which in some instances goes as low as 225 MHz. Civil air–ground voice uses the <strong>very high frequency (VHF)</strong> band, 30 to 300 MHz. <a href="#source-pcg">{g('VHF; UHF')}</a> Many military aircraft use UHF to talk to controllers and to each other, so a civil pilot on VHF may not hear them. <a href="#source-jbsa">{jb('2')}</a> A military trainer usually carries both radios: in one training <Term id="Squadron">squadron</Term>'s script the student works <Term id="ATIS">ATIS</Term>, clearance delivery, ground, tower, departure, approach and the <Term id="Squadron">squadron</Term>'s own base frequency on UHF, and uses VHF to talk to a civil approach frequency and to cancel <Term id="IFR">IFR</Term>. <a href="#source-hollywood">{h('19–31')}</a></p>
  <p>Frequencies are set up in advance as numbered <strong>preset channels</strong>, so a controller or the brief can name a channel instead of a frequency: in that script UHF channel 4 is Sherman Tower, and approach hands the aircraft off with "contact Sherman Tower Button 4". <a href="#source-hollywood">{h('25, 32')}</a> Your <Term id="Squadron">squadron</Term>'s channel card sets the numbers; the ones here are that script's.</p>
  <p>Two emergency frequencies matter to every pilot: <strong>121.5 MHz</strong> (VHF) and <strong>243.0 MHz</strong> (UHF). Both are generally limited to line of sight. 121.5 is guarded by direction-finding stations and some military and civil aircraft; 243.0 is guarded by military aircraft, so a military pilot in trouble has a UHF emergency frequency that other military aircraft are listening to. The frequency in use, or another ATC frequency, is still preferable for an emergency call. <a href="#source-aim">{a('6-3-1')}</a> 122.2 MHz is assigned to most flight service stations as a common en route simplex frequency. <a href="#source-aim">{a('4-2-14')}</a></p>
  <section class="lesson figure-lesson" data-lesson="bands" aria-labelledby="bands-title">
-  <h3 id="bands-title" class="fig-title">Figure 2 — Where the voice frequencies sit</h3>
+  <h3 id="bands-title" class="fig-title">Figure 8 — Where the voice frequencies sit</h3>
   <fieldset class="inline"><legend>Show</legend>
    <label><input type="radio" name="mark" value="121.5" checked /> 121.5</label>
    <label><input type="radio" name="mark" value="122.2" /> 122.2</label>
    <label><input type="radio" name="mark" value="243.0" /> 243.0</label>
    <label><input type="radio" name="mark" value="225" /> 225</label>
   </fieldset>
-  <div class="fig-scroll" role="region" aria-label="Figure 2, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 230" role="img" aria-label="Frequency scale from 100 to 400 MHz with the VHF and UHF bands and the emergency frequencies marked"></svg></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 8, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 230" role="img" aria-label="Frequency scale from 100 to 400 MHz with the VHF and UHF bands and the emergency frequencies marked"></svg></div>
   <p class="no-js">Interactive figure unavailable. 121.5 MHz (VHF emergency) and 122.2 MHz (flight service) sit in VHF; 243.0 MHz (UHF emergency) sits in UHF, above the 225 MHz lower edge of military UHF voice.</p>
   <div class="feedback derived" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">Linear scale, 100–400 MHz only. The figure does not show the civil VHF voice band's exact limits.</p>
@@ -125,7 +325,7 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
   </tbody>
  </table></div>
  <section class="lesson figure-lesson" data-lesson="say" aria-labelledby="say-title">
-  <h3 id="say-title" class="fig-title">Figure 3 — Say it on the radio</h3>
+  <h3 id="say-title" class="fig-title">Figure 9 — Say it on the radio</h3>
   <p>Choose what you are saying and type it. The figure gives the words and, below them, the AIM pronunciation of each character.</p>
   <div class="controls row">
    <label for="say-kind">What it is
@@ -144,7 +344,8 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
  </section>
 
  <h2 id="callsigns">Call signs</h2>
- <p><strong>Military call signs.</strong> The AIM only says that military aircraft use a variety of call sign systems. <a href="#source-aim">{a('4-2-4')}</a> In Navy training the call sign is usually a <Term id="Squadron">squadron</Term> word and a number: the script's student is "KATT 11" for one flight and is told to use a different call sign for every practice event. <a href="#source-hollywood">{h('20')}</a> The <Term id="Squadron">squadron</Term> answers on its own base frequency as "KATT Base", and the side number painted on the jet is passed separately, so the call sign names the flight, not the airframe: "KATT Base, KATT 11 taxi outbound, side number 000". <a href="#source-hollywood">{h('20')}</a> A formation has one tactical call sign for the whole flight, "Angry" in one <Term id="Squadron">squadron</Term>'s examples, and each aircraft answers with its position in the flight, "Angry 1-2". <a href="#source-formsup">{f('2–3')}</a></p>
+ <p><strong>Military call signs.</strong> The AIM only says that military aircraft use a variety of call sign systems. <a href="#source-aim">{a('4-2-4')}</a> In Navy training the call sign is usually a <Term id="Squadron">squadron</Term> word and a number: the script's student is "KATT 11" for one flight and is told to use a different call sign for every practice event. <a href="#source-hollywood">{h('20')}</a></p>
+ <p>The <Term id="Squadron">squadron</Term> answers on its own base frequency as "KATT Base", and the side number painted on the jet is passed separately, so the call sign names the flight, not the airframe: "KATT Base, KATT 11 taxi outbound, side number 000". <a href="#source-hollywood">{h('20')}</a> A formation has one tactical call sign for the whole flight, "Angry" in one <Term id="Squadron">squadron</Term>'s examples, and each aircraft answers with its position in the flight, "Angry 1-2". <a href="#source-formsup">{f('2–3')}</a></p>
  <p>A military call sign is said as written: words, then the digits. The rest of this section is the FAA's rule set, which applies to everyone on a US civil frequency. Never abbreviate a call sign on initial contact, or when another aircraft on the frequency has a similar one. ATC may start abbreviating a call sign; after that the pilot may use the abbreviation, but ATC will not abbreviate the call signs of air carriers or other civil aircraft with authorized call signs. <a href="#source-aim">{a('4-2-4')}</a></p>
  <ul>
   <li><strong>Civil aircraft:</strong> the aircraft type, model or manufacturer's name, then the registration characters. When the type is stated, the "N" prefix is dropped: "Aztec Two Four Six Four Alfa". An abbreviated call sign is the prefix and the last three characters. <a href="#source-aim">{a('4-2-4')}</a></li>
@@ -167,85 +368,13 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
   </tbody>
  </table></div>
 
- <h2 id="sortie">A training sortie, call by call</h2>
- <p>The worked example is the Navy's, because its script is published. Other services' training wings publish their own local calls, and all of them work the same kinds of ATC facility under the FAA rules below. Training Squadron TEN (VT-10) gives its students a "Hollywood Script": every checklist and radio call of a T-6A training flight from Sherman Field, Naval Air Station Pensacola, in order. <a href="#source-hollywood">{h('1, 19–35')}</a> It shows the shape of a Navy <Term id="Sortie">sortie</Term> on the radio:</p>
- <ol class="steps">
-  <li><strong>Copy <Term id="ATIS">ATIS</Term>, then get the clearance.</strong> <Term id="ATIS">ATIS</Term> on UHF 1, then clearance delivery on UHF 2: "Sherman Clearance, KATT 11, <Term id="IFR">IFR</Term>, NPA 630, on request, ready to copy." The clearance is <Term id="Read back">read back</Term>, and clearance delivery answers "KATT 11, readback correct." <a href="#source-hollywood">{h('19–20')}</a></li>
-  <li><strong>Tell the <Term id="Squadron">squadron</Term>.</strong> On the <Term id="Squadron">squadron</Term> base frequency (UHF 19): "KATT Base, KATT 11 taxi outbound, side number 000"; before takeoff, "KATT Base, KATT 11 going flying." <a href="#source-hollywood">{h('20, 25')}</a></li>
-  <li><strong>Ground, then tower.</strong> "Sherman Ground, KATT 11, taxi, information (<Term id="ATIS">ATIS</Term> letter)"; later, on UHF 4, "Sherman Tower, KATT 11, takeoff <Term id="IFR">IFR</Term>." The takeoff readback carries the runway and ends "switching": "KATT 11, cleared for takeoff Runway 7 right, switching." <a href="#source-hollywood">{h('21, 25')}</a></li>
-  <li><strong>Departure and the working area.</strong> Check in climbing with the altitude you are passing and the altitude you are climbing to. Departure clears the flight to its working area, a military operations area (MOA), with "frequency change approved"; the MOA common frequency that follows is a safety-of-flight frequency used by departure, so there is no check-in. <a href="#source-hollywood">{h('27–29')}</a></li>
-  <li><strong>Come home on course rules.</strong> Cancel <Term id="IFR">IFR</Term> when done in the area, copy <Term id="ATIS">ATIS</Term>, then "Pensacola Approach, KATT 11, 3500, information Bravo, request course rules." Approach hands the aircraft to tower at the entry point: "contact Sherman Tower Button 4." <a href="#source-hollywood">{h('30–32')}</a></li>
-  <li><strong>Break, land, and check back in.</strong> "Sherman Tower, KATT 11, Point Golf for the break"; "numbers 7 right"; tower: "right break approved". In the pattern, the position call ends with "gear, stop", and tower clears the aircraft to land. Stay with tower until clear of the runway, taxi back with ground, and finish on base: "KATT Base, KATT 11 in and up." <a href="#source-hollywood">{h('32–35')}</a></li>
- </ol>
- <p>Notice the readbacks: the script puts the call sign first ("KATT 11, cleared to land 7 Right"). The AIM asks for the call sign in every readback and its examples put it at either end, so both satisfy the FAA rule. <a href="#source-hollywood">{h('34')}</a> <a href="#source-aim">{a('4-4-7')}</a></p>
- <section class="lesson figure-lesson" data-lesson="sortie" aria-labelledby="sortie-title">
-  <h3 id="sortie-title" class="fig-title">Figure 4 — A Navy training sortie, call by call</h3>
-  <p>Step through the calls. The drawing shows where the aircraft is on its <Term id="Sortie">sortie</Term> and which preset channel is up; the text gives the call, the reply and the readback.</p>
-  <div class="buttons"><button type="button" data-prev>Previous call</button><button type="button" data-next>Next call</button></div>
-  <div class="fig-scroll" role="region" aria-label="Figure 4, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 300" role="img" aria-label="Side profile of the sortie from the ramp to the working area and back, the aircraft's position, the selected radio channel and the station called"></svg></div>
-  <div class="feedback" data-result role="status" aria-live="polite"></div>
-  <p class="no-js">Interactive figure unavailable. The calls in order: <Term id="ATIS">ATIS</Term> (UHF 1); Sherman Clearance (UHF 2); KATT Base (UHF 19), taxi outbound; Sherman Ground (UHF 3), taxi with the <Term id="ATIS">ATIS</Term> letter; KATT Base, going flying; Sherman Tower (UHF 4), takeoff <Term id="IFR">IFR</Term>; Pensacola Departure (UHF 6), passing for 3000; cleared to the MOA, then MOA Common (UHF 16) with no check-in; Pensacola Approach on VHF 5, cancel <Term id="IFR">IFR</Term>; Pensacola Approach (UHF 6), request course rules; Point Golf in sight, contact Sherman Tower Button 4; Sherman Tower, Point Golf for the break, numbers, break approved, gear, stop, cleared to land; Sherman Ground (UHF 3), taxi to the line; KATT Base, in and up.</p>
-  <p class="fig-caption">The calls are VT-10's script for one T-6A <Term id="Sortie">sortie</Term>, lightly abridged; call sign, channels and places are the script's. Other <Term id="Squadron">squadrons</Term>, bases and aircraft use their own frequencies, entry points and calls. Profile heights are not to scale.</p>
- </section>
-
- <h2 id="contact">Making contact</h2>
- <p>An initial call has up to five parts, in this order: <a href="#source-aim">{a('4-2-3')}</a></p>
- <ol class="call-order">
-  <li>The name of the facility you are calling.</li>
-  <li>Your full aircraft identification, as filed in the flight plan.</li>
-  <li>Your position, when you are on the airport surface.</li>
-  <li>The type of message to follow, or your request if it is short.</li>
-  <li>"Over", if required.</li>
- </ol>
- <p>The Navy script's calls follow the same order: "Sherman Ground, KATT 11, taxi, information (<Term id="ATIS">ATIS</Term> letter)" is facility, identification and request, with the <Term id="ATIS">ATIS</Term> code at the end. <a href="#source-hollywood">{h('21')}</a> The AIM's examples are "New York Radio, Mooney Three One One Echo" and "Columbia Ground, Cessna Three One Six Zero Foxtrot, south ramp, I-F-R Memphis". After contact is established, use the same format, combining the call-up and the message in one transmission. <Term id="Acknowledge">Acknowledge</Term> every call-up or clearance unless told otherwise, and acknowledge a frequency change: "United Two Twenty-Two on one three four point five". Change to the new frequency as soon as possible unless told to change at a time, fix or altitude. <a href="#source-aim">{a('4-2-3')}</a> If the airport has <Term id="ATIS">automatic terminal information service</Term> (<Term id="ATIS">ATIS</Term>), say you have it on initial contact, using its code word: "have information Sierra". <a href="#source-aim">{a('4-1-13')}</a></p>
- <section class="lesson figure-lesson" data-lesson="call" aria-labelledby="call-title">
-  <h3 id="call-title" class="fig-title">Figure 5 — Build the initial call</h3>
-  <p class="task" data-prompt aria-live="polite"></p>
-  <p>Select the pieces in the order you would say them.</p>
-  <div class="buttons chips" data-choices></div>
-  <ol class="built" data-built aria-label="Your call so far"></ol>
-  <div class="buttons"><button type="button" data-check>Check the call</button><button type="button" data-undo>Undo</button><button type="button" data-next>Next situation</button></div>
-  <div class="feedback" data-result role="status" aria-live="polite"></div>
-  <p class="no-js">Interactive figure unavailable. Order: facility, full identification, position on the airport surface, request. For example: "Columbia Ground, Cessna Three One Six Zero Foxtrot, south ramp, I-F-R Memphis."</p>
-  <p class="fig-caption">The first two situations are from the VT-10 script; the third and fourth are the AIM's examples; the last is constructed. The script's ground call has no position element; away from home field, add your position on the airport surface as the AIM asks.</p>
- </section>
-
- <h2 id="words">Words that do the work</h2>
- <p>A few procedure words carry precise meanings. Using the right one saves a transmission; using the wrong one can mislead. <strong><Term>Roger</Term></strong> means only that you received the whole transmission: it must not answer a yes-or-no question. <a href="#source-pcg">{g('ROGER')}</a></p>
- <GlossaryList items={[
-  { id: 'Roger', set: 'Airfield and ATC' }, 'Wilco', 'Affirmative', 'Negative', 'Unable', 'Say again', 'I say again',
-  'Stand by', 'Read back', 'Verify', 'Acknowledge', 'Advise intentions', 'Immediately', 'Negative contact',
-  'Words twice', 'Speak slower', 'Over', 'Out',
- ]} />
- <p class="fig-caption">Definitions from the Pilot/Controller Glossary. <a href="#source-pcg">{g('entries as listed')}</a></p>
- <section class="lesson quiz-lesson" data-lesson="words" aria-labelledby="words-title">
-  <h3 id="words-title">Quiz: which word?</h3>
-  <p class="task" data-prompt aria-live="polite"></p>
-  <div class="buttons" data-choices></div>
-  <p class="feedback" data-result role="status" aria-live="polite"></p>
-  <div class="buttons"><button type="button" data-new>Next situation</button></div>
- </section>
-
- <h2 id="readback">Acknowledgement and readback</h2>
- <p>Include the aircraft identification in every readback and acknowledgement. <Term id="Read back">Read back</Term> the parts of ATC clearances and instructions that contain altitude assignments, vectors or runway assignments, as a means of mutual verification, and read altitudes, altitude restrictions and vectors back in the order they were given. Do not <Term id="Read back">read back</Term> charted procedures unless the controller specifically states them. An initial readback of a taxi, departure or landing clearance should include the runway. <a href="#source-aim">{a('4-4-7')}</a> The AIM's examples: "Climbing to <Term id="Flight level">Flight Level</Term> three three zero, United Twelve" and "November Five Charlie Tango, roger, cleared to land runway nine left". <a href="#source-aim">{a('4-4-7')}</a> On an <Term id="IFR">instrument flight rules</Term> (<Term id="IFR">IFR</Term>) flight, make a written record of your clearance. <a href="#source-aim">{a('4-4-7')}</a></p>
- <section class="lesson figure-lesson" data-lesson="readback" aria-labelledby="rb-title">
-  <h3 id="rb-title" class="fig-title">Figure 6 — Read back the clearance</h3>
-  <p>The controller's transmission is split into its parts. Select every part you must <Term id="Read back">read back</Term>, then check.</p>
-  <blockquote class="atc" data-clearance></blockquote>
-  <div class="buttons chips" data-parts></div>
-  <div class="buttons"><button type="button" data-check>Check readback</button><button type="button" data-next>Next instruction</button></div>
-  <div class="feedback" data-result role="status" aria-live="polite"></div>
-  <p class="no-js">Interactive figure unavailable. For "KATT 11, wind 060 at 8, Runway 7 right, cleared for takeoff, switch to Departure", <Term id="Read back">read back</Term> the runway with your call sign: "KATT 11, cleared for takeoff Runway 7 right, switching."</p>
-  <p class="fig-caption">The checker requires the parts AIM 4-4-7 lists: identification, altitude assignments and restrictions, vectors, and runway assignments. Reading back more is not marked wrong, but is shown. The first two instructions and their readbacks are from the VT-10 script; the third and fifth are adapted from the AIM's examples; the others are constructed.</p>
- </section>
-
  <h2 id="flight">Flight check-ins and frequency changes</h2>
  <p>A formation talks to ATC with one voice, its lead, and uses a separate tactical frequency between its own aircraft. One US Navy training <Term id="Squadron">squadron</Term>'s formation supplement, VT-6's, sets out the pattern. Lead checks the flight in on the briefed tactical frequency on the ground, and once the flight is up on that frequency, neither aircraft switches off it for any reason. <a href="#source-formsup">{f('2')}</a> Radio changes are of three kinds: pre-briefed automatic switches, ATC-directed changes and lead-directed changes. Switches and check-ins are never made on an ATC, area common or common traffic advisory frequency, to keep traffic off saturated frequencies. If unsure of the correct frequency, use plain, concise language on the tactical frequency to get well. <a href="#source-formsup">{f('2')}</a></p>
  <p>The flight's tactical call sign ("Angry" in the supplement's examples) addresses the whole flight; each aircraft answers with its position in the flight. <a href="#source-formsup">{f('2–3')}</a> Before taxi, lead calls "Angry, check Victor" and the wingman answers with its call sign and the <Term id="ATIS">ATIS</Term> code, or "Two, standby (X) mikes" if not ready. <a href="#source-formsup">{f('3')}</a> To leave the working area, lead calls "Angry, push UHF TAC" on the VHF tactical frequency, then checks the flight in on the new frequency: lead "Angry", wingman "Angry 1-2". A push to a frequency that becomes the working frequency, such as a VHF airfield frequency, has no check-in. <a href="#source-formsup">{f('10')}</a></p>
  <section class="lesson figure-lesson" data-lesson="flight" aria-labelledby="flight-title">
-  <h3 id="flight-title" class="fig-title">Figure 7 — Check-in and push, call by call</h3>
+  <h3 id="flight-title" class="fig-title">Figure 10 — Check-in and push, call by call</h3>
   <div class="buttons"><button type="button" data-prev>Previous call</button><button type="button" data-next>Next call</button></div>
-  <div class="fig-scroll" role="region" aria-label="Figure 7, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 300" role="img" aria-label="Lead and wingman radios, the tactical frequencies and who is transmitting"></svg></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 10, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 300" role="img" aria-label="Lead and wingman radios, the tactical frequencies and who is transmitting"></svg></div>
   <div class="feedback" data-result role="status" aria-live="polite"></div>
   <p class="no-js">Interactive figure unavailable. Calls in order: on VHF TAC, "Angry, check Victor" – "Angry 1-2, with (<Term id="ATIS">ATIS</Term> code)"; later, "Angry, push UHF TAC"; both switch; on UHF TAC, "Angry" – "Angry 1-2".</p>
   <p class="fig-caption">One <Term id="Squadron">squadron</Term>'s training example, simplified to the calls cited. Unit procedures, frequencies and call signs differ.</p>
@@ -266,85 +395,39 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
   <div class="buttons"><button type="button" data-new>Next situation</button></div>
  </section>
 
- <h2 id="emergency">Distress and urgency</h2>
- <p>Distress communications have absolute priority over all others; urgency communications come next. A distress call begins with <strong><Term id="Mayday">MAYDAY</Term></strong>, preferably said three times; an urgency call uses <strong><Term id="Pan-pan">PAN-PAN</Term></strong> in the same way. <a href="#source-aim">{a('6-3-1')}</a> Make the first call on the frequency in use, and do not change frequency or ground station unless absolutely necessary. <a href="#source-aim">{a('6-3-1, 6-3-2')}</a> Transmit as many of these items as you need, preferably in this order: <a href="#source-aim">{a('6-3-2')}</a></p>
- <ol class="call-order distress">{DISTRESS_ORDER.map(item => <li>{item}</li>)}</ol>
- <p>While you are in radio contact, keep the assigned transponder code unless ATC tells you otherwise. If you cannot immediately reach an ATC facility, <Term id="Squawk">squawk</Term> code 7700 with altitude reporting (Mode C). <a href="#source-aim">{a('6-3-2')}</a></p>
-
- <h2 id="transponder">Transponder codes</h2>
- <p>A transponder answers radar with a four-digit code. Unless ATC assigns one, a <Term id="VFR">visual flight rules (VFR)</Term> aircraft <Term id="Squawk">squawks</Term> <strong>1200</strong>. Three codes are special: <strong>7500</strong> is the hijack code, <strong>7600</strong> signals two-way radio failure, and <strong>7700</strong> signals an emergency; 7600 and 7700 trigger special indications in automated facilities. When changing codes routinely, avoid passing through 7500, 7600 or 7700: to change from 2700 to 7200, first select 2200, then 7200. <a href="#source-aim">{a('4-1-20')}</a></p>
- <section class="lesson figure-lesson" data-lesson="squawk" aria-labelledby="sq-title">
-  <h3 id="sq-title" class="fig-title">Figure 8 — Change the code without an alarm</h3>
-  <p class="task" data-prompt aria-live="polite"></p>
-  <p>Each knob sets one digit. Every turn changes the code the transponder sends, so plan the order.</p>
-  <div class="squawk" data-knobs></div>
-  <div class="fig-scroll" role="region" aria-label="Figure 8, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 110" role="img" aria-label="Transponder code window and the codes sent so far"></svg></div>
-  <div class="buttons"><button type="button" data-hint>Show a safe order</button><button type="button" data-next>Next change</button></div>
-  <div class="feedback" data-result role="status" aria-live="polite"></div>
-  <p class="no-js">Interactive figure unavailable. From 2700 to 7200, change the second digit first (2200), then the first (7200); setting the first digit first would send 7700.</p>
-  <p class="fig-caption">Each knob step is treated as one code sent. Real transponders differ in how and when a new code takes effect.</p>
- </section>
-
- <h2 id="nordo">When the radio fails</h2>
- <h3>At a towered airport</h3>
- <p>Arriving with the <strong>receiver</strong> inoperative, remain outside or above the Class D surface area until you have determined the direction and flow of traffic, then advise the tower of your aircraft type, position, altitude and intention to land, and request light signals. About 3 to 5 miles out, advise your position and join the <Term>traffic pattern</Term>, watching the tower for light signals. With the <strong>transmitter</strong> inoperative, monitor the tower frequency, and acknowledge tower transmissions or light signals by rocking your wings in daylight, or by blinking the landing or navigation lights at night. <a href="#source-aim">{a('4-2-13')}</a></p>
- <div class="table-scroll" role="region" aria-label="Tower light gun signals" tabindex="0"><table>
-  <caption>Airport traffic control tower light gun signals <a href="#source-aim">{a('4-3-13')}</a></caption>
-  <thead><tr><th scope="col">Signal</th><th scope="col">Aircraft on the ground</th><th scope="col">Aircraft in flight</th></tr></thead>
-  <tbody>{LIGHT_SIGNALS.map(s => <tr><th scope="row">{s.id.replace('-', ' ').replace('alternating', 'alternating red and green').replace(/^./, c => c.toUpperCase())}</th><td>{s.ground}</td><td>{s.flight}</td></tr>)}</tbody>
- </table></div>
- <section class="lesson figure-lesson" data-lesson="light" aria-labelledby="light-title">
-  <h3 id="light-title" class="fig-title">Figure 9 — Read the light gun</h3>
-  <fieldset class="inline"><legend>You are</legend>
-   <label><input type="radio" name="where" value="flight" checked /> In flight</label>
-   <label><input type="radio" name="where" value="ground" /> On the ground</label>
-  </fieldset>
-  <div class="buttons"><button type="button" data-flash>Show a signal</button></div>
-  <div class="fig-scroll" role="region" aria-label="Figure 9, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 260" role="img" aria-label="Control tower aiming a light gun at your aircraft"></svg></div>
-  <p class="task" data-prompt aria-live="polite"></p>
-  <div class="buttons" data-choices></div>
-  <div class="feedback" data-result role="status" aria-live="polite"></div>
-  <p class="no-js">Interactive figure unavailable. Use the table above: for example, a flashing green signal to an aircraft in flight means return for landing, to be followed by steady green at the proper time.</p>
-  <p class="fig-caption">With reduced motion set, flashing signals are shown as a dashed ring instead of blinking.</p>
- </section>
-
- <h3>In instrument conditions</h3>
- <p>If two-way radio communication fails in <Term id="VFR">VFR</Term> conditions, or <Term id="VFR">VFR</Term> conditions are met after the failure, continue the flight under <Term id="VFR">VFR</Term> and land as soon as practicable. In <Term id="IFR">IFR</Term> conditions, fly the route and altitude below. <a href="#source-aim">{a('6-4-1')}</a> <Term id="Squawk">Squawk</Term> 7600, and remember that you may not be in radar coverage. <a href="#source-aim">{a('6-4-2')}</a></p>
- <ul>
-  <li><strong>Route</strong>, the first of these that applies: the route assigned in the last ATC clearance received; if being radar vectored, direct from the point of radio failure to the fix, route or airway specified in the vector clearance; without an assigned route, the route ATC has advised may be expected in a further clearance; otherwise, the route filed in the flight plan.</li>
-  <li><strong>Altitude</strong>, for the route segment being flown, the highest of: the altitude or <Term id="Flight level">flight level</Term> assigned in the last ATC clearance received; the minimum altitude for <Term id="IFR">IFR</Term> operations; and the altitude or <Term id="Flight level">flight level</Term> ATC has advised may be expected in a further clearance, once you reach the time or fix at which ATC said to expect it.</li>
-  <li><strong>Leaving the clearance limit.</strong> If the limit is a fix from which an approach begins, start descent or descent and approach as close as possible to the expect-further-clearance time if you received one; if not, as close as possible to the estimated time of arrival from the filed or amended estimated time en route. If the limit is not an approach fix, leave it at the expect-further-clearance time if you received one, or on arrival if not, and proceed to a fix from which an approach begins; then start descent or descent and approach as close as possible to the estimated time of arrival calculated from the filed or amended estimated time en route.</li>
- </ul>
- <p class="fig-caption">All three rules: <a href="#source-aim">{a('6-4-1')}</a></p>
- <section class="lesson figure-lesson" data-lesson="lost" aria-labelledby="lost-title">
-  <h3 id="lost-title" class="fig-title">Figure 10 — Lost communications: route and altitude</h3>
-  <fieldset class="inline"><legend>When the radio failed</legend>
-   <label><input type="checkbox" name="vectored" /> Being radar vectored</label>
-   <label><input type="checkbox" name="assigned" checked /> Route assigned</label>
-   <label><input type="checkbox" name="expectRoute" /> Told to expect a route</label>
-  </fieldset>
-  <div class="controls row">
-   <label for="lost-assigned">Last assigned altitude <output for="assigned"></output><input id="lost-assigned" name="assignedAlt" type="range" min="3000" max="12000" step="1000" value="5000" /></label>
-   <label for="lost-expected">Expected altitude <output for="expected"></output><input id="lost-expected" name="expected" type="range" min="0" max="12000" step="1000" value="9000" /></label>
-  </div>
-  <div class="fig-scroll" role="region" aria-label="Figure 10, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 360" role="img" aria-label="Route rule chosen, and a side view of four route segments with their minimum altitudes and the altitude to fly"></svg></div>
-  <p class="no-js">Interactive figure unavailable. With a route assigned, fly it. Assigned 5,000 ft, segment minimums 3,000, 7,000, 4,000 and 2,000 ft, and 9,000 ft expected from the third segment: fly 5,000, 7,000, 9,000 and 9,000 ft.</p>
-  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
-  <p class="fig-caption">Illustrative segments and minimum altitudes. The expected altitude applies from the third segment, standing in for "expect 9,000 ten minutes after the fix"; set it to zero for no expected altitude. In the AIM, an expected altitude counts once you reach the time or place ATC said to expect it.</p>
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p>Only the Falcon BMS 4.38.1 Training Manual was read for this panel: its first missions set up the F-16's radios at Gunsan and work ground, tower, departure and approach. In BMS you do not speak to the AI controllers; you pick a call from the ATC menu, and it is made for you. <a href="#source-bms">{bms('45')}</a></p>
+  <div class="table-scroll" role="region" aria-label="Falcon BMS radio procedures" tabindex="0"><table>
+   <caption>Falcon BMS Training Manual compared with this module</caption>
+   <thead><tr><th scope="col">Item</th><th scope="col">BMS Training Manual</th><th scope="col">This module</th></tr></thead>
+   <tbody>
+    <tr><th scope="row">Making a call</th><td>The ATC menu's seven pages cover ground, tower, approach and departure, common and contingency calls, toggled with repeated presses of the menu key; a number key sends the highlighted call. <a href="#source-bms">{bms('45')}</a></td><td>You build the call yourself, in the order facility, call sign, request. <a href="#source-aim">{a('4-2-3')}</a></td></tr>
+    <tr><th scope="row">Preset channels</th><td>The data cartridge sets the home base's UHF presets: Ground Ops 1, Ground 2, Tower 3, Approach and Departure 4. Each flight in a package gets a VHF preset for its own talk, 15 for the first flight, 16 for the second and so on. <a href="#source-bms">{bms('37')}</a></td><td>Your channel card sets the numbers; in the Navy script, UHF 4 is Sherman Tower. <a href="#source-hollywood">{h('25, 32')}</a></td></tr>
+    <tr><th scope="row">Being heard</th><td>AI wingmen, controllers, AWACS, tankers and JTACs answer only if you are on their frequency; a menu entry that is not highlighted means you are not. <a href="#source-bms">{bms('37')}</a></td><td>The same: a formation works ATC through its lead and talks among itself on its tactical frequency. <a href="#source-formsup">{f('2–3')}</a></td></tr>
+    <tr><th scope="row">ATIS</th><td>Each airbase has an ATIS on VHF, giving runway, wind, visibility, clouds, temperature and altimeter setting. <a href="#source-bms">{bms('46')}</a></td><td>Copy ATIS before calling, and give its letter on first contact. <a href="#source-hollywood">{h('19, 21')}</a></td></tr>
+    <tr><th scope="row">Taxi</th><td>Ground gives an expected taxi time on UHF; it needs no reply from the lead and is not a taxi clearance. <a href="#source-bms">{bms('47')}</a></td><td>Taxi only when cleared; the clearance is <Term id="Read back">read back</Term> with your call sign. <a href="#source-hollywood">{h('21')}</a></td></tr>
+    <tr><th scope="row">Handoffs</th><td>At the end of the runway, ground tells you to switch to tower when you are ready; after takeoff you select "Report Airborne" on departure; at 10 NM inbound, approach sends you to tower, where "Request Landing" is the first call. <a href="#source-bms">{bms('49, 55, 82')}</a></td><td>The same chain of frequencies as the Navy sortie. <a href="#source-hollywood">{h('25–32')}</a></td></tr>
+   </tbody>
+  </table></div>
+  <p><strong>Not checked.</strong> The manual does not say whether BMS's AI controllers expect readbacks, distress calls or transponder codes, and this revision makes no claim either way. DCS World's AI air traffic control, its modules' radio manuals and BMS's separate communications book were not read. Sim frequencies and presets are not the real ones.</p>
  </section>
 
  <h2 id="check">Check your understanding</h2>
- <details><summary>You lose sight of your wingman during an engagement. What do you say and do?</summary><p>"(Call sign) blind", and turn away from the predicted collision bearing. "No joy" is for a threat aircraft you cannot see, not your wingman.</p></details>
- <details><summary>Approach tells you "contact Sherman Tower Button 4". What is Button 4?</summary><p>A preset radio channel, here channel 4, which the squadron's channel card sets to Sherman Tower.</p></details>
- <details><summary>Approach asks "Can you accept a visual approach?" and you can. Is "Roger" the answer?</summary><p>No. Roger only says you received the transmission and must not answer a yes-or-no question. Say "Affirmative" with your call sign.</p></details>
- <details><summary>How do you say 17,500 ft and 18,500 ft?</summary><p>"One seven thousand five hundred". At and above 18,000 ft it becomes a flight level: "flight level one eight five".</p></details>
- <details><summary>You are told "turn right heading zero niner zero, descend and maintain three thousand, altimeter two niner niner two". What must you read back?</summary><p>The heading and the altitude, in that order, with your call sign. The AIM's readback list does not include the altimeter setting.</p></details>
- <details><summary>You need to go from 1700 to 7100. Which knob first?</summary><p>The second digit: 1700 → 1100 → 7100. Setting the first digit first would send 7700.</p></details>
- <details><summary>Your radio fails in cloud while you are being vectored. Which route?</summary><p>Direct from the point of failure to the fix, route or airway in the vector clearance.</p></details>
- <details><summary>A steady red light from the tower while you are in the pattern?</summary><p>Give way to other aircraft and continue circling.</p></details>
- <details><summary>Where do you make a MAYDAY call?</summary><p>On the frequency in use first; 121.5 or 243.0 if needed. Do not change frequency unless absolutely necessary.</p></details>
- <details><summary>Your fuel reaches the prebriefed state at which you must head home. What do you call?</summary><p>"Bingo". "Joker" is the earlier, higher state at which you start to wind the event down.</p></details>
- <details><summary>Anyone in the flight sees a safety problem during training maneuvers. What is the call, and what does it do?</summary><p>"Knock-it-off": everyone stops maneuvering. It is a training call, common to all four services' brevity list.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> You have just switched to Approach. The controller has given another aircraft a heading, and the frequency is now quiet. Do you call?</summary><p>Not yet. The other aircraft owes a readback, and the pause is its turn. Call once it has answered and nothing is owed.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> Put these in the order of an initial call: your request, your call sign, the facility.</summary><p>The facility, then your full call sign, then the request: "Sherman Ground, KATT 11, taxi, information (ATIS letter)". On the airport surface, your position goes before the request.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> How do you say the letters "NPA" on the radio?</summary><p>"November Papa Alfa", using the ICAO phonetic alphabet.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> You lose sight of your wingman during an engagement. What do you say and do?</summary><p>"(Call sign) blind", and turn away from the predicted collision bearing. "No joy" is for a threat aircraft you cannot see, not your wingman.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> Approach tells you "contact Sherman Tower Button 4". What is Button 4?</summary><p>A preset radio channel, here channel 4, which the squadron's channel card sets to Sherman Tower.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Approach asks "Can you accept a visual approach?" and you can. Is "Roger" the answer?</summary><p>No. Roger only says you received the transmission and must not answer a yes-or-no question. Say "Affirmative" with your call sign.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> How do you say 17,500 ft and 18,500 ft?</summary><p>"One seven thousand five hundred". At and above 18,000 ft it becomes a flight level: "flight level one eight five".</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> You are told "turn right heading zero niner zero, descend and maintain three thousand, altimeter two niner niner two". What must you read back?</summary><p>The heading and the altitude, in that order, with your call sign. The AIM's readback list does not include the altimeter setting.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> You need to go from 1700 to 7100. Which knob first?</summary><p>The second digit: 1700 → 1100 → 7100. Setting the first digit first would send 7700.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> Your radio fails in cloud while you are being vectored. Which route?</summary><p>Direct from the point of failure to the fix, route or airway in the vector clearance.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> A steady red light from the tower while you are in the pattern?</summary><p>Give way to other aircraft and continue circling.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> Where do you make a MAYDAY call?</summary><p>On the frequency in use first; 121.5 or 243.0 if needed. Do not change frequency unless absolutely necessary.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> Your fuel reaches the prebriefed state at which you must head home. What do you call?</summary><p>"Bingo". "Joker" is the earlier, higher state at which you start to wind the event down.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> Anyone in the flight sees a safety problem during training maneuvers. What is the call, and what does it do?</summary><p>"Knock-it-off": everyone stops maneuvering. It is a training call, common to all four services' brevity list.</p></details>
 
  <h2 id="sources">Sources and applicability</h2>
  <h3>Military sources</h3>
@@ -356,6 +439,8 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
  <h3>Supplementary: FAA sources</h3>
  <p id="source-aim"><strong>[6] Federal Aviation Administration, Aeronautical Information Manual (AIM), current edition as published online.</strong> Inspected 25 October 2026 on faa.gov: <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap4_section_2.html">chapter 4, section 2, Radio Communications Phraseology and Techniques</a> (paras 4-2-1 to 4-2-14); <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap4_section_4.html">chapter 4, section 4, ATC Clearances</a> (para 4-4-7); <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap6_section_3.html">chapter 6, section 3, Distress and Urgency Procedures</a> (paras 6-3-1, 6-3-2); <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap6_section_4.html">chapter 6, section 4, Two-way Radio Communications Failure</a> (paras 6-4-1, 6-4-2); <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap4_section_1.html">chapter 4, section 1, Services Available to Pilots</a> (paras 4-1-13, 4-1-20); <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap4_section_3.html">chapter 4, section 3, Airport Operations</a> (para 4-3-13, light gun signals).</p>
  <p id="source-pcg"><strong>[7] Federal Aviation Administration, Pilot/Controller Glossary (P/CG), current edition as published online.</strong> Inspected 25 October 2026 on faa.gov, entries: <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/chap1_section_19.html">R</a> (Roger, Read back), <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/chap1_section_24.html">W</a> (Wilco, Words twice), <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/chap1_section_2.html">A</a> (Affirmative, Acknowledge, Advise intentions), <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/chap1_section_15.html">N</a> (Negative, Negative contact), <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/chap1_section_20.html">S</a> (Say again, Stand by, Speak slower), <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/chap1_section_22.html">U</a> (Unable, UHF), <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/chap1_section_23.html">V</a> (Verify, VHF), <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/chap1_section_10.html">I</a> (I say again, Immediately), <a href="https://www.faa.gov/air_traffic/publications/atpubs/pcg_html/chap1_section_16.html">O</a> (Over, Out).</p>
+ <h3>Sim source</h3>
+ <p id="source-bms"><strong>[8] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 5 November 2026, pp. 37 (radio presets), 45–49 (ATC menu, ATIS, taxi and takeoff), 55 (departure) and 82 (approach to tower). A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/radio-procedures-evidence.md">radio procedures evidence</a>.</p>
  <p>Figures 1–10 are original drawings and constructed examples, not reproductions of any publication's figures. Call signs, frequencies and timings in constructed examples are invented.</p>
  <p class="note">Applicability: written for US military pilots of all services. The brevity words [4] are joint across the Army, Marine Corps, Navy and Air Force. The <Term id="Sortie">sortie</Term>, formation and training-rule examples are from Naval Air Training Command scripts and instructions [1–3] and show one <Term id="Squadron">squadron</Term>'s practice, not a service-wide standard; your flight manual and your service's, wing's and <Term id="Squadron">squadron</Term>'s procedures govern. The FAA AIM and Pilot/Controller Glossary [6, 7] are the US civil rules that military aircraft of every service also follow in the National Airspace System; they are cited here as the supplementary rule set behind the military calls. ICAO and other national procedures differ in detail. This revision is Drafted pending independent source-backed review.</p>
@@ -363,7 +448,23 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
 <script>import '../../../lessons/radio/lesson-ui.mjs';</script>
 
 <style>
-  .contents ol { columns: 2; column-gap: 2rem; padding-left: 1.5rem; }
+  .contents-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
+  .contents h3 { margin: 0.4rem 0 0.2rem; font-size: 0.95rem; }
+  .lede { font-size: 1.1rem; }
+  .key { padding: 0.6rem 1rem; border-left: 0.25rem solid var(--color-link); background: var(--color-surface); }
+  ul.recap li { margin-block: 0.3rem; }
+  details.more { margin-block: 1rem; padding: 0.5rem 1rem; border: 1px solid var(--color-border); }
+  details.more summary { cursor: pointer; font-weight: 700; }
+  ol.exchange { list-style: none; padding-left: 1rem; border-left: 0.25rem solid var(--color-border); }
+  ol.exchange li { display: grid; grid-template-columns: 7.5rem 1fr; column-gap: 0.75rem; margin-block: 0.4rem; }
+  ol.exchange .who { font-weight: 700; }
+  ol.exchange .step { margin-left: 0.4rem; font-size: 0.85rem; white-space: nowrap; }
+  .outcome { display: inline-block; margin-right: 0.4rem; padding: 0 0.4rem; font-size: 0.8rem; border: 1px solid var(--color-border); color: var(--color-muted); }
+  .sim-panel { margin: 2rem 0; padding: 0.75rem 1.25rem; border-left: 4px solid var(--color-accent); background: var(--color-surface, #f6f7f8); }
+  .sim-panel h2 { margin-top: 0.4rem; }
+  .sim-panel h3 { margin: 1rem 0 0.3rem; font-size: 1rem; }
+  @media (max-width: 40rem) { .contents-groups { grid-template-columns: 1fr; } ol.exchange li { display: block; } }
+  .contents ol { padding-left: 1.5rem; margin-top: 0; }
   .contents li { break-inside: avoid; }
   .table-scroll, .phonetic { overflow-x: auto; border: 1px solid var(--color-border); }
   .table-scroll:focus-visible, .phonetic:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
