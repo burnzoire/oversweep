@@ -34,3 +34,5 @@ DCS F-14A/B and available B(U) distinctions need module/version specificity; che
 ## Editorial action
 
 Prioritise the factual distinctions above. Preserve useful technical reference details and cross-links, while removing redundant narrative before adding new content. Changes to technical claims require independent aviation SME evidence review.
+
+**Applied (2026-11-05):** the record now links the Ship Operations module; the AIM-54 link was already in the body. The Iranian loss figures already carry their years; independent verification was not attempted.

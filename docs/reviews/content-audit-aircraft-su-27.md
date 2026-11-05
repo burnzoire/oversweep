@@ -34,3 +34,5 @@ Use a distinct sim-specific panel as appropriate. Verify each simulation claim a
 ## Editorial disposition
 
 Tighten repetition; preserve distinguishing technical explanations, source caveats and cross-links. Do not change aviation claims without SME review.
+
+**Applied (2026-11-05):** no change in this pass: Su-27S/P equipment versus later derivatives and the dated Ukraine claims need sourced research.

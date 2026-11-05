@@ -34,3 +34,5 @@ Use a distinct sim-specific panel as appropriate. Verify each simulation claim a
 ## Editorial disposition
 
 Tighten repetition; preserve distinguishing technical explanations, source caveats and cross-links. Do not change aviation claims without SME review.
+
+**Applied (2026-11-05):** no change in this pass: laminar-flow and radiator claims need specific sources.

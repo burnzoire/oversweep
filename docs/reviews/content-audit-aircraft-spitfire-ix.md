@@ -34,3 +34,5 @@ Use a distinct sim-specific panel as appropriate. Verify each simulation claim a
 ## Editorial disposition
 
 Tighten repetition; preserve distinguishing technical explanations, source caveats and cross-links. Do not change aviation claims without SME review.
+
+**Applied (2026-11-05):** the Battle of Britain section now opens by saying it was fought by earlier marks and the Mk IX entered service in June 1942. Dive-speed and mark-specific claims were not re-sourced.

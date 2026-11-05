@@ -34,3 +34,5 @@ DCS F-16C and BMS F-16 avionics, radar and flight model differ substantially by 
 ## Editorial action
 
 Prioritise the factual distinctions above. Preserve useful technical reference details and cross-links, while removing redundant narrative before adding new content. Changes to technical claims require independent aviation SME evidence review.
+
+**Applied (2026-11-05):** no change in this pass: the block behind each specification needs sourced research. Dated fleet claims already carry their years.

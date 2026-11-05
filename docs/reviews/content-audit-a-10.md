@@ -32,3 +32,5 @@ Readers should be able to explain the A-10's close-air-support role, the aircraf
 Distinguish DCS A-10A from A-10C II and clarify which systems/variants are flyable. Real-world survivability and upgrade history are not necessarily simulated.
 
 **Review action:** establish what is modelled, simplified, absent or unverified, citing the specific simulator, module, version and source/test. Keep real-world facts primary and put simulator-only behaviour in the established visually distinct sim-specific treatment where applicable. **Fidelity verification pending; no unsupported feature-absence claim is made here.**
+
+**Applied (2026-11-05):** the retirement plan now gives the 2023 target (2028 or 2029) and the April 2026 delay to 2030, as of October 2026, when the sources were read, and the record links the Weapons Delivery and Close Air Support modules. The 2026 Iran operations claim already carries its year. The A-10A/OA-10/A-10C split and the plate's range conditions need sourced research.
