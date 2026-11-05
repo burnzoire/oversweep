@@ -71,8 +71,10 @@ the skill has the read-only `aviation-sme-reviewer` agent (.claude/agents) do th
 review without authoring context. When a PR's content is final, ask
 Nathan once whether to review it; don't run the skill unasked, as each run costs
 plan usage. Any push after the label needs a fresh review, so batch fixes. The
-Copilot review workflow still runs on the `sme-review` label, but its credits are
-spent; don't add that label unless Nathan asks. Never add `sme-override`.
+gate runs only when `sme-passed` or `sme-override` is added or removed, so an
+unreviewed PR shows no gate check rather than a failure. The Copilot review
+workflow is disabled (manual dispatch only) since its credits are spent. Never
+add `sme-override`.
 
 ## Progress and completion
 

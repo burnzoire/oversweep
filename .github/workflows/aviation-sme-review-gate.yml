@@ -2,8 +2,9 @@ name: Aviation SME review gate
 
 on:
   pull_request_target:
-    # labeled/unlabeled re-run the gate when the owner adds or removes sme-override.
-    types: [opened, reopened, ready_for_review, synchronize, labeled, unlabeled]
+    # The gate runs only when a review label is added or removed. Running on every
+    # push failed every content PR until its review, which spammed failure emails.
+    types: [labeled, unlabeled]
 
 permissions:
   actions: read
@@ -17,6 +18,7 @@ concurrency:
 
 jobs:
   verify:
+    if: contains(fromJSON('["sme-passed","sme-override"]'), github.event.label.name)
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

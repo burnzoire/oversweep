@@ -3,7 +3,6 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const workflowPath = ".github/workflows/aviation-sme-review.lock.yml";
-const gateWorkflowFile = "aviation-sme-review-gate.yml";
 const summaryTitle = "Oversweep Aviation SME advisory review";
 export const overrideLabel = "sme-override";
 // The SME review only runs on PRs with this label; Claude adds it when a PR is ready.
@@ -86,8 +85,8 @@ export function evaluateOverride({ labels, events, owner }) {
 }
 
 // A Claude review passes the gate only if the owner's account (Claude acts through it)
-// applied sme-passed after the current head was pushed. headPushedAt is when the gate
-// first ran for this head, which a push triggers straight away.
+// applied sme-passed after the current head was pushed. headPushedAt is the head
+// commit's committer date.
 export function evaluateClaudeReview({ labels, events, owner, headPushedAt }) {
   if (!labels?.some((label) => label.name === passedLabel)) return null;
   const applied = events
@@ -234,10 +233,10 @@ async function main() {
 
   let claudeReview = null;
   if (pullRequest.labels?.some((label) => label.name === passedLabel)) {
-    const gateRuns = await request(apiUrl, token, `/repos/${owner}/${repo}/actions/workflows/${gateWorkflowFile}/runs?head_sha=${headSha}&event=pull_request_target&per_page=100`);
-    const headPushedAt = gateRuns.workflow_runs
-      ?.map((run) => run.created_at)
-      .sort((a, b) => Date.parse(a) - Date.parse(b))[0];
+    // The gate no longer runs on push, so the head commit's committer date stands in
+    // for the push time (a commit, amend or rebase sets it just before the push).
+    const headCommit = await request(apiUrl, token, `/repos/${owner}/${repo}/commits/${headSha}`);
+    const headPushedAt = headCommit.commit?.committer?.date;
     claudeReview = evaluateClaudeReview({ labels: pullRequest.labels, events, owner: repoOwner, headPushedAt });
     if (claudeReview.ready) {
       await writeSummary(claudeReview.message, true);

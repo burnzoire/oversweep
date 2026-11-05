@@ -54,26 +54,10 @@
 #   - ghcr.io/github/github-mcp-server:v2.0.2@sha256:ffced0d76e77428532a2ced185516992d77fd146d69eec2f244e6237d1a97796
 
 name: "Aviation SME PR review"
+# Disabled 2026-11-05: Copilot credits are spent and the Claude sme-review skill
+# replaces this run. Only a manual dispatch starts it now. Recompiling the .md
+# source restores the pull_request trigger.
 on:
-  pull_request:
-    paths:
-      - content/**
-      - src/pages/**
-      - src/lessons/**
-      - src/experiences/**
-      - docs/reviews/**
-      - docs/aviation-sme-review.md
-      - scripts/prepare_review_sources.py
-      - .github/agents/aviation-sme-reviewer.agent.md
-      - .github/workflows/aviation-sme-review.md
-      - .github/workflows/aviation-sme-review.lock.yml
-      - .github/workflows/shared/aviation-sme-review.md
-    types:
-      - opened
-      - reopened
-      - ready_for_review
-      - synchronize
-      - labeled
   # roles: all # Roles processed as role check in pre-activation job
   workflow_dispatch:
     inputs:
