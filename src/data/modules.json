@@ -134,6 +134,17 @@
     "applicability": "For military aircrew of every service who fly close air support, fixed- or rotary-wing: the joint close air support publication, which all four services follow, with Marine Corps attack helicopter CAS and Army close combat attack as that publication describes them. Worked briefs are invented examples in its formats; theater special instructions, your unit's procedures and the current edition govern."
   },
   {
+    "id": "module.precision-targeting",
+    "slug": "precision-targeting",
+    "subject": "air-to-ground-operations",
+    "revision": 1,
+    "title": "Precision Targeting",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Understand how guided weapons are put on a precise point: laser designation by the attacking aircraft, another aircraft or a ground team, laser codes, how a laser seeker finds the spot, the safety zone and attack zone around the laser target line, lasing time, what degrades a laser, coordinate-guided (GPS/INS) weapons with their accuracy and limits, target location error and its categories, and the targeting pod's part, for aircrew of every service.",
+    "applicability": "For military aircrew of every service who employ laser-guided or coordinate-guided weapons, fixed- or rotary-wing, and the JTACs and FAC(A)s who work with them: the joint close air support publication's laser and inertially aided munition procedures, which all four services follow, with laser and guidance principles from the US Naval Academy's weapons systems text. The worked attack is an invented example; theater SPINS, your unit's tactics, your weapon's manual and the current edition govern."
+  },
+  {
     "id": "module.sead-dead",
     "slug": "sead-dead",
     "subject": "air-to-ground-operations",

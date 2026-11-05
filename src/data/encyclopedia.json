@@ -1816,6 +1816,17 @@
     "summary": "Destructive and disruptive suppression, localized and opportune SEAD, engagement zones, the radar horizon, burnthrough and the jammer geometries."
   },
   {
+    "id": "encyclopedia.terminology.precision-targeting",
+    "slug": "precision-targeting",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Precision targeting terms",
+    "designation": "JP 3-09.3 · USNA",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Laser designators, spot trackers and codes, the laser safety and attack zones, spillover and backscatter, inertially aided munitions, target location error and its categories."
+  },
+  {
     "id": "encyclopedia.terminology.flight-planning",
     "slug": "flight-planning",
     "category": "terminology",
