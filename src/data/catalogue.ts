@@ -23,5 +23,5 @@ export const encyclopediaCategories = [
   { slug: "carriers", title: "Carriers", summary: "Aircraft carrier hulls, classes, names and operator histories, with dated sources and links to naval aviation procedures." },
   { slug: "locations", title: "Locations", summary: "Theatres, simulator maps and airfields: geography, military history, facilities and simulator coverage." },
   { slug: "terminology", title: "Terminology", summary: "Brevity words, abbreviations and terms used across the services." },
-  { slug: "reference-data", title: "Reference Data", summary: "Tables pilots look things up in: units, conversions and codes." },
+  { slug: "reference-data", title: "Reference Data", summary: "Tables pilots look things up in: threat tables, codes, units and conversions, shared with the Manual modules that use them." },
 ] as const;

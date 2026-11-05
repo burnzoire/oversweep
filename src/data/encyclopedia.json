@@ -2826,5 +2826,16 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "Allied Force's 2005 Balkans battlefield, with 1999, 2005 and 2010 timelines."
+  },
+  {
+    "id": "encyclopedia.reference-data.f-16-harm-threat-tables",
+    "slug": "f-16-harm-threat-tables",
+    "category": "reference-data",
+    "revision": 1,
+    "title": "F-16 HARM threat tables",
+    "designation": "DCS and Falcon BMS",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The HTS pod's threat classes and the AGM-88 HARM's threat tables and codes in the two F-16 sims, with the symbols each radar shows."
   }
 ]
