@@ -6,11 +6,23 @@ import { sitePath } from '../../../lib/paths';
 import Term from '../../../components/Term.astro';
 import { PATTERNS, SENSITIVITY } from '../../../lessons/weapons-delivery/lesson-model.mjs';
 const wd = getModule('weapons-delivery');
-const contents = [
- ['overview', 'Purpose and learning objectives'], ['types', 'Types of delivery'], ['triangle', 'The bombing triangle and the sight'],
- ['tables', 'Bombing tables and the Z diagram'], ['pattern', 'Roll-in, tracking and recovery'], ['errors', 'Release parameters and errors'],
- ['corrections', 'Correcting in the dive'], ['sights', 'Computed and manual sights'], ['popup', 'The offset pop-up attack'],
- ['ordnance', 'Low and high drag, fuzes and fragmentation'], ['sims', 'In the sim'], ['terms', 'Terms'], ['check', 'Check your understanding'],
+const core = [
+ ['example', 'One 30° bomb run'],
+ ['types', 'Types of delivery'],
+ ['triangle', 'The bombing triangle and the sight'],
+ ['pattern', 'Roll-in, tracking and recovery'],
+ ['errors', 'Release parameters and errors'],
+ ['corrections', 'Correcting in the dive'],
+ ['recap', 'Key points'],
+];
+const reference = [
+ ['tables', 'Bombing tables and the Z diagram'],
+ ['sights', 'Computed and manual sights'],
+ ['popup', 'The offset pop-up attack'],
+ ['ordnance', 'Low and high drag, fuzes and fragmentation'],
+ ['sims', 'In the sim'],
+ ['terms', 'Terms'],
+ ['check', 'Check your understanding'],
  ['sources', 'Sources and applicability'],
 ];
 // Military sources first: [1] CNATRA P-1219 (T-45 Weapons FTI) printed page,
@@ -31,23 +43,49 @@ const bfm = sitePath('manual/air-combat/bfm/');
   <p>Figure 1 lets you fly a dive delivery badly on purpose and see where the bomb goes; Figure 2 steps through a <Term>pop-up</Term> attack in profile and plan.</p>
  </section>
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
-  <ol>{contents.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
  </nav>
 
- <h2 id="overview">Purpose and learning objectives</h2>
- <p>The Navy's weapons training instruction says that every procedure before the dive has one purpose, to get you to the <Term>roll-in</Term> point, and that what you do between <Term>roll-in</Term> and release decides how accurate the delivery is. <a href="#source-p1219">{f('29')}</a> This module follows that order: the kinds of attack, the geometry of the dive, the numbers you plan, and how to fly them and correct them.</p>
- <p>By the end you should be able to: say when a <Term>laydown</Term>, dive, <Term>loft</Term> or <Term>pop-up</Term> attack is used; draw the bombing triangle and name its angles; read a delivery table and a Z diagram; say whether a release that is steep, shallow, fast, slow, high or low hits long or short, and by about how much; explain what <Term>CCIP</Term> computes and what a fixed <Term id="Depressed sight line">depressed sight</Term> does not; fly an offset <Term>pop-up</Term> through its steps; and explain why the <Term>minimum release altitude</Term> is never broken.</p>
+ <p class="lede">The Navy's weapons training instruction says that every procedure before the dive has one purpose, to get you to the <Term>roll-in</Term> point, and that what you do between <Term>roll-in</Term> and release decides how accurate the delivery is. <a href="#source-p1219">{f('29')}</a> This module follows that order: the kinds of attack, the geometry of the dive, the numbers you plan, and how to fly them and correct them.</p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>say when a <Term>laydown</Term>, dive, <Term>loft</Term> or <Term>pop-up</Term> attack is used, and why;</li>
+  <li>draw the bombing triangle, name its angles, and read a delivery table and a Z diagram;</li>
+  <li>say whether a release that is steep, shallow, fast, slow, high or low hits long or short, and by about how much;</li>
+  <li>correct a dive run before release, and explain why the <Term>minimum release altitude</Term> is never broken;</li>
+  <li>explain what <Term>CCIP</Term> computes and what a fixed <Term id="Depressed sight line">depressed sight</Term> does not, and fly an offset <Term>pop-up</Term> through its steps.</li>
+ </ol>
  <p class="note">This is a reference, not a syllabus or a tactic. Worked numbers are the <Term record="t-45">T-45</Term> training jet's practice patterns with practice bombs, from a 2003 revision of its training instruction; combat aircraft, weapons and tactics use their own tables and their service's tactical manuals, which govern. Laser- and coordinate-guided weapons, such as the <Term record="gbu-12">GBU-12</Term> laser-guided bomb and the <Term record="jdam">JDAM</Term>, belong to precision targeting, and helicopter gunnery to rotary-wing attack; the <a href={ordnance}>Ordnance encyclopedia</a> lists the guided weapons.</p>
 
+ <h2 id="example">One 30° bomb run</h2>
+ <p>Here is one practice run with a manual sight, using the <Term record="t-45">T-45</Term> training pattern's numbers. They are training data for a practice bomb, not any aircraft's combat release limits. <a href="#source-p1219">{f('21–25, 36, 40')}</a></p>
+ <ol class="exchange script">
+  <li><span class="who">Pattern</span> <span class="said">8,000 ft above the ground at 250 KIAS, with the sight set to 128 <Term id="Mil">mils</Term> for a release at 3,000 ft and 450 knots in a 30° dive. <a class="step" href="#triangle">Why</a></span></li>
+  <li><span class="who">Roll-in</span> <span class="said">Set release power and pull toward the target about 30° of heading before the <Term>run-in line</Term>, lift vector just below the target. <a class="step" href="#pattern">Why</a></span></li>
+  <li><span class="who">Track</span> <span class="said">Put the <Term>pipper</Term> 65 <Term id="Mil">mils</Term> below the target, hold the <Term>dive angle</Term>, and let the <Term>pipper</Term> track straight up to the aimpoint. <a class="step" href="#pattern">Why</a></span></li>
+  <li><span class="who">An error</span> <span class="said">You are 2° steep. Steep hits long: about 50 ft per degree. <a class="step" href="#errors">Why</a></span></li>
+  <li><span class="who">Correct</span> <span class="said">Hold the dive and release 200 ft high, at 3,200 ft. Never go below the 2,700 ft <Term>minimum release altitude</Term> to fix anything. <a class="step" href="#corrections">Why</a></span></li>
+  <li><span class="who">Release</span> <span class="said"><Term>Pickle</Term> wings level in about 1 g, pause about half a second, then pull smoothly to 4 g. <a class="step" href="#pattern">Why</a></span></li>
+ </ol>
+ <p class="key"><strong>Key point:</strong> a manual sight is right only at the planned dive angle, airspeed, release altitude and g, wings level; every error moves the hit a known amount, and the correction is made before release, never below the minimum release altitude.</p>
+
  <h2 id="types">Types of delivery</h2>
- <p>The Navy's operational navigation instruction names four types of attack: <a href="#source-p1208">{o('5–6')}</a></p>
- <ul>
-  <li><strong><Term>Laydown</Term></strong>: weapons dropped in level flight, the release point usually set by the weapons system. The weapons use high-drag devices so the attacker can avoid the fragmentation pattern.</li>
-  <li><strong>Dive</strong>: the classic delivery, with the aircraft established in a dive of a planned angle down a <Term>run-in line</Term> and the weapon released at a planned altitude and airspeed. The <Term record="t-45">T-45</Term> practice patterns use 10°, 20° and 30° dives. <a href="#source-p1219">{f('21–23')}</a></li>
-  <li><strong><Term>Loft</Term></strong>: the weapon is released by computer with the aircraft nose-up, so it is thrown at the target in a ballistic trajectory, which keeps the attacker farther from the detonation and from the target's defenses.</li>
-  <li><strong><Term>Pop-up</Term></strong>: a low-level run at the target, pulling up hard at a preplanned point to make a dive delivery. In a roll-ahead <Term>pop-up</Term> the heading stays the same; in an angle-off <Term>pop-up</Term> a heading change of 30–60° with a hard climb places the attacker at a roll-in position like a practice pattern's, and the vertical and lateral displacement complicates a defender's firing solution.</li>
- </ul>
+ <p>The Navy's operational navigation instruction names four types of attack.</p>
+ <div class="table-scroll" role="region" aria-label="Types of delivery" tabindex="0"><table>
+  <caption>The four types of attack <a href="#source-p1208">{o('5–6')}</a></caption>
+  <thead><tr><th scope="col">Type</th><th scope="col">How it is flown</th><th scope="col">Why</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>Laydown</Term></th><td>Level flight; the weapons system usually sets the release point</td><td>High-drag weapons let the attacker avoid the fragmentation pattern</td></tr>
+   <tr><th scope="row">Dive</th><td>A dive of planned angle down a <Term>run-in line</Term>, released at a planned altitude and airspeed; the <Term record="t-45">T-45</Term> practice patterns use 10°, 20° and 30° <a href="#source-p1219">{f('21–23')}</a></td><td>The classic delivery</td></tr>
+   <tr><th scope="row"><Term>Loft</Term></th><td>Released by computer, nose up, so the weapon is thrown at the target</td><td>Keeps the attacker farther from the detonation and the target's defenses</td></tr>
+   <tr><th scope="row"><Term>Pop-up</Term></th><td>Low-level run, then a hard pull-up at a planned point into a dive delivery, straight ahead (roll-ahead) or with a 30–60° heading change (angle-off)</td><td>Turns a low-level run into a dive delivery; angle-off complicates a defender's firing solution</td></tr>
+  </tbody>
+ </table></div>
  <p>The choice follows the threat and the target. The same instruction says that steep dives need more altitude and so more time climbing from low level, that high altitude avoids small-arms fire and AAA while low altitude avoids SAMs, and that dive angles of 10, 20 or 30° are picked by distance to the target, the threat and the airspace. <a href="#source-p1208">{o('5, 32')}</a> Toss (<Term>loft</Term>) bombing lets an aircraft attack without overflying a heavily defended target and keeps it away from the weapon's blast; the US Air Force called its version the Low Altitude Bombing System (LABS), whose over-the-shoulder variant releases the bomb past the vertical so it is tossed back toward the target. <a href="#source-toss">[5]</a></p>
+ <p class="key"><strong>Key point:</strong> the attack type follows the threat and the target: laydown low and level with high-drag weapons, dive as the classic delivery, loft to stay away from the target, pop-up to get from low level into a dive.</p>
 
  <h2 id="triangle">The bombing triangle and the sight</h2>
  <p>A bomb released in a dive starts with the aircraft's velocity, and gravity immediately pulls it down from the aircraft's flight path in an arc. The geometry is the <strong>bombing triangle</strong>: its base is the down-range travel from release to impact, its vertical side is the release altitude, and its hypotenuse is the bomb's <Term>trajectory drop</Term>. <a href="#source-p1219">{f('31')}</a> The angles the pilot works with are: <a href="#source-p1219">{f('29–31')}</a></p>
@@ -78,27 +116,16 @@ const bfm = sitePath('manual/air-combat/bfm/');
   <div class="feedback" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">The hit comes from the T-45 FTI's table of error sensitivities, for the <Term>pipper</Term> on the aimpoint at release, wings level and correct g, with errors adding or cancelling; the table rounds and applies to small errors. The side view is to scale, with the sight line set for the planned delivery and the hit placed from the same table; the bomb's curve is a no-drag sketch of the triangle's shape, not a ballistic solution, since real bombs slow down and the real sight setting also carries the angle of attack.</p>
  </section>
-
- <h2 id="tables">Bombing tables and the Z diagram</h2>
- <p>Bombing tables turn a planned delivery into a sight setting. The <Term record="t-45">T-45</Term>'s flight manual contains delivery charts for its practice bombs and rockets, from which the pilot finds the sight setting and release attitude for each pattern; target elevation is added to the release altitude to get the release altitude above mean sea level. <a href="#source-p1219">{f('3')}</a> To hit, the pilot decides on a release altitude and airspeed and reads the sight setting for that attack from the table. <a href="#source-p1219">{f('31')}</a> The table also gives the weapon's <Term>time of fall</Term>, which sets the <Term>offset aimpoint</Term>: the wind drifts the bomb after release, so you aim directly into the wind by 1.7 × <Term>time of fall</Term> (s) × wind (kt) ft. With a 12-knot north wind and a 7-second fall, that is about 140 ft north of the target. <a href="#source-p1219">{f('3–4')}</a> Release airspeed is a true airspeed. <a href="#source-p1219">{f('4')}</a></p>
- <p>The numbers for each pattern go on a <strong>Z diagram</strong> on the briefing board or kneeboard card: pattern altitude, airspeed and power, dive angle, checkpoint altitude, initial <Term>pipper</Term> placement, <Term>mil</Term> setting, release altitude, release airspeed, radar altimeter setting and <Term>minimum release altitude</Term>. <a href="#source-p1219">{f('31')}</a> The T-45's three practice patterns: <a href="#source-p1219">{f('21–23, 36')}</a></p>
- <div class="table-scroll" role="region" aria-label="T-45 practice weapons patterns" tabindex="0"><table>
-  <caption>T-45 practice bomb patterns, heights above ground <a href="#source-p1219">{f('21–23, 36')}</a></caption>
-  <thead><tr><th scope="col">Dive</th><th scope="col">Pattern altitude</th><th scope="col">Pattern speed</th><th scope="col">Release</th><th scope="col">Minimum release</th><th scope="col">Release speed</th><th scope="col">Mil setting</th><th scope="col">Initial sight</th><th scope="col">Weather</th></tr></thead>
-  <tbody>
-   {rows.map((d) => { const p = PATTERNS[d]; return (
-    <tr><th scope="row">{d}°</th><td>{p.patternAlt.toLocaleString('en-US')} ft</td><td>{p.patternKias} KIAS</td><td>{p.release.toLocaleString('en-US')} ft</td><td>{p.minRelease.toLocaleString('en-US')} ft</td><td>{p.releaseKtas} KTAS</td><td>{p.mils}</td><td>{p.initialMils} mils</td><td>{p.weather}</td></tr>
-   ); })}
-  </tbody>
- </table></div>
- <p>The 20° pattern substitutes for the 30° when the ceiling is too low; the 10° pattern simulates high-drag or forward-firing ordnance deliveries. <a href="#source-p1219">{f('22–23')}</a> Practice bombs are filled to simulate general-purpose bomb ballistics: the T-45's <Term record="mk-76">Mk 76</Term> simulates a <Term record="mk-82">Mk 82</Term> 500 lb bomb. <a href="#source-p1219">{f('5')}</a></p>
+ <p class="key"><strong>Key point:</strong> the sight depression is the angle of attack plus the trajectory drop, so the pipper on the target at the planned parameters puts the bomb on the target.</p>
 
  <h2 id="pattern">Roll-in, tracking and recovery</h2>
  <p><strong>The <Term>attack cone</Term>.</strong> For a given <Term>dive angle</Term>, all the flight paths to a target form a cone above it. A practice pattern uses a fixed <Term>run-in line</Term>, but in combat you intercept the cone from the most advantageous direction. <a href="#source-p1219">{f('20')}</a> In the T-45 pattern the abeam position, on the cone with the target abeam, is about 2 NM from it, and you stay on the cone from abeam to <Term>roll-in</Term> by keeping the target at 3 or 9 o'clock, much like flying a <Term>TACAN</Term> arc. <a href="#source-p1219">{f('24–25')}</a></p>
  <p><strong><Term>Roll-in</Term>.</strong> Approaching the <Term>run-in line</Term>, set release power and start a 15–17 <Term id="Units">unit</Term> pull toward the target, about 30° of heading before the run-in heading. Roll to put the lift vector slightly below the target and pull the nose down to align with the <Term>run-in line</Term>; up to 10° off it is accepted. Because of the <Term>pendulum effect</Term>, the roll-out starts while the <Term>pipper</Term> is still short of the <Term>run-in line</Term>. Roll wings level and set the target at the initial sight setting. <a href="#source-p1219">{f('25')}</a></p>
- <p><strong>Tracking.</strong> In <strong>straight-path tracking</strong>, put the target at the initial sight setting (65 <Term id="Mil">mils</Term> below it for 30° bombs, 70 for 20° and 55 for 10°), note the <Term>dive angle</Term> and hold it, and let the <Term>pipper</Term> track straight up to the aimpoint, arriving just as you reach release altitude. If the <Term>dive angle</Term> is more than 5° off plan, abort and move the <Term>roll-in</Term> point. Make left and right corrections early with quick wing dips, not by tracking in a bank. <a href="#source-p1219">{f('36–37')}</a> Holding the <Term>pipper</Term> on a point with forward stick (curvilinear tracking) steepens the dive and drives g toward zero, so a release then hits long or hangs; the training command does not practice it alone, but it may start a run before straight-path tracking from 1.5 times the release altitude. <a href="#source-p1219">{f('37–38')}</a></p>
+ <p><strong>Tracking.</strong> In <strong>straight-path tracking</strong>, put the target at the initial sight setting (65 <Term id="Mil">mils</Term> below it for 30° bombs, 70 for 20° and 55 for 10°), note the <Term>dive angle</Term> and hold it, and let the <Term>pipper</Term> track straight up to the aimpoint, arriving just as you reach release altitude. If the <Term>dive angle</Term> is more than 5° off plan, abort and move the <Term>roll-in</Term> point.</p>
+ <p>Make left and right corrections early with quick wing dips, not by tracking in a bank. <a href="#source-p1219">{f('36–37')}</a> Holding the <Term>pipper</Term> on a point with forward stick (curvilinear tracking) steepens the dive and drives g toward zero, so a release then hits long or hangs; the training command does not practice it alone, but it may start a run before straight-path tracking from 1.5 times the release altitude. <a href="#source-p1219">{f('37–38')}</a></p>
  <p><strong>Release and recovery.</strong> <Term>Pickle</Term> no lower than the <Term>minimum release altitude</Term>, wings level, in about 1 g. Pause about half a second for the weapon to clear, then pull smoothly to 4 g over 2–3 seconds, wings level. <a href="#source-p1219">{f('25')}</a> In the T-45 the <Term>breakaway cross</Term> appears when a normal 4 g recovery after a normal reaction time would bottom out with 1,000 ft or less of ground clearance; it is not shown in dives shallower than 15°, and it is a warning, not a cue to pull. <a href="#source-p1219">{f('11, 49')}</a> <Term>Target fixation</Term> has flown pilots through the <Term>minimum release altitude</Term>, the <Term>breakaway cross</Term> and the radar altimeter warning into the ground. <a href="#source-p1219">{f('50')}</a></p>
  <p>In the training pattern, "in hot" means you intend to release and the master arm is on, "in cold" that you do not, and "<Term id="WINCHESTER">Winchester</Term>" that all ordnance is expended. <a href="#source-p1219">{f('26, 68')}</a></p>
+ <p class="key"><strong>Key point:</strong> roll in early enough to pull down onto the run-in line, track the pipper straight up to the aimpoint, release wings level, and recover with a smooth 4 g pull.</p>
 
  <h2 id="errors">Release parameters and errors</h2>
  <p>Every delivery is planned for one <Term>dive angle</Term>, airspeed, release altitude and g, wings level and in balance. Change any of them and the hit moves: <a href="#source-p1219">{f('32–34')}</a></p>
@@ -128,6 +155,7 @@ const bfm = sitePath('manual/air-combat/bfm/');
   <p class="feedback" data-result role="status" aria-live="polite"></p>
   <div class="buttons"><button type="button" data-new>Next run</button></div>
  </section>
+ <p class="key"><strong>Key point:</strong> steep, fast or low hits long; shallow, slow or high hits short; and where the pipper is at release matters most of all.</p>
 
  <h2 id="corrections">Correcting in the dive</h2>
  <p>In training you can abort a bad run; in combat you normally get one chance, so you learn to correct. <a href="#source-p1219">{f('39')}</a> The <Term record="t-45">T-45</Term> instruction's corrections for a 30° bomb run: <a href="#source-p1219">{f('40–42')}</a></p>
@@ -140,11 +168,37 @@ const bfm = sitePath('manual/air-combat/bfm/');
   <li><strong>Deflection:</strong> with bombs there is no last-moment fix; rudder does not move the bomb and a bank gives a false sight picture. Correct early, wings level at release. Forward-firing weapons can be corrected with rudder: for the gun, 1.25 times the error.</li>
  </ul>
  <p>Never release below the <Term>minimum release altitude</Term> to correct anything. It is a safety margin, and it also protects the weapon: a fuze with an arming delay needs a set <Term>time of fall</Term> to arm, so a low release may drop an unarmed bomb, and with live ordnance there is a fragmentation pattern to avoid. <a href="#source-p1219">{f('30, 40, 50')}</a></p>
+ <p class="key"><strong>Key point:</strong> steep: hold the dive and release high; shallow: add power; early sight picture: release halfway; late sight picture or a deflection error: correct early or abort.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>The attack type follows the threat and the target. <a href="#types">More</a></li>
+  <li>The sight setting is the angle of attack plus the trajectory drop. <a href="#triangle">More</a></li>
+  <li>Track the pipper straight up to the aimpoint; release wings level, then a smooth 4 g pull. <a href="#pattern">More</a></li>
+  <li>Steep, fast or low: long. Shallow, slow or high: short. <a href="#errors">More</a></li>
+  <li>Correct before release; never below the minimum release altitude. <a href="#corrections">More</a></li>
+ </ul>
+
+ <h2 id="tables">Bombing tables and the Z diagram</h2>
+ <p>Bombing tables turn a planned delivery into a sight setting. The <Term record="t-45">T-45</Term>'s flight manual contains delivery charts for its practice bombs and rockets, from which the pilot finds the sight setting and release attitude for each pattern; target elevation is added to the release altitude to get the release altitude above mean sea level. <a href="#source-p1219">{f('3')}</a> To hit, the pilot decides on a release altitude and airspeed and reads the sight setting for that attack from the table. <a href="#source-p1219">{f('31')}</a></p>
+ <p>The table also gives the weapon's <Term>time of fall</Term>, which sets the <Term>offset aimpoint</Term>: the wind drifts the bomb after release, so you aim directly into the wind by 1.7 × <Term>time of fall</Term> (s) × wind (kt) ft. With a 12-knot north wind and a 7-second fall, that is about 140 ft north of the target. <a href="#source-p1219">{f('3–4')}</a> Release airspeed is a true airspeed. <a href="#source-p1219">{f('4')}</a></p>
+ <p>The numbers for each pattern go on a <strong>Z diagram</strong> on the briefing board or kneeboard card: pattern altitude, airspeed and power, dive angle, checkpoint altitude, initial <Term>pipper</Term> placement, <Term>mil</Term> setting, release altitude, release airspeed, radar altimeter setting and <Term>minimum release altitude</Term>. <a href="#source-p1219">{f('31')}</a> The T-45's three practice patterns: <a href="#source-p1219">{f('21–23, 36')}</a></p>
+ <div class="table-scroll" role="region" aria-label="T-45 practice weapons patterns" tabindex="0"><table>
+  <caption>T-45 practice bomb patterns, heights above ground <a href="#source-p1219">{f('21–23, 36')}</a></caption>
+  <thead><tr><th scope="col">Dive</th><th scope="col">Pattern altitude</th><th scope="col">Pattern speed</th><th scope="col">Release</th><th scope="col">Minimum release</th><th scope="col">Release speed</th><th scope="col">Mil setting</th><th scope="col">Initial sight</th><th scope="col">Weather</th></tr></thead>
+  <tbody>
+   {rows.map((d) => { const p = PATTERNS[d]; return (
+    <tr><th scope="row">{d}°</th><td>{p.patternAlt.toLocaleString('en-US')} ft</td><td>{p.patternKias} KIAS</td><td>{p.release.toLocaleString('en-US')} ft</td><td>{p.minRelease.toLocaleString('en-US')} ft</td><td>{p.releaseKtas} KTAS</td><td>{p.mils}</td><td>{p.initialMils} mils</td><td>{p.weather}</td></tr>
+   ); })}
+  </tbody>
+ </table></div>
+ <p>The 20° pattern substitutes for the 30° when the ceiling is too low; the 10° pattern simulates high-drag or forward-firing ordnance deliveries. <a href="#source-p1219">{f('22–23')}</a> Practice bombs are filled to simulate general-purpose bomb ballistics: the T-45's <Term record="mk-76">Mk 76</Term> simulates a <Term record="mk-82">Mk 82</Term> 500 lb bomb. <a href="#source-p1219">{f('5')}</a></p>
 
  <h2 id="sights">Computed and manual sights</h2>
  <p>Everything above is a <strong>manual delivery</strong>: a <Term>depressed sight line</Term>, an "iron sight" set a fixed number of <Term id="Mil">mils</Term> below the line of flight, that is right only when the pilot arrives at the planned parameters. <a href="#source-p1219">{f('67–69')}</a> A computed sight removes most of that work.</p>
- <p><strong><Term>CCIP</Term></strong> (continuously computed impact point) compensates for <Term>dive angle</Term>, airspeed, altitude and target wind and shows on the <Term>HUD</Term> where the weapon would hit if released now. For bombs the T-45 also draws an aiming line above the marker for azimuth steering: put the line over the target, let the marker move up to it and <Term>pickle</Term>. <Term>CCIP</Term> is not magic: it depends on the data entered and a smooth tracking run, releasing near the normal parameters still improves accuracy, and the forecast winds entered may not be the real ones. <a href="#source-p1219">{f('11')}</a> Large stick inputs in the final seconds still spoil hits. <a href="#source-p1219">{f('46')}</a> Because it is hard to fly a consistent <Term>dive angle</Term> and release altitude in a <Term>pop-up</Term> on a target of opportunity, the operational navigation instruction calls <Term>CCIP</Term> the more accurate mode there; on low-level routes the T-45 also flies a simulated level <Term>laydown</Term> by dragging the <Term>CCIP</Term> cross over the target. <a href="#source-p1208">{o('31, 37')}</a></p>
- <p><strong>Computed release (CCRP).</strong> The other computed idea lets the system choose the moment of release. The DCS F-14 manual describes the Tomcat's computer target mode as "similar to a CCRP mode in newer aircraft" and its computer pilot mode as similar to <Term>CCIP</Term>. In computer target, the pilot steers to put the target on the bomb fall line on the <Term>HUD</Term> and designates it; the designation is then held on the ground, the pilot flies the velocity vector along the fall line, holds the release button down, and the weapons system releases the bombs when its solution cue reaches the velocity vector. <a href="#source-f14">[6]</a> No military source read for this revision describes a computed release, so this paragraph rests on that sim manual.</p>
+ <p><strong><Term>CCIP</Term></strong> (continuously computed impact point) compensates for <Term>dive angle</Term>, airspeed, altitude and target wind and shows on the <Term>HUD</Term> where the weapon would hit if released now. For bombs the T-45 also draws an aiming line above the marker for azimuth steering: put the line over the target, let the marker move up to it and <Term>pickle</Term>. <Term>CCIP</Term> is not magic: it depends on the data entered and a smooth tracking run, releasing near the normal parameters still improves accuracy, and the forecast winds entered may not be the real ones. <a href="#source-p1219">{f('11')}</a></p>
+ <p>Large stick inputs in the final seconds still spoil hits. <a href="#source-p1219">{f('46')}</a> Because it is hard to fly a consistent <Term>dive angle</Term> and release altitude in a <Term>pop-up</Term> on a target of opportunity, the operational navigation instruction calls <Term>CCIP</Term> the more accurate mode there; on low-level routes the T-45 also flies a simulated level <Term>laydown</Term> by dragging the <Term>CCIP</Term> cross over the target. <a href="#source-p1208">{o('31, 37')}</a></p>
+ <p><strong>Computed release (CCRP)</strong>, in which the system picks the moment of release, is described in this module only from a sim manual, so it is in <a href="#sims">In the sim</a>.</p>
 
  <h2 id="popup">The offset pop-up attack</h2>
  <p>Sometimes a pilot arcs around the <Term>attack cone</Term> before rolling in, but most times you intercept the cone from an ingress heading and pass briefly through it. The <Term record="t-45">T-45</Term> syllabus first practises this in the <Term>pop-up</Term> pattern, ingressing at low altitude and popping up to the cone. <a href="#source-p1219">{f('45')}</a> The <Term>pop-up</Term> is offset to one side so you can keep the target in sight while climbing <a href="#source-p1219">{f('45')}</a>; the operational navigation instruction's angle-off <Term>pop-up</Term> turns 30–60° at the preplanned point, which also complicates a defender's firing solution. <a href="#source-p1208">{o('6')}</a></p>
@@ -169,7 +223,8 @@ const bfm = sitePath('manual/air-combat/bfm/');
   <p class="fig-caption">Schematic drawn from the T-45 FTI's numbers, not a flown path: the turns, the climb and the dive are placed by hand; the profile's height scale is about two and a half times its distance scale, and the plan's sideways scale twice its distance scale.</p>
  </section>
 
- <p><strong>A section <Term>pop-up</Term>.</strong> On two-plane road reconnaissance the older operational navigation instruction flies the same attack as a <Term>section</Term>: the lead pops at four miles, when the target is 10–12° below the <Term>HUD</Term> waterline, climbs at full power with about 30° of bank to 30° nose up, then wings level with the target at 10 or 2 o'clock. The <Term>roll-in</Term> comes on reaching the 30° <Term>attack cone</Term>, about two miles from the target: overbank to put the lift vector on the target, pull down at 17 <Term id="Units">units</Term>, and stop with the waterline or velocity vector 4–5° above the target. <a href="#source-p1217">{r('33–35')}</a> An early pop reaches apex altitude before the cone, so you level off and drive in to meet it; a late pop meets the cone below the planned apex and leaves less tracking time. The apex must never exceed the top of the route structure. <a href="#source-p1217">{r('33')}</a> The two jets are deconflicted by altitude: <a href="#source-p1217">{r('33, 36')}</a></p>
+ <p><strong>A section <Term>pop-up</Term>.</strong> On two-plane road reconnaissance the older operational navigation instruction flies the same attack as a <Term>section</Term>: the lead pops at four miles, when the target is 10–12° below the <Term>HUD</Term> waterline, climbs at full power with about 30° of bank to 30° nose up, then wings level with the target at 10 or 2 o'clock.</p>
+ <p>The <Term>roll-in</Term> comes on reaching the 30° <Term>attack cone</Term>, about two miles from the target: overbank to put the lift vector on the target, pull down at 17 <Term id="Units">units</Term>, and stop with the waterline or velocity vector 4–5° above the target. <a href="#source-p1217">{r('33–35')}</a> An early pop reaches apex altitude before the cone, so you level off and drive in to meet it; a late pop meets the cone below the planned apex and leaves less tracking time. The apex must never exceed the top of the route structure. <a href="#source-p1217">{r('33')}</a> The two jets are deconflicted by altitude: <a href="#source-p1217">{r('33, 36')}</a></p>
  <div class="table-scroll" role="region" aria-label="Section pop-up altitudes" tabindex="0"><table>
   <caption>Section road-reconnaissance <Term>pop-up</Term>, example altitudes above mean sea level <a href="#source-p1217">{r('33')}</a></caption>
   <thead><tr><th scope="col"></th><th scope="col">Cruise</th><th scope="col">Pull-down</th><th scope="col">Apex</th><th scope="col">Release or recovery start</th><th scope="col">Recovery</th></tr></thead>
@@ -181,10 +236,16 @@ const bfm = sitePath('manual/air-combat/bfm/');
  <p>The lead rolls in first and calls "in low"; the wingman waits for that call, rolls in high and calls "visual" when the lead is back in sight. A wingman with no sight of the lead or the target, or a dive steeper than 35°, goes to high cover instead. With only 1,000 ft to recover from the 30° dive, the recovery is a smooth but aggressive 4–5 g wings-level pull. <a href="#source-p1217">{r('34–36, 38')}</a></p>
 
  <h2 id="ordnance">Low and high drag, fuzes and fragmentation</h2>
- <p>A low-drag general-purpose bomb (<Term>LDGP</Term>), such as the <Term record="mk-82">Mk 82</Term>, falls with its streamlined shape; fitted with a retarding fin such as the Snakeye, the same bomb can open the fin to fall in a high-drag configuration, used in low-level bombing, and with an in-flight selected mode the pilot chooses which. <a href="#source-navedtra">{nv('1-17, 1-24, 1-33')}</a> <Term>Laydown</Term> attacks use such high-drag devices so the attacker can avoid the weapon's fragmentation pattern. <a href="#source-p1208">{o('5')}</a> A <Term>fuze</Term> needs an <Term>arming time</Term> after release before the bomb is armed <a href="#source-navedtra">{nv('1-1')}</a>, and the <Term>minimum release altitude</Term> in the fleet is set by the fragmentation pattern, the time of fall the fuze needs to arm, enemy weapons envelopes and other factors. <a href="#source-p1219">{f('30')}</a> The bombs and rockets themselves, with their fuzes and fins, are in the <a href={ordnance}>ordnance encyclopedia</a>.</p>
+ <p>A low-drag general-purpose bomb (<Term>LDGP</Term>), such as the <Term record="mk-82">Mk 82</Term>, falls with its streamlined shape; fitted with a retarding fin such as the Snakeye, the same bomb can open the fin to fall in a high-drag configuration, used in low-level bombing, and with an in-flight selected mode the pilot chooses which. <a href="#source-navedtra">{nv('1-17, 1-24, 1-33')}</a> <Term>Laydown</Term> attacks use such high-drag devices so the attacker can avoid the weapon's fragmentation pattern. <a href="#source-p1208">{o('5')}</a></p>
+ <p>A <Term>fuze</Term> needs an <Term>arming time</Term> after release before the bomb is armed <a href="#source-navedtra">{nv('1-1')}</a>, and the <Term>minimum release altitude</Term> in the fleet is set by the fragmentation pattern, the time of fall the fuze needs to arm, enemy weapons envelopes and other factors. <a href="#source-p1219">{f('30')}</a> The bombs and rockets themselves, with their fuzes and fins, are in the <a href={ordnance}>ordnance encyclopedia</a>.</p>
 
- <h2 id="sims">In the sim</h2>
- <p>In DCS, the F-14's computer pilot mode is its <Term>CCIP</Term>, computer target its computed release, and manual mode a <Term id="Depressed sight line">depressed sight</Term> set from engagement tables for speed, <Term>dive angle</Term> and release altitude. <a href="#source-f14">[6]</a> Its computer initial point mode is a computed release from a preset IP: designate a landmark you can see, with the target's range, bearing and height from it entered, and the system steers to the real target. <a href="#source-f14">[6]</a> Beware the word "offset" in the F-4E: there it is a blind-bombing mode in which the crew flies over or radar-locks a known IP and the system releases on north–south and east–west offsets to the target, not the offset <Term>pop-up</Term> of this module. <a href="#source-f4">[7]</a></p>
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+ <p><strong>Computed release (CCRP).</strong> The other computed idea lets the system choose the moment of release. The DCS F-14 manual describes the Tomcat's computer target mode as "similar to a CCRP mode in newer aircraft" and its computer pilot mode as similar to <Term>CCIP</Term>. In computer target, the pilot steers to put the target on the bomb fall line on the <Term>HUD</Term> and designates it; the designation is then held on the ground, the pilot flies the velocity vector along the fall line, holds the release button down, and the weapons system releases the bombs when its solution cue reaches the velocity vector. <a href="#source-f14">[6]</a></p>
+ <p>No military source read for this revision describes a computed release, so this paragraph rests on that sim manual.</p>
+  <p>In DCS, the F-14's computer pilot mode is its <Term>CCIP</Term>, computer target its computed release, and manual mode a <Term id="Depressed sight line">depressed sight</Term> set from engagement tables for speed, <Term>dive angle</Term> and release altitude. <a href="#source-f14">[6]</a> Its computer initial point mode is a computed release from a preset IP: designate a landmark you can see, with the target's range, bearing and height from it entered, and the system steers to the real target. <a href="#source-f14">[6]</a> Beware the word "offset" in the F-4E: there it is a blind-bombing mode in which the crew flies over or radar-locks a known IP and the system releases on north–south and east–west offsets to the target, not the offset <Term>pop-up</Term> of this module. <a href="#source-f4">[7]</a></p>
+  <p><strong>Not checked.</strong> Other DCS and Falcon BMS aircraft were not read for this revision. Sim modes and tables are that aircraft's, not the T-45 training numbers on this page.</p>
+ </section>
 
  <h2 id="terms">Terms</h2>
  <GlossaryList items={[
@@ -201,14 +262,16 @@ const bfm = sitePath('manual/air-combat/bfm/');
  </section>
 
  <h2 id="check">Check your understanding</h2>
- <details><summary>You release a bomb 200 ft above the planned altitude in a 30° run, everything else right. Long or short, and by how much?</summary><p>Short, by about 100 ft: high releases fall longer, and the T-45 table gives 50 ft per 100 ft.</p></details>
- <details><summary>In a 30° run you are 2° steep approaching release. What do you do?</summary><p>Hold the dive and release about 200 ft high. Never go below the minimum release altitude.</p></details>
- <details><summary>The pipper reaches the aimpoint at 3,400 ft in a run planned for 3,000 ft. When do you release?</summary><p>At about 3,200 ft: split the difference between the early sight picture altitude and the release altitude.</p></details>
- <details><summary>Why can't you fix a bomb's deflection error with rudder at the last moment?</summary><p>The bomb keeps the aircraft's direction of motion, and yaw or bank gives a false sight picture. Correct early and release wings level.</p></details>
- <details><summary>Wind is 10 kt from the west and the time of fall is 6 seconds. Where is the offset aimpoint?</summary><p>About 100 ft west of the target: 1.7 × 6 × 10 = 102 ft, directly into the wind.</p></details>
- <details><summary>Why does a laydown attack use high-drag weapons?</summary><p>So the attacker, releasing in level flight at low altitude, can avoid the weapon's fragmentation pattern.</p></details>
- <details><summary>What is the difference between CCIP and a computed release?</summary><p>CCIP shows where the bomb would hit now and the pilot releases when it is on the target; in a computed release the pilot designates the target and the system computes and makes the release.</p></details>
- <details><summary>In a pop-up, you reach apex altitude before the attack cone. What now?</summary><p>Level off and drive toward the target until you meet the cone, then roll in. Do not climb above the apex or the top of the route.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> The target is heavily defended by SAMs and you must not overfly it. Which type of attack fits?</summary><p>A <Term>loft</Term> (toss): the weapon is thrown at the target, so you need not overfly it and stay farther from the defenses and the blast.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> What two angles add up to the sight depression?</summary><p>The angle of attack of the armament datum line and the trajectory drop (plus a couple of mils of parallax).</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> You release a bomb 200 ft above the planned altitude in a 30° run, everything else right. Long or short, and by how much?</summary><p>Short, by about 100 ft: high releases fall longer, and the T-45 table gives 50 ft per 100 ft.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> In a 30° run you are 2° steep approaching release. What do you do?</summary><p>Hold the dive and release about 200 ft high. Never go below the minimum release altitude.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> The pipper reaches the aimpoint at 3,400 ft in a run planned for 3,000 ft. When do you release?</summary><p>At about 3,200 ft: split the difference between the early sight picture altitude and the release altitude.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> Why can't you fix a bomb's deflection error with rudder at the last moment?</summary><p>The bomb keeps the aircraft's direction of motion, and yaw or bank gives a false sight picture. Correct early and release wings level.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Wind is 10 kt from the west and the time of fall is 6 seconds. Where is the offset aimpoint?</summary><p>About 100 ft west of the target: 1.7 × 6 × 10 = 102 ft, directly into the wind.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> Why does a laydown attack use high-drag weapons?</summary><p>So the attacker, releasing in level flight at low altitude, can avoid the weapon's fragmentation pattern.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> What is the difference between CCIP and a computed release?</summary><p>CCIP shows where the bomb would hit now and the pilot releases when it is on the target; in a computed release the pilot designates the target and the system computes and makes the release.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> In a pop-up, you reach apex altitude before the attack cone. What now?</summary><p>Level off and drive toward the target until you meet the cone, then roll in. Do not climb above the apex or the top of the route.</p></details>
 
  <h2 id="sources">Sources and applicability</h2>
  <h3>Military sources</h3>
@@ -227,7 +290,23 @@ const bfm = sitePath('manual/air-combat/bfm/');
 <script>import '../../../lessons/weapons-delivery/lesson-ui.mjs';</script>
 
 <style>
-  .contents ol { columns: 2; column-gap: 2rem; padding-left: 1.5rem; }
+  .contents-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
+  .contents h3 { margin: 0.4rem 0 0.2rem; font-size: 0.95rem; }
+  .lede { font-size: 1.1rem; }
+  .key { padding: 0.6rem 1rem; border-left: 0.25rem solid var(--color-link); background: var(--color-surface); }
+  ul.recap li { margin-block: 0.3rem; }
+  details.more { margin-block: 1rem; padding: 0.5rem 1rem; border: 1px solid var(--color-border); }
+  details.more summary { cursor: pointer; font-weight: 700; }
+  ol.exchange { list-style: none; padding-left: 1rem; border-left: 0.25rem solid var(--color-border); }
+  ol.exchange li { display: grid; grid-template-columns: 7.5rem 1fr; column-gap: 0.75rem; margin-block: 0.4rem; }
+  ol.exchange .who { font-weight: 700; }
+  ol.exchange .step { margin-left: 0.4rem; font-size: 0.85rem; white-space: nowrap; }
+  .outcome { display: inline-block; margin-right: 0.4rem; padding: 0 0.4rem; font-size: 0.8rem; border: 1px solid var(--color-border); color: var(--color-muted); }
+  .sim-panel { margin: 2rem 0; padding: 0.75rem 1.25rem; border-left: 4px solid var(--color-accent); background: var(--color-surface, #f6f7f8); }
+  .sim-panel h2 { margin-top: 0.4rem; }
+  .sim-panel h3 { margin: 1rem 0 0.3rem; font-size: 1rem; }
+  @media (max-width: 40rem) { .contents-groups { grid-template-columns: 1fr; } ol.exchange li { display: block; } }
+  .contents ol { padding-left: 1.5rem; margin-top: 0; }
   .contents li { break-inside: avoid; }
   table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
   caption { padding: 0.5rem 0.75rem; text-align: left; color: var(--color-muted); font-size: 0.9rem; }

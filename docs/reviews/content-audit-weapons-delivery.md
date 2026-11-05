@@ -12,11 +12,15 @@ Avoid a continuous explanation that moves from delivery geometries to tables, ai
 
 **Suggested action:** Edit the first-pass path and duplicated introductory material before shortening technically necessary reference explanations. Track actual rendered prose reading length separately.
 
+**Applied (revision 2):** the orienting sequence is now the core: a worked 30° run, delivery types, the bombing triangle, roll-in to recovery, errors and corrections, Key points. Reference holds the delivery tables and Z diagram, sights, the pop-up, ordnance, In the sim, terms, questions and sources. Limitations and the minimum-release-altitude framing stay. The overview became a lede and a numbered outcomes list, and long paragraphs were split. Nothing sourced was cut.
+
 ## 2. Imagery and interactivity
 
 The dive-delivery figure, impact error quiz and pop-up diagram are already substantial. Prioritise reader instructions and summary rather than more mini-games.
 
 Source contains approximately 3 figure-title markers; this count is only a structural indicator and **not** a browser-rendered inventory. Verify the actual rendered diagrams and mobile fallbacks before recommending additional components.
+
+**Applied (revision 2):** no new figures or games. The delivery types became a side-by-side table, as section 4 asked.
 
 ## 3. Learning outcomes
 
@@ -24,11 +28,15 @@ Distinguish level, dive, loft and pop-up geometries; identify release-parameter 
 
 **Check:** The overview and end-of-module questions should both cover these outcomes; split broad objectives into observable questions where necessary.
 
+**Applied (revision 2):** five numbered outcomes; every question is tagged to one, with new questions for outcomes 1 (choosing an attack type) and 2 (the angles in the sight depression).
+
 ## 4. Important omissions or opportunities
 
 Keep illustrative training data and DCS-specific modes separate from real aircraft release limits. A side-by-side delivery-method overview would clarify scope.
 
 Also check cross-links to relevant encyclopedia terms, aircraft and ordnance where they improve comprehension, and distinguish general principles from T-45/FAA/service-specific examples.
+
+**Applied (revision 2):** the worked example labels the T-45 numbers as practice-bomb training data, not release limits. The DCS F-14 computed-release description moved out of the sights section into the "In the sim" panel, so DCS-specific modes are kept apart from the real-world material.
 
 ## Priority
 
@@ -39,3 +47,5 @@ Also check cross-links to relevant encyclopedia terms, aircraft and ordnance whe
 Identify the applicable DCS/BMS modules, which relevant real-world concepts they model, which they simplify or omit, and how a reader can practise the relevant learning outcomes. Check aircraft/version-specific behaviour rather than treating simulator systems as universally accurate.
 
 **Follow-up verification required:** Distinguish real-world facts, simulator-implemented behaviour, known simplifications/omissions and unknowns. Cite a specific simulator/module/version and test or source before asserting fidelity or absence. Present verified sim-only information in the existing visually distinct sim-specific panel convention where applicable. Do not conflate Oversweep's educational models with DCS or BMS.
+
+**Applied (revision 2):** the existing sim section (DCS F-14 and F-4E manuals) is now a visually distinct "In the sim" panel, with the CCRP description moved into it and a "Not checked" line. Other DCS and Falcon BMS aircraft were not read.
