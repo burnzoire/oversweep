@@ -47,6 +47,8 @@ sources:
 
 ## A faster rocket
 
+The HVAR is a Second World War 5 in rocket, not the later and smaller 2.75 in [FFAR and Hydra 70](record:hydra-70).
+
 [Rockets](term:rocket) entered aircraft armament in the Second World War because they offered a heavy blow with no recoil, and because a rocket fired at close range was more accurate than a bomb dropped from high altitude. [[2]](#source-2) The first American 5 in aircraft rocket had a 5 in warhead on an underpowered motor only 3.25 in across. Engineers at Caltech wanted a faster rocket with a flatter trajectory, which would be easier to aim, and designed the HVAR with a full 5 in motor. It carried almost three times the propellant, and its speed gain roughly doubled. [[1]](#source-1)
 
 ## From Normandy to Okinawa

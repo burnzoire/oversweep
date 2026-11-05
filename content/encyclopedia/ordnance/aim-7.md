@@ -51,6 +51,6 @@ That design ties the fighter to the fight. The launching aircraft's radar has to
 
 ## Vietnam to the Gulf
 
-Over Vietnam the Sparrow's record was disappointing. Wikipedia puts it down to unreliable missiles in a tropical climate, limited training in fighter-versus-fighter combat, and rules of engagement that mostly ruled out beyond-visual-range shots. [[1]](#source-1) The AIM-7F of 1976 brought solid-state electronics, a dual-stage motor and a larger warhead, and the AIM-7M of 1982 a new inverse monopulse seeker. In the 1991 Gulf War, 30 of 44 Sparrows fired hit their targets, and 19 of the kills were beyond visual range. [[1]](#source-1)
+Over Vietnam the Sparrow's record was disappointing. Wikipedia puts it down to unreliable missiles in a tropical climate, limited training in fighter-versus-fighter combat, and rules of engagement that mostly ruled out beyond-visual-range shots. [[1]](#source-1) The AIM-7F of 1976 brought solid-state electronics, a dual-stage motor and a larger warhead, and the AIM-7M of 1982 a new inverse monopulse seeker. For the 1991 Gulf War, Wikipedia reports that 30 of 44 Sparrows fired hit their targets, and that 19 of the kills were beyond visual range; it does not say how a hit was counted. [[1]](#source-1)
 
 Related entries: [AIM-120 AMRAAM](record:aim-120) and [R-27 Alamo](record:r-27).

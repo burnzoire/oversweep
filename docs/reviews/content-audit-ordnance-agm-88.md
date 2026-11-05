@@ -34,3 +34,5 @@ DCS F-16 HTS and F/A-18 HARM modes differ; identify version-specific functions a
 ## Editorial action
 
 Prioritise the factual distinctions above. Preserve useful technical reference details and cross-links, while removing redundant narrative before adding new content. Changes to technical claims require independent aviation SME evidence review.
+
+**Applied (2026-11-05):** no change in this pass: variant and aircraft-mode differences need sourced research.

@@ -34,3 +34,5 @@ DCS AH-64D AGM-114K/L support depends on module/version; check whether radar see
 ## Editorial action
 
 Prioritise the factual distinctions above. Preserve useful technical reference details and cross-links, while removing redundant narrative before adding new content. Changes to technical claims require independent aviation SME evidence review.
+
+**Applied (2026-11-05):** no change needed: the record already says most versions are laser-guided and only the Longbow is fire-and-forget; the name's origin is explained.
