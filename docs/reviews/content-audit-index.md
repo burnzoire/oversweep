@@ -21,7 +21,7 @@ Reviews are source-inspection editorial findings, **not** rendered-browser QA, e
 ## Modules — 11/11
 
 - [BFM](content-audit-bfm.md)
-- [Airfield operations](content-audit-airfield-basics.md)
+- [Airfield operations](content-audit-airfield-basics.md) — applied in module revision 3 (sortie-ordered core, tables, BMS sim panel)
 - [Radio procedures](content-audit-radio-procedures.md)
 - [Fixed-wing fundamentals](content-audit-principles-of-flight.md)
 - [Rotor-wing fundamentals](content-audit-rotor-wing.md)
