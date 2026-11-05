@@ -269,3 +269,15 @@ Standard flight mechanics, not taken from the handbooks:
 The example jet trainer (12,000 lb, 180 ft², clean CLmax 1.2, CD0 0.02,
 AR 5, e 0.8) is invented; its 1 G stall speed is 128.1 kt TAS at sea level,
 L/Dmax 12.5 at 198 kt, and corner speed 351 kt at a 7.5 G example limit.
+
+## Falcon BMS 4.38.1 Training Manual (Principles of Flight revision 5, In the sim panel only)
+
+https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf, read 5 November
+2026. Page numbers are the printed page footers.
+
+| Page | Passage (extractor-read, abridged) | Module use |
+| --- | --- | --- |
+| 54 | "When the gear is down the HUD always displays CAS ... because your stall speed is always indicated/calibrated." | Sim panel: which airspeed |
+| 82 | "The optimal approach airspeed depends on your gross weight and the best way to be 'on speed' is to forget all about airspeed and think 13° AOA for landing."; lowering the gear "will automatically deploy leading and trailing edge flaps"; "The drag caused by dirtying up your aircraft configuration will further decrease your airspeed and pitch the nose down a bit." | Sim panel: approach by AOA; configuration and drag |
+| 111 | HARTS 1-5: "recovery procedures are trained from high-pitch altitude, slow airspeed conditions"; "Monitor the attitude direction indicator (ADI) not the flight path marker (FPM). Reference to the HUD flight path results in an increasing attitude as the angle of attack (AOA) increases." | Sim panel: slow, nose-high recovery |
+| 112 | "During the roll to the horizon, it is essential to avoid buffeting" | Sim panel: slow, nose-high recovery |

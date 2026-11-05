@@ -4,19 +4,36 @@ import GlossaryList from '../../../components/GlossaryList.astro';
 import { getModule } from '../../../data/modules';
 import { sitePath } from '../../../lib/paths';
 import Term from '../../../components/Term.astro';
+import '../../../styles/instrument-flight.css';
 const mod = getModule('principles-of-flight');
-const contents = [
- ['overview', 'Purpose and learning objectives'], ['forces', 'The four forces'], ['airfoil', 'The wing and angle of attack'],
- ['lift', 'The lift equation'], ['drag', 'Drag'], ['ground-effect', 'Wingtip vortices and ground effect'],
- ['axes', 'Axes and flight controls'], ['stability', 'Stability'], ['turns', 'Turns and load factor'],
- ['stalls', 'Stalls'], ['envelope', 'The envelope and corner speed'], ['energy', 'Energy: altitude and airspeed'],
- ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+const core = [
+ ['example', 'One turn, worked through'],
+ ['forces', 'The four forces'],
+ ['airfoil', 'The wing and angle of attack'],
+ ['lift', 'The lift equation'],
+ ['drag', 'Drag'],
+ ['turns', 'Turns and load factor'],
+ ['stalls', 'Stalls'],
+ ['envelope', 'The stall boundary and maneuvering speed'],
+ ['recap', 'Key points'],
+];
+const reference = [
+ ['ground-effect', 'Wingtip vortices and ground effect'],
+ ['axes', 'Axes and flight controls'],
+ ['stability', 'Stability'],
+ ['energy', 'Energy: altitude and airspeed'],
+ ['sims', 'In the sim'],
+ ['terms', 'Terms'],
+ ['check', 'Check your understanding'],
+ ['sources', 'Sources and applicability'],
 ];
 const cite = (n: number) => (pages: string) => `[${n}, ${pages.includes('–') || pages.includes(',') ? 'pp.' : 'p.'} ${pages}]`;
 // Military sources first: [1] NAVWEPS 00-80T-80, [2] the Naval Aviation
 // Schools Command preflight aerodynamics guide, [3] CNATRA P-1289.
 // Supplementary FAA handbooks: [4] PHAK, [5] AFH.
 const n = cite(1), g = cite(2), b = cite(3), k = cite(4), a = cite(5);
+// Sim source, In the sim panel only: [6] Falcon BMS 4.38.1 Training Manual.
+const bms = cite(6);
 const bfm = sitePath('manual/air-combat/bfm/'), caseIii = sitePath('manual/naval-operations/case-iii/');
 const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
 ---
@@ -25,16 +42,39 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
  <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
   <h2>{mod.maturity}</h2>
   <p>Module revision {mod.revision} · How military aircraft fly, written for pilots of every service: the four forces, lift and <Term id="AOA">angle of attack</Term>, drag, control and stability, turns and <Term id="Load factor">load factor</Term>, stalls, the maneuvering envelope and energy. It follows the services' own texts, the Navy's aerodynamics books and its jet syllabus, with the FAA handbooks as supplementary sources. Worked numbers use an invented jet trainer. What changes when the wing is a rotor blade is in the companion module, <a href={rotor}>Rotor-Wing Principles of Flight</a>.</p>
-  <p>Every figure is interactive: move a control and the drawing and readout follow. Propellers, high-speed (<Term id="Transonic">transonic</Term>) flight, spins and weight and balance are outside this revision.</p>
+  <p>Every figure is interactive: move a control and the drawing and readout follow. The core sequence runs from the four forces to the stall boundary; ground effect, controls, stability and energy are in the reference half. Propellers, high-speed (<Term id="Transonic">transonic</Term>) flight, spins and weight and balance are outside this revision.</p>
  </section>
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
-  <ol>{contents.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
  </nav>
 
- <h2 id="overview">Purpose and learning objectives</h2>
- <p>Everything else in this manual, from a carrier approach to a fight or a confined-area landing, rests on a handful of ideas: what makes lift, what it costs in drag, what a turn asks of the wing, why a wing stalls, and how altitude and airspeed are two forms of the same energy. Every service teaches them first. Navy and Marine Corps student aviators meet them in the Navy's preflight course and in <em>Aerodynamics for Naval Aviators</em>, whose author put the reason plainly: safe operation in carrier aviation demands precision control of the airplane at high lift conditions. <a href="#source-navweps">{n('34')}</a> Air Force pilots learn the same physics in undergraduate pilot training; this revision did not read an Air Force aerodynamics text, so it cites the Navy ones. Helicopter pilots of every service start from the same laws, which the <a href={rotor}>rotor-wing module</a> carries through to the spinning blade. The same ideas decide a fight: the Navy's basic fighter maneuvering instruction teaches turn performance through lift, <Term id="AOA">angle of attack</Term>, G and energy. <a href="#source-p1289">{b('4-1–4-5')}</a></p>
- <p>By the end you should be able to: name the four forces and say how they balance in level flight and in a climb; define <Term id="AOA">angle of attack</Term> and explain why a wing stalls at its critical angle at any airspeed; use the lift equation to explain why a slower airplane needs more <Term id="AOA">angle of attack</Term>; describe parasite and <Term id="Induced drag">induced drag</Term> and where total drag is least; name the three axes and the control for each; tell static from dynamic stability; work out the <Term id="Load factor">load factor</Term> and stall speed in a level turn; read <Term id="AOA">angle of attack</Term> in <Term id="Units">units</Term> and say why carrier approaches are flown by it; find <Term id="Corner speed">corner speed</Term> on the envelope and tell a lift-limited pull from a load-limited one; and explain why the throttle controls total energy and the elevator divides it between altitude and airspeed.</p>
+ <p class="lede">Everything else in this manual, from a carrier approach to a fight or a confined-area landing, rests on a handful of ideas: what makes lift, what it costs in drag, what a turn asks of the wing, why a wing stalls, and how altitude and airspeed are two forms of the same energy. Every service teaches them first. Navy and Marine Corps student aviators meet them in the Navy's preflight course and in <em>Aerodynamics for Naval Aviators</em>, whose author put the reason plainly: safe operation in carrier aviation demands precision control of the airplane at high lift conditions. <a href="#source-navweps">{n('34')}</a></p>
+ <p>Air Force pilots learn the same physics in undergraduate pilot training; this revision did not read an Air Force aerodynamics text, so it cites the Navy ones. Helicopter pilots of every service start from the same laws, which the <a href={rotor}>rotor-wing module</a> carries through to the spinning blade. The same ideas decide a fight: the Navy's basic fighter maneuvering instruction teaches turn performance through lift, <Term id="AOA">angle of attack</Term>, G and energy. <a href="#source-p1289">{b('4-1–4-5')}</a></p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>name the four forces and say how they balance in level flight and in a climb;</li>
+  <li>define <Term id="AOA">angle of attack</Term>, read it in <Term id="Units">units</Term>, and use the lift equation to explain why a slower or heavier airplane needs more of it, and why approaches are flown by it;</li>
+  <li>describe parasite and <Term id="Induced drag">induced drag</Term>, how each changes with speed, and where total drag is least;</li>
+  <li>work out the <Term id="Load factor">load factor</Term> and stall speed in a level turn, explain why a wing stalls at its critical angle at any airspeed and how to recover, and find <Term id="Corner speed">corner speed</Term>, telling a lift-limited pull from a load-limited one;</li>
+  <li>name the three axes and the control for each, tell static from dynamic stability, and explain why the throttle controls total energy and the elevator divides it between altitude and airspeed.</li>
+ </ol>
  <p class="note">This is a conceptual reference, not a flight manual. The example jet trainer (12,000 lb, 180 ft² of wing, clean CL<sub>max</sub> 1.2) is invented to put numbers on the equations; where a real type's numbers appear, they are the T-45's from its training instruction and are labelled so. Your aircraft's speeds and limits come from its flight manual: NATOPS for the Navy and Marine Corps, the Dash-1 (-1) technical order for the Air Force, the operator's manual for the Army.</p>
+
+ <h2 id="example">One turn, worked through</h2>
+ <p>Here is one level turn in this module's example jet trainer, whose numbers are invented: 12,000 lb, 180 ft² of wing, clean CL<sub>max</sub> 1.2, at sea level. Each step is one idea from the sections below.</p>
+ <ol class="exchange script">
+  <li><span class="who">Level, 300 kt</span> <span class="said">Lift balances weight and thrust balances drag; nothing is accelerating. <a class="step" href="#forces">Why</a></span></li>
+  <li><span class="who">Roll to 60°</span> <span class="said">To hold altitude, the vertical part of the lift must still carry the weight, so the wing must make twice the lift: 2 G. The turn radius is 4,601 ft and the rate 6.3° per second. <a class="step" href="#turns">Why</a></span></li>
+  <li><span class="who">Pull</span> <span class="said">At the same speed, twice the lift needs twice the lift coefficient, so you raise the nose against the relative wind: more <Term id="AOA">angle of attack</Term>. <a class="step" href="#lift">Why</a></span></li>
+  <li><span class="who">Speed bleeds</span> <span class="said">The extra angle of attack brings extra <Term id="Induced drag">induced drag</Term>. Without more thrust, the jet slows in the turn. <a class="step" href="#drag">Why</a></span></li>
+  <li><span class="who">Stall speed</span> <span class="said">At 2 G the stall speed is √2 times the 1 G figure: 181 kt instead of 128 kt. <a class="step" href="#turns">Why</a></span></li>
+  <li><span class="who">At 181 kt</span> <span class="said">Still pulling 2 G, the wing reaches its critical angle of attack and stalls, well above the "stall speed" you learned at 1 G. Recover by reducing the angle of attack first. <a class="step" href="#stalls">Why</a></span></li>
+  <li><span class="who">The limit</span> <span class="said">Below <Term id="Corner speed">corner speed</Term> the wing limits the G you can pull; above it, the structure does. <a class="step" href="#envelope">Why</a></span></li>
+ </ol>
+ <p class="key"><strong>Key point:</strong> a turn asks the wing for more lift, which it makes with more angle of attack; that costs drag and raises the stall speed, and the stall comes at the same critical angle whatever the speed.</p>
 
  <h2 id="forces">The four forces</h2>
  <p>Four forces act on an airplane in flight. <strong>Thrust</strong> is the force produced by a jet engine or engine and propeller. <strong>Drag</strong> primarily acts against thrust and retards the aircraft's motion. <strong>Lift</strong> is the component of the aerodynamic force perpendicular to the relative wind. <strong>Weight</strong> is the force of the Earth's gravity acting on the aircraft's mass. <a href="#source-api">{g('46–47')}</a></p>
@@ -51,13 +91,16 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   <div class="feedback derived" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">Steady straight flight: along the path, thrust = drag + W sin γ; across it, lift = W cos γ, with γ the flight-path angle. Drag is the example jet's level-flight drag at that speed (Figure 4), used for the climb too. Sea level, still air. Thrust is assumed to act along the flight path.</p>
  </section>
+ <p class="key"><strong>Key point:</strong> in steady flight the forces balance, but not simply lift against weight and thrust against drag: in a climb, part of the weight acts along the flight path, and thrust has to overcome it too.</p>
 
  <h2 id="airfoil">The wing and angle of attack</h2>
  <p>A wing's cross-section is an <strong>airfoil</strong>. The <strong>mean camber line</strong> runs midway between its upper and lower surfaces; its most forward and rearward points are the <strong>leading edge</strong> and <strong>trailing edge</strong>, and the straight line through them is the <strong><Term id="Chord line">chord line</Term></strong>. <strong><Term id="Camber">Camber</Term></strong> is the maximum distance between the mean camber line and the <Term id="Chord line">chord line</Term>. <a href="#source-api">{g('33')}</a></p>
- <p>The <strong>relative wind</strong> is the airflow the airplane experiences as it moves through the air, and the <strong><Term id="AOA">angle of attack</Term></strong> (<Term id="AOA">AOA</Term>, α) is the angle between the relative wind and the <Term id="Chord line">chord line</Term>. <a href="#source-api">{g('36')}</a> <a href="#source-navweps">{n('22')}</a> Inclined to the airflow, the wing's pressure distribution provides a net force perpendicular to the airstream: lift. <a href="#source-navweps">{n('7, 19')}</a> In the FAA's explanation, the wing makes the air over the upper surface move faster than the air beneath; by Bernoulli's principle, faster-moving air has lower pressure, so the pressure above falls below atmospheric. The downward and backward flow off the wing, the <strong>downwash</strong>, is pushed down; by Newton's third law, the wing is pushed up and forward. <a href="#source-phak">{k('4-6–4-8')}</a> The handbook warns that it is neither accurate nor useful to assign fixed shares of lift to the upper and lower surfaces: they vary with conditions and design. <a href="#source-phak">{k('4-7')}</a></p>
+ <p>The <strong>relative wind</strong> is the airflow the airplane experiences as it moves through the air, and the <strong><Term id="AOA">angle of attack</Term></strong> (<Term id="AOA">AOA</Term>, α) is the angle between the relative wind and the <Term id="Chord line">chord line</Term>. <a href="#source-api">{g('36')}</a> <a href="#source-navweps">{n('22')}</a> Inclined to the airflow, the wing's pressure distribution provides a net force perpendicular to the airstream: lift. <a href="#source-navweps">{n('7, 19')}</a></p>
+ <p>In the FAA's explanation, the wing makes the air over the upper surface move faster than the air beneath; by Bernoulli's principle, faster-moving air has lower pressure, so the pressure above falls below atmospheric. The downward and backward flow off the wing, the <strong>downwash</strong>, is pushed down; by Newton's third law, the wing is pushed up and forward. <a href="#source-phak">{k('4-6–4-8')}</a> The handbook warns that it is neither accurate nor useful to assign fixed shares of lift to the upper and lower surfaces: they vary with conditions and design. <a href="#source-phak">{k('4-7')}</a></p>
  <p>As <Term id="AOA">angle of attack</Term> increases, the lift coefficient increases up to a maximum, CL<sub>max</sub>; the angle at which it is reached is the CL<sub>max</sub> <Term id="AOA">AOA</Term>, also called the <strong><Term id="Critical angle of attack">critical angle of attack</Term></strong>. <a href="#source-api">{g('50')}</a> Beyond it the airflow is unable to adhere to the upper surface, lift falls away and the wing <strong>stalls</strong>. <a href="#source-navweps">{n('23')}</a> <a href="#source-phak">{k('5-3')}</a></p>
  <h3>Angle of attack in units</h3>
- <p>Many military jets display <Term id="AOA">angle of attack</Term> on a gauge and an approach indexer, and in the T-45, as in other Navy trainers, the scale is in <strong><Term id="Units">units</Term></strong>, not degrees of chord-line angle; the pilot flies by it. In the T-45 training instruction, the lift coefficient "is a function of <Term id="AOA">Angle of Attack (AOA)</Term>", CL<sub>max</sub> occurs at 21 <Term id="Units">units</Term>, and at that lift limit the aircraft is in heavy buffet; a lift-limited pull is flown at 19–21 <Term id="Units">units</Term>, "the rumble of buffet". <a href="#source-p1289">{b('4-1–4-3')}</a> Because the wing stalls at one <Term id="AOA">angle of attack</Term> whatever the weight, an <Term id="AOA">AOA</Term> reference does a job no single airspeed can; <em>Aerodynamics for Naval Aviators</em> calls the mirror landing system coupled with an <Term id="AOA">angle of attack</Term> indicator "an obvious refinement" for the carrier approach. <a href="#source-navweps">{n('26')}</a> The carrier approach is flown "on-speed", a target <Term id="AOA">AOA</Term>; see the <a href={`${caseIii}`}>Case III module</a>. Units are type-specific: the 21 <Term id="Units">units</Term> here are the T-45's, not a figure for any other aircraft.</p>
+ <p>Many military jets display <Term id="AOA">angle of attack</Term> on a gauge and an approach indexer, and in the T-45, as in other Navy trainers, the scale is in <strong><Term id="Units">units</Term></strong>, not degrees of chord-line angle; the pilot flies by it. In the T-45 training instruction, the lift coefficient "is a function of <Term id="AOA">Angle of Attack (AOA)</Term>", CL<sub>max</sub> occurs at 21 <Term id="Units">units</Term>, and at that lift limit the aircraft is in heavy buffet; a lift-limited pull is flown at 19–21 <Term id="Units">units</Term>, "the rumble of buffet". <a href="#source-p1289">{b('4-1–4-3')}</a></p>
+ <p>Because the wing stalls at one <Term id="AOA">angle of attack</Term> whatever the weight, an <Term id="AOA">AOA</Term> reference does a job no single airspeed can; <em>Aerodynamics for Naval Aviators</em> calls the mirror landing system coupled with an <Term id="AOA">angle of attack</Term> indicator "an obvious refinement" for the carrier approach. <a href="#source-navweps">{n('26')}</a> The carrier approach is flown "on-speed", a target <Term id="AOA">AOA</Term>; see the <a href={`${caseIii}`}>Case III module</a>. Units are type-specific: the 21 <Term id="Units">units</Term> here are the T-45's, not a figure for any other aircraft.</p>
  <section class="lesson figure-lesson" data-lesson="airfoil" aria-labelledby="airfoil-title">
   <h3 id="airfoil-title" class="fig-title">Figure 2 — Airfoil, relative wind and the lift curve</h3>
   <div class="controls row">
@@ -68,6 +111,7 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   <div class="feedback derived" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">The section is a NACA 2412 shape (2% <Term id="Camber">camber</Term>, 12% thick) drawn for its looks. The lift curve is the example jet's, illustrative: zero lift at −1°, 0.08 per degree (a low-aspect-ratio wing's shallower slope), rounding to CL<sub>max</sub> 1.2 at a 16° critical angle; the post-stall fall-off and the streamlines are sketches, not measurements. Real wings have their own curve.</p>
  </section>
+ <p class="key"><strong>Key point:</strong> angle of attack is the angle between the wing's chord and the relative wind, and the wing stalls at its critical angle of attack, whatever the airspeed.</p>
 
  <h2 id="lift">The lift equation</h2>
  <p>Lift is L = C<sub>L</sub> q S: the lift coefficient C<sub>L</sub>, which the pilot sets through <Term id="AOA">angle of attack</Term>, times the <strong>dynamic pressure</strong> q = ½ ρ V² (air density ρ, true airspeed V), times the wing area S. <a href="#source-navweps">{n('7, 23')}</a> <a href="#source-api">{g('47')}</a> Lift is therefore proportional to the square of the airspeed. <a href="#source-phak">{k('5-4')}</a> The airplane stalls at the same <Term id="AOA">angle of attack</Term> regardless of weight, dynamic pressure, bank angle and the rest; what changes is the <em>speed</em> at which it reaches that angle. <a href="#source-navweps">{n('24, 39')}</a></p>
@@ -82,6 +126,7 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   <div class="feedback derived" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">C<sub>L</sub> = 2W ÷ (ρ V² S) for the example jet at sea level, ρ = 1.225 kg/m³; 1 G stall speed V<sub>S</sub> = √(2W ÷ (ρ S CL<sub>max</sub>)) = 128.1 kt true airspeed, clean. <Term id="AOA">Angle of attack</Term> read from Figure 2's illustrative curve.</p>
  </section>
+ <p class="key"><strong>Key point:</strong> lift goes with the square of airspeed: halve the speed and the wing needs four times the lift coefficient, which it gets from more angle of attack.</p>
 
  <h2 id="drag">Drag</h2>
  <p><strong><Term id="Parasite drag">Parasite drag</Term></strong> is drag that is not associated with the production of lift. It is composed of <strong>form drag</strong>, <strong>friction drag</strong> and <strong>interference drag</strong>, and it varies directly with velocity squared. <a href="#source-api">{g('52–54')}</a></p>
@@ -97,48 +142,7 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   <div class="feedback derived" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">Level flight, sea level. Parasite D<sub>p</sub> = q S C<sub>D0</sub>, C<sub>D0</sub> = 0.02; induced D<sub>i</sub> = k W² ÷ (q S), k = 1 ÷ (π e AR) with aspect ratio 5 and efficiency e = 0.8; q = ½ ρ V². The minimum is where D<sub>p</sub> = D<sub>i</sub>, giving L/D<sub>max</sub> = 1 ÷ (2√(k C<sub>D0</sub>)). Example values, not any type.</p>
  </section>
-
- <h2 id="ground-effect">Wingtip vortices and ground effect</h2>
- <p>At the wingtip the higher pressure beneath the wing flows around to the lower pressure above, forming a tip vortex and a downwash that reduce lift on that part of the wing. <a href="#source-phak">{k('4-9')}</a> Close to the ground, the surface interferes with these airflow patterns. <Term id="Ground effect">Ground effect</Term> is most noticeable below a height of one wingspan; it reduces <Term id="Induced drag">induced drag</Term> by about 1.4% at one span, 23.5% at a quarter span and 47.6% at a tenth of a span. <a href="#source-phak">{k('5-11–5-12')}</a></p>
-
- <h2 id="axes">Axes and flight controls</h2>
- <p>An airplane rotates about three imaginary axes that pass through its centre of gravity (CG). The <strong>longitudinal axis</strong> passes from nose to tail, and motion about it is <strong>roll</strong>; movement around the <strong>lateral axis</strong> is <strong>pitch</strong>; movement of the longitudinal axis around the <strong>vertical axis</strong> is <strong>yaw</strong>. <a href="#source-api">{g('36')}</a> <a href="#source-phak">{k('5-12–5-13')}</a></p>
- <p>The primary flight controls each make a moment about one axis. The <strong>ailerons</strong>, on the outboard trailing edges of the wings, produce a rolling moment; the <strong>elevator</strong>, on the trailing edge of the horizontal stabilizer, controls the pitching moment; the <strong>rudder</strong>, on the trailing edge of the vertical stabilizer, produces a yawing moment. Many fighters, such as the <Term record="fa-18c">F/A-18</Term> and <Term record="f-15c">F-15</Term>, move the whole horizontal tail instead: a <strong><Term id="Stabilator">stabilator</Term></strong>. <a href="#source-api">{g('68')}</a> The ailerons move in opposite directions: stick right raises the right aileron and lowers the left, increasing lift on the left wing and decreasing it on the right, and the airplane rolls right. <a href="#source-phak">{k('6-3')}</a></p>
- <p>A roll brings a side effect, <strong><Term id="Adverse yaw">adverse yaw</Term></strong>: the nose yaws opposite to the direction of bank, because of the differential drag and the slightly different speeds of the two wings. <a href="#source-phak">{k('6-3')}</a> Coordinated rudder counters it; in coordinated flight the ball of the slip/skid indicator is centred. <a href="#source-afh">{a('5-8')}</a> Trim relieves the pilot of holding constant control pressure: trim tabs move opposite to the control surface they trim, and in the T-6B the trim is changed with switches on the control stick. <a href="#source-api">{g('68–69')}</a> High-lift devices (flaps, slots, slats) exist to increase CL<sub>max</sub> and reduce the stall speed. <a href="#source-navweps">{n('36–37')}</a></p>
- <section class="lesson figure-lesson" data-lesson="axes" aria-labelledby="axes-title">
-  <h3 id="axes-title" class="fig-title">Figure 5 — The three axes and the primary flight controls</h3>
-  <fieldset class="inline"><legend>Axis</legend>
-   <label><input type="radio" name="axis" value="roll" checked /> Roll</label>
-   <label><input type="radio" name="axis" value="pitch" /> Pitch</label>
-   <label><input type="radio" name="axis" value="yaw" /> Yaw</label>
-  </fieldset>
-  <div class="controls row">
-   <label for="axes-input">Control input <output for="input"></output><input id="axes-input" name="input" type="range" min="-100" max="100" step="5" value="40" /></label>
-  </div>
-  <div class="fig-scroll" role="region" aria-label="Figure 5, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 660 400" role="img" aria-label="Three-dimensional line drawing of an airplane rotating about the selected axis, with the controlling surface deflected"></svg></div>
-  <p class="no-js">Interactive figure unavailable. Roll is about the longitudinal axis and is controlled by the ailerons; pitch is about the lateral axis, controlled by the elevator; yaw is about the vertical axis, controlled by the rudder. All three axes pass through the centre of gravity.</p>
-  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
-  <p class="fig-caption">Original line drawing of a generic swept-wing jet trainer, not any particular type; the horizontal tail is drawn with an elevator. Surface travel (up to 25°) and attitude change (up to 30°) are illustrative and proportional to the input; a real airplane's response depends on speed and keeps changing while a control is held.</p>
- </section>
-
- <h2 id="stability">Stability</h2>
- <p><strong>Static stability</strong> is the initial tendency after a disturbance. With <em>positive</em> static stability the airplane initially tends to return to its original state; with <em>neutral</em>, it tends to stay in the new condition; with <em>negative</em>, it tends to continue away. <a href="#source-phak">{k('5-14–5-15')}</a> <strong>Dynamic stability</strong> is the response over time: whether the motion, once started back, damps out, keeps going, or grows. <a href="#source-phak">{k('5-14–5-15')}</a></p>
- <p>In pitch, with the CG forward of the wing's centre of lift and an aerodynamic tail-down force from the horizontal tail, the airplane usually tries to return to a safe flying attitude. <a href="#source-phak">{k('5-15–5-17')}</a></p>
- <section class="lesson figure-lesson" data-lesson="stability" aria-labelledby="stab-title">
-  <h3 id="stab-title" class="fig-title">Figure 6 — Static and dynamic stability after a disturbance</h3>
-  <fieldset class="inline"><legend>Response</legend>
-   <label><input type="radio" name="kind" value="static-positive" /> Static positive</label>
-   <label><input type="radio" name="kind" value="static-neutral" /> Static neutral</label>
-   <label><input type="radio" name="kind" value="static-negative" /> Static negative</label>
-   <label><input type="radio" name="kind" value="dynamic-positive" checked /> Dynamic positive</label>
-   <label><input type="radio" name="kind" value="dynamic-neutral" /> Dynamic neutral</label>
-   <label><input type="radio" name="kind" value="dynamic-negative" /> Dynamic negative</label>
-  </fieldset>
-  <div class="fig-scroll" role="region" aria-label="Figure 6, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 660 320" role="img" aria-label="Displacement against time for the selected kind of stability, with the others of its group shown faintly"></svg></div>
-  <p class="no-js">Interactive figure unavailable. Positive dynamic stability: the airplane overshoots trim but each swing is smaller and it settles. Neutral: the swings stay the same size. Negative: they grow, even though each swing starts back toward trim.</p>
-  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
-  <p class="fig-caption">Illustrative curves only: exponential returns and departures, and 4-second oscillations with damping, unchanged amplitude or growth. They show the shape of each kind of response, not any airplane's numbers.</p>
- </section>
+ <p class="key"><strong>Key point:</strong> parasite drag grows with speed, induced drag shrinks with it; total drag is least at L/D<sub>max</sub>, and below that speed slowing down costs more drag, not less.</p>
 
  <h2 id="turns">Turns and load factor</h2>
  <p>Banking tilts lift with the wing. Its <strong>horizontal component</strong> is the force that pulls the airplane from a straight path into a turn; its <strong>vertical component</strong> is now less than the weight, so to hold altitude the pilot increases <Term id="AOA">angle of attack</Term>, with back pressure on the elevator, until the vertical component again equals the weight. <a href="#source-phak">{k('5-22–5-23')}</a></p>
@@ -157,40 +161,97 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   </tbody>
  </table></div>
  <section class="lesson figure-lesson" data-lesson="turn" aria-labelledby="turn-title">
-  <h3 id="turn-title" class="fig-title">Figure 7 — Bank, load factor and the turn circle</h3>
+  <h3 id="turn-title" class="fig-title">Figure 5 — Bank, load factor and the turn circle</h3>
   <div class="controls row">
    <label for="turn-bank">Bank angle <output for="bank"></output><input id="turn-bank" name="bank" type="range" min="0" max="80" step="1" value="60" /></label>
    <label for="turn-speed">Airspeed <output for="speed"></output><input id="turn-speed" name="speed" type="range" min="150" max="500" step="5" value="300" /></label>
   </div>
-  <div class="fig-scroll" role="region" aria-label="Figure 7, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 660 400" role="img" aria-label="Rear view of the banked airplane with lift resolved into vertical and horizontal parts, and a plan view of its turn circle"></svg></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 5, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 660 400" role="img" aria-label="Rear view of the banked airplane with lift resolved into vertical and horizontal parts, and a plan view of its turn circle"></svg></div>
   <p class="no-js">Interactive figure unavailable. 60° of bank needs 2.00 G. At 300 kt the turn radius is 4,601 ft and the rate 6.3° per second, a full circle in 57 s. The example jet's stall speed rises from 128 to 181 kt.</p>
   <div class="feedback derived" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">Level, coordinated turn at constant true airspeed: n = 1 ÷ cos φ; r = V² ÷ (g tan φ); ω = g tan φ ÷ V, with g = 9.80665 m/s². Stall speed is the example jet's 128.1 kt × √n. The plan view scales to fit.</p>
  </section>
+ <p class="key"><strong>Key point:</strong> in a level turn the load factor is 1 ÷ cos(bank), so 60° needs 2 G, and the stall speed rises with the square root of the load factor.</p>
 
  <h2 id="stalls">Stalls</h2>
- <p>A stall happens when the wing exceeds its <Term id="Critical angle of attack">critical angle of attack</Term>, not when the airplane is "too slow". The stall occurs at a particular <Term id="AOA">angle of attack</Term>; weight, bank angle, <Term id="Load factor">load factor</Term>, density altitude and airspeed have no direct effect on the stall <Term id="AOA">angle of attack</Term>, only on the speed at which the wing reaches it. <a href="#source-navweps">{n('39')}</a> So it is possible to exceed the <Term id="Critical angle of attack">critical angle of attack</Term> at any airspeed, at any attitude and at any power setting. <a href="#source-afh">{a('5-9, 5-12')}</a> The recovery follows from the cause: since stall is precipitated by an excessive <Term id="AOA">angle of attack</Term>, <strong>the <Term id="AOA">angle of attack</Term> must be decreased</strong>. <a href="#source-navweps">{n('39')}</a> Common errors include trying to level the wings or add power before doing so. <a href="#source-afh">{a('5-15, 5-21')}</a> Your aircraft's flight manual gives its own stall and departure warnings and recovery.</p>
+ <p>A stall happens when the wing exceeds its <Term id="Critical angle of attack">critical angle of attack</Term>, not when the airplane is "too slow". The stall occurs at a particular <Term id="AOA">angle of attack</Term>; weight, bank angle, <Term id="Load factor">load factor</Term>, density altitude and airspeed have no direct effect on the stall <Term id="AOA">angle of attack</Term>, only on the speed at which the wing reaches it. <a href="#source-navweps">{n('39')}</a> So it is possible to exceed the <Term id="Critical angle of attack">critical angle of attack</Term> at any airspeed, at any attitude and at any power setting.</p>
+ <p><a href="#source-afh">{a('5-9, 5-12')}</a> The recovery follows from the cause: since stall is precipitated by an excessive <Term id="AOA">angle of attack</Term>, <strong>the <Term id="AOA">angle of attack</Term> must be decreased</strong>. <a href="#source-navweps">{n('39')}</a> Common errors include trying to level the wings or add power before doing so. <a href="#source-afh">{a('5-15, 5-21')}</a> Your aircraft's flight manual gives its own stall and departure warnings and recovery.</p>
  <ul>
   <li><strong>Accelerated stall</strong>: any stall entered at more than 1 G, such as a hard pull in a break turn or a fight. <a href="#source-afh">{a('5-19')}</a> In the T-45, pulling to the lift limit puts the jet in heavy buffet. <a href="#source-p1289">{b('4-2')}</a></li>
   <li><strong>Cross-control stall</strong>: the <Term id="Critical angle of attack">critical angle of attack</Term> is exceeded with aileron applied one way and rudder the other, often in a skidding base-to-final turn, and it can lead to a spin. <a href="#source-afh">{a('5-20')}</a></li>
   <li><strong>Spin</strong>: an aggravated stall in which at least one wing is stalled and the airplane autorotates. Its phases are entry, incipient, developed and recovery. <a href="#source-afh">{a('5-22–5-24')}</a> Spin and out-of-control recovery follow the aircraft's flight manual.</li>
  </ul>
  <p>For comparison, the FAA treats as an <strong>upset</strong> an event that unintentionally exceeds normal flight parameters for a civil airplane: pitch more than 25° nose up, more than 10° nose down, bank more than 45°, or an inappropriate airspeed within those limits. <a href="#source-afh">{a('5-1')}</a> Those numbers are routine attitudes in military flying; what carries over is the idea of recovering <Term id="AOA">angle of attack</Term> first.</p>
+ <p class="key"><strong>Key point:</strong> a stall is exceeding the critical angle of attack, at any airspeed, attitude or power; the first action in a recovery is to reduce the angle of attack.</p>
 
  <h2 id="envelope">The stall boundary and maneuvering speed</h2>
  <p>Put the turn and the lift equation together: at any speed, CL<sub>max</sub> limits how much <Term id="Load factor">load factor</Term> the wing can make, n<sub>max</sub> = (V ÷ V<sub>S</sub>)². Plotted against airspeed, that is the stall boundary of a V-n (V-g) diagram. The structure sets a second limit, the limit <Term id="Load factor">load factor</Term>. Where they meet is the speed fighter pilots call <strong><Term id="Corner speed">corner speed</Term></strong>; the civil handbooks call it the <strong>maneuvering speed</strong>, V<sub>A</sub>, the maximum speed at which the positive design load limit can be imposed. <a href="#source-afh">{a('5-19')}</a></p>
  <p>The T-45 training instruction turns this into two kinds of pull. Above <Term id="Corner airspeed">corner airspeed</Term>, a <strong>load-limit pull</strong>: pull to the G limit, 7.33 G above 5,000 ft. Below it, a <strong>lift-limit pull</strong>: 19–21 <Term id="Units">units</Term>, the rumble of buffet. <a href="#source-p1289">{b('4-3')}</a> <Term id="Corner speed">Corner speed</Term>, 410 KIAS in that jet, gives the best instantaneous turn but also the highest bleed rate, about 8 knots per second. <a href="#source-p1289">{b('4-4')}</a> The <a href={bfm}>BFM module</a> puts these numbers to work.</p>
  <section class="lesson figure-lesson" data-lesson="envelope" aria-labelledby="env-title">
-  <h3 id="env-title" class="fig-title">Figure 8 — Stall boundary, limit load and corner speed</h3>
+  <h3 id="env-title" class="fig-title">Figure 6 — Stall boundary, limit load and corner speed</h3>
   <div class="controls row">
    <label for="env-speed">Airspeed <output for="speed"></output><input id="env-speed" name="speed" type="range" min="80" max="500" step="5" value="250" /></label>
    <label for="env-g">Load factor demanded <output for="g"></output><input id="env-g" name="g" type="range" min="1" max="9" step="0.1" value="3" /></label>
    <label for="env-limit">Limit load factor <output for="limit"></output><input id="env-limit" name="limit" type="range" min="3" max="9" step="0.1" value="7.5" /></label>
   </div>
-  <div class="fig-scroll" role="region" aria-label="Figure 8, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 660 380" role="img" aria-label="Load factor against airspeed with the stall boundary, the limit load and corner speed"></svg></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 6, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 660 380" role="img" aria-label="Load factor against airspeed with the stall boundary, the limit load and corner speed"></svg></div>
   <p class="no-js">Interactive figure unavailable. At 250 kt the example jet's wing can make at most 3.8 G before it stalls, so 3 G is inside the envelope. With a limit <Term id="Load factor">load factor</Term> of 7.5, the stall boundary meets the limit at a <Term id="Corner speed">corner speed</Term> of 351 kt.</p>
   <div class="feedback derived" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">Positive-G side only, example jet at 12,000 lb, clean, sea level, true airspeed: n<sub>max</sub> = (V ÷ 128.1 kt)², <Term id="Corner speed">corner speed</Term> = V<sub>S</sub> √n<sub>limit</sub>. The limit <Term id="Load factor">load factor</Term> is adjustable and set to 7.5 as an example; real limits, the negative side and the high-speed end of the diagram come from the aircraft's NATOPS manual. <Term id="Corner speed">Corner speed</Term> falls at lighter weights, because V<sub>S</sub> does; real corner speeds are usually quoted in indicated airspeed at altitude, so the example's sea-level true airspeed is not comparable with the T-45's 410 KIAS.</p>
+ </section>
+ <p class="key"><strong>Key point:</strong> below corner speed a pull is lift-limited, by the wing; above it, it is load-limited, by the structure. Corner speed gives the best instantaneous turn.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>In a steady climb, thrust overcomes drag plus part of the weight. <a href="#forces">More</a></li>
+  <li>The wing stalls at its critical angle of attack, at any airspeed. <a href="#airfoil">More</a></li>
+  <li>Half the speed needs four times the lift coefficient. <a href="#lift">More</a></li>
+  <li>Total drag is least at L/D<sub>max</sub>; slower than that, drag rises. <a href="#drag">More</a></li>
+  <li>Load factor in a level turn is 1 ÷ cos(bank); stall speed goes up by its square root. <a href="#turns">More</a></li>
+  <li>Stall recovery starts by reducing the angle of attack. <a href="#stalls">More</a></li>
+  <li>Below corner speed the wing limits the turn; above it, the structure does. <a href="#envelope">More</a></li>
+ </ul>
+
+ <h2 id="ground-effect">Wingtip vortices and ground effect</h2>
+ <p>At the wingtip the higher pressure beneath the wing flows around to the lower pressure above, forming a tip vortex and a downwash that reduce lift on that part of the wing. <a href="#source-phak">{k('4-9')}</a> Close to the ground, the surface interferes with these airflow patterns. <Term id="Ground effect">Ground effect</Term> is most noticeable below a height of one wingspan; it reduces <Term id="Induced drag">induced drag</Term> by about 1.4% at one span, 23.5% at a quarter span and 47.6% at a tenth of a span. <a href="#source-phak">{k('5-11–5-12')}</a></p>
+
+ <h2 id="axes">Axes and flight controls</h2>
+ <p>An airplane rotates about three imaginary axes that pass through its centre of gravity (CG). The <strong>longitudinal axis</strong> passes from nose to tail, and motion about it is <strong>roll</strong>; movement around the <strong>lateral axis</strong> is <strong>pitch</strong>; movement of the longitudinal axis around the <strong>vertical axis</strong> is <strong>yaw</strong>. <a href="#source-api">{g('36')}</a> <a href="#source-phak">{k('5-12–5-13')}</a></p>
+ <p>The primary flight controls each make a moment about one axis. The <strong>ailerons</strong>, on the outboard trailing edges of the wings, produce a rolling moment; the <strong>elevator</strong>, on the trailing edge of the horizontal stabilizer, controls the pitching moment; the <strong>rudder</strong>, on the trailing edge of the vertical stabilizer, produces a yawing moment. Many fighters, such as the <Term record="fa-18c">F/A-18</Term> and <Term record="f-15c">F-15</Term>, move the whole horizontal tail instead: a <strong><Term id="Stabilator">stabilator</Term></strong>. <a href="#source-api">{g('68')}</a> The ailerons move in opposite directions: stick right raises the right aileron and lowers the left, increasing lift on the left wing and decreasing it on the right, and the airplane rolls right. <a href="#source-phak">{k('6-3')}</a></p>
+ <p>A roll brings a side effect, <strong><Term id="Adverse yaw">adverse yaw</Term></strong>: the nose yaws opposite to the direction of bank, because of the differential drag and the slightly different speeds of the two wings. <a href="#source-phak">{k('6-3')}</a> Coordinated rudder counters it; in coordinated flight the ball of the slip/skid indicator is centred. <a href="#source-afh">{a('5-8')}</a> Trim relieves the pilot of holding constant control pressure: trim tabs move opposite to the control surface they trim, and in the T-6B the trim is changed with switches on the control stick. <a href="#source-api">{g('68–69')}</a> High-lift devices (flaps, slots, slats) exist to increase CL<sub>max</sub> and reduce the stall speed. <a href="#source-navweps">{n('36–37')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="axes" aria-labelledby="axes-title">
+  <h3 id="axes-title" class="fig-title">Figure 7 — The three axes and the primary flight controls</h3>
+  <fieldset class="inline"><legend>Axis</legend>
+   <label><input type="radio" name="axis" value="roll" checked /> Roll</label>
+   <label><input type="radio" name="axis" value="pitch" /> Pitch</label>
+   <label><input type="radio" name="axis" value="yaw" /> Yaw</label>
+  </fieldset>
+  <div class="controls row">
+   <label for="axes-input">Control input <output for="input"></output><input id="axes-input" name="input" type="range" min="-100" max="100" step="5" value="40" /></label>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 7, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 660 400" role="img" aria-label="Three-dimensional line drawing of an airplane rotating about the selected axis, with the controlling surface deflected"></svg></div>
+  <p class="no-js">Interactive figure unavailable. Roll is about the longitudinal axis and is controlled by the ailerons; pitch is about the lateral axis, controlled by the elevator; yaw is about the vertical axis, controlled by the rudder. All three axes pass through the centre of gravity.</p>
+  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Original line drawing of a generic swept-wing jet trainer, not any particular type; the horizontal tail is drawn with an elevator. Surface travel (up to 25°) and attitude change (up to 30°) are illustrative and proportional to the input; a real airplane's response depends on speed and keeps changing while a control is held.</p>
+ </section>
+
+ <h2 id="stability">Stability</h2>
+ <p><strong>Static stability</strong> is the initial tendency after a disturbance. With <em>positive</em> static stability the airplane initially tends to return to its original state; with <em>neutral</em>, it tends to stay in the new condition; with <em>negative</em>, it tends to continue away. <a href="#source-phak">{k('5-14–5-15')}</a> <strong>Dynamic stability</strong> is the response over time: whether the motion, once started back, damps out, keeps going, or grows. <a href="#source-phak">{k('5-14–5-15')}</a></p>
+ <p>In pitch, with the CG forward of the wing's centre of lift and an aerodynamic tail-down force from the horizontal tail, the airplane usually tries to return to a safe flying attitude. <a href="#source-phak">{k('5-15–5-17')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="stability" aria-labelledby="stab-title">
+  <h3 id="stab-title" class="fig-title">Figure 8 — Static and dynamic stability after a disturbance</h3>
+  <fieldset class="inline"><legend>Response</legend>
+   <label><input type="radio" name="kind" value="static-positive" /> Static positive</label>
+   <label><input type="radio" name="kind" value="static-neutral" /> Static neutral</label>
+   <label><input type="radio" name="kind" value="static-negative" /> Static negative</label>
+   <label><input type="radio" name="kind" value="dynamic-positive" checked /> Dynamic positive</label>
+   <label><input type="radio" name="kind" value="dynamic-neutral" /> Dynamic neutral</label>
+   <label><input type="radio" name="kind" value="dynamic-negative" /> Dynamic negative</label>
+  </fieldset>
+  <div class="fig-scroll" role="region" aria-label="Figure 8, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 660 320" role="img" aria-label="Displacement against time for the selected kind of stability, with the others of its group shown faintly"></svg></div>
+  <p class="no-js">Interactive figure unavailable. Positive dynamic stability: the airplane overshoots trim but each swing is smaller and it settles. Neutral: the swings stay the same size. Negative: they grow, even though each swing starts back toward trim.</p>
+  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Illustrative curves only: exponential returns and departures, and 4-second oscillations with damping, unchanged amplitude or growth. They show the shape of each kind of response, not any airplane's numbers.</p>
  </section>
 
  <h2 id="energy">Energy: altitude and airspeed</h2>
@@ -210,6 +271,22 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   <p class="fig-caption">E<sub>S</sub> = h + V² ÷ 2g with V the true airspeed. Each faint curve is one <Term id="Energy height">energy height</Term>, 4,000 ft apart; the bold curve passes through your point. The zoom and dive figures are ideal: they ignore drag and assume thrust is unchanged.</p>
  </section>
 
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p>A simulator's flight model is that aircraft's model, not these equations. Only the Falcon BMS 4.38.1 Training Manual was read for this panel, which shows where the F-16 training missions use the ideas on this page.</p>
+  <div class="table-scroll" role="region" aria-label="Falcon BMS and this module" tabindex="0"><table>
+   <caption>Falcon BMS Training Manual compared with this module</caption>
+   <thead><tr><th scope="col">Item</th><th scope="col">BMS Training Manual (F-16)</th><th scope="col">This module</th></tr></thead>
+   <tbody>
+    <tr><th scope="row">Flying the approach by angle of attack</th><td>Forget airspeed and fly 13° AOA for landing; the right approach airspeed depends on gross weight. <a href="#source-bms">{bms('82')}</a></td><td>The wing stalls at the same angle of attack at any weight, so an AOA target gives the same margin at every weight. <a href="#source-navweps">{n('39')}</a></td></tr>
+    <tr><th scope="row">Configuration and drag</th><td>Lowering the gear also lowers the flaps; the extra drag slows the jet and pitches the nose down a little. <a href="#source-bms">{bms('82')}</a></td><td>See <a href="#drag">Drag</a>.</td></tr>
+    <tr><th scope="row">Which airspeed</th><td>With the gear down the HUD always shows calibrated airspeed, because stall speed is an indicated or calibrated speed. <a href="#source-bms">{bms('54')}</a></td><td>The worked numbers are at sea level, where true and calibrated airspeed are the same.</td></tr>
+    <tr><th scope="row">Slow, nose-high recovery</th><td>The Horn Awareness and Recovery Training Series (HARTS) practises recoveries from high pitch and low airspeed. Fly them on the attitude indicator, not the HUD flight path marker, because the gap between attitude and flight path grows with angle of attack; avoid buffet in the roll to the horizon. <a href="#source-bms">{bms('111–112')}</a></td><td>Angle of attack is the angle between the wing and the relative wind, and the relative wind lies along the flight path. <a href="#airfoil">More</a></td></tr>
+   </tbody>
+  </table></div>
+  <p><strong>Not checked.</strong> DCS World's flight models and manuals were not read, and no claim is made about how closely any sim models stalls, spins, ground effect or stability. Sim limits and speeds are that aircraft's, not the example jet's.</p>
+ </section>
+
  <h2 id="terms">Terms</h2>
  <GlossaryList items={[
   { id: 'AOA', label: 'Angle of attack (AOA)' }, 'Critical angle of attack', { id: 'Units', label: 'Units (AOA)' },
@@ -221,17 +298,18 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
  ]} />
 
  <h2 id="check">Check your understanding</h2>
- <details><summary>Below corner speed you pull as hard as you can. What limits the turn, and what do you feel?</summary><p>Lift: the wing reaches CL<sub>max</sub> before the G limit. You feel buffet; in the T-45 a lift-limit pull is flown at 19–21 units.</p></details>
- <details><summary>Your jet is 2% heavier than yesterday. How much does the stall speed change?</summary><p>About 1%: stall speed goes with the square root of weight.</p></details>
- <details><summary>Why are carrier approaches flown by angle of attack rather than one airspeed?</summary><p>The wing stalls at the same angle of attack at any weight, so an AOA target gives the same margin above the stall whatever the fuel and stores load; the right airspeed changes with weight.</p></details>
- <details><summary>Can a wing stall at high airspeed?</summary><p>Yes. A stall is exceeding the critical angle of attack, which can happen at any airspeed, attitude or power setting: a hard pull at high speed is an accelerated stall.</p></details>
- <details><summary>The airplane is about to stall. What is the first thing to do?</summary><p>Reduce the angle of attack. Levelling the wings or adding power first are common errors.</p></details>
- <details><summary>You halve your airspeed in level flight. What happens to the lift coefficient the wing needs?</summary><p>It quadruples, because lift goes with the square of airspeed. The wing gets it from a higher angle of attack, until CL<sub>max</sub> runs out.</p></details>
- <details><summary>You slow down below L/D<sub>max</sub> speed. Does drag go down?</summary><p>No. Below L/D<sub>max</sub>, induced drag dominates and total drag rises as you slow.</p></details>
- <details><summary>What load factor does a level 60° bank need, and what happens to the stall speed?</summary><p>2 G, and the stall speed is about 41% higher than at 1 G (√2 ≈ 1.41).</p></details>
- <details><summary>At the same bank, you fly twice as fast. What happens to the turn?</summary><p>The radius is four times larger and the rate is half.</p></details>
- <details><summary>Which control changes your total energy, and which trades altitude for speed?</summary><p>The throttle changes total energy; the elevator divides it between altitude and airspeed.</p></details>
- <details><summary>You roll right using aileron alone. Which way does the nose yaw?</summary><p>Left, opposite to the bank: adverse yaw. Coordinated right rudder keeps the ball centred.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> In a steady climb, does thrust only have to balance drag?</summary><p>No. Part of the weight acts along the flight path, in the same direction as drag, so thrust has to overcome that too.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> Below corner speed you pull as hard as you can. What limits the turn, and what do you feel?</summary><p>Lift: the wing reaches CL<sub>max</sub> before the G limit. You feel buffet; in the T-45 a lift-limit pull is flown at 19–21 units.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> Your jet is 2% heavier than yesterday. How much does the stall speed change?</summary><p>About 1%: stall speed goes with the square root of weight.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> Why are carrier approaches flown by angle of attack rather than one airspeed?</summary><p>The wing stalls at the same angle of attack at any weight, so an AOA target gives the same margin above the stall whatever the fuel and stores load; the right airspeed changes with weight.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> Can a wing stall at high airspeed?</summary><p>Yes. A stall is exceeding the critical angle of attack, which can happen at any airspeed, attitude or power setting: a hard pull at high speed is an accelerated stall.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> The airplane is about to stall. What is the first thing to do?</summary><p>Reduce the angle of attack. Levelling the wings or adding power first are common errors.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> You halve your airspeed in level flight. What happens to the lift coefficient the wing needs?</summary><p>It quadruples, because lift goes with the square of airspeed. The wing gets it from a higher angle of attack, until CL<sub>max</sub> runs out.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> You slow down below L/D<sub>max</sub> speed. Does drag go down?</summary><p>No. Below L/D<sub>max</sub>, induced drag dominates and total drag rises as you slow.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> What load factor does a level 60° bank need, and what happens to the stall speed?</summary><p>2 G, and the stall speed is about 41% higher than at 1 G (√2 ≈ 1.41).</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> At the same bank, you fly twice as fast. What happens to the turn?</summary><p>The radius is four times larger and the rate is half.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> Which control changes your total energy, and which trades altitude for speed?</summary><p>The throttle changes total energy; the elevator divides it between altitude and airspeed.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> You roll right using aileron alone. Which way does the nose yaw?</summary><p>Left, opposite to the bank: adverse yaw. Coordinated right rudder keeps the ball centred.</p></details>
 
  <h2 id="sources">Sources and applicability</h2>
  <h3>Military sources</h3>
@@ -241,8 +319,13 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
  <h3>Supplementary: FAA handbooks</h3>
  <p id="source-phak"><strong>[4] Federal Aviation Administration, FAA-H-8083-25C, Pilot's Handbook of Aeronautical Knowledge (2023).</strong> Chapter PDFs on faa.gov, read through a web text-extraction tool (see the evidence file): <a href="https://www.faa.gov/sites/faa.gov/files/06_phak_ch4_0.pdf">chapter 4, Principles of Flight</a>, <a href="https://www.faa.gov/sites/faa.gov/files/07_phak_ch5_0.pdf">chapter 5, Aerodynamics of Flight</a> and <a href="https://www.faa.gov/sites/faa.gov/files/08_phak_ch6.pdf">chapter 6, Flight Controls</a>. Inspected 25 October 2026. A US Government work, public domain.</p>
  <p id="source-afh"><strong>[5] Federal Aviation Administration, FAA-H-8083-3C, Airplane Flying Handbook (2021).</strong> Read the same way: <a href="https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/05_afh_ch4.pdf">chapter 4, Energy Management</a> and <a href="https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/06_afh_ch5.pdf">chapter 5, Maintaining Aircraft Control: Upset Prevention and Recovery Training</a>. Inspected 25 October 2026. A US Government work, public domain.</p>
+ <h3>Sim source</h3>
+ <p id="source-bms"><strong>[6] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 5 November 2026, pp. 54 (HUD airspeed), 82 (landing approach) and 111–112 (HARTS). A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/flight-fundamentals-faa-evidence.md">Principles of Flight evidence</a>. The turn, stall-speed, drag-curve and V-n equations are standard flight mechanics applied to an invented jet trainer; the tests check them against hand-worked values and the sources' rules of thumb (2% weight for 1% stall speed, 2 G at 60° of bank) and the handbook's energy-height example. The FAA handbooks are cited where they explain a point the military texts read for this revision do not cover, or state a law more exactly.</p>
  <p>Figures 1–9 are original line drawings, not reproductions of any publication's figure, and are not to scale except where a caption gives the scale.</p>
  <p class="note">Applicability: fixed-wing principles for military pilots of every service. The example jet trainer's numbers are invented; T-45 numbers are from its training instruction and apply to that aircraft only. Your aircraft's flight manual governs. This revision is Drafted pending independent source-backed review.</p>
 </SiteLayout>
 <script>import '../../../lessons/flight-fundamentals/lesson-ui.mjs';</script>
+<style>
+  .contents-groups ol { columns: auto; }
+</style>
