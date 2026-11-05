@@ -20,17 +20,17 @@ Reviews are source-inspection editorial findings, **not** rendered-browser QA, e
 
 ## Modules — 11/11
 
-- [BFM](content-audit-bfm.md)
-- [Airfield operations](content-audit-airfield-basics.md)
-- [Radio procedures](content-audit-radio-procedures.md)
-- [Fixed-wing fundamentals](content-audit-principles-of-flight.md)
-- [Rotor-wing fundamentals](content-audit-rotor-wing.md)
-- [Navigation](content-audit-air-navigation.md)
-- [Weapons delivery](content-audit-weapons-delivery.md)
+- [BFM](content-audit-bfm.md) — applied in module revision 3 (core/reference, worked engagement, BMS sim panel)
+- [Airfield operations](content-audit-airfield-basics.md) — applied in module revision 3 (sortie-ordered core, tables, BMS sim panel)
+- [Radio procedures](content-audit-radio-procedures.md) — applied in module revision 5 (exchange-first core, outcomes, BMS sim panel)
+- [Fixed-wing fundamentals](content-audit-principles-of-flight.md) — applied in module revision 5 (forces-to-stall core, outcomes, BMS sim panel)
+- [Rotor-wing fundamentals](content-audit-rotor-wing.md) — applied in module revision 2 (aerodynamics core, hazards table, DCS UH-1H sim panel)
+- [Navigation](content-audit-air-navigation.md) — applied in module revision 3 (arc-workflow core, outcomes, BMS sim panel)
+- [Weapons delivery](content-audit-weapons-delivery.md) — applied in module revision 2 (bomb-run core, delivery-types table, sim panel)
 - [Close air support](content-audit-close-air-support.md) — findings applied in module revision 2 as a benchmark
-- [Ship operations](content-audit-ship-operations.md)
+- [Ship operations](content-audit-ship-operations.md) — applied in module revision 2 (Case I core, branches in reference, Supercarrier sim panel)
 - [Case III](content-audit-case-iii.md) — applied in module revision 3 (four phases with handoffs, practice in reference, Supercarrier sim panel)
-- [Autorotation](content-audit-autorotation.md)
+- [Autorotation](content-audit-autorotation.md) — applied in module revision 2 (traced FAA figures, DCS UH-1H sim panel)
 
 New modules are written to the playbook from the first draft and are not audited separately: Instrument flying (revision 1, PR for issue #97), since split into Attitude Instrument Flying and Instrument Procedures (both revision 1). Two-Ship Formation (revision 1, issue #99), SEAD and DEAD (revision 1, issue #124), Planning a Sortie and Weather and Performance (both revision 1, issue #98), and Air-to-Air Refuelling Procedures (revision 1, issue #100) likewise.
 
