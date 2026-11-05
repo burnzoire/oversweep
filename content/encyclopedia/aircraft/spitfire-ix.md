@@ -75,9 +75,7 @@ Its famous wing solved two conflicting needs. It had to be thin for low drag, ye
 
 ## The Battle of Britain
 
-The Battle of Britain was fought by earlier marks; the Mk IX did not reach service until June 1942. [[2]](#source-2)
-
-The first Spitfire reached No. 19 Squadron at Duxford on 4 August 1938, and 400 were in service when war broke out. [[1]](#source-1) [[3]](#source-3) In the Battle of Britain in 1940 the more numerous Hurricane did most of the fighting against the bombers, while Spitfires, with their higher performance, were sent where possible against the German escort fighters; Spitfire [squadrons](term:squadron) lost fewer aircraft and scored more victories for each loss. The legend grew all the same, helped by a "Spitfire Fund" that let the public buy fighters. [[1]](#source-1)
+The first Spitfire reached No. 19 Squadron at Duxford on 4 August 1938, and 400 were in service when war broke out. [[1]](#source-1) [[3]](#source-3) In the Battle of Britain in 1940 the more numerous Hurricane did most of the fighting against the bombers, while Spitfires, with their higher performance, were sent where possible against the German escort fighters; Spitfire [squadrons](term:squadron) lost fewer aircraft and scored more victories for each loss. The legend grew all the same, helped by a "Spitfire Fund" that let the public buy fighters. [[1]](#source-1) None of this was the Mk IX, which entered service in mid-1942. [[2]](#source-2)
 
 ## The Mark IX answers the Fw 190
 
