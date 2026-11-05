@@ -32,3 +32,5 @@ DCS Nevada representation may reproduce terrain and base layout without modellin
 ## Recommendation
 
 Prioritise applicability, date boundaries, and useful airfield/map cross-links before length-based editing. Preserve real-world historical context as a reference, separate from simulator-specific differences.
+
+**Applied (2026-11-05):** no change needed: units carry asOf dates; theatre links point to theatre records that separate real geography from map availability.

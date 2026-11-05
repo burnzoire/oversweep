@@ -32,3 +32,5 @@ DCS Marianas map era and its representation of Saipan may not match present-day 
 ## Recommendation
 
 Prioritise applicability, date boundaries, and useful airfield/map cross-links before length-based editing. Preserve real-world historical context as a reference, separate from simulator-specific differences.
+
+**Applied (2026-11-05):** no change needed: the 1944 and modern airfields, units and facilities are already separated by period, and the map notes say which DCS map shows which era.

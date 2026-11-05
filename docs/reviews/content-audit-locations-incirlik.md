@@ -32,3 +32,5 @@ DCS Syria may represent the airfield but not all current real-world units, frequ
 ## Recommendation
 
 Prioritise applicability, date boundaries, and useful airfield/map cross-links before length-based editing. Preserve real-world historical context as a reference, separate from simulator-specific differences.
+
+**Applied (2026-11-05):** no change needed: units carry asOf dates and basing. Checking each sim map's era against unit history was not attempted.

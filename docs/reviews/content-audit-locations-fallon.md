@@ -32,3 +32,5 @@ DCS Nevada is a different theatre/terrain product from actual Fallon range opera
 ## Recommendation
 
 Prioritise applicability, date boundaries, and useful airfield/map cross-links before length-based editing. Preserve real-world historical context as a reference, separate from simulator-specific differences.
+
+**Applied (2026-11-05):** no change needed: units carry asOf dates. Range dimensions were not re-verified.

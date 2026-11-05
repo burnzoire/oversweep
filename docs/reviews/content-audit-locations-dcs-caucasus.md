@@ -32,3 +32,5 @@ DCS Caucasus represents a chosen sim terrain snapshot; do not imply that today's
 ## Recommendation
 
 Prioritise applicability, date boundaries, and useful airfield/map cross-links before length-based editing. Preserve real-world historical context as a reference, separate from simulator-specific differences.
+
+**Applied (2026-11-05):** no change in this pass: map-age and compression notes need a sourced statement from the map's documentation.
