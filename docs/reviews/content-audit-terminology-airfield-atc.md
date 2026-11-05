@@ -32,3 +32,5 @@ Explain applicability to specific simulator/module/version only where verified. 
 ## Recommended action
 
 Improve term discoverability, usage context and cross-links before trimming authoritative definitions. SME source review remains required for doctrinal changes.
+
+**Applied (record revision, 2026-11-05):** the set now links the Airfield Operations and Radio Communications modules. The civil/military split, the service marks and the ICAO differences were already in the intro. No sim note: no sim source was read for these words.

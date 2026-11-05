@@ -32,3 +32,5 @@ Explain applicability to specific simulator/module/version only where verified. 
 ## Recommended action
 
 Improve term discoverability, usage context and cross-links before trimming authoritative definitions. SME source review remains required for doctrinal changes.
+
+**Applied (record revision, 2026-11-05):** the set now links the Fixed-Wing and Rotor-Wing modules. Corner speed and corner airspeed already cross-refer to each other, and AOA units are already qualified as the T-45's scale. No sim note added.

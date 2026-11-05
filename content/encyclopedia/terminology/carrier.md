@@ -351,4 +351,6 @@ Several of these words are also multi-service brevity words with a different mea
 
 The Navy glossary covers amphibious assault ships (LHA and LHD) as well as carriers; where the two differ, as for the 10-nm and 12-nm fixes after platform, both are given. [[1]](#source-1)
 
+The [Ship Operations](module:ship-operations) module uses these words in order, from the deck to the wire, and links on to the Case III recovery.
+
 The flight deck words, from the catapult's holdback and shuttle to the foul line and the lens, come from the Navy's T-45 carrier qualification glossary, and the tanker words from the controller manual's tanking table. [[5]](#source-5) [[8]](#source-8) Helicopter deck words such as the LSE, the Charlie pattern and deck landing qualification come from the Army's shipboard operations manual, written for Army crews landing on Navy ships. [[6]](#source-6)

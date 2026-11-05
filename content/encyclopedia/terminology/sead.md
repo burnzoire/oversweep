@@ -131,4 +131,4 @@ sources:
 
 These are the words for what a SEAD mission does and the air defences it faces: the categories and means of suppression from the joint counterair publication, the engagement zones an air defence is organised into, and the jamming terms a strike package lives by. The joint publication applies to all four US services; the jamming terms come from the Naval Academy's weapons systems text. [[1]](#source-1) [[2]](#source-2)
 
-SEAD itself, ARM, electronic attack and early warning are in the joint terms; chaff and decoy are in the weapons terms; MAGNUM is in the brevity words. The Manual's SEAD and DEAD module uses all of them.
+SEAD itself, ARM, electronic attack and early warning are in the joint terms; chaff and decoy are in the weapons terms; MAGNUM is in the brevity words. The Manual's [SEAD and DEAD](module:sead-dead) module uses all of them.

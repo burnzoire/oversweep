@@ -337,4 +337,6 @@ The overhead pattern is military. Its parts, the initial, the break point, the 1
 
 Runway markings, signs and lights are defined from the FAA's Aeronautical Information Manual, the shared US standard that military fields also use. [[6]](#source-6) Words particular to one service are marked: the Air Force's inside downwind, pull closed, runway supervisory unit and simulated flameout, from two of its pilot training bases; [[7]](#source-7) [[8]](#source-8) the Marine Corps' expeditionary airfields; [[9]](#source-9) and the optical landing system and arresting gear of naval air stations. [[10]](#source-10)
 
+The [Airfield Operations](module:airfield-basics) module puts these words in order, from the line to the runway and back, and the [Radio Communications](module:radio-procedures) module covers the calls.
+
 **Other countries.** Because flying is international, the FAA glossary also prints the ICAO definition of a term wherever it differs from the FAA's. [[1]](#source-1) Those differences are quoted in the notes here: ceiling, flight level, ATIS, NOTAM, IFR and the traffic pattern, which ICAO calls the aerodrome traffic circuit.

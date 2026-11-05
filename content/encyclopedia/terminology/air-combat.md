@@ -91,4 +91,6 @@ These are the words of basic fighter maneuvers (BFM), one aircraft against anoth
 
 Fighter communities in every service use these words, but the numbers quoted with them, such as a 410-knot corner airspeed or a 10,000-foot hard deck, are the T-45 syllabus's. An aircraft's own manual and the unit's training rules give its figures. [[1]](#source-1)
 
+The [Basic Fighter Maneuvers](module:bfm) module flies these words one engagement at a time.
+
 Radio calls used in the same fights, such as KNOCK-IT-OFF, BANDIT and TALLY, are in the brevity words.
