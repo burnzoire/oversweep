@@ -22,7 +22,7 @@ Reviews are source-inspection editorial findings, **not** rendered-browser QA, e
 
 - [BFM](content-audit-bfm.md)
 - [Airfield operations](content-audit-airfield-basics.md)
-- [Radio procedures](content-audit-radio-procedures.md)
+- [Radio procedures](content-audit-radio-procedures.md) — applied in module revision 5 (exchange-first core, outcomes, BMS sim panel)
 - [Fixed-wing fundamentals](content-audit-principles-of-flight.md)
 - [Rotor-wing fundamentals](content-audit-rotor-wing.md)
 - [Navigation](content-audit-air-navigation.md)

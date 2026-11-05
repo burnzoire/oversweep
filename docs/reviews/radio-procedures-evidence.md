@@ -1,4 +1,4 @@
-# Radio Procedures and Phraseology, revision 3 — source evidence
+# Radio Procedures and Phraseology, revision 5 — source evidence
 
 Short, paragraph-specific excerpts supporting the claims in the Radio
 Communications module (`src/pages/manual/radio-communications/[module].astro`)
@@ -173,3 +173,18 @@ an Air Force base's guide for civil pilots flying near its training traffic.
 | Page | Passage (paraphrased) | Module use |
 | --- | --- | --- |
 | 2 | Military aircraft commonly talk to ATC on UHF, which civil VHF radios cannot receive, so a civil pilot may hear only the controller's side | Overview; bands |
+
+## [8] Falcon BMS 4.38.1 Training Manual (revision 5, In the sim panel only)
+
+https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf, read 5 November
+2026. Page numbers are the printed page footers.
+
+| Page | Passage (extractor-read, abridged) | Module use |
+| --- | --- | --- |
+| 37 | "Ground Ops is always preset #1, Ground is always preset #2, Tower is always preset #3 and Approach/Departure is always preset #4."; "The first flight in the package will usually be assigned VHF preset #15, the second #16, third #17"; "AI (Wingmen, ATC, AWACS, Tanker, JTAC) will only be able to communicate with you if you are on the same frequency" | Sim panel: presets, being heard |
+| 45 | "The ATC menu has 7 pages relevant to Ground, Tower, Approach and Departure, Common Carrier and Contingencies. Pages are toggled with subsequent (t) presses." | Sim panel: making a call |
+| 46 | "Each airbase has an ATIS VHF frequency."; ATIS gives the airport, active runway, wind, visibility, clouds, temperature and altimeter setting | Sim panel: ATIS |
+| 47 | "ATC will provide information about the expected taxi time on UHF 2. This is an informal message and does not require confirmation by the flight lead on UHF. This call doesn't indicate that you have clearance for taxiing yet." | Sim panel: taxi |
+| 49 | "Upon arriving at EOR, the Ground Controller will call you and instruct you to switch to the Tower frequency. You don't have to do it right away" | Sim panel: handoffs |
+| 55 | "Switch to the Departure frequency (preset 4) and select 'Report Airborne' on the ATC menu Departure page." | Sim panel: handoffs |
+| 82 | "At 10 Nm, Gunsan approach will call you to switch to Tower frequency ... 'Request Landing' at initial contact with the tower" | Sim panel: handoffs |
