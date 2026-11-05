@@ -135,7 +135,11 @@ sources:
     note: "Read pp. 195–199, mission 12, AGM-88 HARMs. A sim manual: it describes the BMS F-16, not the real aircraft."
 ---
 
+## About these tables
+
 These are the threat tables of the two F-16 simulators, DCS World and Falcon BMS, as their official manuals print them. The real aircraft's tables are mission data and are not published, so nothing here describes a real F-16 [[1]](#source-1) [[2]](#source-2).
+
+## What the tables do
 
 An [anti-radiation missile](term:ARM) such as the [AGM-88 HARM](record:agm-88) homes on a radar's own transmissions, so it has to be told which radars to look for. The F-16 does this in two places.
 
