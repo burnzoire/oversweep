@@ -32,3 +32,5 @@ Explain applicability to specific simulator/module/version only where verified. 
 ## Recommended action
 
 Improve term discoverability, usage context and cross-links before trimming authoritative definitions. SME source review remains required for doctrinal changes.
+
+**Applied (record revision, 2026-11-05):** the set now links the Radio Communications module, where the words are used call by call. The edition note (2020 text, 2025 edition not yet readable) and the NATO marks were already in place. No sim note: no sim source covering brevity was read.

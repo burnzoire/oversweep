@@ -32,3 +32,5 @@ Explain applicability to specific simulator/module/version only where verified. 
 ## Recommended action
 
 Improve term discoverability, usage context and cross-links before trimming authoritative definitions. SME source review remains required for doctrinal changes.
+
+**Applied (record revision, 2026-11-05):** the set now links the Ship Operations module (which links on to Case III). Distinct carrier and brevity senses, and CV versus LHA/LHD fixes, were already noted. No sim note added.

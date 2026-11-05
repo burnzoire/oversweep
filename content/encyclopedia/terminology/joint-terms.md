@@ -227,4 +227,6 @@ A few words mean different things to different services, and the dictionary says
 
 The set also gives the dictionary's words for the missions aircraft fly, from strike, reconnaissance and air assault to counterair, fighter sweeps and escorts, and for the air defenses they face and the electronic attack used against them. [[1]](#source-1) Chaff, decoys and guided weapons are in the weapons terms.
 
+The [Close Air Support](module:close-air-support) and [SEAD and DEAD](module:sead-dead) modules use these mission words in practice.
+
 Two flying terms that mean the same to civil and military pilots, angle of attack and head-up display, are defined from the FAA's handbook. [[3]](#source-3) The dictionary quoted is the 2016 amendment of JP 1-02. Later editions may word some entries differently, so check the current DOD Dictionary for a term's latest wording. [[1]](#source-1)

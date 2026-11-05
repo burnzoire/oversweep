@@ -32,3 +32,5 @@ Explain applicability to specific simulator/module/version only where verified. 
 ## Recommended action
 
 Improve term discoverability, usage context and cross-links before trimming authoritative definitions. SME source review remains required for doctrinal changes.
+
+**Applied (record revision, 2026-11-05):** the set now links the BFM module. Its intro already labels the 410-knot corner and 10,000-foot hard deck as the T-45 syllabus's. No sim note: no sim source was read for these words.

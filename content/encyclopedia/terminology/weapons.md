@@ -162,4 +162,6 @@ sources:
 
 These are the words of air-delivered weapons: bombs and their fuzes and fins, rockets, guided missiles and the guided bombs that home on a laser spot, and the chaff and flares an aircraft uses to decoy a threat. The Navy's aviation ordnanceman manual defines the hardware [[1]](#source-1), and the Department of Defense dictionary gives the joint definitions that every service shares. [[2]](#source-2) The words of delivering them, from the dive angle and mil setting to the pop-up, come from the Navy's T-45 weapons and operational navigation training instructions. [[3]](#source-3) [[4]](#source-4)
 
+The [Weapons Delivery](module:weapons-delivery) module uses these words on the bombing range. Where a definition gives a number from the Navy's T-45 training, that number is the trainer's, not every aircraft's.
+
 The individual bombs and rockets, from the Mk 80 series to the Soviet FAB and S-series, have their own encyclopedia entries. Antiradiation missiles and the suppression of enemy air defenses are in the joint terms.

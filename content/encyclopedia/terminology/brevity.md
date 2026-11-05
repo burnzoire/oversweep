@@ -286,4 +286,6 @@ The publication lists several hundred words. This page gives the ones a pilot me
 
 **NATO.** The publication marks words whose meaning may differ from the NATO brevity word, and words that are not NATO brevity words at all, against NATO's Joint Brevity Words Publication (APP-7). Those marks are repeated here in each word's note, so a pilot flying with NATO allies knows which calls to confirm in the brief. [[1]](#source-1)
 
+**On the radio.** The [Radio Communications](module:radio-procedures) module shows these words in use, call by call.
+
 **Edition.** The definitions are quoted from the May 2020 edition with its 2021 change. [[1]](#source-1) A 2025 edition has superseded it and may have changed some words; check the current edition before relying on a meaning. [[2]](#source-2)

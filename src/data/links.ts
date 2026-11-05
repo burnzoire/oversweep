@@ -1,5 +1,6 @@
 import { airfieldContent, categoryRecords, includedRecords, records, recordRoute, termSlug, terminologyContent, type Term } from './encyclopedia';
 import { sitePath } from '../lib/paths';
+import { getModule, moduleRoute } from './modules';
 
 // What a <Term> link shows: where it goes and a short preview, built from the
 // one glossary or encyclopedia record so no page copies a definition.
@@ -95,10 +96,13 @@ export function termMarkup(target: LinkTarget, inner: string) {
 //   [bingo](term:)            glossary word, taken from the text
 //   [final bearing](term:final-bearing)
 //   [F-14](record:f-14)       aircraft, ordnance or threat system
-// Each becomes the same link and preview as <Term>. A record left out of the
-// build becomes plain text; an unknown word or record fails the build.
+//   [Radio](module:radio-procedures)  a Manual module, as a plain link
+// Each term or record becomes the same link and preview as <Term>. A record
+// left out of the build becomes plain text; an unknown word, record or module
+// fails the build.
 export function linkMarkdown(html: string) {
-  return html.replace(/<a href="(term|record):([^"]*)">([\s\S]*?)<\/a>/g, (_, kind: string, ref: string, inner: string) => {
+  return html.replace(/<a href="(term|record|module):([^"]*)">([\s\S]*?)<\/a>/g, (_, kind: string, ref: string, inner: string) => {
+    if (kind === 'module') return `<a href="${escapeHtml(sitePath(moduleRoute(getModule(decodeURIComponent(ref)))))}">${inner}</a>`;
     const text = inner.replace(/<[^>]+>/g, '').trim();
     const word = decodeURIComponent(ref) || text;
     if (kind === 'record') {

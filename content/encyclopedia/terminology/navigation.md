@@ -87,4 +87,6 @@ sources:
 
 These are the words of finding the way: bearings and radials, the compass's errors, flying to and from a station, waypoints and satellite and inertial systems, and the military grid. The Navy's air traffic controller manual and its T-45 instrument flight instruction come first, with the Army's map-reading manual for the grid that every service uses. [[1]](#source-1) [[2]](#source-2) [[3]](#source-3)
 
+The [Air Navigation](module:air-navigation) module puts these words to work on the HSI.
+
 The FAA's manual and handbook are cited for area navigation, GPS integrity and the difference between heading, course and track, which military and civil pilots share. [[4]](#source-4) [[5]](#source-5) TACAN and NOTAM are in the airfield and ATC terms.

@@ -211,4 +211,6 @@ sources:
 
 These are the words of how aircraft fly: the wing and angle of attack, drag, control, turns and energy, and the rotor. Military training texts come first, from the Navy's aerodynamics books and its T-45 fighter syllabus to the Army's fundamentals of flight for helicopter crews. [[1]](#source-1) [[2]](#source-2) [[3]](#source-3) [[4]](#source-4)
 
+The [Fixed-Wing](module:principles-of-flight) and [Rotor-Wing](module:rotor-wing) modules teach these words in order.
+
 The FAA's handbooks describe the same physics for civil pilots and are cited where they state a point more directly, above all for helicopter hazards. [[5]](#source-5) [[6]](#source-6) [[7]](#source-7) Angle of attack itself is in the joint terms. The Navy's aerodynamics book also gives the words of speed and the jet engine: Mach number, the regimes of flight, the afterburner and the turboprop. [[1]](#source-1)
