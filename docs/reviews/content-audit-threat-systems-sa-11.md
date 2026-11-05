@@ -34,3 +34,5 @@ In DCS verify which Buk launcher/radar units are available and their simulated r
 ## Recommended disposition
 
 Retain meaningful technical content. Make the specific edits above before generic shortening; source-changing revisions require aviation SME review.
+
+**Applied (2026-11-05):** no change in this pass: loss attributions already keep the source's wording and citation. Variant-by-capability research was not attempted.

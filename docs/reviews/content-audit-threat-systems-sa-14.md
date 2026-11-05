@@ -34,3 +34,5 @@ Verify DCS/BMS representations and whether SA-14 is individually modelled at all
 ## Recommended disposition
 
 Retain meaningful technical content. Make the specific edits above before generic shortening; source-changing revisions require aviation SME review.
+
+**Applied (2026-11-05):** the 1994 Sea Harrier loss is now marked as disputed, matching the SA-18 page.

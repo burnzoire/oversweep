@@ -34,3 +34,5 @@ DCS Tor/SA-15 units may not model all search/tracking radar and target-sharing f
 ## Recommended disposition
 
 Retain meaningful technical content. Make the specific edits above before generic shortening; source-changing revisions require aviation SME review.
+
+**Applied (2026-11-05):** the 0.8 detection probability is now marked as the one case the source states.

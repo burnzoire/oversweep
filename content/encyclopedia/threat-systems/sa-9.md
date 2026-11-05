@@ -50,7 +50,7 @@ sources:
 
 ## Overview
 
-The 9K31 Strela-1, NATO reporting name **SA-9 Gaskin**, is a highly mobile, short-range, low-altitude infrared-guided SAM on a BRDM-2 scout car. The 9M31 missile was accepted after state trials in 1968 and the 9M31M Strela-1M (SA-9B) entered service in 1970. [[1]](#source-1)
+The 9K31 Strela-1, NATO reporting name **SA-9 Gaskin**, is a highly mobile, short-range, low-altitude infrared-guided SAM, using the photocontrast form of infrared homing described below, on a BRDM-2 scout car. The 9M31 missile was accepted after state trials in 1968 and the 9M31M Strela-1M (SA-9B) entered service in 1970. [[1]](#source-1)
 
 ## The vehicle
 

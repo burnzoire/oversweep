@@ -34,3 +34,5 @@ DCS SA-10 representation may differ in radar network, variant and missile types 
 ## Recommended disposition
 
 Retain meaningful technical content. Make the specific edits above before generic shortening; source-changing revisions require aviation SME review.
+
+**Applied (2026-11-05):** no change needed: the October 2024 Iran and 2022 Ukraine claims already carry their dates and a citation. Per-variant range attribution needs sourced research and was not attempted.

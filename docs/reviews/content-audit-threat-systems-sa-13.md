@@ -34,3 +34,5 @@ Check DCS model subtype, guidance, passive operation, radar warnings and flare s
 ## Recommended disposition
 
 Retain meaningful technical content. Make the specific edits above before generic shortening; source-changing revisions require aviation SME review.
+
+**Applied (2026-11-05):** no change in this pass: matching the photos to the launcher subtype needs image provenance research.
