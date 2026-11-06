@@ -32,7 +32,7 @@ Reviews are source-inspection editorial findings, **not** rendered-browser QA, e
 - [Case III](content-audit-case-iii.md) — applied in module revision 3 (four phases with handoffs, practice in reference, Supercarrier sim panel)
 - [Autorotation](content-audit-autorotation.md) — applied in module revision 2 (traced FAA figures, DCS UH-1H sim panel)
 
-New modules are written to the playbook from the first draft and are not audited separately: Instrument flying (revision 1, PR for issue #97), since split into Attitude Instrument Flying and Instrument Procedures (both revision 1). Two-Ship Formation (revision 1, issue #99), SEAD and DEAD (revision 1, issue #124), Planning a Sortie and Weather and Performance (both revision 1, issue #98), and Air-to-Air Refuelling Procedures (revision 1, issue #100) likewise.
+New modules are written to the playbook from the first draft and are not audited separately: Instrument flying (revision 1, PR for issue #97), since split into Attitude Instrument Flying and Instrument Procedures (both revision 1). Two-Ship Formation (revision 1, issue #99), SEAD and DEAD (revision 1, issue #124), Precision Targeting (revision 1, issue #122), Planning a Sortie and Weather and Performance (both revision 1, issue #98), and Air-to-Air Refuelling Procedures (revision 1, issue #100) likewise.
 
 ## Encyclopedia — 52/229
 

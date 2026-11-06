@@ -195,6 +195,36 @@ export interface OrdnanceData {
   sources: Source[];
 }
 
+// Groups on the Radar & Sensors list, in display order. Groups without
+// records are not shown, so later sensor batches only add records.
+export const sensorGroups = [
+  { slug: 'targeting-pod', title: 'Targeting pods and laser spot trackers' },
+] as const;
+
+// Sensor records: the data plate gives cited text for the sensor and the
+// variants it names; `quick` holds the comparison table's columns.
+export interface SensorData {
+  group: (typeof sensorGroups)[number]['slug'];
+  short?: string;
+  name: string;
+  type: string;
+  origin: string;
+  manufacturer: string;
+  inService: string;
+  weight: string;
+  dimensions: string;
+  sensors: string;
+  laser: string;
+  spotTracker?: string;
+  range?: string;
+  carriers: string[];
+  variants?: string[];
+  // The first photo leads the page; the others follow the record text.
+  photos: Photo[];
+  quick: { introduced: string | null; designates: boolean };
+  sources: Source[];
+}
+
 // An official chart reproduced as an image, such as an FAA airport diagram.
 // `chart` names the edition, since charts are reissued every few weeks.
 export interface Chart {
@@ -403,6 +433,7 @@ export const aircraftContent = (r: EncyclopediaRecord) => {
   return file;
 };
 export const ordnanceContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<OrdnanceData>;
+export const sensorContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<SensorData>;
 export const terminologyContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<TerminologyData>;
 export const airfieldContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AirfieldCatalogueData>;
 

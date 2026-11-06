@@ -8,7 +8,7 @@ import Glossary from "../../components/encyclopedia/Glossary.astro";
 import { encyclopediaCategories } from "../../data/catalogue";
 import { sectionHasContent } from "../../data/availability";
 import { ilsLines, navaidLines, runwayLines, towerLines, towerNote } from "../../data/map-airfield-text";
-import { airfieldCatalogue, aircraftContent, mapAirfieldAnchor, simAirfields, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, recordRoute, type Source } from "../../data/encyclopedia";
+import { airfieldCatalogue, aircraftContent, mapAirfieldAnchor, simAirfields, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, sensorContent, sensorGroups, recordRoute, type Source } from "../../data/encyclopedia";
 import { sitePath } from "../../lib/paths";
 import { airfieldRoles, branches, currentUse, nations, searchTerms, sims, useLabels } from "../../data/airfield-model.mjs";
 import "../../styles/encyclopedia.css";
@@ -44,6 +44,12 @@ const ordnanceRecords = category.slug === "ordnance"
 const ordnance = ordnanceGroups
   .map((group) => ({ group, records: ordnanceRecords.filter(({ data }) => data.group === group.slug) }))
   .filter(({ records }) => records.length > 0);
+// Sensors are listed by group, like ordnance.
+const sensors = category.slug === "radar-sensors"
+  ? sensorGroups
+    .map((group) => ({ group, records: categoryRecords("radar-sensors").map((record) => ({ record, data: sensorContent(record).frontmatter })).filter(({ data }) => data.group === group.slug) }))
+    .filter(({ records }) => records.length > 0)
+  : [];
 // Airfields are one index, searchable and filtered by country, theatre, sim
 // map and service. Theatres list their sim maps under each one.
 const airfieldData = category.slug === "locations" ? airfieldCatalogue() : undefined;
@@ -193,6 +199,38 @@ const deliverySources: Source[] = [
               ))}
             </ol>
           </section>
+        </>
+      ) : category.slug === "radar-sensors" ? (
+        <>
+          <p class="lead">Sensors carried by military aircraft. So far it covers targeting pods, which find, track and laser-mark targets for guided weapons, and the laser spot tracker that lets a pilot find a spot someone else is lasing. Each record gives the pod's sensors, its laser, its weight and which aircraft carry it, with sources. Radars and warning receivers come later.</p>
+          {sensors.map(({ group, records }) => (
+            <div class="aircraft-group">
+              <h2>{group.title}</h2>
+              <div class="entry-grid record-grid">
+                {records.map(({ record, data }) => <RecordCard record={record} photo={data.photos[0]} />)}
+              </div>
+            </div>
+          ))}
+          <h2>Quick reference</h2>
+          <div class="table-scroll" role="region" aria-label="Sensor quick reference table, scrolls sideways on narrow screens" tabindex="0">
+            <table>
+              <thead><tr><th scope="col">Sensor</th><th scope="col">Type</th><th scope="col">Lases targets</th><th scope="col">Entered service</th></tr></thead>
+              {sensors.map(({ group, records }) => (
+                <tbody>
+                  <tr><th scope="rowgroup" colspan="4">{group.title}</th></tr>
+                  {records.map(({ record, data }) => (
+                    <tr>
+                      <th scope="row"><a href={sitePath(recordRoute(record))}>{record.title}</a><br /><span class="entry-kicker">{record.designation}</span></th>
+                      <td>{plain(data.type)}</td>
+                      <td>{data.quick.designates ? "Yes" : "No, it only tracks a spot"}</td>
+                      <td>{data.quick.introduced ?? "not given"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              ))}
+            </table>
+          </div>
+          <p class="note">Each record cites its sources. Pods are upgraded in service, so a record's figures are for the variant it names.</p>
         </>
       ) : category.slug === "locations" && airfieldData ? (
         <>
