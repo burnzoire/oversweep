@@ -1673,6 +1673,61 @@
     "summary": "The RB 04's turbojet successor, fired from the Viggen, the Gripen, ships and coastal trucks."
   },
   {
+    "id": "encyclopedia.radar-sensors.litening",
+    "slug": "litening",
+    "category": "radar-sensors",
+    "revision": 1,
+    "title": "LITENING targeting pod",
+    "designation": "AN/AAQ-28",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Israeli-American targeting pod flown by Marine Corps Harriers and Hornets, Air Force Reserve F-16s and many other air forces."
+  },
+  {
+    "id": "encyclopedia.radar-sensors.sniper",
+    "slug": "sniper",
+    "category": "radar-sensors",
+    "revision": 1,
+    "title": "Sniper Advanced Targeting Pod",
+    "designation": "AN/AAQ-33",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Air Force's advanced targeting pod since 2001, on fighters and bombers, with a video downlink to ground controllers."
+  },
+  {
+    "id": "encyclopedia.radar-sensors.atflir",
+    "slug": "atflir",
+    "category": "radar-sensors",
+    "revision": 1,
+    "title": "ATFLIR targeting pod",
+    "designation": "AN/ASQ-228",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Navy's Hornet and Super Hornet targeting pod, carried on a fuselage missile station."
+  },
+  {
+    "id": "encyclopedia.radar-sensors.lantirn",
+    "slug": "lantirn",
+    "category": "radar-sensors",
+    "revision": 1,
+    "title": "LANTIRN navigation and targeting pods",
+    "designation": "AN/AAQ-13 and AN/AAQ-14",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The two-pod night system that gave the F-15E and F-16 terrain-following radar, infrared and a laser designator."
+  },
+  {
+    "id": "encyclopedia.radar-sensors.pave-penny",
+    "slug": "pave-penny",
+    "category": "radar-sensors",
+    "revision": 1,
+    "title": "Pave Penny laser spot tracker",
+    "designation": "AN/AAS-35",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The 1970s receive-only pod that lets an A-10 pilot find a laser spot someone else is lasing."
+  },
+  {
     "id": "encyclopedia.terminology.brevity",
     "slug": "brevity",
     "category": "terminology",
