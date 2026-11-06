@@ -1,12 +1,15 @@
 ---
 import { recordRoute, referenceTable } from '../../data/encyclopedia';
 import { sitePath } from '../../lib/paths';
+import { recordTarget } from '../../data/links';
 // One table from a Reference Data record. The data lives once, in
 // content/encyclopedia/reference-data/<record>.md; modules embed it with
 // <ReferenceTable record="<slug>" table="<id>" /> instead of copying it.
 // On the record's own page (`onRecord`) the source is cited by number; in a
 // module it is named and linked back to the record, whose numbers would clash
 // with the module's own source list. The build throws on an unknown id.
+// A cell may link a record as "[SA-2](record:sa-2)". It renders as a plain
+// link, not a <Term>, because the scroll region would clip a hover preview.
 interface Props { record: string; table: string; onRecord?: boolean }
 const { record: slug, table: id, onRecord = false } = Astro.props;
 const { record, table, source } = referenceTable(slug, id);
@@ -21,6 +24,13 @@ for (const row of table.rows) {
 }
 const groupLabel = table.columns.find((c) => c.key === table.groupBy)?.label;
 const groupName = (name: string) => (/^\d+$/.test(name) && groupLabel ? `${groupLabel} ${name}` : name);
+// Splits a cell into text and record links; an unpublished record stays text.
+const cell = (v: string) => v.split(/(\[[^\]]+\]\(record:[^)]+\))/).map((part) => {
+  const m = part.match(/^\[([^\]]+)\]\(record:([^)]+)\)$/);
+  if (!m) return { text: part };
+  const target = recordTarget(m[2]);
+  return target ? { text: m[1], href: target.href, title: target.title } : { text: m[1] };
+});
 const cite = `[${source.n}${table.pages ? `, ${table.pages}` : ''}]`;
 ---
 <figure class="ref-table" id={onRecord ? `table-${table.id}` : undefined} data-reference={`${record.slug}/${table.id}`}>
@@ -37,7 +47,7 @@ const cite = `[${source.n}${table.pages ? `, ${table.pages}` : ''}]`;
           {g.rows.map((row) => (
             <tr>{columns.map((c, i) => {
               const v = row[c.key];
-              const body = v === null || v === undefined ? <span class="ref-none" aria-label="none">–</span> : c.code ? <code>{v}</code> : v;
+              const body = v === null || v === undefined ? <span class="ref-none" aria-label="none">–</span> : c.code ? <code>{v}</code> : cell(v).map((p) => p.href ? <a href={p.href} title={p.title}>{p.text}</a> : p.text);
               return i === 0 && !c.code ? <th scope="row">{body}</th> : <td>{body}</td>;
             })}</tr>
           ))}
