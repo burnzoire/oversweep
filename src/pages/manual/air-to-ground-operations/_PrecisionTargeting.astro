@@ -62,11 +62,11 @@ const pad3 = (n: number) => String(n).padStart(3, '0');
   <p>Step through the attack above. The designator sits at the end of the laser target line; the darkest wedge around it is the safety zone, the lighter wedges the preferred and the outer attack zone.</p>
   <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 760 620" role="img" aria-label="Plan view, north up: a target in the centre, a ground laser designator to its northwest on a laser target line of 140, the safety and attack zones as wedges around that line, the briefed attack headings and the attacking aircraft"></svg></div>
   <div class="buttons stepper"><button type="button" data-back>Back</button><button type="button" data-next>Next</button><span data-count role="status" aria-live="polite"></span></div>
-  <p class="no-js">Interactive figure unavailable. The laser target line is {pad3(EXAMPLE.laserTargetLine)}, so the designator is northwest of the target. The briefed attack headings, {pad3(EXAMPLE.fah[0])} to {pad3(EXAMPLE.fah[1])}, are all 25° to 60° off that line, inside the attack zone and clear of the safety zone. Strike 11 runs in on {pad3(EXAMPLE.inHeading)}, 40° off, in the preferred zone; the team lases from ten seconds after the call until impact.</p>
+  <p class="no-js">Interactive figure unavailable. The laser target line is {pad3(EXAMPLE.laserTargetLine)}, so the designator is northwest of the target. The briefed attack headings, {pad3(EXAMPLE.fah[0])} to {pad3(EXAMPLE.fah[1])}, are all 25° to 60° off that line, inside the attack zone and clear of the safety zone. Strike 11 runs in on {pad3(EXAMPLE.inHeading)}, 40° off, in the preferred zone, and releases only once cleared hot. The team lases from the TEN SECONDS call until impact.</p>
   <div class="feedback" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">An invented example, not to scale. The zones are those of the joint publication's Figure III-9 <a href="#source-jp">{j('III-57')}</a>; the positions, codes and headings are made up.</p>
  </section>
- <p class="key"><strong>Key point:</strong> a laser-guided attack works when four things line up: the same code in designator and weapon, an attack heading inside the attack zone and outside the safety zone, a laser on at the right time, and correlation that the spot is on the right target.</p>
+ <p class="key"><strong>Key point:</strong> a laser-guided attack works when four things line up: the same code in designator and weapon, an attack heading inside the attack zone and outside the safety zone, a laser on at the right time, and correlation that the spot is on the right target. None of it starts without a clearance to release.</p>
 
  <h2 id="two">Two ways to guide a weapon</h2>
  <p>Precision weapons in the air-to-ground role are guided one of two ways: by laser energy reflected from the target, or by their own GPS-aided inertial navigation to a set of coordinates. Some, the <Term id="Dual-mode weapon">dual-mode weapons</Term>, can do both. <a href="#source-jp">{j('III-52, III-54–III-55, III-61')}</a></p>
@@ -76,8 +76,8 @@ const pad3 = (n: number) => String(n).padStart(3, '0');
   <tbody>
    <tr><th scope="row">Guides on</th><td>Coded laser energy reflected from the target</td><td>Target coordinates, by its own GPS-aided inertial system</td></tr>
    <tr><th scope="row">Needs</th><td>Line of sight from designator to target and from target to weapon; a matching code; the laser on long enough</td><td>Accurate three-dimensional coordinates on the same datum; encrypted GPS; often more preflight planning</td></tr>
-   <tr><th scope="row">Weather, smoke and dust</th><td>Low cloud, fog, smoke, haze, rain and snow can stop it</td><td>Unaffected; it needs no designator and no sight of the target</td></tr>
-   <tr><th scope="row">Moving targets</th><td>Yes</td><td>No, unless it is dual-mode with a laser seeker or used with a moving-target radar, and even then it flies to the coordinates</td></tr>
+   <tr><th scope="row">Weather, smoke and dust</th><td>Low cloud, fog, smoke, haze, rain and snow can degrade or stop it</td><td>Unaffected; it needs no designator and no sight of the target</td></tr>
+   <tr><th scope="row">Moving targets</th><td>Yes</td><td>Single-mode: no; even with a moving-target radar it still flies to the coordinates. Dual-mode weapons with a laser seeker can.</td></tr>
    <tr><th scope="row">Accuracy</th><td>High first-round hit probability</td><td>Can exceed laser-guided weapons when the coordinates are good enough, and does not change with range</td></tr>
    <tr><th scope="row">Several targets</th><td>Simultaneous attacks need different laser codes</td><td>One aircraft can strike several stationary targets in one pass, depending on aircraft and weapon; once released, it cannot be redirected</td></tr>
   </tbody>
@@ -177,7 +177,7 @@ const pad3 = (n: number) => String(n).padStart(3, '0');
    <label for="pt-hdg">Attack heading</label><span><input id="pt-hdg" type="range" min="0" max="355" step="5" value="240" data-heading /> <output data-heading-out>240</output></span>
   </div>
   <div class="fig-scroll" role="region" aria-label="Figure 2, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 760 620" role="img" aria-label="Plan view: the laser zones around the chosen laser target line and an aircraft on the chosen attack heading"></svg></div>
-  <p class="no-js">Interactive figure unavailable. Subtract the laser target line from your attack heading: under 10° is the safety zone, 10° to 45° preferred, 45° to 60° the edge of the attack zone, more than 60° outside it.</p>
+  <p class="no-js">Interactive figure unavailable. Take the smaller angle between your attack heading and the laser target line: under 10° is the safety zone, 10° to 45° preferred, 45° to 60° the edge of the attack zone, more than 60° outside it.</p>
   <div class="feedback" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">Not to scale. Zones from the joint publication's Figure III-9 <a href="#source-jp">{j('III-57')}</a>; the headings are yours.</p>
  </section>
@@ -301,7 +301,7 @@ const pad3 = (n: number) => String(n).padStart(3, '0');
  </ul>
 
  <h2 id="pods">Targeting pods in this role</h2>
- <p>Aircraft targeting pods, with GPS and laser designators and range finders, are among the systems used to search for, identify and locate targets. <a href="#source-jp">{j('I-2')}</a> On a forward air controller's aircraft, the pod helps find and fix targets and generate coordinates for the controller, alongside an infrared pointer for night, laser spot search and track, and video sent to the ground. <a href="#source-jp">{j('II-8')}</a> An unmanned aircraft's designator can lase for other aircraft's laser-guided weapons. <a href="#source-jp">{j('I-6')}</a></p>
+ <p>GPS, laser designators and range finders, and aircraft targeting pods are among the systems used to search for, identify and locate targets. <a href="#source-jp">{j('I-2')}</a> On a forward air controller's aircraft, the pod helps find and fix targets and generate coordinates for the controller, alongside an infrared pointer for night, laser spot search and track, and video sent to the ground. <a href="#source-jp">{j('II-8')}</a> An unmanned aircraft's designator can lase for other aircraft's laser-guided weapons. <a href="#source-jp">{j('I-6')}</a></p>
  <p>The error of a FAC(A)'s pod-derived coordinates depends on the platform, software, sensors and where the aircraft is relative to the target, but is generally CAT II or better, under 50 ft (15 m). <a href="#source-jp">{j('II-8')}</a> A pod capable of CAT II may still not reach it on a target that is not sensor-significant. <a href="#source-jp">{j('III-34')}</a> In a bomb-on-target delivery of a coordinate-guided weapon, a targeting pod is one of the sensors that can derive the target. <a href="#source-jp">{j('III-62')}</a> In both sims in the panel below, the pod holds the laser and its code and runs the spot search. <a href="#source-bms">[3, pp. 185, 194]</a> <a href="#source-a10">[4, pp. 620, 623]</a></p>
  <p>The Encyclopedia's Radar &amp; Sensors records describe the pods themselves: <Term record="litening">LITENING</Term>, <Term record="sniper">Sniper</Term>, <Term record="atflir">ATFLIR</Term> and the older <Term record="lantirn">LANTIRN</Term>, each with a designator and rangefinder, and <Term record="pave-penny">Pave Penny</Term>, a spot tracker with no laser of its own.</p>
 
@@ -344,7 +344,7 @@ const pad3 = (n: number) => String(n).padStart(3, '0');
   </ul>
   <h3>DCS: A-10C II</h3>
   <ul>
-   <li>The pod's laser code and its laser spot search code default to 1688 and are set on the pod's control page; codes run from 1111 to 1788, with a first digit of 1 and the other three from 1 to 8. When buddy-lasing, both aircraft must be on the same code. <a href="#source-a10">[4, pp. 86, 400, 620, 623]</a></li>
+   <li>The pod's laser code and its laser spot search code default to 1688 and are set on the pod's control page; codes run from 1111 to 1788, with a first digit of 1 and the other three from 1 to 8. When buddy-lasing, both aircraft must be on the same code. <a href="#source-a10">[4, pp. 86, 400, 620–621, 623]</a></li>
    <li>The GBU-38 JDAM strikes within 33 ft of the entered coordinates as long as it has adequate GPS; the sensor point of interest can be its target, and release is in CCRP when the release cue is between the range carets. The GBU-54 Laser JDAM adds a laser seeker for moving targets. <a href="#source-a10">[4, pp. 89–90, 678–679]</a></li>
   </ul>
   <h3>Where the sims and the real world differ, or say nothing</h3>
