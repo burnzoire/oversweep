@@ -14,7 +14,7 @@ carriers:
   - "US Air Force: [F-15E](record:f-15e) and [F-16C/D](record:f-16) Block 40/42 [1] [2]"
   - "US Navy: [F-14](record:f-14), the targeting pod only, as the LANTIRN Targeting System [1]"
 variants:
-  - "F-14 LANTIRN Targeting System: added GPS and an inertial unit and a laser usable to 40,000 ft; the first F-14 LGB drop was by VF-103 in March 1995 [1]"
+  - "F-14 LANTIRN Targeting System: added GPS and an inertial unit and a laser usable to 40,000 ft; the first LANTIRN-guided F-14 LGB drop was by VF-103 in March 1995 [1]"
 photos:
   - src: "encyclopedia/radar-sensors/lantirn.jpg"
     alt: "Close view of two grey pods side by side under the intakes of an F-15E"

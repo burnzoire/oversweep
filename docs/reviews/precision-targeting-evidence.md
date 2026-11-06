@@ -204,7 +204,7 @@ printed page + 25 in chapter I, + 37 in chapter II, + 67 in chapter III and
   "The terms "spot" and "capture" are not synonymous … Correlation is still
   required"; NEGATIVE LASER steps (1)–(5), "choose another mark".
 - pp. E-23 to E-24, Example 9: "Scarface 24's laser, 1688"; "FAH 260 through
-  290, LTL 310, request IN with a heading"; "Viper 11 IN heading 270"; "one
+  290, LTL 310, request IN with a heading"; "Viper 11 IN heading 270"; "Viper 11, CLEARED HOT"; "one
   AWAY, time of fall 30 seconds"; "TEN SECONDS"; "LASER ON"; "Scarface 24,
   LASING 1688."
 
@@ -268,7 +268,7 @@ Cited by the manual's printed footer page.
 - p. 400: LSS code and laser designation code: "The entered value can range
   from 1111 to 1788, but the first digit of the series must be a 1 and the last
   three digits must be between 1 and 8."
-- p. 620: "Set the laser code. The default code is 1688".
+- pp. 620–621: "Set the laser code. The default code is 1688".
 - p. 623: LSS code "defaults to 1688".
 - pp. 678-679: IAM use: CCRP, SPI, "when the Release Cue is between the Maximum
   Range Caret and the Minimum Range Caret, MAN REL will appear"; GBU-54A LJDAM.

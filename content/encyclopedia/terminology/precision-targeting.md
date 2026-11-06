@@ -80,7 +80,7 @@ terms:
     cite: [{ n: 1, page: "III-57" }]
   - term: Semi-active homing
     definition: "Homing in which the target is illuminated from somewhere else, such as a designator on the ground or another aircraft, and the weapon carries only a receiver and steers on the reflected energy. The target may not reflect well toward the weapon."
-    cite: [{ n: 3, page: "16.4.2.2" }]
+    cite: [{ n: 1, page: "III-54–III-55" }, { n: 2, page: "10.6.3.3" }, { n: 3, page: "16.4.2.2" }]
   - term: Spillover
     definition: "Laser energy that misses the target because the spot is too large or only partly on it. Energy travelling past the target may reflect back to the weapon and cause erroneous guidance."
     cite: [{ n: 1, page: "III-54" }]
