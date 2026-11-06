@@ -1,0 +1,79 @@
+---
+import { recordRoute, referenceTable } from '../../data/encyclopedia';
+import { sitePath } from '../../lib/paths';
+import { recordTarget } from '../../data/links';
+// One table from a Reference Data record. The data lives once, in
+// content/encyclopedia/reference-data/<record>.md; modules embed it with
+// <ReferenceTable record="<slug>" table="<id>" /> instead of copying it.
+// On the record's own page (`onRecord`) the source is cited by number; in a
+// module it is named and linked back to the record, whose numbers would clash
+// with the module's own source list. The build throws on an unknown id.
+// A cell may link a record as "[SA-2](record:sa-2)". It renders as a plain
+// link, not a <Term>, because the scroll region would clip a hover preview.
+interface Props { record: string; table: string; onRecord?: boolean }
+const { record: slug, table: id, onRecord = false } = Astro.props;
+const { record, table, source } = referenceTable(slug, id);
+const href = sitePath(recordRoute(record));
+const columns = table.columns.filter((c) => c.key !== table.groupBy);
+const groups: { name: string | null; rows: typeof table.rows }[] = [];
+for (const row of table.rows) {
+  const name = table.groupBy ? row[table.groupBy] ?? null : null;
+  const last = groups.at(-1);
+  if (last && last.name === name) last.rows.push(row);
+  else groups.push({ name, rows: [row] });
+}
+const groupLabel = table.columns.find((c) => c.key === table.groupBy)?.label;
+const groupName = (name: string) => (/^\d+$/.test(name) && groupLabel ? `${groupLabel} ${name}` : name);
+// Splits a cell into text and record links; an unpublished record stays text.
+const cell = (v: string) => v.split(/(\[[^\]]+\]\(record:[^)]+\))/).map((part) => {
+  const m = part.match(/^\[([^\]]+)\]\(record:([^)]+)\)$/);
+  if (!m) return { text: part };
+  const target = recordTarget(m[2]);
+  return target ? { text: m[1], href: target.href, title: target.title } : { text: m[1] };
+});
+const cite = `[${source.n}${table.pages ? `, ${table.pages}` : ''}]`;
+---
+<figure class="ref-table" id={onRecord ? `table-${table.id}` : undefined} data-reference={`${record.slug}/${table.id}`}>
+  <figcaption>
+    <strong>{table.title}</strong>
+    {table.caption && <span class="ref-caption"> {table.caption}</span>}
+  </figcaption>
+  <div class="ref-scroll" role="region" aria-label={`${table.title}, scrolls sideways on narrow screens`} tabindex="0">
+    <table>
+      <thead><tr>{columns.map((c) => <th scope="col">{c.label}</th>)}</tr></thead>
+      {groups.map((g) => (
+        <tbody>
+          {g.name !== null && <tr class="ref-group"><th scope="colgroup" colspan={columns.length}>{groupName(g.name)}</th></tr>}
+          {g.rows.map((row) => (
+            <tr>{columns.map((c, i) => {
+              const v = row[c.key];
+              const body = v === null || v === undefined ? <span class="ref-none" aria-label="none">–</span> : c.code ? <code>{v}</code> : cell(v).map((p) => p.href ? <a href={p.href} title={p.title}>{p.text}</a> : p.text);
+              return i === 0 && !c.code ? <th scope="row">{body}</th> : <td>{body}</td>;
+            })}</tr>
+          ))}
+        </tbody>
+      ))}
+    </table>
+  </div>
+  <p class="ref-source">
+    {onRecord
+      ? <>Source: <a href={`#source-${source.n}`}>{cite}</a></>
+      : <>Source: {source.publisher}, <cite>{source.title}</cite>{table.pages && `, ${table.pages}`}. Kept in the Encyclopedia: <a href={`${href}#table-${table.id}`}>{record.title}</a>.</>}
+  </p>
+</figure>
+
+<style>
+  .ref-table { margin: 1rem 0 1.25rem; }
+  figcaption { margin-bottom: 0.4rem; }
+  .ref-caption { color: var(--color-muted, inherit); }
+  .ref-scroll { overflow-x: auto; border: 1px solid var(--color-border); }
+  .ref-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+  th, td { text-align: left; padding: 0.3rem 0.6rem; border-bottom: 1px solid var(--color-border); vertical-align: top; }
+  thead th { white-space: nowrap; }
+  tbody th[scope="row"] { font-weight: normal; }
+  .ref-group th { background: var(--color-surface, #f6f7f8); font-weight: 600; }
+  code { white-space: nowrap; }
+  .ref-none { color: var(--color-muted, inherit); }
+  .ref-source { font-size: 0.88rem; margin: 0.35rem 0 0; }
+</style>

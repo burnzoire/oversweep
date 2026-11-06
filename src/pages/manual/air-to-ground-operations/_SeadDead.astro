@@ -4,6 +4,7 @@ import GlossaryList from '../../../components/GlossaryList.astro';
 import { getModule } from '../../../data/modules';
 import { sitePath } from '../../../lib/paths';
 import Term from '../../../components/Term.astro';
+import ReferenceTable from '../../../components/encyclopedia/ReferenceTable.astro';
 import { JAMMERS, PACKAGE_STEPS, SCENE, horizonNm } from '../../../lessons/sead/lesson-model.mjs';
 const sead = getModule('sead-dead');
 const core = [
@@ -24,6 +25,7 @@ const wd = sitePath('manual/air-to-ground-operations/weapons-delivery/');
 const cas = sitePath('manual/air-to-ground-operations/close-air-support/');
 const threats = sitePath('encyclopedia/threat-systems/');
 const glossary = sitePath('encyclopedia/terminology/sead/');
+const htsTables = sitePath('encyclopedia/reference-data/f-16-harm-threat-tables/');
 const hz = (ft: number) => horizonNm(ft).toFixed(0);
 ---
 <SiteLayout title={sead.title} activeSection="manual" activeSubject="air-to-ground-operations" compactSubjectNav={true}
@@ -255,12 +257,16 @@ const hz = (ft: number) => horizonNm(ft).toFixed(0);
    <li><strong>HAS</strong> (HARM as sensor): the missile's own receiver finds radars and you pick one. Only the bearing is known, so the missile does not loft and has less range, and a full scan can take 90 seconds. Operators may cycle their radars; the guide suggests the trade-off of waiting until a radar is guiding a missile at you. <a href="#source-f16">[5, pp. 665–667]</a></li>
    <li><strong>POS</strong> (position known): pre-planned against a steerpoint at the radar, with three profiles: <strong>EOM</strong> for off-boresight shots with accurate coordinates, <strong>PB</strong> for the longest range on-bearing, <strong>RUK</strong> for poor or bearing-only data. <a href="#source-f16">[5, p. 668]</a></li>
    <li>The <strong>HTS pod</strong> classifies radars and ranges them passively by triangulation, remembers their locations even after they stop transmitting or are hidden by terrain, and can hand them to other weapons and to wingmen. <a href="#source-f16">[5, p. 525]</a></li>
+   <li>The pod scans only for the <strong>threat classes</strong> you switch on on the HAD threat page, and each class you add lengthens the scan cycle, so switch on only the ones the mission needs. <a href="#source-f16">[5, p. 534]</a> Every class and its radars are listed in the <a href={htsTables}>F-16 HARM threat tables</a>.</li>
   </ul>
+  <ReferenceTable record="f-16-harm-threat-tables" table="dcs-harm-tables" />
   <h3>Falcon BMS 4.38</h3>
   <ul>
    <li>BMS has separate SEAD and DEAD mission types. Its SAM operators play cat-and-mouse with their radars, and a HARM is more likely to miss if its radar goes silent. Search and fire-control radars are separate: destroying the search radar does not stop the site firing, destroying the fire-control radar does. <a href="#source-bms">[6, p. 210]</a></li>
+   <li>HARM threat tables are built before flight on the HARM tab of the Data Cartridge, and a system, its fire-control radar and its early-warning radar each have their own code and symbol, so you can see which radar is emitting. With the HTS pod, the pod detects every threat whatever the tables hold. <a href="#source-bms">[6, pp. 195–197]</a></li>
    <li>Training mission 28 practises SEAD, DEAD and jamming against SA-2, 3, 4, 6 and 11 sites and a KS-19 gun: pre-emptive HARM shots from outside the engagement zone, hunter-killer pairs, loft and pop-up attacks with cluster bombs, and an EA-18G stand-off jammer that only protects its own package. <a href="#source-bms">[6, pp. 372–381]</a></li>
   </ul>
+  <ReferenceTable record="f-16-harm-threat-tables" table="bms-harm-codes" />
   <h3>Where the sims and the real world differ, or say nothing</h3>
   <ul>
    <li>BMS's jammer protects completely inside a 40 NM sphere and ignores altitude <a href="#source-bms">[6, p. 379]</a>; in the real world jamming is a contest of power against range, and the attacker burns through closer in, as in <a href="#jamming">Figure 3</a>. <a href="#source-usna">{u('11.2.2.4')}</a></li>
@@ -305,8 +311,8 @@ const hz = (ft: number) => horizonNm(ft).toFixed(0);
  <p id="source-wiki"><strong>[3] Wikipedia, "Suppression of Enemy Air Defenses".</strong> <a href="https://en.wikipedia.org/wiki/Suppression_of_Enemy_Air_Defenses">Read 3 November 2026.</a> Used for the DEAD distinction, history and weapons.</p>
  <p id="source-rh"><strong>[4] Wikipedia, "Radar horizon".</strong> <a href="https://en.wikipedia.org/wiki/Radar_horizon">Read 3 November 2026.</a> Used for the 4/3 effective earth radius and its examples.</p>
  <h3>Sim sources</h3>
- <p id="source-f16"><strong>[5] Eagle Dynamics, DCS: F-16C Viper Early Access Guide (English).</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 3 November 2026, pp. 525, 657 and 665–668. A sim manual, cited only for the In the sim panel.</p>
- <p id="source-bms"><strong>[6] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 3 November 2026, pp. 210 and 372–381. A sim manual, cited only for the In the sim panel.</p>
+ <p id="source-f16"><strong>[5] Eagle Dynamics, DCS: F-16C Viper Early Access Guide (English).</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 3 November 2026, pp. 525, 657 and 665–668; p. 534 read 5 November 2026. A sim manual, cited only for the In the sim panel.</p>
+ <p id="source-bms"><strong>[6] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 3 November 2026, pp. 210 and 372–381; pp. 195–197 read 5 November 2026. A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/sead-dead-evidence.md">SEAD and DEAD evidence</a>.</p>
  <p>Figures 1 to 3 and the worked package are original, invented examples, not reproductions of any publication's figure.</p>
  <p class="note">Applicability: written for aircrew of every service who fly with or against surface air defences. Doctrine is from the joint publication, which all four services follow; no service's own SEAD tactics publication could be read, so no service-specific tactics are included. Theater rules of engagement, SPINS, your unit's procedures and the current editions govern. This revision is Drafted pending independent source-backed review.</p>

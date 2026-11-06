@@ -15,7 +15,7 @@ export interface LinkTarget {
   more: number;
 }
 
-const categoryNames: Record<string, string> = { aircraft: 'Aircraft', ordnance: 'Ordnance', 'threat-systems': 'Threat system' };
+const categoryNames: Record<string, string> = { aircraft: 'Aircraft', ordnance: 'Ordnance', 'threat-systems': 'Threat system', 'reference-data': 'Reference data' };
 const theatreKinds = { airfield: 'Airfield', theatre: 'Theatre', map: 'Sim map' };
 const kindOf = (r: (typeof records)[number]) =>
   r.category === 'locations' ? theatreKinds[airfieldContent(r).frontmatter.kind] : categoryNames[r.category] ?? r.category;

@@ -437,6 +437,35 @@ export const sensorContent = (r: EncyclopediaRecord) => contentFile(r) as unknow
 export const terminologyContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<TerminologyData>;
 export const airfieldContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<AirfieldCatalogueData>;
 
+// Reference data: tables kept once in the Encyclopedia and shown both on their
+// record page and, through <ReferenceTable>, in any module that needs them, so
+// a module never copies the numbers. A table is found by record slug + table id.
+export interface ReferenceColumn { key: string; label: string; code?: boolean }
+export interface ReferenceTableData {
+  id: string;
+  title: string;
+  caption?: string;
+  source: number; // the record's source the table comes from
+  pages?: string;
+  groupBy?: string; // rows sharing this column's value are listed under one heading row
+  columns: ReferenceColumn[];
+  rows: Record<string, string | null>[];
+}
+export interface ReferenceData { short: string; tables: ReferenceTableData[]; sources: Source[] }
+export const referenceContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<ReferenceData>;
+export function referenceTable(slug: string, id: string) {
+  const record = records.find((r) => r.category === 'reference-data' && r.slug === slug);
+  if (!record) throw new Error(`No reference-data record "${slug}"`);
+  const data = referenceContent(record).frontmatter;
+  const table = data.tables.find((t) => t.id === id);
+  if (!table) throw new Error(`Reference-data record "${slug}" has no table "${id}"`);
+  const source = data.sources.find((s) => s.n === table.source);
+  if (!source) throw new Error(`Table "${slug}/${id}" cites missing source ${table.source}`);
+  const missing = table.groupBy && !table.columns.some((c) => c.key === table.groupBy);
+  if (missing) throw new Error(`Table "${slug}/${id}" groups by unknown column "${table.groupBy}"`);
+  return { record, table, source };
+}
+
 type Entry<T> = { record: EncyclopediaRecord; data: T };
 
 // One DCS map's airfields, as scripts/import_map_airfields.py writes them.
