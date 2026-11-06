@@ -20,7 +20,7 @@ armament:
   - "Air-to-ground: AGM-65 Maverick, AGM-88 HARM, AGM-84 Harpoon, laser- and GPS-guided bombs, Mk 80-series bombs [1]"
 sensors:
   - "AN/APG-73 radar [1]"
-  - "AN/AAS-38 Nite Hawk targeting pod, later ATFLIR (US Navy) or Litening (US Marine Corps) [1]"
+  - "AN/AAS-38 Nite Hawk targeting pod, later [ATFLIR](record:atflir) (US Navy) or [Litening](record:litening) (US Marine Corps) [1]"
   - "AN/ALR-67 radar warning receiver [1]"
 photos:
   - src: "encyclopedia/aircraft/fa-18c.jpg"

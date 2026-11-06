@@ -1,0 +1,476 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
+import { getModule } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import Term from '../../../components/Term.astro';
+import { ATTACK_STEPS, EXAMPLE, TLE_CATS } from '../../../lessons/precision-targeting/lesson-model.mjs';
+const pt = getModule('precision-targeting');
+const core = [
+ ['example', 'One laser-guided attack, start to finish'], ['two', 'Two ways to guide a weapon'], ['laser', 'How laser guidance works'],
+ ['who', 'Who lases: self, buddy or ground'], ['codes', 'Laser codes'], ['geometry', 'The laser target line and the safety zone'],
+ ['timing', 'When to lase, and the hand-off'], ['coords', 'Coordinate-guided weapons'], ['tle', 'Target location error'], ['recap', 'Key points'],
+];
+const reference = [
+ ['spot', 'Spot size, spillover and reflection'], ['environment', 'What degrades a laser'], ['missiles', 'Laser-guided missiles'],
+ ['pods', 'Targeting pods in this role'], ['weapons', 'Guided weapons in the Encyclopedia'], ['calls', 'The laser calls'],
+ ['sims', 'In the sim'], ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+];
+// [1] JP 3-09.3, Close Air Support (25 November 2014), by printed page.
+// [2] US Naval Academy, Fundamentals of Naval Weapons Systems, ch. 10 and 15, by section.
+// [3] Falcon BMS 4.38.1 Training Manual and [4] DCS: A-10C II Flight Manual, sim crossover only.
+const j = (page: string) => `[1, ${/–|,| to /.test(page) ? 'pp.' : 'p.'} ${page}]`;
+const u = (sec: string) => `[2, ${sec}]`;
+const cas = sitePath('manual/air-to-ground-operations/close-air-support/');
+const wd = sitePath('manual/air-to-ground-operations/weapons-delivery/');
+const glossary = sitePath('encyclopedia/terminology/precision-targeting/');
+const casTerms = sitePath('encyclopedia/terminology/close-air-support/');
+const pad3 = (n: number) => String(n).padStart(3, '0');
+---
+<SiteLayout title={pt.title} activeSection="manual" activeSubject="air-to-ground-operations" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Air-to-Ground Operations',href:sitePath('manual/air-to-ground-operations/')},{label:pt.title}]}>
+ <section class="status-panel" data-module-id={pt.id} data-module-revision={pt.revision}>
+  <h2>{pt.maturity}</h2>
+  <p>Module revision {pt.revision} · How laser-guided and coordinate-guided weapons are put on a precise point. For aircrew of every service, from the joint close air support publication.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
+ </nav>
+
+ <p class="lede">A guided weapon goes where it is told. A laser-guided weapon follows a spot of coded laser light that someone keeps on the target; a coordinate-guided weapon flies to a set of numbers. So precision depends less on the weapon than on everything around it: the right code, a seeker that can see the spot and not the designator, a laser that comes on at the right time, and coordinates that are accurate in height as well as position.</p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>compare laser-guided and coordinate-guided weapons, and say which suits a target, the weather and a moving target;</li>
+  <li>explain the <Term>laser target line</Term>, the <Term>laser safety zone</Term> and the <Term>optimal attack zone</Term>, and judge an attack heading against them;</li>
+  <li>explain <Term id="Laser code">laser codes</Term> and who can designate: the attacking aircraft, another aircraft or a ground team;</li>
+  <li>explain when to lase, the laser hand-off calls, and what degrades a laser;</li>
+  <li>explain how coordinate-guided weapons are employed, on a coordinate or on a sensor's target, and their limits;</li>
+  <li>explain <Term id="TLE">target location error</Term>, its categories, and why vertical error matters.</li>
+ </ol>
+ <p class="note">This module explains principles shared by every service; one aircraft's or one weapon's procedures are outside it. How the attack is controlled and briefed is in <a href={cas}>Close Air Support</a>, and unguided deliveries are in <a href={wd}>Weapons Delivery</a>. The worked attack is invented. The joint publication quoted is the 2014 edition; theater special instructions (<Term>SPINS</Term>), your unit's tactics, your weapon's manual and the current edition govern.</p>
+
+ <h2 id="example">One laser-guided attack, start to finish</h2>
+ <p>Here is one invented attack: an aircraft, Strike 11, drops a laser-guided bomb while a ground team, Anvil, lases the target. It follows the structure of a joint publication example <a href="#source-jp">{j('E-23–E-24')}</a>, with made-up call signs, codes and headings. Step through Figure 1 to see where everyone is.</p>
+ <ol class="exchange script">
+  {ATTACK_STEPS.map((s) => <li><span class="who">{s.who}</span> <span class="said">{s.said} <a class="step" href={s.href}>Why</a></span></li>)}
+ </ol>
+ <section class="lesson figure-lesson" data-lesson="attack" aria-labelledby="attack-title">
+  <h3 id="attack-title" class="fig-title">Figure 1 — The attack, played out</h3>
+  <p>Step through the attack above. The designator sits at the end of the laser target line; the darkest wedge around it is the safety zone, the lighter wedges the preferred and the outer attack zone.</p>
+  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 760 620" role="img" aria-label="Plan view, north up: a target in the centre, a ground laser designator to its northwest on a laser target line of 140, the safety and attack zones as wedges around that line, the briefed attack headings and the attacking aircraft"></svg></div>
+  <div class="buttons stepper"><button type="button" data-back>Back</button><button type="button" data-next>Next</button><span data-count role="status" aria-live="polite"></span></div>
+  <p class="no-js">Interactive figure unavailable. The laser target line is {pad3(EXAMPLE.laserTargetLine)}, so the designator is northwest of the target. The briefed attack headings, {pad3(EXAMPLE.fah[0])} to {pad3(EXAMPLE.fah[1])}, are all 25° to 60° off that line, inside the attack zone and clear of the safety zone. Strike 11 runs in on {pad3(EXAMPLE.inHeading)}, 40° off, in the preferred zone; the team lases from ten seconds after the call until impact.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">An invented example, not to scale. The zones are those of the joint publication's Figure III-9 <a href="#source-jp">{j('III-57')}</a>; the positions, codes and headings are made up.</p>
+ </section>
+ <p class="key"><strong>Key point:</strong> a laser-guided attack works when four things line up: the same code in designator and weapon, an attack heading inside the attack zone and outside the safety zone, a laser on at the right time, and correlation that the spot is on the right target.</p>
+
+ <h2 id="two">Two ways to guide a weapon</h2>
+ <p>Precision weapons in the air-to-ground role are guided one of two ways: by laser energy reflected from the target, or by their own GPS-aided inertial navigation to a set of coordinates. Some, the <Term id="Dual-mode weapon">dual-mode weapons</Term>, can do both. <a href="#source-jp">{j('III-52, III-54–III-55, III-61')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Laser-guided and coordinate-guided weapons compared" tabindex="0"><table>
+  <caption>Laser-guided and coordinate-guided weapons <a href="#source-jp">{j('III-52–III-62, V-5')}</a></caption>
+  <thead><tr><th scope="col"></th><th scope="col">Laser-guided</th><th scope="col">Coordinate-guided (GPS/INS)</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Guides on</th><td>Coded laser energy reflected from the target</td><td>Target coordinates, by its own GPS-aided inertial system</td></tr>
+   <tr><th scope="row">Needs</th><td>Line of sight from designator to target and from target to weapon; a matching code; the laser on long enough</td><td>Accurate three-dimensional coordinates on the same datum; encrypted GPS; often more preflight planning</td></tr>
+   <tr><th scope="row">Weather, smoke and dust</th><td>Low cloud, fog, smoke, haze, rain and snow can stop it</td><td>Unaffected; it needs no designator and no sight of the target</td></tr>
+   <tr><th scope="row">Moving targets</th><td>Yes</td><td>No, unless it is dual-mode with a laser seeker or used with a moving-target radar, and even then it flies to the coordinates</td></tr>
+   <tr><th scope="row">Accuracy</th><td>High first-round hit probability</td><td>Can exceed laser-guided weapons when the coordinates are good enough, and does not change with range</td></tr>
+   <tr><th scope="row">Several targets</th><td>Simultaneous attacks need different laser codes</td><td>One aircraft can strike several stationary targets in one pass, depending on aircraft and weapon; once released, it cannot be redirected</td></tr>
+  </tbody>
+ </table></div>
+ <p>Both are supplements to the attack procedures, not substitutes for them: in any laser attack the rule is to keep it simple and use every resource for a first-pass success. <a href="#source-jp">{j('III-52')}</a> A weapon going to coordinates is only as good as the coordinates, which is the subject of <a href="#tle">target location error</a>.</p>
+ <p class="key"><strong>Key point:</strong> a laser follows the target but needs a clear line of sight and a designator; coordinates need neither, but cannot follow a target that moves.</p>
+ <section class="lesson quiz-lesson" data-lesson="check" aria-labelledby="check-quiz-title">
+  <h3 id="check-quiz-title">Quiz: laser, codes and coordinates</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next question</button></div>
+ </section>
+
+ <h2 id="laser">How laser guidance works</h2>
+ <p>A <Term id="LTD">laser target designator</Term> puts a spot of laser energy, coded by its pulse repetition frequency, on the target. The weapon carries only a receiver: it homes on the energy reflected from the target, which is <Term>semi-active homing</Term>. <a href="#source-jp">{j('III-54–III-55')}</a> <a href="#source-usna">{u('16.4.2.2')}</a> A designator's coded train of narrow pulses lets a weapon tell one target from another; a laser bomb's receiver uses an array of photodiodes to turn the spot's position into fin movements. <a href="#source-usna">{u('10.6.3.3')}</a></p>
+ <p>Laser designation does two jobs: <a href="#source-jp">{j('III-54')}</a></p>
+ <div class="table-scroll" role="region" aria-label="The two jobs of laser designation" tabindex="0"><table>
+  <caption>Target acquisition and weapons guidance <a href="#source-jp">{j('III-54')}</a></caption>
+  <thead><tr><th scope="col">Job</th><th scope="col">What happens</th><th scope="col">Limit</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Target acquisition</th><td>A laser spot tracker in the aircraft finds the spot and cues the head-up display to it, for a visual or sensor attack</td><td>The tracker has a limited field of view; cues such as marks, landmarks and coordinates help point it. It must never be the only source of target identification.</td></tr>
+   <tr><th scope="row">Weapons guidance</th><td>A laser-guided weapon homes on the spot, some from standoff ranges</td><td>Most need the spot until impact</td></tr>
+  </tbody>
+ </table></div>
+ <p>Five things must all be true for a <Term id="LST">laser spot tracker</Term> or a <Term id="LGW">laser-guided weapon</Term> to work: <a href="#source-jp">{j('III-52–III-53')}</a></p>
+ <ol>
+  <li>line of sight from the designator to the target, and from the target to the tracker or weapon;</li>
+  <li>compatible codes in the designator and the tracker or weapon;</li>
+  <li>a direction of attack that lets the seeker sense enough reflected energy to acquire and lock on;</li>
+  <li>the target designated at the right time and for long enough, or the seeker can break lock and the weapon's flight becomes unpredictable;</li>
+  <li>release inside the weapon's delivery envelope, so it can physically reach the target.</li>
+ </ol>
+ <p>A weapon released behind friendly positions adds hazard to them; for standoff laser-guided weapons in close air support, that decision rests with the ground commander. <a href="#source-jp">{j('III-53')}</a></p>
+ <p class="key"><strong>Key point:</strong> the weapon sees only reflected, coded energy; line of sight, the code, the attack direction, the lasing time and the release envelope must all be right for it to guide.</p>
+
+ <h2 id="who">Who lases: self, buddy or ground</h2>
+ <p>The designator can be in the attacking aircraft, in another aircraft, or on the ground. <a href="#source-jp">{j('III-58')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Who designates" tabindex="0"><table>
+  <caption>Autonomous and assisted designation <a href="#source-jp">{j('III-58')}</a></caption>
+  <thead><tr><th scope="col">Kind</th><th scope="col">Who lases</th><th scope="col">Notes</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Autonomous (self-lase)</th><td>The attacking aircraft, with its own designator</td><td>Most aircraft that can drop laser-guided bombs can self-designate</td></tr>
+   <tr><th scope="row">Assisted: buddy lase</th><td>Another aircraft</td><td>Aircraft without their own designator always need assisted designation</td></tr>
+   <tr><th scope="row">Assisted: ground or FAC(A)</th><td>A ground team with a ground designator, or a forward air controller (airborne)</td><td>Even when the aircraft can self-designate, the controller should have a ground designator ready as a backup if one is available</td></tr>
+  </tbody>
+ </table></div>
+ <p><Term id="GLTD">Ground designators</Term> range from 10 m to 20 km. <Term id="ALTD">Airborne designators</Term> can lase at very long range and are normally used below 30,000 ft above ground level. <a href="#source-jp">{j('III-55')}</a> Each has trade-offs:</p>
+ <div class="table-scroll" role="region" aria-label="Airborne and ground designators compared" tabindex="0"><table>
+  <caption>Airborne and ground designators <a href="#source-jp">{j('III-56')}</a></caption>
+  <thead><tr><th scope="col">Designator</th><th scope="col">Advantages</th><th scope="col">Disadvantages</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Airborne, in general</th><td>More standoff; larger target-area footprint</td><td>Larger spot; more susceptible to the podium effect</td></tr>
+   <tr><th scope="row">Airborne, trail position</th><td>Better chance of spot detection; more standoff</td><td>Restricts the attack axis; the platform is more predictable</td></tr>
+   <tr><th scope="row">Airborne, overhead wheel</th><td>Less predictable platform; good standoff</td><td>Less effective where the target area has varying vertical development (the podium effect)</td></tr>
+   <tr><th scope="row">Airborne, offset or opposing wheel</th><td>Less predictable platform; excellent standoff</td><td>Restricts the attack axis; more susceptible to the podium effect; coordination-intensive</td></tr>
+   <tr><th scope="row">Ground</th><td>Smaller spot; less ambiguity over the target; rapid battle damage assessment</td><td>Restricts the attack axis; exposes the designator; coordination-intensive</td></tr>
+  </tbody>
+ </table></div>
+ <p>When another unit lases for a weapon, the controller names the lasing call sign and the codes in the brief, and must correlate with the lasing platform too: off-board lasing needs detailed coordination among everyone involved. <a href="#source-jp">{j('V-22')}</a></p>
+ <p class="key"><strong>Key point:</strong> whoever lases, the designator and the weapon must agree on the code, and everyone must agree on which target the spot is on.</p>
+
+ <h2 id="codes">Laser codes</h2>
+ <p>A coded designator emits its energy at a set pulse repetition frequency, given as a code. Codes are always passed as <strong>four digits</strong>, to avoid confusion. <a href="#source-jp">{j('III-58')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Who sets a laser code, and when" tabindex="0"><table>
+  <caption>Who sets the code, and when <a href="#source-jp">{j('III-55–III-56, III-58')}</a></caption>
+  <thead><tr><th scope="col">Equipment</th><th scope="col">When the code is set</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Laser-guided bomb</th><td>Normally before flight; it cannot be changed airborne</td></tr>
+   <tr><th scope="row">Laser missiles (Maverick, Hellfire)</th><td>Most can be changed in flight, before launch</td></tr>
+   <tr><th scope="row">Airborne spot tracker</th><td>Selectable in flight</td></tr>
+   <tr><th scope="row">Designators</th><td>Can change code in flight; the joint publication notes one exception, an AC-130H designator fixed on 1688</td></tr>
+  </tbody>
+ </table></div>
+ <p>The designator's code must match the weapon's, or the weapon will not guide; a tracker must be on the designator's code to see the spot. When one designator both marks for a tracker and guides a weapon, all three must share the code. <a href="#source-jp">{j('III-56, III-58')}</a></p>
+ <p>Because bombs are fixed, the aircrew pass their weapons' codes at check-in and the controller briefs those codes; if an aircraft checks in with a different code than expected, it is the controller's job to sort it out. <a href="#source-jp">{j('III-58, III-79')}</a> Codes are coordinated through the air tasking order, the air support control agency or the brief, and two laser attacks at the same time need different codes. <a href="#source-jp">{j('III-58, V-5')}</a></p>
+ <p class="key"><strong>Key point:</strong> four digits, the same in designator, weapon and tracker, with the bomb's code fixed before takeoff; simultaneous laser attacks need different codes.</p>
+
+ <h2 id="geometry">The laser target line and the safety zone</h2>
+ <p>The <Term>laser target line</Term> is the line from the designator to the target, in degrees magnetic. With a ground designator, the controller passes it in the remarks of the brief, with <Term id="Final attack heading">final attack headings</Term> that keep the aircraft in the laser acquisition area and out of the safety zones. <a href="#source-jp">{j('III-52, III-79')}</a> The zones are wedges with their apex at the target, centred on the line back toward the designator: <a href="#source-jp">{j('III-56–III-57')}</a></p>
+ <div class="table-scroll" role="region" aria-label="The laser zones" tabindex="0"><table>
+  <caption>The zones around the laser target line, for a ground designator <a href="#source-jp">{j('III-56–III-57')}</a></caption>
+  <thead><tr><th scope="col">Attack heading's difference from the laser target line</th><th scope="col">Zone</th><th scope="col">Use</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Less than 10°</th><td>Safety zone (a 20° wedge, from the surface to infinity)</td><td>Avoid unless the tactical situation dictates: the seeker may guide on the designator instead of the target</td></tr>
+   <tr><th scope="row">10° to 45°</th><td>Preferred (a 90° wedge)</td><td>Best seeker acquisition</td></tr>
+   <tr><th scope="row">45° to 60°</th><td>Optimal attack zone (a 120° wedge)</td><td>Allowed; aircraft must be within it</td></tr>
+   <tr><th scope="row">More than 60°</th><td>Outside the attack zone</td><td>Laser seeker and weapon employment prohibited</td></tr>
+  </tbody>
+ </table></div>
+ <p>The difference between your heading and the laser target line is the angle between where you are, seen from the target, and where the designator is: an aircraft on the laser target line's own heading is directly behind the designator. Try headings in Figure 2.</p>
+ <section class="lesson figure-lesson" data-lesson="zones" aria-labelledby="zones-title">
+  <h3 id="zones-title" class="fig-title">Figure 2 — Try an attack heading</h3>
+  <p>Set the laser target line and your attack heading; the figure shows which zone you are in.</p>
+  <div class="controls">
+   <label for="pt-ltl">Laser target line</label><span><input id="pt-ltl" type="range" min="0" max="355" step="5" value="200" data-ltl /> <output data-ltl-out>200</output></span>
+   <label for="pt-hdg">Attack heading</label><span><input id="pt-hdg" type="range" min="0" max="355" step="5" value="240" data-heading /> <output data-heading-out>240</output></span>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 2, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 760 620" role="img" aria-label="Plan view: the laser zones around the chosen laser target line and an aircraft on the chosen attack heading"></svg></div>
+  <p class="no-js">Interactive figure unavailable. Subtract the laser target line from your attack heading: under 10° is the safety zone, 10° to 45° preferred, 45° to 60° the edge of the attack zone, more than 60° outside it.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Not to scale. Zones from the joint publication's Figure III-9 <a href="#source-jp">{j('III-57')}</a>; the headings are yours.</p>
+ </section>
+ <p>The zones are not the only angle that matters. The <Term>attack angle</Term>, between the laser-to-target and seeker-to-target lines, has a maximum set by each weapon: too large, and the seeker will not receive enough energy to sense the spot. <a href="#source-jp">{j('III-57–III-58')}</a> Reflection is strongest at the mirror angle, so the designated side of a target reflects best near the laser target line. <a href="#source-jp">{j('III-54')}</a></p>
+ <p>During a laser hand-off with aircraft overhead, an aircraft on the far side of the overhead from the designator may track the designator, so inbound headings for the hand-off are mandatory for the aircrew. <a href="#source-jp">{j('V-35')}</a></p>
+ <p class="key"><strong>Key point:</strong> with a ground designator, attack 10° to 60° off the laser target line, ideally 10° to 45°, and never inside 10° unless the situation demands it.</p>
+
+ <h2 id="timing">When to lase, and the hand-off</h2>
+ <p>A laser-guided bomb is released, falls, and only guides once it sees the spot. The laser must come on at a time that lets the bomb follow an optimum glide path: lasing too early makes the weapon turn down toward the target too soon, lose energy and hit short. <a href="#source-jp">{j('III-58')}</a></p>
+ <p>Most laser-guided weapons need the target illuminated until impact; some need it before launch and through the whole flight, others only in the terminal phase. <a href="#source-jp">{j('III-54')}</a> Without two-way radio, designation time and duration are planned from the time on target and the weapon's laser requirements; loft deliveries vary by weapon and follow the tactics manuals. Saving laser time matters against laser countermeasures or on batteries, but the laser must stay on long enough to succeed. <a href="#source-jp">{j('III-58–III-59')}</a></p>
+ <p>For a laser mark, the aircrew give a ten-second warning before the laser comes on. <a href="#source-jp">{j('III-79')}</a> A laser hand-off to an aircraft's spot tracker, in the publication's own example, runs: <a href="#source-jp">{j('V-35–V-36')}</a></p>
+ <ol class="exchange">
+  <li><span class="who">Controller</span> <span class="said">"Latch 65 proceed inbound heading 230 to 260, <Term>STARE</Term> 1688 Papa Uniform 123 456."</span></li>
+  <li><span class="who">Aircrew</span> <span class="said">"<Term>TEN SECONDS</Term>… Broadsword 11, <Term>LASER ON</Term>."</span></li>
+  <li><span class="who">Laser operator</span> <span class="said">"<Term>LASING</Term>, 1688." The controller echoes it to the aircrew.</span></li>
+  <li><span class="who">Aircrew</span> <span class="said">"<Term>SPOT</Term>, <Term>CEASE LASER</Term>." The controller keeps lasing until this call.</span></li>
+  <li><span class="who">Controller</span> <span class="said">"What do you have under your crosshairs?" Then confirms the target, and the aircrew call <Term>CAPTURED</Term>.</span></li>
+ </ol>
+ <p>SPOT and CAPTURED are not the same: designator jitter, overspill, underspill and obscuration can put the acquired spot slightly off the target, so <Term>correlation</Term> is still required. If the aircrew call <Term>NEGATIVE LASER</Term>, the controller checks the laser's set-up and aim, the aircraft's code and its position to receive the energy, then tries again or chooses another mark. <a href="#source-jp">{j('V-35–V-36')}</a></p>
+ <p class="key"><strong>Key point:</strong> lase late enough that the weapon keeps its energy and long enough to guide it to impact; a spot is not a target until it has been correlated.</p>
+
+ <h2 id="coords">Coordinate-guided weapons</h2>
+ <p>An <Term id="IAM">inertially aided munition</Term> guides itself from release to the target coordinates with a GPS-aided inertial system, regardless of weather, camouflage or obscurants. Some add a laser, television or millimetre-wave seeker for terminal corrections. <a href="#source-jp">{j('III-61')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Coordinate-guided weapons: advantages and limits" tabindex="0"><table>
+  <caption>Advantages and limits <a href="#source-jp">{j('III-61–III-62')}</a></caption>
+  <thead><tr><th scope="col">Advantages</th><th scope="col">Limits</th></tr></thead>
+  <tbody>
+   <tr><td>Accuracy that can exceed laser weapons, with good three-dimensional coordinates, unaffected by launch range</td><td>Needs extremely accurate coordinates, horizontally and vertically, and some weapons need time after release to acquire guidance</td></tr>
+   <tr><td>Standoff at very long ranges, to stay clear of target-area threats</td><td>Single-mode weapons cannot hit a target that moves after it was targeted</td></tr>
+   <tr><td>All-weather: no designator, no sight of the target</td><td>A malfunction, such as lost guidance or a fin hard-over, makes a very large footprint; when able, employ parallel to the <Term>FLOT</Term></td></tr>
+   <tr><td>Several stationary targets in one pass, depending on aircraft and weapon</td><td>Cannot be redirected once released</td></tr>
+   <tr><td>A steeper impact angle greatly reduces the effect of vertical error</td><td>Long standoff from high altitude must be deconflicted from aircraft below</td></tr>
+  </tbody>
+ </table></div>
+ <p>There are two ways to employ them, the same two methods of attack as in close air support: <a href="#source-jp">{j('III-62')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Bomb on coordinate and bomb on target with coordinate-guided weapons" tabindex="0"><table>
+  <caption>The two methods with coordinate-guided weapons <a href="#source-jp">{j('III-62')}</a></caption>
+  <thead><tr><th scope="col">Method</th><th scope="col">How</th><th scope="col">Watch for</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Bomb on coordinate</th><td>The weapon guides to a set impact angle and azimuth over coordinates passed to the aircrew</td><td>Aircrew never adjust the passed coordinates, so the lowest-error location must be obtained and entered exactly; the commander's risk assessment sets the acceptable error</td></tr>
+   <tr><th scope="row">Bomb on target</th><td>The aircraft derives the target itself with a targeting pod, FLIR, radar or by eye, after the aircrew have captured or are tally or contact with the intended target</td><td>Error depends on the aircraft and sensor and may be worse than a good coordinate, so normal deconfliction and release restrictions apply</td></tr>
+  </tbody>
+ </table></div>
+ <p>Everyone in the attack must use the same maps, charts, databases and target materials, on the same datum and grid system; <Term>WGS 84</Term> is the US Department of Defense's assumed standard unless the SPINS say otherwise. <a href="#source-jp">{j('III-62')}</a> Different datums or large errors can cause significant misses, and the risk to friendly troops grows as their distance from the target shrinks to within the error. <a href="#source-jp">{j('III-28')}</a> Figure 4 shows why height matters as much as position.</p>
+ <section class="lesson figure-lesson" data-lesson="impact" aria-labelledby="impact-title">
+  <h3 id="impact-title" class="fig-title">Figure 4 — Vertical error and impact angle</h3>
+  <p>Give the coordinate a vertical error and change the impact angle. The weapon flies to the coordinate, not the ground.</p>
+  <div class="controls">
+   <label for="pt-ve">Vertical error</label><span><input id="pt-ve" type="range" min="-50" max="50" step="5" value="30" data-ve /> <output data-ve-out>+30 ft</output></span>
+   <label for="pt-ang">Impact angle</label><span><input id="pt-ang" type="range" min="20" max="90" step="5" value="30" data-angle /> <output data-angle-out>30°</output></span>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 4, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 280" role="img" aria-label="Side view: a weapon's path through a coordinate above or below the target, meeting the ground long or short"></svg></div>
+  <p class="no-js">Interactive figure unavailable. A coordinate 30 ft too high, flown at a 30° impact angle, puts the weapon about 52 ft long; at 60° the miss is about 17 ft.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Our geometry, drawn to scale, illustrating the publication's statement that a steeper impact angle greatly reduces the effect of vertical error <a href="#source-jp">{j('III-61')}</a>. A straight final path is assumed; real weapons and fuzes differ.</p>
+ </section>
+ <p class="key"><strong>Key point:</strong> a coordinate-guided weapon goes exactly where its coordinates say, in all weather and at any range; it cannot correct a wrong datum, a wrong height or a target that has moved.</p>
+
+ <h2 id="tle">Target location error</h2>
+ <p><Term id="TLE">Target location error</Term> is the difference between the coordinates generated for a target and where the target really is. It is given mainly as circular error (<Term>CE90</Term>) and vertical error (<Term>VE90</Term>), or sometimes as spherical error: distances within which there is a 90 percent chance the target lies. <a href="#source-jp">{j('III-34')}</a> It falls into six categories: <a href="#source-jp">{j('III-34–III-35')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Target location error categories" tabindex="0"><table>
+  <caption>Target location error categories, by circular error <a href="#source-jp">{j('III-35')}</a></caption>
+  <thead><tr><th scope="col">Category</th>{TLE_CATS.map((c) => <th scope="col">CAT {c.cat}</th>)}</tr></thead>
+  <tbody>
+   <tr><th scope="row">Feet</th><td>0–20</td><td>21–50</td><td>51–100</td><td>101–300</td><td>301–1,000</td><td>over 1,000</td></tr>
+   <tr><th scope="row">Metres</th>{TLE_CATS.map((c) => <td>{c.m}</td>)}</tr>
+  </tbody>
+ </table></div>
+ <ul>
+  <li><strong>The aim point matters.</strong> A system capable of CAT I may not give a CAT I answer for a vehicle the imagery does not show well; a targeting pod capable of CAT II may not manage it on a target that is not sensor-significant, such as a bunker or trench. Slant range, altitude, the laser spot's spread and errors in the source imagery all count. <a href="#source-jp">{j('III-34')}</a></li>
+  <li><strong>Accuracy has a price in time.</strong> Coordinates need only be good enough for the effect wanted; a dense urban fight with friendlies close may need very precise, low-error coordinates, a linear battlefield less. Don't delay the attack for more precision if the coordinates, weapon and mark plan will already do the job. <a href="#source-jp">{j('III-33')}</a></li>
+  <li><strong>Precise coordinates come from <Term>mensuration</Term>:</strong> measuring a location's latitude, longitude and height, for example from <Term>DPPDB</Term> stereo imagery, by people certified to do it. <a href="#source-jp">{j('III-33–III-34')}</a> In the field, a <Term id="LRF">laser range finder</Term> with a compass, tilt sensor and GPS derives a target's position from the observer's. <a href="#source-jp">{j('III-34')}</a></li>
+  <li><strong>Pass the category when it matters</strong>, before the brief: "Cat II, 10-digit grid to follow". It is not normally required to approve a mission or engage a target. <a href="#source-jp">{j('III-34–III-35')}</a></li>
+ </ul>
+ <p class="key"><strong>Key point:</strong> know how good your coordinates are, in height as well as position, and match that to the weapon, the target and how close friendly forces are.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>Laser weapons follow coded, reflected energy and need line of sight; coordinate weapons fly to numbers in any weather but not after a moving target, unless they are dual-mode.</li>
+  <li>Laser codes are four digits and must match in designator, weapon and tracker; a bomb's code is set before flight; simultaneous laser attacks need different codes.</li>
+  <li>The designator can be the attacker, another aircraft or a ground team; whoever it is, the spot must be correlated to the right target.</li>
+  <li>With a ground designator, attack 10° to 60° off the laser target line, preferably 10° to 45°, and avoid the 20° safety zone.</li>
+  <li>Lase late enough to save the weapon's energy and keep lasing until impact unless the weapon needs less; SPOT is not CAPTURED.</li>
+  <li>Coordinate-guided weapons need the lowest target location error the situation allows, on a common datum; a steeper impact angle shrinks the effect of vertical error.</li>
+ </ul>
+
+ <h2 id="spot">Spot size, spillover and reflection</h2>
+ <p>A laser beam spreads. With one milliradian of <Term>beam divergence</Term>, the spot is about one metre across at 1,000 m; aimed at a three-metre box 3,000 m away, it is as wide as the box. <a href="#source-jp">{j('III-53')}</a> One milliradian is typical of a laser's divergence. <a href="#source-usna">{u('10.6.2.3')}</a> <Term>Spillover</Term> is energy that misses the target because the spot is too big or only partly on it; energy beyond the target may reflect back to the weapon and guide it wrongly. <a href="#source-jp">{j('III-53–III-54')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="spot" aria-labelledby="spot-title">
+  <h3 id="spot-title" class="fig-title">Figure 3 — Spot size and spillover</h3>
+  <p>Move the designator away from a three-metre target and watch the spot grow.</p>
+  <div class="controls">
+   <label for="pt-range">Designator range</label><span><input id="pt-range" type="range" min="500" max="8000" step="250" value="3000" data-range /> <output data-range-out>3.0 km</output></span>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 3, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 300" role="img" aria-label="A three-metre square target with the laser spot drawn to scale over it"></svg></div>
+  <p class="no-js">Interactive figure unavailable. With a one-milliradian beam the spot is about one metre across per kilometre of range: 3 m at 3 km, as wide as the target, and 6 m at 6 km, when most of it spills past.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Drawn to scale from the publication's one-milliradian example <a href="#source-jp">{j('III-53')}</a>. A uniform round spot aimed at the target's centre is assumed; real beams and jitter differ.</p>
+ </section>
+ <p>Most surfaces mix mirror-like and scattered reflection. Glass, water and polished surfaces are poor to designate because they reflect in only one direction, and the seeker must be in that small region looking toward it. Battlefield conditions rarely line reflection up with the attacker, so sticking to the laser zones and designating the target's centre gives the best chance. <a href="#source-jp">{j('III-54')}</a></p>
+
+ <h2 id="environment">What degrades a laser</h2>
+ <p>Low cloud and fog, smoke, haze, snow and rain, solar saturation and anything else that limits vision all affect designators and seekers. <a href="#source-jp">{j('III-53')}</a></p>
+ <div class="table-scroll" role="region" aria-label="What degrades a laser, and what helps" tabindex="0"><table>
+  <caption>Problems and remedies <a href="#source-jp">{j('III-53')}</a></caption>
+  <thead><tr><th scope="col">Problem</th><th scope="col">What happens</th><th scope="col">What helps</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Atmospheric scatter</th><td>Particles in the air scatter energy, even on clear days, and can cause false lock-on near the designator</td><td>Follow-on correlation after every hand-off</td></tr>
+   <tr><th scope="row">False seeker lock-on</th><td>The seeker locks onto the designator or the scatter along the beam instead of the target; most likely near the designator</td><td>Mask the designator from the seeker's view with terrain, vegetation, or a screen such as a blanket or tarp; correlate after the hand-off</td></tr>
+   <tr><th scope="row">Smoke and dust (backscatter)</th><td>Obscurants absorb or reflect the beam; energy scattered back can look like a target, and the seeker may lock onto the obscurant</td><td>Lase from the flanks or high ground; move to an unobscured position; use several lasers and hand the mission to one that is not obscured</td></tr>
+  </tbody>
+ </table></div>
+ <p>Smoke and dust from earlier impacts also block later missiles; working targets from downwind to upwind reduces the problem. <a href="#source-jp">{j('III-61')}</a> The terms are <Term>false seeker lock-on</Term> and <Term>backscatter</Term>.</p>
+
+ <h2 id="missiles">Laser-guided missiles</h2>
+ <p>Laser-guided missiles, such as the laser <Term record="agm-65">Maverick</Term> and the <Term record="agm-114">Hellfire</Term>, generally have more standoff than laser-guided bombs, which helps survival against strong defences; take care launching them from behind friendly troops. <a href="#source-jp">{j('III-55')}</a></p>
+ <ul>
+  <li><strong>Laser Maverick:</strong> air or ground designators, with codes selectable in flight; the launching aircraft needs clear line of sight, the missile must lock onto the laser before launch, missile and designator must be on the same code, and the attack heading must allow for the reflected energy unless self-designating. <a href="#source-jp">{j('III-55')}</a></li>
+  <li><strong>Hellfire</strong> can be fired <Term id="LOBL">lock-on before launch</Term>, which needs line of sight but confirms the missile sees the right code and target, or <Term id="LOAL">lock-on after launch</Term>, from behind a mask, climbing and then searching for the code. It can be designated autonomously or remotely; a remote designator lets the launcher fire from a masked position with more standoff, but must identify the target correctly. <a href="#source-jp">{j('III-55, III-59–III-60')}</a></li>
+  <li>Hellfire should use codes from 1111 to 1488 for the best chance of a hit. In rapid fire the aircrew allow at least eight seconds between missiles; with two designators on different codes, the launch interval can be as low as two seconds. Rotary-wing Hellfire has its own designator safety zone for airborne designators, and the normal laser zones above still apply. <a href="#source-jp">{j('III-59–III-61')}</a></li>
+ </ul>
+
+ <h2 id="pods">Targeting pods in this role</h2>
+ <p>Aircraft targeting pods, with GPS and laser designators and range finders, are among the systems used to search for, identify and locate targets. <a href="#source-jp">{j('I-2')}</a> On a forward air controller's aircraft, the pod helps find and fix targets and generate coordinates for the controller, alongside an infrared pointer for night, laser spot search and track, and video sent to the ground. <a href="#source-jp">{j('II-8')}</a> An unmanned aircraft's designator can lase for other aircraft's laser-guided weapons. <a href="#source-jp">{j('I-6')}</a></p>
+ <p>The error of a FAC(A)'s pod-derived coordinates depends on the platform, software, sensors and where the aircraft is relative to the target, but is generally CAT II or better, under 50 ft (15 m). <a href="#source-jp">{j('II-8')}</a> A pod capable of CAT II may still not reach it on a target that is not sensor-significant. <a href="#source-jp">{j('III-34')}</a> In a bomb-on-target delivery of a coordinate-guided weapon, a targeting pod is one of the sensors that can derive the target. <a href="#source-jp">{j('III-62')}</a> In both sims in the panel below, the pod holds the laser and its code and runs the spot search. <a href="#source-bms">[3, pp. 185, 194]</a> <a href="#source-a10">[4, pp. 620, 623]</a></p>
+ <p>The Encyclopedia's Radar &amp; Sensors records describe the pods themselves: <Term record="litening">LITENING</Term>, <Term record="sniper">Sniper</Term>, <Term record="atflir">ATFLIR</Term> and the older <Term record="lantirn">LANTIRN</Term>, each with a designator and rangefinder, and <Term record="pave-penny">Pave Penny</Term>, a spot tracker with no laser of its own.</p>
+
+ <h2 id="weapons">Guided weapons in the Encyclopedia</h2>
+ <p>The Encyclopedia's records give each weapon's guidance, sizes and history:</p>
+ <ul class="weapon-list">
+  <li>Laser-guided bombs: <Term record="gbu-10">GBU-10</Term>, <Term record="gbu-12">GBU-12</Term>, <Term record="gbu-16">GBU-16</Term>, <Term record="gbu-24">GBU-24</Term>, and the <Term record="kab-500">KAB-500</Term> family.</li>
+  <li>Coordinate-guided and dual-mode bombs: <Term record="jdam">JDAM</Term> (including the Laser JDAM), the <Term record="gbu-39">GBU-39 Small Diameter Bomb</Term> and the <Term record="agm-154">AGM-154 JSOW</Term>.</li>
+  <li>Laser-guided missiles: <Term record="agm-65">AGM-65 Maverick</Term>, <Term record="agm-114">AGM-114 Hellfire</Term>, <Term record="kh-25">Kh-25</Term> and <Term record="kh-29">Kh-29</Term>, each with laser and other seekers in different versions.</li>
+ </ul>
+
+ <h2 id="calls">The laser calls</h2>
+ <p>These are the standard laser brevity terms; the joint publication points to the current multi-service brevity publication for the latest. Every call is in the <a href={casTerms}>close air support terms</a>, except <Term>DEAD EYE</Term>, which is in this module's terms. <a href="#source-jp">{j('III-79')}</a></p>
+ <div class="table-scroll" role="region" aria-label="The laser calls" tabindex="0"><table>
+  <caption>Standard laser brevity terms <a href="#source-jp">{j('III-79')}</a></caption>
+  <thead><tr><th scope="col">Call</th><th scope="col">Meaning</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">TEN SECONDS</th><td>Stand by for LASER ON in about ten seconds</td></tr>
+   <tr><th scope="row">LASER ON</th><td>Start, or acknowledge, laser designation</td></tr>
+   <tr><th scope="row">LASING</th><td>The speaker is firing the laser</td></tr>
+   <tr><th scope="row">SPOT</th><td>Laser designation acquired</td></tr>
+   <tr><th scope="row">NEGATIVE LASER</th><td>Laser energy not acquired</td></tr>
+   <tr><th scope="row">SHIFT (direction or target)</th><td>Shift the laser or aimpoint, such as from an offset onto the target, or between targets in a multi-aircraft attack</td></tr>
+   <tr><th scope="row">CEASE LASER</th><td>Stop lasing</td></tr>
+   <tr><th scope="row">DEAD EYE</th><td>Laser designator system inoperative</td></tr>
+   <tr><th scope="row">STARE (code, reference point)</th><td>Cue the laser spot search or tracker on that code relative to a steerpoint, geographic reference, bearing and range or data link point</td></tr>
+  </tbody>
+ </table></div>
+ <p>When a laser marks a target, the brief's marks line names the lasing entity and its code ("Blackjack laser, code 1688"), because the aircrew can confuse the laser source with the target. <a href="#source-jp">{j('III-79')}</a></p>
+
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p>Falcon BMS's F-16 and DCS's A-10C II both model targeting pods, laser codes, laser-guided bombs and coordinate-guided weapons. This is how their official manuals describe them; other sim aircraft were not checked for this revision.</p>
+  <h3>Falcon BMS 4.38</h3>
+  <ul>
+   <li>Training mission 11 is laser-guided bombs. Each bomb's code is set in the loadout screen before flight and cannot be changed airborne; the pod's code is set on the laser page and must match, and the bomb guides only on the combat laser, not the training one. The default is 1688; the manual suggests a code for each flight member, such as 1511 to 1514. <a href="#source-bms">[3, pp. 182–183, 185]</a></li>
+   <li>The bomb falls ballistically until it sees a matching spot. The pod can fire the laser automatically before impact: 16 seconds by default, 12 recommended for Paveway II, 20 for Paveway III, with earlier manual lasing advised for moving targets. Only a range marked L shows the target is really being lased; cloud can stop the spot. <a href="#source-bms">[3, pp. 183, 188–189]</a></li>
+   <li>Buddy lasing and the spot tracker work with a human wingman: the lead lases the wingman's code and the pair use "10 seconds" and "laser on" calls. The tracker searches for a code, detects the spot and moves the pod to it. <a href="#source-bms">[3, pp. 193–194]</a></li>
+   <li>Training mission 15 is inertially aided munitions. JSOW and JDAM must be powered and aligned before release (about 95 seconds to a usable JSOW alignment) and released inside their launch zone. JDAM impact azimuth is settable, but impact angle and velocity are not implemented. <a href="#source-bms">[3, pp. 231–232, 239–242]</a></li>
+  </ul>
+  <h3>DCS: A-10C II</h3>
+  <ul>
+   <li>The pod's laser code and its laser spot search code default to 1688 and are set on the pod's control page; codes run from 1111 to 1788, with a first digit of 1 and the other three from 1 to 8. When buddy-lasing, both aircraft must be on the same code. <a href="#source-a10">[4, pp. 86, 400, 620, 623]</a></li>
+   <li>The GBU-38 JDAM strikes within 33 ft of the entered coordinates as long as it has adequate GPS; the sensor point of interest can be its target, and release is in CCRP when the release cue is between the range carets. The GBU-54 Laser JDAM adds a laser seeker for moving targets. <a href="#source-a10">[4, pp. 89–90, 678–679]</a></li>
+  </ul>
+  <h3>Where the sims and the real world differ, or say nothing</h3>
+  <ul>
+   <li>BMS has only airborne designators, no ground laser team <a href="#source-bms">[3, p. 182]</a>, so the ground laser zones of <a href="#geometry">Figure 2</a> cannot be practised there. <a href="#source-jp">{j('III-56–III-57')}</a></li>
+   <li>The 1111 to 1788 code range is the DCS manual's rule for the A-10C's pod; the joint publication says only that codes are four digits, and gives 1111 to 1488 as Hellfire's best range. <a href="#source-a10">[4, p. 400]</a> <a href="#source-jp">{j('III-58–III-59')}</a></li>
+   <li>The 12-, 16- and 20-second auto-lase times are the BMS manual's settings; the joint publication leaves lasing time to each weapon's rules. <a href="#source-bms">[3, p. 183]</a> <a href="#source-jp">{j('III-58–III-59')}</a></li>
+   <li>Neither manual covers target location error categories, mensuration or datums.</li>
+  </ul>
+  <p><strong>To practise:</strong> fly BMS mission 11 with a human wingman to work the codes, buddy lasing and the spot tracker, then mission 15 for JDAM and JSOW; in DCS, set two A-10Cs on the same code and hand off a target with the laser spot search.</p>
+ </section>
+
+ <h2 id="terms">Terms</h2>
+ <p>Every term here is in the <a href={glossary}>precision targeting terms</a>, except those marked from the close air support terms or the weapons terms.</p>
+ <GlossaryList items={[
+  'LTD', 'GLTD', 'ALTD', 'LST', 'Laser code', 'Semi-active homing', 'Autonomous designation', 'Buddy lasing', 'Laser safety zone', 'Optimal attack zone',
+  'Attack angle', 'Beam divergence', 'Spillover', 'Backscatter', 'False seeker lock-on', 'LOBL', 'LOAL', 'DEAD EYE', 'IAM', 'Dual-mode weapon',
+  'TLE', 'CE90', 'VE90', 'Mensuration', 'DPPDB', 'LRF', 'WGS 84', 'LGW', 'PGM', 'Laser target line', 'BOC', 'BOT',
+ ]} />
+ <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
+  <h3 id="terms-title">Quiz: name the term</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next term</button></div>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <p>One or more questions for each outcome at the top of the page; the quiz in <a href="#two">Two ways to guide a weapon</a> and Figures 2 to 4 cover more.</p>
+ <details><summary><span class="outcome">Outcome 1</span> Your target is a vehicle that may drive off, under clear skies. Laser or coordinates?</summary><p>Laser, or a dual-mode weapon: a laser spot can follow a moving target, while a single-mode coordinate weapon still flies to the coordinates and misses if the target moves.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> Why might a GPS weapon be the better choice through thick haze?</summary><p>It needs no designator and no sight of the target, so obscurants do not affect it; a laser can be absorbed or scattered by them.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> The laser target line is 140. Is a final attack heading window of 080 to 115 acceptable?</summary><p>Yes. Every heading in it is 25° to 60° off the line: inside the 120° attack zone and clear of the 20° safety zone. 100 is in the preferred 10° to 45°.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> Why is attacking along the laser target line's own heading avoided?</summary><p>You would be in the safety zone, behind the designator, where the seeker may lock onto the designator or the scatter near it instead of the target.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Your aircraft has no designator. Can you still drop laser-guided bombs?</summary><p>Yes, with assisted designation: another aircraft (buddy lasing), a FAC(A) or a ground team lases for you, on your bombs' code.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Who corrects it if you check in with a different code than the controller expected?</summary><p>The controller: making the corrections when an aircraft checks in with a different code is the controller's responsibility.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> You called SPOT, CEASE LASER. Can you attack?</summary><p>Not yet. SPOT and CAPTURED are not the same: the spot may be slightly off the target, so the controller confirms what your sensor is on before you call CAPTURED.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> Smoke from the first impact drifts over the target area. What can the designator do?</summary><p>Reposition to the flank or high ground, hand the mission to a laser that is not obscured, and work further targets from downwind to upwind.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> You are given coordinates for a bomb-on-coordinate attack and your pod shows the target a little to one side. Do you adjust them?</summary><p>No. Aircrew do not adjust passed coordinates for any reason; that is why the lowest-error coordinates must be obtained and entered correctly.</p></details>
+ <details><summary><span class="outcome">Outcome 6</span> What does CE90 of 40 ft mean, and which category is it?</summary><p>There is a 90 percent chance the target is within 40 ft horizontally of the coordinates: CAT II.</p></details>
+ <details><summary><span class="outcome">Outcome 6</span> Two units use different datums for the same coordinates. Why does it matter?</summary><p>The same numbers then mark different places on the ground, which can cause significant misses and endanger friendly troops inside the error.</p></details>
+
+ <h2 id="sources">Sources and applicability</h2>
+ <h3>Military sources</h3>
+ <p id="source-jp"><strong>[1] US Joint Chiefs of Staff, JP 3-09.3, Close Air Support, 25 November 2014.</strong> <a href="https://www.bits.de/NRANEU/others/jp-doctrine/jp3_09_3(14).pdf">Read on the Berlin Information-center for Transatlantic Security's copy</a>, 5 November 2026, by printed page: terminal guidance and unmanned aircraft pp. I-2 and I-6; FAC(A) targeting pods p. II-8; IAMs and datums p. III-28; targeting and target location error pp. III-33 to III-35; laser-guided and inertially aided munitions pp. III-52 to III-62; laser marks and brevity p. III-79; simultaneous attacks p. V-5; third-party lasing p. V-22; laser hand-off pp. V-35 to V-36; example pp. E-23 to E-24. A later edition may differ.</p>
+ <p id="source-usna"><strong>[2] US Naval Academy, Weapons and Systems Engineering Department, Fundamentals of Naval Weapons Systems, chapters 10 and 15.</strong> Read on the Federation of American Scientists' copies of <a href="https://man.fas.org/dod-101/navy/docs/fun/part10.htm">chapter 10, Visible and Infrared Spectrum</a> (10.6.2.3 divergence, 10.6.3.3 laser target designators) and <a href="https://man.fas.org/dod-101/navy/docs/fun/part15.htm">chapter 15, Guidance and Control</a> (whose sections are numbered 16.x there; 16.4.2.2 semiactive homing), 5 November 2026.</p>
+ <h3>Sim sources</h3>
+ <p id="source-bms"><strong>[3] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 5 November 2026, pp. 182–194 and 231–243. A sim manual, cited only for the In the sim panel.</p>
+ <p id="source-a10"><strong>[4] Eagle Dynamics, DCS: A-10C II Tank Killer Flight Manual (English).</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/dcs-warthog_2_flight_manual_en/">DCS documentation page</a>, read 5 November 2026, pp. 86, 89–90, 400, 620–623 and 676–681. A sim manual, cited only for the In the sim panel.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/precision-targeting-evidence.md">Precision Targeting evidence</a>.</p>
+ <p>Figures 1 to 4 and the worked attack are original, invented examples. Figures 1 and 2 draw the zones of the joint publication's Figure III-9; Figure 4 is our geometry.</p>
+ <p class="note">Applicability: written for aircrew of every service who employ laser-guided or coordinate-guided weapons, and the controllers who work with them. The procedures are from the joint publication, which all four services follow; no service's own weapons tactics publication could be read, so no service- or aircraft-specific tactics are included. Theater SPINS, your unit's tactics and your weapon's manual govern.</p>
+</SiteLayout>
+
+<script>import '../../../lessons/precision-targeting/lesson-ui.mjs';</script>
+
+<style>
+  .contents-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
+  .contents h3 { margin: 0.4rem 0 0.2rem; font-size: 0.95rem; }
+  .contents ol { padding-left: 1.5rem; margin-top: 0; }
+  .lede { font-size: 1.1rem; }
+  .key { padding: 0.6rem 1rem; border-left: 0.25rem solid var(--color-link); background: var(--color-surface); }
+  ul.recap li { margin-block: 0.3rem; }
+  details.more { margin-block: 1rem; padding: 0.5rem 1rem; border: 1px solid var(--color-border); }
+  details.more summary { cursor: pointer; font-weight: 700; }
+  ol.exchange { list-style: none; padding-left: 1rem; border-left: 0.25rem solid var(--color-border); }
+  ol.exchange li { display: grid; grid-template-columns: 7.5rem 1fr; column-gap: 0.75rem; margin-block: 0.4rem; }
+  ol.exchange .who { font-weight: 700; }
+  ol.exchange .step { margin-left: 0.4rem; font-size: 0.85rem; white-space: nowrap; }
+  .outcome { display: inline-block; margin-right: 0.4rem; padding: 0 0.4rem; font-size: 0.8rem; border: 1px solid var(--color-border); color: var(--color-muted); }
+  .sim-panel { margin: 2rem 0; padding: 0.75rem 1.25rem; border-left: 4px solid var(--color-accent); background: var(--color-surface, #f6f7f8); }
+  .sim-panel h2 { margin-top: 0.4rem; }
+  .sim-panel h3 { margin: 1rem 0 0.3rem; font-size: 1rem; }
+  table { width: 100%; border-collapse: collapse; }
+  caption { padding: 0.5rem 0.75rem; text-align: left; color: var(--color-muted); font-size: 0.9rem; }
+  th, td { padding: 0.45rem 0.75rem; border-top: 1px solid var(--color-border); text-align: left; vertical-align: top; }
+  thead th { background: var(--color-surface); }
+  .note { padding: 0.75rem 1rem; border-left: 0.25rem solid var(--color-border); background: var(--color-surface); }
+  .lesson { margin-block: 1.5rem; padding: 1rem; border: 1px solid var(--color-text); }
+  .lesson h3 { margin-top: 0; }
+  button:focus-visible, input:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .lesson :global(button) { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: #fff; background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
+  .lesson :global(button:disabled) { opacity: 0.45; cursor: default; }
+  .lesson [data-choices] :global(button) { color: var(--color-text); background: #fff; font-weight: 400; text-align: left; }
+  .controls { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; align-items: center; margin-bottom: 0.75rem; }
+  .controls input[type="range"] { width: min(100%, 24rem); min-height: 2.75rem; vertical-align: middle; }
+  .controls output { font-weight: 700; margin-left: 0.3rem; }
+  .feedback { font-weight: 700; min-height: 1.6em; }
+  .feedback :global(p) { margin: 0.2rem 0; }
+  .feedback :global(.derived) { font-weight: 400; }
+  .lesson.ready .no-js { display: none; }
+  .no-js { font-weight: 700; }
+  .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+  @media (min-width: 64rem) {
+    .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
+  }
+  .fig-scroll { overflow-x: auto; }
+  .fig-scroll :global(svg) { min-width: 36rem; }
+  .fig-title { font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 2px solid var(--color-text); padding-bottom: 0.3rem; }
+  .fig-caption { color: var(--color-muted); font-size: 0.9rem; }
+  .stepper { align-items: center; }
+  .stepper [data-count] { font-weight: 700; }
+  .quiz-lesson .task { font-style: italic; }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--color-border); }
+  .table-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+  @media (max-width: 40rem) {
+    .contents-groups { grid-template-columns: 1fr; }
+    ol.exchange li { display: block; }
+    ol.exchange .who { display: block; }
+    .controls { grid-template-columns: 1fr; }
+  }
+  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
+  :global(.natops .frame) { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
+  :global(.natops .lbl) { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
+  :global(.natops .lbl.small) { font-size: 10px; font-weight: 400; }
+  :global(.natops .ln) { fill: none; stroke: var(--color-text); stroke-width: 1.8; }
+  :global(.natops .ln.heavy) { stroke-width: 2.8; }
+  :global(.natops .ln.dashed) { stroke-dasharray: 7 4; }
+  :global(.natops .ln.on) { stroke: var(--color-link); stroke-width: 2.4; }
+  :global(.natops .thin) { fill: none; stroke: var(--color-text); stroke-width: 1; }
+  :global(.natops .thin.dotted) { stroke-dasharray: 2 3; }
+  :global(.natops .shade) { fill: #e6e9ec; stroke: none; }
+  :global(.natops .fill) { fill: var(--color-text); }
+  :global(.natops .mine) { fill: var(--color-link); stroke: var(--color-link); }
+  :global(.natops .zone-attack) { fill: #e3eef8; stroke: var(--color-text); stroke-width: 0.8; }
+  :global(.natops .zone-pref) { fill: #b9d5ee; stroke: var(--color-text); stroke-width: 0.8; }
+  :global(.natops .zone-safety) { fill: #8c96a0; stroke: var(--color-text); stroke-width: 0.8; }
+  .lesson:not(.ready) .buttons, .lesson:not(.ready) .controls, .lesson:not(.ready) svg:empty { display: none; }
+</style>
