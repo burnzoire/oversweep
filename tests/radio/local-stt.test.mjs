@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {concatChunks,downsample,durationSeconds,TARGET_RATE} from '../../src/lessons/radio/audio.mjs';
-import {atcPrompt} from '../../src/experiences/radio-trainer/local-stt.js';
+import {atcPrompt} from '../../src/lessons/radio/context.mjs';
 test('audio samples concatenate without padding or gaps',()=>{
  const result=concatChunks([Float32Array.of(1,2),Float32Array.of(3),Float32Array.of(4,5)]);
  assert.deepEqual(Array.from(result),[1,2,3,4,5]);
