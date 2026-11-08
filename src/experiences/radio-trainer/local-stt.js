@@ -1,5 +1,5 @@
 import {downsample,concatChunks,durationSeconds,TARGET_RATE} from './lessons/radio/audio.mjs';
-import {FALCON_GROUND,activePhrases} from './lessons/radio/context.mjs';
+import {atcPrompt} from './lessons/radio/context.mjs';
 
 const MAX_SECONDS=25;
 const requestTimeout=120000;
@@ -88,25 +88,7 @@ export async function discardCapture() {
  capture.source.disconnect();capture.node.disconnect();capture.chunks.length=0;
  try{await capture.context.close();}catch{}
 }
-export function atcPrompt(stage) {
- const c=FALCON_GROUND;
- const phase=activePhrases(stage).slice(-1).map(x=>x.phrase).join(' ');
- // Supply all known scenario terminology BEFORE inference. Prompt-token support
- // is experimental, and the worker reports when it has to fall back.
- return [
-  'Current radio sequence: '+phase+'.',
-  'Airfield: '+c.location+'.',
-  'Radio agencies: '+c.agencies.join(', ')+'.',
-  'Pilot callsigns: '+c.aircraft.join(', ')+'.',
-  'Active runway: '+c.runway+'.',
-  'Taxiways: '+c.taxiways.join(', ')+'.',
-  'Frequencies: '+c.frequencies.join(', ')+'.',
-  'Location north ramp. Wind two six zero at eight.',
-  'Airfield terms: '+c.terms.join(', ')+'.',
-  'NATO phonetic alphabet: '+c.phonetics.join(', ')+'.',
- ].join(' ');
-}
-export async function transcribeLocal(samples,stage,onProgress=()=>{}) {
+export function atexport async function transcribeLocal(samples,stage,onProgress=()=>{}) {
  if(!loaded)await loadLocalSTT(onProgress);
  return promiseRequest('transcribe',{samples,context:atcPrompt(stage)},onProgress);
 }
