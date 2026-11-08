@@ -33,7 +33,8 @@ function promptTokenIds(transcriber,context) {
  if(!context||typeof tokenizer?.encode!=='function')return null;
  const ids=tokenizer.encode(context,{add_special_tokens:false});
  if(!Array.isArray(ids)||!ids.length)return null;
- return ids.slice(0,80);
+ // Limit Whisper prompt conditioning to a bounded prefix of scenario facts.
+ return ids.slice(0,180);
 }
 onmessage=async ({data})=>{
  const {id,type}=data??{};
