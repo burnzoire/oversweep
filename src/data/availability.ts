@@ -1,5 +1,5 @@
 import { encyclopediaCategories, manualSubjects } from './catalogue';
-import { experienceFrame, experienceRoute, includedExperiences, type Experience } from './experiences';
+import { experienceFrame, experienceRoute, listedExperiences, type Experience } from './experiences';
 import { includedModules, moduleRoute, type Module } from './modules';
 import { categoryRecords } from './encyclopedia';
 import { carriers } from './carriers';
@@ -49,7 +49,7 @@ const fromModule = (m: Module): Entry => ({
 });
 
 export const manualEntries: Entry[] = [
-  ...includedExperiences.map(fromExperience),
+  ...listedExperiences.map(fromExperience),
   ...includedModules.map(fromModule),
 ];
 
@@ -72,5 +72,5 @@ export const categoryTitle = (slug: string) => encyclopediaCategories.find((c) =
 export const sectionHasContent = {
   manual: manualSubjects.some((s) => subjectHasContent(s.slug)),
   encyclopedia: encyclopediaCategories.some((c) => categoryHasContent(c.slug)),
-  training: includedExperiences.length > 0,
+  training: listedExperiences.length > 0,
 };
