@@ -1,3 +1,4 @@
+import {transcribeEnglishOnly} from './lessons/radio/whisper-inference.mjs';
 // Dedicated local transcription worker. Only model files and JS dependencies are
 // downloaded; microphone samples are passed directly to browser inference.
 const TRANSFORMERS_CDN = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1';
@@ -26,16 +27,6 @@ async function ensureLoaded(id) {
  })();
  try{return await loading;}catch(err){loading=null;throw err;}
 }
-function promptTokenIds(transcriber,context) {
- // Transformers.js support for Whisper prompt_ids depends on the version/model.
- // If unavailable, do NOT claim the vocabulary has been injected into inference.
- const tokenizer=transcriber.tokenizer;
- if(!context||typeof tokenizer?.encode!=='function')return null;
- const ids=tokenizer.encode(context,{add_special_tokens:false});
- if(!Array.isArray(ids)||!ids.length)return null;
- // Limit Whisper prompt conditioning to a bounded prefix of scenario facts.
- return ids.slice(0,180);
-}
 onmessage=async ({data})=>{
  const {id,type}=data??{};
  try {
@@ -47,18 +38,8 @@ onmessage=async ({data})=>{
     throw new Error('Recording must contain between 0.2 and 30 seconds of mono 16 kHz PCM.');
   report(id,'progress','Transcribing locally · audio is not uploaded…');
   const start=performance.now();
-  let response,contextApplied=false,warning='';
-  const promptIds=promptTokenIds(transcriber,data.context);
-  if(promptIds) {
-   try {
-    response=await transcriber(audio,{language:'english',task:'transcribe',prompt_ids:promptIds});
-    contextApplied=true;
-   }catch(err) {
-    warning='Context-token prompting unsupported in this runtime; transcribed without it.';
-   }
-  }
-  if(!response)response=await transcriber(audio,{language:'english',task:'transcribe'});
-  postMessage({id,phase:'transcript',text:String(response?.text??'').trim(),
-   ms:Math.round(performance.now()-start),contextApplied,warning});
+  const result=await transcribeEnglishOnly(transcriber,audio,data.context);
+  postMessage({id,phase:'transcript',text:result.text,
+   ms:Math.round(performance.now()-start),contextApplied:result.contextApplied,warning:result.warning});
  }catch(err){postMessage({id,phase:'error',message:err?.message??String(err)});}
 };
