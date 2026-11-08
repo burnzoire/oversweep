@@ -3,6 +3,7 @@ import SiteLayout from '../../../layouts/SiteLayout.astro';
 import { getExperience, experienceFrame } from '../../../data/experiences';
 import { sitePath } from '../../../lib/paths';
 import Term from '../../../components/Term.astro';
+import TrainerLaunch from '../../../components/TrainerLaunch.astro';
 import { RUN } from '../../../lessons/instrument-flight/ils-trainer-model.mjs';
 import { levelTrim } from '../../../lessons/instrument-flight/attitude-model.mjs';
 import '../../../styles/instrument-flight.css';
@@ -31,6 +32,7 @@ const r0 = (v: number) => Math.round(v);
   <p>Module revision {mod.revision} · Practice for instrument flying with nothing outside the window: a generic panel, an invented aircraft, and only the instruments to go on. Its first exercise is the hand-flown ILS, a run of about 90 seconds from the localizer intercept to the decision altitude, with a new wind and start each time. Written for military pilots of every service, from the Air Force's instrument flight procedures manual.</p>
   <p>Read <a href={attitude}>Attitude Instrument Flying</a> for the crosscheck and <a href={`${procedures}#ils`}>Flying the ILS</a> for the approach first. The exercise opens in its own window.</p>
  </section>
+ <TrainerLaunch variant="jump" experienceId={exercise.id} label="Fly the ILS by hand in the instrument trainer" />
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
   <div class="contents-groups">
    <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
@@ -95,7 +97,7 @@ const r0 = (v: number) => Math.round(v);
   <p>{exercise.applicability} Prerequisites: {exercise.prerequisites.join(' · ')}.</p>
   <p>Each run starts level below the glide slope, off the localizer, on an intercept heading, with a random wind you are not told. Fly both needles to the DA on the panel from <a href={attitude}>Attitude Instrument Flying</a>, then land or go missed. The debrief scores the time within one dot, the worst deviations, any limit broken and the decision, and replays the flown path on a plan and profile view beside the panel.</p>
   <p>Controls: the arrow keys move the attitude (<kbd>↑</kbd> nose down, <kbd>↓</kbd> nose up, <kbd>←</kbd> <kbd>→</kbd> bank), <kbd>W</kbd> and <kbd>S</kbd> the power, <kbd>G</kbd> goes missed and <kbd>L</kbd> lands at the DA. An optional <strong>Auto power</strong> switch holds the speed for you, so you can learn to fly the glide slope with pitch alone before adding the power. A joystick or HOTAS can be assigned to the stick and throttle, and a game controller works with its left stick and triggers, and on a phone or with a mouse there are buttons under the panel. No joystick is needed.</p>
-  <p class="launch"><a class="launch-button" href={trainerHref} target="_blank" rel="noopener" data-experience-launch data-experience-id={exercise.id}>Launch the instrument trainer<span> (opens in a new window)</span></a></p>
+  <TrainerLaunch href={trainerHref} experienceId={exercise.id} label="Launch the instrument trainer" />
  </section>
 
  <h2 id="model">What the exercise models</h2>
@@ -122,9 +124,5 @@ const r0 = (v: number) => Math.round(v);
  <p class="note">Applicability: generic instrument procedures for fixed-wing pilots of every service. Your service's instrument manual, the aircraft's flight manual and the published approach govern real approaches, their minimums and their limits. The exercise's aircraft and approach are invented. This revision is Drafted pending independent source-backed review.</p>
 </SiteLayout>
 <style>
- .launch { margin-block: 1.5rem; }
- .launch-button { display: inline-flex; flex-wrap: wrap; align-items: center; min-height: 3rem; padding: 0.6rem 1.2rem; color: #fff; background: var(--color-text); font-weight: 700; font-size: 1.1rem; text-decoration: none; }
- .launch-button span { font-weight: 400; font-size: 0.95rem; }
- .launch-button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
  kbd { font-family: var(--font-mono, monospace); font-size: 0.85em; border: 1px solid var(--color-border, #ccc); border-bottom-width: 2px; border-radius: 3px; padding: 0 0.3em; }
 </style>

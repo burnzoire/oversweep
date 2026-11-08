@@ -3,6 +3,7 @@ import SiteLayout from '../../../layouts/SiteLayout.astro';
 import { getExperience, experienceFrame } from '../../../data/experiences';
 import { sitePath } from '../../../lib/paths';
 import Term from '../../../components/Term.astro';
+import TrainerLaunch from '../../../components/TrainerLaunch.astro';
 import '../../../styles/instrument-flight.css';
 import { HELI_SIL, HELI_LINES, S300_CURVE, HV, s300BestGlide } from '../../../lessons/flight-fundamentals/autorotation-figures.mjs';
 const exercise = getExperience('autorotation');
@@ -62,6 +63,7 @@ const glideRatio = (mph: number, fpm: number) => (mph * 88 / fpm).toFixed(1);
   <p>Module revision {mod.revision} · What a single-engine helicopter's rotor does when the engine fails, and the sequence that gets it to the ground, written for military pilots of every service. It follows the Navy's <em>Aerodynamics for Naval Aviators</em> for the rotor's behaviour and the FAA <em>Helicopter Flying Handbook</em>, as the supplementary source, for the control technique.</p>
   <p>Read the sequence, then fly it in the standalone exercise, which opens in its own window. The rotor aerodynamics behind it (the driving and driven regions of the blade) are in <a href={rotor}>Rotor-Wing Principles of Flight</a>.</p>
  </section>
+ <TrainerLaunch variant="jump" experienceId={exercise.id} label="Practise the engine failure in the autorotation exercise" />
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
   <div class="contents-groups">
    <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
@@ -281,7 +283,7 @@ const glideRatio = (mph: number, fpm: number) => (mph * 88 / fpm).toFixed(1);
   <p>Controls: <kbd>Shift</kbd> and <kbd>Ctrl</kbd> (or <kbd>W</kbd> and <kbd>S</kbd>) move the collective up and down; the up and down arrows move the cyclic forward and aft. On a phone or with a mouse, drag the two levers; a joystick or throttle can be assigned to either control.</p>
   <p>What the exercise practises: outcome 1, the immediate collective; outcome 2, the entry from the speed and height you choose; outcome 3, holding airspeed and rpm in the descent; outcome 4, the flare, level and cushion, which the debrief grades.</p>
   <p>It is an educational model of an invented light helicopter, not of any real type. The rotor's thrust, power and rpm come from simple blade-element and momentum theory, so the descent rate, the rpm response to collective and cyclic, and the cushion at the bottom behave as described above; its numbers do not. The cyclic sets a pitch attitude rather than moving the disk as a real one does. Its autorotation speed of about 55 knots, rotor rpm range of 90 to 108 percent, flare cue at 60 feet and touchdown limits are invented for the exercise. Pedals, yaw, wind, turns, density altitude, the throttle and the ground run are not modelled.</p>
-  <p class="launch"><a class="launch-button" href={trainerHref} target="_blank" rel="noopener" data-experience-launch data-experience-id={exercise.id}>Launch the autorotation exercise<span> (opens in a new window)</span></a></p>
+  <TrainerLaunch href={trainerHref} experienceId={exercise.id} label="Launch the autorotation exercise" />
  </section>
 
  <h2 id="check">Check your understanding</h2>
@@ -331,10 +333,6 @@ const glideRatio = (mph: number, fpm: number) => (mph * 88 / fpm).toFixed(1);
 <style>
  .contents-groups ol { columns: auto; }
  .steps li { margin-block: 0.5rem; }
- .launch { margin-block: 1.5rem; }
- .launch-button { display: inline-flex; flex-wrap: wrap; align-items: center; min-height: 3rem; padding: 0.6rem 1.2rem; color: #fff; background: var(--color-text); font-weight: 700; font-size: 1.1rem; text-decoration: none; }
- .launch-button span { font-weight: 400; font-size: 0.95rem; }
- .launch-button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
  kbd { font-family: var(--font-mono, monospace); font-size: 0.85em; border: 1px solid var(--color-rule, #ccc); border-bottom-width: 2px; border-radius: 3px; padding: 0 0.3em; }
  .natops .track { fill: none; stroke: #c2410c; stroke-width: 5; stroke-linecap: round; opacity: 0.75; }
  .natops .ground { stroke: #1b1f24; stroke-width: 1.5; }
