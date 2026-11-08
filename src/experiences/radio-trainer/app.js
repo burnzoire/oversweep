@@ -1,3 +1,4 @@
+import {loadNeuralVoice,playNeuralVoice,stopNeuralVoice} from './neural-voice.js';
 import { installRecognitionContext, selectTranscript, FALCON_GROUND } from './lessons/radio/context.mjs';
 import { INITIAL, advance, instruction } from './lessons/radio/model.mjs';
 const $ = id => document.getElementById(id);
@@ -29,7 +30,19 @@ function populateVoices(){
  for(const v of voices) $('voices').add(new Option(v.name+' · '+v.lang,v.voiceURI));
  if(voices.some(v=>v.voiceURI===prev))$('voices').value=prev;
 }
-function speak(text){
+async function speak(text){
+ if($('neuralEnabled').checked){
+  const start=performance.now();
+  try{
+   if('speechSynthesis' in window)speechSynthesis.cancel();
+   status('SYNTHESISING');
+   await playNeuralVoice(text,{voice:$('neuralVoice').value,radio:$('radioFilter').checked,onStart:()=>{
+    $('ttsMs').textContent=Math.round(performance.now()-start)+' ms';status('RECEIVING');beep();
+   }});
+   status('READY');return;
+  }catch(e){$('neuralStatus').textContent='Neural synthesis failed: '+e.message+' — using browser voice.';status('READY');}
+ }
+
  if(!$('voice').checked||!('speechSynthesis' in window))return;
  const start=performance.now();
  try {
@@ -112,7 +125,15 @@ async function loadModel(){
 $('ptt').addEventListener('click',startRecording);
 $('send').addEventListener('click',()=>transmit($('text').value));
 $('text').addEventListener('keydown',e=>{if(e.key==='Enter')transmit($('text').value);});
-$('reset').addEventListener('click',()=>{state=structuredClone(INITIAL);if(recording)recognizer?.stop();if('speechSynthesis' in window)speechSynthesis.cancel();$('log').replaceChildren();$('text').value='';lastAtc='';showState();note('Exercise reset. Contact Falcon Ground when ready.');log('atc','Falcon Ground monitoring.');});
+$('loadVoice').addEventListener('click',async()=>{
+ $('loadVoice').disabled=true;
+ try{
+  await loadNeuralVoice(message=>{$('neuralStatus').textContent=message;});
+  $('neuralEnabled').disabled=false;$('neuralEnabled').checked=true;
+ }catch(e){$('neuralStatus').textContent='Neural voice unavailable: '+e.message+'. Browser voice remains available.';$('neuralEnabled').checked=false;}
+ finally{$('loadVoice').disabled=false;}
+});
+$('reset').addEventListener('click',()=>{stopNeuralVoice();state=structuredClone(INITIAL);if(recording)recognizer?.stop();if('speechSynthesis' in window)speechSynthesis.cancel();$('log').replaceChildren();$('text').value='';lastAtc='';showState();note('Exercise reset. Contact Falcon Ground when ready.');log('atc','Falcon Ground monitoring.');});
 $('replay').addEventListener('click',()=>{if(lastAtc)speak(lastAtc);else note('No previous controller response to replay.');});
 $('loadLLM').addEventListener('click',loadModel);
 $('llmEnabled').addEventListener('change',()=>{if($('llmEnabled').checked&&!localEngine){$('llmEnabled').checked=false;note('Load the local LLM before enabling it.');}});
