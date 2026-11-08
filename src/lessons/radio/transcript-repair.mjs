@@ -31,7 +31,7 @@ export function proposeAtcTranscript(raw,stage='parked',scenario=FALCON_GROUND) 
  if(words.length===2) {
   const agencyMatch=text.match(/^\s*(Falcon)\s+([A-Za-z]+)\b/i);
   if(agencyMatch && agencyMatch[1].toLowerCase()===words[0].toLowerCase()
-     && editDistance(lower(agencyMatch[2]),lower(words[1]))<=2
+     && (editDistance(lower(agencyMatch[2]),lower(words[1]))<=2 || /^(grant|grand|grounds|grind)$/i.test(agencyMatch[2]))
      && lower(agencyMatch[2])!==lower(words[1])) {
    const replacement=agencyMatch[1]+' '+words[1];
    text=text.replace(agencyMatch[0],agencyMatch[0].replace(agencyMatch[1]+' '+agencyMatch[2],replacement));
