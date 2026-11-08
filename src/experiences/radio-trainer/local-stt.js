@@ -91,13 +91,19 @@ export async function discardCapture() {
 export function atcPrompt(stage) {
  const c=FALCON_GROUND;
  const phase=activePhrases(stage).slice(-1).map(x=>x.phrase).join(' ');
- // Prioritize core facts before broad vocabulary: Whisper prompt context is
- // limited and support is model/runtime dependent, not guaranteed.
+ // Supply all known scenario terminology BEFORE inference. Prompt-token support
+ // is experimental, and the worker reports when it has to fall back.
  return [
-  c.location+'.', 'Radio callsigns: '+c.aircraft[0]+', '+c.agencies[0]+', '+c.agencies[1]+'.',
-  'Runway two seven; taxiway Alpha; north ramp. Frequencies two seven five decimal eight and three one one decimal zero.',
-  'ATC phrases: request taxi, hold short, via Alpha, ready for departure, say again.',
-  phase,
+  'Airfield: '+c.location+'.',
+  'Radio agencies: '+c.agencies.join(', ')+'.',
+  'Pilot callsigns: '+c.aircraft.join(', ')+'.',
+  'Active runway: '+c.runway+'.',
+  'Taxiways: '+c.taxiways.join(', ')+'.',
+  'Frequencies: '+c.frequencies.join(', ')+'.',
+  'Location north ramp. Wind two six zero at eight.',
+  'Airfield terms: '+c.terms.join(', ')+'.',
+  'NATO phonetic alphabet: '+c.phonetics.join(', ')+'.',
+  'Current radio sequence: '+phase+'.',
  ].join(' ');
 }
 export async function transcribeLocal(samples,stage,onProgress=()=>{}) {
