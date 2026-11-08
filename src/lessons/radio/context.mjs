@@ -70,3 +70,22 @@ export function selectTranscript(alternatives) {
   const primary=candidates[0];
   return {transcript:primary.transcript,ambiguous:NUMBER_CALLSIGN.test(primary.transcript),source:'primary'};
 }
+
+export function atcPrompt(stage) {
+ const c=FALCON_GROUND;
+ const phase=activePhrases(stage).slice(-1).map(x=>x.phrase).join(' ');
+ // Supply all known scenario terminology BEFORE inference. Prompt-token support
+ // is experimental, and the worker reports when it has to fall back.
+ return [
+  'Current radio sequence: '+phase+'.',
+  'Airfield: '+c.location+'.',
+  'Radio agencies: '+c.agencies.join(', ')+'.',
+  'Pilot callsigns: '+c.aircraft.join(', ')+'.',
+  'Active runway: '+c.runway+'.',
+  'Taxiways: '+c.taxiways.join(', ')+'.',
+  'Frequencies: '+c.frequencies.join(', ')+'.',
+  'Location north ramp. Wind two six zero at eight.',
+  'Airfield terms: '+c.terms.join(', ')+'.',
+  'NATO phonetic alphabet: '+c.phonetics.join(', ')+'.',
+ ].join(' ');
+}
