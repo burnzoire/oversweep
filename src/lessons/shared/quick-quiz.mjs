@@ -4,6 +4,8 @@
 // question has been answered correctly the round ends and the next click
 // starts a new one.
 
+import { plainText } from './term-text.mjs';
+
 // The question order, without the DOM. `random` returns [0, 1) like Math.random.
 export function questionPool(items, random = Math.random) {
   let left = [...items], last;
@@ -91,7 +93,7 @@ export function quickQuiz(ui, spec) {
 export function termQuiz(root, { hideTerm = false } = {}) {
   const terms = [...document.querySelectorAll('dl.jargon > div')].map((d) => ({
     // A <Term> link's hidden preview is not part of the word.
-    term: (d.querySelector('dt .term-link') ?? d.querySelector('dt')).textContent.trim(), meaning: d.querySelector('dd').textContent.trim(),
+    term: (d.querySelector('dt .term-link') ?? d.querySelector('dt')).textContent.trim(), meaning: plainText(d.querySelector('dd')),
   }));
   quickQuiz({
     prompt: root.querySelector('[data-prompt]'), choices: root.querySelector('[data-choices]'),
