@@ -44,7 +44,7 @@ export async function checkExperiences({ dist, experiences, review = false, base
         if (await read(file) !== null) problems.push(`${e.id} is excluded but ${file} was emitted.`);
       continue;
     }
-    const unlisted = e.publication === "unlisted" && !review;
+    const unlisted = e.publication === "unlisted";
     const marker = `data-experience-id="${e.id}"`;
     const revision = `data-experience-revision="${e.revision}"`;
     const pages = {
