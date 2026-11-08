@@ -4,6 +4,7 @@ import { INITIAL, advance, instruction } from './lessons/radio/model.mjs';
 const $ = id => document.getElementById(id);
 let state = structuredClone(INITIAL);
 let recognizer = null, recording = false, lastAtc = '', voices = [], audio = null, localEngine = null, lastSpeechStart = 0;
+let contextualPhrasesDisabled = false, recognitionRetryPending = false, recognitionStoppedByUser = false;
 function note(text,kind='') { $('result').textContent=text; $('result').dataset.kind=kind; }
 function status(text){ $('status').textContent=text; }
 function log(kind,text) {
@@ -85,14 +86,15 @@ async function transmit(text){
  lastAtc=controller;log('atc',controller);speak(controller);
  $('text').value='';$('send').disabled=false;inFlight=false;
 }
-async function startRecording(){
+async function startRecording({retryWithoutPhrases=false}={}){
  const Speech=window.SpeechRecognition||window.webkitSpeechRecognition;
  if(!Speech){$('sttStatus').textContent='Unavailable';note('This browser has no SpeechRecognition API. Use typed transmissions.');return;}
- if(recording){recognizer?.stop();return;}
+ if(recording && !retryWithoutPhrases){recognitionStoppedByUser=true;recognizer?.stop();return;}
  try{
   recognizer=new Speech();recognizer.lang='en-US';recognizer.continuous=false;recognizer.interimResults=false;recognizer.maxAlternatives=5;
-  const context=installRecognitionContext(recognizer,state.stage,window);
-  $('sttStatus').textContent=context.supported?`Context loaded: ${context.count} known phrases`:'Browser has no contextual biasing; recognition alternatives enabled';
+  if(!retryWithoutPhrases)recognitionStoppedByUser=false;
+  const context=contextualPhrasesDisabled?{supported:false,count:0}:installRecognitionContext(recognizer,state.stage,window);
+  $('sttStatus').textContent=contextualPhrasesDisabled?'Phrase bias unavailable; recognition alternatives enabled':context.supported?`Context loaded: ${context.count} known phrases`:'Browser has no contextual biasing; recognition alternatives enabled';
   recognizer.onstart=()=>{recording=true;lastSpeechStart=performance.now();$('ptt').textContent='Release transmission';$('ptt').classList.add('recording');$('micState').textContent='Listening…';$('sttStatus').textContent='Listening (browser STT)';status('TRANSMITTING');};
   recognizer.onresult=e=>{
    const candidates=Array.from(e.results[e.results.length-1],a=>({transcript:a.transcript,confidence:a.confidence}));
@@ -104,8 +106,29 @@ async function startRecording(){
    $('micState').textContent=selected.ambiguous?'Uncertain callsign: confirm/correct transcript before sending.':'Transcript captured. Review and transmit text.';
    if(selected.ambiguous)note('Ambiguous number recognised (e.g., 5421). Expected callsign is '+FALCON_GROUND.aircraft[0]+'. Please confirm what you actually said; no automatic correction was made.');
   };
-  recognizer.onerror=e=>{note('Speech recognition: '+e.error+'. Browser recognition can require network access.');$('sttStatus').textContent='Error: '+e.error;};
-  recognizer.onend=()=>{recording=false;$('ptt').textContent='Push to talk';$('ptt').classList.remove('recording');status('READY');if($('micState').textContent==='Listening…')$('micState').textContent='Not recording';};
+  recognizer.onerror=e=>{
+   if(e.error==='phrases-not-supported' && !contextualPhrasesDisabled && !recognitionStoppedByUser){
+    contextualPhrasesDisabled=true;
+    recognitionRetryPending=true;
+    $('sttStatus').textContent='Phrase bias unsupported; retrying without hints';
+    $('micState').textContent='Reconnecting recognition…';
+    note('This browser rejected contextual phrases. Automatically retrying without them; callsign alternatives remain enabled.');
+    return;
+   }
+   note('Speech recognition: '+e.error+'. Browser recognition can require network access.');$('sttStatus').textContent='Error: '+e.error;
+  };
+  recognizer.onend=()=>{
+   recording=false;
+   $('ptt').textContent='Push to talk';$('ptt').classList.remove('recording');status('READY');
+   if(recognitionRetryPending){
+    recognitionRetryPending=false;
+    if(!recognitionStoppedByUser){
+     startRecording({retryWithoutPhrases:true});
+     return;
+    }
+   }
+   if($('micState').textContent==='Listening…'||$('micState').textContent==='Reconnecting recognition…')$('micState').textContent='Not recording';
+  };
   recognizer.start();
  }catch(e){note('Microphone unavailable: '+e.message);$('sttStatus').textContent='Failed';}
 }
@@ -133,7 +156,7 @@ $('loadVoice').addEventListener('click',async()=>{
  }catch(e){$('neuralStatus').textContent='Neural voice unavailable: '+e.message+'. Browser voice remains available.';$('neuralEnabled').checked=false;}
  finally{$('loadVoice').disabled=false;}
 });
-$('reset').addEventListener('click',()=>{stopNeuralVoice();state=structuredClone(INITIAL);if(recording)recognizer?.stop();if('speechSynthesis' in window)speechSynthesis.cancel();$('log').replaceChildren();$('text').value='';lastAtc='';showState();note('Exercise reset. Contact Falcon Ground when ready.');log('atc','Falcon Ground monitoring.');});
+$('reset').addEventListener('click',()=>{stopNeuralVoice();state=structuredClone(INITIAL);if(recording){recognitionStoppedByUser=true;recognitionRetryPending=false;recognizer?.stop();}if('speechSynthesis' in window)speechSynthesis.cancel();$('log').replaceChildren();$('text').value='';lastAtc='';showState();note('Exercise reset. Contact Falcon Ground when ready.');log('atc','Falcon Ground monitoring.');});
 $('replay').addEventListener('click',()=>{if(lastAtc)speak(lastAtc);else note('No previous controller response to replay.');});
 $('loadLLM').addEventListener('click',loadModel);
 $('llmEnabled').addEventListener('change',()=>{if($('llmEnabled').checked&&!localEngine){$('llmEnabled').checked=false;note('Load the local LLM before enabling it.');}});
