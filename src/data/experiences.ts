@@ -6,7 +6,7 @@ import registry from './experiences.json';
 // `launch: 'window'` experiences open in their own window and are never framed;
 // the default embeds them in the Manual page.
 export type Experience = (typeof registry)[number] & {
-  publication: 'published' | 'excluded';
+  publication: 'published' | 'excluded' | 'unlisted';
   launch?: 'embed' | 'window';
 };
 
@@ -15,7 +15,8 @@ export type Experience = (typeof registry)[number] & {
 export const reviewTrainers = import.meta.env.DEV || process.env.OVERSWEEP_REVIEW_TRAINERS === '1';
 
 export const experiences = registry as Experience[];
-export const includedExperiences = experiences.filter(e => e.publication === 'published' || reviewTrainers);
+export const includedExperiences = experiences.filter(e => e.publication !== 'excluded' || reviewTrainers);
+export const listedExperiences = includedExperiences.filter(e => e.publication !== 'unlisted');
 
 export const experienceRoute = (e: Experience) => `manual/${e.subject}/${e.slug}/`;
 export const experienceFrame = (e: Experience) => `experiences/${e.slug}/`;

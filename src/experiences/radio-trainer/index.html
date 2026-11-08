@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Unlisted military radio trainer proof of concept.">
+<title>Radio communications | Oversweep prototype</title>
+<link rel="stylesheet" href="style.css">
+<link rel="modulepreload" href="lessons/radio/model.mjs">
+<script defer type="module" src="app.js"></script>
+</head>
+<body>
+<div class="banner">OVERSWEEP / EXPERIMENTAL — DRAFTED, NOT TECHNICALLY VALIDATED · FICTIONAL RADIO PROCEDURES</div>
+<header>
+  <div><p class="eyebrow">OVERSWEEP / PRACTICE / 001</p><h1>Radio communications</h1><p class="sub">Military airfield · Live voice feasibility exercise</p></div>
+  <div class="right"><span class="indicator" id="status">READY</span><button id="reset" type="button">Restart</button></div>
+</header>
+<main>
+<div class="columns">
+<section class="board">
+  <div class="panel-header"><strong>FALCON GROUND</strong><span class="mono">275.800 MHz · UHF</span></div>
+  <div class="readouts">
+    <div><label>Aircraft</label><strong>VIPER 21</strong></div><div><label>Location</label><strong>North ramp</strong></div>
+    <div><label>Runway</label><strong>27</strong></div><div><label>Conditions</label><strong>VMC / 260° 08 kt</strong></div>
+  </div>
+  <div class="section-head"><strong>Radio traffic</strong><button type="button" id="replay">Replay last ATC</button></div>
+  <div id="log" class="log" aria-label="Radio transcript" aria-live="polite"></div>
+  <div class="section-head"><strong>Your transmission</strong><span id="micState" class="small">Not recording</span></div>
+  <div class="transmit">
+    <button type="button" id="ptt" class="primary">Push to talk</button>
+    <input id="text" aria-label="Typed radio transmission" placeholder="Speak or type your radio call…" maxlength="500">
+    <button type="button" id="send">Transmit text</button>
+  </div>
+  <p class="small">Microphone recognition uses the browser's SpeechRecognition API and may process audio remotely. Text mode is always available.</p>
+  <div class="result" id="result" role="status">Contact Falcon Ground when ready.</div>
+</section>
+<aside>
+  <div class="sideblock"><p class="eyebrow">CURRENT TASK</p><p id="task">Contact Falcon Ground and request taxi.</p></div>
+  <div class="sideblock"><p class="eyebrow">RESPONSE ENGINE</p>
+    <label class="setting"><input type="checkbox" id="llmEnabled"> Experimental local LLM wording</label>
+    <button type="button" id="loadLLM">Load model (optional)</button>
+    <p class="small" id="llmStatus">Deterministic radio controller active. LLM is optional and cannot change clearances.</p>
+  </div>
+  <div class="sideblock"><p class="eyebrow">ATC AUDIO</p>
+    <label class="setting"><input type="checkbox" checked id="voice">Spoken controller</label>
+    <label class="setting"><input type="checkbox" checked id="key">Radio key tones</label>
+    <label for="voices" class="small">Installed voice</label>
+    <select id="voices"><option value="">System voice</option></select>
+    <p class="small">Browser TTS baseline. Neural TTS is not yet validated in this host build.</p>
+  </div>
+  <div class="sideblock"><p class="eyebrow">DIAGNOSTICS</p><dl>
+    <dt>Recognition</dt><dd id="sttStatus">Not tested</dd>
+    <dt>STT latency</dt><dd id="sttMs">—</dd>
+    <dt>Controller latency</dt><dd id="modelMs">—</dd>
+    <dt>TTS start latency</dt><dd id="ttsMs">—</dd>
+    <dt>Turns / errors</dt><dd id="scores">0 / 0</dd>
+  </dl></div>
+</aside>
+</div>
+<p class="disclaimer">This is an unlisted technical POC, not a training-qualified military aviation procedure or a substitute for applicable published guidance. No API key or backend is used.</p>
+</main>
+</body>
+</html>

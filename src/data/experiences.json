@@ -5,8 +5,8 @@
     "slug": "case-iii",
     "subject": "naval-operations",
     "revision": 9,
-    "title": "Case III \u2014 Tomcat recovery exercise",
-    "maturity": "Drafted \u2014 not technically validated",
+    "title": "Case III — Tomcat recovery exercise",
+    "maturity": "Drafted — not technically validated",
     "publication": "published",
     "launch": "window",
     "objective": "Practise modeled navigation, timing, radio choices and configuration in a synthetic recovery scenario.",
@@ -27,7 +27,7 @@
       "objective": "Understand the fixed-wing recovery sequence, marshal, navigation, timing, communications and recovery outcomes; then practise selected skills in a standalone Tomcat exercise.",
       "applicability": "Aircraft-agnostic fixed-wing concepts with historical US Navy training examples; type-specific procedures remain separate.",
       "revision": 3,
-      "maturity": "Drafted \u2014 not technically validated"
+      "maturity": "Drafted — not technically validated"
     }
   },
   {
@@ -36,8 +36,8 @@
     "slug": "autorotation",
     "subject": "flight-fundamentals",
     "revision": 3,
-    "title": "Autorotation \u2014 engine failure exercise",
-    "maturity": "Drafted \u2014 not technically validated",
+    "title": "Autorotation — engine failure exercise",
+    "maturity": "Drafted — not technically validated",
     "publication": "published",
     "launch": "window",
     "objective": "Fly a helicopter engine failure to the ground in a side view: lower the collective, set the autorotation airspeed, keep rotor rpm in the green, then flare, level and cushion.",
@@ -46,7 +46,7 @@
       "Collective and cyclic",
       "Rotor rpm",
       "Autorotation regions",
-      "Height\u2013velocity diagram"
+      "Height–velocity diagram"
     ],
     "assets": [
       "frame-guard.js",
@@ -60,7 +60,7 @@
       "objective": "Understand what an engine failure does to a helicopter's rotor and the sequence that answers it, entry, steady descent, flare and touchdown, and how the right first cyclic input depends on the speed you start from; then fly it in a standalone exercise.",
       "applicability": "Single-rotor helicopters with a freewheeling unit, for military pilots of every service; each type's flight manual gives its own autorotation airspeed, rotor rpm and technique.",
       "revision": 2,
-      "maturity": "Drafted \u2014 not technically validated",
+      "maturity": "Drafted — not technically validated",
       "group": "Rotor wing"
     }
   },
@@ -70,8 +70,8 @@
     "slug": "instrument-trainer",
     "subject": "instrument-flight",
     "revision": 4,
-    "title": "Instrument trainer \u2014 hand-flown ILS",
-    "maturity": "Drafted \u2014 not technically validated",
+    "title": "Instrument trainer — hand-flown ILS",
+    "maturity": "Drafted — not technically validated",
     "publication": "published",
     "launch": "window",
     "objective": "Hand-fly an ILS from the localizer intercept to the decision altitude with only the instrument panel, finding the drift correction for an unknown wind, and make the land or go-missed decision at the DA.",
@@ -103,7 +103,35 @@
       "objective": "Practise instrument flying on a generic panel with nothing outside the window. The first exercise is the hand-flown ILS: intercept, track both needles to the DA, respect the needle limits, and decide.",
       "applicability": "Generic instrument procedures for military fixed-wing pilots of every service; your service's instrument manual, the aircraft's flight manual and the published procedure govern real approaches.",
       "revision": 1,
-      "maturity": "Drafted \u2014 not technically validated"
+      "maturity": "Drafted — not technically validated"
+    }
+  },
+  {
+    "id": "experience.radio-trainer",
+    "manualId": "manual.radio-trainer",
+    "slug": "radio-trainer",
+    "subject": "airfield-operations",
+    "revision": 1,
+    "title": "Military Radio Communications — experimental prototype",
+    "maturity": "Drafted — not technically validated",
+    "publication": "unlisted",
+    "launch": "window",
+    "objective": "Test voice-driven military ground-controller exchanges with a fictional airfield.",
+    "applicability": "Fictional US-oriented military airfield demonstration; not an approved ATC procedure or simulator-specific implementation.",
+    "prerequisites": [
+      "Basic radio operation"
+    ],
+    "assets": [
+      "app.js",
+      "style.css",
+      "lessons/radio/model.mjs"
+    ],
+    "module": {
+      "title": "Military Radio Communications",
+      "objective": "Prototype a spoken exchange with a fictional military ground controller.",
+      "applicability": "Fictional military radio POC, not validated procedures.",
+      "revision": 1,
+      "maturity": "Drafted — not technically validated"
     }
   }
 ]

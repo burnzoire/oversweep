@@ -11,6 +11,21 @@ for (const base of ['/', '/oversweep/']) {
     const origin = `http://127.0.0.1:${server.address.port}`;
     for (const e of experiences) {
       const route = `${base}manual/${e.subject}/${e.slug}/`;
+      if (e.publication === "unlisted") {
+        const frameUrl = `${origin}${base}experiences/${e.slug}/`;
+        const frame = await request(frameUrl);
+        assert.equal(frame.status, 200, frameUrl);
+        const frameHTML = await frame.text();
+        assert(frameHTML.includes(`data-experience-id="${e.id}"`));
+        assert(frameHTML.includes('name="robots" content="noindex,nofollow"'));
+        const assetBase = new URL(frameHTML.match(/<base href="([^"]+)"/)?.[1], frame.url);
+        for (const asset of e.assets) {
+          const response = await request(new URL(asset, assetBase));
+          assert.equal(response.status, 200, `${asset} resolves for unlisted experience`);
+        }
+        console.log(`Unlisted experience HTTP routes: PASS (${e.slug}, ${base})`);
+        continue;
+      }
       const page = await request(`${origin}${route}`);
       assert.equal(page.status, 200, route);
       const html = await page.text();

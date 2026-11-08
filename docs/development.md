@@ -82,6 +82,7 @@ specific experience. Each entry declares `publication` separately from `maturity
   Manual route, trainer frame, every listed asset and the subject and Training
   Library listings are emitted, carry the registered id and revision, and show the
   registered maturity to readers.
+- `unlisted` ships only its direct `experiences/<slug>/` frame and declared assets in normal and review builds. It must include `noindex,nofollow`, and cannot create a Manual wrapper or appear in Manual, Training Library or homepage counts. This is public-by-URL, **not access control**: use only for owner-approved experimental content, never private information. Existing generated-output checks enforce route and link exclusion. The owner must explicitly approve publication of the direct URL before merging.
 - `excluded` ships only in explicit local review builds
   (`OVERSWEEP_REVIEW_TRAINERS=1 npm run check:review`). The production check fails
   if any output file references it.

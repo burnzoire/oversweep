@@ -35,15 +35,16 @@ export async function checkExperiences({ dist, experiences, review = false, base
     throw error;
   });
   const problems = [];
-  const excluded = experiences.filter((e) => e.publication !== "published" && !review);
+  const excluded = experiences.filter((e) => e.publication === "excluded" && !review);
   for (const e of experiences) {
-    if (!["published", "excluded"].includes(e.publication)) problems.push(`${e.id}: unknown publication "${e.publication}".`);
+    if (!["published", "excluded", "unlisted"].includes(e.publication)) problems.push(`${e.id}: unknown publication "${e.publication}".`);
     if (![undefined, "embed", "window"].includes(e.launch)) problems.push(`${e.id}: unknown launch "${e.launch}".`);
     if (excluded.includes(e)) {
       for (const file of [`${route(e)}index.html`, `${frame(e)}index.html`, ...e.assets.map((a) => frame(e) + a)])
         if (await read(file) !== null) problems.push(`${e.id} is excluded but ${file} was emitted.`);
       continue;
     }
+    const unlisted = e.publication === "unlisted";
     const marker = `data-experience-id="${e.id}"`;
     const revision = `data-experience-revision="${e.revision}"`;
     const pages = {
@@ -53,6 +54,11 @@ export async function checkExperiences({ dist, experiences, review = false, base
       "Training Library": await read("training/index.html"),
     };
     for (const [name, html] of Object.entries(pages)) {
+      if (unlisted && name !== "frame") {
+        if (name === "wrapper" && html !== null) problems.push(`${e.id}: unlisted Manual wrapper was emitted.`);
+        if (name !== "wrapper" && html && (html.includes(marker) || html.includes(`${base}/${route(e)}`) || html.includes(`${base}/${frame(e)}`))) problems.push(`${e.id}: unlisted link leaked into ${name}.`);
+        continue;
+      }
       if (html === null) { problems.push(`${e.id}: ${name} page is missing.`); continue; }
       if (!html.includes(marker) || !html.includes(revision))
         problems.push(`${e.id}: ${name} lacks the registered id or revision ${e.revision}.`);
@@ -60,14 +66,16 @@ export async function checkExperiences({ dist, experiences, review = false, base
         problems.push(`${e.id}: ${name} does not show maturity "${e.maturity}".`);
     }
     const href = `href="${base}/${route(e)}"`;
-    for (const name of ["subject index", "Training Library"])
+    for (const name of (unlisted ? [] : ["subject index", "Training Library"]))
       if (pages[name] && !pages[name].includes(href)) problems.push(`${e.id}: ${name} does not link to ${base}/${route(e)}.`);
     // Window-only experiences must be linked in a new window and never framed.
-    if (pages.wrapper && e.launch === "window") {
+    if (unlisted && pages.frame && !pages.frame.includes('name="robots" content="noindex,nofollow"')) problems.push(`${e.id}: unlisted frame lacks noindex.`);
+    if (unlisted) { /* no wrapper by design */ }
+    else if (pages.wrapper && e.launch === "window") {
       if (!launchLink(pages.wrapper, `${base}/${frame(e)}`))
         problems.push(`${e.id}: wrapper does not link to ${base}/${frame(e)} in a new window.`);
       if (/<iframe\b/.test(pages.wrapper)) problems.push(`${e.id}: wrapper frames a window-only experience.`);
-    } else if (pages.wrapper && !new RegExp(`<iframe[^>]*src="${base}/${frame(e)}"`).test(pages.wrapper))
+    } else if (!unlisted && pages.wrapper && !new RegExp(`<iframe[^>]*src="${base}/${frame(e)}"`).test(pages.wrapper))
       problems.push(`${e.id}: wrapper does not embed ${base}/${frame(e)}.`);
     for (const asset of e.assets) {
       if (!(await read(frame(e) + asset))?.trim()) problems.push(`${e.id}: asset ${asset} is missing or empty.`);
