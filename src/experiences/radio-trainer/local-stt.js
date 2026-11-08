@@ -2,7 +2,7 @@ import {downsample,concatChunks,durationSeconds,TARGET_RATE} from './lessons/rad
 import {atcPrompt} from './lessons/radio/context.mjs';
 
 const MAX_SECONDS=25;
-const requestTimeout=120000;
+const requestTimeout=300000;
 let worker=null,seq=0,pending=new Map(),current=null,loaded=false;
 function promiseRequest(type,payload={},onProgress=()=>{}) {
  if(!worker){
@@ -52,8 +52,12 @@ export async function startCapture(onStatus=()=>{}) {
   node.port.onmessage=event=>{
    if(current!==recording)return;
    const chunk=new Float32Array(event.data);
-   recording.chunks.push(chunk);recording.samples+=chunk.length;
-   if(recording.samples/recording.rate>=MAX_SECONDS){
+   if(recording.samples >= MAX_SECONDS*recording.rate)return;
+   const remaining=Math.max(0,Math.floor(MAX_SECONDS*recording.rate-recording.samples));
+   const accepted=chunk.length<=remaining?chunk:chunk.subarray(0,remaining);
+   recording.chunks.push(accepted);recording.samples+=accepted.length;
+   if(recording.samples >= MAX_SECONDS*recording.rate && !recording.limitNotified){
+    recording.limitNotified=true;
     onStatus('Maximum transmission length reached. Release PTT to transcribe.');
    }
   };
