@@ -18,7 +18,7 @@ const lower=s=>s.toLowerCase().replace(/[.,!?]/g,'').replace(/\s+/g,' ').trim();
 const clearTaxiIntent=s=>/\b(?:request|ready)\s+(?:for\s+)?taxi\b/i.test(s);
 const clearActiveAgency=s=>/\bfalcon\s+ground\b/i.test(s);
 const explicitCallsign=s=>/\bviper\s*(?:two\s*one|twenty\s*one|2\s*1|21)\b/i.test(s);
-const numericAlias=/\b(?:521|5\s*21|five\s*two\s*one)\b/i;
+const numericAlias=/^\s*Falcon\s+Ground[,\s]+(521|5\s*21|five\s*two\s*one)\b/i;
 
 /** Return a proposed transcript for confirmation; never infer unrelated numbers. */
 export function proposeAtcTranscript(raw,stage='parked',scenario=FALCON_GROUND) {
@@ -44,8 +44,10 @@ export function proposeAtcTranscript(raw,stage='parked',scenario=FALCON_GROUND) 
      && !explicitCallsign(text) && scenario.aircraft.includes('Viper 21')
      && numericAlias.test(text)) {
   const match=text.match(numericAlias);
-  text=text.replace(numericAlias,'Viper 21');
-  changes.push({field:'callsign',from:match[0],to:'Viper 21'});
+  const originalDigits=match[1];
+  const matchedPrefix=match[0];
+  text=matchedPrefix.replace(originalDigits,'Viper 21')+text.slice(matchedPrefix.length);
+  changes.push({field:'callsign',from:originalDigits,to:'Viper 21'});
  }
  return {raw:original,text,changes,reviewRequired:changes.length>0};
 }
