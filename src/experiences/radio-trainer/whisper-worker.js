@@ -1,6 +1,6 @@
 // Dedicated local transcription worker. Only model files and JS dependencies are
 // downloaded; microphone samples are passed directly to browser inference.
-const TRANSFORMERS_CDN = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1/+esm';
+const TRANSFORMERS_CDN = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1';
 const MODEL = 'Xenova/whisper-tiny.en';
 let pipe = null;
 let loading = null;
