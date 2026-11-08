@@ -25,7 +25,7 @@ test('unsupported prompt context is retried locally without multilingual options
    if(opts.prompt_ids)throw new Error('prompt_ids not supported');
    return {text:'  Viper 21 request taxi  '};
  };
- englishOnly.tokenizer={encode:()=>[12,13]};
+ englishOnly.tokenizer={encode:text=>text==='<|startofprev|>'?[99]:[99,12,13]};
  const response=await transcribeEnglishOnly(englishOnly,new Float32Array(3200),'Viper Two One');
  assert.equal(response.text,'Viper 21 request taxi');
  assert.equal(response.contextApplied,false);
