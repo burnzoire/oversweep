@@ -111,7 +111,7 @@
     "manualId": "manual.radio-trainer",
     "slug": "radio-trainer",
     "subject": "airfield-operations",
-    "revision": 4,
+    "revision": 5,
     "title": "Military Radio Communications — experimental prototype",
     "maturity": "Drafted — not technically validated",
     "publication": "unlisted",
@@ -131,13 +131,14 @@
       "pcm-capture.js",
       "whisper-worker.js",
       "lessons/radio/audio.mjs",
-      "lessons/radio/whisper-inference.mjs"
+      "lessons/radio/whisper-inference.mjs",
+      "lessons/radio/transcript-repair.mjs"
     ],
     "module": {
       "title": "Military Radio Communications",
       "objective": "Prototype a spoken exchange with a fictional military ground controller.",
       "applicability": "Fictional military radio POC, not validated procedures.",
-      "revision": 4,
+      "revision": 5,
       "maturity": "Drafted — not technically validated"
     }
   }
