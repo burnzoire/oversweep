@@ -125,6 +125,13 @@
       "app.js",
       "style.css",
       "lessons/radio/model.mjs"
-    ]
+    ],
+    "module": {
+      "title": "Military Radio Communications",
+      "objective": "Prototype a spoken exchange with a fictional military ground controller.",
+      "applicability": "Fictional military radio POC, not validated procedures.",
+      "revision": 1,
+      "maturity": "Drafted — not technically validated"
+    }
   }
 ]
