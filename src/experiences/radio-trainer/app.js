@@ -1,9 +1,11 @@
 import {loadNeuralVoice,playNeuralVoice,stopNeuralVoice} from './neural-voice.js';
-import { installRecognitionContext, selectTranscript, FALCON_GROUND } from './lessons/radio/context.mjs';
+import { selectTranscript, FALCON_GROUND } from './lessons/radio/context.mjs';
+import { loadLocalSTT, isSTTReady, isCapturing, startCapture, stopCapture, discardCapture, transcribeLocal } from './local-stt.js';
 import { INITIAL, advance, instruction } from './lessons/radio/model.mjs';
 const $ = id => document.getElementById(id);
 let state = structuredClone(INITIAL);
-let recognizer = null, recording = false, lastAtc = '', voices = [], audio = null, localEngine = null, lastSpeechStart = 0;
+let recording = false, lastAtc = '', voices = [], audio = null, localEngine = null;
+let busySTT = false;
 function note(text,kind='') { $('result').textContent=text; $('result').dataset.kind=kind; }
 function status(text){ $('status').textContent=text; }
 function log(kind,text) {
@@ -85,29 +87,54 @@ async function transmit(text){
  lastAtc=controller;log('atc',controller);speak(controller);
  $('text').value='';$('send').disabled=false;inFlight=false;
 }
+function updatePTTState(active) {
+ recording=active;
+ $('ptt').textContent=active?'Release transmission':'Push to talk';
+ $('ptt').classList.toggle('recording',active);
+}
 async function startRecording(){
- const Speech=window.SpeechRecognition||window.webkitSpeechRecognition;
- if(!Speech){$('sttStatus').textContent='Unavailable';note('This browser has no SpeechRecognition API. Use typed transmissions.');return;}
- if(recording){recognizer?.stop();return;}
+ if(busySTT)return;
+ if(isCapturing()){
+  busySTT=true;$('ptt').disabled=true;updatePTTState(false);
+  $('micState').textContent='Preparing audio…';status('TRANSCRIBING');
+  try{
+   const captured=await stopCapture();
+   $('micState').textContent='Captured '+captured.duration.toFixed(1)+' seconds of audio';
+   const result=await transcribeLocal(captured.samples,state.stage,m=>{$('sttStatus').textContent=m;});
+   const text=String(result.text||'').trim();
+   $('sttMs').textContent=result.ms+' ms';
+   const selected=selectTranscript([{transcript:text,confidence:1}]);
+   $('text').value=selected.transcript;
+   $('sttStatus').textContent=result.contextApplied?'Local Whisper · context prompt attempted':'Local Whisper · no context-token support';
+   if(result.warning)$('sttStatus').textContent+=' · fallback';
+   if(!selected.transcript){
+    note('No speech recognised. Hold PTT while speaking, or type a transmission.');
+   } else if(selected.ambiguous){
+    note('Ambiguous number recognised. Expected callsign is '+FALCON_GROUND.aircraft[0]+'. Correct the transcript if necessary.');
+   } else {
+    note('Local transcription ready. Review the text and select Transmit text.');
+   }
+  }catch(err){note('Local STT error: '+err.message);$('sttStatus').textContent='Failed; use text input';}
+  finally{busySTT=false;$('ptt').disabled=false;status('READY');$('micState').textContent='Not recording';}
+  return;
+ }
+ try {
+  await startCapture(message=>{$('micState').textContent=message;});
+  updatePTTState(true);$('micState').textContent='Recording on-device; click again to transcribe.';
+  $('sttStatus').textContent=isSTTReady()?'Local Whisper model ready':'Local recording; model loads after release';
+  status('TRANSMITTING');
+ }catch(err){updatePTTState(false);status('READY');note('Microphone error: '+err.message+'. You can still type your transmission.');}
+}
+async function prepareSTT(){
+ $('loadSTT').disabled=true;
  try{
-  recognizer=new Speech();recognizer.lang='en-US';recognizer.continuous=false;recognizer.interimResults=false;recognizer.maxAlternatives=5;
-  const context=installRecognitionContext(recognizer,state.stage,window);
-  $('sttStatus').textContent=context.supported?`Context loaded: ${context.count} known phrases`:'Browser has no contextual biasing; recognition alternatives enabled';
-  recognizer.onstart=()=>{recording=true;lastSpeechStart=performance.now();$('ptt').textContent='Release transmission';$('ptt').classList.add('recording');$('micState').textContent='Listening…';$('sttStatus').textContent='Listening (browser STT)';status('TRANSMITTING');};
-  recognizer.onresult=e=>{
-   const candidates=Array.from(e.results[e.results.length-1],a=>({transcript:a.transcript,confidence:a.confidence}));
-   const selected=selectTranscript(candidates);
-   const words=selected.transcript;
-   $('sttMs').textContent=Math.round(performance.now()-lastSpeechStart)+' ms';
-   $('text').value=words;
-   $('sttStatus').textContent=selected.source==='alternative'?'Recognised from context-aware alternative':'Transcript ready';
-   $('micState').textContent=selected.ambiguous?'Uncertain callsign: confirm/correct transcript before sending.':'Transcript captured. Review and transmit text.';
-   if(selected.ambiguous)note('Ambiguous number recognised (e.g., 5421). Expected callsign is '+FALCON_GROUND.aircraft[0]+'. Please confirm what you actually said; no automatic correction was made.');
-  };
-  recognizer.onerror=e=>{note('Speech recognition: '+e.error+'. Browser recognition can require network access.');$('sttStatus').textContent='Error: '+e.error;};
-  recognizer.onend=()=>{recording=false;$('ptt').textContent='Push to talk';$('ptt').classList.remove('recording');status('READY');if($('micState').textContent==='Listening…')$('micState').textContent='Not recording';};
-  recognizer.start();
- }catch(e){note('Microphone unavailable: '+e.message);$('sttStatus').textContent='Failed';}
+  await loadLocalSTT(message=>{$('sttStatus').textContent=message;});
+  $('sttStatus').textContent='Local Whisper ready';
+  note('On-device transcription model loaded. Press PTT to record.');
+ }catch(err){
+  $('sttStatus').textContent='Model unavailable';
+  note('Local model loading failed: '+err.message+'. No cloud transcription will be used. You can still type.');
+ }finally{$('loadSTT').disabled=false;}
 }
 async function loadModel(){
  if(localEngine){$('llmStatus').textContent='Local LLM already loaded.';return;}
@@ -123,6 +150,7 @@ async function loadModel(){
  finally{$('loadLLM').disabled=false;}
 }
 $('ptt').addEventListener('click',startRecording);
+$('loadSTT').addEventListener('click',prepareSTT);
 $('send').addEventListener('click',()=>transmit($('text').value));
 $('text').addEventListener('keydown',e=>{if(e.key==='Enter')transmit($('text').value);});
 $('loadVoice').addEventListener('click',async()=>{
@@ -133,10 +161,10 @@ $('loadVoice').addEventListener('click',async()=>{
  }catch(e){$('neuralStatus').textContent='Neural voice unavailable: '+e.message+'. Browser voice remains available.';$('neuralEnabled').checked=false;}
  finally{$('loadVoice').disabled=false;}
 });
-$('reset').addEventListener('click',()=>{stopNeuralVoice();state=structuredClone(INITIAL);if(recording)recognizer?.stop();if('speechSynthesis' in window)speechSynthesis.cancel();$('log').replaceChildren();$('text').value='';lastAtc='';showState();note('Exercise reset. Contact Falcon Ground when ready.');log('atc','Falcon Ground monitoring.');});
+$('reset').addEventListener('click',()=>{stopNeuralVoice();state=structuredClone(INITIAL);discardCapture();updatePTTState(false);if('speechSynthesis' in window)speechSynthesis.cancel();$('log').replaceChildren();$('text').value='';lastAtc='';showState();note('Exercise reset. Contact Falcon Ground when ready.');log('atc','Falcon Ground monitoring.');});
 $('replay').addEventListener('click',()=>{if(lastAtc)speak(lastAtc);else note('No previous controller response to replay.');});
 $('loadLLM').addEventListener('click',loadModel);
 $('llmEnabled').addEventListener('change',()=>{if($('llmEnabled').checked&&!localEngine){$('llmEnabled').checked=false;note('Load the local LLM before enabling it.');}});
 if('speechSynthesis' in window){populateVoices();speechSynthesis.addEventListener?.('voiceschanged',populateVoices);}
-$('sttStatus').textContent=(window.SpeechRecognition||window.webkitSpeechRecognition)?'Available; may be cloud-backed':'Not supported';
+$('sttStatus').textContent='Local Whisper model not loaded';
 showState();log('atc','Falcon Ground monitoring.');
