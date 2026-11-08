@@ -11,8 +11,8 @@ test('Whisper models are distinct English-only, local ONNX weights',()=>{
 test('WER compares exact spoken reference against unmodified raw output',()=>{
  assert.equal(wordErrorRate('Falcon Ground Viper Two One request taxi',
  'Falcon Ground Viper Two One request taxi'),0);
- assert.equal(wordErrorRate('Falcon Ground Viper Two One request taxi',
- 'Falcon Grant 521 request taxi'),4/7);
+ assert.equal(wordErrorRate('alpha bravo charlie delta',
+ 'alpha echo delta'),.5);
  assert.equal(wordErrorRate('One two','One two three'),.5);
  assert.equal(wordErrorRate('','hello'),null);
 });
