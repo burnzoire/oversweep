@@ -58,13 +58,3 @@ Do not mark Technically Validated or release as operational guidance based on th
 3. Test Whisper context injection with `Viper Two One` vs. `5421`, runway/frequency readbacks and noise; compare unconditioned case when prompt-token support fails.
 4. Verify every JS/ONNX dependency works within the static Pages build and under the `/oversweep/` base path.
 5. Test on-device neural audio loading separately; no published claims of natural ATC quality without listening tests.
-
-## Revision 5 — contextual transcription corrections
-
-- Real observation: Whisper output "Falcon Grant 521 request taxi." despite scenario indicating Falcon Ground / Viper 21.
-- Root limitation: previous model prompt used plain vocabulary token IDs, lacking Whisper's `<|startofprev|>` marker. The revised builder uses tokenizer-native `get_prompt_ids` where present, otherwise verifies a correctly prefixed tokenization. Actual browser model acceptance and accuracy benefit remain unverified.
-- Add reviewable, scenario-bound correction proposals. "Falcon Grant" and ambiguous "521" in the initial Ground + request taxi callsign slot can propose "Falcon Ground Viper 21 request taxi". The raw transcript and each change are shown; the text is editable and not sent until the pilot selects Transmit.
-- Numeric substitution is limited to the expected callsign position. Do not rewrite arbitrary runway, altitude, frequency or other callsign numbers.
-- Regression tests cover the exact observed line, unrelated numbers, and proper Whisper prefix formation.
-
-Still required: live browser regression against recorded audio, prompt effectiveness measurement, and protection from incorrect callsign substitutions.
