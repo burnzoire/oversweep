@@ -1,9 +1,16 @@
 import {downsample,concatChunks,durationSeconds,TARGET_RATE} from './lessons/radio/audio.mjs';
 import {atcPrompt} from './lessons/radio/context.mjs';
+import {modelFor} from './lessons/radio/whisper-models.mjs';
 
 const MAX_SECONDS=25;
 const requestTimeout=300000;
-let worker=null,seq=0,pending=new Map(),current=null,loaded=false;
+let worker=null,seq=0,pending=new Map(),current=null,loadedModel=null;
+let queue=Promise.resolve();
+function serialized(action){
+ const next=queue.then(action,action);
+ queue=next.catch(()=>{});
+ return next;
+}
 function promiseRequest(type,payload={},onProgress=()=>{}) {
  if(!worker){
   worker=new Worker(new URL('./whisper-worker.js',import.meta.url),{type:'module'});
@@ -16,25 +23,28 @@ function promiseRequest(type,payload={},onProgress=()=>{}) {
   };
   worker.onerror=e=>{
    for(const task of pending.values()){clearTimeout(task.timeout);task.reject(new Error(e.message||'Local STT worker failed'));}pending.clear();
-   worker?.terminate();worker=null;loaded=false;
+   worker?.terminate();worker=null;loadedModel=null;
   };
  }
  const id=++seq;
  return new Promise((resolve,reject)=>{
   const timeout=setTimeout(()=>{
-   pending.delete(id);reject(new Error('Local speech engine timed out'));worker?.terminate();worker=null;loaded=false;
+   pending.delete(id);reject(new Error('Local speech engine timed out'));worker?.terminate();worker=null;loadedModel=null;
   },requestTimeout);
   pending.set(id,{resolve,reject,onProgress,timeout});
   worker.postMessage({id,type,...payload},payload.samples?[payload.samples.buffer]:[]);
  });
 }
-export async function loadLocalSTT(onProgress) {
- if(loaded)return;
- const reply=await promiseRequest('load',{},onProgress);
- if(reply.phase!=='ready')throw new Error('Speech model did not report ready');
- loaded=true;
+export async function loadLocalSTT(onProgress=()=>{},model='tiny') {
+ modelFor(model);
+ return serialized(async()=>{
+  if(loadedModel===model)return;
+  const reply=await promiseRequest('load',{model},onProgress);
+  if(reply.phase!=='ready')throw new Error('Speech model did not report ready');
+  loadedModel=model;
+ });
 }
-export function isSTTReady(){return loaded;}
+export function isSTTReady(model='tiny'){return loadedModel===model;}
 export function isCapturing(){return Boolean(current);}
 export async function startCapture(onStatus=()=>{}) {
  if(current)throw new Error('Microphone is already recording');
@@ -92,7 +102,28 @@ export async function discardCapture() {
  capture.source.disconnect();capture.node.disconnect();capture.chunks.length=0;
  try{await capture.context.close();}catch{}
 }
-export async function transcribeLocal(samples,stage,onProgress=()=>{}) {
- if(!loaded)await loadLocalSTT(onProgress);
- return promiseRequest('transcribe',{samples,context:atcPrompt(stage)},onProgress);
+export async function transcribeLocal(samples,stage,onProgress=()=>{},model='tiny') {
+ modelFor(model);
+ return serialized(async()=>{
+  if(loadedModel!==model){
+   const reply=await promiseRequest('load',{model},onProgress);
+   if(reply.phase!=='ready')throw new Error('Speech model did not report ready');
+   loadedModel=model;
+  }
+  // Each invocation copies its samples before transfer. This is important for
+  // A/B comparison: detaching the original would prevent the second inference.
+  return promiseRequest('transcribe',{
+   model,samples:samples.slice(),context:atcPrompt(stage)
+  },onProgress);
+ });
+}
+export async function compareWhisperModels(samples,stage,onProgress=()=>{}) {
+ if(!(samples instanceof Float32Array)||!samples.length)throw new Error('Record a transmission first.');
+ const results={};
+ for(const key of ['tiny','small']){
+  onProgress(key,'Preparing '+modelFor(key).label+'…');
+  try{results[key]=await transcribeLocal(samples,stage,m=>onProgress(key,m),key);}
+  catch(error){results[key]={model:key,error:error.message};}
+ }
+ return results;
 }
