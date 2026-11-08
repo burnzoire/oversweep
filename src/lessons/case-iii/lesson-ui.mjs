@@ -5,6 +5,7 @@ import {
   reciprocal, timeEnroute, turnAmount, turnSeconds,
 } from './lesson-model.mjs';
 import { termQuiz } from '../shared/quick-quiz.mjs';
+import { plainText, withoutPreviews } from '../shared/term-text.mjs';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const C = 160; // SVG centre for 320 × 320 plots
@@ -378,8 +379,9 @@ function setupProfile(root) {
     svg.append(el('line', { x1: ax, y1: ay, x2: ax, y2: Y0, class: 'drop' }));
     svg.append(el('path', { d: `M${ax + 12} ${ay} L${ax - 8} ${ay - 3} L${ax - 12} ${ay - 9} L${ax - 14} ${ay - 9} L${ax - 13} ${ay + 1} L${ax - 8} ${ay + 3} Z`, class: 'acft' }));
     const readout = root.querySelector('[data-readout]');
-    const phase = current?.querySelector('[data-cell="what"]')?.textContent ?? 'At the marshal fix.';
-    const coming = next ? `Next, at ${nm(rowDme(next, p))} NM: ${next.querySelector('[data-cell="what"]').textContent}` : 'The approach ends at the ship.';
+    const what = current?.querySelector('[data-cell="what"]');
+    const phase = what ? plainText(what) : 'At the marshal fix.';
+    const coming = next ? `Next, at ${nm(rowDme(next, p))} NM: ${plainText(next.querySelector('[data-cell="what"]'))}` : 'The approach ends at the ship.';
     readout.replaceChildren(
       ...[`${nm(pos)} NM from the ship · ${feet(alt)} in this model.`, `Last point passed: ${phase}`, coming]
         .map((t) => Object.assign(document.createElement('p'), { textContent: t })));
@@ -416,11 +418,11 @@ function setupStack(root) {
   const meaning = root.querySelector('[data-meaning]');
   const pairs = [...dl.querySelectorAll('dt')].map((dt) => [dt, dt.nextElementSibling]);
   for (const [dt, dd] of pairs) {
-    const b = Object.assign(document.createElement('button'), { type: 'button', textContent: dt.textContent, className: 'phrase' });
+    const b = Object.assign(document.createElement('button'), { type: 'button', textContent: plainText(dt), className: 'phrase' });
     b.setAttribute('aria-pressed', 'false');
     b.addEventListener('click', () => {
       for (const other of sentence.querySelectorAll('button')) other.setAttribute('aria-pressed', String(other === b));
-      meaning.textContent = dd.textContent;
+      meaning.replaceChildren(...withoutPreviews(dd).childNodes);
       if (dt.dataset.angels) { f.angels.value = dt.dataset.angels; draw(); }
     });
     sentence.append(b, ' ');
@@ -547,10 +549,10 @@ function setupLens(root) {
     ball.setAttribute('cy', String(119 - k * 15));
     const state = k <= -3 ? 'red' : k < 0 ? 'low' : k > 0 ? 'high' : 'on';
     ball.classList.toggle('red', state === 'red');
-    const lines = [says.find((s) => s.dataset.ballState === state).textContent];
+    const lines = [plainText(says.find((s) => s.dataset.ballState === state))];
     const wo = waveoff.getAttribute('aria-pressed') === 'true';
     svg.classList.toggle('waveoff', wo);
-    if (wo) lines.push(says.find((s) => s.dataset.ballState === 'waveoff').textContent);
+    if (wo) lines.push(plainText(says.find((s) => s.dataset.ballState === 'waveoff')));
     out.textContent = lines.join(' ');
   }
   waveoff.addEventListener('click', () => { waveoff.setAttribute('aria-pressed', String(waveoff.getAttribute('aria-pressed') !== 'true')); draw(); });

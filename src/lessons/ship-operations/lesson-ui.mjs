@@ -3,6 +3,7 @@
 // inputs and draws.
 import { CASE_I, CHARLIE, FT_PER_NM, LENSES, ballPicture, dlqStatus, lensThickness, readComment, splitPass } from './lesson-model.mjs';
 import { quickQuiz, termQuiz, withDistractors } from '../shared/quick-quiz.mjs';
+import { plainText as text } from '../shared/term-text.mjs';
 
 const SVG = 'http://www.w3.org/2000/svg';
 const r0 = (v) => Math.round(v).toLocaleString('en-US');
@@ -28,12 +29,6 @@ function show(root, name, text) {
   if (o) o.textContent = text;
 }
 const pts = (list) => list.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' ');
-// A node's words, without the hover previews of any <Term> links in it.
-function text(node) {
-  const copy = node.cloneNode(true);
-  copy.querySelectorAll('.term-tip').forEach((tip) => tip.remove());
-  return copy.textContent.replace(/\s+/g, ' ').trim();
-}
 
 // Figure 1: a Nimitz-class flight deck in plan, bow to the right and port at
 // the top, traced from an overhead photograph of USS Nimitz and scaled to the
