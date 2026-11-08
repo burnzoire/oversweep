@@ -53,7 +53,7 @@
     <p class="small" id="llmStatus">Deterministic radio controller active. LLM is optional and cannot change clearances.</p>
   </div>
   <div class="sideblock"><p class="eyebrow">ATC AUDIO</p>
-    <label class="setting"><input type="checkbox" checked id="voice">Spoken controller</label>
+    <label class="setting"><input type="checkbox" id="voice">Use installed browser voice as fallback (may not be local)</label>
     <label class="setting"><input type="checkbox" checked id="key">Radio key tones</label>
     <label class="setting"><input type="checkbox" id="neuralEnabled" disabled> Neural controller voice (local model)</label>
     <button type="button" id="loadVoice">Load neural voice model</button>
@@ -63,7 +63,7 @@
     <label class="setting"><input type="checkbox" checked id="radioFilter">Radio voice filtering</label>
     <label for="voices" class="small">Fallback installed voice</label>
     <select id="voices"><option value="">System voice</option></select>
-    <p class="small">Neural TTS is experimental. Browser voice remains the fallback if the model fails.</p>
+    <p class="small">Load the neural voice for on-device synthesis. Browser voices are disabled by default because their processing location is not guaranteed; enable only if you accept that limitation.</p>
   </div>
   <div class="sideblock"><p class="eyebrow">DIAGNOSTICS</p><dl>
     <dt>Recognition</dt><dd id="sttStatus">Not tested</dd>
