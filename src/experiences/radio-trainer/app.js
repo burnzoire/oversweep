@@ -1,4 +1,3 @@
-import {proposeAtcTranscript} from './lessons/radio/transcript-repair.mjs';
 import {loadNeuralVoice,playNeuralVoice,stopNeuralVoice} from './neural-voice.js';
 import { selectTranscript, FALCON_GROUND } from './lessons/radio/context.mjs';
 import { loadLocalSTT, isSTTReady, isCapturing, startCapture, stopCapture, discardCapture, transcribeLocal } from './local-stt.js';
@@ -105,16 +104,13 @@ async function startRecording(){
    const text=String(result.text||'').trim();
    $('sttMs').textContent=result.ms+' ms';
    const selected=selectTranscript([{transcript:text,confidence:1}]);
-   const repaired=proposeAtcTranscript(selected.transcript,state.stage);
-   $('text').value=repaired.text;
-   $('sttStatus').textContent=result.contextApplied?'Local Whisper · prompt submitted (accuracy unverified)':'Local Whisper · no prompt conditioning';
-   if(result.warning)$('sttStatus').textContent+=' · '+result.warning;
+   $('text').value=selected.transcript;
+   $('sttStatus').textContent=result.contextApplied?'Local Whisper · context prompt attempted':'Local Whisper · no context-token support';
+   if(result.warning)$('sttStatus').textContent+=' · fallback';
    if(!selected.transcript){
     note('No speech recognised. Hold PTT while speaking, or type a transmission.');
-   } else if(repaired.reviewRequired){
-    note('Whisper heard: "'+repaired.raw+'". Suggested corrections: '+repaired.changes.map(c=>c.from+' → '+c.to).join('; ')+'. Review the proposed text before selecting Transmit text.');
    } else if(selected.ambiguous){
-    note('Ambiguous callsign digits in transcript. Expected callsign: '+FALCON_GROUND.aircraft[0]+'. Review before transmitting.');
+    note('Ambiguous number recognised. Expected callsign is '+FALCON_GROUND.aircraft[0]+'. Correct the transcript if necessary.');
    } else {
     note('Local transcription ready. Review the text and select Transmit text.');
    }
