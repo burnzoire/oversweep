@@ -45,9 +45,15 @@
   <div class="sideblock"><p class="eyebrow">ATC AUDIO</p>
     <label class="setting"><input type="checkbox" checked id="voice">Spoken controller</label>
     <label class="setting"><input type="checkbox" checked id="key">Radio key tones</label>
-    <label for="voices" class="small">Installed voice</label>
+    <label class="setting"><input type="checkbox" id="neuralEnabled" disabled> Neural controller voice (local model)</label>
+    <button type="button" id="loadVoice">Load neural voice model</button>
+    <p class="small" id="neuralStatus" role="status">Not loaded. The initial download requires network access; inference runs on your device.</p>
+    <label for="neuralVoice" class="small">Neural voice</label>
+    <select id="neuralVoice"><option value="am_michael">US male · Michael</option><option value="am_adam">US male · Adam</option><option value="af_heart">US female · Heart</option><option value="bf_emma">UK female · Emma</option><option value="bm_george">UK male · George</option></select>
+    <label class="setting"><input type="checkbox" checked id="radioFilter">Radio voice filtering</label>
+    <label for="voices" class="small">Fallback installed voice</label>
     <select id="voices"><option value="">System voice</option></select>
-    <p class="small">Browser TTS baseline. Neural TTS is not yet validated in this host build.</p>
+    <p class="small">Neural TTS is experimental. Browser voice remains the fallback if the model fails.</p>
   </div>
   <div class="sideblock"><p class="eyebrow">DIAGNOSTICS</p><dl>
     <dt>Recognition</dt><dd id="sttStatus">Not tested</dd>
