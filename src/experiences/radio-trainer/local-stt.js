@@ -94,6 +94,7 @@ export function atcPrompt(stage) {
  // Supply all known scenario terminology BEFORE inference. Prompt-token support
  // is experimental, and the worker reports when it has to fall back.
  return [
+  'Current radio sequence: '+phase+'.',
   'Airfield: '+c.location+'.',
   'Radio agencies: '+c.agencies.join(', ')+'.',
   'Pilot callsigns: '+c.aircraft.join(', ')+'.',
@@ -103,7 +104,6 @@ export function atcPrompt(stage) {
   'Location north ramp. Wind two six zero at eight.',
   'Airfield terms: '+c.terms.join(', ')+'.',
   'NATO phonetic alphabet: '+c.phonetics.join(', ')+'.',
-  'Current radio sequence: '+phase+'.',
  ].join(' ');
 }
 export async function transcribeLocal(samples,stage,onProgress=()=>{}) {
