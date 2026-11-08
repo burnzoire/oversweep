@@ -1,0 +1,21 @@
+---
+// Shared launch control for a module's standalone trainer.
+// variant="button" (default) opens the trainer in a new window;
+// variant="jump" sits near the top of the module and scrolls to the button's section.
+interface Props { href?: string; experienceId: string; label: string; variant?: 'button' | 'jump'; target?: string }
+const { href, experienceId, label, variant = 'button', target = 'launch' } = Astro.props;
+---
+{variant === 'jump'
+ ? <p class="trainer-jump"><span class="trainer-jump-tag">Interactive exercise</span> <a href={`#${target}`}>{label} <span aria-hidden="true">↓</span></a></p>
+ : <p class="trainer-launch"><a class="trainer-launch-button" href={href} target="_blank" rel="noopener" data-experience-launch data-experience-id={experienceId}><span class="trainer-launch-label">{label}</span> <span class="trainer-launch-note">(opens in a new window) <span aria-hidden="true">↗</span></span></a></p>}
+<style>
+ .trainer-launch { margin-block: 1.5rem; }
+ .trainer-launch-button { display: inline-flex; flex-wrap: wrap; align-items: baseline; column-gap: 0.5rem; row-gap: 0.15rem; min-height: 3rem; padding: 0.75rem 1.4rem; color: var(--color-ink-text); background: var(--color-ink); border-left: 0.4rem solid var(--color-accent); border-radius: 0.25rem; box-shadow: 0 2px 6px rgb(0 0 0 / 0.18); font-size: 1.15rem; font-weight: 700; text-decoration: none; }
+ .trainer-launch-button:hover { background: #1d2c3d; }
+ .trainer-launch-button:hover .trainer-launch-label { text-decoration: underline; text-decoration-color: var(--color-accent); text-underline-offset: 0.2em; }
+ .trainer-launch-note { color: var(--color-ink-muted); font-size: 0.95rem; font-weight: 400; }
+ .trainer-launch-button:focus-visible, .trainer-jump a:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+ .trainer-jump { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.75rem; margin-block: 1rem; padding: 0.6rem 1rem; color: var(--color-ink-text); background: var(--color-ink); border-left: 0.4rem solid var(--color-accent); border-radius: 0.25rem; }
+ .trainer-jump-tag { color: var(--color-accent); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+ .trainer-jump a { color: var(--color-ink-text); font-weight: 700; }
+</style>

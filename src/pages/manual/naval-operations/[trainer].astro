@@ -4,6 +4,7 @@ import GlossaryList from '../../../components/GlossaryList.astro';
 import { getExperience, includedExperiences, experienceFrame } from '../../../data/experiences';
 import { sitePath } from '../../../lib/paths';
 import Term from '../../../components/Term.astro';
+import TrainerLaunch from '../../../components/TrainerLaunch.astro';
 import RecoveryOverview from '../../../components/case-iii/RecoveryOverview.astro';
 import TurnIndicator from '../../../components/case-iii/TurnIndicator.astro';
 import LensFigure from '../../../components/case-iii/LensFigure.astro';
@@ -44,6 +45,7 @@ const reference = [
   <p>Module revision {recoveryModule.revision} · Conventional fixed-wing, arrested carrier recoveries. Aircraft-agnostic concepts, illustrated using historical US Navy training material. Helicopter and vertical-landing procedures are outside this module.</p>
   <p>Read the recovery sequence, explore the navigation geometry, then practise selected skills in the optional standalone Tomcat exercise.</p>
  </section>
+ <TrainerLaunch variant="jump" experienceId={caseIII.id} label="Practise the recovery in the Tomcat exercise" />
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
   <div class="contents-groups">
    <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
@@ -440,7 +442,7 @@ const reference = [
  <p>Reinforce point-to-point navigation, <Term id="Marshal">marshal</Term> timing, radio handoffs and managing a descent through an approach sequence. The Tomcat is the worked example; its configuration controls and scoring do not define the general module.</p>
  <p>The exercise is self-contained: its briefing, instructor, controls and exercise notes explain how to use it without reading this page first. Read the <Term id="Sortie">sortie</Term> briefing and select Start Exercise. Instructor and voice are optional.</p>
  <p>Its motion model converts the commanded KIAS to true airspeed for altitude and plots it relative to Mother, who steams 15 kt into a 10 kt wind: a fixed 25 kt of air down the deck that you must allow for when timing the marshal hold to cross the fix at EAT. Those wind and ship values are exercise assumptions. It simplifies aircraft performance, hold entries, approach guidance and arrestment; fuel consumption and <Term id="Bolter">bolters</Term> are not modelled. Its numeric gates and inherited dialogue remain unvalidated exercise content. It does not assess real proficiency or implement every procedure discussed above.</p>
- <p class="launch"><a class="launch-button" href={trainerHref} target="_blank" rel="noopener" data-experience-launch data-experience-id={caseIII.id}>Launch the Tomcat exercise<span> (opens in a new window)</span></a></p>
+ <TrainerLaunch href={trainerHref} experienceId={caseIII.id} label="Launch the Tomcat exercise" />
  </section>
  <h2 id="sources">Sources and applicability</h2>
  <p id="source-p816"><strong>[1] Naval Air Training Command, CNATRA P-816 (01-14), CV Procedures (UMFO), T-45C.</strong> Revision 28 January 2014, Change 1 dated 9 February 2018. <a href="https://murphysys.com/dcs/P-816.pdf">Read the Navy-authored publication (third-party mirror)</a>. Inspected 24 October 2026: LSOs p. 1-2; CCA p. 1-3; TACAN, ACLS and ICLS terms pp. 1-9–1-10; optical landing system pp. 1-11–1-13; §204, pp. 2-11–2-12 and 2-19–2-27; weather criteria pp. 2-3–2-4; waveoff, Charlie and ball calls pp. 2-17–2-18; glossary A-1–A-3 and A-5 (Platform). Historical training context, not evidence of current fleet-wide applicability. Original paraphrases and geometry only; no manual files or figures are redistributed.</p>
@@ -516,10 +518,6 @@ const reference = [
   .profile .grid line, .profile .marks line { stroke: var(--color-text); }
   .profile .grid text, .profile .marks text { fill: var(--color-text); }
   .profile .path { fill: none; stroke: var(--color-text); stroke-width: 3; }
-  .launch { margin-block: 1.5rem; }
-  .launch-button { display: inline-flex; flex-wrap: wrap; align-items: center; min-height: 3rem; padding: 0.6rem 1.2rem; color: #fff; background: var(--color-text); font-weight: 700; font-size: 1.1rem; text-decoration: none; }
-  .launch-button span { font-weight: 400; font-size: 0.95rem; }
-  .launch-button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
   :global(.lesson svg .ring) { fill: none; stroke: var(--color-text); }
   :global(.lesson svg .ring.minor) { stroke: var(--color-border); stroke-dasharray: 2 3; }
   :global(.lesson svg text) { fill: var(--color-text); font: 11px Arial, Helvetica, sans-serif; }
