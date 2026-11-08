@@ -1,3 +1,4 @@
+import { installRecognitionContext, selectTranscript, FALCON_GROUND } from './lessons/radio/context.mjs';
 import { INITIAL, advance, instruction } from './lessons/radio/model.mjs';
 const $ = id => document.getElementById(id);
 let state = structuredClone(INITIAL);
@@ -76,14 +77,19 @@ async function startRecording(){
  if(!Speech){$('sttStatus').textContent='Unavailable';note('This browser has no SpeechRecognition API. Use typed transmissions.');return;}
  if(recording){recognizer?.stop();return;}
  try{
-  recognizer=new Speech();recognizer.lang='en-US';recognizer.continuous=false;recognizer.interimResults=false;
+  recognizer=new Speech();recognizer.lang='en-US';recognizer.continuous=false;recognizer.interimResults=false;recognizer.maxAlternatives=5;
+  const context=installRecognitionContext(recognizer,state.stage,window);
+  $('sttStatus').textContent=context.supported?`Context loaded: ${context.count} known phrases`:'Browser has no contextual biasing; recognition alternatives enabled';
   recognizer.onstart=()=>{recording=true;lastSpeechStart=performance.now();$('ptt').textContent='Release transmission';$('ptt').classList.add('recording');$('micState').textContent='Listening…';$('sttStatus').textContent='Listening (browser STT)';status('TRANSMITTING');};
   recognizer.onresult=e=>{
-   const words=e.results[e.results.length-1][0].transcript;
+   const candidates=Array.from(e.results[e.results.length-1],a=>({transcript:a.transcript,confidence:a.confidence}));
+   const selected=selectTranscript(candidates);
+   const words=selected.transcript;
    $('sttMs').textContent=Math.round(performance.now()-lastSpeechStart)+' ms';
    $('text').value=words;
-   $('sttStatus').textContent='Transcript ready';
-   $('micState').textContent='Transcript captured. Review and transmit text.';
+   $('sttStatus').textContent=selected.source==='alternative'?'Recognised from context-aware alternative':'Transcript ready';
+   $('micState').textContent=selected.ambiguous?'Uncertain callsign: confirm/correct transcript before sending.':'Transcript captured. Review and transmit text.';
+   if(selected.ambiguous)note('Ambiguous number recognised (e.g., 5421). Expected callsign is '+FALCON_GROUND.aircraft[0]+'. Please confirm what you actually said; no automatic correction was made.');
   };
   recognizer.onerror=e=>{note('Speech recognition: '+e.error+'. Browser recognition can require network access.');$('sttStatus').textContent='Error: '+e.error;};
   recognizer.onend=()=>{recording=false;$('ptt').textContent='Push to talk';$('ptt').classList.remove('recording');status('READY');if($('micState').textContent==='Listening…')$('micState').textContent='Not recording';};
