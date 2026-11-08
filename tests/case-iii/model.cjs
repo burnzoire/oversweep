@@ -3,10 +3,10 @@ const m = require('../../src/experiences/case-iii/model.cjs');
 const near = (a, b, tol, msg) => assert(Math.abs(a - b) <= tol, `${msg}: ${a} vs ${b} (±${tol})`);
 
 // TAS from KIAS: independent ISA density ratios (sigma 0.8359 at 6,000 ft,
-// 0.9646 at 1,200 ft). TAS = EAS / sqrt(sigma).
+// 0.9654 at 1,200 ft). TAS = EAS / sqrt(sigma).
 near(m.tasFromKias(250, 0), 250, 1e-9, 'sea level TAS');
 near(m.tasFromKias(250, 6000), 250 / Math.sqrt(0.8359), 0.2, '6,000 ft TAS');
-near(m.tasFromKias(135, 1200), 135 / Math.sqrt(0.9646), 0.1, '1,200 ft TAS');
+near(m.tasFromKias(135, 1200), 135 / Math.sqrt(0.9654), 0.1, '1,200 ft TAS');
 assert.throws(() => m.tasFromKias(NaN, 0), RangeError);
 assert.throws(() => m.tasFromKias(-1, 0), RangeError);
 console.log('KIAS to TAS (ISA, IAS treated as EAS): PASS.');
