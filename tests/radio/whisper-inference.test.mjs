@@ -10,11 +10,11 @@ test('English-only model never receives forbidden language or task options',asyn
    calls.push(options);
    return {text:' Viper Two One request taxi '};
  };
- englishOnly.tokenizer={encode:()=>[12,13]};
+ englishOnly.tokenizer={encode:text=>text==='<|startofprev|>'?[99]:[99,12,13]};
  const response=await transcribeEnglishOnly(englishOnly,new Float32Array(3200),'Falcon Ground Viper Two One');
  assert.equal(response.text,'Viper Two One request taxi');
  assert.equal(response.contextApplied,true);
- assert.deepEqual(calls,[{prompt_ids:[12,13]}]);
+ assert.deepEqual(calls,[{prompt_ids:[99,12,13]}]);
 });
 
 test('unsupported prompt context is retried locally without multilingual options',async()=>{
@@ -25,12 +25,12 @@ test('unsupported prompt context is retried locally without multilingual options
    if(opts.prompt_ids)throw new Error('prompt_ids not supported');
    return {text:'  Viper 21 request taxi  '};
  };
- englishOnly.tokenizer={encode:()=>[12,13]};
+ englishOnly.tokenizer={encode:text=>text==='<|startofprev|>'?[99]:[99,12,13]};
  const response=await transcribeEnglishOnly(englishOnly,new Float32Array(3200),'Viper Two One');
  assert.equal(response.text,'Viper 21 request taxi');
  assert.equal(response.contextApplied,false);
  assert.match(response.warning,/rejected/);
- assert.deepEqual(options,[{prompt_ids:[12,13]},{}]);
+ assert.deepEqual(options,[{prompt_ids:[99,12,13]},{}]);
 });
 
 test('model with no tokenizer uses unconditional local transcription',async()=>{
@@ -51,7 +51,16 @@ test('prompt encoding errors do not prevent local transcription',async()=>{
 });
 
 test('prompt tokens are bounded and validated',()=>{
- const transcriber={tokenizer:{encode:()=>Array.from({length:240},(_,i)=>i)}};
+ const transcriber={tokenizer:{encode:text=>text==='<|startofprev|>'?[0]:Array.from({length:240},(_,i)=>i)}};
  assert.equal(buildWhisperPromptIds(transcriber,'full context').length,180);
  assert.equal(buildWhisperPromptIds({tokenizer:{encode:()=>['bad']}},'invalid'),null);
+});
+
+test('a plain prompt without startofprev is not falsely counted as conditioning',()=>{
+ const transcriber={tokenizer:{encode:()=>[12,13]}};
+ assert.equal(buildWhisperPromptIds(transcriber,'Falcon Ground Viper Two One'),null);
+});
+test('use tokenizer-native Whisper get_prompt_ids when available',()=>{
+ const transcriber={tokenizer:{get_prompt_ids:()=>[50361,12,13]}};
+ assert.deepEqual(buildWhisperPromptIds(transcriber,'Viper Two One'),[50361,12,13]);
 });
