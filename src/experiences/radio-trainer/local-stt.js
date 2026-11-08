@@ -88,7 +88,7 @@ export async function discardCapture() {
  capture.source.disconnect();capture.node.disconnect();capture.chunks.length=0;
  try{await capture.context.close();}catch{}
 }
-export function atexport async function transcribeLocal(samples,stage,onProgress=()=>{}) {
+export async function transcribeLocal(samples,stage,onProgress=()=>{}) {
  if(!loaded)await loadLocalSTT(onProgress);
  return promiseRequest('transcribe',{samples,context:atcPrompt(stage)},onProgress);
 }
