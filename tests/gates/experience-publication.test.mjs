@@ -73,3 +73,18 @@ test('a window-only experience must be linked in a new window and never framed',
   problems = await check({ ...complete, [wrapper]: launch }, { experience: { launch: 'popup' } });
   assert(problems.some(p => p.includes('unknown launch')));
 });
+
+test('unlisted experience emits direct frame but never a Manual wrapper or catalogue links', async () => {
+  const unlisted = {
+    'experiences/example/index.html': '<head><meta name="robots" content="noindex,nofollow"></head><body '+tag+'><script src="app.js"></script></body>',
+    'experiences/example/app.js': 'run();',
+    'manual/navigation/index.html': '<h1>Navigation</h1>',
+    'training/index.html': '<h1>Training</h1>',
+  };
+  assert.deepEqual(await check(unlisted, { experience: { publication: 'unlisted' } }), []);
+  assert.deepEqual(await check(unlisted, { experience: { publication: 'unlisted' }, review: true }), []);
+  const leaks = await check({ ...unlisted, 'training/index.html': listing }, { experience: { publication: 'unlisted' } });
+  assert(leaks.some(p => p.includes('unlisted link leaked')));
+  const wrapper = await check({ ...unlisted, 'manual/navigation/example/index.html': 'not hidden' }, { experience: { publication: 'unlisted' } });
+  assert(wrapper.some(p => p.includes('unlisted Manual wrapper was emitted')));
+});
