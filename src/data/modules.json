@@ -11,6 +11,17 @@
     "applicability": "Aircraft-agnostic concepts illustrated with US Navy T-45C training figures; type-specific numbers belong to that training example."
   },
   {
+    "id": "module.bvr-intercepts",
+    "slug": "bvr-intercepts",
+    "subject": "air-combat",
+    "revision": 1,
+    "title": "Beyond-Visual-Range Intercepts",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Fly the fight before the merge: read intercept geometry (target aspect, angle-off, lateral separation), put a bandit on a collision course or set up a stern conversion, understand a missile's launch zone and when to shoot, crank and decide to merge or leave, work as a section from commit to sort, and talk to the controller in bullseye and BRAA with the identification the rules of engagement require.",
+    "applicability": "Fighter aircrew of every service, from the Navy's public intercept training instruction (which notes the Air Force's conventions) and the joint counterair publication, with the DCS F-16C and Falcon BMS manuals for the In the sim panel. Unclassified training principles only: real tactics, missile performance and each theater's rules of engagement and SPINS govern."
+  },
+  {
     "id": "module.airfield-basics",
     "slug": "airfield-basics",
     "subject": "airfield-operations",
