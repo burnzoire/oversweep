@@ -1,0 +1,478 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
+import { getModule } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import Term from '../../../components/Term.astro';
+import { CRANK_AO, STEPS, lsExact, lsRule, timeoutRange, tofSec } from '../../../lessons/bvr/lesson-model.mjs';
+const bvr = getModule('bvr-intercepts');
+const core = [
+ ['example', 'One intercept, start to finish'], ['geometry', 'Reading the geometry'], ['collision', 'Collision course and the stern conversion'],
+ ['control', 'The controller: bullseye and BRAA'], ['roe', 'Declarations, ID and the rules of engagement'], ['shoot', 'The shot: launch zones, crank and decide'],
+ ['section', 'Working as a section'], ['recap', 'Key points'],
+];
+const reference = [
+ ['labels', 'Picture labels'], ['reactions', 'When the bandit reacts'], ['vid', 'Visual identification'], ['conventions', 'Navy and Air Force aspect words'],
+ ['missiles', 'The missiles'], ['sims', 'In the sim'], ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+];
+// [1] CNATRA P-825 (07-14), BFM and All Weather Intercept FTI, by printed page.
+// [2] JP 3-01, Countering Air and Missile Threats (23 March 2012), by printed page.
+// [3] DCS F-16C Viper guide and [4] Falcon BMS 4.38.1 Training Manual, sim crossover only.
+const pp = (pg: string) => `${/to|,/.test(pg) ? 'pp.' : 'p.'} ${pg}`;
+const p = (pg: string) => `[1, ${pp(pg)}]`;
+const j = (pg: string) => `[2, ${pp(pg)}]`;
+const d = (pg: string) => `[3, ${pp(pg)}]`;
+const b = (pg: string) => `[4, ${pp(pg)}]`;
+const bfm = sitePath('manual/air-combat/bfm/');
+const radio = sitePath('manual/radio-communications/radio-procedures/');
+const sead = sitePath('manual/air-to-ground-operations/sead-dead/');
+const glossary = sitePath('encyclopedia/terminology/bvr/');
+const brevity = sitePath('encyclopedia/terminology/brevity/');
+const ordnance = sitePath('encyclopedia/ordnance/');
+const k = (ft: number) => `${Math.round(ft / 1000)},000`;
+---
+<SiteLayout title={bvr.title} activeSection="manual" activeSubject="air-combat" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Air Combat',href:sitePath('manual/air-combat/')},{label:bvr.title}]}>
+ <section class="status-panel" data-module-id={bvr.id} data-module-revision={bvr.revision}>
+  <h2>{bvr.maturity}</h2>
+  <p>Module revision {bvr.revision} · The fight before the merge: radar intercepts, missile launch zones, the section's timeline and the controller's calls. For fighter aircrew of every service, from the Navy's public intercept training instruction and joint doctrine. Unclassified training principles only.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
+ </nav>
+
+ <p class="lede">Beyond visual range, generally taken as outside 10 NM, a fighter sees the bandit only as a radar contact and a controller's call. <a href="#source-p825">{p('15-1')}</a> The intercept is a geometry problem in that picture: get to where your missile can reach the bandit and its weapons cannot reach you, with an identity good enough to shoot, then decide whether to stay or leave. The aim the Navy's training text gives is to achieve the best launch zone on the enemy while denying it its own. <a href="#source-p825">{p('4-2')}</a></p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>read intercept geometry: <Term>target aspect</Term>, <Term id="Angle-off">angle-off</Term>, <Term>aspect angle</Term>, <Term>lateral separation</Term>, <Term>cut</Term> and the controller's aspect words;</li>
+  <li>explain a <Term>collision course</Term> and <Term>contact drift</Term>, and how a <Term>stern conversion</Term> uses lateral separation as turning room;</li>
+  <li>describe a missile's launch zone (<Term>LAR</Term>, <Term>RMAX</Term>, <Term>RNE</Term>, <Term>RMIN</Term>) and what the fighter and the bandit each control;</li>
+  <li>describe the post-shot timeline: the <Term>crank</Term>, <Term>timeout</Term>, and the choice to <Term>skate</Term> or <Term>banzai</Term>, and the defensive beam turn;</li>
+  <li>list a section's intercept tasks from commit to merge, including <Term>meld</Term> and <Term>sort</Term>;</li>
+  <li>explain broadcast and tactical control, <Term>BULLSEYE</Term> and <Term>BRAA</Term>, the declarations, and why rules of engagement usually need <Term>positive identification</Term>.</li>
+ </ol>
+ <p class="note">This module teaches the skills an intercept is built on, as the Navy's training instruction does; it says itself that tactics are taught later, in the fleet, and that specific missile tactics are beyond entry-level training. <a href="#source-p825">{p('15-1')}</a> The ranges quoted are its training standards, not combat numbers, and the worked intercept is invented. Real tactics, missile performance, theater rules of engagement and SPINS govern. Turning fights after the merge are in <a href={bfm}>Basic Fighter Maneuvers</a>.</p>
+
+ <h2 id="example">One intercept, start to finish</h2>
+ <p>Here is one invented intercept: a two-ship on a defensive combat air patrol (CAP) meets a single group of two, shoots, and leaves. Every step and call follows the training instruction's sequence and formats; the call signs, positions and ranges are made up. Step through Figure 1.</p>
+ <ol class="exchange script">
+  {STEPS.map((s) => <li><span class="who">{s.phase}</span> <span class="said">{s.text} <a class="step" href={s.href}>Why</a></span></li>)}
+ </ol>
+ <section class="lesson figure-lesson" data-lesson="example" aria-labelledby="example-title">
+  <h3 id="example-title" class="fig-title">Figure 1 — The intercept, played out</h3>
+  <p>Step through the intercept. The highlighted contacts are declared hostile; the dashed lines are missiles, drawn from launch to where the bandits are at timeout.</p>
+  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 360" role="img" aria-label="Plan view: a two-ship section flies north toward a single group of two flying south, commits, shoots at 20 NM, cranks left and turns out"></svg></div>
+  <div class="buttons stepper"><button type="button" data-back>Back</button><button type="button" data-next>Next</button><span data-count role="status" aria-live="polite"></span></div>
+  <p class="no-js">Interactive figure unavailable. The section hears the group on broadcast control at 50 NM, commits at 35 NM, has it declared hostile and targets it at 30 NM, melds and sorts at 25 NM, shoots and cranks at 20 NM, calls timeout about 40 seconds later and skates out.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">An invented example, drawn to scale with both formations at 300 knots, the training instruction's intercept ground speed. <a href="#source-p825">{p('8-5')}</a> The turns are drawn as instantaneous.</p>
+ </section>
+ <p class="key"><strong>Key point:</strong> every intercept runs the same tasks in the same order, commit, label, target, meld, sort, shoot, decide, and each has a range on the timeline by which it should be done. <a href="#source-p825">{p('17-13')}</a></p>
+
+ <h2 id="geometry">Reading the geometry</h2>
+ <p>Everything in an intercept is described from two viewpoints: how the fighter sees the bandit and how the bandit sees the fighter. <a href="#source-p825">{p('8-1')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Intercept angles and distances" tabindex="0"><table>
+  <caption>The words of intercept geometry <a href="#source-p825">{p('8-1')}</a></caption>
+  <thead><tr><th scope="col">Term</th><th scope="col">Measured</th><th scope="col">What it tells you</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>Target aspect</Term> (TA)</th><td>At the bandit, from its heading to the fighter, L or R</td><td>Where you are relative to its flight path; it changes the instant the bandit turns</td></tr>
+   <tr><th scope="row"><Term id="Angle-off">Angle-off</Term> (AO)</th><td>At the fighter, from its heading to the bandit, L or R. The Air Force calls it <Term>antenna train angle</Term> (ATA)</td><td>Where the bandit is off your nose; it changes the instant you turn</td></tr>
+   <tr><th scope="row"><Term>Aspect angle</Term> (AA)</th><td>At the bandit, from its tail to the fighter: 180 − TA</td><td>The same geometry counted from the other end</td></tr>
+   <tr><th scope="row"><Term>Lateral separation</Term> (LS)</th><td>From the fighter to the bandit's flight path</td><td>Your turning room</td></tr>
+   <tr><th scope="row"><Term>Bandit reciprocal</Term> (BR)</th><td>The bandit's heading + 180°</td><td>Fly it and LS stays constant</td></tr>
+   <tr><th scope="row"><Term>Cut</Term></th><td>From your heading to BR</td><td>How fast you are crossing its flight path</td></tr>
+   <tr><th scope="row"><Term>Heading crossing angle</Term> (HCA)</th><td>Between the two headings at the intercept point: 180 − cut</td><td>How you will meet</td></tr>
+   <tr><th scope="row"><Term>Rate of closure</Term> (VC)</th><td>The parts of both speeds that close the range</td><td>Time left; highest when the bandit is nose-on at 0 TA</td></tr>
+  </tbody>
+ </table></div>
+ <p>Lateral separation is the number to watch. A cockpit rule turns TA and slant range into it: LS in feet ≈ TA × range × 100, so a bandit at 20 NM showing 20 TA puts you {k(lsRule(20, 20))} feet from its flight path (exactly, {k(lsExact(20, 20))}). Because TA changes the moment the bandit turns and range changes only slowly, the bandit can take your LS away in an instant: if it turns to put you on its nose, LS is zero, and nothing you do quickly will change that. <a href="#source-p825">{p('8-2')}</a></p>
+ <p>The controller describes the same geometry in words, by the target aspect the group shows you: <a href="#source-p825">{p('5-8')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Aspect words" tabindex="0"><table>
+  <caption>Aspect words and positional advantage (Navy convention, by target aspect) <a href="#source-p825">{p('5-8, 8-9')}</a></caption>
+  <thead><tr><th scope="col">Word</th><th scope="col">Target aspect</th><th scope="col">Quadrant</th><th scope="col">For a fighter starting there</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>HOT</Term></th><td>0–30°</td><td>Head-on</td><td>Positional advantage</td></tr>
+   <tr><th scope="row"><Term>Flank</Term></th><td>30–60°</td><td>Forward quarter</td><td>Positional advantage</td></tr>
+   <tr><th scope="row"><Term>Beam</Term></th><td>70–110°</td><td>Beam quarter</td><td>Neutral or disadvantage</td></tr>
+   <tr><th scope="row"><Term>Drag</Term></th><td>Over 110°*</td><td>Rear quarter</td><td>Disadvantage</td></tr>
+  </tbody>
+ </table></div>
+ <p class="note">* The same text gives drag as 120–180° in its glossary; see <a href="#conventions">Navy and Air Force aspect words</a>. <a href="#source-p825">{p('5-8, A-3')}</a></p>
+ <p>The advantage is about who can affect whom: a fighter ahead of a bandit heading for a friendly ship can put itself between them, and a fighter in its rear quarter cannot affect it until it turns for home. <a href="#source-p825">{p('8-9')}</a> The Air Force counts the same words in aspect angle from the bandit's tail; see <a href="#conventions">Navy and Air Force aspect words</a>.</p>
+ <section class="lesson figure-lesson" data-lesson="geometry" aria-labelledby="geometry-title">
+  <h3 id="geometry-title" class="fig-title">Figure 2 — The intercept triangle</h3>
+  <p>The bandit starts due north of you. Set its target aspect, the range and your angle-off, then fly both aircraft straight to see the contact drift. Use the buttons to put the bandit on collision, to fly the bandit reciprocal, or to point at it.</p>
+  <div class="controls">
+   <label for="geo-ta">Target aspect <output for="geo-ta"></output></label><input id="geo-ta" name="ta" type="range" min="-60" max="60" step="5" value="-30" />
+   <label for="geo-sr">Slant range <output for="geo-sr"></output></label><input id="geo-sr" name="sr" type="range" min="5" max="40" step="1" value="20" />
+   <label for="geo-ao">Angle-off <output for="geo-ao"></output></label><input id="geo-ao" name="ao" type="range" min="-60" max="60" step="1" value="0" />
+  </div>
+  <div class="buttons"><button type="button" data-collision>Put on collision</button><button type="button" data-recip>Fly bandit reciprocal</button><button type="button" data-pure>Point at the bandit</button><button type="button" data-fly>Fly</button></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 2, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 360" role="img" aria-label="Plan view of the fighter, the bandit, their flight paths, the line of sight between them and the lateral separation"></svg></div>
+  <p class="no-js">Interactive figure unavailable. With both aircraft at the same speed, a bandit showing 30 left target aspect is on a collision course when it is 30 degrees right of your nose: the bearing does not change as range closes. Pointing at it instead makes the contact drift, always away from collision bearing.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Both aircraft fly straight at 300 knots. The lateral separation drawn is the exact distance to the bandit's flight path; the readout also gives the TA × range × 100 rule. <a href="#source-p825">{p('8-2, 9-2')}</a></p>
+ </section>
+ <section class="lesson quiz-lesson" data-lesson="aspect" aria-labelledby="aspect-title">
+  <h3 id="aspect-title">Quiz: aspect words and lateral separation</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next question</button></div>
+ </section>
+ <p class="key"><strong>Key point:</strong> the bandit controls target aspect and so your lateral separation, instantly; you control angle-off instantly but change target aspect only by moving through space.</p>
+
+ <h2 id="collision">Collision course and the stern conversion</h2>
+ <p>A fighter closes on a bandit in one of two ways: a <Term>cutoff vector</Term>, which puts it between the bandit and what it defends, or a collision course, which closes the range fastest. <a href="#source-p825">{p('4-2')}</a> On a collision course the bearing stays constant as range decreases. Target aspect and angle-off do not change, the contact does not drift, and with both aircraft at the same speed angle-off equals target aspect, on the opposite side. Closure is at its highest and both aircraft fly the same distance to the intercept point. <a href="#source-p825">{p('9-2')}</a></p>
+ <p>That gives a quick way to set one up: put the bandit at an angle-off equal to its target aspect, on the other side. Off collision, the contact drifts, always away from <Term>collision bearing</Term>, which is half the cut; if the range closes with you flying the bandit reciprocal and some LS, both TA and AO grow. <a href="#source-p825">{p('9-1 to 9-2, 9-20')}</a></p>
+ <p>Chasing with the nose on the bandit (<Term>pure pursuit</Term>) maximises closure only for the moment and flies farther; like a player cutting off the ball carrier, you aim for where the bandit will be. <a href="#source-p825">{p('4-3, 9-2')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Pursuit and intercept courses" tabindex="0"><table>
+  <caption>Where to point the nose <a href="#source-p825">{p('4-2 to 4-4')}</a></caption>
+  <thead><tr><th scope="col">Course</th><th scope="col">Nose</th><th scope="col">Used to</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Collision</th><td>Ahead of the bandit, at collision bearing</td><td>Close fastest; a form of lead pursuit</td></tr>
+   <tr><th scope="row"><Term>Lead pursuit</Term></th><td>Ahead of the bandit</td><td>Fire a forward-quarter missile, increase closure, or take a rear-quarter gun solution</td></tr>
+   <tr><th scope="row"><Term>Pure pursuit</Term></th><td>On the bandit</td><td>Reach its rear quarter; hard for the bandit to see you</td></tr>
+   <tr><th scope="row"><Term>Lag pursuit</Term></th><td>Behind the bandit</td><td>Decrease closure and increase range, for a rear-quarter infrared missile</td></tr>
+  </tbody>
+ </table></div>
+ <h3>The stern conversion</h3>
+ <p>The stern conversion is the first intercept the Navy teaches: arrive behind a bandit that is not maneuvering, the same technique used to join a tanker or a friendly formation. <a href="#source-p825">{p('10-1, 10-8')}</a> Lateral separation is turning room. With 40,000 feet of it at 10 NM, a fighter can turn nose-on, hold pure pursuit and roll out in the rear quarter for a short-range missile; with too little it needs an energy-wasting hard turn and arrives slow and far back. <a href="#source-p825">{p('10-8')}</a></p>
+ <ol class="exchange">
+  <li><span class="who">Build</span><span class="said">Turn to create, keep or remove LS. The 40,000-foot goal reads as 15 TA at 30 NM, 20 TA at 20 NM or 30 TA at 15 NM. <a href="#source-p825">{p('10-9 to 10-10')}</a></span></li>
+  <li><span class="who">Hold</span><span class="said">With the goal met, fly the bandit reciprocal (a zero cut) and LS stays put; or capture 40 TA and hold it on collision to 10 NM. <a href="#source-p825">{p('10-10 to 10-12')}</a></span></li>
+  <li><span class="who">Counterturn</span><span class="said">At 10 NM, turn in and stay in pure pursuit, to arrive with about 1,000 feet of look-up at 0.5 to 1.5 NM, locked and ideally with a <Term>TALLY</Term>. <a href="#source-p825">{p('13-10')}</a></span></li>
+  <li><span class="who">If short</span><span class="said">With little or no LS at 10 NM, a <Term>displacement turn</Term> away creates it first. <a href="#source-p825">{p('13-10')}</a></span></li>
+ </ol>
+ <p>The training numbers assume a bandit at about the fighter's speed; the instruction stresses trends over precise sums, because every LS figure is a snapshot. <a href="#source-p825">{p('10-10')}</a></p>
+ <p class="key"><strong>Key point:</strong> a contact that does not drift is on collision; a stern conversion deliberately stays off collision, holding lateral separation until it is time to turn in.</p>
+
+ <h2 id="control">The controller: bullseye and BRAA</h2>
+ <p>An airborne or surface controller, from an E-2 or E-3 or a ground site, builds the air picture with the fighters. <a href="#source-p825">{p('5-2')}</a> There are two types of control and two formats: <a href="#source-p825">{p('5-7 to 5-9')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Control types and formats" tabindex="0"><table>
+  <caption>Control types and formats <a href="#source-p825">{p('5-7 to 5-9, 16-1')}</a></caption>
+  <thead><tr><th scope="col"></th><th scope="col">Who it is for</th><th scope="col">Format</th><th scope="col">Direction given as</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>Broadcast control</Term></th><td>Everyone on the net</td><td>Bullseye only</td><td>Track direction: "track southwest"</td></tr>
+   <tr><th scope="row"><Term>Tactical control</Term></th><td>One fighter element</td><td>Bullseye or BRAA</td><td>Aspect to that element: "hot"</td></tr>
+  </tbody>
+ </table></div>
+ <p>A bullseye call gives a group's bearing and range from a common reference point every friendly aircraft knows, so it is useless if you do not know where bullseye is. A BRAA call gives bearing, range, altitude and aspect from your own flight, for quicker awareness. <a href="#source-p825">{p('5-7')}</a> Every call about a group gives where it is, its altitude to the nearest thousand feet, its direction, and a declaration. <a href="#source-p825">{p('5-8')}</a> The same hostile group to the north, three ways: <a href="#source-p825">{p('5-9')}</a></p>
+ <ol class="exchange">
+  <li><span class="who">Broadcast, bullseye</span><span class="said">“Nickel 11, SABRE, single group, Vegas 015, 80, 22 thousand, track southwest, hostile.”</span></li>
+  <li><span class="who">Tactical, bullseye</span><span class="said">“Nickel 11, SABRE, single group, Vegas 015, 80, 22 thousand, hot, hostile.”</span></li>
+  <li><span class="who">Tactical, BRAA</span><span class="said">“Nickel 11, SABRE, single group BRAA 345, 90, 22 thousand, hot, hostile.”</span></li>
+ </ol>
+ <p>Before the commit the controller normally uses broadcast control in bullseye; at the commit it moves the fighters to tactical control, in bullseye outside 30 NM and BRAA inside it. <a href="#source-p825">{p('5-9, 17-17')}</a> "Vegas" here is the bullseye's name. The radio basics and the brevity words themselves are in <a href={radio}>Radio Procedures</a> and the <a href={brevity}>brevity words</a>.</p>
+ <p class="key"><strong>Key point:</strong> bullseye calls build everyone's picture from one shared point; BRAA calls tell one flight where a group is from its own nose, and the section moves from one to the other as the range closes.</p>
+
+ <h2 id="roe">Declarations, ID and the rules of engagement</h2>
+ <p>The declaration decides what you may do to a group: <a href="#source-p825">{p('5-8, A-1, A-5')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Declarations" tabindex="0"><table>
+  <caption>The declarations <a href="#source-p825">{p('5-8 to 5-9, A-1, A-5')}</a></caption>
+  <thead><tr><th scope="col">Declaration</th><th scope="col">Meaning</th><th scope="col">For the fighter</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>HOSTILE</Term></th><td>Meets the rules of engagement criteria; positively identified as enemy under theater ROE</td><td>May be engaged</td></tr>
+   <tr><th scope="row"><Term>BANDIT</Term></th><td>Positively identified enemy that does not meet the ROE criteria</td><td>Not, on that alone, authority to engage</td></tr>
+   <tr><th scope="row"><Term>BOGEY</Term></th><td>Identity unknown</td><td>May have to identify it, by sensor or visually</td></tr>
+   <tr><th scope="row">Friendly</th><td>Friendly</td><td>Do not engage</td></tr>
+  </tbody>
+ </table></div>
+ <p>"Standby" means the controller is still working on the identity, "unable" that it cannot make it. <a href="#source-p825">{p('5-9')}</a> A fighter asks with <Term>DECLARE</Term>, giving its contact in BRAA. <a href="#source-p825">{p('16-6, A-3')}</a></p>
+ <p>Joint doctrine separates two kinds of identification: <a href="#source-jp">{j('III-13 to III-14')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Positive and procedural identification" tabindex="0"><table>
+  <caption>Two kinds of identification <a href="#source-jp">{j('III-13 to III-14')}</a></caption>
+  <thead><tr><th scope="col"></th><th scope="col">Based on</th><th scope="col">For a shoot decision</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>Positive identification</Term></th><td>Visual recognition, electronic support systems, non-cooperative target recognition, IFF or other physics-based means; never location or airspace behaviour alone</td><td>Normally what the rules of engagement require against an air threat</td></tr>
+   <tr><th scope="row"><Term>Procedural identification</Term></th><td>Whether a track follows the airspace control rules: friendly while it does, hostile if it does not and is not otherwise identified</td><td>Generally not enough, because of the risk of fratricide</td></tr>
+  </tbody>
+ </table></div>
+ <p><Term>Combat identification</Term> is the process of characterising a contact well enough to support the engagement decision, and a positive engagement order is normally needed as well. <a href="#source-jp">{j('III-16 to III-17')}</a> Whatever the ROE, a unit keeps the inherent right and obligation of self-defense against a hostile act or demonstrated hostile intent. <a href="#source-jp">{j('III-11')}</a></p>
+<p class="key"><strong>Key point:</strong> a shot needs a hostile declaration, and theater ROE normally also require an engagement order; bandit means enemy but not cleared, and a bogey that stays unknown may need a visual identification, directed by 10 NM if the mission requires it.</p>
+
+ <h2 id="shoot">The shot: launch zones, crank and decide</h2>
+ <p>A missile's <Term>LAR</Term> is the three-dimensional volume around the bandit that the fighter must fly into for a chance of a successful shot. It is largest, with the longest maximum range, against a bandit at 0 TA when the shooter is fast and high, and smallest in the rear quarter, low and slow: missiles like altitude, airspeed and closure. <a href="#source-p825">{p('15-1')}</a> The bandit's own <Term>WEZ</Term> grows and shrinks the same way. <a href="#source-p825">{p('15-2')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Launch zone ranges" tabindex="0"><table>
+  <caption>The ranges in a launch zone <a href="#source-p825">{p('15-1 to 15-2, 15-4, 15-8')}</a></caption>
+  <thead><tr><th scope="col">Range</th><th scope="col">Meaning</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>RMAX</Term></th><td>The longest range from which the missile can reach the target, in the current closure, aspect and altitude</td></tr>
+   <tr><th scope="row"><Term>RNE</Term></th><td>No-escape range: inside it the missile reaches the target whatever it does after launch</td></tr>
+   <tr><th scope="row"><Term>ROPT</Term></th><td>A range taught with tactics: far enough not to be defensive, close enough to keep the missile's end-game energy</td></tr>
+   <tr><th scope="row"><Term>RMIN</Term></th><td>The shortest range at which the missile can guide and fuze; shorter for infrared than radar missiles</td></tr>
+  </tbody>
+ </table></div>
+ <div class="table-scroll" role="region" aria-label="What decides whether a shot works" tabindex="0"><table>
+  <caption>What decides whether the shot works <a href="#source-p825">{p('15-6 to 15-8')}</a></caption>
+  <thead><tr><th scope="col">The fighter controls</th><th scope="col">The bandit controls</th></tr></thead>
+  <tbody><tr>
+   <td>The range: a long shot gives the bandit time to see it and maneuver<br />The radar mode and track quality: a single-target track is most accurate<br />Its own speed and altitude at launch: faster and higher means a bigger zone</td>
+   <td>Its own flight path: a hard turn can make a long shot run out of energy, a <Term>kinematic defeat</Term><br />Chaff and jamming, which can break the radar track and decoy the missile</td>
+  </tr></tbody>
+ </table></div>
+ <p>A shot from maximum range may hit before you enter the bandit's zone and leaves time for a second, but is the easiest to defeat. When a bandit defeats a long shot it usually has to point back at you to find you again, which often gives a second shot inside RNE; a second missile before the first times out is a <Term>Pk enhancing shot</Term>. <a href="#source-p825">{p('15-8')}</a> A shot needs a hostile declaration and the "in LAR" cue. <a href="#source-p825">{p('16-11')}</a></p>
+ <h3>After the shot</h3>
+ <ol class="exchange">
+  <li><span class="who">Fox-3</span><span class="said">Call the shot: <Term id="FOX">Fox</Term> three is an active radar missile (one semi-active, two infrared). <a href="#source-p825">{p('16-11, A-4')}</a></span></li>
+  <li><span class="who">Crank</span><span class="said">Turn to put the bandit at least {CRANK_AO}° off the nose on the cold side, so your velocity has more cross-range than down-range, without losing the radar track that supports the missile. It shrinks the threat's zone while the missile flies. <a href="#source-p825">{p('16-11')}</a></span></li>
+  <li><span class="who">Timeout</span><span class="said">The missile closes about 1 NM every 2 seconds fired from the forward quarter, 3 from the beam, 4 from the rear: a 20 NM head-on shot times out in about {tofSec(20, 'forward')} seconds. Timeout is not a kill. <a href="#source-p825">{p('15-9')}</a></span></li>
+  <li><span class="who">Decide</span><span class="said">Winning or losing depends on whether you shot on timeline and whether the bandit is targeting you (under 30 TA, or you are spiked). Then <Term>BANZAI</Term>: support the missile to timeout and go on to the merge; or <Term>SKATE</Term>: support it to timeout and turn out. <a href="#source-p825">{p('16-11 to 16-12')}</a></span></li>
+ </ol>
+ <section class="lesson figure-lesson" data-lesson="zone" aria-labelledby="zone-title">
+  <h3 id="zone-title" class="fig-title">Figure 3 — Where a shot is good, and how long it takes</h3>
+  <p>Move the fighter around the bandit, nose-on (0°) to the tail (180°), and in and out. The zone's shape is illustrative only. On the right, set the shot range to see the time-of-flight rule and the crank.</p>
+  <div class="controls">
+   <label for="zone-ta">Target aspect <output for="zone-ta"></output></label><input id="zone-ta" name="ta" type="range" min="0" max="180" step="5" value="30" />
+   <label for="zone-range">Range <output for="zone-range"></output></label><input id="zone-range" name="range" type="range" min="2" max="110" step="1" value="70" />
+   <label for="zone-shot">Shot range <output for="zone-shot"></output></label><input id="zone-shot" name="shot" type="range" min="8" max="40" step="1" value="20" />
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 3, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 340" role="img" aria-label="An illustrative launch zone around a bandit, longest ahead of it and shortest behind, with the no-escape range inside it, and bars for the time of flight"></svg></div>
+  <p class="no-js">Interactive figure unavailable. The launch zone reaches farthest in front of the bandit and least behind it, with the no-escape range inside. A 20 NM head-on shot times out in about 40 seconds; a 50 degree crank leaves the section about {(timeoutRange(20, CRANK_AO) - timeoutRange(20, 0)).toFixed(1)} NM farther from the bandit at timeout.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">The zone is an invented shape that follows the rules in the sources, longest against a hot bandit and shortest in the rear quarter <a href="#source-p825">{p('15-1')}</a> <a href="#source-f16">{d('269')}</a>; it is not any missile's. The time of flight uses the training rule of thumb. <a href="#source-p825">{p('15-9')}</a></p>
+ </section>
+ <p class="key"><strong>Key point:</strong> shoot inside the launch zone with a hostile declaration, crank to support the missile while slowing the closure, and decide at timeout whether to merge or leave.</p>
+
+ <h2 id="section">Working as a section</h2>
+ <p>Whatever the mission, a fighter section sanitizes airspace, detects and identifies unknown contacts, destroys hostile ones that meet the ROE, and fits into the wider air defence picture. <a href="#source-p825">{p('17-12')}</a> It runs the same tasks against every group that meets commit criteria: <a href="#source-p825">{p('17-13')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Section intercept tasks" tabindex="0"><table>
+  <caption>The section's tasks, with the training timeline <a href="#source-p825">{p('16-5 to 16-7, 17-13 to 17-35')}</a></caption>
+  <thead><tr><th scope="col">Task</th><th scope="col">What happens</th><th scope="col">Training range</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Picture building</th><td>Build the picture with the controller before any commit</td><td>Before commit</td></tr>
+   <tr><th scope="row"><Term>Commit</Term></th><td>A group meets the briefed <Term>commit criteria</Term>; the controller moves to tactical control</td><td>No closer than 35 NM, flank aspect or less</td></tr>
+   <tr><th scope="row">Label and name</th><td>The controller labels the picture and names the groups</td><td>After commit</td></tr>
+   <tr><th scope="row">Target</th><td>Pick the priority group, the highest factor in the picture</td><td>After labeling</td></tr>
+   <tr><th scope="row"><Term>Meld</Term></th><td>Bring both radars onto the targeted group; altitude is the key part of the call</td><td>No earlier than 25 NM</td></tr>
+   <tr><th scope="row"><Term>Sort</Term></th><td>Each fighter takes its own contact in the group</td><td>Right after meld</td></tr>
+   <tr><th scope="row">Shoot</th><td>Shoot in the launch zone on the sort contract, and crank together</td><td>20 NM</td></tr>
+   <tr><th scope="row">Decide</th><td>Merge or leave</td><td>At timeout</td></tr>
+  </tbody>
+ </table></div>
+ <p>Commit criteria come from the mission. A fighter defending an asset has tight criteria so it is not dragged away; an offensive sweep has loose ones. An escort targets only groups that threaten its strikers, and point or area defence kills only threat groups, enemy strikers first. <a href="#source-p825">{p('16-5, 17-23')}</a></p>
+ <p>The <Term>SORT</Term> is briefed as a contract, by azimuth, then range, then elevation. If the group is two contacts, sortable in azimuth, no call is needed: lead takes the left, lead or high contact and the wingman the right, trail or low one. <a href="#source-p825">{p('17-28')}</a></p>
+ <p>With two contacts, each shoots its own; against three, the training instruction has lead shoot the centre and left contacts and the wingman the right. <a href="#source-p825">{p('17-32')}</a> The section cranks after the shot whether or not it fired, away from follow-on groups and surface threats, with the wingman responsible for deconfliction. <a href="#source-p825">{p('17-34')}</a></p>
+ <ol class="exchange">
+  <li><span class="who">Lead</span><span class="said">“Rage 11, Fox-3.”</span></li>
+  <li><span class="who">Wing</span><span class="said">“Rage 12, Fox-3.”</span></li>
+  <li><span class="who">Lead</span><span class="said">“Rage, crank left.” <a href="#source-p825">{p('17-35')}</a></span></li>
+ </ol>
+ <p>Many unseen bandits arriving in the visual arena trace back to poor sanitization at range, poor meld mechanics, no sort, or poor lookout. <a href="#source-p825">{p('17-26')}</a></p>
+ <p class="key"><strong>Key point:</strong> a section is two radars and two missiles working one contract: meld onto one group, sort so each fighter has its own contact, shoot and crank together.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>The bandit controls target aspect and so your lateral separation; you control angle-off. LS ≈ TA × range × 100 feet.</li>
+  <li>On a collision course the contact does not drift; off it, it drifts away from collision bearing.</li>
+  <li>A stern conversion holds lateral separation, about 40,000 feet at 10 NM in training, then turns in.</li>
+  <li>Broadcast control is bullseye for everyone; tactical control is for one flight, in bullseye or BRAA.</li>
+  <li>A shot needs a hostile declaration; theater ROE normally also require an engagement order, and positive identification.</li>
+  <li>A missile's zone is biggest against a hot bandit when you are fast and high; inside RNE it cannot be outmaneuvered.</li>
+  <li>Shoot, crank, call timeout, then banzai to the merge or skate out.</li>
+  <li>A section commits, labels, targets, melds, sorts, shoots and decides, against every group that meets the criteria.</li>
+ </ul>
+
+ <h2 id="labels">Picture labels</h2>
+ <p>Once the fighters commit, the controller labels the picture, how the groups sit relative to each other, and names each group. Only a single group has the same label and name. <a href="#source-p825">{p('16-2, 17-20')}</a> A <Term>GROUP</Term> is radar contacts within 3 NM of each other. <a href="#source-p825">{p('A-5')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Picture labels" tabindex="0"><table>
+  <caption>Common picture labels <a href="#source-p825">{p('16-2, 17-20 to 17-21, A-1, A-6, A-8, A-10')}</a></caption>
+  <thead><tr><th scope="col">Label</th><th scope="col">Arrangement</th><th scope="col">Example call</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Single group</th><td>One group; "heavy" if three or more contacts</td><td>“Single group, Vegas 270, 35, 25 thousand, hot, hostile.”</td></tr>
+   <tr><th scope="row">Two groups azimuth</th><td>Side by side, separated in bearing</td><td>“Two groups azimuth 30. West group Vegas 140, 35, 30 thousand, hot, hostile. East group 20 thousand, beam east, hostile.”</td></tr>
+   <tr><th scope="row">Two groups range</th><td>One behind the other</td><td>“Two groups range 30. Lead group Vegas 250, 40, 26 thousand, hot, hostile. Trail group 30 thousand, flank southwest, hostile.”</td></tr>
+   <tr><th scope="row">Echelon</th><td>A fill-in for groups behind and to the side</td><td>“Two groups, azimuth 30, echelon northeast …”</td></tr>
+   <tr><th scope="row">Stack</th><td>Separated in altitude</td><td>"Two groups stack"</td></tr>
+   <tr><th scope="row">Ladder</th><td>Three or more in range</td><td></td></tr>
+   <tr><th scope="row">Vic, champagne</th><td>Three-group arrangements</td><td></td></tr>
+  </tbody>
+ </table></div>
+ <p>Fighters do not label the picture themselves unless no controller is available or in extremis; lead may recommend a label or ask for a new picture. <a href="#source-p825">{p('17-21')}</a></p>
+
+ <h2 id="reactions">When the bandit reacts</h2>
+ <p>Assume the threat understands radar warning indications and missile timelines and will try to drag you into a short-range fight: a lock can alert it. It may turn in to close fast, turn away, go to the beam, or start jamming. <a href="#source-p825">{p('16-7')}</a> The first signs on the radar are a change in closure, which is instantaneous and sensitive to even a small heading change, then the contact's drift and heading; the aspect vector lags. <a href="#source-p825">{p('16-7 to 16-8')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Reacting to the bandit" tabindex="0"><table>
+  <caption>The training instruction's reactions <a href="#source-p825">{p('16-8 to 16-13')}</a></caption>
+  <thead><tr><th scope="col">Situation</th><th scope="col">Action</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Bandit maneuvers</th><td>Put the contact on the nose, widen the radar scan, and call the maneuver to the controller</td></tr>
+   <tr><th scope="row">It turns away beyond 60 TA outside 20 NM</th><td><Term>Reset</Term>: chasing burns fuel, and you are off its radar. Inside 20 NM only a turn beyond 95 TA triggers a reset; inside 10 NM there is no reset</td></tr>
+   <tr><th scope="row">Spiked and behind the timeline</th><td>Assume a missile. Turn hard to put the bandit on the <Term>beam</Term>, dispense chaff, and hold it at least 5 seconds or until the spike goes; the beam exploits the threat radar's Doppler notch</td></tr>
+   <tr><th scope="row">Lost situational awareness</th><td><Term>ABORT</Term>: a maximum-performance turn to put the threat behind, then a low, fast dash away; no later than 10 NM against a radar threat</td></tr>
+  </tbody>
+ </table></div>
+ <p>Defend at timeout range or by the defend range, 8 NM, whichever comes first; inside the abort range, 10 NM, you are committed to the merge. <a href="#source-p825">{p('16-13')}</a> Never fly through the launch zone of one weapon to reach another's. <a href="#source-p825">{p('16-13')}</a></p>
+
+ <h2 id="vid">Visual identification</h2>
+ <p>A group still a bogey near the merge is a dangerous situation: the fighters must identify it visually and may then fall into a turning fight. If the mission requires visual identification, it is directed by 10 NM. One fighter becomes the <Term>eyeball</Term>, which makes the identification, and the other the <Term>shooter</Term>, which keeps 3,000 to 5,000 feet of vertical separation, short-range missile separation and sight of the eyeball, and shoots its sort contract the moment the group is identified hostile. <a href="#source-p825">{p('17-47 to 17-48')}</a></p>
+ <ol class="exchange">
+  <li><span class="who">Lead</span><span class="said">“Sherpa 11, eyeball.”</span></li>
+  <li><span class="who">Wing</span><span class="said">“Sherpa 12, shooter.”</span></li>
+  <li><span class="who">Lead</span><span class="said">“Shoot, shoot, FULCRUM.” or “Friendlies, friendlies, skip it.” <a href="#source-p825">{p('17-48')}</a></span></li>
+ </ol>
+
+ <h2 id="conventions">Navy and Air Force aspect words</h2>
+ <p>The two services count aspect from opposite ends of the target. The Navy uses target aspect, 0 on the bandit's nose; the Air Force uses aspect angle, 0 at its tail, and calls angle-off antenna train angle. The brevity words follow their own service's count: <a href="#source-p825">{p('8-1, A-3, A-4')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Aspect conventions" tabindex="0"><table>
+  <caption>The same words, two counts <a href="#source-p825">{p('8-1, A-1, A-3 to A-4')}</a></caption>
+  <thead><tr><th scope="col">Word</th><th scope="col">Navy, target aspect</th><th scope="col">Air Force, aspect angle</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>Flank</Term></th><td>30–60°</td><td>120–150°</td></tr>
+   <tr><th scope="row"><Term>Beam</Term></th><td colspan="2">70–110° (the same either way)</td></tr>
+   <tr><th scope="row"><Term>Drag</Term></th><td>120–180°</td><td>0–60°</td></tr>
+  </tbody>
+ </table></div>
+ <p>No Air Force, Marine Corps or Army intercept publication could be read for this revision, so check which convention your unit's briefing guide uses.</p>
+
+ <h2 id="missiles">The missiles</h2>
+ <p>Among the American missiles the Navy's training text describes, three are radar guided. <a href="#source-p825">{p('14-4 to 14-7')}</a> The <Term record="aim-7">AIM-7 Sparrow</Term> is semi-active: the shooter keeps a single-target radar lock to illuminate the target until impact. The <Term record="aim-120">AIM-120 AMRAAM</Term>, its replacement in the Navy and Air Force, needs no lock at medium and short range and can guide from track-while-scan, giving any fighter a multi-target capability. The <Term record="aim-54">AIM-54 Phoenix</Term> it also replaced is retired.</p>
+ <p>The infrared <Term record="aim-9">AIM-9 Sidewinder</Term> is the short-range missile for the end of the stern conversion. Threat missiles you may meet include the <Term record="r-27">R-27</Term>, <Term record="r-77">R-77</Term> and <Term record="pl-12">PL-12</Term>. All are in the <a href={ordnance}>ordnance records</a>.</p>
+
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p>DCS World and Falcon BMS both model the F-16C with the AIM-120. This is how their official manuals describe the BVR fight; other sim aircraft, including two-seat fighters with their own intercept displays, were not checked for this revision.</p>
+  <h3>DCS: F-16C Viper</h3>
+  <ul>
+   <li>The guide explains maximum launch range as the training text does: longest against a hot bandit, shorter against a cold one, and against a slow hot bandit or a fast cold one closure changes it. A bandit that simply changes aspect can defeat a missile fired at absolute maximum range. <a href="#source-f16">{d('269')}</a></li>
+   <li>Its <strong>crank</strong> turns until the radar is near its gimbal limit, ±60°, and it notes the cost: if the bandit turns to follow, your missile must turn too and loses range. <a href="#source-f16">{d('270')}</a></li>
+   <li>When the AIM-120's seeker goes active the bandit may be warned; the flight lead then decides whether to press or turn away, and a staggered wingman can continue while the shooter leaves. A shot fired before maximum range can be used to force a bandit defensive or break up a formation. <a href="#source-f16">{d('270 to 271')}</a></li>
+   <li>The launch zone on the display gives <strong>RAERO</strong> (the missile's aerodynamic maximum, any maneuver defeats it), <strong>ROPT</strong> and <strong>RPI</strong> (high probability against a non-maneuvering target), <strong>RTR</strong> (against a target that turns and runs at once) and <strong>RMIN</strong>. <a href="#source-f16">{d('595 to 596')}</a></li>
+  </ul>
+  <h3>Falcon BMS 4.38</h3>
+  <ul>
+   <li>Training mission 17A flies an intercept and stern conversion with heat-seekers: turn away from the aspect shown to build turning room, more for higher aspect, and go pure pursuit at 120° aspect angle, about 6 to 8 NM, and no later than 5 NM. BMS counts aspect angle, Air Force style. <a href="#source-bms">{b('256, 259 to 260')}</a></li>
+   <li>Mission 18 is a BVR combat air patrol. BMS describes BVR as a cycle of commit and abort, with the leader choosing <strong>wall</strong> (elements line abreast) or <strong>grind</strong> (elements in trail) before each commit, and <strong>skate</strong>, <strong>short skate</strong> or <strong>banzai</strong> flow. <a href="#source-bms">{b('295 to 296')}</a></li>
+   <li>Its BVR timeline defines its own named ranges: transition, desired out, decision, minimum abort and minimum recommit ranges, built from the threat's stern weapon zone. <a href="#source-bms">{b('296 to 297')}</a></li>
+   <li>Mission 18 puts bullseye at the end of the CAP's hot leg so that commit criteria can be a bullseye range, then has you learn that 25 NM is too close and extend it to 40. <a href="#source-bms">{b('310, 314')}</a></li>
+  </ul>
+  <h3>Where the sims and the training instruction differ, or say nothing</h3>
+  <ul>
+   <li>DCS cranks to the radar's ±60° gimbal limit <a href="#source-f16">{d('270')}</a>; the training standard is at least 50° angle-off, without gimbaling the radar. <a href="#source-p825">{p('16-11')}</a></li>
+   <li>BMS's banzai notches for a briefed time, commonly 15 seconds, then aborts if spiked <a href="#source-bms">{b('296')}</a>; the training instruction's beam defense holds at least 5 seconds or until the spike goes, and its banzai is launch and defend to the merge. <a href="#source-p825">{p('16-12 to 16-13')}</a></li>
+   <li>Grinder and wall tactics come only from the sim manual here. The training instruction has its own timeline <a href="#source-p825">{p('16-10')}</a>, a transition range <a href="#source-p825">{p('16-11')}</a>, and an 8 NM defend range and 10 NM abort range <a href="#source-p825">{p('16-13')}</a>. BMS's desired-out, decision, minimum-abort and minimum-recommit ranges are defined differently, from the threat's stern weapon zone.</li>
+   <li>Neither manual covers the declarations, positive and procedural identification, or a visual identification.</li>
+  </ul>
+  <p><strong>To practise:</strong> fly Figure 2's collision and bandit reciprocal cases against an AI target, then BMS mission 18 or a DCS F-16C intercept: commit, declare, meld, shoot inside the launch zone, crank and call timeout.</p>
+ </section>
+
+ <h2 id="terms">Terms</h2>
+ <p>Every term here is in the <a href={glossary}>beyond-visual-range terms</a>; BRAA, bullseye and the declarations are also in the <a href={brevity}>brevity words</a>, and target aspect and the pursuit curves in the air combat terms.</p>
+ <GlossaryList items={[
+  'Target aspect', 'Angle-off', 'Antenna train angle', 'Aspect angle', 'Lateral separation', 'Bandit reciprocal', 'Cut', 'Heading crossing angle', 'Rate of closure',
+  'Collision course', 'Collision bearing', 'Contact drift', 'Cutoff vector', 'Pure pursuit', 'Positional advantage', 'Stern conversion', 'Counterturn', 'Displacement turn',
+  'LAR', 'RMAX', 'RNE', 'RMIN', 'ROPT', 'Kinematic defeat', 'Pk enhancing shot', 'Commit criteria', 'Broadcast control', 'Tactical control', 'Declaration',
+  'Picture label', 'MELD', 'SORT', 'CRANK', 'TIMEOUT', 'TRASHED', 'SKATE', 'BANZAI', 'Reset', 'Eyeball', 'Shooter', 'Positive identification', 'Procedural identification', 'Combat identification',
+ ]} />
+ <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
+  <h3 id="terms-title">Quiz: name the term</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next term</button></div>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <p>One or more questions for each outcome at the top of the page; the quiz in <a href="#geometry">Reading the geometry</a> and Figures 2 and 3 cover more.</p>
+ <section class="lesson quiz-lesson" data-lesson="section" aria-labelledby="section-quiz-title">
+  <h3 id="section-quiz-title">Quiz: shots, sections and identification</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next question</button></div>
+ </section>
+ <details><summary><span class="outcome">Outcome 1</span> A bandit at 20 NM shows 20 R target aspect, then turns to put you on its nose. What happened to your lateral separation?</summary><p>It went from about 40,000 feet to zero, instantly: TA is now 0, and LS = TA × range × 100.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> The contact holds the same bearing as the range closes. What does that tell you?</summary><p>You are on a collision course; with both aircraft at the same speed, your angle-off equals its target aspect, on the other side.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> You have 40,000 feet of lateral separation at 25 NM and want to keep it to 10 NM. What heading do you fly?</summary><p>The bandit reciprocal: on a zero cut, lateral separation does not change.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Why might a fighter not shoot at maximum range, even with a valid launch zone?</summary><p>A long shot gives the bandit time to see it and maneuver, and the missile arrives with little energy, so it is easy to defeat kinematically; ROPT trades range for end-game energy.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> Your missile times out and the radar contact disappears. Was it a kill?</summary><p>Not necessarily: timeout only says the missile has reached its expected target. A lost contact after timeout may mean a kill.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> In what order does a section run its intercept tasks?</summary><p>Picture building, commit, label and name, target, meld, sort, shoot, decide, merge.</p></details>
+ <details><summary><span class="outcome">Outcome 6</span> What is the difference between a broadcast call and a tactical call about the same group?</summary><p>Broadcast is for everyone, in bullseye, with a track direction; tactical is for one flight, in bullseye or BRAA, with the group's aspect to that flight.</p></details>
+
+ <h2 id="sources">Sources and applicability</h2>
+ <h3>Military sources</h3>
+ <p id="source-p825"><strong>[1] US Navy, Chief of Naval Air Training, CNATRA P-825 (07-14), Flight Training Instruction, Basic Fighter Maneuvering (BFM) and All Weather Intercept (AWI), Advanced UMFO T-45C/VMTS, 1 July 2014.</strong> <a href="https://falcon.blu3wolf.com/Docs/P-825.pdf">Read on a public copy</a>, 9 November 2026, by printed page: fighter missions and pursuit, pp. 4-2 to 4-4; air intercept control, pp. 5-2 to 5-9; intercept geometry, pp. 8-1 to 9-20; target aspect control and the stern conversion, pp. 10-1 to 10-12 and 13-10; missiles, pp. 14-4 to 14-7; missile employment, pp. 15-1 to 15-10; advanced intercepts, pp. 16-1 to 16-14; section employment, pp. 17-12 to 17-48; brevity codes, pp. A-1 to A-11. The Navy's training text for student naval flight officers and Marine Corps navigators; CNATRA's own site no longer serves it, and a 2017 revision exists that was not read. It teaches skills, not fleet tactics.</p>
+ <p id="source-jp"><strong>[2] US Joint Chiefs of Staff, JP 3-01, Countering Air and Missile Threats, 23 March 2012.</strong> <a href="https://www.bits.de/NRANEU/others/jp-doctrine/jp3_01(12).pdf">Read on the Berlin Information-center for Transatlantic Security's copy</a>, 9 November 2026, pp. III-11 to III-17. The joint publication for all four services; a later edition exists that could not be read.</p>
+ <h3>Sim sources</h3>
+ <p id="source-f16"><strong>[3] Eagle Dynamics, DCS: F-16C Viper Early Access Guide (English).</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 9 November 2026, pp. 269–271 and 595–596. A sim manual, cited only for the In the sim panel and Figure 3's shape.</p>
+ <p id="source-bms"><strong>[4] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 9 November 2026, pp. 256, 259–260, 295–297, 310 and 314. A sim manual, cited only for the In the sim panel.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/bvr-intercepts-evidence.md">BVR intercepts evidence</a>.</p>
+ <p>Figures 1 to 3 and the worked intercept are original, invented examples, not reproductions of any publication's figure.</p>
+ <p class="note">Applicability: written for fighter aircrew of every service. The procedures are the Navy's published training standards, which it says are skills rather than tactics, with the Air Force's aspect conventions noted; no Air Force or Army intercept publication could be read. Identification is from joint doctrine. Real tactics, missile performance, theater rules of engagement, SPINS, your unit's procedures and the current editions govern. This revision is Drafted pending independent source-backed review.</p>
+</SiteLayout>
+
+<script>import '../../../lessons/bvr/lesson-ui.mjs';</script>
+
+<style>
+  .contents-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
+  .contents h3 { margin: 0.4rem 0 0.2rem; font-size: 0.95rem; }
+  .contents ol { padding-left: 1.5rem; margin-top: 0; }
+  .lede { font-size: 1.1rem; }
+  .key { padding: 0.6rem 1rem; border-left: 0.25rem solid var(--color-link); background: var(--color-surface); }
+  ul.recap li { margin-block: 0.3rem; }
+  ol.exchange, .feedback :global(ol.exchange) { list-style: none; padding-left: 1rem; border-left: 0.25rem solid var(--color-border); }
+  ol.exchange li, .feedback :global(ol.exchange li) { display: grid; grid-template-columns: 9rem 1fr; column-gap: 0.75rem; margin-block: 0.4rem; }
+  ol.exchange .who, .feedback :global(.who) { font-weight: 700; }
+  .feedback :global(.said) { font-weight: 400; }
+  ol.exchange .step { margin-left: 0.4rem; font-size: 0.85rem; white-space: nowrap; }
+  .outcome { display: inline-block; margin-right: 0.4rem; padding: 0 0.4rem; font-size: 0.8rem; border: 1px solid var(--color-border); color: var(--color-muted); }
+  .sim-panel { margin: 2rem 0; padding: 0.75rem 1.25rem; border-left: 4px solid var(--color-accent); background: var(--color-surface, #f6f7f8); }
+  .sim-panel h2 { margin-top: 0.4rem; }
+  .sim-panel h3 { margin: 1rem 0 0.3rem; font-size: 1rem; }
+  table { width: 100%; border-collapse: collapse; }
+  caption { padding: 0.5rem 0.75rem; text-align: left; color: var(--color-muted); font-size: 0.9rem; }
+  th, td { padding: 0.45rem 0.75rem; border-top: 1px solid var(--color-border); text-align: left; vertical-align: top; }
+  thead th { background: var(--color-surface); }
+  .note { padding: 0.75rem 1rem; border-left: 0.25rem solid var(--color-border); background: var(--color-surface); }
+  .lesson { margin-block: 1.5rem; padding: 1rem; border: 1px solid var(--color-text); }
+  .lesson h3 { margin-top: 0; }
+  button:focus-visible, input:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .lesson :global(button) { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: #fff; background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
+  .lesson :global(button:disabled) { opacity: 0.45; cursor: default; }
+  .lesson [data-choices] :global(button) { color: var(--color-text); background: #fff; font-weight: 400; text-align: left; }
+  .controls { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; align-items: center; margin-bottom: 0.75rem; }
+  .controls input[type="range"] { width: 100%; min-height: 2.75rem; }
+  .controls output { font-weight: 700; margin-left: 0.3rem; }
+  .feedback { font-weight: 700; min-height: 1.6em; }
+  .feedback :global(p) { margin: 0.2rem 0; }
+  .feedback :global(.derived) { font-weight: 400; }
+  .lesson.ready .no-js { display: none; }
+  .no-js { font-weight: 700; }
+  .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+  @media (min-width: 64rem) {
+    .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
+  }
+  .fig-scroll { overflow-x: auto; }
+  .fig-scroll :global(svg) { min-width: 36rem; }
+  .fig-title { font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 2px solid var(--color-text); padding-bottom: 0.3rem; }
+  .fig-caption { color: var(--color-muted); font-size: 0.9rem; }
+  .stepper { align-items: center; }
+  .stepper [data-count] { font-weight: 700; }
+  .quiz-lesson .task { font-style: italic; }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--color-border); }
+  .table-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+  @media (max-width: 40rem) {
+    .contents-groups { grid-template-columns: 1fr; }
+    ol.exchange li, .feedback :global(ol.exchange li) { display: block; }
+    ol.exchange .who, .feedback :global(.who) { display: block; }
+    .controls { grid-template-columns: 1fr; }
+  }
+  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
+  :global(.natops .frame) { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
+  :global(.natops .lbl) { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
+  :global(.natops .lbl.small) { font-size: 10px; font-weight: 400; }
+  :global(.natops .ln) { fill: none; stroke: var(--color-text); stroke-width: 1.8; }
+  :global(.natops .ln.dashed) { stroke-dasharray: 7 4; }
+  :global(.natops .ln.on), :global(.natops .thin.on) { stroke: var(--color-link); stroke-width: 2.4; }
+  :global(.natops .thin) { fill: none; stroke: var(--color-text); stroke-width: 1; }
+  :global(.natops .thin.dotted) { stroke-dasharray: 2 3; }
+  :global(.natops .thin.dashed) { stroke-dasharray: 6 4; }
+  :global(.natops .shade) { fill: #e6e9ec; stroke: none; }
+  :global(.natops .fill) { fill: var(--color-text); }
+  :global(.natops .mine) { fill: var(--color-link); stroke: var(--color-link); }
+  .lesson:not(.ready) .buttons, .lesson:not(.ready) .controls, .lesson:not(.ready) svg:empty { display: none; }
+</style>

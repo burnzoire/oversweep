@@ -1904,6 +1904,17 @@
     "summary": "Critical action items, how soon to land, the power-off emergency landing pattern and its keys, emergency fuel, and the checklists after an ejection."
   },
   {
+    "id": "encyclopedia.terminology.bvr",
+    "slug": "bvr",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Beyond-visual-range terms",
+    "designation": "CNATRA P-825 and JP 3-01",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Intercept geometry, collision course and the stern conversion, missile launch zones, control and section calls from commit to decision, and how a group is identified before a shot."
+  },
+  {
     "id": "encyclopedia.theatres.middle-east",
     "slug": "middle-east",
     "category": "locations",
