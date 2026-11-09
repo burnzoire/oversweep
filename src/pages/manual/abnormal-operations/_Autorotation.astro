@@ -13,11 +13,11 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
 const core = [
  ['example', 'One engine failure, start to finish'], ['failure', 'What an engine failure does to the rotor'],
  ['entry', 'The entry depends on your speed and height'], ['descent', 'The steady descent: airspeed and rotor rpm'],
- ['landing', 'Flare, level and cushion'], ['recap', 'Key points'],
+ ['landing', 'Flare, level and cushion'], ['variants', 'Turns, power recovery and the hover'], ['recap', 'Key points'],
 ];
 const reference = [
- ['errors', 'Common errors'], ['sims', 'In the sim'], ['launch', 'Practice: engine failure exercise'],
- ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+ ['errors', 'Common errors'], ['sims', 'In the sim'], ['check', 'Check your understanding'],
+ ['sources', 'Sources and applicability'], ['launch', 'Practise it: the autorotation exercise'],
 ];
 const cite = (n: number) => (pages: string) => `[${n}, ${pages.includes('–') || pages.includes(',') ? 'pp.' : 'p.'} ${pages}]`;
 // [1] NAVWEPS 00-80T-80 (printed pages), the military source; [2] the FAA
@@ -56,14 +56,13 @@ const minPt = S300_CURVE.reduce((a, b) => (b[1] < a[1] ? b : a));
 const tangentEnd = [glideMph * 1.12, glideFpm * 1.12];
 const glideRatio = (mph: number, fpm: number) => (mph * 88 / fpm).toFixed(1);
 ---
-<SiteLayout title={mod.title} activeSection="manual" activeSubject="flight-fundamentals" compactSubjectNav={true}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Flight Fundamentals',href:sitePath('manual/flight-fundamentals/')},{label:mod.title}]}>
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="abnormal-operations" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Abnormal Operations',href:sitePath('manual/abnormal-operations/')},{label:mod.title}]}>
  <section class="status-panel">
   <h2>{mod.maturity}</h2>
-  <p>Module revision {mod.revision} · What a single-engine helicopter's rotor does when the engine fails, and the sequence that gets it to the ground, written for military pilots of every service. It follows the Navy's <em>Aerodynamics for Naval Aviators</em> for the rotor's behaviour and the FAA <em>Helicopter Flying Handbook</em>, as the supplementary source, for the control technique.</p>
-  <p>Read the sequence, then fly it in the standalone exercise, which opens in its own window. The rotor aerodynamics behind it (the driving and driven regions of the blade) are in <a href={rotor}>Rotor-Wing Principles of Flight</a>.</p>
+  <p>Module revision {mod.revision} · How a helicopter's rotor keeps turning without power, and how the pilot uses it to get to the ground after an engine failure, written for military pilots of every service. It follows the Navy's <em>Aerodynamics for Naval Aviators</em> for the rotor's behaviour and the FAA <em>Helicopter Flying Handbook</em>, as the supplementary source, for the control technique.</p>
+  <p>The rotor aerodynamics behind it (the driving and driven regions of the blade) are in <a href={rotor}>Rotor-Wing Principles of Flight</a>. A standalone exercise to fly it is linked at the end of the page. Fixed-wing engine failures, fires and the other emergencies are in <a href={sitePath('manual/abnormal-operations/emergency-procedures/')}>Emergency Procedures</a>.</p>
  </section>
- <TrainerLaunch variant="jump" experienceId={exercise.id} label="Practise the engine failure in the autorotation exercise" />
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
   <div class="contents-groups">
    <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
@@ -77,7 +76,8 @@ const glideRatio = (mph: number, fpm: number) => (mph * 88 / fpm).toFixed(1);
   <li>say why the <Term id="Collective">collective</Term> must come down at once, and what happens to rotor rpm if it does not;</li>
   <li>choose the first <Term id="Cyclic">cyclic</Term> movement from the speed and height you start at, and say why low, slow starts are the hardest;</li>
   <li>explain how airspeed and rotor rpm set the descent, and which way to move the collective when rpm is high or low;</li>
-  <li>describe the flare, the level attitude and the cushion, and what goes wrong when each is early, late or too much.</li>
+  <li>describe the flare, the level attitude and the cushion, and what goes wrong when each is early, late or too much;</li>
+  <li>say what a turn, a power recovery and a power failure in a hover change about the same sequence.</li>
  </ol>
  <p class="note">This is a conceptual reference, not a flight manual or an emergency checklist. Each type's autorotation airspeed, rotor rpm range, flare height and technique come from its flight manual: the operator's manual for the Army, NATOPS for the Navy and Marine Corps, the -1 for the Air Force. Multiengine helicopters that can fly on one engine are outside this module.</p>
 
@@ -236,6 +236,20 @@ const glideRatio = (mph: number, fpm: number) => (mph * 88 / fpm).toFixed(1);
  <p>The timing of the flare and of the collective matters most when touching down slowly, especially with a low-inertia rotor. It is generally better to accept more ground run than a harder landing at minimum groundspeed. <a href="#source-hfh">{h('11-4')}</a></p>
  <p class="key"><strong>Key point:</strong> the flare slows you and builds rpm, the level attitude keeps the tail clear, and the cushion spends the rotor's stored energy once, close to the ground.</p>
 
+ <h2 id="variants">Turns, power recovery and the hover</h2>
+ <p>The straight-in autorotation is the base case. Three variants change one part of it, and each type's flight manual gives the heights and limits. The numbers below are the FAA handbook's training technique. <a href="#source-hfh">{h('11-6–11-9')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Autorotation variants" tabindex="0"><table>
+  <caption>What each variant changes</caption>
+  <thead><tr><th scope="col">Variant</th><th scope="col">Why it is flown</th><th scope="col">What changes</th><th scope="col">The trap</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">With a turn (90° or 180°)</th><td>To land into the wind or avoid obstacles <a href="#source-hfh">{h('11-6')}</a></td><td>Turn early, so the rest is flown as a straight-in; in training, 30 to 60 degrees of bank, and the turn finished and lined up before 200 feet above the ground <a href="#source-hfh">{h('11-6')}</a></td><td>Rotor rpm builds with G in the turn; an out-of-trim turn raises the sink rate, and a late turn arrives on the final course low <a href="#source-hfh">{h('11-6')}</a></td></tr>
+   <tr><th scope="row">With a power recovery</th><td>To end a practice autorotation before touchdown <a href="#source-hfh">{h('11-7')}</a></td><td>Level at about 3 to 15 feet, then raise the collective and the throttle together to rejoin the needles; then hover and land, or go around <a href="#source-hfh">{h('11-7')}</a></td><td>Throttle too fast overspeeds the engine, too slow loses rotor rpm; slower-responding engines need power developing by about 100 feet <a href="#source-hfh">{h('11-7–11-8')}</a></td></tr>
+   <tr><th scope="row">Power failure in a hover</th><td>So the response to an engine failure in a low hover is automatic <a href="#source-hfh">{h('11-8')}</a></td><td>No collective on entry: pedal for heading, cyclic for a level, vertical descent; at about 1 foot, raise the collective to cushion <a href="#source-hfh">{h('11-8–11-9')}</a></td><td>Any sideways movement risks dynamic rollover; a low-inertia rotor settles at once <a href="#source-hfh">{h('11-9')}</a></td></tr>
+  </tbody>
+ </table></div>
+ <p>A go-around from a practice autorotation must not pass through an unsafe area of the height–velocity diagram. <a href="#source-hfh">{h('11-8')}</a> The same handbook says the autorotation also answers a complete tail rotor failure, because there is virtually no torque in one. <a href="#source-hfh">{h('11-2')}</a></p>
+ <p class="key"><strong>Key point:</strong> a turn, a power recovery or a hover changes where the sequence starts or ends, not the chain itself: rotor rpm in the green, a level attitude near the ground, and the collective used once to cushion.</p>
+
  <h2 id="recap">Key points</h2>
  <ul class="recap">
   <li>Lower the collective the moment the engine fails; rotor rpm lost too far may not come back. <a href="#failure">More</a></li>
@@ -243,6 +257,7 @@ const glideRatio = (mph: number, fpm: number) => (mph * 88 / fpm).toFixed(1);
   <li>Fly the autorotation airspeed for the slowest descent, or the faster speed for the longest glide. <a href="#descent">More</a></li>
   <li>Hold rotor rpm in the green with small collective movements: up to lower rpm, down to raise it. <a href="#descent">More</a></li>
   <li>Flare, level, then cushion with the collective, close to the ground and only once. <a href="#landing">More</a></li>
+  <li>Turn early in a turning autorotation; in a power recovery, bring the throttle and collective up together; in a hover, leave the collective until the last foot. <a href="#variants">More</a></li>
  </ul>
 
  <h2 id="errors">Common errors</h2>
@@ -275,16 +290,6 @@ const glideRatio = (mph: number, fpm: number) => (mph * 88 / fpm).toFixed(1);
   <p><strong>Not checked.</strong> The other DCS helicopters (Mi-8MTV2, Mi-24P, Ka-50, AH-64D, SA342, OH-58D, CH-47F) and helicopters in other sims were not checked. The Oversweep exercise below is a separate, invented model, not a model of the Huey.</p>
  </section>
 
- <h2 id="launch">Practice: engine failure exercise</h2>
- <section class="status-panel" data-experience-id={exercise.id} data-experience-revision={exercise.revision}>
-  <h3>{exercise.title}</h3><p>{exercise.maturity} · Exercise revision {exercise.revision}</p>
-  <p>{exercise.applicability} Prerequisites: {exercise.prerequisites.join(' · ')}.</p>
-  <p>Choose the fuel, the height and the forward speed, then take the engine failure after a countdown, or by surprise. In a side view over flat ground, fly the autorotation to the ground with the collective and the cyclic, reading airspeed, vertical speed, height and a dual rotor and engine tachometer. An optional instructor calls the sequence, and a debrief grades the touchdown.</p>
-  <p>Controls: <kbd>Shift</kbd> and <kbd>Ctrl</kbd> (or <kbd>W</kbd> and <kbd>S</kbd>) move the collective up and down; the up and down arrows move the cyclic forward and aft. On a phone or with a mouse, drag the two levers; a joystick or throttle can be assigned to either control.</p>
-  <p>What the exercise practises: outcome 1, the immediate collective; outcome 2, the entry from the speed and height you choose; outcome 3, holding airspeed and rpm in the descent; outcome 4, the flare, level and cushion, which the debrief grades.</p>
-  <p>It is an educational model of an invented light helicopter, not of any real type. The rotor's thrust, power and rpm come from simple blade-element and momentum theory, so the descent rate, the rpm response to collective and cyclic, and the cushion at the bottom behave as described above; its numbers do not. The cyclic sets a pitch attitude rather than moving the disk as a real one does. Its autorotation speed of about 55 knots, rotor rpm range of 90 to 108 percent, flare cue at 60 feet and touchdown limits are invented for the exercise. Pedals, yaw, wind, turns, density altitude, the throttle and the ground run are not modelled.</p>
-  <TrainerLaunch href={trainerHref} experienceId={exercise.id} label="Launch the autorotation exercise" />
- </section>
 
  <h2 id="check">Check your understanding</h2>
  <details><summary><span class="outcome">Outcome 1</span> The engine quits and you take three seconds to lower the collective. What happens to rotor rpm, and why might it not come back?</summary><p>With the blades still at high pitch and no engine torque, rpm falls, fastest in a low-inertia rotor. Let it fall too far and the rotor becomes unstable and keeps slowing; with the collective already down, only height or airspeed can buy it back.</p></details>
@@ -295,17 +300,29 @@ const glideRatio = (mph: number, fpm: number) => (mph * 88 / fpm).toFixed(1);
  <details><summary><span class="outcome">Outcome 3</span> Your landing spot is farther than the glide at the autorotation speed will reach. Speed up or slow down?</summary><p>Speed up, toward the maximum-range speed, where a line from the origin touches the descent curve. You come down faster but go farther for each foot of height. Slowing down below the minimum-descent speed shortens the glide and steepens the descent.</p></details>
  <details><summary><span class="outcome">Outcome 4</span> You pulled the collective at 40 feet and the descent stopped, but now rotor rpm is low and you are sinking again. What went wrong?</summary><p>The collective came too early and used up the rotor's stored energy above the ground, leaving little or none for the cushion at the bottom.</p></details>
  <details><summary><span class="outcome">Outcome 4</span> Why hold the skids level at the bottom instead of keeping the flare attitude to the ground?</summary><p>A nose-high, tail-low attitude close to the ground puts the tail rotor into the ground first. Level the helicopter with forward cyclic at a few feet, then cushion.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> You enter an autorotation downwind and need a 180-degree turn to land into the wind. When do you turn, and what happens to rotor rpm in it?</summary><p>Early, once the descent and airspeed are set, so you are lined up with the landing area before 200 feet and fly the rest as a straight-in. Rotor rpm builds with the G of the turn; hold it in range with the collective, and expect to lower the collective again on rollout.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> The engine quits in a 3-foot hover. Do you lower the collective?</summary><p>No. The handbook's technique leaves the collective alone on entry: hold the heading with the pedal and a level, vertical descent with the cyclic, then raise the collective at about a foot to cushion.</p></details>
 
  <h2 id="sources">Sources and applicability</h2>
  <h3>Military source</h3>
  <p id="source-navweps"><strong>[1] H. H. Hurt, Jr., NAVWEPS 00-80T-80, Aerodynamics for Naval Aviators, revised January 1965.</strong> Issued by the Office of the Chief of Naval Operations, Aviation Training Division; hosted by the FAA: <a href="https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/00-80T-80.pdf">read the book (faa.gov)</a>. Inspected 26 October 2026 from the PDF: pp. 407–409 (autorotation, rotor inertia and the dead man's curve). A US Government work.</p>
  <h3>Supplementary: FAA handbook</h3>
- <p id="source-hfh"><strong>[2] Federal Aviation Administration, FAA-H-8083-21B, Helicopter Flying Handbook (2019).</strong> Chapter PDFs on faa.gov, read on 26 October and 5 November 2026: <a href="https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/helicopter_flying_handbook/hfh_ch07.pdf">chapter 7, Helicopter Performance</a> (pp. 7-3–7-5: the height–velocity diagram, Figure 7-1, and the autorotation curve, Figure 7-3) and <a href="https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/helicopter_flying_handbook/hfh_ch11.pdf">chapter 11, Helicopter Emergencies and Hazards</a> (pp. 11-2–11-7: autorotation, and Figure 11-2, the straight-in autorotation). A US Government work, public domain.</p>
+ <p id="source-hfh"><strong>[2] Federal Aviation Administration, FAA-H-8083-21B, Helicopter Flying Handbook (2019).</strong> Chapter PDFs on faa.gov, read on 26 October and 5 November 2026: <a href="https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/helicopter_flying_handbook/hfh_ch07.pdf">chapter 7, Helicopter Performance</a> (pp. 7-3–7-5: the height–velocity diagram, Figure 7-1, and the autorotation curve, Figure 7-3) and <a href="https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/helicopter_flying_handbook/hfh_ch11.pdf">chapter 11, Helicopter Emergencies and Hazards</a> (pp. 11-2–11-9: autorotation, Figure 11-2, the straight-in autorotation, and the turning, power-recovery and hovering autorotations; the variants read 9 November 2026). A US Government work, public domain.</p>
  <h3>Sim source</h3>
  <p id="source-dcs"><strong>[3] Eagle Dynamics, DCS: UH-1H Huey Flight Manual (English).</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 5 November 2026 by printed page: section 9.7, Autorotation, practical part, pp. 127–131. A sim manual, cited only for the In the sim panel.</p>
- <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/autorotation-evidence.md">Autorotation Practice evidence</a>. The FAA handbook is cited for the control technique, which the Navy text, a book of aerodynamics, does not give step by step. The Army's FM 3-04.203 was not read for this module.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/autorotation-evidence.md">Autorotation evidence</a>. The FAA handbook is cited for the control technique, which the Navy text, a book of aerodynamics, does not give step by step. The Army's FM 3-04.203 was not read for this module.</p>
  <p>Figures 1 to 3 are redrawn from the FAA handbook's Figures 11-2, 7-1 and 7-3: the helicopter in Figure 1 is traced from Figure 11-2, Figure 2 is read off Figure 7-1's grid, and Figure 3's curve is digitised from Figure 7-3.</p>
- <p class="note">Applicability: single-rotor helicopters with a freewheeling unit, for military helicopter pilots of every service. The worked example and the exercise use an invented helicopter whose numbers apply to no real type. Your helicopter's operator's manual, NATOPS or -1 governs its limits and emergency procedures. This revision is Drafted pending independent source-backed review.</p>
+ <p class="note">Applicability: single-rotor helicopters with a freewheeling unit, for military helicopter pilots of every service. The worked example and the exercise use an invented helicopter whose numbers apply to no real type. Your helicopter's operator's manual, NATOPS or -1 governs its limits and emergency procedures. Revision 3 moved the module from Flight Fundamentals to Abnormal Operations and added the variants. This revision is Drafted pending independent source-backed review.</p>
+ <h2 id="launch">Practise it: the autorotation exercise</h2>
+ <section class="status-panel" data-experience-id={exercise.id} data-experience-revision={exercise.revision}>
+  <h3>{exercise.title}</h3><p>{exercise.maturity} · Exercise revision {exercise.revision}</p>
+  <p>{exercise.applicability} Prerequisites: {exercise.prerequisites.join(' · ')}.</p>
+  <p>Choose the fuel, the height and the forward speed, then take the engine failure after a countdown, or by surprise. In a side view over flat ground, fly the autorotation to the ground with the collective and the cyclic, reading airspeed, vertical speed, height and a dual rotor and engine tachometer. An optional instructor calls the sequence, and a debrief grades the touchdown.</p>
+  <p>Controls: <kbd>Shift</kbd> and <kbd>Ctrl</kbd> (or <kbd>W</kbd> and <kbd>S</kbd>) move the collective up and down; the up and down arrows move the cyclic forward and aft. On a phone or with a mouse, drag the two levers; a joystick or throttle can be assigned to either control.</p>
+  <p>What the exercise practises: outcome 1, the immediate collective; outcome 2, the entry from the speed and height you choose; outcome 3, holding airspeed and rpm in the descent; outcome 4, the flare, level and cushion, which the debrief grades. It flies straight-in autorotations only, so outcome 5 is covered by the text and questions above.</p>
+  <p>It is an educational model of an invented light helicopter, not of any real type. The rotor's thrust, power and rpm come from simple blade-element and momentum theory, so the descent rate, the rpm response to collective and cyclic, and the cushion at the bottom behave as described above; its numbers do not. The cyclic sets a pitch attitude rather than moving the disk as a real one does. Its autorotation speed of about 55 knots, rotor rpm range of 90 to 108 percent, flare cue at 60 feet and touchdown limits are invented for the exercise. Pedals, yaw, wind, turns, density altitude, the throttle and the ground run are not modelled.</p>
+  <TrainerLaunch href={trainerHref} experienceId={exercise.id} label="Launch the autorotation exercise" />
+ </section>
 </SiteLayout>
 <script>
  import { s300Descent } from '../../../lessons/flight-fundamentals/autorotation-figures.mjs';

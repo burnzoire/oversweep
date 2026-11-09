@@ -34,7 +34,7 @@
     "id": "experience.autorotation",
     "manualId": "manual.autorotation",
     "slug": "autorotation",
-    "subject": "flight-fundamentals",
+    "subject": "abnormal-operations",
     "revision": 3,
     "title": "Autorotation — engine failure exercise",
     "maturity": "Drafted — not technically validated",
@@ -56,12 +56,11 @@
       "lessons/shared/axis-bindings.mjs"
     ],
     "module": {
-      "title": "Autorotation Practice",
-      "objective": "Understand what an engine failure does to a helicopter's rotor and the sequence that answers it, entry, steady descent, flare and touchdown, and how the right first cyclic input depends on the speed you start from; then fly it in a standalone exercise.",
+      "title": "Autorotation",
+      "objective": "Understand autorotation in a helicopter: what keeps the rotor turning without power, why the entry after an engine failure depends on speed and height, how airspeed and rotor rpm set the descent and glide, the flare, level and cushion, and the turning, power-recovery and hover variants; then fly it in a standalone exercise.",
       "applicability": "Single-rotor helicopters with a freewheeling unit, for military pilots of every service; each type's flight manual gives its own autorotation airspeed, rotor rpm and technique.",
-      "revision": 2,
-      "maturity": "Drafted — not technically validated",
-      "group": "Rotor wing"
+      "revision": 3,
+      "maturity": "Drafted — not technically validated"
     }
   },
   {

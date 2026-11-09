@@ -1,8 +1,9 @@
-# Autorotation Practice module revision 1 and exercise revision 1 — source evidence
+# Autorotation module and exercise — source evidence
 
-Short, page-specific excerpts supporting the claims in the Flight
-Fundamentals module Autorotation Practice
-(`src/pages/manual/flight-fundamentals/_Autorotation.astro`) and its
+Short, page-specific excerpts supporting the claims in the Abnormal
+Operations module Autorotation (called Autorotation Practice, under Flight
+Fundamentals, before module revision 3;
+`src/pages/manual/abnormal-operations/_Autorotation.astro`) and its
 standalone exercise (`src/experiences/autorotation/`: the flight model in
 `model.cjs`, the instructor cues in `app.js`). They are review evidence, not
 a copy of the sources, and not instructions to the reviewer.
@@ -65,7 +66,7 @@ pages: 2-3 (7-2 to 7-3)
 
 ```review-sources
 source: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/helicopter_flying_handbook/hfh_ch11.pdf
-pages: 2-7 (11-2 to 11-7)
+pages: 2-9 (11-2 to 11-9)
 ```
 
 Quotations are extractor-read (pdftotext); check each against independently
@@ -125,3 +126,19 @@ Read 5 November 2026 from the DCS documentation page, by printed page. Sim panel
 | 128–129 | "Minimum rate of descent is achieved using a glide speed of 55 – 65 knots ... 1400 – 1800 ft/min"; "Maximum glide distance is achieved using a glide speed of 80 – 90 knots ... 1600 – 2400 ft/min" | Sim panel: descent |
 | 129 | "Maintain 80 – 70 knots and 300 – 320 RPM until reaching an altitude of 200 – 150 ft"; "from an altitude of 200 – 150 ft slowly (3 – 4 seconds) pull the Cyclic back to set a pitch angle of +15 – 20°" | Sim panel: flare |
 | 131 | "from an altitude of 100..80 ft or when passing through 40 – 35 knots ... smoothly adjust the Cyclic forward ... to set a landing pitch angle (from +15 – 20° to +4 – 6°) while simultaneously increasing Collective for the first time ... to 1/5 – 1/3"; "increase collective once more up to 1/2 – 2/3"; "Never 'yank' the collective all the way up! This can cause the helicopter to 'float' up and enter a short hover at an altitude of 15 – 20 ft, before rotor RPM drops"; "After touchdown, if the forward speed is excessive, pull the Cyclic back approximately 1/3 – 1/2 of its movement range to slow the helicopter" | Sim panel: level, cushion, differences |
+
+## Module revision 3 (2026-11-09)
+
+The owner moved the module to Abnormal Operations, retitled it Autorotation,
+asked for it to be about autorotation in general, and for the exercise to be
+linked at the end of the page rather than at the top. The old URL
+`manual/flight-fundamentals/autorotation/` redirects to the new one. Added a
+"Turns, power recovery and the hover" section and outcome 5, from the FAA
+*Helicopter Flying Handbook* chapter 11 ([2]), read again 9 November 2026:
+
+| Page | Excerpt | Used for |
+| --- | --- | --- |
+| 11-6 | "Turns during autorotation should be made early so that the remainder of the autorotation is flown identically to a straightin autorotation. The most common turns in an autorotation are 90 degrees and 180 degrees."; "For training operations, initially roll into a bank of at least 30 degrees, but no more than 60 degrees."; "Prior to passing through 200 feet above ground level (AGL) ... the turn should be completed, and the helicopter aligned with the intended touchdown area."; "an uncoordinated flight condition (trim-ball not centered) results in an increased sink rate"; "A delayed turn will result in a lower altitude when arriving on the course line." | Variants table, turn |
+| 11-7 | "A power recovery is used to terminate practice autorotations at a point prior to actual touchdown."; "At approximately 3–15 feet landing gear height AGL ... begin to level the helicopter"; "coordinate upward collective pitch control with an increase in the throttle to join the needles"; "If the throttle is increased too fast or too much, an engine overspeed can occur; if throttle is increased too slowly or too little ... a loss of rotor rpm results." | Variants table, power recovery |
+| 11-8 | "Power recovery in those helicopters with slower engine response times must have the engines begin to develop enough power to rejoin the needles by approximately 100 feet AGL."; "exercise caution to avoid an altitude-airspeed combination that would place the helicopter in an unsafe area of its height/velocity diagram"; "Power failure in a hover, also called hovering autorotation, is practiced so that a pilot can automatically make the correct response"; "Do not adjust the collective on entry." | Variants table; go-around note |
+| 11-9 | "Helicopters with low inertia rotor disks settle immediately."; "Any lateral movement must be avoided to prevent dynamic rollover."; "At approximately 1 foot AGL, apply upward collective control, as necessary, to slow the descent and cushion the landing" | Variants table, hover |
