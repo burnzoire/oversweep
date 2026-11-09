@@ -34,10 +34,10 @@ const af = para(8), cnaf = para(9), afh = cite(10), aim = para(11), bms = cite(1
 // Figure 1: an overhead power-off pattern in plan view, landing left to right.
 // Positions follow the BMS manual's definitions of the three keys; the
 // geometry is schematic, not to scale.
-const RWY = { x0: 200, x1: 460, y: 250 };
+const RWY = { x0: 200, x1: 460, y: 200 };
 const HK = [RWY.x0 + (RWY.x1 - RWY.x0) / 3, RWY.y];
 const R = 70;
-const pattern = `M${HK[0] - 60} ${RWY.y} L${HK[0]} ${RWY.y} L${HK[0] + 40} ${RWY.y} A${R} ${R} 0 0 0 ${HK[0] + 40} ${RWY.y - 2 * R} L150 ${RWY.y - 2 * R} A${R} ${R} 0 0 0 150 ${RWY.y} L${RWY.x0 + 30} ${RWY.y}`;
+const pattern = `M${HK[0]} ${RWY.y} L${HK[0] + 40} ${RWY.y} A${R} ${R} 0 0 0 ${HK[0] + 40} ${RWY.y - 2 * R} L150 ${RWY.y - 2 * R} A${R} ${R} 0 0 0 150 ${RWY.y} L${RWY.x0 + 30} ${RWY.y}`;
 const LK = [150, RWY.y - 2 * R], BK = [150 - R, RWY.y - R];
 const keys = [
  { p: HK, n: 'High key', dx: -6, dy: 28 },
@@ -142,16 +142,16 @@ const initial = glideCheck({ rule: 't6', distanceNm: 6, heightFt: 8000 });
  <p>A precautionary or forced landing to a runway is flown as an <Term>ELP</Term>, an emergency landing pattern, managed by height at a series of checkpoints called keys. <a href="#source-vs">{vs('5')}</a> <Term>High key</Term> comes first, over the field; <Term>low key</Term> is on the downwind side; the T-6 training notes put them at 3,000 and 1,500 feet above the ground. <a href="#source-vs">{vs('5')}</a> Each type's manual gives its own heights and positions. The BMS training manual defines a third, base key, for its simulated F-16, and its definitions of all three are used for Figure 1. <a href="#source-bms">{bms('143')}</a></p>
  <section class="lesson figure-lesson ready" aria-labelledby="elp-title">
   <h3 id="elp-title" class="fig-title">Figure 1 — An overhead power-off pattern</h3>
-  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops elp" viewBox="0 0 560 320" role="img" aria-label="Plan view. The aircraft arrives over the runway at high key, a third of the way down it, turns 180 degrees onto a downwind leg opposite the landing direction, passes low key, turns through base key at the midpoint of the turn to final, and lands.">
-   <rect x="1" y="1" width="558" height="318" class="frame" />
+  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops elp" viewBox="0 0 560 260" role="img" aria-label="Plan view. The aircraft starts over the runway at high key, a third of the way down it, turns 180 degrees onto a downwind leg opposite the landing direction, passes low key, turns through base key at the midpoint of the turn to final, and lands.">
+   <rect x="1" y="1" width="558" height="258" class="frame" />
    <rect x={RWY.x0} y={RWY.y - 9} width={RWY.x1 - RWY.x0} height="18" class="runway" />
    <path d={`M${RWY.x0 + 6} ${RWY.y} H${RWY.x1 - 6}`} class="centreline" />
    <path d={pattern} class="track" />
    <path d={`M${RWY.x0 + 30} ${RWY.y} l-10 -6 v12z`} class="arrow" />
-   <path d={`M${HK[0] + 140} ${RWY.y - 2 * R} l10 -6 v12z`} class="arrow" />
+   <path d={`M${HK[0] - 40} ${RWY.y - 2 * R} l10 -6 v12z`} class="arrow" />
    {keys.map((k) => <g><circle cx={k.p[0]} cy={k.p[1]} r="7" class="key-pt" /><text x={k.p[0] + k.dx} y={k.p[1] + k.dy} text-anchor={k.anchor ?? 'middle'} class="lbl">{k.n}</text></g>)}
    <text x={RWY.x1} y={RWY.y + 30} text-anchor="end" class="lbl small">Landing direction →</text>
-   <text x="300" y={RWY.y - 2 * R - 14} text-anchor="middle" class="lbl small">Downwind, descending</text>
+   <text x="250" y={RWY.y - 2 * R - 14} text-anchor="middle" class="lbl small">Downwind, descending</text>
   </svg></div>
   <div class="table-scroll" role="region" aria-label="Key heights" tabindex="0"><table>
    <caption>Where each key is, and two aircraft's heights</caption>
@@ -178,7 +178,8 @@ const initial = glideCheck({ rule: 't6', distanceNm: 6, heightFt: 8000 });
   <p class="fig-caption">Each rule is one aircraft's, from its source, and assumes still air; a headwind shortens the glide. Use your own type's glide data. <a href="#source-vs">{vs('5')}</a> <a href="#source-bms">{bms('144–146')}</a></p>
  </section>
  <h3>Just after takeoff</h3>
- <p>Low after takeoff there is no pattern to fly. The FAA's handbook, the supplementary source here, prefers continuing straight ahead or turning slightly, which gives time to set a safe landing attitude and land under control as slowly as possible. Turning back to the runway, "the impossible turn", needs more than 180 degrees of heading change, a steep bank, known height loss for the type and practice; at low altitude it is an unacceptable risk for untrained pilots. <a href="#source-afh">{afh('18-7–18-8')}</a> A pilot's unconscious wish to save the aircraft, or to delay the moment, leads to the classic errors: turning back without the height, stretching the glide, and indecision. <a href="#source-afh">{afh('18-1–18-2')}</a> In an ejection seat aircraft, the choice may instead be when to eject (see <a href="#eject">Ejection</a>).</p>
+ <p>Low after takeoff there is no pattern to fly. The FAA's handbook, the supplementary source here, prefers continuing straight ahead or turning slightly, which gives time to set a safe landing attitude and land under control as slowly as possible. Turning back to the runway, "the impossible turn", needs more than 180 degrees of heading change, a steep bank, known height loss for the type and practice; at low altitude it is an unacceptable risk for untrained pilots. <a href="#source-afh">{afh('18-7–18-8')}</a></p>
+ <p>A pilot's unconscious wish to save the aircraft, or to delay the moment, leads to the classic errors: turning back without the height, stretching the glide, and indecision. <a href="#source-afh">{afh('18-1–18-2')}</a> In an ejection seat aircraft, the choice may instead be when to eject (see <a href="#eject">Ejection</a>).</p>
  <p class="key"><strong>Key point:</strong> turn, climb, clean, then decide: a precautionary landing if the engine is still running, an airstart if it is warranted, and a forced landing or ejection if not. Manage the glide by height at the keys of your type's pattern.</p>
 
  <h2 id="multi">Engine failure with more than one engine</h2>
@@ -250,7 +251,8 @@ const initial = glideCheck({ rule: 't6', distanceNm: 6, heightFt: 8000 });
    <tr><th scope="row">Two equal systems</th><td>A compromise, about 45 degrees down swell to both <a href="#source-aim">{aim('6-3-3')}</a></td></tr>
   </tbody>
  </table></div>
- <p>Touch down at the lowest speed and rate of descent that allow safe handling, nose up; with power, ditch before the fuel runs out rather than after. <a href="#source-aim">{aim('6-3-3')}</a> In Navy aircraft, cargo and equipment must be secured against a crash landing on land or water, and multipiloted aircraft carry ditching and bailout bills, drilled often. <a href="#source-cnaf">{cnaf('7.1.7')}</a> Automatic life preserver inflation is designed for ejection seat aircraft only, and is not worn where ditching is a recommended procedure, such as in helicopters. <a href="#source-cnaf">{cnaf('8.2.1.1')}</a> Getting out of a sinking, inverted helicopter is learned in underwater egress trainers, which this module does not try to replace.</p>
+ <p>Touch down at the lowest speed and rate of descent that allow safe handling, nose up; with power, ditch before the fuel runs out rather than after. <a href="#source-aim">{aim('6-3-3')}</a></p>
+ <p>In Navy aircraft, cargo and equipment must be secured against a crash landing on land or water, and multipiloted aircraft carry ditching and bailout bills, drilled often. <a href="#source-cnaf">{cnaf('7.1.7')}</a> Automatic life preserver inflation is designed for ejection seat aircraft only, and is not worn where ditching is a recommended procedure, such as in helicopters. <a href="#source-cnaf">{cnaf('8.2.1.1')}</a> Getting out of a sinking, inverted helicopter is learned in underwater egress trainers, which this module does not try to replace.</p>
  <p class="key"><strong>Key point:</strong> read the sea before the wind: land parallel to the main swell, slowly, nose up, and with power if you still have it.</p>
 
  <h2 id="lost">Lost radios, lost visual flight</h2>
