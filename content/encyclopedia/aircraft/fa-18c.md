@@ -19,9 +19,9 @@ armament:
   - "Air-to-air: AIM-9 Sidewinder, AIM-7 Sparrow, AIM-120 AMRAAM [1]"
   - "Air-to-ground: AGM-65 Maverick, AGM-88 HARM, AGM-84 Harpoon, laser- and GPS-guided bombs, Mk 80-series bombs [1]"
 sensors:
-  - "AN/APG-73 radar [1]"
+  - "[AN/APG-73](record:apg-65) radar [1]"
   - "AN/AAS-38 Nite Hawk targeting pod, later [ATFLIR](record:atflir) (US Navy) or [Litening](record:litening) (US Marine Corps) [1]"
-  - "AN/ALR-67 radar warning receiver [1]"
+  - "[AN/ALR-67](record:alr-67) radar warning receiver [1]"
 photos:
   - src: "encyclopedia/aircraft/fa-18c.jpg"
     alt: "An F/A-18C Hornet on an aircraft carrier's catapult, with deck crew around it"
