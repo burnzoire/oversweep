@@ -147,8 +147,10 @@ start point.
 | 18-7 | Ditching: "involves less deceleration violence than a poor tree landing"; "ditched at minimum speed and in a normal landing attitude does not immediately sink"; "Loss of depth perception may occur when landing on a wide expanse of smooth water". Engine failure after takeoff: "Continuing straight ahead or making a slight turn"; "'the impossible turn'"; "requires a turn with a higher bank angle" | Ditching; after takeoff |
 | 18-8 | "A turn back to the departure runway may require more than a 180° change in direction."; "an unacceptable risk for student pilots, low-time pilots, untrained pilots"; emergency descent "made in a turn to check for other air traffic below"; "In the case of an engine fire, a high airspeed descent could blow out the fire." | After takeoff; systems |
 | 18-9 | Engine fire causes; signs "smoke and/or flames ... discoloration, bubbling, and/or melting of the engine cowling skin"; oil-fed fire "thick black smoke ... consider stopping the propeller rotation" | Systems table |
-| 18-10 | Electrical fire: "odor of burning insulation"; isolate the circuit; "battery master switch and alternator/generator switches should be turned off"; switch-by-switch restoration; cabin fire: "identifying and shutting down the faulty system"; vents "only after the fire extinguisher ... is used"; "If smoke increases ... immediately closed" | Systems table; details |
+| 18-10 | Electrical fire: "odor of burning insulation"; isolate the circuit; "battery master switch and alternator/generator switches should be turned off"; "If electrical power is absolutely essential for the flight, an attempt may be made to identify and isolate the faulty circuit by: 1. Turning the electrical master switch OFF. 2. Turning all individual electrical switches OFF. 3. Turning the master switch back ON. 4. Selecting electrical switches ... one at a time"; "This procedure, however, has the effect of recreating the original problem. The most prudent course of action is to land as soon as possible."; cabin fire: "identifying and shutting down the faulty system"; vents "only after the fire extinguisher ... is used"; "If smoke increases ... immediately closed" | Systems table; details |
 | 18-12–18-13 | Landing gear malfunction: "select an airport with crash and rescue facilities"; "request that emergency equipment is standing by" | Systems table |
+| 18-13 | "Most in-flight failures of the electrical system are located in the generator or alternator." | Systems table |
+| 18-12 | "the pilot has the option of landing on the available gear legs or landing with all the gear legs retracted" | Systems table |
 | 18-14–18-15 | "any loss of electrical power is critical in a small airplane—notify ATC of the situation immediately"; "Shed all but the most necessary electrical load"; pitot-static: "confirm it by opening the alternate static source" | Systems table |
 | 18-18–18-21 | "the only way to control the airplane safely is by using and trusting the flight instruments"; "A shallow bank"; "Combined maneuvers, such as climbing or descending turns, should be avoided" | Lost visual flight |
 
@@ -175,3 +177,15 @@ descent which permit safe handling and optimum nose up attitude";
 | 144 | "Best glide speed is thus typically set to ~200 knots; with landing gear down just subtract 10 knots"; "7° AOA"; "The F-16 will go 7 Nm over the ground for every 5000 feet of altitude loss."; "just use ... 1000 feet altitude loss for every nautical mile"; "The EPU will run for about 10 minutes on hydrazine"; "your only way out is to eject" | Glide rule; sim panel |
 | 145 | "Perform an emergency jettison"; "let your speed decrease to best glide speed while maintaining level flight. When you reach best glide speed start a descent"; "squawk emergency with the IFF"; tower frequency on the backup UHF; "request an emergency landing" | Sim panel |
 | 146 | "You will have to 'Request Wind Check'"; the wind "may throw all your parameters out the window" | Sim panel; Figure 2 caption |
+
+## SME review 1 (2026-11-09, head e57af4e): fixes
+
+BLOCKED with 2 findings, both fixed: B1, the glide-reach sentence now reads
+(height − 3) × 2 as the stan notes give it; B2, the electrical-fire
+restoration sequence is now conditional on power being essential, includes
+"all individual switches off", carries the handbook's warning and "land as
+soon as possible". Low findings 1–9 applied (accelerate in cloud, "may need"
+more than 180°, uncited bird-strike signs removed, 18-13 locator, both gear
+options, emergency-fuel quiz stem, FROST fittings and heels wording, T-44
+sequence marked abridged, source page lists). Finding 10: the PEL term's
+purpose clause was removed.

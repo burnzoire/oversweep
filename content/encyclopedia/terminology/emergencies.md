@@ -13,7 +13,7 @@ terms:
     cite: [{ n: 1, page: "2" }]
   - term: PEL
     expansion: Precautionary emergency landing
-    definition: "A landing flown from a power-off emergency landing pattern when the single engine might quit or may need to be shut down, such as for a chip light, low fuel pressure or an unconfirmed fire, so that the aircraft can still reach the runway if it does."
+    definition: "A landing flown from a power-off emergency landing pattern when the single engine might quit or may need to be shut down, such as for a chip light, low fuel pressure or an unconfirmed fire."
     cite: [{ n: 1, page: "2" }, { n: 3, page: "5" }]
   - term: ELP
     expansion: Emergency landing pattern
@@ -30,11 +30,11 @@ terms:
     note: "Minimum fuel, by contrast, is not an emergency: the aircraft can accept little or no delay."
     cite: [{ n: 4, page: "Attachment 1" }]
   - term: IROK
-    definition: "The post-ejection checklist under the parachute: Inflate the life preserver, Release the raft, Options (steering, visor, mask, gloves, seat survival kit) and the Koch or canopy release fittings, released on water entry over water or after landing over land."
+    definition: "The post-ejection checklist under the parachute: Inflate the life preserver, Release the raft, Options (steering, visor, mask, gloves, seat survival kit) and the canopy release fittings (FROST fittings in the T-6), released on water entry over water or after landing over land."
     cite: [{ n: 5, page: "1–2" }]
   - term: PLF
     expansion: Parachute landing fall
-    definition: "The way to land under a parachute over land, taking the impact on five points of contact in turn: balls of the feet, side of the calf, side of the thigh, side of the buttocks and the shoulder blade. The heels should never touch the ground first."
+    definition: "The way to land under a parachute over land, taking the impact on five points of contact in turn: balls of the feet, side of the calf, side of the thigh, side of the buttocks and the shoulder blade. The heels should never touch the ground."
     cite: [{ n: 5, page: "2" }]
   - term: ADR
     definition: "After a parachute water entry: Avoid the parachute, Disentangle from it, then Release the seat survival kit on one side and retrieve the survival items."
