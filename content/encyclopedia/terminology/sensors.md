@@ -82,6 +82,9 @@ terms:
   - term: Time-sharing
     definition: "Dividing the airspace into lookout sectors by priority and cross-checking them in turn, dropping the lowest first when busy and rebuilding one sector at a time. Near rocks, far rocks and check six are the basic cross-check at low level."
     cite: [{ n: 3, page: "22 to 24" }]
+  - term: Radar correlation
+    definition: "Matching your own radar contact to the group a controller has called, by placing the cursor and scan volume at the called bearing, range and altitude, before declaring or locking it. Not the close air support sense of correlation."
+    cite: [{ n: 2, page: "10-3, 10-14" }]
   - term: Forward-looking infrared
     expansion: FLIR
     definition: "An imaging sensor that builds a TV-like picture from heat, so it needs no visible light. It works best when warm objects stand out against a cool background; cloud and rain cut its range, though it sees through light haze better than the eye."
