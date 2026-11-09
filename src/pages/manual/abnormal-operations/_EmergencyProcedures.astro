@@ -1,0 +1,368 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
+import { getModule } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import Term from '../../../components/Term.astro';
+import '../../../styles/instrument-flight.css';
+import { RULES, glideCheck } from '../../../lessons/abnormal/glide-check.mjs';
+const mod = getModule('emergency-procedures');
+const radio = sitePath('manual/radio-communications/radio-procedures/');
+const auto = sitePath('manual/abnormal-operations/autorotation/');
+const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
+const core = [
+ ['example', 'One emergency, start to finish'], ['rules', 'Three rules for every emergency'],
+ ['landing', 'How soon to land, and telling someone'], ['engine', 'Engine failure in a single-engine aircraft'],
+ ['multi', 'Engine failure with more than one engine'], ['systems', 'Fire, smoke and system failures'],
+ ['eject', 'Ejection'], ['water', 'Ditching'], ['lost', 'Lost radios, lost visual flight'], ['recap', 'Key points'],
+];
+const reference = [
+ ['helicopters', 'Helicopters'], ['sims', 'In the sim'], ['check', 'Check your understanding'],
+ ['terms', 'Terms'], ['sources', 'Sources and applicability'],
+];
+const cite = (n: number) => (pages: string) => `[${n}, ${/[–,]/.test(pages) ? 'pp.' : 'p.'} ${pages}]`;
+const para = (n: number) => (p: string) => `[${n}, ${p}]`;
+// [1] VT-6 EP guide, [2] VT-10 brief guide, [3] VT-10 FAM stan notes, [4] TW-6
+// T-6 ejection brief, [5] TW-6 T-45 ejection brief, [6] TW-6 T-6 post-ejection
+// procedures, [7] VT-35 T-44 emergency phrases (all CNATRA, by PDF page);
+// [8] AFMAN 11-202V3 and [9] CNAF M-3710.7 by paragraph; [10] FAA Airplane
+// Flying Handbook ch. 18 and [11] AIM 6-3, supplementary; [12] BMS Training
+// Manual, sim panel only.
+const v6 = cite(1), vb = cite(2), vs = cite(3), e6 = cite(4), e45 = cite(5), pe = cite(6), t44 = cite(7);
+const af = para(8), cnaf = para(9), afh = cite(10), aim = para(11), bms = cite(12);
+
+// Figure 1: an overhead power-off pattern in plan view, landing left to right.
+// Positions follow the BMS manual's definitions of the three keys; the
+// geometry is schematic, not to scale.
+const RWY = { x0: 200, x1: 460, y: 250 };
+const HK = [RWY.x0 + (RWY.x1 - RWY.x0) / 3, RWY.y];
+const R = 70;
+const pattern = `M${HK[0] - 60} ${RWY.y} L${HK[0]} ${RWY.y} L${HK[0] + 40} ${RWY.y} A${R} ${R} 0 0 0 ${HK[0] + 40} ${RWY.y - 2 * R} L150 ${RWY.y - 2 * R} A${R} ${R} 0 0 0 150 ${RWY.y} L${RWY.x0 + 30} ${RWY.y}`;
+const LK = [150, RWY.y - 2 * R], BK = [150 - R, RWY.y - R];
+const keys = [
+ { p: HK, n: 'High key', dx: -6, dy: 28 },
+ { p: LK, n: 'Low key', dx: 0, dy: -16 },
+ { p: BK, n: 'Base key', dx: -8, dy: 4, anchor: 'end' },
+];
+const initial = glideCheck({ rule: 't6', distanceNm: 6, heightFt: 8000 });
+---
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="abnormal-operations" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Abnormal Operations',href:sitePath('manual/abnormal-operations/')},{label:mod.title}]}>
+ <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
+  <h2>{mod.maturity}</h2>
+  <p>Module revision {mod.revision} · How a military pilot handles an emergency in flight, whatever the aircraft: the rules that come first, how soon to land, engine failure, fire and system failures, ejection, ditching and losing the radios. It follows Navy primary training squadrons' published study aids and the Air Force's flight rules, with the FAA's handbook and information manual as supplementary sources.</p>
+  <p>Helicopter engine failures are in <a href={auto}>Autorotation</a>, the next module in this subject. The radio calls and codes are in <a href={`${radio}#emergency`}>Radio Procedures</a>.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
+ </nav>
+
+ <p class="lede">Emergencies are won or lost before they happen. The Navy's primary squadrons tell students that preparation starts with knowing the flight manual: the emergency section, but also the limits, the flight characteristics and the systems, because understanding a system is what makes its emergency procedures make sense. <a href="#source-vt6">{v6('1')}</a> In the air the order never changes: fly the aircraft first, then work out what is wrong, then fix it, then decide how soon to land. <a href="#source-vt6">{v6('1–2')}</a></p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>apply the three rules to any emergency, and say why analysing comes before acting;</li>
+  <li>tell "land as soon as possible" from "land as soon as practical", and say when to declare an emergency or a fuel state;</li>
+  <li>handle an engine failure in a single-engine aircraft: the first reaction, the precautionary landing, the power-off pattern and whether you can glide to it;</li>
+  <li>describe how a crew confirms the engine before shutting it down in a multiengine aircraft;</li>
+  <li>name the first actions for an engine, electrical or cabin fire and the common system failures;</li>
+  <li>explain the ejection decision, body position and what follows under the parachute;</li>
+  <li>choose a ditching heading, and handle lost radios or an accidental entry into cloud.</li>
+ </ol>
+ <p class="note">This is a conceptual reference, not a flight manual or an emergency checklist. Every procedure, step, speed and height for a real aircraft comes from its flight manual and checklist: NATOPS for the Navy and Marine Corps, the -1 for the Air Force, the operator's manual for the Army. The numbers quoted here are the training aircraft's in each source, named where they appear, to show the size of things; they apply to no other type.</p>
+
+ <h2 id="example">One emergency, start to finish</h2>
+ <p>Here is one precautionary landing in a single-engine turboprop trainer, using the T-6's published training numbers. The flight is invented: 8,000 feet above the ground, 6 nautical miles from the nearest suitable field, when a chip light comes on (metal in the engine oil, a sign the engine might fail).</p>
+ <ol class="exchange script">
+  <li><span class="who">1 · Fly</span> <span class="said">Turn toward the nearest suitable field, climb (or hold airspeed if cloud is in the way), and clean up: gear, flaps and speed brake up. This first reaction should take 4 to 5 seconds. <a class="step" href="#rules">Why</a></span></li>
+  <li><span class="who">2 · Analyse</span> <span class="said">Put the right name to the indications: check engine speed first, then the secondary gauges. A chip light with the engine still running is a case for a precautionary emergency landing. <a class="step" href="#engine">Why</a></span></li>
+  <li><span class="who">3 · Act</span> <span class="said">"PEL, execute." Fly the critical action items from memory, then get out the checklist for the rest, with its notes, warnings and cautions. <a class="step" href="#rules">Why</a></span></li>
+  <li><span class="who">4 · Can I make it?</span> <span class="said">Half of 6 miles plus 3 for high key: 6,000 feet needed, and you have 8,000. Head for high key over the field. <a class="step" href="#glide">Why</a></span></li>
+  <li><span class="who">5 · Tell someone</span> <span class="said">Declare an emergency and say what you intend; it gets priority from every controller and the crash crew ready. <a class="step" href="#landing">Why</a></span></li>
+  <li><span class="who">6 · Land</span> <span class="said">Fly the power-off pattern from high key through low key and land as soon as possible, ready for the engine to stop at any point. <a class="step" href="#elp">Why</a></span></li>
+ </ol>
+ <p>Steps 1, 3 and 4 follow the Navy's T-6 training aids. <a href="#source-vt6">{v6('1–2')}</a> <a href="#source-vs">{vs('5')}</a> <a href="#source-vb">{vb('3')}</a></p>
+ <p class="key"><strong>Key point:</strong> whatever the emergency, the order is fly, analyse, act, land. Steps 4 and 6 are particular to an engine that might fail; other emergencies change the action and the landing, not the order.</p>
+
+ <h2 id="rules">Three rules for every emergency</h2>
+ <p>The Navy's T-6 squadrons teach three basic rules for any airborne emergency, from the flight manual, and the Falcon BMS training manual gives the same three for the simulated F-16. <a href="#source-vt6">{v6('1')}</a> <a href="#source-bms">{bms('14')}</a></p>
+ <div class="table-scroll" role="region" aria-label="The three rules" tabindex="0"><table>
+  <caption>The three rules, and the trap in each</caption>
+  <thead><tr><th scope="col">Rule</th><th scope="col">What it means</th><th scope="col">The trap</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">1 · Maintain aircraft control</th><td>Don't hit anything (other aircraft, the ground, obstacles) and don't stall or depart controlled flight <a href="#source-vt6">{v6('1')}</a></td><td>Not flying the aircraft, or losing track of where it is going: the quickest way to fail an emergency, real or simulated <a href="#source-vt6">{v6('1')}</a></td></tr>
+   <tr><th scope="row">2 · Analyse the situation</th><td>Take the time to put the right procedure's name to what you see; knowing the systems is what makes that possible <a href="#source-vt6">{v6('1')}</a></td><td>"Fast hands": doing the wrong steps on a wrong analysis can make a bad situation much worse <a href="#source-vt6">{v6('1')}</a></td></tr>
+   <tr><th scope="row">3 · Take appropriate action</th><td>Fly the <Term>critical action items</Term> from memory, word for word, then the checklist for the rest, with its notes, warnings and cautions <a href="#source-vt6">{v6('1')}</a></td><td>Assuming the problem is solved: after each action, check you got the result you wanted <a href="#source-vt6">{v6('1')}</a></td></tr>
+  </tbody>
+ </table></div>
+ <p>With more than one crew member, the one not flying backs up the one flying with the checklist; solo, open it when time permits, or have someone read it over the radio. Other aircraft, a duty officer or ATC can help. <a href="#source-vt6">{v6('1')}</a> A crew briefs this before every flight: the Navy's T-6A brief says the crew will maintain aircraft control, analyse the situation, take proper action and land as soon as conditions permit, reading the checklist verbatim when conditions allow. <a href="#source-vb">{vb('3')}</a></p>
+ <p>Preparation means taking each emergency to its logical end: a compressor stall can lead to an engine failure, an airstart, then a precautionary or forced landing, one emergency through five procedures. Ask what would make it worse: after a hydraulic failure that needs the emergency gear extension, what if the flaps won't come down too, or a tyre blows on landing? <a href="#source-vt6">{v6('1')}</a></p>
+ <p class="key"><strong>Key point:</strong> control first, always. Analyse before any action other than keeping control, and check the result of every step you take.</p>
+
+ <h2 id="landing">How soon to land, and telling someone</h2>
+ <p>Most emergency procedures end with a landing instruction. The two common ones mean different things: <a href="#source-vt6">{v6('2')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Landing instructions" tabindex="0"><table>
+  <caption>The two landing instructions</caption>
+  <thead><tr><th scope="col">Instruction</th><th scope="col">Meaning</th><th scope="col">Example</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>Land as soon as possible</Term></th><td>Land at the first place a safe landing can be made, in the quickest safe way <a href="#source-vt6">{v6('2')}</a></td><td>Smoke and fumes <a href="#source-vt6">{v6('2')}</a></td></tr>
+   <tr><th scope="row"><Term>Land as soon as practical</Term></th><td>Extended flight is not recommended; how long you fly and where you land are the pilot in command's decision <a href="#source-vt6">{v6('2')}</a></td><td>—</td></tr>
+  </tbody>
+ </table></div>
+ <p>Fly a straight-in approach when the controllability of the aircraft is in question. <a href="#source-vt6">{v6('2')}</a> Before landing, think about the runway length you need, whether crash crews and a flight surgeon are available, whether you could end up ejecting over a town and can route around it, and whether you will stop on the runway and egress there. <a href="#source-vt6">{v6('2')}</a></p>
+ <h3>Declare it</h3>
+ <p>Students often forget to declare an emergency. The declaration gets top priority from any controller and every base agency; add your emergency status to every call so you are not forgotten. Declare for any power or controllability problem, or any condition that could lead to a fire or injury, and consider it when weather means you need priority. The Navy squadron adds that no one is faulted for a conservative decision to declare. <a href="#source-vt6">{v6('2')}</a> The calls, MAYDAY and PAN-PAN, and code 7700 are in <a href={`${radio}#emergency`}>Radio Procedures</a>.</p>
+ <div class="table-scroll" role="region" aria-label="Fuel states" tabindex="0"><table>
+  <caption>The two fuel declarations</caption>
+  <thead><tr><th scope="col">Declaration</th><th scope="col">Meaning</th><th scope="col">What ATC does</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>Minimum fuel</Term></th><td>On reaching the destination the aircraft can accept little or no delay; not an emergency, but one is possible if there is undue delay <a href="#source-afman">{af('Attachment 1')}</a></td><td>No priority is expected <a href="#source-vb">{vb('3')}</a></td></tr>
+   <tr><th scope="row"><Term>Emergency fuel</Term></th><td>It is necessary to go directly to the airport of intended landing because of low fuel <a href="#source-afman">{af('Attachment 1')}</a></td><td>Priority handling is both required and expected <a href="#source-afman">{af('Attachment 1')}</a></td></tr>
+  </tbody>
+ </table></div>
+ <p>The Air Force rule is to declare either one when the aircraft may land with less than the type's minimum reserve or emergency fuel. <a href="#source-afman">{af('3.20.2')}</a> Each squadron briefs its own figures; the Navy T-6A brief, for example, sets them at 200 and 150 pounds. <a href="#source-vb">{vb('3')}</a> A divert is not the same as an IFR alternate: the same brief uses "diverts" for the fields along the route where a precautionary landing could be flown, and "alternates" for the ones the flight rules require on an IFR flight plan. <a href="#source-vb">{vb('5')}</a></p>
+ <p class="key"><strong>Key point:</strong> "possible" means the first safe place, now; "practical" leaves the choice to the pilot. Declare early: an emergency gets you priority, and minimum fuel does not.</p>
+
+ <h2 id="engine">Engine failure in a single-engine aircraft</h2>
+ <p>In a single-engine aircraft any engine malfunction is treated conservatively until troubleshooting shows otherwise. The T-6 squadron's technique at the first sign of trouble is <strong>turn, climb, clean</strong>: turn toward the nearest suitable field, climb (trading speed for height, or accelerating if cloud is in the way), and raise the gear, flaps and speed brake, which improves both the climb and the glide. It is only the first reaction, 4 to 5 seconds, made while analysing. <a href="#source-vt6">{v6('1')}</a> <a href="#source-vs">{vs('5')}</a></p>
+ <p>The analysis then decides which of three ways it goes; the T-6 squadron's troubleshooting tree starts with the engine's speed, its most important sign of health. <a href="#source-vt6">{v6('4')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Engine trouble outcomes" tabindex="0"><table>
+  <caption>Engine running, failing or failed</caption>
+  <thead><tr><th scope="col">What you find</th><th scope="col">What you do</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Running, but it might quit or need shutting down (chip light, low fuel pressure, an unconfirmed fire)</th><td>A <Term>PEL</Term>, a precautionary emergency landing, flown from the power-off pattern so it still works if the engine stops <a href="#source-vt6">{v6('2, 4')}</a></td></tr>
+   <tr><th scope="row">Failed, and an airstart is warranted</th><td>Try the airstart; if it works, a PEL; if not, a forced landing or ejection <a href="#source-vt6">{v6('2, 4')}</a></td></tr>
+   <tr><th scope="row">Failed, and an airstart is not warranted</th><td>A forced landing or ejection <a href="#source-vt6">{v6('2, 4')}</a></td></tr>
+  </tbody>
+ </table></div>
+ <p>When not to try a restart is in the type's manual and brief. The Navy T-6A brief, for one, rules it out for suspected foreign object damage, fire, or a seized engine, or below 2,000 feet above the ground. <a href="#source-vb">{vb('3')}</a></p>
+ <h3 id="elp">The power-off pattern</h3>
+ <p>A precautionary or forced landing to a runway is flown as an <Term>ELP</Term>, an emergency landing pattern, managed by height at a series of checkpoints called keys. <a href="#source-vs">{vs('5')}</a> <Term>High key</Term> comes first, over the field; <Term>low key</Term> is on the downwind side; the T-6 training notes put them at 3,000 and 1,500 feet above the ground. <a href="#source-vs">{vs('5')}</a> Each type's manual gives its own heights and positions. The BMS training manual defines a third, base key, for its simulated F-16, and its definitions of all three are used for Figure 1. <a href="#source-bms">{bms('143')}</a></p>
+ <section class="lesson figure-lesson ready" aria-labelledby="elp-title">
+  <h3 id="elp-title" class="fig-title">Figure 1 — An overhead power-off pattern</h3>
+  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops elp" viewBox="0 0 560 320" role="img" aria-label="Plan view. The aircraft arrives over the runway at high key, a third of the way down it, turns 180 degrees onto a downwind leg opposite the landing direction, passes low key, turns through base key at the midpoint of the turn to final, and lands.">
+   <rect x="1" y="1" width="558" height="318" class="frame" />
+   <rect x={RWY.x0} y={RWY.y - 9} width={RWY.x1 - RWY.x0} height="18" class="runway" />
+   <path d={`M${RWY.x0 + 6} ${RWY.y} H${RWY.x1 - 6}`} class="centreline" />
+   <path d={pattern} class="track" />
+   <path d={`M${RWY.x0 + 30} ${RWY.y} l-10 -6 v12z`} class="arrow" />
+   <path d={`M${HK[0] + 140} ${RWY.y - 2 * R} l10 -6 v12z`} class="arrow" />
+   {keys.map((k) => <g><circle cx={k.p[0]} cy={k.p[1]} r="7" class="key-pt" /><text x={k.p[0] + k.dx} y={k.p[1] + k.dy} text-anchor={k.anchor ?? 'middle'} class="lbl">{k.n}</text></g>)}
+   <text x={RWY.x1} y={RWY.y + 30} text-anchor="end" class="lbl small">Landing direction →</text>
+   <text x="300" y={RWY.y - 2 * R - 14} text-anchor="middle" class="lbl small">Downwind, descending</text>
+  </svg></div>
+  <div class="table-scroll" role="region" aria-label="Key heights" tabindex="0"><table>
+   <caption>Where each key is, and two aircraft's heights</caption>
+   <thead><tr><th scope="col">Key</th><th scope="col">Where (BMS manual)</th><th scope="col">T-6 (Navy training notes)</th><th scope="col">F-16 (BMS sim manual)</th></tr></thead>
+   <tbody>
+    <tr><th scope="row">High key</th><td>A third of the way down the landing runway <a href="#source-bms">{bms('143')}</a></td><td>3,000 ft AGL <a href="#source-vs">{vs('5')}</a></td><td>7,000 to 10,000 ft <a href="#source-bms">{bms('143–144')}</a></td></tr>
+    <tr><th scope="row">Low key</th><td>Abeam the point where you roll out on final <a href="#source-bms">{bms('143')}</a></td><td>1,500 ft AGL <a href="#source-vs">{vs('5')}</a></td><td>3,000 to 5,000 ft <a href="#source-bms">{bms('143–144')}</a></td></tr>
+    <tr><th scope="row">Base key</th><td>Midpoint of the turn from downwind to final <a href="#source-bms">{bms('143')}</a></td><td>—</td><td>No lower than 2,000 ft AGL <a href="#source-bms">{bms('143–144')}</a></td></tr>
+   </tbody>
+  </table></div>
+  <p class="fig-caption">Schematic, not to scale; the turn direction is arbitrary. Positions are the BMS training manual's definitions for its simulated F-16, which says the pattern can be entered at any point provided the next key's height can be reached. The T-6 notes give the heights only. <a href="#source-bms">{bms('143')}</a> <a href="#source-vs">{vs('5')}</a></p>
+ </section>
+ <h3 id="glide">Can you glide there?</h3>
+ <p>The T-6 notes give a rule of thumb for the glide: the height needed, in thousands of feet above the ground, is half the distance in nautical miles plus the key height; turned round, the distance you can glide and still reach high key is twice your height (in thousands) minus three. It works only with no wind, at 125 knots, clean, with the propeller feathered. <a href="#source-vs">{vs('5')}</a> The BMS manual's simplified rule for its F-16 is 1,000 feet for every nautical mile. <a href="#source-bms">{bms('144')}</a> Try both in Figure 2.</p>
+ <section class="lesson figure-lesson" data-lesson="glide" aria-labelledby="glide-title">
+  <h3 id="glide-title" class="fig-title">Figure 2 — Glide check to high key</h3>
+  <div class="controls row">
+   <label for="glide-rule">Rule <select id="glide-rule" name="rule">{Object.entries(RULES).map(([k, r]) => <option value={k}>{r.label}</option>)}</select></label>
+   <label for="glide-distance">Distance to the field <output for="glide-distance">6 NM</output> <input id="glide-distance" name="distance" type="range" min="0" max="30" step="1" value="6" /></label>
+   <label for="glide-height">Height above the field <output for="glide-height">8,000 ft</output> <input id="glide-height" name="height" type="range" min="1000" max="25000" step="500" value="8000" /></label>
+  </div>
+  <p class="no-js">Interactive check unavailable. With the T-6 rule, 6 NM from the field needs {initial.neededHighKey.toLocaleString('en-US')} feet to reach high key and {initial.neededLowKey.toLocaleString('en-US')} feet for low key; from 8,000 feet you could reach high key at a field up to {initial.reachHighKeyNm} NM away.</p>
+  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Each rule is one aircraft's, from its source, and assumes still air; a headwind shortens the glide. Use your own type's glide data. <a href="#source-vs">{vs('5')}</a> <a href="#source-bms">{bms('144–146')}</a></p>
+ </section>
+ <h3>Just after takeoff</h3>
+ <p>Low after takeoff there is no pattern to fly. The FAA's handbook, the supplementary source here, prefers continuing straight ahead or turning slightly, which gives time to set a safe landing attitude and land under control as slowly as possible. Turning back to the runway, "the impossible turn", needs more than 180 degrees of heading change, a steep bank, known height loss for the type and practice; at low altitude it is an unacceptable risk for untrained pilots. <a href="#source-afh">{afh('18-7–18-8')}</a> A pilot's unconscious wish to save the aircraft, or to delay the moment, leads to the classic errors: turning back without the height, stretching the glide, and indecision. <a href="#source-afh">{afh('18-1–18-2')}</a> In an ejection seat aircraft, the choice may instead be when to eject (see <a href="#eject">Ejection</a>).</p>
+ <p class="key"><strong>Key point:</strong> turn, climb, clean, then decide: a precautionary landing if the engine is still running, an airstart if it is warranted, and a forced landing or ejection if not. Manage the glide by height at the keys of your type's pattern.</p>
+
+ <h2 id="multi">Engine failure with more than one engine</h2>
+ <p>With an engine still working, the danger is shutting down the wrong one. The Navy's T-44 multiengine students say each shutdown step aloud and the other pilot concurs before it is done. <a href="#source-t44">{t44('1')}</a> After an engine failure just after rotation, the T-44 sequence runs:</p>
+ <ol class="exchange script">
+  <li><span class="who">Pilot flying</span> <span class="said">"Power as required, landing gear up, airspeed 102/110." <a href="#source-t44">{t44('1')}</a></span></li>
+  <li><span class="who">Pilot flying</span> <span class="said">"This will be an emergency shutdown of the left engine." <a href="#source-t44">{t44('1')}</a></span></li>
+  <li><span class="who">Pilot flying</span> <span class="said">"Left power lever idle, concur?"</span></li>
+  <li><span class="who">Pilot monitoring</span> <span class="said">"Concur."</span></li>
+  <li><span class="who">Pilot flying</span> <span class="said">"Left prop lever feather, concur?" … "Left condition lever fuel cut off, concur?" Each is answered "Concur."</span></li>
+  <li><span class="who">Pilot flying</span> <span class="said">"Is it a fire or fuel leak?" If not: "Hold the checklist, you have the comms, declare an emergency." <a href="#source-t44">{t44('1')}</a></span></li>
+ </ol>
+ <p>The levers, speeds and order are the T-44's; the pattern of naming the engine, challenging each step and waiting for "concur" is what carries over. Once the shutdown is done, the pilot flying hands the checklist and the radios to the other pilot. <a href="#source-t44">{t44('1–2')}</a></p>
+ <p class="key"><strong>Key point:</strong> fly first, then name the engine and confirm every shutdown step with the other pilot before you move a lever.</p>
+
+ <h2 id="systems">Fire, smoke and system failures</h2>
+ <p>The Navy aids above concern the T-6, whose own procedures are not public; the FAA handbook gives the generic picture, for light aircraft. <a href="#source-afh">{afh('18-9–18-16')}</a> Your type's checklist replaces every line of this table.</p>
+ <div class="table-scroll" role="region" aria-label="Fires and system failures" tabindex="0"><table>
+  <caption>Common fires and failures: the signs and the first ideas (FAA, light aircraft)</caption>
+  <thead><tr><th scope="col">Emergency</th><th scope="col">Signs</th><th scope="col">The first ideas</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Engine fire</th><td>Smoke or flames from the cowling, or discoloured, bubbling or melting cowling skin <a href="#source-afh">{afh('18-9')}</a></td><td>The checklist's shutdown; a high-speed descent could blow the fire out, and an oil-fed fire (thick black smoke) may call for stopping the propeller <a href="#source-afh">{afh('18-8–18-9')}</a></td></tr>
+   <tr><th scope="row">Electrical fire</th><td>The smell of burning insulation <a href="#source-afh">{afh('18-10')}</a></td><td>Find and isolate the faulty circuit; if you can't, and flight conditions permit, battery and generator off <a href="#source-afh">{afh('18-10')}</a></td></tr>
+   <tr><th scope="row">Cabin fire or smoke</th><td>Smoke or fumes <a href="#source-afh">{afh('18-10')}</a></td><td>Shut down the faulty system; use the extinguisher first, then vent the cabin, closing the vents again if the smoke gets worse <a href="#source-afh">{afh('18-10')}</a>; land as soon as possible <a href="#source-vt6">{v6('2')}</a></td></tr>
+   <tr><th scope="row">Electrical failure</th><td>A generator or alternator warning, then failing equipment <a href="#source-afh">{afh('18-14')}</a></td><td>Tell ATC at once; if a complete loss is coming, shed all but the essential load <a href="#source-afh">{afh('18-14')}</a></td></tr>
+   <tr><th scope="row">Pitot-static blockage</th><td>Airspeed, altimeter or vertical speed readings that go wrong as the aircraft climbs or descends <a href="#source-afh">{afh('18-14–18-15')}</a></td><td>Confirm a suspected static blockage by opening the alternate static source <a href="#source-afh">{afh('18-15')}</a></td></tr>
+   <tr><th scope="row">Landing gear that won't extend</th><td>No safe gear indication after the normal and alternate methods <a href="#source-afh">{afh('18-12')}</a></td><td>Choose an airport with crash and rescue services, ask for emergency equipment to stand by, and plan the landing on the gear that is down <a href="#source-afh">{afh('18-12–18-13')}</a></td></tr>
+   <tr><th scope="row">Bird strike</th><td>An impact, a cracked windscreen or engine indications <a href="#source-vb">{vb('4')}</a></td><td>Keep control; the T-6A brief assumes engine damage from a strike in the propeller arc and flies a PEL <a href="#source-vb">{vb('4')}</a></td></tr>
+  </tbody>
+ </table></div>
+ <details class="more"><summary>More on fires and failures</summary>
+  <p>An in-flight engine fire usually comes from fuel, oil or hydraulic fluid reaching a hot surface. <a href="#source-afh">{afh('18-9')}</a> If an electrical fire's source cannot be found, the handbook's sequence is master switch off, then on again, then each switch that was on before, one at a time with a pause after each, watching for smell, smoke or sparks. <a href="#source-afh">{afh('18-10')}</a> An emergency descent is the fastest way down to a lower altitude or the ground; practise it in a turn, to check below for traffic and look for a landing area. <a href="#source-afh">{afh('18-8')}</a></p>
+  <p>Hydraulic and fuel system failures depend entirely on how the type's systems are built, which is why the Navy squadrons ask for the systems to be known as well as the procedures: a hydraulic failure might need the emergency gear extension and leave the flaps without pressure. <a href="#source-vt6">{v6('1')}</a> A fuel pressure warning in a single-engine aircraft is one of the Navy's examples of a precautionary landing. <a href="#source-vt6">{v6('2')}</a> In the T-44, a fuel leak changes the start of the shutdown sequence. <a href="#source-t44">{t44('1')}</a></p>
+ </details>
+ <p class="key"><strong>Key point:</strong> for a fire, remove the source; for a system failure, know what the system feeds and what you lose with it. Smoke and fumes mean land as soon as possible.</p>
+
+ <h2 id="eject">Ejection</h2>
+ <p>An ejection seat gives a way out when the aircraft cannot be landed, but only inside the seat's envelope and only if the decision comes in time. The Navy's training-wing ejection briefs list the decision, the envelope, body position and what to do after. <a href="#source-e6">{e6('2–3')}</a> <a href="#source-e45">{e45('2–3')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Ejection decision heights" tabindex="0"><table>
+  <caption>Two trainers' ejection decisions and envelopes (Navy training-wing briefs)</caption>
+  <thead><tr><th scope="col">Item</th><th scope="col">T-6 (US16LA seat)</th><th scope="col">T-45 (NACES SJU-17 seat)</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Out of control</th><td>Eject by 6,000 ft AGL</td><td>Eject by 10,000 ft AGL</td></tr>
+   <tr><th scope="row">Controlled flight</th><td>No lower than 2,000 ft AGL</td><td>No lower than 2,000 ft AGL</td></tr>
+   <tr><th scope="row">Envelope</th><td>Zero speed, zero height; ground to 35,000 ft; 370 KIAS maximum</td><td>Zero speed, zero height; ground to 50,000 ft; 550 KIAS maximum</td></tr>
+   <tr><th scope="row">Best airspeed</th><td>125 to 180 KIAS</td><td>250 KCAS</td></tr>
+  </tbody>
+ </table></div>
+ <p class="fig-caption">From the T-6 and T-45 briefs. <a href="#source-e6">{e6('2')}</a> <a href="#source-e45">{e45('2')}</a> Other types differ: use your own type's.</p>
+ <p>Both briefs say the decision should be briefed before flight, and list the psychological factors that delay it. <a href="#source-e6">{e6('2')}</a> <a href="#source-e45">{e45('2')}</a> The T-6A crew brief sets the calls: "Eject, eject, eject", and with the intercom lost, three raps on the canopy; for a controlled ejection, the instructor's hand signal and a thumbs-up acknowledgement. <a href="#source-vb">{vb('4–5')}</a> On the ground, the same brief has the crew eject if the aircraft is leaving the runway at high speed or high angles, and "stick with it" at low speed, egressing once stopped. <a href="#source-vb">{vb('3')}</a></p>
+ <h3>Body position, then the parachute</h3>
+ <ol class="steps">
+  <li><strong>Position.</strong> Head firmly against the headrest, chin raised about 10 degrees, shoulders back, elbows in, buttocks and thighs firmly on the seat, heels on the deck. Pull the handle up toward the abdomen with the elbows close in; mask on and visor down against windblast. <a href="#source-e6">{e6('3')}</a> <a href="#source-e45">{e45('3')}</a></li>
+  <li><strong>Under the canopy: <Term>IROK</Term>.</strong> Inflate the life preserver, release the raft (where fitted), options as time permits (steer into the wind, visor and mask, gloves, the survival kit), and locate the canopy release fittings. <a href="#source-pe">{pe('1–2')}</a></li>
+  <li><strong>Prepare to land.</strong> By about 200 feet: feet and knees together, knees slightly bent, steering into the wind. <a href="#source-pe">{pe('2')}</a></li>
+  <li><strong>Land.</strong> Over land, a <Term>PLF</Term>, on five points of contact, never heels first; release the fittings after it. Over water, release the fittings as the feet touch the water, then <Term>ADR</Term>: avoid and disentangle from the parachute, release the survival kit on one side and retrieve its items. <a href="#source-pe">{pe('1–2')}</a></li>
+ </ol>
+ <p>Winds above 25 knots on landing raise the risk of severe injury or death. <a href="#source-e6">{e6('3')}</a> <a href="#source-e45">{e45('3')}</a></p>
+ <p class="key"><strong>Key point:</strong> the ejection decision is made on the ground, in the brief: know your type's heights, and go by them without waiting. After that, body position, then IROK and the landing.</p>
+
+ <h2 id="water">Ditching</h2>
+ <p>A well-flown water landing is usually gentler than a poor landing in trees or on very rough ground, and an aircraft ditched slowly in a normal landing attitude does not sink at once. Over smooth water depth perception is easily lost. <a href="#source-afh">{afh('18-7')}</a> The FAA's information manual ranks the factors in order: the sea and wind, then the aircraft, then the pilot's skill. <a href="#source-aim">{aim('6-3-3')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Ditching heading" tabindex="0"><table>
+  <caption>Choosing the ditching heading (AIM, supplementary)</caption>
+  <thead><tr><th scope="col">Sea</th><th scope="col">Heading</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">One swell system</th><td>Parallel to the swell, on the crest or the back side, never into the face; of the two directions, the one more into the wind <a href="#source-aim">{aim('6-3-3')}</a></td></tr>
+   <tr><th scope="row">Two systems, one much bigger</th><td>Parallel to the primary swell and down the secondary <a href="#source-aim">{aim('6-3-3')}</a></td></tr>
+   <tr><th scope="row">Two equal systems</th><td>A compromise, about 45 degrees down swell to both <a href="#source-aim">{aim('6-3-3')}</a></td></tr>
+  </tbody>
+ </table></div>
+ <p>Touch down at the lowest speed and rate of descent that allow safe handling, nose up; with power, ditch before the fuel runs out rather than after. <a href="#source-aim">{aim('6-3-3')}</a> In Navy aircraft, cargo and equipment must be secured against a crash landing on land or water, and multipiloted aircraft carry ditching and bailout bills, drilled often. <a href="#source-cnaf">{cnaf('7.1.7')}</a> Automatic life preserver inflation is designed for ejection seat aircraft only, and is not worn where ditching is a recommended procedure, such as in helicopters. <a href="#source-cnaf">{cnaf('8.2.1.1')}</a> Getting out of a sinking, inverted helicopter is learned in underwater egress trainers, which this module does not try to replace.</p>
+ <p class="key"><strong>Key point:</strong> read the sea before the wind: land parallel to the main swell, slowly, nose up, and with power if you still have it.</p>
+
+ <h2 id="lost">Lost radios, lost visual flight</h2>
+ <p>The Navy T-6A brief's lost-radio plan is typical: troubleshoot the cords, the previous frequencies and every radio first; if still lost, squawk 7600 and follow the local procedures home, or the flight information handbook elsewhere. With the intercom lost, the crew uses hand signals. <a href="#source-vb">{vb('3')}</a> The US rules for a radio failure on an IFR flight, the route and altitude to fly, are in <a href={`${radio}#nordo`}>Radio Procedures</a>.</p>
+ <p>If the weather closes in on a visual flight, the same brief turns back the way the aircraft came, and if visual conditions cannot be regained, asks ATC for an IFR clearance. <a href="#source-vb">{vb('5')}</a> The FAA handbook's advice for a pilot not trained on instruments is to use and trust the flight instruments, keep the bank shallow and avoid combined manoeuvres such as climbing turns. <a href="#source-afh">{afh('18-18–18-21')}</a></p>
+ <p class="key"><strong>Key point:</strong> with the radios gone, troubleshoot, squawk 7600 and fly the published plan; caught by cloud, turn back and ask for help on the instruments.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>Maintain aircraft control, analyse the situation, take the appropriate action, then land as the emergency dictates. <a href="#rules">More</a></li>
+  <li>"As soon as possible" is the first safe place; "as soon as practical" leaves the choice to the pilot. Declare early. <a href="#landing">More</a></li>
+  <li>Single engine: turn, climb, clean, then a precautionary landing, an airstart, or a forced landing or ejection, flown by height at the keys. <a href="#engine">More</a></li>
+  <li>Multiengine: fly first, then confirm every shutdown step with the other pilot. <a href="#multi">More</a></li>
+  <li>Fire: remove the source; smoke and fumes mean land as soon as possible. <a href="#systems">More</a></li>
+  <li>Ejection heights are briefed before flight and not waited past; then body position, IROK and the landing. <a href="#eject">More</a></li>
+  <li>Ditch parallel to the main swell, slowly and nose up. Lost radios: troubleshoot, 7600, the published plan. <a href="#water">More</a></li>
+ </ul>
+
+ <h2 id="helicopters">Helicopters</h2>
+ <p>A single-engine helicopter's engine failure is answered with an autorotation, taken step by step in <a href={auto}>Autorotation</a>, with its own exercise. The rotor hazards that become emergencies (low rotor rpm, vortex ring state, dynamic rollover, loss of tail rotor effectiveness) are in <a href={rotor}>Rotor-Wing Principles of Flight</a>. The three rules and the landing instructions above apply to helicopters as much as to aircraft with wings.</p>
+
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p>Only the Falcon BMS 4.38.1 Training Manual was read for this panel. It gives the same three rules for its F-16, and a training mission (TR_BMS_07) that is a full flameout landing. <a href="#source-bms">{bms('14')}</a> <a href="#source-bms">{bms('143–146')}</a></p>
+  <div class="table-scroll" role="region" aria-label="BMS flameout landing" tabindex="0"><table>
+   <caption>Falcon BMS F-16 flameout landing, from the training manual</caption>
+   <thead><tr><th scope="col">Item</th><th scope="col">What the manual gives</th></tr></thead>
+   <tbody>
+    <tr><th scope="row">The mission</th><td>Engine out at 21,000 ft, 13 NM south of Osan, fuel at zero; land on runway 09 <a href="#source-bms">{bms('143')}</a></td></tr>
+    <tr><th scope="row">First actions</th><td>Emergency jettison the stores, turn for the runway, slow to best glide speed and descend to hold it <a href="#source-bms">{bms('145')}</a></td></tr>
+    <tr><th scope="row">Glide</th><td>About 200 kt gear up (7° AOA), 190 gear down; 7 NM for every 5,000 ft; simplified to 1,000 ft per NM <a href="#source-bms">{bms('144')}</a></td></tr>
+    <tr><th scope="row">The pattern</th><td>Overhead, through high key, low key and base key (Figure 1), which it calls far safer than a straight-in <a href="#source-bms">{bms('143')}</a></td></tr>
+    <tr><th scope="row">Time limit</th><td>About 10 minutes of emergency power unit hydrazine; when it runs out the jet is uncontrollable and the only way out is to eject <a href="#source-bms">{bms('144')}</a></td></tr>
+    <tr><th scope="row">Radio</th><td>Squawk emergency, set the tower frequency on the backup UHF and request an emergency landing; ask for a wind check <a href="#source-bms">{bms('145–146')}</a></td></tr>
+   </tbody>
+  </table></div>
+  <p><strong>Where it differs from this module.</strong> The BMS manual says there is no risk in the sim and so no reason to hesitate to eject; real ejection carries the injury risks the Navy briefs list, which is why real decision heights are set in the brief. <a href="#source-bms">{bms('59')}</a> <a href="#source-e6">{e6('3')}</a> Its key heights are its F-16's, not a trainer's (Figure 1).</p>
+  <p><strong>Not said.</strong> The manual's emergency chapters were read for the three rules, ejection, the airstart and the flameout landing; its other emergencies were not compared with this page.</p>
+  <p><strong>Not checked.</strong> DCS World modules' manuals, and other sims, were not checked for this module.</p>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <details><summary><span class="outcome">Outcome 1</span> A warning light comes on as you level off. What do you do before you open the checklist?</summary><p>Fly the aircraft: don't hit anything and don't stall. Then analyse until the indications have the right procedure's name. Only then act, and check each action worked.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> Why does the Navy warn against "fast hands"?</summary><p>Acting on a wrong analysis can make a bad situation much worse. The only thing to do before the analysis is to keep control.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> The checklist says "land as soon as practical". Must you land at the nearest field?</summary><p>No. Extended flight is not recommended, but how long you fly and where you land are the pilot in command's decision. "As soon as possible" would mean the first place a safe landing can be made.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> You will land with less than your reserve fuel and need priority. Minimum fuel or emergency fuel?</summary><p>Emergency fuel: it says priority is required and expected. Minimum fuel says you can accept little or no delay, and is not an emergency.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Your single engine's chip light comes on, but the engine is running normally. What kind of landing?</summary><p>A precautionary emergency landing (PEL), flown from the power-off pattern so the landing still works if the engine stops.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> With the T-6 rule, you are 10 NM from the field at 7,000 ft above it. High key, low key, or neither?</summary><p>Low key: high key needs half of 10 plus 3, 8,000 ft; low key needs half of 10 plus 1.5, 6,500 ft. Try it in Figure 2.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> In a twin, why say "Left power lever idle, concur?" instead of just pulling it?</summary><p>So the other pilot confirms the right engine before anything is shut down: shutting down the good engine is the danger in a multiengine aircraft.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> You smell burning insulation and can't find the circuit. What next, if conditions permit?</summary><p>Turn the battery and generator off to remove the possible source, then, per the FAA handbook, bring them and each needed switch back one at a time, watching for smell, smoke or sparks.</p></details>
+ <details><summary><span class="outcome">Outcome 6</span> Your T-45 is out of control at 12,000 ft above the ground and not recovering. When do you eject?</summary><p>By 10,000 ft AGL, the T-45 brief's out-of-control height; the decision was made in the brief, not in the cockpit. In a T-6 the brief's figure would be 6,000 ft.</p></details>
+ <details><summary><span class="outcome">Outcome 6</span> You are under the parachute over the sea. What does IROK have you do, and when do you release the fittings?</summary><p>Inflate the life preserver, release the raft where fitted, take the options (visor up and mask off over water, among others), and locate the fittings; release them as your feet touch the water, then avoid and disentangle from the parachute.</p></details>
+ <details><summary><span class="outcome">Outcome 7</span> One big swell runs north–south and the wind is from the north-east. Which way do you ditch?</summary><p>Parallel to the swell, north or south, and of those two the one more into the wind: north.</p></details>
+ <details><summary><span class="outcome">Outcome 7</span> Both radios are silent. What does the T-6A brief do first?</summary><p>Troubleshoot: the cords, the previous frequencies and every radio. If still lost, squawk 7600 and follow the published lost-communications plan.</p></details>
+
+ <h2 id="terms">Terms</h2>
+ <GlossaryList items={[
+  'Critical action items', 'Land as soon as possible', 'Land as soon as practical', 'PEL', 'ELP', 'High key', 'Low key', 'Minimum fuel', 'Emergency fuel', 'IROK', 'PLF', 'ADR', 'Mayday', 'Squawk',
+ ]} />
+
+ <h2 id="sources">Sources and applicability</h2>
+ <h3>Military sources</h3>
+ <p>All the Navy sources are public study aids published by squadrons of the Chief of Naval Air Training (CNATRA) for one training aircraft each, cited by PDF page. They are not flight manuals, and each says so or defers to NATOPS.</p>
+ <p id="source-vt6"><strong>[1] Training Squadron SIX (VT-6), How to Handle an Emergency Situation.</strong> Undated, T-6B. <a href="https://www.cnatra.navy.mil/tw5/vt6/assets/docs/university/how-to-handle-eps.pdf">cnatra.navy.mil</a>, read 9 November 2026, pp. 1–2.</p>
+ <p id="source-vb"><strong>[2] Training Squadron TEN (VT-10), Introduction to Briefing Guide, 18 June 2026.</strong> T-6A. <a href="https://www.cnatra.navy.mil/tw6/vt10/assets/docs/training/ep-brief-guide.pdf">cnatra.navy.mil</a>, read 9 November 2026, pp. 3–5.</p>
+ <p id="source-vs"><strong>[3] Training Squadron TEN (VT-10), FAM Stan Notes, June 2026.</strong> T-6A. <a href="https://www.cnatra.navy.mil/tw6/vt10/assets/docs/training/stan-notes-fam.pdf">cnatra.navy.mil</a>, read 9 November 2026, p. 5: simulated emergencies, turn, climb, clean and the dead-engine glide rule.</p>
+ <p id="source-e6"><strong>[4] Training Air Wing SIX, US16LA-JPATS Low Speed Ejection Seat: seat brief and aeromedical aspects of ejection.</strong> Undated, T-6. <a href="https://www.cnatra.navy.mil/tw6/assets/docs/safety/aero-and-egress-T6.pdf">cnatra.navy.mil</a>, read 9 November 2026, pp. 2–3.</p>
+ <p id="source-e45"><strong>[5] Training Air Wing SIX, NACES SJU-17: aeromedical aspects of ejection and emergency ground egress.</strong> Undated, T-45. <a href="https://www.cnatra.navy.mil/tw6/assets/docs/safety/aero-and-egress-T45.pdf">cnatra.navy.mil</a>, read 9 November 2026, pp. 2–3.</p>
+ <p id="source-pe"><strong>[6] Training Air Wing SIX, Post-Ejection Procedures (T-6).</strong> Undated. <a href="https://www.cnatra.navy.mil/tw6/assets/docs/safety/post-ejection-procedures-T6.pdf">cnatra.navy.mil</a>, read 9 November 2026, pp. 1–2.</p>
+ <p id="source-t44"><strong>[7] Training Squadron THIRTY-FIVE (VT-35), T-44 Emergency Phrases, December 2024.</strong> <a href="https://www.cnatra.navy.mil/tw4/vt35/assets/docs/training/t44-emergency-phrases.pdf">cnatra.navy.mil</a>, read 9 November 2026, pp. 1–2.</p>
+ <p id="source-afman"><strong>[8] US Air Force, AFMAN 11-202 Volume 3, Flight Operations, 10 January 2022, incorporating Change 1.</strong> <a href="https://static.e-publishing.af.mil/production/1/af_a3/publication/afman11-202v3/afman11-202v3.pdf">Published on the Air Force e-Publishing site</a>, which states no releasability restrictions; read 9 November 2026 from a copy supplied for this revision, by paragraph: 3.20.2 and Attachment 1 (minimum and emergency fuel).</p>
+ <p id="source-cnaf"><strong>[9] US Navy, CNAF M-3710.7, NATOPS General Flight and Operating Instructions Manual, 5 May 2016.</strong> Read 9 November 2026 from a copy supplied for this revision, by paragraph: 7.1.7 (ditching and bailout) and 8.2.1.1 (aircrew equipment, the life preserver note). Summarised in this site's own words, as the manual restricts reproduction for nonmilitary use.</p>
+ <h3>Supplementary: FAA</h3>
+ <p id="source-afh"><strong>[10] Federal Aviation Administration, FAA-H-8083-3C, Airplane Flying Handbook, chapter 18, Emergency Procedures.</strong> <a href="https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/airplane_handbook/19_afh_ch18.pdf">faa.gov chapter PDF</a>, read 9 November 2026, pp. 18-1–18-21. Written for civil light aircraft; a US Government work.</p>
+ <p id="source-aim"><strong>[11] Federal Aviation Administration, Aeronautical Information Manual, chapter 6, section 3, Distress and Urgency Procedures.</strong> <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap6_section_3.html">faa.gov</a>, read 9 November 2026, by paragraph: 6-3-3, ditching procedures.</p>
+ <h3>Sim source</h3>
+ <p id="source-bms"><strong>[12] Falcon BMS, BMS Training Manual 4.38.1.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">cdn.falcon-bms.com</a>, read 9 November 2026 by printed page: p. 14 (the three rules), p. 59 (ejection), pp. 143–146 (mission 7, flameout landing). A sim manual: cited for the In the sim panel, and for the key positions and the F-16 heights in Figure 1, labelled as such.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/emergency-procedures-evidence.md">Emergency Procedures evidence</a>. No Army source was read: Army emergency procedures were not found in a public, readable form. The worked example's flight is invented; its numbers are the T-6's from [1] to [3].</p>
+ <p class="note">Applicability: military pilots of every service, fixed-wing; helicopters through the Autorotation module. Each type's flight manual and checklist govern its emergency procedures, limits and ejection decision. This revision is Drafted pending independent source-backed review.</p>
+</SiteLayout>
+<script>
+ import { RULES, glideCheck } from '../../../lessons/abnormal/glide-check.mjs';
+ const root = document.querySelector<HTMLElement>('[data-lesson="glide"]');
+ if (root) {
+  const rule = root.querySelector<HTMLSelectElement>('select[name="rule"]')!;
+  const dist = root.querySelector<HTMLInputElement>('input[name="distance"]')!;
+  const height = root.querySelector<HTMLInputElement>('input[name="height"]')!;
+  const [dOut, hOut] = root.querySelectorAll('output');
+  const result = root.querySelector('[data-result]')!;
+  const ft = (n: number) => `${Math.round(n).toLocaleString('en-US')} ft`;
+  const update = () => {
+   const r = glideCheck({ rule: rule.value, distanceNm: Number(dist.value), heightFt: Number(height.value) });
+   const name = RULES[rule.value as keyof typeof RULES].label;
+   dOut.textContent = `${dist.value} NM`; hOut.textContent = ft(Number(height.value));
+   const verdict = r.target === 'high' ? `You reach high key with ${ft(r.marginFt)} to spare.`
+    : r.target === 'low' ? `Not high key (${ft(-r.marginFt)} short), but you can still reach low key.`
+    : 'You reach neither key: pick a nearer field, or plan a forced landing or ejection.';
+   result.textContent = `${name}: high key needs ${ft(r.neededHighKey)}, low key ${ft(r.neededLowKey)}. ${verdict} From this height you could reach high key at a field up to ${r.reachHighKeyNm.toFixed(1)} NM away.`;
+  };
+  [rule, dist, height].forEach((el) => el.addEventListener('input', update));
+  update();
+  root.classList.add('ready');
+ }
+</script>
+<style>
+ .contents-groups ol { columns: auto; }
+ .steps li { margin-block: 0.5rem; }
+ .natops .runway { fill: #4b5563; }
+ .natops .centreline { stroke: #fff; stroke-width: 1.5; stroke-dasharray: 8 6; }
+ .natops .track { fill: none; stroke: #c2410c; stroke-width: 3; stroke-linecap: round; }
+ .natops .arrow { fill: #c2410c; }
+ .natops .key-pt { fill: #f5c518; stroke: #1b1f24; stroke-width: 1.5; }
+ .natops .lbl.small { font-size: 11px; }
+ .controls select { font: inherit; }
+</style>

@@ -1,4 +1,4 @@
-// Figure data for the Autorotation Practice module.
+// Figure data for the Autorotation module.
 // HELI_*: a light single-rotor helicopter in side view, traced (OpenCV contours)
 // from the FAA Helicopter Flying Handbook, FAA-H-8083-21B, Figure 11-2
 // (p. 11-4), a US Government work. Units: 130 across, origin at the skids'

@@ -288,7 +288,7 @@ const practice = autorotationPractice && sitePath(experienceRoute(autorotationPr
  <h3>The height–velocity diagram</h3>
  <p>Some combinations of height and airspeed leave too little time, height or speed to enter a steady <Term id="Autorotation">autorotation</Term>. The flight manual's <Term id="Height/velocity diagram">height–velocity diagram</Term> shades them. Low and slow, high above a survivable drop but well below <Term id="Autorotation">autorotation</Term> speed, there is not enough height to accelerate; the 1965 Navy text put the minimum at about 300 feet for most small helicopters and 500 to 600 feet for larger ones.</p>
  <p>Fast and close to the ground, there is too little time to flare before hitting the ground or striking the tail. <a href="#source-hfh">{h('7-2–7-3')}</a> <a href="#source-navweps">{n('409')}</a> The diagram applies only within its gross weight and density altitude, and multiengine helicopters that can fly on one engine do not show the fast, low area. <a href="#source-hfh">{h('7-3–7-4')}</a> The usual safe takeoff stays out of the shaded areas by accelerating close to the ground and climbing as speed approaches a safe <Term id="Autorotation">autorotation</Term> speed. <a href="#source-hfh">{h('7-3')}</a></p>
- {practice && <p>The entry, descent, flare and touchdown are taken step by step in <a href={practice}>Autorotation Practice</a>, which ends in a standalone engine failure exercise.</p>}
+ {practice && <p>The entry, descent, flare and touchdown are taken step by step in the <a href={practice}>Autorotation</a> module, under Abnormal Operations, which ends with a standalone engine failure exercise.</p>}
 
  <section class="sim-panel" aria-labelledby="sims">
   <h2 id="sims">In the sim</h2>
@@ -303,7 +303,7 @@ const practice = autorotationPractice && sitePath(experienceRoute(autorotationPr
     <tr><th scope="row">Retreating blade stall</th><td>Vibration, then the nose lifts and the helicopter rolls left. Correction: reduce collective and neutralise the cyclic; holding the cyclic forward without lowering the collective aggravates it. <a href="#source-dcs">{dcs('27–28')}</a></td><td>The same signs; lower the collective, and forward cyclic makes it worse. <a href="#source-navweps">{n('404')}</a></td></tr>
    </tbody>
   </table></div>
-  <p>The manual's emergency technique for an engine failure in the Huey is in the <a href={practice ?? sitePath('manual/flight-fundamentals/')}>Autorotation Practice</a> module's own sim panel.</p>
+  <p>The manual's emergency technique for an engine failure in the Huey is in the <a href={practice ?? sitePath('manual/abnormal-operations/')}>Autorotation</a> module's own sim panel.</p>
   <p><strong>Not checked.</strong> The panel compares what the manual says, not how the DCS flight model behaves: no claim is made that the sim reproduces any of these effects. Other sim helicopters, in DCS or elsewhere, were not checked.</p>
  </section>
 

@@ -33,7 +33,7 @@ const fromExperience = (e: Experience): Entry => ({
   href: experienceRoute(e),
   subject: e.subject,
   trainer: { title: e.title, href: experienceFrame(e), experience: e },
-  group: e.module && 'group' in e.module ? e.module.group : undefined,
+  group: (e.module as { group?: string } | undefined)?.group,
 });
 
 const fromModule = (m: Module): Entry => ({

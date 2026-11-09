@@ -1893,6 +1893,17 @@
     "summary": "Air tasking and special instructions, the nav log's headings and speeds, the equal time point, US flight plan forms and NOTAMs, METAR and TAF codes, density altitude and weight and balance."
   },
   {
+    "id": "encyclopedia.terminology.emergencies",
+    "slug": "emergencies",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Emergency terms",
+    "designation": "CNATRA training aids",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Critical action items, how soon to land, the power-off emergency landing pattern and its keys, emergency fuel, and the checklists after an ejection."
+  },
+  {
     "id": "encyclopedia.theatres.middle-east",
     "slug": "middle-east",
     "category": "locations",
