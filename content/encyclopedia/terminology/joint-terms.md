@@ -167,8 +167,7 @@ terms:
     cite: [{ n: 1, page: "6" }]
   - term: AAA
     expansion: Antiaircraft artillery
-    definition: Guns used against air targets; the gun part of air defense artillery (ADA), the weapons and equipment for actively combating air targets from the ground.
-    note: "The dictionary lists AAA only as an abbreviation; the definition is that of air defense artillery, which also covers missiles. [1]"
+    definition: "The dictionary lists AAA only as the abbreviation of antiaircraft artillery. It falls under air defense artillery (ADA): weapons and equipment for actively combating air targets from the ground."
     cite: [{ n: 1, page: "A-1" }, { n: 1, page: "6" }]
   - term: Counterair
     definition: A mission that integrates offensive and defensive operations to attain and maintain a desired degree of air superiority and protection by neutralizing or destroying enemy aircraft and missiles, both before and after launch.

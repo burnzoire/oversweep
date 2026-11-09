@@ -61,8 +61,8 @@ const fig = { envelope: e ? 1 : 0, rwr: e ? 2 : 1, battery: e ? 3 : 2 };
         <div><dt>Role</dt><dd><Cited text={data.role} /></dd></div>
         <div><dt>In service</dt><dd><Cited text={data.inService} /></dd></div>
         {data.guidance && <div><dt>{gun ? 'Fire control' : 'Guidance'}</dt><dd><Cited text={data.guidance} /></dd></div>}
-        {e && <div><dt>{gun ? 'Effective range' : 'Range'}</dt><dd>{range} <Cited text={cite(e.cite)} /></dd></div>}
-        {e && <div><dt>{gun ? 'Effective altitude' : 'Altitude'}</dt><dd>{alt} <Cited text={cite(e.cite)} /></dd></div>}
+        {e && <div><dt>{e.labels?.range ?? (gun ? 'Effective range' : 'Range')}</dt><dd>{range} <Cited text={cite(e.cite)} /></dd></div>}
+        {e && <div><dt>{e.labels?.altitude ?? (gun ? 'Effective altitude' : 'Altitude')}</dt><dd>{alt} <Cited text={cite(e.cite)} /></dd></div>}
         {c && <div><dt>Detection range</dt><dd>Up to {distance(c.rangeKm)} <Cited text={cite(c.cite)} /></dd></div>}
         {c && <div><dt>Coverage ceiling</dt><dd>{c.altM === null ? 'Not given' : height(c.altM)} <Cited text={cite(c.cite)} /></dd></div>}
         <div><dt>Mobility and deployment</dt><dd><Cited text={data.mobility} /></dd></div>
@@ -76,7 +76,7 @@ const fig = { envelope: e ? 1 : 0, rwr: e ? 2 : 1, battery: e ? 3 : 2 };
     {e && (
       <EnvelopeFigure items={items} highlight={record.slug} from={gun ? 'gun' : 'launcher'} title={`Figure ${fig.envelope} — ${data.nato} engagement limits (side view)`}>
         {gun
-          ? <p class="fig-caption"><Cited text={e.basis} /> The shaded region combines the published effective range, treated as slant range from the gun, with the published effective altitude. A gun's shells fly further than this, but beyond it the chance of a hit falls away, and it changes with target speed, crossing angle and how the gun is aimed. Dashed edges mark limits the cited sources do not give. Other guns in this section are drawn faintly for comparison. Each scale prints its vertical exaggeration.</p>
+          ? <p class="fig-caption"><Cited text={e.basis} /> The shaded region combines the published {(e.labels?.range ?? 'effective range').toLowerCase()}, treated as slant range from the gun, with the published {(e.labels?.altitude ?? 'effective altitude').toLowerCase()}. {e.labels ? 'These are not effective limits: a hit is far less likely near their edge, and the chance of one' : 'A gun\'s shells fly further than this, but beyond it the chance of a hit falls away, and it'} changes with target speed, crossing angle and how the gun is aimed. Dashed edges mark limits the cited sources do not give. Other guns in this section are drawn faintly for comparison. Each scale prints its vertical exaggeration.</p>
           : <p class="fig-caption"><Cited text={e.basis} /> The shaded region combines the published minimum and maximum range, treated as slant range from the launcher, with the minimum and maximum altitude. Real launch zones are smaller and change with target speed, aspect and altitude. Dashed edges mark limits the cited sources do not give. Other SAMs in this section are drawn faintly for comparison, labelled by SA number. Each scale prints its vertical exaggeration.</p>}
       </EnvelopeFigure>
     )}

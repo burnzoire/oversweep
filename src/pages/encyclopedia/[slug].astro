@@ -29,7 +29,7 @@ const threats = category.slug === "threat-systems"
   : [];
 const envelopeCaption: Record<string, string> = {
   sam: "Each region combines a system's published minimum and maximum range, treated as slant range from the launcher, with its minimum and maximum altitude, using the figures and sources on its record page. Labels are SA numbers. Real launch zones are smaller and change with target speed, aspect and altitude. Dashed edges mark limits the sources do not give; the SA-9's sources give no ceiling, so only its range is drawn. Each scale prints its vertical exaggeration.",
-  aaa: "Each region combines a gun's published effective range, treated as slant range from the gun, with its effective altitude, using the figures and sources on its record page. Shells fly further than this, but beyond it the chance of a hit falls away. Dashed edges mark limits the sources do not give. Each scale prints its vertical exaggeration.",
+  aaa: "Each region combines a gun's published effective range, treated as slant range from the gun, with its effective altitude, using the figures and sources on its record page. Shells fly further than this, but beyond it the chance of a hit falls away. Where a source gives no effective figure, the record's own label says what is drawn instead, as the table below shows. Dashed edges mark limits the sources do not give. Each scale prints its vertical exaggeration.",
 };
 const label = (title: string) => title.split(" ")[0].replace(/^SA-/, "");
 // Citation numbers belong to each record's own source list, so the table drops them.
@@ -385,8 +385,8 @@ const deliverySources: Source[] = [
                         <tr>
                           <th scope="row"><a href={sitePath(recordRoute(record))}>{record.title}</a><br /><span class="entry-kicker">{record.designation}</span></th>
                           <td>{plain(data.guidance ?? "")}</td>
-                          <td>{km(data.envelope!.maxRangeKm)}</td>
-                          <td>{data.envelope!.maxAltM === null ? "not given" : km(data.envelope!.maxAltM / 1000)}</td>
+                          <td>{km(data.envelope!.maxRangeKm)}{data.envelope!.labels && <><br /><span class="entry-kicker">{data.envelope!.labels.range.toLowerCase()}</span></>}</td>
+                          <td>{data.envelope!.maxAltM === null ? "not given" : km(data.envelope!.maxAltM / 1000)}{data.envelope!.labels && data.envelope!.maxAltM !== null && <><br /><span class="entry-kicker">{data.envelope!.labels.altitude.toLowerCase()}</span></>}</td>
                           <td>{data.rwr.length ? data.rwr.map((s) => s.symbol).join(", ") : "none"}</td>
                         </tr>
                       ))}

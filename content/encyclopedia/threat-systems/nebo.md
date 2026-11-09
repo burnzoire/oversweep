@@ -57,9 +57,9 @@ The Nebo ("sky") radars are a family of Soviet and Russian VHF surveillance rada
 
 ## What it does
 
-These are surveillance radars that find aircraft at long range for the air defence network; they do not guide weapons. The Nebo-M system, built around the Nebo-U's successor, claims to detect fifth-generation aircraft such as the F-22 and F-35. [[2]](#source-2)
+These are surveillance radars that find aircraft at long range for the air defence network; they do not guide weapons. The Nebo-M system, built around the Nebo-U (RLM-M), claims to detect fifth-generation aircraft such as the F-22 and F-35. [[2]](#source-2)
 
-The 55Zh6U Nebo-U of 1992 kept the Tall Rack name; it has been integrated with the SA-21 system around Moscow. [[1]](#source-1) Now the VHF element of the Nebo-M system, it is easy to tell from the older 1L13 because its polarisation is vertical rather than horizontal. [[2]](#source-2) The Nebo-UM has been delivered to Russian air defence regiments since 2018. [[2]](#source-2)
+The 55Zh6U Nebo-U of 1992 kept the Tall Rack name. [[1]](#source-1) Now the VHF element of the Nebo-M system, it is easy to tell from the older 1L13 because its polarisation is vertical rather than horizontal. [[2]](#source-2) The Nebo-UM has been delivered to Russian air defence regiments since 2018. [[2]](#source-2)
 
 ## Coverage
 

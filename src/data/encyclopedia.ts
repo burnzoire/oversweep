@@ -34,6 +34,9 @@ export interface Envelope {
   minAltM: number | null;
   maxAltM: number | null;
   cite: number[];
+  // What the limits are when they are not the default (engagement limits for
+  // missiles, effective limits for guns), e.g. a gun's maximum reach.
+  labels?: { range: string; altitude: string };
 }
 
 export interface Radar {
