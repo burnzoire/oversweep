@@ -23,8 +23,8 @@ sensors:
   - "IHADSS helmet sight that can slave the gun to the crew member's head [1]"
 photos:
   - src: "encyclopedia/aircraft/ah-64d.jpg"
-    alt: "A grey AH-64D Apache with a Longbow radar dome above its rotor, flying low over desert"
-    caption: "An AH-64D Apache Longbow of the 1st Battalion, 101st Aviation Regiment, flying from Forward Operating Base Speicher, Iraq, December 2005."
+    alt: "A grey AH-64D Apache flying low over farmland, with no radar dome fitted above its rotor"
+    caption: "An AH-64D Apache Longbow of the 1st Battalion, 101st Aviation Regiment, flying from Forward Operating Base Speicher, Iraq, December 2005. This one is not carrying the mast-mounted Longbow radar."
     author: "Tech. Sgt. Andy Dunaway, US Air Force"
     licence: "Public domain"
     sourceUrl: "https://commons.wikimedia.org/wiki/File:AH-64D_Apache_Longbow.jpg"

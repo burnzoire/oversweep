@@ -7,22 +7,22 @@ origin: "United States"
 manufacturer: "Tracor, now BAE Systems; the ALE-47 also by Symetrics Industries [1] [2]"
 inService: "ALE-47 initial operating capability with the US Navy in 1998 [1]"
 sensors: "ALE-47: takes threat data from the radar warning receiver, missile approach warning system and other EW sensors [1]"
-modes: "ALE-40: the pilot releases chaff or flares to suit the threat [2]. ALE-47: dispenses automatically when the sensors detect a threat, to programs the aircrew build [1] [3]"
+modes: "ALE-40: the pilot releases chaff or flares to suit the threat [2]. ALE-47: can dispense automatically when the sensors detect a threat, to programs the aircrew build [1] [3]"
 display: "ALE-47: a cockpit control unit, or an integration into the aircraft's glass cockpit through the optional programmer [1]"
 carriers:
   - "[F-16](record:f-16), [A-10](record:a-10), F-4, F-5E/F, [F-14](record:f-14) and C-130 among others (ALE-40) [4]"
   - "38 aircraft types in over 30 countries (ALE-47), including the [F-16](record:f-16), [F/A-18](record:fa-18c), C-17, [CH-47](record:ch-47f) and UH-60 [1]"
-  - "US Navy F-14B/D, EA-6B and F/A-18C/D, in place of the ALE-39 [3]"
+  - "US Navy F-14B/D, EA-6B and F/A-18C/D, in place of the ALE-39 (retrofit planned from 2000) [3]"
 variants:
   - "ALE-40: holds 30 chaff cartridges or 15 flares per dispenser [4]"
   - "ALE-47: up to 32 dispensers on a fixed-wing aircraft and 16 on a helicopter, each holding up to 30 expendables of up to five types; its sequencers detect and correct misfires [1]"
 photos:
   - src: "encyclopedia/radar-sensors/ale-47.jpg"
-    alt: "The parts of a countermeasures dispenser system laid out: control boxes and rectangular dispenser magazines"
-    caption: "Components of the AN/ALE-47 countermeasures dispenser system."
-    author: "US Air Force"
+    alt: "A Hornet fighter climbing away in a vapour cloud as burning flares fall behind it"
+    caption: "A US Navy F/A-18C Hornet of VFA-25 releases flares during an air power demonstration in the Pacific, June 2011. The Navy's F/A-18C/D was among the first types to get the ALE-47."
+    author: "Mass Communication Specialist 2nd Class James R. Evans, US Navy"
     licence: "Public domain"
-    sourceUrl: "https://commons.wikimedia.org/wiki/File:AN_ALE-47.jpg"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:US_Navy_110603-N-DR144-202_An_F-A-18C_Hornet_deploys_flares_while_flying_faster_than_the_speed_of_sound_alongside_USS_Carl_Vinson_(CVN_70)_during_a.jpg"
     accessed: "2026-11-09"
 quick: { introduced: "1998 (ALE-47)" }
 sources:

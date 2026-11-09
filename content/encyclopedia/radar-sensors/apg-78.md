@@ -7,9 +7,8 @@ origin: "United States"
 manufacturer: "Longbow LLC, a joint venture of Lockheed Martin and Northrop Grumman [1]"
 inService: "1998 [1]"
 band: "Ka band [1]"
-modes: "Target acquisition; tracks up to 128 targets and engages up to 16 at once [1]"
+modes: "Target acquisition; tracks up to 128 targets and engages up to 16 at once; an attack can begin within 30 seconds, and a radio modem shares the targets with ground units and other Apaches [1]"
 range: "8 km, in Wikipedia's infobox figure [1]"
-display: "An attack can begin within 30 seconds; a radio modem shares the targets with ground units and other Apaches, so they can fire on targets one helicopter found [1]"
 carriers:
   - "[AH-64D Apache Longbow](record:ah-64d) and AH-64E Guardian [1]"
   - "AgustaWestland Apache (British Army) [1]"
@@ -18,12 +17,12 @@ variants:
   - "AH-64E version: adds overwater capability [1]"
 photos:
   - src: "encyclopedia/radar-sensors/apg-78.jpg"
-    alt: "Four Apache helicopters lifting off in a line from a dusty base below mountains"
-    caption: "AH-64D Apache Longbows leave Forward Operating Base Salerno, Afghanistan. The dome above each rotor holds the APG-78."
-    author: "Spc. Erin Dierschow, US Army"
-    licence: "Public domain"
-    sourceUrl: "https://commons.wikimedia.org/wiki/File:Apache_Longbow_DVIDS549015.jpg"
-    accessed: "2026-10-25"
+    alt: "Close-up of the round Longbow radar dome mounted on a mast above an Apache's main rotor head"
+    caption: "The APG-78 Longbow radar dome above the rotor of a Japan Ground Self-Defense Force AH-64D, March 2013."
+    author: "Hunini"
+    licence: "CC BY-SA 3.0"
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:JGSDF_AH-64D（74506）_APG-78_Longbow_millimeter-wave_fire-control_radar.JPG"
+    accessed: "2026-11-09"
 quick: { introduced: "1998", band: "Ka band" }
 sources:
   - n: 1

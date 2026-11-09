@@ -4,7 +4,7 @@ short: "MMS"
 name: "Mast-Mounted Sight"
 type: "Gyro-stabilised sensor ball above the main rotor [1]"
 origin: "United States"
-manufacturer: "Ball Aerospace & Technologies [1]"
+manufacturer: "Developed by McDonnell Douglas; later Boeing, now DRS Technologies [1]"
 inService: "With the OH-58D, from the Army Helicopter Improvement Program [1]"
 sensors: "Television system and thermal imaging system [1]"
 laser: "Laser rangefinder/designator [1]"
@@ -44,7 +44,7 @@ The US Army wanted a scout helicopter that could carry out reconnaissance, surve
 
 ## What is in it
 
-Ball Aerospace's sight has a gyro-stabilised platform with a television system, a thermal imaging system and a laser rangefinder/designator. [[1]](#source-1) It gave the OH-58D target acquisition and laser designation by day or night, in limited visibility and in bad weather. [[1]](#source-1) The OH-58D was the first US Army helicopter with a 1553 databus, so target data from the sight could go directly to precision-guided weapons. [[1]](#source-1)
+The sight has a gyro-stabilised platform with a television system, a thermal imaging system and a laser rangefinder/designator. [[1]](#source-1) It gave the OH-58D target acquisition and laser designation by day or night, in limited visibility and in bad weather. [[1]](#source-1) The OH-58D was the first US Army helicopter with a 1553 databus, so target data from the sight could go directly to precision-guided weapons. [[1]](#source-1)
 
 ## Beyond the Army
 
