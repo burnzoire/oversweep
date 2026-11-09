@@ -1,7 +1,7 @@
 ---
 import Cited from './Cited.astro';
-interface Props { symbols: { symbol: string; emitter: string }[]; name: string; cite: string }
-const { symbols, name, cite } = Astro.props;
+interface Props { n?: number; symbols: { symbol: string; emitter: string }[]; name: string; cite: string }
+const { n = 2, symbols, name, cite } = Astro.props;
 // Search-only radars cannot guide a missile, so they sit in the non-lethal inner
 // band; track radars are drawn in the lethal middle band, as if in range but not
 // yet engaging. Bearings are arbitrary.
@@ -14,7 +14,7 @@ const placed = symbols.map((s, i) => {
 });
 ---
 <section class="lesson figure-lesson rwr-figure" aria-labelledby="rwr-title">
-  <h3 id="rwr-title" class="fig-title">Figure 2 — {name} on a radar warning receiver</h3>
+  <h3 id="rwr-title" class="fig-title">Figure {n} — {name} on a radar warning receiver</h3>
   {symbols.length ? (
     <div class="rwr-layout">
       <svg class="natops rwr" viewBox="0 0 320 320" role="img" aria-label={`Radar warning display showing ${symbols.map((s) => s.symbol).join(' and ')}`}>

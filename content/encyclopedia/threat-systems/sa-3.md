@@ -1,4 +1,5 @@
 ---
+group: sam
 nato: SA-3 Goa
 designation: S-125 Neva/Pechora
 role: Short-range SAM system [1]

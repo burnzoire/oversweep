@@ -209,6 +209,127 @@
     "summary": "Twin 30 mm cannon and eight command-guided missiles on one tracked vehicle with its own Hot Shot radar."
   },
   {
+    "id": "encyclopedia.threat-systems.zu-23-2",
+    "slug": "zu-23-2",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "ZU-23-2",
+    "designation": "2A13 twin 23 mm anti-aircraft gun",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Towed twin 23 mm cannon, aimed optically by its crew: cheap, everywhere, and a threat to helicopters and low, slow aircraft."
+  },
+  {
+    "id": "encyclopedia.threat-systems.zsu-23-4",
+    "slug": "zsu-23-4",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "ZSU-23-4 Shilka",
+    "designation": "Self-propelled quad 23 mm anti-aircraft gun",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Four radar-directed 23 mm cannon on a tracked vehicle; the gun that caught low-flying Israeli jets in 1973."
+  },
+  {
+    "id": "encyclopedia.threat-systems.zsu-57-2",
+    "slug": "zsu-57-2",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "ZSU-57-2",
+    "designation": "Self-propelled twin 57 mm anti-aircraft gun",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Twin 57 mm guns on a T-54 hull, aimed optically: heavy shells to 4.5 km up, but no radar and no fire on the move."
+  },
+  {
+    "id": "encyclopedia.threat-systems.s-60",
+    "slug": "s-60",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "S-60",
+    "designation": "AZP S-60 57 mm anti-aircraft gun",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Towed 57 mm gun, radar-directed by a battery fire-control radar; the keystone of North Vietnam's low-level defence."
+  },
+  {
+    "id": "encyclopedia.threat-systems.ks-19",
+    "slug": "ks-19",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "KS-19",
+    "designation": "100 mm anti-aircraft gun KS-19",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Heavy towed 100 mm gun laid by the Fire Can radar; reaches far higher than any light gun, firing time- or proximity-fuzed shells."
+  },
+  {
+    "id": "encyclopedia.threat-systems.gepard",
+    "slug": "gepard",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "Gepard",
+    "designation": "Flakpanzer Gepard (35 mm)",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "German twin 35 mm gun tank with its own search and tracking radars; back in combat in Ukraine against drones and cruise missiles."
+  },
+  {
+    "id": "encyclopedia.threat-systems.m163",
+    "slug": "m163",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "M163 VADS",
+    "designation": "M163 Vulcan Air Defense System (20 mm)",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "US Army 20 mm Gatling on an M113, with a range-only radar and a lead-computing sight; short reach, very high rate of fire."
+  },
+  {
+    "id": "encyclopedia.threat-systems.p-14",
+    "slug": "p-14",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "P-14 Tall King",
+    "designation": "P-14 Lena / Oborona-14",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Huge VHF early-warning radar of the Soviet air defence forces, seeing out to about 400 km."
+  },
+  {
+    "id": "encyclopedia.threat-systems.p-19",
+    "slug": "p-19",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "P-19 Flat Face",
+    "designation": "P-19 Dunai (1RL134)",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Mobile UHF acquisition radar for low-flying aircraft, the usual search radar of SA-3 sites."
+  },
+  {
+    "id": "encyclopedia.threat-systems.p-35",
+    "slug": "p-35",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "P-35 Bar Lock",
+    "designation": "P-35 Saturn",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "E/F-band early-warning and ground-controlled intercept radar with twin stacked-beam antennas."
+  },
+  {
+    "id": "encyclopedia.threat-systems.nebo",
+    "slug": "nebo",
+    "category": "threat-systems",
+    "revision": 1,
+    "title": "Nebo Box Spring and Tall Rack",
+    "designation": "1L13 and 55Zh6 Nebo family",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Soviet and Russian VHF surveillance radars that succeeded the P-14; the Tall Rack was the first Soviet VHF radar to measure height."
+  },
+  {
     "id": "encyclopedia.aircraft.a-10",
     "slug": "a-10",
     "category": "aircraft",

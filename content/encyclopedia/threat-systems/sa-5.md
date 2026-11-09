@@ -1,4 +1,5 @@
 ---
+group: sam
 nato: SA-5 Gammon
 designation: S-200
 role: Long-range, high-altitude strategic air defence [1]

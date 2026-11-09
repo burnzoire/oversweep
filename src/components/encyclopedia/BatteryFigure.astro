@@ -1,8 +1,8 @@
 ---
 import type { ThreatData } from '../../data/encyclopedia';
 import Cited from './Cited.astro';
-interface Props { battery: NonNullable<ThreatData['battery']>; name: string; cite: string }
-const { battery, name, cite } = Astro.props;
+interface Props { n?: number; battery: NonNullable<ThreatData['battery']>; name: string; cite: string }
+const { n: figure = 3, battery, name, cite } = Astro.props;
 
 // Schematic plan-view symbols, not to scale and not vehicle outlines.
 const missileMarks = (n: number, w: number) => Array.from({ length: n }, (_, i) => -w / 2 + ((i + 1) * w) / (n + 1));
@@ -27,8 +27,8 @@ const off = (p: { x: number; y: number }, d: number) => ({ x: p.x + n.x * d, y: 
 const d0 = off(p0, 34), d1 = off(p1, 34), dl = off(mid, 48);
 ---
 <section class="lesson figure-lesson battery-figure" aria-labelledby="battery-title">
-  <h3 id="battery-title" class="fig-title">Figure 3 — {battery.pattern === 'ring' ? `${name} site (plan view)` : battery.pattern === 'rings' ? `${name} site rings (plan view)` : `${name} unit composition`}</h3>
-  <div class="fig-scroll" role="region" aria-label="Figure 3, scrolls sideways on narrow screens" tabindex="0">
+  <h3 id="battery-title" class="fig-title">Figure {figure} — {battery.pattern === 'ring' ? `${name} site (plan view)` : battery.pattern === 'rings' ? `${name} site rings (plan view)` : `${name} unit composition`}</h3>
+  <div class="fig-scroll" role="region" aria-label={`Figure ${figure}, scrolls sideways on narrow screens`} tabindex="0">
     {battery.pattern === 'rings' ? (
       <svg class="natops" viewBox="0 0 640 380" role="img" aria-label={battery.items.map((i) => `${i.count} ${i.label}`).join(', ')}>
         {battery.items.map((item, k) => {
@@ -80,6 +80,8 @@ const d0 = off(p0, 34), d1 = off(p1, 34), dl = off(mid, 48);
                     <><circle class="bat-body" cx="0" cy="-14" r="7" /><line class="ln" x1="0" y1="-7" x2="0" y2="18" /><line class="bat-missile" x1="-18" y1="-4" x2="20" y2="-18" /></>
                   ) : row.kind === 'radar' ? (
                     <><rect class="bat-radar" x="-20" y="-14" width="40" height="30" /><path class="ln" d="M-14 -20 Q0 -36 14 -20" /></>
+                  ) : row.kind === 'gun' ? (
+                    <><rect class="bat-body" x="-20" y="-6" width="40" height="22" /><line class="bat-missile" x1="-4" y1="-6" x2="16" y2="-30" /><line class="bat-missile" x1="4" y1="-6" x2="24" y2="-30" /></>
                   ) : row.kind === 'command' ? (
                     <><rect class="bat-body" x="-20" y="-14" width="40" height="30" /><line class="ln" x1="-12" y1="-14" x2="-12" y2="-32" /><path class="fixmark" d="M-12 -32 L4 -27 L-12 -22 Z" /></>
                   ) : (

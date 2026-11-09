@@ -19,20 +19,28 @@ export function getStaticPaths() {
 
 const { record } = Astro.props as { record: EncyclopediaRecord };
 const { frontmatter: data, Content } = recordContent(record);
-const siblings = categoryRecords(record.category);
+// Records are navigated and compared within their group (missiles, guns, radars).
+const group = (r: EncyclopediaRecord) => recordContent(r).frontmatter.group;
+const siblings = categoryRecords(record.category).filter((r) => group(r) === data.group);
 const category = categoryTitle(record.category);
 const cite = (ns: number[]) => ns.map((n) => `[${n}]`).join(' ');
 const sourceFor = (pattern: RegExp) => data.sources.find((s) => pattern.test(s.url));
 const rwrSource = sourceFor(/heatblur/);
 const label = (r: EncyclopediaRecord) => r.title.split(' ')[0].replace(/^SA-/, '');
-const items = siblings.map((r) => ({ slug: r.slug, label: label(r), name: r.title, envelope: recordContent(r).frontmatter.envelope }));
+const items = siblings.flatMap((r) => { const envelope = recordContent(r).frontmatter.envelope; return envelope ? [{ slug: r.slug, label: label(r), name: r.title, envelope }] : []; });
 const e = data.envelope;
+const c = data.coverage;
+const gun = data.group === 'aaa';
 const nm = (km: number) => { const v = kmToNm(km); return v < 50 ? v.toFixed(1) : v.toFixed(0); };
 const ft = (m: number) => { const f = mToFt(m); const step = f < 1000 ? 10 : 100; return Math.round(f / step) * step; };
 const n = (v: number) => v.toLocaleString('en-GB');
 const span = (lo: string | null, hi: string | null) => lo === null ? `up to ${hi}; minimum not given` : hi === null ? `from ${lo}; maximum not given` : `${lo}–${hi}`;
-const range = span(e.minRangeKm === null ? null : `${n(e.minRangeKm)} km (${nm(e.minRangeKm)} NM)`, `${n(e.maxRangeKm)} km (${nm(e.maxRangeKm)} NM)`);
-const alt = span(e.minAltM === null ? null : `${n(e.minAltM)} m (${n(ft(e.minAltM))} ft)`, e.maxAltM === null ? null : `${n(e.maxAltM)} m (${n(ft(e.maxAltM))} ft)`);
+const distance = (km: number) => `${n(km)} km (${nm(km)} NM)`;
+const height = (m: number) => `${n(m)} m (${n(ft(m))} ft)`;
+const range = e && span(e.minRangeKm === null ? null : distance(e.minRangeKm), distance(e.maxRangeKm));
+const alt = e && span(e.minAltM === null ? null : height(e.minAltM), e.maxAltM === null ? null : height(e.maxAltM));
+// Figures are numbered in the order they appear, since not every record has every figure.
+const fig = { envelope: e ? 1 : 0, rwr: e ? 2 : 1, battery: e ? 3 : 2 };
 ---
 <SiteLayout title={record.title} activeSection="encyclopedia"
   description={`${record.title} (${record.designation}): ${record.summary}`}
@@ -52,28 +60,34 @@ const alt = span(e.minAltM === null ? null : `${n(e.minAltM)} m (${n(ft(e.minAlt
       <dl>
         <div><dt>Role</dt><dd><Cited text={data.role} /></dd></div>
         <div><dt>In service</dt><dd><Cited text={data.inService} /></dd></div>
-        <div><dt>Guidance</dt><dd><Cited text={data.guidance} /></dd></div>
-        <div><dt>Range</dt><dd>{range} <Cited text={cite(e.cite)} /></dd></div>
-        <div><dt>Altitude</dt><dd>{alt} <Cited text={cite(e.cite)} /></dd></div>
+        {data.guidance && <div><dt>{gun ? 'Fire control' : 'Guidance'}</dt><dd><Cited text={data.guidance} /></dd></div>}
+        {e && <div><dt>{gun ? 'Effective range' : 'Range'}</dt><dd>{range} <Cited text={cite(e.cite)} /></dd></div>}
+        {e && <div><dt>{gun ? 'Effective altitude' : 'Altitude'}</dt><dd>{alt} <Cited text={cite(e.cite)} /></dd></div>}
+        {c && <div><dt>Detection range</dt><dd>Up to {distance(c.rangeKm)} <Cited text={cite(c.cite)} /></dd></div>}
+        {c && <div><dt>Coverage ceiling</dt><dd>{c.altM === null ? 'Not given' : height(c.altM)} <Cited text={cite(c.cite)} /></dd></div>}
         <div><dt>Mobility and deployment</dt><dd><Cited text={data.mobility} /></dd></div>
-        <div><dt>Radars</dt><dd>{data.radars.length ? <><ul>{data.radars.map((r) => <li><strong>{r.name}{r.nato && ` “${r.nato}”`}</strong>{r.band && ` (${r.band} band)`}: {r.role}</li>)}</ul>{data.radarsCite && <span>Sources: <Cited text={cite(data.radarsCite)} /></span>}</> : 'None: infrared-guided'}</dd></div>
+        <div><dt>Radars</dt><dd>{data.radars.length ? <><ul>{data.radars.map((r) => <li><strong>{r.name}{r.nato && ` “${r.nato}”`}</strong>{r.band && ` (${r.band} band)`}: {r.role}</li>)}</ul>{data.radarsCite && <span>Sources: <Cited text={cite(data.radarsCite)} /></span>}</> : gun ? 'None: aimed optically' : 'None: infrared-guided'}</dd></div>
         <div><dt>RWR symbol</dt><dd>{data.rwr.length ? data.rwr.map((s) => <span><span class="symbol">{s.symbol}</span>{s.emitter} </span>) : 'None'}{rwrSource && data.rwr.length > 0 && <> <Cited text={`[${rwrSource.n}]`} /></>}</dd></div>
       </dl>
     </section>
 
     {data.photo && <RecordPhoto photo={data.photo} />}
 
-    <EnvelopeFigure items={items} highlight={record.slug} title={`Figure 1 — ${data.nato} engagement limits (side view)`}>
-      <p class="fig-caption"><Cited text={e.basis} /> The shaded region combines the published minimum and maximum range, treated as slant range from the launcher, with the minimum and maximum altitude. Real launch zones are smaller and change with target speed, aspect and altitude. Dashed edges mark limits the cited sources do not give. Other SAMs in this section are drawn faintly for comparison, labelled by SA number. Each scale prints its vertical exaggeration.</p>
-    </EnvelopeFigure>
+    {e && (
+      <EnvelopeFigure items={items} highlight={record.slug} from={gun ? 'gun' : 'launcher'} title={`Figure ${fig.envelope} — ${data.nato} engagement limits (side view)`}>
+        {gun
+          ? <p class="fig-caption"><Cited text={e.basis} /> The shaded region combines the published effective range, treated as slant range from the gun, with the published effective altitude. A gun's shells fly further than this, but beyond it the chance of a hit falls away, and it changes with target speed, crossing angle and how the gun is aimed. Dashed edges mark limits the cited sources do not give. Other guns in this section are drawn faintly for comparison. Each scale prints its vertical exaggeration.</p>
+          : <p class="fig-caption"><Cited text={e.basis} /> The shaded region combines the published minimum and maximum range, treated as slant range from the launcher, with the minimum and maximum altitude. Real launch zones are smaller and change with target speed, aspect and altitude. Dashed edges mark limits the cited sources do not give. Other SAMs in this section are drawn faintly for comparison, labelled by SA number. Each scale prints its vertical exaggeration.</p>}
+      </EnvelopeFigure>
+    )}
 
     <div class="record-body"><LinkedText><Content /></LinkedText></div>
 
-    <RwrFigure symbols={data.rwr} name={data.nato} cite={rwrSource ? `[${rwrSource.n}]` : ''}>
+    <RwrFigure n={fig.rwr} symbols={data.rwr} name={data.nato} cite={rwrSource ? `[${rwrSource.n}]` : ''}>
       <Fragment slot="none"><Cited text={data.rwrNote} /></Fragment>
     </RwrFigure>
 
-    {data.battery && <BatteryFigure battery={data.battery} name={data.nato} cite={cite(data.battery.cite)} />}
+    {data.battery && <BatteryFigure n={fig.battery} battery={data.battery} name={data.nato} cite={cite(data.battery.cite)} />}
 
     <section class="sources" aria-labelledby="sources-title">
       <h2 id="sources-title">Sources</h2>

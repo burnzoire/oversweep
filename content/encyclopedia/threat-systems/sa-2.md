@@ -1,4 +1,5 @@
 ---
+group: sam
 nato: SA-2 Guideline
 designation: S-75 Dvina (V-750 missile)
 role: Area air defence, operated as a complete site [2]

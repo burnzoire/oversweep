@@ -3,8 +3,9 @@ import type { Envelope } from '../../data/encyclopedia';
 import { fittingScale, kmToNm, mToFt, region, scales, type Scale } from '../../lib/envelope';
 
 interface Item { slug: string; label: string; name: string; envelope: Envelope }
-interface Props { items: Item[]; highlight?: string; title: string; defaultScale?: string }
-const { items, highlight, title, defaultScale } = Astro.props;
+// `from` names what range is measured from: a missile launcher or a gun.
+interface Props { items: Item[]; highlight?: string; title: string; defaultScale?: string; from?: 'launcher' | 'gun' }
+const { items, highlight, title, defaultScale, from = 'launcher' } = Astro.props;
 const focus = items.find((i) => i.slug === highlight);
 const initial = defaultScale ?? (focus ? fittingScale(focus.envelope).id : 'medium');
 
@@ -45,10 +46,16 @@ function draw(scale: Scale) {
   // edge; the rest are nudged up when they would overprint a neighbour.
   const clipped = shapes.filter((s) => s.label.anchor === 'end');
   const placed = shapes.filter((s) => s.label.anchor !== 'end').map((s) => ({ ...s.label, on: s.on })).sort((a, b) => a.x - b.x || b.y - a.y);
+  // Labels are compared by their approximate width, so long ones such as
+  // "(ceiling not given)" on the baseline do not run into each other.
+  const width = (l: { text: string }) => l.text.length * 7.5;
   for (let i = 1; i < placed.length; i++) {
-    for (let j = 0; j < i; j++) {
-      const a = placed[j], b = placed[i];
-      if (Math.abs(a.x - b.x) < 16 && Math.abs(a.y - b.y) < 13) b.y = Math.max(a.y - 14, T + 12);
+    for (let moved = true, guard = 0; moved && guard < placed.length; guard++) {
+      moved = false;
+      for (let j = 0; j < i; j++) {
+        const a = placed[j], b = placed[i];
+        if (a.x < b.x + width(b) && b.x < a.x + width(a) && Math.abs(a.y - b.y) < 13) { b.y = Math.max(a.y - 14, T + 12); moved = true; }
+      }
     }
   }
   const labels = clipped.length
@@ -89,7 +96,7 @@ const figId = `env-${highlight ?? 'all'}`;
         </g>
         {v.labels.map((l) => <text class:list={['lbl', 'env-label', { on: l.on }]} x={l.x} y={l.y} text-anchor={l.anchor}>{l.text}</text>)}
         <text class="lbl small" x={R} y={H - 18} text-anchor="end">VERTICAL SCALE ×{v.exaggeration.toFixed(1)}</text>
-        <text class="lbl" x={(L + R) / 2} y={H - 18} text-anchor="middle">RANGE FROM LAUNCHER (NM)</text>
+        <text class="lbl" x={(L + R) / 2} y={H - 18} text-anchor="middle">RANGE FROM {from === 'gun' ? 'GUN' : 'LAUNCHER'} (NM)</text>
         <text class="lbl" x={16} y={(T + B) / 2} text-anchor="middle" transform={`rotate(-90 16 ${(T + B) / 2})`}>ALTITUDE (THOUSANDS OF FT)</text>
       </svg>
     </div>

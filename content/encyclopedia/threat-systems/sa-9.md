@@ -1,4 +1,5 @@
 ---
+group: sam
 nato: SA-9 Gaskin
 designation: 9K31 Strela-1
 role: Mobile short-range, low-altitude infrared SAM [1]
