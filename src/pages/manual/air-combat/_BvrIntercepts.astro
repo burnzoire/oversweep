@@ -97,15 +97,16 @@ const k = (ft: number) => `${Math.round(ft / 1000)},000`;
    <tr><th scope="row"><Term>HOT</Term></th><td>0–30°</td><td>Head-on</td><td>Positional advantage</td></tr>
    <tr><th scope="row"><Term>Flank</Term></th><td>30–60°</td><td>Forward quarter</td><td>Positional advantage</td></tr>
    <tr><th scope="row"><Term>Beam</Term></th><td>70–110°</td><td>Beam quarter</td><td>Neutral or disadvantage</td></tr>
-   <tr><th scope="row"><Term>Drag</Term></th><td>Over 110°</td><td>Rear quarter</td><td>Disadvantage</td></tr>
+   <tr><th scope="row"><Term>Drag</Term></th><td>Over 110°*</td><td>Rear quarter</td><td>Disadvantage</td></tr>
   </tbody>
  </table></div>
+ <p class="note">* The same text gives drag as 120–180° in its glossary; see <a href="#conventions">Navy and Air Force aspect words</a>. <a href="#source-p825">{p('5-8, A-3')}</a></p>
  <p>The advantage is about who can affect whom: a fighter ahead of a bandit heading for a friendly ship can put itself between them, and a fighter in its rear quarter cannot affect it until it turns for home. <a href="#source-p825">{p('8-9')}</a> The Air Force counts the same words in aspect angle from the bandit's tail; see <a href="#conventions">Navy and Air Force aspect words</a>.</p>
  <section class="lesson figure-lesson" data-lesson="geometry" aria-labelledby="geometry-title">
   <h3 id="geometry-title" class="fig-title">Figure 2 — The intercept triangle</h3>
   <p>The bandit starts due north of you. Set its target aspect, the range and your angle-off, then fly both aircraft straight to see the contact drift. Use the buttons to put the bandit on collision, to fly the bandit reciprocal, or to point at it.</p>
   <div class="controls">
-   <label for="geo-ta">Target aspect <output for="geo-ta"></output></label><input id="geo-ta" name="ta" type="range" min="-90" max="90" step="5" value="-30" />
+   <label for="geo-ta">Target aspect <output for="geo-ta"></output></label><input id="geo-ta" name="ta" type="range" min="-60" max="60" step="5" value="-30" />
    <label for="geo-sr">Slant range <output for="geo-sr"></output></label><input id="geo-sr" name="sr" type="range" min="5" max="40" step="1" value="20" />
    <label for="geo-ao">Angle-off <output for="geo-ao"></output></label><input id="geo-ao" name="ao" type="range" min="-60" max="60" step="1" value="0" />
   </div>
@@ -191,7 +192,7 @@ const k = (ft: number) => `${Math.round(ft / 1000)},000`;
   </tbody>
  </table></div>
  <p><Term>Combat identification</Term> is the process of characterising a contact well enough to support the engagement decision, and a positive engagement order is normally needed as well. <a href="#source-jp">{j('III-16 to III-17')}</a> Whatever the ROE, a unit keeps the inherent right and obligation of self-defense against a hostile act or demonstrated hostile intent. <a href="#source-jp">{j('III-11')}</a></p>
-<p class="key"><strong>Key point:</strong> a missile goes only at a group declared hostile; bandit means enemy but not cleared, and a bogey that stays unknown means a visual identification inside 10 NM.</p>
+<p class="key"><strong>Key point:</strong> a shot needs a hostile declaration, and theater ROE normally also require an engagement order; bandit means enemy but not cleared, and a bogey that stays unknown may need a visual identification, directed by 10 NM if the mission requires it.</p>
 
  <h2 id="shoot">The shot: launch zones, crank and decide</h2>
  <p>A missile's <Term>LAR</Term> is the three-dimensional volume around the bandit that the fighter must fly into for a chance of a successful shot. It is largest, with the longest maximum range, against a bandit at 0 TA when the shooter is fast and high, and smallest in the rear quarter, low and slow: missiles like altitude, airspeed and closure. <a href="#source-p825">{p('15-1')}</a> The bandit's own <Term>WEZ</Term> grows and shrinks the same way. <a href="#source-p825">{p('15-2')}</a></p>
@@ -249,7 +250,7 @@ const k = (ft: number) => `${Math.round(ft / 1000)},000`;
    <tr><th scope="row"><Term>Meld</Term></th><td>Bring both radars onto the targeted group; altitude is the key part of the call</td><td>No earlier than 25 NM</td></tr>
    <tr><th scope="row"><Term>Sort</Term></th><td>Each fighter takes its own contact in the group</td><td>Right after meld</td></tr>
    <tr><th scope="row">Shoot</th><td>Shoot in the launch zone on the sort contract, and crank together</td><td>20 NM</td></tr>
-   <tr><th scope="row">Decide</th><td>Merge or leave</td><td>By the decision range</td></tr>
+   <tr><th scope="row">Decide</th><td>Merge or leave</td><td>At timeout</td></tr>
   </tbody>
  </table></div>
  <p>Commit criteria come from the mission. A fighter defending an asset has tight criteria so it is not dragged away; an offensive sweep has loose ones. An escort targets only groups that threaten its strikers, and point or area defence kills only threat groups, enemy strikers first. <a href="#source-p825">{p('16-5, 17-23')}</a></p>
@@ -269,7 +270,7 @@ const k = (ft: number) => `${Math.round(ft / 1000)},000`;
   <li>On a collision course the contact does not drift; off it, it drifts away from collision bearing.</li>
   <li>A stern conversion holds lateral separation, about 40,000 feet at 10 NM in training, then turns in.</li>
   <li>Broadcast control is bullseye for everyone; tactical control is for one flight, in bullseye or BRAA.</li>
-  <li>Only a hostile declaration clears a shot; rules of engagement normally need positive identification.</li>
+  <li>A shot needs a hostile declaration; theater ROE normally also require an engagement order, and positive identification.</li>
   <li>A missile's zone is biggest against a hot bandit when you are fast and high; inside RNE it cannot be outmaneuvered.</li>
   <li>Shoot, crank, call timeout, then banzai to the merge or skate out.</li>
   <li>A section commits, labels, targets, melds, sorts, shoots and decides, against every group that meets the criteria.</li>
@@ -304,10 +305,10 @@ const k = (ft: number) => `${Math.round(ft / 1000)},000`;
    <tr><th scope="row">Lost situational awareness</th><td><Term>ABORT</Term>: a maximum-performance turn to put the threat behind, then a low, fast dash away; no later than 10 NM against a radar threat</td></tr>
   </tbody>
  </table></div>
- <p>Defend at timeout range or by the defend range, whichever comes first; inside the abort range you are committed to the merge. <a href="#source-p825">{p('16-12')}</a> Never fly through the launch zone of one weapon to reach another's. <a href="#source-p825">{p('16-13')}</a></p>
+ <p>Defend at timeout range or by the defend range, 8 NM, whichever comes first; inside the abort range, 10 NM, you are committed to the merge. <a href="#source-p825">{p('16-13')}</a> Never fly through the launch zone of one weapon to reach another's. <a href="#source-p825">{p('16-13')}</a></p>
 
  <h2 id="vid">Visual identification</h2>
- <p>A group still a bogey near the merge is a dangerous situation: the fighters must identify it visually and may then fall into a turning fight. If visual identification is needed, it is directed by 10 NM. One fighter becomes the <Term>eyeball</Term>, which makes the identification, and the other the <Term>shooter</Term>, which hangs back 3,000 to 5,000 feet apart vertically with weapons separation and shoots its sort contract the moment the group is identified hostile. <a href="#source-p825">{p('17-47 to 17-48')}</a></p>
+ <p>A group still a bogey near the merge is a dangerous situation: the fighters must identify it visually and may then fall into a turning fight. If the mission requires visual identification, it is directed by 10 NM. One fighter becomes the <Term>eyeball</Term>, which makes the identification, and the other the <Term>shooter</Term>, which keeps 3,000 to 5,000 feet of vertical separation, short-range missile separation and sight of the eyeball, and shoots its sort contract the moment the group is identified hostile. <a href="#source-p825">{p('17-47 to 17-48')}</a></p>
  <ol class="exchange">
   <li><span class="who">Lead</span><span class="said">“Sherpa 11, eyeball.”</span></li>
   <li><span class="who">Wing</span><span class="said">“Sherpa 12, shooter.”</span></li>
@@ -328,7 +329,7 @@ const k = (ft: number) => `${Math.round(ft / 1000)},000`;
  <p>No Air Force, Marine Corps or Army intercept publication could be read for this revision, so check which convention your unit's briefing guide uses.</p>
 
  <h2 id="missiles">The missiles</h2>
- <p>The Navy's training text describes three American missiles. <a href="#source-p825">{p('14-4 to 14-7')}</a> The <Term record="aim-7">AIM-7 Sparrow</Term> is semi-active: the shooter keeps a single-target radar lock to illuminate the target until impact. The <Term record="aim-120">AIM-120 AMRAAM</Term>, its replacement in the Navy and Air Force, needs no lock at medium and short range and can guide from track-while-scan, giving any fighter a multi-target capability. The <Term record="aim-54">AIM-54 Phoenix</Term> it also replaced is retired.</p>
+ <p>Among the American missiles the Navy's training text describes, three are radar guided. <a href="#source-p825">{p('14-4 to 14-7')}</a> The <Term record="aim-7">AIM-7 Sparrow</Term> is semi-active: the shooter keeps a single-target radar lock to illuminate the target until impact. The <Term record="aim-120">AIM-120 AMRAAM</Term>, its replacement in the Navy and Air Force, needs no lock at medium and short range and can guide from track-while-scan, giving any fighter a multi-target capability. The <Term record="aim-54">AIM-54 Phoenix</Term> it also replaced is retired.</p>
  <p>The infrared <Term record="aim-9">AIM-9 Sidewinder</Term> is the short-range missile for the end of the stern conversion. Threat missiles you may meet include the <Term record="r-27">R-27</Term>, <Term record="r-77">R-77</Term> and <Term record="pl-12">PL-12</Term>. All are in the <a href={ordnance}>ordnance records</a>.</p>
 
  <section class="sim-panel" aria-labelledby="sims">
@@ -345,14 +346,14 @@ const k = (ft: number) => `${Math.round(ft / 1000)},000`;
   <ul>
    <li>Training mission 17A flies an intercept and stern conversion with heat-seekers: turn away from the aspect shown to build turning room, more for higher aspect, and go pure pursuit at 120° aspect angle, about 6 to 8 NM, and no later than 5 NM. BMS counts aspect angle, Air Force style. <a href="#source-bms">{b('256, 259 to 260')}</a></li>
    <li>Mission 18 is a BVR combat air patrol. BMS describes BVR as a cycle of commit and abort, with the leader choosing <strong>wall</strong> (elements line abreast) or <strong>grind</strong> (elements in trail) before each commit, and <strong>skate</strong>, <strong>short skate</strong> or <strong>banzai</strong> flow. <a href="#source-bms">{b('295 to 296')}</a></li>
-   <li>Its BVR timeline defines ranges the training instruction leaves to the fleet: transition, desired out, decision, minimum abort and minimum recommit ranges, built from the threat's stern weapon zone. <a href="#source-bms">{b('296 to 297')}</a></li>
+   <li>Its BVR timeline defines its own named ranges: transition, desired out, decision, minimum abort and minimum recommit ranges, built from the threat's stern weapon zone. <a href="#source-bms">{b('296 to 297')}</a></li>
    <li>Mission 18 puts bullseye at the end of the CAP's hot leg so that commit criteria can be a bullseye range, then has you learn that 25 NM is too close and extend it to 40. <a href="#source-bms">{b('310, 314')}</a></li>
   </ul>
   <h3>Where the sims and the training instruction differ, or say nothing</h3>
   <ul>
    <li>DCS cranks to the radar's ±60° gimbal limit <a href="#source-f16">{d('270')}</a>; the training standard is at least 50° angle-off, without gimbaling the radar. <a href="#source-p825">{p('16-11')}</a></li>
-   <li>BMS's banzai notches for a briefed time, commonly 15 seconds, then aborts if spiked <a href="#source-bms">{b('296')}</a>; the training instruction's beam defense holds at least 5 seconds or until the spike goes, and its banzai is launch and defend to the merge. <a href="#source-p825">{p('16-12')}</a></li>
-   <li>Grinder and wall tactics, and the decision and abort ranges, come only from the sim manual here; the public Navy text does not teach them.</li>
+   <li>BMS's banzai notches for a briefed time, commonly 15 seconds, then aborts if spiked <a href="#source-bms">{b('296')}</a>; the training instruction's beam defense holds at least 5 seconds or until the spike goes, and its banzai is launch and defend to the merge. <a href="#source-p825">{p('16-12 to 16-13')}</a></li>
+   <li>Grinder and wall tactics come only from the sim manual here. The training instruction has its own timeline <a href="#source-p825">{p('16-10')}</a>, a transition range <a href="#source-p825">{p('16-11')}</a>, and an 8 NM defend range and 10 NM abort range <a href="#source-p825">{p('16-13')}</a>. BMS's desired-out, decision, minimum-abort and minimum-recommit ranges are defined differently, from the threat's stern weapon zone.</li>
    <li>Neither manual covers the declarations, positive and procedural identification, or a visual identification.</li>
   </ul>
   <p><strong>To practise:</strong> fly Figure 2's collision and bandit reciprocal cases against an AI target, then BMS mission 18 or a DCS F-16C intercept: commit, declare, meld, shoot inside the launch zone, crank and call timeout.</p>

@@ -154,7 +154,7 @@ terms:
   - term: Beam
     form: "(ING)"
     definition: "A target maneuvering within 70 to 110 degrees aspect. Turning to put a radar threat on the beam is also a missile defense, because it puts the fighter in the threat radar's Doppler notch."
-    cite: [{ n: 1, page: "16-12, A-1" }]
+    cite: [{ n: 1, page: "16-12 to 16-13, A-1" }]
   - term: Flank
     form: "(ING)"
     definition: "A target with a stable aspect of 30 to 60 degrees (Navy, target aspect)."
