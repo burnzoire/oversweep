@@ -1,4 +1,5 @@
 ---
+group: sam
 nato: SA-1 Guild
 designation: S-25 Berkut
 role: Strategic air defence of Moscow [1]

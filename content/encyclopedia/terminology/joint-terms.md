@@ -165,6 +165,10 @@ terms:
     expansion: Air defense artillery
     definition: Weapons and equipment for actively combating air targets from the ground.
     cite: [{ n: 1, page: "6" }]
+  - term: AAA
+    expansion: Antiaircraft artillery
+    definition: "The dictionary lists AAA only as the abbreviation of antiaircraft artillery. It falls under air defense artillery (ADA): weapons and equipment for actively combating air targets from the ground."
+    cite: [{ n: 1, page: "A-1" }, { n: 1, page: "6" }]
   - term: Counterair
     definition: A mission that integrates offensive and defensive operations to attain and maintain a desired degree of air superiority and protection by neutralizing or destroying enemy aircraft and missiles, both before and after launch.
     note: "It is made up of offensive counterair (OCA) and defensive counterair (DCA). [1]"

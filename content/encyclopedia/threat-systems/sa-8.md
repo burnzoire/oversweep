@@ -1,4 +1,5 @@
 ---
+group: sam
 nato: SA-8 Gecko
 designation: 9K33 Osa
 role: Self-contained short-range SAM vehicle [1]

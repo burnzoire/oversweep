@@ -1,4 +1,5 @@
 ---
+group: sam
 nato: SA-7 Grail
 designation: 9K32 Strela-2 (Strela-2M is SA-7b)
 role: Man-portable air defence system (MANPADS) [1]

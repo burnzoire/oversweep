@@ -1,4 +1,5 @@
 ---
+group: sam
 nato: SA-6 Gainful
 designation: 2K12 Kub
 role: Mobile army air defence battery [1]

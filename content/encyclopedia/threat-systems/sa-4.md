@@ -1,4 +1,5 @@
 ---
+group: sam
 nato: SA-4 Ganef
 designation: 2K11 Krug
 role: Tracked army SAM system [1]

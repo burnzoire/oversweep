@@ -34,6 +34,9 @@ export interface Envelope {
   minAltM: number | null;
   maxAltM: number | null;
   cite: number[];
+  // What the limits are when they are not the default (engagement limits for
+  // missiles, effective limits for guns), e.g. a gun's maximum reach.
+  labels?: { range: string; altitude: string };
 }
 
 export interface Radar {
@@ -59,21 +62,40 @@ export interface Photo {
 }
 
 export interface BatteryItem {
-  kind: 'radar' | 'launcher' | 'reload' | 'command' | 'gunner';
+  kind: 'radar' | 'launcher' | 'reload' | 'command' | 'gunner' | 'gun';
   label: string;
   count?: number;
   missiles?: number;
 }
 
+// Threat Systems are listed in these groups. Missiles and guns carry an
+// engagement envelope; early-warning radars carry detection coverage instead.
+export const threatGroups = [
+  { slug: 'sam', title: 'Surface-to-air missile systems' },
+  { slug: 'aaa', title: 'Anti-aircraft guns' },
+  { slug: 'ewr', title: 'Early-warning radars' },
+] as const;
+export type ThreatGroup = (typeof threatGroups)[number]['slug'];
+
+export interface Coverage {
+  basis: string;
+  rangeKm: number;
+  altM: number | null;
+  cite: number[];
+}
+
 export interface ThreatData {
+  group: ThreatGroup;
   nato: string;
   designation: string;
   role: string;
   inService: string;
-  guidance: string;
+  // How a missile is guided or a gun aimed; early-warning radars have none.
+  guidance?: string;
   seeker?: 'radar' | 'infrared';
   mobility: string;
-  envelope: Envelope;
+  envelope?: Envelope;
+  coverage?: Coverage;
   radars: Radar[];
   radarsCite?: number[];
   // Symbols from the cited RWR threat table; empty when the system has none.

@@ -8,7 +8,7 @@ import Glossary from "../../components/encyclopedia/Glossary.astro";
 import { encyclopediaCategories } from "../../data/catalogue";
 import { sectionHasContent } from "../../data/availability";
 import { ilsLines, navaidLines, runwayLines, towerLines, towerNote } from "../../data/map-airfield-text";
-import { airfieldCatalogue, aircraftContent, mapAirfieldAnchor, simAirfields, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, sensorContent, sensorGroups, recordRoute, type Source } from "../../data/encyclopedia";
+import { airfieldCatalogue, aircraftContent, mapAirfieldAnchor, simAirfields, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, threatGroups, sensorContent, sensorGroups, recordRoute, type Source } from "../../data/encyclopedia";
 import { sitePath } from "../../lib/paths";
 import { airfieldRoles, branches, currentUse, nations, searchTerms, sims, useLabels } from "../../data/airfield-model.mjs";
 import "../../styles/encyclopedia.css";
@@ -22,7 +22,15 @@ export function getStaticPaths() {
 
 const { category } = Astro.props;
 const records = categoryRecords(category.slug).map((record) => ({ record, data: recordContent(record).frontmatter }));
-const withEnvelopes = records.filter(({ data }) => data.envelope);
+// Threat systems are listed by group: missiles and guns each get an envelope
+// comparison and a quick-reference table; radars get a coverage table.
+const threats = category.slug === "threat-systems"
+  ? threatGroups.map((group) => ({ group, records: records.filter(({ data }) => (data.group ?? "sam") === group.slug) })).filter(({ records }) => records.length > 0)
+  : [];
+const envelopeCaption: Record<string, string> = {
+  sam: "Each region combines a system's published minimum and maximum range, treated as slant range from the launcher, with its minimum and maximum altitude, using the figures and sources on its record page. Labels are SA numbers. Real launch zones are smaller and change with target speed, aspect and altitude. Dashed edges mark limits the sources do not give; the SA-9's sources give no ceiling, so only its range is drawn. Each scale prints its vertical exaggeration.",
+  aaa: "Each region combines a gun's published effective range, treated as slant range from the gun, with its effective altitude, using the figures and sources on its record page. Shells fly further than this, but beyond it the chance of a hit falls away. Where a source gives no effective figure, the record's own label says what is drawn instead, as the table below shows. Dashed edges mark limits the sources do not give. Each scale prints its vertical exaggeration.",
+};
 const label = (title: string) => title.split(" ")[0].replace(/^SA-/, "");
 // Citation numbers belong to each record's own source list, so the table drops them.
 const plain = (text: string) => text.replace(/\s*\[\d+\]/g, "");
@@ -117,7 +125,7 @@ const deliverySources: Source[] = [
   ) : (
     <div class="ency">
       {category.slug === "threat-systems" && (
-        <p class="lead">Surface-to-air missile systems a pilot may face, from the SA-1 to the SA-19: Soviet systems first fielded between the 1950s and the 1990s, many still met, in upgraded versions, in conflicts and simulators. Each record gives the system's radars, guidance, published engagement limits and what it shows on a radar warning receiver, with sources.</p>
+        <p class="lead">Ground-based air defences a pilot may face: surface-to-air missile systems from the SA-1 to the SA-19, the anti-aircraft guns that defend troops and targets at low level, and the early-warning radars that find aircraft at long range and cue missiles and fighters onto them. Most are Soviet systems first fielded between the 1950s and the 1990s and still met, in upgraded versions, in conflicts and simulators; the western guns are here because they appear in simulators and in many air forces. Each record gives the system's radars, guidance or fire control, published engagement limits or radar coverage, and what it shows on a radar warning receiver, with sources.</p>
       )}
       {category.slug === "aircraft" ? (
         <>
@@ -329,6 +337,67 @@ const deliverySources: Source[] = [
           </section>
 
         </>
+      ) : category.slug === "threat-systems" ? (
+        <>
+          {threats.map(({ group, records }) => (
+            <div class="aircraft-group">
+              <h2>{group.title}</h2>
+              <div class="entry-grid record-grid">
+                {records.map(({ record, data }) => <RecordCard record={record} photo={data.photo} />)}
+              </div>
+            </div>
+          ))}
+          {threats.map(({ group, records }, i) => {
+            const withEnvelopes = records.filter(({ data }) => data.envelope);
+            const figure = threats.slice(0, i).filter((t) => t.records.some(({ data }) => data.envelope)).length + 1;
+            return group.slug === "ewr" ? (
+              <>
+                <h2>Compare the early-warning radars</h2>
+                <div class="table-scroll" role="region" aria-label="Early-warning radar table, scrolls sideways on narrow screens" tabindex="0">
+                  <table>
+                    <thead><tr><th scope="col">Radar</th><th scope="col">In service</th><th scope="col">Detection range</th><th scope="col">Coverage ceiling</th><th scope="col">RWR symbol (DCS F-14)</th></tr></thead>
+                    <tbody>
+                      {records.map(({ record, data }) => (
+                        <tr>
+                          <th scope="row"><a href={sitePath(recordRoute(record))}>{record.title}</a><br /><span class="entry-kicker">{record.designation}</span></th>
+                          <td>{plain(data.inService)}</td>
+                          <td>{data.coverage ? km(data.coverage.rangeKm) : "not given"}</td>
+                          <td>{data.coverage?.altM ? km(data.coverage.altM / 1000) : "not given"}</td>
+                          <td>{data.rwr.length ? data.rwr.map((s) => s.symbol).join(", ") : "none"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <p class="note">Detection ranges are the best case each source gives; a radar sees a low or small aircraft much closer than that, and nothing below its horizon. Each record cites its sources.</p>
+              </>
+            ) : withEnvelopes.length > 0 && (
+              <>
+                <h2>{group.slug === "aaa" ? "Compare the guns" : "Compare the missile envelopes"}</h2>
+                <EnvelopeFigure title={`Figure ${figure} — ${group.slug === "aaa" ? "Published effective range and altitude of the guns" : "Published engagement limits of the missile systems"} (side view)`} defaultScale={group.slug === "aaa" ? "point" : undefined} from={group.slug === "aaa" ? "gun" : "launcher"} items={withEnvelopes.map(({ record, data }) => ({ slug: record.slug, label: label(record.title), name: record.title, envelope: data.envelope! }))}>
+                  <p class="fig-caption">{envelopeCaption[group.slug]}</p>
+                </EnvelopeFigure>
+                <div class="table-scroll" role="region" aria-label={`${group.title} quick reference table, scrolls sideways on narrow screens`} tabindex="0">
+                  <table>
+                    <thead><tr><th scope="col">System</th><th scope="col">{group.slug === "aaa" ? "Fire control" : "Guidance"}</th><th scope="col">{group.slug === "aaa" ? "Effective range" : "Max range"}</th><th scope="col">{group.slug === "aaa" ? "Effective altitude" : "Ceiling"}</th><th scope="col">RWR symbol (DCS F-14)</th></tr></thead>
+                    <tbody>
+                      {withEnvelopes.map(({ record, data }) => (
+                        <tr>
+                          <th scope="row"><a href={sitePath(recordRoute(record))}>{record.title}</a><br /><span class="entry-kicker">{record.designation}</span></th>
+                          <td>{plain(data.guidance ?? "")}</td>
+                          <td>{km(data.envelope!.maxRangeKm)}{data.envelope!.labels && <><br /><span class="entry-kicker">{data.envelope!.labels.range.toLowerCase()}</span></>}</td>
+                          <td>{data.envelope!.maxAltM === null ? "not given" : km(data.envelope!.maxAltM / 1000)}{data.envelope!.labels && data.envelope!.maxAltM !== null && <><br /><span class="entry-kicker">{data.envelope!.labels.altitude.toLowerCase()}</span></>}</td>
+                          <td>{data.rwr.length ? data.rwr.map((s) => s.symbol).join(", ") : "none"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <p class="note">Figures are the variant drawn in Figure {figure}; each record cites its sources and lists the other published figures.</p>
+              </>
+            );
+          })}
+        </>
       ) : category.slug === "terminology" ? (
         <Glossary />
       ) : (
@@ -337,32 +406,6 @@ const deliverySources: Source[] = [
           <div class="entry-grid record-grid">
             {records.map(({ record }) => <RecordCard record={record} />)}
           </div>
-        </>
-      )}
-      {withEnvelopes.length > 0 && (
-        <>
-          <h2>Compare the envelopes</h2>
-          <EnvelopeFigure title="Figure 1 — Published engagement limits (side view)" items={withEnvelopes.map(({ record, data }) => ({ slug: record.slug, label: label(record.title), name: record.title, envelope: data.envelope }))}>
-            <p class="fig-caption">Each region combines a system's published minimum and maximum range, treated as slant range from the launcher, with its minimum and maximum altitude, using the figures and sources on its record page. Labels are SA numbers. Real launch zones are smaller and change with target speed, aspect and altitude. Dashed edges mark limits the sources do not give; the SA-9's sources give no ceiling, so only its range is drawn. Each scale prints its vertical exaggeration.</p>
-          </EnvelopeFigure>
-          <h2>Quick reference</h2>
-          <div class="table-scroll" role="region" aria-label="Quick reference table, scrolls sideways on narrow screens" tabindex="0">
-            <table>
-              <thead><tr><th scope="col">System</th><th scope="col">Guidance</th><th scope="col">Max range</th><th scope="col">Ceiling</th><th scope="col">RWR symbol (DCS F-14)</th></tr></thead>
-              <tbody>
-                {withEnvelopes.map(({ record, data }) => (
-                  <tr>
-                    <th scope="row"><a href={sitePath(recordRoute(record))}>{record.title}</a><br /><span class="entry-kicker">{record.designation}</span></th>
-                    <td>{plain(data.guidance)}</td>
-                    <td>{km(data.envelope.maxRangeKm)}</td>
-                    <td>{data.envelope.maxAltM === null ? "not given" : km(data.envelope.maxAltM / 1000)}</td>
-                    <td>{data.rwr.length ? data.rwr.map((s) => s.symbol).join(", ") : "none"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p class="note">Ranges and ceilings are the variant drawn in Figure 1; each record cites its sources and lists the other published figures.</p>
         </>
       )}
     </div>
