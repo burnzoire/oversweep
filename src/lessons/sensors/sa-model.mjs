@@ -41,7 +41,9 @@ export const SOURCES = [
   { id: 'iff', label: 'IFF (Mode 4)' },
 ];
 export const TRACKS = [
-  { id: 'wing', label: 'Your wingman', x: 2, y: -0.5, kind: 'friend', seen: { eyes: 'In sight, line abreast', link: 'Own flight member: position and status', iff: 'Correct Mode 4 reply: friendly' }, iffFriend: true },
+  { id: 'wing', label: 'Your wingman', x: 2, y: -0.5, kind: 'friend', seen: { eyes: 'In sight, line abreast', link: 'Own flight member: position and status' } },
+  // Inside the ±60° interrogation sector ahead (bearing about 321°).
+  { id: 'friend', label: 'Friendly flight', x: -20, y: 25, kind: 'friend', seen: { link: 'Friendly participant (PPLI)', iff: 'Correct Mode 4 reply: friendly' }, iffFriend: true },
   { id: 'north', label: 'Group north', x: -4, y: 38, kind: 'hostile', seen: {
     radar: 'Contact: bearing 354, 38 NM, 25,000 ft, hot',
     control: '"Single group, bullseye 350/60, 25 thousand, hostile"',

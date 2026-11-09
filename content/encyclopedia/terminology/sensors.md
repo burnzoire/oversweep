@@ -107,10 +107,10 @@ terms:
     definition: "The shared display of tracks across a joint force, consolidated from each component's sensors over data link interfaces under assigned track managers."
     cite: [{ n: 5, page: "II-12, II-26" }]
   - term: Interrogator
-    definition: "The part of an IFF system that transmits coded challenges and evaluates the coded replies, to identify the aircraft that answer. Fighters, controllers' radars and surface defenses carry them."
+    definition: "The part of an IFF system that transmits coded challenges and evaluates the coded replies, to identify the aircraft that answer."
     cite: [{ n: 1, page: "A-23" }]
   - term: Transponder
-    definition: "A transmitter-receiver that accepts an interrogator's challenge and automatically transmits the reply set for it; the airborne half of IFF and of air traffic control's secondary radar."
+    definition: "A transmitter-receiver that accepts an interrogator's challenge and automatically transmits the reply set for it."
     note: "In brevity the IFF transponder is PARROT. [2]"
     cite: [{ n: 1, page: "A-45" }, { n: 2, page: "A-7" }]
   - term: Selective identification feature
@@ -118,8 +118,8 @@ terms:
     definition: "The capability added to basic IFF that lets a transponder send, and an interrogator receive and display, selected coded replies, such as a mission code, a unit code or an air traffic control code."
     cite: [{ n: 1, page: "A-39" }]
   - term: IFF mode
-    definition: "One type of IFF challenge and reply. Modes 1 (mission) and 2 (unit or airframe) are military; Mode 3/A is the four-digit code shared with air traffic control, and Mode C adds pressure altitude; Modes 4 and 5 are encrypted military modes, Mode 5 adding the aircraft's position."
-    note: "The modes and codes in use are set for each operation in the air tasking order and special instructions. A correct Mode 4 reply is one route to a positive friendly identification; a valid Mode 1 or 2 only starts the procedural checks. [5]"
+    definition: "One type of IFF challenge and reply. Modes 1 (mission) and 2 (unit or airframe) are military; Mode 3/A is the four-digit code shared with air traffic control, and civil Mode C reports altitude; Modes 4 and 5 are encrypted military modes, Mode 5 adding the aircraft's position."
+    note: "The modes and codes in use are set for each operation in the air tasking order and special instructions. A correct Mode 4 reply is one route to a positive friendly identification; a valid Mode 1 or 2 only leads on to a minimum-risk route check. [5]"
     cite: [{ n: 7, page: "Modes" }, { n: 5, page: "A-3, A-5" }]
 sources:
   - n: 1
