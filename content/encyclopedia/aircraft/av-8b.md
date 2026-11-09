@@ -19,7 +19,7 @@ armament:
   - "AGM-65 Maverick, laser- and GPS-guided bombs and rockets [1]"
 sensors:
   - "Navigation forward-looking infrared and night-vision-goggle-compatible cockpit on the Night Attack [1]"
-  - "[Litening](record:litening) targeting pod; the Harrier II Plus adds the APG-65 radar [1]"
+  - "[Litening](record:litening) targeting pod; the Harrier II Plus adds the [APG-65](record:apg-65) radar [1]"
 photos:
   - src: "encyclopedia/aircraft/av-8b-2.jpg"
     alt: "A Harrier hovering low over the deck of an amphibious assault ship at sea, nozzles pointing down"

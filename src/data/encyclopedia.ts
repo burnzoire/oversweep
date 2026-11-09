@@ -220,11 +220,14 @@ export interface OrdnanceData {
 // Groups on the Radar & Sensors list, in display order. Groups without
 // records are not shown, so later sensor batches only add records.
 export const sensorGroups = [
+  { slug: 'fighter-radar', title: 'Fighter radars' },
+  { slug: 'rwr', title: 'Radar warning receivers' },
   { slug: 'targeting-pod', title: 'Targeting pods and laser spot trackers' },
 ] as const;
 
 // Sensor records: the data plate gives cited text for the sensor and the
-// variants it names; `quick` holds the comparison table's columns.
+// variants it names; `quick` holds the comparison table's columns. Pods fill
+// the laser rows; radars and warning receivers fill band, modes and display.
 export interface SensorData {
   group: (typeof sensorGroups)[number]['slug'];
   short?: string;
@@ -233,17 +236,22 @@ export interface SensorData {
   origin: string;
   manufacturer: string;
   inService: string;
-  weight: string;
-  dimensions: string;
-  sensors: string;
-  laser: string;
+  weight?: string;
+  dimensions?: string;
+  // Radio frequency band (radars) or the band a receiver covers (RWRs).
+  band?: string;
+  sensors?: string;
+  modes?: string;
+  laser?: string;
   spotTracker?: string;
   range?: string;
+  // What the crew sees: the display and the cues the sensor gives.
+  display?: string;
   carriers: string[];
   variants?: string[];
   // The first photo leads the page; the others follow the record text.
   photos: Photo[];
-  quick: { introduced: string | null; designates: boolean };
+  quick: { introduced: string | null; designates?: boolean; band?: string };
   sources: Source[];
 }
 

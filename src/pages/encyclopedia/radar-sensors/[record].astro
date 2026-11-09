@@ -25,13 +25,22 @@ const plate: [string, string | undefined][] = [
   ['Origin', data.origin],
   ['Manufacturer', data.manufacturer],
   ['In service', data.inService],
+  ['Band', data.band],
   ['Weight', data.weight],
   ['Dimensions', data.dimensions],
   ['Sensors', data.sensors],
+  ['Modes', data.modes],
   ['Laser', data.laser],
   ['Laser spot tracker', data.spotTracker],
   ['Range', data.range],
+  ['What the crew sees', data.display],
 ];
+// The status panel's caveat depends on what kind of sensor the record is.
+const caveat = {
+  'targeting-pod': 'Pods are upgraded in service, so weights, sensors and ranges change with the variant; the data plate names the variants its figures describe.',
+  'fighter-radar': 'Published detection ranges depend on the target\'s radar cross-section, its aspect and altitude, the mode and the variant, so treat a quoted range as one data point, not a performance figure.',
+  rwr: 'A warning receiver only knows the radars in its threat library, and its symbols and priorities are set by that library, so what one shows varies by aircraft, variant and software load.',
+}[data.group];
 ---
 <SiteLayout title={record.title} activeSection="encyclopedia"
   description={`${record.title} (${record.designation}): ${record.summary}`}
@@ -44,7 +53,7 @@ const plate: [string, string | undefined][] = [
     <section class="status-panel" data-record-id={record.id} data-record-revision={record.revision}>
       <h2>{record.maturity}</h2>
       <p>Record revision {record.revision} · {record.summary}</p>
-      <p>Real-world sensor as described in public sources. Pods are upgraded in service, so weights, sensors and ranges change with the variant; the data plate names the variants its figures describe. The record describes the equipment; it is not a guide to employing it.</p>
+      <p>Real-world sensor as described in public sources. {caveat} The record describes the equipment; it is not a guide to employing it.</p>
     </section>
 
     <section class="data-plate" aria-labelledby="plate-title">
@@ -66,7 +75,7 @@ const plate: [string, string | undefined][] = [
           <li id={`source-${s.n}`} value={s.n}><cite>{s.title}</cite>. {s.publisher}{s.date && `, ${s.date}`}. <a href={s.url}>{s.url}</a> (accessed {s.accessed}).{s.note && ` ${s.note}`}</li>
         ))}
       </ol>
-      <p class="note">Wikipedia articles are secondary sources and can change; they are cited with the date they were read. FAS Military Analysis Network pages date from the late 1990s and describe the pods as they were then.</p>
+      <p class="note">Wikipedia articles are secondary sources and can change; they are cited with the date they were read. FAS Military Analysis Network pages date from the late 1990s and describe the equipment as it was then.</p>
     </section>
   </div>
 </SiteLayout>

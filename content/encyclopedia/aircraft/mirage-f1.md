@@ -20,7 +20,7 @@ armament:
   - "Super 530 and Magic air-to-air missiles; AIM-9 Sidewinder on Spanish and Greek aircraft [1]"
   - "Bombs, rockets and, on Iraqi aircraft, Exocet anti-ship missiles [1]"
 sensors:
-  - "Thomson-CSF Cyrano IV monopulse radar; the Cyrano IV-1 added limited look-down [1] [2]"
+  - "Thomson-CSF [Cyrano IV](record:cyrano-iv) monopulse radar; the Cyrano IV-1 added limited look-down [1] [2]"
 photos:
   - src: "encyclopedia/aircraft/mirage-f1.jpg"
     alt: "A camouflaged two-seat Mirage F1 banking over desert, carrying drop tanks"

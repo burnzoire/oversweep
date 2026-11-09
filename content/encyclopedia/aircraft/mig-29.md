@@ -17,7 +17,7 @@ armament:
   - "One 30 mm GSh-30-1 cannon, 150 rounds (100 on later variants) [1]"
   - "Six underwing pylons: R-27 radar-guided missiles inboard, R-73 (or older R-60) dogfight missiles outboard; up to 4,000 kg of stores [1]"
 sensors:
-  - "N019 Sapfir-29 look-down/shoot-down pulse-Doppler radar (9.12) [1]"
+  - "[N019](record:n019) Sapfir-29 look-down/shoot-down pulse-Doppler radar (9.12) [1]"
   - "Infrared search and track (IRST) and laser rangefinder in front of the canopy [1]"
   - "Shchel helmet-mounted sight for off-boresight R-73 shots [1] [2]"
 photos:
