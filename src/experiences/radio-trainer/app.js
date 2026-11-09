@@ -1,11 +1,14 @@
 import {loadNeuralVoice,playNeuralVoice,stopNeuralVoice} from './neural-voice.js';
 import { selectTranscript, FALCON_GROUND } from './lessons/radio/context.mjs';
-import { loadLocalSTT, isSTTReady, isCapturing, startCapture, stopCapture, discardCapture, transcribeLocal } from './local-stt.js';
+import { loadLocalSTT, isSTTReady, isCapturing, startCapture, stopCapture, discardCapture, transcribeLocal, compareWhisperModels } from './local-stt.js';
+import {wordErrorRate,modelFor} from './lessons/radio/whisper-models.mjs';
 import { INITIAL, advance, instruction } from './lessons/radio/model.mjs';
 const $ = id => document.getElementById(id);
 let state = structuredClone(INITIAL);
 let recording = false, lastAtc = '', voices = [], audio = null, localEngine = null;
 let busySTT = false;
+let lastRecording=null,recordingStage=null;
+const selectedSTTModel=()=> $('sttModel').value;
 function note(text,kind='') { $('result').textContent=text; $('result').dataset.kind=kind; }
 function status(text){ $('status').textContent=text; }
 function log(kind,text) {
@@ -99,13 +102,18 @@ async function startRecording(){
   $('micState').textContent='Preparing audio…';status('TRANSCRIBING');
   try{
    const captured=await stopCapture();
+   lastRecording=captured.samples;
+   $('compareSTT').disabled=false;
+   $('compareResults').replaceChildren();
+   $('compareStatus').textContent='Same recording available for comparison ('+captured.duration.toFixed(1)+' s).';
    $('micState').textContent='Captured '+captured.duration.toFixed(1)+' seconds of audio';
-   const result=await transcribeLocal(captured.samples,state.stage,m=>{$('sttStatus').textContent=m;});
+   const model=selectedSTTModel();
+   const result=await transcribeLocal(captured.samples,recordingStage,m=>{$('sttStatus').textContent=m;},model);
    const text=String(result.text||'').trim();
    $('sttMs').textContent=result.ms+' ms';
    const selected=selectTranscript([{transcript:text,confidence:1}]);
    $('text').value=selected.transcript;
-   $('sttStatus').textContent=result.contextApplied?'Local Whisper · context prompt attempted':'Local Whisper · no context-token support';
+   $('sttStatus').textContent=modelFor(model).label+' · '+(result.contextApplied?'context prompt submitted':'no context-token support');
    if(result.warning)$('sttStatus').textContent+=' · fallback';
    if(!selected.transcript){
     note('No speech recognised. Hold PTT while speaking, or type a transmission.');
@@ -120,17 +128,23 @@ async function startRecording(){
  }
  try {
   await startCapture(message=>{$('micState').textContent=message;});
+  recordingStage=state.stage;
+  lastRecording=null;
+  $('compareSTT').disabled=true;
+  $('compareResults').replaceChildren();
+  $('compareStatus').textContent='Recording a new sample…';
   updatePTTState(true);$('micState').textContent='Recording on-device; click again to transcribe.';
-  $('sttStatus').textContent=isSTTReady()?'Local Whisper model ready':'Local recording; model loads after release';
+  $('sttStatus').textContent=isSTTReady(selectedSTTModel())?'Selected Whisper model ready':'Local recording; selected model loads after release';
   status('TRANSMITTING');
  }catch(err){updatePTTState(false);status('READY');note('Microphone error: '+err.message+'. You can still type your transmission.');}
 }
 async function prepareSTT(){
  $('loadSTT').disabled=true;
  try{
-  await loadLocalSTT(message=>{$('sttStatus').textContent=message;});
-  $('sttStatus').textContent='Local Whisper ready';
-  note('On-device transcription model loaded. Press PTT to record.');
+  const model=selectedSTTModel();
+  await loadLocalSTT(message=>{$('sttStatus').textContent=message;},model);
+  $('sttStatus').textContent=modelFor(model).label+' ready';
+  note('On-device '+modelFor(model).label+' loaded. Press PTT to record.');
  }catch(err){
   $('sttStatus').textContent='Model unavailable';
   note('Local model loading failed: '+err.message+'. No cloud transcription will be used. You can still type.');
@@ -149,7 +163,46 @@ async function loadModel(){
  }catch(e){$('llmStatus').textContent='Local LLM unavailable: '+e.message+'. Deterministic controller remains active.';$('llmEnabled').checked=false;}
  finally{$('loadLLM').disabled=false;}
 }
+function renderComparison(results,reference) {
+ const container=$('compareResults');container.replaceChildren();
+ const referenceWords=reference.trim();
+ for(const model of ['tiny','small']){
+  const data=results[model];const section=document.createElement('div');
+  section.className='sideblock';
+  const title=document.createElement('strong');title.textContent=modelFor(model).label;
+  const transcript=document.createElement('p');transcript.textContent=data?.error?'Error: '+data.error:(data?.text||'(no speech)');
+  const timing=document.createElement('p');timing.className='small';
+  timing.textContent=data?.error?'Model failed':data.ms+' ms inference · '+(data.contextApplied?'context submitted':'unconditioned');
+  section.append(title,transcript,timing);
+  if(referenceWords&&!data?.error){
+   const metric=document.createElement('p');metric.className='small';
+   const score=wordErrorRate(referenceWords,data.text);
+   metric.textContent=score===null?'Enter reference words to score.':'Word error rate: '+(100*score).toFixed(1)+'%';
+   section.append(metric);
+  }
+  container.append(section);
+ }
+}
+async function compareLastRecording(){
+ if(busySTT||!lastRecording)return;
+ busySTT=true;
+ $('compareSTT').disabled=true;$('ptt').disabled=true;
+ const samples=lastRecording.slice(),stage=recordingStage,reference=$('referenceSTT').value;
+ $('compareStatus').textContent='Running both models locally on the same captured audio. This may use significant memory.';
+ try{
+  const results=await compareWhisperModels(samples,stage,(model,message)=>{
+   $('compareStatus').textContent=modelFor(model).label+': '+message;
+  });
+  renderComparison(results,reference);
+  $('compareStatus').textContent='Comparison complete. Times measure inference only, excluding model downloads/loading.';
+ }catch(err){$('compareStatus').textContent='Comparison failed: '+err.message;}
+ finally{busySTT=false;$('ptt').disabled=false;$('compareSTT').disabled=!lastRecording;}
+}
 $('ptt').addEventListener('click',startRecording);
+$('compareSTT').addEventListener('click',compareLastRecording);
+$('sttModel').addEventListener('change',()=>{
+ $('sttStatus').textContent=isSTTReady(selectedSTTModel())?'Selected model ready':'Selected model not loaded';
+});
 $('loadSTT').addEventListener('click',prepareSTT);
 $('send').addEventListener('click',()=>transmit($('text').value));
 $('text').addEventListener('keydown',e=>{if(e.key==='Enter')transmit($('text').value);});
@@ -161,10 +214,10 @@ $('loadVoice').addEventListener('click',async()=>{
  }catch(e){$('neuralStatus').textContent='Neural voice unavailable: '+e.message+'. Browser voice remains available.';$('neuralEnabled').checked=false;}
  finally{$('loadVoice').disabled=false;}
 });
-$('reset').addEventListener('click',()=>{stopNeuralVoice();state=structuredClone(INITIAL);discardCapture();updatePTTState(false);if('speechSynthesis' in window)speechSynthesis.cancel();$('log').replaceChildren();$('text').value='';lastAtc='';showState();note('Exercise reset. Contact Falcon Ground when ready.');log('atc','Falcon Ground monitoring.');});
+$('reset').addEventListener('click',()=>{stopNeuralVoice();state=structuredClone(INITIAL);discardCapture();lastRecording=null;recordingStage=null;$('compareSTT').disabled=true;$('compareResults').replaceChildren();$('compareStatus').textContent='Record a transmission to enable comparison.';updatePTTState(false);if('speechSynthesis' in window)speechSynthesis.cancel();$('log').replaceChildren();$('text').value='';lastAtc='';showState();note('Exercise reset. Contact Falcon Ground when ready.');log('atc','Falcon Ground monitoring.');});
 $('replay').addEventListener('click',()=>{if(lastAtc)speak(lastAtc);else note('No previous controller response to replay.');});
 $('loadLLM').addEventListener('click',loadModel);
 $('llmEnabled').addEventListener('change',()=>{if($('llmEnabled').checked&&!localEngine){$('llmEnabled').checked=false;note('Load the local LLM before enabling it.');}});
 if('speechSynthesis' in window){populateVoices();speechSynthesis.addEventListener?.('voiceschanged',populateVoices);}
-$('sttStatus').textContent='Local Whisper model not loaded';
+$('sttStatus').textContent='Small.en selected; model not loaded';
 showState();log('atc','Falcon Ground monitoring.');

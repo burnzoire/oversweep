@@ -1,45 +1,57 @@
 import {transcribeEnglishOnly} from './lessons/radio/whisper-inference.mjs';
-// Dedicated local transcription worker. Only model files and JS dependencies are
-// downloaded; microphone samples are passed directly to browser inference.
-const TRANSFORMERS_CDN = 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1';
-const MODEL = 'Xenova/whisper-tiny.en';
-let pipe = null;
-let loading = null;
-function report(id,phase,message){postMessage({id,phase,message});}
-async function ensureLoaded(id) {
- if(pipe)return pipe;
- if(!loading) loading=(async()=>{
-  report(id,'progress','Importing local Whisper inference runtime…');
-  const {pipeline,env}=await import(TRANSFORMERS_CDN);
-  // Do not allow any remote inference endpoint; hub fetches are only weights.
-  env.allowRemoteModels=true;
+import {modelFor} from './lessons/radio/whisper-models.mjs';
+// No remote transcription. Only JS runtime and model weights are downloaded.
+const TRANSFORMERS_CDN='https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1';
+let active=null,activeKey=null,loading=null,runtime=null;
+function report(id,phase,message,other={}){postMessage({id,phase,message,...other});}
+async function getRuntime(){
+ if(!runtime)runtime=import(TRANSFORMERS_CDN);
+ return runtime;
+}
+async function ensureLoaded(id,key){
+ const {id:modelId,label}=modelFor(key);
+ if(active&&activeKey===key)return active;
+ if(loading)return loading; // requests are serialized by the page
+ loading=(async()=>{
+  if(active){
+   report(id,'progress','Releasing previous model before switching…');
+   try{await active.dispose?.();}finally{active=null;activeKey=null;}
+  }
+  report(id,'progress','Preparing '+label+' (download on first use)…');
+  const {pipeline,env}=await getRuntime();
+  env.allowRemoteModels=true; // downloads only; no inference API
   env.allowLocalModels=false;
-  report(id,'progress','Downloading Whisper Tiny English model. First use requires internet; audio remains on this device.');
-  const instance=await pipeline('automatic-speech-recognition',MODEL,{
+  const instance=await pipeline('automatic-speech-recognition',modelId,{
    device:'wasm',dtype:'q8',
-   progress_callback:status=>{
-    if(status?.status==='progress'&&status.total)
-      report(id,'progress', 'Downloading '+(status.file??'model')+' · '+Math.round(status.loaded/status.total*100)+'%');
+   progress_callback:p=>{
+    if(p?.status==='progress'&&p.total)
+     report(id,'progress',label+' · '+(p.file??'weights')+' '+Math.round(p.loaded/p.total*100)+'%');
    },
   });
-  pipe=instance;
+  active=instance;activeKey=key;
   return instance;
  })();
- try{return await loading;}catch(err){loading=null;throw err;}
+ try{return await loading;}finally{loading=null;}
 }
 onmessage=async ({data})=>{
- const {id,type}=data??{};
- try {
-  if(type==='load'){await ensureLoaded(id);report(id,'ready','Whisper is ready for local transcription.');return;}
+ const {id,type,model='tiny'}=data??{};
+ try{
+  modelFor(model);
+  if(type==='load'){
+   await ensureLoaded(id,model);
+   report(id,'ready',model+' ready', {model});return;
+  }
   if(type!=='transcribe')return;
-  const transcriber=await ensureLoaded(id);
   const audio=data.samples;
   if(!(audio instanceof Float32Array)||audio.length<3200||audio.length>16000*30)
-    throw new Error('Recording must contain between 0.2 and 30 seconds of mono 16 kHz PCM.');
-  report(id,'progress','Transcribing locally · audio is not uploaded…');
+   throw new Error('Recording must contain 0.2–30 seconds of mono 16 kHz PCM.');
+  const transcriber=await ensureLoaded(id,model);
+  report(id,'progress','Running '+model+' locally; audio is not uploaded…');
   const start=performance.now();
   const result=await transcribeEnglishOnly(transcriber,audio,data.context);
-  postMessage({id,phase:'transcript',text:result.text,
-   ms:Math.round(performance.now()-start),contextApplied:result.contextApplied,warning:result.warning});
- }catch(err){postMessage({id,phase:'error',message:err?.message??String(err)});}
+  report(id,'transcript','Transcribed on device',{
+   model,text:result.text,ms:Math.round(performance.now()-start),
+   contextApplied:result.contextApplied,warning:result.warning,
+  });
+ }catch(err){report(id,'error',err?.message??String(err),{model});}
 };

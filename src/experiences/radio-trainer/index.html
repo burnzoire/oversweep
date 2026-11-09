@@ -15,6 +15,7 @@
 <link rel="prefetch" href="whisper-worker.js" as="script">
 <link rel="modulepreload" href="lessons/radio/audio.mjs">
 <link rel="modulepreload" href="lessons/radio/whisper-inference.mjs">
+<link rel="modulepreload" href="lessons/radio/whisper-models.mjs">
 <script defer type="module" src="app.js"></script>
 </head>
 <body>
@@ -45,8 +46,20 @@
 <aside>
   <div class="sideblock"><p class="eyebrow">CURRENT TASK</p><p id="task">Contact Falcon Ground and request taxi.</p></div>
   <div class="sideblock"><p class="eyebrow">LOCAL SPEECH RECOGNITION</p>
-    <button type="button" id="loadSTT">Load local Whisper model</button>
-    <p class="small">The speech model runs on this device. First load downloads model weights and JavaScript dependencies; subsequent sessions can use cached files. No cloud transcription fallback.</p>
+    <label for="sttModel" class="small">Active model</label>
+    <select id="sttModel">
+      <option value="small">Whisper Small.en · larger model</option>
+      <option value="tiny">Whisper Tiny.en · baseline</option>
+    </select>
+    <button type="button" id="loadSTT">Load selected model</button>
+    <p class="small">Both models run locally. Download on first use; Small.en needs considerably more memory and processing time. No cloud transcription fallback.</p>
+    <div class="section-head"><strong>Accent comparison</strong></div>
+    <p class="small">Record a transmission using PTT, then compare Tiny.en and Small.en with the exact same audio. Raw transcripts are not corrected or submitted as radio traffic.</p>
+    <button type="button" id="compareSTT" disabled>Compare both models on last recording</button>
+    <label for="referenceSTT" class="small">What you actually said (optional, for word-error score)</label>
+    <input id="referenceSTT" aria-label="Reference words for speech recognition benchmark" placeholder="Type the actual words spoken" maxlength="500">
+    <p id="compareStatus" class="small" role="status">Record a transmission to enable comparison.</p>
+    <div id="compareResults" aria-live="polite"></div>
   </div>
   <div class="sideblock"><p class="eyebrow">RESPONSE ENGINE</p>
     <label class="setting"><input type="checkbox" id="llmEnabled"> Experimental local LLM wording</label>

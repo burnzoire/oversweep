@@ -58,3 +58,12 @@ Do not mark Technically Validated or release as operational guidance based on th
 3. Test Whisper context injection with `Viper Two One` vs. `5421`, runway/frequency readbacks and noise; compare unconditioned case when prompt-token support fails.
 4. Verify every JS/ONNX dependency works within the static Pages build and under the `/oversweep/` base path.
 5. Test on-device neural audio loading separately; no published claims of natural ATC quality without listening tests.
+
+## Revision 6 — Australian English recognition comparison
+
+- Provide on-demand English Whisper Tiny.en and Small.en, sourced from their publicly available Transformers.js ONNX model repositories. Small.en is the preferred active model for evaluation, not an established accuracy winner.
+- A single captured microphone transmission (mono 16 kHz PCM) can be run through both engines sequentially with exactly the same recorded samples and unchanged ATC context. The original captured samples remain in browser memory until replaced or reset. Neither recordings nor transcripts are uploaded by the trainer.
+- Show separate **raw** model transcripts and inference-only milliseconds (load/download time excluded). Users may optionally type the exact words spoken to calculate case/punctuation-insensitive word error rate. A reference is necessary to make any accuracy claim.
+- Release the old model before switching to the next to reduce simultaneous model memory use. Small.en is significantly heavier, and runtime compatibility or latency on actual hardware is still unverified.
+- No pronunciation aliases, error pattern substitutions or changes to the deterministic ATC controller. Positive vocabulary prompting remains experimental and identical across the two models.
+- Benchmark quality requires real recorded Australian-accented ATC calls, repetitions and multiple stages; automated tests only establish the selection, scoring and code integration, not whether Small.en improves the acoustic result.
