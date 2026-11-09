@@ -2036,6 +2036,17 @@
     "summary": "Intercept geometry, collision course and the stern conversion, missile launch zones, control and section calls from commit to decision, and how a group is identified before a shot."
   },
   {
+    "id": "encyclopedia.terminology.sensors",
+    "slug": "sensors",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Sensors and situational awareness terms",
+    "designation": "Electronic Warfare Fundamentals, CNATRA P-825, MCH 11-F16 Vol 5 and JP 3-01",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "How a fighter radar searches, measures and locks, the Doppler notch, warning receivers, chaff, flares and jamming, infrared and night vision sensors, datalinks and the words for building situational awareness."
+  },
+  {
     "id": "encyclopedia.theatres.middle-east",
     "slug": "middle-east",
     "category": "locations",

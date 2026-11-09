@@ -1,0 +1,288 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
+import { getModule } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import Term from '../../../components/Term.astro';
+import '../../../styles/instrument-flight.css';
+import '../../../styles/sensors.css';
+import { FRAME_6B_140_SEC, elevationRule, notchHalfWidth } from '../../../lessons/sensors/radar-model.mjs';
+const mod = getModule('radar-and-warning');
+const core = [
+ ['example', 'One engagement, from both cockpits'], ['radar', 'How a fighter radar sees'], ['scan', 'Pointing the scan volume'],
+ ['modes', 'Search, track-while-scan and lock'], ['notch', 'The Doppler notch'], ['rwr', 'Reading the warning receiver'],
+ ['countermeasures', 'Chaff, flares and jamming'], ['recap', 'Key points'],
+];
+const reference = [
+ ['prf', 'PRF and its trade-offs'], ['rwr-inside', 'Inside the warning receiver'], ['maws', 'Missile warning and infrared defense'],
+ ['sims', 'In the sim'], ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+];
+// [1] Electronic Warfare Fundamentals (ACC TRSS, November 2000), by printed page.
+// [2] CNATRA P-825 (07-14), BFM and All Weather Intercept FTI, by printed page.
+// [3] DCS F-16C Viper guide and [4] Falcon BMS 4.38.1 Training Manual, sim crossover only.
+// [5] US Naval Academy, Fundamentals of Naval Weapons Systems, by chapter.
+const pp = (pg: string) => `${/to|,/.test(pg) ? 'pp.' : 'p.'} ${pg}`;
+const e = (pg: string) => `[1, ${pp(pg)}]`;
+const p = (pg: string) => `[2, ${pp(pg)}]`;
+const d = (pg: string) => `[3, ${pp(pg)}]`;
+const b = (pg: string) => `[4, ${pp(pg)}]`;
+const glossary = sitePath('encyclopedia/terminology/sensors/');
+const brevity = sitePath('encyclopedia/terminology/brevity/');
+const bvr = sitePath('manual/air-combat/bvr-intercepts/');
+const sead = sitePath('manual/air-to-ground-operations/sead-dead/');
+const sa = sitePath('manual/sensors-situational-awareness/situational-awareness/');
+const threats = sitePath('encyclopedia/threat-systems/');
+const half = Math.round(notchHalfWidth(450, 60));
+---
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="sensors-situational-awareness" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Sensors & Situational Awareness',href:sitePath('manual/sensors-situational-awareness/')},{label:mod.title}]}>
+ <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
+  <h2>{mod.maturity}</h2>
+  <p>Module revision {mod.revision} · What a fighter radar can and cannot see, what your warning receiver is telling you, and how chaff, flares and jamming answer radar and infrared threats. For aircrew of every service, fixed and rotary wing, from Air Force and Navy training texts. Unclassified principles only.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
+ </nav>
+
+ <p class="lede">Radar is the biggest threat to an aircraft over a modern battlefield, and the first step in countering it is knowing what the signals around you mean. <a href="#source-ewf">{e('17-1')}</a> A radar measures range by timing its pulses and closure from their Doppler shift; that strength is also its weakness, because a target that is not closing or opening, relative to the ground, looks like the ground. Your <Term>radar warning receiver</Term> hears the radars looking at you, and chaff, flares and jamming exploit what each radar or seeker needs to keep tracking. <a href="#source-ewf">{e('7-20 to 7-22')}</a></p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>explain how a <Term>pulse-Doppler radar</Term> measures range and closure, what <Term>pulse repetition frequency</Term> trades, and what <Term>clutter</Term>, <Term>blind speed</Term>s and the <Term>resolution cell</Term> do to a picture;</li>
+  <li>point a <Term>scan volume</Term> at a called altitude and say why you wait a full <Term>frame</Term> before moving it;</li>
+  <li>tell <Term id="Range while search">search</Term>, <Term>track-while-scan</Term> and <Term>single-target track</Term> apart, and what a missile needs from each;</li>
+  <li>read a warning receiver's symbols, bearings and tones, and name its limits;</li>
+  <li>explain the <Term>Doppler notch</Term> and how <Term>chaff</Term>, <Term id="Decoy flare">flares</Term> and <Term id="Self-protection jamming">jamming</Term> defeat radar and infrared threats.</li>
+ </ol>
+ <p class="note">Every aircraft's radar, warning receiver and dispenser differ, and their threat tables and defensive tactics are in classified manuals. <a href="#source-ewf">{e('15-5')}</a> This page teaches the principles common to all of them; its examples are invented. Using the picture these sensors give is in <a href={sa}>Situational Awareness and the Sensor Picture</a>; the intercept itself is in <a href={bvr}>Beyond-Visual-Range Intercepts</a>.</p>
+
+ <h2 id="example">One engagement, from both cockpits</h2>
+ <p>Here is one invented engagement, seen from a fighter's radar and from the warning receiver of the aircraft it is hunting: you. The steps follow the training texts; the bearings and the outcome are made up. Step through Figure 1 as you read.</p>
+ <ol class="exchange script">
+  <li><span class="who">Fighter radar</span> <span class="said">Searches in range-while-search with six bars, its volume pointed at the altitude the controller called for you. <a class="step" href="#scan">Why</a></span></li>
+  <li><span class="who">Your receiver</span> <span class="said">A surveillance radar shows at 2 o'clock in search, then an airborne radar at 11 o'clock, with the new-threat tone. <a class="step" href="#rwr">Why</a></span></li>
+  <li><span class="who">Fighter radar</span> <span class="said">Finds you, correlates you with the controller's call and locks: single-target track. <a class="step" href="#modes">Why</a></span></li>
+  <li><span class="who">Your receiver</span> <span class="said">The airborne symbol shows track: you are <Term id="SPIKE(D)">spiked</Term>. Then a launch warning. <a class="step" href="#rwr">Why</a></span></li>
+  <li><span class="who">You</span> <span class="said">Turn hard, level and the short way to put the threat on the beam, at 9 o'clock, dispensing chaff as you turn. <a class="step" href="#countermeasures">Why</a></span></li>
+  <li><span class="who">Fighter radar</span> <span class="said">You now close only at its own speed, like the ground beneath you, and the chaff stopped in the air at once: both fall in its notch. <a class="step" href="#notch">Why</a></span></li>
+  <li><span class="who">You</span> <span class="said">Hold the beam at least 5 seconds or until the spike goes; in this example it drops back to search. <a class="step" href="#countermeasures">Why</a></span></li>
+ </ol>
+ <section class="lesson figure-lesson" data-lesson="rwr" aria-labelledby="rwr-fig-title">
+  <h3 id="rwr-fig-title" class="fig-title">Figure 1 — The engagement on a warning receiver</h3>
+  <p>Step through what a generic warning receiver shows. The scope is centered on you with your nose at the top; the plan view beside it shows your heading and where the radars really are.</p>
+  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 340" role="img" aria-label="A circular warning receiver scope with threat symbols at their bearings from the nose, and a plan view of your heading and the threats"></svg></div>
+  <div class="buttons stepper"><button type="button" data-back>Back</button><button type="button" data-next>Next</button><span data-count role="status" aria-live="polite"></span></div>
+  <p class="no-js">Interactive figure unavailable. Heading north, a surveillance radar appears at 2 o'clock and an airborne radar at 11 o'clock; the airborne radar goes to track, then launch. A right turn to 060 puts it at 9 o'clock, on the beam.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Invented example. The symbols are generic (EW, surveillance; AI, airborne interceptor, with a chevron; a box for track, a circle for launch); each aircraft has its own. A symbol's distance from the center here means nothing about range.</p>
+ </section>
+ <p class="key"><strong>Key point:</strong> a warning receiver tells you which radars are looking your way and roughly from where; how you respond depends on what that radar needs to keep tracking you.</p>
+
+ <h2 id="radar">How a fighter radar sees</h2>
+ <p>A pulse radar times each pulse to the target and back for range; its antenna's pointing gives azimuth and elevation. A pulse-Doppler radar also measures the Doppler shift of each return, so it gets closure pulse to pulse, uses that shift to reject clutter, and tracks targets in velocity. <a href="#source-ewf">{e('7-20')}</a> To do so it cancels every return with no motion relative to the radar platform's view of the ground, and anything below its speed gate. <a href="#source-ewf">{e('5-17, 7-22')}</a></p>
+ <div class="table-scroll" role="region" aria-label="What limits a radar's picture" tabindex="0"><table>
+  <caption>What limits the picture <a href="#source-ewf">{e('5-14 to 5-17, 7-22 to 7-23')}</a></caption>
+  <thead><tr><th scope="col">Effect</th><th scope="col">Cause</th><th scope="col">What you see</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>Resolution cell</Term></th><td>Pulse width and beamwidth</td><td>A close formation shows as one contact; the cell grows with range</td></tr>
+   <tr><th scope="row"><Term>Blind speed</Term></th><td>Clutter filters at the PRF's harmonics</td><td>Targets at some closures disappear</td></tr>
+   <tr><th scope="row"><Term>Range ambiguity</Term></th><td>A return arrives after the next pulse</td><td>A distant target at a wrong, shorter range</td></tr>
+   <tr><th scope="row">Range eclipsing</th><td>A return arrives while the radar transmits</td><td>The target is not displayed</td></tr>
+   <tr><th scope="row"><Term>Doppler notch</Term></th><td>No relative motion along the line of sight</td><td>A beaming target is filtered with the ground</td></tr>
+  </tbody>
+ </table></div>
+ <p>Radars switch between pulse repetition frequencies to solve ambiguity and eclipsing, at the cost of complex processing; <a href="#prf">PRF and its trade-offs</a> has the detail. <a href="#source-ewf">{e('7-23')}</a> A radar's signal also reaches a warning receiver well beyond the range the radar itself can detect, because it travels one way, not there and back. <a href="#source-f16">{d('388')}</a></p>
+ <p class="key"><strong>Key point:</strong> a pulse-Doppler radar sees motion along its line of sight; resolution, PRF and the notch decide what it misses.</p>
+
+ <h2 id="scan">Pointing the scan volume</h2>
+ <p>A fighter radar does not see everywhere at once. It searches a volume set by an azimuth width, a number of elevation bars and a range scale, which the crew points with the cursor and antenna elevation. The Navy's training radar starts each intercept in range-while-search, 6 bars, 140° wide, an 80 NM scale, the cursor at 25 NM and the volume centered on your own altitude. <a href="#source-p825">{p('16-4')}</a></p>
+ <p>When the controller calls an altitude, point the volume at it. The rule is the same one used for lateral separation: vertical displacement in feet = elevation in degrees × range in NM × 100. A group 10,000 ft above you at 20 NM is {elevationRule(10000, 20)}° up, so the bars must cover at least that. <a href="#source-p825">{p('8-7')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="scan" aria-labelledby="scan-title">
+  <h3 id="scan-title" class="fig-title">Figure 2 — The scan volume and a called altitude</h3>
+  <p>You are at 20,000 ft. Set the controller's called altitude and range, then point the antenna and choose the bars to cover it.</p>
+  <div class="controls">
+   <label for="scan-dalt">Called altitude, above or below you <output for="scan-dalt"></output></label><input id="scan-dalt" name="dalt" type="range" min="-15000" max="20000" step="1000" value="10000" />
+   <label for="scan-range">Range <output for="scan-range"></output></label><input id="scan-range" name="range" type="range" min="5" max="40" step="1" value="20" />
+   <label for="scan-elev">Antenna elevation <output for="scan-elev"></output></label><input id="scan-elev" name="elev" type="range" min="-10" max="10" step="1" value="0" />
+   <label for="scan-bars">Bars <output for="scan-bars"></output></label><input id="scan-bars" name="bars" type="range" min="1" max="6" step="1" value="6" />
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 2, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 320" role="img" aria-label="Side view of the radar scan volume as a wedge of bars from your aircraft, with the called group's altitude and range"></svg></div>
+  <p class="no-js">Interactive figure unavailable. A group 10,000 ft above you at 20 NM is 5 degrees up: raise the antenna about 5 degrees, or use enough bars that the volume reaches it.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">The bar width (2.2° per bar) and the frame times, scaled in proportion from the training radar's 13 seconds for 6 bars at 140°, are illustrative. <a href="#source-p825">{p('13-2')}</a> Real radars differ.</p>
+ </section>
+ <p>Be patient. The antenna works through its bars one at a time, so a 6-bar, 140° frame takes about {FRAME_6B_140_SEC} seconds. Move the volume only after a complete frame at the current setting, so the airspace you leave behind is known to be clear; if the controller gives no altitude, wait two complete frames before adjusting. <a href="#source-p825">{p('10-3, 13-2')}</a> More bars cover more height but lengthen each frame. <a href="#source-f16">{d('382')}</a></p>
+ <p class="key"><strong>Key point:</strong> point the volume where the group is called, using feet = degrees × NM × 100, and sanitize each frame before you move it.</p>
+
+ <h2 id="modes">Search, track-while-scan and lock</h2>
+ <div class="table-scroll" role="region" aria-label="Radar modes" tabindex="0"><table>
+  <caption>What each mode gives</caption>
+  <thead><tr><th scope="col">Mode</th><th scope="col">What the antenna does</th><th scope="col">What you get</th><th scope="col">Missile support</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term id="Range while search">Search</Term> (RWS)</th><td>Keeps scanning the volume</td><td>Contacts with range and angle, refreshed each frame <a href="#source-p825">{p('16-4')}</a></td><td>None on its own</td></tr>
+   <tr><th scope="row"><Term>Track-while-scan</Term> (TWS)</th><td>Keeps scanning; the computer holds a track file on each target and predicts it between updates</td><td>Several tracks, with data that is not continuous <a href="#source-usna">[5, ch. 6]</a></td><td>An active missile can be guided from it, so several targets can be shot <a href="#source-p825">{p('14-7')}</a></td></tr>
+   <tr><th scope="row"><Term>Single-target track</Term> (STT)</th><td>Points at one target and dwells on it</td><td>Continuous, reliable track data <a href="#source-f16">{d('380')}</a></td><td>Needed for a semi-active missile, which homes on the shooter's illumination until impact <a href="#source-p825">{p('14-4')}</a></td></tr>
+  </tbody>
+ </table></div>
+ <p>The modes are a trade between picture and quality: search sees the most airspace, a lock sees one target best. A lock is also what a target's warning receiver reads as track, and what its countermeasures aim to break. <a href="#source-ewf">{e('17-6 to 17-9')}</a> In the Navy's training intercept the crew commands STT once the contact is correlated with the controller's call. <a href="#source-p825">{p('10-3')}</a></p>
+ <p class="key"><strong>Key point:</strong> search sees the most, track-while-scan holds several targets with gaps, and a lock holds one target continuously; a semi-active missile needs the lock to impact.</p>
+
+ <h2 id="notch">The Doppler notch</h2>
+ <p>A pulse-Doppler radar removes ground returns by rejecting everything with a low velocity relative to the ground. That is how it finds aircraft that once hid in ground clutter, and it is also its biggest exploitable weakness: put your aircraft below its speed gate, relative to the radar, and it breaks track. That band is called the Doppler notch. <a href="#source-ewf">{e('7-22')}</a></p>
+ <p>The geometry is simple. A target flying straight across the radar's line of sight, at 90° target aspect, has none of its own speed toward or away from the radar. It closes only at the radar aircraft's own speed, exactly like the ground beneath it, and is hidden in the clutter notch. <a href="#source-p825">{p('8-5')}</a> In Figure 3's illustrative case, a 450-knot target with a 60-knot gate is notched within about {half}° of the beam.</p>
+ <section class="lesson figure-lesson" data-lesson="notch" aria-labelledby="notch-title">
+  <h3 id="notch-title" class="fig-title">Figure 3 — Flying the notch</h3>
+  <p>Turn the target and watch its own speed along the line of sight. Below the gate, the radar filters it with the ground.</p>
+  <div class="controls">
+   <label for="notch-ta">Target aspect <output for="notch-ta"></output></label><input id="notch-ta" name="ta" type="range" min="0" max="180" step="5" value="45" />
+   <label for="notch-speed">Target speed <output for="notch-speed"></output></label><input id="notch-speed" name="speed" type="range" min="150" max="600" step="25" value="450" />
+   <label for="notch-gate">Speed gate (illustrative) <output for="notch-gate"></output></label><input id="notch-gate" name="gate" type="range" min="20" max="150" step="10" value="60" />
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 3, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 340" role="img" aria-label="Plan view of a radar aircraft and a target, the target's velocity and its component along the line of sight, with the headings that fall in the notch shaded"></svg></div>
+  <p class="no-js">Interactive figure unavailable. At 0 target aspect the target's whole speed is along the line of sight and it is easy to see; at 90, flying across the line of sight, it has none and falls in the notch; at 180, flying away, it is visible again.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">The radar flies at 450 knots. Real speed gates are set by each radar and its mode, sometimes by the crew; the gate here is illustrative. <a href="#source-f16">{d('391')}</a></p>
+ </section>
+ <p>The notch works against the radar aircraft as well as for it: a fighter beaming a threat is in that threat's notch, and the same rule hides a friendly or a bandit crossing in front of your own radar. <a href="#source-p825">{p('8-5, 16-13')}</a></p>
+ <p class="key"><strong>Key point:</strong> what counts is the target's own motion along the radar's line of sight; across it, on the beam, a pulse-Doppler radar sees it as ground.</p>
+
+ <h2 id="rwr">Reading the warning receiver</h2>
+ <p>A radar warning receiver is an electronic warfare support system: antennas round the aircraft feed a processor that matches each signal against an <Term>emitter identification table</Term> and puts a symbol for the radar on the scope, with a tone. <a href="#source-ewf">{e('17-1, 17-6 to 17-8')}</a></p>
+ <div class="table-scroll" role="region" aria-label="What the warning receiver shows" tabindex="0"><table>
+  <caption>What the scope and tones tell you <a href="#source-ewf">{e('17-8 to 17-10')}</a></caption>
+  <thead><tr><th scope="col">Cue</th><th scope="col">Meaning</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Symbol type</th><td>Which threat system, each with its own symbol</td></tr>
+   <tr><th scope="row">Symbol position</th><td>The radar's bearing relative to your nose, you at the center, from signal strength at each antenna</td></tr>
+   <tr><th scope="row">Mode marks</th><td>Whether the radar is in search, track or missile launch</td></tr>
+   <tr><th scope="row">New-threat tone</th><td>A threat just detected; often called the "new guy" alert</td></tr>
+   <tr><th scope="row">Continuous audio</th><td>A selected threat, real (its actual PRF) or synthetic (its class)</td></tr>
+   <tr><th scope="row">Launch audio and light</th><td>Signal characteristics that indicate a missile launch</td></tr>
+  </tbody>
+ </table></div>
+ <p>Treat it as a direction finder, not a position. Precise position is not possible with most receivers; hard maneuvering beyond its limits gives wrong azimuths and multiple symbols for one radar; similar radars can show as more than one symbol, an ambiguity, from friendly radars as well as threats. <a href="#source-ewf">{e('17-1, 17-10 to 17-13')}</a> In brevity, a tracking airborne radar is a <Term id="SPIKE(D)">spike</Term>, a surface radar is <Term>MUD</Term>, and no indications at all is <Term>NAKED</Term>. The radars themselves are in <a href={threats}>Threat Systems</a>.</p>
+ <p class="key"><strong>Key point:</strong> the receiver tells you what kind of radar, roughly where, and whether it is searching, tracking or guiding; never treat the symbol as a fix.</p>
+
+ <h2 id="countermeasures">Chaff, flares and jamming</h2>
+ <p>Each countermeasure attacks what a sensor needs to keep tracking. None works alone as well as with a maneuver. <a href="#source-ewf">{e('13-1, 15-5')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Countermeasures" tabindex="0"><table>
+  <caption>The countermeasures and how they are used</caption>
+  <thead><tr><th scope="col">Measure</th><th scope="col">Against</th><th scope="col">How it works</th><th scope="col">Use it with</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>Chaff</Term>, self-protection</th><td>Acquisition and tracking radars</td><td>A cloud of dipoles that must bloom within the radar's resolution cell; it slows to the air's speed almost at once <a href="#source-ewf">{e('13-2, 13-6 to 13-8')}</a></td><td>Jamming and maneuver, to break lock or cause a survivable miss; against a Doppler radar, on the beam <a href="#source-ewf">{e('13-2, 13-8')}</a></td></tr>
+   <tr><th scope="row">Chaff, screening</th><td>Early warning and acquisition radars</td><td>Corridors or area saturation that deny the air defense its picture <a href="#source-ewf">{e('13-2')}</a></td><td>Limited effect against Doppler tracking radars <a href="#source-ewf">{e('13-8')}</a></td></tr>
+   <tr><th scope="row"><Term id="Decoy flare">Flares</Term></th><td>Infrared missiles</td><td>A heat source more attractive than the aircraft, inside the seeker's field of view; rise and burn time matter <a href="#source-ewf">{e('15-1 to 15-3')}</a></td><td>A turn to put the missile on the beam; less power, no afterburner <a href="#source-ewf">{e('15-5 to 15-6')}</a></td></tr>
+   <tr><th scope="row"><Term>Noise jamming</Term></th><td>A radar's receiver</td><td>High-power noise on its frequency to deny range <a href="#source-ewf">{e('9-1')}</a></td><td>Support jammers, or self-protection pods</td></tr>
+   <tr><th scope="row"><Term>Deception jamming</Term></th><td>A radar's tracking</td><td>Altered copies of its own pulses give false range, angle or velocity; it must match the radar's frequency, PRF, pulse width and scan <a href="#source-ewf">{e('9-2')}</a></td><td>Chaff and maneuver</td></tr>
+  </tbody>
+ </table></div>
+ <p>Jamming comes from the aircraft itself, <Term>self-protection jamming</Term>, or from support jammers: stand-off jammers orbiting outside the missile zones and escort jammers with the package, working against the early warning and control radars. <a href="#source-ewf">{e('9-3')}</a> A jammer also radiates, and can reveal an aircraft no radar had yet detected. <a href="#source-f16">{d('393')}</a> Suppressing the defenses themselves is in <a href={sead}>SEAD and DEAD</a>.</p>
+ <p>The Navy's training defense against a radar missile puts it together: if spiked and behind the timeline, assume a missile is in the air; turn the short way, as hard as possible and level, to put the threat on the beam; dispense chaff while turning; and hold it on the beam at least 5 seconds or until the spike goes away. The beam defeats the lock by using the notch. <a href="#source-p825">{p('16-12 to 16-13')}</a></p>
+ <p class="key"><strong>Key point:</strong> chaff and the notch both work on the beam, flares work with a turn that puts the missile on the beam, and every countermeasure works best with a maneuver.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>A pulse-Doppler radar measures range by timing and closure by Doppler shift; it cancels whatever does not move relative to the ground. <a href="#radar">How a fighter radar sees</a></li>
+  <li>Point the scan volume with feet = degrees × NM × 100 and wait for complete frames. <a href="#scan">Pointing the scan volume</a></li>
+  <li>Search sees the most; track-while-scan holds several targets; a lock holds one, and a semi-active missile needs it. <a href="#modes">Search, track-while-scan and lock</a></li>
+  <li>A target flying across the line of sight falls in the Doppler notch. <a href="#notch">The Doppler notch</a></li>
+  <li>The warning receiver gives a threat's type, rough bearing and mode, never a fix, and nothing for a passive infrared missile. <a href="#rwr">Reading the warning receiver</a></li>
+  <li>Chaff, flares and jamming each attack what a sensor needs, and work best with a maneuver. <a href="#countermeasures">Chaff, flares and jamming</a></li>
+ </ul>
+
+ <h2 id="prf">PRF and its trade-offs</h2>
+ <p><Term>Pulse repetition frequency</Term> is the rate a radar sends pulses, not its operating frequency. <a href="#source-ewf">{e('3-2')}</a> It sets how far the radar can measure range unambiguously and how well it measures velocity. A pulsed signal contains many frequencies spaced at the PRF; the radar filters out those harmonics to find the carrier's shift, and each filter makes a blind speed. A higher PRF spaces them wider: fewer blind speeds, more range ambiguity. <a href="#source-ewf">{e('5-14 to 5-17')}</a></p>
+ <div class="table-scroll" role="region" aria-label="PRF trade-offs" tabindex="0"><table>
+  <caption>PRF and tracking <a href="#source-ewf">{e('7-21')}</a></caption>
+  <thead><tr><th scope="col">PRF</th><th scope="col">Range</th><th scope="col">Velocity</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Low</th><td>Accurate, long and unambiguous</td><td>Very hard to track</td></tr>
+   <tr><th scope="row">Medium</th><td>Easy to track</td><td>Easy to track</td></tr>
+   <tr><th scope="row">High</th><td>Ambiguous</td><td>Excellent resolution</td></tr>
+  </tbody>
+ </table></div>
+ <p>Most modern pulse-Doppler radars have medium and high PRF modes for this reason. <a href="#source-ewf">{e('5-17')}</a> Radars also stagger or jitter the interval between pulses, both against repeater jammers and to reject range-ambiguous returns. <a href="#source-ewf">{e('3-2')}</a> <a href="#source-f16">{d('386')}</a></p>
+
+ <h2 id="rwr-inside">Inside the warning receiver</h2>
+ <details class="more"><summary>More on antennas, receivers and the threat table</summary>
+  <p>Antennas are placed to cover set sectors round the aircraft; their sensitivity sets detection range, and a cross-polarized antenna can delay detection until you are inside a threat's lethal range. <a href="#source-ewf">{e('17-1 to 17-3')}</a> Crystal video receivers are fast and wide but can saturate in a dense signal environment; superheterodyne receivers are sensitive and selective but can miss scanning radars without special tuning. <a href="#source-ewf">{e('17-4 to 17-5')}</a></p>
+  <p>The processor ranks signals so lethal threats are identified first, using characteristics such as frequency, pulse width and PRF. The emitter identification table is built from intelligence and support data and reprogrammed for each theater; a symbol stays for its <Term>symbol age-out</Term> time after the signal stops. <a href="#source-ewf">{e('17-6 to 17-8, 17-13')}</a></p>
+  <p>The crew's control unit selects priority lists for ingress and egress, the audio, and which threats are shown, and repeats the launch warning visually. <a href="#source-ewf">{e('17-10')}</a></p>
+ </details>
+
+ <h2 id="maws">Missile warning and infrared defense</h2>
+ <p>An infrared missile is passive, so the warning receiver gives no warning unless a radar was used to cue it. A <Term>missile approach warning system</Term> looks for the missile instead: actively with a pulse-Doppler radar, which must keep radiating, or passively from the motor's ultraviolet or infrared signature. Timeliness and a low false-alarm rate are its two requirements, since false alarms from the sun, flares or a wingman would fire an automatic dispenser and reveal you. <a href="#source-ewf">{e('15-6 to 15-7')}</a></p>
+ <p>Beyond flares, reduce the engines' signature by reducing power, but not below the airspeed you need to maneuver; avoid afterburner; use the sun behind you to mask your signature; and use clouds or smoke, which diffuse infrared. <a href="#source-ewf">{e('15-5 to 15-6')}</a> <Term>Flare rise time</Term> lengthens at altitude, and some seekers reject a flare that separates too fast, which is why kinematic flares thrust along with the aircraft. <a href="#source-ewf">{e('15-2 to 15-3')}</a></p>
+
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p>DCS World and Falcon BMS both model the F-16C's radar, warning receiver and dispenser. This is what their official manuals say; helicopters and other aircraft, with their own warning receivers and missile warners, were not checked for this revision.</p>
+  <h3>DCS: F-16C Viper</h3>
+  <ul>
+   <li>The guide explains the same radar trade-offs: medium PRF for all-aspect detection with poorer clutter rejection, high PRF for longer, hot-aspect detection, and a pilot-set moving-target rejection threshold that can filter slow or crossing aircraft as clutter. <a href="#source-f16">{d('389 to 391')}</a></li>
+   <li>More bars mean a longer scan; the antenna elevation moves the whole volume, and the cursor shows the altitudes it covers at that range. <a href="#source-f16">{d('382')}</a></li>
+   <li>The ALR-56M covers 360° in azimuth but only ±45° in elevation, so a threat above or below you at high pitch or bank drops off the scope, with its lock and launch warnings. <a href="#source-f16">{d('693')}</a></li>
+   <li>Its scope moves a symbol toward the center as the threat goes from search to track to guidance, so distance from the center there means lethality. <a href="#source-f16">{d('694')}</a></li>
+   <li>The guide stresses that the receiver shows only the presence of a radar signal, not that the radar has detected you or which aircraft on that bearing it is tracking. <a href="#source-f16">{d('693')}</a></li>
+  </ul>
+  <h3>Falcon BMS 4.38</h3>
+  <ul>
+   <li>Training mission 18's banzai flow has the element turn to opposite sides to notch the adversary, for example to 270 and 090 against a threat at 360, for a briefed time, commonly 15 seconds, then abort if still spiked. <a href="#source-bms">{b('296')}</a></li>
+   <li>The manual tells you to use your eyes or the warning receiver to see where a launched missile comes from. <a href="#source-bms">{b('379')}</a></li>
+  </ul>
+  <h3>Where the sims and the training texts differ, or say nothing</h3>
+  <ul>
+   <li>BMS holds the notch for a briefed 15 seconds <a href="#source-bms">{b('296')}</a>; the Navy's training defense holds the beam at least 5 seconds or until the spike goes. <a href="#source-p825">{p('16-12 to 16-13')}</a></li>
+   <li>DCS's scope puts lethal threats near the center <a href="#source-f16">{d('694')}</a>; the Air Force text says only that symbol position shows relative bearing, and Figure 1 here gives distance from the center no meaning. <a href="#source-ewf">{e('17-8')}</a></li>
+   <li>Neither sim manual read here models chaff bloom against the resolution cell, flare rise time or a missile approach warner on the F-16C; nothing is claimed either way.</li>
+  </ul>
+  <p><strong>To practise:</strong> against an AI fighter, note when its symbol goes from search to track, then turn to put it at 3 or 9 o'clock and dispense chaff, and watch whether the track drops.</p>
+ </section>
+
+ <h2 id="terms">Terms</h2>
+ <p>Every term here is in the <a href={glossary}>sensors and situational awareness terms</a>, except chaff and flares (weapons terms), the jamming words (SEAD terms) and the brevity words.</p>
+ <GlossaryList items={[
+  'Pulse repetition frequency', 'Pulse-Doppler radar', 'Clutter', 'Blind speed', 'Range ambiguity', 'Resolution cell', 'Doppler notch', 'Scan volume', 'Frame',
+  'Range while search', 'Track-while-scan', 'Single-target track', 'Break lock', 'Radar warning receiver', 'Emitter identification table', 'Symbol age-out',
+  'Chaff', 'Decoy flare', 'Flare rise time', 'Noise jamming', 'Deception jamming', 'Self-protection jamming', 'Missile approach warning system', 'SPIKE(D)', 'MUD', 'NAKED',
+ ]} />
+ <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
+  <h3 id="terms-title">Quiz: name the term</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next term</button></div>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <p>One or more questions for each outcome; Figures 2 and 3 cover outcomes 2 and 5 too.</p>
+ <section class="lesson quiz-lesson" data-lesson="questions" aria-labelledby="questions-title">
+  <h3 id="questions-title">Quiz: radar, warning and countermeasures</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next question</button></div>
+ </section>
+ <details><summary><span class="outcome">Outcome 1</span> Why does a medium-PRF mode see more blind speeds than a high-PRF one?</summary><p>Its spectral lines are closer together, so its clutter filters at those harmonics cancel more closures. It has fewer range ambiguities in return.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> A group is called 6,000 ft below you at 30 NM. Where must the volume reach?</summary><p>At least 2° down: 6,000 = 30 × elevation × 100.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Why might a crew stay in track-while-scan rather than lock?</summary><p>It keeps tracks on several targets while still scanning, and an active missile can be guided from it; a lock gives continuous data on one target but stops the search.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> During a hard defensive turn two symbols for the same radar appear. Why?</summary><p>Aggressive maneuvering changes the signal strength at each antenna quickly, and the processor can read one emitter as several, each kept for its age-out time.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> Why dispense chaff during the turn to the beam rather than flying straight at the radar?</summary><p>A Doppler radar ignores chaff, which stops in the air at once, unless you too have no relative velocity, which happens only on the beam.</p></details>
+
+ <h2 id="sources">Sources and applicability</h2>
+ <h3>Military sources</h3>
+ <p id="source-ewf"><strong>[1] US Air Force, Air Combat Command Training Support Squadron, Det 8, Electronic Warfare Fundamentals, November 2000.</strong> <a href="https://falcon.blu3wolf.com/Docs/Electronic-Warfare-Fundamentals.pdf">Read on a public copy</a>, 9 November 2026, by printed page: signal characteristics, p. 3-2; radar principles, pp. 5-12 to 5-17; target tracking, pp. 7-20 to 7-23; radar jamming, pp. 9-1 to 9-3; chaff, pp. 13-1 to 13-8; IR countermeasures, pp. 15-1 to 15-7; warning receivers, pp. 17-1 to 17-13. A student text and reference for electronic warfare training; it is not an aircraft or tactics manual.</p>
+ <p id="source-p825"><strong>[2] US Navy, Chief of Naval Air Training, CNATRA P-825 (07-14), Flight Training Instruction, Basic Fighter Maneuvering (BFM) and All Weather Intercept (AWI), Advanced UMFO T-45C/VMTS, 1 July 2014.</strong> <a href="https://falcon.blu3wolf.com/Docs/P-825.pdf">Read on a public copy</a>, 9 November 2026, by printed page: pp. 8-5, 8-7, 10-3, 13-2, 14-4, 14-7, 16-4 and 16-12 to 16-13. The Navy's intercept training text, whose radar is a training simulation of a fighter radar; it teaches skills, not fleet tactics.</p>
+ <p id="source-usna"><strong>[5] US Naval Academy, Fundamentals of Naval Weapons Systems, chapter 6, Track-While-Scan Concepts.</strong> <a href="https://man.fas.org/dod-101/navy/docs/fun/part06.htm">Read on the Federation of American Scientists' copy</a>, 9 November 2026. An undated academic text; its examples are shipboard radars.</p>
+ <h3>Sim sources</h3>
+ <p id="source-f16"><strong>[3] Eagle Dynamics, DCS: F-16C Viper Early Access Guide (English).</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 9 November 2026, pp. 380, 382, 386, 388 to 391, 393 and 693 to 694. A sim manual, cited for the In the sim panel and where noted.</p>
+ <p id="source-bms"><strong>[4] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 9 November 2026, pp. 296 and 379. A sim manual, cited only for the In the sim panel.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/sensors-evidence.md">Sensors and situational awareness evidence</a>.</p>
+ <p>Figures 1 to 3 and the worked engagement are original, invented examples, not reproductions of any publication's figure.</p>
+ <p class="note">Applicability: written for aircrew of every service and both fixed and rotary wing, from an Air Force electronic warfare text that covers radar and infrared threats generally and a Navy intercept training text. No Army or helicopter-specific survivability publication could be read; Army aviation's survivability manuals are restricted. Each aircraft's flight and tactics manuals, its threat tables and your unit's procedures govern. This revision is Drafted pending independent source-backed review.</p>
+</SiteLayout>
+
+<script>import '../../../lessons/sensors/radar-ui.mjs';</script>
+

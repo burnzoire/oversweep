@@ -1,0 +1,19 @@
+/* Sensors & Situational Awareness figures. Loaded after instrument-flight.css,
+   which supplies the shared page layout, tables, exchanges and lessons. */
+.lesson .controls { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; align-items: center; }
+.lesson .controls input[type="range"] { width: 100%; min-height: 2.75rem; }
+.lesson .controls output { font-weight: 700; margin-left: 0.3rem; }
+.lesson .controls select { min-height: 2.75rem; font: inherit; }
+.lesson [data-sources] { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; margin-bottom: 0.75rem; }
+.lesson [data-sources] label { display: inline-flex; gap: 0.4rem; align-items: center; min-height: 2.75rem; }
+.lesson .stepper { align-items: center; }
+.lesson .stepper [data-count] { font-weight: 700; }
+.natops .mine { fill: var(--color-link); stroke: var(--color-link); }
+.natops .thin.dashed { stroke-dasharray: 6 4; }
+.natops .thin.on { stroke: var(--color-link); stroke-width: 2.4; }
+.natops .zone { fill: #eef0f2; stroke: var(--color-text); stroke-width: 0.8; }
+.natops .zone.on { fill: #cfe0f3; stroke: var(--color-link); stroke-width: 1.4; }
+.lesson:not(.ready) .controls, .lesson:not(.ready) [data-sources] { display: none; }
+@media (max-width: 40rem) {
+  .lesson .controls { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,275 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
+import { getModule } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import Term from '../../../components/Term.astro';
+import '../../../styles/instrument-flight.css';
+import '../../../styles/sensors.css';
+const mod = getModule('situational-awareness');
+const core = [
+ ['example', 'One picture, built and kept'], ['priorities', 'Priorities and what SA is'], ['lookout', 'Lookout and the cross-check'],
+ ['mutual', 'Mutual support and the team'], ['eoir', 'Infrared, pods and night vision'], ['datalink', 'Datalinks and the shared picture'],
+ ['fusion', 'Fusing the sources'], ['recap', 'Key points'],
+];
+const reference = [
+ ['roles', 'Flight roles'], ['imaging', 'How well an imaging sensor sees'], ['sims', 'In the sim'], ['terms', 'Terms'],
+ ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+];
+// [1] MCH 11-F16 Vol 5 (10 May 1996), by printed page.
+// [2] CNATRA P-825 (07-14), by printed page.  [3] Electronic Warfare Fundamentals (2000).
+// [4] JP 3-01 (2012), by printed page.  [5] US Naval Academy, Fundamentals of Naval Weapons Systems, by section.
+// [6] Wikipedia (secondary).  [7] DCS F-16C guide and [8] Falcon BMS 4.38.1 Training Manual, sim crossover only.
+const pp = (pg: string) => `${/to|,/.test(pg) ? 'pp.' : 'p.'} ${pg}`;
+const m = (pg: string) => `[1, ${pp(pg)}]`;
+const p = (pg: string) => `[2, ${pp(pg)}]`;
+const e = (pg: string) => `[3, ${pp(pg)}]`;
+const j = (pg: string) => `[4, ${pp(pg)}]`;
+const u = (sec: string) => `[5, §${sec}]`;
+const d = (pg: string) => `[7, ${pp(pg)}]`;
+const b = (pg: string) => `[8, ${pp(pg)}]`;
+const glossary = sitePath('encyclopedia/terminology/sensors/');
+const radar = sitePath('manual/sensors-situational-awareness/radar-and-warning/');
+const bvr = sitePath('manual/air-combat/bvr-intercepts/');
+const formation = sitePath('manual/formation-flying/');
+const pods = sitePath('encyclopedia/radar-sensors/');
+const targeting = sitePath('manual/air-to-ground-operations/precision-targeting/');
+---
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="sensors-situational-awareness" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Sensors & Situational Awareness',href:sitePath('manual/sensors-situational-awareness/')},{label:mod.title}]}>
+ <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
+  <h2>{mod.maturity}</h2>
+  <p>Module revision {mod.revision} · Building the picture: priorities, lookout, mutual support, infrared and night vision sensors, datalinks, and fusing them into one picture you trust. For aircrew of every service, from Air Force and Navy training texts and joint doctrine.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
+ </nav>
+
+ <p class="lede"><Term>Situational awareness</Term> is your perception and understanding of what is actually happening around you. No single sensor gives it: you assemble it from the radar, the warning receiver, your flight, the controller, support assets, your eyes and mutual support. <a href="#source-mch">{m('11')}</a> Fighter pilots are not born with it; it has to be developed and kept current, and the aim is the big picture, with no surprises. <a href="#source-mch">{m('11')}</a></p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>set task priorities that protect aircraft control, terrain, other aircraft, fuel and threats before anything else;</li>
+  <li>run a <Term>time-sharing</Term> lookout and drop and rebuild sectors in the right order;</li>
+  <li>describe a <Term>mutual support</Term> contract and how the flight and the controller share one picture;</li>
+  <li>use <Term id="Forward-looking infrared">FLIR</Term>, targeting pods and an <Term>image intensifier</Term> within what each can see;</li>
+  <li>say what a <Term>tactical data link</Term> such as <Term>Link 16</Term> adds and what it does not;</li>
+  <li>fuse every source into one picture, <Term>correlation</Term> first.</li>
+ </ol>
+ <p class="note">These are principles that apply in any cockpit, taken from an Air Force fighter handbook, a Navy intercept training text and joint doctrine. Their examples are fighters; the same priorities, lookout and fusion apply in helicopters and multi-crew aircraft, whose crew coordination standards are their own. The worked picture is invented. How the radar and warning receiver work is in <a href={radar}>Radar, Warning Receivers and Countermeasures</a>.</p>
+
+ <h2 id="example">One picture, built and kept</h2>
+ <p>Here is one invented two-ship sortie, from the brief to a decision, showing where each piece of the picture comes from. The sequence and calls follow the training texts; the tracks are made up. Figure 1 shows the picture with each source switched on or off.</p>
+ <ol class="exchange script">
+  <li><span class="who">Before flight</span> <span class="said">Chair-fly the sortie: where will you be busiest, what comes first then, and what you would do at joker fuel. <a class="step" href="#priorities">Why</a></span></li>
+  <li><span class="who">Your eyes</span> <span class="said">Wingman in sight, line abreast; near rocks, far rocks, check six, then the wider sectors. <a class="step" href="#lookout">Why</a></span></li>
+  <li><span class="who">Controller</span> <span class="said">"Single group, bullseye 350/60, 25 thousand, hostile." <a class="step" href="#mutual">Why</a></span></li>
+  <li><span class="who">Datalink</span> <span class="said">Shows that hostile track, a surface threat from the brief, and an unknown track to the east no one has identified. <a class="step" href="#datalink">Why</a></span></li>
+  <li><span class="who">Radar</span> <span class="said">A contact at 354°, 38 NM, 25,000 ft, hot: it matches the call. You call "contact" with its position and "declare", and the controller confirms hostile. <a class="step" href="#fusion">Why</a></span></li>
+  <li><span class="who">Warning receiver</span> <span class="said">An airborne radar in search near 12 o'clock, a bearing that fits the group; a surface radar at 3 o'clock where the briefed threat is. <a class="step" href="#fusion">Why</a></span></li>
+  <li><span class="who">You</span> <span class="said">One hostile group, correlated by four sources; one unknown, held only by the datalink, kept in the picture and asked about. <a class="step" href="#fusion">Why</a></span></li>
+ </ol>
+ <section class="lesson figure-lesson" data-lesson="picture" aria-labelledby="picture-title">
+  <h3 id="picture-title" class="fig-title">Figure 1 — Where the picture comes from</h3>
+  <p>Switch each source off and on. A track shown with several sources is correlated; a warning receiver alone gives only a bearing.</p>
+  <div data-sources></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 360" role="img" aria-label="Plan view centered on your aircraft with range rings, your wingman, a hostile group to the north, an unknown track to the east and a surface threat to the east, each shown according to the sources switched on"></svg></div>
+  <p class="no-js">Interactive figure unavailable. The hostile group to the north is held by the radar, the controller, the datalink and the warning receiver; the unknown track to the east only by the datalink; the surface threat by the warning receiver, as a bearing, and by the datalink from the brief.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">An invented picture, ranges to scale (rings every 10 NM). The call formats follow the training instruction. <a href="#source-p825">{p('5-9, 10-3')}</a></p>
+ </section>
+ <p class="key"><strong>Key point:</strong> each source gives part of the picture; the picture you can act on is the one several sources agree on.</p>
+
+ <h2 id="priorities">Priorities and what SA is</h2>
+ <p>In any busy mission there are moments when you cannot do everything. The handbook's answer is a have-to-do list, set long before you reach the aircraft, with nice-to-do tasks such as answering fuel checks or passing a weather report below it. <a href="#source-mch">{m('8 to 9')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Top priority tasks" tabindex="0"><table>
+  <caption>The tasks that never go away <a href="#source-mch">{m('8 to 9')}</a></caption>
+  <thead><tr><th scope="col">Priority</th><th scope="col">Task</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">1</th><td>Maintain aircraft control</td></tr>
+   <tr><th scope="row">2</th><td>Never hit the ground, or anything attached to it</td></tr>
+   <tr><th scope="row">3</th><td>Never hit anything in the air, such as your lead or wingman</td></tr>
+   <tr><th scope="row">4</th><td>Never run out of fuel</td></tr>
+   <tr><th scope="row">5</th><td>Never let anything shot from the ground or air hit your aircraft</td></tr>
+  </tbody>
+ </table></div>
+ <p>The order can shift: in close formation in cloud at 20,000 ft, avoiding your flight matters more than the ground. Letting nice-to-do tasks take priority is misprioritization, and the handbook says many of its own revisions came from accidents it caused. <a href="#source-mch">{m('9')}</a> Mission objectives built around the flight's lowest common denominator, and chair-flying the critical moments before you strap in, delay task saturation. <a href="#source-mch">{m('10 to 11')}</a></p>
+ <p class="key"><strong>Key point:</strong> SA rests on priorities set before flight: control, terrain, other aircraft, fuel and threats first, everything else after.</p>
+
+ <h2 id="lookout">Lookout and the cross-check</h2>
+ <p>Visual lookout is a priority task for every flight member, leads as well as wingmen. The handbook's reason: historically 90% of air-to-air kills came from attacks the victim did not see. <a href="#source-mch">{m('20')}</a> You can do only one task at a time, so lookout is time-shared: the airspace is divided into sectors, each given a priority. <a href="#source-mch">{m('23')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Lookout sectors" tabindex="0"><table>
+  <caption>The time-share plan, highest priority first (number two in a low-level formation) <a href="#source-mch">{m('23 to 24')}</a></caption>
+  <thead><tr><th scope="col">Sector</th><th scope="col">Name</th><th scope="col">What it covers</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">1</th><td>Near rocks</td><td>The ground that will affect your flight path in the next 10 to 15 seconds: the hub of the cross-check</td></tr>
+   <tr><th scope="row">1A</th><td>Far rocks</td><td>The terrain that will affect your future maneuvering</td></tr>
+   <tr><th scope="row">2</th><td>Check six</td><td>Inside the flight, behind: your position and your lead's six o'clock</td></tr>
+   <tr><th scope="row">3</th><td>Inside the flight, ahead</td><td>Ahead of the 3/9 line: bandits converting, surface-to-air missiles from the front</td></tr>
+   <tr><th scope="row">4</th><td>Outside the flight</td><td>Ahead of and behind the 3/9 line, outside the formation: the lowest priority</td></tr>
+  </tbody>
+ </table></div>
+ <p>Start every mission with the basic pattern, near rocks, far rocks, check six, and build out as workload allows. When it rises, in rough terrain, defensive reactions or navigation turns, drop the lowest sectors in order; in hard turns only near rocks may be left. Rebuild one sector at a time. <a href="#source-mch">{m('22 to 23')}</a> The radar has a place too: leads fold it into sector 3, wingmen look at it after sector 4, and a switch change replaces a sector search, never the near rocks. <a href="#source-mch">{m('24')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="lookout" aria-labelledby="lookout-title">
+  <h3 id="lookout-title" class="fig-title">Figure 2 — Time-sharing the lookout</h3>
+  <p>Set your position and the workload; the highlighted sectors are the ones still in your cross-check, numbered in order.</p>
+  <div class="controls">
+   <label for="lookout-position">Your position</label><select id="lookout-position" name="position"><option value="wing">Wingman (two or four)</option><option value="lead">Lead or number three</option></select>
+   <label for="lookout-load">Workload</label><select id="lookout-load" name="load"></select>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 2, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 360" role="img" aria-label="Plan view of a two-ship with the lookout sectors drawn round the wingman: near and far rocks ahead, the flight's six behind, inside the flight ahead, and outside the flight to either side"></svg></div>
+  <p class="no-js">Interactive figure unavailable. With a light load the cross-check runs sectors 1, 1A, 2, 3 and 4, with the radar placed by position; busy, it keeps 1, 1A and 2; in a hard turn only sector 1, the near rocks.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Schematic sector shapes after the handbook's time-share plan, not to scale. How many sectors each workload keeps is this figure's illustration of the rule to drop the lowest first. <a href="#source-mch">{m('22 to 24')}</a></p>
+ </section>
+ <p class="key"><strong>Key point:</strong> near rocks, far rocks and check six come first; under load drop the lowest sectors in order and rebuild one at a time.</p>
+
+ <h2 id="mutual">Mutual support and the team</h2>
+ <p>Mutual support is a subset of SA: a contract within a flight of two or more aircraft. It demands knowing where your flight and the threat are, and what both sides' weapons can do; the flight lead sets it to the experience of the flight. <a href="#source-mch">{m('19')}</a></p>
+ <div class="table-scroll" role="region" aria-label="A mutual support contract" tabindex="0"><table>
+  <caption>What a sound mutual support contract provides <a href="#source-mch">{m('19')}</a></caption>
+  <tbody>
+   <tr><th scope="row">Position awareness</th><td>Of the other flight members</td></tr>
+   <tr><th scope="row">Early threat awareness</th><td>Of the threat and its attack axis</td></tr>
+   <tr><th scope="row">Communication</th><td>Of offensive and defensive information to the flight</td></tr>
+   <tr><th scope="row">Targeting</th><td>Weapons employment before the threat attacks</td></tr>
+   <tr><th scope="row">Options</th><td>The ability to press the attack or disengage</td></tr>
+  </tbody>
+ </table></div>
+ <p>Visual formations give all of this, and the time you spend holding position affects how well you can see a threat by eye, radar or controller. <a href="#source-mch">{m('20')}</a> The controller is part of the team too: fighter and controller build a common understanding of the picture, so brief and debrief together. When you ask for a picture, the controller gives every known hostile, bandit or bogey group; a group you hold that the controller has not called, you call and ask to have declared. <a href="#source-p825">{p('5-11')}</a> Formation flying itself is in <a href={formation}>Formation Flying</a>.</p>
+ <p class="key"><strong>Key point:</strong> mutual support is a briefed contract: know where your flight and the threat are, tell each other, and keep the option to press or leave.</p>
+
+ <h2 id="eoir">Infrared, pods and night vision</h2>
+ <p>Two kinds of imaging sensor extend your eyes, and neither is better: each wins in some conditions. <a href="#source-usna">{u('10.5')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Imaging sensors compared" tabindex="0"><table>
+  <caption>Image intensifiers and FLIR <a href="#source-usna">{u('10.5.3')}</a></caption>
+  <thead><tr><th scope="col"></th><th scope="col"><Term>Image intensifier</Term> (night vision goggles, low-light TV)</th><th scope="col"><Term id="Forward-looking infrared">FLIR</Term></th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Sees</th><td>Faint visible light, amplified 1,000 to 10,000 times</td><td>Heat contrast; no visible light needed</td></tr>
+   <tr><th scope="row">Needs</th><td>Some light from stars, moon or sky; cannot see in complete darkness</td><td>Thermal contrast; best at night, when warm objects stand out against a cool background</td></tr>
+   <tr><th scope="row">Limits</th><td>Considerable loss of detail</td><td>Cloud, rain and humidity absorb infrared, so range is less than radar's; sees through light fog and haze better than the eye</td></tr>
+  </tbody>
+ </table></div>
+ <p>Goggles also narrow your view: a common goggle has a 40° field of view, against about 190° for both eyes unaided, so you must move your head to scan. <a href="#source-wiki-nvd">[6, Night-vision device]</a> A targeting pod carries a FLIR and usually a TV camera on a stabilized turret; the records in <a href={pods}>Radar &amp; Sensors</a> cover the <Term record="litening">LITENING</Term>, <Term record="sniper">Sniper</Term> and <Term record="atflir">ATFLIR</Term> pods, and using one to find and mark a target is in <a href={targeting}>Precision Targeting</a>.</p>
+ <p>Use the picture without letting it take you. The handbook allows a FLIR picture in the head-up display as another horizon reference and to see cloud on recovery at night, but warns that too bright an image hides the normal symbology and can reflect on the canopy, and that a wingman rejoining should fly the rejoin, not look at the pod display. <a href="#source-mch">{m('284')}</a></p>
+ <p class="key"><strong>Key point:</strong> goggles need some light and narrow your view; a FLIR needs heat contrast and loses range in moisture; neither is a reason to stop flying the aircraft.</p>
+
+ <h2 id="datalink">Datalinks and the shared picture</h2>
+ <p>A tactical data link exchanges tracks and other data by digital radio between aircraft, ships, ground units and control agencies. In joint air defense, a link such as Link 16 shares the <Term>common tactical picture</Term> between the services' systems, and track information from each component is consolidated over data link interfaces by assigned track managers. <a href="#source-jp">{j('II-12, II-26')}</a> The older links show the idea: Link 11 relays sensor information and engagement status, and Link 4 lets a controller pass target data to a fighter and the fighter's data back. <a href="#source-usna">{u('20.4.4')}</a></p>
+ <p>Link 16 itself is a secure, jam-resistant, time-division link on 960 to 1,215 MHz, carrying standard J-series messages such as precise participant location and identification. <a href="#source-wiki-l16">[6, Link 16]</a> In the cockpit that means seeing friendly aircraft and tracks your own sensors do not hold, and the controller's display can combine its radar with linked data down to fuel state and weapon load. <a href="#source-p825">{p('5-5')}</a></p>
+ <p>Limits follow from how it works. The picture is only as good as its track management: one formation can be shown as a single track with a strength field, to save workload and messages. <a href="#source-jp">{j('III-15')}</a> A linked track is someone else's sensor at an earlier moment, not your own.</p>
+ <p class="key"><strong>Key point:</strong> a datalink lets you see what others see, in a common picture; it does not replace correlating what you see yourself.</p>
+
+ <h2 id="fusion">Fusing the sources</h2>
+ <div class="table-scroll" role="region" aria-label="What each source gives" tabindex="0"><table>
+  <caption>What each source contributes</caption>
+  <thead><tr><th scope="col">Source</th><th scope="col">Gives</th><th scope="col">Does not give</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Your radar</th><td>Bearing, range, altitude and closure of contacts in its volume</td><td>Identity on its own; anything outside its volume or in its notch <a href={radar}>(radar module)</a></td></tr>
+   <tr><th scope="row">Warning receiver</th><td>Which radars, roughly where, and what mode <a href="#source-ewf">{e('17-8 to 17-10')}</a></td><td>Range or a fix; passive infrared threats <a href="#source-ewf">{e('15-6, 17-1')}</a></td></tr>
+   <tr><th scope="row">Controller</th><td>The wider picture in bullseye or BRAA, and declarations <a href="#source-p825">{p('5-7 to 5-9')}</a></td><td>Close control at long range from a slow-scanning radar <a href="#source-p825">{p('5-1')}</a></td></tr>
+   <tr><th scope="row">Datalink</th><td>Other units' tracks and identities in the common picture <a href="#source-jp">{j('II-12')}</a></td><td>Your own confirmation</td></tr>
+   <tr><th scope="row">Eyes, goggles, FLIR and pods</th><td>Visual and thermal pictures; a visual check of what a track is</td><td>Range and identity at long range</td></tr>
+  </tbody>
+ </table></div>
+ <p>Fusion starts with correlation: placing your contact against the controller's call in bearing, range and altitude. If you see nothing where the group is called, put the cursor there and adjust the volume; once you have the contact, give its position and ask for a declaration, and the controller repeats it with the identity. <a href="#source-p825">{p('10-3')}</a></p>
+ <p>Identification works the same way at joint level: information from onboard, off-board, air, surface and space sensors, gathered by reliable voice and data networks, supports the engagement decision, and a friendly can be identified by voice or datalink. <a href="#source-jp">{j('A-1, A-5')}</a> A track only one source holds stays in the picture as what it is: unknown until someone identifies it.</p>
+ <p class="key"><strong>Key point:</strong> correlate before you act: a contact several sources agree on is a picture, a single-source track is a question.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>SA is assembled from every source and kept current; priorities set before flight protect it. <a href="#priorities">Priorities and what SA is</a></li>
+  <li>Lookout is time-shared: near rocks, far rocks, check six first, and drop and rebuild sectors in order. <a href="#lookout">Lookout and the cross-check</a></li>
+  <li>Mutual support is a briefed contract within the flight, and the controller shares the picture. <a href="#mutual">Mutual support and the team</a></li>
+  <li>Goggles need some light; FLIR needs heat contrast and dry air; both narrow attention. <a href="#eoir">Infrared, pods and night vision</a></li>
+  <li>A datalink shares others' tracks in a common picture, not your own confirmation. <a href="#datalink">Datalinks and the shared picture</a></li>
+  <li>Correlate sources before you act on a track. <a href="#fusion">Fusing the sources</a></li>
+ </ul>
+
+ <h2 id="roles">Flight roles</h2>
+ <p>The flight lead assigns each flight member's responsibilities, so each has a manageable number of tasks. <a href="#source-mch">{m('22')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Four-ship roles" tabindex="0"><table>
+  <caption>Responsibilities by position in a four-ship <a href="#source-mch">{m('22')}</a></caption>
+  <thead><tr><th scope="col">Position</th><th scope="col">Responsibilities</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Number one</th><td>Primary planner and decision maker, primary navigation and radar lookout, visual lookout for number two, primary engaged fighter if practical</td></tr>
+   <tr><th scope="row">Number two</th><td>Formation position, visual lookout, mutual support of number one; navigation and radar awareness as other tasks allow</td></tr>
+   <tr><th scope="row">Number three</th><td>Supports number one: secondary planner and alternate decision maker, support position for the lead element, secondary navigation and radar monitor, visual lookout for number four, mutual support of the whole flight, secondary engaged fighter if practical</td></tr>
+   <tr><th scope="row">Number four</th><td>Formation position, visual lookout for the flight, mutual support of number three, navigation and radar awareness as other tasks allow</td></tr>
+  </tbody>
+ </table></div>
+ <p>Wingmen also help plan the mission, back up the navigation and have visual lookout and radar responsibilities of their own. <a href="#source-mch">{m('11')}</a></p>
+
+ <h2 id="imaging">How well an imaging sensor sees</h2>
+ <p>What you can tell from an image is described in levels, the <Term>Johnson criteria</Term>, first defined at the Army's Night Vision Laboratory: detection (something is there), orientation (its long axis can be seen), recognition (its class) and identification (its type within the class). The better the sensor, the higher the level at a given range. <a href="#source-usna">{u('10.5')}</a> A FLIR's two measures, thermal and angular resolution, trade against each other through detector size: one system cannot have the best of both. <a href="#source-usna">{u('10.5.3')}</a></p>
+
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p>DCS World and Falcon BMS both model the F-16C's datalink and targeting pod, and BMS models goggles. This is what their official manuals say; helicopter sensors and goggles in either sim were not checked for this revision.</p>
+  <h3>DCS: F-16C Viper</h3>
+  <ul>
+   <li>The F-16C's datalink is MIDS on the tactical network, sharing a common tactical picture with flight members (up to 8 including you), donors in the package (up to 4) and command and control platforms on their own mission channel. <a href="#source-f16">{d('452 to 453')}</a></li>
+   <li>The targeting pod carries a FLIR, usable day or night with wide and narrow fields of view, and a daylight-only TV camera with more magnification; picture-in-picture puts the TV image inside the wider FLIR view for awareness around it. <a href="#source-f16">{d('487')}</a></li>
+  </ul>
+  <h3>Falcon BMS 4.38</h3>
+  <ul>
+   <li>Training mission 17C teaches the improved data modem and Link 16, including using Link 16 information to build SA. <a href="#source-bms">{b('277')}</a></li>
+   <li>BMS goggles toggle on a key and deliberately narrow your field of view, to simulate tunnel vision. <a href="#source-bms">{b('136')}</a></li>
+  </ul>
+  <h3>Where the sims and the sources differ, or say nothing</h3>
+  <ul>
+   <li>Neither manual teaches a lookout time-share or a mutual support contract; on a monitor your view is limited by the screen, which the handbook's sector plan does not consider.</li>
+   <li>BMS's goggle model narrows the view, as the source's 40° field of view does <a href="#source-wiki-nvd">[6, Night-vision device]</a>; whether either sim models the need for some light, or the loss of detail, was not checked.</li>
+  </ul>
+  <p><strong>To practise:</strong> fly a sortie with the datalink display and the radar both up, and for each track say which sources hold it before you act: Figure 1's question.</p>
+ </section>
+
+ <h2 id="terms">Terms</h2>
+ <p>Every term here is in the <a href={glossary}>sensors and situational awareness terms</a>, except correlation (beyond-visual-range terms).</p>
+ <GlossaryList items={[
+  'Situational awareness', 'Mutual support', 'Time-sharing', 'Forward-looking infrared', 'Image intensifier', 'Johnson criteria', 'Tactical data link', 'Link 16', 'Common tactical picture', 'Correlation',
+ ]} />
+ <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
+  <h3 id="terms-title">Quiz: name the term</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next term</button></div>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <p>One or more questions for each outcome; Figures 1 and 2 cover outcomes 2 and 6 too.</p>
+ <section class="lesson quiz-lesson" data-lesson="questions" aria-labelledby="questions-title">
+  <h3 id="questions-title">Quiz: building the picture</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next question</button></div>
+ </section>
+ <details><summary><span class="outcome">Outcome 1</span> In close formation in cloud, what moves up the priority list?</summary><p>Avoiding the other aircraft in your flight: the handbook puts it above the ground in that case.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> After a hard turn you had only the near rocks in your cross-check. What next?</summary><p>Rebuild one sector at a time: far rocks, check six, then the rest.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Your radar holds a group the controller has not called. What do you do?</summary><p>Call it in the format in use and ask for a declaration; the controller repeats it with a name and a declaration if known.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> Why might goggles show little on a moonless, overcast night?</summary><p>An intensifier needs some light from stars, moon or sky; with none, only an infrared sensor sees.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> A linked track shows a formation as one symbol. Why?</summary><p>Formation tracking: one track with a strength field stands for a formation that keeps a steady relationship, to cut workload and messages.</p></details>
+ <details><summary><span class="outcome">Outcome 6</span> Only the datalink holds a track to the east, with no identity. What is it in your picture?</summary><p>An unknown: keep it, and ask about it, until another source correlates or identifies it.</p></details>
+
+ <h2 id="sources">Sources and applicability</h2>
+ <h3>Military sources</h3>
+ <p id="source-mch"><strong>[1] US Air Force, Air Combat Command, MCH 11-F16 Volume 5, F-16 Combat Aircraft Fundamentals, 10 May 1996.</strong> <a href="https://falcon.blu3wolf.com/Docs/F-16%20COMBAT%20AIRCRAFT%20FUNDAMENTALS%20-%20Multi-Command%20Handbook%2011-F16%20Vol5.pdf">Read on a public copy</a>, 9 November 2026, by printed page: preparation and situation awareness, pp. 8 to 11; mutual support, formation and lookout, pp. 19 to 24; FLIR on recovery, p. 284. A superseded multi-command handbook, used only for the principles it states for every pilot, not its F-16 procedures.</p>
+ <p id="source-p825"><strong>[2] US Navy, Chief of Naval Air Training, CNATRA P-825 (07-14), Flight Training Instruction, BFM and All Weather Intercept, 1 July 2014.</strong> <a href="https://falcon.blu3wolf.com/Docs/P-825.pdf">Read on a public copy</a>, 9 November 2026, by printed page: pp. 5-1, 5-5, 5-7 to 5-11 and 10-3.</p>
+ <p id="source-ewf"><strong>[3] US Air Force, ACC Training Support Squadron, Det 8, Electronic Warfare Fundamentals, November 2000.</strong> <a href="https://falcon.blu3wolf.com/Docs/Electronic-Warfare-Fundamentals.pdf">Read on a public copy</a>, 9 November 2026, pp. 15-6, 17-1 and 17-8 to 17-10.</p>
+ <p id="source-jp"><strong>[4] US Joint Chiefs of Staff, JP 3-01, Countering Air and Missile Threats, 23 March 2012.</strong> <a href="https://www.bits.de/NRANEU/others/jp-doctrine/jp3_01(12).pdf">Read on the Berlin Information-center for Transatlantic Security's copy</a>, 9 November 2026, pp. II-12, II-26, III-15, A-1 and A-5. A later edition exists that could not be read.</p>
+ <p id="source-usna"><strong>[5] US Naval Academy, Fundamentals of Naval Weapons Systems, chapter 10, Visible and Infrared Spectrum, and chapter 20, Command, Control, and Communication.</strong> <a href="https://man.fas.org/dod-101/navy/docs/fun/">Read on the Federation of American Scientists' copy</a>, 9 November 2026, §§10.5 to 10.5.3 and 20.4.4. An undated academic text.</p>
+ <h3>Secondary sources</h3>
+ <p id="source-wiki-l16"><strong>[6] Wikipedia, <a href="https://en.wikipedia.org/wiki/Link_16">Link 16</a></strong> and <strong id="source-wiki-nvd"><a href="https://en.wikipedia.org/wiki/Night-vision_device">Night-vision device</a></strong>, read 9 November 2026. Used only for public facts no military source read here gives: Link 16's band, access method and messages, and a common goggle's field of view.</p>
+ <h3>Sim sources</h3>
+ <p id="source-f16"><strong>[7] Eagle Dynamics, DCS: F-16C Viper Early Access Guide (English).</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 9 November 2026, pp. 452 to 453 and 487. A sim manual, cited only for the In the sim panel.</p>
+ <p id="source-bms"><strong>[8] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 9 November 2026, pp. 136 and 277. A sim manual, cited only for the In the sim panel.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/sensors-evidence.md">Sensors and situational awareness evidence</a>.</p>
+ <p>Figures 1 and 2 and the worked picture are original, invented examples, not reproductions of any publication's figure.</p>
+ <p class="note">Applicability: written for aircrew of every service. The Army's and the Air Force's crew coordination and night vision publications could not be read (Army training circulars on goggles and aircrew coordination are not public; Air Force e-publishing refused access), so multi-crew coordination is not covered here and goggle limits come from a secondary source. Your aircraft's manuals, your service's crew resource management and night vision standards, and the theater's procedures govern. This revision is Drafted pending independent source-backed review.</p>
+</SiteLayout>
+
+<script>import '../../../lessons/sensors/sa-ui.mjs';</script>

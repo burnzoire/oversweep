@@ -22,6 +22,28 @@
     "applicability": "Fighter aircrew of every service, from the Navy's public intercept training instruction (which notes the Air Force's conventions) and the joint counterair publication, with the DCS F-16C and Falcon BMS manuals for the In the sim panel. Unclassified training principles only: real tactics, missile performance and each theater's rules of engagement and SPINS govern."
   },
   {
+    "id": "module.radar-and-warning",
+    "slug": "radar-and-warning",
+    "subject": "sensors-situational-awareness",
+    "revision": 1,
+    "title": "Radar, Warning Receivers and Countermeasures",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Understand how a fighter's pulse-Doppler radar searches, measures and locks, why PRF matters and where the Doppler notch is; point the scan volume at a called altitude; read a radar warning receiver and know its limits; and explain how chaff, flares and jamming defeat radar and infrared threats.",
+    "applicability": "Aircrew of every service, fixed and rotary wing, from the Air Force's electronic warfare training text and the Navy's intercept training instruction, with the DCS F-16C and Falcon BMS manuals for the In the sim panel. Unclassified principles only: each aircraft's systems, threat tables and tactics manuals govern."
+  },
+  {
+    "id": "module.situational-awareness",
+    "slug": "situational-awareness",
+    "subject": "sensors-situational-awareness",
+    "revision": 1,
+    "title": "Situational Awareness and the Sensor Picture",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Build and keep situational awareness: set task priorities, run a time-shared lookout, work a mutual support contract, use infrared sensors, targeting pods and night vision goggles within their limits, use the datalink picture, and fuse every source into one picture you correlate and check.",
+    "applicability": "Aircrew of every service, from an Air Force fighter handbook, the Navy's intercept training instruction, the Naval Academy's weapons text and joint doctrine, with Wikipedia for public datalink and goggle facts and the DCS F-16C and Falcon BMS manuals for the In the sim panel. Your aircraft's manuals, unit standards and the theater's procedures govern."
+  },
+  {
     "id": "module.airfield-basics",
     "slug": "airfield-basics",
     "subject": "airfield-operations",
