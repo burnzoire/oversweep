@@ -17,8 +17,8 @@ variants:
   - "AH-64E version: adds overwater capability [1]"
 photos:
   - src: "encyclopedia/radar-sensors/apg-78.jpg"
-    alt: "Close-up of the round Longbow radar dome mounted on a mast above an Apache's main rotor head"
-    caption: "The APG-78 Longbow radar dome above the rotor of a Japan Ground Self-Defense Force AH-64D, March 2013."
+    alt: "Close-up of the round Longbow radar dome on its mast above an Apache's main rotor head"
+    caption: "The APG-78 Longbow radar dome on its mast above the rotor of a Japan Ground Self-Defense Force AH-64D, March 2013 (cropped)."
     author: "Hunini"
     licence: "CC BY-SA 3.0"
     sourceUrl: "https://commons.wikimedia.org/wiki/File:JGSDF_AH-64D（74506）_APG-78_Longbow_millimeter-wave_fire-control_radar.JPG"
