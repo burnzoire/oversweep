@@ -210,7 +210,7 @@ const deliverySources: Source[] = [
         </>
       ) : category.slug === "radar-sensors" ? (
         <>
-          <p class="lead">Sensors carried by military aircraft: the fighter radars that find and track targets, the <a href={sitePath("encyclopedia/terminology/sensors/#radar-warning-receiver")}>radar warning receivers</a> that tell a crew who is looking at them, and the targeting pods that find, track and laser-mark targets for guided weapons. Each record gives what the sensor is, which aircraft carry it, what the crew sees and where it came from, with sources.</p>
+          <p class="lead">Sensors carried by military aircraft: the fighter radars that find and track targets, the <a href={sitePath("encyclopedia/terminology/sensors/#radar-warning-receiver")}>radar warning receivers</a> that tell a crew who is looking at them, and the targeting pods and helicopter sights that find, track and laser-mark targets for guided weapons, and the dispensers and jamming pods that protect the aircraft. Each record gives what the sensor is, which aircraft carry it, what the crew sees and where it came from, with sources.</p>
           {sensors.map(({ group, records }) => (
             <div class="aircraft-group">
               <h2>{group.title}</h2>
@@ -230,7 +230,7 @@ const deliverySources: Source[] = [
                     <tr>
                       <th scope="row"><a href={sitePath(recordRoute(record))}>{record.title}</a><br /><span class="entry-kicker">{record.designation}</span></th>
                       <td>{plain(data.type)}</td>
-                      <td>{group.slug === "targeting-pod" ? (data.quick.designates ? "Lases targets" : "No laser; it only tracks a spot") : data.quick.band ?? (data.band ? plain(data.band) : "not given")}</td>
+                      <td>{group.slug === "targeting-pod" || data.quick.designates ? (data.quick.designates ? "Lases targets" : "No laser; it only tracks a spot") : data.quick.band ?? (data.band ? plain(data.band) : "not given")}</td>
                       <td>{data.quick.introduced ?? "not given"}</td>
                     </tr>
                   ))}

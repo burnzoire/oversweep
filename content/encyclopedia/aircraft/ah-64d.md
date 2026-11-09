@@ -18,8 +18,8 @@ armament:
   - "Four stub-wing pylons for up to 16 AGM-114 Hellfire missiles or up to 76 [Hydra 70](record:hydra-70) rockets, or a mix [1] [2]"
   - "AIM-92 Stinger air-to-air missiles on wingtip stations (Longbow) [1]"
 sensors:
-  - "AN/APG-78 Longbow fire-control radar in a dome above the main rotor; tracks up to 128 targets and engages up to 16 [1]"
-  - "TADS/PNVS nose sights with day TV, thermal imaging and a laser rangefinder/designator, later replaced by Arrowhead [1] [2]"
+  - "[AN/APG-78 Longbow](record:apg-78) fire-control radar in a dome above the main rotor; tracks up to 128 targets and engages up to 16 [1]"
+  - "[TADS/PNVS](record:tads-pnvs) nose sights with day TV, thermal imaging and a laser rangefinder/designator, later replaced by Arrowhead [1] [2]"
   - "IHADSS helmet sight that can slave the gun to the crew member's head [1]"
 photos:
   - src: "encyclopedia/aircraft/ah-64d.jpg"

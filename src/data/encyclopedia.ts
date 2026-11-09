@@ -223,6 +223,8 @@ export const sensorGroups = [
   { slug: 'fighter-radar', title: 'Fighter radars' },
   { slug: 'rwr', title: 'Radar warning receivers' },
   { slug: 'targeting-pod', title: 'Targeting pods and laser spot trackers' },
+  { slug: 'helicopter-sensor', title: 'Helicopter sensors' },
+  { slug: 'countermeasure', title: 'Countermeasures: dispensers and jamming pods' },
 ] as const;
 
 // Sensor records: the data plate gives cited text for the sensor and the
