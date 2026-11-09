@@ -2025,6 +2025,72 @@
     "summary": "The Soviet-era radar warning receiver of the MiG-29, Su-25, Su-27 and other front-line aircraft."
   },
   {
+    "id": "encyclopedia.radar-sensors.apg-78",
+    "slug": "apg-78",
+    "category": "radar-sensors",
+    "revision": 1,
+    "title": "AN/APG-78 Longbow radar",
+    "designation": "AN/APG-78",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Apache Longbow's millimetre-wave fire-control radar, in the dome above the rotor so the helicopter can search from behind cover."
+  },
+  {
+    "id": "encyclopedia.radar-sensors.tads-pnvs",
+    "slug": "tads-pnvs",
+    "category": "radar-sensors",
+    "revision": 1,
+    "title": "TADS/PNVS",
+    "designation": "AN/ASQ-170, AN/AAQ-11",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Apache's nose turrets: the gunner's targeting sight with laser designator, and the pilot's head-slaved infrared night vision."
+  },
+  {
+    "id": "encyclopedia.radar-sensors.mms",
+    "slug": "mms",
+    "category": "radar-sensors",
+    "revision": 1,
+    "title": "Mast-mounted sight",
+    "designation": "OH-58D Mast-Mounted Sight (MMS)",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Kiowa Warrior's 'beach ball' above the rotor: TV, thermal imager and laser designator for scouting from behind cover."
+  },
+  {
+    "id": "encyclopedia.radar-sensors.ale-47",
+    "slug": "ale-47",
+    "category": "radar-sensors",
+    "revision": 1,
+    "title": "AN/ALE-40 and ALE-47 dispensers",
+    "designation": "AN/ALE-40, AN/ALE-47",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The chaff and flare dispensers on most US combat aircraft: the simple ALE-40 and its programmable, sensor-linked successor."
+  },
+  {
+    "id": "encyclopedia.radar-sensors.alq-131",
+    "slug": "alq-131",
+    "category": "radar-sensors",
+    "revision": 1,
+    "title": "AN/ALQ-131 jamming pod",
+    "designation": "AN/ALQ-131",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The US Air Force's modular self-protection jamming pod, reconfigurable by band, on the F-16, A-10, F-15 and many others."
+  },
+  {
+    "id": "encyclopedia.radar-sensors.alq-184",
+    "slug": "alq-184",
+    "category": "radar-sensors",
+    "revision": 1,
+    "title": "AN/ALQ-184 jamming pod",
+    "designation": "AN/ALQ-184",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Raytheon's self-protection jamming pod for the F-16 and A-10, which aims high-power jamming at several emitters at once."
+  },
+  {
     "id": "encyclopedia.terminology.brevity",
     "slug": "brevity",
     "category": "terminology",

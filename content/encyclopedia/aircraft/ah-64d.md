@@ -18,13 +18,13 @@ armament:
   - "Four stub-wing pylons for up to 16 AGM-114 Hellfire missiles or up to 76 [Hydra 70](record:hydra-70) rockets, or a mix [1] [2]"
   - "AIM-92 Stinger air-to-air missiles on wingtip stations (Longbow) [1]"
 sensors:
-  - "AN/APG-78 Longbow fire-control radar in a dome above the main rotor; tracks up to 128 targets and engages up to 16 [1]"
-  - "TADS/PNVS nose sights with day TV, thermal imaging and a laser rangefinder/designator, later replaced by Arrowhead [1] [2]"
+  - "[AN/APG-78 Longbow](record:apg-78) fire-control radar in a dome above the main rotor; tracks up to 128 targets and engages up to 16 [1]"
+  - "[TADS/PNVS](record:tads-pnvs) nose sights with day TV, thermal imaging and a laser rangefinder/designator, later replaced by Arrowhead [1] [2]"
   - "IHADSS helmet sight that can slave the gun to the crew member's head [1]"
 photos:
   - src: "encyclopedia/aircraft/ah-64d.jpg"
-    alt: "A grey AH-64D Apache with a Longbow radar dome above its rotor, flying low over desert"
-    caption: "An AH-64D Apache Longbow of the 1st Battalion, 101st Aviation Regiment, flying from Forward Operating Base Speicher, Iraq, December 2005."
+    alt: "A grey AH-64D Apache flying low over farmland, with no radar dome fitted above its rotor"
+    caption: "An AH-64D Apache Longbow of the 1st Battalion, 101st Aviation Regiment, flying from Forward Operating Base Speicher, Iraq, December 2005. This one is not carrying the mast-mounted Longbow radar."
     author: "Tech. Sgt. Andy Dunaway, US Air Force"
     licence: "Public domain"
     sourceUrl: "https://commons.wikimedia.org/wiki/File:AH-64D_Apache_Longbow.jpg"

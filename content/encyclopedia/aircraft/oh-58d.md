@@ -20,7 +20,7 @@ armament:
   - "One seven-tube pod of 70 mm [Hydra 70](record:hydra-70) or APKWS rockets [1] [2]"
   - "Two AGM-114 Hellfire missiles; Air-to-Air Stinger (ATAS) missiles for self-defence [1] [2]"
 sensors:
-  - "Mast-Mounted Sight above the rotor: television camera, thermal imager and laser rangefinder/designator [1] [2]"
+  - "[Mast-Mounted Sight](record:mms) above the rotor: television camera, thermal imager and laser rangefinder/designator [1] [2]"
   - "Inertial navigation with embedded GPS, night-vision goggle symbology, video image crosslink; the first US Army helicopter fielded with a MIL-STD-1553 data bus [1] [2]"
 photos:
   - src: "encyclopedia/aircraft/oh-58d.jpg"

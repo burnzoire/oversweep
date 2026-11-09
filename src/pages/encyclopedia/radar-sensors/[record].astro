@@ -40,6 +40,8 @@ const caveat = {
   'targeting-pod': 'Pods are upgraded in service, so weights, sensors and ranges change with the variant; the data plate names the variants its figures describe.',
   'fighter-radar': 'Published detection ranges depend on the target\'s radar cross-section, its aspect and altitude, the mode and the variant, so treat a quoted range as one data point, not a performance figure.',
   rwr: 'A warning receiver only knows the radars in its threat library, and its symbols and priorities are set by that library, so what one shows varies by aircraft, variant and software load.',
+  'helicopter-sensor': 'Helicopter sights and radars are upgraded in service, so the sensors and figures change with the variant; the data plate names the variants its figures describe.',
+  countermeasure: 'Dispensers and jammers are only as good as their programs and threat data, which are reprogrammed for each theatre, so their figures describe the hardware, not how well it works against a given threat.',
 }[data.group];
 ---
 <SiteLayout title={record.title} activeSection="encyclopedia"
