@@ -1,6 +1,6 @@
 ---
 short: Sensors
-usage: "Aircrew of every service using radar, warning receivers, countermeasures, electro-optical and infrared sensors, night vision and datalinks, and building situational awareness from them"
+usage: "Aircrew of every service using radar, warning receivers, countermeasures, electro-optical and infrared sensors, night vision, datalinks and IFF, and building situational awareness from them"
 terms:
   - term: Pulse repetition frequency
     expansion: PRF
@@ -106,6 +106,21 @@ terms:
     expansion: CTP
     definition: "The shared display of tracks across a joint force, consolidated from each component's sensors over data link interfaces under assigned track managers."
     cite: [{ n: 5, page: "II-12, II-26" }]
+  - term: Interrogator
+    definition: "The part of an IFF system that transmits coded challenges and evaluates the coded replies, to identify the aircraft that answer. Fighters, controllers' radars and surface defenses carry them."
+    cite: [{ n: 1, page: "A-23" }]
+  - term: Transponder
+    definition: "A transmitter-receiver that accepts an interrogator's challenge and automatically transmits the reply set for it; the airborne half of IFF and of air traffic control's secondary radar."
+    note: "In brevity the IFF transponder is PARROT. [2]"
+    cite: [{ n: 1, page: "A-45" }, { n: 2, page: "A-7" }]
+  - term: Selective identification feature
+    expansion: SIF
+    definition: "The capability added to basic IFF that lets a transponder send, and an interrogator receive and display, selected coded replies, such as a mission code, a unit code or an air traffic control code."
+    cite: [{ n: 1, page: "A-39" }]
+  - term: IFF mode
+    definition: "One type of IFF challenge and reply. Modes 1 (mission) and 2 (unit or airframe) are military; Mode 3/A is the four-digit code shared with air traffic control, and Mode C adds pressure altitude; Modes 4 and 5 are encrypted military modes, Mode 5 adding the aircraft's position."
+    note: "The modes and codes in use are set for each operation in the air tasking order and special instructions. A correct Mode 4 reply is one route to a positive friendly identification; a valid Mode 1 or 2 only starts the procedural checks. [5]"
+    cite: [{ n: 7, page: "Modes" }, { n: 5, page: "A-3, A-5" }]
 sources:
   - n: 1
     title: "Electronic Warfare Fundamentals"
@@ -149,7 +164,14 @@ sources:
     url: "https://en.wikipedia.org/wiki/Link_16"
     accessed: "2026-11-09"
     note: "A secondary source, used only for the public facts no military source read here gives."
+  - n: 7
+    title: "Identification friend or foe"
+    publisher: "Wikipedia"
+    date: "Read 9 November 2026"
+    url: "https://en.wikipedia.org/wiki/Identification_friend_or_foe"
+    accessed: "2026-11-09"
+    note: "A secondary source, used only for what each IFF mode carries, which no military source read here lists."
 ---
 ## The words of sensors and situational awareness
 
-These are the words for what a military aircraft's sensors see and how crews turn that into a picture: how a fighter radar searches, measures and locks, why it cannot see a target crossing its line of sight, what a radar warning receiver can and cannot tell you, how chaff, flares and jamming work, and the imaging sensors, night vision and datalinks that complete the picture. The radar and electronic warfare terms come from the Air Force's electronic warfare training text [[1]](#source-1) and the Navy's intercept training instruction [[2]](#source-2); the situational awareness terms from an Air Force fighter handbook [[3]](#source-3); the imaging terms from the Naval Academy's weapons text [[4]](#source-4); and the datalink terms from joint doctrine [[5]](#source-5).
+These are the words for what a military aircraft's sensors see and how crews turn that into a picture: how a fighter radar searches, measures and locks, why it cannot see a target crossing its line of sight, what a radar warning receiver can and cannot tell you, how chaff, flares and jamming work, and the imaging sensors, night vision, datalinks and IFF that complete the picture. The radar and electronic warfare terms come from the Air Force's electronic warfare training text [[1]](#source-1) and the Navy's intercept training instruction [[2]](#source-2); the situational awareness terms from an Air Force fighter handbook [[3]](#source-3); the imaging terms from the Naval Academy's weapons text [[4]](#source-4); and the datalink and identification terms from joint doctrine [[5]](#source-5) and the electronic warfare text [[1]](#source-1).

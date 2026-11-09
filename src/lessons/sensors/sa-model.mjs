@@ -2,6 +2,7 @@
 // Awareness and the Sensor Picture module. No DOM. Sources: [1] MCH 11-F16
 // Vol 5 (1996), [2] CNATRA P-825 (07-14), [3] Electronic Warfare
 // Fundamentals (2000), [4] JP 3-01 (2012), by printed page.
+// [5] USNA Fundamentals of Naval Weapons Systems, by section.
 
 // [1] pp. 23-24: the time-share plan, highest priority first. Sectors 1, 1A
 // and 2 are the basic cross-check; under load the lowest are dropped in order,
@@ -37,17 +38,20 @@ export const SOURCES = [
   { id: 'rwr', label: 'Warning receiver' },
   { id: 'control', label: 'Controller (voice)' },
   { id: 'link', label: 'Datalink' },
+  { id: 'iff', label: 'IFF (Mode 4)' },
 ];
 export const TRACKS = [
-  { id: 'wing', label: 'Your wingman', x: 2, y: -0.5, kind: 'friend', seen: { eyes: 'In sight, line abreast', link: 'Own flight member: position and status' } },
+  { id: 'wing', label: 'Your wingman', x: 2, y: -0.5, kind: 'friend', seen: { eyes: 'In sight, line abreast', link: 'Own flight member: position and status', iff: 'Correct Mode 4 reply: friendly' }, iffFriend: true },
   { id: 'north', label: 'Group north', x: -4, y: 38, kind: 'hostile', seen: {
     radar: 'Contact: bearing 354, 38 NM, 25,000 ft, hot',
     control: '"Single group, bullseye 350/60, 25 thousand, hostile"',
     link: 'Hostile air track from the control platform',
     rwr: 'Airborne radar, search, about 12 o\'clock: bearing only',
+    iff: 'No Mode 4 reply: not a friend, not proof of hostile',
   } },
   { id: 'east', label: 'Track east', x: 26, y: 22, kind: 'unknown', seen: {
     link: 'Unknown air track from the control platform, 34 NM',
+    iff: 'No Mode 4 reply: still unknown',
   } },
   { id: 'sam', label: 'SAM site', x: 30, y: -6, kind: 'surface', seen: {
     rwr: 'Surface radar, search, about 3 o\'clock: bearing only',
@@ -56,15 +60,18 @@ export const TRACKS = [
 ];
 export const bearingTo = ({ x, y }) => ((Math.atan2(x, y) * 180) / Math.PI + 360) % 360;
 export const rangeTo = ({ x, y }) => Math.hypot(x, y);
-// What you know about a track from the sources switched on.
+// What you know about a track from the sources switched on. IFF can only
+// identify a friend: a track that does not reply gives IFF nothing to hold, so
+// its identity is left to the other sources ([4] pp. A-3, A-5, D-7).
 export function known(track, on) {
-  const by = Object.keys(track.seen).filter((s) => on.includes(s));
+  const by = Object.keys(track.seen).filter((s) => on.includes(s) && (s !== 'iff' || track.iffFriend));
   return {
     by,
-    position: by.some((s) => ['eyes', 'radar', 'control', 'link'].includes(s)),
+    position: by.some((s) => ['eyes', 'radar', 'control', 'link', 'iff'].includes(s)),
     bearingOnly: by.length > 0 && by.every((s) => s === 'rwr'),
-    identity: by.some((s) => ['eyes', 'control', 'link'].includes(s)) && track.kind !== 'unknown',
+    identity: (by.some((s) => ['eyes', 'control', 'link'].includes(s)) && track.kind !== 'unknown') || by.includes('iff'),
     correlated: by.length > 1,
+    noReply: on.includes('iff') && 'iff' in track.seen && !track.iffFriend,
   };
 }
 
@@ -76,5 +83,7 @@ export const SA_QUESTIONS = [
   { outcome: 4, ask: 'It is an overcast moonless night over cool ground. Which sensor sees a warm vehicle?', answer: 'The FLIR', options: ['The FLIR', 'Image-intensifying goggles', 'Both equally'], why: 'Intensifiers need some visible light from stars, moon or sky; FLIR images heat and needs none, working best when warm objects stand out against a cool background. ([5] §10.5.3)' },
   { outcome: 4, ask: 'Why does a FLIR not replace the radar in cloud?', answer: 'Moisture absorbs and scatters infrared', options: ['Moisture absorbs and scatters infrared', 'It only works by day', 'It has no range readout'], why: 'Clouds, rain and humidity cut FLIR range below radar\'s, though it sees through light haze better than the eye. ([5] §10.5.3)' },
   { outcome: 5, ask: 'What does a tactical datalink add to your own sensors?', answer: 'Tracks others hold, in a common picture', options: ['Tracks others hold, in a common picture', 'A lock on every track', 'A guarantee every track is identified'], why: 'A link such as Link 16 shares the common tactical picture between units, so you see tracks your own sensors do not hold; their quality is only as good as the track management behind them. ([4] pp. II-12, II-26)' },
+  { outcome: 7, ask: 'Your Mode 4 interrogation gets no reply from a radar contact. What is it?', answer: 'Not identified as a friend: still unknown', options: ['Not identified as a friend: still unknown', 'Hostile', 'Friendly with its transponder off'], why: 'IFF can positively identify only a friend. Friendly aircraft without transponders can share the airspace, and a positive identification is more than a lack of friend. ([4] pp. A-3, D-7)' },
+  { outcome: 7, ask: 'Which IFF result is a positive friendly identification in the joint sample matrix?', answer: 'A correct Mode 4 reply', options: ['A correct Mode 4 reply', 'A valid Mode 1 or 2 reply', 'A Mode 3/A code from air traffic control'], why: 'A correct Mode 4 reply, or a datalink PPLI, makes a track positive friendly; Modes 1 and 2 only lead on to the procedural checks. ([4] p. A-5)' },
   { outcome: 6, ask: 'Your radar contact matches the controller\'s call in bearing, range and altitude. What do you call?', answer: 'Contact, with its position, and ask for a declaration', options: ['Contact, with its position, and ask for a declaration', 'Nothing until it is identified', 'Spiked'], why: 'Correlation: give the contact\'s BRAA and "declare"; the controller repeats the group with a declaration. ([2] p. 10-3)' },
 ];

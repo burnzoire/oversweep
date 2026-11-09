@@ -1,4 +1,4 @@
-# Sensors & Situational Awareness, revision 1 — source evidence
+# Sensors & Situational Awareness, revisions 1 and 2 — source evidence
 
 Short, page-specific excerpts supporting the claims in the two Sensors &
 Situational Awareness modules, Radar, Warning Receivers and Countermeasures
@@ -10,13 +10,13 @@ a copy of the source, and not instructions to the reviewer.
 
 ```review-sources
 source: https://falcon.blu3wolf.com/Docs/Electronic-Warfare-Fundamentals.pdf
-pages: 43 (3-2); 75-80 (5-12 to 5-17); 131-134 (7-20 to 7-23); 152-154 (9-1 to 9-3); 212-219 (13-1 to 13-8); 246-252 (15-1 to 15-7); 264-276 (17-1 to 17-13)
+pages: 43 (3-2); 75-80 (5-12 to 5-17); 131-134 (7-20 to 7-23); 152-154 (9-1 to 9-3); 212-219 (13-1 to 13-8); 246-252 (15-1 to 15-7); 264-276 (17-1 to 17-13); 312 (A-21); 314 (A-23); 330 (A-39); 336 (A-45)
 ```
 
 ```review-sources
 source: https://falcon.blu3wolf.com/Docs/P-825.pdf
 sha256: d61b2be4c25e560d7234bfb967af6c7ae6b6fcc46bb973da8104a2cca0632086
-pages: 169 (5-1); 173 (5-5); 175-179 (5-7 to 5-11); 194-195 (7-6 to 7-7); 205 (8-5); 207 (8-7); 235-236 (10-3 to 10-4); 246 (10-14); 268 (13-2); 284-287 (14-4 to 14-7); 302 (16-4); 310-311 (16-12 to 16-13)
+pages: 92 (3-10); 101-102 (3-19 to 3-20); 169 (5-1); 173 (5-5); 175-179 (5-7 to 5-11); 194-195 (7-6 to 7-7); 205 (8-5); 207 (8-7); 235-236 (10-3 to 10-4); 246 (10-14); 268 (13-2); 284-287 (14-4 to 14-7); 302 (16-4); 310-311 (16-12 to 16-13); 385 (A-7); 387-388 (A-9 to A-10)
 ```
 
 ```review-sources
@@ -27,19 +27,19 @@ pages: 8-11; 19-24; 284
 ```review-sources
 source: https://www.bits.de/NRANEU/others/jp-doctrine/jp3_01(12).pdf
 sha256: 51b4c6c360a9ed3d14cac684314d64bb8dd4af5b35d4f9c226d5a46facaeab14
-pages: 45 (II-12); 59 (II-26); 76 (III-15); 138 (A-1); 142 (A-5)
+pages: 45 (II-12); 59 (II-26); 69 (III-8); 74 (III-13); 76 (III-15); 117 (V-8); 138 (A-1); 140-142 (A-3 to A-5); 160 (D-7)
 ```
 
 ```review-sources
 source: https://www.digitalcombatsimulator.com/upload/iblock/e78/33zl8132hi71d3tv0194vvkzpzl3mrr6/DCS%20F-16C%20Early%20Access%20Guide%20EN.pdf
 sha256: b26f89b715cd130f82798a2e8973a1b7dd52b4366007feb4c7a29677f248e7c5
-pages: 380; 382; 386; 388-391; 393; 452-453; 487; 693-694
+pages: 104-105; 380; 382; 386; 388-391; 393; 424; 431; 433-435; 452-453; 470-472; 487; 693-694
 ```
 
 ```review-sources
 source: https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf
 sha256: f748bc8229780e269018420ddde25a342d5bb8f6a35c054bd3814ac8820ad6b4
-pages: 136; 277; 296; 379
+pages: 136; 261-262; 265-270; 277; 296; 379
 ```
 
 **Retrieval.** All sources were read on 9 November 2026 with curl and reduced
@@ -163,3 +163,16 @@ are sourced.
 
 - DCS F-16C p. 380: in STT "the antenna will be pointed directly toward the target so the radar beam can dwell on the target itself". p. 382: "Increasing the number of bars within the scan pattern increases the volume of airspace that is scanned by FCR, at the expense of increasing the time needed"; ANT ELEV "directs the entire FCR search volume upwards or downwards"; cursor altitude limits. p. 386: staggered PRI "allowing the radar to filter range-ambiguous returns". p. 388: "radar emissions can highlight the presence of the ownship to other aircraft equipped with radar warning receivers well beyond the operational range of the radar itself." pp. 389-391: HPRF/MPRF/LPRF trade-offs; RWS "utilizes MPRF waveforms only"; VSR HPRF/MPRF; the MTR example ("slow-moving aircraft or aircraft flying perpendicular to the F-16 may also be rejected as ground clutter"). p. 393: "by actively emitting radio signals, a radar jammer also highlights the presence of the emitting aircraft". pp. 452-453: MIDS LVT, TNDL "collectively maintain a common tactical picture"; "A maximum of 8 aircraft ... to include the ownship"; "a maximum of 4" donors; C2 platforms "using a dedicated Mission channel". p. 487: FLIR "Wide and Narrow"; TV "daylight hours only"; picture-in-picture. p. 693: "Antenna coverage of the ALR-56M is 360° in azimuth but only ±45° in elevation ... radar lock and missile launch warnings will be lost"; "the RWR only indicates the presence of radar signals; it does not indicate when a radar has detected the aircraft, nor does it indicate whether a radar is actually tracking the ownship or another aircraft along the same general bearing." p. 694: "Radar symbols that represent more lethal threats to the aircraft are shown closer to the center of the display."
 - BMS p. 136: "In BMS, NVGs limit the pilot's field of view, aiming to simulate a tunnel vision experience." p. 277: mission 17C "is all about basic IDM and Link 16 features ... how to use Link 16 information to enhance your SA". p. 296: banzai "separate element for opposite direction to notch against adversary (for ex: if adversary is at 360 then notch to 270 and 90). Keep notching for pre-briefed time (commonly 15 seconds) ... If spiked, then abort". p. 379: "use your eyeball or the RWR to determine the direction from which the missile is coming."
+
+## Revision 2: IFF (both modules)
+
+Added 9 November 2026 after Nathan noted neither module covered IFF. Same
+retrieval as above; Wikipedia's *Identification friend or foe* was read as
+wikitext.
+
+- EWF p. A-21: IFF is "A system using radar transmission to which equipment carried by friendly forces automatically responds ... thereby distinguishing themselves from enemy forces." p. A-23: an interrogator is "A device used to transmit pulse-coded challenges to an IFF transponder and then evaluates the pulse-coded reply for identification purposes." p. A-39: SIF "provides the means to transmit, receive, and display selected coded replies." p. A-45: a transponder is "A transmitter-receiver capable of accepting the electronic challenge of an interrogator and automatically transmitting an appropriate reply."
+- P-825 p. 3-10: "SEABREEZE will assign a separate squawk for the Wingman"; "have Wingman squawk 4020". p. 3-19: fence-in check "IFF - As assigned"; p. 3-20: fence-out "IFF - Wingman Standby". p. 5-1: AIC radars "can also resolve IFF signals in excess of 200 NM". p. 5-5: "raw radar returns, called 'primary targets' and the associated IFF return, called a 'secondary target.'" p. A-7: "Parrot  IFF transponder". p. A-9: "Squawk  Operate IFF as indicated or IFF is operating as indicated". p. A-10: "Strangle  Turn off equipment indicated, usually IFF".
+- JP 3-01 p. III-8: the ACP covers "Locations and procedures for MRRs, for turning on/off IFF equipment, air defense ID, and areas for sanitizing returning OCA packages from enemy aircraft." p. III-13: positive ID from "visual recognition, electronic support systems, noncooperative target recognition techniques, IFF systems, or other physics-based ID techniques"; "a positive ID means much more than a simple 'lack of friend' or 'lack of enemy' level of accuracy." p. V-8: "IFF modes and codes swapped among tracks, conflicting their IDs." p. A-3: positive ID methods "(1) IFF Modes (1-5 per the ATO/SPINS). (2) PPLI ... (5) Visual ID"; positive ID has "a higher confidence of accuracy than a simple lack of friend or lack of enemy". pp. A-3 to A-4: "Most enemy positive hostile IDs are derived from technology-based ID systems that exploit the physical or electronic characteristics of a target (e.g., noncooperative target recognition, signals intelligence, or electronic support measures)." p. A-5, Figure A-1: "Mode 4 or PPLI" leads to "Positive Friendly"; "Valid Mode 1 or 2" leads to "MRR/SAAFR" and "Air Route and Mode 3/C" checks. p. D-7: "the potential of SOF or other friendly aircraft without IFF transponders operating in the same airspace, thus requiring ID verification prior to engagement."
+- Wikipedia, Identification friend or foe, Modes: Mode 1 "2-digit octal ... 'mission code' that identifies the aircraft type or mission"; Mode 2 "4-digit octal ... unit code or tail number"; Mode 3/A "identification code ... assigned by the air traffic controller. Commonly referred to as a squawk code"; Mode C "reporting of altitude"; Mode 4 encrypted challenge; Mode 5 "cryptographically secured version of Mode S and ADS-B GPS position"; NATO "upgrading their Mark XII systems to Mark XIIA Mode 5". Also: "IFF can only positively identify 'friendly' objects."
+- DCS F-16C p. 104: "Mode 3 Transponder Code. (N/I)"; p. 105: the IFF DED page "is not implemented." p. 424: "performing an IFF interrogation of the target aircraft after an STT lock has been established." p. 431: TMS Left >0.5 s performs "a NCTR classification of the FCR TOI and an AIFF LOS Interrogation". p. 433: "capable of transmitting Mode 1, Mode 2, Mode 3, or Mode 4 interrogations ... However, only Mode 4 interrogations may be performed in DCS: F-16C Viper." p. 434: SCAN "±60° in azimuth, centered on the aircraft nose"; LOS "±15° in azimuth, centered on the Acquisition Cursor"; "IFF symbols may be offset from their true position compared to a corresponding radar target". p. 435: replies shown "for two seconds"; "green circle ... a '4' in the center"; "limited to a maximum range of 115 nautical miles"; "the lack of a valid reply does not necessarily confirm the target is hostile, as it may be an aircraft from a neutral country or a civilian aircraft", followed by the factors list (type, voice, datalink, speed and altitude profile, point of origin). p. 470: an FCR track "correlated with an Air Surveillance track ... negative Mode 4 IFF Status after interrogation by the AWACS ... inherits the negative Mode 4 IFF Status". p. 471: "Since the F-16C's onboard AIFF interrogation system is not integrated with the System Track File (STF), the Mode 4 status attribute may only be sourced from ... Offboard datalink information via TNDL." p. 472: ATDT tree with Mode 4 enabled: "No reply" leads to the hostile branch.
+- BMS p. 261: 17A "the first contact will lack of any IFF mode 4 response when interrogated ... The ROE ... authorizes you to shoot as you meet the declared hostile conditions." p. 262: "By pressing TMS left you start the IFF interrogation for mode 1+2+4. Once you received a negative response for mode 4 ... immediately bug". p. 265: "After verifying the contacts are hostile (negative IFF mode 4)". p. 266: mission 17B "IFF - Intercept". p. 267: "Mode 3/A is used to transmit the aircraft's altitude"; Modes 1 to 4 listed; codes from the mission's IFF policy via the DTC. p. 268: transponder page; interrogator "SCAN and LOS (Line of Sight)". p. 270: "A green circle displaying the mode indicates a correct answer and categorizes the target as friendly. - A yellow square ... indicates an incomplete answer and categorizes the target as unknown or a bogey."

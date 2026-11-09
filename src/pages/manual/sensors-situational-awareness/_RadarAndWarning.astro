@@ -52,7 +52,7 @@ const half = Math.round(notchHalfWidth(450, 60));
  <ol class="outcomes">
   <li>explain how a <Term>pulse-Doppler radar</Term> measures range and closure, what <Term>pulse repetition frequency</Term> trades, and what <Term>clutter</Term>, <Term>blind speed</Term>s and the <Term>resolution cell</Term> do to a picture;</li>
   <li>point a <Term>scan volume</Term> at a called altitude and say why you wait a full <Term>frame</Term> before moving it;</li>
-  <li>tell <Term id="Range while search">search</Term>, <Term>track-while-scan</Term> and <Term>single-target track</Term> apart, and what a missile needs from each;</li>
+  <li>tell <Term id="Range while search">search</Term>, <Term>track-while-scan</Term> and <Term>single-target track</Term> apart, what a missile needs from each, and why none of them says what a contact is;</li>
   <li>read a warning receiver's symbols, bearings and tones, and name its limits;</li>
   <li>explain the <Term>Doppler notch</Term> and how <Term>chaff</Term>, <Term id="Decoy flare">flares</Term> and <Term id="Self-protection jamming">jamming</Term> defeat radar and infrared threats.</li>
  </ol>
@@ -127,6 +127,7 @@ const half = Math.round(notchHalfWidth(450, 60));
   </tbody>
  </table></div>
  <p>The modes are a trade between picture and quality: search sees the most airspace, a lock sees one target best. A lock is also what a target's warning receiver reads as track, and what its countermeasures aim to break. <a href="#source-ewf">{e('17-6 to 17-9')}</a> In the Navy's training intercept the crew commands STT once the contact is correlated with the controller's call. <a href="#source-p825">{p('10-14')}</a></p>
+ <p>No mode tells you what a contact is. A controller's display pairs each raw radar return, the primary target, with its <Term>IFF</Term> reply, the secondary target. <a href="#source-p825">{p('5-5')}</a> In the fighter an interrogator challenges the contacts, and a correct encrypted reply identifies a friend; no reply leaves a contact unknown, not hostile. How IFF works, and what else identifies a contact, is in <a href={`${sa}#iff`}>IFF: identifying friends</a>.</p>
  <p class="key"><strong>Key point:</strong> search sees the most, track-while-scan holds several targets with gaps, and a lock holds one target continuously; a semi-active missile needs the lock to impact.</p>
 
  <h2 id="notch">The Doppler notch</h2>
@@ -186,7 +187,7 @@ const half = Math.round(notchHalfWidth(450, 60));
  <ul class="recap">
   <li>A pulse-Doppler radar measures range by timing and closure by Doppler shift; it cancels whatever does not move relative to the ground. <a href="#radar">How a fighter radar sees</a></li>
   <li>Point the scan volume with feet = degrees × NM × 100 and wait for complete frames. <a href="#scan">Pointing the scan volume</a></li>
-  <li>Search sees the most; track-while-scan holds several targets; a lock holds one, and a semi-active missile needs it. <a href="#modes">Search, track-while-scan and lock</a></li>
+  <li>Search sees the most; track-while-scan holds several targets; a lock holds one, and a semi-active missile needs it; none of them identifies a contact. <a href="#modes">Search, track-while-scan and lock</a></li>
   <li>A target flying across the line of sight falls in the Doppler notch. <a href="#notch">The Doppler notch</a></li>
   <li>The warning receiver gives a threat's type, rough bearing and mode, never a fix, and nothing for a passive infrared missile. <a href="#rwr">Reading the warning receiver</a></li>
   <li>Chaff, flares and jamming each attack what a sensor needs, and work best with a maneuver. <a href="#countermeasures">Chaff, flares and jamming</a></li>
@@ -223,6 +224,7 @@ const half = Math.round(notchHalfWidth(450, 60));
   <ul>
    <li>The guide explains the same radar trade-offs: medium PRF for all-aspect detection with poorer clutter rejection, high PRF for longer, hot-aspect detection, and a pilot-set moving-target rejection threshold that can filter slow or crossing aircraft as clutter. <a href="#source-f16">{d('389 to 391')}</a></li>
    <li>More bars mean a longer scan; the antenna elevation moves the whole volume, and the cursor shows the altitudes it covers at that range. <a href="#source-f16">{d('382')}</a></li>
+   <li>With the radar as the sensor of interest, a short press of TMS left sends an IFF interrogation across the volume ahead and a long press one along the cursor, together with a non-cooperative target recognition attempt on the target of interest. <a href="#source-f16">{d('431, 434')}</a> In close combat the guide suggests interrogating a target after locking it, so you do not shoot a friend. <a href="#source-f16">{d('424')}</a></li>
    <li>The ALR-56M covers 360° in azimuth but only ±45° in elevation, so a threat above or below you at high pitch or bank drops off the scope, with its lock and launch warnings. <a href="#source-f16">{d('693')}</a></li>
    <li>Its scope moves a symbol toward the center as the threat goes from search to track to guidance, so distance from the center there means lethality. <a href="#source-f16">{d('694')}</a></li>
    <li>The guide stresses that the receiver shows only the presence of a radar signal, not that the radar has detected you or which aircraft on that bearing it is tracking. <a href="#source-f16">{d('693')}</a></li>
@@ -230,6 +232,7 @@ const half = Math.round(notchHalfWidth(450, 60));
   <h3>Falcon BMS 4.38</h3>
   <ul>
    <li>Training mission 18's banzai flow has the element turn to opposite sides to notch the adversary, for example to 270 and 090 against a threat at 360, for a briefed time, commonly 15 seconds, then abort if still spiked. <a href="#source-bms">{b('296')}</a></li>
+   <li>Training mission 17A starts the intercept with TMS left, an IFF interrogation in Modes 1, 2 and 4, and bugs the contact only after it gives no Mode 4 reply. <a href="#source-bms">{b('262')}</a> How the sims treat a missing reply is in <a href={`${sa}#sims`}>the Situational Awareness module's In the sim panel</a>.</li>
    <li>The manual tells you to use your eyes or the warning receiver to see where a launched missile comes from. <a href="#source-bms">{b('379')}</a></li>
   </ul>
   <h3>Where the sims and the training texts differ, or say nothing</h3>
@@ -242,11 +245,11 @@ const half = Math.round(notchHalfWidth(450, 60));
  </section>
 
  <h2 id="terms">Terms</h2>
- <p>Every term here is in the <a href={glossary}>sensors and situational awareness terms</a>, except chaff and flares (weapons terms), the jamming words (SEAD terms) and the brevity words.</p>
+ <p>Every term here is in the <a href={glossary}>sensors and situational awareness terms</a>, except chaff and flares (weapons terms), the jamming words (SEAD terms), IFF (a joint term) and the brevity words.</p>
  <GlossaryList items={[
   'Pulse repetition frequency', 'Pulse-Doppler radar', 'Clutter', 'Blind speed', 'Range ambiguity', 'Resolution cell', 'Doppler notch', 'Scan volume', 'Frame',
   'Range while search', 'Track-while-scan', 'Single-target track', 'Break lock', 'Radar warning receiver', 'Emitter identification table', 'Symbol age-out',
-  'Chaff', 'Decoy flare', 'Flare rise time', 'Noise jamming', 'Deception jamming', 'Self-protection jamming', 'Missile approach warning system', 'SPIKE(D)', 'MUD', 'NAKED',
+  'Chaff', 'Decoy flare', 'Flare rise time', 'Noise jamming', 'Deception jamming', 'Self-protection jamming', 'Missile approach warning system', 'IFF', 'SPIKE(D)', 'MUD', 'NAKED',
  ]} />
  <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
   <h3 id="terms-title">Quiz: name the term</h3>
@@ -268,17 +271,18 @@ const half = Math.round(notchHalfWidth(450, 60));
  <details><summary><span class="outcome">Outcome 1</span> Why does a medium-PRF mode see more blind speeds than a high-PRF one?</summary><p>Its spectral lines are closer together, so its clutter filters at those harmonics cancel more closures. It has fewer range ambiguities in return.</p></details>
  <details><summary><span class="outcome">Outcome 2</span> A group is called 6,000 ft below you at 30 NM. Where must the volume reach?</summary><p>At least 2° down: 6,000 = 30 × elevation × 100.</p></details>
  <details><summary><span class="outcome">Outcome 3</span> Why might a crew stay in track-while-scan rather than lock?</summary><p>It keeps tracks on several targets while still scanning, and an active missile can be guided from it; a lock gives continuous data on one target but stops the search.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> You have a solid lock on a contact. Do you know what it is?</summary><p>No. A lock gives continuous track data, not an identity. An IFF reply can identify a friend; anything else needs other sources.</p></details>
  <details><summary><span class="outcome">Outcome 4</span> During a hard defensive turn two symbols for the same radar appear. Why?</summary><p>Aggressive maneuvering changes the signal strength at each antenna quickly, and the processor can read one emitter as several, each kept for its age-out time.</p></details>
  <details><summary><span class="outcome">Outcome 5</span> Why dispense chaff during the turn to the beam rather than flying straight at the radar?</summary><p>A Doppler radar ignores chaff, which stops in the air at once, unless you too have no relative velocity, which happens only on the beam.</p></details>
 
  <h2 id="sources">Sources and applicability</h2>
  <h3>Military sources</h3>
  <p id="source-ewf"><strong>[1] US Air Force, Air Combat Command Training Support Squadron, Det 8, Electronic Warfare Fundamentals, November 2000.</strong> <a href="https://falcon.blu3wolf.com/Docs/Electronic-Warfare-Fundamentals.pdf">Read on a public copy</a>, 9 November 2026, by printed page: signal characteristics, p. 3-2; radar principles, pp. 5-12 to 5-17; target tracking, pp. 7-20 to 7-23; radar jamming, pp. 9-1 to 9-3; chaff, pp. 13-1 to 13-8; IR countermeasures, pp. 15-1 to 15-7; warning receivers, pp. 17-1 to 17-13. A student text and reference for electronic warfare training; it is not an aircraft or tactics manual.</p>
- <p id="source-p825"><strong>[2] US Navy, Chief of Naval Air Training, CNATRA P-825 (07-14), Flight Training Instruction, Basic Fighter Maneuvering (BFM) and All Weather Intercept (AWI), Advanced UMFO T-45C/VMTS, 1 July 2014.</strong> <a href="https://falcon.blu3wolf.com/Docs/P-825.pdf">Read on a public copy</a>, 9 November 2026, by printed page: pp. 8-5, 8-7, 10-3 to 10-4, 10-14, 13-2, 14-4, 14-7, 16-4 and 16-12 to 16-13. The Navy's intercept training text, whose radar is a training simulation of a fighter radar; it teaches skills, not fleet tactics.</p>
+ <p id="source-p825"><strong>[2] US Navy, Chief of Naval Air Training, CNATRA P-825 (07-14), Flight Training Instruction, Basic Fighter Maneuvering (BFM) and All Weather Intercept (AWI), Advanced UMFO T-45C/VMTS, 1 July 2014.</strong> <a href="https://falcon.blu3wolf.com/Docs/P-825.pdf">Read on a public copy</a>, 9 November 2026, by printed page: pp. 5-5, 8-5, 8-7, 10-3 to 10-4, 10-14, 13-2, 14-4, 14-7, 16-4 and 16-12 to 16-13. The Navy's intercept training text, whose radar is a training simulation of a fighter radar; it teaches skills, not fleet tactics.</p>
  <p id="source-usna"><strong>[5] US Naval Academy, Fundamentals of Naval Weapons Systems, chapter 6, Track-While-Scan Concepts.</strong> <a href="https://man.fas.org/dod-101/navy/docs/fun/part06.htm">Read on the Federation of American Scientists' copy</a>, 9 November 2026. An undated academic text; its examples are shipboard radars.</p>
  <h3>Sim sources</h3>
- <p id="source-f16"><strong>[3] Eagle Dynamics, DCS: F-16C Viper Early Access Guide (English).</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 9 November 2026, pp. 380, 382, 386, 388 to 391, 393 and 693 to 694. A sim manual, cited for the In the sim panel and where noted.</p>
- <p id="source-bms"><strong>[4] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 9 November 2026, pp. 296 and 379. A sim manual, cited only for the In the sim panel.</p>
+ <p id="source-f16"><strong>[3] Eagle Dynamics, DCS: F-16C Viper Early Access Guide (English).</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 9 November 2026, pp. 380, 382, 386, 388 to 391, 393, 424, 431, 434 and 693 to 694. A sim manual, cited for the In the sim panel and where noted.</p>
+ <p id="source-bms"><strong>[4] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 9 November 2026, pp. 262, 296 and 379. A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/sensors-evidence.md">Sensors and situational awareness evidence</a>.</p>
  <p>Figures 1 to 3 and the worked engagement are original, invented examples, not reproductions of any publication's figure.</p>
  <p class="note">Applicability: written for aircrew of every service and both fixed and rotary wing, from an Air Force electronic warfare text that covers radar and infrared threats generally and a Navy intercept training text. No Army or helicopter-specific survivability publication could be read; Army aviation's survivability manuals are restricted. Each aircraft's flight and tactics manuals, its threat tables and your unit's procedures govern. This revision is Drafted pending independent source-backed review.</p>
