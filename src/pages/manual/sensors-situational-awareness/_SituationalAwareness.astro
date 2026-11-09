@@ -10,7 +10,7 @@ const mod = getModule('situational-awareness');
 const core = [
  ['example', 'One picture, built and kept'], ['priorities', 'Priorities and what SA is'], ['lookout', 'Lookout and the cross-check'],
  ['mutual', 'Mutual support and the team'], ['eoir', 'Infrared, pods and night vision'], ['datalink', 'Datalinks and the shared picture'],
- ['fusion', 'Fusing the sources'], ['recap', 'Key points'],
+ ['iff', 'IFF: identifying friends'], ['fusion', 'Fusing the sources'], ['recap', 'Key points'],
 ];
 const reference = [
  ['roles', 'Flight roles'], ['imaging', 'How well an imaging sensor sees'], ['sims', 'In the sim'], ['terms', 'Terms'],
@@ -39,7 +39,7 @@ const targeting = sitePath('manual/air-to-ground-operations/precision-targeting/
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Sensors & Situational Awareness',href:sitePath('manual/sensors-situational-awareness/')},{label:mod.title}]}>
  <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
   <h2>{mod.maturity}</h2>
-  <p>Module revision {mod.revision} · Building the picture: priorities, lookout, mutual support, infrared and night vision sensors, datalinks, and fusing them into one picture you trust. For aircrew of every service, from Air Force and Navy training texts and joint doctrine.</p>
+  <p>Module revision {mod.revision} · Building the picture: priorities, lookout, mutual support, infrared and night vision sensors, datalinks, IFF, and fusing them into one picture you trust. For aircrew of every service, from Air Force and Navy training texts and joint doctrine.</p>
  </section>
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
   <div class="contents-groups">
@@ -56,7 +56,8 @@ const targeting = sitePath('manual/air-to-ground-operations/precision-targeting/
   <li>describe a <Term>mutual support</Term> contract and how the flight and the controller share one picture;</li>
   <li>use <Term id="Forward-looking infrared">FLIR</Term>, targeting pods and an <Term>image intensifier</Term> within what each can see;</li>
   <li>say what a <Term>tactical data link</Term> such as <Term>Link 16</Term> adds and what it does not;</li>
-  <li>fuse every source into one picture, <Term id="Radar correlation">correlation</Term> first.</li>
+  <li>fuse every source into one picture, <Term id="Radar correlation">correlation</Term> first;</li>
+  <li>use <Term>IFF</Term> to identify friends, and say what a missing reply does and does not tell you.</li>
  </ol>
  <p class="note">These are principles that apply in any cockpit, taken from an Air Force fighter handbook, a Navy intercept training text and joint doctrine. Their examples are fighters; the same priorities, lookout and fusion apply in helicopters and multi-crew aircraft, whose crew coordination standards are their own. The worked picture is invented. How the radar and warning receiver work is in <a href={radar}>Radar, Warning Receivers and Countermeasures</a>.</p>
 
@@ -66,17 +67,18 @@ const targeting = sitePath('manual/air-to-ground-operations/precision-targeting/
   <li><span class="who">Before flight</span> <span class="said">Chair-fly the sortie: where will you be busiest, what comes first then, and what you would do at joker fuel. <a class="step" href="#priorities">Why</a></span></li>
   <li><span class="who">Your eyes</span> <span class="said">Wingman in sight, line abreast; near rocks, far rocks, check six, then the wider sectors. <a class="step" href="#lookout">Why</a></span></li>
   <li><span class="who">Controller</span> <span class="said">"Single group, bullseye 350/60, 25 thousand, hostile." <a class="step" href="#mutual">Why</a></span></li>
-  <li><span class="who">Datalink</span> <span class="said">Shows that hostile track, a surface threat from the brief, and an unknown track to the east no one has identified. <a class="step" href="#datalink">Why</a></span></li>
+  <li><span class="who">Datalink</span> <span class="said">Shows that hostile track, a friendly flight to the northwest, a surface threat from the brief, and an unknown track to the east no one has identified. <a class="step" href="#datalink">Why</a></span></li>
   <li><span class="who">Radar</span> <span class="said">A contact at 354°, 38 NM, 25,000 ft, hot: it matches the call. You call "contact" with its position and "declare", and the controller confirms hostile. <a class="step" href="#fusion">Why</a></span></li>
+  <li><span class="who">Interrogator</span> <span class="said">A Mode 4 challenge across the volume ahead: the friendly flight replies correctly; the group north and the track east give no reply. That alone makes neither of them hostile. Your wingman, on the beam, is outside it; you hold him by eye and datalink. <a class="step" href="#iff">Why</a></span></li>
   <li><span class="who">Warning receiver</span> <span class="said">An airborne radar in search near 12 o'clock, a bearing that fits the group; a surface radar at 3 o'clock where the briefed threat is. <a class="step" href="#fusion">Why</a></span></li>
-  <li><span class="who">You</span> <span class="said">One hostile group, correlated by four sources; one unknown, held only by the datalink, kept in the picture and asked about. <a class="step" href="#fusion">Why</a></span></li>
+  <li><span class="who">You</span> <span class="said">One hostile group, correlated by four sources; one unknown, held by the datalink and silent to IFF, kept in the picture as unknown and asked about. <a class="step" href="#fusion">Why</a></span></li>
  </ol>
  <section class="lesson figure-lesson" data-lesson="picture" aria-labelledby="picture-title">
   <h3 id="picture-title" class="fig-title">Figure 1 — Where the picture comes from</h3>
   <p>Switch each source off and on. A track shown with several sources is correlated; a warning receiver alone gives only a bearing.</p>
   <div data-sources></div>
-  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 360" role="img" aria-label="Plan view centered on your aircraft with range rings, your wingman, a hostile group to the north, an unknown track to the east and a surface threat to the east, each shown according to the sources switched on"></svg></div>
-  <p class="no-js">Interactive figure unavailable. The hostile group to the north is held by the radar, the controller, the datalink and the warning receiver; the unknown track to the east only by the datalink; the surface threat by the warning receiver, as a bearing, and by the datalink from the brief.</p>
+  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 360" role="img" aria-label="Plan view centered on your aircraft with range rings, your wingman, a friendly flight to the northwest that answers IFF, a hostile group to the north, an unknown track to the east and a surface threat to the east, each shown according to the sources switched on"></svg></div>
+  <p class="no-js">Interactive figure unavailable. The friendly flight to the northwest is held by the datalink and identified by its Mode 4 reply. The hostile group to the north is held by the radar, the controller, the datalink and the warning receiver, and gives no IFF reply; the unknown track to the east only by the datalink, and it gives no IFF reply; the surface threat by the warning receiver, as a bearing, and by the datalink from the brief.</p>
   <div class="feedback" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">An invented picture, ranges to scale (rings every 10 NM). The call formats follow the training instruction. <a href="#source-p825">{p('5-9, 10-3')}</a></p>
  </section>
@@ -162,6 +164,34 @@ const targeting = sitePath('manual/air-to-ground-operations/precision-targeting/
  <p>Limits follow from how it works. The picture is only as good as its track management: one formation can be shown as a single track with a strength field, to save workload and messages. <a href="#source-jp">{j('III-15')}</a> A linked track is someone else's sensor at an earlier moment, not your own.</p>
  <p class="key"><strong>Key point:</strong> a datalink lets you see what others see, in a common picture; it does not replace correlating what you see yourself.</p>
 
+ <h2 id="iff">IFF: identifying friends</h2>
+ <p><Term>IFF</Term> is a challenge and reply. An <Term>interrogator</Term> transmits a coded challenge; the <Term>transponder</Term> in a friendly aircraft answers it automatically, and the interrogator evaluates the reply. <a href="#source-ewf">{e('A-21, A-23, A-45')}</a> The <Term>selective identification feature</Term> lets the reply carry a selected code, so the answer can say more than "friendly". <a href="#source-ewf">{e('A-39')}</a> Interrogators sit in fighters and in the controllers' radars: a control radar's display shows the raw radar return, the primary target, and its IFF reply, the secondary target, and can read IFF beyond 200 NM. <a href="#source-p825">{p('5-1, 5-5')}</a></p>
+ <div class="table-scroll" role="region" aria-label="IFF modes" tabindex="0"><table>
+  <caption>The IFF modes <a href="#source-wiki-iff">[6, Identification friend or foe]</a></caption>
+  <thead><tr><th scope="col">Mode</th><th scope="col">Who uses it</th><th scope="col">The reply carries</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">1</th><td>Military</td><td>A two-digit mission code: the aircraft's type or mission</td></tr>
+   <tr><th scope="row">2</th><td>Military</td><td>A four-digit unit code or tail number</td></tr>
+   <tr><th scope="row">3/A</th><td>Military and civil</td><td>The four-digit code air traffic control assigns: the squawk</td></tr>
+   <tr><th scope="row">C</th><td>Civil</td><td>Pressure altitude</td></tr>
+   <tr><th scope="row">4</th><td>Military</td><td>An encrypted reply to an encrypted challenge</td></tr>
+   <tr><th scope="row">5</th><td>Military</td><td>An encrypted reply that adds the aircraft's position; it is replacing Mode 4</td></tr>
+  </tbody>
+ </table></div>
+ <p>Which modes and codes are in use is set for each operation in the air tasking order and special instructions. <a href="#source-jp">{j('A-3')}</a> In joint doctrine's sample identification matrix, a correct Mode 4 reply, or a datalink position-and-identity report (<Term>Link 16</Term>'s PPLI), makes a track positive friendly; a valid Mode 1 or 2 only leads on to a procedural check of whether the track is on a minimum-risk route; a track without one is checked against air routes with Mode 3/C, the minimum-risk routes and its flight profile. <a href="#source-jp">{j('A-5')}</a> In the air you set the IFF as assigned at the fence check, a controller can give the wingman a separate code, and at the fence-out the wingman sets the IFF to standby. <a href="#source-p825">{p('3-10, 3-19 to 3-20')}</a> Where IFF is switched on or off is planned in the airspace control plan along with the minimum-risk routes and the areas for sanitizing returning packages from enemy aircraft. <a href="#source-jp">{j('III-8')}</a> The calls are brevity: <Term>SQUAWK</Term> to operate the IFF as indicated, <Term>STRANGLE</Term> to turn it off, and <Term>PARROT</Term> for the transponder itself. <a href="#source-p825">{p('A-7, A-9 to A-10')}</a></p>
+ <div class="table-scroll" role="region" aria-label="What an IFF result tells you" tabindex="0"><table>
+  <caption>What an interrogation tells you</caption>
+  <thead><tr><th scope="col">Result</th><th scope="col">What it means</th><th scope="col">What it does not mean</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Correct encrypted reply (Mode 4)</th><td>A positive identification as friendly <a href="#source-jp">{j('A-3, A-5')}</a></td><td>That every system shows it on the right track: modes and codes can be swapped between tracks in a shared picture <a href="#source-jp">{j('V-8')}</a></td></tr>
+   <tr><th scope="row">Valid Mode 1 or 2</th><td>A start for procedural identification: whether it is on a minimum-risk route <a href="#source-jp">{j('A-5')}</a></td><td>A positive friendly</td></tr>
+   <tr><th scope="row">No valid Mode 1 or 2</th><td>Procedural checks: air route and Mode 3/C, minimum-risk route and flight profile, which can end in neutral, unknown or hostile <a href="#source-jp">{j('A-5')}</a></td><td>Hostile on the reply alone</td></tr>
+   <tr><th scope="row">No reply, or a wrong one</th><td>Not identified as a friend</td><td>Hostile: friendly aircraft without IFF transponders can share the airspace <a href="#source-jp">{j('D-7')}</a>, and a positive identification is more than a lack of friend <a href="#source-jp">{j('III-13, A-3')}</a></td></tr>
+  </tbody>
+ </table></div>
+ <p>Most positive hostile identifications come from technology that exploits the target's own physical or electronic signature, such as non-cooperative target recognition, signals intelligence or electronic support; visual identification is also a positive method. <a href="#source-jp">{j('A-3 to A-4')}</a> Procedural identification can also end in hostile, for a track that breaks the airspace rules and is not otherwise identified. <a href="#source-jp">{j('III-13')}</a> That is why <Term>positive identification</Term> lists IFF beside those methods, not above them. <a href="#source-jp">{j('III-13')}</a></p>
+ <p class="key"><strong>Key point:</strong> IFF can positively identify a friend; no reply leaves a track unknown, never hostile on its own.</p>
+
  <h2 id="fusion">Fusing the sources</h2>
  <div class="table-scroll" role="region" aria-label="What each source gives" tabindex="0"><table>
   <caption>What each source contributes</caption>
@@ -170,6 +200,7 @@ const targeting = sitePath('manual/air-to-ground-operations/precision-targeting/
    <tr><th scope="row">Your radar</th><td>Bearing, range, altitude and closure of contacts in its volume</td><td>Identity on its own; anything outside its volume or in its notch <a href={radar}>(radar module)</a></td></tr>
    <tr><th scope="row">Warning receiver</th><td>Which radars, roughly where, and what mode <a href="#source-ewf">{e('17-8 to 17-10')}</a></td><td>Range or a fix; passive infrared threats <a href="#source-ewf">{e('15-6, 17-1')}</a></td></tr>
    <tr><th scope="row">Controller</th><td>The wider picture in bullseye or BRAA, and declarations <a href="#source-p825">{p('5-7 to 5-9')}</a></td><td>Close control at long range from a slow-scanning radar <a href="#source-p825">{p('5-1')}</a></td></tr>
+   <tr><th scope="row">IFF interrogator</th><td>Friends, by a correct encrypted reply <a href="#source-jp">{j('A-5')}</a></td><td>A hostile identity: no reply is not a foe <a href="#source-jp">{j('D-7')}</a></td></tr>
    <tr><th scope="row">Datalink</th><td>Other units' tracks and identities in the common picture <a href="#source-jp">{j('II-12')}</a></td><td>Your own confirmation</td></tr>
    <tr><th scope="row">Eyes, goggles, FLIR and pods</th><td>Visual and thermal pictures; a visual check of what a track is</td><td>Range and identity at long range</td></tr>
   </tbody>
@@ -185,6 +216,7 @@ const targeting = sitePath('manual/air-to-ground-operations/precision-targeting/
   <li>Mutual support is a briefed contract within the flight, and the controller shares the picture. <a href="#mutual">Mutual support and the team</a></li>
   <li>Goggles need some light; FLIR needs heat contrast and dry air; both narrow attention. <a href="#eoir">Infrared, pods and night vision</a></li>
   <li>A datalink shares others' tracks in a common picture, not your own confirmation. <a href="#datalink">Datalinks and the shared picture</a></li>
+  <li>A correct Mode 4 reply identifies a friend; no reply leaves a track unknown. <a href="#iff">IFF: identifying friends</a></li>
   <li>Correlate sources before you act on a track. <a href="#fusion">Fusing the sources</a></li>
  </ul>
 
@@ -207,29 +239,35 @@ const targeting = sitePath('manual/air-to-ground-operations/precision-targeting/
 
  <section class="sim-panel" aria-labelledby="sims">
   <h2 id="sims">In the sim</h2>
-  <p>DCS World and Falcon BMS both model the F-16C's datalink and targeting pod, and BMS models goggles. This is what their official manuals say; helicopter sensors and goggles in either sim were not checked for this revision.</p>
+  <p>DCS World and Falcon BMS both model the F-16C's datalink, IFF interrogator and targeting pod, and BMS models goggles. This is what their official manuals say; helicopter sensors and goggles in either sim were not checked for this revision.</p>
   <h3>DCS: F-16C Viper</h3>
   <ul>
    <li>The F-16C's datalink is MIDS on the tactical network, sharing a common tactical picture with flight members (up to 8 including you), donors in the package (up to 4) and command and control platforms on their own mission channel. <a href="#source-f16">{d('452 to 453')}</a></li>
+   <li>The F-16C's interrogator can challenge in Modes 1 to 4 in the real jet, but only Mode 4 is modeled: a short press of TMS left scans ±60° about the nose, a long press ±15° about the radar cursor, out to 115 NM. A correct reply shows on the radar display as a green circle with a "4" for two seconds, and may sit off its radar target, because IFF is less precise than the radar. <a href="#source-f16">{d('433 to 435')}</a></li>
+   <li>The manual says what doctrine says: a valid Mode 4 reply confirms a friend, but no reply does not confirm a hostile; it may be a neutral or civil aircraft, and type, controller and datalink information, flight profile and point of origin all count. <a href="#source-f16">{d('435')}</a> The jet's own interrogator does not feed the track file; a Mode 4 status reaches it only over the datalink, from a platform such as AWACS. <a href="#source-f16">{d('470 to 471')}</a> The transponder's settings page is not implemented. <a href="#source-f16">{d('104 to 105')}</a></li>
    <li>The targeting pod carries a FLIR, usable day or night with wide and narrow fields of view, and a daylight-only TV camera with more magnification; picture-in-picture puts the TV image inside the wider FLIR view for awareness around it. <a href="#source-f16">{d('487')}</a></li>
   </ul>
   <h3>Falcon BMS 4.38</h3>
   <ul>
    <li>Training mission 17C teaches the improved data modem and Link 16, including using Link 16 information to build SA. <a href="#source-bms">{b('277')}</a></li>
+   <li>Training mission 17B is IFF: the transponder and interrogator pages, scan and line-of-sight interrogation in Modes 1 to 4, and codes loaded from the mission's IFF policy through the data cartridge. A correct reply is a green circle; an incomplete one is a yellow square, treated as unknown. <a href="#source-bms">{b('266 to 270')}</a></li>
    <li>BMS goggles toggle on a key and deliberately narrow your field of view, to simulate tunnel vision. <a href="#source-bms">{b('136')}</a></li>
   </ul>
   <h3>Where the sims and the sources differ, or say nothing</h3>
   <ul>
+   <li>BMS's mission 17A has you treat contacts as hostile after a negative Mode 4 reply, under that mission's rules of engagement, and in DCS a data cartridge rule can mark a no-reply datalink track hostile. Doctrine treats no reply as unknown, so in a sim it is the mission's rules, not IFF, that make it hostile. <a href="#source-bms">{b('261, 265')}</a> <a href="#source-f16">{d('471 to 472')}</a></li>
+   <li>BMS's manual says Mode 3/A carries altitude; in the mode table above, altitude is Mode C and 3/A is the code. <a href="#source-bms">{b('267')}</a></li>
    <li>Neither manual teaches a lookout time-share or a mutual support contract; on a monitor your view is limited by the screen, which the handbook's sector plan does not consider.</li>
    <li>BMS's goggle model narrows the view, as the source's 40° field of view does <a href="#source-wiki-nvd">[6, Night-vision device]</a>; whether either sim models the need for some light, or the loss of detail, was not checked.</li>
   </ul>
-  <p><strong>To practise:</strong> fly a sortie with the datalink display and the radar both up, and for each track say which sources hold it before you act: Figure 1's question.</p>
+  <p><strong>To practise:</strong> fly a sortie with the datalink display and the radar both up, and interrogate, and for each track say which sources hold it and whether it answered before you act: Figure 1's question.</p>
  </section>
 
  <h2 id="terms">Terms</h2>
- <p>Every term here is in the <a href={glossary}>sensors and situational awareness terms</a>.</p>
+ <p>Every term here is in the <a href={glossary}>sensors and situational awareness terms</a>, except IFF (a joint term), positive identification (a BVR term) and the brevity words.</p>
  <GlossaryList items={[
   'Situational awareness', 'Mutual support', 'Time-sharing', 'Forward-looking infrared', 'Image intensifier', 'Johnson criteria', 'Tactical data link', 'Link 16', 'Common tactical picture', 'Radar correlation',
+  'IFF', 'Interrogator', 'Transponder', 'Selective identification feature', 'IFF mode', 'Positive identification', 'SQUAWK', 'PARROT',
  ]} />
  <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
   <h3 id="terms-title">Quiz: name the term</h3>
@@ -240,7 +278,7 @@ const targeting = sitePath('manual/air-to-ground-operations/precision-targeting/
  </section>
 
  <h2 id="check">Check your understanding</h2>
- <p>One or more questions for each outcome; Figures 1 and 2 cover outcomes 2 and 6 too.</p>
+ <p>One or more questions for each outcome; Figures 1 and 2 cover outcomes 2, 6 and 7 too.</p>
  <section class="lesson quiz-lesson" data-lesson="questions" aria-labelledby="questions-title">
   <h3 id="questions-title">Quiz: building the picture</h3>
   <p class="task" data-prompt aria-live="polite"></p>
@@ -254,19 +292,20 @@ const targeting = sitePath('manual/air-to-ground-operations/precision-targeting/
  <details><summary><span class="outcome">Outcome 4</span> Why might goggles show little on a moonless, overcast night?</summary><p>An intensifier needs some light from stars, moon or sky; with none, only an infrared sensor sees.</p></details>
  <details><summary><span class="outcome">Outcome 5</span> A linked track shows a formation as one symbol. Why?</summary><p>Formation tracking: one track with a strength field stands for a formation that keeps a steady relationship, to cut workload and messages.</p></details>
  <details><summary><span class="outcome">Outcome 6</span> Only the datalink holds a track to the east, with no identity. What is it in your picture?</summary><p>An unknown: keep it, and ask about it, until another source correlates or identifies it.</p></details>
+ <details><summary><span class="outcome">Outcome 7</span> Your Mode 4 challenge gets no reply from a contact. Can you call it hostile?</summary><p>Not on IFF alone. No reply means only that it is not identified as a friend: it may carry no transponder, or be neutral. A hostile identification needs other means, such as non-cooperative target recognition, electronic support, a visual identification or procedural identification under the theater's criteria, as the rules of engagement require.</p></details>
 
  <h2 id="sources">Sources and applicability</h2>
  <h3>Military sources</h3>
  <p id="source-mch"><strong>[1] US Air Force, Air Combat Command, MCH 11-F16 Volume 5, F-16 Combat Aircraft Fundamentals, 10 May 1996.</strong> <a href="https://falcon.blu3wolf.com/Docs/F-16%20COMBAT%20AIRCRAFT%20FUNDAMENTALS%20-%20Multi-Command%20Handbook%2011-F16%20Vol5.pdf">Read on a public copy</a>, 9 November 2026, by printed page: preparation and situation awareness, pp. 8 to 11; mutual support, formation and lookout, pp. 19 to 24; FLIR on recovery, p. 284. A superseded multi-command handbook, used only for the principles it states for every pilot, not its F-16 procedures.</p>
- <p id="source-p825"><strong>[2] US Navy, Chief of Naval Air Training, CNATRA P-825 (07-14), Flight Training Instruction, BFM and All Weather Intercept, 1 July 2014.</strong> <a href="https://falcon.blu3wolf.com/Docs/P-825.pdf">Read on a public copy</a>, 9 November 2026, by printed page: pp. 5-1, 5-5, 5-7 to 5-11 and 10-3.</p>
- <p id="source-ewf"><strong>[3] US Air Force, ACC Training Support Squadron, Det 8, Electronic Warfare Fundamentals, November 2000.</strong> <a href="https://falcon.blu3wolf.com/Docs/Electronic-Warfare-Fundamentals.pdf">Read on a public copy</a>, 9 November 2026, pp. 15-6, 17-1 and 17-8 to 17-10.</p>
- <p id="source-jp"><strong>[4] US Joint Chiefs of Staff, JP 3-01, Countering Air and Missile Threats, 23 March 2012.</strong> <a href="https://www.bits.de/NRANEU/others/jp-doctrine/jp3_01(12).pdf">Read on the Berlin Information-center for Transatlantic Security's copy</a>, 9 November 2026, pp. II-12, II-26, III-15, A-1 and A-5. A later edition exists that could not be read.</p>
+ <p id="source-p825"><strong>[2] US Navy, Chief of Naval Air Training, CNATRA P-825 (07-14), Flight Training Instruction, BFM and All Weather Intercept, 1 July 2014.</strong> <a href="https://falcon.blu3wolf.com/Docs/P-825.pdf">Read on a public copy</a>, 9 November 2026, by printed page: pp. 3-10, 3-19 to 3-20, 5-1, 5-5, 5-7 to 5-11 and 10-3, and brevity pp. A-7 and A-9 to A-10.</p>
+ <p id="source-ewf"><strong>[3] US Air Force, ACC Training Support Squadron, Det 8, Electronic Warfare Fundamentals, November 2000.</strong> <a href="https://falcon.blu3wolf.com/Docs/Electronic-Warfare-Fundamentals.pdf">Read on a public copy</a>, 9 November 2026, pp. 15-6, 17-1 and 17-8 to 17-10, and glossary pp. A-21, A-23, A-39 and A-45.</p>
+ <p id="source-jp"><strong>[4] US Joint Chiefs of Staff, JP 3-01, Countering Air and Missile Threats, 23 March 2012.</strong> <a href="https://www.bits.de/NRANEU/others/jp-doctrine/jp3_01(12).pdf">Read on the Berlin Information-center for Transatlantic Security's copy</a>, 9 November 2026, pp. II-12, II-26, III-8, III-13, III-15, V-8, A-1, A-3 to A-5 and D-7. A later edition exists that could not be read.</p>
  <p id="source-usna"><strong>[5] US Naval Academy, Fundamentals of Naval Weapons Systems, chapter 10, Visible and Infrared Spectrum, and chapter 20, Command, Control, and Communication.</strong> <a href="https://man.fas.org/dod-101/navy/docs/fun/">Read on the Federation of American Scientists' copy</a>, 9 November 2026, §§10.5 to 10.5.3 and 20.4.4. An undated academic text.</p>
  <h3>Secondary sources</h3>
- <p id="source-wiki-l16"><strong>[6] Wikipedia, <a href="https://en.wikipedia.org/wiki/Link_16">Link 16</a></strong> and <strong id="source-wiki-nvd"><a href="https://en.wikipedia.org/wiki/Night-vision_device">Night-vision device</a></strong>, read 9 November 2026. Used only for public facts no military source read here gives: Link 16's band, access method and messages, and a common goggle's field of view.</p>
+ <p id="source-wiki-l16"><strong>[6] Wikipedia, <a href="https://en.wikipedia.org/wiki/Link_16">Link 16</a></strong> and <strong id="source-wiki-nvd"><a href="https://en.wikipedia.org/wiki/Night-vision_device">Night-vision device</a></strong> and <strong id="source-wiki-iff"><a href="https://en.wikipedia.org/wiki/Identification_friend_or_foe">Identification friend or foe</a></strong>, read 9 November 2026. Used only for public facts no military source read here gives: Link 16's band, access method and messages, a common goggle's field of view, and what each IFF mode carries.</p>
  <h3>Sim sources</h3>
- <p id="source-f16"><strong>[7] Eagle Dynamics, DCS: F-16C Viper Early Access Guide (English).</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 9 November 2026, pp. 452 to 453 and 487. A sim manual, cited only for the In the sim panel.</p>
- <p id="source-bms"><strong>[8] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 9 November 2026, pp. 136 and 277. A sim manual, cited only for the In the sim panel.</p>
+ <p id="source-f16"><strong>[7] Eagle Dynamics, DCS: F-16C Viper Early Access Guide (English).</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 9 November 2026, pp. 104 to 105, 433 to 435, 452 to 453, 470 to 472 and 487. A sim manual, cited only for the In the sim panel.</p>
+ <p id="source-bms"><strong>[8] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 9 November 2026, pp. 136, 261, 265 to 270 and 277. A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/sensors-evidence.md">Sensors and situational awareness evidence</a>.</p>
  <p>Figures 1 and 2 and the worked picture are original, invented examples, not reproductions of any publication's figure.</p>
  <p class="note">Applicability: written for aircrew of every service. The Army's and the Air Force's crew coordination and night vision publications could not be read (Army training circulars on goggles and aircrew coordination are not public; Air Force e-publishing refused access), so multi-crew coordination is not covered here and goggle limits come from a secondary source. Your aircraft's manuals, your service's crew resource management and night vision standards, and the theater's procedures govern. This revision is Drafted pending independent source-backed review.</p>

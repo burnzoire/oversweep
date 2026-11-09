@@ -92,7 +92,8 @@ function setupPicture(root) {
         items.push(el('text', { class: 'lbl small', x: x + 10, y: below ? y + 18 : y - 8 }, `${t.label}${k.identity ? '' : ', ID unknown'}`));
         if (t.id !== 'wing') items.push(el('text', { class: 'lbl small', x: x + 10, y: y + 6 }, `${Math.round(bearingTo(t)).toString().padStart(3, '0')}° ${Math.round(rangeTo(t))} NM`));
       }
-      lines.push(`${t.label}. ${k.by.map((s) => `${SOURCES.find((x) => x.id === s).label}: ${t.seen[s]}`).join('. ')}.${k.correlated ? ' Several sources agree: correlated.' : ' One source only.'}`);
+      const silent = k.noReply ? ` Interrogated: ${t.seen.iff}.` : '';
+      lines.push(`${t.label}. ${k.by.map((s) => `${SOURCES.find((x) => x.id === s).label}: ${t.seen[s]}`).join('. ')}.${silent}${k.correlated ? ' Several sources agree: correlated.' : ' One source only.'}`);
     }
     svg.replaceChildren(...items);
     out.replaceChildren(...(lines.length ? lines.map((l) => para(l, 'derived')) : [para('No sources on: you know only what you briefed.')]));

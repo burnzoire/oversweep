@@ -66,11 +66,25 @@ test('the invented picture: the hostile group is correlated, the RWR alone gives
   assert.ok(known(sam, ['rwr']).bearingOnly && !known(sam, ['link', 'rwr']).bearingOnly);
 });
 
+test('IFF identifies the friend that replies; no reply adds no identity and no correlation', () => {
+  const all = ['eyes', 'radar', 'rwr', 'control', 'link', 'iff'];
+  const friend = TRACKS.find((t) => t.id === 'friend'), wing = TRACKS.find((t) => t.id === 'wing'), north = TRACKS.find((t) => t.id === 'north'), east = TRACKS.find((t) => t.id === 'east');
+  assert.ok(known(friend, ['iff']).identity && known(friend, all).correlated);
+  assert.ok(!('iff' in wing.seen), 'the wingman is on the beam, outside the interrogation');
+  for (const t of TRACKS.filter((t) => 'iff' in t.seen)) {
+    const off = ((Math.atan2(t.x, t.y) * 180) / Math.PI + 540) % 360 - 180;
+    assert.ok(Math.abs(off) <= 60, `${t.id} is inside the interrogation sector`);
+  }
+  assert.ok(!known(north, ['radar', 'iff']).identity && known(north, ['radar', 'iff']).noReply);
+  assert.ok(!known(north, ['iff']).by.length);
+  assert.ok(!known(east, all).identity && !known(east, all).correlated && known(east, all).noReply);
+});
+
 test('every question has its answer among its options and cites a source', () => {
   for (const q of [...RADAR_QUESTIONS, ...SA_QUESTIONS]) {
     assert.ok(q.options.includes(q.answer), q.ask);
     assert.match(q.why, /\[\d\]/);
   }
   assert.deepEqual([...new Set(RADAR_QUESTIONS.map((q) => q.outcome))].sort(), [1, 2, 3, 4, 5]);
-  assert.deepEqual([...new Set(SA_QUESTIONS.map((q) => q.outcome))].sort(), [1, 2, 3, 4, 5, 6]);
+  assert.deepEqual([...new Set(SA_QUESTIONS.map((q) => q.outcome))].sort(), [1, 2, 3, 4, 5, 6, 7]);
 });
