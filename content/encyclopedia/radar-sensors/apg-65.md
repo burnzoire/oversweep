@@ -6,7 +6,7 @@ type: "All-weather multimode pulse-Doppler radar [1]"
 origin: "United States"
 manufacturer: "Hughes Aircraft, now Raytheon [1]"
 inService: "APG-65 operational since 1983; APG-73 since 1992 [1]"
-band: "I band, 8 to 12 GHz [1]"
+band: "X band, 8 to 12 GHz; Wikipedia calls it I band [1]"
 modes: "Air-to-air: velocity search, range-while-search, track-while-scan, single-target track, gun director and raid assessment [1]. Air-to-surface: Doppler-beam-sharpened sector and patch mapping, medium-range synthetic aperture radar, fixed and moving ground target track, and sea surface search [1]"
 display: "Raid assessment expands the area around a single tracked target so the radar can show closely spaced aircraft as separate contacts [1]"
 carriers:
@@ -25,7 +25,7 @@ photos:
     licence: "Public domain"
     sourceUrl: "https://commons.wikimedia.org/wiki/File:AN-APG-73_090612-N-7780S-056.jpg"
     accessed: "2026-11-09"
-quick: { introduced: "1983", band: "I band, 8–12 GHz" }
+quick: { introduced: "1983", band: "X band, 8–12 GHz" }
 sources:
   - n: 1
     title: "AN/APG-65 radar family"

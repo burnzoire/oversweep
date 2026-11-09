@@ -37,7 +37,7 @@ sources:
     date: "10 May 1996"
     url: "https://falcon.blu3wolf.com/Docs/F-16%20COMBAT%20AIRCRAFT%20FUNDAMENTALS%20-%20Multi-Command%20Handbook%2011-F16%20Vol5.pdf"
     accessed: "2026-11-09"
-    note: "A multi-command handbook, read on a public copy; by printed page. Superseded; used here for what it says about the F-16A and F-16C radars."
+    note: "A multi-command handbook, read on a public copy; by printed page. Superseded; used here for what it says about the F-16A and F-16C radars. APG-68: para 5.11.3, p. 152; modes pp. 153–154."
   - n: 3
     title: "F-16 Fighting Falcon"
     publisher: "Federation of American Scientists, Military Analysis Network"

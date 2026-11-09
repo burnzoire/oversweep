@@ -10,7 +10,7 @@ band: "X band, with four operating frequencies [1]"
 weight: "98 to 135 kg, depending on configuration [1]"
 dimensions: "Antenna 29 in wide by 19 in high [1]"
 modes: "Ten air-to-air and air-to-surface modes; ground mapping, Doppler beam sharpening, beacon and sea modes for surface work [1]. Low PRF in uplook for targets in low clutter; medium PRF in downlook for targets in heavy clutter [1]"
-range: "Up to 80 NM [1]"
+range: "Up to 80 NM, in Wikipedia's figure, which does not give the target size [1]"
 display: "In ground map the radar puts surface returns on the display for the pilot to track with the cursors. Expand magnifies the area four times, and Doppler beam sharpening sharpens returns more than 15 degrees off course; in both the cursors stay centred, so it is easy to think the aircraft is pointing straight at the steerpoint [2]"
 carriers:
   - "[F-16A/B](record:f-16), all versions [1]"
@@ -41,7 +41,7 @@ sources:
     date: "10 May 1996"
     url: "https://falcon.blu3wolf.com/Docs/F-16%20COMBAT%20AIRCRAFT%20FUNDAMENTALS%20-%20Multi-Command%20Handbook%2011-F16%20Vol5.pdf"
     accessed: "2026-11-09"
-    note: "A multi-command handbook, read on a public copy; by printed page. Superseded; used here for what it says about the F-16A and F-16C radars."
+    note: "A multi-command handbook, read on a public copy; by printed page. Superseded; used here for what it says about the F-16A and F-16C radars. APG-66: para 5.11.10, pp. 154–155."
 ---
 
 ## Built for a lightweight fighter

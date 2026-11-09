@@ -38,7 +38,7 @@ The SPO-15, named Beryoza ('birch'), is the [radar warning receiver](term:radar-
 
 ## The Sirena line before it
 
-The Soviet Union's first radar warning receiver, Sirena, was built in 1953; the war in Korea and a captured American F-86A spurred its development. [[1]](#source-1) Sirena-2 and Sirena-3 followed, and the Sirena-3M, or SPO-10, went into aircraft such as the MiG-25 and Su-24. [[1]](#source-1)
+Sirena, built in 1953, was the first Soviet series-produced radar warning receiver (the source also describes an earlier tail-warning set, Tovarishch); the war in Korea and a captured American F-86A spurred its development. [[1]](#source-1) Sirena-2 and Sirena-3 followed, and the Sirena-3M, or SPO-10, went into aircraft such as the MiG-25 and Su-24. [[1]](#source-1)
 
 ## Sources
 

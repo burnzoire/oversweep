@@ -9,7 +9,7 @@ inService: "RDI from 1987 on the Mirage 2000C [2]; first production RDY delivere
 band: "8 to 12 GHz, I/J band (RDY) [1]"
 weight: "240 kg (RDY) [1]"
 dimensions: "Flat-plate antenna 655 mm across (RDY) [1]"
-modes: "RDI and the earlier RDM: air-to-air only [1]. RDY: adds air-to-ground modes, mainly ground mapping and navigation, and control of anti-ship missiles [1] [2]"
+modes: "RDI: air-to-air only [1]. The RDM-3 upgrade gave Greek Mirage 2000EGs Exocet capability [2]. RDY: adds air-to-ground modes, mainly ground mapping and navigation, and control of anti-ship missiles [1] [2]"
 range: "RDI: about 150 km [2]. RDY: maximum 60 NM air-to-air and 20 NM looking down [1]"
 display: "The RDY detects up to 24 targets, tracks 8 and lets the pilot engage 4 at once with MICA missiles [1] [2]"
 carriers:
@@ -43,7 +43,7 @@ sources:
 
 ## Three radars for one fighter
 
-The first 37 [Mirage 2000Cs](record:m-2000c) flew with the RDM radar. [[2]](#source-2) From 1987 the 2000C received the RDI (Radar Doppler à Impulsion), with a range of about 150 km and paired with the Super 530D missile. [[2]](#source-2) Like the RDM, the RDI works in air-to-air mode only. [[1]](#source-1)
+The first 37 [Mirage 2000Cs](record:m-2000c) flew with the RDM radar. [[2]](#source-2) From 1987 the 2000C received the RDI (Radar Doppler à Impulsion), with a range of about 150 km and paired with the Super 530D missile. [[2]](#source-2) Wikipedia's RDY article describes the RDI and RDM as air-to-air only, [[1]](#source-1) though the RDM-3 upgrade on Greek aircraft added Exocet capability. [[2]](#source-2)
 
 ## The RDY
 

@@ -4,7 +4,7 @@ short: "ALR-56"
 name: "AN/ALR-56 radar warning receiver"
 type: "Radar warning receiver, part of the F-15 Tactical Electronic Warfare System (TEWS) [1] [2]"
 origin: "United States"
-manufacturer: "Loral; later Litton [1] [2]"
+manufacturer: "Loral, with Litton as second source [1] [2]"
 inService: "ALR-56M selected for the F-16 in 1988 [1]"
 band: "2 to 20 GHz [2]; the ALR-56A's dual-channel receiver scans 6 to 20 GHz [1]"
 sensors: "Four antennas, on each fin tip and wingtip, and a fifth blade antenna under the forward fuselage (F-15) [1]"
@@ -46,7 +46,7 @@ sources:
 
 ## The Eagle's warning receiver
 
-On the [F-15](record:f-15c) the ALR-56 detects radar signals, identifies them as a specific threat and alerts the crew on the TEWS display. [[1]](#source-1) It also manages the aircraft's ALE-45 countermeasures dispenser and ALQ-135 jammer. [[1]](#source-1) Its four main antennas sit on the fin tips and wingtips, with a fifth under the nose, and its software can be changed as threats change. [[1]](#source-1)
+On the [F-15](record:f-15c) the ALR-56 detects radar signals, identifies them as a specific threat and alerts the crew on the TEWS display. [[1]](#source-1) It also manages the aircraft's ALE-45 countermeasures dispenser and ALQ-135 jammer. [[1]](#source-1) Its four main antennas sit on the fin tips and wingtips, with a fifth under the forward fuselage, and its software can be changed as threats change. [[1]](#source-1)
 
 ## Limits of the processor
 

@@ -13,7 +13,7 @@ carriers:
 photos:
   - src: "encyclopedia/radar-sensors/alr-45.jpg"
     alt: "The underside of an F-14 banking left, carrying six large Phoenix missiles under its fuselage and wing gloves"
-    caption: "A VF-211 F-14A with six AIM-54 Phoenix missiles, November 1989. Tomcats of this era carried the ALR-45 and ALR-50."
+    caption: "A VF-211 Tomcat with six inert ATM-54A training Phoenix rounds, November 1989."
     author: "PH1 Michael D. Flynn, US Navy"
     licence: "Public domain"
     sourceUrl: "https://commons.wikimedia.org/wiki/File:F-14B_VF-211_Six_Phoenix_4.jpg"
@@ -40,7 +40,7 @@ sources:
 
 ## Two receivers, two jobs
 
-The ALR-45 is a [radar warning receiver](term:radar-warning-receiver) covering 2 to 14 GHz. [[1]](#source-1) The ALR-50 is a separate receiver for detecting surface-to-air missile launches, covering 4 to 20 GHz. [[1]](#source-1) Navy aircraft including the A-7, A-6 and [F-14](record:f-14), carried them together. [[1]](#source-1) [[2]](#source-2)
+The ALR-45 is a [radar warning receiver](term:radar-warning-receiver) covering 2 to 14 GHz. [[1]](#source-1) The ALR-50 is a separate receiver for detecting surface-to-air missile launches, covering 4 to 20 GHz. [[1]](#source-1) Navy aircraft including the A-4, A-7 and [F-14](record:f-14) carried them together. [[1]](#source-1) [[2]](#source-2)
 
 ## Replaced by the ALR-67
 
