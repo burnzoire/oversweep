@@ -2,7 +2,7 @@
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import GlossaryList from '../../../components/GlossaryList.astro';
 import { getModule, includedModules } from '../../../data/modules';
-import { sitePath } from '../../../lib/paths';
+import { sitePath, assetPath } from '../../../lib/paths';
 import Term from '../../../components/Term.astro';
 const so = getModule('ship-operations');
 // Naval Operations also holds the Case III practice module, routed by
@@ -115,15 +115,16 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   <caption>Jersey colours on the flight deck <a href="#source-p1211">{cq('35')}</a> <a href="#source-fm1564">{fm('F-1')}</a></caption>
   <thead><tr><th scope="col">Jersey</th><th scope="col">Who</th></tr></thead>
   <tbody>
-   <tr data-colour="Yellow"><th scope="row">Yellow</th><td data-who>Aircraft directors, the catapult and arresting gear officers, the flight deck officer and the helicopter LSE: the only people who may direct an aircraft</td></tr>
-   <tr data-colour="Green"><th scope="row">Green</th><td data-who>Catapult and arresting gear crews, and squadron maintenance crews</td></tr>
-   <tr data-colour="Brown"><th scope="row">Brown</th><td data-who>Plane captains, who look after an aircraft and watch its engine start</td></tr>
-   <tr data-colour="Blue"><th scope="row">Blue</th><td data-who>Plane handlers who push, chock and chain aircraft, tractor drivers, elevator operators and phone talkers</td></tr>
-   <tr data-colour="Purple"><th scope="row">Purple</th><td data-who>Fuel crews</td></tr>
-   <tr data-colour="White"><th scope="row">White</th><td data-who>Safety observers, medical crews, LSOs, final checkers and quality assurance</td></tr>
-   <tr data-colour="Red"><th scope="row">Red</th><td data-who>Ordnance crews, and crash and salvage crews</td></tr>
+   <tr data-colour="Yellow"><th scope="row"><img class="jersey-photo" src={assetPath('manual/ship-operations/jerseys/yellow.jpg')} alt="An aircraft director in a yellow jersey marked "Fly 1 Director" signals to a Hornet" width="96" height="96" loading="lazy" decoding="async" /><span>Yellow</span></th><td data-who>Aircraft directors, the catapult and arresting gear officers, the flight deck officer and the helicopter LSE: the only people who may direct an aircraft</td></tr>
+   <tr data-colour="Green"><th scope="row"><img class="jersey-photo" src={assetPath('manual/ship-operations/jerseys/green.jpg')} alt="A catapult crewman in a green jersey runs clear of the launch path, signalling the jet is on the catapult" width="96" height="96" loading="lazy" decoding="async" /><span>Green</span></th><td data-who>Catapult and arresting gear crews, and squadron maintenance crews</td></tr>
+   <tr data-colour="Brown"><th scope="row"><img class="jersey-photo" src={assetPath('manual/ship-operations/jerseys/brown.jpg')} alt="A plane captain in a brown jersey signals beside his aircraft" width="96" height="96" loading="lazy" decoding="async" /><span>Brown</span></th><td data-who>Plane captains, who look after an aircraft and watch its engine start</td></tr>
+   <tr data-colour="Blue"><th scope="row"><img class="jersey-photo" src={assetPath('manual/ship-operations/jerseys/blue.jpg')} alt="A plane handler in a blue jersey carries a pair of wheel chocks" width="96" height="96" loading="lazy" decoding="async" /><span>Blue</span></th><td data-who>Plane handlers who push, chock and chain aircraft, tractor drivers, elevator operators and phone talkers</td></tr>
+   <tr data-colour="Purple"><th scope="row"><img class="jersey-photo" src={assetPath('manual/ship-operations/jerseys/purple.jpg')} alt="A fuel crewman in a purple jersey and helmet at the refuelling point of a Super Hornet" width="96" height="96" loading="lazy" decoding="async" /><span>Purple</span></th><td data-who>Fuel crews</td></tr>
+   <tr data-colour="White"><th scope="row"><img class="jersey-photo" src={assetPath('manual/ship-operations/jerseys/white.jpg')} alt="A landing signal officer in a white jersey watches a Super Hornet approach from the LSO platform" width="96" height="96" loading="lazy" decoding="async" /><span>White</span></th><td data-who>Safety observers, medical crews, LSOs, final checkers and quality assurance</td></tr>
+   <tr data-colour="Red"><th scope="row"><img class="jersey-photo" src={assetPath('manual/ship-operations/jerseys/red.jpg')} alt="Ordnance crew in red jerseys lift a laser-guided bomb onto a Super Hornet" width="96" height="96" loading="lazy" decoding="async" /><span>Red</span></th><td data-who>Ordnance crews, and crash and salvage crews</td></tr>
   </tbody>
  </table></div>
+ <p class="photo-credit">Photos: U.S. Navy, public domain, via Wikimedia Commons (accessed 10 November 2026): <a href="https://commons.wikimedia.org/wiki/File:US_Navy_070807-N-8119R-050_Aviation_Boatswain%27s_Mate_(Handling)_Airman_Anthony_Raymond_directs_an_F-A-18A_Hornet,_assigned_to_the.jpg">yellow</a> (MC3 Gretchen M. Roth, 2007); <a href="https://commons.wikimedia.org/wiki/File:US_Navy_070612-N-8119R-056_Aviation_Boatswain%27s_Mate_Equipment_3rd_Class_Brent_Hoeft_runs_out_of_the_launch_path_while_signaling_that_an_F-A-18F_Super_Hornet_is_attached_to_the_catapult_and_ready_for_launch.jpg">green</a> (MC3 Gretchen M. Roth, 2007); <a href="https://commons.wikimedia.org/wiki/File:US_Navy_060310-N-0499M-062_A_plane_captain_stands_by_during_flight_operations_on_the_flight_deck_aboard_the_Nimitz-class_aircraft_carrier_USS_Abraham_Lincoln_(CVN_72).jpg">brown</a> (PH3 James R. McGury, 2006); <a href="https://commons.wikimedia.org/wiki/File:US_Navy_061030-N-1205S-048_Aviation_Boatswain%27s_Mate_(Handling)_Airman_Dustin_Savoie_removes_the_chocks_from_an_aircraft_during_flight_operations_aboard_the_nuclear-powered_aircraft_carrier_USS_Nimitz_(CVN_68).jpg">blue</a> (MC3 Jeremiah Sholtis, 2006); <a href="https://commons.wikimedia.org/wiki/File:US_Navy_070606-N-8119R-062_Aviation_Boatswain%27s_Mate_Fuels_3rd_Class_Jonathan_McDaniel_refuels_a_F-A-18F_Super_Hornet_on_the_flight_deck_of_the_nuclear-powered_aircraft_carrier_USS_Nimitz_(CVN_68).jpg">purple</a> (MC3 Gretchen M. Roth, 2007); <a href="https://commons.wikimedia.org/wiki/File:US_Navy_070703-N-8923M-121_Landing_signal_officer_(LSO)_Lt._Brett_Pugsley_watches_from_the_LSO_platform_as_an_F-A-18E_Super_Hornet_prepares_to_land_aboard_Nimitz-class_aircraft_carrier_USS_Harry_S_Truman_(CVN_75).jpg">white</a> (SN Kevin T. Murray Jr., 2007); <a href="https://commons.wikimedia.org/wiki/File:US_Navy_030413-N-1577S-001_Aviation_Ordnancemen_load_laser_guided_munitions_onto_an_F-A-18E_Super_Hornet_on_the_flight_deck_aboard_USS_Nimitz_(CVN_68).jpg">red</a> (PHAN Timothy F. Sosa, 2003).</p>
  <p>Officers and chiefs on the flight deck also wear khaki trousers, and the catapult and arresting gear officers carry orange and green reflective tape on their helmets. <a href="#source-p1211">{cq('35')}</a> A director's signals above the waist are for the pilot and those below it for the deck crew; a director hands an aircraft on by patting both sides of the head and pointing to the next director, who raises one arm to take control. <a href="#source-p1211">{cq('36')}</a> If you lose sight of your director, or two give you signals at once, stop. <a href="#source-p1211">{cq('35')}</a></p>
  <section class="lesson quiz-lesson" data-lesson="jerseys" aria-labelledby="jerseys-title">
   <h3 id="jerseys-title">Quiz: what colour is that jersey?</h3>
@@ -586,6 +587,11 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   caption { padding: 0.5rem 0.75rem; text-align: left; color: var(--color-muted); font-size: 0.9rem; }
   th, td { padding: 0.45rem 0.75rem; border-top: 1px solid var(--color-border); text-align: left; vertical-align: top; }
   thead th { background: var(--color-surface); }
+  table[data-jerseys] tbody th { white-space: nowrap; }
+  table[data-jerseys] tbody th span { display: block; margin-top: 0.25rem; }
+  table[data-jerseys] td { vertical-align: middle; }
+  .jersey-photo { display: block; width: 6rem; height: 6rem; object-fit: cover; border-radius: 4px; border: 1px solid var(--color-border); }
+  .photo-credit { font-size: 0.8rem; color: var(--color-muted); }
   .note { padding: 0.75rem 1rem; border-left: 0.25rem solid var(--color-border); background: var(--color-surface); }
   ol.steps li { margin-block: 0.35rem; }
   .lesson { margin-block: 1.5rem; padding: 1rem; border: 1px solid var(--color-text); }
