@@ -5,7 +5,7 @@ terms:
   - term: Attack by fire position
     form: "(ABF)"
     definition: "Army. A position that attack and reconnaissance helicopters fly to along preplanned attack routes to engage the enemy, set as a control measure in planning or selected in hasty attack planning. It is occupied much like a battle position, but normally with more freedom of movement, and is chosen for sensor range rather than weapons range."
-    cite: [{ n: 3, page: "3-4, 3-7" }, { n: 4, page: "3-19, 3-85" }]
+    cite: [{ n: 3, page: "3-4, 3-12" }, { n: 4, page: "3-19, 3-85 to 3-86" }]
   - term: Attack helicopter control point
     definition: "A special control point that attack helicopter aircrews can use in addition to the normal close air support control points."
     cite: [{ n: 1, page: "III-91" }]
@@ -13,7 +13,7 @@ terms:
     definition: "The movement technique for when enemy contact is imminent. The flight moves by nap-of-the-earth flight, deliberately, with speed not essential, in two elements: one bounds forward while the other takes up an overwatch position, covering it from a covered, concealed position with observation and fields of fire."
     cite: [{ n: 1, page: "III-92" }]
   - term: Bump attack
-    definition: "Army. An attack method that uses masking terrain while increasing the angle of attack: each aircrew bumps up before or during the engagement, normally in running fire transitioning to diving fire, then returns to terrain flight altitude. It gives longer range, less dispersion and a better look-down angle, but silhouettes the aircraft and can bleed airspeed."
+    definition: "Army. An attack method that uses masking terrain while steepening the attack angle: each aircrew bumps up before or during the engagement, normally in running fire transitioning to diving fire, then returns to terrain flight altitude. It gives longer range, less dispersion and a better look-down angle, but silhouettes the aircraft and can bleed airspeed."
     cite: [{ n: 4, page: "3-70" }]
   - term: Continuous attack
     definition: "Army. A method of employment in which at least one attack company is always in the fight while the others wait at the holding area or FARP, or move to a battle position or attack by fire position, to relieve it. It keeps constant pressure on the enemy and gives the most flexibility."
@@ -57,7 +57,7 @@ terms:
     cite: [{ n: 1, page: "III-91" }]
   - term: Maximum destruction attack
     definition: "Army. A method of employment in which all three companies of a battalion attack at once with massed fires. The whole battalion may then be out of the fight for 45 to 90 minutes, and much of it unable to fly further missions for at least 24 hours."
-    cite: [{ n: 3, page: "3-13" }]
+    cite: [{ n: 3, page: "3-14" }]
   - term: Mixed section
     definition: "A helicopter flight or section made of more than one aircraft type, such as an AH-64 and an OH-58 in an Army flight or an AH-1 and a UH-1 in a Marine Corps section. It gives the most flexible mix of sensors, communications, maneuverability, firepower and mutual support."
     cite: [{ n: 1, page: "I-5, III-90" }]
@@ -104,7 +104,7 @@ sources:
   - n: 2
     title: "JP 1-02, Department of Defense Dictionary of Military and Associated Terms"
     publisher: "US Department of Defense (copy hosted by Penn State's military family school resources)"
-    date: "8 November 2010, as amended through 15 February 2016"
+    date: "8 November 2010, as amended through 15 January 2016"
     url: "https://schoolresources.militaryfamilies.psu.edu/wp-content/uploads/2017/08/department_of_defense_dictionary_of_military_and_associated_terms.pdf"
     accessed: "2026-11-10"
     note: "By printed page of the dictionary."
@@ -114,7 +114,7 @@ sources:
     date: "6 April 2020"
     url: "https://aviation-assets.info/wp-content/uploads/ARN21797_FM_3-04_FINAL_WEB_wfix.pdf"
     accessed: "2026-11-10"
-    note: "By printed page: attacks pp. 3-3 to 3-8; methods of employment pp. 3-12 to 3-13. Army-specific."
+    note: "By printed page: attacks pp. 3-3 to 3-8; methods of employment pp. 3-12 to 3-14. Army-specific."
   - n: 4
     title: "FM 3-04.126, Attack Reconnaissance Helicopter Operations"
     publisher: "Headquarters, Department of the Army"

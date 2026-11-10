@@ -24,7 +24,7 @@ pages: 413-414 (printed 11–1 to 11–2)
 
 ```review-sources
 source: https://aviation-assets.info/wp-content/uploads/ARN21797_FM_3-04_FINAL_WEB_wfix.pdf
-pages: 59-60; 63-64; 67-69
+pages: 59-60; 63-64; 67-70
 ```
 
 ```review-sources
@@ -91,7 +91,7 @@ https://www.bits.de/NRANEU/others/jp-doctrine/jp3_09_3(14).pdf
 - **p. V-32** Restrictions include "Approval out of the BP for RW."
 - **pp. E-17 to E-19** Example 7, Type 3 control, BOT mission using RW CAS assets: section of AH-1s checks in at "HA Nancy"; game plan "Type 3 control, bomb on target, Employ 6 x K2A Hellfires from BP Viper … Expect approval forward of BP for Rockets and Guns"; lines 1–3 "Viper, 150, 3200"; "CLEARED TO ENGAGE"; "approved forward of BP for Rockets and Guns"; "ENGAGEMENT COMPLETE"; return to the HA and BDA.
 
-## [2] JP 1-02, DoD Dictionary, as amended through 15 February 2016
+## [2] JP 1-02, DoD Dictionary, as amended through 15 January 2016
 
 https://schoolresources.militaryfamilies.psu.edu/wp-content/uploads/2017/08/department_of_defense_dictionary_of_military_and_associated_terms.pdf
 
@@ -113,7 +113,7 @@ https://schoolresources.militaryfamilies.psu.edu/wp-content/uploads/2017/08/depa
 - p. 3-12: "Maximizing the use of terrain to mask maneuver along attack routes
   and in attack by fire positions"; timing: committed too early the attack may
   culminate, too late the aircraft may miss the target.
-- pp. 3-12 to 3-13: continuous attack (at least one company always in the
+- pp. 3-12 to 3-14: continuous attack (at least one company always in the
   fight), phased attack (shaping company, second phased in from a different BP
   or ABF, third the reserve; short FARP turnaround), maximum destruction attack
   (all three companies; battalion may be out of the fight 45 to 90 minutes and
@@ -145,7 +145,7 @@ https://schoolresources.militaryfamilies.psu.edu/wp-content/uploads/2017/08/depa
 - p. 3-84 (¶ 3-362): the HA "is normally located approximately 2 to 5
   kilometers behind the BP, ABF, or FLOT"; aircraft remain at NOE, maintain
   operating RPM and radio listening silence.
-- pp. 3-85 to 3-86 (¶ 3-364 to 3-370): ABF occupation has "greater freedom of
+- pp. 3-85 to 3-86 (¶ 3-364 to 3-370; SET HOT/COLD and sensor range are ¶ 3-368 on p. 3-86): ABF occupation has "greater freedom of
   movement than the occupation of the BP"; the lead team clears the attack
   route, maneuver area and ABF/BP; standard or nonstandard set; "SET HOT"
   (teams are in position and have targets in sight) or "SET COLD"; "Sensor
