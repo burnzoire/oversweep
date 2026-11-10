@@ -7,7 +7,8 @@ import { sitePath } from "../../lib/paths";
 const exercises = manualEntries.filter((entry) => entry.trainer);
 ---
 
-<SiteLayout title="Training Library" activeSection="training" isSectionIndex empty={exercises.length === 0}>
+<SiteLayout title="Training Library" activeSection="training" isSectionIndex empty={exercises.length === 0}
+  description="Standalone flight exercises for practising what an Oversweep Manual module teaches, such as hand-flown approaches, carrier recoveries and autorotations.">
   {exercises.length > 0 ? (
     <>
       <p class="lead">Standalone exercises for practising what a Manual module teaches. Each opens in its own window; read its module first for the background.</p>

@@ -3,6 +3,7 @@ import BrandMark from "../components/BrandMark.astro";
 import { manualSubjects } from "../data/catalogue";
 import { sectionHasContent, subjectEntries } from "../data/availability";
 import { assetPath, sitePath } from "../lib/paths";
+import { clip, defaultDescription, describeRoute, entryForRoute, routeOf, siteName } from "../lib/seo";
 import "../styles/global.css";
 
 interface Breadcrumb {
@@ -23,6 +24,10 @@ interface Props {
   // Pages that render their own <h1>, such as the home page hero.
   customHeading?: boolean;
   description?: string;
+  // A file under public/ to show when the page is shared, such as a record's
+  // lead photo; the site's default share card otherwise.
+  image?: string;
+  imageAlt?: string;
 }
 
 const {
@@ -35,8 +40,52 @@ const {
   breadcrumbs = [],
   empty = false,
   customHeading = false,
-  description = "Oversweep explains military flight concepts with interactive figures and visible sources.",
+  description: givenDescription,
+  image,
+  imageAlt,
 } = Astro.props;
+const route = routeOf(Astro.url.pathname, import.meta.env.BASE_URL);
+const isNotFound = Astro.url.pathname.replace(/\/+$/, "").endsWith("/404");
+const description = clip(givenDescription ?? describeRoute(route) ?? defaultDescription);
+// Absolute URLs need the site origin, which the Pages build passes with --site.
+const site = Astro.site;
+const absolute = (path: string) => (site ? new URL(path, site).href : undefined);
+const canonical = isNotFound ? undefined : absolute(sitePath(route));
+const shareImage = absolute(assetPath(image ?? "og-default.png"));
+const shareImageAlt = image ? (imageAlt ?? title) : "Oversweep, the interactive flight reference";
+const entry = entryForRoute(route);
+const structuredData = site && !empty && !isNotFound
+  ? [
+      isHomePage && {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: siteName,
+        url: absolute(sitePath()),
+        description,
+      },
+      breadcrumbs.length > 1 && {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: breadcrumbs.map((crumb, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: crumb.label,
+          ...(index === breadcrumbs.length - 1 ? { item: canonical } : crumb.href ? { item: absolute(crumb.href) } : {}),
+        })),
+      },
+      entry && {
+        "@context": "https://schema.org",
+        "@type": "LearningResource",
+        name: entry.title,
+        description: entry.objective,
+        url: canonical,
+        learningResourceType: "Module",
+        inLanguage: "en",
+        isAccessibleForFree: true,
+        isPartOf: { "@type": "WebSite", name: siteName, url: absolute(sitePath()) },
+      },
+    ].filter(Boolean)
+  : [];
 const sections = [
   { id: "manual", label: "Manual", path: "manual/", available: sectionHasContent.manual },
   { id: "encyclopedia", label: "Encyclopedia", path: "encyclopedia/", available: sectionHasContent.encyclopedia },
@@ -56,6 +105,20 @@ const subjects = manualSubjects.map((subject) => ({ ...subject, count: subjectEn
     {empty && <meta name="robots" content="noindex" />}
     <link rel="icon" href={assetPath("favicon.svg")} type="image/svg+xml" />
     <title>{pageTitle}</title>
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:type" content={isHomePage ? "website" : "article"} />
+    <meta property="og:title" content={isHomePage ? `${siteName} · ${title}` : title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {shareImage && <meta property="og:image" content={shareImage} />}
+    {shareImage && <meta property="og:image:alt" content={shareImageAlt} />}
+    <meta property="og:locale" content="en_GB" />
+    <meta name="twitter:card" content={shareImage ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    {shareImage && <meta name="twitter:image" content={shareImage} />}
+    {structuredData.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>

@@ -18,6 +18,7 @@ const category = categoryTitle(record.category);
 const siblings = categoryRecords('reference-data');
 ---
 <SiteLayout title={record.title} activeSection="encyclopedia"
+  image={data.photo?.src} imageAlt={data.photo?.alt}
   description={`${record.title}: ${record.summary}`}
   breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: category, href: sitePath('encyclopedia/reference-data/') }, { label: record.title }]}>
   <div class="ency">

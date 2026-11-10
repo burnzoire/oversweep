@@ -43,6 +43,7 @@ const alt = e && span(e.minAltM === null ? null : height(e.minAltM), e.maxAltM =
 const fig = { envelope: e ? 1 : 0, rwr: e ? 2 : 1, battery: e ? 3 : 2 };
 ---
 <SiteLayout title={record.title} activeSection="encyclopedia"
+  image={data.photo?.src} imageAlt={data.photo?.alt}
   description={`${record.title} (${record.designation}): ${record.summary}`}
   breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: category, href: sitePath(`encyclopedia/${record.category}/`) }, { label: record.title }]}>
   <div class="ency">

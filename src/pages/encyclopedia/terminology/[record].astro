@@ -19,6 +19,7 @@ const siblings = categoryRecords('terminology');
 const terms = [...data.terms].sort((a, b) => a.term.localeCompare(b.term, 'en', { sensitivity: 'base' }));
 ---
 <SiteLayout title={record.title} activeSection="encyclopedia"
+  image={data.photo?.src} imageAlt={data.photo?.alt}
   description={`${record.title}: ${record.summary}`}
   breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: category, href: sitePath('encyclopedia/terminology/') }, { label: record.title }]}>
   <div class="ency terminology">

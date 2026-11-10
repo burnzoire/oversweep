@@ -37,6 +37,7 @@ const plate: [string, string][] = [
 ];
 ---
 <SiteLayout title={record.title} activeSection="encyclopedia"
+  image={leadPhoto?.src} imageAlt={leadPhoto?.alt}
   description={`${record.title} (${record.designation}): ${record.summary}`}
   breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: category, href: sitePath('encyclopedia/aircraft/') }, { label: record.title }]}>
   <div class="ency">
