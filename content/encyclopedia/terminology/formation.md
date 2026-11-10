@@ -1,6 +1,6 @@
 ---
 short: Formation
-usage: Pilots of every service flying as a section, division or helicopter flight
+usage: Pilots of every service flying as a section, division, display team or helicopter flight
 terms:
   - term: Parade
     definition: The close, fixed formation position, held by lining up checkpoint pairs on the lead rather than by a number. An administrative formation for airshows and the break, with little flexibility; the wingman asks before crossing under.
@@ -77,11 +77,11 @@ terms:
     definition: "A fixed helicopter formation, staggered left or right: each aircraft about 45° astern of the one ahead, alternating sides, so chalk 3 and the other odd chalks fly in trail behind lead. Chalk 2's side names it."
     cite: [{ n: 5, page: "224" }]
   - term: Echelon formation
-    definition: "A fixed helicopter formation, echelon left or right, with every wingman on the same side of lead at about 30-45° off lead's 6 o'clock. Suited to dust, sand and snow takeoffs and landings, but it severely limits maneuvering."
-    cite: [{ n: 5, page: "225" }]
+    definition: "A formation with every wingman on the same side of lead, echelon left or right. In a fixed-wing four-ship each flies the bearing line of the aircraft ahead; it is used in the traffic pattern and for pitchouts, and lead can turn only away from the flight. In helicopters each wingman sits about 30-45° off lead's 6 o'clock, suited to dust, sand and snow takeoffs and landings, but it severely limits maneuvering."
+    cite: [{ n: 7, page: "10" }, { n: 5, page: "225" }]
   - term: Trail formation
-    definition: "A fixed helicopter formation with each aircraft following the one ahead within 10° of its track. The hardest fixed formation, used for takeoffs, landings and changing formation but not for long, and a poor choice in dust, sand or snow."
-    cite: [{ n: 5, page: "226" }]
+    definition: "A formation with each aircraft following the one ahead. Fixed-wing flights fly close trail, extended trail or tail chase. In helicopters each aircraft stays within 10° of the track of the one ahead: the hardest fixed formation, used for takeoffs, landings and changing formation but not for long, and a poor choice in dust, sand or snow."
+    cite: [{ n: 7, page: "10" }, { n: 5, page: "226" }]
   - term: V-formation
     definition: "A fixed helicopter formation of a leader and two wingmen, each about 45° astern of the leader, one left and one right. It needs a relatively small landing area."
     cite: [{ n: 5, page: "226-227" }]
@@ -103,6 +103,57 @@ terms:
   - term: LITECON
     definition: "Army. A numbered lighting condition for multi-aircraft flight, setting the anti-collision, position, formation and covert IR lights; the circular's sample runs from 1, FAA day, to 5, total blackout."
     cite: [{ n: 5, page: "216" }]
+  - term: Division
+    definition: "Three or four aircraft, usually two sections, flying as the largest maneuver element: a group that can maneuver independently, not the two-aircraft element. Five or more aircraft, or two or more maneuver elements, make a flight."
+    cite: [{ n: 3, page: "Formation Description" }]
+  - term: Element
+    definition: "A leader and a wingman, never more than two aircraft; every flight is built of elements, so a four-ship has two. The element stays together: #4 flies on #3 and moves with it. Navy and Marine Corps aviators call it a section."
+    cite: [{ n: 7, page: "8" }, { n: 3, page: "Formation Description" }]
+  - term: Deputy lead
+    definition: "#3 in a four-ship: the second element's leader, who should have lead experience and preferably be lead qualified."
+    cite: [{ n: 7, page: "8" }]
+  - term: Fingertip
+    definition: "The standard close four-ship configuration, named for the fingertips of a hand seen from above: #2 on one side of lead, #3 on the other with #4 outboard of it. Strong right or left is the side the second element is on. Every configuration change starts from fingertip."
+    cite: [{ n: 7, page: "8-9" }]
+  - term: Diamond
+    definition: "A four-ship with #4 in the slot behind lead, on the bearing lines of #2 and #3: compact, symmetrical and maneuverable, often the building block of mass formations."
+    cite: [{ n: 7, page: "11, 29" }]
+  - term: Slot
+    definition: "The position directly behind lead in a diamond, flown by #4 with close-trail references."
+    cite: [{ n: 7, page: "11, 29" }]
+  - term: Route position
+    definition: "A relaxed formation position, at least two to four ship widths and no more than 500 ft from lead, between the 3/9 line and the bearing line. Used for frequency changes, in-flight checks and long legs; the farther out, the closer to the 3/9 line."
+    cite: [{ n: 7, page: "12" }]
+  - term: Phantom wingman
+    definition: "An imaginary aircraft that lets an odd-numbered flight fly a four-ship's positions and signals: a three-ship vic usually flies with a phantom #4."
+    cite: [{ n: 7, page: "9, 13" }]
+  - term: Division wall
+    definition: "Four aircraft line abreast in combat spread: the section leads 0.8-1.0 nm apart in the centre, the wingmen the same distance outside them, with a briefed altitude plan. For simultaneous attacks with the most visual mutual support."
+    cite: [{ n: 6, page: "7-1" }]
+  - term: Fluid four
+    definition: "A division with the section leads in combat spread and each wingman in tac wing on its leader. Used for transits and holding: an intermediate step between fingertip and a tactical formation such as division wall."
+    cite: [{ n: 6, page: "7-2" }, { n: 3, page: "Fluid Four" }]
+  - term: Tac wing
+    definition: "A loose wingman position on lead's cruise bearing line or aft of it, 0.2-0.6 nm away and no lower than 1,000 ft below lead, where the wingman flows inside and outside turns using geometry rather than throttle."
+    cite: [{ n: 6, page: "6-9" }]
+  - term: In-place turn
+    definition: "A tactical turn of 180° in which every aircraft turns at the same moment and the formation rolls out on the reciprocal with the aircraft on swapped sides. Used to engage a threat in the rear quarter or to leave a target area."
+    cite: [{ n: 6, page: "5-8, 7-5" }]
+  - term: Pitchout
+    definition: "Breaking a flight up from echelon in sequence, lead first at 45-60° of bank and each wingman at a set interval in seconds, for landing spacing, rejoin practice or extended trail."
+    cite: [{ n: 7, page: "37" }]
+  - term: Display team
+    definition: "A single aircraft, formation or group flying as one display act throughout; counted as one display item. Under UK military rules, a high-energy display team of three or more aircraft makes a display at least Tier 2."
+    cite: [{ n: 8, page: "3, 7" }]
+  - term: Flypast
+    definition: "Aircraft flying singly or in formation over or past spectators along a pre-planned route without maneuvering, except for navigation and repositioning: no aerobatics and up to three planned passes (UK military definition)."
+    cite: [{ n: 8, page: "3" }]
+  - term: Minimum separation distance
+    definition: "MSD: a minimum separation, in feet, that UK military display rules set for displaying aircraft, by aircraft type, close formation or not, and maneuver; for example 300 ft for a fixed-wing close formation in aerobatics, and 500 ft for aerobatics outside the display area."
+    cite: [{ n: 8, page: "2, 21-22" }]
+  - term: Crowd line
+    definition: "The line marking the nearest edge of any area open to spectators, from which display lateral separation is measured: 230 m normally in UK military rules, 450 m for aircraft above 300 KIAS heading toward spectators."
+    cite: [{ n: 8, page: "2, 22-23" }]
 sources:
   - n: 1
     title: "Formation Supplement (FORMSUP)"
@@ -138,10 +189,31 @@ sources:
     url: "https://aviation-assets.info/wp-content/uploads/ARN46145-TC_3-04.1-4-000-WEB-1.pdf"
     accessed: "2026-11-10"
     note: "By printed page; chapter 6 covers multi-aircraft operations. Approved for public release; a public copy."
+  - n: 6
+    title: "CNATRA P-1288 (Rev. 01-23), Flight Training Instruction, Tactical Formation T-45 Strike"
+    publisher: "Chief of Naval Air Training, US Navy"
+    date: "23 January 2023"
+    url: "https://patchwiki.biligame.com/images/falconbms/f/fc/gydmumyx1j1cbxoeofygk3pgl1hk8w5.pdf"
+    accessed: "2026-11-10"
+    note: "By printed page. Cleared for public release; a third-party copy, as the CNATRA publications folder no longer serves it."
+  - n: 7
+    title: "Formation Pilots' Knowledge Guide, Version 3.0"
+    publisher: "Formation and Safety Team (FAST)"
+    date: "14 November 2024"
+    url: "https://assets.nicepagecdn.com/272793ad/6169412/files/FASTFormationVer3.014Nov2024-compressed_2.pdf"
+    accessed: "2026-11-10"
+    note: "By printed page. Civilian warbird and kit-aircraft formation guide; supplementary."
+  - n: 8
+    title: "RA 2335 Issue 14, Flying Displays, Display Flying, Display Parachuting, Role Demonstrations and Flypasts"
+    publisher: "UK Military Aviation Authority"
+    date: "January 2026"
+    url: "https://assets.publishing.service.gov.uk/media/6970ee71011505255b2d42fd/RA2335_Issue_14.pdf"
+    accessed: "2026-11-10"
+    note: "By page. UK military display regulation; other nations' rules differ."
 ---
 
 ## The words of formation flying
 
-These are the words of two aircraft flying as one: the formations, the parade checkpoints, the rendezvous and its recovery, losing sight, and the tactical turns. They also cover helicopter flights: the crew roles, the fixed and maneuvering formations, spacing and the breakups. They come from the Navy training command's T-6B and T-44C formation material [[1]](#source-1) [[2]](#source-2), where type numbers are examples from those aircraft, and, for helicopter flights, the Army's fundamentals of flight circular. [[5]](#source-5)
+These are the words of two aircraft flying as one: the formations, the parade checkpoints, the rendezvous and its recovery, losing sight, and the tactical turns. They also cover helicopter flights: the crew roles, the fixed and maneuvering formations, spacing and the breakups; and four-ship and display formations. They come from the Navy training command's T-6B and T-44C formation material [[1]](#source-1) [[2]](#source-2), where type numbers are examples from those aircraft, for helicopter flights, the Army's fundamentals of flight circular [[5]](#source-5), and for four-ships and displays the Navy's T-45 tactical formation instruction [[6]](#source-6), a civilian formation guide [[7]](#source-7) and the UK military display regulation. [[8]](#source-8)
 
 BLIND, VISUAL, JOKER, BINGO and PUSH are in the brevity words, and the 3/9 line and lag pursuit in the air combat terms.

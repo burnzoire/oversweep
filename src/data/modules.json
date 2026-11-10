@@ -131,7 +131,7 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "objective": "Fly as a section: know the parade, cruise, combat cruise and combat spread positions, hold parade by its checkpoints in altitude, bearing, closure order, make the flight's check-ins and frequency changes, fly the breakup and rendezvous and recover from an underrun, run the lost sight and blind procedures, use the lead's lights at night, and recognise the tactical turns.",
-    "applicability": "For military pilots of every service: the Navy training command's T-6B and T-44C formation material as generic technique, with type numbers as examples and the FAA's lighting rule as a supplement. Air Force and Army fixed-wing formation publications are not yet covered, and helicopter formations are in their own module; your service's formation rules, unit procedures and the aircraft's flight manual govern."
+    "applicability": "For military pilots of every service: the Navy training command's T-6B and T-44C formation material as generic technique, with type numbers as examples and the FAA's lighting rule as a supplement. Air Force and Army fixed-wing formation publications are not yet covered, and four-ship, display and helicopter formations are in their own modules; your service's formation rules, unit procedures and the aircraft's flight manual govern."
   },
   {
     "id": "module.helicopter-formation",
@@ -143,6 +143,17 @@
     "publication": "published",
     "objective": "Fly helicopters as a flight: know the air mission commander's, flight lead's, tactical lead's and wingmen's jobs; the staggered, echelon, trail and V fixed formations and the combat cruise, combat trail and combat spread maneuvering formations; spacing in rotor disks and vertical separation; the formation takeoff, turns, lead change and landing; and the lost visual contact, inadvertent IMC and threat breakups, lighting and the radio-silent form-up.",
     "applicability": "For helicopter pilots of every service: the US Army's fundamentals of flight training circular (TC 3-04.1-4, 2026) as generic technique, with Army-only rules labelled, and the DCS AH-64D manual for the sim. Navy and Marine Corps helicopter formation instructions were not found on a public host; your service's formation rules, unit procedures and the aircraft's operator's manual govern."
+  },
+  {
+    "id": "module.four-ship-formation",
+    "slug": "four-ship-formation",
+    "subject": "formation-flying",
+    "revision": 1,
+    "title": "Four-Ship and Display Formations",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Fly a fixed-wing flight of three to five: number a four-ship and its elements; fly fingertip, echelon, trail, diamond, vic and route and change between them with cross-unders, the lead change and the pitchout; fly division wall, fluid four and division combat cruise and their tac and in-place turns; run a division's lost sight breakup; and know the limits that shape a formation display.",
+    "applicability": "For fixed-wing pilots of every service: Navy T-45 tactical formation and tiltrotor division training as generic technique, the UK military display regulation as an example of display limits, and a civilian formation guide for the close configurations and signals, with the DCS F-16C guide for the sim. Air Force and Army four-ship guidance and US display-team procedures were not read; your service's formation rules, unit procedures and the aircraft's flight manual govern."
   },
   {
     "id": "module.aar-procedures",
