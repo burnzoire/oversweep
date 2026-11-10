@@ -58,9 +58,9 @@ tables:
       - { char: "0", word: Zero, say: "ZEE-RO", morse: "–––––" }
   - id: light-gun-signals
     title: Tower light gun signals
-    caption: "What the tower's light gun means to a vehicle or person on the airfield, an aircraft on the ground and an aircraft in flight. A light can only approve or refuse what you are expected to do. Acknowledge by day by moving the ailerons or rudder; at night, blink the landing or navigation lights."
+    caption: "What the tower's light gun means to a vehicle or person on the airfield, an aircraft on the ground and an aircraft in flight. A light can only approve or refuse what you are expected to do. Acknowledge on the ground by day by moving the ailerons or rudder, in flight by day by rocking the wings, and at night by blinking the landing or navigation lights."
     source: 1
-    pages: "para. 4-3-13"
+    pages: "paras. 4-3-13, 4-2-13"
     columns:
       - { key: signal, label: Colour and type of signal }
       - { key: vehicles, label: "Vehicles, equipment and personnel" }
@@ -115,7 +115,7 @@ sources:
     publisher: Federal Aviation Administration
     url: https://www.faa.gov/air_traffic/publications/atpubs/aim_html/
     accessed: 10 November 2026
-    note: "Current edition as published online. Read: chapter 4, section 1, para. 4-1-20 (transponder and ADS-B operation); chapter 4, section 2, para. 4-2-7 (phonetic alphabet and Morse code, TBL 4-2-2); chapter 4, section 3, para. 4-3-13 (traffic control light signals, TBL 4-3-1); chapter 6, para. 6-3-2 (emergency squawk) and para. 6-4-2 (radio failure squawk). US civil rules that military aircraft follow in US airspace."
+    note: "Current edition as published online. Read: chapter 4, section 1, para. 4-1-20 (transponder and ADS-B operation); chapter 4, section 2, para. 4-2-7 (phonetic alphabet and Morse code) and para. 4-2-13 (acknowledging the tower without a transmitter); chapter 4, section 3, para. 4-3-13 (traffic control light signals); chapter 6, para. 6-3-2 (emergency squawk) and para. 6-4-2 (radio failure squawk). US civil rules that military aircraft follow in US airspace."
   - n: 2
     title: "Identification friend or foe"
     publisher: Wikipedia

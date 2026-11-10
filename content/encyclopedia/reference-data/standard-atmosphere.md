@@ -3,7 +3,7 @@ short: Standard atmosphere
 tables:
   - id: standard-atmosphere
     title: ICAO standard atmosphere by altitude
-    caption: "Density ratio σ, its square root, pressure ratio δ, temperature, temperature ratio θ and the speed of sound in the standard atmosphere. Temperature falls at a constant rate up to the tropopause at 36,089 ft and is constant above it to 80,000 ft. The °C and inHg columns are converted here from the source's °F and δ, using 29.92 inHg at sea level."
+    caption: "Density ratio σ, its square root, pressure ratio δ, temperature, temperature ratio θ and the speed of sound in the standard atmosphere. Temperature falls at a constant rate up to the tropopause at 36,089 ft and is constant above it to 65,617 ft (20 km), the top of this table's range. The °C and inHg columns are converted here from the source's °F and δ, using 29.92 inHg at sea level."
     source: 1
     pages: "Figure 1.1, p. 5; pp. 2, 4"
     columns:
@@ -40,13 +40,6 @@ tables:
       - { alt: "55,000", sigma: "0.1197", root: "0.3460", delta: "0.0900", inhg: "2.69", tf: "−69.70", tc: "−56.5", theta: "0.7519", a: "573.8" }
       - { alt: "60,000", sigma: "0.0941", root: "0.3068", delta: "0.0708", inhg: "2.12", tf: "−69.70", tc: "−56.5", theta: "0.7519", a: "573.8" }
       - { alt: "65,000", sigma: "0.0740", root: "0.2721", delta: "0.0557", inhg: "1.67", tf: "−69.70", tc: "−56.5", theta: "0.7519", a: "573.8" }
-      - { alt: "70,000", sigma: "0.0582", root: "0.2413", delta: "0.0438", inhg: "1.31", tf: "−69.70", tc: "−56.5", theta: "0.7519", a: "573.8" }
-      - { alt: "75,000", sigma: "0.0458", root: "0.2140", delta: "0.0344", inhg: "1.03", tf: "−69.70", tc: "−56.5", theta: "0.7519", a: "573.8" }
-      - { alt: "80,000", sigma: "0.0360", root: "0.1897", delta: "0.0271", inhg: "0.81", tf: "−69.70", tc: "−56.5", theta: "0.7519", a: "573.8" }
-      - { alt: "85,000", sigma: "0.0280", root: "0.1673", delta: "0.0213", inhg: "0.64", tf: "−64.80", tc: "−53.8", theta: "0.7613", a: "577.4" }
-      - { alt: "90,000", sigma: "0.0217", root: "0.1472", delta: "0.0168", inhg: "0.50", tf: "−56.57", tc: "−49.2", theta: "0.7772", a: "583.4" }
-      - { alt: "95,000", sigma: "0.0169", root: "0.1299", delta: "0.0134", inhg: "0.40", tf: "−48.34", tc: "−44.6", theta: "0.7931", a: "589.3" }
-      - { alt: "100,000", sigma: "0.0132", root: "0.1149", delta: "0.0107", inhg: "0.32", tf: "−40.11", tc: "−40.1", theta: "0.8089", a: "595.2" }
 sources:
   - n: 1
     title: "NAVWEPS 00-80T-80, Aerodynamics for Naval Aviators"
@@ -54,7 +47,7 @@ sources:
     date: "revised January 1965"
     url: https://www.faa.gov/sites/faa.gov/files/regulations_policies/handbooks_manuals/aviation/00-80T-80.pdf
     accessed: 10 November 2026
-    note: "Read by printed page: standard sea-level pressure, p. 2; pressure and density altitude, p. 4; Figure 1.1, Standard Altitude Table, p. 5; true and equivalent airspeed, p. 14; speed of sound and Mach number, p. 202. The figure also gives kinematic viscosity, left out here. The FAA's copy of the Navy manual."
+    note: "Read by printed page: standard sea-level pressure, p. 2; pressure and density altitude, p. 4; Figure 1.1, Standard Altitude Table, p. 5; true and equivalent airspeed, p. 14; speed of sound and Mach number, p. 202. The figure also gives kinematic viscosity, left out here, and rows from 70,000 to 100,000 ft, left out because the current standard atmosphere warms above 65,617 ft and the 1965 figure does not. The FAA's copy of the Navy manual."
 ---
 
 ## About this table
@@ -63,4 +56,4 @@ The standard atmosphere is the average atmosphere that aircraft performance and 
 
 **True airspeed.** The airspeed indicator is calibrated for sea-level density, so true airspeed is equivalent airspeed divided by √σ: at 40,000 ft, where √σ is about 0.5, the aircraft flies about twice as fast as the equivalent airspeed [[1]](#source-1).
 
-**Mach number.** Mach number is true airspeed divided by the speed of sound. The speed of sound depends only on the air's temperature, which is why it falls with height up to the tropopause and is constant above it [[1]](#source-1).
+**Mach number.** Mach number is true airspeed divided by the speed of sound. The speed of sound depends only on the air's temperature, which is why it falls with height up to the tropopause and is constant from there to the top of this table [[1]](#source-1).

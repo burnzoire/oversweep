@@ -3342,7 +3342,7 @@
     "designation": "ICAO standard atmosphere",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "summary": "Density, pressure, temperature and the speed of sound from sea level to 100,000 ft, with the ratios that give true airspeed."
+    "summary": "Density, pressure, temperature and the speed of sound from sea level to 65,000 ft, with the ratios that give true airspeed."
   },
   {
     "id": "encyclopedia.reference-data.time-zones-and-date-time-groups",
