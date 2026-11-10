@@ -12,7 +12,6 @@ jobs:
   build:
     permissions:
       contents: read
-      pages: read
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -30,22 +29,20 @@ jobs:
         with:
           node-version: '22.23.4'
           cache: npm
-      - name: Read Pages URL
-        id: pages
-        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
       - run: npm ci
       - name: Validate foundation
         run: python3 scripts/check_docs.py
       - name: Check application
         run: npm run check
-      - name: Build for the configured Pages URL
-        env:
-          PAGES_ORIGIN: ${{ steps.pages.outputs.origin }}
-          PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+      # The site origin (https://www.oversweep.com) comes from astro.config.mjs,
+      # not from the Pages settings, which report http:// while HTTPS is not
+      # enforced and would put http:// URLs in the canonical tags and sitemap.
+      - name: Build for www.oversweep.com
         run: |
           rm -rf dist
-          npx --no-install astro build --site "$PAGES_ORIGIN" --base "${PAGES_BASE_PATH:-/}"
+          npx --no-install astro build
           test -f dist/index.html
+          grep -q '<loc>https://www.oversweep.com/' dist/sitemap.xml
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:
           path: dist

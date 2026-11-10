@@ -22,7 +22,7 @@ Other branches are skipped, and PRs receive no deployment permissions or public 
 
 The build job uses a GitHub-hosted Linux runner, Node 22, the committed npm lockfile,
 foundation checks and the application's required `npm run check`. It then removes
-previous output and builds Astro for the URL returned by configure-pages. Only
+previous output and builds Astro for `https://www.oversweep.com`. Only
 `dist/` is uploaded; never upload the repository, documentation or a development
 preview build. The deploy job alone receives Pages write and OIDC permissions.
 Actions are pinned to commit SHAs; releases are serialized without cancellation.
@@ -34,9 +34,13 @@ The site PR provides `package-lock.json`, `astro.config.mjs`, static output to
 experience work must extend the production checks to fail closed on invalid content
 and exclude unapproved experiences and assets.
 
-Astro receives `--site` and `--base` from Pages metadata. Default project hosting
-uses `https://burnzoire.github.io/oversweep/` with base `/oversweep`; a configured
-custom domain uses its origin and root base. Use `import.meta.env.BASE_URL` for
+The site is served from the custom domain `https://www.oversweep.com` at the root
+base. The origin is fixed as `site` in `astro.config.mjs`, so canonical, Open Graph,
+JSON-LD, sitemap and robots.txt URLs always use it; the build no longer takes the
+origin from Pages metadata, which reports `http://` while **Enforce HTTPS** is off.
+The old `https://burnzoire.github.io/oversweep/` address redirects to the custom
+domain. The review build still uses base `/oversweep` to catch hard-coded
+root-relative paths. Use `import.meta.env.BASE_URL` for
 internal navigation, public assets, fetch URLs and search paths. Astro does not
 rewrite hard-coded root-relative links automatically.
 
@@ -54,15 +58,11 @@ content. The successful deployment job is not a substitute for these live checks
 2. After a push to main (or an explicitly authorised manual dispatch), check both
    build/deploy jobs and use the deployment URL reported by the run. The latest
    observed main run succeeded, but the URL and live behavior still need verification.
-3. Once the intended spelling is confirmed, set the custom domain in Pages
-   settings, for example `www.oversweep.com`. The owner's message said
-   `www.oversleep.com`; no domain has been set on that assumption.
-4. Set DNS record `CNAME www → burnzoire.github.io` at the DNS provider.
-   The target excludes `https://` and `/oversweep/`. Configure the domain in
-   GitHub before changing DNS. A CNAME file is unnecessary for Actions publishing.
-5. Run the workflow again to rebuild using custom-domain metadata. After DNS and
-   certificate provisioning complete, enable **Enforce HTTPS** and check the
-   site, nested routes and assets at the custom domain.
+3. The custom domain `www.oversweep.com` is set in Pages settings, with DNS
+   `CNAME www → burnzoire.github.io`. A CNAME file is unnecessary for Actions
+   publishing. If the domain ever changes, change `site` in `astro.config.mjs`.
+4. Enable **Enforce HTTPS** in Pages settings so `http://` requests redirect to
+   `https://`.
 
 DNS changes remain owner-managed. No DNS credentials, PAT or custom deployment
 secret is required by this workflow. Domain verification through GitHub is

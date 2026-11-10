@@ -47,7 +47,7 @@ const {
 const route = routeOf(Astro.url.pathname, import.meta.env.BASE_URL);
 const isNotFound = Astro.url.pathname.replace(/\/+$/, "").endsWith("/404");
 const description = clip(givenDescription ?? describeRoute(route) ?? defaultDescription);
-// Absolute URLs need the site origin, which the Pages build passes with --site.
+// Absolute URLs need the site origin, set as `site` in astro.config.mjs.
 const site = Astro.site;
 const absolute = (path: string) => (site ? new URL(path, site).href : undefined);
 const canonical = isNotFound ? undefined : absolute(sitePath(route));
