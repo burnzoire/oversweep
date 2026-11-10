@@ -22,6 +22,7 @@ export interface Scale {
 }
 
 export const scales: Scale[] = [
+  { id: 'strategic', label: 'Very long range (250 NM)', maxNm: 250, maxKft: 100, stepNm: 50, stepKft: 20 },
   { id: 'long', label: 'Long range (150 NM)', maxNm: 150, maxKft: 100, stepNm: 25, stepKft: 20 },
   { id: 'medium', label: 'Medium range (35 NM)', maxNm: 35, maxKft: 100, stepNm: 5, stepKft: 20 },
   { id: 'short', label: 'Short range (14 NM)', maxNm: 14, maxKft: 50, stepNm: 2, stepKft: 10 },

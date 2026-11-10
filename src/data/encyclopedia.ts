@@ -68,10 +68,13 @@ export interface BatteryItem {
   missiles?: number;
 }
 
-// Threat Systems are listed in these groups. Missiles and guns carry an
-// engagement envelope; early-warning radars carry detection coverage instead.
+// Threat Systems are listed in these groups. Missiles are grouped by where
+// they come from; missiles and guns carry an engagement envelope, and
+// early-warning radars carry detection coverage instead.
 export const threatGroups = [
-  { slug: 'sam', title: 'Surface-to-air missile systems' },
+  { slug: 'sam', title: 'Soviet and Russian surface-to-air missiles' },
+  { slug: 'sam-western', title: 'Western surface-to-air missiles' },
+  { slug: 'sam-chinese', title: 'Chinese surface-to-air missiles' },
   { slug: 'aaa', title: 'Anti-aircraft guns' },
   { slug: 'ewr', title: 'Early-warning radars' },
 ] as const;
@@ -86,7 +89,12 @@ export interface Coverage {
 
 export interface ThreatData {
   group: ThreatGroup;
+  // The NATO or other reporting name (SA-21 Growler, CH-SA-9), or for a
+  // Western system its common name (Patriot).
   nato: string;
+  // Short label for figures and record navigation where the title's first
+  // word is not enough, e.g. "Patriot" rather than "MIM-104".
+  short?: string;
   designation: string;
   role: string;
   inService: string;

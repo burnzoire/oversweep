@@ -28,10 +28,13 @@ const threats = category.slug === "threat-systems"
   ? threatGroups.map((group) => ({ group, records: records.filter(({ data }) => (data.group ?? "sam") === group.slug) })).filter(({ records }) => records.length > 0)
   : [];
 const envelopeCaption: Record<string, string> = {
-  sam: "Each region combines a system's published minimum and maximum range, treated as slant range from the launcher, with its minimum and maximum altitude, using the figures and sources on its record page. Labels are SA numbers. Real launch zones are smaller and change with target speed, aspect and altitude. Dashed edges mark limits the sources do not give; the SA-9's sources give no ceiling, so only its range is drawn. Each scale prints its vertical exaggeration.",
+  sam: "Each region combines a system's published minimum and maximum range, treated as slant range from the launcher, with its minimum and maximum altitude, using the figures and sources on its record page. Labels are SA numbers. Real launch zones are smaller and change with target speed, aspect and altitude. Dashed edges mark limits the sources do not give; where the sources give no ceiling, as for the SA-9, only the range is drawn. Each scale prints its vertical exaggeration.",
+  "sam-western": "Each region combines a system's published minimum and maximum range, treated as slant range from the launcher, with its minimum and maximum altitude, using the figures and sources on its record page; the record says which missile the figures describe. Real launch zones are smaller and change with target speed, aspect and altitude. Dashed edges mark limits the sources do not give. Each scale prints its vertical exaggeration.",
+  "sam-chinese": "Each region combines a system's published maximum range, treated as slant range from the launcher, with its altitude limits where the sources give them, using the figures and sources on its record page. Dashed edges mark limits the sources do not give; where they give no ceiling, only the range is drawn. Real launch zones are smaller and change with target speed, aspect and altitude. Each scale prints its vertical exaggeration.",
   aaa: "Each region combines a gun's published effective range, treated as slant range from the gun, with its effective altitude, using the figures and sources on its record page. Shells fly further than this, but beyond it the chance of a hit falls away. Where a source gives no effective figure, the record's own label says what is drawn instead, as the table below shows. Dashed edges mark limits the sources do not give. Each scale prints its vertical exaggeration.",
 };
-const label = (title: string) => title.split(" ")[0].replace(/^SA-/, "");
+const origin: Record<string, string> = { sam: "Soviet and Russian", "sam-western": "Western", "sam-chinese": "Chinese" };
+const label = (title: string, short?: string) => short ?? title.split(" ")[0].replace(/^SA-/, "");
 // Citation numbers belong to each record's own source list, so the table drops them.
 const plain = (text: string) => text.replace(/\s*\[\d+\]/g, "");
 const km = (value: number) => `${Number(value.toFixed(1)).toLocaleString("en-GB")} km`;
@@ -373,8 +376,8 @@ const deliverySources: Source[] = [
               </>
             ) : withEnvelopes.length > 0 && (
               <>
-                <h2>{group.slug === "aaa" ? "Compare the guns" : "Compare the missile envelopes"}</h2>
-                <EnvelopeFigure title={`Figure ${figure} — ${group.slug === "aaa" ? "Published effective range and altitude of the guns" : "Published engagement limits of the missile systems"} (side view)`} defaultScale={group.slug === "aaa" ? "point" : undefined} from={group.slug === "aaa" ? "gun" : "launcher"} items={withEnvelopes.map(({ record, data }) => ({ slug: record.slug, label: label(record.title), name: record.title, envelope: data.envelope! }))}>
+                <h2>{group.slug === "aaa" ? "Compare the guns" : `Compare the ${origin[group.slug]} missile envelopes`}</h2>
+                <EnvelopeFigure title={`Figure ${figure} — ${group.slug === "aaa" ? "Published effective range and altitude of the guns" : `Published engagement limits of the ${origin[group.slug]} missile systems`} (side view)`} defaultScale={group.slug === "aaa" ? "point" : undefined} from={group.slug === "aaa" ? "gun" : "launcher"} items={withEnvelopes.map(({ record, data }) => ({ slug: record.slug, label: label(record.title, data.short), name: record.title, envelope: data.envelope! }))}>
                   <p class="fig-caption">{envelopeCaption[group.slug]}</p>
                 </EnvelopeFigure>
                 <div class="table-scroll" role="region" aria-label={`${group.title} quick reference table, scrolls sideways on narrow screens`} tabindex="0">

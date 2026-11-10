@@ -65,13 +65,15 @@ function draw(scale: Scale) {
   const exaggeration = ((B - T) / ((scale.maxKft * 1000) / 6076.12)) / ((R - L) / scale.maxNm);
   return { scale, ticksX, ticksY, x, y, labels, exaggeration, shapes: shapes.sort((a, b) => Number(a.on) - Number(b.on)) };
 }
-const views = scales.map(draw);
+// The very long scale is offered only when an envelope runs past the long one.
+const shown = scales.filter((s) => s.id !== 'strategic' || items.some((i) => kmToNm(i.envelope.maxRangeKm) > 150));
+const views = shown.map(draw);
 const figId = `env-${highlight ?? 'all'}`;
 ---
 <section class="lesson figure-lesson envelope-figure" data-envelope data-highlight={highlight} aria-labelledby={`${figId}-title`}>
   <h3 id={`${figId}-title`} class="fig-title">{title}</h3>
   <div class="buttons" role="group" aria-label="Figure scale">
-    {scales.map((s) => <button type="button" data-scale-button={s.id} aria-pressed={s.id === initial ? "true" : "false"}>{s.label}</button>)}
+    {shown.map((s) => <button type="button" data-scale-button={s.id} aria-pressed={s.id === initial ? "true" : "false"}>{s.label}</button>)}
   </div>
   {views.map((v) => (
     <div class="fig-scroll" data-scale={v.scale.id} hidden={v.scale.id !== initial} role="region" aria-label={`${v.scale.label}; scrolls sideways on narrow screens`} tabindex="0">

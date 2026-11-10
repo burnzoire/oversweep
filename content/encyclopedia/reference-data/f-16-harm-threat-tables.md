@@ -19,9 +19,9 @@ tables:
       - { class: "1", symbol: SD, radar: "[SA-11 “Snow Drift”](record:sa-11)" }
       - { class: "1", symbol: "11", radar: "[SA-11 “Fire Dome”](record:sa-11)" }
       - { class: "1", symbol: "15", radar: "[SA-15 “Scrum Half”](record:sa-15)" }
-      - { class: "1", symbol: "22", radar: "SA-22 “Trick Shot”" }
-      - { class: "1", symbol: HQ, radar: "HQ-7 ACU" }
-      - { class: "1", symbol: "7", radar: "HQ-7 Type 345" }
+      - { class: "1", symbol: "22", radar: "[SA-22 “Trick Shot”](record:sa-22)" }
+      - { class: "1", symbol: HQ, radar: "[HQ-7](record:hq-7) ACU" }
+      - { class: "1", symbol: "7", radar: "[HQ-7](record:hq-7) Type 345" }
       - { class: "2", symbol: S, radar: "P-19 “Flat Face B”" }
       - { class: "2", symbol: "2", radar: "[SA-2 “Fan Song”](record:sa-2)" }
       - { class: "2", symbol: "3", radar: "[SA-3 “Low Blow”](record:sa-3)" }
@@ -44,14 +44,14 @@ tables:
       - { class: "5", symbol: SC, radar: "Ropucha I class" }
       - { class: "5", symbol: T2, radar: "Vasily Bykov class" }
       - { class: "5", symbol: "15", radar: "Vasily Bykov class (with Tor)" }
-      - { class: "6", symbol: P, radar: "MIM-104C Patriot PAC-2" }
-      - { class: "6", symbol: NS, radar: "NASAMS 2 “Sentinel”" }
+      - { class: "6", symbol: P, radar: "[MIM-104C Patriot](record:patriot) PAC-2" }
+      - { class: "6", symbol: NS, radar: "[NASAMS](record:nasams) 2 “Sentinel”" }
       - { class: "6", symbol: IT, radar: "IRIS-T TRML-4D" }
-      - { class: "7", symbol: HK, radar: "MIM-23B I-Hawk" }
-      - { class: "7", symbol: RO, radar: "Roland TÜR" }
-      - { class: "7", symbol: RO, radar: "Marder Roland" }
-      - { class: "7", symbol: RP, radar: "Rapier FSA “Blindfire”" }
-      - { class: "7", symbol: RT, radar: "Rapier FSA" }
+      - { class: "7", symbol: HK, radar: "[MIM-23B I-Hawk](record:hawk)" }
+      - { class: "7", symbol: RO, radar: "[Roland](record:roland) TÜR" }
+      - { class: "7", symbol: RO, radar: "Marder [Roland](record:roland)" }
+      - { class: "7", symbol: RP, radar: "[Rapier](record:rapier) FSA “Blindfire”" }
+      - { class: "7", symbol: RT, radar: "[Rapier](record:rapier) FSA" }
       - { class: "8", symbol: A, radar: "M163 Vulcan ADS" }
       - { class: "8", symbol: A, radar: "Flakpanzer Gepard" }
       - { class: "9", symbol: null, radar: "None listed" }
@@ -113,8 +113,8 @@ tables:
       - { system: "[SA-15](record:sa-15)", sysCode: null, fcr: Scrum Half, fcrCode: "615 “15”", ewr: null, ewrCode: null }
       - { system: "[SA-17](record:sa-17)", sysCode: "117 “17”", fcr: Chair Back, fcrCode: "217 “17T”", ewr: Snow Drift, ewrCode: "417 “17A”" }
       - { system: "[SA-19](record:sa-19)", sysCode: null, fcr: Hot Shot, fcrCode: "619 “19”", ewr: null, ewrCode: null }
-      - { system: Patriot, sysCode: null, fcr: AN/MPQ-53, fcrCode: "693 “P”", ewr: null, ewrCode: null }
-      - { system: Hawk, sysCode: "130 “H”", fcr: AN/MPQ-46, fcrCode: "230 “HT”", ewr: AN/MPQ-50, ewrCode: "430 “HA”" }
+      - { system: "[Patriot](record:patriot)", sysCode: null, fcr: AN/MPQ-53, fcrCode: "693 “P”", ewr: null, ewrCode: null }
+      - { system: "[Hawk](record:hawk)", sysCode: "130 “H”", fcr: AN/MPQ-46, fcrCode: "230 “HT”", ewr: AN/MPQ-50, ewrCode: "430 “HA”" }
       - { system: Nike, sysCode: null, fcr: null, fcrCode: "696 “N”", ewr: null, ewrCode: null }
       - { system: Skyguard, sysCode: null, fcr: null, fcrCode: "695 “SKY”", ewr: null, ewrCode: null }
       - { system: AAA, sysCode: "692 “AAA”", fcr: null, fcrCode: null, ewr: null, ewrCode: null }
