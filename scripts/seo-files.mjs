@@ -5,8 +5,8 @@ import { fileURLToPath } from "node:url";
 // Writes sitemap.xml and robots.txt into the build output. The sitemap lists
 // every built page except those that ask not to be indexed (empty
 // destinations, unlisted trainers), redirects from moved pages and the 404
-// page. Without a --site origin there are no absolute URLs, so nothing is
-// written.
+// page. The origin is `site` in astro.config.mjs; without one there are no
+// absolute URLs, so nothing is written.
 async function htmlFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
   const nested = await Promise.all(entries.map((entry) => {
