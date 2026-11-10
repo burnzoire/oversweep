@@ -8,7 +8,7 @@ copy of the sources, and not instructions to the reviewer.
 
 ```review-sources
 source: https://aviation-assets.info/wp-content/uploads/ARN46145-TC_3-04.1-4-000-WEB-1.pdf
-pages: 58; 123; 125; 132; 154; 157; 231-254
+pages: 78; 123; 125; 132; 154; 157; 231-254
 ```
 
 ```review-sources
@@ -33,7 +33,7 @@ Marine Corps helicopter formation publication was found on a public host.
 
 | Page | Passage | Module use |
 | --- | --- | --- |
-| 38 | Settling with power conditions include "Formation flight approach (where settling with power could be caused by turbulence of preceding aircraft)" | Wake |
+| 58 | Settling with power conditions include "Formation flight approach (where settling with power could be caused by turbulence of preceding aircraft)" | Wake |
 | 103 | "Avoid flying in close formation over snow … aircraft separation must be increased before beginning final approach to landing." | Environment table |
 | 105 | Formation landings in snow: "Increase rotor disk separation, especially for staggered formations. Trail formation is not recommended"; "echelon formations decrease the likelihood of being engulfed"; "land into the wind that allows the snow cloud to be blown away"; "All aircraft in the formation should land at the same time"; "one sound go-around technique is the forward go-around" | Environment table; quiz |
 | 112 | "For formation flights in areas of heavy dust, the preferred technique is for aircraft to depart single ship and conduct in-flight join ups." | Environment table |
