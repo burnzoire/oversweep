@@ -12,7 +12,9 @@ const { experience } = Astro.props as { experience: Experience };
 // URLs in development. The base keeps authored asset links valid at either base.
 const source = await readFile(resolve(process.cwd(), 'src/experiences', experience.slug, 'index.html'), 'utf8');
 const base = sitePath(experienceFrame(experience));
-const html = await versionAssets(source.replace('<head>', `<head><base href="${base}">`)
+// Unlisted trainers stay out of search results and the sitemap.
+const robots = experience.publication === 'unlisted' ? '<meta name="robots" content="noindex">' : '';
+const html = await versionAssets(source.replace('<head>', `<head><base href="${base}">${robots}`)
   .replace('<body>', `<body data-experience-id="${experience.id}" data-experience-revision="${experience.revision}">`), experience.slug, experience.assets, base);
 ---
 <Fragment set:html={html} />

@@ -16,7 +16,7 @@ const classProfile = classProfileFor(carrier.class);
 const shipProfile = shipProfileFor(carrier.slug);
 const classmates = carriers.filter((entry) => entry.class === carrier.class && entry !== carrier);
 ---
-<SiteLayout title={carrier.name} activeSection="encyclopedia" description={carrier.summary} breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: 'Carriers', href: sitePath('encyclopedia/carriers/') }, { label: carrier.name }]}>
+<SiteLayout title={carrier.name} activeSection="encyclopedia" description={`${carrier.name}: ${carrier.summary}`} breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: 'Carriers', href: sitePath('encyclopedia/carriers/') }, { label: carrier.name }]}>
   <article class="ency carriers" data-carrier-record={carrier.slug}>
     <section class="status-panel"><h2>{carrierMaturity}</h2><p>Historical reference record. The sources below cover the ship's identity, completion or carrier commission, and operator history.</p></section>
     <p class="lead">{carrier.summary}</p>

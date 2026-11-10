@@ -72,6 +72,7 @@ const ids = a?.identifiers;
 const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.iata}`, ids.faa && `FAA ${ids.faa}`, ...(ids.others ?? [])].filter(Boolean).join(' · ');
 ---
 <SiteLayout title={record.title} activeSection="encyclopedia"
+  image={leadPhoto?.src} imageAlt={leadPhoto?.alt}
   description={`${record.title} (${record.designation}): ${record.summary}`}
   breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: category, href: sitePath(`encyclopedia/${record.category}/`) }, ...(map?.theatres[0] ? [{ label: map.theatres[0].record.title, href: link(map.theatres[0].record) }] : []), { label: record.title }]}>
   <div class="ency airfield">

@@ -28,7 +28,8 @@ const categories = encyclopediaCategories.map((category) => ({
 const empty = !categories.some((c) => c.available);
 ---
 
-<SiteLayout title="Encyclopedia" activeSection="encyclopedia" isSectionIndex empty={empty}>
+<SiteLayout title="Encyclopedia" activeSection="encyclopedia" isSectionIndex empty={empty}
+  description="Reference records on military aircraft, ordnance, threat systems, sensors, carriers, airfields, simulator maps and terminology, each with cited sources.">
   {empty ? (
     <p class="empty-note">No encyclopedia records are published yet. Start with the <a href={sitePath("manual/")}>Manual</a> instead.</p>
   ) : (

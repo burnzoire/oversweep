@@ -7,7 +7,8 @@ import '../../../../styles/encyclopedia.css';
 const { theatres } = airfieldCatalogue();
 const list = [...theatres].sort((a, b) => a.record.title.localeCompare(b.record.title));
 ---
-<SiteLayout title="Theatres" activeSection="encyclopedia" breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: 'Locations', href: sitePath('encyclopedia/locations/') }, { label: 'Theatres' }]}>
+<SiteLayout title="Theatres" activeSection="encyclopedia" breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: 'Locations', href: sitePath('encyclopedia/locations/') }, { label: 'Theatres' }]}
+  description="Real-world regions, their military history, and the DCS World and Falcon BMS maps set within them, with coverage and airfield tables.">
   <div class="ency">
     <nav class="theatre-jump" aria-label="Locations"><ul><li><a href={sitePath('encyclopedia/locations/')}>All locations</a></li><li><span aria-current="page">Theatres</span></li></ul></nav>
     <p class="lead">Real-world regions, their military history, and the simulator maps set within them. Map pages retain their coverage, purchase or access links, and airfield reference tables.</p>
