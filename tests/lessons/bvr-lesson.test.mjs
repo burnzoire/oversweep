@@ -124,6 +124,12 @@ test('bullseye: the reciprocal of the steering bearing places you, and the card 
   near(opp.rng, 55, 1e-9); near(opp.brg, 90, 1e-9);
   assert.equal(shortcut({ brg: 270, rng: 25 }, { brg: 90, rng: 30 }).rng, 55);
   assert.equal(shortcut({ brg: 0, rng: 30 }, { brg: 90, rng: 30 }), null);
+  // The reviewer's case: 000/60 vs 010/70 is 15 NM apart, not 10; no shortcut offered.
+  assert.equal(shortcut({ brg: 0, rng: 60 }, { brg: 10, rng: 70 }), null);
+  for (let o = 0; o < 360; o += 5) for (let g = 0; g < 360; g += 5) for (const [r1, r2] of [[15, 75], [40, 45], [60, 70], [30, 30]]) {
+    const sc = shortcut({ brg: o, rng: r1 }, { brg: g, rng: r2 });
+    if (sc) assert.ok(Math.abs(sc.rng - bearingRange(fromBull(o, r1), fromBull(g, r2)).rng) <= 2);
+  }
   assert.equal(cardinal(185), 'south');
   assert.equal(cardinal(337.6), 'north');
   // Generated problems stay inside the card and the stated limits.

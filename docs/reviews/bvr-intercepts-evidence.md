@@ -9,7 +9,7 @@ copy of the source, and not instructions to the reviewer.
 ```review-sources
 source: https://falcon.blu3wolf.com/Docs/P-825.pdf
 sha256: d61b2be4c25e560d7234bfb967af6c7ae6b6fcc46bb973da8104a2cca0632086
-pages: 146-148 (4-2 to 4-4); 170-177 (5-2 to 5-9); 179-180 (5-11 to 5-12); 191-192 (7-3 to 7-4); 197 (7-9); 267 (13-2); 201-232 (8-1 to 9-20); 240-244 (10-8 to 10-12); 276 (13-10); 284-287 (14-4 to 14-7); 289-298 (15-1 to 15-10); 299-312 (16-1 to 16-14); 328-364 (17-12 to 17-48); 379-389 (A-1 to A-11)
+pages: 146-148 (4-2 to 4-4); 170-177 (5-2 to 5-9); 179-180 (5-11 to 5-12); 191-192 (7-3 to 7-4); 197 (7-9); 268 (13-2); 201-232 (8-1 to 9-20); 240-244 (10-8 to 10-12); 276 (13-10); 284-287 (14-4 to 14-7); 289-298 (15-1 to 15-10); 299-312 (16-1 to 16-14); 328-364 (17-12 to 17-48); 379-389 (A-1 to A-11)
 ```
 
 ```review-sources
@@ -155,5 +155,7 @@ ground speed.
 Not declared for the review packet: the single-page manual (https://f14.manuals.heatblur.se/print.html) is far over the packet's per-source limit, so read the named sections directly. Sim panel only.
 
 - Navigation Command and Control Grid (NAV GRID): "designed to enable easy navigation and CAP control from a common fixed reference point. It enables TID readout of bearing and range from that set reference point, called YY. While NAV GRID is active displayed range and bearing on the TID for hooks and own aircraft is indicated relative YY." "While the original purpose of this functionality was intended for fleet defence use it works perfectly fine as a bulls-eye reference in DCS with YY set to the bulls-eye. The only real limitation being the grid only displaying along the threat axis and not all around." "When hot spawning in DCS YY will be set to mission bulls-eye for your faction"; "When cold starting with Jester he has to be commanded to adjust these parameters via the Jester wheel"; "With a human RIO he/she will have to enter it manually."
+- Navigation displays: "All displays provide navigation information with respect to magnetic north."
+- PTID Bullseye Grid Entry: "If no waypoint is designated as the Bullseye reference point, the system will select the first waypoint in the flight plan as the default Bullseye."
 - HSD Mode Switch: "TID - Repeats the RIO Tactical Information Display."
 - Programmable Tactical Information Display (F-14B Upgrade), Tactical Page: "BT: Bullseye to Target; BA: Bullseye to Own Aircraft; DP 06: selected Bullseye waypoint"; Menu Page: "Bullseye or Nav Grid Overlay".

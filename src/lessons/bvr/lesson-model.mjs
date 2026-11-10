@@ -206,13 +206,16 @@ export function bearingRange(a, b) {
 // A navigation display steering to bullseye shows bearing and range TO it; you
 // are on the reciprocal bearing FROM it, at the same range.
 export const ownFromSteer = (brgTo, rng) => ({ brg: norm360(brgTo + 180), rng });
-// The quick cases: within 10 degrees of the same bullseye bearing the ranges
-// subtract; within 10 degrees of opposite bearings they add.
+// The quick cases, range only: on nearly the same bullseye bearing the ranges
+// subtract; on nearly opposite bearings they add. Offered only when the result
+// is within 2 NM of the true range: the same-bearing case degrades fast when
+// the two ranges are close.
 export function shortcut(own, group) {
   const d = Math.abs(norm180(group.brg - own.brg));
-  if (d <= 10) return { kind: 'same', rng: Math.abs(group.rng - own.rng) };
-  if (d >= 170) return { kind: 'opposite', rng: group.rng + own.rng };
-  return null;
+  const sc = d <= 30 ? { kind: 'same', rng: Math.abs(group.rng - own.rng) } : d >= 150 ? { kind: 'opposite', rng: group.rng + own.rng } : null;
+  if (!sc) return null;
+  const exact = bearingRange(fromBull(own.brg, own.rng), fromBull(group.brg, group.rng)).rng;
+  return Math.abs(exact - sc.rng) <= 2 ? sc : null;
 }
 export const CARDINALS = ['north', 'northeast', 'east', 'southeast', 'south', 'southwest', 'west', 'northwest'];
 export const cardinal = (h) => CARDINALS[Math.round(norm360(h) / 45) % 8];

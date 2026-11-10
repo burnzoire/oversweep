@@ -146,7 +146,7 @@ function setupGeometry(root) {
   draw();
 }
 
-// Figure 3: an illustrative launch zone around a bandit, and the time of flight.
+// Figure 4: an illustrative launch zone around a bandit, and the time of flight.
 function setupZone(root) {
   const svg = root.querySelector('svg');
   const out = root.querySelector('[data-result]');
