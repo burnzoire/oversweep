@@ -1,0 +1,291 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
+import { getModule } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import Term from '../../../components/Term.astro';
+import '../../../styles/instrument-flight.css';
+import '../../../styles/formation.css';
+const mod = getModule('four-ship-formation');
+// The first-pass path, then reference material for when it is needed.
+const core = [
+ ['example', 'One four-ship sortie, start to finish'], ['organisation', 'How a four-ship is organised'], ['close', 'The close configurations'],
+ ['changes', 'Changing configuration'], ['tactical', 'Tactical four-ship formations'], ['turns', 'Turning a division'], ['display', 'Display formations'], ['recap', 'Key points'],
+];
+const reference = [
+ ['lost', 'Lost sight in a division'], ['lead-change', 'The lead change'], ['pitchout', 'Pitchout and rejoin'], ['signals', 'Visual signals'],
+ ['admin', 'Joining, checks and ranging'], ['sims', 'In the sim'], ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+];
+// [1] CNATRA P-1288, by printed page (PDF page = chapter page + 10 for
+// chapter 1, 7-1 = PDF 63). [2] VT-35 brief, by slide title. [3] RA 2335,
+// by page. [4] FAST guide, by printed page. [5] DCS F-16C guide, by page.
+const pp = (n: number) => (page: string) => `[${n}, ${/[–,]/.test(page) ? 'pp.' : 'p.'} ${page}]`;
+const fti = pp(1), ra = pp(3), fast = pp(4), f16 = pp(5);
+const vt = (slide: string) => `[2, “${slide}”]`;
+const glossary = sitePath('encyclopedia/terminology/formation/');
+const twoShip = sitePath('manual/formation-flying/two-ship-formation/');
+const helo = sitePath('manual/formation-flying/helicopter-formation/');
+---
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="formation-flying" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Formation Flying',href:sitePath('manual/formation-flying/')},{label:mod.title}]}>
+ <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
+  <h2>{mod.maturity}</h2>
+  <p>Module revision {mod.revision} · Fixed-wing flights of three to five: the four-ship’s elements and positions, the close configurations (fingertip, echelon, trail, diamond, vic), changing between them, the division wall, fluid four and division combat cruise, the division’s tac and in-place turns, lost sight, the lead change and pitchout, and the rules that shape a display team’s formations. From Navy jet and tiltrotor training and the UK military display regulation, with a civilian formation guide for the close configurations and signals, and the DCS F-16C guide for the sim.</p>
+  <p>Figure 1 draws the close configurations from above; Figure 2 the tactical formations; Figure 3 animates the division wall’s tac and in-place turns.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
+ </nav>
+
+ <p class="lede">Large forces are built from divisions: four aircraft in two sections, flown in briefed formations. <a href="#source-fti">{fti('7-1')}</a> Adding two aircraft changes the flight more than you might expect: communication and maneuvering get more complex, and every pilot needs more discipline and awareness. <a href="#source-fast">{fast('22')}</a> This module builds on <a href={twoShip}>Two-Ship Formation</a>, which covers the parade sight picture, combat spread and the section’s tactical turns; helicopter flights are in <a href={helo}>Helicopter Formation</a>.</p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>number a four-ship, name its elements and deputy lead, and place each wingman in fingertip, echelon, trail, diamond, vic and route;</li>
+  <li>change configuration: the cross-under to echelon, the element cross-under, the diamond, the lead change and the pitchout, with their signals;</li>
+  <li>describe division wall, fluid four and division combat cruise, and pick one for a task;</li>
+  <li>follow a division wall tac turn and in-place turn, and say how wingmen move when fluid four turns;</li>
+  <li>run a division’s lost sight breakup;</li>
+  <li>state the display rules that shape a formation display: what a display team is, weather minima, minimum separation distance and crowd-line separation.</li>
+ </ol>
+ <p class="note">This is a reference, not a qualification. The tactical procedures come from Navy T-45 jet training and Navy tiltrotor training, the display rules from the UK military regulator, and the close configurations and signals from a civilian formation guide, given as generic technique with service rules labelled. Air Force and Army fixed-wing four-ship publications, and US display-team procedures, could not be read for this revision. Your service’s rules, your unit’s standard procedures and the aircraft’s flight manual govern.</p>
+
+ <h2 id="example">One four-ship sortie, start to finish</h2>
+ <p>An invented training sortie for four jets, callsign Lion. Each step is a published procedure; the choices are illustrative. Each step links to the section that explains it.</p>
+ <ol class="exchange script">
+  <li><span class="who">Brief</span> <span class="said">The division lead briefs the rendezvous, an altitude plan giving each jet its own altitude, and which jets range on which by air-to-air TACAN. <a href="#source-fti">{fti('7-1, 7-3')}</a> <a class="step" href="#admin">Joining and ranging</a></span></li>
+  <li><span class="who">Join</span> <span class="said">The flight takes off in sections and joins with a running rendezvous. As −4 you fly on −3 and keep −3 between you and the lead section. <a href="#source-fti">{fti('7-1')}</a> <a class="step" href="#admin">Joining</a></span></li>
+  <li><span class="who">Fingertip</span> <span class="said">Lead holds <Term>fingertip</Term> strong right: −2 on lead’s left, −3 on the right with −4 outboard of it. <a href="#source-fast">{fast('8–9')}</a> <a class="step" href="#close">Close configurations</a></span></li>
+  <li><span class="who">Lead</span> <span class="said">“Lion, flow 360, deploy.” No reply is needed. −4 goes to <Term>tac wing</Term> on −3, then pushes out to combat spread once −3 is far enough from −1. The flight is in <Term>division wall</Term>. <a href="#source-fti">{fti('7-2')}</a> <a class="step" href="#tactical">Tactical formations</a></span></li>
+  <li><span class="who">Turns</span> <span class="said">Lead calls tac turns and <Term id="In-place turn">in-place turns</Term>; the wingmen hold position on their section leads at 300 KIAS. <a href="#source-fti">{fti('7-4–7-5')}</a> <a class="step" href="#turns">Turning a division</a></span></li>
+  <li><span class="who">Transit</span> <span class="said">For the leg home the flight sets <Term>fluid four</Term>, giving the wingmen time for cockpit tasks. <a href="#source-fti">{fti('7-2')}</a> <a class="step" href="#tactical">Fluid four</a></span></li>
+  <li><span class="who">Lead</span> <span class="said">“Lion, fence-out, you are cleared to join.” Everyone rejoins to fingertip; −4 keeps −3 between itself and −1. <a href="#source-fti">{fti('7-3')}</a> <a class="step" href="#admin">Rejoin</a></span></li>
+  <li><span class="who">Recovery</span> <span class="said">Lead signals #3 out, then #2 across: the flight is in <Term id="Echelon formation">echelon</Term> right for the <Term>pitchout</Term>, at the interval lead shows with fingers. <a href="#source-fast">{fast('23, 37')}</a> <a class="step" href="#pitchout">Pitchout</a></span></li>
+ </ol>
+ <p class="key"><strong>Key point:</strong> a division is two sections; most of the work is each wingman flying good formation on its own section lead while keeping the other section in sight.</p>
+
+ <h2 id="organisation">How a four-ship is organised</h2>
+ <p>A flight of four is numbered #1 (flight lead) to #4, in two <Term id="Element">elements</Term> of two. #3 leads the second element and is <Term>deputy lead</Term>; #2 and #4 are the wingmen, usually the junior pilots. The elements stay together: #2 flies on #1, #4 flies on #3 and moves with it. <a href="#source-fast">{fast('8')}</a> Navy and Marine Corps usage calls the element a section, three or four aircraft a <Term>division</Term>, and two or more maneuver elements, or five or more aircraft, a flight. <a href="#source-vt">{vt('Formation Description')}</a> In a tactical division, −1 is division lead and −3 is the second section lead; the wingmen fly on their own section leads. <a href="#source-fti">{fti('7-1, 7-6')}</a></p>
+ <p>An odd number of aircraft flies with a <Term>phantom wingman</Term>: a three-ship normally behaves as a four-ship with a phantom #4. <a href="#source-fast">{fast('9, 13')}</a></p>
+ <p class="key"><strong>Key point:</strong> #4 always flies on #3, never on lead; #3 is ready to take the flight.</p>
+
+ <h2 id="close">The close configurations</h2>
+ <p>The basic configurations are fingertip, echelon and trail; most others are variations. <a href="#source-fast">{fast('8')}</a> In each, the wingman flies on a bearing line, normally 30° to 45° aft of the aircraft it flies on depending on type, with slight vertical spacing and wingtip clearance. <a href="#source-fast">{fast('9')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="admin" aria-labelledby="admin-title">
+  <h3 id="admin-title" class="fig-title">Figure 1 — The close configurations from above</h3>
+  <p class="no-js">This figure needs JavaScript. The table below gives the same positions.</p>
+  <div class="buttons" data-forms role="group" aria-label="Configuration"></div>
+  <div class="buttons" data-side role="group" aria-label="Strong side"></div>
+  <div class="fig-scroll"><svg class="form" role="img" aria-label="Four-ship close configurations from above"></svg></div>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">The side button sets the strong side: where the second element sits in fingertip, the vic’s outboard aircraft, or the side of an echelon. Bearing lines are drawn at 35°, inside the guide’s 30–45° range; spacing is schematic, since the real sight picture depends on the type.</p>
+ </section>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Close four-ship configurations <a href="#source-fast">{fast('8–13')}</a></caption>
+  <thead><tr><th>Configuration</th><th>Where the wingmen fly</th><th>Use it for</th></tr></thead>
+  <tbody>
+   <tr><td><Term>Fingertip</Term> strong left or right</td><td>#2 on one side of lead; #3 on the other with #4 outboard of #3</td><td>The standard configuration; every change of configuration starts from it</td></tr>
+   <tr><td><Term id="Echelon formation">Echelon</Term> left or right</td><td>All on one side, each on the bearing line of the aircraft ahead</td><td>The traffic pattern and pitchouts; lead can turn only away from the flight</td></tr>
+   <tr><td><Term id="Trail formation">Trail</Term></td><td>Each behind the one ahead: close, extended or tail chase</td><td>Extended trail where more maneuverability is wanted; close to extended is a spacing change, not a configuration change</td></tr>
+   <tr><td><Term>Diamond</Term></td><td>#4 in the <Term>slot</Term> behind lead, on the bearing lines of #2 and #3</td><td>A compact, maneuverable, symmetrical four-ship; the building block of mass formations</td></tr>
+   <tr><td>Vic, or V</td><td>Three aircraft, one wingman each side; extended outboard for a five-ship vic</td><td>A three-ship, flown with a phantom #4</td></tr>
+   <tr><td><Term>Route position</Term></td><td>At least two to four ship widths, no more than 500 ft, between the 3/9 line and the bearing line</td><td>Frequency changes, in-flight checks, long legs and busy airspace</td></tr>
+  </tbody>
+ </table></div>
+ <p>In a fingertip turn the aircraft on the outside stack up and those on the inside stack down. <a href="#source-fast">{fast('22')}</a> In route, wingmen stack down on the inside of a turn and fly echelon on the outside; the farther out they are, the closer to the 3/9 line they stay so lead can keep them in sight, and lead takes care turning into them. Lead sends the flight to route with a quick rudder wag and back to fingertip with a wing rock. <a href="#source-fast">{fast('12')}</a> Lead flies a stable platform and never exceeds the ability of the least proficient wingman. <a href="#source-fast">{fast('22')}</a></p>
+ <p class="key"><strong>Key point:</strong> fingertip is home; regroup there before any change, and fly every position off the aircraft you are assigned to.</p>
+
+ <h2 id="changes">Changing configuration</h2>
+ <p>Cross-unders move wingmen from one side of lead to the other: to set up a pitchout, keep them out of the sun, clear for traffic or rest a neck. A cross-under from fingertip produces echelon. <a href="#source-fast">{fast('23')}</a></p>
+ <ol>
+  <li><strong>Make room.</strong> Lead signals #3 first with a raised clenched fist, so #3 moves out. Once #3 is moving, lead gives #2 the same signal. <a href="#source-fast">{fast('23')}</a></li>
+  <li><strong>#2 crosses under.</strong> Down and back, keeping out of lead’s wingtip vortices and wake and no more than one ship length back; across, with a heading change of a degree or two; then forward and up into position on #3’s side. It is a deliberate repositioning, not a race. <a href="#source-fast">{fast('23–24')}</a></li>
+  <li><strong>The element cross-under.</strong> Lead double-pumps a clenched fist to #3. #3 crosses lead’s 6 o’clock with #4 on its wing; #4 crosses #3’s 6 o’clock and continues outboard, keeping every aircraft in sight. Lead calls knock-it-off if it goes wrong. <a href="#source-fast">{fast('23–24')}</a></li>
+  <li><strong>Diamond.</strong> Lead holds up four fingers, then gestures aft with a fist and thumb. #3 passes the signal to #4 without taking its eyes off lead. #4 makes a half cross-under into the slot with close-trail references, adjusts to the bearing lines of #2 and #3, and calls in. A wing rock returns #4 to fingertip on #3. <a href="#source-fast">{fast('29')}</a></li>
+ </ol>
+ <p>A common error is lead signalling #2 before #3, so #2 crosses into a side that is not yet clear. <a href="#source-fast">{fast('24')}</a> The lead change and pitchout are in the reference section. <a href="#lead-change">Lead change</a> · <a href="#pitchout">Pitchout</a></p>
+ <p class="key"><strong>Key point:</strong> clear the side first: #3 out, then #2 across; the element moves as one.</p>
+
+ <h2 id="tactical">Tactical four-ship formations</h2>
+ <p>Close configurations fly the division to and from the fight; tactical formations fight it. The Navy’s jet training teaches division wall and fluid four, and later training adds others. <a href="#source-fti">{fti('7-1')}</a> Each builds on the section’s combat spread: the wingman on lead’s 3/9 line, 0.8–1.0 nm away, 1,000 ft above or below. <a href="#source-fti">{fti('1-3')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="tactical" aria-labelledby="tac-title">
+  <h3 id="tac-title" class="fig-title">Figure 2 — Tactical four-ship formations</h3>
+  <p class="no-js">This figure needs JavaScript. The table below gives the same positions.</p>
+  <div class="buttons" data-forms role="group" aria-label="Formation"></div>
+  <div class="fig-scroll"><svg class="form" role="img" aria-label="Tactical four-ship formations from above"></svg></div>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Distances in nautical miles, to scale; the jets are not. Division wall and fluid four follow the T-45 instruction’s figures 7-1 and 7-2, division combat cruise the VT-35 slide. The angle of tac wing and the combat cruise positions other than the 0.5 nm interval are illustrative.</p>
+ </section>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Tactical four-ship formations</caption>
+  <thead><tr><th>Formation</th><th>Where each jet flies</th><th>Use it for</th></tr></thead>
+  <tbody>
+   <tr><td><Term>Division wall</Term></td><td>Line abreast in combat spread: −1 and −3 in the centre, 0.8–1.0 nm apart; −2 and −4 outside, the same distance from their leads. An altitude plan from the division lead; the example gives each jet its own altitude. <a href="#source-fti">{fti('7-1')}</a></td><td>Simultaneous attacks on air threats or surface targets with the most visual mutual support</td></tr>
+   <tr><td><Term>Fluid four</Term></td><td>−1 and −3 in combat spread; −2 and −4 in <Term>tac wing</Term>, on the section lead’s cruise bearing line or aft, 0.2–0.6 nm away, no lower than 1,000 ft below. <a href="#source-fti">{fti('6-9, 7-2')}</a> Wingmen stay on the outside and change sides in large turns, using radius of turn. <a href="#source-vt">{vt('Fluid Four')}</a></td><td>Transits, holding at a point or racetrack, quick changes of direction, and as a step between fingertip and wall</td></tr>
+   <tr><td>Division combat cruise</td><td>Both sections in combat cruise: −3 sets the interval, 0.5 nm on the slide; −2 balances the flight; −4 flies heavy to one side. <a href="#source-vt">{vt('Division Combat Cruise')}</a></td><td>A division of slower aircraft; shown in Navy tiltrotor training</td></tr>
+  </tbody>
+ </table></div>
+ <p>In US airspace, a slightly condensed fluid four can serve as the FAA-recognised standard formation, with every aircraft within 1 nm and 100 ft of lead. <a href="#source-fti">{fti('7-2')}</a> To deploy from fingertip, −4 first takes tac wing on −3, then pushes out with it to combat spread. <a href="#source-fti">{fti('7-2')}</a></p>
+ <p class="key"><strong>Key point:</strong> in wall all four are fighters with equal lookout; in fluid four the section leads keep mutual support and the wingmen get breathing room.</p>
+
+ <h2 id="turns">Turning a division</h2>
+ <p>The division lead calls every turn; the wingmen do not answer. Each wingman holds position on its own section lead with sound timing and steady basic airwork; in training the T-45 flies them at 300 KIAS and 14 units AOA, and only 90° tac turns and 180° in-place turns are called. <a href="#source-fti">{fti('7-4–7-7')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="turns" aria-labelledby="turns-title">
+  <h3 id="turns-title" class="fig-title">Figure 3 — Division wall turns</h3>
+  <p class="no-js">This figure needs JavaScript. The text below describes both turns.</p>
+  <div class="buttons" data-kind role="group" aria-label="Turn"></div>
+  <div class="buttons" data-dir role="group" aria-label="Direction"></div>
+  <div class="buttons"><button type="button" data-play>Play</button> <label>Time <input type="range" min="0" max="60" step="0.5" value="0" data-time /></label></div>
+  <div class="fig-scroll"><svg class="form" role="img" aria-label="Division wall turn"></svg></div>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Ground tracks, north up, played at four times real speed. The turn radius is illustrative, and the tac turn timing is the ideal one that brings all four out line abreast; in the air each jet times its turn by eye.</p>
+ </section>
+ <ul>
+  <li><strong>Tac turn in wall.</strong> The wingman on the outside of the called turn simply turns 90°. The next aircraft toward the inside turns as the preceding aircraft’s intakes come round toward it, and so on down the line. <a href="#source-fti">{fti('7-4')}</a> The flight swaps sides and rolls out back in spread. <a href="#source-fti">{fti('5-7')}</a></li>
+  <li><strong>In-place turn in wall.</strong> All four turn 180° together, as a section does, usually to leave a target area after simultaneous attacks. <a href="#source-fti">{fti('7-5')}</a> Both fighters in a section begin and finish their turns together, and each rolls out on the other side. <a href="#source-fti">{fti('5-8')}</a></li>
+  <li><strong>Tac turn in fluid four.</strong> −1 or −3, depending on the direction, turns into the other section lead, watching the wingman on that side for deconfliction. Its wingman flies tac wing and flows to the inside. The other section lead tac-turns as the first lead’s intakes approach; its wingman uses energy and geometry to stay in tac wing and ends up on the outside, looking through its leader to see the other section. <a href="#source-fti">{fti('7-6')}</a></li>
+  <li><strong>In-place turn in fluid four.</strong> −1 and −3 make an in-place turn. The outside wingman moves to the inside in tac wing; the inside wingman holds tac wing but rolls out on the outside, looking through its leader for the other section. <a href="#source-fti">{fti('7-7')}</a></li>
+ </ul>
+ <p class="key"><strong>Key point:</strong> in a tac turn the outside jet turns first and each next jet waits for the one before; in an in-place turn everyone turns at once.</p>
+
+ <h2 id="display">Display formations</h2>
+ <p>A display team is one display act: a single aircraft, a formation or a group flying together throughout, and counted as one display item. <a href="#source-ra">{ra('3, 6')}</a> A flypast is aircraft, single or in formation, passing spectators along a planned route without maneuvering except to navigate or reposition: no aerobatics, and up to three planned passes. <a href="#source-ra">{ra('3')}</a></p>
+ <p>The close configurations above are the display team’s shapes. The diamond is the usual building block for mass formations, the vic extends to five or more, and echelon sets up the break to land. <a href="#source-fast">{fast('9–11, 37')}</a> Signals are visual, passed down the line without looking away from lead. <a href="#source-fast">{fast('29')}</a></p>
+ <p>The rules below are the UK military regulator’s, an example of how a service bounds formation display flying; other nations’ rules differ.</p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Formation display limits in UK military rules (RA 2335) <a href="#source-ra">{ra('21–23')}</a></caption>
+  <thead><tr><th>Limit</th><th>Formation</th><th>Compare: solo</th></tr></thead>
+  <tbody>
+   <tr><td>Weather, flypasts and non-aerobatic display (most aircraft)</td><td>Cloud base 1,000 ft, visibility 5 km</td><td>500 ft, 5 km</td></tr>
+   <tr><td>Weather, aerobatic display</td><td>Piston formations 1,000 ft; jet and turboprop formations 1,500 ft; visibility 5 km</td><td>1,000 ft, 5 km</td></tr>
+   <tr><td>MSD, flypast wings level or up to 20° bank</td><td>Fixed-wing close formation 250 ft</td><td>Fixed wing 100 ft</td></tr>
+   <tr><td>MSD, non-aerobatic up to 90° bank</td><td>Fixed-wing close formation 300 ft</td><td>Fixed wing 100 ft</td></tr>
+   <tr><td>MSD, aerobatic, inverted and link maneuvers</td><td>300 ft</td><td>300 ft</td></tr>
+   <tr><td>Lateral separation from the <Term>crowd line</Term></td><td colspan="2">230 m; 450 m above 300 KIAS heading toward spectators; on both sides when spectators are on both sides</td></tr>
+  </tbody>
+ </table></div>
+ <p>These <Term id="Minimum separation distance">minimum separation distances</Term> apply within a display authority’s approved sequence; aerobatics outside the display area need 500 ft. <a href="#source-ra">{ra('21–22')}</a> A display with a high-energy team of three or more aircraft (over 1,200 kg or faster than 150 KIAS) is at least a Tier 2 event, the regulator’s measure of the event’s complexity. <a href="#source-ra">{ra('3–4, 7')}</a></p>
+ <p class="key"><strong>Key point:</strong> a close formation display needs more cloud base and, for a flypast or gentle turns, more height than a solo, and stays at least 230 m from the crowd.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>A four-ship is two elements: #2 on #1, #4 on #3; #3 is deputy lead.</li>
+  <li>Close configurations: fingertip (home), echelon (pattern and pitchout; lead turns only away), trail, diamond (#4 in the slot), vic and route. Outside of a turn stacks up, inside stacks down.</li>
+  <li>Changing: lead clears the side with #3 first, then #2 crosses under; #4 crosses #3’s six.</li>
+  <li>Division wall: four line abreast at 0.8–1.0 nm with an altitude plan. Fluid four: section leads in spread, wingmen in tac wing, 0.2–0.6 nm.</li>
+  <li>Lost sight in a division: a briefed fan, each position with its own heading offset and altitude.</li>
+  <li>Wall tac turn: outside jet first, each next when the preceding jet’s intakes come round. In-place turn: all four at once.</li>
+  <li>Displays: one team is one act; UK military close formations need 1,000–1,500 ft cloud, 250–300 ft MSD and 230 m from the crowd.</li>
+ </ul>
+
+ <h2 id="lost">Lost sight in a division</h2>
+ <p>The Navy tiltrotor brief gives the breakup “packages” for a division that enters cloud. Lead calls the base heading and base altitude, considering the minimum safe altitude for obstacle clearance. The assignments go with the position, whether the flight is in echelon, parade or a balanced combat cruise. <a href="#source-vt">{vt('Division IIMC Breakup Packages')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Fan breakup, three aircraft <a href="#source-vt">{vt('Division IIMC Breakup Packages')}</a></caption>
+  <thead><tr><th>Aircraft</th><th>Heading</th><th>Altitude</th></tr></thead>
+  <tbody>
+   <tr><td>Lead</td><td>Base heading</td><td>Base altitude + 1,000 ft</td></tr>
+   <tr><td>−2</td><td>Keep sight of lead; if sight is lost, turn 30° away, then back to base heading after 30 seconds</td><td>Base altitude + 500 ft</td></tr>
+   <tr><td>−3</td><td>Continue the lost sight turn to 60° away from base heading, then back to base heading after 30 seconds</td><td>Base altitude</td></tr>
+  </tbody>
+ </table></div>
+ <p>The calls: “Popeye, three has lost sight.” “Stingray flight, IMC breakup, fan, base heading …, base altitude ….” “Three turning left.” Every aircraft starts squawking and uses its traffic advisory system; lead gives join-up instructions if clear of cloud or coordinates IFR handling if not. If lead calls a reversal instead of a fan, the continued turn runs back to front: −3 to the base heading, −2 to base heading minus 30°, lead to base heading minus 60°. <a href="#source-vt">{vt('Division IIMC Breakup Packages')}</a> The section’s lost sight procedure is in <a href={twoShip}>Two-Ship Formation</a>.</p>
+
+ <h2 id="lead-change">The lead change</h2>
+ <p>The lead change uses the stable-platform idea: the pilot giving up the lead holds power and position while the new lead maneuvers. It must be briefed. <a href="#source-fast">{fast('35')}</a></p>
+ <ol>
+  <li>Lead points at the new lead, usually #3 from fingertip, then points straight ahead. The new lead nods. <a href="#source-fast">{fast('35')}</a></li>
+  <li>The new lead moves out to route, two to four ship widths, and forward.</li>
+  <li>Passing line abreast, the new lead taps its head and points forward to accept the lead. As it passes the old lead’s 3/9 line, the old lead moves into fingertip on it.</li>
+  <li>By radio: lead sends the flight to route and calls “Bigdog 3, you have the lead”; #3 moves forward and, line abreast, calls “Bigdog 3 has the lead”. All stay in route until the new lead rocks them in.</li>
+  <li>The new lead checks the flight in and each wingman answers with its new callsign. From echelon, #4 can be the new lead: it crosses under, then moves forward in route.</li>
+ </ol>
+
+ <h2 id="pitchout">Pitchout and rejoin</h2>
+ <p>Lead puts the flight in echelon, signals, clears and breaks away at 45–60° of bank, rolling out after about 180°. The signal is an index finger twirled, then the number of fingers for the seconds between breaks; #2 nods, and #3 and #4 copy #2’s interval without the signal being passed. The wingmen break in turn and roll out behind lead, then call “Bigdog 2 in, Bigdog 3 in, Bigdog 4 in”. <a href="#source-fast">{fast('37')}</a></p>
+ <p>Lead rocks its wings to start the rejoin, first toward the side of a turning rejoin. In a straight-ahead rejoin #2 joins on lead’s right unless briefed otherwise and the second element on the other side; wingmen hold at least 10 kt or 10% more than lead and move from the 6 o’clock to route at 200–500 ft before joining. A wingman about to overshoot turns slightly away with lead in sight, and breaks out if it would lose sight. <a href="#source-fast">{fast('37')}</a></p>
+
+ <h2 id="signals">Visual signals</h2>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Four-ship visual signals in a civilian formation guide <a href="#source-fast">{fast('12, 23, 29, 35, 37')}</a></caption>
+  <thead><tr><th>Signal</th><th>Meaning</th></tr></thead>
+  <tbody>
+   <tr><td>Raised clenched fist (to #3, then #2)</td><td>Cross under: #3 makes room, #2 crosses to #3’s side</td></tr>
+   <tr><td>Double pump of a clenched fist to #3</td><td>Element cross-under</td></tr>
+   <tr><td>Four fingers, then fist with thumb aft</td><td>Diamond: #4 to the slot</td></tr>
+   <tr><td>Quick rudder wag</td><td>Go to route</td></tr>
+   <tr><td>Wing rock</td><td>Return to fingertip; start a rejoin</td></tr>
+   <tr><td>Point at a pilot, then straight ahead</td><td>Take the lead</td></tr>
+   <tr><td>Index finger twirled, then fingers</td><td>Pitchout, with seconds between breaks</td></tr>
+  </tbody>
+ </table></div>
+ <p>Services have their own signal sets; brief the ones you will use.</p>
+
+ <h2 id="admin">Joining, checks and ranging</h2>
+ <ul>
+  <li><strong>Join.</strong> When weather rules out an interval takeoff, the division takes off in sections and joins with a running or TACAN rendezvous. −4 flies the briefed formation on −3 and keeps −3 between itself and the lead section. <a href="#source-fti">{fti('7-1')}</a></li>
+  <li><strong>Collapse and fence-out.</strong> After the work, lead may collapse the flight to fingertip, loose cruise or tac wing with “cleared to join”; each wingman flies a join it has been taught while keeping sight of all the others. A plain “fence out” sends wingmen to their own section leads. <a href="#source-fti">{fti('7-3')}</a></li>
+  <li><strong>Battle damage checks.</strong> Normally by sections from fluid four; or −4 checks the rest and −2 checks −4. In a three-ship, from fingertip, −3 checks lead and −2, then −2 checks −3. Afterwards −3 and −4 join on −1, with −4 in tac wing on −3. <a href="#source-fti">{fti('7-3–7-4')}</a></li>
+  <li><strong>Ranging.</strong> Lead briefs who ranges on whom by air-to-air TACAN. The instruction’s example, −1 40X, −2 103X, −3 104X, −4 41X, gives ranging within each section, and −3 can range on −1 by moving one channel. <a href="#source-fti">{fti('7-3')}</a></li>
+ </ul>
+
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p><strong>Flights and elements.</strong> The DCS F-16C guide describes the same structure: a four-ship flight of two two-ship elements, the flight lead in charge and the element lead commanding the second element. It warns that close formation drags each wingman’s attention from the radar, threat warning and other displays, and slows reaction to threats. <a href="#source-f16">{f16('293')}</a></p>
+  <p><strong>Formations.</strong> It lists six, each with a briefed close and open distance: line abreast and trail at 1 nm close, 1½ nm open; wedge; echelon at ⅓ nm close; finger four at 250 ft close, 500 ft open; and spread four, with the elements ½ nm apart close and the wingmen 250 ft from their leads. <a href="#source-f16">{f16('293–295')}</a></p>
+  <p><strong>Where they differ.</strong> The guide’s line abreast at 1 nm is close to division wall, and its finger four is a fingertip; but its spacings are far looser than a real close formation’s wingtip clearance, and it gives no altitude plan. Fly the real numbers with people; the guide’s are its own.</p>
+  <p><strong>What was not checked.</strong> How the AI wingmen fly these formations, and other sims’ formation commands, were not checked.</p>
+  <p><strong>To practise:</strong> with three friends, fly the opening sortie: fingertip, deploy to wall, a tac turn each way, fluid four home and a pitchout from echelon.</p>
+ </section>
+
+ <h2 id="terms">Terms</h2>
+ <p>Every word is in the <a href={glossary}>formation terms</a>.</p>
+ <GlossaryList items={[
+  'Division', 'Element', 'Deputy lead', 'Fingertip', 'Echelon formation', 'Trail formation', 'Diamond', 'Slot', 'Route position', 'Phantom wingman',
+  'Division wall', 'Fluid four', 'Tac wing', 'Tac turn', 'In-place turn', 'Pitchout', 'Display team', 'Flypast', 'Minimum separation distance', 'Crowd line',
+ ]} />
+ <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
+  <h3 id="terms-title">Quiz: name the term</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next term</button></div>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <p>One or more questions for each outcome at the top of the page; Figure 1 and the formation quiz cover outcomes 1 and 3, Figure 2 outcome 3 and Figure 3 outcome 4.</p>
+ <section class="lesson quiz-lesson" data-lesson="picks" aria-labelledby="picks-title">
+  <h3 id="picks-title">Quiz: pick the formation</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next question</button></div>
+ </section>
+ <details><summary><span class="outcome">Outcome 1</span> The flight is in fingertip strong left. Where are you as #4?</summary><p>On the left, outboard of #3 on #3’s bearing line. The second element is on the strong side; #2 is alone on the right.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> In a diamond, what references does #4 use?</summary><p>Close-trail references to get into the slot behind lead, then the fingertip bearing lines of #2 and #3 to make the diamond symmetrical.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> Lead wants echelon right from fingertip strong right. Who moves, and in what order?</summary><p>Lead signals #3 first to move out and make room, then #2, who crosses under to the right side. Signalling #2 first is a common error.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> During an element cross-under, where does #4 go?</summary><p>With #3, crossing #3’s 6 o’clock and continuing to the outboard position, so it keeps every aircraft in sight.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> How does fluid four differ from division wall?</summary><p>In both, −1 and −3 are in combat spread. In wall the wingmen are also in spread, line abreast; in fluid four they fly tac wing, 0.2–0.6 nm from their leads on the cruise bearing line or aft.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> Division wall, order −2, −1, −3, −4 from left to right. Lead calls a tac turn left. Who turns first?</summary><p>−4, on the outside of the turn. −3 turns as −4’s intakes come round toward it, then −1, then −2.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> Fluid four makes an in-place turn. You are the wingman on the inside. Where do you roll out?</summary><p>On the outside, still in tac wing, looking through your section lead to regain sight of the other section.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> You are −3 of a three-ship in cloud and you lose sight of lead. Lead calls a fan breakup. What do you do?</summary><p>Call “three has lost sight”, continue your lost sight turn to 60° away from the base heading and climb to the base altitude; after 30 seconds return to the base heading. Lead climbs 1,000 ft above base and −2 500 ft above, so the three of you are separated. Squawk and follow lead’s join-up or IFR instructions.</p></details>
+ <details><summary><span class="outcome">Outcome 6</span> Under UK military rules, a jet close formation plans an aerobatic display. Cloud base is 1,200 ft. Can it go?</summary><p>Not with aerobatics: jet and turboprop formations need a 1,500 ft cloud base for aerobatic display flying. A flypast or non-aerobatic display needs 1,000 ft.</p></details>
+ <details><summary><span class="outcome">Outcome 6</span> How close may a fast jet formation run in toward the crowd?</summary><p>No closer than 230 m laterally, increased to 450 m when above 300 KIAS and heading toward spectators.</p></details>
+
+ <h2 id="sources">Sources and applicability</h2>
+ <h3>Military sources</h3>
+ <p id="source-fti"><strong>[1] Chief of Naval Air Training, CNATRA P-1288 (Rev. 01-23), Flight Training Instruction, Tactical Formation T-45 Strike, 23 January 2023.</strong> <a href="https://patchwiki.biligame.com/images/falconbms/f/fc/gydmumyx1j1cbxoeofygk3pgl1hk8w5.pdf">third-party copy</a>, read 10 November 2026 by printed page (pp. 1-3, 5-7–5-8, 6-9, 7-1–7-8). Cleared for public release; the official copy is on the CNATRA issuances site, which needs a login, and the public publications folder no longer serves it.</p>
+ <p id="source-vt"><strong>[2] Training Squadron THREE FIVE (VT-35), Tiltrotor Formation and Aerial Refueling Procedures, F0201/F0301 brief, updated 29 September 2021.</strong> <a href="https://www.cnatra.navy.mil/tw4/vt35/assets/docs/training/tiltrotor-form-procedures.pdf">cnatra.navy.mil</a>, read 10 November 2026; cited by slide title (“Formation Description”, “Division Combat Cruise”, “Division IIMC Breakup Packages” and “Fluid Four”).</p>
+ <p id="source-ra"><strong>[3] UK Military Aviation Authority, RA 2335 Issue 14, Flying Displays, Display Flying, Display Parachuting, Role Demonstrations and Flypasts, January 2026.</strong> <a href="https://assets.publishing.service.gov.uk/media/6970ee71011505255b2d42fd/RA2335_Issue_14.pdf">gov.uk</a>, read 10 November 2026 by page (pp. 2–4, 6–7, 21–23). UK military rules, given as an example.</p>
+ <h3>Supplementary civilian source</h3>
+ <p id="source-fast"><strong>[4] Formation and Safety Team (FAST), Formation Pilots’ Knowledge Guide, Version 3.0, 14 November 2024.</strong> <a href="https://assets.nicepagecdn.com/272793ad/6169412/files/FASTFormationVer3.014Nov2024-compressed_2.pdf">FAST copy</a>, read 10 November 2026 by printed page (pp. 8–13, 22–24, 29, 35, 37). Civilian warbird and kit-aircraft formation training; used for the close configurations and signals, which the military sources read here do not describe for four aircraft.</p>
+ <h3>Sim source</h3>
+ <p id="source-f16"><strong>[5] Eagle Dynamics, DCS: F-16C Viper Early Access Guide (English).</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 10 November 2026, pp. 293–295. A sim manual, cited only for the In the sim panel.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/four-ship-formation-evidence.md">four-ship formation evidence</a>.</p>
+ <p>Figures 1 to 3 and the opening sortie are original drawings and examples, laid out after the T-45 instruction’s figures 7-1 to 7-4, the VT-35 division slides and the guide’s configuration drawings, but not reproductions of them.</p>
+ <p class="note">Applicability: written for fixed-wing pilots of every service. The tactical procedures come from Navy and Marine Corps training (T-45 jets and tiltrotor students), the display limits from the UK military regulator, and the close configurations and signals from a civilian guide, all given in generic form with service rules labelled. Air Force (AFMAN 11-248) and Army fixed-wing four-ship guidance, and US military display-team procedures, could not be read for this revision. Your service’s rules, your unit’s standard procedures and the aircraft’s flight manual govern.</p>
+
+</SiteLayout>
+<script>import '../../../lessons/formation/division-ui.mjs';</script>
