@@ -36,7 +36,7 @@ Poppler `pdftotext -layout`; figures were checked as rendered pages. The `pages:
 are PDF pages. In CNATRA P-1288 printed page 1-3 is PDF 13, 5-7 and 5-8 are PDF 47–48,
 6-9 is PDF 61 and 7-1 to 7-8 are PDF 63–70. In RA 2335, the FAST guide and the DCS
 F-16C guide the printed page is the PDF page. The VT-35 brief has no page numbers and is
-cited by slide title. Check each quotation against independently retrieved text, and
+cited by slide title; cnatra.navy.mil serves it only with the TrustID intermediate certificate (see `scripts/prepare_review_sources.py`), and slides 81–82 were checked as rendered pages. Slide 82 draws three aircraft and gives no −4 assignment. Check each quotation against independently retrieved text, and
 treat a wording mismatch as a finding against this record.
 
 **Military sources first.** P-1288 is a Navy publication cleared for public release; the
@@ -83,8 +83,8 @@ close four-ship configurations, configuration changes and signals.
 | 6 | Footnote 24 "A Display Team is classed as a single Display Item" | Display |
 | 7 | Table 1 note "Any Flying Display with a High Energy Display Team of 3 or more Aircraft should be categorized as a minimum Tier 2" | Display |
 | 21 | Table 5 weather minima: formations 1000 ft / 5 km; aerobatic piston formations 1000; jet/turboprop formations 1500; para 99 "Aerobatic Manoeuvres – All Aircraft. 500 feet MSD" outside the display area | Display table |
-| 22 | Table 6: fixed wing 100/100/300, fixed-wing close formation 250/300/300 ft; para 102c "230 m" | Display table; terms |
-| 23 | "(1) High Speed Aircraft … in excess of 300 KIAS … towards a Spectator Area … 450 m"; d. dual spectator areas | Display table |
+| 22 | Table 6: fixed wing 100/100/300, fixed-wing close formation 250/300/300 ft | Display table; terms |
+| 23 | para 102c "230 m"; "(1) High Speed Aircraft … in excess of 300 KIAS … towards a Spectator Area … 450 m"; d. dual spectator areas | Display table |
 
 ## [4] FAST, Formation Pilots' Knowledge Guide v3.0, 14 November 2024
 

@@ -121,7 +121,7 @@ function setupTactical(root) {
 
 /* ---------- Figure 3: division wall turns ---------- */
 const TURN_SAY = {
-  tac: 'Tac turn, 90°: the jet on the outside of the called turn turns first; each next jet turns as the preceding jet’s intakes come round toward it. They roll out line abreast on the new heading, in a new order. [1, pp. 5-7, 7-4]',
+  tac: 'Tac turn, 90°: the jet on the outside of the called turn turns first; each next jet turns as the preceding jet’s intakes come round toward it. They roll out line abreast on the new heading, in a new order. The animation uses the ideal timing, which here comes a little after that cue. [1, pp. 5-7, 7-4]',
   inplace: 'In-place turn, 180°: all four turn together and roll out line abreast on the reciprocal, each now on the other side of its section lead. [1, pp. 5-8, 7-5]',
 };
 function setupTurns(root) {
@@ -155,7 +155,7 @@ function setupTurns(root) {
       svg.append(...jet(x, y, 26, p.h, `${p.n === 1 ? 'lead' : ''} ${turning ? 'turning' : ''}`, `−${p.n}`));
     }
     svg.append(el('text', { x: 20, y: 26, class: 'dark' }, `${state.kind === 'tac' ? 'Tac' : 'In-place'} turn ${state.dir < 0 ? 'left' : 'right'} · ${Math.round(state.t)} s`));
-    svg.append(el('text', { x: W - 20, y: H - 14, class: 'dark small', 'text-anchor': 'end' }, `Ground tracks at 300 KIAS; ${SPREAD} nm spacing; ${RADIUS} nm turn radius (illustrative). Red: turning.`));
+    svg.append(el('text', { x: W - 20, y: H - 14, class: 'dark small', 'text-anchor': 'end' }, `Ground tracks at about 300 kt, no wind; ${SPREAD} nm spacing; ${RADIUS} nm turn radius (illustrative). Red: turning.`));
     const turning = now.filter((p) => state.t > p.start && state.t < p.end).map((p) => `−${p.n}`);
     out.textContent = `${TURN_SAY[state.kind]} ${turning.length ? `Turning now: ${turning.join(', ')}.` : ''}`;
     svg.setAttribute('aria-label', `Division wall ${state.kind === 'tac' ? 'tac' : 'in-place'} turn ${state.dir < 0 ? 'left' : 'right'}, ${Math.round(state.t)} seconds in.`);

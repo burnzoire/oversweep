@@ -104,7 +104,7 @@ terms:
     definition: "Army. A numbered lighting condition for multi-aircraft flight, setting the anti-collision, position, formation and covert IR lights; the circular's sample runs from 1, FAA day, to 5, total blackout."
     cite: [{ n: 5, page: "216" }]
   - term: Division
-    definition: "Three or four aircraft flying as one maneuver element, usually two sections. Five or more aircraft, or two or more maneuver elements, make a flight."
+    definition: "Three or four aircraft, usually two sections, flying as the largest maneuver element: a group that can maneuver independently, not the two-aircraft element. Five or more aircraft, or two or more maneuver elements, make a flight."
     cite: [{ n: 3, page: "Formation Description" }]
   - term: Element
     definition: "A leader and a wingman, never more than two aircraft; every flight is built of elements, so a four-ship has two. The element stays together: #4 flies on #3 and moves with it. Navy and Marine Corps aviators call it a section."
@@ -116,10 +116,10 @@ terms:
     definition: "The standard close four-ship configuration, named for the fingertips of a hand seen from above: #2 on one side of lead, #3 on the other with #4 outboard of it. Strong right or left is the side the second element is on. Every configuration change starts from fingertip."
     cite: [{ n: 7, page: "8-9" }]
   - term: Diamond
-    definition: "A four-ship with #4 in the slot behind lead, on the bearing lines of #2 and #3: compact, symmetrical and maneuverable, and the building block of mass display formations."
+    definition: "A four-ship with #4 in the slot behind lead, on the bearing lines of #2 and #3: compact, symmetrical and maneuverable, often the building block of mass formations."
     cite: [{ n: 7, page: "11, 29" }]
   - term: Slot
-    definition: "The position directly behind and below lead in a diamond, flown by #4 with close-trail references."
+    definition: "The position directly behind lead in a diamond, flown by #4 with close-trail references."
     cite: [{ n: 7, page: "11, 29" }]
   - term: Route position
     definition: "A relaxed formation position, at least two to four ship widths and no more than 500 ft from lead, between the 3/9 line and the bearing line. Used for frequency changes, in-flight checks and long legs; the farther out, the closer to the 3/9 line."
@@ -149,7 +149,7 @@ terms:
     definition: "Aircraft flying singly or in formation over or past spectators along a pre-planned route without maneuvering, except for navigation and repositioning: no aerobatics and up to three planned passes (UK military definition)."
     cite: [{ n: 8, page: "3" }]
   - term: Minimum separation distance
-    definition: "MSD: the least separation, in feet, a displaying aircraft keeps. UK military rules set it by aircraft type, close formation or not, and maneuver; for example 300 ft for a fixed-wing close formation in aerobatics, and 500 ft for aerobatics outside the display area."
+    definition: "MSD: a minimum separation, in feet, that UK military display rules set for displaying aircraft, by aircraft type, close formation or not, and maneuver; for example 300 ft for a fixed-wing close formation in aerobatics, and 500 ft for aerobatics outside the display area."
     cite: [{ n: 8, page: "2, 21-22" }]
   - term: Crowd line
     definition: "The line marking the nearest edge of any area open to spectators, from which display lateral separation is measured: 230 m normally in UK military rules, 450 m for aircraft above 300 KIAS heading toward spectators."
