@@ -2245,6 +2245,17 @@
     "summary": "Laser designators, spot trackers and codes, the laser safety and attack zones, spillover and backscatter, inertially aided munitions, target location error and its categories."
   },
   {
+    "id": "encyclopedia.terminology.rotary-wing-attack",
+    "slug": "rotary-wing-attack",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Rotary-wing attack terms",
+    "designation": "JP 3-09.3 · JP 1-02",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Terrain flight profiles and movement techniques, holding areas, battle and firing positions, hovering, running and diving fire, and the overhead position."
+  },
+  {
     "id": "encyclopedia.terminology.flight-planning",
     "slug": "flight-planning",
     "category": "terminology",

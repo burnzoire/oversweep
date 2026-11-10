@@ -3,12 +3,13 @@ import WeaponsDelivery from './_WeaponsDelivery.astro';
 import CloseAirSupport from './_CloseAirSupport.astro';
 import SeadDead from './_SeadDead.astro';
 import PrecisionTargeting from './_PrecisionTargeting.astro';
+import RotaryWingAttack from './_RotaryWingAttack.astro';
 import { includedModules } from '../../../data/modules';
 // Air-to-Ground Operations has one page per module, each its own component
 // kept beside this route so the SME review reads it (the underscore keeps
 // Astro from routing it). This route emits only the modules the registry
 // includes in the build.
-const pages = { 'weapons-delivery': WeaponsDelivery, 'close-air-support': CloseAirSupport, 'sead-dead': SeadDead, 'precision-targeting': PrecisionTargeting };
+const pages = { 'weapons-delivery': WeaponsDelivery, 'close-air-support': CloseAirSupport, 'sead-dead': SeadDead, 'precision-targeting': PrecisionTargeting, 'rotary-wing-attack': RotaryWingAttack };
 export function getStaticPaths() {
   return includedModules.filter((m) => m.subject === 'air-to-ground-operations').map((m) => ({ params: { module: m.slug } }));
 }

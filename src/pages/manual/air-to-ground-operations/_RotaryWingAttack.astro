@@ -1,0 +1,356 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
+import { getModule } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import Term from '../../../components/Term.astro';
+import { ATTACK_STEPS, FIRE_MODES, MOVEMENT, PROFILES } from '../../../lessons/rotary-wing-attack/lesson-model.mjs';
+const rwa = getModule('rotary-wing-attack');
+const core = [
+ ['example', 'One helicopter attack, start to finish'], ['who', 'Who flies it: Army and Marine Corps'], ['altitudes', 'Altitudes and terrain flight'],
+ ['movement', 'Moving to the battle position'], ['positions', 'Holding areas, battle positions and firing points'], ['firing', 'Hovering, running and diving fire'],
+ ['weapons', 'Guns, rockets and missiles'], ['egress', 'Disengaging and egress'], ['recap', 'Key points'],
+];
+const reference = [
+ ['overhead', 'The overhead, cities and night'], ['hellfire', 'Hellfire from a helicopter'], ['briefs', 'Briefs and attack headings for helicopters'],
+ ['fixed-wing', 'Working alongside fixed-wing aircraft'], ['aircraft', 'Attack helicopters and weapons in the Encyclopedia'],
+ ['sims', 'In the sim'], ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+];
+// [1] JP 3-09.3, Close Air Support (25 November 2014), by printed page.
+// [2] JP 1-02, DoD Dictionary (as amended through 15 February 2016), by printed page.
+// [3] DCS: AH-64D Flight Manual and [4] DCS: Black Shark 3 Flight Manual, sim crossover only.
+const j = (page: string) => `[1, ${/–|,| to /.test(page) ? 'pp.' : 'p.'} ${page}]`;
+const cas = sitePath('manual/air-to-ground-operations/close-air-support/');
+const pt = sitePath('manual/air-to-ground-operations/precision-targeting/');
+const wd = sitePath('manual/air-to-ground-operations/weapons-delivery/');
+const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
+const glossary = sitePath('encyclopedia/terminology/rotary-wing-attack/');
+---
+<SiteLayout title={rwa.title} activeSection="manual" activeSubject="air-to-ground-operations" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Air-to-Ground Operations',href:sitePath('manual/air-to-ground-operations/')},{label:rwa.title}]}>
+ <section class="status-panel" data-module-id={rwa.id} data-module-revision={rwa.revision}>
+  <h2>{rwa.maturity}</h2>
+  <p>Module revision {rwa.revision} · How attack helicopters reach a target unseen, fire on it and get away. For helicopter aircrew of every service, from the joint close air support publication, with Army and Marine Corps differences labelled.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
+ </nav>
+
+ <p class="lede">An attack helicopter survives by not being seen until it chooses to be. It flies low and hidden to a position behind cover, rises or slides out only long enough to fire, and drops back out of sight. Almost everything in this module, from the height it flies at to how it fires, is a trade between seeing and hitting the target and being seen and hit by it.</p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>explain how Army and Marine Corps attack helicopters are employed, <Term>close combat attack</Term> against close air support, and why sections mix aircraft types;</li>
+  <li>give the rotary-wing altitude bands and the three <Term>terrain flight</Term> profiles, and choose a profile and movement technique for how likely contact is;</li>
+  <li>explain <Term id="Holding area">holding areas</Term>, <Term id="Battle position">battle positions</Term> and <Term id="Firing point">firing points</Term>, and how they are briefed;</li>
+  <li>compare <Term>hovering fire</Term>, <Term>running fire</Term> and <Term>diving fire</Term>, and choose one for the weapon, the threat and the terrain;</li>
+  <li>explain direct and <Term id="Indirect fire">indirect fire</Term> from a helicopter, including Hellfire from a masked position;</li>
+  <li>explain how a helicopter disengages, remasks and egresses, and what it reports.</li>
+ </ol>
+ <p class="note">This module explains principles shared by the services that fly attack helicopters; one aircraft's procedures are outside it. How a close air support attack is controlled and briefed, including the 5-line, is in <a href={cas}>Close Air Support</a>; laser designation is in <a href={pt}>Precision Targeting</a>; how the rotor flies is in <a href={rotor}>Rotor-Wing Principles of Flight</a>. The worked attack is invented. The joint publication quoted is the 2014 edition; theater special instructions (<Term>SPINS</Term>), your unit's tactics and your aircraft's manual govern.</p>
+
+ <h2 id="example">One helicopter attack, start to finish</h2>
+ <p>Here is one invented attack: two attack helicopters, Saber 21 and 22, destroy armored vehicles approaching friendly troops, controlled by a terminal attack controller, Hammer 11. It follows the structure of the joint publication's helicopter example <a href="#source-jp">{j('E-17–E-19')}</a>, with made-up call signs, places and numbers. Step through Figure 1 to see where the section is.</p>
+ <ol class="exchange script">
+  {ATTACK_STEPS.map((s) => <li><span class="who">{s.who}</span> <span class="said">{s.said} <a class="step" href={s.href}>Why</a></span></li>)}
+ </ol>
+ <section class="lesson figure-lesson" data-lesson="attack" aria-labelledby="attack-title">
+  <h3 id="attack-title" class="fig-title">Figure 1 — The attack, played out</h3>
+  <p>Step through the attack above. The section waits in the holding area, moves unseen to the battle position behind a ridge, fires from its firing points, then is cleared forward.</p>
+  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 760 560" role="img" aria-label="Plan view, north up: a holding area to the southwest, a release point, an ingress route to a battle position behind a ridge with three firing points, and the target to the northeast"></svg></div>
+  <div class="buttons stepper"><button type="button" data-back>Back</button><button type="button" data-next>Next</button><span data-count role="status" aria-live="polite"></span></div>
+  <p class="no-js">Interactive figure unavailable. The section holds in holding area Rose, receives the game plan and the brief "Oak, 060, 3400", moves by NOE flight in bounding overwatch from the release point to battle position Oak, picks firing points behind the ridge, unmasks to fire Hellfire in hovering fire, remasks or displaces, is approved forward for rockets and guns in running fire, then egresses back to Rose.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">An invented example, not to scale, laid out like the joint publication's Figure III-26, Example of Rotary-Wing Close Air Support Tactics <a href="#source-jp">{j('III-93')}</a>.</p>
+ </section>
+ <p class="key"><strong>Key point:</strong> the attack runs holding area, hidden ingress, battle position, unmask and fire, remask or displace, and egress; the aircraft is exposed only while it fires.</p>
+
+ <h2 id="who">Who flies it: Army and Marine Corps</h2>
+ <p>Attack helicopters reposition firepower quickly as the situation changes. They carry forward-firing and off-axis weapons and advanced sensors, respond and loiter well, and can ingress, attack and egress low or at nap of the earth, in varied terrain, or escorting transport, medical evacuation and personnel recovery helicopters. <a href="#source-jp">{j('I-5')}</a> How they are employed depends on the service:</p>
+ <div class="table-scroll" role="region" aria-label="How the Army and the Marine Corps employ attack helicopters" tabindex="0"><table>
+  <caption>Army and Marine Corps attack helicopters <a href="#source-jp">{j('I-5, III-89–III-90')}</a></caption>
+  <thead><tr><th scope="col"></th><th scope="col">US Army</th><th scope="col">US Marine Corps</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Organized as</th><td>Units of combat aviation brigades, a subordinate maneuver unit of the ground commander, given mission-type orders</td><td>Squadrons in the Marine air-ground task force, in general or direct support, usually in sections and divisions</td></tr>
+   <tr><th scope="row">Standard attack method</th><td><Term>Close combat attack</Term> (CCA): an attack for friendly units in close combat, needing detailed integration but no terminal control from the ground. CCA is not CAS, and the Army does not consider its attack helicopters a CAS system.</td><td>Close air support: trained and equipped for CAS and tasked for it</td></tr>
+   <tr><th scope="row">A typical mixed flight</th><td>An AH-64 with an OH-58</td><td>An AH-1 with a UH-1</td></tr>
+   <tr><th scope="row">For a controller</th><td>Do not expect CAS procedures without prior coordination and training</td><td>Expect CAS procedures</td></tr>
+  </tbody>
+ </table></div>
+ <p>Unlike fixed-wing flights, helicopter sections are often a <Term>mixed section</Term> of types, which gives the most flexible mix of sensors, communications, maneuverability, firepower and mutual support. <a href="#source-jp">{j('III-90')}</a> The Army's four primary missions for attack reconnaissance units are reconnaissance, security, attack and movement to contact, and they conduct two basic types of attack: close combat attack and interdiction attack. Special operations helicopters use CAS, CCA, gunship and forward air controller procedures. <a href="#source-jp">{j('I-5, III-89')}</a></p>
+ <p class="key"><strong>Key point:</strong> Marine Corps attack helicopters fly CAS; Army attack helicopters fight as maneuver units with close combat attack, and fly CAS only after coordination; both usually fly mixed sections.</p>
+
+ <h2 id="altitudes">Altitudes and terrain flight</h2>
+ <p>Helicopter altitudes are counted above ground level, in three bands: <a href="#source-jp">{j('III-90')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Rotary-wing altitude bands" tabindex="0"><table>
+  <caption>Rotary-wing operating altitudes <a href="#source-jp">{j('III-90')}</a></caption>
+  <thead><tr><th scope="col">Band</th><th scope="col">Height above ground</th></tr></thead>
+  <tbody><tr><th scope="row">High</th><td>Above 3,000 ft</td></tr><tr><th scope="row">Medium</th><td>500 to 3,000 ft</td></tr><tr><th scope="row">Low</th><td>Below 500 ft</td></tr></tbody>
+ </table></div>
+ <p>En route, the route, altitude, airspeed, terrain flight profile and formation are chosen to avoid concentrations of air defenses, prevent early detection, or stay outside the reach of certain threats. Nearing the target, a likely point of contact or a strong infrared SAM threat, aircrews fly lower and more cautiously, using <Term>terrain flight</Term> to deny the enemy visual, optical or electronic detection, and may take an unpredictable path within an assigned corridor. <a href="#source-jp">{j('III-90')}</a> There are three profiles:</p>
+ <div class="table-scroll" role="region" aria-label="The three terrain flight profiles" tabindex="0"><table>
+  <caption>Terrain flight profiles <a href="#source-jp">{j('III-90–III-91')}</a></caption>
+  <thead><tr><th scope="col">Profile</th><th scope="col">Height</th><th scope="col">Airspeed</th><th scope="col">Purpose</th></tr></thead>
+  <tbody>{PROFILES.map((p) => <tr><th scope="row">{p.name}</th><td>{p.height}</td><td>{p.speed}</td><td>{p.use}</td></tr>)}</tbody>
+ </table></div>
+ <p>Terrain flight is flight close to the earth's surface with airspeed, height and altitude adapted to the ground's contours and cover, to avoid enemy detection and fire. <a href="#source-jp102">[2, p. 240]</a> Figure 2 shows why lower is better against an observer on the ground.</p>
+ <section class="lesson figure-lesson" data-lesson="terrain" aria-labelledby="terrain-title">
+  <h3 id="terrain-title" class="fig-title">Figure 2 — Three profiles, one observer</h3>
+  <p>Pick a profile. The path is solid where terrain hides it from an enemy observer on the far rise, dashed where the observer can see it.</p>
+  <div class="buttons">{PROFILES.map((p) => <button type="button" data-profile={p.id} aria-pressed="false">{p.name}</button>)}</div>
+  <div class="fig-scroll" role="region" aria-label="Figure 2, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 760 340" role="img" aria-label="Side view of rolling ground with tree patches, a flight path for the chosen profile and an enemy observer on the far rise"></svg></div>
+  <p class="no-js">Interactive figure unavailable. On the invented ground, a constant-altitude low-level path, 100 to about 190 ft above the ground, is in the observer's sight the whole way; a contour path 75 ft above the ground is hidden for only about a tenth of it; a nap-of-the-earth path just above the trees is hidden for more than half.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Our illustration over invented ground. Heights are to scale and distance is compressed; only terrain blocks the line of sight, not trees. The profiles' heights are the joint publication's <a href="#source-jp">{j('III-91')}</a>; the NOE path is drawn 15 ft above the highest obstacle, inside the DCS AH-64D manual's "under 25 feet above the highest obstacle" <a href="#source-ah64">[3, p. 353]</a>, because the publication gives no figure for NOE.</p>
+ </section>
+ <p>Lower is not always safer. Where small arms and rocket-propelled grenades are the main threat, attack helicopters normally climb, usually to medium altitude, out of those weapons' effective range, taking the lowest altitude that still lets their sensors work for a reconnaissance task. They generally avoid urban areas unless attacking there, and may cross them at rooftop height to cut exposure. <a href="#source-jp">{j('III-91')}</a></p>
+ <p class="key"><strong>Key point:</strong> against air defenses, fly lower as the threat grows: low level, then contour, then NOE; against small arms and RPGs, climb out of their reach instead.</p>
+
+ <h2 id="movement">Moving to the battle position</h2>
+ <p>Ingress runs from the release point or holding area until the attack begins at the battle position. Close to the threat, aircrews move by terrain flight; near friendly artillery and mortars they combine it with airspace coordinating measures to stay clear of their trajectories, and their movement must be coordinated with the fire support agencies. <a href="#source-jp">{j('III-91–III-92')}</a> How the flight moves depends on how likely contact is:</p>
+ <div class="table-scroll" role="region" aria-label="Techniques of movement" tabindex="0"><table>
+  <caption>Techniques of movement, the joint publication's Figure III-25 <a href="#source-jp">{j('III-92')}</a></caption>
+  <thead><tr><th scope="col">Technique</th><th scope="col">Likelihood of contact</th><th scope="col">Terrain flight profile</th><th scope="col">How</th></tr></thead>
+  <tbody>{MOVEMENT.map((m) => <tr><th scope="row">{m.name}</th><td>{m.contact}</td><td>{m.profile}</td><td>{m.how}</td></tr>)}</tbody>
+ </table></div>
+ <p>Terrain flight and the movement techniques can stop the controller talking to low-flying aircraft, and radio calls may not be desirable during ingress anyway. To keep operations secure, aircrews can land to get a face-to-face brief from the supported commander or controller before leaving the holding area, or use an airborne relay. <a href="#source-jp">{j('III-93')}</a></p>
+ <p class="key"><strong>Key point:</strong> remote contact, travel; possible contact, traveling overwatch; imminent contact, bounding overwatch at NOE, with one element always covering the other.</p>
+
+ <h2 id="positions">Holding areas, battle positions and firing points</h2>
+ <p>Helicopter close air support can be flown with or without holding areas and battle positions. When they are used, controllers and aircrews choose ones that are tactically sound, support the scheme of maneuver and are coordinated with other supporting arms. <a href="#source-jp">{j('III-91')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Holding areas, battle positions and firing points" tabindex="0"><table>
+  <caption>The positions of a helicopter attack <a href="#source-jp">{j('III-90–III-93, V-26')}</a></caption>
+  <thead><tr><th scope="col">Position</th><th scope="col">What it is</th><th scope="col">How it is used</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>Holding area</Term> (HA)</th><td>An area where helicopters wait for targets or missions; an informal airspace coordination area while in use</td><td>Set up in planning, named or numbered, and activated during operations. Helicopters can also launch to forward assembly areas, FARPs, or straight into an attack or support-by-fire position.</td></tr>
+   <tr><th scope="row"><Term>Battle position</Term> (BP)</th><td>A maneuvering area containing firing points; also an informal airspace coordination area while in use</td><td>Planned and set up like a holding area. The attack begins here; a 9-line names it on line 1, gives the heading from its center to the target on line 2 and the distance in meters, to the nearest 100, on line 3. A hasty BP is given by its center grid.</td></tr>
+   <tr><th scope="row"><Term>Firing point</Term> (FP)</th><td>An individual aircraft's firing position inside the battle position</td><td>On reaching the BP, the controller or mission commander gives final instructions; each aircrew picks its own firing point and stays masked until the time on target, time to target or the order to attack.</td></tr>
+  </tbody>
+ </table></div>
+ <p>Attack helicopters can also use their own <Term id="Attack helicopter control point">attack helicopter control points</Term> as well as the normal close air support ones. <a href="#source-jp">{j('III-91')}</a> Hidden at a firing point, a helicopter is in <Term>defilade</Term>: protected from observation and fire by a hill, ridge or bank. <a href="#source-jp102">[2, p. 63]</a></p>
+ <p class="key"><strong>Key point:</strong> wait in the holding area, attack from the battle position, and fire from a firing point you chose, masked until the time or the order.</p>
+
+ <h2 id="firing">Hovering, running and diving fire</h2>
+ <p>How to attack is the air mission commander's choice, weighing the threat, the target's size and vulnerability, the weather, the terrain, the accuracy needed, the weapons' effectiveness and fragmentation patterns. <a href="#source-jp">{j('III-93')}</a> There are three ways to fire: <a href="#source-jp">{j('III-93–III-94')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Hovering, running and diving fire compared" tabindex="0"><table>
+  <caption>The three firing techniques <a href="#source-jp">{j('III-93–III-94')}</a></caption>
+  <thead><tr><th scope="col">Technique</th><th scope="col">Flight</th><th scope="col">When</th><th scope="col">Gains</th><th scope="col">Costs</th></tr></thead>
+  <tbody>{FIRE_MODES.map((m) => <tr><th scope="row">{m.name}</th><td>{m.flight}</td><td>{m.when}</td><td>{m.gains}</td><td>{m.costs}</td></tr>)}</tbody>
+ </table></div>
+ <section class="lesson figure-lesson" data-lesson="fire" aria-labelledby="fire-title">
+  <h3 id="fire-title" class="fig-title">Figure 3 — Three ways to fire</h3>
+  <p>Pick a technique to see the helicopter's path and what it gains and gives up.</p>
+  <div class="buttons">{FIRE_MODES.map((m) => <button type="button" data-mode={m.id} aria-pressed="false">{m.name}</button>)}</div>
+  <div class="fig-scroll" role="region" aria-label="Figure 3, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 760 300" role="img" aria-label="Side view of a helicopter firing at a target: from a hover behind a mask, in level forward flight, or diving from the overhead"></svg></div>
+  <p class="no-js">Interactive figure unavailable. Hovering fire: unmask from behind cover, fire, remask; best for guided missiles. Running fire: level forward flight; steadier for rockets and guns, and less dust than a hover. Diving fire: descending from altitude, often the overhead; the most accurate unguided fire and above the small-arms threat, but continuously exposed.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Not to scale. Techniques from the joint publication <a href="#source-jp">{j('III-93–III-94')}</a>; the drawing is ours.</p>
+ </section>
+ <p>A section can combine them: often the wingman suppresses the target with rockets and guns while the lead fires precision guided munitions, which cuts the flight's vulnerability. <a href="#source-jp">{j('III-94')}</a> In running fire, fire is direct when the aircrew has an unobstructed view of the target and indirect when it cannot see it. <a href="#source-jp">{j('III-94')}</a></p>
+ <p class="key"><strong>Key point:</strong> hover to fire guided missiles from cover, run to steady rockets and guns, dive from altitude for the most accurate unguided fire; whatever the technique, keep exposure short.</p>
+ <section class="lesson quiz-lesson" data-lesson="check" aria-labelledby="check-quiz-title">
+  <h3 id="check-quiz-title">Quiz: profiles, positions and firing</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next question</button></div>
+ </section>
+
+ <h2 id="weapons">Guns, rockets and missiles</h2>
+ <p>An attack helicopter's weapons fire forward or off the axis of the aircraft. <a href="#source-jp">{j('I-5')}</a> Each suits a firing technique:</p>
+ <div class="table-scroll" role="region" aria-label="Helicopter weapons and the firing techniques that suit them" tabindex="0"><table>
+  <caption>Weapons and techniques <a href="#source-jp">{j('III-55, III-59–III-60, III-93–III-94, V-11')}</a></caption>
+  <thead><tr><th scope="col">Weapon</th><th scope="col">Suits</th><th scope="col">Why</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Guided missiles, such as Hellfire</th><td>Hovering fire, from a masked position where the missile allows it</td><td>Hovering fire is the most effective profile for precision guided munitions; a missile that locks on after launch with a remote designator can be fired without line of sight to the target</td></tr>
+   <tr><th scope="row">Rockets</th><td>Running or diving fire</td><td>Unguided; a hover can make them less accurate, forward flight may steady the aircraft, and a dive may give the most accurate results</td></tr>
+   <tr><th scope="row">Guns</th><td>Running or diving fire; suppression</td><td>Unguided, like rockets; with rockets, they suppress the target while the lead fires guided missiles</td></tr>
+  </tbody>
+ </table></div>
+ <p>Because off-axis weapons do not need the aircraft to point at the target, a controller may give a <Term>munition attack azimuth</Term> instead of a final attack heading. <a href="#source-jp">{j('V-11')}</a> Laser-guided missiles, their codes and their designators are in <a href={pt}>Precision Targeting</a>; the Hellfire's helicopter rules are in <a href="#hellfire">Hellfire from a helicopter</a>.</p>
+ <p class="key"><strong>Key point:</strong> guided missiles from the hover and from cover; rockets and guns from forward flight or a dive, and to suppress.</p>
+
+ <h2 id="egress">Disengaging and egress</h2>
+ <p>Hovering fire positions are held only for short periods so the enemy cannot target them; afterwards the aircraft <Term id="Remask">remasks</Term> or displaces. <a href="#source-jp">{j('III-93–III-94')}</a> When the attack is done or time on station is over, the flight checks out and egresses by planned or assigned routing, with the same airspeed, altitude, formation and tactics as the inbound en route phase. It can rearm and refuel at a <Term>FARP</Term> to keep supporting the troops on the ground, and makes every attempt to pass <Term>BDA</Term> and a mission report through the air liaison officer's command and control system. <a href="#source-jp">{j('III-94')}</a></p>
+ <p class="key"><strong>Key point:</strong> after firing, remask or move; leave as you came, then rearm, refuel and report.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>Marine Corps attack helicopters fly close air support; Army attack helicopters use close combat attack, which is not CAS. Both often fly mixed sections.</li>
+  <li>Altitude bands are low below 500 ft, medium 500 to 3,000 ft and high above 3,000 ft above the ground.</li>
+  <li>Terrain flight is low level (constant, normally 100–200 ft), contour (normally 50–100 ft) or NOE (as low as vegetation and obstacles allow); against small arms and RPGs, climb instead.</li>
+  <li>Travel when contact is remote, use traveling overwatch when it is possible and bounding overwatch when it is imminent.</li>
+  <li>Wait in a holding area, attack from a battle position and fire from a chosen firing point, masked until the time or the order.</li>
+  <li>Hovering fire suits guided missiles, running fire steadies rockets and guns, diving fire gives the most accurate unguided fire but exposes the aircraft.</li>
+  <li>After firing, remask or displace; egress like the ingress, rearm at a FARP and report.</li>
+ </ul>
+
+ <h2 id="overhead">The overhead, cities and night</h2>
+ <p>Diving fire often comes from an <Term>overhead position</Term>, which lets the aircrew keep high situational awareness, look down into urban settings, hold a constant weapons solution and deliver more accurate fire. It also leaves the helicopters continuously exposed. Its altitude cuts the small-arms and RPG threat but increases tracking time and reduces background clutter for an infrared SAM, so risk must be weighed against benefit every time. <a href="#source-jp">{j('III-94')}</a></p>
+ <p>Altitudes for the same area normally change from day to night, with the threat, weather and terrain. Over open desert helicopters normally fly lower as the light fades, to keep visual reference with the ground. Over cities they can often operate more safely at night than by day, but stay high enough not to be lit from below by city lights, usually from 1,500 to 3,000 ft above the ground. <a href="#source-jp">{j('III-91')}</a></p>
+
+ <h2 id="hellfire">Hellfire from a helicopter</h2>
+ <p>The <Term record="agm-114">Hellfire</Term> is a laser-guided missile against individual hard and soft point targets, guided by ground or airborne designators and able to engage several targets quickly. <a href="#source-jp">{j('III-59')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Hellfire launch modes and designation" tabindex="0"><table>
+  <caption>Launch modes and designation <a href="#source-jp">{j('III-59–III-60')}</a></caption>
+  <thead><tr><th scope="col">Choice</th><th scope="col">What it means</th><th scope="col">Use it</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>LOBL</Term></th><td>The seeker locks onto the coded laser energy before launch, so it needs direct line of sight to the target</td><td>Close to the target, for a higher probability of hit; confirms the missile sees the right code and target and is within launch constraints</td></tr>
+   <tr><th scope="row"><Term>LOAL</Term></th><td>The seeker locks on in flight, so the aircraft can launch without line of sight</td><td>To reduce the launcher's exposure, defeat laser countermeasures by delaying designation, and extend range with a remote designator</td></tr>
+   <tr><th scope="row">Autonomous designation</th><td>The launching aircraft lases its own target</td><td>The easiest to set up, but the aircrew must identify the right target</td></tr>
+   <tr><th scope="row">Remote designation</th><td>Another aircraft or a ground designator lases</td><td>Lets the launcher fire from a masked position with longer standoff; the designator must identify and lase the right target, because the aircrew may not see it</td></tr>
+  </tbody>
+ </table></div>
+ <p>Both launch modes work with either kind of designation. Codes from 1111 to 1488 give the highest probability of hit. In rapid fire the aircrew allows at least eight seconds between missiles; with two designators on different codes the interval can be as low as two seconds. Dust and smoke from the first impacts can block the laser for later missiles, so targets are worked from downwind to upwind. <a href="#source-jp">{j('III-59–III-61')}</a> For airborne designators, a helicopter Hellfire shot has its own designator safety zone, the publication's Figure III-10, on top of the normal laser zones. <a href="#source-jp">{j('III-60')}</a> Those laser zones are explained in <a href={pt + '#geometry'}>Precision Targeting</a>.</p>
+
+ <h2 id="briefs">Briefs and attack headings for helicopters</h2>
+ <p>Helicopters get the same 9-line as fixed-wing aircraft, with the battle position, heading and distance in meters as lines 1 to 3, or the shorter, friendly-centric <Term>5-line</Term>, which is the same format as the Army's close combat attack brief. A 5-line is still a CAS brief and is not clearance to fire; with Army or special operations helicopters, the controller adds "At my command" to keep control of the timing. <a href="#source-jp">{j('III-94–III-95, V-26')}</a> Both are covered in <a href={cas + '#fiveline'}>Close Air Support</a>.</p>
+ <p>Restrictions for helicopters can include approval out of, or forward of, the battle position, as in the worked example, and a munition attack azimuth instead of an aircraft heading. <a href="#source-jp">{j('V-11, V-32, E-17–E-19')}</a> Communication with helicopters is often hard because their low altitudes block line of sight, so planners use an airborne relay, ground relays or other ways to extend low-altitude radio coverage. <a href="#source-jp">{j('III-90')}</a></p>
+
+ <h2 id="fixed-wing">Working alongside fixed-wing aircraft</h2>
+ <p>A <Term>JAAT</Term>, a joint air attack team, combines fixed-wing close air support aircraft and helicopters to find and attack high-priority targets and targets of opportunity, supported by fire support, air defense artillery, naval surface fire support and intelligence. <a href="#source-jp">{j('I-5–I-6')}</a> When helicopters and fixed-wing aircraft attack at the same time, the fixed-wing aircrew must be under the controller's control to cross above or below the coordination altitude, and low-altitude fixed-wing control points and initial points will likely need lateral separation from helicopter holding areas and battle positions. <a href="#source-jp">{j('III-87')}</a></p>
+ <p>The weather can favor either: helicopters can often work under low ceilings that stop fixed-wing CAS, while fixed-wing aircraft can work above blowing surface dust that keeps helicopters on the ground. <a href="#source-jp">{j('I-8')}</a></p>
+
+ <h2 id="aircraft">Attack helicopters and weapons in the Encyclopedia</h2>
+ <p>The Encyclopedia's records give each aircraft's and weapon's role, sensors and history:</p>
+ <ul class="weapon-list">
+  <li>Attack and armed helicopters: <Term record="ah-64d">AH-64D Apache</Term>, <Term record="ka-50">Ka-50</Term>, <Term record="mi-24p">Mi-24P</Term>, <Term record="oh-58d">OH-58D Kiowa Warrior</Term>, <Term record="sa342">SA 342 Gazelle</Term> and the <Term record="uh-1h">UH-1H</Term>.</li>
+  <li>Guided missiles: <Term record="agm-114">AGM-114 Hellfire</Term>, <Term record="bgm-71">BGM-71 TOW</Term>, <Term record="hot">HOT</Term>, <Term record="9k114">9K114 Shturm</Term> and <Term record="9k121">9K121 Vikhr</Term>.</li>
+  <li>Rockets: <Term record="hydra-70">Hydra 70</Term>, <Term record="s-5">S-5</Term>, <Term record="s-8">S-8</Term> and <Term record="s-13">S-13</Term>.</li>
+ </ul>
+
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p>Falcon BMS has no flyable helicopters. In DCS, the AH-64D and Ka-50 manuals were read for this revision; the Mi-24P, OH-58D, SA 342 and UH-1H manuals were not checked.</p>
+  <h3>DCS: AH-64D</h3>
+  <ul>
+   <li>Its tactical employment chapter teaches masking and unmasking, vertically or laterally, engaging in the shortest time, then remasking and relocating to a different battle position, "much in the same manner an infantryman bounds from cover to cover". Against small arms with few air defenses, it suggests flying higher, out of their range. <a href="#source-ah64">[3, p. 350]</a></li>
+   <li>It pairs each terrain flight mode with a movement technique: low level with traveling, contour with traveling overwatch, NOE with bounding overwatch. <a href="#source-ah64">[3, p. 353]</a></li>
+   <li>Its weapon delivery techniques are hover fire below effective translational lift (roughly 16 to 24 knots), running fire above it, and diving fire at about −10° to −30° pitch, which can follow a "bump" up from behind cover. <a href="#source-ah64">[3, p. 354]</a></li>
+   <li>The two-ship air weapons team flies Combat Cruise or Combat Spread, with the wingman always ready to give suppressive fire for the lead. <a href="#source-ah64">[3, pp. 351–352]</a> Rockets can be fired indirectly from behind cover at a target point handed off by another aircraft or ground forces, and Hellfire launched lock-on-after-launch on a high, low or direct trajectory over terrain. <a href="#source-ah64">[3, pp. 559, 578]</a></li>
+  </ul>
+  <h3>DCS: Ka-50 Black Shark 3</h3>
+  <ul>
+   <li>The manual's combat employment chapter tells you to study the terrain before the mission, find terrain masking and pop-up opportunities, and choose the best battle positions. <a href="#source-ka50">[4, pp. 11–1 to 11–2]</a></li>
+   <li>The Vikhr's minimum safe launch altitude is 10 m in a hover and 50 m in forward flight, at 800 m to 8 km from the target; the cannon's minimum is 10 m in a hover. <a href="#source-ka50">[4, p. 11–1]</a></li>
+  </ul>
+  <h3>Where the sim and the real world differ, or say nothing</h3>
+  <ul>
+   <li>The AH-64D manual gives terrain flight heights above the highest obstacle: low level 80 to 200 ft, contour 25 to 80 ft, NOE under 25 ft. The joint publication gives low level as normally 100 to 200 ft and contour 50 to 100 ft above ground level, and no figure for NOE. <a href="#source-ah64">[3, p. 353]</a> <a href="#source-jp">{j('III-91')}</a></li>
+   <li>The airspeed boundary between hover and running fire (effective translational lift), the dive angles and the "bump" are the sim manual's; the joint publication defines the techniques without numbers. <a href="#source-ah64">[3, p. 354]</a> <a href="#source-jp">{j('III-93–III-94')}</a></li>
+   <li>The manual's hover-fire drawbacks, the power it needs out of ground effect and the risk of ambush, are not in the joint publication, which gives instead the loss of rocket and gun accuracy in a hover. <a href="#source-ah64">[3, p. 354]</a> <a href="#source-jp">{j('III-94')}</a></li>
+   <li>Neither manual covers the 9-line or 5-line for helicopters, holding areas as airspace coordination areas, or the JAAT.</li>
+  </ul>
+  <p><strong>To practise:</strong> in the AH-64D, fly a two-ship from a holding area to a battle position at NOE, pick firing points behind a ridge, unmask to fire Hellfire, remask and move; then fire rockets in running fire and again in a dive, and compare the spread.</p>
+ </section>
+
+ <h2 id="terms">Terms</h2>
+ <p>Every term here is in the <a href={glossary}>rotary-wing attack terms</a>, except those marked from the close air support, precision targeting or joint terms.</p>
+ <GlossaryList items={[
+  'Terrain flight', 'Low-level flight', 'Contour flight', 'NOE flight', 'Traveling', 'Traveling overwatch', 'Bounding overwatch', 'Holding area',
+  'Battle position', 'Firing point', 'Attack helicopter control point', 'Defilade', 'Hovering fire', 'Running fire', 'Diving fire', 'Overhead position',
+  'Remask', 'Indirect fire', 'Mixed section', 'Munition attack azimuth', 'JAAT', 'Close combat attack', '5-line', 'LOBL', 'LOAL', 'FARP',
+ ]} />
+ <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
+  <h3 id="terms-title">Quiz: name the term</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next term</button></div>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <p>One or more questions for each outcome at the top of the page; the quiz in <a href="#firing">Hovering, running and diving fire</a> and Figures 1 to 3 cover more.</p>
+ <details><summary><span class="outcome">Outcome 1</span> Is an Army close combat attack the same as close air support?</summary><p>No. CCA is the Army's attack for friendly units in close combat; it needs detailed integration but no terminal control from the ground, and the Army does not consider its attack helicopters a CAS system.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> A Marine section checks in as an AH-1 and a UH-1. Why the mix?</summary><p>Mixed sections give the most flexible mix of sensors, communications, maneuverability, firepower and mutual support.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> Contact is possible but not imminent, and speed matters. How do you move?</summary><p>Traveling overwatch, by contour or NOE flight: the main element keeps moving while the overwatch element covers it.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> At 400 ft above the ground, which altitude band are you in, and is it a terrain flight profile?</summary><p>Low, below 500 ft. It is not one of the terrain flight profiles' normal heights: low level is normally 100 to 200 ft, contour 50 to 100 ft.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> The brief says "Oak, 060, 3400". What do the three items mean?</summary><p>Line 1, the battle position Oak; line 2, the heading from its center to the target, 060; line 3, the distance from its center, 3,400 meters, given to the nearest 100.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Who picks your firing point, and what do you do there before the attack?</summary><p>You do, once in the battle position, after the controller's or mission commander's final instructions; you stay masked until the time on target, time to target or the order to attack.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> Why might a hover make your rockets less accurate?</summary><p>A hovering aircraft can be less stable; forward flight may add stability and improve the accuracy of unguided ordnance.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> What does the overhead give you over a city, and what does it cost?</summary><p>High situational awareness, a view down into the streets, a constant weapons solution and more accurate fire; but continuous exposure, and an easier shot for an infrared SAM.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> Can you fire Hellfire without seeing the target?</summary><p>Yes: lock-on after launch, with a remote designator lasing the target, lets you fire from a masked position with longer standoff.</p></details>
+ <details><summary><span class="outcome">Outcome 6</span> After the attack, how do you choose the egress altitude and airspeed?</summary><p>By the same considerations as the inbound en route phase: the threat, terrain and formation; then rearm and refuel at a FARP if you can, and pass BDA and a mission report.</p></details>
+
+ <h2 id="sources">Sources and applicability</h2>
+ <h3>Military sources</h3>
+ <p id="source-jp"><strong>[1] US Joint Chiefs of Staff, JP 3-09.3, Close Air Support, 25 November 2014.</strong> <a href="https://www.bits.de/NRANEU/others/jp-doctrine/jp3_09_3(14).pdf">Read on the Berlin Information-center for Transatlantic Security's copy</a>, 10 November 2026, by printed page: rotary-wing considerations pp. I-5 to I-6 and I-8; Hellfire pp. III-59 to III-61; low-altitude fixed-wing coordination p. III-87; rotary-wing CAS tactics pp. III-89 to III-94; the 5-line pp. III-94 to III-95; off-axis weapons p. V-11; the 9-line for helicopters pp. V-26 and V-32; Example 7 pp. E-17 to E-19. A later edition may differ.</p>
+ <p id="source-jp102"><strong>[2] US Department of Defense, JP 1-02, Dictionary of Military and Associated Terms, 8 November 2010, as amended through 15 February 2016.</strong> <a href="https://schoolresources.militaryfamilies.psu.edu/wp-content/uploads/2017/08/department_of_defense_dictionary_of_military_and_associated_terms.pdf">PDF</a>, read 10 November 2026: defilade p. 63; terrain flight p. 240.</p>
+ <h3>Sim sources</h3>
+ <p id="source-ah64"><strong>[3] Eagle Dynamics, DCS: AH-64D Flight Manual (English).</strong> <a href="https://www.digitalcombatsimulator.com/upload/iblock/30e/j1dh7g3egpennjdngtub7uubwcqfgrrh/DCS%20AH-64D%20Flight%20Manual%20EN.pdf">PDF</a>, read 10 November 2026, pp. 350–354, 559 and 578. A sim manual, cited for the In the sim panel and Figure 2's NOE height only.</p>
+ <p id="source-ka50"><strong>[4] Eagle Dynamics, DCS: Black Shark 3 Flight Manual (English).</strong> <a href="https://www.digitalcombatsimulator.com/upload/iblock/ece/ak5ecs04jakt38ubluxzfjqpv5k3zp5p/DCS_BS3_Flight_Manual_EN.pdf">PDF</a>, read 10 November 2026, pp. 11–1 to 11–2. A sim manual, cited only for the In the sim panel.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/rotary-wing-attack-evidence.md">Rotary-Wing Attack evidence</a>.</p>
+ <p>Figures 1 to 3 and the worked attack are original, invented examples. Figure 1 is laid out like the joint publication's Figure III-26; Figure 2's ground and line-of-sight are our geometry.</p>
+ <p class="note">Applicability: written for helicopter aircrew of every service who attack ground targets, and the controllers and ground units they support. The procedures are from the joint close air support publication, which all four services follow; Army and Marine Corps differences are labelled. The Army's own attack helicopter publications (FM 3-04, FM 3-04.126, ATP 3-04.1) and its definitions of attack by fire and support by fire could not be read in a public copy for this revision, so the Army tactical tasks are not covered here; restricted training circulars are not used. Theater SPINS, your unit's tactics and your aircraft's manual govern.</p>
+</SiteLayout>
+
+<script>import '../../../lessons/rotary-wing-attack/lesson-ui.mjs';</script>
+
+<style>
+  .contents-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; }
+  .contents h3 { margin: 0.4rem 0 0.2rem; font-size: 0.95rem; }
+  .contents ol { padding-left: 1.5rem; margin-top: 0; }
+  .lede { font-size: 1.1rem; }
+  .key { padding: 0.6rem 1rem; border-left: 0.25rem solid var(--color-link); background: var(--color-surface); }
+  ul.recap li { margin-block: 0.3rem; }
+  ol.exchange { list-style: none; padding-left: 1rem; border-left: 0.25rem solid var(--color-border); }
+  ol.exchange li { display: grid; grid-template-columns: 7.5rem 1fr; column-gap: 0.75rem; margin-block: 0.4rem; }
+  ol.exchange .who { font-weight: 700; }
+  ol.exchange .step { margin-left: 0.4rem; font-size: 0.85rem; white-space: nowrap; }
+  .outcome { display: inline-block; margin-right: 0.4rem; padding: 0 0.4rem; font-size: 0.8rem; border: 1px solid var(--color-border); color: var(--color-muted); }
+  .sim-panel { margin: 2rem 0; padding: 0.75rem 1.25rem; border-left: 4px solid var(--color-accent); background: var(--color-surface, #f6f7f8); }
+  .sim-panel h2 { margin-top: 0.4rem; }
+  .sim-panel h3 { margin: 1rem 0 0.3rem; font-size: 1rem; }
+  table { width: 100%; border-collapse: collapse; }
+  caption { padding: 0.5rem 0.75rem; text-align: left; color: var(--color-muted); font-size: 0.9rem; }
+  th, td { padding: 0.45rem 0.75rem; border-top: 1px solid var(--color-border); text-align: left; vertical-align: top; }
+  thead th { background: var(--color-surface); }
+  .note { padding: 0.75rem 1rem; border-left: 0.25rem solid var(--color-border); background: var(--color-surface); }
+  .lesson { margin-block: 1.5rem; padding: 1rem; border: 1px solid var(--color-text); }
+  .lesson h3 { margin-top: 0; }
+  button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .lesson :global(button) { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: #fff; background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
+  .lesson :global(button[aria-pressed="false"]) { color: var(--color-text); background: #fff; }
+  .lesson :global(button:disabled) { opacity: 0.45; cursor: default; }
+  .lesson [data-choices] :global(button) { color: var(--color-text); background: #fff; font-weight: 400; text-align: left; }
+  .feedback { font-weight: 700; min-height: 1.6em; }
+  .feedback :global(p) { margin: 0.2rem 0; }
+  .feedback :global(.derived) { font-weight: 400; }
+  .lesson.ready .no-js { display: none; }
+  .no-js { font-weight: 700; }
+  .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+  @media (min-width: 64rem) {
+    .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
+  }
+  .fig-scroll { overflow-x: auto; }
+  .fig-scroll :global(svg) { min-width: 36rem; }
+  .fig-title { font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 2px solid var(--color-text); padding-bottom: 0.3rem; }
+  .fig-caption { color: var(--color-muted); font-size: 0.9rem; }
+  .stepper { align-items: center; }
+  .stepper [data-count] { font-weight: 700; }
+  .quiz-lesson .task { font-style: italic; }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--color-border); }
+  .table-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+  @media (max-width: 40rem) {
+    .contents-groups { grid-template-columns: 1fr; }
+    ol.exchange li { display: block; }
+    ol.exchange .who { display: block; }
+  }
+  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
+  :global(.natops .frame) { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
+  :global(.natops .lbl) { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
+  :global(.natops .lbl.small) { font-size: 10px; font-weight: 400; }
+  :global(.natops .ln) { fill: none; stroke: var(--color-text); stroke-width: 1.8; }
+  :global(.natops .ln.heavy) { stroke-width: 2.8; }
+  :global(.natops .ln.dashed) { stroke-dasharray: 7 4; }
+  :global(.natops .ln.on) { stroke: var(--color-link); stroke-width: 2.4; }
+  :global(.natops .thin) { fill: none; stroke: var(--color-text); stroke-width: 1; }
+  :global(.natops .thin.dotted) { stroke-dasharray: 2 3; }
+  :global(.natops .shade) { fill: #e6e9ec; stroke: none; }
+  :global(.natops .fill) { fill: var(--color-text); }
+  :global(.natops .mine) { fill: var(--color-link); stroke: var(--color-link); }
+  .lesson:not(.ready) .buttons, .lesson:not(.ready) svg:empty { display: none; }
+</style>
