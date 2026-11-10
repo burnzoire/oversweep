@@ -5,7 +5,8 @@ import { getModule, includedModules } from '../../../data/modules';
 import { sitePath } from '../../../lib/paths';
 import Term from '../../../components/Term.astro';
 import { termTarget } from '../../../data/links';
-import { PHONETIC, LIGHT_SIGNALS, DISTRESS_ORDER, TRAINING_CALLS, BREVITY } from '../../../lessons/radio/lesson-model.mjs';
+import { DISTRESS_ORDER, TRAINING_CALLS, BREVITY } from '../../../lessons/radio/lesson-model.mjs';
+import ReferenceTable from '../../../components/encyclopedia/ReferenceTable.astro';
 const radio = getModule('radio-procedures');
 export function getStaticPaths() { return includedModules.some(m => m.slug === 'radio-procedures') ? [{ params: { module: 'radio-procedures' } }] : []; }
 const core = [
@@ -41,7 +42,6 @@ const a = (para: string) => `[6, ${para.includes('–') || para.includes(',') ? 
 const g = (term: string) => `[7, ${term}]`;
 const bms = (pages: string) => `[8, ${/–|,/.test(pages) ? 'pp.' : 'p.'} ${pages}]`;
 const bfm = sitePath('manual/air-combat/bfm/');
-const morse = (m: string) => m.replaceAll('.', '·').replaceAll('-', '–');
 const caseIii = sitePath('manual/naval-operations/case-iii/');
 const airfield = sitePath('manual/airfield-operations/airfield-basics/');
 ---
@@ -206,16 +206,13 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
   <p class="no-js">Interactive figure unavailable. From 2700 to 7200, change the second digit first (2200), then the first (7200); setting the first digit first would send 7700.</p>
   <p class="fig-caption">Each knob step is treated as one code sent. Real transponders differ in how and when a new code takes effect.</p>
  </section>
+ <ReferenceTable record="radio-and-visual-signals" table="transponder-codes" />
  <p class="key"><strong>Key point:</strong> 7500 hijack, 7600 radio failure, 7700 emergency: when changing code, turn the knobs in an order that never passes through one of them.</p>
 
  <h2 id="nordo">When the radio fails</h2>
  <h3>At a towered airport</h3>
  <p>Arriving with the <strong>receiver</strong> inoperative, remain outside or above the Class D surface area until you have determined the direction and flow of traffic, then advise the tower of your aircraft type, position, altitude and intention to land, and request light signals. About 3 to 5 miles out, advise your position and join the <Term>traffic pattern</Term>, watching the tower for light signals. With the <strong>transmitter</strong> inoperative, monitor the tower frequency, and acknowledge tower transmissions or light signals by rocking your wings in daylight, or by blinking the landing or navigation lights at night. <a href="#source-aim">{a('4-2-13')}</a></p>
- <div class="table-scroll" role="region" aria-label="Tower light gun signals" tabindex="0"><table>
-  <caption>Airport traffic control tower light gun signals <a href="#source-aim">{a('4-3-13')}</a></caption>
-  <thead><tr><th scope="col">Signal</th><th scope="col">Aircraft on the ground</th><th scope="col">Aircraft in flight</th></tr></thead>
-  <tbody>{LIGHT_SIGNALS.map(s => <tr><th scope="row">{s.id.replace('-', ' ').replace('alternating', 'alternating red and green').replace(/^./, c => c.toUpperCase())}</th><td>{s.ground}</td><td>{s.flight}</td></tr>)}</tbody>
- </table></div>
+ <ReferenceTable record="radio-and-visual-signals" table="light-gun-signals" />
  <section class="lesson figure-lesson" data-lesson="light" aria-labelledby="light-title">
   <h3 id="light-title" class="fig-title">Figure 6 — Read the light gun</h3>
   <fieldset class="inline"><legend>You are</legend>
@@ -289,13 +286,7 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
 
  <h2 id="alphabet">The phonetic alphabet</h2>
  <p>Use the International Civil Aviation Organization (ICAO) phonetic alphabet when communications conditions make letters hard to tell apart, when aircraft with similar call signs share a frequency, and to spell difficult words. Each letter has a telephony word and a pronunciation; the digits have their own pronunciations, such as TREE, FIFE and NIN-ER. <a href="#source-aim">{a('4-2-7')}</a></p>
- <div class="phonetic" role="region" aria-label="Phonetic alphabet table" tabindex="0">
-  <table>
-   <caption>Phonetic alphabet and Morse code <a href="#source-aim">{a('4-2-7')}</a></caption>
-   <thead><tr><th scope="col">Character</th><th scope="col">Telephony</th><th scope="col">Pronunciation</th><th scope="col">Morse</th></tr></thead>
-   <tbody>{PHONETIC.map(p => <tr><th scope="row">{p.char}</th><td>{p.word}</td><td>{p.say}</td><td class="morse">{morse(p.morse)}</td></tr>)}</tbody>
-  </table>
- </div>
+ <ReferenceTable record="radio-and-visual-signals" table="phonetic-alphabet" />
 
  <h2 id="numbers">Numbers on the radio</h2>
  <p>The AIM's rules for numbers: <a href="#source-aim">{a('4-2-8–4-2-12')}</a></p>
@@ -466,15 +457,12 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
   @media (max-width: 40rem) { .contents-groups { grid-template-columns: 1fr; } ol.exchange li { display: block; } }
   .contents ol { padding-left: 1.5rem; margin-top: 0; }
   .contents li { break-inside: avoid; }
-  .table-scroll, .phonetic { overflow-x: auto; border: 1px solid var(--color-border); }
-  .table-scroll:focus-visible, .phonetic:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
-  .phonetic { max-height: 32rem; overflow-y: auto; }
-  .phonetic thead th { position: sticky; top: 0; }
+  .table-scroll { overflow-x: auto; border: 1px solid var(--color-border); }
+  .table-scroll:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
   table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
   caption { padding: 0.5rem 0.75rem; text-align: left; color: var(--color-muted); font-size: 0.9rem; }
   th, td { padding: 0.45rem 0.75rem; border-top: 1px solid var(--color-border); text-align: left; vertical-align: top; }
   thead th { background: var(--color-surface); }
-  td.morse { font: 700 1.1rem/1 ui-monospace, Menlo, Consolas, monospace; letter-spacing: 0.15em; white-space: nowrap; }
   .note { padding: 0.75rem 1rem; border-left: 0.25rem solid var(--color-border); background: var(--color-surface); }
   ol.steps li, ol.call-order li { margin-block: 0.35rem; }
   ol.call-order { counter-reset: call; list-style: none; padding-left: 0; }

@@ -8,7 +8,7 @@ import Glossary from "../../components/encyclopedia/Glossary.astro";
 import { encyclopediaCategories } from "../../data/catalogue";
 import { sectionHasContent } from "../../data/availability";
 import { ilsLines, navaidLines, runwayLines, towerLines, towerNote } from "../../data/map-airfield-text";
-import { airfieldCatalogue, aircraftContent, mapAirfieldAnchor, simAirfields, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, threatGroups, sensorContent, sensorGroups, recordRoute, type Source } from "../../data/encyclopedia";
+import { airfieldCatalogue, aircraftContent, mapAirfieldAnchor, simAirfields, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, threatGroups, sensorContent, sensorGroups, recordRoute, referenceContent, type Source } from "../../data/encyclopedia";
 import { sitePath } from "../../lib/paths";
 import { airfieldRoles, branches, currentUse, nations, searchTerms, sims, useLabels } from "../../data/airfield-model.mjs";
 import "../../styles/encyclopedia.css";
@@ -404,7 +404,7 @@ const deliverySources: Source[] = [
         <>
           <h2>Records</h2>
           <div class="entry-grid record-grid">
-            {records.map(({ record }) => <RecordCard record={record} />)}
+            {records.map(({ record }) => <RecordCard record={record} photo={record.category === 'reference-data' ? referenceContent(record).frontmatter.photo : undefined} />)}
           </div>
         </>
       )}
