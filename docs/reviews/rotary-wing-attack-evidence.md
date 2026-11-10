@@ -22,24 +22,40 @@ source: https://www.digitalcombatsimulator.com/upload/iblock/ece/ak5ecs04jakt38u
 pages: 413-414 (printed 11–1 to 11–2)
 ```
 
+```review-sources
+source: https://aviation-assets.info/wp-content/uploads/ARN21797_FM_3-04_FINAL_WEB_wfix.pdf
+pages: 59-60; 63-64; 67-69
+```
+
+```review-sources
+source: https://aviation-assets.info/wp-content/uploads/fm-3-04-126-attack-reconnaissance-helicopter-operations.pdf
+pages: 81; 130-132; 145-148; 221
+```
+
 **Retrieval.** All sources were read on 10 November 2026 and reduced to text
 with Poppler `pdftotext -layout`. Quotations come from that text: check each
 against independently retrieved source text and treat a wording mismatch as a
 finding against this record.
 
-**Page numbers.** JP 3-09.3: PDF page = printed page + 25 in chapter I, + 67 in
+**Page numbers.** FM 3-04: PDF page = printed chapter-3 page + 56 (3-3 is
+PDF page 59). FM 3-04.126: PDF page = printed chapter-3 page + 62 (3-85 is
+PDF page 147); B-3 is PDF page 221. JP 3-09.3: PDF page = printed page + 25 in chapter I, + 67 in
 chapter III, + 217 in chapter V and + 311 in Appendix E (E-17 is PDF page 328).
 AH-64D manual: printed page = PDF page. Black Shark 3 manual: chapter-page
 numbering; pp. 11–1 and 11–2 are PDF pages 413 and 414. JP 1-02: printed page 63
 is PDF page 69, printed page 240 is PDF page 246.
 
 **Sources that could not be read.** irp.fas.org returned HTTP 202 with an
-empty body for FM 3-04 (2020), FM 3-04.126 (2007) and TC 3-04.4;
-man.fas.org did the same for FM 1-112; armypubs.army.mil returned an error page;
-everyspec.com, asktop.net and digitalcommons.unl.edu returned 403;
-globalsecurity.org returned 402. So no Army attack helicopter publication was
-read, and the Army tactical tasks attack by fire and support by fire are not
-defined on the page. TC 3-04.3 and TC 3-04.45 are restricted and were not used.
+empty body for FM 3-04, FM 3-04.126 and TC 3-04.4; man.fas.org did the same for
+FM 1-112; armypubs.army.mil returned an error page; everyspec.com, asktop.net
+and digitalcommons.unl.edu returned 403; globalsecurity.org returned 402. The
+project owner then supplied public copies of FM 3-04 and FM 3-04.126 (both
+"Approved for public release; distribution is unlimited") on
+aviation-assets.info, which are the copies cited. The current Army tactics
+publications (ATP 3-04.1, TC 3-04.12) were not read. TC 3-04.3 and TC 3-04.45
+are restricted and were not used. Neither Army manual defines attack by fire
+or support by fire position in its glossary (both only expand ABF and SBF), so
+the glossary entries describe the positions from how the manuals use them.
 
 **Invented content.** Figure 1's attack (Saber 21 and 22, Hammer 11, holding
 area Rose, battle position Oak, heading 060, 3,400 m, four Hellfire) is made
@@ -82,7 +98,69 @@ https://schoolresources.militaryfamilies.psu.edu/wp-content/uploads/2017/08/depa
 - **p. 63** "defilade — 1. Protection from hostile observation and fire provided by an obstacle such as a hill, ridge, or bank. 2. A vertical distance by which a position is concealed from enemy observation. 3. To shield from enemy fire or observation by using natural or artificial obstacles."
 - **p. 240** "terrain flight — Flight close to the Earth's surface during which airspeed, height, and/or altitude are adapted to the contours and cover of the ground in order to avoid enemy detection and fire. Also called contour flight; low-level flight; nap-of-the-earth flight."
 
-## [3] DCS: AH-64D Flight Manual (English)
+## [3] FM 3-04, Army Aviation, 6 April 2020
+
+- p. 3-3 to 3-4: attacks against enemy forces in close friendly contact, where
+  the ground maneuver commander controls the synchronization of the aviation
+  maneuver and the deconfliction of its fires, and out of friendly contact,
+  where the air mission commander does within an assigned area of operations;
+  either can be hasty or deliberate. The tactical task is attack (destroy,
+  defeat, disrupt, divert or delay).
+- p. 3-4: control measures include "ACMs, attack by fire positions, attack
+  routes, fire support coordination measures" and holding areas; "Once
+  triggered, the AWT maneuvers along preplanned routes to an attack by fire
+  position to destroy the enemy".
+- p. 3-12: "Maximizing the use of terrain to mask maneuver along attack routes
+  and in attack by fire positions"; timing: committed too early the attack may
+  culminate, too late the aircraft may miss the target.
+- pp. 3-12 to 3-13: continuous attack (at least one company always in the
+  fight), phased attack (shaping company, second phased in from a different BP
+  or ABF, third the reserve; short FARP turnaround), maximum destruction attack
+  (all three companies; battalion may be out of the fight 45 to 90 minutes and
+  much of it unable to fly further missions for at least 24 hours).
+
+## [4] FM 3-04.126, Attack Reconnaissance Helicopter Operations, 16 February 2007
+
+- p. 3-19 (¶ 3-90): hasty attack planning "can consist of the following:
+  Select an ABF or SBF position, if applicable. Define the EA. Define the
+  target. Determine the method of engagement."
+- p. 3-68 (¶ 3-296): "The static attack maintains all aircraft in an ABF/SBF and
+  is utilized when the threat situation and environmental conditions allow
+  aircraft to fire from a hover."
+- p. 3-69 (¶ 3-298 to 3-299): "Hover fire is any engagement conducted below
+  effective translational lift (ETL). It may be either stationary or moving."
+  "Running fire is an engagement from a moving helicopter above ETL. Forward
+  airspeed adds stability to the helicopter and increases the delivery
+  accuracy of weapon systems, particularly rockets."
+- pp. 3-69 to 3-70 (¶ 3-302 to 3-305): low-level attack ("near terrain or NOE
+  ... normally used during hover or running fire"; cannot engage at maximum
+  range; wider dispersion), bump attack ("normally used during running fire,
+  transitioning to diving fire. Each aircrew bumps up prior to or during
+  weapons engagement and then returns to terrain flight altitude"), high
+  attack ("normally greater than 1,000 feet"; "higher altitudes enable greater
+  effectiveness of threat IR and RF missiles").
+- pp. 3-83 to 3-84 (¶ 3-359): "Should enemy AD or tanks be in overwatch, or if
+  the target is stationary, the aircrew should not make more than two
+  engagements from the same firing position."
+- p. 3-84 (¶ 3-362): the HA "is normally located approximately 2 to 5
+  kilometers behind the BP, ABF, or FLOT"; aircraft remain at NOE, maintain
+  operating RPM and radio listening silence.
+- pp. 3-85 to 3-86 (¶ 3-364 to 3-370): ABF occupation has "greater freedom of
+  movement than the occupation of the BP"; the lead team clears the attack
+  route, maneuver area and ABF/BP; standard or nonstandard set; "SET HOT"
+  (teams are in position and have targets in sight) or "SET COLD"; "Sensor
+  range, not weapons range, is the key factor when selecting ABFs/BPs"; "left
+  shoots left and lead, right shoots right and rear, and center shoots center
+  zone"; "As a rule, no more than 10 minutes should be spent in any one BP";
+  egress "using terrain flight to the RP. Remaining teams cover the egress".
+- p. B-3 (¶ B-10 to B-11): racetrack orbit behind the BP, ABF or SBF when
+  density altitude precludes hovering; "The BP, ABF, or SBF is normally offset
+  from the flank of the friendly ground position but close enough to
+  facilitate efficient target handoffs", keeping rotor wash, back blast,
+  casings and signature off the ground unit, engaging the enemy's flank and
+  lessening fratricide risk along the gun-target line.
+
+## [5] DCS: AH-64D Flight Manual (English)
 
 - **p. 350** Masking/un-masking: "attack helicopters may un-mask vertically or laterally … When an attack is initiated, the enemy should be engaged within the shortest amount of time possible before re-masking and relocating to a different battle position." "…bound from one battle position to the next … (much in the same manner an infantryman bounds from cover to cover)". "in a threat environment where air defenses are low and the most prevalent threat to helicopters is small arms fire … it may be advantageous to maintain a higher altitude outside the engagement ranges of such weapons."
 - **pp. 351 to 352** Air Weapons Team of two AH-64s; the wingman "always ready to provide suppressive fire in support of Lead"; Combat Cruise and Combat Spread.
@@ -91,7 +169,7 @@ https://schoolresources.militaryfamilies.psu.edu/wp-content/uploads/2017/08/depa
 - **p. 559** Rockets: the fire control system "allows the AH-64 to employ unguided rockets from behind cover when the aircraft may not have a direct line-of-sight to the target location. This capability facilitates indirect fire against target locations that have been handed off to the AH-64 crew from another platform such as another AH-64 team member, a scout helicopter, or friendly ground forces."
 - **p. 578** LOAL "allows the launching aircraft to fire the missile while remaining behind cover"; High, Low and Direct trajectories to clear terrain.
 
-## [4] DCS: Black Shark 3 Flight Manual (English)
+## [6] DCS: Black Shark 3 Flight Manual (English)
 
 - **p. 11–1** "always study the terrain before the mission and use it to your advantage; identify terrain masking and pop-up opportunities". Vikhr: "Minimum Safe Launch Altitude – Hover 10 m", "Minimum Safe Launch Altitude – Forward Flight 50 m", "Minimum Range to Target 800 m", "Maximum Range to Target 8,000 m". Cannon: "Minimum Safe Altitude - Hover 10 m".
 - **p. 11–2** Mission preparation: "Determine best Battle Positions (BP), if needed."
