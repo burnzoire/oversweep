@@ -45,3 +45,14 @@ svg.form { display: block; width: 100%; height: auto; background: #fff; }
 @media (prefers-reduced-motion: reduce) { .form .lamp.strobe { animation: none; } }
 .lesson [data-choices] button[aria-pressed="true"] { background: var(--color-text); color: #fff; }
 .controls label { margin-right: 0.6rem; }
+/* Helicopter Formation module (helo-ui.mjs). */
+.form .heli .disk { fill: rgba(60, 64, 70, 0.08); stroke: #6b747c; stroke-width: 1; stroke-dasharray: 4 3; }
+.form .heli .body { fill: #8d97a0; stroke: #3b434b; stroke-width: 0.6; }
+.form .heli.lead .body { fill: var(--color-text); }
+.form .heli.moving .disk { stroke: #d93025; }
+.form .heli-side .body { fill: #5d6770; stroke: #3b434b; stroke-width: 0.6; }
+.form .heli-side .rotor { stroke: #3b434b; stroke-width: 2; }
+.form .wake { fill: none; stroke: #d93025; stroke-width: 2; stroke-dasharray: 5 4; }
+.form .track { stroke: var(--color-link); stroke-width: 2; }
+.form .track-end { fill: var(--color-link); }
+.form .ghost { fill: none; stroke: #9aa1a8; stroke-width: 1; stroke-dasharray: 2 3; }

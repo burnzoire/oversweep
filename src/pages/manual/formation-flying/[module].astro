@@ -1,10 +1,11 @@
 ---
 import TwoShip from './_TwoShip.astro';
+import Helicopter from './_Helicopter.astro';
 import { includedModules } from '../../../data/modules';
 // Formation Flying has one page per module, each its own component kept
 // beside this route so the SME review reads it (the underscore keeps Astro
 // from routing it). This route emits only the modules the registry includes.
-const pages = { 'two-ship-formation': TwoShip };
+const pages = { 'two-ship-formation': TwoShip, 'helicopter-formation': Helicopter };
 export function getStaticPaths() {
   return includedModules.filter((m) => m.subject === 'formation-flying').map((m) => ({ params: { module: m.slug } }));
 }

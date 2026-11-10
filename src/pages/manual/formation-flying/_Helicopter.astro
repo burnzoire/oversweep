@@ -1,0 +1,349 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
+import { getModule } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import Term from '../../../components/Term.astro';
+import '../../../styles/instrument-flight.css';
+import '../../../styles/formation.css';
+const mod = getModule('helicopter-formation');
+// The first-pass path, then reference material for when it is needed.
+const core = [
+ ['example', 'One formation sortie, start to finish'], ['roles', 'Who does what'], ['formations', 'The formations'],
+ ['spacing', 'Spacing in rotor disks'], ['enroute', 'Takeoff, en route and landing'], ['contingencies', 'Lost visual contact and breakups'], ['recap', 'Key points'],
+];
+const reference = [
+ ['lead-change', 'The lead change'], ['lights', 'Lights and flying without the radio'], ['rejoin', 'Rendezvous, join-up and planned breakups'],
+ ['environment', 'Dust, snow and mountains'], ['wake', 'Wake and rotor wash'], ['brief', 'What the brief covers'],
+ ['sims', 'In the sim'], ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+];
+// [1] Army TC 3-04.1-4, Fundamentals of Flight (March 2026), by printed
+// page (PDF page = printed + 20). [2] DCS AH-64D flight manual, by printed
+// page, sim crossover only.
+const pp = (n: number) => (page: string) => `[${n}, ${/[–,]/.test(page) ? 'pp.' : 'p.'} ${page}]`;
+const tc = pp(1), ah = pp(2);
+const glossary = sitePath('encyclopedia/terminology/formation/');
+const twoShip = sitePath('manual/formation-flying/two-ship-formation/');
+const rwAttack = sitePath('manual/air-to-ground-operations/rotary-wing-attack/');
+const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
+---
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="formation-flying" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Formation Flying',href:sitePath('manual/formation-flying/')},{label:mod.title}]}>
+ <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
+  <h2>{mod.maturity}</h2>
+  <p>Module revision {mod.revision} · Helicopters flying as a flight: the crew roles, the fixed and maneuvering formations, spacing in rotor disks, the formation takeoff, turns and landing, lost visual contact, the inadvertent IMC and threat breakups, the lead change and lighting. From the Army’s fundamentals of flight training circular, given as generic technique, with the DCS AH-64D manual for the sim.</p>
+  <p>Figure 1 draws every formation from above for a flight of two to five; Figure 2 shows vertical separation; Figure 3 is the inadvertent IMC breakup; Figure 4 steps through a lead change.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
+ </nav>
+
+ <p class="lede">Helicopters fly in formation to control and mass a flight: its strengths are control, predictability, flexibility, mutual support and threat detection. The two-helicopter team is the building block, and every larger formation is made of teams. Discipline matters most: when lead and wingmen know their duties, they work together as a team. <a href="#source-tc">{tc('211, 223')}</a> Fixed-wing sections, parade sight pictures and tactical turns are in <a href={twoShip}>Two-Ship Formation</a>.</p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>name the fixed and maneuvering helicopter formations, where each wingman flies, and pick one for a task;</li>
+  <li>give formation spacing in rotor disks and vertical separation, and say what stepped-down costs;</li>
+  <li>say what the air mission commander, flight lead, tactical lead, wingmen and each crewmember do;</li>
+  <li>describe the formation takeoff, turns, lead change and landing;</li>
+  <li>run the lost visual contact, inadvertent IMC and threat breakup procedures, and use lights to form a flight without the radio.</li>
+ </ol>
+ <p class="note">This is a reference, not a qualification. The procedures come from the US Army’s fundamentals of flight training circular, given here as generic technique; the circular itself says its angles and distances can change with aircraft and mission. Navy and Marine Corps helicopter formation publications could not be found on a public host for this revision. Your service’s rules, your unit’s standard procedures and the aircraft’s operator’s manual govern.</p>
+
+ <h2 id="example">One formation sortie, start to finish</h2>
+ <p>An invented sortie: four utility helicopters lift troops from a pickup zone to a dusty landing zone. Each step is the circular’s procedure; the choices of formation and spacing are illustrative. Each step links to the section that explains it.</p>
+ <ol class="exchange script">
+  <li><span class="who">Brief</span> <span class="said">The <Term>air mission commander</Term> briefs formations, altitudes, airspeeds, lighting, lead change, loss of visual contact, lost communications, inadvertent IMC, actions on contact, downed aircraft and separation. <a href="#source-tc">{tc('211, 216')}</a> <a class="step" href="#brief">The brief</a></span></li>
+  <li><span class="who">Forming up</span> <span class="said">No radio: every anti-collision light is on. Each crew turns its light off when it is ready and the light ahead is off. Trail, last to be ready, keeps its light on and tells lead the flight is ready with a code word. <a href="#source-tc">{tc('223')}</a> <a class="step" href="#lights">Lights</a></span></li>
+  <li><span class="who">Takeoff</span> <span class="said">All four lift off together on lead’s signal. Lead accelerates a little faster than a VMC takeoff so the others reach translational lift, and the wingmen step up into the en route formation. <a href="#source-tc">{tc('216–217')}</a> <a class="step" href="#enroute">Takeoff</a></span></li>
+  <li><span class="who">En route</span> <span class="said"><Term id="Staggered formation">Staggered</Term> right at close spacing, three to five rotor disks. Lead makes smooth turns of no more than 30° bank and changes speed and height gradually. <a href="#source-tc">{tc('215, 217, 224')}</a> <a class="step" href="#formations">Formations</a></span></li>
+  <li><span class="who">Lost contact</span> <span class="said">Chalk 4 loses sight of chalk 3 and calls lead at once. Lead gives heading, altitude, airspeed and distance to the next waypoint and holds them; chalk 4 takes lead’s heading and airspeed until it rejoins. <a href="#source-tc">{tc('222')}</a> <a class="step" href="#contingencies">Lost visual contact</a></span></li>
+  <li><span class="who">Approach</span> <span class="said">For the dust, the flight changes to <Term id="Echelon formation">echelon</Term> right. Lead flies a constant approach angle and touches down far enough forward to leave room for the whole flight. <a href="#source-tc">{tc('217–218, 225')}</a> <a class="step" href="#environment">Dust</a></span></li>
+  <li><span class="who">Landing</span> <span class="said">All four touch down at the same time. Had it looked unsafe, lead would have gone around before the flight descended below the obstacles or lost translational lift. <a href="#source-tc">{tc('218')}</a> <a class="step" href="#enroute">Landing</a></span></li>
+ </ol>
+ <p class="key"><strong>Key point:</strong> the brief sets every formation, spacing and contingency in advance, so the flight can change shape or recover with few words.</p>
+
+ <h2 id="roles">Who does what</h2>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Roles in a helicopter flight <a href="#source-tc">{tc('211–213')}</a></caption>
+  <thead><tr><th>Role</th><th>Who</th><th>Responsible for</th></tr></thead>
+  <tbody>
+   <tr><td><Term>Air mission commander</Term> (AMC)</td><td>In charge of all the flight’s resources; an alternate is designated</td><td>Planning, organizing and briefing; delegating tasks; flight integrity, flight discipline and the mission; the debrief</td></tr>
+   <tr><td>Flight lead (team lead for two aircraft)</td><td>Designated by the AMC, generally the most proficient pilot in command</td><td>Navigation, en route communication, obstacle and threat avoidance, the wingmen’s positions and every aircraft’s energy state</td></tr>
+   <tr><td><Term>Tactical lead</Term></td><td>Whoever first sees a threat or obstacle, in any aircraft</td><td>Announcing it and calling the maneuver to engage, suppress or bypass it; flight lead takes control back when the situation allows</td></tr>
+   <tr><td>Wingmen (chalk 2, 3…)</td><td>Every other aircraft</td><td>Holding the formation, lookout, navigation and fire support; collision, obstacle and threat avoidance; backup navigation and communications; questioning lead on a significant deviation; ready to take the lead</td></tr>
+  </tbody>
+ </table></div>
+ <p>Inside each aircraft the pilot on the controls (P*) flies and avoids hazards; the pilot not on the controls (P) monitors the profile, works the radios and switches, navigates and copies clearances, ready to take control; nonrated crewmembers watch terrain, threats and the other aircraft and call every change in their positions. <a href="#source-tc">{tc('213')}</a> The P* flies with primary reference to one other aircraft; the P can watch the others. <a href="#source-tc">{tc('217')}</a> Every aircraft is a <Term>chalk</Term>, numbered from lead.</p>
+ <p class="key"><strong>Key point:</strong> the AMC owns the mission, flight lead flies it and tactical lead can be anyone; every wingman is ready to lead.</p>
+
+ <h2 id="formations">The formations</h2>
+ <p><Term id="Fixed formation">Fixed formations</Term> are for control: the flight acts as one aircraft and mirrors lead, for departures and arrivals at landing zones and airfields, administrative transits and weather that rules out tactical spacing. Lead must leave wingmen room from obstacles, and inside a turn a wingman sits lower. <Term id="Maneuvering formation">Maneuvering formations</Term> are for tactics: wider spacing, overlapping fields of view and fire, and lead free to maneuver near terrain while wingmen keep their own clearance. <a href="#source-tc">{tc('224, 227')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="formations" aria-labelledby="forms-title">
+  <h3 id="forms-title" class="fig-title">Figure 1 — The formations from above</h3>
+  <p class="no-js">This figure needs JavaScript. The table below gives the same positions.</p>
+  <div class="buttons" data-forms role="group" aria-label="Formation"></div>
+  <div class="buttons" data-count role="group" aria-label="Flight size"></div>
+  <div class="buttons" data-gap role="group" aria-label="Spacing"></div>
+  <div class="buttons" data-side role="group" aria-label="Side of chalk 2"></div>
+  <div class="fig-scroll"><svg class="form" role="img" aria-label="Helicopter formations from above"></svg></div>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Rotor disks are drawn to scale with the spacing, measured edge to edge as the circular defines it. Dashed lines join each wingman to the aircraft it flies on. The V and combat spread are drawn at the sizes the circular describes, three and two aircraft. The angles are the circular’s guides; aircraft limits can change them, as on the UH-60, whose windshield posts block the 45° view.</p>
+ </section>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Helicopter formations <a href="#source-tc">{tc('224–230')}</a></caption>
+  <thead><tr><th>Formation</th><th>Where each wingman flies</th><th>Use it for</th><th>Costs</th></tr></thead>
+  <tbody>
+   <tr><td colspan="4"><strong>Fixed</strong></td></tr>
+   <tr><td><Term id="Staggered formation">Staggered</Term> left or right</td><td>About 45° astern of the aircraft ahead, alternating sides; chalk 3 is in trail behind lead</td><td>Congested airspace, large flights in low threat, air assault approaches and takeoffs, narrow canyons</td><td>Hard work tight or close; long, wide landing area; some limit on door gunners</td></tr>
+   <tr><td><Term id="Echelon formation">Echelon</Term> left or right</td><td>All on one side, about 30–45° off lead’s 6 o’clock</td><td>Dust, sand and snow takeoffs and landings; troops to a flank</td><td>Severely limits maneuvering; long, wide landing area</td></tr>
+   <tr><td><Term id="Trail formation">Trail</Term></td><td>Behind the aircraft ahead, within 10° of its track</td><td>Takeoffs, landings and changing formation; not for long</td><td>Closure hard to judge; poor in dust, sand and snow</td></tr>
+   <tr><td><Term id="V-formation">V</Term></td><td>Two wingmen about 45° astern of the leader, one each side</td><td>Small landing areas; dust with light winds; all-round security</td><td>Restricts inboard door gunners</td></tr>
+   <tr><td colspan="4"><strong>Maneuvering</strong></td></tr>
+   <tr><td><Term>Combat cruise</Term></td><td>A team’s wingman anywhere from lead’s 3 to 9 o’clock, best at 45°</td><td>The basic team formation: flexibility and mutual support</td><td>Long periods at lead’s 6 o’clock not recommended</td></tr>
+   <tr><td>Combat cruise left or right</td><td>From directly behind to abeam on one side, best at 45°; sides change only when lead briefs it</td><td>Spacing with some predictability</td><td>Less freedom than combat cruise</td></tr>
+   <tr><td><Term>Combat trail</Term></td><td>Within 30° either side of the 6 o’clock of the aircraft ahead</td><td>Narrow terrain and narrow landing zones</td><td>Not for long or at night</td></tr>
+   <tr><td><Term>Combat spread</Term></td><td>Toward lead’s 3 or 9 o’clock, on the side lead calls</td><td>Most observation forward; least exposure over open ground</td><td>Needs a rapid scan, more so at night</td></tr>
+  </tbody>
+ </table></div>
+ <details class="more"><summary>More on each formation</summary>
+  <ul>
+   <li><strong>Staggered</strong> is one of the most common Army formations, a continuous chain of two-helicopter elements of any size. Lead directs a change between left and right; chalk 2 crosses with a heading change of about 5–10° and a slight vertical stack to avoid rotor wash, while chalk 3 stays behind lead. It fixes wingmen, lets lead maneuver, makes loads easy to preposition and deploys troops for all-round security. <a href="#source-tc">{tc('224')}</a></li>
+   <li><strong>Echelon</strong> wingmen need not stay level in a turn, especially a turn toward them, where they may stack slightly low to keep the aircraft ahead in sight. It makes the whole flight easy to see and lets door gunners fire almost unrestricted, but the flight is more vulnerable in a threat engagement and loads are harder to preposition. <a href="#source-tc">{tc('225')}</a></li>
+   <li><strong>Trail</strong> is the hardest fixed formation: distance and closure are hard to read, especially at night, aided or unaided, and the aircraft ahead struggles to scan for a wingman at its 6 o’clock. It eases load prepositioning and door-gun fire, but needs a long landing area. <a href="#source-tc">{tc('226')}</a></li>
+   <li><strong>V</strong> pilots scan both other aircraft. Small Vs suit dust, sand and snow in light winds, because the wider disk separation keeps each aircraft out of the cloud ahead. <a href="#source-tc">{tc('226–227')}</a></li>
+   <li><strong>Combat cruise</strong> replaced the term free cruise. Lead maneuvers and engages without affecting the wingman’s path unless they are tight; the two divide observation sectors; the wingman, holding no fixed position, can work on navigation, terrain masking and the enemy, ready to fire in support. In rough terrain it is tighter. In a turn the wingman slides, using lead’s turn radius, and resumes when lead rolls out. In larger flights each aircraft flies off the one ahead, and teams can fly as combat cruise teams in trail with slightly more space between teams. <a href="#source-tc">{tc('228')}</a></li>
+  </ul>
+ </details>
+ <p>Many wingmen move to the outside of a turn to keep lead and the terrain ahead in sight; on the inside, especially stacked low, they need a rapid scan. The whole flight should never pass over the same spot: vary the paths between teams. <a href="#source-tc">{tc('227')}</a> In terrain flight each aircraft picks its own ground within lead’s general direction, not equally spaced and not over the ground the aircraft ahead used, which would help enemy gunners. <a href="#source-tc">{tc('213')}</a></p>
+ <p class="key"><strong>Key point:</strong> fixed formations trade flexibility for control and mirror lead; maneuvering formations give each wingman an area, not a point, and make it responsible for its own clearance.</p>
+
+ <h2 id="spacing">Spacing in rotor disks</h2>
+ <p>Helicopter spacing is counted in rotor disks of the type being flown, from the rear edge of the leading aircraft’s disk to the front edge of the trailing one. It is set in the brief and established by chalk 2; the rest follow its pattern. <a href="#source-tc">{tc('214')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Horizontal distance <a href="#source-tc">{tc('214–215')}</a></caption>
+  <thead><tr><th>Name</th><th>Disk edge to disk edge</th></tr></thead>
+  <tbody>
+   <tr><td>Tight</td><td>About 2 rotor disks</td></tr>
+   <tr><td>Close</td><td>3 to 5 rotor disks</td></tr>
+   <tr><td>Loose</td><td>6 to 10 rotor disks</td></tr>
+   <tr><td>Extended</td><td>More than 10 rotor disks, as tactics require</td></tr>
+  </tbody>
+ </table></div>
+ <p>The angle is measured from the 6 o’clock of the aircraft followed: 0° is directly behind, 90° abeam. It is traditionally 30° or 45°. <a href="#source-tc">{tc('214')}</a> Spacing is a trade decided by mission, enemy, terrain, troops, time and civil considerations: low-illumination nights usually need close spacing, day flights can spread out, and loose or extended formations are less tiring than tight or close ones. Lead weighs threat, terrain, illumination, time of day, visibility, communications and the crews and aircraft. <a href="#source-tc">{tc('214, 217')}</a> Over flat terrain spacing should increase, since a spread flight is harder to detect and an enemy that finds one aircraft may miss the other; rough terrain may need closer spacing to keep control. <a href="#source-tc">{tc('216')}</a> Maneuvering formations range from three to five rotor disks to a kilometre or more. <a href="#source-tc">{tc('227')}</a> Whatever the spacing, the wingman is ultimately responsible for keeping clear, by anticipating lead’s maneuvers. <a href="#source-tc">{tc('214')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="vertical" aria-labelledby="vert-title">
+  <h3 id="vert-title" class="fig-title">Figure 2 — Vertical separation</h3>
+  <p class="no-js">This figure needs JavaScript. The text below gives the three options.</p>
+  <div class="buttons" data-choices role="group" aria-label="Vertical separation"></div>
+  <div class="fig-scroll"><svg class="form" role="img" aria-label="Vertical separation, side view"></svg></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+ </section>
+ <p>Vertical separation is flat (all at one altitude), <Term>stepped-up</Term> (each aircraft 1–10 ft higher than the one ahead) or stepped-down (1–10 ft lower). Stepped-down puts trailing aircraft in the wake of the ones ahead, so they must adjust their position and need more power. <a href="#source-tc">{tc('215')}</a> Trailing aircraft flying below the aircraft ahead may meet wake turbulence and sudden pitch, roll and yaw. <a href="#source-tc">{tc('217')}</a></p>
+ <p class="key"><strong>Key point:</strong> spacing is counted in rotor disks edge to edge, briefed and set by chalk 2, and wider when terrain and light allow; whatever the spacing, the wingman keeps the separation.</p>
+
+ <h2 id="enroute">Takeoff, en route and landing</h2>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Phases of a formation flight <a href="#source-tc">{tc('216–218')}</a></caption>
+  <thead><tr><th>Phase</th><th>Lead</th><th>Wingmen</th></tr></thead>
+  <tbody>
+   <tr><td>Takeoff</td><td>Gives the signal; all lift off together, into the wind. Accelerates slightly faster than a VMC takeoff so followers reach translational lift, but not so fast that they scramble; climbs enough to clear barriers, then accelerates smoothly to cruise</td><td>Move into the en route formation and step up as soon as possible, into undisturbed air</td></tr>
+   <tr><td>En route</td><td>Changes altitude and airspeed smoothly and gradually, especially in tight or close formations</td><td>Fly on one aircraft; the P navigates in every aircraft in case it has to take the lead</td></tr>
+   <tr><td>Turns</td><td>Smooth, constant-rate turns of no more than 30° bank, started early for a large turn; avoid planning legs with heading changes of more than 60°</td><td>Inside the turn: slightly slower and lower. Outside: slightly faster and higher. Avoid being forced inside lead’s turning arc</td></tr>
+   <tr><td>Changing formation</td><td>Only when necessary, as briefed; trail can be a transitional formation</td><td>Change only to a briefed formation</td></tr>
+   <tr><td>Landing</td><td>Flies straight and level to the approach angle, then a constant angle; touches down far enough forward to leave room for the whole flight; goes around before descending below obstacles or losing translational lift</td><td>All touch down together, holding position; if closing too fast, no S-turns to lose airspeed: go around if unable to slow</td></tr>
+  </tbody>
+ </table></div>
+ <p>Abrupt changes by lead cause an <Term>accordion effect</Term>: each aircraft copies the change a little harder than the one ahead, and aircraft at the back can close dangerously fast. Closure on the approach is somewhat slower at night than by day. <a href="#source-tc">{tc('217–218')}</a> With moderate to heavy dust, sand or snow, aircraft take off singly in chalk order and join up in flight instead. <a href="#source-tc">{tc('217')}</a></p>
+ <p class="key"><strong>Key point:</strong> lead flies smoothly and gently so the whole flight can follow; anything abrupt grows down the formation.</p>
+
+ <h2 id="contingencies">Lost visual contact and breakups</h2>
+ <p><strong>Lost visual contact.</strong> Call lead at once. <a href="#source-tc">{tc('222')}</a></p>
+ <ol class="exchange">
+  <li><span class="who">Wingman</span> <span class="said">Calls lead immediately on losing sight of the aircraft it follows.</span></li>
+  <li><span class="who">Lead</span> <span class="said">Announces heading, altitude, airspeed and, if available, distance to the next waypoint, and holds them until everyone has rejoined.</span></li>
+  <li><span class="who">Wingman</span> <span class="said">Takes lead’s heading and airspeed and tries to regain contact.</span></li>
+  <li><span class="who">Flight</span> <span class="said">Reorients, by the unit’s procedures: a rally point, covert or overt lights, or a ground rally. The mission goes on only when the whole flight is formed.</span></li>
+ </ol>
+ <p>Reorientation comes first: except for enemy contact, every mission requirement waits for it. A wingman may rejoin in a different position; the mission commander can then separate the flight by altitude, a target reference point, a cardinal direction or another method. <a href="#source-tc">{tc('222–223')}</a></p>
+ <p><strong>Inadvertent IMC breakup.</strong> Every multi-helicopter brief includes a plan for inadvertent instrument conditions, for every phase. The aircraft that enters cloud says so on the radio, with a briefed code word or plain language, for example: “Lead is IMC, executing breakup procedure, heading 090.” The flight then breaks up by the plan, unless it can stay in visual conditions. Turns, airspeeds and climbs are at a set standard rate, and each aircraft holds its heading and altitude for at least 30 seconds before anything else. Each aircraft stays in contact with lead and calls ATC in chalk order. <a href="#source-tc">{tc('220')}</a> For a staggered formation the circular suggests: <a href="#source-tc">{tc('220–221')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="iimc" aria-labelledby="iimc-title">
+  <h3 id="iimc-title" class="fig-title">Figure 3 — Inadvertent IMC breakup from a staggered formation</h3>
+  <p class="no-js">This figure needs JavaScript. The table below gives the same plan.</p>
+  <div class="buttons" data-count role="group" aria-label="Flight size"></div>
+  <div class="buttons" data-side role="group" aria-label="Staggered side"></div>
+  <div class="fig-scroll"><svg class="form" role="img" aria-label="Inadvertent IMC breakup"></svg></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+ </section>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>The suggested breakup, staggered left <a href="#source-tc">{tc('220–221')}</a></caption>
+  <thead><tr><th>Chalk</th><th>Turn</th><th>Climb</th></tr></thead>
+  <tbody>
+   <tr><td>1 (lead)</td><td>Straight ahead</td><td>Climbs and reports the heading and altitude it will hold</td></tr>
+   <tr><td>2</td><td>20° left</td><td>500 ft above lead</td></tr>
+   <tr><td>3</td><td>30° right</td><td>500 ft above chalk 2 (1,000 ft above lead)</td></tr>
+   <tr><td>4</td><td>40° left</td><td>500 ft above chalk 3 (1,500 ft above lead)</td></tr>
+   <tr><td>5</td><td>50° right</td><td>500 ft above chalk 4 (2,000 ft above lead)</td></tr>
+  </tbody>
+ </table></div>
+ <p>The rule is easy to remember: each chalk turns 10° times its chalk number away from the flight, even chalks to the staggered side and odd chalks the other way, and each climbs 500 ft above the chalk ahead. There are variations, such as lead climbing highest and the others stacking down 500 ft. The plan must allow for enemy air defences, terrain, the emergency minimum safe altitude, recovery airfields, fuel, airspace control orders and nearby borders or restricted areas; turns no steeper than standard rate. Brief it whenever the forecast is below the circular’s 1,000/3 (a 1,000 ft ceiling or 3 miles visibility); mountains need detailed plans. <a href="#source-tc">{tc('221')}</a></p>
+ <p><strong>Threat breakup.</strong> A last response to the enemy acting against the flight, on a code such as “bandit break” for an air threat or “enemy break” for a ground threat. Because combat cruise is built from two-ship sections, a large formation breaks into pairs: with an odd number, lead, chalk 2 and chalk 3 can break to the clear side and the remaining pairs in opposite directions. Crews stay oriented on aircraft turning their way, descend to cover, dispense chaff or flares if they carry them, and pilots in command decide whether to jettison external loads. The plan includes how to rejoin. <a href="#source-tc">{tc('221–222')}</a></p>
+ <p class="key"><strong>Key point:</strong> lost contact is a call, a held heading and a rejoin before anything else; the IMC and threat breakups work only because every crew briefed its own heading, altitude or direction before takeoff.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>The AMC owns the mission; flight lead flies it; tactical lead is whoever sees the threat first; every wingman is ready to lead.</li>
+  <li>Fixed formations (staggered, echelon, trail, V) mirror lead for control. Maneuvering formations (combat cruise, combat cruise left or right, combat trail, combat spread) give wingmen an area and their own clearance.</li>
+  <li>Spacing is in rotor disks, edge to edge: tight about 2, close 3–5, loose 6–10, extended more. Stepped-up keeps trailing aircraft out of the wake.</li>
+  <li>Lead flies smoothly: no more than 30° of bank, gradual speed and height changes, all aircraft lifting and landing together.</li>
+  <li>Lost contact: call, take lead’s heading and airspeed, rejoin before the mission goes on. Inadvertent IMC: the briefed breakup, here 10° times chalk number and 500 ft per chalk, held for at least 30 seconds.</li>
+ </ul>
+
+ <h2 id="lead-change">The lead change</h2>
+ <p>Lead changes are difficult and potentially dangerous, so they are made on the ground whenever possible. In flight, only lead may start one, by a prearranged signal, and never by a wingman accelerating past lead, day or night. <a href="#source-tc">{tc('218')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="lead" aria-labelledby="lead-title">
+  <h3 id="lead-title" class="fig-title">Figure 4 — An en route lead change, flight of three</h3>
+  <p class="no-js">This figure needs JavaScript. The list below gives the same steps.</p>
+  <div class="fig-scroll"><svg class="form" role="img" aria-label="Lead change"></svg></div>
+  <div class="buttons"><button type="button" data-prev>Back</button><button type="button" data-next>Next step</button></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <p class="fig-caption">Staggered right at close spacing; lead leaves to the left, away from chalk 2. Positions are drawn to scale in rotor disks but the timing is illustrative. After the rejoin, the new flight is staggered left of its new lead.</p>
+ </section>
+ <ol>
+  <li>Lead signals; the flight acknowledges, starting with chalk 2.</li>
+  <li>Lead turns 30–90° to the briefed side, moves at least eight rotor disks out and parallels the formation.</li>
+  <li>Chalk 2, the new lead, confirms and announces that the former lead is clear.</li>
+  <li>The former lead slows to 10 KIAS below the en route airspeed and confirms each aircraft by sight as it passes, so as not to rejoin early and collide.</li>
+  <li>After the last aircraft passes, the former lead rejoins as trail and takes on trail’s lighting; the old trail aircraft changes its lights to match the rest. <a href="#source-tc">{tc('218')}</a></li>
+ </ol>
+ <p>Every chalk number moves up when lead leaves: chalk 2 becomes lead, chalk 3 becomes chalk 2, and so on. <a href="#source-tc">{tc('232')}</a></p>
+
+ <h2 id="lights">Lights and flying without the radio</h2>
+ <p>In the Army, lighting for multi-aircraft flights is governed by AR 95-1, AR 95-2, aircraft limits, local rules and unit procedures. The circular gives a sample set of lighting conditions; other services and nations have their own. <a href="#source-tc">{tc('216')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Sample lighting conditions (Army) <a href="#source-tc">{tc('216')}</a></caption>
+  <thead><tr><th><Term>LITECON</Term></th><th>Description</th><th>Anti-collision</th><th>Position (nav)</th><th>Formation</th><th>Covert IR position</th></tr></thead>
+  <tbody>
+   <tr><td>1</td><td>FAA day</td><td>White</td><td>Off</td><td>Off</td><td>Off</td></tr>
+   <tr><td>2</td><td>FAA night</td><td>Red</td><td>Bright</td><td>Bright</td><td>On</td></tr>
+   <tr><td>3</td><td>Night form</td><td>Off</td><td>Dim</td><td>Bright</td><td>On</td></tr>
+   <tr><td>4</td><td>Covert</td><td>Off/IR</td><td>Off</td><td>Covert</td><td>On</td></tr>
+   <tr><td>5</td><td>Total blackout</td><td>Off</td><td>Off</td><td>Off</td><td>Off</td></tr>
+  </tbody>
+ </table></div>
+ <p>A flight can form up and depart without the radio, using the anti-collision lights: <a href="#source-tc">{tc('223')}</a></p>
+ <ol class="exchange">
+  <li><span class="who">Every aircraft</span> <span class="said">Moves into position for the formation takeoff with its anti-collision light on (or turns it on after landing).</span></li>
+  <li><span class="who">Each chalk in turn</span> <span class="said">Turns its light off when ready, and only once the light of the aircraft ahead is off.</span></li>
+  <li><span class="who">Trail</span> <span class="said">When ready and the light ahead is off, tells lead the flight is ready by code word or plain language, and leaves its own light on for the flight.</span></li>
+  <li><span class="who">Flight</span> <span class="said">Departs on the code word, the ATC call or the briefed time.</span></li>
+ </ol>
+ <p>Radio calls in formation must be short. Visual signals, unit procedures and a thorough brief cut the need for them; radio-silent missions need practice and are used with discretion, safety first. <a href="#source-tc">{tc('223')}</a> In the Army, the only formations authorized for night or NVG flight at 80 ft above the highest obstacle and below are combat cruise formations, with the techniques of movement in TC 3-04.11. <a href="#source-tc">{tc('223')}</a> With mixed types at night, plan for their different external lights and for the differences between NVG and FLIR. <a href="#source-tc">{tc('231')}</a></p>
+
+ <h2 id="rejoin">Rendezvous, join-up and planned breakups</h2>
+ <p>Rendezvous and join-up are hard and dangerous, day or night: joining aircraft are hard to identify and closure is hard to judge. When the situation allows, do them on the ground, at the briefed rally point. <a href="#source-tc">{tc('222')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Joining in the air <a href="#source-tc">{tc('222')}</a></caption>
+  <thead><tr><th></th><th>Rendezvous</th><th>Join-up</th></tr></thead>
+  <tbody>
+   <tr><td>When</td><td>Aircraft join lead at a rendezvous point in the air</td><td>Aircraft that cannot watch each other depart, such as in brownout or whiteout, take off singly and join in flight</td></tr>
+   <tr><td>Lead</td><td>Arrives at the rendezvous point at the planned time and altitude, then orbits in the briefed direction at standard rate or less, at 70 KIAS or as briefed</td><td>Accelerates to the briefed airspeed, normally 70 KIAS, then to en route airspeed once everyone has joined</td></tr>
+   <tr><td>Others</td><td>Enter lead’s orbit at the assigned airspeed and adjust into the briefed position</td><td>Depart in chalk order with single-ship lighting until in formation, no more than 10 kt faster than the briefed airspeed</td></tr>
+  </tbody>
+ </table></div>
+ <p>The rendezvous is the more dangerous: at night a crew cannot see another aircraft’s silhouette until close, so overrunning the aircraft ahead is easy. Brief and hold the planned airspeeds. <a href="#source-tc">{tc('222')}</a></p>
+ <p><strong>Planned breakups.</strong> A flight can also simply land and depart separately. Train and rehearse the briefed method. <a href="#source-tc">{tc('218–219')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Breaking up a formation <a href="#source-tc">{tc('218–219')}</a></caption>
+  <thead><tr><th>Method</th><th>How</th><th>Use</th></tr></thead>
+  <tbody>
+   <tr><td>Single aircraft, method 1</td><td>From echelon in the circular’s example, lead sets an interval (10 seconds in the example), commands the break and turns 90° away; each chalk follows at the interval</td><td>A landing zone that takes one aircraft at a time, ideally approached on the landing heading with the breakup over it</td></tr>
+   <tr><td>Single aircraft, method 2</td><td>Lead commands it; trail turns 30–90° away to the clear side; once trail is confirmed clear, the rest turn away in reverse chalk order; each then sets its lights and avionics</td><td>Any time multi-helicopter flight ends</td></tr>
+   <tr><td>Into elements</td><td>From staggered, lead sets the interval between elements; the first element holds course and the rest slow or turn by elements to the desired separation</td><td>Splitting a flight into teams, for example five into two and three</td></tr>
+  </tbody>
+ </table></div>
+
+ <h2 id="environment">Dust, snow and mountains</h2>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Formations in difficult environments</caption>
+  <thead><tr><th>Environment</th><th>What changes</th></tr></thead>
+  <tbody>
+   <tr><td>Snow</td><td>Avoid close formation over snow. Increase separation before the final approach so the cloud can settle. For landings, increase disk separation (especially staggered), avoid trail, use echelon if conditions allow, land into a wind that blows the cloud away, all land together and plan go-arounds, for example a forward go-around away from the cloud. <a href="#source-tc">{tc('103, 105')}</a></td></tr>
+   <tr><td>Dust and sand</td><td>In heavy dust, depart single-ship and join up in flight. <a href="#source-tc">{tc('112')}</a> Echelon suits dust, sand and snow takeoffs and landings; trail does not. <a href="#source-tc">{tc('225–226')}</a></td></tr>
+   <tr><td>Brownout or whiteout at the landing zone</td><td>The flight may spread to the briefed landing disk separation before the approach. The AMC may stack down and land in reverse chalk order, so no aircraft is caught in the cloud ahead, as with CH-47s approaching a snowfield where they may slide after touchdown. <a href="#source-tc">{tc('218')}</a></td></tr>
+   <tr><td>Mountains</td><td>Close formation is restricted; use combat cruise (the circular still says free cruise), loose trail or staggered trail, with more spacing for tight landing zones, steep terrain and narrow valleys. Mountain landing zones often take only one or two aircraft. <a href="#source-tc">{tc('134')}</a> In low-level flight a staggered-trail formation is normal. <a href="#source-tc">{tc('137')}</a></td></tr>
+  </tbody>
+ </table></div>
+
+ <h2 id="wake">Wake and rotor wash</h2>
+ <p>Every aircraft leaves wake turbulence; fly at or above the path of the aircraft ahead and avoid the area behind and below it, especially low down. <a href="#source-tc">{tc('232–234')}</a> A hovering or slow hover-taxiing helicopter throws outwash vortices to about three rotor diameters in every direction, so stay at least three rotor diameters from one. Departing and landing helicopters leave a pair of strong trailing vortices like a large fixed-wing aircraft’s, so take care crossing behind them. <a href="#source-tc">{tc('234')}</a> A formation approach is one of the circular’s settling-with-power cases, from the turbulence of the aircraft ahead. <a href="#source-tc">{tc('58')}</a> Rotor aerodynamics are in <a href={rotor}>Rotor-Wing</a>.</p>
+
+ <h2 id="brief">What the brief covers</h2>
+ <p>Every multi-aircraft flight is briefed with a unit-approved checklist, whatever its size. <a href="#source-tc">{tc('216')}</a> The circular’s items, grouped: <a href="#source-tc">{tc('216, 231–232')}</a></p>
+ <div class="table-scroll" tabindex="0"><table>
+  <caption>Formation brief items</caption>
+  <thead><tr><th>Group</th><th>Items</th></tr></thead>
+  <tbody>
+   <tr><td>The formation</td><td>Formation types and how to change them; altitudes; airspeeds; horizontal distance and vertical separation; chalk numbering and each chalk’s duties</td></tr>
+   <tr><td>Lights and signals</td><td>Aircraft lighting; signals, lights and communications</td></tr>
+   <tr><td>Contingencies</td><td>Lead change; loss of visual contact and in-flight link-up; lost communications; inadvertent IMC; actions on contact and emergency breakup; downed aircraft and downed-crew pickup points; rendezvous and join-up</td></tr>
+   <tr><td>The mission</td><td>Route, rules of engagement, time schedule, pickup and landing zones, troop and cargo loads, armed escort, refuelling and rearming, emergency medical procedures, where the AMC and unit commander are</td></tr>
+  </tbody>
+ </table></div>
+ <p>The formation itself is chosen from the mission, the enemy and its air defences, fire support, terrain and weather, the need to maneuver, armed escort, how the formation will be controlled (radio, visual signals or timing), aircraft types and NVDs, crew experience and survivability equipment. <a href="#source-tc">{tc('231')}</a> The movement techniques that go with maneuvering formations, traveling, traveling overwatch and bounding overwatch, are in <a href={rwAttack}>Rotary-Wing Attack</a>. <a href="#source-tc">{tc('213–214')}</a></p>
+
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p><strong>Team formations.</strong> The DCS AH-64D manual’s tactical chapter describes the attack weapons team’s formations the same way: lead maneuvers predictably, the wingman never hinders lead and is ready to fire in support, and spacing runs from three to five rotor disks to a kilometre or more, greater over open terrain. <a href="#source-ah">{ah('351')}</a> It calls combat cruise the standard formation for team employment, with the trail aircraft free to move along lead’s aft hemisphere; combat cruise left or right pins the wingman to one side, “possibly due to terrain”; and combat spread puts the wingman at 3 or 9 o’clock. <a href="#source-ah">{ah('352')}</a> It pairs contour flight with traveling overwatch and combat cruise. <a href="#source-ah">{ah('353')}</a></p>
+  <p><strong>Where the two differ.</strong> The DCS figure draws combat spread with marks 10° either side of abeam; the Army circular gives no band, only a move toward the abeam position. <a href="#source-ah">{ah('352')}</a> <a href="#source-tc">{tc('230')}</a> Figure 1 follows the circular.</p>
+  <p><strong>Lights.</strong> The DCS AH-64D has formation lights on the wing tips, tail boom and vertical stabilizer, set with a FORM knob, and an ANTI COLL switch with WHT, OFF and RED. <a href="#source-ah">{ah('95, 120')}</a></p>
+  <p><strong>What was not checked.</strong> The manual does not describe fixed formations, the IMC breakup, the lead change or the light form-up, so nothing is claimed about how the sim treats them. The other DCS helicopter manuals and the AI wingman formation commands were not checked.</p>
+  <p><strong>To practise:</strong> with friends, brief Figure 3’s breakup with your chalk numbers, fly the opening sortie in staggered and echelon, and change lead with Figure 4’s steps.</p>
+ </section>
+
+ <h2 id="terms">Terms</h2>
+ <p>Every word is in the <a href={glossary}>formation terms</a>.</p>
+ <GlossaryList items={[
+  'Chalk', 'Air mission commander', 'Tactical lead', 'Fixed formation', 'Maneuvering formation', 'Staggered formation', 'Echelon formation', 'Trail formation',
+  'V-formation', 'Combat cruise', 'Combat trail', 'Combat spread', 'Stepped-up', 'Accordion effect', 'Inadvertent IMC breakup', 'LITECON',
+ ]} />
+ <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
+  <h3 id="terms-title">Quiz: name the term</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next term</button></div>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <p>One or more questions for each outcome at the top of the page; Figure 1 and the formation quiz cover outcome 1, Figure 2 outcome 2, Figure 4 outcome 4 and Figure 3 outcome 5.</p>
+ <section class="lesson quiz-lesson" data-lesson="picks" aria-labelledby="picks-title">
+  <h3 id="picks-title">Quiz: pick the formation</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next question</button></div>
+ </section>
+ <details><summary><span class="outcome">Outcome 1</span> You are chalk 3 of four in staggered right. Where do you fly?</summary><p>In trail directly behind lead: about 45° astern of chalk 2, on the opposite side to it. Odd-numbered wingmen fly behind lead.</p></details>
+ <details><summary><span class="outcome">Outcome 1</span> In combat cruise you have settled at lead’s 6 o’clock. Why move?</summary><p>Extended flight at lead’s 6 o’clock is not recommended; the best position is 45°, where you can best cover lead.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> The brief says close spacing. How far is that, and measured from where?</summary><p>Three to five rotor disks, from the rear edge of the leading aircraft’s disk to the front edge of yours. Chalk 2 sets it and the rest follow.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> Why prefer stepped-up to stepped-down?</summary><p>In stepped-down the trailing aircraft may fly into the wake of the aircraft ahead, have to adjust their positions and need more power. Stepped-up keeps them above it.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> You are chalk 2 and see a gun position ahead before lead does. What is your role?</summary><p>You are now the tactical lead: announce the threat and call the maneuver to engage, suppress or bypass it. Flight lead takes control back once the threat is bypassed or neutralized.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> Who changes the radios and navigates in each aircraft?</summary><p>Normally the pilot not on the controls (P), leaving the P* to fly and avoid hazards.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> You want to swap lead to chalk 2 in flight. How does it start, and what must chalk 2 never do?</summary><p>Only lead starts it, by a prearranged signal that the flight acknowledges from chalk 2 down. Chalk 2 never accelerates past lead to take over. Better still, change lead on the ground.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> On a formation approach you are closing too fast. S-turns?</summary><p>No: avoid S-turns to lose airspeed. Go around if you cannot slow to the right airspeed, especially when heavy.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> You are chalk 4 in staggered left and lead calls “Lead is IMC, executing breakup procedure, heading 090.” Using the circular’s plan, what do you do?</summary><p>Turn 40° left to 050 and climb to 1,500 ft above lead’s altitude, at standard rate, and hold that for at least 30 seconds. Stay in contact with lead and call ATC in chalk order.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> On the ground before a radio-silent departure, the aircraft ahead has turned off its anti-collision light and you are trail. What do you do when ready?</summary><p>Leave your light on and tell lead the flight is ready with the code word (or plain language). The flight departs on the code word, the ATC call or the briefed time.</p></details>
+
+ <h2 id="sources">Sources and applicability</h2>
+ <h3>Military source</h3>
+ <p id="source-tc"><strong>[1] Headquarters, Department of the Army, TC 3-04.1-4, Fundamentals of Flight, 18 March 2026.</strong> <a href="https://aviation-assets.info/wp-content/uploads/ARN46145-TC_3-04.1-4-000-WEB-1.pdf">aviation-assets.info copy</a>, read 10 November 2026 by printed page (chapter 6, pp. 211–234; chapter 1, p. 58; chapter 3, pp. 103, 105, 112, 134, 137). Approved for public release; supersedes TC 3-04.4 (2022); the official copy is on the Army Publishing Directorate site, armypubs.army.mil. The source of every procedure on this page.</p>
+ <h3>Sim source</h3>
+ <p id="source-ah"><strong>[2] Eagle Dynamics, DCS: AH-64D Flight Manual (English), PDF dated 7 August 2026, 747 pp.</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 10 November 2026, pp. 95, 120 and 351–353. A sim manual, cited only for the In the sim panel.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/helicopter-formation-evidence.md">helicopter formation evidence</a>.</p>
+ <p>Figures 1 to 4 and the opening sortie are original drawings and examples, laid out after the circular’s figures 6-1, 6-2, 6-6 and 6-8 to 6-17 but not reproductions of them.</p>
+ <p class="note">Applicability: written for helicopter pilots of every service. Every procedure comes from one Army training circular, given in generic form; the lighting conditions and the night/NVG formation rule are Army rules and are labelled. Navy and Marine Corps helicopter formation instructions were not found on a public host for this revision. Your service’s rules, your unit’s standard procedures and the aircraft’s operator’s manual govern.</p>
+
+</SiteLayout>
+<script>import '../../../lessons/formation/helo-ui.mjs';</script>
