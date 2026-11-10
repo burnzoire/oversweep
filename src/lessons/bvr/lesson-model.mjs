@@ -192,3 +192,42 @@ export const QUESTIONS = [
   { outcome: 6, ask: 'The controller declares a group "bandit". Can you shoot it?', answer: 'Not on that declaration alone', options: ['Yes, it is enemy', 'Not on that declaration alone', 'Only with a Fox-2'], why: 'A bandit is positively identified as enemy; the term does not by itself give direction or authority to engage. A shot needs a hostile declaration, and theater ROE normally also require an engagement order. (P-825, pp. 5-8, A-1, A-5; JP 3-01, p. III-16)' },
   { outcome: 6, ask: 'A track is flying outside the safe-passage corridor at the wrong altitude, with no other identification. What kind of ID is that?', answer: 'Procedural ID', options: ['Positive ID', 'Procedural ID', 'Combat identification complete'], why: 'Procedural ID rests on following airspace rules; positive ID comes from visual, electronic, IFF or other physics-based means and is normally what ROE require to shoot. (JP 3-01, p. III-13)' },
 ];
+
+// Bullseye without a readout (Figure 3). Plan view, NM, bullseye at the origin,
+// x east and y north; bearings in degrees as the card is drawn, north up. The
+// conversions are plain navigation geometry, not a procedure from the sources.
+// A point at a bearing and range from bullseye.
+export const fromBull = (brg, rng) => [rng * Math.sin(rad(brg)), rng * Math.cos(rad(brg))];
+// Bearing and range from a to b (both plan-view points).
+export function bearingRange(a, b) {
+  const dx = b[0] - a[0], dy = b[1] - a[1];
+  return { brg: norm360(deg(Math.atan2(dx, dy))), rng: Math.hypot(dx, dy) };
+}
+// A navigation display steering to bullseye shows bearing and range TO it; you
+// are on the reciprocal bearing FROM it, at the same range.
+export const ownFromSteer = (brgTo, rng) => ({ brg: norm360(brgTo + 180), rng });
+// The quick cases: within 10 degrees of the same bullseye bearing the ranges
+// subtract; within 10 degrees of opposite bearings they add.
+export function shortcut(own, group) {
+  const d = Math.abs(norm180(group.brg - own.brg));
+  if (d <= 10) return { kind: 'same', rng: Math.abs(group.rng - own.rng) };
+  if (d >= 170) return { kind: 'opposite', rng: group.rng + own.rng };
+  return null;
+}
+export const CARDINALS = ['north', 'northeast', 'east', 'southeast', 'south', 'southwest', 'west', 'northwest'];
+export const cardinal = (h) => CARDINALS[Math.round(norm360(h) / 45) % 8];
+// An invented problem: your steering readout to bullseye and a broadcast call.
+// Bearings to 5 degrees and ranges to 5 NM, as a call would round them; the
+// group is 15 to 70 NM from you and inside the card's 80 NM ring.
+export function bullseyeProblem(rand = Math.random) {
+  const pick = (lo, hi, by) => lo + by * Math.floor(rand() * ((hi - lo) / by + 1));
+  for (;;) {
+    const steer = { brg: pick(0, 355, 5), rng: pick(15, 60, 5) };
+    const own = ownFromSteer(steer.brg, steer.rng);
+    const group = { brg: pick(0, 355, 5), rng: pick(20, 75, 5) };
+    const braa = bearingRange(fromBull(own.brg, own.rng), fromBull(group.brg, group.rng));
+    if (braa.rng < 15 || braa.rng > 70) continue;
+    const track = pick(0, 315, 45); // broadcast calls give a cardinal track
+    return { steer, own, group, braa, track, alt: pick(15, 35, 1) };
+  }
+}
