@@ -3,7 +3,7 @@ short: Rotary-wing attack
 usage: Attack helicopter aircrew of every service, and the controllers and ground units they support
 terms:
   - term: Attack helicopter control point
-    definition: "A control point set up for attack helicopters in addition to the normal close air support control points, used to route and hold them on the way to the target area."
+    definition: "A special control point that attack helicopter aircrews can use in addition to the normal close air support control points."
     cite: [{ n: 1, page: "III-91" }]
   - term: Bounding overwatch
     definition: "The movement technique for when enemy contact is imminent. The flight moves by nap-of-the-earth flight, deliberately, with speed not essential, in two elements: one bounds forward while the other takes up an overwatch position, covering it from a covered, concealed position with observation and fields of fire."
@@ -30,7 +30,7 @@ terms:
     cite: [{ n: 1, page: "III-93–III-94" }]
   - term: Indirect fire
     form: "(IDF)"
-    definition: "In helicopter running fire, fire delivered when the aircrew cannot see the target, as opposed to direct fire with an unobstructed view of it."
+    definition: "Fire delivered when the aircrew cannot see the target, as opposed to direct fire with an unobstructed view of it. Helicopters can deliver it in running fire, or in hovering fire hidden from the enemy by terrain."
     cite: [{ n: 1, page: "III-94" }]
   - term: JAAT
     expansion: Joint air attack team
@@ -40,7 +40,7 @@ terms:
     definition: "Terrain flight at a constant altitude, normally 100 to 200 ft above ground level, and airspeed. It reduces or avoids enemy detection or observation."
     cite: [{ n: 1, page: "III-91" }]
   - term: Mixed section
-    definition: "A helicopter section or flight made of more than one aircraft type, such as an AH-1 and a UH-1 in the Marine Corps or an AH-64 and an OH-58 in the Army. It gives the most flexible mix of sensors, communications, maneuverability, firepower and mutual support."
+    definition: "A helicopter flight or section made of more than one aircraft type, such as an AH-64 and an OH-58 in an Army flight or an AH-1 and a UH-1 in a Marine Corps section. It gives the most flexible mix of sensors, communications, maneuverability, firepower and mutual support."
     cite: [{ n: 1, page: "I-5, III-90" }]
   - term: Munition attack azimuth
     definition: "An attack direction given for the munition rather than the aircraft. Because helicopters and unmanned aircraft can fire off-axis, they need not point at the target, so a controller may give one instead of a final attack heading."
