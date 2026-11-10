@@ -3310,5 +3310,49 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "summary": "The HTS pod's threat classes and the AGM-88 HARM's threat tables and codes in the two F-16 sims, with the symbols each radar shows."
+  },
+  {
+    "id": "encyclopedia.reference-data.radio-and-visual-signals",
+    "slug": "radio-and-visual-signals",
+    "category": "reference-data",
+    "revision": 1,
+    "title": "Radio and visual signals",
+    "designation": "FAA AIM and IFF",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The phonetic alphabet with Morse code, tower light gun signals, transponder codes with a set meaning, and the IFF modes."
+  },
+  {
+    "id": "encyclopedia.reference-data.units-and-conversions",
+    "slug": "units-and-conversions",
+    "category": "reference-data",
+    "revision": 1,
+    "title": "Units and conversions",
+    "designation": "NIST SP 811 and FAA",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Conversion factors for distance, height, speed, pressure, mass, volume and temperature, and the standard weights of fuel."
+  },
+  {
+    "id": "encyclopedia.reference-data.standard-atmosphere",
+    "slug": "standard-atmosphere",
+    "category": "reference-data",
+    "revision": 1,
+    "title": "Standard atmosphere",
+    "designation": "ICAO standard atmosphere",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "Density, pressure, temperature and the speed of sound from sea level to 65,000 ft, with the ratios that give true airspeed."
+  },
+  {
+    "id": "encyclopedia.reference-data.time-zones-and-date-time-groups",
+    "slug": "time-zones-and-date-time-groups",
+    "category": "reference-data",
+    "revision": 1,
+    "title": "Time zones and date-time groups",
+    "designation": "Military time",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The lettered military time zones from Zulu round the world, and the formats of the US military date-time group."
   }
 ]

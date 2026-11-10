@@ -1,4 +1,5 @@
 ---
+import ReferenceTable from '../../../components/encyclopedia/ReferenceTable.astro';
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import GlossaryList from '../../../components/GlossaryList.astro';
 import { getModule } from '../../../data/modules';
@@ -166,18 +167,7 @@ const targeting = sitePath('manual/air-to-ground-operations/precision-targeting/
 
  <h2 id="iff">IFF: identifying friends</h2>
  <p><Term>IFF</Term> is a challenge and reply. An <Term>interrogator</Term> transmits a coded challenge; the <Term>transponder</Term> in a friendly aircraft answers it automatically, and the interrogator evaluates the reply. <a href="#source-ewf">{e('A-21, A-23, A-45')}</a> The <Term>selective identification feature</Term> lets the reply carry a selected code, so the answer can say more than "friendly". <a href="#source-ewf">{e('A-39')}</a> Interrogators sit in fighters and in the controllers' radars: a control radar's display shows the raw radar return, the primary target, and its IFF reply, the secondary target, and can read IFF beyond 200 NM. <a href="#source-p825">{p('5-1, 5-5')}</a></p>
- <div class="table-scroll" role="region" aria-label="IFF modes" tabindex="0"><table>
-  <caption>The IFF modes <a href="#source-wiki-iff">[6, Identification friend or foe]</a></caption>
-  <thead><tr><th scope="col">Mode</th><th scope="col">Who uses it</th><th scope="col">The reply carries</th></tr></thead>
-  <tbody>
-   <tr><th scope="row">1</th><td>Military</td><td>A two-digit mission code: the aircraft's type or mission</td></tr>
-   <tr><th scope="row">2</th><td>Military</td><td>A four-digit unit code or tail number</td></tr>
-   <tr><th scope="row">3/A</th><td>Military and civil</td><td>The four-digit code air traffic control assigns: the squawk</td></tr>
-   <tr><th scope="row">C</th><td>Civil</td><td>Pressure altitude</td></tr>
-   <tr><th scope="row">4</th><td>Military</td><td>An encrypted reply to an encrypted challenge</td></tr>
-   <tr><th scope="row">5</th><td>Military</td><td>An encrypted reply that adds the aircraft's position; it is replacing Mode 4</td></tr>
-  </tbody>
- </table></div>
+ <ReferenceTable record="radio-and-visual-signals" table="iff-modes" />
  <p>Which modes and codes are in use is set for each operation in the air tasking order and special instructions. <a href="#source-jp">{j('A-3')}</a> In joint doctrine's sample identification matrix, a correct Mode 4 reply, or a datalink position-and-identity report (<Term>Link 16</Term>'s PPLI), makes a track positive friendly; a valid Mode 1 or 2 only leads on to a procedural check of whether the track is on a minimum-risk route; a track without one is checked against air routes with Mode 3/C, the minimum-risk routes and its flight profile. <a href="#source-jp">{j('A-5')}</a> In the air you set the IFF as assigned at the fence check, a controller can give the wingman a separate code, and at the fence-out the wingman sets the IFF to standby. <a href="#source-p825">{p('3-10, 3-19 to 3-20')}</a> Where IFF is switched on or off is planned in the airspace control plan along with the minimum-risk routes and the areas for sanitizing returning packages from enemy aircraft. <a href="#source-jp">{j('III-8')}</a> The calls are brevity: <Term>SQUAWK</Term> to operate the IFF as indicated, <Term>STRANGLE</Term> to turn it off, and <Term>PARROT</Term> for the transponder itself. <a href="#source-p825">{p('A-7, A-9 to A-10')}</a></p>
  <div class="table-scroll" role="region" aria-label="What an IFF result tells you" tabindex="0"><table>
   <caption>What an interrogation tells you</caption>

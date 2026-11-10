@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../../../layouts/SiteLayout.astro';
+import ReferenceTable from '../../../components/encyclopedia/ReferenceTable.astro';
 import GlossaryList from '../../../components/GlossaryList.astro';
 import { getModule } from '../../../data/modules';
 import { sitePath } from '../../../lib/paths';
@@ -11,7 +12,7 @@ const core = [
  ['density', 'Density altitude'], ['takeoff', 'Takeoff and landing distance'], ['balance', 'Weight and balance'], ['recap', 'Key points'],
 ];
 const reference = [
- ['codes', 'METAR weather codes'], ['pirep', 'Pilot reports'], ['sims', 'In the sim'], ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+ ['codes', 'METAR weather codes'], ['pirep', 'Pilot reports'], ['atmosphere', 'The standard atmosphere'], ['sims', 'In the sim'], ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
 ];
 // [1] FAA PHAK FAA-H-8083-25B, by printed page. [2] 14 CFR part 91 (US civil rules).
 // [3] Falcon BMS 4.38 User Manual and [4] DCS User Manual, sim crossover only.
@@ -230,6 +231,10 @@ const ft = (x: number) => `${Math.round(x).toLocaleString('en-US')} ft`;
 
  <h2 id="pirep">Pilot reports</h2>
  <p>A <Term>PIREP</Term> gives what no other source can: the real bases and tops of cloud, wind shear, turbulence and icing. When the ceiling is below 5,000 ft or visibility 5 miles or less, US ATC facilities must ask pilots for them. <a href="#source-phak">{ph('13-8')}</a> A report needs at least its first five items, the nearest station, the report type (UA routine, UUA urgent), location, time and altitude, plus one weather phenomenon. <a href="#source-phak">{ph('13-8')}</a></p>
+
+ <h2 id="atmosphere">The standard atmosphere</h2>
+ <p>Pressure altitude and density altitude are both read against the standard atmosphere: the altitude in this table with the same pressure, or the same density, as the air outside. <a href="#source-phak">{ph('11-3')}</a> It also gives the density ratio that turns equivalent airspeed into true airspeed, and the speed of sound for Mach number.</p>
+ <ReferenceTable record="standard-atmosphere" table="standard-atmosphere" />
 
  <section class="sim-panel" aria-labelledby="sims">
   <h2 id="sims">In the sim</h2>

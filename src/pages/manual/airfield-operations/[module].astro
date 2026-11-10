@@ -1,4 +1,5 @@
 ---
+import ReferenceTable from '../../../components/encyclopedia/ReferenceTable.astro';
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import GlossaryList from '../../../components/GlossaryList.astro';
 import { getModule, includedModules } from '../../../data/modules';
@@ -133,18 +134,7 @@ const bms = (pages: string) => `[13, ${/–|,/.test(pages) ? 'pp.' : 'p.'} ${pag
  <p>At an airport with an operating tower, approval is needed before moving an aircraft or vehicle onto the movement area, and a clearance is needed before taxiing on a runway, taking off, landing or crossing any runway. ATC issues an explicit clearance for every runway crossing, and a taxi instruction to the departure runway is not a clearance to enter or cross it. <a href="#source-aim4">{aim4('4-3-18')}</a></p>
  <p>Pilots unfamiliar with an airport can ask for progressive taxi instructions, and should remember that jet blast, prop wash and rotor wash can damage aircraft and equipment close behind. <a href="#source-aim4">{aim4('4-3-18')}</a> Who you call for taxi, and when, is in <a href="#talk">Talking to the airfield</a>.</p>
  <p>Towers control aircraft, vehicles and people without radios, or whose radio contact cannot be established, with a light gun: an intense narrow beam of a selected colour. Light signals can only approve or disapprove what the pilot is expected to do, and a pilot may not be looking at the tower when a signal is sent. <a href="#source-aim4">{aim4('4-3-13')}</a> Navy towers use the same signals for aircraft. <a href="#source-navedtra">{nav('9-10')}</a> At an <Term id="FCLP">FCLP</Term> runway the <Term id="Landing Signal Officer (LSO)">LSO</Term> has the lens's own lights as well: flashing red <Term id="Wave-off lights">wave-off lights</Term>, and green cut lights to acknowledge an aircraft without a radio. <a href="#source-navedtra">{nav('4-25')}</a></p>
- <div class="table-scroll" role="region" aria-label="Traffic control light signals" tabindex="0"><table>
-  <caption>Traffic control light signals <a href="#source-navedtra">{nav('9-10')}</a> <a href="#source-aim4">{aim4('4-3-13')}</a></caption>
-  <thead><tr><th scope="col">Signal</th><th scope="col">Vehicles, equipment and personnel</th><th scope="col">Aircraft on the ground</th><th scope="col">Aircraft in flight</th></tr></thead>
-  <tbody>
-   <tr><th scope="row">Steady green</th><td>Cleared to cross, proceed or go</td><td>Cleared for takeoff</td><td>Cleared to land</td></tr>
-   <tr><th scope="row">Flashing green</th><td>Not applicable</td><td>Cleared for taxi</td><td>Return for landing (to be followed by steady green at the proper time)</td></tr>
-   <tr><th scope="row">Steady red</th><td>STOP</td><td>STOP</td><td>Give way to other aircraft and continue circling</td></tr>
-   <tr><th scope="row">Flashing red</th><td>Clear the taxiway/runway</td><td>Taxi clear of the runway in use</td><td>Airport unsafe, do not land</td></tr>
-   <tr><th scope="row">Flashing white</th><td>Return to starting point on airport</td><td>Return to starting point on airport</td><td>Not applicable</td></tr>
-   <tr><th scope="row">Alternating red and green</th><td>Exercise extreme caution</td><td>Exercise extreme caution</td><td>Exercise extreme caution</td></tr>
-  </tbody>
- </table></div>
+ <ReferenceTable record="radio-and-visual-signals" table="light-gun-signals" />
  <section class="lesson figure-lesson" data-lesson="lightgun" aria-labelledby="gun-title">
   <h3 id="gun-title" class="fig-title">Figure 3 — Light gun signals from the tower</h3>
   <fieldset class="inline"><legend>You are</legend>

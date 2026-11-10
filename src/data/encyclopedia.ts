@@ -483,7 +483,7 @@ export interface ReferenceTableData {
   columns: ReferenceColumn[];
   rows: Record<string, string | null>[];
 }
-export interface ReferenceData { short: string; tables: ReferenceTableData[]; sources: Source[] }
+export interface ReferenceData { short: string; photo?: Photo; tables: ReferenceTableData[]; sources: Source[] }
 export const referenceContent = (r: EncyclopediaRecord) => contentFile(r) as unknown as RecordFile<ReferenceData>;
 export function referenceTable(slug: string, id: string) {
   const record = records.find((r) => r.category === 'reference-data' && r.slug === slug);
