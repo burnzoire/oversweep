@@ -1,6 +1,6 @@
 ---
 short: Formation
-usage: Pilots of every service flying as a section or division
+usage: Pilots of every service flying as a section, division or helicopter flight
 terms:
   - term: Parade
     definition: The close, fixed formation position, held by lining up checkpoint pairs on the lead rather than by a number. An administrative formation for airshows and the break, with little flexibility; the wingman asks before crossing under.
@@ -9,8 +9,8 @@ terms:
     definition: An administrative formation in which the wingman moves between the 30° and 45° bearings on either side of lead, using radius of turn, up to about 0.2 NM in the T-44C. Used through controlled airspace to keep the formation tight and away from other aircraft.
     cite: [{ n: 3, page: "Formation Types" }]
   - term: Combat spread
-    definition: A tactical formation with the wingman within 10° of abeam the lead, 0.3–2.0 NM away in the T-44C depending on conditions. Tactical formation maneuvers are called from it.
-    cite: [{ n: 2, page: "Combat Spread" }]
+    definition: A tactical formation with the wingman near abeam the lead, for the most lookout forward. In the T-44C it is within 10° of abeam, 0.3–2.0 NM away depending on conditions, and tactical formation maneuvers are called from it; in Army helicopter teams lead calls it with a side and the wingman moves toward lead's 3 or 9 o'clock.
+    cite: [{ n: 2, page: "Combat Spread" }, { n: 5, page: "230" }]
   - term: Step-down
     definition: The wingman's height below the lead in parade, the first checkpoint corrected (the A of A-B-C). On the T-6B, set with the lead's inboard exhaust stack fully visible and tangent to the bottom leading edge of the wing.
     cite: [{ n: 1, page: "8" }]
@@ -57,6 +57,52 @@ terms:
   - term: Hook turn
     definition: A 120-240° turn by both aircraft in the same direction at once; they change sides, and the aircraft on the inside loses sight of the other until the rollout.
     cite: [{ n: 2, page: "Hook Turn" }]
+  - term: Chalk
+    definition: "An aircraft's numbered place in a helicopter flight: chalk 1 is lead, then chalk 2, 3 and so on. When lead leaves the flight, chalk 2 becomes lead, chalk 3 becomes chalk 2, and so on."
+    cite: [{ n: 5, page: "212, 232" }]
+  - term: Air mission commander
+    expansion: AMC
+    definition: "The officer in charge of all of a flight's resources, responsible for planning, organizing and briefing the mission, delegating tasks, flight integrity and discipline, and the debrief. A designated alternate takes over if the AMC must leave the flight."
+    cite: [{ n: 5, page: "211-212" }]
+  - term: Tactical lead
+    definition: "Whoever, in any aircraft or position, first sees a threat or obstacle. The tactical lead announces it and calls the maneuver to engage, suppress or bypass it; flight lead takes control back when the threat is bypassed or neutralized."
+    cite: [{ n: 5, page: "212" }]
+  - term: Fixed formation
+    definition: "A helicopter formation used when more control is needed: the flight acts as one aircraft and mirrors lead's movements. Staggered, echelon, trail and V are fixed formations, used for departures and arrivals, administrative transits and when tactical spacing is not possible."
+    cite: [{ n: 5, page: "224" }]
+  - term: Maneuvering formation
+    definition: "A helicopter formation for tactical situations, with wider spacing and overlapping fields of view and fire; each wingman holds an area rather than a point and keeps its own clearance while lead maneuvers freely. Combat cruise, combat cruise left or right, combat trail and combat spread."
+    cite: [{ n: 5, page: "227" }]
+  - term: Staggered formation
+    definition: "A fixed helicopter formation, staggered left or right: each aircraft about 45° astern of the one ahead, alternating sides, so chalk 3 and the other odd chalks fly in trail behind lead. Chalk 2's side names it."
+    cite: [{ n: 5, page: "224" }]
+  - term: Echelon formation
+    definition: "A fixed helicopter formation, echelon left or right, with every wingman on the same side of lead at about 30-45° off lead's 6 o'clock. Suited to dust, sand and snow takeoffs and landings, but it severely limits maneuvering."
+    cite: [{ n: 5, page: "225" }]
+  - term: Trail formation
+    definition: "A fixed helicopter formation with each aircraft following the one ahead within 10° of its track. The hardest fixed formation, used for takeoffs, landings and changing formation but not for long, and a poor choice in dust, sand or snow."
+    cite: [{ n: 5, page: "226" }]
+  - term: V-formation
+    definition: "A fixed helicopter formation of a leader and two wingmen, each about 45° astern of the leader, one left and one right. It needs a relatively small landing area."
+    cite: [{ n: 5, page: "226-227" }]
+  - term: Combat cruise
+    definition: "The basic helicopter team formation, which replaced the term free cruise: the wingman may fly anywhere from about lead's 3 o'clock round the back to 9 o'clock, best at 45°, and lead maneuvers freely. Combat cruise left or right keeps the wingman on one side, from directly behind to abeam."
+    cite: [{ n: 5, page: "228-229" }]
+  - term: Combat trail
+    definition: "A helicopter maneuvering formation that holds each wingman within 30° either side of the 6 o'clock of the aircraft ahead, for narrow terrain and narrow landing zones; not for long periods or at night."
+    cite: [{ n: 5, page: "229-230" }]
+  - term: Stepped-up
+    definition: "Vertical separation in a helicopter formation with each aircraft 1-10 ft higher than the one ahead. Its opposite, stepped-down, can put trailing aircraft in the wake and costs them power."
+    cite: [{ n: 5, page: "215" }]
+  - term: Accordion effect
+    definition: "Abrupt altitude or airspeed changes by the lead, copied ever more abruptly down a formation, so that aircraft at the back close dangerously fast."
+    cite: [{ n: 5, page: "217" }]
+  - term: Inadvertent IMC breakup
+    definition: "A formation's briefed plan for flying into cloud. In the Army circular's suggestion for a staggered formation, lead flies straight ahead and each chalk turns 10° times its chalk number away from the flight and climbs 500 ft above the chalk ahead, holding it for at least 30 seconds."
+    cite: [{ n: 5, page: "220-221" }]
+  - term: LITECON
+    definition: "Army. A numbered lighting condition for multi-aircraft flight, setting the anti-collision, position, formation and covert IR lights; the circular's sample runs from 1, FAA day, to 5, total blackout."
+    cite: [{ n: 5, page: "216" }]
 sources:
   - n: 1
     title: "Formation Supplement (FORMSUP)"
@@ -85,10 +131,17 @@ sources:
     url: "https://www.digitalcombatsimulator.com/en/downloads/documentation/"
     accessed: "2026-11-02"
     note: "A sim manual, by printed page."
+  - n: 5
+    title: "TC 3-04.1-4, Fundamentals of Flight"
+    publisher: "Headquarters, Department of the Army"
+    date: "18 March 2026"
+    url: "https://aviation-assets.info/wp-content/uploads/ARN46145-TC_3-04.1-4-000-WEB-1.pdf"
+    accessed: "2026-11-10"
+    note: "By printed page; chapter 6 covers multi-aircraft operations. Approved for public release; a public copy."
 ---
 
 ## The words of formation flying
 
-These are the words of two aircraft flying as one: the formations, the parade checkpoints, the rendezvous and its recovery, losing sight, and the tactical turns. They come from the Navy training command's T-6B and T-44C formation material. [[1]](#source-1) [[2]](#source-2) Type numbers are examples from those aircraft.
+These are the words of two aircraft flying as one: the formations, the parade checkpoints, the rendezvous and its recovery, losing sight, and the tactical turns. They also cover helicopter flights: the crew roles, the fixed and maneuvering formations, spacing and the breakups. They come from the Navy training command's T-6B and T-44C formation material [[1]](#source-1) [[2]](#source-2), where type numbers are examples from those aircraft, and, for helicopter flights, the Army's fundamentals of flight circular. [[5]](#source-5)
 
 BLIND, VISUAL, JOKER, BINGO and PUSH are in the brevity words, and the 3/9 line and lag pursuit in the air combat terms.

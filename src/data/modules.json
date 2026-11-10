@@ -131,7 +131,18 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "objective": "Fly as a section: know the parade, cruise, combat cruise and combat spread positions, hold parade by its checkpoints in altitude, bearing, closure order, make the flight's check-ins and frequency changes, fly the breakup and rendezvous and recover from an underrun, run the lost sight and blind procedures, use the lead's lights at night, and recognise the tactical turns.",
-    "applicability": "For military pilots of every service: the Navy training command's T-6B and T-44C formation material as generic technique, with type numbers as examples and the FAA's lighting rule as a supplement. Air Force and Army formation publications and helicopter formations are not yet covered; your service's formation rules, unit procedures and the aircraft's flight manual govern."
+    "applicability": "For military pilots of every service: the Navy training command's T-6B and T-44C formation material as generic technique, with type numbers as examples and the FAA's lighting rule as a supplement. Air Force and Army fixed-wing formation publications are not yet covered, and helicopter formations are in their own module; your service's formation rules, unit procedures and the aircraft's flight manual govern."
+  },
+  {
+    "id": "module.helicopter-formation",
+    "slug": "helicopter-formation",
+    "subject": "formation-flying",
+    "revision": 1,
+    "title": "Helicopter Formation",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Fly helicopters as a flight: know the air mission commander's, flight lead's, tactical lead's and wingmen's jobs; the staggered, echelon, trail and V fixed formations and the combat cruise, combat trail and combat spread maneuvering formations; spacing in rotor disks and vertical separation; the formation takeoff, turns, lead change and landing; and the lost visual contact, inadvertent IMC and threat breakups, lighting and the radio-silent form-up.",
+    "applicability": "For helicopter pilots of every service: the US Army's fundamentals of flight training circular (TC 3-04.1-4, 2026) as generic technique, with Army-only rules labelled, and the DCS AH-64D manual for the sim. Navy and Marine Corps helicopter formation instructions were not found on a public host; your service's formation rules, unit procedures and the aircraft's operator's manual govern."
   },
   {
     "id": "module.aar-procedures",
