@@ -108,3 +108,39 @@ test('every quiz question has its answer among its options', () => {
   for (const q of QUESTIONS) assert.ok(q.options.includes(q.answer), q.ask);
   assert.deepEqual([...new Set(QUESTIONS.map((q) => q.outcome))].sort(), [3, 4, 5, 6]);
 });
+
+test('bullseye: the reciprocal of the steering bearing places you, and the card gives BRAA', async () => {
+  const { bearingRange, bullseyeProblem, cardinal, fromBull, ownFromSteer, shortcut } = await import('../../src/lessons/bvr/lesson-model.mjs');
+  // Bullseye 200 at 40 from you puts you at bullseye 020, 40.
+  assert.deepEqual(ownFromSteer(200, 40), { brg: 20, rng: 40 });
+  assert.deepEqual(ownFromSteer(90, 25), { brg: 270, rng: 25 });
+  const [x, y] = fromBull(90, 10);
+  near(x, 10, 1e-9); near(y, 0, 1e-9);
+  // Same bearing: ranges subtract, the group is beyond you. Opposite: they add.
+  const same = bearingRange(fromBull(20, 40), fromBull(20, 70));
+  near(same.rng, 30, 1e-9); near(same.brg, 20, 1e-9);
+  assert.deepEqual(shortcut({ brg: 20, rng: 40 }, { brg: 25, rng: 70 }), { kind: 'same', rng: 30 });
+  const opp = bearingRange(fromBull(270, 25), fromBull(90, 30));
+  near(opp.rng, 55, 1e-9); near(opp.brg, 90, 1e-9);
+  assert.equal(shortcut({ brg: 270, rng: 25 }, { brg: 90, rng: 30 }).rng, 55);
+  assert.equal(shortcut({ brg: 0, rng: 30 }, { brg: 90, rng: 30 }), null);
+  // The reviewer's case: 000/60 vs 010/70 is 15 NM apart, not 10; no shortcut offered.
+  assert.equal(shortcut({ brg: 0, rng: 60 }, { brg: 10, rng: 70 }), null);
+  for (let o = 0; o < 360; o += 5) for (let g = 0; g < 360; g += 5) for (const [r1, r2] of [[15, 75], [40, 45], [60, 70], [30, 30]]) {
+    const sc = shortcut({ brg: o, rng: r1 }, { brg: g, rng: r2 });
+    if (sc) assert.ok(Math.abs(sc.rng - bearingRange(fromBull(o, r1), fromBull(g, r2)).rng) <= 2);
+  }
+  assert.equal(cardinal(185), 'south');
+  assert.equal(cardinal(337.6), 'north');
+  // Generated problems stay inside the card and the stated limits.
+  let seed = 7;
+  const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  for (let i = 0; i < 200; i++) {
+    const p = bullseyeProblem(rand);
+    assert.equal(p.own.brg, (p.steer.brg + 180) % 360);
+    assert.ok(p.group.rng <= 75 && p.own.rng <= 60);
+    assert.ok(p.braa.rng >= 15 && p.braa.rng <= 70);
+    const check = bearingRange(fromBull(p.own.brg, p.own.rng), fromBull(p.group.brg, p.group.rng));
+    near(check.rng, p.braa.rng, 1e-9);
+  }
+});

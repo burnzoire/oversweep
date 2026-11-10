@@ -14,12 +14,12 @@
     "id": "module.bvr-intercepts",
     "slug": "bvr-intercepts",
     "subject": "air-combat",
-    "revision": 1,
+    "revision": 2,
     "title": "Beyond-Visual-Range Intercepts",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "objective": "Fly the fight before the merge: read intercept geometry (target aspect, angle-off, lateral separation), put a bandit on a collision course or set up a stern conversion, understand a missile's launch zone and when to shoot, crank and decide to merge or leave, work as a section from commit to sort, and talk to the controller in bullseye and BRAA with the identification the rules of engagement require.",
-    "applicability": "Fighter aircrew of every service, from the Navy's public intercept training instruction (which notes the Air Force's conventions) and the joint counterair publication, with the DCS F-16C and Falcon BMS manuals for the In the sim panel. Unclassified training principles only: real tactics, missile performance and each theater's rules of engagement and SPINS govern."
+    "objective": "Fly the fight before the merge: read intercept geometry (target aspect, angle-off, lateral separation), put a bandit on a collision course or set up a stern conversion, understand a missile's launch zone and when to shoot, crank and decide to merge or leave, work as a section from commit to sort, and talk to the controller in bullseye and BRAA, plotting bullseye calls by hand when the cockpit has no bullseye readout, with the identification the rules of engagement require.",
+    "applicability": "Fighter aircrew of every service, from the Navy's public intercept training instruction (which notes the Air Force's conventions) and the joint counterair publication, with the DCS F-16C, DCS F-14 and Falcon BMS manuals for the In the sim panel. Unclassified training principles only: real tactics, missile performance and each theater's rules of engagement and SPINS govern."
   },
   {
     "id": "module.radar-and-warning",
@@ -30,7 +30,7 @@
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "objective": "Understand how a fighter's pulse-Doppler radar searches, measures and locks, why PRF matters and where the Doppler notch is; point the scan volume at a called altitude; know that a radar contact has no identity until IFF or another source gives one; read a radar warning receiver and know its limits; and explain how chaff, flares and jamming defeat radar and infrared threats.",
-    "applicability": "Aircrew of every service, fixed and rotary wing, from the Air Force's electronic warfare training text and the Navy's intercept training instruction, with the DCS F-16C and Falcon BMS manuals for the In the sim panel. Unclassified principles only: each aircraft's systems, threat tables and tactics manuals govern."
+    "applicability": "Aircrew of every service, fixed and rotary wing, from the Air Force's electronic warfare training text and the Navy's intercept training instruction, with the DCS F-16C, DCS F-14 and Falcon BMS manuals for the In the sim panel. Unclassified principles only: each aircraft's systems, threat tables and tactics manuals govern."
   },
   {
     "id": "module.situational-awareness",

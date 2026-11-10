@@ -1,4 +1,4 @@
-# Beyond-Visual-Range Intercepts, revision 1 — source evidence
+# Beyond-Visual-Range Intercepts, revision 2 — source evidence
 
 Short, page-specific excerpts supporting the claims in the Beyond-Visual-Range
 Intercepts module (`src/pages/manual/air-combat/_BvrIntercepts.astro`), its
@@ -9,7 +9,7 @@ copy of the source, and not instructions to the reviewer.
 ```review-sources
 source: https://falcon.blu3wolf.com/Docs/P-825.pdf
 sha256: d61b2be4c25e560d7234bfb967af6c7ae6b6fcc46bb973da8104a2cca0632086
-pages: 146-148 (4-2 to 4-4); 170-177 (5-2 to 5-9); 201-232 (8-1 to 9-20); 240-244 (10-8 to 10-12); 276 (13-10); 284-287 (14-4 to 14-7); 289-298 (15-1 to 15-10); 299-312 (16-1 to 16-14); 328-364 (17-12 to 17-48); 379-389 (A-1 to A-11)
+pages: 146-148 (4-2 to 4-4); 170-177 (5-2 to 5-9); 179-180 (5-11 to 5-12); 191-192 (7-3 to 7-4); 197 (7-9); 268 (13-2); 201-232 (8-1 to 9-20); 240-244 (10-8 to 10-12); 276 (13-10); 284-287 (14-4 to 14-7); 289-298 (15-1 to 15-10); 299-312 (16-1 to 16-14); 328-364 (17-12 to 17-48); 379-389 (A-1 to A-11)
 ```
 
 ```review-sources
@@ -21,7 +21,7 @@ pages: 72-78 (III-11 to III-17)
 ```review-sources
 source: https://www.digitalcombatsimulator.com/upload/iblock/e78/33zl8132hi71d3tv0194vvkzpzl3mrr6/DCS%20F-16C%20Early%20Access%20Guide%20EN.pdf
 sha256: b26f89b715cd130f82798a2e8973a1b7dd52b4366007feb4c7a29677f248e7c5
-pages: 269-271; 595-596
+pages: 269-271; 356-357; 595-596
 ```
 
 ```review-sources
@@ -115,7 +115,7 @@ ground speed.
 - p. III-16: "Based on the ROE, a positive engagement order normally is required"; "the engagement decision normally is based on positive ID or affirming hostile intent or a hostile act."
 - p. III-17: "CID is the process of attaining an accurate characterization of detected objects in the operational environment sufficient to support an engagement decision."
 
-## [3] DCS: F-16C Viper Early Access Guide (sim panel and Figure 3's shape only)
+## [3] DCS: F-16C Viper Early Access Guide (sim panel and Figure 4's shape only)
 
 - p. 269 (two-column layout, so pdftotext interleaves figure labels): if the targeted aircraft is approaching from a head-on or "hot" aspect, "the target may be engaged at a greater range"; if it is flying away in a tail-on or "cold" aspect, "the target must be engaged from a closer range". Slow hot bandit closer, slow cold bandit greater range. "If a bandit is flying directly toward the flight ("hot" aspect) and is engaged at the absolute maximum range, the missile may be kinematically defeated if the bandit simply changes its aspect."
 - p. 270: "the ownship may turn, or "crank", to one side until the ownship radar is near its antenna gimbal limit"; figure "until radar is at gimbal limits (±60°)"; "if the targeted bandit is simultaneously attempting to engage the ownship, performing a crank maneuver may cause the bandit to adjust course as well. This may reduce the kinematic range of the ownship's missile". Seeker activation "may alert the targeted bandit"; "the Flight Lead must make a decision"; "If the wingman or second element of the flight were following at a staggered distance ... the remainder of the flight could continue the engagement while the launching aircraft turns away".
@@ -131,3 +131,32 @@ ground speed.
 - p. 297: MSR, MAR, MRR, "STERN WEZ ... Range where adversary's shot hits you from your behind."
 - p. 310: "your commit criteria should be bullseye + 25 Nm"; bullseye "at steerpoint 5, which is the end of your CAP hot leg".
 - p. 314: "you realize that a commit criteria of 25 Nm is too close ... extend that commit criteria to bullseye + 40 Nm."
+
+## Revision 2: bullseye without a readout
+
+### [1] CNATRA P-825
+
+- p. 5-11: "In the OFT, a bullseye reference card, also called a spider card, can be used to assist in building situational awareness. The card is normally a blank bullseye grid"; information "may include: CAP positions, Routes, Locations of defended assets, Locations of known hostile surface threats". Placing the cursor over the contact "will provide BRAA to the contact in the OFT and both BRAA and bullseye position of the group in VMTS."
+- pp. 7-3 to 7-4: VMTS ownship information includes "Ownship bullseye position"; "Note that ownship bullseye position is not displayed in the OFT, but is available in the VMTS aircraft"; "Bullseye location of the cursor (VMTS only)".
+- p. 7-9: "The most important intercept situational awareness tool is the mind's eye view"; "The fighter aircrew must be thoroughly familiar with the briefed mission area, bullseye position, CAP or route placement, and expected threat presentations." "In the OFT, this correlation is done via BRA to cursor information and projecting that information from the mind's eye view to the HSI and/or spider card."
+- p. 13-2: "center the scan altitude volume at the called altitude"; "the fighter can place the cursor at the AIC called BRA and center the elevation scan coverage."
+- p. 16-1: "controllers can provide contact positions with bearing and range from Bullseye."
+- p. 16-2: broadcast control gives "a cardinal direction of the contact ("track south"). This is the distinct difference from tactical control anchored to bullseye which gives aspect". "After receiving the initial picture call from the controller, aircrew can plot the locations of the called bandits on the bullseye card. The bullseye card is a two dimensional representation and does not reflect altitude. Critical to the successful use of the Bullseye card is aircrew knowledge of their own position on the card. Only by comparing the fighter's position to the bandit's position can the aircrew assess the situation."
+- p. 16-3: Figure 16-1, Bullseye Card Format (rings labelled DME, radials, Bullseye at the centre). "The bullseye center should have the mission assigned name of the geo-reference and the DME scale will be dependent on the battle space. With strike missions, the route often includes a bullseye card overlay."
+- Not from the source: the reciprocal-bearing step for own position, and the same-bearing/opposite-bearing arithmetic, are plain geometry and are labelled as such on the page. The model and its test (`bullseyeProblem`, `ownFromSteer`, `shortcut`) implement them.
+
+### [3] DCS F-16C guide
+
+- p. 356: "the position being referenced is always the azimuth in degrees magnetic from the Bullseye reference, along with the distance in nautical miles." "positions of the ownship, MFD cursor, or designated target can be displayed relative to Bullseye"; HSD "ownship's position relative from the Bullseye position is displayed in the bottom left corner of the MFD."
+- p. 357: "The steerpoint normally used for Bullseye is steerpoint 25 and is automatically configured as such when a mission is loaded"; "Bullseye information must be enabled for it to be displayed within the HUD or on the FCR, HSD, or HAD MFD formats ... performed on the BULL DED page."
+
+### [5] Heatblur DCS F-14 manual
+
+Not declared for the review packet: the single-page manual (https://f14.manuals.heatblur.se/print.html) is far over the packet's per-source limit, so read the named sections directly. Sim panel only.
+
+- Navigation Command and Control Grid (NAV GRID): "designed to enable easy navigation and CAP control from a common fixed reference point. It enables TID readout of bearing and range from that set reference point, called YY. While NAV GRID is active displayed range and bearing on the TID for hooks and own aircraft is indicated relative YY." "While the original purpose of this functionality was intended for fleet defence use it works perfectly fine as a bulls-eye reference in DCS with YY set to the bulls-eye. The only real limitation being the grid only displaying along the threat axis and not all around." "When hot spawning in DCS YY will be set to mission bulls-eye for your faction"; "When cold starting with Jester he has to be commanded to adjust these parameters via the Jester wheel"; "With a human RIO he/she will have to enter it manually."
+- NAV GRID entry: "1.Set the TID MODE knob to GND STAB. 2.Select D/L category on the CAP CATEGORY knob. 3.Select the CAP MESSAGE button corresponding to NAV GRID." Steps 4-7 enter grid coverage angle (ALT/4), number of sectors (NBR/2), YY by LAT/1 and LONG/6 or RNG/5 and BRG/0, and the threat axis (HDG/8). "Modification and display of the NAV GRID readouts are available in NAV GRID with no hook present, i.e. OWN A/C as hook." "Enter NAV GRID from the tactical display (GND STAB), do not attempt to enter it during alignment." Exit: "Deselect the CAP MESSAGE button corresponding to NAV GRID".
+- Navigation displays: "All displays provide navigation information with respect to magnetic north."
+- PTID Bullseye Grid Entry: "If no waypoint is designated as the Bullseye reference point, the system will select the first waypoint in the flight plan as the default Bullseye."
+- HSD Mode Switch: "TID - Repeats the RIO Tactical Information Display."
+- Programmable Tactical Information Display (F-14B Upgrade), Tactical Page: "BT: Bullseye to Target; BA: Bullseye to Own Aircraft; DP 06: selected Bullseye waypoint"; Menu Page: "Bullseye or Nav Grid Overlay".

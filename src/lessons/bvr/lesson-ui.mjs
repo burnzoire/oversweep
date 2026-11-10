@@ -2,8 +2,8 @@
 // quizzes. Geometry, steps and questions come from lesson-model.mjs; this file
 // reads inputs and draws.
 import {
-  ASPECT_ITEMS, CRANK_AO, LS_ITEMS, QUESTIONS, STEPS, TOF_SEC_PER_NM, ZONE, aspectWord, banditHeading, closure, collisionAo,
-  cutAndHca, fighterHeading, fly, losRate, lsExact, lsRule, positions, rMax, rNe, rangeAt, shotZone, timeoutRange, tofSec,
+  ASPECT_ITEMS, CRANK_AO, LS_ITEMS, QUESTIONS, STEPS, TOF_SEC_PER_NM, ZONE, aspectWord, banditHeading, bearingRange, bullseyeProblem, cardinal, closure, collisionAo,
+  cutAndHca, fromBull, norm180, shortcut, fighterHeading, fly, losRate, lsExact, lsRule, positions, rMax, rNe, rangeAt, shotZone, timeoutRange, tofSec,
 } from './lesson-model.mjs';
 import { quickQuiz, shuffle, termQuiz } from '../shared/quick-quiz.mjs';
 
@@ -146,7 +146,7 @@ function setupGeometry(root) {
   draw();
 }
 
-// Figure 3: an illustrative launch zone around a bandit, and the time of flight.
+// Figure 4: an illustrative launch zone around a bandit, and the time of flight.
 function setupZone(root) {
   const svg = root.querySelector('svg');
   const out = root.querySelector('[data-result]');
@@ -226,7 +226,85 @@ function setupQuestions(root) {
   });
 }
 
-const blocks = { example: setupExample, geometry: setupGeometry, zone: setupZone, aspect: setupAspect, section: setupQuestions, terms: (root) => termQuiz(root, { hideTerm: true }) };
+// Figure 3: plot yourself and a called group on a bullseye card, north up.
+function setupBullseye(root) {
+  const svg = root.querySelector('svg');
+  const out = root.querySelector('[data-result]');
+  const task = root.querySelector('[data-prompt]');
+  const reveal = root.querySelector('[data-reveal]');
+  const again = root.querySelector('[data-new]');
+  const CX = 190, CY = 180, K = 2; // 80 NM ring = 160 px
+  const P = ([x, y]) => [CX + x * K, CY - y * K];
+  const nm = (px, py) => [(px - CX) / K, (CY - py) / K];
+  const fmt = (b) => (Math.round(b) % 360 ? hdg(b) : '360');
+  let q, marks, shown;
+  const cross = (x, y, cls) => el('path', { class: cls, d: `M${x - 6} ${y - 6} L${x + 6} ${y + 6} M${x - 6} ${y + 6} L${x + 6} ${y - 6}` });
+  function card() {
+    const items = [el('rect', { class: 'frame', x: 1, y: 1, width: 638, height: 358 }), el('text', { class: 'lbl', x: 400, y: 30 }, 'BULLSEYE CARD, NORTH UP'), el('text', { class: 'lbl small', x: 400, y: 48 }, 'Rings every 20 NM')];
+    for (const r of [20, 40, 60, 80]) items.push(el('circle', { class: 'thin', cx: CX, cy: CY, r: r * K }), el('text', { class: 'lbl small', x: CX + 3, y: CY - r * K + 11 }, String(r)));
+    for (let b = 0; b < 360; b += 45) {
+      const [x, y] = P(fromBull(b, 80)), [lx, ly] = P(fromBull(b, 86));
+      items.push(el('line', { class: 'thin dotted', x1: CX, y1: CY, x2: x, y2: y }), el('text', { class: 'lbl small', x: lx, y: ly + 4, 'text-anchor': 'middle' }, hdg(b)));
+    }
+    items.push(el('circle', { class: 'fill', cx: CX, cy: CY, r: 3 }), el('text', { class: 'lbl small', x: CX - 6, y: CY - 6, 'text-anchor': 'end' }, 'VEGAS'));
+    return items;
+  }
+  function draw() {
+    const items = card();
+    const own = P(fromBull(q.own.brg, q.own.rng)), grp = P(fromBull(q.group.brg, q.group.rng));
+    if (marks[0]) items.push(cross(...P(marks[0]), 'ln on'));
+    if (marks[1]) items.push(cross(...P(marks[1]), 'ln'));
+    if (shown) {
+      items.push(el('line', { class: 'thin dashed', x1: CX, y1: CY, x2: own[0], y2: own[1] }), el('line', { class: 'thin dashed', x1: CX, y1: CY, x2: grp[0], y2: grp[1] }));
+      items.push(el('line', { class: 'ln on', x1: own[0], y1: own[1], x2: grp[0], y2: grp[1] }));
+      items.push(el('circle', { class: 'mine', cx: own[0], cy: own[1], r: 5 }), el('text', { class: 'lbl small', x: own[0] + 9, y: own[1] + 14 }, 'You'));
+      items.push(jet(grp[0], grp[1], q.track), el('text', { class: 'lbl small', x: grp[0] + 11, y: grp[1] - 6 }, 'Group'));
+    }
+    const lines = shown ? [`From you: ${fmt(q.braa.brg)}°, ${Math.round(q.braa.rng)} NM`, `Group tracks ${cardinal(q.track)}`] : [marks.length ? 'Now click where the group is' : 'Click where you are'];
+    lines.forEach((t, i) => items.push(el('text', { class: i ? 'lbl small' : 'lbl', x: 400, y: 90 + i * 20 }, t)));
+    if (marks.length) {
+      items.push(cross(406, 296, 'ln on'), el('text', { class: 'lbl small', x: 420, y: 300 }, 'Your mark for you'));
+      if (marks[1]) items.push(cross(406, 320, 'ln'), el('text', { class: 'lbl small', x: 420, y: 324 }, 'Your mark for the group'));
+    }
+    svg.replaceChildren(...items);
+  }
+  function finish() {
+    shown = true;
+    draw();
+    const own = fromBull(q.own.brg, q.own.rng), grp = fromBull(q.group.brg, q.group.rng);
+    const miss = marks.map((m, i) => bearingRange(m, i ? grp : own).rng);
+    const ta = Math.abs(norm180(q.track - bearingRange(grp, own).brg));
+    const msgs = [];
+    if (marks.length === 2) msgs.push(para(miss.every((d) => d <= 8) ? 'Good plot: both marks within 8 NM.' : `Your marks were ${Math.round(miss[0])} NM and ${Math.round(miss[1])} NM out. Check which way the bearing points.`));
+    msgs.push(
+      para(`You: the readout says bullseye is ${fmt(q.steer.brg)}° at ${q.steer.rng} NM from you, so you are on the reciprocal, Vegas ${fmt(q.own.brg)}, ${q.own.rng}.`, 'derived'),
+      para(`Group: Vegas ${fmt(q.group.brg)}, ${q.group.rng}, plotted out from bullseye along ${fmt(q.group.brg)}°.`, 'derived'),
+      para(`From you it is about ${fmt(q.braa.brg)}° at ${Math.round(q.braa.rng)} NM, ${q.alt},000 ft, ${(aspectWord(ta) ?? 'between flank and beam').toLowerCase()} to you (${Math.round(ta)}° target aspect).`, 'derived'),
+    );
+    const s = shortcut(q.own, q.group);
+    if (s) msgs.push(para(s.kind === 'same' ? `Shortcut: you and the group are on almost the same bullseye bearing, so the ranges subtract: ${s.rng} NM.` : `Shortcut: you are on almost opposite bullseye bearings, so the ranges add: ${s.rng} NM.`, 'derived'));
+    out.replaceChildren(...msgs);
+    reveal.disabled = true;
+  }
+  function fresh() {
+    q = bullseyeProblem(); marks = []; shown = false;
+    task.textContent = `Your navigation display, steering to bullseye: ${fmt(q.steer.brg)}°, ${q.steer.rng} NM. The controller: “Rage 11, SABRE, group Vegas ${fmt(q.group.brg)}, ${q.group.rng}, ${q.alt} thousand, track ${cardinal(q.track)}.” Click where you are, then where the group is.`;
+    out.replaceChildren();
+    reveal.disabled = false;
+    draw();
+  }
+  svg.addEventListener('click', (ev) => {
+    if (shown) return;
+    const pt = new DOMPoint(ev.clientX, ev.clientY).matrixTransform(svg.getScreenCTM().inverse());
+    marks.push(nm(pt.x, pt.y));
+    if (marks.length === 2) finish(); else draw();
+  });
+  reveal.addEventListener('click', finish);
+  again.addEventListener('click', fresh);
+  fresh();
+}
+
+const blocks = { example: setupExample, geometry: setupGeometry, bullseye: setupBullseye, zone: setupZone, aspect: setupAspect, section: setupQuestions, terms: (root) => termQuiz(root, { hideTerm: true }) };
 for (const root of document.querySelectorAll('[data-lesson]')) {
   blocks[root.dataset.lesson]?.(root);
   root.classList.add('ready');

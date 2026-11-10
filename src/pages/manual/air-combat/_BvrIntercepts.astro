@@ -8,7 +8,7 @@ import { CRANK_AO, STEPS, lsExact, lsRule, timeoutRange, tofSec } from '../../..
 const bvr = getModule('bvr-intercepts');
 const core = [
  ['example', 'One intercept, start to finish'], ['geometry', 'Reading the geometry'], ['collision', 'Collision course and the stern conversion'],
- ['control', 'The controller: bullseye and BRAA'], ['roe', 'Declarations, ID and the rules of engagement'], ['shoot', 'The shot: launch zones, crank and decide'],
+ ['control', 'The controller: bullseye and BRAA'], ['bullseye', 'Bullseye without a readout'], ['roe', 'Declarations, ID and the rules of engagement'], ['shoot', 'The shot: launch zones, crank and decide'],
  ['section', 'Working as a section'], ['recap', 'Key points'],
 ];
 const reference = [
@@ -23,11 +23,13 @@ const p = (pg: string) => `[1, ${pp(pg)}]`;
 const j = (pg: string) => `[2, ${pp(pg)}]`;
 const d = (pg: string) => `[3, ${pp(pg)}]`;
 const b = (pg: string) => `[4, ${pp(pg)}]`;
+const h = (sec: string) => `[5, ${sec}]`;
 const bfm = sitePath('manual/air-combat/bfm/');
 const radio = sitePath('manual/radio-communications/radio-procedures/');
 const sead = sitePath('manual/air-to-ground-operations/sead-dead/');
 const glossary = sitePath('encyclopedia/terminology/bvr/');
 const brevity = sitePath('encyclopedia/terminology/brevity/');
+const nav = sitePath('manual/navigation/air-navigation/');
 const ordnance = sitePath('encyclopedia/ordnance/');
 const k = (ft: number) => `${Math.round(ft / 1000)},000`;
 ---
@@ -52,7 +54,7 @@ const k = (ft: number) => `${Math.round(ft / 1000)},000`;
   <li>describe a missile's launch zone (<Term>LAR</Term>, <Term>RMAX</Term>, <Term>RNE</Term>, <Term>RMIN</Term>) and what the fighter and the bandit each control;</li>
   <li>describe the post-shot timeline: the <Term>crank</Term>, <Term>timeout</Term>, and the choice to <Term>skate</Term> or <Term>banzai</Term>, and the defensive beam turn;</li>
   <li>list a section's intercept tasks from commit to merge, including <Term>meld</Term> and <Term>sort</Term>;</li>
-  <li>explain broadcast and tactical control, <Term>BULLSEYE</Term> and <Term>BRAA</Term>, the declarations, and why rules of engagement usually need <Term>positive identification</Term>.</li>
+  <li>explain broadcast and tactical control, <Term>BULLSEYE</Term> and <Term>BRAA</Term>, plot yourself and a called group on a bullseye card when the cockpit gives no bullseye readout, the declarations, and why rules of engagement usually need <Term>positive identification</Term>.</li>
  </ol>
  <p class="note">This module teaches the skills an intercept is built on, as the Navy's training instruction does; it says itself that tactics are taught later, in the fleet, and that specific missile tactics are beyond entry-level training. <a href="#source-p825">{p('15-1')}</a> The ranges quoted are its training standards, not combat numbers, and the worked intercept is invented. Real tactics, missile performance, theater rules of engagement and SPINS govern. Turning fights after the merge are in <a href={bfm}>Basic Fighter Maneuvers</a>.</p>
 
@@ -169,6 +171,31 @@ const k = (ft: number) => `${Math.round(ft / 1000)},000`;
  <p>Before the commit the controller normally uses broadcast control in bullseye; at the commit it moves the fighters to tactical control, in bullseye outside 30 NM and BRAA inside it. <a href="#source-p825">{p('5-9, 17-17')}</a> "Vegas" here is the bullseye's name. The radio basics and the brevity words themselves are in <a href={radio}>Radio Procedures</a> and the <a href={brevity}>brevity words</a>.</p>
  <p class="key"><strong>Key point:</strong> bullseye calls build everyone's picture from one shared point; BRAA calls tell one flight where a group is from its own nose, and the section moves from one to the other as the range closes.</p>
 
+
+ <h2 id="bullseye">Bullseye without a readout</h2>
+ <p>Some cockpits work bullseye for you: they show your own position from bullseye, and the bullseye position of the radar cursor, so a call can be matched straight to the display. Others do not. The Navy's own intercept simulator shows only bearing and range from the fighter to the cursor, and its students correlate a bullseye call by projecting that picture onto the navigation display and a bullseye card. <a href="#source-p825">{p('7-3 to 7-4, 7-9')}</a> Without a readout the work is done on a card and in your head, and it starts before flight: know the mission area, where bullseye is, your CAP or route and the threat you expect. The training text calls the resulting mind's eye picture the most important intercept awareness tool. <a href="#source-p825">{p('7-9')}</a></p>
+ <h3>The bullseye card</h3>
+ <p>A bullseye card, also called a spider card, is a blank grid centred on bullseye: range rings and bearing lines, labelled with the bullseye's name, at a range scale that fits the battle space. Strike routes often carry one as an overlay. <a href="#source-p825">{p('16-2 to 16-3')}</a> Before flight, draw on it what the mission needs: CAP stations, routes, defended assets and known surface threats. <a href="#source-p825">{p('5-11')}</a> After the controller's picture call, plot each group on it. The card is flat and shows no altitude. It is only useful if you also know where you are on it: only by comparing your position with the bandit's can you judge the picture. <a href="#source-p825">{p('16-2')}</a></p>
+ <h3>Finding yourself, then the group</h3>
+ <ol>
+  <li><strong>Find yourself.</strong> Put bullseye in the navigation system as a waypoint or steering point. The display then gives the bearing and range <em>to</em> bullseye; you are on the reciprocal bearing <em>from</em> it, at the same range. Bullseye 200° at 40 NM from you puts you at bullseye 020, 40. It is the same step as turning a bearing to a beacon into the radial you are on, covered in <a href={nav}>Air Navigation</a>; it is plain geometry, not a procedure from the training text.</li>
+  <li><strong>Plot the group.</strong> From the centre of the card, go out along the called bearing to the called range. "Vegas 015, 45" is 45 NM from bullseye on the 015° line. <a href="#source-p825">{p('16-1')}</a></li>
+  <li><strong>Read across.</strong> The line from you to the group gives its rough bearing and range from you. Compare the called track direction with that line: broadcast calls give the group's track, not its aspect to you, so work the aspect out from the plot: a group tracking toward you is hot to you. <a href="#source-p825">{p('16-1 to 16-2')}</a></li>
+  <li><strong>Look with the radar.</strong> Point the radar's search volume where the group should be, at its called altitude, and put the cursor on it for bearing and range from you; then correlate the contact with the call and ask for a declaration. <a href="#source-p825">{p('7-9, 13-2')}</a></li>
+ </ol>
+ <p>Two cases need no plot, only arithmetic. If you and the group are on nearly the same bullseye bearing, the ranges subtract: you at Vegas 020, 40 and a group at Vegas 020, 70 means it is 30 NM beyond you, on about the same line. If you are on nearly opposite bearings, they add: you at Vegas 270, 25 and a group at Vegas 090, 30 means 55 NM, straight across bullseye. Both give range only, and the first gets worse the further apart the two bearings are and the closer the two ranges; anything else, plot it.</p>
+ <p>The arithmetic matters until the group is inside 30 NM. After the commit the controller moves the flight to tactical control, still in bullseye outside 30 NM, and inside 30 NM gives the group in BRAA, from your own nose, so there is nothing to convert. <a href="#source-p825">{p('5-9')}</a></p>
+ <section class="lesson figure-lesson" data-lesson="bullseye" aria-labelledby="bullseye-title">
+  <h3 id="bullseye-title" class="fig-title">Figure 3 — Plotting a bullseye call</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-reveal>Show the answer</button><button type="button" data-new>New problem</button></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 3, scrolls sideways on narrow screens" tabindex="0"><svg class="natops bull-card" viewBox="0 0 640 360" role="img" aria-label="A bullseye card centred on bullseye Vegas, with range rings every 20 NM and bearing lines every 45 degrees. Click to plot yourself and the called group."></svg></div>
+  <p class="no-js">Interactive figure unavailable. Example: the navigation display shows bullseye 200° at 40 NM, so you are at bullseye 020, 40. A group called at Vegas 020, 70 is on the same line, 30 NM beyond you.</p>
+  <div class="feedback" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Invented problems, north up and to scale, with the card, the call and the steering readout all in the same (magnetic) bearings, with bearings to 5° and ranges to 5 NM as a call would round them. The conversion is plain geometry; the card's form follows the training text's bullseye card. <a href="#source-p825">{p('16-2 to 16-3')}</a></p>
+ </section>
+ <p class="key"><strong>Key point:</strong> a bullseye call means nothing until you know where you are from bullseye: take the reciprocal of your bearing to it, plot yourself and the group on the card, then read the group's bearing and range from you.</p>
+
  <h2 id="roe">Declarations, ID and the rules of engagement</h2>
  <p>The declaration decides what you may do to a group: <a href="#source-p825">{p('5-8, A-1, A-5')}</a></p>
  <div class="table-scroll" role="region" aria-label="Declarations" tabindex="0"><table>
@@ -223,14 +250,14 @@ const k = (ft: number) => `${Math.round(ft / 1000)},000`;
   <li><span class="who">Decide</span><span class="said">Winning or losing depends on whether you shot on timeline and whether the bandit is targeting you (under 30 TA, or you are spiked). Then <Term>BANZAI</Term>: support the missile to timeout and go on to the merge; or <Term>SKATE</Term>: support it to timeout and turn out. <a href="#source-p825">{p('16-11 to 16-12')}</a></span></li>
  </ol>
  <section class="lesson figure-lesson" data-lesson="zone" aria-labelledby="zone-title">
-  <h3 id="zone-title" class="fig-title">Figure 3 — Where a shot is good, and how long it takes</h3>
+  <h3 id="zone-title" class="fig-title">Figure 4 — Where a shot is good, and how long it takes</h3>
   <p>Move the fighter around the bandit, nose-on (0°) to the tail (180°), and in and out. The zone's shape is illustrative only. On the right, set the shot range to see the time-of-flight rule and the crank.</p>
   <div class="controls">
    <label for="zone-ta">Target aspect <output for="zone-ta"></output></label><input id="zone-ta" name="ta" type="range" min="0" max="180" step="5" value="30" />
    <label for="zone-range">Range <output for="zone-range"></output></label><input id="zone-range" name="range" type="range" min="2" max="110" step="1" value="70" />
    <label for="zone-shot">Shot range <output for="zone-shot"></output></label><input id="zone-shot" name="shot" type="range" min="8" max="40" step="1" value="20" />
   </div>
-  <div class="fig-scroll" role="region" aria-label="Figure 3, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 340" role="img" aria-label="An illustrative launch zone around a bandit, longest ahead of it and shortest behind, with the no-escape range inside it, and bars for the time of flight"></svg></div>
+  <div class="fig-scroll" role="region" aria-label="Figure 4, scrolls sideways on narrow screens" tabindex="0"><svg class="natops" viewBox="0 0 640 340" role="img" aria-label="An illustrative launch zone around a bandit, longest ahead of it and shortest behind, with the no-escape range inside it, and bars for the time of flight"></svg></div>
   <p class="no-js">Interactive figure unavailable. The launch zone reaches farthest in front of the bandit and least behind it, with the no-escape range inside. A 20 NM head-on shot times out in about 40 seconds; a 50 degree crank leaves the section about {(timeoutRange(20, CRANK_AO) - timeoutRange(20, 0)).toFixed(1)} NM farther from the bandit at timeout.</p>
   <div class="feedback" data-result role="status" aria-live="polite"></div>
   <p class="fig-caption">The zone is an invented shape that follows the rules in the sources, longest against a hot bandit and shortest in the rear quarter <a href="#source-p825">{p('15-1')}</a> <a href="#source-f16">{d('269')}</a>; it is not any missile's. The time of flight uses the training rule of thumb. <a href="#source-p825">{p('15-9')}</a></p>
@@ -334,7 +361,7 @@ const k = (ft: number) => `${Math.round(ft / 1000)},000`;
 
  <section class="sim-panel" aria-labelledby="sims">
   <h2 id="sims">In the sim</h2>
-  <p>DCS World and Falcon BMS both model the F-16C with the AIM-120. This is how their official manuals describe the BVR fight; other sim aircraft, including two-seat fighters with their own intercept displays, were not checked for this revision.</p>
+  <p>DCS World and Falcon BMS both model the F-16C with the AIM-120. This is how their official manuals describe the BVR fight. For bullseye, the DCS F-14 is set beside the F-16C, because its cockpit handles bullseye very differently; other sim aircraft were not checked.</p>
   <h3>DCS: F-16C Viper</h3>
   <ul>
    <li>The guide explains maximum launch range as the training text does: longest against a hot bandit, shorter against a cold one, and against a slow hot bandit or a fast cold one closure changes it. A bandit that simply changes aspect can defeat a missile fired at absolute maximum range. <a href="#source-f16">{d('269')}</a></li>
@@ -348,6 +375,13 @@ const k = (ft: number) => `${Math.round(ft / 1000)},000`;
    <li>Mission 18 is a BVR combat air patrol. BMS describes BVR as a cycle of commit and abort, with the leader choosing <strong>wall</strong> (elements line abreast) or <strong>grind</strong> (elements in trail) before each commit, and <strong>skate</strong>, <strong>short skate</strong> or <strong>banzai</strong> flow. <a href="#source-bms">{b('295 to 296')}</a></li>
    <li>Its BVR timeline defines its own named ranges: transition, desired out, decision, minimum abort and minimum recommit ranges, built from the threat's stern weapon zone. <a href="#source-bms">{b('296 to 297')}</a></li>
    <li>Mission 18 puts bullseye at the end of the CAP's hot leg so that commit criteria can be a bullseye range, then has you learn that 25 NM is too close and extend it to 40. <a href="#source-bms">{b('310, 314')}</a></li>
+  </ul>
+  <h3>Bullseye in the cockpit: DCS F-16C and F-14</h3>
+  <ul>
+   <li><strong>F-16C.</strong> Bullseye is a steerpoint, normally 25, set automatically when the mission loads, and switched on from the BULL page. The horizontal situation display then shows your own bearing and range from bullseye in its lower left corner, and the cursor's bearing and range from bullseye, so a call can be matched straight to the display. The guide gives bullseye bearings in degrees magnetic, and the F-14 manual says its displays are referenced to magnetic north. <a href="#source-f16">{d('356 to 357')}</a></li>
+   <li><strong>F-14A and F-14B.</strong> The manual describes no dedicated bullseye readout; instead it suggests the RIO's tactical display has a navigation grid built for fleet defence: it reads bearing and range from a reference point, YY, to the hooked track and to your own aircraft, and the manual says it works as a bullseye reference with YY on the bullseye. Its grid is drawn only along a set threat axis, not all round. On a hot start DCS puts YY on the mission bullseye; on a cold start Jester has to be told to set it, and a human RIO enters it by hand. <a href="#source-f14">{h('Navigation Command and Control Grid')}</a> The pilot's horizontal situation display can repeat the RIO's tactical display. <a href="#source-f14">{h('HSD Mode Switch')}</a> If the grid is not set up, use the card and the reciprocal above.</li>
+   <li><strong>Setting up NAV GRID.</strong> All of it is done from the back seat. The RIO sets the TID to ground stabilised (GND STAB), selects the datalink (D/L) category on the computer address panel (CAP), and presses the NAV GRID message button. Then the RIO enters the grid's coverage angle and number of sectors, the YY position (latitude and longitude, or range and bearing from own aircraft), and the threat axis. Enter it from the tactical display, not during alignment. To leave NAV GRID, deselect the same button. The bearing and range readouts work with no hook, which makes own aircraft the hook. <a href="#source-f14">{h('Navigation Command and Control Grid')}</a> From the front seat, set the HSD mode switch to TID to see the RIO's display. <a href="#source-f14">{h('HSD Mode Switch')}</a> The manual does not say whether Jester turns the grid on by itself, so check the TID before relying on it.</li>
+   <li><strong>F-14B (Upgrade).</strong> Its programmable tactical display adds a bullseye readout: bearing and range from bullseye to own aircraft and to the target, from a waypoint chosen as bullseye; if none is chosen, it uses the first waypoint in the flight plan, so check what the readout is referenced to. <a href="#source-f14">{h('Programmable Tactical Information Display')}</a></li>
   </ul>
   <h3>Where the sims and the training instruction differ, or say nothing</h3>
   <ul>
@@ -390,6 +424,7 @@ const k = (ft: number) => `${Math.round(ft / 1000)},000`;
  <details><summary><span class="outcome">Outcome 3</span> Why might a fighter not shoot at maximum range, even with a valid launch zone?</summary><p>A long shot gives the bandit time to see it and maneuver, and the missile arrives with little energy, so it is easy to defeat kinematically; ROPT trades range for end-game energy.</p></details>
  <details><summary><span class="outcome">Outcome 4</span> Your missile times out and the radar contact disappears. Was it a kill?</summary><p>Not necessarily: timeout only says the missile has reached its expected target. A lost contact after timeout may mean a kill.</p></details>
  <details><summary><span class="outcome">Outcome 5</span> In what order does a section run its intercept tasks?</summary><p>Picture building, commit, label and name, target, meld, sort, shoot, decide, merge.</p></details>
+ <details><summary><span class="outcome">Outcome 6</span> Your jet has no bullseye readout. Steering to bullseye shows 110° at 30 NM, and a group is called at bullseye 290, 50. Where is it from you?</summary><p>You are on the reciprocal, bullseye 290, 30. The group is on the same bullseye bearing, so the ranges subtract: about 20 NM beyond you, bearing about 290° from you.</p></details>
  <details><summary><span class="outcome">Outcome 6</span> What is the difference between a broadcast call and a tactical call about the same group?</summary><p>Broadcast is for everyone, in bullseye, with a track direction; tactical is for one flight, in bullseye or BRAA, with the group's aspect to that flight.</p></details>
 
  <h2 id="sources">Sources and applicability</h2>
@@ -397,10 +432,11 @@ const k = (ft: number) => `${Math.round(ft / 1000)},000`;
  <p id="source-p825"><strong>[1] US Navy, Chief of Naval Air Training, CNATRA P-825 (07-14), Flight Training Instruction, Basic Fighter Maneuvering (BFM) and All Weather Intercept (AWI), Advanced UMFO T-45C/VMTS, 1 July 2014.</strong> <a href="https://falcon.blu3wolf.com/Docs/P-825.pdf">Read on a public copy</a>, 9 November 2026, by printed page: fighter missions and pursuit, pp. 4-2 to 4-4; air intercept control, pp. 5-2 to 5-9; intercept geometry, pp. 8-1 to 9-20; target aspect control and the stern conversion, pp. 10-1 to 10-12 and 13-10; missiles, pp. 14-4 to 14-7; missile employment, pp. 15-1 to 15-10; advanced intercepts, pp. 16-1 to 16-14; section employment, pp. 17-12 to 17-48; brevity codes, pp. A-1 to A-11. The Navy's training text for student naval flight officers and Marine Corps navigators; CNATRA's own site no longer serves it, and a 2017 revision exists that was not read. It teaches skills, not fleet tactics.</p>
  <p id="source-jp"><strong>[2] US Joint Chiefs of Staff, JP 3-01, Countering Air and Missile Threats, 23 March 2012.</strong> <a href="https://www.bits.de/NRANEU/others/jp-doctrine/jp3_01(12).pdf">Read on the Berlin Information-center for Transatlantic Security's copy</a>, 9 November 2026, pp. III-11 to III-17. The joint publication for all four services; a later edition exists that could not be read.</p>
  <h3>Sim sources</h3>
- <p id="source-f16"><strong>[3] Eagle Dynamics, DCS: F-16C Viper Early Access Guide (English).</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 9 November 2026, pp. 269–271 and 595–596. A sim manual, cited only for the In the sim panel and Figure 3's shape.</p>
+ <p id="source-f16"><strong>[3] Eagle Dynamics, DCS: F-16C Viper Early Access Guide (English).</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 9 November 2026, pp. 269–271, 356–357 and 595–596. A sim manual, cited only for the In the sim panel and Figure 4's shape.</p>
  <p id="source-bms"><strong>[4] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 9 November 2026, pp. 256, 259–260, 295–297, 310 and 314. A sim manual, cited only for the In the sim panel.</p>
+ <p id="source-f14"><strong>[5] Heatblur Simulations, DCS: F-14 Tomcat manual.</strong> <a href="https://f14.manuals.heatblur.se/print.html">Online manual</a>, read 10 November 2026, by section: Navigation Command and Control Grid (NAV GRID); HSD Mode Switch; Programmable Tactical Information Display. A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/bvr-intercepts-evidence.md">BVR intercepts evidence</a>.</p>
- <p>Figures 1 to 3 and the worked intercept are original, invented examples, not reproductions of any publication's figure.</p>
+ <p>Figures 1 to 4 and the worked intercept are original, invented examples, not reproductions of any publication's figure.</p>
  <p class="note">Applicability: written for fighter aircrew of every service. The procedures are the Navy's published training standards, which it says are skills rather than tactics, with the Air Force's aspect conventions noted; no Air Force or Army intercept publication could be read. Identification is from joint doctrine. Real tactics, missile performance, theater rules of engagement, SPINS, your unit's procedures and the current editions govern. This revision is Drafted pending independent source-backed review.</p>
 </SiteLayout>
 
