@@ -542,6 +542,14 @@ h2 {
 .card-art .ship { fill: var(--color-surface); stroke: currentColor; stroke-width: 1.2; }
 .card-art .tower path { fill: var(--color-surface); stroke: currentColor; stroke-width: 1.5; stroke-linejoin: round; }
 .card-art .tower path + path { fill: none; }
+.card-art .lamp { fill: #fff; stroke: currentColor; stroke-width: 1.2; }
+.card-art .ground { fill: var(--color-surface); }
+.card-art .screen { fill: var(--color-surface); stroke: currentColor; stroke-width: 1; }
+.card-art .dots circle { fill: none; stroke: currentColor; stroke-width: 1.2; }
+.card-art .ln.needle { stroke-width: 3.5; }
+.card-art .heli .disc { fill: none; stroke: currentColor; stroke-width: 0.6; stroke-dasharray: 2 1.5; }
+.card-art .heli .body { fill: #fff; stroke: currentColor; stroke-width: 0.9; stroke-linejoin: round; }
+.card-art .heli .rotor { fill: none; stroke: currentColor; stroke-width: 1.1; stroke-linecap: round; }
 
 .subject-glyph {
   width: 1em;

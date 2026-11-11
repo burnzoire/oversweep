@@ -2,6 +2,31 @@
 import CaseIiiMarshal from './CaseIiiMarshal.astro';
 import BfmCircles from './BfmCircles.astro';
 import RadioExchange from './RadioExchange.astro';
+import FixedWingAoa from './FixedWingAoa.astro';
+import RotorDisc from './RotorDisc.astro';
+import RunwayPapi from './RunwayPapi.astro';
+import WindTriangle from './WindTriangle.astro';
+import AttitudeIndicator from './AttitudeIndicator.astro';
+import IlsProfile from './IlsProfile.astro';
+import IlsNeedles from './IlsNeedles.astro';
+import RouteCard from './RouteCard.astro';
+import TakeoffClimb from './TakeoffClimb.astro';
+import TwoShipParade from './TwoShipParade.astro';
+import HelicopterStagger from './HelicopterStagger.astro';
+import FingerFour from './FingerFour.astro';
+import ProbeDrogue from './ProbeDrogue.astro';
+import DiveDelivery from './DiveDelivery.astro';
+import CasRunIn from './CasRunIn.astro';
+import PodView from './PodView.astro';
+import MaskedHover from './MaskedHover.astro';
+import ThreatRing from './ThreatRing.astro';
+import AngledDeck from './AngledDeck.astro';
+import CollisionCourse from './CollisionCourse.astro';
+import RwrScope from './RwrScope.astro';
+import Bullseye from './Bullseye.astro';
+import FlameoutPattern from './FlameoutPattern.astro';
+import Autorotation from './Autorotation.astro';
+import HoldShort from './HoldShort.astro';
 
 // Card illustrations for Manual and Training Library cards, keyed by the
 // module or experience id the card is built from (Entry.id). Renders nothing
@@ -10,6 +35,31 @@ const art: Record<string, typeof CaseIiiMarshal> = {
   'experience.case-iii-tomcat': CaseIiiMarshal,
   'module.bfm': BfmCircles,
   'module.radio-procedures': RadioExchange,
+  'module.principles-of-flight': FixedWingAoa,
+  'module.rotor-wing': RotorDisc,
+  'module.airfield-basics': RunwayPapi,
+  'module.air-navigation': WindTriangle,
+  'module.attitude-instrument-flying': AttitudeIndicator,
+  'module.instrument-procedures': IlsProfile,
+  'experience.instrument-trainer': IlsNeedles,
+  'module.sortie-planning': RouteCard,
+  'module.weather-and-performance': TakeoffClimb,
+  'module.two-ship-formation': TwoShipParade,
+  'module.helicopter-formation': HelicopterStagger,
+  'module.four-ship-formation': FingerFour,
+  'module.aar-procedures': ProbeDrogue,
+  'module.weapons-delivery': DiveDelivery,
+  'module.close-air-support': CasRunIn,
+  'module.precision-targeting': PodView,
+  'module.rotary-wing-attack': MaskedHover,
+  'module.sead-dead': ThreatRing,
+  'module.ship-operations': AngledDeck,
+  'module.bvr-intercepts': CollisionCourse,
+  'module.radar-and-warning': RwrScope,
+  'module.situational-awareness': Bullseye,
+  'module.emergency-procedures': FlameoutPattern,
+  'experience.autorotation': Autorotation,
+  'experience.radio-trainer': HoldShort,
 };
 const Art = art[Astro.props.id as string];
 ---

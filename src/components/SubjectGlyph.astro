@@ -4,6 +4,26 @@
 // the subject name always sits next to it in text.
 interface Props { subject: string }
 const glyphs: Record<string, string> = {
+  // Airfoil with its lift arrow.
+  'flight-fundamentals': 'M1.5 11 C4 7.5 10 7 14.5 10 C10 11 4 11.5 1.5 11 Z M7 8 V2 M5.5 3.5 L7 2 L8.5 3.5',
+  // Runway in perspective with its centreline.
+  'airfield-operations': 'M4.5 15 L7 1 H9 L11.5 15 Z M8 4 V5.5 M8 8 V9.5 M8 12 V13.5',
+  // Compass rose needle.
+  'navigation': 'M8 1.5 A6.5 6.5 0 1 0 8 14.5 A6.5 6.5 0 1 0 8 1.5 M8 3.5 L10 8 L8 12.5 L6 8 Z',
+  // Attitude indicator: horizon and aircraft symbol.
+  'instrument-flight': 'M8 1.5 A6.5 6.5 0 1 0 8 14.5 A6.5 6.5 0 1 0 8 1.5 M1.5 9 H14.5 M4.5 7 H6.5 L8 8.5 L9.5 7 H11.5',
+  // Route legs between steerpoints.
+  'flight-planning': 'M2.5 13 L6 5 L11 9 L13.5 3 M7 5 A1 1 0 1 0 5 5 A1 1 0 1 0 7 5 M12 9 A1 1 0 1 0 10 9 A1 1 0 1 0 12 9',
+  // Two aircraft in echelon.
+  'formation-flying': 'M2 8 L5 4 L8 8 M8 13.5 L11 9.5 L14 13.5',
+  // Hose and drogue basket.
+  'air-to-air-refuelling': 'M1 3 H4 C8 3 7 10 10 10 M10 8 L15 6 M10 12 L15 14 M10 8 V12',
+  // Radar scan sector.
+  'sensors-situational-awareness': 'M8 14 L2.5 4.5 A6.5 6.5 0 0 1 13.5 4.5 Z M8 14 L10 6',
+  // Target crosshair.
+  'air-to-ground-operations': 'M8 3 A5 5 0 1 0 8 13 A5 5 0 1 0 8 3 M8 1 V5 M8 11 V15 M1 8 H5 M11 8 H15',
+  // Warning triangle.
+  'abnormal-operations': 'M8 1.5 L15 14 H1 Z M8 6 V9.5 M8 11.8 V12',
   // Carrier plan view with the angled landing area.
   'naval-operations': 'M2 6.5 H11 L14.5 8 L11 9.5 H2 Z M3.5 9 L9.5 6.4',
   // Two turn circles meeting at the pass.

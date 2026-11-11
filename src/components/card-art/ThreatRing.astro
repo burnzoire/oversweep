@@ -1,0 +1,16 @@
+---
+// Card art: SEAD, close up: a surface-to-air site and its threat ring, the strike route kept outside it
+// and an anti-radiation missile fired at the emitter.
+const jet = 'M0 -11 L2 -5 L2 -2 L9 3 L9 5 L2 3 L2 7 L4 10 L4 11 L0 10 L-4 11 L-4 10 L-2 7 L-2 3 L-9 5 L-9 3 L-2 -2 L-2 -5 Z';
+---
+<svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-threatring-t">
+  <title id="art-threatring-t">Plan view of a surface-to-air threat ring around a radar site, a route held outside it and an anti-radiation missile fired at the site.</title>
+  <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
+  <circle class="ln dashed" cx="205" cy="102" r="56" />
+  <path class="fix" d="M205 94 L213 102 L205 110 L197 102 Z" />
+  <path class="ln thin" d="M197 92 A12 12 0 0 1 213 92 M193 86 A18 18 0 0 1 217 86" />
+  <path class="ln" d="M14 30 H306" />
+  <path class="ln muted dashed" d="M126 34 Q186 42 200 90" />
+  <path class="ln muted" d="M200 90 m-7 -7 l7 7 l3 -9" />
+  <path class="jet" d={jet} transform="translate(110 30) rotate(90) scale(1.5)" />
+</svg>

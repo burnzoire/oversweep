@@ -1,0 +1,18 @@
+---
+// Card art: A bullseye reference, close up: range rings and bearing lines around the bullseye, a contact
+// group placed from it and own aircraft.
+const jet = 'M0 -11 L2 -5 L2 -2 L9 3 L9 5 L2 3 L2 7 L4 10 L4 11 L0 10 L-4 11 L-4 10 L-2 7 L-2 3 L-9 5 L-9 3 L-2 -2 L-2 -5 Z';
+---
+<svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-bullseye-t">
+  <title id="art-bullseye-t">A bullseye with range rings and bearing lines, a contact group placed by bearing and range from it, and own aircraft.</title>
+  <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
+  <circle class="ln thin dashed" cx="120" cy="98" r="22" />
+  <circle class="ln thin dashed" cx="120" cy="98" r="44" />
+  <circle class="ln thin dashed" cx="120" cy="98" r="66" />
+  <path class="ln thin" d="M120 26 V170 M48 98 H192" />
+  <circle class="fix" cx="120" cy="98" r="4" />
+  <path class="ln dashed" d="M120 98 L246 52" />
+  <path class="jet muted" d={jet} transform="translate(244 50) rotate(-120) scale(1.2)" />
+  <path class="jet muted" d={jet} transform="translate(262 62) rotate(-120) scale(1.2)" />
+  <path class="jet" d={jet} transform="translate(210 146) rotate(-40) scale(1.4)" />
+</svg>
