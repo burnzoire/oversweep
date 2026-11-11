@@ -1,0 +1,16 @@
+---
+import CaseIiiMarshal from './CaseIiiMarshal.astro';
+import BfmCircles from './BfmCircles.astro';
+import RadioExchange from './RadioExchange.astro';
+
+// Card illustrations for Manual and Training Library cards, keyed by the
+// module or experience id the card is built from (Entry.id). Renders nothing
+// for an entry without one. See docs/card-art.md for the drawing conventions.
+const art: Record<string, typeof CaseIiiMarshal> = {
+  'experience.case-iii-tomcat': CaseIiiMarshal,
+  'module.bfm': BfmCircles,
+  'module.radio-procedures': RadioExchange,
+};
+const Art = art[Astro.props.id as string];
+---
+{Art && <div class="entry-art"><Art /></div>}

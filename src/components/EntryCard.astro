@@ -1,6 +1,8 @@
 ---
 import { subjectTitle, type Entry } from '../data/availability';
 import { sitePath } from '../lib/paths';
+import SubjectGlyph from './SubjectGlyph.astro';
+import CardArt from './card-art/CardArt.astro';
 interface Props {
   entry: Entry;
   // `trainer` presents the standalone exercise first, for the Training Library.
@@ -25,22 +27,25 @@ const markers = experience
 const Heading = (headingLevel === 3 ? 'h3' : 'h2') as 'h2' | 'h3';
 ---
 <section class="entry-card" {...markers}>
-  {showSubject && <p class="entry-kicker">{subjectTitle(entry.subject)}</p>}
-  <Heading class="entry-title"><a href={sitePath(entry.href)}>{title}</a></Heading>
-  <p class="entry-objective">{objective}</p>
-  <p class="entry-applicability">{applicability}</p>
-  <p class="entry-meta"><span class="maturity">{maturity}</span> · {revision}{local && ' · Local review only'}</p>
-  <p class="entry-actions">
-    {asTrainer ? (
-      <>
-        <a class="button" href={sitePath(entry.trainer!.href)} target="_blank" rel="noopener">Launch the exercise <span class="visually-hidden"> (opens in a new window)</span> <span aria-hidden="true">↗</span></a>
-        <a href={sitePath(entry.href)}>Read the {entry.title} module first</a>
-      </>
-    ) : (
-      <>
-        <a class="button" href={sitePath(entry.href)}>Read the module</a>
-        {entry.trainer && <span class="entry-extra">Includes a practice exercise</span>}
-      </>
-    )}
-  </p>
+  <div class="entry-body">
+    {showSubject && <p class="entry-kicker"><SubjectGlyph subject={entry.subject} />{subjectTitle(entry.subject)}</p>}
+    <Heading class="entry-title"><a href={sitePath(entry.href)}>{title}</a></Heading>
+    <p class="entry-objective">{objective}</p>
+    <p class="entry-applicability">{applicability}</p>
+    <p class="entry-meta"><span class="maturity">{maturity}</span> · {revision}{local && ' · Local review only'}</p>
+    <p class="entry-actions">
+      {asTrainer ? (
+        <>
+          <a class="button" href={sitePath(entry.trainer!.href)} target="_blank" rel="noopener">Launch the exercise <span class="visually-hidden"> (opens in a new window)</span> <span aria-hidden="true">↗</span></a>
+          <a href={sitePath(entry.href)}>Read the {entry.title} module first</a>
+        </>
+      ) : (
+        <>
+          <a class="button" href={sitePath(entry.href)}>Read the module</a>
+          {entry.trainer && <span class="entry-extra">Includes a practice exercise</span>}
+        </>
+      )}
+    </p>
+  </div>
+  <CardArt id={entry.id} />
 </section>

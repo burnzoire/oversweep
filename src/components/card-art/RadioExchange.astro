@@ -1,0 +1,31 @@
+---
+// Card art: one exchange as a message-sequence chart, after the module's
+// "One exchange, start to finish" (AIM 4-2-3 initial-call order, readback of
+// runway, then the frequency change and check-in with Departure).
+---
+<svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-radio-t">
+  <title id="art-radio-t">Sequence chart of one radio exchange: listen first, initial call to Tower with facility, call sign and request; Tower's clearance; the readback; then switching to Departure and checking in.</title>
+  <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
+  <text class="tag" x="10" y="17">FIG 03 · SEQUENCE</text>
+  <!-- Lifelines -->
+  <g class="head"><rect x="12" y="26" width="56" height="16" /><rect x="196" y="26" width="52" height="16" /><rect x="256" y="26" width="58" height="16" /></g>
+  <text class="lbl small head-lbl" x="40" y="37" text-anchor="middle">AIRCRAFT</text>
+  <text class="lbl small head-lbl" x="222" y="37" text-anchor="middle">TOWER</text>
+  <text class="lbl small head-lbl" x="285" y="37" text-anchor="middle">DEPARTURE</text>
+  <path class="ln thin dashed" d="M40 42 L40 170 M222 42 L222 170 M285 42 L285 170" />
+  <!-- Listen -->
+  <rect class="listen" x="36" y="48" width="8" height="12" />
+  <text class="lbl small" x="50" y="58">LISTEN FIRST</text>
+  <!-- 1 initial call -->
+  <text class="lbl small" x="48" y="74">1 FACILITY · CALL SIGN · REQUEST</text>
+  <path class="ln" d="M40 79 L222 79 m-7 -4 l7 4 l-7 4" />
+  <!-- 2 clearance -->
+  <text class="lbl small" x="214" y="97" text-anchor="end">2 CLEARANCE</text>
+  <path class="ln muted" d="M222 102 L40 102 m7 -4 l-7 4 l7 4" />
+  <!-- 3 readback -->
+  <text class="lbl small" x="48" y="120">3 READBACK · CALL SIGN + RWY</text>
+  <path class="ln" d="M40 125 L222 125 m-7 -4 l7 4 l-7 4" />
+  <!-- 4 switch and check in -->
+  <text class="lbl small" x="48" y="146">4 SWITCH · CHECK IN CLIMBING</text>
+  <path class="ln heavy" d="M40 151 L285 151 m-8 -4 l8 4 l-8 4" />
+</svg>

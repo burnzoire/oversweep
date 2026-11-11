@@ -1,0 +1,16 @@
+---
+// Small category pictogram for a Manual subject: supporting metadata beside
+// the subject name, never a substitute for the card illustration. Decorative:
+// the subject name always sits next to it in text.
+interface Props { subject: string }
+const glyphs: Record<string, string> = {
+  // Carrier plan view with the angled landing area.
+  'naval-operations': 'M2 6.5 H11 L14.5 8 L11 9.5 H2 Z M3.5 9 L9.5 6.4',
+  // Two turn circles meeting at the pass.
+  'air-combat': 'M8 8 A3.5 3.5 0 1 0 1 8 A3.5 3.5 0 1 0 8 8 A3.5 3.5 0 1 0 15 8 A3.5 3.5 0 1 0 8 8',
+  // Antenna mast with a radiated wavefront either side.
+  'radio-communications': 'M8 5 V14 M6 14 H10 M5 2.5 A4.5 4.5 0 0 0 5 9.5 M11 2.5 A4.5 4.5 0 0 1 11 9.5 M6.8 4.6 A2 2 0 0 0 6.8 7.4 M9.2 4.6 A2 2 0 0 1 9.2 7.4',
+};
+const d = glyphs[Astro.props.subject];
+---
+{d && <svg class="subject-glyph" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d={d} /></svg>}
