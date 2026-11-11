@@ -542,6 +542,19 @@ h2 {
 .card-art .ship { fill: var(--color-surface); stroke: currentColor; stroke-width: 1.2; }
 .card-art .tower path { fill: var(--color-surface); stroke: currentColor; stroke-width: 1.5; stroke-linejoin: round; }
 .card-art .tower path + path { fill: none; }
+.card-art .fixfill { fill: currentColor; }
+.card-art .tanker path, .card-art .tanker rect { fill: #fff; stroke: currentColor; stroke-width: 1.2; stroke-linejoin: round; }
+.card-art .a10 path { fill: #fff; stroke: currentColor; stroke-width: 0.8; stroke-linejoin: round; }
+.card-art .bombs circle { fill: currentColor; }
+.card-art .caution { fill: url(#art-jett-stripes); stroke: currentColor; stroke-width: 1.5; }
+.card-art .stripe-a { fill: var(--color-accent); }
+.card-art .stripe-b { fill: var(--color-ink); }
+.card-art .button-face { fill: #fff; stroke: currentColor; stroke-width: 2.5; }
+.card-art .screen-dark { fill: var(--color-ink); }
+.card-art text { fill: currentColor; font-family: Arial, Helvetica, sans-serif; text-anchor: middle; }
+.card-art text.card { font-size: 10px; font-weight: 700; }
+.card-art text.btn { font-size: 15px; font-weight: 700; letter-spacing: 0.08em; }
+.card-art text.lcd { fill: var(--color-accent); font: 700 24px ui-monospace, Menlo, Consolas, monospace; letter-spacing: 0.06em; }
 .card-art .lamp { fill: #fff; stroke: currentColor; stroke-width: 1.2; }
 .card-art .ground { fill: var(--color-surface); }
 .card-art .screen { fill: var(--color-surface); stroke: currentColor; stroke-width: 1; }

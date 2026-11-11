@@ -1,16 +1,16 @@
 ---
-// Card art: A dive delivery in profile, close up: the dive, the release point, the bomb's ballistic fall
-// to the target and the pull-off.
+// Card art: A dive delivery in profile, close up: the dive to the release point, the bomb falling away
+// below the flight path to the target, and the aircraft's pull-off.
 const jet = 'M0 -11 L2 -5 L2 -2 L9 3 L9 5 L2 3 L2 7 L4 10 L4 11 L0 10 L-4 11 L-4 10 L-2 7 L-2 3 L-9 5 L-9 3 L-2 -2 L-2 -5 Z';
 ---
 <svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-divedelivery-t">
-  <title id="art-divedelivery-t">Profile of a dive bombing attack: the dive to the release point, the bomb's fall to the target and the aircraft's pull-off.</title>
+  <title id="art-divedelivery-t">Profile of a dive bombing attack: the dive to the release point, the bomb falling away below the flight path to the target, and the aircraft pulling off above it.</title>
   <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
   <path class="ln" d="M14 150 H306" />
-  <path class="ln heavy" d="M40 30 L150 95" />
-  <path class="ln dashed" d="M150 95 C178 112 200 104 222 72" />
-  <path class="ln muted dashed" d="M150 95 Q186 116.3 223 150" />
-  <circle class="fix" cx="150" cy="95" r="3.5" />
-  <path class="ln" d="M213 140 H233 V150 H213 Z" />
-  <path class="jet" d={jet} transform="translate(98 64) rotate(121) scale(1.4)" />
+  <path class="ln heavy" d="M30 24 L150 95" />
+  <path class="ln" d="M150 95 C178 111.5 204 110 232 74 L250 48" />
+  <path class="ln thin muted dashed" d="M150 95 L235 145" />
+  <g class="bombs"><circle cx="164" cy="103.4" r="2.6" /><circle cx="178" cy="112.6" r="2.6" /><circle cx="191" cy="122.6" r="2.6" /><circle cx="203" cy="133.6" r="2.6" /><circle cx="214" cy="145" r="2.6" /></g>
+  <path class="ln" d="M210 140 H228 V150 H210 Z" />
+  <path class="jet" d={jet} transform="translate(92 60.6) rotate(121) scale(1.4)" />
 </svg>

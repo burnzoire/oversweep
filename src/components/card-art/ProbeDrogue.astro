@@ -1,14 +1,20 @@
 ---
-// Card art: Probe and drogue, close up: the tanker's hose and basket trailing aft and a receiver closing
-// with its probe lined up on the basket.
+// Card art: Probe and drogue from wing pods, close up: a tanker trailing a hose and basket from each
+// wing pod, with a receiver plugged in on each side. Plan view.
 const jet = 'M0 -11 L2 -5 L2 -2 L9 3 L9 5 L2 3 L2 7 L4 10 L4 11 L0 10 L-4 11 L-4 10 L-2 7 L-2 3 L-9 5 L-9 3 L-2 -2 L-2 -5 Z';
 ---
 <svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-probedrogue-t">
-  <title id="art-probedrogue-t">Plan view of probe-and-drogue refuelling: the hose and basket trailing from the tanker and a receiver closing with its probe lined up.</title>
+  <title id="art-probedrogue-t">Plan view of a tanker refuelling two receivers at once, one plugged into the hose and basket trailing from each wing pod.</title>
   <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
-  <path class="ln heavy" d="M8 80 L196 80" />
-  <path class="jet muted" d="M196 74 L230 62 L230 98 L196 86 Z" />
-  <path class="ln thin" d="M206 70.5 L206 89.5 M218 66.5 L218 93.5" />
-  <path class="ln" d="M278 80 L238 80" />
-  <path class="jet" d={jet} transform="translate(290 90) rotate(-90) scale(1.9)" />
+  <g class="tanker">
+    <path d="M154 48 L72 84 L72 90 L154 66 Z" /><path d="M166 48 L248 84 L248 90 L166 66 Z" />
+    <path d="M154 104 L128 116 L128 120 L154 112 Z" /><path d="M166 104 L192 116 L192 120 L166 112 Z" />
+    <path d="M160 8 C165 8 166 14 166 22 L166 112 L163 120 L157 120 L154 112 L154 22 C154 14 155 8 160 8 Z" />
+    <rect x="110" y="66" width="6" height="12" /><rect x="204" y="66" width="6" height="12" />
+    <rect x="79" y="82" width="6" height="14" rx="2" /><rect x="235" y="82" width="6" height="14" rx="2" />
+  </g>
+  <path class="ln" d="M82 96 V128 M238 96 V128" />
+  <path class="lamp" d="M78 126 H86 L91 137 H73 Z" /><path class="lamp" d="M234 126 H242 L247 137 H229 Z" />
+  <path class="jet" d={jet} transform="translate(82 151) rotate(0) scale(1.4)" />
+  <path class="jet" d={jet} transform="translate(238 151) rotate(0) scale(1.4)" />
 </svg>

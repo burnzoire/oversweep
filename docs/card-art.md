@@ -1,9 +1,10 @@
 # Card illustrations and subject glyphs
 
-Manual and Training Library cards (`src/components/EntryCard.astro`) can carry a
+Manual cards (`src/components/EntryCard.astro`) can carry a
 small technical illustration of the concept the module teaches, plus a subject
 glyph beside the subject name. Both are optional: a card without art keeps the
-plain text layout.
+plain text layout. Training Library cards carry no art; they will show the
+trainer itself.
 
 ## Adding an illustration
 
@@ -18,10 +19,14 @@ plain text layout.
 3. Keep to the shared frame so cards stay consistent:
    - `viewBox="0 0 320 180"` with `<rect class="frame" x="0.5" y="0.5" width="319" height="179" />`.
    - Classes from `.card-art` in `src/styles/global.css` only: `ln` (with
-     `heavy`, `thin`, `dashed`, `muted`), `jet` / `jet muted` (own / other
-     aircraft, the BFM figure's jet path), `fix`, `ship`, `tower`.
+     `heavy`, `thin`, `dashed`, `muted`, `needle`), `jet` / `jet muted` (own /
+     other aircraft, the BFM figure's jet path), `heli` (with `disc`, `body`,
+     `rotor`), `a10`, `tanker`, `fix`, `fixfill`, `lamp` (white fill), `ship`,
+     `ground`, `screen`, `screen-dark`, `dots`, `bombs`, `tower`, `caution`.
      Colours come from `currentColor` and the theme tokens, never hard-coded hues.
-   - No text: the card's title and summary carry the words.
+   - No labels: the card's title and summary carry the words. Text that is
+     part of the object drawn (a radio's display, a button legend, a compass
+     card) is fine.
    - No animation.
 4. Accessibility: the SVG has `role="img"` and a `<title>` that says what the
    figure shows, with a unique id referenced by `aria-labelledby`.

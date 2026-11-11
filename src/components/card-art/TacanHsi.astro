@@ -1,0 +1,20 @@
+---
+// Card art: The TACAN course indicator (HSI), close up: the compass card, the course arrow set to
+// 040 with its deviation bar showing the course to the right, and the TO arrow.
+const jet = 'M0 -11 L2 -5 L2 -2 L9 3 L9 5 L2 3 L2 7 L4 10 L4 11 L0 10 L-4 11 L-4 10 L-2 7 L-2 3 L-9 5 L-9 3 L-2 -2 L-2 -5 Z';
+---
+<svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-tacanhsi-t">
+  <title id="art-tacanhsi-t">A horizontal situation indicator set for a TACAN course of 040: the deviation bar right of centre, so the course is to the right, with the TO arrow showing.</title>
+  <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
+  <circle class="ln" cx="160" cy="90" r="68" />
+  <path class="ln thin" d="M160.0 22.0 L160.0 32.0 M171.8 23.0 L170.9 28.0 M183.3 26.1 L181.5 30.8 M194.0 31.1 L189.0 39.8 M203.7 37.9 L200.5 41.7 M212.1 46.3 L208.3 49.5 M218.9 56.0 L210.2 61.0 M223.9 66.7 L219.2 68.5 M227.0 78.2 L222.0 79.1 M228.0 90.0 L218.0 90.0 M227.0 101.8 L222.0 100.9 M223.9 113.3 L219.2 111.5 M218.9 124.0 L210.2 119.0 M212.1 133.7 L208.3 130.5 M203.7 142.1 L200.5 138.3 M194.0 148.9 L189.0 140.2 M183.3 153.9 L181.5 149.2 M171.8 157.0 L170.9 152.0 M160.0 158.0 L160.0 148.0 M148.2 157.0 L149.1 152.0 M136.7 153.9 L138.5 149.2 M126.0 148.9 L131.0 140.2 M116.3 142.1 L119.5 138.3 M107.9 133.7 L111.7 130.5 M101.1 124.0 L109.8 119.0 M96.1 113.3 L100.8 111.5 M93.0 101.8 L98.0 100.9 M92.0 90.0 L102.0 90.0 M93.0 78.2 L98.0 79.1 M96.1 66.7 L100.8 68.5 M101.1 56.0 L109.8 61.0 M107.9 46.3 L111.7 49.5 M116.3 37.9 L119.5 41.7 M126.0 31.1 L131.0 39.8 M136.7 26.1 L138.5 30.8 M148.2 23.0 L149.1 28.0" />
+  <text class="card" x="160.0" y="45.5">N</text><text class="card" x="184.0" y="51.9">3</text><text class="card" x="201.6" y="69.5">6</text><text class="card" x="208.0" y="93.5">E</text><text class="card" x="201.6" y="117.5">12</text><text class="card" x="184.0" y="135.1">15</text><text class="card" x="160.0" y="141.5">S</text><text class="card" x="136.0" y="135.1">21</text><text class="card" x="118.4" y="117.5">24</text><text class="card" x="112.0" y="93.5">W</text><text class="card" x="118.4" y="69.5">30</text><text class="card" x="136.0" y="51.9">33</text>
+  <path class="fix" d="M160 14 L155 6 H165 Z" />
+  <g transform="rotate(40 160 90)">
+    <path class="fix" d="M160 36 L154 48 H166 Z" />
+    <path class="ln heavy" d="M160 48 V68 M160 112 V140" />
+    <path class="ln heavy" d="M171 70 V110" />
+    <path class="fix" d="M150 64 L154 56 L158 64 Z" />
+  </g>
+  <path class="jet" d={jet} transform="translate(160 90) rotate(0) scale(0.9)" />
+</svg>

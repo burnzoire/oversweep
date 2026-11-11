@@ -47,5 +47,6 @@ const Heading = (headingLevel === 3 ? 'h3' : 'h2') as 'h2' | 'h3';
       )}
     </p>
   </div>
-  <CardArt id={entry.id} />
+  {/* Training Library cards will show the trainer itself; only module cards carry art. */}
+  {!asTrainer && <CardArt id={entry.id} />}
 </section>
