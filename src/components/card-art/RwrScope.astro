@@ -1,15 +1,14 @@
 ---
-// Card art: A radar warning receiver display, close up: own aircraft at the centre, range rings and threat
-// markers by bearing, the highest-priority one boxed in a diamond.
+// Card art: A radar warning receiver display, close up: own aircraft at the centre and threat markers
+// by bearing (distance from the centre is not range).
 const jet = 'M0 -11 L2 -5 L2 -2 L9 3 L9 5 L2 3 L2 7 L4 10 L4 11 L0 10 L-4 11 L-4 10 L-2 7 L-2 3 L-9 5 L-9 3 L-2 -2 L-2 -5 Z';
 ---
 <svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-rwrscope-t">
-  <title id="art-rwrscope-t">A radar warning receiver display: own aircraft at the centre and threat markers by bearing, the priority threat inside a diamond.</title>
+  <title id="art-rwrscope-t">A radar warning receiver display: own aircraft at the centre and threat markers placed by bearing.</title>
   <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
   <circle class="ln" cx="160" cy="90" r="66" />
   <circle class="ln thin dashed" cx="160" cy="90" r="40" />
   <path class="ln thin" d="M160 24 V32 M160 148 V156 M94 90 H102 M218 90 H226" />
   <rect class="fix" x="196" y="52" width="7" height="7" /><rect class="fix" x="104" y="110" width="7" height="7" /><rect class="fix" x="178" y="128" width="7" height="7" />
-  <path class="ln" d="M199.5 41 L211 55.5 L199.5 70 L188 55.5 Z" />
   <path class="jet" d={jet} transform="translate(160 90) rotate(0) scale(0.8)" />
 </svg>
