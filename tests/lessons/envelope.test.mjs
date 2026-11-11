@@ -52,4 +52,7 @@ test('the figure picks the smallest scale that holds the envelope', () => {
   assert.equal(fittingScale(env({ maxRangeKm: 24, maxAltM: 14000 })).id, 'short'); // SA-6: 13.0 NM, 45,932 ft
   assert.equal(fittingScale(env({ maxRangeKm: 50, maxAltM: 27000 })).id, 'medium'); // SA-4: 27.0 NM, 88,583 ft
   assert.equal(fittingScale(env({ maxRangeKm: 250, maxAltM: 29200 })).id, 'long'); // SA-5: 135 NM
+  assert.equal(fittingScale(env({ maxRangeKm: 160, maxAltM: 32000 })).id, 'long'); // Patriot: 86 NM, 104,987 ft
+  assert.equal(fittingScale(env({ maxRangeKm: 70, maxAltM: 35000 })).id, 'long'); // SA-27: 38 NM, 114,829 ft
+  assert.equal(fittingScale(env({ maxRangeKm: 380, maxAltM: 30000 })).id, 'strategic'); // SA-21: 205 NM
 });

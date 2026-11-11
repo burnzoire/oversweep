@@ -9,14 +9,14 @@ guidance: "Semi-active radar homing on continuous-wave illumination from the bat
 seeker: radar
 mobility: "Towed launchers (three missiles each), radars and control units on trailers [1]"
 envelope:
-  basis: "MIM-23B to M (Improved Hawk): 1.5–35 km range [1] and up to 18 km altitude [1]. The source's 60 m minimum altitude is for the original MIM-23A [1]."
+  basis: "MIM-23B to M (Improved Hawk): 1.5–35 km range [1] and up to 18 km altitude [1]. The source gives a 60 m minimum altitude for both the original MIM-23A and the Improved Hawk [1]. The source also gives 1.5–40 km at high altitude and 45–50 km elsewhere [1]."
   minRangeKm: 1.5
   maxRangeKm: 35
   minAltM: 60
   maxAltM: 18000
   cite: [1]
 radars:
-  - { name: "AN/MPQ-50", role: "Pulse acquisition radar (PAR), L-band, the battery's search radar" }
+  - { name: "AN/MPQ-50", role: "Pulse acquisition radar (PAR), the battery's search radar" }
   - { name: "AN/MPQ-48 / -55 / -62", role: "Continuous-wave acquisition radar (CWAR) for low-level targets" }
   - { name: "AN/MPQ-46 / -57 / -61", role: "High-power illuminator (HPI or HPIR): tracks the target and illuminates it for the missile" }
   - { name: "AN/MPQ-51", role: "Range-only radar, for use under jamming" }
@@ -73,7 +73,7 @@ A Hawk battery finds targets with a pulse acquisition radar (PAR) for medium alt
 
 ## Envelope
 
-The original MIM-23A engaged at 2–25 km and 60 m–11 km. The MIM-23B and later missiles reach 1.5–35 km (0.8–19 NM) and up to 18 km (59,000 ft). [[1]](#source-1) Figure 1 draws the later missile with the MIM-23A's 60 m (200 ft) floor, because the source gives no other. Israel modified its Hawks to engage at up to 24 km. [[1]](#source-1)
+The original MIM-23A engaged at 2–25 km and 60 m–11 km. The MIM-23B and later missiles reach 1.5–35 km (0.8–19 NM) and up to 18 km (59,000 ft). [[1]](#source-1) The source gives the Improved Hawk the same 60 m (200 ft) minimum altitude, and Figure 1 draws it. [[1]](#source-1) The source is not consistent on maximum range: the same section gives 1.5–40 km at high altitude, its infobox gives 45–50 km and the MIM-23K is listed at 45 km. [[1]](#source-1) Figure 1 uses the 35 km figure. Israel modified its Hawks to engage at up to 24 km. [[1]](#source-1)
 
 ## On the radar warning receiver
 

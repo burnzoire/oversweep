@@ -7,7 +7,7 @@ role: Franco-German mobile short-range surface-to-air missile system [1]
 inService: "Roland 1 entered service in 1976; missile production from 1977; Roland 3 missile from 1988 [1]"
 guidance: "Command to line of sight: the missile is tracked optically (Roland 1) or by radar (Roland 2), and steered onto the line of sight [1]"
 seeker: radar
-mobility: "Tracked (AMX-30, Marder, US XM975) or in a shelter on a truck or fixed site; two ready missiles and eight reloads [1]"
+mobility: "Tracked (AMX-30, Marder; the US XM975 reached only a prototype) or in a shelter on a truck or fixed site; two ready missiles and eight reloads [1]"
 envelope:
   basis: "Roland 1 and 2: 500–6,300 m range and 20–5,500 m altitude [1]. The Roland 3 missile reaches 8.5 km and 6,000 m [1]."
   minRangeKm: 0.5

@@ -4,7 +4,7 @@ nato: CH-SA-1
 short: HQ-2
 designation: HQ-2 (Hongqi-2)
 role: Chinese high-altitude surface-to-air missile system derived from the Soviet S-75 [1]
-inService: "Developed from the HQ-1 in the 1960s; China's main air defence system for over forty years, being replaced by the HQ-22 since 2016 [1] [2]"
+inService: "Developed from the HQ-1 in the 1960s; China's main air defence system for over forty years, being replaced by the HQ-22 [1] [2]; upgraded HQ-2s remain in service [1] [2]"
 guidance: "Radio command guidance, as on the S-75 it derives from [1]"
 seeker: radar
 mobility: "Towed launchers; the HQ-2J uses the Type 77 transporter-launcher [2]"

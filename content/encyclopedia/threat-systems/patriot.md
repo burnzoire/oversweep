@@ -9,7 +9,7 @@ guidance: "PAC-2: track-via-missile, a semi-active seeker relaying to the ground
 seeker: radar
 mobility: "Trailer-mounted launchers: four PAC-2 or sixteen PAC-3 missiles each [1]"
 envelope:
-  basis: "PAC-2 GEM family: 160 km range [1] and an estimated 32 km ceiling from the source's missile table [1]. No minimums are given."
+  basis: "PAC-2 GEM family: 160 km range and 32 km ceiling, both marked as estimates in the source's missile table; the same source elsewhere gives PAC-2 intercepts up to 20 km altitude [1]. No minimums are given."
   minRangeKm: null
   maxRangeKm: 160
   minAltM: null
@@ -54,7 +54,7 @@ sources:
 
 The MIM-104 Patriot is the US Army's primary high-to-medium air defence system and has been widely exported. [[1]](#source-1) Its name comes from its radar, the AN/MPQ-53 “Phased Array Tracking Radar to Intercept on Target”. [[1]](#source-1) It began replacing the Nike Hercules in 1984. The first missile, the MIM-104A, was built against aircraft and reached about 70 km; later versions turned it into an anti-ballistic missile system. [[1]](#source-1)
 
-For allied aircrew, Patriot is as likely to be a friendly system to deconflict with as a threat. Patriot batteries have shot down friendly aircraft (see History), so follow the airspace control measures and keep [IFF](term:iff) working.
+For allied aircrew, Patriot is as likely to be a friendly system to deconflict with as a threat. Patriot batteries have shot down friendly aircraft (see History), so, as general guidance, follow the airspace control measures and keep [IFF](term:iff) working.
 
 ## The battery
 
@@ -68,7 +68,7 @@ A battery's fire control section is the radar set, the engagement control statio
 
 ## Envelope
 
-Figure 1 draws the PAC-2 GEM family: 160 km (86 NM) and an estimated 32 km (105,000 ft) ceiling. [[1]](#source-1) Both are the source's figures; it marks the ceiling as an estimate and gives no minimum range or altitude, so those edges are dashed.
+Figure 1 draws the PAC-2 GEM family: 160 km (86 NM) and an estimated 32 km (105,000 ft) ceiling. [[1]](#source-1) The source's missile table marks both figures as estimates, and its PAC-3 section gives the PAC-2 an intercept altitude of up to 20 km (66,000 ft), so treat the ceiling as uncertain. [[1]](#source-1) No minimum range or altitude is given, so those edges are dashed.
 
 ## On the radar warning receiver
 

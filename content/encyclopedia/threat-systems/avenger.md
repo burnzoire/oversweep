@@ -58,7 +58,7 @@ With the slew-to-cue upgrade, a radar picture from the air defence network can s
 
 ## Envelope
 
-The Avenger's reach is the Stinger's. Figure 1 draws the Stinger figures from the [Stinger](record:stinger) record's source: up to 4,800 m (2.6 NM) and 3,800 m (12,500 ft). [[3]](#source-3) No minimums are given, so those edges are dashed.
+The Avenger's reach is the Stinger's. Figure 1 draws the Stinger figures from the [Stinger](record:stinger) record's source: up to 4,800 m (2.6 NM) and 3,800 m (12,500 ft). [[3]](#source-3) That source's minimum range is about 0.1 miles (160 m), while the Marine Corps fact file gives 1 km, and no minimum altitude is given; Figure 1 leaves both inner edges dashed. [[3]](#source-3)
 
 ## On the radar warning receiver
 

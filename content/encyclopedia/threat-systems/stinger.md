@@ -52,7 +52,7 @@ The Stinger is fire-and-forget: after launch the missile needs no further help f
 
 ## Envelope
 
-Wikipedia gives a range of up to 4,800 m (2.6 NM) and engagements up to 3,800 m (12,500 ft). [[1]](#source-1) The Marine Corps fact file on the FAS page gives 1–8 km and a 10,000 ft (3,046 m) ceiling. [[2]](#source-2) Figure 1 uses the Wikipedia figures; no minimums are given, so those edges are dashed.
+Wikipedia gives a range of up to 4,800 m (2.6 NM) and engagements up to 3,800 m (12,500 ft). [[1]](#source-1) The Marine Corps fact file on the FAS page gives 1–8 km and a 10,000 ft (3,046 m) ceiling. [[2]](#source-2) Figure 1 uses the Wikipedia figures. The sources disagree on the minimum range: the Wikipedia infobox gives about 0.1 miles (160 m) and the fact file 1 km. Neither gives a minimum altitude, so Figure 1 leaves both inner edges dashed.
 
 ## On the radar warning receiver
 

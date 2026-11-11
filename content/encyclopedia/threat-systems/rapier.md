@@ -74,4 +74,4 @@ In the DCS [F-14](record:f-14), the AN/ALR-67 shows the Blindfire track radar as
 
 ## History
 
-Rapier's first known combat use was in December 1974, when an Iranian Rapier inside Iraq shot down an Iraqi Il-76; Iran's Rapiers are reported to have downed more aircraft in the Iran–Iraq War. [[1]](#source-1) In the 1982 Falklands War, British Rapier units at San Carlos and later Stanley were hampered by fragile launchers and the loss of spare missiles, and their confirmed kills were limited. [[1]](#source-1)
+Rapier's first known combat use was in December 1974, when an Iranian Rapier inside Iraq shot down an Iraqi Il-76, a claim the source marks as needing a citation; Iran's Rapiers are reported to have downed more aircraft in the Iran–Iraq War. [[1]](#source-1) In the 1982 Falklands War, British Rapier units at San Carlos and later Stanley were hampered by fragile launchers and the loss of spare missiles, and their confirmed kills were limited. [[1]](#source-1)

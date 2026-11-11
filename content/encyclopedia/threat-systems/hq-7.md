@@ -5,7 +5,7 @@ short: HQ-7
 designation: HQ-7 (Hongqi-7), export FM-80 and FM-90
 role: Chinese short-range surface-to-air missile system, reverse-engineered from the French Crotale [1]
 inService: "Early 1980s [1]"
-guidance: "Command guidance (HQ-7A); the source lists infrared homing for a later version [1]"
+guidance: "Command guidance (HQ-7A); the source also lists infrared homing, without saying which version [1]"
 seeker: radar
 mobility: "Transporter-erector-launchers with four or eight missiles; naval HHQ-7 on ships [1]"
 envelope:
