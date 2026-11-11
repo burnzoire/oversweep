@@ -22,16 +22,19 @@ export interface Scale {
 }
 
 export const scales: Scale[] = [
-  { id: 'long', label: 'Long range (150 NM)', maxNm: 150, maxKft: 100, stepNm: 25, stepKft: 20 },
+  { id: 'strategic', label: 'Very long range (250 NM)', maxNm: 250, maxKft: 120, stepNm: 50, stepKft: 20 },
+  { id: 'long', label: 'Long range (150 NM)', maxNm: 150, maxKft: 120, stepNm: 25, stepKft: 20 },
   { id: 'medium', label: 'Medium range (35 NM)', maxNm: 35, maxKft: 100, stepNm: 5, stepKft: 20 },
   { id: 'short', label: 'Short range (14 NM)', maxNm: 14, maxKft: 50, stepNm: 2, stepKft: 10 },
   { id: 'point', label: 'Point defence (5 NM)', maxNm: 5, maxKft: 10, stepNm: 1, stepKft: 2 },
 ];
 
-// The smallest scale that shows the whole envelope.
-export function fittingScale(e: Envelope): Scale {
-  const fits = (s: Scale) => kmToNm(e.maxRangeKm) <= s.maxNm && mToFt(e.maxAltM ?? 0) / 1000 <= s.maxKft;
-  return [...scales].reverse().find(fits) ?? scales[0];
+export const fitsScale = (e: Envelope, s: Scale) => kmToNm(e.maxRangeKm) <= s.maxNm && mToFt(e.maxAltM ?? 0) / 1000 <= s.maxKft;
+
+// The smallest of the given scales (largest first) that shows the whole
+// envelope, or the largest one when none does.
+export function fittingScale(e: Envelope, from: Scale[] = scales): Scale {
+  return [...from].reverse().find((s) => fitsScale(e, s)) ?? from[0];
 }
 
 export interface Region {
