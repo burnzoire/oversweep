@@ -1,38 +1,17 @@
 ---
-// Card art: Case III marshal and straight-in approach, plan view, not to scale.
-// Geometry follows Figure 1 of the module (case-iii/RecoveryOverview): a
-// left-hand racetrack astern of the ship, the marshal fix at the end of the
-// inbound leg, commencing from the fix down the final bearing to the ship.
+// Card art: the Case III marshal hold, close up. Plan view, not to scale.
+// Same geometry as the module's Figure 1 (case-iii/RecoveryOverview): a
+// left-hand racetrack, the marshal fix at the end of the inbound leg, and
+// the commence from the fix toward the ship (off the right edge).
 const jet = 'M0 -11 L2 -5 L2 -2 L9 3 L9 5 L2 3 L2 7 L4 10 L4 11 L0 10 L-4 11 L-4 10 L-2 7 L-2 3 L-9 5 L-9 3 L-2 -2 L-2 -5 Z';
 ---
 <svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-case-iii-t">
-  <title id="art-case-iii-t">Plan view of a Case III recovery: a left-hand holding racetrack at the marshal fix astern of the ship, then the approach from the fix down the final bearing to the ship. Not to scale.</title>
+  <title id="art-case-iii-t">Plan view of the Case III marshal hold: a left-hand racetrack with the fix at the end of the inbound leg, and the commence from the fix toward the ship.</title>
   <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
-  <text class="tag" x="10" y="17">FIG 01 · PLAN</text>
-  <!-- Marshal racetrack, left-hand turns -->
-  <path class="ln" d="M28 112 L92 112 A20 20 0 0 0 92 72 L28 72 A20 20 0 0 0 28 112" />
-  <path class="ln" d="M64 112 L57 108 M64 112 L57 116" />
-  <path class="jet muted" d={jet} transform="translate(56 72) rotate(-90) scale(0.62)" />
-  <text class="lbl" x="18" y="52">MARSHAL</text>
-  <text class="lbl small" x="18" y="154">LEFT-HAND HOLD</text>
-  <text class="lbl small" x="18" y="166">ASTERN · ANGELS + 15 DME</text>
-  <!-- Fix and commence -->
-  <path class="fix" d="M92 106 L98 112 L92 118 L86 112 Z" />
-  <text class="lbl small" x="92" y="132" text-anchor="middle">FIX</text>
-  <path class="ln heavy" d="M98 112 L252 112" />
-  <path class="ln" d="M252 112 l-8 -4 M252 112 l-8 4" />
-  <text class="lbl small" x="116" y="102">COMMENCE</text>
-  <!-- DME ticks on the final bearing -->
-  <path class="ln thin" d="M184 106 L184 118 M238 106 L238 118" />
-  <text class="lbl small" x="184" y="130" text-anchor="middle">PLATFORM</text>
-  <text class="lbl small" x="184" y="142" text-anchor="middle">5,000 FT</text>
-  <text class="lbl small" x="240" y="142" text-anchor="middle">¾ NM</text>
-  <text class="lbl small" x="240" y="130" text-anchor="middle">BALL</text>
-  <!-- Ship, heading east -->
-  <path class="ship" d="M258 105 L296 105 L309 112 L296 119 L258 119 Z" />
-  <path class="ln thin" d="M262 117 L292 108" />
-  <path class="ln" d="M266 150 L300 150" />
-  <path class="ln" d="M300 150 l-7 -4 M300 150 l-7 4" />
-  <text class="lbl small" x="276" y="144">BRC</text>
-  <text class="tag" x="310" y="170" text-anchor="end">NOT TO SCALE</text>
+  <path class="ln" d="M70 125 L210 125 A30 30 0 0 0 210 65 L70 65 A30 30 0 0 0 70 125" />
+  <path class="ln" d="M140 125 l-9 -5 M140 125 l-9 5" />
+  <path class="jet muted" d={jet} transform="translate(130 65) rotate(-90)" />
+  <path class="ln heavy dashed" d="M216 125 L300 125" />
+  <path class="ln heavy" d="M300 125 l-10 -6 M300 125 l-10 6" />
+  <path class="fix" d="M210 116 L219 125 L210 134 L201 125 Z" />
 </svg>

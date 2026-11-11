@@ -499,7 +499,7 @@ h2 {
    column keeps its full reading width. */
 .entry-card:has(> .entry-art) {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 24rem;
+  grid-template-columns: minmax(0, 1fr) 18rem;
   gap: 0.75rem 1.75rem;
   align-items: start;
 }
@@ -540,12 +540,8 @@ h2 {
 .card-art .jet.muted { fill: #fff; stroke: currentColor; stroke-width: 1.4; }
 .card-art .fix { fill: currentColor; }
 .card-art .ship { fill: var(--color-surface); stroke: currentColor; stroke-width: 1.2; }
-.card-art .head rect { fill: var(--color-surface); stroke: currentColor; stroke-width: 1; }
-.card-art .listen { fill: var(--color-muted); }
-.card-art text { fill: currentColor; font: 700 10px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
-.card-art .lbl.small { font-size: 9px; font-weight: 400; }
-.card-art .head-lbl { font-size: 8.5px; letter-spacing: 0.02em; }
-.card-art .tag { fill: var(--color-muted); font-size: 8.5px; letter-spacing: 0.08em; }
+.card-art .tower path { fill: var(--color-surface); stroke: currentColor; stroke-width: 1.5; stroke-linejoin: round; }
+.card-art .tower path + path { fill: none; }
 
 .subject-glyph {
   width: 1em;

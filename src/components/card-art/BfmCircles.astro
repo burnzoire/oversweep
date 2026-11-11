@@ -1,29 +1,16 @@
 ---
-// Card art: one-circle and two-circle flow after a neutral pass, plan view.
-// Same geometry and turn directions as Figure (bfm/FlowFigure): 1C shares one
-// circle flown in opposite directions; 2C uses two circles, both clockwise.
+// Card art: two-circle flow after a neutral pass, close up. Plan view.
+// Same geometry and turn directions as the module's flow figure
+// (bfm/FlowFigure): two turn circles, both aircraft turning clockwise.
 const jet = 'M0 -11 L2 -5 L2 -2 L9 3 L9 5 L2 3 L2 7 L4 10 L4 11 L0 10 L-4 11 L-4 10 L-2 7 L-2 3 L-9 5 L-9 3 L-2 -2 L-2 -5 Z';
 ---
 <svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-bfm-t">
-  <title id="art-bfm-t">Plan view of turn flow after a pass. One-circle: both aircraft on one circle, turning in opposite directions, nose-to-nose. Two-circle: each aircraft on its own circle, same turn direction, nose-to-tail.</title>
+  <title id="art-bfm-t">Plan view of two-circle flow: after the pass each aircraft turns on its own circle in the same direction, nose-to-tail.</title>
   <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
-  <text class="tag" x="10" y="17">FIG 02 · PLAN</text>
-  <path class="ln thin dashed" d="M160 28 L160 160" />
-  <!-- One-circle -->
-  <text class="lbl" x="84" y="38" text-anchor="middle">ONE-CIRCLE</text>
-  <circle class="ln" cx="92" cy="98" r="44" />
-  <path class="ln" d="M92 54 l-7 -4 M92 54 l-7 4" />
-  <path class="ln" d="M92 142 l-7 -4 M92 142 l-7 4" />
-  <path class="jet" d={jet} transform="translate(50.3 84) rotate(19) scale(0.72)" />
-  <path class="jet muted" d={jet} transform="translate(51 114) rotate(159) scale(0.72)" />
-  <text class="lbl small" x="84" y="162" text-anchor="middle">NOSE-TO-NOSE · RADIUS</text>
-  <!-- Two-circle -->
-  <text class="lbl" x="240" y="38" text-anchor="middle">TWO-CIRCLE</text>
-  <circle class="ln dashed" cx="210" cy="98" r="30" />
-  <circle class="ln" cx="270" cy="98" r="30" />
-  <path class="ln" d="M210 68 l-7 -4 M210 68 l-7 4" />
-  <path class="ln" d="M270 128 l7 -4 M270 128 l7 4" />
-  <path class="jet" d={jet} transform="translate(243.5 84) rotate(28) scale(0.72)" />
-  <path class="jet muted" d={jet} transform="translate(236.5 112) rotate(-152) scale(0.72)" />
-  <text class="lbl small" x="240" y="162" text-anchor="middle">NOSE-TO-TAIL · RATE</text>
+  <circle class="ln dashed" cx="115" cy="90" r="45" />
+  <circle class="ln" cx="205" cy="90" r="45" />
+  <path class="ln" d="M115 45 l-9 -5 M115 45 l-9 5" />
+  <path class="ln" d="M205 135 l9 -5 M205 135 l9 5" />
+  <path class="jet" d={jet} transform="translate(165.7 68) rotate(29) scale(1.25)" />
+  <path class="jet muted" d={jet} transform="translate(154.3 112) rotate(-151) scale(1.25)" />
 </svg>
