@@ -7,10 +7,10 @@ origin: "United States; BAE Systems guidance unit [1] [2]"
 inService: "US Marine Corps, March 2012, as the APKWS II; later the US Navy, Army and Air Force and export users [1] [2]"
 weight: "About 32 lb (15 kg) complete; the guidance unit adds 9 lb (4 kg) to the rocket [1]"
 dimensions: "Length 73.8 in (1.87 m), 18.5 in (47 cm) longer than the unguided rocket; diameter 2.75 in (70 mm); wingspan 9.55 in (24 cm) [1]"
-warhead: "Standard Hydra 70 warheads and fuzes, such as the M151 high-explosive warhead; a proximity fuze for use against drones [1] [2]"
+warhead: "Standard Hydra 70 warheads and fuzes, such as the M151 high-explosive warhead; a proximity fuze for use against drones [1]"
 guidance: "Semi-active laser homing: a WGU-59/B mid-body guidance unit with a laser seeker in the leading edge of each of its four canards; the seeker optics deploy about half a second after launch [1] [2]"
 fuzing: "The Hydra 70 fuzes it is built with [1]"
-delivery: "Fired from the normal 2.75 in rocket launchers like an unguided rocket, at a target marked by a laser designator on its code [1] [2]"
+delivery: "Fired like an unguided rocket from 2.75 in rocket launchers (the 7-tube pod is a lengthened LAU-68 F/A, to fit the longer rocket), at a target marked by a laser designator on its code [1] [2]"
 range: "1.1–5 km (0.6–2.7 NM) from helicopters; 2–11 km (1.1–5.9 NM) from fixed-wing aircraft [1]"
 carriers:
   - "US Marine Corps: AH-1W, AH-1Z and UH-1Y helicopters, [AV-8B Harrier II](record:av-8b) and [F/A-18 Hornet](record:fa-18c) [1] [2]"
@@ -23,7 +23,7 @@ variants:
   - "Counter-drone version: proximity-fuzed, cued by a targeting pod against drones and cruise missiles [1]"
 photos:
   - src: "encyclopedia/ordnance/apkws.jpg"
-    alt: "A grey Navy helicopter low over the sea with a rocket leaving a smoke trail from the pod on its weapons pylon"
+    alt: "A grey Navy helicopter low over the sea with a rocket pod on its weapons pylon and faint smoke drifting behind it after firing"
     caption: "An MH-60S Sea Hawk of HSC-7 fires an APKWS II on a live-fire range off Virginia, 18 August 2015."
     author: "Mass Communication Specialist 3rd Class Desmond Parks, US Navy"
     licence: "Public domain"
@@ -37,7 +37,7 @@ sources:
     url: "https://en.wikipedia.org/wiki/Advanced_Precision_Kill_Weapon_System"
     accessed: "2026-11-12"
   - n: 2
-    title: "Advanced Precision Kill Weapon System II (APKWS II) Goes to War"
+    title: "Advanced Precision Kill Weapon System II (APKWS II) Goes to War, pp. 1–3"
     publisher: "Defense Media Network, 9 July 2012"
     url: "https://www.defensemedianetwork.com/stories/advanced-precision-kill-weapon-system-ii-apkws-ii-goes-to-war/"
     accessed: "2026-11-12"
@@ -45,7 +45,7 @@ sources:
 
 ## A kit, not a new missile
 
-The APKWS (Advanced Precision Kill Weapon System) is not a new missile but a kit. A guidance section the size of a soda can is screwed in between the motor and the warhead of an ordinary [Hydra 70](record:hydra-70) 2.75 in rocket, turning it into a [laser-guided](term:lgw) [precision weapon](term:pgm). [[1]](#source-1) [[2]](#source-2) Ordnance crews remove the warhead, fit the guidance unit to the motor, put the warhead back on, set the laser code and switch the unit on. [[2]](#source-2) The rocket uses the existing launchers, motors, warheads and [fuzes](term:fuze). [[1]](#source-1)
+The APKWS (Advanced Precision Kill Weapon System) is not a new missile but a kit. A guidance section the size of a soda can is screwed in between the motor and the warhead of an ordinary [Hydra 70](record:hydra-70) 2.75 in rocket, turning it into a [laser-guided](term:lgw) [precision weapon](term:pgm). [[1]](#source-1) [[2]](#source-2) Ordnance crews remove the warhead, fit the guidance unit to the motor, put the warhead back on, set the laser code and switch the unit on. [[2]](#source-2) The rocket uses the existing motors, warheads and [fuzes](term:fuze), and the 7-tube pod is a lengthened LAU-68 to take the longer round. [[1]](#source-1) [[2]](#source-2)
 
 It fills the gap between unguided rockets and the [Hellfire](record:agm-114): accurate enough for a single vehicle or a small team, with a smaller warhead that limits collateral damage, at about a third of the cost and weight of other laser-guided weapons. [[1]](#source-1) [[2]](#source-2) A helicopter that carries pods of rockets can now carry a pod of precision shots; the program office quoted "up to 76" precision kills on one assault-support sortie. [[2]](#source-2)
 
