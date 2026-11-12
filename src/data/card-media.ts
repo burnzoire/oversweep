@@ -39,10 +39,11 @@ export const cardMedia: Record<string, CardMedia> = {
   'module.radio-procedures': {
     summary: 'Speak and understand military air–ground radio.',
     photo: {
-      src: 'encyclopedia/reference-data/light-gun.jpg',
-      alt: 'An airman in a control tower aims a signal light gun.',
-      credit: 'Staff Sgt. Bradley C. Church, US Air Force, public domain',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:An_airman_aims_a_light_gun_as_he_works_in_the_control_tower_at_Ali_Base.jpg',
+      src: 'manual/cards/par-scope.jpg',
+      alt: 'An air traffic controller reflected in a precision approach radar scope as he talks an aircraft down.',
+      credit: 'US Air Force, public domain',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:PAR_Scope.jpg',
+      position: '50% 40%',
     },
   },
   'module.air-navigation': {
@@ -57,28 +58,31 @@ export const cardMedia: Record<string, CardMedia> = {
   'module.attitude-instrument-flying': {
     summary: 'Fly the aircraft on instruments alone.',
     photo: {
-      src: 'encyclopedia/aircraft/f-15c.jpg',
-      alt: 'An F-15C banking above white cloud.',
-      credit: 'Airman 1st Class Matthew Seefeldt, US Air Force, public domain',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:F-15C_Eagle_from_the_44th_Fighter_Squadron_flies_during_a_routine_training_exercise_April_15,_2019.jpg',
+      src: 'manual/cards/attitude-indicator.jpg',
+      alt: 'An attitude indicator showing a level attitude, with its bank scale and pitch ladder.',
+      credit: 'NASA (Reddy and Garcia), public domain',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:VMS_Artificial_Horizon.jpg',
+      position: '50% 48%',
     },
   },
   'experience.instrument-trainer': {
     summary: 'Hand-fly an ILS approach to minimums.',
     photo: {
-      src: 'encyclopedia/aircraft/c-130j.jpg',
-      alt: 'A C-130J flying above cloud.',
-      credit: 'US Air Force, public domain',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:C-130J_135th_AS_Maryland_ANG_in_flight.jpg',
+      src: 'manual/cards/hsi.jpg',
+      alt: 'A horizontal situation indicator with its course arrow, deviation bar, heading and course knobs.',
+      credit: 'Yxen, public domain',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:HSI-L159.jpg',
+      position: '50% 50%',
     },
   },
   'module.instrument-procedures': {
     summary: 'Fly a whole sortie in cloud, from departure to the approach.',
     photo: {
-      src: 'encyclopedia/aircraft/kc-46.jpg',
-      alt: 'A KC-46 flying above cloud.',
-      credit: 'US Air Force, public domain',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:KC-46_Pegasus_prepares_to_refuel_C-17_(cropped).jpg',
+      src: 'manual/cards/f16-instrument-panel.jpg',
+      alt: 'The instrument panel of an F-16 cockpit.',
+      credit: 'GeertBoogaard, public domain',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Fighter_cockpit.jpg',
+      position: '50% 85%',
     },
   },
   'module.two-ship-formation': {
@@ -102,10 +106,11 @@ export const cardMedia: Record<string, CardMedia> = {
   'module.four-ship-formation': {
     summary: 'Fly a flight of three to five, and display formations.',
     photo: {
-      src: 'encyclopedia/aircraft/f-86.jpg',
-      alt: 'Three F-86 Sabres flying in formation over mountains.',
-      credit: 'US Air Force, public domain',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:F-86Fs_51FIW_over_Korea_1953.jpg',
+      src: 'manual/cards/four-ship-f35b.jpg',
+      alt: 'Four F-35B Lightning IIs flying in formation over an amphibious assault ship.',
+      credit: 'US Navy, public domain',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Four_F-35B_Lightning_II_aircraft_perform_a_flyover_above_the_amphibious_assault_ship_USS_America_(LHA_6)_during_the_Lightning_Carrier_Proof_of_Concept_Demonstration_(30357956614).jpg',
+      position: '60% 55%',
     },
   },
   'module.aar-procedures': {
@@ -174,10 +179,11 @@ export const cardMedia: Record<string, CardMedia> = {
   'experience.case-iii-tomcat': {
     summary: 'Fly a Case III carrier recovery from marshal to the deck.',
     photo: {
-      src: 'encyclopedia/aircraft/f-14-2.jpg',
-      alt: 'The underside of an F-14 banking left.',
-      credit: 'PH1 Michael D. Flynn, US Navy, public domain',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:F-14B_VF-211_Six_Phoenix_4.jpg',
+      src: 'manual/cards/case-iii-night-launch.jpg',
+      alt: 'An F/A-18F Super Hornet launching from a carrier catapult at night.',
+      credit: 'Mass Communication Specialist 2nd Class Gina K. Wollman, US Navy, public domain',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:US_Navy_100306-N-3595W-001_An_F-A-18F_Super_Hornet_launches_from_the_Nimitz-class_aircraft_carrier_USS_Dwight_D._Eisenhower_(CVN_69)_during_night_flight_operations.jpg',
+      position: '50% 45%',
     },
   },
   'module.sortie-planning': {
@@ -192,10 +198,11 @@ export const cardMedia: Record<string, CardMedia> = {
   'module.weather-and-performance': {
     summary: 'Check whether the weather and the aircraft allow the plan.',
     photo: {
-      src: 'encyclopedia/aircraft/av-8b.jpg',
-      alt: 'A Harrier taking off from a desert runway.',
-      credit: 'Senior Airman Giovanni Sims, US Air Force, public domain',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:AV-8B_Harrier_II_of_VMA-214_launches_from_Prince_Sultan_Air_Base.jpg',
+      src: 'manual/cards/fog-flight-line.jpg',
+      alt: 'Super Hornets on a flight line shrouded in early-morning fog.',
+      credit: 'US Navy, public domain',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:US_Navy_101118-N-7214P-007_F-A-18E-F_Super_Hornets_are_positioned_on_the_flight_line_of_Marine_Corps_Air_Station_Miramar_during_the_early_morning_f.jpg',
+      position: '50% 60%',
     },
   },
   'module.emergency-procedures': {
