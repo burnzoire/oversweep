@@ -31,8 +31,8 @@ const groups = subjectGroups(subject.slug);
     ? groups.map((group) => group.title
       ? <section class="subject-group" aria-labelledby={`group-${group.title.toLowerCase().replace(/\W+/g, '-')}`}>
           <h2 id={`group-${group.title.toLowerCase().replace(/\W+/g, '-')}`}>{group.title}</h2>
-          {group.entries.map((entry) => <EntryCard entry={entry} headingLevel={3} />)}
+          <div class="entry-grid">{group.entries.map((entry) => <EntryCard entry={entry} headingLevel={3} compact />)}</div>
         </section>
-      : group.entries.map((entry) => <EntryCard entry={entry} />))
+      : <div class="entry-grid">{group.entries.map((entry) => <EntryCard entry={entry} compact />)}</div>)
     : <p class="empty-note">No {subject.title.toLowerCase()} modules are published yet. Subjects with modules are linked in the subject list, or see <a href={sitePath("manual/")}>everything in the Manual</a>.</p>}
 </SiteLayout>
