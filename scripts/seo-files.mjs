@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 // destinations, unlisted trainers), redirects from moved pages and the 404
 // page. The origin is `site` in astro.config.mjs; without one there are no
 // absolute URLs, so nothing is written.
-async function htmlFiles(directory) {
+export async function htmlFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
   const nested = await Promise.all(entries.map((entry) => {
     const filename = path.join(directory, entry.name);

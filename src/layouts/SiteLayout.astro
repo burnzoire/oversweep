@@ -1,5 +1,6 @@
 ---
 import BrandMark from "../components/BrandMark.astro";
+import SiteSearch from "../components/SiteSearch.astro";
 import { manualSubjects } from "../data/catalogue";
 import { sectionHasContent, subjectEntries } from "../data/availability";
 import { assetPath, sitePath } from "../lib/paths";
@@ -160,6 +161,7 @@ const subjects = manualSubjects.map((subject) => ({ ...subject, count: subjectEn
             );
           })}
         </nav>
+        <SiteSearch />
       </div>
     </header>
     <main id="main-content" class="page-shell" data-empty={empty ? "" : undefined}>

@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config";
+import { searchIndex } from "./scripts/search-index.mjs";
 import { seoFiles } from "./scripts/seo-files.mjs";
 
 // The site is served from the custom domain at the root, over HTTPS. Canonical,
@@ -8,5 +9,5 @@ export default defineConfig({
   output: "static",
   trailingSlash: "always",
   devToolbar: { enabled: false },
-  integrations: [seoFiles()],
+  integrations: [seoFiles(), searchIndex()],
 });

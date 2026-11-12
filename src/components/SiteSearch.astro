@@ -1,0 +1,87 @@
+---
+// The header search: a link to /search/ that, with JavaScript, opens a search
+// dialog instead (full screen on phones). "/" or Ctrl/⌘+K opens it too.
+import SearchBox from "./SearchBox.astro";
+import { sitePath } from "../lib/paths";
+---
+
+<a class="search-trigger" href={sitePath("search/")} data-search-open>
+  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m15.5 15.5 5 5" /></svg>
+  <span class="search-trigger-label">Search</span>
+  <kbd class="search-trigger-key" aria-hidden="true">/</kbd>
+</a>
+<dialog class="search-dialog" aria-label="Search Oversweep" data-search-dialog>
+  <SearchBox id="site-search">
+    <button class="search-close" type="button" data-search-close>
+      <span class="search-close-text">Close</span><kbd class="search-close-key" aria-hidden="true">Esc</kbd>
+    </button>
+  </SearchBox>
+</dialog>
+
+<script>
+  import { mountSearch } from "../scripts/site-search.mjs";
+
+  const dialog = document.querySelector<HTMLDialogElement>("[data-search-dialog]");
+  const pageBox = document.querySelector<HTMLElement>("[data-search-page]");
+  const dialogBox = dialog?.querySelector<HTMLElement>("[data-search]");
+  const dialogSearch = dialogBox && mountSearch(dialogBox);
+  const trigger = document.querySelector<HTMLElement>("[data-search-open]");
+
+  const open = () => {
+    // On the search page itself, the page's own box is the search.
+    if (pageBox) {
+      pageBox.querySelector<HTMLInputElement>("[data-search-input]")?.focus();
+      return;
+    }
+    if (!dialog || dialog.open) return;
+    dialog.showModal();
+    const input = dialog.querySelector<HTMLInputElement>("[data-search-input]");
+    input?.focus();
+    input?.select();
+    dialogSearch?.warm();
+  };
+
+  trigger?.addEventListener("click", (event) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+    event.preventDefault();
+    open();
+  });
+  // Warm the index as soon as the reader shows interest.
+  trigger?.addEventListener("pointerenter", () => dialogSearch?.warm(), { once: true });
+  dialog?.querySelector("[data-search-close]")?.addEventListener("click", () => dialog.close());
+  // A click on the backdrop (outside the panel) closes the dialog.
+  dialog?.addEventListener("click", (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+  dialog?.addEventListener("close", () => trigger?.focus());
+
+  document.addEventListener("keydown", (event) => {
+    const target = event.target as HTMLElement;
+    const typing = target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName);
+    if ((event.key === "k" || event.key === "K") && (event.metaKey || event.ctrlKey)) {
+      event.preventDefault();
+      open();
+    } else if (event.key === "/" && !typing && !event.metaKey && !event.ctrlKey && !event.altKey) {
+      event.preventDefault();
+      open();
+    }
+  });
+
+  if (pageBox) {
+    const input = pageBox.querySelector<HTMLInputElement>("[data-search-input]");
+    const pageSearch = mountSearch(pageBox);
+    const query = new URLSearchParams(location.search).get("q");
+    if (input && query) {
+      input.value = query;
+      pageSearch.update();
+    }
+    pageBox.addEventListener("search:query", (event) => {
+      const url = new URL(location.href);
+      const value = (event as CustomEvent<string>).detail;
+      if (value) url.searchParams.set("q", value);
+      else url.searchParams.delete("q");
+      history.replaceState(null, "", url);
+    });
+    input?.focus();
+  }
+</script>

@@ -1,0 +1,13 @@
+---
+import SearchBox from "../../components/SearchBox.astro";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+---
+
+<SiteLayout
+  title="Search"
+  activeSection="home"
+  description="Search every Oversweep Manual module, Encyclopedia record, glossary term and trainer."
+>
+  <SearchBox id="page-search" page />
+  <noscript><p>Search needs JavaScript. Browse the Manual, Encyclopedia and Training Library from the menu instead.</p></noscript>
+</SiteLayout>
