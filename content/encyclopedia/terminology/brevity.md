@@ -286,7 +286,7 @@ sources:
     date: "28 May 2020, Change 1 of 2 April 2021"
     url: "https://irp.fas.org/doddir/army/atp1-02-1.pdf"
     accessed: "2026-10-26"
-    note: "Distribution A: approved for public release. Chapter I, Table 1 (key to the symbols, p. 1) and Table 2 (brevity codes, pp. 2–59); page numbers are the printed pages."
+    note: "Distribution A: approved for public release. Chapter I, Table 1 (key to the symbols, p. 1) and Table 2 (brevity codes, pp. 2–59); page numbers are the printed pages. GUNS, HIT(S), OFF, RIFLE, SHOPPING and SQUIRTER were added on 2026-11-12 from a copy of the same Change 1 PDF mirrored at patchwiki.biligame.com, because the FAS copy returned an empty body that day."
   - n: 2
     title: "ATP 1-02.1 / MCRP 3-30B.1 / NTTP 6-02.1 / AFTTP 3-2.5, Brevity: Multi-Service Tactics, Techniques, and Procedures for Multi-Service Brevity Codes"
     publisher: "Air Land Sea Space Application Center"
