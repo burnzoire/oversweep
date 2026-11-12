@@ -1,11 +1,4 @@
 ---
-// Card art (flat technical style, see docs/card-art.md): a two-ship in parade: the wingman stacked back on the 45-degree bearing line.
-const jet = 'M0 -12 L2 -6 L3 -3 L10 4 L10 6 L3 4 L3 9 L5 11 L5 12 L0 10 L-5 12 L-5 11 L-3 9 L-3 4 L-10 6 L-10 4 L-3 -3 L-2 -6 Z';
+// Original bespoke technical card artwork for Oversweep; subject to SME review.
 ---
-<svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-twoshipparade-t">
-  <title id="art-twoshipparade-t">Plan view of a two-ship in close formation: the wingman aft of the leader on the bearing line.</title>
-  <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
-  <path class="accent-stroke dashed" d="M108 32 L228 152" />
-  <path class="jet" d={jet} transform="translate(138 62) rotate(0) scale(2.6)" />
-  <path class="jet" d={jet} transform="translate(190 114) rotate(0) scale(2.6)" />
-</svg>
+<svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="custom-TwoShipParade"><title id="custom-TwoShipParade">TwoShipParade aviation technical illustration</title><rect class="frame" x=".5" y=".5" width="319" height="179"/><path class="ln thin muted" d="M18 18 H45 M18 18 V38 M302 18 H275 M302 18 V38 M18 162 H45 M18 162 V142 M302 162 H275 M302 162 V142"/><path class="ln thin muted dashed" d="M100 20 L234 154"/><path class="ln thin muted" d="M103 40 L232 169"/><g class="jet" transform="translate(122 63) scale(1.9)"><path d="M0 -17 C3 -14 3 -8 4 -5 L23 6 L23 11 L5 7 L6 16 L11 20 L11 23 L0 20 L-11 23 L-11 20 L-6 16 L-5 7 L-23 11 L-23 6 L-4 -5 C-3 -8 -3 -14 0 -17 Z"/></g><g class="jet muted" transform="translate(197 135) scale(1.8)"><path d="M0 -17 C3 -14 3 -8 4 -5 L23 6 L23 11 L5 7 L6 16 L11 20 L11 23 L0 20 L-11 23 L-11 20 L-6 16 L-5 7 L-23 11 L-23 6 L-4 -5 C-3 -8 -3 -14 0 -17 Z"/></g><path class="accent-stroke" d="M122 103 L197 175 m-14 -5 l14 5 -6 -14"/><path class="ln thin muted" d="M122 63 L197 63 L197 135"/><path class="accent-stroke" d="M189 124 A12 12 0 0 1 197 116"/><text class="card" x="74" y="28">LEAD</text><text class="card" x="254" y="146">WING</text></svg>
