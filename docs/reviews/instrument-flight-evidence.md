@@ -187,13 +187,21 @@ The split added more invented material, all labelled on the pages:
   p. 1-2 and the dots and limits AFMAN p. 210. The scripted approach's
   heading corrections stay within 5°, after P-1204 p. 6-62.
 
-## Instrument Trainer (issue #169)
+## ILS Approach (issue #169; was Instrument Trainer)
 
-The Instrument Trainer module page (`_InstrumentTrainer.astro`) and its
-hand-flown ILS exercise use only excerpts already recorded above: AFMAN
-pp. 157–158 (drift), 208 (descent rate), 209–210 (runway environment, ILS
-limits) and 250 (missed approach), and P-1204 pp. 1-2 (needle scaling) and
-6-62 (localizer corrections). The needle geometry is `ils-model.mjs`.
+The ILS Approach module page (`_IlsApproach.astro`, renamed from the
+Instrument Trainer page in revision 2) and its hand-flown ILS exercise use
+only excerpts already recorded above: AFMAN pp. 157–158 (drift), 206–208
+(precision approach, DA, descent rate), 209–210 (runway environment, ILS
+components and limits, glide slope failure) and 249–250 (missed approach),
+P-1204 pp. 1-2 (needle scaling), 6-57 (range), 6-59 (markers), 6-60
+(configure before glide slope intercept) and 6-62 (localizer corrections),
+and the DCS: A-10C II manual pp. 573–574 and 602–603. Revision 2 moved the
+ILS needle figure, the ILS stage steps (now the setup table and the
+intercept and tracking sections), the range/marker/false glide slope
+notes and the DCS ILS steps here from Instrument Procedures, which now keeps
+a short ILS summary and links to this module. The needle geometry is
+`ils-model.mjs`.
 
 Invented for the exercise (`ils-trainer-model.mjs`, all labelled on the page
 and in the trainer): the aircraft is `attitude-model.mjs` at 140 KIAS with

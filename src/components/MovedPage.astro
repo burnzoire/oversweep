@@ -1,0 +1,12 @@
+---
+// A renamed page's old address: sends the reader to the new one and tells
+// search engines where it went. `to` is a site path, e.g. 'manual/x/y/'.
+import { sitePath } from '../lib/paths';
+const { to } = Astro.props as { to: string };
+const href = sitePath(to);
+const canonical = new URL(href, Astro.site).href;
+---
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Moved</title>
+<meta http-equiv="refresh" content={`0;url=${href}`}><meta name="robots" content="noindex"><link rel="canonical" href={canonical}></head>
+<body><p>This page has moved to <a href={href}>{canonical}</a>.</p></body></html>

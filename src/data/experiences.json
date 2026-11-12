@@ -64,12 +64,12 @@
     }
   },
   {
-    "id": "experience.instrument-trainer",
-    "manualId": "manual.instrument-trainer",
-    "slug": "instrument-trainer",
+    "id": "experience.ils-approach",
+    "manualId": "manual.ils-approach",
+    "slug": "ils-approach",
     "subject": "instrument-flight",
     "revision": 4,
-    "title": "Instrument trainer — hand-flown ILS",
+    "title": "ILS approach — hand-flown exercise",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
     "launch": "window",
@@ -78,8 +78,7 @@
     "prerequisites": [
       "The basic T and the crosscheck",
       "Control and performance",
-      "ILS needles and their limits",
-      "Decision altitude"
+      "The ILS approach, from this module"
     ],
     "assets": [
       "frame-guard.js",
@@ -98,10 +97,10 @@
       "lessons/instrument-flight/windscreen.mjs"
     ],
     "module": {
-      "title": "Instrument Trainer",
-      "objective": "Practise instrument flying on a generic panel with nothing outside the window. The first exercise is the hand-flown ILS: intercept, track both needles to the DA, respect the needle limits, and decide.",
-      "applicability": "Generic instrument procedures for military fixed-wing pilots of every service; your service's instrument manual, the aircraft's flight manual and the published procedure govern real approaches.",
-      "revision": 1,
+      "title": "ILS Approach",
+      "objective": "Fly an ILS approach on instruments: what the localizer and glide slope tell you, setting up before the localizer, the intercept and wind correction, tracking both needles down to the decision altitude, the limits that end the approach, the decision and the missed approach; then hand-fly it in a standalone exercise.",
+      "applicability": "Generic precision-approach procedure for military fixed-wing pilots of every service; your service's instrument manual, the aircraft's flight manual and the published procedure govern real approaches.",
+      "revision": 2,
       "maturity": "Drafted — not technically validated"
     }
   },

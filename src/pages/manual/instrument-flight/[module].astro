@@ -1,15 +1,15 @@
 ---
 import AttitudeFlying from './_AttitudeFlying.astro';
 import InstrumentProcedures from './_InstrumentProcedures.astro';
-import InstrumentTrainer from './_InstrumentTrainer.astro';
+import IlsApproach from './_IlsApproach.astro';
 import { includedModules } from '../../../data/modules';
 import { includedExperiences } from '../../../data/experiences';
 // Instrument Flight has one page per module, each its own component kept
 // beside this route so the SME review reads it (the underscore keeps Astro
 // from routing it). This route emits only the modules the registry includes;
-// the instrument trainer comes from the experience registry, since it
+// ILS Approach comes from the experience registry, since it
 // launches a trainer.
-const pages = { 'attitude-instrument-flying': AttitudeFlying, 'instrument-procedures': InstrumentProcedures, 'instrument-trainer': InstrumentTrainer };
+const pages = { 'attitude-instrument-flying': AttitudeFlying, 'instrument-procedures': InstrumentProcedures, 'ils-approach': IlsApproach };
 export function getStaticPaths() {
   return [...includedModules, ...includedExperiences].filter((m) => m.subject === 'instrument-flight').map((m) => ({ params: { module: m.slug } }));
 }

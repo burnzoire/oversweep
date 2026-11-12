@@ -65,14 +65,14 @@ export const cardMedia: Record<string, CardMedia> = {
       position: '50% 48%',
     },
   },
-  'experience.instrument-trainer': {
-    summary: 'Hand-fly an ILS approach to minimums.',
+  'experience.ils-approach': {
+    summary: 'Fly an ILS down to the decision altitude, then hand-fly it.',
     photo: {
-      src: 'manual/cards/hsi.jpg',
-      alt: 'A horizontal situation indicator with its course arrow, deviation bar, heading and course knobs.',
-      credit: 'Yxen, public domain',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:HSI-L159.jpg',
-      position: '50% 50%',
+      src: 'manual/cards/attitude-indicator.jpg',
+      alt: 'An attitude director indicator with its ILS course bar and glide slope pointer centred.',
+      credit: 'NASA (Reddy and Garcia), public domain',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:VMS_Artificial_Horizon.jpg',
+      position: '50% 48%',
     },
   },
   'module.instrument-procedures': {
