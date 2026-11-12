@@ -1,16 +1,18 @@
 ---
-// Case III marshal: simplified holding-pattern symbol. Procedural geometry to be
-// compared with the module's RecoveryOverview before production approval.
+// Case III marshal: simplified left-hand holding pattern, plan view.
+// The aircraft flies westbound on the top (outbound) leg, turns left via
+// the western arc, flies eastbound inbound on the bottom, then commences
+// from the fix toward the ship. Not to scale.
+// Geometry follows case-iii/RecoveryOverview and is subject to SME review.
 const jet = 'M0 -12 L2 -6 L3 -3 L10 4 L10 6 L3 4 L3 9 L5 11 L5 12 L0 10 L-5 12 L-5 11 L-3 9 L-3 4 L-10 6 L-10 4 L-3 -3 L-2 -6 Z';
 ---
 <svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-case-iii-t">
- <title id="art-case-iii-t">Plan view of a left-hand racetrack hold, marshal fix and outbound commencement path.</title>
- <rect class="frame" x=".5" y=".5" width="319" height="179"/>
- <path class="ln heavy" d="M74 48 H235 A39 39 0 0 1 235 126 H74 A39 39 0 0 1 74 48"/>
- <path class="ln heavy" d="M178 48 l-8 -5 M178 48 l-8 5 M137 126 l8 -5 M137 126 l8 5"/>
- <path class="jet" d={jet} transform="translate(112 48) rotate(90) scale(1.25)" />
- <path class="accent-stroke dashed" d="M235 126 H308"/>
- <path class="accent-stroke" d="M308 126 l-10 -6 M308 126 l-10 6"/>
- <path class="accent-fill" d="M235 119 l7 7 -7 7 -7 -7 Z"/>
- <path class="ln thin muted dashed" d="M38 87 H271" opacity=".35"/>
+  <title id="art-case-iii-t">Plan view of the Case III marshal: a left-hand racetrack hold, the marshal fix at the end of the inbound leg, and the commence toward the ship.</title>
+  <rect class="frame" x=".5" y=".5" width="319" height="179"/>
+  <path class="ln heavy" d="M74 48 H235 A39 39 0 0 1 235 126 H74 A39 39 0 0 1 74 48"/>
+  <path class="ln heavy" d="M155 48 l8 -5 M155 48 l8 5 M155 126 l-8 -5 M155 126 l-8 5"/>
+  <path class="jet" d={jet} transform="translate(112 48) rotate(-90) scale(1.25)" />
+  <path class="accent-stroke dashed" d="M235 126 H308"/>
+  <path class="accent-stroke" d="M308 126 l-10 -6 M308 126 l-10 6"/>
+  <path class="accent-fill" d="M235 119 l7 7 -7 7 -7 -7 Z"/>
 </svg>
