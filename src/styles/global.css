@@ -881,7 +881,7 @@ h2 {
 .card-art .knob path { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 .card-art .control-buttons rect { fill: #fff; stroke: currentColor; stroke-width: 1.1; }
 .card-art .control-buttons rect.selected-button { stroke: var(--color-accent); stroke-width: 2; }
-.card-art .tiny-label { fill: var(--color-ink); font: 600 9px Arial, sans-serif; text-anchor: middle; }
+.card-art .tiny-label { fill: var(--color-ink); font: 700 10px Arial, sans-serif; text-anchor: middle; }
 @media (prefers-contrast: more) {
   .card-art .accent-stroke, .card-art .accent-fill { stroke: currentColor; }
   .card-art .accent-fill { fill: currentColor; }
