@@ -277,7 +277,7 @@ const say = (id: string) => NINE_LINE.find((l) => l.id === id)!.says.replace(/"/
 
  <h2 id="attack">IN, cleared hot, abort and reattack</h2>
  <p>On the run-in the aircrew makes the calls requested, such as "IP inbound", then <Term>IN</Term> with the heading or direction if one was restricted, early enough to be cleared before the release window: "IN heading 360". <a href="#source-jp">{j('III-44 to III-45')}</a></p>
- <p>Once an aircraft calls IN, everyone else holds their calls until it is cleared or aborted, except that anyone can and should call an abort at any time: the tactical air direction net belongs to the controller. <a href="#source-jp">{j('V-46')}</a> After release the aircrew reports off and what it released: "Faction 31, off, one away, 27 seconds." <a href="#source-jp">{j('V-54')}</a></p>
+ <p>Once an aircraft calls IN, everyone else holds their calls until it is cleared or aborted, except that anyone can and should call an abort at any time: the tactical air direction net belongs to the controller. <a href="#source-jp">{j('V-46')}</a> After release the aircrew reports <Term>OFF</Term> and what it released: "Faction 31, off, one away, 27 seconds." <a href="#source-jp">{j('V-54')}</a> The common brevity words cover the shot itself: <Term>GUNS</Term> for the gun, <Term>RIFLE</Term> for an air-to-surface missile launch and <Term>MAGNUM</Term> for an anti-radiation missile.</p>
  <p>For Types 1 and 2 the controller answers IN with <Term>CLEARED HOT</Term>, <Term>CONTINUE DRY</Term> or <Term>ABORT</Term>, and under Type 1 must see the aircraft and judge its geometry first. <a href="#source-jp">{j('III-44 to III-45')}</a></p>
  <p><strong>Abort.</strong> The controller shall abort an aircraft not aligned with the correct target, and must abort it if friendly troops may be endangered or for the aircrew's safety. <a href="#source-jp">{j('V-47')}</a></p>
  <ul class="exchange">
@@ -296,7 +296,7 @@ const say = (id: string) => NINE_LINE.find((l) => l.id === id)!.says.replace(/"/
   <li>Type of control (how risk is managed) and method of attack (BOT or BOC) are separate choices in the game plan.</li>
   <li>Check-in in MNPOPCA order; 9-line in three groups of three, then remarks, restrictions and the TOT last.</li>
   <li>Read back elevation, location and every restriction.</li>
-  <li>Correlate on every attack. Under Types 1 and 2 each attack is IN, CLEARED HOT (or abort), off; under Type 3 one CLEARED TO ENGAGE covers the engagement, bracketed by COMMENCING ENGAGEMENT and ENGAGEMENT COMPLETE.</li>
+  <li>Correlate on every attack. Under Types 1 and 2 each attack is IN, CLEARED HOT (or abort), <Term>OFF</Term>; under Type 3 one CLEARED TO ENGAGE covers the engagement, bracketed by COMMENCING ENGAGEMENT and ENGAGEMENT COMPLETE.</li>
   <li>CLEARED means ordnance comes off; anyone can call ABORT.</li>
  </ul>
 
@@ -435,7 +435,7 @@ const say = (id: string) => NINE_LINE.find((l) => l.id === id)!.says.replace(/"/
   'Terminal attack control', 'Terminal guidance operations', 'Type 1 control', 'Type 2 control', 'Type 3 control', 'BOT', 'BOC', 'Correlation',
   'CAS check-in', 'Game plan', '9-line', '5-line', 'Initial point', 'Battle position', 'Offset direction', 'Final attack heading',
   'Laser target line', 'Mandatory readback', 'Talk-on', 'FIDO', { id: 'Danger close', set: 'Close air support' }, 'Risk-estimate distance', 'Troops in contact',
-  'Close combat attack', 'CONTACT', 'CAPTURED', 'SPOT', 'CONTACT SPARKLE', 'CLEARED TO ENGAGE', 'IN',
+  'Close combat attack', 'CONTACT', 'CAPTURED', 'SPOT', 'CONTACT SPARKLE', 'CLEARED TO ENGAGE', 'IN', 'OFF', 'GUNS', 'RIFLE',
  ]} />
  <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
   <h3 id="terms-title">Quiz: name the term</h3>
