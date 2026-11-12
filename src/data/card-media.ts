@@ -1,6 +1,7 @@
 // Manual card media: a one-line summary and a cropped photo for each Manual
 // card (#238). The photos reuse public-domain images that the encyclopedia
-// already holds and credits; the credit shows as the photo's hover title.
+// already holds and credits, or cards-only ones in public/manual/cards/; the
+// credit shows as the photo's hover title.
 // `position` moves the crop focus inside the 16:9 frame.
 export interface CardMedia {
   summary: string;
@@ -200,10 +201,11 @@ export const cardMedia: Record<string, CardMedia> = {
   'module.emergency-procedures': {
     summary: 'Handle an in-flight emergency in any aircraft.',
     photo: {
-      src: 'encyclopedia/aircraft/mig-21-2.jpg',
-      alt: 'A MiG-21 landing with its braking parachute streaming.',
-      credit: 'US Air Force, public domain',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:VPAF_MiG-21_landing_with_chute.jpg',
+      src: 'manual/cards/ejection.jpg',
+      alt: 'A pilot ejecting from an F-16 moments before it hits the ground, the canopy tumbling above the seat.',
+      credit: 'Staff Sgt. Bennie J. Davis III, US Air Force, public domain',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:2003_Thunderbirds_Mountain_Home_airshow_crash_ejection.jpg',
+      position: '50% 42%',
     },
   },
   'experience.autorotation': {
