@@ -59,7 +59,7 @@ export const cardMedia: Record<string, CardMedia> = {
     summary: 'Fly the aircraft on instruments alone.',
     photo: {
       src: 'manual/cards/agb-3-attitude-indicator.jpg',
-      alt: 'An AGB-3 attitude indicator showing about 10° nose down, its pitch ladder and bank scale.',
+      alt: 'An AGB-3 attitude indicator showing about 5° nose down, its pitch ladder and bank scale.',
       credit: 'SobakaRU, public domain',
       sourceUrl: 'https://commons.wikimedia.org/wiki/File:Artificial_Horizon_%E2%80%94_AGB-3.jpg',
       position: '60% 55%',
@@ -69,7 +69,7 @@ export const cardMedia: Record<string, CardMedia> = {
     summary: 'Fly an ILS down to the decision altitude, then hand-fly it.',
     photo: {
       src: 'manual/cards/attitude-indicator.jpg',
-      alt: 'An attitude director indicator with its ILS course bar and glide slope pointer centred.',
+      alt: 'An attitude director indicator with crossed steering bars and a glide slope scale.',
       credit: 'NASA (Reddy and Garcia), public domain',
       sourceUrl: 'https://commons.wikimedia.org/wiki/File:VMS_Artificial_Horizon.jpg',
       position: '50% 48%',
