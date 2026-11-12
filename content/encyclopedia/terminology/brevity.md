@@ -117,6 +117,13 @@ terms:
   - term: GATE
     definition: Fly as quickly as possible, using afterburner or maximum power.
     cite: [{ n: 1, page: "21" }]
+  - term: GUNS
+    definition: Aircraft gun is being employed.
+    domains: [Air-to-air, Air-to-surface]
+    cite: [{ n: 1, page: "23" }]
+  - term: HIT(S)
+    definition: "1. Momentary radar return(s). 2. Followed by an altitude (air-to-air): indicates approximate altitude, as in \"GROUP BULLSEYE 360/10, HITS 15 thousand\". 3. Weapons had desired effects on the intended target (air-to-surface)."
+    cite: [{ n: 1, page: "24" }]
   - term: HOLDING HANDS
     definition: Aircraft in visual formation.
     domains: [Air-to-air]
@@ -163,6 +170,11 @@ terms:
     definition: "1. Aircrew does not have visual contact with the TARGET or BANDIT. Opposite of TALLY. 2. Indicates that radio communications could not be established with the distant end on a specified radio net."
     note: "Both meanings are marked as possibly differing from the NATO brevity word. [1]"
     cite: [{ n: 1, page: "33" }]
+  - term: OFF
+    form: "[direction]"
+    definition: Attack is terminated, and maneuvering to the indicated direction.
+    domains: [Air-to-air, Air-to-surface]
+    cite: [{ n: 1, page: "34" }]
   - term: PADLOCKED
     definition: Aircrew cannot take eyes off an aircraft, ground target, or surface position without risk of losing TALLY or VISUAL.
     cite: [{ n: 1, page: "34" }]
@@ -192,6 +204,12 @@ terms:
     form: "[channel]"
     definition: Switch to designated frequency; no acknowledgment required.
     cite: [{ n: 1, page: "38" }]
+  - term: RIFLE
+    form: "[number, time]"
+    definition: FRIENDLY air-to-surface missile launch. The call can add the number of munitions and the time of flight.
+    domains: [Air-to-surface, Maritime air]
+    note: "The publication adds that the call includes the launch location in BULLSEYE format, and the weapon's track direction, when appropriate. Marked as possibly differing from the NATO brevity word. [1]"
+    cite: [{ n: 1, page: "40" }]
   - term: ROGER
     definition: Radio transmission received; does not indicate compliance or reaction.
     cite: [{ n: 1, page: "41" }]
@@ -206,6 +224,10 @@ terms:
     definition: Takeoff as quickly as possible.
     domains: [Air-to-air, Surface-to-air, Surface-to-surface]
     cite: [{ n: 1, page: "42" }]
+  - term: SHOPPING
+    definition: An aircraft request to a forward air controller, JTAC or C2 platform for a target or task.
+    domains: [Air-to-surface]
+    cite: [{ n: 1, page: "44" }]
   - term: SORTED
     definition: Sort responsibility within a GROUP has been met.
     domains: [Air-to-air, Air-to-surface, Maritime air]
@@ -225,6 +247,11 @@ terms:
     definition: Operate IFF/selective ID feature as indicated or IFF or selective ID feature is operating as indicated.
     domains: [Air-to-air]
     note: "For the air traffic control instruction, see Squawk in the airfield terms."
+    cite: [{ n: 1, page: "49" }]
+  - term: SQUIRTER
+    definition: A ground-borne object of interest departing the objective area.
+    domains: [Air-to-surface, Surface-to-surface]
+    note: "Not a NATO brevity word. [1]"
     cite: [{ n: 1, page: "49" }]
   - term: STRANGER
     definition: Unidentified traffic that is not a participant in the action in progress.
