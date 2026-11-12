@@ -39,11 +39,11 @@ export const cardMedia: Record<string, CardMedia> = {
   'module.radio-procedures': {
     summary: 'Speak and understand military air–ground radio.',
     photo: {
-      src: 'manual/cards/par-scope.jpg',
-      alt: 'An air traffic controller reflected in a precision approach radar scope as he talks an aircraft down.',
-      credit: 'US Air Force, public domain',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:PAR_Scope.jpg',
-      position: '50% 40%',
+      src: 'manual/cards/hornet-pilot.jpg',
+      alt: 'An F/A-18C Hornet pilot, seen head-on through the canopy, salutes the catapult officer before launch.',
+      credit: 'US Navy, public domain',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:US_Navy_050310-N-4308O-066_A_pilot_salutes_the_catapult_officer_from_the_cockpit_of_his_F-A-18C_Hornet_prior_to_launching_from_the_Nimitz-class_aircraft_carrier_USS_Harry_S._Truman_(CVN_75).jpg',
+      position: '50% 35%',
     },
   },
   'module.air-navigation': {
