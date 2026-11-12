@@ -10,7 +10,7 @@ if (window.top !== window.self) {
     link.href = location.href;
     link.target = '_blank';
     link.rel = 'noopener';
-    link.textContent = 'Open the instrument trainer in a new window';
+    link.textContent = 'Open the ILS approach trainer in a new window';
     notice.append('This exercise runs only in its own window. ', link, '.');
     document.body.replaceChildren(notice);
   });

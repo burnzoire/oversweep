@@ -115,11 +115,11 @@
     "id": "module.instrument-procedures",
     "slug": "instrument-procedures",
     "subject": "instrument-flight",
-    "revision": 1,
+    "revision": 2,
     "title": "Instrument Procedures",
     "maturity": "Drafted — not technically validated",
     "publication": "published",
-    "objective": "Fly an instrument sortie: the departure climb, holding and its entries, the approach to minimums, the ILS and how its needles behave, PAR and ASR radar approaches, the missed approach, high-altitude penetrations, reading the approach plate and lost communications.",
+    "objective": "Fly an instrument sortie: the departure climb, holding and its entries, the approach to minimums, the ILS in brief, PAR and ASR radar approaches, the missed approach, high-altitude penetrations, reading the approach plate and lost communications.",
     "applicability": "For military pilots of every service, fixed- and rotary-wing: the Air Force instrument flight procedures manual and the Navy's instrument training instructions first, as generic procedure, with the FAA Aeronautical Information Manual as the supplementary US rule set. Army instrument publications could not be read for this revision; your service's instrument rules, the aircraft's flight manual and current flight information publications govern."
   },
   {

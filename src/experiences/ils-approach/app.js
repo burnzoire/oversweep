@@ -1,4 +1,4 @@
-/* Instrument trainer, exercise 1: the hand-flown ILS. Inputs, the frame
+/* ILS Approach trainer: the hand-flown ILS. Inputs, the frame
  * loop, the panel, the decision at the DA and the debrief with its replay.
  * The run (start, wind, flight, limits and score) is in
  * lessons/instrument-flight/ils-trainer-model.mjs; the panel and the views
@@ -12,7 +12,7 @@ import { drawWindscreen, visibilityAt } from './lessons/instrument-flight/windsc
 
 if (!window.oversweepFramed) {
   const $ = (id) => document.getElementById(id);
-  const STORE = 'oversweep.instrument-trainer.';
+  const STORE = 'oversweep.instrument-trainer.';  // key kept from the old instrument-trainer slug so saved bindings survive
   const read = (key, fallback) => { try { const v = localStorage.getItem(STORE + key); return v ? JSON.parse(v) : fallback; } catch { return fallback; } };
   const write = (key, value) => { try { localStorage.setItem(STORE + key, JSON.stringify(value)); } catch { /* private window */ } };
   const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));

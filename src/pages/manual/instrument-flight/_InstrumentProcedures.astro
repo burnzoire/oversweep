@@ -28,6 +28,7 @@ const a5 = aim(2), a6 = aim(3);
 const attitude = sitePath('manual/instrument-flight/attitude-instrument-flying/');
 const nav = sitePath('manual/navigation/air-navigation/');
 const radio = sitePath('manual/radio-communications/radio-procedures/');
+const ils = sitePath('manual/instrument-flight/ils-approach/');
 const glossary = sitePath('encyclopedia/terminology/instrument-flight/');
 ---
 <SiteLayout title={mod.title} activeSection="manual" activeSubject="instrument-flight" compactSubjectNav={true}
@@ -35,7 +36,7 @@ const glossary = sitePath('encyclopedia/terminology/instrument-flight/');
  <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
   <h2>{mod.maturity}</h2>
   <p>Module revision {mod.revision} · A whole instrument sortie: the departure climb, holding, the approach to minimums, the ILS, radar approaches and the missed approach, then high-altitude approaches, the approach plate and lost communications. For fixed- and rotary-wing pilots of every service, from the Air Force's instrument flight procedures manual and the Navy's instrument training instructions, with the FAA's Aeronautical Information Manual as the supplementary source.</p>
-  <p>Figure 1 lets you try any holding entry; Figure 2 flies an ILS with working localizer and glide slope needles. Controlling the aircraft on instruments comes first, in <a href={attitude}>Attitude Instrument Flying</a>.</p>
+  <p>Figure 1 lets you try any holding entry; the ILS has its own module, <a href={ils}>ILS Approach</a>, with working needles and a trainer. Controlling the aircraft on instruments comes first, in <a href={attitude}>Attitude Instrument Flying</a>.</p>
  </section>
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
   <div class="contents-groups">
@@ -50,7 +51,7 @@ const glossary = sitePath('encyclopedia/terminology/instrument-flight/');
   <li>plan an <Term>IFR</Term> departure climb;</li>
   <li>copy a holding clearance, choose the entry, and fly the timing, speed limits and wind correction;</li>
   <li>fly an approach to the <Term id="Minimum descent altitude">MDA</Term> or <Term id="Decision altitude">DA</Term> and know when you may go below it;</li>
-  <li>read the ILS needles, explain why they grow more sensitive close in, and apply the ILS limits;</li>
+  <li>read the ILS needles and apply the ILS limits (taught in full in ILS Approach);</li>
   <li>fly a <Term>PAR</Term> or <Term>ASR</Term> approach and a missed approach;</li>
   <li>read an approach plate and fly the lost communications rules.</li>
  </ol>
@@ -186,40 +187,8 @@ const glossary = sitePath('encyclopedia/terminology/instrument-flight/');
  <p class="key"><strong>Key point:</strong> step down only past each fix. On a non-precision approach, level off at the MDA until the runway environment is in sight or you reach the MAP; on a precision approach, decide at the DA: continue with the runway environment in sight, otherwise go missed.</p>
 
  <h2 id="ils">Flying the ILS</h2>
- <p>An ILS needs its localizer, glide slope and outer marker (or a published substitute for the marker). If the glide slope fails, the approach becomes a localizer approach without glide path; if the localizer fails, the approach is not authorized. Tune it early and monitor the identifier throughout, and set the published front course even for a back course approach. <a href="#source-afman">{af('209–210')}</a></p>
- <p><strong>The needles.</strong> The localizer drives the HSI's course bar, and the glide slope a pointer beside the card; many aircraft also show both as crossed bars on the attitude indicator. Fly toward the needle: bar right, the course is to your right; glide slope pointer high, the glide slope is above you. Full deflection is two dots. It is an angle, not a distance: about 2.5° either side of a 5°-wide localizer course, and 0.7° above or below the glide slope. <a href="#source-t45">{t45('1-2')}</a> <a href="#source-afman">{af('210')}</a> So the same error in feet moves the needles further the closer you get, and a correction that was right far out is too big near minimums. Figure 2 shows it.</p>
- <section class="lesson figure-lesson panel-fig" data-lesson="ils" aria-labelledby="ils-title">
-  <h3 id="ils-title" class="fig-title">Figure 2 — ILS needles</h3>
-  <p>Move the aircraft along the approach, off the centerline and off the glide slope, and watch the HSI and the attitude indicator's ILS bars. Or fly a whole approach: it starts right of course and low, captures the localizer, then the glide slope.</p>
-  <div class="controls row">
-   <label for="ils-range">Range <input type="range" id="ils-range" name="range" min="0.5" max="10" step="0.1" value="6" /> <output for="range">6.0 NM</output></label>
-   <label for="ils-right">Off centerline <input type="range" id="ils-right" name="right" min="-2000" max="2000" step="20" value="400" /> <output for="right">400 ft right</output></label>
-   <label for="ils-above">Off glide slope <input type="range" id="ils-above" name="above" min="-400" max="400" step="10" value="-60" /> <output for="above">60 ft low</output></label>
-  </div>
-  <div class="buttons"><button type="button" data-fly>Fly the approach</button> <button type="button" data-centre>Centre the needles</button></div>
-  <div class="fig-scroll"><svg class="inst" viewBox="0 0 700 470" role="img" aria-label="Plan view and profile of an ILS approach beside an HSI and an attitude indicator showing the localizer and glide slope needles"></svg></div>
-  <p class="no-js">Interactive figure unavailable. Example: 400 ft right of the centerline at 6 NM is just over half a dot, with the course bar left of centre; the same 400 ft at 1 NM is more than one dot.</p>
-  <div class="feedback" data-result role="status" aria-live="polite"></div>
-  <p class="fig-caption">Schematic. Needle scaling from the Navy's training instruction (2.5° and 0.7° full scale) and the Air Force manual's dots; the 3° glide slope, 8,000 ft runway, antenna positions and 200 ft DA are invented for the figure, and real installations vary. Both views are stretched across the approach so the offsets show.</p>
- </section>
- <div class="table-scroll" tabindex="0"><table>
-  <caption>Flying it <a href="#source-afman">{af('209–210')}</a> <a href="#source-t45">{t45('6-57–6-62')}</a></caption>
-  <thead><tr><th>Stage</th><th>What you do</th></tr></thead>
-  <tbody>
-   <tr><td>Before the localizer</td><td>Fly the published procedure or the vectors on the navigation aid it uses; have the ILS tuned and identified, the front course set, and back it up with any other navigation aid available</td></tr>
-   <tr><td>Before glide slope intercept</td><td>Configured, on speed, landing checklist done, so there is time for it before the glide slope arrives</td></tr>
-   <tr><td>On the localizer</td><td>Correct with heading changes of no more than 5° either side of the wind-corrected heading</td></tr>
-   <tr><td>Glide slope intercept</td><td>As the glide slope pointer centres, set the descent attitude and power to stay on speed and on the glidepath</td></tr>
-   <tr><td>At the final approach fix</td><td>Start the clock: if the glide slope is lost you may, depending on minimums, continue on the localizer only and time to the MAP</td></tr>
-   <tr><td>To the DA</td><td>Look for the runway approaching the DA while watching range, markers or DME; at the DA, continue only with the runway environment in sight, otherwise go missed</td></tr>
-  </tbody>
- </table></div>
- <ul>
-  <li><strong>Range.</strong> The localizer is usable to 18 miles within 10° of the centerline unless the plate says otherwise; the glide slope to 10 miles, more where it has been certified for it. <a href="#source-afman">{af('210')}</a> <a href="#source-t45">{t45('6-57')}</a></li>
-  <li><strong>Limits.</strong> Discontinue the approach if the localizer is unreliable or shows full-scale deflection on final. Do not go below localizer minimums if you are more than one dot (half scale) below or two dots (full scale) above the glide slope; recapture within those limits and you may continue to the DA. <a href="#source-afman">{af('210')}</a></li>
-  <li><strong>False glide slopes.</strong> A false glide slope signal can appear with everything working and no flags. Confirm your position with other navigation aids where you can. <a href="#source-afman">{af('210')}</a></li>
-  <li><strong>Marker beacons.</strong> Most ILS approaches do not have all three, and some none; without them, cross-radial fixes, DME or radar give range. The outer marker usually marks the FAF and often the glidepath intercept; the middle marker is near the DA for a Category I approach, roughly half a mile out and 200 ft above the ground; the inner marker is the Category II DA, at about 100 ft. <a href="#source-t45">{t45('6-59')}</a></li>
- </ul>
+ <p>The ILS is the precision approach you will fly most: a localizer for the course and a glide slope for the descent, flown down to the DA. The whole procedure, from setting up to the missed approach, with a figure of the needles and a trainer to fly it by hand, is its own module: <a href={ils}>ILS Approach</a>.</p>
+ <p>In short: fly toward the needles, and keep corrections small and smaller still close in, because the needles show angles. On final, full-scale localizer deflection means discontinue; more than one dot low or two dots high means no descent below localizer minimums. <a href="#source-afman">{af('209–210')}</a> <a href="#source-t45">{t45('1-2')}</a></p>
  <p class="key"><strong>Key point:</strong> the needles show angles, so keep corrections small and smaller still close in; on final, full-scale localizer means discontinue, and more than one dot low or two high means no descent below localizer minimums.</p>
 
  <h2 id="radar">Radar approaches: PAR and ASR</h2>
@@ -312,21 +281,17 @@ const glossary = sitePath('encyclopedia/terminology/instrument-flight/');
  <section class="sim-panel" aria-labelledby="sims">
   <h2 id="sims">In the sim</h2>
   <p>The DCS: A-10C II manual covers flying an ILS and the airfield approaches; this panel is from that manual only. Other DCS aircraft and Falcon BMS were not checked for this revision.</p>
-  <h3>Flying an ILS in DCS</h3>
+  <h3>Approaches in DCS</h3>
   <ol class="steps">
-   <li>Turn on the ILS panel and set the station's frequency (108.10 to 111.95 MHz); the CDU DIVERT page lists airfield ILS frequencies. Press ILS on the navigation mode select panel. <a href="#source-a10">{dcs('573')}</a></li>
-   <li>Fly the localizer and glide slope bars on the ADI to a cross; the marker light and tone show the outer and inner markers. Some runways, the manual's example is Batumi, have one landing direction and no beacons. <a href="#source-a10">{dcs('573–574, 602–603')}</a></li>
-   <li>The manual's ILS starts at 2,000 ft above the ground, flaps up, around 150 KIAS, and configures (speed brakes 40%, gear, flaps down) over the outer marker. <a href="#source-a10">{dcs('602')}</a></li>
-   <li>The manual also describes a TACAN approach (hold, penetration descent, level off, land) and a ground controlled approach, in which ATC gives heading, altitude and airspeed to the pattern entry point. <a href="#source-a10">{dcs('600–603')}</a></li>
+   <li>The manual describes a TACAN approach (hold, penetration descent, level off, land) and a ground controlled approach, in which ATC gives heading, altitude and airspeed to the pattern entry point. <a href="#source-a10">{dcs('600–603')}</a> Flying its ILS is covered in <a href={`${ils}#sims`}>ILS Approach</a>.</li>
   </ol>
   <h3>Where it differs from the real-world sources</h3>
   <ul>
-   <li><strong>Glide slope limits.</strong> The manual's "general rule" is to go missed more than 1 dot low or 2 dots high. <a href="#source-a10">{dcs('574')}</a> In the Air Force manual the same numbers are a limit on descending below localizer minimums, and recapturing within them lets you continue. <a href="#source-afman">{af('210')}</a></li>
    <li><strong>Holding speed.</strong> The manual's hold is flown at 200 to 350 KIAS. <a href="#source-a10">{dcs('601')}</a> The real maximums are 200 to 265 KIAS by altitude, 310 at Air Force and 230 at Navy airfields unless published otherwise. <a href="#source-afman">{af('153–154')}</a></li>
    <li><strong>The TACAN approach.</strong> The manual's penetration descends at 1,200 to 1,500 ft a minute, 300 ft for every mile, and levels off at 400 ft (straight-in) or 600 ft (circling). <a href="#source-a10">{dcs('601')}</a> Those are its own numbers, not a published procedure: a real approach flies the plate's altitudes down to its MDA or DA. <a href="#source-afman">{af('171, 206–208')}</a></li>
    <li>Not described in the manual, so not claimed either way: holding entries, PAR glidepath calls and lost communications.</li>
   </ul>
-  <p><strong>To practise:</strong> fly Figure 1's entries at a TACAN fix, then an ILS with the real limits above, keeping the localizer corrections within 5° as Figure 2 does and briefing the missed approach before you start.</p>
+  <p><strong>To practise:</strong> fly Figure 1's entries at a TACAN fix, then fly the plate's altitudes down a TACAN approach, briefing the missed approach before you start.</p>
  </section>
 
  <h2 id="terms">Terms</h2>
@@ -345,7 +310,7 @@ const glossary = sitePath('encyclopedia/terminology/instrument-flight/');
  </section>
 
  <h2 id="check">Check your understanding</h2>
- <p>One or more questions for each outcome at the top of the page; Figure 1 and its quiz cover holding entries, and Figure 2 the ILS needles.</p>
+ <p>One or more questions for each outcome at the top of the page; Figure 1 and its quiz cover holding entries.</p>
  <details><summary><span class="outcome">Outcome 1</span> The plate gives no climb gradient. What must an Air Force pilot climb at, and when may they turn?</summary><p>At least 200 ft per nautical mile with all engines operating, and no turn until 400 ft above the departure end unless the procedure requires an early turn.</p></details>
  <details><summary><span class="outcome">Outcome 2</span> Holding at 16,000 ft away from a military field, with no published speed. What is the maximum speed, and how long is the inbound leg?</summary><p>265 KIAS, and 1½ minutes inbound, because the hold is above 14,000 ft.</p></details>
  <details><summary><span class="outcome">Outcome 2</span> Inbound you need 5° of right drift correction. What do you hold outbound?</summary><p>15° left: three times the inbound correction, the other way.</p></details>
@@ -362,17 +327,16 @@ const glossary = sitePath('encyclopedia/terminology/instrument-flight/');
  <h2 id="sources">Sources and applicability</h2>
  <h3>Military sources</h3>
  <p id="source-afman"><strong>[1] US Air Force, AFMAN 11-217 Volume 1, Instrument Flight Procedures, 22 October 2010.</strong> <a href="https://www.code7700.com/pdfs/usaf/afman11-217v1.pdf">Read on code7700.com's copy</a>, 2 November 2026, by printed page: chapter 1 (p. 12), approach plates (pp. 103–106), departures (pp. 127–128), holding (pp. 151–159), high-altitude approaches (pp. 171–174), final approach, ILS and radar (pp. 206–210, 219–222), missed approach (pp. 249–250). Superseded by the consolidated AFMAN 11-217 of 10 June 2019, which could not be retrieved; numbers may have changed.</p>
- <p id="source-t45"><strong>[4] Chief of Naval Air Training, CNATRA P-1204 (Rev. 09-16, Change 2 of 25 March 2021), Flight Training Instruction, Instrument, T-45C MPTS and IUT.</strong> <a href="https://web.archive.org/web/20211009235549/https://www.cnatra.navy.mil/local/docs/pat-pubs/P-1204.pdf">Internet Archive copy of cnatra.navy.mil</a> (October 2021 snapshot), read 2 November 2026 by printed page: ILS needle scaling (p. 1-2), lost communications (pp. 6-7–6-8), GCA (pp. 6-48–6-50), ILS (pp. 6-57–6-62). A training command instruction for one aircraft type.</p>
+ <p id="source-t45"><strong>[4] Chief of Naval Air Training, CNATRA P-1204 (Rev. 09-16, Change 2 of 25 March 2021), Flight Training Instruction, Instrument, T-45C MPTS and IUT.</strong> <a href="https://web.archive.org/web/20211009235549/https://www.cnatra.navy.mil/local/docs/pat-pubs/P-1204.pdf">Internet Archive copy of cnatra.navy.mil</a> (October 2021 snapshot), read 2 November 2026 by printed page: ILS needle scaling (p. 1-2), lost communications (pp. 6-7–6-8), GCA (pp. 6-48–6-50). A training command instruction for one aircraft type.</p>
  <p id="source-th73"><strong>[5] Chief of Naval Air Training, CNATRA P-480 (New 05-22), Flight Training Instruction, Basic Instrument and Radio Instrument, TH-73A, 5 May 2022.</strong> <a href="https://web.archive.org/web/20240814201447/https://www.cnatra.navy.mil/local/docs/pat-pubs/P-480.pdf">Internet Archive copy of cnatra.navy.mil</a> (August 2024 snapshot), read 2 November 2026 by printed page: holding (p. 3-19), GCA (pp. 4-16–4-17). A training command instruction for one aircraft type.</p>
  <h3>Supplementary FAA sources</h3>
  <p id="source-aim5"><strong>[2] FAA, Aeronautical Information Manual, chapter 5, section 3: En Route Procedures.</strong> <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap5_section_3.html">faa.gov</a>, read 2 November 2026: ¶5-3-8, Holding.</p>
  <p id="source-aim6"><strong>[3] FAA, Aeronautical Information Manual, chapter 6, section 4: Two-way Radio Communications Failure.</strong> <a href="https://www.faa.gov/air_traffic/publications/atpubs/aim_html/chap6_section_4.html">faa.gov</a>, read 2 November 2026: ¶6-4-1, quoting 14 CFR 91.185.</p>
  <h3>Sim source</h3>
- <p id="source-a10"><strong>[6] Eagle Dynamics, DCS: A-10C II Tank Killer Flight Manual (English), July 2023.</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/dcs-warthog_2_flight_manual_en/">Download page</a>, read 2 November 2026, pp. 573–574 and 600–603. A sim manual, cited only for the In the sim panel.</p>
+ <p id="source-a10"><strong>[6] Eagle Dynamics, DCS: A-10C II Tank Killer Flight Manual (English), July 2023.</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/dcs-warthog_2_flight_manual_en/">Download page</a>, read 2 November 2026, pp. 600–603. A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/instrument-flight-evidence.md">instrument flight evidence</a>.</p>
- <p>Figures 1 and 2, the holding quiz and the opening sortie are original, invented examples, not reproductions of any publication's figure.</p>
+ <p>Figure 1, the holding quiz and the opening sortie are original, invented examples, not reproductions of any publication's figure.</p>
  <p class="note">Applicability: written for fixed- and rotary-wing pilots of every service. Everything outside the sim panel is from the Air Force manual, the FAA's manual, or the Navy's instrument training instructions, with type-specific numbers left out: procedures are given in generic form, and your aircraft's numbers come from its flight manual. The Navy's NATOPS instrument flight manual and the Army's instrument publications could not be read for this revision, so no Army rules are included, and Navy rules beyond the training instructions and the Air Force manual's Navy airfield holding speed are not covered. Your service's rules, the aircraft's flight manual and current FLIP govern.</p>
 
 </SiteLayout>
 <script>import '../../../lessons/instrument-flight/lesson-ui.mjs';</script>
-<script>import '../../../lessons/instrument-flight/ils-ui.mjs';</script>

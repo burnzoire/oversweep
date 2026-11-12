@@ -58,21 +58,21 @@ export const cardMedia: Record<string, CardMedia> = {
   'module.attitude-instrument-flying': {
     summary: 'Fly the aircraft on instruments alone.',
     photo: {
+      src: 'manual/cards/agb-3-attitude-indicator.jpg',
+      alt: 'An AGB-3 attitude indicator showing about 5° nose down, its pitch ladder and bank scale.',
+      credit: 'SobakaRU, public domain',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Artificial_Horizon_%E2%80%94_AGB-3.jpg',
+      position: '60% 55%',
+    },
+  },
+  'experience.ils-approach': {
+    summary: 'Fly an ILS down to the decision altitude, then hand-fly it.',
+    photo: {
       src: 'manual/cards/attitude-indicator.jpg',
-      alt: 'An attitude indicator showing a level attitude, with its bank scale and pitch ladder.',
+      alt: 'An attitude director indicator with crossed steering bars and a glide slope scale.',
       credit: 'NASA (Reddy and Garcia), public domain',
       sourceUrl: 'https://commons.wikimedia.org/wiki/File:VMS_Artificial_Horizon.jpg',
       position: '50% 48%',
-    },
-  },
-  'experience.instrument-trainer': {
-    summary: 'Hand-fly an ILS approach to minimums.',
-    photo: {
-      src: 'manual/cards/hsi.jpg',
-      alt: 'A horizontal situation indicator with its course arrow, deviation bar, heading and course knobs.',
-      credit: 'Yxen, public domain',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:HSI-L159.jpg',
-      position: '50% 50%',
     },
   },
   'module.instrument-procedures': {
