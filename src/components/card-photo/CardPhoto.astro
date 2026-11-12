@@ -1,7 +1,11 @@
 ---
 // Card photos: a cropped, credited photograph on a Manual module card (#238,
 // photo trial). Photos reuse public-domain images the encyclopedia already
-// holds and credits; `position` sets the crop focus for the 16:9 frame.
+// holds and credits; `position` sets the crop focus for the 16:9 frame. The
+// photos are public domain, so the credit is a hover title rather than a
+// caption (Nathan found a caption too distracting). The photo is decorative,
+// like the encyclopedia card thumbnails, because the title follows it; the full credit stays on
+// the encyclopedia record.
 import { assetPath } from '../../lib/paths';
 
 interface CardPhotoEntry {
@@ -34,13 +38,29 @@ const photos: Record<string, CardPhotoEntry> = {
     credit: 'SSgt. Scott Stewart, US Air Force, public domain',
     sourceUrl: 'https://commons.wikimedia.org/wiki/File:AGM-88_HARM_on_F-4G_(cropped).jpg',
   },
+  'module.weapons-delivery': {
+    src: 'encyclopedia/ordnance/mk-84.jpg',
+    alt: 'An F-16 banking over a desert range with four bombs falling away below it.',
+    position: '50% 50%',
+    credit: 'Tech. Sgt. Jose Lopez, US Air Force, public domain',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:An_air-to-air_left_rear_view_of_an_F-16_Fighting_Falcon_aircraft_of_the_429th_Tactical_Fighter_Squadron_releasing_four_Mark_84_2000-pound_bombs_over_a_range_in_Nevada_-_DPLA_-_65f08ce9f09ce5ccf7e8231da120fde0.jpeg',
+  },
+  'module.precision-targeting': {
+    src: 'encyclopedia/radar-sensors/sniper.jpg',
+    alt: 'An F-15E carrying a targeting pod under its intake.',
+    position: '50% 55%',
+    credit: 'US Air Force, public domain',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:F-15E_with_Sniper_pod.jpg',
+  },
+  'module.rotary-wing-attack': {
+    src: 'encyclopedia/aircraft/ah-64d.jpg',
+    alt: 'An AH-64D Apache flying low over farmland.',
+    position: '50% 50%',
+    credit: 'Tech. Sgt. Andy Dunaway, US Air Force, public domain',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:AH-64D_Apache_Longbow.jpg',
+  },
 };
 
 const photo = photos[Astro.props.id as string];
 ---
-{photo && (
-  <figure class="entry-art card-photo">
-    <img src={assetPath(photo.src)} alt={photo.alt} loading="lazy" decoding="async" style={`object-position: ${photo.position}`} />
-    <figcaption>Photo: <a href={photo.sourceUrl}>{photo.credit}</a></figcaption>
-  </figure>
-)}
+{photo && <img class="entry-thumb" src={assetPath(photo.src)} alt="" title={`Photo: ${photo.credit}`} loading="lazy" decoding="async" style={`object-position: ${photo.position}`} />}

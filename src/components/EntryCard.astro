@@ -8,12 +8,22 @@ interface Props {
   focus?: 'module' | 'trainer';
   showSubject?: boolean;
   headingLevel?: 2 | 3;
+  // `compact` is the Manual index card: photo on top, a one-line summary, no
+  // applicability paragraph.
+  compact?: boolean;
 }
-const { entry, focus = 'module', showSubject = false, headingLevel = 2 } = Astro.props;
+const { entry, focus = 'module', showSubject = false, headingLevel = 2, compact = false } = Astro.props;
 const experience = entry.trainer?.experience;
 const asTrainer = focus === 'trainer' && entry.trainer;
 const title = asTrainer ? entry.trainer!.title : entry.title;
 const objective = asTrainer ? experience!.objective : entry.objective;
+// The compact summary is the objective's lead clause, up to its first colon
+// (or comma when it has none).
+const lead = (text: string) => {
+  const cut = text.includes(':') ? text.indexOf(':') : text.indexOf(',');
+  return cut > 0 ? `${text.slice(0, cut)}.` : text;
+};
+const summary = compact ? lead(objective) : objective;
 const applicability = asTrainer ? experience!.applicability : entry.applicability;
 const maturity = asTrainer ? experience!.maturity : entry.maturity;
 const revision = asTrainer
@@ -25,27 +35,24 @@ const markers = experience
   : { 'data-module-id': entry.module!.id, 'data-module-revision': entry.module!.revision };
 const Heading = (headingLevel === 3 ? 'h3' : 'h2') as 'h2' | 'h3';
 ---
-<section class="entry-card" {...markers}>
-  <div class="entry-body">
-    {showSubject && <p class="entry-kicker">{subjectTitle(entry.subject)}</p>}
-    <Heading class="entry-title"><a href={sitePath(entry.href)}>{title}</a></Heading>
-    <p class="entry-objective">{objective}</p>
-    <p class="entry-applicability">{applicability}</p>
-    <p class="entry-meta"><span class="maturity">{maturity}</span> · {revision}{local && ' · Local review only'}</p>
-    <p class="entry-actions">
-      {asTrainer ? (
-        <>
-          <a class="button" href={sitePath(entry.trainer!.href)} target="_blank" rel="noopener">Launch the exercise <span class="visually-hidden"> (opens in a new window)</span> <span aria-hidden="true">↗</span></a>
-          <a href={sitePath(entry.href)}>Read the {entry.title} module first</a>
-        </>
-      ) : (
-        <>
-          <a class="button" href={sitePath(entry.href)}>Read the module</a>
-          {entry.trainer && <span class="entry-extra">Includes a practice exercise</span>}
-        </>
-      )}
-    </p>
-  </div>
-  {/* Training Library cards will show the trainer itself; only module cards carry a photo. */}
-  {!asTrainer && <CardPhoto id={entry.id} />}
+<section class:list={['entry-card', { compact }]} {...markers}>
+  {compact && !asTrainer && <CardPhoto id={entry.id} />}
+  {showSubject && <p class="entry-kicker">{subjectTitle(entry.subject)}</p>}
+  <Heading class="entry-title"><a href={sitePath(entry.href)}>{title}</a></Heading>
+  <p class="entry-objective">{summary}</p>
+  {!compact && <p class="entry-applicability">{applicability}</p>}
+  <p class="entry-meta"><span class="maturity">{maturity}</span> · {revision}{local && ' · Local review only'}</p>
+  <p class="entry-actions">
+    {asTrainer ? (
+      <>
+        <a class="button" href={sitePath(entry.trainer!.href)} target="_blank" rel="noopener">Launch the exercise <span class="visually-hidden"> (opens in a new window)</span> <span aria-hidden="true">↗</span></a>
+        <a href={sitePath(entry.href)}>Read the {entry.title} module first</a>
+      </>
+    ) : (
+      <>
+        <a class="button" href={sitePath(entry.href)}>Read the module</a>
+        {entry.trainer && <span class="entry-extra">Includes a practice exercise</span>}
+      </>
+    )}
+  </p>
 </section>
