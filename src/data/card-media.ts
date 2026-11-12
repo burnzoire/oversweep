@@ -58,11 +58,11 @@ export const cardMedia: Record<string, CardMedia> = {
   'module.attitude-instrument-flying': {
     summary: 'Fly the aircraft on instruments alone.',
     photo: {
-      src: 'manual/cards/attitude-indicator.jpg',
-      alt: 'An attitude indicator showing a level attitude, with its bank scale and pitch ladder.',
-      credit: 'NASA (Reddy and Garcia), public domain',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:VMS_Artificial_Horizon.jpg',
-      position: '50% 48%',
+      src: 'manual/cards/agb-3-attitude-indicator.jpg',
+      alt: 'An AGB-3 attitude indicator showing about 10° nose down, its pitch ladder and bank scale.',
+      credit: 'SobakaRU, public domain',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Artificial_Horizon_%E2%80%94_AGB-3.jpg',
+      position: '60% 55%',
     },
   },
   'experience.ils-approach': {
