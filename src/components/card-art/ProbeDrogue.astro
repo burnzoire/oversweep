@@ -1,20 +1,4 @@
 ---
-// Card art (flat technical style, see docs/card-art.md): probe and drogue from wing pods: a tanker trailing a hose and basket from each pod with a
-// receiver plugged into each. Plan view.
-const jet = 'M0 -12 L2 -6 L3 -3 L10 4 L10 6 L3 4 L3 9 L5 11 L5 12 L0 10 L-5 12 L-5 11 L-3 9 L-3 4 L-10 6 L-10 4 L-3 -3 L-2 -6 Z';
+// Original bespoke technical card artwork for Oversweep; subject to SME review.
 ---
-<svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-probedrogue-t">
-  <title id="art-probedrogue-t">Plan view of a tanker refuelling two receivers at once, one plugged into the hose and basket trailing from each wing pod.</title>
-  <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
-  <g class="tanker2">
-    <path d="M154 46 L64 82 L64 89 L154 66 Z" /><path d="M166 46 L256 82 L256 89 L166 66 Z" />
-    <path d="M154 104 L126 116 L126 121 L154 112 Z" /><path d="M166 104 L194 116 L194 121 L166 112 Z" />
-    <path d="M160 6 C165.5 6 167 13 167 22 L167 112 L163.5 122 L156.5 122 L153 112 L153 22 C153 13 154.5 6 160 6 Z" />
-  </g>
-  <rect class="g3" x="111" y="62" width="7" height="14" rx="3" /><rect class="g3" x="202" y="62" width="7" height="14" rx="3" />
-  <rect class="g4" x="75" y="79" width="7" height="15" rx="3" /><rect class="g4" x="238" y="79" width="7" height="15" rx="3" />
-  <path class="ln" d="M78.5 94 V124 M241.5 94 V124" />
-  <path class="accent-fill" d="M75 122 H82 L86.5 133 H70.5 Z" /><path class="accent-fill" d="M238 122 H245 L249.5 133 H233.5 Z" />
-  <path class="jet" d={jet} transform="translate(78.5 148) rotate(0) scale(1.5)" />
-  <path class="jet" d={jet} transform="translate(241.5 148) rotate(0) scale(1.5)" />
-</svg>
+<svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="custom-ProbeDrogue"><title id="custom-ProbeDrogue">ProbeDrogue aviation technical illustration</title><rect class="frame" x=".5" y=".5" width="319" height="179"/><path class="ln thin muted" d="M18 18 H45 M18 18 V38 M302 18 H275 M302 18 V38 M18 162 H45 M18 162 V142 M302 162 H275 M302 162 V142"/><g class="panel"><path d="M155 25 Q160 13 165 25 L170 91 L202 112 L202 119 L168 109 L167 133 L153 133 L152 109 L118 119 L118 112 L150 91 Z"/><path d="M153 62 L70 88 L70 94 L153 80 M167 62 L250 88 L250 94 L167 80"/></g><path class="ln heavy" d="M73 94 C76 113 78 125 88 136 M247 94 C244 113 242 125 232 136"/><path class="accent-fill" d="M83 133 l10 0 5 7 -20 0 Z M227 133 l10 0 5 7 -20 0 Z"/><g class="jet" transform="translate(89 155) rotate(0) scale(.85)"><path d="M0 -17 C3 -14 3 -8 4 -5 L23 6 L23 11 L5 7 L6 16 L11 20 L11 23 L0 20 L-11 23 L-11 20 L-6 16 L-5 7 L-23 11 L-23 6 L-4 -5 C-3 -8 -3 -14 0 -17 Z"/></g><g class="jet muted" transform="translate(231 155) scale(.85)"><path d="M0 -17 C3 -14 3 -8 4 -5 L23 6 L23 11 L5 7 L6 16 L11 20 L11 23 L0 20 L-11 23 L-11 20 L-6 16 L-5 7 L-23 11 L-23 6 L-4 -5 C-3 -8 -3 -14 0 -17 Z"/></g><g class="ln thin muted"><path d="M80 120 H104 M216 120 H240"/></g><text class="card" x="160" y="22">WING-POD AAR</text></svg>
