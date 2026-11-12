@@ -1,14 +1,19 @@
 ---
-// Card art: Angle of attack, close up: an airfoil pitched up into a level relative wind (the arrows ahead
-// of it), its chord line, and lift acting perpendicular to the relative wind.
+// Principles of flight. Editorial instrument-plate styling, static vector.
+// Simplified airflow visual, not a quantitative pressure/velocity diagram.
 ---
 <svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-fixedwingaoa-t">
-  <title id="art-fixedwingaoa-t">An airfoil pitched up into a level relative wind, at an angle of attack, with lift acting perpendicular to the relative wind.</title>
+  <title id="art-fixedwingaoa-t">Airfoil section in a relative wind with surrounding flow lines and an upward lift vector.</title>
   <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
-  <g transform="rotate(10 160 95)">
-    <path class="ln thin dashed" d="M80 95 L262 95" />
-    <path class="jet muted" d="M90 95 C92 82 120 76 150 77 C190 79 225 89 240 95 C215 97 180 99 150 100 C120 101 95 101 90 95 Z" />
+  <g class="ln thin muted" opacity=".7">
+    <path d="M18 66 C66 66 76 48 133 49 C191 50 238 73 303 70" />
+    <path d="M18 77 C65 77 78 61 133 62 C189 63 239 83 303 83" />
+    <path d="M18 101 C64 101 78 115 133 113 C193 111 240 102 303 106" />
+    <path d="M18 112 C67 112 79 128 134 126 C197 124 243 116 303 119" />
   </g>
-  <path class="ln" d="M14 60 H60 m-9 -5 l9 5 l-9 5 M14 83 H60 m-9 -5 l9 5 l-9 5 M14 106 H60 m-9 -5 l9 5 l-9 5" />
-  <path class="ln heavy" d="M128 84 L128 24 m-6 10 l6 -10 l6 10" />
+  <g class="ln"><path d="M19 90 H67 m-9 -5 l9 5 -9 5 M19 105 H57 m-9 -5 l9 5 -9 5"/></g>
+  <path class="airfoil" d="M75 95 C98 72 140 71 171 78 C211 85 250 100 272 108 C209 110 131 104 75 95 Z"/>
+  <path class="ln thin muted dashed" d="M73 95 L284 112"/>
+  <path class="accent-stroke" d="M161 79 V26 m-7 10 l7 -10 7 10" />
+  <text class="annotation" x="176" y="35">L</text>
 </svg>
