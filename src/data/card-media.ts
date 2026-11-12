@@ -58,11 +58,11 @@ export const cardMedia: Record<string, CardMedia> = {
   'module.attitude-instrument-flying': {
     summary: 'Fly the aircraft on instruments alone.',
     photo: {
-      src: 'manual/cards/agb-3-attitude-indicator.jpg',
-      alt: 'An AGB-3 attitude indicator showing about 5° nose down, its pitch ladder and bank scale.',
-      credit: 'SobakaRU, public domain',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Artificial_Horizon_%E2%80%94_AGB-3.jpg',
-      position: '60% 55%',
+      src: 'manual/cards/c-130-cockpit-in-flight.jpg',
+      alt: 'Pilots flying a C-130 in flight, the instrument panel with its attitude indicators in front of them.',
+      credit: 'US Air Force, public domain',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:110319-F-PM645-435_36AS_C-130_cockpit_in_flight_from_Yokota_to_Hyakuri.jpg',
+      position: '40% 60%',
     },
   },
   'experience.ils-approach': {
