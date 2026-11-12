@@ -8,7 +8,7 @@ inService: "The FFAR from the early 1950s; the Mk 66 motor of the Hydra 70 repla
 weight: "Mk 66 motor 13.6 lb (6.2 kg); about 25 lb (11 kg) for a complete rocket, depending on the warhead [1]"
 dimensions: "Diameter 2.75 in (70 mm); motor length 41.7 in (1.06 m) [1]"
 warhead: "Interchangeable: the M151 10 lb high-explosive warhead is the most common; also dual-purpose, smoke, illumination, flechette and practice warheads [1] [3]"
-guidance: "None; the APKWS laser guidance kit converts it into a guided rocket [1]"
+guidance: "None; the [APKWS](record:apkws) laser guidance kit converts it into a guided rocket [1]"
 fuzing: "Impact-detonating or remote-set multi-option [fuzes](term:fuze) on unitary warheads; settable air-burst [fuzes](term:fuze) on cargo warheads [1]"
 delivery: "Fired singly or rippled from 7- and 19-tube launchers [1] [4]"
 range: "547–8,749 yd (0.5–8 km) effective, depending on warhead and platform; up to 11,483 yd under optimum conditions [1]"
