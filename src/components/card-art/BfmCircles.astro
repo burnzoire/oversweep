@@ -1,15 +1,16 @@
 ---
-// Two-circle BFM flow, stylised plan view. Turn directions require SME verification
-// against bfm/FlowFigure prior to publication.
+// Two-circle BFM flow, stylised plan view. The two circles meet at the
+// neutral pass rather than overlap. Review the aircraft headings and turn
+// directions against bfm/FlowFigure during the final aviation SME review.
 const jet='M0 -12 L2 -6 L3 -3 L10 4 L10 6 L3 4 L3 9 L5 11 L5 12 L0 10 L-5 12 L-5 11 L-3 9 L-3 4 L-10 6 L-10 4 L-3 -3 L-2 -6 Z';
 ---
 <svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-bfm-t">
-<title id="art-bfm-t">Two aircraft manoeuvring through adjacent turning circles, illustrating two-circle BFM flow.</title>
-<rect class="frame" x=".5" y=".5" width="319" height="179"/>
-<circle class="ln thin muted dashed" cx="113" cy="90" r="53"/>
-<circle class="ln heavy" cx="207" cy="90" r="53"/>
-<path class="ln" d="M113 37 l-9 -5 M113 37 l-9 6 M207 143 l9 -5 M207 143 l9 5"/>
-<path class="accent-stroke" d="M260 90 A53 53 0 0 1 228 139 m11 -2 l-11 2 4 -11"/>
-<path class="jet" d={jet} transform="translate(159 66) rotate(30) scale(1.35)"/>
-<path class="jet muted" d={jet} transform="translate(161 114) rotate(210) scale(1.35)"/>
+  <title id="art-bfm-t">Two-circle BFM flow with two tangent turning circles and aircraft separated on their respective turn paths.</title>
+  <rect class="frame" x=".5" y=".5" width="319" height="179"/>
+  <circle class="ln thin muted dashed" cx="107" cy="90" r="53"/>
+  <circle class="ln heavy" cx="213" cy="90" r="53"/>
+  <path class="ln" d="M107 37 l-9 -5 M107 37 l-9 6 M213 143 l9 -5 M213 143 l9 5"/>
+  <path class="accent-stroke" d="M266 90 A53 53 0 0 1 234 139 m11 -2 l-11 2 4 -11"/>
+  <path class="jet" d={jet} transform="translate(166 67) rotate(28) scale(1.25)"/>
+  <path class="jet muted" d={jet} transform="translate(154 113) rotate(208) scale(1.25)"/>
 </svg>
