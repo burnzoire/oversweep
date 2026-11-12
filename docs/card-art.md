@@ -90,3 +90,24 @@ grey fills `g1`–`g4`; ink faces `face`/`ink` with white markings (`line-w`,
 `launcher`, `deck`, `sign`, `papi-red`, `button-top`, `tanker2` and `a10b`.
 Each component's header comment says what it depicts. All 28 are pending
 final SME review of the geometry before merge.
+
+
+## Bespoke redraw pass — 12 November 2026
+
+The 24 card-art components beyond the first four prototypes have now been
+**rewritten with new SVG composition and geometry**, not merely recoloured.
+Eight instruments/aviation fundamentals, eight formations/flight-operations
+subjects and eight threat/ship/emergency subjects have custom editorial
+technical plates. The components keep the same 320×180 registration and
+accessibility contract.
+
+The redraw is a **design proposal**, not aviation SME approval. Confirm visual
+quality at actual card size and validate all depicted operational geometry:
+marshalling and approaches, PAPI / holding-position markings, ILS / HSI
+indications, formation positioning, two-point refuelling, weapons delivery,
+SAM site, carrier deck, BFM and intercept geometry. Some designs use simplified
+or symbolic rather than aircraft-type-accurate equipment, and illustrations
+must not be presented as procedural reference without verification.
+
+Do not interpret passing build checks as design or aviation sign-off. Retain
+this PR in draft until design screenshots and SME review are completed.
