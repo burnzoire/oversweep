@@ -1,0 +1,33 @@
+---
+// One search box: input, live status and results, wired by
+// src/scripts/site-search.mjs. Used in the header dialog and on /search/.
+import { assetPath } from "../lib/paths";
+
+interface Props {
+  id: string;
+  page?: boolean;
+}
+
+const { id, page = false } = Astro.props;
+---
+
+<div class:list={["search-box", { "search-box-page": page }]} data-search data-search-page={page ? "" : undefined} data-index={assetPath("search-index.json")} data-pagefind={assetPath("pagefind/pagefind.js")}>
+  <form class="search-form" role="search" action={assetPath("search/")} method="get">
+    <label class="visually-hidden" for={`${id}-input`}>Search Oversweep</label>
+    <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m15.5 15.5 5 5" /></svg>
+    <input
+      id={`${id}-input`}
+      class="search-input"
+      type="search"
+      name="q"
+      placeholder="Modules, aircraft, SAMs, airfields, terms…"
+      autocomplete="off"
+      spellcheck="false"
+      enterkeyhint="go"
+      data-search-input
+    />
+    <slot />
+  </form>
+  <p class="search-status" role="status" aria-live="polite" data-search-status></p>
+  <ul class="search-results" data-search-results></ul>
+</div>
