@@ -1,21 +1,7 @@
 ---
-// Card art (flat technical style, see docs/card-art.md): attitude indicator in a gentle right bank with the nose a few degrees up: sky and
-// ground halves, horizon, pitch ladder, bank scale and the fixed aircraft symbol.
+// Oversweep card-art: redrawn as an editorial aviation technical plate.
+// Simplified visual reference; review procedure-specific geometry with the SME.
 ---
-<svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-attitudeindicator-t">
-  <title id="art-attitudeindicator-t">An attitude indicator in a gentle right bank with the nose slightly above the horizon.</title>
-  <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
-  <rect class="panel" x="78" y="8" width="164" height="164" rx="10" /><g class="fastener"><circle cx="87" cy="17" r="3" /><circle cx="233" cy="17" r="3" /><circle cx="87" cy="163" r="3" /><circle cx="233" cy="163" r="3" /></g>
-  <circle class="face" cx="160" cy="90" r="72" />
-  <defs><clipPath id="art-ai-clip"><circle cx="160" cy="90" r="60" /></clipPath></defs>
-  <g clip-path="url(#art-ai-clip)"><g transform="rotate(-15 160 90)">
-    <rect class="sky" x="80" y="10" width="160" height="88" />
-    <rect class="earth" x="80" y="98" width="160" height="80" />
-    <path class="line-w heavy" d="M80 98 H240" />
-    <path class="line-w" d="M146 80 H174 M152 62 H168 M146 116 H174 M152 134 H168" />
-  </g></g>
-  <path class="line-w" d="M99.4 55 L106.3 59 M110.5 40.5 L114 44 M125 29.4 L129 36.3 M136.1 24.2 L137.8 28.9 M147.8 21.1 L148.7 26 M160 20 L160 28 M172.2 21.1 L171.3 26 M183.9 24.2 L182.2 28.9 M195 29.4 L191 36.3 M209.5 40.5 L206 44 M220.6 55 L213.7 59" />
-  <path class="w" transform="rotate(-15 160 90)" d="M160 31 L155 40 H165 Z" />
-  <path class="accent-fill" d="M118 88 H146 L153 96 L160 89 L167 96 L174 88 H202 V92 H176 L167 101 L160 94 L153 101 L144 92 H118 Z" />
-  <circle class="accent-fill" cx="160" cy="90" r="2.6" />
+<svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="new-AttitudeIndicator">
+<title id="new-AttitudeIndicator">Attitude Indicator technical illustration</title><rect class="frame" x=".5" y=".5" width="319" height="179"/><path class="ln thin muted" d="M18 18 H45 M18 18 V38 M302 18 H275 M302 18 V38 M18 162 H45 M18 162 V142 M302 162 H275 M302 162 V142"/><rect class="panel" x="79" y="9" width="162" height="162" rx="8"/><defs><clipPath id="new-ai-clip"><circle cx="160" cy="90" r="65"/></clipPath></defs><circle class="screen-dark" cx="160" cy="90" r="69"/><g clip-path="url(#new-ai-clip)"><g transform="rotate(-17 160 90)"><rect class="screen" x="74" y="9" width="172" height="93"/><rect class="ship" x="74" y="102" width="172" height="83"/><path class="ln heavy" d="M73 102 H247"/><g class="ln thin"><path d="M147 71 H173 M137 82 H183 M147 118 H173 M137 130 H183"/></g><g class="tiny-label"><text x="128" y="82">10</text><text x="192" y="82">10</text><text x="128" y="130">10</text><text x="192" y="130">10</text></g></g></g><circle class="ln heavy" cx="160" cy="90" r="66"/><g class="ln thin"><path transform="rotate(-60 160 90)" d="M160 23 V30"/><path transform="rotate(-45 160 90)" d="M160 23 V30"/><path transform="rotate(-30 160 90)" d="M160 23 V30"/><path transform="rotate(0 160 90)" d="M160 23 V35"/><path transform="rotate(30 160 90)" d="M160 23 V30"/><path transform="rotate(45 160 90)" d="M160 23 V30"/><path transform="rotate(60 160 90)" d="M160 23 V30"/></g><path class="accent-fill" d="M160 22 l-6 9 h12 Z"/><path class="accent-stroke" d="M108 88 H141 l19 11 19 -11 H212 M160 86 V97"/><text class="card" x="160" y="166">ATTITUDE · BANK</text>
 </svg>
