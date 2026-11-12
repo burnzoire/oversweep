@@ -1,19 +1,4 @@
 ---
-// Card art (flat technical style, see docs/card-art.md): holding short: an aircraft on the taxiway at the runway holding position marking (solid lines
-// on the taxiway side, dashed on the runway side), beside the runway holding position sign.
-const jet = 'M0 -12 L2 -6 L3 -3 L10 4 L10 6 L3 4 L3 9 L5 11 L5 12 L0 10 L-5 12 L-5 11 L-3 9 L-3 4 L-10 6 L-10 4 L-3 -3 L-2 -6 Z';
+// Hand-composed Oversweep vector artwork. Teaching schematic; aviation SME review required.
 ---
-<svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-holdshort-t">
-  <title id="art-holdshort-t">Plan view of an aircraft on a taxiway, holding short at the runway holding position marking beside the holding position sign. Not to scale.</title>
-  <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
-  <rect class="g1" x="1" y="1" width="318" height="178" />
-  <rect class="g4" x="1" y="18" width="318" height="44" />
-  <path class="line-w" d="M1 22 H319 M1 58 H319" />
-  <path class="line-w heavy" d="M14 40 H44 M68 40 H98 M122 40 H152 M176 40 H206 M230 40 H260 M284 40 H314" />
-  <rect class="g4" x="138" y="62" width="44" height="118" />
-  <path class="accent-stroke thin" d="M160 40 V180" />
-  <path class="accent-stroke thin" d="M138 70 H182 M138 76 H182" style="stroke-dasharray:5 4" />
-  <path class="accent-stroke thin" d="M138 84 H182 M138 90 H182" />
-  <rect class="sign" x="196" y="70" width="44" height="18" rx="2" /><text class="face-label small" x="218" y="83">9-27</text>
-  <path class="jet" d={jet} transform="translate(160 124) rotate(0) scale(2.1)" />
-</svg>
+<svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="custom-HoldShort"><title id="custom-HoldShort">HoldShort custom aviation technical plate</title><rect class="frame" x=".5" y=".5" width="319" height="179"/><path class="ln thin muted" d="M18 18 H45 M18 18 V38 M302 18 H275 M302 18 V38 M18 162 H45 M18 162 V142 M302 162 H275 M302 162 V142"/><rect class="screen" x="24" y="23" width="272" height="134" rx="3"/><rect class="ship" x="190" y="23" width="91" height="134"/><path class="ln thin muted dashed" d="M236 28 V150"/><path class="ln" d="M43 90 H281"/><path class="ln heavy" d="M179 26 V154 M185 26 V154"/><path class="ln thin dashed" d="M195 26 V154 M201 26 V154"/><g class="jet" transform="translate(115 89) rotate(90) scale(1.45)"><path d="M0 -17 C3 -14 3 -8 4 -5 L23 6 L23 11 L5 7 L6 16 L11 20 L11 23 L0 20 L-11 23 L-11 20 L-6 16 L-5 7 L-23 11 L-23 6 L-4 -5 C-3 -8 -3 -14 0 -17 Z"/></g><path class="accent-stroke" d="M179 35 V146"/><rect class="screen-dark" x="143" y="136" width="31" height="17" rx="2"/><text x="158" y="149" fill="#fff" font-size="11" font-family="Arial" text-anchor="middle">09-27</text><text class="card" x="76" y="35">TAXIWAY</text><text class="card" x="245" y="35">RUNWAY</text></svg>
