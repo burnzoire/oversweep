@@ -1,0 +1,46 @@
+---
+// Card photos: a cropped, credited photograph on a Manual module card (#238,
+// photo trial). Photos reuse public-domain images the encyclopedia already
+// holds and credits; `position` sets the crop focus for the 16:9 frame.
+import { assetPath } from '../../lib/paths';
+
+interface CardPhotoEntry {
+  src: string;
+  alt: string;
+  position: string;
+  credit: string;
+  sourceUrl: string;
+}
+
+const photos: Record<string, CardPhotoEntry> = {
+  'module.aar-procedures': {
+    src: 'encyclopedia/aircraft/kc-135.jpg',
+    alt: 'A KC-135R tanker refuelling an F-15C through its boom over cloud.',
+    position: '50% 45%',
+    credit: 'US Air Force, public domain',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:F-15C_Eagle_from_the_67th_Fighter_Squadron_at_Kadena_AB_is_refueled_by_a_KC-135R_Stratotanker_from_the_909th_Air_Refueling_Squadron_.jpg',
+  },
+  'module.close-air-support': {
+    src: 'encyclopedia/aircraft/a-10.jpg',
+    alt: 'An A-10 Thunderbolt II in flight over desert, carrying bombs and missiles under its wings.',
+    position: '50% 50%',
+    credit: 'Master Sgt. William Greer, US Air Force, public domain',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Fairchild_Republic_A-10_Thunderbolt_II_-_32156159151.jpg',
+  },
+  'module.sead-dead': {
+    src: 'encyclopedia/ordnance/agm-88.jpg',
+    alt: 'An AGM-88 HARM anti-radiation missile under the wing of an F-4G Wild Weasel.',
+    position: '50% 50%',
+    credit: 'SSgt. Scott Stewart, US Air Force, public domain',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:AGM-88_HARM_on_F-4G_(cropped).jpg',
+  },
+};
+
+const photo = photos[Astro.props.id as string];
+---
+{photo && (
+  <figure class="entry-art card-photo">
+    <img src={assetPath(photo.src)} alt={photo.alt} loading="lazy" decoding="async" style={`object-position: ${photo.position}`} />
+    <figcaption>Photo: <a href={photo.sourceUrl}>{photo.credit}</a></figcaption>
+  </figure>
+)}
