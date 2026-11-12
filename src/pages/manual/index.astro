@@ -14,7 +14,9 @@ const available = manualSubjects.filter((s) => subjectEntries(s.slug).length > 0
   {available.map((subject) => (
     <section class="subject-group" aria-labelledby={`subject-${subject.slug}`}>
       <h2 id={`subject-${subject.slug}`}><a href={sitePath(`manual/${subject.slug}/`)}>{subject.title}</a></h2>
-      {subjectEntries(subject.slug).map((entry) => <EntryCard entry={entry} headingLevel={3} />)}
+      <div class="entry-grid">
+        {subjectEntries(subject.slug).map((entry) => <EntryCard entry={entry} headingLevel={3} compact />)}
+      </div>
     </section>
   ))}
 </SiteLayout>

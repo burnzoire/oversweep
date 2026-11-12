@@ -1,18 +1,25 @@
 ---
 import { subjectTitle, type Entry } from '../data/availability';
 import { sitePath } from '../lib/paths';
+import CardPhoto from './card-photo/CardPhoto.astro';
+import { cardMedia } from '../data/card-media';
 interface Props {
   entry: Entry;
   // `trainer` presents the standalone exercise first, for the Training Library.
   focus?: 'module' | 'trainer';
   showSubject?: boolean;
   headingLevel?: 2 | 3;
+  // `compact` is the Manual index card: photo on top, the one-line summary from
+  // card-media.ts, no applicability paragraph.
+  compact?: boolean;
 }
-const { entry, focus = 'module', showSubject = false, headingLevel = 2 } = Astro.props;
+const { entry, focus = 'module', showSubject = false, headingLevel = 2, compact = false } = Astro.props;
 const experience = entry.trainer?.experience;
 const asTrainer = focus === 'trainer' && entry.trainer;
 const title = asTrainer ? entry.trainer!.title : entry.title;
 const objective = asTrainer ? experience!.objective : entry.objective;
+// Compact cards show the one-line summary from card-media.ts.
+const summary = (compact && cardMedia[entry.id]?.summary) || objective;
 const applicability = asTrainer ? experience!.applicability : entry.applicability;
 const maturity = asTrainer ? experience!.maturity : entry.maturity;
 const revision = asTrainer
@@ -24,11 +31,12 @@ const markers = experience
   : { 'data-module-id': entry.module!.id, 'data-module-revision': entry.module!.revision };
 const Heading = (headingLevel === 3 ? 'h3' : 'h2') as 'h2' | 'h3';
 ---
-<section class="entry-card" {...markers}>
+<section class:list={['entry-card', { compact }]} {...markers}>
+  {compact && !asTrainer && <CardPhoto id={entry.id} />}
   {showSubject && <p class="entry-kicker">{subjectTitle(entry.subject)}</p>}
   <Heading class="entry-title"><a href={sitePath(entry.href)}>{title}</a></Heading>
-  <p class="entry-objective">{objective}</p>
-  <p class="entry-applicability">{applicability}</p>
+  <p class="entry-objective">{summary}</p>
+  {!compact && <p class="entry-applicability">{applicability}</p>}
   <p class="entry-meta"><span class="maturity">{maturity}</span> · {revision}{local && ' · Local review only'}</p>
   <p class="entry-actions">
     {asTrainer ? (

@@ -1,0 +1,11 @@
+---
+// The photo on a compact Manual card. It is decorative, like the encyclopedia
+// card thumbnails, because the card title follows it; the credit is a hover
+// title rather than a caption, and the full credit stays on the encyclopedia
+// record.
+import { cardMedia } from '../../data/card-media';
+import { assetPath } from '../../lib/paths';
+
+const photo = cardMedia[Astro.props.id as string]?.photo;
+---
+{photo && <img class="entry-thumb" src={assetPath(photo.src)} alt="" title={`Photo: ${photo.credit}`} loading="lazy" decoding="async" style={photo.position ? `object-position: ${photo.position}` : undefined} />}
