@@ -220,10 +220,11 @@ export const cardMedia: Record<string, CardMedia> = {
   'module.bfm': {
     summary: 'Turn with an opponent and win the fight within visual range.',
     photo: {
-      src: 'encyclopedia/aircraft/mig-15-3.jpg',
-      alt: 'A gun-camera frame of a MiG-15 seen from behind.',
-      credit: 'US Air Force, public domain',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:MiG-15_being_hit_over_Korea_c1953.jpg',
+      src: 'manual/cards/tomcat-turn.jpg',
+      alt: 'An F-14B Tomcat in a hard banked turn with afterburners lit and vapour trailing from its wingtips.',
+      credit: 'PHC Mahlon K. Miller, US Navy, public domain',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:F-14B_VF-101_Air_Show_Turn_2004.JPEG',
+      position: '50% 40%',
     },
   },
   'module.bvr-intercepts': {
@@ -238,10 +239,11 @@ export const cardMedia: Record<string, CardMedia> = {
   'module.radar-and-warning': {
     summary: 'How radar searches and locks, and how warning receivers and countermeasures answer it.',
     photo: {
-      src: 'encyclopedia/radar-sensors/ale-47.jpg',
-      alt: 'A Hornet climbing away as flares fall behind it.',
-      credit: 'Mass Communication Specialist 2nd Class James R. Evans, US Navy, public domain',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:US_Navy_110603-N-DR144-202_An_F-A-18C_Hornet_deploys_flares_while_flying_faster_than_the_speed_of_sound_alongside_USS_Carl_Vinson_(CVN_70)_during_a.jpg',
+      src: 'manual/cards/flares.jpg',
+      alt: 'An F-15E Strike Eagle banking over mountains as it pumps out flares.',
+      credit: 'Staff Sgt. Aaron Allmon, US Air Force, public domain',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Afghanistan_Flyover,_F-15E_from_391st_Expeditionary_Fighter_Squadron_deploys_flares_during_a_flight_over_Afghanistan,_Nov._12,_2008.jpg',
+      position: '50% 50%',
     },
   },
   'module.situational-awareness': {
