@@ -1,18 +1,17 @@
 ---
-// Card art: A bullseye reference, close up: range rings and bearing lines around the bullseye, a contact
-// group placed from it and own aircraft.
-const jet = 'M0 -11 L2 -5 L2 -2 L9 3 L9 5 L2 3 L2 7 L4 10 L4 11 L0 10 L-4 11 L-4 10 L-2 7 L-2 3 L-9 5 L-9 3 L-2 -2 L-2 -5 Z';
+// Card art (flat technical style, see docs/card-art.md): a bullseye reference: range rings and bearing spokes around the bullseye, a hostile group
+// placed by bearing and range from it, and own aircraft.
+const jet = 'M0 -12 L2 -6 L3 -3 L10 4 L10 6 L3 4 L3 9 L5 11 L5 12 L0 10 L-5 12 L-5 11 L-3 9 L-3 4 L-10 6 L-10 4 L-3 -3 L-2 -6 Z';
 ---
 <svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-bullseye-t">
-  <title id="art-bullseye-t">A bullseye with range rings and bearing lines, a contact group placed by bearing and range from it, and own aircraft.</title>
+  <title id="art-bullseye-t">A bullseye with range rings and bearing spokes, a hostile group placed by bearing and range from it, and own aircraft.</title>
   <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
-  <circle class="ln thin dashed" cx="120" cy="98" r="22" />
-  <circle class="ln thin dashed" cx="120" cy="98" r="44" />
-  <circle class="ln thin dashed" cx="120" cy="98" r="66" />
-  <path class="ln thin" d="M120 26 V170 M48 98 H192" />
-  <circle class="fix" cx="120" cy="98" r="4" />
-  <path class="ln dashed" d="M120 98 L246 52" />
-  <path class="jet muted" d={jet} transform="translate(244 50) rotate(-120) scale(1.2)" />
-  <path class="jet muted" d={jet} transform="translate(262 62) rotate(-120) scale(1.2)" />
-  <path class="jet" d={jet} transform="translate(210 146) rotate(-40) scale(1.4)" />
+  <rect class="g1" x="10" y="10" width="300" height="160" rx="4" />
+  <path class="grid-ink" d="M118 88 L118 26 M123.7 90.3 L167.5 46.5 M126 96 L188 96 M123.7 101.7 L167.5 145.5 M118 104 L118 166 M112.3 101.7 L68.5 145.5 M110 96 L48 96 M112.3 90.3 L68.5 46.5" />
+  <circle class="ring-ink thin" cx="118" cy="96" r="24" /><circle class="ring-ink thin" cx="118" cy="96" r="48" /><circle class="ring-ink thin" cx="118" cy="96" r="70" />
+  <circle class="w-ink" cx="118" cy="96" r="7" /><circle class="ink" cx="118" cy="96" r="2.5" />
+  <path class="ln dashed" d="M125 93.5 L232 56" />
+  <path class="accent-fill" d={jet} transform="translate(236 46) rotate(-109) scale(1.4)" />
+  <path class="accent-fill" d={jet} transform="translate(262 68) rotate(-109) scale(1.4)" />
+  <path class="jet" d={jet} transform="translate(220 146) rotate(-40) scale(1.6)" />
 </svg>

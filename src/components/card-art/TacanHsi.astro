@@ -1,20 +1,24 @@
 ---
-// Card art: The TACAN course indicator (HSI), close up: the compass card, the course arrow set to
-// 040 with its deviation bar showing the course to the right, and the TO arrow.
-const jet = 'M0 -11 L2 -5 L2 -2 L9 3 L9 5 L2 3 L2 7 L4 10 L4 11 L0 10 L-4 11 L-4 10 L-2 7 L-2 3 L-9 5 L-9 3 L-2 -2 L-2 -5 Z';
+// Card art (flat technical style, see docs/card-art.md): horizontal situation indicator on a TACAN course of 040: compass card, course arrow and
+// deviation bar (course to the right), TO arrow, DME and course windows.
+const jet = 'M0 -12 L2 -6 L3 -3 L10 4 L10 6 L3 4 L3 9 L5 11 L5 12 L0 10 L-5 12 L-5 11 L-3 9 L-3 4 L-10 6 L-10 4 L-3 -3 L-2 -6 Z';
 ---
 <svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-tacanhsi-t">
-  <title id="art-tacanhsi-t">A horizontal situation indicator set for a TACAN course of 040: the deviation bar right of centre, so the course is to the right, with the TO arrow showing.</title>
+  <title id="art-tacanhsi-t">A horizontal situation indicator tuned to a TACAN: course 040 selected, the deviation bar right of centre so the course lies to the right, the TO arrow showing, and 12.4 miles on the DME.</title>
   <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
-  <circle class="ln" cx="160" cy="90" r="68" />
-  <path class="ln thin" d="M160.0 22.0 L160.0 32.0 M171.8 23.0 L170.9 28.0 M183.3 26.1 L181.5 30.8 M194.0 31.1 L189.0 39.8 M203.7 37.9 L200.5 41.7 M212.1 46.3 L208.3 49.5 M218.9 56.0 L210.2 61.0 M223.9 66.7 L219.2 68.5 M227.0 78.2 L222.0 79.1 M228.0 90.0 L218.0 90.0 M227.0 101.8 L222.0 100.9 M223.9 113.3 L219.2 111.5 M218.9 124.0 L210.2 119.0 M212.1 133.7 L208.3 130.5 M203.7 142.1 L200.5 138.3 M194.0 148.9 L189.0 140.2 M183.3 153.9 L181.5 149.2 M171.8 157.0 L170.9 152.0 M160.0 158.0 L160.0 148.0 M148.2 157.0 L149.1 152.0 M136.7 153.9 L138.5 149.2 M126.0 148.9 L131.0 140.2 M116.3 142.1 L119.5 138.3 M107.9 133.7 L111.7 130.5 M101.1 124.0 L109.8 119.0 M96.1 113.3 L100.8 111.5 M93.0 101.8 L98.0 100.9 M92.0 90.0 L102.0 90.0 M93.0 78.2 L98.0 79.1 M96.1 66.7 L100.8 68.5 M101.1 56.0 L109.8 61.0 M107.9 46.3 L111.7 49.5 M116.3 37.9 L119.5 41.7 M126.0 31.1 L131.0 39.8 M136.7 26.1 L138.5 30.8 M148.2 23.0 L149.1 28.0" />
-  <text class="card" x="160.0" y="45.5">N</text><text class="card" x="184.0" y="51.9">3</text><text class="card" x="201.6" y="69.5">6</text><text class="card" x="208.0" y="93.5">E</text><text class="card" x="201.6" y="117.5">12</text><text class="card" x="184.0" y="135.1">15</text><text class="card" x="160.0" y="141.5">S</text><text class="card" x="136.0" y="135.1">21</text><text class="card" x="118.4" y="117.5">24</text><text class="card" x="112.0" y="93.5">W</text><text class="card" x="118.4" y="69.5">30</text><text class="card" x="136.0" y="51.9">33</text>
-  <path class="fix" d="M160 14 L155 6 H165 Z" />
+  <rect class="panel" x="78" y="8" width="164" height="164" rx="10" /><g class="fastener"><circle cx="87" cy="17" r="3" /><circle cx="233" cy="17" r="3" /><circle cx="87" cy="163" r="3" /><circle cx="233" cy="163" r="3" /></g>
+  <circle class="face" cx="160" cy="90" r="70" />
+  <path class="line-w" d="M160 24 L160 33 M165.8 24.3 L165.4 27.7 M171.5 25 L170.4 30.9 M177.1 26.2 L176.2 29.6 M182.6 28 L180.5 33.6 M187.9 30.2 L186.4 33.4 M193 32.8 L188.5 40.6 M197.9 35.9 L195.8 38.8 M202.4 39.4 L198.6 44 M206.7 43.3 L204.2 45.8 M210.6 47.6 L206 51.4 M214.1 52.1 L211.2 54.2 M217.2 57 L209.4 61.5 M219.8 62.1 L216.6 63.6 M222 67.4 L216.4 69.5 M223.8 72.9 L220.4 73.8 M225 78.5 L219.1 79.6 M225.7 84.2 L222.3 84.6 M226 90 L217 90 M225.7 95.8 L222.3 95.4 M225 101.5 L219.1 100.4 M223.8 107.1 L220.4 106.2 M222 112.6 L216.4 110.5 M219.8 117.9 L216.6 116.4 M217.2 123 L209.4 118.5 M214.1 127.9 L211.2 125.8 M210.6 132.4 L206 128.6 M206.7 136.7 L204.2 134.2 M202.4 140.6 L198.6 136 M197.9 144.1 L195.8 141.2 M193 147.2 L188.5 139.4 M187.9 149.8 L186.4 146.6 M182.6 152 L180.5 146.4 M177.1 153.8 L176.2 150.4 M171.5 155 L170.4 149.1 M165.8 155.7 L165.4 152.3 M160 156 L160 147 M154.2 155.7 L154.6 152.3 M148.5 155 L149.6 149.1 M142.9 153.8 L143.8 150.4 M137.4 152 L139.5 146.4 M132.1 149.8 L133.6 146.6 M127 147.2 L131.5 139.4 M122.1 144.1 L124.2 141.2 M117.6 140.6 L121.4 136 M113.3 136.7 L115.8 134.2 M109.4 132.4 L114 128.6 M105.9 127.9 L108.8 125.8 M102.8 123 L110.6 118.5 M100.2 117.9 L103.4 116.4 M98 112.6 L103.6 110.5 M96.2 107.1 L99.6 106.2 M95 101.5 L100.9 100.4 M94.3 95.8 L97.7 95.4 M94 90 L103 90 M94.3 84.2 L97.7 84.6 M95 78.5 L100.9 79.6 M96.2 72.9 L99.6 73.8 M98 67.4 L103.6 69.5 M100.2 62.1 L103.4 63.6 M102.8 57 L110.6 61.5 M105.9 52.1 L108.8 54.2 M109.4 47.6 L114 51.4 M113.3 43.3 L115.8 45.8 M117.6 39.4 L121.4 44 M122.1 35.9 L124.2 38.8 M127 32.8 L131.5 40.6 M132.1 30.2 L133.6 33.4 M137.4 28 L139.5 33.6 M142.9 26.2 L143.8 29.6 M148.5 25 L149.6 30.9 M154.2 24.3 L154.6 27.7" />
+  <text class="face-label" x="160" y="45">N</text><text class="face-label" x="184.5" y="51.6">3</text><text class="face-label" x="202.4" y="69.5">6</text><text class="face-label" x="209" y="94">E</text><text class="face-label" x="202.4" y="118.5">12</text><text class="face-label" x="184.5" y="136.4">15</text><text class="face-label" x="160" y="143">S</text><text class="face-label" x="135.5" y="136.4">21</text><text class="face-label" x="117.6" y="118.5">24</text><text class="face-label" x="111" y="94">W</text><text class="face-label" x="117.6" y="69.5">30</text><text class="face-label" x="135.5" y="51.6">33</text>
+  <path class="w" d="M160 23 L155 14 H165 Z" />
   <g transform="rotate(40 160 90)">
-    <path class="fix" d="M160 36 L154 48 H166 Z" />
-    <path class="ln heavy" d="M160 48 V68 M160 112 V140" />
-    <path class="ln heavy" d="M171 70 V110" />
-    <path class="fix" d="M150 64 L154 56 L158 64 Z" />
+    <g class="dots-w"><circle cx="134" cy="90" r="2.2" /><circle cx="147" cy="90" r="2.2" /><circle cx="173" cy="90" r="2.2" /><circle cx="186" cy="90" r="2.2" /></g>
+    <path class="accent-fill" d="M160 30 L153.5 42 H158 V58 H162 V42 H166.5 Z" />
+    <path class="accent-fill" d="M158 122 H162 V150 H158 Z" />
+    <path class="accent-fill" d="M171 70 H175 V110 H171 Z" />
+    <path class="w" d="M160 62 L154 70 H166 Z" />
   </g>
-  <path class="jet" d={jet} transform="translate(160 90) rotate(0) scale(0.9)" />
+  <path class="w" d={jet} transform="translate(160 92) scale(0.95)" />
+  <rect class="face" x="86" y="15" width="32" height="15" rx="2" /><text class="face-label small" x="102" y="26">12.4</text>
+  <rect class="face" x="202" y="15" width="32" height="15" rx="2" /><text class="face-label small" x="218" y="26">040</text>
 </svg>

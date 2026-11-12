@@ -81,10 +81,12 @@ Required production standard:
 SVG structure and shared visual primitives. These are **prototypes**, pending
 visual and SME review, not proof the entire suite is ready.
 
-**Remaining work:** every other art component in `src/components/card-art/`
-needs an individual art-direction review and, where not already at this quality
-bar, a redraw; the old screenshot montage must not be treated as approval.
-Regenerate a full-sheet review after replacement, then inspect at actual
-rendered desktop/mobile card size. The original user feedback specifically
-praised instrument concepts but rejected many procedural silhouettes as
-amateurish.
+**Second pass (revision 5, 2026-11-12):** the other 24 components were redrawn
+in the same flat style. Shared classes added to `global.css` for this set:
+grey fills `g1`–`g4`; ink faces `face`/`ink` with white markings (`line-w`,
+`dots-w`, `ring-w`, `w`, `text.face-label`); outlined `ring-ink`/`ring-g`;
+`wp` waypoints; `sky`/`earth` for attitude; `disc`, `disc-lg`, `blade`, `hub`,
+`rotor-side` and `ghost` for helicopters; `scan`, `grid`, `road`, `revet`,
+`launcher`, `deck`, `sign`, `papi-red`, `button-top`, `tanker2` and `a10b`.
+Each component's header comment says what it depicts. All 28 are pending
+final SME review of the geometry before merge.

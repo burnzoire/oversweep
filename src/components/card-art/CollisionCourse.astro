@@ -1,14 +1,16 @@
 ---
-// Card art: A collision-course intercept, close up: fighter and target tracks meeting at one point, the
-// fighter leading the target so both arrive together.
-const jet = 'M0 -11 L2 -5 L2 -2 L9 3 L9 5 L2 3 L2 7 L4 10 L4 11 L0 10 L-4 11 L-4 10 L-2 7 L-2 3 L-9 5 L-9 3 L-2 -2 L-2 -5 Z';
+// Card art (flat technical style, see docs/card-art.md): a collision-course intercept in plan: the fighter leads the target so both arrive at the
+// same point, the target inside the fighter's radar scan.
+const jet = 'M0 -12 L2 -6 L3 -3 L10 4 L10 6 L3 4 L3 9 L5 11 L5 12 L0 10 L-5 12 L-5 11 L-3 9 L-3 4 L-10 6 L-10 4 L-3 -3 L-2 -6 Z';
 ---
 <svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-collisioncourse-t">
-  <title id="art-collisioncourse-t">Plan view of a collision-course intercept: the fighter leads the target so their tracks meet at one point.</title>
+  <title id="art-collisioncourse-t">Plan view of a collision-course intercept: the fighter leads the target so their tracks meet at one point, with the target inside the fighter's radar scan.</title>
   <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
-  <path class="ln" d="M80 155 L200 45" />
-  <path class="ln muted" d="M295 120 L200 45" />
-  <path class="ln" d="M194 39 L206 51 M206 39 L194 51" />
-  <path class="jet" d={jet} transform="translate(80 155) rotate(47) scale(1.5)" />
-  <path class="jet muted" d={jet} transform="translate(295 120) rotate(-52) scale(1.5)" />
+  <rect class="g1" x="10" y="10" width="300" height="160" rx="4" />
+  <path class="scan" d="M70 152 L90.2 29.7 A124 124 0 0 1 194 150.7 Z" />
+  <path class="accent-stroke" d="M70 152 L196 44" />
+  <path class="ln dashed" d="M276 116 L196 44" />
+  <circle class="ring-ink" cx="196" cy="44" r="6" />
+  <path class="jet" d={jet} transform="translate(70 152) rotate(49.4) scale(1.7)" />
+  <path class="jet muted" d={jet} transform="translate(276 116) rotate(-48) scale(1.7)" />
 </svg>

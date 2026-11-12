@@ -1,20 +1,20 @@
 ---
-// Card art: Probe and drogue from wing pods, close up: a tanker trailing a hose and basket from each
-// wing pod, with a receiver plugged in on each side. Plan view.
-const jet = 'M0 -11 L2 -5 L2 -2 L9 3 L9 5 L2 3 L2 7 L4 10 L4 11 L0 10 L-4 11 L-4 10 L-2 7 L-2 3 L-9 5 L-9 3 L-2 -2 L-2 -5 Z';
+// Card art (flat technical style, see docs/card-art.md): probe and drogue from wing pods: a tanker trailing a hose and basket from each pod with a
+// receiver plugged into each. Plan view.
+const jet = 'M0 -12 L2 -6 L3 -3 L10 4 L10 6 L3 4 L3 9 L5 11 L5 12 L0 10 L-5 12 L-5 11 L-3 9 L-3 4 L-10 6 L-10 4 L-3 -3 L-2 -6 Z';
 ---
 <svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-probedrogue-t">
   <title id="art-probedrogue-t">Plan view of a tanker refuelling two receivers at once, one plugged into the hose and basket trailing from each wing pod.</title>
   <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
-  <g class="tanker">
-    <path d="M154 48 L72 84 L72 90 L154 66 Z" /><path d="M166 48 L248 84 L248 90 L166 66 Z" />
-    <path d="M154 104 L128 116 L128 120 L154 112 Z" /><path d="M166 104 L192 116 L192 120 L166 112 Z" />
-    <path d="M160 8 C165 8 166 14 166 22 L166 112 L163 120 L157 120 L154 112 L154 22 C154 14 155 8 160 8 Z" />
-    <rect x="110" y="66" width="6" height="12" /><rect x="204" y="66" width="6" height="12" />
-    <rect x="79" y="82" width="6" height="14" rx="2" /><rect x="235" y="82" width="6" height="14" rx="2" />
+  <g class="tanker2">
+    <path d="M154 46 L64 82 L64 89 L154 66 Z" /><path d="M166 46 L256 82 L256 89 L166 66 Z" />
+    <path d="M154 104 L126 116 L126 121 L154 112 Z" /><path d="M166 104 L194 116 L194 121 L166 112 Z" />
+    <path d="M160 6 C165.5 6 167 13 167 22 L167 112 L163.5 122 L156.5 122 L153 112 L153 22 C153 13 154.5 6 160 6 Z" />
   </g>
-  <path class="ln" d="M82 96 V128 M238 96 V128" />
-  <path class="lamp" d="M78 126 H86 L91 137 H73 Z" /><path class="lamp" d="M234 126 H242 L247 137 H229 Z" />
-  <path class="jet" d={jet} transform="translate(82 151) rotate(0) scale(1.4)" />
-  <path class="jet" d={jet} transform="translate(238 151) rotate(0) scale(1.4)" />
+  <rect class="g3" x="111" y="62" width="7" height="14" rx="3" /><rect class="g3" x="202" y="62" width="7" height="14" rx="3" />
+  <rect class="g4" x="75" y="79" width="7" height="15" rx="3" /><rect class="g4" x="238" y="79" width="7" height="15" rx="3" />
+  <path class="ln" d="M78.5 94 V124 M241.5 94 V124" />
+  <path class="accent-fill" d="M75 122 H82 L86.5 133 H70.5 Z" /><path class="accent-fill" d="M238 122 H245 L249.5 133 H233.5 Z" />
+  <path class="jet" d={jet} transform="translate(78.5 148) rotate(0) scale(1.5)" />
+  <path class="jet" d={jet} transform="translate(241.5 148) rotate(0) scale(1.5)" />
 </svg>

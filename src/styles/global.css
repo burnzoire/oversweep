@@ -886,3 +886,52 @@ h2 {
   .card-art .accent-stroke, .card-art .accent-fill { stroke: currentColor; }
   .card-art .accent-fill { fill: currentColor; }
 }
+
+/* Card-art flat plates (revision 5): restrained grey fills, ink faces with
+   white markings, amber only where it teaches. */
+.card-art .g1 { fill: #eef1f4; }
+.card-art .g2 { fill: #d5dbe1; }
+.card-art .g3 { fill: #9aa5b0; }
+.card-art .g4 { fill: #3c4752; }
+.card-art .ink, .card-art .face, .card-art .feather-l { fill: var(--color-ink); }
+.card-art .w { fill: #fff; }
+.card-art .w-ink, .card-art .wp, .card-art .feather-r { fill: #fff; stroke: var(--color-ink); stroke-width: 1.5; }
+.card-art .line-w { fill: none; stroke: #fff; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.card-art .line-w.heavy { stroke-width: 2.5; }
+.card-art .line-w.thin { stroke-width: 1; }
+.card-art .line-w.dashed { stroke-dasharray: 4 3; }
+.card-art .dots-w circle { fill: none; stroke: #fff; stroke-width: 1.4; }
+.card-art .ring-w { fill: none; stroke: #fff; stroke-width: 1.2; opacity: 0.7; }
+.card-art .ring-g { fill: none; stroke: var(--color-muted); stroke-width: 1; }
+.card-art .ring-ink { fill: none; stroke: var(--color-ink); stroke-width: 1.6; }
+.card-art .ring-ink.thin { stroke-width: 1; }
+.card-art text.face-label { fill: #fff; font: 700 11px Arial, Helvetica, sans-serif; text-anchor: middle; }
+.card-art text.face-label.small { font-size: 10px; }
+.card-art text.face-label.tiny { font-size: 8px; }
+.card-art text.face-label.btn { font-size: 13px; letter-spacing: 0.08em; }
+.card-art text.face-label.rwr { font-size: 12px; }
+.card-art text.face-label.accent-text { fill: var(--color-accent); }
+.card-art .accent-stroke.thin { stroke-width: 2; }
+.card-art .sky { fill: #8fa9c0; }
+.card-art .earth { fill: #6d5a48; }
+.card-art .disc { fill: #e3e8ec; stroke: var(--color-ink); stroke-width: 1.2; }
+.card-art .disc-lg { fill: #eef1f4; stroke: var(--color-ink); stroke-width: 1.6; }
+.card-art .blade { fill: var(--color-ink); }
+.card-art .hub { fill: #fff; stroke: var(--color-ink); stroke-width: 2; }
+.card-art .rotor-side { fill: none; stroke: var(--color-ink); stroke-width: 2.2; stroke-linecap: round; }
+.card-art .ghost { opacity: 0.35; }
+.card-art .grid { fill: none; stroke: #e1e6ea; stroke-width: 1; }
+.card-art .grid-ink { fill: none; stroke: #c3cbd2; stroke-width: 1; }
+.card-art .tri, .card-art .navaid, .card-art .hostile { fill: var(--color-ink); }
+.card-art .scene-1 { fill: #4a5560; }
+.card-art .scene-2 { fill: #2e3740; }
+.card-art .scene-road, .card-art .road { fill: none; stroke: #b9c1c8; stroke-width: 4; stroke-linecap: round; }
+.card-art .scene-hot { fill: #e7ecef; }
+.card-art .button-top { fill: #3c4752; stroke: #fff; stroke-width: 1.5; }
+.card-art .tanker2 path, .card-art .a10b path { fill: #d5dbe1; stroke: var(--color-ink); stroke-width: 0.8; stroke-linejoin: round; }
+.card-art .revet { fill: none; stroke: #9aa5b0; stroke-width: 5; stroke-linecap: round; }
+.card-art .launcher { fill: var(--color-ink); }
+.card-art .deck { fill: #9aa5b0; stroke: var(--color-ink); stroke-width: 1.4; stroke-linejoin: round; }
+.card-art .scan { fill: #eef1f4; stroke: #c3cbd2; stroke-width: 1; }
+.card-art .sign { fill: #c8102e; stroke: var(--color-ink); stroke-width: 1; }
+.card-art .papi-red { fill: #c8102e; stroke: var(--color-ink); stroke-width: 1.2; }

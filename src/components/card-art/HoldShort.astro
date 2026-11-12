@@ -1,16 +1,19 @@
 ---
-// Card art: Holding short, close up: an aircraft on the taxiway at the runway holding position marking
-// (solid lines on the taxiway side, dashed on the runway side), awaiting the controller's clearance.
-const jet = 'M0 -11 L2 -5 L2 -2 L9 3 L9 5 L2 3 L2 7 L4 10 L4 11 L0 10 L-4 11 L-4 10 L-2 7 L-2 3 L-9 5 L-9 3 L-2 -2 L-2 -5 Z';
+// Card art (flat technical style, see docs/card-art.md): holding short: an aircraft on the taxiway at the runway holding position marking (solid lines
+// on the taxiway side, dashed on the runway side), beside the runway holding position sign.
+const jet = 'M0 -12 L2 -6 L3 -3 L10 4 L10 6 L3 4 L3 9 L5 11 L5 12 L0 10 L-5 12 L-5 11 L-3 9 L-3 4 L-10 6 L-10 4 L-3 -3 L-2 -6 Z';
 ---
 <svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-holdshort-t">
-  <title id="art-holdshort-t">Plan view of an aircraft on a taxiway, holding short at the runway holding position marking. Not to scale.</title>
+  <title id="art-holdshort-t">Plan view of an aircraft on a taxiway, holding short at the runway holding position marking beside the holding position sign. Not to scale.</title>
   <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
-  <rect class="ship" x="0" y="22" width="320" height="34" />
-  <path class="ln thin" d="M20 39 H44 M70 39 H94 M120 39 H144 M176 39 H200 M226 39 H250 M276 39 H300" />
-  <path class="ln" d="M142 56 V180 M178 56 V180" />
-  <path class="ln thin dashed" d="M142 66 H178 M142 72 H178" />
-  <path class="ln thin" d="M142 80 H178 M142 86 H178" />
-  <path class="ln thin" d="M160 56 V180" />
-  <path class="jet" d={jet} transform="translate(160 122) rotate(0) scale(1.9)" />
+  <rect class="g1" x="1" y="1" width="318" height="178" />
+  <rect class="g4" x="1" y="18" width="318" height="44" />
+  <path class="line-w" d="M1 22 H319 M1 58 H319" />
+  <path class="line-w heavy" d="M14 40 H44 M68 40 H98 M122 40 H152 M176 40 H206 M230 40 H260 M284 40 H314" />
+  <rect class="g4" x="138" y="62" width="44" height="118" />
+  <path class="accent-stroke thin" d="M160 40 V180" />
+  <path class="accent-stroke thin" d="M138 70 H182 M138 76 H182" style="stroke-dasharray:5 4" />
+  <path class="accent-stroke thin" d="M138 84 H182 M138 90 H182" />
+  <rect class="sign" x="196" y="70" width="44" height="18" rx="2" /><text class="face-label small" x="218" y="83">9-27</text>
+  <path class="jet" d={jet} transform="translate(160 124) rotate(0) scale(2.1)" />
 </svg>

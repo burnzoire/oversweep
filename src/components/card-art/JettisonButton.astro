@@ -1,13 +1,14 @@
 ---
-// Card art: Emergency procedures, close up: a guarded emergency jettison button inside caution stripes.
+// Card art (flat technical style, see docs/card-art.md): emergency jettison button inside a caution-striped border on an instrument panel.
 ---
 <svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-jettisonbutton-t">
-  <title id="art-jettisonbutton-t">An emergency jettison button inside a yellow and black caution-striped border.</title>
+  <title id="art-jettisonbutton-t">An emergency jettison button marked EMER JETT inside a yellow and black caution-striped border.</title>
   <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
-  <defs><pattern id="art-jett-stripes" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect class="stripe-a" width="14" height="14" /><rect class="stripe-b" width="7" height="14" /></pattern></defs>
-  <rect class="caution" x="100" y="22" width="120" height="136" rx="4" />
-  <rect class="ship" x="114" y="36" width="92" height="108" rx="3" />
-  <rect class="button-face" x="126" y="52" width="68" height="76" rx="8" />
-  <text class="btn" x="160" y="86">EMER</text>
-  <text class="btn" x="160" y="106">JETT</text>
+  <rect class="panel" x="78" y="8" width="164" height="164" rx="10" /><g class="fastener"><circle cx="87" cy="17" r="3" /><circle cx="233" cy="17" r="3" /><circle cx="87" cy="163" r="3" /><circle cx="233" cy="163" r="3" /></g>
+  <defs><pattern id="art-jett-stripes" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect class="stripe-a" width="12" height="12" /><rect class="stripe-b" width="6" height="12" /></pattern></defs>
+  <rect class="caution" x="104" y="34" width="112" height="112" rx="6" />
+  <rect class="face" x="118" y="48" width="84" height="84" rx="6" />
+  <rect class="button-top" x="126" y="56" width="68" height="68" rx="5" />
+  <text class="face-label btn" x="160" y="87">EMER</text>
+  <text class="face-label btn" x="160" y="106">JETT</text>
 </svg>

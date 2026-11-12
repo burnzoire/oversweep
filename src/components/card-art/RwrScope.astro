@@ -1,14 +1,18 @@
 ---
-// Card art: A radar warning receiver display, close up: own aircraft at the centre and threat markers
-// by bearing (distance from the centre is not range).
-const jet = 'M0 -11 L2 -5 L2 -2 L9 3 L9 5 L2 3 L2 7 L4 10 L4 11 L0 10 L-4 11 L-4 10 L-2 7 L-2 3 L-9 5 L-9 3 L-2 -2 L-2 -5 Z';
+// Card art (flat technical style, see docs/card-art.md): radar warning receiver display: own aircraft at the centre and threat symbols by
+// bearing (distance from the centre is not range).
+const jet = 'M0 -12 L2 -6 L3 -3 L10 4 L10 6 L3 4 L3 9 L5 11 L5 12 L0 10 L-5 12 L-5 11 L-3 9 L-3 4 L-10 6 L-10 4 L-3 -3 L-2 -6 Z';
 ---
 <svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-rwrscope-t">
-  <title id="art-rwrscope-t">A radar warning receiver display: own aircraft at the centre and threat markers placed by bearing.</title>
+  <title id="art-rwrscope-t">A radar warning receiver display: own aircraft at the centre and threat symbols placed by bearing around it.</title>
   <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
-  <circle class="ln" cx="160" cy="90" r="66" />
-  <circle class="ln thin dashed" cx="160" cy="90" r="40" />
-  <path class="ln thin" d="M160 24 V32 M160 148 V156 M94 90 H102 M218 90 H226" />
-  <rect class="fix" x="196" y="52" width="7" height="7" /><rect class="fix" x="104" y="110" width="7" height="7" /><rect class="fix" x="178" y="128" width="7" height="7" />
-  <path class="jet" d={jet} transform="translate(160 90) rotate(0) scale(0.8)" />
+  <rect class="panel" x="78" y="8" width="164" height="164" rx="10" /><g class="fastener"><circle cx="87" cy="17" r="3" /><circle cx="233" cy="17" r="3" /><circle cx="87" cy="163" r="3" /><circle cx="233" cy="163" r="3" /></g>
+  <circle class="face" cx="160" cy="90" r="72" />
+  <circle class="ring-g" cx="160" cy="90" r="46" /><circle class="ring-g" cx="160" cy="90" r="22" />
+  <path class="line-w" d="M160 20 L160 28 M195 29.4 L191 36.3 M220.6 55 L213.7 59 M230 90 L222 90 M220.6 125 L213.7 121 M195 150.6 L191 143.7 M160 160 L160 152 M125 150.6 L129 143.7 M99.4 125 L106.3 121 M90 90 L98 90 M99.4 55 L106.3 59 M125 29.4 L129 36.3" />
+  <path class="w" d={jet} transform="translate(160 91) scale(0.8)" />
+  <text class="face-label rwr accent-text" x="196" y="56">29</text>
+  <text class="face-label rwr" x="113" y="121">S</text>
+  <text class="face-label rwr" x="184" y="137">U</text>
+  <text class="face-label rwr" x="118" y="58">2</text>
 </svg>
