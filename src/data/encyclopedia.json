@@ -550,6 +550,18 @@
     "summary": "Soviet and Russian VHF surveillance radars that succeeded the P-14; the Tall Rack was the first Soviet VHF radar to measure height."
   },
   {
+    "id": "encyclopedia.aircraft.a-6",
+    "slug": "a-6",
+    "category": "aircraft",
+    "revision": 1,
+    "title": "A-6 Intruder",
+    "designation": "Grumman A-6E and KA-6D",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The Navy and Marine Corps' two-seat, all-weather night bomber for three decades, and a carrier tanker as the KA-6D.",
+    "era": "modern"
+  },
+  {
     "id": "encyclopedia.aircraft.a-10",
     "slug": "a-10",
     "category": "aircraft",
