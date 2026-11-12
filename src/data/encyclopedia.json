@@ -1872,6 +1872,17 @@
     "summary": "The helicopter tank buster with laser or radar seekers, now also the drone strike weapon."
   },
   {
+    "id": "encyclopedia.ordnance.apkws",
+    "slug": "apkws",
+    "category": "ordnance",
+    "revision": 1,
+    "title": "APKWS laser-guided rocket",
+    "designation": "APKWS II / AGR-20",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "A laser guidance kit that turns the Hydra 70 rocket into a cheap precision weapon, now also a drone killer."
+  },
+  {
     "id": "encyclopedia.ordnance.bgm-71",
     "slug": "bgm-71",
     "category": "ordnance",
