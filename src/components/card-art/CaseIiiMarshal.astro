@@ -1,17 +1,16 @@
 ---
-// Card art: the Case III marshal hold, close up. Plan view, not to scale.
-// Same geometry as the module's Figure 1 (case-iii/RecoveryOverview): a
-// left-hand racetrack, the marshal fix at the end of the inbound leg, and
-// the commence from the fix toward the ship (off the right edge).
-const jet = 'M0 -11 L2 -5 L2 -2 L9 3 L9 5 L2 3 L2 7 L4 10 L4 11 L0 10 L-4 11 L-4 10 L-2 7 L-2 3 L-9 5 L-9 3 L-2 -2 L-2 -5 Z';
+// Case III marshal: simplified holding-pattern symbol. Procedural geometry to be
+// compared with the module's RecoveryOverview before production approval.
+const jet = 'M0 -12 L2 -6 L3 -3 L10 4 L10 6 L3 4 L3 9 L5 11 L5 12 L0 10 L-5 12 L-5 11 L-3 9 L-3 4 L-10 6 L-10 4 L-3 -3 L-2 -6 Z';
 ---
 <svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-case-iii-t">
-  <title id="art-case-iii-t">Plan view of the Case III marshal hold: a left-hand racetrack with the fix at the end of the inbound leg, and the commence from the fix toward the ship.</title>
-  <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
-  <path class="ln" d="M70 125 L210 125 A30 30 0 0 0 210 65 L70 65 A30 30 0 0 0 70 125" />
-  <path class="ln" d="M140 125 l-9 -5 M140 125 l-9 5" />
-  <path class="jet muted" d={jet} transform="translate(130 65) rotate(-90)" />
-  <path class="ln heavy dashed" d="M216 125 L300 125" />
-  <path class="ln heavy" d="M300 125 l-10 -6 M300 125 l-10 6" />
-  <path class="fix" d="M210 116 L219 125 L210 134 L201 125 Z" />
+ <title id="art-case-iii-t">Plan view of a left-hand racetrack hold, marshal fix and outbound commencement path.</title>
+ <rect class="frame" x=".5" y=".5" width="319" height="179"/>
+ <path class="ln heavy" d="M74 48 H235 A39 39 0 0 1 235 126 H74 A39 39 0 0 1 74 48"/>
+ <path class="ln heavy" d="M178 48 l-8 -5 M178 48 l-8 5 M137 126 l8 -5 M137 126 l8 5"/>
+ <path class="jet" d={jet} transform="translate(112 48) rotate(90) scale(1.25)" />
+ <path class="accent-stroke dashed" d="M235 126 H308"/>
+ <path class="accent-stroke" d="M308 126 l-10 -6 M308 126 l-10 6"/>
+ <path class="accent-fill" d="M235 119 l7 7 -7 7 -7 -7 Z"/>
+ <path class="ln thin muted dashed" d="M38 87 H271" opacity=".35"/>
 </svg>
