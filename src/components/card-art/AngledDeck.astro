@@ -1,18 +1,4 @@
 ---
-// Card art (flat technical style, see docs/card-art.md): a Nimitz-class flight deck in plan, traced from the ship operations module's Figure 1:
-// the angled landing area with its centreline, edges and arresting wires, four catapults,
-// elevators and island, and an aircraft on final along the angled-deck centreline.
-const jet = 'M0 -12 L2 -6 L3 -3 L10 4 L10 6 L3 4 L3 9 L5 11 L5 12 L0 10 L-5 12 L-5 11 L-3 9 L-3 4 L-10 6 L-10 4 L-3 -3 L-2 -6 Z';
+// Hand-composed Oversweep vector artwork. Teaching schematic; aviation SME review required.
 ---
-<svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-angleddeck-t">
-  <title id="art-angleddeck-t">Plan view of an aircraft carrier's flight deck: the angled landing area with its centreline and arresting wires, the catapults, elevators and island, and an aircraft on final along the angled-deck centreline.</title>
-  <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
-  <polygon class="deck" points="50,81.9 77.6,78.5 84.2,66.6 214.2,64.4 235.6,77.6 293,82.1 297.6,84.2 299,85.3 299,102.7 297.6,103.6 237,107 218.7,118.9 81,118.9 80.3,112.9 61.9,111.6 57.5,106.1 50,106.1" />
-  <polygon class="g3" points="176.1,105.9 193.2,105.9 193.4,113.4 196.4,118.9 176.1,118.9" /><polygon class="g3" points="140.7,105.9 154.4,105.9 154.9,112.7 158.1,118.9 140.7,118.9" /><polygon class="g3" points="82.4,105.2 96.7,105.2 98.6,107 98.6,118.9 82.4,118.9" /><polygon class="g3" points="84.7,77.1 98.3,77.1 102,66.6 84.7,66.6" />
-  <path class="line-w thin" d="M209.6 105.2 L295.8 99.9 M209.6 88.8 L291.9 87.2 M128.7 78.7 L198.2 72.1 M125.2 68.9 L198.2 68.5" />
-  <path class="line-w" d="M88.8 98.4 L86.4 83.1 M97.4 97.1 L95 81.8 M105.7 95.8 L103.3 80.4 M114 94.4 L111.6 79.1" />
-  <path class="accent-stroke" d="M50 96.7 L223.4 69.3" />
-  <polygon class="ink" points="107,110.4 135.5,110.4 135.5,118.9 107,118.9" />
-  <path class="ln thin muted dashed" d="M32 99.6 L50 96.7" />
-  <path class="jet" d={jet} transform="translate(32 99.6) rotate(81) scale(1.3)" />
-</svg>
+<svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="custom-AngledDeck"><title id="custom-AngledDeck">AngledDeck custom aviation technical plate</title><rect class="frame" x=".5" y=".5" width="319" height="179"/><path class="ln thin muted" d="M18 18 H45 M18 18 V38 M302 18 H275 M302 18 V38 M18 162 H45 M18 162 V142 M302 162 H275 M302 162 V142"/><path class="panel" d="M44 70 L83 58 L225 58 L248 73 L295 77 Q307 82 307 92 Q307 102 295 107 L247 113 L224 125 L82 125 L44 110 Q29 106 26 90 Q27 78 44 70 Z"/><path class="ln thin muted" d="M79 61 V124 M222 61 V123 M77 98 L252 69 M80 105 L266 75"/><path class="accent-stroke" d="M25 115 L239 73"/><path class="ln thin muted dashed" d="M7 118 L239 73"/><path class="ln heavy" d="M115 95 l3 16 M128 92 l3 16 M141 89 l3 16 M154 86 l3 16"/><g class="screen-dark"><rect x="185" y="101" width="29" height="19" rx="2"/></g><g class="lamp"><rect x="220" y="82" width="22" height="17" rx="2"/></g><g class="ln thin"><path d="M233 83 V69 M239 83 V63 M230 70 H243"/><path d="M92 67 L165 67 M99 73 L166 73 M99 117 L167 117"/></g><g transform="translate(48 107) rotate(79) scale(.75)"><path class="jet" d="M0 -17 C3 -14 3 -8 4 -5 L23 6 L23 11 L5 7 L6 16 L11 20 L11 23 L0 20 L-11 23 L-11 20 L-6 16 L-5 7 L-23 11 L-23 6 L-4 -5 C-3 -8 -3 -14 0 -17 Z"/></g><text class="card" x="160" y="146">ANGLED LANDING AREA</text></svg>
