@@ -1,16 +1,4 @@
 ---
-// Card art (flat technical style, see docs/card-art.md): a collision-course intercept in plan: the fighter leads the target so both arrive at the
-// same point, the target inside the fighter's radar scan.
-const jet = 'M0 -12 L2 -6 L3 -3 L10 4 L10 6 L3 4 L3 9 L5 11 L5 12 L0 10 L-5 12 L-5 11 L-3 9 L-3 4 L-10 6 L-10 4 L-3 -3 L-2 -6 Z';
+// Hand-composed Oversweep vector artwork. Teaching schematic; aviation SME review required.
 ---
-<svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="art-collisioncourse-t">
-  <title id="art-collisioncourse-t">Plan view of a collision-course intercept: the fighter leads the target so their tracks meet at one point, with the target inside the fighter's radar scan.</title>
-  <rect class="frame" x="0.5" y="0.5" width="319" height="179" />
-  <rect class="g1" x="10" y="10" width="300" height="160" rx="4" />
-  <path class="scan" d="M70 152 L90.2 29.7 A124 124 0 0 1 194 150.7 Z" />
-  <path class="accent-stroke" d="M70 152 L196 44" />
-  <path class="ln dashed" d="M276 116 L196 44" />
-  <circle class="ring-ink" cx="196" cy="44" r="6" />
-  <path class="jet" d={jet} transform="translate(70 152) rotate(49.4) scale(1.7)" />
-  <path class="jet muted" d={jet} transform="translate(276 116) rotate(-48) scale(1.7)" />
-</svg>
+<svg class="card-art" viewBox="0 0 320 180" role="img" aria-labelledby="custom-CollisionCourse"><title id="custom-CollisionCourse">CollisionCourse custom aviation technical plate</title><rect class="frame" x=".5" y=".5" width="319" height="179"/><path class="ln thin muted" d="M18 18 H45 M18 18 V38 M302 18 H275 M302 18 V38 M18 162 H45 M18 162 V142 M302 162 H275 M302 162 V142"/><rect class="screen" x="22" y="22" width="276" height="136" rx="4"/><g class="ln thin muted dashed"><path d="M40 134 H280 M70 28 V151 M160 28 V151 M250 28 V151"/><circle cx="201" cy="72" r="58"/></g><path class="ln heavy" d="M61 138 L213 69"/><path class="accent-stroke" d="M118 112 L213 69"/><path class="ln thin muted dashed" d="M83 52 L213 69"/><g transform="translate(68 132) rotate(67) scale(1)"><path class="jet" d="M0 -17 C3 -14 3 -8 4 -5 L23 6 L23 11 L5 7 L6 16 L11 20 L11 23 L0 20 L-11 23 L-11 20 L-6 16 L-5 7 L-23 11 L-23 6 L-4 -5 C-3 -8 -3 -14 0 -17 Z"/></g><g transform="translate(96 55) rotate(96) scale(.9)"><path class="jet muted" d="M0 -17 C3 -14 3 -8 4 -5 L23 6 L23 11 L5 7 L6 16 L11 20 L11 23 L0 20 L-11 23 L-11 20 L-6 16 L-5 7 L-23 11 L-23 6 L-4 -5 C-3 -8 -3 -14 0 -17 Z"/></g><circle class="accent-fill" cx="213" cy="69" r="5"/><path class="ln thin" d="M202 69 H224 M213 58 V80"/><text class="card" x="244" y="52">INTERCEPT</text><text class="card" x="59" y="36">TARGET</text><text class="card" x="62" y="151">FIGHTER</text></svg>
