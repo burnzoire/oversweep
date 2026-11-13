@@ -10,7 +10,7 @@
     "check:review": "astro build --base /oversweep && node scripts/check_site.mjs /oversweep && node scripts/check_experiences.mjs --review --base=/oversweep && node scripts/check_modules.mjs --review --base=/oversweep && node scripts/check_encyclopedia.mjs --review --base=/oversweep",
     "check:dev": "node scripts/check_experiences_dev.mjs"
   },
-  "license": "MIT",
+  "license": "UNLICENSED",
   "private": true,
   "type": "module",
   "engines": {

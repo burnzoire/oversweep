@@ -1,21 +1,26 @@
-MIT License
+Copyright (c) 2026 Nathan Burns. All rights reserved.
 
-Copyright (c) 2026 Nathan Burns
+Oversweep (https://www.oversweep.com) and this repository, including its
+source code, text, figures, diagrams, trainers and data, are protected by
+copyright. No licence is granted to copy, modify, republish, distribute,
+mirror or commercially use any part of it, in whole or in part, without the
+copyright owner's prior written permission.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+You may:
+- read and use the site for personal, non-commercial purposes;
+- quote short extracts with attribution and a link to the source page.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+This repository is public on GitHub. GitHub's Terms of Service let other
+GitHub users view and fork it on GitHub; that permission does not extend to
+any use outside GitHub, including hosting a copy of the site.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Earlier revisions of this repository were published under the MIT licence.
+Copies taken under those revisions keep that licence; this notice applies to
+all later revisions.
+
+Third-party material (photos, charts, maps, quoted publications and
+public-domain government works) is not owned by Oversweep and remains under
+its owners' terms, as credited where it is used.
+
+To ask for permission, open an issue at
+https://github.com/burnzoire/oversweep/issues.

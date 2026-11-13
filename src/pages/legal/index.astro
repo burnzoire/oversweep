@@ -3,6 +3,7 @@ import SiteLayout from "../../layouts/SiteLayout.astro";
 import { sitePath } from "../../lib/paths";
 
 const updated = "13 November 2026";
+const year = new Date().getFullYear();
 const repo = "https://github.com/burnzoire/oversweep";
 ---
 
@@ -10,7 +11,7 @@ const repo = "https://github.com/burnzoire/oversweep";
   title="Legal notice"
   activeSection="home"
   breadcrumbs={[{ label: "Home", href: sitePath() }, { label: "Legal notice" }]}
-  description="Oversweep's legal notice: a free reference for flight sim enthusiasts, not for real-world flight. Disclaimer, liability, affiliations, trademarks, sources and privacy."
+  description="Oversweep's legal notice: a free reference for flight sim enthusiasts, not for real-world flight. Disclaimer, liability, affiliations, trademarks, copyright and privacy."
 >
   <div class="legal">
     <p class="lede">Oversweep is a free, non-commercial reference for flight simulator enthusiasts. By using this site you agree to the terms below. <span class="updated">Last updated {updated}.</span></p>
@@ -46,8 +47,13 @@ const repo = "https://github.com/burnzoire/oversweep";
     <section aria-labelledby="sources">
       <h2 id="sources">Sources, images and copyright</h2>
       <p>Oversweep cites its sources so readers can check them. Material from publications is summarised or quoted briefly for education, criticism and review, with attribution. Photos, charts and maps from other people are credited beside each image with their author, licence and source; they remain under their owners' terms, and their licences apply to any reuse. Government works are used as public-domain material where their publisher marks them as such. Links to other sites are provided for reference; Oversweep does not control and is not responsible for their content.</p>
-      <p>Oversweep's own source code, text and drawn figures are published under the <a href={`${repo}/blob/main/LICENSE`}>MIT licence</a> unless marked otherwise.</p>
       <p>If you own material used here and want a credit corrected or the material removed, open an issue on the <a href={`${repo}/issues`}>Oversweep repository</a>.</p>
+    </section>
+
+    <section aria-labelledby="copyright">
+      <h2 id="copyright">Copyright</h2>
+      <p>© {year} Oversweep. All rights reserved. Oversweep's original text, figures, diagrams, trainers, data and code are protected by copyright. You may not copy, republish, mirror or reproduce the site or any substantial part of it, or use it commercially (for example on an advertising-funded site), without written permission.</p>
+      <p>You are welcome to read and use the site for your own flying, and to quote short extracts with attribution and a link back to the page. Third-party photos, charts and maps, and public-domain government material, are not owned by Oversweep and stay under their own terms, as credited where they appear. See the repository <a href={`${repo}/blob/main/LICENSE`}>licence notice</a> for details, and open an issue there to ask for permission.</p>
     </section>
 
     <section aria-labelledby="privacy">
