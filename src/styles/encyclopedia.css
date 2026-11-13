@@ -63,6 +63,8 @@
 .ency .record-filter .filter-search, .ency .record-filter .filter-status, .ency .record-filter .filter-empty { grid-column: 1 / -1; }
 .ency .record-filter label { display: block; font-weight: 700; margin-bottom: 0.3rem; }
 .ency .record-filter input, .ency .record-filter select { box-sizing: border-box; width: 100%; min-height: 2.75rem; padding: 0.4rem 0.6rem; font: inherit; color: var(--color-text); border: 1px solid var(--color-text); background: #fff; }
+/* A drawn chevron replaces the native arrow, which browsers place flush with the border: centred vertically with room on the right. */
+.ency .record-filter select { appearance: none; padding-right: 2.5rem; text-overflow: ellipsis; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23111' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 0.85rem center / 0.75rem auto; }
 .ency .record-filter input:focus-visible, .ency .record-filter select:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
 .ency .record-filter .filter-status { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; }
 .ency .record-filter .filter-count, .ency .record-filter .filter-empty { margin: 0; color: var(--color-muted); font-size: 0.9rem; }
