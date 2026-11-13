@@ -31,7 +31,7 @@ pages: 70 (3-22); 74 (3-26); 331-332 (5-15 to 5-16); 342 (5-26); 467 (8-9); 593 
 ```review-sources
 source: https://aviation-assets.info/wp-content/uploads/fm-3-04-126-attack-reconnaissance-helicopter-operations.pdf
 sha256: b8077611ec40596541575a0f9cc1377a0c647f2b611a64b4ae437773bcd202f0
-pages: 69-70 (3-7 to 3-8); 211-217 (A-1 to A-7)
+pages: 70-71 (3-8 to 3-9); 211-217 (A-1 to A-7)
 ```
 
 ```review-sources
@@ -279,10 +279,10 @@ unlimited." The ATP 1-02.1 copy is the one used for the A/G brevity words
 
 ## [4] FM 3-04.126 (16 February 2007)
 
-- **3-7.** "Terrain flying includes appropriate tactical application of
+- **3-8.** "Terrain flying includes appropriate tactical application of
   low-level, contour, and NOE flight techniques as appropriate, diminishing the
   enemy's capability to acquire, track, and engage aircraft."
-- **3-8.** "Vegetation and terrain features masking an aircraft from visual and
+- **3-9.** "Vegetation and terrain features masking an aircraft from visual and
   electronic detection significantly degrade the capability of threat weapons
   ... Companies use the highest terrain flight altitude for a specific
   condition. A higher flight altitude reduces difficulty in navigation, permits

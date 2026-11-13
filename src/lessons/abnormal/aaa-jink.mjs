@@ -1,4 +1,4 @@
-// Why a jink spoils aimed AAA, for the Threat Avoidance module, Figure 1.
+// Why a jink spoils aimed AAA, for the Threat Avoidance module, Figure 2.
 // Aimed AAA fire control computes its aim point on the assumption that the
 // target holds the same heading, altitude and airspeed for the projectile's
 // time of flight (USAF Electronic Warfare Fundamentals, 2000, p. 8-13). This
@@ -30,7 +30,7 @@ export function jinkOffset({ speedKt, tofS, loadG }) {
   };
 }
 
-// Plan-view geometry for Figure 1, shared by the page's server render and
+// Plan-view geometry for Figure 2, shared by the page's server render and
 // its script: the turning track, the straight predicted track and both ends,
 // scaled to fit the figure.
 export function jinkPicture({ speedKt, tofS, loadG }, W = 640, H = 260) {

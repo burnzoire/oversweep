@@ -1,4 +1,4 @@
-// Threat Avoidance module: Figure 1 (aimed AAA and the jink) and the quizzes.
+// Threat Avoidance module: Figure 2 (aimed AAA and the jink) and the quizzes.
 import { jinkPicture } from './aaa-jink.mjs';
 import { quickQuiz, termQuiz } from '../shared/quick-quiz.mjs';
 
