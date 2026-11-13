@@ -4,7 +4,7 @@ import SiteSearch from "../components/SiteSearch.astro";
 import { manualSubjects } from "../data/catalogue";
 import { sectionHasContent, subjectEntries } from "../data/availability";
 import { assetPath, sitePath } from "../lib/paths";
-import { clip, defaultDescription, describeRoute, entryForRoute, routeOf, siteName } from "../lib/seo";
+import { audience, clip, defaultDescription, describeRoute, entryForRoute, routeOf, shareSiteName, siteName } from "../lib/seo";
 import "../styles/global.css";
 
 interface Breadcrumb {
@@ -53,7 +53,7 @@ const site = Astro.site;
 const absolute = (path: string) => (site ? new URL(path, site).href : undefined);
 const canonical = isNotFound ? undefined : absolute(sitePath(route));
 const shareImage = absolute(assetPath(image ?? "og-default.png"));
-const shareImageAlt = image ? (imageAlt ?? title) : "Oversweep, the interactive flight reference";
+const shareImageAlt = image ? (imageAlt ?? title) : "Oversweep, the interactive flight sim reference";
 const entry = entryForRoute(route);
 const structuredData = site && !empty && !isNotFound
   ? [
@@ -63,6 +63,7 @@ const structuredData = site && !empty && !isNotFound
         name: siteName,
         url: absolute(sitePath()),
         description,
+        audience,
       },
       breadcrumbs.length > 1 && {
         "@context": "https://schema.org",
@@ -83,6 +84,7 @@ const structuredData = site && !empty && !isNotFound
         learningResourceType: "Module",
         inLanguage: "en",
         isAccessibleForFree: true,
+        audience,
         isPartOf: { "@type": "WebSite", name: siteName, url: absolute(sitePath()) },
       },
     ].filter(Boolean)
@@ -107,7 +109,7 @@ const subjects = manualSubjects.map((subject) => ({ ...subject, count: subjectEn
     <link rel="icon" href={assetPath("favicon.svg")} type="image/svg+xml" />
     <title>{pageTitle}</title>
     {canonical && <link rel="canonical" href={canonical} />}
-    <meta property="og:site_name" content={siteName} />
+    <meta property="og:site_name" content={shareSiteName} />
     <meta property="og:type" content={isHomePage ? "website" : "article"} />
     <meta property="og:title" content={isHomePage ? `${siteName} · ${title}` : title} />
     <meta property="og:description" content={description} />
@@ -134,7 +136,7 @@ const subjects = manualSubjects.map((subject) => ({ ...subject, count: subjectEn
           <BrandMark />
           <span class="brand-text">
             <span class="brand-name">OVERSWEEP</span>
-            <span class="brand-tagline">The Interactive Flight Reference</span>
+            <span class="brand-tagline">The Interactive Flight Sim Reference</span>
           </span>
         </a>
         <nav class="primary-nav" aria-label="Primary navigation">
@@ -228,7 +230,8 @@ const subjects = manualSubjects.map((subject) => ({ ...subject, count: subjectEn
     <footer class="site-footer">
       <div class="footer-inner">
         <a class="footer-brand" href={sitePath()}><BrandMark />Oversweep</a>
-        <p>Educational reference for simulator pilots. Every module shows its review status. Not approved operational guidance.</p>
+        <p>A free reference for flight sim enthusiasts. For simulation and education only, not for real-world flight or operational use. Not affiliated with any armed force, government or simulator developer.</p>
+        <a class="footer-legal" href={sitePath("legal/")}>Legal notice</a>
       </div>
     </footer>
   </body>
