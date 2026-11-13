@@ -78,11 +78,11 @@ export const cardMedia: Record<string, CardMedia> = {
   'module.instrument-procedures': {
     summary: 'Fly a whole sortie in cloud, from departure to the approach.',
     photo: {
-      src: 'manual/cards/f16-instrument-panel.jpg',
-      alt: 'The instrument panel of an F-16 cockpit.',
-      credit: 'GeertBoogaard, public domain',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Fighter_cockpit.jpg',
-      position: '50% 85%',
+      src: 'manual/cards/hornet-in-cloud.jpg',
+      alt: 'A Marine Corps F/A-18C Hornet flying past towering cumulus cloud.',
+      credit: 'Cpl. Calah Thompson, US Marine Corps, public domain',
+      sourceUrl:
+        'https://commons.wikimedia.org/wiki/File:In_the_Clouds_-_VMFA_(AW)-224_Marines_Conduct_Flight_Operations_at_Suwon_AB_South_Korea_(8555072).jpg',
     },
   },
   'module.two-ship-formation': {
