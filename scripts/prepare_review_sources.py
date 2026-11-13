@@ -67,6 +67,11 @@ SOURCE_HOSTS = frozenset({
     'bloximages.chicago2.vip.townnews.com',
     # Public copies of Army FM 3-04 and FM 3-04.126 (both Distribution A).
     'aviation-assets.info',
+    # Public copies of Air Force training texts (Electronic Warfare
+    # Fundamentals, MCH 11-F16 Vol 5, the F-16 BEM) and of CNATRA P-825.
+    'falcon.blu3wolf.com',
+    # A public copy of ATP 1-02.1, Multi-Service Brevity Codes (2020).
+    'patchwiki.biligame.com',
 })
 # .navy.mil hosts such as cnatra.navy.mil chain to DoD roots, which public CA
 # bundles leave out. These are added to (never replace) the default store for

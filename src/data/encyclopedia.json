@@ -2521,6 +2521,17 @@
     "summary": "Critical action items, how soon to land, the power-off emergency landing pattern and its keys, emergency fuel, and the checklists after an ejection."
   },
   {
+    "id": "encyclopedia.terminology.threat-avoidance",
+    "slug": "threat-avoidance",
+    "category": "terminology",
+    "revision": 1,
+    "title": "Threat avoidance terms",
+    "designation": "USAF EW Fundamentals and F-16 fundamentals",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "How SAMs and anti-aircraft guns guide and aim, the terrain and maneuvers that defeat them, the threat reaction and the imminent threat warning."
+  },
+  {
     "id": "encyclopedia.terminology.bvr",
     "slug": "bvr",
     "category": "terminology",

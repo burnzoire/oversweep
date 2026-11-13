@@ -1,0 +1,374 @@
+---
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import GlossaryList from '../../../components/GlossaryList.astro';
+import { getModule } from '../../../data/modules';
+import { sitePath } from '../../../lib/paths';
+import Term from '../../../components/Term.astro';
+import '../../../styles/instrument-flight.css';
+import { jinkPicture } from '../../../lessons/abnormal/aaa-jink.mjs';
+const mod = getModule('threat-avoidance');
+const threats = sitePath('encyclopedia/threat-systems/');
+const radar = sitePath('manual/sensors-situational-awareness/radar-and-warning/');
+const sead = sitePath('manual/air-to-ground-operations/sead-dead/');
+const emergency = sitePath('manual/abnormal-operations/emergency-procedures/');
+const rwa = sitePath('manual/air-to-ground-operations/rotary-wing-attack/');
+const core = [
+ ['example', 'One SAM engagement, start to finish'], ['avoid', 'Avoid first: route, height and terrain'],
+ ['guidance', 'Know how the threat guides'], ['warning', 'Recognising an engagement'],
+ ['radar', 'Defeating a radar-guided SAM'], ['ir', 'Defeating an infrared missile'],
+ ['aaa', 'Defeating anti-aircraft guns'], ['flight', 'The flight, the reaction and the egress'], ['recap', 'Key points'],
+];
+const reference = [
+ ['helicopters', 'Helicopters'], ['limits', 'What this page cannot give you'], ['sims', 'In the sim'],
+ ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
+];
+// [1] USAF Electronic Warfare Fundamentals (2000), [2] MCH 11-F16 Vol 5 (1996),
+// [3] Korean AF TTP 3-3 Vol 5 BEM (2005), [4] FM 3-04.126 (2007), all by
+// printed page; [5] ATP 1-02.1 (2020) by printed page; [6] DCS F-16C guide
+// and [7] Falcon BMS 4.38.1 Training Manual, sim panel only.
+const cite = (n: number) => (pages: string) => `[${n}, ${/[–,]/.test(pages) || / to /.test(pages) ? 'pp.' : 'p.'} ${pages}]`;
+const e = cite(1), m = cite(2), b = cite(3), f = cite(4), a = cite(5), d = cite(6), s = cite(7);
+const initial = { speedKt: 450, tofS: 3, loadG: 4 };
+const pic = jinkPicture(initial);
+const ft = (n: number) => `${Math.round(n).toLocaleString('en-US')} ft`;
+---
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="abnormal-operations" compactSubjectNav={true}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Abnormal Operations',href:sitePath('manual/abnormal-operations/')},{label:mod.title}]}>
+ <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
+  <h2>{mod.maturity}</h2>
+  <p>Module revision {mod.revision} · How aircrew of any service stay out of reach of surface-to-air missiles and anti-aircraft guns, and what they do when one engages them anyway: planning around the threat, how each kind of threat guides or aims, the warning, and the maneuvers, chaff, flares and jamming that defeat it. It follows an Air Force electronic warfare text, the Air Force's F-16 fundamentals in two versions, and the Army's attack helicopter manual, with joint brevity.</p>
+  <p>How a radar sees, the Doppler notch and the countermeasures themselves are in <a href={radar}>Radar and Warning Systems</a>; attacking the defences is in <a href={sead}>SEAD and DEAD</a>; the threats one by one are in <a href={threats}>Threat Systems</a>.</p>
+ </section>
+ <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
+  <div class="contents-groups">
+   <div><h3>The core sequence</h3><ol>{core.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+   <div><h3>Reference</h3><ol>{reference.map(([id,label]) => <li><a href={`#${id}`}>{label}</a></li>)}</ol></div>
+  </div>
+ </nav>
+
+ <p class="lede">The best defence against a surface threat is not to be where it can reach you. Placing terrain between the aircraft and a threat radar effectively negates that radar, and is an integral part of threat avoidance in mission planning. <a href="#source-ewf">{e('6-25')}</a></p>
+ <p>When avoidance fails, the defence depends on knowing how the threat guides: a familiarity with each system's guidance is the key to understanding the jamming, the chaff and flare settings and the maneuvers designed to counter it. <a href="#source-ewf">{e('8-15')}</a> The aircraft-specific maneuvers and dispenser programs are in classified tactics manuals <a href="#source-ewf">{e('15-5')}</a>; this page teaches the principles they are built on.</p>
+ <p>By the end you should be able to:</p>
+ <ol class="outcomes">
+  <li>plan a route and altitude to avoid surface threats, using terrain, and weigh low against medium altitude;</li>
+  <li>name the ways SAMs guide and AAA aims, and the weakness each leaves;</li>
+  <li>recognise an engagement from the warning receiver or by eye, and make the calls;</li>
+  <li>defeat a radar-guided SAM with maneuver, chaff and jamming, including the last-ditch break;</li>
+  <li>defeat an infrared missile with flares, the beam, power, the sun and cloud;</li>
+  <li>spoil aimed anti-aircraft fire and keep exposure to guns short;</li>
+  <li>keep the flight together through a threat reaction and the egress, in a jet or a helicopter.</li>
+ </ol>
+ <p class="note">This is a conceptual reference, not a tactics manual. Every aircraft's maneuvers, dispenser programs, jammer settings and limits come from its own flight and tactics manuals, many of them classified; the threat systems' real capabilities come from current intelligence. Two of the sources are F-16 handbooks, used here only for principles they state generally; the jet's own numbers appear only where named.</p>
+
+ <h2 id="example">One SAM engagement, start to finish</h2>
+ <p>Here is one engagement, from the planning to the egress, by an invented two-ship of strike fighters, callsign COBRA, at medium altitude. A mobile <Term record="sa-6">SA-6</Term> battery, whose missile uses command guidance with terminal <Term>semi-active homing</Term>, is reported near the route; the radio calls follow the format of the Air Force's basic employment manual. <a href="#source-bem">{b('A1-79')}</a></p>
+ <ol class="exchange script">
+  <li><span class="who">1 · Plan</span> <span class="said">Route around the reported ring, use the ridgeline on the way in to mask the threat radar, and fly at medium altitude, above the light guns and shoulder-fired missiles. Brief the threat reaction and the egress. <a class="step" href="#avoid">Why</a></span></li>
+  <li><span class="who">2 · Warning</span> <span class="said">The warning receiver shows the SA-6 radar searching: <Term>DIRT</Term>. Radar search alone needs no evasive maneuver; check the jammer and dispenser are set. <a class="step" href="#warning">Why</a></span></li>
+  <li><span class="who">3 · Track</span> <span class="said">"COBRA 1, MUD 6, SOUTH, NEAR." It is tracking you. Keep the plan only if the route still clears its ring; if not, turn away and put the terrain between you. <a class="step" href="#warning">Why</a></span></li>
+  <li><span class="who">4 · Launch</span> <span class="said">The receiver shows a launch. "COBRA 1, SINGER 6, SOUTH, DEFENDING 090, BULLSEYE 040/20." Turn to put the threat on the beam, dispensing chaff with the jammer on. <a class="step" href="#radar">Why</a></span></li>
+  <li><span class="who">5 · Last ditch</span> <span class="said">The missile is in sight and still guiding. Put it at 3 or 9 o'clock and pull hard out of plane, perpendicular to its line, until it overshoots. <a class="step" href="#break">Why</a></span></li>
+  <li><span class="who">6 · Regroup</span> <span class="said">Recover the energy and height, tell the wingman your heading and height, and rejoin; then leave the target area, get away from the threat envelope and regain mutual support. <a class="step" href="#flight">Why</a></span></li>
+ </ol>
+ <p>The calls in steps 3 and 4 follow the manual's format and examples; the rest of the flight is invented. <a href="#source-bem">{b('A1-79')}</a></p>
+ <p class="key"><strong>Key point:</strong> plan to avoid, read the warning, react to the kind of guidance in front of you, tell the flight, and get away from the envelope. A different threat changes the reaction in steps 4 and 5, not the order.</p>
+
+ <h2 id="avoid">Avoid first: route, height and terrain</h2>
+ <p>Every threat in the defence needs line of sight, and every one has an envelope. The cheapest defence is to plan the route, the timing and the altitude so the threats never get a shot. The Army's attack helicopter manual lists the same measures for any mission: alter the route to avoid known air defence areas, plan the mission earlier or later to use the night, plan suppression at the critical points, and fly a smaller formation. <a href="#source-fm">{f('A-5')}</a> Suppressing or destroying the defences is a mission of its own, in <a href={sead}>SEAD and DEAD</a>.</p>
+ <h3 id="height">Low or medium altitude</h3>
+ <p>Neither altitude is safe from everything. The F-16 handbook sets out the trade, and says do not fly lower than the altitude at which you can safely and effectively do every task: <a href="#source-mch">{m('125–127')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Low or medium altitude" tabindex="0"><table>
+  <caption>Low against medium altitude for ingress and egress</caption>
+  <thead><tr><th scope="col">Altitude</th><th scope="col">Gains</th><th scope="col">Costs</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Low</th><td>Detection may be delayed; exposure to surface-to-air threats is shorter, because they need line of sight and terrain degrades their detection and tracking; many air-to-air threats work poorly low <a href="#source-mch">{m('126')}</a></td><td>The ground; harder navigation and lookout; much more fuel; and it puts you "in the heart of AAA engagement zones" <a href="#source-mch">{m('126')}</a></td></tr>
+   <tr><th scope="row">Medium</th><td>Avoids certain systems, especially light AAA and <Term>MANPADS</Term>; more range, energy and time to work the systems <a href="#source-mch">{m('126')}</a> <a href="#source-bem">{b('5-26')}</a></td><td>Vulnerable to certain threat systems; easier to detect, since radars see farther; the threat can come from any direction in three dimensions <a href="#source-mch">{m('127')}</a></td></tr>
+  </tbody>
+ </table></div>
+ <p>Medium altitude may be the right choice when the major threat is AAA. <a href="#source-mch">{m('126')}</a> The same trade decides the weapons delivery: diving from medium altitude can keep the recovery above some small AAA, but exposure to SAMs and air-to-air threats grows; a higher release keeps the recovery above small arms and light AAA, with more SAM exposure still. <a href="#source-mch">{m('146')}</a></p>
+ <h3 id="terrain">Terrain</h3>
+ <div class="table-scroll" role="region" aria-label="Terrain and radar" tabindex="0"><table>
+  <caption>The three ways terrain limits a threat radar</caption>
+  <thead><tr><th scope="col">Effect</th><th scope="col">How</th><th scope="col">Limit</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>Radar horizon</Term></th><td>The earth's curve hides a low aircraft beyond a range set by the antenna's and the aircraft's heights <a href="#source-ewf">{e('6-23 to 6-25')}</a></td><td>The simple range assumes water or level terrain <a href="#source-ewf">{e('6-25')}</a></td></tr>
+   <tr><th scope="row">Direct <Term>terrain masking</Term></th><td>A terrain feature between the aircraft and the radar blocks its line of sight in that sector <a href="#source-ewf">{e('6-25')}</a></td><td>Only while the feature stays between you</td></tr>
+   <tr><th scope="row"><Term>Indirect terrain masking</Term></th><td>A pulse radar that lights up the aircraft and the terrain behind it together may not tell the two apart; most effective abeam the radar <a href="#source-ewf">{e('6-25')}</a></td><td>Pulse-Doppler and moving-target-indicator radars may be able to negate it <a href="#source-ewf">{e('6-25')}</a></td></tr>
+  </tbody>
+ </table></div>
+ <p>The radar horizon is worked through, with its formula and an interactive figure, in <a href={`${sead}#avoid`}>SEAD and DEAD</a>. Using terrain well starts with route study: knowing where the high and rough ground is lets you follow the path of least resistance, looking ahead for the saddles between hills. <a href="#source-mch">{m('275')}</a></p>
+ <p class="key"><strong>Key point:</strong> keep out of the envelope and out of line of sight. Low altitude trades the SAMs for the guns and the ground; medium altitude trades the guns and shoulder-fired missiles for the SAMs and the fighters.</p>
+
+ <h2 id="guidance">Know how the threat guides</h2>
+ <p>Guns and missiles both have to find, track and then hit the aircraft; each kind does the last part differently, and each leaves a different opening. The Army manual sorts the sensors behind them into radar, infrared, laser and directed energy, and optical or electro-optical; all need line of sight. <a href="#source-fm">{f('A-1 to A-2')}</a> A missile flies three phases: an unguided boost, mid-course guidance and the terminal phase, in which it tries to pass close enough for its fuze. <a href="#source-ewf">{e('8-1 to 8-2')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Guidance and its weaknesses" tabindex="0"><table>
+  <caption>How each kind of threat guides, and the opening it leaves</caption>
+  <thead><tr><th scope="col">Guidance</th><th scope="col">How it works</th><th scope="col">The opening</th><th scope="col">Examples in the Encyclopedia</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>Command guidance</Term></th><td>A ground radar tracks the target and the missile's beacon; a computer sends the steering <a href="#source-ewf">{e('8-3')}</a></td><td>Unguided for the first 2–3 seconds, so a minimum range; only as accurate as the radar's track, so jamming or loss of signal hurts it; reactive, so its maneuvers lag yours. Its beacon is hard to jam: work on the tracking radar <a href="#source-ewf">{e('8-3, 8-5')}</a></td><td><Term record="sa-2">SA-2</Term>, <Term record="sa-3">SA-3</Term>, <Term record="sa-8">SA-8</Term>, <Term record="sa-15">SA-15</Term></td></tr>
+   <tr><th scope="row"><Term>Semi-active homing</Term></th><td>The ground radar lights the target with continuous-wave energy and the missile homes on the reflection, locked to the target's Doppler <a href="#source-ewf">{e('8-6')}</a></td><td>Needs the illuminator on you to the end; chaff and the beam, which bring your Doppler near zero, may break the lock, and it normally cannot regain it. But it has a very small minimum range and reacts quickly <a href="#source-ewf">{e('8-8')}</a></td><td><Term record="sa-11">SA-11</Term>, <Term record="hawk">Hawk</Term>; the <Term record="sa-6">SA-6</Term> in its terminal phase</td></tr>
+   <tr><th scope="row"><Term>Active guidance</Term> and <Term>track-via-missile</Term></th><td>An active missile finishes with its own radar; a track-via-missile seeker sends what it sees to the ground, which steers it <a href="#source-ewf">{e('8-9, 8-11')}</a></td><td>Hard to jam at the end; the mid-course phase may be jammed through the ground radar. Track-via-missile reacts quickly to anything you do <a href="#source-ewf">{e('8-10 to 8-12')}</a></td><td><Term record="patriot">Patriot</Term></td></tr>
+   <tr><th scope="row">Infrared homing</th><td>A passive seeker homes on the aircraft's heat; the operator must see the target first <a href="#source-fm">{f('A-1')}</a></td><td>Decoyed by flares; confused by the sun, cloud and haze. But hard to detect before launch, to locate, and to react to in a short flight <a href="#source-fm">{f('A-1')}</a> <a href="#source-ewf">{e('15-6')}</a></td><td><Term record="sa-7">SA-7</Term>, <Term record="sa-14">SA-14</Term>, <Term record="sa-18">SA-18</Term>, <Term record="stinger">Stinger</Term>, <Term record="sa-13">SA-13</Term></td></tr>
+   <tr><th scope="row"><Term>Aimed fire</Term> (guns)</th><td>A radar computer or a gunner's sight predicts where you will be when the rounds arrive <a href="#source-ewf">{e('8-12 to 8-13')}</a></td><td>The prediction assumes you hold heading, altitude and airspeed for the time of flight <a href="#source-ewf">{e('8-13')}</a></td><td><Term record="zsu-23-4">ZSU-23-4</Term> and <Term record="ks-19">KS-19</Term> (radar); <Term record="zu-23-2">ZU-23-2</Term> (optical)</td></tr>
+   <tr><th scope="row"><Term>Barrage fire</Term> (guns)</th><td>Rounds fired into a sector you are expected to fly through <a href="#source-ewf">{e('8-14')}</a></td><td>None in your maneuvering: it does not aim at you. It covers the expected attack directions and altitudes, so a predictable path is the risk <a href="#source-ewf">{e('8-14')}</a></td><td>Any gun</td></tr>
+  </tbody>
+ </table></div>
+ <details class="more"><summary>More on matching a system to its guidance</summary>
+  <p>The Electronic Warfare Fundamentals text names the SA-2, SA-3, SA-4 and SA-8 as command-guided. <a href="#source-ewf">{e('8-3')}</a> The other examples in the table are taken from each system's Encyclopedia record, which gives its guidance with its own sources; several systems mix modes, such as the SA-6's command mid-course and semi-active terminal phase, and the SA-10's semi-active terminal phase on one missile. Before you fly against a system, read its record for its guidance, envelope and radars, and its warning-receiver symbol.</p>
+ </details>
+ <p class="key"><strong>Key point:</strong> know which kind of guidance you face. Command guidance depends on the ground radar; semi-active homing on the illuminator and your Doppler; infrared on your heat and the seeker's view; aimed guns on your holding a steady path.</p>
+
+ <h2 id="warning">Recognising an engagement</h2>
+ <p>The <Term>radar warning receiver</Term> tells you what kind of radar is looking at you, roughly from where, and whether it is searching, tracking or guiding; how to read it is in <a href={`${radar}#rwr`}>Radar and Warning Systems</a>. Joint brevity gives each state its own word: <a href="#source-atp">{a('16, 32, 45')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Warning calls" tabindex="0"><table>
+  <caption>The calls for a surface threat</caption>
+  <thead><tr><th scope="col">Word</th><th scope="col">Meaning</th><th scope="col">What it asks of you</th></tr></thead>
+  <tbody>
+   <tr><th scope="row"><Term>DIRT</Term></th><td>Warning receiver shows a surface threat in search mode <a href="#source-atp">{a('16')}</a></td><td>Awareness; radar search or acquisition does not need evasive maneuvering <a href="#source-fm">{f('A-5')}</a></td></tr>
+   <tr><th scope="row"><Term>MUD</Term></th><td>A ground threat displayed with no launch indication; or a surface threat in track mode <a href="#source-atp">{a('32')}</a></td><td>You are being tracked: your plan must keep you out of its reach, or you change the plan</td></tr>
+   <tr><th scope="row"><Term>SINGER</Term></th><td>Warning receiver indication of a SAM launch <a href="#source-atp">{a('45')}</a></td><td>React now</td></tr>
+   <tr><th scope="row"><Term>SAM</Term></th><td>A SAM seen in flight or launching, with its position <a href="#source-atp">{a('41')}</a></td><td>React now; infrared missiles may give no other warning</td></tr>
+   <tr><th scope="row"><Term>DEFENDING</Term></th><td>Aircraft is in a defensive position and maneuvering with reference to a SAM threat <a href="#source-atp">{a('16')}</a></td><td>Your own call, with your heading and position</td></tr>
+   <tr><th scope="row"><Term>TRESPASS</Term></th><td>The flight is entering the ring of a named SAM system at a stated position <a href="#source-atp">{a('55')}</a></td><td>A warning from a controller</td></tr>
+  </tbody>
+ </table></div>
+ <p>A controlling agency may also give an <Term>imminent threat warning</Term> when an aircraft comes within 5 NM of the briefed maximum effective range of an active threat; once a fighter has called MUD, DEFENDING or SINGER for that threat it is not needed. <a href="#source-bem">{b('A1-82')}</a></p>
+ <p>Infrared missiles are passive: the warning receiver gives no warning unless the threat used radar to acquire you first. A <Term>missile approach warning system</Term> looks for the missile itself, but early systems took the sun, flares or the wingman for missiles. <a href="#source-ewf">{e('15-6 to 15-7')}</a> Otherwise it is eyes: lookout sectors that cover the front quadrant can catch SAMs fired from ahead, and night vision goggles have proved able to detect SAMs and AAA at night. <a href="#source-bem">{b('3-26, 8-9')}</a></p>
+ <p class="key"><strong>Key point:</strong> search is information, track is a warning, launch is a reaction. Infrared missiles may skip straight to the launch, so lookout still matters.</p>
+
+ <h2 id="radar">Defeating a radar-guided SAM</h2>
+ <p>Against a radar SAM you attack its track. Self-protection chaff, burst-dispensed in the final phase of an engagement, can cause tracking errors or a break-lock, and works much better with jamming and evasive maneuvers. <a href="#source-ewf">{e('13-12')}</a> Used with jamming and maneuvers, chaff can make a tracking radar break lock, or cause a survivable miss if a SAM is fired. <a href="#source-ewf">{e('13-2')}</a> Each part does a different job:</p>
+ <div class="table-scroll" role="region" aria-label="Defeating radar SAMs" tabindex="0"><table>
+  <caption>Maneuver, chaff and jamming against a radar SAM</caption>
+  <thead><tr><th scope="col">Measure</th><th scope="col">What it does</th><th scope="col">Best when</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">The beam</th><td>Brings your speed toward the radar near zero, so a Doppler radar or semi-active missile, which tracks by that speed, may lose you <a href="#source-ewf">{e('8-8, 13-15')}</a></td><td>Against Doppler and continuous-wave tracking; the notch is explained in <a href={`${radar}#notch`}>Radar and Warning Systems</a></td></tr>
+   <tr><th scope="row"><Term>Chaff</Term></th><td>A cloud bigger on the radar than the aircraft, inside the radar's resolution cell; the radar moves its track to the chaff <a href="#source-ewf">{e('13-6 to 13-7, 13-13')}</a></td><td>On the beam: against a Doppler radar the chaff, stopped in the air, only works if you are stopped relative to the radar too; against a monopulse radar the beam gives the greatest angle error <a href="#source-ewf">{e('13-14 to 13-15')}</a></td></tr>
+   <tr><th scope="row">Maneuver out of the cell</th><td>After dispensing, maneuver vertically or horizontally to leave the resolution cell, so the track stays with the chaff <a href="#source-ewf">{e('13-13')}</a></td><td>Against a track-while-scan or conical-scan radar <a href="#source-ewf">{e('13-13')}</a></td></tr>
+   <tr><th scope="row"><Term>Self-protection jamming</Term></th><td>In the DCS F-16C guide, a sim source: denies or degrades the radar's range and track, buying time to leave the envelope or reach your own weapon release <a href="#source-dcs">{d('703, 705')}</a></td><td>Until <Term>burnthrough</Term>, closer to the radar <a href="#source-dcs">{d('705')}</a></td></tr>
+  </tbody>
+ </table></div>
+ <p>Against command guidance the missile has no seeker of its own: the work is on the tracking radar, by jamming, chaff and terrain, and by maneuvering, because the computer's corrections lag your maneuvers. <a href="#source-ewf">{e('8-5')}</a> Against a semi-active missile the work is on its Doppler lock. <a href="#source-ewf">{e('8-8')}</a> Against an active missile in its terminal phase jamming is very hard, so the time to jam is mid-course, through the ground radar. <a href="#source-ewf">{e('8-10 to 8-11')}</a></p>
+ <h3 id="low">Low-altitude reactions</h3>
+ <p>Below the minimum safe altitude (MSA) the F-16 handbook gives three options. They come from its night terrain-following (LANTIRN) section and assume a terrain-following system flying the jet low, but the order of choice is the general lesson: <a href="#source-mch">{m('275')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Low-altitude reactions" tabindex="0"><table>
+  <caption>Reacting to a threat from below the minimum safe altitude</caption>
+  <thead><tr><th scope="col">Option</th><th scope="col">How</th><th scope="col">When</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">1 · Lower, and check away</th><td>Go lower and check away from the threat, using direct and indirect terrain masking to deny acquisition <a href="#source-mch">{m('275')}</a></td><td>The first option</td></tr>
+   <tr><th scope="row">2 · Climb, then maneuver</th><td>Climb to or above the MSA, then maneuver as required <a href="#source-mch">{m('275')}</a></td><td>Only with time between the first indication and the engagement <a href="#source-mch">{m('275')}</a></td></tr>
+   <tr><th scope="row">3 · Oblique turn up</th><td>A 30–45° bank oblique turn up to or above the MSA, then over-bank to about 90–120° and pull to the new heading <a href="#source-mch">{m('275')}</a></td><td>From below the MSA</td></tr>
+  </tbody>
+ </table></div>
+ <p>At low altitude a pilot in the notch can still dispense chaff with G on the jet by momentarily pulling up 5–10° nose high at 3–4 G while dispensing, then letting the terrain-following system bring the jet back down. <a href="#source-mch">{m('275–276')}</a></p>
+ <h3 id="break">The last ditch</h3>
+ <p>When a SAM is confirmed to be guiding on you and you can see it, the Air Force's employment manual trains a maneuver like the last-ditch one, the <Term>orthogonal break</Term>, flown from 400 KCAS or more at 4–5 G: <a href="#source-bem">{b('5-15 to 5-16')}</a></p>
+ <ol class="steps">
+  <li>Turn hard and level to put the threat at 3 or 9 o'clock.</li>
+  <li>With the missile in sight, pull hard out of plane, perpendicular to its intercept axis; the pull resembles part of a barrel roll.</li>
+  <li>Keep pulling and rolling to hold it at 3 or 9 o'clock until it overshoots.</li>
+  <li>You are now nose-high, often at 30–90° of bank: drop the nose back below the horizon and recover from the dive, then back on course.</li>
+ </ol>
+ <p class="key"><strong>Key point:</strong> chaff, the beam and jamming each attack the radar's track, and work best together; against a missile in sight that is still guiding, the last defence is a hard pull out of its plane.</p>
+
+ <h2 id="ir">Defeating an infrared missile</h2>
+ <p>A flare must be hotter to the seeker than the aircraft and inside the seeker's field of view at the same time; then the seeker tracks the more intense source and is decoyed. <a href="#source-ewf">{e('15-4')}</a> Maneuvers make the flare work: they add to the missile's tracking problem, increase the distance between aircraft and flare, and put the aircraft outside the seeker's view. <a href="#source-ewf">{e('15-5')}</a></p>
+ <section class="lesson figure-lesson ready" aria-labelledby="ir-title">
+  <h3 id="ir-title" class="fig-title">Figure 1 — Flare and turn to the beam</h3>
+  <div class="fig-scroll" role="region" aria-label="Figure 1, scrolls sideways on narrow screens" tabindex="0"><svg class="natops ir-fig" viewBox="0 0 640 270" role="img" aria-label="Plan view. A missile approaches from the left. The aircraft dispenses a flare and turns so that the missile's line of sight is at right angles to its path; the flare is left behind near where the turn began.">
+   <rect x="1" y="1" width="638" height="268" class="frame" />
+   <path d="M90 225 Q210 160 318 126" class="missile-track" />
+   <path d="M318 126 l-11 -1 l7 9z" class="fill" />
+   <path d="M140 120 L330 120 Q430 120 465 220" class="jet-track" />
+   <path d="M465 220 l-1 -12 l-8 7z" class="jet-arrow" />
+   <circle cx="340" cy="128" r="9" class="flare" />
+   <circle cx="352" cy="134" r="6" class="flare" />
+   <text x="90" y="245" class="lbl">Missile</text>
+   <text x="140" y="108" class="lbl small">Aircraft</text>
+   <text x="330" y="100" class="lbl small">Flares, as the turn starts</text>
+   <text x="470" y="150" class="lbl small">Turn to put the missile</text>
+   <text x="470" y="164" class="lbl small">on the beam (3 or 9 o'clock)</text>
+   <text x="470" y="248" class="lbl small">Missile now on the beam</text>
+  </svg></div>
+  <p class="fig-caption">Schematic, not to scale, after the electronic warfare text's Figure 15-5. One tactic when an infrared missile is fired is to dispense a flare at once and maneuver to put the missile on the beam: the missile's guidance has the highest line-of-sight rate to process, and the aircraft and flare separate most. <a href="#source-ewf">{e('15-5')}</a></p>
+ </section>
+ <p>With the missile on the beam the pilot also has the best chance to see it, judge its range and keep it there; seeing the missile improves the chance of surviving. <a href="#source-ewf">{e('15-5')}</a> Modern dispensers can run programs tuned to particular missiles, selected by the pilot for the most likely threat. <a href="#source-ewf">{e('15-5')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Other infrared countermeasures" tabindex="0"><table>
+  <caption>The other infrared countermeasures</caption>
+  <thead><tr><th scope="col">Measure</th><th scope="col">Why</th><th scope="col">Limit</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Less power</th><td>The engines are the largest heat source and the only one the pilot controls; less power means a flare needs less intensity. Minimise afterburner, whose signature is hard for any flare to cover <a href="#source-ewf">{e('15-5 to 15-6')}</a></td><td>Never below the power needed for maneuvering airspeed <a href="#source-ewf">{e('15-6')}</a></td></tr>
+   <tr><th scope="row">The sun</th><td>Maneuvering into the sun masks the aircraft's signature from most infrared threats; attacking with the sun behind you may limit the defenders' infrared systems <a href="#source-ewf">{e('15-6')}</a></td><td>Depends on the sun's position and the attack axis</td></tr>
+   <tr><th scope="row">Cloud and smoke</th><td>Water vapour and smoke particles diffuse the infrared energy, so the seeker has no point to track <a href="#source-ewf">{e('15-6')}</a></td><td>Only where there is cloud or smoke</td></tr>
+   <tr><th scope="row">Altitude</th><td>Medium altitude avoids MANPADS <a href="#source-bem">{b('5-26')}</a></td><td>Brings the SAMs and fighters into play (<a href="#height">above</a>)</td></tr>
+  </tbody>
+ </table></div>
+ <p>Flares cost surprise. Dropping them pre-emptively in a target area is an effective tactic against MANPADS, but it shows every defender where you are, day or night, and automatic dispensing cued by the warning systems errs on the side of caution, dropping expendables on any ambiguity. <a href="#source-ewf">{e('15-4')}</a> Some advanced seekers also look for a flare's rapid rise in energy, or its rapid separation from the aircraft, as a sign to ignore it; kinematic flares answer the separation trigger, and covert flares remove the visible flame and smoke that give the aircraft away. <a href="#source-ewf">{e('15-2 to 15-4')}</a></p>
+ <p class="key"><strong>Key point:</strong> flare and turn the missile onto the beam, at once and together; then keep it in sight. Less power, the sun and cloud make the flare's job easier.</p>
+
+ <h2 id="aaa">Defeating anti-aircraft guns</h2>
+ <p>Guns are point defence, sited around the things worth attacking: airfields, bridges, command posts, army units and the SAM sites themselves. <a href="#source-ewf">{e('8-12')}</a></p>
+ <p>Small-calibre guns fire fast over a short range with a short time of flight, often aimed optically with tracers to correct the aim; larger guns have a slower rate of fire, a longer range and a longer time of flight, and usually use a tracking radar and a fire control computer. <a href="#source-ewf">{e('8-12')}</a> Both aim where you will be, on the assumption that you hold your heading, altitude and airspeed while the rounds are in the air. <a href="#source-ewf">{e('8-13')}</a> Change any of them and the rounds arrive where you would have been: Figure 2 shows how far.</p>
+ <section class="lesson figure-lesson" data-lesson="jink" aria-labelledby="jink-title">
+  <h3 id="jink-title" class="fig-title">Figure 2 — Spoiling the gunner's prediction</h3>
+  <div class="controls row">
+   <label for="jink-speed">Speed <output for="jink-speed">450 kt</output> <input id="jink-speed" name="speed" type="range" min="300" max="600" step="25" value="450" /></label>
+   <label for="jink-tof">Time of flight of the rounds <output for="jink-tof">3 s</output> <input id="jink-tof" name="tof" type="range" min="1" max="6" step="0.5" value="3" /></label>
+   <label for="jink-g">Level turn, begun as the gun fires <output for="jink-g">4 g</output> <input id="jink-g" name="g" type="range" min="1" max="6" step="0.5" value="4" /></label>
+  </div>
+  <div class="fig-scroll" role="region" aria-label="Figure 2, scrolls sideways on narrow screens" tabindex="0"><svg class="natops jink-fig" viewBox="0 0 640 260" role="img" aria-label="Plan view. A straight dashed line runs from where the gun fires to the point it aims at; the aircraft's turning path curves away from it, and a short line joins the aim point to where the aircraft actually is when the rounds arrive.">
+   <rect x="1" y="1" width="638" height="258" class="frame" />
+   <path data-predicted d={`M${pic.X0} ${pic.Y0} L${pic.px} ${pic.py}`} class="ln dashed" />
+   <path data-track d={pic.track} class="jet-track" />
+   <path data-offset d={`M${pic.px} ${pic.py} L${pic.ax} ${pic.ay}`} class="offset" />
+   <circle cx={pic.X0} cy={pic.Y0} r="5" class="fill" />
+   <circle data-aim cx={pic.px} cy={pic.py} r="7" class="aim" />
+   <circle data-jet cx={pic.ax} cy={pic.ay} r="6" class="fill" />
+   <text x={pic.X0} y={pic.Y0 + 24} class="lbl small">Gun fires</text>
+   <text x="16" y="38" class="lbl small">Dashed: the path the gun predicts. Ring: its aim point.</text>
+   <text x="16" y="22" class="lbl small">Solid: your path. Dot: you, as the rounds arrive.</text>
+  </svg></div>
+  <p class="no-js">Interactive figure unavailable. At 450 kt you fly {ft(pic.r.predictedFt)} in 3 s; a 4 g level turn begun as the gun fires puts you {ft(pic.r.offsetFt)} from the gun's aim point when the rounds arrive.</p>
+  <div class="feedback derived" data-result role="status" aria-live="polite"></div>
+  <p class="fig-caption">Kinematics only: constant speed and a level turn, worked out on this page. No gun, round, fuze or lethal radius is modelled, so the distance is not a hit or a miss; a longer time of flight, as for the larger radar-directed guns, gives a turn more time to work. The times of flight on the slider are illustrative, not any gun's. The prediction it spoils is the one the source describes. <a href="#source-ewf">{e('8-13')}</a></p>
+ </section>
+ <p>Among the F-16 handbook's low-altitude exercises are S-turns, banked turns of 60–70° linked by unloaded reversals, which it describes as defensive reactions to ground threats, and <Term id="Vertical jink">vertical jinks</Term>, climbs and dives through level of up to 30°. <a href="#source-mch">{m('260')}</a></p>
+ <p>In the target area the delivery itself can do the same work: a <Term>curvilinear approach</Term> changes heading, altitude, airspeed and G all the way to final, leaving only a short tracking run and a lower chance of a hit from AAA. <a href="#source-mch">{m('167')}</a> The recovery after release must stay above the minimum altitude for AAA, set from the munition, the threat and the target area tactics. <a href="#source-mch">{m('166')}</a></p>
+ <p><Term>Barrage fire</Term> is different: it is used when the guns cannot track you, and is fired into the sector you are expected to fly through. It works best around a fixed target, because an attacker may have to fly a predictable path to deliver, and the barrage can cover the expected attack directions and altitudes. <a href="#source-ewf">{e('8-14')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Against guns" tabindex="0"><table>
+  <caption>The defences against guns, and what each attacks</caption>
+  <thead><tr><th scope="col">Defence</th><th scope="col">Attacks</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">Altitude above the gun's reach, or medium-altitude ingress</th><td>Range: light guns cannot reach <a href="#source-mch">{m('126, 146')}</a></td></tr>
+   <tr><th scope="row">Jinks, S-turns, a curvilinear final</th><td>Prediction: the assumption that you hold a steady path <a href="#source-ewf">{e('8-13')}</a> <a href="#source-mch">{m('167, 260')}</a></td></tr>
+   <tr><th scope="row">Short exposure, low or a quick pop-up</th><td>Time: a properly planned pop-up gives surprise and deception against AAA, though low ingress means flying among the guns and small arms <a href="#source-mch">{m('172–173')}</a></td></tr>
+   <tr><th scope="row">Formation</th><td>Warning: in line abreast, the leader's overflight is less likely to alert the guns before the wingman arrives; in a wedge the gunners get 2–4 more seconds to react to the wingman <a href="#source-bem">{b('3-22')}</a></td></tr>
+   <tr><th scope="row">Chaff and jamming</th><td>The fire control radar of radar-directed guns <a href="#source-ewf">{e('13-1')}</a></td></tr>
+  </tbody>
+ </table></div>
+ <p class="key"><strong>Key point:</strong> aimed guns predict a steady path, so don't fly one in their reach; barrage fire waits on the path you are expected to fly, so don't fly that either. Above all, stay above or away from them where you can.</p>
+
+ <h2 id="flight">The flight, the reaction and the egress</h2>
+ <p>A <Term>threat reaction</Term> splits the flight. No one can easily watch the others during one, so the reacting pilot tells the rest the reference heading, the altitude and the type of reaction, and dispenses chaff or flares and uses jamming as required. <a href="#source-mch">{m('275')}</a> When defending against a surface threat, fighters call DEFENDING with the magnetic heading and their bullseye position: <a href="#source-bem">{b('A1-79')}</a></p>
+ <ol class="exchange">
+  <li><span class="who">Defending</span> <span class="said">"RAMBO 1, MUD 6, NORTH, MEDIUM, DEFENDING 270, BULLSEYE 240/15."</span></li>
+ </ol>
+ <p>At medium altitude, altitude separation deconflicts the others from a reacting aircraft, and individual members who react can flow to the back of the formation afterwards; keeping elements together helps spot the next threat and watch the reacting pilot's altitude. <a href="#source-mch">{m('275')}</a> At night the explosions and launches are disorienting, and the reaction must be flown on the instruments unless the horizon is clearly visible; it may be more important to stay oriented than to defeat a threat that may not even be targeting you. <a href="#source-mch">{m('275')}</a></p>
+ <p>Unacceptable target area defences and battle damage are among the reasons to egress or abort. The general egress priorities are: <a href="#source-mch">{m('202–203')}</a></p>
+ <ol class="steps">
+  <li>Leave the target area.</li>
+  <li>Get away from the threat envelope.</li>
+  <li>Regain mutual support.</li>
+ </ol>
+ <p>A pilot separated from the flight follows the egress plan, keeps their own lookout and goes to the briefed rendezvous point, chosen to be relatively free of defences; above all, join with someone as soon as possible. In mountains an in-trail egress may help mask the defences. Do a battle damage check on each aircraft. <a href="#source-mch">{m('203')}</a></p>
+ <p>A damaged aircraft that cannot fly the planned egress speed first communicates its status; if it can still cross back over the front line it should, and ejection in the briefed safe areas is considered if it cannot. <a href="#source-mch">{m('203')}</a> What to do with a damaged aircraft is in <a href={emergency}>Emergency Procedures</a>.</p>
+ <p class="key"><strong>Key point:</strong> say what you are doing when you react; then leave the target area, get away from the envelope and get back together.</p>
+
+ <h2 id="recap">Key points</h2>
+ <ul class="recap">
+  <li>Avoid first: route, timing and altitude out of the envelopes, and terrain between you and the radar. <a href="#avoid">More</a></li>
+  <li>Low altitude trades the SAMs for the guns and the ground; medium altitude the guns and MANPADS for the SAMs and fighters. <a href="#height">More</a></li>
+  <li>Know the guidance: command on the ground radar, semi-active on the illuminator and your Doppler, infrared on your heat, guns on your steady path. <a href="#guidance">More</a></li>
+  <li>DIRT is search, MUD is track, SINGER is a launch; infrared missiles may give no warning. <a href="#warning">More</a></li>
+  <li>Radar SAMs: beam, chaff and jamming together; last ditch, a hard pull out of plane with the missile in sight. <a href="#radar">More</a></li>
+  <li>Infrared missiles: flare and turn them onto the beam at once; less power, the sun and cloud help. <a href="#ir">More</a></li>
+  <li>Guns: be above or away; inside their reach, never a steady or predictable path. <a href="#aaa">More</a></li>
+  <li>Tell the flight when you react; leave the target area, get away from the envelope, regroup. <a href="#flight">More</a></li>
+ </ul>
+
+ <h2 id="helicopters">Helicopters</h2>
+ <p>Helicopter crews meet the same threats closer to the ground, and avoid them first with terrain flight: low-level, contour and nap-of-the-earth flight diminish the enemy's ability to acquire, track and engage aircraft. <a href="#source-fm">{f('3-8')}</a> Terrain and vegetation that mask an aircraft from visual and electronic detection significantly degrade threat weapons, and the crew still uses the highest terrain flight altitude the masking allows, for easier navigation, more speed, fewer hazards and less fatigue. <a href="#source-fm">{f('3-9')}</a> The three modes are defined in the <Term>terrain flight</Term> terms; flying them in formation is in <a href={sitePath('manual/formation-flying/helicopter-formation/')}>Helicopter Formation</a>, and attacking from them in <a href={rwa}>Rotary-Wing Attack</a>.</p>
+ <p>The Army's manual breaks the reaction to an engagement into three parts. When a gun or missile is seen firing, or the survivability equipment shows a radar track or launch, the crew has seconds: <a href="#source-fm">{f('A-5')}</a></p>
+ <div class="table-scroll" role="region" aria-label="Helicopter reaction" tabindex="0"><table>
+  <caption>The three parts of a helicopter crew's reaction</caption>
+  <thead><tr><th scope="col">Part</th><th scope="col">What happens</th></tr></thead>
+  <tbody>
+   <tr><th scope="row">1 · Indication</th><td>Decides the immediate action, and deploy to cover <a href="#source-fm">{f('A-5')}</a></td></tr>
+   <tr><th scope="row">2 · Evasive maneuver</th><td>Maneuver and expend countermeasures if applicable, when masking terrain is not readily available <a href="#source-fm">{f('A-5')}</a></td></tr>
+   <tr><th scope="row">3 · Actions on contact</th><td>The decision to continue or abort the mission <a href="#source-fm">{f('A-5')}</a></td></tr>
+  </tbody>
+ </table></div>
+ <p>Crew coordination is rehearsed, with standard terms such as "missile 3 o'clock, break right"; in a formation, "Team 2 break right, missile" or "Team 1, tracers, three o'clock, break left" tells the others what you are doing. <a href="#source-fm">{f('A-5 to A-6')}</a></p>
+ <p>Formations and spacing leave each aircraft room to evade, and the brief covers the break-up and how to reform. One aircraft may be the only one to get a warning, because of terrain, a narrow radar beam, altitude or a fault, so it passes its indications to the others. <a href="#source-fm">{f('A-5 to A-7')}</a></p>
+ <p>The manual also notes that some modern radars track the rotor blades, and cancel the blind speeds that once gave a Doppler notch (the manual's sense here is a blind speed toward or away from the radar, not the beam, which still works); even then, no aircraft can sit in the notch of more than one radar. <a href="#source-fm">{f('A-1')}</a></p>
+
+ <h2 id="limits">What this page cannot give you</h2>
+ <p>The issue behind this module asked for detailed methods against specific threats. The public sources stop at the principles: the electronic warfare text says the aircraft-specific maneuvers and flare programs are in classified tactics manuals, and the F-16 handbook refers to a restricted manual for specific threat capabilities. <a href="#source-ewf">{e('15-5')}</a> <a href="#source-mch">{m('125')}</a> So the page organises the threats by guidance, which is public and decides the defence, and leaves each system's numbers to its <a href={threats}>Encyclopedia record</a>. Nothing here gives a system's real minimum range against a maneuvering target, its reaction time, or the dispenser program for it.</p>
+
+ <section class="sim-panel" aria-labelledby="sims">
+  <h2 id="sims">In the sim</h2>
+  <p>The DCS: F-16C Viper guide and the Falcon BMS 4.38.1 Training Manual were read for this panel. Both model the F-16's dispenser and jamming pod, and BMS has a SEAD training mission with a short section on missile evasion. <a href="#source-dcs">{d('697–708')}</a> <a href="#source-bms">{s('374–379')}</a></p>
+  <div class="table-scroll" role="region" aria-label="Sim notes" tabindex="0"><table>
+   <caption>Running a threat reaction in the two F-16 sims</caption>
+   <thead><tr><th scope="col">Item</th><th scope="col">DCS F-16C</th><th scope="col">Falcon BMS F-16</th></tr></thead>
+   <tbody>
+    <tr><th scope="row">Dispenser modes</th><td>OFF, STBY, MAN, SEMI and AUTO on the CMDS panel; SEMI asks consent ("Counter") before dispensing a program cued by the warning receiver <a href="#source-dcs">{d('697–698')}</a></td><td>Refers to its Dash-34 for the electronic warfare suite <a href="#source-bms">{s('374')}</a></td></tr>
+    <tr><th scope="row">Dispense</th><td>Countermeasures Management Switch forward for the selected manual program; a separate chaff/flare button for program 5 <a href="#source-dcs">{d('708')}</a></td><td>—</td></tr>
+    <tr><th scope="row">Jamming pod</th><td>ALQ-131 or ALQ-184; noise or deception jamming; burnthrough closer to the radar <a href="#source-dcs">{d('703–705, 708')}</a></td><td>"Music on" with the right transmit mode, as one of three methods <a href="#source-bms">{s('379')}</a></td></tr>
+    <tr><th scope="row">Altitude</th><td>—</td><td>Two "optimal" blocks against SAMs and AAA: above 30,000 ft AGL and 50–300 ft AGL, at 350 kt or more <a href="#source-bms">{s('375')}</a></td></tr>
+    <tr><th scope="row">Missile evasion</th><td>—</td><td>Jamming, maneuvering and terrain masking; "turn and run" against the SA-2 and SA-3: full throttle, missile on your six, descend and turn hard <a href="#source-bms">{s('379')}</a></td></tr>
+   </tbody>
+  </table></div>
+  <p><strong>Where it differs from this module.</strong> BMS says beaming is not very effective against missiles, especially short-range systems like the SA-6 and SA-11, because you stay inside the engagement zone and can be fired at again. <a href="#source-bms">{s('379')}</a> The electronic warfare text, describing real semi-active missiles, says chaff and the beam may break their lock. <a href="#source-ewf">{e('8-8')}</a></p>
+  <p>The two are not about the same thing: one is a sim's advice on staying alive in its model, the other how the guidance works. In BMS, its own model decides. The BMS altitude blocks are the sim's rules of thumb for its F-16, not a real-world standard.</p>
+  <p><strong>Not said.</strong> Neither manual was checked for how its sim models guns, flare rejection or the sun.</p>
+  <p><strong>Not checked.</strong> Other DCS modules' manuals, helicopter modules, and other sims were not read for this module.</p>
+ </section>
+
+ <h2 id="terms">Terms</h2>
+ <GlossaryList items={[
+  'Command guidance', 'Semi-active homing', 'Active guidance', 'Track-via-missile', 'Aimed fire', 'Barrage fire', 'MANPADS', 'Radar horizon', 'Terrain masking', 'Indirect terrain masking',
+  'DIRT', 'MUD', 'SINGER', 'SAM', 'DEFENDING', 'TRESPASS', 'Imminent threat warning', 'Chaff', 'Decoy flare', 'Self-protection jamming', 'Burnthrough',
+  'Threat reaction', 'Orthogonal break', 'Vertical jink', 'Curvilinear approach', 'Terrain flight',
+ ]} />
+ <section class="lesson quiz-lesson" data-lesson="terms" aria-labelledby="terms-title">
+  <h3 id="terms-title">Quiz: name the term</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next term</button></div>
+ </section>
+
+ <h2 id="check">Check your understanding</h2>
+ <p>At least two questions for each outcome; Figure 2 covers outcome 6 too.</p>
+ <section class="lesson quiz-lesson" data-lesson="questions" aria-labelledby="questions-title">
+  <h3 id="questions-title">Quiz: avoiding and defeating surface threats</h3>
+  <p class="task" data-prompt aria-live="polite"></p>
+  <div class="buttons" data-choices></div>
+  <p class="feedback" data-result role="status" aria-live="polite"></p>
+  <div class="buttons"><button type="button" data-new>Next question</button></div>
+ </section>
+ <details><summary><span class="outcome">Outcome 1</span> Your route passes a ridge 10 NM from a reported SAM radar. How can it help?</summary><p>Fly the leg with the ridge between you and the radar: direct terrain masking blocks its line of sight in that sector. Flying close to the ridge where the radar lights it too may also hide you from a pulse radar (indirect masking), but a pulse-Doppler radar may see through that.</p></details>
+ <details><summary><span class="outcome">Outcome 2</span> Why is jamming the missile of a command-guided SAM the wrong target?</summary><p>Its beacon is at the rear, facing the ground radar, and can be fairly powerful, so it is hard to jam. The missile is only as accurate as the ground radar's track, so jam, chaff or mask the tracking radar instead.</p></details>
+ <details><summary><span class="outcome">Outcome 3</span> DIRT, then MUD, then SINGER, all from the same SA-6. What has happened?</summary><p>Its radar went from searching, to tracking you, to a launch indication. The first needs awareness, the second a check that your plan keeps you out of its reach, the third a reaction now.</p></details>
+ <details><summary><span class="outcome">Outcome 4</span> At low altitude, below the minimum safe altitude, you get a launch indication with little time. What is the first option the F-16 handbook gives?</summary><p>Go lower and check away from the threat, using direct and indirect terrain masking to deny it acquisition. Climbing to the MSA first needs time between the indication and the engagement. The handbook gives these for flight with a terrain-following system.</p></details>
+ <details><summary><span class="outcome">Outcome 5</span> Why not select afterburner to outrun an infrared missile you have just seen launched?</summary><p>Afterburner gives a signature that is hard for any flare to cover. Flare and turn to put it on the beam at once, with the least power that keeps your maneuvering speed.</p></details>
+ <details><summary><span class="outcome">Outcome 6</span> Why does the time of flight of the rounds matter to a jink?</summary><p>The gun aims at where a steady aircraft would be when the rounds arrive. The longer they take, the further any change of heading, height or speed takes you from that point (Figure 2).</p></details>
+ <details><summary><span class="outcome">Outcome 7</span> You are separated from your wingman after the attack. What now?</summary><p>Follow the egress plan with your own lookout to the briefed rendezvous point, and join with someone as soon as possible.</p></details>
+
+ <h2 id="sources">Sources and applicability</h2>
+ <h3>Military sources</h3>
+ <p id="source-ewf"><strong>[1] US Air Force, Electronic Warfare Fundamentals, November 2000.</strong> A student text of Air Combat Command's Training Support Squadron, Det 8. <a href="https://falcon.blu3wolf.com/Docs/Electronic-Warfare-Fundamentals.pdf">Public copy</a>, read 13 November 2026 by printed page: 6-23 to 6-26 (radar horizon and terrain masking), 8-1 to 8-15 (missile guidance and AAA), 13-1 to 13-16 (chaff), 14-1, and 15-1 to 15-8 (infrared countermeasures).</p>
+ <p id="source-mch"><strong>[2] US Air Force, MCH 11-F16 Volume 5, F-16 Combat Aircraft Fundamentals, 10 May 1996.</strong> <a href="https://falcon.blu3wolf.com/Docs/F-16%20COMBAT%20AIRCRAFT%20FUNDAMENTALS%20-%20Multi-Command%20Handbook%2011-F16%20Vol5.pdf">Public copy</a>, read 13 November 2026 by printed page: 125–127 (low and medium altitude), 146 (deliveries), 166–167 (recovery, curvilinear approach), 172–173 (pop-up), 202–203 (egress), 260 (vertical jinks, S-turns), 275–276 (terrain masking, threat reaction). Superseded; cited only for principles it states generally.</p>
+ <p id="source-bem"><strong>[3] Republic of Korea Air Force, TTP 3-3 Volume 5, Basic Employment Manual, F-16C, 1 October 2005.</strong> An unclassified version of the US Air Force's AFTTP 3-3 fundamentals prepared for the Korean Air Force. <a href="https://falcon.blu3wolf.com/Docs/Basic-Employment-Manual-F-16C-RoKAF.pdf">Public copy</a>, read 13 November 2026 by printed page: 3-22, 3-26, 5-15 to 5-16 (S-turns, orthogonal break), 5-26, 8-9, A1-79 (DIRT, MUD and SINGER calls), A1-82 (imminent threat warning).</p>
+ <p id="source-fm"><strong>[4] US Army, FM 3-04.126, Attack Reconnaissance Helicopter Operations, 16 February 2007.</strong> Distribution unlimited. <a href="https://aviation-assets.info/wp-content/uploads/fm-3-04-126-attack-reconnaissance-helicopter-operations.pdf">Public copy</a>, read 13 November 2026 by printed page: 3-8 to 3-9 (terrain flight), A-1 to A-7 (aircraft survivability).</p>
+ <p id="source-atp"><strong>[5] ATP 1-02.1 / MCRP 3-30B.1 / NTTP 6-02.1 / AFTTP 3-2.5, Multi-Service Brevity Codes, 28 May 2020.</strong> <a href="https://patchwiki.biligame.com/images/falconbms/b/b9/52h07xttr3pokygwj13g7hwripg1cix.pdf">Public copy</a>, read 13 November 2026 by printed page: 16, 32, 41, 45, 55.</p>
+ <h3>Sim sources</h3>
+ <p id="source-dcs"><strong>[6] Eagle Dynamics, DCS: F-16C Viper Early Access Guide (English).</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 13 November 2026, pp. 697–698 and 703–708. A sim manual: cited for the In the sim panel, and for how a jamming pod buys time (pp. 703–705).</p>
+ <p id="source-bms"><strong>[7] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 13 November 2026 by printed page: 374–379 (mission 28, SEAD). A sim manual, cited only for the In the sim panel.</p>
+ <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/threat-avoidance-evidence.md">Threat Avoidance evidence</a>. The worked example's flight is invented; its calls follow [3]. Figure 2's numbers are this page's own kinematics, not a source's.</p>
+ <p class="note">Applicability: military aircrew of every service, fixed and rotary wing. Two sources are F-16 handbooks and one an Army helicopter manual; their principles are presented generally, and any aircraft's own flight and tactics manuals govern its maneuvers, limits and countermeasures. Detailed threat-specific tactics are classified and are not here. This revision is Drafted pending independent source-backed review.</p>
+</SiteLayout>
+<script>
+ import '../../../lessons/abnormal/threat-ui.mjs';
+</script>
+<style>
+ .contents-groups ol { columns: auto; }
+ .natops .missile-track { fill: none; stroke: #b91c1c; stroke-width: 2.5; stroke-dasharray: 6 4; }
+ .natops .jet-track { fill: none; stroke: var(--color-link); stroke-width: 3; stroke-linecap: round; }
+ .natops .jet-arrow { fill: var(--color-link); }
+ .natops .flare { fill: #f59e0b; stroke: #b45309; stroke-width: 1.5; }
+ .natops .aim { fill: none; stroke: #b91c1c; stroke-width: 2.5; }
+ .natops .offset { fill: none; stroke: #b91c1c; stroke-width: 2; }
+ .natops .missile-track + path { fill: #b91c1c; }
+</style>

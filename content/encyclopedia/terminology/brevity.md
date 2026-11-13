@@ -89,9 +89,19 @@ terms:
   - term: DEADEYE
     definition: Laser designator system inoperative.
     cite: [{ n: 1, page: "15" }]
+  - term: DEFENDING
+    form: "[direction]"
+    definition: Aircraft is in a defensive position and maneuvering with reference to a SAM threat.
+    domains: [Air-to-air, Air-to-surface]
+    cite: [{ n: 1, page: "16" }]
   - term: DEFENSIVE
     definition: Aircraft is under attack, maneuvering defensively, and unable to ensure deconfliction or mutual support.
     domains: [Air-to-air, Air-to-surface]
+    cite: [{ n: 1, page: "16" }]
+  - term: DIRT
+    definition: Radar warning receiver indication of surface threat in search mode. See MUD and SINGER.
+    domains: [Surface-to-air]
+    note: "Not a NATO brevity word. [1]"
     cite: [{ n: 1, page: "16" }]
   - term: ENGAGED
     definition: Call from an aircraft maneuvering in the visual arena to relinquish deconfliction responsibilities.
@@ -228,6 +238,11 @@ terms:
     definition: An aircraft request to a forward air controller, JTAC or C2 platform for a target or task.
     domains: [Air-to-surface]
     cite: [{ n: 1, page: "44" }]
+  - term: SINGER
+    form: "(type, direction)"
+    definition: Radar warning receiver indication of SAM launch. See MUD and DIRT.
+    domains: [Electromagnetic warfare]
+    cite: [{ n: 1, page: "45" }]
   - term: SORTED
     definition: Sort responsibility within a GROUP has been met.
     domains: [Air-to-air, Air-to-surface, Maritime air]
@@ -265,6 +280,11 @@ terms:
   - term: TALLY
     definition: Sighting of a target, non-friendly aircraft, or enemy position. Opposite of NO JOY.
     cite: [{ n: 1, page: "53" }]
+  - term: TRESPASS
+    form: "[system, position]"
+    definition: The addressed flight is entering the threat SAM ring of a specific (system) at the stated location.
+    domains: [Electromagnetic warfare]
+    cite: [{ n: 1, page: "55" }]
   - term: TUMBLEWEED
     definition: I have limited situational awareness, (i.e., NO JOY, BLIND) and request information.
     cite: [{ n: 1, page: "56" }]
