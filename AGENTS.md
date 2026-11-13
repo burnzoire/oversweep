@@ -62,6 +62,9 @@ reviewer is required. Authors cannot self-validate. Record the exact revision,
 inspected sources, independent model cases and resolved findings. CI alone does
 not establish aviation correctness. This policy supersedes human-review gates in
 historical plans; those plans are evidence inputs, not additional approval stages.
+Maturity is internal tracking only: never show maturity labels (such as "Drafted —
+not technically validated") on pages, cards or trainers. The legal page is the
+reader-facing disclaimer.
 
 The SME review gate passes a PR that changes any path in `smeReviewPaths`
 (scripts/sme-review-gate.mjs) when it carries the `sme-passed` label, added after

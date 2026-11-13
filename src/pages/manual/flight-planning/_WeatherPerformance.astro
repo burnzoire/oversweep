@@ -34,7 +34,6 @@ const ft = (x: number) => `${Math.round(x).toLocaleString('en-US')} ft`;
 <SiteLayout title={mod.title} activeSection="manual" activeSubject="flight-planning" compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Flight Planning',href:sitePath('manual/flight-planning/')},{label:mod.title}]}>
  <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
-  <h2>{mod.maturity}</h2>
   <p>Module revision {mod.revision} · Reading the weather for a plan and working out what the aircraft can do: the briefing, METAR and TAF, density altitude, takeoff and landing distance, and weight and balance.</p>
  </section>
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
@@ -291,7 +290,7 @@ const ft = (x: number) => `${Math.round(x).toLocaleString('en-US')} ft`;
  <p id="source-dcs"><strong>[4] Eagle Dynamics, DCS User Manual (English, 2020).</strong> <a href="https://www.digitalcombatsimulator.com/upload/iblock/ed6/87v22jwd1xh51i3rgki944xsf503istq/DCS_User_Manual_EN_2020.pdf">DCS User Manual (PDF)</a>, read 3 November 2026, pp. 112–113. A sim manual, cited only for the In the sim panel; later DCS versions changed the weather editor.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/flight-planning-evidence.md">Flight Planning evidence</a>.</p>
  <p>Figures 1 to 4 use the FAA handbook's examples where stated; the other reports, the airfields, the trainer and its loads are invented.</p>
- <p class="note">Applicability: written for pilots of every service. The METAR and TAF codes and the performance methods are those of the FAA handbook, used by US military and civil pilots alike; other countries' codes differ slightly. Military weather briefs are from the Air Force and Army weather handbook and the Navy's general flight rules. Your service's weather rules, its weather unit's products and the aircraft's flight manual govern. This revision is Drafted pending independent source-backed review.</p>
+ <p class="note">Applicability: written for pilots of every service. The METAR and TAF codes and the performance methods are those of the FAA handbook, used by US military and civil pilots alike; other countries' codes differ slightly. Military weather briefs are from the Air Force and Army weather handbook and the Navy's general flight rules. Your service's weather rules, its weather unit's products and the aircraft's flight manual govern.</p>
 </SiteLayout>
 
 <script>import '../../../lessons/flight-planning/weather-ui.mjs';</script>

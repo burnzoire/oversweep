@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 // Generated-output checks for every registered trainer-less module. Published
-// modules must ship their page and subject listing with visible maturity and
+// modules must ship their page and subject listing without the internal maturity label and with
 // revision, and carry no trainer; excluded modules must not leak into normal
 // builds. `--review` treats every entry as included.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -57,7 +57,7 @@ export async function checkModules({ dist, modules, review = false, base = "" })
       const section = sections[name] = moduleSection(html, m.id);
       if (!section || !section.tag.includes(revision))
         problems.push(`${m.id}: ${name} lacks the registered id or revision ${m.revision}.`);
-      if (!section?.body.includes(m.maturity)) problems.push(`${m.id}: ${name} does not show maturity "${m.maturity}".`);
+      if (section?.body.includes(m.maturity)) problems.push(`${m.id}: ${name} shows the internal maturity label "${m.maturity}".`);
     }
     if (pages["subject index"] && !sections["subject index"]?.body.includes(`href="${base}/${route(m)}"`))
       problems.push(`${m.id}: subject index does not link to ${base}/${route(m)}.`);

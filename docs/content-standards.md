@@ -70,8 +70,10 @@ Deterministic test fixtures must distinguish exact expectations from approximati
 | Technically Validated | Independent source-backed aviation SME agent review of the exact revision; model reference cases and findings resolved |
 | Published | Validation retained, accessibility/visual checks passed, explicit publication approval and actual release |
 
-Maturity belongs to each content revision, independent of issue status.
-Unvalidated material must be visibly marked and excluded from any future published
+Maturity belongs to each content revision, independent of issue status. It is
+tracked in the registries (`maturity` in `src/data/*.json`) and in these docs
+only, and is never shown on the site: the legal page is the reader-facing
+disclaimer. Unvalidated material stays excluded from any future published
 validated-content index by default. Add a machine-enforced publication gate when
 content tooling is implemented. AI prose remains Drafted without the evidence and independent agent review above.
 CI alone cannot establish factual correctness.

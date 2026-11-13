@@ -41,7 +41,6 @@ const reference = [
  compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Naval Operations',href:sitePath('manual/naval-operations/')},{label:'Case III Recoveries'}]}>
  <section class="status-panel">
-  <h2>{recoveryModule.maturity}</h2>
   <p>Module revision {recoveryModule.revision} · Conventional fixed-wing, arrested carrier recoveries. Aircraft-agnostic concepts, illustrated using historical US Navy training material. Helicopter and vertical-landing procedures are outside this module.</p>
   <p>Read the recovery sequence, explore the navigation geometry, then practise selected skills in the optional standalone Tomcat exercise.</p>
  </section>
@@ -437,11 +436,11 @@ const reference = [
  <details><summary><span class="outcome">Outcome 5</span> Does a bolter mean you can join the Case I visual pattern?</summary><p>No. Follow the applicable Case III bolter procedure and controller instructions.</p></details>
  <h2 id="launch">Practice: Tomcat recovery exercise</h2>
  <section class="status-panel" data-experience-id={caseIII.id} data-experience-revision={caseIII.revision}>
- <h3>{caseIII.title}</h3><p>{caseIII.maturity} · Exercise revision {caseIII.revision}</p>
+ <h3>{caseIII.title}</h3><p>Exercise revision {caseIII.revision}</p>
  <p>{caseIII.applicability} Prerequisites: {caseIII.prerequisites.join(' · ')}.</p>
  <p>Reinforce point-to-point navigation, <Term id="Marshal">marshal</Term> timing, radio handoffs and managing a descent through an approach sequence. The Tomcat is the worked example; its configuration controls and scoring do not define the general module.</p>
  <p>The exercise is self-contained: its briefing, instructor, controls and exercise notes explain how to use it without reading this page first. Read the <Term id="Sortie">sortie</Term> briefing and select Start Exercise. Instructor and voice are optional.</p>
- <p>Its motion model converts the commanded KIAS to true airspeed for altitude and plots it relative to Mother, who steams 15 kt into a 10 kt wind: a fixed 25 kt of air down the deck that you must allow for when timing the marshal hold to cross the fix at EAT. Those wind and ship values are exercise assumptions. It simplifies aircraft performance, hold entries, approach guidance and arrestment; fuel consumption and <Term id="Bolter">bolters</Term> are not modelled. Its numeric gates and inherited dialogue remain unvalidated exercise content. It does not assess real proficiency or implement every procedure discussed above.</p>
+ <p>Its motion model converts the commanded KIAS to true airspeed for altitude and plots it relative to Mother, who steams 15 kt into a 10 kt wind: a fixed 25 kt of air down the deck that you must allow for when timing the marshal hold to cross the fix at EAT. Those wind and ship values are exercise assumptions. It simplifies aircraft performance, hold entries, approach guidance and arrestment; fuel consumption and <Term id="Bolter">bolters</Term> are not modelled. Its numeric gates and dialogue are simplified exercise content. It does not assess real proficiency or implement every procedure discussed above.</p>
  <TrainerLaunch href={trainerHref} experienceId={caseIII.id} label="Launch the Tomcat exercise" />
  </section>
  <h2 id="sources">Sources and applicability</h2>
@@ -452,7 +451,7 @@ const reference = [
  <h3>Sim source</h3>
  <p id="source-sc"><strong>[5] Eagle Dynamics, DCS: Supercarrier Operations Guide.</strong> Updated 20 November 2024. <a href="https://www.digitalcombatsimulator.com/upload/iblock/e1b/430ooc582lpb0npynbsewan6omd5ohvs/DCS_Supercarrier_Operations_Guide_EN.pdf">PDF</a>, read 5 November 2026, pp. 75–81 (Case III recovery). A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific source excerpts and provenance are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/case-iii-p816-evidence.md">P-816 evidence</a> and <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/case-iii-general-source.md">general carrier-control evidence</a> and <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/case-iii-visual-module-evidence.md">figure, communications and turn-needle evidence</a>. The module's conceptual structure is aircraft-agnostic; published profile numbers, reporting examples and handling sequences remain attributed to their documented contexts.</p>
- <p class="note"><strong>Source conflict:</strong> this edition gives different <Term id="Case I, II and III">Case III</Term> visibility thresholds in its weather-criteria section (p. 2-4) and recovery section (p. 2-22). Exact weather minima are therefore unresolved here. This module teaches the night/instrument-recovery purpose without asserting a numerical threshold. It remains Drafted pending independent source-backed review.</p>
+ <p class="note"><strong>Source conflict:</strong> this edition gives different <Term id="Case I, II and III">Case III</Term> visibility thresholds in its weather-criteria section (p. 2-4) and recovery section (p. 2-22). Exact weather minima are therefore unresolved here. This module teaches the night/instrument-recovery purpose without asserting a numerical threshold.</p>
  <p>Figures 1–5 are original line drawings, not reproductions of any manual figure. They are not to scale; every label repeats a value stated in the text beside it with its source. The profile, stack and turn practice use the simplified models described with them.</p>
  <p>The geometry interaction is a simplified educational model: flat station-centred coordinates, no wind, horizontal range and a fixed 250 NM/hour illustration rate. Its equations are shown with the worked example. This is not an IAS-to-groundspeed conversion or a prescribed approach.</p>
  <p>The module's source review is separate from the trainer's validation. Neither the T-45C publication nor this module validates the trainer's Tomcat gates, radio script or scoring.</p>

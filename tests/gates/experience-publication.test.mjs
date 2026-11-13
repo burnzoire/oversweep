@@ -10,9 +10,9 @@ const experience = {
   maturity: 'Drafted — not technically validated', publication: 'published', assets: ['app.js'],
 };
 const tag = `data-experience-id="${experience.id}" data-experience-revision="2"`;
-const listing = `<section ${tag}><strong>${experience.maturity}</strong><a href="/manual/navigation/example/">Open</a></section>`;
+const listing = `<section ${tag}><a href="/manual/navigation/example/">Open</a></section>`;
 const complete = {
-  'manual/navigation/example/index.html': `<section ${tag}>${experience.maturity}</section><iframe src="/experiences/example/"></iframe>`,
+  'manual/navigation/example/index.html': `<section ${tag}></section><iframe src="/experiences/example/"></iframe>`,
   'experiences/example/index.html': `<body ${tag}><script src="app.js"></script></body>`,
   'experiences/example/app.js': 'run();',
   'manual/navigation/index.html': listing,
@@ -43,10 +43,11 @@ test('a published experience must ship every route, listing and asset', async ()
   assert(problems.some(p => p.includes('asset app.js is missing')));
 });
 
-test('published pages must show the registered maturity and revision', async () => {
-  const problems = await check(complete, { experience: { maturity: 'Technically Validated', revision: 3 } });
-  assert(problems.some(p => p.includes('does not show maturity')));
+test('published pages must show the registered revision and hide the maturity label', async () => {
+  const problems = await check(complete, { experience: { revision: 3 } });
   assert(problems.some(p => p.includes('revision 3')));
+  const labelled = Object.fromEntries(Object.entries(complete).map(([file, html]) => [file, html.replace('</section>', `${experience.maturity}</section>`)]));
+  assert((await check(labelled)).some(p => p.includes('shows the internal maturity label')));
 });
 
 test('an excluded experience must not appear anywhere in normal output', async () => {
@@ -62,7 +63,7 @@ test('review builds require excluded experiences to be complete', async () => {
 
 test('a window-only experience must be linked in a new window and never framed', async () => {
   const wrapper = 'manual/navigation/example/index.html';
-  const launch = `<section ${tag}>${experience.maturity}</section><a href="/experiences/example/" target="_blank" rel="noopener" data-experience-launch>Launch</a>`;
+  const launch = `<section ${tag}></section><a href="/experiences/example/" target="_blank" rel="noopener" data-experience-launch>Launch</a>`;
   const options = { experience: { launch: 'window' } };
   assert.deepEqual(await check({ ...complete, [wrapper]: launch }, options), []);
   let problems = await check(complete, options);

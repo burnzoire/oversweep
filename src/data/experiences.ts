@@ -2,7 +2,7 @@ import registry from './experiences.json';
 
 // The registry is the single source for Manual, Training Library, routes and
 // output checks. `publication` decides whether an experience ships in normal
-// builds; it is independent of `maturity`, which is always shown to readers.
+// builds; it is independent of `maturity`, which is internal and never shown to readers.
 // `launch: 'window'` experiences open in their own window and are never framed;
 // the default embeds them in the Manual page.
 export type Experience = (typeof registry)[number] & {

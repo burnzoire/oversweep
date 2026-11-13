@@ -39,7 +39,7 @@ test('ISO year rollover and week 53 retain the last feature until week 1', () =>
 // the clock controllable to exercise an open tab across a weekly boundary.
 import vm from 'node:vm';
 import ts from 'typescript';
-test('browser selection replaces stale text, photo, links, credit and maturity together', () => {
+test('browser selection replaces stale text, photo, links and credit together', () => {
   const source = readFileSync(new URL('../../src/components/FeaturedArticle.astro', import.meta.url), 'utf8');
   const script = source.match(/<script>\n([\s\S]*?)<\/script>/)[1].replace(/import .*?;\n/, '');
   const elements = new Map();
@@ -48,7 +48,7 @@ test('browser selection replaces stale text, photo, links, credit and maturity t
     return elements.get(selector);
   } };
   const features = Array.from({ length: 52 }, (_, i) => ({
-    title: `Article ${i + 1}`, summary: `Summary ${i + 1}`, category: 'Aircraft', maturity: 'Drafted — not technically validated',
+    title: `Article ${i + 1}`, summary: `Summary ${i + 1}`, category: 'Aircraft',
     href: `/oversweep/encyclopedia/aircraft/article-${i + 1}/`,
     photo: { src: `/oversweep/photos/${i + 1}.jpg`, alt: `Photo ${i + 1}`, author: `Author ${i + 1}`, licence: i % 2 ? 'CC BY' : 'Public domain',
       licenceUrl: i % 2 ? 'https://creativecommons.org/licenses/by/4.0/' : undefined, sourceUrl: `https://example.org/photo-${i + 1}` },
@@ -62,7 +62,7 @@ test('browser selection replaces stale text, photo, links, credit and maturity t
   });
   const verify = () => {
     const feature = features[week - 1];
-    for (const key of ['title', 'summary', 'category', 'maturity']) assert.equal(elements.get(`[data-feature-${key}]`).textContent, feature[key]);
+    for (const key of ['title', 'summary', 'category']) assert.equal(elements.get(`[data-feature-${key}]`).textContent, feature[key]);
     for (const key of ['title', 'link']) assert.equal(elements.get(`[data-feature-${key}]`).href, feature.href);
     assert.equal(elements.get('[data-feature-image]').src, feature.photo.src);
     assert.equal(elements.get('[data-feature-image]').alt, feature.photo.alt);

@@ -12,7 +12,7 @@ const features = schedule.map(id => {
   const data = recordContent(record).frontmatter as { photo?: Photo; photos?: Photo[] };
   const photo = data.photos?.[0] ?? data.photo;
   if (!photo) throw new Error(`Weekly feature needs a credited photograph: ${id}`);
-  return { title: record.title, summary: record.summary, maturity: record.maturity,
+  return { title: record.title, summary: record.summary,
     category: categoryTitle(record.category), href: sitePath(recordRoute(record)),
     photo: { ...photo, src: assetPath(photo.src) } };
 });
@@ -33,7 +33,6 @@ const feature = features[featuredWeek() - 1];
     <p class="feature-category">Encyclopedia · <span data-feature-category>{feature.category}</span></p>
     <h3 id="featured-title"><a data-feature-title href={feature.href}>{feature.title}</a></h3>
     <p class="feature-summary" data-feature-summary>{feature.summary}</p>
-    <p class="feature-maturity" data-feature-maturity>{feature.maturity}</p>
     <a class="feature-link" data-feature-link href={feature.href}>Explore the article <span aria-hidden="true">→</span></a>
   </div>
 </section>
@@ -53,7 +52,7 @@ const feature = features[featuredWeek() - 1];
       image.src = feature.photo.src;
       image.alt = feature.photo.alt;
       image.style.objectFit = feature.photo.fit ?? 'cover';
-      for (const [key, value] of Object.entries({ category: feature.category, title: feature.title, summary: feature.summary, maturity: feature.maturity })) {
+      for (const [key, value] of Object.entries({ category: feature.category, title: feature.title, summary: feature.summary })) {
         root.querySelector(`[data-feature-${key}]`)!.textContent = String(value);
       }
       for (const key of ['title', 'link']) root.querySelector<HTMLAnchorElement>(`[data-feature-${key}]`)!.href = feature.href;
@@ -87,7 +86,6 @@ const feature = features[featuredWeek() - 1];
   h3 a { color: var(--color-ink); text-decoration: none; }
   h3 a:hover { text-decoration: underline; }
   .feature-summary { font-size: 1rem; max-width: 52ch; margin: .75rem 0; }
-  .feature-maturity { font-size: .75rem; color: var(--color-muted); }
   .feature-link { display: inline-flex; align-items: center; gap: 1rem; min-height: 2.75rem; font-size: .9rem; font-weight: 650; }
   @media (max-width: 40rem) { .weekly-feature { grid-template-columns: 1fr; gap: 1rem; } }
 </style>

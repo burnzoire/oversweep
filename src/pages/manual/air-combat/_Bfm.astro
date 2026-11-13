@@ -23,7 +23,6 @@ const p = cite(1), q = cite(2), b = cite(3);
 <SiteLayout title={bfm.title} activeSection="manual" activeSubject="air-combat" compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Air Combat',href:sitePath('manual/air-combat/')},{label:bfm.title}]}>
  <section class="status-panel" data-module-id={bfm.id} data-module-revision={bfm.revision}>
-  <h2>{bfm.maturity}</h2>
   <p>Module revision {bfm.revision} · One-versus-one (1v1) basic fighter maneuvers (BFM). Generic concepts for any fighter or trainer; the numbers are worked examples from one jet trainer's syllabus, the US Navy T-45C's. Defensive and high-aspect BFM and <Term>section</Term> (2v1) engaged maneuvering are outside this revision.</p>
   <p>Learn the geometry first, then how turn performance, the vertical and energy decide what each aircraft can do. Every figure is interactive. Revision 3 puts the core sequence first, with a worked engagement, and moves the training rules, the vertical, three-dimensional maneuvers and guns into the reference half.</p>
  </section>
@@ -315,7 +314,7 @@ const p = cite(1), q = cite(2), b = cite(3);
  <p id="source-bms"><strong>[3] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 5 November 2026, pp. 316–323 (section 19.1, Basic Fighter Maneuver, and Mission 19). A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/bfm-p1289-evidence.md">P-1289 evidence</a>.</p>
  <p>Figures 1–8 are original line drawings, not reproductions of any manual figure, and are not to scale except where a caption says so. The level-turn, radial-G, pursuit and maneuver figures use the simplified models described with them.</p>
- <p class="note">Applicability: the source is a T-45C training instruction. Its airspeeds, G limit, deck altitudes and training rules are that syllabus's figures, used here as worked examples. This revision is Drafted pending independent source-backed review.</p>
+ <p class="note">Applicability: the source is a T-45C training instruction. Its airspeeds, G limit, deck altitudes and training rules are that syllabus's figures, used here as worked examples.</p>
 </SiteLayout>
 <script>import '../../../lessons/bfm/lesson-ui.mjs';</script>
 <style>

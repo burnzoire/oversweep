@@ -539,11 +539,6 @@ h2 {
   font-size: 0.9rem;
 }
 
-.entry-meta .maturity {
-  color: var(--color-text);
-  font-weight: 700;
-}
-
 .entry-actions {
   display: flex;
   flex-wrap: wrap;

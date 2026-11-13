@@ -5,8 +5,8 @@ import { airfieldRoles, basings, branches, coverageStatuses, eras, nations, sims
 import { purchaseSims, validatePurchases } from './purchase.mjs';
 
 // Encyclopedia records. Like modules, `publication` decides whether a record
-// ships in normal builds and is independent of `maturity`, which is always
-// shown. Each record's text and structured data live in
+// ships in normal builds and is independent of `maturity`, which is internal
+// and never shown. Each record's text and structured data live in
 // content/encyclopedia/<category>/<slug>.md, where the SME review reads them.
 export type EncyclopediaRecord = (typeof registry)[number] & { publication: 'published' | 'excluded' };
 

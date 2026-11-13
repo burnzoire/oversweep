@@ -30,7 +30,6 @@ const r0 = (v: number) => Math.round(v);
 <SiteLayout title={mod.title} activeSection="manual" activeSubject="instrument-flight" compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Instrument Flight',href:sitePath('manual/instrument-flight/')},{label:mod.title}]}>
  <section class="status-panel" data-module-id={exercise.manualId} data-module-revision={mod.revision}>
-  <h2>{mod.maturity}</h2>
   <p>Module revision {mod.revision} · The ILS from the start of the approach to the decision altitude: what the localizer and glide slope show, setting up, the intercept and the wind, tracking both needles, the limits, the decision and the missed approach. Written for fixed-wing military pilots of every service, from the Air Force's instrument flight procedures manual, with the Navy's instrument training instruction for the needle scaling.</p>
   <p>It assumes the crosscheck from <a href={attitude}>Attitude Instrument Flying</a>; the approach parts it shares with other approaches (the FAF, minimums and the plate) are in <a href={`${procedures}#approach`}>Instrument Procedures</a>. Then hand-fly it in the trainer, which opens in its own window.</p>
  </section>
@@ -139,7 +138,7 @@ const r0 = (v: number) => Math.round(v);
 
  <h2 id="launch">Practice: the hand-flown ILS</h2>
  <section class="status-panel" data-experience-id={exercise.id} data-experience-revision={exercise.revision}>
-  <h3>{exercise.title}</h3><p>{exercise.maturity} · Exercise revision {exercise.revision}</p>
+  <h3>{exercise.title}</h3><p>Exercise revision {exercise.revision}</p>
   <p>{exercise.applicability} Prerequisites: {exercise.prerequisites.join(' · ')}.</p>
   <p>The trainer flies the core sequence above, from the intercept to the DA. Each run starts level below the glide slope, off the localizer, on an intercept heading, with a random wind you are not told. Fly both needles to the DA on the panel from <a href={attitude}>Attitude Instrument Flying</a>, then land or go missed. The debrief scores the time within one dot, the worst deviations, any limit broken and the decision, and replays the flown path on a plan and profile view beside the panel.</p>
   <p>Controls: the arrow keys move the attitude (<kbd>↑</kbd> nose down, <kbd>↓</kbd> nose up, <kbd>←</kbd> <kbd>→</kbd> bank), <kbd>W</kbd> and <kbd>S</kbd> the power, <kbd>G</kbd> goes missed and <kbd>L</kbd> lands at the DA. An optional <strong>Auto power</strong> switch holds the speed for you, so you can learn to fly the glide slope with pitch alone before adding the power. A joystick or HOTAS can be assigned to the stick and throttle, and a game controller works with its left stick and triggers, and on a phone or with a mouse there are buttons under the panel. No joystick is needed.</p>
@@ -194,7 +193,7 @@ const r0 = (v: number) => Math.round(v);
  <p id="source-t45"><strong>[2] Chief of Naval Air Training, CNATRA P-1204 (Rev. 09-16, Change 2 of 25 March 2021), Flight Training Instruction, Instrument, T-45C MPTS and IUT.</strong> <a href="https://web.archive.org/web/20211009235549/https://www.cnatra.navy.mil/local/docs/pat-pubs/P-1204.pdf">Internet Archive copy of cnatra.navy.mil</a> (October 2021 snapshot), read 2 November 2026 by printed page: ILS needle scaling (p. 1-2), localizer and glide slope range (p. 6-57), marker beacons (p. 6-59), configuring before glide slope intercept (p. 6-60) and localizer corrections and the FAF (p. 6-62). A training command instruction for one aircraft type, cited for these generic points only.</p>
  <p id="source-a10"><strong>[3] Eagle Dynamics, DCS: A-10C II Tank Killer Flight Manual (English), July 2023.</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/dcs-warthog_2_flight_manual_en/">Download page</a>, read 2 November 2026, pp. 573–574 and 602–603. A sim manual, cited only for the In the sim panel.</p>
  <p>Page excerpts are in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/instrument-flight-evidence.md">Instrument flight evidence</a>.</p>
- <p class="note">Applicability: generic instrument procedures for fixed-wing pilots of every service. Your service's instrument manual, the aircraft's flight manual and the published approach govern real approaches, their minimums and their limits. Figure 1, the worked approach and the exercise's aircraft and approach are invented. This revision is Drafted pending independent source-backed review.</p>
+ <p class="note">Applicability: generic instrument procedures for fixed-wing pilots of every service. Your service's instrument manual, the aircraft's flight manual and the published approach govern real approaches, their minimums and their limits. Figure 1, the worked approach and the exercise's aircraft and approach are invented.</p>
 </SiteLayout>
 <script>import '../../../lessons/instrument-flight/ils-ui.mjs';</script>
 <style>

@@ -3,7 +3,7 @@ import { reviewTrainers } from './experiences';
 
 // Reference modules without a trainer. Like experiences, `publication` decides
 // whether a module ships in normal builds and is independent of `maturity`,
-// which is always shown to readers. Modules attached to a trainer stay in
+// which is internal and never shown to readers. Modules attached to a trainer stay in
 // experiences.json under `module`.
 export type Module = (typeof registry)[number] & { publication: 'published' | 'excluded' };
 

@@ -30,7 +30,6 @@ const pad3 = (n: number) => String(n).padStart(3, '0');
 <SiteLayout title={pt.title} activeSection="manual" activeSubject="air-to-ground-operations" compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Air-to-Ground Operations',href:sitePath('manual/air-to-ground-operations/')},{label:pt.title}]}>
  <section class="status-panel" data-module-id={pt.id} data-module-revision={pt.revision}>
-  <h2>{pt.maturity}</h2>
   <p>Module revision {pt.revision} · How laser-guided and coordinate-guided weapons are put on a precise point. For aircrew of every service, from the joint close air support publication.</p>
  </section>
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>

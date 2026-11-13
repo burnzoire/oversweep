@@ -31,7 +31,6 @@ const terms = [...data.terms].sort((a, b) => a.term.localeCompare(b.term, 'en', 
     </nav>
     {data.photo && <PhotoFigure photo={data.photo} lead />}
     <section class="status-panel" data-record-id={record.id} data-record-revision={record.revision}>
-      <h2>{record.maturity}</h2>
       <p>Record revision {record.revision} · {record.summary}</p>
       <p>Definitions are quoted or closely paraphrased from the source named with each word. Meanings change between editions and theatres; the brief and the current publications take precedence.</p>
     </section>

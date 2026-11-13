@@ -69,7 +69,7 @@ test('generated profile checks catch missing history, member links and citation 
   const { checkCarrierProfiles } = await import('../../scripts/check_carrier_profiles.mjs');
   const dist = await mkdtemp(path.join(tmpdir(), 'carrier-profiles-'));
   const data = fixture();
-  const common = '<p>Drafted — not technically validated</p><section data-class-profile="test-class"><a href="#class-source-archive">[1]</a><li id="class-source-archive">Class source</li></section><a href="/review/manual/naval-operations/ship-operations/">Naval Operations</a>';
+  const common = '<section data-class-profile="test-class"><a href="#class-source-archive">[1]</a><li id="class-source-archive">Class source</li></section><a href="/review/manual/naval-operations/ship-operations/">Naval Operations</a>';
   const classPage = `${common}<a href="/review/encyclopedia/carriers/ship-one/">Ship One</a>`;
   const hullPage = `${common}<section data-ship-profile="ship-one"><a href="#history-source-archive">[1]</a><li id="history-source-archive">History source</li></section><a href="/review/encyclopedia/carriers/classes/test-class/">Test class</a><h2 id="carrier-sources">Identity sources</h2>`;
   const put = async (route, html) => { const folder = path.join(dist, route); await mkdir(folder, { recursive: true }); await writeFile(path.join(folder, 'index.html'), html); };

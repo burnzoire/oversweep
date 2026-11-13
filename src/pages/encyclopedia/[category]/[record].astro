@@ -51,7 +51,6 @@ const fig = { envelope: e ? 1 : 0, rwr: e ? 2 : 1, battery: e ? 3 : 2 };
       <ol>{siblings.map((r) => { const name = recordContent(r).frontmatter.short ?? r.title.split(' ')[0]; return <li>{r.slug === record.slug ? <span aria-current="page">{name}</span> : <a href={sitePath(recordRoute(r))}>{name}</a>}</li>; })}</ol>
     </nav>
     <section class="status-panel" data-record-id={record.id} data-record-revision={record.revision}>
-      <h2>{record.maturity}</h2>
       <p>Record revision {record.revision} · {record.summary}</p>
       <p>Real-world system as described in public sources. Figures vary between variants and sources, so differences are shown beside the number they affect. Simulator implementations may differ.</p>
     </section>

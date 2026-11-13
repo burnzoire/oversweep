@@ -31,7 +31,6 @@ const hz = (ft: number) => horizonNm(ft).toFixed(0);
 <SiteLayout title={sead.title} activeSection="manual" activeSubject="air-to-ground-operations" compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Air-to-Ground Operations',href:sitePath('manual/air-to-ground-operations/')},{label:sead.title}]}>
  <section class="status-panel" data-module-id={sead.id} data-module-revision={sead.revision}>
-  <h2>{sead.maturity}</h2>
   <p>Module revision {sead.revision} · How surface air defences are avoided, suppressed and destroyed so a strike gets through. For aircrew of every service, from the joint counterair publication.</p>
  </section>
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
@@ -315,7 +314,7 @@ const hz = (ft: number) => horizonNm(ft).toFixed(0);
  <p id="source-bms"><strong>[6] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 3 November 2026, pp. 210 and 372–381; pp. 195–197 read 5 November 2026. A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/sead-dead-evidence.md">SEAD and DEAD evidence</a>.</p>
  <p>Figures 1 to 3 and the worked package are original, invented examples, not reproductions of any publication's figure.</p>
- <p class="note">Applicability: written for aircrew of every service who fly with or against surface air defences. Doctrine is from the joint publication, which all four services follow; no service's own SEAD tactics publication could be read, so no service-specific tactics are included. Theater rules of engagement, SPINS, your unit's procedures and the current editions govern. This revision is Drafted pending independent source-backed review.</p>
+ <p class="note">Applicability: written for aircrew of every service who fly with or against surface air defences. Doctrine is from the joint publication, which all four services follow; no service's own SEAD tactics publication could be read, so no service-specific tactics are included. Theater rules of engagement, SPINS, your unit's procedures and the current editions govern.</p>
 </SiteLayout>
 
 <script>import '../../../lessons/sead/lesson-ui.mjs';</script>

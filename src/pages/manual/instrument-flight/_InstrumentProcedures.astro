@@ -34,7 +34,6 @@ const glossary = sitePath('encyclopedia/terminology/instrument-flight/');
 <SiteLayout title={mod.title} activeSection="manual" activeSubject="instrument-flight" compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Instrument Flight',href:sitePath('manual/instrument-flight/')},{label:mod.title}]}>
  <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
-  <h2>{mod.maturity}</h2>
   <p>Module revision {mod.revision} · A whole instrument sortie: the departure climb, holding, the approach to minimums, the ILS, radar approaches and the missed approach, then high-altitude approaches, the approach plate and lost communications. For fixed- and rotary-wing pilots of every service, from the Air Force's instrument flight procedures manual and the Navy's instrument training instructions, with the FAA's Aeronautical Information Manual as the supplementary source.</p>
   <p>Figure 1 lets you try any holding entry; the ILS has its own module, <a href={ils}>ILS Approach</a>, with working needles and a trainer. Controlling the aircraft on instruments comes first, in <a href={attitude}>Attitude Instrument Flying</a>.</p>
  </section>
