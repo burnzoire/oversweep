@@ -19,7 +19,7 @@ const core = [
  ['aaa', 'Defeating anti-aircraft guns'], ['flight', 'The flight, the reaction and the egress'], ['recap', 'Key points'],
 ];
 const reference = [
- ['helicopters', 'Helicopters'], ['limits', 'What this page cannot give you'], ['sims', 'In the sim'],
+ ['helicopters', 'Helicopters'], ['sims', 'In the sim'],
  ['terms', 'Terms'], ['check', 'Check your understanding'], ['sources', 'Sources and applicability'],
 ];
 // [1] USAF Electronic Warfare Fundamentals (2000), [2] MCH 11-F16 Vol 5 (1996),
@@ -291,9 +291,6 @@ const ft = (n: number) => `${Math.round(n).toLocaleString('en-US')} ft`;
  <p>Crew coordination is rehearsed, with standard terms such as "missile 3 o'clock, break right"; in a formation, "Team 2 break right, missile" or "Team 1, tracers, three o'clock, break left" tells the others what you are doing. <a href="#source-fm">{f('A-5 to A-6')}</a></p>
  <p>Formations and spacing leave each aircraft room to evade, and the brief covers the break-up and how to reform. One aircraft may be the only one to get a warning, because of terrain, a narrow radar beam, altitude or a fault, so it passes its indications to the others. <a href="#source-fm">{f('A-5 to A-7')}</a></p>
  <p>The manual also notes that some modern radars track the rotor blades, and cancel the blind speeds that once gave a Doppler notch (the manual's sense here is a blind speed toward or away from the radar, not the beam, which still works); even then, no aircraft can sit in the notch of more than one radar. <a href="#source-fm">{f('A-1')}</a></p>
-
- <h2 id="limits">What this page cannot give you</h2>
- <p>The issue behind this module asked for detailed methods against specific threats. The public sources stop at the principles: the electronic warfare text says the aircraft-specific maneuvers and flare programs are in classified tactics manuals, and the F-16 handbook refers to a restricted manual for specific threat capabilities. <a href="#source-ewf">{e('15-5')}</a> <a href="#source-mch">{m('125')}</a> So the page organises the threats by guidance, which is public and decides the defence, and leaves each system's numbers to its <a href={threats}>Encyclopedia record</a>. Nothing here gives a system's real minimum range against a maneuvering target, its reaction time, or the dispenser program for it.</p>
 
  <section class="sim-panel" aria-labelledby="sims">
   <h2 id="sims">In the sim</h2>
