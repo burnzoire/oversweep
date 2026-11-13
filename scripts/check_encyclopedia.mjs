@@ -72,9 +72,11 @@ export async function checkRecords({ dist, records, review = false, base = "", c
     }
     if (pages["category index"] && !(simMap ? pages["category index"] : sections["category index"]?.body)?.includes(`href="${base}/${route(r)}"`))
       problems.push(`${r.id}: category index does not link to ${base}/${route(r)}.`);
-    // Aircraft cards carry their era so the list's era filter can show or hide them.
-    if (r.category === "aircraft" && pages["category index"] && !sections["category index"]?.tag.includes(`data-era="${r.era}"`))
-      problems.push(`${r.id}: category index card has no data-era="${r.era}".`);
+    // Cards on a filtered list carry the facets the list's filter bar reads.
+    if (r.category === "aircraft" && pages["category index"] && !sections["category index"]?.tag.includes(`data-facet-era="${r.era}"`))
+      problems.push(`${r.id}: category index card has no data-facet-era="${r.era}".`);
+    if (["aircraft", "ordnance", "radar-sensors", "threat-systems"].includes(r.category) && pages["category index"] && !sections["category index"]?.tag.includes("data-filter-item"))
+      problems.push(`${r.id}: category index card is not tagged for the list filter.`);
     // Every record shows where its facts come from, and every citation resolves.
     if (pages.page) {
       const anchors = new Set([...pages.page.matchAll(/\bid="(source-\d+)"/g)].map((m) => m[1]));
