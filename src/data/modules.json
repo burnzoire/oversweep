@@ -264,5 +264,16 @@
     "publication": "published",
     "objective": "Handle an in-flight emergency in any aircraft: maintain control, analyse, act and land as the emergency dictates; declare an emergency or a fuel state; fly a precautionary landing and a power-off pattern after a single-engine failure and check the glide; confirm shutdowns in a multiengine aircraft; meet fires and system failures; make the ejection decision and follow the post-ejection checklist; ditch; and handle lost radios or inadvertent cloud.",
     "applicability": "Military pilots of every service, fixed-wing, in generic form from Navy primary training squadrons' public study aids (T-6, T-44, T-45), Air Force and Navy flight rules, with the FAA's handbook and information manual as supplementary sources and Falcon BMS for the In the sim panel. Each aircraft's flight manual and checklist govern its own procedures, limits and ejection decision."
+  },
+  {
+    "id": "module.threat-avoidance",
+    "slug": "threat-avoidance",
+    "subject": "abnormal-operations",
+    "revision": 1,
+    "title": "Threat Avoidance and Defeat",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "objective": "Avoid and defeat surface-to-air threats: plan a route, altitude and terrain to stay out of their reach; know how each kind of SAM and gun guides or aims and what that leaves open; recognise an engagement from the warning receiver or by eye and make the calls; defeat radar-guided and infrared-guided missiles with maneuver, chaff, flares and jamming; spoil aimed anti-aircraft fire; and keep the flight together through a threat reaction and the egress.",
+    "applicability": "Military aircrew of every service, fixed and rotary wing, in generic form from an Air Force electronic warfare text, two versions of the Air Force's F-16 fundamentals, the Army's attack reconnaissance helicopter manual and joint brevity, with DCS World and Falcon BMS for the In the sim panel. Detailed threat-specific tactics are in classified tactics manuals and are not on this page."
   }
 ]

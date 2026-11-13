@@ -1,12 +1,13 @@
 ---
 import EmergencyProcedures from './_EmergencyProcedures.astro';
 import Autorotation from './_Autorotation.astro';
+import ThreatAvoidance from './_ThreatAvoidance.astro';
 import { includedModules } from '../../../data/modules';
 import { includedExperiences } from '../../../data/experiences';
 // Abnormal Operations: one page component per module, kept beside this route
 // so the SME review reads it (the underscore keeps Astro from routing it).
 // Autorotation comes from the experience registry, since it has a trainer.
-const pages = { 'emergency-procedures': EmergencyProcedures, autorotation: Autorotation };
+const pages = { 'emergency-procedures': EmergencyProcedures, 'threat-avoidance': ThreatAvoidance, autorotation: Autorotation };
 export function getStaticPaths() {
   return [...includedModules, ...includedExperiences]
     .filter((m) => m.subject === 'abnormal-operations').map((m) => ({ params: { module: m.slug } }));

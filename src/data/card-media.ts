@@ -215,6 +215,15 @@ export const cardMedia: Record<string, CardMedia> = {
       position: '50% 42%',
     },
   },
+  'module.threat-avoidance': {
+    summary: 'Avoid, then defeat, the missiles and guns on the ground.',
+    photo: {
+      src: 'encyclopedia/threat-systems/zsu-23-4.jpg',
+      alt: 'A ZSU-23-4 anti-aircraft gun vehicle, four short barrels and a small dish radar on its turret.',
+      credit: 'Sgt. Ryan Ward, US Marine Corps, public domain',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:ZSU-23-4-Camp-Pendleton.jpg',
+    },
+  },
   'experience.autorotation': {
     summary: 'Land a helicopter after an engine failure.',
     photo: {
