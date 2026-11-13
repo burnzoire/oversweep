@@ -11,8 +11,8 @@ const module = {
 };
 const tag = `data-module-id="${module.id}" data-module-revision="2"`;
 const complete = {
-  'manual/navigation/example/index.html': `<section ${tag}>${module.maturity}</section>`,
-  'manual/navigation/index.html': `<section ${tag}><strong>${module.maturity}</strong><a href="/manual/navigation/example/">Open</a></section>`,
+  'manual/navigation/example/index.html': `<section ${tag}></section>`,
+  'manual/navigation/index.html': `<section ${tag}><a href="/manual/navigation/example/">Open</a></section>`,
 };
 
 async function checkAll(files, modules, review = false) {
@@ -41,10 +41,11 @@ test('a published module must ship its page and subject listing', async () => {
   assert(problems.some(p => p.includes('does not link')));
 });
 
-test('published pages must show the registered maturity and revision', async () => {
-  const problems = await check(complete, { module: { maturity: 'Technically Validated', revision: 3 } });
-  assert(problems.some(p => p.includes('does not show maturity')));
+test('published pages must show the registered revision and hide the maturity label', async () => {
+  const problems = await check(complete, { module: { revision: 3 } });
   assert(problems.some(p => p.includes('revision 3')));
+  const labelled = Object.fromEntries(Object.entries(complete).map(([file, html]) => [file, html.replace('</section>', `${module.maturity}</section>`)]));
+  assert((await check(labelled)).some(p => p.includes('shows the internal maturity label')));
 });
 
 test('a trainer-less module must not frame or launch a trainer', async () => {
@@ -73,18 +74,17 @@ test('unknown publication values are rejected', async () => {
 });
 
 test('one module card cannot mask another on a shared subject page', async () => {
-  const other = { ...module, id: 'module.other', slug: 'other', revision: 5, maturity: 'Outlined' };
+  const other = { ...module, id: 'module.other', slug: 'other', revision: 5 };
   const otherTag = `data-module-id="${other.id}" data-module-revision="4"`;
   const files = {
     ...complete,
-    'manual/navigation/other/index.html': `<section data-module-id="${other.id}" data-module-revision="5">Outlined</section>`,
-    // The other card is stale (revision 4) and hides its maturity; the first card carries both values.
+    'manual/navigation/other/index.html': `<section data-module-id="${other.id}" data-module-revision="5"></section>`,
+    // The other card is stale (revision 4); the first card carries its revision in an attribute.
     'manual/navigation/index.html': `<section ${otherTag}><a href="/manual/navigation/other/">Open</a></section>`
-      + `<section ${tag} data-note="5">${module.maturity} Outlined<a href="/manual/navigation/example/">Open</a></section>`,
+      + `<section ${tag} data-note="5"><a href="/manual/navigation/example/">Open</a></section>`,
   };
   const problems = await checkAll(files, [module, other]);
   assert(problems.some(p => p.includes('module.other: subject index lacks the registered id or revision 5')));
-  assert(problems.some(p => p.includes('module.other: subject index does not show maturity')));
   assert(!problems.some(p => p.startsWith('module.example')));
 });
 

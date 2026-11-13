@@ -10,7 +10,6 @@ export async function checkCarrierProfiles({ dist, profiles, carriers, base = ''
   const index = await read('encyclopedia/carriers/');
   const checkPage = (html, label, classProfile, shipProfile) => {
     if (!html) { problems.push(`${label}: profile page is missing`); return; }
-    if (!html.includes('Drafted') || !html.includes('not technically validated')) problems.push(`${label}: profile maturity is missing`);
     if (!html.includes(`data-class-profile="${classProfile.slug}"`)) problems.push(`${label}: shared class profile is missing`);
     if (shipProfile && !html.includes(`data-ship-profile="${shipProfile.carrier}"`)) problems.push(`${label}: ship history is missing`);
     const anchors = [...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);

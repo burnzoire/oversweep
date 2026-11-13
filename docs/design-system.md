@@ -13,7 +13,7 @@ This is a design proposal, not an implemented or usability-tested interface.
 | Diagrams | Labelled geometry, explicit units, consistent line weights and scale notes |
 | Controls | Clear state, keyboard operation, visible focus and touch-friendly targets |
 | Feedback | Explain why an answer succeeds/fails; never rely on colour alone |
-| Sources | Nearby applicability, assumptions, maturity and source links |
+| Sources | Nearby applicability, assumptions and source links |
 | Motion | User control, reduced-motion alternative and no essential timed animation |
 
 ## Responsive layouts and component behaviour
@@ -101,22 +101,21 @@ soon", and its route still builds with `data-empty` so URLs stay stable.
 `scripts/check_site.mjs` fails if any page links to an empty destination or
 says "coming soon".
 
-## Source and maturity presentation
+## Source presentation
 
-Keep applicability and content maturity visible near the page title and repeat
-the relevant status beside a claim or block when readers could otherwise miss
-its scope. Use explicit text labels, not colour-only badges. Make source markers
+Keep applicability visible near the page title and repeat it beside a claim or
+block when readers could otherwise miss its scope. Use explicit text labels, not colour-only badges. Make source markers
 keyboard-accessible links to a nearby source list containing title, publisher,
 edition/date, precise section/page, lawful access and rights information.
 Expose assumptions and unresolved limitations next to the affected claim.
 
-Use the maturity values and gates in [content standards](content-standards.md):
-Outlined, Researched, Drafted, Technically Validated and Published. For example,
-show “Drafted — not technically validated” rather than an ambiguous “draft”
-badge. A Technically Validated label requires independent source-backed SME agent
-review and complete evidence for that revision; Published additionally requires the publication gates and
-actual release. Do not imply that a visual treatment itself validates or
-approves content.
+Content maturity (Outlined, Researched, Drafted, Technically Validated,
+Published; see [content standards](content-standards.md)) is internal tracking
+and is never shown on the site. Do not render maturity labels, “draft” or
+“not validated” badges, or similar status text on pages, cards or trainer
+frames. The [legal page](../src/pages/legal.astro) is the single reader-facing
+disclaimer. Do not imply that a visual treatment itself validates or approves
+content.
 
 ## Review record
 
@@ -130,9 +129,9 @@ Checked against the [product vision](vision.md), [content standards](content-sta
 - Reference pages and embedded experiences share a content flow, so the
   experience needs an explicit objective-to-controls-to-debrief order and must
   not be required to access the reference explanation.
-- Content standards require visible applicability, traceable sources and
-  revision-specific maturity; text labels and nearby source details are needed
-  so neither colour nor a generic badge implies validation.
+- Content standards require visible applicability and traceable sources; text
+  labels and nearby source details are needed so colour alone never implies
+  validation. Maturity is tracked in the registries and docs, not on pages.
 - The standards also require precise, labelled diagrams. Static figures need a
   text equivalent; interactive figures additionally need a keyboard alternative.
 

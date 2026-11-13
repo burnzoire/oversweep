@@ -4,7 +4,7 @@ import { checkCarrierProfiles } from "./check_carrier_profiles.mjs";
 import { fileURLToPath } from "node:url";
 
 // Generated-output checks for every registered encyclopedia record. Published
-// records must ship their page with visible maturity and revision, and a category
+// records must ship their page with their revision, without the internal maturity label, and a category
 // card (or a direct link for simulator maps). They must list sources, credit any
 // photo, and have a content file; excluded records must
 // not leak into normal builds. `--review` treats every entry as included.
@@ -63,12 +63,12 @@ export async function checkRecords({ dist, records, review = false, base = "", c
     for (const [name, html] of Object.entries(pages)) {
       if (html === null) { problems.push(`${r.id}: ${name} is missing.`); continue; }
       // Simulator maps are direct links in theatre browse cards; their own pages
-      // retain the full revision and maturity checks.
+      // retain the full revision checks.
       if (name === "category index" && simMap) continue;
       const section = sections[name] = recordSection(html, r.id);
       if (!section || !section.tag.includes(revision))
         problems.push(`${r.id}: ${name} lacks the registered id or revision ${r.revision}.`);
-      if (!section?.body.includes(r.maturity)) problems.push(`${r.id}: ${name} does not show maturity "${r.maturity}".`);
+      if (section?.body.includes(r.maturity)) problems.push(`${r.id}: ${name} shows the internal maturity label "${r.maturity}".`);
     }
     if (pages["category index"] && !(simMap ? pages["category index"] : sections["category index"]?.body)?.includes(`href="${base}/${route(r)}"`))
       problems.push(`${r.id}: category index does not link to ${base}/${route(r)}.`);

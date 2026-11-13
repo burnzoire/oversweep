@@ -16,5 +16,5 @@ const local = record.publication !== 'published';
   <Heading class="entry-title"><a href={sitePath(recordRoute(record))}>{record.title}</a></Heading>
   <p class="entry-objective">{record.summary}</p>
   <slot />
-  <p class="entry-meta"><span class="maturity">{record.maturity}</span> · Record revision {record.revision}{local && ' · Local review only'}</p>
+  <p class="entry-meta">Record revision {record.revision}{local && ' · Local review only'}</p>
 </section>

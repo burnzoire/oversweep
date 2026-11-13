@@ -81,7 +81,6 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
     </nav>
     {leadPhoto && <PhotoFigure photo={leadPhoto} lead />}
     <section class="status-panel" data-record-id={record.id} data-record-revision={record.revision}>
-      <h2>{record.maturity}</h2>
       <p>Record revision {record.revision} · {record.summary}</p>
       {a && <p>A real-world airfield as described in public sources, and how sim maps represent it. Units, facilities and names change; each is dated where the sources allow, and the charts are not for navigation. Use current official publications for flight planning.</p>}
       {t && <p>A real-world region and its military history. Its airfields and the sim maps that represent it are listed from their own records.</p>}

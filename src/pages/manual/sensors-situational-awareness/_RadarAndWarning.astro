@@ -37,7 +37,6 @@ const half = Math.round(notchHalfWidth(450, 60));
 <SiteLayout title={mod.title} activeSection="manual" activeSubject="sensors-situational-awareness" compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Sensors & Situational Awareness',href:sitePath('manual/sensors-situational-awareness/')},{label:mod.title}]}>
  <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
-  <h2>{mod.maturity}</h2>
   <p>Module revision {mod.revision} · What a fighter radar can and cannot see, what your warning receiver is telling you, and how chaff, flares and jamming answer radar and infrared threats. For aircrew of every service, fixed and rotary wing, from Air Force and Navy training texts. Unclassified principles only.</p>
  </section>
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
@@ -285,7 +284,7 @@ const half = Math.round(notchHalfWidth(450, 60));
  <p id="source-bms"><strong>[4] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 9 November 2026, pp. 262, 296 and 379. A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/sensors-evidence.md">Sensors and situational awareness evidence</a>.</p>
  <p>Figures 1 to 3 and the worked engagement are original, invented examples, not reproductions of any publication's figure.</p>
- <p class="note">Applicability: written for aircrew of every service and both fixed and rotary wing, from an Air Force electronic warfare text that covers radar and infrared threats generally and a Navy intercept training text. No Army or helicopter-specific survivability publication could be read; Army aviation's survivability manuals are restricted. Each aircraft's flight and tactics manuals, its threat tables and your unit's procedures govern. This revision is Drafted pending independent source-backed review.</p>
+ <p class="note">Applicability: written for aircrew of every service and both fixed and rotary wing, from an Air Force electronic warfare text that covers radar and infrared threats generally and a Navy intercept training text. No Army or helicopter-specific survivability publication could be read; Army aviation's survivability manuals are restricted. Each aircraft's flight and tactics manuals, its threat tables and your unit's procedures govern.</p>
 </SiteLayout>
 
 <script>import '../../../lessons/sensors/radar-ui.mjs';</script>

@@ -80,8 +80,8 @@ specific experience. Each entry declares `publication` separately from `maturity
 
 - `published` ships in normal production builds. `npm run check` fails unless the
   Manual route, trainer frame, every listed asset and the subject and Training
-  Library listings are emitted, carry the registered id and revision, and show the
-  registered maturity to readers.
+  Library listings are emitted and carry the registered id and revision. The
+  registered maturity is internal: the check fails if a page shows it.
 - `unlisted` ships only its direct `experiences/<slug>/` frame and declared assets in normal and review builds. It must include `noindex,nofollow`, and cannot create a Manual wrapper or appear in Manual, Training Library or homepage counts. This is public-by-URL, **not access control**: use only for owner-approved experimental content, never private information. Existing generated-output checks enforce route and link exclusion. The owner must explicitly approve publication of the direct URL before merging.
 - `excluded` ships only in explicit local review builds
   (`OVERSWEEP_REVIEW_TRAINERS=1 npm run check:review`). The production check fails
@@ -112,14 +112,15 @@ Reference modules without a trainer are registered in `src/data/modules.json`
 with the same `publication` and `maturity` fields. The subject listing, the
 module route and `scripts/check_modules.mjs` read that registry; no check names
 a specific module. A published module must emit its page and subject listing
-with the registered id, revision and maturity, and its page must contain no
+with the registered id and revision, without the maturity label, and its page must contain no
 `<iframe>` or trainer launch link. Excluded modules follow the experience rules
 above. A module that has a trainer stays in `experiences.json` under `module`.
 
 Setting an entry to `published` is an owner publication decision for the exact
 revision; record it in the PR. Publication does not change maturity: a Drafted
-experience stays visibly marked Drafted, and Technically Validated still requires
-the content-standard evidence and independent SME review. The `Aviation SME
+experience stays Drafted in the registry, and Technically Validated still requires
+the content-standard evidence and independent SME review. Maturity is never
+shown to readers; the legal page carries the site-wide disclaimer. The `Aviation SME
 review gate` remains a separate check on trainer and content changes; see
 [reading and passing the SME gate](copilot-agents.md#reading-and-passing-the-sme-gate),
 including the owner-only `sme-override` label.

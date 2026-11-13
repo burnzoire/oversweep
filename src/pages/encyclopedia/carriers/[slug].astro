@@ -6,7 +6,7 @@ import { classProfileFor, shipProfileFor } from '../../../data/carrier-profiles'
 import { carrierClassRoute } from '../../../data/carrier-profile-model.mjs';
 import CarrierModuleLink from '../../../components/encyclopedia/CarrierModuleLink.astro';
 import { carriers, carrierRoute, type Carrier } from '../../../data/carriers';
-import { carrierDate, carrierEntryDate, carrierEntryLabel, carrierMaturity } from '../../../data/carrier-model.mjs';
+import { carrierDate, carrierEntryDate, carrierEntryLabel } from '../../../data/carrier-model.mjs';
 import { sitePath } from '../../../lib/paths';
 import '../../../styles/encyclopedia.css';
 import '../../../styles/carriers.css';
@@ -18,7 +18,7 @@ const classmates = carriers.filter((entry) => entry.class === carrier.class && e
 ---
 <SiteLayout title={carrier.name} activeSection="encyclopedia" description={`${carrier.name}: ${carrier.summary}`} breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: 'Carriers', href: sitePath('encyclopedia/carriers/') }, { label: carrier.name }]}>
   <article class="ency carriers" data-carrier-record={carrier.slug}>
-    <section class="status-panel"><h2>{carrierMaturity}</h2><p>Historical reference record. The sources below cover the ship's identity, completion or carrier commission, and operator history.</p></section>
+    <section class="status-panel"><p>Historical reference record. The sources below cover the ship's identity, completion or carrier commission, and operator history.</p></section>
     <p class="lead">{carrier.summary}</p>
     <section class="data-plate" aria-labelledby="carrier-identity"><h2 id="carrier-identity">Identity</h2><dl>
       <div><dt>Identifier</dt><dd>{carrier.hull}</dd></div>

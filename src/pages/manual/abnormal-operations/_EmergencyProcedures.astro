@@ -49,7 +49,6 @@ const initial = glideCheck({ rule: 't6', distanceNm: 6, heightFt: 8000 });
 <SiteLayout title={mod.title} activeSection="manual" activeSubject="abnormal-operations" compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Abnormal Operations',href:sitePath('manual/abnormal-operations/')},{label:mod.title}]}>
  <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
-  <h2>{mod.maturity}</h2>
   <p>Module revision {mod.revision} · How a military pilot handles an emergency in flight, whatever the aircraft: the rules that come first, how soon to land, engine failure, fire and system failures, ejection, ditching and losing the radios. It follows Navy primary training squadrons' published study aids and the Air Force's flight rules, with the FAA's handbook and information manual as supplementary sources.</p>
   <p>Helicopter engine failures are in <a href={auto}>Autorotation</a>, the next module in this subject. The radio calls and codes are in <a href={`${radio}#emergency`}>Radio Procedures</a>.</p>
  </section>
@@ -331,7 +330,7 @@ const initial = glideCheck({ rule: 't6', distanceNm: 6, heightFt: 8000 });
  <h3>Sim source</h3>
  <p id="source-bms"><strong>[12] Falcon BMS, BMS Training Manual 4.38.1.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">cdn.falcon-bms.com</a>, read 9 November 2026 by printed page: p. 14 (the three rules), p. 59 (ejection), pp. 143–146 (mission 7, flameout landing). A sim manual: cited for the In the sim panel, and for the key positions and the F-16 heights in Figure 1, labelled as such.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/emergency-procedures-evidence.md">Emergency Procedures evidence</a>. No Army source was read: Army emergency procedures were not found in a public, readable form. The worked example's flight is invented; its numbers are the T-6's from [1] to [3].</p>
- <p class="note">Applicability: military pilots of every service, fixed-wing; helicopters through the Autorotation module. Each type's flight manual and checklist govern its emergency procedures, limits and ejection decision. This revision is Drafted pending independent source-backed review.</p>
+ <p class="note">Applicability: military pilots of every service, fixed-wing; helicopters through the Autorotation module. Each type's flight manual and checklist govern its emergency procedures, limits and ejection decision.</p>
 </SiteLayout>
 <script>
  import { RULES, glideCheck } from '../../../lessons/abnormal/glide-check.mjs';

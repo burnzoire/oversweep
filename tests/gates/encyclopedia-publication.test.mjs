@@ -14,8 +14,8 @@ const record = {
 };
 const tag = `data-record-id="${record.id}" data-record-revision="2"`;
 const complete = {
-  'encyclopedia/example/thing/index.html': `<section ${tag}>${record.maturity}</section><dd>12 km <a href="#source-1">[1]</a></dd><div class="record-body"><h2>Overview</h2></div><li id="source-1">Source</li>`,
-  'encyclopedia/example/index.html': `<section ${tag}><span>${record.maturity}</span><a href="/encyclopedia/example/thing/">Open</a></section>`,
+  'encyclopedia/example/thing/index.html': `<section ${tag}></section><dd>12 km <a href="#source-1">[1]</a></dd><div class="record-body"><h2>Overview</h2></div><li id="source-1">Source</li>`,
+  'encyclopedia/example/index.html': `<section ${tag}><a href="/encyclopedia/example/thing/">Open</a></section>`,
 };
 
 async function checkAll(files, records, { review = false, content = true } = {}) {
@@ -50,15 +50,16 @@ test('a published record must ship its page, category listing and content file',
   assert(problems.some(p => p.includes('example/thing.md is missing')));
 });
 
-test('published pages must show the registered maturity and revision', async () => {
-  const problems = await check(complete, { record: { maturity: 'Technically Validated', revision: 3 } });
-  assert(problems.some(p => p.includes('does not show maturity')));
+test('published pages must show the registered revision and hide the maturity label', async () => {
+  const problems = await check(complete, { record: { revision: 3 } });
   assert(problems.some(p => p.includes('revision 3')));
+  const labelled = Object.fromEntries(Object.entries(complete).map(([file, html]) => [file, html.replace('</section>', `${record.maturity}</section>`)]));
+  assert((await check(labelled)).some(p => p.includes('shows the internal maturity label')));
 });
 
 test('a record page must list sources and resolve every citation', async () => {
   const page = 'encyclopedia/example/thing/index.html';
-  let problems = await check({ ...complete, [page]: `<section ${tag}>${record.maturity}</section>` });
+  let problems = await check({ ...complete, [page]: `<section ${tag}></section>` });
   assert(problems.some(p => p.includes('lists no sources')));
   problems = await check({ ...complete, [page]: complete[page] + '<a href="#source-4">[4]</a>' });
   assert(problems.some(p => p.includes('#source-4 has no source entry')));
@@ -114,7 +115,7 @@ test('every registered record has a content file in the repository', async () =>
 });
 
 test('the encyclopedia landing shows categories, not records', async () => {
-  const problems = await check({ ...complete, 'encyclopedia/index.html': `<section ${tag}>${record.maturity}</section>` });
+  const problems = await check({ ...complete, 'encyclopedia/index.html': `<section ${tag}></section>` });
   assert(problems.some(p => p.includes('encyclopedia/index.html lists records')));
   assert.deepEqual(await check({ ...complete, 'encyclopedia/index.html': '<ul class="category-grid"></ul>' }), []);
 });

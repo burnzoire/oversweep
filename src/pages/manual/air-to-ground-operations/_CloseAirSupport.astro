@@ -30,7 +30,6 @@ const say = (id: string) => NINE_LINE.find((l) => l.id === id)!.says.replace(/"/
 <SiteLayout title={cas.title} activeSection="manual" activeSubject="air-to-ground-operations" compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Air-to-Ground Operations',href:sitePath('manual/air-to-ground-operations/')},{label:cas.title}]}>
  <section class="status-panel" data-module-id={cas.id} data-module-revision={cas.revision}>
-  <h2>{cas.maturity}</h2>
   <p>Module revision {cas.revision} · How an attack close to friendly troops is controlled, briefed and cleared, from the cockpit's side. For fixed- and rotary-wing aircrew of every service, from the joint close air support publication.</p>
  </section>
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
@@ -465,7 +464,7 @@ const say = (id: string) => NINE_LINE.find((l) => l.id === id)!.says.replace(/"/
  <p id="source-a10"><strong>[2] Eagle Dynamics, DCS: A-10C II Tank Killer Flight Manual (English), July 2023, "F4 JTAC".</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/dcs-warthog_2_flight_manual_en/">Download page</a>, read 2 November 2026, pp. 784–788. A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/close-air-support-evidence.md">close air support evidence</a>.</p>
  <p>Figures 1 and 2 and the opening exchange are original, invented examples, not reproductions of any publication's figure.</p>
- <p class="note">Applicability: written for aircrew of every service who fly close air support, fixed- or rotary-wing. Everything outside the sim panel is from the joint publication, including how it describes Marine Corps attack helicopter CAS and Army close combat attack; the Army's own aviation manual and the Navy's CAS training instructions could not be read for this revision, so no service-specific rules beyond the joint publication's are included. Theater SPINS, your unit's procedures and the current edition govern. This revision is Drafted pending independent source-backed review.</p>
+ <p class="note">Applicability: written for aircrew of every service who fly close air support, fixed- or rotary-wing. Everything outside the sim panel is from the joint publication, including how it describes Marine Corps attack helicopter CAS and Army close combat attack; the Army's own aviation manual and the Navy's CAS training instructions could not be read for this revision, so no service-specific rules beyond the joint publication's are included. Theater SPINS, your unit's procedures and the current edition govern.</p>
 </SiteLayout>
 <script>import '../../../lessons/close-air-support/lesson-ui.mjs';</script>
 

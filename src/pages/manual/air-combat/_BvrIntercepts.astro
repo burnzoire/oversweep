@@ -36,7 +36,6 @@ const k = (ft: number) => `${Math.round(ft / 1000)},000`;
 <SiteLayout title={bvr.title} activeSection="manual" activeSubject="air-combat" compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Air Combat',href:sitePath('manual/air-combat/')},{label:bvr.title}]}>
  <section class="status-panel" data-module-id={bvr.id} data-module-revision={bvr.revision}>
-  <h2>{bvr.maturity}</h2>
   <p>Module revision {bvr.revision} · The fight before the merge: radar intercepts, missile launch zones, the section's timeline and the controller's calls. For fighter aircrew of every service, from the Navy's public intercept training instruction and joint doctrine. Unclassified training principles only.</p>
  </section>
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
@@ -437,7 +436,7 @@ const k = (ft: number) => `${Math.round(ft / 1000)},000`;
  <p id="source-f14"><strong>[5] Heatblur Simulations, DCS: F-14 Tomcat manual.</strong> <a href="https://f14.manuals.heatblur.se/print.html">Online manual</a>, read 10 November 2026, by section: Navigation Command and Control Grid (NAV GRID); HSD Mode Switch; Programmable Tactical Information Display. A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/bvr-intercepts-evidence.md">BVR intercepts evidence</a>.</p>
  <p>Figures 1 to 4 and the worked intercept are original, invented examples, not reproductions of any publication's figure.</p>
- <p class="note">Applicability: written for fighter aircrew of every service. The procedures are the Navy's published training standards, which it says are skills rather than tactics, with the Air Force's aspect conventions noted; no Air Force or Army intercept publication could be read. Identification is from joint doctrine. Real tactics, missile performance, theater rules of engagement, SPINS, your unit's procedures and the current editions govern. This revision is Drafted pending independent source-backed review.</p>
+ <p class="note">Applicability: written for fighter aircrew of every service. The procedures are the Navy's published training standards, which it says are skills rather than tactics, with the Air Force's aspect conventions noted; no Air Force or Army intercept publication could be read. Identification is from joint doctrine. Real tactics, missile performance, theater rules of engagement, SPINS, your unit's procedures and the current editions govern.</p>
 </SiteLayout>
 
 <script>import '../../../lessons/bvr/lesson-ui.mjs';</script>

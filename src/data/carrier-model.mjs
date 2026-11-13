@@ -1,7 +1,6 @@
 // Each entry is one physical hull. Renaming and transfer do not create a ship.
 export const carrierCutoff = '1945-09-02';
 export const carrierAsOf = '2026-10-29';
-export const carrierMaturity = 'Drafted — not technically validated';
 
 const text = (value) => typeof value === 'string' && value.trim().length > 0;
 const date = (value) => /^\d{4}-\d{2}-\d{2}$/.test(value ?? '') && !Number.isNaN(Date.parse(value)) && new Date(value).toISOString().slice(0, 10) === value;

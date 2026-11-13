@@ -21,7 +21,6 @@ const objective = asTrainer ? experience!.objective : entry.objective;
 // Compact cards show the one-line summary from card-media.ts.
 const summary = (compact && cardMedia[entry.id]?.summary) || objective;
 const applicability = asTrainer ? experience!.applicability : entry.applicability;
-const maturity = asTrainer ? experience!.maturity : entry.maturity;
 const revision = asTrainer
   ? `Exercise revision ${experience!.revision}`
   : `Module revision ${experience?.module?.revision ?? entry.module?.revision}`;
@@ -37,7 +36,7 @@ const Heading = (headingLevel === 3 ? 'h3' : 'h2') as 'h2' | 'h3';
   <Heading class="entry-title"><a href={sitePath(entry.href)}>{title}</a></Heading>
   <p class="entry-objective">{summary}</p>
   {!compact && <p class="entry-applicability">{applicability}</p>}
-  <p class="entry-meta"><span class="maturity">{maturity}</span> · {revision}{local && ' · Local review only'}</p>
+  <p class="entry-meta">{revision}{local && ' · Local review only'}</p>
   <p class="entry-actions">
     {asTrainer ? (
       <>

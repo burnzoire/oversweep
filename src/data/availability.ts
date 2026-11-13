@@ -13,7 +13,6 @@ export interface Entry {
   title: string;
   objective: string;
   applicability: string;
-  maturity: string;
   href: string;
   subject: string;
   // Set for modules with a standalone trainer, which opens in its own window.
@@ -29,7 +28,6 @@ const fromExperience = (e: Experience): Entry => ({
   title: e.module?.title ?? e.title,
   objective: e.module?.objective ?? e.objective,
   applicability: e.module?.applicability ?? e.applicability,
-  maturity: e.module?.maturity ?? e.maturity,
   href: experienceRoute(e),
   subject: e.subject,
   trainer: { title: e.title, href: experienceFrame(e), experience: e },
@@ -41,7 +39,6 @@ const fromModule = (m: Module): Entry => ({
   title: m.title,
   objective: m.objective,
   applicability: m.applicability,
-  maturity: m.maturity,
   href: moduleRoute(m),
   subject: m.subject,
   module: m,

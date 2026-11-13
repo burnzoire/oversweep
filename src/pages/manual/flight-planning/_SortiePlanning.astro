@@ -43,7 +43,6 @@ const lb = (x: number) => `${(Math.round(x / 10) * 10).toLocaleString('en-US')} 
 <SiteLayout title={mod.title} activeSection="manual" activeSubject="flight-planning" compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Flight Planning',href:sitePath('manual/flight-planning/')},{label:mod.title}]}>
  <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
-  <h2>{mod.maturity}</h2>
   <p>Module revision {mod.revision} · How a sortie is planned: the tasking and inputs, the route and nav log, fuel with JOKER and BINGO, the flight plan and NOTAMs, and what goes on your card. For pilots of every service.</p>
  </section>
  <nav class="contents" aria-labelledby="contents-title"><h2 id="contents-title">In this module</h2>
@@ -312,7 +311,7 @@ const lb = (x: number) => `${(Math.round(x / 10) * 10).toLocaleString('en-US')} 
  <p id="source-dcs"><strong>[8] Eagle Dynamics, DCS User Manual (English, 2020).</strong> <a href="https://www.digitalcombatsimulator.com/upload/iblock/ed6/87v22jwd1xh51i3rgki944xsf503istq/DCS_User_Manual_EN_2020.pdf">DCS User Manual (PDF)</a>, read 3 November 2026, pp. 65, 109 and 179. A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/flight-planning-evidence.md">Flight Planning evidence</a>.</p>
  <p>Figures 1 to 3 and the worked sortie are original, invented examples, not reproductions of any publication's figure.</p>
- <p class="note">Applicability: written for pilots of every service. The method is generic; joint tasking is from the joint publication, the planning arithmetic from an Air Force manual, and the nav log, forms and NOTAMs from FAA publications that also govern military flights in US airspace. Service fuel reserve and alternate rules are shown for the Air Force and the Navy as examples; Army planning publications were not read for this revision. Your service's rules, the aircraft's flight manual and current flight information publications govern. This revision is Drafted pending independent source-backed review.</p>
+ <p class="note">Applicability: written for pilots of every service. The method is generic; joint tasking is from the joint publication, the planning arithmetic from an Air Force manual, and the nav log, forms and NOTAMs from FAA publications that also govern military flights in US airspace. Service fuel reserve and alternate rules are shown for the Air Force and the Navy as examples; Army planning publications were not read for this revision. Your service's rules, the aircraft's flight manual and current flight information publications govern.</p>
 </SiteLayout>
 
 <script>import '../../../lessons/flight-planning/sortie-ui.mjs';</script>

@@ -35,7 +35,6 @@ const ft = (n: number) => `${Math.round(n).toLocaleString('en-US')} ft`;
 <SiteLayout title={mod.title} activeSection="manual" activeSubject="abnormal-operations" compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Abnormal Operations',href:sitePath('manual/abnormal-operations/')},{label:mod.title}]}>
  <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
-  <h2>{mod.maturity}</h2>
   <p>Module revision {mod.revision} · How aircrew of any service stay out of reach of surface-to-air missiles and anti-aircraft guns, and what they do when one engages them anyway: planning around the threat, how each kind of threat guides or aims, the warning, and the maneuvers, chaff, flares and jamming that defeat it. It follows an Air Force electronic warfare text, the Air Force's F-16 fundamentals in two versions, and the Army's attack helicopter manual, with joint brevity.</p>
   <p>How a radar sees, the Doppler notch and the countermeasures themselves are in <a href={radar}>Radar and Warning Systems</a>; attacking the defences is in <a href={sead}>SEAD and DEAD</a>; the threats one by one are in <a href={threats}>Threat Systems</a>.</p>
  </section>
@@ -354,7 +353,7 @@ const ft = (n: number) => `${Math.round(n).toLocaleString('en-US')} ft`;
  <p id="source-dcs"><strong>[6] Eagle Dynamics, DCS: F-16C Viper Early Access Guide (English).</strong> <a href="https://www.digitalcombatsimulator.com/en/downloads/documentation/">DCS documentation page</a>, read 13 November 2026, pp. 697–698 and 703–708. A sim manual: cited for the In the sim panel, and for how a jamming pod buys time (pp. 703–705).</p>
  <p id="source-bms"><strong>[7] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 13 November 2026 by printed page: 374–379 (mission 28, SEAD). A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/threat-avoidance-evidence.md">Threat Avoidance evidence</a>. The worked example's flight is invented; its calls follow [3]. Figure 2's numbers are this page's own kinematics, not a source's.</p>
- <p class="note">Applicability: military aircrew of every service, fixed and rotary wing. Two sources are F-16 handbooks and one an Army helicopter manual; their principles are presented generally, and any aircraft's own flight and tactics manuals govern its maneuvers, limits and countermeasures. Detailed threat-specific tactics are classified and are not here. This revision is Drafted pending independent source-backed review.</p>
+ <p class="note">Applicability: military aircrew of every service, fixed and rotary wing. Two sources are F-16 handbooks and one an Army helicopter manual; their principles are presented generally, and any aircraft's own flight and tactics manuals govern its maneuvers, limits and countermeasures. Detailed threat-specific tactics are classified and are not here.</p>
 </SiteLayout>
 <script>
  import '../../../lessons/abnormal/threat-ui.mjs';

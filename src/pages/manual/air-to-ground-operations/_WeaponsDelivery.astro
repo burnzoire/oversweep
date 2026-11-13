@@ -38,7 +38,6 @@ const bfm = sitePath('manual/air-combat/bfm/');
 <SiteLayout title={wd.title} activeSection="manual" activeSubject="air-to-ground-operations" compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Air-to-Ground Operations',href:sitePath('manual/air-to-ground-operations/')},{label:wd.title}]}>
  <section class="status-panel" data-module-id={wd.id} data-module-revision={wd.revision}>
-  <h2>{wd.maturity}</h2>
   <p>Module revision {wd.revision} · How a fixed-wing pilot puts an unguided weapon on a target: the four kinds of attack, the geometry of a dive delivery, the numbers a pilot flies to and what an error in each does to the hit, and the offset <Term>pop-up</Term> attack from the run-in to the recovery. Written for military pilots of every service from the US Navy's T-45 weapons and operational navigation training instructions, with sim manuals for the computed modes.</p>
   <p>Figure 1 lets you fly a dive delivery badly on purpose and see where the bomb goes; Figure 2 steps through a <Term>pop-up</Term> attack in profile and plan.</p>
  </section>
@@ -285,7 +284,7 @@ const bfm = sitePath('manual/air-combat/bfm/');
  <p id="source-f4"><strong>[7] Heatblur Simulations, DCS: F-4E Phantom II manual, "Offset Delivery".</strong> <a href="https://f4.manuals.heatblur.se/stores/air_to_ground/bombs/employment/offset_delivery.html">Read the page</a>, 27 October 2026. A sim manual, cited for sim crossover.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/weapons-delivery-evidence.md">weapons delivery evidence</a>.</p>
  <p>Figures 1 and 2 are original drawings, not reproductions of any publication's figures.</p>
- <p class="note">Applicability: written for military pilots of every service who fly fixed-wing attack. The principles are the same in any aircraft, but every number here is a <Term record="t-45">T-45</Term> training number with practice bombs from Navy training publications [1–3] of 1999–2003; your aircraft's tactical manual, its delivery tables and your unit's rules govern. Air Force weapons-delivery instructions could not be read for this revision, so no Air Force-specific rules are included. This revision is Drafted pending independent source-backed review.</p>
+ <p class="note">Applicability: written for military pilots of every service who fly fixed-wing attack. The principles are the same in any aircraft, but every number here is a <Term record="t-45">T-45</Term> training number with practice bombs from Navy training publications [1–3] of 1999–2003; your aircraft's tactical manual, its delivery tables and your unit's rules govern. Air Force weapons-delivery instructions could not be read for this revision, so no Air Force-specific rules are included.</p>
 </SiteLayout>
 <script>import '../../../lessons/weapons-delivery/lesson-ui.mjs';</script>
 

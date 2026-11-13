@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 // Generated-output checks for every registered experience. Published entries
-// must ship complete and visibly carry their maturity; excluded entries must not
+// must ship complete without the internal maturity label; excluded entries must not
 // leak into normal builds. `--review` treats every entry as included.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -62,8 +62,8 @@ export async function checkExperiences({ dist, experiences, review = false, base
       if (html === null) { problems.push(`${e.id}: ${name} page is missing.`); continue; }
       if (!html.includes(marker) || !html.includes(revision))
         problems.push(`${e.id}: ${name} lacks the registered id or revision ${e.revision}.`);
-      if (name !== "frame" && !html.includes(e.maturity))
-        problems.push(`${e.id}: ${name} does not show maturity "${e.maturity}".`);
+      if (html.includes(e.maturity))
+        problems.push(`${e.id}: ${name} shows the internal maturity label "${e.maturity}".`);
     }
     const href = `href="${base}/${route(e)}"`;
     for (const name of (unlisted ? [] : ["subject index", "Training Library"]))

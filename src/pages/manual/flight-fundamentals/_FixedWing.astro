@@ -40,7 +40,6 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
 <SiteLayout title={mod.title} activeSection="manual" activeSubject="flight-fundamentals" compactSubjectNav={true}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Flight Fundamentals',href:sitePath('manual/flight-fundamentals/')},{label:mod.title}]}>
  <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
-  <h2>{mod.maturity}</h2>
   <p>Module revision {mod.revision} · How military aircraft fly, written for pilots of every service: the four forces, lift and <Term id="AOA">angle of attack</Term>, drag, control and stability, turns and <Term id="Load factor">load factor</Term>, stalls, the maneuvering envelope and energy. It follows the services' own texts, the Navy's aerodynamics books and its jet syllabus, with the FAA handbooks as supplementary sources. Worked numbers use an invented jet trainer. What changes when the wing is a rotor blade is in the companion module, <a href={rotor}>Rotor-Wing Principles of Flight</a>.</p>
   <p>Every figure is interactive: move a control and the drawing and readout follow. The core sequence runs from the four forces to the stall boundary; ground effect, controls, stability and energy are in the reference half. Propellers, high-speed (<Term id="Transonic">transonic</Term>) flight, spins and weight and balance are outside this revision.</p>
  </section>
@@ -323,7 +322,7 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
  <p id="source-bms"><strong>[6] Benchmark Sims, Falcon BMS 4.38.1 Training Manual.</strong> <a href="https://cdn.falcon-bms.com/docs/4.38/BMS-Training-Manual.pdf">PDF</a>, read 5 November 2026, pp. 54 (HUD airspeed), 82 (landing approach) and 111–112 (HARTS). A sim manual, cited only for the In the sim panel.</p>
  <p>Page-specific excerpts are recorded in the repository review evidence: <a href="https://github.com/burnzoire/oversweep/blob/main/docs/reviews/flight-fundamentals-faa-evidence.md">Principles of Flight evidence</a>. The turn, stall-speed, drag-curve and V-n equations are standard flight mechanics applied to an invented jet trainer; the tests check them against hand-worked values and the sources' rules of thumb (2% weight for 1% stall speed, 2 G at 60° of bank) and the handbook's energy-height example. The FAA handbooks are cited where they explain a point the military texts read for this revision do not cover, or state a law more exactly.</p>
  <p>Figures 1–9 are original line drawings, not reproductions of any publication's figure, and are not to scale except where a caption gives the scale.</p>
- <p class="note">Applicability: fixed-wing principles for military pilots of every service. The example jet trainer's numbers are invented; T-45 numbers are from its training instruction and apply to that aircraft only. Your aircraft's flight manual governs. This revision is Drafted pending independent source-backed review.</p>
+ <p class="note">Applicability: fixed-wing principles for military pilots of every service. The example jet trainer's numbers are invented; T-45 numbers are from its training instruction and apply to that aircraft only. Your aircraft's flight manual governs.</p>
 </SiteLayout>
 <script>import '../../../lessons/flight-fundamentals/lesson-ui.mjs';</script>
 <style>
