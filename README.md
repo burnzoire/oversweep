@@ -68,6 +68,6 @@ Run `python3 scripts/check_docs.py` using Python 3.11 or newer; no third-party
 dependencies are required. CI runs the same check. It checks repository structure,
 local Markdown file links, whitespace and required templates, not aviation truth.
 
-Existing MIT licence is retained. Third-party manuals, imagery and excerpts need
+All rights reserved; see [LICENSE](LICENSE). Third-party manuals, imagery and excerpts need
 their own permission and attribution; repository licensing does not grant those rights.
 

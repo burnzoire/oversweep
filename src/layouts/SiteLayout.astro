@@ -231,7 +231,7 @@ const subjects = manualSubjects.map((subject) => ({ ...subject, count: subjectEn
       <div class="footer-inner">
         <a class="footer-brand" href={sitePath()}><BrandMark />Oversweep</a>
         <p>A free reference for flight sim enthusiasts. For simulation and education only, not for real-world flight or operational use. Not affiliated with any armed force, government or simulator developer.</p>
-        <a class="footer-legal" href={sitePath("legal/")}>Legal notice</a>
+        <p class="footer-copyright">© {new Date().getFullYear()} Oversweep. All rights reserved. <a href={sitePath("legal/")}>Legal notice</a></p>
       </div>
     </footer>
   </body>
