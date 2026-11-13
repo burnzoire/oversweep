@@ -9,7 +9,7 @@ const available = manualSubjects.filter((s) => subjectEntries(s.slug).length > 0
 ---
 
 <SiteLayout title="Manual" activeSection="manual" isSectionIndex
-  description="Military flight procedures taught from first principles, with interactive figures, sources and knowledge checks: navigation, instruments, formation, carrier ops, air combat and more.">
+  description="Military flight procedures for flight sim pilots, taught from first principles with interactive figures, sources and knowledge checks: navigation, instruments, formation, carrier ops, air combat and more.">
   <p class="lead">Each module teaches one topic from first principles, with interactive figures, sources and a short knowledge check. Every module states its review status. Subjects without modules yet are dimmed in the subject list.</p>
   {available.map((subject) => (
     <section class="subject-group" aria-labelledby={`subject-${subject.slug}`}>

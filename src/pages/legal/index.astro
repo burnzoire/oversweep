@@ -1,0 +1,77 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { sitePath } from "../../lib/paths";
+
+const updated = "13 November 2026";
+const repo = "https://github.com/burnzoire/oversweep";
+---
+
+<SiteLayout
+  title="Legal notice"
+  activeSection="home"
+  breadcrumbs={[{ label: "Home", href: sitePath() }, { label: "Legal notice" }]}
+  description="Oversweep's legal notice: a free reference for flight sim enthusiasts, not for real-world flight. Disclaimer, liability, affiliations, trademarks, sources and privacy."
+>
+  <div class="legal">
+    <p class="lede">Oversweep is a free, non-commercial reference for flight simulator enthusiasts. By using this site you agree to the terms below. <span class="updated">Last updated {updated}.</span></p>
+
+    <section aria-labelledby="sim-only">
+      <h2 id="sim-only">For simulation and education only</h2>
+      <p>Everything on Oversweep is written for flight simulation and general interest. <strong>It is not flight training, and it is not for real-world flight, mission planning or any operational use.</strong> It does not replace official publications, flight manuals, checklists, air traffic instructions or qualified instruction. If you fly for real, follow your aircraft's flight manual, your service or operator's procedures and your instructors.</p>
+      <p>Procedures, numbers and tactics are simplified, generalised or adapted for simulators, and real procedures vary by country, service, unit and aircraft. Simulator behaviour also differs from real aircraft and between simulators.</p>
+    </section>
+
+    <section aria-labelledby="as-is">
+      <h2 id="as-is">Information provided as is</h2>
+      <p>The site is provided free of charge, "as is" and "as available". Content is researched, written and checked with the help of AI tools, and may be incomplete, out of date or wrong, even where a module shows a review status or cites a source. Review statuses describe how a page was checked; they are not a certification or an approval for any real-world use. No warranty is given that the content is accurate, complete or fit for any purpose, or that the site will be available or free of errors.</p>
+    </section>
+
+    <section aria-labelledby="liability">
+      <h2 id="liability">Limitation of liability</h2>
+      <p>To the extent permitted by law, the author of Oversweep is not liable for any loss, damage, injury or claim arising from your use of, or reliance on, this site or any site it links to, whether in contract, negligence or otherwise.</p>
+      <p>Nothing in this notice excludes, restricts or modifies any right or remedy, or any guarantee, warranty or other term or condition, that cannot lawfully be excluded or limited, including under the Australian Consumer Law or the consumer laws of your country.</p>
+    </section>
+
+    <section aria-labelledby="affiliation">
+      <h2 id="affiliation">No affiliation or endorsement</h2>
+      <p>Oversweep is an independent hobby project. It is not affiliated with, endorsed by or sponsored by any armed force, defence department, government or government agency, aviation regulator, aircraft or weapons manufacturer, or simulator developer or publisher, including Eagle Dynamics, Benchmark Sims and Microsoft. Use of public government material, insignia or imagery does not imply endorsement by the government or service concerned.</p>
+      <p>Oversweep uses only publicly released material. It does not knowingly publish classified, restricted or export-controlled information; if you believe something here should not be public, report it and it will be reviewed and removed where appropriate.</p>
+    </section>
+
+    <section aria-labelledby="trademarks">
+      <h2 id="trademarks">Trademarks</h2>
+      <p>DCS and DCS World are trademarks of Eagle Dynamics SA. Falcon BMS is developed by Benchmark Sims. Microsoft Flight Simulator is a trademark of Microsoft Corporation. Aircraft, weapon, system and product names, and any other trademarks mentioned, belong to their respective owners and are used only to identify the thing being described. Their use does not imply any connection with or endorsement by their owners.</p>
+    </section>
+
+    <section aria-labelledby="sources">
+      <h2 id="sources">Sources, images and copyright</h2>
+      <p>Oversweep cites its sources so readers can check them. Material from publications is summarised or quoted briefly for education, criticism and review, with attribution. Photos, charts and maps from other people are credited beside each image with their author, licence and source; they remain under their owners' terms, and their licences apply to any reuse. Government works are used as public-domain material where their publisher marks them as such. Links to other sites are provided for reference; Oversweep does not control and is not responsible for their content.</p>
+      <p>Oversweep's own source code, text and drawn figures are published under the <a href={`${repo}/blob/main/LICENSE`}>MIT licence</a> unless marked otherwise.</p>
+      <p>If you own material used here and want a credit corrected or the material removed, open an issue on the <a href={`${repo}/issues`}>Oversweep repository</a>.</p>
+    </section>
+
+    <section aria-labelledby="privacy">
+      <h2 id="privacy">Privacy</h2>
+      <p>Oversweep has no accounts, no advertising, no analytics and no tracking cookies, and it does not collect your personal information.</p>
+      <ul>
+        <li>The site is hosted on GitHub Pages. GitHub receives your IP address and standard request details when you load a page, as described in the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub General Privacy Statement</a>.</li>
+        <li>Interactive theatre maps load map tiles from OpenStreetMap's tile servers, which receive your IP address under the <a href="https://osmfoundation.org/wiki/Privacy_Policy">OpenStreetMap Foundation Privacy Policy</a>.</li>
+        <li>Some trainers remember settings, such as voice choices, in your browser's local storage. That data stays on your device and is never sent to Oversweep. Clearing your browser data removes it.</li>
+        <li>Site search runs in your browser; searches are not sent anywhere.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="general">
+      <h2 id="general">Changes and governing law</h2>
+      <p>This notice may change at any time; the date above shows the latest version. It is governed by the laws of Australia. If any part of it is unenforceable, the rest still applies.</p>
+      <p>Questions about this notice can be raised as an issue on the <a href={`${repo}/issues`}>Oversweep repository</a>.</p>
+    </section>
+  </div>
+</SiteLayout>
+
+<style>
+  .legal { max-width: 70ch; }
+  .lede { font-size: 1.1rem; }
+  .updated { display: block; margin-top: .5rem; color: var(--color-muted); font-size: .9rem; }
+  .legal section { margin-top: 2rem; }
+</style>
