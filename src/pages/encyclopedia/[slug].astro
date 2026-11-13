@@ -1,6 +1,7 @@
 ---
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import RecordCard from "../../components/encyclopedia/RecordCard.astro";
+import FilterBar from "../../components/encyclopedia/FilterBar.astro";
 import EnvelopeFigure from "../../components/encyclopedia/EnvelopeFigure.astro";
 import DeliveryFigure from "../../components/encyclopedia/DeliveryFigure.astro";
 import Cited from "../../components/encyclopedia/Cited.astro";
@@ -10,6 +11,7 @@ import { sectionHasContent } from "../../data/availability";
 import { ilsLines, navaidLines, runwayLines, towerLines, towerNote } from "../../data/map-airfield-text";
 import { airfieldCatalogue, aircraftContent, mapAirfieldAnchor, simAirfields, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, threatGroups, sensorContent, sensorGroups, recordRoute, type Source } from "../../data/encyclopedia";
 import { sitePath } from "../../lib/paths";
+import { aircraftFacets, aircraftFilter, buildFacets, filterAttributes, ordnanceFacets, ordnanceFilter, searchText, sensorFacets, sensorFilter, threatFacets, threatFilter, type FilterItem } from "../../data/record-facets";
 import { airfieldRoles, branches, currentUse, nations, searchTerms, sims, useLabels } from "../../data/airfield-model.mjs";
 import "../../styles/encyclopedia.css";
 
@@ -25,7 +27,7 @@ const records = categoryRecords(category.slug).map((record) => ({ record, data: 
 // Threat systems are listed by group: missiles and guns each get an envelope
 // comparison and a quick-reference table; radars get a coverage table.
 const threats = category.slug === "threat-systems"
-  ? threatGroups.map((group) => ({ group, records: records.filter(({ data }) => (data.group ?? "sam") === group.slug) })).filter(({ records }) => records.length > 0)
+  ? threatGroups.map((group) => ({ group, records: records.filter(({ data }) => (data.group ?? "sam") === group.slug).map((x) => ({ ...x, filter: threatFilter(x.record, x.data) })) })).filter(({ records }) => records.length > 0)
   : [];
 const envelopeCaption: Record<string, string> = {
   sam: "Each region combines a system's published minimum and maximum range, treated as slant range from the launcher, with its minimum and maximum altitude, using the figures and sources on its record page. Labels are SA numbers. Real launch zones are smaller and change with target speed, aspect and altitude. Dashed edges mark limits the sources do not give; where the sources give no ceiling, as for the SA-9, only the range is drawn. Each scale prints its vertical exaggeration.",
@@ -41,16 +43,24 @@ const km = (value: number) => `${Number(value.toFixed(1)).toLocaleString("en-GB"
 // Aircraft are listed by group (jets, propeller aircraft, helicopters), newest era first.
 const eraOrder = (era: string) => aircraftEras.findIndex((e) => e.slug === era);
 const aircraftRecords = category.slug === "aircraft"
-  ? categoryRecords("aircraft").map((record) => ({ record, era: aircraftEra(record), data: aircraftContent(record).frontmatter }))
+  ? categoryRecords("aircraft").map((record) => {
+    const era = aircraftEra(record);
+    const data = aircraftContent(record).frontmatter;
+    return { record, era, data, filter: aircraftFilter(record, era, data) };
+  })
   : [];
 const aircraft = aircraftGroups
   .map((group) => ({ group, records: aircraftRecords.filter(({ data }) => data.group === group.slug).sort((a, b) => eraOrder(a.era) - eraOrder(b.era)) }))
   .filter(({ records }) => records.length > 0);
-const eraCounts = aircraftEras.map((era) => ({ era, count: aircraftRecords.filter((r) => r.era === era.slug).length })).filter(({ count }) => count > 0);
+// Table rows filter with their cards but are not counted.
+const row = (filter: FilterItem) => filterAttributes({ ...filter, count: undefined });
 const n = (value: number) => value.toLocaleString("en-GB");
 // Ordnance is listed by group (bombs, cluster bombs, rockets and so on).
 const ordnanceRecords = category.slug === "ordnance"
-  ? categoryRecords("ordnance").map((record) => ({ record, data: ordnanceContent(record).frontmatter }))
+  ? categoryRecords("ordnance").map((record) => {
+    const data = ordnanceContent(record).frontmatter;
+    return { record, data, filter: ordnanceFilter(record, data) };
+  })
   : [];
 const ordnance = ordnanceGroups
   .map((group) => ({ group, records: ordnanceRecords.filter(({ data }) => data.group === group.slug) }))
@@ -58,9 +68,18 @@ const ordnance = ordnanceGroups
 // Sensors are listed by group, like ordnance.
 const sensors = category.slug === "radar-sensors"
   ? sensorGroups
-    .map((group) => ({ group, records: categoryRecords("radar-sensors").map((record) => ({ record, data: sensorContent(record).frontmatter })).filter(({ data }) => data.group === group.slug) }))
+    .map((group) => ({ group, records: categoryRecords("radar-sensors").map((record) => {
+      const data = sensorContent(record).frontmatter;
+      return { record, data, filter: sensorFilter(record, data) };
+    }).filter(({ data }) => data.group === group.slug) }))
     .filter(({ records }) => records.length > 0)
   : [];
+const facets = {
+  aircraft: aircraftFacets(aircraftRecords.map((x) => x.filter)),
+  ordnance: ordnanceFacets(ordnanceRecords.map((x) => x.filter)),
+  sensors: sensorFacets(sensors.flatMap((g) => g.records.map((x) => x.filter))),
+  threats: threatFacets(threats.flatMap((g) => g.records.map((x) => x.filter))),
+};
 // Airfields are one index, searchable and filtered by country, theatre, sim
 // map and service. Theatres list their sim maps under each one.
 const airfieldData = category.slug === "locations" ? airfieldCatalogue() : undefined;
@@ -76,12 +95,15 @@ const airfieldIndex = airfieldData ? byTitle(airfieldData.airfields).map((entry)
     use: currentUse(data.operators ?? []),
     aliases: (data.names ?? []).map((x) => x.name),
     filter: {
-      search: searchTerms(record.slug, data, represented.flatMap((x) => x.coverage.inSimName ?? [])),
-      country: data.country,
-      theatres: entry.theatres.map((x) => x.record.slug).join(" "),
-      maps: represented.map((x) => x.record.slug).join(" "),
-      services: services.join(" "),
-    },
+      count: "records",
+      search: searchText([searchTerms(record.slug, data, represented.flatMap((x) => x.coverage.inSimName ?? []))]),
+      values: {
+        country: [data.country],
+        theatre: entry.theatres.map((x) => x.record.slug),
+        map: represented.map((x) => x.record.slug),
+        service: services,
+      },
+    } as FilterItem,
   };
 }) : [];
 // Every airfield on every sim map, with or without a record yet.
@@ -90,17 +112,23 @@ const simIndex = category.slug === "locations" && airfieldData ? simAirfields().
   return {
     ...x,
     filter: {
-      search: [indexed?.filter.search, ...x.names].filter(Boolean).join(" | ").toLowerCase(),
-      country: indexed?.filter.country ?? "",
-      theatres: x.theatres.map((t) => t.record.slug).join(" "),
-      maps: [...new Set(x.maps.map((m) => m.map.record.slug))].join(" "),
-      services: indexed?.filter.services ?? "",
-    },
+      search: searchText([indexed?.filter.search, ...x.names]),
+      values: {
+        country: indexed?.filter.values.country ?? [],
+        theatre: x.theatres.map((t) => t.record.slug),
+        map: [...new Set(x.maps.map((m) => m.map.record.slug))],
+        service: indexed?.filter.values.service ?? [],
+      },
+    } as FilterItem,
   };
 }) : [];
-const usedNations = [...new Set(airfieldIndex.map((a) => a.data.country))].sort((a, b) => nations[a].name.localeCompare(nations[b].name));
-const usedServices = Object.keys(branches).filter((b) => airfieldIndex.some((a) => a.services.includes(b as keyof typeof branches))) as (keyof typeof branches)[];
-const mapName = (x: { data: { name: string } }) => x.data.name;
+// Location facets count every airfield once: the records, then the sim-map airfields without one.
+const locationFacets = airfieldData ? buildFacets([...airfieldIndex, ...simIndex.filter((x) => !x.record)].map((a) => a.filter), [
+  { key: "country", label: "Country or territory", any: "Any", labels: Object.fromEntries(Object.entries(nations).map(([k, v]) => [k, v.name])) },
+  { key: "theatre", label: "Theatre", any: "Any", order: byTitle(airfieldData.theatres).map((x) => ({ slug: x.record.slug, title: x.record.title })) },
+  { key: "map", label: "Sim map", any: "Any, or none checked", order: airfieldData.maps.map((x) => ({ slug: x.record.slug, title: x.data.name })) },
+  { key: "service", label: "Service", any: "Any", order: Object.entries(branches).map(([k, v]) => ({ slug: k, title: v })) },
+]) : [];
 const ft = (feet: number) => `${n(feet)} ft (${n(Math.round(feet * 0.3048))} m)`;
 const weight = (kg: number) => `${n(kg)} kg (${n(Math.round(kg * 2.20462))} lb)`;
 // Sources for the delivery figure on the ordnance page; records cite their own.
@@ -132,16 +160,13 @@ const deliverySources: Source[] = [
       )}
       {category.slug === "aircraft" ? (
         <>
-          <p class="lead">Military aircraft from the Second World War to today: fighters, attack aircraft, trainers, a transport and helicopters. The Second World War aircraft are here for their history; use the era buttons to show only the aircraft you need. Each record gives the aircraft's role, the variant its figures describe, performance, armament and service history, with sources.</p>
-          <div class="buttons era-filter" role="group" aria-label="Show aircraft by era" hidden>
-            <button type="button" data-era-filter="all" aria-pressed="true">All ({aircraftRecords.length})</button>
-            {eraCounts.map(({ era, count }) => <button type="button" data-era-filter={era.slug} aria-pressed="false">{era.title} ({count})</button>)}
-          </div>
+          <p class="lead">Military aircraft from the Second World War to today: fighters, attack aircraft, trainers, a transport and helicopters. The Second World War aircraft are here for their history; use the filters to show only the aircraft you need. Each record gives the aircraft's role, the variant its figures describe, performance, armament and service history, with sources.</p>
+          <FilterBar id="aircraft" label="Find an aircraft" search={{ label: "Aircraft name or designation", placeholder: "e.g. Hornet, F-16 or MiG" }} facets={facets.aircraft} nouns={{ records: "aircraft" }} />
           {aircraft.map(({ group, records }) => (
-            <div class="aircraft-group">
+            <div class="aircraft-group" data-filter-group>
               <h2>{group.title}</h2>
               <div class="entry-grid record-grid">
-                {records.map(({ record, era, data }) => <RecordCard record={record} photo={data.photos[0]} era={era} />)}
+                {records.map(({ record, data, filter }) => <RecordCard record={record} photo={data.photos[0]} filter={filter} />)}
               </div>
             </div>
           ))}
@@ -150,10 +175,10 @@ const deliverySources: Source[] = [
             <table>
               <thead><tr><th scope="col">Aircraft</th><th scope="col">Role</th><th scope="col">First flight</th><th scope="col">Max speed</th><th scope="col">Ceiling</th></tr></thead>
               {aircraft.map(({ group, records }) => (
-                <tbody class="aircraft-group">
+                <tbody data-filter-group>
                   <tr><th scope="rowgroup" colspan="5">{group.title}</th></tr>
-                  {records.map(({ record, era, data }) => (
-                    <tr data-era={era}>
+                  {records.map(({ record, data, filter }) => (
+                    <tr {...row(filter)}>
                       <th scope="row"><a href={sitePath(recordRoute(record))}>{record.title}</a><br /><span class="entry-kicker">{record.designation}</span></th>
                       <td>{plain(data.role)}</td>
                       <td>{data.quick.firstFlight}</td>
@@ -170,11 +195,12 @@ const deliverySources: Source[] = [
       ) : category.slug === "ordnance" ? (
         <>
           <p class="lead">Weapons carried by military aircraft of every service. So far it covers air-to-air missiles and aircraft guns from the 1950s to today; guided air-to-ground weapons, from laser-guided bombs and GPS kits to anti-radiation, anti-ship and anti-tank missiles; and unguided weapons: the US Mark 80 general-purpose bombs and their Soviet counterparts, cluster bombs, fire and practice bombs, and air-to-ground rockets from the Second World War on. Each record gives the weapon's weight, warhead or ammunition, guidance or fuzing, and which aircraft carry it, with sources. Published air-to-air missile ranges are best cases, and each air-to-air record says what its figure depends on.</p>
+          <FilterBar id="ordnance" label="Find a weapon" search={{ label: "Weapon name or designation", placeholder: "e.g. Sidewinder, GBU-12 or Kh-29" }} facets={facets.ordnance} nouns={{ records: "weapons" }} />
           {ordnance.map(({ group, records }) => (
-            <div class="aircraft-group">
+            <div class="aircraft-group" data-filter-group>
               <h2>{group.title}</h2>
               <div class="entry-grid record-grid">
-                {records.map(({ record, data }) => <RecordCard record={record} photo={data.photos[0]} />)}
+                {records.map(({ record, data, filter }) => <RecordCard record={record} photo={data.photos[0]} filter={filter} />)}
               </div>
             </div>
           ))}
@@ -187,10 +213,10 @@ const deliverySources: Source[] = [
             <table>
               <thead><tr><th scope="col">Weapon</th><th scope="col">Type</th><th scope="col">Weight</th><th scope="col">Entered service</th></tr></thead>
               {ordnance.map(({ group, records }) => (
-                <tbody>
+                <tbody data-filter-group>
                   <tr><th scope="rowgroup" colspan="4">{group.title}</th></tr>
-                  {records.map(({ record, data }) => (
-                    <tr>
+                  {records.map(({ record, data, filter }) => (
+                    <tr {...row(filter)}>
                       <th scope="row"><a href={sitePath(recordRoute(record))}>{record.title}</a><br /><span class="entry-kicker">{record.designation}</span></th>
                       <td>{plain(data.type)}</td>
                       <td>{data.quick.weightKg === null ? "not given" : weight(data.quick.weightKg)}</td>
@@ -214,11 +240,12 @@ const deliverySources: Source[] = [
       ) : category.slug === "radar-sensors" ? (
         <>
           <p class="lead">Sensors carried by military aircraft: the fighter radars that find and track targets, the <a href={sitePath("encyclopedia/terminology/sensors/#radar-warning-receiver")}>radar warning receivers</a> that tell a crew who is looking at them, and the targeting pods and helicopter sights that find, track and laser-mark targets for guided weapons, and the dispensers and jamming pods that protect the aircraft. Each record gives what the sensor is, which aircraft carry it, what the crew sees and where it came from, with sources.</p>
+          <FilterBar id="sensors" label="Find a sensor" search={{ label: "Sensor name or designation", placeholder: "e.g. APG-68, Sniper or SPO-15" }} facets={facets.sensors} nouns={{ records: "sensors" }} />
           {sensors.map(({ group, records }) => (
-            <div class="aircraft-group">
+            <div class="aircraft-group" data-filter-group>
               <h2>{group.title}</h2>
               <div class="entry-grid record-grid">
-                {records.map(({ record, data }) => <RecordCard record={record} photo={data.photos[0]} />)}
+                {records.map(({ record, data, filter }) => <RecordCard record={record} photo={data.photos[0]} filter={filter} />)}
               </div>
             </div>
           ))}
@@ -227,10 +254,10 @@ const deliverySources: Source[] = [
             <table>
               <thead><tr><th scope="col">Sensor</th><th scope="col">Type</th><th scope="col">Band, or whether it lases</th><th scope="col">Entered service</th></tr></thead>
               {sensors.map(({ group, records }) => (
-                <tbody>
+                <tbody data-filter-group>
                   <tr><th scope="rowgroup" colspan="4">{group.title}</th></tr>
-                  {records.map(({ record, data }) => (
-                    <tr>
+                  {records.map(({ record, data, filter }) => (
+                    <tr {...row(filter)}>
                       <th scope="row"><a href={sitePath(recordRoute(record))}>{record.title}</a><br /><span class="entry-kicker">{record.designation}</span></th>
                       <td>{plain(data.type)}</td>
                       <td>{group.slug === "targeting-pod" || data.quick.designates ? (data.quick.designates ? "Lases targets" : "No laser; it only tracks a spot") : data.quick.band ?? (data.band ? plain(data.band) : "not given")}</td>
@@ -260,48 +287,13 @@ const deliverySources: Source[] = [
             </div>
           </section>
           <h2 id="airfield-index">Find a location</h2>
-          <form class="airfield-filter" role="search" aria-label="Find a location" hidden>
-            <div class="filter-field filter-search">
-              <label for="airfield-q">Location name, former name or identifier</label>
-              <input id="airfield-q" name="q" type="search" autocomplete="off" placeholder="e.g. Isely, KLSV or Batumi" />
-            </div>
-            <div class="filter-field">
-              <label for="airfield-country">Country or territory (airfields)</label>
-              <select id="airfield-country" name="country">
-                <option value="">Any</option>
-                {usedNations.map((c) => <option value={c}>{nations[c].name}</option>)}
-              </select>
-            </div>
-            <div class="filter-field">
-              <label for="airfield-theatre">Theatre</label>
-              <select id="airfield-theatre" name="theatre">
-                <option value="">Any</option>
-                {byTitle(airfieldData.theatres).map((x) => <option value={x.record.slug}>{x.record.title}</option>)}
-              </select>
-            </div>
-            <div class="filter-field">
-              <label for="airfield-map">Sim map</label>
-              <select id="airfield-map" name="map">
-                <option value="">Any, or none checked</option>
-                {airfieldData.maps.map((x) => <option value={x.record.slug}>{mapName(x)}</option>)}
-              </select>
-            </div>
-            <div class="filter-field">
-              <label for="airfield-service">Service (airfields)</label>
-              <select id="airfield-service" name="service">
-                <option value="">Any</option>
-                {usedServices.map((b) => <option value={b}>{branches[b]}</option>)}
-              </select>
-            </div>
-            <p class="filter-count" aria-live="polite"></p>
-            <p class="filter-empty" hidden>No location matches. Clear a filter or try another name.</p>
-          </form>
+          <FilterBar id="airfield" label="Find a location" search={{ label: "Location name, former name or identifier", placeholder: "e.g. Isely, KLSV or Batumi" }} facets={locationFacets} nouns={{ records: "airfield records", rows: "airfields on the sim maps" }} />
 
-          <section data-location-group>
+          <section data-filter-group>
           <h2>Airfields</h2>
           <div class="entry-grid record-grid airfield-index">
             {airfieldIndex.map((a) => (
-              <RecordCard record={a.record} photo={a.data.photos[0]} filter={{ ...a.filter, airfield: "", location: "", kind: "airfield" }}>
+              <RecordCard record={a.record} photo={a.data.photos[0]} filter={a.filter}>
                 <dl class="card-facts">
                   <div><dt>Where</dt><dd>{nations[a.data.country].name}</dd></div>
                   {a.aliases.length > 0 && <div><dt>Also</dt><dd>{a.aliases.join(" · ")}</dd></div>}
@@ -315,7 +307,7 @@ const deliverySources: Source[] = [
             ))}
           </div>
           </section>
-          <section data-location-group>
+          <section data-filter-group>
           <h2 id="sim-airfields">Every represented airfield</h2>
           <p>Every airfield with a runway on each DCS World map, with its runways, tower frequencies, navaids and ILS as the game has them. An airfield on more than one map gets a line for each map. {simIndex.filter((x) => x.record).length} of {simIndex.length} have a full record so far; more are being added theatre by theatre, the major military bases first.</p>
           <div class="table-scroll" role="region" aria-label="Every represented airfield, scrolls sideways on narrow screens" tabindex="0">
@@ -323,7 +315,7 @@ const deliverySources: Source[] = [
               <thead><tr><th scope="col">Airfield</th><th scope="col">Map and name in the sim</th><th scope="col">Elevation</th><th scope="col">Runways (magnetic)</th><th scope="col">Tower (MHz)</th><th scope="col">TACAN, VOR and NDB</th><th scope="col">ILS</th></tr></thead>
               <tbody>
                 {simIndex.flatMap((x) => x.maps.map((m, i) => (
-                  <tr class={i === 0 ? "sim-airfield" : "sim-airfield-more"} data-airfield {...Object.fromEntries(Object.entries(x.filter).map(([k, v]) => [`data-${k}`, v]))}>
+                  <tr class={i === 0 ? "sim-airfield" : "sim-airfield-more"} {...filterAttributes({ ...x.filter, count: i === 0 ? "rows" : undefined })}>
                     {i === 0 && <th scope="row" rowspan={x.maps.length}>{x.record ? <a href={sitePath(recordRoute(x.record.record))}>{x.name}</a> : x.name}<span class="cell-note">{x.theatres.map((t) => t.record.title).join(", ")}{!x.record && " · record not written yet"}</span></th>}
                     <td><a href={`${sitePath(recordRoute(m.map.record))}#${mapAirfieldAnchor(m.name)}`}>{m.map.data.name}</a>{m.name !== x.name && <span class="cell-note">as {m.name}</span>}</td>
                     <td>{m.field.elevationFt === undefined ? "—" : `${n(m.field.elevationFt)} ft`}</td>
@@ -342,11 +334,12 @@ const deliverySources: Source[] = [
         </>
       ) : category.slug === "threat-systems" ? (
         <>
+          <FilterBar id="threats" label="Find a threat system" search={{ label: "System name, NATO name or designation", placeholder: "e.g. SA-6, Gainful or Patriot" }} facets={facets.threats} nouns={{ records: "systems" }} />
           {threats.map(({ group, records }) => (
-            <div class="aircraft-group">
+            <div class="aircraft-group" data-filter-group>
               <h2>{group.title}</h2>
               <div class="entry-grid record-grid">
-                {records.map(({ record, data }) => <RecordCard record={record} photo={data.photo} />)}
+                {records.map(({ record, data, filter }) => <RecordCard record={record} photo={data.photo} filter={filter} />)}
               </div>
             </div>
           ))}
@@ -415,5 +408,4 @@ const deliverySources: Source[] = [
   )}
 </SiteLayout>
 
-<script>import "../../scripts/era-filter.mjs";</script>
-<script>import "../../scripts/airfield-filter.mjs";</script>
+<script>import "../../scripts/record-filter.mjs";</script>

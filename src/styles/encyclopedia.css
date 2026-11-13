@@ -56,9 +56,18 @@
 .ency button { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: var(--color-text); background: #fff; border: 1px solid var(--color-text); cursor: pointer; }
 .ency button[aria-pressed="true"] { color: #fff; background: var(--color-link); border-color: var(--color-link); }
 .ency button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
-/* Era filter on the aircraft list: `hidden` must win over the flex and grid displays. */
-.ency .era-filter { margin: 0 0 0.5rem; }
-.ency .era-filter[hidden], .ency [data-era][hidden], .ency .aircraft-group[hidden] { display: none; }
+/* The shared list filter bar (FilterBar.astro): `hidden` must win over the flex and grid displays. */
+.ency .record-filter { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: 0.75rem 1rem; align-items: end; margin: 0 0 1rem; padding: 0.9rem 1rem; border: 1px solid var(--color-border); background: var(--color-surface, #f6f7f8); }
+/* Two selects a row on a phone. */
+@media (max-width: 40rem) { .ency .record-filter { grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr)); } }
+.ency .record-filter .filter-search, .ency .record-filter .filter-status, .ency .record-filter .filter-empty { grid-column: 1 / -1; }
+.ency .record-filter label { display: block; font-weight: 700; margin-bottom: 0.3rem; }
+.ency .record-filter input, .ency .record-filter select { box-sizing: border-box; width: 100%; min-height: 2.75rem; padding: 0.4rem 0.6rem; font: inherit; color: var(--color-text); border: 1px solid var(--color-text); background: #fff; }
+.ency .record-filter input:focus-visible, .ency .record-filter select:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+.ency .record-filter .filter-status { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; }
+.ency .record-filter .filter-count, .ency .record-filter .filter-empty { margin: 0; color: var(--color-muted); font-size: 0.9rem; }
+.ency .record-filter .filter-clear { min-height: 2.25rem; padding: 0.25rem 0.75rem; font-weight: 400; }
+.ency .record-filter[hidden], .ency .record-filter [hidden], .ency [data-filter-item][hidden], .ency [data-filter-group][hidden] { display: none; }
 
 .ency svg.natops { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
 .ency .natops .frame { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
@@ -166,14 +175,7 @@
 .ency .sim-panel li + li { margin-top: 0.3rem; }
 .ency .theatre-meta { margin: -0.25rem 0 0.75rem; color: var(--color-muted); }
 
-/* Airfields: the index's search and filters, card facts, and the record's sections. */
-.ency .airfield-filter { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); gap: 0.75rem 1rem; align-items: end; margin: 0 0 0.75rem; padding: 0.9rem 1rem; border: 1px solid var(--color-border); background: var(--color-surface, #f6f7f8); }
-.ency .airfield-filter .filter-search { grid-column: 1 / -1; }
-.ency .airfield-filter label { display: block; font-weight: 700; margin-bottom: 0.3rem; }
-.ency .airfield-filter input, .ency .airfield-filter select { box-sizing: border-box; width: 100%; min-height: 2.75rem; padding: 0.4rem 0.6rem; font: inherit; border: 1px solid var(--color-text); background: #fff; }
-.ency .airfield-filter input:focus-visible, .ency .airfield-filter select:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
-.ency .airfield-filter .filter-count, .ency .airfield-filter .filter-empty { grid-column: 1 / -1; margin: 0; color: var(--color-muted); font-size: 0.9rem; }
-.ency .airfield-filter[hidden], .ency [data-airfield][hidden], .ency .filter-empty[hidden] { display: none; }
+/* Airfields: card facts and the record's sections. */
 .ency .card-facts { display: grid; gap: 0.2rem; margin: 0 0 0.6rem; font-size: 0.9rem; }
 .ency .airfield-index { grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); }
 .ency .card-facts > div { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: 0.5rem; }
@@ -241,7 +243,6 @@
 .ency .plan-key .swatch-helipad { background: #fff; border-color: #2b2f33; }
 .ency .plan-key .swatch-boundary { background: #f6f7f4; border: 1px dashed #8a8f94; }
 
-.ency [data-location][hidden], .ency [data-location-group][hidden] { display: none; }
 
 /* Theatre overviews retain the complete chart at every viewport size. */
 .ency .theatre-overview { margin: 1.5rem 0; border: 1px solid var(--color-border); }

@@ -1,0 +1,45 @@
+---
+import type { Facet } from '../../data/record-facets';
+// The one filter bar every encyclopedia list uses: a name search, one select
+// per facet, an optional sort, a live count and a clear button. Items to
+// filter carry filterAttributes() (record-facets.ts); record-filter.mjs runs
+// it. Without JavaScript the bar stays hidden and every item is listed.
+// `nouns` names what each counted kind is, e.g. { records: "aircraft" }.
+interface Props {
+  id: string;
+  label: string;
+  search: { label: string; placeholder: string };
+  facets: Facet[];
+  nouns: Record<string, string>;
+  sort?: { label: string; options: { value: string; label: string }[] };
+}
+const { id, label, search, facets, nouns, sort } = Astro.props;
+---
+<form class="record-filter" role="search" aria-label={label} data-nouns={JSON.stringify(nouns)} data-pagefind-ignore hidden>
+  <div class="filter-field filter-search">
+    <label for={`${id}-q`}>{search.label}</label>
+    <input id={`${id}-q`} name="q" type="search" autocomplete="off" placeholder={search.placeholder} />
+  </div>
+  {facets.map((facet) => (
+    <div class="filter-field">
+      <label for={`${id}-${facet.key}`}>{facet.label}</label>
+      <select id={`${id}-${facet.key}`} name={facet.key} data-facet={facet.key}>
+        <option value="">{facet.any ?? 'Any'}</option>
+        {facet.options.map((o) => <option value={o.value}>{o.label} ({o.count})</option>)}
+      </select>
+    </div>
+  ))}
+  {sort && (
+    <div class="filter-field">
+      <label for={`${id}-sort`}>{sort.label}</label>
+      <select id={`${id}-sort`} name="sort" data-sort>
+        {sort.options.map((o) => <option value={o.value}>{o.label}</option>)}
+      </select>
+    </div>
+  )}
+  <div class="filter-status">
+    <p class="filter-count" aria-live="polite"></p>
+    <button type="reset" class="filter-clear" hidden>Clear filters</button>
+  </div>
+  <p class="filter-empty" hidden>Nothing matches. Clear a filter or try another name.</p>
+</form>
