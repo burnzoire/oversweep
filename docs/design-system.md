@@ -113,7 +113,7 @@ Content maturity (Outlined, Researched, Drafted, Technically Validated,
 Published; see [content standards](content-standards.md)) is internal tracking
 and is never shown on the site. Do not render maturity labels, “draft” or
 “not validated” badges, or similar status text on pages, cards or trainer
-frames. The [legal page](../src/pages/legal.astro) is the single reader-facing
+frames. The [legal page](../src/pages/legal/index.astro) is the single reader-facing
 disclaimer. Do not imply that a visual treatment itself validates or approves
 content.
 
