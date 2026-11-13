@@ -3,13 +3,11 @@ import SiteLayout from "../../layouts/SiteLayout.astro";
 import RecordCard from "../../components/encyclopedia/RecordCard.astro";
 import FilterBar from "../../components/encyclopedia/FilterBar.astro";
 import EnvelopeFigure from "../../components/encyclopedia/EnvelopeFigure.astro";
-import DeliveryFigure from "../../components/encyclopedia/DeliveryFigure.astro";
-import Cited from "../../components/encyclopedia/Cited.astro";
 import Glossary from "../../components/encyclopedia/Glossary.astro";
 import { encyclopediaCategories } from "../../data/catalogue";
 import { sectionHasContent } from "../../data/availability";
 import { ilsLines, navaidLines, runwayLines, towerLines, towerNote } from "../../data/map-airfield-text";
-import { airfieldCatalogue, aircraftContent, mapAirfieldAnchor, simAirfields, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, threatGroups, sensorContent, sensorGroups, recordRoute, type Source } from "../../data/encyclopedia";
+import { airfieldCatalogue, aircraftContent, mapAirfieldAnchor, simAirfields, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, threatGroups, sensorContent, sensorGroups, recordRoute } from "../../data/encyclopedia";
 import { sitePath } from "../../lib/paths";
 import { aircraftFacets, aircraftFilter, buildFacets, filterAttributes, ordnanceFacets, ordnanceFilter, searchText, sensorFacets, sensorFilter, threatFacets, threatFilter, type FilterItem } from "../../data/record-facets";
 import { airfieldRoles, branches, currentUse, nations, searchTerms, sims, useLabels } from "../../data/airfield-model.mjs";
@@ -131,13 +129,6 @@ const locationFacets = airfieldData ? buildFacets([...airfieldIndex, ...simIndex
 ]) : [];
 const ft = (feet: number) => `${n(feet)} ft (${n(Math.round(feet * 0.3048))} m)`;
 const weight = (kg: number) => `${n(kg)} kg (${n(Math.round(kg * 2.20462))} lb)`;
-// Sources for the delivery figure on the ordnance page; records cite their own.
-const deliverySources: Source[] = [
-  { n: 1, title: "Aviation Ordnanceman, NAVEDTRA 14313, chapter 1: Bombs, fuzes and associated components", publisher: "US Navy, Naval Education and Training Professional Development and Technology Center (copy hosted by Integrated Publishing)", url: "https://navyaviation.tpub.com/14313/css/Bsu-85-B-Air-Inflatable-Retarder-36.htm", accessed: "2026-10-26", note: "Printed page 1-26: Snakeye retarded, unretarded and in-flight selection modes." },
-  { n: 2, title: "Toss bombing", publisher: "Wikipedia (secondary source)", url: "https://en.wikipedia.org/wiki/Toss_bombing", accessed: "2026-10-26" },
-  { n: 3, title: "Dive bomber", publisher: "Wikipedia (secondary source)", url: "https://en.wikipedia.org/wiki/Dive_bomber", accessed: "2026-10-26" },
-  { n: 4, title: "Unguided bomb", publisher: "Wikipedia (secondary source)", url: "https://en.wikipedia.org/wiki/Unguided_bomb", accessed: "2026-10-26" },
-];
 ---
 
 <SiteLayout
@@ -204,10 +195,6 @@ const deliverySources: Source[] = [
               </div>
             </div>
           ))}
-          <h2>How unguided weapons are delivered</h2>
-          <DeliveryFigure title="Figure 1 — Delivery profiles (side view)">
-            <p class="fig-caption">An unguided bomb follows a ballistic path from the moment it leaves the aircraft, so where and how it is released decides where it lands. <Cited text="[4]" /> In a <strong>level</strong> release the bomb leaves at the aircraft's own speed and carries on forward as it falls, so at low level the bomb and the aircraft arrive over the target together. <Cited text="[1]" /> In a <strong>dive</strong> the aircraft points at the target, which shortens and straightens the bomb's fall and makes aiming over the nose easier; the aircraft must then pull out. <Cited text="[3]" /> In a <strong>loft</strong> or toss the aircraft approaches low, pulls up and releases in the climb, typically between 20° and 75° above the horizon, so the bomb is thrown forward and the aircraft need not overfly the target. <Cited text="[2]" /> A <strong>retarded</strong> bomb opens fins, a parachute or a ballute after release; the drag slows it so that an aircraft bombing from low level is clear of the blast and fragments when the bomb arrives. <Cited text="[1] [4]" /></p>
-          </DeliveryFigure>
           <h2>Quick reference</h2>
           <div class="table-scroll" role="region" aria-label="Ordnance quick reference table, scrolls sideways on narrow screens" tabindex="0">
             <table>
@@ -228,14 +215,6 @@ const deliverySources: Source[] = [
             </table>
           </div>
           <p class="note">Weights are for the variant named on each record, rounded; a rocket's weight is one complete round, and a gun's is the gun alone unless its record says otherwise. Each record cites its sources and notes other published figures.</p>
-          <section class="sources" aria-labelledby="sources-title">
-            <h2 id="sources-title">Sources for Figure 1</h2>
-            <ol>
-              {deliverySources.map((s) => (
-                <li id={`source-${s.n}`} value={s.n}><cite>{s.title}</cite>. {s.publisher}. <a href={s.url}>{s.url}</a> (accessed {s.accessed}).{s.note && ` ${s.note}`}</li>
-              ))}
-            </ol>
-          </section>
         </>
       ) : category.slug === "radar-sensors" ? (
         <>
