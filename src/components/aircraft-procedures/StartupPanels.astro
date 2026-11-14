@@ -9,7 +9,7 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
 <div class="startup-panels" data-startup-panels>
 
   <div class="startup-panel" data-panel="elec">
-<div class="elec-art" data-main-state="off">
+<div class="elec-art" style={`--art-ratio:${elecArt.width / elecArt.height}`} data-main-state="off">
 <span class="relay-light" data-lamp="flcs-rly" aria-hidden="true"></span>
 <img src={elecArt.src} width={elecArt.width} height={elecArt.height} alt="F-16C electrical panel" />
 <div class="switch" role="group" aria-label="MAIN PWR toggle">
@@ -27,7 +27,7 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
 </div>
   </div>
   <div class="startup-panel" data-panel="test" hidden>
-    <div class="raster-panel raster-test">
+    <div class="raster-panel raster-test" style={`--art-ratio:${testArt.width / testArt.height}`}>
       <img src={testArt.src} width={testArt.width} height={testArt.height} alt="FLCS TEST panel" />
       <span class="raster-lamp" data-flcs-channel="C" style="--x:68%;--y:38.6%;--w:9.5%;--h:6.7%" aria-hidden="true"></span>
       <span class="raster-lamp" data-flcs-channel="A" style="--x:78.2%;--y:38.6%;--w:9.5%;--h:6.7%" aria-hidden="true"></span>
@@ -50,7 +50,7 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
     </div>
   </div>
   <div class="startup-panel" data-panel="jfs" hidden>
-    <div class="raster-panel raster-jfs">
+    <div class="raster-panel raster-jfs" style={`--art-ratio:${jfsArt.width / jfsArt.height}`}>
       <img src={jfsArt.src} width={jfsArt.width} height={jfsArt.height} alt="ENG and JET START panel" />
       <span class="raster-lamp" data-lamp="jfs-run" style="--x:26.1%;--y:12%;--w:10.2%;--h:4.7%" aria-hidden="true"></span>
       <div class="raster-switch flcs-toggle jfs-toggle" role="group" aria-label="JFS switch" style="--x:63.4%;--y:14.37%">
@@ -69,7 +69,7 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
   </div>
 
   <div class="startup-panel" data-panel="caution" hidden>
-    <div class="raster-panel raster-caution">
+    <div class="raster-panel raster-caution" style={`--art-ratio:${cautionArt.width / cautionArt.height}`}>
       <img src={cautionArt.src} width={cautionArt.width} height={cautionArt.height} alt="Caution annunciators" />
       <span class="raster-lamp" data-lamp="warn-elec" style="--x:7.9%;--y:20.3%;--w:19.7%;--h:8%" aria-hidden="true"></span>
       <span class="raster-lamp" data-lamp="warn-sec" style="--x:30%;--y:20.3%;--w:19%;--h:8%" aria-hidden="true"></span>
@@ -78,7 +78,7 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
   </div>
   <div class="startup-panel" data-panel="eyebrow" hidden>
     <button type="button" class="master-caution" data-control="master-caution" data-lamp="master-caution">MASTER CAUTION</button>
-    <div class="raster-panel raster-eyebrow">
+    <div class="raster-panel raster-eyebrow" style={`--art-ratio:${eyebrowArt.width / eyebrowArt.height}`}>
       <img src={eyebrowArt.src} width={eyebrowArt.width} height={eyebrowArt.height} alt="Right eyebrow warning annunciators" />
       <span class="raster-lamp" data-lamp="warn-engine" style="--x:6.5%;--y:54%;--w:16%;--h:22%" aria-hidden="true"></span>
       <span class="raster-lamp" data-lamp="warn-hyd" style="--x:24.6%;--y:25%;--w:16%;--h:22%" aria-hidden="true"></span>
@@ -139,8 +139,8 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
 .raster-lamp{position:absolute;left:var(--x);top:var(--y);width:var(--w);height:var(--h);pointer-events:none;border-radius:3px}
 .raster-lamp.lit{background:#ffb82c77}
 .raster-test .raster-lamp.lit,.raster-jfs .raster-lamp.lit{background:#45b87966}
-.raster-switch{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);width:22%;min-width:44px;aspect-ratio:1;border:0;border-radius:50%;background:transparent;padding:0;cursor:pointer}
-.raster-switch svg{background:transparent;pointer-events:none}
+.raster-switch{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);width:22%;aspect-ratio:1;border:0;border-radius:50%;background:transparent;padding:0;cursor:pointer}
+.raster-switch svg{display:block;width:100%;height:100%;background:transparent;pointer-events:none}
 .raster-switch svg g{transition:transform .16s ease}
 @media(prefers-reduced-motion:reduce){.raster-switch svg g{transition:none}}
 
@@ -156,7 +156,7 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
 .raster-jfs .shaft{transform-origin:50px 50px;transform:scaleY(0)}
 .raster-jfs [data-position="start2"] .shaft{transform:scaleY(1)}
 .raster-jfs [data-position="start2"] .cap{transform:translateY(34px)}
-.raster-jfs .raster-switch{width:17%;min-width:44px}
+.raster-jfs .raster-switch{width:17%}
 .raster-jfs .raster-switch svg{overflow:visible}
 .raster-jfs .raster-switch svg{position:relative}
 .master-caution{display:block;margin:.5rem auto;padding:.6rem;border:2px solid #343434;border-radius:4px;background:#fff;color:#171717;font-weight:700}
