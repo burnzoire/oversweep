@@ -89,10 +89,10 @@ if (root) {
 
   function drawEngine(r: number, t: number, msg: string) {
     const angle = (v: number, max: number) => -140 + Math.min(1, v/max)*280;
-    rpm.setAttribute('transform', `rotate(${angle(r,100)} 124 118)`);
-    ftit.setAttribute('transform', `rotate(${angle(t,1000)} 337 118)`);
+    rpm.setAttribute('transform', `rotate(${angle(r,110)} 242 488)`);
+    ftit.setAttribute('transform', `rotate(${angle(Math.max(0,t-200),1000)} 242 662)`);
     rpmValue.textContent = r.toFixed(0);
-    ftitValue.textContent = t.toFixed(0);
+    ftitValue.textContent = t <= 0 ? '—' : t.toFixed(0);
     signal.textContent = msg;
   }
   function animateEngine() {
@@ -122,10 +122,12 @@ if (root) {
       id==='jfs'?'jfs':id==='throttle'?'throttle':
       id==='ground-ready'?'elec':'engine';
     const showTest = id==='flcs-test'||id==='flcs-release';
-    all<HTMLElement>('[data-panel]').forEach(el=>{
-      el.hidden=el.dataset.panel !== (showTest?'test':panel);
-    });
-    engineReference.hidden = panel !== 'engine';
+    const visible = new Set<string>([showTest?'test':panel]);
+    if (id==='main-power') {visible.add('caution');visible.add('eyebrow');}
+    if (id==='sec') visible.add('caution');
+    if (id==='generator') visible.add('eyebrow');
+    all<HTMLElement>('[data-panel]').forEach(el=>{el.hidden=!visible.has(el.dataset.panel||'');});
+    engineReference.hidden = panel !== 'engine' && panel !== 'throttle';
     const expected = actions[id] || '';
     all<SVGGElement>('[data-control]').forEach(el=>{
       const active = el.dataset.control === expected;
@@ -149,6 +151,12 @@ if (root) {
     lit('flcs-pmg',flcsHeld||jfsStarted);
     lit('to-flcs',flcsHeld||jfsStarted);
     lit('jfs-run',jfsStarted&&!throttleIdle);
+    const engineRunning = ['generator','idle-check'].includes(id);
+    lit('warn-elec',main==='main' && !engineRunning);
+    lit('warn-sec',main==='main' && !engineRunning && id!=='sec' && !throttleIdle);
+    lit('warn-engine',main==='main' && !engineRunning);
+    lit('warn-hyd',main==='main' && id!=='idle-check');
+    lit('warn-seat',engineRunning);
     all<SVGGElement>('[data-flcs-channel]').forEach(n=>n.classList.toggle('lit',flcsHeld));
     // EPU GEN/PMG lights deliberately remain OFF; don't claim simulated fault logic.
     const message = id==='flcs-test'?'Click the FLCS PWR TEST switch to hold it at TEST.':
