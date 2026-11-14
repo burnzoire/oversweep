@@ -21,13 +21,16 @@ const objective = asTrainer ? experience!.objective : entry.objective;
 // Compact cards show the one-line summary from card-media.ts.
 const summary = (compact && cardMedia[entry.id]?.summary) || objective;
 const applicability = asTrainer ? experience!.applicability : entry.applicability;
+const isProcedure = !experience && !entry.module;
 const revision = asTrainer
   ? `Exercise revision ${experience!.revision}`
-  : `Module revision ${experience?.module?.revision ?? entry.module?.revision}`;
-const local = (experience ?? entry.module)?.publication !== 'published';
+  : isProcedure ? 'Aircraft procedure' : `Module revision ${experience?.module?.revision ?? entry.module?.revision}`;
+const local = isProcedure || (experience ?? entry.module)?.publication !== 'published';
 const markers = experience
   ? { 'data-experience-id': experience.id, 'data-experience-revision': experience.revision }
-  : { 'data-module-id': entry.module!.id, 'data-module-revision': entry.module!.revision };
+  : isProcedure
+    ? { 'data-procedure-id': entry.id }
+    : { 'data-module-id': entry.module!.id, 'data-module-revision': entry.module!.revision };
 const Heading = (headingLevel === 3 ? 'h3' : 'h2') as 'h2' | 'h3';
 ---
 <section class:list={['entry-card', { compact }]} {...markers}>
