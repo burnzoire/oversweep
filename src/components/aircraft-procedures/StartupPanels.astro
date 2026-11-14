@@ -8,67 +8,48 @@
  * They remain review-only pending DCS screenshot overlay and SME signoff.
  */
 const dzus = (x: number, y: number, r = 8) => ({x,y,r});
-const elecMounts = [dzus(47,106,30),dzus(582,106,30),dzus(49,676,30),dzus(581,676,30)];
 const testMounts = [dzus(103,45,30),dzus(481,45,30),dzus(104,1118,30),dzus(481,1118,30)];
 const jfsMounts = [dzus(31,79,27),dzus(391,80,27),dzus(31,1020,27),dzus(390,1020,27)];
 ---
 <div class="startup-panels" data-startup-panels>
 
-  <!-- Plate coordinates are measured from source-normalized frontal diagrams.
-       Original vector primitives, not embedded source artwork. -->
   <div class="startup-panel" data-panel="elec">
-    <svg viewBox="0 0 630 786" role="group" aria-label="F-16C Block 50 ELEC panel with reference-aligned control centres, annunciators and mounting fasteners">
-      <title>F-16C ELEC control plate — source-aligned original vector</title>
-      <path d="M7 3 H623 V782 H7 Z" class="plate"/>
-      <path d="M96 5 H354 V67 H521 V602 H7 V154 H96 Z" class="inset-outline"/>
-      <path d="M8 604 H523 V778 H8Z" class="inset-outline"/>
-      {elecMounts.map(m=><g class="dzus" transform={`translate(${m.x} ${m.y})`}>
-        <circle r={m.r+11}/><circle r={m.r+4}/><path d={`M-${m.r-4} -${m.r-4} L${m.r-4} ${m.r-4}`}/>
-      </g>)}
-      {[[282,203],[129,516],[146,675]].map(([x,y])=><g class="captive-screw" transform={`translate(${x} ${y})`}><circle r="20"/><path d="M-13 0 H13 M0 -13 V13"/></g>)}
-      <text x="187" y="63" class="panel-large">MAIN PWR</text>
-      <text x="296" y="153" class="panel-large">BATT</text>
-      <text x="183" y="237" class="panel-large">OFF</text>
-      <circle cx="187" cy="145" r="53" class="switch-bezel"/><circle cx="187" cy="145" r="40" class="bezel-inner"/>
-      <g data-main-lever>
-        <path d="M180 145 L178 183 Q180 192 190 192 L196 180 L193 145Z" class="lever-body"/>
-        <ellipse cx="187" cy="186" rx="19" ry="13" class="lever-grip"/>
-      </g>
-      <circle cx="187" cy="145" r="9" class="pivot"/>
-      <g data-control="main-batt" role="button" tabindex="0" class="clickable" aria-label="Turn MAIN PWR to BATT">
-        <circle cx="187" cy="145" r="54" class="hit"/>
-        <circle cx="187" cy="145" r="62" class="target-ring"/>
-      </g>
-      <g data-control="main-main" role="button" tabindex="0" class="clickable" aria-label="Turn MAIN PWR to MAIN PWR">
-        <circle cx="187" cy="145" r="54" class="hit"/>
-        <circle cx="187" cy="145" r="62" class="target-ring"/>
-      </g>
-      <text x="51" y="309" class="panel-large">E</text><text x="51" y="354" class="panel-large">L</text>
-      <text x="51" y="399" class="panel-large">E</text><text x="51" y="444" class="panel-large">C</text>
-      <text x="155" y="319" class="panel-large">+</text>
-      <text x="243" y="345" class="panel-large">CAUTION</text>
-      <text x="243" y="380" class="panel-large">RESET</text>
-      <circle cx="242" cy="445" r="48" class="round-button"/>
-      <circle cx="242" cy="445" r="37" class="push"/>
-      <path d="M364 70 H514 V517 H364Z" class="recess"/>
-      <g data-lamp="flcs-pmg"><rect x="378" y="84" width="125" height="64" class="lamp"/><text x="440" y="122" class="panel-small">FLCS PMG</text></g>
-      <g data-lamp="main-gen"><rect x="378" y="149" width="125" height="62" class="lamp"/><text x="440" y="188" class="panel-small">MAIN GEN</text></g>
-      <g data-lamp="stby-gen"><rect x="378" y="226" width="125" height="65" class="lamp"/><text x="440" y="263" class="panel-small">STBY GEN</text></g>
-      <rect x="378" y="292" width="125" height="65" class="blank-lens"/>
-      <g data-lamp="epu-gen"><rect x="378" y="372" width="125" height="63" class="lamp"/><text x="440" y="410" class="panel-small">EPU GEN</text></g>
-      <g data-lamp="epu-pmg"><rect x="378" y="437" width="125" height="65" class="lamp"/><text x="440" y="476" class="panel-small">EPU PMG</text></g>
-      <g data-control="epu-check" role="button" tabindex="0" class="clickable" aria-label="Confirm EPU GEN and EPU PMG off">
-        <rect x="378" y="372" width="125" height="130" class="hit"/>
-        <rect x="372" y="366" width="137" height="142" class="target-ring"/>
-      </g>
-      <path d="M202 566 H263 M434 566 H509" class="rule"/>
-      <text x="348" y="573" class="panel-large">ACFT BATT</text>
-      <path d="M199 603 H516 V751 H199Z" class="recess"/>
-      <g data-lamp="to-flcs"><rect x="210" y="616" width="137" height="63" class="lamp"/><text x="279" y="655" class="panel-small">TO FLCS</text></g>
-      <g data-lamp="flcs-rly"><rect x="210" y="682" width="137" height="61" class="lamp"/><text x="279" y="719" class="panel-small">FLCS RLY</text></g>
-      <g data-lamp="battery-fail"><rect x="369" y="616" width="132" height="127" class="lamp"/><text x="435" y="688" class="panel-small">FAIL</text></g>
+    <svg viewBox="0 0 672 891" role="group" aria-label="DCS F-16C ELEC panel with main power switch and electrical annunciators">
+      <title>F-16C ELEC panel, manual-guided line drawing</title>
+      <path class="plate" d="M6 10 H652 V875 H6 Z"/>
+      <path class="seam" d="M7 671 H366 L369 682 H534 L534 615 H505"/>
+      <path class="internal" d="M354 88 L354 591 Q355 604 366 604 L518 604 Q533 604 533 589 L533 99 Q533 90 522 90 Z"/>
+      <path class="internal" d="M196 606 H515 Q529 606 529 619 V677 H196"/>
+      <g><circle class="mount" cx="49" cy="145" r="36"/><circle class="mount-inner" cx="49" cy="145" r="28"/><path class="slot" d="M49 120 V170"/></g>
+      <g><circle class="mount" cx="606" cy="128" r="35"/><circle class="mount-inner" cx="606" cy="128" r="27"/><path class="slot" d="M606 104 V151"/></g>
+      <g><circle class="mount" cx="67" cy="776" r="36"/><circle class="mount-inner" cx="67" cy="776" r="27"/><path class="slot" d="M67 752 V800"/></g>
+      <g><circle class="mount" cx="599" cy="776" r="36"/><circle class="mount-inner" cx="599" cy="776" r="27"/><path class="slot" d="M599 752 V800"/></g>
+      <g transform="translate(291 247)"><circle class="mount" r="24"/><circle class="mount-inner" r="16"/><path class="slot smallslot" d="M-9 -7 L9 7"/><path class="slot smallslot" d="M-10 0 H10"/></g>
+      <g transform="translate(131 574)"><circle class="mount" r="23"/><circle class="mount-inner" r="15"/><path class="slot smallslot" d="M-8 -7 L8 7"/><path class="slot smallslot" d="M-9 0 H9"/></g>
+      <g transform="translate(166 736)"><circle class="mount" r="14"/><circle class="mount-inner" r="8"/><path class="slot smallslot" d="M-4 -4 L4 4"/></g>
+      <text class="label" x="115" y="78">MAIN PWR</text><text class="label" x="243" y="184">BATT</text><text class="label" x="156" y="287">OFF</text>
+      <circle class="bezel" cx="187" cy="168" r="53"/><circle class="mount-inner" cx="187" cy="168" r="42"/>
+      <g data-main-lever transform="rotate(180 187 168)"><path class="metal" d="M175 168 L174 106 Q184 95 198 106 L200 168Z"/><rect class="switch" x="171" y="88" width="34" height="51" rx="11"/><path d="M176 98 H201" stroke="#62696e" stroke-width="5"/></g>
+      <g data-control="main-batt" role="button" tabindex="0" class="clickable" aria-label="Turn MAIN PWR to BATT"><circle cx="187" cy="168" r="54" class="hit"/><circle cx="187" cy="168" r="61" class="target-ring"/></g>
+      <g data-control="main-main" role="button" tabindex="0" class="clickable" aria-label="Turn MAIN PWR to MAIN PWR"><circle cx="187" cy="168" r="54" class="hit"/><circle cx="187" cy="168" r="61" class="target-ring"/></g>
+      <text class="label" x="38" y="365">E</text><text class="label" x="38" y="416">L</text><text class="label" x="38" y="467">E</text><text class="label" x="38" y="518">C</text>
+      <text class="label" x="138" y="375">+</text><text class="label" x="174" y="404">CAUTION</text><text class="label" x="195" y="444">RESET</text>
+      <circle class="bezel" cx="253" cy="516" r="51"/><circle class="metal" cx="253" cy="516" r="38"/>
+      <path class="internal" d="M374 100 H520 V595 H374Z"/>
+      <g data-lamp="flcs-pmg"><rect class="lamp" x="383" y="109" width="132" height="70" rx="4"/><text class="legend" x="449" y="153">FLCS PMG</text></g>
+      <g data-lamp="main-gen"><rect class="lamp" x="383" y="181" width="132" height="70" rx="4"/><text class="legend" x="449" y="225">MAIN GEN</text></g>
+      <g data-lamp="stby-gen"><rect class="lamp" x="383" y="268" width="132" height="73" rx="4"/><text class="legend" x="449" y="314">STBY GEN</text></g>
+      <rect class="blank-lens" x="383" y="342" width="132" height="76" rx="4"/>
+      <g data-lamp="epu-gen"><rect class="lamp" x="383" y="436" width="132" height="72" rx="4"/><text class="legend" x="449" y="481">EPU GEN</text></g>
+      <g data-lamp="epu-pmg"><rect class="lamp" x="383" y="510" width="132" height="73" rx="4"/><text class="legend" x="449" y="556">EPU PMG</text></g>
+      <path class="internal" d="M199 605 H515 V678 H199Z"/><path class="seam" d="M200 639 H251 M463 639 H511"/><text class="label" x="265" y="653">ACFT BATT</text>
+      <path class="internal" d="M213 686 H521 V853 H213Z"/>
+      <g data-lamp="to-flcs"><rect class="lamp" x="222" y="693" width="140" height="75" rx="4"/><text class="legend" x="292" y="737">TO FLCS</text></g>
+      <g data-lamp="flcs-rly"><rect class="lamp" x="222" y="769" width="140" height="74" rx="4"/><text class="legend" x="292" y="813">FLCS RLY</text></g>
+      <g data-lamp="battery-fail"><rect class="lamp" x="383" y="693" width="133" height="150" rx="4"/><text class="legend" x="449.5" y="782">FAIL</text></g>
+      <g data-control="epu-check" role="button" tabindex="0" class="clickable" aria-label="Confirm EPU GEN and EPU PMG off"><rect x="383" y="436" width="132" height="147" class="hit"/><rect x="377" y="430" width="144" height="159" class="target-ring"/></g>
     </svg>
-    <p class="panel-note">Coordinates transcribed from a front-view Block 50/52 ELEC technical diagram (210 × 262 px original), including seven visible mounting/retaining screws and the two-part annunciator stacks. DCS variant confirmation is still required.</p>
+    <p class="panel-note">Redrawn from the DCS F-16C Early Access Guide, page 64. Fastener and control positions are approximate.</p>
   </div>
   <div class="startup-panel" data-panel="test" hidden>
     <svg viewBox="0 0 607 1162" role="group" aria-label="Single-seat F-16C TEST plate with reference-aligned DZUS fasteners, upper pushbuttons, FLCS channel lights and test toggle">
@@ -295,4 +276,13 @@ const jfsMounts = [dzus(31,79,27),dzus(391,80,27),dzus(31,1020,27),dzus(390,1020
 .startup-panels .panel-note{font-size:.83rem;color:var(--color-muted);margin:.45rem 0 .75rem}
 .startup-panels .panel-feedback{font-size:.88rem;font-weight:600;padding:.5rem;border-left:3px solid var(--color-ink);background:var(--color-surface)}
 /* SVG lever transforms are instantaneous. Transitioning the SVG line transform caused a visible detached-lever artefact in Chromium. */
+
+.startup-panels [data-panel="elec"] :is(.internal,.seam){fill:none;stroke:#333;stroke-width:2.5}
+.startup-panels [data-panel="elec"] :is(.mount,.bezel,.metal){fill:#f6f6f6;stroke:#222;stroke-width:3}
+.startup-panels [data-panel="elec"] .mount-inner{fill:none;stroke:#555;stroke-width:2}
+.startup-panels [data-panel="elec"] .slot{stroke:#222;stroke-width:4;stroke-linecap:round}
+.startup-panels [data-panel="elec"] .smallslot{stroke-width:2.5}
+.startup-panels [data-panel="elec"] .label{fill:#222;font:600 27px "Arial Narrow","Liberation Sans Narrow",Arial,sans-serif}
+.startup-panels [data-panel="elec"] .legend{font:700 19px "Arial Narrow","Liberation Sans Narrow",Arial,sans-serif;text-anchor:middle}
+.startup-panels [data-panel="elec"] .switch{fill:#404040;stroke:#222;stroke-width:2}
 </style>

@@ -81,3 +81,7 @@ Outstanding before exact-DCS signoff:
 - Validate ELEC annunciator grouping and real JFS guard colour/mechanical behaviour in the actual sim.
 - Replace conceptual throttle and verify engine-dial faces and warning placements.
 - Confirm copyright provenance for any direct reuse; current SVG is independently drawn and only original drawings are committed.
+
+## DCS manual-guided ELEC redraw
+
+The interactive ELEC plate now uses the original technical drawing developed from page 64 of the 16 August 2026 DCS F-16C Early Access Guide. The xFlight coordinates above describe the previous ELEC draft. The new 672 × 891 drawing uses MAIN PWR at (187,168) and CAUTION RESET at (253,516). The existing procedure drives the switch and electrical lamps. The DCS screenshot overlay and SME review remain pending.

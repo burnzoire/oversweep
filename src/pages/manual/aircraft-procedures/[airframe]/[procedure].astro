@@ -142,7 +142,7 @@ if (root) {
         el.dataset.control === 'throttle-idle' ? throttleIdle : false));
     });
     const lever = one<SVGGElement>('[data-main-lever]')!;
-    lever.setAttribute('transform',`rotate(${main==='batt'?-90:main==='main'?145:0} 187 145)`);
+    lever.setAttribute('transform',`rotate(${main==='batt'?90:main==='main'?0:180} 187 168)`);
     one<SVGGElement>('[data-flcs-lever]')!.setAttribute('transform',flcsHeld?'rotate(-90 450 779)':'');
     one<SVGGElement>('[data-jfs-lever]')!.setAttribute('transform',jfsStarted?'rotate(120 277 154)':'');
     one<SVGRectElement>('[data-throttle-grip]')!.setAttribute('transform',throttleIdle?'translate(0 -106)':'');

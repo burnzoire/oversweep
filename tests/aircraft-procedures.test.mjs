@@ -44,7 +44,7 @@ test('panel redraw separates the physical units, includes documented proportions
   const svg = await read('src/components/aircraft-procedures/StartupPanels.astro');
   for (const panel of ['elec','test','jfs','throttle'])
     assert.match(svg, new RegExp('data-panel="' + panel + '"'));
-  for (const id of ['elecMounts','testMounts','jfsMounts','class="dzus"'])
+  for (const id of ['testMounts','jfsMounts','class="dzus"'])
     assert.ok(svg.includes(id), 'missing ' + id);
   assert.ok(svg.includes('75.60×93.60 mm'));
   assert.ok(svg.includes('75.60×145.50 mm'));
@@ -70,11 +70,13 @@ test('ELEC and TEST layouts preserve photo-supported lamp groupings and test-con
 test('source-coordinate control pivots and screw arrays are explicit', async () => {
  const component=await read('src/components/aircraft-procedures/StartupPanels.astro');
  const page=await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
- for(const value of ['viewBox="0 0 630 786"','viewBox="0 0 607 1162"','viewBox="0 0 420 1100"'])
+ for(const value of ['viewBox="0 0 672 891"','viewBox="0 0 607 1162"','viewBox="0 0 420 1100"'])
    assert.ok(component.includes(value),value);
- for(const value of ['dzus(47,106','dzus(103,45','dzus(31,79'])
+ for(const value of ['dzus(103,45','dzus(31,79'])
    assert.ok(component.includes(value),value);
  assert.ok(page.includes('rotate(120 277 154)'));
  assert.ok(page.includes('rotate(-90 450 779)'));
- assert.ok(page.includes('187 145'));
+ assert.ok(page.includes('187 168'));
+ assert.match(component, /data-main-lever transform="rotate\(180 187 168\)"/);
+ assert.match(component, /class="mount" cx="49" cy="145"/);
 });
