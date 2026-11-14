@@ -4,7 +4,8 @@ import SiteLayout from "../../layouts/SiteLayout.astro";
 import { manualSubjects } from "../../data/catalogue";
 import { subjectEntries, subjectGroups } from "../../data/availability";
 import { sitePath } from "../../lib/paths";
-import { airframes } from "../../data/aircraft-procedures";
+import CardPhoto from "../../components/card-photo/CardPhoto.astro";
+import { airframes, visibleProcedures } from "../../data/aircraft-procedures";
 
 export function getStaticPaths() {
   return manualSubjects.map((subject) => ({
@@ -29,12 +30,21 @@ const groups = subjectGroups(subject.slug);
   ]}
 >
   {subject.slug === "aircraft-procedures" && entries.length > 0 && (
-    <section aria-label="Airframes"><h2>By aircraft</h2><ul class="subject-list">
-      {airframes.map(airframe => <li><a href={sitePath(`manual/aircraft-procedures/${airframe.slug}/`)}>{airframe.title}</a></li>)}
-    </ul></section>
+    <section aria-labelledby="aircraft-heading">
+      <h2 id="aircraft-heading">By aircraft</h2>
+      <div class="entry-grid">
+        {airframes.filter(airframe => visibleProcedures.some(guide => guide.airframe === airframe.slug)).map(airframe => (
+          <article class="entry-card compact">
+            <CardPhoto id="module.weapons-delivery" />
+            <h3 class="entry-title"><a href={sitePath(`manual/aircraft-procedures/${airframe.slug}/`)}>{airframe.title}</a></h3>
+            <p class="entry-objective">Engine start from cold and dark to stable idle in DCS.</p>
+          </article>
+        ))}
+      </div>
+    </section>
   )}
   {entries.length > 0
-    ? groups.map((group) => group.title
+    ? subject.slug === "aircraft-procedures" ? null : groups.map((group) => group.title
       ? <section class="subject-group" aria-labelledby={`group-${group.title.toLowerCase().replace(/\W+/g, '-')}`}>
           <h2 id={`group-${group.title.toLowerCase().replace(/\W+/g, '-')}`}>{group.title}</h2>
           <div class="entry-grid">{group.entries.map((entry) => <EntryCard entry={entry} headingLevel={3} compact />)}</div>

@@ -9,6 +9,6 @@ const guides=visibleProcedures.filter(p=>p.airframe===airframe.slug);
 <SiteLayout title={airframe.title} activeSection="manual" activeSubject="aircraft-procedures"
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Aircraft Procedures',href:sitePath('manual/aircraft-procedures/')},{label:airframe.title}]}>
   <p class="lead">Aircraft-specific cockpit procedures for the simulator, in the order you need to perform them.</p>
-  <p class="status-panel">Review-only: procedures below are not yet validated in a running DCS build.</p>
+  <p class="status-panel">Public preview. Simulator validation is pending.</p>
   <ul class="subject-list">{guides.map(p=><li><a href={sitePath(procedureRoute(p))}>{p.title}</a> — {p.objective}</li>)}</ul>
 </SiteLayout>

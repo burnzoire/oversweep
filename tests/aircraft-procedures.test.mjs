@@ -4,10 +4,10 @@ import { readFile } from 'node:fs/promises';
 
 const read = path => readFile(new URL('../' + path, import.meta.url), 'utf8');
 
-test('aircraft procedures are review-only and do not publish by default', async () => {
+test('public preview procedures are visible and review-only procedures remain gated', async () => {
   const source = await read('src/data/aircraft-procedures.ts');
-  assert.match(source, /visibleProcedures = reviewTrainers \? procedures : \[\]/);
-  assert.match(source, /status: 'review-only'/);
+  assert.match(source, /visibleProcedures = procedures\.filter\(p => p\.status === 'public-preview' \|\| reviewTrainers\)/);
+  assert.match(source, /status: 'public-preview',/);
   assert.match(source, /simVersion: 'DCS build not yet verified'/);
 });
 test('engine start guide contains actions, expected indications and source mapping', async () => {
