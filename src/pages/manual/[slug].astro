@@ -44,7 +44,7 @@ const groups = subjectGroups(subject.slug);
     </section>
   )}
   {entries.length > 0
-    ? groups.map((group) => group.title
+    ? subject.slug === "aircraft-procedures" ? null : groups.map((group) => group.title
       ? <section class="subject-group" aria-labelledby={`group-${group.title.toLowerCase().replace(/\W+/g, '-')}`}>
           <h2 id={`group-${group.title.toLowerCase().replace(/\W+/g, '-')}`}>{group.title}</h2>
           <div class="entry-grid">{group.entries.map((entry) => <EntryCard entry={entry} headingLevel={3} compact />)}</div>
