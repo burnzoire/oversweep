@@ -4,6 +4,7 @@ import SiteLayout from "../../layouts/SiteLayout.astro";
 import { manualSubjects } from "../../data/catalogue";
 import { subjectEntries, subjectGroups } from "../../data/availability";
 import { sitePath } from "../../lib/paths";
+import { airframes } from "../../data/aircraft-procedures";
 
 export function getStaticPaths() {
   return manualSubjects.map((subject) => ({
@@ -27,6 +28,11 @@ const groups = subjectGroups(subject.slug);
     { label: subject.title },
   ]}
 >
+  {subject.slug === "aircraft-procedures" && entries.length > 0 && (
+    <section aria-label="Airframes"><h2>By aircraft</h2><ul class="subject-list">
+      {airframes.map(airframe => <li><a href={sitePath(`manual/aircraft-procedures/${airframe.slug}/`)}>{airframe.title}</a></li>)}
+    </ul></section>
+  )}
   {entries.length > 0
     ? groups.map((group) => group.title
       ? <section class="subject-group" aria-labelledby={`group-${group.title.toLowerCase().replace(/\W+/g, '-')}`}>
