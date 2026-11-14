@@ -25,7 +25,7 @@ const isProcedure = !experience && !entry.module;
 const revision = asTrainer
   ? `Exercise revision ${experience!.revision}`
   : isProcedure ? 'Aircraft procedure' : `Module revision ${experience?.module?.revision ?? entry.module?.revision}`;
-const local = isProcedure || (experience ?? entry.module)?.publication !== 'published';
+const local = isProcedure ? entry.procedureStatus !== 'public-preview' : (experience ?? entry.module)?.publication !== 'published';
 const markers = experience
   ? { 'data-experience-id': experience.id, 'data-experience-revision': experience.revision }
   : isProcedure
@@ -39,7 +39,7 @@ const Heading = (headingLevel === 3 ? 'h3' : 'h2') as 'h2' | 'h3';
   <Heading class="entry-title"><a href={sitePath(entry.href)}>{title}</a></Heading>
   <p class="entry-objective">{summary}</p>
   {!compact && <p class="entry-applicability">{applicability}</p>}
-  <p class="entry-meta">{revision}{local && ' · Local review only'}</p>
+  <p class="entry-meta">{revision}{local ? ' · Local review only' : isProcedure && ' · Public preview'}</p>
   <p class="entry-actions">
     {asTrainer ? (
       <>
