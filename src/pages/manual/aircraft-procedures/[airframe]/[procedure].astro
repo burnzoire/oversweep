@@ -44,7 +44,7 @@ const steps = guide.steps;
       <StartupPanels />
       <div data-engine-reference hidden><EngineInstrument /></div>
       <p data-indication aria-live="polite">Select the control named in the instructions. The panel responds to your input.</p>
-      <p class="procedure-cite">Clickable control geometry is an original technical drawing and is not yet dimensionally verified against DCS. The RPM/FTIT animation is a separate schematic prototype. Neither is connected to the simulator.</p>
+      <p class="procedure-cite">Clickable control geometry is an original technical drawing and is not yet dimensionally verified against DCS. The RPM/FTIT animation is a separate schematic prototype. Trainer timing is illustrative: 12 seconds to RUN, 8 seconds to 20% RPM, and 30 seconds to idle. SEC clearance and pressure recovery use illustrative events within those intervals. No live DCS telemetry.</p>
     </aside>
   </div>
   <h2>Source and verification</h2>
@@ -89,15 +89,16 @@ if (root) {
   const completed = new Set<string>();
   let frame = 0;
 
+  let secCleared = false, pressureEstablished = false, cautionPending = false;
   let displayedRpm = 0, displayedFtit = 0;
   function updateGlareShield(rpm: number) {
     const powered = main === 'main';
-    const pressureEstablished = throttleIdle && rpm >= 70;
+
     const lights = {
       'warn-engine': powered && rpm < 60,
       'warn-hyd': powered && !pressureEstablished,
       'warn-hyd-bottom': powered && !pressureEstablished,
-      'master-caution': powered && !finished,
+      'master-caution': powered && cautionPending,
     };
     for (const [lamp, on] of Object.entries(lights)) {
       all(`[data-lamp="${lamp}"]`).forEach(el => el.classList.toggle('lit', on));
@@ -105,6 +106,9 @@ if (root) {
   }
   function drawEngine(r: number, t: number, msg: string) {
     displayedRpm = r;
+    if (throttleIdle && displayedRpm >= 60 && !finished && ['throttle', 'generator'].includes(steps[step].dataset.stepId || '')) cautionPending = true;
+    all('[data-lamp="warn-seat"]').forEach(el => el.classList.toggle('lit', throttleIdle && r >= 60));
+    all('[data-lamp="warn-sec"]').forEach(el => el.classList.toggle('lit', main === 'main' && !secCleared));
     updateGlareShield(r);
     displayedFtit = t;
     // Angles sampled from the visible numeric labels on the review artwork.
@@ -125,7 +129,7 @@ if (root) {
     signal.textContent = msg;
     all('[data-lamp="jfs-run"]').forEach(el => el.classList.toggle('lit', jfsRun && r < 55));
     one<SVGElement>('[data-jfs-lever]')!.dataset.position = jfsStarted && r < 55 ? 'start2' : 'off';
-    if (steps[step].dataset.stepId === 'sec') confirm.disabled = r < 20;
+    if (steps[step].dataset.stepId === 'sec') confirm.disabled = r < 20 || !secCleared;
   }
   function animateEngine(onSettled?: () => void) {
     cancelAnimationFrame(frame);
@@ -145,6 +149,8 @@ if (root) {
       const duration = onSettled ? (id === "idle" ? 30000 : 8000) : 1200;
       const k = Math.min(1,(now-start)/duration);
       const smooth = k*k*(3-2*k);
+      if (id === 'jfs' && jfsRun && k >= .75) secCleared = true;
+      if (id === 'idle' && throttleIdle && k >= .95) pressureEstablished = true;
       drawEngine(initialRpm+(Number(target[0])-initialRpm)*smooth,initialFtit+(Number(target[1])-initialFtit)*smooth,String(target[2]));
       if(k<1) frame=requestAnimationFrame(tick);
       else onSettled?.();
@@ -160,7 +166,8 @@ if (root) {
     const visible = new Set<string>([showTest?'test':panel]);
     if (showTest) visible.add('elec');
     if (id==='main-power') {visible.add('caution');visible.add('eyebrow');}
-    if (id==='sec') visible.add('caution');
+    if (['jfs','sec','throttle'].includes(id)) visible.add('caution');
+    if (id==='idle-check') visible.add('jfs');
     if (['throttle','generator','idle-check','master-caution'].includes(id)) visible.add('eyebrow');
     if (id==='generator') visible.add('caution');
     all<HTMLElement>('[data-panel]').forEach(el=>{el.hidden=!visible.has(el.dataset.panel||'');});
@@ -189,7 +196,7 @@ if (root) {
     lit('jfs-run',jfsRun && displayedRpm < 55);
     const engineRunning = ['generator','idle-check'].includes(id);
     lit('warn-elec',main==='main' && !engineRunning);
-    lit('warn-sec',main==='main' && !engineRunning && id!=='sec' && !throttleIdle);
+    lit('warn-sec',main==='main' && !engineRunning && !secCleared);
     lit('warn-seat',engineRunning);
     all<SVGGElement>('[data-flcs-channel]').forEach(n=>n.classList.toggle('lit',flcsHeld));
     // EPU GEN/PMG lights deliberately remain OFF; don't claim simulated fault logic.
@@ -232,7 +239,7 @@ if (root) {
     previous.disabled=step===0;
     confirm.textContent = id === 'epu-check' ? 'Confirm EPU lights off' : 'Confirm indication';
     confirm.hidden=!confirmations.has(id);
-    confirm.disabled=finished || (id === 'sec' && displayedRpm < 20);
+    confirm.disabled=finished || (id === 'sec' && (displayedRpm < 20 || !secCleared));
     information.textContent = '';
     updatePanels();
     animateEngine();
@@ -256,6 +263,7 @@ if (root) {
       completed.add(id);
     }
     if (control === 'master-caution' && !finished) {
+      cautionPending = false;
       finished = true;
       completed.add(id);
       render();
@@ -264,6 +272,8 @@ if (root) {
     if (control === 'jfs-start2') {
       jfsStarted = true;
       jfsRun = false;
+      secCleared = false;
+      pressureEstablished = false;
       completed.add(id);
       render();
       // Illustrative delay within the documented 30-second RUN limit.
@@ -313,7 +323,7 @@ if (root) {
   });
   confirm.addEventListener('click', () => {
     if (confirm.disabled || confirm.hidden) return;
-    if (step === steps.length - 1) finished = true;
+    if (step === steps.length - 1 || (steps[step].dataset.stepId === 'idle-check' && !cautionPending)) finished = true;
     else step += 1;
     render();
   });
