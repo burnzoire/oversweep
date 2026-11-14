@@ -54,8 +54,8 @@ const jfsMounts = [dzus(100,54),dzus(404,54),dzus(100,792),dzus(404,792)];
       <g data-lamp="to-flcs"><rect x="178" y="355" width="106" height="28" class="lamp"/><text x="231" y="374" class="lamp-text">TO FLCS</text></g>
       <g data-lamp="flcs-rly"><rect x="178" y="384" width="106" height="28" class="lamp"/><text x="231" y="403" class="lamp-text">FLCS RLY</text></g>
       <g data-lamp="battery-fail"><rect x="289" y="355" width="101" height="57" class="lamp"/><text x="339" y="387" class="lamp-text">FAIL</text></g>
-      <g data-control="epu-check" role="button" tabindex="0" class="clickable" aria-label="Confirm EPU GEN and EPU PMG indicators are off"><rect x="308" y="238" width="88" height="65" class="hit"/></g>
-      <g data-control="main-batt" role="button" tabindex="0" class="clickable" aria-label="Select BATT by clicking the switch"><circle cx="204" cy="133" r="22" class="hit"/></g>
+      <g data-control="epu-check" role="button" tabindex="0" class="clickable" aria-label="Confirm EPU GEN and EPU PMG indicators are off"><rect x="308" y="238" width="88" height="65" class="hit"/><rect x="303" y="234" width="98" height="73" class="target-ring"/></g>
+      <g data-control="main-batt" role="button" tabindex="0" class="clickable" aria-label="Select BATT by clicking the switch"><circle cx="204" cy="133" r="30" class="hit"/><circle cx="204" cy="133" r="34" class="target-ring"/></g>
       <g data-control="main-main" role="button" tabindex="0" class="clickable" aria-label="Select MAIN PWR by clicking the switch"><circle cx="204" cy="133" r="22" class="hit"/></g>
       <g transform="translate(278 215)" class="captive-screw"><circle r="6"/><path d="M-4 0 H4"/></g>
       <text x="63" y="281" transform="rotate(-90 63 281)" class="side-label">E L E C</text>
@@ -114,6 +114,7 @@ const jfsMounts = [dzus(100,54),dzus(404,54),dzus(100,792),dzus(404,792)];
         aria-label="Hold or release FLCS PWR TEST switch" aria-pressed="false">
         <rect x="298" y="429" width="124" height="135" rx="3" class="hit"/>
         <circle cx="352" cy="485" r="25" class="switch-bezel"/>
+        <circle cx="352" cy="485" r="33" class="target-ring"/>
         <line data-flcs-lever x1="352" y1="485" x2="385" y2="485" class="lever"/>
         <circle cx="352" cy="485" r="6" class="pivot"/>
       </g>
@@ -138,6 +139,7 @@ const jfsMounts = [dzus(100,54),dzus(404,54),dzus(100,792),dzus(404,792)];
       <g data-control="jfs-start2" role="button" tabindex="0" class="clickable" aria-label="Select JFS START 2" aria-pressed="false">
         <rect x="250" y="119" width="143" height="135" class="hit"/>
         <circle cx="307" cy="183" r="27" class="switch-bezel"/>
+        <circle cx="307" cy="183" r="35" class="target-ring"/>
         <line data-jfs-lever x1="307" y1="183" x2="343" y2="183" class="lever"/>
         <circle cx="307" cy="183" r="7" class="pivot"/>
       </g>
@@ -172,6 +174,7 @@ const jfsMounts = [dzus(100,54),dzus(404,54),dzus(100,792),dzus(404,792)];
       <g data-control="throttle-idle" role="button" tabindex="0" class="clickable" aria-label="Move throttle to idle" aria-pressed="false">
         <rect x="207" y="101" width="110" height="190" class="hit"/>
         <rect data-throttle-grip x="228" y="233" width="69" height="37" rx="7" class="control-fill"/>
+        <rect x="213" y="108" width="99" height="178" class="target-ring"/>
       </g>
       <text x="253" y="302" class="small">FUNCTIONAL GUIDE ONLY</text>
     </svg>
@@ -261,10 +264,11 @@ const jfsMounts = [dzus(100,54),dzus(404,54),dzus(100,792),dzus(404,792)];
 .startup-panels .clickable{cursor:pointer;outline:none}
 .startup-panels .clickable[data-active="false"]{pointer-events:none}
 .startup-panels .clickable:focus-visible .hit{stroke:#005fcc;stroke-width:4;fill:#dbeafb;fill-opacity:.35}
-.startup-panels .clickable[data-active="true"] .hit{stroke:#9d6709;stroke-width:2;stroke-dasharray:7 5}
+.startup-panels .target-ring{fill:none;stroke:transparent;stroke-width:2;pointer-events:none}
+.startup-panels .clickable[data-active="true"] .target-ring{stroke:#9d6709;stroke-width:2;stroke-dasharray:5 4}
 .startup-panels [data-lamp].lit .lamp,.startup-panels [data-flcs-channel].lit .lamp{fill:#ffe8b3;stroke:#855400}
-.startup-panels [aria-pressed="true"] .hit{stroke:#a86904;stroke-width:2}
+.startup-panels [aria-pressed="true"] .target-ring{stroke:#9d6709;stroke-width:2}
 .startup-panels .panel-note{font-size:.83rem;color:var(--color-muted);margin:.45rem 0 .75rem}
 .startup-panels .panel-feedback{font-size:.88rem;font-weight:600;padding:.5rem;border-left:3px solid var(--color-ink);background:var(--color-surface)}
-@media(prefers-reduced-motion:no-preference){.startup-panels [data-main-lever],.startup-panels [data-flcs-lever],.startup-panels [data-jfs-lever],.startup-panels [data-throttle-grip]{transition:transform .22s ease}}
+/* SVG lever transforms are instantaneous. Transitioning the SVG line transform caused a visible detached-lever artefact in Chromium. */
 </style>
