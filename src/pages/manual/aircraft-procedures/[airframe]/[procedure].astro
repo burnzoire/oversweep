@@ -41,8 +41,10 @@ const steps = guide.steps;
       <div class="retry-mark" data-retry-mark hidden aria-hidden="true">×</div>
       <p class="retry-hint" data-retry-hint role="status" hidden></p>
       <h2>Control and indication</h2>
-      <StartupPanels />
-      <div data-engine-reference hidden><EngineInstrument /></div>
+      <div class="cockpit-layout">
+        <StartupPanels />
+        <div class="cockpit-gauges" data-engine-reference hidden><EngineInstrument /></div>
+      </div>
       <p data-indication aria-live="polite">Select the control named in the instructions. The panel responds to your input.</p>
       <p class="procedure-cite">Clickable control geometry is an original technical drawing and is not yet dimensionally verified against DCS. The RPM/FTIT animation is a separate schematic prototype. Trainer timing is illustrative: 12 seconds to RUN, 8 seconds to 20% RPM, and 30 seconds to idle. SEC clearance, generator transfer and pressure recovery use illustrative events within those intervals. No live DCS telemetry.</p>
     </aside>
@@ -166,6 +168,7 @@ if (root) {
     const panel = ['battery','flcs-test','flcs-release','main-power','epu-check'].includes(id)?'elec':
       id==='jfs'?'jfs':id==='throttle'?'throttle':
       id==='ground-ready'?'elec':'engine';
+    visual.dataset.stage = id;
     const showTest = id==='flcs-test'||id==='flcs-release';
     const visible = new Set<string>([showTest?'test':panel]);
     if (showTest) visible.add('elec');
@@ -380,4 +383,27 @@ if (root) {
 @media(min-width:58rem){.procedure-workspace{grid-template-columns:minmax(0,1fr) minmax(18rem,1fr)}.procedure-visual{position:sticky;top:1rem}}
 .procedure-visual[hidden]{display:none}
 .procedure-workspace.procedure-finished{grid-template-columns:minmax(0,1fr)}
+
+/* Keep cockpit controls and indications in the same visual field. */
+.procedure-visual{border:0;padding:.25rem}
+.cockpit-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:.5rem;align-items:start}
+.cockpit-layout:has(.cockpit-gauges:not([hidden])){grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
+.cockpit-layout :global(.startup-panels){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45rem;align-items:start}
+.cockpit-layout :global(.startup-panel[data-panel="throttle"]),
+.cockpit-layout :global(.startup-panel[data-panel="eyebrow"]),
+.cockpit-layout :global(.panel-feedback){grid-column:1/-1}
+.cockpit-layout :global(.startup-panel:not([hidden]):not(.startup-panel:not([hidden]) ~ .startup-panel):not(:has(~ .startup-panel:not([hidden])))){grid-column:1/-1}
+.cockpit-layout :global(.raster-panel img),
+.cockpit-layout :global(.elec-art img){max-height:36svh;width:auto;max-width:100%;margin:auto}
+.cockpit-layout :global(.raster-panel),
+.cockpit-layout :global(.elec-art){width:max-content;max-width:100%}
+.cockpit-gauges :global(.engine-figure){width:min(100%,14svh);margin:auto}
+.cockpit-gauges :global(.engine-readouts){position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media(max-width:57.99rem){
+.procedure-step{padding:.55rem}
+.procedure-step h2{font-size:1.15rem}
+.procedure-step p{margin:.25rem 0}
+.procedure-controls{margin-top:.4rem}
+.procedure-workspace{gap:.45rem}
+}
 </style>
