@@ -1,0 +1,39 @@
+name: PR 262 visual capture (temporary)
+on:
+  push:
+    branches: [review/pr-262-browser-captures]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22.23.4'
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save --ignore-scripts playwright-core@1.56.1
+      - name: Capture review page in Chrome
+        env:
+          OVERSWEEP_REVIEW_TRAINERS: '1'
+        run: node scripts/review/f16-capture.mjs
+      - name: Upload screenshots
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pr-262-browser-screenshots
+          path: review-screenshots/*.png
+      - name: Commit captures only to temporary branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f review-screenshots/*.png
+          git commit -m "Capture browser screenshots for PR #262" || exit 0
+          git -c http.extraheader="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)" push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
