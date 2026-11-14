@@ -1,0 +1,27 @@
+---
+import engineArt from "../../assets/aircraft-procedures/f16-engine.webp";
+---
+<figure class="engine-figure">
+  <div class="engine-art">
+    <img src={engineArt.src} width={engineArt.width} height={engineArt.height} alt="Oil pressure, nozzle position, RPM and FTIT gauges" />
+    <svg viewBox="0 0 675 1774" aria-hidden="true">
+      <g data-needle="oil" data-pivot="221 243" transform="translate(221 243) rotate(-140)"><path d="M-5 18 L-4 -18 L0 -130 L4 -18 L5 18 Z" fill="#242424"/><circle r="9" fill="#f5f5f5" stroke="#242424" stroke-width="3"/><circle r="3" fill="#242424"/></g>
+      <g data-needle="noz" data-pivot="255 640" transform="translate(255 640) rotate(-140)"><path d="M-5 18 L-4 -18 L0 -150 L4 -18 L5 18 Z" fill="#242424"/><circle r="9" fill="#f5f5f5" stroke="#242424" stroke-width="3"/><circle r="3" fill="#242424"/></g>
+      <g data-needle="rpm" data-pivot="273 1070" transform="translate(273 1070) rotate(-140)"><path d="M-5 18 L-4 -18 L0 -169 L4 -18 L5 18 Z" fill="#242424"/><circle r="9" fill="#f5f5f5" stroke="#242424" stroke-width="3"/><circle r="3" fill="#242424"/></g>
+      <g data-needle="ftit" data-pivot="329 1512" transform="translate(329 1512) rotate(-140)"><path d="M-5 18 L-4 -18 L0 -169 L4 -18 L5 18 Z" fill="#242424"/><circle r="9" fill="#f5f5f5" stroke="#242424" stroke-width="3"/><circle r="3" fill="#242424"/></g>
+    </svg>
+  </div>
+  <figcaption>
+    <span class="engine-readouts">Procedure example: RPM <strong data-value="rpm">0</strong>%; FTIT <strong data-value="ftit">—</strong> °C. <span data-signal>ENGINE OFF</span></span>
+    <span class="source-note">Illustrative instrument indications. Gauge markings and motion await in-simulator verification.</span>
+  </figcaption>
+</figure>
+<style>
+.engine-figure{margin:0;max-width:28rem}
+.engine-figure svg{width:100%;height:auto;display:block}
+.engine-figure figcaption{display:grid;gap:.35rem;font-size:.8rem;color:var(--color-muted);margin-top:.4rem}
+.engine-figure .engine-readouts{color:var(--color-text)}
+.engine-art{position:relative}
+.engine-art img{width:100%;height:auto;display:block}
+.engine-art svg{position:absolute;inset:0;pointer-events:none}
+</style>

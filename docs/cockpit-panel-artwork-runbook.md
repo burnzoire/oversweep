@@ -1,0 +1,15 @@
+# Interactive cockpit panel artwork
+
+Use the official simulator manual as the geometry and procedure reference. For the DCS F-16C, start with the [Eagle Dynamics guide](https://www.digitalcombatsimulator.com/en/downloads/documentation/dcs-viper_early_access_manual_en/). Record the edition, page, panel, and simulator variant. Page 64 of the August 2026 guide shows the ELEC panel.
+
+1. Crop the panel reference and generate a straight-on raster drawing in black technical linework on white. Include the plate, labels, fasteners, switch bezels, unlit lenses, and dial scales. Leave the movable shafts, button caps, and needles out of the background. Check spelling, geometry, and control placement against the reference before adding interaction.
+2. Place moving parts over the artwork in panel-relative coordinates. Anchor each part at its physical pivot or centre. Give a three-position toggle separate upper and lower hit areas that move it one detent at a time and stop at the ends. Round the shaft at the pivot and show its cap centred when viewed end-on. Give pushbuttons a raised cap that visibly recesses and returns on release.
+3. Add one shaped light overlay per indication, including individual legends within a shared bezel. Keep the label readable when illuminated. Drive the overlay from procedure state. For example, display FLCS RLY during the battery-power step when the procedure calls for it. Give each gauge needle its own pivot and map values to the verified scale.
+4. Use native buttons for hit areas where possible. Label them for screen readers, preserve keyboard activation and focus, and respect reduced motion. Keep the visual response and the step-completion condition tied to the same action.
+5. Review each panel at guide size and close-up. Exercise every control and relevant lamp state on desktop and mobile. Capture a fresh view of every illustration, including representative changed states, or provide an interactive preview covering them all. Label any simulator behavior or geometry that still needs verification.
+
+For PR #262, apply the ELEC pattern to TEST and ENG & JET START, use independent light overlays on the caution and warning panels, and layer the engine needles over the instrument artwork. Keep the Throttle Idle button for the throttle step.
+
+## Toggle interaction and progression
+
+Draw every toggle orthographically, looking straight at the panel. Use a centred cap at neutral and move the shaft and cap together about the same pivot. Test both detents in the browser. Keep hit areas invisible during hover and while awaiting input. Preserve keyboard focus indicators, actual lamp states, and wrong-input feedback. Advance after a correct control action once its visual response has registered. Keep indication confirmations explicit.

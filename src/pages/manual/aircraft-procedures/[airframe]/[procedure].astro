@@ -1,0 +1,366 @@
+---
+import SiteLayout from '../../../../layouts/SiteLayout.astro';
+import EngineInstrument from '../../../../components/aircraft-procedures/EngineInstrument.astro';
+import StartupPanels from '../../../../components/aircraft-procedures/StartupPanels.astro';
+import {visibleProcedures, procedureRoute, sourceUrl, type AircraftProcedure} from '../../../../data/aircraft-procedures';
+import {sitePath} from '../../../../lib/paths';
+export function getStaticPaths() {
+  return visibleProcedures.map(p=>({params:{airframe:p.airframe,procedure:p.slug},props:{guide:p}}));
+}
+const {guide} = Astro.props as {guide:AircraftProcedure};
+const steps = guide.steps;
+---
+<SiteLayout title={guide.title} activeSection="manual" activeSubject="aircraft-procedures"
+ description="Review-only illustrated DCS F-16C cold-start engine procedure; not yet validated in the simulator."
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Aircraft Procedures',href:sitePath('manual/aircraft-procedures/')},{label:'F-16C',href:sitePath('manual/aircraft-procedures/f-16c/')},{label:'Engine Start'}]}>
+  <section class="status-panel">
+    <p><strong>Review-only prototype — not validated in DCS.</strong> DCS F-16C Block 50; source: Eagle Dynamics F-16C Early Access Guide (23 March 2026), pp. 134–135. Exact behaviour and simulator version require a local test. This covers engine start; the remaining after-start setup, INS alignment and taxi checks are not yet included.</p>
+    <p><strong>Initial state:</strong> cold-and-dark F-16C on the ground, throttle at cutoff. Ground crew and area must be clear before cranking. The simulation beside the steps is educational, not connected to DCS.</p>
+  </section>
+  <div class="procedure-workspace" data-procedure>
+    <div class="procedure-guide">
+      <p class="procedure-progress" role="status" aria-live="polite" data-progress>Review the steps below; JavaScript enables step navigation.</p>
+      <ol class="procedure-steps">
+        {steps.map((s,i)=><li class="procedure-step" data-step={i} data-step-id={s.id} data-visual={s.visual ?? ''}>
+          <div class="procedure-kicker">{s.section} · {String(i+1).padStart(2,'0')} / {steps.length}</div>
+          <h2>{s.title}</h2>
+          <p><strong>Control</strong> · {s.control}</p>
+          <p class="procedure-action"><strong>Do</strong> · {s.action}</p>
+          <p><strong>Expect</strong> · {s.expect}</p>
+          {s.caution && <p class="procedure-warning"><strong>Note</strong> · {s.caution}</p>}
+          <p class="procedure-cite">Evidence: {s.evidence}</p>
+        </li>)}
+      </ol>
+      <h2 class="procedure-step" data-complete tabindex="-1" hidden>Startup complete</h2>
+      <div class="procedure-controls" hidden data-controls>
+        <button type="button" data-confirm hidden>Confirm indication</button>
+        <button type="button" data-prev>Previous</button>
+      </div>
+    </div>
+    <aside class="procedure-visual" aria-label="Interactive cockpit control panels">
+      <div class="retry-mark" data-retry-mark hidden aria-hidden="true">×</div>
+      <p class="retry-hint" data-retry-hint role="status" hidden></p>
+      <h2>Control and indication</h2>
+      <StartupPanels />
+      <div data-engine-reference hidden><EngineInstrument /></div>
+      <p data-indication aria-live="polite">Select the control named in the instructions. The panel responds to your input.</p>
+      <p class="procedure-cite">Clickable control geometry is an original technical drawing and is not yet dimensionally verified against DCS. The RPM/FTIT animation is a separate schematic prototype. Trainer timing is illustrative: 12 seconds to RUN, 8 seconds to 20% RPM, and 30 seconds to idle. SEC clearance and pressure recovery use illustrative events within those intervals. No live DCS telemetry.</p>
+    </aside>
+  </div>
+  <h2>Source and verification</h2>
+  <p><a href={sourceUrl}>Eagle Dynamics — DCS F-16C Early Access Guide (23 March 2026)</a>, “Before Engine Start” and “Engine Start”, pp. 134–135. The guide is independently worded and uses original schematic artwork. No Chuck's Guide illustration or text is reproduced.</p>
+  <p><strong>Outstanding:</strong> capture a DCS session from cold-and-dark; validate step ordering, exact light names, timing, RPM and FTIT movement; complete after-start setup, INS alignment and avionics checks before publishing this as a complete cold-start guide.</p>
+</SiteLayout>
+<script>
+const root = document.querySelector<HTMLElement>('[data-procedure]');
+if (root) {
+  const all = <T extends Element>(selector: string) => [...root.querySelectorAll<T>(selector)];
+  const one = <T extends Element>(selector: string) => root.querySelector<T>(selector);
+  const steps = all<HTMLElement>('[data-step]');
+  const previous = one<HTMLButtonElement>('[data-prev]')!;
+  const confirm = one<HTMLButtonElement>('[data-confirm]')!;
+  const controls = one<HTMLElement>('[data-controls]')!;
+  const progress = one<HTMLElement>('[data-progress]')!;
+  const feedback = one<HTMLElement>('[data-panel-feedback]')!;
+  const information = one<HTMLElement>('[data-indication]')!;
+  const engineReference = one<HTMLElement>('[data-engine-reference]')!;
+  const rpm = one<SVGGElement>('[data-needle="rpm"]')!;
+  const ftit = one<SVGGElement>('[data-needle="ftit"]')!;
+  const rpmValue = one<HTMLElement>('[data-value="rpm"]')!;
+  const ftitValue = one<HTMLElement>('[data-value="ftit"]')!;
+  const signal = one<HTMLElement>('[data-signal]')!;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const actions: Record<string, string> = {
+    battery: 'main-batt',
+    'flcs-test': 'flcs-test',
+    'flcs-release': 'flcs-norm',
+    'main-power': 'main-main',
+    jfs: 'jfs-start2',
+    'master-caution': 'master-caution',
+    throttle: 'throttle-idle',
+  };
+  const confirmations = new Set(['ground-ready', 'epu-check', 'sec', 'generator', 'idle-check']);
+  let step = 0;
+  let main: 'off'|'batt'|'main' = 'off';
+  let flcsHeld = false;
+  let jfsStarted = false;
+  let jfsRun = false;
+  let throttleIdle = false;
+  const completed = new Set<string>();
+  let frame = 0;
+
+  let secCleared = false, pressureEstablished = false, cautionPending = false;
+  let displayedRpm = 0, displayedFtit = 0;
+  function updateGlareShield(rpm: number) {
+    const powered = main === 'main';
+
+    const lights = {
+      'warn-engine': powered && rpm < 60,
+      'warn-hyd': powered && !pressureEstablished,
+      'warn-hyd-bottom': powered && !pressureEstablished,
+      'master-caution': powered && cautionPending,
+    };
+    for (const [lamp, on] of Object.entries(lights)) {
+      all(`[data-lamp="${lamp}"]`).forEach(el => el.classList.toggle('lit', on));
+    }
+  }
+  function drawEngine(r: number, t: number, msg: string) {
+    displayedRpm = r;
+    if (throttleIdle && displayedRpm >= 60 && !finished && ['throttle', 'generator'].includes(steps[step].dataset.stepId || '')) cautionPending = true;
+    all('[data-lamp="warn-seat"]').forEach(el => el.classList.toggle('lit', throttleIdle && r >= 60));
+    all('[data-lamp="warn-sec"]').forEach(el => el.classList.toggle('lit', main === 'main' && !secCleared));
+    updateGlareShield(r);
+    displayedFtit = t;
+    // Angles sampled from the visible numeric labels on the review artwork.
+    const dialAngle = (value: number, stops: readonly (readonly [number, number])[]) => {
+      const index = stops.findIndex(([mark]) => value <= mark);
+      if (index === 0) return stops[0][1];
+      if (index < 0) return stops[stops.length - 1][1];
+      const [lo, start] = stops[index - 1];
+      const [hi, end] = stops[index];
+      return start + (end - start) * (value - lo) / (hi - lo);
+    };
+    const rpmAngle = dialAngle(r, [[0,0],[10,-38],[20,-72],[30,-105],[40,-139],[50,-180],[60,-222],[70,-255],[80,-289],[90,-322],[100,-360]]);
+    const ftitAngle = dialAngle(t, [[200,45],[300,72],[400,108],[500,138],[600,165],[700,195],[800,225],[900,253],[1000,285],[1100,316],[1200,360]]);
+    rpm.setAttribute('transform', `translate(${rpm.dataset.pivot}) rotate(${rpmAngle})`);
+    ftit.setAttribute('transform', `translate(${ftit.dataset.pivot}) rotate(${ftitAngle})`);
+    rpmValue.textContent = r.toFixed(0);
+    ftitValue.textContent = t <= 0 ? '—' : t.toFixed(0);
+    signal.textContent = msg;
+    all('[data-lamp="jfs-run"]').forEach(el => el.classList.toggle('lit', jfsRun && r < 55));
+    one<SVGElement>('[data-jfs-lever]')!.dataset.position = jfsStarted && r < 55 ? 'start2' : 'off';
+    if (steps[step].dataset.stepId === 'sec') confirm.disabled = r < 20 || !secCleared;
+  }
+  function animateEngine(onSettled?: () => void) {
+    cancelAnimationFrame(frame);
+    const id = steps[step].dataset.visual;
+    const target = (id === 'jfs' && jfsRun)||id === 'rpm20' ? [20,0,'JFS RUN']
+      : id === 'idle' ? (throttleIdle ? [70,620,'IDLE'] : [20,0,'READY FOR IDLE'])
+      : id === 'engine' ? [70,620,'ENGINE WARNING OFF']
+      : id === 'stable' ? [70,620,'IDLE CHECK']
+      : [0,0,'ENGINE OFF'];
+    if (reduced.matches && !onSettled) {
+      drawEngine(Number(target[0]),Number(target[1]),String(target[2]));
+      return;
+    }
+    const initialRpm = displayedRpm, initialFtit = displayedFtit;
+    const start = performance.now();
+    const tick=(now:number)=>{
+      const duration = onSettled ? (id === "idle" ? 30000 : 8000) : 1200;
+      const k = Math.min(1,(now-start)/duration);
+      const smooth = k*k*(3-2*k);
+      if (id === 'jfs' && jfsRun && k >= .75) secCleared = true;
+      if (id === 'idle' && throttleIdle && k >= .95) pressureEstablished = true;
+      drawEngine(initialRpm+(Number(target[0])-initialRpm)*smooth,initialFtit+(Number(target[1])-initialFtit)*smooth,String(target[2]));
+      if(k<1) frame=requestAnimationFrame(tick);
+      else onSettled?.();
+    };
+    frame=requestAnimationFrame(tick);
+  }
+  function updatePanels() {
+    const id = steps[step].dataset.stepId || '';
+    const panel = ['battery','flcs-test','flcs-release','main-power','epu-check'].includes(id)?'elec':
+      id==='jfs'?'jfs':id==='throttle'?'throttle':
+      id==='ground-ready'?'elec':'engine';
+    const showTest = id==='flcs-test'||id==='flcs-release';
+    const visible = new Set<string>([showTest?'test':panel]);
+    if (showTest) visible.add('elec');
+    if (id==='main-power') {visible.add('caution');visible.add('eyebrow');}
+    if (['jfs','sec','throttle'].includes(id)) visible.add('caution');
+    if (id==='idle-check') visible.add('jfs');
+    if (['throttle','generator','idle-check','master-caution'].includes(id)) visible.add('eyebrow');
+    if (id==='generator' || id==='master-caution') visible.add('caution');
+    all<HTMLElement>('[data-panel]').forEach(el=>{el.hidden=!visible.has(el.dataset.panel||'');});
+    engineReference.hidden = id === 'master-caution' || (panel !== 'engine' && panel !== 'throttle' && id !== 'jfs');
+    const expected = actions[id] || '';
+    all<HTMLElement | SVGGElement>('[data-control]').forEach(el=>{
+      const active = el.dataset.control === expected;
+      el.dataset.active = String(active);
+
+      el.setAttribute('aria-pressed', String(
+        el.dataset.control === 'main-batt' ? main==='batt':
+        el.dataset.control === 'main-main' ? main==='main':
+        el.dataset.control === 'main-off' ? main==='off':
+        el.dataset.control === 'flcs-test' ? flcsHeld:
+        el.dataset.control === 'jfs-start2' ? jfsStarted:
+        el.dataset.control === 'throttle-idle' ? throttleIdle : false));
+    });
+    const elec = one<HTMLElement>(".elec-art")!;
+    elec.dataset.mainState = main;
+    one<HTMLElement>('[data-flcs-lever]')!.dataset.position = flcsHeld ? 'test' : 'norm';
+    one<SVGElement>('[data-jfs-lever]')!.dataset.position = jfsStarted ? 'start2' : 'off';
+    const lit = (name:string, isLit:boolean) => all<SVGGElement>(`[data-lamp="${name}"]`).forEach(n=>n.classList.toggle('lit',isLit));
+    lit('flcs-rly',main!=='off'&&!flcsHeld&&!jfsStarted);
+    lit('flcs-pmg',flcsHeld||jfsStarted);
+    lit('to-flcs',flcsHeld||jfsStarted);
+    lit('jfs-run',jfsRun && displayedRpm < 55);
+    const engineRunning = ['generator','idle-check'].includes(id);
+    lit('warn-elec',main==='main' && !engineRunning);
+    lit('warn-sec',main==='main' && !engineRunning && !secCleared);
+    lit('warn-seat',engineRunning);
+    all<SVGGElement>('[data-flcs-channel]').forEach(n=>n.classList.toggle('lit',flcsHeld));
+    // EPU GEN/PMG lights deliberately remain OFF; don't claim simulated fault logic.
+    const message = id==='flcs-test'?'Click the upper half of FLCS PWR TEST to select TEST.':
+      id==='flcs-release'?'Click the lower half of FLCS PWR TEST to return it to NORM.':
+      id==='battery'?'Select BATT directly on the electrical panel.':
+      id==='main-power'?'Select MAIN PWR directly on the electrical panel.':
+      id==='jfs'?(jfsRun ? 'JET FUEL RUN is on.' : jfsStarted ? 'Wait for the green JET FUEL RUN light. It should illuminate within 30 seconds.' : 'Select JFS START 2.'):
+      id==='throttle'?'Select Throttle Idle to continue.':
+      id==='epu-check'?'Verify both EPU lights are off, then select Confirm EPU lights off below the step.':
+      'Observe the relevant indication and confirm the step.';
+    feedback.textContent = message;
+  }
+  const mark = one<HTMLElement>('[data-retry-mark]')!;
+  const hint = one<HTMLElement>('[data-retry-hint]')!;
+  const visual = mark.parentElement!;
+  function retry(control: Element) {
+    const bounds = control.getBoundingClientRect();
+    const area = visual.getBoundingClientRect();
+    mark.style.left = `${bounds.left - area.left + bounds.width / 2}px`;
+    mark.style.top = `${bounds.top - area.top + bounds.height / 2}px`;
+    mark.hidden = false;
+    hint.hidden = false;
+    hint.textContent = `Try again. ${feedback.textContent}`;
+  }
+
+  let finished = false;
+  function render() {
+    mark.hidden = true;
+    hint.hidden = true;
+    cancelAnimationFrame(frame);
+    const id=steps[step].dataset.stepId || '';
+    steps.forEach((el,i)=>el.hidden=finished || i!==step);
+    const complete = one<HTMLElement>('[data-complete]')!;
+    complete.hidden = !finished;
+    if (finished) complete.focus();
+    controls.hidden=false;
+    progress.hidden = finished;
+    progress.textContent=`Step ${step+1} of ${steps.length}`;
+    previous.disabled=step===0;
+    confirm.textContent = id === 'epu-check' ? 'Confirm EPU lights off' : 'Confirm indication';
+    confirm.hidden=!confirmations.has(id);
+    confirm.disabled=finished || (id === 'sec' && (displayedRpm < 20 || !secCleared));
+    information.textContent = '';
+    updatePanels();
+    animateEngine();
+  }
+  let advanceTimer: ReturnType<typeof setTimeout>;
+  function advanceAfterControl() {
+    const current = step;
+    render();
+    clearTimeout(advanceTimer);
+    advanceTimer = setTimeout(() => {
+      if (step !== current) return;
+      step += 1;
+      render();
+    }, reduced.matches ? 0 : window.matchMedia("(max-width: 48rem)").matches ? 1500 : 900);
+  }
+  function select(control:string, target: Element) {
+    const id=steps[step].dataset.stepId || '';
+    if(control!==actions[id] || completed.has(id)){
+      retry(target);
+      if (id === 'jfs' && control === 'jfs-start1') hint.textContent = 'You selected START 1. Press the lower half of the JFS toggle to select START 2.';
+      return;
+    }
+    if (control === 'flcs-test' || control === 'flcs-norm') {
+      flcsHeld = control === 'flcs-test';
+      completed.add(id);
+    }
+    if (control === 'master-caution' && !finished) {
+      cautionPending = false;
+      finished = true;
+      completed.add(id);
+      render();
+      return;
+    }
+    if (control === 'jfs-start2') {
+      jfsStarted = true;
+      jfsRun = false;
+      secCleared = false;
+      pressureEstablished = false;
+      completed.add(id);
+      render();
+      // Illustrative delay within the documented 30-second RUN limit.
+      advanceTimer = setTimeout(() => {
+        jfsRun = true;
+        render();
+        animateEngine(advanceAfterControl);
+      }, 12000);
+      return;
+    }
+    if(control==='throttle-idle'){
+      throttleIdle=true;
+      completed.add(id);
+      render();
+      animateEngine(advanceAfterControl);
+      return;
+    }
+    advanceAfterControl();
+  }
+  all<HTMLButtonElement>('button[data-control]').forEach(button => {
+    button.addEventListener('click', () => select(button.dataset.control || '', button));
+  });
+  function moveMain(direction: number) {
+    const positions = ['off', 'batt', 'main'] as const;
+    const next = positions[positions.indexOf(main) + direction];
+    const id = steps[step].dataset.stepId || '';
+    const expected = id === 'battery' ? 'batt' : id === 'main-power' ? 'main' : undefined;
+    if ((!next || next !== expected) && main !== expected || completed.has(id)) {
+      retry(direction > 0 ? up : down);
+      return;
+    }
+    if (main !== expected && next) main = next;
+    completed.add(id);
+    advanceAfterControl();
+  }
+  const up = one<HTMLButtonElement>('.toggle-up')!;
+  const down = one<HTMLButtonElement>('.toggle-down')!;
+  up.addEventListener('click', () => moveMain(1));
+  down.addEventListener('click', () => moveMain(-1));
+  const reset = one<HTMLButtonElement>('[data-elec-reset]')!;
+  let resetTimer: ReturnType<typeof setTimeout>;
+  reset.addEventListener('click', () => {
+    retry(reset);
+    clearTimeout(resetTimer);
+    reset.classList.add('pulse');
+    resetTimer = setTimeout(() => reset.classList.remove('pulse'), 220);
+  });
+  confirm.addEventListener('click', () => {
+    if (confirm.disabled || confirm.hidden) return;
+    if (step === steps.length - 1 || (steps[step].dataset.stepId === 'idle-check' && !cautionPending)) finished = true;
+    else step += 1;
+    render();
+  });
+  previous.addEventListener('click', () => {
+    clearTimeout(advanceTimer);
+    finished = false;
+    step = Math.max(0, step - 1);
+    completed.delete(steps[step].dataset.stepId || '');
+    render();
+  });
+  // Turn off the enhanced navigation if required controls are missing:
+  // the full static step list remains readable without JavaScript.
+  render();
+}
+</script>
+<style>
+.procedure-workspace{display:grid;gap:1.5rem;margin-top:1.5rem;align-items:start}
+.procedure-progress{font-weight:700}
+.procedure-steps{padding:0;margin:0;list-style:none}
+.procedure-step{border:1px solid var(--color-border);border-top:4px solid var(--color-ink);padding:1.25rem;margin:0}
+.procedure-step[hidden],.procedure-controls[hidden]{display:none}
+.procedure-step h2{margin:.25rem 0 .8rem}
+.procedure-step p{margin:.65rem 0}
+.procedure-kicker{font-size:.8rem;color:var(--color-muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.procedure-action{padding:.7rem;background:var(--color-surface)}
+.procedure-warning{border-left:4px solid #915300;padding-left:.7rem}
+.procedure-cite{font-size:.85rem;color:var(--color-muted)}
+.procedure-controls{display:flex;gap:.75rem;margin-top:1rem}
+.procedure-controls button{min-height:2.75rem;padding:.45rem 1rem;border:1px solid var(--color-ink);background:#fff;color:var(--color-ink);cursor:pointer;font:inherit}
+.procedure-controls button:disabled{opacity:.4;cursor:default}
+.retry-mark{position:absolute;z-index:3;transform:translate(-50%,-50%);font:bold 2.1rem/1 system-ui;color:#b00020;background:white;border-radius:50%;width:1em;text-align:center;pointer-events:none}
+.retry-hint{position:absolute;z-index:4;top:0;left:1rem;right:1rem;margin:0;padding:.5rem;border:2px solid #b00020;background:#fff;color:#740017;pointer-events:none}
+.procedure-visual{position:relative;border:1px solid var(--color-border);padding:1rem}
+.procedure-visual h2{margin-top:0}
+@media(min-width:58rem){.procedure-workspace{grid-template-columns:minmax(0,1fr) minmax(18rem,1fr)}.procedure-visual{position:sticky;top:1rem}}
+</style>

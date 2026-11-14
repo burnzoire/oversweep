@@ -1,0 +1,172 @@
+---
+import eyebrowArt from "../../assets/aircraft-procedures/f16-eyebrow.webp";
+import cautionArt from "../../assets/aircraft-procedures/f16-caution.webp";
+import jfsArt from "../../assets/aircraft-procedures/f16-jfs.webp";
+import testArt from "../../assets/aircraft-procedures/f16-test.webp";
+import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
+// Raster line artwork referenced to the Eagle Dynamics F-16C guide (pp. 46, 59, 63, 64, 72).
+---
+<div class="startup-panels" data-startup-panels>
+
+  <div class="startup-panel" data-panel="elec">
+<div class="elec-art" data-main-state="off">
+<span class="relay-light" data-lamp="flcs-rly" aria-hidden="true"></span>
+<img src={elecArt.src} width={elecArt.width} height={elecArt.height} alt="F-16C electrical panel" />
+<div class="switch" role="group" aria-label="MAIN PWR toggle">
+<svg viewBox="0 0 100 100" aria-hidden="true">
+<circle cx="50" cy="50" r="25" fill="#fff" stroke="#171717" stroke-width="1.5"/>
+<path class="shaft" d="M38 55C37 48 42 43 50 43C58 43 63 48 62 55L64 83Q64 91 50 91Q36 91 36 83Z" fill="#fff" stroke="#171717" stroke-width="2"/>
+<g class="cap"><circle cx="50" cy="50" r="16" fill="#fff" stroke="#171717" stroke-width="2"/><circle cx="50" cy="50" r="12" fill="none" stroke="#171717"/></g>
+</svg>
+<button type="button" class="toggle-up" aria-label="Move MAIN PWR toggle up"></button>
+<button type="button" class="toggle-down" aria-label="Move MAIN PWR toggle down"></button>
+</div>
+<button type="button" class="reset" data-elec-reset aria-label="CAUTION RESET"><span class="reset-cap" aria-hidden="true"></span></button>
+<span class="elec-lamp" style="--x:57%;--y:14%;--w:21%;--h:6%" data-lamp="flcs-pmg"></span>
+<span class="elec-lamp" style="--x:34%;--y:80%;--w:20%;--h:6%" data-lamp="to-flcs"></span>
+</div>
+    <p class="panel-note">Redrawn from the DCS F-16C Early Access Guide, page 64. Fastener and control positions are approximate.</p>
+  </div>
+  <div class="startup-panel" data-panel="test" hidden>
+    <div class="raster-panel raster-test">
+      <img src={testArt.src} width={testArt.width} height={testArt.height} alt="FLCS TEST panel" />
+      <span class="raster-lamp" data-flcs-channel="C" style="--x:68%;--y:38.6%;--w:9.5%;--h:6.7%" aria-hidden="true"></span>
+      <span class="raster-lamp" data-flcs-channel="A" style="--x:78.2%;--y:38.6%;--w:9.5%;--h:6.7%" aria-hidden="true"></span>
+      <span class="raster-lamp" data-flcs-channel="D" style="--x:68%;--y:45.6%;--w:9.5%;--h:7.2%" aria-hidden="true"></span>
+      <span class="raster-lamp" data-flcs-channel="B" style="--x:78.2%;--y:45.6%;--w:9.5%;--h:7.2%" aria-hidden="true"></span>
+      <div class="raster-switch flcs-toggle" data-flcs-lever data-position="norm" role="group" aria-label="FLCS PWR TEST">
+        <svg viewBox="0 0 100 100" aria-hidden="true">
+<circle cx="50" cy="50" r="25" fill="#fff" stroke="#171717" stroke-width="1.5"/>
+<path class="shaft" d="M38 55C37 48 42 43 50 43C58 43 63 48 62 55L64 83Q64 91 50 91Q36 91 36 83Z" fill="#fff" stroke="#171717" stroke-width="2"/>
+<g class="cap"><circle cx="50" cy="50" r="16" fill="#fff" stroke="#171717" stroke-width="2"/><circle cx="50" cy="50" r="12" fill="none" stroke="#171717"/></g>
+</svg>
+        <button type="button" data-control="flcs-test" aria-label="Select TEST"></button>
+        <button type="button" data-control="flcs-norm" aria-label="Return to NORM"></button>
+      </div>
+      <button class="panel-hotspot" type="button" style="--x:23%;--y:20%" data-control="fire-test" aria-label="FIRE & OHEAT DETECT"></button>
+      <button class="panel-hotspot" type="button" style="--x:52%;--y:20%" data-control="obogs-test" aria-label="OBOGS BIT"></button>
+      <button class="panel-hotspot" type="button" style="--x:80%;--y:20%" data-control="mal-test" aria-label="MAL & IND LTS"></button>
+      <button class="panel-hotspot" type="button" style="--x:21%;--y:48%" data-control="probe-heat" aria-label="PROBE HEAT"></button>
+      <button class="panel-hotspot" type="button" style="--x:51%;--y:48%" data-control="epu-gen" aria-label="EPU/GEN"></button>
+    </div>
+  </div>
+  <div class="startup-panel" data-panel="jfs" hidden>
+    <div class="raster-panel raster-jfs">
+      <img src={jfsArt.src} width={jfsArt.width} height={jfsArt.height} alt="ENG and JET START panel" />
+      <span class="raster-lamp" data-lamp="jfs-run" style="--x:26.1%;--y:12%;--w:10.2%;--h:4.7%" aria-hidden="true"></span>
+      <div class="raster-switch flcs-toggle jfs-toggle" role="group" aria-label="JFS switch" style="--x:63.4%;--y:14.37%">
+        <svg data-jfs-lever data-position="off" viewBox="0 0 100 100" aria-hidden="true">
+<circle cx="50" cy="50" r="25" fill="#fff" stroke="#171717" stroke-width="1.5"/>
+<path class="shaft" d="M38 55C37 48 42 43 50 43C58 43 63 48 62 55L64 83Q64 91 50 91Q36 91 36 83Z" fill="#fff" stroke="#171717" stroke-width="2"/>
+<g class="cap"><circle cx="50" cy="50" r="16" fill="#fff" stroke="#171717" stroke-width="2"/><circle cx="50" cy="50" r="12" fill="none" stroke="#171717"/></g>
+</svg>
+        <button type="button" data-control="jfs-start1" aria-label="Select JFS START 1"></button>
+        <button type="button" data-control="jfs-start2" aria-label="Select JFS START 2"></button>
+      </div>
+      <button class="panel-hotspot" type="button" style="--x:49%;--y:38%" data-control="eng-cont" aria-label="ENG CONT safety latch"></button>
+      <button class="panel-hotspot" type="button" style="--x:49%;--y:62%" data-control="ab-reset" aria-label="AB RESET switch"></button>
+      <button class="panel-hotspot" type="button" style="--x:50%;--y:86%" data-control="max-power" aria-label="MAX POWER switch"></button>
+    </div>
+  </div>
+  <div class="startup-panel" data-panel="throttle" hidden>
+    <button type="button" class="throttle-idle-button" data-control="throttle-idle" aria-pressed="false">Throttle Idle</button>
+  </div>
+
+  <div class="startup-panel" data-panel="caution" hidden>
+    <div class="raster-panel raster-caution">
+      <img src={cautionArt.src} width={cautionArt.width} height={cautionArt.height} alt="Caution annunciators" />
+      <span class="raster-lamp" data-lamp="warn-elec" style="--x:7.9%;--y:20.3%;--w:19.7%;--h:8%" aria-hidden="true"></span>
+      <span class="raster-lamp" data-lamp="warn-sec" style="--x:30%;--y:20.3%;--w:19%;--h:8%" aria-hidden="true"></span>
+      <span class="raster-lamp" data-lamp="warn-seat" style="--x:73%;--y:9.7%;--w:19%;--h:8%" aria-hidden="true"></span>
+    </div>
+  </div>
+  <div class="startup-panel" data-panel="eyebrow" hidden>
+    <button type="button" class="master-caution" data-control="master-caution" data-lamp="master-caution">MASTER CAUTION</button>
+    <div class="raster-panel raster-eyebrow">
+      <img src={eyebrowArt.src} width={eyebrowArt.width} height={eyebrowArt.height} alt="Right eyebrow warning annunciators" />
+      <span class="raster-lamp" data-lamp="warn-engine" style="--x:6.5%;--y:54%;--w:16%;--h:22%" aria-hidden="true"></span>
+      <span class="raster-lamp" data-lamp="warn-hyd" style="--x:24.6%;--y:25%;--w:16%;--h:22%" aria-hidden="true"></span>
+      <span class="raster-lamp" data-lamp="warn-hyd-bottom" style="--x:24.6%;--y:54%;--w:16%;--h:22%" aria-hidden="true"></span>
+    </div>
+  </div>
+  <div class="panel-feedback" data-panel-feedback aria-live="polite">Use the control named in the current step.</div>
+</div>
+<style>
+.startup-panel[hidden]{display:none}
+.startup-panels svg{display:block;width:100%;max-width:100%;max-height:58rem;height:auto;background:white}
+.startup-panels .panel-note{font-size:.83rem;color:var(--color-muted);margin:.45rem 0 .75rem}
+.startup-panels .panel-feedback{font-size:.88rem;font-weight:600;padding:.5rem;border-left:3px solid var(--color-ink);background:var(--color-surface)}
+/* SVG lever transforms are instantaneous. Transitioning the SVG line transform caused a visible detached-lever artefact in Chromium. */
+
+
+
+
+
+
+
+
+
+
+
+.throttle-idle-button{min-height:2.75rem;padding:.45rem 1rem;border:1px solid var(--color-ink);background:#fff;color:var(--color-ink);font:inherit;cursor:pointer}
+.throttle-idle-button[aria-pressed="true"]{background:var(--color-surface)}
+
+.elec-art{position:relative;background:white}
+.elec-art img{display:block;width:100%;height:auto}
+.elec-art button{font:inherit}
+.elec-art .switch,.elec-art .reset{position:absolute;transform:translate(-50%,-50%);border:0;background:transparent;padding:0;border-radius:50%;cursor:pointer}
+.elec-art .switch{left:29.8%;top:20.65%;width:18%;aspect-ratio:1}
+.elec-art .switch button{position:absolute;left:0;width:100%;height:50%;border:0;background:transparent;cursor:pointer;padding:0}
+.elec-art .switch .toggle-up{top:0;border-radius:50% 50% 0 0}
+.elec-art .switch .toggle-down{bottom:0;border-radius:0 0 50% 50%}
+.elec-art .switch svg{pointer-events:none;background:transparent;width:100%;overflow:visible;display:block}
+.elec-art .reset{left:37.4%;top:57.4%;width:17%;aspect-ratio:1}
+.elec-art .reset-cap{position:absolute;inset:15%;border-radius:50%;border:1.5px solid #222;background:radial-gradient(ellipse at 40% 28%,#fff 18%,#f4f4f4 60%,#aaa 100%);box-shadow:inset 0 1px 0 #fff,0 3px 0 #555,0 5px 4px #0005;transform:translateY(-3px);transition:transform 95ms ease-out,box-shadow 95ms ease-out}
+.elec-art .reset:active .reset-cap,.elec-art .reset.pulse .reset-cap{transform:translateY(1px) scale(.96);box-shadow:inset 0 2px 4px #0006,0 1px 0 #555}
+@media(prefers-reduced-motion:reduce){.elec-art .reset-cap{transition:none}}
+.elec-art .shaft{transform-origin:50px 50px;transition:transform .18s ease-out}
+.elec-art[data-main-state="main"] .shaft{transform:scaleY(-1)}
+.elec-art[data-main-state="batt"] .shaft{transform:scaleY(0)}
+.elec-art[data-main-state="off"] .shaft{transform:scaleY(1)}
+.elec-art .cap{transition:transform .18s ease-out}
+.elec-art[data-main-state="main"] .cap{transform:translateY(-34px)}
+.elec-art[data-main-state="off"] .cap{transform:translateY(34px)}
+@media(prefers-reduced-motion:reduce){.elec-art .shaft,.elec-art .cap{transition:none}}
+.elec-art .relay-light{position:absolute;left:33.8%;top:87.1%;width:19.8%;height:5.8%;border-radius:5px;pointer-events:none;opacity:0;transition:opacity .15s ease-out;background:radial-gradient(ellipse,#ffd36a99,#ffbd4266 72%,transparent);mix-blend-mode:multiply;z-index:1}
+.elec-art .relay-light.lit{opacity:1}
+@media(prefers-reduced-motion:reduce){.elec-art .relay-light{transition:none}}
+
+.elec-art{max-width:440px;margin:auto}
+.elec-art .elec-lamp{position:absolute;left:var(--x);top:var(--y);width:var(--w);height:var(--h);pointer-events:none;border-radius:4px}
+.elec-art .elec-lamp.lit{background:#ffbd4266}
+
+.raster-panel{position:relative;margin:auto;max-width:440px}
+.raster-test,.raster-jfs{max-width:320px}
+.raster-panel img{width:100%;height:auto;display:block}
+.raster-lamp{position:absolute;left:var(--x);top:var(--y);width:var(--w);height:var(--h);pointer-events:none;border-radius:3px}
+.raster-lamp.lit{background:#ffb82c77}
+.raster-test .raster-lamp.lit,.raster-jfs .raster-lamp.lit{background:#45b87966}
+.raster-switch{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);width:22%;min-width:44px;aspect-ratio:1;border:0;border-radius:50%;background:transparent;padding:0;cursor:pointer}
+.raster-switch svg{background:transparent;pointer-events:none}
+.raster-switch svg g{transition:transform .16s ease}
+@media(prefers-reduced-motion:reduce){.raster-switch svg g{transition:none}}
+
+.flcs-toggle{--x:64.2%;--y:78.2%}
+.flcs-toggle button{position:absolute;left:0;width:100%;height:50%;padding:0;border:0;background:transparent;cursor:pointer}
+.flcs-toggle button:first-of-type{top:0}
+.flcs-toggle button:last-of-type{bottom:0}
+.flcs-toggle .shaft{transform-origin:50px 50px;transform:scaleY(0);transition:transform .18s ease-out}
+.flcs-toggle .cap{transition:transform .18s ease-out}
+.flcs-toggle[data-position="test"] .shaft{transform:scaleY(-1)}
+.flcs-toggle[data-position="test"] .cap{transform:translateY(-34px)}
+@media(prefers-reduced-motion:reduce){.flcs-toggle .shaft,.flcs-toggle .cap{transition:none}}
+.raster-jfs .shaft{transform-origin:50px 50px;transform:scaleY(0)}
+.raster-jfs [data-position="start2"] .shaft{transform:scaleY(1)}
+.raster-jfs [data-position="start2"] .cap{transform:translateY(34px)}
+.raster-jfs .raster-switch{width:17%;min-width:44px}
+.raster-jfs .raster-switch svg{overflow:visible}
+.raster-jfs .raster-switch svg{position:relative}
+.master-caution{display:block;margin:.5rem auto;padding:.6rem;border:2px solid #343434;border-radius:4px;background:#fff;color:#171717;font-weight:700}
+.master-caution.lit{background:#ffcf63}
+.panel-hotspot{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);width:16%;aspect-ratio:1;border:0;background:transparent;cursor:pointer}
+</style>

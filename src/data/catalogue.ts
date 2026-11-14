@@ -1,4 +1,5 @@
 export const manualSubjects = [
+  { slug: "aircraft-procedures", title: "Aircraft Procedures" },
   { slug: "flight-fundamentals", title: "Flight Fundamentals" },
   { slug: "airfield-operations", title: "Airfield Operations" },
   { slug: "radio-communications", title: "Radio Communications" },

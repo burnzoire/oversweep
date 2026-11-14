@@ -3,6 +3,7 @@ import { experienceFrame, experienceRoute, listedExperiences, type Experience } 
 import { includedModules, moduleRoute, type Module } from './modules';
 import { categoryRecords } from './encyclopedia';
 import { carriers } from './carriers';
+import { visibleProcedures, procedureRoute } from './aircraft-procedures';
 
 // What a reader can actually open, derived from the registries. Navigation shows
 // destinations without content dimmed and unlinked, so readers only follow links
@@ -48,6 +49,10 @@ const fromModule = (m: Module): Entry => ({
 export const manualEntries: Entry[] = [
   ...listedExperiences.map(fromExperience),
   ...includedModules.map(fromModule),
+  ...visibleProcedures.map(p => ({
+    id: p.id, title: p.title, objective: p.objective, applicability: p.applicability,
+    href: procedureRoute(p), subject: 'aircraft-procedures', group: 'F-16C Viper',
+  })),
 ];
 
 export const subjectEntries = (slug: string) => manualEntries.filter((entry) => entry.subject === slug);
