@@ -49,3 +49,14 @@ The CI screenshots were downloaded and inspected at their own pixel resolution (
 Further corrections were made to ELEC (real paired annunciator housing and unused STBY lens) and TEST (top-row positions and 2×2 FLCS A/B/C/D indicator, with its lower-right test switch). Check the [latest close-up captures](https://github.com/burnzoire/oversweep/tree/review/pr-262-browser-captures/review-screenshots) on the separate temporary branch.
 
 **Remaining visual blockers are deliberately NOT marked complete.** A plausible line drawing with a correct legend is not an exact reproduction of panel contour/DZUS coordinates. The source reference must be perspective-rectified and all control/hole coordinates independently measured before the final redraw is accepted. No new files reproduce third-party photographic pixels.
+
+
+## Selected drawing language — user reference, 14 November 2026
+
+Visual style reference: [VRChat forum: Blueprints of the F-16 for AVPs](https://ask.vrchat.com/t/blueprints-of-the-f-16-for-avps-avatar-vehicle-plane/27199) (multiple F-16 blueprint/technical sheets published by the forum user).
+
+**Desired presentation:** blueprint/engineering-drawing linework, orthographic and detailed. A cockpit panel drawing should be a complete technical depiction of the *part*, not a schematic block of the switches relevant to the current step. Include boundaries, bends/notches, fasteners/DZUS, panel recesses, switch bodies, guarded controls, label lettering and instrument mountings where visible, with faithful spatial arrangement. Use precise consistent stroke weights, unfilled backgrounds, restrained leader lines and no decorative housings or invented graphics. Highlight active controls separately as an interaction overlay; it must not change the source geometry.
+
+**Important distinction:** the VRChat post contains F-16 avatar/vehicle blueprint illustrations, including F-16A/B material. It is an **aesthetic/detail-density reference only**. It is not evidence for the geometry or labels of the **DCS F-16C Block 50 cockpit**. All cockpit details must come from separately verified DCS-specific visual references, and the blueprint artwork must not be directly copied or traced without permission.
+
+Acceptance for next revision: for each startup panel, publish a *full-panel* drawing alongside a matching-perspective source capture and a side-by-side overlay. A detailed-looking but unsurveyed redraw remains unaccepted, even if mouse/keyboard interaction tests pass.
