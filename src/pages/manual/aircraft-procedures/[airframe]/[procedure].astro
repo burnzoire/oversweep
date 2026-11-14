@@ -1,6 +1,7 @@
 ---
 import SiteLayout from '../../../../layouts/SiteLayout.astro';
 import EngineInstrument from '../../../../components/aircraft-procedures/EngineInstrument.astro';
+import StartupPanels from '../../../../components/aircraft-procedures/StartupPanels.astro';
 import {visibleProcedures, procedureRoute, sourceUrl, type AircraftProcedure} from '../../../../data/aircraft-procedures';
 import {sitePath} from '../../../../lib/paths';
 export function getStaticPaths() {
@@ -20,7 +21,7 @@ const steps = guide.steps;
     <div class="procedure-guide">
       <p class="procedure-progress" role="status" aria-live="polite" data-progress>Review the steps below; JavaScript enables step navigation.</p>
       <ol class="procedure-steps">
-        {steps.map((s,i)=><li class="procedure-step" data-step={i} data-visual={s.visual ?? ''}>
+        {steps.map((s,i)=><li class="procedure-step" data-step={i} data-step-id={s.id} data-visual={s.visual ?? ''}>
           <div class="procedure-kicker">{s.section} · {String(i+1).padStart(2,'0')} / {steps.length}</div>
           <h2>{s.title}</h2>
           <p><strong>Control</strong> · {s.control}</p>
@@ -31,15 +32,17 @@ const steps = guide.steps;
         </li>)}
       </ol>
       <div class="procedure-controls" hidden data-controls>
+        <button type="button" data-confirm hidden>Confirm indication</button>
         <button type="button" data-prev>Previous</button>
         <button type="button" data-next>Next step</button>
       </div>
     </div>
-    <aside class="procedure-visual" aria-label="Illustrated instrument reference">
-      <h2>Instrument reference</h2>
-      <EngineInstrument />
-      <p data-indication aria-live="polite">Instrument animation is illustrative. Follow the indication described in the step.</p>
-      <p class="procedure-cite">The diagram intentionally omits panel textures and unrelated controls. It is not a substitute for confirming the real cockpit state.</p>
+    <aside class="procedure-visual" aria-label="Interactive cockpit control panels">
+      <h2>Control and indication</h2>
+      <StartupPanels />
+      <div data-engine-reference hidden><EngineInstrument /></div>
+      <p data-indication aria-live="polite">Select the highlighted switch or indicator. The panel responds to your input.</p>
+      <p class="procedure-cite">Clickable control geometry is an original technical drawing and is not yet dimensionally verified against DCS. The RPM/FTIT animation is a separate schematic prototype. Neither is connected to the simulator.</p>
     </aside>
   </div>
   <h2>Source and verification</h2>
@@ -48,43 +51,162 @@ const steps = guide.steps;
 </SiteLayout>
 <script>
 const root = document.querySelector<HTMLElement>('[data-procedure]');
-if(root){
- const steps=[...root.querySelectorAll<HTMLElement>('[data-step]')],prev=root.querySelector<HTMLButtonElement>('[data-prev]')!,next=root.querySelector<HTMLButtonElement>('[data-next]')!,controls=root.querySelector<HTMLElement>('[data-controls]')!;
- const progress=root.querySelector<HTMLElement>('[data-progress]')!,info=root.querySelector<HTMLElement>('[data-indication]')!;
- const rpm=root.querySelector<SVGLineElement>('[data-needle="rpm"]')!,ftit=root.querySelector<SVGLineElement>('[data-needle="ftit"]')!;
- const rpmValue=root.querySelector<SVGTextElement>('[data-value="rpm"]')!,ftitValue=root.querySelector<SVGTextElement>('[data-value="ftit"]')!,signal=root.querySelector<SVGTextElement>('[data-signal]')!;
- const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
- let index=0,frame=0;
- function renderGauges(r:number,t:number,msg:string) {
-   const needle=(node:SVGLineElement,value:number,max:number,x:number)=>node.setAttribute('transform',`rotate(${-140+Math.min(1,value/max)*280} ${x} 118)`);
-   needle(rpm,r,100,124);needle(ftit,t,1000,337);
-   rpmValue.textContent=r.toFixed(0);ftitValue.textContent=t.toFixed(0);signal.textContent=msg;
- }
- function render(){
-  cancelAnimationFrame(frame);
-  steps.forEach((s,i)=>{s.hidden=i!==index});
-  controls.hidden=false;
-  prev.disabled=index===0;next.textContent=index===steps.length-1?'Finish review':'Next step';
-  next.disabled=index===steps.length-1;
-  progress.textContent=`Step ${index+1} of ${steps.length}`;
-  const visual=steps[index].dataset.visual;
-  const target = visual==='jfs'||visual==='rpm20'?[20,0,'JFS RUN']:visual==='idle'?[55,700,'LIGHT-OFF']:visual==='engine'?[60,650,'ENGINE OFF']:visual==='stable'?[70,620,'IDLE CHECK']:[0,0,'ENGINE OFF'];
-  if(reduced.matches){renderGauges(target[0] as number,target[1] as number,target[2] as string);}
-  else {
-    const start=performance.now(),duration=1200;
-    const animate=(now:number)=>{
-      const k=Math.min(1,(now-start)/duration);
-      const eased=k*k*(3-2*k);
-      renderGauges((target[0] as number)*eased,(target[1] as number)*eased,target[2] as string);
-      if(k<1)frame=requestAnimationFrame(animate);
-    };
-    frame=requestAnimationFrame(animate);
+if (root) {
+  const all = <T extends Element>(selector: string) => [...root.querySelectorAll<T>(selector)];
+  const one = <T extends Element>(selector: string) => root.querySelector<T>(selector);
+  const steps = all<HTMLElement>('[data-step]');
+  const previous = one<HTMLButtonElement>('[data-prev]')!;
+  const next = one<HTMLButtonElement>('[data-next]')!;
+  const confirm = one<HTMLButtonElement>('[data-confirm]')!;
+  const controls = one<HTMLElement>('[data-controls]')!;
+  const progress = one<HTMLElement>('[data-progress]')!;
+  const feedback = one<HTMLElement>('[data-panel-feedback]')!;
+  const information = one<HTMLElement>('[data-indication]')!;
+  const engineReference = one<HTMLElement>('[data-engine-reference]')!;
+  const rpm = one<SVGLineElement>('[data-needle="rpm"]')!;
+  const ftit = one<SVGLineElement>('[data-needle="ftit"]')!;
+  const rpmValue = one<SVGTextElement>('[data-value="rpm"]')!;
+  const ftitValue = one<SVGTextElement>('[data-value="ftit"]')!;
+  const signal = one<SVGTextElement>('[data-signal]')!;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const actions: Record<string, string> = {
+    battery: 'main-batt',
+    'flcs-test': 'flcs-test',
+    'flcs-release': 'flcs-test',
+    'main-power': 'main-main',
+    'epu-check': 'epu-check',
+    jfs: 'jfs-start2',
+    throttle: 'throttle-idle',
+  };
+  const confirmations = new Set(['sec', 'generator', 'idle-check']);
+  let step = 0;
+  let main: 'off'|'batt'|'main' = 'off';
+  let flcsHeld = false;
+  let jfsStarted = false;
+  let throttleIdle = false;
+  const completed = new Set<string>();
+  let frame = 0;
+
+  function drawEngine(r: number, t: number, msg: string) {
+    const angle = (v: number, max: number) => -140 + Math.min(1, v/max)*280;
+    rpm.setAttribute('transform', `rotate(${angle(r,100)} 124 118)`);
+    ftit.setAttribute('transform', `rotate(${angle(t,1000)} 337 118)`);
+    rpmValue.textContent = r.toFixed(0);
+    ftitValue.textContent = t.toFixed(0);
+    signal.textContent = msg;
   }
-  info.textContent=visual==='rpm20'?'Wait for at least 20% RPM before moving the throttle. Animation timing is illustrative.':visual==='stable'?'Read the numerical idle limits in the step; the display values are an illustrative example.':'This drawing shows a representative engine state, not live DCS data.';
- }
- prev.addEventListener('click',()=>{index=Math.max(0,index-1);render()});
- next.addEventListener('click',()=>{index=Math.min(steps.length-1,index+1);render()});
- render();
+  function animateEngine() {
+    cancelAnimationFrame(frame);
+    const id = steps[step].dataset.visual;
+    const target = id === 'jfs'||id === 'rpm20' ? [20,0,'JFS RUN']
+      : id === 'idle' ? [55,700,'LIGHT-OFF']
+      : id === 'engine' ? [60,650,'ENGINE OFF']
+      : id === 'stable' ? [70,620,'IDLE CHECK']
+      : [0,0,'ENGINE OFF'];
+    if (reduced.matches) {
+      drawEngine(Number(target[0]),Number(target[1]),String(target[2]));
+      return;
+    }
+    const start = performance.now();
+    const tick=(now:number)=>{
+      const k = Math.min(1,(now-start)/1200);
+      const smooth = k*k*(3-2*k);
+      drawEngine(Number(target[0])*smooth,Number(target[1])*smooth,String(target[2]));
+      if(k<1) frame=requestAnimationFrame(tick);
+    };
+    frame=requestAnimationFrame(tick);
+  }
+  function updatePanels() {
+    const id = steps[step].dataset.stepId || '';
+    const panel = ['battery','flcs-test','flcs-release','main-power','epu-check'].includes(id)?'elec':
+      id==='jfs'?'jfs':id==='throttle'?'throttle':
+      id==='ground-ready'?'elec':'engine';
+    const showTest = id==='flcs-test'||id==='flcs-release';
+    all<HTMLElement>('[data-panel]').forEach(el=>{
+      el.hidden=el.dataset.panel !== (showTest?'test':panel);
+    });
+    engineReference.hidden = panel !== 'engine';
+    const expected = actions[id] || '';
+    all<SVGGElement>('[data-control]').forEach(el=>{
+      const active = el.dataset.control === expected;
+      el.dataset.active = String(active);
+      el.setAttribute('aria-disabled',String(!active));
+      el.setAttribute('aria-pressed', String(
+        el.dataset.control === 'main-batt' ? main==='batt':
+        el.dataset.control === 'main-main' ? main==='main':
+        el.dataset.control === 'main-off' ? main==='off':
+        el.dataset.control === 'flcs-test' ? flcsHeld:
+        el.dataset.control === 'jfs-start2' ? jfsStarted:
+        el.dataset.control === 'throttle-idle' ? throttleIdle : false));
+    });
+    const lever = one<SVGLineElement>('[data-main-lever]')!;
+    lever.setAttribute('transform',`rotate(${main==='batt'?-90:main==='main'?145:0} 108 152)`);
+    one<SVGLineElement>('[data-flcs-lever]')!.setAttribute('transform',flcsHeld?'rotate(180 305 303)':'');
+    one<SVGLineElement>('[data-jfs-lever]')!.setAttribute('transform',jfsStarted?'rotate(95 340 175)':'');
+    one<SVGRectElement>('[data-throttle-grip]')!.setAttribute('transform',throttleIdle?'translate(0 -106)':'');
+    const lit = (name:string, isLit:boolean) => all<SVGGElement>(`[data-lamp="${name}"]`).forEach(n=>n.classList.toggle('lit',isLit));
+    lit('flcs-rly',main!=='off'&&!flcsHeld&&!jfsStarted);
+    lit('flcs-pmg',flcsHeld||jfsStarted);
+    lit('to-flcs',flcsHeld||jfsStarted);
+    lit('jfs-run',jfsStarted&&!throttleIdle);
+    all<SVGGElement>('[data-flcs-channel]').forEach(n=>n.classList.toggle('lit',flcsHeld));
+    // EPU GEN/PMG lights deliberately remain OFF; don't claim simulated fault logic.
+    const message = id==='flcs-test'?'Click the FLCS PWR TEST switch to hold it at TEST.':
+      id==='flcs-release'?'Click the switch again to release it to NORM.':
+      id==='battery'?'Select BATT directly on the electrical panel.':
+      id==='main-power'?'Select MAIN PWR directly on the electrical panel.':
+      id==='jfs'?'Click the JFS control to select START 2.':
+      id==='throttle'?'Click the throttle to cross the idle detent.':
+      id==='epu-check'?'Click the EPU indicator area to confirm both lights are OFF.':
+      'Observe the relevant indication and confirm the step.';
+    feedback.textContent = message;
+  }
+  function render() {
+    cancelAnimationFrame(frame);
+    const id=steps[step].dataset.stepId || '';
+    steps.forEach((el,i)=>el.hidden=i!==step);
+    controls.hidden=false;
+    progress.textContent=`Step ${step+1} of ${steps.length}`;
+    previous.disabled=step===0;
+    const needsClick=Boolean(actions[id]);
+    confirm.hidden=!confirmations.has(id);
+    confirm.disabled=completed.has(id);
+    next.disabled=(needsClick||confirmations.has(id))&&!completed.has(id);
+    next.textContent=step===steps.length-1?'Finish review':'Next step';
+    if(step===steps.length-1)next.disabled=true;
+    updatePanels();
+    animateEngine();
+    information.textContent=next.disabled?'Use the highlighted control or confirm the observed indication to continue.':'Action acknowledged. Continue to the next step.';
+  }
+  function select(control:string) {
+    const id=steps[step].dataset.stepId || '';
+    if(control!==actions[id])return;
+    if(control==='main-batt'){main='batt';completed.add(id);}
+    if(control==='main-main'){main='main';completed.add(id);}
+    if(control==='flcs-test'){
+      if(id==='flcs-test'&&!flcsHeld){flcsHeld=true;completed.add(id);}
+      else if(id==='flcs-release'&&flcsHeld){flcsHeld=false;completed.add(id);}
+    }
+    if(control==='epu-check')completed.add(id);
+    if(control==='jfs-start2'){jfsStarted=true;completed.add(id);}
+    if(control==='throttle-idle'){throttleIdle=true;completed.add(id);}
+    render();
+  }
+  all<SVGGElement>('[data-control]').forEach(el=>{
+    el.addEventListener('click',()=>select(el.dataset.control || ''));
+    el.addEventListener('keydown',evt=>{
+      if(evt.key==='Enter'||evt.key===' '){evt.preventDefault();select(el.dataset.control || '');}
+    });
+  });
+  confirm.addEventListener('click',()=>{completed.add(steps[step].dataset.stepId||'');render();});
+  previous.addEventListener('click',()=>{step=Math.max(0,step-1);render();});
+  next.addEventListener('click',()=>{
+    if(next.disabled)return;
+    step=Math.min(steps.length-1,step+1);render();
+  });
+  // Turn off the enhanced navigation if required controls are missing:
+  // the full static step list remains readable without JavaScript.
+  render();
 }
 </script>
 <style>
