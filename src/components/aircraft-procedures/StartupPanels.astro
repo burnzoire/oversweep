@@ -69,26 +69,55 @@ const jfsMounts = [dzus(100,54),dzus(404,54),dzus(100,792),dzus(404,792)];
       <path d="M88 36 H416 Q426 36 426 46 V622 Q426 634 414 634 H90 Q78 634 78 622 V48 Q78 36 88 36Z" class="plate"/>
       {testMounts.map(m=><g transform={`translate(${m.x} ${m.y})`} class="dzus"><circle r={m.r+3}/><circle r={m.r-1}/><path d="M-6 -6 L6 6"/></g>)}
       <text x="252" y="27" class="panel-header">TEST · LEFT CONSOLE</text>
-      <text x="152" y="104" class="legend">FIRE &amp; OHEAT</text><text x="152" y="120" class="legend">DETECT</text><circle cx="152" cy="155" r="18" class="push"/>
-      <text x="347" y="104" class="legend">MAL &amp; IND</text><text x="347" y="120" class="legend">LTS</text><circle cx="347" cy="155" r="18" class="push"/>
-      <text x="153" y="222" class="legend">OBOGS BIT</text>
-      <circle cx="153" cy="268" r="19" class="switch-bezel"/><path d="M153 267 v-24" class="lever-small"/>
-      <text x="347" y="222" class="legend">PROBE HEAT</text>
-      <circle cx="347" cy="268" r="19" class="switch-bezel"/><path d="M347 267 v27" class="lever-small"/>
-      <text x="147" y="350" class="legend">EPU / GEN</text>
-      <circle cx="147" cy="391" r="19" class="switch-bezel"/><path d="M147 391 v-23" class="lever-small"/>
-      <text x="329" y="350" class="legend">FLCS PWR</text>
-      {['A','B','C','D'].map((n,i)=><g data-flcs-channel={n}><rect x={253+i*38} y="363" width="34" height="36" class="lamp"/><text x={270+i*38} y="387" class="lamp-text">{n}</text></g>)}
-      <text x="248" y="462" class="legend">FLCS PWR TEST</text>
-      <text x="145" y="506" class="legend">TEST</text>
-      <text x="341" y="506" class="legend">NORM</text>
-      <text x="341" y="583" class="legend">MAINT</text>
-      <g data-control="flcs-test" role="button" tabindex="0" class="clickable" aria-label="Hold or release FLCS PWR TEST switch" aria-pressed="false">
-        <rect x="118" y="474" width="279" height="119" rx="3" class="hit"/>
-        <circle cx="245" cy="535" r="24" class="switch-bezel"/>
-        <line data-flcs-lever x1="245" y1="535" x2="280" y2="535" class="lever"/>
-        <circle cx="245" cy="535" r="6" class="pivot"/>
+      {/* Layout follows the single-seat F-16C TEST plate: three across the
+           upper row, PROBE HEAT / EPU-GEN / FLCS PWR at mid-height,
+           and FLCS PWR TEST at the lower right. */}
+      <text x="151" y="99" class="legend">FIRE &amp;</text>
+      <text x="151" y="114" class="legend">OHEAT DETECT</text>
+      <circle cx="151" cy="161" r="24" class="push"/>
+      <text x="250" y="99" class="legend">OBOGS</text>
+      <text x="250" y="114" class="legend">BIT</text>
+      <text x="250" y="202" class="small">OFF</text>
+      <circle cx="250" cy="161" r="22" class="switch-bezel"/>
+      <path d="M250 161 v-20" class="lever-small"/>
+      <text x="350" y="99" class="legend">MAL &amp;</text>
+      <text x="350" y="114" class="legend">IND LTS</text>
+      <circle cx="350" cy="161" r="24" class="push"/>
+      <g class="captive-screw" transform="translate(145 220)"><circle r="8"/><path d="M-5 -5 L5 5"/></g>
+      <g class="captive-screw" transform="translate(296 220)"><circle r="8"/><path d="M-5 -5 L5 5"/></g>
+      <text x="148" y="281" class="legend">PROBE</text>
+      <text x="148" y="296" class="legend">HEAT</text>
+      <circle cx="148" cy="341" r="22" class="switch-bezel"/>
+      <path d="M148 341 l-21 -15" class="lever-small"/>
+      <text x="131" y="383" class="small">TEST</text>
+      <text x="228" y="281" class="legend">EPU/GEN</text>
+      <circle cx="228" cy="341" r="22" class="switch-bezel"/>
+      <path d="M228 341 l-20 -12" class="lever-small"/>
+      <text x="225" y="382" class="small">OFF</text>
+      <path d="M293 258 V560" class="rule"/>
+      <text x="355" y="270" class="legend">FLCS</text>
+      <text x="355" y="286" class="legend">PWR</text>
+      <text x="349" y="307" class="small">L | R</text>
+      <text x="410" y="349" class="small" transform="rotate(90 410 349)">CHAN 1 2</text>
+      <path d="M314 318 H396 V398 H314 Z" class="recess"/>
+      {[
+        {id:'C',x:319,y:325},{id:'A',x:358,y:325},
+        {id:'D',x:319,y:363},{id:'B',x:358,y:363}
+      ].map(c=><g data-flcs-channel={c.id}>
+        <rect x={c.x} y={c.y} width="33" height="32" class="lamp"/>
+        <text x={c.x+16.5} y={c.y+22} class="lamp-text">{c.id}</text>
+      </g>)}
+      <text x="325" y="441" class="legend">TEST</text>
+      <text x="412" y="487" class="legend">NORM</text>
+      <text x="348" y="553" class="legend">MAINT</text>
+      <g data-control="flcs-test" role="button" tabindex="0" class="clickable"
+        aria-label="Hold or release FLCS PWR TEST switch" aria-pressed="false">
+        <rect x="298" y="429" width="124" height="135" rx="3" class="hit"/>
+        <circle cx="352" cy="485" r="25" class="switch-bezel"/>
+        <line data-flcs-lever x1="352" y1="485" x2="385" y2="485" class="lever"/>
+        <circle cx="352" cy="485" r="6" class="pivot"/>
       </g>
+      <g class="captive-screw" transform="translate(396 574)"><circle r="8"/><path d="M-5 -5 L5 5"/></g>
       <text x="63" y="342" transform="rotate(-90 63 342)" class="side-label">T E S T</text>
     </svg>
     <p class="panel-note">All seven TEST panel functions and the three FLCS PWR TEST markings are shown. The physical outline follows the approximate 75.60 × 145.50 mm panel dimensions; subcomponent positions remain visually sourced, not dimensionally surveyed.</p>
