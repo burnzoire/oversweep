@@ -34,15 +34,25 @@ try {
   await page.locator('[data-procedure] [data-step]:visible').first().waitFor();
   if (!(await page.title()).includes('F-16C')) throw Error('Unexpected review page title');
   await page.screenshot({ path: 'review-screenshots/f16-start-desktop.png', fullPage: true });
+  // Full-resolution crops permit reviewers to count fasteners and inspect legends,
+  // rather than judging tiny drawings embedded in full-page screenshots.
+  async function capturePanel(panel, filename) {
+    const svg = page.locator(`[data-panel="${panel}"] svg`);
+    await svg.evaluate(el => { el.style.width = '680px'; el.style.maxWidth='none'; el.style.maxHeight='none'; });
+    await svg.screenshot({ path:`review-screenshots/${filename}.png` });
+    await svg.evaluate(el => { el.style.width=''; el.style.maxWidth=''; el.style.maxHeight=''; });
+  }
 
   // Exercise the actual SVG controls; Next must be blocked until each action.
   if (!(await page.locator('[data-next]').isDisabled())) throw Error('Battery action is not gated');
   await page.locator('[data-control="main-batt"]').click();
   if (await page.locator('[data-next]').isDisabled()) throw Error('Battery switch did not complete step');
   await page.screenshot({ path: 'review-screenshots/f16-battery-selected-desktop.png', fullPage: true });
+  await capturePanel('elec','panel-elec-detail');
   await page.locator('[data-next]').click(); // FLCS test
   await page.locator('[data-control="flcs-test"]').click();
   await page.screenshot({ path: 'review-screenshots/f16-flcs-test-desktop.png', fullPage: true });
+  await capturePanel('test','panel-test-detail');
   await page.locator('[data-next]').click(); // FLCS release
   await page.locator('[data-control="flcs-test"]').click();
   await page.locator('[data-next]').click(); // MAIN PWR
@@ -54,6 +64,7 @@ try {
   await page.locator('[data-next]').click(); // JFS
   await page.locator('[data-control="jfs-start2"]').click();
   await page.screenshot({ path: 'review-screenshots/f16-jfs-selected-desktop.png', fullPage: true });
+  await capturePanel('jfs','panel-jfs-detail');
   await page.locator('[data-next]').click(); // 20 percent
   await page.waitForTimeout(1400);
   if (!(await page.locator('[data-step="7"]').isVisible())) throw Error('RPM 20% step not reached');
@@ -68,6 +79,9 @@ try {
   await page.locator('[data-next]').click(); // idle
   await page.waitForTimeout(1400);
   await page.screenshot({ path: 'review-screenshots/f16-idle-desktop.png', fullPage: true });
+  const instrument = page.locator('[data-engine-reference] svg');
+  await instrument.evaluate(el => {el.style.width='540px';el.style.maxWidth='none'});
+  await instrument.screenshot({path:'review-screenshots/panel-engine-stack-detail.png'});
   await page.setViewportSize({ width: 390, height: 844 });
   for (let i=10;i>0;i--) await page.locator('[data-prev]').click();
   await page.screenshot({ path: 'review-screenshots/f16-start-mobile.png', fullPage: true });
