@@ -28,6 +28,33 @@ jobs:
         with:
           name: pr-262-browser-screenshots
           path: review-screenshots/*.png
+      - name: Fetch reference images for private geometry audit
+        shell: bash
+        run: |
+          mkdir -p reference-inputs
+          fetch() {
+            if ! curl --location --silent --show-error --fail --retry 2 --max-time 20 "$2" --output "reference-inputs/$1"; then
+              rm -f "reference-inputs/$1"
+              echo "Reference unavailable: $1"
+            fi
+          }
+          fetch elec-layout.gif https://www.xflight.de/original/parts/left_console/elec/elec_01.gif
+          fetch elec-photo.jpg https://www.xflight.de/simulator/pictures/detail/sim_124.jpg
+          fetch test-layout.gif https://www.xflight.de/original/parts/left_console/test/test.gif
+          fetch test-photo.jpg https://www.xflight.de/original/parts/left_console/test/test_03.jpg
+          fetch jfs-photo.jpg https://www.xflight.de/original/parts/left_console/engstart/engstart_03.jpg
+          fetch jfs-layout.gif https://www.xflight.de/original/parts/left_console/engstart/engstart_02.gif
+          fetch dcs-console.jpg https://cypher1778.github.io/DCS_Wiki/f-16c/images/dcs14-left_console.jpg
+          fetch dcs-caution.jpg https://cypher1778.github.io/DCS_Wiki/f-16c/images/ss17-caution_panel.jpg
+          fetch dcs-engine.jpg https://wiki.hoggitworld.com/images/1/10/ENG_Instruments.jpg
+          file reference-inputs/* || true
+      - name: Upload reference images as temporary analysis artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pr-262-temporary-reference-inputs
+          path: reference-inputs/*
+          retention-days: 1
+          if-no-files-found: warn
       - name: Commit captures only to temporary branch
         run: |
           git config user.name "github-actions[bot]"
