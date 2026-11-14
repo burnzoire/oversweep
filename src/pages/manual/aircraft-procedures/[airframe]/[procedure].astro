@@ -1,0 +1,108 @@
+---
+import SiteLayout from '../../../../layouts/SiteLayout.astro';
+import EngineInstrument from '../../../../components/aircraft-procedures/EngineInstrument.astro';
+import {visibleProcedures, procedureRoute, sourceUrl, type AircraftProcedure} from '../../../../data/aircraft-procedures';
+import {sitePath} from '../../../../lib/paths';
+export function getStaticPaths() {
+  return visibleProcedures.map(p=>({params:{airframe:p.airframe,procedure:p.slug},props:{guide:p}}));
+}
+const {guide} = Astro.props as {guide:AircraftProcedure};
+const steps = guide.steps;
+---
+<SiteLayout title={guide.title} activeSection="manual" activeSubject="aircraft-procedures"
+ empty={true} description="Review-only illustrated DCS F-16C cold-start engine procedure; not yet validated in the simulator."
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Aircraft Procedures',href:sitePath('manual/aircraft-procedures/')},{label:'F-16C',href:sitePath('manual/aircraft-procedures/f-16c/')},{label:'Engine Start'}]}>
+  <section class="status-panel">
+    <p><strong>Review-only prototype — not validated in DCS.</strong> DCS F-16C Block 50; source: Eagle Dynamics F-16C Early Access Guide (23 March 2026), pp. 134–135. Exact behaviour and simulator version require a local test. This covers engine start; the remaining after-start setup, INS alignment and taxi checks are not yet included.</p>
+    <p><strong>Initial state:</strong> cold-and-dark F-16C on the ground, throttle at cutoff. Ground crew and area must be clear before cranking. The simulation beside the steps is educational, not connected to DCS.</p>
+  </section>
+  <div class="procedure-workspace" data-procedure>
+    <div class="procedure-guide">
+      <p class="procedure-progress" role="status" aria-live="polite" data-progress>Review the steps below; JavaScript enables step navigation.</p>
+      <ol class="procedure-steps">
+        {steps.map((s,i)=><li class="procedure-step" data-step={i} data-visual={s.visual ?? ''}>
+          <div class="procedure-kicker">{s.section} · {String(i+1).padStart(2,'0')} / {steps.length}</div>
+          <h2>{s.title}</h2>
+          <p><strong>Control</strong> · {s.control}</p>
+          <p class="procedure-action"><strong>Do</strong> · {s.action}</p>
+          <p><strong>Expect</strong> · {s.expect}</p>
+          {s.caution && <p class="procedure-warning"><strong>Note</strong> · {s.caution}</p>}
+          <p class="procedure-cite">Evidence: {s.evidence}</p>
+        </li>)}
+      </ol>
+      <div class="procedure-controls" hidden data-controls>
+        <button type="button" data-prev>Previous</button>
+        <button type="button" data-next>Next step</button>
+      </div>
+    </div>
+    <aside class="procedure-visual" aria-label="Illustrated instrument reference">
+      <h2>Instrument reference</h2>
+      <EngineInstrument />
+      <p data-indication aria-live="polite">Instrument animation is illustrative. Follow the indication described in the step.</p>
+      <p class="procedure-cite">The diagram intentionally omits panel textures and unrelated controls. It is not a substitute for confirming the real cockpit state.</p>
+    </aside>
+  </div>
+  <h2>Source and verification</h2>
+  <p><a href={sourceUrl}>Eagle Dynamics — DCS F-16C Early Access Guide (23 March 2026)</a>, “Before Engine Start” and “Engine Start”, pp. 134–135. The guide is independently worded and uses original schematic artwork. No Chuck's Guide illustration or text is reproduced.</p>
+  <p><strong>Outstanding:</strong> capture a DCS session from cold-and-dark; validate step ordering, exact light names, timing, RPM and FTIT movement; complete after-start setup, INS alignment and avionics checks before publishing this as a complete cold-start guide.</p>
+</SiteLayout>
+<script>
+const root = document.querySelector<HTMLElement>('[data-procedure]');
+if(root){
+ const steps=[...root.querySelectorAll<HTMLElement>('[data-step]')],prev=root.querySelector<HTMLButtonElement>('[data-prev]')!,next=root.querySelector<HTMLButtonElement>('[data-next]')!,controls=root.querySelector<HTMLElement>('[data-controls]')!;
+ const progress=root.querySelector<HTMLElement>('[data-progress]')!,info=root.querySelector<HTMLElement>('[data-indication]')!;
+ const rpm=root.querySelector<SVGLineElement>('[data-needle="rpm"]')!,ftit=root.querySelector<SVGLineElement>('[data-needle="ftit"]')!;
+ const rpmValue=root.querySelector<SVGTextElement>('[data-value="rpm"]')!,ftitValue=root.querySelector<SVGTextElement>('[data-value="ftit"]')!,signal=root.querySelector<SVGTextElement>('[data-signal]')!;
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+ let index=0,frame=0;
+ function renderGauges(r:number,t:number,msg:string) {
+   const needle=(node:SVGLineElement,value:number,max:number,x:number)=>node.setAttribute('transform',`rotate(${-140+Math.min(1,value/max)*280} ${x} 118)`);
+   needle(rpm,r,100,124);needle(ftit,t,1000,337);
+   rpmValue.textContent=r.toFixed(0);ftitValue.textContent=t.toFixed(0);signal.textContent=msg;
+ }
+ function render(){
+  cancelAnimationFrame(frame);
+  steps.forEach((s,i)=>{s.hidden=i!==index});
+  controls.hidden=false;
+  prev.disabled=index===0;next.textContent=index===steps.length-1?'Finish review':'Next step';
+  next.disabled=index===steps.length-1;
+  progress.textContent=`Step ${index+1} of ${steps.length}`;
+  const visual=steps[index].dataset.visual;
+  const target = visual==='jfs'||visual==='rpm20'?[20,0,'JFS RUN']:visual==='idle'?[55,700,'LIGHT-OFF']:visual==='engine'?[60,650,'ENGINE OFF']:visual==='stable'?[70,620,'IDLE CHECK']:[0,0,'ENGINE OFF'];
+  if(reduced.matches){renderGauges(target[0] as number,target[1] as number,target[2] as string);}
+  else {
+    const start=performance.now(),duration=1200;
+    const animate=(now:number)=>{
+      const k=Math.min(1,(now-start)/duration);
+      const eased=k*k*(3-2*k);
+      renderGauges((target[0] as number)*eased,(target[1] as number)*eased,target[2] as string);
+      if(k<1)frame=requestAnimationFrame(animate);
+    };
+    frame=requestAnimationFrame(animate);
+  }
+  info.textContent=visual==='rpm20'?'Wait for at least 20% RPM before moving the throttle. Animation timing is illustrative.':visual==='stable'?'Read the numerical idle limits in the step; the display values are an illustrative example.':'This drawing shows a representative engine state, not live DCS data.';
+ }
+ prev.addEventListener('click',()=>{index=Math.max(0,index-1);render()});
+ next.addEventListener('click',()=>{index=Math.min(steps.length-1,index+1);render()});
+ render();
+}
+</script>
+<style>
+.procedure-workspace{display:grid;gap:1.5rem;margin-top:1.5rem;align-items:start}
+.procedure-progress{font-weight:700}
+.procedure-steps{padding:0;margin:0;list-style:none}
+.procedure-step{border:1px solid var(--color-border);border-top:4px solid var(--color-ink);padding:1.25rem;margin:0}
+.procedure-step[hidden],.procedure-controls[hidden]{display:none}
+.procedure-step h2{margin:.25rem 0 .8rem}
+.procedure-step p{margin:.65rem 0}
+.procedure-kicker{font-size:.8rem;color:var(--color-muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.procedure-action{padding:.7rem;background:var(--color-surface)}
+.procedure-warning{border-left:4px solid #915300;padding-left:.7rem}
+.procedure-cite{font-size:.85rem;color:var(--color-muted)}
+.procedure-controls{display:flex;gap:.75rem;margin-top:1rem}
+.procedure-controls button{min-height:2.75rem;padding:.45rem 1rem;border:1px solid var(--color-ink);background:#fff;color:var(--color-ink);cursor:pointer;font:inherit}
+.procedure-controls button:disabled{opacity:.4;cursor:default}
+.procedure-visual{border:1px solid var(--color-border);padding:1rem}
+.procedure-visual h2{margin-top:0}
+@media(min-width:58rem){.procedure-workspace{grid-template-columns:minmax(0,1fr) minmax(18rem,1fr)}.procedure-visual{position:sticky;top:1rem}}
+</style>
