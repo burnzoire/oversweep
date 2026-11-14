@@ -47,3 +47,17 @@ For every panel asset: record the simulator/build/variant, independent image ref
 The current official F-16C manual (23 March 2026) locates the panels under **Instrument Panel** (pp. 44–53) and **Left Console** (pp. 61–73). Engine Instruments are described around p. 48 and ENG & JET START around p. 62. Manual text alone does **not** establish enough geometric detail to author exact SVG paths: the actual images or independently captured DCS references must be visually examined. Verification of both artistic geometry and animation behaviour is outstanding.
 
 **New visual acceptance gate:** No exact panel drawing → no completed illustrated procedure. This does not prevent a review-only implementation branch from remaining available for iteration.
+
+## Interactive prototype pass (14 November 2026)
+
+The following SVG control targets are wired to the procedure state machine and gate navigation until acted on:
+
+- ELEC panel: MAIN PWR OFF → BATT → MAIN PWR (clickable positions and updating electrical annunciators);
+- TEST panel: FLCS PWR TEST → TEST, held across the indication step, then release to NORM;
+- EPU lamp group: acknowledge both EPU GEN/PMG indications as off;
+- ENG & JET START: JFS START 2 with RUN lamp indication;
+- throttle: cutoff → IDLE detent after the illustrated 20% RPM gate.
+
+Keyboard Enter/Space is supported for SVG controls. The procedure still renders all text without JavaScript. A separate temporary-branch Chromium capture checks switch interactions and disabled Next-step gating.
+
+**Fidelity qualification:** These are original line-art *working prototypes*. The photographic references establish basic panel relationships and labels, but the panel perimeter, coordinates, the detail of the FLCS TEST panel and the throttle geometry have **not** been independently checked against a current DCS screenshot at matching camera angle. **Exact-outline requirement remains open**; the visual signoff blocker above is **not lifted**. The EPU confirmation is a learning interaction, not a simulated EPU fault detector.
