@@ -145,7 +145,7 @@ if (root) {
     lever.setAttribute('transform',`rotate(${main==='batt'?90:main==='main'?0:180} 187 168)`);
     one<SVGGElement>('[data-flcs-lever]')!.setAttribute('transform',flcsHeld?'rotate(-90 450 779)':'');
     one<SVGGElement>('[data-jfs-lever]')!.setAttribute('transform',jfsStarted?'rotate(120 277 154)':'');
-    one<SVGRectElement>('[data-throttle-grip]')!.setAttribute('transform',throttleIdle?'translate(0 -106)':'');
+    one<SVGGElement>('[data-throttle-grip]')!.setAttribute('transform', throttleIdle ? 'rotate(-18 198 354)' : '');
     const lit = (name:string, isLit:boolean) => all<SVGGElement>(`[data-lamp="${name}"]`).forEach(n=>n.classList.toggle('lit',isLit));
     lit('flcs-rly',main!=='off'&&!flcsHeld&&!jfsStarted);
     lit('flcs-pmg',flcsHeld||jfsStarted);
