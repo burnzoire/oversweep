@@ -27,56 +27,39 @@ test('instrument artwork and procedural content remain separate', async () => {
   assert.doesNotMatch(svg, /<image\b|href="https?:/);
 });
 
-test('panel controls are selectable SVG elements with distinct locations', async () => {
+test('panel controls are native buttons with distinct locations', async () => {
   const svg = await read('src/components/aircraft-procedures/StartupPanels.astro');
   const page = await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
   for (const key of ['flcs-test','jfs-start2','throttle-idle']) {
     assert.match(svg, new RegExp('data-control="' + key + '"'));
     assert.match(page, new RegExp("'" + key + "'"));
   }
-  assert.match(svg,/role="button" tabindex="0"/);
-  assert.match(page,/evt.key==='Enter'/);
+  assert.match(svg,/<button type="button"[^>]*data-control=/);
   assert.match(page,/next.disabled=/);
   assert.match(page,/completed.add\(id\)/);
 });
 
-test('panel redraw separates the physical units, includes documented proportions and DZUS detailing', async () => {
+test('panel redraw uses separate artwork and movable controls', async () => {
   const svg = await read('src/components/aircraft-procedures/StartupPanels.astro');
   for (const panel of ['elec','test','jfs','throttle'])
     assert.match(svg, new RegExp('data-panel="' + panel + '"'));
-  for (const id of ['testMounts','jfsMounts','class="dzus"'])
-    assert.ok(svg.includes(id), 'missing ' + id);
-  assert.ok(svg.includes('75.60×93.60 mm'));
-  assert.ok(svg.includes('75.60×145.50 mm'));
-  assert.ok(svg.includes('75.60×200'));
+  for (const panel of ['test', 'jfs', 'caution', 'eyebrow']) {
+    assert.ok(svg.includes(`f16-${panel}.webp`));
+  }
   assert.match(svg, /data-jfs-lever/);
   assert.match(svg, /data-flcs-lever/);
   assert.match(svg, /class="toggle-up"/);
   assert.match(svg, /class="toggle-down"/);
-  assert.match(svg, /dimensionally surveyed/i);
 });
 
-test('ELEC and TEST layouts preserve photo-supported lamp groupings and test-control order', async () => {
- const svg = await read('src/components/aircraft-procedures/StartupPanels.astro');
- assert.match(svg,/data-lamp="flcs-pmg"/);
- assert.match(svg,/data-lamp="flcs-rly"/);
- assert.match(svg,/const gauges|data-flcs-channel/);
- assert.match(svg,/id:'C',x:422,y:478/);
- assert.match(svg,/id:'B',x:486,y:543/);
- assert.match(svg,/Hold FLCS PWR TEST at TEST/);
- const page = await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
- assert.ok(page.includes('rotate(-90 450 779)'));
-});
-
-test('source-coordinate control pivots and screw arrays are explicit', async () => {
- const component=await read('src/components/aircraft-procedures/StartupPanels.astro');
- const page=await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
- for(const value of ['viewBox="0 0 607 1162"','viewBox="0 0 420 1100"'])
-   assert.ok(component.includes(value),value);
- for(const value of ['dzus(103,45','dzus(31,79'])
-   assert.ok(component.includes(value),value);
- assert.ok(page.includes('rotate(120 277 154)'));
- assert.ok(page.includes('rotate(-90 450 779)'));
- assert.match(page, /moveMain\(1\)/);
- assert.match(page, /moveMain\(-1\)/);
+test('raster panels expose independent annunciators and control overlays', async () => {
+  const panels = await read('src/components/aircraft-procedures/StartupPanels.astro');
+  const instruments = await read('src/components/aircraft-procedures/EngineInstrument.astro');
+  for (const lamp of ['flcs-pmg', 'flcs-rly', 'jfs-run', 'warn-sec', 'warn-engine']) {
+    assert.ok(panels.includes(`data-lamp="${lamp}"`));
+  }
+  for (const channel of ['A', 'B', 'C', 'D']) {
+    assert.ok(panels.includes(`data-flcs-channel="${channel}"`));
+  }
+  assert.match(instruments, /f16-engine\.webp/);
 });

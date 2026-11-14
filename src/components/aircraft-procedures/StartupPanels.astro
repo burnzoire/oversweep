@@ -1,16 +1,10 @@
 ---
+import eyebrowArt from "../../assets/aircraft-procedures/f16-eyebrow.webp";
+import cautionArt from "../../assets/aircraft-procedures/f16-caution.webp";
+import jfsArt from "../../assets/aircraft-procedures/f16-jfs.webp";
+import testArt from "../../assets/aircraft-procedures/f16-test.webp";
 import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
-/**
- * Original, monochrome vector drafts, using panel-local units mapped from
- * published F-16C Block 50 references. The exterior dimensions are grounded in
- * xFlight's original-panel measurement table (ELEC 75.60×93.60 mm,
- * TEST ~75.60×145.50 mm, ENG & JET START ~75.60×200 mm).
- * Internal details are photo-referenced but NOT dimensionally surveyed.
- * They remain review-only pending DCS screenshot overlay and SME signoff.
- */
-const dzus = (x: number, y: number, r = 8) => ({x,y,r});
-const testMounts = [dzus(103,45,30),dzus(481,45,30),dzus(104,1118,30),dzus(481,1118,30)];
-const jfsMounts = [dzus(31,79,27),dzus(391,80,27),dzus(31,1020,27),dzus(390,1020,27)];
+// Raster line artwork referenced to the Eagle Dynamics F-16C guide (pp. 46, 59, 63, 64, 72).
 ---
 <div class="startup-panels" data-startup-panels>
 
@@ -34,213 +28,55 @@ const jfsMounts = [dzus(31,79,27),dzus(391,80,27),dzus(31,1020,27),dzus(390,1020
     <p class="panel-note">Redrawn from the DCS F-16C Early Access Guide, page 64. Fastener and control positions are approximate.</p>
   </div>
   <div class="startup-panel" data-panel="test" hidden>
-    <svg viewBox="0 0 607 1162" role="group" aria-label="Single-seat F-16C TEST plate with reference-aligned DZUS fasteners, upper pushbuttons, FLCS channel lights and test toggle">
-      <title>F-16C TEST plate — source-aligned single-seat panel layout</title>
-      <path d="M2 1 H606 V1160 H2Z" class="plate"/>
-      <path d="M2 92 H606 V1072 H2Z" class="inset-outline"/>
-      {testMounts.map(m=><g class="dzus" transform={`translate(${m.x} ${m.y})`}>
-        <circle r={m.r+12}/><circle r={m.r+5}/><path d={`M-${m.r-4} ${m.r-4} L${m.r-4} -${m.r-4}`}/>
-      </g>)}
-      {[[85,373],[400,374],[535,874]].map(([x,y])=><g class="captive-screw" transform={`translate(${x} ${y})`}><circle r="27"/><path d="M-17 -17 L17 17 M17 -17 L-17 17"/></g>)}
-      <text x="131" y="142" class="panel-large">FIRE &amp;</text>
-      <text x="131" y="175" class="panel-large">OHEAT DETECT</text>
-      <text x="305" y="142" class="panel-large">OBOGS</text>
-      <text x="305" y="175" class="panel-large">BIT</text>
-      <text x="485" y="142" class="panel-large">MAL &amp;</text>
-      <text x="485" y="175" class="panel-large">IND LTS</text>
-      <circle cx="129" cy="246" r="52" class="round-button"/><circle cx="129" cy="246" r="41" class="push"/>
-      <circle cx="485" cy="246" r="52" class="round-button"/><circle cx="485" cy="246" r="41" class="push"/>
-      <circle cx="305" cy="247" r="53" class="switch-bezel"/><circle cx="305" cy="247" r="40" class="bezel-inner"/>
-      <path d="M305 249 V276" class="lever-small"/>
-      <ellipse cx="305" cy="273" rx="23" ry="18" class="lever-grip"/>
-      <text x="305" y="338" class="panel-large">OFF</text>
-      <text x="34" y="273" class="panel-large">T</text><text x="34" y="313" class="panel-large">E</text>
-      <text x="34" y="353" class="panel-large">S</text><text x="34" y="393" class="panel-large">T</text>
-      <text x="92" y="460" class="panel-large">PROBE</text>
-      <text x="92" y="492" class="panel-large">HEAT</text>
-      <text x="288" y="479" class="panel-large">EPU/GEN</text>
-      <circle cx="86" cy="565" r="53" class="switch-bezel"/>
-      <path d="M86 561 L86 603" class="lever-small"/>
-      <circle cx="290" cy="565" r="53" class="switch-bezel"/>
-      <path d="M290 562 L291 606" class="lever-small"/>
-      <text x="87" y="665" class="panel-large">TEST</text>
-      <text x="292" y="666" class="panel-large">OFF</text>
-      <text x="185" y="572" class="panel-large">OFF</text>
-      <path d="M385 411 V877" class="rule"/>
-      <text x="480" y="383" class="panel-large">FLCS</text>
-      <text x="480" y="419" class="panel-large">PWR</text>
-      <text x="483" y="457" class="panel-large">L | R</text>
-      <text x="575" y="519" class="panel-small">CHAN</text>
-      <text x="575" y="546" class="panel-small">1</text><text x="575" y="584" class="panel-small">2</text>
-      <path d="M414 469 H556 V610 H414Z" class="recess"/>
-      {[
-        {id:'C',x:422,y:478},{id:'A',x:486,y:478},
-        {id:'D',x:422,y:543},{id:'B',x:486,y:543}
-      ].map(c=><g data-flcs-channel={c.id}><rect x={c.x} y={c.y} width="61" height="59" class="lamp"/><text x={c.x+30.5} y={c.y+37} class="panel-small">{c.id}</text></g>)}
-      <text x="450" y="720" class="panel-large">TEST</text>
-      <text x="551" y="802" class="panel-large">NORM</text>
-      <text x="448" y="876" class="panel-large">MAINT</text>
-      <g data-control="flcs-test" role="button" tabindex="0" class="clickable" aria-label="Hold FLCS PWR TEST at TEST or release to NORM">
-        <rect x="391" y="715" width="170" height="161" class="hit"/>
-        <circle cx="450" cy="779" r="53" class="switch-bezel"/><circle cx="450" cy="779" r="40" class="bezel-inner"/>
-        <g data-flcs-lever>
-          <path d="M450 779 L483 777 L489 791 L452 791Z" class="lever-body"/>
-          <ellipse cx="487" cy="786" rx="22" ry="15" class="lever-grip"/>
-        </g>
-        <circle cx="450" cy="779" r="7" class="pivot"/>
-        <circle cx="450" cy="779" r="62" class="target-ring"/>
-      </g>
-      <text x="442" y="969" class="panel-large">+</text>
-    </svg>
-    <p class="panel-note">Single-seat front-view TEST reference coordinate system (cropped first plate from a two-variant 442 × 420 px source). OBOGS BIT uses DCS wording instead of the older real-panel OXY QTY legend. Seven visible fasteners/retainers mapped.</p>
+    <div class="raster-panel raster-test">
+      <img src={testArt.src} width={testArt.width} height={testArt.height} alt="FLCS TEST panel" />
+      <span class="raster-lamp" data-flcs-channel="C" style="--x:68%;--y:38.6%;--w:9.5%;--h:6.7%" aria-hidden="true"></span>
+      <span class="raster-lamp" data-flcs-channel="A" style="--x:78.2%;--y:38.6%;--w:9.5%;--h:6.7%" aria-hidden="true"></span>
+      <span class="raster-lamp" data-flcs-channel="D" style="--x:68%;--y:45.6%;--w:9.5%;--h:7.2%" aria-hidden="true"></span>
+      <span class="raster-lamp" data-flcs-channel="B" style="--x:78.2%;--y:45.6%;--w:9.5%;--h:7.2%" aria-hidden="true"></span>
+      <button type="button" class="raster-switch" data-control="flcs-test" aria-label="Hold or release FLCS PWR TEST" style="--x:64.2%;--y:78.2%">
+        <svg viewBox="0 0 100 100" aria-hidden="true">
+          <g data-flcs-lever><path d="M47 40Q40 42 40 50Q40 58 47 60L75 62V38Z" fill="white" stroke="#171717" stroke-width="2"/><circle cx="75" cy="50" r="12" fill="white" stroke="#171717" stroke-width="2"/><circle cx="75" cy="50" r="8" fill="none" stroke="#171717"/></g>
+        </svg>
+      </button>
+    </div>
   </div>
   <div class="startup-panel" data-panel="jfs" hidden>
-    <svg viewBox="0 0 420 1100" role="group" aria-label="GE F110 ENG and JET START panel based on upright front-view technical reference with JFS start control">
-      <title>F-16C Block 50 · ENG &amp; JET START control plate</title>
-      <path d="M1 1 H418 V1099 H1Z" class="plate"/>
-      <path d="M62 2 H357 V96 H419 V986 H358 V1098 H62 V990 H1 V96 H62Z" class="inset-outline"/>
-      {jfsMounts.map(m=><g class="dzus" transform={`translate(${m.x} ${m.y})`}><circle r={m.r+10}/><circle r={m.r+4}/><path d={`M-${m.r-4} ${m.r-4} L${m.r-4} -${m.r-4}`}/></g>)}
-      {[[209,231],[329,556],[209,838]].map(([x,y])=><g class="captive-screw" transform={`translate(${x} ${y})`}><circle r="23"/><path d="M-14 -14 L14 14 M14 -14 L-14 14"/></g>)}
-      <text x="210" y="61" class="panel-large">JET FUEL</text>
-      <path d="M73 51 H160 M279 51 H348" class="rule"/>
-      <text x="118" y="106" class="panel-large">RUN</text>
-      <g data-lamp="jfs-run"><circle cx="119" cy="157" r="39" class="round-button"/><circle cx="119" cy="157" r="29" class="lamp"/></g>
-      <text x="275" y="104" class="panel-large">START 1</text>
-      <text x="346" y="160" class="panel-large">OFF</text>
-      <text x="276" y="216" class="panel-large">START 2</text>
-      <g data-control="jfs-start2" role="button" tabindex="0" class="clickable" aria-label="Select JFS START 2">
-        <circle cx="277" cy="154" r="41" class="hit"/>
-        <circle cx="277" cy="154" r="44" class="switch-bezel"/>
-        <circle cx="277" cy="154" r="31" class="bezel-inner"/>
-        <g data-jfs-lever><path d="M277 154 L318 148 L323 164 L281 167Z" class="lever-body"/><ellipse cx="318" cy="155" rx="21" ry="16" class="lever-grip"/></g>
-        <circle cx="277" cy="154" r="7" class="pivot"/>
-        <circle cx="277" cy="154" r="52" class="target-ring"/>
-      </g>
-      <path d="M74 274 H351" class="rule"/>
-      <text x="208" y="311" class="panel-large">ENG CONT</text>
-      <text x="208" y="339" class="panel-large">PRI</text>
-      <rect x="157" y="348" width="106" height="164" class="guard"/>
-      <path d="M167 360 H253 V495 H167Z" class="inset-outline"/>
-      <path d="M168 363 H252 V440 H231 V402 H192 V440 H169 Z" class="guard-inner"/>
-      <circle cx="209" cy="393" r="23" class="switch-bezel"/><path d="M209 393 V370" class="lever-small"/>
-      <text x="208" y="545" class="panel-large">SEC</text>
-      <text x="208" y="654" class="panel-large">AB RESET</text>
-      <circle cx="208" cy="703" r="39" class="switch-bezel"/><path d="M208 703 L244 708" class="lever-small"/>
-      <text x="304" y="712" class="panel-large">NORM</text>
-      <text x="207" y="774" class="panel-large">ENG DATA</text>
-      <text x="210" y="944" class="panel-large">MAX POWER</text>
-      <rect x="111" y="924" width="25" height="136" rx="12" class="guard"/>
-      <rect x="286" y="924" width="25" height="136" rx="12" class="guard"/>
-      <circle cx="209" cy="996" r="40" class="switch-bezel"/><path d="M209 996 V1037" class="lever-small"/>
-      <text x="208" y="1074" class="panel-large">OFF</text>
-      <text x="25" y="196" class="panel-small">E</text><text x="25" y="224" class="panel-small">N</text>
-      <text x="25" y="252" class="panel-small">G</text>
-      <text x="25" y="296" class="panel-small">&amp;</text>
-      <text x="25" y="338" class="panel-small">J</text><text x="25" y="366" class="panel-small">E</text>
-      <text x="25" y="394" class="panel-small">T</text>
-      <text x="25" y="448" class="panel-small">S</text><text x="25" y="476" class="panel-small">T</text>
-      <text x="25" y="504" class="panel-small">A</text><text x="25" y="532" class="panel-small">R</text>
-      <text x="25" y="560" class="panel-small">T</text>
-    </svg>
-    <p class="panel-note">Front-view GE F110 plate rotated upright from its technical drawing. Real visible control and retaining fastener centres, guard, RUN lens and mounting hardware are mapped to a 420 × 1100 source-coordinate view.</p>
+    <div class="raster-panel raster-jfs">
+      <img src={jfsArt.src} width={jfsArt.width} height={jfsArt.height} alt="ENG and JET START panel" />
+      <span class="raster-lamp" data-lamp="jfs-run" style="--x:25%;--y:11.5%;--w:7%;--h:3.8%" aria-hidden="true"></span>
+      <button type="button" class="raster-switch" data-control="jfs-start2" aria-label="Select JFS START 2" style="--x:57.2%;--y:12.8%">
+        <svg viewBox="0 0 100 100" aria-hidden="true">
+          <g data-jfs-lever><path d="M47 40Q40 42 40 50Q40 58 47 60L75 62V38Z" fill="white" stroke="#171717" stroke-width="2"/><circle cx="75" cy="50" r="12" fill="white" stroke="#171717" stroke-width="2"/><circle cx="75" cy="50" r="8" fill="none" stroke="#171717"/></g>
+        </svg>
+      </button>
+    </div>
   </div>
   <div class="startup-panel" data-panel="throttle" hidden>
     <button type="button" class="throttle-idle-button" data-control="throttle-idle" aria-pressed="false">Throttle Idle</button>
   </div>
 
   <div class="startup-panel" data-panel="caution" hidden>
-    <svg viewBox="0 0 570 540" role="img" aria-label="F-16C caution annunciator panel, four columns and eight rows in actual order">
-      <title>CAUTION LIGHT PANEL · 32 positions</title>
-      <path d="M33 17 H537 Q550 17 550 30 V505 Q550 523 532 523 H37 Q20 523 20 507 V31 Q20 17 33 17Z" class="plate"/>
-      {[[48,36],[522,36],[48,505],[522,505]].map(([x,y])=><g transform={`translate(${x} ${y})`} class="dzus"><circle r="11"/><circle r="7"/><path d="M-5 -5 L5 5"/></g>)}
-      {[
-        ['FLCS FAULT','ENGINE FAULT','AVIONICS FAULT','SEAT NOT ARMED'],
-        ['ELEC SYS','SEC','EQUIP HOT','NWS FAIL'],
-        ['PROBE HEAT','FUEL/OIL HOT','RADAR ALT','ANTI SKID'],
-        ['CADC','INLET ICING','IFF','HOOK'],
-        ['STORES CONFIG','OVERHEAT','NUCLEAR','OBOGS'],
-        ['AFT NOT ENGAGED','EEC','','CABIN PRESS'],
-        ['FWD FUEL LOW','BUC','',''],
-        ['AFT FUEL LOW','','','']
-      ].map((row,ri)=>row.map((label,ci)=>{
-        const x=43+ci*121, y=62+ri*55;
-        const lines=label.split(' ');
-        return <g data-lamp={label==='ELEC SYS'?'warn-elec':label==='SEC'?'warn-sec':label==='SEAT NOT ARMED'?'warn-seat':''}>
-          <rect x={x} y={y} width="117" height="47" rx="2" class="lamp" />
-          {label.length<13 ? <text x={x+58.5} y={y+29} class="lamp-text">{label||'—'}</text>
-            : <>
-                <text x={x+58.5} y={y+19} class="lamp-text">{lines.slice(0,Math.ceil(lines.length/2)).join(' ')}</text>
-                <text x={x+58.5} y={y+34} class="lamp-text">{lines.slice(Math.ceil(lines.length/2)).join(' ')}</text>
-              </>}
-        </g>;
-      }))}
-    </svg>
-    <p class="panel-note">Caution-light layout is the observed four-column/eight-row DCS arrangement; individual panel-edge and fastener coordinates await orthographic verification.</p>
+    <div class="raster-panel raster-caution">
+      <img src={cautionArt.src} width={cautionArt.width} height={cautionArt.height} alt="Caution annunciators" />
+      <span class="raster-lamp" data-lamp="warn-elec" style="--x:7.9%;--y:20.3%;--w:19.7%;--h:8%" aria-hidden="true"></span>
+      <span class="raster-lamp" data-lamp="warn-sec" style="--x:30%;--y:20.3%;--w:19%;--h:8%" aria-hidden="true"></span>
+      <span class="raster-lamp" data-lamp="warn-seat" style="--x:73%;--y:9.7%;--w:19%;--h:8%" aria-hidden="true"></span>
+    </div>
   </div>
   <div class="startup-panel" data-panel="eyebrow" hidden>
-    <svg viewBox="0 0 600 240" role="img" aria-label="F-16C right eyebrow split warning lights, ENGINE and HYD OIL PRESS">
-      <title>RIGHT EYEBROW · warning annunciators</title>
-      <path d="M29 19 H553 L579 64 V214 H40 L16 182 V41 Z" class="plate"/>
-      {[[31,40],[547,40],[42,195],[553,195]].map(([x,y])=><g transform={`translate(${x} ${y})`} class="dzus"><circle r="9"/><circle r="6"/><path d="M-4 -4 L4 4"/></g>)}
-      {[
-        ['ENG FIRE','ENGINE'],
-        ['HYD/OIL','PRESS'],
-        ['FLCS','DBU ON'],
-        ['TO/LDG','CONFIG']
-      ].map((pair,i)=>{
-        const x=49+i*131;
-        return <g>
-          <g data-lamp={i===1?'warn-hyd':''}><rect x={x} y="62" width="126" height="56" class="lamp"/><text x={x+63} y="94" class="lamp-text">{pair[0]}</text></g>
-          <g data-lamp={i===0?'warn-engine':i===1?'warn-hyd':''}><rect x={x} y="121" width="126" height="56" class="lamp"/><text x={x+63} y="154" class="lamp-text">{pair[1]}</text></g>
-        </g>;
-      })}
-      <text x="303" y="211" class="small">ENGINE AND HYD/OIL PRESS — RIGHT EYEBROW</text>
-    </svg>
-    <p class="panel-note">Right-eyebrow split indicators reproduced in their horizontal sequence. Exact housing geometry is awaiting DCS reference overlay.</p>
+    <div class="raster-panel raster-eyebrow">
+      <img src={eyebrowArt.src} width={eyebrowArt.width} height={eyebrowArt.height} alt="Right eyebrow warning annunciators" />
+      <span class="raster-lamp" data-lamp="warn-engine" style="--x:6.5%;--y:54%;--w:16%;--h:22%" aria-hidden="true"></span>
+      <span class="raster-lamp" data-lamp="warn-hyd" style="--x:24.6%;--y:25%;--w:16%;--h:22%" aria-hidden="true"></span>
+      <span class="raster-lamp" data-lamp="warn-hyd-bottom" style="--x:24.6%;--y:54%;--w:16%;--h:22%" aria-hidden="true"></span>
+    </div>
   </div>
   <div class="panel-feedback" data-panel-feedback aria-live="polite">Select the highlighted control to proceed.</div>
 </div>
 <style>
 .startup-panel[hidden]{display:none}
 .startup-panels svg{display:block;width:100%;max-width:100%;max-height:58rem;height:auto;background:white}
-.startup-panels .plate{fill:#fff;stroke:#171717;stroke-width:2}
-.startup-panels .panel-large{font:600 16px "Arial Narrow",system-ui,sans-serif;text-anchor:middle;fill:#222}
-.startup-panels .panel-small{font:600 12px "Arial Narrow",system-ui,sans-serif;text-anchor:middle;fill:#222}
-.startup-panels .inset-outline{fill:none;stroke:#555;stroke-width:2.2}
-.startup-panels .lever-body{fill:#f5f5f5;stroke:#252525;stroke-width:3;stroke-linejoin:round}
-.startup-panels .lever-grip{fill:#ddd;stroke:#333;stroke-width:2.5}
-.startup-panels .guard-inner{fill:#fff;stroke:#a52d27;stroke-width:2.5}
-.startup-panels .panel-header{font:700 12px system-ui,sans-serif;letter-spacing:1px;text-anchor:middle;fill:#444}
-.startup-panels .legend{font:600 12px system-ui,sans-serif;text-anchor:middle;fill:#222}
-.startup-panels .small{font:600 10px system-ui,sans-serif;text-anchor:middle;fill:#666}
-.startup-panels .side-label{font:700 14px system-ui,sans-serif;letter-spacing:3px;fill:#333;text-anchor:middle}
-.startup-panels .dzus circle:first-child{fill:#f6f6f6;stroke:#333;stroke-width:1.7}
-.startup-panels .dzus circle:nth-child(2){fill:none;stroke:#777;stroke-width:1.2}
-.startup-panels .dzus path{stroke:#333;stroke-width:2.2;stroke-linecap:round}
-.startup-panels .rule{fill:none;stroke:#333;stroke-width:1.3}
-.startup-panels .switch-bezel{fill:#f9f9f9;stroke:#222;stroke-width:2.8}
-.startup-panels .bezel-inner{fill:none;stroke:#777;stroke-width:1.2}
-.startup-panels .lever,.startup-panels .lever-small{fill:none;stroke:#181818;stroke-width:8;stroke-linecap:round}
-.startup-panels .lever-small{stroke-width:7}
-.startup-panels .pivot{fill:#fff;stroke:#222;stroke-width:2}
-.startup-panels .push{fill:#eee;stroke:#333;stroke-width:2}
-.startup-panels .lamp{fill:#f8f8f8;stroke:#333;stroke-width:2}
-.startup-panels .inner-lens{fill:#fff;stroke:#555;stroke-width:1}
-.startup-panels .lamp-text{font:600 11px system-ui,sans-serif;text-anchor:middle;fill:#333}
-.startup-panels .recess{fill:none;stroke:#333;stroke-width:2.2}
-.startup-panels .blank-lens{fill:#eee;stroke:#333;stroke-width:1.5}
-.startup-panels .captive-screw circle{stroke:#444;stroke-width:1.5;fill:#fafafa}
-.startup-panels .captive-screw path{stroke:#333;stroke-width:1.5}
-.startup-panels .guard{fill:#f9f9f9;stroke:#222;stroke-width:3}
-.startup-panels .control-fill{fill:#eee;stroke:#111;stroke-width:2}
-.startup-panels .hit{fill:#fff;fill-opacity:.01;stroke:transparent}
-.startup-panels .clickable{cursor:pointer;outline:none}
-.startup-panels .clickable:focus-visible .hit{stroke:#005fcc;stroke-width:4;fill:#dbeafb;fill-opacity:.35}
-.startup-panels .target-ring{fill:none;stroke:transparent;stroke-width:2;pointer-events:none}
-.startup-panels .clickable[data-active="true"] .target-ring{stroke:#9d6709;stroke-width:2;stroke-dasharray:5 4}
-.startup-panels [data-lamp].lit .lamp{fill:#ffe8b3;stroke:#855400}\n.startup-panels [data-lamp="jfs-run"].lit .lamp{fill:#c8e9cd;stroke:#246a35}
-.startup-panels [data-flcs-channel].lit .lamp{fill:#d9f1de;stroke:#236d36}
-.startup-panels [aria-pressed="true"] .target-ring{stroke:#9d6709;stroke-width:2}
 .startup-panels .panel-note{font-size:.83rem;color:var(--color-muted);margin:.45rem 0 .75rem}
 .startup-panels .panel-feedback{font-size:.88rem;font-weight:600;padding:.5rem;border-left:3px solid var(--color-ink);background:var(--color-surface)}
 /* SVG lever transforms are instantaneous. Transitioning the SVG line transform caused a visible detached-lever artefact in Chromium. */
@@ -287,4 +123,16 @@ const jfsMounts = [dzus(31,79,27),dzus(391,80,27),dzus(31,1020,27),dzus(390,1020
 .elec-art{max-width:440px;margin:auto}
 .elec-art .elec-lamp{position:absolute;left:var(--x);top:var(--y);width:var(--w);height:var(--h);pointer-events:none;border-radius:4px}
 .elec-art .elec-lamp.lit{background:#ffbd4266}
+
+.raster-panel{position:relative;margin:auto;max-width:440px}
+.raster-test,.raster-jfs{max-width:320px}
+.raster-panel img{width:100%;height:auto;display:block}
+.raster-lamp{position:absolute;left:var(--x);top:var(--y);width:var(--w);height:var(--h);pointer-events:none;border-radius:3px}
+.raster-lamp.lit{background:#ffb82c77}
+.raster-test .raster-lamp.lit,.raster-jfs .raster-lamp.lit{background:#45b87966}
+.raster-switch{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);width:22%;min-width:44px;aspect-ratio:1;border:0;border-radius:50%;background:transparent;padding:0;cursor:pointer}
+.raster-switch[data-active="true"]{outline:2px dashed #9d6709}
+.raster-switch svg{background:transparent;pointer-events:none}
+.raster-switch svg g{transition:transform .16s ease}
+@media(prefers-reduced-motion:reduce){.raster-switch svg g{transition:none}}
 </style>

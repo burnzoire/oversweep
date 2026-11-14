@@ -90,8 +90,8 @@ if (root) {
 
   function drawEngine(r: number, t: number, msg: string) {
     const angle = (v: number, max: number) => -140 + Math.min(1, v/max)*280;
-    rpm.setAttribute('transform', `rotate(${angle(r,110)} 245 508)`);
-    ftit.setAttribute('transform', `rotate(${angle(Math.max(0,t-200),1000)} 310 723)`);
+    rpm.setAttribute('transform', `translate(${rpm.dataset.pivot}) rotate(${angle(r,110)})`);
+    ftit.setAttribute('transform', `translate(${ftit.dataset.pivot}) rotate(${angle(Math.max(0,t-200),1000)})`);
     rpmValue.textContent = r.toFixed(0);
     ftitValue.textContent = t <= 0 ? '—' : t.toFixed(0);
     signal.textContent = msg;
@@ -100,8 +100,8 @@ if (root) {
     cancelAnimationFrame(frame);
     const id = steps[step].dataset.visual;
     const target = id === 'jfs'||id === 'rpm20' ? [20,0,'JFS RUN']
-      : id === 'idle' ? [55,700,'LIGHT-OFF']
-      : id === 'engine' ? [60,650,'ENGINE OFF']
+      : id === 'idle' ? (throttleIdle ? [55,700,'LIGHT-OFF'] : [20,0,'READY FOR IDLE'])
+      : id === 'engine' ? [60,650,'ENGINE WARNING OFF']
       : id === 'stable' ? [70,620,'IDLE CHECK']
       : [0,0,'ENGINE OFF'];
     if (reduced.matches) {
@@ -124,9 +124,11 @@ if (root) {
       id==='ground-ready'?'elec':'engine';
     const showTest = id==='flcs-test'||id==='flcs-release';
     const visible = new Set<string>([showTest?'test':panel]);
+    if (showTest || id==='jfs') visible.add('elec');
     if (id==='main-power') {visible.add('caution');visible.add('eyebrow');}
     if (id==='sec') visible.add('caution');
-    if (id==='generator') visible.add('eyebrow');
+    if (id==='generator' || id==='idle-check') visible.add('eyebrow');
+    if (id==='generator') visible.add('caution');
     all<HTMLElement>('[data-panel]').forEach(el=>{el.hidden=!visible.has(el.dataset.panel||'');});
     engineReference.hidden = panel !== 'engine' && panel !== 'throttle';
     const expected = actions[id] || '';
@@ -144,8 +146,8 @@ if (root) {
     });
     const elec = one<HTMLElement>(".elec-art")!;
     elec.dataset.mainState = main;
-    one<SVGGElement>('[data-flcs-lever]')!.setAttribute('transform',flcsHeld?'rotate(-90 450 779)':'');
-    one<SVGGElement>('[data-jfs-lever]')!.setAttribute('transform',jfsStarted?'rotate(120 277 154)':'');
+    one<SVGGElement>('[data-flcs-lever]')!.setAttribute('transform',flcsHeld?'rotate(-90 50 50)':'');
+    one<SVGGElement>('[data-jfs-lever]')!.setAttribute('transform',jfsStarted?'rotate(90 50 50)':'');
     const lit = (name:string, isLit:boolean) => all<SVGGElement>(`[data-lamp="${name}"]`).forEach(n=>n.classList.toggle('lit',isLit));
     lit('flcs-rly',main!=='off'&&!flcsHeld&&!jfsStarted);
     lit('flcs-pmg',flcsHeld||jfsStarted);
@@ -156,6 +158,7 @@ if (root) {
     lit('warn-sec',main==='main' && !engineRunning && id!=='sec' && !throttleIdle);
     lit('warn-engine',main==='main' && !engineRunning);
     lit('warn-hyd',main==='main' && id!=='idle-check');
+    lit('warn-hyd-bottom',main==='main' && id!=='idle-check');
     lit('warn-seat',engineRunning);
     all<SVGGElement>('[data-flcs-channel]').forEach(n=>n.classList.toggle('lit',flcsHeld));
     // EPU GEN/PMG lights deliberately remain OFF; don't claim simulated fault logic.
@@ -214,13 +217,8 @@ if (root) {
     if(control==='throttle-idle'){throttleIdle=true;completed.add(id);}
     render();
   }
-  all<HTMLElement | SVGGElement>('[data-control]').forEach(el=>{
-    el.addEventListener('click',()=>select(el.dataset.control || '', el));
-    if (el instanceof HTMLButtonElement) return;
-    el.addEventListener('keydown', (evt: Event) => {
-      if (!(evt instanceof KeyboardEvent)) return;
-      if(evt.key==='Enter'||evt.key===' '){evt.preventDefault();select(el.dataset.control || '', el);}
-    });
+  all<HTMLButtonElement>('button[data-control]').forEach(button => {
+    button.addEventListener('click', () => select(button.dataset.control || '', button));
   });
   function moveMain(direction: number) {
     const positions = ['off', 'batt', 'main'] as const;
