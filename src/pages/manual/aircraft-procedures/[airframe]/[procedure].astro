@@ -31,7 +31,7 @@ const steps = guide.steps;
           <p class="procedure-cite">Evidence: {s.evidence}</p>
         </li>)}
       </ol>
-      <h2 class="procedure-step" data-complete tabindex="-1" hidden>Startup complete</h2>
+      <h2 class="procedure-step" data-complete tabindex="-1" hidden>Engine start complete</h2>
       <div class="procedure-controls" hidden data-controls>
         <button type="button" data-confirm hidden>Confirm indication</button>
         <button type="button" data-prev>Previous</button>
@@ -44,7 +44,7 @@ const steps = guide.steps;
       <StartupPanels />
       <div data-engine-reference hidden><EngineInstrument /></div>
       <p data-indication aria-live="polite">Select the control named in the instructions. The panel responds to your input.</p>
-      <p class="procedure-cite">Clickable control geometry is an original technical drawing and is not yet dimensionally verified against DCS. The RPM/FTIT animation is a separate schematic prototype. Trainer timing is illustrative: 12 seconds to RUN, 8 seconds to 20% RPM, and 30 seconds to idle. SEC clearance and pressure recovery use illustrative events within those intervals. No live DCS telemetry.</p>
+      <p class="procedure-cite">Clickable control geometry is an original technical drawing and is not yet dimensionally verified against DCS. The RPM/FTIT animation is a separate schematic prototype. Trainer timing is illustrative: 12 seconds to RUN, 8 seconds to 20% RPM, and 30 seconds to idle. SEC clearance, generator transfer and pressure recovery use illustrative events within those intervals. No live DCS telemetry.</p>
     </aside>
   </div>
   <h2>Source and verification</h2>
@@ -90,6 +90,7 @@ if (root) {
   let frame = 0;
 
   let secCleared = false, pressureEstablished = false, cautionPending = false;
+  let mainGeneratorOnline = false;
   let displayedRpm = 0, displayedFtit = 0;
   function updateGlareShield(rpm: number) {
     const powered = main === 'main';
@@ -110,6 +111,7 @@ if (root) {
     all('[data-lamp="warn-seat"]').forEach(el => el.classList.toggle('lit', throttleIdle && r >= 60));
     all('[data-lamp="warn-sec"]').forEach(el => el.classList.toggle('lit', main === 'main' && !secCleared));
     updateGlareShield(r);
+    all('[data-lamp="warn-elec"]').forEach(el => el.classList.toggle('lit', main === 'main' && !mainGeneratorOnline));
     displayedFtit = t;
     // Angles sampled from the visible numeric labels on the review artwork.
     const dialAngle = (value: number, stops: readonly (readonly [number, number])[]) => {
@@ -145,12 +147,17 @@ if (root) {
     }
     const initialRpm = displayedRpm, initialFtit = displayedFtit;
     const start = performance.now();
+    let standbySince: number | undefined;
     const tick=(now:number)=>{
       const duration = onSettled ? (id === "idle" ? 30000 : 8000) : 1200;
       const k = Math.min(1,(now-start)/duration);
       const smooth = k*k*(3-2*k);
       if (id === 'jfs' && jfsRun && k >= .75) secCleared = true;
       if (id === 'idle' && throttleIdle && k >= .95) pressureEstablished = true;
+      if (id === 'idle' && throttleIdle && initialRpm + (Number(target[0]) - initialRpm) * smooth >= 60) {
+        standbySince ??= now;
+        if (now - standbySince >= 5000) mainGeneratorOnline = true;
+      }
       drawEngine(initialRpm+(Number(target[0])-initialRpm)*smooth,initialFtit+(Number(target[1])-initialFtit)*smooth,String(target[2]));
       if(k<1) frame=requestAnimationFrame(tick);
       else onSettled?.();
@@ -195,7 +202,7 @@ if (root) {
     lit('to-flcs',flcsHeld||jfsStarted);
     lit('jfs-run',jfsRun && displayedRpm < 55);
     const engineRunning = ['generator','idle-check'].includes(id);
-    lit('warn-elec',main==='main' && !engineRunning);
+    lit('warn-elec',main==='main' && !mainGeneratorOnline);
     lit('warn-sec',main==='main' && !engineRunning && !secCleared);
     lit('warn-seat',engineRunning);
     all<SVGGElement>('[data-flcs-channel]').forEach(n=>n.classList.toggle('lit',flcsHeld));
@@ -224,7 +231,10 @@ if (root) {
   }
 
   let finished = false;
+  const captureState = () => ({ main, flcsHeld, jfsStarted, jfsRun, throttleIdle, secCleared, pressureEstablished, cautionPending, displayedRpm, displayedFtit, mainGeneratorOnline });
+  const stepStates = new Map<number, ReturnType<typeof captureState>>();
   function render() {
+    if (!stepStates.has(step)) stepStates.set(step, captureState());
     mark.hidden = true;
     hint.hidden = true;
     cancelAnimationFrame(frame);
@@ -335,7 +345,12 @@ if (root) {
     clearTimeout(advanceTimer);
     finished = false;
     step = Math.max(0, step - 1);
-    completed.delete(steps[step].dataset.stepId || '');
+    const state = stepStates.get(step)!;
+    ({ main, flcsHeld, jfsStarted, jfsRun, throttleIdle, secCleared, pressureEstablished, cautionPending, displayedRpm, displayedFtit, mainGeneratorOnline } = state);
+    for (let index = step; index < steps.length; index++) {
+      completed.delete(steps[index].dataset.stepId || '');
+      if (index > step) stepStates.delete(index);
+    }
     render();
   });
   // Turn off the enhanced navigation if required controls are missing:

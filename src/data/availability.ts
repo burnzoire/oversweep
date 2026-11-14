@@ -19,6 +19,7 @@ export interface Entry {
   // Set for modules with a standalone trainer, which opens in its own window.
   trainer?: { title: string; href: string; experience: Experience };
   module?: Module;
+  procedureStatus?: (typeof visibleProcedures)[number]['status'];
   // A subject can split its modules into groups (Flight Fundamentals: fixed
   // and rotor wing); the subject page lists each group under its own heading.
   group?: string;
@@ -51,7 +52,7 @@ export const manualEntries: Entry[] = [
   ...includedModules.map(fromModule),
   ...visibleProcedures.map(p => ({
     id: p.id, title: p.title, objective: p.objective, applicability: p.applicability,
-    href: procedureRoute(p), subject: 'aircraft-procedures', group: 'F-16C Viper',
+    procedureStatus: p.status, href: procedureRoute(p), subject: 'aircraft-procedures', group: 'F-16C Viper',
   })),
 ];
 
