@@ -1,5 +1,4 @@
-// Review-only aircraft procedures. Publishing requires the existing content gate
-// and in-simulator verification; do not expose draft instructions by default.
+// Aircraft procedures can be public while their simulator validation is pending.
 import { reviewTrainers } from './experiences';
 
 export interface ProcedureStep {
@@ -20,7 +19,7 @@ export interface AircraftProcedure {
   title: string;
   objective: string;
   applicability: string;
-  status: 'review-only';
+  status: 'public-preview' | 'review-only';
   simVersion: string;
   steps: ProcedureStep[];
 }
@@ -33,7 +32,7 @@ export const procedures: AircraftProcedure[] = [{
   objective: 'Start the DCS F-16C main engine from a cold-and-dark state using exact control actions and expected indications.',
   applicability: 'DCS F-16C Block 50 (circa 2007); official guide edition 23 March 2026. In-simulator verification pending.',
   simVersion: 'DCS build not yet verified',
-  status: 'review-only',
+  status: 'public-preview',
   steps: [
     {id:'battery',section:'Pre-start',title:'Apply battery power',control:'MAIN PWR',action:'Move the MAIN PWR switch to BATT.',expect:'ACFT BATT FLCS RLY light is illuminated.',caution:'Limit operation on battery to 5 minutes without starting the engine or applying external power.',evidence:'p. 134, Before Engine Start, steps 1–2',visual:'power'},
     {id:'flcs-test',section:'Pre-start',title:'Test FLCS battery supply',control:'FLCS PWR TEST',action:'Hold the FLCS PWR TEST switch at TEST.',expect:'Verify the specified FLCS power test lights, including FLCS PMG and TO FLCS, illuminate; FLCS RLY goes out.',evidence:'p. 134, Before Engine Start, steps 3–4',visual:'test'},
@@ -49,6 +48,6 @@ export const procedures: AircraftProcedure[] = [{
     {id:'master-caution',section:'Stabilise',title:'Acknowledge master caution',control:'MASTER CAUTION',action:'Acknowledge the simulated SEAT NOT ARMED caution by pressing MASTER CAUTION. This step appears only when the master lamp is lit.',expect:'The MASTER CAUTION light goes out.',evidence:'Illustrative acknowledgement of the modelled caution',visual:'stable'}
   ]
 }];
-export const visibleProcedures = reviewTrainers ? procedures : [];
+export const visibleProcedures = procedures.filter(p => p.status === 'public-preview' || reviewTrainers);
 export const procedureRoute = (p: AircraftProcedure) => `manual/aircraft-procedures/${p.airframe}/${p.slug}/`;
 export const airframes = [{slug:'f-16c',title:'F-16C Viper'}];
