@@ -55,6 +55,21 @@ jobs:
           path: reference-inputs/*
           retention-days: 1
           if-no-files-found: warn
+      - name: Render official F-16C manual ELEC panel source pages (private review only)
+        shell: bash
+        run: |
+          mkdir -p manual-source
+          curl -L --fail --retry 2 --max-time 150 -o /tmp/f16manual.pdf 'https://www.digitalcombatsimulator.ru/upload/iblock/6f7/joywm66pwdgg4iacljy8zolons4dz8dh/DCS%20F-16C%20Early%20Access%20Guide%20EN.pdf' || \
+          curl -L --fail --retry 2 --max-time 150 -o /tmp/f16manual.pdf 'https://www.digitalcombatsimulator.com/upload/iblock/702/g3681i5nju34fotig6rjizhah94890qo/DCS%20F-16C%20Early%20Access%20Guide%20EN.pdf'
+          pdfinfo /tmp/f16manual.pdf | head -20
+          pdftoppm -f 64 -l 73 -r 135 -png /tmp/f16manual.pdf manual-source/f16-manual
+          ls -lh manual-source
+      - name: Upload manual page images for one-off comparison
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: f16-manual-source-pages-temp
+          path: manual-source/*.png
+          retention-days: 1
       - name: Commit captures only to temporary branch
         run: |
           git config user.name "github-actions[bot]"
