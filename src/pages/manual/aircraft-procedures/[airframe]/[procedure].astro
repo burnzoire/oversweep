@@ -43,7 +43,7 @@ const steps = guide.steps;
       <h2>Control and indication</h2>
       <StartupPanels />
       <div data-engine-reference hidden><EngineInstrument /></div>
-      <p data-indication aria-live="polite">Select the highlighted switch or indicator. The panel responds to your input.</p>
+      <p data-indication aria-live="polite">Select the control named in the instructions. The panel responds to your input.</p>
       <p class="procedure-cite">Clickable control geometry is an original technical drawing and is not yet dimensionally verified against DCS. The RPM/FTIT animation is a separate schematic prototype. Neither is connected to the simulator.</p>
     </aside>
   </div>
@@ -147,7 +147,7 @@ if (root) {
     const elec = one<HTMLElement>(".elec-art")!;
     elec.dataset.mainState = main;
     one<HTMLElement>('[data-flcs-lever]')!.dataset.position = flcsHeld ? 'test' : 'norm';
-    one<SVGGElement>('[data-jfs-lever]')!.setAttribute('transform',jfsStarted?'rotate(90 50 50)':'');
+    one<SVGElement>('[data-jfs-lever]')!.dataset.position = jfsStarted ? 'start2' : 'off';
     const lit = (name:string, isLit:boolean) => all<SVGGElement>(`[data-lamp="${name}"]`).forEach(n=>n.classList.toggle('lit',isLit));
     lit('flcs-rly',main!=='off'&&!flcsHeld&&!jfsStarted);
     lit('flcs-pmg',flcsHeld||jfsStarted);
@@ -204,7 +204,19 @@ if (root) {
     if (finished) next.disabled = true;
     updatePanels();
     animateEngine();
-    information.textContent=finished?'Startup review complete.':next.disabled?'Use the highlighted control or confirm the observed indication to continue.':'Action acknowledged. Continue to the next step.';
+    information.textContent=finished?'Startup review complete.':next.disabled?'Use the named control or confirm the observed indication to continue.':'Action acknowledged. Continue to the next step.';
+  }
+  let advanceTimer: ReturnType<typeof setTimeout>;
+  function advanceAfterControl() {
+    const current = step;
+    render();
+    next.disabled = true;
+    clearTimeout(advanceTimer);
+    advanceTimer = setTimeout(() => {
+      if (step !== current) return;
+      step += 1;
+      render();
+    }, reduced.matches ? 0 : 650);
   }
   function select(control:string, target: Element) {
     const id=steps[step].dataset.stepId || '';
@@ -215,7 +227,7 @@ if (root) {
     }
     if(control==='jfs-start2'){jfsStarted=true;completed.add(id);}
     if(control==='throttle-idle'){throttleIdle=true;completed.add(id);}
-    render();
+    advanceAfterControl();
   }
   all<HTMLButtonElement>('button[data-control]').forEach(button => {
     button.addEventListener('click', () => select(button.dataset.control || '', button));
@@ -231,7 +243,7 @@ if (root) {
     }
     main = next;
     completed.add(id);
-    render();
+    advanceAfterControl();
   }
   const up = one<HTMLButtonElement>('.toggle-up')!;
   const down = one<HTMLButtonElement>('.toggle-down')!;
@@ -246,7 +258,7 @@ if (root) {
     resetTimer = setTimeout(() => reset.classList.remove('pulse'), 220);
   });
   confirm.addEventListener('click',()=>{completed.add(steps[step].dataset.stepId||'');render();});
-  previous.addEventListener('click',()=>{finished=false;step=Math.max(0,step-1);render();});
+  previous.addEventListener('click',()=>{clearTimeout(advanceTimer);finished=false;step=Math.max(0,step-1);render();});
   next.addEventListener('click',()=>{
     if(next.disabled)return;
     if (step === steps.length - 1) finished = true;

@@ -50,9 +50,11 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
       <img src={jfsArt.src} width={jfsArt.width} height={jfsArt.height} alt="ENG and JET START panel" />
       <span class="raster-lamp" data-lamp="jfs-run" style="--x:25%;--y:11.5%;--w:7%;--h:3.8%" aria-hidden="true"></span>
       <button type="button" class="raster-switch" data-control="jfs-start2" aria-label="Select JFS START 2" style="--x:57.2%;--y:12.8%">
-        <svg viewBox="0 0 100 100" aria-hidden="true">
-          <g data-jfs-lever><path d="M47 40Q40 42 40 50Q40 58 47 60L75 62V38Z" fill="white" stroke="#171717" stroke-width="2"/><circle cx="75" cy="50" r="12" fill="white" stroke="#171717" stroke-width="2"/><circle cx="75" cy="50" r="8" fill="none" stroke="#171717"/></g>
-        </svg>
+        <svg data-jfs-lever data-position="off" viewBox="0 0 100 100" aria-hidden="true">
+<circle cx="50" cy="50" r="25" fill="#fff" stroke="#171717" stroke-width="1.5"/>
+<path class="shaft" d="M38 55C37 48 42 43 50 43C58 43 63 48 62 55L64 83Q64 91 50 91Q36 91 36 83Z" fill="#fff" stroke="#171717" stroke-width="2"/>
+<g class="cap"><circle cx="50" cy="50" r="16" fill="#fff" stroke="#171717" stroke-width="2"/><circle cx="50" cy="50" r="12" fill="none" stroke="#171717"/></g>
+</svg>
       </button>
     </div>
   </div>
@@ -76,7 +78,7 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
       <span class="raster-lamp" data-lamp="warn-hyd-bottom" style="--x:24.6%;--y:54%;--w:16%;--h:22%" aria-hidden="true"></span>
     </div>
   </div>
-  <div class="panel-feedback" data-panel-feedback aria-live="polite">Select the highlighted control to proceed.</div>
+  <div class="panel-feedback" data-panel-feedback aria-live="polite">Use the control named in the current step.</div>
 </div>
 <style>
 .startup-panel[hidden]{display:none}
@@ -134,7 +136,6 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
 .raster-lamp.lit{background:#ffb82c77}
 .raster-test .raster-lamp.lit,.raster-jfs .raster-lamp.lit{background:#45b87966}
 .raster-switch{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);width:22%;min-width:44px;aspect-ratio:1;border:0;border-radius:50%;background:transparent;padding:0;cursor:pointer}
-.raster-switch[data-active="true"]{outline:2px dashed #9d6709}
 .raster-switch svg{background:transparent;pointer-events:none}
 .raster-switch svg g{transition:transform .16s ease}
 @media(prefers-reduced-motion:reduce){.raster-switch svg g{transition:none}}
@@ -148,4 +149,7 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
 .flcs-toggle[data-position="test"] .shaft{transform:scaleY(-1)}
 .flcs-toggle[data-position="test"] .cap{transform:translateY(-34px)}
 @media(prefers-reduced-motion:reduce){.flcs-toggle .shaft,.flcs-toggle .cap{transition:none}}
+.raster-jfs .shaft{transform-origin:50px 50px;transform:scaleY(0)}
+.raster-jfs [data-position="start2"] .shaft{transform:scaleY(1)}
+.raster-jfs [data-position="start2"] .cap{transform:translateY(34px)}
 </style>

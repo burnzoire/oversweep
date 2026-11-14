@@ -9,3 +9,7 @@ Use the official simulator manual as the geometry and procedure reference. For t
 5. Review each panel at guide size and close-up. Exercise every control and relevant lamp state on desktop and mobile. Capture a fresh view of every illustration, including representative changed states, or provide an interactive preview covering them all. Label any simulator behavior or geometry that still needs verification.
 
 For PR #262, apply the ELEC pattern to TEST and ENG & JET START, use independent light overlays on the caution and warning panels, and layer the engine needles over the instrument artwork. Keep the Throttle Idle button for the throttle step.
+
+## Toggle interaction and progression
+
+Draw every toggle orthographically, looking straight at the panel. Use a centred cap at neutral and move the shaft and cap together about the same pivot. Test both detents in the browser. Keep hit areas invisible during hover and while awaiting input. Preserve keyboard focus indicators, actual lamp states, and wrong-input feedback. Advance after a correct control action once its visual response has registered. Keep indication confirmations explicit.
