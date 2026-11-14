@@ -47,6 +47,7 @@ try {
   await page.locator('[data-control="flcs-test"]').click();
   await page.locator('[data-next]').click(); // MAIN PWR
   await page.locator('[data-control="main-main"]').click();
+  await page.screenshot({ path: 'review-screenshots/f16-electrical-caution-desktop.png', fullPage: true });
   await page.locator('[data-next]').click(); // EPU
   await page.locator('[data-control="epu-check"]').click();
   await page.locator('[data-next]').click(); // ground
@@ -62,6 +63,7 @@ try {
   await page.locator('[data-control="throttle-idle"]').click();
   await page.screenshot({ path: 'review-screenshots/f16-throttle-idle-desktop.png', fullPage: true });
   await page.locator('[data-next]').click(); // generator
+  await page.screenshot({ path: 'review-screenshots/f16-engine-eyebrow-desktop.png', fullPage: true });
   await page.locator('[data-confirm]').click();
   await page.locator('[data-next]').click(); // idle
   await page.waitForTimeout(1400);
@@ -69,7 +71,7 @@ try {
   await page.setViewportSize({ width: 390, height: 844 });
   for (let i=10;i>0;i--) await page.locator('[data-prev]').click();
   await page.screenshot({ path: 'review-screenshots/f16-start-mobile.png', fullPage: true });
-  console.log('Captured desktop battery, FLCS, JFS, throttle, RPM and idle states plus mobile in Chromium; step gating verified.');
+  console.log('Captured panel geometry for ELEC/TEST/JFS, caution light matrix, right eyebrow and instrument stack plus mobile in Chromium; step gating verified.');
 } catch (error) {
   console.error(error);
   process.exitCode = 1;
