@@ -37,3 +37,15 @@ A panel is not accepted merely because the correct controls are present. The acc
 6. An aviation SME geometry signoff **separate** from a successful browser build.
 
 **No accepted panel satisfies these criteria yet.** Source dimensions are not fastener coordinates. The current PR remains draft and review-only.
+
+## Evidence-based correction pass and actual browser inspection
+
+The CI screenshots were downloaded and inspected at their own pixel resolution (not just trusting automated green checks). This exposed three concrete bugs:
+
+1. FLCS TEST toggle appeared visually detached from its bezel during CSS transform transition. **Corrected by removing transition and keeping transform about the actual switch pivot.**
+2. Dashed highlight rectangles covered large areas of the TEST and JFS panels, falsely suggesting physical cutouts. **Corrected by using invisible hit areas and a switch-local focus ring.**
+3. Four identical engine faces, with digital numbers in the analogue dial area. **Corrected to staggered faces with relative sizes informed by the DCS photo, and moved synthetic numbers outside the panel.**
+
+Further corrections were made to ELEC (real paired annunciator housing and unused STBY lens) and TEST (top-row positions and 2×2 FLCS A/B/C/D indicator, with its lower-right test switch). Check the [latest close-up captures](https://github.com/burnzoire/oversweep/tree/review/pr-262-browser-captures/review-screenshots) on the separate temporary branch.
+
+**Remaining visual blockers are deliberately NOT marked complete.** A plausible line drawing with a correct legend is not an exact reproduction of panel contour/DZUS coordinates. The source reference must be perspective-rectified and all control/hole coordinates independently measured before the final redraw is accepted. No new files reproduce third-party photographic pixels.
