@@ -153,8 +153,13 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
 .raster-jfs .shaft{transform-origin:50px 50px;transform:scaleY(0)}
 .raster-jfs [data-position="start2"] .shaft{transform:scaleY(1)}
 .raster-jfs [data-position="start2"] .cap{transform:translateY(34px)}
-.jfs-detents{position:absolute;left:49.5%;top:7.2%;width:39%;height:16%;background:#fff;display:grid;grid-template-rows:repeat(3,1fr);align-items:center;padding-left:15%;box-sizing:border-box;font:600 clamp(8px,2vw,13px)/1 "Arial Narrow",system-ui,sans-serif;color:#171717;white-space:nowrap}
-.jfs-detents span{justify-self:start}
+.jfs-detents{position:absolute;left:49%;top:7%;width:45%;height:17%;background:#fff;color:#171717;font:600 clamp(8px,2vw,13px)/1 "Arial Narrow",system-ui,sans-serif;white-space:nowrap}
+.jfs-detents span{position:absolute;transform:translate(-50%,-50%)}
+.jfs-detents span:nth-child(1){left:19%;top:12%}
+.jfs-detents span:nth-child(2){left:57%;top:42%}
+.jfs-detents span:nth-child(3){left:19%;top:88%}
+.raster-jfs .raster-switch{width:17%;min-width:44px}
+.raster-jfs .raster-switch svg{overflow:visible}
 .raster-jfs .raster-switch::before{content:"";position:absolute;inset:23%;border:1px solid #171717;border-radius:50%;background:#fff}
 .raster-jfs .raster-switch svg{position:relative}
 </style>
