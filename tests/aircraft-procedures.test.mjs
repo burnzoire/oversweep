@@ -46,9 +46,9 @@ test('panel redraw separates the physical units, includes documented proportions
     assert.match(svg, new RegExp('data-panel="' + panel + '"'));
   for (const id of ['elecMounts','testMounts','jfsMounts','class="dzus"'])
     assert.ok(svg.includes(id), 'missing ' + id);
-  assert.match(svg, /75\\.60×93\\.60 mm/);
-  assert.match(svg, /75\\.60×145\\.50 mm/);
-  assert.match(svg, /75\\.60×200/);
+  assert.ok(svg.includes('75.60×93.60 mm'));
+  assert.ok(svg.includes('75.60×145.50 mm'));
+  assert.ok(svg.includes('75.60×200'));
   assert.match(svg, /data-jfs-lever/);
   assert.match(svg, /data-flcs-lever/);
   assert.match(svg, /data-main-lever/);
@@ -62,7 +62,7 @@ test('ELEC and TEST layouts preserve photo-supported lamp groupings and test-con
  assert.match(svg,/const gauges|data-flcs-channel/);
  assert.match(svg,/id:'C',x:422,y:478/);
  assert.match(svg,/id:'B',x:486,y:543/);
- assert.match(svg,/FLCS PWR TEST switch/);
+ assert.match(svg,/Hold FLCS PWR TEST at TEST/);
  const page = await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
  assert.ok(page.includes('rotate(-90 450 779)'));
 });
