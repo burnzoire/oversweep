@@ -6,7 +6,7 @@ const host = 'http://127.0.0.1:4321';
 const route = '/manual/aircraft-procedures/f-16c/engine-start/';
 const server = spawn('npm', ['run', 'dev', '--', '--host', '127.0.0.1'], {
   env: { ...process.env, OVERSWEEP_REVIEW_TRAINERS: '1' },
-  stdio: ['ignore', 'pipe', 'pipe'],
+  stdio: ['ignore', 'pipe', 'pipe'], detached: true,
 });
 server.stdout.on('data', data => process.stdout.write(data));
 server.stderr.on('data', data => process.stderr.write(data));
@@ -16,7 +16,7 @@ try {
   let ready = false;
   for (let i = 0; i < 75; i++) {
     try {
-      const response = await fetch(host + route);
+      const response = await fetch(host + route, { signal: AbortSignal.timeout(3000) });
       if (response.status === 200) { ready = true; break; }
     } catch {}
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -49,7 +49,11 @@ try {
   for (let i=10;i>0;i--) await page.locator('[data-prev]').click();
   await page.screenshot({ path: 'review-screenshots/f16-start-mobile.png', fullPage: true });
   console.log('Captured desktop start, RPM threshold, idle, and mobile start from real Chromium browser.');
+} catch (error) {
+  console.error(error);
+  process.exitCode = 1;
 } finally {
   await browser?.close();
-  server.kill('SIGTERM');
+  try { process.kill(-server.pid, 'SIGTERM'); } catch {}
+  process.exit(process.exitCode || 0);
 }
