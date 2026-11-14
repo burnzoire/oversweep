@@ -38,6 +38,8 @@ const steps = guide.steps;
       </div>
     </div>
     <aside class="procedure-visual" aria-label="Interactive cockpit control panels">
+      <div class="retry-mark" data-retry-mark hidden aria-hidden="true">×</div>
+      <p class="retry-hint" data-retry-hint role="status" hidden></p>
       <h2>Control and indication</h2>
       <StartupPanels />
       <div data-engine-reference hidden><EngineInstrument /></div>
@@ -131,7 +133,7 @@ if (root) {
     all<HTMLElement | SVGGElement>('[data-control]').forEach(el=>{
       const active = el.dataset.control === expected;
       el.dataset.active = String(active);
-      el.setAttribute('aria-disabled',String(!active));
+
       el.setAttribute('aria-pressed', String(
         el.dataset.control === 'main-batt' ? main==='batt':
         el.dataset.control === 'main-main' ? main==='main':
@@ -142,8 +144,6 @@ if (root) {
     });
     const elec = one<HTMLElement>(".elec-art")!;
     elec.dataset.mainState = main;
-    elec.querySelector<HTMLButtonElement>(".toggle-up")!.disabled = main === "main";
-    elec.querySelector<HTMLButtonElement>(".toggle-down")!.disabled = main === "off";
     one<SVGGElement>('[data-flcs-lever]')!.setAttribute('transform',flcsHeld?'rotate(-90 450 779)':'');
     one<SVGGElement>('[data-jfs-lever]')!.setAttribute('transform',jfsStarted?'rotate(120 277 154)':'');
     const lit = (name:string, isLit:boolean) => all<SVGGElement>(`[data-lamp="${name}"]`).forEach(n=>n.classList.toggle('lit',isLit));
@@ -169,7 +169,23 @@ if (root) {
       'Observe the relevant indication and confirm the step.';
     feedback.textContent = message;
   }
+  const mark = one<HTMLElement>('[data-retry-mark]')!;
+  const hint = one<HTMLElement>('[data-retry-hint]')!;
+  const visual = mark.parentElement!;
+  function retry(control: Element) {
+    const bounds = control.getBoundingClientRect();
+    const area = visual.getBoundingClientRect();
+    mark.style.left = `${bounds.left - area.left + bounds.width / 2}px`;
+    mark.style.top = `${bounds.top - area.top + bounds.height / 2}px`;
+    mark.hidden = false;
+    hint.hidden = false;
+    hint.textContent = `Try again. ${feedback.textContent}`;
+  }
+
+  let finished = false;
   function render() {
+    mark.hidden = true;
+    hint.hidden = true;
     cancelAnimationFrame(frame);
     const id=steps[step].dataset.stepId || '';
     steps.forEach((el,i)=>el.hidden=i!==step);
@@ -182,14 +198,14 @@ if (root) {
     confirm.disabled=completed.has(id);
     next.disabled=(needsClick||confirmations.has(id))&&!completed.has(id);
     next.textContent=step===steps.length-1?'Finish review':'Next step';
-    if(step===steps.length-1)next.disabled=true;
+    if (finished) next.disabled = true;
     updatePanels();
     animateEngine();
-    information.textContent=next.disabled?'Use the highlighted control or confirm the observed indication to continue.':'Action acknowledged. Continue to the next step.';
+    information.textContent=finished?'Startup review complete.':next.disabled?'Use the highlighted control or confirm the observed indication to continue.':'Action acknowledged. Continue to the next step.';
   }
-  function select(control:string) {
+  function select(control:string, target: Element) {
     const id=steps[step].dataset.stepId || '';
-    if(control!==actions[id])return;
+    if(control!==actions[id] || completed.has(id)){retry(target);return;}
     if(control==='flcs-test'){
       if(id==='flcs-test'&&!flcsHeld){flcsHeld=true;completed.add(id);}
       else if(id==='flcs-release'&&flcsHeld){flcsHeld=false;completed.add(id);}
@@ -199,38 +215,44 @@ if (root) {
     render();
   }
   all<HTMLElement | SVGGElement>('[data-control]').forEach(el=>{
-    el.addEventListener('click',()=>select(el.dataset.control || ''));
+    el.addEventListener('click',()=>select(el.dataset.control || '', el));
     if (el instanceof HTMLButtonElement) return;
     el.addEventListener('keydown', (evt: Event) => {
       if (!(evt instanceof KeyboardEvent)) return;
-      if(evt.key==='Enter'||evt.key===' '){evt.preventDefault();select(el.dataset.control || '');}
+      if(evt.key==='Enter'||evt.key===' '){evt.preventDefault();select(el.dataset.control || '', el);}
     });
   });
   function moveMain(direction: number) {
     const positions = ['off', 'batt', 'main'] as const;
-    const index = positions.indexOf(main) + direction;
-    const next = positions[index];
-    if (!next) return;
-    main = next;
+    const next = positions[positions.indexOf(main) + direction];
     const id = steps[step].dataset.stepId || '';
-    if ((id === 'battery' && main === 'batt') || (id === 'main-power' && main === 'main')) completed.add(id);
-    else if (id === 'battery' || id === 'main-power') completed.delete(id);
+    const expected = id === 'battery' ? 'batt' : id === 'main-power' ? 'main' : undefined;
+    if (!next || next !== expected || completed.has(id)) {
+      retry(direction > 0 ? up : down);
+      return;
+    }
+    main = next;
+    completed.add(id);
     render();
   }
-  one<HTMLButtonElement>('.toggle-up')!.addEventListener('click', () => moveMain(1));
-  one<HTMLButtonElement>('.toggle-down')!.addEventListener('click', () => moveMain(-1));
+  const up = one<HTMLButtonElement>('.toggle-up')!;
+  const down = one<HTMLButtonElement>('.toggle-down')!;
+  up.addEventListener('click', () => moveMain(1));
+  down.addEventListener('click', () => moveMain(-1));
   const reset = one<HTMLButtonElement>('[data-elec-reset]')!;
   let resetTimer: ReturnType<typeof setTimeout>;
   reset.addEventListener('click', () => {
+    retry(reset);
     clearTimeout(resetTimer);
     reset.classList.add('pulse');
     resetTimer = setTimeout(() => reset.classList.remove('pulse'), 220);
   });
   confirm.addEventListener('click',()=>{completed.add(steps[step].dataset.stepId||'');render();});
-  previous.addEventListener('click',()=>{step=Math.max(0,step-1);render();});
+  previous.addEventListener('click',()=>{finished=false;step=Math.max(0,step-1);render();});
   next.addEventListener('click',()=>{
     if(next.disabled)return;
-    step=Math.min(steps.length-1,step+1);render();
+    if (step === steps.length - 1) finished = true;
+    else step += 1;render();
   });
   // Turn off the enhanced navigation if required controls are missing:
   // the full static step list remains readable without JavaScript.
@@ -252,7 +274,9 @@ if (root) {
 .procedure-controls{display:flex;gap:.75rem;margin-top:1rem}
 .procedure-controls button{min-height:2.75rem;padding:.45rem 1rem;border:1px solid var(--color-ink);background:#fff;color:var(--color-ink);cursor:pointer;font:inherit}
 .procedure-controls button:disabled{opacity:.4;cursor:default}
-.procedure-visual{border:1px solid var(--color-border);padding:1rem}
+.retry-mark{position:absolute;z-index:3;transform:translate(-50%,-50%);font:bold 2.1rem/1 system-ui;color:#b00020;background:white;border-radius:50%;width:1em;text-align:center;pointer-events:none}
+.retry-hint{position:absolute;z-index:4;top:0;left:1rem;right:1rem;margin:0;padding:.5rem;border:2px solid #b00020;background:#fff;color:#740017;pointer-events:none}
+.procedure-visual{position:relative;border:1px solid var(--color-border);padding:1rem}
 .procedure-visual h2{margin-top:0}
 @media(min-width:58rem){.procedure-workspace{grid-template-columns:minmax(0,1fr) minmax(18rem,1fr)}.procedure-visual{position:sticky;top:1rem}}
 </style>
