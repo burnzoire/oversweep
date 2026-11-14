@@ -54,3 +54,15 @@ test('panel redraw separates the physical units, includes documented proportions
   assert.match(svg, /data-main-lever/);
   assert.match(svg, /not dimensionally surveyed/);
 });
+
+test('ELEC and TEST layouts preserve photo-supported lamp groupings and test-control order', async () => {
+ const svg = await read('src/components/aircraft-procedures/StartupPanels.astro');
+ assert.match(svg,/Single vertical housing with three paired lamp modules/);
+ assert.match(svg,/class="blank-lens"/);
+ assert.match(svg,/const gauges|data-flcs-channel/);
+ assert.match(svg,/id:'C',x:319,y:325/);
+ assert.match(svg,/id:'B',x:358,y:363/);
+ assert.match(svg,/FLCS PWR TEST switch/);
+ const page = await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
+ assert.match(page,/rotate\(180 352 485\)/);
+});
