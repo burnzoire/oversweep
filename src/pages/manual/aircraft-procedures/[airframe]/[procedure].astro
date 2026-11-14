@@ -74,7 +74,7 @@ if (root) {
   const actions: Record<string, string> = {
     battery: 'main-batt',
     'flcs-test': 'flcs-test',
-    'flcs-release': 'flcs-test',
+    'flcs-release': 'flcs-norm',
     'main-power': 'main-main',
     jfs: 'jfs-start2',
     throttle: 'throttle-idle',
@@ -146,7 +146,7 @@ if (root) {
     });
     const elec = one<HTMLElement>(".elec-art")!;
     elec.dataset.mainState = main;
-    one<SVGGElement>('[data-flcs-lever]')!.setAttribute('transform',flcsHeld?'rotate(-90 50 50)':'');
+    one<HTMLElement>('[data-flcs-lever]')!.dataset.position = flcsHeld ? 'test' : 'norm';
     one<SVGGElement>('[data-jfs-lever]')!.setAttribute('transform',jfsStarted?'rotate(90 50 50)':'');
     const lit = (name:string, isLit:boolean) => all<SVGGElement>(`[data-lamp="${name}"]`).forEach(n=>n.classList.toggle('lit',isLit));
     lit('flcs-rly',main!=='off'&&!flcsHeld&&!jfsStarted);
@@ -162,8 +162,8 @@ if (root) {
     lit('warn-seat',engineRunning);
     all<SVGGElement>('[data-flcs-channel]').forEach(n=>n.classList.toggle('lit',flcsHeld));
     // EPU GEN/PMG lights deliberately remain OFF; don't claim simulated fault logic.
-    const message = id==='flcs-test'?'Click the FLCS PWR TEST switch to hold it at TEST.':
-      id==='flcs-release'?'Click the switch again to release it to NORM.':
+    const message = id==='flcs-test'?'Click the upper half of FLCS PWR TEST to select TEST.':
+      id==='flcs-release'?'Click the lower half of FLCS PWR TEST to return it to NORM.':
       id==='battery'?'Select BATT directly on the electrical panel.':
       id==='main-power'?'Select MAIN PWR directly on the electrical panel.':
       id==='jfs'?'Click the JFS control to select START 2.':
@@ -209,9 +209,9 @@ if (root) {
   function select(control:string, target: Element) {
     const id=steps[step].dataset.stepId || '';
     if(control!==actions[id] || completed.has(id)){retry(target);return;}
-    if(control==='flcs-test'){
-      if(id==='flcs-test'&&!flcsHeld){flcsHeld=true;completed.add(id);}
-      else if(id==='flcs-release'&&flcsHeld){flcsHeld=false;completed.add(id);}
+    if (control === 'flcs-test' || control === 'flcs-norm') {
+      flcsHeld = control === 'flcs-test';
+      completed.add(id);
     }
     if(control==='jfs-start2'){jfsStarted=true;completed.add(id);}
     if(control==='throttle-idle'){throttleIdle=true;completed.add(id);}
