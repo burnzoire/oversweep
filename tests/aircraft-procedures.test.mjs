@@ -30,18 +30,20 @@ test('instrument artwork and procedural content remain separate', async () => {
 test('panel controls are native buttons with distinct locations', async () => {
   const svg = await read('src/components/aircraft-procedures/StartupPanels.astro');
   const page = await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
-  for (const key of ['flcs-test','jfs-start2','throttle-idle']) {
+  for (const key of ['flcs-test','jfs-start2']) {
     assert.match(svg, new RegExp('data-control="' + key + '"'));
     assert.match(page, new RegExp("'" + key + "'"));
   }
   assert.match(svg,/<button type="button"[^>]*data-control=/);
+  assert.match(page, /<div class="procedure-controls"[^>]*>[\s\S]*?<button type="button" data-control="throttle-idle"/);
+  assert.match(page, /throttle: 'throttle-idle'/);
   assert.match(page,/advanceAfterControl/);
   assert.match(page,/completed.add\(id\)/);
 });
 
 test('panel redraw uses separate artwork and movable controls', async () => {
   const svg = await read('src/components/aircraft-procedures/StartupPanels.astro');
-  for (const panel of ['elec','test','jfs','throttle'])
+  for (const panel of ['elec','test','jfs'])
     assert.match(svg, new RegExp('data-panel="' + panel + '"'));
   for (const panel of ['test', 'jfs', 'caution', 'eyebrow']) {
     assert.ok(svg.includes(`f16-${panel}.webp`));
