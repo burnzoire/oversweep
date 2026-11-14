@@ -217,6 +217,7 @@ if (root) {
   const mark = one<HTMLElement>('[data-retry-mark]')!;
   const hint = one<HTMLElement>('[data-retry-hint]')!;
   const visual = mark.parentElement!;
+  const workspace = root;
   function retry(control: Element) {
     const bounds = control.getBoundingClientRect();
     const area = visual.getBoundingClientRect();
@@ -240,7 +241,7 @@ if (root) {
     const complete = one<HTMLElement>('[data-complete]')!;
     complete.hidden = !finished;
     visual.hidden = finished;
-    root.classList.toggle('procedure-finished', finished);
+    workspace.classList.toggle('procedure-finished', finished);
     if (finished) complete.focus();
     controls.hidden=false;
     progress.hidden = finished;
