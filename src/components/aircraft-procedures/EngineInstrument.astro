@@ -1,41 +1,88 @@
 ---
-interface Props { label?: string }
-const { label = 'F-16C engine instruments — instructional diagram' } = Astro.props;
+/**
+ * DCS F-16C engine instrument stack: four gauges, ordered from top:
+ * OIL PRESS, NOZ POS, RPM, FTIT. Geometry follows the instrument family and
+ * location from the simulator, but individual coordinates are not measured.
+ * Original SVG with no texture, screenshot, or third-party art embedded.
+ */
+const gauges = [
+ {id:'oil',title:'OIL',unit:'PSI',center:140,min:0,max:100,needle:15},
+ {id:'noz',title:'NOZ POS',unit:'% OPEN',center:314,min:0,max:100,needle:97},
+ {id:'rpm',title:'RPM',unit:'PERCENT',center:488,min:0,max:110,needle:0},
+ {id:'ftit',title:'FTIT',unit:'°C',center:662,min:200,max:1200,needle:200},
+] as const;
+const cx=242;
+const sweepStart = -125;
+const sweep=250;
+const pos=(c:number,index:number,count=11)=>{
+ const a=(sweepStart+index*(sweep/(count-1)))*Math.PI/180;
+ return {x:cx+Math.sin(a)*62, y:c-Math.cos(a)*62,
+         x2:cx+Math.sin(a)*53,y2:c-Math.cos(a)*53};
+};
 ---
 <figure class="engine-figure">
-  <svg data-engine-display viewBox="0 0 460 245" role="img" aria-label={label} class="engine-svg">
-    <title>{label}</title>
-    <rect x="2" y="2" width="456" height="241" rx="2" fill="#fff" stroke="#171717" stroke-width="2" />
-    <text x="230" y="22" text-anchor="middle" class="eng-heading">ENGINE INDICATIONS · SCHEMATIC</text>
-    {['RPM','FTIT'].map((name, i) => {
-      const x = i === 0 ? 124 : 337;
-      return <g>
-        <circle cx={x} cy="118" r="76" fill="none" stroke="#171717" stroke-width="2" />
-        <path d={`M ${x-52} 158 A 68 68 0 1 1 ${x+52} 158`} fill="none" stroke="#777" stroke-width="1" />
-        {Array.from({length:9}, (_,k) => {
-          const a = (-220 + k * 35) * Math.PI / 180;
-          const xx = x + Math.sin(a)*65, yy = 118 - Math.cos(a)*65;
-          const x2 = x + Math.sin(a)*55, y2 = 118 - Math.cos(a)*55;
-          return <line x1={xx} y1={yy} x2={x2} y2={y2} stroke="#171717" stroke-width="1.5" />;
-        })}
-        <line data-needle={i===0?'rpm':'ftit'} x1={x} y1="118" x2={x} y2="65" stroke="#111" stroke-width="2.6" stroke-linecap="round" transform={`rotate(-140 ${x} 118)`} />
-        <circle cx={x} cy="118" r="5" fill="#171717"/>
-        <text x={x} y="144" text-anchor="middle" class="eng-readout" data-value={i===0?'rpm':'ftit'}>0</text>
-        <text x={x} y="162" text-anchor="middle" class="eng-label">{name} {i===0?'%':'°C'}</text>
-      </g>
-    })}
-    <g transform="translate(166 205)">
-      <rect x="0" y="0" width="128" height="27" fill="#fff" stroke="#171717"/>
-      <text x="64" y="18" text-anchor="middle" class="eng-label" data-signal>ENGINE OFF</text>
+  <svg viewBox="0 0 485 780" role="img" aria-label="F-16C engine instrument stack, OIL, NOZ POS, RPM and FTIT in actual vertical sequence">
+    <title>F-16C · Engine Instruments</title>
+    <path d="M166 38 H314 L340 63 H353 L375 332 L375 415 L419 499 L422 711 L407 748 H157 L124 734 L121 62 Q121 39 143 38 Z" class="panel-outline"/>
+    <path d="M152 65 H320 L343 349 L388 506 L391 711 L365 723 H155 L147 65 Z" class="seam"/>
+    {gauges.map((g,i)=><g class="gauge">
+      <circle cx={cx} cy={g.center} r="75" class="bezel"/>
+      <circle cx={cx} cy={g.center} r="69" class="face"/>
+      {Array.from({length:11},(_,n)=>{
+        const p=pos(g.center,n);
+        return <line x1={p.x} y1={p.y} x2={p.x2} y2={p.y2} class="tick"/>;
+      })}
+      {i===0 && [0,20,40,60,80,100].map((n,k)=>{
+        const p=pos(g.center,k*2);
+        return <text x={p.x2} y={p.y2} class="tick-label" text-anchor="middle">{n}</text>;
+      })}
+      {i===1 && [0,20,40,60,80,100].map((n,k)=>{
+        const p=pos(g.center,k*2);
+        return <text x={p.x2} y={p.y2} class="tick-label" text-anchor="middle">{n}</text>;
+      })}
+      {i===2 && [0,20,40,60,80,100].map((n,k)=>{
+        const p=pos(g.center,k*2);
+        return <text x={p.x2} y={p.y2} class="tick-label" text-anchor="middle">{n}</text>;
+      })}
+      {i===3 && [200,400,600,800,1000,1200].map((n,k)=>{
+        const p=pos(g.center,k*2);
+        return <text x={p.x2} y={p.y2} class="tick-label" text-anchor="middle">{n/100}</text>;
+      })}
+      <text x={cx} y={g.center-18} class="gauge-title">{g.title}</text>
+      <text x={cx} y={g.center-4} class="gauge-unit">{g.unit}</text>
+      <line x1={cx} y1={g.center} x2={cx} y2={g.center-47}
+        data-needle={g.id} class="needle"
+        transform={`rotate(${i===0?-80:i===1?113:-125} ${cx} ${g.center})`}/>
+      <circle cx={cx} cy={g.center} r="5" class="hub"/>
+      {(g.id==='rpm'||g.id==='ftit') && <text x={cx} y={g.center+28} text-anchor="middle" data-value={g.id} class="gauge-readout">{g.id==='ftit'?'200':'0'}</text>}
+    </g>)}
+    {[[143,65],[323,68],[140,328],[359,353],[144,538],[391,541],[162,722],[375,720]].map(([x,y])=><g class="mount" transform={`translate(${x} ${y})`}>
+      <circle r="7"/><path d="M-5 -5 L5 5"/>
+    </g>)}
+    <g transform="translate(145 738)">
+      <rect width="190" height="29" class="status"/>
+      <text x="95" y="19" data-signal text-anchor="middle" class="status-text">ENGINE OFF</text>
     </g>
   </svg>
-  <figcaption>Original simplified line drawing. Control and instrument indications are representative; animation timing and acceleration are illustrative, not measured from DCS.</figcaption>
+  <figcaption>Original four-instrument line drawing based on the DCS right-side engine stack. Panel silhouette, bezels, fasteners and gauge scales remain subject to dimensional verification; animated needle values are illustrative and are not live DCS data.</figcaption>
 </figure>
 <style>
-.engine-figure {margin:0;max-width:33rem}
-.engine-svg {width:100%;height:auto;display:block}
-.eng-heading {font: 600 11px system-ui,sans-serif;letter-spacing:1.5px;fill:#333}
-.eng-readout {font: 700 21px ui-monospace,monospace;fill:#111}
-.eng-label {font: 11px system-ui,sans-serif;fill:#333}
-.engine-figure figcaption {font-size:.8rem;color:var(--color-muted);margin-top:.3rem}
+.engine-figure{margin:0;max-width:28rem}
+.engine-figure svg{width:100%;height:auto;display:block}
+.engine-figure .panel-outline{stroke:#171717;stroke-width:2.5;fill:#fff}
+.engine-figure .seam{stroke:#666;stroke-width:1;fill:none}
+.engine-figure .bezel{fill:#fff;stroke:#222;stroke-width:3}
+.engine-figure .face{fill:#fff;stroke:#333;stroke-width:1.5}
+.engine-figure .tick{stroke:#171717;stroke-width:1.6}
+.engine-figure .tick-label{font:9px ui-monospace,monospace;fill:#111}
+.engine-figure .gauge-title{font:700 13px system-ui,sans-serif;text-anchor:middle;fill:#111}
+.engine-figure .gauge-unit{font:10px system-ui,sans-serif;text-anchor:middle;fill:#444}
+.engine-figure .needle{stroke:#151515;stroke-width:3;stroke-linecap:round}
+.engine-figure .hub{fill:#171717}
+.engine-figure .mount circle{fill:#f4f4f4;stroke:#333;stroke-width:1.5}
+.engine-figure .mount path{stroke:#333;stroke-width:1.5}
+.engine-figure .gauge-readout{font:700 14px ui-monospace,monospace;fill:#111}
+.engine-figure .status{fill:white;stroke:#444}
+.engine-figure .status-text{font:600 12px system-ui,sans-serif}
+.engine-figure figcaption{font-size:.8rem;color:var(--color-muted);margin-top:.4rem}
 </style>
