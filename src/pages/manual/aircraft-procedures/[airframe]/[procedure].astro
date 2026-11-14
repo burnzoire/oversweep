@@ -33,6 +33,7 @@ const steps = guide.steps;
       <h2 class="procedure-step" data-complete tabindex="-1" hidden>Engine start complete</h2>
       <div class="procedure-controls" hidden data-controls>
         <button type="button" data-confirm hidden>Confirm indication</button>
+        <button type="button" data-control="throttle-idle" aria-pressed="false" hidden>Throttle Idle</button>
         <button type="button" data-prev>Previous</button>
       </div>
     </div>
@@ -163,7 +164,7 @@ if (root) {
   function updatePanels() {
     const id = steps[step].dataset.stepId || '';
     const panel = ['battery','flcs-test','flcs-release','main-power','epu-check'].includes(id)?'elec':
-      id==='jfs'?'jfs':id==='throttle'?'throttle':
+      id==='jfs'?'jfs':
       id==='ground-ready'?'elec':'engine';
     visual.dataset.stage = id;
     const showTest = id==='flcs-test'||id==='flcs-release';
@@ -175,7 +176,10 @@ if (root) {
     if (['throttle','generator','idle-check','master-caution'].includes(id)) visible.add('eyebrow');
     if (id==='generator' || id==='master-caution') visible.add('caution');
     all<HTMLElement>('[data-panel]').forEach(el=>{el.hidden=!visible.has(el.dataset.panel||'');});
-    engineReference.hidden = id === 'master-caution' || (panel !== 'engine' && panel !== 'throttle' && id !== 'jfs');
+    engineReference.hidden = id === 'master-caution' || (panel !== 'engine' && id !== 'jfs');
+    const throttleButton = one<HTMLButtonElement>('[data-control="throttle-idle"]')!;
+    throttleButton.hidden = id !== 'throttle' || finished;
+    throttleButton.disabled = throttleIdle;
     const expected = actions[id] || '';
     all<HTMLElement | SVGGElement>('[data-control]').forEach(el=>{
       const active = el.dataset.control === expected;
@@ -385,8 +389,6 @@ if (root) {
 .procedure-visual{border:0;padding:.25rem}
 .cockpit-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem;align-items:start}
 .cockpit-layout :global(.startup-panels){display:contents}
-.cockpit-layout :global(.startup-panel[data-panel="throttle"]),
-.cockpit-layout :global(.startup-panel[data-panel="eyebrow"]),
 .cockpit-layout :global(.panel-feedback){grid-column:1/-1}
 .cockpit-layout :global(.raster-panel img),
 .cockpit-layout :global(.elec-art img){max-height:36svh;width:auto;max-width:100%;margin:auto}
@@ -401,7 +403,7 @@ if (root) {
 .procedure-controls{margin-top:.4rem}
 .procedure-workspace{gap:.45rem}
 }
-.cockpit-gauges{grid-column:2;grid-row:1}
+.cockpit-gauges{order:-1}
+.procedure-visual[data-stage="jfs"] .cockpit-gauges{order:0}
 .cockpit-layout :global(.panel-feedback){order:1}
-.cockpit-layout :global(.startup-panel[data-panel="eyebrow"]){grid-column:auto}
 </style>
