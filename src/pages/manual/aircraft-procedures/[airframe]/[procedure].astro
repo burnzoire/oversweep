@@ -11,10 +11,10 @@ const {guide} = Astro.props as {guide:AircraftProcedure};
 const steps = guide.steps;
 ---
 <SiteLayout title={guide.title} activeSection="manual" activeSubject="aircraft-procedures"
- description="Review-only illustrated DCS F-16C cold-start engine procedure; not yet validated in the simulator."
+ description="Illustrated DCS F-16C engine-start procedure. Simulator validation is pending."
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Aircraft Procedures',href:sitePath('manual/aircraft-procedures/')},{label:'F-16C',href:sitePath('manual/aircraft-procedures/f-16c/')},{label:'Engine Start'}]}>
   <section class="status-panel">
-    <p><strong>Review-only prototype — not validated in DCS.</strong> DCS F-16C Block 50; source: Eagle Dynamics F-16C Early Access Guide (23 March 2026), pp. 134–135. Exact behaviour and simulator version require a local test. This covers engine start; the remaining after-start setup, INS alignment and taxi checks are not yet included.</p>
+    <p><strong>Public preview. Simulator validation is pending.</strong> DCS F-16C Block 50; source: Eagle Dynamics F-16C Early Access Guide (23 March 2026), pp. 134–135. Exact behaviour and simulator version require a local test. This covers engine start; the remaining after-start setup, INS alignment and taxi checks are not yet included.</p>
     <p><strong>Initial state:</strong> cold-and-dark F-16C on the ground, throttle at cutoff. Ground crew and area must be clear before cranking. The simulation beside the steps is educational, not connected to DCS.</p>
   </section>
   <div class="procedure-workspace" data-procedure>
