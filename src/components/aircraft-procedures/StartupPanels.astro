@@ -35,8 +35,7 @@ const jfsMounts = [dzus(100,54),dzus(404,54),dzus(100,792),dzus(404,792)];
       </g>
       <line data-main-lever x1="204" y1="133" x2="204" y2="173" class="lever"/>
       <circle cx="204" cy="133" r="6" class="pivot"/>
-      <g data-control="elec-reset" role="button" tabindex="0" class="clickable" aria-label="ELEC caution reset button">
-        <rect x="151" y="223" width="111" height="111" class="hit"/>
+      <g aria-label="ELEC caution reset button (not used in this procedure)">
         <text x="206" y="233" class="legend">CAUTION</text>
         <text x="206" y="251" class="legend">RESET</text>
         <circle cx="206" cy="295" r="19" class="push"/>
@@ -51,6 +50,9 @@ const jfsMounts = [dzus(100,54),dzus(404,54),dzus(100,792),dzus(404,792)];
       <g data-lamp="to-flcs"><rect x="182" y="352" width="99" height="29" class="lamp"/><text x="232" y="371" class="lamp-text">TO FLCS</text></g>
       <g data-lamp="flcs-rly"><rect x="182" y="382" width="99" height="30" class="lamp"/><text x="232" y="401" class="lamp-text">FLCS RLY</text></g>
       <g data-lamp="battery-fail"><rect x="286" y="352" width="104" height="60" class="lamp"/><text x="338" y="388" class="lamp-text">FAIL</text></g>
+      <g data-control="epu-check" role="button" tabindex="0" class="clickable" aria-label="Confirm EPU GEN and EPU PMG indicators are off"><rect x="304" y="204" width="104" height="81" class="hit"/></g>
+      <g data-control="main-batt" role="button" tabindex="0" class="clickable" aria-label="Select BATT by clicking the switch"><circle cx="204" cy="133" r="22" class="hit"/></g>
+      <g data-control="main-main" role="button" tabindex="0" class="clickable" aria-label="Select MAIN PWR by clicking the switch"><circle cx="204" cy="133" r="22" class="hit"/></g>
       <text x="63" y="281" transform="rotate(-90 63 281)" class="side-label">E L E C</text>
     </svg>
     <p class="panel-note">ELEC panel outline uses the documented 75.60 × 93.60 mm proportions. Fasteners and controls are positioned from the visual reference; exact DCS-coordinate overlay still requires signoff.</p>
@@ -168,6 +170,7 @@ const jfsMounts = [dzus(100,54),dzus(404,54),dzus(100,792),dzus(404,792)];
 .startup-panels .control-fill{fill:#eee;stroke:#111;stroke-width:2}
 .startup-panels .hit{fill:#fff;fill-opacity:.01;stroke:transparent}
 .startup-panels .clickable{cursor:pointer;outline:none}
+.startup-panels .clickable[data-active="false"]{pointer-events:none}
 .startup-panels .clickable:focus-visible .hit{stroke:#005fcc;stroke-width:4;fill:#dbeafb;fill-opacity:.35}
 .startup-panels .clickable[data-active="true"] .hit{stroke:#9d6709;stroke-width:2;stroke-dasharray:7 5}
 .startup-panels [data-lamp].lit .lamp,.startup-panels [data-flcs-channel].lit .lamp{fill:#ffe8b3;stroke:#855400}
