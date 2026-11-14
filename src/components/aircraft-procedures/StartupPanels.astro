@@ -186,7 +186,7 @@ const jfsMounts = [dzus(100,54),dzus(404,54),dzus(100,792),dzus(404,792)];
       ].map((pair,i)=>{
         const x=49+i*131;
         return <g>
-          <g data-lamp={i===0?'warn-engine':''}><rect x={x} y="62" width="126" height="56" class="lamp"/><text x={x+63} y="94" class="lamp-text">{pair[0]}</text></g>
+          <g data-lamp={i===1?'warn-hyd':''}><rect x={x} y="62" width="126" height="56" class="lamp"/><text x={x+63} y="94" class="lamp-text">{pair[0]}</text></g>
           <g data-lamp={i===0?'warn-engine':i===1?'warn-hyd':''}><rect x={x} y="121" width="126" height="56" class="lamp"/><text x={x+63} y="154" class="lamp-text">{pair[1]}</text></g>
         </g>;
       })}
