@@ -64,5 +64,17 @@ test('ELEC and TEST layouts preserve photo-supported lamp groupings and test-con
  assert.match(svg,/id:'B',x:358,y:363/);
  assert.match(svg,/FLCS PWR TEST switch/);
  const page = await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
- assert.match(page,/rotate\(180 352 485\)/);
+ assert.match(page,/rotate\\(-90 450 779\\)/);
+});
+
+test('source-coordinate control pivots and screw arrays are explicit', async () => {
+ const component=await read('src/components/aircraft-procedures/StartupPanels.astro');
+ const page=await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
+ for(const value of ['viewBox="0 0 630 786"','viewBox="0 0 607 1162"','viewBox="0 0 420 1100"'])
+   assert.ok(component.includes(value),value);
+ for(const value of ['dzus(47,106','dzus(103,45','dzus(31,79'])
+   assert.ok(component.includes(value),value);
+ assert.ok(page.includes('rotate(120 277 154)'));
+ assert.ok(page.includes('rotate(-90 450 779)'));
+ assert.ok(page.includes('187 145'));
 });
