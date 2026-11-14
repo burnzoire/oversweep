@@ -25,3 +25,25 @@ The schematic RPM and FTIT dials are instructional abstractions. Their physical 
 
 ## Acceptance gate
 Only switch this procedure into public listings when it is complete and the technical and rights checks above pass. A review build flag is for review, **not** an approval.
+
+
+## Visual-fidelity review: blocker (14 November 2026)
+
+**Current artwork is not acceptable as a final procedure illustration.** The two invented RPM/FTIT dials are generic and do not reproduce the actual F-16C engine instrument cluster or physical panel locations. Retain only as a temporary animation prototype; remove/replace before approval. NATOPS-style means minimal black-line drafting with **exact panel geometry, real control spacing, functional positions, guards and labels**.
+
+| Startup function | Exact drawing needed | Steps requiring it |
+| --- | --- | --- |
+| Main/battery power | Left console ELEC control panel | battery, main-power |
+| FLCS test | Left console TEST panel and relevant annunciators | flcs-test, flcs-release |
+| EPU status | EPU indication/control area | epu-check |
+| Engine crank | Left console ENG & JET START control panel, including JFS positions and RUN light | jfs |
+| Throttle | F-16C throttle cutoff/IDLE mechanism and relevant control stops | throttle |
+| RPM, FTIT, oil, nozzle | Actual instrument-panel **Engine Instruments** cluster and separate FUEL FLOW indicator | sec, throttle, generator, idle-check |
+| Warnings and gear indications | Actual warning/caution locations and wheel lights | main-power, sec, generator |
+| Ground preparation | No instrument drawing required unless a cockpit control is mentioned | ground-ready |
+
+For every panel asset: record the simulator/build/variant, independent image reference, lawful image-use status, drawing source and review status. Compare rendered SVG with source side-by-side for shape, relative component placement, correct lettering and switch travel. Do **not** render a generic panel and label it as an F-16 control.
+
+The current official F-16C manual (23 March 2026) locates the panels under **Instrument Panel** (pp. 44–53) and **Left Console** (pp. 61–73). Engine Instruments are described around p. 48 and ENG & JET START around p. 62. Manual text alone does **not** establish enough geometric detail to author exact SVG paths: the actual images or independently captured DCS references must be visually examined. Verification of both artistic geometry and animation behaviour is outstanding.
+
+**New visual acceptance gate:** No exact panel drawing → no completed illustrated procedure. This does not prevent a review-only implementation branch from remaining available for iteration.
