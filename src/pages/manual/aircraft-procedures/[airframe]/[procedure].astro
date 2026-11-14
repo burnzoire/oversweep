@@ -141,8 +141,10 @@ if (root) {
         el.dataset.control === 'jfs-start2' ? jfsStarted:
         el.dataset.control === 'throttle-idle' ? throttleIdle : false));
     });
-    const lever = one<SVGGElement>('[data-main-lever]')!;
-    lever.setAttribute('transform',`rotate(${main==='batt'?90:main==='main'?0:180} 187 168)`);
+    const elec = one<HTMLElement>(".elec-art")!;
+    elec.dataset.mainState = main;
+    elec.querySelector<HTMLButtonElement>(".toggle-up")!.disabled = main === "main";
+    elec.querySelector<HTMLButtonElement>(".toggle-down")!.disabled = main === "off";
     one<SVGGElement>('[data-flcs-lever]')!.setAttribute('transform',flcsHeld?'rotate(-90 450 779)':'');
     one<SVGGElement>('[data-jfs-lever]')!.setAttribute('transform',jfsStarted?'rotate(120 277 154)':'');
     const lit = (name:string, isLit:boolean) => all<SVGGElement>(`[data-lamp="${name}"]`).forEach(n=>n.classList.toggle('lit',isLit));
@@ -164,7 +166,7 @@ if (root) {
       id==='main-power'?'Select MAIN PWR directly on the electrical panel.':
       id==='jfs'?'Click the JFS control to select START 2.':
       id==='throttle'?'Select Throttle Idle to continue.':
-      id==='epu-check'?'Click the EPU indicator area to confirm both lights are OFF.':
+      id==='epu-check'?'Confirm both EPU lights are off.':
       'Observe the relevant indication and confirm the step.';
     feedback.textContent = message;
   }
@@ -188,8 +190,6 @@ if (root) {
   function select(control:string) {
     const id=steps[step].dataset.stepId || '';
     if(control!==actions[id])return;
-    if(control==='main-batt'){main='batt';completed.add(id);}
-    if(control==='main-main'){main='main';completed.add(id);}
     if(control==='flcs-test'){
       if(id==='flcs-test'&&!flcsHeld){flcsHeld=true;completed.add(id);}
       else if(id==='flcs-release'&&flcsHeld){flcsHeld=false;completed.add(id);}
@@ -206,6 +206,26 @@ if (root) {
       if (!(evt instanceof KeyboardEvent)) return;
       if(evt.key==='Enter'||evt.key===' '){evt.preventDefault();select(el.dataset.control || '');}
     });
+  });
+  function moveMain(direction: number) {
+    const positions = ['off', 'batt', 'main'] as const;
+    const index = positions.indexOf(main) + direction;
+    const next = positions[index];
+    if (!next) return;
+    main = next;
+    const id = steps[step].dataset.stepId || '';
+    if ((id === 'battery' && main === 'batt') || (id === 'main-power' && main === 'main')) completed.add(id);
+    else if (id === 'battery' || id === 'main-power') completed.delete(id);
+    render();
+  }
+  one<HTMLButtonElement>('.toggle-up')!.addEventListener('click', () => moveMain(1));
+  one<HTMLButtonElement>('.toggle-down')!.addEventListener('click', () => moveMain(-1));
+  const reset = one<HTMLButtonElement>('[data-elec-reset]')!;
+  let resetTimer: ReturnType<typeof setTimeout>;
+  reset.addEventListener('click', () => {
+    clearTimeout(resetTimer);
+    reset.classList.add('pulse');
+    resetTimer = setTimeout(() => reset.classList.remove('pulse'), 220);
   });
   confirm.addEventListener('click',()=>{completed.add(steps[step].dataset.stepId||'');render();});
   previous.addEventListener('click',()=>{step=Math.max(0,step-1);render();});

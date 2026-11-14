@@ -1,4 +1,5 @@
 ---
+import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
 /**
  * Original, monochrome vector drafts, using panel-local units mapped from
  * published F-16C Block 50 references. The exterior dimensions are grounded in
@@ -14,45 +15,23 @@ const jfsMounts = [dzus(31,79,27),dzus(391,80,27),dzus(31,1020,27),dzus(390,1020
 <div class="startup-panels" data-startup-panels>
 
   <div class="startup-panel" data-panel="elec">
-    <svg viewBox="0 0 672 891" role="group" aria-label="DCS F-16C ELEC panel with main power switch and electrical annunciators">
-      <title>F-16C ELEC panel, manual-guided line drawing</title>
-      <path class="plate" d="M19 10 H639 Q652 10 652 23 V862 Q652 875 639 875 H19 Q6 875 6 862 V23 Q6 10 19 10Z"/>
-      <path class="seam" d="M7 671 H366 L369 682 H534 L534 615 H505"/>
-      <path class="internal" d="M354 88 L354 591 Q355 604 366 604 L518 604 Q533 604 533 589 L533 99 Q533 90 522 90 Z"/>
-      <path class="internal" d="M196 606 H515 Q529 606 529 619 V677 H196"/>
-      <g><circle class="mount" cx="49" cy="145" r="36"/><circle class="mount-inner" cx="49" cy="145" r="28"/><circle class="engraved" cx="49" cy="145" r="31"/><path class="engraved" d="M45 123V167 M53 123V167"/><path class="slot" d="M49 120 V170"/></g>
-      <g><circle class="mount" cx="606" cy="128" r="35"/><circle class="mount-inner" cx="606" cy="128" r="27"/><circle class="engraved" cx="606" cy="128" r="30"/><path class="engraved" d="M602 106V150 M610 106V150"/><path class="slot" d="M606 104 V151"/></g>
-      <g><circle class="mount" cx="67" cy="776" r="36"/><circle class="mount-inner" cx="67" cy="776" r="27"/><circle class="engraved" cx="67" cy="776" r="31"/><path class="engraved" d="M63 754V798 M71 754V798"/><path class="slot" d="M67 752 V800"/></g>
-      <g><circle class="mount" cx="599" cy="776" r="36"/><circle class="mount-inner" cx="599" cy="776" r="27"/><circle class="engraved" cx="599" cy="776" r="31"/><path class="engraved" d="M595 754V798 M603 754V798"/><path class="slot" d="M599 752 V800"/></g>
-      <g transform="translate(291 247)"><circle class="mount" r="24"/><circle class="mount-inner" r="16"/><path class="slot smallslot" d="M-9 -7 L9 7"/><path class="slot smallslot" d="M-10 0 H10"/></g>
-      <g transform="translate(131 574)"><circle class="mount" r="23"/><circle class="mount-inner" r="15"/><path class="slot smallslot" d="M-8 -7 L8 7"/><path class="slot smallslot" d="M-9 0 H9"/></g>
-      <g transform="translate(166 736)"><circle class="mount" r="14"/><circle class="mount-inner" r="8"/><path class="slot smallslot" d="M-4 -4 L4 4"/></g>
-      <text class="label" x="115" y="78">MAIN PWR</text><text class="label" x="277" y="176">BATT</text><text class="label" x="156" y="287">OFF</text>
-      <circle class="bezel" cx="187" cy="168" r="53"/><circle class="mount-inner" cx="187" cy="168" r="42"/>
-      <path class="engraved" d="M171 122H203L225 139V197L203 214H171L149 197V139Z"/>
-      <circle class="engraved" cx="187" cy="168" r="34"/>
-      <circle class="engraved" cx="187" cy="168" r="27"/>
-      <circle class="engraved" cx="187" cy="168" r="21"/>
-      <g data-main-lever transform="rotate(180 187 168)"><path class="metal" d="M175 170V121L170 113V99Q170 88 181 88H193Q204 88 204 99V113L199 121V170Q199 182 187 182Q175 182 175 170Z"/><path class="engraved" d="M174 102H200 M174 109H200 M179 124V166 M195 124V166"/></g>
-      <g data-control="main-batt" role="button" tabindex="0" class="clickable" aria-label="Turn MAIN PWR to BATT"><circle cx="187" cy="168" r="54" class="hit"/><circle cx="187" cy="168" r="61" class="target-ring"/></g>
-      <g data-control="main-main" role="button" tabindex="0" class="clickable" aria-label="Turn MAIN PWR to MAIN PWR"><circle cx="187" cy="168" r="54" class="hit"/><circle cx="187" cy="168" r="61" class="target-ring"/></g>
-      <text class="label" x="38" y="365">E</text><text class="label" x="38" y="416">L</text><text class="label" x="38" y="467">E</text><text class="label" x="38" y="518">C</text>
-      <text class="label" x="138" y="375">+</text><text class="label" x="174" y="404">CAUTION</text><text class="label" x="195" y="444">RESET</text>
-      <circle class="bezel" cx="253" cy="516" r="51"/><circle class="engraved" cx="253" cy="516" r="45"/><circle class="metal" cx="253" cy="516" r="37"/><circle class="engraved" cx="253" cy="516" r="29"/><path class="engraved" d="M253 454V461"/>
-      <path class="internal" d="M380 100 H516 Q522 100 522 106 V589 Q522 595 516 595 H380 Q374 595 374 589 V106 Q374 100 380 100Z"/>
-      <g data-lamp="flcs-pmg"><rect class="lamp" x="383" y="109" width="132" height="70" rx="4"/><rect class="engraved" x="388" y="114" width="122" height="60" rx="3"/><text class="legend" x="449" y="153">FLCS PMG</text></g>
-      <g data-lamp="main-gen"><rect class="lamp" x="383" y="181" width="132" height="70" rx="4"/><rect class="engraved" x="388" y="186" width="122" height="60" rx="3"/><text class="legend" x="449" y="225">MAIN GEN</text></g>
-      <g data-lamp="stby-gen"><rect class="lamp" x="383" y="268" width="132" height="73" rx="4"/><rect class="engraved" x="388" y="273" width="122" height="63" rx="3"/><text class="legend" x="449" y="314">STBY GEN</text></g>
-      <rect class="blank-lens" x="383" y="342" width="132" height="76" rx="4"/><rect class="engraved" x="388" y="347" width="122" height="66" rx="3"/>
-      <g data-lamp="epu-gen"><rect class="lamp" x="383" y="436" width="132" height="72" rx="4"/><rect class="engraved" x="388" y="441" width="122" height="62" rx="3"/><text class="legend" x="449" y="481">EPU GEN</text></g>
-      <g data-lamp="epu-pmg"><rect class="lamp" x="383" y="510" width="132" height="73" rx="4"/><rect class="engraved" x="388" y="515" width="122" height="63" rx="3"/><text class="legend" x="449" y="556">EPU PMG</text></g>
-      <path class="internal" d="M199 605 H515 V678 H199Z"/><path class="seam" d="M200 639 H251 M463 639 H511"/><text class="label" x="265" y="653">ACFT BATT</text>
-      <path class="internal" d="M213 686 H521 V853 H213Z"/>
-      <g data-lamp="to-flcs"><rect class="lamp" x="222" y="693" width="140" height="75" rx="4"/><rect class="engraved" x="227" y="698" width="130" height="65" rx="3"/><text class="legend" x="292" y="737">TO FLCS</text></g>
-      <g data-lamp="flcs-rly"><rect class="lamp" x="222" y="769" width="140" height="74" rx="4"/><rect class="engraved" x="227" y="774" width="130" height="64" rx="3"/><text class="legend" x="292" y="813">FLCS RLY</text></g>
-      <g data-lamp="battery-fail"><rect class="lamp" x="383" y="693" width="133" height="150" rx="4"/><rect class="engraved" x="388" y="698" width="123" height="140" rx="3"/><text class="legend" x="449.5" y="782">FAIL</text></g>
-      <g data-control="epu-check" role="button" tabindex="0" class="clickable" aria-label="Confirm EPU GEN and EPU PMG off"><rect x="383" y="436" width="132" height="147" class="hit"/><rect x="377" y="430" width="144" height="159" class="target-ring"/></g>
-    </svg>
+<div class="elec-art" data-main-state="off">
+<span class="relay-light" data-lamp="flcs-rly" aria-hidden="true"></span>
+<img src={elecArt.src} width={elecArt.width} height={elecArt.height} alt="F-16C electrical panel" />
+<div class="switch" role="group" aria-label="MAIN PWR toggle">
+<svg viewBox="0 0 100 100" aria-hidden="true">
+<circle cx="50" cy="50" r="25" fill="#fff" stroke="#171717" stroke-width="1.5"/>
+<path class="shaft" d="M38 55C37 48 42 43 50 43C58 43 63 48 62 55L64 83Q64 91 50 91Q36 91 36 83Z" fill="#fff" stroke="#171717" stroke-width="2"/>
+<g class="cap"><circle cx="50" cy="50" r="16" fill="#fff" stroke="#171717" stroke-width="2"/><circle cx="50" cy="50" r="12" fill="none" stroke="#171717"/></g>
+</svg>
+<button type="button" class="toggle-up" aria-label="Move MAIN PWR toggle up"></button>
+<button type="button" class="toggle-down" aria-label="Move MAIN PWR toggle down"></button>
+</div>
+<button type="button" class="reset" data-elec-reset aria-label="CAUTION RESET"><span class="reset-cap" aria-hidden="true"></span></button>
+<span class="elec-lamp" style="--x:57%;--y:14%;--w:21%;--h:6%" data-lamp="flcs-pmg"></span>
+<span class="elec-lamp" style="--x:34%;--y:80%;--w:20%;--h:6%" data-lamp="to-flcs"></span>
+<button type="button" class="elec-epu" data-control="epu-check">Confirm EPU lights off</button>
+</div>
     <p class="panel-note">Redrawn from the DCS F-16C Early Access Guide, page 64. Fastener and control positions are approximate.</p>
   </div>
   <div class="startup-panel" data-panel="test" hidden>
@@ -268,17 +247,48 @@ const jfsMounts = [dzus(31,79,27),dzus(391,80,27),dzus(31,1020,27),dzus(390,1020
 .startup-panels .panel-feedback{font-size:.88rem;font-weight:600;padding:.5rem;border-left:3px solid var(--color-ink);background:var(--color-surface)}
 /* SVG lever transforms are instantaneous. Transitioning the SVG line transform caused a visible detached-lever artefact in Chromium. */
 
-.startup-panels [data-panel="elec"] .plate{stroke:#111;stroke-width:3}
-.startup-panels [data-panel="elec"] .internal,.startup-panels [data-panel="elec"] .seam{fill:none;stroke:#151515;stroke-width:2}
-.startup-panels [data-panel="elec"] .engraved{fill:none;stroke:#151515;stroke-width:1.45;stroke-linejoin:round;pointer-events:none}
-.startup-panels [data-panel="elec"] .lamp,.startup-panels [data-panel="elec"] .blank-lens{fill:#fff}
-.startup-panels [data-panel="elec"] [data-lamp].lit .lamp{fill:#ffe8b3;stroke:#855400}
-.startup-panels [data-panel="elec"] .mount,.startup-panels [data-panel="elec"] .bezel,.startup-panels [data-panel="elec"] .metal{fill:#fff;stroke:#111;stroke-width:2.25}
-.startup-panels [data-panel="elec"] .mount-inner{fill:none;stroke:#555;stroke-width:2}
-.startup-panels [data-panel="elec"] .slot{stroke:#111;stroke-width:1.65;stroke-linecap:round}
-.startup-panels [data-panel="elec"] .smallslot{stroke-width:2.5}
-.startup-panels [data-panel="elec"] .label{fill:#222;font:600 24px "Arial Narrow","Liberation Sans Narrow",Arial,sans-serif}
-.startup-panels [data-panel="elec"] .legend{font:600 18px "Arial Narrow","Liberation Sans Narrow",Arial,sans-serif;text-anchor:middle}
+
+
+
+
+
+
+
+
+
+
 .throttle-idle-button{min-height:2.75rem;padding:.45rem 1rem;border:1px solid var(--color-ink);background:#fff;color:var(--color-ink);font:inherit;cursor:pointer}
 .throttle-idle-button[aria-pressed="true"]{background:var(--color-surface)}
+
+.elec-art{position:relative;background:white}
+.elec-art img{display:block;width:100%;height:auto}
+.elec-art button{font:inherit}
+.elec-art .switch,.elec-art .reset{position:absolute;transform:translate(-50%,-50%);border:0;background:transparent;padding:0;border-radius:50%;cursor:pointer}
+.elec-art .switch{left:29.8%;top:20.65%;width:18%;aspect-ratio:1}
+.elec-art .switch button{position:absolute;left:0;width:100%;height:50%;border:0;background:transparent;cursor:pointer;padding:0}
+.elec-art .switch .toggle-up{top:0;border-radius:50% 50% 0 0}
+.elec-art .switch .toggle-down{bottom:0;border-radius:0 0 50% 50%}
+.elec-art .switch button:hover{background:#397bb91c}
+.elec-art .switch svg{pointer-events:none;background:transparent;width:100%;overflow:visible;display:block}
+.elec-art .reset{left:37.4%;top:57.45%;width:19%;aspect-ratio:1}
+.elec-art .reset-cap{position:absolute;inset:15%;border-radius:50%;border:1.5px solid #222;background:radial-gradient(ellipse at 40% 28%,#fff 18%,#f4f4f4 60%,#aaa 100%);box-shadow:inset 0 1px 0 #fff,0 3px 0 #555,0 5px 4px #0005;transform:translateY(-3px);transition:transform 95ms ease-out,box-shadow 95ms ease-out}
+.elec-art .reset:active .reset-cap,.elec-art .reset.pulse .reset-cap{transform:translateY(1px) scale(.96);box-shadow:inset 0 2px 4px #0006,0 1px 0 #555}
+@media(prefers-reduced-motion:reduce){.elec-art .reset-cap{transition:none}}
+.elec-art .shaft{transform-origin:50px 50px;transition:transform .18s ease-out}
+.elec-art[data-main-state="main"] .shaft{transform:scaleY(-1)}
+.elec-art[data-main-state="batt"] .shaft{transform:scaleY(.03)}
+.elec-art[data-main-state="off"] .shaft{transform:scaleY(1)}
+.elec-art .cap{transition:transform .18s ease-out}
+.elec-art[data-state="0"] .cap{transform:translateY(-34px)}
+.elec-art[data-state="2"] .cap{transform:translateY(34px)}
+@media(prefers-reduced-motion:reduce){.elec-art .shaft,.elec-art .cap{transition:none}}
+.elec-art .relay-light{position:absolute;left:33.8%;top:87.1%;width:19.8%;height:5.8%;border-radius:5px;pointer-events:none;opacity:0;transition:opacity .15s ease-out;background:radial-gradient(ellipse,#ffd36a99,#ffbd4266 72%,transparent);mix-blend-mode:multiply}
+.elec-art[data-state="1"] .relay-light{opacity:1}
+@media(prefers-reduced-motion:reduce){.elec-art .relay-light{transition:none}}
+
+.elec-art{max-width:440px;margin:auto}
+.elec-art .elec-lamp{position:absolute;left:var(--x);top:var(--y);width:var(--w);height:var(--h);pointer-events:none;border-radius:4px}
+.elec-art .elec-lamp.lit{background:#ffbd4266}
+.elec-epu{display:none;margin:.5rem 0}
+.elec-epu[data-active="true"]{display:inline-block}
 </style>

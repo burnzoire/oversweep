@@ -30,7 +30,7 @@ test('instrument artwork and procedural content remain separate', async () => {
 test('panel controls are selectable SVG elements with distinct locations', async () => {
   const svg = await read('src/components/aircraft-procedures/StartupPanels.astro');
   const page = await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
-  for (const key of ['main-batt','main-main','flcs-test','epu-check','jfs-start2','throttle-idle']) {
+  for (const key of ['flcs-test','epu-check','jfs-start2','throttle-idle']) {
     assert.match(svg, new RegExp('data-control="' + key + '"'));
     assert.match(page, new RegExp("'" + key + "'"));
   }
@@ -51,14 +51,15 @@ test('panel redraw separates the physical units, includes documented proportions
   assert.ok(svg.includes('75.60×200'));
   assert.match(svg, /data-jfs-lever/);
   assert.match(svg, /data-flcs-lever/);
-  assert.match(svg, /data-main-lever/);
+  assert.match(svg, /class="toggle-up"/);
+  assert.match(svg, /class="toggle-down"/);
   assert.match(svg, /dimensionally surveyed/i);
 });
 
 test('ELEC and TEST layouts preserve photo-supported lamp groupings and test-control order', async () => {
  const svg = await read('src/components/aircraft-procedures/StartupPanels.astro');
- assert.match(svg,/FLCS PMG/);
- assert.match(svg,/class="blank-lens"/);
+ assert.match(svg,/data-lamp="flcs-pmg"/);
+ assert.match(svg,/data-lamp="flcs-rly"/);
  assert.match(svg,/const gauges|data-flcs-channel/);
  assert.match(svg,/id:'C',x:422,y:478/);
  assert.match(svg,/id:'B',x:486,y:543/);
@@ -70,13 +71,12 @@ test('ELEC and TEST layouts preserve photo-supported lamp groupings and test-con
 test('source-coordinate control pivots and screw arrays are explicit', async () => {
  const component=await read('src/components/aircraft-procedures/StartupPanels.astro');
  const page=await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
- for(const value of ['viewBox="0 0 672 891"','viewBox="0 0 607 1162"','viewBox="0 0 420 1100"'])
+ for(const value of ['viewBox="0 0 607 1162"','viewBox="0 0 420 1100"'])
    assert.ok(component.includes(value),value);
  for(const value of ['dzus(103,45','dzus(31,79'])
    assert.ok(component.includes(value),value);
  assert.ok(page.includes('rotate(120 277 154)'));
  assert.ok(page.includes('rotate(-90 450 779)'));
- assert.ok(page.includes('187 168'));
- assert.match(component, /data-main-lever transform="rotate\(180 187 168\)"/);
- assert.match(component, /class="mount" cx="49" cy="145"/);
+ assert.match(page, /moveMain\(1\)/);
+ assert.match(page, /moveMain\(-1\)/);
 });
