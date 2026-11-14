@@ -194,7 +194,7 @@ if (root) {
     lit('flcs-pmg',flcsHeld||jfsStarted);
     lit('to-flcs',flcsHeld||jfsStarted);
     lit('jfs-run',jfsRun && displayedRpm < 55);
-    const engineRunning = ['generator','idle-check'].includes(id);
+    const engineRunning = ['generator','idle-check','master-caution'].includes(id);
     lit('warn-elec',main==='main' && !engineRunning);
     lit('warn-sec',main==='main' && !engineRunning && !secCleared);
     lit('warn-seat',engineRunning);
@@ -232,6 +232,8 @@ if (root) {
     steps.forEach((el,i)=>el.hidden=finished || i!==step);
     const complete = one<HTMLElement>('[data-complete]')!;
     complete.hidden = !finished;
+    visual.hidden = finished;
+    root.classList.toggle('procedure-finished', finished);
     if (finished) complete.focus();
     controls.hidden=false;
     progress.hidden = finished;
@@ -361,6 +363,8 @@ if (root) {
 .retry-mark{position:absolute;z-index:3;transform:translate(-50%,-50%);font:bold 2.1rem/1 system-ui;color:#b00020;background:white;border-radius:50%;width:1em;text-align:center;pointer-events:none}
 .retry-hint{position:absolute;z-index:4;top:0;left:1rem;right:1rem;margin:0;padding:.5rem;border:2px solid #b00020;background:#fff;color:#740017;pointer-events:none}
 .procedure-visual{position:relative;border:1px solid var(--color-border);padding:1rem}
+.procedure-visual[hidden]{display:none}
 .procedure-visual h2{margin-top:0}
 @media(min-width:58rem){.procedure-workspace{grid-template-columns:minmax(0,1fr) minmax(18rem,1fr)}.procedure-visual{position:sticky;top:1rem}}
+.procedure-workspace.procedure-finished{grid-template-columns:minmax(0,1fr)}
 </style>
