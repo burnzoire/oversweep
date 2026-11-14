@@ -124,8 +124,8 @@ if (root) {
       const [hi, end] = stops[index];
       return start + (end - start) * (value - lo) / (hi - lo);
     };
-    const rpmAngle = dialAngle(r, [[0,0],[10,-38],[20,-72],[30,-105],[40,-139],[50,-180],[60,-222],[70,-255],[80,-289],[90,-322],[100,-360]]);
-    const ftitAngle = dialAngle(t, [[200,45],[300,72],[400,108],[500,138],[600,165],[700,195],[800,225],[900,253],[1000,285],[1100,316],[1200,360]]);
+    const rpmAngle = dialAngle(r, [[0,0],[20,38],[40,71],[60,108],[70,145],[80,183],[90,226],[100,275],[110,322]]);
+    const ftitAngle = dialAngle(t, [[200,107],[300,136],[400,158],[500,180],[600,205],[700,233],[800,277],[900,329],[1000,387],[1200,65+360]]);
     rpm.setAttribute('transform', `translate(${rpm.dataset.pivot}) rotate(${rpmAngle})`);
     ftit.setAttribute('transform', `translate(${ftit.dataset.pivot}) rotate(${ftitAngle})`);
     rpmValue.textContent = r.toFixed(0);
