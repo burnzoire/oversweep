@@ -34,7 +34,6 @@ const steps = guide.steps;
       <div class="procedure-controls" hidden data-controls>
         <button type="button" data-confirm hidden>Confirm indication</button>
         <button type="button" data-prev>Previous</button>
-        <button type="button" data-next>Next step</button>
       </div>
     </div>
     <aside class="procedure-visual" aria-label="Interactive cockpit control panels">
@@ -58,7 +57,6 @@ if (root) {
   const one = <T extends Element>(selector: string) => root.querySelector<T>(selector);
   const steps = all<HTMLElement>('[data-step]');
   const previous = one<HTMLButtonElement>('[data-prev]')!;
-  const next = one<HTMLButtonElement>('[data-next]')!;
   const confirm = one<HTMLButtonElement>('[data-confirm]')!;
   const controls = one<HTMLElement>('[data-controls]')!;
   const progress = one<HTMLElement>('[data-progress]')!;
@@ -79,7 +77,7 @@ if (root) {
     jfs: 'jfs-start2',
     throttle: 'throttle-idle',
   };
-  const confirmations = new Set(['epu-check', 'sec', 'generator', 'idle-check']);
+  const confirmations = new Set(['ground-ready', 'epu-check', 'sec', 'generator', 'idle-check']);
   let step = 0;
   let main: 'off'|'batt'|'main' = 'off';
   let flcsHeld = false;
@@ -88,13 +86,17 @@ if (root) {
   const completed = new Set<string>();
   let frame = 0;
 
+  let displayedRpm = 0, displayedFtit = 0;
   function drawEngine(r: number, t: number, msg: string) {
+    displayedRpm = r;
+    displayedFtit = t;
     const angle = (v: number, max: number) => -140 + Math.min(1, v/max)*280;
     rpm.setAttribute('transform', `translate(${rpm.dataset.pivot}) rotate(${angle(r,110)})`);
     ftit.setAttribute('transform', `translate(${ftit.dataset.pivot}) rotate(${angle(Math.max(0,t-200),1000)})`);
     rpmValue.textContent = r.toFixed(0);
     ftitValue.textContent = t <= 0 ? '—' : t.toFixed(0);
     signal.textContent = msg;
+    if (steps[step].dataset.stepId === 'sec') confirm.disabled = r < 20;
   }
   function animateEngine() {
     cancelAnimationFrame(frame);
@@ -108,11 +110,12 @@ if (root) {
       drawEngine(Number(target[0]),Number(target[1]),String(target[2]));
       return;
     }
+    const initialRpm = displayedRpm, initialFtit = displayedFtit;
     const start = performance.now();
     const tick=(now:number)=>{
       const k = Math.min(1,(now-start)/1200);
       const smooth = k*k*(3-2*k);
-      drawEngine(Number(target[0])*smooth,Number(target[1])*smooth,String(target[2]));
+      drawEngine(initialRpm+(Number(target[0])-initialRpm)*smooth,initialFtit+(Number(target[1])-initialFtit)*smooth,String(target[2]));
       if(k<1) frame=requestAnimationFrame(tick);
     };
     frame=requestAnimationFrame(tick);
@@ -130,7 +133,7 @@ if (root) {
     if (id==='generator' || id==='idle-check') visible.add('eyebrow');
     if (id==='generator') visible.add('caution');
     all<HTMLElement>('[data-panel]').forEach(el=>{el.hidden=!visible.has(el.dataset.panel||'');});
-    engineReference.hidden = panel !== 'engine' && panel !== 'throttle';
+    engineReference.hidden = panel !== 'engine' && panel !== 'throttle' && id !== 'jfs';
     const expected = actions[id] || '';
     all<HTMLElement | SVGGElement>('[data-control]').forEach(el=>{
       const active = el.dataset.control === expected;
@@ -195,22 +198,17 @@ if (root) {
     controls.hidden=false;
     progress.textContent=`Step ${step+1} of ${steps.length}`;
     previous.disabled=step===0;
-    const needsClick=Boolean(actions[id]);
     confirm.textContent = id === 'epu-check' ? 'Confirm EPU lights off' : 'Confirm indication';
     confirm.hidden=!confirmations.has(id);
-    confirm.disabled=completed.has(id);
-    next.disabled=(needsClick||confirmations.has(id))&&!completed.has(id);
-    next.textContent=step===steps.length-1?'Finish review':'Next step';
-    if (finished) next.disabled = true;
+    confirm.disabled=finished || (id === 'sec' && displayedRpm < 20);
+    information.textContent = finished ? 'Startup review complete.' : '';
     updatePanels();
     animateEngine();
-    information.textContent=finished?'Startup review complete.':next.disabled?'Use the named control or confirm the observed indication to continue.':'Action acknowledged. Continue to the next step.';
   }
   let advanceTimer: ReturnType<typeof setTimeout>;
   function advanceAfterControl() {
     const current = step;
     render();
-    next.disabled = true;
     clearTimeout(advanceTimer);
     advanceTimer = setTimeout(() => {
       if (step !== current) return;
@@ -237,11 +235,11 @@ if (root) {
     const next = positions[positions.indexOf(main) + direction];
     const id = steps[step].dataset.stepId || '';
     const expected = id === 'battery' ? 'batt' : id === 'main-power' ? 'main' : undefined;
-    if (!next || next !== expected || completed.has(id)) {
+    if ((!next || next !== expected) && main !== expected || completed.has(id)) {
       retry(direction > 0 ? up : down);
       return;
     }
-    main = next;
+    if (main !== expected && next) main = next;
     completed.add(id);
     advanceAfterControl();
   }
@@ -257,12 +255,18 @@ if (root) {
     reset.classList.add('pulse');
     resetTimer = setTimeout(() => reset.classList.remove('pulse'), 220);
   });
-  confirm.addEventListener('click',()=>{completed.add(steps[step].dataset.stepId||'');render();});
-  previous.addEventListener('click',()=>{clearTimeout(advanceTimer);finished=false;step=Math.max(0,step-1);render();});
-  next.addEventListener('click',()=>{
-    if(next.disabled)return;
+  confirm.addEventListener('click', () => {
+    if (confirm.disabled || confirm.hidden) return;
     if (step === steps.length - 1) finished = true;
-    else step += 1;render();
+    else step += 1;
+    render();
+  });
+  previous.addEventListener('click', () => {
+    clearTimeout(advanceTimer);
+    finished = false;
+    step = Math.max(0, step - 1);
+    completed.delete(steps[step].dataset.stepId || '');
+    render();
   });
   // Turn off the enhanced navigation if required controls are missing:
   // the full static step list remains readable without JavaScript.

@@ -35,7 +35,7 @@ test('panel controls are native buttons with distinct locations', async () => {
     assert.match(page, new RegExp("'" + key + "'"));
   }
   assert.match(svg,/<button type="button"[^>]*data-control=/);
-  assert.match(page,/next.disabled=/);
+  assert.match(page,/advanceAfterControl/);
   assert.match(page,/completed.add\(id\)/);
 });
 
