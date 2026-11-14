@@ -8,162 +8,179 @@
  * They remain review-only pending DCS screenshot overlay and SME signoff.
  */
 const dzus = (x: number, y: number, r = 8) => ({x,y,r});
-const elecMounts = [dzus(100,54),dzus(404,54),dzus(100,430),dzus(404,430)];
-const testMounts = [dzus(100,54),dzus(404,54),dzus(100,614),dzus(404,614)];
-const jfsMounts = [dzus(100,54),dzus(404,54),dzus(100,792),dzus(404,792)];
+const elecMounts = [dzus(47,106,30),dzus(582,106,30),dzus(49,676,30),dzus(581,676,30)];
+const testMounts = [dzus(103,45,30),dzus(481,45,30),dzus(104,1118,30),dzus(481,1118,30)];
+const jfsMounts = [dzus(31,79,27),dzus(391,80,27),dzus(31,1020,27),dzus(390,1020,27)];
 ---
 <div class="startup-panels" data-startup-panels>
+
+  <!-- Plate coordinates are measured from source-normalized frontal diagrams.
+       Original vector primitives, not embedded source artwork. -->
   <div class="startup-panel" data-panel="elec">
-    <svg viewBox="0 0 505 485" role="group" aria-label="F-16C ELEC control panel technical drawing, MAIN PWR switch and annunciators">
-      <title>ELEC CONTROL · 75.60 × 93.60 mm physical panel</title>
-      <path d="M88 36 H416 Q426 36 426 46 V436 Q426 447 415 447 H89 Q78 447 78 436 V47 Q78 36 88 36Z" class="plate"/>
-      {elecMounts.map(m=><g transform={`translate(${m.x} ${m.y})`} class="dzus"><circle r={m.r+3}/><circle r={m.r-1}/><path d={`M-${m.r-2} -${m.r-2} L${m.r-2} ${m.r-2}`}/></g>)}
-      <text x="251" y="27" class="panel-header">ELEC · LEFT CONSOLE</text>
-      <text x="191" y="86" class="legend">MAIN PWR</text>
-      <text x="276" y="132" class="legend">BATT</text>
-      <text x="190" y="189" class="legend">OFF</text>
-      <circle cx="204" cy="133" r="30" class="switch-bezel"/>
-      <circle cx="204" cy="133" r="22" class="bezel-inner"/>
-      <g class="switch-option" aria-label="MAIN PWR switch position">
-        <rect x="110" y="65" width="162" height="45" rx="3" class="hit"/>
-      </g>
-      <g class="switch-option" aria-label="BATT switch position">
-        <rect x="252" y="106" width="78" height="48" rx="3" class="hit"/>
-      </g>
-      <g class="switch-option" aria-label="OFF switch position">
-        <rect x="146" y="166" width="100" height="42" rx="3" class="hit"/>
-      </g>
-      <line data-main-lever x1="204" y1="133" x2="204" y2="173" class="lever"/>
-      <circle cx="204" cy="133" r="6" class="pivot"/>
-      <g aria-label="ELEC caution reset button (not used in this procedure)">
-        <text x="206" y="244" class="legend">CAUTION</text>
-        <text x="206" y="261" class="legend">RESET</text>
-        <circle cx="206" cy="294" r="19" class="push"/>
-      </g>
-      {/* Single vertical housing with three paired lamp modules — as on the Block 50 ELEC panel.
-           The centre-right space of the STBY GEN module is NOT a separate lamp. */}
-      <path d="M300 77 H402 V321 H300Z" class="recess"/>
-      <g data-lamp="flcs-pmg"><rect x="308" y="84" width="88" height="32" class="lamp"/><text x="352" y="105" class="lamp-text">FLCS PMG</text></g>
-      <g data-lamp="main-gen"><rect x="308" y="117" width="88" height="32" class="lamp"/><text x="352" y="138" class="lamp-text">MAIN GEN</text></g>
-      <g data-lamp="stby-gen"><rect x="308" y="161" width="88" height="32" class="lamp"/><text x="352" y="182" class="lamp-text">STBY GEN</text></g>
-      <rect x="308" y="194" width="88" height="32" class="blank-lens"/>
-      <g data-lamp="epu-gen"><rect x="308" y="238" width="88" height="32" class="lamp"/><text x="352" y="259" class="lamp-text">EPU GEN</text></g>
-      <g data-lamp="epu-pmg"><rect x="308" y="271" width="88" height="32" class="lamp"/><text x="352" y="292" class="lamp-text">EPU PMG</text></g>
-      <text x="290" y="342" class="legend">ACFT BATT</text>
-      <path d="M171 349 H397 V424 H171Z" class="recess"/>
-      <g data-lamp="to-flcs"><rect x="178" y="355" width="106" height="28" class="lamp"/><text x="231" y="374" class="lamp-text">TO FLCS</text></g>
-      <g data-lamp="flcs-rly"><rect x="178" y="384" width="106" height="28" class="lamp"/><text x="231" y="403" class="lamp-text">FLCS RLY</text></g>
-      <g data-lamp="battery-fail"><rect x="289" y="355" width="101" height="57" class="lamp"/><text x="339" y="387" class="lamp-text">FAIL</text></g>
-      <g data-control="epu-check" role="button" tabindex="0" class="clickable" aria-label="Confirm EPU GEN and EPU PMG indicators are off"><rect x="308" y="238" width="88" height="65" class="hit"/><rect x="303" y="234" width="98" height="73" class="target-ring"/></g>
-      <g data-control="main-batt" role="button" tabindex="0" class="clickable" aria-label="Select BATT by clicking the switch"><circle cx="204" cy="133" r="30" class="hit"/><circle cx="204" cy="133" r="34" class="target-ring"/></g>
-      <g data-control="main-main" role="button" tabindex="0" class="clickable" aria-label="Select MAIN PWR by clicking the switch"><circle cx="204" cy="133" r="22" class="hit"/></g>
-      <g transform="translate(278 215)" class="captive-screw"><circle r="6"/><path d="M-4 0 H4"/></g>
-      <text x="63" y="281" transform="rotate(-90 63 281)" class="side-label">E L E C</text>
-    </svg>
-    <p class="panel-note">ELEC panel outline uses the documented 75.60 × 93.60 mm proportions. Fasteners and controls are positioned from the visual reference; exact DCS-coordinate overlay still requires signoff.</p>
-  </div>
-
-  <div class="startup-panel" data-panel="test" hidden>
-    <svg viewBox="0 0 505 664" role="group" aria-label="F-16C TEST panel full outline, FLCS PWR TEST switch and four channel indications">
-      <title>TEST · approx. 75.60 × 145.50 mm physical panel</title>
-      <path d="M88 36 H416 Q426 36 426 46 V622 Q426 634 414 634 H90 Q78 634 78 622 V48 Q78 36 88 36Z" class="plate"/>
-      {testMounts.map(m=><g transform={`translate(${m.x} ${m.y})`} class="dzus"><circle r={m.r+3}/><circle r={m.r-1}/><path d="M-6 -6 L6 6"/></g>)}
-      <text x="252" y="27" class="panel-header">TEST · LEFT CONSOLE</text>
-      {/* Layout follows the single-seat F-16C TEST plate: three across the
-           upper row, PROBE HEAT / EPU-GEN / FLCS PWR at mid-height,
-           and FLCS PWR TEST at the lower right. */}
-      <text x="151" y="99" class="legend">FIRE &amp;</text>
-      <text x="151" y="114" class="legend">OHEAT DETECT</text>
-      <circle cx="151" cy="161" r="24" class="push"/>
-      <text x="250" y="99" class="legend">OBOGS</text>
-      <text x="250" y="114" class="legend">BIT</text>
-      <text x="250" y="202" class="small">OFF</text>
-      <circle cx="250" cy="161" r="22" class="switch-bezel"/>
-      <path d="M250 161 v-20" class="lever-small"/>
-      <text x="350" y="99" class="legend">MAL &amp;</text>
-      <text x="350" y="114" class="legend">IND LTS</text>
-      <circle cx="350" cy="161" r="24" class="push"/>
-      <g class="captive-screw" transform="translate(145 220)"><circle r="8"/><path d="M-5 -5 L5 5"/></g>
-      <g class="captive-screw" transform="translate(296 220)"><circle r="8"/><path d="M-5 -5 L5 5"/></g>
-      <text x="148" y="281" class="legend">PROBE</text>
-      <text x="148" y="296" class="legend">HEAT</text>
-      <circle cx="148" cy="341" r="22" class="switch-bezel"/>
-      <path d="M148 341 l-21 -15" class="lever-small"/>
-      <text x="131" y="383" class="small">TEST</text>
-      <text x="228" y="281" class="legend">EPU/GEN</text>
-      <circle cx="228" cy="341" r="22" class="switch-bezel"/>
-      <path d="M228 341 l-20 -12" class="lever-small"/>
-      <text x="225" y="382" class="small">OFF</text>
-      <path d="M293 258 V560" class="rule"/>
-      <text x="355" y="270" class="legend">FLCS</text>
-      <text x="355" y="286" class="legend">PWR</text>
-      <text x="349" y="307" class="small">L | R</text>
-      <text x="410" y="349" class="small" transform="rotate(90 410 349)">CHAN 1 2</text>
-      <path d="M314 318 H396 V398 H314 Z" class="recess"/>
-      {[
-        {id:'C',x:319,y:325},{id:'A',x:358,y:325},
-        {id:'D',x:319,y:363},{id:'B',x:358,y:363}
-      ].map(c=><g data-flcs-channel={c.id}>
-        <rect x={c.x} y={c.y} width="33" height="32" class="lamp"/>
-        <text x={c.x+16.5} y={c.y+22} class="lamp-text">{c.id}</text>
+    <svg viewBox="0 0 630 786" role="group" aria-label="F-16C Block 50 ELEC panel with reference-aligned control centres, annunciators and mounting fasteners">
+      <title>F-16C ELEC control plate — source-aligned original vector</title>
+      <path d="M7 3 H623 V782 H7 Z" class="plate"/>
+      <path d="M96 5 H354 V67 H521 V602 H7 V154 H96 Z" class="inset-outline"/>
+      <path d="M8 604 H523 V778 H8Z" class="inset-outline"/>
+      {elecMounts.map(m=><g class="dzus" transform={`translate(${m.x} ${m.y})`}>
+        <circle r={m.r+11}/><circle r={m.r+4}/><path d={`M-${m.r-4} -${m.r-4} L${m.r-4} ${m.r-4}`}/>
       </g>)}
-      <text x="325" y="441" class="legend">TEST</text>
-      <text x="412" y="487" class="legend">NORM</text>
-      <text x="348" y="553" class="legend">MAINT</text>
-      <g data-control="flcs-test" role="button" tabindex="0" class="clickable"
-        aria-label="Hold or release FLCS PWR TEST switch" aria-pressed="false">
-        <rect x="298" y="429" width="124" height="135" rx="3" class="hit"/>
-        <circle cx="352" cy="485" r="25" class="switch-bezel"/>
-        <circle cx="352" cy="485" r="33" class="target-ring"/>
-        <line data-flcs-lever x1="352" y1="485" x2="385" y2="485" class="lever"/>
-        <circle cx="352" cy="485" r="6" class="pivot"/>
+      {[[282,203],[129,516],[146,675]].map(([x,y])=><g class="captive-screw" transform={`translate(${x} ${y})`}><circle r="20"/><path d="M-13 0 H13 M0 -13 V13"/></g>)}
+      <text x="187" y="63" class="panel-large">MAIN PWR</text>
+      <text x="296" y="153" class="panel-large">BATT</text>
+      <text x="183" y="237" class="panel-large">OFF</text>
+      <circle cx="187" cy="145" r="53" class="switch-bezel"/><circle cx="187" cy="145" r="40" class="bezel-inner"/>
+      <g data-main-lever>
+        <path d="M180 145 L178 183 Q180 192 190 192 L196 180 L193 145Z" class="lever-body"/>
+        <ellipse cx="187" cy="186" rx="19" ry="13" class="lever-grip"/>
       </g>
-      <g class="captive-screw" transform="translate(396 574)"><circle r="8"/><path d="M-5 -5 L5 5"/></g>
-      <text x="63" y="342" transform="rotate(-90 63 342)" class="side-label">T E S T</text>
+      <circle cx="187" cy="145" r="9" class="pivot"/>
+      <g data-control="main-batt" role="button" tabindex="0" class="clickable" aria-label="Turn MAIN PWR to BATT">
+        <circle cx="187" cy="145" r="54" class="hit"/>
+        <circle cx="187" cy="145" r="62" class="target-ring"/>
+      </g>
+      <g data-control="main-main" role="button" tabindex="0" class="clickable" aria-label="Turn MAIN PWR to MAIN PWR">
+        <circle cx="187" cy="145" r="54" class="hit"/>
+        <circle cx="187" cy="145" r="62" class="target-ring"/>
+      </g>
+      <text x="51" y="309" class="panel-large">E</text><text x="51" y="354" class="panel-large">L</text>
+      <text x="51" y="399" class="panel-large">E</text><text x="51" y="444" class="panel-large">C</text>
+      <text x="155" y="319" class="panel-large">+</text>
+      <text x="243" y="345" class="panel-large">CAUTION</text>
+      <text x="243" y="380" class="panel-large">RESET</text>
+      <circle cx="242" cy="445" r="48" class="round-button"/>
+      <circle cx="242" cy="445" r="37" class="push"/>
+      <path d="M364 70 H514 V517 H364Z" class="recess"/>
+      <g data-lamp="flcs-pmg"><rect x="378" y="84" width="125" height="64" class="lamp"/><text x="440" y="122" class="panel-small">FLCS PMG</text></g>
+      <g data-lamp="main-gen"><rect x="378" y="149" width="125" height="62" class="lamp"/><text x="440" y="188" class="panel-small">MAIN GEN</text></g>
+      <g data-lamp="stby-gen"><rect x="378" y="226" width="125" height="65" class="lamp"/><text x="440" y="263" class="panel-small">STBY GEN</text></g>
+      <rect x="378" y="292" width="125" height="65" class="blank-lens"/>
+      <g data-lamp="epu-gen"><rect x="378" y="372" width="125" height="63" class="lamp"/><text x="440" y="410" class="panel-small">EPU GEN</text></g>
+      <g data-lamp="epu-pmg"><rect x="378" y="437" width="125" height="65" class="lamp"/><text x="440" y="476" class="panel-small">EPU PMG</text></g>
+      <g data-control="epu-check" role="button" tabindex="0" class="clickable" aria-label="Confirm EPU GEN and EPU PMG off">
+        <rect x="378" y="372" width="125" height="130" class="hit"/>
+        <rect x="372" y="366" width="137" height="142" class="target-ring"/>
+      </g>
+      <path d="M202 566 H263 M434 566 H509" class="rule"/>
+      <text x="348" y="573" class="panel-large">ACFT BATT</text>
+      <path d="M199 603 H516 V751 H199Z" class="recess"/>
+      <g data-lamp="to-flcs"><rect x="210" y="616" width="137" height="63" class="lamp"/><text x="279" y="655" class="panel-small">TO FLCS</text></g>
+      <g data-lamp="flcs-rly"><rect x="210" y="682" width="137" height="61" class="lamp"/><text x="279" y="719" class="panel-small">FLCS RLY</text></g>
+      <g data-lamp="battery-fail"><rect x="369" y="616" width="132" height="127" class="lamp"/><text x="435" y="688" class="panel-small">FAIL</text></g>
     </svg>
-    <p class="panel-note">All seven TEST panel functions and the three FLCS PWR TEST markings are shown. The physical outline follows the approximate 75.60 × 145.50 mm panel dimensions; subcomponent positions remain visually sourced, not dimensionally surveyed.</p>
+    <p class="panel-note">Coordinates transcribed from a front-view Block 50/52 ELEC technical diagram (210 × 262 px original), including seven visible mounting/retaining screws and the two-part annunciator stacks. DCS variant confirmation is still required.</p>
   </div>
-
+  <div class="startup-panel" data-panel="test" hidden>
+    <svg viewBox="0 0 607 1162" role="group" aria-label="Single-seat F-16C TEST plate with reference-aligned DZUS fasteners, upper pushbuttons, FLCS channel lights and test toggle">
+      <title>F-16C TEST plate — source-aligned single-seat panel layout</title>
+      <path d="M2 1 H606 V1160 H2Z" class="plate"/>
+      <path d="M2 92 H606 V1072 H2Z" class="inset-outline"/>
+      {testMounts.map(m=><g class="dzus" transform={`translate(${m.x} ${m.y})`}>
+        <circle r={m.r+12}/><circle r={m.r+5}/><path d={`M-${m.r-4} ${m.r-4} L${m.r-4} -${m.r-4}`}/>
+      </g>)}
+      {[[85,373],[400,374],[535,874]].map(([x,y])=><g class="captive-screw" transform={`translate(${x} ${y})`}><circle r="27"/><path d="M-17 -17 L17 17 M17 -17 L-17 17"/></g>)}
+      <text x="131" y="142" class="panel-large">FIRE &amp;</text>
+      <text x="131" y="175" class="panel-large">OHEAT DETECT</text>
+      <text x="305" y="142" class="panel-large">OBOGS</text>
+      <text x="305" y="175" class="panel-large">BIT</text>
+      <text x="485" y="142" class="panel-large">MAL &amp;</text>
+      <text x="485" y="175" class="panel-large">IND LTS</text>
+      <circle cx="129" cy="246" r="52" class="round-button"/><circle cx="129" cy="246" r="41" class="push"/>
+      <circle cx="485" cy="246" r="52" class="round-button"/><circle cx="485" cy="246" r="41" class="push"/>
+      <circle cx="305" cy="247" r="53" class="switch-bezel"/><circle cx="305" cy="247" r="40" class="bezel-inner"/>
+      <path d="M305 249 V276" class="lever-small"/>
+      <ellipse cx="305" cy="273" rx="23" ry="18" class="lever-grip"/>
+      <text x="305" y="338" class="panel-large">OFF</text>
+      <text x="34" y="273" class="panel-large">T</text><text x="34" y="313" class="panel-large">E</text>
+      <text x="34" y="353" class="panel-large">S</text><text x="34" y="393" class="panel-large">T</text>
+      <text x="92" y="460" class="panel-large">PROBE</text>
+      <text x="92" y="492" class="panel-large">HEAT</text>
+      <text x="288" y="479" class="panel-large">EPU/GEN</text>
+      <circle cx="86" cy="565" r="53" class="switch-bezel"/>
+      <path d="M86 561 L86 603" class="lever-small"/>
+      <circle cx="290" cy="565" r="53" class="switch-bezel"/>
+      <path d="M290 562 L291 606" class="lever-small"/>
+      <text x="87" y="665" class="panel-large">TEST</text>
+      <text x="292" y="666" class="panel-large">OFF</text>
+      <text x="185" y="572" class="panel-large">OFF</text>
+      <path d="M385 411 V877" class="rule"/>
+      <text x="480" y="383" class="panel-large">FLCS</text>
+      <text x="480" y="419" class="panel-large">PWR</text>
+      <text x="483" y="457" class="panel-large">L | R</text>
+      <text x="575" y="519" class="panel-small">CHAN</text>
+      <text x="575" y="546" class="panel-small">1</text><text x="575" y="584" class="panel-small">2</text>
+      <path d="M414 469 H556 V610 H414Z" class="recess"/>
+      {[
+        {id:'C',x:422,y:478},{id:'A',x:486,y:478},
+        {id:'D',x:422,y:543},{id:'B',x:486,y:543}
+      ].map(c=><g data-flcs-channel={c.id}><rect x={c.x} y={c.y} width="61" height="59" class="lamp"/><text x={c.x+30.5} y={c.y+37} class="panel-small">{c.id}</text></g>)}
+      <text x="450" y="720" class="panel-large">TEST</text>
+      <text x="551" y="802" class="panel-large">NORM</text>
+      <text x="448" y="876" class="panel-large">MAINT</text>
+      <g data-control="flcs-test" role="button" tabindex="0" class="clickable" aria-label="Hold FLCS PWR TEST at TEST or release to NORM">
+        <rect x="391" y="715" width="170" height="161" class="hit"/>
+        <circle cx="450" cy="779" r="53" class="switch-bezel"/><circle cx="450" cy="779" r="40" class="bezel-inner"/>
+        <g data-flcs-lever>
+          <path d="M450 779 L483 777 L489 791 L452 791Z" class="lever-body"/>
+          <ellipse cx="487" cy="786" rx="22" ry="15" class="lever-grip"/>
+        </g>
+        <circle cx="450" cy="779" r="7" class="pivot"/>
+        <circle cx="450" cy="779" r="62" class="target-ring"/>
+      </g>
+      <text x="442" y="969" class="panel-large">+</text>
+    </svg>
+    <p class="panel-note">Single-seat front-view TEST reference coordinate system (cropped first plate from a two-variant 442 × 420 px source). OBOGS BIT uses DCS wording instead of the older real-panel OXY QTY legend. Seven visible fasteners/retainers mapped.</p>
+  </div>
   <div class="startup-panel" data-panel="jfs" hidden>
-    <svg viewBox="0 0 505 853" role="group" aria-label="F-16C GE F110 engine and jet start panel, full length, JFS START 2 clickable">
-      <title>ENG &amp; JET START · approx. 75.60 × 200.00 mm physical panel</title>
-      <path d="M91 34 H412 V62 H422 V775 H413 V812 H90 V777 H79 V63 H91 Z" class="plate"/>
-      {jfsMounts.map(m=><g transform={`translate(${m.x} ${m.y})`} class="dzus"><circle r={m.r+3}/><circle r={m.r-1}/><path d="M-6 -6 L6 6"/></g>)}
-      <text x="252" y="27" class="panel-header">GE F110 · ENG &amp; JET START</text>
-      <text x="251" y="92" class="legend">JET FUEL</text><path d="M140 105 H365" class="rule"/>
-      <text x="157" y="135" class="legend">RUN</text>
-      <g data-lamp="jfs-run"><circle cx="157" cy="178" r="24" class="lamp"/><circle cx="157" cy="178" r="18" class="inner-lens"/></g>
-      <text x="282" y="140" class="legend">START 1</text>
-      <text x="369" y="184" class="legend">OFF</text>
-      <text x="278" y="229" class="legend">START 2</text>
-      <g data-control="jfs-start2" role="button" tabindex="0" class="clickable" aria-label="Select JFS START 2" aria-pressed="false">
-        <rect x="250" y="119" width="143" height="135" class="hit"/>
-        <circle cx="307" cy="183" r="27" class="switch-bezel"/>
-        <circle cx="307" cy="183" r="35" class="target-ring"/>
-        <line data-jfs-lever x1="307" y1="183" x2="343" y2="183" class="lever"/>
-        <circle cx="307" cy="183" r="7" class="pivot"/>
+    <svg viewBox="0 0 420 1100" role="group" aria-label="GE F110 ENG and JET START panel based on upright front-view technical reference with JFS start control">
+      <title>F-16C Block 50 · ENG &amp; JET START control plate</title>
+      <path d="M1 1 H418 V1099 H1Z" class="plate"/>
+      <path d="M62 2 H357 V96 H419 V986 H358 V1098 H62 V990 H1 V96 H62Z" class="inset-outline"/>
+      {jfsMounts.map(m=><g class="dzus" transform={`translate(${m.x} ${m.y})`}><circle r={m.r+10}/><circle r={m.r+4}/><path d={`M-${m.r-4} ${m.r-4} L${m.r-4} -${m.r-4}`}/></g>)}
+      {[[209,231],[329,556],[209,838]].map(([x,y])=><g class="captive-screw" transform={`translate(${x} ${y})`}><circle r="23"/><path d="M-14 -14 L14 14 M14 -14 L-14 14"/></g>)}
+      <text x="210" y="61" class="panel-large">JET FUEL</text>
+      <path d="M73 51 H160 M279 51 H348" class="rule"/>
+      <text x="118" y="106" class="panel-large">RUN</text>
+      <g data-lamp="jfs-run"><circle cx="119" cy="157" r="39" class="round-button"/><circle cx="119" cy="157" r="29" class="lamp"/></g>
+      <text x="275" y="104" class="panel-large">START 1</text>
+      <text x="346" y="160" class="panel-large">OFF</text>
+      <text x="276" y="216" class="panel-large">START 2</text>
+      <g data-control="jfs-start2" role="button" tabindex="0" class="clickable" aria-label="Select JFS START 2">
+        <circle cx="277" cy="154" r="41" class="hit"/>
+        <circle cx="277" cy="154" r="44" class="switch-bezel"/>
+        <circle cx="277" cy="154" r="31" class="bezel-inner"/>
+        <g data-jfs-lever><path d="M277 154 L318 148 L323 164 L281 167Z" class="lever-body"/><ellipse cx="318" cy="155" rx="21" ry="16" class="lever-grip"/></g>
+        <circle cx="277" cy="154" r="7" class="pivot"/>
+        <circle cx="277" cy="154" r="52" class="target-ring"/>
       </g>
-      <path d="M137 274 H370" class="rule"/>
-      <text x="256" y="307" class="legend">ENG CONT</text><text x="251" y="338" class="legend">PRI</text>
-      <rect x="208" y="347" width="92" height="156" rx="5" class="guard"/>
-      <path d="M220 361 H289 V487 H220 Z" fill="none" stroke="#333" stroke-width="2"/>
-      <circle cx="255" cy="382" r="15" class="switch-bezel"/>
-      <path d="M255 382 v-25" class="lever-small"/>
-      <text x="253" y="522" class="legend">SEC</text>
-      <text x="251" y="570" class="legend">AB RESET</text>
-      <circle cx="252" cy="614" r="22" class="switch-bezel"/>
-      <path d="M252 614 h27" class="lever-small"/>
-      <text x="335" y="613" class="legend">NORM</text>
-      <text x="253" y="648" class="legend">ENG DATA</text>
-      <text x="253" y="702" class="legend">MAX POWER</text>
-      <circle cx="253" cy="739" r="22" class="switch-bezel"/>
-      <path d="M253 739 v25" class="lever-small"/>
-      <text x="303" y="771" class="legend">OFF</text>
-      <text x="64" y="421" transform="rotate(-90 64 421)" class="side-label">ENG &amp; JET START</text>
+      <path d="M74 274 H351" class="rule"/>
+      <text x="208" y="311" class="panel-large">ENG CONT</text>
+      <text x="208" y="339" class="panel-large">PRI</text>
+      <rect x="157" y="348" width="106" height="164" class="guard"/>
+      <path d="M167 360 H253 V495 H167Z" class="inset-outline"/>
+      <path d="M168 363 H252 V440 H231 V402 H192 V440 H169 Z" class="guard-inner"/>
+      <circle cx="209" cy="393" r="23" class="switch-bezel"/><path d="M209 393 V370" class="lever-small"/>
+      <text x="208" y="545" class="panel-large">SEC</text>
+      <text x="208" y="654" class="panel-large">AB RESET</text>
+      <circle cx="208" cy="703" r="39" class="switch-bezel"/><path d="M208 703 L244 708" class="lever-small"/>
+      <text x="304" y="712" class="panel-large">NORM</text>
+      <text x="207" y="774" class="panel-large">ENG DATA</text>
+      <text x="210" y="944" class="panel-large">MAX POWER</text>
+      <rect x="111" y="924" width="25" height="136" rx="12" class="guard"/>
+      <rect x="286" y="924" width="25" height="136" rx="12" class="guard"/>
+      <circle cx="209" cy="996" r="40" class="switch-bezel"/><path d="M209 996 V1037" class="lever-small"/>
+      <text x="208" y="1074" class="panel-large">OFF</text>
+      <text x="25" y="196" class="panel-small">E</text><text x="25" y="224" class="panel-small">N</text>
+      <text x="25" y="252" class="panel-small">G</text>
+      <text x="25" y="296" class="panel-small">&amp;</text>
+      <text x="25" y="338" class="panel-small">J</text><text x="25" y="366" class="panel-small">E</text>
+      <text x="25" y="394" class="panel-small">T</text>
+      <text x="25" y="448" class="panel-small">S</text><text x="25" y="476" class="panel-small">T</text>
+      <text x="25" y="504" class="panel-small">A</text><text x="25" y="532" class="panel-small">R</text>
+      <text x="25" y="560" class="panel-small">T</text>
     </svg>
-    <p class="panel-note">Complete GE F110 engine-start plate, including RUN, JFS, ENG CONT guard, AB RESET and MAX POWER. Full 75.60 × approx. 200 mm outline; finer coordinates and DZUS placements await DCS overlay approval.</p>
+    <p class="panel-note">Front-view GE F110 plate rotated upright from its technical drawing. Real visible control and retaining fastener centres, guard, RUN lens and mounting hardware are mapped to a 420 × 1100 source-coordinate view.</p>
   </div>
-
   <div class="startup-panel" data-panel="throttle" hidden>
     <svg viewBox="0 0 505 350" role="group" aria-label="F-16C throttle cutoff and idle gate — provisional, not verified panel geometry">
       <title>Throttle travel — functional demonstration, not a surveyed panel</title>
@@ -237,6 +254,12 @@ const jfsMounts = [dzus(100,54),dzus(404,54),dzus(100,792),dzus(404,792)];
 .startup-panel[hidden]{display:none}
 .startup-panels svg{display:block;width:100%;max-width:100%;max-height:58rem;height:auto;background:white}
 .startup-panels .plate{fill:#fff;stroke:#171717;stroke-width:2}
+.startup-panels .panel-large{font:600 24px "Arial Narrow",system-ui,sans-serif;text-anchor:middle;fill:#222}
+.startup-panels .panel-small{font:600 20px "Arial Narrow",system-ui,sans-serif;text-anchor:middle;fill:#222}
+.startup-panels .inset-outline{fill:none;stroke:#555;stroke-width:2.2}
+.startup-panels .lever-body{fill:#f5f5f5;stroke:#252525;stroke-width:3;stroke-linejoin:round}
+.startup-panels .lever-grip{fill:#ddd;stroke:#333;stroke-width:2.5}
+.startup-panels .guard-inner{fill:#fff;stroke:#444;stroke-width:2.5}
 .startup-panels .panel-header{font:700 12px system-ui,sans-serif;letter-spacing:1px;text-anchor:middle;fill:#444}
 .startup-panels .legend{font:600 12px system-ui,sans-serif;text-anchor:middle;fill:#222}
 .startup-panels .small{font:600 10px system-ui,sans-serif;text-anchor:middle;fill:#666}
@@ -266,7 +289,8 @@ const jfsMounts = [dzus(100,54),dzus(404,54),dzus(100,792),dzus(404,792)];
 .startup-panels .clickable:focus-visible .hit{stroke:#005fcc;stroke-width:4;fill:#dbeafb;fill-opacity:.35}
 .startup-panels .target-ring{fill:none;stroke:transparent;stroke-width:2;pointer-events:none}
 .startup-panels .clickable[data-active="true"] .target-ring{stroke:#9d6709;stroke-width:2;stroke-dasharray:5 4}
-.startup-panels [data-lamp].lit .lamp,.startup-panels [data-flcs-channel].lit .lamp{fill:#ffe8b3;stroke:#855400}
+.startup-panels [data-lamp].lit .lamp{fill:#ffe8b3;stroke:#855400}
+.startup-panels [data-flcs-channel].lit .lamp{fill:#d9f1de;stroke:#236d36}
 .startup-panels [aria-pressed="true"] .target-ring{stroke:#9d6709;stroke-width:2}
 .startup-panels .panel-note{font-size:.83rem;color:var(--color-muted);margin:.45rem 0 .75rem}
 .startup-panels .panel-feedback{font-size:.88rem;font-weight:600;padding:.5rem;border-left:3px solid var(--color-ink);background:var(--color-surface)}
