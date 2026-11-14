@@ -65,9 +65,9 @@ if (root) {
   const engineReference = one<HTMLElement>('[data-engine-reference]')!;
   const rpm = one<SVGLineElement>('[data-needle="rpm"]')!;
   const ftit = one<SVGLineElement>('[data-needle="ftit"]')!;
-  const rpmValue = one<SVGTextElement>('[data-value="rpm"]')!;
-  const ftitValue = one<SVGTextElement>('[data-value="ftit"]')!;
-  const signal = one<SVGTextElement>('[data-signal]')!;
+  const rpmValue = one<HTMLElement>('[data-value="rpm"]')!;
+  const ftitValue = one<HTMLElement>('[data-value="ftit"]')!;
+  const signal = one<HTMLElement>('[data-signal]')!;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   const actions: Record<string, string> = {
     battery: 'main-batt',
@@ -89,8 +89,8 @@ if (root) {
 
   function drawEngine(r: number, t: number, msg: string) {
     const angle = (v: number, max: number) => -140 + Math.min(1, v/max)*280;
-    rpm.setAttribute('transform', `rotate(${angle(r,110)} 242 488)`);
-    ftit.setAttribute('transform', `rotate(${angle(Math.max(0,t-200),1000)} 242 662)`);
+    rpm.setAttribute('transform', `rotate(${angle(r,110)} 245 508)`);
+    ftit.setAttribute('transform', `rotate(${angle(Math.max(0,t-200),1000)} 310 723)`);
     rpmValue.textContent = r.toFixed(0);
     ftitValue.textContent = t <= 0 ? '—' : t.toFixed(0);
     signal.textContent = msg;
