@@ -59,3 +59,15 @@ Research date: 2026-11-14. Purpose: collect **external references** for accurate
 ## Rights notes
 
 Publicly available images are useful **references**, but online availability is not a blanket licence to reproduce images or trace copyrighted drawings. Draw original technical diagrams, cite sources, avoid copying a third-party guide's art and labels arrangement as an expressive illustration. Where required, seek permission for direct image reuse. Confirm rights separately before placing any photograph or game texture in published Oversweep.
+
+## Redraw iteration — reference-to-asset provenance (14 November 2026)
+
+The first redraw replaces the invented large combined panel with **separate, full-height ELEC, TEST and GE F110 ENG & JET START vector panels**. Each has independently positioned DZUS/quarter-turn fastener symbols; panel proportions use the original-panel dimensions tabulated by [xFlight's Left Console measurements](https://www.xflight.de/pe_org_par_lfc.htm):
+
+- ELEC 75.60 × 93.60 mm (documented dimensions; target ratio 0.8077).
+- TEST approximately 75.60 × 145.50 mm (estimated by the source, target ratio 0.5196).
+- ENG & JET START approximately 75.60 × 200.00 mm (estimated by the source, target ratio 0.3780).
+
+The current SVG coordinates **are not measured physical control or DZUS coordinates**. The electrical switch/annunciator ordering comes from xFlight's photograph (see inventory), but the actual F-16C Block 50 DCS variant's markings override older hardware variants. The engine panel includes the GE F110 controls in xFlight's list (RUN/JFS, ENG CONT, AB RESET, MAX POWER), corroborated with the Hispapanels replica photo. The TEST panel includes the associated controls documented by Eagle Dynamics; layout still requires in-sim comparative capture.
+
+**IMPORTANT:** These are now well-proportioned *reference-based drafts*, not certified exact technical reproductions. Further work must use straight-on, high-resolution, specifically DCS Block 50 images with a fixed overlay: physically count and match all fasteners, slots, distances, border cutouts, lettering, guards and knobs. The generic throttle and engine-gauge mockups remain provisional and should be removed/replaced once equivalent references are found. Neither the new panel drawings nor the existing throttle/gauge artwork is publication-ready.
