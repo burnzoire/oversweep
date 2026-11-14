@@ -61,3 +61,14 @@ The following SVG control targets are wired to the procedure state machine and g
 Keyboard Enter/Space is supported for SVG controls. The procedure still renders all text without JavaScript. A separate temporary-branch Chromium capture checks switch interactions and disabled Next-step gating.
 
 **Fidelity qualification:** These are original line-art *working prototypes*. The photographic references establish basic panel relationships and labels, but the panel perimeter, coordinates, the detail of the FLCS TEST panel and the throttle geometry have **not** been independently checked against a current DCS screenshot at matching camera angle. **Exact-outline requirement remains open**; the visual signoff blocker above is **not lifted**. The EPU confirmation is a learning interaction, not a simulated EPU fault detector.
+
+## Reference-derived redraw checkpoint (14 November 2026)
+
+The prior side-by-side RPM/FTIT cartoon has been replaced with the correct four-instrument **OIL → NOZ POS → RPM → FTIT** vertical stack. The guide now includes distinct original SVGs for the ELEC, TEST and GE F110 ENG & JET START panels, with quarter-turn fastener outlines; a 4 × 8 caution-light panel; and the split right-eyebrow warning assembly. The switches remain clickable and warning lamps respond to the procedure state (educational only, not DCS telemetry). Reference basis:
+
+- [xFlight Left Console panel dimensions](https://www.xflight.de/pe_org_par_lfc.htm) — ELEC exact 75.60 × 93.60 mm; TEST and ENG START estimated dimensions; source clearly distinguishes measured and estimated values.
+- [xFlight Block 50/52 ELEC controls](https://www.xflight.de/pe_org_par_lfc_elec.htm) and [GE F110 engine-start controls](https://www.xflight.de/pe_org_par_lfc_engstart.htm).
+- [DCS engine instrument stack photograph](https://wiki.hoggitworld.com/images/1/10/ENG_Instruments.jpg), [DCS right-eyebrow photograph](https://wiki.hoggitworld.com/images/8/88/VBLs.jpg), and [DCS caution matrix photo](https://cypher1778.github.io/DCS_Wiki/f-16c/images/ss17-caution_panel.jpg).
+- [Eagle Dynamics F-16C Early Access Guide, 23 March 2026](https://www.digitalcombatsimulator.ru/upload/iblock/6f7/joywm66pwdgg4iacljy8zolons4dz8dh/DCS%20F-16C%20Early%20Access%20Guide%20EN.pdf), panel layout and startup sequence.
+
+**Visual acceptance is still BLOCKED.** A source-derived panel outline is *not* an exact surveyed contour. No reliable, orthographic DCS screenshot overlay or verified per-fastener coordinate table has yet been produced; current individual DZUS positions, panel edge cuts and some labels are draft positions. The throttle remains conceptual. Production should not advertise the artwork as exact, and should not publish the procedure until geometric comparison and in-sim verification are complete. The new work provides a significantly more realistic panel review surface; it does not silently clear the exactness requirement.
