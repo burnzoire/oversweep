@@ -143,6 +143,57 @@ const jfsMounts = [dzus(100,54),dzus(404,54),dzus(100,792),dzus(404,792)];
     </svg>
     <p class="panel-note">Throttle needs a measured DCS reference. This conceptual travel indication is NOT an exact cockpit outline and remains blocked for publication.</p>
   </div>
+
+  <div class="startup-panel" data-panel="caution" hidden>
+    <svg viewBox="0 0 570 540" role="img" aria-label="F-16C caution annunciator panel, four columns and eight rows in actual order">
+      <title>CAUTION LIGHT PANEL · 32 positions</title>
+      <path d="M33 17 H537 Q550 17 550 30 V505 Q550 523 532 523 H37 Q20 523 20 507 V31 Q20 17 33 17Z" class="plate"/>
+      {[[48,36],[522,36],[48,505],[522,505]].map(([x,y])=><g transform={`translate(${x} ${y})`} class="dzus"><circle r="11"/><circle r="7"/><path d="M-5 -5 L5 5"/></g>)}
+      {[
+        ['FLCS FAULT','ENGINE FAULT','AVIONICS FAULT','SEAT NOT ARMED'],
+        ['ELEC SYS','SEC','EQUIP HOT','NWS FAIL'],
+        ['PROBE HEAT','FUEL/OIL HOT','RADAR ALT','ANTI SKID'],
+        ['CADC','INLET ICING','IFF','HOOK'],
+        ['STORES CONFIG','OVERHEAT','NUCLEAR','OBOGS'],
+        ['AFT NOT ENGAGED','EEC','','CABIN PRESS'],
+        ['FWD FUEL LOW','BUC','',''],
+        ['AFT FUEL LOW','','','']
+      ].map((row,ri)=>row.map((label,ci)=>{
+        const x=43+ci*121, y=62+ri*55;
+        const lines=label.split(' ');
+        return <g data-lamp={label==='ELEC SYS'?'warn-elec':label==='SEC'?'warn-sec':label==='SEAT NOT ARMED'?'warn-seat':''}>
+          <rect x={x} y={y} width="117" height="47" rx="2" class="lamp" />
+          {label.length<13 ? <text x={x+58.5} y={y+29} class="lamp-text">{label||'—'}</text>
+            : <>
+                <text x={x+58.5} y={y+19} class="lamp-text">{lines.slice(0,Math.ceil(lines.length/2)).join(' ')}</text>
+                <text x={x+58.5} y={y+34} class="lamp-text">{lines.slice(Math.ceil(lines.length/2)).join(' ')}</text>
+              </>}
+        </g>;
+      }))}
+    </svg>
+    <p class="panel-note">Caution-light layout is the observed four-column/eight-row DCS arrangement; individual panel-edge and fastener coordinates await orthographic verification.</p>
+  </div>
+  <div class="startup-panel" data-panel="eyebrow" hidden>
+    <svg viewBox="0 0 600 240" role="img" aria-label="F-16C right eyebrow split warning lights, ENGINE and HYD OIL PRESS">
+      <title>RIGHT EYEBROW · warning annunciators</title>
+      <path d="M29 19 H553 L579 64 V214 H40 L16 182 V41 Z" class="plate"/>
+      {[[31,40],[547,40],[42,195],[553,195]].map(([x,y])=><g transform={`translate(${x} ${y})`} class="dzus"><circle r="9"/><circle r="6"/><path d="M-4 -4 L4 4"/></g>)}
+      {[
+        ['ENG FIRE','ENGINE'],
+        ['HYD/OIL','PRESS'],
+        ['FLCS','DBU ON'],
+        ['TO/LDG','CONFIG']
+      ].map((pair,i)=>{
+        const x=49+i*131;
+        return <g>
+          <g data-lamp={i===0?'warn-engine':''}><rect x={x} y="62" width="126" height="56" class="lamp"/><text x={x+63} y="94" class="lamp-text">{pair[0]}</text></g>
+          <g data-lamp={i===0?'warn-engine':i===1?'warn-hyd':''}><rect x={x} y="121" width="126" height="56" class="lamp"/><text x={x+63} y="154" class="lamp-text">{pair[1]}</text></g>
+        </g>;
+      })}
+      <text x="303" y="211" class="small">ENGINE AND HYD/OIL PRESS — RIGHT EYEBROW</text>
+    </svg>
+    <p class="panel-note">Right-eyebrow split indicators reproduced in their horizontal sequence. Exact housing geometry is awaiting DCS reference overlay.</p>
+  </div>
   <div class="panel-feedback" data-panel-feedback aria-live="polite">Select the highlighted control to proceed.</div>
 </div>
 <style>
