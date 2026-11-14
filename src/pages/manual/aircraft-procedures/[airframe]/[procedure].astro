@@ -82,6 +82,7 @@ if (root) {
   let main: 'off'|'batt'|'main' = 'off';
   let flcsHeld = false;
   let jfsStarted = false;
+  let jfsRun = false;
   let throttleIdle = false;
   const completed = new Set<string>();
   let frame = 0;
@@ -111,7 +112,7 @@ if (root) {
   function animateEngine() {
     cancelAnimationFrame(frame);
     const id = steps[step].dataset.visual;
-    const target = id === 'jfs'||id === 'rpm20' ? [20,0,'JFS RUN']
+    const target = (id === 'jfs' && jfsRun)||id === 'rpm20' ? [20,0,'JFS RUN']
       : id === 'idle' ? (throttleIdle ? [55,700,'LIGHT-OFF'] : [20,0,'READY FOR IDLE'])
       : id === 'engine' ? [60,650,'ENGINE WARNING OFF']
       : id === 'stable' ? [70,620,'IDLE CHECK']
@@ -165,7 +166,7 @@ if (root) {
     lit('flcs-rly',main!=='off'&&!flcsHeld&&!jfsStarted);
     lit('flcs-pmg',flcsHeld||jfsStarted);
     lit('to-flcs',flcsHeld||jfsStarted);
-    lit('jfs-run',jfsStarted&&!throttleIdle);
+    lit('jfs-run',jfsRun&&!throttleIdle);
     const engineRunning = ['generator','idle-check'].includes(id);
     lit('warn-elec',main==='main' && !engineRunning);
     lit('warn-sec',main==='main' && !engineRunning && id!=='sec' && !throttleIdle);
@@ -179,7 +180,7 @@ if (root) {
       id==='flcs-release'?'Click the lower half of FLCS PWR TEST to return it to NORM.':
       id==='battery'?'Select BATT directly on the electrical panel.':
       id==='main-power'?'Select MAIN PWR directly on the electrical panel.':
-      id==='jfs'?'Click the JFS control to select START 2.':
+      id==='jfs'?(jfsRun ? 'JET FUEL RUN is on.' : jfsStarted ? 'Wait for the green JET FUEL RUN light. It should illuminate within 30 seconds.' : 'Select JFS START 2.'):
       id==='throttle'?'Select Throttle Idle to continue.':
       id==='epu-check'?'Verify both EPU lights are off, then select Confirm EPU lights off below the step.':
       'Observe the relevant indication and confirm the step.';
@@ -233,7 +234,18 @@ if (root) {
       flcsHeld = control === 'flcs-test';
       completed.add(id);
     }
-    if(control==='jfs-start2'){jfsStarted=true;completed.add(id);}
+    if (control === 'jfs-start2') {
+      jfsStarted = true;
+      jfsRun = false;
+      completed.add(id);
+      render();
+      // Illustrative delay within the documented 30-second RUN limit.
+      advanceTimer = setTimeout(() => {
+        jfsRun = true;
+        advanceAfterControl();
+      }, 12000);
+      return;
+    }
     if(control==='throttle-idle'){throttleIdle=true;completed.add(id);}
     advanceAfterControl();
   }

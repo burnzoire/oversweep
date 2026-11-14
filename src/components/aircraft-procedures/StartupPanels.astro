@@ -49,7 +49,8 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
     <div class="raster-panel raster-jfs">
       <img src={jfsArt.src} width={jfsArt.width} height={jfsArt.height} alt="ENG and JET START panel" />
       <span class="raster-lamp" data-lamp="jfs-run" style="--x:25%;--y:11.5%;--w:7%;--h:3.8%" aria-hidden="true"></span>
-      <button type="button" class="raster-switch" data-control="jfs-start2" aria-label="Select JFS START 2" style="--x:57.2%;--y:12.8%">
+      <div class="jfs-detents" aria-hidden="true"><span>START 1</span><span>OFF</span><span>START 2</span></div>
+      <button type="button" class="raster-switch" data-control="jfs-start2" aria-label="Select JFS START 2" style="--x:57.2%;--y:16.8%">
         <svg data-jfs-lever data-position="off" viewBox="0 0 100 100" aria-hidden="true">
 <circle cx="50" cy="50" r="25" fill="#fff" stroke="#171717" stroke-width="1.5"/>
 <path class="shaft" d="M38 55C37 48 42 43 50 43C58 43 63 48 62 55L64 83Q64 91 50 91Q36 91 36 83Z" fill="#fff" stroke="#171717" stroke-width="2"/>
@@ -152,4 +153,5 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
 .raster-jfs .shaft{transform-origin:50px 50px;transform:scaleY(0)}
 .raster-jfs [data-position="start2"] .shaft{transform:scaleY(1)}
 .raster-jfs [data-position="start2"] .cap{transform:translateY(34px)}
+.jfs-detents{position:absolute;left:49%;top:7%;width:46%;height:17%;background:#fff;display:grid;grid-template-rows:repeat(3,1fr);align-items:center;padding-left:19%;box-sizing:border-box;font:600 clamp(8px,2vw,13px) system-ui;color:#171717}
 </style>
