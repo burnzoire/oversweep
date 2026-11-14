@@ -35,20 +35,41 @@ try {
   if (!(await page.title()).includes('F-16C')) throw Error('Unexpected review page title');
   await page.screenshot({ path: 'review-screenshots/f16-start-desktop.png', fullPage: true });
 
-  // The 20% gate is step 8 (zero-based index 7).
-  for (let i = 0; i < 7; i++) await page.locator('[data-next]').click();
+  // Exercise the actual SVG controls; Next must be blocked until each action.
+  if (!(await page.locator('[data-next]').isDisabled())) throw Error('Battery action is not gated');
+  await page.locator('[data-control="main-batt"]').click();
+  if (await page.locator('[data-next]').isDisabled()) throw Error('Battery switch did not complete step');
+  await page.screenshot({ path: 'review-screenshots/f16-battery-selected-desktop.png', fullPage: true });
+  await page.locator('[data-next]').click(); // FLCS test
+  await page.locator('[data-control="flcs-test"]').click();
+  await page.screenshot({ path: 'review-screenshots/f16-flcs-test-desktop.png', fullPage: true });
+  await page.locator('[data-next]').click(); // FLCS release
+  await page.locator('[data-control="flcs-test"]').click();
+  await page.locator('[data-next]').click(); // MAIN PWR
+  await page.locator('[data-control="main-main"]').click();
+  await page.locator('[data-next]').click(); // EPU
+  await page.locator('[data-control="epu-check"]').click();
+  await page.locator('[data-next]').click(); // ground
+  await page.locator('[data-next]').click(); // JFS
+  await page.locator('[data-control="jfs-start2"]').click();
+  await page.screenshot({ path: 'review-screenshots/f16-jfs-selected-desktop.png', fullPage: true });
+  await page.locator('[data-next]').click(); // 20 percent
   await page.waitForTimeout(1400);
-  await page.screenshot({ path: 'review-screenshots/f16-rpm20-desktop.png', fullPage: true });
   if (!(await page.locator('[data-step="7"]').isVisible())) throw Error('RPM 20% step not reached');
-
-  for (let i = 7; i < 10; i++) await page.locator('[data-next]').click();
+  await page.screenshot({ path: 'review-screenshots/f16-rpm20-desktop.png', fullPage: true });
+  await page.locator('[data-confirm]').click();
+  await page.locator('[data-next]').click(); // throttle idle
+  await page.locator('[data-control="throttle-idle"]').click();
+  await page.screenshot({ path: 'review-screenshots/f16-throttle-idle-desktop.png', fullPage: true });
+  await page.locator('[data-next]').click(); // generator
+  await page.locator('[data-confirm]').click();
+  await page.locator('[data-next]').click(); // idle
   await page.waitForTimeout(1400);
   await page.screenshot({ path: 'review-screenshots/f16-idle-desktop.png', fullPage: true });
-
   await page.setViewportSize({ width: 390, height: 844 });
   for (let i=10;i>0;i--) await page.locator('[data-prev]').click();
   await page.screenshot({ path: 'review-screenshots/f16-start-mobile.png', fullPage: true });
-  console.log('Captured desktop start, RPM threshold, idle, and mobile start from real Chromium browser.');
+  console.log('Captured desktop battery, FLCS, JFS, throttle, RPM and idle states plus mobile in Chromium; step gating verified.');
 } catch (error) {
   console.error(error);
   process.exitCode = 1;
