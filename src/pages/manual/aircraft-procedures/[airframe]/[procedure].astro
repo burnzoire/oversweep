@@ -89,8 +89,8 @@ if (root) {
 
   function drawEngine(r: number, t: number, msg: string) {
     const angle = (v: number, max: number) => -140 + Math.min(1, v/max)*280;
-    rpm.setAttribute('transform', `rotate(${angle(r,100)} 124 118)`);
-    ftit.setAttribute('transform', `rotate(${angle(t,1000)} 337 118)`);
+    rpm.setAttribute('transform', `rotate(${angle(r,110)} 242 488)`);
+    ftit.setAttribute('transform', `rotate(${angle(Math.max(0,t-200),1000)} 242 662)`);
     rpmValue.textContent = r.toFixed(0);
     ftitValue.textContent = t.toFixed(0);
     signal.textContent = msg;
