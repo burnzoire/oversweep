@@ -36,23 +36,28 @@ const jfsMounts = [dzus(100,54),dzus(404,54),dzus(100,792),dzus(404,792)];
       <line data-main-lever x1="204" y1="133" x2="204" y2="173" class="lever"/>
       <circle cx="204" cy="133" r="6" class="pivot"/>
       <g aria-label="ELEC caution reset button (not used in this procedure)">
-        <text x="206" y="233" class="legend">CAUTION</text>
-        <text x="206" y="251" class="legend">RESET</text>
-        <circle cx="206" cy="295" r="19" class="push"/>
+        <text x="206" y="244" class="legend">CAUTION</text>
+        <text x="206" y="261" class="legend">RESET</text>
+        <circle cx="206" cy="294" r="19" class="push"/>
       </g>
-      <g data-lamp="flcs-pmg"><rect x="306" y="81" width="99" height="40" class="lamp"/><text x="355" y="104" class="lamp-text">FLCS PMG</text></g>
-      <g data-lamp="main-gen"><rect x="306" y="122" width="99" height="40" class="lamp"/><text x="355" y="145" class="lamp-text">MAIN GEN</text></g>
-      <g data-lamp="stby-gen"><rect x="306" y="163" width="99" height="40" class="lamp"/><text x="355" y="186" class="lamp-text">STBY GEN</text></g>
-      <g data-lamp="epu-gen"><rect x="306" y="204" width="99" height="40" class="lamp"/><text x="355" y="227" class="lamp-text">EPU GEN</text></g>
-      <g data-lamp="epu-pmg"><rect x="306" y="245" width="99" height="40" class="lamp"/><text x="355" y="268" class="lamp-text">EPU PMG</text></g>
-      <path d="M175 341 H394" class="rule"/>
-      <text x="283" y="338" class="legend">ACFT BATT</text>
-      <g data-lamp="to-flcs"><rect x="182" y="352" width="99" height="29" class="lamp"/><text x="232" y="371" class="lamp-text">TO FLCS</text></g>
-      <g data-lamp="flcs-rly"><rect x="182" y="382" width="99" height="30" class="lamp"/><text x="232" y="401" class="lamp-text">FLCS RLY</text></g>
-      <g data-lamp="battery-fail"><rect x="286" y="352" width="104" height="60" class="lamp"/><text x="338" y="388" class="lamp-text">FAIL</text></g>
-      <g data-control="epu-check" role="button" tabindex="0" class="clickable" aria-label="Confirm EPU GEN and EPU PMG indicators are off"><rect x="304" y="204" width="104" height="81" class="hit"/></g>
+      {/* Single vertical housing with three paired lamp modules — as on the Block 50 ELEC panel.
+           The centre-right space of the STBY GEN module is NOT a separate lamp. */}
+      <path d="M300 77 H402 V321 H300Z" class="recess"/>
+      <g data-lamp="flcs-pmg"><rect x="308" y="84" width="88" height="32" class="lamp"/><text x="352" y="105" class="lamp-text">FLCS PMG</text></g>
+      <g data-lamp="main-gen"><rect x="308" y="117" width="88" height="32" class="lamp"/><text x="352" y="138" class="lamp-text">MAIN GEN</text></g>
+      <g data-lamp="stby-gen"><rect x="308" y="161" width="88" height="32" class="lamp"/><text x="352" y="182" class="lamp-text">STBY GEN</text></g>
+      <rect x="308" y="194" width="88" height="32" class="blank-lens"/>
+      <g data-lamp="epu-gen"><rect x="308" y="238" width="88" height="32" class="lamp"/><text x="352" y="259" class="lamp-text">EPU GEN</text></g>
+      <g data-lamp="epu-pmg"><rect x="308" y="271" width="88" height="32" class="lamp"/><text x="352" y="292" class="lamp-text">EPU PMG</text></g>
+      <text x="290" y="342" class="legend">ACFT BATT</text>
+      <path d="M171 349 H397 V424 H171Z" class="recess"/>
+      <g data-lamp="to-flcs"><rect x="178" y="355" width="106" height="28" class="lamp"/><text x="231" y="374" class="lamp-text">TO FLCS</text></g>
+      <g data-lamp="flcs-rly"><rect x="178" y="384" width="106" height="28" class="lamp"/><text x="231" y="403" class="lamp-text">FLCS RLY</text></g>
+      <g data-lamp="battery-fail"><rect x="289" y="355" width="101" height="57" class="lamp"/><text x="339" y="387" class="lamp-text">FAIL</text></g>
+      <g data-control="epu-check" role="button" tabindex="0" class="clickable" aria-label="Confirm EPU GEN and EPU PMG indicators are off"><rect x="308" y="238" width="88" height="65" class="hit"/></g>
       <g data-control="main-batt" role="button" tabindex="0" class="clickable" aria-label="Select BATT by clicking the switch"><circle cx="204" cy="133" r="22" class="hit"/></g>
       <g data-control="main-main" role="button" tabindex="0" class="clickable" aria-label="Select MAIN PWR by clicking the switch"><circle cx="204" cy="133" r="22" class="hit"/></g>
+      <g transform="translate(278 215)" class="captive-screw"><circle r="6"/><path d="M-4 0 H4"/></g>
       <text x="63" y="281" transform="rotate(-90 63 281)" class="side-label">E L E C</text>
     </svg>
     <p class="panel-note">ELEC panel outline uses the documented 75.60 × 93.60 mm proportions. Fasteners and controls are positioned from the visual reference; exact DCS-coordinate overlay still requires signoff.</p>
@@ -217,6 +222,10 @@ const jfsMounts = [dzus(100,54),dzus(404,54),dzus(100,792),dzus(404,792)];
 .startup-panels .lamp{fill:#f8f8f8;stroke:#333;stroke-width:2}
 .startup-panels .inner-lens{fill:#fff;stroke:#555;stroke-width:1}
 .startup-panels .lamp-text{font:600 11px system-ui,sans-serif;text-anchor:middle;fill:#333}
+.startup-panels .recess{fill:none;stroke:#333;stroke-width:2.2}
+.startup-panels .blank-lens{fill:#eee;stroke:#333;stroke-width:1.5}
+.startup-panels .captive-screw circle{stroke:#444;stroke-width:1.5;fill:#fafafa}
+.startup-panels .captive-screw path{stroke:#333;stroke-width:1.5}
 .startup-panels .guard{fill:#f9f9f9;stroke:#222;stroke-width:3}
 .startup-panels .control-fill{fill:#eee;stroke:#111;stroke-width:2}
 .startup-panels .hit{fill:#fff;fill-opacity:.01;stroke:transparent}
