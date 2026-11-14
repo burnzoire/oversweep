@@ -30,7 +30,6 @@ const jfsMounts = [dzus(31,79,27),dzus(391,80,27),dzus(31,1020,27),dzus(390,1020
 <button type="button" class="reset" data-elec-reset aria-label="CAUTION RESET"><span class="reset-cap" aria-hidden="true"></span></button>
 <span class="elec-lamp" style="--x:57%;--y:14%;--w:21%;--h:6%" data-lamp="flcs-pmg"></span>
 <span class="elec-lamp" style="--x:34%;--y:80%;--w:20%;--h:6%" data-lamp="to-flcs"></span>
-<button type="button" class="elec-epu" data-control="epu-check">Confirm EPU lights off</button>
 </div>
     <p class="panel-note">Redrawn from the DCS F-16C Early Access Guide, page 64. Fastener and control positions are approximate.</p>
   </div>
@@ -270,25 +269,23 @@ const jfsMounts = [dzus(31,79,27),dzus(391,80,27),dzus(31,1020,27),dzus(390,1020
 .elec-art .switch .toggle-down{bottom:0;border-radius:0 0 50% 50%}
 .elec-art .switch button:hover{background:#397bb91c}
 .elec-art .switch svg{pointer-events:none;background:transparent;width:100%;overflow:visible;display:block}
-.elec-art .reset{left:37.4%;top:57.45%;width:19%;aspect-ratio:1}
+.elec-art .reset{left:37.4%;top:57.4%;width:17%;aspect-ratio:1}
 .elec-art .reset-cap{position:absolute;inset:15%;border-radius:50%;border:1.5px solid #222;background:radial-gradient(ellipse at 40% 28%,#fff 18%,#f4f4f4 60%,#aaa 100%);box-shadow:inset 0 1px 0 #fff,0 3px 0 #555,0 5px 4px #0005;transform:translateY(-3px);transition:transform 95ms ease-out,box-shadow 95ms ease-out}
 .elec-art .reset:active .reset-cap,.elec-art .reset.pulse .reset-cap{transform:translateY(1px) scale(.96);box-shadow:inset 0 2px 4px #0006,0 1px 0 #555}
 @media(prefers-reduced-motion:reduce){.elec-art .reset-cap{transition:none}}
 .elec-art .shaft{transform-origin:50px 50px;transition:transform .18s ease-out}
 .elec-art[data-main-state="main"] .shaft{transform:scaleY(-1)}
-.elec-art[data-main-state="batt"] .shaft{transform:scaleY(.03)}
+.elec-art[data-main-state="batt"] .shaft{transform:scaleY(0)}
 .elec-art[data-main-state="off"] .shaft{transform:scaleY(1)}
 .elec-art .cap{transition:transform .18s ease-out}
-.elec-art[data-state="0"] .cap{transform:translateY(-34px)}
-.elec-art[data-state="2"] .cap{transform:translateY(34px)}
+.elec-art[data-main-state="main"] .cap{transform:translateY(-34px)}
+.elec-art[data-main-state="off"] .cap{transform:translateY(34px)}
 @media(prefers-reduced-motion:reduce){.elec-art .shaft,.elec-art .cap{transition:none}}
-.elec-art .relay-light{position:absolute;left:33.8%;top:87.1%;width:19.8%;height:5.8%;border-radius:5px;pointer-events:none;opacity:0;transition:opacity .15s ease-out;background:radial-gradient(ellipse,#ffd36a99,#ffbd4266 72%,transparent);mix-blend-mode:multiply}
-.elec-art[data-state="1"] .relay-light{opacity:1}
+.elec-art .relay-light{position:absolute;left:33.8%;top:87.1%;width:19.8%;height:5.8%;border-radius:5px;pointer-events:none;opacity:0;transition:opacity .15s ease-out;background:radial-gradient(ellipse,#ffd36a99,#ffbd4266 72%,transparent);mix-blend-mode:multiply;z-index:1}
+.elec-art .relay-light.lit{opacity:1}
 @media(prefers-reduced-motion:reduce){.elec-art .relay-light{transition:none}}
 
 .elec-art{max-width:440px;margin:auto}
 .elec-art .elec-lamp{position:absolute;left:var(--x);top:var(--y);width:var(--w);height:var(--h);pointer-events:none;border-radius:4px}
 .elec-art .elec-lamp.lit{background:#ffbd4266}
-.elec-epu{display:none;margin:.5rem 0}
-.elec-epu[data-active="true"]{display:inline-block}
 </style>

@@ -74,11 +74,10 @@ if (root) {
     'flcs-test': 'flcs-test',
     'flcs-release': 'flcs-test',
     'main-power': 'main-main',
-    'epu-check': 'epu-check',
     jfs: 'jfs-start2',
     throttle: 'throttle-idle',
   };
-  const confirmations = new Set(['sec', 'generator', 'idle-check']);
+  const confirmations = new Set(['epu-check', 'sec', 'generator', 'idle-check']);
   let step = 0;
   let main: 'off'|'batt'|'main' = 'off';
   let flcsHeld = false;
@@ -166,7 +165,7 @@ if (root) {
       id==='main-power'?'Select MAIN PWR directly on the electrical panel.':
       id==='jfs'?'Click the JFS control to select START 2.':
       id==='throttle'?'Select Throttle Idle to continue.':
-      id==='epu-check'?'Confirm both EPU lights are off.':
+      id==='epu-check'?'Verify both EPU lights are off, then select Confirm EPU lights off below the step.':
       'Observe the relevant indication and confirm the step.';
     feedback.textContent = message;
   }
@@ -178,6 +177,7 @@ if (root) {
     progress.textContent=`Step ${step+1} of ${steps.length}`;
     previous.disabled=step===0;
     const needsClick=Boolean(actions[id]);
+    confirm.textContent = id === 'epu-check' ? 'Confirm EPU lights off' : 'Confirm indication';
     confirm.hidden=!confirmations.has(id);
     confirm.disabled=completed.has(id);
     next.disabled=(needsClick||confirmations.has(id))&&!completed.has(id);
@@ -194,7 +194,6 @@ if (root) {
       if(id==='flcs-test'&&!flcsHeld){flcsHeld=true;completed.add(id);}
       else if(id==='flcs-release'&&flcsHeld){flcsHeld=false;completed.add(id);}
     }
-    if(control==='epu-check')completed.add(id);
     if(control==='jfs-start2'){jfsStarted=true;completed.add(id);}
     if(control==='throttle-idle'){throttleIdle=true;completed.add(id);}
     render();

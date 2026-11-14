@@ -30,7 +30,7 @@ test('instrument artwork and procedural content remain separate', async () => {
 test('panel controls are selectable SVG elements with distinct locations', async () => {
   const svg = await read('src/components/aircraft-procedures/StartupPanels.astro');
   const page = await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
-  for (const key of ['flcs-test','epu-check','jfs-start2','throttle-idle']) {
+  for (const key of ['flcs-test','jfs-start2','throttle-idle']) {
     assert.match(svg, new RegExp('data-control="' + key + '"'));
     assert.match(page, new RegExp("'" + key + "'"));
   }
