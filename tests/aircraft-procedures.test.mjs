@@ -39,3 +39,18 @@ test('panel controls are selectable SVG elements with distinct locations', async
   assert.match(page,/next.disabled=/);
   assert.match(page,/completed.add\(id\)/);
 });
+
+test('panel redraw separates the physical units, includes documented proportions and DZUS detailing', async () => {
+  const svg = await read('src/components/aircraft-procedures/StartupPanels.astro');
+  for (const panel of ['elec','test','jfs','throttle'])
+    assert.match(svg, new RegExp('data-panel="' + panel + '"'));
+  for (const id of ['elecMounts','testMounts','jfsMounts','class="dzus"'])
+    assert.ok(svg.includes(id), 'missing ' + id);
+  assert.match(svg, /75\.60 × 93\.60 mm/);
+  assert.match(svg, /75\.60 × 145\.50 mm/);
+  assert.match(svg, /75\.60 × 200/);
+  assert.match(svg, /data-jfs-lever/);
+  assert.match(svg, /data-flcs-lever/);
+  assert.match(svg, /data-main-lever/);
+  assert.match(svg, /not dimensionally surveyed/);
+});
