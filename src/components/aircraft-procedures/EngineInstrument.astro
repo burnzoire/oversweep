@@ -1,0 +1,41 @@
+---
+interface Props { label?: string }
+const { label = 'F-16C engine instruments — instructional diagram' } = Astro.props;
+---
+<figure class="engine-figure">
+  <svg data-engine-display viewBox="0 0 460 245" role="img" aria-label={label} class="engine-svg">
+    <title>{label}</title>
+    <rect x="2" y="2" width="456" height="241" rx="2" fill="#fff" stroke="#171717" stroke-width="2" />
+    <text x="230" y="22" text-anchor="middle" class="eng-heading">ENGINE INDICATIONS · SCHEMATIC</text>
+    {['RPM','FTIT'].map((name, i) => {
+      const x = i === 0 ? 124 : 337;
+      return <g>
+        <circle cx={x} cy="118" r="76" fill="none" stroke="#171717" stroke-width="2" />
+        <path d={`M ${x-52} 158 A 68 68 0 1 1 ${x+52} 158`} fill="none" stroke="#777" stroke-width="1" />
+        {Array.from({length:9}, (_,k) => {
+          const a = (-220 + k * 35) * Math.PI / 180;
+          const xx = x + Math.sin(a)*65, yy = 118 - Math.cos(a)*65;
+          const x2 = x + Math.sin(a)*55, y2 = 118 - Math.cos(a)*55;
+          return <line x1={xx} y1={yy} x2={x2} y2={y2} stroke="#171717" stroke-width="1.5" />;
+        })}
+        <line data-needle={i===0?'rpm':'ftit'} x1={x} y1="118" x2={x} y2="65" stroke="#111" stroke-width="2.6" stroke-linecap="round" transform={`rotate(-140 ${x} 118)`} />
+        <circle cx={x} cy="118" r="5" fill="#171717"/>
+        <text x={x} y="144" text-anchor="middle" class="eng-readout" data-value={i===0?'rpm':'ftit'}>0</text>
+        <text x={x} y="162" text-anchor="middle" class="eng-label">{name} {i===0?'%':'°C'}</text>
+      </g>
+    })}
+    <g transform="translate(166 205)">
+      <rect x="0" y="0" width="128" height="27" fill="#fff" stroke="#171717"/>
+      <text x="64" y="18" text-anchor="middle" class="eng-label" data-signal>ENGINE OFF</text>
+    </g>
+  </svg>
+  <figcaption>Original simplified line drawing. Control and instrument indications are representative; animation timing and acceleration are illustrative, not measured from DCS.</figcaption>
+</figure>
+<style>
+.engine-figure {margin:0;max-width:33rem}
+.engine-svg {width:100%;height:auto;display:block}
+.eng-heading {font: 600 11px system-ui,sans-serif;letter-spacing:1.5px;fill:#333}
+.eng-readout {font: 700 21px ui-monospace,monospace;fill:#111}
+.eng-label {font: 11px system-ui,sans-serif;fill:#333}
+.engine-figure figcaption {font-size:.8rem;color:var(--color-muted);margin-top:.3rem}
+</style>
