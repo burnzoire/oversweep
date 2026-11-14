@@ -167,20 +167,41 @@ const jfsMounts = [dzus(31,79,27),dzus(391,80,27),dzus(31,1020,27),dzus(390,1020
     <p class="panel-note">Front-view GE F110 plate rotated upright from its technical drawing. Real visible control and retaining fastener centres, guard, RUN lens and mounting hardware are mapped to a 420 × 1100 source-coordinate view.</p>
   </div>
   <div class="startup-panel" data-panel="throttle" hidden>
-    <svg viewBox="0 0 505 350" role="group" aria-label="F-16C throttle cutoff and idle gate — provisional, not verified panel geometry">
-      <title>Throttle travel — functional demonstration, not a surveyed panel</title>
-      <path d="M76 40 H429 V314 H76Z" class="plate"/>
-      <text x="253" y="80" class="legend">THROTTLE · CUTOFF / IDLE</text>
-      <path d="M225 271 V116 H301 V271" class="guide" fill="none"/>
-      <text x="200" y="134" class="legend">IDLE</text><text x="185" y="276" class="legend">CUTOFF</text>
-      <g data-control="throttle-idle" role="button" tabindex="0" class="clickable" aria-label="Move throttle to idle" aria-pressed="false">
-        <rect x="207" y="101" width="110" height="190" class="hit"/>
-        <rect data-throttle-grip x="228" y="233" width="69" height="37" rx="7" class="control-fill"/>
-        <rect x="213" y="108" width="99" height="178" class="target-ring"/>
+    <svg viewBox="0 0 540 460" role="group" aria-label="F-16C throttle quadrant and idle position, drawn from the supplied reference">
+      <title>F-16C throttle quadrant</title>
+      <g class="throttle-drawing">
+        <path class="plate" d="M31 81H502V134L479 154H426L398 171H341L314 162H189L147 193H88L71 174H31Z"/>
+        <path d="M32 101H476 M32 160H73L91 177H139L184 145H315L349 155H400L427 138H475"/>
+        <path class="plate" d="M52 244Q168 150 265 162Q340 167 433 225L414 250Q340 203 271 194Q177 182 72 268Z"/>
+        <path d="M68 251Q177 163 270 178Q344 188 420 236 M209 166L214 191 M239 161L242 187"/>
+        <path class="plate" d="M30 365L410 321L501 349V390L30 437Z"/>
+        <path d="M30 384L413 339L501 365 M30 418L501 373"/>
+        <path class="plate" d="M141 347L191 324L217 329L216 343L170 362L141 360Z"/>
+        <path d="M152 350L192 333L206 336 M166 359L166 352"/>
+        <circle cx="98" cy="126" r="9"/><path d="M93 126H103"/>
+        <circle cx="460" cy="114" r="9"/><path d="M455 114H465"/>
+        <circle cx="68" cy="397" r="8"/><path d="M64 397H72"/>
+        <circle cx="447" cy="365" r="8"/><path d="M443 365H451"/>
+        <path d="M124 215H173L208 179 M394 406H209L174 360"/>
+        <text x="76" y="220">IDLE</text>
+        <text x="403" y="411">FRICTION</text>
+        <text x="76" y="301">CUTOFF</text><path d="M148 296H176"/>
       </g>
-      <text x="253" y="302" class="small">FUNCTIONAL GUIDE ONLY</text>
+      <g data-control="throttle-idle" role="button" tabindex="0" class="clickable" aria-label="Move throttle to idle" aria-pressed="false">
+        <g data-throttle-grip class="throttle-drawing">
+          <path class="plate" d="M182 355Q187 324 218 299L248 285L264 303L237 326Q217 343 211 365Z"/>
+          <path d="M191 352Q199 326 230 305L253 293"/>
+          <path class="plate" d="M235 272Q235 250 255 243Q272 237 290 248L313 266L350 273Q369 279 367 298L359 327Q355 339 343 334L318 320L291 315L262 299Q235 292 235 272Z"/>
+          <path d="M246 270Q246 254 261 251Q274 248 287 258L309 276L348 283 M254 286L275 294L296 306L323 313L349 325"/>
+          <path class="plate" d="M314 261L320 249L341 254L342 270Z"/>
+          <ellipse cx="352" cy="291" rx="9" ry="12"/><ellipse cx="352" cy="291" rx="5" ry="8"/>
+          <ellipse cx="340" cy="321" rx="9" ry="10"/><ellipse cx="340" cy="321" rx="5" ry="6"/>
+        </g>
+        <rect x="228" y="129" width="150" height="211" rx="12" class="hit"/>
+        <rect x="230" y="131" width="146" height="207" rx="12" class="target-ring"/>
+      </g>
     </svg>
-    <p class="panel-note">Throttle needs a measured DCS reference. This conceptual travel indication is NOT an exact cockpit outline and remains blocked for publication.</p>
+    <p class="panel-note">Illustration based on the supplied throttle quadrant drawing. The movement between cutoff and idle is illustrative.</p>
   </div>
 
   <div class="startup-panel" data-panel="caution" hidden>
@@ -292,4 +313,6 @@ const jfsMounts = [dzus(31,79,27),dzus(391,80,27),dzus(31,1020,27),dzus(390,1020
 .startup-panels [data-panel="elec"] .smallslot{stroke-width:2.5}
 .startup-panels [data-panel="elec"] .label{fill:#222;font:600 24px "Arial Narrow","Liberation Sans Narrow",Arial,sans-serif}
 .startup-panels [data-panel="elec"] .legend{font:600 18px "Arial Narrow","Liberation Sans Narrow",Arial,sans-serif;text-anchor:middle}
+.startup-panels .throttle-drawing{fill:none;stroke:#202020;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.startup-panels .throttle-drawing text{fill:#171717;stroke:none;font:600 16px system-ui,sans-serif}
 </style>
