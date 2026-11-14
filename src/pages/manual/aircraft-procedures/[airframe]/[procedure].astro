@@ -75,6 +75,7 @@ if (root) {
     'flcs-release': 'flcs-norm',
     'main-power': 'main-main',
     jfs: 'jfs-start2',
+    'master-caution': 'master-caution',
     throttle: 'throttle-idle',
   };
   const confirmations = new Set(['ground-ready', 'epu-check', 'sec', 'generator', 'idle-check']);
@@ -88,8 +89,22 @@ if (root) {
   let frame = 0;
 
   let displayedRpm = 0, displayedFtit = 0;
+  function updateGlareShield(rpm: number) {
+    const powered = main === 'main';
+    const pressureEstablished = throttleIdle && rpm >= 70;
+    const lights = {
+      'warn-engine': powered && rpm < 60,
+      'warn-hyd': powered && !pressureEstablished,
+      'warn-hyd-bottom': powered && !pressureEstablished,
+      'master-caution': powered && !finished,
+    };
+    for (const [lamp, on] of Object.entries(lights)) {
+      all(`[data-lamp="${lamp}"]`).forEach(el => el.classList.toggle('lit', on));
+    }
+  }
   function drawEngine(r: number, t: number, msg: string) {
     displayedRpm = r;
+    updateGlareShield(r);
     displayedFtit = t;
     // Angles sampled from the visible numeric labels on the review artwork.
     const dialAngle = (value: number, stops: readonly (readonly [number, number])[]) => {
@@ -107,6 +122,8 @@ if (root) {
     rpmValue.textContent = r.toFixed(0);
     ftitValue.textContent = t <= 0 ? '—' : t.toFixed(0);
     signal.textContent = msg;
+    all('[data-lamp="jfs-run"]').forEach(el => el.classList.toggle('lit', jfsRun && r < 55));
+    one<SVGElement>('[data-jfs-lever]')!.dataset.position = jfsStarted && r < 55 ? 'start2' : 'off';
     if (steps[step].dataset.stepId === 'sec') confirm.disabled = r < 20;
   }
   function animateEngine(onSettled?: () => void) {
@@ -143,7 +160,7 @@ if (root) {
     if (showTest) visible.add('elec');
     if (id==='main-power') {visible.add('caution');visible.add('eyebrow');}
     if (id==='sec') visible.add('caution');
-    if (id==='generator' || id==='idle-check') visible.add('eyebrow');
+    if (['throttle','generator','idle-check','master-caution'].includes(id)) visible.add('eyebrow');
     if (id==='generator') visible.add('caution');
     all<HTMLElement>('[data-panel]').forEach(el=>{el.hidden=!visible.has(el.dataset.panel||'');});
     engineReference.hidden = panel !== 'engine' && panel !== 'throttle' && id !== 'jfs';
@@ -168,13 +185,10 @@ if (root) {
     lit('flcs-rly',main!=='off'&&!flcsHeld&&!jfsStarted);
     lit('flcs-pmg',flcsHeld||jfsStarted);
     lit('to-flcs',flcsHeld||jfsStarted);
-    lit('jfs-run',jfsRun&&!throttleIdle);
+    lit('jfs-run',jfsRun && displayedRpm < 55);
     const engineRunning = ['generator','idle-check'].includes(id);
     lit('warn-elec',main==='main' && !engineRunning);
     lit('warn-sec',main==='main' && !engineRunning && id!=='sec' && !throttleIdle);
-    lit('warn-engine',main==='main' && !engineRunning);
-    lit('warn-hyd',main==='main' && id!=='idle-check');
-    lit('warn-hyd-bottom',main==='main' && id!=='idle-check');
     lit('warn-seat',engineRunning);
     all<SVGGElement>('[data-flcs-channel]').forEach(n=>n.classList.toggle('lit',flcsHeld));
     // EPU GEN/PMG lights deliberately remain OFF; don't claim simulated fault logic.
@@ -214,7 +228,7 @@ if (root) {
     confirm.textContent = id === 'epu-check' ? 'Confirm EPU lights off' : 'Confirm indication';
     confirm.hidden=!confirmations.has(id);
     confirm.disabled=finished || (id === 'sec' && displayedRpm < 20);
-    information.textContent = finished ? 'Startup review complete.' : '';
+    information.textContent = finished ? 'Startup complete.' : '';
     updatePanels();
     animateEngine();
   }
@@ -235,6 +249,12 @@ if (root) {
     if (control === 'flcs-test' || control === 'flcs-norm') {
       flcsHeld = control === 'flcs-test';
       completed.add(id);
+    }
+    if (control === 'master-caution' && !finished) {
+      finished = true;
+      completed.add(id);
+      render();
+      return;
     }
     if (control === 'jfs-start2') {
       jfsStarted = true;

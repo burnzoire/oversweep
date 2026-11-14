@@ -71,6 +71,7 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
     </div>
   </div>
   <div class="startup-panel" data-panel="eyebrow" hidden>
+    <button type="button" class="master-caution" data-control="master-caution" data-lamp="master-caution">MASTER CAUTION</button>
     <div class="raster-panel raster-eyebrow">
       <img src={eyebrowArt.src} width={eyebrowArt.width} height={eyebrowArt.height} alt="Right eyebrow warning annunciators" />
       <span class="raster-lamp" data-lamp="warn-engine" style="--x:6.5%;--y:54%;--w:16%;--h:22%" aria-hidden="true"></span>
@@ -155,4 +156,6 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
 .raster-jfs .raster-switch{width:17%;min-width:44px}
 .raster-jfs .raster-switch svg{overflow:visible}
 .raster-jfs .raster-switch svg{position:relative}
+.master-caution{display:block;margin:.5rem auto;padding:.6rem;border:2px solid #343434;border-radius:4px;background:#fff;color:#171717;font-weight:700}
+.master-caution.lit{background:#ffcf63}
 </style>
