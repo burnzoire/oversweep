@@ -390,10 +390,8 @@ if (root) {
 .cockpit-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem;align-items:start}
 .cockpit-layout :global(.startup-panels){display:contents}
 .cockpit-layout :global(.panel-feedback){grid-column:1/-1}
-.cockpit-layout :global(.raster-panel img),
-.cockpit-layout :global(.elec-art img){max-height:36svh;width:auto;max-width:100%;margin:auto}
 .cockpit-layout :global(.raster-panel),
-.cockpit-layout :global(.elec-art){width:max-content;max-width:100%}
+.cockpit-layout :global(.elec-art){width:min(100%, calc(36svh * var(--art-ratio)))}
 .cockpit-gauges :global(.engine-figure){width:min(100%,14svh);margin:auto}
 .cockpit-gauges :global(.engine-readouts){position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
 @media(max-width:57.99rem){
