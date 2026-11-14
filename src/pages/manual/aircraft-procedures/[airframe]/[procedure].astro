@@ -109,25 +109,27 @@ if (root) {
     signal.textContent = msg;
     if (steps[step].dataset.stepId === 'sec') confirm.disabled = r < 20;
   }
-  function animateEngine() {
+  function animateEngine(onSettled?: () => void) {
     cancelAnimationFrame(frame);
     const id = steps[step].dataset.visual;
     const target = (id === 'jfs' && jfsRun)||id === 'rpm20' ? [20,0,'JFS RUN']
-      : id === 'idle' ? (throttleIdle ? [55,700,'LIGHT-OFF'] : [20,0,'READY FOR IDLE'])
-      : id === 'engine' ? [60,650,'ENGINE WARNING OFF']
+      : id === 'idle' ? (throttleIdle ? [70,620,'IDLE'] : [20,0,'READY FOR IDLE'])
+      : id === 'engine' ? [70,620,'ENGINE WARNING OFF']
       : id === 'stable' ? [70,620,'IDLE CHECK']
       : [0,0,'ENGINE OFF'];
-    if (reduced.matches) {
+    if (reduced.matches && !onSettled) {
       drawEngine(Number(target[0]),Number(target[1]),String(target[2]));
       return;
     }
     const initialRpm = displayedRpm, initialFtit = displayedFtit;
     const start = performance.now();
     const tick=(now:number)=>{
-      const k = Math.min(1,(now-start)/1200);
+      const duration = onSettled ? (id === "idle" ? 30000 : 8000) : 1200;
+      const k = Math.min(1,(now-start)/duration);
       const smooth = k*k*(3-2*k);
       drawEngine(initialRpm+(Number(target[0])-initialRpm)*smooth,initialFtit+(Number(target[1])-initialFtit)*smooth,String(target[2]));
       if(k<1) frame=requestAnimationFrame(tick);
+      else onSettled?.();
     };
     frame=requestAnimationFrame(tick);
   }
@@ -138,7 +140,7 @@ if (root) {
       id==='ground-ready'?'elec':'engine';
     const showTest = id==='flcs-test'||id==='flcs-release';
     const visible = new Set<string>([showTest?'test':panel]);
-    if (showTest || id==='jfs') visible.add('elec');
+    if (showTest) visible.add('elec');
     if (id==='main-power') {visible.add('caution');visible.add('eyebrow');}
     if (id==='sec') visible.add('caution');
     if (id==='generator' || id==='idle-check') visible.add('eyebrow');
@@ -242,11 +244,18 @@ if (root) {
       // Illustrative delay within the documented 30-second RUN limit.
       advanceTimer = setTimeout(() => {
         jfsRun = true;
-        advanceAfterControl();
+        render();
+        animateEngine(advanceAfterControl);
       }, 12000);
       return;
     }
-    if(control==='throttle-idle'){throttleIdle=true;completed.add(id);}
+    if(control==='throttle-idle'){
+      throttleIdle=true;
+      completed.add(id);
+      render();
+      animateEngine(advanceAfterControl);
+      return;
+    }
     advanceAfterControl();
   }
   all<HTMLButtonElement>('button[data-control]').forEach(button => {
