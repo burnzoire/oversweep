@@ -31,6 +31,7 @@ const steps = guide.steps;
           <p class="procedure-cite">Evidence: {s.evidence}</p>
         </li>)}
       </ol>
+      <h2 class="procedure-step" data-complete tabindex="-1" hidden>Startup complete</h2>
       <div class="procedure-controls" hidden data-controls>
         <button type="button" data-confirm hidden>Confirm indication</button>
         <button type="button" data-prev>Previous</button>
@@ -221,14 +222,18 @@ if (root) {
     hint.hidden = true;
     cancelAnimationFrame(frame);
     const id=steps[step].dataset.stepId || '';
-    steps.forEach((el,i)=>el.hidden=i!==step);
+    steps.forEach((el,i)=>el.hidden=finished || i!==step);
+    const complete = one<HTMLElement>('[data-complete]')!;
+    complete.hidden = !finished;
+    if (finished) complete.focus();
     controls.hidden=false;
+    progress.hidden = finished;
     progress.textContent=`Step ${step+1} of ${steps.length}`;
     previous.disabled=step===0;
     confirm.textContent = id === 'epu-check' ? 'Confirm EPU lights off' : 'Confirm indication';
     confirm.hidden=!confirmations.has(id);
     confirm.disabled=finished || (id === 'sec' && displayedRpm < 20);
-    information.textContent = finished ? 'Startup complete.' : '';
+    information.textContent = '';
     updatePanels();
     animateEngine();
   }
