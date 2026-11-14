@@ -43,19 +43,29 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
         <button type="button" data-control="flcs-test" aria-label="Select TEST"></button>
         <button type="button" data-control="flcs-norm" aria-label="Return to NORM"></button>
       </div>
+      <button class="panel-hotspot" type="button" style="--x:23%;--y:20%" data-control="fire-test" aria-label="FIRE & OHEAT DETECT"></button>
+      <button class="panel-hotspot" type="button" style="--x:52%;--y:20%" data-control="obogs-test" aria-label="OBOGS BIT"></button>
+      <button class="panel-hotspot" type="button" style="--x:80%;--y:20%" data-control="mal-test" aria-label="MAL & IND LTS"></button>
+      <button class="panel-hotspot" type="button" style="--x:21%;--y:48%" data-control="probe-heat" aria-label="PROBE HEAT"></button>
+      <button class="panel-hotspot" type="button" style="--x:51%;--y:48%" data-control="epu-gen" aria-label="EPU/GEN"></button>
     </div>
   </div>
   <div class="startup-panel" data-panel="jfs" hidden>
     <div class="raster-panel raster-jfs">
       <img src={jfsArt.src} width={jfsArt.width} height={jfsArt.height} alt="ENG and JET START panel" />
       <span class="raster-lamp" data-lamp="jfs-run" style="--x:26.1%;--y:12%;--w:10.2%;--h:4.7%" aria-hidden="true"></span>
-      <button type="button" class="raster-switch" data-control="jfs-start2" aria-label="Select JFS START 2" style="--x:63.4%;--y:14.37%">
+      <div class="raster-switch flcs-toggle jfs-toggle" role="group" aria-label="JFS switch" style="--x:63.4%;--y:14.37%">
         <svg data-jfs-lever data-position="off" viewBox="0 0 100 100" aria-hidden="true">
 <circle cx="50" cy="50" r="25" fill="#fff" stroke="#171717" stroke-width="1.5"/>
 <path class="shaft" d="M38 55C37 48 42 43 50 43C58 43 63 48 62 55L64 83Q64 91 50 91Q36 91 36 83Z" fill="#fff" stroke="#171717" stroke-width="2"/>
 <g class="cap"><circle cx="50" cy="50" r="16" fill="#fff" stroke="#171717" stroke-width="2"/><circle cx="50" cy="50" r="12" fill="none" stroke="#171717"/></g>
 </svg>
-      </button>
+        <button type="button" data-control="jfs-start1" aria-label="Select JFS START 1"></button>
+        <button type="button" data-control="jfs-start2" aria-label="Select JFS START 2"></button>
+      </div>
+      <button class="panel-hotspot" type="button" style="--x:49%;--y:38%" data-control="eng-cont" aria-label="ENG CONT safety latch"></button>
+      <button class="panel-hotspot" type="button" style="--x:49%;--y:62%" data-control="ab-reset" aria-label="AB RESET switch"></button>
+      <button class="panel-hotspot" type="button" style="--x:50%;--y:86%" data-control="max-power" aria-label="MAX POWER switch"></button>
     </div>
   </div>
   <div class="startup-panel" data-panel="throttle" hidden>
@@ -158,4 +168,5 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
 .raster-jfs .raster-switch svg{position:relative}
 .master-caution{display:block;margin:.5rem auto;padding:.6rem;border:2px solid #343434;border-radius:4px;background:#fff;color:#171717;font-weight:700}
 .master-caution.lit{background:#ffcf63}
+.panel-hotspot{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);width:16%;aspect-ratio:1;border:0;background:transparent;cursor:pointer}
 </style>

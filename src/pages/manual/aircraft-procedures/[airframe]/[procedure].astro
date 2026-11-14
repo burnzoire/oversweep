@@ -169,9 +169,9 @@ if (root) {
     if (['jfs','sec','throttle'].includes(id)) visible.add('caution');
     if (id==='idle-check') visible.add('jfs');
     if (['throttle','generator','idle-check','master-caution'].includes(id)) visible.add('eyebrow');
-    if (id==='generator') visible.add('caution');
+    if (id==='generator' || id==='master-caution') visible.add('caution');
     all<HTMLElement>('[data-panel]').forEach(el=>{el.hidden=!visible.has(el.dataset.panel||'');});
-    engineReference.hidden = panel !== 'engine' && panel !== 'throttle' && id !== 'jfs';
+    engineReference.hidden = id === 'master-caution' || (panel !== 'engine' && panel !== 'throttle' && id !== 'jfs');
     const expected = actions[id] || '';
     all<HTMLElement | SVGGElement>('[data-control]').forEach(el=>{
       const active = el.dataset.control === expected;
@@ -257,7 +257,11 @@ if (root) {
   }
   function select(control:string, target: Element) {
     const id=steps[step].dataset.stepId || '';
-    if(control!==actions[id] || completed.has(id)){retry(target);return;}
+    if(control!==actions[id] || completed.has(id)){
+      retry(target);
+      if (id === 'jfs' && control === 'jfs-start1') hint.textContent = 'You selected START 1. Press the lower half of the JFS toggle to select START 2.';
+      return;
+    }
     if (control === 'flcs-test' || control === 'flcs-norm') {
       flcsHeld = control === 'flcs-test';
       completed.add(id);
