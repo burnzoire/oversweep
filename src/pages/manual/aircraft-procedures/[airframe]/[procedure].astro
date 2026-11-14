@@ -147,17 +147,14 @@ if (root) {
     }
     const initialRpm = displayedRpm, initialFtit = displayedFtit;
     const start = performance.now();
-    let standbySince: number | undefined;
     const tick=(now:number)=>{
       const duration = onSettled ? (id === "idle" ? 30000 : 8000) : 1200;
       const k = Math.min(1,(now-start)/duration);
       const smooth = k*k*(3-2*k);
       if (id === 'jfs' && jfsRun && k >= .75) secCleared = true;
       if (id === 'idle' && throttleIdle && k >= .95) pressureEstablished = true;
-      if (id === 'idle' && throttleIdle && initialRpm + (Number(target[0]) - initialRpm) * smooth >= 60) {
-        standbySince ??= now;
-        if (now - standbySince >= 5000) mainGeneratorOnline = true;
-      }
+      // Use elapsed time so a delayed frame cannot skip generator transfer.
+      if (id === 'idle' && throttleIdle && (k >= .9 || !onSettled)) mainGeneratorOnline = true;
       drawEngine(initialRpm+(Number(target[0])-initialRpm)*smooth,initialFtit+(Number(target[1])-initialFtit)*smooth,String(target[2]));
       if(k<1) frame=requestAnimationFrame(tick);
       else onSettled?.();
@@ -220,6 +217,7 @@ if (root) {
   const mark = one<HTMLElement>('[data-retry-mark]')!;
   const hint = one<HTMLElement>('[data-retry-hint]')!;
   const visual = mark.parentElement!;
+  const workspace = root;
   function retry(control: Element) {
     const bounds = control.getBoundingClientRect();
     const area = visual.getBoundingClientRect();
@@ -242,6 +240,8 @@ if (root) {
     steps.forEach((el,i)=>el.hidden=finished || i!==step);
     const complete = one<HTMLElement>('[data-complete]')!;
     complete.hidden = !finished;
+    visual.hidden = finished;
+    workspace.classList.toggle('procedure-finished', finished);
     if (finished) complete.focus();
     controls.hidden=false;
     progress.hidden = finished;
@@ -378,4 +378,6 @@ if (root) {
 .procedure-visual{position:relative;border:1px solid var(--color-border);padding:1rem}
 .procedure-visual h2{margin-top:0}
 @media(min-width:58rem){.procedure-workspace{grid-template-columns:minmax(0,1fr) minmax(18rem,1fr)}.procedure-visual{position:sticky;top:1rem}}
+.procedure-visual[hidden]{display:none}
+.procedure-workspace.procedure-finished{grid-template-columns:minmax(0,1fr)}
 </style>
