@@ -196,6 +196,7 @@ if (root) {
     const elec = one<HTMLElement>(".elec-art")!;
     elec.dataset.mainState = main;
     one<HTMLElement>('[data-flcs-lever]')!.dataset.position = flcsHeld ? 'test' : 'norm';
+    one<HTMLButtonElement>('[data-control="flcs-norm"]')!.setAttribute('aria-label', flcsHeld ? 'Return to NORM' : 'Select MAINT');
     one<SVGElement>('[data-jfs-lever]')!.dataset.position = jfsStarted ? 'start2' : 'off';
     const lit = (name:string, isLit:boolean) => all<SVGGElement>(`[data-lamp="${name}"]`).forEach(n=>n.classList.toggle('lit',isLit));
     lit('flcs-rly',main!=='off'&&!flcsHeld&&!jfsStarted);
@@ -272,10 +273,9 @@ if (root) {
   function select(control:string, target: Element) {
     const id=steps[step].dataset.stepId || '';
     if ((control === 'flcs-test' && flcsHeld) ||
-        (control === 'flcs-norm' && !flcsHeld) ||
         (control === 'jfs-start2' && jfsStarted)) return;
     if (control === 'master-caution' && completed.has(id)) return;
-    if(control!==actions[id] || completed.has(id)){
+    if ((control === 'flcs-norm' && !flcsHeld) || control!==actions[id] || completed.has(id)){
       retry(target);
       if (id === 'jfs' && control === 'jfs-start1') hint.textContent = 'You selected START 1. Press the lower half of the JFS toggle to select START 2.';
       return;
