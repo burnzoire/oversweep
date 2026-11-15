@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Adds PR previews to the live build in dist/ before the Pages deploy: the latest
-# successful `PR preview` build (pr-preview.yml) of each open PR in this
+# Adds PR previews to the live build in dist/ before the Pages deploy: the
+# preview-site-<head sha> artifact (pr-preview.yml) of each open PR in this
 # repository labelled `preview`, newest first, at most MAX_PREVIEWS of them. Each
 # is served at /preview/<sha>/, and /preview/index.json lists them for the
 # ?sha= and ?pr= loader (src/components/PreviewSwitch.astro). Needs GH_TOKEN
@@ -21,14 +21,12 @@ while IFS= read -r entry; do
   sha=$(jq -r .sha <<<"$entry")
   pr=$(jq -r .pr <<<"$entry")
   [[ "$sha" =~ ^[0-9a-f]{40}$ ]] || continue
-  found=""
-  for run in $(gh api "repos/$repo/actions/workflows/pr-preview.yml/runs?head_sha=$sha&status=success&per_page=20" --jq '.workflow_runs[].id'); do
-    if gh api "repos/$repo/actions/runs/$run/artifacts" --jq '.artifacts[] | select(.name == "preview-site" and (.expired | not)) | .id' | grep -q .; then
-      gh run download "$run" --repo "$repo" --name preview-site --dir "$out/$sha"
-      found="$run"
-      break
-    fi
-  done
+  found=$(gh api "repos/$repo/actions/artifacts?name=preview-site-$sha&per_page=20" \
+    --jq '[.artifacts[] | select(.expired | not)] | sort_by(.created_at) | last | .workflow_run.id // empty')
+  if [ -n "$found" ] && ! gh run download "$found" --repo "$repo" --name "preview-site-$sha" --dir "$out/$sha"; then
+    rm -rf "${out:?}/$sha"
+    found=""
+  fi
   if [ -z "$found" ]; then
     echo "PR #$pr: no finished preview build for $sha yet."
     continue
