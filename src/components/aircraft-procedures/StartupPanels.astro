@@ -3,7 +3,8 @@ import eyebrowArt from "../../assets/aircraft-procedures/f16-eyebrow.webp";
 import cautionArt from "../../assets/aircraft-procedures/f16-caution.webp";
 import jfsArt from "../../assets/aircraft-procedures/f16-jfs.webp";
 import testArt from "../../assets/aircraft-procedures/f16-test.webp";
-import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
+import CockpitPanel from "../cockpit-panels/CockpitPanel.astro";
+import { f16cElec } from "../../data/cockpit-panels/f16c-elec";
 import brakeArt from "../../assets/aircraft-procedures/f16-brake.webp";
 import canopyArt from "../../assets/aircraft-procedures/f16-canopy.webp";
 import fuelArt from "../../assets/aircraft-procedures/f16-fuel-feed.webp";
@@ -80,22 +81,7 @@ const cues = {toggle:['↑','↓'], slider:['↑','↓'], rotary:['↶','↷'], 
 <div class="startup-panels" data-startup-panels>
 
   <div class="startup-panel" data-panel="elec">
-<div class="elec-art" style={`--art-ratio:${elecArt.width / elecArt.height}`} data-main-state="off">
-<span class="relay-light" data-lamp="flcs-rly" aria-hidden="true"></span>
-<img src={elecArt.src} width={elecArt.width} height={elecArt.height} alt="F-16C electrical panel" />
-<div class="switch" role="group" aria-label="MAIN PWR toggle">
-<svg viewBox="0 0 100 100" aria-hidden="true">
-<circle cx="50" cy="50" r="25" fill="#fff" stroke="#171717" stroke-width="1.5"/>
-<path class="shaft" d="M38 55C37 48 42 43 50 43C58 43 63 48 62 55L64 83Q64 91 50 91Q36 91 36 83Z" fill="#fff" stroke="#171717" stroke-width="2"/>
-<g class="cap"><circle cx="50" cy="50" r="16" fill="#fff" stroke="#171717" stroke-width="2"/><circle cx="50" cy="50" r="12" fill="none" stroke="#171717"/></g>
-</svg>
-<button type="button" class="toggle-up" aria-label="Move MAIN PWR toggle up"><span class="toggle-cue" aria-hidden="true">↑</span></button>
-<button type="button" class="toggle-down" aria-label="Move MAIN PWR toggle down"><span class="toggle-cue" aria-hidden="true">↓</span></button>
-</div>
-<button type="button" class="reset" data-elec-reset aria-label="CAUTION RESET"><span class="reset-cap" aria-hidden="true"></span></button>
-<span class="elec-lamp" style="--x:57%;--y:14%;--w:21%;--h:6%" data-lamp="flcs-pmg"></span>
-<span class="elec-lamp" style="--x:34%;--y:80%;--w:20%;--h:6%" data-lamp="to-flcs"></span>
-</div>
+<CockpitPanel spec={f16cElec} class="elec-art" />
   </div>
   <div class="startup-panel" data-panel="test" hidden>
     <div class="raster-panel raster-test" style={`--art-ratio:${testArt.width / testArt.height}`}>
@@ -315,34 +301,7 @@ button:hover > .toggle-cue,button:focus-visible > .toggle-cue{visibility:visible
 
 
 
-.elec-art{position:relative;background:white}
-.elec-art img{display:block;width:100%;height:auto}
-.elec-art button{font:inherit}
-.elec-art .switch,.elec-art .reset{position:absolute;transform:translate(-50%,-50%);border:0;background:transparent;padding:0;border-radius:50%;cursor:pointer}
-.elec-art .switch{left:29.8%;top:20.65%;width:18%;aspect-ratio:1}
-.elec-art .switch button{position:absolute;left:0;width:100%;height:50%;border:0;background:transparent;cursor:pointer;padding:0}
-.elec-art .switch .toggle-up{top:0;border-radius:50% 50% 0 0}
-.elec-art .switch .toggle-down{bottom:0;border-radius:0 0 50% 50%}
-.elec-art .switch svg{pointer-events:none;background:transparent;width:100%;overflow:visible;display:block}
-.elec-art .reset{left:37.4%;top:57.4%;width:17%;aspect-ratio:1}
-.elec-art .reset-cap{position:absolute;inset:15%;border-radius:50%;border:1.5px solid #222;background:radial-gradient(ellipse at 40% 28%,#fff 18%,#f4f4f4 60%,#aaa 100%);box-shadow:inset 0 1px 0 #fff,0 3px 0 #555,0 5px 4px #0005;transform:translateY(-3px);transition:transform 95ms ease-out,box-shadow 95ms ease-out}
-.elec-art .reset:active .reset-cap,.elec-art .reset.pulse .reset-cap{transform:translateY(1px) scale(.96);box-shadow:inset 0 2px 4px #0006,0 1px 0 #555}
-@media(prefers-reduced-motion:reduce){.elec-art .reset-cap{transition:none}}
-.elec-art .shaft{transform-origin:50px 50px;transition:transform .18s ease-out}
-.elec-art[data-main-state="main"] .shaft{transform:scaleY(-1)}
-.elec-art[data-main-state="batt"] .shaft{transform:scaleY(0)}
-.elec-art[data-main-state="off"] .shaft{transform:scaleY(1)}
-.elec-art .cap{transition:transform .18s ease-out}
-.elec-art[data-main-state="main"] .cap{transform:translateY(-34px)}
-.elec-art[data-main-state="off"] .cap{transform:translateY(34px)}
-@media(prefers-reduced-motion:reduce){.elec-art .shaft,.elec-art .cap{transition:none}}
-.elec-art .relay-light{position:absolute;left:33.8%;top:87.1%;width:19.8%;height:5.8%;border-radius:5px;pointer-events:none;opacity:0;transition:opacity .15s ease-out;background:radial-gradient(ellipse,#ffd36a99,#ffbd4266 72%,transparent);mix-blend-mode:multiply;z-index:1}
-.elec-art .relay-light.lit{opacity:1}
-@media(prefers-reduced-motion:reduce){.elec-art .relay-light{transition:none}}
-
-.elec-art{max-width:440px;margin:auto}
-.elec-art .elec-lamp{position:absolute;left:var(--x);top:var(--y);width:var(--w);height:var(--h);pointer-events:none;border-radius:4px}
-.elec-art .elec-lamp.lit{background:#ffbd4266}
+:global(.elec-art){max-width:440px;margin:auto}
 
 .raster-panel{position:relative;margin:auto;max-width:440px}
 .raster-test,.raster-jfs{max-width:320px}

@@ -88,3 +88,13 @@ photos on pp. 19 and 33 show the squared AIR REFUEL switch cap and the DN LOCK
 REL button in the striped recess next to the landing-gear handle. The exercise begins with both rotary selectors at OFF and
 uses a 750 ms canopy hold. These are trainer settings. Confirm cockpit geometry,
 cold-spawn detents and canopy travel time in the current DCS build.
+
+## Vector ELEC panel (15 November 2026)
+
+The ELEC panel is now drawn entirely as vector from `src/data/cockpit-panels/f16c-elec.ts`
+(the WebP face is removed). Geometry is traced from the DCS F-16C Early Access Guide,
+p. 64, after rectifying the image on its four DZUS fasteners (`scripts/panel-trace.py`), and
+checked by overlaying the drawing on the reference (`scripts/panel-overlay.mjs`). The face,
+lever, lamps and hit zones come from the same coordinates. The guide image crops the panel's
+left, top and bottom edges, so those edges are drawn to the crop. The remaining panels are
+still raster and are the next candidates for the same workflow.

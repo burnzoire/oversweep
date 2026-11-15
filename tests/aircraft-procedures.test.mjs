@@ -50,14 +50,27 @@ test('panel redraw uses separate artwork and movable controls', async () => {
   }
   assert.match(svg, /data-jfs-lever/);
   assert.match(svg, /data-flcs-lever/);
-  assert.match(svg, /class="toggle-up"/);
-  assert.match(svg, /class="toggle-down"/);
+  assert.match(svg, /<CockpitPanel spec=\{f16cElec\} class="elec-art"/);
+});
+
+test('ELEC panel is vector art drawn from its traced data', async () => {
+  const spec = await read('src/data/cockpit-panels/f16c-elec.ts');
+  const panel = await read('src/components/cockpit-panels/CockpitPanel.astro');
+  const render = await read('src/data/cockpit-panels/render.ts');
+  for (const lamp of ['flcs-pmg', 'flcs-rly', 'to-flcs', 'main-gen', 'epu-gen', 'epu-pmg'])
+    assert.ok(spec.includes(`lamp: '${lamp}'`));
+  assert.match(spec, /stateAttr: 'main-state'/);
+  assert.match(spec, /DCS F-16C Viper Early Access Guide[^']*p\. 64/);
+  assert.match(panel, /class="toggle-up"/);
+  assert.match(panel, /class="toggle-down"/);
+  assert.match(render, /data-lamp=/);
+  assert.doesNotMatch(spec + panel + render, /<image\b|\.webp/);
 });
 
 test('raster panels expose independent annunciators and control overlays', async () => {
   const panels = await read('src/components/aircraft-procedures/StartupPanels.astro');
   const instruments = await read('src/components/aircraft-procedures/EngineInstrument.astro');
-  for (const lamp of ['flcs-pmg', 'flcs-rly', 'jfs-run', 'warn-sec', 'warn-engine']) {
+  for (const lamp of ['jfs-run', 'warn-sec', 'warn-engine']) {
     assert.ok(panels.includes(`data-lamp="${lamp}"`));
   }
   for (const channel of ['A', 'B', 'C', 'D']) {

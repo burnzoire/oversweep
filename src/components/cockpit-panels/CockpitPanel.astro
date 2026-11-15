@@ -1,0 +1,39 @@
+---
+/**
+ * Renders a cockpit panel from its data spec: vector face, controls and hit zones
+ * all from the same coordinates. State lives on the root element:
+ * - toggles read `data-<stateAttr>` (lever moves to that position);
+ * - lamps light when their `[data-lamp]` group gets the `lit` class;
+ * - pushbutton caps press while their hit zone is :active or has `pulse`.
+ */
+import type { PanelSpec } from '../../data/cockpit-panels/types';
+import { hitZones, renderPanelSvg } from '../../data/cockpit-panels/render';
+
+interface Props { spec: PanelSpec; class?: string; [attr: `data-${string}`]: string }
+const { spec, class: className, ...attrs } = Astro.props;
+const [w, h] = spec.size;
+const initial = Object.fromEntries(spec.parts.flatMap(p => p.kind === 'toggle' ? [[`data-${p.stateAttr ?? p.id}`, p.initial]] : []));
+---
+<div class:list={['cockpit-panel', className]} style={`--art-ratio:${w / h}`} role="group" aria-label={spec.title} {...initial} {...attrs}>
+  <Fragment set:html={renderPanelSvg(spec)} />
+  {hitZones(spec).map(({ part, style }) => part.kind === 'toggle' ? (
+    <div class:list={['cp-hit cp-toggle', part.hitClass]} style={style} role="group" aria-label={`${part.positions.map(p => p.label).join(' / ')} switch`}>
+      <button type="button" class="toggle-up" aria-label={`Move ${part.positions[0].label} switch up`}><span class="toggle-cue" aria-hidden="true">↑</span></button>
+      <button type="button" class="toggle-down" aria-label={`Move ${part.positions[0].label} switch down`}><span class="toggle-cue" aria-hidden="true">↓</span></button>
+    </div>
+  ) : part.kind === 'pushbutton' ? (
+    <button type="button" class:list={['cp-hit cp-push', part.hitClass]} style={style} data-press={part.id} aria-label={part.label} {...(part.hitAttrs ?? {})}></button>
+  ) : null)}
+</div>
+
+<style>
+.cockpit-panel{position:relative;background:#fff}
+.cockpit-panel :global(svg){display:block;width:100%;height:auto}
+.cp-hit{position:absolute;transform:translate(-50%,-50%);aspect-ratio:1;border:0;padding:0;background:transparent;border-radius:50%;cursor:pointer}
+.cp-toggle button{position:absolute;left:0;width:100%;height:50%;border:0;padding:0;background:transparent;cursor:pointer}
+.cp-toggle .toggle-up{top:0;border-radius:50% 50% 0 0}
+.cp-toggle .toggle-down{bottom:0;border-radius:0 0 50% 50%}
+.toggle-cue{position:absolute;inset-inline-start:100%;top:50%;transform:translateY(-50%);z-index:2;padding:0 .2em;background:#fff;color:#161616;border:1px solid currentColor;border-radius:.2em;font:600 .7rem/1.25 system-ui;white-space:nowrap;pointer-events:none}
+@media(hover:hover){.toggle-cue{visibility:hidden}.cp-toggle button:hover>.toggle-cue,.cp-toggle button:focus-visible>.toggle-cue{visibility:visible}}
+.cp-hit:focus-visible,.cp-toggle button:focus-visible{outline:2px solid #1f6feb;outline-offset:1px}
+</style>
