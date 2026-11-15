@@ -4,6 +4,21 @@ import cautionArt from "../../assets/aircraft-procedures/f16-caution.webp";
 import jfsArt from "../../assets/aircraft-procedures/f16-jfs.webp";
 import testArt from "../../assets/aircraft-procedures/f16-test.webp";
 import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
+import brakeArt from "../../assets/aircraft-procedures/f16-brake.webp";
+import canopyArt from "../../assets/aircraft-procedures/f16-canopy.webp";
+import fuelArt from "../../assets/aircraft-procedures/f16-fuel-feed.webp";
+import airArt from "../../assets/aircraft-procedures/f16-air-source.webp";
+
+const preStartPanels = [
+  {id:'parking-brake', art:brakeArt, label:'Parking brake switch on the landing gear panel', x:38.55, y:49.58,
+    position:'centre', control:[['parking-brake-up','Select PARKING BRAKE','↑'],['parking-brake-down','Move parking brake switch down','↓']]},
+  {id:'canopy', art:canopyArt, label:'Canopy switch and handle', x:50, y:52,
+    position:'centre', control:[['canopy-up','Raise canopy','↑'],['canopy-down','Hold canopy switch down','↓']]},
+  {id:'fuel-feed', art:fuelArt, label:'ENG FEED selector on the FUEL panel', x:50, y:56.6, rotary:true,
+    position:'off', control:[['fuel-feed-ccw','Turn ENG FEED anticlockwise','↶'],['fuel-feed-cw','Turn ENG FEED clockwise','↷']]},
+  {id:'air-source', art:airArt, label:'AIR SOURCE selector on the AIR COND panel', x:50, y:56.6, rotary:true,
+    position:'off', control:[['air-source-ccw','Turn AIR SOURCE anticlockwise','↶'],['air-source-cw','Turn AIR SOURCE clockwise','↷']]},
+];
 // Raster line artwork referenced to the Eagle Dynamics F-16C guide (pp. 46, 59, 63, 64, 72).
 ---
 <div class="startup-panels" data-startup-panels>
@@ -101,6 +116,40 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
     </div>
   </div>
 
+  {preStartPanels.map(({id, art, label, control, x, y, position, rotary}) => (
+    <div class="startup-panel prestart-panel" data-panel={id} hidden>
+      <div class="raster-panel prestart-art" style={`--art-ratio:${art.width / art.height}`}>
+        <img src={art.src} width={art.width} height={art.height} alt={label} />
+        <div class:list={['prestart-control', rotary ? 'rotary-control' : 'raster-switch']} data-prestart-position={id}
+          data-position={position} style={`--x:${x}%;--y:${y}%`} role="group" aria-label={label}>
+          {rotary ? (
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <g class="selector-knob">
+                <circle cx="50" cy="50" r="35" fill="white" stroke="#171717" stroke-width="3" />
+                <path d="M43 27H57V65H43Z M50 20V39" fill="white" stroke="#171717" stroke-width="3" />
+              </g>
+            </svg>
+          ) : (
+            <svg viewBox="0 0 100 100" aria-hidden="true">
+              <path class="shaft" d="M39 52Q39 42 50 42Q61 42 61 52L65 82H35Z" fill="white" stroke="#171717" stroke-width="3" />
+              <circle class="cap" cx="50" cy="50" r="16" fill="white" stroke="#171717" stroke-width="3" />
+            </svg>
+          )}
+          {control.map(([value, name, cue]) => (
+            <button type="button" data-control={value} aria-label={name}><span class="toggle-cue" aria-hidden="true">{cue}</span></button>
+          ))}
+        </div>
+        {id === 'canopy' && (
+          <button type="button" class="canopy-guard" data-control="canopy-lock" aria-label="Close canopy handle" aria-pressed="false">
+            <svg viewBox="0 0 140 80" aria-hidden="true">
+              <path d="M9 8H28V25L62 41H78L112 25V8H131V34L86 57V72H54V57L9 34Z" fill="white" stroke="#171717" stroke-width="4" />
+            </svg>
+          </button>
+        )}
+      </div>
+    </div>
+  ))}
+
   <div class="startup-panel" data-panel="caution" hidden>
     <div class="raster-panel raster-caution" style={`--art-ratio:${cautionArt.width / cautionArt.height}`}>
       <img src={cautionArt.src} width={cautionArt.width} height={cautionArt.height} alt="Caution annunciators" />
@@ -113,6 +162,7 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
     <button type="button" class="master-caution" data-control="master-caution" data-lamp="master-caution">MASTER CAUTION</button>
     <div class="raster-panel raster-eyebrow" style={`--art-ratio:${eyebrowArt.width / eyebrowArt.height}`}>
       <img src={eyebrowArt.src} width={eyebrowArt.width} height={eyebrowArt.height} alt="Right eyebrow warning annunciators" />
+      <span class="raster-lamp" data-lamp="warn-canopy" style="--x:78%;--y:25%;--w:16%;--h:22%" aria-hidden="true"></span>
       <span class="raster-lamp" data-lamp="warn-engine" style="--x:6.5%;--y:54%;--w:16%;--h:22%" aria-hidden="true"></span>
       <span class="raster-lamp" data-lamp="warn-hyd" style="--x:24.6%;--y:25%;--w:16%;--h:22%" aria-hidden="true"></span>
       <span class="raster-lamp" data-lamp="warn-hyd-bottom" style="--x:24.6%;--y:54%;--w:16%;--h:22%" aria-hidden="true"></span>
@@ -121,13 +171,16 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
   <div class="panel-feedback" data-panel-feedback aria-live="polite">Use the control named in the current step.</div>
 </div>
 <script>
-  document.querySelectorAll<HTMLElement>('.elec-art .switch, .raster-switch').forEach(toggle => {
+  document.querySelectorAll<HTMLElement>('.elec-art .switch, .raster-switch:not([data-prestart-position=canopy]), .rotary-control').forEach(toggle => {
     toggle.addEventListener('keydown', event => {
-      if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return;
+      const rotary = toggle.classList.contains('rotary-control');
+      const first = rotary ? 'ArrowLeft' : 'ArrowUp';
+      const second = rotary ? 'ArrowRight' : 'ArrowDown';
+      if (event.key !== first && event.key !== second) return;
       event.preventDefault();
       if (event.repeat) return;
       const buttons = toggle.querySelectorAll<HTMLButtonElement>('button');
-      buttons[event.key === 'ArrowUp' ? 0 : 1]?.click();
+      buttons[event.key === first ? 0 : 1]?.click();
     });
   });
 </script>
@@ -218,4 +271,22 @@ button:hover > .toggle-cue,button:focus-visible > .toggle-cue{visibility:visible
 .master-caution{display:block;margin:.5rem auto;padding:.6rem;border:2px solid #343434;border-radius:4px;background:#fff;color:#171717;font-weight:700;cursor:pointer}
 .master-caution.lit{background:#ffcf63}
 .panel-hotspot{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);width:16%;aspect-ratio:1;border:0;background:transparent;cursor:pointer}
+  .prestart-control{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);width:23%;aspect-ratio:1}
+  .prestart-control svg{position:absolute;inset:0;width:100%;background:transparent;pointer-events:none}
+  .prestart-control .shaft{transform-origin:50px 50px;transform:scaleY(0)}
+  .prestart-control[data-position="up"] .shaft{transform:scaleY(-1)}
+  .prestart-control[data-position="down"] .shaft{transform:scaleY(1)}
+  .prestart-control[data-position="up"] .cap{transform:translateY(-31px)}
+  .prestart-control[data-position="down"] .cap{transform:translateY(31px)}
+  .rotary-control .selector-knob{transform-origin:50px 50px;transform:rotate(-123deg)}
+  .rotary-control[data-position="norm"] .selector-knob{transform:rotate(-73deg)}
+  .rotary-control button{position:absolute;top:0;width:50%;height:100%;border:0;background:transparent;cursor:pointer}
+  .rotary-control button:first-of-type{left:0}
+  .rotary-control button:last-of-type{right:0}
+  .rotary-control button:first-of-type .toggle-cue{inset-inline-start:auto;inset-inline-end:100%}
+  .canopy-guard{position:absolute;top:74%;left:34%;width:32%;height:24%;background:transparent;border:0;cursor:pointer}
+  .canopy-guard svg{pointer-events:none;background:transparent}
+  .canopy-guard[aria-pressed="true"]{transform:scaleY(-.87);transform-origin:top center}
+  .rotary-control button:focus-visible,.canopy-guard:focus-visible{outline:2px solid currentColor;outline-offset:1px}
+  [data-control="canopy-down"]{touch-action:none;user-select:none}
 </style>
