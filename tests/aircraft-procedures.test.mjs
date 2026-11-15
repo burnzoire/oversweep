@@ -17,64 +17,54 @@ test('engine start guide contains actions, expected indications and source mappi
   assert.match(data, /at least 20%/);
   assert.match(data, /evidence:'p\. 135/);
 });
+const panelFiles = ['elec', 'test', 'jfs', 'gear', 'canopy', 'fuel', 'air', 'caution', 'eyebrow', 'engine'];
+const specs = async () => (await Promise.all(panelFiles.map(f => read(`src/data/cockpit-panels/f16c-${f}.ts`)))).join('\n');
+
 test('instrument artwork and procedural content remain separate', async () => {
   const page = await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
-  const svg = await read('src/components/aircraft-procedures/EngineInstrument.astro');
+  const instruments = await read('src/components/aircraft-procedures/EngineInstrument.astro');
+  const render = await read('src/data/cockpit-panels/render.ts');
   assert.match(page, /guide\.steps/);
   assert.match(page, /EngineInstrument/);
   assert.match(page, /prefers-reduced-motion/);
-  assert.match(svg, /data-needle/);
-  assert.doesNotMatch(svg, /<image\b|href="https?:/);
+  assert.match(page, /JSON\.parse\(rpm\.dataset\.stops!\)/);
+  assert.match(instruments, /<CockpitPanel spec=\{f16cEngine\}/);
+  assert.match(render, /data-needle=/);
+  assert.match(render, /data-stops=/);
 });
 
 test('panel controls are native buttons with distinct locations', async () => {
-  const svg = await read('src/components/aircraft-procedures/StartupPanels.astro');
+  const all = await specs();
   const page = await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
-  for (const key of ['flcs-test','jfs-start2']) {
-    assert.match(svg, new RegExp('data-control="' + key + '"'));
+  const panel = await read('src/components/cockpit-panels/CockpitPanel.astro');
+  for (const key of ['flcs-test', 'jfs-start2', 'parking-brake-up', 'canopy-down', 'canopy-lock', 'fuel-feed-cw', 'air-source-cw']) {
+    assert.match(all, new RegExp("'" + key + "'"));
     assert.match(page, new RegExp("'" + key + "'"));
   }
-  assert.match(svg,/<button type="button"[^>]*data-control=/);
+  assert.match(panel, /<button type="button"[^>]*data-control=/);
   assert.match(page, /<div class="procedure-controls"[^>]*>[\s\S]*?<button type="button" data-control="throttle-idle"/);
   assert.match(page, /throttle: 'throttle-idle'/);
-  assert.match(page,/advanceAfterControl/);
-  assert.match(page,/completed.add\(id\)/);
+  assert.match(page, /advanceAfterControl/);
+  assert.match(page, /completed.add\(id\)/);
 });
 
-test('panel redraw uses separate artwork and movable controls', async () => {
-  const svg = await read('src/components/aircraft-procedures/StartupPanels.astro');
-  for (const panel of ['elec','test','jfs'])
-    assert.match(svg, new RegExp('data-panel="' + panel + '"'));
-  for (const panel of ['test', 'jfs', 'caution', 'eyebrow']) {
-    assert.ok(svg.includes(`f16-${panel}.webp`));
-  }
-  assert.match(svg, /data-jfs-lever/);
-  assert.match(svg, /data-flcs-lever/);
-  assert.match(svg, /<CockpitPanel spec=\{f16cElec\} class="elec-art"/);
-});
-
-test('ELEC panel is vector art drawn from its traced data', async () => {
-  const spec = await read('src/data/cockpit-panels/f16c-elec.ts');
-  const panel = await read('src/components/cockpit-panels/CockpitPanel.astro');
-  const render = await read('src/data/cockpit-panels/render.ts');
-  for (const lamp of ['flcs-pmg', 'flcs-rly', 'to-flcs', 'main-gen', 'epu-gen', 'epu-pmg'])
-    assert.ok(spec.includes(`lamp: '${lamp}'`));
-  assert.match(spec, /stateAttr: 'main-state'/);
-  assert.match(spec, /DCS F-16C Viper Early Access Guide[^']*p\. 64/);
-  assert.match(panel, /class="toggle-up"/);
-  assert.match(panel, /class="toggle-down"/);
-  assert.match(render, /data-lamp=/);
-  assert.doesNotMatch(spec + panel + render, /<image\b|\.webp/);
-});
-
-test('raster panels expose independent annunciators and control overlays', async () => {
+test('every startup panel is vector art drawn from a traced spec', async () => {
   const panels = await read('src/components/aircraft-procedures/StartupPanels.astro');
-  const instruments = await read('src/components/aircraft-procedures/EngineInstrument.astro');
-  for (const lamp of ['jfs-run', 'warn-sec', 'warn-engine']) {
-    assert.ok(panels.includes(`data-lamp="${lamp}"`));
-  }
-  for (const channel of ['A', 'B', 'C', 'D']) {
-    assert.ok(panels.includes(`data-flcs-channel="${channel}"`));
-  }
-  assert.match(instruments, /f16-engine\.webp/);
+  const all = await specs();
+  for (const panel of ['elec', 'test', 'jfs', 'caution', 'eyebrow'])
+    assert.match(panels, new RegExp('data-panel="' + panel + '"'));
+  for (const id of ['parking-brake', 'canopy', 'fuel-feed', 'air-source'])
+    assert.match(panels, new RegExp("id: '" + id + "'"));
+  assert.doesNotMatch(panels + all, /\.webp|<img\b|<image\b/);
+  for (const f of panelFiles) assert.match(await read(`src/data/cockpit-panels/f16c-${f}.ts`), /DCS F-16C Viper Early Access Guide[^']*p\. \d+/);
+  for (const hook of ["'data-flcs-lever'", "'data-jfs-lever'", "stateAttr: 'main-state'", "'data-prestart-position': 'canopy'", "'data-prestart-position': 'parking-brake'"])
+    assert.ok(all.includes(hook), hook);
+});
+
+test('panel specs expose the annunciators and channel lamps the procedure drives', async () => {
+  const all = await specs();
+  for (const lamp of ['flcs-pmg', 'flcs-rly', 'to-flcs', 'jfs-run', 'warn-sec', 'warn-elec', 'warn-seat', 'warn-engine', 'warn-hyd', 'warn-canopy'])
+    assert.ok(all.includes(`'${lamp}'`), lamp);
+  assert.match(all, /'data-flcs-channel': letter/);
+  for (const needle of ['oil', 'noz', 'rpm', 'ftit']) assert.ok(all.includes(`needle: '${needle}'`), needle);
 });

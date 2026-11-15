@@ -89,12 +89,25 @@ REL button in the striped recess next to the landing-gear handle. The exercise b
 uses a 750 ms canopy hold. These are trainer settings. Confirm cockpit geometry,
 cold-spawn detents and canopy travel time in the current DCS build.
 
-## Vector ELEC panel (15 November 2026)
+## Vector panels (15 November 2026)
 
-The ELEC panel is now drawn entirely as vector from `src/data/cockpit-panels/f16c-elec.ts`
-(the WebP face is removed). Geometry is traced from the DCS F-16C Early Access Guide,
-p. 64, after rectifying the image on its four DZUS fasteners (`scripts/panel-trace.py`), and
-checked by overlaying the drawing on the reference (`scripts/panel-overlay.mjs`). The face,
-lever, lamps and hit zones come from the same coordinates. The guide image crops the panel's
-left, top and bottom edges, so those edges are drawn to the crop. The remaining panels are
-still raster and are the next candidates for the same workflow.
+Every panel in the module is now vector art drawn from a data spec in
+`src/data/cockpit-panels/` (all WebP faces are removed). Each spec is traced from the
+Eagle Dynamics DCS F-16C guide (16 Aug 2026 edition) and checked by overlaying the
+drawing on the reference (`scripts/panel-trace.py`, `scripts/panel-overlay.mjs`):
+
+| Panel | Guide page | Notes |
+| --- | --- | --- |
+| ELEC | 64 | Rectified on the four DZUS fasteners; left, top and bottom edges cropped in the image. |
+| TEST | 72 | Image crops the panel on every side. |
+| ENG & JET START | 63 | Left, top and bottom edges cropped. |
+| Landing gear | 55 | Left edge hidden; gear handle drawn as its footprint at DN. |
+| Canopy switch and handle | 73 | No square-on view exists; drawn as seen in the guide image, not orthographic. |
+| FUEL | 67 | ENG FEED detents from the printed ticks. |
+| AIR COND | 76 | Knob detents from the printed scale and leader lines. |
+| Caution lights | 59 | Lamp matrix only. |
+| Right eyebrow | 46 | Oblique image rectified on the strip corners; modules drawn at equal width. HYD/OIL PRESS and TO/LDG CONFIG are single lamps (the raster split them). |
+| Engine instruments | 50 | Dial stops measured from the printed numerals; the page reads them from `data-stops`. |
+
+The face, controls, lamps and hit zones of each panel come from the same coordinates.
+The full 19-step procedure was driven end to end in Chromium with no page errors.

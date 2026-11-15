@@ -1,39 +1,61 @@
 ---
 /**
  * Renders a cockpit panel from its data spec: vector face, controls and hit zones
- * all from the same coordinates. State lives on the root element:
- * - toggles read `data-<stateAttr>` (lever moves to that position);
+ * all from the same coordinates. State lives in attributes the page script sets:
+ * - a toggle, rotary or handle follows `data-position` on its hit zone
+ *   (or the root's `data-<stateAttr>` when the spec names one);
  * - lamps light when their `[data-lamp]` group gets the `lit` class;
  * - pushbutton caps press while their hit zone is :active or has `pulse`.
  */
-import type { PanelSpec } from '../../data/cockpit-panels/types';
+import type { Input, PanelSpec } from '../../data/cockpit-panels/types';
 import { hitZones, renderPanelSvg } from '../../data/cockpit-panels/render';
 
 interface Props { spec: PanelSpec; class?: string; [attr: `data-${string}`]: string }
 const { spec, class: className, ...attrs } = Astro.props;
 const [w, h] = spec.size;
-const initial = Object.fromEntries(spec.parts.flatMap(p => p.kind === 'toggle' ? [[`data-${p.stateAttr ?? p.id}`, p.initial]] : []));
+const initial = Object.fromEntries(spec.parts.flatMap(p => p.kind === 'toggle' && p.stateAttr ? [[`data-${p.stateAttr}`, p.initial]] : []));
+const defaults = (label: string, kind: string): Input[] => kind === 'rotary'
+  ? [[``, `Turn ${label} anticlockwise`], [``, `Turn ${label} clockwise`]]
+  : [[``, `Move ${label} up`], [``, `Move ${label} down`]];
+const cue = { toggle: ['↑', '↓'], handle: ['↑', '↓'], rotary: ['↶', '↷'] } as const;
 ---
-<div class:list={['cockpit-panel', className]} style={`--art-ratio:${w / h}`} role="group" aria-label={spec.title} {...initial} {...attrs}>
+<div class:list={['cockpit-panel', className]} data-panel-id={spec.id} style={`--art-ratio:${w / h}`} role="group" aria-label={spec.title} {...initial} {...attrs}>
   <Fragment set:html={renderPanelSvg(spec)} />
-  {hitZones(spec).map(({ part, style }) => part.kind === 'toggle' ? (
-    <div class:list={['cp-hit cp-toggle', part.hitClass]} style={style} role="group" aria-label={`${part.positions.map(p => p.label).join(' / ')} switch`}>
-      <button type="button" class="toggle-up" aria-label={`Move ${part.positions[0].label} switch up`}><span class="toggle-cue" aria-hidden="true">↑</span></button>
-      <button type="button" class="toggle-down" aria-label={`Move ${part.positions[0].label} switch down`}><span class="toggle-cue" aria-hidden="true">↓</span></button>
-    </div>
-  ) : part.kind === 'pushbutton' ? (
-    <button type="button" class:list={['cp-hit cp-push', part.hitClass]} style={style} data-press={part.id} aria-label={part.label} {...(part.hitAttrs ?? {})}></button>
-  ) : null)}
+  {hitZones(spec).map(({ part, style }) => {
+    if (part.kind === 'pushbutton') return (
+      <button type="button" class:list={['cp-hit cp-push', part.shape === 'square' && 'cp-square', part.hitClass]} style={style} data-press={part.id} aria-label={part.label} {...(part.hitAttrs ?? {})}></button>
+    );
+    if (part.kind !== 'toggle' && part.kind !== 'rotary' && part.kind !== 'handle') return null;
+    const name = part.label ?? (part.kind === 'toggle' ? part.positions.map(p => p.label ?? p.id).join(' / ') : part.id);
+    const inputs = part.inputs ?? defaults(name, part.kind);
+    const stateless = part.kind === 'toggle' && part.stateAttr;
+    return (
+      <div class:list={['cp-hit', `cp-${part.kind}`, part.hitClass]} style={style} data-hit={part.id} data-position={stateless ? undefined : part.initial} role="group" aria-label={name} {...(part.hitAttrs ?? {})}>
+        {inputs.map(([control, label, disabled], i) => (
+          <button type="button" class={i === 0 ? 'toggle-up' : 'toggle-down'} data-control={control || undefined} aria-label={label} disabled={disabled}>
+            <span class="toggle-cue" aria-hidden="true">{cue[part.kind][i === 0 ? 0 : 1]}</span>
+          </button>
+        ))}
+      </div>
+    );
+  })}
 </div>
 
 <style>
 .cockpit-panel{position:relative;background:#fff}
 .cockpit-panel :global(svg){display:block;width:100%;height:auto}
-.cp-hit{position:absolute;transform:translate(-50%,-50%);aspect-ratio:1;border:0;padding:0;background:transparent;border-radius:50%;cursor:pointer}
-.cp-toggle button{position:absolute;left:0;width:100%;height:50%;border:0;padding:0;background:transparent;cursor:pointer}
-.cp-toggle .toggle-up{top:0;border-radius:50% 50% 0 0}
-.cp-toggle .toggle-down{bottom:0;border-radius:0 0 50% 50%}
+.cp-hit{position:absolute;transform:translate(-50%,-50%);border:0;padding:0;background:transparent;border-radius:50%;cursor:pointer}
+.cp-square,.cp-handle{border-radius:6%}
+.cp-hit > button{position:absolute;border:0;padding:0;background:transparent;cursor:pointer}
+.cp-toggle > button,.cp-handle > button{left:0;width:100%;height:50%}
+.cp-toggle > .toggle-up,.cp-handle > .toggle-up{top:0}
+.cp-toggle > .toggle-down,.cp-handle > .toggle-down{bottom:0}
+.cp-rotary > button{top:0;height:100%;width:50%}
+.cp-rotary > .toggle-up{left:0}
+.cp-rotary > .toggle-down{right:0}
+.cp-hit > button:disabled{cursor:not-allowed}
 .toggle-cue{position:absolute;inset-inline-start:100%;top:50%;transform:translateY(-50%);z-index:2;padding:0 .2em;background:#fff;color:#161616;border:1px solid currentColor;border-radius:.2em;font:600 .7rem/1.25 system-ui;white-space:nowrap;pointer-events:none}
-@media(hover:hover){.toggle-cue{visibility:hidden}.cp-toggle button:hover>.toggle-cue,.cp-toggle button:focus-visible>.toggle-cue{visibility:visible}}
-.cp-hit:focus-visible,.cp-toggle button:focus-visible{outline:2px solid #1f6feb;outline-offset:1px}
+.cp-rotary > .toggle-up .toggle-cue{inset-inline-start:auto;inset-inline-end:100%}
+@media(hover:hover){.toggle-cue{visibility:hidden}.cp-hit > button:hover>.toggle-cue,.cp-hit > button:focus-visible>.toggle-cue{visibility:visible}}
+.cp-hit:focus-visible,.cp-hit > button:focus-visible{outline:2px solid #1f6feb;outline-offset:1px}
 </style>
