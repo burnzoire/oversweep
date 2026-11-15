@@ -110,8 +110,11 @@ WebP and its hand-placed percentage overlays.
 
 ## Limits to be honest about
 
-- The art is NATOPS-style line drawing: no shading, and a toggle lever is shown
-  schematically from above. It shows layout, legends and state, not texture.
+- The art is old-flight-manual line drawing: bezels, rings, plate edges and
+  fastener heads are drawn with `cased()` in `render.ts` (heavy outline with a
+  thin white core) so they read as double-line engraving, and raised plates get
+  an offset lip. Keep new control kinds in that style. There is no shading, and
+  a toggle lever is shown schematically from above.
 - The guide image fixes proportions, not real-world size. If the reference crops
   an edge, the drawn edge is a guess and must be marked as one.
 - Text uses a condensed system font stretched to the measured width; the glyphs
