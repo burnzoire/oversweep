@@ -22,7 +22,9 @@ Other branches are skipped, and PRs receive no deployment permissions.
 
 ## PR previews
 
-Label a PR `preview` to publish it on the live site under `/preview/<sha>/`.
+Label a PR `preview`, or comment `/preview` on it, to publish it on the live site
+under `/preview/<sha>/`. Only the repository owner, members and collaborators can
+trigger it by comment; the comment adds the label, so later pushes republish too.
 [PR preview](../.github/workflows/pr-preview.yml) builds the PR head at that base
 (branches of this repository only, never forks) and uploads it as an artifact; it
 has no write access. The Pages workflow then runs on main (`workflow_run`), builds
