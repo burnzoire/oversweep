@@ -1,0 +1,77 @@
+---
+// PR previews. A preview build (PUBLIC_PREVIEW_SHA set, see
+// .github/workflows/pr-preview.yml) is served under /preview/<sha>/ on the live
+// site: it shows a banner naming the PR and commit, with a link to the same
+// page on the live site. The live build instead carries a small loader: a
+// visit with ?sha=<commit> (any unique prefix) or ?pr=<number> looks the commit
+// up in /preview/index.json and opens the same page in that preview.
+interface Props {
+  // The page's route below the base, as routeOf returns it ("" for home).
+  route: string;
+}
+const { route } = Astro.props;
+const sha = import.meta.env.PUBLIC_PREVIEW_SHA ?? "";
+const pr = import.meta.env.PUBLIC_PREVIEW_PR ?? "";
+// Absolute, since it leaves the preview's base path.
+const livePage = new URL(`/${route}`, Astro.site ?? "https://www.oversweep.com").href;
+const base = import.meta.env.BASE_URL.replace(/\/+$/, "");
+---
+
+{sha ? (
+  <div class="preview-banner" role="note">
+    <span>
+      Preview of {pr ? <a href={`https://github.com/burnzoire/oversweep/pull/${pr}`}>PR #{pr}</a> : "a PR"} at{" "}
+      <code>{sha.slice(0, 7)}</code>. Not the live site.
+    </span>
+    <a href={livePage}>View live page</a>
+  </div>
+) : (
+  <script is:inline define:vars={{ base }}>
+    (() => {
+      const query = new URLSearchParams(location.search);
+      const sha = (query.get("sha") || "").trim().toLowerCase();
+      const pr = (query.get("pr") || "").trim();
+      if (!/^[0-9a-f]{4,40}$/.test(sha) && !/^\d+$/.test(pr)) return;
+      const note = (text) => {
+        const show = () => {
+          const banner = document.createElement("div");
+          banner.className = "preview-banner";
+          banner.setAttribute("role", "note");
+          banner.textContent = text;
+          document.body.prepend(banner);
+        };
+        document.body ? show() : addEventListener("DOMContentLoaded", show);
+      };
+      fetch(`${base}/preview/index.json`, { cache: "no-store" })
+        .then((response) => (response.ok ? response.json() : []))
+        .then((previews) => {
+          const hit = previews.find((p) => (sha ? p.sha.startsWith(sha) : String(p.pr) === pr));
+          if (!hit) return note(`No preview is published for ${sha ? `commit ${sha}` : `PR #${pr}`}.`);
+          query.delete("sha");
+          query.delete("pr");
+          const rest = query.toString();
+          const path = location.pathname.slice(base.length) || "/";
+          location.replace(`${base}/preview/${hit.sha}${path}${rest ? `?${rest}` : ""}${location.hash}`);
+        })
+        .catch(() => note("PR previews could not be loaded."));
+    })();
+  </script>
+)}
+
+<style is:global>
+  .preview-banner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    background: var(--color-accent);
+    color: var(--color-ink);
+    font-size: 0.875rem;
+    text-align: center;
+  }
+  .preview-banner a {
+    color: inherit;
+    font-weight: 600;
+  }
+</style>

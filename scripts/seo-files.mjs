@@ -50,7 +50,7 @@ export function seoFiles() {
           "</urlset>",
           "",
         ].join("\n"));
-        await writeFile(path.join(output, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${sitemap}\n`);
+        await writeFile(path.join(output, "robots.txt"), `User-agent: *\nAllow: /\nDisallow: ${base}preview/\n\nSitemap: ${sitemap}\n`);
         logger.info(`sitemap.xml lists ${urls.length} pages.`);
       },
     },
