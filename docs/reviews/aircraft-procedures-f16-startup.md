@@ -72,3 +72,19 @@ The prior side-by-side RPM/FTIT cartoon has been replaced with the correct four-
 - [Eagle Dynamics F-16C Early Access Guide, 23 March 2026](https://www.digitalcombatsimulator.ru/upload/iblock/6f7/joywm66pwdgg4iacljy8zolons4dz8dh/DCS%20F-16C%20Early%20Access%20Guide%20EN.pdf), panel layout and startup sequence.
 
 **Visual acceptance is still BLOCKED.** A source-derived panel outline is *not* an exact surveyed contour. No reliable, orthographic DCS screenshot overlay or verified per-fastener coordinate table has yet been produced; current individual DZUS positions, panel edge cuts and some labels are draft positions. The throttle remains conceptual. Production should not advertise the artwork as exact, and should not publish the procedure until geometric comparison and in-sim verification are complete. The new work provides a significantly more realistic panel review surface; it does not silently clear the exactness requirement.
+
+## Pre-start controls follow-up
+
+The closed-canopy exercise follows Chuck’s *DCS F-16C Viper Guide*, Part 4,
+pp. 88 and 90 in the attached edition. Eagle Dynamics’ 23 March 2026 guide
+covers the landing gear panel (pp. 54–55), right eyebrow (p. 47), fuel panel
+(p. 66), canopy switch and handle (p. 72), and air conditioning panel (p. 75).
+Its before-start checklist leaves canopy position to the pilot (p. 134).
+The four orthographic raster backgrounds show the fixed plates, legends and
+bezels. Separate face-on control overlays share the mounting pivots, including
+the TEMP knob and adjacent controls. Surrounding inputs use the same wrong-input
+feedback as the other panels in this guided exercise. The attached cockpit
+photos on pp. 19 and 33 show the squared AIR REFUEL switch cap and the DN LOCK
+REL button in the striped recess next to the landing-gear handle. The exercise begins with both rotary selectors at OFF and
+uses a 750 ms canopy hold. These are trainer settings. Confirm cockpit geometry,
+cold-spawn detents and canopy travel time in the current DCS build.

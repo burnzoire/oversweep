@@ -4,6 +4,77 @@ import cautionArt from "../../assets/aircraft-procedures/f16-caution.webp";
 import jfsArt from "../../assets/aircraft-procedures/f16-jfs.webp";
 import testArt from "../../assets/aircraft-procedures/f16-test.webp";
 import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
+import brakeArt from "../../assets/aircraft-procedures/f16-brake.webp";
+import canopyArt from "../../assets/aircraft-procedures/f16-canopy.webp";
+import fuelArt from "../../assets/aircraft-procedures/f16-fuel-feed.webp";
+import airArt from "../../assets/aircraft-procedures/f16-air-source.webp";
+
+type PanelInput = [id: string, label: string];
+type PanelControl = {
+  id: string;
+  kind: 'toggle' | 'rotary' | 'button' | 'slider';
+  label: string;
+  anchor: [x: number, y: number, width: number];
+  inputs: PanelInput[];
+  position?: 'up' | 'centre' | 'down' | 'off';
+  angles?: [initial: number, norm: number];
+  face?: 'paddle' | 'square' | 'triple' | 'recessed';
+  primary?: boolean;
+};
+
+const parkingBrake: PanelControl[] = [
+  {id:'parking-brake', kind:'toggle', label:'Parking brake and anti-skid', anchor:[55.3,56.7,16], position:'centre', primary:true,
+    inputs:[['parking-brake-up','Select PARKING BRAKE'],['parking-brake-down','Move parking brake switch down']]},
+  {id:'emergency-stores', kind:'button', label:'Emergency stores jettison', anchor:[32.1,27.2,17],
+    inputs:[['emergency-stores','EMER STORES JETTISON']]},
+  {id:'hook', kind:'toggle', label:'Hook', anchor:[84.3,23.8,13], position:'up', face:'paddle',
+    inputs:[['hook-up','Select HOOK UP'],['hook-down','Select HOOK DN']]},
+  {id:'ground-jettison', kind:'toggle', label:'Ground jettison enable', anchor:[17.7,56.3,12], position:'down',
+    inputs:[['ground-jettison-up','Select GND JETT ENABLE'],['ground-jettison-down','Select GND JETT OFF']]},
+  {id:'brakes-channel', kind:'toggle', label:'Brakes channel', anchor:[35.6,56.3,12], position:'up',
+    inputs:[['brakes-channel-up','Select BRAKES CHAN 1'],['brakes-channel-down','Select BRAKES CHAN 2']]},
+  {id:'stores-config', kind:'toggle', label:'Stores configuration', anchor:[14.6,85.5,12], position:'up',
+    inputs:[['stores-config-up','Select CAT I'],['stores-config-down','Select CAT III']]},
+  {id:'horn-silencer', kind:'button', label:'Horn silencer', anchor:[32.5,85.9,9],
+    inputs:[['horn-silencer','HORN SILENCER']]},
+  {id:'landing-lights', kind:'toggle', label:'Landing and taxi lights', anchor:[55.1,84.8,13], position:'centre', face:'triple',
+    inputs:[['landing-lights-up','Move LIGHTS switch up'],['landing-lights-down','Move LIGHTS switch down']]},
+  {id:'landing-gear', kind:'slider', label:'Landing gear handle', anchor:[85.2,61.0,16], position:'down',
+    inputs:[['landing-gear-up','Move landing gear handle to UP'],['landing-gear-down','Move landing gear handle to DN']]},
+  {id:'down-lock-release', kind:'button', label:'Down lock release', anchor:[84.0,83.8,9], face:'recessed',
+    inputs:[['down-lock-release','DN LOCK REL']]},
+];
+
+const canopyControls: PanelControl[] = [
+  {id:'canopy', kind:'toggle', label:'Canopy switch', anchor:[70.1,40.9,20], position:'centre', primary:true,
+    inputs:[['canopy-up','Raise canopy'],['canopy-down','Hold canopy switch down']]},
+];
+
+const fuelControls: PanelControl[] = [
+  {id:'fuel-feed', kind:'rotary', label:'Engine feed', anchor:[55,55.6,12.7], angles:[-125,-58], position:'off', primary:true,
+    inputs:[['fuel-feed-ccw','Turn ENG FEED anticlockwise'],['fuel-feed-cw','Turn ENG FEED clockwise']]},
+  {id:'fuel-master', kind:'toggle', label:'Fuel master', anchor:[16.1,55.6,10], position:'up', face:'paddle',
+    inputs:[['fuel-master-up','Move FUEL MASTER up'],['fuel-master-down','Move FUEL MASTER down']]},
+  {id:'tank-inerting', kind:'toggle', label:'Tank inerting', anchor:[33.5,61.9,9], position:'down',
+    inputs:[['tank-inerting-up','Select TANK INERTING'],['tank-inerting-down','Select TANK INERTING OFF']]},
+  {id:'air-refuel', kind:'toggle', label:'Air refuel', anchor:[79.3,61.7,10], position:'down', face:'square',
+    inputs:[['air-refuel-up','Select AIR REFUEL OPEN'],['air-refuel-down','Select AIR REFUEL CLOSE']]},
+];
+
+const airControls: PanelControl[] = [
+  {id:'air-source', kind:'rotary', label:'Air source', anchor:[49.8,31.9,36], angles:[-135,-45], position:'off', primary:true,
+    inputs:[['air-source-ccw','Turn AIR SOURCE anticlockwise'],['air-source-cw','Turn AIR SOURCE clockwise']]},
+  {id:'air-temp', kind:'rotary', label:'Temperature', anchor:[49.8,73.3,36], angles:[0,0],
+    inputs:[['air-temp-ccw','Turn TEMP toward COOL'],['air-temp-cw','Turn TEMP toward WARM']]},
+];
+
+const preStartPanels = [
+  {id:'parking-brake', art:brakeArt, label:'F-16C landing gear panel', controls:parkingBrake},
+  {id:'canopy', art:canopyArt, label:'F-16C canopy switch and handle mounting assembly', controls:canopyControls},
+  {id:'fuel-feed', art:fuelArt, label:'F-16C FUEL panel', controls:fuelControls},
+  {id:'air-source', art:airArt, label:'F-16C AIR COND panel', controls:airControls},
+];
+const cues = {toggle:['↑','↓'], slider:['↑','↓'], rotary:['↶','↷'], button:[]};
 // Raster line artwork referenced to the Eagle Dynamics F-16C guide (pp. 46, 59, 63, 64, 72).
 ---
 <div class="startup-panels" data-startup-panels>
@@ -101,6 +172,89 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
     </div>
   </div>
 
+  {preStartPanels.map(({id, art, label, controls}) => (
+    <div class="startup-panel prestart-panel" data-panel={id} hidden>
+      <div class="raster-panel prestart-art" style={`--art-ratio:${art.width / art.height}`}>
+        <img src={art.src} width={art.width} height={art.height} alt={label} />
+        {controls.map(({id, kind, label, anchor:[x,y,width], position, angles, inputs, face, primary}) => (
+          <div class:list={['prestart-control', `prestart-${kind}`, {'rotary-control':kind==='rotary', 'raster-switch':kind==='toggle'||kind==='slider', primary}]}
+            data-prestart-position={id} data-position={position}
+            style={`--x:${x}%;--y:${y}%;--control-width:${width}%;--initial-angle:${angles?.[0] ?? 0}deg;--norm-angle:${angles?.[1] ?? 0}deg`}
+            role="group" aria-label={label}>
+            {kind === 'rotary' && (
+              <svg viewBox="0 0 100 100" aria-hidden="true">
+                <g class="selector-knob" stroke="#171717" stroke-width="2.4" stroke-linejoin="round">
+                  <circle cx="50" cy="50" r="32" fill="white" />
+                  <circle cx="50" cy="50" r="27" fill="none" stroke-width="1" stroke-dasharray="2 3" />
+                  <path d="M33 27L38 20H62L67 27L69 68L62 76H38L31 68Z" fill="white" />
+                  <path d="M50 22V37" fill="none" />
+                </g>
+              </svg>
+            )}
+            {kind === 'toggle' && (
+              <svg viewBox="0 0 100 100" aria-hidden="true">
+                <path class="shaft" d="M39 51Q39 43 50 43Q61 43 61 51L64 78H36Z" fill="white" stroke="#171717" stroke-width="3" />
+                <g class="cap" fill="white" stroke="#171717" stroke-width="2.5">
+                  {face === 'paddle' && <path d="M33 33H67V55A17 17 0 0 1 33 55Z" />}
+                  {face === 'square' && <path d="M34 35H66V65H34Z M38 39H62V61H38Z" />}
+                  {face === 'triple' && <>
+                    <rect x="17" y="37" width="66" height="26" rx="12" />
+                    <circle cx="29" cy="50" r="7" /><circle cx="50" cy="50" r="7" /><circle cx="71" cy="50" r="7" />
+                  </>}
+                  {!face && <>
+                    <circle cx="50" cy="50" r="15" />
+                    <circle cx="50" cy="50" r="10" fill="none" stroke-width="1.2" />
+                  </>}
+                </g>
+              </svg>
+            )}
+            {kind === 'slider' && (
+              <svg viewBox="0 0 100 100" aria-hidden="true">
+                <g class="gear-grip" stroke="#171717" stroke-width="2.5">
+                  <path d="M31 50H64V71H31Z" fill="#e6e6e6" />
+                  <path d="M24 24H58Q71 24 71 38V56Q71 64 63 64H24Z" fill="white" />
+                  <path d="M29 27V60M34 27V60M39 27V60M44 27V60M49 27V60" fill="none" stroke-width="1.4" />
+                  <rect x="64" y="37" width="11" height="12" rx="3" fill="white" />
+                </g>
+              </svg>
+            )}
+            {kind === 'button' && (
+              <svg viewBox="0 0 100 100" aria-hidden="true">
+                <circle cx="50" cy="50" r="33" fill={face === 'recessed' ? '#202020' : 'white'} stroke="#171717" stroke-width="2.5" />
+                <circle cx="50" cy="50" r="28" fill="none" stroke={face === 'recessed' ? '#8a8a8a' : '#171717'} stroke-width="1.5" />
+              </svg>
+            )}
+            {inputs.map(([value, name], index) => (
+              <button type="button" data-control={value} aria-label={name} disabled={id === 'fuel-master'}>
+                {cues[kind][index] && <span class="toggle-cue" aria-hidden="true">{cues[kind][index]}</span>}
+              </button>
+            ))}
+          </div>
+        ))}
+        {id === 'fuel-feed' && (
+          <button type="button" class="fuel-master-guard" data-control="fuel-master-guard" aria-label="FUEL MASTER switch guard">
+            <svg viewBox="0 0 70 90" aria-hidden="true">
+              <path d="M7 7H22V25Q22 34 29 34H41Q48 34 48 25V7H63V81H7Z" fill="white" stroke="#171717" stroke-width="3" />
+              <path d="M11 68H59M11 74H59" fill="none" stroke="#171717" stroke-width="1.5" />
+            </svg>
+          </button>
+        )}
+        {id === 'canopy' && (
+          <button type="button" class="canopy-guard" data-control="canopy-lock" aria-label="Close canopy handle" aria-pressed="false">
+            <svg viewBox="0 0 200 100" aria-hidden="true">
+              <g fill="white" stroke="#171717" stroke-width="2.5" stroke-linejoin="round">
+                <path d="M147 3H183V22H168L162 47L190 72V94H167L145 67L120 52L19 84L9 68L109 38L26 26L29 10L134 21Z" />
+                <path d="M147 3H183V15H145Z M18 67L27 81L19 84L9 68Z M166 82H190V94H167Z" />
+                <path d="M151 18L148 43L169 69M123 44L29 19" fill="none" stroke-width="1.2" />
+                <circle cx="166" cy="8.5" r="3" />
+              </g>
+            </svg>
+          </button>
+        )}
+      </div>
+    </div>
+  ))}
+
   <div class="startup-panel" data-panel="caution" hidden>
     <div class="raster-panel raster-caution" style={`--art-ratio:${cautionArt.width / cautionArt.height}`}>
       <img src={cautionArt.src} width={cautionArt.width} height={cautionArt.height} alt="Caution annunciators" />
@@ -113,6 +267,7 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
     <button type="button" class="master-caution" data-control="master-caution" data-lamp="master-caution">MASTER CAUTION</button>
     <div class="raster-panel raster-eyebrow" style={`--art-ratio:${eyebrowArt.width / eyebrowArt.height}`}>
       <img src={eyebrowArt.src} width={eyebrowArt.width} height={eyebrowArt.height} alt="Right eyebrow warning annunciators" />
+      <span class="raster-lamp" data-lamp="warn-canopy" style="--x:78%;--y:25%;--w:16%;--h:22%" aria-hidden="true"></span>
       <span class="raster-lamp" data-lamp="warn-engine" style="--x:6.5%;--y:54%;--w:16%;--h:22%" aria-hidden="true"></span>
       <span class="raster-lamp" data-lamp="warn-hyd" style="--x:24.6%;--y:25%;--w:16%;--h:22%" aria-hidden="true"></span>
       <span class="raster-lamp" data-lamp="warn-hyd-bottom" style="--x:24.6%;--y:54%;--w:16%;--h:22%" aria-hidden="true"></span>
@@ -121,13 +276,16 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
   <div class="panel-feedback" data-panel-feedback aria-live="polite">Use the control named in the current step.</div>
 </div>
 <script>
-  document.querySelectorAll<HTMLElement>('.elec-art .switch, .raster-switch').forEach(toggle => {
+  document.querySelectorAll<HTMLElement>('.elec-art .switch, .raster-switch:not([data-prestart-position=canopy]), .rotary-control').forEach(toggle => {
     toggle.addEventListener('keydown', event => {
-      if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return;
+      const rotary = toggle.classList.contains('rotary-control');
+      const first = rotary ? 'ArrowLeft' : 'ArrowUp';
+      const second = rotary ? 'ArrowRight' : 'ArrowDown';
+      if (event.key !== first && event.key !== second) return;
       event.preventDefault();
       if (event.repeat) return;
       const buttons = toggle.querySelectorAll<HTMLButtonElement>('button');
-      buttons[event.key === 'ArrowUp' ? 0 : 1]?.click();
+      buttons[event.key === first ? 0 : 1]?.click();
     });
   });
 </script>
@@ -218,4 +376,36 @@ button:hover > .toggle-cue,button:focus-visible > .toggle-cue{visibility:visible
 .master-caution{display:block;margin:.5rem auto;padding:.6rem;border:2px solid #343434;border-radius:4px;background:#fff;color:#171717;font-weight:700;cursor:pointer}
 .master-caution.lit{background:#ffcf63}
 .panel-hotspot{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);width:16%;aspect-ratio:1;border:0;background:transparent;cursor:pointer}
+  .prestart-control{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);width:var(--control-width);aspect-ratio:1}
+  .prestart-toggle.primary,.prestart-rotary.primary{min-width:48px}
+  @media(hover:none){
+    .prestart-control:not(.primary) button:not(:focus-visible) > .toggle-cue{visibility:hidden}
+  }
+  .prestart-control button:disabled > .toggle-cue{visibility:hidden}
+  .prestart-control svg{position:absolute;inset:0;width:100%;background:transparent;pointer-events:none}
+  .prestart-control .shaft{transform-origin:50px 50px;transform:scaleY(0)}
+  .prestart-control[data-position="up"] .shaft{transform:scaleY(-1)}
+  .prestart-control[data-position="down"] .shaft{transform:scaleY(1)}
+  .prestart-control[data-position="up"] .cap{transform:translateY(-31px)}
+  .prestart-control[data-position="down"] .cap{transform:translateY(31px)}
+  .rotary-control .selector-knob{transform-origin:50px 50px;transform:rotate(var(--initial-angle))}
+  .rotary-control[data-position="norm"] .selector-knob{transform:rotate(var(--norm-angle))}
+  .rotary-control button{position:absolute;top:0;width:50%;height:100%;border:0;background:transparent;cursor:pointer}
+  .rotary-control button:first-of-type{left:0}
+  .rotary-control button:last-of-type{right:0}
+  .prestart-rotary .toggle-cue{inset-inline-start:50%;top:100%;transform:translate(-50%,0)}
+  .prestart-slider{height:27%;aspect-ratio:auto}
+  .prestart-slider svg{top:50%;bottom:auto;transform:translateY(-50%);overflow:visible}
+  .prestart-slider[data-position="down"] .gear-grip{transform:translateY(58px)}
+  .prestart-slider[data-position="up"] .gear-grip{transform:translateY(-58px)}
+  .fuel-master-guard{position:absolute;left:16.1%;top:51%;width:10%;padding:0;aspect-ratio:7/9;transform:translate(-50%,-50%);border:0;background:transparent;cursor:pointer}
+  .fuel-master-guard svg{pointer-events:none;background:transparent}
+  .prestart-button button{position:absolute;inset:0;border:0;border-radius:50%;background:transparent;cursor:pointer}
+  .prestart-button:active svg{transform:scale(.9)}
+  .canopy-guard{position:absolute;top:55%;left:22%;width:58%;padding:0;aspect-ratio:2;border:0;background:transparent;cursor:pointer}
+  .canopy-guard svg{pointer-events:none;background:transparent}
+  .canopy-guard[aria-pressed="true"]{transform:scaleY(-.87);transform-origin:83% 8.5%}
+  .prestart-art button{-webkit-tap-highlight-color:transparent}
+  .prestart-control button:focus-visible,.canopy-guard:focus-visible,.fuel-master-guard:focus-visible{outline:2px solid currentColor;outline-offset:1px}
+  [data-control="canopy-down"]{touch-action:none;user-select:none}
 </style>

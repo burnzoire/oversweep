@@ -2,7 +2,7 @@
 import SiteLayout from '../../../../layouts/SiteLayout.astro';
 import EngineInstrument from '../../../../components/aircraft-procedures/EngineInstrument.astro';
 import StartupPanels from '../../../../components/aircraft-procedures/StartupPanels.astro';
-import {visibleProcedures, procedureRoute, sourceUrl, type AircraftProcedure} from '../../../../data/aircraft-procedures';
+import {visibleProcedures, sourceUrl, type AircraftProcedure} from '../../../../data/aircraft-procedures';
 import {sitePath} from '../../../../lib/paths';
 export function getStaticPaths() {
   return visibleProcedures.map(p=>({params:{airframe:p.airframe,procedure:p.slug},props:{guide:p}}));
@@ -22,7 +22,7 @@ const steps = guide.steps;
       <ol class="procedure-steps">
         {steps.map((s,i)=><li class="procedure-step" data-step={i} data-step-id={s.id} data-visual={s.visual ?? ''}>
           <div class="procedure-kicker">{s.section} · {String(i+1).padStart(2,'0')} / {steps.length}</div>
-          <h2>{s.title}</h2>
+          <h2 tabindex="-1">{s.title}</h2>
           <p><strong>Control</strong> · {s.control}</p>
           <p class="procedure-action"><strong>Do</strong> · {s.action}</p>
           <p><strong>Expect</strong> · {s.expect}</p>
@@ -48,8 +48,9 @@ const steps = guide.steps;
       <p data-indication aria-live="polite">Select the control named in the instructions. The panel responds to your input.</p>
     </aside>
   </div>
-  <h2>Source</h2>
-  <p><a href={sourceUrl}>Eagle Dynamics — DCS F-16C Early Access Guide (23 March 2026)</a>, “Before Engine Start” and “Engine Start”, pp. 134–135.</p>
+  <h2>Sources</h2>
+  <p><a href={sourceUrl}>Eagle Dynamics — DCS F-16C Early Access Guide (23 March 2026)</a>, cockpit controls, “Before Engine Start” and “Engine Start”, pp. 134–135.</p>
+  <p><a href="https://chucksguides.com/aircraft/dcs/f-16cm/">Chuck’s Guide — DCS F-16C Viper</a>, Part 4, pp. 88 and 90 in the referenced edition. The exercise uses its closed-canopy example.</p>
 </SiteLayout>
 <script>
 const root = document.querySelector<HTMLElement>('[data-procedure]');
@@ -75,17 +76,25 @@ if (root) {
     'flcs-test': 'flcs-test',
     'flcs-release': 'flcs-norm',
     'main-power': 'main-main',
+    'parking-brake': 'parking-brake-up',
+    'canopy-close': 'canopy-down',
+    'canopy-lock': 'canopy-lock',
+    'fuel-feed': 'fuel-feed-cw',
+    'air-source': 'air-source-cw',
     jfs: 'jfs-start2',
     'master-caution': 'master-caution',
     throttle: 'throttle-idle',
   };
-  const confirmations = new Set(['ground-ready', 'epu-check', 'sec', 'generator', 'idle-check']);
+  const confirmations = new Set(['ground-ready', 'epu-check', 'sec', 'generator', 'idle-check', 'canopy-check', 'throttle-cutoff']);
   let step = 0;
   let main: 'off'|'batt'|'main' = 'off';
   let flcsHeld = false;
   let jfsStarted = false;
   let jfsRun = false;
   let throttleIdle = false;
+  const preStart = { parkingBrake: false, canopyDown: false, canopyLocked: false, feedNormal: false, airNormal: false };
+  const canopyToggle = one<HTMLElement>('[data-prestart-position="canopy"]')!;
+  const canopyDownButton = one<HTMLButtonElement>('[data-control="canopy-down"]')!;
   const completed = new Set<string>();
   let frame = 0;
 
@@ -100,6 +109,7 @@ if (root) {
       'warn-hyd': powered && !pressureEstablished,
       'warn-hyd-bottom': powered && !pressureEstablished,
       'master-caution': powered && cautionPending,
+      'warn-canopy': powered && !preStart.canopyLocked,
     };
     for (const [lamp, on] of Object.entries(lights)) {
       all(`[data-lamp="${lamp}"]`).forEach(el => el.classList.toggle('lit', on));
@@ -165,11 +175,14 @@ if (root) {
     const id = steps[step].dataset.stepId || '';
     const panel = ['battery','flcs-test','flcs-release','main-power','epu-check'].includes(id)?'elec':
       id==='jfs'?'jfs':
-      id==='ground-ready'?'elec':'engine';
+      ['parking-brake','fuel-feed','air-source'].includes(id)?id:
+      id.startsWith('canopy-')?'canopy':
+      id==='ground-ready'||id==='throttle-cutoff'?'':'engine';
     visual.dataset.stage = id;
     const showTest = id==='flcs-test'||id==='flcs-release';
     const visible = new Set<string>([showTest?'test':panel]);
     if (showTest) visible.add('elec');
+    if (id.startsWith('canopy-')) visible.add('eyebrow');
     if (id==='main-power') {visible.add('caution');visible.add('eyebrow');}
     if (['jfs','sec','throttle'].includes(id)) visible.add('caution');
     if (id==='idle-check') visible.add('jfs');
@@ -191,10 +204,23 @@ if (root) {
         el.dataset.control === 'main-off' ? main==='off':
         el.dataset.control === 'flcs-test' ? flcsHeld:
         el.dataset.control === 'jfs-start2' ? jfsStarted:
-        el.dataset.control === 'throttle-idle' ? throttleIdle : false));
+        el.dataset.control === 'throttle-idle' ? throttleIdle :
+        el.dataset.control === 'parking-brake-up' ? preStart.parkingBrake :
+        el.dataset.control === 'canopy-lock' ? preStart.canopyLocked :
+        el.dataset.control === 'fuel-feed-cw' ? preStart.feedNormal :
+        el.dataset.control === 'air-source-cw' ? preStart.airNormal : false));
     });
     const elec = one<HTMLElement>(".elec-art")!;
     elec.dataset.mainState = main;
+    const positions = {
+      'parking-brake': preStart.parkingBrake ? 'up' : 'centre',
+      'fuel-feed': preStart.feedNormal ? 'norm' : 'off',
+      'air-source': preStart.airNormal ? 'norm' : 'off',
+    };
+    for (const [panel, position] of Object.entries(positions)) {
+      one<HTMLElement>(`[data-prestart-position="${panel}"]`)!.dataset.position = position;
+    }
+    updateGlareShield(displayedRpm);
     one<HTMLElement>('[data-flcs-lever]')!.dataset.position = flcsHeld ? 'test' : 'norm';
     one<HTMLButtonElement>('[data-control="flcs-norm"]')!.setAttribute('aria-label', flcsHeld ? 'Return to NORM' : 'Select MAINT');
     one<SVGElement>('[data-jfs-lever]')!.dataset.position = jfsStarted ? 'start2' : 'off';
@@ -216,6 +242,8 @@ if (root) {
       id==='jfs'?(jfsRun ? 'JET FUEL RUN is on.' : jfsStarted ? 'Wait for the green JET FUEL RUN light. It should illuminate within 30 seconds.' : 'Select JFS START 2.'):
       id==='throttle'?'Select Throttle Idle to continue.':
       id==='epu-check'?'Verify both EPU lights are off, then select Confirm EPU lights off below the step.':
+      id==='throttle-cutoff'?'Throttle position · OFF':
+      actions[id]?'Use the control named in the current step.':
       'Observe the relevant indication and confirm the step.';
     feedback.textContent = message;
   }
@@ -234,7 +262,7 @@ if (root) {
   }
 
   let finished = false;
-  const captureState = () => ({ main, flcsHeld, jfsStarted, jfsRun, throttleIdle, secCleared, pressureEstablished, cautionPending, displayedRpm, displayedFtit, mainGeneratorOnline });
+  const captureState = () => ({ main, flcsHeld, jfsStarted, jfsRun, throttleIdle, secCleared, pressureEstablished, cautionPending, displayedRpm, displayedFtit, mainGeneratorOnline, preStart: {...preStart} });
   const stepStates = new Map<number, ReturnType<typeof captureState>>();
   function render() {
     if (!stepStates.has(step)) stepStates.set(step, captureState());
@@ -252,10 +280,15 @@ if (root) {
     progress.hidden = finished;
     progress.textContent=`Step ${step+1} of ${steps.length}`;
     previous.disabled=step===0;
-    confirm.textContent = id === 'epu-check' ? 'Confirm EPU lights off' : 'Confirm indication';
+    confirm.textContent = id === 'epu-check' ? 'Confirm EPU lights off' :
+      id === 'canopy-check' ? 'Confirm CANOPY light off' :
+      id === 'throttle-cutoff' ? 'Confirm throttle OFF' :
+      id === 'ground-ready' ? 'Confirm area clear' : 'Confirm indication';
     confirm.hidden=!confirmations.has(id);
     confirm.disabled=finished || (id === 'sec' && (displayedRpm < 20 || !secCleared));
-    information.textContent = '';
+    information.textContent = id.startsWith('canopy-')
+      ? `CANOPY warning · ${preStart.canopyLocked ? 'OFF' : 'ON'}`
+      : '';
     updatePanels();
     animateEngine();
   }
@@ -266,8 +299,11 @@ if (root) {
     clearTimeout(advanceTimer);
     advanceTimer = setTimeout(() => {
       if (step !== current) return;
+      const moveFocus = workspace.contains(document.activeElement);
+      releaseCanopySwitch();
       step += 1;
       render();
+      if (moveFocus) steps[step].querySelector('h2')?.focus({preventScroll:true});
     }, reduced.matches ? 0 : window.matchMedia("(max-width: 48rem)").matches ? 1500 : 900);
   }
   function select(control:string, target: Element) {
@@ -284,6 +320,15 @@ if (root) {
       flcsHeld = control === 'flcs-test';
       completed.add(id);
     }
+    if (control === 'parking-brake-up') preStart.parkingBrake = true;
+    if (control === 'canopy-down') preStart.canopyDown = true;
+    if (control === 'canopy-lock') {
+      if (!preStart.canopyDown) return retry(target);
+      preStart.canopyLocked = true;
+    }
+    if (control === 'fuel-feed-cw') preStart.feedNormal = true;
+    if (control === 'air-source-cw') preStart.airNormal = true;
+    if (['parking-brake-up','canopy-down','canopy-lock','fuel-feed-cw','air-source-cw'].includes(control)) completed.add(id);
     if (control === 'master-caution' && !finished) {
       cautionPending = false;
       completed.add(id);
@@ -320,7 +365,60 @@ if (root) {
     advanceAfterControl();
   }
   all<HTMLButtonElement>('button[data-control]').forEach(button => {
+    if (button === canopyDownButton) return;
     button.addEventListener('click', () => select(button.dataset.control || '', button));
+  });
+  let canopyHold: ReturnType<typeof setTimeout> | undefined;
+  let canopyReady = false;
+  function beginCanopyHold() {
+    const id = steps[step].dataset.stepId || '';
+    if (canopyHold !== undefined || canopyReady) return;
+    if (id !== 'canopy-close' || completed.has(id)) return retry(canopyDownButton);
+    mark.hidden = true;
+    hint.hidden = true;
+    canopyToggle.dataset.position = 'down';
+    canopyHold = setTimeout(() => {
+      canopyHold = undefined;
+      canopyReady = true;
+    }, 750);
+  }
+  function releaseCanopySwitch() {
+    clearTimeout(canopyHold);
+    canopyHold = undefined;
+    canopyReady = false;
+    canopyToggle.dataset.position = 'centre';
+  }
+  canopyDownButton.addEventListener('pointerdown', event => {
+    if (event.button !== 0 || !event.isPrimary) return;
+    canopyDownButton.setPointerCapture(event.pointerId);
+    beginCanopyHold();
+  });
+  function releaseCanopyInput() {
+    const ready = canopyReady;
+    if (canopyHold !== undefined) {
+      retry(canopyDownButton);
+      hint.textContent = 'Hold the canopy switch down until the canopy is closed.';
+    }
+    releaseCanopySwitch();
+    if (ready) select('canopy-down', canopyDownButton);
+  }
+  canopyDownButton.addEventListener('pointerup', releaseCanopyInput);
+  canopyDownButton.addEventListener('pointercancel', releaseCanopySwitch);
+  canopyDownButton.addEventListener('lostpointercapture', releaseCanopySwitch);
+  canopyDownButton.addEventListener('keydown', event => {
+    if (event.key !== ' ' && event.key !== 'Enter' && event.key !== 'ArrowDown') return;
+    event.preventDefault();
+    if (!event.repeat) beginCanopyHold();
+  });
+  canopyDownButton.addEventListener('keyup', event => {
+    if (event.key !== ' ' && event.key !== 'Enter' && event.key !== 'ArrowDown') return;
+    event.preventDefault();
+    releaseCanopyInput();
+  });
+  canopyDownButton.addEventListener('blur', releaseCanopySwitch);
+  // Support assistive technology that invokes a native click without a down event.
+  canopyDownButton.addEventListener('click', event => {
+    if (event.detail === 0) select('canopy-down', canopyDownButton);
   });
   function moveMain(direction: number) {
     const positions = ['off', 'batt', 'main'] as const;
@@ -357,9 +455,11 @@ if (root) {
   previous.addEventListener('click', () => {
     clearTimeout(advanceTimer);
     finished = false;
+    releaseCanopySwitch();
     step = Math.max(0, step - 1);
     const state = stepStates.get(step)!;
     ({ main, flcsHeld, jfsStarted, jfsRun, throttleIdle, secCleared, pressureEstablished, cautionPending, displayedRpm, displayedFtit, mainGeneratorOnline } = state);
+    Object.assign(preStart, state.preStart);
     for (let index = step; index < steps.length; index++) {
       completed.delete(steps[index].dataset.stepId || '');
       if (index > step) stepStates.delete(index);
@@ -409,6 +509,12 @@ if (root) {
 .procedure-step p{margin:.25rem 0}
 .procedure-controls{margin-top:.4rem}
 .procedure-workspace{gap:.45rem}
+}
+.procedure-visual:is([data-stage="parking-brake"],[data-stage="fuel-feed"],[data-stage="air-source"]) :global(.prestart-panel){grid-column:1/-1}
+.procedure-visual[data-stage="air-source"] :global(.prestart-art){width:min(100%, calc(46svh * var(--art-ratio)))}
+@media(max-width:36rem){
+  .procedure-visual[data-stage^="canopy-"] :global(.startup-panel){grid-column:1/-1}
+  .procedure-visual[data-stage^="canopy-"] :global(.prestart-art){width:min(100%, 19rem)}
 }
 .cockpit-gauges{order:-1}
 .procedure-visual[data-stage="jfs"] .cockpit-gauges{order:0}
