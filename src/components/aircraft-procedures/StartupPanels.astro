@@ -44,6 +44,10 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
       </div>
       <button class="panel-hotspot" type="button" style="--x:23%;--y:20%" data-control="fire-test" aria-label="FIRE & OHEAT DETECT"></button>
       <div class="raster-switch fixed-toggle" role="group" aria-label="OBOGS TEST" style="--x:51.7%;--y:19.6%;--w:15%;--h:10%">
+        <svg class="parked-toggle" viewBox="0 0 100 100" aria-hidden="true">
+          <path d="M39 51Q39 42 50 42Q61 42 61 51L64 79H36Z" fill="white" stroke="#171717" stroke-width="3" />
+          <circle cx="50" cy="79" r="14" fill="white" stroke="#171717" stroke-width="3" />
+        </svg>
         <button type="button" data-control="obogs-test-up" aria-label="Select BIT"><span class="toggle-cue" aria-hidden="true">↑</span></button>
         <button type="button" data-control="obogs-test-down" aria-label="Select OFF"><span class="toggle-cue" aria-hidden="true">↓</span></button>
       </div>
@@ -53,6 +57,10 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
         <button type="button" data-control="probe-heat-down" aria-label="Select TEST"><span class="toggle-cue" aria-hidden="true">↓</span></button>
       </div>
       <div class="raster-switch fixed-toggle" role="group" aria-label="EPU GEN" style="--x:50.4%;--y:48%;--w:15%;--h:10%">
+        <svg class="parked-toggle" viewBox="0 0 100 100" aria-hidden="true">
+          <path d="M39 51Q39 42 50 42Q61 42 61 51L64 79H36Z" fill="white" stroke="#171717" stroke-width="3" />
+          <circle cx="50" cy="79" r="14" fill="white" stroke="#171717" stroke-width="3" />
+        </svg>
         <button type="button" data-control="epu-gen-up" aria-label="Select EPU/GEN"><span class="toggle-cue" aria-hidden="true">↑</span></button>
         <button type="button" data-control="epu-gen-down" aria-label="Select OFF"><span class="toggle-cue" aria-hidden="true">↓</span></button>
       </div>
@@ -203,7 +211,7 @@ button:hover > .toggle-cue,button:focus-visible > .toggle-cue{visibility:visible
 .raster-jfs [data-position="start2"] .cap{transform:translateY(34px)}
 .raster-jfs .jfs-toggle{width:17%}
 .raster-panel .fixed-toggle{width:var(--w);height:var(--h);aspect-ratio:auto}
-.fixed-toggle .ab-reset-face{position:absolute;inset:0}
+.fixed-toggle .ab-reset-face,.fixed-toggle .parked-toggle{position:absolute;inset:0}
 .raster-switch button:focus-visible,.panel-hotspot:focus-visible,.elec-art button:focus-visible{outline:2px solid currentColor;outline-offset:1px}
 .raster-jfs .raster-switch svg{overflow:visible}
 .raster-jfs .raster-switch svg{position:relative}
