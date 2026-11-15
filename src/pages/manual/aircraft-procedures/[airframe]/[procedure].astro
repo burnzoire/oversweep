@@ -271,6 +271,9 @@ if (root) {
   }
   function select(control:string, target: Element) {
     const id=steps[step].dataset.stepId || '';
+    if ((control === 'flcs-test' && flcsHeld) ||
+        (control === 'flcs-norm' && !flcsHeld) ||
+        (control === 'jfs-start2' && jfsStarted)) return;
     if (control === 'master-caution' && completed.has(id)) return;
     if(control!==actions[id] || completed.has(id)){
       retry(target);
@@ -324,11 +327,12 @@ if (root) {
     const next = positions[positions.indexOf(main) + direction];
     const id = steps[step].dataset.stepId || '';
     const expected = id === 'battery' ? 'batt' : id === 'main-power' ? 'main' : undefined;
-    if ((!next || next !== expected) && main !== expected || completed.has(id)) {
+    if (!next) return;
+    if (next !== expected || completed.has(id)) {
       retry(direction > 0 ? up : down);
       return;
     }
-    if (main !== expected && next) main = next;
+    main = next;
     completed.add(id);
     advanceAfterControl();
   }
