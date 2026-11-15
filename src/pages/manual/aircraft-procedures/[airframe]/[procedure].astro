@@ -271,6 +271,7 @@ if (root) {
   }
   function select(control:string, target: Element) {
     const id=steps[step].dataset.stepId || '';
+    if (control === 'master-caution' && completed.has(id)) return;
     if(control!==actions[id] || completed.has(id)){
       retry(target);
       if (id === 'jfs' && control === 'jfs-start1') hint.textContent = 'You selected START 1. Press the lower half of the JFS toggle to select START 2.';
@@ -282,9 +283,13 @@ if (root) {
     }
     if (control === 'master-caution' && !finished) {
       cautionPending = false;
-      finished = true;
       completed.add(id);
       render();
+      clearTimeout(advanceTimer);
+      advanceTimer = setTimeout(() => {
+        finished = true;
+        render();
+      }, 1000);
       return;
     }
     if (control === 'jfs-start2') {
