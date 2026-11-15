@@ -18,8 +18,8 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
 <path class="shaft" d="M38 55C37 48 42 43 50 43C58 43 63 48 62 55L64 83Q64 91 50 91Q36 91 36 83Z" fill="#fff" stroke="#171717" stroke-width="2"/>
 <g class="cap"><circle cx="50" cy="50" r="16" fill="#fff" stroke="#171717" stroke-width="2"/><circle cx="50" cy="50" r="12" fill="none" stroke="#171717"/></g>
 </svg>
-<button type="button" class="toggle-up" aria-label="Move MAIN PWR toggle up"></button>
-<button type="button" class="toggle-down" aria-label="Move MAIN PWR toggle down"></button>
+<button type="button" class="toggle-up" aria-label="Move MAIN PWR toggle up"><span class="toggle-cue" aria-hidden="true">↑</span></button>
+<button type="button" class="toggle-down" aria-label="Move MAIN PWR toggle down"><span class="toggle-cue" aria-hidden="true">↓</span></button>
 </div>
 <button type="button" class="reset" data-elec-reset aria-label="CAUTION RESET"><span class="reset-cap" aria-hidden="true"></span></button>
 <span class="elec-lamp" style="--x:57%;--y:14%;--w:21%;--h:6%" data-lamp="flcs-pmg"></span>
@@ -39,8 +39,8 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
 <path class="shaft" d="M38 55C37 48 42 43 50 43C58 43 63 48 62 55L64 83Q64 91 50 91Q36 91 36 83Z" fill="#fff" stroke="#171717" stroke-width="2"/>
 <g class="cap"><circle cx="50" cy="50" r="16" fill="#fff" stroke="#171717" stroke-width="2"/><circle cx="50" cy="50" r="12" fill="none" stroke="#171717"/></g>
 </svg>
-        <button type="button" data-control="flcs-test" aria-label="Select TEST"></button>
-        <button type="button" data-control="flcs-norm" aria-label="Return to NORM"></button>
+        <button type="button" data-control="flcs-test" aria-label="Select TEST"><span class="toggle-cue" aria-hidden="true">↑</span></button>
+        <button type="button" data-control="flcs-norm" aria-label="Return to NORM"><span class="toggle-cue" aria-hidden="true">↓</span></button>
       </div>
       <button class="panel-hotspot" type="button" style="--x:23%;--y:20%" data-control="fire-test" aria-label="FIRE & OHEAT DETECT"></button>
       <button class="panel-hotspot" type="button" style="--x:52%;--y:20%" data-control="obogs-test" aria-label="OBOGS BIT"></button>
@@ -59,8 +59,8 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
 <path class="shaft" d="M38 55C37 48 42 43 50 43C58 43 63 48 62 55L64 83Q64 91 50 91Q36 91 36 83Z" fill="#fff" stroke="#171717" stroke-width="2"/>
 <g class="cap"><circle cx="50" cy="50" r="16" fill="#fff" stroke="#171717" stroke-width="2"/><circle cx="50" cy="50" r="12" fill="none" stroke="#171717"/></g>
 </svg>
-        <button type="button" data-control="jfs-start1" aria-label="Select JFS START 1"></button>
-        <button type="button" data-control="jfs-start2" aria-label="Select JFS START 2"></button>
+        <button type="button" data-control="jfs-start1" aria-label="Select JFS START 1"><span class="toggle-cue" aria-hidden="true">↑ START 1</span></button>
+        <button type="button" data-control="jfs-start2" aria-label="Select JFS START 2"><span class="toggle-cue" aria-hidden="true">↓ START 2</span></button>
       </div>
       <button class="panel-hotspot" type="button" style="--x:49%;--y:38%" data-control="eng-cont" aria-label="ENG CONT safety latch"></button>
       <button class="panel-hotspot" type="button" style="--x:49%;--y:62%" data-control="ab-reset" aria-label="AB RESET switch"></button>
@@ -87,7 +87,25 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
   </div>
   <div class="panel-feedback" data-panel-feedback aria-live="polite">Use the control named in the current step.</div>
 </div>
+<script>
+  document.querySelectorAll<HTMLElement>('.elec-art .switch, .raster-switch').forEach(toggle => {
+    toggle.addEventListener('keydown', event => {
+      if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return;
+      event.preventDefault();
+      if (event.repeat) return;
+      const buttons = toggle.querySelectorAll<HTMLButtonElement>('button');
+      buttons[event.key === 'ArrowUp' ? 0 : 1]?.click();
+    });
+  });
+</script>
+
 <style>
+.toggle-cue{position:absolute;inset-inline-start:100%;top:50%;transform:translateY(-50%);z-index:2;padding:0 .2em;background:#fff;color:#161616;border:1px solid currentColor;border-radius:.2em;font:600 .7rem/1.25 system-ui;white-space:nowrap;pointer-events:none}
+.jfs-toggle .toggle-cue{inset-inline-start:auto;inset-inline-end:100%}
+@media(hover:hover){
+.toggle-cue{visibility:hidden}
+.switch:hover .toggle-cue,.raster-switch:hover .toggle-cue,.switch:focus-within .toggle-cue,.raster-switch:focus-within .toggle-cue{visibility:visible}
+}
 .startup-panel[hidden]{display:none}
 .startup-panels svg{display:block;width:100%;max-width:100%;max-height:58rem;height:auto;background:white}
 .startup-panels .panel-feedback{font-size:.88rem;font-weight:600;padding:.5rem;border-left:3px solid var(--color-ink);background:var(--color-surface)}
