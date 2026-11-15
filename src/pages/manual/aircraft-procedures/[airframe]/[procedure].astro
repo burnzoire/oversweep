@@ -299,10 +299,11 @@ if (root) {
     clearTimeout(advanceTimer);
     advanceTimer = setTimeout(() => {
       if (step !== current) return;
+      const moveFocus = workspace.contains(document.activeElement);
       releaseCanopySwitch();
       step += 1;
       render();
-      steps[step].querySelector('h2')?.focus({preventScroll:true});
+      if (moveFocus) steps[step].querySelector('h2')?.focus({preventScroll:true});
     }, reduced.matches ? 0 : window.matchMedia("(max-width: 48rem)").matches ? 1500 : 900);
   }
   function select(control:string, target: Element) {
@@ -368,21 +369,23 @@ if (root) {
     button.addEventListener('click', () => select(button.dataset.control || '', button));
   });
   let canopyHold: ReturnType<typeof setTimeout> | undefined;
+  let canopyReady = false;
   function beginCanopyHold() {
     const id = steps[step].dataset.stepId || '';
-    if (canopyHold !== undefined) return;
+    if (canopyHold !== undefined || canopyReady) return;
     if (id !== 'canopy-close' || completed.has(id)) return retry(canopyDownButton);
     mark.hidden = true;
     hint.hidden = true;
     canopyToggle.dataset.position = 'down';
     canopyHold = setTimeout(() => {
       canopyHold = undefined;
-      select('canopy-down', canopyDownButton);
+      canopyReady = true;
     }, 750);
   }
   function releaseCanopySwitch() {
     clearTimeout(canopyHold);
     canopyHold = undefined;
+    canopyReady = false;
     canopyToggle.dataset.position = 'centre';
   }
   canopyDownButton.addEventListener('pointerdown', event => {
@@ -391,13 +394,17 @@ if (root) {
     beginCanopyHold();
   });
   function releaseCanopyInput() {
+    const ready = canopyReady;
     if (canopyHold !== undefined) {
       retry(canopyDownButton);
       hint.textContent = 'Hold the canopy switch down until the canopy is closed.';
     }
     releaseCanopySwitch();
+    if (ready) select('canopy-down', canopyDownButton);
   }
-  canopyDownButton.addEventListener('lostpointercapture', releaseCanopyInput);
+  canopyDownButton.addEventListener('pointerup', releaseCanopyInput);
+  canopyDownButton.addEventListener('pointercancel', releaseCanopySwitch);
+  canopyDownButton.addEventListener('lostpointercapture', releaseCanopySwitch);
   canopyDownButton.addEventListener('keydown', event => {
     if (event.key !== ' ' && event.key !== 'Enter' && event.key !== 'ArrowDown') return;
     event.preventDefault();
@@ -408,7 +415,7 @@ if (root) {
     event.preventDefault();
     releaseCanopyInput();
   });
-  canopyDownButton.addEventListener('blur', releaseCanopyInput);
+  canopyDownButton.addEventListener('blur', releaseCanopySwitch);
   // Support assistive technology that invokes a native click without a down event.
   canopyDownButton.addEventListener('click', event => {
     if (event.detail === 0) select('canopy-down', canopyDownButton);
