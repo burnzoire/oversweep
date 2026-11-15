@@ -43,10 +43,27 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
         <button type="button" data-control="flcs-norm" aria-label="Return to NORM"><span class="toggle-cue" aria-hidden="true">↓</span></button>
       </div>
       <button class="panel-hotspot" type="button" style="--x:23%;--y:20%" data-control="fire-test" aria-label="FIRE & OHEAT DETECT"></button>
-      <button class="panel-hotspot" type="button" style="--x:52%;--y:20%" data-control="obogs-test" aria-label="OBOGS BIT"></button>
+      <div class="raster-switch fixed-toggle" role="group" aria-label="OBOGS TEST" style="--x:51.7%;--y:19.6%;--w:15%;--h:10%">
+        <svg class="parked-toggle" viewBox="0 0 100 100" aria-hidden="true">
+          <path d="M39 51Q39 42 50 42Q61 42 61 51L64 79H36Z" fill="white" stroke="#171717" stroke-width="3" />
+          <circle cx="50" cy="79" r="14" fill="white" stroke="#171717" stroke-width="3" />
+        </svg>
+        <button type="button" data-control="obogs-test-up" aria-label="Select BIT"><span class="toggle-cue" aria-hidden="true">↑</span></button>
+        <button type="button" data-control="obogs-test-down" aria-label="Select OFF"><span class="toggle-cue" aria-hidden="true">↓</span></button>
+      </div>
       <button class="panel-hotspot" type="button" style="--x:80%;--y:20%" data-control="mal-test" aria-label="MAL & IND LTS"></button>
-      <button class="panel-hotspot" type="button" style="--x:21%;--y:48%" data-control="probe-heat" aria-label="PROBE HEAT"></button>
-      <button class="panel-hotspot" type="button" style="--x:51%;--y:48%" data-control="epu-gen" aria-label="EPU/GEN"></button>
+      <div class="raster-switch fixed-toggle" role="group" aria-label="PROBE HEAT" style="--x:21%;--y:48.3%;--w:15%;--h:10%">
+        <button type="button" data-control="probe-heat-up" aria-label="Select PROBE HEAT"><span class="toggle-cue" aria-hidden="true">↑</span></button>
+        <button type="button" data-control="probe-heat-down" aria-label="Select TEST"><span class="toggle-cue" aria-hidden="true">↓</span></button>
+      </div>
+      <div class="raster-switch fixed-toggle" role="group" aria-label="EPU GEN" style="--x:50.4%;--y:48%;--w:15%;--h:10%">
+        <svg class="parked-toggle" viewBox="0 0 100 100" aria-hidden="true">
+          <path d="M39 51Q39 42 50 42Q61 42 61 51L64 79H36Z" fill="white" stroke="#171717" stroke-width="3" />
+          <circle cx="50" cy="79" r="14" fill="white" stroke="#171717" stroke-width="3" />
+        </svg>
+        <button type="button" data-control="epu-gen-up" aria-label="Select EPU/GEN"><span class="toggle-cue" aria-hidden="true">↑</span></button>
+        <button type="button" data-control="epu-gen-down" aria-label="Select OFF"><span class="toggle-cue" aria-hidden="true">↓</span></button>
+      </div>
     </div>
   </div>
   <div class="startup-panel" data-panel="jfs" hidden>
@@ -59,12 +76,28 @@ import elecArt from "../../assets/aircraft-procedures/f16-elec.webp";
 <path class="shaft" d="M38 55C37 48 42 43 50 43C58 43 63 48 62 55L64 83Q64 91 50 91Q36 91 36 83Z" fill="#fff" stroke="#171717" stroke-width="2"/>
 <g class="cap"><circle cx="50" cy="50" r="16" fill="#fff" stroke="#171717" stroke-width="2"/><circle cx="50" cy="50" r="12" fill="none" stroke="#171717"/></g>
 </svg>
-        <button type="button" data-control="jfs-start1" aria-label="Select JFS START 1"><span class="toggle-cue" aria-hidden="true">↑ START 1</span></button>
-        <button type="button" data-control="jfs-start2" aria-label="Select JFS START 2"><span class="toggle-cue" aria-hidden="true">↓ START 2</span></button>
+        <button type="button" data-control="jfs-start1" aria-label="Select JFS START 1"><span class="toggle-cue" aria-hidden="true">↑</span></button>
+        <button type="button" data-control="jfs-start2" aria-label="Select JFS START 2"><span class="toggle-cue" aria-hidden="true">↓</span></button>
       </div>
-      <button class="panel-hotspot" type="button" style="--x:49%;--y:38%" data-control="eng-cont" aria-label="ENG CONT safety latch"></button>
-      <button class="panel-hotspot" type="button" style="--x:49%;--y:62%" data-control="ab-reset" aria-label="AB RESET switch"></button>
-      <button class="panel-hotspot" type="button" style="--x:50%;--y:86%" data-control="max-power" aria-label="MAX POWER switch"></button>
+      <div class="raster-switch fixed-toggle" role="group" aria-label="ENG CONT" style="--x:49.5%;--y:38.85%;--w:25%;--h:15.5%">
+        <button type="button" data-control="eng-cont-up" aria-label="Select PRI"><span class="toggle-cue" aria-hidden="true">↑</span></button>
+        <button type="button" data-control="eng-cont-down" aria-label="Select SEC"><span class="toggle-cue" aria-hidden="true">↓</span></button>
+      </div>
+      <div class="raster-switch fixed-toggle" role="group" aria-label="AB RESET" style="--x:49.5%;--y:61.9%;--w:23%;--h:7.5%">
+        <svg class="ab-reset-face" viewBox="0 0 176 124" aria-hidden="true">
+          <rect width="176" height="124" fill="white" />
+          <g transform="translate(78 62)" fill="white" stroke="#171717" stroke-width="4">
+            <path d="M-23-53H23L53-23V23L23 53H-23L-53 23V-23Z" />
+            <circle r="46" /><circle r="36" /><circle r="29" /><circle r="22" />
+          </g>
+        </svg>
+        <button type="button" data-control="ab-reset-up" aria-label="Select AB RESET"><span class="toggle-cue" aria-hidden="true">↑</span></button>
+        <button type="button" data-control="ab-reset-down" aria-label="Select ENG DATA"><span class="toggle-cue" aria-hidden="true">↓</span></button>
+      </div>
+      <div class="raster-switch fixed-toggle" role="group" aria-label="MAX POWER" style="--x:49.5%;--y:87%;--w:18%;--h:10%">
+        <button type="button" data-control="max-power-up" aria-label="Select MAX POWER"><span class="toggle-cue" aria-hidden="true">↑</span></button>
+        <button type="button" data-control="max-power-down" aria-label="Select OFF"><span class="toggle-cue" aria-hidden="true">↓</span></button>
+      </div>
     </div>
   </div>
 
@@ -165,9 +198,9 @@ button:hover > .toggle-cue,button:focus-visible > .toggle-cue{visibility:visible
 @media(prefers-reduced-motion:reduce){.raster-switch svg g{transition:none}}
 
 .flcs-toggle{--x:64.2%;--y:78.2%}
-.flcs-toggle button{position:absolute;left:0;width:100%;height:50%;padding:0;border:0;background:transparent;cursor:pointer}
-.flcs-toggle button:first-of-type{top:0}
-.flcs-toggle button:last-of-type{bottom:0}
+.raster-switch button{position:absolute;left:0;width:100%;height:50%;padding:0;border:0;background:transparent;cursor:pointer}
+.raster-switch button:first-of-type{top:0}
+.raster-switch button:last-of-type{bottom:0}
 .flcs-toggle .shaft{transform-origin:50px 50px;transform:scaleY(0);transition:transform .18s ease-out}
 .flcs-toggle .cap{transition:transform .18s ease-out}
 .flcs-toggle[data-position="test"] .shaft{transform:scaleY(-1)}
@@ -176,7 +209,10 @@ button:hover > .toggle-cue,button:focus-visible > .toggle-cue{visibility:visible
 .raster-jfs .shaft{transform-origin:50px 50px;transform:scaleY(0)}
 .raster-jfs [data-position="start2"] .shaft{transform:scaleY(1)}
 .raster-jfs [data-position="start2"] .cap{transform:translateY(34px)}
-.raster-jfs .raster-switch{width:17%}
+.raster-jfs .jfs-toggle{width:17%}
+.raster-panel .fixed-toggle{width:var(--w);height:var(--h);aspect-ratio:auto}
+.fixed-toggle .ab-reset-face,.fixed-toggle .parked-toggle{position:absolute;inset:0}
+.raster-switch button:focus-visible,.panel-hotspot:focus-visible,.elec-art button:focus-visible{outline:2px solid currentColor;outline-offset:1px}
 .raster-jfs .raster-switch svg{overflow:visible}
 .raster-jfs .raster-switch svg{position:relative}
 .master-caution{display:block;margin:.5rem auto;padding:.6rem;border:2px solid #343434;border-radius:4px;background:#fff;color:#171717;font-weight:700;cursor:pointer}

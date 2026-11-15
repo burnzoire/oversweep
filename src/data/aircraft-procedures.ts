@@ -23,7 +23,7 @@ export interface AircraftProcedure {
   simVersion: string;
   steps: ProcedureStep[];
 }
-export const sourceUrl = 'https://www.digitalcombatsimulator.ru/upload/iblock/6f7/joywm66pwdgg4iacljy8zolons4dz8dh/DCS%20F-16C%20Early%20Access%20Guide%20EN.pdf';
+export const sourceUrl = 'https://www.digitalcombatsimulator.com/en/downloads/documentation/dcs-viper_early_access_manual_en/';
 export const procedures: AircraftProcedure[] = [{
   id: 'procedure.dcs-f16c.engine-start',
   slug: 'engine-start',
