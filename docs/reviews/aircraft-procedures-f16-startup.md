@@ -80,7 +80,11 @@ pp. 88 and 90 in the attached edition. Eagle Dynamics’ 23 March 2026 guide
 covers the landing gear panel (pp. 54–55), right eyebrow (p. 47), fuel panel
 (p. 66), canopy switch and handle (p. 72), and air conditioning panel (p. 75).
 Its before-start checklist leaves canopy position to the pilot (p. 134).
-These four illustrations show original schematic excerpts of the relevant
-cockpit controls. The exercise begins with both rotary selectors at OFF and
+The four orthographic raster backgrounds show the fixed plates, legends and
+bezels. Separate face-on control overlays share the mounting pivots, including
+the TEMP knob and adjacent controls. Surrounding inputs use the same wrong-input
+feedback as the other panels in this guided exercise. The attached cockpit
+photos on pp. 19 and 33 show the squared AIR REFUEL switch cap and the DN LOCK
+REL button in the striped recess next to the landing-gear handle. The exercise begins with both rotary selectors at OFF and
 uses a 750 ms canopy hold. These are trainer settings. Confirm cockpit geometry,
 cold-spawn detents and canopy travel time in the current DCS build.

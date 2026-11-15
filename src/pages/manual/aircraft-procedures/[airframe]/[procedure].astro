@@ -511,6 +511,7 @@ if (root) {
 .procedure-workspace{gap:.45rem}
 }
 .procedure-visual:is([data-stage="parking-brake"],[data-stage="fuel-feed"],[data-stage="air-source"]) :global(.prestart-panel){grid-column:1/-1}
+.procedure-visual[data-stage="air-source"] :global(.prestart-art){width:min(100%, calc(46svh * var(--art-ratio)))}
 @media(max-width:36rem){
   .procedure-visual[data-stage^="canopy-"] :global(.startup-panel){grid-column:1/-1}
   .procedure-visual[data-stage^="canopy-"] :global(.prestart-art){width:min(100%, 19rem)}
