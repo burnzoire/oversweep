@@ -113,7 +113,9 @@ WebP and its hand-placed percentage overlays.
 - The art is old-flight-manual line drawing: bezels, rings, plate edges and
   fastener heads are drawn with `cased()` in `render.ts` (heavy outline with a
   thin white core) so they read as double-line engraving, and raised plates get
-  an offset lip. Keep new control kinds in that style. There is no shading, and
+  an offset lip. Line weights snap to three pens (`PENS`); don't add hairlines.
+  Toggle bats are drawn as chunky as the real lever: a flared lever ending in a
+  ball about the bushing's size, measured on the guide image. Keep new control kinds in that style. There is no shading, and
   a toggle lever is shown schematically from above.
 - The guide image fixes proportions, not real-world size. If the reference crops
   an edge, the drawn edge is a guess and must be marked as one.

@@ -12,7 +12,13 @@ let U = 1;
 let PANEL = '';
 let uid = 0;
 const n = (v: number) => +v.toFixed(2);
-const sw = (mm: number) => `stroke-width="${n(mm * U)}"`;
+/**
+ * Line weights snap to three pens (fine, medium, heavy) so the drawing reads as
+ * deliberate ink rather than many slightly different hairlines.
+ */
+const PENS = [0.4, 0.6, 0.9];
+const pen = (mm: number) => PENS.reduce((a, b) => (Math.abs(b - mm) < Math.abs(a - mm) ? b : a));
+const sw = (mm: number) => `stroke-width="${n(pen(mm) * U)}"`;
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 /**
  * Old-manual ink: a heavy outline with a thin white line down its middle, so
@@ -21,7 +27,7 @@ const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
  */
 const cased = (el: string, mm: number) =>
   el.replace(/\/>$/, ` ${sw(mm)}/>`) +
-  el.replace(/ (fill|class)="[^"]*"/g, '').replace(/\/>$/, ` fill="none" stroke="#fff" ${sw(mm * 0.34)}/>`);
+  el.replace(/ (fill|class)="[^"]*"/g, '').replace(/\/>$/, ` fill="none" stroke="#fff" stroke-width="${n(pen(mm) * 0.34 * U)}"/>`);
 const attrs = (a: Record<string, string> = {}) => Object.entries(a).map(([k, v]) => ` ${k}="${esc(v)}"`).join('');
 const rad = (deg: number) => (deg * Math.PI) / 180;
 /** Point at `deg` clockwise from 12 o'clock. */
@@ -67,21 +73,30 @@ export function toggleOffsets(t: ToggleSwitch) {
   return t.positions.map((p, i) => ({ id: p.id, k: p.k ?? k[i] }));
 }
 
+/**
+ * Toggle lever seen from the front. The bat is drawn as chunky as on the real
+ * switch: a lever that flares from the bushing to a ball about the bushing's
+ * own size (measured on the DCS guide images), so it reads at a glance.
+ */
 function toggle(t: ToggleSwitch) {
   const [x, y] = t.at, r = t.r, L = r * (t.reach ?? 1.05);
   const face = t.face ?? 'bat';
-  const shaftW = face === 'paddle' ? 0.32 : face === 'rocker' ? 0.5 : 0.18;
+  /** Lever half-width at the bushing and at the tip. */
+  const [w0, w1] = face === 'paddle' ? [0.3, 0.42] : face === 'rocker' ? [0.5, 0.5] : face === 'square' ? [0.32, 0.5] : [0.3, 0.5];
   const tip = face === 'paddle'
-    ? `<rect x="${n(-r * 0.55)}" y="${n(-r * 0.3)}" width="${n(r * 1.1)}" height="${n(r * 0.6)}" rx="${n(r * 0.12)}" fill="#fff" ${sw(0.4)}/><path d="M${n(-r * 0.4)} 0H${n(r * 0.4)}" ${sw(0.2)}/>`
+    ? cased(`<rect x="${n(-r * 0.62)}" y="${n(-r * 0.42)}" width="${n(r * 1.24)}" height="${n(r * 0.84)}" rx="${n(r * 0.3)}" fill="#fff"/>`, 0.6)
     : face === 'rocker'
-      ? `<rect x="${n(-r * 2.6)}" y="${n(-r * 0.9)}" width="${n(r * 5.2)}" height="${n(r * 1.8)}" rx="${n(r * 0.9)}" fill="#fff" ${sw(0.45)}/>` +
-        [-1.7, 0, 1.7].map(o => `<circle cx="${n(r * o)}" r="${n(r * 0.6)}" fill="#fff" ${sw(0.3)}/>`).join('')
+      ? cased(`<rect x="${n(-r * 2.6)}" y="${n(-r * 0.9)}" width="${n(r * 5.2)}" height="${n(r * 1.8)}" rx="${n(r * 0.9)}" fill="#fff"/>`, 0.6) +
+        [-1.7, 0, 1.7].map(o => `<circle cx="${n(r * o)}" r="${n(r * 0.6)}" fill="#fff" ${sw(0.4)}/>`).join('')
     : face === 'square'
-      ? `<rect x="${n(-r * 0.5)}" y="${n(-r * 0.5)}" width="${n(r)}" height="${n(r)}" rx="${n(r * 0.08)}" fill="#fff" ${sw(0.4)}/><rect x="${n(-r * 0.36)}" y="${n(-r * 0.36)}" width="${n(r * 0.72)}" height="${n(r * 0.72)}" ${sw(0.2)}/>`
-      : `<circle r="${n(r * 0.4)}" fill="#fff" ${sw(0.55)}/><circle r="${n(r * 0.24)}" ${sw(0.25)}/>`;
+      ? cased(`<rect x="${n(-r * 0.78)}" y="${n(-r * 0.7)}" width="${n(r * 1.56)}" height="${n(r * 1.4)}" rx="${n(r * 0.18)}" fill="#fff"/>`, 0.6) +
+        `<rect x="${n(-r * 0.5)}" y="${n(-r * 0.44)}" width="${n(r)}" height="${n(r * 0.88)}" rx="${n(r * 0.1)}" fill="#fff" ${sw(0.4)}/>`
+      : cased(`<circle r="${n(r * 0.66)}" fill="#fff"/>`, 0.6) + `<circle r="${n(r * 0.34)}" ${sw(0.4)}/>`;
+  /** Hex nut on the bushing, flats top and bottom. */
+  const hex = Array.from({ length: 6 }, (_, i) => polar(0, 0, r * 0.72, 30 + i * 60)).map(([px, py]) => `${n(px)} ${n(py)}`).join('L');
   return `<g class="toggle" data-toggle="${t.id}" transform="translate(${n(x)} ${n(y)})">` +
-    cased(`<circle r="${n(r)}" fill="#fff"/>`, 0.75) + `<circle r="${n(r * 0.8)}" ${sw(0.35)}/>` + cased(`<circle r="${n(r * 0.52)}"/>`, 0.6) +
-    `<path class="shaft" d="M${n(-r * shaftW)} 0H${n(r * shaftW)}L${n(r * (shaftW + 0.05))} ${n(L)}H${n(-r * (shaftW + 0.05))}Z" fill="#fff" ${sw(0.45)}/>` +
+    cased(`<circle r="${n(r)}" fill="#fff"/>`, 0.6) + `<path d="M${hex}Z" ${sw(0.4)}/>` +
+    `<path class="shaft" d="M${n(-r * w0)} 0A${n(r * w0)} ${n(r * w0)} 0 0 1 ${n(r * w0)} 0L${n(r * w1)} ${n(L)}H${n(-r * w1)}Z" fill="#fff" ${sw(0.6)}/>` +
     `<g class="tip">${tip}</g></g>`;
 }
 
@@ -112,7 +127,7 @@ function pushbutton(b: PushButton) {
   }
   return `<g class="pushbutton" data-pushbutton="${b.id}" transform="translate(${n(x)} ${n(y)})">` +
     cased(`<circle r="${n(r)}" fill="#fff"/>`, 0.75) + `<circle r="${n(r * 0.84)}" ${sw(0.35)}/>` +
-    `<g class="cap">${cased(`<circle r="${n(r * 0.66)}" fill="#fff"/>`, 0.65)}<path d="M${n(-r * 0.38)} ${n(-r * 0.3)}A${n(r * 0.5)} ${n(r * 0.5)} 0 0 1 ${n(r * 0.3)} ${n(-r * 0.42)}" ${sw(0.25)}/></g></g>`;
+    `<g class="cap">${cased(`<circle r="${n(r * 0.66)}" fill="#fff"/>`, 0.65)}</g></g>`;
 }
 
 function handle(h: Handle) {
@@ -250,7 +265,7 @@ export function renderPanelSvg(spec: PanelSpec, opts: { title?: boolean } = {}) 
       : `<path d="${p.d}" fill="${p.fill ?? '#fff'}" ${sw(0.45)}/>`)).join('');
   return (`<svg class="cockpit-panel-svg" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" ${opts.title ? `role="img" aria-label="${esc(spec.title)}"` : 'aria-hidden="true"'}>` +
     `<style>${stateCss(spec)}</style>` +
-    `<g fill="none" stroke="${INK}" stroke-width="${n(0.45 * U)}" stroke-linejoin="round" font-family="${FONT}" font-weight="700">` +
+    `<g fill="none" stroke="${INK}" stroke-width="${n(0.45 * U)}" stroke-linejoin="round" stroke-linecap="round" font-family="${FONT}" font-weight="700">` +
     `<g class="plates">${plates}</g>` +
     `<g class="parts">${spec.parts.map(part).join('')}</g></g></svg>`)
     .replace(/<text /g, `<text fill="${INK}" stroke="none" `);
