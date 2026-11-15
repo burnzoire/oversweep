@@ -1,0 +1,63 @@
+name: PR preview
+# Builds a PR labelled `preview` for /preview/<sha>/ on the live site. This
+# workflow has no write access: it only uploads the build as an artifact. The
+# Pages workflow (pages.yml) runs after it on main, collects the latest preview
+# of every open labelled PR and deploys them with the live site. Removing the
+# label or closing the PR takes its preview down on the next deploy.
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled, unlabeled, closed]
+permissions:
+  contents: read
+concurrency:
+  group: pr-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  build:
+    # Only branches of this repository: a fork's code never reaches the live domain.
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.action != 'closed' && github.event.action != 'unlabeled' &&
+      contains(github.event.pull_request.labels.*.name, 'preview') &&
+      (github.event.action != 'labeled' || github.event.label.name == 'preview')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PUBLIC_PREVIEW_SHA: ${{ github.event.pull_request.head.sha }}
+      PUBLIC_PREVIEW_PR: ${{ github.event.pull_request.number }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22.23.4'
+          cache: npm
+      - run: npm ci
+      - name: Build for /preview/<sha>/
+        run: |
+          rm -rf dist
+          npx --no-install astro build --base "/preview/$PUBLIC_PREVIEW_SHA/"
+          node scripts/check_site.mjs "/preview/$PUBLIC_PREVIEW_SHA"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: preview-site
+          path: dist
+          retention-days: 30
+          if-no-files-found: error
+  # Tells the Pages workflow to redeploy without this PR's preview.
+  remove:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      ((github.event.action == 'closed' && contains(github.event.pull_request.labels.*.name, 'preview')) ||
+       (github.event.action == 'unlabeled' && github.event.label.name == 'preview'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: echo "${{ github.event.pull_request.number }}" > remove.txt
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: preview-remove
+          path: remove.txt
+          retention-days: 1

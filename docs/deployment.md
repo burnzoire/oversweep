@@ -18,7 +18,28 @@ to work around unavailable Pages.
 The [Pages workflow](../.github/workflows/pages.yml) runs automatically on every
 push to main, including merged PRs. Manual dispatch from main remains available.
 Merging a PR therefore initiates publication after the workflow's checks pass.
-Other branches are skipped, and PRs receive no deployment permissions or public previews.
+Other branches are skipped, and PRs receive no deployment permissions.
+
+## PR previews
+
+Label a PR `preview` to publish it on the live site under `/preview/<sha>/`.
+[PR preview](../.github/workflows/pr-preview.yml) builds the PR head at that base
+(branches of this repository only, never forks) and uploads it as an artifact; it
+has no write access. The Pages workflow then runs on main (`workflow_run`), builds
+the live site as usual and adds the latest finished preview of every open labelled
+PR (at most four, about 100 MB each) with `scripts/add-previews.sh`, which also
+writes `/preview/index.json`. Each push to a labelled PR republishes it; removing the
+label or closing the PR takes it down on the next deploy. Preview artifacts last
+30 days, so a preview older than that drops out until the PR is pushed again.
+
+Open any live page with `?sha=<commit>` (a unique prefix of at least four
+characters) or `?pr=<number>` and the loader in `PreviewSwitch.astro` opens the same
+page in that preview; an unknown commit shows a note on the live page. Previews
+show a banner linking back to the live page, carry `noindex` with the live page as
+canonical, and `/preview/` is disallowed in robots.txt. They are added after the
+live build, so they never enter the live sitemap or search index. A preview runs on
+the live origin and shares its browser storage, which is why only this repository's
+branches are built.
 
 The build job uses a GitHub-hosted Linux runner, Node 22, the committed npm lockfile,
 foundation checks and the application's required `npm run check`. It then removes
