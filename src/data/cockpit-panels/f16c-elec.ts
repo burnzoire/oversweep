@@ -14,13 +14,13 @@ export const f16cElec: PanelSpec = {
   unit: 4,
   source: {
     trace: 'Eagle Dynamics, DCS F-16C Viper Early Access Guide (EN, 16 Aug 2026 edition), p. 64, "ELEC Control Panel" image, rectified on the four DZUS fasteners',
-    size: 'No dimensions in the guide; proportions are those of the DCS cockpit model. Left, top and bottom panel edges are cropped in the reference and are drawn to the crop.',
+    size: 'No dimensions in the guide; proportions are those of the DCS cockpit model. Left, top and bottom panel edges are cropped in the reference and are drawn just inside the crop with a small gap so the raised plate edge stays visible.',
     checks: ['Same guide, p. 64 callouts 1-10 (control names and lamp legends)'],
     variant: 'DCS F-16C Block 50',
   },
   plates: [
     { d: 'M9 0H321Q325 0 325 4V438Q325 442 321 442H9Q5 442 5 438V4Q5 0 9 0Z' },
-    { raised: true, d: 'M5 0H182V292Q182 297 187 297H258Q263 297 263 302V333Q263 338 258 338H5Z' },
+    { raised: true, d: 'M13 5H178Q182 5 182 9V292Q182 297 187 297H258Q263 297 263 302V333Q263 338 258 338H13Q9 338 9 334V9Q9 5 13 5Z' },
   ],
   parts: [
     { kind: 'dzus', at: [26, 64], r: 20, slot: 0 },
