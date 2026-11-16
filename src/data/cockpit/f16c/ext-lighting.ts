@@ -105,7 +105,7 @@ export const extLighting: PanelSpec = {
     { component: 'toggle-large', control: 'wing-tail', at: pt(290, 95) },
     { component: 'toggle-large', control: 'fuselage', at: pt(397, 95) },
     { component: 'knob-knurled', control: 'form', at: pt(88, 225) },
-    { component: 'knob-bar', control: 'master', at: pt(...MS) },
+    { component: 'knob-bar-thick', control: 'master', at: pt(...MS) },
     { component: 'knob-lobed', control: 'aerial-refueling', at: pt(355, 225) },
   ],
   controls: [

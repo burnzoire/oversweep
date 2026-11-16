@@ -232,8 +232,10 @@ export const KNOBS = {
   'knob-knurled': { r: 9.4, lobes: 12, ridge: [0.82, 0.13] },
   /** Plain round knob with a wide raised bar (EXT LIGHTING MASTER). */
   'knob-bar': { r: 10, lobes: 0, ridge: [0.96, 0.22] },
-  /** Large knob with three broad lobes and a raised bar (EXT LIGHTING AERIAL REFUELING). */
-  'knob-lobed': { r: 11.2, lobes: 3, ridge: [0.88, 0.18] },
+  /** Round base under a three-armed grip with deep hollows between the arms, index bar along one arm (EXT LIGHTING AERIAL REFUELING). */
+  'knob-lobed': { r: 10.4, lobes: 0, ridge: [0.7, 0.13], grip: 3 },
+  /** Round knob crossed by a broad raised grip band that runs rim to rim (EXT LIGHTING MASTER). */
+  'knob-bar-thick': { r: 10, lobes: 0, ridge: [1, 0.4], band: true },
   /** Round knob with a wide raised bar, smaller than knob-bar (UHF backup CHAN and frequency knobs). */
   'knob-bar-medium': { r: 7.2, lobes: 0, ridge: [0.96, 0.22] },
   /** Very small knurled knob (UHF backup VOL). */
@@ -271,6 +273,34 @@ export function knobArt(art: keyof typeof KNOBS) {
     rim = `<path d="M${pts.join('L')}Z" fill="${PAPER}"/>`;
   }
   const [hl, hw] = ridge.map(f => f * r);
+  const t = KNOBS[art];
+  if ('band' in t) {
+    // Grip band clipped by the rim; the index runs from the rim to the centre.
+    const yc = n(Math.sqrt(r * r - hw * hw));
+    const band = `M${n(-hw)} -${yc}V${yc}A${r} ${r} 0 0 0 ${n(hw)} ${yc}V-${yc}A${r} ${r} 0 0 0 ${n(-hw)} -${yc}Z`;
+    return cased(rim, 'heavy') + `<path d="${band}" fill="${PAPER}" ${sw('medium')}/>` +
+      `<rect x="${n(-hw * 0.3)}" y="${n(-r * 0.85)}" width="${n(hw * 0.6)}" height="${n(r * 0.85)}" fill="${PAPER}" ${sw('medium')}/>`;
+  }
+  if ('grip' in t) {
+    // Three-armed grip: rounded arm ends near the rim, deep hollows between them.
+    const N = 144, pts: string[] = [];
+    for (let i = 0; i <= N; i++) {
+      // Each arm is a round-ended spoke (capsule) from the centre; find where this ray leaves their union.
+      const a = (i / N) * 2 * Math.PI, L = 0.64 * r, w = 0.33 * r;
+      const inside = (d: number) => Array.from({ length: t.grip }, (_, k) => (k / t.grip + 1 / 24) * 2 * Math.PI).some(b => {
+        const x = d * Math.sin(a - b), y = d * Math.cos(a - b), py = Math.max(0, Math.min(L, y));
+        return Math.hypot(x, y - py) <= w;
+      });
+      let lo = 0, hi = r;
+      for (let j = 0; j < 30; j++) { const m = (lo + hi) / 2; if (inside(m)) lo = m; else hi = m; }
+      const rr = lo;
+      pts.push(`${n(rr * Math.sin(a))} ${n(-rr * Math.cos(a))}`);
+    }
+    return cased(rim, 'heavy') + `<circle r="${n(r * 0.9)}" ${sw('fine')}/>` +
+      cased(`<path d="M${pts.join("L")}Z" fill="${PAPER}"/>`, "heavy") +
+      `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(2 * hl)}" rx="${n(hw * 0.4)}" fill="${PAPER}" ${sw('medium')}/>` +
+      `<path d="M0 ${n(-hl + hw)}V0" ${sw('heavy')}/>`;
+  }
   return cased(rim, 'heavy') +
     `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(2 * hl)}" rx="${n(hw * 0.6)}" fill="${PAPER}" ${sw('medium')}/>` +
     `<path d="M0 ${n(-hl + hw)}V0" ${sw('heavy')}/>`;
