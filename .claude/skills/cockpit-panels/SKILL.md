@@ -96,7 +96,9 @@ everything that stands proud of it.
     toggles so the guard can shut them.
   - lever-lock (lock insert and slot visible in the bushing): flat-topped
     mushroom cap = `toggle-large-cylinder` (MAIN PWR); tapered shaft to a domed
-    cap = `toggle-large-lock` (JFS, MAX POWER, AB RESET, TANK INERTING); square
+    cap = `toggle-large-lock` (JFS, MAX POWER, AB RESET, TANK INERTING, AVIONICS
+    POWER MFD; the cap is a short cylinder under a hemisphere, drawn as a capsule,
+    with a little less throw than the flat-top); square
     paddle on a trapezoid lever = `toggle-large-square` (AIR REFUEL).
     The lock slot has square ends so it never reads as part of the lever.
     Flat-top lever-locks (`toggle-large-cylinder`) translate as a whole toward
