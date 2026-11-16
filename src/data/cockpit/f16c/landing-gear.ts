@@ -59,7 +59,7 @@ export const landingGear: PanelSpec = {
       'The gear handle hides its slot. The slot is placed under the UP and DN legends, where the handle\'s shaft enters the panel; the knob is drawn square-on over it, at UP as shown and at DN at the bottom of the slot. Its DN position overlaps the edge of the DN LOCK REL stripes.',
       'The gear handle wheel is drawn on its tread, square-on, with the whole tyre as the red warning light lens.',
       'The LIGHTS switch is drawn as a wide flat paddle, from its end-on look in the image (three round bosses along a long pill).',
-      'GND JETT and ANTI-SKID are large lever-locks; BRAKES and STORES CONFIG show no lever-lock slot in the image, so they are drawn as plain toggles. The HOOK lever is a one-off: a long flat tongue that overhangs well past its bushing toward the selected position (over the HOOK plate at UP).',
+      'GND JETT and ANTI-SKID are large lever-locks; BRAKES and STORES CONFIG show no lever-lock slot in the image, so they are drawn as plain toggles. The HOOK lever is a one-off, traced from the image: a flat vertical paddle with a semicircular end toward the bushing, overhanging well past it toward the selected position (over the HOOK plate at UP).',
       'The SPEED BRAKE position indicator (item 12) sits on the strip below this panel, outside the rectified image, so it is not drawn here.',
       'EMER STORES JETTISON has a light circle-and-square mark at the centre of its cap; what it is (a lens, a latch or a guard insert) is not stated in the guide, so it is drawn as an outline only.',
       'The upper-left corner of the panel is hidden behind the canopy frame in the image; the plate outline steps in there as the visible edge suggests, and its left edge slopes in above GND JETT ENABLE, traced from the strip of side wall visible beside it.',
@@ -68,7 +68,7 @@ export const landingGear: PanelSpec = {
   plate: [
     { d: path('M139 23H449Q453 23 453 27V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23Z') },
     // Top layer, cut away for the gear handle's channel and, to its lower left, the recess round DN LOCK REL.
-    { d: path('M139 23H449Q453 23 453 27V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23ZM398 190H445V370H327V289H398Z'), raised: true },
+    { d: path('M139 23H449Q453 23 453 27V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23ZM397 190H447V374H322V287H397Z'), raised: true },
   ],
   engraving: [
     // EMER STORES JETTISON: legend, and the hazard-striped square around the button.
@@ -77,10 +77,10 @@ export const landingGear: PanelSpec = {
     { kind: 'path', pen: 'heavy', d: stripes(160, 72, 257, 165) },
     // WHEELS: aircraft outline with the three gear lights.
     // Traced as the guide draws it: the fuselage sides run unbroken from the
-    // nose to the tail, separating the wings and tailplanes, which close on
-    // them, and the engine nozzle is its own outline at the tail.
+    // nose past the wings, which close on them; the tailplanes join the
+    // fuselage with no separating line, and the engine nozzle is its own outline.
     { kind: 'path', d: path([
-      `M${W - 16} 178V88L${W} 40L${W + 16} 88V178`,
+      `M${W - 16} 157V88L${W} 40L${W + 16} 88V157`,
       `M${W - 16} 99L${W - 63} 129V137H${W - 16}M${W + 16} 99L${W + 63} 129V137H${W + 16}`,
       `M${W - 16} 157L${W - 37} 172V178H${W - 16}M${W + 16} 157L${W + 37} 172V178H${W + 16}`,
       `M${W - 16} 178H${W + 16}L${W + 9} 188H${W - 9}Z`,
@@ -115,9 +115,9 @@ export const landingGear: PanelSpec = {
     L([317, 367], 'OFF', 8.5, 19),
     L([272, 395], 'TAXI', 8.5, 24),
     // DN LOCK REL: legend and the hazard-striped box around the button.
-    L([362, 270], 'DN LOCK', 8.5, 41),
-    L([362, 284], 'REL', 8.5, 20),
-    { kind: 'path', pen: 'heavy', d: stripes(327, 289, 398, 370) },
+    L([362, 266], 'DN LOCK', 8.5, 41),
+    L([362, 279], 'REL', 8.5, 20),
+    { kind: 'path', pen: 'heavy', d: stripes(327, 289, 393, 369) },
     L([217, 310], '+', 7),
   ],
   placements: [
@@ -132,7 +132,7 @@ export const landingGear: PanelSpec = {
     { component: 'lamp-round', indicator: 'wheels-nose', at: pt(W, 60) },
     { component: 'lamp-round', indicator: 'wheels-left', at: pt(W - 32, 107) },
     { component: 'lamp-round', indicator: 'wheels-right', at: pt(W + 32, 107) },
-    { component: 'toggle-hook', control: 'hook', at: pt(418, 107) },
+    { component: 'toggle-hook', control: 'hook', at: pt(413, 106) },
     { component: 'toggle-large-lock', control: 'gnd-jett', at: pt(90, 223) },
     { component: 'toggle-medium', control: 'brakes', at: pt(169, 226) },
     { component: 'toggle-large-lock', control: 'anti-skid', at: pt(244, 234) },
@@ -152,7 +152,7 @@ export const landingGear: PanelSpec = {
       id: 'hook', name: 'HOOK switch', type: 'toggle', travel: 'vertical', latched: true,
       positions: [{ id: 'up', label: 'UP', hold: 'stable' }, { id: 'dn', label: 'DN', hold: 'stable' }],
       initial: 'up',
-      protections: [{ kind: 'latch', verified: false, note: 'Drawn as its one-off long tongue lever. It moves with a plain click; any lock is not simulated.' }],
+      protections: [{ kind: 'latch', verified: false, note: 'Drawn as its one-off paddle lever. It moves with a plain click; any lock is not simulated.' }],
       description: 'Lowers the arresting hook for an emergency arrestment on a runway cable. DN releases the hook and holds it fully down with pneumatic pressure. UP only releases that pressure, so the hook can ride up over cables to taxi clear; once down, it cannot be fully raised from the cockpit.',
       source: src,
     },

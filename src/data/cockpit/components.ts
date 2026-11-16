@@ -96,12 +96,12 @@ export const TOGGLES = {
   /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). */
   'toggle-large-lock': { r: 6.24, reach: 7.2, ball: 3.36, cap: 'dome', lock: true },
   /**
-   * One-off HOOK lever: a long flat tongue, narrow at a round bushing with an
-   * oblong slot and widening to a rounded end that overhangs well past the
-   * bushing toward the selected position (UP: over the HOOK plate). `ball` is
-   * half the tongue's end width.
+   * One-off HOOK lever: a round bushing with an oblong slot and a flat
+   * vertical paddle (rectangle, semicircle end toward the pivot) overhanging
+   * well past the bushing toward the selected position (UP: over the HOOK
+   * plate). `reach` is the paddle's far end from the pivot; `ball` is half its width.
    */
-  'toggle-hook': { r: 4.4, reach: 13.5, ball: 4.6, cap: 'hook' },
+  'toggle-hook': { r: 4.4, reach: 20.6, ball: 4.1, cap: 'hook' },
   /** Plain toggle with a wide flat paddle, with three round grip bosses along its end (gear panel LIGHTS). `ball` is half the paddle width. */
   'toggle-paddle-wide': { r: 4.0, reach: 4.6, ball: 11, cap: 'wide' },
 } as const;
@@ -150,10 +150,13 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   // viewer (a near-circle). Its top is nearly flat, so no inner ring.
   const face = (ry: number) => cased(`<ellipse cy="${n(L)}" rx="${ball}" ry="${n(ry)}" fill="${PAPER}"/>`, 'medium');
   if (cap === 'hook') {
-    // Tongue from a narrow root at the pivot to a rounded end past `reach`, with a pressed centre groove.
-    const s = Math.sign(k) || -1, d = Math.abs(L), r0 = r * 0.32, Y = (y: number) => n(s * y);
-    const tongue = `<path d="M${n(-r0)} 0L${n(-ball)} ${Y(d)}A${ball} ${ball} 0 0 ${s > 0 ? 0 : 1} ${n(ball)} ${Y(d)}L${n(r0)} 0Z" fill="${PAPER}"/>`;
-    return cased(tongue, 'medium') + `<path d="M0 ${Y(r * 0.6)}Q${n(ball * 0.2)} ${Y(d * 0.6)} 0 ${Y(d + ball * 0.6)}" ${sw('fine')}/>`;
+    // Traced from the guide image: a short stem from the pivot to a flat
+    // vertical paddle, a rectangle with a semicircular end toward the pivot
+    // and a square-cornered far end, overhanging well past the bushing.
+    const s = Math.sign(k) || -1, Y = (y: number) => n(s * y), near = r * 1.27, c = near + ball;
+    const stem = `<rect x="${n(-r * 0.22)}" y="${n(Math.min(0, s * c))}" width="${n(r * 0.44)}" height="${n(c)}" fill="${PAPER}" ${sw('medium')}/>`;
+    const paddle = `<path d="M${n(-ball)} ${Y(reach)}H${n(ball)}V${Y(c)}A${ball} ${ball} 0 0 ${s > 0 ? 0 : 1} ${n(-ball)} ${Y(c)}Z" fill="${PAPER}"/>`;
+    return stem + cased(paddle, 'medium');
   }
   if (cap === 'wide') {
     // Wide paddle end (seen almost end-on at the real lean): a long pill with three round grip bosses.
