@@ -67,8 +67,8 @@ export const landingGear: PanelSpec = {
   },
   plate: [
     { d: path('M139 23L449 13Q453 12.9 453 17V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23Z') },
-    // Top layer, cut away for the gear handle's channel and, to its lower left, a padded recess round the DN LOCK REL button; the cut edge runs through the striped border.
-    { d: path('M139 23L449 13Q453 12.9 453 17V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23ZM397 190H447V364H335V301H397Z'), raised: true },
+    // Top layer, cut away for the gear handle's channel and, to its lower left, a padded recess round the DN LOCK REL button; the cut edge runs through the striped border, so the stripes stop at it; its left corners are rounded.
+    { d: path('M139 23L449 13Q453 12.9 453 17V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23ZM397 190H447V364H342Q335 364 335 357V308Q335 301 342 301H397Z'), raised: true },
   ],
   engraving: [
     // EMER STORES JETTISON: legend, and the hazard-striped square around the button.
@@ -105,7 +105,7 @@ export const landingGear: PanelSpec = {
     L([242, 200], 'BRAKE', 8.5, 35),
     L([292, 237], 'ANTI-SKID', 8.5, 48),
     L([245, 262], 'OFF', 8.5, 20),
-    L([50, 315], 'STORES CONFIG', 8.5, 95),
+    L([53, 315], 'STORES CONFIG', 8.5, 78),
     L([52, 330], 'CAT I', 8.5, 31),
     L([50, 397], 'CAT III', 8.5, 33),
     L([172, 315], 'HORN', 8.5, 31),
@@ -117,7 +117,7 @@ export const landingGear: PanelSpec = {
     // DN LOCK REL: legend and the hazard-striped box around the button.
     L([362, 266], 'DN LOCK', 8.5, 41),
     L([362, 279], 'REL', 8.5, 20),
-    { kind: 'path', pen: 'heavy', d: stripes(328, 289, 398, 370) },
+    { kind: 'path', pen: 'heavy', d: stripes(328, 289, 398, 370, 9, [335, 301, 398, 364]) },
     L([217, 310], '+', 7),
   ],
   placements: [
