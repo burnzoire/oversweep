@@ -40,7 +40,7 @@ function dzusCut([x, y]: Pt, corner: Cut, layered: boolean) {
   const sy = corner.startsWith('up') ? -1 : 1, sx = corner.endsWith('left') ? -1 : 1;
   const ax = x - sx * c, by = y - sy * c;
   const edge = `M${n(ax)} ${n(y + sy * far)}V${n(y)}A${n(c)} ${n(c)} 0 0 ${sx * sy < 0 ? 0 : 1} ${n(x)} ${n(by)}H${n(x + sx * far)}`;
-  // On a layered panel the notch removes the top layer's outline, showing the plate below.
+  // On a layered panel the notch removes the plate borders inside it.
   const hole = layered ? `<path d="${edge}V${n(y + sy * far)}Z" fill="${PAPER}" stroke="none"/>` : '';
   return hole + `<path d="${edge}" ${sw('medium')}/>`;
 }
@@ -48,7 +48,8 @@ function dzusCut([x, y]: Pt, corner: Cut, layered: boolean) {
 function placement(spec: PanelSpec, p: Placement, state: Record<string, string>): string {
   switch (p.component) {
     case 'dzus': case 'screw': case 'screw-medium': case 'screw-small':
-      return (p.component === 'dzus' && p.cut ? `<g clip-path="url(#plate-${spec.id})">${dzusCut(p.at, p.cut, spec.plate.length > 1)}</g>` : '') +
+      // A single plate is clipped to itself; on a layered panel the notch runs through every layer's border.
+      return (p.component === 'dzus' && p.cut ? (spec.plate.length > 1 ? dzusCut(p.at, p.cut, true) : `<g clip-path="url(#plate-${spec.id})">${dzusCut(p.at, p.cut, false)}</g>`) : '') +
         at(p.at, fastener(p.component), ` class="${p.component}"`);
     case 'toggle-large': case 'toggle-medium': case 'toggle-small': case 'toggle-large-cylinder': case 'toggle-large-square': case 'toggle-large-lock': {
       const c = controlOf(spec, p.control), leans = toggleLeans(c.positions.length);
