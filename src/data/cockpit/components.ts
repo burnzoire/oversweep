@@ -198,15 +198,16 @@ function leverOnPivot(art: keyof typeof TOGGLES, k: number, count = 0) {
     // Square paddle end, nearly face-on at the real lean.
     ? cased(`<rect x="${n(-ball)}" y="${n(L - ball * 0.92)}" width="${n(ball * 2)}" height="${n(ball * 1.84)}" rx="${n(ball * 0.12)}" fill="${PAPER}"/>`, 'medium')
     : cap === 'dome' && Math.abs(k) > 1e-6
-    // Domed cap (Honeywell-style lever-lock, Nathan 2026-11-17): not a sphere but a
-    // short cylinder under a hemispherical top, so square-on it is a capsule whose
-    // round end points away from the pivot and whose flat end has small round corners.
-    // The cylinder (about 0.7 cap diameters long) leans 17°, so square-on only
-    // ~0.3 of its length shows: 0.41 of the cap radius.
+    // Domed cap (Honeywell-style lever-lock, Nathan 2026-11-17): a hemisphere on a
+    // short cylinder (about 0.7 cap diameters), leaning 17°. Square-on: the
+    // hemisphere's round far end, the cylinder's sides foreshortened to 0.41 of the
+    // cap radius, its round near end seen as a flat ellipse (semi-minor 0.29 of the
+    // radius), and the dome/cylinder seam as a second arc inside the far end: "(( )".
     ? (() => {
-      const sg = Math.sign(k), d = Math.abs(L), b = ball, e = ball * 0.41, c = ball * 0.2, Y = (y: number) => n(sg * y);
-      return cased(`<path d="M${n(-b)} ${Y(d)}A${b} ${b} 0 0 ${sg > 0 ? 0 : 1} ${n(b)} ${Y(d)}L${n(b)} ${Y(d - e + c)}` +
-        `Q${n(b)} ${Y(d - e)} ${n(b - c)} ${Y(d - e)}H${n(-b + c)}Q${n(-b)} ${Y(d - e)} ${n(-b)} ${Y(d - e + c)}Z" fill="${PAPER}"/>`, 'medium');
+      const sg = Math.sign(k), d = Math.abs(L), b = ball, e = ball * 0.41, m = ball * 0.29, Y = (y: number) => n(sg * y);
+      const far = sg > 0 ? 0 : 1, near = sg > 0 ? 0 : 1;
+      return cased(`<path d="M${n(-b)} ${Y(d)}A${b} ${b} 0 0 ${far} ${n(b)} ${Y(d)}V${Y(d - e)}A${b} ${n(m)} 0 0 ${near} ${n(-b)} ${Y(d - e)}Z" fill="${PAPER}"/>`, 'medium') +
+        `<path d="M${n(-b)} ${Y(d)}A${b} ${n(m)} 0 0 ${far} ${n(b)} ${Y(d)}" ${sw('fine')}/>`;
     })()
     : cased(`<circle cy="${n(L)}" r="${ball}" fill="${PAPER}"/>`, 'medium');
   if (Math.abs(k) < 1e-6) return tip;
