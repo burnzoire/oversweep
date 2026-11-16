@@ -17,7 +17,7 @@ const L = (at: [number, number], text: string, cap: number, width?: number) =>
   ({ kind: 'text' as const, at: pt(...at), text, cap: mm(cap), ...(width ? { width: mm(width) } : {}) });
 /** Switch pivots on their legends' centre lines (x) and the bushing row (y). */
 const SW: Record<string, [number, number]> = {
-  'left-hdpt': [78, 72], 'right-hdpt': [164, 72], fcr: [250, 72], 'rdr-alt': [337, 72],
+  'left-hdpt': [78, 70], 'right-hdpt': [164, 70], fcr: [250, 70], 'rdr-alt': [337, 70],
 };
 const latch = [{ kind: 'latch' as const, verified: false, note: 'The guide image shows a lever-lock slot in the bushing, so it is drawn as latched. It moves with a plain click; the lock is not simulated.' }];
 const onOff = [{ id: 'on', label: 'On', hold: 'stable' as const }, { id: 'off', label: 'OFF', hold: 'stable' as const }];
@@ -39,7 +39,6 @@ export const snsrPwr: PanelSpec = {
       'The panel\'s top, bottom and left edges are cropped in the reference and its other fasteners are out of frame; the drawn plate edges sit just inside the crop and only the visible fastener is drawn.',
       'The ON (forward) positions of the switches carry no legend; the switch titles sit above them.',
       'The switches are drawn as lever-locks: the reference shows the lock slot in each bushing. Their levers are drawn square-on.',
-      'The larger lever caps need more room than the printed layout gives: the switch row sits 2 px lower and the titles and OFF legends 4–9 px further out than printed, so the caps clear them in every position.',
     ],
   },
   plate: [
@@ -54,10 +53,10 @@ export const snsrPwr: PanelSpec = {
     // Vertical title: SNSR beside PWR.
     ...([['S', 16], ['N', 36], ['S', 56], ['R', 75]] as const).map(([t, y]) => L([26, y], t, 14, 10)),
     ...([['P', 25], ['W', 46], ['R', 66]] as const).map(([t, y]) => L([43, y], t, 14, 12)),
-    L([78, 11], 'LEFT', 10, 26), L([78, 26], 'HDPT', 10, 26), L([78, 118], 'OFF', 10, 21),
-    L([164, 11], 'RIGHT', 10, 32), L([164, 26], 'HDPT', 10, 26), L([164, 118], 'OFF', 10, 21),
-    L([250, 26], 'FCR', 10, 21), L([250, 118], 'OFF', 10, 21),
-    L([337, 11], 'RDR', 10, 21), L([337, 26], 'ALT', 10, 21), L([337, 118], 'OFF', 10, 21),
+    L([78, 14], 'LEFT', 10, 26), L([78, 30], 'HDPT', 10, 26), L([78, 109], 'OFF', 10, 21),
+    L([164, 16], 'RIGHT', 10, 32), L([164, 32], 'HDPT', 10, 26), L([164, 109], 'OFF', 10, 21),
+    L([250, 34], 'FCR', 10, 21), L([250, 109], 'OFF', 10, 21),
+    L([337, 21], 'RDR', 10, 21), L([337, 37], 'ALT', 10, 21), L([337, 109], 'OFF', 10, 21),
     L([381, 75], 'STBY', 10, 26),
     // Printed cross above the screw.
     { kind: 'path', pen: 'fine', d: path('M388 39H396M392 35V43') },

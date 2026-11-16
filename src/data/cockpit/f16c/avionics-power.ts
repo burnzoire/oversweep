@@ -94,10 +94,10 @@ export const avionicsPower: PanelSpec = {
     ...[...'AVIONICS'].map((t, i) => L([13, 72 + 20 * i], t, 13, t === 'I' ? 3 : 10)),
     ...[...'POWER'].map((t, i) => L([29, 102 + 20 * i], t, 13, t === 'W' ? 13 : 10)),
     // Switch titles (traced where printed) and OFF legends (on the pivots).
-    L([56, 20], 'MMC', 9.5, 25), L([124, 20], 'ST STA', 9.5, 37), L([200, 20], 'MFD', 9.5, 24),
-    L([271, 20], 'UFC', 9.5, 22), L([346, 20], 'MAP', 9.5, 22),
-    L([164, 131], 'GPS', 9.5, 21), L([240, 131], 'DL', 9.5, 14),
-    ...Object.entries(SW).map(([, [x, y]]) => L([x, y + 50], 'OFF', 9.5, 19)),
+    L([56, 24], 'MMC', 9.5, 25), L([124, 24], 'ST STA', 9.5, 37), L([200, 24], 'MFD', 9.5, 24),
+    L([271, 24], 'UFC', 9.5, 22), L([346, 24], 'MAP', 9.5, 22),
+    L([170, 131], 'GPS', 9.5, 21), L([244, 131], 'DL', 9.5, 14),
+    ...Object.entries(SW).map(([, [x, y]]) => L([x, y + 43], 'OFF', 9.5, 19)),
     L([220, 150], '+', 7),
     // INS dial: bracketed title, ALIGN bracket over STOR HDG and NORM, ticks.
     L([INS[0], 146], 'INS', 9.5, 20),
@@ -108,14 +108,14 @@ export const avionicsPower: PanelSpec = {
     { kind: 'path', d: arcMm(INS, 70, -70, -62) + arcMm(INS, 70, -36, -28) + path(tick(INS, -70, 63, 70) + tick(INS, -28, 63, 70)) },
     L(polar(INS, 70, -49), 'ALIGN', 9.5, 30, -49),
     L([56, 206], 'STOR', 9.5, 27), L([59, 218], 'HDG', 9.5, 23),
-    L([93, 175], 'NORM', 9.5, 31), L([133, 172], 'NAV', 9.5, 21), L([159, 192], 'CAL', 9.5, 19),
+    L([93, 175], 'NORM', 9.5, 31), L([133, 172], 'NAV', 9.5, 21), L([157, 192], 'CAL', 9.5, 19),
     L([177, 236], 'IN FLT', 9.5, 32), L([177, 250], 'ALIGN', 9.5, 30),
     L([145, 270], 'ATT', 9.5, 21), L([66, 254], 'OFF', 9.5, 21),
     { kind: 'path', pen: 'medium', d: path(INS_POS.map(p => tick(INS, p.angle, 37, 44)).join('')) },
     // MIDS LVT dial.
     L([MIDS[0], 152], 'MIDS LVT', 9.5, 52),
     { kind: 'path', d: path(`M${MIDS[0] - 45} 157L${MIDS[0] - 40} 152H${MIDS[0] - 31}M${MIDS[0] + 31} 152H${MIDS[0] + 40}L${MIDS[0] + 45} 157`) },
-    L([MIDS[0], 169], 'OFF', 9.5, 18), L([306, 186], 'ZERO', 9.5, 27), L([389, 186], 'ON', 9.5, 13),
+    L([MIDS[0], 169], 'OFF', 9.5, 18), L([310, 186], 'ZERO', 9.5, 27), L([389, 186], 'ON', 9.5, 13),
     { kind: 'path', pen: 'medium', d: path(MIDS_POS.map(p => tick(MIDS, p.angle, 37, 44)).join('')) },
   ],
   placements: [

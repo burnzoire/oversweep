@@ -171,10 +171,10 @@ draw left and right cut-outs (and their DZUS) mirrored about the panel centre
 at the mean measured heights, all the same width; inner radii generous
 (8–14 px, never ~7); DZUS centred in its slot or notch.
 
-**Legend clearance.** After any change to a toggle or its legends, run
-`node --experimental-strip-types --no-warnings scripts/cockpit-overlaps.mjs`
-(add `--all` for every lever position). It lists every legend a bushing or
-the drawn lever tip covers; move the legend clear rather than shrink the part.
+**Legend clearance.** Legends stay where the guide prints them; never move one
+to clear a lever. A thrown lever or cap may cover a legend, because the control
+moves (Nathan, 2026-11-17). `scripts/cockpit-overlaps.mjs` (add `--all` for every
+lever position) still lists what a bushing or lever tip covers, as information.
 
 **Reference images.** `pdfimages -j` gives JPEGs; convert them to PNG before
 `cockpit-review.mjs` (a JPEG reference renders blank).
