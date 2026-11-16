@@ -20,6 +20,14 @@ const tick = (c: [number, number], a: number, r0: number, r1: number) => {
   const s = Math.sin(a * Math.PI / 180), k = -Math.cos(a * Math.PI / 180);
   return `M${(c[0] + r0 * s).toFixed(1)} ${(c[1] + r0 * k).toFixed(1)}L${(c[0] + r1 * s).toFixed(1)} ${(c[1] + r1 * k).toFixed(1)}`;
 };
+/** Point at radius r and angle a (clockwise from 12 o'clock) about c, in reference px. */
+const polar = (c: [number, number], r: number, a: number): [number, number] =>
+  [+(c[0] + r * Math.sin(a * Math.PI / 180)).toFixed(1), +(c[1] - r * Math.cos(a * Math.PI / 180)).toFixed(1)];
+/** Clockwise arc about c from angle a0 to a1 (reference px in), returned in mm; path() would scale the arc flags. */
+const arcMm = (c: [number, number], r: number, a0: number, a1: number) => {
+  const [x0, y0] = polar(c, r, a0), [x1, y1] = polar(c, r, a1);
+  return `M${mm(x0)} ${mm(y0)}A${mm(r)} ${mm(r)} 0 0 1 ${mm(x1)} ${mm(y1)}`;
+};
 /** Switch pivots: x on the OFF legends' measured centres, y on the bushing row. */
 const SW: Record<string, [number, number]> = {
   mmc: [67, 70], 'st-sta': [140.5, 70], mfd: [218, 70], ufc: [295, 70], map: [368, 70],
@@ -66,7 +74,7 @@ export const avionicsPower: PanelSpec = {
     shown: { mmc: 'on', 'st-sta': 'on', mfd: 'on', ufc: 'on', map: 'off', gps: 'on', dl: 'on', ins: 'nav', mids: 'on' },
     unresolved: [
       'The switch titles sit up and to the left of their switches in the reference (by about 6 mm) and are traced where they are printed; the MMC and ST STA titles are partly hidden by the lever caps, so their widths are estimated.',
-      'The bushings show the lever-lock slot on every switch, so all seven are drawn as lever-locks; their levers are drawn square-on.',
+      'The bushings show the lever-lock slot on every switch, so all seven are drawn as lever-locks: flat-topped caps, except MFD\'s rounded cap. Their levers are drawn square-on.',
       'The INS knob detents are at the measured tick angles, which are unevenly spaced on the plate. The MIDS LVT ticks measure within 3° of 45° steps and are drawn evenly.',
       'Whether MIDS LVT ZERO needs a pull to select is not shown; it moves with a plain click.',
       'Both knobs stand proud of the panel, so their centres come from the printed ticks, not the knob outlines.',
@@ -88,14 +96,17 @@ export const avionicsPower: PanelSpec = {
     // Switch titles (traced where printed) and OFF legends (on the pivots).
     L([56, 24], 'MMC', 9.5, 25), L([124, 24], 'ST STA', 9.5, 37), L([200, 24], 'MFD', 9.5, 24),
     L([271, 24], 'UFC', 9.5, 22), L([346, 24], 'MAP', 9.5, 22),
-    L([170, 131], 'GPS', 9.5, 21), L([244, 131], 'DL', 9.5, 14),
-    ...Object.entries(SW).map(([, [x, y]]) => L([x, y + 43], 'OFF', 9.5, 19)),
+    L([164, 131], 'GPS', 9.5, 21), L([240, 131], 'DL', 9.5, 14),
+    ...Object.entries(SW).map(([, [x, y]]) => L([x, y + 45], 'OFF', 9.5, 19)),
     L([220, 150], '+', 7),
     // INS dial: bracketed title, ALIGN bracket over STOR HDG and NORM, ticks.
     L([INS[0], 146], 'INS', 9.5, 20),
     { kind: 'path', d: path(`M${INS[0] - 44} 152L${INS[0] - 38} 146H${INS[0] - 14}M${INS[0] + 14} 146H${INS[0] + 38}L${INS[0] + 44} 152`) },
-    L([62, 170], 'ALIGN', 9.5, 30, -36),
-    { kind: 'path', d: path('M46 199L42 194L49 189M73 164L79 158L84 162') },
+    // ALIGN bracket: an arc about the INS pivot (r 70) over STOR HDG and NORM,
+    // ends turned in radially toward the pivot (pie edges), broken for the
+    // ALIGN legend, which sits tangential to the knob at the arc's middle.
+    { kind: 'path', d: arcMm(INS, 70, -70, -62) + arcMm(INS, 70, -36, -28) + path(tick(INS, -70, 63, 70) + tick(INS, -28, 63, 70)) },
+    L(polar(INS, 70, -49), 'ALIGN', 9.5, 30, -49),
     L([56, 206], 'STOR', 9.5, 27), L([59, 218], 'HDG', 9.5, 23),
     L([93, 175], 'NORM', 9.5, 31), L([133, 172], 'NAV', 9.5, 21), L([159, 192], 'CAL', 9.5, 19),
     L([177, 236], 'IN FLT', 9.5, 32), L([177, 250], 'ALIGN', 9.5, 30),
@@ -103,7 +114,7 @@ export const avionicsPower: PanelSpec = {
     { kind: 'path', pen: 'medium', d: path(INS_POS.map(p => tick(INS, p.angle, 37, 44)).join('')) },
     // MIDS LVT dial.
     L([MIDS[0], 152], 'MIDS LVT', 9.5, 52),
-    { kind: 'path', d: path(`M${MIDS[0] - 50} 158L${MIDS[0] - 44} 152H${MIDS[0] - 30}M${MIDS[0] + 30} 152H${MIDS[0] + 44}L${MIDS[0] + 50} 158`) },
+    { kind: 'path', d: path(`M${MIDS[0] - 45} 157L${MIDS[0] - 40} 152H${MIDS[0] - 31}M${MIDS[0] + 31} 152H${MIDS[0] + 40}L${MIDS[0] + 45} 157`) },
     L([MIDS[0], 169], 'OFF', 9.5, 18), L([306, 186], 'ZERO', 9.5, 27), L([389, 186], 'ON', 9.5, 13),
     { kind: 'path', pen: 'medium', d: path(MIDS_POS.map(p => tick(MIDS, p.angle, 37, 44)).join('')) },
   ],
@@ -115,7 +126,7 @@ export const avionicsPower: PanelSpec = {
     { component: 'screw-medium', at: pt(103, 95) },
     { component: 'screw-medium', at: pt(332, 94) },
     { component: 'screw-medium', at: pt(284, 244) },
-    ...Object.entries(SW).map(([id, at]) => ({ component: 'toggle-large-lock' as const, control: id, at: pt(...at) })),
+    ...Object.entries(SW).map(([id, at]) => ({ component: id === 'mfd' ? 'toggle-large-lock' as const : 'toggle-large-cylinder' as const, control: id, at: pt(...at) })),
     { component: 'rotary-pointer-medium', control: 'ins', at: pt(...INS) },
     { component: 'rotary-pointer-medium', control: 'mids', at: pt(...MIDS) },
   ],

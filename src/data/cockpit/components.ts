@@ -86,17 +86,17 @@ export const TOGGLES = {
    * bushing, lever 26.7 mm above the bushing, cap 10.7 mm dia, 34° total
    * travel (17° each side). Scaled to this bushing, seen square-on the lever
    * projects only ~26.7·sin 17° and the cap stays almost face-on (cos 17°).
-   * `ball` is the cap radius.
+   * `ball` is the cap radius. Lever and cap enlarged 50% (Nathan, 2026-11-17).
    */
-  'toggle-large-cylinder': { r: 5.2, reach: 6.4, ball: 3.45, cap: 'cylinder', lock: true },
+  'toggle-large-cylinder': { r: 5.2, reach: 6.4, ball: 5.18, cap: 'cylinder', lock: true },
   /**
    * Medium bushing with a flat lever widening (trapezoid) to a square paddle
    * (AIR REFUEL). The guide image shows a lock-insert slot in the bushing, so
    * it is drawn as a lever-lock base. `ball` is half the paddle width.
    */
   'toggle-large-square': { r: 4.0, reach: 4.6, ball: 3.3, cap: 'square', lock: true },
-  /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). */
-  'toggle-large-lock': { r: 6.24, reach: 7.2, ball: 3.36, cap: 'dome', lock: true },
+  /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). Lever and cap enlarged 50% (Nathan, 2026-11-17). */
+  'toggle-large-lock': { r: 6.24, reach: 7.2, ball: 5.04, cap: 'dome', lock: true },
   /**
    * One-off HOOK lever: a round bushing with an oblong slot and a flat
    * vertical paddle (rectangle, semicircle end toward the pivot) overhanging
