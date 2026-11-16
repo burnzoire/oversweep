@@ -64,6 +64,7 @@ export const leftEyebrow: PanelSpec = {
     { raised: true, d: path(box(349, 131, 99, 56, SLOPE)) },               // screw block, under the MASTER CAUTION housing
     { raised: true, d: path(box(425, 60, 156, 101, SLOPE)) },             // MASTER CAUTION
     { raised: true, d: path(box(257, 232, 140, 78, SLOPE)) },              // TF-FAIL and its blank cell
+    // The lower blank cap and IFF IDENT share the vertical run's centre line, x = 42.
     // One housing from F-ACK down to IFF IDENT, 76 px wide, bending smoothly from the 45° run to vertical.
     { raised: true, d: path('M147.6 315.6L53.5 410.8Q4 460.3 4 530.3V655H80V531.7Q80 491.7 108.3 463.4L201.4 369.4Z') },
   ],
@@ -83,8 +84,8 @@ export const leftEyebrow: PanelSpec = {
     { component: 'lamp-module', at: tl(279, 210, TF), rotate: SLOPE, size: TF, lamps: [] },
     { component: 'push-square', control: 'f-ack', at: P(142, 345), rotate: SLOPE, size: [B, B], legend: [{ text: 'F-ACK', cap: 3.4, y: 0, width: mm(42) }] },
     { component: 'lamp-module', at: tl(80, 402, [B, B]), rotate: SLOPE, size: [B, B], lamps: [] },
-    { component: 'lamp-module', at: tl(47, 495, [B, B]), size: [B, B], lamps: [] },
-    { component: 'push-square', control: 'iff-ident', at: P(37, 580), size: [B, B], legend: [
+    { component: 'lamp-module', at: tl(42, 495, [B, B]), size: [B, B], lamps: [] },
+    { component: 'push-square', control: 'iff-ident', at: P(42, 580), size: [B, B], legend: [
       { text: 'IFF', cap: 3.2, y: -2.6, width: mm(21) },
       { text: 'IDENT', cap: 3.2, y: 2.6, width: mm(40) },
     ] },
