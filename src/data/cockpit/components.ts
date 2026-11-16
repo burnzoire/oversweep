@@ -98,8 +98,8 @@ export const TOGGLES = {
    * it is drawn as a lever-lock base. `ball` is half the paddle width.
    */
   'toggle-large-square': { r: 4.0, reach: 4.6, ball: 3.3, cap: 'square', lock: true },
-  /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). Cap the same diameter as the flat-top's (Nathan); throw long enough that the shaft shows below the cap, a little shorter on two-position switches (`reach2`) (Nathan, 2026-11-17). */
-  'toggle-large-lock': { r: 6.24, reach: 9.4, reach2: 8.8, ball: 5.18, cap: 'dome', lock: true },
+  /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). Cap the same diameter as the flat-top's (Nathan); throw long enough that the shaft shows below the cap, a little shorter on two-position switches (`reach2`) (Nathan, 2026-11-17). Bushing the same size as the flat-top's (Nathan). */
+  'toggle-large-lock': { r: 5.2, reach: 9.4, reach2: 8.8, ball: 5.18, cap: 'dome', lock: true },
   /**
    * One-off HOOK lever: a round bushing with an oblong slot and a flat
    * vertical paddle (rectangle, semicircle end toward the pivot) overhanging
@@ -170,7 +170,7 @@ export function toggleReach(art: keyof typeof TOGGLES, count = 0) {
 function leverOnPivot(art: keyof typeof TOGGLES, k: number, count = 0) {
   const t = TOGGLES[art], { r, ball, cap } = t, reach = toggleReach(art, count);
   const L = reach * k;
-  const w0 = cap === 'cylinder' ? ball * 0.58 : 'hex' in t ? r * 0.17 : r * 0.3, w1 = cap === 'dome' ? ball * 0.8 : ball * 0.62;
+  const w0 = cap === 'cylinder' ? ball * 0.58 : cap === 'dome' ? ball * 0.36 : 'hex' in t ? r * 0.17 : r * 0.3, w1 = cap === 'dome' ? ball * 0.8 : ball * 0.62;
   // Mushroom cap: the lever leans only ~17° from the panel normal, so the cap stays almost square to the
   // viewer (a near-circle). Its top is nearly flat, so no inner ring.
   const face = (ry: number) => cased(`<ellipse cy="${n(L)}" rx="${ball}" ry="${n(ry)}" fill="${PAPER}"/>`, 'medium');
