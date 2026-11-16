@@ -93,8 +93,8 @@ export const TOGGLES = {
    * it is drawn as a lever-lock base. `ball` is half the paddle width.
    */
   'toggle-large-square': { r: 4.0, reach: 4.6, ball: 3.3, cap: 'square', lock: true },
-  /** Bulbous lever-lock: a big ball on a short, thick lever in a lock-insert bushing (IFF M-4 CODE / REPLY). */
-  'toggle-large-lock': { r: 5.2, reach: 4.6, ball: 4.0, cap: 'ball', lock: true },
+  /** Large lever-lock bat: a tapered pill rising from a lock-insert bushing, its flat end visible (IFF M-4 CODE / REPLY). */
+  'toggle-large-lock': { r: 5.2, reach: 6.2, ball: 2.7, cap: 'pill', lock: true },
 } as const;
 
 /** Lever lean for each position in travel order: -1 toward the first, 0 straight out, 1 toward the last. */
@@ -128,7 +128,7 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   const t = TOGGLES[art], { r, reach, ball, cap } = t;
   const lock = 'lock' in t && t.lock;
   const L = reach * k;
-  const w0 = cap === 'cylinder' ? ball * 0.58 : r * 0.3, w1 = cap === 'cylinder' ? ball * 0.62 : ball * 0.62;
+  const w0 = cap === 'cylinder' ? ball * 0.58 : cap === 'pill' ? r * 0.34 : r * 0.3, w1 = cap === 'cylinder' ? ball * 0.62 : ball * 0.62;
   // Mushroom cap: the lever leans only ~17° from the panel normal, so the cap stays almost square to the
   // viewer (a near-circle). Its top is nearly flat, so no inner ring.
   const face = (ry: number) => cased(`<ellipse cy="${n(L)}" rx="${ball}" ry="${n(ry)}" fill="${PAPER}"/>`, 'medium');
@@ -137,30 +137,36 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
     : cap === 'square'
     // Square paddle end, nearly face-on at the real lean.
     ? cased(`<rect x="${n(-ball)}" y="${n(L - ball * 0.92)}" width="${n(ball * 2)}" height="${n(ball * 1.84)}" rx="${n(ball * 0.12)}" fill="${PAPER}"/>`, 'medium')
-    : cased(`<circle cy="${n(L)}" r="${ball}" fill="${PAPER}"/>`, 'medium') + `<circle cx="${n(-ball * 0.3)}" cy="${n(L - ball * 0.3)}" r="${n(ball * 0.32)}" ${sw('fine')}/>`;
+    : cap === 'pill'
+    // Pointing at the viewer: the rounded end with its flat end face.
+    ? cased(`<circle r="${ball}" fill="${PAPER}"/>`, 'medium') + `<circle r="${n(ball * 0.7)}" ${sw('fine')}/>`
+    : cased(`<circle cy="${n(L)}" r="${ball}" fill="${PAPER}"/>`, 'medium');
   if (Math.abs(k) < 1e-6) return tip;
   const s = Math.sign(k);
-  // A plain toggle's lever passes through the pivot, so its rounded root sits
-  // behind it, offset away from the lean by half the lever's thickness. A
-  // lever-lock's lever rises out of the lock insert, so its root is centred.
-  const y0 = lock ? 0 : -s * w0;
+  // A plain toggle's lever starts at the pivot: its rounded root is offset
+  // toward the lean by half the lever's thickness, so its back edge sits on
+  // the pivot. A lever-lock's lever rises out of the lock insert, so its
+  // root is centred on the pivot.
+  const y0 = lock ? 0 : s * w0;
   const arc = `A${n(w0)} ${n(w0)} 0 0 ${s > 0 ? 1 : 0}`;
   if (cap === 'square') {
     // Flat lever widening from the root to the paddle: a trapezoid under the face.
     const y1 = L - s * ball * 0.6;
     return `<path d="M${n(-w0)} ${n(y0)}${arc} ${n(w0)} ${n(y0)}L${n(ball * 0.9)} ${n(y1)}H${n(-ball * 0.9)}Z" fill="${PAPER}" ${sw('medium')}/>` + tip;
   }
-  if (cap === 'ball') {
+  if (cap === 'ball' || cap === 'pill') {
     // Teardrop: one outline from the round lever root, along the common
     // tangents, around the ball. Lever along +y, mirrored for an upward lean.
-    const rc = lock ? 0 : -w0, d = Math.abs(L), r0 = w0, r1 = ball, a = Math.asin(Math.min(0.95, (r1 - r0) / (d - rc)));
+    const rc = lock ? 0 : w0, d = Math.abs(L), r0 = w0, r1 = ball, a = Math.asin(Math.min(0.95, (r1 - r0) / (d - rc)));
     const ca = Math.cos(a), sa = Math.sin(a), Y = (y: number) => n(s * y);
     const p0r = [r0 * ca, rc - r0 * sa], p0l = [-r0 * ca, rc - r0 * sa];
     const p1r = [r1 * ca, d - r1 * sa], p1l = [-r1 * ca, d - r1 * sa];
     const sweep = s > 0 ? 1 : 0;
     const drop = `<path d="M${n(p0r[0])} ${Y(p0r[1])}L${n(p1r[0])} ${Y(p1r[1])}A${r1} ${r1} 0 1 ${sweep} ${n(p1l[0])} ${Y(p1l[1])}` +
       `L${n(p0l[0])} ${Y(p0l[1])}A${n(r0)} ${n(r0)} 0 0 ${sweep} ${n(p0r[0])} ${Y(p0r[1])}Z" fill="${PAPER}"/>`;
-    return cased(drop, 'medium');
+    // A pill's flat end face shows as an ellipse foreshortened by the lean.
+    const face = cap === 'pill' ? `<ellipse cy="${Y(d + r1 * 0.25)}" rx="${n(r1 * 0.7)}" ry="${n(r1 * 0.5)}" ${sw('fine')}/>` : '';
+    return cased(drop, 'medium') + face;
   }
   // Shaft: semicircle on the bushing side, straight flanks out to the ball.
   const shaft = cap === 'cylinder'
