@@ -93,7 +93,11 @@ export const uhf: PanelSpec = {
   plate: [
     { d: path('M6 2H544Q548 2 548 6V454Q548 458 544 458H6Q2 458 2 454V6Q2 2 6 2Z') },
     // Raised face: the preset card well (top left) and the DZUS strips are cut away.
-    { d: path('M288 2H508V137Q508 140 511 140H548V323H510Q507 323 507 326V458H40V325Q40 322 37 322H2V132H285Q288 132 288 129Z'), raised: true },
+    // Cut-outs measured from the reference (px, brightness gradient plus 5x crops):
+    // top-left DZUS well x <= 37, y <= 126; card well x 37–285.5, y <= 130 (square
+    // corner); top-right strip x >= 510, y <= 136.5; lower strips x <= 43.5 below
+    // y 320 and x >= 505 below y 323. The strip corners are rounded, about 7 px.
+    { d: path('M285.5 2H510V129.5Q510 136.5 517 136.5H548V323H512Q505 323 505 330V458H43.5V327Q43.5 320 36.5 320H2V126H37V130H285.5Z'), raised: true },
     // Preset channel card.
     { d: path('M42 9H272Q277 9 277 14V117Q277 122 272 122H42Q37 122 37 117V14Q37 9 42 9Z'), raised: true },
   ],

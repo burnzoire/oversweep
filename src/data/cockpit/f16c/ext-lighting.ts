@@ -58,7 +58,10 @@ export const extLighting: PanelSpec = {
   plate: [
     { d: path('M6 2H478Q482 2 482 6V278Q482 282 478 282H6Q2 282 2 278V6Q2 2 6 2Z') },
     // Raised face plate, cut away round the four corner DZUS.
-    { d: path('M35 2H444V63Q444 66 447 66H482V222H447Q444 222 444 225V282H34V224Q34 221 31 221H2V68H32Q35 68 35 65Z'), raised: true },
+    // Edges measured from the reference by brightness gradient (px): TL x 35.5 / y 66,
+    // TR x 445.5 / y 64.5, BL x 34.5 / y 223.5, BR x 443.5 / y 222.5; inner corner
+    // radius about 10 px (readable at BR only; the others are hidden by DZUS rims).
+    { d: path('M35.5 2H445.5V54.5Q445.5 64.5 455.5 64.5H482V222.5H453.5Q443.5 222.5 443.5 232.5V282H34.5V233.5Q34.5 223.5 24.5 223.5H2V66H25.5Q35.5 66 35.5 56Z'), raised: true },
   ],
   engraving: [
     // Vertical "EXT" and "LIGHTING".

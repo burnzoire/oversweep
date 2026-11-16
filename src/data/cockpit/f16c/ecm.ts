@@ -16,7 +16,9 @@ const src = 'DCS F-16C guide pp. 706–707';
 const L = (at: [number, number], text: string, cap: number, width?: number) =>
   ({ kind: 'text' as const, at: pt(...at), text, cap: mm(cap), ...(width ? { width: mm(width) } : {}) });
 /** Module buttons: centres of the 4 x 2 matrix and the button size, in reference px. */
-const COLS = [167.5, 225.5, 284, 342.5], ROWS = [65.5, 124.5], B: [number, number] = [mm(53), mm(51)];
+const COLS = [167, 225, 283, 341], ROWS = [65, 124.5], B: [number, number] = [mm(56), mm(54)];
+/** Half-round slot end (radius r, reference px) to (x, y), anticlockwise. */
+const arc = (r: number, x: number, y: number) => `A${mm(r)} ${mm(r)} 0 0 0 ${mm(x)} ${mm(y)}`;
 const latched = [
   { id: 'out', label: 'Out (off)', hold: 'stable' as const },
   { id: 'in', label: 'In (on)', hold: 'stable' as const },
@@ -61,7 +63,16 @@ export const ecm: PanelSpec = {
   plate: [
     { d: path('M6 2H402Q406 2 406 6V175Q406 179 402 179H6Q2 179 2 175V6Q2 2 6 2Z') },
     // Raised face plate, cut away round the four corner DZUS; on the right the cuts meet the module housing.
-    { d: path('M33 2H373V55Q373 58 376 58H406V130H376Q373 130 373 133V179H33V131Q33 128 30 128H2V55H30Q33 55 33 52Z'), raised: true },
+    // Each DZUS sits in a slot cut in from the side edge with a half-round end
+    // centred on the fastener. Slot edges measured from the reference by
+    // brightness gradient (px): TL y 23.5–54.5, BL 128–158.5, TR 23.5–58,
+    // BR 129–159.5.
+    {
+      d: path('M6 2H402Q406 2 406 6V23.5H390.5') + arc(17.25, 390.5, 58) + path('H406V129H390.5') + arc(15.25, 390.5, 159.5) +
+        path('H406V175Q406 179 402 179H6Q2 179 2 175V158.5H15.5') + arc(15.25, 15.5, 128) + path('H2V54.5H15.5') + arc(15.5, 15.5, 23.5) +
+        path('H2V6Q2 2 6 2Z'),
+      raised: true,
+    },
   ],
   engraving: [
     ...([['E', 75], ['C', 92], ['M', 109]] as const).map(([t, y]) => L([11, y], t, 13, 10)),
@@ -74,7 +85,7 @@ export const ecm: PanelSpec = {
     L([53, 170], 'RESET', 9.5, 34),
     L([120, 170], 'BIT', 9.5, 18),
     // Module button housing: a raised frame round the 4 x 2 matrix.
-    { kind: 'path', pen: 'medium', d: path('M137 31H373V154H137Z') },
+    { kind: 'path', pen: 'medium', d: path('M136 35H373V154H136Z') },
   ],
   placements: [
     { component: 'dzus', at: pt(15.5, 37) },

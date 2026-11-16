@@ -143,6 +143,27 @@ deliberate ones (square-on levers, controls squared with legends) or are
 recorded in `source.unresolved`. Zoom (`g.py`-style crops at 4x) on anything
 you cannot judge at full size, especially knob grips and bushings.
 
+**Measure plate steps and cut-outs; never guess them (Nathan, 2026-11-16).**
+For every DZUS, slot, strip, well and layer step:
+1. Zoom each one: `python3 -I scripts/panel-zoom.py <rect.png> x0 y0 x1 y1 6 out.png`
+   (contrast-stretched crop with a 5 px grid beside its edge map). Decide the
+   shape from what is visible: corner notch, side slot with a half-round end,
+   long strip, well.
+2. Measure each straight edge with `python3 -I scripts/panel-edge.py <rect.png>
+   row|col ...`, scanning rows or columns where nothing else (fastener rims,
+   legends, knobs) crosses, and take the position most lines agree on. Read
+   corner and end radii off the zoom where they are visible.
+3. Write the measured numbers into the plate path, with a comment giving them.
+   Where an edge is hidden (under a rim, a legend), say so in the comment and in
+   `unresolved` rather than inventing it.
+4. Check with `python3 -I scripts/panel-cut-sheet.py <rect.png> <out>-overlay.png
+   sheet.png "TL:x0,y0,x1,y1" ...` (source crop beside the overlay for each
+   cut-out), and show that sheet in the PR.
+
+Shapes seen so far: EXT LIGHTING has corner notches with ~10 px rounded inner
+corners; ECM has side slots with a half-round end centred on each DZUS; UHF
+has long DZUS strips with ~7 px rounded corners and a square-cornered card well.
+
 ## 5. Ship
 
 - `src/data/cockpit/<aircraft>/index.ts`: attach the spec to its catalogue entry.
