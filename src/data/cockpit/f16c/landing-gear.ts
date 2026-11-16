@@ -62,13 +62,13 @@ export const landingGear: PanelSpec = {
       'GND JETT and ANTI-SKID are large lever-locks; BRAKES and STORES CONFIG show no lever-lock slot in the image, so they are drawn as plain toggles. The HOOK lever is a one-off: a long flat tongue that overhangs well past its bushing toward the selected position (over the HOOK plate at UP).',
       'The SPEED BRAKE position indicator (item 12) sits on the strip below this panel, outside the rectified image, so it is not drawn here.',
       'EMER STORES JETTISON has a light circle-and-square mark at the centre of its cap; what it is (a lens, a latch or a guard insert) is not stated in the guide, so it is drawn as an outline only.',
-      'The upper-left corner of the panel is hidden behind the canopy frame in the image; the plate outline steps in there as the visible edge suggests.',
+      'The upper-left corner of the panel is hidden behind the canopy frame in the image; the plate outline steps in there as the visible edge suggests, and its left edge slopes in above GND JETT ENABLE, traced from the strip of side wall visible beside it.',
     ],
   },
   plate: [
-    { d: path('M139 23H449Q453 23 453 27V418Q453 422 449 422H9Q5 422 5 418V154Q5 150 9 150H135V27Q135 23 139 23Z') },
+    { d: path('M139 23H449Q453 23 453 27V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23Z') },
     // Top layer, cut away for the gear handle's channel and, to its lower left, the recess round DN LOCK REL.
-    { d: path('M139 23H449Q453 23 453 27V418Q453 422 449 422H9Q5 422 5 418V154Q5 150 9 150H135V27Q135 23 139 23ZM398 190H445V370H327V289H398Z'), raised: true },
+    { d: path('M139 23H449Q453 23 453 27V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23ZM398 190H445V370H327V289H398Z'), raised: true },
   ],
   engraving: [
     // EMER STORES JETTISON: legend, and the hazard-striped square around the button.
