@@ -5,16 +5,18 @@ import { tracer } from '../trace.ts';
  * F-16C right eyebrow warning lights (glareshield, right of the HUD), DCS.
  *
  * Reference: the guide's p. 46 cockpit image (440 x 461 JPEG, extracted with
- * `pdfimages -j -f 46 -l 46`), turned 38° so the legends read level, then
- * rectified on the outer corners of the row of five light modules:
- *   python3 -I scripts/panel-trace.py <p46 turned 38°> <out> 72.5,225 587.5,300 65,325 582.5,392.5
- * and cropped at (55, 230). Measurements below are in that crop's pixels and stored in mm.
+ * `pdfimages -j -f 46 -l 46`), traced unrectified. The five modules run down and
+ * right along the glareshield; each is placed at its centre in the image and turned
+ * 45° with the strip, drawn square-on at full size. Module size and legend widths
+ * were measured with the image turned 38° and rectified on the row's outer corners
+ * (python3 -I scripts/panel-trace.py <p46 turned 38°> <out> 72.5,225 587.5,300 65,325 582.5,392.5).
  */
 const PX = 4.04;
 const { pt, mm, path } = tracer(PX);
 const src = 'DCS F-16C guide pp. 46–47';
 
 const W = mm(96), H = mm(107), I = 1.3;
+const SLOPE = 45;                // strip angle, degrees clockwise
 const lens = (half?: 'top' | 'bottom'): LampCell['rect'] => {
   const h = +(H - 2 * I).toFixed(2), w = +(W - 2 * I).toFixed(2);
   return half === 'top' ? [I, I, w, +(h / 2 - 0.3).toFixed(2)] : half === 'bottom' ? [I, +(I + h / 2 + 0.3).toFixed(2), w, +(h / 2 - 0.3).toFixed(2)] : [I, I, w, h];
@@ -44,14 +46,15 @@ const indicators: IndicatorDef[] = [];
 const light = (id: string, legend: string, description: string) =>
   indicators.push({ id, name: `${legend.replace('\n', ' ')} warning light`, type: 'lamp', colour: 'red', description, source: src });
 MODULES.forEach((m, i) => {
-  const at = pt(15 + 102.5 * i, 30);
+  // Module centres step 71.25, 75.75 px from the ENG FIRE module at (84, 82).
+  const at = pt(84 + 71.25 * i - 48, 82 + 75.75 * i - 53.5);
   if (typeof m[0] === 'string') {
     const [id, legend, widths, description] = m as [string, string, [number, number], string];
-    placements.push({ component: 'lamp-module', at, size: [W, H], lamps: [{ indicator: id, legend, rect: lens(), cap: CAP, halves: true, width: widths.map(mm) }] });
+    placements.push({ component: 'lamp-module', at, rotate: SLOPE, size: [W, H], lamps: [{ indicator: id, legend, rect: lens(), cap: CAP, halves: true, width: widths.map(mm) }] });
     light(id, legend, description);
   } else {
     const [top, bottom] = m as Lamp[];
-    placements.push({ component: 'lamp-module', at, size: [W, H], lamps: [
+    placements.push({ component: 'lamp-module', at, rotate: SLOPE, size: [W, H], lamps: [
       { indicator: top[0], legend: top[1], rect: lens('top'), cap: CAP, width: mm(top[2]) },
       { indicator: bottom[0], legend: bottom[1], rect: lens('bottom'), cap: CAP, width: mm(bottom[2]) },
     ] });
@@ -63,24 +66,24 @@ MODULES.forEach((m, i) => {
 export const rightEyebrow: PanelSpec = {
   id: 'right-eyebrow',
   title: 'Right eyebrow warning lights',
-  canvas: [mm(545), mm(150)],
+  canvas: [mm(446), mm(461)],
   source: {
     variant: 'DCS F-16C Viper (Block 50)',
     manual: 'Eagle Dynamics, DCS F-16C Viper Early Access Guide (EN, 16 Aug 2026)',
     page: 46,
     image: 'p. 46 "Right Eyebrow Lights" cockpit image, 440 x 461 px',
-    rectify: 'turn 38°, then python3 -I scripts/panel-trace.py <turned> <out> 72.5,225 587.5,300 65,325 582.5,392.5; crop at (55, 230)',
+    rectify: 'none: traced on the image as extracted; modules placed by their centres (sizes measured after turning 38° and rectifying on the row corners)',
     pxPerMm: PX,
     scale: 'No fasteners are visible, so the scale is assumed: a module pitch of 1 in (102.5 px).',
     shown: {},
     unresolved: [
-      'The strip is seen steeply from below and to the left, so module height and the gap between modules are estimated after rectifying.',
+      'The strip is seen steeply from below and to the left, so module height is estimated after rectifying; modules are drawn square-on at their image centres.',
       'The scale is assumed, not measured.',
-      'The housing outline is simplified to a plain strip.',
+      'The housing outline is simplified to a straight strip, 85 px either side of the module centre line, cropped by the image edges.',
       'HYD/OIL PRESS and TO/LDG CONFIG are each one warning across both halves of the lens, as the guide describes them.',
     ],
   },
-  plate: [{ d: path('M6 2H539Q543 2 543 6V144Q543 148 539 148H6Q2 148 2 144V6Q2 2 6 2Z') }],
+  plate: [{ d: path('M87.7 -38.2L489.2 388.7L365.3 505.2L-36.2 78.3Z') }],
   engraving: [],
   placements,
   controls: [],
