@@ -29,7 +29,7 @@ const dirLabels = (id: string) => {
   <div class="cp-stage">
     <Fragment set:html={renderPanel(spec, { label: `${cockpit.title} ${spec.title}` })} />
     {hitZones(spec).map(z => {
-      const style = `left:${pct(z.box[0], W)};top:${pct(z.box[1], H)};width:${pct(z.box[2], W)};height:${pct(z.box[3], H)}`;
+      const style = `left:${pct(z.box[0], W)};top:${pct(z.box[1], H)};width:${pct(z.box[2], W)};height:${pct(z.box[3], H)}` + (z.rotate ? `;transform:rotate(${z.rotate}deg)` : '');
       if (z.kind === 'indicator') {
         const ind = spec.indicators.find(i => i.id === z.id)!;
         return <button type="button" class="cp-hit cp-lamp" style={style} data-select={z.id} aria-label={`${ind.name}: what it shows`}></button>;
