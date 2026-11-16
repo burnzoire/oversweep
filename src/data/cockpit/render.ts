@@ -35,17 +35,20 @@ function moving(c: ControlDef, current: string, draw: (posIndex: number) => stri
  * about the fastener on the side away from the corner (clipped to the plate).
  * Absolute coordinates, so the plate clip applies directly.
  */
-function dzusCut([x, y]: Pt, corner: Cut) {
+function dzusCut([x, y]: Pt, corner: Cut, layered: boolean) {
   const c = FASTENERS.dzus.cut, far = 1000;
   const sy = corner.startsWith('up') ? -1 : 1, sx = corner.endsWith('left') ? -1 : 1;
   const ax = x - sx * c, by = y - sy * c;
-  return `<path d="M${n(ax)} ${n(y + sy * far)}V${n(y)}A${n(c)} ${n(c)} 0 0 ${sx * sy < 0 ? 0 : 1} ${n(x)} ${n(by)}H${n(x + sx * far)}" ${sw('medium')}/>`;
+  const edge = `M${n(ax)} ${n(y + sy * far)}V${n(y)}A${n(c)} ${n(c)} 0 0 ${sx * sy < 0 ? 0 : 1} ${n(x)} ${n(by)}H${n(x + sx * far)}`;
+  // On a layered panel the notch removes the top layer's outline, showing the plate below.
+  const hole = layered ? `<path d="${edge}V${n(y + sy * far)}Z" fill="${PAPER}" stroke="none"/>` : '';
+  return hole + `<path d="${edge}" ${sw('medium')}/>`;
 }
 
 function placement(spec: PanelSpec, p: Placement, state: Record<string, string>): string {
   switch (p.component) {
     case 'dzus': case 'screw': case 'screw-medium': case 'screw-small':
-      return (p.component === 'dzus' && p.cut ? `<g clip-path="url(#plate-${spec.id})">${dzusCut(p.at, p.cut)}</g>` : '') +
+      return (p.component === 'dzus' && p.cut ? `<g clip-path="url(#plate-${spec.id})">${dzusCut(p.at, p.cut, spec.plate.length > 1)}</g>` : '') +
         at(p.at, fastener(p.component), ` class="${p.component}"`);
     case 'toggle-large': case 'toggle-medium': case 'toggle-small': case 'toggle-large-cylinder': case 'toggle-large-square': case 'toggle-large-lock': {
       const c = controlOf(spec, p.control), leans = toggleLeans(c.positions.length);
@@ -121,7 +124,7 @@ export function renderPanel(spec: PanelSpec, opts: RenderOptions = {}) {
     : `<path d="${e.d}" ${sw(e.pen ?? 'medium')}/>`).join('');
   return `<svg class="cockpit-svg" viewBox="0 0 ${n(w)} ${n(h)}" xmlns="http://www.w3.org/2000/svg" ${opts.label ? `role="img" aria-label="${esc(opts.label)}"` : 'aria-hidden="true"'}>` +
     `<g fill="none" stroke="${INK}" stroke-linejoin="round" stroke-linecap="round" font-family="${FONT}" font-weight="600">` +
-    `<defs><clipPath id="plate-${spec.id}"><path d="${spec.plate[0].d}"/></clipPath></defs>` +
+    `<defs><clipPath id="plate-${spec.id}"><path d="${spec.plate[spec.plate.length - 1].d}"/></clipPath></defs>` +
     `<g class="plate">${plate}</g><g class="engraving">${engraving}</g>` +
     `<g class="components">${spec.placements.map(p => placement(spec, p, state)).join('')}</g></g>` +
     (opts.guide ? guideLayer(spec) : '') + '</svg>';
