@@ -78,10 +78,14 @@ export const TOGGLES = {
   'toggle-medium': { r: 4.0, reach: 5.9, ball: 1.95, cap: 'ball' },
   'toggle-small': { r: 3.0, reach: 4.4, ball: 1.5, cap: 'ball' },
   /**
-   * Large bushing with a thin stem that flares to a round end cap, no ball
-   * (MAIN PWR). `ball` is the end-cap radius.
+   * Pull-to-unlock (lever-lock) switch, MAIN PWR. Proportions from the
+   * Honeywell MICRO SWITCH TL-series mounting drawing (p. 45): 15/32 in
+   * bushing, lever 26.7 mm above the bushing, cap 10.7 mm dia, 34° total
+   * travel (17° each side). Scaled to this bushing, seen square-on the lever
+   * projects only ~26.7·sin 17° and the cap stays almost face-on (cos 17°).
+   * `ball` is the cap radius.
    */
-  'toggle-large-cylinder': { r: 5.2, reach: 7.8, ball: 3.4, cap: 'cylinder' },
+  'toggle-large-cylinder': { r: 5.2, reach: 4.9, ball: 3.45, cap: 'cylinder' },
   /** Medium bushing with a large square paddle cap (AIR REFUEL). */
   'toggle-large-square': { r: 4.0, reach: 6.2, ball: 3.6, cap: 'square' },
 } as const;
@@ -92,7 +96,18 @@ export function toggleLeans(count: number) {
 }
 
 export function toggleBase(art: keyof typeof TOGGLES) {
-  const { r } = TOGGLES[art];
+  const { r, cap } = TOGGLES[art];
+  if (cap === 'cylinder') {
+    // Lever-lock: castellated lock collar inside the bushing nut.
+    const c = r * 0.5, notch = Array.from({ length: 4 }, (_, i) => {
+      const [x1, y1] = polar(c, 45 + i * 90 - 12), [x2, y2] = polar(c, 45 + i * 90 + 12);
+      const [x3, y3] = polar(c * 0.72, 45 + i * 90 + 12), [x4, y4] = polar(c * 0.72, 45 + i * 90 - 12);
+      return `M${n(x1)} ${n(y1)}L${n(x4)} ${n(y4)}L${n(x3)} ${n(y3)}L${n(x2)} ${n(y2)}`;
+    }).join('');
+    const hex = Array.from({ length: 6 }, (_, i) => polar(r * 0.74, 30 + i * 60)).map(([x, y]) => `${n(x)} ${n(y)}`).join('L');
+    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<path d="M${hex}Z" fill="${PAPER}" ${sw('medium')}/>` +
+      `<circle r="${n(c)}" fill="${PAPER}" ${sw('medium')}/><path d="${notch}" ${sw('fine')}/>`;
+  }
   const hex = Array.from({ length: 6 }, (_, i) => polar(r * 0.74, 30 + i * 60)).map(([x, y]) => `${n(x)} ${n(y)}`).join('L');
   return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<path d="M${hex}Z" fill="${PAPER}" ${sw('medium')}/>` +
     `<circle r="${n(r * 0.42)}" ${sw('fine')}/>`;
@@ -105,13 +120,13 @@ export function toggleBase(art: keyof typeof TOGGLES) {
 export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   const { r, reach, ball, cap } = TOGGLES[art];
   const L = reach * k;
-  const w0 = cap === 'cylinder' ? ball * 0.36 : r * 0.3, w1 = cap === 'cylinder' ? ball : ball * 0.62;
-  // Flared end of a stem lever: the lever only leans ~25° from the panel normal, so its end face stays almost
-  // square to the viewer (a near-circle) and the thin stem is short in projection.
+  const w0 = cap === 'cylinder' ? ball * 0.5 : r * 0.3, w1 = cap === 'cylinder' ? ball * 0.56 : ball * 0.62;
+  // Mushroom cap: the lever leans only ~17° from the panel normal, so the cap stays almost square to the
+  // viewer (a near-circle); a smaller ring marks the dome.
   const face = (ry: number) => cased(`<ellipse cy="${n(L)}" rx="${ball}" ry="${n(ry)}" fill="${PAPER}"/>`, 'medium') +
-    `<ellipse cy="${n(L)}" rx="${n(ball * 0.62)}" ry="${n(ry * 0.62)}" ${sw('fine')}/>`;
+    `<ellipse cy="${n(L)}" rx="${n(ball * 0.55)}" ry="${n(ry * 0.55)}" ${sw('fine')}/>`;
   const tip = cap === 'cylinder'
-    ? face(Math.abs(k) < 1e-6 ? ball : ball * 0.9)
+    ? face(Math.abs(k) < 1e-6 ? ball : ball * 0.96)
     : cap === 'square'
     ? cased(`<rect x="${n(-ball)}" y="${n(L - ball * 0.9)}" width="${n(ball * 2)}" height="${n(ball * 1.8)}" rx="${n(ball * 0.18)}" fill="${PAPER}"/>`, 'medium') +
       `<rect x="${n(-ball * 0.62)}" y="${n(L - ball * 0.52)}" width="${n(ball * 1.24)}" height="${n(ball * 1.04)}" rx="${n(ball * 0.1)}" fill="${PAPER}" ${sw('fine')}/>`
@@ -120,8 +135,8 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   const s = Math.sign(k);
   // Shaft: semicircle on the bushing side, straight flanks out to the ball.
   const shaft = cap === 'cylinder'
-    // Thin stem from the bushing, flaring into the end cap over the last third.
-    ? `<path d="M${n(-w0)} 0V${n(L * 0.62)}L${n(-ball * 0.8)} ${n(L)}H${n(ball * 0.8)}L${n(w0)} ${n(L * 0.62)}V0Z" fill="${PAPER}" ${sw('medium')}/>`
+    // Thick lever, slightly wider at the cap end.
+    ? `<path d="M${n(-w0)} 0L${n(-w1)} ${n(L)}H${n(w1)}L${n(w0)} 0Z" fill="${PAPER}" ${sw('medium')}/>`
     : `<path d="M${n(-w0)} 0A${n(w0)} ${n(w0)} 0 0 ${s > 0 ? 0 : 1} ${n(w0)} 0L${n(w1)} ${n(L)}H${n(-w1)}Z" fill="${PAPER}" ${sw('medium')}/>`;
   return shaft + tip;
 }
