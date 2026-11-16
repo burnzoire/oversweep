@@ -94,10 +94,12 @@ export const uhf: PanelSpec = {
     { d: path('M6 2H544Q548 2 548 6V454Q548 458 544 458H6Q2 458 2 454V6Q2 2 6 2Z') },
     // Raised face: only the DZUS corners are cut away; the preset card sits on the face.
     // Cut-outs measured from the reference (px, brightness gradient plus 5x crops):
-    // top-left DZUS corner x <= 37, y <= 126; top-right strip x >= 510, y <= 136.5;
-    // lower strips x <= 43.5 below y 320 and x >= 505 below y 323. Inner corners
-    // rounded at 12 px (enlarged on review against the source).
-    { d: path('M37 2H510V124.5Q510 136.5 522 136.5H548V323H517Q505 323 505 335V458H43.5V332Q43.5 320 31.5 320H2V126H25Q37 126 37 114Z'), raised: true },
+    // top-left x <= 37, y <= 126; top-right x >= 510, y <= 136.5; lower strips
+    // x <= 43.5 below y 320 and x >= 505 below y 323. The unrectified reference
+    // sits a few px lower on the right, so the left and right cut-outs (and their
+    // DZUS) are drawn mirrored about the centre at the mean heights: top cut-outs
+    // down to y 133, lower strips from y 321.5. Inner corners rounded at 12 px.
+    { d: path('M37 2H513V121Q513 133 525 133H548V321.5H518.5Q506.5 321.5 506.5 333.5V458H43.5V333.5Q43.5 321.5 31.5 321.5H2V133H25Q37 133 37 121Z'), raised: true },
     // Preset channel card.
     { d: path('M42 9H272Q277 9 277 14V117Q277 122 272 122H42Q37 122 37 117V14Q37 9 42 9Z'), raised: true },
   ],
@@ -142,9 +144,9 @@ export const uhf: PanelSpec = {
     L([527, 375], '806', 8, 18),
   ],
   placements: [
-    ...([[18, 52], [18, 108], [18, 340], [18, 395], [529, 65], [529, 123], [529, 350], [529, 402]] as const)
+    ...([[18, 58.5], [18, 115.5], [18, 345], [18, 398.5], [532, 58.5], [532, 115.5], [532, 345], [532, 398.5]] as const)
       .map(([x, y]) => ({ component: 'dzus' as const, at: pt(x, y) })),
-    ...([[15, 155], [15, 298], [530, 163], [530, 303], [310, 20], [477, 24], [75, 438], [275, 440], [478, 440]] as const)
+    ...([[15, 159], [15, 300.5], [535, 159], [535, 300.5], [310, 20], [477, 24], [75, 438], [275, 440], [478, 440]] as const)
       .map(([x, y]) => ({ component: 'screw' as const, at: pt(x, y) })),
     { component: 'knob-spindle', control: 'chan', at: pt(465, 87) },
     { component: 'push-round-medium', control: 'test-display', at: pt(104, 170) },
