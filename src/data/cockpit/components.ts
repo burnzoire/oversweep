@@ -77,6 +77,11 @@ export const TOGGLES = {
   'toggle-large': { r: 5.2, reach: 7.0, ball: 2.5, cap: 'ball' },
   'toggle-medium': { r: 4.0, reach: 5.9, ball: 1.95, cap: 'ball' },
   'toggle-small': { r: 3.0, reach: 4.4, ball: 1.5, cap: 'ball' },
+  /**
+   * Large bushing with a long lever that tapers out to a flat round end, no
+   * ball (MAIN PWR). `ball` is the end-face radius.
+   */
+  'toggle-large-cylinder': { r: 5.2, reach: 7.6, ball: 3.2, cap: 'cylinder' },
   /** Medium bushing with a large square paddle cap (AIR REFUEL). */
   'toggle-large-square': { r: 4.0, reach: 6.2, ball: 3.6, cap: 'square' },
 } as const;
@@ -100,8 +105,12 @@ export function toggleBase(art: keyof typeof TOGGLES) {
 export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   const { r, reach, ball, cap } = TOGGLES[art];
   const L = reach * k;
-  const w0 = r * 0.3, w1 = ball * 0.62;
-  const tip = cap === 'square'
+  const w0 = cap === 'cylinder' ? r * 0.36 : r * 0.3, w1 = cap === 'cylinder' ? ball : ball * 0.62;
+  // Flat end face of a cylinder lever: a full disc when it points at the viewer, foreshortened when leaning.
+  const face = (ry: number) => cased(`<ellipse cy="${n(L)}" rx="${ball}" ry="${n(ry)}" fill="${PAPER}"/>`, 'medium');
+  const tip = cap === 'cylinder'
+    ? (Math.abs(k) < 1e-6 ? face(ball) + `<circle r="${n(ball * 0.62)}" ${sw('fine')}/>` : face(ball * 0.5))
+    : cap === 'square'
     ? cased(`<rect x="${n(-ball)}" y="${n(L - ball * 0.9)}" width="${n(ball * 2)}" height="${n(ball * 1.8)}" rx="${n(ball * 0.18)}" fill="${PAPER}"/>`, 'medium') +
       `<rect x="${n(-ball * 0.62)}" y="${n(L - ball * 0.52)}" width="${n(ball * 1.24)}" height="${n(ball * 1.04)}" rx="${n(ball * 0.1)}" fill="${PAPER}" ${sw('fine')}/>`
     : cased(`<circle cy="${n(L)}" r="${ball}" fill="${PAPER}"/>`, 'medium') + `<circle cx="${n(-ball * 0.3)}" cy="${n(L - ball * 0.3)}" r="${n(ball * 0.32)}" ${sw('fine')}/>`;

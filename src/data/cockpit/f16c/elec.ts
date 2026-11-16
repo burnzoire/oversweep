@@ -64,7 +64,7 @@ export const elec: PanelSpec = {
     { component: 'screw', at: pt(147, 123) },
     { component: 'screw', at: pt(61, 293) },
     { component: 'screw-small', at: pt(77, 370) },
-    { component: 'toggle-large', control: 'main-pwr', at: pt(97, 81) },
+    { component: 'toggle-large-cylinder', control: 'main-pwr', at: pt(97, 81) },
     { component: 'push-round-large', control: 'caution-reset', at: pt(122, 257) },
     { component: 'lamp-module', at: pt(192, 48), size: [LW, LH], lamps: [
       { indicator: 'flcs-pmg', legend: 'FLCS PMG', rect: cellTop, width: mm(49) },

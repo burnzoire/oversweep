@@ -33,7 +33,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
   switch (p.component) {
     case 'dzus': case 'screw': case 'screw-medium': case 'screw-small':
       return at(p.at, fastener(p.component), ` class="${p.component}"`);
-    case 'toggle-large': case 'toggle-medium': case 'toggle-small': case 'toggle-large-square': {
+    case 'toggle-large': case 'toggle-medium': case 'toggle-small': case 'toggle-large-cylinder': case 'toggle-large-square': {
       const c = controlOf(spec, p.control), leans = toggleLeans(c.positions.length);
       const rot = c.travel === 'horizontal' ? ' transform="rotate(-90)"' : '';
       return at(p.at, toggleBase(p.component) + moving(c, state[c.id] ?? c.initial, i => toggleLever(p.component as keyof typeof TOGGLES, leans[i]), rot), ` data-art="${p.component}"`);
@@ -122,7 +122,7 @@ export function hitZones(spec: PanelSpec): HitZone[] {
   return spec.placements.flatMap((p): HitZone[] => {
     const [x, y] = p.at;
     switch (p.component) {
-      case 'toggle-large': case 'toggle-medium': case 'toggle-small': case 'toggle-large-square': {
+      case 'toggle-large': case 'toggle-medium': case 'toggle-small': case 'toggle-large-cylinder': case 'toggle-large-square': {
         const t = TOGGLES[p.component], c = controlOf(spec, p.control);
         const long = 2 * (t.reach + t.ball) + 1, wide = 2.6 * t.r;
         const [bw, bh] = c.travel === 'horizontal' ? [long, wide] : [wide, long];
