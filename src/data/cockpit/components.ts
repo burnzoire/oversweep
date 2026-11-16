@@ -120,7 +120,7 @@ export function toggleBase(art: keyof typeof TOGGLES) {
 export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   const { r, reach, ball, cap } = TOGGLES[art];
   const L = reach * k;
-  const w0 = cap === 'cylinder' ? ball * 0.5 : r * 0.3, w1 = cap === 'cylinder' ? ball * 0.56 : ball * 0.62;
+  const w0 = cap === 'cylinder' ? ball * 0.58 : r * 0.3, w1 = cap === 'cylinder' ? ball * 0.62 : ball * 0.62;
   // Mushroom cap: the lever leans only ~17° from the panel normal, so the cap stays almost square to the
   // viewer (a near-circle); a smaller ring marks the dome.
   const face = (ry: number) => cased(`<ellipse cy="${n(L)}" rx="${ball}" ry="${n(ry)}" fill="${PAPER}"/>`, 'medium') +
@@ -135,8 +135,8 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   const s = Math.sign(k);
   // Shaft: semicircle on the bushing side, straight flanks out to the ball.
   const shaft = cap === 'cylinder'
-    // Thick lever, slightly wider at the cap end.
-    ? `<path d="M${n(-w0)} 0L${n(-w1)} ${n(L)}H${n(w1)}L${n(w0)} 0Z" fill="${PAPER}" ${sw('medium')}/>`
+    // Thick lever with a round base (the cylinder seen end-on at the pivot), slightly wider at the cap.
+    ? `<path d="M${n(-w0)} 0A${n(w0)} ${n(w0)} 0 0 ${s > 0 ? 0 : 1} ${n(w0)} 0L${n(w1)} ${n(L)}H${n(-w1)}Z" fill="${PAPER}" ${sw('medium')}/>`
     : `<path d="M${n(-w0)} 0A${n(w0)} ${n(w0)} 0 0 ${s > 0 ? 0 : 1} ${n(w0)} 0L${n(w1)} ${n(L)}H${n(-w1)}Z" fill="${PAPER}" ${sw('medium')}/>`;
   return shaft + tip;
 }
