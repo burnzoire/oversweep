@@ -12,7 +12,7 @@
 import type { ControlDef, Cut, PanelSpec, Placement, Pt } from './types';
 import {
   FASTENERS, FONT, INK, LAMPS, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, lampModuleFrame, lampRoundBezel, n,
-  gearKnob, gearSlot, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
+  gearKnob, gearSlot, knobArt, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
 } from './components.ts';
 
 const at = ([x, y]: Pt, body: string, extra = '') => `<g transform="translate(${n(x)} ${n(y)})"${extra}>${body}</g>`;
@@ -72,7 +72,12 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       return at(p.at, rotaryBase(p.component) + moving(c, state[c.id] ?? c.initial, i =>
         `<g transform="rotate(${c.positions[i].angle ?? 0})">${rotaryKnob(p.component)}</g>`), ` data-art="${p.component}"`);
     }
-    case 'push-round-large': case 'push-round-xl': case 'push-round-xxl': {
+    case 'knob-plain-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': {
+      const c = controlOf(spec, p.control);
+      return at(p.at, moving(c, state[c.id] ?? c.initial, i =>
+        `<g transform="rotate(${c.positions[i].angle ?? 0})">${knobArt(p.component)}</g>`), ` data-art="${p.component}"`);
+    }
+    case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-xxl': {
       const c = controlOf(spec, p.control), art = p.component;
       return at(p.at, pushBase(art) + moving(c, state[c.id] ?? c.initial, i => pushCap(art, i > 0)), ` data-art="${p.component}"`);
     }
@@ -196,11 +201,15 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         const r = ROTARIES[p.component].skirt * 1.15;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }
+      case 'knob-plain-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': {
+        const r = KNOBS[p.component].r * 1.1;
+        return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
+      }
       case 'gear-handle': {
         const [w, h] = p.size, bh = p.travel + h;
         return [{ kind: 'control', id: p.control, box: [x - w / 2, y - bh / 2, w, bh] }];
       }
-      case 'push-round-large': case 'push-round-xl': case 'push-round-xxl': {
+      case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-xxl': {
         const r = PUSHES[p.component].r;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }

@@ -216,6 +216,50 @@ export const ROTARIES = {
   'rotary-pointer-large': { skirt: 13, bar: 12.2, barBack: 6.1, barFront: 4.3 },
 } as const;
 
+/**
+ * Knobs that turn as a whole, with no fixed skirt: the body is the moving part.
+ * `r` is the body radius (mm); `lobes` > 0 scallops the rim (knurled grip);
+ * `ridge` is the raised bar across the face as [half-length, half-width] in
+ * fractions of `r`; the white index line runs from the centre out along the
+ * bar to the pointing end.
+ */
+export const KNOBS = {
+  /** Small smooth round knob with a short index bar (ECM DIM). */
+  'knob-plain-small': { r: 4.8, lobes: 0, ridge: [0.6, 0.14] },
+  /** Small knurled selector (EXT LIGHTING ANTI-COLL). */
+  'knob-knurled-small': { r: 7.9, lobes: 12, ridge: [0.82, 0.16] },
+  /** Knurled dimmer (EXT LIGHTING FORM). */
+  'knob-knurled': { r: 9.4, lobes: 12, ridge: [0.82, 0.13] },
+  /** Plain round knob with a wide raised bar (EXT LIGHTING MASTER). */
+  'knob-bar': { r: 10, lobes: 0, ridge: [0.96, 0.22] },
+  /** Large knob with three broad lobes and a raised bar (EXT LIGHTING AERIAL REFUELING). */
+  'knob-lobed': { r: 11.2, lobes: 3, ridge: [0.88, 0.18] },
+  /** Round knob with a wide raised bar, smaller than knob-bar (UHF backup CHAN and frequency knobs). */
+  'knob-bar-medium': { r: 7.2, lobes: 0, ridge: [0.96, 0.22] },
+  /** Very small knurled knob (UHF backup VOL). */
+  'knob-knurled-mini': { r: 4.8, lobes: 12, ridge: [0.8, 0.16] },
+} as const;
+
+/** A KNOBS body pointing at 12 o'clock; the renderer turns it to the detent. */
+export function knobArt(art: keyof typeof KNOBS) {
+  const { r, lobes, ridge } = KNOBS[art];
+  let rim: string;
+  if (!lobes) rim = `<circle r="${r}" fill="${PAPER}"/>`;
+  else {
+    // Scalloped rim: a bump per lobe (shallow for knurling, deep for broad lobes).
+    const depth = lobes > 6 ? 0.06 : 0.26, N = lobes * 16, pts: string[] = [];
+    for (let i = 0; i <= N; i++) {
+      const a = (i / N) * 2 * Math.PI, rr = r * (1 - depth / 2 + (depth / 2) * Math.cos(lobes * a));
+      pts.push(`${n(rr * Math.sin(a))} ${n(-rr * Math.cos(a))}`);
+    }
+    rim = `<path d="M${pts.join('L')}Z" fill="${PAPER}"/>`;
+  }
+  const [hl, hw] = ridge.map(f => f * r);
+  return cased(rim, 'heavy') +
+    `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(2 * hl)}" rx="${n(hw * 0.6)}" fill="${PAPER}" ${sw('medium')}/>` +
+    `<path d="M0 ${n(-hl + hw)}V0" ${sw('heavy')}/>`;
+}
+
 export function rotaryBase(art: keyof typeof ROTARIES) {
   const { skirt } = ROTARIES[art];
   return cased(`<circle r="${skirt}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(skirt * 0.9)}" ${sw('fine')}/>`;
@@ -232,6 +276,10 @@ export function rotaryKnob(art: keyof typeof ROTARIES) {
 /* ------------------------------------------------------------ pushbuttons */
 
 export const PUSHES = {
+  /** Small round button (ECM RESET and BIT). */
+  'push-round-small': { r: 3.4, cap: 2.5 },
+  /** Medium round button (UHF backup TEST DISPLAY and STATUS). */
+  'push-round-medium': { r: 4.1, cap: 3.2 },
   'push-round-large': { r: 6.6, cap: 4.5 },
   /** Gear panel DN LOCK REL. */
   'push-round-xl': { r: 7.8, cap: 6.0 },
