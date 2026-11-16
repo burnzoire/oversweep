@@ -86,16 +86,19 @@ export const TOGGLES = {
    * bushing, lever 26.7 mm above the bushing, cap 10.7 mm dia, 34° total
    * travel (17° each side). Scaled to this bushing, seen square-on the lever
    * projects only ~26.7·sin 17° and the cap stays almost face-on (cos 17°).
-   * `ball` is the cap radius. Lever and cap enlarged 50% (Nathan, 2026-11-17).
+   * `ball` is the cap radius. Cap enlarged 50% (Nathan, 2026-11-17).
    */
-  'toggle-large-cylinder': { r: 5.2, reach: 6.4, ball: 5.18, cap: 'cylinder', lock: true },
+  // `shift`: the whole lever translates this far (mm) toward the lean when it
+  // actuates: the lever-lock mechanism carries it to the end of its slot, so in
+  // the guide it looks pivoted off-centre (Nathan, 2026-11-17).
+  'toggle-large-cylinder': { r: 5.2, reach: 6.4, ball: 5.18, cap: 'cylinder', lock: true, shift: 2.5 },
   /**
    * Medium bushing with a flat lever widening (trapezoid) to a square paddle
    * (AIR REFUEL). The guide image shows a lock-insert slot in the bushing, so
    * it is drawn as a lever-lock base. `ball` is half the paddle width.
    */
   'toggle-large-square': { r: 4.0, reach: 4.6, ball: 3.3, cap: 'square', lock: true },
-  /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). Lever and cap enlarged 50% (Nathan, 2026-11-17). */
+  /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). Cap enlarged 50% (Nathan, 2026-11-17). */
   'toggle-large-lock': { r: 6.24, reach: 7.2, ball: 5.04, cap: 'dome', lock: true },
   /**
    * One-off HOOK lever: a round bushing with an oblong slot and a flat
@@ -153,6 +156,12 @@ export function toggleBase(art: keyof typeof TOGGLES) {
 const LOCK_SHIFT = 0.7;
 
 export function toggleLever(art: keyof typeof TOGGLES, k: number) {
+  const t = TOGGLES[art], lever = leverOnPivot(art, k);
+  // A lever-lock with `shift` translates as a whole toward the lean when it actuates.
+  return 'shift' in t && t.shift && Math.abs(k) > 1e-6 ? `<g transform="translate(0 ${n(Math.sign(k) * t.shift)})">${lever}</g>` : lever;
+}
+
+function leverOnPivot(art: keyof typeof TOGGLES, k: number) {
   const t = TOGGLES[art], { r, reach, ball, cap } = t;
   const L = reach * k;
   const w0 = cap === 'cylinder' ? ball * 0.58 : 'hex' in t ? r * 0.17 : r * 0.3, w1 = cap === 'dome' ? ball * 0.8 : ball * 0.62;

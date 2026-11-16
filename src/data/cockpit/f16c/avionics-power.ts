@@ -94,10 +94,10 @@ export const avionicsPower: PanelSpec = {
     ...[...'AVIONICS'].map((t, i) => L([13, 72 + 20 * i], t, 13, t === 'I' ? 3 : 10)),
     ...[...'POWER'].map((t, i) => L([29, 102 + 20 * i], t, 13, t === 'W' ? 13 : 10)),
     // Switch titles (traced where printed) and OFF legends (on the pivots).
-    L([56, 24], 'MMC', 9.5, 25), L([124, 24], 'ST STA', 9.5, 37), L([200, 24], 'MFD', 9.5, 24),
-    L([271, 24], 'UFC', 9.5, 22), L([346, 24], 'MAP', 9.5, 22),
+    L([56, 20], 'MMC', 9.5, 25), L([124, 20], 'ST STA', 9.5, 37), L([200, 20], 'MFD', 9.5, 24),
+    L([271, 20], 'UFC', 9.5, 22), L([346, 20], 'MAP', 9.5, 22),
     L([164, 131], 'GPS', 9.5, 21), L([240, 131], 'DL', 9.5, 14),
-    ...Object.entries(SW).map(([, [x, y]]) => L([x, y + 45], 'OFF', 9.5, 19)),
+    ...Object.entries(SW).map(([, [x, y]]) => L([x, y + 50], 'OFF', 9.5, 19)),
     L([220, 150], '+', 7),
     // INS dial: bracketed title, ALIGN bracket over STOR HDG and NORM, ticks.
     L([INS[0], 146], 'INS', 9.5, 20),
