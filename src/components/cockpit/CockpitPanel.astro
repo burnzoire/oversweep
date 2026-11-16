@@ -112,7 +112,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
 
   const select = (id: string) => {
     svg.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'));
-    svg.querySelector(`[data-move="${id}"], [data-indicator="${id}"]`)?.classList.add('selected');
+    svg.querySelectorAll(`[data-move="${id}"], [data-indicator="${id}"]`).forEach(e => e.classList.add('selected'));
     if (!info) return;
     for (const card of info.querySelectorAll<HTMLElement>('[data-item]')) card.hidden = card.dataset.item !== id;
     info.querySelector<HTMLElement>('[data-item-empty]')?.toggleAttribute('hidden', true);
