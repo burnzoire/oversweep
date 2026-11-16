@@ -21,7 +21,7 @@ const arrow = (a: [number, number], c: [number, number], tip: [number, number]) 
   const b = [tip[0] - ux * h, tip[1] - uy * h];
   return path(`M${a[0]} ${a[1]}Q${c[0]} ${c[1]} ${tip[0]} ${tip[1]}M${(b[0] - uy * w).toFixed(1)} ${(b[1] + ux * w).toFixed(1)}L${tip[0]} ${tip[1]}L${(b[0] + uy * w).toFixed(1)} ${(b[1] - ux * w).toFixed(1)}`);
 };
-const AC: [number, number] = [82, 80];   // ANTI-COLL knob
+const AC: [number, number] = [87, 76];   // ANTI-COLL knob (centre from its legend ring and lit face)
 const MS: [number, number] = [238, 222]; // MASTER knob
 /** ANTI-COLL detents, evenly spaced; legends sit on a circle round the knob along each detent. */
 const ACP = ['OFF', '1', '2', '3', '4', 'A', 'B', 'C'].map((t, i) => ({ t, angle: -150 + 38 * i }));
@@ -60,8 +60,8 @@ export const extLighting: PanelSpec = {
     // Raised face plate, cut away round the four corner DZUS.
     // Edges measured from the reference by brightness gradient (px): TL x 35.5 / y 66,
     // TR x 445.5 / y 64.5, BL x 34.5 / y 223.5, BR x 443.5 / y 222.5; inner corner
-    // radius about 10 px (readable at BR only; the others are hidden by DZUS rims).
-    { d: path('M35.5 2H445.5V54.5Q445.5 64.5 455.5 64.5H482V222.5H453.5Q443.5 222.5 443.5 232.5V282H34.5V233.5Q34.5 223.5 24.5 223.5H2V66H25.5Q35.5 66 35.5 56Z'), raised: true },
+    // radius 14 px (measured about 10 px at BR, enlarged on review against the source).
+    { d: path('M35.5 2H445.5V50.5Q445.5 64.5 459.5 64.5H482V222.5H457.5Q443.5 222.5 443.5 236.5V282H34.5V237.5Q34.5 223.5 20.5 223.5H2V66H21.5Q35.5 66 35.5 52Z'), raised: true },
   ],
   engraving: [
     // Vertical "EXT" and "LIGHTING".
@@ -98,7 +98,7 @@ export const extLighting: PanelSpec = {
     L([300, 193], '+', 8),
     { kind: 'path', d: path(`M208 191L213 196M${MS[0]} 179V185M268 191L263 196M193 222H201M274 222H283`) },
     // AERIAL REFUELING dimmer.
-    L([355, 165], 'AERIAL REFUELING', 12, 112),
+    L([368, 165], 'AERIAL REFUELING', 12, 112),
     L([421, 231], 'BRT', 10, 22),
     { kind: 'path', d: arrow([400, 177], [414, 190], [418, 218]) },
   ],
@@ -116,7 +116,7 @@ export const extLighting: PanelSpec = {
     { component: 'toggle-large', control: 'fuselage', at: pt(397, 95) },
     { component: 'knob-knurled', control: 'form', at: pt(97, 222) },
     { component: 'knob-bar-thick', control: 'master', at: pt(...MS) },
-    { component: 'knob-lobed', control: 'aerial-refueling', at: pt(355, 225) },
+    { component: 'knob-lobed', control: 'aerial-refueling', at: pt(368, 220) },
   ],
   controls: [
     {

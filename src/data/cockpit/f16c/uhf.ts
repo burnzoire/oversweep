@@ -92,12 +92,12 @@ export const uhf: PanelSpec = {
   },
   plate: [
     { d: path('M6 2H544Q548 2 548 6V454Q548 458 544 458H6Q2 458 2 454V6Q2 2 6 2Z') },
-    // Raised face: the preset card well (top left) and the DZUS strips are cut away.
+    // Raised face: only the DZUS corners are cut away; the preset card sits on the face.
     // Cut-outs measured from the reference (px, brightness gradient plus 5x crops):
-    // top-left DZUS well x <= 37, y <= 126; card well x 37–285.5, y <= 130 (square
-    // corner); top-right strip x >= 510, y <= 136.5; lower strips x <= 43.5 below
-    // y 320 and x >= 505 below y 323. The strip corners are rounded, about 7 px.
-    { d: path('M285.5 2H510V129.5Q510 136.5 517 136.5H548V323H512Q505 323 505 330V458H43.5V327Q43.5 320 36.5 320H2V126H37V130H285.5Z'), raised: true },
+    // top-left DZUS corner x <= 37, y <= 126; top-right strip x >= 510, y <= 136.5;
+    // lower strips x <= 43.5 below y 320 and x >= 505 below y 323. Inner corners
+    // rounded at 12 px (enlarged on review against the source).
+    { d: path('M37 2H510V124.5Q510 136.5 522 136.5H548V323H517Q505 323 505 335V458H43.5V332Q43.5 320 31.5 320H2V126H25Q37 126 37 114Z'), raised: true },
     // Preset channel card.
     { d: path('M42 9H272Q277 9 277 14V117Q277 122 272 122H42Q37 122 37 117V14Q37 9 42 9Z'), raised: true },
   ],
@@ -146,15 +146,15 @@ export const uhf: PanelSpec = {
       .map(([x, y]) => ({ component: 'dzus' as const, at: pt(x, y) })),
     ...([[15, 155], [15, 298], [530, 163], [530, 303], [310, 20], [477, 24], [75, 438], [275, 440], [478, 440]] as const)
       .map(([x, y]) => ({ component: 'screw' as const, at: pt(x, y) })),
-    { component: 'knob-bar', control: 'chan', at: pt(465, 87) },
+    { component: 'knob-spindle', control: 'chan', at: pt(465, 87) },
     { component: 'push-round-medium', control: 'test-display', at: pt(104, 170) },
     { component: 'push-round-medium', control: 'status', at: pt(445, 177) },
     ...FK.map(([x, y], i) => ({ component: 'knob-bar-medium' as const, control: `freq-${i + 1}`, at: pt(x, y) })),
     { component: 'knob-radio-large', control: 'function', at: pt(...FN) },
     { component: 'knob-knurled-mini', control: 'vol', at: pt(277, 368) },
     { component: 'knob-radio-large', control: 'mode', at: pt(...MD) },
-    { component: 'toggle-small', control: 'tone', at: pt(213, 432) },
-    { component: 'toggle-small', control: 'squelch', at: pt(330.5, 432) },
+    { component: 'toggle-mini-hex', control: 'tone', at: pt(213, 432) },
+    { component: 'toggle-mini-hex', control: 'squelch', at: pt(330.5, 432) },
   ],
   controls: [
     {

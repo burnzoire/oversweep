@@ -55,7 +55,7 @@ export const ecm: PanelSpec = {
       'The OFF legend under the power switch is hidden by its lever in the reference; it is placed on the switch\'s centre line below the bushing.',
       'Each module button carries four status lights (S, A, F, T) along its top; they are unlit and barely readable in the reference, so they are not drawn.',
       'RESET (red) and BIT (white) look like lit buttons; the guide gives them no light function, so they are drawn as plain buttons.',
-      'DIM is a smooth round knob in the reference; it is drawn with a short index bar so its turn shows. It is modelled with four detents.',
+      'DIM has no index mark; it is drawn with very fine grip lines round its rim, which the reference is too small to show. It is modelled with four detents.',
       'The power and XMIT switches are drawn as flat-top lever-locks; their bushings are partly hidden by the levers in the reference.',
       'The plate edges are cropped in the reference; the drawn edges sit just inside the crop.',
     ],
@@ -64,12 +64,13 @@ export const ecm: PanelSpec = {
     { d: path('M6 2H402Q406 2 406 6V175Q406 179 402 179H6Q2 179 2 175V6Q2 2 6 2Z') },
     // Raised face plate, cut away round the four corner DZUS; on the right the cuts meet the module housing.
     // Each DZUS sits in a slot cut in from the side edge with a half-round end
-    // centred on the fastener. Slot edges measured from the reference by
-    // brightness gradient (px): TL y 23.5–54.5, BL 128–158.5, TR 23.5–58,
-    // BR 129–159.5.
+    // centred on the fastener (r 16). Screw rings and slot edges measured from
+    // the reference by brightness gradient (px): screws TL (15.5, 39),
+    // TR (392, 42.5), BL (15.5, 143), BR (392, 144.5); slot edges TL y 22.5–55.5,
+    // TR 25.5–58, BL 127–159.5, BR 128–159.
     {
-      d: path('M6 2H402Q406 2 406 6V23.5H390.5') + arc(17.25, 390.5, 58) + path('H406V129H390.5') + arc(15.25, 390.5, 159.5) +
-        path('H406V175Q406 179 402 179H6Q2 179 2 175V158.5H15.5') + arc(15.25, 15.5, 128) + path('H2V54.5H15.5') + arc(15.5, 15.5, 23.5) +
+      d: path('M6 2H402Q406 2 406 6V26.5H392') + arc(16, 392, 58.5) + path('H406V128.5H392') + arc(16, 392, 160.5) +
+        path('H406V175Q406 179 402 179H6Q2 179 2 175V159H15.5') + arc(16, 15.5, 127) + path('H2V55H15.5') + arc(16, 15.5, 23) +
         path('H2V6Q2 2 6 2Z'),
       raised: true,
     },
@@ -88,12 +89,12 @@ export const ecm: PanelSpec = {
     { kind: 'path', pen: 'medium', d: path('M136 35H373V154H136Z') },
   ],
   placements: [
-    { component: 'dzus', at: pt(15.5, 37) },
-    { component: 'dzus', at: pt(390.5, 37) },
-    { component: 'dzus', at: pt(15.5, 142.5) },
-    { component: 'dzus', at: pt(390.5, 142.5) },
+    { component: 'dzus', at: pt(15.5, 39) },
+    { component: 'dzus', at: pt(392, 42.5) },
+    { component: 'dzus', at: pt(15.5, 143) },
+    { component: 'dzus', at: pt(392, 144.5) },
     { component: 'toggle-large-cylinder', control: 'power', at: pt(64, 37) },
-    { component: 'knob-plain-small', control: 'dim', at: pt(54, 99) },
+    { component: 'knob-fine-knurl-small', control: 'dim', at: pt(54, 99) },
     { component: 'toggle-large-cylinder', control: 'xmit', at: pt(112, 91) },
     { component: 'push-round-small', control: 'reset', at: pt(53, 145) },
     { component: 'push-round-small', control: 'bit', at: pt(120, 145) },
