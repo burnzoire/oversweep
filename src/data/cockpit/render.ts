@@ -65,7 +65,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
     case 'toggle-large': case 'toggle-medium': case 'toggle-small': case 'toggle-large-cylinder': case 'toggle-large-square': case 'toggle-large-lock': case 'toggle-paddle-wide': case 'toggle-hook': case 'toggle-mini-hex': {
       const c = controlOf(spec, p.control), leans = toggleLeans(c.positions.length);
       const rot = c.travel === 'horizontal' ? ' transform="rotate(-90)"' : '';
-      return at(p.at, toggleBase(p.component) + moving(c, state[c.id] ?? c.initial, i => toggleLever(p.component as keyof typeof TOGGLES, leans[i]), rot), ` data-art="${p.component}"`);
+      return at(p.at, toggleBase(p.component) + moving(c, state[c.id] ?? c.initial, i => toggleLever(p.component as keyof typeof TOGGLES, leans[i], c.positions.length), rot), ` data-art="${p.component}"`);
     }
     case 'rotary-pointer': case 'rotary-pointer-large': case 'rotary-pointer-medium': {
       const c = controlOf(spec, p.control);

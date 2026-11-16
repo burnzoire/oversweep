@@ -30,7 +30,7 @@ for (const s of specs) {
     const shown = s.source?.shown?.[p.control] ?? c?.initial;
     for (const [i, k] of toggleLeans(n).entries()) {
       if (!process.argv.includes('--all') && c?.positions[i]?.id !== shown) continue;
-      const L = t.reach * k + (t.shift && k ? Math.sign(k) * t.shift : 0);
+      const L = (n === 2 && t.reach2 ? t.reach2 : t.reach) * k + (t.shift && k ? Math.sign(k) * t.shift : 0);
       circles.push({ x: horiz ? L : 0, y: horiz ? 0 : L, r: t.ball, what: `tip@${c?.positions[i]?.id}` });
     }
     for (const cc of circles) {

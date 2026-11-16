@@ -98,8 +98,8 @@ export const TOGGLES = {
    * it is drawn as a lever-lock base. `ball` is half the paddle width.
    */
   'toggle-large-square': { r: 4.0, reach: 4.6, ball: 3.3, cap: 'square', lock: true },
-  /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). Cap enlarged 50% (Nathan, 2026-11-17). */
-  'toggle-large-lock': { r: 6.24, reach: 7.8, ball: 5.04, cap: 'dome', lock: true },
+  /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). Cap enlarged 50%; two-position switches throw shorter (`reach2`) (Nathan, 2026-11-17). */
+  'toggle-large-lock': { r: 6.24, reach: 7.8, reach2: 6, ball: 5.04, cap: 'dome', lock: true },
   /**
    * One-off HOOK lever: a round bushing with an oblong slot and a flat
    * vertical paddle (rectangle, semicircle end toward the pivot) overhanging
@@ -155,14 +155,20 @@ export function toggleBase(art: keyof typeof TOGGLES) {
 /** How far a lever-lock's shaft base moves toward the lean (mm): the lift-and-shift into its detent. */
 const LOCK_SHIFT = 0.7;
 
-export function toggleLever(art: keyof typeof TOGGLES, k: number) {
-  const t = TOGGLES[art], lever = leverOnPivot(art, k);
+export function toggleLever(art: keyof typeof TOGGLES, k: number, count = 0) {
+  const t = TOGGLES[art], lever = leverOnPivot(art, k, count);
   // A lever-lock with `shift` translates as a whole toward the lean when it actuates.
   return 'shift' in t && t.shift && Math.abs(k) > 1e-6 ? `<g transform="translate(0 ${n(Math.sign(k) * t.shift)})">${lever}</g>` : lever;
 }
 
-function leverOnPivot(art: keyof typeof TOGGLES, k: number) {
-  const t = TOGGLES[art], { r, reach, ball, cap } = t;
+/** Lever length (mm) for a switch with `count` positions: `reach2` for two-position switches where given. */
+export function toggleReach(art: keyof typeof TOGGLES, count = 0) {
+  const t = TOGGLES[art];
+  return count === 2 && 'reach2' in t ? t.reach2 : t.reach;
+}
+
+function leverOnPivot(art: keyof typeof TOGGLES, k: number, count = 0) {
+  const t = TOGGLES[art], { r, ball, cap } = t, reach = toggleReach(art, count);
   const L = reach * k;
   const w0 = cap === 'cylinder' ? ball * 0.58 : 'hex' in t ? r * 0.17 : r * 0.3, w1 = cap === 'dome' ? ball * 0.8 : ball * 0.62;
   // Mushroom cap: the lever leans only ~17° from the panel normal, so the cap stays almost square to the
