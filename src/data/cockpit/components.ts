@@ -279,11 +279,11 @@ export function gearSlot(travel: number) {
  */
 export function gearKnob([w, h]: [number, number], y: number, indicator?: string) {
   // A wheel seen on its tread: a barrel-shaped tyre with circumferential
-  // grooves (vertical, bowed out like the tyre's curve) between two shoulder
-  // lines where the tread rolls over to the sidewalls.
+  // grooves (vertical, bowed out like the tyre's curve).
   const t = y - h / 2, b = y + h / 2, sh = h * 0.07;
   const body = `M${n(-w / 2)} ${n(t + sh * 2)}Q${n(-w / 2)} ${n(t)} 0 ${n(t)}Q${n(w / 2)} ${n(t)} ${n(w / 2)} ${n(t + sh * 2)}V${n(b - sh * 2)}Q${n(w / 2)} ${n(b)} 0 ${n(b)}Q${n(-w / 2)} ${n(b)} ${n(-w / 2)} ${n(b - sh * 2)}Z`;
-  const shoulders = `M${n(-w / 2 + 0.4)} ${n(t + sh * 2)}Q0 ${n(t + sh * 0.6)} ${n(w / 2 - 0.4)} ${n(t + sh * 2)}M${n(-w / 2 + 0.4)} ${n(b - sh * 2)}Q0 ${n(b - sh * 0.6)} ${n(w / 2 - 0.4)} ${n(b - sh * 2)}`;
+  // Only the lower shoulder shows a line; the top rolls over with no sheath.
+  const shoulders = `M${n(-w / 2 + 0.4)} ${n(b - sh * 2)}Q0 ${n(b - sh * 0.6)} ${n(w / 2 - 0.4)} ${n(b - sh * 2)}`;
   const grooves = [-0.32, -0.16, 0, 0.16, 0.32].map(f => {
     const x = f * w, bow = f * w * 0.25;
     return `M${n(x)} ${n(t + sh * 2.2)}Q${n(x + bow)} ${n(y)} ${n(x)} ${n(b - sh * 2.2)}`;
