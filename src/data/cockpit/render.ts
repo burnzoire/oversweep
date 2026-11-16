@@ -17,6 +17,16 @@ import {
 
 const at = ([x, y]: Pt, body: string, extra = '') => `<g transform="translate(${n(x)} ${n(y)})"${extra}>${body}</g>`;
 
+/** Turns `body` by `deg` (clockwise) about (cx, cy); unchanged when there is no turn. */
+const turn = (deg: number | undefined, cx: number, cy: number, body: string) =>
+  deg ? `<g transform="rotate(${deg} ${n(cx)} ${n(cy)})">${body}</g>` : body;
+
+/** Axis-aligned box around a w x h rectangle centred on (cx, cy), turned by `deg`. */
+function turnedBox(cx: number, cy: number, w: number, h: number, deg = 0): [number, number, number, number] {
+  const a = deg * Math.PI / 180, bw = Math.abs(w * Math.cos(a)) + Math.abs(h * Math.sin(a)), bh = Math.abs(w * Math.sin(a)) + Math.abs(h * Math.cos(a));
+  return [cx - bw / 2, cy - bh / 2, bw, bh];
+}
+
 export function controlOf(spec: PanelSpec, id: string): ControlDef {
   const c = spec.controls.find(c => c.id === id);
   if (!c) throw new Error(`${spec.id}: placement refers to unknown control "${id}"`);
@@ -78,7 +88,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       const face = p.indicator
         ? `<g data-indicator="${p.indicator}"><rect class="lens" x="${n(-w / 2 + li)}" y="${n(-h / 2 + li)}" width="${n(w - 2 * li)}" height="${n(h - 2 * li)}" rx="0.5" stroke="none"/>${legend}</g>`
         : legend;
-      return at(p.at, pushSquareBase(p.size) + moving(c, state[c.id] ?? c.initial, i => pushSquareCap(p.size, i > 0)) + face, ' data-art="push-square"');
+      return at(p.at, turn(p.rotate, 0, 0, pushSquareBase(p.size) + moving(c, state[c.id] ?? c.initial, i => pushSquareCap(p.size, i > 0)) + face), ' data-art="push-square"');
     }
     case 'guard-flip': {
       const c = controlOf(spec, p.control);
@@ -99,7 +109,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       });
       // An unused module shows a dash across its blank lens.
       if (p.blank) s += `<path d="M${n(w * 0.22)} ${n(h / 2)}H${n(w * 0.78)}" ${sw('medium')}/>`;
-      return at(p.at, s, ' data-art="lamp-module"');
+      return at(p.at, turn(p.rotate, w / 2, h / 2, s), ' data-art="lamp-module"');
     }
     case 'lamp-round': {
       const { lens } = LAMPS[p.component];
@@ -189,7 +199,7 @@ export function hitZones(spec: PanelSpec): HitZone[] {
       }
       case 'push-square': {
         const [w, h] = p.size;
-        return [{ kind: 'control', id: p.control, box: [x - w / 2, y - h / 2, w, h] }];
+        return [{ kind: 'control', id: p.control, box: turnedBox(x, y, w, h, p.rotate) }];
       }
       case 'guard-flip': {
         // The lower half of the closed guard: the upper half is left to the switch it covers.
@@ -201,7 +211,13 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         return [{ kind: 'indicator', id: p.indicator, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }
       case 'lamp-module':
-        return p.lamps.map(l => ({ kind: 'indicator', id: l.indicator, box: [x + l.rect[0], y + l.rect[1], l.rect[2], l.rect[3]] as [number, number, number, number] }));
+        return p.lamps.map(l => {
+          // A turned module turns its cells about the module centre.
+          const [mw, mh] = p.size, a = (p.rotate ?? 0) * Math.PI / 180;
+          const dx = l.rect[0] + l.rect[2] / 2 - mw / 2, dy = l.rect[1] + l.rect[3] / 2 - mh / 2;
+          const cx = x + mw / 2 + dx * Math.cos(a) - dy * Math.sin(a), cy = y + mh / 2 + dx * Math.sin(a) + dy * Math.cos(a);
+          return { kind: 'indicator' as const, id: l.indicator, box: turnedBox(cx, cy, l.rect[2], l.rect[3], p.rotate) };
+        });
       default:
         return [];
     }
