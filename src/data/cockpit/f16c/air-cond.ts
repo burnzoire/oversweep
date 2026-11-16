@@ -49,7 +49,15 @@ export const airCond: PanelSpec = {
       'The left and right plate edges are cropped in the reference.',
     ],
   },
-  plate: [{ d: path('M6 2H434Q438 2 438 6V170Q438 174 434 174H6Q2 174 2 170V6Q2 2 6 2Z') }],
+  plate: [
+    { d: path('M6 2H434Q438 2 438 6V170Q438 174 434 174H6Q2 174 2 170V6Q2 2 6 2Z') },
+    // Raised face, notched round the four corner DZUS. Notch edges measured by
+    // brightness gradient on the rectified reference (px): TL x 36.5, bottom 62.5;
+    // TR x 403.5, bottom 61.5; BL x 35.5, top about 115; BR x 404.5, top 116.5.
+    // Drawn mirrored: x 36 / 404, top notches to y 62, bottom notches from
+    // y 116, inner corners rounded at 8 px.
+    { d: path('M36 2H404V54Q404 62 412 62H438V116H412Q404 116 404 124V174H36V124Q36 116 28 116H2V62H28Q36 62 36 54Z'), raised: true },
+  ],
   engraving: [
     // Vertical "AIR COND" in two columns.
     ...([['A', 76], ['I', 92], ['R', 108]] as const).map(([t, y]) => L([33, y], t, 12, 8)),
@@ -79,10 +87,10 @@ export const airCond: PanelSpec = {
     L([247, 143], '+', 7),
   ],
   placements: [
-    { component: 'dzus', at: pt(20.5, 43.75) },
-    { component: 'dzus', at: pt(421.3, 43.75) },
-    { component: 'dzus', at: pt(20.5, 131.5) },
-    { component: 'dzus', at: pt(421.3, 131.5) },
+    { component: 'dzus', at: pt(20, 43.75) },
+    { component: 'dzus', at: pt(420, 43.75) },
+    { component: 'dzus', at: pt(20, 131.5) },
+    { component: 'dzus', at: pt(420, 131.5) },
     { component: 'screw-medium', at: pt(62, 143) },
     { component: 'screw-medium', at: pt(247, 32) },
     { component: 'rotary-pointer-large', control: 'temp', at: pt(...T) },
