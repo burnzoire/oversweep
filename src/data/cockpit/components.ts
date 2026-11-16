@@ -94,7 +94,7 @@ export const TOGGLES = {
    */
   'toggle-large-square': { r: 4.0, reach: 4.6, ball: 3.3, cap: 'square', lock: true },
   /** Bulbous lever-lock: a big ball on a short, thick lever in a lock-insert bushing (IFF M-4 CODE / REPLY). */
-  'toggle-large-lock': { r: 4.6, reach: 4.4, ball: 3.6, cap: 'ball', lock: true },
+  'toggle-large-lock': { r: 5.2, reach: 4.6, ball: 4.0, cap: 'ball', lock: true },
 } as const;
 
 /** Lever lean for each position in travel order: -1 toward the first, 0 straight out, 1 toward the last. */
