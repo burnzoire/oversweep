@@ -51,19 +51,16 @@ export const leftEyebrow: PanelSpec = {
     scale: 'No fasteners are visible, so the scale is assumed: the square pushbuttons (about 60 px across) are taken as 0.75 in.',
     shown: { 'master-caution': 'out', 'f-ack': 'out', 'iff-ident': 'out' },
     unresolved: [
-      'The eyebrow is seen steeply from below; items are drawn square-on at their image centres. The housings are traced as their front faces, with sizes across the strip estimated; the strip is two straight runs joined by a smooth bend.',
-      'The image crops the strip at its top and left, and cuts off the far corners of MASTER CAUTION; its face is measured on the two visible edges and centred on its legend.',
+      'The eyebrow is seen steeply from below; items are drawn square-on at their image centres. The housings are traced as their front faces, with sizes across the strip estimated.',
+      'The image cuts off the far corners of MASTER CAUTION; its face is measured on the two visible edges and centred on its legend.',
       'The scale is assumed, not measured.',
       'Two blank square caps and the blank cell beside TF-FAIL have no function in the guide; they are drawn as unlit blanks.',
       'The guide does not give the TF-FAIL or MASTER CAUTION colours; the image shows TF-FAIL red and MASTER CAUTION amber.',
     ],
   },
-  // The eyebrow (in drawing px, image y + 30): upper segment from x + y = 419 to 630, lower segment x = 2 to 85,
-  // joined by a smooth bend.
-  // On it, the raised housings behind the lights, traced from the image: each is the
+  // The raised housings behind the lights, traced from the image: each is the
   // front face only (the camera also shows their sides), about 8 px proud of what it holds.
   plate: [
-    { d: path('M417 2L58.6 360.4Q2 417 2 497V653H85V585Q85 545 113.3 516.7L511 119V2Z') },
     { raised: true, d: path(box(349, 131, 99, 56, SLOPE)) },               // screw block, under the MASTER CAUTION housing
     { raised: true, d: path(box(425, 60, 156, 101, SLOPE)) },             // MASTER CAUTION
     { raised: true, d: path(box(257, 232, 140, 78, SLOPE)) },              // TF-FAIL and its blank cell

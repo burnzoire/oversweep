@@ -86,14 +86,12 @@ export const rightEyebrow: PanelSpec = {
     unresolved: [
       'The strip is seen steeply from below and to the left, so module height is estimated after rectifying; modules are drawn square-on at their image centres.',
       'The scale is assumed, not measured.',
-      'The housing outline is simplified to a straight strip, 85 px either side of the module centre line, cropped by the image edges.',
       'HYD/OIL PRESS and TO/LDG CONFIG are each one warning across both halves of the lens, as the guide describes them.',
     ],
   },
-  // The eyebrow strip, and on it the housing that holds the five modules, traced as its
+  // The housing that holds the five modules, traced as its
   // front face: 8 px clear of the modules all round, along the line of module centres.
   plate: [
-    { d: path('M87.7 -38.2L489.2 388.7L365.3 505.2L-36.2 78.3Z') },
     { raised: true, d: path(box(226.5, 233.5, 528, 123, 46.75)) },
   ],
   engraving: [],
