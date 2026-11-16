@@ -70,13 +70,14 @@ export function fastener(kind: keyof typeof FASTENERS) {
 /**
  * Toggle switches seen square-on. `r` is the bushing bezel radius; the lever
  * leans toward the selected position and its projected length is `reach`.
- * Proportions follow the approved JFS panel artwork: a lever that flares from
- * the bushing to a ball about half the bezel radius.
+ * Ball levers are one teardrop outline from the lever root to a ball about
+ * 0.6 of the bezel radius; seen square-on with a real ~17-20° lean, the ball
+ * sits about one bezel radius off centre.
  */
 export const TOGGLES = {
-  'toggle-large': { r: 5.2, reach: 7.0, ball: 2.5, cap: 'ball' },
-  'toggle-medium': { r: 4.0, reach: 5.9, ball: 1.95, cap: 'ball' },
-  'toggle-small': { r: 3.0, reach: 4.4, ball: 1.5, cap: 'ball' },
+  'toggle-large': { r: 5.2, reach: 5.6, ball: 3.2, cap: 'ball' },
+  'toggle-medium': { r: 4.0, reach: 4.3, ball: 2.5, cap: 'ball' },
+  'toggle-small': { r: 3.0, reach: 3.2, ball: 1.9, cap: 'ball' },
   /**
    * Pull-to-unlock (lever-lock) switch, MAIN PWR. Proportions from the
    * Honeywell MICRO SWITCH TL-series mounting drawing (p. 45): 15/32 in
@@ -131,6 +132,18 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
     : cased(`<circle cy="${n(L)}" r="${ball}" fill="${PAPER}"/>`, 'medium') + `<circle cx="${n(-ball * 0.3)}" cy="${n(L - ball * 0.3)}" r="${n(ball * 0.32)}" ${sw('fine')}/>`;
   if (Math.abs(k) < 1e-6) return tip;
   const s = Math.sign(k);
+  if (cap === 'ball') {
+    // Teardrop: one outline from the round lever root, along the common
+    // tangents, around the ball. Lever along +y, mirrored for an upward lean.
+    const d = Math.abs(L), r0 = w0, r1 = ball, a = Math.asin(Math.min(0.95, (r1 - r0) / d));
+    const ca = Math.cos(a), sa = Math.sin(a), Y = (y: number) => n(s * y);
+    const p0r = [r0 * ca, -r0 * sa], p0l = [-r0 * ca, -r0 * sa];
+    const p1r = [r1 * ca, d - r1 * sa], p1l = [-r1 * ca, d - r1 * sa];
+    const sweep = s > 0 ? 1 : 0;
+    const drop = `<path d="M${n(p0r[0])} ${Y(p0r[1])}L${n(p1r[0])} ${Y(p1r[1])}A${r1} ${r1} 0 1 ${sweep} ${n(p1l[0])} ${Y(p1l[1])}` +
+      `L${n(p0l[0])} ${Y(p0l[1])}A${n(r0)} ${n(r0)} 0 0 ${sweep} ${n(p0r[0])} ${Y(p0r[1])}Z" fill="${PAPER}"/>`;
+    return cased(drop, 'medium');
+  }
   // Shaft: semicircle on the bushing side, straight flanks out to the ball.
   const shaft = cap === 'cylinder'
     // Thick lever with a round base (the cylinder seen end-on at the pivot), slightly wider at the cap.
