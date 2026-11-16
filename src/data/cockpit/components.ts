@@ -98,8 +98,8 @@ export const TOGGLES = {
    * it is drawn as a lever-lock base. `ball` is half the paddle width.
    */
   'toggle-large-square': { r: 4.0, reach: 4.6, ball: 3.3, cap: 'square', lock: true },
-  /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). Cap radius measured on the guide's AVIONICS POWER MFD cap (27 px across at 3.1 px/mm); throw long enough that the shaft shows below the cap, a little shorter on two-position switches (`reach2`) (Nathan, 2026-11-17). */
-  'toggle-large-lock': { r: 6.24, reach: 8.6, reach2: 8, ball: 4.35, cap: 'dome', lock: true },
+  /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). Cap the same diameter as the flat-top's (Nathan); throw long enough that the shaft shows below the cap, a little shorter on two-position switches (`reach2`) (Nathan, 2026-11-17). */
+  'toggle-large-lock': { r: 6.24, reach: 9.4, reach2: 8.8, ball: 5.18, cap: 'dome', lock: true },
   /**
    * One-off HOOK lever: a round bushing with an oblong slot and a flat
    * vertical paddle (rectangle, semicircle end toward the pivot) overhanging
