@@ -4,6 +4,7 @@ import { includedModules, moduleRoute, type Module } from './modules';
 import { categoryRecords } from './encyclopedia';
 import { carriers } from './carriers';
 import { visibleProcedures, procedureRoute } from './aircraft-procedures';
+import { cockpits, cockpitRoute } from './cockpit/f16c/index.ts';
 
 // What a reader can actually open, derived from the registries. Navigation shows
 // destinations without content dimmed and unlinked, so readers only follow links
@@ -50,6 +51,11 @@ const fromModule = (m: Module): Entry => ({
 export const manualEntries: Entry[] = [
   ...listedExperiences.map(fromExperience),
   ...includedModules.map(fromModule),
+  ...cockpits.map(c => ({
+    id: `cockpit.${c.id}`, title: `${c.title} — Cockpit Familiarization`,
+    objective: `Find your way around the ${c.title} cockpit area by area, with every control on each panel working as in the sim.`,
+    applicability: c.variant, href: cockpitRoute(c), subject: 'aircraft-procedures', group: 'F-16C Viper',
+  })),
   ...visibleProcedures.map(p => ({
     id: p.id, title: p.title, objective: p.objective, applicability: p.applicability,
     procedureStatus: p.status, href: procedureRoute(p), subject: 'aircraft-procedures', group: 'F-16C Viper',

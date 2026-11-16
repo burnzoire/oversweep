@@ -1,0 +1,40 @@
+---
+import SiteLayout from '../../../../../layouts/SiteLayout.astro';
+import CockpitNav from '../../../../../components/cockpit/CockpitNav.astro';
+import { cockpits, builtPanels, panelRoute } from '../../../../../data/cockpit/f16c/index.ts';
+import { renderPanel } from '../../../../../data/cockpit/render.ts';
+import { sitePath } from '../../../../../lib/paths';
+export function getStaticPaths() { return cockpits.map(c => ({ params: { airframe: c.airframe }, props: { cockpit: c } })); }
+const { cockpit } = Astro.props;
+const built = builtPanels(cockpit);
+---
+<SiteLayout title={`${cockpit.title} — Cockpit Familiarization`} activeSection="manual" activeSubject="aircraft-procedures"
+ description={`Find your way around the ${cockpit.variant} cockpit, area by area and panel by panel, with every control on each panel working as it does in the sim.`}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Aircraft Procedures',href:sitePath('manual/aircraft-procedures/')},{label:cockpit.title,href:sitePath(`manual/aircraft-procedures/${cockpit.airframe}/`)},{label:'Cockpit Familiarization'}]}>
+  <p class="lead">Learn where each control is and how it moves before you fly procedures. Choose a cockpit area, then a panel. The jet is cold and dark, and every switch, knob and guard on a panel moves the way it does in the sim. Your switch positions are kept as you move between panels.</p>
+  <div class="cockpit-home">
+    <CockpitNav cockpit={cockpit} />
+    <ul class="cockpit-cards">
+      {built.map(({ area, panel, spec }) => (
+        <li><a href={sitePath(panelRoute(cockpit, panel.id))}>
+          <span class="cc-art"><Fragment set:html={renderPanel(spec)} /></span>
+          <span class="cc-title">{panel.title}</span>
+          <span class="cc-area">{area.title}</span>
+        </a></li>
+      ))}
+    </ul>
+  </div>
+  <h2>Source</h2>
+  <p><a href={cockpit.manual.url}>{cockpit.manual.title}</a> ({cockpit.manual.edition}), Cockpit Overview, pp. 43–82. Panel artwork is traced from that guide's cockpit images.</p>
+</SiteLayout>
+<style>
+.cockpit-home{display:grid;grid-template-columns:minmax(14rem,18rem) 1fr;gap:2rem;align-items:start}
+.cockpit-cards{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,15rem),1fr));gap:1rem}
+.cockpit-cards a{display:flex;flex-direction:column;gap:.2rem;padding:.75rem;border:1px solid var(--color-border);border-radius:.3rem;text-decoration:none;color:var(--color-text)}
+.cockpit-cards a:hover{border-color:var(--color-link)}
+.cc-art{display:flex;align-items:center;justify-content:center;height:10rem;margin-bottom:.4rem}
+.cc-art :global(svg){max-width:100%;max-height:100%}
+.cc-title{font-weight:700;color:var(--color-link)}
+.cc-area{font-size:.85rem;color:var(--color-muted)}
+@media(max-width:48rem){.cockpit-home{grid-template-columns:1fr}.cockpit-home > :first-child{order:2}}
+</style>
