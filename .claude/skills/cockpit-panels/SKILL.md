@@ -97,7 +97,8 @@ everything that stands proud of it.
   - lever-lock (lock insert and slot visible in the bushing): flat-topped
     mushroom cap = `toggle-large-cylinder` (MAIN PWR); tapered shaft to a domed
     cap = `toggle-large-lock` (JFS, MAX POWER, AB RESET, TANK INERTING, AVIONICS
-    POWER MFD; the cap is a short cylinder under a hemisphere, drawn as a capsule,
+    POWER MFD; the cap is a sphere drawn out along the lever, square-on a short
+    stadium with the near end's far edge showing inside the far end, "(( )",
     with a little less throw than the flat-top); square
     paddle on a trapezoid lever = `toggle-large-square` (AIR REFUEL).
     The lock slot has square ends so it never reads as part of the lever.
