@@ -86,9 +86,13 @@ export const TOGGLES = {
    * projects only ~26.7·sin 17° and the cap stays almost face-on (cos 17°).
    * `ball` is the cap radius.
    */
-  'toggle-large-cylinder': { r: 5.2, reach: 4.9, ball: 3.45, cap: 'cylinder' },
-  /** Medium bushing with a large square paddle cap (AIR REFUEL). */
-  'toggle-large-square': { r: 4.0, reach: 6.2, ball: 3.6, cap: 'square' },
+  'toggle-large-cylinder': { r: 5.2, reach: 4.9, ball: 3.45, cap: 'cylinder', lock: true },
+  /**
+   * Medium bushing with a flat lever widening (trapezoid) to a square paddle
+   * (AIR REFUEL). The guide image shows a lock-insert slot in the bushing, so
+   * it is drawn as a lever-lock base. `ball` is half the paddle width.
+   */
+  'toggle-large-square': { r: 4.0, reach: 4.6, ball: 3.3, cap: 'square', lock: true },
 } as const;
 
 /** Lever lean for each position in travel order: -1 toward the first, 0 straight out, 1 toward the last. */
@@ -97,8 +101,8 @@ export function toggleLeans(count: number) {
 }
 
 export function toggleBase(art: keyof typeof TOGGLES) {
-  const { r, cap } = TOGGLES[art];
-  if (cap === 'cylinder') {
+  const t = TOGGLES[art], r = t.r;
+  if ('lock' in t && t.lock) {
     // Lever-lock: round bushing (no hex nut on the panel face) with the
     // locking insert showing: a slot the lever travels in, with a detent
     // notch at each latched position (top, centre, bottom).
@@ -127,11 +131,16 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   const tip = cap === 'cylinder'
     ? face(Math.abs(k) < 1e-6 ? ball : ball * 0.96)
     : cap === 'square'
-    ? cased(`<rect x="${n(-ball)}" y="${n(L - ball * 0.9)}" width="${n(ball * 2)}" height="${n(ball * 1.8)}" rx="${n(ball * 0.18)}" fill="${PAPER}"/>`, 'medium') +
-      `<rect x="${n(-ball * 0.62)}" y="${n(L - ball * 0.52)}" width="${n(ball * 1.24)}" height="${n(ball * 1.04)}" rx="${n(ball * 0.1)}" fill="${PAPER}" ${sw('fine')}/>`
+    // Square paddle end, nearly face-on at the real lean.
+    ? cased(`<rect x="${n(-ball)}" y="${n(L - ball * 0.92)}" width="${n(ball * 2)}" height="${n(ball * 1.84)}" rx="${n(ball * 0.12)}" fill="${PAPER}"/>`, 'medium')
     : cased(`<circle cy="${n(L)}" r="${ball}" fill="${PAPER}"/>`, 'medium') + `<circle cx="${n(-ball * 0.3)}" cy="${n(L - ball * 0.3)}" r="${n(ball * 0.32)}" ${sw('fine')}/>`;
   if (Math.abs(k) < 1e-6) return tip;
   const s = Math.sign(k);
+  if (cap === 'square') {
+    // Flat lever widening from the root to the paddle: a trapezoid under the face.
+    const y1 = L - s * ball * 0.6;
+    return `<path d="M${n(-w0)} 0L${n(-ball * 0.9)} ${n(y1)}H${n(ball * 0.9)}L${n(w0)} 0Z" fill="${PAPER}" ${sw('medium')}/>` + tip;
+  }
   if (cap === 'ball') {
     // Teardrop: one outline from the round lever root, along the common
     // tangents, around the ball. Lever along +y, mirrored for an upward lean.

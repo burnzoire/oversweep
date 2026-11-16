@@ -31,7 +31,8 @@ export const fuel: PanelSpec = {
       'ENG FEED tick marks are not evenly spaced in the image: NORM measures 44° and FWD 52° either side of AFT. The measured angles are used; the reference cannot show whether the spacing comes from the cockpit model or the camera.',
       'The ENG FEED knob stands proud of the panel, so its top is offset by the camera angle; its centre and detents come from the printed ticks, not the knob.',
       'The FUEL MASTER switch is hidden by its closed guard except for the lever tip; its bushing size is not visible and the medium toggle is assumed.',
-      'TANK INERTING lever points almost straight at the camera; its OFF position is inferred from the legend layout.',
+      'TANK INERTING lever points almost straight at the camera; its OFF position is inferred from the legend layout, and the lever hides whether the bushing has a lock insert.',
+      'AIR REFUEL shows a lock-insert slot in its bushing, so it is drawn as a lever-lock switch; the guide text does not say.',
     ],
   },
   plate: [{ d: path('M8 3H432Q437 3 437 8V165Q437 170 432 170H8Q3 170 3 165V8Q3 3 8 3Z') }],
@@ -67,7 +68,7 @@ export const fuel: PanelSpec = {
     { component: 'guard-flip', control: 'fuel-master-guard', at: pt(83.5, 117), size: [mm(49), mm(91)] },
     { component: 'toggle-large', control: 'tank-inerting', at: pt(166, 104) },
     { component: 'rotary-pointer', control: 'eng-feed', at: pt(268, 103) },
-    { component: 'toggle-large-square', control: 'air-refuel', at: pt(366, 70) },
+    { component: 'toggle-large-square', control: 'air-refuel', at: pt(365, 67) },
   ],
   controls: [
     {
@@ -106,9 +107,10 @@ export const fuel: PanelSpec = {
       source: src,
     },
     {
-      id: 'air-refuel', name: 'AIR REFUEL switch', type: 'toggle', travel: 'vertical',
+      id: 'air-refuel', name: 'AIR REFUEL switch', type: 'toggle', travel: 'vertical', latched: true,
       positions: [{ id: 'open', label: 'OPEN', hold: 'stable' }, { id: 'close', label: 'CLOSE', hold: 'stable' }],
       initial: 'close',
+      protections: [{ kind: 'latch', verified: false, note: 'The guide image shows a lever-lock slot in the bushing, so it is drawn as latched. It moves with a plain click; the lock is not simulated.' }],
       description: 'OPEN opens the refuelling door, depressurises the tanks for refuelling and turns on the AR floodlights; below 400 knots it also sets the FLCS gains to takeoff and landing. CLOSE reverses this.',
       source: src,
     },
