@@ -12,7 +12,7 @@
 import type { ControlDef, Cut, PanelSpec, Placement, Pt } from './types';
 import {
   FASTENERS, FONT, INK, LAMPS, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, lampModuleFrame, lampRoundBezel, n,
-  pushBase, pushCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
+  pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
 } from './components.ts';
 
 const at = ([x, y]: Pt, body: string, extra = '') => `<g transform="translate(${n(x)} ${n(y)})"${extra}>${body}</g>`;
@@ -62,14 +62,23 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       const rot = c.travel === 'horizontal' ? ' transform="rotate(-90)"' : '';
       return at(p.at, toggleBase(p.component) + moving(c, state[c.id] ?? c.initial, i => toggleLever(p.component as keyof typeof TOGGLES, leans[i]), rot), ` data-art="${p.component}"`);
     }
-    case 'rotary-pointer': {
+    case 'rotary-pointer': case 'rotary-pointer-large': {
       const c = controlOf(spec, p.control);
       return at(p.at, rotaryBase(p.component) + moving(c, state[c.id] ?? c.initial, i =>
-        `<g transform="rotate(${c.positions[i].angle ?? 0})">${rotaryKnob(p.component as 'rotary-pointer')}</g>`), ` data-art="${p.component}"`);
+        `<g transform="rotate(${c.positions[i].angle ?? 0})">${rotaryKnob(p.component)}</g>`), ` data-art="${p.component}"`);
     }
     case 'push-round-large': {
       const c = controlOf(spec, p.control);
       return at(p.at, pushBase(p.component) + moving(c, state[c.id] ?? c.initial, i => pushCap(p.component as 'push-round-large', i > 0)), ` data-art="${p.component}"`);
+    }
+    case 'push-square': {
+      const c = controlOf(spec, p.control), [w, h] = p.size, li = 2.2;
+      // The legend is fixed on top of the moving cap; on a lit button it is the lamp's lens.
+      const legend = p.legend.map(l => text(0, l.y, l.text, l.cap, l.width)).join('');
+      const face = p.indicator
+        ? `<g data-indicator="${p.indicator}"><rect class="lens" x="${n(-w / 2 + li)}" y="${n(-h / 2 + li)}" width="${n(w - 2 * li)}" height="${n(h - 2 * li)}" rx="0.5" stroke="none"/>${legend}</g>`
+        : legend;
+      return at(p.at, pushSquareBase(p.size) + moving(c, state[c.id] ?? c.initial, i => pushSquareCap(p.size, i > 0)) + face, ' data-art="push-square"');
     }
     case 'guard-flip': {
       const c = controlOf(spec, p.control);
@@ -82,10 +91,14 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       cells.forEach((l, i) => {
         const [x, y, cw, ch] = l.rect;
         s += `<g data-indicator="${l.indicator}"><rect class="lens" x="${n(x)}" y="${n(y)}" width="${n(cw)}" height="${n(ch)}" rx="0.4" stroke="none"/>` +
-          (l.legend ? text(x + cw / 2, y + ch / 2, l.legend, 2.3, l.width) : '') + '</g>';
+          (l.halves
+            ? l.legend.split('\n').map((t, k) => text(x + cw / 2, y + ch * (k ? 0.75 : 0.25), t, l.cap ?? 2.3, lineWidth(l.width, k))).join('')
+            : legendLines(x + cw / 2, y + ch / 2, l.legend, l.cap ?? 2.3, l.width)) + '</g>';
+        if (l.halves) s += `<path d="M0.9 ${n(y + ch / 2)}H${n(w - 0.9)}" ${sw('fine')}/>`;
         if (i) s += `<path d="M0.9 ${n(y - 0.3)}H${n(w - 0.9)}" ${sw('fine')}/>`;
       });
-      void h;
+      // An unused module shows a dash across its blank lens.
+      if (p.blank) s += `<path d="M${n(w * 0.22)} ${n(h / 2)}H${n(w * 0.78)}" ${sw('medium')}/>`;
       return at(p.at, s, ' data-art="lamp-module"');
     }
     case 'lamp-round': {
@@ -94,6 +107,14 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
         `<g data-indicator="${p.indicator}"><circle class="lens" r="${lens}" ${sw('medium')}/></g>`, ' data-art="lamp-round"');
     }
   }
+}
+
+/** Lamp legend, centred on (x, y); `\n` splits it into stacked lines, each fitted to `width`. */
+const lineWidth = (w: number | number[] | undefined, k: number) => Array.isArray(w) ? w[k] : w;
+
+function legendLines(x: number, y: number, legend: string, cap: number, width?: number | number[]) {
+  const lines = legend ? legend.split('\n') : [], lead = cap * 1.35;
+  return lines.map((t, i) => text(x, y + (i - (lines.length - 1) / 2) * lead, t, cap, lineWidth(width, i))).join('');
 }
 
 /** Pivot crosshairs, component names and lamp rectangles: the placement guide. */
@@ -158,13 +179,17 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         const [bw, bh] = c.travel === 'horizontal' ? [long, wide] : [wide, long];
         return [{ kind: 'control', id: p.control, box: [x - bw / 2, y - bh / 2, bw, bh] }];
       }
-      case 'rotary-pointer': {
+      case 'rotary-pointer': case 'rotary-pointer-large': {
         const r = ROTARIES[p.component].skirt * 1.15;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }
       case 'push-round-large': {
         const r = PUSHES[p.component].r;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
+      }
+      case 'push-square': {
+        const [w, h] = p.size;
+        return [{ kind: 'control', id: p.control, box: [x - w / 2, y - h / 2, w, h] }];
       }
       case 'guard-flip': {
         // The lower half of the closed guard: the upper half is left to the switch it covers.

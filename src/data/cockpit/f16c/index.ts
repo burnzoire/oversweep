@@ -2,6 +2,10 @@ import type { AircraftCockpit } from '../types';
 import { elec } from './elec.ts';
 import { engJetStart } from './eng-jet-start.ts';
 import { fuel } from './fuel.ts';
+import { airCond } from './air-cond.ts';
+import { caution } from './caution.ts';
+import { rightEyebrow } from './right-eyebrow.ts';
+import { leftEyebrow } from './left-eyebrow.ts';
 
 /**
  * DCS F-16C cockpit catalogue: areas and panels in the order the official guide
@@ -24,8 +28,8 @@ export const f16cCockpit: AircraftCockpit = {
       id: 'instrument-panel', title: 'Instrument panel', panels: [
         { id: 'aoa-indexer', title: 'AoA indexer', page: 44 },
         { id: 'ar-nws-indicator', title: 'AR status / NWS indicator', page: 45 },
-        { id: 'left-eyebrow', title: 'Left eyebrow lights', page: 45 },
-        { id: 'right-eyebrow', title: 'Right eyebrow lights', page: 46 },
+        { id: 'left-eyebrow', title: 'Left eyebrow lights', page: 45, spec: leftEyebrow },
+        { id: 'right-eyebrow', title: 'Right eyebrow lights', page: 46, spec: rightEyebrow },
         { id: 'misc', title: 'MISC panel', page: 47 },
         { id: 'rf-switch', title: 'RF switch', page: 48 },
         { id: 'sai', title: 'Standby attitude indicator', page: 49 },
@@ -50,7 +54,7 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'compass', title: 'Magnetic compass', page: 58 },
         { id: 'fuel-qty', title: 'Fuel quantity indicator', page: 58 },
         { id: 'pfld', title: 'Pilot fault list display', page: 59 },
-        { id: 'caution', title: 'Caution light panel', page: 59 },
+        { id: 'caution', title: 'Caution light panel', page: 59, spec: caution },
         { id: 'hyd-pressure', title: 'Hydraulic pressure indicators', page: 61 },
         { id: 'epu-fuel', title: 'EPU fuel quantity indicator', page: 61 },
         { id: 'cabin-pressure', title: 'Cabin pressure indicator', page: 61 },
@@ -80,7 +84,7 @@ export const f16cCockpit: AircraftCockpit = {
       id: 'right-console', title: 'Right console', panels: [
         { id: 'snsr-pwr', title: 'SNSR PWR panel', page: 75 },
         { id: 'interior-lighting', title: 'Interior LIGHTING panel', page: 76 },
-        { id: 'air-cond', title: 'AIR COND panel', page: 76 },
+        { id: 'air-cond', title: 'AIR COND panel', page: 76, spec: airCond },
         { id: 'ky-58', title: 'KY-58 secure voice panel', page: 77 },
         { id: 'oxygen', title: 'OXYGEN regulator panel', page: 77 },
         { id: 'anti-ice', title: 'ANTI ICE & ANT SEL switches', page: 78 },

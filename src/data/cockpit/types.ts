@@ -121,7 +121,9 @@ export type Placement =
   | { component: RotaryArt; control: string; at: Pt }
   | { component: PushArt; control: string; at: Pt }
   | { component: 'guard-flip'; control: string; at: Pt; size: [w: number, h: number] }
-  | { component: LampModuleArt; at: Pt; size: [w: number, h: number]; lamps: LampCell[] }
+  /** Square pushbutton, centred on `at`; `legend` lines are placed by their centre `y` (mm from the centre). With `indicator`, the legend face is that lamp's lens. */
+  | { component: 'push-square'; control: string; at: Pt; size: [w: number, h: number]; legend: { text: string; cap: number; y: number; width?: number }[]; indicator?: string }
+  | { component: LampModuleArt; at: Pt; size: [w: number, h: number]; lamps: LampCell[]; /** Unused module: a dash across the blank lens. */ blank?: boolean }
   | { component: LampRoundArt; indicator: string; at: Pt }
   | { component: 'dzus'; at: Pt; cut?: Cut }
   | { component: 'screw' | 'screw-medium' | 'screw-small'; at: Pt };
@@ -130,7 +132,7 @@ export type Placement =
 export type Cut = 'up-left' | 'up-right' | 'down-left' | 'down-right';
 
 export type ToggleArt = 'toggle-large' | 'toggle-medium' | 'toggle-small' | 'toggle-large-cylinder' | 'toggle-large-square' | 'toggle-large-lock';
-export type RotaryArt = 'rotary-pointer';
+export type RotaryArt = 'rotary-pointer' | 'rotary-pointer-large';
 export type PushArt = 'push-round-large';
 export type LampModuleArt = 'lamp-module';
 /** A single round press-to-test style indicator lens in a bezel (JFS RUN). */
@@ -141,8 +143,12 @@ export interface LampCell {
   indicator: string;
   legend: string;
   rect: Rect;
-  /** Measured legend width (mm), to lock the lettering to the reference. */
-  width?: number;
+  /** Measured legend width (mm), to lock the lettering to the reference; one per line for a multi-line legend. */
+  width?: number | number[];
+  /** Legend cap height (mm); default 2.3. */
+  cap?: number;
+  /** One lamp behind a split lens: the two legend lines sit in the top and bottom halves (HYD/OIL over PRESS). */
+  halves?: boolean;
 }
 
 /** Fixed engraving on the plate: legends, rules, tick marks. */
