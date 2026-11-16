@@ -68,6 +68,39 @@ resolve in `source.unresolved`.
   angles where spacing varies, needle separate, raster and vector from the
   same geometry.
 
+## 3a. Drawing rules (Nathan's corrections; get these right first time)
+
+The guide's cockpit images are perspective shots from an off-axis camera.
+Measure what lies flat on the plate (legends, rules, fasteners) and correct
+everything that stands proud of it.
+
+- **Pivots sit on their legends' centre line.** A toggle's pivot is centred
+  between its position legends (e.g. START 1 / START 2), not where the
+  bushing or lever tip appears. Fixed parts placed around a control (wire
+  bails, guards) are symmetric about its pivot.
+- **Levers are drawn square-on** at their real lean (about 17° from the
+  panel normal), short, never with the camera's exaggerated length.
+- **Shaft base:** the lever's lowest circle is centred on the pivot. Do not
+  draw that circle as a separate line (it spoils the 3D read). Lever-locks
+  shift their base 0.7 mm toward the lean (lift and shift into the detent).
+- **Pick the toggle by the bushing:**
+  - plain toggle (`toggle-medium` etc.): round orange-red water-resistant
+    grommet, no hex nut, teardrop lever to a ball. Guarded switches are plain
+    toggles so the guard can shut them.
+  - lever-lock (lock insert and slot visible in the bushing): flat-topped
+    mushroom cap = `toggle-large-cylinder` (MAIN PWR); tapered shaft to a domed
+    cap = `toggle-large-lock` (JFS, MAX POWER, AB RESET, TANK INERTING); square
+    paddle on a trapezoid lever = `toggle-large-square` (AIR REFUEL).
+    The lock slot has square ends so it never reads as part of the lever.
+  - When the bushing is hidden, say so in `source.unresolved`.
+- **DZUS cut-outs:** the face plate is notched around each corner DZUS. Set
+  `cut` to the plate corner the notch opens toward (`up-left` …); it is drawn
+  as two straight edges with a quarter round about the fastener.
+- **Engraving stays clear** of fastener cut-outs and the plate edge; tighten
+  letter spacing rather than overlap.
+- Real-part datasheets (e.g. Honeywell TL series) are fine for a component's
+  shape; panel layout still traces from the sim guide only.
+
 ## 4. Review by onion skin, adjust, repeat
 
 ```

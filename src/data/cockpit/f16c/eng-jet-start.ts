@@ -42,9 +42,9 @@ export const engJetStart: PanelSpec = {
     // Vertical panel name and the FRICTION bracket on the left edge.
     ...([['E', 80], ['N', 98], ['G', 115], ['&', 143], ['J', 185], ['E', 200], ['T', 215], ['S', 253], ['T', 270], ['A', 287], ['R', 303], ['T', 320]] as const)
       .map(([t, y]) => L([10, y], t, 13, 9)),
-    ...([['F', 369], ['R', 386], ['I', 402], ['C', 416], ['T', 430], ['I', 444], ['O', 459], ['N', 474]] as const)
+    ...([['F', 367], ['R', 381], ['I', 395], ['C', 409], ['T', 423], ['I', 437], ['O', 451], ['N', 465]] as const)
       .map(([t, y]) => L([8, y], t, 8)),
-    { kind: 'path', d: path('M6 351H17V478M6 361L8 356L10 361ZM6 478L8 483L10 478Z') },
+    { kind: 'path', d: path('M6 351H17V476M6 361L8 356L10 361ZM6 472L8 477L10 472Z') },
     L([113, 13], 'JET FUEL', 8.5, 49),
     { kind: 'path', d: path('M37 11H82M143 11H188') },
     L([63, 33], 'RUN', 8.5, 21),
