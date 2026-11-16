@@ -119,7 +119,7 @@ export const interiorLighting: PanelSpec = {
     { component: 'knob-knurled-edge', control: 'primary-consoles', at: pt(...P_CONS) },
     { component: 'knob-knurled-edge', control: 'primary-inst-pnl', at: pt(...P_INST) },
     { component: 'knob-knurled-edge', control: 'primary-ded', at: pt(...P_DED) },
-    { component: 'knob-knurled-edge', control: 'flood-consoles', at: pt(...F_CONS) },
+    { component: 'knob-knurled-skirt', control: 'flood-consoles', at: pt(...F_CONS) },
     { component: 'knob-lobed', control: 'flood-inst-pnl', at: pt(...F_INST) },
     { component: 'toggle-medium', control: 'mal-ind-lts', at: pt(344, 267) },
   ],
