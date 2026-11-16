@@ -100,8 +100,10 @@ export const TOGGLES = {
    * vertical paddle (rectangle, semicircle end toward the pivot) overhanging
    * well past the bushing toward the selected position (UP: over the HOOK
    * plate). `reach` is the paddle's far end from the pivot; `ball` is half its width.
+   * Seen square-on, not with the guide image's low camera angle, so the
+   * paddle is foreshortened to about 13 mm from the pivot.
    */
-  'toggle-hook': { r: 4.4, reach: 20.6, ball: 4.1, cap: 'hook' },
+  'toggle-hook': { r: 4.4, reach: 13, ball: 4.1, cap: 'hook' },
   /** Plain toggle with a wide flat paddle, with three round grip bosses along its end (gear panel LIGHTS). `ball` is half the paddle width. */
   'toggle-paddle-wide': { r: 4.0, reach: 4.6, ball: 10, cap: 'wide' },
 } as const;
@@ -153,7 +155,7 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
     // Traced from the guide image: a short stem from the pivot to a flat
     // vertical paddle, a rectangle with a semicircular end toward the pivot
     // and a square-cornered far end, overhanging well past the bushing.
-    const s = Math.sign(k) || -1, Y = (y: number) => n(s * y), near = r * 1.27, c = near + ball;
+    const s = Math.sign(k) || -1, Y = (y: number) => n(s * y), near = r * 0.8, c = near + ball;
     const stem = `<rect x="${n(-r * 0.22)}" y="${n(Math.min(0, s * c))}" width="${n(r * 0.44)}" height="${n(c)}" fill="${PAPER}" ${sw('medium')}/>`;
     const paddle = `<path d="M${n(-ball)} ${Y(reach)}H${n(ball)}V${Y(c)}A${ball} ${ball} 0 0 ${s > 0 ? 0 : 1} ${n(-ball)} ${Y(c)}Z" fill="${PAPER}"/>`;
     return stem + cased(paddle, 'medium');
