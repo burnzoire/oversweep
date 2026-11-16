@@ -1,5 +1,6 @@
 import type { AircraftCockpit } from '../types';
 import { elec } from './elec.ts';
+import { engJetStart } from './eng-jet-start.ts';
 import { fuel } from './fuel.ts';
 
 /**
@@ -59,7 +60,7 @@ export const f16cCockpit: AircraftCockpit = {
     {
       id: 'left-console', title: 'Left console', panels: [
         { id: 'manual-pitch-override', title: 'Manual pitch override switch', page: 62 },
-        { id: 'eng-jet-start', title: 'ENG & JET START panel', page: 63 },
+        { id: 'eng-jet-start', title: 'ENG & JET START panel', page: 63, spec: engJetStart },
         { id: 'epu', title: 'EPU panel', page: 64 },
         { id: 'elec', title: 'ELEC panel', page: 64, spec: elec },
         { id: 'audio', title: 'AUDIO 1 & 2 panels', page: 65 },

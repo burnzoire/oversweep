@@ -28,6 +28,7 @@ export const fuel: PanelSpec = {
     scale: 'Plate width (434 px) taken as a standard 5.75 in (146.05 mm) console panel. This fixes the DZUS head size used on every panel.',
     shown: { 'fuel-master-guard': 'closed', 'fuel-master': 'master', 'tank-inerting': 'off', 'eng-feed': 'norm', 'air-refuel': 'close' },
     unresolved: [
+      'Levers stand proud of the panel and the camera is off-axis, so bushings appear shifted; each toggle pivot is set on the centre line of its legends.',
       'ENG FEED tick marks are not evenly spaced in the image: NORM measures 44° and FWD 52° either side of AFT. The measured angles are used; the reference cannot show whether the spacing comes from the cockpit model or the camera.',
       'The ENG FEED knob stands proud of the panel, so its top is offset by the camera angle; its centre and detents come from the printed ticks, not the knob.',
       'The FUEL MASTER switch is hidden by its closed guard except for the lever tip; its bushing size is not visible and the medium toggle is assumed.',
@@ -64,11 +65,11 @@ export const fuel: PanelSpec = {
     { component: 'dzus', at: pt(427, 131) },
     { component: 'screw-medium', at: pt(165, 25) },
     { component: 'screw-medium', at: pt(342, 147) },
-    { component: 'toggle-medium', control: 'fuel-master', at: pt(83, 41) },
-    { component: 'guard-flip', control: 'fuel-master-guard', at: pt(83.5, 117), size: [mm(49), mm(91)] },
-    { component: 'toggle-large-lock', control: 'tank-inerting', at: pt(166, 104) },
+    { component: 'toggle-medium', control: 'fuel-master', at: pt(81.5, 41) },
+    { component: 'guard-flip', control: 'fuel-master-guard', at: pt(81.5, 117), size: [mm(49), mm(91)] },
+    { component: 'toggle-large-lock', control: 'tank-inerting', at: pt(161, 104) },
     { component: 'rotary-pointer', control: 'eng-feed', at: pt(268, 103) },
-    { component: 'toggle-large-square', control: 'air-refuel', at: pt(365, 67) },
+    { component: 'toggle-large-square', control: 'air-refuel', at: pt(368, 67) },
   ],
   controls: [
     {

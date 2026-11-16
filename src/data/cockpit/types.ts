@@ -122,12 +122,15 @@ export type Placement =
   | { component: PushArt; control: string; at: Pt }
   | { component: 'guard-flip'; control: string; at: Pt; size: [w: number, h: number] }
   | { component: LampModuleArt; at: Pt; size: [w: number, h: number]; lamps: LampCell[] }
+  | { component: LampRoundArt; indicator: string; at: Pt }
   | { component: 'dzus' | 'screw' | 'screw-medium' | 'screw-small'; at: Pt };
 
 export type ToggleArt = 'toggle-large' | 'toggle-medium' | 'toggle-small' | 'toggle-large-cylinder' | 'toggle-large-square' | 'toggle-large-lock';
 export type RotaryArt = 'rotary-pointer';
 export type PushArt = 'push-round-large';
 export type LampModuleArt = 'lamp-module';
+/** A single round press-to-test style indicator lens in a bezel (JFS RUN). */
+export type LampRoundArt = 'lamp-round';
 
 /** One independently lit legend or bulb, rect relative to the module's top-left. */
 export interface LampCell {

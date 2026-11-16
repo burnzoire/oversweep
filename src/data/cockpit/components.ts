@@ -228,6 +228,17 @@ export function guardArt(size: [number, number], open: boolean) {
 
 /* ------------------------------------------------------------ lamp module */
 
+export const LAMPS = {
+  /** Round indicator: bezel and lens (JFS RUN). */
+  'lamp-round': { r: 5.8, lens: 4.4 },
+} as const;
+
+/** Round lamp bezel; the lens is drawn by the renderer as the lit element. */
+export function lampRoundBezel(art: keyof typeof LAMPS) {
+  const { r, lens } = LAMPS[art];
+  return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n((r + lens) / 2)}" ${sw('fine')}/>`;
+}
+
 /** Bezel around a set of lamp cells; `size` in mm, origin top-left. */
 export function lampModuleFrame(size: [number, number]) {
   const [w, h] = size, i = 0.9;

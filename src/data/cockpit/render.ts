@@ -11,7 +11,7 @@
  */
 import type { ControlDef, PanelSpec, Placement, Pt } from './types';
 import {
-  FASTENERS, FONT, INK, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, lampModuleFrame, n,
+  FASTENERS, FONT, INK, LAMPS, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, lampModuleFrame, lampRoundBezel, n,
   pushBase, pushCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
 } from './components.ts';
 
@@ -63,6 +63,11 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       });
       void h;
       return at(p.at, s, ' data-art="lamp-module"');
+    }
+    case 'lamp-round': {
+      const { lens } = LAMPS[p.component];
+      return at(p.at, lampRoundBezel(p.component) +
+        `<g data-indicator="${p.indicator}"><circle class="lens" r="${lens}" ${sw('medium')}/></g>`, ' data-art="lamp-round"');
     }
   }
 }
@@ -140,6 +145,10 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         // The lower half of the closed guard: the upper half is left to the switch it covers.
         const [gw, gh] = p.size;
         return [{ kind: 'control', id: p.control, box: [x - gw / 2, y - gh * 0.5, gw, gh * 0.5] }];
+      }
+      case 'lamp-round': {
+        const r = LAMPS[p.component].r;
+        return [{ kind: 'indicator', id: p.indicator, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }
       case 'lamp-module':
         return p.lamps.map(l => ({ kind: 'indicator', id: l.indicator, box: [x + l.rect[0], y + l.rect[1], l.rect[2], l.rect[3]] as [number, number, number, number] }));
