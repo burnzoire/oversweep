@@ -126,6 +126,10 @@ fit, check it on the other panels before changing it.
 - `node --test tests/cockpit.test.mjs`, `npm run check`.
 - Drive the page in Playwright: every control both ways, guards, momentary
   release, state kept after moving to another panel and back, no page errors.
-- Add the overlay and side-by-side images to the PR (pr-screenshots branch)
-  with desktop and phone screenshots, and the `preview` label.
+- Required in every panel PR (Nathan 2026-11-16, he reviews from these): for
+  each new or changed panel, the final `-side.png` (guide source image next to
+  the drawing) at the top of its section in the PR description, then the
+  overlay, then desktop and phone page screenshots. Re-render them from the
+  final commit and push them to the pr-screenshots branch (`pr-<N>/side-<panel>.png`).
+  Add the `preview` label.
 - Ask Nathan to confirm in-sim behaviour the guide does not state.

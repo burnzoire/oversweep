@@ -177,6 +177,8 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
 export const ROTARIES = {
   /** Bar-pointer selector on a round skirt (ENG FEED). */
   'rotary-pointer': { skirt: 10.2, bar: 9.6, barBack: 4.8, barFront: 3.4 },
+  /** Larger bar-pointer selector (AIR COND TEMP and AIR SOURCE). */
+  'rotary-pointer-large': { skirt: 13, bar: 12.2, barBack: 6.1, barFront: 4.3 },
 } as const;
 
 export function rotaryBase(art: keyof typeof ROTARIES) {
@@ -208,6 +210,18 @@ export function pushCap(art: keyof typeof PUSHES, pressed: boolean) {
   const { cap } = PUSHES[art];
   const c = pressed ? cap * 0.9 : cap;
   return cased(`<circle r="${n(c)}" fill="${PAPER}"/>`, 'medium') + (pressed ? `<circle r="${n(c * 0.8)}" ${sw('fine')}/>` : '');
+}
+
+/** Square pushbutton housing, `size` in mm, centred on the origin. */
+export function pushSquareBase([w, h]: [number, number]) {
+  return cased(`<rect x="${n(-w / 2)}" y="${n(-h / 2)}" width="${n(w)}" height="${n(h)}" rx="1.2" fill="${PAPER}"/>`, 'heavy');
+}
+
+/** Square pushbutton cap, inset in its housing; pressed, it sinks (smaller, with a shadow line). */
+export function pushSquareCap([w, h]: [number, number], pressed: boolean) {
+  const i = pressed ? 1.5 : 1.0, cw = w - 2 * i, ch = h - 2 * i;
+  return cased(`<rect x="${n(-cw / 2)}" y="${n(-ch / 2)}" width="${n(cw)}" height="${n(ch)}" rx="0.8" fill="${PAPER}"/>`, 'medium') +
+    (pressed ? `<rect x="${n(-cw / 2 + 0.6)}" y="${n(-ch / 2 + 0.6)}" width="${n(cw - 1.2)}" height="${n(ch - 1.2)}" rx="0.5" fill="none" ${sw('fine')}/>` : '');
 }
 
 /* ----------------------------------------------------------------- guards */
