@@ -93,7 +93,7 @@ everything that stands proud of it.
     paddle on a trapezoid lever = `toggle-large-square` (AIR REFUEL).
     The lock slot has square ends so it never reads as part of the lever.
   - When the bushing is hidden, say so in `source.unresolved`.
-- **DZUS cut-outs:** the face plate is notched around each corner DZUS. Set
+- **DZUS cut-outs:** only where the guide shows one, the top plate layer (last `plate` entry) is notched around a corner DZUS; lower layers keep their outline. Set
   `cut` to the plate corner the notch opens toward (`up-left` …); it is drawn
   as two straight edges with a quarter round about the fastener.
 - **Engraving stays clear** of fastener cut-outs and the plate edge; tighten
