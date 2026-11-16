@@ -94,7 +94,7 @@ export const TOGGLES = {
    */
   'toggle-large-square': { r: 4.0, reach: 4.6, ball: 3.3, cap: 'square', lock: true },
   /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). */
-  'toggle-large-lock': { r: 5.2, reach: 6.0, ball: 2.8, cap: 'dome', lock: true },
+  'toggle-large-lock': { r: 6.24, reach: 7.2, ball: 3.36, cap: 'dome', lock: true },
   /**
    * One-off HOOK lever: a long flat tongue, narrow at a round bushing with an
    * oblong slot and widening to a rounded end that overhangs well past the
@@ -230,8 +230,8 @@ export const PUSHES = {
   'push-round-large': { r: 6.6, cap: 4.5 },
   /** Gear panel DN LOCK REL. */
   'push-round-xl': { r: 7.8, cap: 6.0 },
-  /** Gear panel EMER STORES JETTISON. */
-  'push-round-xxl': { r: 14, cap: 10.5 },
+  /** Gear panel EMER STORES JETTISON: a large flat cap with a circle-and-square mark at its centre. */
+  'push-round-xxl': { r: 14, cap: 10.5, mark: true },
 } as const;
 
 export function pushBase(art: keyof typeof PUSHES) {
@@ -242,8 +242,12 @@ export function pushBase(art: keyof typeof PUSHES) {
 /** Cap out (`in` false) or pressed in (drawn smaller with a deeper shadow ring). */
 export function pushCap(art: keyof typeof PUSHES, pressed: boolean) {
   const { cap } = PUSHES[art];
-  const c = pressed ? cap * 0.9 : cap;
-  return cased(`<circle r="${n(c)}" fill="${PAPER}"/>`, 'medium') + (pressed ? `<circle r="${n(c * 0.8)}" ${sw('fine')}/>` : '');
+  const c = pressed ? cap * 0.9 : cap, t = PUSHES[art];
+  // Centre mark (EMER STORES JETTISON): a square overlaid on a circle, sized from the guide image.
+  const q = c * 0.34, m = 'mark' in t && t.mark
+    ? `<circle r="${n(c * 0.4)}" ${sw('fine')}/><rect x="${n(-q)}" y="${n(-q)}" width="${n(2 * q)}" height="${n(2 * q)}" rx="${n(q * 0.12)}" ${sw('fine')}/>`
+    : '';
+  return cased(`<circle r="${n(c)}" fill="${PAPER}"/>`, 'medium') + (pressed ? `<circle r="${n(c * 0.8)}" ${sw('fine')}/>` : '') + m;
 }
 
 /** Square pushbutton housing, `size` in mm, centred on the origin. */
