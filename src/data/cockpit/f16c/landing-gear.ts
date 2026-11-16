@@ -66,9 +66,9 @@ export const landingGear: PanelSpec = {
     ],
   },
   plate: [
-    { d: path('M139 23H449Q453 23 453 27V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23Z') },
+    { d: path('M139 23L449 29Q453 29.1 453 33V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23Z') },
     // Top layer, cut away for the gear handle's channel and, to its lower left, the recess round DN LOCK REL.
-    { d: path('M139 23H449Q453 23 453 27V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23ZM397 190H447V374H322V287H397Z'), raised: true },
+    { d: path('M139 23L449 29Q453 29.1 453 33V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23ZM397 190H447V374H322V287H397Z'), raised: true },
   ],
   engraving: [
     // EMER STORES JETTISON: legend, and the hazard-striped square around the button.
@@ -121,9 +121,9 @@ export const landingGear: PanelSpec = {
     L([217, 310], '+', 7),
   ],
   placements: [
-    { component: 'dzus', at: pt(147, 43) },
-    { component: 'dzus', at: pt(438, 43) },
-    { component: 'dzus', at: pt(437, 402) },
+    { component: 'dzus', at: pt(147, 43), cut: 'up-left' },
+    { component: 'dzus', at: pt(438, 43), cut: 'up-right' },
+    { component: 'dzus', at: pt(437, 402), cut: 'down-right' },
     { component: 'screw-medium', at: pt(280, 48) },
     { component: 'screw-medium', at: pt(22, 270) },
     { component: 'screw-medium', at: pt(142, 397) },
