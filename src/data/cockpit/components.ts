@@ -78,6 +78,8 @@ export const TOGGLES = {
   'toggle-large': { r: 5.2, reach: 5.6, ball: 3.2, cap: 'ball' },
   'toggle-medium': { r: 4.0, reach: 4.3, ball: 2.5, cap: 'ball' },
   'toggle-small': { r: 3.0, reach: 3.2, ball: 1.9, cap: 'ball' },
+  /** Miniature toggle on a hex nut with a thin lever and a small ball tip (UHF backup TONE and SQUELCH). `r` is the nut's corner radius. */
+  'toggle-mini-hex': { r: 3.4, reach: 3.4, ball: 1.25, cap: 'ball', hex: true },
   /**
    * Pull-to-unlock (lever-lock) switch, MAIN PWR. Proportions from the
    * Honeywell MICRO SWITCH TL-series mounting drawing (p. 45): 15/32 in
@@ -86,7 +88,7 @@ export const TOGGLES = {
    * projects only ~26.7·sin 17° and the cap stays almost face-on (cos 17°).
    * `ball` is the cap radius.
    */
-  'toggle-large-cylinder': { r: 5.2, reach: 4.9, ball: 3.45, cap: 'cylinder', lock: true },
+  'toggle-large-cylinder': { r: 5.2, reach: 6.4, ball: 3.45, cap: 'cylinder', lock: true },
   /**
    * Medium bushing with a flat lever widening (trapezoid) to a square paddle
    * (AIR REFUEL). The guide image shows a lock-insert slot in the bushing, so
@@ -131,10 +133,16 @@ export function toggleBase(art: keyof typeof TOGGLES) {
       cased(`<circle r="${n(ri)}" fill="${PAPER}"/>`, 'medium') +
       `<rect x="${n(-sw2)}" y="${n(-sl)}" width="${n(sw2 * 2)}" height="${n(sl * 2)}" ${sw('medium')}/><path d="${notches}" ${sw('fine')}/>`;
   }
+  if ('hex' in t) {
+    // Hex mounting nut (flats top and bottom) round the threaded bushing and its lever hole.
+    const hx = Array.from({ length: 6 }, (_, i) => { const a = (i / 6) * 2 * Math.PI; return `${n(r * Math.cos(a))} ${n(r * Math.sin(a))}`; });
+    return cased(`<path d="M${hx.join('L')}Z" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.62)}" ${sw('fine')}/>` +
+      `<circle r="${n(r * 0.34)}" ${sw('fine')}/>`;
+  }
   // Plain toggle: the bushing is covered by a round water-resistant grommet
   // (orange-red in the jet), a raised ring with the lever rising from its centre.
   return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + cased(`<circle r="${n(r * 0.72)}" fill="${PAPER}"/>`, 'medium') +
-    `<circle r="${n(r * 0.58)}" ${sw('fine')}/><circle r="${n(r * 0.36)}" ${sw('fine')}/>`;
+    `<circle r="${n(r * 0.6)}" ${sw('fine')}/><circle r="${n(r * 0.44)}" ${sw('fine')}/>`;
 }
 
 /**
@@ -147,7 +155,7 @@ const LOCK_SHIFT = 0.7;
 export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   const t = TOGGLES[art], { r, reach, ball, cap } = t;
   const L = reach * k;
-  const w0 = cap === 'cylinder' ? ball * 0.58 : cap === 'dome' ? r * 0.3 : r * 0.3, w1 = cap === 'dome' ? ball * 0.8 : ball * 0.62;
+  const w0 = cap === 'cylinder' ? ball * 0.58 : 'hex' in t ? r * 0.17 : r * 0.3, w1 = cap === 'dome' ? ball * 0.8 : ball * 0.62;
   // Mushroom cap: the lever leans only ~17° from the panel normal, so the cap stays almost square to the
   // viewer (a near-circle). Its top is nearly flat, so no inner ring.
   const face = (ry: number) => cased(`<ellipse cy="${n(L)}" rx="${ball}" ry="${n(ry)}" fill="${PAPER}"/>`, 'medium');
@@ -199,7 +207,11 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
     const sweep = s > 0 ? 1 : 0;
     const drop = `<path d="M${n(p0r[0])} ${Y(p0r[1])}L${n(p1r[0])} ${Y(p1r[1])}A${r1} ${r1} 0 1 ${sweep} ${n(p1l[0])} ${Y(p1l[1])}` +
       `L${n(p0l[0])} ${Y(p0l[1])}A${n(r0)} ${n(r0)} 0 0 ${sweep} ${n(p0r[0])} ${Y(p0r[1])}Z" fill="${PAPER}"/>`;
-    return cased(drop, 'medium');
+    // Top of the bulbous tip: the ball's own outline on the lever side, left
+    // unjoined from the teardrop so the ball reads as a smooth dome.
+    const rt = r1 * 0.97, e = 0.85, tx = rt * Math.sin(e), ty = d - rt * Math.cos(e);
+    const top = `<path d="M${n(-tx)} ${Y(ty)}A${n(rt)} ${n(rt)} 0 0 ${s > 0 ? 1 : 0} ${n(tx)} ${Y(ty)}" fill="none" ${sw('fine')}/>`;
+    return cased(drop, 'medium') + top;
   }
   // Shaft: round root at the bushing, straight flanks widening out to the cap
   // (cylinder: flat mushroom cap; dome: rounded cap a little wider than the shaft).
@@ -216,6 +228,124 @@ export const ROTARIES = {
   'rotary-pointer-large': { skirt: 13, bar: 12.2, barBack: 6.1, barFront: 4.3 },
 } as const;
 
+/**
+ * Knobs that turn as a whole, with no fixed skirt: the body is the moving part.
+ * `r` is the body radius (mm); `lobes` > 0 scallops the rim (knurled grip);
+ * `ridge` is the raised bar across the face as [half-length, half-width] in
+ * fractions of `r`; the white index line runs from the centre out along the
+ * bar to the pointing end.
+ */
+export const KNOBS = {
+  /** Small round knob with very fine grip lines round the rim and no index (ECM DIM). */
+  'knob-fine-knurl-small': { r: 4.8, lobes: 32, ridge: [0, 0], fine: true },
+  /** Small knurled selector (EXT LIGHTING ANTI-COLL). */
+  'knob-knurled-small': { r: 7.9, lobes: 12, ridge: [0.82, 0.16] },
+  /** Knurled dimmer (EXT LIGHTING FORM). */
+  'knob-knurled': { r: 9.4, lobes: 12, ridge: [0.82, 0.13] },
+  /** Plain round knob with a wide raised bar (EXT LIGHTING MASTER). */
+  'knob-bar': { r: 10, lobes: 0, ridge: [0.96, 0.22], bar: true },
+  /** Round base under a three-armed grip with deep hollows between the arms, index bar along one arm (EXT LIGHTING AERIAL REFUELING). */
+  'knob-lobed': { r: 10.4, lobes: 0, ridge: [0.7, 0.13], grip: 3 },
+  /** Round knob crossed by a broad raised grip band that runs rim to rim (EXT LIGHTING MASTER). */
+  'knob-bar-thick': { r: 10, lobes: 0, ridge: [1, 0.4], band: true },
+  /** Round knob with a wide raised bar, smaller than knob-bar (UHF backup CHAN and frequency knobs). */
+  'knob-bar-medium': { r: 7.2, lobes: 0, ridge: [0.96, 0.22], bar: true },
+  /** Round knob crossed by a spindle grip, thickest at the centre and tapering to rounded ends; no index line (UHF backup CHAN). */
+  'knob-spindle': { r: 10, lobes: 0, ridge: [0.95, 0.3], spindle: true },
+  /** Very small knurled knob (UHF backup VOL). */
+  'knob-knurled-mini': { r: 4.8, lobes: 12, ridge: [0.8, 0.16] },
+  /**
+   * Large radio selector (UHF backup function and mode knobs): a broad skirt
+   * with a raised centre boss, a flat lever running from the boss to the rim
+   * opposite the pointer, and a white index bar set into the rim at the
+   * pointing end. The whole knob turns.
+   */
+  'knob-radio-large': { r: 12.4, lobes: 0, ridge: [0, 0], lever: true },
+} as const;
+
+/** A KNOBS body pointing at 12 o'clock; the renderer turns it to the detent. */
+export function knobArt(art: keyof typeof KNOBS) {
+  const { r, lobes, ridge } = KNOBS[art];
+  if ('lever' in KNOBS[art]) {
+    // Traced from the guide's p. 262 UHF mode knob (proportions of r).
+    const k = (v: number) => n(v * r);
+    const lever = `M${k(-0.19)} ${k(-0.21)}L${k(-0.27)} ${k(0.08)}V${k(0.9)}Q0 ${k(1.03)} ${k(0.27)} ${k(0.9)}V${k(0.08)}L${k(0.19)} ${k(-0.21)}Q0 ${k(-0.28)} ${k(-0.19)} ${k(-0.21)}Z`;
+    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') +
+      `<circle r="${k(0.69)}" ${sw('fine')}/>` +
+      `<path d="${lever}" fill="${PAPER}" ${sw('medium')}/>` +
+      // Indicator: only the white index set into the rim (nothing at the centre).
+      `<rect x="${k(-0.075)}" y="${k(-1.04)}" width="${k(0.15)}" height="${k(0.33)}" rx="${k(0.02)}" fill="${PAPER}" ${sw('heavy')}/>`;
+  }
+  let rim: string;
+  if (!lobes) rim = `<circle r="${r}" fill="${PAPER}"/>`;
+  else {
+    // Scalloped rim: a bump per lobe (shallow for knurling, deep for broad lobes).
+    const depth = 'fine' in KNOBS[art] ? 0.035 : lobes > 6 ? 0.06 : 0.26, N = lobes * 16, pts: string[] = [];
+    for (let i = 0; i <= N; i++) {
+      const a = (i / N) * 2 * Math.PI, rr = r * (1 - depth / 2 + (depth / 2) * Math.cos(lobes * a));
+      pts.push(`${n(rr * Math.sin(a))} ${n(-rr * Math.cos(a))}`);
+    }
+    rim = `<path d="M${pts.join('L')}Z" fill="${PAPER}"/>`;
+  }
+  const [hl, hw] = ridge.map(f => f * r);
+  const t = KNOBS[art];
+  if ('spindle' in t) {
+    // Spindle grip: half-width hw at the centre, narrowing to round ends; the grip itself is the pointer.
+    const we = hw * 0.45, yt = hl - we, cx = 2 * hw - we;
+    const grip = `M${n(-we)} ${n(-yt)}A${n(we)} ${n(we)} 0 0 1 ${n(we)} ${n(-yt)}Q${n(cx)} 0 ${n(we)} ${n(yt)}` +
+      `A${n(we)} ${n(we)} 0 0 1 ${n(-we)} ${n(yt)}Q${n(-cx)} 0 ${n(-we)} ${n(-yt)}Z`;
+    return cased(rim, 'heavy') + `<path d="${grip}" fill="${PAPER}" ${sw('medium')}/>`;
+  }
+  if ('band' in t) {
+    // Grip band clipped by the rim; the index runs from the rim to the centre.
+    const yc = n(Math.sqrt(r * r - hw * hw));
+    const band = `M${n(-hw)} -${yc}V${yc}A${r} ${r} 0 0 0 ${n(hw)} ${yc}V-${yc}A${r} ${r} 0 0 0 ${n(-hw)} -${yc}Z`;
+    return cased(rim, 'heavy') + `<path d="${band}" fill="${PAPER}" ${sw('medium')}/>` +
+      `<rect x="${n(-hw * 0.3)}" y="${n(-r * 0.85)}" width="${n(hw * 0.6)}" height="${n(r * 0.85)}" fill="${PAPER}" ${sw('medium')}/>`;
+  }
+  if ('grip' in t) {
+    // Three-armed grip: rounded arm ends near the rim, deep hollows between them.
+    const N = 144, pts: string[] = [];
+    for (let i = 0; i <= N; i++) {
+      // Each arm is a round-ended spoke (capsule) from the centre; find where this ray leaves their union.
+      const a = (i / N) * 2 * Math.PI, L = 0.64 * r, w = 0.33 * r;
+      const inside = (d: number) => Array.from({ length: t.grip }, (_, k) => (k / t.grip) * 2 * Math.PI).some(b => {
+        const x = d * Math.sin(a - b), y = d * Math.cos(a - b), py = Math.max(0, Math.min(L, y));
+        return Math.hypot(x, y - py) <= w;
+      });
+      let lo = 0, hi: number = r;
+      for (let j = 0; j < 30; j++) { const m = (lo + hi) / 2; if (inside(m)) lo = m; else hi = m; }
+      const rr = lo;
+      pts.push(`${n(rr * Math.sin(a))} ${n(-rr * Math.cos(a))}`);
+    }
+    return cased(rim, 'heavy') + `<circle r="${n(r * 0.9)}" ${sw('fine')}/>` +
+      cased(`<path d="M${pts.join("L")}Z" fill="${PAPER}"/>`, "heavy") + armIndex(0.64 * r, 0.33 * r, hw);
+  }
+  // Bar knobs: the raised bar is the grip and runs across the centre. Other
+  // knobs: the white indicator bar starts at the centre and runs out to the
+  // pointing end.
+  if ('bar' in t) return cased(rim, 'heavy') +
+    `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(2 * hl)}" rx="${n(hw * 0.6)}" fill="${PAPER}" ${sw('medium')}/>` +
+    `<path d="M0 ${n(-hl + hw)}V0" ${sw('heavy')}/>`;
+  return cased(rim, 'heavy') + (hl ? indicator(hl, hw) : '');
+}
+
+/**
+ * A grip arm's white index bar: from the centre out to the arm's round end
+ * (arm length `L`, half-width `w`), flush with the edge, with no cap of its own.
+ */
+function armIndex(L: number, w: number, hw: number) {
+  const yc = L + Math.sqrt(w * w - hw * hw);
+  return `<path d="M${n(-hw)} 0V${n(-yc)}A${n(w)} ${n(w)} 0 0 1 ${n(hw)} ${n(-yc)}V0Z" fill="${PAPER}" ${sw('medium')}/>` +
+    `<path d="M0 ${n(-L - w)}V0" ${sw('heavy')}/>`;
+}
+
+/** A knob's white indicator bar from the centre out to `hl`, with its index line. */
+function indicator(hl: number, hw: number) {
+  return `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl + hw)}" rx="${n(hw * 0.6)}" fill="${PAPER}" ${sw('medium')}/>` +
+    `<path d="M0 ${n(-hl + hw)}V0" ${sw('heavy')}/>`;
+}
+
 export function rotaryBase(art: keyof typeof ROTARIES) {
   const { skirt } = ROTARIES[art];
   return cased(`<circle r="${skirt}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(skirt * 0.9)}" ${sw('fine')}/>`;
@@ -226,12 +356,16 @@ export function rotaryKnob(art: keyof typeof ROTARIES) {
   const { bar, barBack, barFront } = ROTARIES[art];
   const body = `M${-barFront} ${-bar}Q0 ${n(-bar - 1.2)} ${barFront} ${-bar}L${barBack} ${n(bar * 0.82)}Q0 ${n(bar * 1.08)} ${-barBack} ${n(bar * 0.82)}Z`;
   return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') +
-    `<path d="M0 ${n(-bar + 0.9)}V${n(-bar * 0.25)}" ${sw('heavy')}/>`;
+    `<path d="M0 ${n(-bar + 0.9)}V0" ${sw('heavy')}/>`;
 }
 
 /* ------------------------------------------------------------ pushbuttons */
 
 export const PUSHES = {
+  /** Small round button (ECM RESET and BIT). */
+  'push-round-small': { r: 3.4, cap: 2.5 },
+  /** Medium round button (UHF backup TEST DISPLAY and STATUS). */
+  'push-round-medium': { r: 4.1, cap: 3.2 },
   'push-round-large': { r: 6.6, cap: 4.5 },
   /** Gear panel DN LOCK REL. */
   'push-round-xl': { r: 7.8, cap: 6.0 },

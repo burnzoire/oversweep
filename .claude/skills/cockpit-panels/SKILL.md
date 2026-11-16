@@ -105,6 +105,20 @@ everything that stands proud of it.
   as two straight edges with a quarter round about the fastener.
 - **Engraving stays clear** of fastener cut-outs and the plate edge; tighten
   letter spacing rather than overlap.
+- **Square controls up with their legends.** The camera's perspective shifts
+  knobs, switches and legends off their shared lines. Put a control and its
+  legends on common centre lines (a toggle between its position legends, a
+  row of knobs on one y, a knob centred under its title), and point each
+  rotary detent straight at its legend. Space detents evenly where the
+  legends only look uneven through perspective, and put the legends on their
+  detent lines.
+- **Knob indicator lines start at the centre** and run out to the pointing
+  end; only a bar knob's grip (CHAN, frequency knobs) crosses the centre.
+- **Trace one-off knob grips** (three-armed AERIAL REFUELING grip, MASTER's
+  broad band, the UHF radio selector's lever) as their own components.
+- **Unlit displays** show faint outlines of their segment digits (UHF uses
+  10-segment LEDs: seven bars with a split middle and two diagonals); use a
+  `faint` engraving path.
 - Real-part datasheets (e.g. Honeywell TL series) are fine for a component's
   shape; panel layout still traces from the sim guide only.
 
@@ -119,6 +133,36 @@ ids, lamp rectangles). Check fasteners, bezels, pivots, lamp rectangles, tick
 counts/spacing/lengths, label positions and widths, needle silhouette. Move
 what does not register and run again. If a shared component's size does not
 fit, check it on the other panels before changing it.
+
+**Self-correct before reporting (Nathan, 2026-11-16).** Never send a panel
+for review straight off the first render. For every panel, open the overlay
+and walk it control by control: body outline, centre, indicator, grip shape
+and lever type against the source; legends against the drawing. List each
+mismatch, fix it, re-render, and repeat until the only differences left are
+deliberate ones (square-on levers, controls squared with legends) or are
+recorded in `source.unresolved`. Zoom (`g.py`-style crops at 4x) on anything
+you cannot judge at full size, especially knob grips and bushings.
+
+**Measure plate steps and cut-outs; never guess them (Nathan, 2026-11-16).**
+For every DZUS, slot, strip, well and layer step:
+1. Zoom each one: `python3 -I scripts/panel-zoom.py <rect.png> x0 y0 x1 y1 6 out.png`
+   (contrast-stretched crop with a 5 px grid beside its edge map). Decide the
+   shape from what is visible: corner notch, side slot with a half-round end,
+   long strip, well.
+2. Measure each straight edge with `python3 -I scripts/panel-edge.py <rect.png>
+   row|col ...`, scanning rows or columns where nothing else (fastener rims,
+   legends, knobs) crosses, and take the position most lines agree on. Read
+   corner and end radii off the zoom where they are visible.
+3. Write the measured numbers into the plate path, with a comment giving them.
+   Where an edge is hidden (under a rim, a legend), say so in the comment and in
+   `unresolved` rather than inventing it.
+4. Check with `python3 -I scripts/panel-cut-sheet.py <rect.png> <out>-overlay.png
+   sheet.png "TL:x0,y0,x1,y1" ...` (source crop beside the overlay for each
+   cut-out), and show that sheet in the PR.
+
+Shapes seen so far: EXT LIGHTING has corner notches with ~10 px rounded inner
+corners; ECM has side slots with a half-round end centred on each DZUS; UHF
+has long DZUS strips with ~7 px rounded corners and a square-cornered card well.
 
 ## 5. Ship
 

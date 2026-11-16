@@ -12,7 +12,7 @@
 import type { ControlDef, Cut, PanelSpec, Placement, Pt } from './types';
 import {
   FASTENERS, FONT, INK, LAMPS, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, lampModuleFrame, lampRoundBezel, n,
-  gearKnob, gearSlot, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
+  gearKnob, gearSlot, knobArt, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
 } from './components.ts';
 
 const at = ([x, y]: Pt, body: string, extra = '') => `<g transform="translate(${n(x)} ${n(y)})"${extra}>${body}</g>`;
@@ -62,7 +62,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
         return cut + at(p.at, fastener(p.component), ` class="${p.component}"`);
       }
       return at(p.at, fastener(p.component), ` class="${p.component}"`);
-    case 'toggle-large': case 'toggle-medium': case 'toggle-small': case 'toggle-large-cylinder': case 'toggle-large-square': case 'toggle-large-lock': case 'toggle-paddle-wide': case 'toggle-hook': {
+    case 'toggle-large': case 'toggle-medium': case 'toggle-small': case 'toggle-large-cylinder': case 'toggle-large-square': case 'toggle-large-lock': case 'toggle-paddle-wide': case 'toggle-hook': case 'toggle-mini-hex': {
       const c = controlOf(spec, p.control), leans = toggleLeans(c.positions.length);
       const rot = c.travel === 'horizontal' ? ' transform="rotate(-90)"' : '';
       return at(p.at, toggleBase(p.component) + moving(c, state[c.id] ?? c.initial, i => toggleLever(p.component as keyof typeof TOGGLES, leans[i]), rot), ` data-art="${p.component}"`);
@@ -72,7 +72,12 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       return at(p.at, rotaryBase(p.component) + moving(c, state[c.id] ?? c.initial, i =>
         `<g transform="rotate(${c.positions[i].angle ?? 0})">${rotaryKnob(p.component)}</g>`), ` data-art="${p.component}"`);
     }
-    case 'push-round-large': case 'push-round-xl': case 'push-round-xxl': {
+    case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': {
+      const c = controlOf(spec, p.control);
+      return at(p.at, moving(c, state[c.id] ?? c.initial, i =>
+        `<g transform="rotate(${c.positions[i].angle ?? 0})">${knobArt(p.component)}</g>`), ` data-art="${p.component}"`);
+    }
+    case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-xxl': {
       const c = controlOf(spec, p.control), art = p.component;
       return at(p.at, pushBase(art) + moving(c, state[c.id] ?? c.initial, i => pushCap(art, i > 0)), ` data-art="${p.component}"`);
     }
@@ -159,7 +164,7 @@ export function renderPanel(spec: PanelSpec, opts: RenderOptions = {}) {
     cased(`<path d="${p.d}" fill="${PAPER}" fill-rule="evenodd"/>`, i === 0 || p.raised ? 'heavy' : 'medium')).join('');
   const engraving = spec.engraving.map(e => e.kind === 'text'
     ? text(e.at[0], e.at[1], e.text, e.cap, e.width, e.anchor)
-    : `<path d="${e.d}" ${sw(e.pen ?? 'medium')}/>`).join('');
+    : `<path d="${e.d}" ${sw(e.pen ?? 'medium')}${e.faint ? ' stroke-opacity="0.3"' : ''}/>`).join('');
   return `<svg class="cockpit-svg" viewBox="0 0 ${n(w)} ${n(h)}" xmlns="http://www.w3.org/2000/svg" ${opts.label ? `role="img" aria-label="${esc(opts.label)}"` : 'aria-hidden="true"'}>` +
     `<g fill="none" stroke="${INK}" stroke-linejoin="round" stroke-linecap="round" font-family="${FONT}" font-weight="600">` +
     `<defs><clipPath id="plate-${spec.id}"><path d="${spec.plate[spec.plate.length - 1].d}"/></clipPath><clipPath id="base-${spec.id}"><path d="${spec.plate[0].d}"/></clipPath></defs>` +
@@ -185,7 +190,7 @@ export function hitZones(spec: PanelSpec): HitZone[] {
   return spec.placements.flatMap((p): HitZone[] => {
     const [x, y] = p.at;
     switch (p.component) {
-      case 'toggle-large': case 'toggle-medium': case 'toggle-small': case 'toggle-large-cylinder': case 'toggle-large-square': case 'toggle-large-lock': case 'toggle-paddle-wide': case 'toggle-hook': {
+      case 'toggle-large': case 'toggle-medium': case 'toggle-small': case 'toggle-large-cylinder': case 'toggle-large-square': case 'toggle-large-lock': case 'toggle-paddle-wide': case 'toggle-hook': case 'toggle-mini-hex': {
         const t = TOGGLES[p.component], c = controlOf(spec, p.control);
         const isWide = t.cap === 'wide';
         const long = isWide ? 2 * t.reach + 8.2 : 2 * (t.reach + t.ball) + 1, wide = isWide ? 2 * t.ball + 1 : 2.6 * t.r;
@@ -196,11 +201,15 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         const r = ROTARIES[p.component].skirt * 1.15;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }
+      case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': {
+        const r = KNOBS[p.component].r * 1.1;
+        return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
+      }
       case 'gear-handle': {
         const [w, h] = p.size, bh = p.travel + h;
         return [{ kind: 'control', id: p.control, box: [x - w / 2, y - bh / 2, w, bh] }];
       }
-      case 'push-round-large': case 'push-round-xl': case 'push-round-xxl': {
+      case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-xxl': {
         const r = PUSHES[p.component].r;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }

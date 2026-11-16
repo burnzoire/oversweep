@@ -7,6 +7,9 @@ import { airCond } from './air-cond.ts';
 import { caution } from './caution.ts';
 import { rightEyebrow } from './right-eyebrow.ts';
 import { leftEyebrow } from './left-eyebrow.ts';
+import { extLighting } from './ext-lighting.ts';
+import { ecm } from './ecm.ts';
+import { uhf } from './uhf.ts';
 
 /**
  * DCS F-16C cockpit catalogue: areas and panels in the order the official guide
@@ -72,7 +75,9 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'avtr', title: 'AVTR panel', page: 66 },
         { id: 'fuel', title: 'FUEL panel', page: 67, spec: fuel },
         { id: 'iff', title: 'IFF panel', page: 67 },
-        { id: 'ext-lighting', title: 'EXT LIGHTING panel', page: 69 },
+        { id: 'ext-lighting', title: 'EXT LIGHTING panel', page: 69, spec: extLighting },
+        { id: 'ecm', title: 'ECM panel', page: 706, spec: ecm },
+        { id: 'uhf', title: 'UHF backup panel', page: 259, spec: uhf },
         { id: 'flt-control', title: 'FLT CONTROL panel', page: 71 },
         { id: 'manual-trim', title: 'MANUAL TRIM panel', page: 72 },
         { id: 'test', title: 'TEST panel', page: 72 },

@@ -75,6 +75,8 @@ export interface ControlDef {
    * rotary, out to in for a pushbutton, closed to open for a guard.
    */
   travel?: 'vertical' | 'horizontal';
+  /** Rotary with no end stops: turning past the last position wraps to the first (UHF digit and CHAN knobs). */
+  cyclic?: boolean;
   positions: ControlPosition[];
   initial: string;
   /** Mechanically latched (lever-lock) switch; see `protections`. */
@@ -119,6 +121,7 @@ export interface PanelSource {
 export type Placement =
   | { component: ToggleArt; control: string; at: Pt }
   | { component: RotaryArt; control: string; at: Pt }
+  | { component: KnobArt; control: string; at: Pt }
   | { component: PushArt; control: string; at: Pt }
   /** Landing gear handle: a slot centred on `at`, `travel` mm between the knob's end positions, knob `size` in mm. */
   | { component: 'gear-handle'; control: string; at: Pt; travel: number; size: [w: number, h: number]; /** The light in the knob. */ indicator?: string }
@@ -133,9 +136,10 @@ export type Placement =
 /** The plate corner toward which the face plate is cut away around a DZUS. */
 export type Cut = 'up-left' | 'up-right' | 'down-left' | 'down-right';
 
-export type ToggleArt = 'toggle-large' | 'toggle-medium' | 'toggle-small' | 'toggle-large-cylinder' | 'toggle-large-square' | 'toggle-large-lock' | 'toggle-paddle-wide' | 'toggle-hook';
+export type ToggleArt = 'toggle-large' | 'toggle-medium' | 'toggle-small' | 'toggle-large-cylinder' | 'toggle-large-square' | 'toggle-large-lock' | 'toggle-paddle-wide' | 'toggle-hook' | 'toggle-mini-hex';
 export type RotaryArt = 'rotary-pointer' | 'rotary-pointer-large';
-export type PushArt = 'push-round-large' | 'push-round-xl' | 'push-round-xxl';
+export type KnobArt = 'knob-fine-knurl-small' | 'knob-knurled-small' | 'knob-knurled' | 'knob-bar' | 'knob-lobed' | 'knob-bar-medium' | 'knob-knurled-mini' | 'knob-radio-large' | 'knob-bar-thick' | 'knob-spindle';
+export type PushArt = 'push-round-small' | 'push-round-medium' | 'push-round-large' | 'push-round-xl' | 'push-round-xxl';
 export type LampModuleArt = 'lamp-module';
 /** A single round press-to-test style indicator lens in a bezel (JFS RUN). */
 export type LampRoundArt = 'lamp-round';
@@ -156,7 +160,7 @@ export interface LampCell {
 /** Fixed engraving on the plate: legends, rules, tick marks. */
 export type Engraving =
   | { kind: 'text'; at: Pt; text: string; cap: number; width?: number; anchor?: 'start' | 'middle' | 'end' }
-  | { kind: 'path'; d: string; pen?: Pen };
+  | { kind: 'path'; d: string; pen?: Pen; /** Drawn pale: unlit display segments. */ faint?: boolean };
 
 export type Pen = 'fine' | 'medium' | 'heavy';
 
