@@ -103,7 +103,7 @@ export const TOGGLES = {
    */
   'toggle-hook': { r: 4.4, reach: 20.6, ball: 4.1, cap: 'hook' },
   /** Plain toggle with a wide flat paddle, with three round grip bosses along its end (gear panel LIGHTS). `ball` is half the paddle width. */
-  'toggle-paddle-wide': { r: 4.0, reach: 4.6, ball: 11, cap: 'wide' },
+  'toggle-paddle-wide': { r: 4.0, reach: 4.6, ball: 10, cap: 'wide' },
 } as const;
 
 /** Lever lean for each position in travel order: -1 toward the first, 0 straight out, 1 toward the last. */

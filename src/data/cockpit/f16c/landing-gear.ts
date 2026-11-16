@@ -67,8 +67,8 @@ export const landingGear: PanelSpec = {
   },
   plate: [
     { d: path('M139 23L449 29Q453 29.1 453 33V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23Z') },
-    // Top layer, cut away for the gear handle's channel and, to its lower left, the recess round DN LOCK REL.
-    { d: path('M139 23L449 29Q453 29.1 453 33V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23ZM397 190H447V374H322V287H397Z'), raised: true },
+    // Top layer, cut away for the gear handle's channel and, to its lower left, a padded recess round the DN LOCK REL button; the cut edge runs through the striped border.
+    { d: path('M139 23L449 29Q453 29.1 453 33V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23ZM397 190H447V364H335V301H397Z'), raised: true },
   ],
   engraving: [
     // EMER STORES JETTISON: legend, and the hazard-striped square around the button.
@@ -112,12 +112,12 @@ export const landingGear: PanelSpec = {
     L([172, 332], 'SILENCER', 8.5, 52),
     L([270, 320], 'LIGHTS', 8.5, 39),
     L([270, 335], 'LANDING', 8.5, 45),
-    L([317, 367], 'OFF', 8.5, 19),
+    L([313, 367], 'OFF', 8.5, 16),
     L([272, 395], 'TAXI', 8.5, 24),
     // DN LOCK REL: legend and the hazard-striped box around the button.
     L([362, 266], 'DN LOCK', 8.5, 41),
     L([362, 279], 'REL', 8.5, 20),
-    { kind: 'path', pen: 'heavy', d: stripes(327, 289, 393, 369) },
+    { kind: 'path', pen: 'heavy', d: stripes(328, 289, 398, 370) },
     L([217, 310], '+', 7),
   ],
   placements: [
