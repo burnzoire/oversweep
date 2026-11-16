@@ -20,6 +20,12 @@ const MC: [number, number] = [mm(92), mm(84)]; // MASTER CAUTION face, along x a
 const TF: [number, number] = [mm(62), mm(62)];
 /** Top-left of a w x h module centred on (x, y) in reference px (modules turn about their centre). */
 const tl = (x: number, y: number, [w, h]: [number, number]) => [+(mm(x) - w / 2).toFixed(3), +(mm(y) - h / 2).toFixed(3)] as [number, number];
+/** Rectangle w x h (px) centred on (x, y), turned `deg` clockwise; an SVG path in reference px. */
+const box = (x: number, y: number, w: number, h: number, deg = 0) => {
+  const a = deg * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
+  return 'M' + [[-w / 2, -h / 2], [w / 2, -h / 2], [w / 2, h / 2], [-w / 2, h / 2]]
+    .map(([u, v]) => `${(x + u * c - v * s).toFixed(1)} ${(y + u * s + v * c).toFixed(1)}`).join('L') + 'Z';
+};
 const pushed = [
   { id: 'out', label: 'Released', hold: 'stable' as const },
   { id: 'in', label: 'Pressed', hold: 'momentary' as const, spring: 'out' },
@@ -39,17 +45,27 @@ export const leftEyebrow: PanelSpec = {
     scale: 'No fasteners are visible, so the scale is assumed: the square pushbuttons (about 60 px across) are taken as 0.75 in.',
     shown: { 'master-caution': 'out', 'f-ack': 'out', 'iff-ident': 'out' },
     unresolved: [
-      'The eyebrow is seen steeply from below; items are drawn square-on at their image centres, and the strip outline is simplified to two straight segments.',
+      'The eyebrow is seen steeply from below; items are drawn square-on at their image centres. The housings are traced as their front faces, with sizes across the strip estimated; the strip itself is two straight segments.',
       'The image crops the strip at its top and left, so the outline stops at the canvas edge.',
       'The scale is assumed, not measured.',
       'Two blank square caps and the blank cell beside TF-FAIL have no function in the guide; they are drawn as unlit blanks.',
       'The guide does not give the TF-FAIL or MASTER CAUTION colours; the image shows TF-FAIL red and MASTER CAUTION amber.',
     ],
   },
-  // Upper segment: from x + y = 389 to 600; lower segment: x = 2 to 85.
-  plate: [{ d: path('M387 2L2 387V623H85V515L481 119V2Z') }],
+  // The eyebrow: upper segment from x + y = 389 to 600, lower segment x = 2 to 85.
+  // On it, the raised housings behind the lights, traced from the image: each is the
+  // front face only (the camera also shows their sides), about 8 px proud of what it holds.
+  plate: [
+    { d: path('M387 2L2 387V623H85V515L481 119V2Z') },
+    { raised: true, d: path(box(349, 131, 99, 56, SLOPE)) },               // screw block, under the MASTER CAUTION housing
+    { raised: true, d: path(box(414, 76, 108, 100, SLOPE)) },             // MASTER CAUTION
+    { raised: true, d: path(box(257, 232, 140, 78, SLOPE)) },              // TF-FAIL and its blank cell
+    { raised: true, d: path(box(142, 345, 76, 76, SLOPE)) },               // F-ACK
+    { raised: true, d: path(box(42, 538, 76, 162)) },                      // blank cap and IFF IDENT
+  ],
   engraving: [],
   placements: [
+    { component: 'screw-medium', at: pt(349, 131) },
     { component: 'push-square', control: 'master-caution', indicator: 'master-caution', at: pt(414, 76), rotate: SLOPE, size: MC, legend: [
       { text: 'MASTER', cap: 4.5, y: -7, width: mm(68) },
       { text: 'CAUTION', cap: 4.5, y: 0, width: mm(74) },

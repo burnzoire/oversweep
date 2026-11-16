@@ -41,6 +41,13 @@ const MODULES: (Lamp[] | [id: string, legend: string, widths: [number, number], 
   ],
 ];
 
+/** Rectangle w x h (px) centred on (x, y), turned `deg` clockwise; an SVG path in reference px. */
+const box = (x: number, y: number, w: number, h: number, deg = 0) => {
+  const a = deg * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
+  return 'M' + [[-w / 2, -h / 2], [w / 2, -h / 2], [w / 2, h / 2], [-w / 2, h / 2]]
+    .map(([u, v]) => `${(x + u * c - v * s).toFixed(1)} ${(y + u * s + v * c).toFixed(1)}`).join('L') + 'Z';
+};
+
 const placements: Placement[] = [];
 const indicators: IndicatorDef[] = [];
 const light = (id: string, legend: string, description: string) =>
@@ -83,7 +90,12 @@ export const rightEyebrow: PanelSpec = {
       'HYD/OIL PRESS and TO/LDG CONFIG are each one warning across both halves of the lens, as the guide describes them.',
     ],
   },
-  plate: [{ d: path('M87.7 -38.2L489.2 388.7L365.3 505.2L-36.2 78.3Z') }],
+  // The eyebrow strip, and on it the housing that holds the five modules, traced as its
+  // front face: 8 px clear of the modules all round, along the line of module centres.
+  plate: [
+    { d: path('M87.7 -38.2L489.2 388.7L365.3 505.2L-36.2 78.3Z') },
+    { raised: true, d: path(box(226.5, 233.5, 528, 123, 46.75)) },
+  ],
   engraving: [],
   placements,
   controls: [],
