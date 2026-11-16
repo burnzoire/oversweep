@@ -58,9 +58,9 @@ export const elec: PanelSpec = {
   ],
   placements: [
     { component: 'dzus', at: pt(26, 64), cut: 'up-left' },
-    { component: 'dzus', at: pt(304, 64), cut: 'up-right' },
-    { component: 'dzus', at: pt(25, 390), cut: 'down-left' },
-    { component: 'dzus', at: pt(304, 390), cut: 'down-right' },
+    { component: 'dzus', at: pt(304, 64) },
+    { component: 'dzus', at: pt(25, 390) },
+    { component: 'dzus', at: pt(304, 390) },
     { component: 'screw', at: pt(147, 123) },
     { component: 'screw', at: pt(61, 293) },
     { component: 'screw-small', at: pt(77, 370) },
