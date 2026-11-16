@@ -249,8 +249,8 @@ export function pushCap(art: keyof typeof PUSHES, pressed: boolean) {
   const { cap } = PUSHES[art];
   const c = pressed ? cap * 0.9 : cap, t = PUSHES[art];
   // Centre mark (EMER STORES JETTISON): a square overlaid on a circle, sized from the guide image.
-  const q = c * 0.34, m = 'mark' in t && t.mark
-    ? `<circle r="${n(c * 0.4)}" ${sw('fine')}/><rect x="${n(-q)}" y="${n(-q)}" width="${n(2 * q)}" height="${n(2 * q)}" rx="${n(q * 0.12)}" ${sw('fine')}/>`
+  const q = c * 0.3, m = 'mark' in t && t.mark
+    ? `<circle r="${n(c * 0.35)}" ${sw('fine')}/><rect x="${n(-q)}" y="${n(-q)}" width="${n(2 * q)}" height="${n(2 * q)}" rx="${n(q * 0.12)}" ${sw('fine')}/>`
     : '';
   return cased(`<circle r="${n(c)}" fill="${PAPER}"/>`, 'medium') + (pressed ? `<circle r="${n(c * 0.8)}" ${sw('fine')}/>` : '') + m;
 }

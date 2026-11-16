@@ -35,6 +35,29 @@ const stripes = (x0: number, y0: number, x1: number, y1: number, step = 9, hole?
   }
   return path(d);
 };
+/**
+ * Hazard stripes in the box, stopped at an arbitrary cut-out (`inside` is true
+ * in the cut), with the box `border` path given separately so it can leave the
+ * cut open.
+ */
+const stripesCut = (x0: number, y0: number, x1: number, y1: number, inside: (x: number, y: number) => boolean, border: string, step = 9) => {
+  let d = border;
+  for (let c = x0 + y0 + step; c < x1 + y1; c += step) {
+    const ax = Math.max(x0, c - y1), bx = Math.min(x1, c - y0);
+    let start: number | null = null;
+    for (let x = ax; x <= bx + 0.01; x += 0.25) {
+      const out = x <= bx && !inside(x, c - x);
+      if (out && start === null) start = x;
+      if (!out && start !== null) { if (x - start > 0.5) d += `M${start.toFixed(1)} ${(c - start).toFixed(1)}L${(x - 0.25).toFixed(1)} ${(c - x + 0.25).toFixed(1)}`; start = null; }
+    }
+    if (start !== null && bx - start > 0.5) d += `M${start.toFixed(1)} ${(c - start).toFixed(1)}L${bx.toFixed(1)} ${(c - bx).toFixed(1)}`;
+  }
+  return path(d);
+};
+// DN LOCK REL recess: a channel off the gear slot whose left end is a half-round concentric with the button.
+const DNL = { cx: 365, cy: 332.5, r: 31.5, x1: 397 };
+const inDnLockCut = (x: number, y: number) =>
+  (x >= DNL.cx && x <= DNL.x1 + 1 && y >= DNL.cy - DNL.r && y <= DNL.cy + DNL.r) || Math.hypot(x - DNL.cx, y - DNL.cy) <= DNL.r;
 const pushed = [
   { id: 'out', label: 'Released', hold: 'stable' as const },
   { id: 'in', label: 'Pressed', hold: 'momentary' as const, spring: 'out' },
@@ -67,8 +90,8 @@ export const landingGear: PanelSpec = {
   },
   plate: [
     { d: path('M139 23L449 13Q453 12.9 453 17V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23Z') },
-    // Top layer, cut away for the gear handle's channel and, to its lower left, a padded recess round the DN LOCK REL button; the cut edge runs through the striped border, so the stripes stop at it; its left corners are rounded.
-    { d: path('M139 23L449 13Q453 12.9 453 17V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23ZM397 190H447V364H342Q335 364 335 357V308Q335 301 342 301H397Z'), raised: true },
+    // Top layer, cut away for the gear handle's channel and, to its lower left, a padded recess round the DN LOCK REL button; the cut edge runs through the striped border, so the stripes stop at it; its left end is a half-round concentric with the button.
+    { d: path('M139 23L449 13Q453 12.9 453 17V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23ZM397 190H447V364H365') + `A${mm(DNL.r)} ${mm(DNL.r)} 0 0 1 ${mm(DNL.cx)} ${mm(DNL.cy - DNL.r)}` + path('H397Z'), raised: true },
   ],
   engraving: [
     // EMER STORES JETTISON: legend, and the hazard-striped square around the button.
@@ -117,7 +140,7 @@ export const landingGear: PanelSpec = {
     // DN LOCK REL: legend and the hazard-striped box around the button.
     L([362, 266], 'DN LOCK', 8.5, 41),
     L([362, 279], 'REL', 8.5, 20),
-    { kind: 'path', pen: 'heavy', d: stripes(328, 289, 398, 370, 9, [335, 301, 398, 364]) },
+    { kind: 'path', pen: 'heavy', d: stripesCut(328, 289, 397, 370, inDnLockCut, 'M397 301V289H328V370H397V364') },
     L([217, 310], '+', 7),
   ],
   placements: [
