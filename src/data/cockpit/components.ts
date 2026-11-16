@@ -93,8 +93,8 @@ export const TOGGLES = {
    * it is drawn as a lever-lock base. `ball` is half the paddle width.
    */
   'toggle-large-square': { r: 4.0, reach: 4.6, ball: 3.3, cap: 'square', lock: true },
-  /** Large lever-lock bat: a tapered pill rising from a lock-insert bushing, its flat end visible (IFF M-4 CODE / REPLY). */
-  'toggle-large-lock': { r: 5.2, reach: 6.2, ball: 2.7, cap: 'pill', lock: true },
+  /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). */
+  'toggle-large-lock': { r: 5.2, reach: 6.0, ball: 2.8, cap: 'dome', lock: true },
 } as const;
 
 /** Lever lean for each position in travel order: -1 toward the first, 0 straight out, 1 toward the last. */
@@ -128,7 +128,7 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   const t = TOGGLES[art], { r, reach, ball, cap } = t;
   const lock = 'lock' in t && t.lock;
   const L = reach * k;
-  const w0 = cap === 'cylinder' ? ball * 0.58 : cap === 'pill' ? r * 0.34 : r * 0.3, w1 = cap === 'cylinder' ? ball * 0.62 : ball * 0.62;
+  const w0 = cap === 'cylinder' ? ball * 0.58 : cap === 'dome' ? r * 0.3 : r * 0.3, w1 = cap === 'dome' ? ball * 0.8 : ball * 0.62;
   // Mushroom cap: the lever leans only ~17° from the panel normal, so the cap stays almost square to the
   // viewer (a near-circle). Its top is nearly flat, so no inner ring.
   const face = (ry: number) => cased(`<ellipse cy="${n(L)}" rx="${ball}" ry="${n(ry)}" fill="${PAPER}"/>`, 'medium');
@@ -137,9 +137,6 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
     : cap === 'square'
     // Square paddle end, nearly face-on at the real lean.
     ? cased(`<rect x="${n(-ball)}" y="${n(L - ball * 0.92)}" width="${n(ball * 2)}" height="${n(ball * 1.84)}" rx="${n(ball * 0.12)}" fill="${PAPER}"/>`, 'medium')
-    : cap === 'pill'
-    // Pointing at the viewer: the rounded end with its flat end face.
-    ? cased(`<circle r="${ball}" fill="${PAPER}"/>`, 'medium') + `<circle r="${n(ball * 0.7)}" ${sw('fine')}/>`
     : cased(`<circle cy="${n(L)}" r="${ball}" fill="${PAPER}"/>`, 'medium');
   if (Math.abs(k) < 1e-6) return tip;
   const s = Math.sign(k);
@@ -154,7 +151,7 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
     const y1 = L - s * ball * 0.6;
     return `<path d="M${n(-w0)} ${n(y0)}${arc} ${n(w0)} ${n(y0)}L${n(ball * 0.9)} ${n(y1)}H${n(-ball * 0.9)}Z" fill="${PAPER}" ${sw('medium')}/>` + tip;
   }
-  if (cap === 'ball' || cap === 'pill') {
+  if (cap === 'ball') {
     // Teardrop: one outline from the round lever root, along the common
     // tangents, around the ball. Lever along +y, mirrored for an upward lean.
     const rc = lock ? 0 : w0, d = Math.abs(L), r0 = w0, r1 = ball, a = Math.asin(Math.min(0.95, (r1 - r0) / (d - rc)));
@@ -164,15 +161,11 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
     const sweep = s > 0 ? 1 : 0;
     const drop = `<path d="M${n(p0r[0])} ${Y(p0r[1])}L${n(p1r[0])} ${Y(p1r[1])}A${r1} ${r1} 0 1 ${sweep} ${n(p1l[0])} ${Y(p1l[1])}` +
       `L${n(p0l[0])} ${Y(p0l[1])}A${n(r0)} ${n(r0)} 0 0 ${sweep} ${n(p0r[0])} ${Y(p0r[1])}Z" fill="${PAPER}"/>`;
-    // A pill's flat end face shows as an ellipse foreshortened by the lean.
-    const face = cap === 'pill' ? `<ellipse cy="${Y(d + r1 * 0.25)}" rx="${n(r1 * 0.7)}" ry="${n(r1 * 0.5)}" ${sw('fine')}/>` : '';
-    return cased(drop, 'medium') + face;
+    return cased(drop, 'medium');
   }
-  // Shaft: semicircle on the bushing side, straight flanks out to the ball.
-  const shaft = cap === 'cylinder'
-    // Thick lever with a round base (the cylinder seen end-on at the pivot), slightly wider at the cap.
-    ? `<path d="M${n(-w0)} ${n(y0)}${arc} ${n(w0)} ${n(y0)}L${n(w1)} ${n(L)}H${n(-w1)}Z" fill="${PAPER}" ${sw('medium')}/>`
-    : `<path d="M${n(-w0)} ${n(y0)}${arc} ${n(w0)} ${n(y0)}L${n(w1)} ${n(L)}H${n(-w1)}Z" fill="${PAPER}" ${sw('medium')}/>`;
+  // Shaft: round root at the bushing, straight flanks widening out to the cap
+  // (cylinder: flat mushroom cap; dome: rounded cap a little wider than the shaft).
+  const shaft = `<path d="M${n(-w0)} ${n(y0)}${arc} ${n(w0)} ${n(y0)}L${n(w1)} ${n(L)}H${n(-w1)}Z" fill="${PAPER}" ${sw('medium')}/>`;
   return shaft + tip;
 }
 
