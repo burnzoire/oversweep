@@ -95,6 +95,8 @@ export const TOGGLES = {
   'toggle-large-square': { r: 4.0, reach: 4.6, ball: 3.3, cap: 'square', lock: true },
   /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). */
   'toggle-large-lock': { r: 5.2, reach: 6.0, ball: 2.8, cap: 'dome', lock: true },
+  /** Plain toggle with a wide flat paddle, gripped across its end by three ridges (gear panel LIGHTS). `ball` is half the paddle width. */
+  'toggle-paddle-wide': { r: 4.0, reach: 4.6, ball: 11, cap: 'wide' },
 } as const;
 
 /** Lever lean for each position in travel order: -1 toward the first, 0 straight out, 1 toward the last. */
@@ -134,6 +136,15 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   // Mushroom cap: the lever leans only ~17° from the panel normal, so the cap stays almost square to the
   // viewer (a near-circle). Its top is nearly flat, so no inner ring.
   const face = (ry: number) => cased(`<ellipse cy="${n(L)}" rx="${ball}" ry="${n(ry)}" fill="${PAPER}"/>`, 'medium');
+  if (cap === 'wide') {
+    // Wide paddle end (seen almost end-on at the real lean): a long pill with three grip ridges.
+    const hh = 3.6, x = ball;
+    const pill = cased(`<rect x="${n(-x)}" y="${n(L - hh)}" width="${n(2 * x)}" height="${n(2 * hh)}" rx="${n(hh)}" fill="${PAPER}"/>`, 'medium') +
+      `<path d="M${n(-x / 3)} ${n(L - hh * 0.8)}V${n(L + hh * 0.8)}M${n(x / 3)} ${n(L - hh * 0.8)}V${n(L + hh * 0.8)}" ${sw('fine')}/>`;
+    if (Math.abs(k) < 1e-6) return pill;
+    const y1 = L - Math.sign(k) * hh;
+    return `<path d="M${n(-r * 0.3)} 0L${n(-x * 0.8)} ${n(y1)}H${n(x * 0.8)}L${n(r * 0.3)} 0Z" fill="${PAPER}" ${sw('medium')}/>` + pill;
+  }
   const tip = cap === 'cylinder'
     ? face(Math.abs(k) < 1e-6 ? ball : ball * 0.96)
     : cap === 'square'
@@ -198,6 +209,10 @@ export function rotaryKnob(art: keyof typeof ROTARIES) {
 
 export const PUSHES = {
   'push-round-large': { r: 6.6, cap: 4.5 },
+  /** Gear panel DN LOCK REL. */
+  'push-round-xl': { r: 7.8, cap: 6.0 },
+  /** Gear panel EMER STORES JETTISON. */
+  'push-round-xxl': { r: 14, cap: 10.5 },
 } as const;
 
 export function pushBase(art: keyof typeof PUSHES) {
@@ -222,6 +237,24 @@ export function pushSquareCap([w, h]: [number, number], pressed: boolean) {
   const i = pressed ? 1.5 : 1.0, cw = w - 2 * i, ch = h - 2 * i;
   return cased(`<rect x="${n(-cw / 2)}" y="${n(-ch / 2)}" width="${n(cw)}" height="${n(ch)}" rx="0.8" fill="${PAPER}"/>`, 'medium') +
     (pressed ? `<rect x="${n(-cw / 2 + 0.6)}" y="${n(-ch / 2 + 0.6)}" width="${n(cw - 1.2)}" height="${n(ch - 1.2)}" rx="0.5" fill="none" ${sw('fine')}/>` : '');
+}
+
+/* ---------------------------------------------------------- gear handle */
+
+/** Landing gear handle slot, `travel` mm long (UP to DN knob centres), centred on the origin. */
+export function gearSlot(travel: number) {
+  const h = travel / 2 + 2, w = 1.6;
+  return cased(`<rect x="${n(-w)}" y="${n(-h)}" width="${n(2 * w)}" height="${n(2 * h)}" rx="${n(w)}" fill="${PAPER}"/>`, 'medium');
+}
+
+/**
+ * The gear handle's wheel-shaped knob seen square-on: the tyre is edge-on, so it
+ * shows as a tall rounded block with tread ribs across it. `size` in mm, centred on `y`.
+ */
+export function gearKnob([w, h]: [number, number], y: number) {
+  const ribs = [-0.3, -0.1, 0.1, 0.3].map(f => `M${n(-w / 2 + 1.2)} ${n(y + f * h)}H${n(w / 2 - 1.2)}`).join('');
+  return cased(`<rect x="${n(-w / 2)}" y="${n(y - h / 2)}" width="${n(w)}" height="${n(h)}" rx="${n(w * 0.3)}" fill="${PAPER}"/>`, 'heavy') +
+    `<path d="${ribs}" ${sw('fine')}/>`;
 }
 
 /* ----------------------------------------------------------------- guards */

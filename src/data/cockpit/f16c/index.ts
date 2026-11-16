@@ -2,6 +2,7 @@ import type { AircraftCockpit } from '../types';
 import { elec } from './elec.ts';
 import { engJetStart } from './eng-jet-start.ts';
 import { fuel } from './fuel.ts';
+import { landingGear } from './landing-gear.ts';
 import { airCond } from './air-cond.ts';
 import { caution } from './caution.ts';
 import { rightEyebrow } from './right-eyebrow.ts';
@@ -44,7 +45,7 @@ export const f16cCockpit: AircraftCockpit = {
     },
     {
       id: 'left-aux-console', title: 'Left auxiliary console', panels: [
-        { id: 'landing-gear', title: 'Landing gear panel', page: 55 },
+        { id: 'landing-gear', title: 'Landing gear panel', page: 55, spec: landingGear },
         { id: 'hmcs', title: 'HMCS control panel', page: 57 },
         { id: 'alt-gear', title: 'ALT GEAR handle', page: 57 },
       ],

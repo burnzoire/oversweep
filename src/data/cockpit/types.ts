@@ -120,6 +120,8 @@ export type Placement =
   | { component: ToggleArt; control: string; at: Pt }
   | { component: RotaryArt; control: string; at: Pt }
   | { component: PushArt; control: string; at: Pt }
+  /** Landing gear handle: a slot centred on `at`, `travel` mm between the knob's end positions, knob `size` in mm. */
+  | { component: 'gear-handle'; control: string; at: Pt; travel: number; size: [w: number, h: number] }
   | { component: 'guard-flip'; control: string; at: Pt; size: [w: number, h: number] }
   /** Square pushbutton, centred on `at`; `legend` lines are placed by their centre `y` (mm from the centre). With `indicator`, the legend face is that lamp's lens. */
   | { component: 'push-square'; control: string; at: Pt; size: [w: number, h: number]; legend: { text: string; cap: number; y: number; width?: number }[]; indicator?: string; /** Turn (degrees clockwise) about the centre, for buttons on an angled mount. */ rotate?: number }
@@ -131,9 +133,9 @@ export type Placement =
 /** The plate corner toward which the face plate is cut away around a DZUS. */
 export type Cut = 'up-left' | 'up-right' | 'down-left' | 'down-right';
 
-export type ToggleArt = 'toggle-large' | 'toggle-medium' | 'toggle-small' | 'toggle-large-cylinder' | 'toggle-large-square' | 'toggle-large-lock';
+export type ToggleArt = 'toggle-large' | 'toggle-medium' | 'toggle-small' | 'toggle-large-cylinder' | 'toggle-large-square' | 'toggle-large-lock' | 'toggle-paddle-wide';
 export type RotaryArt = 'rotary-pointer' | 'rotary-pointer-large';
-export type PushArt = 'push-round-large';
+export type PushArt = 'push-round-large' | 'push-round-xl' | 'push-round-xxl';
 export type LampModuleArt = 'lamp-module';
 /** A single round press-to-test style indicator lens in a bezel (JFS RUN). */
 export type LampRoundArt = 'lamp-round';
