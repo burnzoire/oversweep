@@ -98,8 +98,10 @@ export const uhf: PanelSpec = {
     // x <= 43.5 below y 320 and x >= 505 below y 323. The unrectified reference
     // sits a few px lower on the right, so the left and right cut-outs (and their
     // DZUS) are drawn mirrored about the centre at the mean heights: top cut-outs
-    // down to y 133, lower strips from y 321.5. Inner corners rounded at 12 px.
-    { d: path('M37 2H513V121Q513 133 525 133H548V321.5H518.5Q506.5 321.5 506.5 333.5V458H43.5V333.5Q43.5 321.5 31.5 321.5H2V133H25Q37 133 37 121Z'), raised: true },
+    // down to y 133, lower strips from y 321.5. All four are the same width
+    // (35 px, the top-left's, which the preset card bounds). Inner corners
+    // rounded at 12 px.
+    { d: path('M37 2H513V121Q513 133 525 133H548V321.5H525Q513 321.5 513 333.5V458H37V333.5Q37 321.5 25 321.5H2V133H25Q37 133 37 121Z'), raised: true },
     // Preset channel card.
     { d: path('M42 9H272Q277 9 277 14V117Q277 122 272 122H42Q37 122 37 117V14Q37 9 42 9Z'), raised: true },
   ],
@@ -141,7 +143,7 @@ export const uhf: PanelSpec = {
     L([359, 432], 'ON', 10, 15),
     // Vertical "UHF" and the part number.
     ...([['U', 217], ['H', 241], ['F', 264]] as const).map(([t, y]) => L([530, y], t, 15, 13)),
-    L([527, 375], '806', 8, 18),
+    L([525, 372], '806', 8, 18),
   ],
   placements: [
     ...([[18, 58.5], [18, 115.5], [18, 345], [18, 398.5], [532, 58.5], [532, 115.5], [532, 345], [532, 398.5]] as const)
