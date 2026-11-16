@@ -158,7 +158,7 @@ export const uhf: PanelSpec = {
   ],
   controls: [
     {
-      id: 'chan', name: 'CHAN knob', type: 'rotary',
+      id: 'chan', name: 'CHAN knob', type: 'rotary', cyclic: true,
       positions: Array.from({ length: 20 }, (_, i) => ({ id: String(i + 1), label: `Preset ${i + 1}`, angle: i * 18, hold: 'stable' as const })),
       initial: '1',
       description: 'Selects one of the 20 preset channels. In PRESET mode the radio tunes the selected channel and the CHAN window shows its number; in MNL and GRD the window is blank.',
@@ -186,12 +186,12 @@ export const uhf: PanelSpec = {
       source: src,
     },
     ...[2, 3, 4].map(k => ({
-      id: `freq-${k}`, name: `Manual frequency knob ${k}`, type: 'rotary' as const, positions: digits, initial: '0',
+      id: `freq-${k}`, name: `Manual frequency knob ${k}`, type: 'rotary' as const, cyclic: true, positions: digits, initial: '0',
       description: `Sets digit ${k} of the manual frequency, used in MNL mode.`,
       source: src,
     })),
     {
-      id: 'freq-5', name: 'Manual frequency knob 5', type: 'rotary',
+      id: 'freq-5', name: 'Manual frequency knob 5', type: 'rotary', cyclic: true,
       positions: ['00', '25', '50', '75'].map((id, i) => ({ id, label: id, angle: i * 90, hold: 'stable' as const })),
       initial: '00',
       description: 'Sets the last two digits of the manual frequency (00, 25, 50 or 75), used in MNL mode.',

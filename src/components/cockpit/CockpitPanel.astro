@@ -135,7 +135,9 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
   const press = (c: ControlDef, dir: string) => {
     select(c.id);
     const i = c.positions.findIndex(p => p.id === pos(c));
-    let j = dir === 'flip' ? (i + 1) % c.positions.length : i + Number(dir);
+    const n = c.positions.length;
+    let j = dir === 'flip' ? (i + 1) % n : i + Number(dir);
+    if (c.cyclic) j = (j + n) % n;
     if (j < 0 || j >= c.positions.length) { say(`${c.name} is already at ${label(c)}.`); return; }
     const to = c.positions[j];
     const why = blocked(c, to.id);

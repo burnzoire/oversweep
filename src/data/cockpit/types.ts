@@ -75,6 +75,8 @@ export interface ControlDef {
    * rotary, out to in for a pushbutton, closed to open for a guard.
    */
   travel?: 'vertical' | 'horizontal';
+  /** Rotary with no end stops: turning past the last position wraps to the first (UHF digit and CHAN knobs). */
+  cyclic?: boolean;
   positions: ControlPosition[];
   initial: string;
   /** Mechanically latched (lever-lock) switch; see `protections`. */
