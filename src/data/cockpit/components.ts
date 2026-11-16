@@ -200,13 +200,13 @@ function leverOnPivot(art: keyof typeof TOGGLES, k: number, count = 0) {
     : cap === 'dome' && Math.abs(k) > 1e-6
     // Domed cap (Nathan 2026-11-17): a sphere with depth, i.e. drawn out along the
     // lever axis. Leaning 17°, square-on it is two round ends of the cap radius,
-    // 0.41 of the radius apart (a short stadium), with the near end's far edge
-    // showing inside the far end: "(( )".
+    // 0.41 of the radius apart (a short stadium), with the far end's near edge
+    // showing just inside the near end: "(( )" with the pivot on the left.
     ? (() => {
       const sg = Math.sign(k), d = Math.abs(L), b = ball, e = ball * 0.41, Y = (y: number) => n(sg * y);
       const sw0 = sg > 0 ? 0 : 1;
       return cased(`<path d="M${n(-b)} ${Y(d)}A${b} ${b} 0 0 ${sw0} ${n(b)} ${Y(d)}V${Y(d - e)}A${b} ${b} 0 0 ${sw0} ${n(-b)} ${Y(d - e)}Z" fill="${PAPER}"/>`, 'medium') +
-        `<path d="M${n(-b)} ${Y(d - e)}A${b} ${b} 0 0 ${sw0} ${n(b)} ${Y(d - e)}" ${sw('fine')}/>`;
+        `<path d="M${n(-b)} ${Y(d)}A${b} ${b} 0 0 ${1 - sw0} ${n(b)} ${Y(d)}" ${sw('fine')}/>`;
     })()
     : cased(`<circle cy="${n(L)}" r="${ball}" fill="${PAPER}"/>`, 'medium');
   if (Math.abs(k) < 1e-6) return tip;

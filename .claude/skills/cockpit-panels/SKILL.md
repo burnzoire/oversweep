@@ -98,7 +98,8 @@ everything that stands proud of it.
     mushroom cap = `toggle-large-cylinder` (MAIN PWR); tapered shaft to a domed
     cap = `toggle-large-lock` (JFS, MAX POWER, AB RESET, TANK INERTING, AVIONICS
     POWER MFD; the cap is a sphere drawn out along the lever, square-on a short
-    stadium with the near end's far edge showing inside the far end, "(( )",
+    stadium with the far end's near edge showing just inside the near end, "(( )"
+    with the pivot on the left,
     with a little less throw than the flat-top); square
     paddle on a trapezoid lever = `toggle-large-square` (AIR REFUEL).
     The lock slot has square ends so it never reads as part of the lever.
