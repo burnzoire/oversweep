@@ -74,6 +74,13 @@ The guide's cockpit images are perspective shots from an off-axis camera.
 Measure what lies flat on the plate (legends, rules, fasteners) and correct
 everything that stands proud of it.
 
+- **Panels are often layered.** Look for a step in the plate: a raised face
+  plate (top layer) sitting on a base plate, often wrapping one group of
+  controls and jutting around a legend (ELEC's top layer goes around MAIN
+  PWR and juts around ACFT BATT). Trace each layer as its own `plate` entry,
+  back to front, with `raised: true` on the upper ones. Fasteners, legends
+  and controls belong to the layer they sit on; cut-outs and notches belong
+  to the top layer only.
 - **Pivots sit on their legends' centre line.** A toggle's pivot is centred
   between its position legends (e.g. START 1 / START 2), not where the
   bushing or lever tip appears. Fixed parts placed around a control (wire
