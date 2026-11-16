@@ -164,7 +164,7 @@ export function renderPanel(spec: PanelSpec, opts: RenderOptions = {}) {
     cased(`<path d="${p.d}" fill="${PAPER}" fill-rule="evenodd"/>`, i === 0 || p.raised ? 'heavy' : 'medium')).join('');
   const engraving = spec.engraving.map(e => e.kind === 'text'
     ? text(e.at[0], e.at[1], e.text, e.cap, e.width, e.anchor)
-    : `<path d="${e.d}" ${sw(e.pen ?? 'medium')}/>`).join('');
+    : `<path d="${e.d}" ${sw(e.pen ?? 'medium')}${e.faint ? ' stroke-opacity="0.3"' : ''}/>`).join('');
   return `<svg class="cockpit-svg" viewBox="0 0 ${n(w)} ${n(h)}" xmlns="http://www.w3.org/2000/svg" ${opts.label ? `role="img" aria-label="${esc(opts.label)}"` : 'aria-hidden="true"'}>` +
     `<g fill="none" stroke="${INK}" stroke-linejoin="round" stroke-linecap="round" font-family="${FONT}" font-weight="600">` +
     `<defs><clipPath id="plate-${spec.id}"><path d="${spec.plate[spec.plate.length - 1].d}"/></clipPath><clipPath id="base-${spec.id}"><path d="${spec.plate[0].d}"/></clipPath></defs>` +

@@ -16,12 +16,36 @@ const src = 'DCS F-16C guide pp. 259–260';
 const L = (at: [number, number], text: string, cap: number, width?: number) =>
   ({ kind: 'text' as const, at: pt(...at), text, cap: mm(cap), ...(width ? { width: mm(width) } : {}) });
 /** Manual frequency knobs, left to right (reference px). */
-const FK: [number, number][] = [[74, 270], [174, 270], [277, 273], [378, 276], [478, 279]];
+const FK: [number, number][] = [75, 176, 277, 378, 479].map(x => [x, 273]);
 const digits = Array.from({ length: 10 }, (_, d) => ({ id: String(d), label: String(d), angle: d * 36, hold: 'stable' as const }));
 const pushed = [
   { id: 'out', label: 'Released', hold: 'stable' as const },
   { id: 'in', label: 'Pressed', hold: 'momentary' as const, spring: 'out' },
 ];
+/**
+ * Unlit 10-segment LED digit (outlines only), centred on (cx, cy), half-size
+ * w x h in reference px: the seven bars with the middle bar split in two, and
+ * two diagonals (centre to top right, bottom left to centre), as the lit
+ * digits in the reference show.
+ */
+const led = (cx: number, cy: number, w: number, h: number) => {
+  const t = Math.min(w, h) * 0.3, g = t * 0.35, f = (v: number) => +v.toFixed(2);
+  const hz = (x1: number, x2: number, y: number) =>
+    `M${f(x1)} ${f(y)}L${f(x1 + t / 2)} ${f(y - t / 2)}H${f(x2 - t / 2)}L${f(x2)} ${f(y)}L${f(x2 - t / 2)} ${f(y + t / 2)}H${f(x1 + t / 2)}Z`;
+  const vt = (x: number, y1: number, y2: number) =>
+    `M${f(x)} ${f(y1)}L${f(x + t / 2)} ${f(y1 + t / 2)}V${f(y2 - t / 2)}L${f(x)} ${f(y2)}L${f(x - t / 2)} ${f(y2 - t / 2)}V${f(y1 + t / 2)}Z`;
+  const dg = (x1: number, y1: number, x2: number, y2: number) => {
+    const l = Math.hypot(x2 - x1, y2 - y1), nx = -(y2 - y1) / l * t * 0.3, ny = (x2 - x1) / l * t * 0.3;
+    return `M${f(x1 + nx)} ${f(y1 + ny)}L${f(x2 + nx)} ${f(y2 + ny)}L${f(x2 - nx)} ${f(y2 - ny)}L${f(x1 - nx)} ${f(y1 - ny)}Z`;
+  };
+  const [l, r, tp, bt] = [cx - w, cx + w, cy - h, cy + h];
+  return [
+    hz(l + g, r - g, tp), hz(l + g, r - g, bt), hz(l + g, cx - g, cy), hz(cx + g, r - g, cy),
+    vt(l, tp + g, cy - g), vt(l, cy + g, bt - g), vt(r, tp + g, cy - g), vt(r, cy + g, bt - g),
+    dg(cx + g + t / 2, cy - g - t / 2, r - g - t / 2, tp + g + t / 2), dg(l + g + t / 2, bt - g - t / 2, cx - g - t / 2, cy + g + t / 2),
+  ].join('');
+};
+
 /** Preset card table: column and row rules (reference px). */
 const COLS = [42, 63.5, 117, 136.5, 185, 210, 266.5], ROWS = [15, 30, 44, 58, 72.5, 87, 101, 116];
 const card = [
@@ -53,7 +77,7 @@ export const uhf: PanelSpec = {
     scale: 'DZUS stud heads are drawn at one size (8.5 mm) on every panel; this panel\'s scale is set so its fastener heads (about 32 px) match.',
     shown: { chan: '4', 'freq-1': '3', 'freq-2': '6', 'freq-3': '0', 'freq-4': '4', 'freq-5': '00', function: 'both', mode: 'preset' },
     unresolved: [
-      'The CHAN and frequency displays are drawn as empty windows; the digits they show (04 and 360.400 in the reference) depend on the radio state, not on the knobs alone.',
+      'The CHAN and frequency displays are drawn unlit, with faint outlines of their 10-segment digits; the digits they show (04 and 360.400 in the reference) depend on the radio state, not on the knobs alone.',
       'The preset card is a write-on card; only its rules, headings and channel numbers are drawn.',
       'CHAN detents are taken as 18° apart (20 presets), from the bar angle at preset 4. The frequency digit knobs are taken as 36° apart, matching their bar angles at 6, 0 and 4.',
       'The TONE and SQUELCH switches are seen end-on in the reference, so their lever positions are not readable. TONE is drawn as a spring-loaded switch toward TONE.',
@@ -72,16 +96,18 @@ export const uhf: PanelSpec = {
     { kind: 'path', pen: 'fine', d: path(card) },
     ...cardText,
     // CHAN.
-    L([363, 28], 'CHAN', 12, 44),
+    L([365, 28], 'CHAN', 12, 44),
     { kind: 'path', pen: 'heavy', d: path('M339 63H391V106H339Z') },
     { kind: 'path', pen: 'fine', d: path('M343 67H387V102H343Z') },
+    { kind: 'path', pen: 'fine', faint: true, d: path(led(354, 84.5, 9, 12.5) + led(376, 84.5, 9, 12.5)) },
     // TEST DISPLAY and STATUS.
     L([56, 163], 'TEST', 11, 28),
     L([57, 176], 'DISPLAY', 10, 49),
-    L([483, 178], 'STATUS', 11, 39),
+    L([483, 177], 'STATUS', 11, 39),
     // Frequency display, the digit underline bars and the leaders to their knobs.
     { kind: 'path', pen: 'heavy', d: path('M180 156H378V197H180Z') },
     { kind: 'path', pen: 'fine', d: path('M184 160H374V193H184Z') },
+    { kind: 'path', pen: 'fine', faint: true, d: path([0, 1, 2, 3, 4, 5].map(k => led(193 + 33.2 * k, 176.5, 10, 13.5)).join('') + 'M273.5 189.5H275.5V191.5H273.5Z') },
     { kind: 'path', pen: 'heavy', d: path('M178 202H207M213 202H238M248 202H278M283 202H312M317 202H377') },
     { kind: 'path', d: path('M190 204L101 251M226 204L194 245M263 204L271 245M297 204L356 254M345 204L455 257') },
     // A-3-2 knob.
@@ -89,20 +115,20 @@ export const uhf: PanelSpec = {
     L([31, 269], '3', 10),
     L([37, 289], '2', 10),
     // Function knob.
-    L([65, 359], 'OFF', 11.5, 26),
-    L([96, 336], 'MAIN', 11.5, 33),
+    L([66, 360], 'OFF', 11.5, 26),
+    L([97, 336], 'MAIN', 11.5, 33),
     L([155, 336], 'BOTH', 11.5, 37),
-    L([184, 361], 'ADF', 11.5, 26),
+    L([186, 360], 'ADF', 11.5, 26),
     // VOL.
-    L([275, 336], 'VOL', 11.5, 26),
+    L([277, 336], 'VOL', 11.5, 26),
     // Mode knob.
-    L([385, 344], 'MNL', 11.5, 27),
-    L([426, 330], 'PRESET', 11.5, 51),
-    L([466, 344], 'GRD', 11.5, 25),
+    L([389, 344], 'MNL', 11.5, 27),
+    L([428, 330], 'PRESET', 11.5, 51),
+    L([467, 344], 'GRD', 11.5, 25),
     // TONE and SQUELCH.
-    L([187, 433], 'T', 10),
-    L([244, 433], 'TONE', 10, 28),
-    L([329, 413], 'SQUELCH', 10, 46),
+    L([187, 432], 'T', 10),
+    L([244, 432], 'TONE', 10, 28),
+    L([330.5, 413], 'SQUELCH', 10, 46),
     L([302, 432], 'OFF', 10, 21),
     L([359, 432], 'ON', 10, 15),
     // Vertical "UHF" and the part number.
@@ -118,11 +144,11 @@ export const uhf: PanelSpec = {
     { component: 'push-round-medium', control: 'test-display', at: pt(104, 170) },
     { component: 'push-round-medium', control: 'status', at: pt(445, 177) },
     ...FK.map(([x, y], i) => ({ component: 'knob-bar-medium' as const, control: `freq-${i + 1}`, at: pt(x, y) })),
-    { component: 'knob-radio-large', control: 'function', at: pt(126, 397) },
+    { component: 'knob-radio-large', control: 'function', at: pt(126, 398) },
     { component: 'knob-knurled-mini', control: 'vol', at: pt(277, 368) },
-    { component: 'knob-radio-large', control: 'mode', at: pt(428, 400) },
-    { component: 'toggle-small', control: 'tone', at: pt(213, 433) },
-    { component: 'toggle-small', control: 'squelch', at: pt(332, 430) },
+    { component: 'knob-radio-large', control: 'mode', at: pt(428, 398) },
+    { component: 'toggle-small', control: 'tone', at: pt(213, 432) },
+    { component: 'toggle-small', control: 'squelch', at: pt(330.5, 432) },
   ],
   controls: [
     {
@@ -168,10 +194,10 @@ export const uhf: PanelSpec = {
     {
       id: 'function', name: 'Function knob', type: 'rotary',
       positions: [
-        { id: 'off', label: 'OFF', angle: -57, hold: 'stable' },
+        { id: 'off', label: 'OFF', angle: -58, hold: 'stable' },
         { id: 'main', label: 'MAIN', angle: -25, hold: 'stable' },
-        { id: 'both', label: 'BOTH', angle: 20, hold: 'stable' },
-        { id: 'adf', label: 'ADF', angle: 57, hold: 'stable' },
+        { id: 'both', label: 'BOTH', angle: 25, hold: 'stable' },
+        { id: 'adf', label: 'ADF', angle: 58, hold: 'stable' },
       ],
       initial: 'off',
       description: 'OFF removes power from the backup radio. MAIN works the radio on the selected preset or manual frequency, with the guard receiver off. BOTH adds the guard receiver on 243.0 MHz. ADF has no function in DCS.',
@@ -192,9 +218,9 @@ export const uhf: PanelSpec = {
     {
       id: 'mode', name: 'Mode knob', type: 'rotary',
       positions: [
-        { id: 'mnl', label: 'MNL', angle: -38, hold: 'stable' },
+        { id: 'mnl', label: 'MNL', angle: -37, hold: 'stable' },
         { id: 'preset', label: 'PRESET', angle: 0, hold: 'stable' },
-        { id: 'grd', label: 'GRD', angle: 35, hold: 'stable' },
+        { id: 'grd', label: 'GRD', angle: 37, hold: 'stable' },
       ],
       initial: 'preset',
       description: 'MNL tunes the frequency set on the five manual frequency knobs. PRESET tunes the preset channel selected on the CHAN knob. GRD tunes the guard frequency, 243.0 MHz, and turns the separate guard receiver off.',

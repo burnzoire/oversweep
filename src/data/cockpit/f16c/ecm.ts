@@ -66,8 +66,8 @@ export const ecm: PanelSpec = {
     L([64, 64], 'OFF', 9.5, 21),
     ...([['1', 79], ['2', 91], ['3', 103]] as const).map(([t, y]) => L([88, y], t, 9.5)),
     L([54, 121], 'DIM', 9.5, 21),
-    L([108, 121], 'XMIT', 9.5, 28),
-    L([54, 170], 'RESET', 9.5, 34),
+    L([112, 121], 'XMIT', 9.5, 28),
+    L([53, 170], 'RESET', 9.5, 34),
     L([120, 170], 'BIT', 9.5, 18),
     // Module button housing: a raised frame round the 4 x 2 matrix.
     { kind: 'path', pen: 'medium', d: path('M137 31H373V154H137Z') },

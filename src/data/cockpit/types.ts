@@ -158,7 +158,7 @@ export interface LampCell {
 /** Fixed engraving on the plate: legends, rules, tick marks. */
 export type Engraving =
   | { kind: 'text'; at: Pt; text: string; cap: number; width?: number; anchor?: 'start' | 'middle' | 'end' }
-  | { kind: 'path'; d: string; pen?: Pen };
+  | { kind: 'path'; d: string; pen?: Pen; /** Drawn pale: unlit display segments. */ faint?: boolean };
 
 export type Pen = 'fine' | 'medium' | 'heavy';
 

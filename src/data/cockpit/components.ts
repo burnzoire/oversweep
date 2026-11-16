@@ -231,13 +231,13 @@ export const KNOBS = {
   /** Knurled dimmer (EXT LIGHTING FORM). */
   'knob-knurled': { r: 9.4, lobes: 12, ridge: [0.82, 0.13] },
   /** Plain round knob with a wide raised bar (EXT LIGHTING MASTER). */
-  'knob-bar': { r: 10, lobes: 0, ridge: [0.96, 0.22] },
+  'knob-bar': { r: 10, lobes: 0, ridge: [0.96, 0.22], bar: true },
   /** Round base under a three-armed grip with deep hollows between the arms, index bar along one arm (EXT LIGHTING AERIAL REFUELING). */
   'knob-lobed': { r: 10.4, lobes: 0, ridge: [0.7, 0.13], grip: 3 },
   /** Round knob crossed by a broad raised grip band that runs rim to rim (EXT LIGHTING MASTER). */
   'knob-bar-thick': { r: 10, lobes: 0, ridge: [1, 0.4], band: true },
   /** Round knob with a wide raised bar, smaller than knob-bar (UHF backup CHAN and frequency knobs). */
-  'knob-bar-medium': { r: 7.2, lobes: 0, ridge: [0.96, 0.22] },
+  'knob-bar-medium': { r: 7.2, lobes: 0, ridge: [0.96, 0.22], bar: true },
   /** Very small knurled knob (UHF backup VOL). */
   'knob-knurled-mini': { r: 4.8, lobes: 12, ridge: [0.8, 0.16] },
   /**
@@ -259,6 +259,7 @@ export function knobArt(art: keyof typeof KNOBS) {
     return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') +
       `<circle r="${k(0.69)}" ${sw('fine')}/>` +
       `<path d="${lever}" fill="${PAPER}" ${sw('medium')}/>` +
+      `<path d="M0 ${k(-0.71)}V0" ${sw('heavy')}/>` +
       `<rect x="${k(-0.075)}" y="${k(-1.04)}" width="${k(0.15)}" height="${k(0.33)}" rx="${k(0.02)}" fill="${PAPER}" ${sw('heavy')}/>`;
   }
   let rim: string;
@@ -298,11 +299,20 @@ export function knobArt(art: keyof typeof KNOBS) {
     }
     return cased(rim, 'heavy') + `<circle r="${n(r * 0.9)}" ${sw('fine')}/>` +
       cased(`<path d="M${pts.join("L")}Z" fill="${PAPER}"/>`, "heavy") +
-      `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(2 * hl)}" rx="${n(hw * 0.4)}" fill="${PAPER}" ${sw('medium')}/>` +
-      `<path d="M0 ${n(-hl + hw)}V0" ${sw('heavy')}/>`;
+      indicator(hl, hw);
   }
-  return cased(rim, 'heavy') +
+  // Bar knobs: the raised bar is the grip and runs across the centre. Other
+  // knobs: the white indicator bar starts at the centre and runs out to the
+  // pointing end.
+  if ('bar' in t) return cased(rim, 'heavy') +
     `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(2 * hl)}" rx="${n(hw * 0.6)}" fill="${PAPER}" ${sw('medium')}/>` +
+    `<path d="M0 ${n(-hl + hw)}V0" ${sw('heavy')}/>`;
+  return cased(rim, 'heavy') + indicator(hl, hw);
+}
+
+/** A knob's white indicator bar from the centre out to `hl`, with its index line. */
+function indicator(hl: number, hw: number) {
+  return `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl + hw)}" rx="${n(hw * 0.6)}" fill="${PAPER}" ${sw('medium')}/>` +
     `<path d="M0 ${n(-hl + hw)}V0" ${sw('heavy')}/>`;
 }
 
@@ -316,7 +326,7 @@ export function rotaryKnob(art: keyof typeof ROTARIES) {
   const { bar, barBack, barFront } = ROTARIES[art];
   const body = `M${-barFront} ${-bar}Q0 ${n(-bar - 1.2)} ${barFront} ${-bar}L${barBack} ${n(bar * 0.82)}Q0 ${n(bar * 1.08)} ${-barBack} ${n(bar * 0.82)}Z`;
   return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') +
-    `<path d="M0 ${n(-bar + 0.9)}V${n(-bar * 0.25)}" ${sw('heavy')}/>`;
+    `<path d="M0 ${n(-bar + 0.9)}V0" ${sw('heavy')}/>`;
 }
 
 /* ------------------------------------------------------------ pushbuttons */

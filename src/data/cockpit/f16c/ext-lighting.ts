@@ -23,6 +23,10 @@ const arrow = (a: [number, number], c: [number, number], tip: [number, number]) 
 };
 const AC: [number, number] = [82, 80];   // ANTI-COLL knob
 const MS: [number, number] = [238, 222]; // MASTER knob
+/** ANTI-COLL detents, evenly spaced; legends sit on a circle round the knob along each detent. */
+const ACP = ['OFF', '1', '2', '3', '4', 'A', 'B', 'C'].map((t, i) => ({ t, angle: -150 + 38 * i }));
+const acLegend = (a: number, rr: number): [number, number] =>
+  [+(AC[0] + rr * Math.sin(a * Math.PI / 180)).toFixed(1), +(AC[1] - rr * Math.cos(a * Math.PI / 180)).toFixed(1)];
 /** Four detents for the continuous dimmers, 90° apart; the reference shows each at the third. */
 const dimmer = [
   { id: 'off', label: 'OFF', angle: -135, hold: 'stable' as const },
@@ -46,7 +50,7 @@ export const extLighting: PanelSpec = {
     shown: { 'anti-coll': 'off', flash: 'steady', 'wing-tail': 'off', fuselage: 'off', form: 'mid', master: 'norm', 'aerial-refueling': 'mid' },
     unresolved: [
       'FORM and AERIAL REFUELING are continuous dimmers; they are modelled with four detents 90° apart (OFF to BRT). Where the dimmer stops at each end is not shown.',
-      'The ANTI-COLL detent angles are taken from the directions of their legends from the knob centre, so they are not evenly spaced.',
+      'The ANTI-COLL legends look unevenly spaced in the reference because of the camera angle; the detents are drawn evenly, 38° apart, with each legend on its detent line.',
       'The plate edges are cropped in the reference; the drawn edges sit just inside the crop.',
       'All three toggles show the orange-red grommet of plain toggles.',
     ],
@@ -58,14 +62,13 @@ export const extLighting: PanelSpec = {
     ...([['L', 70], ['I', 88], ['G', 112], ['H', 133], ['T', 155], ['I', 175], ['N', 194], ['G', 215]] as const).map(([t, y]) => t === 'I' ? L([37, y], t, 14) : L([37, y], t, 14, 9)),
     // ANTI-COLL selector.
     L([94, 18], 'ANTI-COLL', 12, 68),
-    L([66, 116], 'OFF', 10, 20),
-    ...([['1', 54, 95], ['2', 54, 70], ['3', 66, 49], ['4', 88, 42], ['A', 113, 49], ['B', 127, 70], ['C', 125, 95]] as const).map(([t, x, y]) => L([x, y], t, 10)),
+    ...ACP.map(({ t, angle }) => t === 'OFF' ? L(acLegend(angle, 40), t, 10, 20) : L(acLegend(angle, 34), t, 10)),
     // POSITION switches.
     L([240, 14], 'POSITION', 12, 55),
     { kind: 'path', d: path('M193 14H210M270 14H287') },
-    L([195, 35], 'FLASH', 10, 40),
-    L([193, 116], 'STEADY', 10.5, 47),
-    L([285, 35], 'WING/TAIL', 12, 67),
+    L([194, 35], 'FLASH', 10, 40),
+    L([194, 116], 'STEADY', 10.5, 47),
+    L([288, 35], 'WING/TAIL', 12, 67),
     L([397, 35], 'FUSELAGE', 12, 62),
     L([343, 62], 'BRT', 10, 23),
     L([342, 95], 'OFF', 10, 22),
@@ -76,13 +79,13 @@ export const extLighting: PanelSpec = {
     L([154, 235], 'BRT', 10, 22),
     { kind: 'path', d: arrow([138, 185], [153, 196], [155, 222]) },
     // MASTER selector.
-    L([239, 137], 'MASTER', 12, 48),
-    L([239, 157], 'COVERT', 10, 38),
-    { kind: 'path', d: path('M216 150H262V164H216Z') },
-    { kind: 'path', d: path('M197 178Q203 160 216 157M262 157Q275 160 283 176') },
-    L([239, 172], 'A-C', 10, 22),
+    L([238, 137], 'MASTER', 12, 48),
+    L([238, 157], 'COVERT', 10, 38),
+    { kind: 'path', d: path('M215 150H261V164H215Z') },
+    { kind: 'path', d: path('M197 178Q203 160 215 157M261 157Q273 160 279 178') },
+    L([238, 172], 'A-C', 10, 22),
     L([196, 183], 'ALL', 10, 22),
-    L([281, 183], 'FORM', 10, 32),
+    L([280, 183], 'FORM', 10, 32),
     L([182, 222], 'OFF', 10, 22),
     L([299, 222], 'NORM', 10, 32),
     L([300, 193], '+', 8),
@@ -101,8 +104,8 @@ export const extLighting: PanelSpec = {
     { component: 'screw-medium', at: pt(342, 22) },
     { component: 'screw-medium', at: pt(187, 248) },
     { component: 'knob-knurled-small', control: 'anti-coll', at: pt(...AC) },
-    { component: 'toggle-large', control: 'flash', at: pt(193, 76) },
-    { component: 'toggle-large', control: 'wing-tail', at: pt(290, 95) },
+    { component: 'toggle-large', control: 'flash', at: pt(194, 75.5) },
+    { component: 'toggle-large', control: 'wing-tail', at: pt(288, 95) },
     { component: 'toggle-large', control: 'fuselage', at: pt(397, 95) },
     { component: 'knob-knurled', control: 'form', at: pt(88, 225) },
     { component: 'knob-bar-thick', control: 'master', at: pt(...MS) },
@@ -112,14 +115,7 @@ export const extLighting: PanelSpec = {
     {
       id: 'anti-coll', name: 'ANTI-COLL knob', type: 'rotary',
       positions: [
-        { id: 'off', label: 'OFF', angle: -155, hold: 'stable' },
-        { id: '1', label: '1', angle: -118, hold: 'stable' },
-        { id: '2', label: '2', angle: -72, hold: 'stable' },
-        { id: '3', label: '3', angle: -30, hold: 'stable' },
-        { id: '4', label: '4', angle: 8, hold: 'stable' },
-        { id: 'a', label: 'A', angle: 45, hold: 'stable' },
-        { id: 'b', label: 'B', angle: 78, hold: 'stable' },
-        { id: 'c', label: 'C', angle: 110, hold: 'stable' },
+        ...ACP.map(({ t, angle }) => ({ id: t.toLowerCase(), label: t, angle, hold: 'stable' as const })),
       ],
       initial: 'off',
       description: 'Turns the anti-collision strobe on the tail off, or selects one of its seven flash patterns (1 to 4, A to C).',

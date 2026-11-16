@@ -105,6 +105,20 @@ everything that stands proud of it.
   as two straight edges with a quarter round about the fastener.
 - **Engraving stays clear** of fastener cut-outs and the plate edge; tighten
   letter spacing rather than overlap.
+- **Square controls up with their legends.** The camera's perspective shifts
+  knobs, switches and legends off their shared lines. Put a control and its
+  legends on common centre lines (a toggle between its position legends, a
+  row of knobs on one y, a knob centred under its title), and point each
+  rotary detent straight at its legend. Space detents evenly where the
+  legends only look uneven through perspective, and put the legends on their
+  detent lines.
+- **Knob indicator lines start at the centre** and run out to the pointing
+  end; only a bar knob's grip (CHAN, frequency knobs) crosses the centre.
+- **Trace one-off knob grips** (three-armed AERIAL REFUELING grip, MASTER's
+  broad band, the UHF radio selector's lever) as their own components.
+- **Unlit displays** show faint outlines of their segment digits (UHF uses
+  10-segment LEDs: seven bars with a split middle and two diagonals); use a
+  `faint` engraving path.
 - Real-part datasheets (e.g. Honeywell TL series) are fine for a component's
   shape; panel layout still traces from the sim guide only.
 
