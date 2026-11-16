@@ -124,7 +124,7 @@ export type Placement =
   | { component: LampModuleArt; at: Pt; size: [w: number, h: number]; lamps: LampCell[] }
   | { component: 'dzus' | 'screw' | 'screw-medium' | 'screw-small'; at: Pt };
 
-export type ToggleArt = 'toggle-large' | 'toggle-medium' | 'toggle-small' | 'toggle-large-cylinder' | 'toggle-large-square';
+export type ToggleArt = 'toggle-large' | 'toggle-medium' | 'toggle-small' | 'toggle-large-cylinder' | 'toggle-large-square' | 'toggle-large-lock';
 export type RotaryArt = 'rotary-pointer';
 export type PushArt = 'push-round-large';
 export type LampModuleArt = 'lamp-module';

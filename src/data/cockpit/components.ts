@@ -93,6 +93,8 @@ export const TOGGLES = {
    * it is drawn as a lever-lock base. `ball` is half the paddle width.
    */
   'toggle-large-square': { r: 4.0, reach: 4.6, ball: 3.3, cap: 'square', lock: true },
+  /** Bulbous lever-lock: a big ball on a short, thick lever in a lock-insert bushing (IFF M-4 CODE / REPLY). */
+  'toggle-large-lock': { r: 4.6, reach: 4.4, ball: 3.6, cap: 'ball', lock: true },
 } as const;
 
 /** Lever lean for each position in travel order: -1 toward the first, 0 straight out, 1 toward the last. */
@@ -112,9 +114,10 @@ export function toggleBase(art: keyof typeof TOGGLES) {
       cased(`<circle r="${n(ri)}" fill="${PAPER}"/>`, 'medium') +
       `<rect x="${n(-sw2)}" y="${n(-sl)}" width="${n(sw2 * 2)}" height="${n(sl * 2)}" rx="${n(sw2)}" ${sw('medium')}/><path d="${notches}" ${sw('fine')}/>`;
   }
-  const hex = Array.from({ length: 6 }, (_, i) => polar(r * 0.74, 30 + i * 60)).map(([x, y]) => `${n(x)} ${n(y)}`).join('L');
-  return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<path d="M${hex}Z" fill="${PAPER}" ${sw('medium')}/>` +
-    `<circle r="${n(r * 0.42)}" ${sw('fine')}/>`;
+  // Plain toggle: the bushing is covered by a round water-resistant grommet
+  // (orange-red in the jet), a raised ring with the lever rising from its centre.
+  return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + cased(`<circle r="${n(r * 0.72)}" fill="${PAPER}"/>`, 'medium') +
+    `<circle r="${n(r * 0.58)}" ${sw('fine')}/><circle r="${n(r * 0.36)}" ${sw('fine')}/>`;
 }
 
 /**
@@ -122,7 +125,8 @@ export function toggleBase(art: keyof typeof TOGGLES) {
  * Horizontal travel is the same drawing rotated by the renderer.
  */
 export function toggleLever(art: keyof typeof TOGGLES, k: number) {
-  const { r, reach, ball, cap } = TOGGLES[art];
+  const t = TOGGLES[art], { r, reach, ball, cap } = t;
+  const lock = 'lock' in t && t.lock;
   const L = reach * k;
   const w0 = cap === 'cylinder' ? ball * 0.58 : r * 0.3, w1 = cap === 'cylinder' ? ball * 0.62 : ball * 0.62;
   // Mushroom cap: the lever leans only ~17° from the panel normal, so the cap stays almost square to the
@@ -136,9 +140,10 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
     : cased(`<circle cy="${n(L)}" r="${ball}" fill="${PAPER}"/>`, 'medium') + `<circle cx="${n(-ball * 0.3)}" cy="${n(L - ball * 0.3)}" r="${n(ball * 0.32)}" ${sw('fine')}/>`;
   if (Math.abs(k) < 1e-6) return tip;
   const s = Math.sign(k);
-  // The lever passes through the pivot, so its rounded root sits behind it,
-  // offset away from the lean by half the lever's thickness.
-  const y0 = -s * w0;
+  // A plain toggle's lever passes through the pivot, so its rounded root sits
+  // behind it, offset away from the lean by half the lever's thickness. A
+  // lever-lock's lever rises out of the lock insert, so its root is centred.
+  const y0 = lock ? 0 : -s * w0;
   const arc = `A${n(w0)} ${n(w0)} 0 0 ${s > 0 ? 1 : 0}`;
   if (cap === 'square') {
     // Flat lever widening from the root to the paddle: a trapezoid under the face.
@@ -148,9 +153,9 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   if (cap === 'ball') {
     // Teardrop: one outline from the round lever root, along the common
     // tangents, around the ball. Lever along +y, mirrored for an upward lean.
-    const d = Math.abs(L), r0 = w0, r1 = ball, a = Math.asin(Math.min(0.95, (r1 - r0) / (d + w0)));
+    const rc = lock ? 0 : -w0, d = Math.abs(L), r0 = w0, r1 = ball, a = Math.asin(Math.min(0.95, (r1 - r0) / (d - rc)));
     const ca = Math.cos(a), sa = Math.sin(a), Y = (y: number) => n(s * y);
-    const p0r = [r0 * ca, -w0 - r0 * sa], p0l = [-r0 * ca, -w0 - r0 * sa];
+    const p0r = [r0 * ca, rc - r0 * sa], p0l = [-r0 * ca, rc - r0 * sa];
     const p1r = [r1 * ca, d - r1 * sa], p1l = [-r1 * ca, d - r1 * sa];
     const sweep = s > 0 ? 1 : 0;
     const drop = `<path d="M${n(p0r[0])} ${Y(p0r[1])}L${n(p1r[0])} ${Y(p1r[1])}A${r1} ${r1} 0 1 ${sweep} ${n(p1l[0])} ${Y(p1l[1])}` +
