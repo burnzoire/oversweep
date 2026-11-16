@@ -160,9 +160,21 @@ For every DZUS, slot, strip, well and layer step:
    sheet.png "TL:x0,y0,x1,y1" ...` (source crop beside the overlay for each
    cut-out), and show that sheet in the PR.
 
-Shapes seen so far: EXT LIGHTING has corner notches with ~10 px rounded inner
-corners; ECM has side slots with a half-round end centred on each DZUS; UHF
-has long DZUS strips with ~7 px rounded corners and a square-cornered card well.
+Shapes seen so far: EXT LIGHTING and AIR COND have corner notches; ECM has
+side slots with a half-round end centred on each DZUS; UHF has long DZUS
+strips plus a top-left corner notch (the preset card sits on the face, not in
+a well). Nathan's rules (2026-11-16): only the area round the DZUS is cut;
+draw left and right cut-outs (and their DZUS) mirrored about the panel centre
+at the mean measured heights, all the same width; inner radii generous
+(8–14 px, never ~7); DZUS centred in its slot or notch.
+
+**Legend clearance.** After any change to a toggle or its legends, run
+`node --experimental-strip-types --no-warnings scripts/cockpit-overlaps.mjs`
+(add `--all` for every lever position). It lists every legend a bushing or
+the drawn lever tip covers; move the legend clear rather than shrink the part.
+
+**Reference images.** `pdfimages -j` gives JPEGs; convert them to PNG before
+`cockpit-review.mjs` (a JPEG reference renders blank).
 
 ## 5. Ship
 
