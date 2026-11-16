@@ -126,7 +126,6 @@ export function toggleBase(art: keyof typeof TOGGLES) {
  */
 export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   const t = TOGGLES[art], { r, reach, ball, cap } = t;
-  const lock = 'lock' in t && t.lock;
   const L = reach * k;
   const w0 = cap === 'cylinder' ? ball * 0.58 : cap === 'dome' ? r * 0.3 : r * 0.3, w1 = cap === 'dome' ? ball * 0.8 : ball * 0.62;
   // Mushroom cap: the lever leans only ~17° from the panel normal, so the cap stays almost square to the
@@ -140,11 +139,9 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
     : cased(`<circle cy="${n(L)}" r="${ball}" fill="${PAPER}"/>`, 'medium');
   if (Math.abs(k) < 1e-6) return tip;
   const s = Math.sign(k);
-  // A plain toggle's lever starts at the pivot: its rounded root is offset
-  // toward the lean by half the lever's thickness, so its back edge sits on
-  // the pivot. A lever-lock's lever rises out of the lock insert, so its
-  // root is centred on the pivot.
-  const y0 = lock ? 0 : s * w0;
+  // Every lever starts at the pivot: its rounded root is offset toward the
+  // lean by half the lever's thickness, so nothing reaches behind the pivot.
+  const y0 = s * w0;
   const arc = `A${n(w0)} ${n(w0)} 0 0 ${s > 0 ? 1 : 0}`;
   if (cap === 'square') {
     // Flat lever widening from the root to the paddle: a trapezoid under the face.
@@ -154,7 +151,7 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   if (cap === 'ball') {
     // Teardrop: one outline from the round lever root, along the common
     // tangents, around the ball. Lever along +y, mirrored for an upward lean.
-    const rc = lock ? 0 : w0, d = Math.abs(L), r0 = w0, r1 = ball, a = Math.asin(Math.min(0.95, (r1 - r0) / (d - rc)));
+    const rc = w0, d = Math.abs(L), r0 = w0, r1 = ball, a = Math.asin(Math.min(0.95, (r1 - r0) / (d - rc)));
     const ca = Math.cos(a), sa = Math.sin(a), Y = (y: number) => n(s * y);
     const p0r = [r0 * ca, rc - r0 * sa], p0l = [-r0 * ca, rc - r0 * sa];
     const p1r = [r1 * ca, d - r1 * sa], p1l = [-r1 * ca, d - r1 * sa];
