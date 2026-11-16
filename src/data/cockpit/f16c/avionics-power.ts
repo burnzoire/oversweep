@@ -97,14 +97,14 @@ export const avionicsPower: PanelSpec = {
     L([62, 170], 'ALIGN', 9.5, 30, -36),
     { kind: 'path', d: path('M46 199L42 194L49 189M73 164L79 158L84 162') },
     L([56, 206], 'STOR', 9.5, 27), L([59, 218], 'HDG', 9.5, 23),
-    L([93, 175], 'NORM', 9.5, 31), L([133, 172], 'NAV', 9.5, 21), L([157, 192], 'CAL', 9.5, 19),
+    L([93, 175], 'NORM', 9.5, 31), L([133, 172], 'NAV', 9.5, 21), L([159, 192], 'CAL', 9.5, 19),
     L([177, 236], 'IN FLT', 9.5, 32), L([177, 250], 'ALIGN', 9.5, 30),
     L([145, 270], 'ATT', 9.5, 21), L([66, 254], 'OFF', 9.5, 21),
     { kind: 'path', pen: 'medium', d: path(INS_POS.map(p => tick(INS, p.angle, 37, 44)).join('')) },
     // MIDS LVT dial.
     L([MIDS[0], 152], 'MIDS LVT', 9.5, 52),
     { kind: 'path', d: path(`M${MIDS[0] - 50} 158L${MIDS[0] - 44} 152H${MIDS[0] - 30}M${MIDS[0] + 30} 152H${MIDS[0] + 44}L${MIDS[0] + 50} 158`) },
-    L([MIDS[0], 169], 'OFF', 9.5, 18), L([310, 186], 'ZERO', 9.5, 27), L([389, 186], 'ON', 9.5, 13),
+    L([MIDS[0], 169], 'OFF', 9.5, 18), L([306, 186], 'ZERO', 9.5, 27), L([389, 186], 'ON', 9.5, 13),
     { kind: 'path', pen: 'medium', d: path(MIDS_POS.map(p => tick(MIDS, p.angle, 37, 44)).join('')) },
   ],
   placements: [
