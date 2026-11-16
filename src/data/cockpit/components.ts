@@ -291,7 +291,7 @@ export function knobArt(art: keyof typeof KNOBS) {
         const x = d * Math.sin(a - b), y = d * Math.cos(a - b), py = Math.max(0, Math.min(L, y));
         return Math.hypot(x, y - py) <= w;
       });
-      let lo = 0, hi = r;
+      let lo = 0, hi: number = r;
       for (let j = 0; j < 30; j++) { const m = (lo + hi) / 2; if (inside(m)) lo = m; else hi = m; }
       const rr = lo;
       pts.push(`${n(rr * Math.sin(a))} ${n(-rr * Math.cos(a))}`);
