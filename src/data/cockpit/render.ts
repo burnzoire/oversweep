@@ -22,11 +22,6 @@ const turn = (deg: number | undefined, cx: number, cy: number, body: string) =>
   deg ? `<g transform="rotate(${deg} ${n(cx)} ${n(cy)})">${body}</g>` : body;
 
 /** Axis-aligned box around a w x h rectangle centred on (cx, cy), turned by `deg`. */
-function turnedBox(cx: number, cy: number, w: number, h: number, deg = 0): [number, number, number, number] {
-  const a = deg * Math.PI / 180, bw = Math.abs(w * Math.cos(a)) + Math.abs(h * Math.sin(a)), bh = Math.abs(w * Math.sin(a)) + Math.abs(h * Math.cos(a));
-  return [cx - bw / 2, cy - bh / 2, bw, bh];
-}
-
 export function controlOf(spec: PanelSpec, id: string): ControlDef {
   const c = spec.controls.find(c => c.id === id);
   if (!c) throw new Error(`${spec.id}: placement refers to unknown control "${id}"`);
@@ -178,9 +173,11 @@ export function renderPanel(spec: PanelSpec, opts: RenderOptions = {}) {
 export interface HitZone {
   kind: 'control' | 'indicator';
   id: string;
-  /** Box in mm (x, y, w, h). */
+  /** Box in mm (x, y, w, h), before `rotate`. */
   box: [number, number, number, number];
   round?: boolean;
+  /** Turn in degrees about the box centre, for items drawn turned (eyebrow lights). */
+  rotate?: number;
 }
 
 /** Hit zones in mm, from the same placements and component dimensions as the art. */
@@ -209,7 +206,7 @@ export function hitZones(spec: PanelSpec): HitZone[] {
       }
       case 'push-square': {
         const [w, h] = p.size;
-        return [{ kind: 'control', id: p.control, box: turnedBox(x, y, w, h, p.rotate) }];
+        return [{ kind: 'control', id: p.control, box: [x - w / 2, y - h / 2, w, h], rotate: p.rotate }];
       }
       case 'guard-flip': {
         // The lower half of the closed guard: the upper half is left to the switch it covers.
@@ -226,7 +223,7 @@ export function hitZones(spec: PanelSpec): HitZone[] {
           const [mw, mh] = p.size, a = (p.rotate ?? 0) * Math.PI / 180;
           const dx = l.rect[0] + l.rect[2] / 2 - mw / 2, dy = l.rect[1] + l.rect[3] / 2 - mh / 2;
           const cx = x + mw / 2 + dx * Math.cos(a) - dy * Math.sin(a), cy = y + mh / 2 + dx * Math.sin(a) + dy * Math.cos(a);
-          return { kind: 'indicator' as const, id: l.indicator, box: turnedBox(cx, cy, l.rect[2], l.rect[3], p.rotate) };
+          return { kind: 'indicator' as const, id: l.indicator, box: [cx - l.rect[2] / 2, cy - l.rect[3] / 2, l.rect[2], l.rect[3]] as [number, number, number, number], rotate: p.rotate };
         });
       default:
         return [];

@@ -152,13 +152,13 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   // viewer (a near-circle). Its top is nearly flat, so no inner ring.
   const face = (ry: number) => cased(`<ellipse cy="${n(L)}" rx="${ball}" ry="${n(ry)}" fill="${PAPER}"/>`, 'medium');
   if (cap === 'hook') {
-    // Traced from the guide image: a short stem from the pivot to a flat
-    // vertical paddle, a rectangle with a semicircular end toward the pivot
-    // and a square-cornered far end, overhanging well past the bushing.
-    const s = Math.sign(k) || -1, Y = (y: number) => n(s * y), near = r * 0.1, c = near + ball;
-    const stem = `<rect x="${n(-r * 0.22)}" y="${n(Math.min(0, s * c))}" width="${n(r * 0.44)}" height="${n(c)}" fill="${PAPER}" ${sw('medium')}/>`;
-    const paddle = `<path d="M${n(-ball)} ${Y(reach)}H${n(ball)}V${Y(c)}A${ball} ${ball} 0 0 ${s > 0 ? 0 : 1} ${n(-ball)} ${Y(c)}Z" fill="${PAPER}"/>`;
-    return stem + cased(paddle, 'medium');
+    // Traced from the guide image: a flat vertical paddle, a rectangle with a
+    // semicircular end at the pivot and a square-cornered far end overhanging
+    // well above the bushing. The paddle always points up; moving to DN it
+    // does not flip, it slides down by the lever's square-on throw.
+    const dy = k > 0 ? r * 1.6 : 0, c = r * 0.1 + ball;
+    const paddle = `<path d="M${n(-ball)} ${n(dy - reach)}H${n(ball)}V${n(dy - c)}A${ball} ${ball} 0 0 1 ${n(-ball)} ${n(dy - c)}Z" fill="${PAPER}"/>`;
+    return cased(paddle, 'medium');
   }
   if (cap === 'wide') {
     // Wide paddle end (seen almost end-on at the real lean): a long pill with three round grip bosses.
