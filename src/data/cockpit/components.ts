@@ -86,17 +86,20 @@ export const TOGGLES = {
    * bushing, lever 26.7 mm above the bushing, cap 10.7 mm dia, 34° total
    * travel (17° each side). Scaled to this bushing, seen square-on the lever
    * projects only ~26.7·sin 17° and the cap stays almost face-on (cos 17°).
-   * `ball` is the cap radius.
+   * `ball` is the cap radius. Cap enlarged 50% (Nathan, 2026-11-17).
    */
-  'toggle-large-cylinder': { r: 5.2, reach: 6.4, ball: 3.45, cap: 'cylinder', lock: true },
+  // `shift`: the whole lever translates this far (mm) toward the lean when it
+  // actuates: the lever-lock mechanism carries it to the end of its slot, so in
+  // the guide it looks pivoted off-centre (Nathan, 2026-11-17).
+  'toggle-large-cylinder': { r: 5.2, reach: 6.4, ball: 5.18, cap: 'cylinder', lock: true, shift: 2.5 },
   /**
    * Medium bushing with a flat lever widening (trapezoid) to a square paddle
    * (AIR REFUEL). The guide image shows a lock-insert slot in the bushing, so
    * it is drawn as a lever-lock base. `ball` is half the paddle width.
    */
   'toggle-large-square': { r: 4.0, reach: 4.6, ball: 3.3, cap: 'square', lock: true },
-  /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). */
-  'toggle-large-lock': { r: 6.24, reach: 7.2, ball: 3.36, cap: 'dome', lock: true },
+  /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). Cap the same diameter as the flat-top's (Nathan); throw long enough that the shaft shows below the cap, a little shorter on two-position switches (`reach2`) (Nathan, 2026-11-17). */
+  'toggle-large-lock': { r: 6.24, reach: 9.4, reach2: 8.8, ball: 5.18, cap: 'dome', lock: true },
   /**
    * One-off HOOK lever: a round bushing with an oblong slot and a flat
    * vertical paddle (rectangle, semicircle end toward the pivot) overhanging
@@ -152,8 +155,20 @@ export function toggleBase(art: keyof typeof TOGGLES) {
 /** How far a lever-lock's shaft base moves toward the lean (mm): the lift-and-shift into its detent. */
 const LOCK_SHIFT = 0.7;
 
-export function toggleLever(art: keyof typeof TOGGLES, k: number) {
-  const t = TOGGLES[art], { r, reach, ball, cap } = t;
+export function toggleLever(art: keyof typeof TOGGLES, k: number, count = 0) {
+  const t = TOGGLES[art], lever = leverOnPivot(art, k, count);
+  // A lever-lock with `shift` translates as a whole toward the lean when it actuates.
+  return 'shift' in t && t.shift && Math.abs(k) > 1e-6 ? `<g transform="translate(0 ${n(Math.sign(k) * t.shift)})">${lever}</g>` : lever;
+}
+
+/** Lever length (mm) for a switch with `count` positions: `reach2` for two-position switches where given. */
+export function toggleReach(art: keyof typeof TOGGLES, count = 0) {
+  const t = TOGGLES[art];
+  return count === 2 && 'reach2' in t ? t.reach2 : t.reach;
+}
+
+function leverOnPivot(art: keyof typeof TOGGLES, k: number, count = 0) {
+  const t = TOGGLES[art], { r, ball, cap } = t, reach = toggleReach(art, count);
   const L = reach * k;
   const w0 = cap === 'cylinder' ? ball * 0.58 : 'hex' in t ? r * 0.17 : r * 0.3, w1 = cap === 'dome' ? ball * 0.8 : ball * 0.62;
   // Mushroom cap: the lever leans only ~17° from the panel normal, so the cap stays almost square to the
@@ -182,6 +197,17 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
     : cap === 'square'
     // Square paddle end, nearly face-on at the real lean.
     ? cased(`<rect x="${n(-ball)}" y="${n(L - ball * 0.92)}" width="${n(ball * 2)}" height="${n(ball * 1.84)}" rx="${n(ball * 0.12)}" fill="${PAPER}"/>`, 'medium')
+    : cap === 'dome' && Math.abs(k) > 1e-6
+    // Domed cap (Nathan 2026-11-17): a sphere with depth, i.e. drawn out along the
+    // lever axis. Leaning 17°, square-on it is two round ends of the cap radius,
+    // 0.41 of the radius apart (a short stadium), with the far end's near edge
+    // showing just inside the near end: "(( )" with the pivot on the left.
+    ? (() => {
+      const sg = Math.sign(k), d = Math.abs(L), b = ball, e = ball * 0.41, Y = (y: number) => n(sg * y);
+      const sw0 = sg > 0 ? 0 : 1;
+      return cased(`<path d="M${n(-b)} ${Y(d)}A${b} ${b} 0 0 ${sw0} ${n(b)} ${Y(d)}V${Y(d - e)}A${b} ${b} 0 0 ${sw0} ${n(-b)} ${Y(d - e)}Z" fill="${PAPER}"/>`, 'medium') +
+        `<path d="M${n(-b)} ${Y(d)}A${b} ${b} 0 0 ${1 - sw0} ${n(b)} ${Y(d)}" ${sw('fine')}/>`;
+    })()
     : cased(`<circle cy="${n(L)}" r="${ball}" fill="${PAPER}"/>`, 'medium');
   if (Math.abs(k) < 1e-6) return tip;
   const s = Math.sign(k);
@@ -226,6 +252,8 @@ export const ROTARIES = {
   'rotary-pointer': { skirt: 10.2, bar: 9.6, barBack: 4.8, barFront: 3.4 },
   /** Larger bar-pointer selector (AIR COND TEMP and AIR SOURCE). */
   'rotary-pointer-large': { skirt: 13, bar: 12.2, barBack: 6.1, barFront: 4.3 },
+  /** Mid-size selector, 11.6 mm skirt, with a broad block grip that chamfers to a pointed front (AVIONICS POWER INS and MIDS LVT). */
+  'rotary-pointer-medium': { skirt: 11.6, bar: 10.9, barBack: 6.2, barFront: 2.8, block: true },
 } as const;
 
 /**
@@ -242,6 +270,10 @@ export const KNOBS = {
   'knob-knurled-small': { r: 7.9, lobes: 12, ridge: [0.82, 0.16] },
   /** Knurled dimmer (EXT LIGHTING FORM). */
   'knob-knurled': { r: 9.4, lobes: 12, ridge: [0.82, 0.13] },
+  /** Knurled dimmer whose white index runs square-ended right out to the rim (Interior LIGHTING). */
+  'knob-knurled-edge': { r: 9.4, lobes: 12, ridge: [0.94, 0.13], edge: true },
+  /** As knob-knurled-edge, with the index carried on across a fixed collar to its rim (`reach`, mm; FLOOD CONSOLES). */
+  'knob-knurled-skirt': { r: 9.4, lobes: 12, ridge: [0.94, 0.13], edge: true, reach: 12.26 },
   /** Plain round knob with a wide raised bar (EXT LIGHTING MASTER). */
   'knob-bar': { r: 10, lobes: 0, ridge: [0.96, 0.22], bar: true },
   /** Round base under a three-armed grip with deep hollows between the arms, index bar along one arm (EXT LIGHTING AERIAL REFUELING). */
@@ -327,6 +359,17 @@ export function knobArt(art: keyof typeof KNOBS) {
   if ('bar' in t) return cased(rim, 'heavy') +
     `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(2 * hl)}" rx="${n(hw * 0.6)}" fill="${PAPER}" ${sw('medium')}/>` +
     `<path d="M0 ${n(-hl + hw)}V0" ${sw('heavy')}/>`;
+  if ('reach' in t) {
+    // Index carried across the collar: the strip from the knob rim to the collar rim, under the knob.
+    const out = `<rect x="${n(-hw)}" y="${n(-t.reach)}" width="${n(2 * hw)}" height="${n(t.reach - r * 0.9)}" fill="${PAPER}" ${sw('medium')}/>` +
+      `<path d="M0 ${n(-t.reach)}V${n(-r * 0.9)}" ${sw('heavy')}/>`;
+    return out + cased(rim, 'heavy') +
+      `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
+      `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
+  }
+  if ('edge' in t) return cased(rim, 'heavy') +
+    `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
+    `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
   return cased(rim, 'heavy') + (hl ? indicator(hl, hw) : '');
 }
 
@@ -354,6 +397,15 @@ export function rotaryBase(art: keyof typeof ROTARIES) {
 /** The knob drawn pointing at 12 o'clock; the renderer rotates it to the detent. */
 export function rotaryKnob(art: keyof typeof ROTARIES) {
   const { bar, barBack, barFront } = ROTARIES[art];
+  if ('block' in ROTARIES[art]) {
+    // Block grip traced from the guide's p. 78 INS knob (fractions of the skirt):
+    // pointed front, chamfered shoulders, parallel sides, square back with rounded corners.
+    const R = ROTARIES[art].skirt, k = (v: number) => n(v * R);
+    // Long sides parallel, square to the back edge (Nathan, 2026-11-17).
+    const body = `M${k(-0.07)} ${k(-0.93)}Q0 ${k(-0.97)} ${k(0.07)} ${k(-0.93)}L${k(0.5)} ${k(-0.42)}V${k(0.84)}` +
+      `Q${k(0.5)} ${k(0.96)} ${k(0.38)} ${k(0.96)}H${k(-0.38)}Q${k(-0.5)} ${k(0.96)} ${k(-0.5)} ${k(0.84)}V${k(-0.42)}Z`;
+    return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') + `<path d="M0 ${k(-0.8)}V0" ${sw('heavy')}/>`;
+  }
   const body = `M${-barFront} ${-bar}Q0 ${n(-bar - 1.2)} ${barFront} ${-bar}L${barBack} ${n(bar * 0.82)}Q0 ${n(bar * 1.08)} ${-barBack} ${n(bar * 0.82)}Z`;
   return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') +
     `<path d="M0 ${n(-bar + 0.9)}V0" ${sw('heavy')}/>`;

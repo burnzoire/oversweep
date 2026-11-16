@@ -96,9 +96,16 @@ everything that stands proud of it.
     toggles so the guard can shut them.
   - lever-lock (lock insert and slot visible in the bushing): flat-topped
     mushroom cap = `toggle-large-cylinder` (MAIN PWR); tapered shaft to a domed
-    cap = `toggle-large-lock` (JFS, MAX POWER, AB RESET, TANK INERTING); square
+    cap = `toggle-large-lock` (JFS, MAX POWER, AB RESET, TANK INERTING, AVIONICS
+    POWER MFD; the cap is a sphere drawn out along the lever, square-on a short
+    stadium with the far end's near edge showing just inside the near end, "(( )"
+    with the pivot on the left,
+    with a little less throw than the flat-top); square
     paddle on a trapezoid lever = `toggle-large-square` (AIR REFUEL).
     The lock slot has square ends so it never reads as part of the lever.
+    Flat-top lever-locks (`toggle-large-cylinder`) translate as a whole toward
+    the throw (`shift`), so they look pivoted off-centre like the guide; don't
+    lengthen the lever instead (Nathan, 2026-11-17).
   - When the bushing is hidden, say so in `source.unresolved`.
 - **DZUS cut-outs:** only where the guide shows one, the top plate layer (last `plate` entry) is notched around a corner DZUS; lower layers keep their outline. Set
   `cut` to the plate corner the notch opens toward (`up-left` …); it is drawn
@@ -168,10 +175,10 @@ draw left and right cut-outs (and their DZUS) mirrored about the panel centre
 at the mean measured heights, all the same width; inner radii generous
 (8–14 px, never ~7); DZUS centred in its slot or notch.
 
-**Legend clearance.** After any change to a toggle or its legends, run
-`node --experimental-strip-types --no-warnings scripts/cockpit-overlaps.mjs`
-(add `--all` for every lever position). It lists every legend a bushing or
-the drawn lever tip covers; move the legend clear rather than shrink the part.
+**Legend clearance.** Legends stay where the guide prints them; never move one
+to clear a lever. A thrown lever or cap may cover a legend, because the control
+moves (Nathan, 2026-11-17). `scripts/cockpit-overlaps.mjs` (add `--all` for every
+lever position) still lists what a bushing or lever tip covers, as information.
 
 **Reference images.** `pdfimages -j` gives JPEGs; convert them to PNG before
 `cockpit-review.mjs` (a JPEG reference renders blank).
