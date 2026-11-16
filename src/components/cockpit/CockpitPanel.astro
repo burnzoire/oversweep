@@ -1,0 +1,191 @@
+---
+/**
+ * Interactive close-up of one assembled panel. Everything comes from the
+ * panel spec: the artwork, the hit zones and the movement rules. The script
+ * below is the same for every panel; it knows positions, holds, guards and
+ * protections, never a panel by name.
+ *
+ * Control positions are kept per aircraft in sessionStorage, so they survive
+ * moving between panels. The jet is cold and dark: no systems logic runs and
+ * no lamp lights; selecting a lamp shows what it means.
+ */
+import type { AircraftCockpit, PanelSpec } from '../../data/cockpit/types';
+import { hitZones, renderPanel } from '../../data/cockpit/render.ts';
+
+interface Props { cockpit: AircraftCockpit; spec: PanelSpec }
+const { cockpit, spec } = Astro.props;
+const [W, H] = spec.canvas;
+const pct = (v: number, of: number) => `${+((v / of) * 100).toFixed(3)}%`;
+const def = { aircraft: cockpit.id, panel: spec.id, controls: spec.controls, indicators: spec.indicators };
+const control = (id: string) => spec.controls.find(c => c.id === id)!;
+const dirLabels = (id: string) => {
+  const c = control(id);
+  if (c.type === 'rotary') return [`Turn ${c.name} anticlockwise`, `Turn ${c.name} clockwise`];
+  if (c.travel === 'horizontal') return [`Move ${c.name} left`, `Move ${c.name} right`];
+  return [`Move ${c.name} up`, `Move ${c.name} down`];
+};
+---
+<div class="cockpit-panel" data-cockpit-panel style={`--ratio:${W / H}`}>
+  <div class="cp-stage">
+    <Fragment set:html={renderPanel(spec, { label: `${cockpit.title} ${spec.title}` })} />
+    {hitZones(spec).map(z => {
+      const style = `left:${pct(z.box[0], W)};top:${pct(z.box[1], H)};width:${pct(z.box[2], W)};height:${pct(z.box[3], H)}`;
+      if (z.kind === 'indicator') {
+        const ind = spec.indicators.find(i => i.id === z.id)!;
+        return <button type="button" class="cp-hit cp-lamp" style={style} data-select={z.id} aria-label={`${ind.name}: what it shows`}></button>;
+      }
+      const c = control(z.id);
+      if (c.type === 'toggle' || c.type === 'rotary') {
+        const [a, b] = dirLabels(c.id);
+        const axis = c.type === 'rotary' || c.travel === 'horizontal' ? 'cp-x' : 'cp-y';
+        return (
+          <div class:list={['cp-hit', axis, z.round && 'cp-round']} style={style} role="group" aria-label={c.name}>
+            <button type="button" data-control={c.id} data-dir="-1" aria-label={a}></button>
+            <button type="button" data-control={c.id} data-dir="1" aria-label={b}></button>
+          </div>
+        );
+      }
+      const verb = c.type === 'guard' ? `Open or close the ${c.name}` : `Press ${c.name}`;
+      return <button type="button" class:list={['cp-hit', z.round && 'cp-round']} style={style} data-control={c.id} data-dir="flip" aria-label={verb}></button>;
+    })}
+  </div>
+  <p class="cp-status" role="status" aria-live="polite" data-cp-status></p>
+  <script type="application/json" data-cockpit-def set:html={JSON.stringify(def)} />
+</div>
+
+<style>
+.cockpit-panel{--panel-ink:#161616;max-width:min(100%,calc(34rem * var(--ratio)))}
+.cp-stage{position:relative;aspect-ratio:var(--ratio);background:#fff;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.cp-stage :global(svg){display:block;width:100%;height:100%}
+.cp-stage :global(.lens){fill:transparent}
+.cp-stage :global([data-indicator].selected .lens){fill:rgba(0,95,204,.14);stroke:#005fcc;stroke-width:.5}
+.cp-hit{position:absolute;margin:0;padding:0;border:0;background:transparent;cursor:pointer;border-radius:8%;overflow:hidden}
+.cp-round{border-radius:50%}
+.cp-hit > button{position:absolute;margin:0;padding:0;border:0;background:transparent;cursor:pointer}
+.cp-y > button{left:0;width:100%;height:50%}
+.cp-y > button:first-child{top:0}
+.cp-y > button:last-child{bottom:0}
+.cp-x > button{top:0;height:100%;width:50%}
+.cp-x > button:first-child{left:0}
+.cp-x > button:last-child{right:0}
+.cp-hit:focus-visible,.cp-hit > button:focus-visible{outline:2px solid var(--color-focus,#005fcc);outline-offset:1px}
+@media(hover:hover){.cp-hit:hover,.cp-hit > button:hover{background:rgba(0,95,204,.08)}}
+.cp-status{min-height:1.6em;margin:.4rem 0 0;font-size:.95rem;color:var(--color-muted,#595959)}
+</style>
+
+<script>
+import type { ControlDef, IndicatorDef } from '../../data/cockpit/types';
+
+interface Def { aircraft: string; panel: string; controls: ControlDef[]; indicators: IndicatorDef[] }
+const storeKey = (aircraft: string) => `oversweep:cockpit:${aircraft}`;
+const load = (aircraft: string): Record<string, string> => {
+  try { return JSON.parse(sessionStorage.getItem(storeKey(aircraft)) ?? '{}') ?? {}; } catch { return {}; }
+};
+const save = (aircraft: string, s: Record<string, string>) => {
+  try { sessionStorage.setItem(storeKey(aircraft), JSON.stringify(s)); } catch { /* storage unavailable: state lasts for this page only */ }
+};
+
+for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]')) {
+  const def: Def = JSON.parse(root.querySelector('[data-cockpit-def]')!.textContent!);
+  const svg = root.querySelector('svg')!;
+  const status = root.querySelector<HTMLElement>('[data-cp-status]')!;
+  const info = document.querySelector<HTMLElement>(`[data-cockpit-info="${def.panel}"]`);
+  const byId = new Map(def.controls.map(c => [c.id, c]));
+  const key = (id: string) => `${def.panel}.${id}`;
+  let store = load(def.aircraft);
+  const pos = (c: ControlDef) => store[key(c.id)] ?? c.initial;
+  const label = (c: ControlDef, p = pos(c)) => c.positions.find(x => x.id === p)?.label ?? p;
+
+  const draw = (c: ControlDef) => {
+    for (const g of svg.querySelectorAll<SVGGElement>(`[data-move="${c.id}"] > [data-pos]`)) {
+      if (g.dataset.pos === pos(c)) g.removeAttribute('display'); else g.setAttribute('display', 'none');
+    }
+    for (const el of document.querySelectorAll<HTMLElement>(`[data-position-of="${key(c.id)}"]`)) el.textContent = label(c);
+  };
+  const set = (c: ControlDef, p: string) => {
+    store = load(def.aircraft);
+    store[key(c.id)] = p;
+    save(def.aircraft, store);
+    draw(c);
+  };
+  const say = (t: string) => { status.textContent = t; };
+
+  const select = (id: string) => {
+    svg.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'));
+    svg.querySelector(`[data-move="${id}"], [data-indicator="${id}"]`)?.classList.add('selected');
+    if (!info) return;
+    for (const card of info.querySelectorAll<HTMLElement>('[data-item]')) card.hidden = card.dataset.item !== id;
+    info.querySelector<HTMLElement>('[data-item-empty]')?.toggleAttribute('hidden', true);
+  };
+
+  /** Why `c` cannot go from its position to `to`, or '' if it can. */
+  const blocked = (c: ControlDef, to: string) => {
+    for (const p of c.protections ?? []) {
+      if (p.kind !== 'guard' || !p.guard) continue;
+      const g = byId.get(p.guard);
+      if (!g || pos(g) !== p.blockedWhen) continue;
+      if (p.from && !p.from.includes(pos(c))) continue;
+      if (p.to && !p.to.includes(to)) continue;
+      return p.note;
+    }
+    return '';
+  };
+
+  /** Press: move one detent (or flip). Returns true when a momentary position was entered. */
+  const press = (c: ControlDef, dir: string) => {
+    select(c.id);
+    const i = c.positions.findIndex(p => p.id === pos(c));
+    let j = dir === 'flip' ? (i + 1) % c.positions.length : i + Number(dir);
+    if (j < 0 || j >= c.positions.length) { say(`${c.name} is already at ${label(c)}.`); return; }
+    const to = c.positions[j];
+    const why = blocked(c, to.id);
+    if (why) { say(why); return; }
+    set(c, to.id);
+    if (c.guards && to.id === 'closed') {
+      const guarded = byId.get(c.guards.control);
+      if (guarded && pos(guarded) !== c.guards.closesTo) set(guarded, c.guards.closesTo);
+    }
+    say(`${c.name}: ${to.label}.`);
+  };
+  /** Release: momentary positions spring back. */
+  const release = (c: ControlDef) => {
+    const p = c.positions.find(x => x.id === pos(c));
+    if (p?.hold === 'momentary' && p.spring) {
+      set(c, p.spring);
+      say(`${c.name}: ${label(c)} (springs back).`);
+    }
+  };
+
+  for (const b of root.querySelectorAll<HTMLButtonElement>('[data-control]')) {
+    const c = byId.get(b.dataset.control!)!;
+    let held = false;
+    const down = () => { if (held) return; held = true; press(c, b.dataset.dir!); };
+    const up = () => { if (!held) return; held = false; release(c); };
+    b.addEventListener('pointerdown', e => { if (e.button === 0) { b.setPointerCapture(e.pointerId); down(); } });
+    b.addEventListener('pointerup', up);
+    b.addEventListener('pointercancel', up);
+    b.addEventListener('lostpointercapture', up);
+    b.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) { e.preventDefault(); down(); } });
+    b.addEventListener('keyup', e => { if (e.key === 'Enter' || e.key === ' ') up(); });
+    b.addEventListener('blur', up);
+    b.addEventListener('click', e => e.preventDefault());
+  }
+  for (const b of root.querySelectorAll<HTMLButtonElement>('[data-select]')) {
+    b.addEventListener('click', () => {
+      select(b.dataset.select!);
+      const ind = def.indicators.find(i => i.id === b.dataset.select);
+      if (ind) say(`${ind.name}: off (cold jet).`);
+    });
+  }
+  for (const b of document.querySelectorAll<HTMLButtonElement>(`[data-cockpit-pick="${def.panel}"]`)) {
+    b.addEventListener('click', () => select(b.dataset.id!));
+  }
+  document.querySelector(`[data-cockpit-reset="${def.aircraft}"]`)?.addEventListener('click', () => {
+    try { sessionStorage.removeItem(storeKey(def.aircraft)); } catch { /* nothing stored */ }
+    store = {};
+    def.controls.forEach(draw);
+    say('Every control is back in its cold-and-dark position.');
+  });
+  def.controls.forEach(draw);
+}
+</script>

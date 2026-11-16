@@ -1,0 +1,99 @@
+---
+import SiteLayout from '../../../../../layouts/SiteLayout.astro';
+import CockpitNav from '../../../../../components/cockpit/CockpitNav.astro';
+import CockpitPanel from '../../../../../components/cockpit/CockpitPanel.astro';
+import { cockpits, builtPanels, panelRoute, cockpitRoute } from '../../../../../data/cockpit/f16c/index.ts';
+import { sitePath } from '../../../../../lib/paths';
+export function getStaticPaths() {
+  return cockpits.flatMap(c => {
+    const built = builtPanels(c);
+    return built.map((b, i) => ({ params: { airframe: c.airframe, panel: b.panel.id }, props: { cockpit: c, ...b, prev: built[i - 1], next: built[i + 1] } }));
+  });
+}
+const { cockpit, area, panel, spec, prev, next } = Astro.props;
+const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns when released' : h === 'magnetic' ? 'magnetically held' : '';
+---
+<SiteLayout title={`${cockpit.title} ${spec.title}`} activeSection="manual" activeSubject="aircraft-procedures" compactSubjectNav={true}
+ description={`Interactive ${cockpit.variant} ${spec.title}: where every control is, how it moves and what each light means.`}
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Aircraft Procedures',href:sitePath('manual/aircraft-procedures/')},{label:cockpit.title,href:sitePath(`manual/aircraft-procedures/${cockpit.airframe}/`)},{label:'Cockpit',href:sitePath(cockpitRoute(cockpit))},{label:panel.title}]}>
+  <p class="cockpit-where">{area.title} · {cockpit.manual.title.replace('Eagle Dynamics — ', '')}, p. {spec.source.page}</p>
+  <nav class="cockpit-area" aria-label={`${area.title} panels`}>
+    <span class="ca-title">{area.title}</span>
+    <ul>{area.panels.map(p => <li>{p.spec
+      ? <a href={sitePath(panelRoute(cockpit, p.id))} aria-current={p.id === panel.id ? 'page' : undefined}>{p.title}</a>
+      : <span>{p.title}</span>}</li>)}</ul>
+  </nav>
+  <details class="cockpit-all"><summary>All cockpit areas and panels</summary><CockpitNav cockpit={cockpit} current={panel.id} /></details>
+  <div class="cockpit-page">
+    <div class="cockpit-main">
+      <CockpitPanel cockpit={cockpit} spec={spec} />
+      <p class="cockpit-hint">Click the upper or lower half of a switch to move it, or the left or right half of a knob to turn it. Select a light to see what it means. The jet is cold and dark, so lights stay off.</p>
+      <nav class="cockpit-pager" aria-label="Panels">
+        {prev ? <a href={sitePath(panelRoute(cockpit, prev.panel.id))} rel="prev">← {prev.panel.title}</a> : <span></span>}
+        <button type="button" class="cockpit-reset" data-cockpit-reset={cockpit.id}>Reset cockpit to cold and dark</button>
+        {next ? <a href={sitePath(panelRoute(cockpit, next.panel.id))} rel="next">{next.panel.title} →</a> : <span></span>}
+      </nav>
+    </div>
+    <aside class="cockpit-info" data-cockpit-info={spec.id} aria-label={`${spec.title} controls and indications`}>
+      <div class="ci-card" data-item-empty><p>Select a control or light on the panel, or in the lists below.</p></div>
+      {spec.controls.map(c => (
+        <div class="ci-card" data-item={c.id} hidden>
+          <h2>{c.name}</h2>
+          <p class="ci-pos">Position: <strong data-position-of={`${spec.id}.${c.id}`}>{c.positions.find(p => p.id === c.initial)?.label}</strong></p>
+          <p>{c.description}</p>
+          <p class="ci-meta">Positions: {c.positions.map(p => p.label + (holdText(p.hold) ? ` (${holdText(p.hold)})` : '')).join(' · ')}</p>
+          {c.protections?.map(p => <p class="ci-meta">{p.note}</p>)}
+          <p class="ci-src">{c.source}</p>
+        </div>
+      ))}
+      {spec.indicators.map(i => (
+        <div class="ci-card" data-item={i.id} hidden>
+          <h2>{i.name}</h2>
+          <p>{i.description}</p>
+          <p class="ci-src">{i.source}</p>
+        </div>
+      ))}
+      <h2 class="ci-head">Controls</h2>
+      <ul class="ci-list">{spec.controls.map(c => <li><button type="button" data-cockpit-pick={spec.id} data-id={c.id}>{c.name}</button> <span data-position-of={`${spec.id}.${c.id}`}>{c.positions.find(p => p.id === c.initial)?.label}</span></li>)}</ul>
+      {spec.indicators.length > 0 && <>
+        <h2 class="ci-head">Lights</h2>
+        <ul class="ci-list">{spec.indicators.map(i => <li><button type="button" data-cockpit-pick={spec.id} data-id={i.id}>{i.name}</button></li>)}</ul>
+      </>}
+    </aside>
+  </div>
+  <h2>Source</h2>
+  <p><a href={cockpit.manual.url}>{cockpit.manual.title}</a> ({cockpit.manual.edition}), p. {spec.source.page}. Artwork is traced from the guide's {spec.source.image}.</p>
+</SiteLayout>
+<style>
+.cockpit-where{margin-top:0;color:var(--color-muted)}
+.cockpit-area{display:flex;flex-wrap:wrap;align-items:baseline;gap:.25rem .75rem;margin:.5rem 0}
+.ca-title{font-weight:700}
+.cockpit-area ul{display:flex;flex-wrap:wrap;gap:.2rem .35rem;list-style:none;margin:0;padding:0}
+.cockpit-area li > *{display:inline-flex;align-items:center;min-height:2.2rem;padding:0 .55rem;border:1px solid #d0d0d0;border-radius:1.1rem;font-size:.88rem}
+.cockpit-area li > span{color:var(--color-unavailable);border-style:dashed}
+.cockpit-area a{text-decoration:none}
+.cockpit-area a[aria-current="page"]{background:var(--color-ink);color:var(--color-ink-text);border-color:var(--color-ink)}
+.cockpit-all{margin:0 0 1.25rem}
+.cockpit-all summary{cursor:pointer;color:var(--color-link);min-height:2.4rem;display:flex;align-items:center}
+.cockpit-all[open] .cockpit-nav{max-width:30rem}
+.cockpit-page{display:grid;grid-template-columns:minmax(0,1fr) minmax(15rem,20rem);gap:1.75rem;align-items:start}
+.cockpit-main{min-width:0}
+.cockpit-main :global(.cockpit-panel){margin-inline:auto}
+.cockpit-hint{font-size:.9rem;color:var(--color-muted)}
+.cockpit-pager{display:flex;justify-content:space-between;align-items:center;gap:.75rem;flex-wrap:wrap;margin-top:1rem}
+.cockpit-pager a{min-height:2.75rem;display:inline-flex;align-items:center}
+.cockpit-reset{font:inherit;font-size:.9rem;padding:.45rem .8rem;border:1px solid var(--color-border);border-radius:.25rem;background:#fff;cursor:pointer;min-height:2.75rem}
+.cockpit-info{font-size:.93rem}
+.ci-card{padding:.8rem 1rem;border:1px solid var(--color-border);border-left:.3rem solid var(--color-text);background:var(--color-surface)}
+.ci-card h2{font-size:1.05rem;margin:0 0 .3rem}
+.ci-card p{margin:.35rem 0}
+.ci-pos strong{letter-spacing:.02em}
+.ci-meta{color:var(--color-muted)}
+.ci-src{font-size:.82rem;color:var(--color-muted)}
+.ci-head{font-size:1rem;margin:1.1rem 0 .3rem}
+.ci-list{list-style:none;margin:0;padding:0}
+.ci-list li{display:flex;justify-content:space-between;gap:.5rem;align-items:center;border-bottom:1px solid #e3e3e3}
+.ci-list button{font:inherit;background:none;border:0;padding:.35rem 0;color:var(--color-link);cursor:pointer;text-align:left;min-height:2.5rem}
+.ci-list span{color:var(--color-muted);font-size:.88em;text-align:right}
+@media(max-width:60rem){.cockpit-page{grid-template-columns:1fr}}
+</style>
