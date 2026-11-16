@@ -66,9 +66,9 @@ export const landingGear: PanelSpec = {
     ],
   },
   plate: [
-    { d: path('M139 23L449 29Q453 29.1 453 33V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23Z') },
+    { d: path('M139 23L449 13Q453 12.9 453 17V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23Z') },
     // Top layer, cut away for the gear handle's channel and, to its lower left, a padded recess round the DN LOCK REL button; the cut edge runs through the striped border.
-    { d: path('M139 23L449 29Q453 29.1 453 33V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23ZM397 190H447V364H335V301H397Z'), raised: true },
+    { d: path('M139 23L449 13Q453 12.9 453 17V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23ZM397 190H447V364H335V301H397Z'), raised: true },
   ],
   engraving: [
     // EMER STORES JETTISON: legend, and the hazard-striped square around the button.
@@ -83,7 +83,7 @@ export const landingGear: PanelSpec = {
       `M${W - 16} 157V88L${W} 40L${W + 16} 88V157`,
       `M${W - 16} 99L${W - 63} 129V137H${W - 16}M${W + 16} 99L${W + 63} 129V137H${W + 16}`,
       `M${W - 16} 157L${W - 37} 172V178H${W - 16}M${W + 16} 157L${W + 37} 172V178H${W + 16}`,
-      `M${W - 16} 178H${W + 16}L${W + 9} 188H${W - 9}Z`,
+      `M${W - 16} 178L${W - 9} 188H${W + 9}L${W + 16} 178`,
     ].join('')) },
     ...([['W', 100], ['H', 113.5], ['E', 127], ['E', 140.5], ['L', 154], ['S', 167.5]] as const).map(([t, y]) => L([W, y], t, 8.5, 7)),
     // HOOK: striped plate with its legend, and the switch positions.
@@ -122,7 +122,7 @@ export const landingGear: PanelSpec = {
   ],
   placements: [
     { component: 'dzus', at: pt(147, 43), cut: 'up-left' },
-    { component: 'dzus', at: pt(438, 43), cut: 'up-right' },
+    { component: 'dzus', at: pt(438, 32), cut: 'up-right' },
     { component: 'dzus', at: pt(437, 402), cut: 'down-right' },
     { component: 'screw-medium', at: pt(280, 48) },
     { component: 'screw-medium', at: pt(22, 270) },
