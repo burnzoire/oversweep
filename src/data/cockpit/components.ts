@@ -136,17 +136,21 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
     : cased(`<circle cy="${n(L)}" r="${ball}" fill="${PAPER}"/>`, 'medium') + `<circle cx="${n(-ball * 0.3)}" cy="${n(L - ball * 0.3)}" r="${n(ball * 0.32)}" ${sw('fine')}/>`;
   if (Math.abs(k) < 1e-6) return tip;
   const s = Math.sign(k);
+  // The lever passes through the pivot, so its rounded root sits behind it,
+  // offset away from the lean by half the lever's thickness.
+  const y0 = -s * w0;
+  const arc = `A${n(w0)} ${n(w0)} 0 0 ${s > 0 ? 1 : 0}`;
   if (cap === 'square') {
     // Flat lever widening from the root to the paddle: a trapezoid under the face.
     const y1 = L - s * ball * 0.6;
-    return `<path d="M${n(-w0)} 0L${n(-ball * 0.9)} ${n(y1)}H${n(ball * 0.9)}L${n(w0)} 0Z" fill="${PAPER}" ${sw('medium')}/>` + tip;
+    return `<path d="M${n(-w0)} ${n(y0)}${arc} ${n(w0)} ${n(y0)}L${n(ball * 0.9)} ${n(y1)}H${n(-ball * 0.9)}Z" fill="${PAPER}" ${sw('medium')}/>` + tip;
   }
   if (cap === 'ball') {
     // Teardrop: one outline from the round lever root, along the common
     // tangents, around the ball. Lever along +y, mirrored for an upward lean.
-    const d = Math.abs(L), r0 = w0, r1 = ball, a = Math.asin(Math.min(0.95, (r1 - r0) / d));
+    const d = Math.abs(L), r0 = w0, r1 = ball, a = Math.asin(Math.min(0.95, (r1 - r0) / (d + w0)));
     const ca = Math.cos(a), sa = Math.sin(a), Y = (y: number) => n(s * y);
-    const p0r = [r0 * ca, -r0 * sa], p0l = [-r0 * ca, -r0 * sa];
+    const p0r = [r0 * ca, -w0 - r0 * sa], p0l = [-r0 * ca, -w0 - r0 * sa];
     const p1r = [r1 * ca, d - r1 * sa], p1l = [-r1 * ca, d - r1 * sa];
     const sweep = s > 0 ? 1 : 0;
     const drop = `<path d="M${n(p0r[0])} ${Y(p0r[1])}L${n(p1r[0])} ${Y(p1r[1])}A${r1} ${r1} 0 1 ${sweep} ${n(p1l[0])} ${Y(p1l[1])}` +
@@ -156,8 +160,8 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   // Shaft: semicircle on the bushing side, straight flanks out to the ball.
   const shaft = cap === 'cylinder'
     // Thick lever with a round base (the cylinder seen end-on at the pivot), slightly wider at the cap.
-    ? `<path d="M${n(-w0)} 0A${n(w0)} ${n(w0)} 0 0 ${s > 0 ? 1 : 0} ${n(w0)} 0L${n(w1)} ${n(L)}H${n(-w1)}Z" fill="${PAPER}" ${sw('medium')}/>`
-    : `<path d="M${n(-w0)} 0A${n(w0)} ${n(w0)} 0 0 ${s > 0 ? 1 : 0} ${n(w0)} 0L${n(w1)} ${n(L)}H${n(-w1)}Z" fill="${PAPER}" ${sw('medium')}/>`;
+    ? `<path d="M${n(-w0)} ${n(y0)}${arc} ${n(w0)} ${n(y0)}L${n(w1)} ${n(L)}H${n(-w1)}Z" fill="${PAPER}" ${sw('medium')}/>`
+    : `<path d="M${n(-w0)} ${n(y0)}${arc} ${n(w0)} ${n(y0)}L${n(w1)} ${n(L)}H${n(-w1)}Z" fill="${PAPER}" ${sw('medium')}/>`;
   return shaft + tip;
 }
 
