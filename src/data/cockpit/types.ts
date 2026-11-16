@@ -133,7 +133,7 @@ export type Placement =
 /** The plate corner toward which the face plate is cut away around a DZUS. */
 export type Cut = 'up-left' | 'up-right' | 'down-left' | 'down-right';
 
-export type ToggleArt = 'toggle-large' | 'toggle-medium' | 'toggle-small' | 'toggle-large-cylinder' | 'toggle-large-square' | 'toggle-large-lock' | 'toggle-paddle-wide';
+export type ToggleArt = 'toggle-large' | 'toggle-medium' | 'toggle-small' | 'toggle-large-cylinder' | 'toggle-large-square' | 'toggle-large-lock' | 'toggle-paddle-wide' | 'toggle-hook';
 export type RotaryArt = 'rotary-pointer' | 'rotary-pointer-large';
 export type PushArt = 'push-round-large' | 'push-round-xl' | 'push-round-xxl';
 export type LampModuleArt = 'lamp-module';
@@ -167,7 +167,7 @@ export interface PanelSpec {
   /** Canvas in mm; the plate is drawn inside it. */
   canvas: [w: number, h: number];
   source: PanelSource;
-  /** Plate outlines (mm path data), back to front. `raised` gets an offset lip. */
+  /** Plate outlines (mm path data), back to front. `raised` gets an offset lip. Paths fill even-odd, so a second subpath cuts a hole. */
   plate: { d: string; raised?: boolean }[];
   engraving: Engraving[];
   placements: Placement[];

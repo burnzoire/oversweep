@@ -67,7 +67,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
         return cut + at(p.at, fastener(p.component), ` class="${p.component}"`);
       }
       return at(p.at, fastener(p.component), ` class="${p.component}"`);
-    case 'toggle-large': case 'toggle-medium': case 'toggle-small': case 'toggle-large-cylinder': case 'toggle-large-square': case 'toggle-large-lock': case 'toggle-paddle-wide': {
+    case 'toggle-large': case 'toggle-medium': case 'toggle-small': case 'toggle-large-cylinder': case 'toggle-large-square': case 'toggle-large-lock': case 'toggle-paddle-wide': case 'toggle-hook': {
       const c = controlOf(spec, p.control), leans = toggleLeans(c.positions.length);
       const rot = c.travel === 'horizontal' ? ' transform="rotate(-90)"' : '';
       return at(p.at, toggleBase(p.component) + moving(c, state[c.id] ?? c.initial, i => toggleLever(p.component as keyof typeof TOGGLES, leans[i]), rot), ` data-art="${p.component}"`);
@@ -161,7 +161,7 @@ export function renderPanel(spec: PanelSpec, opts: RenderOptions = {}) {
   const [w, h] = spec.canvas, state = opts.state ?? {};
   const plate = spec.plate.map((p, i) =>
     (p.raised ? `<path d="${p.d}" transform="translate(0.45 0.45)" ${sw('medium')}/>` : '') +
-    cased(`<path d="${p.d}" fill="${PAPER}"/>`, i === 0 || p.raised ? 'heavy' : 'medium')).join('');
+    cased(`<path d="${p.d}" fill="${PAPER}" fill-rule="evenodd"/>`, i === 0 || p.raised ? 'heavy' : 'medium')).join('');
   const engraving = spec.engraving.map(e => e.kind === 'text'
     ? text(e.at[0], e.at[1], e.text, e.cap, e.width, e.anchor)
     : `<path d="${e.d}" ${sw(e.pen ?? 'medium')}/>`).join('');
@@ -188,7 +188,7 @@ export function hitZones(spec: PanelSpec): HitZone[] {
   return spec.placements.flatMap((p): HitZone[] => {
     const [x, y] = p.at;
     switch (p.component) {
-      case 'toggle-large': case 'toggle-medium': case 'toggle-small': case 'toggle-large-cylinder': case 'toggle-large-square': case 'toggle-large-lock': case 'toggle-paddle-wide': {
+      case 'toggle-large': case 'toggle-medium': case 'toggle-small': case 'toggle-large-cylinder': case 'toggle-large-square': case 'toggle-large-lock': case 'toggle-paddle-wide': case 'toggle-hook': {
         const t = TOGGLES[p.component], c = controlOf(spec, p.control);
         const isWide = t.cap === 'wide';
         const long = isWide ? 2 * t.reach + 8.2 : 2 * (t.reach + t.ball) + 1, wide = isWide ? 2 * t.ball + 1 : 2.6 * t.r;

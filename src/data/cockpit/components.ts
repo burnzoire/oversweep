@@ -95,6 +95,13 @@ export const TOGGLES = {
   'toggle-large-square': { r: 4.0, reach: 4.6, ball: 3.3, cap: 'square', lock: true },
   /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). */
   'toggle-large-lock': { r: 5.2, reach: 6.0, ball: 2.8, cap: 'dome', lock: true },
+  /**
+   * One-off HOOK lever: a long flat tongue, narrow at a round bushing with an
+   * oblong slot and widening to a rounded end that overhangs well past the
+   * bushing toward the selected position (UP: over the HOOK plate). `ball` is
+   * half the tongue's end width.
+   */
+  'toggle-hook': { r: 4.4, reach: 13.5, ball: 4.6, cap: 'hook' },
   /** Plain toggle with a wide flat paddle, with three round grip bosses along its end (gear panel LIGHTS). `ball` is half the paddle width. */
   'toggle-paddle-wide': { r: 4.0, reach: 4.6, ball: 11, cap: 'wide' },
 } as const;
@@ -106,6 +113,12 @@ export function toggleLeans(count: number) {
 
 export function toggleBase(art: keyof typeof TOGGLES) {
   const t = TOGGLES[art], r = t.r;
+  if (t.cap === 'hook') {
+    // Round bushing with the oblong slot the tongue travels in.
+    const sl = r * 0.55, sw2 = r * 0.24;
+    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.78)}" ${sw('fine')}/>` +
+      `<rect x="${n(-sw2)}" y="${n(-sl)}" width="${n(sw2 * 2)}" height="${n(sl * 2)}" rx="${n(sw2)}" ${sw('medium')}/>`;
+  }
   if ('lock' in t && t.lock) {
     // Lever-lock: round bushing (no hex nut on the panel face) with the
     // locking insert showing: a slot the lever travels in, with a detent
@@ -136,6 +149,12 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   // Mushroom cap: the lever leans only ~17° from the panel normal, so the cap stays almost square to the
   // viewer (a near-circle). Its top is nearly flat, so no inner ring.
   const face = (ry: number) => cased(`<ellipse cy="${n(L)}" rx="${ball}" ry="${n(ry)}" fill="${PAPER}"/>`, 'medium');
+  if (cap === 'hook') {
+    // Tongue from a narrow root at the pivot to a rounded end past `reach`, with a pressed centre groove.
+    const s = Math.sign(k) || -1, d = Math.abs(L), r0 = r * 0.32, Y = (y: number) => n(s * y);
+    const tongue = `<path d="M${n(-r0)} 0L${n(-ball)} ${Y(d)}A${ball} ${ball} 0 0 ${s > 0 ? 0 : 1} ${n(ball)} ${Y(d)}L${n(r0)} 0Z" fill="${PAPER}"/>`;
+    return cased(tongue, 'medium') + `<path d="M0 ${Y(r * 0.6)}Q${n(ball * 0.2)} ${Y(d * 0.6)} 0 ${Y(d + ball * 0.6)}" ${sw('fine')}/>`;
+  }
   if (cap === 'wide') {
     // Wide paddle end (seen almost end-on at the real lean): a long pill with three round grip bosses.
     const hh = 3.6, x = ball;
