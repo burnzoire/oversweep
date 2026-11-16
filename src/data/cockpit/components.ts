@@ -81,7 +81,7 @@ export const TOGGLES = {
    * Large bushing with a long lever that tapers out to a flat round end, no
    * ball (MAIN PWR). `ball` is the end-face radius.
    */
-  'toggle-large-cylinder': { r: 5.2, reach: 7.6, ball: 3.2, cap: 'cylinder' },
+  'toggle-large-cylinder': { r: 5.2, reach: 7.8, ball: 3.0, cap: 'cylinder' },
   /** Medium bushing with a large square paddle cap (AIR REFUEL). */
   'toggle-large-square': { r: 4.0, reach: 6.2, ball: 3.6, cap: 'square' },
 } as const;
@@ -105,11 +105,13 @@ export function toggleBase(art: keyof typeof TOGGLES) {
 export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   const { r, reach, ball, cap } = TOGGLES[art];
   const L = reach * k;
-  const w0 = cap === 'cylinder' ? r * 0.36 : r * 0.3, w1 = cap === 'cylinder' ? ball : ball * 0.62;
+  const w0 = cap === 'cylinder' ? ball * 0.86 : r * 0.3, w1 = cap === 'cylinder' ? ball : ball * 0.62;
   // Flat end face of a cylinder lever: a full disc when it points at the viewer, foreshortened when leaning.
   const face = (ry: number) => cased(`<ellipse cy="${n(L)}" rx="${ball}" ry="${n(ry)}" fill="${PAPER}"/>`, 'medium');
   const tip = cap === 'cylinder'
-    ? (Math.abs(k) < 1e-6 ? face(ball) + `<circle r="${n(ball * 0.62)}" ${sw('fine')}/>` : face(ball * 0.5))
+    ? (Math.abs(k) < 1e-6
+      ? face(ball) + `<circle r="${n(ball * 0.7)}" ${sw('fine')}/>`
+      : face(ball * 0.42) + `<ellipse cy="${n(L)}" rx="${n(ball * 0.7)}" ry="${n(ball * 0.28)}" ${sw('fine')}/>`)
     : cap === 'square'
     ? cased(`<rect x="${n(-ball)}" y="${n(L - ball * 0.9)}" width="${n(ball * 2)}" height="${n(ball * 1.8)}" rx="${n(ball * 0.18)}" fill="${PAPER}"/>`, 'medium') +
       `<rect x="${n(-ball * 0.62)}" y="${n(L - ball * 0.52)}" width="${n(ball * 1.24)}" height="${n(ball * 1.04)}" rx="${n(ball * 0.1)}" fill="${PAPER}" ${sw('fine')}/>`
@@ -117,7 +119,10 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   if (Math.abs(k) < 1e-6) return tip;
   const s = Math.sign(k);
   // Shaft: semicircle on the bushing side, straight flanks out to the ball.
-  const shaft = `<path d="M${n(-w0)} 0A${n(w0)} ${n(w0)} 0 0 ${s > 0 ? 0 : 1} ${n(w0)} 0L${n(w1)} ${n(L)}H${n(-w1)}Z" fill="${PAPER}" ${sw('medium')}/>`;
+  const shaft = cap === 'cylinder'
+    // Cylinder: straight flanks from a collar on the bushing to the end face.
+    ? `<path d="M${n(-w0)} 0L${n(-w1)} ${n(L)}H${n(w1)}L${n(w0)} 0Z" fill="${PAPER}" ${sw('medium')}/>` + cased(`<ellipse rx="${n(w0)}" ry="${n(w0 * 0.42)}" fill="${PAPER}"/>`, 'medium')
+    : `<path d="M${n(-w0)} 0A${n(w0)} ${n(w0)} 0 0 ${s > 0 ? 0 : 1} ${n(w0)} 0L${n(w1)} ${n(L)}H${n(-w1)}Z" fill="${PAPER}" ${sw('medium')}/>`;
   return shaft + tip;
 }
 
