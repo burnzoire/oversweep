@@ -55,13 +55,17 @@ export const extLighting: PanelSpec = {
       'All three toggles show the orange-red grommet of plain toggles.',
     ],
   },
-  plate: [{ d: path('M6 2H478Q482 2 482 6V278Q482 282 478 282H6Q2 282 2 278V6Q2 2 6 2Z') }],
+  plate: [
+    { d: path('M6 2H478Q482 2 482 6V278Q482 282 478 282H6Q2 282 2 278V6Q2 2 6 2Z') },
+    // Raised face plate, cut away round the four corner DZUS.
+    { d: path('M35 2H444V63Q444 66 447 66H482V222H447Q444 222 444 225V282H34V224Q34 221 31 221H2V68H32Q35 68 35 65Z'), raised: true },
+  ],
   engraving: [
     // Vertical "EXT" and "LIGHTING".
     ...([['E', 122], ['X', 140], ['T', 163]] as const).map(([t, y]) => L([15, y], t, 14, 9)),
-    ...([['L', 70], ['I', 88], ['G', 112], ['H', 133], ['T', 155], ['I', 175], ['N', 194], ['G', 215]] as const).map(([t, y]) => t === 'I' ? L([37, y], t, 14) : L([37, y], t, 14, 9)),
+    ...([['L', 0], ['I', 1], ['G', 2], ['H', 3], ['T', 4], ['I', 5], ['N', 6], ['G', 7]] as const).map(([t, k]) => [t, 76 + 19.4 * k] as const).map(([t, y]) => t === 'I' ? L([37, y], t, 14) : L([37, y], t, 14, 9)),
     // ANTI-COLL selector.
-    L([94, 18], 'ANTI-COLL', 12, 68),
+    L([AC[0], 18], 'ANTI-COLL', 12, 68),
     ...ACP.map(({ t, angle }) => t === 'OFF' ? L(acLegend(angle, 40), t, 10, 20) : L(acLegend(angle, 34), t, 10)),
     // POSITION switches.
     L([240, 14], 'POSITION', 12, 55),
@@ -70,12 +74,12 @@ export const extLighting: PanelSpec = {
     L([194, 116], 'STEADY', 10.5, 47),
     L([288, 35], 'WING/TAIL', 12, 67),
     L([397, 35], 'FUSELAGE', 12, 62),
-    L([343, 62], 'BRT', 10, 23),
-    L([342, 95], 'OFF', 10, 22),
-    L([343, 129], 'DIM', 10, 20),
+    L([342.5, 62], 'BRT', 10, 23),
+    L([342.5, 95], 'OFF', 10, 22),
+    L([342.5, 129], 'DIM', 10, 20),
     { kind: 'path', d: path('M287 62H328M358 62H398M313 95H326M358 95H371M287 129H328M358 129H398') },
     // FORM dimmer.
-    L([108, 174], 'FORM', 12, 33),
+    L([97, 174], 'FORM', 12, 33),
     L([154, 235], 'BRT', 10, 22),
     { kind: 'path', d: arrow([138, 185], [153, 196], [155, 222]) },
     // MASTER selector.
@@ -91,7 +95,7 @@ export const extLighting: PanelSpec = {
     L([300, 193], '+', 8),
     { kind: 'path', d: path(`M208 191L213 196M${MS[0]} 179V185M268 191L263 196M193 222H201M274 222H283`) },
     // AERIAL REFUELING dimmer.
-    L([369, 165], 'AERIAL REFUELING', 12, 112),
+    L([355, 165], 'AERIAL REFUELING', 12, 112),
     L([421, 231], 'BRT', 10, 22),
     { kind: 'path', d: arrow([400, 177], [414, 190], [418, 218]) },
   ],

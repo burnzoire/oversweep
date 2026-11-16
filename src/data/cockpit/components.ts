@@ -86,7 +86,7 @@ export const TOGGLES = {
    * projects only ~26.7·sin 17° and the cap stays almost face-on (cos 17°).
    * `ball` is the cap radius.
    */
-  'toggle-large-cylinder': { r: 5.2, reach: 4.9, ball: 3.45, cap: 'cylinder', lock: true },
+  'toggle-large-cylinder': { r: 5.2, reach: 6.4, ball: 3.45, cap: 'cylinder', lock: true },
   /**
    * Medium bushing with a flat lever widening (trapezoid) to a square paddle
    * (AIR REFUEL). The guide image shows a lock-insert slot in the bushing, so
@@ -259,7 +259,9 @@ export function knobArt(art: keyof typeof KNOBS) {
     return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') +
       `<circle r="${k(0.69)}" ${sw('fine')}/>` +
       `<path d="${lever}" fill="${PAPER}" ${sw('medium')}/>` +
-      `<path d="M0 ${k(-0.71)}V0" ${sw('heavy')}/>` +
+      // Indicator: a white bar from the centre out to the index set into the rim.
+      `<rect x="${k(-0.06)}" y="${k(-0.74)}" width="${k(0.12)}" height="${k(0.8)}" rx="${k(0.04)}" fill="${PAPER}" ${sw('medium')}/>` +
+      `<path d="M0 ${k(-0.7)}V0" ${sw('heavy')}/>` +
       `<rect x="${k(-0.075)}" y="${k(-1.04)}" width="${k(0.15)}" height="${k(0.33)}" rx="${k(0.02)}" fill="${PAPER}" ${sw('heavy')}/>`;
   }
   let rim: string;

@@ -58,12 +58,16 @@ export const ecm: PanelSpec = {
       'The plate edges are cropped in the reference; the drawn edges sit just inside the crop.',
     ],
   },
-  plate: [{ d: path('M6 2H402Q406 2 406 6V175Q406 179 402 179H6Q2 179 2 175V6Q2 2 6 2Z') }],
+  plate: [
+    { d: path('M6 2H402Q406 2 406 6V175Q406 179 402 179H6Q2 179 2 175V6Q2 2 6 2Z') },
+    // Raised face plate, cut away round the four corner DZUS; on the right the cuts meet the module housing.
+    { d: path('M33 2H373V55Q373 58 376 58H406V130H376Q373 130 373 133V179H33V131Q33 128 30 128H2V55H30Q33 55 33 52Z'), raised: true },
+  ],
   engraving: [
     ...([['E', 75], ['C', 92], ['M', 109]] as const).map(([t, y]) => L([11, y], t, 13, 10)),
     L([64, 11], 'OPR', 9.5, 21),
-    ...([['S', 24], ['T', 35], ['B', 46], ['Y', 57]] as const).map(([t, y]) => L([89, y], t, 9.5, 7)),
-    L([64, 71], 'OFF', 9.5, 21),
+    ...([['S', 20.5], ['T', 31.5], ['B', 42.5], ['Y', 53.5]] as const).map(([t, y]) => L([89, y], t, 9.5, 7)),
+    L([64, 74.5], 'OFF', 9.5, 21),
     ...([['1', 79], ['2', 91], ['3', 103]] as const).map(([t, y]) => L([88, y], t, 9.5)),
     L([54, 121], 'DIM', 9.5, 21),
     L([112, 121], 'XMIT', 9.5, 28),
@@ -78,7 +82,7 @@ export const ecm: PanelSpec = {
     { component: 'dzus', at: pt(15.5, 142.5) },
     { component: 'dzus', at: pt(390.5, 142.5) },
     { component: 'toggle-large-cylinder', control: 'power', at: pt(64, 37) },
-    { component: 'knob-plain-small', control: 'dim', at: pt(54, 95) },
+    { component: 'knob-plain-small', control: 'dim', at: pt(54, 99) },
     { component: 'toggle-large-cylinder', control: 'xmit', at: pt(112, 91) },
     { component: 'push-round-small', control: 'reset', at: pt(53, 145) },
     { component: 'push-round-small', control: 'bit', at: pt(120, 145) },

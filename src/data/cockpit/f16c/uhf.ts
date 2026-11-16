@@ -17,6 +17,11 @@ const L = (at: [number, number], text: string, cap: number, width?: number) =>
   ({ kind: 'text' as const, at: pt(...at), text, cap: mm(cap), ...(width ? { width: mm(width) } : {}) });
 /** Manual frequency knobs, left to right (reference px). */
 const FK: [number, number][] = [75, 176, 277, 378, 479].map(x => [x, 273]);
+/** Function and mode selector centres (reference px). */
+const FN: [number, number] = [126, 398], MD: [number, number] = [428, 398];
+/** A legend's centre on a detent line, `r` reference px from the knob centre. */
+const onDetent = ([x, y]: [number, number], a: number, r: number): [number, number] =>
+  [+(x + r * Math.sin(a * Math.PI / 180)).toFixed(1), +(y - r * Math.cos(a * Math.PI / 180)).toFixed(1)];
 const digits = Array.from({ length: 10 }, (_, d) => ({ id: String(d), label: String(d), angle: d * 36, hold: 'stable' as const }));
 const pushed = [
   { id: 'out', label: 'Released', hold: 'stable' as const },
@@ -88,7 +93,7 @@ export const uhf: PanelSpec = {
   plate: [
     { d: path('M6 2H544Q548 2 548 6V454Q548 458 544 458H6Q2 458 2 454V6Q2 2 6 2Z') },
     // Raised face: the preset card well (top left) and the DZUS strips are cut away.
-    { d: path('M288 2H508V140H548V323H507V458H40V322H2V132H288Z'), raised: true },
+    { d: path('M288 2H508V137Q508 140 511 140H548V323H510Q507 323 507 326V458H40V325Q40 322 37 322H2V132H285Q288 132 288 129Z'), raised: true },
     // Preset channel card.
     { d: path('M42 9H272Q277 9 277 14V117Q277 122 272 122H42Q37 122 37 117V14Q37 9 42 9Z'), raised: true },
   ],
@@ -106,25 +111,22 @@ export const uhf: PanelSpec = {
     L([483, 177], 'STATUS', 11, 39),
     // Frequency display, the digit underline bars and the leaders to their knobs.
     { kind: 'path', pen: 'heavy', d: path('M180 156H378V197H180Z') },
-    { kind: 'path', pen: 'fine', d: path('M184 160H374V193H184Z') },
-    { kind: 'path', pen: 'fine', faint: true, d: path([0, 1, 2, 3, 4, 5].map(k => led(193 + 33.2 * k, 176.5, 10, 13.5)).join('') + 'M273.5 189.5H275.5V191.5H273.5Z') },
+    { kind: 'path', pen: 'fine', d: path('M182 158H376V195H182Z') },
+    { kind: 'path', pen: 'fine', faint: true, d: path([0, 1, 2, 3, 4, 5].map(k => led(194.5 + 33 * k, 176.5, 9.5, 13.5)).join('') + 'M275 189.5H277V191.5H275Z') },
     { kind: 'path', pen: 'heavy', d: path('M178 202H207M213 202H238M248 202H278M283 202H312M317 202H377') },
-    { kind: 'path', d: path('M190 204L101 251M226 204L194 245M263 204L271 245M297 204L356 254M345 204L455 257') },
+    // Leaders from each digit bar to the rim of its knob.
+    { kind: 'path', d: path([190, 226, 263, 297, 345].map((x, i) => {
+      const [cx, cy] = FK[i], dx = x - cx, dy = 204 - cy, l = Math.hypot(dx, dy), r = 28;
+      return `M${x} 204L${(cx + dx / l * r).toFixed(1)} ${(cy + dy / l * r).toFixed(1)}`;
+    }).join('')) },
     // A-3-2 knob.
-    L([35, 245], 'A', 10),
-    L([31, 269], '3', 10),
-    L([37, 289], '2', 10),
+    ...([['2', -117], ['3', -90], ['A', -57]] as const).map(([t, a]) => L(onDetent(FK[0], a, 40), t, 10)),
     // Function knob.
-    L([66, 360], 'OFF', 11.5, 26),
-    L([97, 336], 'MAIN', 11.5, 33),
-    L([155, 336], 'BOTH', 11.5, 37),
-    L([186, 360], 'ADF', 11.5, 26),
+    ...([['OFF', -58, 26], ['MAIN', -25, 33], ['BOTH', 25, 37], ['ADF', 58, 26]] as const).map(([t, a, w]) => L(onDetent(FN, a, 70), t, 11.5, w)),
     // VOL.
     L([277, 336], 'VOL', 11.5, 26),
     // Mode knob.
-    L([389, 344], 'MNL', 11.5, 27),
-    L([428, 330], 'PRESET', 11.5, 51),
-    L([467, 344], 'GRD', 11.5, 25),
+    ...([['MNL', -37, 27], ['PRESET', 0, 51], ['GRD', 37, 25]] as const).map(([t, a, w]) => L(onDetent(MD, a, 67), t, 11.5, w)),
     // TONE and SQUELCH.
     L([187, 432], 'T', 10),
     L([244, 432], 'TONE', 10, 28),
@@ -144,9 +146,9 @@ export const uhf: PanelSpec = {
     { component: 'push-round-medium', control: 'test-display', at: pt(104, 170) },
     { component: 'push-round-medium', control: 'status', at: pt(445, 177) },
     ...FK.map(([x, y], i) => ({ component: 'knob-bar-medium' as const, control: `freq-${i + 1}`, at: pt(x, y) })),
-    { component: 'knob-radio-large', control: 'function', at: pt(126, 398) },
+    { component: 'knob-radio-large', control: 'function', at: pt(...FN) },
     { component: 'knob-knurled-mini', control: 'vol', at: pt(277, 368) },
-    { component: 'knob-radio-large', control: 'mode', at: pt(428, 398) },
+    { component: 'knob-radio-large', control: 'mode', at: pt(...MD) },
     { component: 'toggle-small', control: 'tone', at: pt(213, 432) },
     { component: 'toggle-small', control: 'squelch', at: pt(330.5, 432) },
   ],

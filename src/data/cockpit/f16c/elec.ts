@@ -43,9 +43,9 @@ export const elec: PanelSpec = {
     { raised: true, d: path('M13 5H178Q182 5 182 9V292Q182 297 187 297H258Q263 297 263 302V333Q263 338 258 338H13Q9 338 9 334V9Q9 5 13 5Z') },
   ],
   engraving: [
-    { kind: 'text', at: pt(99, 32), text: 'MAIN PWR', cap: mm(14), width: mm(76) },
+    { kind: 'text', at: pt(97, 25), text: 'MAIN PWR', cap: mm(14), width: mm(76) },
     { kind: 'text', at: pt(149, 81), text: 'BATT', cap: mm(15), width: mm(41) },
-    { kind: 'text', at: pt(95, 128), text: 'OFF', cap: mm(14), width: mm(28) },
+    { kind: 'text', at: pt(97, 137), text: 'OFF', cap: mm(14), width: mm(28) },
     { kind: 'text', at: pt(78, 173), text: '+', cap: mm(10) },
     { kind: 'text', at: pt(122, 184), text: 'CAUTION', cap: mm(14), width: mm(65) },
     { kind: 'text', at: pt(122, 204), text: 'RESET', cap: mm(14), width: mm(48) },
