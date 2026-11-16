@@ -121,7 +121,7 @@ export type Placement =
   | { component: RotaryArt; control: string; at: Pt }
   | { component: PushArt; control: string; at: Pt }
   /** Landing gear handle: a slot centred on `at`, `travel` mm between the knob's end positions, knob `size` in mm. */
-  | { component: 'gear-handle'; control: string; at: Pt; travel: number; size: [w: number, h: number] }
+  | { component: 'gear-handle'; control: string; at: Pt; travel: number; size: [w: number, h: number]; /** The light in the knob. */ indicator?: string }
   | { component: 'guard-flip'; control: string; at: Pt; size: [w: number, h: number] }
   /** Square pushbutton, centred on `at`; `legend` lines are placed by their centre `y` (mm from the centre). With `indicator`, the legend face is that lamp's lens. */
   | { component: 'push-square'; control: string; at: Pt; size: [w: number, h: number]; legend: { text: string; cap: number; y: number; width?: number }[]; indicator?: string; /** Turn (degrees clockwise) about the centre, for buttons on an angled mount. */ rotate?: number }

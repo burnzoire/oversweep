@@ -84,7 +84,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
     case 'gear-handle': {
       // Knob centred on the slot at each end of its travel (first position at the top).
       const c = controlOf(spec, p.control), last = c.positions.length - 1;
-      return at(p.at, gearSlot(p.travel) + moving(c, state[c.id] ?? c.initial, i => gearKnob(p.size, p.travel * (i / last - 0.5))), ' data-art="gear-handle"');
+      return at(p.at, gearSlot(p.travel) + moving(c, state[c.id] ?? c.initial, i => gearKnob(p.size, p.travel * (i / last - 0.5), p.indicator)), ' data-art="gear-handle"');
     }
     case 'push-square': {
       const c = controlOf(spec, p.control), [w, h] = p.size, li = 2.2;

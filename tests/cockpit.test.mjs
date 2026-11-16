@@ -23,7 +23,7 @@ test('every built panel models each placed control and lamp once', { skip: !canI
   for (const { spec } of builtPanels(f16cCockpit)) {
     const placed = spec.placements.filter(p => 'control' in p).map(p => p.control);
     assert.deepEqual([...placed].sort(), spec.controls.map(c => c.id).sort(), `${spec.id}: placements and controls differ`);
-    const lamps = spec.placements.flatMap(p => p.component === 'lamp-module' ? p.lamps.map(l => l.indicator) : p.component === 'lamp-round' ? [p.indicator] : p.component === 'push-square' && p.indicator ? [p.indicator] : []);
+    const lamps = spec.placements.flatMap(p => p.component === 'lamp-module' ? p.lamps.map(l => l.indicator) : p.component === 'lamp-round' ? [p.indicator] : (p.component === 'push-square' || p.component === 'gear-handle') && p.indicator ? [p.indicator] : []);
     assert.deepEqual([...lamps].sort(), spec.indicators.map(i => i.id).sort(), `${spec.id}: lamp cells and indicators differ`);
     for (const c of spec.controls) {
       assert.ok(c.positions.some(p => p.id === c.initial), `${spec.id}.${c.id}: initial position`);

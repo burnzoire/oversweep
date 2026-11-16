@@ -95,7 +95,7 @@ export const TOGGLES = {
   'toggle-large-square': { r: 4.0, reach: 4.6, ball: 3.3, cap: 'square', lock: true },
   /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). */
   'toggle-large-lock': { r: 5.2, reach: 6.0, ball: 2.8, cap: 'dome', lock: true },
-  /** Plain toggle with a wide flat paddle, gripped across its end by three ridges (gear panel LIGHTS). `ball` is half the paddle width. */
+  /** Plain toggle with a wide flat paddle, with three round grip bosses along its end (gear panel LIGHTS). `ball` is half the paddle width. */
   'toggle-paddle-wide': { r: 4.0, reach: 4.6, ball: 11, cap: 'wide' },
 } as const;
 
@@ -137,10 +137,10 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   // viewer (a near-circle). Its top is nearly flat, so no inner ring.
   const face = (ry: number) => cased(`<ellipse cy="${n(L)}" rx="${ball}" ry="${n(ry)}" fill="${PAPER}"/>`, 'medium');
   if (cap === 'wide') {
-    // Wide paddle end (seen almost end-on at the real lean): a long pill with three grip ridges.
+    // Wide paddle end (seen almost end-on at the real lean): a long pill with three round grip bosses.
     const hh = 3.6, x = ball;
     const pill = cased(`<rect x="${n(-x)}" y="${n(L - hh)}" width="${n(2 * x)}" height="${n(2 * hh)}" rx="${n(hh)}" fill="${PAPER}"/>`, 'medium') +
-      `<path d="M${n(-x / 3)} ${n(L - hh * 0.8)}V${n(L + hh * 0.8)}M${n(x / 3)} ${n(L - hh * 0.8)}V${n(L + hh * 0.8)}" ${sw('fine')}/>`;
+      [-2 * x / 3, 0, 2 * x / 3].map(cx => `<circle cx="${n(cx)}" cy="${n(L)}" r="${n(hh * 0.7)}" ${sw('fine')}/>`).join('');
     if (Math.abs(k) < 1e-6) return pill;
     const y1 = L - Math.sign(k) * hh;
     return `<path d="M${n(-r * 0.3)} 0L${n(-x * 0.8)} ${n(y1)}H${n(x * 0.8)}L${n(r * 0.3)} 0Z" fill="${PAPER}" ${sw('medium')}/>` + pill;
@@ -251,10 +251,21 @@ export function gearSlot(travel: number) {
  * The gear handle's wheel-shaped knob seen square-on: the tyre is edge-on, so it
  * shows as a tall rounded block with tread ribs across it. `size` in mm, centred on `y`.
  */
-export function gearKnob([w, h]: [number, number], y: number) {
-  const ribs = [-0.3, -0.1, 0.1, 0.3].map(f => `M${n(-w / 2 + 1.2)} ${n(y + f * h)}H${n(w / 2 - 1.2)}`).join('');
-  return cased(`<rect x="${n(-w / 2)}" y="${n(y - h / 2)}" width="${n(w)}" height="${n(h)}" rx="${n(w * 0.3)}" fill="${PAPER}"/>`, 'heavy') +
-    `<path d="${ribs}" ${sw('fine')}/>`;
+export function gearKnob([w, h]: [number, number], y: number, indicator?: string) {
+  // A wheel seen on its tread: a barrel-shaped tyre with circumferential
+  // grooves (vertical, bowed out like the tyre's curve) between two shoulder
+  // lines where the tread rolls over to the sidewalls.
+  const t = y - h / 2, b = y + h / 2, sh = h * 0.07;
+  const body = `M${n(-w / 2)} ${n(t + sh * 2)}Q${n(-w / 2)} ${n(t)} 0 ${n(t)}Q${n(w / 2)} ${n(t)} ${n(w / 2)} ${n(t + sh * 2)}V${n(b - sh * 2)}Q${n(w / 2)} ${n(b)} 0 ${n(b)}Q${n(-w / 2)} ${n(b)} ${n(-w / 2)} ${n(b - sh * 2)}Z`;
+  const shoulders = `M${n(-w / 2 + 0.4)} ${n(t + sh * 2)}Q0 ${n(t + sh * 0.6)} ${n(w / 2 - 0.4)} ${n(t + sh * 2)}M${n(-w / 2 + 0.4)} ${n(b - sh * 2)}Q0 ${n(b - sh * 0.6)} ${n(w / 2 - 0.4)} ${n(b - sh * 2)}`;
+  const grooves = [-0.32, -0.16, 0, 0.16, 0.32].map(f => {
+    const x = f * w, bow = f * w * 0.25;
+    return `M${n(x)} ${n(t + sh * 2.2)}Q${n(x + bow)} ${n(y)} ${n(x)} ${n(b - sh * 2.2)}`;
+  }).join('');
+  // The whole tyre is the translucent red lens of the handle light.
+  const lens = indicator ? `<g data-indicator="${indicator}"><path class="lens" d="${body}" stroke="none"/></g>` : '';
+  return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') + lens +
+    `<path d="${shoulders}" ${sw('medium')}/><path d="${grooves}" ${sw('fine')}/>`;
 }
 
 /* ----------------------------------------------------------------- guards */
