@@ -98,15 +98,14 @@ export function toggleLeans(count: number) {
 export function toggleBase(art: keyof typeof TOGGLES) {
   const { r, cap } = TOGGLES[art];
   if (cap === 'cylinder') {
-    // Lever-lock: castellated lock collar inside the bushing nut.
-    const c = r * 0.5, notch = Array.from({ length: 4 }, (_, i) => {
-      const [x1, y1] = polar(c, 45 + i * 90 - 12), [x2, y2] = polar(c, 45 + i * 90 + 12);
-      const [x3, y3] = polar(c * 0.72, 45 + i * 90 + 12), [x4, y4] = polar(c * 0.72, 45 + i * 90 - 12);
-      return `M${n(x1)} ${n(y1)}L${n(x4)} ${n(y4)}L${n(x3)} ${n(y3)}L${n(x2)} ${n(y2)}`;
-    }).join('');
-    const hex = Array.from({ length: 6 }, (_, i) => polar(r * 0.74, 30 + i * 60)).map(([x, y]) => `${n(x)} ${n(y)}`).join('L');
-    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<path d="M${hex}Z" fill="${PAPER}" ${sw('medium')}/>` +
-      `<circle r="${n(c)}" fill="${PAPER}" ${sw('medium')}/><path d="${notch}" ${sw('fine')}/>`;
+    // Lever-lock: round bushing (no hex nut on the panel face) with the
+    // locking insert showing: a slot the lever travels in, with a detent
+    // notch at each latched position (top, centre, bottom).
+    const ri = r * 0.6, sw2 = r * 0.2, sl = r * 0.48, nd = r * 0.12;
+    const notches = [-sl * 0.85, 0, sl * 0.85].map(y => `M${n(-sw2)} ${n(y - nd)}H${n(-sw2 - nd)}V${n(y + nd)}H${n(-sw2)}M${n(sw2)} ${n(y - nd)}H${n(sw2 + nd)}V${n(y + nd)}H${n(sw2)}`).join('');
+    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.82)}" ${sw('fine')}/>` +
+      cased(`<circle r="${n(ri)}" fill="${PAPER}"/>`, 'medium') +
+      `<rect x="${n(-sw2)}" y="${n(-sl)}" width="${n(sw2 * 2)}" height="${n(sl * 2)}" rx="${n(sw2)}" ${sw('medium')}/><path d="${notches}" ${sw('fine')}/>`;
   }
   const hex = Array.from({ length: 6 }, (_, i) => polar(r * 0.74, 30 + i * 60)).map(([x, y]) => `${n(x)} ${n(y)}`).join('L');
   return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<path d="M${hex}Z" fill="${PAPER}" ${sw('medium')}/>` +
