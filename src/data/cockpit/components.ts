@@ -376,8 +376,8 @@ export function rotaryKnob(art: keyof typeof ROTARIES) {
     // pointed front, chamfered shoulders, parallel sides, square back with rounded corners.
     const R = ROTARIES[art].skirt, k = (v: number) => n(v * R);
     // Long sides parallel, square to the back edge (Nathan, 2026-11-17).
-    const body = `M${k(-0.07)} ${k(-0.93)}Q0 ${k(-0.97)} ${k(0.07)} ${k(-0.93)}L${k(0.5)} ${k(-0.42)}V${k(0.72)}` +
-      `Q${k(0.5)} ${k(0.84)} ${k(0.38)} ${k(0.84)}H${k(-0.38)}Q${k(-0.5)} ${k(0.84)} ${k(-0.5)} ${k(0.72)}V${k(-0.42)}Z`;
+    const body = `M${k(-0.07)} ${k(-0.93)}Q0 ${k(-0.97)} ${k(0.07)} ${k(-0.93)}L${k(0.5)} ${k(-0.42)}V${k(0.84)}` +
+      `Q${k(0.5)} ${k(0.96)} ${k(0.38)} ${k(0.96)}H${k(-0.38)}Q${k(-0.5)} ${k(0.96)} ${k(-0.5)} ${k(0.84)}V${k(-0.42)}Z`;
     return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') + `<path d="M0 ${k(-0.8)}V0" ${sw('heavy')}/>`;
   }
   const body = `M${-barFront} ${-bar}Q0 ${n(-bar - 1.2)} ${barFront} ${-bar}L${barBack} ${n(bar * 0.82)}Q0 ${n(bar * 1.08)} ${-barBack} ${n(bar * 0.82)}Z`;
