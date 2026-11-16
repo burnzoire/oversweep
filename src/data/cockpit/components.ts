@@ -139,9 +139,9 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
     : cased(`<circle cy="${n(L)}" r="${ball}" fill="${PAPER}"/>`, 'medium');
   if (Math.abs(k) < 1e-6) return tip;
   const s = Math.sign(k);
-  // Every lever starts at the pivot: its rounded root is offset toward the
-  // lean by half the lever's thickness, so nothing reaches behind the pivot.
-  const y0 = s * w0;
+  // The base of the shaft is a circle centred on the pivot; the lever's
+  // rounded root is that circle.
+  const y0 = 0;
   const arc = `A${n(w0)} ${n(w0)} 0 0 ${s > 0 ? 1 : 0}`;
   if (cap === 'square') {
     // Flat lever widening from the root to the paddle: a trapezoid under the face.
@@ -151,7 +151,7 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   if (cap === 'ball') {
     // Teardrop: one outline from the round lever root, along the common
     // tangents, around the ball. Lever along +y, mirrored for an upward lean.
-    const rc = w0, d = Math.abs(L), r0 = w0, r1 = ball, a = Math.asin(Math.min(0.95, (r1 - r0) / (d - rc)));
+    const rc = 0, d = Math.abs(L), r0 = w0, r1 = ball, a = Math.asin(Math.min(0.95, (r1 - r0) / (d - rc)));
     const ca = Math.cos(a), sa = Math.sin(a), Y = (y: number) => n(s * y);
     const p0r = [r0 * ca, rc - r0 * sa], p0l = [-r0 * ca, rc - r0 * sa];
     const p1r = [r1 * ca, d - r1 * sa], p1l = [-r1 * ca, d - r1 * sa];
