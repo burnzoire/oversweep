@@ -99,7 +99,7 @@ export const TOGGLES = {
    */
   'toggle-large-square': { r: 4.0, reach: 4.6, ball: 3.3, cap: 'square', lock: true },
   /** Large lever-lock: a shaft widening from a lock-insert bushing to a domed cap (IFF M-4 CODE / REPLY). Cap enlarged 50% (Nathan, 2026-11-17). */
-  'toggle-large-lock': { r: 6.24, reach: 7.2, ball: 5.04, cap: 'dome', lock: true },
+  'toggle-large-lock': { r: 6.24, reach: 7.8, ball: 5.04, cap: 'dome', lock: true },
   /**
    * One-off HOOK lever: a round bushing with an oblong slot and a flat
    * vertical paddle (rectangle, semicircle end toward the pivot) overhanging
