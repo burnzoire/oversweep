@@ -35,25 +35,28 @@ function moving(c: ControlDef, current: string, draw: (posIndex: number) => stri
  * about the fastener on the side away from the corner (clipped to the plate).
  * Absolute coordinates, so the plate clip applies directly.
  */
-function dzusCut([x, y]: Pt, corner: Cut, layered: boolean) {
+function dzusCut([x, y]: Pt, corner: Cut) {
   const c = FASTENERS.dzus.cut, far = 1000;
   const sy = corner.startsWith('up') ? -1 : 1, sx = corner.endsWith('left') ? -1 : 1;
   const ax = x - sx * c, by = y - sy * c;
   const edge = `M${n(ax)} ${n(y + sy * far)}V${n(y)}A${n(c)} ${n(c)} 0 0 ${sx * sy < 0 ? 0 : 1} ${n(x)} ${n(by)}H${n(x + sx * far)}`;
   // On a layered panel the notch clears the upper layers' borders inside it.
-  const hole = layered ? `<path d="${edge}V${n(y + sy * far)}Z" fill="${PAPER}" stroke="none"/>` : '';
-  return hole + `<path d="${edge}" ${sw('medium')}/>`;
+  return { hole: `<path d="${edge}V${n(y + sy * far)}Z" fill="${PAPER}" stroke="none"/>`, edge: `<path d="${edge}" ${sw('medium')}/>` };
 }
 
 function placement(spec: PanelSpec, p: Placement, state: Record<string, string>): string {
   switch (p.component) {
     case 'dzus': case 'screw': case 'screw-medium': case 'screw-small':
-      // Single plate: the notch edges, clipped to the plate. Layered panel: the notch clears the
-      // upper layers inside the base plate, then the base plate's border is drawn again on top.
-      return (p.component === 'dzus' && p.cut ? (spec.plate.length > 1
-        ? `<g clip-path="url(#base-${spec.id})">${dzusCut(p.at, p.cut, true)}</g>` + cased(`<path d="${spec.plate[0].d}" fill="none"/>`, 'heavy')
-        : `<g clip-path="url(#plate-${spec.id})">${dzusCut(p.at, p.cut, false)}</g>`) : '') +
-        at(p.at, fastener(p.component), ` class="${p.component}"`);
+      if (p.component === 'dzus' && p.cut) {
+        // The notch edges end at the top layer's outline. On a layered panel the notch first clears
+        // the upper layers inside the base plate, then the base plate's border is drawn again.
+        const { hole, edge } = dzusCut(p.at, p.cut);
+        const cut = (spec.plate.length > 1
+          ? `<g clip-path="url(#base-${spec.id})">${hole}</g>` + cased(`<path d="${spec.plate[0].d}" fill="none"/>`, 'heavy') : '') +
+          `<g clip-path="url(#plate-${spec.id})">${edge}</g>`;
+        return cut + at(p.at, fastener(p.component), ` class="${p.component}"`);
+      }
+      return at(p.at, fastener(p.component), ` class="${p.component}"`);
     case 'toggle-large': case 'toggle-medium': case 'toggle-small': case 'toggle-large-cylinder': case 'toggle-large-square': case 'toggle-large-lock': {
       const c = controlOf(spec, p.control), leans = toggleLeans(c.positions.length);
       const rot = c.travel === 'horizontal' ? ' transform="rotate(-90)"' : '';
