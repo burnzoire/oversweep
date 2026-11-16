@@ -9,7 +9,7 @@
  * the client engine flips them. Lamps are `<g data-indicator="<id>">` with a
  * `.lens` rect that lights when the group gets the `lit` class.
  */
-import type { ControlDef, PanelSpec, Placement, Pt } from './types';
+import type { ControlDef, Cut, PanelSpec, Placement, Pt } from './types';
 import {
   FASTENERS, FONT, INK, LAMPS, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, lampModuleFrame, lampRoundBezel, n,
   pushBase, pushCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
@@ -29,10 +29,24 @@ function moving(c: ControlDef, current: string, draw: (posIndex: number) => stri
     `<g data-pos="${p.id}"${p.id === current ? '' : ' display="none"'}>${draw(i)}</g>`).join('') + '</g>';
 }
 
+/**
+ * The slot cut in the face plate around a DZUS fastener: a U with its round
+ * end about the fastener, running out to the plate edge (clipped to the plate).
+ * Absolute coordinates, so the plate clip applies directly.
+ */
+function dzusCut([x, y]: Pt, dir: Cut) {
+  const c = FASTENERS.dzus.cut, far = 1000;
+  const [ux, uy] = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[dir];
+  const [px, py] = [-uy, ux]; // perpendicular
+  const P = (a: number, b: number) => `${n(x + px * a + ux * b)} ${n(y + py * a + uy * b)}`;
+  return `<path d="M${P(-c, far)}L${P(-c, 0)}A${n(c)} ${n(c)} 0 0 0 ${P(c, 0)}L${P(c, far)}" ${sw('medium')}/>`;
+}
+
 function placement(spec: PanelSpec, p: Placement, state: Record<string, string>): string {
   switch (p.component) {
     case 'dzus': case 'screw': case 'screw-medium': case 'screw-small':
-      return at(p.at, fastener(p.component), ` class="${p.component}"`);
+      return (p.component === 'dzus' && p.cut ? `<g clip-path="url(#plate-${spec.id})">${dzusCut(p.at, p.cut)}</g>` : '') +
+        at(p.at, fastener(p.component), ` class="${p.component}"`);
     case 'toggle-large': case 'toggle-medium': case 'toggle-small': case 'toggle-large-cylinder': case 'toggle-large-square': case 'toggle-large-lock': {
       const c = controlOf(spec, p.control), leans = toggleLeans(c.positions.length);
       const rot = c.travel === 'horizontal' ? ' transform="rotate(-90)"' : '';
@@ -107,6 +121,7 @@ export function renderPanel(spec: PanelSpec, opts: RenderOptions = {}) {
     : `<path d="${e.d}" ${sw(e.pen ?? 'medium')}/>`).join('');
   return `<svg class="cockpit-svg" viewBox="0 0 ${n(w)} ${n(h)}" xmlns="http://www.w3.org/2000/svg" ${opts.label ? `role="img" aria-label="${esc(opts.label)}"` : 'aria-hidden="true"'}>` +
     `<g fill="none" stroke="${INK}" stroke-linejoin="round" stroke-linecap="round" font-family="${FONT}" font-weight="600">` +
+    `<defs><clipPath id="plate-${spec.id}"><path d="${spec.plate[0].d}"/></clipPath></defs>` +
     `<g class="plate">${plate}</g><g class="engraving">${engraving}</g>` +
     `<g class="components">${spec.placements.map(p => placement(spec, p, state)).join('')}</g></g>` +
     (opts.guide ? guideLayer(spec) : '') + '</svg>';

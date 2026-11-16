@@ -46,7 +46,7 @@ export function text(x: number, y: number, s: string, cap: number, width?: numbe
 
 export const FASTENERS = {
   /** Quarter-turn DZUS stud head. */
-  dzus: { r: 4.25 },
+  dzus: { r: 4.25, cut: 5.1 },
   /** Panel screw in a countersunk well. */
   screw: { r: 3.4 },
   'screw-medium': { r: 2.8 },
