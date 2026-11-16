@@ -99,6 +99,9 @@ everything that stands proud of it.
     cap = `toggle-large-lock` (JFS, MAX POWER, AB RESET, TANK INERTING); square
     paddle on a trapezoid lever = `toggle-large-square` (AIR REFUEL).
     The lock slot has square ends so it never reads as part of the lever.
+    Flat-top lever-locks (`toggle-large-cylinder`) translate as a whole toward
+    the throw (`shift`), so they look pivoted off-centre like the guide; don't
+    lengthen the lever instead (Nathan, 2026-11-17).
   - When the bushing is hidden, say so in `source.unresolved`.
 - **DZUS cut-outs:** only where the guide shows one, the top plate layer (last `plate` entry) is notched around a corner DZUS; lower layers keep their outline. Set
   `cut` to the plate corner the notch opens toward (`up-left` …); it is drawn
