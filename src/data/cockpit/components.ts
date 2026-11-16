@@ -121,9 +121,8 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   const L = reach * k;
   const w0 = cap === 'cylinder' ? ball * 0.58 : r * 0.3, w1 = cap === 'cylinder' ? ball * 0.62 : ball * 0.62;
   // Mushroom cap: the lever leans only ~17° from the panel normal, so the cap stays almost square to the
-  // viewer (a near-circle); a smaller ring marks the dome.
-  const face = (ry: number) => cased(`<ellipse cy="${n(L)}" rx="${ball}" ry="${n(ry)}" fill="${PAPER}"/>`, 'medium') +
-    `<ellipse cy="${n(L)}" rx="${n(ball * 0.55)}" ry="${n(ry * 0.55)}" ${sw('fine')}/>`;
+  // viewer (a near-circle). Its top is nearly flat, so no inner ring.
+  const face = (ry: number) => cased(`<ellipse cy="${n(L)}" rx="${ball}" ry="${n(ry)}" fill="${PAPER}"/>`, 'medium');
   const tip = cap === 'cylinder'
     ? face(Math.abs(k) < 1e-6 ? ball : ball * 0.96)
     : cap === 'square'
