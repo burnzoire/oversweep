@@ -142,13 +142,11 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
   // The base of the shaft is a circle centred on the pivot (the bushing
   // centre); the lever's rounded root is that circle.
   const y0 = 0;
-  // The base of the shaft, drawn as its own circle on the pivot.
-  const base = `<circle r="${n(w0)}" ${sw('fine')}/>`;
   const arc = `A${n(w0)} ${n(w0)} 0 0 ${s > 0 ? 1 : 0}`;
   if (cap === 'square') {
     // Flat lever widening from the root to the paddle: a trapezoid under the face.
     const y1 = L - s * ball * 0.6;
-    return `<path d="M${n(-w0)} ${n(y0)}${arc} ${n(w0)} ${n(y0)}L${n(ball * 0.9)} ${n(y1)}H${n(-ball * 0.9)}Z" fill="${PAPER}" ${sw('medium')}/>` + base + tip;
+    return `<path d="M${n(-w0)} ${n(y0)}${arc} ${n(w0)} ${n(y0)}L${n(ball * 0.9)} ${n(y1)}H${n(-ball * 0.9)}Z" fill="${PAPER}" ${sw('medium')}/>` + tip;
   }
   if (cap === 'ball') {
     // Teardrop: one outline from the round lever root, along the common
@@ -160,12 +158,12 @@ export function toggleLever(art: keyof typeof TOGGLES, k: number) {
     const sweep = s > 0 ? 1 : 0;
     const drop = `<path d="M${n(p0r[0])} ${Y(p0r[1])}L${n(p1r[0])} ${Y(p1r[1])}A${r1} ${r1} 0 1 ${sweep} ${n(p1l[0])} ${Y(p1l[1])}` +
       `L${n(p0l[0])} ${Y(p0l[1])}A${n(r0)} ${n(r0)} 0 0 ${sweep} ${n(p0r[0])} ${Y(p0r[1])}Z" fill="${PAPER}"/>`;
-    return cased(drop, 'medium') + base;
+    return cased(drop, 'medium');
   }
   // Shaft: round root at the bushing, straight flanks widening out to the cap
   // (cylinder: flat mushroom cap; dome: rounded cap a little wider than the shaft).
   const shaft = `<path d="M${n(-w0)} ${n(y0)}${arc} ${n(w0)} ${n(y0)}L${n(w1)} ${n(L)}H${n(-w1)}Z" fill="${PAPER}" ${sw('medium')}/>`;
-  return shaft + base + tip;
+  return shaft + tip;
 }
 
 /* --------------------------------------------------------------- rotaries */
