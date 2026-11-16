@@ -244,6 +244,8 @@ export const KNOBS = {
   'knob-knurled-small': { r: 7.9, lobes: 12, ridge: [0.82, 0.16] },
   /** Knurled dimmer (EXT LIGHTING FORM). */
   'knob-knurled': { r: 9.4, lobes: 12, ridge: [0.82, 0.13] },
+  /** Knurled dimmer whose white index runs square-ended right out to the rim (Interior LIGHTING). */
+  'knob-knurled-edge': { r: 9.4, lobes: 12, ridge: [0.94, 0.13], edge: true },
   /** Plain round knob with a wide raised bar (EXT LIGHTING MASTER). */
   'knob-bar': { r: 10, lobes: 0, ridge: [0.96, 0.22], bar: true },
   /** Round base under a three-armed grip with deep hollows between the arms, index bar along one arm (EXT LIGHTING AERIAL REFUELING). */
@@ -329,6 +331,9 @@ export function knobArt(art: keyof typeof KNOBS) {
   if ('bar' in t) return cased(rim, 'heavy') +
     `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(2 * hl)}" rx="${n(hw * 0.6)}" fill="${PAPER}" ${sw('medium')}/>` +
     `<path d="M0 ${n(-hl + hw)}V0" ${sw('heavy')}/>`;
+  if ('edge' in t) return cased(rim, 'heavy') +
+    `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
+    `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
   return cased(rim, 'heavy') + (hl ? indicator(hl, hw) : '');
 }
 

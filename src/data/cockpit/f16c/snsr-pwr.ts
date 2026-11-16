@@ -44,6 +44,11 @@ export const snsrPwr: PanelSpec = {
   },
   plate: [
     { d: path('M6 4H434Q438 4 438 8V126Q438 130 434 130H6Q2 130 2 126V8Q2 4 6 4Z') },
+    // Raised face, notched round the bottom-right DZUS. Notch edges measured by
+    // brightness gradient (px): top 72.5 (cols 434-438), left 410.5 (rows 110-117,
+    // below the fastener rim). Drawn at x 410, y 72 with a 12 px inner radius; the
+    // notch runs to the plate's cropped bottom edge.
+    { d: path('M6 4H434Q438 4 438 8V72H422Q410 72 410 84V130H6Q2 130 2 126V8Q2 4 6 4Z'), raised: true },
   ],
   engraving: [
     // Vertical title: SNSR beside PWR.
@@ -60,7 +65,7 @@ export const snsrPwr: PanelSpec = {
   placements: [
     { component: 'screw', at: pt(28, 103) },
     { component: 'screw-medium', at: pt(389, 108) },
-    { component: 'dzus', at: pt(423, 90) },
+    { component: 'dzus', at: pt(425.5, 92.5) },
     ...Object.entries(SW).map(([id, at]) => ({ component: 'toggle-large-lock' as const, control: id, at: pt(...at) })),
   ],
   controls: [
