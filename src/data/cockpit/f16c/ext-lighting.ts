@@ -27,7 +27,7 @@ const MS: [number, number] = [238, 222]; // MASTER knob
 const ACP = ['OFF', '1', '2', '3', '4', 'A', 'B', 'C'].map((t, i) => ({ t, angle: -150 + 38 * i }));
 const acLegend = (a: number, rr: number): [number, number] =>
   [+(AC[0] + rr * Math.sin(a * Math.PI / 180)).toFixed(1), +(AC[1] - rr * Math.cos(a * Math.PI / 180)).toFixed(1)];
-/** Four detents for the continuous dimmers, 90° apart; the reference shows each at the third. */
+/** Four detents for the continuous dimmers, 90° apart; the reference shows both at OFF. */
 const dimmer = [
   { id: 'off', label: 'OFF', angle: -135, hold: 'stable' as const },
   { id: 'dim', label: 'DIM', angle: -45, hold: 'stable' as const },
@@ -47,7 +47,7 @@ export const extLighting: PanelSpec = {
     rectify: 'python3 -I scripts/panel-trace.py <p69.jpg> <out> 19,46.5 462,46.3 16,242 464.7,243',
     pxPerMm: PX,
     scale: 'DZUS stud heads are drawn at one size (8.5 mm) on every panel; this panel\'s scale is set so its fastener heads (about 28 px) match.',
-    shown: { 'anti-coll': 'off', flash: 'steady', 'wing-tail': 'off', fuselage: 'off', form: 'mid', master: 'norm', 'aerial-refueling': 'mid' },
+    shown: { 'anti-coll': 'off', flash: 'steady', 'wing-tail': 'off', fuselage: 'off', form: 'off', master: 'norm', 'aerial-refueling': 'off' },
     unresolved: [
       'FORM and AERIAL REFUELING are continuous dimmers; they are modelled with four detents 90° apart (OFF to BRT). Where the dimmer stops at each end is not shown.',
       'The ANTI-COLL legends look unevenly spaced in the reference because of the camera angle; the detents are drawn evenly, 38° apart, with each legend on its detent line.',
@@ -107,7 +107,7 @@ export const extLighting: PanelSpec = {
     { component: 'toggle-large', control: 'flash', at: pt(194, 75.5) },
     { component: 'toggle-large', control: 'wing-tail', at: pt(288, 95) },
     { component: 'toggle-large', control: 'fuselage', at: pt(397, 95) },
-    { component: 'knob-knurled', control: 'form', at: pt(88, 225) },
+    { component: 'knob-knurled', control: 'form', at: pt(97, 222) },
     { component: 'knob-bar-thick', control: 'master', at: pt(...MS) },
     { component: 'knob-lobed', control: 'aerial-refueling', at: pt(355, 225) },
   ],

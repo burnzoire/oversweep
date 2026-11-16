@@ -134,6 +134,15 @@ counts/spacing/lengths, label positions and widths, needle silhouette. Move
 what does not register and run again. If a shared component's size does not
 fit, check it on the other panels before changing it.
 
+**Self-correct before reporting (Nathan, 2026-11-16).** Never send a panel
+for review straight off the first render. For every panel, open the overlay
+and walk it control by control: body outline, centre, indicator, grip shape
+and lever type against the source; legends against the drawing. List each
+mismatch, fix it, re-render, and repeat until the only differences left are
+deliberate ones (square-on levers, controls squared with legends) or are
+recorded in `source.unresolved`. Zoom (`g.py`-style crops at 4x) on anything
+you cannot judge at full size, especially knob grips and bushings.
+
 ## 5. Ship
 
 - `src/data/cockpit/<aircraft>/index.ts`: attach the spec to its catalogue entry.

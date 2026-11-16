@@ -288,7 +288,7 @@ export function knobArt(art: keyof typeof KNOBS) {
     for (let i = 0; i <= N; i++) {
       // Each arm is a round-ended spoke (capsule) from the centre; find where this ray leaves their union.
       const a = (i / N) * 2 * Math.PI, L = 0.64 * r, w = 0.33 * r;
-      const inside = (d: number) => Array.from({ length: t.grip }, (_, k) => (k / t.grip + 1 / 24) * 2 * Math.PI).some(b => {
+      const inside = (d: number) => Array.from({ length: t.grip }, (_, k) => (k / t.grip) * 2 * Math.PI).some(b => {
         const x = d * Math.sin(a - b), y = d * Math.cos(a - b), py = Math.max(0, Math.min(L, y));
         return Math.hypot(x, y - py) <= w;
       });
