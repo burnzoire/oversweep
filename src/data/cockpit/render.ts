@@ -30,16 +30,16 @@ function moving(c: ControlDef, current: string, draw: (posIndex: number) => stri
 }
 
 /**
- * The slot cut in the face plate around a DZUS fastener: a U with its round
- * end about the fastener, running out to the plate edge (clipped to the plate).
+ * The face plate cut away around a DZUS fastener toward a plate corner: two
+ * straight edges running out to the plate edges, joined by a quarter round
+ * about the fastener on the side away from the corner (clipped to the plate).
  * Absolute coordinates, so the plate clip applies directly.
  */
-function dzusCut([x, y]: Pt, dir: Cut) {
+function dzusCut([x, y]: Pt, corner: Cut) {
   const c = FASTENERS.dzus.cut, far = 1000;
-  const [ux, uy] = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] }[dir];
-  const [px, py] = [-uy, ux]; // perpendicular
-  const P = (a: number, b: number) => `${n(x + px * a + ux * b)} ${n(y + py * a + uy * b)}`;
-  return `<path d="M${P(-c, far)}L${P(-c, 0)}A${n(c)} ${n(c)} 0 0 0 ${P(c, 0)}L${P(c, far)}" ${sw('medium')}/>`;
+  const sy = corner.startsWith('up') ? -1 : 1, sx = corner.endsWith('left') ? -1 : 1;
+  const ax = x - sx * c, by = y - sy * c;
+  return `<path d="M${n(ax)} ${n(y + sy * far)}V${n(y)}A${n(c)} ${n(c)} 0 0 ${sx * sy < 0 ? 0 : 1} ${n(x)} ${n(by)}H${n(x + sx * far)}" ${sw('medium')}/>`;
 }
 
 function placement(spec: PanelSpec, p: Placement, state: Record<string, string>): string {

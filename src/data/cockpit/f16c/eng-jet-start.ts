@@ -42,9 +42,9 @@ export const engJetStart: PanelSpec = {
     // Vertical panel name and the FRICTION bracket on the left edge.
     ...([['E', 80], ['N', 98], ['G', 115], ['&', 143], ['J', 185], ['E', 200], ['T', 215], ['S', 253], ['T', 270], ['A', 287], ['R', 303], ['T', 320]] as const)
       .map(([t, y]) => L([10, y], t, 13, 9)),
-    ...([['F', 375], ['R', 392], ['I', 408], ['C', 422], ['T', 436], ['I', 450], ['O', 465], ['N', 480]] as const)
+    ...([['F', 369], ['R', 386], ['I', 402], ['C', 416], ['T', 430], ['I', 444], ['O', 459], ['N', 474]] as const)
       .map(([t, y]) => L([8, y], t, 8)),
-    { kind: 'path', d: path('M4 357H17V484M6 367L8 362L10 367ZM6 484L8 489L10 484Z') },
+    { kind: 'path', d: path('M6 351H17V478M6 361L8 356L10 361ZM6 478L8 483L10 478Z') },
     L([113, 13], 'JET FUEL', 8.5, 49),
     { kind: 'path', d: path('M37 11H82M143 11H188') },
     L([63, 33], 'RUN', 8.5, 21),
@@ -61,14 +61,14 @@ export const engJetStart: PanelSpec = {
     L([167, 418], '+', 7),
     L([113, 466], 'MAX POWER', 8.5, 66),
     L([113, 523], 'OFF', 8.5, 20),
-    // Wire bails either side of MAX POWER.
-    { kind: 'path', pen: 'heavy', d: path('M56 471Q56 467 59.5 467Q63 467 63 471V526Q63 530 59.5 530Q56 530 56 526ZM150 471Q150 467 153.5 467Q157 467 157 471V526Q157 530 153.5 530Q150 530 150 526Z') },
+    // Wire bails either side of MAX POWER, equidistant from its pivot (the camera skews them).
+    { kind: 'path', pen: 'heavy', d: path('M62.5 471Q62.5 467 66 467Q69.5 467 69.5 471V526Q69.5 530 66 530Q62.5 530 62.5 526ZM156.5 471Q156.5 467 160 467Q163.5 467 163.5 471V526Q163.5 530 160 530Q156.5 530 156.5 526Z') },
   ],
   placements: [
-    { component: 'dzus', at: pt(17, 27), cut: 'up' },
-    { component: 'dzus', at: pt(209, 27), cut: 'up' },
-    { component: 'dzus', at: pt(16, 507), cut: 'down' },
-    { component: 'dzus', at: pt(209, 507), cut: 'down' },
+    { component: 'dzus', at: pt(17, 27), cut: 'up-left' },
+    { component: 'dzus', at: pt(209, 27), cut: 'up-right' },
+    { component: 'dzus', at: pt(16, 507), cut: 'down-left' },
+    { component: 'dzus', at: pt(209, 507), cut: 'down-right' },
     { component: 'screw-medium', at: pt(112, 106) },
     { component: 'screw-medium', at: pt(177, 273) },
     { component: 'screw-medium', at: pt(111, 418) },

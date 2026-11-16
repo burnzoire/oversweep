@@ -126,8 +126,8 @@ export type Placement =
   | { component: 'dzus'; at: Pt; cut?: Cut }
   | { component: 'screw' | 'screw-medium' | 'screw-small'; at: Pt };
 
-/** Direction in which the face plate's slot around a DZUS opens to the plate edge. */
-export type Cut = 'up' | 'down' | 'left' | 'right';
+/** The plate corner toward which the face plate is cut away around a DZUS. */
+export type Cut = 'up-left' | 'up-right' | 'down-left' | 'down-right';
 
 export type ToggleArt = 'toggle-large' | 'toggle-medium' | 'toggle-small' | 'toggle-large-cylinder' | 'toggle-large-square' | 'toggle-large-lock';
 export type RotaryArt = 'rotary-pointer';
