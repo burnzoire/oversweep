@@ -138,7 +138,7 @@ export const uhf: PanelSpec = {
     // TONE and SQUELCH.
     L([187, 432], 'T', 10),
     L([244, 432], 'TONE', 10, 28),
-    L([330.5, 413], 'SQUELCH', 10, 46),
+    L([330.5, 411.5], 'SQUELCH', 10, 46),
     L([302, 432], 'OFF', 10, 21),
     L([359, 432], 'ON', 10, 15),
     // Vertical "UHF" and the part number.
