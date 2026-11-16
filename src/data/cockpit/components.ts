@@ -238,11 +238,27 @@ export const KNOBS = {
   'knob-bar-medium': { r: 7.2, lobes: 0, ridge: [0.96, 0.22] },
   /** Very small knurled knob (UHF backup VOL). */
   'knob-knurled-mini': { r: 4.8, lobes: 12, ridge: [0.8, 0.16] },
+  /**
+   * Large radio selector (UHF backup function and mode knobs): a broad skirt
+   * with a raised centre boss, a flat lever running from the boss to the rim
+   * opposite the pointer, and a white index bar set into the rim at the
+   * pointing end. The whole knob turns.
+   */
+  'knob-radio-large': { r: 12.4, lobes: 0, ridge: [0, 0], lever: true },
 } as const;
 
 /** A KNOBS body pointing at 12 o'clock; the renderer turns it to the detent. */
 export function knobArt(art: keyof typeof KNOBS) {
   const { r, lobes, ridge } = KNOBS[art];
+  if ('lever' in KNOBS[art]) {
+    // Traced from the guide's p. 262 UHF mode knob (proportions of r).
+    const k = (v: number) => n(v * r);
+    const lever = `M${k(-0.19)} ${k(-0.21)}L${k(-0.27)} ${k(0.08)}V${k(0.9)}Q0 ${k(1.03)} ${k(0.27)} ${k(0.9)}V${k(0.08)}L${k(0.19)} ${k(-0.21)}Q0 ${k(-0.28)} ${k(-0.19)} ${k(-0.21)}Z`;
+    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') +
+      `<circle r="${k(0.69)}" ${sw('fine')}/>` +
+      `<path d="${lever}" fill="${PAPER}" ${sw('medium')}/>` +
+      `<rect x="${k(-0.075)}" y="${k(-1.04)}" width="${k(0.15)}" height="${k(0.33)}" rx="${k(0.02)}" fill="${PAPER}" ${sw('heavy')}/>`;
+  }
   let rim: string;
   if (!lobes) rim = `<circle r="${r}" fill="${PAPER}"/>`;
   else {
