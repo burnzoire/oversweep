@@ -226,6 +226,8 @@ export const ROTARIES = {
   'rotary-pointer': { skirt: 10.2, bar: 9.6, barBack: 4.8, barFront: 3.4 },
   /** Larger bar-pointer selector (AIR COND TEMP and AIR SOURCE). */
   'rotary-pointer-large': { skirt: 13, bar: 12.2, barBack: 6.1, barFront: 4.3 },
+  /** Mid-size selector, 11.6 mm skirt, with a broad block grip that chamfers to a pointed front (AVIONICS POWER INS and MIDS LVT). */
+  'rotary-pointer-medium': { skirt: 11.6, bar: 10.9, barBack: 6.2, barFront: 2.8, block: true },
 } as const;
 
 /**
@@ -354,6 +356,14 @@ export function rotaryBase(art: keyof typeof ROTARIES) {
 /** The knob drawn pointing at 12 o'clock; the renderer rotates it to the detent. */
 export function rotaryKnob(art: keyof typeof ROTARIES) {
   const { bar, barBack, barFront } = ROTARIES[art];
+  if ('block' in ROTARIES[art]) {
+    // Block grip traced from the guide's p. 78 INS knob (fractions of the skirt):
+    // pointed front, chamfered shoulders, broad back with rounded corners.
+    const R = ROTARIES[art].skirt, k = (v: number) => n(v * R);
+    const body = `M${k(-0.07)} ${k(-0.93)}Q0 ${k(-0.97)} ${k(0.07)} ${k(-0.93)}L${k(0.44)} ${k(-0.42)}L${k(0.56)} ${k(0.7)}` +
+      `Q${k(0.57)} ${k(0.82)} ${k(0.45)} ${k(0.84)}H${k(-0.45)}Q${k(-0.57)} ${k(0.82)} ${k(-0.56)} ${k(0.7)}L${k(-0.44)} ${k(-0.42)}Z`;
+    return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') + `<path d="M0 ${k(-0.8)}V0" ${sw('heavy')}/>`;
+  }
   const body = `M${-barFront} ${-bar}Q0 ${n(-bar - 1.2)} ${barFront} ${-bar}L${barBack} ${n(bar * 0.82)}Q0 ${n(bar * 1.08)} ${-barBack} ${n(bar * 0.82)}Z`;
   return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') +
     `<path d="M0 ${n(-bar + 0.9)}V0" ${sw('heavy')}/>`;

@@ -10,6 +10,9 @@ import { leftEyebrow } from './left-eyebrow.ts';
 import { extLighting } from './ext-lighting.ts';
 import { ecm } from './ecm.ts';
 import { uhf } from './uhf.ts';
+import { snsrPwr } from './snsr-pwr.ts';
+import { interiorLighting } from './interior-lighting.ts';
+import { avionicsPower } from './avionics-power.ts';
 
 /**
  * DCS F-16C cockpit catalogue: areas and panels in the order the official guide
@@ -88,13 +91,13 @@ export const f16cCockpit: AircraftCockpit = {
     },
     {
       id: 'right-console', title: 'Right console', panels: [
-        { id: 'snsr-pwr', title: 'SNSR PWR panel', page: 75 },
-        { id: 'interior-lighting', title: 'Interior LIGHTING panel', page: 76 },
+        { id: 'snsr-pwr', title: 'SNSR PWR panel', page: 75, spec: snsrPwr },
+        { id: 'interior-lighting', title: 'Interior LIGHTING panel', page: 76, spec: interiorLighting },
         { id: 'air-cond', title: 'AIR COND panel', page: 76, spec: airCond },
         { id: 'ky-58', title: 'KY-58 secure voice panel', page: 77 },
         { id: 'oxygen', title: 'OXYGEN regulator panel', page: 77 },
         { id: 'anti-ice', title: 'ANTI ICE & ANT SEL switches', page: 78 },
-        { id: 'avionics-power', title: 'AVIONICS POWER panel', page: 78 },
+        { id: 'avionics-power', title: 'AVIONICS POWER panel', page: 78, spec: avionicsPower },
         { id: 'misc-switches', title: 'Voice message, zeroize, seat adjust and nuclear consent switches', page: 80 },
       ],
     },
