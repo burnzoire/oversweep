@@ -23,7 +23,7 @@ test('every built panel models each placed control and lamp once', { skip: !canI
   for (const { spec } of builtPanels(f16cCockpit)) {
     const placed = spec.placements.filter(p => 'control' in p).map(p => p.control);
     assert.deepEqual([...placed].sort(), spec.controls.map(c => c.id).sort(), `${spec.id}: placements and controls differ`);
-    const lamps = spec.placements.flatMap(p => p.component === 'lamp-module' ? p.lamps.map(l => l.indicator) : p.component === 'lamp-round' ? [p.indicator] : (p.component === 'push-square' || p.component === 'gear-handle') && p.indicator ? [p.indicator] : []);
+    const lamps = spec.placements.flatMap(p => p.component === 'lamp-module' ? p.lamps.map(l => l.indicator) : p.component === 'lamp-round' ? [p.indicator] : (p.component === 'push-square' || p.component === 'gear-handle') && p.indicator ? [p.indicator] : p.component === 'gauge' ? [p.indicator] : []);
     assert.deepEqual([...lamps].sort(), spec.indicators.map(i => i.id).sort(), `${spec.id}: lamp cells and indicators differ`);
     for (const c of spec.controls) {
       assert.ok(c.positions.some(p => p.id === c.initial), `${spec.id}.${c.id}: initial position`);
@@ -39,6 +39,28 @@ test('every built panel models each placed control and lamp once', { skip: !canI
     for (const [w, h] of [spec.canvas]) for (const z of zones) {
       assert.ok(z.box[0] >= -1 && z.box[1] >= -1 && z.box[0] + z.box[2] <= w + 1 && z.box[1] + z.box[3] <= h + 1, `${spec.id}.${z.id} hit zone off the plate`);
     }
+  }
+});
+
+test('gauge scales increase and every tick and needle lands on the dial', { skip: !canImportTs }, async () => {
+  const { f16cCockpit, builtPanels, dialAngle, tickValues, renderPanel } = await load();
+  const gauges = builtPanels(f16cCockpit).flatMap(({ spec }) => spec.placements.filter(p => p.component === 'gauge').map(p => ({ spec, p })));
+  assert.ok(gauges.length >= 4);
+  for (const { spec, p } of gauges) {
+    const { dial } = p, id = `${spec.id}.${p.indicator}`;
+    for (let i = 1; i < dial.scale.length; i++) {
+      assert.ok(dial.scale[i][0] > dial.scale[i - 1][0] && dial.scale[i][1] > dial.scale[i - 1][1], `${id}: scale knots increase`);
+    }
+    assert.ok(dial.scale.at(-1)[1] - dial.scale[0][1] < 360, `${id}: scale under one turn`);
+    for (const t of dial.ticks) {
+      assert.ok(t.r[0] < t.r[1] && t.r[1] < dial.face, `${id}: ticks inside the face`);
+      for (const v of tickValues(t)) assert.ok(v >= dial.scale[0][0] && v <= dial.scale.at(-1)[0], `${id}: tick ${v} on the scale`);
+    }
+    assert.ok(dial.hub < dial.needle && dial.needle < dial.face, `${id}: needle between hub and face`);
+    const ind = spec.indicators.find(i => i.id === p.indicator);
+    assert.equal(ind?.type, 'gauge');
+    assert.equal(dialAngle(dial, dial.scale[0][0] - 50), dial.scale[0][1], `${id}: needle stops at the bottom of the scale`);
+    assert.match(renderPanel(spec), new RegExp(`data-needle="${p.indicator}"`));
   }
 });
 
