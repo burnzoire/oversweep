@@ -459,10 +459,12 @@ export function rotaryKnob(art: keyof typeof ROTARIES) {
   if ('waist' in ROTARIES[art]) {
     // Traced from the guide's p. 65 COMM mode knobs: point at the front, widest just behind the centre, narrow rounded tail.
     const W = (ROTARIES[art] as { waist: number }).waist, T = barBack, k = (v: number) => n(v);
+    // A short straight point (about 1.4 mm each side), then curved out to the waist.
+    const dx = 0.62, dy = 0.79, px = 1.4 * dx, py = -bar + 1.4 * dy;
     // Curved from the point to the waist; straight sides from the waist back to a wide, flat tail.
-    const body = `M0 ${k(-bar)}C${k(W * 0.45)} ${k(-bar * 0.72)} ${k(W)} ${k(-bar * 0.3)} ${k(W)} ${k(bar * 0.2)}` +
+    const body = `M0 ${k(-bar)}L${k(px)} ${k(py)}C${k(px + 0.9 * dx)} ${k(py + 0.9 * dy)} ${k(W)} ${k(-bar * 0.3)} ${k(W)} ${k(bar * 0.2)}` +
       `L${k(T)} ${k(bar * 0.9)}Q${k(T)} ${k(bar)} ${k(T - 0.6)} ${k(bar)}H${k(-(T - 0.6))}Q${k(-T)} ${k(bar)} ${k(-T)} ${k(bar * 0.9)}` +
-      `L${k(-W)} ${k(bar * 0.2)}C${k(-W)} ${k(-bar * 0.3)} ${k(-W * 0.45)} ${k(-bar * 0.72)} 0 ${k(-bar)}Z`;
+      `L${k(-W)} ${k(bar * 0.2)}C${k(-W)} ${k(-bar * 0.3)} ${k(-px - 0.9 * dx)} ${k(py + 0.9 * dy)} ${k(-px)} ${k(py)}Z`;
     return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') + `<path d="M0 ${n(-bar + 0.9)}V0" ${sw('heavy')}/>`;
   }
   const body = `M${-barFront} ${-bar}Q0 ${n(-bar - 1.2)} ${barFront} ${-bar}L${barBack} ${n(bar * 0.82)}Q0 ${n(bar * 1.08)} ${-barBack} ${n(bar * 0.82)}Z`;
