@@ -25,7 +25,8 @@ test("unknown passages skip inference and invalid citation numbers fall back", a
   const unknown = await handle(request(["/unknown/"]), {});
   assert.deepEqual((await unknown.json()).ids, []);
   const response = await handle(request(), { AI: { run: async () => ({ response: '{"answer":"Answer","sources":[2]}' }) } });
-  assert.equal(response.status, 502);
+  assert.equal(response.status, 200);
+  assert.deepEqual((await response.json()).ids, []);
 });
 
 test("daily inference quota is distinct from capacity throttling", async () => {
@@ -39,6 +40,7 @@ test("Gemma chat completions return JSON under choices[0].message.content", asyn
   const response = await handle(request(), { AI: { async run(model, options) {
     assert.equal(model, "@cf/google/gemma-4-26b-a4b-it");
     assert.equal(options.response_format.json_schema.name, "oversweep_answer");
+    assert.deepEqual(options.response_format.json_schema.schema.properties.sources.items.enum, [1]);
     assert.deepEqual(options.response_format.json_schema.schema.required, ["answer", "sources"]);
     return { choices: [{ message: { content: '{"answer":"Sochi Tower is 127.0 MHz VHF.","sources":[1]}' } }] };
   } } });
