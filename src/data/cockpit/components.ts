@@ -298,10 +298,10 @@ export const KNOBS = {
   'knob-spindle': { r: 10, lobes: 0, ridge: [0.95, 0.3], spindle: true },
   /** Very small knurled knob (UHF backup VOL). */
   'knob-knurled-mini': { r: 4.8, lobes: 12, ridge: [0.8, 0.16] },
-  /** Large knurled volume knob (AUDIO 1 COMM 1 and COMM 2); index runs out to the rim. */
-  'knob-knurled-large': { r: 11.2, lobes: 12, ridge: [0.94, 0.1], edge: true },
+  /** Large knurled volume knob (AUDIO 1 COMM 1 and COMM 2); tapers to a smaller scalloped top face with channels down the recesses; index runs out to the rim. */
+  'knob-knurled-large': { r: 11.2, lobes: 12, ridge: [0.94, 0.1], edge: true, taper: 0.84 },
   /** Small knurled knob whose index runs square-ended out to the rim (AUDIO 1 SECURE VOICE and TF). */
-  'knob-knurled-small-edge': { r: 7.9, lobes: 12, ridge: [0.94, 0.16], edge: true },
+  'knob-knurled-small-edge': { r: 7.9, lobes: 12, ridge: [0.94, 0.16], edge: true, taper: 0.84 },
   /** Round knob crossed by a straight raised grip band along the index axis; index from the centre to the rim (AUDIO 1 MSL). */
   'knob-round': { r: 10, lobes: 0, ridge: [0.98, 0.1], edge: true, fin: 0.3 },
   /** Smaller knob-round, same grip (AUDIO 1 THREAT, AUDIO 2 ILS). */
@@ -414,6 +414,22 @@ export function knobArt(art: keyof typeof KNOBS) {
     const w = t.fin * r, yc = n(Math.sqrt(r * r - w * w));
     const grip = `M${n(-w)} -${yc}V${yc}A${r} ${r} 0 0 0 ${n(w)} ${yc}V-${yc}A${r} ${r} 0 0 0 ${n(-w)} -${yc}Z`;
     return cased(rim, 'heavy') + `<path d="${grip}" fill="${PAPER}" ${sw('medium')}/>` +
+      `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
+      `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
+  }
+  if ('taper' in t && lobes) {
+    // Tapered knurled knob: the smaller top face repeats the scallops inside the base rim, and a channel runs
+    // down from each top-face recess to the matching base recess.
+    const depth = 0.06, s = t.taper, N = lobes * 16, top: string[] = [];
+    for (let i = 0; i <= N; i++) {
+      const a = (i / N) * 2 * Math.PI, rr = s * r * (1 - depth / 2 + (depth / 2) * Math.cos(lobes * a));
+      top.push(`${n(rr * Math.sin(a))} ${n(-rr * Math.cos(a))}`);
+    }
+    const ch = Array.from({ length: lobes }, (_, k) => {
+      const a = ((2 * k + 1) * Math.PI) / lobes, r0 = s * r * (1 - depth), r1 = r * (1 - depth);
+      return `M${n(r0 * Math.sin(a))} ${n(-r0 * Math.cos(a))}L${n(r1 * Math.sin(a))} ${n(-r1 * Math.cos(a))}`;
+    }).join('');
+    return cased(rim, 'heavy') + `<path d="${ch}" ${sw('fine')}/>` + `<path d="M${top.join('L')}Z" fill="${PAPER}" ${sw('medium')}/>` +
       `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
       `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
   }
