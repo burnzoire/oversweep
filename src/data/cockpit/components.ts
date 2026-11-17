@@ -306,10 +306,10 @@ export const KNOBS = {
   'knob-round': { r: 10, lobes: 0, ridge: [0.98, 0.1], edge: true, fin: 0.3 },
   /** Smaller knob-round, same grip (AUDIO 1 THREAT, AUDIO 2 ILS). */
   'knob-round-small': { r: 7.4, lobes: 0, ridge: [0.98, 0.1], edge: true, fin: 0.3 },
-  /** Rounded cross knob: four round-ended arms with small fillets between them, index along one arm (AUDIO 2 INTERCOM). */
-  'knob-cross': { r: 11, lobes: 0, ridge: [0.98, 0.1], cross: 0.33 },
+  /** Cross knob cut from a round base: four straight arms ending on the base circle, index along one arm (AUDIO 2 INTERCOM). */
+  'knob-cross': { r: 11, lobes: 0, ridge: [0.98, 0.1], cross: 0.42 },
   /** Small four-lobed cross knob (AUDIO 2 TACAN). */
-  'knob-cross-small': { r: 7.9, lobes: 0, ridge: [0.98, 0.13], cross: 0.33 },
+  'knob-cross-small': { r: 7.9, lobes: 0, ridge: [0.98, 0.13], cross: 0.42 },
   /**
    * Large radio selector (UHF backup function and mode knobs): a broad skirt
    * with a raised centre boss, a flat lever running from the boss to the rim
@@ -392,17 +392,11 @@ export function knobArt(art: keyof typeof KNOBS) {
       `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
   }
   if ('cross' in t) {
-    // Rounded cross: four capsule arms (half-width cross x r) reaching the rim, with small fillets where they meet.
-    const w = t.cross * r, L = r - w, f = w * 0.2, N = 288, pts: string[] = [];
-    // Distance from a point to the nearest arm axis, minus the arm half-width; fillet by a smooth minimum.
+    // Cross cut from a round base: two straight arms (half-width cross x r) whose ends are the base circle, small fillets where they meet.
+    const w = t.cross * r, f = w * 0.3, N = 288, pts: string[] = [];
     const sdf = (x: number, y: number) => {
-      const d = [0, 1, 2, 3].map(k => {
-        const b = (k * Math.PI) / 2, u = x * Math.cos(b) + y * Math.sin(b), v = -x * Math.sin(b) + y * Math.cos(b);
-        const pu = Math.max(0, Math.min(L, u));
-        return Math.hypot(u - pu, v) - w;
-      }).sort((a, b) => a - b);
-      const h = Math.max(f - Math.abs(d[0] - d[1]), 0) / f;
-      return Math.min(d[0], d[1]) - (h * h * f) / 4;
+      const d0 = Math.abs(x) - w, d1 = Math.abs(y) - w, h = Math.max(f - Math.abs(d0 - d1), 0) / f;
+      return Math.max(Math.min(d0, d1) - (h * h * f) / 4, Math.hypot(x, y) - r);
     };
     for (let i = 0; i <= N; i++) {
       const a = (i / N) * 2 * Math.PI;
