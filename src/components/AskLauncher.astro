@@ -1,13 +1,18 @@
 ---
+import { assetPath } from "../lib/paths";
 import AskOversweep from "./AskOversweep.astro";
+const avatar = assetPath("images/ask-oversweep.webp");
 ---
 
-<button class="ask-launcher" type="button" aria-haspopup="dialog" aria-controls="ask-dialog" data-ask-launcher hidden>
-  Ask Oversweep
+<button class="ask-launcher" type="button" aria-haspopup="dialog" aria-controls="ask-dialog" data-ask-launcher aria-label="Ask Oversweep" title="Ask Oversweep" hidden>
+  <img src={avatar} alt="" width="58" height="58" />
 </button>
 <dialog id="ask-dialog" aria-labelledby="ask-dialog-title">
   <header>
-    <h2 id="ask-dialog-title">Ask Oversweep</h2>
+    <div class="ask-identity">
+      <img src={avatar} alt="" width="40" height="40" />
+      <h2 id="ask-dialog-title">Ask Oversweep</h2>
+    </div>
     <form method="dialog" class="ask-actions">
       <button type="button" data-new-chat aria-label="New chat" title="New chat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg></button>
       <button type="submit" aria-label="Close" title="Close"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg></button>
@@ -37,9 +42,35 @@ import AskOversweep from "./AskOversweep.astro";
     bottom: max(1rem, env(safe-area-inset-bottom));
     right: max(1rem, env(safe-area-inset-right));
     z-index: 20;
-    color: white;
+    width: 3.875rem;
+    height: 3.875rem;
+    padding: 0;
+    border: 2px solid var(--color-ink);
+    border-radius: 50%;
     background: var(--color-ink);
-    padding: .7rem 1rem;
+    box-shadow: 0 2px 8px rgb(0 0 0 / .22);
+  }
+  .ask-launcher::after {
+    content: "";
+    position: absolute;
+    right: .15rem;
+    bottom: -.23rem;
+    width: .95rem;
+    height: .95rem;
+    background: var(--color-ink);
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+    transform: rotate(-8deg);
+  }
+  .ask-launcher img, .ask-identity img {
+    display: block;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .ask-launcher img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
   }
   button { cursor: pointer; font: inherit; }
   dialog {
@@ -59,6 +90,8 @@ import AskOversweep from "./AskOversweep.astro";
   .ask-actions { display: flex; gap: .25rem; }
   .ask-actions button { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; color: inherit; background: transparent; border: 1px solid transparent; }
   .ask-actions button:hover { border-color: currentColor; }
+  .ask-identity { display: flex; align-items: center; gap: .6rem; }
+  .ask-identity img { flex: none; }
   h2 { margin: 0; }
   .ask-greeting { display: grid; }
   .ask-greeting > span { grid-area: 1 / 1; }
