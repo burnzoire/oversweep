@@ -21,7 +21,7 @@ export async function findPassages(pagefind, question, base, origin) {
     const pages = await Promise.all(results.slice(0, 12).map((result) => result.data()));
     const passages = pages.filter((page) => allowedUrl(page.url, base, origin)).flatMap((page) => {
       const section = page.sub_results
-        ?.filter(part => part.url.startsWith(page.url + "#") && part.plain_excerpt && !/#sources(?:-title)?$/.test(part.url))
+        ?.filter(part => part.url.startsWith(page.url + "#") && part.plain_excerpt && !/#(?:sources(?:-title)?|[^#]*fig-title)$/.test(part.url))
         .sort((a, b) => score(b) - score(a))[0];
       const url = section?.url ?? page.url;
       const title = [page.meta?.title, section?.title].filter(Boolean);
