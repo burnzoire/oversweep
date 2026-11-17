@@ -420,7 +420,7 @@ export function knobArt(art: keyof typeof KNOBS) {
   if ('taper' in t && lobes) {
     // Tapered knurled knob: a round base and a smaller top face (taper x r), each with a deliberate round
     // scallop cut at every recess, and a channel from each top-face scallop down to the base scallop below it.
-    const s = t.taper, nr = 0.6 * r * Math.sin(Math.PI / lobes);
+    const s = t.taper, nr = 0.4 * r * Math.sin(Math.PI / lobes);
     const scallops = (R: number, q: number) => {
       const N = lobes * 24, pts: string[] = [];
       for (let i = 0; i <= N; i++) {
@@ -439,7 +439,8 @@ export function knobArt(art: keyof typeof KNOBS) {
     }).join('');
     const top = scallops(s * r, nr * s);
     rim = `<path d="${scallops(r, nr)}" fill="${PAPER}"/>`;
-    return cased(rim, 'heavy') + `<path d="${ch}" ${sw('medium')}/>` + `<path d="${top}" fill="${PAPER}" ${sw('medium')}/>` +
+    // A plain round base under the knob shows in the base scallops.
+    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + cased(rim, 'heavy') + `<path d="${ch}" ${sw('medium')}/>` + `<path d="${top}" fill="${PAPER}" ${sw('medium')}/>` +
       `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
       `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
   }
