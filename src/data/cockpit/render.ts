@@ -130,7 +130,8 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
     }
     case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-xxl': {
       const c = controlOf(spec, p.control), art = p.component;
-      return at(p.at, pushBase(art) + moving(c, state[c.id] ?? c.initial, i => painted(p.paint, pushCap(art, i > 0))), ` data-art="${p.component}"`);
+      // A painted button is painted whole: cap and skirt (DN LOCK REL).
+      return at(p.at, painted(p.paint, pushBase(art) + moving(c, state[c.id] ?? c.initial, i => pushCap(art, i > 0))), ` data-art="${p.component}"`);
     }
     case 'gear-handle': {
       // Knob centred on the slot at each end of its travel (first position at the top).
