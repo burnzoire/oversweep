@@ -260,8 +260,8 @@ function leverOnPivot(art: keyof typeof TOGGLES, k: number, count = 0) {
 /* --------------------------------------------------------------- rotaries */
 
 export const ROTARIES = {
-  /** Bar-pointer selector on a round skirt (ENG FEED). */
-  'rotary-pointer': { skirt: 10.2, bar: 9.6, barBack: 4.8, barFront: 3.4 },
+  /** Pointer selector on a round skirt; the grip has a wide waist, pinches to a point at the index and to a narrow tail at the back (ENG FEED, AUDIO 1 COMM mode knobs). */
+  'rotary-pointer': { skirt: 10.2, bar: 9.6, barBack: 2.2, barFront: 0, waist: 5.8 },
   /** Larger bar-pointer selector (AIR COND TEMP and AIR SOURCE). */
   'rotary-pointer-large': { skirt: 13, bar: 12.2, barBack: 6.1, barFront: 4.3 },
   /** Mid-size selector, 11.6 mm skirt, with a broad block grip that chamfers to a pointed front (AVIONICS POWER INS and MIDS LVT). */
@@ -302,16 +302,16 @@ export const KNOBS = {
   'knob-knurled-large': { r: 11.2, lobes: 12, ridge: [0.94, 0.1], edge: true },
   /** Small knurled knob whose index runs square-ended out to the rim (AUDIO 1 SECURE VOICE and TF). */
   'knob-knurled-small-edge': { r: 7.9, lobes: 12, ridge: [0.94, 0.16], edge: true },
-  /** Round knob with a raised grip along the index axis that smooths down to the rim at both ends; index from the centre to the rim (AUDIO 1 MSL). */
-  'knob-round': { r: 10, lobes: 0, ridge: [0.98, 0.1], edge: true, fin: 0.36 },
+  /** Round knob crossed by a straight raised grip band along the index axis; index from the centre to the rim (AUDIO 1 MSL). */
+  'knob-round': { r: 10, lobes: 0, ridge: [0.98, 0.1], edge: true, fin: 0.3 },
   /** Smaller knob-round, same grip (AUDIO 1 THREAT, AUDIO 2 ILS). */
-  'knob-round-small': { r: 7.4, lobes: 0, ridge: [0.98, 0.1], edge: true, fin: 0.36 },
+  'knob-round-small': { r: 7.4, lobes: 0, ridge: [0.98, 0.1], edge: true, fin: 0.3 },
   /** Rounded cross knob: four round-ended arms with small fillets between them, index along one arm (AUDIO 2 INTERCOM). */
   'knob-cross': { r: 11, lobes: 0, ridge: [0.98, 0.1], cross: 0.33 },
   /** Small four-lobed cross knob (AUDIO 2 TACAN). */
   'knob-cross-small': { r: 7.9, lobes: 0, ridge: [0.98, 0.13], cross: 0.33 },
   /**
-   * Large radio selector (UHF backup function and mode knobs, AUDIO 1 COMM mode knobs): a broad skirt
+   * Large radio selector (UHF backup function and mode knobs): a broad skirt
    * with a raised centre boss, a flat lever running from the boss to the rim
    * opposite the pointer, and a white index bar set into the rim at the
    * pointing end. The whole knob turns.
@@ -415,10 +415,9 @@ export function knobArt(art: keyof typeof KNOBS) {
       `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
   }
   if ('fin' in t) {
-    // Grip along the index axis: widest (fin x r) at the centre, smoothing down to the rim at both ends.
-    const w = t.fin * r, e = r * 0.98;
-    const grip = `M0 ${n(-e)}C${n(w * 0.9)} ${n(-e * 0.55)} ${n(w)} ${n(-e * 0.25)} ${n(w)} 0C${n(w)} ${n(e * 0.25)} ${n(w * 0.9)} ${n(e * 0.55)} 0 ${n(e)}` +
-      `C${n(-w * 0.9)} ${n(e * 0.55)} ${n(-w)} ${n(e * 0.25)} ${n(-w)} 0C${n(-w)} ${n(-e * 0.25)} ${n(-w * 0.9)} ${n(-e * 0.55)} 0 ${n(-e)}Z`;
+    // Straight grip band across the knob along the index axis, rim to rim (half-width fin x r).
+    const w = t.fin * r, yc = n(Math.sqrt(r * r - w * w));
+    const grip = `M${n(-w)} -${yc}V${yc}A${r} ${r} 0 0 0 ${n(w)} ${yc}V-${yc}A${r} ${r} 0 0 0 ${n(-w)} -${yc}Z`;
     return cased(rim, 'heavy') + `<path d="${grip}" fill="${PAPER}" ${sw('medium')}/>` +
       `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
       `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
@@ -461,6 +460,14 @@ export function rotaryKnob(art: keyof typeof ROTARIES) {
     const body = `M${k(-0.07)} ${k(-0.93)}Q0 ${k(-0.97)} ${k(0.07)} ${k(-0.93)}L${k(0.5)} ${k(-0.42)}V${k(0.84)}` +
       `Q${k(0.5)} ${k(0.96)} ${k(0.38)} ${k(0.96)}H${k(-0.38)}Q${k(-0.5)} ${k(0.96)} ${k(-0.5)} ${k(0.84)}V${k(-0.42)}Z`;
     return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') + `<path d="M0 ${k(-0.8)}V0" ${sw('heavy')}/>`;
+  }
+  if ('waist' in ROTARIES[art]) {
+    // Traced from the guide's p. 65 COMM mode knobs: point at the front, widest just behind the centre, narrow rounded tail.
+    const W = ROTARIES[art].waist, T = barBack, k = (v: number) => n(v);
+    const body = `M0 ${k(-bar)}C${k(W * 0.45)} ${k(-bar * 0.72)} ${k(W)} ${k(-bar * 0.3)} ${k(W)} ${k(bar * 0.2)}` +
+      `C${k(W)} ${k(bar * 0.55)} ${k(T)} ${k(bar * 0.68)} ${k(T)} ${k(bar * 0.86)}Q${k(T)} ${k(bar)} 0 ${k(bar)}Q${k(-T)} ${k(bar)} ${k(-T)} ${k(bar * 0.86)}` +
+      `C${k(-T)} ${k(bar * 0.68)} ${k(-W)} ${k(bar * 0.55)} ${k(-W)} ${k(bar * 0.2)}C${k(-W)} ${k(-bar * 0.3)} ${k(-W * 0.45)} ${k(-bar * 0.72)} 0 ${k(-bar)}Z`;
+    return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') + `<path d="M0 ${n(-bar + 0.9)}V0" ${sw('heavy')}/>`;
   }
   const body = `M${-barFront} ${-bar}Q0 ${n(-bar - 1.2)} ${barFront} ${-bar}L${barBack} ${n(bar * 0.82)}Q0 ${n(bar * 1.08)} ${-barBack} ${n(bar * 0.82)}Z`;
   return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') +
