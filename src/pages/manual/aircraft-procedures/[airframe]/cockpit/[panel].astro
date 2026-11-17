@@ -17,7 +17,7 @@ const tries = readings(spec);
 const hint = [
   spec.controls.length ? 'Click the upper or lower half of a switch to move it, or the left or right half of a knob to turn it.' : '',
   gauges ? 'Select an instrument to see what it shows.' : 'Select a light to see what it means.',
-  gauges ? 'The jet is cold and dark; each instrument\'s slider shows how it reads when working.' : 'The jet is cold and dark, so lights stay off.',
+  gauges ? 'The jet is cold and dark; set a reading with the sliders in the Instruments list to see how an instrument reads when working.' : 'The jet is cold and dark, so lights stay off.',
 ].filter(Boolean).join(' ');
 const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns when released' : h === 'magnetic' ? 'magnetically held' : '';
 ---
@@ -58,7 +58,6 @@ const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns whe
         <div class="ci-card" data-item={i.id} hidden>
           <h2>{i.name}</h2>
           {i.type !== 'lamp' && <p class="ci-pos">Cold and dark: {i.restNote ?? <>needle at its stop, <strong>{i.rest} {i.unit}</strong></>}</p>}
-          {tries[i.id] && <label class="ci-try">Try a reading <input type="range" data-reading={`${spec.id}.${i.id}`} min={tries[i.id].range[0]} max={tries[i.id].range[1]} step={tries[i.id].range[2]} value={i.rest ?? tries[i.id].range[0]} /> <output>{(i.rest ?? tries[i.id].range[0]).toLocaleString('en-US')} {i.unit}</output></label>}
           <p>{i.description}</p>
           <p class="ci-src">{i.source}</p>
         </div>
@@ -69,7 +68,15 @@ const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns whe
       </>}
       {spec.indicators.length > 0 && <>
         <h2 class="ci-head">{gauges ? 'Instruments' : 'Lights'}</h2>
-        <ul class="ci-list">{spec.indicators.map(i => <li><button type="button" data-cockpit-pick={spec.id} data-id={i.id}>{i.name}</button></li>)}</ul>
+        <ul class="ci-list">{spec.indicators.map(i => {
+          const t = tries[i.id], v = i.rest ?? t?.range[0];
+          return <li class:list={[t && 'ci-gauge']}>
+            <button type="button" data-cockpit-pick={spec.id} data-id={i.id}>{i.name}</button>
+            {t && <output data-readout={`${spec.id}.${i.id}`}>{v?.toLocaleString('en-US')} {i.unit}</output>}
+            {t && <input type="range" class="ci-slider" aria-label={`Set ${i.name}`} data-reading={`${spec.id}.${i.id}`} min={t.range[0]} max={t.range[1]} step={t.range[2]} value={v} />}
+          </li>;
+        })}</ul>
+        {Object.keys(tries).length > 0 && <p class="ci-meta">Drag a slider to set an instrument's reading.</p>}
       </>}
     </aside>
   </div>
@@ -102,13 +109,13 @@ const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns whe
 .ci-pos strong{letter-spacing:.02em}
 .ci-meta{color:var(--color-muted)}
 .ci-src{font-size:.82rem;color:var(--color-muted)}
-.ci-try{display:flex;flex-wrap:wrap;align-items:center;gap:.25rem .6rem;margin:.5rem 0}
-.ci-try input{flex:1 1 9rem;min-height:2.5rem}
-.ci-try output{font-variant-numeric:tabular-nums;min-width:6.5em}
 .ci-head{font-size:1rem;margin:1.1rem 0 .3rem}
 .ci-list{list-style:none;margin:0;padding:0}
 .ci-list li{display:flex;justify-content:space-between;gap:.5rem;align-items:center;border-bottom:1px solid #e3e3e3}
 .ci-list button{font:inherit;background:none;border:0;padding:.35rem 0;color:var(--color-link);cursor:pointer;text-align:left;min-height:2.5rem}
 .ci-list span{color:var(--color-muted);font-size:.88em;text-align:right}
+.ci-list li.ci-gauge{flex-wrap:wrap;row-gap:0;padding-bottom:.3rem}
+.ci-list output{font-variant-numeric:tabular-nums;font-weight:700;text-align:right}
+.ci-slider{flex:1 0 100%;margin:0;min-height:2.25rem;accent-color:var(--color-link)}
 @media(max-width:60rem){.cockpit-page{grid-template-columns:1fr}}
 </style>

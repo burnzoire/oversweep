@@ -203,12 +203,17 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
   };
   for (const input of document.querySelectorAll<HTMLInputElement>(`[data-reading^="${def.panel}."]`)) {
     const id = input.dataset.reading!.slice(def.panel.length + 1), ind = def.indicators.find(i => i.id === id);
-    const out = input.parentElement?.querySelector('output');
+    const out = document.querySelector(`[data-readout="${input.dataset.reading}"]`);
     input.addEventListener('input', () => {
       const v = Number(input.value);
       show(id, v);
       if (out) out.textContent = `${v.toLocaleString('en-US')} ${ind?.unit ?? ''}`;
       select(id);
+    });
+    // Reset puts every reading back where the page started.
+    document.querySelector(`[data-cockpit-reset="${def.aircraft}"]`)?.addEventListener('click', () => {
+      input.value = input.defaultValue;
+      input.dispatchEvent(new Event('input'));
     });
   }
 }
