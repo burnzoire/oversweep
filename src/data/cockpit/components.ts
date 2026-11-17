@@ -418,18 +418,28 @@ export function knobArt(art: keyof typeof KNOBS) {
       `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
   }
   if ('taper' in t && lobes) {
-    // Tapered knurled knob: the smaller top face repeats the scallops inside the base rim, and a channel runs
-    // down from each top-face recess to the matching base recess.
-    const depth = 0.06, s = t.taper, N = lobes * 16, top: string[] = [];
-    for (let i = 0; i <= N; i++) {
-      const a = (i / N) * 2 * Math.PI, rr = s * r * (1 - depth / 2 + (depth / 2) * Math.cos(lobes * a));
-      top.push(`${n(rr * Math.sin(a))} ${n(-rr * Math.cos(a))}`);
-    }
+    // Tapered knurled knob: a round base and a smaller top face (taper x r), each with a deliberate round
+    // scallop cut at every recess, and a channel from each top-face scallop down to the base scallop below it.
+    const s = t.taper, nr = 0.6 * r * Math.sin(Math.PI / lobes);
+    const scallops = (R: number, q: number) => {
+      const N = lobes * 24, pts: string[] = [];
+      for (let i = 0; i <= N; i++) {
+        const a = (i / N) * 2 * Math.PI, k = Math.round((a * lobes) / (2 * Math.PI) - 0.5), b = ((2 * k + 1) * Math.PI) / lobes;
+        // Ray from the centre: the rim at R, or the near side of the scallop circle (radius q, centred just outside the rim at b).
+        const Rc = R + 0.3 * q, cx = Rc * Math.sin(b), cy = -Rc * Math.cos(b), ux = Math.sin(a), uy = -Math.cos(a);
+        const p = ux * cx + uy * cy, disc = p * p - (Rc * Rc - q * q);
+        const rr = disc > 0 && p - Math.sqrt(disc) < R ? p - Math.sqrt(disc) : R;
+        pts.push(`${n(rr * ux)} ${n(rr * uy)}`);
+      }
+      return `M${pts.join('L')}Z`;
+    };
     const ch = Array.from({ length: lobes }, (_, k) => {
-      const a = ((2 * k + 1) * Math.PI) / lobes, r0 = s * r * (1 - depth), r1 = r * (1 - depth);
+      const a = ((2 * k + 1) * Math.PI) / lobes, r0 = s * (r - 0.7 * nr), r1 = r - 0.7 * nr;
       return `M${n(r0 * Math.sin(a))} ${n(-r0 * Math.cos(a))}L${n(r1 * Math.sin(a))} ${n(-r1 * Math.cos(a))}`;
     }).join('');
-    return cased(rim, 'heavy') + `<path d="${ch}" ${sw('fine')}/>` + `<path d="M${top.join('L')}Z" fill="${PAPER}" ${sw('medium')}/>` +
+    const top = scallops(s * r, nr * s);
+    rim = `<path d="${scallops(r, nr)}" fill="${PAPER}"/>`;
+    return cased(rim, 'heavy') + `<path d="${ch}" ${sw('medium')}/>` + `<path d="${top}" fill="${PAPER}" ${sw('medium')}/>` +
       `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
       `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
   }
