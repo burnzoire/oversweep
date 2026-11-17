@@ -124,14 +124,14 @@ export interface PanelSource {
 
 /** A shared component placed on the plate. `at` is the component's pivot in mm. */
 export type Placement =
-  | { component: ToggleArt; control: string; at: Pt }
+  | { component: ToggleArt; control: string; at: Pt; paint?: Paint }
   | { component: RotaryArt; control: string; at: Pt }
   | { component: KnobArt; control: string; at: Pt }
-  | { component: PushArt; control: string; at: Pt }
+  | { component: PushArt; control: string; at: Pt; paint?: Paint }
   /** Landing gear handle: a slot centred on `at`, `travel` mm between the knob's end positions, knob `size` in mm. */
   | { component: 'gear-handle'; control: string; at: Pt; travel: number; size: [w: number, h: number]; /** The light in the knob. */ indicator?: string }
   /** Flip guard hinged at `at` (the middle of its hinge edge); `size` is the closed footprint. `rotate`: degrees clockwise about the hinge (180 = hinged along the top). */
-  | { component: 'guard-flip'; control: string; at: Pt; size: [w: number, h: number]; rotate?: number }
+  | { component: 'guard-flip'; control: string; at: Pt; size: [w: number, h: number]; rotate?: number; paint?: Paint }
   /** Square pushbutton, centred on `at`; `legend` lines are placed by their centre `y` (mm from the centre). With `indicator`, the legend face is that lamp's lens. */
   | { component: 'push-square'; control: string; at: Pt; size: [w: number, h: number]; legend: { text: string; cap: number; y: number; width?: number }[]; indicator?: string; /** Turn (degrees clockwise) about the centre, for buttons on an angled mount. */ rotate?: number }
   | { component: LampModuleArt; at: Pt; size: [w: number, h: number]; lamps: LampCell[]; /** Unused module: a dash across the blank lens. */ blank?: boolean; /** Turn (degrees clockwise) about the module centre, for modules on an angled mount. */ rotate?: number }
@@ -192,7 +192,20 @@ export interface LampCell {
 /** Fixed engraving on the plate: legends, rules, tick marks. */
 export type Engraving =
   | { kind: 'text'; at: Pt; text: string; cap: number; width?: number; anchor?: 'start' | 'middle' | 'end'; /** Degrees clockwise about `at` (legends set along a dial, e.g. INS ALIGN). */ rotate?: number }
-  | { kind: 'path'; d: string; pen?: Pen; /** Drawn pale: unlit display segments. */ faint?: boolean };
+  | { kind: 'path'; d: string; pen?: Pen; /** Drawn pale: unlit display segments. */ faint?: boolean }
+  /**
+   * Painted area under the engraving: `d` (closed shapes) filled with `paint`,
+   * clipped to `clip` (even-odd, so a hole is a second shape inside the first).
+   * Hazard stripes are the alternate bands of a striped box.
+   */
+  | { kind: 'fill'; d: string; paint: Paint; clip?: string };
+
+/**
+ * Warning colours, used only where the real cockpit paints a part to warn
+ * (the guide shows it coloured): red guards, yellow hazard stripes and
+ * caution-yellow caps. Everything else stays black on white.
+ */
+export type Paint = 'red' | 'yellow';
 
 export type Pen = 'fine' | 'medium' | 'heavy';
 

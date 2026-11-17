@@ -73,7 +73,7 @@ export const epu: PanelSpec = {
     { component: 'dzus', at: pt(327.5, 138) },
     { component: 'screw', at: pt(14, 76) },
     { component: 'toggle-medium', control: 'epu', at: pt(...PIVOT) },
-    { component: 'guard-flip', control: 'epu-guard', at: pt(PIVOT[0], 17), size: GUARD, rotate: 180 },
+    { component: 'guard-flip', control: 'epu-guard', at: pt(PIVOT[0], 17), size: GUARD, rotate: 180, paint: 'red' },
     { component: 'lamp-round', indicator: 'epu-run', at: pt(199.5, 112.5) },
     { component: 'lamp-module', at: [+(mm(MOD[0]) - LW / 2).toFixed(3), +(mm(MOD[1]) - LH / 2).toFixed(3)], size: [LW, LH], rotate: 90, lamps: [
       { indicator: 'hydrazn', legend: 'HYDRAZN', rect: cellTop, cap: 2.8, width: mm(34) },

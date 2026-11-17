@@ -177,6 +177,15 @@ everything that stands proud of it.
   end; only a bar knob's grip (CHAN, frequency knobs) crosses the centre.
 - **Trace one-off knob grips** (three-armed AERIAL REFUELING grip, MASTER's
   broad band, the UHF radio selector's lever) as their own components.
+- **Warning colours (Nathan, 2026-11-17).** The style is black on white, with
+  colour only where the guide shows a part painted to warn: red guards
+  (`paint: 'red'` on `guard-flip`), yellow caution caps and levers
+  (`paint: 'yellow'`; a painted pushbutton is painted whole, skirt included),
+  and hazard stripes as yellow and white bands between the black lines (an
+  engraving `fill` under the stripe lines, clipped to the striped area).
+  Paints approximate FED-STD-595 insignia red 11136 and insignia yellow 33538
+  (`PAINTS` in components.ts). Grey or black parts stay uncoloured; lamps stay
+  unlit.
 - **Unlit displays** show faint outlines of their segment digits (UHF uses
   10-segment LEDs: seven bars with a split middle and two diagonals); use a
   `faint` engraving path.
