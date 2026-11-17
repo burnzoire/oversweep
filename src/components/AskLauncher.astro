@@ -8,7 +8,10 @@ import AskOversweep from "./AskOversweep.astro";
 <dialog id="ask-dialog" aria-labelledby="ask-dialog-title">
   <header>
     <h2 id="ask-dialog-title">Ask Oversweep</h2>
-    <form method="dialog"><button type="submit">Close</button></form>
+    <form method="dialog" class="ask-actions">
+      <button type="button" data-new-chat aria-label="New chat" title="New chat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg></button>
+      <button type="submit" aria-label="Close" title="Close"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg></button>
+    </form>
   </header>
   <p class="ask-greeting"><span class="ask-dots" aria-hidden="true"><i></i><i></i><i></i></span><span>Hi! What would you like to know about flight simulation?</span></p>
   <AskOversweep id="ask-dialog-question" />
@@ -53,6 +56,9 @@ import AskOversweep from "./AskOversweep.astro";
   }
   dialog::backdrop { background: rgb(0 0 0 / .24); }
   header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+  .ask-actions { display: flex; gap: .25rem; }
+  .ask-actions button { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; color: inherit; background: transparent; border: 1px solid transparent; }
+  .ask-actions button:hover { border-color: currentColor; }
   h2 { margin: 0; }
   .ask-greeting { display: grid; }
   .ask-greeting > span { grid-area: 1 / 1; }
