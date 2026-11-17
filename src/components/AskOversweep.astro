@@ -75,7 +75,9 @@ const { id } = Astro.props;
       try {
         const pagefind = await import(/* @vite-ignore */ panel.dataset.index!);
         const search = (query: string) => findPassages(pagefind, query, panel.dataset.base!, location.origin);
-        const refersBack = Boolean(previous && /\b(it|they|that|those|this|them|same)\b/i.test(question));
+        // An availability question with no named subject continues the current topic.
+        const implicitSubject = /^\s*(?:what|which)\s+(?:[\p{L}-]+\s+){1,3}(?:is|are)\s+(?:available|listed|supported|simulated)\s*[?!.]*$/iu.test(question);
+        const refersBack = Boolean(previous && (implicitSubject || /\b(it|they|that|those|this|them|same)\b/i.test(question)));
         const followUp = refersBack || Boolean(previous && /^(and|what about|how about)\b/i.test(question));
         const retained = refersBack && !retry && citedPassages.length > 0;
         const contextual = followUp && !retained ? await search(question + " " + previous) : [];
