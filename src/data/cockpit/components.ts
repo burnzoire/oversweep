@@ -670,9 +670,12 @@ export function paddlePointerArt([outer, inner]: [string, string]) {
 }
 
 /** One drum of a counter: digits 0–9 and 0 again (or only zeros), `roll` apart, centred on the origin at 0. */
-export function drumStrip(roll: number, cap: number, width: number, zeros = false) {
+export function drumStrip(roll: number, cap: number, width: number, zeros = false, blank = false) {
   let s = '';
-  for (let i = -1; i <= 10; i++) s += text(0, i * roll, zeros ? '0' : String((i + 10) % 10), cap, width);
+  for (let i = -1; i <= 10; i++) {
+    const d = zeros ? 0 : (i + 10) % 10;
+    if (!(blank && d === 0)) s += text(0, i * roll, String(d), cap, width);
+  }
   return s;
 }
 

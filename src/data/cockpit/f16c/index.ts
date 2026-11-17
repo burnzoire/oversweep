@@ -16,6 +16,7 @@ import { interiorLighting } from './interior-lighting.ts';
 import { avionicsPower } from './avionics-power.ts';
 import { engineInstruments } from './engine-instruments.ts';
 import { fuelQty } from './fuel-qty.ts';
+import { fuelFlow } from './fuel-flow.ts';
 import { epu } from './epu.ts';
 
 /**
@@ -45,6 +46,7 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'rf-switch', title: 'RF switch', page: 48 },
         { id: 'sai', title: 'Standby attitude indicator', page: 49 },
         { id: 'engine-instruments', title: 'Engine instruments', page: 50, spec: engineInstruments },
+        { id: 'fuel-flow', title: 'Fuel flow indicator', page: 50, spec: fuelFlow },
         { id: 'airspeed-mach', title: 'Airspeed / Mach indicator', page: 51 },
         { id: 'altimeter', title: 'Altimeter', page: 51 },
         { id: 'aoa-indicator', title: 'AoA indicator', page: 52 },

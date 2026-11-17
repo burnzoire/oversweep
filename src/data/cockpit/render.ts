@@ -74,13 +74,16 @@ function sector(r0: number, r1: number, a0: number, a1: number) {
 
 /** Drum counter (totalizer): drums behind a window, each turned to its odometer position. */
 function counter(c: DrumCounter, value: number, clip: string) {
-  const [w, h] = c.window, pos = drumPositions(value, c.drums, c.fixed, c.unit);
-  let s = `<defs><clipPath id="${clip}"><rect x="${n(c.at[0] - w / 2)}" y="${n(c.at[1] - h / 2)}" width="${n(w)}" height="${n(h)}"/></clipPath></defs><g clip-path="url(#${clip})">`;
+  const [w, h] = c.window, pos = drumPositions(value, c.drums, c.fixed, c.unit, c.still);
+  const drumX = (k: number) => c.at[0] + (k - (c.drums - 1) / 2) * c.pitch;
+  // The window, plus any taller slot a drum shows through (the clip is their union).
+  const rects = [[c.at[0] - w / 2, c.at[1] - h / 2, w, h], ...(c.slots ?? []).map(t => [drumX(t.drum) - c.pitch / 2, c.at[1] - t.h / 2, c.pitch, t.h])]
+    .map(([x, y, rw, rh]) => `<rect x="${n(x)}" y="${n(y)}" width="${n(rw)}" height="${n(rh)}"`);
+  let s = `<defs><clipPath id="${clip}">${rects.map(r => r + '/>').join('')}</clipPath></defs><g clip-path="url(#${clip})">`;
   pos.forEach((p, k) => {
-    const x = c.at[0] + (k - (c.drums - 1) / 2) * c.pitch;
-    s += `<g transform="translate(${n(x)} ${n(c.at[1])})"><g data-drum="${c.indicator}" data-place="${k}" transform="translate(0 ${n(-p * c.roll)})">${drumStrip(c.roll, c.cap, c.width, k >= c.drums - c.fixed)}</g></g>`;
+    s += `<g transform="translate(${n(drumX(k))} ${n(c.at[1])})"><g data-drum="${c.indicator}" data-place="${k}" transform="translate(0 ${n(-p * c.roll)})">${drumStrip(c.roll, c.cap, c.width, k >= c.drums - c.fixed, k < (c.blank ?? 0))}</g></g>`;
   });
-  return s + `</g><g data-indicator="${c.indicator}"><rect class="lens" x="${n(c.at[0] - w / 2)}" y="${n(c.at[1] - h / 2)}" width="${n(w)}" height="${n(h)}" stroke="none"/></g>`;
+  return s + `</g><g data-indicator="${c.indicator}">${rects.map(r => r + ' class="lens" stroke="none"/>').join('')}</g>`;
 }
 
 /** Dial art: bezel, face, painted ticks and sectors, legends, counter, needle or pointers (turned to their values), hub. */
@@ -105,20 +108,22 @@ function gauge(spec: PanelSpec, dial: Dial, indicator: string | undefined, value
 /** What the page needs to move a reading: a needle's scale or a counter's drums, and the range to try. */
 export type Reading =
   | { kind: 'needle'; scale: Dial['scale']; range: [number, number, number] }
-  | { kind: 'counter'; drums: number; fixed: number; unit: number; roll: number; range: [number, number, number] };
+  | { kind: 'counter'; drums: number; fixed: number; unit: number; roll: number; still?: boolean; range: [number, number, number] };
 
 /** Every gauge and counter reading on a panel, by indicator id. */
 export function readings(spec: PanelSpec): Record<string, Reading> {
   const out: Record<string, Reading> = {};
+  const ind = (id: string) => spec.indicators.find(i => i.id === id);
+  const drums = (c: DrumCounter) => { out[c.indicator] = { kind: 'counter', drums: c.drums, fixed: c.fixed, unit: c.unit, roll: c.roll, ...(c.still ? { still: true } : {}), range: ind(c.indicator)?.range ?? [0, c.unit * 10 ** (c.drums - c.fixed) - c.unit, c.unit / 10] }; };
   for (const p of spec.placements) {
+    if (p.component === 'counter') drums(p.counter);
     if (p.component !== 'gauge') continue;
-    const { dial } = p, ind = (id: string) => spec.indicators.find(i => i.id === id);
+    const { dial } = p;
     const lo = dial.scale[0][0], hi = dial.scale[dial.scale.length - 1][0];
     const needle = (id: string) => { out[id] = { kind: 'needle', scale: dial.scale, range: ind(id)?.range ?? [lo, hi, 10 ** Math.floor(Math.log10((hi - lo) / 100))] }; };
     if (p.indicator) needle(p.indicator);
     for (const q of dial.pointers ?? []) needle(q.indicator);
-    const c = dial.counter;
-    if (c) out[c.indicator] = { kind: 'counter', drums: c.drums, fixed: c.fixed, unit: c.unit, roll: c.roll, range: ind(c.indicator)?.range ?? [0, c.unit * 10 ** (c.drums - c.fixed) - c.unit, c.unit / 10] };
+    if (dial.counter) drums(dial.counter);
   }
   return out;
 }
@@ -133,6 +138,10 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
     case 'gauge': {
       const value = (id: string) => state[id] !== undefined ? Number(state[id]) : spec.indicators.find(i => i.id === id)?.rest ?? p.dial.scale[0][0];
       return at(p.at, gauge(spec, p.dial, p.indicator, value), ' data-art="gauge"');
+    }
+    case 'counter': {
+      const c = p.counter, v = state[c.indicator] !== undefined ? Number(state[c.indicator]) : spec.indicators.find(i => i.id === c.indicator)?.rest ?? 0;
+      return at(p.at, counter(c, v, `drums-${spec.id}-${c.indicator}`), ' data-art="counter"');
     }
     case 'dzus': case 'screw': case 'screw-medium': case 'screw-small':
       if (p.component === 'dzus' && p.cut) {
@@ -331,6 +340,10 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         const c = p.dial.counter;
         if (c) zones.push({ kind: 'indicator', id: c.indicator, box: [x + c.at[0] - c.window[0] / 2, y + c.at[1] - c.window[1] / 2, c.window[0], c.window[1]] });
         return zones;
+      }
+      case 'counter': {
+        const c = p.counter;
+        return [{ kind: 'indicator', id: c.indicator, box: [x + c.at[0] - c.window[0] / 2, y + c.at[1] - c.window[1] / 2, c.window[0], c.window[1]] }];
       }
       case 'lamp-round': {
         const r = LAMPS[p.component].r;
