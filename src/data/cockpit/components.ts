@@ -261,7 +261,7 @@ function leverOnPivot(art: keyof typeof TOGGLES, k: number, count = 0) {
 
 export const ROTARIES = {
   /** Pointer selector on a round skirt; the grip has a wide waist, pinches to a point at the index and to a narrow tail at the back (ENG FEED, AUDIO 1 COMM mode knobs). */
-  'rotary-pointer': { skirt: 10.2, bar: 9.6, barBack: 2.2, barFront: 0, waist: 5.8 },
+  'rotary-pointer': { skirt: 10.2, bar: 9.6, barBack: 3.4, barFront: 0, waist: 5.8 },
   /** Larger bar-pointer selector (AIR COND TEMP and AIR SOURCE). */
   'rotary-pointer-large': { skirt: 13, bar: 12.2, barBack: 6.1, barFront: 4.3 },
   /** Mid-size selector, 11.6 mm skirt, with a broad block grip that chamfers to a pointed front (AVIONICS POWER INS and MIDS LVT). */
@@ -457,10 +457,11 @@ export function rotaryKnob(art: keyof typeof ROTARIES) {
   }
   if ('waist' in ROTARIES[art]) {
     // Traced from the guide's p. 65 COMM mode knobs: point at the front, widest just behind the centre, narrow rounded tail.
-    const W = ROTARIES[art].waist, T = barBack, k = (v: number) => n(v);
+    const W = (ROTARIES[art] as { waist: number }).waist, T = barBack, k = (v: number) => n(v);
+    // Curved from the point to the waist; straight sides from the waist back to a wide, flat tail.
     const body = `M0 ${k(-bar)}C${k(W * 0.45)} ${k(-bar * 0.72)} ${k(W)} ${k(-bar * 0.3)} ${k(W)} ${k(bar * 0.2)}` +
-      `C${k(W)} ${k(bar * 0.55)} ${k(T)} ${k(bar * 0.68)} ${k(T)} ${k(bar * 0.86)}Q${k(T)} ${k(bar)} 0 ${k(bar)}Q${k(-T)} ${k(bar)} ${k(-T)} ${k(bar * 0.86)}` +
-      `C${k(-T)} ${k(bar * 0.68)} ${k(-W)} ${k(bar * 0.55)} ${k(-W)} ${k(bar * 0.2)}C${k(-W)} ${k(-bar * 0.3)} ${k(-W * 0.45)} ${k(-bar * 0.72)} 0 ${k(-bar)}Z`;
+      `L${k(T)} ${k(bar * 0.9)}Q${k(T)} ${k(bar)} ${k(T - 0.6)} ${k(bar)}H${k(-(T - 0.6))}Q${k(-T)} ${k(bar)} ${k(-T)} ${k(bar * 0.9)}` +
+      `L${k(-W)} ${k(bar * 0.2)}C${k(-W)} ${k(-bar * 0.3)} ${k(-W * 0.45)} ${k(-bar * 0.72)} 0 ${k(-bar)}Z`;
     return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') + `<path d="M0 ${n(-bar + 0.9)}V0" ${sw('heavy')}/>`;
   }
   const body = `M${-barFront} ${-bar}Q0 ${n(-bar - 1.2)} ${barFront} ${-bar}L${barBack} ${n(bar * 0.82)}Q0 ${n(bar * 1.08)} ${-barBack} ${n(bar * 0.82)}Z`;
