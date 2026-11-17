@@ -10,6 +10,7 @@ import AskOversweep from "./AskOversweep.astro";
     <h2 id="ask-dialog-title">Ask Oversweep</h2>
     <form method="dialog"><button type="submit">Close</button></form>
   </header>
+  <p class="ask-greeting"><span class="ask-dots" aria-hidden="true"><i></i><i></i><i></i></span><span>Hi! What would you like to know about flight simulation?</span></p>
   <AskOversweep id="ask-dialog-question" />
 </dialog>
 
@@ -53,6 +54,19 @@ import AskOversweep from "./AskOversweep.astro";
   dialog::backdrop { background: rgb(0 0 0 / .24); }
   header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
   h2 { margin: 0; }
+  .ask-greeting { display: grid; }
+  .ask-greeting > span { grid-area: 1 / 1; }
+  dialog[open] .ask-greeting > span:last-child { animation: greet .15s .65s both; }
+  dialog[open] .ask-dots { display: flex; gap: .25rem; align-items: center; animation: greet .15s .65s reverse both; }
+  .ask-dots i { width: .35rem; height: .35rem; border-radius: 50%; background: currentColor; animation: pulse .6s infinite alternate; }
+  .ask-dots i:nth-child(2) { animation-delay: .12s; }
+  .ask-dots i:nth-child(3) { animation-delay: .24s; }
+  @keyframes greet { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes pulse { from { opacity: .35; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    dialog[open] .ask-dots { display: none; }
+    dialog[open] .ask-greeting > span:last-child { animation: none; }
+  }
   @media (max-width: 40rem) {
     dialog { inset: 0; width: 100%; height: 100dvh; max-width: none; max-height: none; }
   }
