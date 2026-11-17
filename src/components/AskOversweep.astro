@@ -73,18 +73,22 @@ const { id } = Astro.props;
         for (const passage of passages) {
           const result = document.createElement("li");
           const link = document.createElement("a");
-          const quote = document.createElement("blockquote");
           link.href = passage.url;
           link.textContent = passage.title;
-          text.innerHTML = passage.excerpt;
-          quote.textContent = text.value;
-          result.append(link, quote);
+          result.append(link);
           sources.append(result);
         }
-        reply.copy.textContent = passages.length
-          ? "Here’s what I found on Oversweep."
-          : "I couldn’t find that on Oversweep. Could you tell me a bit more?";
-        if (passages.length) reply.bubble.append(sources);
+        if (passages.length) {
+          text.innerHTML = passages[0].excerpt;
+          reply.copy.textContent = text.value;
+          const reading = document.createElement("details");
+          const label = document.createElement("summary");
+          label.textContent = "Read more on Oversweep";
+          reading.append(label, sources);
+          reply.bubble.append(reading);
+        } else {
+          reply.copy.textContent = "I couldn’t find that on Oversweep. Could you tell me a bit more?";
+        }
       } catch {
         reply.copy.textContent = "I couldn’t reach the Oversweep index. Try again in a moment.";
       } finally {
@@ -110,5 +114,4 @@ const { id } = Astro.props;
   [data-thread] :global(ul) { padding: 0; margin: .5rem 0 0; list-style: none; }
   [data-thread] :global(li) { padding: .5rem; margin-top: .4rem; border: 1px solid #c6cdd4; border-radius: .4rem; background: white; }
   [data-new-chat] { background: transparent; color: inherit; padding: .3rem .6rem; }
-  .ask :global(blockquote) { margin: .4rem 0 0; }
 </style>
