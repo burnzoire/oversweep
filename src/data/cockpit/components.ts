@@ -298,20 +298,20 @@ export const KNOBS = {
   'knob-spindle': { r: 10, lobes: 0, ridge: [0.95, 0.3], spindle: true },
   /** Very small knurled knob (UHF backup VOL). */
   'knob-knurled-mini': { r: 4.8, lobes: 12, ridge: [0.8, 0.16] },
-  /** Large knurled volume knob (AUDIO 1 COMM 1 and COMM 2). */
-  'knob-knurled-large': { r: 11.2, lobes: 12, ridge: [0.82, 0.1] },
+  /** Large knurled volume knob (AUDIO 1 COMM 1 and COMM 2); index runs out to the rim. */
+  'knob-knurled-large': { r: 11.2, lobes: 12, ridge: [0.94, 0.1], edge: true },
+  /** Small knurled knob whose index runs square-ended out to the rim (AUDIO 1 SECURE VOICE and TF). */
+  'knob-knurled-small-edge': { r: 7.9, lobes: 12, ridge: [0.94, 0.16], edge: true },
   /** Plain round knob with an index bar from the centre to the rim (AUDIO 1 MSL). */
-  'knob-round': { r: 10, lobes: 0, ridge: [0.85, 0.1] },
+  'knob-round': { r: 10, lobes: 0, ridge: [0.98, 0.1], edge: true },
   /** Small plain round knob (AUDIO 1 THREAT, AUDIO 2 ILS). */
-  'knob-round-small': { r: 7.4, lobes: 0, ridge: [0.85, 0.13] },
+  'knob-round-small': { r: 7.4, lobes: 0, ridge: [0.98, 0.13], edge: true },
   /** Four-lobed cross knob, index along one lobe (AUDIO 2 INTERCOM). */
-  'knob-cross': { r: 11, lobes: 4, ridge: [0.8, 0.1] },
+  'knob-cross': { r: 11, lobes: 4, ridge: [0.98, 0.1], edge: true },
   /** Small four-lobed cross knob (AUDIO 2 TACAN). */
-  'knob-cross-small': { r: 7.9, lobes: 4, ridge: [0.8, 0.13] },
-  /** Large round knob crossed by a broad grip band (AUDIO 1 COMM mode knobs). */
-  'knob-bar-thick-large': { r: 11.8, lobes: 0, ridge: [1, 0.3], band: true },
+  'knob-cross-small': { r: 7.9, lobes: 4, ridge: [0.98, 0.13], edge: true },
   /**
-   * Large radio selector (UHF backup function and mode knobs): a broad skirt
+   * Large radio selector (UHF backup function and mode knobs, AUDIO 1 COMM mode knobs): a broad skirt
    * with a raised centre boss, a flat lever running from the boss to the rim
    * opposite the pointer, and a white index bar set into the rim at the
    * pointing end. The whole knob turns.
