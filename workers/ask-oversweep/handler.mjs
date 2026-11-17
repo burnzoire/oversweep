@@ -47,7 +47,7 @@ export function createHandler(corpus) {
     const sources = [...new Set(ids)].filter(id => Object.hasOwn(corpus, id));
     if (!sources.length) return json({ answer: insufficient, ids: [] });
     const passages = sources.map((id, index) => ({ source: index + 1, ...corpus[id] }));
-    const model = env.ASK_MODEL || "@cf/ibm-granite/granite-4.0-h-micro";
+    const model = env.ASK_MODEL || "@cf/meta/llama-3.1-8b-instruct";
     const ray = request.headers.get("cf-ray");
     const logFailure = (stage, error) => {
       const candidate = error?.code ?? String(error?.message ?? "").match(/\b[35]\d{3}\b/)?.[0];
