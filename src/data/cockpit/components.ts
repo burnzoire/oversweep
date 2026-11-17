@@ -433,10 +433,12 @@ export function knobArt(art: keyof typeof KNOBS) {
       }
       return `M${pts.join('L')}Z`;
     };
-    const ch = Array.from({ length: lobes }, (_, k) => {
-      const a = ((2 * k + 1) * Math.PI) / lobes, r0 = s * (r - 0.7 * nr), r1 = r - 0.7 * nr;
-      return `M${n(r0 * Math.sin(a))} ${n(-r0 * Math.cos(a))}L${n(r1 * Math.sin(a))} ${n(-r1 * Math.cos(a))}`;
-    }).join('');
+    // Channels join each top-face scallop's two corners to the matching corners of the base scallop.
+    const Rc = r + 0.3 * nr, phi = Math.acos((r * r + Rc * Rc - nr * nr) / (2 * r * Rc));
+    const ch = Array.from({ length: lobes }, (_, k) => [-phi, phi].map(d => {
+      const a = ((2 * k + 1) * Math.PI) / lobes + d, r0 = s * r;
+      return `M${n(r0 * Math.sin(a))} ${n(-r0 * Math.cos(a))}L${n(r * Math.sin(a))} ${n(-r * Math.cos(a))}`;
+    }).join('')).join('');
     const top = scallops(s * r, nr * s);
     rim = `<path d="${scallops(r, nr)}" fill="${PAPER}"/>`;
     // A plain round base under the knob shows in the base scallops.
