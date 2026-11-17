@@ -302,14 +302,14 @@ export const KNOBS = {
   'knob-knurled-large': { r: 11.2, lobes: 12, ridge: [0.94, 0.1], edge: true },
   /** Small knurled knob whose index runs square-ended out to the rim (AUDIO 1 SECURE VOICE and TF). */
   'knob-knurled-small-edge': { r: 7.9, lobes: 12, ridge: [0.94, 0.16], edge: true },
-  /** Plain round knob with an index bar from the centre to the rim (AUDIO 1 MSL). */
-  'knob-round': { r: 10, lobes: 0, ridge: [0.98, 0.1], edge: true },
-  /** Small plain round knob (AUDIO 1 THREAT, AUDIO 2 ILS). */
-  'knob-round-small': { r: 7.4, lobes: 0, ridge: [0.98, 0.13], edge: true },
-  /** Four-lobed cross knob, index along one lobe (AUDIO 2 INTERCOM). */
-  'knob-cross': { r: 11, lobes: 4, ridge: [0.98, 0.1], edge: true },
+  /** Round knob with a raised grip along the index axis that smooths down to the rim at both ends; index from the centre to the rim (AUDIO 1 MSL). */
+  'knob-round': { r: 10, lobes: 0, ridge: [0.98, 0.1], edge: true, fin: 0.36 },
+  /** Smaller knob-round, same grip (AUDIO 1 THREAT, AUDIO 2 ILS). */
+  'knob-round-small': { r: 7.4, lobes: 0, ridge: [0.98, 0.1], edge: true, fin: 0.36 },
+  /** Rounded cross knob: four round-ended arms with small fillets between them, index along one arm (AUDIO 2 INTERCOM). */
+  'knob-cross': { r: 11, lobes: 0, ridge: [0.98, 0.1], cross: 0.33 },
   /** Small four-lobed cross knob (AUDIO 2 TACAN). */
-  'knob-cross-small': { r: 7.9, lobes: 4, ridge: [0.98, 0.13], edge: true },
+  'knob-cross-small': { r: 7.9, lobes: 0, ridge: [0.98, 0.13], cross: 0.33 },
   /**
    * Large radio selector (UHF backup function and mode knobs, AUDIO 1 COMM mode knobs): a broad skirt
    * with a raised centre boss, a flat lever running from the boss to the rim
@@ -388,6 +388,38 @@ export function knobArt(art: keyof typeof KNOBS) {
     const out = `<rect x="${n(-hw)}" y="${n(-t.reach)}" width="${n(2 * hw)}" height="${n(t.reach - r * 0.9)}" fill="${PAPER}" ${sw('medium')}/>` +
       `<path d="M0 ${n(-t.reach)}V${n(-r * 0.9)}" ${sw('heavy')}/>`;
     return out + cased(rim, 'heavy') +
+      `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
+      `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
+  }
+  if ('cross' in t) {
+    // Rounded cross: four capsule arms (half-width cross x r) reaching the rim, with small fillets where they meet.
+    const w = t.cross * r, L = r - w, f = w * 0.2, N = 288, pts: string[] = [];
+    // Distance from a point to the nearest arm axis, minus the arm half-width; fillet by a smooth minimum.
+    const sdf = (x: number, y: number) => {
+      const d = [0, 1, 2, 3].map(k => {
+        const b = (k * Math.PI) / 2, u = x * Math.cos(b) + y * Math.sin(b), v = -x * Math.sin(b) + y * Math.cos(b);
+        const pu = Math.max(0, Math.min(L, u));
+        return Math.hypot(u - pu, v) - w;
+      }).sort((a, b) => a - b);
+      const h = Math.max(f - Math.abs(d[0] - d[1]), 0) / f;
+      return Math.min(d[0], d[1]) - (h * h * f) / 4;
+    };
+    for (let i = 0; i <= N; i++) {
+      const a = (i / N) * 2 * Math.PI;
+      let lo = 0, hi = r * 1.2;
+      for (let j = 0; j < 32; j++) { const m = (lo + hi) / 2; if (sdf(m * Math.sin(a), -m * Math.cos(a)) <= 0) lo = m; else hi = m; }
+      pts.push(`${n(lo * Math.sin(a))} ${n(-lo * Math.cos(a))}`);
+    }
+    return cased(`<path d="M${pts.join('L')}Z" fill="${PAPER}"/>`, 'heavy') +
+      `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
+      `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
+  }
+  if ('fin' in t) {
+    // Grip along the index axis: widest (fin x r) at the centre, smoothing down to the rim at both ends.
+    const w = t.fin * r, e = r * 0.98;
+    const grip = `M0 ${n(-e)}C${n(w * 0.9)} ${n(-e * 0.55)} ${n(w)} ${n(-e * 0.25)} ${n(w)} 0C${n(w)} ${n(e * 0.25)} ${n(w * 0.9)} ${n(e * 0.55)} 0 ${n(e)}` +
+      `C${n(-w * 0.9)} ${n(e * 0.55)} ${n(-w)} ${n(e * 0.25)} ${n(-w)} 0C${n(-w)} ${n(-e * 0.25)} ${n(-w * 0.9)} ${n(-e * 0.55)} 0 ${n(-e)}Z`;
+    return cased(rim, 'heavy') + `<path d="${grip}" fill="${PAPER}" ${sw('medium')}/>` +
       `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
       `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
   }
