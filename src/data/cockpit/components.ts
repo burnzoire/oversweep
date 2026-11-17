@@ -441,8 +441,8 @@ export function knobArt(art: keyof typeof KNOBS) {
     }).join('')).join('');
     const top = scallops(s * r, nr * s);
     rim = `<path d="${scallops(r, nr)}" fill="${PAPER}"/>`;
-    // A plain round base under the knob shows in the base scallops.
-    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + rim.replace(/\/>$/, ` ${sw('medium')}/>`) + `<path d="${ch}" ${sw('medium')}/>` + `<path d="${top}" fill="${PAPER}" ${sw('medium')}/>` +
+    // A plain round base under the knob shows in the base scallops. Inner lines (top face, channels) are light so the outline and index lead.
+    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + rim.replace(/\/>$/, ` ${sw('medium')}/>`) + `<path d="${ch}" ${sw('fine')} stroke-opacity="0.45"/>` + `<path d="${top}" fill="${PAPER}" ${sw('fine')} stroke-opacity="0.45"/>` +
       `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
       `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
   }
