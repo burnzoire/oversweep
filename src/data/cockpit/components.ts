@@ -393,7 +393,7 @@ export function knobArt(art: keyof typeof KNOBS) {
   }
   if ('cross' in t) {
     // Cross cut from a round base: two straight arms (half-width cross x r) whose ends are the base circle, small fillets where they meet.
-    const w = t.cross * r, f = w * 0.3, N = 288, pts: string[] = [];
+    const w = t.cross * r, f = w * 0.55, N = 288, pts: string[] = [];
     const sdf = (x: number, y: number) => {
       const d0 = Math.abs(x) - w, d1 = Math.abs(y) - w, h = Math.max(f - Math.abs(d0 - d1), 0) / f;
       return Math.max(Math.min(d0, d1) - (h * h * f) / 4, Math.hypot(x, y) - r);
