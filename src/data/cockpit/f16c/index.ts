@@ -1,5 +1,6 @@
 import type { AircraftCockpit } from '../types';
 import { elec } from './elec.ts';
+import { audio } from './audio.ts';
 import { engJetStart } from './eng-jet-start.ts';
 import { fuel } from './fuel.ts';
 import { landingGear } from './landing-gear.ts';
@@ -76,7 +77,7 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'eng-jet-start', title: 'ENG & JET START panel', page: 63, spec: engJetStart },
         { id: 'epu', title: 'EPU panel', page: 64, spec: epu },
         { id: 'elec', title: 'ELEC panel', page: 64, spec: elec },
-        { id: 'audio', title: 'AUDIO 1 & 2 panels', page: 65 },
+        { id: 'audio', title: 'AUDIO 1 & 2 panels', page: 65, spec: audio },
         { id: 'avtr', title: 'AVTR panel', page: 66 },
         { id: 'fuel', title: 'FUEL panel', page: 67, spec: fuel },
         { id: 'iff', title: 'IFF panel', page: 67 },
