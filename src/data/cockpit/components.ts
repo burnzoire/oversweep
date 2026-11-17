@@ -16,6 +16,18 @@ import type { Pen } from './types';
 export const INK = 'var(--panel-ink,#161616)';
 export const PAPER = 'var(--panel-paper,#fff)';
 /**
+ * Warning paints (sRGB approximations of FED-STD-595 colours): insignia red
+ * FS 11136 for guards, insignia yellow FS 33538 for hazard stripes and
+ * caution caps. Only parts the guide shows painted get them.
+ */
+export const PAINTS = {
+  red: 'var(--panel-red,#b3262a)',
+  yellow: 'var(--panel-yellow,#f2b807)',
+} as const;
+/** A moving part drawn in a paint: its paper fills take the colour, ink lines stay black. */
+export const painted = (paint: keyof typeof PAINTS | undefined, body: string) =>
+  paint ? `<g style="--panel-paper:${PAINTS[paint]}">${body}</g>` : body;
+/**
  * Lettering. MS 33558 is a monoline gothic; the closest bundled-free stack is a
  * condensed sans, stretched to the measured width of each legend.
  */

@@ -11,7 +11,7 @@
  */
 import type { ControlDef, Cut, Dial, PanelSpec, Placement, Pt } from './types';
 import {
-  FASTENERS, FONT, INK, LAMPS, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, lampModuleFrame, lampRoundBezel, n,
+  FASTENERS, FONT, INK, LAMPS, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, painted, PAINTS, lampModuleFrame, lampRoundBezel, n,
   gaugeBezel, gaugeHub, gearKnob, gearSlot, knobArt, needleArt, polar, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
 } from './components.ts';
 
@@ -116,7 +116,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
     case 'toggle-large': case 'toggle-medium': case 'toggle-small': case 'toggle-large-cylinder': case 'toggle-large-square': case 'toggle-large-lock': case 'toggle-paddle-wide': case 'toggle-hook': case 'toggle-mini-hex': {
       const c = controlOf(spec, p.control), leans = toggleLeans(c.positions.length);
       const rot = c.travel === 'horizontal' ? ' transform="rotate(-90)"' : '';
-      return at(p.at, toggleBase(p.component) + moving(c, state[c.id] ?? c.initial, i => toggleLever(p.component as keyof typeof TOGGLES, leans[i], c.positions.length), rot), ` data-art="${p.component}"`);
+      return at(p.at, toggleBase(p.component) + moving(c, state[c.id] ?? c.initial, i => painted(p.paint, toggleLever(p.component as keyof typeof TOGGLES, leans[i], c.positions.length)), rot), ` data-art="${p.component}"`);
     }
     case 'rotary-pointer': case 'rotary-pointer-large': case 'rotary-pointer-medium': {
       const c = controlOf(spec, p.control);
@@ -130,7 +130,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
     }
     case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-xxl': {
       const c = controlOf(spec, p.control), art = p.component;
-      return at(p.at, pushBase(art) + moving(c, state[c.id] ?? c.initial, i => pushCap(art, i > 0)), ` data-art="${p.component}"`);
+      return at(p.at, pushBase(art) + moving(c, state[c.id] ?? c.initial, i => painted(p.paint, pushCap(art, i > 0))), ` data-art="${p.component}"`);
     }
     case 'gear-handle': {
       // Knob centred on the slot at each end of its travel (first position at the top).
@@ -148,7 +148,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
     }
     case 'guard-flip': {
       const c = controlOf(spec, p.control);
-      return at(p.at, turn(p.rotate, 0, 0, moving(c, state[c.id] ?? c.initial, i => guardArt(p.size, c.positions[i].id !== 'closed'))), ` data-art="guard-flip"`);
+      return at(p.at, turn(p.rotate, 0, 0, moving(c, state[c.id] ?? c.initial, i => painted(p.paint, guardArt(p.size, c.positions[i].id !== 'closed')))), ` data-art="guard-flip"`);
     }
     case 'lamp-module': {
       const [w, h] = p.size;
@@ -213,12 +213,19 @@ export function renderPanel(spec: PanelSpec, opts: RenderOptions = {}) {
   const plate = spec.plate.map((p, i) =>
     (p.raised ? `<path d="${p.d}" transform="translate(0.45 0.45)" ${sw('medium')}/>` : '') +
     cased(`<path d="${p.d}" fill="${PAPER}" fill-rule="evenodd"/>`, i === 0 || p.raised ? 'heavy' : 'medium')).join('');
-  const engraving = spec.engraving.map(e => e.kind === 'text'
-    ? (e.rotate ? `<g transform="rotate(${e.rotate} ${n(e.at[0])} ${n(e.at[1])})">${text(e.at[0], e.at[1], e.text, e.cap, e.width, e.anchor)}</g>` : text(e.at[0], e.at[1], e.text, e.cap, e.width, e.anchor))
-    : `<path d="${e.d}" ${sw(e.pen ?? 'medium')}${e.faint ? ' stroke-opacity="0.3"' : ''}/>`).join('');
+  let clips = '';
+  const engraving = spec.engraving.map((e, i) => {
+    if (e.kind === 'text') return e.rotate ? `<g transform="rotate(${e.rotate} ${n(e.at[0])} ${n(e.at[1])})">${text(e.at[0], e.at[1], e.text, e.cap, e.width, e.anchor)}</g>` : text(e.at[0], e.at[1], e.text, e.cap, e.width, e.anchor);
+    if (e.kind === 'fill') {
+      const id = `paint-${spec.id}-${i}`;
+      if (e.clip) clips += `<clipPath id="${id}"><path d="${e.clip}" clip-rule="evenodd"/></clipPath>`;
+      return `<path d="${e.d}" fill="${PAINTS[e.paint]}" stroke="none"${e.clip ? ` clip-path="url(#${id})"` : ''}/>`;
+    }
+    return `<path d="${e.d}" ${sw(e.pen ?? 'medium')}${e.faint ? ' stroke-opacity="0.3"' : ''}/>`;
+  }).join('');
   return `<svg class="cockpit-svg" viewBox="0 0 ${n(w)} ${n(h)}" xmlns="http://www.w3.org/2000/svg" ${opts.label ? `role="img" aria-label="${esc(opts.label)}"` : 'aria-hidden="true"'}>` +
     `<g fill="none" stroke="${INK}" stroke-linejoin="round" stroke-linecap="round" font-family="${FONT}" font-weight="600">` +
-    (spec.plate.length ? `<defs><clipPath id="plate-${spec.id}"><path d="${spec.plate[spec.plate.length - 1].d}"/></clipPath><clipPath id="base-${spec.id}"><path d="${spec.plate[0].d}"/></clipPath></defs>` : '') +
+    (spec.plate.length || clips ? `<defs>${spec.plate.length ? `<clipPath id="plate-${spec.id}"><path d="${spec.plate[spec.plate.length - 1].d}"/></clipPath><clipPath id="base-${spec.id}"><path d="${spec.plate[0].d}"/></clipPath>` : ''}${clips}</defs>` : '') +
     `<g class="plate">${plate}</g><g class="engraving">${engraving}</g>` +
     `<g class="components">${spec.placements.map(p => placement(spec, p, state)).join('')}</g></g>` +
     (opts.guide ? guideLayer(spec) : '') + '</svg>';

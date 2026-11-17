@@ -54,6 +54,21 @@ const stripesCut = (x0: number, y0: number, x1: number, y1: number, inside: (x: 
   }
   return path(d);
 };
+/**
+ * The yellow bands of the hazard stripes drawn by `stripes`/`stripesCut` over the
+ * same box: every other band between the "/" lines, starting at the top-left
+ * corner (the guide's stripes run yellow, black, white, black). Clip them to
+ * the striped area with the fill's `clip`.
+ */
+const yellowBands = (x0: number, y0: number, x1: number, y1: number, step = 9) => {
+  let d = '';
+  for (let c = x0 + y0; c < x1 + y1; c += 2 * step) {
+    const e = c + step;
+    d += `M${c - y0} ${y0}L${e - y0} ${y0}L${e - y1} ${y1}L${c - y1} ${y1}Z`;
+  }
+  return path(d);
+};
+const box = (x0: number, y0: number, x1: number, y1: number) => `M${x0} ${y0}H${x1}V${y1}H${x0}Z`;
 // DN LOCK REL recess: a channel off the gear slot whose left end is a half-round concentric with the button.
 const DNL = { cx: 365, cy: 332.5, r: 31.5, x1: 397 };
 const inDnLockCut = (x: number, y: number) =>
@@ -97,6 +112,7 @@ export const landingGear: PanelSpec = {
     // EMER STORES JETTISON: legend, and the hazard-striped square around the button.
     L([210, 50], 'EMER STORES', 9, 73),
     L([207, 62], 'JETTISON', 9, 48),
+    { kind: 'fill', paint: 'yellow', d: yellowBands(160, 72, 257, 165), clip: path(box(160, 72, 257, 165)) },
     { kind: 'path', pen: 'heavy', d: stripes(160, 72, 257, 165) },
     // WHEELS: aircraft outline with the three gear lights.
     // Traced as the guide draws it: the fuselage sides run unbroken from the
@@ -110,6 +126,7 @@ export const landingGear: PanelSpec = {
     ].join('')) },
     ...([['W', 100], ['H', 113.5], ['E', 127], ['E', 140.5], ['L', 154], ['S', 167.5]] as const).map(([t, y]) => L([W, y], t, 8.5, 7)),
     // HOOK: striped plate with its legend, and the switch positions.
+    { kind: 'fill', paint: 'yellow', d: yellowBands(392, 50, 443, 83), clip: path(box(392, 50, 443, 83) + box(400, 59, 435, 75)) },
     { kind: 'path', pen: 'heavy', d: stripes(392, 50, 443, 83, 9, [400, 59, 435, 75]) },
     L([417, 67], 'HOOK', 8.5, 26),
     L([440, 92], 'UP', 8.5, 11),
@@ -140,6 +157,8 @@ export const landingGear: PanelSpec = {
     // DN LOCK REL: legend and the hazard-striped box around the button.
     L([362, 266], 'DN LOCK', 8.5, 41),
     L([362, 279], 'REL', 8.5, 20),
+    { kind: 'fill', paint: 'yellow', d: yellowBands(328, 289, 397, 370),
+      clip: path(box(328, 289, 397, 370) + `M${DNL.cx} ${DNL.cy - DNL.r}H${DNL.x1}V${DNL.cy + DNL.r}H${DNL.cx}`) + `A${mm(DNL.r)} ${mm(DNL.r)} 0 0 1 ${mm(DNL.cx)} ${mm(DNL.cy - DNL.r)}Z` },
     { kind: 'path', pen: 'heavy', d: stripesCut(328, 289, 397, 370, inDnLockCut, 'M397 301V289H328V370H397V364') },
     L([217, 310], '+', 7),
   ],
@@ -155,14 +174,14 @@ export const landingGear: PanelSpec = {
     { component: 'lamp-round', indicator: 'wheels-nose', at: pt(W, 60) },
     { component: 'lamp-round', indicator: 'wheels-left', at: pt(W - 32, 107) },
     { component: 'lamp-round', indicator: 'wheels-right', at: pt(W + 32, 107) },
-    { component: 'toggle-hook', control: 'hook', at: pt(413, 106) },
+    { component: 'toggle-hook', control: 'hook', at: pt(413, 106), paint: 'yellow' },
     { component: 'toggle-large-lock', control: 'gnd-jett', at: pt(90, 223) },
     { component: 'toggle-medium', control: 'brakes', at: pt(169, 226) },
     { component: 'toggle-large-lock', control: 'anti-skid', at: pt(244, 234) },
     { component: 'toggle-medium', control: 'stores-config', at: pt(51, 363) },
     { component: 'push-round-large', control: 'horn-silencer', at: pt(172, 362) },
     { component: 'toggle-paddle-wide', control: 'lights', at: pt(271, 364) },
-    { component: 'push-round-xl', control: 'dn-lock-rel', at: pt(365, 332) },
+    { component: 'push-round-xl', control: 'dn-lock-rel', at: pt(365, 332), paint: 'yellow' },
     { component: 'gear-handle', control: 'lg-handle', at: pt(421, 272.5), travel: mm(145), size: [mm(54), mm(100)], indicator: 'gear-handle-light' },
   ],
   controls: [

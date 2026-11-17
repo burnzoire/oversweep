@@ -66,7 +66,7 @@ export const fuel: PanelSpec = {
     { component: 'screw-medium', at: pt(165, 25) },
     { component: 'screw-medium', at: pt(342, 147) },
     { component: 'toggle-medium', control: 'fuel-master', at: pt(81.5, 41) },
-    { component: 'guard-flip', control: 'fuel-master-guard', at: pt(81.5, 117), size: [mm(49), mm(91)] },
+    { component: 'guard-flip', control: 'fuel-master-guard', at: pt(81.5, 117), size: [mm(49), mm(91)], paint: 'red' },
     { component: 'toggle-large-lock', control: 'tank-inerting', at: pt(161, 104) },
     { component: 'rotary-pointer', control: 'eng-feed', at: pt(268, 103) },
     { component: 'toggle-large-square', control: 'air-refuel', at: pt(368, 67) },

@@ -75,7 +75,7 @@ export const engJetStart: PanelSpec = {
     { component: 'lamp-round', indicator: 'jfs-run', at: pt(61, 65) },
     { component: 'toggle-large-lock', control: 'jfs', at: pt(149, 62) },
     { component: 'toggle-medium', control: 'eng-cont', at: pt(113, 180) },
-    { component: 'guard-flip', control: 'eng-cont-guard', at: pt(113, 247), size: [mm(51), mm(85)] },
+    { component: 'guard-flip', control: 'eng-cont-guard', at: pt(113, 247), size: [mm(51), mm(85)], paint: 'red' },
     { component: 'toggle-large-lock', control: 'ab-reset', at: pt(113, 345) },
     { component: 'toggle-large-lock', control: 'max-power', at: pt(113, 488) },
   ],
