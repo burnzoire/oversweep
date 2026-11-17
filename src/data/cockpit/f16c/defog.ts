@@ -2,10 +2,9 @@ import type { PanelSpec } from '../types';
 import { tracer } from '../trace.ts';
 
 /**
- * F-16C left sidewall controls, DCS: DEFOG lever (more to follow: manual
- * canopy handcrank, canopy switch and lever, CHAFF/FLARE dispense button).
+ * F-16C DEFOG lever (left console, outboard edge), DCS.
  *
- * DEFOG reference: the guide's p. 74 "DEFOG Lever" image (330 x 126 JPEG,
+ * Reference: the guide's p. 74 "DEFOG Lever" image (330 x 126 JPEG,
  * `pdfimages -png -f 74 -l 74`, image 005), rectified on the corners of the
  * MIN–DEFOG–MAX placard (edges measured with scripts/panel-edge.py):
  *   python3 -I scripts/panel-trace.py <p74-005.png> <out> 18.2,75.2 302.3,80.8 14.3,94.0 300.2,99.8 330 126
@@ -17,9 +16,9 @@ const src = 'DCS F-16C guide p. 74';
 const T = (at: [number, number], text: string, cap: number, width: number) =>
   ({ kind: 'text' as const, at: pt(...at), text, cap: mm(cap), width: mm(width) });
 
-export const sidewallControls: PanelSpec = {
-  id: 'sidewall-controls',
-  title: 'Sidewall controls',
+export const defog: PanelSpec = {
+  id: 'defog',
+  title: 'DEFOG lever',
   canvas: [mm(320), mm(112)],
   source: {
     variant: 'DCS F-16C Viper (Block 50)',
