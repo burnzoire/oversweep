@@ -74,6 +74,25 @@ export function pageEntries(html, url, { glossary = false } = {}) {
   return entries;
 }
 
+function addAskSections(corpus, html, entry) {
+  const main = html.match(/<main\b[\s\S]*?<\/main>/)?.[0];
+  if (!main || !entry) return;
+  const clean = main.replace(/<(script|style|svg|nav)\b[^>]*>[\s\S]*?<\/\1>/gi, "");
+  const headings = [...clean.matchAll(/<h([1-6])\b([^>]*)>([\s\S]*?)<\/h\1>/gi)]
+    .filter(heading => attr(heading[2], "id") && !/\bfig-title\b/.test(attr(heading[2], "class") ?? ""));
+  const text = (fragment) => clip(textOf(fragment.replace(/>\s*</g, "> <")), 1250);
+  corpus[entry.u] = { title: entry.t, text: text(clean) };
+  for (const [i, heading] of headings.entries()) {
+    const id = attr(heading[2], "id");
+    if (!id || skipHeading.test(id)) continue;
+    const passage = text(clean.slice(heading.index + heading[0].length, headings[i + 1]?.index));
+    if (passage) corpus[entry.u + "#" + encodeURIComponent(decode(id))] = {
+      title: entry.t + " · " + textOf(heading[3]),
+      text: passage,
+    };
+  }
+}
+
 export function searchIndex() {
   let base = "/";
   return {
@@ -85,6 +104,7 @@ export function searchIndex() {
       "astro:build:done": async ({ dir, logger }) => {
         const output = fileURLToPath(dir);
         const entries = [];
+        const corpus = Object.create(null);
         const { index: fullText } = await pagefind.createIndex({
           rootSelector: "main",
           excludeSelectors: ["nav", ".subject-nav", ".term-tip", "script", "style", "svg"],
@@ -94,14 +114,19 @@ export function searchIndex() {
           const html = await readFile(file, "utf8");
           if (!indexable(html)) continue;
           const route = path.relative(output, path.dirname(file)).split(path.sep).join("/");
-          // The home page and search page are not results; 404 is not a page.
-          if (route === "" || route === "404" || route === "search") continue;
-          entries.push(...pageEntries(html, `${base}${route}/`, { glossary: route === "encyclopedia/terminology" }));
+          // The home, search and ask pages are not results; 404 is not a page.
+          if (route === "" || route === "404" || route === "search" || route === "ask") continue;
+          const page = pageEntries(html, `${base}${route}/`, { glossary: route === "encyclopedia/terminology" });
+          entries.push(...page);
+          if (base === "/" && /^(manual|encyclopedia|training|experiences)\//.test(route + "/")) {
+            addAskSections(corpus, html, page[0]);
+          }
           await fullText.addHTMLFile({ url: `${base}${route}/`, content: html });
         }
         await fullText.writeFiles({ outputPath: path.join(output, "pagefind") });
         await pagefind.close();
         await writeFile(path.join(output, "search-index.json"), JSON.stringify(entries));
+        if (base === "/") await writeFile(path.join(output, "ask-corpus.json"), JSON.stringify(corpus));
         logger.info(`search-index.json has ${entries.length} entries.`);
       },
     },

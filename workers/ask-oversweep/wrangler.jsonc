@@ -1,0 +1,7 @@
+{
+  "name": "ask-oversweep",
+  "main": "index.mjs",
+  "compatibility_date": "2026-11-17",
+  "workers_dev": true,
+  "ai": { "binding": "AI" }
+}

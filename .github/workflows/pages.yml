@@ -68,6 +68,8 @@ jobs:
       # not from the Pages settings, which report http:// while HTTPS is not
       # enforced and would put http:// URLs in the canonical tags and sitemap.
       - name: Build for www.oversweep.com
+        env:
+          PUBLIC_ASK_ENDPOINT: ${{ vars.PUBLIC_ASK_ENDPOINT }}
         run: |
           rm -rf dist
           npx --no-install astro build
