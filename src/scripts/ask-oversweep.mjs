@@ -13,7 +13,7 @@ export async function findPassages(pagefind, question, base, origin) {
 
   // Shorter phrases recover matches when the full question is too specific.
   const concise = words.filter(word => word !== "freq" && word !== "frequency");
-  const queries = [...new Set([words.join(" "), concise.join(" "), words.slice(0, 3).join(" "), words.slice(-3).join(" "), words.slice(0, 2).join(" "), words.slice(-2).join(" ")])];
+  const queries = [...new Set([concise.join(" "), words.join(" "), words.slice(0, 3).join(" "), words.slice(-3).join(" "), words.slice(0, 2).join(" "), words.slice(-2).join(" ")])];
   for (const query of queries.filter(Boolean)) {
     const terms = query.split(" ");
     const score = (part) => terms.filter(term => part.plain_excerpt.toLowerCase().includes(term)).length;
