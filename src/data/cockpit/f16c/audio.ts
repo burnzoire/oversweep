@@ -114,7 +114,7 @@ export const audio: PanelSpec = {
     arrow([391, 36], [404, 50], [407, 72]), L([407, 79], 'INC', 10, 18),
     // COMM mode knobs: legends on their detent lines, with ticks.
     ...[MODE_1, MODE_2].flatMap(c => [
-      L([c[0] - 33, 132], 'OFF', 10, 21), L([c[0], 122], 'SQL', 10, 22), L([c[0] + 31, 132], 'GD', 10, 13),
+      L([c[0] - 34, 130], 'OFF', 10, 21), L([c[0], 119.5], 'SQL', 10, 22), L([c[0] + 32, 130], 'GD', 10, 13),
       { kind: 'path' as const, pen: 'medium' as const, d: path(tick(c, -MODE_ANGLE, 37, 44) + tick(c, 0, 37, 44) + tick(c, MODE_ANGLE, 37, 44)) },
     ]),
     // TF and THREAT.
