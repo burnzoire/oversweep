@@ -70,7 +70,7 @@ export function createHandler(corpus) {
               type: "object",
               properties: {
                 answer: { type: "string" },
-                sources: { type: "array", items: { type: "integer" } },
+                sources: { type: "array", items: { type: "integer", enum: passages.map(passage => passage.source) } },
               },
               required: ["answer", "sources"],
               additionalProperties: false,
@@ -112,7 +112,7 @@ export function createHandler(corpus) {
     if (!reply.answer.trim() || !reply.sources.length ||
       reply.sources.some(n => !Number.isInteger(n) || !sources[n - 1])) {
       logFailure("response_sources");
-      return json({ code: "invalid_answer", stage: "response_sources" }, 502);
+      return json({ answer: insufficient, ids: [] });
     }
     return json({ answer: reply.answer.trim(), ids: [...new Set(reply.sources.map(n => sources[n - 1]))] });
   };
