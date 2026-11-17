@@ -405,7 +405,7 @@ export function knobArt(art: keyof typeof KNOBS) {
       pts.push(`${n(lo * Math.sin(a))} ${n(-lo * Math.cos(a))}`);
     }
     // The round base fills the gaps between the arms.
-    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + cased(`<path d="M${pts.join('L')}Z" fill="${PAPER}"/>`, 'heavy') +
+    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<path d="M${pts.join('L')}Z" fill="${PAPER}" ${sw('medium')}/>` +
       `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
       `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
   }
@@ -442,7 +442,7 @@ export function knobArt(art: keyof typeof KNOBS) {
     const top = scallops(s * r, nr * s);
     rim = `<path d="${scallops(r, nr)}" fill="${PAPER}"/>`;
     // A plain round base under the knob shows in the base scallops.
-    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + cased(rim, 'heavy') + `<path d="${ch}" ${sw('medium')}/>` + `<path d="${top}" fill="${PAPER}" ${sw('medium')}/>` +
+    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + rim.replace(/\/>$/, ` ${sw('medium')}/>`) + `<path d="${ch}" ${sw('medium')}/>` + `<path d="${top}" fill="${PAPER}" ${sw('medium')}/>` +
       `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
       `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
   }
