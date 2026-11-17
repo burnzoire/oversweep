@@ -299,9 +299,9 @@ export const KNOBS = {
   /** Very small knurled knob (UHF backup VOL). */
   'knob-knurled-mini': { r: 4.8, lobes: 12, ridge: [0.8, 0.16] },
   /** Large knurled volume knob (AUDIO 1 COMM 1 and COMM 2); tapers to a smaller scalloped top face with channels down the recesses; index runs out to the rim. */
-  'knob-knurled-large': { r: 11.2, lobes: 12, ridge: [0.94, 0.1], edge: true, taper: 0.84 },
+  'knob-knurled-large': { r: 11.2, lobes: 8, ridge: [0.94, 0.1], edge: true, taper: 0.84 },
   /** Small knurled knob whose index runs square-ended out to the rim (AUDIO 1 SECURE VOICE and TF). */
-  'knob-knurled-small-edge': { r: 7.9, lobes: 12, ridge: [0.94, 0.16], edge: true, taper: 0.84 },
+  'knob-knurled-small-edge': { r: 7.9, lobes: 8, ridge: [0.94, 0.16], edge: true, taper: 0.84 },
   /** Round knob crossed by a straight raised grip band along the index axis; index from the centre to the rim (AUDIO 1 MSL). */
   'knob-round': { r: 10, lobes: 0, ridge: [0.98, 0.1], edge: true, fin: 0.3 },
   /** Smaller knob-round, same grip (AUDIO 1 THREAT, AUDIO 2 ILS). */
