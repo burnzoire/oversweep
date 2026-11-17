@@ -2,7 +2,7 @@
 import { assetPath, sitePath } from "../lib/paths";
 const { id } = Astro.props;
 ---
-  <section class="ask" data-ask data-index={assetPath("pagefind/pagefind.js")} data-base={sitePath()}>
+  <section class="ask" data-ask data-index={assetPath("pagefind/pagefind.js")} data-base={sitePath()} data-endpoint={import.meta.env.PUBLIC_ASK_ENDPOINT}>
     {id !== "ask-dialog-question" && <button type="button" data-new-chat aria-label="New chat" title="New chat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg></button>}
     <div data-thread role="log" aria-label="Conversation"></div>
     <form>
@@ -68,9 +68,28 @@ const { id } = Astro.props;
         const contextual = followUp ? await search(question + " " + previous) : [];
         const passages = contextual.length ? contextual : await search(question);
         if (turn !== generation) return;
+        let generated: { answer?: string; ids?: string[] } | undefined;
+        let quota = false;
+        if (panel.dataset.endpoint && passages.length) {
+          try {
+            const response = await fetch(panel.dataset.endpoint, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ question, previous: previous || undefined, ids: passages.map(passage => passage.url) }),
+              signal: AbortSignal.timeout(12000),
+            });
+            const payload = await response.json();
+            quota = response.status === 429 && payload.code === "daily_quota";
+            if (response.ok) generated = payload;
+          } catch {
+            // Pagefind remains usable if inference is unavailable.
+          }
+        }
+        if (turn !== generation) return;
         if (!followUp && passages.length) previous = question;
         const sources = document.createElement("ul");
         for (const passage of passages) {
+          if (generated?.ids && !generated.ids.includes(passage.url)) continue;
           const result = document.createElement("li");
           const link = document.createElement("a");
           link.href = passage.url;
@@ -80,12 +99,19 @@ const { id } = Astro.props;
         }
         if (passages.length) {
           text.innerHTML = passages[0].excerpt;
-          reply.copy.textContent = text.value;
+          reply.copy.textContent = generated?.answer ?? (quota
+            ? "Negative, Ghostrider. The pattern is full"
+            : panel.dataset.endpoint ? "I couldn’t generate a reply. Here’s what I found on Oversweep." : "Here’s what I found on Oversweep.");
+          if (!generated?.answer) {
+            const excerpt = document.createElement("blockquote");
+            excerpt.textContent = text.value;
+            reply.bubble.append(excerpt);
+          }
           const reading = document.createElement("details");
           const label = document.createElement("summary");
           label.textContent = "Read more on Oversweep";
           reading.append(label, sources);
-          reply.bubble.append(reading);
+          if (sources.childElementCount) reply.bubble.append(reading);
         } else {
           reply.copy.textContent = "I couldn’t find that on Oversweep. Could you tell me a bit more?";
         }
@@ -115,3 +141,4 @@ const { id } = Astro.props;
   [data-thread] :global(li) { padding: .5rem; margin-top: .4rem; border: 1px solid #c6cdd4; border-radius: .4rem; background: white; }
   [data-new-chat] { background: transparent; color: inherit; padding: .3rem .6rem; }
 </style>
+
