@@ -190,7 +190,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       const c = controlOf(spec, p.control);
       return `<g data-art="traced">` + painted(p.paint, moving(c, state[c.id] ?? c.initial, i => {
         const sh = p.shapes[c.positions[i].id];
-        return sh ? cased(`<path d="${sh.d}" fill="${PAPER}" fill-rule="evenodd"/>`) + (sh.parts ?? []).map(d => cased(`<path d="${d}" fill="${PAPER}"/>`)).join('') + (sh.lines ? `<path d="${sh.lines}" fill="none" ${sw('fine')}/>` : '') : '';
+        return sh ? cased(`<path d="${sh.d}" fill="${PAPER}" fill-rule="evenodd"/>`) + (sh.parts ?? []).map(d => cased(`<path d="${d}" fill="${PAPER}"/>`)).join('') + (sh.lines ? `<path d="${sh.lines}" fill="none" ${sw('fine')}/>` : '') + (sh.legend ?? []).map(l => text(l.at[0], l.at[1], l.text, l.cap, l.width)).join('') : '';
       })) + '</g>';
     }
     case 'slot-lever': {
