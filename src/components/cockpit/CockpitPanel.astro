@@ -10,13 +10,13 @@
  * no lamp lights; selecting a lamp shows what it means.
  */
 import type { AircraftCockpit, PanelSpec } from '../../data/cockpit/types';
-import { hitZones, renderPanel } from '../../data/cockpit/render.ts';
+import { hitZones, readings, renderPanel } from '../../data/cockpit/render.ts';
 
 interface Props { cockpit: AircraftCockpit; spec: PanelSpec }
 const { cockpit, spec } = Astro.props;
 const [W, H] = spec.canvas;
 const pct = (v: number, of: number) => `${+((v / of) * 100).toFixed(3)}%`;
-const def = { aircraft: cockpit.id, panel: spec.id, controls: spec.controls, indicators: spec.indicators };
+const def = { aircraft: cockpit.id, panel: spec.id, controls: spec.controls, indicators: spec.indicators, readings: readings(spec) };
 const control = (id: string) => spec.controls.find(c => c.id === id)!;
 const dirLabels = (id: string) => {
   const c = control(id);
@@ -59,6 +59,7 @@ const dirLabels = (id: string) => {
 .cp-stage :global(svg){display:block;width:100%;height:100%}
 .cp-stage :global(.lens){fill:transparent}
 .cp-stage :global([data-indicator].selected .lens){fill:rgba(0,95,204,.14);stroke:#005fcc;stroke-width:.5}
+.cp-stage :global([data-indicator].selected > [data-needle] > path:first-child){stroke:#005fcc;stroke-width:.6}
 .cp-hit{position:absolute;margin:0;padding:0;border:0;background:transparent;cursor:pointer;border-radius:8%;overflow:hidden}
 .cp-round{border-radius:50%}
 .cp-hit > button{position:absolute;margin:0;padding:0;border:0;background:transparent;cursor:pointer}
@@ -75,8 +76,10 @@ const dirLabels = (id: string) => {
 
 <script>
 import type { ControlDef, IndicatorDef } from '../../data/cockpit/types';
+import type { Reading } from '../../data/cockpit/render.ts';
+import { drumPositions, scaleAngle } from '../../data/cockpit/dial.ts';
 
-interface Def { aircraft: string; panel: string; controls: ControlDef[]; indicators: IndicatorDef[] }
+interface Def { aircraft: string; panel: string; controls: ControlDef[]; indicators: IndicatorDef[]; readings: Record<string, Reading> }
 const storeKey = (aircraft: string) => `oversweep:cockpit:${aircraft}`;
 const load = (aircraft: string): Record<string, string> => {
   try { return JSON.parse(sessionStorage.getItem(storeKey(aircraft)) ?? '{}') ?? {}; } catch { return {}; }
@@ -176,7 +179,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     b.addEventListener('click', () => {
       select(b.dataset.select!);
       const ind = def.indicators.find(i => i.id === b.dataset.select);
-      if (ind) say(ind.type === 'gauge' ? `${ind.name}: needle at its stop, ${ind.rest} ${ind.unit ?? ''} (cold jet).` : `${ind.name}: off (cold jet).`);
+      if (ind) say(ind.type === 'lamp' ? `${ind.name}: off (cold jet).` : `${ind.name}: ${ind.restNote ?? `needle at its stop, ${ind.rest} ${ind.unit ?? ''}`} (cold jet).`);
     });
   }
   for (const b of document.querySelectorAll<HTMLButtonElement>(`[data-cockpit-pick="${def.panel}"]`)) {
@@ -189,5 +192,29 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     say('Every control is back in its cold-and-dark position.');
   });
   def.controls.forEach(draw);
+
+  /** Try a reading: move a needle or roll a counter (not saved; the jet stays cold and dark). */
+  const show = (id: string, v: number) => {
+    const r = def.readings[id];
+    if (!r) return;
+    if (r.kind === 'needle') svg.querySelector(`[data-needle="${id}"]`)?.setAttribute('transform', `rotate(${+scaleAngle(r.scale, v).toFixed(3)})`);
+    else drumPositions(v, r.drums, r.fixed, r.unit).forEach((p, k) =>
+      svg.querySelector(`[data-drum="${id}"][data-place="${k}"]`)?.setAttribute('transform', `translate(0 ${+(-p * r.roll).toFixed(3)})`));
+  };
+  for (const input of document.querySelectorAll<HTMLInputElement>(`[data-reading^="${def.panel}."]`)) {
+    const id = input.dataset.reading!.slice(def.panel.length + 1), ind = def.indicators.find(i => i.id === id);
+    const out = document.querySelector(`[data-readout="${input.dataset.reading}"]`);
+    input.addEventListener('input', () => {
+      const v = Number(input.value);
+      show(id, v);
+      if (out) out.textContent = `${v.toLocaleString('en-US')} ${ind?.unit ?? ''}`;
+      select(id);
+    });
+    // Reset puts every reading back where the page started.
+    document.querySelector(`[data-cockpit-reset="${def.aircraft}"]`)?.addEventListener('click', () => {
+      input.value = input.defaultValue;
+      input.dispatchEvent(new Event('input'));
+    });
+  }
 }
 </script>

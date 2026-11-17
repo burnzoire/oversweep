@@ -9,11 +9,13 @@
  * the client engine flips them. Lamps are `<g data-indicator="<id>">` with a
  * `.lens` rect that lights when the group gets the `lit` class.
  */
-import type { ControlDef, Cut, Dial, PanelSpec, Placement, Pt } from './types';
+import type { ControlDef, Cut, Dial, DrumCounter, PanelSpec, Placement, Pt } from './types';
 import {
   FASTENERS, FONT, INK, LAMPS, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, painted, PAINTS, lampModuleFrame, lampRoundBezel, n,
-  gaugeBezel, gaugeHub, gearKnob, gearSlot, knobArt, needleArt, polar, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
+  gaugeBezel, gaugeHub, drumStrip, paddlePointerArt, PADDLE_POINTER, gearKnob, gearSlot, knobArt, needleArt, polar, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
 } from './components.ts';
+import { drumPositions, scaleAngle } from './dial.ts';
+export { drumPositions };
 
 const at = ([x, y]: Pt, body: string, extra = '') => `<g transform="translate(${n(x)} ${n(y)})"${extra}>${body}</g>`;
 
@@ -50,15 +52,7 @@ function dzusCut([x, y]: Pt, corner: Cut) {
 }
 
 /** Needle angle (degrees clockwise from 12 o'clock) for `value`, linear between the dial's scale knots, clamped at the ends. */
-export function dialAngle(dial: Dial, value: number) {
-  const k = dial.scale;
-  if (value <= k[0][0]) return k[0][1];
-  for (let i = 1; i < k.length; i++) {
-    const [v0, a0] = k[i - 1], [v1, a1] = k[i];
-    if (value <= v1) return a0 + ((a1 - a0) * (value - v0)) / (v1 - v0);
-  }
-  return k[k.length - 1][1];
-}
+export const dialAngle = (dial: Dial, value: number) => scaleAngle(dial.scale, value);
 
 /** Every tick value of a run, without the values another run draws. */
 export function tickValues(t: Dial['ticks'][number]) {
@@ -78,8 +72,19 @@ function sector(r0: number, r1: number, a0: number, a1: number) {
   return `M${n(x0)} ${n(y0)}A${n(r1)} ${n(r1)} 0 ${big} 1 ${n(x1)} ${n(y1)}L${n(x2)} ${n(y2)}A${n(r0)} ${n(r0)} 0 ${big} 0 ${n(x3)} ${n(y3)}Z`;
 }
 
-/** Dial art: bezel, face, painted ticks and sectors, legends, needle (turned to `value`), hub. */
-function gauge(dial: Dial, indicator: string, value: number) {
+/** Drum counter (totalizer): drums behind a window, each turned to its odometer position. */
+function counter(c: DrumCounter, value: number, clip: string) {
+  const [w, h] = c.window, pos = drumPositions(value, c.drums, c.fixed, c.unit);
+  let s = `<defs><clipPath id="${clip}"><rect x="${n(c.at[0] - w / 2)}" y="${n(c.at[1] - h / 2)}" width="${n(w)}" height="${n(h)}"/></clipPath></defs><g clip-path="url(#${clip})">`;
+  pos.forEach((p, k) => {
+    const x = c.at[0] + (k - (c.drums - 1) / 2) * c.pitch;
+    s += `<g transform="translate(${n(x)} ${n(c.at[1])})"><g data-drum="${c.indicator}" data-place="${k}" transform="translate(0 ${n(-p * c.roll)})">${drumStrip(c.roll, c.cap, c.width, k >= c.drums - c.fixed)}</g></g>`;
+  });
+  return s + `</g><g data-indicator="${c.indicator}"><rect class="lens" x="${n(c.at[0] - w / 2)}" y="${n(c.at[1] - h / 2)}" width="${n(w)}" height="${n(h)}" stroke="none"/></g>`;
+}
+
+/** Dial art: bezel, face, painted ticks and sectors, legends, counter, needle or pointers (turned to their values), hub. */
+function gauge(spec: PanelSpec, dial: Dial, indicator: string | undefined, value: (id: string) => number) {
   let s = gaugeBezel(dial.bezel, dial.face);
   for (const f of dial.fills ?? []) s += `<path d="${sector(f.r[0], f.r[1], dialAngle(dial, f.from), dialAngle(dial, f.to))}" fill="${INK}" ${sw('fine')}/>`;
   for (const t of dial.ticks) {
@@ -90,17 +95,44 @@ function gauge(dial: Dial, indicator: string, value: number) {
     s += `<path d="${d}" stroke-width="${n(t.width)}" stroke-linecap="butt"/>`;
   }
   s += dial.legends.map(l => text(l.at[0], l.at[1], l.text, l.cap, l.width)).join('');
-  s += `<g data-indicator="${indicator}"><circle class="lens" r="${n(dial.face)}" stroke="none"/>` +
-    `<g data-needle="${indicator}" transform="rotate(${n(dialAngle(dial, value))})">${needleArt(dial.needle)}</g></g>`;
+  if (dial.counter) s += counter(dial.counter, value(dial.counter.indicator), `drums-${spec.id}-${dial.counter.indicator}`);
+  if (indicator && dial.needle) s += `<g data-indicator="${indicator}"><circle class="lens" r="${n(dial.face)}" stroke="none"/>` +
+    `<g data-needle="${indicator}" transform="rotate(${n(dialAngle(dial, value(indicator)))})">${needleArt(dial.needle)}</g></g>`;
+  for (const p of dial.pointers ?? []) s += `<g data-indicator="${p.indicator}"><g data-needle="${p.indicator}" transform="rotate(${n(dialAngle(dial, value(p.indicator)))})">${paddlePointerArt(p.legend)}</g></g>`;
   return s + gaugeHub(dial.hub);
+}
+
+/** What the page needs to move a reading: a needle's scale or a counter's drums, and the range to try. */
+export type Reading =
+  | { kind: 'needle'; scale: Dial['scale']; range: [number, number, number] }
+  | { kind: 'counter'; drums: number; fixed: number; unit: number; roll: number; range: [number, number, number] };
+
+/** Every gauge and counter reading on a panel, by indicator id. */
+export function readings(spec: PanelSpec): Record<string, Reading> {
+  const out: Record<string, Reading> = {};
+  for (const p of spec.placements) {
+    if (p.component !== 'gauge') continue;
+    const { dial } = p, ind = (id: string) => spec.indicators.find(i => i.id === id);
+    const lo = dial.scale[0][0], hi = dial.scale[dial.scale.length - 1][0];
+    const needle = (id: string) => { out[id] = { kind: 'needle', scale: dial.scale, range: ind(id)?.range ?? [lo, hi, 10 ** Math.floor(Math.log10((hi - lo) / 100))] }; };
+    if (p.indicator) needle(p.indicator);
+    for (const q of dial.pointers ?? []) needle(q.indicator);
+    const c = dial.counter;
+    if (c) out[c.indicator] = { kind: 'counter', drums: c.drums, fixed: c.fixed, unit: c.unit, roll: c.roll, range: ind(c.indicator)?.range ?? [0, c.unit * 10 ** (c.drums - c.fixed) - c.unit, c.unit / 10] };
+  }
+  return out;
+}
+
+/** Every indicator a dial shows: its needle, its pointers and its counter. */
+export function dialIndicators(p: Extract<Placement, { component: 'gauge' }>) {
+  return [...(p.indicator ? [p.indicator] : []), ...(p.dial.pointers ?? []).map(q => q.indicator), ...(p.dial.counter ? [p.dial.counter.indicator] : [])];
 }
 
 function placement(spec: PanelSpec, p: Placement, state: Record<string, string>): string {
   switch (p.component) {
     case 'gauge': {
-      const ind = spec.indicators.find(i => i.id === p.indicator);
-      const value = state[p.indicator] !== undefined ? Number(state[p.indicator]) : ind?.rest ?? p.dial.scale[0][0];
-      return at(p.at, gauge(p.dial, p.indicator, value), ' data-art="gauge"');
+      const value = (id: string) => state[id] !== undefined ? Number(state[id]) : spec.indicators.find(i => i.id === id)?.rest ?? p.dial.scale[0][0];
+      return at(p.at, gauge(spec, p.dial, p.indicator, value), ' data-art="gauge"');
     }
     case 'dzus': case 'screw': case 'screw-medium': case 'screw-small':
       if (p.component === 'dzus' && p.cut) {
@@ -288,8 +320,17 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         return [{ kind: 'control', id: p.control, box: [x0, y0, Math.max(...xs) - x0, Math.max(...ys) - y0] }];
       }
       case 'gauge': {
-        const r = p.dial.bezel;
-        return [{ kind: 'indicator', id: p.indicator, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
+        const r = p.dial.bezel, zones: HitZone[] = [];
+        if (p.indicator) zones.push({ kind: 'indicator', id: p.indicator, box: [x - r, y - r, 2 * r, 2 * r], round: true });
+        // Pointers: a round zone over the letters at the pointer's cold-and-dark reading.
+        for (const q of p.dial.pointers ?? []) {
+          const rest = spec.indicators.find(i => i.id === q.indicator)?.rest ?? p.dial.scale[0][0];
+          const [px, py] = polar((PADDLE_POINTER.outer + PADDLE_POINTER.inner) / 2, dialAngle(p.dial, rest)), zr = 4.5;
+          zones.push({ kind: 'indicator', id: q.indicator, box: [x + px - zr, y + py - zr, 2 * zr, 2 * zr], round: true });
+        }
+        const c = p.dial.counter;
+        if (c) zones.push({ kind: 'indicator', id: c.indicator, box: [x + c.at[0] - c.window[0] / 2, y + c.at[1] - c.window[1] / 2, c.window[0], c.window[1]] });
+        return zones;
       }
       case 'lamp-round': {
         const r = LAMPS[p.component].r;

@@ -1,0 +1,7 @@
+{
+ "_how": "Blob numbers come from: scripts/gauge-dial.py blobs <p58.png> <dir> fuel 106 109 68 100 150 (p58.png = pdfimages -j -f 58 -l 58 image 002 converted to PNG). Blobs 8 and 14 are the pointers, 4/11/17/19/25/27/29+ are numerals. Then: scripts/gauge-dial.py fit <p58.png> <dir> <this file>.",
+ "fuel": {
+  "pairs": "45:0,47:1,48:2,49:3,50:4,52:5,53:6,54:7,55:8,56:9,58:10,60:11,61:12,62:13,63:14,65:15,67:16,68:17,69:18,70:19,72:20,74:21,0:22,1:23,2:24,3:25,5:26,6:27,7:28,9:29,10:30,12:31,13:32,15:33,16:34,18:35,20:36,21:37,22:38,23:39,24:40,26:41,28:42",
+  "classes_every": [[5, "M"], [1, "m"]]
+ }
+}
