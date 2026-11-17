@@ -11,6 +11,22 @@ export async function findPassages(pagefind, question, base, origin) {
     .filter((word) => !ignoredWords.has(word));
   if (!words.length) return [];
 
+  // Aircraft variants usually share one encyclopedia record: F-14B → F-14.
+  const aircraft = question.match(/\b([a-z]{1,3})[-–]?(\d{1,3})[a-z]?\b/i);
+  if (aircraft) {
+    const designator = `${aircraft[1]}-${aircraft[2]}`.toLowerCase();
+    const expectedPath = `${base}encyclopedia/aircraft/${designator}/`;
+    const { results } = await pagefind.search(designator);
+    const pages = await Promise.all(results.slice(0, 12).map(result => result.data()));
+    const record = pages.find(page => {
+      const url = new URL(page.url, origin);
+      return url.origin === origin && url.pathname === expectedPath;
+    });
+    if (record?.plain_excerpt) {
+      return [{ url: expectedPath, title: record.meta?.title ?? designator.toUpperCase(), excerpt: record.plain_excerpt }];
+    }
+  }
+
   // Shorter phrases recover matches when the full question is too specific.
   const concise = words.filter(word => word !== "freq" && word !== "frequency");
   const queries = [...new Set([concise.join(" "), words.join(" "), words.slice(0, 3).join(" "), words.slice(-3).join(" "), words.slice(0, 2).join(" "), words.slice(-2).join(" ")])];
