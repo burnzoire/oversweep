@@ -60,7 +60,7 @@ export async function findPassages(pagefind, question, base, origin) {
     const record = page.url === named?.entry.u;
     const bonus = record ? 5 : 0;
     if (page.plain_excerpt) {
-      candidates.push({ url: page.url, title, excerpt: page.plain_excerpt, score: scoreText(page.plain_excerpt) + bonus + (record ? 1 : 0) });
+      candidates.push({ url: page.url, title, excerpt: page.plain_excerpt, score: scoreText(page.plain_excerpt) + bonus });
     }
     for (const section of page.sub_results ?? []) {
       if (!section.url.startsWith(page.url + "#") || !section.plain_excerpt || /#(?:sources(?:-title)?|[^#]*fig-title)$/.test(section.url)) continue;
