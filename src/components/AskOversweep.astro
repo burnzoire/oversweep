@@ -27,12 +27,14 @@ const { id } = Astro.props;
     const reset = panel.closest("dialog")?.querySelector<HTMLButtonElement>("[data-new-chat]")
       ?? panel.querySelector<HTMLButtonElement>("[data-new-chat]");
     let previous = "";
+    let citedPassages: Awaited<ReturnType<typeof findPassages>> = [];
     let lastQuestion = "";
     let generation = 0;
 
     reset?.addEventListener("click", () => {
       generation++;
       previous = "";
+      citedPassages = [];
       lastQuestion = "";
       thread.replaceChildren();
       form.reset();
@@ -73,9 +75,11 @@ const { id } = Astro.props;
       try {
         const pagefind = await import(/* @vite-ignore */ panel.dataset.index!);
         const search = (query: string) => findPassages(pagefind, query, panel.dataset.base!, location.origin);
-        const followUp = previous && (/\b(it|they|that|those|this|them|same)\b/i.test(question) || /^(and|what about|how about)\b/i.test(question));
-        const contextual = followUp ? await search(question + " " + previous) : [];
-        const passages = contextual.length ? contextual : await search(question);
+        const refersBack = Boolean(previous && /\b(it|they|that|those|this|them|same)\b/i.test(question));
+        const followUp = refersBack || Boolean(previous && /^(and|what about|how about)\b/i.test(question));
+        const retained = refersBack && !retry && citedPassages.length > 0;
+        const contextual = followUp && !retained ? await search(question + " " + previous) : [];
+        const passages = retained ? citedPassages : contextual.length ? contextual : await search(question);
         if (turn !== generation) return;
         let generated: { answer?: string; ids?: string[] } | undefined;
         let quota = false;
@@ -84,7 +88,7 @@ const { id } = Astro.props;
             const response = await fetch(panel.dataset.endpoint, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ question, previous: previous || undefined, ids: passages.map(passage => passage.url) }),
+              body: JSON.stringify({ question, previous: followUp ? previous : undefined, ids: passages.map(passage => passage.url) }),
               signal: AbortSignal.timeout(12000),
             });
             const payload = await response.json();
@@ -95,7 +99,13 @@ const { id } = Astro.props;
           }
         }
         if (turn !== generation) return;
-        if (!followUp) previous = question;
+        if (!followUp) {
+          previous = question;
+          citedPassages = [];
+        }
+        if (generated?.ids?.length) {
+          citedPassages = passages.filter(passage => generated.ids!.includes(passage.url));
+        }
         const sources = document.createElement("ul");
         for (const passage of passages) {
           if (generated?.ids && !generated.ids.includes(passage.url)) continue;
