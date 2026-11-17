@@ -88,10 +88,15 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'test', title: 'TEST panel', page: 72 },
         { id: 'canopy-jettison', title: 'Canopy jettison T-handle', page: 74 },
         { id: 'anti-g-test', title: 'ANTI-G TEST button', page: 62 },
-        // One page for the sidewall outboard of the console: canopy switch and
+      ],
+    },
+    {
+      id: 'left-sidewall', title: 'Left sidewall', panels: [
+        { id: 'throttle', title: 'Throttle', page: 86 },
+        // One page for the controls on the sidewall itself: canopy switch and
         // handle (p. 73), DEFOG lever (p. 74), manual canopy handcrank (p. 62)
         // and CHAFF/FLARE dispense button (p. 708).
-        { id: 'left-sidewall', title: 'Left sidewall', page: 73 },
+        { id: 'sidewall-controls', title: 'Sidewall controls', page: 73 },
       ],
     },
     {
