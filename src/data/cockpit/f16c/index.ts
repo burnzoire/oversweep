@@ -99,11 +99,12 @@ export const f16cCockpit: AircraftCockpit = {
     {
       id: 'left-sidewall', title: 'Left sidewall', panels: [
         { id: 'throttle', title: 'Throttle', page: 86 },
-        // One page for the controls on the vertical sidewall: manual canopy
-        // handcrank (p. 62), canopy switch and handle (p. 73) and CHAFF/FLARE
-        // dispense button (p. 708). DEFOG and the canopy jettison T-handle are
-        // on the (horizontal) left console.
+        // Controls on the vertical sidewall above the throttle: canopy switch
+        // and handle (p. 73) and CHAFF/FLARE dispense button (p. 708). The
+        // handcrank is further aft, so it has its own page. DEFOG and the
+        // canopy jettison T-handle are on the (horizontal) left console.
         { id: 'sidewall-controls', title: 'Sidewall controls', page: 73 },
+        { id: 'canopy-handcrank', title: 'Manual canopy handcrank', page: 62 },
       ],
     },
     {
