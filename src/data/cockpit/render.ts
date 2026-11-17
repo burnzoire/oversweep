@@ -329,6 +329,7 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         return [{ kind: 'control', id: p.control, box: [x - w / 2, y - bh / 2, w, bh] }];
       }
       case 'traced': {
+        if (p.hit) return [{ kind: 'control', id: p.control, box: p.hit }];
         // Bounds of every position's outline.
         const nums = Object.values(p.shapes).flatMap(sh => (sh.d.match(/-?\d*\.?\d+/g) ?? []).map(Number));
         const xs = nums.filter((_, i) => i % 2 === 0), ys = nums.filter((_, i) => i % 2 === 1);
