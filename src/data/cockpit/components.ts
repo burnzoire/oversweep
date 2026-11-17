@@ -306,7 +306,7 @@ export const KNOBS = {
   'knob-round': { r: 10, lobes: 0, ridge: [0.98, 0.1], edge: true, fin: 0.3 },
   /** Smaller knob-round, same grip (AUDIO 1 THREAT, AUDIO 2 ILS). */
   'knob-round-small': { r: 7.4, lobes: 0, ridge: [0.98, 0.1], edge: true, fin: 0.3 },
-  /** Cross knob cut from a round base: four straight arms ending on the base circle, index along one arm (AUDIO 2 INTERCOM). */
+  /** Cross knob on a round base: four straight arms ending on the base circle, the base filling the gaps, index along one arm (AUDIO 2 INTERCOM). */
   'knob-cross': { r: 11, lobes: 0, ridge: [0.98, 0.1], cross: 0.42 },
   /** Small four-lobed cross knob (AUDIO 2 TACAN). */
   'knob-cross-small': { r: 7.9, lobes: 0, ridge: [0.98, 0.13], cross: 0.42 },
@@ -404,7 +404,8 @@ export function knobArt(art: keyof typeof KNOBS) {
       for (let j = 0; j < 32; j++) { const m = (lo + hi) / 2; if (sdf(m * Math.sin(a), -m * Math.cos(a)) <= 0) lo = m; else hi = m; }
       pts.push(`${n(lo * Math.sin(a))} ${n(-lo * Math.cos(a))}`);
     }
-    return cased(`<path d="M${pts.join('L')}Z" fill="${PAPER}"/>`, 'heavy') +
+    // The round base fills the gaps between the arms.
+    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + cased(`<path d="M${pts.join('L')}Z" fill="${PAPER}"/>`, 'heavy') +
       `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
       `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
   }
