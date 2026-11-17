@@ -77,6 +77,9 @@ export function createHandler(corpus) {
             },
           },
         },
+        ...(model === "@cf/google/gemma-4-26b-a4b-it"
+          ? { chat_template_kwargs: { enable_thinking: false } }
+          : {}),
         max_completion_tokens: 250,
         temperature: 0.1,
       });
@@ -92,6 +95,10 @@ export function createHandler(corpus) {
     try {
       if (typeof reply === "string") reply = JSON.parse(reply.trim().replace(/^```(?:json)?\s*|\s*```$/g, ""));
     } catch {
+      if (result?.choices?.[0]?.finish_reason === "length") {
+        logFailure("response_truncated");
+        return json({ code: "invalid_answer", stage: "response_truncated" }, 502);
+      }
       logFailure("response_json");
       return json({ code: "invalid_answer", stage: "response_json" }, 502);
     }
