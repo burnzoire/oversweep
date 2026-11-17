@@ -489,32 +489,39 @@ export function gearKnob([w, h]: [number, number], y: number, indicator?: string
  * closed. `size` is the closed footprint. Open, it stands up toward the viewer
  * and is seen edge-on as a short band at the hinge.
  *
- * `half`: one cover of a split pair (EPU: one cover over each throw). The
- * lever slot is then a notch in the inner corner of the free end, on the
- * named side, so the two covers together leave the lever's centre slot.
+ * Traced from the FUEL MASTER and EPU guards in the DCS F-16C guide (pp. 64,
+ * 67): one bent sheet of aluminium, its long sides folded down into flanges
+ * (the fold lines), a small cut-out in each side about halfway up, two prongs
+ * either side of the lever slot at the free end, and hinge plates fixed to the
+ * panel at both hinge corners.
  */
-export function guardArt(size: [number, number], open: boolean, half?: 'left' | 'right') {
+export function guardArt(size: [number, number], open: boolean) {
   const [w, h] = size;
   const x = -w / 2;
+  // Hinge plates: fixed to the panel at the hinge corners, half under the guard.
+  const pw = w * 0.09, pl = h * 0.08;
+  const plates = [x, -x].map(px => cased(`<rect x="${n(px - pw / 2)}" y="${n(-pl)}" width="${n(pw)}" height="${n(pl * 1.6)}" rx="0.3" fill="${PAPER}"/>`, 'medium')).join('');
   if (open) {
     const band = h * 0.2;
-    return cased(`<rect x="${n(x)}" y="${n(-band)}" width="${n(w)}" height="${n(band)}" rx="0.6" fill="${PAPER}"/>`, 'heavy') +
+    return plates + cased(`<rect x="${n(x)}" y="${n(-band)}" width="${n(w)}" height="${n(band)}" rx="0.6" fill="${PAPER}"/>`, 'heavy') +
       `<path d="M${n(x + 1)} ${n(-band * 0.5)}H${n(-x - 1)}" ${sw('fine')}/>`;
   }
-  if (half) {
-    const s = half === 'right' ? 1 : -1, inner = s * w / 2, outer = -s * w / 2;
-    // Half the cover's width, so the two notches together clear the lever's ball.
-    const nw = w * 0.5, nd = h * 0.27, rn = Math.min(1.2, nw / 2), r = w * 0.2, top = -h;
-    const d = `M${n(inner)} 0V${n(top + nd)}H${n(inner - s * (nw - rn))}Q${n(inner - s * nw)} ${n(top + nd)} ${n(inner - s * nw)} ${n(top + nd - rn)}` +
-      `V${n(top)}H${n(outer + s * r)}Q${n(outer)} ${n(top)} ${n(outer)} ${n(top + r)}V-1.2Q${n(outer)} 0 ${n(outer + s * 1.2)} 0Z`;
-    return cased(`<path d="${d}" fill="${PAPER}"/>`, 'heavy') +
-      `<path d="M${n(outer + s * 1.2)} ${n(-h * 0.7)}V${n(-h * 0.22)}M${n(outer)} ${n(-h * 0.14)}H${n(inner)}M${n(outer)} ${n(-h * 0.08)}H${n(inner)}" ${sw('fine')}/>`;
-  }
-  // Closed: U-shaped cover with a notch at the top for the lever and side slots.
-  const notch = w * 0.4, nd = h * 0.27;
-  const d = `M${n(x)} ${n(-h)}H${n(-notch / 2)}V${n(-h + nd)}Q0 ${n(-h + nd + 1.2)} ${n(notch / 2)} ${n(-h + nd)}V${n(-h)}H${n(-x)}V-1.2Q${n(-x)} 0 ${n(-x - 1.2)} 0H${n(x + 1.2)}Q${n(x)} 0 ${n(x)} -1.2Z`;
-  return cased(`<path d="${d}" fill="${PAPER}"/>`, 'heavy') +
-    `<path d="M${n(x + 1.4)} ${n(-h * 0.7)}V${n(-h * 0.22)}M${n(-x - 1.4)} ${n(-h * 0.7)}V${n(-h * 0.22)}M${n(x)} ${n(-h * 0.14)}H${n(-x)}M${n(x)} ${n(-h * 0.08)}H${n(-x)}" ${sw('fine')}/>`;
+  // Closed: outline from the hinge's left corner round the left side (with its
+  // cut-out), over the left prong, down into the lever slot and out again.
+  const notch = w * 0.4, nd = h * 0.27, r = w * 0.15;
+  const cd = w * 0.07, c0 = -h * 0.48, c1 = -h * 0.56;
+  const side = (sx: number) => ({ ex: sx * -x, ix: sx * (-x - cd) });
+  const L = side(-1), R = side(1);
+  const d = `M${n(L.ex + 1.2)} 0Q${n(L.ex)} 0 ${n(L.ex)} -1.2V${n(c0)}H${n(L.ix)}V${n(c1)}H${n(L.ex)}` +
+    `V${n(-h + r)}Q${n(L.ex)} ${n(-h)} ${n(L.ex + r)} ${n(-h)}H${n(-notch / 2 - r)}Q${n(-notch / 2)} ${n(-h)} ${n(-notch / 2)} ${n(-h + r)}` +
+    `V${n(-h + nd - notch / 2)}A${n(notch / 2)} ${n(notch / 2)} 0 0 0 ${n(notch / 2)} ${n(-h + nd - notch / 2)}` +
+    `V${n(-h + r)}Q${n(notch / 2)} ${n(-h)} ${n(notch / 2 + r)} ${n(-h)}H${n(R.ex - r)}Q${n(R.ex)} ${n(-h)} ${n(R.ex)} ${n(-h + r)}` +
+    `V${n(c1)}H${n(R.ix)}V${n(c0)}H${n(R.ex)}V-1.2Q${n(R.ex)} 0 ${n(R.ex - 1.2)} 0Z`;
+  // Fold lines of the side flanges, broken at the cut-outs; a line across near the hinge.
+  const f = w * 0.13;
+  const folds = `M${n(x + f)} ${n(-h * 0.06)}V${n(c0)}M${n(x + f)} ${n(c1)}V${n(-h + r)}` +
+    `M${n(-x - f)} ${n(-h * 0.06)}V${n(c0)}M${n(-x - f)} ${n(c1)}V${n(-h + r)}M${n(x)} ${n(-h * 0.06)}H${n(-x)}`;
+  return plates + cased(`<path d="${d}" fill="${PAPER}"/>`, 'heavy') + `<path d="${folds}" ${sw('fine')}/>`;
 }
 
 /* ------------------------------------------------------------ lamp module */

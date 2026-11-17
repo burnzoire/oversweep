@@ -145,7 +145,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     set(c, to.id);
     if (c.guards && to.id === 'closed') {
       const guarded = byId.get(c.guards.control);
-      if (guarded && pos(guarded) !== c.guards.closesTo && (!c.guards.when || c.guards.when.includes(pos(guarded)))) set(guarded, c.guards.closesTo);
+      if (guarded && pos(guarded) !== c.guards.closesTo) set(guarded, c.guards.closesTo);
     }
     say(`${c.name}: ${to.label}.`);
   };

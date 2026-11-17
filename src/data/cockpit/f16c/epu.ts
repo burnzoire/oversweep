@@ -26,9 +26,8 @@ const cellTop = [0.9, 0.9, LW - 1.8, (LH - 1.8) / 2] as [number, number, number,
 const cellBot = [0.9, 0.9 + (LH - 1.8) / 2, LW - 1.8, (LH - 1.8) / 2] as [number, number, number, number];
 /** Module centre (px) on the rectified reference; `at` is its unturned top-left corner. */
 const MOD: [number, number] = [271, 81.5];
-/** Split guard: two covers hinged along the top edge, one over each half of the switch. */
-const COVER: [number, number] = [mm(23), mm(71)];
-const closedOpen = [{ id: 'closed', label: 'Closed', hold: 'stable' as const }, { id: 'open', label: 'Open', hold: 'stable' as const }];
+/** Guard (the FUEL MASTER guard's component), hinged along the top edge; footprint measured off the reference, centred on the pivot. */
+const GUARD: [number, number] = [mm(46), mm(71)];
 
 export const epu: PanelSpec = {
   id: 'epu',
@@ -42,12 +41,11 @@ export const epu: PanelSpec = {
     rectify: 'python3 -I scripts/panel-trace.py <p64-002.png> <out> 26,22 327,25 33,140 335,134 350 158',
     pxPerMm: PX,
     scale: 'DZUS heads measure 26–28 px (8.5 mm) and the HYDRAZN/AIR module 50 x 55 px, the same module as on ELEC (15.4 x 16.7 mm); 3.25 px/mm fits both.',
-    shown: { 'epu-off-cover': 'closed', 'epu-on-cover': 'closed', epu: 'norm' },
+    shown: { 'epu-guard': 'closed', epu: 'norm' },
     unresolved: [
       'The plate\'s left and right edges are cropped in the reference; the drawn edges sit at the crop.',
-      'The guard is drawn as two covers, one over the OFF throw and one over the ON throw, from the seam down its middle and the hinge blocks at both top corners. The guide text does not describe the guard; how the covers open in the simulator is to be confirmed.',
-      'The switch bushing is mostly hidden by the guard; a silver ring shows below it rather than the orange grommet of other plain toggles. It is drawn as a large plain toggle, since a guard must be able to shut it.',
-      'The guard\'s hinge blocks on the plate are not drawn.',
+      'The guide text does not describe the guard. It is drawn as the FUEL MASTER guard, keeping the switch at NORM while closed; whether it blocks only one throw in the simulator is to be confirmed.',
+      'The switch bushing is mostly hidden by the guard; it is drawn as the plain toggle used under the FUEL MASTER guard.',
     ],
   },
   plate: [
@@ -74,9 +72,8 @@ export const epu: PanelSpec = {
     { component: 'dzus', at: pt(28.5, 138) },
     { component: 'dzus', at: pt(327.5, 138) },
     { component: 'screw', at: pt(14, 76) },
-    { component: 'toggle-large', control: 'epu', at: pt(...PIVOT) },
-    { component: 'guard-flip', control: 'epu-off-cover', at: pt(PIVOT[0] - 11.5, 17), size: COVER, half: 'left', rotate: 180 },
-    { component: 'guard-flip', control: 'epu-on-cover', at: pt(PIVOT[0] + 11.5, 17), size: COVER, half: 'right', rotate: 180 },
+    { component: 'toggle-medium', control: 'epu', at: pt(...PIVOT) },
+    { component: 'guard-flip', control: 'epu-guard', at: pt(PIVOT[0], 17), size: GUARD, rotate: 180 },
     { component: 'lamp-round', indicator: 'epu-run', at: pt(199.5, 112.5) },
     { component: 'lamp-module', at: [+(mm(MOD[0]) - LW / 2).toFixed(3), +(mm(MOD[1]) - LH / 2).toFixed(3)], size: [LW, LH], rotate: 90, lamps: [
       { indicator: 'hydrazn', legend: 'HYDRAZN', rect: cellTop, cap: 2.8, width: mm(34) },
@@ -85,16 +82,12 @@ export const epu: PanelSpec = {
   ],
   controls: [
     {
-      id: 'epu-off-cover', name: 'EPU switch cover (OFF)', type: 'guard', positions: closedOpen, initial: 'closed',
-      guards: { control: 'epu', closesTo: 'norm', when: ['off'] },
-      description: 'Red cover over the OFF side of the EPU switch. Closed, it keeps the switch out of OFF; closing it with the switch at OFF pushes it back to NORM.',
-      source: `${src} (image); the cover's behaviour is not in the guide text`,
-    },
-    {
-      id: 'epu-on-cover', name: 'EPU switch cover (ON)', type: 'guard', positions: closedOpen, initial: 'closed',
-      guards: { control: 'epu', closesTo: 'norm', when: ['on'] },
-      description: 'Red cover over the ON side of the EPU switch. Closed, it keeps the switch out of ON; closing it with the switch at ON pushes it back to NORM.',
-      source: `${src} (image); the cover's behaviour is not in the guide text`,
+      id: 'epu-guard', name: 'EPU switch guard', type: 'guard',
+      positions: [{ id: 'closed', label: 'Closed', hold: 'stable' }, { id: 'open', label: 'Open', hold: 'stable' }],
+      initial: 'closed',
+      guards: { control: 'epu', closesTo: 'norm' },
+      description: 'Red guard over the EPU switch. The switch is kept at NORM with the guard closed; closing the guard pushes the switch back to NORM.',
+      source: `${src} (image); the guard is not described in the guide text`,
     },
     {
       id: 'epu', name: 'EPU switch', type: 'toggle', travel: 'horizontal',
@@ -104,10 +97,7 @@ export const epu: PanelSpec = {
         { id: 'on', label: 'ON', hold: 'stable' },
       ],
       initial: 'norm',
-      protections: [
-        { kind: 'guard', guard: 'epu-off-cover', blockedWhen: 'closed', to: ['off'], verified: false, note: 'The OFF cover is closed. Open it first.' },
-        { kind: 'guard', guard: 'epu-on-cover', blockedWhen: 'closed', to: ['on'], verified: false, note: 'The ON cover is closed. Open it first.' },
-      ],
+      protections: [{ kind: 'guard', guard: 'epu-guard', blockedWhen: 'closed', verified: false, note: 'Cannot leave NORM while the guard is closed. Open the guard first.' }],
       description: 'Sets the EPU to automatic operation or commands it on or off. OFF: commands the EPU off on the ground, and in flight unless both the main and standby generators have failed; if the switch has stayed at OFF since takeoff, EPU operation is inhibited in flight. NORM: normal operation; if set to NORM at any time since takeoff, the EPU starts automatically when main and standby generator power is lost or both hydraulic systems fail (not on the ground with the engine shut down). ON: commands the EPU on.',
       source: src,
     },

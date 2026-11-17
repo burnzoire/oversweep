@@ -148,7 +148,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
     }
     case 'guard-flip': {
       const c = controlOf(spec, p.control);
-      return at(p.at, turn(p.rotate, 0, 0, moving(c, state[c.id] ?? c.initial, i => guardArt(p.size, c.positions[i].id !== 'closed', p.half))), ` data-art="guard-flip"`);
+      return at(p.at, turn(p.rotate, 0, 0, moving(c, state[c.id] ?? c.initial, i => guardArt(p.size, c.positions[i].id !== 'closed'))), ` data-art="guard-flip"`);
     }
     case 'lamp-module': {
       const [w, h] = p.size;
