@@ -3,5 +3,15 @@
   "main": "index.mjs",
   "compatibility_date": "2026-11-17",
   "workers_dev": true,
-  "ai": { "binding": "AI" }
+  "ai": {
+    "binding": "AI"
+  },
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "invocation_logs": true,
+      "persist": true
+    }
+  }
 }
