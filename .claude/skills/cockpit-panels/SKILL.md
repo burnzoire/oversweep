@@ -36,6 +36,63 @@ Worked examples: F-16C `elec.ts` (toggle, pushbutton, lamp modules) and
   selecting one shows its meaning. Controls move one detent per click on the
   upper/lower (left/right) half; no pull/latch gesture is simulated (Nathan).
 
+## How console panels are built (reason from this, don't guess shapes)
+
+Side-console and instrument panels in US military jets follow a few public
+standards. Knowing the build tells you what a shape in a perspective photo
+must be.
+
+- **Console rails.** Panels drop into a console between two rails and are held
+  by quarter-turn DZUS-type fasteners (MIL-F-25173, "Dzus-type control panel
+  fastener") along the left and right edges only. Console panel outlines
+  follow MS25212 ("Control panel, console type, aircraft equipment, basic
+  dimensions"); 5.75 in is the common width between DZUS rails. So: all
+  panels on one console share a width, DZUS sit in columns near the side
+  edges at matching heights, and there are none on the top and bottom edges.
+  A fastener that looks off its column in the photo is perspective; put it
+  back on the column.
+- **Lighted plate on a mounting plate.** The face you see is an integrally
+  illuminated information panel (MIL-DTL-7788, formerly MIL-P-7788): one
+  sheet of acrylic about 0.23 in (5.8 mm) thick, finished opaque black
+  (Class 1) or gray (Class 2), with the legends left clear so the lamps
+  embedded inside light them from within. It is about 0.05 in (1.2 mm)
+  smaller each way than the metal mounting plate under it and is held to it
+  by 6-32 screws in grommets (MS3498), at least two, about one per 8 sq in,
+  spaced symmetrically. That is the "layered" step seen on ELEC: the lighted
+  plate sits proud of a slightly larger base. Where it must clear a DZUS
+  head, the lighted plate is notched or slotted; the base plate is not.
+  Immediate-action legends get yellow (or, for NVIS, yellow/black/white)
+  stripes. Small round screw heads inside the plate area are usually these
+  6-32 hold-down screws,
+  not DZUS: don't give them cut-outs.
+- **Controls pass through the plate.** Every switch, knob and lamp is mounted
+  to the structure behind and pokes through a hole in the plate, so its
+  centre is fixed by the hole: the bushing (toggle), shaft (rotary) or bezel
+  (lamp) is the centre, never where a lever tip or knob top appears. Panel
+  legends are engraved in the plate around those holes and never move.
+- **Toggle switches** are environmentally sealed (MIL-DTL-3950). The lever
+  pivots inside the bushing, so the shaft base is centred on the bushing and
+  the lever leans about 17 degrees each way. A lever-lock switch (e.g.
+  MS24658, Honeywell TL series "pull-to-unlock") has a slotted lock insert in
+  the bushing; the lever must be pulled out of a detent before it can move,
+  so a thrown lever-lock sits off-centre toward its throw (our `shift`).
+  Lever tops vary by part (flat-top mushroom, domed cap, square paddle):
+  pick the component by the bushing and cap, see §3a.
+- **Rotary knobs** are standard military knobs (MS91528 / NASM91528): round,
+  round skirted, skirted pointer, unskirted pointer, bar, and bar with a dial
+  skirt. A skirt is a wider flat disc at the knob's base carrying the index
+  mark; the mark lines up with legends or ticks printed on the plate, so a
+  pointer's line starts at the centre and points straight at a legend. A bar
+  knob's grip crosses the centre. Concentric knobs stack a small knob on a
+  larger skirted one on the same shaft.
+- **Use it to check a drawing.** If a shape in the guide image cannot be
+  explained by a rail, a plate layer, a fastener, a hole with a part through
+  it, or a printed legend, look again before drawing it.
+
+Sources: MIL-P-7788F (ibiblio.org/apollo/Documents/assist.dla.mil/MIL_P_7788F.pdf,
+§1.2, 3.4.2, 3.4.5, 3.7.2); MS25212C, MIL-F-25173A, MS24658, MIL-DTL-3950,
+MS91528 titles and scopes (everyspec.com listings); Honeywell TL datasheet.
+
 ## 1. Reference: official sim manual only
 
 Use the official guide of the simulator variant (DCS: Eagle Dynamics guide;
@@ -107,9 +164,8 @@ everything that stands proud of it.
     the throw (`shift`), so they look pivoted off-centre like the guide; don't
     lengthen the lever instead (Nathan, 2026-11-17).
   - When the bushing is hidden, say so in `source.unresolved`.
-- **DZUS cut-outs:** only where the guide shows one, the top plate layer (last `plate` entry) is notched around a corner DZUS; lower layers keep their outline. Set
-  `cut` to the plate corner the notch opens toward (`up-left` …); it is drawn
-  as two straight edges with a quarter round about the fastener.
+- **DZUS fasteners and cut-outs:** see "DZUS cut-outs" below; check every
+  panel for them.
 - **Engraving stays clear** of fastener cut-outs and the plate edge; tighten
   letter spacing rather than overlap.
 - **Square controls up with their legends.** The camera's perspective shifts
@@ -150,30 +206,39 @@ deliberate ones (square-on levers, controls squared with legends) or are
 recorded in `source.unresolved`. Zoom (`g.py`-style crops at 4x) on anything
 you cannot judge at full size, especially knob grips and bushings.
 
-**Measure plate steps and cut-outs; never guess them (Nathan, 2026-11-16).**
-For every DZUS, slot, strip, well and layer step:
-1. Zoom each one: `python3 -I scripts/panel-zoom.py <rect.png> x0 y0 x1 y1 6 out.png`
+### DZUS cut-outs (measure, never guess)
+
+Nathan rejected guessed DZUS cuts over and over (EXT LIGHTING, ECM, UHF), and
+AIR COND first shipped with none at all. Every panel gets this check, even when
+the cut-outs look obvious or absent.
+
+1. **Find them.** For each DZUS head (8.5 mm), zoom:
+   `python3 -I scripts/panel-zoom.py <rect.png> x0 y0 x1 y1 6 out.png`
    (contrast-stretched crop with a 5 px grid beside its edge map). Decide the
-   shape from what is visible: corner notch, side slot with a half-round end,
-   long strip, well.
-2. Measure each straight edge with `python3 -I scripts/panel-edge.py <rect.png>
-   row|col ...`, scanning rows or columns where nothing else (fastener rims,
-   legends, knobs) crosses, and take the position most lines agree on. Read
-   corner and end radii off the zoom where they are visible.
-3. Write the measured numbers into the plate path, with a comment giving them.
+   shape from what is visible. Shapes seen so far:
+   - corner notch, two straight edges and a quarter round about the fastener
+     (EXT LIGHTING, AIR COND); set `cut` to the plate corner it opens toward
+     (`up-left` …);
+   - side slot with a half-round end centred on the DZUS (ECM);
+   - long DZUS strip down the side plus a corner notch (UHF; its preset card
+     sits on the face, not in a well);
+   - none: the DZUS sits on the plate (say so in a comment).
+2. **Measure each straight edge** with `python3 -I scripts/panel-edge.py
+   <rect.png> row|col ...`, scanning rows or columns where nothing else
+   (fastener rims, legends, knobs) crosses, and take the position most lines
+   agree on. Read corner and end radii off the zoom where they are visible.
+3. **Make them symmetric.** The guide photos are skewed, so measured left and
+   right cut-outs never match. Draw left and right cut-outs (and their DZUS)
+   mirrored about the panel centre, at the mean of the measured heights, all
+   the same width. Only the area round the DZUS is cut. Inner radii are
+   generous (8–14 px, never about 7). The DZUS is centred in its slot or notch.
+4. **Write the numbers** into the plate path with a comment giving them.
    Where an edge is hidden (under a rim, a legend), say so in the comment and in
-   `unresolved` rather than inventing it.
-4. Check with `python3 -I scripts/panel-cut-sheet.py <rect.png> <out>-overlay.png
+   `unresolved` rather than inventing it. Cuts belong to the top plate layer
+   (the last `plate` entry); lower layers keep their outline.
+5. **Check** with `python3 -I scripts/panel-cut-sheet.py <rect.png> <out>-overlay.png
    sheet.png "TL:x0,y0,x1,y1" ...` (source crop beside the overlay for each
    cut-out), and show that sheet in the PR.
-
-Shapes seen so far: EXT LIGHTING and AIR COND have corner notches; ECM has
-side slots with a half-round end centred on each DZUS; UHF has long DZUS
-strips plus a top-left corner notch (the preset card sits on the face, not in
-a well). Nathan's rules (2026-11-16): only the area round the DZUS is cut;
-draw left and right cut-outs (and their DZUS) mirrored about the panel centre
-at the mean measured heights, all the same width; inner radii generous
-(8–14 px, never ~7); DZUS centred in its slot or notch.
 
 **Legend clearance.** Legends stay where the guide prints them; never move one
 to clear a lever. A thrown lever or cap may cover a legend, because the control
@@ -187,6 +252,12 @@ lever position) still lists what a bushing or lever tip covers, as information.
 
 - `src/data/cockpit/<aircraft>/index.ts`: attach the spec to its catalogue entry.
 - `node --test tests/cockpit.test.mjs`, `npm run check`.
+- **Tracker.** Each aircraft's cockpit has a tracker issue with one sub-issue
+  per catalogue panel (F-16C: #290, sub-issues #291–#355). Every panel PR body
+  says `Closes #N` for each panel sub-issue it completes, so merging closes
+  them and the tracker count updates itself. A PR that only revises an
+  already-closed panel says `Refs #N` instead. Add a sub-issue (under the
+  tracker) for a panel or part that has none before opening its PR.
 - Drive the page in Playwright: every control both ways, guards, momentary
   release, state kept after moving to another panel and back, no page errors.
 - Required in every panel PR (Nathan 2026-11-16, he reviews from these): for
