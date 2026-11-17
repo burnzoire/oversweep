@@ -56,6 +56,7 @@ import { sitePath } from "../lib/paths";
   dialog?.addEventListener("close", () => trigger?.focus());
 
   document.addEventListener("keydown", (event) => {
+    if (document.querySelector("dialog[open]:not([data-search-dialog])")) return;
     const target = event.target as HTMLElement;
     const typing = target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName);
     if ((event.key === "k" || event.key === "K") && (event.metaKey || event.ctrlKey)) {
