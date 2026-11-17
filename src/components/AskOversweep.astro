@@ -7,7 +7,7 @@ const { id } = Astro.props;
       <label for={id}>What would you like to know?</label>
       <div class="ask-controls">
         <input id={id} name="question" type="search" maxlength="300" required />
-        <button type="submit">Find passages</button>
+        <button type="submit">Send</button>
       </div>
     </form>
     <p data-ask-status role="status"></p>
@@ -33,7 +33,7 @@ const { id } = Astro.props;
       if (button.disabled || !question) return;
       button.disabled = true;
       results.replaceChildren();
-      status.textContent = "Finding passages…";
+      status.textContent = "Working on it…";
       try {
         const pagefind = await import(/* @vite-ignore */ panel.dataset.index!);
         const passages = await findPassages(pagefind, question, panel.dataset.base!, location.origin);
