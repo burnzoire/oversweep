@@ -10,9 +10,9 @@ import { tracer } from '../trace.ts';
  * image 002). The camera is almost square-on; the image was squared up on the
  * four flange screws. Values below are rectified reference pixels.
  *
- * Counter: digits 37.5 px tall and 23.5 px wide, drum centres 34.4 px apart
+ * Counter: stroked digits 37.5 px tall and 23.1 px wide (stroke 5.2 px), drum centres 34.4 px apart
  * (taken from the dark gaps between drums), so the drums are centred on
- * (157.7, 123.8). The two right-hand drums print only zeros and stay still
+ * (157.7, 124.5). The two right-hand drums print only zeros and stay still
  * (they are level with the 6, while the hundreds drum has rolled); the left
  * drum shows a blank for 0. The hundreds drum shows through a taller slot
  * (82–167 px) with the next digits above and below; 4 and 6 sit 44 px from the
@@ -59,9 +59,9 @@ export const fuelFlow: PanelSpec = {
     text('FUEL', 97, 78, 26, 72), text('FLOW', 222, 77.5, 25.5, 76), text('PPH', 158, 181.5, 17.5, 38),
   ],
   placements: [
-    { component: 'counter', at: pt(157.7, 123.8), counter: {
-      indicator: 'fuel-flow', at: [0, 0], drums: 5, fixed: 2, unit: 100, blank: 1, still: true,
-      pitch: mm(34.4), roll: mm(44), window: [mm(172), mm(45)], cap: mm(37.5), width: mm(29),
+    { component: 'counter', at: pt(157.7, 124.5), counter: {
+      indicator: 'fuel-flow', at: [0, 0], drums: 5, fixed: 2, unit: 100, blank: 1, still: true, stroked: true,
+      pitch: mm(34.4), roll: mm(44), window: [mm(172), mm(45)], cap: mm(37.5), width: mm(23.1),
       slots: [{ drum: 2, h: mm(85) }],
     } },
     { component: 'screw', at: pt(30, 30) }, { component: 'screw', at: pt(292, 30) },

@@ -669,12 +669,37 @@ export function paddlePointerArt([outer, inner]: [string, string]) {
     `<path d="M${n(-h + 0.6)} ${n(-p.bar)}H${n(h - 0.6)}" stroke="${PAPER}" ${sw('fine')}/>`;
 }
 
-/** One drum of a counter: digits 0–9 and 0 again (or only zeros), `roll` apart, centred on the origin at 0. */
-export function drumStrip(roll: number, cap: number, width: number, zeros = false, blank = false) {
+/**
+ * Stroked counter digits (uniform-stroke instrument lettering, as on the
+ * F-16C FUEL FLOW drums, guide p. 50): centre lines in a box drawn 37.5 high
+ * and 23.1 wide outside the stroke, centred on the origin. The 0, 5 and 6 are
+ * traced from the guide (straight diagonal tail on the 6, flat top on the 5);
+ * the other digits are drawn in the same style.
+ */
+const DIGIT_STROKE = 5.2, DIGIT_H = 37.5, DIGIT_W = 23.1;
+const STROKE_DIGITS: Record<string, string> = {
+  0: 'M0 -16.4C5.1 -16.4 9.2 -9.1 9.2 0S5.1 16.4 0 16.4S-9.2 9.1 -9.2 0S-5.1 -16.4 0 -16.4Z',
+  1: 'M-5 -11.4L1 -16.4V16.4',
+  2: 'M-8.8 -9.5C-8.8 -14 -5 -16.4 0 -16.4C5 -16.4 8.8 -13.5 8.8 -8.5C8.8 -4 6 -1 -9.2 16.4H9.2',
+  3: 'M-8.5 -16.4H8.5L-1 -2.2C5.6 -2.6 9.2 1.6 9.2 6.8C9.2 12.4 5 16.4 -0.2 16.4C-4.4 16.4 -7.8 14.4 -9.2 11',
+  4: 'M4.5 16.4V-16.4L-9.2 7H9.2',
+  5: 'M7.8 -16.4H-7.6L-8.4 -1.2C-6.2 -2.6 -3.4 -3.4 -0.4 -3.4C5.2 -3.4 9.2 0.8 9.2 6.5C9.2 12.2 5 16.4 -0.4 16.4C-4.4 16.4 -7.6 14.4 -9.2 11.2',
+  6: 'M6.5 -16.4L-7.38 1.17M9.4 7A9.4 9.4 0 1 1 -9.4 7A9.4 9.4 0 1 1 9.4 7Z',
+  7: 'M-9.2 -16.4H9.2L-2 16.4',
+  8: 'M0 -16.4C4.2 -16.4 7.6 -12.7 7.6 -8.2S4.2 0 0 0S-7.6 -3.7 -7.6 -8.2S-4.2 -16.4 0 -16.4ZM0 0C5 0 9.2 3.3 9.2 8.2S5 16.4 0 16.4S-9.2 13.1 -9.2 8.2S-5 0 0 0Z',
+  9: 'M-6.5 16.4L7.38 -1.17M-9.4 -7A9.4 9.4 0 1 1 9.4 -7A9.4 9.4 0 1 1 -9.4 -7Z',
+};
+function strokeDigit(d: number, y: number, cap: number, width: number) {
+  return `<path transform="translate(0 ${n(y)}) scale(${n(width / DIGIT_W)} ${n(cap / DIGIT_H)})" d="${STROKE_DIGITS[d]}" fill="none" stroke="${INK}" stroke-width="${DIGIT_STROKE}" stroke-linecap="round" stroke-linejoin="round"/>`;
+}
+
+/** One drum of a counter: digits 0–9 and 0 again (or only zeros), `roll` apart, centred on the origin at 0. `stroked` draws the shared stroked digits instead of type. */
+export function drumStrip(roll: number, cap: number, width: number, zeros = false, blank = false, stroked = false) {
   let s = '';
   for (let i = -1; i <= 10; i++) {
     const d = zeros ? 0 : (i + 10) % 10;
-    if (!(blank && d === 0)) s += text(0, i * roll, String(d), cap, width);
+    if (blank && d === 0) continue;
+    s += stroked ? strokeDigit(d, i * roll, cap, width) : text(0, i * roll, String(d), cap, width);
   }
   return s;
 }

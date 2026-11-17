@@ -197,6 +197,8 @@ export interface DrumCounter {
   /** Digit cap height and width. */
   cap: number;
   width: number;
+  /** Draw the shared stroked digits (traced instrument lettering) instead of type, so every viewer sees the same shapes. */
+  stroked?: boolean;
   /** Leading drums that show a blank instead of 0 (F-16C FUEL FLOW ten-thousands drum). */
   blank?: number;
   /** The `fixed` zero drums stay still instead of rolling with the lowest rolling drum. */

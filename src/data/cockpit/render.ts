@@ -81,7 +81,7 @@ function counter(c: DrumCounter, value: number, clip: string) {
     .map(([x, y, rw, rh]) => `<rect x="${n(x)}" y="${n(y)}" width="${n(rw)}" height="${n(rh)}"`);
   let s = `<defs><clipPath id="${clip}">${rects.map(r => r + '/>').join('')}</clipPath></defs><g clip-path="url(#${clip})">`;
   pos.forEach((p, k) => {
-    s += `<g transform="translate(${n(drumX(k))} ${n(c.at[1])})"><g data-drum="${c.indicator}" data-place="${k}" transform="translate(0 ${n(-p * c.roll)})">${drumStrip(c.roll, c.cap, c.width, k >= c.drums - c.fixed, k < (c.blank ?? 0))}</g></g>`;
+    s += `<g transform="translate(${n(drumX(k))} ${n(c.at[1])})"><g data-drum="${c.indicator}" data-place="${k}" transform="translate(0 ${n(-p * c.roll)})">${drumStrip(c.roll, c.cap, c.width, k >= c.drums - c.fixed, k < (c.blank ?? 0), c.stroked)}</g></g>`;
   });
   return s + `</g><g data-indicator="${c.indicator}">${rects.map(r => r + ' class="lens" stroke="none"/>').join('')}</g>`;
 }
