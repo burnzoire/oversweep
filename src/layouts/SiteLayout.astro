@@ -1,4 +1,5 @@
 ---
+import AskLauncher from "../components/AskLauncher.astro";
 import BrandMark from "../components/BrandMark.astro";
 import SiteSearch from "../components/SiteSearch.astro";
 import PreviewSwitch from "../components/PreviewSwitch.astro";
@@ -239,5 +240,6 @@ const subjects = manualSubjects.map((subject) => ({ ...subject, count: subjectEn
         <p class="footer-copyright">© {new Date().getFullYear()} Oversweep. All rights reserved. <a href={sitePath("legal/")}>Legal notice</a></p>
       </div>
     </footer>
+    {Astro.url.pathname !== sitePath("ask") && <AskLauncher />}
   </body>
 </html>

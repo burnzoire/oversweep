@@ -1,0 +1,59 @@
+---
+import AskOversweep from "./AskOversweep.astro";
+---
+
+<button class="ask-launcher" type="button" aria-haspopup="dialog" aria-controls="ask-dialog" data-ask-launcher hidden>
+  Ask Oversweep
+</button>
+<dialog id="ask-dialog" aria-labelledby="ask-dialog-title">
+  <header>
+    <h2 id="ask-dialog-title">Ask Oversweep</h2>
+    <form method="dialog"><button type="submit">Close</button></form>
+  </header>
+  <AskOversweep id="ask-dialog-question" />
+</dialog>
+
+<script>
+  const launcher = document.querySelector<HTMLButtonElement>("[data-ask-launcher]");
+  const dialog = document.querySelector<HTMLDialogElement>("#ask-dialog");
+
+  if (launcher && dialog) {
+    launcher.hidden = false;
+    launcher.addEventListener("click", () => {
+      dialog.showModal();
+      dialog.querySelector<HTMLInputElement>("#ask-dialog-question")?.focus();
+    });
+    dialog.addEventListener("close", () => launcher.focus());
+  }
+</script>
+
+<style>
+  .ask-launcher {
+    position: fixed;
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    right: max(1rem, env(safe-area-inset-right));
+    z-index: 20;
+    color: white;
+    background: var(--color-ink);
+    padding: .7rem 1rem;
+  }
+  button { cursor: pointer; font: inherit; }
+  dialog {
+    position: fixed;
+    inset: auto max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) auto;
+    margin: 0;
+    box-sizing: border-box;
+    width: min(28rem, calc(100% - 2rem));
+    max-height: calc(100dvh - 2rem);
+    padding: 1rem;
+    color: var(--color-ink);
+    background: white;
+    border: 1px solid currentColor;
+  }
+  dialog::backdrop { background: rgb(0 0 0 / .24); }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+  h2 { margin: 0; }
+  @media (max-width: 40rem) {
+    dialog { inset: 0; width: 100%; height: 100dvh; max-width: none; max-height: none; }
+  }
+</style>

@@ -1,0 +1,73 @@
+---
+import { assetPath, sitePath } from "../lib/paths";
+const { id } = Astro.props;
+---
+  <section class="ask" data-ask data-index={assetPath("pagefind/pagefind.js")} data-base={sitePath()}>
+    <form>
+      <label for={id}>What would you like to know?</label>
+      <div class="ask-controls">
+        <input id={id} name="question" type="search" maxlength="300" required />
+        <button type="submit">Find passages</button>
+      </div>
+    </form>
+    <p data-ask-status role="status"></p>
+    <ol data-ask-results aria-label="Matching passages"></ol>
+    <noscript><p>Enable JavaScript to find passages.</p></noscript>
+  </section>
+
+
+<script>
+  import { findPassages } from "../scripts/ask-oversweep.mjs";
+
+  for (const panel of document.querySelectorAll<HTMLElement>("[data-ask]")) {
+    const form = panel.querySelector<HTMLFormElement>("form")!;
+    const input = form.querySelector<HTMLInputElement>("input")!;
+    const button = form.querySelector<HTMLButtonElement>("button")!;
+    const status = panel.querySelector<HTMLElement>("[data-ask-status]")!;
+    const results = panel.querySelector<HTMLOListElement>("[data-ask-results]")!;
+    const text = document.createElement("textarea");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const question = input.value.trim();
+      if (button.disabled || !question) return;
+      button.disabled = true;
+      results.replaceChildren();
+      status.textContent = "Finding passages…";
+      try {
+        const pagefind = await import(/* @vite-ignore */ panel.dataset.index!);
+        const passages = await findPassages(pagefind, question, panel.dataset.base!, location.origin);
+        for (const passage of passages) {
+          const result = document.createElement("li");
+          const link = document.createElement("a");
+          const quote = document.createElement("blockquote");
+          link.href = passage.url;
+          link.textContent = passage.title;
+          text.innerHTML = passage.excerpt;
+          quote.textContent = text.value;
+          result.append(link, quote);
+          results.append(result);
+        }
+        status.textContent = passages.length
+          ? "Matching Oversweep passages"
+          : "No matching passages. Try a shorter question or a specific term.";
+      } catch {
+        status.textContent = "Passage search is temporarily unavailable.";
+      } finally {
+        button.disabled = false;
+      }
+    });
+}
+</script>
+
+<style>
+  .ask { max-width: 42rem; }
+  .ask-controls { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
+  input { flex: 1 1 16rem; min-width: 0; }
+  input, button { font: inherit; padding: .65rem .8rem; }
+  button { color: white; background: var(--color-ink); border: 1px solid var(--color-ink); cursor: pointer; }
+  button:disabled { opacity: .65; cursor: wait; }
+  ol { padding-inline-start: 1.5rem; }
+  .ask :global(li) { padding-block: .6rem; }
+  .ask :global(blockquote) { margin: .4rem 0 0; }
+</style>
