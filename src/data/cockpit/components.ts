@@ -260,8 +260,8 @@ function leverOnPivot(art: keyof typeof TOGGLES, k: number, count = 0) {
 /* --------------------------------------------------------------- rotaries */
 
 export const ROTARIES = {
-  /** Bar-pointer selector on a round skirt (ENG FEED). */
-  'rotary-pointer': { skirt: 10.2, bar: 9.6, barBack: 4.8, barFront: 3.4 },
+  /** Pointer selector on a round skirt; the grip has a wide waist, pinches to a point at the index and to a narrow tail at the back (ENG FEED, AUDIO 1 COMM mode knobs). */
+  'rotary-pointer': { skirt: 10.2, bar: 9.6, barBack: 3.4, barFront: 0, waist: 5.8 },
   /** Larger bar-pointer selector (AIR COND TEMP and AIR SOURCE). */
   'rotary-pointer-large': { skirt: 13, bar: 12.2, barBack: 6.1, barFront: 4.3 },
   /** Mid-size selector, 11.6 mm skirt, with a broad block grip that chamfers to a pointed front (AVIONICS POWER INS and MIDS LVT). */
@@ -298,6 +298,18 @@ export const KNOBS = {
   'knob-spindle': { r: 10, lobes: 0, ridge: [0.95, 0.3], spindle: true },
   /** Very small knurled knob (UHF backup VOL). */
   'knob-knurled-mini': { r: 4.8, lobes: 12, ridge: [0.8, 0.16] },
+  /** Large knurled volume knob (AUDIO 1 COMM 1 and COMM 2); tapers to a smaller scalloped top face with channels down the recesses; index runs out to the rim. */
+  'knob-knurled-large': { r: 11.2, lobes: 8, ridge: [0.94, 0.1], edge: true, taper: 0.84 },
+  /** Small knurled knob whose index runs square-ended out to the rim (AUDIO 1 SECURE VOICE and TF). */
+  'knob-knurled-small-edge': { r: 7.9, lobes: 8, ridge: [0.94, 0.16], edge: true, taper: 0.84 },
+  /** Round knob crossed by a straight raised grip band along the index axis; index from the centre to the rim (AUDIO 1 MSL). */
+  'knob-round': { r: 10, lobes: 0, ridge: [0.98, 0.1], edge: true, fin: 0.3 },
+  /** Smaller knob-round, same grip (AUDIO 1 THREAT, AUDIO 2 ILS). */
+  'knob-round-small': { r: 7.4, lobes: 0, ridge: [0.98, 0.1], edge: true, fin: 0.3 },
+  /** Cross knob on a round base: four straight arms ending on the base circle, the base filling the gaps, index along one arm (AUDIO 2 INTERCOM). */
+  'knob-cross': { r: 11, lobes: 0, ridge: [0.98, 0.1], cross: 0.42 },
+  /** Small four-lobed cross knob (AUDIO 2 TACAN). */
+  'knob-cross-small': { r: 7.9, lobes: 0, ridge: [0.98, 0.13], cross: 0.42 },
   /**
    * Large radio selector (UHF backup function and mode knobs): a broad skirt
    * with a raised centre boss, a flat lever running from the boss to the rim
@@ -379,6 +391,61 @@ export function knobArt(art: keyof typeof KNOBS) {
       `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
       `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
   }
+  if ('cross' in t) {
+    // Cross cut from a round base: two straight arms (half-width cross x r) whose ends are the base circle, small fillets where they meet.
+    const w = t.cross * r, f = w * 0.55, N = 288, pts: string[] = [];
+    const sdf = (x: number, y: number) => {
+      const d0 = Math.abs(x) - w, d1 = Math.abs(y) - w, h = Math.max(f - Math.abs(d0 - d1), 0) / f;
+      return Math.max(Math.min(d0, d1) - (h * h * f) / 4, Math.hypot(x, y) - r);
+    };
+    for (let i = 0; i <= N; i++) {
+      const a = (i / N) * 2 * Math.PI;
+      let lo = 0, hi = r * 1.2;
+      for (let j = 0; j < 32; j++) { const m = (lo + hi) / 2; if (sdf(m * Math.sin(a), -m * Math.cos(a)) <= 0) lo = m; else hi = m; }
+      pts.push(`${n(lo * Math.sin(a))} ${n(-lo * Math.cos(a))}`);
+    }
+    // The round base fills the gaps between the arms.
+    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<path d="M${pts.join('L')}Z" fill="${PAPER}" ${sw('medium')}/>` +
+      `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
+      `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
+  }
+  if ('fin' in t) {
+    // Straight grip band across the knob along the index axis, rim to rim (half-width fin x r).
+    const w = t.fin * r, yc = n(Math.sqrt(r * r - w * w));
+    const grip = `M${n(-w)} -${yc}V${yc}A${r} ${r} 0 0 0 ${n(w)} ${yc}V-${yc}A${r} ${r} 0 0 0 ${n(-w)} -${yc}Z`;
+    return cased(rim, 'heavy') + `<path d="${grip}" fill="${PAPER}" ${sw('medium')}/>` +
+      `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
+      `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
+  }
+  if ('taper' in t && lobes) {
+    // Tapered knurled knob: a round base and a smaller top face (taper x r), each with a deliberate round
+    // scallop cut at every recess, and a channel from each top-face scallop down to the base scallop below it.
+    const s = t.taper, nr = 0.4 * r * Math.sin(Math.PI / lobes);
+    const scallops = (R: number, q: number) => {
+      const N = lobes * 24, pts: string[] = [];
+      for (let i = 0; i <= N; i++) {
+        const a = (i / N) * 2 * Math.PI, k = Math.round((a * lobes) / (2 * Math.PI) - 0.5), b = ((2 * k + 1) * Math.PI) / lobes;
+        // Ray from the centre: the rim at R, or the near side of the scallop circle (radius q, centred just outside the rim at b).
+        const Rc = R + 0.3 * q, cx = Rc * Math.sin(b), cy = -Rc * Math.cos(b), ux = Math.sin(a), uy = -Math.cos(a);
+        const p = ux * cx + uy * cy, disc = p * p - (Rc * Rc - q * q);
+        const rr = disc > 0 && p - Math.sqrt(disc) < R ? p - Math.sqrt(disc) : R;
+        pts.push(`${n(rr * ux)} ${n(rr * uy)}`);
+      }
+      return `M${pts.join('L')}Z`;
+    };
+    // Channels join each top-face scallop's two corners to the matching corners of the base scallop.
+    const Rc = r + 0.3 * nr, phi = Math.acos((r * r + Rc * Rc - nr * nr) / (2 * r * Rc));
+    const ch = Array.from({ length: lobes }, (_, k) => [-phi, phi].map(d => {
+      const a = ((2 * k + 1) * Math.PI) / lobes + d, r0 = s * r;
+      return `M${n(r0 * Math.sin(a))} ${n(-r0 * Math.cos(a))}L${n(r * Math.sin(a))} ${n(-r * Math.cos(a))}`;
+    }).join('')).join('');
+    const top = scallops(s * r, nr * s);
+    rim = `<path d="${scallops(r, nr)}" fill="${PAPER}"/>`;
+    // A plain round base under the knob shows in the base scallops. Inner lines (top face, channels) are light so the outline and index lead.
+    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + rim.replace(/\/>$/, ` ${sw('medium')}/>`) + `<path d="${ch}" ${sw('fine')} stroke-opacity="0.45"/>` + `<path d="${top}" fill="${PAPER}" ${sw('fine')} stroke-opacity="0.45"/>` +
+      `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
+      `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
+  }
   if ('edge' in t) return cased(rim, 'heavy') +
     `<rect x="${n(-hw)}" y="${n(-hl)}" width="${n(2 * hw)}" height="${n(hl)}" fill="${PAPER}" ${sw('medium')}/>` +
     `<path d="M0 ${n(-hl)}V0" ${sw('heavy')}/>`;
@@ -417,6 +484,17 @@ export function rotaryKnob(art: keyof typeof ROTARIES) {
     const body = `M${k(-0.07)} ${k(-0.93)}Q0 ${k(-0.97)} ${k(0.07)} ${k(-0.93)}L${k(0.5)} ${k(-0.42)}V${k(0.84)}` +
       `Q${k(0.5)} ${k(0.96)} ${k(0.38)} ${k(0.96)}H${k(-0.38)}Q${k(-0.5)} ${k(0.96)} ${k(-0.5)} ${k(0.84)}V${k(-0.42)}Z`;
     return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') + `<path d="M0 ${k(-0.8)}V0" ${sw('heavy')}/>`;
+  }
+  if ('waist' in ROTARIES[art]) {
+    // Traced from the guide's p. 65 COMM mode knobs: point at the front, widest just behind the centre, narrow rounded tail.
+    const W = (ROTARIES[art] as { waist: number }).waist, T = barBack, k = (v: number) => n(v);
+    // A short straight point (about 1.4 mm each side), then curved out to the waist.
+    const dx = 0.62, dy = 0.79, px = 1.4 * dx, py = -bar + 1.4 * dy;
+    // Curved from the point to the waist; straight sides from the waist back to a wide, flat tail.
+    const body = `M0 ${k(-bar)}L${k(px)} ${k(py)}C${k(px + 0.9 * dx)} ${k(py + 0.9 * dy)} ${k(W)} ${k(-bar * 0.3)} ${k(W)} ${k(bar * 0.2)}` +
+      `L${k(T)} ${k(bar * 0.9)}Q${k(T)} ${k(bar)} ${k(T - 0.6)} ${k(bar)}H${k(-(T - 0.6))}Q${k(-T)} ${k(bar)} ${k(-T)} ${k(bar * 0.9)}` +
+      `L${k(-W)} ${k(bar * 0.2)}C${k(-W)} ${k(-bar * 0.3)} ${k(-px - 0.9 * dx)} ${k(py + 0.9 * dy)} ${k(-px)} ${k(py)}Z`;
+    return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') + `<path d="M0 ${n(-bar + 0.9)}V0" ${sw('heavy')}/>`;
   }
   const body = `M${-barFront} ${-bar}Q0 ${n(-bar - 1.2)} ${barFront} ${-bar}L${barBack} ${n(bar * 0.82)}Q0 ${n(bar * 1.08)} ${-barBack} ${n(bar * 0.82)}Z`;
   return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') +
