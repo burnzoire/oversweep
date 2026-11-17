@@ -84,9 +84,12 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'flt-control', title: 'FLT CONTROL panel', page: 71 },
         { id: 'manual-trim', title: 'MANUAL TRIM panel', page: 72 },
         { id: 'test', title: 'TEST panel', page: 72 },
-        { id: 'canopy', title: 'Canopy switch and handle', page: 73 },
         { id: 'canopy-jettison', title: 'Canopy jettison T-handle', page: 74 },
-        { id: 'defog', title: 'DEFOG lever', page: 74 },
+        { id: 'anti-g-test', title: 'ANTI-G TEST button', page: 62 },
+        // One page for the sidewall outboard of the console: canopy switch and
+        // handle (p. 73), DEFOG lever (p. 74), manual canopy handcrank (p. 62)
+        // and CHAFF/FLARE dispense button (p. 708).
+        { id: 'left-sidewall', title: 'Left sidewall', page: 73 },
       ],
     },
     {
