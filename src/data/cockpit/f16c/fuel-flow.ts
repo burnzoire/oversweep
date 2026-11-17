@@ -61,7 +61,7 @@ export const fuelFlow: PanelSpec = {
   placements: [
     { component: 'counter', at: pt(157.7, 123.8), counter: {
       indicator: 'fuel-flow', at: [0, 0], drums: 5, fixed: 2, unit: 100, blank: 1, still: true,
-      pitch: mm(34.4), roll: mm(44), window: [mm(172), mm(45)], cap: mm(37.5), width: mm(23.5),
+      pitch: mm(34.4), roll: mm(44), window: [mm(172), mm(45)], cap: mm(37.5), width: mm(29),
       slots: [{ drum: 2, h: mm(85) }],
     } },
     { component: 'screw', at: pt(30, 30) }, { component: 'screw', at: pt(292, 30) },
