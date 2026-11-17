@@ -142,6 +142,8 @@ export type Placement =
   | { component: LampRoundArt; indicator: string; at: Pt }
   /** Pointer instrument centred on `at`; everything inside `dial` is relative to the dial centre. */
   | { component: 'gauge'; /** The needle's indicator; omitted when the dial has `pointers`. */ indicator?: string; at: Pt; dial: Dial }
+  /** Drum counter on its own (F-16C FUEL FLOW): the counter is relative to `at`. */
+  | { component: 'counter'; at: Pt; counter: DrumCounter }
   | { component: 'dzus'; at: Pt; cut?: Cut }
   | { component: 'screw' | 'screw-medium' | 'screw-small'; at: Pt };
 
@@ -195,6 +197,14 @@ export interface DrumCounter {
   /** Digit cap height and width. */
   cap: number;
   width: number;
+  /** Draw the shared stroked digits (traced instrument lettering) instead of type, so every viewer sees the same shapes. */
+  stroked?: boolean;
+  /** Leading drums that show a blank instead of 0 (F-16C FUEL FLOW ten-thousands drum). */
+  blank?: number;
+  /** The `fixed` zero drums stay still instead of rolling with the lowest rolling drum. */
+  still?: boolean;
+  /** Drums seen through a taller slot than `window` (height `h`, centred on `at`), e.g. a rolling drum showing its neighbours. */
+  slots?: { drum: number; h: number }[];
 }
 
 /** The plate corner toward which the face plate is cut away around a DZUS. */

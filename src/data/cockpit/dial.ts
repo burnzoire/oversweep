@@ -18,9 +18,10 @@ export function scaleAngle(k: Knots, value: number) {
  * Drum positions of an odometer-style counter, highest drum first. `unit` is
  * the value of one step of the lowest rolling drum; the last `fixed` drums
  * carry only zeros and roll with it. A position of 1.5 is half way from 1 to 2.
- * A drum turns only while every drum below it rolls from 9 to 0.
+ * A drum turns only while every drum below it rolls from 9 to 0. `still`:
+ * the fixed drums do not roll.
  */
-export function drumPositions(value: number, drums: number, fixed: number, unit: number) {
+export function drumPositions(value: number, drums: number, fixed: number, unit: number, still = false) {
   const u = Math.max(0, value) / unit, rolling = drums - fixed, out: number[] = [];
   let carry = u % 10;
   out.unshift(carry);
@@ -29,6 +30,6 @@ export function drumPositions(value: number, drums: number, fixed: number, unit:
     carry = (Math.floor(u / 10 ** i) % 10) + Math.max(0, lower - 9);
     out.unshift(carry);
   }
-  for (let i = 0; i < fixed; i++) out.push(u % 1);
+  for (let i = 0; i < fixed; i++) out.push(still ? 0 : u % 1);
   return out;
 }

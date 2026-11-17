@@ -198,7 +198,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     const r = def.readings[id];
     if (!r) return;
     if (r.kind === 'needle') svg.querySelector(`[data-needle="${id}"]`)?.setAttribute('transform', `rotate(${+scaleAngle(r.scale, v).toFixed(3)})`);
-    else drumPositions(v, r.drums, r.fixed, r.unit).forEach((p, k) =>
+    else drumPositions(v, r.drums, r.fixed, r.unit, r.still).forEach((p, k) =>
       svg.querySelector(`[data-drum="${id}"][data-place="${k}"]`)?.setAttribute('transform', `translate(0 ${+(-p * r.roll).toFixed(3)})`));
   };
   for (const input of document.querySelectorAll<HTMLInputElement>(`[data-reading^="${def.panel}."]`)) {
