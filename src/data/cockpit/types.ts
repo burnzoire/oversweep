@@ -140,7 +140,7 @@ export type Placement =
    * canopy handle). Paths are absolute panel mm (`M`/`L`/`Q`/`Z` with x y pairs);
    * `lines` are fine detail lines on the part. `at` is the part's hinge or pivot.
    */
-  | { component: 'traced'; control: string; at: Pt; shapes: Record<string, { d: string; lines?: string }>; paint?: Paint; /** Click area in mm when the outlines' bounds would cover other controls. */ hit?: Rect }
+  | { component: 'traced'; control: string; at: Pt; shapes: Record<string, { d: string; /** Solid parts drawn over d in order, each filled and outlined. */ parts?: string[]; lines?: string }>; paint?: Paint; /** Click area in mm when the outlines' bounds would cover other controls. */ hit?: Rect }
   /** Lever in a straight slot (F-16C DEFOG): slot centred on `at`, turned by `rotate`; the lever root moves `travel` mm between its first and last positions, along the slot. */
   | { component: 'slot-lever'; control: string; at: Pt; travel: number; rotate?: number }
   /** Flip guard hinged at `at` (the middle of its hinge edge); `size` is the closed footprint. `rotate`: degrees clockwise about the hinge (180 = hinged along the top). */
