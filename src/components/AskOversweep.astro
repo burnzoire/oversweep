@@ -95,7 +95,7 @@ const { id } = Astro.props;
           }
         }
         if (turn !== generation) return;
-        if (!followUp && passages.length) previous = question;
+        if (!followUp) previous = question;
         const sources = document.createElement("ul");
         for (const passage of passages) {
           if (generated?.ids && !generated.ids.includes(passage.url)) continue;
