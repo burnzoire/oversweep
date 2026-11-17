@@ -513,6 +513,8 @@ export const PUSHES = {
   'push-round-xl': { r: 7.8, cap: 6.0 },
   /** Gear panel EMER STORES JETTISON: a large flat cap with a circle-and-square mark at its centre. */
   'push-round-xxl': { r: 14, cap: 10.5, mark: true },
+  /** Large cap in a wide bezel (F-16C CHAFF/FLARE dispense button). */
+  'push-round-bezel': { r: 17.7, cap: 13.4 },
 } as const;
 
 export function pushBase(art: keyof typeof PUSHES) {

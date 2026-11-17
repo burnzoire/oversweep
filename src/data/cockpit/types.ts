@@ -131,9 +131,16 @@ export type Placement =
   | { component: ToggleArt; control: string; at: Pt; paint?: Paint }
   | { component: RotaryArt; control: string; at: Pt }
   | { component: KnobArt; control: string; at: Pt }
-  | { component: PushArt; control: string; at: Pt; paint?: Paint }
+  /** `legend` lines are printed on the cap, placed by their centre `y` (mm from the centre); `marks` is extra cap printing (mm path, centre origin). */
+  | { component: PushArt; control: string; at: Pt; paint?: Paint; legend?: { text: string; cap: number; y: number; width?: number }[]; marks?: string }
   /** Landing gear handle: a slot centred on `at`, `travel` mm between the knob's end positions, knob `size` in mm. */
   | { component: 'gear-handle'; control: string; at: Pt; travel: number; size: [w: number, h: number]; /** The light in the knob. */ indicator?: string }
+  /**
+   * One-off part traced from the reference, one outline per position (F-16C
+   * canopy handle). Paths are absolute panel mm (`M`/`L`/`Q`/`Z` with x y pairs);
+   * `lines` are fine detail lines on the part. `at` is the part's hinge or pivot.
+   */
+  | { component: 'traced'; control: string; at: Pt; shapes: Record<string, { d: string; lines?: string }>; paint?: Paint }
   /** Lever in a straight slot (F-16C DEFOG): slot centred on `at`, turned by `rotate`; the lever root moves `travel` mm between its first and last positions, along the slot. */
   | { component: 'slot-lever'; control: string; at: Pt; travel: number; rotate?: number }
   /** Flip guard hinged at `at` (the middle of its hinge edge); `size` is the closed footprint. `rotate`: degrees clockwise about the hinge (180 = hinged along the top). */
@@ -215,7 +222,7 @@ export type Cut = 'up-left' | 'up-right' | 'down-left' | 'down-right';
 export type ToggleArt = 'toggle-large' | 'toggle-medium' | 'toggle-small' | 'toggle-large-cylinder' | 'toggle-large-square' | 'toggle-large-lock' | 'toggle-paddle-wide' | 'toggle-hook' | 'toggle-mini-hex';
 export type RotaryArt = 'rotary-pointer' | 'rotary-pointer-large' | 'rotary-pointer-medium';
 export type KnobArt = 'knob-fine-knurl-small' | 'knob-knurled-small' | 'knob-knurled' | 'knob-knurled-edge' | 'knob-knurled-skirt' | 'knob-bar' | 'knob-lobed' | 'knob-bar-medium' | 'knob-knurled-mini' | 'knob-radio-large' | 'knob-bar-thick' | 'knob-spindle' | 'knob-knurled-large' | 'knob-knurled-small-edge' | 'knob-round' | 'knob-round-small' | 'knob-cross' | 'knob-cross-small';
-export type PushArt = 'push-round-small' | 'push-round-medium' | 'push-round-large' | 'push-round-xl' | 'push-round-xxl';
+export type PushArt = 'push-round-small' | 'push-round-medium' | 'push-round-large' | 'push-round-xl' | 'push-round-xxl' | 'push-round-bezel';
 export type LampModuleArt = 'lamp-module';
 /** A single round press-to-test style indicator lens in a bezel (JFS RUN). */
 export type LampRoundArt = 'lamp-round';
