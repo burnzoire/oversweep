@@ -82,8 +82,12 @@ export interface ControlDef {
   /** Mechanically latched (lever-lock) switch; see `protections`. */
   latched?: boolean;
   protections?: Protection[];
-  /** Closing this guard drives the guarded control back to this position. */
-  guards?: { control: string; closesTo: string };
+  /**
+   * Closing this guard drives the guarded control back to this position;
+   * with `when`, only from those positions (a split cover only pushes back a
+   * lever on its own side).
+   */
+  guards?: { control: string; closesTo: string; when?: string[] };
   description: string;
   /** Manual page or other evidence for the behaviour. */
   source: string;
@@ -130,7 +134,8 @@ export type Placement =
   | { component: PushArt; control: string; at: Pt }
   /** Landing gear handle: a slot centred on `at`, `travel` mm between the knob's end positions, knob `size` in mm. */
   | { component: 'gear-handle'; control: string; at: Pt; travel: number; size: [w: number, h: number]; /** The light in the knob. */ indicator?: string }
-  | { component: 'guard-flip'; control: string; at: Pt; size: [w: number, h: number] }
+  /** Flip guard hinged at `at` (the middle of its hinge edge); `size` is the closed footprint. `half`: one cover of a split pair, its lever notch on that side (before turning). `rotate`: degrees clockwise about the hinge (180 = hinged along the top). */
+  | { component: 'guard-flip'; control: string; at: Pt; size: [w: number, h: number]; half?: 'left' | 'right'; rotate?: number }
   /** Square pushbutton, centred on `at`; `legend` lines are placed by their centre `y` (mm from the centre). With `indicator`, the legend face is that lamp's lens. */
   | { component: 'push-square'; control: string; at: Pt; size: [w: number, h: number]; legend: { text: string; cap: number; y: number; width?: number }[]; indicator?: string; /** Turn (degrees clockwise) about the centre, for buttons on an angled mount. */ rotate?: number }
   | { component: LampModuleArt; at: Pt; size: [w: number, h: number]; lamps: LampCell[]; /** Unused module: a dash across the blank lens. */ blank?: boolean; /** Turn (degrees clockwise) about the module centre, for modules on an angled mount. */ rotate?: number }

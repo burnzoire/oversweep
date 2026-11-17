@@ -488,14 +488,27 @@ export function gearKnob([w, h]: [number, number], y: number, indicator?: string
  * Flip guard, hinged along its bottom edge (the pivot), covering a toggle when
  * closed. `size` is the closed footprint. Open, it stands up toward the viewer
  * and is seen edge-on as a short band at the hinge.
+ *
+ * `half`: one cover of a split pair (EPU: one cover over each throw). The
+ * lever slot is then a notch in the inner corner of the free end, on the
+ * named side, so the two covers together leave the lever's centre slot.
  */
-export function guardArt(size: [number, number], open: boolean) {
+export function guardArt(size: [number, number], open: boolean, half?: 'left' | 'right') {
   const [w, h] = size;
   const x = -w / 2;
   if (open) {
     const band = h * 0.2;
     return cased(`<rect x="${n(x)}" y="${n(-band)}" width="${n(w)}" height="${n(band)}" rx="0.6" fill="${PAPER}"/>`, 'heavy') +
       `<path d="M${n(x + 1)} ${n(-band * 0.5)}H${n(-x - 1)}" ${sw('fine')}/>`;
+  }
+  if (half) {
+    const s = half === 'right' ? 1 : -1, inner = s * w / 2, outer = -s * w / 2;
+    // Half the cover's width, so the two notches together clear the lever's ball.
+    const nw = w * 0.5, nd = h * 0.27, rn = Math.min(1.2, nw / 2), r = w * 0.2, top = -h;
+    const d = `M${n(inner)} 0V${n(top + nd)}H${n(inner - s * (nw - rn))}Q${n(inner - s * nw)} ${n(top + nd)} ${n(inner - s * nw)} ${n(top + nd - rn)}` +
+      `V${n(top)}H${n(outer + s * r)}Q${n(outer)} ${n(top)} ${n(outer)} ${n(top + r)}V-1.2Q${n(outer)} 0 ${n(outer + s * 1.2)} 0Z`;
+    return cased(`<path d="${d}" fill="${PAPER}"/>`, 'heavy') +
+      `<path d="M${n(outer + s * 1.2)} ${n(-h * 0.7)}V${n(-h * 0.22)}M${n(outer)} ${n(-h * 0.14)}H${n(inner)}M${n(outer)} ${n(-h * 0.08)}H${n(inner)}" ${sw('fine')}/>`;
   }
   // Closed: U-shaped cover with a notch at the top for the lever and side slots.
   const notch = w * 0.4, nd = h * 0.27;
