@@ -1,5 +1,6 @@
 ---
 import SearchBox from "../../components/SearchBox.astro";
+import { sitePath } from "../../lib/paths";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 ---
 
@@ -9,5 +10,6 @@ import SiteLayout from "../../layouts/SiteLayout.astro";
   description="Search every Oversweep Manual module, Encyclopedia record, glossary term and trainer."
 >
   <SearchBox id="page-search" page />
+  <p><a href={sitePath("ask/")}>Ask Oversweep</a></p>
   <noscript><p>Search needs JavaScript. Browse the Manual, Encyclopedia and Training Library from the menu instead.</p></noscript>
 </SiteLayout>

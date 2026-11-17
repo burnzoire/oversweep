@@ -94,8 +94,8 @@ export function searchIndex() {
           const html = await readFile(file, "utf8");
           if (!indexable(html)) continue;
           const route = path.relative(output, path.dirname(file)).split(path.sep).join("/");
-          // The home page and search page are not results; 404 is not a page.
-          if (route === "" || route === "404" || route === "search") continue;
+          // The home, search and ask pages are not results; 404 is not a page.
+          if (route === "" || route === "404" || route === "search" || route === "ask") continue;
           entries.push(...pageEntries(html, `${base}${route}/`, { glossary: route === "encyclopedia/terminology" }));
           await fullText.addHTMLFile({ url: `${base}${route}/`, content: html });
         }
