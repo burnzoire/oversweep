@@ -3,13 +3,13 @@ import { assetPath, sitePath } from "../lib/paths";
 const { id } = Astro.props;
 ---
   <section class="ask" data-ask data-index={assetPath("pagefind/pagefind.js")} data-base={sitePath()}>
-    <button type="button" data-new-chat>New chat</button>
+    {id !== "ask-dialog-question" && <button type="button" data-new-chat aria-label="New chat" title="New chat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg></button>}
     <div data-thread role="log" aria-label="Conversation"></div>
     <form>
       
       <div class="ask-controls">
         <input id={id} name="question" type="text" aria-label="Your message" placeholder="Type a message…" maxlength="300" required />
-        <button type="submit">Send</button>
+        <button type="submit" aria-label="Send" title="Send"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4zM22 2 11 13" /></svg></button>
       </div>
     </form>
     <noscript><p>Enable JavaScript to find passages.</p></noscript>
@@ -24,11 +24,12 @@ const { id } = Astro.props;
     const input = form.querySelector<HTMLInputElement>("input")!;
     const button = form.querySelector<HTMLButtonElement>("button")!;
     const thread = panel.querySelector<HTMLElement>("[data-thread]")!;
-    const reset = panel.querySelector<HTMLButtonElement>("[data-new-chat]")!;
+    const reset = panel.closest("dialog")?.querySelector<HTMLButtonElement>("[data-new-chat]")
+      ?? panel.querySelector<HTMLButtonElement>("[data-new-chat]");
     let previous = "";
     let generation = 0;
 
-    reset.addEventListener("click", () => {
+    reset?.addEventListener("click", () => {
       generation++;
       previous = "";
       thread.replaceChildren();
@@ -99,6 +100,7 @@ const { id } = Astro.props;
   input { flex: 1 1 16rem; min-width: 0; }
   input, button { font: inherit; padding: .65rem .8rem; }
   button { color: white; background: var(--color-ink); border: 1px solid var(--color-ink); cursor: pointer; }
+  button[aria-label] { display: inline-grid; place-items: center; min-width: 2.75rem; min-height: 2.75rem; }
   button:disabled { opacity: .65; cursor: wait; }
   [data-thread] { display: grid; gap: .65rem; max-height: min(48dvh, 24rem); overflow-y: auto; margin-top: .5rem; }
   [data-thread]:empty { display: none; }
