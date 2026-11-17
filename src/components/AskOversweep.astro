@@ -27,11 +27,13 @@ const { id } = Astro.props;
     const reset = panel.closest("dialog")?.querySelector<HTMLButtonElement>("[data-new-chat]")
       ?? panel.querySelector<HTMLButtonElement>("[data-new-chat]");
     let previous = "";
+    let lastQuestion = "";
     let generation = 0;
 
     reset?.addEventListener("click", () => {
       generation++;
       previous = "";
+      lastQuestion = "";
       thread.replaceChildren();
       form.reset();
       button.disabled = false;
@@ -53,11 +55,18 @@ const { id } = Astro.props;
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
-      const question = input.value.trim();
-      if (button.disabled || !question) return;
+      const message = input.value.trim();
+      const retry = /^(?:please )?(?:try again|retry)[.!?]*$/i.test(message);
+      const question = retry ? lastQuestion : message;
+      if (button.disabled || !message) return;
+      if (!question) {
+        appendMessage("oversweep", "Ask me a question first, then I can retry it.");
+        return;
+      }
+      lastQuestion = question;
       button.disabled = true;
       const turn = generation;
-      appendMessage("you", question);
+      appendMessage("you", message);
       input.value = "";
       input.focus();
       const reply = appendMessage("oversweep", "…");

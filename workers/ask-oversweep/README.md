@@ -1,6 +1,6 @@
 # Ask Oversweep deployment
 
-The site publishes the canonical passage corpus at `/ask-corpus.json`. The Worker fetches it from Oversweep so content changes flow through without a Worker deploy. The site sends section IDs, the question, and the previous topic.
+The deployment workflow builds the site and bundles its passage corpus into the Worker. The site sends section IDs, the question, and the previous topic. Run the Worker deployment after site content changes to refresh the bundled corpus.
 
 After approval and merge, run **Deploy Ask Oversweep Worker** from Actions. It uses the existing `CLOUDFLARE_API_TOKEN` repository secret and `CLOUDFLARE_ACCOUNT_ID` variable. Set the repository variable `PUBLIC_ASK_ENDPOINT` to `https://ask-oversweep.burnzoire.workers.dev/ask` and rerun the Pages deployment to activate generated replies. Builds with no endpoint use Pagefind alone.
 
