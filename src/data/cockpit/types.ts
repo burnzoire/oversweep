@@ -134,6 +134,8 @@ export type Placement =
   | { component: PushArt; control: string; at: Pt; paint?: Paint }
   /** Landing gear handle: a slot centred on `at`, `travel` mm between the knob's end positions, knob `size` in mm. */
   | { component: 'gear-handle'; control: string; at: Pt; travel: number; size: [w: number, h: number]; /** The light in the knob. */ indicator?: string }
+  /** Lever in a straight slot (F-16C DEFOG): slot centred on `at`, turned by `rotate`; the lever root moves `travel` mm between its first and last positions, along the slot. */
+  | { component: 'slot-lever'; control: string; at: Pt; travel: number; rotate?: number }
   /** Flip guard hinged at `at` (the middle of its hinge edge); `size` is the closed footprint. `rotate`: degrees clockwise about the hinge (180 = hinged along the top). */
   | { component: 'guard-flip'; control: string; at: Pt; size: [w: number, h: number]; rotate?: number; paint?: Paint }
   /** Square pushbutton, centred on `at`; `legend` lines are placed by their centre `y` (mm from the centre). With `indicator`, the legend face is that lamp's lens. */

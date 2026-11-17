@@ -18,6 +18,7 @@ import { engineInstruments } from './engine-instruments.ts';
 import { fuelQty } from './fuel-qty.ts';
 import { fuelFlow } from './fuel-flow.ts';
 import { epu } from './epu.ts';
+import { sidewallControls } from './sidewall-controls.ts';
 
 /**
  * DCS F-16C cockpit catalogue: areas and panels in the order the official guide
@@ -100,7 +101,7 @@ export const f16cCockpit: AircraftCockpit = {
         // One page for the controls on the sidewall itself: canopy switch and
         // handle (p. 73), DEFOG lever (p. 74), manual canopy handcrank (p. 62)
         // and CHAFF/FLARE dispense button (p. 708).
-        { id: 'sidewall-controls', title: 'Sidewall controls', page: 73 },
+        { id: 'sidewall-controls', title: 'Sidewall controls', page: 73, spec: sidewallControls },
       ],
     },
     {

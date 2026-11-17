@@ -572,6 +572,32 @@ export function gearKnob([w, h]: [number, number], y: number, indicator?: string
     `<path d="${shoulders}" ${sw('medium')}/><path d="${grooves}" ${sw('fine')}/>`;
 }
 
+/* ------------------------------------------------------------ slot lever */
+
+/**
+ * Slot lever (F-16C DEFOG), traced from the DCS F-16C guide p. 74: a flat
+ * blade with a round top standing out of a straight slot, with a round disc
+ * knob on its face. Drawn upright (the guide's camera leans it toward MIN).
+ * mm: slot height, blade root width and visible length, disc diameter and
+ * its centre above the slot.
+ */
+export const SLOT_LEVER = { slotH: 2.3, root: 10.8, length: 23, disc: 16.5, discY: 6.5 } as const;
+
+/** The slot, long enough for the lever root at both ends of `travel`, centred on the origin. */
+export function leverSlot(travel: number) {
+  const { slotH, root } = SLOT_LEVER, w = travel + root;
+  return `<rect x="${n(-w / 2)}" y="${n(-slotH / 2)}" width="${n(w)}" height="${n(slotH)}" fill="${INK}" stroke="none"/>`;
+}
+
+/** The lever with its root at `x` on the slot line. */
+export function slotLeverArt(x: number) {
+  const { root, length, disc, discY } = SLOT_LEVER, r = root / 2, top = -length + r;
+  const blade = `M${n(x - r)} 0V${n(top)}A${n(r)} ${n(r)} 0 0 1 ${n(x + r)} ${n(top)}V0Z`;
+  return cased(`<path d="${blade}" fill="${PAPER}"/>`) +
+    cased(`<circle cx="${n(x)}" cy="${n(-discY)}" r="${n(disc / 2)}" fill="${PAPER}"/>`) +
+    `<circle cx="${n(x)}" cy="${n(-discY)}" r="${n(disc / 2 - 1.6)}" fill="none" ${sw('fine')}/>`;
+}
+
 /* ----------------------------------------------------------------- guards */
 
 /**

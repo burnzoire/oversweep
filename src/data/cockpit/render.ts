@@ -12,7 +12,7 @@
 import type { ControlDef, Cut, Dial, DrumCounter, PanelSpec, Placement, Pt } from './types';
 import {
   FASTENERS, FONT, INK, LAMPS, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, painted, PAINTS, lampModuleFrame, lampRoundBezel, n,
-  gaugeBezel, gaugeHub, drumStrip, paddlePointerArt, PADDLE_POINTER, gearKnob, gearSlot, knobArt, needleArt, polar, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
+  gaugeBezel, gaugeHub, drumStrip, paddlePointerArt, PADDLE_POINTER, gearKnob, gearSlot, leverSlot, slotLeverArt, SLOT_LEVER, knobArt, needleArt, polar, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
 } from './components.ts';
 import { drumPositions, scaleAngle } from './dial.ts';
 export { drumPositions };
@@ -179,6 +179,11 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       const c = controlOf(spec, p.control), last = c.positions.length - 1;
       return at(p.at, gearSlot(p.travel) + moving(c, state[c.id] ?? c.initial, i => gearKnob(p.size, p.travel * (i / last - 0.5), p.indicator)), ' data-art="gear-handle"');
     }
+    case 'slot-lever': {
+      // Lever root moves along the slot, first position at the left.
+      const c = controlOf(spec, p.control), last = c.positions.length - 1;
+      return turn(p.rotate, p.at[0], p.at[1], at(p.at, leverSlot(p.travel) + moving(c, state[c.id] ?? c.initial, i => slotLeverArt(p.travel * (i / last - 0.5))), ' data-art="slot-lever"'));
+    }
     case 'push-square': {
       const c = controlOf(spec, p.control), [w, h] = p.size, li = 2.2;
       // The legend is fixed on top of the moving cap; on a lit button it is the lamp's lens.
@@ -308,6 +313,14 @@ export function hitZones(spec: PanelSpec): HitZone[] {
       case 'gear-handle': {
         const [w, h] = p.size, bh = p.travel + h;
         return [{ kind: 'control', id: p.control, box: [x - w / 2, y - bh / 2, w, bh] }];
+      }
+      case 'slot-lever': {
+        // The slot and the lever above it; turned levers get the turned box's bounds.
+        const { root, length, disc } = SLOT_LEVER, w = p.travel + Math.max(root, disc), h = length + 2;
+        const a = ((p.rotate ?? 0) * Math.PI) / 180, c = Math.abs(Math.cos(a)), s = Math.abs(Math.sin(a));
+        const cx = x + (length / 2) * Math.sin(a), cy = y - (length / 2) * Math.cos(a);
+        const bw = w * c + h * s, bh = w * s + h * c;
+        return [{ kind: 'control', id: p.control, box: [cx - bw / 2, cy - bh / 2, bw, bh] }];
       }
       case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-xxl': {
         const r = PUSHES[p.component].r;
