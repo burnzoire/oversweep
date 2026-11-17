@@ -92,13 +92,17 @@ export interface ControlDef {
 export interface IndicatorDef {
   id: string;
   name: string;
-  /** `lamp`: a light (cold jet: off). `gauge`: a pointer instrument (cold jet: needle at `rest`). */
-  type: 'lamp' | 'gauge';
+  /** `lamp`: a light (cold jet: off). `gauge`: a pointer instrument (cold jet: needle at `rest`). `counter`: a drum counter (shows `rest`). */
+  type: 'lamp' | 'gauge' | 'counter';
   /** Lamps only. */
   colour?: 'amber' | 'green' | 'red';
   /** Gauges only: unit of the scale, and the value the needle shows cold and dark. */
   unit?: string;
   rest?: number;
+  /** Gauges and counters: the range a reader can try on the page (defaults to the dial's scale). */
+  range?: [min: number, max: number, step: number];
+  /** Gauges and counters: what the cold-and-dark line says, when it is not a needle at its stop. */
+  restNote?: string;
   description: string;
   source: string;
 }
@@ -137,7 +141,7 @@ export type Placement =
   | { component: LampModuleArt; at: Pt; size: [w: number, h: number]; lamps: LampCell[]; /** Unused module: a dash across the blank lens. */ blank?: boolean; /** Turn (degrees clockwise) about the module centre, for modules on an angled mount. */ rotate?: number }
   | { component: LampRoundArt; indicator: string; at: Pt }
   /** Pointer instrument centred on `at`; everything inside `dial` is relative to the dial centre. */
-  | { component: 'gauge'; indicator: string; at: Pt; dial: Dial }
+  | { component: 'gauge'; /** The needle's indicator; omitted when the dial has `pointers`. */ indicator?: string; at: Pt; dial: Dial }
   | { component: 'dzus'; at: Pt; cut?: Cut }
   | { component: 'screw' | 'screw-medium' | 'screw-small'; at: Pt };
 
@@ -161,8 +165,36 @@ export interface Dial {
   fills?: { from: number; to: number; r: [inner: number, outer: number] }[];
   /** Numerals and dial legends, upright, by their centre relative to the dial centre; `width` locks the measured width. */
   legends: { text: string; at: Pt; cap: number; width?: number }[];
-  /** Needle tip radius (the shared needle's shank stretches to it). */
-  needle: number;
+  /** Needle tip radius (the shared needle's shank stretches to it); single-needle dials only. */
+  needle?: number;
+  /**
+   * Dials with more than one pointer (F-16C fuel AL and FR): each pointer is
+   * its own gauge indicator, drawn back to front, as the shared `art` with its
+   * two tank letters printed along it (outer letter first).
+   */
+  pointers?: { indicator: string; art: 'paddle'; legend: [outer: string, inner: string] }[];
+  /** A drum counter (totalizer) behind a window in the face. */
+  counter?: DrumCounter;
+}
+
+/**
+ * Odometer-style drum counter, relative to the dial centre. Drums sit `pitch`
+ * apart, centred on `at`; digits are printed `roll` apart round each drum and
+ * show through a `window` (w, h) centred on `at`. The lowest rolling drum
+ * counts in `unit`s; the last `fixed` drums carry only zeros.
+ */
+export interface DrumCounter {
+  indicator: string;
+  at: Pt;
+  drums: number;
+  fixed: number;
+  unit: number;
+  pitch: number;
+  roll: number;
+  window: [w: number, h: number];
+  /** Digit cap height and width. */
+  cap: number;
+  width: number;
 }
 
 /** The plate corner toward which the face plate is cut away around a DZUS. */

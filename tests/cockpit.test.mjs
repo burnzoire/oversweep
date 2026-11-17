@@ -19,11 +19,11 @@ test('catalogue lists every area and panel with unique stable ids', { skip: !can
 });
 
 test('every built panel models each placed control and lamp once', { skip: !canImportTs }, async () => {
-  const { f16cCockpit, builtPanels, renderPanel, hitZones } = await load();
+  const { f16cCockpit, builtPanels, renderPanel, hitZones, dialIndicators } = await load();
   for (const { spec } of builtPanels(f16cCockpit)) {
     const placed = spec.placements.filter(p => 'control' in p).map(p => p.control);
     assert.deepEqual([...placed].sort(), spec.controls.map(c => c.id).sort(), `${spec.id}: placements and controls differ`);
-    const lamps = spec.placements.flatMap(p => p.component === 'lamp-module' ? p.lamps.map(l => l.indicator) : p.component === 'lamp-round' ? [p.indicator] : (p.component === 'push-square' || p.component === 'gear-handle') && p.indicator ? [p.indicator] : p.component === 'gauge' ? [p.indicator] : []);
+    const lamps = spec.placements.flatMap(p => p.component === 'lamp-module' ? p.lamps.map(l => l.indicator) : p.component === 'lamp-round' ? [p.indicator] : (p.component === 'push-square' || p.component === 'gear-handle') && p.indicator ? [p.indicator] : p.component === 'gauge' ? dialIndicators(p) : []);
     assert.deepEqual([...lamps].sort(), spec.indicators.map(i => i.id).sort(), `${spec.id}: lamp cells and indicators differ`);
     for (const c of spec.controls) {
       assert.ok(c.positions.some(p => p.id === c.initial), `${spec.id}.${c.id}: initial position`);
@@ -56,12 +56,27 @@ test('gauge scales increase and every tick and needle lands on the dial', { skip
       assert.ok(t.r[0] < t.r[1] && t.r[1] < dial.face, `${id}: ticks inside the face`);
       for (const v of tickValues(t)) assert.ok(v >= dial.scale[0][0] && v <= dial.scale.at(-1)[0], `${id}: tick ${v} on the scale`);
     }
-    assert.ok(dial.hub < dial.needle && dial.needle < dial.face, `${id}: needle between hub and face`);
-    const ind = spec.indicators.find(i => i.id === p.indicator);
-    assert.equal(ind?.type, 'gauge');
+    assert.ok(p.indicator ? dial.needle && dial.hub < dial.needle && dial.needle < dial.face : dial.pointers?.length, `${id}: a needle between hub and face, or pointers`);
+    const svg = renderPanel(spec);
+    for (const ind of [p.indicator, ...(dial.pointers ?? []).map(q => q.indicator)].filter(Boolean)) {
+      assert.equal(spec.indicators.find(i => i.id === ind)?.type, 'gauge', `${spec.id}.${ind}: gauge indicator`);
+      assert.match(svg, new RegExp(`data-needle="${ind}"`));
+    }
+    if (dial.counter) {
+      assert.equal(spec.indicators.find(i => i.id === dial.counter.indicator)?.type, 'counter');
+      assert.equal((svg.match(new RegExp(`data-drum="${dial.counter.indicator}"`, 'g')) ?? []).length, dial.counter.drums);
+    }
     assert.equal(dialAngle(dial, dial.scale[0][0] - 50), dial.scale[0][1], `${id}: needle stops at the bottom of the scale`);
-    assert.match(renderPanel(spec), new RegExp(`data-needle="${p.indicator}"`));
   }
+});
+
+test('drum counters roll like an odometer', { skip: !canImportTs }, async () => {
+  const { drumPositions } = await load();
+  assert.deepEqual(drumPositions(7100, 5, 2, 100).map(v => +v.toFixed(3)), [0, 7, 1, 0, 0]);
+  assert.deepEqual(drumPositions(7150, 5, 2, 100).map(v => +v.toFixed(3)), [0, 7, 1.5, 0.5, 0.5]);
+  // The thousands drum turns only while the hundreds drum rolls from 9 to 0.
+  assert.deepEqual(drumPositions(7950, 5, 2, 100).map(v => +v.toFixed(3)), [0, 7.5, 9.5, 0.5, 0.5]);
+  assert.deepEqual(drumPositions(9950, 5, 2, 100).map(v => +v.toFixed(3)), [0.5, 9.5, 9.5, 0.5, 0.5]);
 });
 
 test('shared components keep fixed sizes across panels (same art id, same size)', async () => {

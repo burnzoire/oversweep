@@ -650,6 +650,32 @@ export function needleArt(length: number) {
   return `<path d="M${n(-b)} 0V${n(s)}L${n(-t)} ${n(y)}A${n(t)} ${n(t)} 0 0 1 ${n(t)} ${n(y)}L${n(b)} ${n(s)}V0Z" fill="${INK}" ${sw('fine')}/>`;
 }
 
+/**
+ * Broad tank pointer of the F-16C fuel quantity indicator (AL and FR share
+ * it), in mm, pointing at 12 o'clock from the dial centre. Measured on the
+ * guide's p. 58 image (2.7 px/mm) with each pointer turned upright: a parallel
+ * shaft 4.4 mm wide to 26.7 mm, tapering to a point at 31.9 mm; a paddle on
+ * its anticlockwise side out to 16.5 mm, whose outer edge leans in toward the
+ * hub. The two tank letters are printed upright along the shaft, outer letter
+ * first, with a bar between them.
+ */
+export const PADDLE_POINTER = { half: 2.22, taper: 26.67, tip: 31.85, paddleTop: 16.48, paddleLeft: 6.0, paddleRoot: 2.85, outer: 24.8, inner: 19.7, bar: 22.0, cap: 3.5 } as const;
+
+export function paddlePointerArt([outer, inner]: [string, string]) {
+  const p = PADDLE_POINTER, h = p.half;
+  const letter = (y: number, t: string) => text(0, -y, t, p.cap).replace(`fill="${INK}"`, `fill="${PAPER}"`);
+  return `<path d="M${n(h)} 0V${n(-p.taper)}L0 ${n(-p.tip)}L${n(-h)} ${n(-p.taper)}V${n(-p.paddleTop)}H${n(-p.paddleLeft)}L${n(-p.paddleRoot)} 0Z" fill="${INK}" ${sw('fine')}/>` +
+    letter(p.outer, outer) + letter(p.inner, inner) +
+    `<path d="M${n(-h + 0.6)} ${n(-p.bar)}H${n(h - 0.6)}" stroke="${PAPER}" ${sw('fine')}/>`;
+}
+
+/** One drum of a counter: digits 0–9 and 0 again (or only zeros), `roll` apart, centred on the origin at 0. */
+export function drumStrip(roll: number, cap: number, width: number, zeros = false) {
+  let s = '';
+  for (let i = -1; i <= 10; i++) s += text(0, i * roll, zeros ? '0' : String((i + 10) % 10), cap, width);
+  return s;
+}
+
 /** Bezel ring with the dial face inside it, centred on the origin. */
 export function gaugeBezel(bezel: number, face: number) {
   return cased(`<circle r="${n(bezel)}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(face)}" ${sw('medium')}/>`;

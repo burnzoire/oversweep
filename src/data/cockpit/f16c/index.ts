@@ -15,6 +15,7 @@ import { snsrPwr } from './snsr-pwr.ts';
 import { interiorLighting } from './interior-lighting.ts';
 import { avionicsPower } from './avionics-power.ts';
 import { engineInstruments } from './engine-instruments.ts';
+import { fuelQty } from './fuel-qty.ts';
 import { epu } from './epu.ts';
 
 /**
@@ -62,7 +63,7 @@ export const f16cCockpit: AircraftCockpit = {
     {
       id: 'right-aux-console', title: 'Right auxiliary console', panels: [
         { id: 'compass', title: 'Magnetic compass', page: 58 },
-        { id: 'fuel-qty', title: 'Fuel quantity indicator', page: 58 },
+        { id: 'fuel-qty', title: 'Fuel quantity indicator', page: 58, spec: fuelQty },
         { id: 'pfld', title: 'Pilot fault list display', page: 59 },
         { id: 'caution', title: 'Caution light panel', page: 59, spec: caution },
         { id: 'hyd-pressure', title: 'Hydraulic pressure indicators', page: 61 },

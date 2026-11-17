@@ -3,6 +3,7 @@ import SiteLayout from '../../../../../layouts/SiteLayout.astro';
 import CockpitNav from '../../../../../components/cockpit/CockpitNav.astro';
 import CockpitPanel from '../../../../../components/cockpit/CockpitPanel.astro';
 import { cockpits, builtPanels, panelRoute, cockpitRoute } from '../../../../../data/cockpit/f16c/index.ts';
+import { readings } from '../../../../../data/cockpit/render.ts';
 import { sitePath } from '../../../../../lib/paths';
 export function getStaticPaths() {
   return cockpits.flatMap(c => {
@@ -11,11 +12,12 @@ export function getStaticPaths() {
   });
 }
 const { cockpit, area, panel, spec, prev, next } = Astro.props;
-const gauges = spec.indicators.some(i => i.type === 'gauge');
+const gauges = spec.indicators.some(i => i.type !== 'lamp');
+const tries = readings(spec);
 const hint = [
   spec.controls.length ? 'Click the upper or lower half of a switch to move it, or the left or right half of a knob to turn it.' : '',
   gauges ? 'Select an instrument to see what it shows.' : 'Select a light to see what it means.',
-  gauges ? 'The jet is cold and dark, so the needles rest at their stops.' : 'The jet is cold and dark, so lights stay off.',
+  gauges ? 'The jet is cold and dark; each instrument\'s slider shows how it reads when working.' : 'The jet is cold and dark, so lights stay off.',
 ].filter(Boolean).join(' ');
 const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns when released' : h === 'magnetic' ? 'magnetically held' : '';
 ---
@@ -55,7 +57,8 @@ const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns whe
       {spec.indicators.map(i => (
         <div class="ci-card" data-item={i.id} hidden>
           <h2>{i.name}</h2>
-          {i.type === 'gauge' && <p class="ci-pos">Cold and dark: needle at its stop, <strong>{i.rest} {i.unit}</strong></p>}
+          {i.type !== 'lamp' && <p class="ci-pos">Cold and dark: {i.restNote ?? <>needle at its stop, <strong>{i.rest} {i.unit}</strong></>}</p>}
+          {tries[i.id] && <label class="ci-try">Try a reading <input type="range" data-reading={`${spec.id}.${i.id}`} min={tries[i.id].range[0]} max={tries[i.id].range[1]} step={tries[i.id].range[2]} value={i.rest ?? tries[i.id].range[0]} /> <output>{(i.rest ?? tries[i.id].range[0]).toLocaleString('en-US')} {i.unit}</output></label>}
           <p>{i.description}</p>
           <p class="ci-src">{i.source}</p>
         </div>
@@ -99,6 +102,9 @@ const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns whe
 .ci-pos strong{letter-spacing:.02em}
 .ci-meta{color:var(--color-muted)}
 .ci-src{font-size:.82rem;color:var(--color-muted)}
+.ci-try{display:flex;flex-wrap:wrap;align-items:center;gap:.25rem .6rem;margin:.5rem 0}
+.ci-try input{flex:1 1 9rem;min-height:2.5rem}
+.ci-try output{font-variant-numeric:tabular-nums;min-width:6.5em}
 .ci-head{font-size:1rem;margin:1.1rem 0 .3rem}
 .ci-list{list-style:none;margin:0;padding:0}
 .ci-list li{display:flex;justify-content:space-between;gap:.5rem;align-items:center;border-bottom:1px solid #e3e3e3}
