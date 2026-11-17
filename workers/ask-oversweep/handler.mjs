@@ -47,7 +47,7 @@ export function createHandler(corpus) {
     const sources = [...new Set(ids)].filter(id => Object.hasOwn(corpus, id));
     if (!sources.length) return json({ answer: insufficient, ids: [] });
     const passages = sources.map((id, index) => ({ source: index + 1, ...corpus[id] }));
-    const model = env.ASK_MODEL || "@cf/meta/llama-3.1-8b-instruct";
+    const model = env.ASK_MODEL || "@cf/google/gemma-4-26b-a4b-it";
     const ray = request.headers.get("cf-ray");
     const logFailure = (stage, error) => {
       const candidate = error?.code ?? String(error?.message ?? "").match(/\b[35]\d{3}\b/)?.[0];
@@ -64,16 +64,20 @@ export function createHandler(corpus) {
         response_format: {
           type: "json_schema",
           json_schema: {
-            type: "object",
-            properties: {
-              answer: { type: "string" },
-              sources: { type: "array", items: { type: "integer" } },
+            name: "oversweep_answer",
+            strict: true,
+            schema: {
+              type: "object",
+              properties: {
+                answer: { type: "string" },
+                sources: { type: "array", items: { type: "integer" } },
+              },
+              required: ["answer", "sources"],
+              additionalProperties: false,
             },
-            required: ["answer", "sources"],
-            additionalProperties: false,
           },
         },
-        max_tokens: 250,
+        max_completion_tokens: 250,
         temperature: 0.1,
       });
     } catch (error) {
@@ -84,7 +88,7 @@ export function createHandler(corpus) {
       return json({ code: "unavailable" }, 502);
     }
 
-    let reply = result?.response;
+    let reply = result?.choices?.[0]?.message?.content ?? result?.response;
     try {
       if (typeof reply === "string") reply = JSON.parse(reply.trim().replace(/^```(?:json)?\s*|\s*```$/g, ""));
     } catch {
