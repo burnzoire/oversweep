@@ -9,10 +9,10 @@
  * the client engine flips them. Lamps are `<g data-indicator="<id>">` with a
  * `.lens` rect that lights when the group gets the `lit` class.
  */
-import type { ControlDef, Cut, PanelSpec, Placement, Pt } from './types';
+import type { ControlDef, Cut, Dial, PanelSpec, Placement, Pt } from './types';
 import {
   FASTENERS, FONT, INK, LAMPS, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, lampModuleFrame, lampRoundBezel, n,
-  gearKnob, gearSlot, knobArt, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
+  gaugeBezel, gaugeHub, gearKnob, gearSlot, knobArt, needleArt, polar, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
 } from './components.ts';
 
 const at = ([x, y]: Pt, body: string, extra = '') => `<g transform="translate(${n(x)} ${n(y)})"${extra}>${body}</g>`;
@@ -49,8 +49,59 @@ function dzusCut([x, y]: Pt, corner: Cut) {
   return { hole: `<path d="${edge}V${n(y + sy * far)}Z" fill="${PAPER}" stroke="none"/>`, edge: `<path d="${edge}" ${sw('medium')}/>` };
 }
 
+/** Needle angle (degrees clockwise from 12 o'clock) for `value`, linear between the dial's scale knots, clamped at the ends. */
+export function dialAngle(dial: Dial, value: number) {
+  const k = dial.scale;
+  if (value <= k[0][0]) return k[0][1];
+  for (let i = 1; i < k.length; i++) {
+    const [v0, a0] = k[i - 1], [v1, a1] = k[i];
+    if (value <= v1) return a0 + ((a1 - a0) * (value - v0)) / (v1 - v0);
+  }
+  return k[k.length - 1][1];
+}
+
+/** Every tick value of a run, without the values another run draws. */
+export function tickValues(t: Dial['ticks'][number]) {
+  const out: number[] = [];
+  for (let i = 0; ; i++) {
+    const v = +(t.from + i * t.step).toFixed(6);
+    if (v > t.to + 1e-9) break;
+    if (t.skip && Math.abs(v / t.skip - Math.round(v / t.skip)) < 1e-9) continue;
+    out.push(v);
+  }
+  return out;
+}
+
+/** Ring sector between two radii and two angles (clockwise from 12 o'clock). */
+function sector(r0: number, r1: number, a0: number, a1: number) {
+  const [x0, y0] = polar(r1, a0), [x1, y1] = polar(r1, a1), [x2, y2] = polar(r0, a1), [x3, y3] = polar(r0, a0), big = a1 - a0 > 180 ? 1 : 0;
+  return `M${n(x0)} ${n(y0)}A${n(r1)} ${n(r1)} 0 ${big} 1 ${n(x1)} ${n(y1)}L${n(x2)} ${n(y2)}A${n(r0)} ${n(r0)} 0 ${big} 0 ${n(x3)} ${n(y3)}Z`;
+}
+
+/** Dial art: bezel, face, painted ticks and sectors, legends, needle (turned to `value`), hub. */
+function gauge(dial: Dial, indicator: string, value: number) {
+  let s = gaugeBezel(dial.bezel, dial.face);
+  for (const f of dial.fills ?? []) s += `<path d="${sector(f.r[0], f.r[1], dialAngle(dial, f.from), dialAngle(dial, f.to))}" fill="${INK}" ${sw('fine')}/>`;
+  for (const t of dial.ticks) {
+    const d = tickValues(t).map(v => {
+      const a = dialAngle(dial, v), [x0, y0] = polar(t.r[0], a), [x1, y1] = polar(t.r[1], a);
+      return `M${n(x0)} ${n(y0)}L${n(x1)} ${n(y1)}`;
+    }).join('');
+    s += `<path d="${d}" stroke-width="${n(t.width)}" stroke-linecap="butt"/>`;
+  }
+  s += dial.legends.map(l => text(l.at[0], l.at[1], l.text, l.cap, l.width)).join('');
+  s += `<g data-indicator="${indicator}"><circle class="lens" r="${n(dial.face)}" stroke="none"/>` +
+    `<g data-needle="${indicator}" transform="rotate(${n(dialAngle(dial, value))})">${needleArt(dial.needle)}</g></g>`;
+  return s + gaugeHub(dial.hub);
+}
+
 function placement(spec: PanelSpec, p: Placement, state: Record<string, string>): string {
   switch (p.component) {
+    case 'gauge': {
+      const ind = spec.indicators.find(i => i.id === p.indicator);
+      const value = state[p.indicator] !== undefined ? Number(state[p.indicator]) : ind?.rest ?? p.dial.scale[0][0];
+      return at(p.at, gauge(p.dial, p.indicator, value), ' data-art="gauge"');
+    }
     case 'dzus': case 'screw': case 'screw-medium': case 'screw-small':
       if (p.component === 'dzus' && p.cut) {
         // The notch edges end at the top layer's outline. On a layered panel the notch first clears
@@ -139,7 +190,7 @@ function guideLayer(spec: PanelSpec) {
   for (const p of spec.placements) {
     const [x, y] = p.at;
     s += `<path d="M${n(x - 2)} ${n(y)}H${n(x + 2)}M${n(x)} ${n(y - 2)}V${n(y + 2)}"/>`;
-    const name = 'control' in p ? `${p.control} · ${p.component}` : p.component;
+    const name = 'control' in p ? `${p.control} · ${p.component}` : 'indicator' in p ? `${p.indicator} · ${p.component}` : p.component;
     if (p.component !== 'dzus' && !p.component.startsWith('screw')) s += `<text x="${n(x + 2.2)}" y="${n(y - 1)}" fill="${blue}" stroke="none">${esc(name)}</text>`;
     if (p.component === 'lamp-module') {
       for (const l of p.lamps) s += `<rect x="${n(x + l.rect[0])}" y="${n(y + l.rect[1])}" width="${n(l.rect[2])}" height="${n(l.rect[3])}" stroke-dasharray="0.8 0.6"/>`;
@@ -167,7 +218,7 @@ export function renderPanel(spec: PanelSpec, opts: RenderOptions = {}) {
     : `<path d="${e.d}" ${sw(e.pen ?? 'medium')}${e.faint ? ' stroke-opacity="0.3"' : ''}/>`).join('');
   return `<svg class="cockpit-svg" viewBox="0 0 ${n(w)} ${n(h)}" xmlns="http://www.w3.org/2000/svg" ${opts.label ? `role="img" aria-label="${esc(opts.label)}"` : 'aria-hidden="true"'}>` +
     `<g fill="none" stroke="${INK}" stroke-linejoin="round" stroke-linecap="round" font-family="${FONT}" font-weight="600">` +
-    `<defs><clipPath id="plate-${spec.id}"><path d="${spec.plate[spec.plate.length - 1].d}"/></clipPath><clipPath id="base-${spec.id}"><path d="${spec.plate[0].d}"/></clipPath></defs>` +
+    (spec.plate.length ? `<defs><clipPath id="plate-${spec.id}"><path d="${spec.plate[spec.plate.length - 1].d}"/></clipPath><clipPath id="base-${spec.id}"><path d="${spec.plate[0].d}"/></clipPath></defs>` : '') +
     `<g class="plate">${plate}</g><g class="engraving">${engraving}</g>` +
     `<g class="components">${spec.placements.map(p => placement(spec, p, state)).join('')}</g></g>` +
     (opts.guide ? guideLayer(spec) : '') + '</svg>';
@@ -221,6 +272,10 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         // The lower half of the closed guard: the upper half is left to the switch it covers.
         const [gw, gh] = p.size;
         return [{ kind: 'control', id: p.control, box: [x - gw / 2, y - gh * 0.5, gw, gh * 0.5] }];
+      }
+      case 'gauge': {
+        const r = p.dial.bezel;
+        return [{ kind: 'indicator', id: p.indicator, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }
       case 'lamp-round': {
         const r = LAMPS[p.component].r;

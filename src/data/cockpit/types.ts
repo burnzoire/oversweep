@@ -92,8 +92,13 @@ export interface ControlDef {
 export interface IndicatorDef {
   id: string;
   name: string;
-  type: 'lamp';
-  colour: 'amber' | 'green' | 'red';
+  /** `lamp`: a light (cold jet: off). `gauge`: a pointer instrument (cold jet: needle at `rest`). */
+  type: 'lamp' | 'gauge';
+  /** Lamps only. */
+  colour?: 'amber' | 'green' | 'red';
+  /** Gauges only: unit of the scale, and the value the needle shows cold and dark. */
+  unit?: string;
+  rest?: number;
   description: string;
   source: string;
 }
@@ -130,8 +135,34 @@ export type Placement =
   | { component: 'push-square'; control: string; at: Pt; size: [w: number, h: number]; legend: { text: string; cap: number; y: number; width?: number }[]; indicator?: string; /** Turn (degrees clockwise) about the centre, for buttons on an angled mount. */ rotate?: number }
   | { component: LampModuleArt; at: Pt; size: [w: number, h: number]; lamps: LampCell[]; /** Unused module: a dash across the blank lens. */ blank?: boolean; /** Turn (degrees clockwise) about the module centre, for modules on an angled mount. */ rotate?: number }
   | { component: LampRoundArt; indicator: string; at: Pt }
+  /** Pointer instrument centred on `at`; everything inside `dial` is relative to the dial centre. */
+  | { component: 'gauge'; indicator: string; at: Pt; dial: Dial }
   | { component: 'dzus'; at: Pt; cut?: Cut }
   | { component: 'screw' | 'screw-medium' | 'screw-small'; at: Pt };
+
+/**
+ * A round pointer dial, drawn square-on. Radii in mm from the dial centre,
+ * angles in degrees clockwise from 12 o'clock. The scale is a table of
+ * (value, angle) knots measured off the printed ticks, linear between knots,
+ * so a scale whose spacing varies is described by more knots.
+ */
+export interface Dial {
+  /** Outer edge of the bezel ring, and the edge of the dial face inside it. */
+  bezel: number;
+  face: number;
+  /** Pointer hub (cap over the needle root). */
+  hub: number;
+  /** (value, angle) knots in increasing value; angles increase clockwise and may run past 360. */
+  scale: [value: number, angle: number][];
+  /** Tick runs: one tick every `step` from `from` to `to`, skipping values on `skip` multiples (drawn by another run). */
+  ticks: { from: number; to: number; step: number; skip?: number; r: [inner: number, outer: number]; width: number }[];
+  /** Solid painted sectors between two values (RPM's 60–65 % band). */
+  fills?: { from: number; to: number; r: [inner: number, outer: number] }[];
+  /** Numerals and dial legends, upright, by their centre relative to the dial centre; `width` locks the measured width. */
+  legends: { text: string; at: Pt; cap: number; width?: number }[];
+  /** Needle tip radius (the shared needle's shank stretches to it). */
+  needle: number;
+}
 
 /** The plate corner toward which the face plate is cut away around a DZUS. */
 export type Cut = 'up-left' | 'up-right' | 'down-left' | 'down-right';
@@ -171,7 +202,7 @@ export interface PanelSpec {
   /** Canvas in mm; the plate is drawn inside it. */
   canvas: [w: number, h: number];
   source: PanelSource;
-  /** Plate outlines (mm path data), back to front. `raised` gets an offset lip. Paths fill even-odd, so a second subpath cuts a hole. */
+  /** Plate outlines (mm path data), back to front. `raised` gets an offset lip. Paths fill even-odd, so a second subpath cuts a hole. Empty: instruments drawn without a plate (the guide image does not show one). */
   plate: { d: string; raised?: boolean }[];
   engraving: Engraving[];
   placements: Placement[];

@@ -11,6 +11,12 @@ export function getStaticPaths() {
   });
 }
 const { cockpit, area, panel, spec, prev, next } = Astro.props;
+const gauges = spec.indicators.some(i => i.type === 'gauge');
+const hint = [
+  spec.controls.length ? 'Click the upper or lower half of a switch to move it, or the left or right half of a knob to turn it.' : '',
+  gauges ? 'Select an instrument to see what it shows.' : 'Select a light to see what it means.',
+  gauges ? 'The jet is cold and dark, so the needles rest at their stops.' : 'The jet is cold and dark, so lights stay off.',
+].filter(Boolean).join(' ');
 const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns when released' : h === 'magnetic' ? 'magnetically held' : '';
 ---
 <SiteLayout title={`${cockpit.title} ${spec.title}`} activeSection="manual" activeSubject="aircraft-procedures" compactSubjectNav={true}
@@ -27,7 +33,7 @@ const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns whe
   <div class="cockpit-page">
     <div class="cockpit-main">
       <CockpitPanel cockpit={cockpit} spec={spec} />
-      <p class="cockpit-hint">Click the upper or lower half of a switch to move it, or the left or right half of a knob to turn it. Select a light to see what it means. The jet is cold and dark, so lights stay off.</p>
+      <p class="cockpit-hint">{hint}</p>
       <nav class="cockpit-pager" aria-label="Panels">
         {prev ? <a href={sitePath(panelRoute(cockpit, prev.panel.id))} rel="prev">← {prev.panel.title}</a> : <span></span>}
         <button type="button" class="cockpit-reset" data-cockpit-reset={cockpit.id}>Reset cockpit to cold and dark</button>
@@ -35,7 +41,7 @@ const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns whe
       </nav>
     </div>
     <aside class="cockpit-info" data-cockpit-info={spec.id} aria-label={`${spec.title} controls and indications`}>
-      <div class="ci-card" data-item-empty><p>Select a control or light on the panel, or in the lists below.</p></div>
+      <div class="ci-card" data-item-empty><p>{spec.controls.length ? 'Select a control or light on the panel, or in the lists below.' : 'Select an instrument on the panel, or in the list below.'}</p></div>
       {spec.controls.map(c => (
         <div class="ci-card" data-item={c.id} hidden>
           <h2>{c.name}</h2>
@@ -49,14 +55,17 @@ const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns whe
       {spec.indicators.map(i => (
         <div class="ci-card" data-item={i.id} hidden>
           <h2>{i.name}</h2>
+          {i.type === 'gauge' && <p class="ci-pos">Cold and dark: needle at its stop, <strong>{i.rest} {i.unit}</strong></p>}
           <p>{i.description}</p>
           <p class="ci-src">{i.source}</p>
         </div>
       ))}
-      <h2 class="ci-head">Controls</h2>
-      <ul class="ci-list">{spec.controls.map(c => <li><button type="button" data-cockpit-pick={spec.id} data-id={c.id}>{c.name}</button> <span data-position-of={`${spec.id}.${c.id}`}>{c.positions.find(p => p.id === c.initial)?.label}</span></li>)}</ul>
+      {spec.controls.length > 0 && <>
+        <h2 class="ci-head">Controls</h2>
+        <ul class="ci-list">{spec.controls.map(c => <li><button type="button" data-cockpit-pick={spec.id} data-id={c.id}>{c.name}</button> <span data-position-of={`${spec.id}.${c.id}`}>{c.positions.find(p => p.id === c.initial)?.label}</span></li>)}</ul>
+      </>}
       {spec.indicators.length > 0 && <>
-        <h2 class="ci-head">Lights</h2>
+        <h2 class="ci-head">{gauges ? 'Instruments' : 'Lights'}</h2>
         <ul class="ci-list">{spec.indicators.map(i => <li><button type="button" data-cockpit-pick={spec.id} data-id={i.id}>{i.name}</button></li>)}</ul>
       </>}
     </aside>

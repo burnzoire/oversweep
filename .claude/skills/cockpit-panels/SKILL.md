@@ -121,9 +121,7 @@ resolve in `source.unresolved`.
 
 - Rotary detents: take angles from the printed ticks, not the knob (tall
   knobs are offset by the camera). Record measured angles where spacing varies.
-- Gauges (when added): repeating tick patterns where they fit, explicit
-  angles where spacing varies, needle separate, raster and vector from the
-  same geometry.
+- Gauges: see "Pointer dials" below.
 
 ## 3a. Drawing rules (Nathan's corrections; get these right first time)
 
@@ -184,6 +182,31 @@ everything that stands proud of it.
   `faint` engraving path.
 - Real-part datasheets (e.g. Honeywell TL series) are fine for a component's
   shape; panel layout still traces from the sim guide only.
+
+## 3b. Pointer dials (gauges)
+
+A dial is one `gauge` placement (`Dial` in types.ts) with an `indicator` of
+type `gauge` (`unit`, cold-and-dark `rest`). Ticks, numerals and the needle
+are measured, never laid out from the guide's prose. Worked example: F-16C
+`engine-instruments.ts` (OIL, NOZ POS, RPM, FTIT).
+
+1. `scripts/gauge-dial.py blobs` on each dial; read the numbered
+   `-blobs.png` and write the blob → value map (keep it in `docs/cockpit/`).
+2. `scripts/gauge-dial.py fit`: one affine for every dial on the image, each
+   centre fitted to the tick **inner** ends (outer ends hide under the bezel
+   lip, so a circle through them gives the wrong centre). Its per-tick
+   residuals show whether a scale is linear: a smooth trend that no centre
+   removes means the printed scale is non-linear (F-16C RPM above 65 %).
+3. `polar` unwraps a dial; `ticks` gives each tick's angle, radii and width,
+   `needle` the needle width against radius, `glyphs` the numeral boxes. Check
+   glyph boxes for missed letters (the S of NOZ POS was missed) and for
+   numerals merged with the needle; measure those on a zoom.
+4. The scale is `(value, angle)` knots: two for a linear scale, a knot every
+   major step from a local fit where spacing varies. Painted bands are `fills`.
+5. Needles share one component (`NEEDLE` in components.ts) when their width
+   profiles match; only the length differs.
+6. Tick widths come from a blurred image: take about 80 % of the
+   half-brightness width.
 
 ## 4. Review by onion skin, adjust, repeat
 

@@ -523,3 +523,29 @@ export function lampModuleFrame(size: [number, number]) {
   return cased(`<rect width="${n(w)}" height="${n(h)}" rx="1.2" fill="${PAPER}"/>`, 'heavy') +
     `<rect x="${i}" y="${i}" width="${n(w - 2 * i)}" height="${n(h - 2 * i)}" rx="0.6" fill="${PAPER}" ${sw('fine')}/>`;
 }
+
+/* ----------------------------------------------------------------- gauges */
+
+/**
+ * The pointer shared by the F-16C engine instruments (OIL, NOZ POS, RPM,
+ * FTIT): measured on the guide's p. 50 image, all four have the same
+ * parallel shank 3.6 mm wide from under the hub, tapering over its last
+ * 6.5 mm to a rounded tip 0.9 mm wide. Only the length differs per dial.
+ * Drawn pointing at 12 o'clock from the dial centre; the renderer turns it.
+ */
+export const NEEDLE = { base: 3.6, taper: 6.5, tip: 0.9 } as const;
+
+export function needleArt(length: number) {
+  const { base, taper, tip } = NEEDLE, b = base / 2, t = tip / 2, y = -(length - t), s = -(length - taper);
+  return `<path d="M${n(-b)} 0V${n(s)}L${n(-t)} ${n(y)}A${n(t)} ${n(t)} 0 0 1 ${n(t)} ${n(y)}L${n(b)} ${n(s)}V0Z" fill="${INK}" ${sw('fine')}/>`;
+}
+
+/** Bezel ring with the dial face inside it, centred on the origin. */
+export function gaugeBezel(bezel: number, face: number) {
+  return cased(`<circle r="${n(bezel)}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(face)}" ${sw('medium')}/>`;
+}
+
+/** Hub cap over the needle root. */
+export function gaugeHub(r: number) {
+  return cased(`<circle r="${n(r)}" fill="${PAPER}"/>`, 'medium') + `<circle r="${n(r * 0.45)}" ${sw('fine')}/>`;
+}

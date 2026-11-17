@@ -25,14 +25,14 @@ const dirLabels = (id: string) => {
   return [`Move ${c.name} up`, `Move ${c.name} down`];
 };
 ---
-<div class="cockpit-panel" data-cockpit-panel style={`--ratio:${W / H}`}>
+<div class="cockpit-panel" data-cockpit-panel style={`--ratio:${W / H}` + (W / H < 0.6 ? ';--cp-height:52rem' : '')}>
   <div class="cp-stage">
     <Fragment set:html={renderPanel(spec, { label: `${cockpit.title} ${spec.title}` })} />
     {hitZones(spec).map(z => {
       const style = `left:${pct(z.box[0], W)};top:${pct(z.box[1], H)};width:${pct(z.box[2], W)};height:${pct(z.box[3], H)}` + (z.rotate ? `;transform:rotate(${z.rotate}deg)` : '');
       if (z.kind === 'indicator') {
         const ind = spec.indicators.find(i => i.id === z.id)!;
-        return <button type="button" class="cp-hit cp-lamp" style={style} data-select={z.id} aria-label={`${ind.name}: what it shows`}></button>;
+        return <button type="button" class:list={['cp-hit', 'cp-lamp', z.round && 'cp-round']} style={style} data-select={z.id} aria-label={`${ind.name}: what it shows`}></button>;
       }
       const c = control(z.id);
       if (c.type === 'toggle' || c.type === 'rotary') {
@@ -54,7 +54,7 @@ const dirLabels = (id: string) => {
 </div>
 
 <style>
-.cockpit-panel{--panel-ink:#161616;max-width:min(100%,calc(34rem * var(--ratio)))}
+.cockpit-panel{--panel-ink:#161616;max-width:min(100%,calc(var(--cp-height,34rem) * var(--ratio)))}
 .cp-stage{position:relative;aspect-ratio:var(--ratio);background:#fff;user-select:none;-webkit-user-select:none;touch-action:manipulation}
 .cp-stage :global(svg){display:block;width:100%;height:100%}
 .cp-stage :global(.lens){fill:transparent}
@@ -176,7 +176,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     b.addEventListener('click', () => {
       select(b.dataset.select!);
       const ind = def.indicators.find(i => i.id === b.dataset.select);
-      if (ind) say(`${ind.name}: off (cold jet).`);
+      if (ind) say(ind.type === 'gauge' ? `${ind.name}: needle at its stop, ${ind.rest} ${ind.unit ?? ''} (cold jet).` : `${ind.name}: off (cold jet).`);
     });
   }
   for (const b of document.querySelectorAll<HTMLButtonElement>(`[data-cockpit-pick="${def.panel}"]`)) {
