@@ -148,7 +148,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
     }
     case 'guard-flip': {
       const c = controlOf(spec, p.control);
-      return at(p.at, moving(c, state[c.id] ?? c.initial, i => guardArt(p.size, c.positions[i].id !== 'closed')), ` data-art="guard-flip"`);
+      return at(p.at, turn(p.rotate, 0, 0, moving(c, state[c.id] ?? c.initial, i => guardArt(p.size, c.positions[i].id !== 'closed'))), ` data-art="guard-flip"`);
     }
     case 'lamp-module': {
       const [w, h] = p.size;
@@ -270,8 +270,14 @@ export function hitZones(spec: PanelSpec): HitZone[] {
       }
       case 'guard-flip': {
         // The lower half of the closed guard: the upper half is left to the switch it covers.
-        const [gw, gh] = p.size;
-        return [{ kind: 'control', id: p.control, box: [x - gw / 2, y - gh * 0.5, gw, gh * 0.5] }];
+        const [gw, gh] = p.size, a = (p.rotate ?? 0) * Math.PI / 180;
+        if (!a) return [{ kind: 'control', id: p.control, box: [x - gw / 2, y - gh * 0.5, gw, gh * 0.5] }];
+        // A turned guard: the same hinge-side half, turned about the hinge (square turns only).
+        const pts = [[-gw / 2, -gh * 0.5], [gw / 2, -gh * 0.5], [-gw / 2, 0], [gw / 2, 0]]
+          .map(([u, v]) => [x + u * Math.cos(a) - v * Math.sin(a), y + u * Math.sin(a) + v * Math.cos(a)]);
+        const xs = pts.map(q => q[0]), ys = pts.map(q => q[1]);
+        const x0 = Math.min(...xs), y0 = Math.min(...ys);
+        return [{ kind: 'control', id: p.control, box: [x0, y0, Math.max(...xs) - x0, Math.max(...ys) - y0] }];
       }
       case 'gauge': {
         const r = p.dial.bezel;

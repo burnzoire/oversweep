@@ -14,6 +14,7 @@ import { snsrPwr } from './snsr-pwr.ts';
 import { interiorLighting } from './interior-lighting.ts';
 import { avionicsPower } from './avionics-power.ts';
 import { engineInstruments } from './engine-instruments.ts';
+import { epu } from './epu.ts';
 
 /**
  * DCS F-16C cockpit catalogue: areas and panels in the order the official guide
@@ -73,7 +74,7 @@ export const f16cCockpit: AircraftCockpit = {
       id: 'left-console', title: 'Left console', panels: [
         { id: 'manual-pitch-override', title: 'Manual pitch override switch', page: 62 },
         { id: 'eng-jet-start', title: 'ENG & JET START panel', page: 63, spec: engJetStart },
-        { id: 'epu', title: 'EPU panel', page: 64 },
+        { id: 'epu', title: 'EPU panel', page: 64, spec: epu },
         { id: 'elec', title: 'ELEC panel', page: 64, spec: elec },
         { id: 'audio', title: 'AUDIO 1 & 2 panels', page: 65 },
         { id: 'avtr', title: 'AVTR panel', page: 66 },
