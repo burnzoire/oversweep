@@ -155,8 +155,8 @@ export function searchIndex() {
         await pagefind.close();
         await writeFile(path.join(output, "search-index.json"), JSON.stringify(entries));
         if (base === "/") {
-          await writeFile(path.join(output, "ask-corpus.json"), JSON.stringify(corpus));
-          await writeFile(path.join(output, "ask-search.json"), JSON.stringify(prepareCorpus(corpus)));
+          await writeFile(path.join(output, "ask-corpus.txt"), JSON.stringify(corpus));
+          await writeFile(path.join(output, "ask-search.txt"), JSON.stringify(prepareCorpus(corpus)));
         }
         logger.info(`search-index.json has ${entries.length} entries.`);
       },

@@ -13,5 +13,15 @@
       "invocation_logs": true,
       "persist": true
     }
-  }
+  },
+  "rules": [
+    {
+      "type": "Text",
+      "globs": [
+        "**/ask-corpus.txt",
+        "**/ask-search.txt"
+      ],
+      "fallthrough": true
+    }
+  ]
 }

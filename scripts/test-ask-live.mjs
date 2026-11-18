@@ -6,7 +6,7 @@ import { createRetriever } from '../workers/ask-oversweep/retrieval.mjs';
 if (process.env.ASK_LIVE !== '1') throw new Error('Set ASK_LIVE=1 to authorize live inference');
 const endpoint = process.env.ASK_ENDPOINT ?? 'https://ask-oversweep.burnzoire.workers.dev/ask';
 const cases = JSON.parse(await fs.readFile(new URL('../tests/ask/conversations.json', import.meta.url)));
-const retrieve = createRetriever(JSON.parse(await fs.readFile(new URL('../dist/ask-corpus.json', import.meta.url))));
+const retrieve = createRetriever(JSON.parse(await fs.readFile(new URL('../dist/ask-corpus.txt', import.meta.url))));
 if (process.env.ASK_REVISION) {
   const deployed = await fetch(endpoint, { method: 'HEAD', signal: AbortSignal.timeout(15000) });
   if (deployed.headers.get('x-ask-revision') !== process.env.ASK_REVISION) throw new Error('Expected branch revision is not deployed; no inference tests were started');
