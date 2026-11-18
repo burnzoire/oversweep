@@ -160,7 +160,7 @@ export function createRetriever(corpus, prepared = prepareCorpus(corpus)) {
         ? row.text.slice(0, 250) + " … " + row.text.slice(start, start + Math.max(0, limit - 253))
         : row.text.slice(0, limit);
       remaining -= text.length;
-      return { id: row.id, title: row.title, text };
+      return { id: row.id, title: row.title, text, kind: /#af-/.test(row.id) ? "simulator_record" : row.id.startsWith("/manual/") ? "explanation" : "article", ...(/#af-/.test(row.id) ? { scope: row.title.split(" · ").slice(1).join(" · ") } : {}) };
     }).filter(row => row.text) };
   };
 }

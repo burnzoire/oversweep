@@ -84,3 +84,15 @@ test("temporary capacity retries once, rejects queues, and preserves daily-quota
  const quota=await handle(request(),{AI:{async run(){calls++;throw Object.assign(new Error('Quota'),{code:3036})}}});
  assert.equal(quota.status,429);assert.equal(calls,1);
 });
+
+
+test("structured output bounds prevent repeating citations from exhausting completion", async()=> {
+ const response=await handle(request(),{AI:{async run(_model,options){
+ const schema=options.response_format.json_schema.schema;
+ assert.equal(schema.properties.sources.maxItems,1);
+ assert.equal(schema.properties.sources.uniqueItems,true);
+ assert.equal(schema.properties.answer.maxLength,1200);
+ assert.equal(options.max_completion_tokens,700);
+ return {response:JSON.stringify({answer:"127.0 MHz",sources:[1]})};
+ }}});assert.equal(response.status,200);
+});
