@@ -43,7 +43,7 @@ test('independent questions release prior topic and comparisons include every na
 });
 test('topic IDs preserve context beyond the bounded history and reset prevents leakage', () => {
   assert.equal(retrieve('What about ILS?',{topic:[sochi],history:[]}).subject,'Sochi International Airport');
-  assert.equal(retrieve('What about ILS?',{topic:[],history:[{role:'user',content:'Sochi tower?'}]}).subject,undefined);
+  assert.equal(retrieve('What about ILS?',{topic:[],history:[]}).subject,undefined);
 });
 
 test('generic attribute words do not match a simulator theatre name', () => {
@@ -74,4 +74,22 @@ test('comparison follow-ups retain both the earlier and newly named aircraft', (
   const f14='/encyclopedia/aircraft/f-14/',f16='/encyclopedia/aircraft/f-16/';
   const r=createRetriever({...corpus,[f14]:{title:'F-14 Tomcat',text:'Two engines.'},[f16]:{title:'F-16 Fighting Falcon',text:'One engine.'}});
   assert.deepEqual(new Set(r('How does this differ from the F-16?',{topic:[f14]}).topic),new Set([f14,f16]));
+});
+
+
+test('explicit map scope resolves duplicate row names before deduplication',()=>{
+ const r=createRetriever({...corpus,
+ '/encyclopedia/locations/dcs-syria/':{title:'DCS: Syria',text:'Theatre.'},
+ '/encyclopedia/locations/dcs-sinai/':{title:'DCS: Sinai',text:'Theatre.'},
+ '/encyclopedia/locations/dcs-syria/#af-hatzerim':{title:'Hatzerim · DCS: Syria',name:'Hatzerim',text:'Tower 128.2'},
+ '/encyclopedia/locations/dcs-sinai/#af-hatzerim':{title:'Hatzerim · DCS: Sinai',name:'Hatzerim',text:'Tower 119.75'},
+ '/encyclopedia/locations/dcs-syria/#af-king-hussein':{title:'King Hussein Air College · DCS: Syria',name:'King Hussein Air College',text:'Tower 118.3'}});
+ assert.deepEqual(r('What is the tower frequency for Hatzerim in Syria?').topic,['/encyclopedia/locations/dcs-syria/#af-hatzerim']);
+ assert.equal(r('What is the tower frequency for King Hussein Air College?').topic.length,1);
+ assert.equal(r('What is the tower frequency for Hatzerim?').topic.length,2);
+});
+
+test('a failed new-subject question supersedes the last successful topic',()=>{
+ const result=retrieve('What runways are available?',{topic:[sochi],history:[{role:'user',content:'Sochi tower?'},{role:'assistant',content:'127.0'},{role:'user',content:'What is the tower frequency for Ramat David?'}]});
+ assert.equal(result.subject,'Ramat David Airbase');
 });

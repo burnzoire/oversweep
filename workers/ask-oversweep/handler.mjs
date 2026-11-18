@@ -60,6 +60,7 @@ export function createHandler(corpus) {
       const candidate = error?.code ?? String(error?.message ?? "").match(/\b[35]\d{3}\b/)?.[0];
       const code = /^\d{4}$/.test(String(candidate)) ? Number(candidate) : undefined;
       console.warn("ask_oversweep_failure", { stage, ray, model, code });
+      return code;
     };
     let result;
     try {
@@ -94,8 +95,8 @@ export function createHandler(corpus) {
       if (Number(error?.code) === 3036 || dailyQuota.test(String(error?.message ?? ""))) {
         return json({ code: "daily_quota" }, 429);
       }
-      logFailure("inference", error);
-      return json({ code: "unavailable" }, 502);
+      const upstreamCode = logFailure("inference", error);
+      return json({ code: "unavailable", stage: "inference", upstreamCode }, 502);
     }
 
     let reply = result?.choices?.[0]?.message?.content ?? result?.response;

@@ -299,5 +299,36 @@
         ]
       }
     ]
+  },
+  {
+    "id": "theatre-scope",
+    "turns": [
+      {
+        "question": "What is the tower frequency for Hatzerim in Syria?",
+        "all": [
+          "128.2",
+          "259"
+        ],
+        "none": [
+          "119.75"
+        ]
+      },
+      {
+        "question": "What is the tower frequency for Biggin Hill in The Channel?",
+        "all": [
+          "118.2"
+        ],
+        "none": [
+          "134.8"
+        ]
+      },
+      {
+        "question": "What is the tower frequency for King Hussein Air College?",
+        "all": [
+          "118.3",
+          "250.45"
+        ]
+      }
+    ]
   }
 ]

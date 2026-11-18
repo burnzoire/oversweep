@@ -19,7 +19,7 @@ export function createRetriever(corpus) {
     if (id.startsWith('/encyclopedia/aircraft/')) labels.push(value.title.replace(/\b[A-Z]{1,4}[-–]?\d+[A-Z0-9/-]*\b/g, '').trim());
     const lead = value.text.split(/[.!?]/)[0];
     if (glossary(id) && terms(lead).length <= 6) labels.push(lead);
-    return { id, ...value, counts, length: tokens.length, titleWords: new Set(terms(value.title)), mapName: /\/locations\/(?:dcs-|bms-|falcon4-)/.test(id) && !id.includes("#") ? value.title.replace(/^(?:DCS|Falcon BMS|Falcon 4\.0):?\s*/i, "").toLowerCase() : undefined, labels: labels.map(label => [...new Set(terms(label))].filter(t => !titleNoise.has(t))) };
+    return { id, ...value, counts, length: tokens.length, titleWords: new Set(terms(value.title)), mapName: /\/locations\/(?:dcs-|bms-|falcon4-)/.test(id) && !id.includes("#") ? value.title.replace(/^(?:DCS|Falcon BMS|Falcon 4\.0):?\s*/i, "").toLowerCase() : undefined, labels: labels.map(label => [...new Set(terms(label))].filter(t => /#af-/.test(id) || !titleNoise.has(t))) };
   });
   const byId = new Map(rows.map(row => [row.id, row]));
   const averageLength = rows.reduce((sum, row) => sum + row.length, 0) / (rows.length || 1);
@@ -33,7 +33,8 @@ export function createRetriever(corpus) {
   function named(question) {
     const query = new Set(terms(question));
     const phrase = [...query].join(' ');
-    const matches = roots.map(row => {
+    const scopes = new Set(roots.filter(row => row.mapName && question.toLowerCase().includes(row.mapName)).map(row => row.id));
+    let matches = roots.filter(row => !/#af-/.test(row.id) || !scopes.size || scopes.has(root(row.id))).map(row => {
       let evidence = '';
       const score = Math.max(0, ...row.labels.filter(title => title.length).map(title => {
         const matched = title.filter(t => query.has(t));
@@ -46,13 +47,15 @@ export function createRetriever(corpus) {
       }));
       return { row, score, evidence };
     }).filter(x => x.score > 0).sort((a, b) => b.score - a.score || Number(leaf(a.row.id)) - Number(leaf(b.row.id)) || a.row.id.localeCompare(b.row.id));
+    if (matches.some(item => /#af-/.test(item.row.id))) matches = matches.filter(item => !scopes.has(item.row.id));
     if (!matches.length) return [];
     const first = matches[0];
-    const seen = new Set();
+    const seen = new Map();
     return matches.filter(item => {
       if (item !== first && (!entity(first.row.id) || !entity(item.row.id))) return false;
-      if (seen.has(item.evidence)) return false;
-      seen.add(item.evidence); return true;
+      const previous = seen.get(item.evidence);
+      if (previous && !(/#af-/.test(previous.id) && /#af-/.test(item.row.id) && root(previous.id) !== root(item.row.id))) return false;
+      seen.set(item.evidence, item.row); return true;
     }).slice(0, 3).map(item => item.row);
   }
   return function retrieve(question, { history = [], previous = '', ids = [], topic } = {}) {
@@ -62,9 +65,17 @@ export function createRetriever(corpus) {
     const independent = !referential && (definition || /^how (?:do|does)\b/i.test(question));
     const followUp = !independent && (referential || /^(?:and|what about|how about|also)\b/i.test(question) || query.length <= 2 && !/\b(?:for|at|in)\s+\S/i.test(question));
     const priorQuestions = history.filter(turn => turn.role === 'user').map(turn => turn.content);
-    const prior = topic === undefined
+    let prior = topic === undefined
       ? [...(previous ? [previous] : []), ...priorQuestions].reverse().map(named).find(matches => matches.some(row => entity(row.id))) ?? []
       : topic.map(id => byId.get(id)).filter(Boolean);
+    // A failed request leaves an unpaired user turn. Its explicit new subject
+    // takes precedence over topic IDs from the last successful reply.
+    const unanswered = history.at(-1);
+    if (unanswered?.role === 'user') {
+      const newer = named(unanswered.content);
+      if (newer.length) prior = newer;
+      else if (terms(unanswered.content).length > 2 && !/\b(it|its|they|their|that|this)\b/i.test(unanswered.content)) prior = [];
+    }
     let subjects = named(question);
     if (prior.length && !independent && subjects.every(row => glossary(row.id))) subjects = [];
     if (!subjects.length && followUp) subjects = prior;
@@ -97,14 +108,22 @@ export function createRetriever(corpus) {
     if (subjects.length && query.length && !subjects.every(row => /#af-/.test(row.id))) {
       const subjectTerms = new Set(subjects.flatMap(row => [...row.titleWords]));
       const concepts = queryTerms.filter(t => !subjectTerms.has(t) && weight(t) > 1);
+      const needsExplanation = concepts.some(t => !selected.some(row => row.counts.has(t)));
       const acronyms = new Set(terms(selected.map(row => row.text).join(' ').match(/\b[A-Z][A-Z0-9]{1,7}\b/g)?.join(' ') ?? ''));
       const acronymQuestion = query.some(t => acronymTerms.has(t));
       const helperScore = row => score(row) + (acronymQuestion ? [...acronyms].reduce((n, t) => n + (row.counts.has(t) ? weight(t) : 0), 0) : 0);
       const related = candidates.filter(row => (row.id.startsWith('/manual/') && row.id.includes('#') || glossary(row.id)) && !onSubject(row) && concepts.some(t => row.counts.has(t)))
         .map(row => ({ row, score: helperScore(row) })).sort((a, b) => b.score - a.score || a.row.text.length - b.row.text.length);
-      const definition = subjects.every(row => glossary(row.id)) ? undefined : related.find(x => glossary(x.row.id) && [...x.row.titleWords].some(t => query.includes(t)))?.row;
+      const definition = subjects.every(row => glossary(row.id)) ? undefined : related.find(x => glossary(x.row.id) && [...x.row.titleWords].every(t => concepts.includes(t)))?.row;
       const explanation = related.find(x => x.row.id.startsWith('/manual/') && x.row.text.length > 300)?.row;
-      for (const row of [definition, explanation]) if (row && selected.length < 6) selected.push(row);
+      const headingTerms = previousTerms.length ? previousTerms.filter(t => !subjectTerms.has(t)) : concepts;
+      const headingScore = row => {
+        const heading = [...new Set(terms(row.title.split('·').at(-1)))];
+        return heading.filter(t => headingTerms.includes(t)).length / (heading.length || 1);
+      };
+      const headingExplanation = related.filter(x => x.row.id.startsWith('/manual/') && x.row !== explanation && headingScore(x.row) > 0)
+        .sort((a, b) => headingScore(b.row) - headingScore(a.row) || b.score - a.score)[0]?.row;
+      if (needsExplanation) for (const row of [definition, explanation, headingExplanation]) if (row && selected.length < 6) selected.push(row);
     }
     let remaining = 14000;
     return { subject: subjects.map(row => row.title).join(' and ') || undefined, topic: subjects.map(row => row.id), passages: selected.map((row, index) => {

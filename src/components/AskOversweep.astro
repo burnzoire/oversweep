@@ -74,10 +74,16 @@ const { id } = Astro.props;
       input.value = "";
       input.focus();
       const reply = appendMessage("oversweep", "…");
+      const contextHistory = history;
+      history = [...history, { role: "user", content: question }].slice(-6) as typeof history;
       try {
-        const pagefind = await import(/* @vite-ignore */ panel.dataset.index!);
-        const search = (query: string) => findPassages(pagefind, query, panel.dataset.base!, location.origin);
-        const passages = await search(question);
+        let passages: Awaited<ReturnType<typeof findPassages>> = [];
+        try {
+          const pagefind = await import(/* @vite-ignore */ panel.dataset.index!);
+          passages = await findPassages(pagefind, question, panel.dataset.base!, location.origin);
+        } catch (error) {
+          if (!panel.dataset.endpoint) throw error;
+        }
         if (turn !== generation) return;
         let generated: { answer?: string; ids?: string[]; topic?: string[]; references?: { id: string; title: string }[] } | undefined;
         let quota = false;
@@ -87,7 +93,7 @@ const { id } = Astro.props;
             const response = await fetch(panel.dataset.endpoint, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ question, history, topic, ids: passages.map(passage => passage.url) }),
+              body: JSON.stringify({ question, history: contextHistory, topic, ids: passages.map(passage => passage.url) }),
               signal: AbortSignal.any([pending.signal, AbortSignal.timeout(30000)]),
             });
             const payload = await response.json();
@@ -98,7 +104,6 @@ const { id } = Astro.props;
           }
         }
         if (turn !== generation) return;
-        history = [...history, { role: "user", content: question }].slice(-6) as typeof history;
         if (generated?.answer) {
           history = [...history, { role: "assistant", content: generated.answer.slice(0, 1200) }].slice(-6) as typeof history;
         }
