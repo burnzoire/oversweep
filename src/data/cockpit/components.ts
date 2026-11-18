@@ -584,11 +584,12 @@ export function gearKnob([w, h]: [number, number], y: number, indicator?: string
  * knob on its face. Drawn upright (the guide's camera leans it toward MIN).
  * The disc's face turns inboard, toward the pilot (its long axis runs fore and
  * aft in the guide image), so from above it is seen edge-on: a short bar across
- * the blade, `thick` deep.
+ * the blade, `thick` deep, with its neck (`neck`: width at the disc, width at
+ * the blade, length) tapering back to the blade.
  * mm: slot height, blade root width and visible length, disc diameter,
  * thickness and its centre above the slot.
  */
-export const SLOT_LEVER = { slotH: 2.3, root: 10.8, length: 23, disc: 16.5, thick: 4.2, discY: 6.5 } as const;
+export const SLOT_LEVER = { slotH: 2.3, root: 10.8, length: 23, disc: 16.5, thick: 4.2, discY: 3.5, neck: [9, 4.5, 7] } as const;
 
 /** The slot, long enough for the lever root at both ends of `travel`, centred on the origin. */
 export function leverSlot(travel: number) {
@@ -600,11 +601,14 @@ export function leverSlot(travel: number) {
 export function slotLeverArt(x: number) {
   const { root, length, disc, discY } = SLOT_LEVER, r = root / 2, top = -length + r;
   const blade = `M${n(x - r)} 0V${n(top)}A${n(r)} ${n(r)} 0 0 1 ${n(x + r)} ${n(top)}V0Z`;
-  const { thick } = SLOT_LEVER, w = disc, h = thick, x0 = x - w / 2, y0 = -discY - h / 2;
-  // Edge-on disc: a stadium, with the rim's near edge as a fine line along it.
+  const { thick, neck } = SLOT_LEVER, w = disc, h = thick, x0 = x - w / 2, y0 = -discY - h / 2;
+  // Mushroom knob seen from above: the edge-on disc (a stadium) inboard, and its
+  // neck tapering outboard (up) from the back of the disc to the blade.
+  const [nw0, nw1, nl] = neck, ny = y0 + h * 0.3;
+  const stem = `M${n(x - nw0 / 2)} ${n(ny)}L${n(x - nw1 / 2)} ${n(ny - nl)}H${n(x + nw1 / 2)}L${n(x + nw0 / 2)} ${n(ny)}Z`;
   return cased(`<path d="${blade}" fill="${PAPER}"/>`) +
-    cased(`<rect x="${n(x0)}" y="${n(y0)}" width="${n(w)}" height="${n(h)}" rx="${n(h / 2)}" fill="${PAPER}"/>`) +
-    `<path d="M${n(x0 + h / 2)} ${n(-discY + h * 0.12)}H${n(x0 + w - h / 2)}" ${sw('fine')}/>`;
+    cased(`<path d="${stem}" fill="${PAPER}"/>`) +
+    cased(`<rect x="${n(x0)}" y="${n(y0)}" width="${n(w)}" height="${n(h)}" rx="${n(h / 2)}" fill="${PAPER}"/>`);
 }
 
 /* ----------------------------------------------------------------- guards */
