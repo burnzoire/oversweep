@@ -1,0 +1,3669 @@
+
+> oversweep@0.1.0 check
+> npm test && astro check && tsc --noEmit && npm run build && node scripts/check_site.mjs && node scripts/check_experiences.mjs && node scripts/check_modules.mjs && node scripts/check_encyclopedia.mjs
+
+
+> oversweep@0.1.0 test
+> node --test "tests/**/*.test.mjs" "tests/*/*.cjs"
+
+TAP version 13
+# Subtest: public preview procedures are visible and review-only procedures remain gated
+ok 1 - public preview procedures are visible and review-only procedures remain gated
+  ---
+  duration_ms: 11.303621
+  type: 'test'
+  ...
+# Subtest: engine start guide contains actions, expected indications and source mapping
+ok 2 - engine start guide contains actions, expected indications and source mapping
+  ---
+  duration_ms: 4.136416
+  type: 'test'
+  ...
+# Subtest: instrument artwork and procedural content remain separate
+ok 3 - instrument artwork and procedural content remain separate
+  ---
+  duration_ms: 4.449993
+  type: 'test'
+  ...
+# Subtest: panel controls are native buttons with distinct locations
+ok 4 - panel controls are native buttons with distinct locations
+  ---
+  duration_ms: 3.435164
+  type: 'test'
+  ...
+# Subtest: panel redraw uses separate artwork and movable controls
+ok 5 - panel redraw uses separate artwork and movable controls
+  ---
+  duration_ms: 2.376675
+  type: 'test'
+  ...
+# Subtest: raster panels expose independent annunciators and control overlays
+ok 6 - raster panels expose independent annunciators and control overlays
+  ---
+  duration_ms: 3.081179
+  type: 'test'
+  ...
+# Subtest: airfield rows beyond the old cutoff retain labels and canonical anchors
+ok 7 - airfield rows beyond the old cutoff retain labels and canonical anchors
+  ---
+  duration_ms: 6.82277
+  type: 'test'
+  ...
+# Subtest: long passages use a bounded relevant window with the source introduction
+ok 8 - long passages use a bounded relevant window with the source introduction
+  ---
+  duration_ms: 5.331915
+  type: 'test'
+  ...
+# Subtest: re-searches the current subject on follow-ups and clears it for explicit switches
+ok 9 - re-searches the current subject on follow-ups and clears it for explicit switches
+  ---
+  duration_ms: 4.752808
+  type: 'test'
+  ...
+# Subtest: pronouns keep the airfield instead of making TACAN the new topic
+ok 10 - pronouns keep the airfield instead of making TACAN the new topic
+  ---
+  duration_ms: 0.840111
+  type: 'test'
+  ...
+# Subtest: canonical glossary aliases preserve word order
+ok 11 - canonical glossary aliases preserve word order
+  ---
+  duration_ms: 0.431648
+  type: 'test'
+  ...
+# Subtest: independent questions release prior topic and comparisons include every named record
+ok 12 - independent questions release prior topic and comparisons include every named record
+  ---
+  duration_ms: 12.927167
+  type: 'test'
+  ...
+# Subtest: topic IDs preserve context beyond the bounded history and reset prevents leakage
+ok 13 - topic IDs preserve context beyond the bounded history and reset prevents leakage
+  ---
+  duration_ms: 2.02678
+  type: 'test'
+  ...
+# Subtest: generic attribute words do not match a simulator theatre name
+ok 14 - generic attribute words do not match a simulator theatre name
+  ---
+  duration_ms: 0.828469
+  type: 'test'
+  ...
+# Subtest: aircraft nicknames preserve a topic and include the factual record
+ok 15 - aircraft nicknames preserve a topic and include the factual record
+  ---
+  duration_ms: 1.804305
+  type: 'test'
+  ...
+# Subtest: airfield table rows retain context without mistaking directions for names
+ok 16 - airfield table rows retain context without mistaking directions for names
+  ---
+  duration_ms: 0.976607
+  type: 'test'
+  ...
+# Subtest: comparison follow-ups retain both the earlier and newly named aircraft
+ok 17 - comparison follow-ups retain both the earlier and newly named aircraft
+  ---
+  duration_ms: 1.114434
+  type: 'test'
+  ...
+# Subtest: explicit map scope resolves duplicate row names before deduplication
+ok 18 - explicit map scope resolves duplicate row names before deduplication
+  ---
+  duration_ms: 2.076594
+  type: 'test'
+  ...
+# Subtest: a failed new-subject question supersedes the last successful topic
+ok 19 - a failed new-subject question supersedes the last successful topic
+  ---
+  duration_ms: 0.448419
+  type: 'test'
+  ...
+# Subtest: build-prepared metadata round-trips without changing retrieval
+ok 20 - build-prepared metadata round-trips without changing retrieval
+  ---
+  duration_ms: 1.365454
+  type: 'test'
+  ...
+# Subtest: multiple failed dependent questions preserve the latest explicit subject
+ok 21 - multiple failed dependent questions preserve the latest explicit subject
+  ---
+  duration_ms: 0.274754
+  type: 'test'
+  ...
+# Subtest: explicit simulator scope prefers the matching row over a standalone article
+ok 22 - explicit simulator scope prefers the matching row over a standalone article
+  ---
+  duration_ms: 0.667299
+  type: 'test'
+  ...
+# Subtest: standalone articles include their explicitly linked theatre rows
+ok 23 - standalone articles include their explicitly linked theatre rows
+  ---
+  duration_ms: 0.772234
+  type: 'test'
+  ...
+# Subtest: retrieval labels canonical scopes and separates explanations from records
+ok 24 - retrieval labels canonical scopes and separates explanations from records
+  ---
+  duration_ms: 0.500687
+  type: 'test'
+  ...
+# ask_oversweep_failure {
+#   stage: 'response_sources',
+#   ray: null,
+#   model: '@cf/google/gemma-4-26b-a4b-it',
+#   code: undefined
+# }
+# Subtest: the model receives canonical passages and returns supporting section IDs
+ok 25 - the model receives canonical passages and returns supporting section IDs
+  ---
+  duration_ms: 35.572519
+  type: 'test'
+  ...
+# Subtest: unmatched questions skip inference and invalid citation numbers fall back
+ok 26 - unmatched questions skip inference and invalid citation numbers fall back
+  ---
+  duration_ms: 4.831937
+  type: 'test'
+  ...
+# ask_oversweep_failure {
+#   stage: 'inference',
+#   ray: null,
+#   model: '@cf/google/gemma-4-26b-a4b-it',
+#   code: 3040
+# }
+# Subtest: daily inference quota is distinct from capacity throttling
+ok 27 - daily inference quota is distinct from capacity throttling
+  ---
+  duration_ms: 504.269551
+  type: 'test'
+  ...
+# Subtest: Gemma chat completions return JSON under choices[0].message.content
+ok 28 - Gemma chat completions return JSON under choices[0].message.content
+  ---
+  duration_ms: 1.947022
+  type: 'test'
+  ...
+# Subtest: history is validated and forwarded as context, while unknown hints recover canonically
+ok 29 - history is validated and forwarded as context, while unknown hints recover canonically
+  ---
+  duration_ms: 2.972279
+  type: 'test'
+  ...
+# Subtest: origin, payload size, and malformed JSON fail before inference
+ok 30 - origin, payload size, and malformed JSON fail before inference
+  ---
+  duration_ms: 1.406871
+  type: 'test'
+  ...
+# Subtest: temporary capacity retries once, rejects queues, and preserves daily-quota semantics
+ok 31 - temporary capacity retries once, rejects queues, and preserves daily-quota semantics
+  ---
+  duration_ms: 502.394083
+  type: 'test'
+  ...
+# Subtest: structured output uses compatible schema with completion headroom
+ok 32 - structured output uses compatible schema with completion headroom
+  ---
+  duration_ms: 0.746546
+  type: 'test'
+  ...
+# Framed autorotation exercise stays stopped and links to a new window: PASS.
+# Subtest: tests/autorotation/frame-guard.cjs
+ok 5 - tests/autorotation/frame-guard.cjs
+  ---
+  duration_ms: 44.138848
+  type: 'test'
+  ...
+# Autorotation model: descent-rate curve, rpm control, trim, rpm decay, textbook and H/V landings, grading, no divergence with a lost rotor: PASS.
+# Subtest: tests/autorotation/model.cjs
+ok 6 - tests/autorotation/model.cjs
+  ---
+  duration_ms: 4771.31335
+  type: 'test'
+  ...
+# Framed trainer stays stopped and links to a new window; standalone trainer starts: PASS.
+# Subtest: tests/case-iii/frame-guard.cjs
+ok 7 - tests/case-iii/frame-guard.cjs
+  ---
+  duration_ms: 78.565981
+  type: 'test'
+  ...
+# KIAS to TAS (ISA, IAS treated as EAS): PASS.
+# Ship-relative velocity, wind correction and speed along track: PASS.
+# Calm baseline: six-minute circuit, two-minute turns and racetrack geometry: PASS.
+# 25 kt airflow: inbound-leg closure and circuit times match independent arithmetic: PASS.
+# Elapsed time and distance agree on a straight leg: PASS.
+# Hold entry and fix-crossing continuity: PASS.
+# EAT outbound solution in calm and 25 kt airflow: PASS.
+# Subtest: tests/case-iii/model.cjs
+ok 8 - tests/case-iii/model.cjs
+  ---
+  duration_ms: 520.656859
+  type: 'test'
+  ...
+# Full guided sortie: TRAPPED; all 13 checks; no corrections.
+# Invalid channel, premature on-speed, flap overspeed, practice toggle and waveoff: PASS.
+# Airspeed labels remain consistent across controls, coaching and telemetry: PASS.
+# EAT guidance: planned crossing, outbound solution, pause over the fix and post-call commands PASS.
+# Visible Marshal / Approach / LSO channel controls: PASS.
+# Penetration/platform heading and final intercept guidance: PASS.
+# Ten complete recoveries across BRC 000–359, differing arrival radials and 000 crossing: TRAPPED.
+# Random sortie generation, rotated geometry/motion, radio/guidance and chart values: PASS.
+# Initial heading points generally toward Mother, distinct from the fix, and closes carrier range: PASS.
+# Marshal clearance remains visible and distinguishes radial from steering heading: PASS.
+# Mouse drag, shift steps, +/- buttons, heading wrap, bounds, cancel, draft/apply and on-speed lock: PASS.
+# Complete auto-pause/resume sortie without manual resume: TRAPPED. Draft guards, multi-step gates, manual pause and automatic approach view/reset: PASS.
+# Three manual views and automatic Final view with rotated deck / four wires: PASS.
+# Five role voices, pilot transmission audio, custom choice and single-voice pitch fallback: PASS.
+# American voice preference, five distinct US voices, automatic selection and unavailable-US fallback: PASS.
+# Platform pauses exactly at 5,000 ft for level-off and through-descent; time holds until call + applied rate; early call rejected: PASS.
+# Arrow time controls 1× / 4× / 16× and new-sortie default 1×: PASS.
+# Auto-resume resets accelerated time to 1× only after the required step is complete: PASS.
+# Configuration limits visible; actual deceleration progress; ready prompt; immediate action on valid click: PASS.
+# Automatic role voices: 10% female probability, stable per-sortie assignment and known-voice matching: PASS.
+# Early fix crossing keeps holding and says so: PASS.
+# Speaking card follows actual playback start/end/error, clears on cancel and ignores stale callbacks: PASS.
+# Separate display/spoken transmissions, digit callsigns/headings/times, decimal fuel, units and explicit speech overrides: PASS.
+# Carrier exchanges, actual-intercept bullseye, final contact/glidepath calls, UTC EAT, niner, altimeter and complete-sortie spoken numbers: PASS.
+# Seeded approach, rotated deck rollout, wire-three capture, pause/resume, 1x arrestment, centreline stop past all wires, reset and off-deck rejection: PASS.
+# Late EAT: pause, amended time after the next circuit, reachable outbound: PASS.
+# Finite telemetry, groove convergence/LSO calls, clean Final labels, deeper male voice selection and state-specific CTAs: PASS.
+# Representative TACAN bearings/radials, TO/FROM, CDI sign, PTP scaling, optional answer reveal, course wrap, separate pilot control, zero range and reset: PASS.
+# Instructor-off manual arrival/approach/arrestment, missing-call progression, silence, hidden hints, pause toggle, persistent fuel, phonetics and distinct non-US English allocation: PASS.
+# Grey/disabled state matches extension gates; enabled controls and newly satisfied dependencies act immediately while paused; briefing stays display-only: PASS.
+# Finished debrief survives explicit and animation-frame renders without replacement or scroll reset: PASS.
+# View-specific marshal/approach/deck layers, passed-gate removal, persistent scale and instructor-off filtering across rotated carriers: PASS.
+# View-synchronised profile distance/altitude zoom, signed deck rollout and instructor-off guidance filtering: PASS.
+# Platform altitude annotation follows visible profile scale and instructor mode: PASS.
+# Action borders appear only with Instructor enabled and clear immediately when disabled: PASS.
+# In-page restart confirmation, cancel, repeated clicks, confirmed reset, Fly again and radio voice default: PASS.
+# Popup brief has no radio entry or pre-start hints; Start Exercise enables inbound hints only in guided mode: PASS.
+# Novelty voices excluded from allocation/picker pool and saved novelty preference removed: PASS.
+# Preferred Google role cast, controlled reuse, moderate controller pitch and character exclusions: PASS.
+# Radio scroll position preserved while reviewing and after finish; follows only at bottom; six-minute marshal geometry: PASS.
+# Displayed KIAS, TAS and ship-relative motion agree outside the hold and on final: PASS.
+# Subtest: tests/case-iii/sortie.cjs
+ok 9 - tests/case-iii/sortie.cjs
+  ---
+  duration_ms: 5128.84434
+  type: 'test'
+  ...
+# Subtest: catalogue lists every area and panel with unique stable ids
+ok 38 - catalogue lists every area and panel with unique stable ids
+  ---
+  duration_ms: 151.069037
+  type: 'test'
+  ...
+# Subtest: every built panel models each placed control and lamp once
+ok 39 - every built panel models each placed control and lamp once
+  ---
+  duration_ms: 169.506199
+  type: 'test'
+  ...
+# Subtest: gauge scales increase and every tick and needle lands on the dial
+ok 40 - gauge scales increase and every tick and needle lands on the dial
+  ---
+  duration_ms: 15.531127
+  type: 'test'
+  ...
+# Subtest: drum counters roll like an odometer
+ok 41 - drum counters roll like an odometer
+  ---
+  duration_ms: 0.761815
+  type: 'test'
+  ...
+# Subtest: shared components keep fixed sizes across panels (same art id, same size)
+ok 42 - shared components keep fixed sizes across panels (same art id, same size)
+  ---
+  duration_ms: 23.159073
+  type: 'test'
+  ...
+# Subtest: panel page script is generic: no panel or control names in the engine
+ok 43 - panel page script is generic: no panel or control names in the engine
+  ---
+  duration_ms: 2.848257
+  type: 'test'
+  ...
+# Subtest: the minimal fixture is valid
+ok 44 - the minimal fixture is valid
+  ---
+  duration_ms: 8.566793
+  type: 'test'
+  ...
+# Subtest: relationships must name existing theatres and maps
+ok 45 - relationships must name existing theatres and maps
+  ---
+  duration_ms: 3.733643
+  type: 'test'
+  ...
+# Subtest: required fields, controlled values, dates and citations are checked
+ok 46 - required fields, controlled values, dates and citations are checked
+  ---
+  duration_ms: 0.441365
+  type: 'test'
+  ...
+# Subtest: coverage claims need a source, and sim facts belong only to represented maps
+ok 47 - coverage claims need a source, and sim facts belong only to represented maps
+  ---
+  duration_ms: 0.544448
+  type: 'test'
+  ...
+# Subtest: derived values: longest paved runway, current use, periods and search terms
+ok 48 - derived values: longest paved runway, current use, periods and search terms
+  ---
+  duration_ms: 0.897138
+  type: 'test'
+  ...
+# Subtest: the real airfield, theatre and sim map content is valid and registered
+ok 49 - the real airfield, theatre and sim map content is valid and registered
+  ---
+  duration_ms: 12.634279
+  type: 'test'
+  ...
+# Subtest: representative cases: international, historical and multi-map
+ok 50 - representative cases: international, historical and multi-map
+  ---
+  duration_ms: 0.300552
+  type: 'test'
+  ...
+# Subtest: generated DCS map tables belong to map records and contain every represented airfield
+ok 51 - generated DCS map tables belong to map records and contain every represented airfield
+  ---
+  duration_ms: 5.866011
+  type: 'test'
+  ...
+# Subtest: separate class and hull source scopes accept the same source id
+ok 52 - separate class and hull source scopes accept the same source id
+  ---
+  duration_ms: 3.123833
+  type: 'test'
+  ...
+# Subtest: profile references and uniqueness preserve registry identities
+ok 53 - profile references and uniqueness preserve registry identities
+  ---
+  duration_ms: 2.51813
+  type: 'test'
+  ...
+# Subtest: every summary, fact, section, overview and milestone requires local evidence
+ok 54 - every summary, fact, section, overview and milestone requires local evidence
+  ---
+  duration_ms: 0.955748
+  type: 'test'
+  ...
+# Subtest: empty content, invalid evidence and duplicate source IDs are rejected
+ok 55 - empty content, invalid evidence and duplicate source IDs are rejected
+  ---
+  duration_ms: 0.983509
+  type: 'test'
+  ...
+# Subtest: snapshot, access and event dates reject impossible and future dates, retaining year precision
+ok 56 - snapshot, access and event dates reject impossible and future dates, retaining year precision
+  ---
+  duration_ms: 0.885726
+  type: 'test'
+  ...
+# Subtest: generated profile checks catch missing history, member links and citation anchors
+ok 57 - generated profile checks catch missing history, member links and citation anchors
+  ---
+  duration_ms: 45.559809
+  type: 'test'
+  ...
+# Subtest: one hull can have several names and navies; search finds all identities
+ok 58 - one hull can have several names and navies; search finds all identities
+  ---
+  duration_ms: 2.760042
+  type: 'test'
+  ...
+# Subtest: carrier search accepts names without their diacritics
+ok 59 - carrier search accepts names without their diacritics
+  ---
+  duration_ms: 1.54534
+  type: 'test'
+  ...
+# Subtest: commissioning boundary excludes wartime ships and rejects impossible dates
+ok 60 - commissioning boundary excludes wartime ships and rejects impossible dates
+  ---
+  duration_ms: 0.805125
+  type: 'test'
+  ...
+# Subtest: completed but never commissioned hulls use their documented completion
+ok 61 - completed but never commissioned hulls use their documented completion
+  ---
+  duration_ms: 0.525733
+  type: 'test'
+  ...
+# Subtest: duplicate hull identities, missing names and missing evidence fail validation
+ok 62 - duplicate hull identities, missing names and missing evidence fail validation
+  ---
+  duration_ms: 0.475459
+  type: 'test'
+  ...
+# Subtest: dates retain the precision provided by sources
+ok 63 - dates retain the precision provided by sources
+  ---
+  duration_ms: 22.100423
+  type: 'test'
+  ...
+# Subtest: the real carrier registry passes the same boundary and source checks
+ok 64 - the real carrier registry passes the same boundary and source checks
+  ---
+  duration_ms: 4.185959
+  type: 'test'
+  ...
+# Subtest: every aircraft and sim map has a valid purchase list
+ok 65 - every aircraft and sim map has a valid purchase list
+  ---
+  duration_ms: 4.292672
+  type: 'test'
+  ...
+# Subtest: a sim map is sold for its own sim
+ok 66 - a sim map is sold for its own sim
+  ---
+  duration_ms: 0.337141
+  type: 'test'
+  ...
+# Subtest: the developer store comes before the DCS Store
+ok 67 - the developer store comes before the DCS Store
+  ---
+  duration_ms: 4.27022
+  type: 'test'
+  ...
+# Subtest: an entry is sold, free or not on sale
+ok 68 - an entry is sold, free or not on sale
+  ---
+  duration_ms: 0.279733
+  type: 'test'
+  ...
+# Subtest: a tanker record that does list a purchase lists a valid one
+ok 69 - a tanker record that does list a purchase lists a valid one
+  ---
+  duration_ms: 0.360174
+  type: 'test'
+  ...
+# Subtest: the phonetic alphabet matches the radio lesson model
+ok 70 - the phonetic alphabet matches the radio lesson model
+  ---
+  duration_ms: 40.770452
+  type: 'test'
+  ...
+# Subtest: the light gun signals match the radio lesson model
+ok 71 - the light gun signals match the radio lesson model
+  ---
+  duration_ms: 38.052487
+  type: 'test'
+  ...
+# Subtest: every reference table row fills only its own columns
+ok 72 - every reference table row fills only its own columns
+  ---
+  duration_ms: 127.827178
+  type: 'test'
+  ...
+# Subtest: a complete published record passes
+ok 73 - a complete published record passes
+  ---
+  duration_ms: 27.122383
+  type: 'test'
+  ...
+# Subtest: a published record must ship its page, category listing and content file
+ok 74 - a published record must ship its page, category listing and content file
+  ---
+  duration_ms: 6.191324
+  type: 'test'
+  ...
+# Subtest: published pages must show the registered revision and hide the maturity label
+ok 75 - published pages must show the registered revision and hide the maturity label
+  ---
+  duration_ms: 14.027035
+  type: 'test'
+  ...
+# Subtest: a record page must list sources and resolve every citation
+ok 76 - a record page must list sources and resolve every citation
+  ---
+  duration_ms: 22.633327
+  type: 'test'
+  ...
+# Subtest: a record page must render its text
+ok 77 - a record page must render its text
+  ---
+  duration_ms: 5.340322
+  type: 'test'
+  ...
+# Subtest: a record photo must be a site file with alt text and a credit
+ok 78 - a record photo must be a site file with alt text and a credit
+  ---
+  duration_ms: 31.721101
+  type: 'test'
+  ...
+# Subtest: an excluded record must not appear anywhere in normal output
+ok 79 - an excluded record must not appear anywhere in normal output
+  ---
+  duration_ms: 7.334623
+  type: 'test'
+  ...
+# Subtest: review builds require excluded records to be complete
+ok 80 - review builds require excluded records to be complete
+  ---
+  duration_ms: 8.025656
+  type: 'test'
+  ...
+# Subtest: unknown publication values and duplicate ids are rejected
+ok 81 - unknown publication values and duplicate ids are rejected
+  ---
+  duration_ms: 16.921821
+  type: 'test'
+  ...
+# Subtest: every registered record has a content file in the repository
+ok 82 - every registered record has a content file in the repository
+  ---
+  duration_ms: 71.159873
+  type: 'test'
+  ...
+# Subtest: the encyclopedia landing shows categories, not records
+ok 83 - the encyclopedia landing shows categories, not records
+  ---
+  duration_ms: 19.019342
+  type: 'test'
+  ...
+# Subtest: links into the terminology glossary must land on an entry
+ok 84 - links into the terminology glossary must land on an entry
+  ---
+  duration_ms: 14.996749
+  type: 'test'
+  ...
+# Subtest: term links name an existing entry, at every mention
+ok 85 - term links name an existing entry, at every mention
+  ---
+  duration_ms: 20.430005
+  type: 'test'
+  ...
+# Subtest: a complete published experience passes
+ok 86 - a complete published experience passes
+  ---
+  duration_ms: 21.887842
+  type: 'test'
+  ...
+# Subtest: a published experience must ship every route, listing and asset
+ok 87 - a published experience must ship every route, listing and asset
+  ---
+  duration_ms: 5.884
+  type: 'test'
+  ...
+# Subtest: published pages must show the registered revision and hide the maturity label
+ok 88 - published pages must show the registered revision and hide the maturity label
+  ---
+  duration_ms: 17.371543
+  type: 'test'
+  ...
+# Subtest: an excluded experience must not appear anywhere in normal output
+ok 89 - an excluded experience must not appear anywhere in normal output
+  ---
+  duration_ms: 7.043189
+  type: 'test'
+  ...
+# Subtest: review builds require excluded experiences to be complete
+ok 90 - review builds require excluded experiences to be complete
+  ---
+  duration_ms: 2.527709
+  type: 'test'
+  ...
+# Subtest: a window-only experience must be linked in a new window and never framed
+ok 91 - a window-only experience must be linked in a new window and never framed
+  ---
+  duration_ms: 31.153149
+  type: 'test'
+  ...
+# Subtest: unlisted experience emits direct frame but never a Manual wrapper or catalogue links
+ok 92 - unlisted experience emits direct frame but never a Manual wrapper or catalogue links
+  ---
+  duration_ms: 23.215257
+  type: 'test'
+  ...
+# Subtest: a complete published module passes
+ok 93 - a complete published module passes
+  ---
+  duration_ms: 15.875005
+  type: 'test'
+  ...
+# Subtest: a published module must ship its page and subject listing
+ok 94 - a published module must ship its page and subject listing
+  ---
+  duration_ms: 4.083731
+  type: 'test'
+  ...
+# Subtest: published pages must show the registered revision and hide the maturity label
+ok 95 - published pages must show the registered revision and hide the maturity label
+  ---
+  duration_ms: 8.20944
+  type: 'test'
+  ...
+# Subtest: a trainer-less module must not frame or launch a trainer
+ok 96 - a trainer-less module must not frame or launch a trainer
+  ---
+  duration_ms: 14.182667
+  type: 'test'
+  ...
+# Subtest: an excluded module must not appear anywhere in normal output
+ok 97 - an excluded module must not appear anywhere in normal output
+  ---
+  duration_ms: 4.733546
+  type: 'test'
+  ...
+# Subtest: review builds require excluded modules to be complete
+ok 98 - review builds require excluded modules to be complete
+  ---
+  duration_ms: 8.625769
+  type: 'test'
+  ...
+# Subtest: unknown publication values are rejected
+ok 99 - unknown publication values are rejected
+  ---
+  duration_ms: 3.771848
+  type: 'test'
+  ...
+# Subtest: one module card cannot mask another on a shared subject page
+ok 100 - one module card cannot mask another on a shared subject page
+  ---
+  duration_ms: 5.821081
+  type: 'test'
+  ...
+# Subtest: an excluded module must not be linked without its marker
+ok 101 - an excluded module must not be linked without its marker
+  ---
+  duration_ms: 6.094043
+  type: 'test'
+  ...
+# Subtest: requires review for aviation content, lessons and trainers only
+ok 102 - requires review for aviation content, lessons and trainers only
+  ---
+  duration_ms: 2.283455
+  type: 'test'
+  ...
+# Subtest: gate paths match the SME workflow trigger paths
+ok 103 - gate paths match the SME workflow trigger paths
+  ---
+  duration_ms: 9.519989
+  type: 'test'
+  ...
+# Subtest: parses each listed blocker and ignores the collapsed full review
+ok 104 - parses each listed blocker and ignores the collapsed full review
+  ---
+  duration_ms: 0.991545
+  type: 'test'
+  ...
+# Subtest: a blocked gate shows its blockers and links the full review
+ok 105 - a blocked gate shows its blockers and links the full review
+  ---
+  duration_ms: 0.941201
+  type: 'test'
+  ...
+# Subtest: a listed blocker fails the gate even when the header says READY
+ok 106 - a listed blocker fails the gate even when the header says READY
+  ---
+  duration_ms: 0.559947
+  type: 'test'
+  ...
+# Subtest: only the owner's sme-override label overrides the review
+ok 107 - only the owner's sme-override label overrides the review
+  ---
+  duration_ms: 0.278041
+  type: 'test'
+  ...
+# Subtest: accepts only a successful exact-head agent report
+ok 108 - accepts only a successful exact-head agent report
+  ---
+  duration_ms: 0.259145
+  type: 'test'
+  ...
+# Subtest: the gate summary shows which records were cut, failed or never read
+ok 109 - the gate summary shows which records were cut, failed or never read
+  ---
+  duration_ms: 0.334306
+  type: 'test'
+  ...
+# Subtest: source coverage is complete only when the review says so without listing records
+ok 110 - source coverage is complete only when the review says so without listing records
+  ---
+  duration_ms: 0.398736
+  type: 'test'
+  ...
+# Subtest: unresolved Case III evidence findings visibly block readiness
+ok 111 - unresolved Case III evidence findings visibly block readiness
+  ---
+  duration_ms: 0.447097
+  type: 'test'
+  ...
+# Subtest: missing, skipped, stale, or failed reports never pass
+ok 112 - missing, skipped, stale, or failed reports never pass
+  ---
+  duration_ms: 0.235691
+  type: 'test'
+  ...
+# Subtest: pending gate points to the sme-review skill until a review runs
+ok 113 - pending gate points to the sme-review skill until a review runs
+  ---
+  duration_ms: 0.217207
+  type: 'test'
+  ...
+# Subtest: sme-passed passes only when applied through the owner's account after the head was pushed
+ok 114 - sme-passed passes only when applied through the owner's account after the head was pushed
+  ---
+  duration_ms: 0.297266
+  type: 'test'
+  ...
+# Subtest: 52 distinct features resolve to published articles with local credited images
+ok 115 - 52 distinct features resolve to published articles with local credited images
+  ---
+  duration_ms: 7.132745
+  type: 'test'
+  ...
+# Subtest: Melbourne Monday boundary changes feature irrespective of viewer timezone
+ok 116 - Melbourne Monday boundary changes feature irrespective of viewer timezone
+  ---
+  duration_ms: 23.65902
+  type: 'test'
+  ...
+# Subtest: ISO year rollover and week 53 retain the last feature until week 1
+ok 117 - ISO year rollover and week 53 retain the last feature until week 1
+  ---
+  duration_ms: 0.82318
+  type: 'test'
+  ...
+# Subtest: browser selection replaces stale text, photo, links and credit together
+ok 118 - browser selection replaces stale text, photo, links and credit together
+  ---
+  duration_ms: 60.245521
+  type: 'test'
+  ...
+# Subtest: featured reading has contextual terms and paths to related content
+ok 119 - featured reading has contextual terms and paths to related content
+  ---
+  duration_ms: 2.248256
+  type: 'test'
+  ...
+# Subtest: a 4 g turn at 450 kt over a 3 s time of flight
+ok 120 - a 4 g turn at 450 kt over a 3 s time of flight
+  ---
+  duration_ms: 1.372498
+  type: 'test'
+  ...
+# Subtest: for short times the offset approaches half a t squared
+ok 121 - for short times the offset approaches half a t squared
+  ---
+  duration_ms: 0.206135
+  type: 'test'
+  ...
+# Subtest: holding 1 g, no turn, leaves the aircraft on the predicted point
+ok 122 - holding 1 g, no turn, leaves the aircraft on the predicted point
+  ---
+  duration_ms: 0.268983
+  type: 'test'
+  ...
+# Subtest: the offset grows with time of flight and with g
+ok 123 - the offset grows with time of flight and with g
+  ---
+  duration_ms: 0.212167
+  type: 'test'
+  ...
+# Subtest: bad inputs throw
+ok 124 - bad inputs throw
+  ---
+  duration_ms: 2.634767
+  type: 'test'
+  ...
+# Subtest: every flow step places both receivers on a spot that exists
+ok 125 - every flow step places both receivers on a spot that exists
+  ---
+  duration_ms: 1.420377
+  type: 'test'
+  ...
+# Subtest: director lights and boom calls point the receiver toward the contact position
+ok 126 - director lights and boom calls point the receiver toward the contact position
+  ---
+  duration_ms: 1.291326
+  type: 'test'
+  ...
+# Subtest: the drogue light goes green only between valve open and the end of the hose range
+ok 127 - the drogue light goes green only between valve open and the end of the hose range
+  ---
+  duration_ms: 0.249576
+  type: 'test'
+  ...
+# Subtest: the point-parallel tanker rolls out on the receiver track the set distance ahead
+ok 128 - the point-parallel tanker rolls out on the receiver track the set distance ahead
+  ---
+  duration_ms: 0.453499
+  type: 'test'
+  ...
+# Subtest: quiz answers are unique and every question explains itself
+ok 129 - quiz answers are unique and every question explains itself
+  ---
+  duration_ms: 0.348172
+  type: 'test'
+  ...
+# Subtest: runway designators follow the AIM examples
+ok 130 - runway designators follow the AIM examples
+  ---
+  duration_ms: 1.695352
+  type: 'test'
+  ...
+# Subtest: reciprocal ends and parallel suffixes
+ok 131 - reciprocal ends and parallel suffixes
+  ---
+  duration_ms: 1.396023
+  type: 'test'
+  ...
+# Subtest: threshold stripes and marking elements follow AIM tables 2-3-1 and 2-3-2
+ok 132 - threshold stripes and marking elements follow AIM tables 2-3-1 and 2-3-2
+  ---
+  duration_ms: 0.373378
+  type: 'test'
+  ...
+# Subtest: wind components
+ok 133 - wind components
+  ---
+  duration_ms: 0.448729
+  type: 'test'
+  ...
+# Subtest: runway most nearly aligned with the wind at 5 kt or more
+ok 134 - runway most nearly aligned with the wind at 5 kt or more
+  ---
+  duration_ms: 0.52392
+  type: 'test'
+  ...
+# Subtest: PAPI indications match the AIM figure labels
+ok 135 - PAPI indications match the AIM figure labels
+  ---
+  duration_ms: 0.410017
+  type: 'test'
+  ...
+# Subtest: glide path height
+ok 136 - glide path height
+  ---
+  duration_ms: 0.345206
+  type: 'test'
+  ...
+# Subtest: level turn by bank angle
+ok 137 - level turn by bank angle
+  ---
+  duration_ms: 0.32107
+  type: 'test'
+  ...
+# Subtest: overhead maneuver geometry and glossary limits
+ok 138 - overhead maneuver geometry and glossary limits
+  ---
+  duration_ms: 0.834091
+  type: 'test'
+  ...
+# Subtest: rectangular pattern geometry
+ok 139 - rectangular pattern geometry
+  ---
+  duration_ms: 1.766095
+  type: 'test'
+  ...
+# Subtest: runway lighting by distance remaining
+ok 140 - runway lighting by distance remaining
+  ---
+  duration_ms: 0.355345
+  type: 'test'
+  ...
+# Subtest: light gun signals follow AIM TBL 4-3-13
+ok 141 - light gun signals follow AIM TBL 4-3-13
+  ---
+  duration_ms: 0.217367
+  type: 'test'
+  ...
+# Subtest: PAPI boundaries: a unit turns white only above its setting
+ok 142 - PAPI boundaries: a unit turns white only above its setting
+  ---
+  duration_ms: 0.209322
+  type: 'test'
+  ...
+# Subtest: a wind exactly between two runways keeps the first listed
+ok 143 - a wind exactly between two runways keeps the first listed
+  ---
+  duration_ms: 0.162705
+  type: 'test'
+  ...
+# Subtest: the overhead initial is measured up to the break point
+ok 144 - the overhead initial is measured up to the break point
+  ---
+  duration_ms: 0.202469
+  type: 'test'
+  ...
+# Subtest: radio calls: who to call and when
+ok 145 - radio calls: who to call and when
+  ---
+  duration_ms: 0.4008
+  type: 'test'
+  ...
+# Subtest: CTAF self-announcements follow AC 90-66C
+ok 146 - CTAF self-announcements follow AC 90-66C
+  ---
+  duration_ms: 0.516016
+  type: 'test'
+  ...
+# Subtest: IFLOLS meatball follows NAVEDTRA 14342A
+ok 147 - IFLOLS meatball follows NAVEDTRA 14342A
+  ---
+  duration_ms: 0.32621
+  type: 'test'
+  ...
+# Subtest: arresting gear disks: 10 ft circles 30 ft on center across the runway
+ok 148 - arresting gear disks: 10 ft circles 30 ft on center across the runway
+  ---
+  duration_ms: 0.235371
+  type: 'test'
+  ...
+# Subtest: Navy field calls follow the overhead and the Hollywood Script order
+ok 149 - Navy field calls follow the overhead and the Hollywood Script order
+  ---
+  duration_ms: 0.333204
+  type: 'test'
+  ...
+# Subtest: Set binds the axis that moves, ignoring one resting off centre, and keeps signs
+ok 150 - Set binds the axis that moves, ignoring one resting off centre, and keeps signs
+  ---
+  duration_ms: 3.160914
+  type: 'test'
+  ...
+# Subtest: level turn: 2 G is a 60° bank
+ok 151 - level turn: 2 G is a 60° bank
+  ---
+  duration_ms: 1.550621
+  type: 'test'
+  ...
+# Subtest: level turn: T-45 corner and load limit
+ok 152 - level turn: T-45 corner and load limit
+  ---
+  duration_ms: 0.343353
+  type: 'test'
+  ...
+# Subtest: level turn rejects impossible inputs
+ok 153 - level turn rejects impossible inputs
+  ---
+  duration_ms: 0.296244
+  type: 'test'
+  ...
+# Subtest: radial G around a loop matches the source example
+ok 154 - radial G around a loop matches the source example
+  ---
+  duration_ms: 0.239007
+  type: 'test'
+  ...
+# Subtest: 10% rule
+ok 155 - 10% rule
+  ---
+  duration_ms: 0.316983
+  type: 'test'
+  ...
+# Subtest: T-45 airspeed bands and pull type
+ok 156 - T-45 airspeed bands and pull type
+  ---
+  duration_ms: 1.317275
+  type: 'test'
+  ...
+# Subtest: geometry: dead astern in the control zone range
+ok 157 - geometry: dead astern in the control zone range
+  ---
+  duration_ms: 0.542595
+  type: 'test'
+  ...
+# Subtest: geometry: beam aspect inside the bubble
+ok 158 - geometry: beam aspect inside the bubble
+  ---
+  duration_ms: 0.358491
+  type: 'test'
+  ...
+# Subtest: pursuit illustration: lead closes most, lag least
+ok 159 - pursuit illustration: lead closes most, lag least
+  ---
+  duration_ms: 9.597117
+  type: 'test'
+  ...
+# Subtest: available G: lift-limited below corner, load-limited above
+ok 160 - available G: lift-limited below corner, load-limited above
+  ---
+  duration_ms: 1.589324
+  type: 'test'
+  ...
+# Subtest: bleed is calibrated to the source corner figure
+ok 161 - bleed is calibrated to the source corner figure
+  ---
+  duration_ms: 0.298678
+  type: 'test'
+  ...
+# Subtest: fly: the corner bleed holds in indicated airspeed at altitude
+ok 162 - fly: the corner bleed holds in indicated airspeed at altitude
+  ---
+  duration_ms: 0.720989
+  type: 'test'
+  ...
+# Subtest: fly: 1 G straight and level holds height and speed
+ok 163 - fly: 1 G straight and level holds height and speed
+  ---
+  duration_ms: 3.598814
+  type: 'test'
+  ...
+# Subtest: fly: a 4 G level turn has the textbook radius
+ok 164 - fly: a 4 G level turn has the textbook radius
+  ---
+  duration_ms: 5.228683
+  type: 'test'
+  ...
+# Subtest: split-S: matches the source altitude and reverses heading
+ok 165 - split-S: matches the source altitude and reverses heading
+  ---
+  duration_ms: 11.154778
+  type: 'test'
+  ...
+# Subtest: high yo-yo: kills closure and stays out of the in-close region
+ok 166 - high yo-yo: kills closure and stays out of the in-close region
+  ---
+  duration_ms: 6.815011
+  type: 'test'
+  ...
+# Subtest: low yo-yo: nose low inside the turn, then back up
+ok 167 - low yo-yo: nose low inside the turn, then back up
+  ---
+  duration_ms: 2.051148
+  type: 'test'
+  ...
+# Subtest: scissors: paths cross and drift downrange
+ok 168 - scissors: paths cross and drift downrange
+  ---
+  duration_ms: 5.109413
+  type: 'test'
+  ...
+# Subtest: level circle: radius and load factor
+ok 169 - level circle: radius and load factor
+  ---
+  duration_ms: 0.904742
+  type: 'test'
+  ...
+# Subtest: ribbon: top view of a level turn shows the canopy side throughout
+ok 170 - ribbon: top view of a level turn shows the canopy side throughout
+  ---
+  duration_ms: 2.562875
+  type: 'test'
+  ...
+# Subtest: ribbon: the split-S shows its underside from above while inverted
+ok 171 - ribbon: the split-S shows its underside from above while inverted
+  ---
+  duration_ms: 8.644531
+  type: 'test'
+  ...
+# Subtest: ribbon: grid step stays readable
+ok 172 - ribbon: grid step stays readable
+  ---
+  duration_ms: 0.185206
+  type: 'test'
+  ...
+# Subtest: the LS rule gives the training instruction's 40K gates (P-825 pp. 8-2, 10-9)
+ok 173 - the LS rule gives the training instruction's 40K gates (P-825 pp. 8-2, 10-9)
+  ---
+  duration_ms: 2.48043
+  type: 'test'
+  ...
+# Subtest: headings follow TA and AO, and AA = 180 - TA
+ok 174 - headings follow TA and AO, and AA = 180 - TA
+  ---
+  duration_ms: 0.305332
+  type: 'test'
+  ...
+# Subtest: co-speed collision: AO equals TA on the opposite side, no drift, constant bearing (P-825 p. 9-2)
+ok 175 - co-speed collision: AO equals TA on the opposite side, no drift, constant bearing (P-825 p. 9-2)
+  ---
+  duration_ms: 0.589193
+  type: 'test'
+  ...
+# Subtest: off collision the contact drifts away from collision bearing (P-825 p. 9-2)
+ok 176 - off collision the contact drifts away from collision bearing (P-825 p. 9-2)
+  ---
+  duration_ms: 0.186119
+  type: 'test'
+  ...
+# Subtest: flying the bandit reciprocal keeps LS and lets TA and AO grow (P-825 pp. 9-4, 10-10)
+ok 177 - flying the bandit reciprocal keeps LS and lets TA and AO grow (P-825 pp. 9-4, 10-10)
+  ---
+  duration_ms: 0.231873
+  type: 'test'
+  ...
+# Subtest: closure is highest nose-on and equal to the fighter's speed at 90 TA (P-825 p. 8-5)
+ok 178 - closure is highest nose-on and equal to the fighter's speed at 90 TA (P-825 p. 8-5)
+  ---
+  duration_ms: 0.332482
+  type: 'test'
+  ...
+# Subtest: aspect words match the controller's ranges (P-825 p. 5-8)
+ok 179 - aspect words match the controller's ranges (P-825 p. 5-8)
+  ---
+  duration_ms: 0.275796
+  type: 'test'
+  ...
+# Subtest: time of flight rule and the crank (P-825 pp. 15-9, 16-11)
+ok 180 - time of flight rule and the crank (P-825 pp. 15-9, 16-11)
+  ---
+  duration_ms: 0.247292
+  type: 'test'
+  ...
+# Subtest: the illustrative zone is longest hot and shortest in the rear quarter, with RNE inside
+ok 181 - the illustrative zone is longest hot and shortest in the rear quarter, with RNE inside
+  ---
+  duration_ms: 0.614479
+  type: 'test'
+  ...
+# Subtest: the worked intercept follows the training timeline
+ok 182 - the worked intercept follows the training timeline
+  ---
+  duration_ms: 1.636162
+  type: 'test'
+  ...
+# Subtest: every quiz question has its answer among its options
+ok 183 - every quiz question has its answer among its options
+  ---
+  duration_ms: 0.340557
+  type: 'test'
+  ...
+# Subtest: bullseye: the reciprocal of the steering bearing places you, and the card gives BRAA
+ok 184 - bullseye: the reciprocal of the steering bearing places you, and the card gives BRAA
+  ---
+  duration_ms: 29.427424
+  type: 'test'
+  ...
+# Subtest: radial/DME positions and reciprocals
+ok 185 - radial/DME positions and reciprocals
+  ---
+  duration_ms: 1.748982
+  type: 'test'
+  ...
+# Subtest: point-to-point course and distance
+ok 186 - point-to-point course and distance
+  ---
+  duration_ms: 0.565408
+  type: 'test'
+  ...
+# Subtest: time en route at a fixed rate
+ok 187 - time en route at a fixed rate
+  ---
+  duration_ms: 0.290984
+  type: 'test'
+  ...
+# Subtest: AIM holding turn rate: 3°/s or 30° bank, whichever needs less bank
+ok 188 - AIM holding turn rate: 3°/s or 30° bank, whichever needs less bank
+  ---
+  duration_ms: 0.642832
+  type: 'test'
+  ...
+# Subtest: direct entry turns in the hold direction and joins the inbound course
+ok 189 - direct entry turns in the hold direction and joins the inbound course
+  ---
+  duration_ms: 6.931519
+  type: 'test'
+  ...
+# Subtest: teardrop entry: one-minute leg, then the turn back crosses and corrects
+ok 190 - teardrop entry: one-minute leg, then the turn back crosses and corrects
+  ---
+  duration_ms: 1.249187
+  type: 'test'
+  ...
+# Subtest: parallel entry: non-holding side, more than 180° back, corrected on the first circuit
+ok 191 - parallel entry: non-holding side, more than 180° back, corrected on the first circuit
+  ---
+  duration_ms: 0.70549
+  type: 'test'
+  ...
+# Subtest: entry joins are judged over the whole turn back and from on-course starts
+ok 192 - entry joins are judged over the whole turn back and from on-course starts
+  ---
+  duration_ms: 6.966164
+  type: 'test'
+  ...
+# Subtest: entry paths stay finite and end established on the inbound course
+ok 193 - entry paths stay finite and end established on the inbound course
+  ---
+  duration_ms: 157.142518
+  type: 'test'
+  ...
+# Subtest: EAT plans with 120 s turns and 60 s legs
+ok 194 - EAT plans with 120 s turns and 60 s legs
+  ---
+  duration_ms: 0.752227
+  type: 'test'
+  ...
+# Subtest: invalid inputs are rejected
+ok 195 - invalid inputs are rejected
+  ---
+  duration_ms: 0.401772
+  type: 'test'
+  ...
+# Subtest: CV-1 example profile from angels 7 at 22 DME
+ok 196 - CV-1 example profile from angels 7 at 22 DME
+  ---
+  duration_ms: 0.403916
+  type: 'test'
+  ...
+# Subtest: higher marshal altitudes reach platform close to 20 DME
+ok 197 - higher marshal altitudes reach platform close to 20 DME
+  ---
+  duration_ms: 0.244798
+  type: 'test'
+  ...
+# Subtest: final-bearing correction rule
+ok 198 - final-bearing correction rule
+  ---
+  duration_ms: 0.177933
+  type: 'test'
+  ...
+# Subtest: timed turns
+ok 199 - timed turns
+  ---
+  duration_ms: 0.212227
+  type: 'test'
+  ...
+# Subtest: the brief has nine numbered lines then remarks, in order
+ok 200 - the brief has nine numbered lines then remarks, in order
+  ---
+  duration_ms: 1.864349
+  type: 'test'
+  ...
+# Subtest: mandatory readback is lines 4 and 6 and the restrictions (JP 3-09.3 p. V-33)
+ok 201 - mandatory readback is lines 4 and 6 and the restrictions (JP 3-09.3 p. V-33)
+  ---
+  duration_ms: 0.430746
+  type: 'test'
+  ...
+# Subtest: headings are read as three sequential digits
+ok 202 - headings are read as three sequential digits
+  ---
+  duration_ms: 1.733303
+  type: 'test'
+  ...
+# Subtest: the IP lies on the reciprocal of line 2 at the line 3 distance
+ok 203 - the IP lies on the reciprocal of line 2 at the line 3 distance
+  ---
+  duration_ms: 0.961639
+  type: 'test'
+  ...
+# Subtest: the run-in heading falls inside the attack-heading window
+ok 204 - the run-in heading falls inside the attack-heading window
+  ---
+  duration_ms: 0.418302
+  type: 'test'
+  ...
+# Subtest: quiz questions have their answer among the options
+ok 205 - quiz questions have their answer among the options
+  ---
+  duration_ms: 0.36927
+  type: 'test'
+  ...
+# Subtest: the played example clears each pass under Type 1 and once under Type 3 (p. III-46)
+ok 206 - the played example clears each pass under Type 1 and once under Type 3 (p. III-46)
+  ---
+  duration_ms: 2.831618
+  type: 'test'
+  ...
+# Subtest: unit conversions use the exact international definitions
+ok 207 - unit conversions use the exact international definitions
+  ---
+  duration_ms: 1.006503
+  type: 'test'
+  ...
+# Subtest: the region is bounded by slant range and altitude
+ok 208 - the region is bounded by slant range and altitude
+  ---
+  duration_ms: 0.599632
+  type: 'test'
+  ...
+# Subtest: missing limits default to the ground and the launcher; a missing ceiling has no region
+ok 209 - missing limits default to the ground and the launcher; a missing ceiling has no region
+  ---
+  duration_ms: 0.280394
+  type: 'test'
+  ...
+# Subtest: a ceiling above the maximum slant range is clipped to it
+ok 210 - a ceiling above the maximum slant range is clipped to it
+  ---
+  duration_ms: 0.202228
+  type: 'test'
+  ...
+# Subtest: impossible limits are rejected
+ok 211 - impossible limits are rejected
+  ---
+  duration_ms: 0.379159
+  type: 'test'
+  ...
+# Subtest: the figure picks the smallest scale that holds the envelope
+ok 212 - the figure picks the smallest scale that holds the envelope
+  ---
+  duration_ms: 0.237484
+  type: 'test'
+  ...
+# Subtest: load factor in a level turn is 1 / cos(bank)
+ok 213 - load factor in a level turn is 1 / cos(bank)
+  ---
+  duration_ms: 1.746347
+  type: 'test'
+  ...
+# Subtest: stall speed rises with the square root of load factor
+ok 214 - stall speed rises with the square root of load factor
+  ---
+  duration_ms: 1.361287
+  type: 'test'
+  ...
+# Subtest: level turn radius and rate
+ok 215 - level turn radius and rate
+  ---
+  duration_ms: 0.419354
+  type: 'test'
+  ...
+# Subtest: example jet trainer: 1 G stall speed and lift equation
+ok 216 - example jet trainer: 1 G stall speed and lift equation
+  ---
+  duration_ms: 0.479788
+  type: 'test'
+  ...
+# Subtest: illustrative lift curve: linear, then a smooth peak at the critical angle
+ok 217 - illustrative lift curve: linear, then a smooth peak at the critical angle
+  ---
+  duration_ms: 0.559466
+  type: 'test'
+  ...
+# Subtest: V-n stall boundary and maneuvering speed
+ok 218 - V-n stall boundary and maneuvering speed
+  ---
+  duration_ms: 0.297667
+  type: 'test'
+  ...
+# Subtest: drag curve: minimum where parasite equals induced, at L/Dmax
+ok 219 - drag curve: minimum where parasite equals induced, at L/Dmax
+  ---
+  duration_ms: 0.583612
+  type: 'test'
+  ...
+# Subtest: steady climb: thrust carries drag plus a weight component
+ok 220 - steady climb: thrust carries drag plus a weight component
+  ---
+  duration_ms: 0.306633
+  type: 'test'
+  ...
+# Subtest: energy height matches the Airplane Flying Handbook example
+ok 221 - energy height matches the Airplane Flying Handbook example
+  ---
+  duration_ms: 0.700891
+  type: 'test'
+  ...
+# Subtest: stability responses
+ok 222 - stability responses
+  ---
+  duration_ms: 0.806709
+  type: 'test'
+  ...
+# Subtest: wind triangle reproduces the PHAK worked log (TC 031, 360/10, 115 KTAS: 3° L, 106 kt)
+ok 223 - wind triangle reproduces the PHAK worked log (TC 031, 360/10, 115 KTAS: 3° L, 106 kt)
+  ---
+  duration_ms: 1.538359
+  type: 'test'
+  ...
+# Subtest: still air: heading equals course and ground speed equals TAS
+ok 224 - still air: heading equals course and ground speed equals TAS
+  ---
+  duration_ms: 0.249547
+  type: 'test'
+  ...
+# Subtest: AFMAN 11-217V3 rules of thumb
+ok 225 - AFMAN 11-217V3 rules of thumb
+  ---
+  duration_ms: 0.239969
+  type: 'test'
+  ...
+# Subtest: equal time point moves toward the field behind with a tailwind going on
+ok 226 - equal time point moves toward the field behind with a tailwind going on
+  ---
+  duration_ms: 0.308467
+  type: 'test'
+  ...
+# Subtest: the sortie plan is consistent: JOKER above BINGO, landing above the reserve, ladder falls
+ok 227 - the sortie plan is consistent: JOKER above BINGO, landing above the reserve, ladder falls
+  ---
+  duration_ms: 0.8869
+  type: 'test'
+  ...
+# Subtest: quiz answers are among their options
+ok 228 - quiz answers are among their options
+  ---
+  duration_ms: 0.198933
+  type: 'test'
+  ...
+# Subtest: METAR decoder reads the PHAK example
+ok 229 - METAR decoder reads the PHAK example
+  ---
+  duration_ms: 25.278687
+  type: 'test'
+  ...
+# Subtest: TAF decoder splits the PHAK example into its groups
+ok 230 - TAF decoder splits the PHAK example into its groups
+  ---
+  duration_ms: 3.375014
+  type: 'test'
+  ...
+# Subtest: pressure and density altitude match the PHAK table and examples
+ok 231 - pressure and density altitude match the PHAK table and examples
+  ---
+  duration_ms: 0.705911
+  type: 'test'
+  ...
+# Subtest: weight and balance: CG = total moment ÷ total weight
+ok 232 - weight and balance: CG = total moment ÷ total weight
+  ---
+  duration_ms: 0.854168
+  type: 'test'
+  ...
+# Subtest: decoder: mixed visibility, qualifiers, +FC and unknown ceilings
+ok 233 - decoder: mixed visibility, qualifiers, +FC and unknown ceilings
+  ---
+  duration_ms: 2.277922
+  type: 'test'
+  ...
+# Subtest: the T-6B parade reference lines up all three VT-6 checkpoints within the figure tolerance
+ok 234 - the T-6B parade reference lines up all three VT-6 checkpoints within the figure tolerance
+  ---
+  duration_ms: 1.37366
+  type: 'test'
+  ...
+# Subtest: the reference is a plausible right-side parade: aft of the wingline, stepped down, wingtips clear
+ok 235 - the reference is a plausible right-side parade: aft of the wingline, stepped down, wingtips clear
+  ---
+  duration_ms: 0.357539
+  type: 'test'
+  ...
+# Subtest: moving the wingman names the error: forward is acute, aft sucked, up high, down low, out wide
+ok 236 - moving the wingman names the error: forward is acute, aft sucked, up high, down low, out wide
+  ---
+  duration_ms: 1.065343
+  type: 'test'
+  ...
+# Subtest: moving off the reference breaks a checkpoint
+ok 237 - moving off the reference breaks a checkpoint
+  ---
+  duration_ms: 0.215774
+  type: 'test'
+  ...
+# Subtest: formations: bearings ordered, ranges ordered, tactical formations wider than administrative
+ok 238 - formations: bearings ordered, ranges ordered, tactical formations wider than administrative
+  ---
+  duration_ms: 0.272901
+  type: 'test'
+  ...
+# Subtest: every call quiz answer is a distinct option
+ok 239 - every call quiz answer is a distinct option
+  ---
+  duration_ms: 0.150282
+  type: 'test'
+  ...
+# Subtest: a checkpoint behind the eye counts as not lined up instead of crashing
+ok 240 - a checkpoint behind the eye counts as not lined up instead of crashing
+  ---
+  duration_ms: 0.478204
+  type: 'test'
+  ...
+# Subtest: fingertip strong right puts the second element on the right, \#4 outboard of \#3 (FAST p. 8-9)
+ok 241 - fingertip strong right puts the second element on the right, \#4 outboard of \#3 (FAST p. 8-9)
+  ---
+  duration_ms: 1.474308
+  type: 'test'
+  ...
+# Subtest: echelon puts every wingman on one side, each on the bearing line of the one ahead (p. 10)
+ok 242 - echelon puts every wingman on one side, each on the bearing line of the one ahead (p. 10)
+  ---
+  duration_ms: 0.325929
+  type: 'test'
+  ...
+# Subtest: diamond: \#4 in the slot directly behind lead, on the bearing lines of \#2 and \#3 (pp. 11, 29)
+ok 243 - diamond: \#4 in the slot directly behind lead, on the bearing lines of \#2 and \#3 (pp. 11, 29)
+  ---
+  duration_ms: 0.194233
+  type: 'test'
+  ...
+# Subtest: every close configuration draws the size it describes
+ok 244 - every close configuration draws the size it describes
+  ---
+  duration_ms: 0.184294
+  type: 'test'
+  ...
+# Subtest: division wall: line abreast, order -2 -1 -3 -4, 0.8-1.0 nm apart (P-1288 p. 7-1)
+ok 245 - division wall: line abreast, order -2 -1 -3 -4, 0.8-1.0 nm apart (P-1288 p. 7-1)
+  ---
+  duration_ms: 0.928056
+  type: 'test'
+  ...
+# Subtest: fluid four: section leads in spread, wingmen in tac wing 0.2-0.6 nm aft and outside (pp. 6-9, 7-2)
+ok 246 - fluid four: section leads in spread, wingmen in tac wing 0.2-0.6 nm aft and outside (pp. 6-9, 7-2)
+  ---
+  duration_ms: 0.204723
+  type: 'test'
+  ...
+# Subtest: tac turn left in wall: -4 (outside) turns first, -2 last, all roll out line abreast heading west
+ok 247 - tac turn left in wall: -4 (outside) turns first, -2 last, all roll out line abreast heading west
+  ---
+  duration_ms: 0.569626
+  type: 'test'
+  ...
+# Subtest: in-place turn: all four turn together through 180° and swap sides (pp. 5-8, 7-5)
+ok 248 - in-place turn: all four turn together through 180° and swap sides (pp. 5-8, 7-5)
+  ---
+  duration_ms: 0.24569
+  type: 'test'
+  ...
+# Subtest: quiz answers are among the options, and each tactical formation is cited
+ok 249 - quiz answers are among the options, and each tactical formation is cited
+  ---
+  duration_ms: 0.490668
+  type: 'test'
+  ...
+# Subtest: T-6 rule: the stan notes worked examples
+ok 250 - T-6 rule: the stan notes worked examples
+  ---
+  duration_ms: 1.465341
+  type: 'test'
+  ...
+# Subtest: T-6 rule: low key only, and out of reach
+ok 251 - T-6 rule: low key only, and out of reach
+  ---
+  duration_ms: 0.230411
+  type: 'test'
+  ...
+# Subtest: BMS F-16 rule: 1,000 ft per NM plus a 7,000 ft high key
+ok 252 - BMS F-16 rule: 1,000 ft per NM plus a 7,000 ft high key
+  ---
+  duration_ms: 0.286315
+  type: 'test'
+  ...
+# Subtest: rejects bad input
+ok 253 - rejects bad input
+  ---
+  duration_ms: 0.475109
+  type: 'test'
+  ...
+# Subtest: spacing is edge to edge in rotor disks, so centres are one disk further apart (TC 3-04.1-4, p. 214)
+ok 254 - spacing is edge to edge in rotor disks, so centres are one disk further apart (TC 3-04.1-4, p. 214)
+  ---
+  duration_ms: 2.058391
+  type: 'test'
+  ...
+# Subtest: staggered: chalk 2 sets the side and chalk 3 flies in trail directly behind lead (p. 224)
+ok 255 - staggered: chalk 2 sets the side and chalk 3 flies in trail directly behind lead (p. 224)
+  ---
+  duration_ms: 1.96673
+  type: 'test'
+  ...
+# Subtest: echelon puts every wingman on one side; trail puts them all behind
+ok 256 - echelon puts every wingman on one side; trail puts them all behind
+  ---
+  duration_ms: 0.431598
+  type: 'test'
+  ...
+# Subtest: the V and combat spread are drawn at the sizes the circular describes
+ok 257 - the V and combat spread are drawn at the sizes the circular describes
+  ---
+  duration_ms: 0.237424
+  type: 'test'
+  ...
+# Subtest: every manoeuvring formation has a zone and every formation a citation
+ok 258 - every manoeuvring formation has a zone and every formation a citation
+  ---
+  duration_ms: 0.339005
+  type: 'test'
+  ...
+# Subtest: IIMC breakup: 10° times chalk number, even chalks to the staggered side, 500 ft per chalk (pp. 220–221)
+ok 259 - IIMC breakup: 10° times chalk number, even chalks to the staggered side, 500 ft per chalk (pp. 220–221)
+  ---
+  duration_ms: 0.538158
+  type: 'test'
+  ...
+# Subtest: the lead change moves lead at least eight disks out and ends with the former lead in trail (p. 218)
+ok 260 - the lead change moves lead at least eight disks out and ends with the former lead in trail (p. 218)
+  ---
+  duration_ms: 0.157214
+  type: 'test'
+  ...
+# Subtest: formation quiz answers are among the options
+ok 261 - formation quiz answers are among the options
+  ---
+  duration_ms: 0.145482
+  type: 'test'
+  ...
+# Subtest: AIM entry sectors for right turns: direct -70 to +110, teardrop to the outbound course, parallel the rest (AIM 5-3-8)
+ok 262 - AIM entry sectors for right turns: direct -70 to +110, teardrop to the outbound course, parallel the rest (AIM 5-3-8)
+  ---
+  duration_ms: 1.779179
+  type: 'test'
+  ...
+# Subtest: left turns mirror the sectors
+ok 263 - left turns mirror the sectors
+  ---
+  duration_ms: 0.356708
+  type: 'test'
+  ...
+# Subtest: arrival sectors are 180, 70 and 110 degrees wide and match the heading rule
+ok 264 - arrival sectors are 180, 70 and 110 degrees wide and match the heading rule
+  ---
+  duration_ms: 2.965719
+  type: 'test'
+  ...
+# Subtest: 70 degree method: direct only within 70 degrees of the inbound course (AFMAN 11-217 p. 154)
+ok 265 - 70 degree method: direct only within 70 degrees of the inbound course (AFMAN 11-217 p. 154)
+  ---
+  duration_ms: 0.289772
+  type: 'test'
+  ...
+# Subtest: quiz questions stay at least 10 degrees from a sector line
+ok 266 - quiz questions stay at least 10 degrees from a sector line
+  ---
+  duration_ms: 1.671347
+  type: 'test'
+  ...
+# Subtest: tracks start and end at the fix, and the pattern lies on the holding side
+ok 267 - tracks start and end at the fix, and the pattern lies on the holding side
+  ---
+  duration_ms: 3.785623
+  type: 'test'
+  ...
+# Subtest: rules of thumb: VVI for 3 and 2.5 degrees, drift correction (AFMAN 11-217 pp. 158, 208)
+ok 268 - rules of thumb: VVI for 3 and 2.5 degrees, drift correction (AFMAN 11-217 pp. 158, 208)
+  ---
+  duration_ms: 0.216315
+  type: 'test'
+  ...
+# Subtest: entry tracks keep heading continuity on the way back to the fix
+ok 269 - entry tracks keep heading continuity on the way back to the fix
+  ---
+  duration_ms: 61.101761
+  type: 'test'
+  ...
+# Subtest: the invented trainer is in balance at its cruise trim
+ok 270 - the invented trainer is in balance at its cruise trim
+  ---
+  duration_ms: 6.943372
+  type: 'test'
+  ...
+# Subtest: attitude changes at once; the VSI lags the vertical speed (control and performance)
+ok 271 - attitude changes at once; the VSI lags the vertical speed (control and performance)
+  ---
+  duration_ms: 0.467134
+  type: 'test'
+  ...
+# Subtest: turn rate is g·tan(bank)/speed: 30° at 250 kt is about 2.5°/s; standard rate bank grows with speed
+ok 272 - turn rate is g·tan(bank)/speed: 30° at 250 kt is about 2.5°/s; standard rate bank grows with speed
+  ---
+  duration_ms: 0.234378
+  type: 'test'
+  ...
+# Subtest: every unusual attitude picture has its own recovery, and the hub returns between spokes
+ok 273 - every unusual attitude picture has its own recovery, and the hub returns between spokes
+  ---
+  duration_ms: 0.340718
+  type: 'test'
+  ...
+# Subtest: ILS needles: on the beams they centre; full scale is 2.5° and 0.7° (P-1204 p. 1-2) at two dots
+ok 274 - ILS needles: on the beams they centre; full scale is 2.5° and 0.7° (P-1204 p. 1-2) at two dots
+  ---
+  duration_ms: 0.606315
+  type: 'test'
+  ...
+# Subtest: the same error in feet is more dots close in
+ok 275 - the same error in feet is more dots close in
+  ---
+  duration_ms: 0.275846
+  type: 'test'
+  ...
+# Subtest: ILS limits (AFMAN 11-217 p. 210): full-scale localizer, one dot low, two dots high
+ok 276 - ILS limits (AFMAN 11-217 p. 210): full-scale localizer, one dot low, two dots high
+  ---
+  duration_ms: 0.377647
+  type: 'test'
+  ...
+# Subtest: the scripted approach ends on the centerline and the glide slope
+ok 277 - the scripted approach ends on the centerline and the glide slope
+  ---
+  duration_ms: 1.318738
+  type: 'test'
+  ...
+# Subtest: every run starts below the glide slope, off the localizer, on an intercept heading, within needle range
+ok 278 - every run starts below the glide slope, off the localizer, on an intercept heading, within needle range
+  ---
+  duration_ms: 6.180724
+  type: 'test'
+  ...
+# Subtest: the aircraft is in balance on the approach: level at level trim, 3° down at descent trim
+ok 279 - the aircraft is in balance on the approach: level at level trim, 3° down at descent trim
+  ---
+  duration_ms: 6.954062
+  type: 'test'
+  ...
+# Subtest: a well-flown run reaches the DA in about 90 seconds, inside one dot, and the right decision scores ok
+ok 280 - a well-flown run reaches the DA in about 90 seconds, inside one dot, and the right decision scores ok
+  ---
+  duration_ms: 135.917024
+  type: 'test'
+  ...
+# Subtest: wind: the drift correction holds the course; ignoring it lets the localizer drift
+ok 281 - wind: the drift correction holds the course; ignoring it lets the localizer drift
+  ---
+  duration_ms: 7.892877
+  type: 'test'
+  ...
+# Subtest: the decision: land only in sight and in position; late or wrong is a wrong call
+ok 282 - the decision: land only in sight and in position; late or wrong is a wrong call
+  ---
+  duration_ms: 4.170263
+  type: 'test'
+  ...
+# Subtest: limits: full-scale localizer is a broken limit, and going missed on it is right
+ok 283 - limits: full-scale localizer is a broken limit, and going missed on it is right
+  ---
+  duration_ms: 0.515875
+  type: 'test'
+  ...
+# Subtest: limits: more than one dot low below localizer minimums is recorded
+ok 284 - limits: more than one dot low below localizer minimums is recorded
+  ---
+  duration_ms: 26.972586
+  type: 'test'
+  ...
+# Subtest: the run records samples for the replay, in time order
+ok 285 - the run records samples for the replay, in time order
+  ---
+  duration_ms: 7.880394
+  type: 'test'
+  ...
+# Subtest: fuzz: random inputs never produce non-finite state
+ok 286 - fuzz: random inputs never produce non-finite state
+  ---
+  duration_ms: 72.172173
+  type: 'test'
+  ...
+# Subtest: auto power holds the approach speed through a level-off and a descent
+ok 287 - auto power holds the approach speed through a level-off and a descent
+  ---
+  duration_ms: 6.857521
+  type: 'test'
+  ...
+# Subtest: windscreen: on the centreline and glide path the runway is ahead, below the horizon
+ok 288 - windscreen: on the centreline and glide path the runway is ahead, below the horizon
+  ---
+  duration_ms: 4.930986
+  type: 'test'
+  ...
+# Subtest: signed angle difference wraps at north
+ok 289 - signed angle difference wraps at north
+  ---
+  duration_ms: 1.775913
+  type: 'test'
+  ...
+# Subtest: coordinates parse from decimal, DM and DMS, with hemisphere letters
+ok 290 - coordinates parse from decimal, DM and DMS, with hemisphere letters
+  ---
+  duration_ms: 1.228368
+  type: 'test'
+  ...
+# Subtest: coordinate formats round once and carry 60 into the next unit
+ok 291 - coordinate formats round once and carry 60 into the next unit
+  ---
+  duration_ms: 0.548696
+  type: 'test'
+  ...
+# Subtest: resolution follows one minute of latitude = 1 NM
+ok 292 - resolution follows one minute of latitude = 1 NM
+  ---
+  duration_ms: 0.55585
+  type: 'test'
+  ...
+# Subtest: UTM zones, bands and coordinates match WGS 84 references
+ok 293 - UTM zones, bands and coordinates match WGS 84 references
+  ---
+  duration_ms: 0.674101
+  type: 'test'
+  ...
+# Subtest: MGRS references match the NGA lettering, truncated to the chosen digits
+ok 294 - MGRS references match the NGA lettering, truncated to the chosen digits
+  ---
+  duration_ms: 1.015751
+  type: 'test'
+  ...
+# Subtest: true, magnetic and compass headings follow "east is least, west is best"
+ok 295 - true, magnetic and compass headings follow "east is least, west is best"
+  ---
+  duration_ms: 0.395921
+  type: 'test'
+  ...
+# Subtest: wind triangle reproduces the PHAK worked example
+ok 296 - wind triangle reproduces the PHAK worked example
+  ---
+  duration_ms: 0.447357
+  type: 'test'
+  ...
+# Subtest: radial and range of a station-frame position
+ok 297 - radial and range of a station-frame position
+  ---
+  duration_ms: 0.763509
+  type: 'test'
+  ...
+# Subtest: HSI: bearing pointer, TO/FROM and CDI deflection
+ok 298 - HSI: bearing pointer, TO/FROM and CDI deflection
+  ---
+  duration_ms: 0.816117
+  type: 'test'
+  ...
+# Subtest: intercept headings by the FTI methods
+ok 299 - intercept headings by the FTI methods
+  ---
+  duration_ms: 0.609721
+  type: 'test'
+  ...
+# Subtest: lead points and radial spacing
+ok 300 - lead points and radial spacing
+  ---
+  duration_ms: 0.341349
+  type: 'test'
+  ...
+# Subtest: ground speed checks (P-1204 p. 71)
+ok 301 - ground speed checks (P-1204 p. 71)
+  ---
+  duration_ms: 0.212858
+  type: 'test'
+  ...
+# Subtest: arc leads reproduce the FTI examples and table
+ok 302 - arc leads reproduce the FTI examples and table
+  ---
+  duration_ms: 0.495878
+  type: 'test'
+  ...
+# Subtest: chord method stays within a band around the arc
+ok 303 - chord method stays within a band around the arc
+  ---
+  duration_ms: 8.399897
+  type: 'test'
+  ...
+# Subtest: point-to-point reuses the Case III geometry
+ok 304 - point-to-point reuses the Case III geometry
+  ---
+  duration_ms: 0.303969
+  type: 'test'
+  ...
+# Subtest: turn radius and fly-by anticipation
+ok 305 - turn radius and fly-by anticipation
+  ---
+  duration_ms: 0.330138
+  type: 'test'
+  ...
+# Subtest: route flight sequences waypoints and flies direct-to
+ok 306 - route flight sequences waypoints and flies direct-to
+  ---
+  duration_ms: 10.225381
+  type: 'test'
+  ...
+# Subtest: cross-track has the CDI bar's sense
+ok 307 - cross-track has the CDI bar's sense
+  ---
+  duration_ms: 0.260998
+  type: 'test'
+  ...
+# Subtest: course flight: FTI method intercepts and tracks the course
+ok 308 - course flight: FTI method intercepts and tracks the course
+  ---
+  duration_ms: 12.445917
+  type: 'test'
+  ...
+# Subtest: course flight: homing curves downwind, tracking holds the course
+ok 309 - course flight: homing curves downwind, tracking holds the course
+  ---
+  duration_ms: 7.795686
+  type: 'test'
+  ...
+# Subtest: course flight: station passage flips TO to FROM on the same course
+ok 310 - course flight: station passage flips TO to FROM on the same course
+  ---
+  duration_ms: 2.525806
+  type: 'test'
+  ...
+# Subtest: course flight: hold mode turns to the heading bug at a half standard rate
+ok 311 - course flight: hold mode turns to the heading bug at a half standard rate
+  ---
+  duration_ms: 0.722061
+  type: 'test'
+  ...
+# Subtest: air-to-air TACAN channels pair 63 apart
+ok 312 - air-to-air TACAN channels pair 63 apart
+  ---
+  duration_ms: 0.313176
+  type: 'test'
+  ...
+# Subtest: bearing difference wraps through north
+ok 313 - bearing difference wraps through north
+  ---
+  duration_ms: 1.362379
+  type: 'test'
+  ...
+# Subtest: laser zones follow JP 3-09.3 Figure III-9: 20° safety wedge, 10–45° preferred, 120° attack zone
+ok 314 - laser zones follow JP 3-09.3 Figure III-9: 20° safety wedge, 10–45° preferred, 120° attack zone
+  ---
+  duration_ms: 1.705381
+  type: 'test'
+  ...
+# Subtest: the worked attack is consistent: every briefed heading is in the attack zone, the IN heading is preferred
+ok 315 - the worked attack is consistent: every briefed heading is in the attack zone, the IN heading is preferred
+  ---
+  duration_ms: 0.63058
+  type: 'test'
+  ...
+# Subtest: beam divergence matches the one-milliradian example (JP 3-09.3, p. III-53)
+ok 316 - beam divergence matches the one-milliradian example (JP 3-09.3, p. III-53)
+  ---
+  duration_ms: 5.231561
+  type: 'test'
+  ...
+# Subtest: impact angle: a steeper angle shrinks the miss from the same vertical error
+ok 317 - impact angle: a steeper angle shrinks the miss from the same vertical error
+  ---
+  duration_ms: 0.558174
+  type: 'test'
+  ...
+# Subtest: TLE categories follow JP 3-09.3 Figure III-5
+ok 318 - TLE categories follow JP 3-09.3 Figure III-5
+  ---
+  duration_ms: 0.736618
+  type: 'test'
+  ...
+# Subtest: laser codes must match and be four digits
+ok 319 - laser codes must match and be four digits
+  ---
+  duration_ms: 0.338924
+  type: 'test'
+  ...
+# Subtest: every question has its answer among the options and an outcome 1–6
+ok 320 - every question has its answer among the options and an outcome 1–6
+  ---
+  duration_ms: 0.300041
+  type: 'test'
+  ...
+# Subtest: a question answered correctly is not asked again in the round (\#69)
+ok 321 - a question answered correctly is not asked again in the round (\#69)
+  ---
+  duration_ms: 1.694601
+  type: 'test'
+  ...
+# Subtest: a missed question stays in the round and is not asked twice in a row
+ok 322 - a missed question stays in the round and is not asked twice in a row
+  ---
+  duration_ms: 0.354703
+  type: 'test'
+  ...
+# Subtest: the last question left is asked again until it is answered
+ok 323 - the last question left is asked again until it is answered
+  ---
+  duration_ms: 0.177703
+  type: 'test'
+  ...
+# Subtest: reset puts every question back
+ok 324 - reset puts every question back
+  ---
+  duration_ms: 0.230281
+  type: 'test'
+  ...
+# Subtest: distractors include the answer once, with distinct others
+ok 325 - distractors include the answer once, with distinct others
+  ---
+  duration_ms: 0.630559
+  type: 'test'
+  ...
+# Subtest: score line says how many are left
+ok 326 - score line says how many are left
+  ---
+  duration_ms: 0.166301
+  type: 'test'
+  ...
+# Subtest: phonetic table covers A–Z and 0–9 with AIM spellings
+ok 327 - phonetic table covers A–Z and 0–9 with AIM spellings
+  ---
+  duration_ms: 1.714067
+  type: 'test'
+  ...
+# Subtest: figures and altitudes (4-2-8, 4-2-9)
+ok 328 - figures and altitudes (4-2-8, 4-2-9)
+  ---
+  duration_ms: 0.906126
+  type: 'test'
+  ...
+# Subtest: directions, speeds, Mach (4-2-10, 4-2-11)
+ok 329 - directions, speeds, Mach (4-2-10, 4-2-11)
+  ---
+  duration_ms: 0.658912
+  type: 'test'
+  ...
+# Subtest: frequencies, time, codes
+ok 330 - frequencies, time, codes
+  ---
+  duration_ms: 0.904292
+  type: 'test'
+  ...
+# Subtest: civil call signs drop the N; abbreviation keeps the last three (4-2-4)
+ok 331 - civil call signs drop the N; abbreviation keeps the last three (4-2-4)
+  ---
+  duration_ms: 0.552594
+  type: 'test'
+  ...
+# Subtest: initial call order (4-2-3a)
+ok 332 - initial call order (4-2-3a)
+  ---
+  duration_ms: 1.108885
+  type: 'test'
+  ...
+# Subtest: readback: altitude, vector, runway and identification (4-4-7)
+ok 333 - readback: altitude, vector, runway and identification (4-4-7)
+  ---
+  duration_ms: 0.488925
+  type: 'test'
+  ...
+# Subtest: code change 2700 → 7200 avoids 7700 by changing the second digit first (4-1-20)
+ok 334 - code change 2700 → 7200 avoids 7700 by changing the second digit first (4-1-20)
+  ---
+  duration_ms: 0.777084
+  type: 'test'
+  ...
+# Subtest: lost comms route priority and highest altitude per segment (6-4-1c)
+ok 335 - lost comms route priority and highest altitude per segment (6-4-1c)
+  ---
+  duration_ms: 0.784799
+  type: 'test'
+  ...
+# Subtest: a call into a quiet frequency with no reply owed is clear, and later stations wait for it
+ok 336 - a call into a quiet frequency with no reply owed is clear, and later stations wait for it
+  ---
+  duration_ms: 1.132369
+  type: 'test'
+  ...
+# Subtest: keying over a transmission in progress loses both, and the other call is repeated
+ok 337 - keying over a transmission in progress loses both, and the other call is repeated
+  ---
+  duration_ms: 0.566059
+  type: 'test'
+  ...
+# Subtest: a reply owed makes silence not clear
+ok 338 - a reply owed makes silence not clear
+  ---
+  duration_ms: 0.289362
+  type: 'test'
+  ...
+# Subtest: only a station keying within the reaction time can double with you
+ok 339 - only a station keying within the reaction time can double with you
+  ---
+  duration_ms: 0.180848
+  type: 'test'
+  ...
+# Subtest: calling again before your answer comes is too soon
+ok 340 - calling again before your answer comes is too soon
+  ---
+  duration_ms: 0.241291
+  type: 'test'
+  ...
+# Subtest: Navy sortie runs ATIS, clearance, base, ground, tower, departure in that order
+ok 341 - Navy sortie runs ATIS, clearance, base, ground, tower, departure in that order
+  ---
+  duration_ms: 0.207177
+  type: 'test'
+  ...
+# Subtest: every Navy initial call names the station first, then KATT 11
+ok 342 - every Navy initial call names the station first, then KATT 11
+  ---
+  duration_ms: 0.182933
+  type: 'test'
+  ...
+# Subtest: every Navy readback starts with the call sign; takeoff and landing readbacks carry the runway
+ok 343 - every Navy readback starts with the call sign; takeoff and landing readbacks carry the runway
+  ---
+  duration_ms: 0.351057
+  type: 'test'
+  ...
+# Subtest: preset channels are consistent through the sortie
+ok 344 - preset channels are consistent through the sortie
+  ---
+  duration_ms: 0.234028
+  type: 'test'
+  ...
+# Subtest: the Navy clearance and ground calls are in AIM 4-2-3 order
+ok 345 - the Navy clearance and ground calls are in AIM 4-2-3 order
+  ---
+  duration_ms: 0.143418
+  type: 'test'
+  ...
+# Subtest: training-rule calls cover the P-1289 safety words
+ok 346 - training-rule calls cover the P-1289 safety words
+  ---
+  duration_ms: 0.250869
+  type: 'test'
+  ...
+# Subtest: a Navy takeoff readback needs only the call sign and runway
+ok 347 - a Navy takeoff readback needs only the call sign and runway
+  ---
+  duration_ms: 0.193071
+  type: 'test'
+  ...
+# Subtest: brevity words are unique, defined and page-cited
+ok 348 - brevity words are unique, defined and page-cited
+  ---
+  duration_ms: 0.401341
+  type: 'test'
+  ...
+# Subtest: rotary-wing altitude bands follow JP 3-09.3 p. III-90
+ok 349 - rotary-wing altitude bands follow JP 3-09.3 p. III-90
+  ---
+  duration_ms: 1.47561
+  type: 'test'
+  ...
+# Subtest: movement techniques follow Figure III-25
+ok 350 - movement techniques follow Figure III-25
+  ---
+  duration_ms: 1.614541
+  type: 'test'
+  ...
+# Subtest: three profiles and three firing techniques
+ok 351 - three profiles and three firing techniques
+  ---
+  duration_ms: 0.251691
+  type: 'test'
+  ...
+# Subtest: Figure 2: each profile stays inside its published height band, and lower is less exposed
+ok 352 - Figure 2: each profile stays inside its published height band, and lower is less exposed
+  ---
+  duration_ms: 7.571877
+  type: 'test'
+  ...
+# Subtest: Figure 1: the brief matches the drawing
+ok 353 - Figure 1: the brief matches the drawing
+  ---
+  duration_ms: 0.384169
+  type: 'test'
+  ...
+# Subtest: every question has its answer among the options and an outcome 1–6, and every outcome has a question
+ok 354 - every question has its answer among the options and an outcome 1–6, and every outcome has a question
+  ---
+  duration_ms: 0.217146
+  type: 'test'
+  ...
+# Subtest: rotor speeds: tip speed, dissymmetry and reverse flow
+ok 355 - rotor speeds: tip speed, dissymmetry and reverse flow
+  ---
+  duration_ms: 3.176002
+  type: 'test'
+  ...
+# Subtest: blade element: angle of attack is pitch less inflow angle
+ok 356 - blade element: angle of attack is pitch less inflow angle
+  ---
+  duration_ms: 0.437168
+  type: 'test'
+  ...
+# Subtest: cyclic: least pitch 90° before the side the disk tilts to
+ok 357 - cyclic: least pitch 90° before the side the disk tilts to
+  ---
+  duration_ms: 1.242114
+  type: 'test'
+  ...
+# Subtest: hover power: momentum theory plus blade profile drag
+ok 358 - hover power: momentum theory plus blade profile drag
+  ---
+  duration_ms: 0.454651
+  type: 'test'
+  ...
+# Subtest: power curve: minimum-power speed, hover ceiling and density
+ok 359 - power curve: minimum-power speed, hover ceiling and density
+  ---
+  duration_ms: 7.927673
+  type: 'test'
+  ...
+# Subtest: vortex ring state: the FAA combination of conditions
+ok 360 - vortex ring state: the FAA combination of conditions
+  ---
+  duration_ms: 0.365845
+  type: 'test'
+  ...
+# Subtest: autorotation regions: the handbook sizes, and collective moves them
+ok 361 - autorotation regions: the handbook sizes, and collective moves them
+  ---
+  duration_ms: 0.349574
+  type: 'test'
+  ...
+# Subtest: turn load: 1 / cos(bank)
+ok 362 - turn load: 1 / cos(bank)
+  ---
+  duration_ms: 0.264946
+  type: 'test'
+  ...
+# Subtest: radar horizon matches the 4/3-earth examples (Wikipedia, Radar horizon)
+ok 363 - radar horizon matches the 4/3-earth examples (Wikipedia, Radar horizon)
+  ---
+  duration_ms: 1.15438
+  type: 'test'
+  ...
+# Subtest: two horizons add: an aircraft is seen just inside their sum and hidden just beyond
+ok 364 - two horizons add: an aircraft is seen just inside their sum and hidden just beyond
+  ---
+  duration_ms: 1.607097
+  type: 'test'
+  ...
+# Subtest: the lowest visible height is where the target horizon closes the gap
+ok 365 - the lowest visible height is where the target horizon closes the gap
+  ---
+  duration_ms: 0.499174
+  type: 'test'
+  ...
+# Subtest: a ridge masks a low aircraft the horizon alone would not hide
+ok 366 - a ridge masks a low aircraft the horizon alone would not hide
+  ---
+  duration_ms: 1.387422
+  type: 'test'
+  ...
+# Subtest: burnthrough is where echo equals jamming, and a stand-off jammer is burned through farther out (USNA 11.2.2.4, 11.2.2.7)
+ok 367 - burnthrough is where echo equals jamming, and a stand-off jammer is burned through farther out (USNA 11.2.2.4, 11.2.2.7)
+  ---
+  duration_ms: 0.316522
+  type: 'test'
+  ...
+# Subtest: the invented package keeps the jammer outside the engagement zone and strikes inside it
+ok 368 - the invented package keeps the jammer outside the engagement zone and strikes inside it
+  ---
+  duration_ms: 0.285093
+  type: 'test'
+  ...
+# Subtest: every outcome 1-6 has a quiz question, and every answer is an option
+ok 369 - every outcome 1-6 has a quiz question, and every answer is an option
+  ---
+  duration_ms: 0.756025
+  type: 'test'
+  ...
+# Subtest: the elevation rule gives the training instruction's worked example (P-825 p. 8-7)
+ok 370 - the elevation rule gives the training instruction's worked example (P-825 p. 8-7)
+  ---
+  duration_ms: 1.454862
+  type: 'test'
+  ...
+# Subtest: the scan volume covers what its bars reach, and more bars take longer
+ok 371 - the scan volume covers what its bars reach, and more bars take longer
+  ---
+  duration_ms: 1.649467
+  type: 'test'
+  ...
+# Subtest: the notch is centred on the beam: at 90 TA the target closes only at the fighter's speed (P-825 p. 8-5)
+ok 372 - the notch is centred on the beam: at 90 TA the target closes only at the fighter's speed (P-825 p. 8-5)
+  ---
+  duration_ms: 0.388657
+  type: 'test'
+  ...
+# Subtest: the warning receiver steps put the threat on the beam after the turn (P-825 pp. 16-12 to 16-13)
+ok 373 - the warning receiver steps put the threat on the beam after the turn (P-825 pp. 16-12 to 16-13)
+  ---
+  duration_ms: 0.357599
+  type: 'test'
+  ...
+# Subtest: lookout drops the lowest sectors first and places the radar by position (MCH 11-F16v5 pp. 22-24)
+ok 374 - lookout drops the lowest sectors first and places the radar by position (MCH 11-F16v5 pp. 22-24)
+  ---
+  duration_ms: 1.211186
+  type: 'test'
+  ...
+# Subtest: the invented picture: the hostile group is correlated, the RWR alone gives a bearing, the unknown stays unknown
+ok 375 - the invented picture: the hostile group is correlated, the RWR alone gives a bearing, the unknown stays unknown
+  ---
+  duration_ms: 0.485899
+  type: 'test'
+  ...
+# Subtest: IFF identifies the friend that replies; no reply adds no identity and no correlation
+ok 376 - IFF identifies the friend that replies; no reply adds no identity and no correlation
+  ---
+  duration_ms: 0.511998
+  type: 'test'
+  ...
+# Subtest: every question has its answer among its options and cites a source
+ok 377 - every question has its answer among its options and cites a source
+  ---
+  duration_ms: 0.57745
+  type: 'test'
+  ...
+# Subtest: lenses carry the FTI cell counts and coverage
+ok 378 - lenses carry the FTI cell counts and coverage
+  ---
+  duration_ms: 2.965575
+  type: 'test'
+  ...
+# Subtest: the wedge narrows toward the lens
+ok 379 - the wedge narrows toward the lens
+  ---
+  duration_ms: 0.375402
+  type: 'test'
+  ...
+# Subtest: the ball sits on the datum on the glideslope, and goes red when low
+ok 380 - the ball sits on the datum on the glideslope, and goes red when low
+  ---
+  duration_ms: 0.332372
+  type: 'test'
+  ...
+# Subtest: ball picture rejects bad input
+ok 381 - ball picture rejects bad input
+  ---
+  duration_ms: 0.506968
+  type: 'test'
+  ...
+# Subtest: pattern paths join up and end at the landing spot
+ok 382 - pattern paths join up and end at the landing spot
+  ---
+  duration_ms: 0.637102
+  type: 'test'
+  ...
+# Subtest: the page lists the same pattern steps as the model
+ok 383 - the page lists the same pattern steps as the model
+  ---
+  duration_ms: 0.997917
+  type: 'test'
+  ...
+# Subtest: single-spot deck landing currency
+ok 384 - single-spot deck landing currency
+  ---
+  duration_ms: 0.489225
+  type: 'test'
+  ...
+# Subtest: multispot day and night deck landing currency
+ok 385 - multispot day and night deck landing currency
+  ---
+  duration_ms: 0.3795
+  type: 'test'
+  ...
+# Subtest: deck landing currency rejects bad input
+ok 386 - deck landing currency rejects bad input
+  ---
+  duration_ms: 0.480539
+  type: 'test'
+  ...
+# Subtest: LSO comments split into the grading symbols
+ok 387 - LSO comments split into the grading symbols
+  ---
+  duration_ms: 1.65684
+  type: 'test'
+  ...
+# Subtest: the page lists every lettered symbol in P-1211 Figures 7 and 8
+ok 388 - the page lists every lettered symbol in P-1211 Figures 7 and 8
+  ---
+  duration_ms: 0.866622
+  type: 'test'
+  ...
+# Subtest: real comments read with their marks
+ok 389 - real comments read with their marks
+  ---
+  duration_ms: 1.696624
+  type: 'test'
+  ...
+# Subtest: patterns carry the FTI numbers
+ok 390 - patterns carry the FTI numbers
+  ---
+  duration_ms: 1.476506
+  type: 'test'
+  ...
+# Subtest: error directions follow the FTI: steep, fast or low is long
+ok 391 - error directions follow the FTI: steep, fast or low is long
+  ---
+  duration_ms: 0.342942
+  type: 'test'
+  ...
+# Subtest: errors add or cancel as in the FTI examples
+ok 392 - errors add or cancel as in the FTI examples
+  ---
+  duration_ms: 1.591828
+  type: 'test'
+  ...
+# Subtest: minimum release altitude is flagged
+ok 393 - minimum release altitude is flagged
+  ---
+  duration_ms: 0.215052
+  type: 'test'
+  ...
+# Subtest: offset aimpoint matches the FTI example
+ok 394 - offset aimpoint matches the FTI example
+  ---
+  duration_ms: 0.350807
+  type: 'test'
+  ...
+# Subtest: no-drag fall is consistent and ends on the ground
+ok 395 - no-drag fall is consistent and ends on the ground
+  ---
+  duration_ms: 0.42744
+  type: 'test'
+  ...
+# Subtest: quiz questions are answered from the table
+ok 396 - quiz questions are answered from the table
+  ---
+  duration_ms: 20.472845
+  type: 'test'
+  ...
+# Subtest: context front-loads current callsigns, location, procedures and numeric fields
+ok 397 - context front-loads current callsigns, location, procedures and numeric fields
+  ---
+  duration_ms: 1.71012
+  type: 'test'
+  ...
+# Subtest: bias is installed only where browser supports contextual recognition
+ok 398 - bias is installed only where browser supports contextual recognition
+  ---
+  duration_ms: 0.661588
+  type: 'test'
+  ...
+# Subtest: recognition alternatives prefer a grounded callsign
+ok 399 - recognition alternatives prefer a grounded callsign
+  ---
+  duration_ms: 0.407543
+  type: 'test'
+  ...
+# Subtest: do not silently rewrite ambiguous digits
+ok 400 - do not silently rewrite ambiguous digits
+  ---
+  duration_ms: 0.294311
+  type: 'test'
+  ...
+# Subtest: no callsign bias invents a call from unrelated numeric fields
+ok 401 - no callsign bias invents a call from unrelated numeric fields
+  ---
+  duration_ms: 0.26684
+  type: 'test'
+  ...
+# Subtest: audio samples concatenate without padding or gaps
+ok 402 - audio samples concatenate without padding or gaps
+  ---
+  duration_ms: 1.899154
+  type: 'test'
+  ...
+# Subtest: 48 kHz microphone data downsampled to 16 kHz with expected duration
+ok 403 - 48 kHz microphone data downsampled to 16 kHz with expected duration
+  ---
+  duration_ms: 13.738505
+  type: 'test'
+  ...
+# Subtest: 44.1 kHz samples resample to 16 kHz with stable zero signal
+ok 404 - 44.1 kHz samples resample to 16 kHz with stable zero signal
+  ---
+  duration_ms: 8.469747
+  type: 'test'
+  ...
+# Subtest: resampler rejects incorrect input rates
+ok 405 - resampler rejects incorrect input rates
+  ---
+  duration_ms: 0.645808
+  type: 'test'
+  ...
+# Subtest: Whisper prefix context prioritizes airfield, agency, callsign, runway and stage
+ok 406 - Whisper prefix context prioritizes airfield, agency, callsign, runway and stage
+  ---
+  duration_ms: 1.215675
+  type: 'test'
+  ...
+# Subtest: initial state and immutable transition
+ok 407 - initial state and immutable transition
+  ---
+  duration_ms: 1.934239
+  type: 'test'
+  ...
+# Subtest: wrong or incomplete transmissions do not advance
+ok 408 - wrong or incomplete transmissions do not advance
+  ---
+  duration_ms: 0.584984
+  type: 'test'
+  ...
+# Subtest: hold short requires runway, taxiway and callsign
+ok 409 - hold short requires runway, taxiway and callsign
+  ---
+  duration_ms: 1.417402
+  type: 'test'
+  ...
+# Subtest: readback and handoff preserve expected stages
+ok 410 - readback and handoff preserve expected stages
+  ---
+  duration_ms: 0.527908
+  type: 'test'
+  ...
+# Subtest: emergency does not advance fictional procedure
+ok 411 - emergency does not advance fictional procedure
+  ---
+  duration_ms: 0.253855
+  type: 'test'
+  ...
+# Subtest: intent parser handles common callsign forms
+ok 412 - intent parser handles common callsign forms
+  ---
+  duration_ms: 0.158947
+  type: 'test'
+  ...
+# Subtest: invalid state rejected
+ok 413 - invalid state rejected
+  ---
+  duration_ms: 0.200516
+  type: 'test'
+  ...
+# Subtest: English-only model never receives forbidden language or task options
+ok 414 - English-only model never receives forbidden language or task options
+  ---
+  duration_ms: 1.770102
+  type: 'test'
+  ...
+# Subtest: unsupported prompt context is retried locally without multilingual options
+ok 415 - unsupported prompt context is retried locally without multilingual options
+  ---
+  duration_ms: 0.591473
+  type: 'test'
+  ...
+# Subtest: model with no tokenizer uses unconditional local transcription
+ok 416 - model with no tokenizer uses unconditional local transcription
+  ---
+  duration_ms: 0.320129
+  type: 'test'
+  ...
+# Subtest: prompt encoding errors do not prevent local transcription
+ok 417 - prompt encoding errors do not prevent local transcription
+  ---
+  duration_ms: 0.282529
+  type: 'test'
+  ...
+# Subtest: prompt tokens are bounded and validated
+ok 418 - prompt tokens are bounded and validated
+  ---
+  duration_ms: 0.48623
+  type: 'test'
+  ...
+# Subtest: a plain prompt without startofprev is not falsely counted as conditioning
+ok 419 - a plain prompt without startofprev is not falsely counted as conditioning
+  ---
+  duration_ms: 0.204993
+  type: 'test'
+  ...
+# Subtest: use tokenizer-native Whisper get_prompt_ids when available
+ok 420 - use tokenizer-native Whisper get_prompt_ids when available
+  ---
+  duration_ms: 0.278411
+  type: 'test'
+  ...
+# Subtest: Whisper models are distinct English-only, local ONNX weights
+ok 421 - Whisper models are distinct English-only, local ONNX weights
+  ---
+  duration_ms: 2.480201
+  type: 'test'
+  ...
+# Subtest: WER compares exact spoken reference against unmodified raw output
+ok 422 - WER compares exact spoken reference against unmodified raw output
+  ---
+  duration_ms: 0.574615
+  type: 'test'
+  ...
+# Subtest: tokenizer is case/punctuation insensitive without call sign substitutions
+ok 423 - tokenizer is case/punctuation insensitive without call sign substitutions
+  ---
+  duration_ms: 0.313377
+  type: 'test'
+  ...
+# Subtest: designators match with or without their punctuation
+ok 424 - designators match with or without their punctuation
+  ---
+  duration_ms: 2.226135
+  type: 'test'
+  ...
+# Subtest: titles rank above headings, and matching headings come back as deep links
+ok 425 - titles rank above headings, and matching headings come back as deep links
+  ---
+  duration_ms: 0.363721
+  type: 'test'
+  ...
+# Subtest: every query word must match; short words do not match inside prose
+ok 426 - every query word must match; short words do not match inside prose
+  ---
+  duration_ms: 1.053401
+  type: 'test'
+  ...
+# Subtest: the index takes titles, breadcrumbs, headings and glossary terms from built pages
+ok 427 - the index takes titles, breadcrumbs, headings and glossary terms from built pages
+  ---
+  duration_ms: 1.82821
+  type: 'test'
+  ...
+# Subtest: sitemap leaves out noindex pages and redirects
+ok 428 - sitemap leaves out noindex pages and redirects
+  ---
+  duration_ms: 1.182673
+  type: 'test'
+  ...
+1..428
+# tests 428
+# suites 0
+# pass 428
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6547.726043
+[2m05:48:13[22m [34m[types][39m Generated [2m122ms[22m
+[2m05:48:13[22m [34m[check][39m Getting diagnostics for Astro files in /home/runner/work/oversweep/oversweep...
+[96msrc/data/airfield-model.mjs[0m:[93m317[0m:[93m9[0m - [93mwarning[0m[90m ts(6133): [0m'nums' is declared but its value is never read.
+
+[7m317[0m   const nums = checkSources(data, where, problems);
+[7m   [0m [93m        ~~~~[0m
+
+[96msrc/experiences/autorotation/app.js[0m:[93m322[0m:[93m40[0m - [93mwarning[0m[90m ts(6133): [0m'to' is declared but its value is never read.
+
+[7m322[0m   function ticks(ctx, cx, cy, r, from, to, values, label, minor = []) {
+[7m   [0m [93m                                       ~~[0m
+[96msrc/experiences/autorotation/app.js[0m:[93m322[0m:[93m34[0m - [93mwarning[0m[90m ts(6133): [0m'from' is declared but its value is never read.
+
+[7m322[0m   function ticks(ctx, cx, cy, r, from, to, values, label, minor = []) {
+[7m   [0m [93m                                 ~~~~[0m
+[96msrc/experiences/autorotation/app.js[0m:[93m198[0m:[93m50[0m - [93mwarning[0m[90m ts(2568): [0mProperty 'webkitAudioContext' may not exist on type 'Window & typeof globalThis'. Did you mean 'AudioContext'?
+
+[7m198[0m       audio = new (window.AudioContext || window.webkitAudioContext)();
+[7m   [0m [93m                                                 ~~~~~~~~~~~~~~~~~~[0m
+
+[96msrc/experiences/radio-trainer/app.js[0m:[93m23[0m:[93m44[0m - [93mwarning[0m[90m ts(2568): [0mProperty 'webkitAudioContext' may not exist on type 'Window & typeof globalThis'. Did you mean 'AudioContext'?
+
+[7m23[0m   audio??=new (window.AudioContext||window.webkitAudioContext)();
+[7m  [0m [93m                                           ~~~~~~~~~~~~~~~~~~[0m
+[96msrc/experiences/radio-trainer/app.js[0m:[93m8[0m:[93m5[0m - [93mwarning[0m[90m ts(6133): [0m'recording' is declared but its value is never read.
+
+[7m8[0m let recording = false, lastAtc = '', voices = [], audio = null, localEngine = null;
+[7m [0m [93m    ~~~~~~~~~[0m
+
+[96msrc/experiences/radio-trainer/neural-voice.js[0m:[93m28[0m:[93m45[0m - [93mwarning[0m[90m ts(2568): [0mProperty 'webkitAudioContext' may not exist on type 'Window & typeof globalThis'. Did you mean 'AudioContext'?
+
+[7m28[0m  context??=new (window.AudioContext||window.webkitAudioContext)();
+[7m  [0m [93m                                            ~~~~~~~~~~~~~~~~~~[0m
+
+[96msrc/lessons/aar/lesson-ui.mjs[0m:[93m331[0m:[93m17[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m331[0m   feedback: (q, o, right) => `${right ? 'Correct' : `Not quite: ${verb} ${q.answer}`}. ${q.why}`,
+[7m   [0m [93m                ~[0m
+
+[96msrc/lessons/abnormal/threat-ui.mjs[0m:[93m57[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m57[0m     feedback: (q, o, right) => `${right ? 'Correct.' : 'Not quite.'} ${q.why}`,
+[7m  [0m [93m                  ~[0m
+
+[96msrc/lessons/airfield-ops/lesson-ui.mjs[0m:[93m746[0m:[93m24[0m - [93mwarning[0m[90m ts(6133): [0m'm' is declared but its value is never read.
+
+[7m746[0m     feedback: (signal, m, right) => `${right ? 'Correct' : 'Not quite'}: ${signal.colour.toLowerCase()} means "${signal[who()]}" ${{ ground: 'to an aircraft on the ground', air: 'to an aircraft in flight', vehicle: 'to vehicles, equipment and personnel' }[who()]}.`,
+[7m   [0m [93m                       ~[0m
+[96msrc/lessons/airfield-ops/lesson-ui.mjs[0m:[93m306[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'k' is declared but its value is never read.
+
+[7m306[0m     feedback: (s, k, right) => `${right ? 'Correct' : `Not quite: it is a ${s.kind.toLowerCase()} sign`}. ${s.meaning}`,
+[7m   [0m [93m                  ~[0m
+
+[96msrc/lessons/bvr/lesson-ui.mjs[0m:[93m225[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m225[0m     feedback: (q, o, right) => `${right ? 'Correct.' : 'Not quite.'} ${q.why}`,
+[7m   [0m [93m                  ~[0m
+[96msrc/lessons/bvr/lesson-ui.mjs[0m:[93m212[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m212[0m     feedback: (q, o, right) => (q.kind === 'aspect'
+[7m   [0m [93m                  ~[0m
+
+[96msrc/lessons/case-iii/lesson-model.mjs[0m:[93m181[0m:[93m40[0m - [93mwarning[0m[90m ts(2568): [0mProperty 'legHeading' may not exist on type '{ entry: any; turns: any; inboundCourse: number; heading: number; entryTurnRate: number; points: { x: number; y: number; }[]; }'. Did you mean 'heading'?
+
+[7m181[0m   if (legHeading !== undefined) result.legHeading = legHeading;
+[7m   [0m [93m                                       ~~~~~~~~~~[0m
+
+[96msrc/lessons/case-iii/lesson-ui.mjs[0m:[93m181[0m:[93m43[0m - [93mwarning[0m[90m ts(2568): [0mProperty 'legHeading' may not exist on type '{ entry: any; turns: any; inboundCourse: number; heading: number; entryTurnRate: number; points: { x: number; y: number; }[]; }'. Did you mean 'heading'?
+
+[7m181[0m     const steps = ENTRY_STEPS[entry](path.legHeading ?? outbound, turns);
+[7m   [0m [93m                                          ~~~~~~~~~~[0m
+
+[96msrc/lessons/close-air-support/lesson-ui.mjs[0m:[93m211[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m211[0m     feedback: (q, o, right) => `${right ? 'Correct.' : 'Not quite.'} ${q.why}`,
+[7m   [0m [93m                  ~[0m
+[96msrc/lessons/close-air-support/lesson-ui.mjs[0m:[93m200[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m200[0m     feedback: (q, o, right) => `${right ? 'Correct.' : `Not quite: ${q.answer.toLowerCase()}.`}${q.item.readback ? ' It is read back.' : ''}`,
+[7m   [0m [93m                  ~[0m
+
+[96msrc/lessons/flight-planning/sortie-ui.mjs[0m:[93m156[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m156[0m     feedback: (q, o, right) => `${right ? 'Correct.' : 'Not quite.'} ${q.why}`,
+[7m   [0m [93m                  ~[0m
+
+[96msrc/lessons/flight-planning/weather-ui.mjs[0m:[93m144[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m144[0m     feedback: (q, o, right) => `${right ? 'Correct.' : 'Not quite.'} ${q.why}`,
+[7m   [0m [93m                  ~[0m
+
+[96msrc/lessons/formation/division-ui.mjs[0m:[93m196[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m196[0m     feedback: (q, o, right) => `${right ? 'Correct' : `Not quite: ${q.answer}`}. ${q.why}`,
+[7m   [0m [93m                  ~[0m
+[96msrc/lessons/formation/division-ui.mjs[0m:[93m147[0m:[93m33[0m - [93mwarning[0m[90m ts(6133): [0m's' is declared but its value is never read.
+
+[7m147[0m       const d = samples.filter((s, k) => k * 0.5 <= state.t).map((s, k) => `${k ? 'L' : 'M'}${P(s[i].x, -s[i].y).map((v) => v.toFixed(1)).join(' ')}`).join(' ');
+[7m   [0m [93m                                ~[0m
+[96msrc/lessons/formation/division-ui.mjs[0m:[93m144[0m:[93m13[0m - [93mwarning[0m[90m ts(6133): [0m'px' is declared but its value is never read.
+
+[7m144[0m     const { px, P } = fit([...all, ...all.map(([x, y]) => [x, y - 0.2])], 50, 400);
+[7m   [0m [93m            ~~[0m
+
+[96msrc/lessons/formation/helo-ui.mjs[0m:[93m210[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m210[0m     feedback: (q, o, right) => `${right ? 'Correct' : `Not quite: ${q.answer}`}. ${q.why}`,
+[7m   [0m [93m                  ~[0m
+
+[96msrc/lessons/formation/lesson-ui.mjs[0m:[93m121[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m121[0m     feedback: (q, o, right) => `${right ? 'Correct' : `Not quite: ${q.answer}`}. ${q.why}`,
+[7m   [0m [93m                  ~[0m
+
+[96msrc/lessons/instrument-flight/attitude-ui.mjs[0m:[93m131[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m131[0m     feedback: (q, o, right) => `${right ? 'Correct' : 'Not quite'}: ${q.label.toLowerCase()}. ${q.why}`,
+[7m   [0m [93m                  ~[0m
+
+[96msrc/lessons/instrument-flight/ils-ui.mjs[0m:[93m11[0m:[93m7[0m - [93mwarning[0m[90m ts(6133): [0m'D' is declared but its value is never read.
+
+[7m11[0m const D = Math.PI / 180;
+[7m  [0m [93m      ~[0m
+
+[96msrc/lessons/instrument-flight/lesson-ui.mjs[0m:[93m121[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m121[0m     feedback: (q, o, right) => `${right ? 'Correct' : 'Not quite'}: ${q.answer.toLowerCase()}. Your heading is ${Math.abs(diff(q.inbound, q.heading))}° from the inbound course.`,
+[7m   [0m [93m                  ~[0m
+
+[96msrc/lessons/precision-targeting/lesson-ui.mjs[0m:[93m184[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m184[0m     feedback: (q, o, right) => `${right ? 'Correct.' : 'Not quite.'} ${q.why}`,
+[7m   [0m [93m                  ~[0m
+
+[96msrc/lessons/radio/lesson-ui.mjs[0m:[93m528[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'm' is declared but its value is never read.
+
+[7m528[0m     feedback: (s, m, right) => `${right ? 'Correct' : `Not quite: ${s[where()]}`}. ${name(s)}.`,
+[7m   [0m [93m                  ~[0m
+[96msrc/lessons/radio/lesson-ui.mjs[0m:[93m336[0m:[93m28[0m - [93mwarning[0m[90m ts(6133): [0m'w' is declared but its value is never read.
+
+[7m336[0m     feedback: ([, answer], w, right) => (right ? 'Correct.' : `Not quite: “${answer}”.`),
+[7m   [0m [93m                           ~[0m
+[96msrc/lessons/radio/lesson-ui.mjs[0m:[93m50[0m:[93m21[0m - [93mwarning[0m[90m ts(6133): [0m'c' is declared but its value is never read.
+
+[7m50[0m     SORTIE.forEach((c, k) => {
+[7m  [0m [93m                    ~[0m
+
+[96msrc/lessons/rotary-wing-attack/lesson-ui.mjs[0m:[93m184[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m184[0m     feedback: (q, o, right) => `${right ? 'Correct.' : 'Not quite.'} ${q.why}`,
+[7m   [0m [93m                  ~[0m
+
+[96msrc/lessons/sead/lesson-ui.mjs[0m:[93m186[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m186[0m     feedback: (q, o, right) => `${right ? 'Correct.' : 'Not quite.'} ${q.why}`,
+[7m   [0m [93m                  ~[0m
+
+[96msrc/lessons/sensors/radar-ui.mjs[0m:[93m165[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m165[0m     feedback: (q, o, right) => `${right ? 'Correct.' : 'Not quite.'} ${q.why}`,
+[7m   [0m [93m                  ~[0m
+
+[96msrc/lessons/sensors/sa-ui.mjs[0m:[93m111[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m111[0m     feedback: (q, o, right) => `${right ? 'Correct.' : 'Not quite.'} ${q.why}`,
+[7m   [0m [93m                  ~[0m
+
+[96msrc/lessons/shared/instruments.mjs[0m:[93m8[0m:[93m7[0m - [93mwarning[0m[90m ts(6133): [0m'D' is declared but its value is never read.
+
+[7m8[0m const D = Math.PI / 180;
+[7m [0m [93m      ~[0m
+
+[96msrc/lessons/shared/quick-quiz.mjs[0m:[93m112[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'option' is declared but its value is never read.
+
+[7m112[0m     feedback: (t, option, right) => (right ? 'Correct.' : `Not quite: that was ${t.term}.`),
+[7m   [0m [93m                  ~~~~~~[0m
+
+[96msrc/lessons/ship-operations/lesson-ui.mjs[0m:[93m141[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m141[0m     feedback: (q, o, ok) => (ok ? right(q) : wrong(q)),
+[7m   [0m [93m                  ~[0m
+
+[96msrc/lessons/weapons-delivery/lesson-ui.mjs[0m:[93m197[0m:[93m19[0m - [93mwarning[0m[90m ts(6133): [0m'o' is declared but its value is never read.
+
+[7m197[0m     feedback: (q, o, right) => (right ? 'Correct.' : `Not quite: ${describeMiss(q.total).toLowerCase()}.`),
+[7m   [0m [93m                  ~[0m
+
+[96msrc/pages/encyclopedia/[slug].astro[0m:[93m130[0m:[93m7[0m - [93mwarning[0m[90m ts(6133): [0m'ft' is declared but its value is never read.
+
+[7m130[0m const ft = (feet: number) => `${n(feet)} ft (${n(Math.round(feet * 0.3048))} m)`;
+[7m   [0m [93m      ~~[0m
+
+[96msrc/pages/manual/air-combat/_BvrIntercepts.astro[0m:[93m29[0m:[93m7[0m - [93mwarning[0m[90m ts(6133): [0m'sead' is declared but its value is never read.
+
+[7m29[0m const sead = sitePath('manual/air-to-ground-operations/sead-dead/');
+[7m  [0m [93m      ~~~~[0m
+
+[96msrc/pages/manual/air-to-ground-operations/_CloseAirSupport.astro[0m:[93m27[0m:[93m7[0m - [93mwarning[0m[90m ts(6133): [0m'lines' is declared but its value is never read.
+
+[7m27[0m const lines = NINE_LINE.filter((l) => l.line);
+[7m  [0m [93m      ~~~~~[0m
+
+[96msrc/pages/manual/air-to-ground-operations/_RotaryWingAttack.astro[0m:[93m29[0m:[93m7[0m - [93mwarning[0m[90m ts(6133): [0m'wd' is declared but its value is never read.
+
+[7m29[0m const wd = sitePath('manual/air-to-ground-operations/weapons-delivery/');
+[7m  [0m [93m      ~~[0m
+
+[96msrc/pages/manual/air-to-ground-operations/_SeadDead.astro[0m:[93m25[0m:[93m7[0m - [93mwarning[0m[90m ts(6133): [0m'cas' is declared but its value is never read.
+
+[7m25[0m const cas = sitePath('manual/air-to-ground-operations/close-air-support/');
+[7m  [0m [93m      ~~~[0m
+
+[96msrc/pages/manual/air-to-ground-operations/_WeaponsDelivery.astro[0m:[93m36[0m:[93m7[0m - [93mwarning[0m[90m ts(6133): [0m'bfm' is declared but its value is never read.
+
+[7m36[0m const bfm = sitePath('manual/air-combat/bfm/');
+[7m  [0m [93m      ~~~[0m
+
+[96msrc/pages/manual/sensors-situational-awareness/_RadarAndWarning.astro[0m:[93m30[0m:[93m7[0m - [93mwarning[0m[90m ts(6133): [0m'brevity' is declared but its value is never read.
+
+[7m30[0m const brevity = sitePath('encyclopedia/terminology/brevity/');
+[7m  [0m [93m      ~~~~~~~[0m
+
+[96msrc/pages/manual/sensors-situational-awareness/_SituationalAwareness.astro[0m:[93m34[0m:[93m7[0m - [93mwarning[0m[90m ts(6133): [0m'bvr' is declared but its value is never read.
+
+[7m34[0m const bvr = sitePath('manual/air-combat/bvr-intercepts/');
+[7m  [0m [93m      ~~~[0m
+
+[96mtests/lessons/case-iii-lesson.test.mjs[0m:[93m105[0m:[93m18[0m - [93mwarning[0m[90m ts(2568): [0mProperty 'legHeading' may not exist on type '{ entry: any; turns: any; inboundCourse: number; heading: number; entryTurnRate: number; points: { x: number; y: number; }[]; }'. Did you mean 'heading'?
+
+[7m105[0m   assert.equal(r.legHeading, 180);
+[7m   [0m [93m                 ~~~~~~~~~~[0m
+[96mtests/lessons/case-iii-lesson.test.mjs[0m:[93m99[0m:[93m97[0m - [93mwarning[0m[90m ts(2568): [0mProperty 'legHeading' may not exist on type '{ entry: any; turns: any; inboundCourse: number; heading: number; entryTurnRate: number; points: { x: number; y: number; }[]; }'. Did you mean 'heading'?
+
+[7m99[0m   assert.equal(entryPath({ inboundCourse: 40, heading: 220, turns: 'left', entry: 'teardrop' }).legHeading, 250);
+[7m  [0m [93m                                                                                                ~~~~~~~~~~[0m
+[96mtests/lessons/case-iii-lesson.test.mjs[0m:[93m86[0m:[93m18[0m - [93mwarning[0m[90m ts(2568): [0mProperty 'legHeading' may not exist on type '{ entry: any; turns: any; inboundCourse: number; heading: number; entryTurnRate: number; points: { x: number; y: number; }[]; }'. Did you mean 'heading'?
+
+[7m86[0m   assert.equal(r.legHeading, 150);
+[7m  [0m [93m                 ~~~~~~~~~~[0m
+[96mtests/lessons/case-iii-lesson.test.mjs[0m:[93m52[0m:[93m7[0m - [93mwarning[0m[90m ts(6133): [0m'R' is declared but its value is never read.
+
+[7m52[0m const R = 250 / 30 / Math.PI, LEG = 250 / 60, ER = 1.5775;
+[7m  [0m [93m      ~[0m
+
+[96mtests/lessons/instrument-trainer.test.mjs[0m:[93m86[0m:[93m27[0m - [93mwarning[0m[90m ts(2568): [0mProperty 'locCapturedAt' may not exist on type '{ seed: number; course: number; windFrom: number; windKt: number; visual: boolean; s: { pitch: 3; bank: number; power: 70; speed: 250; altitude: number; heading: number; vs: number; vsi: number; rate: number; slip: number; t: number; }; ... 13 more ...; decisionAt: undefined; }'. Did you mean 'capturedAt'?
+
+[7m86[0m   run.capturedAt = 0; run.locCapturedAt = 0;
+[7m  [0m [93m                          ~~~~~~~~~~~~~[0m
+
+[96mtests/radio/whisper-inference.test.mjs[0m:[93m38[0m:[93m26[0m - [93mwarning[0m[90m ts(6133): [0m'samples' is declared but its value is never read.
+
+[7m38[0m  const transcriber=async(samples,options={})=>{calls.push(options);return {text:'Runway two seven'};};
+[7m  [0m [93m                         ~~~~~~~[0m
+[96mtests/radio/whisper-inference.test.mjs[0m:[93m22[0m:[93m26[0m - [93mwarning[0m[90m ts(6133): [0m'samples' is declared but its value is never read.
+
+[7m22[0m  const englishOnly=async(samples,opts={})=>{
+[7m  [0m [93m                         ~~~~~~~[0m
+[96mtests/radio/whisper-inference.test.mjs[0m:[93m7[0m:[93m26[0m - [93mwarning[0m[90m ts(6133): [0m'samples' is declared but its value is never read.
+
+[7m7[0m  const englishOnly=async(samples,options={})=>{
+[7m [0m [93m                         ~~~~~~~[0m
+
+Result (329 files): 
+- 0 errors
+- 0 warnings
+- 55 hints
+
+
+> oversweep@0.1.0 build
+> astro build
+
+[2m05:48:37[22m [34m[types][39m Generated [2m57ms[22m
+[2m05:48:37[22m [34m[build][39m output: [34m"static"[39m
+[2m05:48:37[22m [34m[build][39m mode: [34m"static"[39m
+[2m05:48:37[22m [34m[build][39m directory: [34m/home/runner/work/oversweep/oversweep/dist/[39m
+[2m05:48:37[22m [34m[build][39m Collecting build info...
+[2m05:48:37[22m [34m[build][39m [32m✓ Completed in 117ms.[39m
+[2m05:48:37[22m [34m[build][39m Building static entrypoints...
+[2m05:48:38[22m [34m[vite][39m [32m✓ built in 1.91s[39m
+[2m05:48:39[22m [34m[vite][39m [32m✓ built in 225ms[39m
+[2m05:48:39[22m [34m[build][39m Rearranging server assets...
+
+[42m[30m generating static routes [39m[49m
+[2m05:48:39[22m   [34m├─[39m [2m/404.html[22m [2m(+12ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/ask/index.html[22m [2m(+4ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/a-6/index.html[22m [2m(+9ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/a-10/index.html[22m [2m(+4ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/ah-64d/index.html[22m [2m(+4ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/ajs-37/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/av-8b/index.html[22m [2m(+4ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/bf-109k-4/index.html[22m [2m(+4ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/c-101/index.html[22m [2m(+6ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/c-130j/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/ch-47f/index.html[22m [2m(+4ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/christen-eagle-ii/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/f4u-1d/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/f-4/index.html[22m [2m(+5ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/f-5/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/f-14/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/f-15c/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/f-15e/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/f-16/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/f-86/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/f-100/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/fa-18c/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/fw-190a-8/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/fw-190d-9/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/i-16/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/j-11a/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/jf-17/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/ka-50/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/l-39/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/la-7/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/mb-339/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/mi-8mtv2/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/mi-24p/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/mig-15/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/mig-19/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/mig-21/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/mig-29/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/m-2000c/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/mirage-f1/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/mosquito-fb-vi/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/oh-58d/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/p-47d/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/p-51d/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/sa342/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/spitfire-ix/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/su-25/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/su-27/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/su-33/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/t-45/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/uh-1h/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/yak-52/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/kc-135/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/kc-10/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/kc-46/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/a330-mrtt/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/kc-130j/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/il-78/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/s-3b/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/aircraft/mq-25/index.html[22m [2m(+4ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/classes/nimitz/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/classes/gerald-r-ford/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-saidor/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-midway/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-point-cruz/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hms-perseus-r51/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-rendova/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-franklin-d-roosevelt/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-badoeng-strait/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-princeton/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-mindoro/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-tarawa/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hmcs-warrior-r31/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hms-theseus-r64/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hms-triumph-r16/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-palau/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-sicily/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-kearsarge/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-leyte/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-philippine-sea/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-saipan/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/rabaul/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-valley-forge/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-wright/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-coral-sea/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hmcs-magnificent-cvl21/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hmas-sydney-r17/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-oriskany/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hms-eagle-r05/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hms-centaur-r06/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hms-albion-r07/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hms-bulwark-r08/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hms-ark-royal-r09/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-forrestal/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hmas-melbourne-r21/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-saratoga/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hmcs-bonaventure-cvl22/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-ranger/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-independence/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hms-hermes-r12/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/ins-vikrant-r11/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-kitty-hawk/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-iwo-jima/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-constellation/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/clemenceau/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-enterprise/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-okinawa/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/foch/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-guadalcanal/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/jeanne-d-arc/index.html[22m [2m(+4ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-guam/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-america/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-tripoli/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/moskva-carrier/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-john-f-kennedy/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-new-orleans/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/leningrad/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-inchon/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-nimitz/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/kiev/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-dwight-d-eisenhower/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/minsk/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hms-invincible-r05/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/novorossiysk/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-carl-vinson/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hms-illustrious-r06/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/giuseppe-garibaldi/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hms-ark-royal-r07/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-theodore-roosevelt/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/baku-vikramaditya/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/principe-de-asturias/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-abraham-lincoln/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/admiral-kuznetsov/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-george-washington/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-john-c-stennis/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/chakri-naruebet/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hms-ocean-l12/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-harry-s-truman/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/charles-de-gaulle/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-ronald-reagan/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/cavour/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-george-h-w-bush/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hyuga/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/ise/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/liaoning/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/izumo/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/kaga/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/uss-gerald-r-ford/index.html[22m [2m(+4ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hms-queen-elizabeth-r08/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/hms-prince-of-wales-r09/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/shandong/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/vikrant-2022/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/shahid-bahman-bagheri/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/fujian/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/carriers/index.html[22m [2m(+15ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/theatres/index.html[22m [2m(+10ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/middle-east/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/europe/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/east-asia-pacific/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/north-america/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/caucasus/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/central-asia/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/south-atlantic/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/nellis/index.html[22m [2m(+10ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/edwards/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/andersen/index.html[22m [2m(+4ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/kadena/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/lakenheath/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/incirlik/index.html[22m [2m(+6ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/al-udeid/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/fallon/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/pensacola/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/whiting-field/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/kingsville/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/yuma/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/fort-rucker/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/saipan/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/akrotiri/index.html[22m [2m(+6ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/batumi/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/kobuleti/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/kutaisi/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/senaki/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/vaziani/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/tbilisi/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/gudauta/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/sukhumi/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/sochi/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/anapa/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/gelendzhik/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/krymsk/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/krasnodar-center/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/mozdok/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/beslan/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/ramat-david/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/khmeimim/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/damascus/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/aleppo/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/abu-al-duhur/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/hama/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/taftanaz/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/jirah/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/tabqa/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/palmyra/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/tiyas/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/beirut/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/al-dhafra/index.html[22m [2m(+4ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/al-minhad/index.html[22m [2m(+4ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/khasab/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/fujairah/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/dubai/index.html[22m [2m(+6ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/sharjah/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/bandar-abbas/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/bandar-lengeh/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/lar/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/qeshm/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/kish/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/sirri/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/creech/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/groom-lake/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/tonopah-test-range/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/harry-reid/index.html[22m [2m(+4ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/guam/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/rota/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/dcs-nevada/index.html[22m [2m(+4ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/dcs-marianas/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/dcs-marianas-1944/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/dcs-syria/index.html[22m [2m(+5ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/dcs-persian-gulf/index.html[22m [2m(+4ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/dcs-the-channel/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/bms-korea/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/dcs-caucasus/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/dcs-sinai/index.html[22m [2m(+4ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/dcs-kola/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/dcs-afghanistan/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/dcs-southwest-afghanistan/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/dcs-east-afghanistan/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/dcs-iraq/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/dcs-iraq-north/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/dcs-cold-war-germany/index.html[22m [2m(+6ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/dcs-normandy/index.html[22m [2m(+5ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/dcs-south-atlantic/index.html[22m [2m(+3ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/bms-balkans/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/bms-hellenic/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/bms-israel/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/bms-falklands/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/falcon4-korea/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/locations/falcon4-balkans/index.html[22m [2m(+1ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/ordnance/mk-81/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/ordnance/mk-82/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/ordnance/mk-83/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/ordnance/mk-84/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/ordnance/fab-250/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/ordnance/fab-500/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/ordnance/ofab-250-270/index.html[22m [2m(+2ms)[22m 
+[2m05:48:39[22m   [34m├─[39m [2m/encyclopedia/ordnance/cbu-87/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/cbu-97/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/mk-20/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/rbk-500/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/mk-77/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/mk-76/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/hydra-70/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/zuni/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/s-5/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/s-8/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/s-13/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/s-24/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/hvar/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/aim-9/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/aim-7/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/aim-120/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/aim-54/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/r-3/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/r-60/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/r-73/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/r-27/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/r-77/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/r-40/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/magic-2/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/super-530/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/pl-5/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/pl-12/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/m61/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/gau-8/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/gau-12/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/m39/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/defa-550/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/aden/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/gsh-23/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/gsh-30-1/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/gsh-6-23/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/gbu-10/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/gbu-12/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/gbu-16/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/gbu-24/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/jdam/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/gbu-39/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/agm-154/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/agm-65/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/agm-88/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/adm-141/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/adm-160/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/alarm/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/agm-45/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/agm-84/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/agm-114/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/apkws/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/bgm-71/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/kh-25/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/kh-29/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/kh-31/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/kh-58/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/kh-59/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/kab-500/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/9k114/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/9k121/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/as-30/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/hot/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/rb-04/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/rb-05/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/rbs-15/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/litening/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/sniper/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/atflir/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/lantirn/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/pave-penny/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/apg-63/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/apg-65/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/apg-66/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/apg-68/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/awg-9/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/apq-120/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/n019/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/n001/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/cyrano-iv/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/rdy/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/klj-7/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/alr-67/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/alr-56/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/alr-69/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/alr-45/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/spo-15/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/apg-78/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/tads-pnvs/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/mms/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/ale-47/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/alq-131/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/alq-184/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/reference-data/f-16-harm-threat-tables/index.html[22m [2m(+5ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/reference-data/radio-and-visual-signals/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/reference-data/units-and-conversions/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/reference-data/standard-atmosphere/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/reference-data/time-zones-and-date-time-groups/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/brevity/index.html[22m [2m(+3ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/joint-terms/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/airfield-atc/index.html[22m [2m(+3ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/carrier/index.html[22m [2m(+3ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/air-combat/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/flight/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/navigation/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/instrument-flight/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/formation/index.html[22m [2m(+3ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/aar/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/weapons/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/close-air-support/index.html[22m [2m(+5ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/sead/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/precision-targeting/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/rotary-wing-attack/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/flight-planning/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/emergencies/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/threat-avoidance/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/bvr/index.html[22m [2m(+3ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/sensors/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-1/index.html[22m [2m(+23ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-2/index.html[22m [2m(+17ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-3/index.html[22m [2m(+12ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-4/index.html[22m [2m(+13ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-5/index.html[22m [2m(+16ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-6/index.html[22m [2m(+20ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-7/index.html[22m [2m(+14ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-8/index.html[22m [2m(+13ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-9/index.html[22m [2m(+20ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-10/index.html[22m [2m(+14ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-11/index.html[22m [2m(+13ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-12/index.html[22m [2m(+13ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-13/index.html[22m [2m(+12ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-14/index.html[22m [2m(+22ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-15/index.html[22m [2m(+44ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-16/index.html[22m [2m(+12ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-17/index.html[22m [2m(+13ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-18/index.html[22m [2m(+13ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-19/index.html[22m [2m(+14ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-20/index.html[22m [2m(+12ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-21/index.html[22m [2m(+13ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-22/index.html[22m [2m(+12ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-23/index.html[22m [2m(+13ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-24/index.html[22m [2m(+11ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-26/index.html[22m [2m(+13ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-27/index.html[22m [2m(+12ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/sa-29/index.html[22m [2m(+12ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/patriot/index.html[22m [2m(+4ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/hawk/index.html[22m [2m(+4ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/nasams/index.html[22m [2m(+4ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/roland/index.html[22m [2m(+6ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/rapier/index.html[22m [2m(+4ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/crotale/index.html[22m [2m(+4ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/chaparral/index.html[22m [2m(+4ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/avenger/index.html[22m [2m(+6ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/stinger/index.html[22m [2m(+4ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/hq-2/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/hq-7/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/hq-9/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/zu-23-2/index.html[22m [2m(+3ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/zsu-23-4/index.html[22m [2m(+3ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/zsu-57-2/index.html[22m [2m(+3ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/s-60/index.html[22m [2m(+5ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/ks-19/index.html[22m [2m(+4ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/gepard/index.html[22m [2m(+3ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/m163/index.html[22m [2m(+3ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/p-14/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/p-19/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/p-35/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/nebo/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/aircraft/index.html[22m [2m(+9ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/ordnance/index.html[22m [2m(+9ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/threat-systems/index.html[22m [2m(+26ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/radar-sensors/index.html[22m [2m(+4ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/index.html[22m [2m(+48ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/terminology/index.html[22m [2m(+53ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/reference-data/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/index.html[22m [2m(+3ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/nellis/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/edwards/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/andersen/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/kadena/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/lakenheath/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/incirlik/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/al-udeid/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/fallon/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/pensacola/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/whiting-field/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/kingsville/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/yuma/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/fort-rucker/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/saipan/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/akrotiri/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/batumi/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/kobuleti/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/kutaisi/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/senaki/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/vaziani/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/tbilisi/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/gudauta/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/sukhumi/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/sochi/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/anapa/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/gelendzhik/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/krymsk/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/krasnodar-center/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/mozdok/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/beslan/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/ramat-david/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/khmeimim/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/damascus/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/aleppo/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/abu-al-duhur/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/hama/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/taftanaz/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/jirah/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/tabqa/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/palmyra/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/tiyas/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/beirut/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/al-dhafra/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/al-minhad/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/khasab/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/fujairah/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/dubai/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/sharjah/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/bandar-abbas/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/bandar-lengeh/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/lar/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/qeshm/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/kish/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/sirri/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/creech/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/groom-lake/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/tonopah-test-range/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/harry-reid/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/guam/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/airfields-carriers/rota/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/middle-east/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/europe/index.html[22m [2m(+3ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/east-asia-pacific/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/north-america/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/caucasus/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/central-asia/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/south-atlantic/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/dcs-nevada/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/dcs-marianas/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/dcs-marianas-1944/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/dcs-syria/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/dcs-persian-gulf/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/dcs-the-channel/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/bms-korea/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/dcs-caucasus/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/dcs-sinai/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/dcs-kola/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/dcs-afghanistan/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/dcs-southwest-afghanistan/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/dcs-east-afghanistan/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/dcs-iraq/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/dcs-iraq-north/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/dcs-cold-war-germany/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/dcs-normandy/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/dcs-south-atlantic/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/bms-balkans/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/bms-hellenic/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/bms-israel/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/bms-falklands/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/falcon4-korea/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/theatres/falcon4-balkans/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-saidor/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-midway/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-point-cruz/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hms-perseus-r51/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-rendova/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-franklin-d-roosevelt/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-badoeng-strait/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-princeton/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-mindoro/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-tarawa/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hmcs-warrior-r31/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hms-theseus-r64/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hms-triumph-r16/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-palau/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-sicily/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-kearsarge/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-leyte/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-philippine-sea/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-saipan/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/rabaul/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-valley-forge/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-wright/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-coral-sea/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hmcs-magnificent-cvl21/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hmas-sydney-r17/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-oriskany/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hms-eagle-r05/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hms-centaur-r06/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hms-albion-r07/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hms-bulwark-r08/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hms-ark-royal-r09/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-forrestal/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hmas-melbourne-r21/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-saratoga/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hmcs-bonaventure-cvl22/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-ranger/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-independence/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hms-hermes-r12/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/ins-vikrant-r11/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-kitty-hawk/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-iwo-jima/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-constellation/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/clemenceau/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-enterprise/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-okinawa/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/foch/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-guadalcanal/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/jeanne-d-arc/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-guam/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-america/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-tripoli/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/moskva-carrier/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-john-f-kennedy/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-new-orleans/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/leningrad/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-inchon/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-nimitz/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/kiev/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-dwight-d-eisenhower/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/minsk/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hms-invincible-r05/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/novorossiysk/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-carl-vinson/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hms-illustrious-r06/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/giuseppe-garibaldi/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hms-ark-royal-r07/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-theodore-roosevelt/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/baku-vikramaditya/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/principe-de-asturias/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-abraham-lincoln/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/admiral-kuznetsov/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-george-washington/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-john-c-stennis/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/chakri-naruebet/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hms-ocean-l12/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-harry-s-truman/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/charles-de-gaulle/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-ronald-reagan/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/cavour/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-george-h-w-bush/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hyuga/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/ise/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/liaoning/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/izumo/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/kaga/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/uss-gerald-r-ford/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hms-queen-elizabeth-r08/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/hms-prince-of-wales-r09/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/shandong/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/vikrant-2022/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/shahid-bahman-bagheri/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/encyclopedia/locations/carriers/fujian/index.html[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/experiences/instrument-trainer/index.html[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/experiences/case-iii/model.cjs[22m [2m(+2ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/experiences/autorotation/model.cjs[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/experiences/case-iii/style.css[22m [2m(+1ms)[22m 
+[2m05:48:40[22m   [34m├─[39m [2m/experiences/autorotation/style.css[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/ils-approach/style.css[22m [2m(+2ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/radio-trainer/style.css[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/case-iii/frame-guard.js[22m [2m(+2ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/case-iii/app.js[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/autorotation/frame-guard.js[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/autorotation/app.js[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/ils-approach/frame-guard.js[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/ils-approach/app.js[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/radio-trainer/app.js[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/radio-trainer/neural-voice.js[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/radio-trainer/local-stt.js[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/radio-trainer/pcm-capture.js[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/radio-trainer/whisper-worker.js[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/case-iii/index.html[22m [2m(+3ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/autorotation/index.html[22m [2m(+2ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/ils-approach/index.html[22m [2m(+4ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/radio-trainer/index.html[22m [2m(+3ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/ils-approach/styles/instrument-panel.css[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/autorotation/lessons/shared/axis-bindings.mjs[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/ils-approach/lessons/instrument-flight/ils-trainer-model.mjs[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/ils-approach/lessons/instrument-flight/attitude-model.mjs[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/ils-approach/lessons/instrument-flight/ils-model.mjs[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/ils-approach/lessons/instrument-flight/ils-views.mjs[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/ils-approach/lessons/shared/instruments.mjs[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/ils-approach/lessons/shared/hsi.mjs[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/ils-approach/lessons/navigation/lesson-model.mjs[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/ils-approach/lessons/case-iii/lesson-model.mjs[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/ils-approach/lessons/shared/axis-bindings.mjs[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/ils-approach/lessons/instrument-flight/windscreen.mjs[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/radio-trainer/lessons/radio/model.mjs[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/radio-trainer/lessons/radio/context.mjs[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/radio-trainer/lessons/radio/audio.mjs[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/radio-trainer/lessons/radio/whisper-inference.mjs[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/experiences/radio-trainer/lessons/radio/whisper-models.mjs[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/legal/index.html[22m [2m(+3ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/abnormal-operations/emergency-procedures/index.html[22m [2m(+5ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/abnormal-operations/threat-avoidance/index.html[22m [2m(+6ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/abnormal-operations/autorotation/index.html[22m [2m(+6ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/air-combat/bfm/index.html[22m [2m(+9ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/air-combat/bvr-intercepts/index.html[22m [2m(+7ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/air-to-air-refuelling/aar-procedures/index.html[22m [2m(+5ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/air-to-ground-operations/weapons-delivery/index.html[22m [2m(+9ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/air-to-ground-operations/close-air-support/index.html[22m [2m(+8ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/air-to-ground-operations/precision-targeting/index.html[22m [2m(+6ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/air-to-ground-operations/rotary-wing-attack/index.html[22m [2m(+6ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/air-to-ground-operations/sead-dead/index.html[22m [2m(+7ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/left-eyebrow/index.html[22m [2m(+5ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/right-eyebrow/index.html[22m [2m(+2ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/engine-instruments/index.html[22m [2m(+3ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/fuel-flow/index.html[22m [2m(+3ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/landing-gear/index.html[22m [2m(+5ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/fuel-qty/index.html[22m [2m(+2ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/caution/index.html[22m [2m(+2ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/eng-jet-start/index.html[22m [2m(+3ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/epu/index.html[22m [2m(+2ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/elec/index.html[22m [2m(+2ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/audio/index.html[22m [2m(+44ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/fuel/index.html[22m [2m(+2ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/ext-lighting/index.html[22m [2m(+21ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/ecm/index.html[22m [2m(+4ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/uhf/index.html[22m [2m(+3ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/snsr-pwr/index.html[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/interior-lighting/index.html[22m [2m(+19ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/air-cond/index.html[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/avionics-power/index.html[22m [2m(+2ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/cockpit/index.html[22m [2m(+85ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/engine-start/index.html[22m [2m(+3ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/f-16c/index.html[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/airfield-operations/airfield-basics/index.html[22m [2m(+11ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/flight-fundamentals/autorotation/index.html[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/flight-fundamentals/principles-of-flight/index.html[22m [2m(+6ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/flight-fundamentals/rotor-wing/index.html[22m [2m(+10ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/flight-planning/sortie-planning/index.html[22m [2m(+5ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/flight-planning/weather-and-performance/index.html[22m [2m(+5ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/formation-flying/two-ship-formation/index.html[22m [2m(+3ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/formation-flying/helicopter-formation/index.html[22m [2m(+5ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/formation-flying/four-ship-formation/index.html[22m [2m(+3ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/instrument-flight/instrument-trainer/index.html[22m [2m(+2ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/instrument-flight/attitude-instrument-flying/index.html[22m [2m(+3ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/instrument-flight/instrument-procedures/index.html[22m [2m(+3ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/instrument-flight/ils-approach/index.html[22m [2m(+2ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/naval-operations/ship-operations/index.html[22m [2m(+7ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/naval-operations/case-iii/index.html[22m [2m(+11ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/navigation/air-navigation/index.html[22m [2m(+7ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/radio-communications/radio-procedures/index.html[22m [2m(+7ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/sensors-situational-awareness/radar-and-warning/index.html[22m [2m(+6ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/sensors-situational-awareness/situational-awareness/index.html[22m [2m(+3ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/aircraft-procedures/index.html[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/flight-fundamentals/index.html[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/airfield-operations/index.html[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/radio-communications/index.html[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/navigation/index.html[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/instrument-flight/index.html[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/flight-planning/index.html[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/formation-flying/index.html[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/air-to-air-refuelling/index.html[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/naval-operations/index.html[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/air-combat/index.html[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/sensors-situational-awareness/index.html[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/air-to-ground-operations/index.html[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/abnormal-operations/index.html[22m [2m(+1ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/manual/index.html[22m [2m(+4ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/search/index.html[22m [2m(+2ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/training/index.html[22m [2m(+2ms)[22m 
+[2m05:48:41[22m   [34m├─[39m [2m/index.html[22m [2m(+4ms)[22m 
+[2m05:48:41[22m [32m✓ Completed in 2.26s.
+[39m
+[2m05:48:41[22m [34m[build][39m [32m✓ Completed in 4.47s.[39m
+[2m05:48:41[22m [34m[oversweep-seo-files][39m sitemap.xml lists 500 pages.
+[2m05:48:44[22m [34m[build][39m Waiting for integration [1m"oversweep-search-index"[22m, hook [1m"astro:build:done"[22m...
+[2m05:48:45[22m [34m[oversweep-search-index][39m search-index.json has 1244 entries.
+[2m05:48:45[22m [34m[build][39m 691 page(s) built in [1m8.59s[22m
+[2m05:48:45[22m [34m[build][39m [1mComplete![22m
+Generated-site checks passed: 692 pages, base /
+Experience output checks passed (production, base /): case-iii, autorotation, ils-approach
+Module output checks passed (production, base /): bfm, bvr-intercepts, radar-and-warning, situational-awareness, airfield-basics, radio-procedures, principles-of-flight, rotor-wing, air-navigation, attitude-instrument-flying, instrument-procedures, two-ship-formation, helicopter-formation, four-ship-formation, aar-procedures, weapons-delivery, close-air-support, precision-targeting, rotary-wing-attack, sead-dead, ship-operations, sortie-planning, weather-and-performance, emergency-procedures, threat-avoidance
+Encyclopedia output checks passed (production, base /): sa-1, sa-2, sa-3, sa-4, sa-5, sa-6, sa-7, sa-8, sa-9, sa-10, sa-11, sa-12, sa-13, sa-14, sa-15, sa-16, sa-17, sa-18, sa-19, sa-20, sa-21, sa-22, sa-23, sa-24, sa-26, sa-27, sa-29, patriot, hawk, nasams, roland, rapier, crotale, chaparral, avenger, stinger, hq-2, hq-7, hq-9, zu-23-2, zsu-23-4, zsu-57-2, s-60, ks-19, gepard, m163, p-14, p-19, p-35, nebo, a-6, a-10, ah-64d, ajs-37, av-8b, bf-109k-4, c-101, c-130j, ch-47f, christen-eagle-ii, f4u-1d, f-4, f-5, f-14, f-15c, f-15e, f-16, f-86, f-100, fa-18c, fw-190a-8, fw-190d-9, i-16, j-11a, jf-17, ka-50, l-39, la-7, mb-339, mi-8mtv2, mi-24p, mig-15, mig-19, mig-21, mig-29, m-2000c, mirage-f1, mosquito-fb-vi, oh-58d, p-47d, p-51d, sa342, spitfire-ix, su-25, su-27, su-33, t-45, uh-1h, yak-52, kc-135, kc-10, kc-46, a330-mrtt, kc-130j, il-78, s-3b, mq-25, mk-81, mk-82, mk-83, mk-84, fab-250, fab-500, ofab-250-270, cbu-87, cbu-97, mk-20, rbk-500, mk-77, mk-76, hydra-70, zuni, s-5, s-8, s-13, s-24, hvar, aim-9, aim-7, aim-120, aim-54, r-3, r-60, r-73, r-27, r-77, r-40, magic-2, super-530, pl-5, pl-12, m61, gau-8, gau-12, m39, defa-550, aden, gsh-23, gsh-30-1, gsh-6-23, gbu-10, gbu-12, gbu-16, gbu-24, jdam, gbu-39, agm-154, agm-65, agm-88, adm-141, adm-160, alarm, agm-45, agm-84, agm-114, apkws, bgm-71, kh-25, kh-29, kh-31, kh-58, kh-59, kab-500, 9k114, 9k121, as-30, hot, rb-04, rb-05, rbs-15, litening, sniper, atflir, lantirn, pave-penny, apg-63, apg-65, apg-66, apg-68, awg-9, apq-120, n019, n001, cyrano-iv, rdy, klj-7, alr-67, alr-56, alr-69, alr-45, spo-15, apg-78, tads-pnvs, mms, ale-47, alq-131, alq-184, brevity, joint-terms, airfield-atc, carrier, air-combat, flight, navigation, instrument-flight, formation, aar, weapons, close-air-support, sead, precision-targeting, rotary-wing-attack, flight-planning, emergencies, threat-avoidance, bvr, sensors, middle-east, europe, east-asia-pacific, north-america, caucasus, central-asia, south-atlantic, nellis, edwards, andersen, kadena, lakenheath, incirlik, al-udeid, fallon, pensacola, whiting-field, kingsville, yuma, fort-rucker, saipan, akrotiri, batumi, kobuleti, kutaisi, senaki, vaziani, tbilisi, gudauta, sukhumi, sochi, anapa, gelendzhik, krymsk, krasnodar-center, mozdok, beslan, ramat-david, khmeimim, damascus, aleppo, abu-al-duhur, hama, taftanaz, jirah, tabqa, palmyra, tiyas, beirut, al-dhafra, al-minhad, khasab, fujairah, dubai, sharjah, bandar-abbas, bandar-lengeh, lar, qeshm, kish, sirri, creech, groom-lake, tonopah-test-range, harry-reid, guam, rota, dcs-nevada, dcs-marianas, dcs-marianas-1944, dcs-syria, dcs-persian-gulf, dcs-the-channel, bms-korea, dcs-caucasus, dcs-sinai, dcs-kola, dcs-afghanistan, dcs-southwest-afghanistan, dcs-east-afghanistan, dcs-iraq, dcs-iraq-north, dcs-cold-war-germany, dcs-normandy, dcs-south-atlantic, bms-balkans, bms-hellenic, bms-israel, bms-falklands, falcon4-korea, falcon4-balkans, f-16-harm-threat-tables, radio-and-visual-signals, units-and-conversions, standard-atmosphere, time-zones-and-date-time-groups
