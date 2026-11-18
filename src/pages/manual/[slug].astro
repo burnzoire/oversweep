@@ -6,6 +6,7 @@ import { subjectEntries, subjectGroups } from "../../data/availability";
 import { sitePath } from "../../lib/paths";
 import CardPhoto from "../../components/card-photo/CardPhoto.astro";
 import { airframes, visibleProcedures } from "../../data/aircraft-procedures";
+import { cardMedia } from "../../data/card-media";
 
 export function getStaticPaths() {
   return manualSubjects.map((subject) => ({
@@ -33,13 +34,17 @@ const groups = subjectGroups(subject.slug);
     <section aria-labelledby="aircraft-heading">
       <h2 id="aircraft-heading">By aircraft</h2>
       <div class="entry-grid">
-        {airframes.filter(airframe => visibleProcedures.some(guide => guide.airframe === airframe.slug)).map(airframe => (
-          <article class="entry-card compact">
-            <CardPhoto id="module.weapons-delivery" />
-            <h3 class="entry-title"><a href={sitePath(`manual/aircraft-procedures/${airframe.slug}/`)}>{airframe.title}</a></h3>
-            <p class="entry-objective">Learn the F-16C’s cockpit, systems, and procedures in DCS.</p>
-          </article>
-        ))}
+        {airframes.filter(airframe => visibleProcedures.some(guide => guide.airframe === airframe.slug)).map(airframe => {
+          const mediaId = `aircraft-procedures.${airframe.slug}`;
+          const media = cardMedia[mediaId];
+          return (
+            <article class="entry-card compact">
+              <CardPhoto id={mediaId} />
+              <h3 class="entry-title"><a href={sitePath(`manual/aircraft-procedures/${airframe.slug}/`)}>{airframe.title}</a></h3>
+              {media && <p class="entry-objective">{media.summary}</p>}
+            </article>
+          );
+        })}
       </div>
     </section>
   )}
