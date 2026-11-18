@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createRetriever } from '../../workers/ask-oversweep/retrieval.mjs';
+import { createRetriever, prepareCorpus } from '../../workers/ask-oversweep/retrieval.mjs';
 const sochi = '/encyclopedia/locations/sochi/';
 const ramat = '/encyclopedia/locations/ramat-david/';
 const kutaisi = '/encyclopedia/locations/kutaisi/';
@@ -92,4 +92,13 @@ test('explicit map scope resolves duplicate row names before deduplication',()=>
 test('a failed new-subject question supersedes the last successful topic',()=>{
  const result=retrieve('What runways are available?',{topic:[sochi],history:[{role:'user',content:'Sochi tower?'},{role:'assistant',content:'127.0'},{role:'user',content:'What is the tower frequency for Ramat David?'}]});
  assert.equal(result.subject,'Ramat David Airbase');
+});
+
+
+test('build-prepared metadata round-trips without changing retrieval',()=>{
+ const prepared=JSON.parse(JSON.stringify(prepareCorpus(corpus)));
+ const r=createRetriever(corpus,prepared);
+ for(const q of ['What freq is Sochi tower?','What is angle of attack?','Which one runs east-west?']) {
+   assert.deepEqual(r(q,{topic:[ramat]}),retrieve(q,{topic:[ramat]}));
+ }
 });

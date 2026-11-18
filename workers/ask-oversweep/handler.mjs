@@ -3,8 +3,8 @@ const site = "https://www.oversweep.com";
 const dailyQuota = /\b3036\b|daily free allocation/i;
 const insufficient = "I couldn’t find enough on Oversweep to answer that.";
 
-export function createHandler(corpus) {
-  const retrieve = corpus ? createRetriever(corpus) : undefined;
+export function createHandler(corpus, prepared) {
+  const retrieve = corpus ? createRetriever(corpus, prepared) : undefined;
   return async function handle(request, env) {
     const origin = request.headers.get("Origin");
     const headers = {

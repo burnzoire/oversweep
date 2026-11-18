@@ -2,6 +2,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import * as pagefind from "pagefind";
+import { prepareCorpus } from "../workers/ask-oversweep/retrieval.mjs";
 import { htmlFiles, indexable } from "./seo-files.mjs";
 
 // Writes search-index.json into the build output for the site search
@@ -153,7 +154,10 @@ export function searchIndex() {
         await fullText.writeFiles({ outputPath: path.join(output, "pagefind") });
         await pagefind.close();
         await writeFile(path.join(output, "search-index.json"), JSON.stringify(entries));
-        if (base === "/") await writeFile(path.join(output, "ask-corpus.json"), JSON.stringify(corpus));
+        if (base === "/") {
+          await writeFile(path.join(output, "ask-corpus.json"), JSON.stringify(corpus));
+          await writeFile(path.join(output, "ask-search.json"), JSON.stringify(prepareCorpus(corpus)));
+        }
         logger.info(`search-index.json has ${entries.length} entries.`);
       },
     },

@@ -10,7 +10,7 @@ const glossary = id => id.startsWith('/encyclopedia/terminology/#');
 const entity = id => /\/encyclopedia\/(aircraft|locations|ordnance|radar-sensors)\//.test(id);
 const root = id => id.split('#')[0];
 const leaf = id => glossary(id) || /#af-/.test(id);
-export function createRetriever(corpus) {
+export function prepareCorpus(corpus) {
   const rows = Object.entries(corpus).map(([id, value]) => {
     const tokens = terms(value.title + ' ' + value.text);
     const counts = new Map();
@@ -21,11 +21,22 @@ export function createRetriever(corpus) {
     if (glossary(id) && terms(lead).length <= 6) labels.push(lead);
     return { id, ...value, counts, length: tokens.length, titleWords: new Set(terms(value.title)), mapName: /\/locations\/(?:dcs-|bms-|falcon4-)/.test(id) && !id.includes("#") ? value.title.replace(/^(?:DCS|Falcon BMS|Falcon 4\.0):?\s*/i, "").toLowerCase() : undefined, labels: labels.map(label => [...new Set(terms(label))].filter(t => /#af-/.test(id) || !titleNoise.has(t))) };
   });
-  const byId = new Map(rows.map(row => [row.id, row]));
   const averageLength = rows.reduce((sum, row) => sum + row.length, 0) / (rows.length || 1);
   const frequency = new Map();
   for (const row of rows) for (const word of row.counts.keys()) frequency.set(word, (frequency.get(word) ?? 0) + 1);
-  const weights = new Map([...frequency].map(([t, count]) => [t, Math.log(1 + rows.length / (1 + count))]));
+  return {
+    averageLength,
+    weights: [...frequency].map(([t, count]) => [t, Math.log(1 + rows.length / (1 + count))]),
+    rows: rows.map(({ id, counts, length, titleWords, mapName, labels }) => ({ id, counts: [...counts], length, titleWords: [...titleWords], mapName, labels })),
+  };
+}
+
+// Production receives build-prepared metadata. Tests can prepare tiny fixtures.
+export function createRetriever(corpus, prepared = prepareCorpus(corpus)) {
+  const rows = prepared.rows.map(row => ({ ...row, ...corpus[row.id], counts: new Map(row.counts), titleWords: new Set(row.titleWords) }));
+  const byId = new Map(rows.map(row => [row.id, row]));
+  const averageLength = prepared.averageLength;
+  const weights = new Map(prepared.weights);
   const weight = t => weights.get(t) ?? Math.log(1 + rows.length);
   const roots = rows.filter(row => !row.id.includes('#') || leaf(row.id));
   const candidates = rows.filter(row => !/#(?:sources(?:-title)?|terms-title|contents-title|[^#]*fig-title)$/.test(row.id));
