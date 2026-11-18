@@ -582,10 +582,13 @@ export function gearKnob([w, h]: [number, number], y: number, indicator?: string
  * Slot lever (F-16C DEFOG), traced from the DCS F-16C guide p. 74: a flat
  * blade with a round top standing out of a straight slot, with a round disc
  * knob on its face. Drawn upright (the guide's camera leans it toward MIN).
- * mm: slot height, blade root width and visible length, disc diameter and
- * its centre above the slot.
+ * The disc's face turns inboard, toward the pilot (its long axis runs fore and
+ * aft in the guide image), so from above it is seen edge-on: a short bar across
+ * the blade, `thick` deep.
+ * mm: slot height, blade root width and visible length, disc diameter,
+ * thickness and its centre above the slot.
  */
-export const SLOT_LEVER = { slotH: 2.3, root: 10.8, length: 23, disc: 16.5, discY: 6.5 } as const;
+export const SLOT_LEVER = { slotH: 2.3, root: 10.8, length: 23, disc: 16.5, thick: 4.2, discY: 6.5 } as const;
 
 /** The slot, long enough for the lever root at both ends of `travel`, centred on the origin. */
 export function leverSlot(travel: number) {
@@ -597,9 +600,11 @@ export function leverSlot(travel: number) {
 export function slotLeverArt(x: number) {
   const { root, length, disc, discY } = SLOT_LEVER, r = root / 2, top = -length + r;
   const blade = `M${n(x - r)} 0V${n(top)}A${n(r)} ${n(r)} 0 0 1 ${n(x + r)} ${n(top)}V0Z`;
+  const { thick } = SLOT_LEVER, w = disc, h = thick, x0 = x - w / 2, y0 = -discY - h / 2;
+  // Edge-on disc: a stadium, with the rim's near edge as a fine line along it.
   return cased(`<path d="${blade}" fill="${PAPER}"/>`) +
-    cased(`<circle cx="${n(x)}" cy="${n(-discY)}" r="${n(disc / 2)}" fill="${PAPER}"/>`) +
-    `<circle cx="${n(x)}" cy="${n(-discY)}" r="${n(disc / 2 - 1.6)}" fill="none" ${sw('fine')}/>`;
+    cased(`<rect x="${n(x0)}" y="${n(y0)}" width="${n(w)}" height="${n(h)}" rx="${n(h / 2)}" fill="${PAPER}"/>`) +
+    `<path d="M${n(x0 + h / 2)} ${n(-discY + h * 0.12)}H${n(x0 + w - h / 2)}" ${sw('fine')}/>`;
 }
 
 /* ----------------------------------------------------------------- guards */
