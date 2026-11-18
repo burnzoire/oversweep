@@ -8,15 +8,24 @@
  * Control positions are kept per aircraft in sessionStorage, so they survive
  * moving between panels. The jet is cold and dark: no systems logic runs and
  * no lamp lights; selecting a lamp shows what it means.
+ *
+ * Procedures host several panels on one page: `scope` keeps their positions
+ * apart from Cockpit Familiarization. The engine reports every move as a
+ * `cockpit:change` event on window (detail: panel, control, position, phase
+ * `press` or `release`) and takes `cockpit:indicate` events (detail: `lit`, the
+ * `<panel>.<indicator>` ids that are on; `readings`, values by the same ids),
+ * so the procedure, not the panel, decides what lights. `cockpit:set`
+ * (detail: `positions` by `<panel>.<control>`) moves controls without a
+ * change event.
  */
 import type { AircraftCockpit, PanelSpec } from '../../data/cockpit/types';
 import { hitZones, readings, renderPanel } from '../../data/cockpit/render.ts';
 
-interface Props { cockpit: AircraftCockpit; spec: PanelSpec }
-const { cockpit, spec } = Astro.props;
+interface Props { cockpit: AircraftCockpit; spec: PanelSpec; scope?: string }
+const { cockpit, spec, scope } = Astro.props;
 const [W, H] = spec.canvas;
 const pct = (v: number, of: number) => `${+((v / of) * 100).toFixed(3)}%`;
-const def = { aircraft: cockpit.id, panel: spec.id, controls: spec.controls, indicators: spec.indicators, readings: readings(spec) };
+const def = { aircraft: scope ? `${cockpit.id}:${scope}` : cockpit.id, panel: spec.id, controls: spec.controls, indicators: spec.indicators, readings: readings(spec) };
 const control = (id: string) => spec.controls.find(c => c.id === id)!;
 const dirLabels = (id: string) => {
   const c = control(id);
@@ -58,6 +67,9 @@ const dirLabels = (id: string) => {
 .cp-stage{position:relative;aspect-ratio:var(--ratio);background:#fff;user-select:none;-webkit-user-select:none;touch-action:manipulation}
 .cp-stage :global(svg){display:block;width:100%;height:100%}
 .cp-stage :global(.lens){fill:transparent}
+.cp-stage :global([data-indicator].lit[data-colour="amber"] .lens){fill:#f5b400}
+.cp-stage :global([data-indicator].lit[data-colour="green"] .lens){fill:#5fd35f}
+.cp-stage :global([data-indicator].lit[data-colour="red"] .lens){fill:#ff5a4f}
 .cp-stage :global([data-indicator].selected .lens){fill:rgba(0,95,204,.14);stroke:#005fcc;stroke-width:.5}
 .cp-stage :global([data-indicator].selected > [data-needle] > path:first-child){stroke:#005fcc;stroke-width:.6}
 .cp-hit{position:absolute;margin:0;padding:0;border:0;background:transparent;cursor:pointer;border-radius:8%;overflow:hidden}
@@ -177,11 +189,12 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     drawAt(c, at(c));
     for (const el of document.querySelectorAll<HTMLElement>(`[data-position-of="${key(c.id)}"]`)) el.textContent = label(c);
   };
-  const setAt = (c: ControlDef, v: number) => {
+  const setAt = (c: ControlDef, v: number, phase: 'press' | 'release' = 'press') => {
     store = load(def.aircraft);
     store[key(c.id)] = Number.isInteger(v) ? c.positions[v].id : `~${+v.toFixed(4)}`;
     save(def.aircraft, store);
     draw(c);
+    if (Number.isInteger(v)) dispatchEvent(new CustomEvent('cockpit:change', { detail: { aircraft: def.aircraft, panel: def.panel, control: c.id, position: c.positions[v].id, phase } }));
   };
   const set = (c: ControlDef, p: string) => setAt(c, Math.max(0, c.positions.findIndex(x => x.id === p)));
   const say = (t: string) => { status.textContent = t; };
@@ -189,15 +202,15 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
   /** Move to a position, animated through the poses in between when the control is tweened. */
   const running = new Map<string, number>();
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const moveTo = (c: ControlDef, to: number, done?: () => void) => {
+  const moveTo = (c: ControlDef, to: number, done?: () => void, phase: 'press' | 'release' = 'press') => {
     cancelAnimationFrame(running.get(c.id) ?? 0);
     const from = at(c);
-    if (!tweens.has(c.id) || reduced || from === to) { setAt(c, to); done?.(); return; }
+    if (!tweens.has(c.id) || reduced || from === to) { setAt(c, to, phase); done?.(); return; }
     const ms = Math.min(700, 160 + 140 * Math.abs(to - from)), t0 = performance.now();
     const step = (now: number) => {
       const k = Math.min(1, (now - t0) / ms), e = k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
       if (k < 1) { drawAt(c, from + (to - from) * e); running.set(c.id, requestAnimationFrame(step)); }
-      else { running.delete(c.id); setAt(c, to); done?.(); }
+      else { running.delete(c.id); setAt(c, to, phase); done?.(); }
     };
     running.set(c.id, requestAnimationFrame(step));
   };
@@ -247,7 +260,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
   const release = (c: ControlDef) => {
     const p = c.positions.find(x => x.id === pos(c));
     if (p?.hold === 'momentary' && p.spring) {
-      moveTo(c, Math.max(0, c.positions.findIndex(x => x.id === p.spring)));
+      moveTo(c, Math.max(0, c.positions.findIndex(x => x.id === p.spring)), undefined, 'release');
       say(`${c.name}: ${label(c)} (springs back).`);
     }
   };
@@ -333,6 +346,26 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     else drumPositions(v, r.drums, r.fixed, r.unit, r.still).forEach((p, k) =>
       svg.querySelector(`[data-drum="${id}"][data-place="${k}"]`)?.setAttribute('transform', `translate(0 ${+(-p * r.roll).toFixed(3)})`));
   };
+  // Lamps and readings the host page sets (procedures); lamp colour from the indicator definition.
+  for (const ind of def.indicators) svg.querySelectorAll<SVGGElement>(`[data-indicator="${ind.id}"]`).forEach(g => { if (ind.colour) g.dataset.colour = ind.colour; });
+  // Positions the host page sets (procedures: start state, stepping back, undoing a wrong move).
+  addEventListener('cockpit:set', e => {
+    const { positions = {} } = (e as CustomEvent<{ positions?: Record<string, string> }>).detail;
+    for (const c of def.controls) {
+      const p = positions[key(c.id)];
+      if (p !== undefined && p !== store[key(c.id)] && c.positions.some(x => x.id === p)) {
+        store = load(def.aircraft); store[key(c.id)] = p; save(def.aircraft, store); draw(c);
+      }
+    }
+  });
+  addEventListener('cockpit:indicate', e => {
+    const { lit = [], readings: values = {} } = (e as CustomEvent<{ lit?: string[]; readings?: Record<string, number> }>).detail;
+    const on = new Set(lit);
+    for (const ind of def.indicators) {
+      if (ind.type === 'lamp') svg.querySelectorAll(`[data-indicator="${ind.id}"]`).forEach(g => g.classList.toggle('lit', on.has(key(ind.id))));
+      else if (key(ind.id) in values) show(ind.id, values[key(ind.id)]);
+    }
+  });
   for (const input of document.querySelectorAll<HTMLInputElement>(`[data-reading^="${def.panel}."]`)) {
     const id = input.dataset.reading!.slice(def.panel.length + 1), ind = def.indicators.find(i => i.id === id);
     const out = document.querySelector(`[data-readout="${input.dataset.reading}"]`);
