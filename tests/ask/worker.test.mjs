@@ -30,7 +30,7 @@ test("unmatched questions skip inference and invalid citation numbers fall back"
 });
 
 test("daily inference quota is distinct from capacity throttling", async () => {
-  for (const [code, status] of [[3036, 429], [3040, 502]]) {
+  for (const [code, status] of [[3036, 429], [3040, 503]]) {
     const response = await handle(request(), { AI: { async run() { throw Object.assign(new Error("Workers AI error"), { code }); } } });
     assert.equal(response.status, status);
   }
@@ -68,4 +68,19 @@ test("origin, payload size, and malformed JSON fail before inference", async () 
   assert.equal((await handle(req("{}", {Origin:"https://evil.example"}), {})).status,403);
   assert.equal((await handle(req("["), {})).status,400);
   assert.equal((await handle(req("x".repeat(12001)), {})).status,413);
+});
+
+
+test("temporary capacity retries once, rejects queues, and preserves daily-quota semantics", async () => {
+ let calls=0;
+ const response=await handle(request(),{AI:{async run(_model,_options,execution){
+   assert.equal(execution.rejectIfBusy,true);
+   calls++;
+   if(calls===1)throw Object.assign(new Error('Capacity'),{code:3040});
+   return {response:JSON.stringify({answer:'127.0 MHz',sources:[1]})};
+ }}});
+ assert.equal(response.status,200);assert.equal(calls,2);
+ calls=0;
+ const quota=await handle(request(),{AI:{async run(){calls++;throw Object.assign(new Error('Quota'),{code:3036})}}});
+ assert.equal(quota.status,429);assert.equal(calls,1);
 });

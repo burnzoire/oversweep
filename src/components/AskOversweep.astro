@@ -87,6 +87,8 @@ const { id } = Astro.props;
         if (turn !== generation) return;
         let generated: { answer?: string; ids?: string[]; topic?: string[]; references?: { id: string; title: string }[] } | undefined;
         let quota = false;
+        let busy = false;
+        let unavailable = false;
         if (panel.dataset.endpoint) {
           try {
             pending = new AbortController();
@@ -98,9 +100,11 @@ const { id } = Astro.props;
             });
             const payload = await response.json();
             quota = response.status === 429 && payload.code === "daily_quota";
+            busy = response.status === 503 && payload.code === "busy";
+            unavailable = !response.ok && !quota && !busy;
             if (response.ok) generated = payload;
           } catch {
-            // Pagefind remains usable if inference is unavailable.
+            unavailable = true;
           }
         }
         if (turn !== generation) return;
@@ -124,12 +128,14 @@ const { id } = Astro.props;
           result.append(link);
           sources.append(result);
         }
-        if (passages.length || generated?.answer || quota) {
+        if (passages.length || generated?.answer || quota || busy || unavailable) {
           text.innerHTML = passages[0]?.excerpt ?? "";
           reply.copy.textContent = generated?.answer ?? (quota
             ? "Negative, Ghostrider. The pattern is full"
-            : panel.dataset.endpoint ? "I couldn’t generate a reply. Here’s what I found on Oversweep." : "Here’s what I found on Oversweep.");
-          if (!generated?.answer && !quota && passages.length) {
+            : busy ? "I’m temporarily busy. Please try again in a moment."
+            : unavailable ? "I couldn’t generate a reply right now. Please try again."
+            : "Here’s what I found on Oversweep.");
+          if (!generated?.answer && !quota && !busy && !unavailable && passages.length) {
             const excerpt = document.createElement("blockquote");
             excerpt.textContent = text.value;
             reply.bubble.append(excerpt);
