@@ -12,9 +12,9 @@
 interface StepDo { control: string; to: string; on?: 'press' | 'release'; hold?: number }
 interface Step { id: string; panels: string[]; do?: StepDo; confirm?: string }
 interface Config { aircraft: string; initial: Record<string, string>; labels: Record<string, string>; names: Record<string, string>; orders: Record<string, string[]>; steps: Step[] }
-interface Engine { rpm: number; ftit: number; jfsStarted: boolean; jfsRun: boolean; secCleared: boolean; pressure: boolean; mainGen: boolean; caution: boolean }
+interface Engine { rpm: number; ftit: number; jfsStarted: boolean; jfsRun: boolean; secCleared: boolean; pressure: boolean; mainGen: boolean; caution: boolean; idle: boolean }
 
-const cold = (): Engine => ({ rpm: 0, ftit: 0, jfsStarted: false, jfsRun: false, secCleared: false, pressure: false, mainGen: false, caution: false });
+const cold = (): Engine => ({ rpm: 0, ftit: 0, jfsStarted: false, jfsRun: false, secCleared: false, pressure: false, mainGen: false, caution: false, idle: false });
 
 export function startEngineModel(root: HTMLElement, cfg: Config) {
   const all = <T extends Element>(sel: string) => [...root.querySelectorAll<T>(sel)];
@@ -43,7 +43,9 @@ export function startEngineModel(root: HTMLElement, cfg: Config) {
   let holding = false;
 
   const later = (ms: number, fn: () => void) => { timers.push(setTimeout(fn, reduced.matches ? Math.min(ms, 50) : ms)); };
-  const clearTimers = () => { timers.splice(0).forEach(clearTimeout); cancelAnimationFrame(frame); clearTimeout(holdTimer); holding = false; };
+  // Step timers stop on every step change; the engine keeps spooling across steps until stepped back.
+  const clearTimers = () => { timers.splice(0).forEach(clearTimeout); clearTimeout(holdTimer); holding = false; };
+  const stopEngine = () => cancelAnimationFrame(frame);
   const setPositions = (p: Record<string, string>) => dispatchEvent(new CustomEvent('cockpit:set', { detail: { positions: p } }));
   const say = (t: string, retry = false) => { feedback.textContent = t; feedback.classList.toggle('retry', retry); };
   const label = (control: string, to: string) => cfg.labels[`${control}.${to}`] ?? `${cfg.names[control] ?? control} to ${to}`;
@@ -58,8 +60,15 @@ export function startEngineModel(root: HTMLElement, cfg: Config) {
     const powered = main === 'batt' || main === 'main-pwr';
     const onMain = main === 'main-pwr';
     const flcsTest = pos['test.flcs-pwr-test'] === 'test';
-    // Engine-driven pumps: illustrative rise to 3,000 psi (normal 2,850–3,250) as the engine comes up to idle.
-    const hyd = 3000 * Math.min(1, Math.max(0, (eng.rpm - 20) / 40));
+    // On a battery start only RPM and FTIT work until the standby generator comes on at about 60% RPM
+    // (guide p. 135, step 3 note). Then the other instruments settle towards illustrative idle readings
+    // inside the guide's limits: fuel flow 700–1,700 PPH, oil ≥15 psi, nozzle >94%, hydraulics 2,850–3,250 psi.
+    const standby = eng.rpm >= 60;
+    const k = standby ? Math.min(1, (eng.rpm - 60) / 10) : 0;
+    const fuelFlow = standby ? Math.round((1600 - 500 * k) / 100) * 100 : 0;
+    const oil = standby ? 10 + 20 * k : 0;
+    const noz = standby ? 80 + 18 * k : 0;
+    const hyd = standby ? 2000 + 1000 * k : 0;
     const lit = new Set<string>();
     const on = (id: string, v: boolean) => { if (v) lit.add(id); };
     on('elec.flcs-rly', powered && !flcsTest && !eng.jfsStarted);
@@ -74,8 +83,17 @@ export function startEngineModel(root: HTMLElement, cfg: Config) {
     on('caution.elec-sys', onMain && !eng.mainGen);
     on('caution.seat-not-armed', pos['sidewall-controls.throttle'] === 'idle' && eng.rpm >= 60);
     on('eng-jet-start.jfs-run', eng.jfsRun && eng.rpm < 55);
-    dispatchEvent(new CustomEvent('cockpit:indicate', { detail: { lit: [...lit], readings: { 'engine-instruments.rpm': eng.rpm, 'engine-instruments.ftit': eng.ftit, 'hyd-pressure.hyd-a': hyd, 'hyd-pressure.hyd-b': hyd } } }));
-    if (stepId() === 'sec') confirm.disabled = eng.rpm < 20 || !eng.secCleared;
+    dispatchEvent(new CustomEvent('cockpit:indicate', { detail: { lit: [...lit], readings: {
+      'engine-instruments.rpm': eng.rpm, 'engine-instruments.ftit': eng.ftit, 'engine-instruments.oil': oil, 'engine-instruments.noz-pos': noz,
+      'fuel-flow.fuel-flow': fuelFlow, 'hyd-pressure.hyd-a': hyd, 'hyd-pressure.hyd-b': hyd,
+    } } }));
+    const id = stepId();
+    const wait = id === 'sec' ? eng.rpm < 20 || !eng.secCleared : id === 'generator' ? eng.rpm < 60 : id.startsWith('idle-') ? !eng.idle : false;
+    if (!confirm.hidden && confirm.disabled !== wait) {
+      confirm.disabled = wait;
+      if (id === 'generator') say(wait ? 'Watch RPM rise; ENGINE goes out at about 60%.' : 'Check the indications, then confirm.');
+      else if (id.startsWith('idle-')) say(wait ? 'Wait for RPM to settle at idle.' : 'Check the indication, then confirm.');
+    }
   }
 
   /** Spool RPM and FTIT to a target over `ms`, then call `then`. */
@@ -90,6 +108,25 @@ export function startEngineModel(root: HTMLElement, cfg: Config) {
       if (k < 1) frame = requestAnimationFrame(tick); else then?.();
     };
     frame = requestAnimationFrame(tick);
+  }
+
+  /**
+   * Fuel in: the engine accelerates to idle across the following steps. Once lit (about 25%) the procedure
+   * moves on; ENGINE goes out and SEAT NOT ARMED comes on at about 60%, the main generator follows, and at
+   * idle the JFS drops out. Resumes from the current RPM after stepping back.
+   */
+  function runUp() {
+    const from = eng.rpm;
+    spool(70, 620, Math.max(1, 30000 * (70 - from) / 50), () => {
+      pos['eng-jet-start.jfs'] = 'off'; setPositions({ 'eng-jet-start.jfs': 'off' });
+      eng.idle = true;
+      indicate();
+    }, () => {
+      if (eng.rpm >= 25 && stepId() === 'throttle' && done && !timers.length) next(0);
+      if (eng.rpm >= 60 && from < 60) eng.caution = true;
+      if (eng.rpm >= 66) eng.mainGen = true;
+      if (eng.rpm >= 68) eng.pressure = true;
+    });
   }
 
   const stepId = () => cfg.steps[step]?.id ?? '';
@@ -155,14 +192,8 @@ export function startEngineModel(root: HTMLElement, cfg: Config) {
       return;
     }
     if (id === 'throttle') {
-      say('Fuel in. Watch RPM and FTIT rise.');
-      spool(70, 620, 30000, () => {
-        // Engine running: the JFS drops out; ENGINE warning off at about 60% and SEAT NOT ARMED on.
-        pos['eng-jet-start.jfs'] = 'off'; setPositions({ 'eng-jet-start.jfs': 'off' });
-        eng.caution = true;
-        indicate();
-        next();
-      }, k => { if (k >= 0.9) eng.mainGen = true; if (k >= 0.95) eng.pressure = true; });
+      say('Fuel in. Combustion within a few seconds; RPM and FTIT rise.');
+      runUp();
       return;
     }
     if (id === 'master-caution') { eng.caution = false; indicate(); later(1000, () => go(cfg.steps.length)); return; }
@@ -216,13 +247,14 @@ export function startEngineModel(root: HTMLElement, cfg: Config) {
     go(step + 1);
   });
   previous.addEventListener('click', () => {
-    clearTimers();
+    clearTimers(); stopEngine();
     const to = finished ? cfg.steps.length - 1 : Math.max(0, step - 1);
     finished = false;
     const h = history[to];
     if (h) { pos = { ...h.pos }; eng = { ...h.eng }; setPositions(pos); }
     step = to; done = false;
     render();
+    if (pos['sidewall-controls.throttle'] === 'idle' && !eng.idle && stepId() !== 'throttle') runUp();
   });
 
   setPositions(pos);

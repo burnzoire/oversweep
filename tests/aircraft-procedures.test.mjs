@@ -12,7 +12,7 @@ test('public preview procedures are visible and review-only procedures remain ga
 });
 test('engine start guide contains actions, expected indications and source mapping', async () => {
   const data = await read('src/data/aircraft-procedures.ts');
-  for (const id of ['battery','flcs-test','jfs','sec','throttle','generator','idle-check'])
+  for (const id of ['battery','flcs-test','jfs','sec','throttle','generator','idle-jfs','idle-fuel-flow','idle-hyd'])
     assert.match(data, new RegExp("id:'" + id + "'"));
   assert.match(data, /at least 20%/);
   assert.match(data, /evidence:'p\. 135/);

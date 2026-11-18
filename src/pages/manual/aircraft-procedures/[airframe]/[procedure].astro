@@ -116,5 +116,11 @@ if (root && configEl) {
 .procedure-workspace{gap:.45rem}
 .proc-panel{--proc-h:26svh}
 .proc-panel.acting{--proc-h:40svh}
+/* Phones: size panels by area, not height, so tall panels (engine instruments) are not shrunk to a sliver. */
+@supports (width: calc(1px * sqrt(2))){
+.proc-panel{--proc-s:30svh}
+.proc-panel.acting{--proc-s:46svh}
+.proc-panel :global(.cockpit-panel){width:min(100%,calc(var(--proc-s) * sqrt(var(--ratio))))}
+}
 }
 </style>
