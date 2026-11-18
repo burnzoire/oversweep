@@ -99,7 +99,9 @@ export function addAskSections(corpus, html, entry) {
     const head = table[0].match(/<thead\b[^>]*>[\s\S]*?<\/thead>/)?.[0] ?? "";
     for (const row of table[0].matchAll(/<tr\b[^>]*\bid="(af-[^"]+)"[^>]*>([\s\S]*?)<\/tr>/g)) {
       const name = textOf((row[2].match(/<th\b[^>]*>([\s\S]*?)<\/th>/)?.[1] ?? "").replace(/<span class="cell-note">[\s\S]*?<\/span>/g, ""));
-      if (name) corpus[entry.u + "#" + row[1]] = { title: name + " · " + entry.t, name, text: entry.t + ". " + text("<table>" + head + row[0] + "</table>") };
+      const target = row[2].match(/<th\b[^>]*>[\s\S]*?<a\b[^>]*href="([^"]+)"/)?.[1];
+      const record = target && /^\/encyclopedia\/locations\/[a-z0-9-]+\/$/.test(target) ? target : undefined;
+      if (name) corpus[entry.u + "#" + row[1]] = { title: name + " · " + entry.t, name, ...(record ? { record } : {}), text: entry.t + ". " + text("<table>" + head + row[0] + "</table>") };
     }
   }
   if (entry.u === "/encyclopedia/terminology/") return;

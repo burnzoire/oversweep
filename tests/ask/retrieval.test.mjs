@@ -116,3 +116,11 @@ test('explicit simulator scope prefers the matching row over a standalone articl
  assert.deepEqual(result.topic,[id]);
  assert.ok(result.passages.some(p=>p.text.includes('38.4')));
 });
+
+
+test('standalone articles include their explicitly linked theatre rows',()=>{
+ const id='/encyclopedia/locations/dcs-syria/#af-ramat-david';
+ const r=createRetriever({...corpus,[id]:{title:'Ramat David · DCS: Syria',name:'Ramat David',record:ramat,text:'Runways 09 (082°) / 27 (262°).'}});
+ const result=r('Which one runs east-west?',{topic:[ramat],history:[{role:'user',content:'What runways are available?'}]});
+ assert.ok(result.passages.some(p=>p.id===id && p.text.includes('082°')));
+});

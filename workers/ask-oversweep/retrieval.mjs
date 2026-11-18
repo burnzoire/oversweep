@@ -123,6 +123,11 @@ export function createRetriever(corpus, prepared = prepareCorpus(corpus)) {
       const best = ranked.find(x => x.row.id === subject.id || (!leaf(subject.id) && root(x.row.id) === root(subject.id)))?.row;
       for (const row of [subject, best]) if (row && !selected.includes(row)) selected.push(row);
     }
+    // Table links are the authoritative article-to-row join, including fields
+    // omitted by the shorter narrative record (for example measured headings).
+    const linked = candidates.filter(row => row.record && subjectIds.has(row.record))
+      .sort((a, b) => score(b) - score(a) || a.id.localeCompare(b.id));
+    for (const row of linked) if (selected.length < 6 && !selected.includes(row)) selected.push(row);
     for (const { row } of ranked) if (selected.length < (subjects.length ? 4 : 6) && !selected.includes(row)) selected.push(row);
     if (subjects.length && query.length && !subjects.every(row => /#af-/.test(row.id))) {
       const subjectTerms = new Set(subjects.flatMap(row => [...row.titleWords]));
