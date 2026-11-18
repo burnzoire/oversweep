@@ -1,16 +1,233 @@
 ---
 import SiteLayout from '../../../../layouts/SiteLayout.astro';
-import {airframes,visibleProcedures,procedureRoute} from '../../../../data/aircraft-procedures';
-import {sitePath} from '../../../../lib/paths';
-import {cockpits,cockpitRoute} from '../../../../data/cockpit/f16c/index.ts';
-export function getStaticPaths(){return airframes.filter(a=>visibleProcedures.some(p=>p.airframe===a.slug)).map(a=>({params:{airframe:a.slug},props:{airframe:a}}))}
-const {airframe}=Astro.props;
-const guides=visibleProcedures.filter(p=>p.airframe===airframe.slug);
-const cockpit=cockpits.find(c=>c.airframe===airframe.slug);
+import { airframes, procedureRoute, sourceUrl, visibleProcedures } from '../../../../data/aircraft-procedures';
+import { cardMedia } from '../../../../data/card-media';
+import { cockpits, cockpitRoute } from '../../../../data/cockpit/f16c/index.ts';
+import { assetPath, sitePath } from '../../../../lib/paths';
+
+export function getStaticPaths() {
+  return airframes
+    .filter(airframe => visibleProcedures.some(guide => guide.airframe === airframe.slug))
+    .map(airframe => ({ params: { airframe: airframe.slug }, props: { airframe } }));
+}
+
+const { airframe } = Astro.props;
+const cockpit = cockpits.find(item => item.airframe === airframe.slug);
+const cockpitMedia = cockpit && cardMedia[`cockpit.${cockpit.id}`];
+const guides = visibleProcedures.filter(guide => guide.airframe === airframe.slug);
+const isViper = airframe.slug === 'f-16c';
+const hero = cardMedia[`aircraft-procedures.${airframe.slug}`]?.photo;
+const lessons = [
+  ...(cockpit ? [{
+    title: 'Cockpit Familiarisation',
+    href: cockpitRoute(cockpit),
+    summary: cockpitMedia?.summary ?? 'Explore the cockpit panel by panel.',
+    photo: cockpitMedia?.photo,
+  }] : []),
+  ...guides.map(guide => ({
+    title: guide.slug === 'engine-start' ? 'Engine Start' : guide.title,
+    href: procedureRoute(guide),
+    summary: cardMedia[guide.id]?.summary ?? guide.objective,
+    photo: cardMedia[guide.id]?.photo,
+  })),
+];
+const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => photo !== undefined);
 ---
-<SiteLayout title={airframe.title} activeSection="manual" activeSubject="aircraft-procedures"
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Aircraft Procedures',href:sitePath('manual/aircraft-procedures/')},{label:airframe.title}]}>
-  <p class="lead">Aircraft-specific cockpit procedures for the simulator, in the order you need to perform them.</p>
-  <p class="status-panel">Public preview. Simulator validation is pending.</p>
-  <ul class="subject-list">{cockpit && <li><a href={sitePath(cockpitRoute(cockpit))}>Cockpit familiarization</a> — learn each panel and how its controls move before flying the procedures.</li>}{guides.map(p=><li><a href={sitePath(procedureRoute(p))}>{p.slug === 'engine-start' ? 'Start engine exercise' : p.title}</a> — {p.objective}</li>)}</ul>
+
+<SiteLayout
+  title={airframe.title}
+  activeSection="manual"
+  activeSubject="aircraft-procedures"
+  customHeading={isViper}
+  description={isViper ? 'Get to know the DCS F-16C Block 50 cockpit, then practise a cold-and-dark engine start.' : undefined}
+  image={hero?.src}
+  imageAlt={hero?.alt}
+  breadcrumbs={[
+    { label: 'Manual', href: sitePath('manual/') },
+    { label: 'Aircraft Procedures', href: sitePath('manual/aircraft-procedures/') },
+    { label: airframe.title },
+  ]}
+>
+  {isViper && (
+    <header class="airframe-briefing">
+      <div class="briefing-copy">
+        <p class="sim-variant">DCS World · Block 50</p>
+        <h1>{airframe.title}</h1>
+        <p>Take a moment to get oriented in the Viper. The sidestick is on your right, the throttle on your left, and the head-up display is straight ahead. Now look down at the side consoles. That’s where much of your work on the ground happens.</p>
+        <p>Start by learning where to reach. In the engine-start exercise, practise looking back to the instruments to see how the jet responds.</p>
+      </div>
+      {hero && (
+        <img
+          class="briefing-photo"
+          src={assetPath(hero.src)}
+          alt={hero.alt}
+          width="1440"
+          height="960"
+          fetchpriority="high"
+          style={hero.position ? `object-position: ${hero.position}` : undefined}
+        />
+      )}
+    </header>
+  )}
+
+  <section class="syllabus" aria-labelledby="ground-operations">
+    <h2 id="ground-operations">Cockpit and Ground Operations</h2>
+    <ol class="lesson-list" role="list">
+      {lessons.map(lesson => (
+        <li>
+          <a class="lesson-link" href={sitePath(lesson.href)}>
+            {lesson.photo && <img src={assetPath(lesson.photo.src)} alt="" loading="lazy" decoding="async" />}
+            <div class="lesson-copy">
+              <h3>{lesson.title}</h3>
+              <p>{lesson.summary}</p>
+            </div>
+            <span class="lesson-arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <div class="airframe-sources">
+    {isViper && <a href={sourceUrl}>Eagle Dynamics F-16C manual</a>}
+    {photos.length > 0 && (
+      <details>
+        <summary>Photo credits</summary>
+        <ul>
+          {photos.map(photo => <li><a href={photo.sourceUrl}>{photo.credit}</a></li>)}
+        </ul>
+      </details>
+    )}
+  </div>
 </SiteLayout>
+
+<style>
+  .airframe-briefing {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    overflow: hidden;
+    background: var(--color-ink);
+    color: var(--color-ink-text);
+    border-top: 3px solid var(--color-accent);
+  }
+
+  .briefing-copy {
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+    line-height: 1.55;
+  }
+
+  .briefing-copy .sim-variant {
+    margin: 0 0 0.45rem;
+    color: var(--color-ink-muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .briefing-copy h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .briefing-copy h1 + p {
+    margin-top: 1rem;
+  }
+
+  .briefing-copy p + p {
+    margin-top: 0.75rem;
+  }
+
+  .briefing-photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    object-fit: cover;
+  }
+
+  .syllabus h2 {
+    margin-bottom: 0.75rem;
+  }
+
+  .lesson-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .lesson-list li {
+    max-width: none;
+    margin: 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .lesson-link {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.75rem, 2.5vw, 1.5rem);
+    padding: 0.75rem 0.5rem 0.75rem 0;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .lesson-link:hover,
+  .lesson-link:focus-visible {
+    background: var(--color-surface);
+  }
+
+  .lesson-link img {
+    width: clamp(5.25rem, 23%, 12rem);
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    flex: none;
+  }
+
+  .lesson-copy {
+    flex: 1;
+  }
+
+  .lesson-copy h3 {
+    margin: 0;
+    color: var(--color-link);
+    font-size: 1.125rem;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .lesson-copy p {
+    margin-block: 0.25rem 0;
+  }
+
+  .lesson-arrow {
+    flex: none;
+    color: var(--color-link);
+    font-size: 1.25rem;
+  }
+
+  .airframe-sources {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .airframe-sources summary {
+    cursor: pointer;
+  }
+
+  @media (max-width: 76rem) {
+    .airframe-briefing {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .briefing-photo {
+      grid-row: 1;
+      height: auto;
+      aspect-ratio: 2 / 1;
+    }
+  }
+</style>

@@ -9,6 +9,34 @@ export interface CardMedia {
 }
 
 export const cardMedia: Record<string, CardMedia> = {
+  'aircraft-procedures.f-16c': {
+    summary: 'Get to know the DCS F-16C cockpit and practise a cold-and-dark engine start.',
+    photo: {
+      src: 'manual/cards/f16c-viper.webp',
+      alt: 'An F-16C Viper banking hard with white vapour streaming over the wings.',
+      credit: 'F-16C in flight — Steven Cardo, US Air Force (public domain)',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Viper_Demo_arrives_in_Colombia_for_F-AIR_2025_(9249001).jpg',
+      position: '68% 50%',
+    },
+  },
+  'cockpit.dcs-f16c': {
+    summary: 'Work through the cockpit panel by panel. Find the switches, knobs and indicators you’ll use in the procedures.',
+    photo: {
+      src: 'manual/cards/f16c-cockpit.webp',
+      alt: 'The F-16C instrument panel and head-up display from the pilot’s seat.',
+      credit: 'Cockpit — US Air Force (public domain)',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:F-16C_cockpit_m02006112700032.jpg',
+    },
+  },
+  'procedure.dcs-f16c.engine-start': {
+    summary: 'Bring a cold-and-dark Viper to idle in the interactive exercise. Check the instruments and lights as the start progresses.',
+    photo: {
+      src: 'manual/cards/f16c-start.webp',
+      alt: 'An F-16 pilot in an open cockpit signalling for engine start at Avalon.',
+      credit: 'Engine start at Avalon — Peter Reft, US Air Force (public domain)',
+      sourceUrl: 'https://www.dvidshub.net/image/8942229/pacific-air-forces-f-16-demonstration-team-performs-avalon-australian-international-airshow-2025',
+    },
+  },
   'module.principles-of-flight': {
     summary: 'How a wing makes lift, and how a jet turns, climbs and stalls.',
     photo: {
