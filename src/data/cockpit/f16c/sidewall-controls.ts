@@ -18,8 +18,8 @@ const canopySwitch = (hidden: boolean) => {
   const [r, reach] = [5.2, 7.5], k = ry / rx;
   const toggle = `<ellipse cx="${cx}" cy="${ye}" rx="${r}" ry="${(r * k).toFixed(2)}" ${st} stroke="#161616" stroke-width="${sw}"/>` +
     `<ellipse cx="${cx}" cy="${ye}" rx="${(r * 0.6).toFixed(2)}" ry="${(r * 0.6 * k).toFixed(2)}" fill="none" ${hidden ? 'stroke-dasharray="1.6 1.2" ' : ''}stroke="#161616" stroke-width="0.25"/>` +
-    // Plain tapered lever: wide at the grommet, narrowing to a rounded tip.
-    `<path d="M${cx - 1.4} ${ye}L${cx - 0.7} ${ye + reach}A0.7 0.7 0 0 0 ${cx + 0.7} ${ye + reach}L${cx + 1.4} ${ye}Z" ${st} stroke="#161616" stroke-width="${sw}"/>`;
+    // Plain tapered lever: narrow at the grommet, widening to a round tip.
+    `<path d="M${cx - 0.7} ${ye}L${cx - 1.6} ${ye + reach}A1.6 1.6 0 0 0 ${cx + 1.6} ${ye + reach}L${cx + 0.7} ${ye}Z" ${st} stroke="#161616" stroke-width="${sw}"/>`;
   return body + toggle;
 };
 
