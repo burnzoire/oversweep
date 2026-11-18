@@ -55,6 +55,57 @@ const { id } = Astro.props;
       bubble.scrollIntoView({ block: "nearest" });
       return { bubble, copy };
     }
+    function addReport(bubble: HTMLElement, endpoint: string, report: {
+      question: string;
+      history: typeof history;
+      answer: string;
+      stage: string;
+      sources: string[];
+      topic: string[];
+      revision?: string;
+    }) {
+      const details = document.createElement("details");
+      details.dataset.report = "";
+      const label = document.createElement("summary");
+      label.textContent = report.stage === "answered" ? "Report answer" : "Report unanswered question";
+      const disclosure = document.createElement("p");
+      disclosure.textContent = "Send this question, the reply, up to two preceding messages and source IDs to Oversweep for review. Only send if those messages contain no personal details.";
+      const send = document.createElement("button");
+      send.type = "button";
+      send.textContent = "Send report";
+      const status = document.createElement("p");
+      status.setAttribute("role", "status");
+      details.append(label, disclosure, send, status);
+      bubble.append(details);
+
+      send.addEventListener("click", async () => {
+        send.disabled = true;
+        status.textContent = "Sending report…";
+        try {
+          const url = new URL(endpoint, location.href);
+          url.pathname = url.pathname.replace(/\/$/, "") + "/report";
+          const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(report),
+            signal: AbortSignal.timeout(10000),
+          });
+          if (response.status === 429) {
+            status.textContent = "Too many reports. Try again in a minute.";
+            send.disabled = false;
+            return;
+          }
+          if (!response.ok) throw new Error("Report failed");
+          send.hidden = true;
+          disclosure.hidden = true;
+          status.textContent = "Report sent. Thank you.";
+        } catch {
+          status.textContent = "Couldn’t send the report. Try again.";
+          send.disabled = false;
+        }
+      });
+    }
+
     const text = document.createElement("textarea");
 
     form.addEventListener("submit", async (event) => {
@@ -75,6 +126,7 @@ const { id } = Astro.props;
       input.focus();
       const reply = appendMessage("oversweep", "…");
       const contextHistory = history;
+      const contextTopic = topic;
       history = [...history, { role: "user", content: question }].slice(-6) as typeof history;
       try {
         let passages: Awaited<ReturnType<typeof findPassages>> = [];
@@ -85,7 +137,7 @@ const { id } = Astro.props;
           if (!panel.dataset.endpoint) throw error;
         }
         if (turn !== generation) return;
-        let generated: { answer?: string; ids?: string[]; topic?: string[]; references?: { id: string; title: string }[] } | undefined;
+        let generated: { answer?: string; ids?: string[]; topic?: string[]; stage?: string; retrieved?: string[]; revision?: string; references?: { id: string; title: string }[] } | undefined;
         let quota = false;
         let busy = false;
         let unavailable = false;
@@ -95,7 +147,7 @@ const { id } = Astro.props;
             const response = await fetch(panel.dataset.endpoint, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ question, history: contextHistory, topic, ids: passages.map(passage => passage.url) }),
+              body: JSON.stringify({ question, history: contextHistory, topic: contextTopic, ids: passages.map(passage => passage.url) }),
               signal: AbortSignal.any([pending.signal, AbortSignal.timeout(30000)]),
             });
             const payload = await response.json();
@@ -145,6 +197,17 @@ const { id } = Astro.props;
           label.textContent = "Read more on Oversweep";
           reading.append(label, sources);
           if (sources.childElementCount) reply.bubble.append(reading);
+          if (generated?.answer && generated.retrieved && panel.dataset.endpoint) {
+            addReport(reply.bubble, panel.dataset.endpoint, {
+              question,
+              history: contextHistory.slice(-2),
+              answer: generated.answer.slice(0, 1200),
+              stage: generated.stage ?? "answered",
+              sources: generated.retrieved,
+              topic: contextTopic,
+              revision: generated.revision,
+            });
+          }
         } else {
           reply.copy.textContent = "I couldn’t find that on Oversweep. Could you tell me a bit more?";
         }
@@ -172,6 +235,9 @@ const { id } = Astro.props;
   [data-thread] :global(p) { margin: 0; color: inherit; }
   [data-thread] :global(ul) { padding: 0; margin: .5rem 0 0; list-style: none; }
   [data-thread] :global(li) { padding: .5rem; margin-top: .4rem; border: 1px solid #c6cdd4; border-radius: .4rem; background: white; }
+  [data-thread] :global([data-report]) { margin-top: .5rem; font-size: .875em; }
+  [data-thread] :global([data-report] summary) { cursor: pointer; }
+  [data-thread] :global([data-report] button) { margin: .4rem 0; }
   [data-new-chat] { background: transparent; color: inherit; padding: .3rem .6rem; }
 </style>
 

@@ -6,6 +6,13 @@
   "ai": {
     "binding": "AI"
   },
+  "ratelimits": [
+    {
+      "name": "ASK_REPORT_LIMIT",
+      "namespace_id": "38801",
+      "simple": { "limit": 5, "period": 60 }
+    }
+  ],
   "observability": {
     "logs": {
       "enabled": true,

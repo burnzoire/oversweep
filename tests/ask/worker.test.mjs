@@ -23,7 +23,9 @@ test("the model receives canonical passages and returns supporting section IDs",
 
 test("unmatched questions skip inference and invalid citation numbers fall back", async () => {
   const unknown = await handle(new Request("https://worker.example/ask", {method:"POST", body: JSON.stringify({question:"xyzzy",ids:["/unknown/"]})}), {});
-  assert.deepEqual((await unknown.json()).ids, []);
+  const missing = await unknown.json();
+  assert.deepEqual(missing.ids, []);
+  assert.equal(missing.stage, "no_passages");
   const response = await handle(request(), { AI: { run: async () => ({ response: '{"answer":"Answer","sources":[2]}' }) } });
   assert.equal(response.status, 200);
   assert.deepEqual((await response.json()).ids, []);
@@ -45,7 +47,7 @@ test("Gemma chat completions return JSON under choices[0].message.content", asyn
     return { choices: [{ message: { content: '{"answer":"Sochi Tower is 127.0 MHz VHF.","sources":[1]}' } }] };
   } } });
   assert.equal(response.status, 200);
-  assert.deepEqual(await response.json(), { answer: "Sochi Tower is 127.0 MHz VHF.", ids: [id], topic: [], references: [{ id, title: "Sochi · Sim maps" }] });
+  assert.deepEqual(await response.json(), { answer: "Sochi Tower is 127.0 MHz VHF.", ids: [id], topic: [], retrieved: [id], references: [{ id, title: "Sochi · Sim maps" }] });
 });
 
 
@@ -95,4 +97,44 @@ test("structured output uses compatible schema with completion headroom", async(
  assert.equal(options.max_completion_tokens,700);
  return {response:JSON.stringify({answer:"127.0 MHz",sources:[1]})};
  }}});assert.equal(response.status,200);
+});
+
+test("opt-in reports validate context, respect limits and bypass inference", async t => {
+  const info = t.mock.method(console, "info", () => {});
+  const report = {
+    question: "Does it have an ILS?",
+    history: [{ role: "user", content: "Tell me about Sochi." }],
+    answer: "I couldn’t find enough on Oversweep to answer that.",
+    stage: "no_supported_answer",
+    sources: [id, id],
+    topic: [id],
+    revision: "a".repeat(40),
+  };
+  const origin = "https://www.oversweep.com";
+  const submit = (body = report, headers = { Origin: origin }, method = "POST") =>
+    new Request("https://worker.example/ask/report", {
+      method, headers, body: method === "POST" ? JSON.stringify(body) : undefined,
+    });
+  const env = {
+    ASK_REPORT_LIMIT: { limit: async () => ({ success: true }) },
+    ASK_REVISION: "b".repeat(40),
+  };
+  const preflight = await handle(submit(report, { Origin: origin }, "OPTIONS"), env);
+  assert.equal(preflight.status, 204);
+  assert.equal(preflight.headers.get("Access-Control-Allow-Origin"), origin);
+  assert.equal((await handle(submit(report, {}), env)).status, 403);
+  assert.equal((await handle(submit(report, { Origin: "https://evil.example" }), env)).status, 403);
+  for (const invalid of [
+    { sources: ["https://unknown.example/"] }, { history: Array(3).fill(report.history[0]) },
+    { answer: "x".repeat(1201) }, { stage: "daily_quota" },
+  ]) {
+    assert.equal((await handle(submit({ ...report, ...invalid }), env)).status, 400);
+  }
+  assert.equal((await handle(submit(), { ASK_REPORT_LIMIT: { limit: async () => ({ success: false }) } })).status, 429);
+  assert.equal(info.mock.callCount(), 0);
+
+  assert.equal((await handle(submit(), env)).status, 204);
+  assert.deepEqual(info.mock.calls[0].arguments, [
+    "ask_oversweep_report", { ...report, sources: [id] },
+  ]);
 });
