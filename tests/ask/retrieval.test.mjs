@@ -45,3 +45,18 @@ test('topic IDs preserve context beyond the bounded history and reset prevents l
   assert.equal(retrieve('What about ILS?',{topic:[sochi],history:[]}).subject,'Sochi International Airport');
   assert.equal(retrieve('What about ILS?',{topic:[],history:[{role:'user',content:'Sochi tower?'}]}).subject,undefined);
 });
+
+test('generic attribute words do not match a simulator theatre name', () => {
+  const r = createRetriever({...corpus,'/encyclopedia/locations/dcs-the-channel/':{title:'DCS: The Channel',text:'World War II theatre.'}});
+  const result = r('And the VORTAC channel again?',{topic:[ramat]});
+  assert.equal(result.subject,'Ramat David Airbase');
+  assert.ok(result.passages.some(p=>p.text.includes('84X')));
+});
+
+test('aircraft nicknames preserve a topic and include the factual record', () => {
+  const id='/encyclopedia/aircraft/f-14/';
+  const r = createRetriever({...corpus,[id]:{title:'F-14 Tomcat',text:'Powerplant F-14A TF30; F-14B F110-GE-400.'},[id+'#history']:{title:'F-14 Tomcat · History',text:'The engines changed.'}});
+  const result=r('What engines does the Tomcat have?');
+  assert.deepEqual(result.topic,[id]);
+  assert.ok(result.passages.some(p=>p.text.includes('F110-GE-400')));
+});
