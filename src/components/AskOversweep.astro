@@ -26,15 +26,15 @@ const { id } = Astro.props;
     const thread = panel.querySelector<HTMLElement>("[data-thread]")!;
     const reset = panel.closest("dialog")?.querySelector<HTMLButtonElement>("[data-new-chat]")
       ?? panel.querySelector<HTMLButtonElement>("[data-new-chat]");
-    let previous = "";
-    let citedPassages: Awaited<ReturnType<typeof findPassages>> = [];
+    let history: { role: "user" | "assistant"; content: string }[] = [];
+    let pending: AbortController | undefined;
     let lastQuestion = "";
     let generation = 0;
 
     reset?.addEventListener("click", () => {
       generation++;
-      previous = "";
-      citedPassages = [];
+      pending?.abort();
+      history = [];
       lastQuestion = "";
       thread.replaceChildren();
       form.reset();
@@ -75,23 +75,18 @@ const { id } = Astro.props;
       try {
         const pagefind = await import(/* @vite-ignore */ panel.dataset.index!);
         const search = (query: string) => findPassages(pagefind, query, panel.dataset.base!, location.origin);
-        // An availability question with no named subject continues the current topic.
-        const implicitSubject = /^\s*(?:what|which)\s+(?:[\p{L}-]+\s+){1,3}(?:is|are)\s+(?:available|listed|supported|simulated)\s*[?!.]*$/iu.test(question);
-        const refersBack = Boolean(previous && (implicitSubject || /\b(it|they|that|those|this|them|same)\b/i.test(question)));
-        const followUp = refersBack || Boolean(previous && /^(and|what about|how about)\b/i.test(question));
-        const retained = refersBack && !retry && citedPassages.length > 0;
-        const contextual = followUp && !retained ? await search(question + " " + previous) : [];
-        const passages = retained ? citedPassages : contextual.length ? contextual : await search(question);
+        const passages = await search(question);
         if (turn !== generation) return;
         let generated: { answer?: string; ids?: string[] } | undefined;
         let quota = false;
-        if (panel.dataset.endpoint && passages.length) {
+        if (panel.dataset.endpoint) {
           try {
+            pending = new AbortController();
             const response = await fetch(panel.dataset.endpoint, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ question, previous: followUp ? previous : undefined, ids: passages.map(passage => passage.url) }),
-              signal: AbortSignal.timeout(12000),
+              body: JSON.stringify({ question, history, ids: passages.map(passage => passage.url) }),
+              signal: AbortSignal.any([pending.signal, AbortSignal.timeout(30000)]),
             });
             const payload = await response.json();
             quota = response.status === 429 && payload.code === "daily_quota";
@@ -101,12 +96,14 @@ const { id } = Astro.props;
           }
         }
         if (turn !== generation) return;
-        if (!followUp) {
-          previous = question;
-          citedPassages = [];
+        if (generated?.answer) {
+          history = [...history, { role: "user", content: question }, { role: "assistant", content: generated.answer.slice(0, 1200) }].slice(-6) as typeof history;
         }
-        if (generated?.ids?.length) {
-          citedPassages = passages.filter(passage => generated.ids!.includes(passage.url));
+        // The Worker may recover relevant sources that Pagefind missed.
+        for (const id of generated?.ids ?? []) {
+          if (!passages.some(passage => passage.url === id)) {
+            passages.push({ url: id, title: "Supporting article", excerpt: "" });
+          }
         }
         const sources = document.createElement("ul");
         for (const passage of passages) {
@@ -118,8 +115,8 @@ const { id } = Astro.props;
           result.append(link);
           sources.append(result);
         }
-        if (passages.length) {
-          text.innerHTML = passages[0].excerpt;
+        if (passages.length || generated?.answer) {
+          text.innerHTML = passages[0]?.excerpt ?? "";
           reply.copy.textContent = generated?.answer ?? (quota
             ? "Negative, Ghostrider. The pattern is full"
             : panel.dataset.endpoint ? "I couldn’t generate a reply. Here’s what I found on Oversweep." : "Here’s what I found on Oversweep.");

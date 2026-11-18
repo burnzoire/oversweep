@@ -1,0 +1,32 @@
+// Opt-in integration test: REAL Workers AI calls consume the account's allocation.
+// Build first. No model mocks, saved replies, or network interception are used.
+// ASK_LIVE=1 node scripts/test-ask-live.mjs <output.json> [case-id,...]
+import fs from 'node:fs/promises';
+import { createRetriever } from '../workers/ask-oversweep/retrieval.mjs';
+if (process.env.ASK_LIVE !== '1') throw new Error('Set ASK_LIVE=1 to authorize live inference');
+const endpoint = process.env.ASK_ENDPOINT ?? 'https://ask-oversweep.burnzoire.workers.dev/ask';
+const cases = JSON.parse(await fs.readFile(new URL('../tests/ask/conversations.json', import.meta.url)));
+const retrieve = createRetriever(JSON.parse(await fs.readFile(new URL('../dist/ask-corpus.json', import.meta.url))));
+const selected = process.argv[3]?.split(',');
+const results = [];
+for (const conversation of cases.filter(c => !selected || selected.includes(c.id))) {
+  let history = [];
+  for (const turn of conversation.turns) {
+    const ids = retrieve(turn.question, { history }).passages.map(p => p.id);
+    const started = Date.now();
+    const row = { conversation: conversation.id, question: turn.question, history: [...history], requestedIds: ids };
+    try {
+      const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question: turn.question, history, ids: ids.slice(0, 3) }), signal: AbortSignal.timeout(40000) });
+      Object.assign(row, { status: response.status, revision: response.headers.get('x-ask-revision'), reply: await response.json() });
+      const answer = row.reply.answer?.toLowerCase() ?? '';
+      row.passed = response.ok && (turn.all ?? []).every(s => answer.includes(s.toLowerCase())) && (!turn.any || turn.any.some(s => answer.includes(s.toLowerCase()))) && (turn.none ?? []).every(s => !answer.includes(s.toLowerCase()));
+      if (row.reply.answer) history = [...history, { role: 'user', content: turn.question }, { role: 'assistant', content: row.reply.answer.slice(0, 1200) }].slice(-6);
+    } catch (error) { row.error = error.message; row.passed = false; }
+    row.ms = Date.now() - started;
+    results.push(row);
+    console.log(JSON.stringify({ conversation: row.conversation, question: row.question, reply: row.reply, ms: row.ms, passed: row.passed, revision: row.revision }));
+    await fs.writeFile(process.argv[2] ?? 'tests/ask/results/live.json', JSON.stringify({ endpoint, at: new Date().toISOString(), results }, null, 2) + '\n');
+  }
+}
+console.log(`${results.filter(r => r.passed).length}/${results.length} passed; inspect replies as well as keyword checks.`);
+process.exitCode = results.some(r => !r.passed) ? 1 : 0;
