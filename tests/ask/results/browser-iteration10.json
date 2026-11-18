@@ -1,0 +1,228 @@
+{
+  "at": "2026-11-18T03:47:22.241Z",
+  "frontend": "local branch production build served under permitted origin",
+  "inference": "Unintercepted live Cloudflare Worker",
+  "evidence": [
+    {
+      "status": 200,
+      "headers": {
+        "access-control-allow-headers": "Content-Type",
+        "access-control-allow-methods": "POST, OPTIONS",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "cache-control": "no-store",
+        "cf-ray": "a5c3fe283d482bff-ORD",
+        "content-encoding": "zstd",
+        "content-type": "application/json",
+        "date": "Wed, 18 Nov 2026 03:47:17 GMT",
+        "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+        "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=DPPENDIAudR61Lde8EHjS5LljMrWot6LZ6lshNIS11HX0alEodrEOxLKdn3Wq%2BwSIq0DIvUB6dA49gpH8vs2NQ2pI%2FQRC7UUhDZvgV6tBBD7cA4m9bUcgsr57GdKkhdh1%2Fqgsqt5j2Vv4K9c%2BTX52gRX6SMIbEs%2BVIwatl397vu%2B8A%3D%3D\"}]}",
+        "server": "envoy",
+        "vary": "Origin",
+        "x-ask-revision": "8176a50108cb233b382ef980885f467198360bcc",
+        "x-envoy-upstream-service-time": "1377"
+      },
+      "request": {
+        "question": "What is the TACAN for Ramat David?",
+        "history": [],
+        "topic": [],
+        "ids": [
+          "/encyclopedia/locations/ramat-david/",
+          "/encyclopedia/locations/ramat-david/#history",
+          "/encyclopedia/locations/ramat-david/#role-today"
+        ]
+      },
+      "reply": {
+        "answer": "The VORTAC for Ramat David is RMD, with channel 84X and 113.7 MHz in DCS: Syria and DCS: Sinai.",
+        "ids": [
+          "/encyclopedia/locations/ramat-david/#sims-title"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/ramat-david/#sims-title",
+            "title": "Ramat David Airbase · Sim maps"
+          }
+        ]
+      }
+    },
+    {
+      "status": 200,
+      "headers": {
+        "access-control-allow-headers": "Content-Type",
+        "access-control-allow-methods": "POST, OPTIONS",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "cache-control": "no-store",
+        "cf-ray": "a5c3fe315f042bff-ORD",
+        "content-encoding": "zstd",
+        "content-type": "application/json",
+        "date": "Wed, 18 Nov 2026 03:47:18 GMT",
+        "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+        "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=8z9Cfk6bHQ17MLPuXz%2FmU0biA%2Bh%2Bd6bz0mC7oOQkszEadD044UnE6mrhkMg%2F0W2QK6HSxXmYRFdSQeSgW9lgulWfJD6FIhDLTKTxmU4wpjf3ei9p3Y9%2Bt%2BGVeQEjwEDDzKR7twLHv7RGj3JHRaobpAuaRrdSKdGDPNm2fTgE8tKGSQ%3D%3D\"}]}",
+        "server": "envoy",
+        "vary": "Origin",
+        "x-ask-revision": "8176a50108cb233b382ef980885f467198360bcc",
+        "x-envoy-upstream-service-time": "1294"
+      },
+      "request": {
+        "question": "What runways are available?",
+        "history": [
+          {
+            "role": "user",
+            "content": "What is the TACAN for Ramat David?"
+          },
+          {
+            "role": "assistant",
+            "content": "The VORTAC for Ramat David is RMD, with channel 84X and 113.7 MHz in DCS: Syria and DCS: Sinai."
+          }
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "ids": [
+          "/encyclopedia/locations/anapa/",
+          "/encyclopedia/locations/anapa/#facilities-title",
+          "/encyclopedia/locations/beslan/"
+        ]
+      },
+      "reply": {
+        "answer": "The available runways are 09/27, 11/29, and 15/33.",
+        "ids": [
+          "/encyclopedia/locations/ramat-david/",
+          "/encyclopedia/locations/ramat-david/#sims-title",
+          "/encyclopedia/locations/ramat-david/#facilities-title"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/ramat-david/",
+            "title": "Ramat David Airbase"
+          },
+          {
+            "id": "/encyclopedia/locations/ramat-david/#sims-title",
+            "title": "Ramat David Airbase · Sim maps"
+          },
+          {
+            "id": "/encyclopedia/locations/ramat-david/#facilities-title",
+            "title": "Ramat David Airbase · Runways and facilities"
+          }
+        ]
+      }
+    },
+    {
+      "status": 200,
+      "headers": {
+        "access-control-allow-headers": "Content-Type",
+        "access-control-allow-methods": "POST, OPTIONS",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "cache-control": "no-store",
+        "cf-ray": "a5c3fe3c5d512bff-ORD",
+        "content-encoding": "zstd",
+        "content-type": "application/json",
+        "date": "Wed, 18 Nov 2026 03:47:20 GMT",
+        "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+        "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=RWU6wlKne%2BxCiPcvxIACKets%2FDpaGp8Mjxw%2F1t5icxMZst4yLPjGMtfxMI5ybidbQyewXpxp0XsO9xZd2tzvDR6ujKcWHmMCUY4OrHJJzhKbjpVR2CUnOMGOJmwkaIUMUUPye0dWonnnblpvIzHuAHQJLLBRW6aFpHI4ccs0Pjvymw%3D%3D\"}]}",
+        "server": "envoy",
+        "vary": "Origin",
+        "x-ask-revision": "8176a50108cb233b382ef980885f467198360bcc",
+        "x-envoy-upstream-service-time": "1400"
+      },
+      "request": {
+        "question": "Which one runs east-west?",
+        "history": [
+          {
+            "role": "user",
+            "content": "What is the TACAN for Ramat David?"
+          },
+          {
+            "role": "assistant",
+            "content": "The VORTAC for Ramat David is RMD, with channel 84X and 113.7 MHz in DCS: Syria and DCS: Sinai."
+          },
+          {
+            "role": "user",
+            "content": "What runways are available?"
+          },
+          {
+            "role": "assistant",
+            "content": "The available runways are 09/27, 11/29, and 15/33."
+          }
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "ids": [
+          "/encyclopedia/locations/bandar-lengeh/#the-airfield",
+          "/encyclopedia/locations/batumi/#role-today",
+          "/encyclopedia/locations/batumi/#the-airfield"
+        ]
+      },
+      "reply": {
+        "answer": "Runway 09/27 runs east-west; runway 09 points 087 degrees and its other end, runway 27, points 267 degrees.",
+        "ids": [
+          "/manual/airfield-operations/airfield-basics/#numbers"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/manual/airfield-operations/airfield-basics/#numbers",
+            "title": "The Airfield and the Traffic Pattern · Runway numbers"
+          }
+        ]
+      }
+    },
+    {
+      "status": 200,
+      "headers": {
+        "access-control-allow-headers": "Content-Type",
+        "access-control-allow-methods": "POST, OPTIONS",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "cache-control": "no-store",
+        "cf-ray": "a5c3fe479b902bff-ORD",
+        "content-encoding": "zstd",
+        "content-type": "application/json",
+        "date": "Wed, 18 Nov 2026 03:47:21 GMT",
+        "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+        "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=Aa%2FfyIaS8w5iCKrLEgmXhiyQPLbw5ZdRuUvl9HL01%2FGBGVexggNEZk50HUeTfADBr0hBqrdQx%2FLv9Q%2F19GneBqGe%2BLDJnV%2FGPnOnig9EVqZLKFOe%2Fn4RFo2JZp%2FYyJFOohnaNT6S7M2sAqGHxFARhxPPgIjPbU1LqCtxq2rEistZ3Q%3D%3D\"}]}",
+        "server": "envoy",
+        "vary": "Origin",
+        "x-ask-revision": "8176a50108cb233b382ef980885f467198360bcc",
+        "x-envoy-upstream-service-time": "847"
+      },
+      "request": {
+        "question": "What engines does the F-14B have?",
+        "history": [],
+        "topic": [],
+        "ids": [
+          "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-14/#irans-tomcats"
+        ]
+      },
+      "reply": {
+        "answer": "The F-14B has two General Electric F110-GE-400 engines, 27,000 lb each.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          },
+          {
+            "id": "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+            "title": "F-14 Tomcat · Swing wings and Phoenix missiles"
+          }
+        ]
+      }
+    }
+  ]
+}

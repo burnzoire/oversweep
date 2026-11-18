@@ -1,0 +1,108 @@
+[
+  {
+    "question": "What engines does the F-14B have?",
+    "ids": [
+      "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+      "/encyclopedia/aircraft/f-14/",
+      "/encyclopedia/aircraft/f-14/#irans-tomcats"
+    ],
+    "status": 200,
+    "reply": {
+      "answer": "The F-14B has two General Electric F110-GE-400 engines, 27,000 lb each.",
+      "ids": [
+        "/encyclopedia/aircraft/f-14/"
+      ]
+    },
+    "ms": 9787
+  },
+  {
+    "question": "What engines does the Tomcat have?",
+    "ids": [
+      "/encyclopedia/aircraft/f-14/",
+      "/encyclopedia/aircraft/f-14/#guarding-the-fleet",
+      "/encyclopedia/aircraft/f-14/#plate-title"
+    ],
+    "status": 200,
+    "reply": {
+      "answer": "The F-14A has two Pratt & Whitney TF30-P-414A afterburning turbofans, while the F-14B/D has two General Electric F110-GE-400 engines.",
+      "ids": [
+        "/encyclopedia/aircraft/f-14/"
+      ]
+    },
+    "ms": 1511
+  },
+  {
+    "question": "What is the tower frequency for Sochi?",
+    "ids": [
+      "/encyclopedia/locations/sochi/",
+      "/encyclopedia/locations/sochi/#history",
+      "/encyclopedia/locations/sochi/#role-title"
+    ],
+    "status": 200,
+    "reply": {
+      "answer": "I couldn’t find enough on Oversweep to answer that.",
+      "ids": []
+    },
+    "ms": 666
+  },
+  {
+    "question": "What is the TACAN for Sochi?",
+    "ids": [
+      "/encyclopedia/locations/sochi/",
+      "/encyclopedia/locations/sochi/#history",
+      "/encyclopedia/locations/sochi/#role-title"
+    ],
+    "status": 200,
+    "reply": {
+      "answer": "I couldn’t find enough on Oversweep to answer that.",
+      "ids": []
+    },
+    "ms": 1016
+  },
+  {
+    "question": "What is the VORTAC for Ramat David?",
+    "ids": [
+      "/encyclopedia/locations/ramat-david/#sims-title",
+      "/encyclopedia/locations/ramat-david/",
+      "/encyclopedia/locations/ramat-david/#history"
+    ],
+    "status": 200,
+    "reply": {
+      "answer": "The VORTAC for Ramat David is RMD, channel 84X and 113.7 MHz.",
+      "ids": [
+        "/encyclopedia/locations/ramat-david/#sims-title"
+      ]
+    },
+    "ms": 792
+  },
+  {
+    "question": "What runways are available at Ramat David?",
+    "ids": [
+      "/encyclopedia/locations/ramat-david/#sims-title",
+      "/encyclopedia/locations/ramat-david/",
+      "/encyclopedia/locations/ramat-david/#history"
+    ],
+    "status": 200,
+    "reply": {
+      "answer": "The available runways at Ramat David are 09/27, 11/29 and 15/33.",
+      "ids": [
+        "/encyclopedia/locations/ramat-david/#sims-title"
+      ]
+    },
+    "ms": 1252
+  },
+  {
+    "question": "What is angle of attack?",
+    "ids": [
+      "/manual/air-to-ground-operations/rotary-wing-attack/",
+      "/manual/air-to-ground-operations/rotary-wing-attack/#abf",
+      "/manual/air-to-ground-operations/rotary-wing-attack/#aircraft"
+    ],
+    "status": 200,
+    "reply": {
+      "answer": "I couldn’t find enough on Oversweep to answer that.",
+      "ids": []
+    },
+    "ms": 4094
+  }
+]

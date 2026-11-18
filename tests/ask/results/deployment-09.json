@@ -1,0 +1,7 @@
+{
+  "revision": "d5807034102fa2c8c0160eed76d0db98b456d010",
+  "run": "https://github.com/burnzoire/oversweep/actions/runs/44231866850",
+  "conclusion": "failure",
+  "error": "Your Worker failed validation because it exceeded startup limits. Error: Script startup exceeded CPU time limit.",
+  "live_revision_retained": "a3abb2d463df752356cb0945923d4cffa535242d"
+}

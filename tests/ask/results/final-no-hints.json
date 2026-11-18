@@ -1,0 +1,255 @@
+{
+  "endpoint": "https://ask-oversweep.burnzoire.workers.dev/ask",
+  "at": "2026-11-18T03:48:36.680Z",
+  "results": [
+    {
+      "conversation": "tomcat",
+      "question": "What engines does the F-14B have?",
+      "requestedIds": [],
+      "status": 200,
+      "revision": "8176a50108cb233b382ef980885f467198360bcc",
+      "reply": {
+        "answer": "The F-14B has two General Electric F110-GE-400 engines, which provide 27,000 lb each.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          },
+          {
+            "id": "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+            "title": "F-14 Tomcat · Swing wings and Phoenix missiles"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 7323
+    },
+    {
+      "conversation": "tomcat",
+      "question": "And the A model?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/aircraft/f-14/"
+      ],
+      "status": 200,
+      "revision": "8176a50108cb233b382ef980885f467198360bcc",
+      "reply": {
+        "answer": "The F-14A has two Pratt & Whitney TF30-P-414A afterburning turbofans, 20,900 lb each.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 12307
+    },
+    {
+      "conversation": "tomcat",
+      "question": "How many crew?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/aircraft/f-14/"
+      ],
+      "status": 200,
+      "revision": "8176a50108cb233b382ef980885f467198360bcc",
+      "reply": {
+        "answer": "The F-14 Tomcat has a crew of two: a pilot and a radar intercept officer (RIO).",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 943
+    },
+    {
+      "conversation": "sochi",
+      "question": "What freq is Sochi tower?",
+      "requestedIds": [],
+      "status": 200,
+      "revision": "8176a50108cb233b382ef980885f467198360bcc",
+      "reply": {
+        "answer": "The tower frequencies are 127.0 MHz VHF and 256.0 MHz UHF.",
+        "ids": [
+          "/encyclopedia/locations/sochi/#sims-title"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/sochi/#sims-title",
+            "title": "Sochi International Airport · Sim maps"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 980
+    },
+    {
+      "conversation": "sochi",
+      "question": "Does it have a TACAN?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/sochi/"
+      ],
+      "status": 200,
+      "revision": "8176a50108cb233b382ef980885f467198360bcc",
+      "reply": {
+        "answer": "A TACAN is not listed in the supplied Oversweep material for Sochi International Airport. The airport is represented with an NDB with marker (CO) and an ILS on runway 06, 111.1 MHz (ISO).",
+        "ids": [
+          "/encyclopedia/locations/sochi/#sims-title"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/sochi/#sims-title",
+            "title": "Sochi International Airport · Sim maps"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 846
+    },
+    {
+      "conversation": "sochi",
+      "question": "What about ILS?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/sochi/"
+      ],
+      "status": 200,
+      "revision": "8176a50108cb233b382ef980885f467198360bcc",
+      "reply": {
+        "answer": "There is an ILS on runway 06, 111.1 MHz (ISO).",
+        "ids": [
+          "/encyclopedia/locations/sochi/#history"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/sochi/#history",
+            "title": "Sochi International Airport · History"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1079
+    },
+    {
+      "conversation": "sochi",
+      "question": "What runways are available?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/sochi/"
+      ],
+      "status": 200,
+      "revision": "8176a50108cb233b382ef980885f467198360bcc",
+      "reply": {
+        "answer": "The available runways are 06/24 and 02/20.",
+        "ids": [
+          "/encyclopedia/locations/sochi/",
+          "/encyclopedia/locations/sochi/#facilities-title",
+          "/encyclopedia/locations/sochi/#the-airfield"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/sochi/",
+            "title": "Sochi International Airport"
+          },
+          {
+            "id": "/encyclopedia/locations/sochi/#facilities-title",
+            "title": "Sochi International Airport · Runways and facilities"
+          },
+          {
+            "id": "/encyclopedia/locations/sochi/#the-airfield",
+            "title": "Sochi International Airport · The airfield"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 919
+    },
+    {
+      "conversation": "table-airfield",
+      "question": "What is the tower frequency for Kuweires?",
+      "requestedIds": [],
+      "status": 200,
+      "revision": "8176a50108cb233b382ef980885f467198360bcc",
+      "reply": {
+        "answer": "The tower frequencies for Kuweires are VHF 120.5, UHF 251.35, low VHF 39.8, and HF 4.45.",
+        "ids": [
+          "/encyclopedia/locations/dcs-syria/#af-kuweires"
+        ],
+        "topic": [
+          "/encyclopedia/locations/dcs-syria/#af-kuweires"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-kuweires",
+            "title": "Kuweires · DCS: Syria"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1612
+    },
+    {
+      "conversation": "table-airfield",
+      "question": "What runways are available?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/dcs-syria/#af-kuweires"
+      ],
+      "status": 200,
+      "revision": "8176a50108cb233b382ef980885f467198360bcc",
+      "reply": {
+        "answer": "The available runways at Kuweires are 10 (095°) / 28 (275°), 6,663 ft.",
+        "ids": [
+          "/encyclopedia/locations/dcs-syria/#af-kuweires"
+        ],
+        "topic": [
+          "/encyclopedia/locations/dcs-syria/#af-kuweires"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-kuweires",
+            "title": "Kuweires · DCS: Syria"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1285
+    }
+  ]
+}

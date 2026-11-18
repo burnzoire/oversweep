@@ -1,0 +1,357 @@
+[
+  {
+    "id": "tomcat",
+    "turns": [
+      {
+        "question": "What engines does the F-14B have?",
+        "all": [
+          "F110",
+          "GE-400"
+        ]
+      },
+      {
+        "question": "And the A model?",
+        "all": [
+          "TF30"
+        ]
+      },
+      {
+        "question": "How many crew?",
+        "any": [
+          "two",
+          "2:",
+          "2 "
+        ]
+      }
+    ]
+  },
+  {
+    "id": "sochi",
+    "turns": [
+      {
+        "question": "What freq is Sochi tower?",
+        "all": [
+          "127",
+          "256"
+        ]
+      },
+      {
+        "question": "Does it have a TACAN?",
+        "any": [
+          "not listed",
+          "does not list",
+          "doesn't list",
+          "no TACAN",
+          "not mention",
+          "not provide",
+          "not specified",
+          "not documented",
+          "not supplied",
+          "not available",
+          "no listed"
+        ]
+      },
+      {
+        "question": "What about ILS?",
+        "all": [
+          "111.1",
+          "06"
+        ]
+      },
+      {
+        "question": "What runways are available?",
+        "all": [
+          "06/24"
+        ],
+        "none": [
+          "Gelendzhik",
+          "Dubai"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ramat",
+    "turns": [
+      {
+        "question": "What is the TACAN for Ramat David?",
+        "all": [
+          "84X",
+          "RMD"
+        ]
+      },
+      {
+        "question": "What runways are available?",
+        "all": [
+          "09/27",
+          "11/29",
+          "15/33"
+        ],
+        "none": [
+          "Gelendzhik",
+          "Dubai"
+        ]
+      },
+      {
+        "question": "Which one runs east-west?",
+        "all": [
+          "09/27"
+        ],
+        "none": [
+          "087",
+          "267",
+          "none of",
+          "no runway"
+        ],
+        "review": "Select the runway closest to east-west; do not copy illustrative example bearings or reject all strips because none is exactly 090/270."
+      },
+      {
+        "question": "What is the tower freq for Sochi?",
+        "all": [
+          "127",
+          "256"
+        ],
+        "none": [
+          "Ramat"
+        ]
+      },
+      {
+        "question": "What about its ILS?",
+        "all": [
+          "111.1"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "concepts",
+    "turns": [
+      {
+        "question": "What is angle of attack?",
+        "all": [
+          "chord",
+          "air"
+        ],
+        "none": [
+          "laser-to-target"
+        ]
+      },
+      {
+        "question": "What is a VORTAC?",
+        "all": [
+          "VOR",
+          "TACAN"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "tomcat-alias",
+    "turns": [
+      {
+        "question": "What engines does the Tomcat have?",
+        "all": [
+          "TF30",
+          "F110"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unsupported",
+    "turns": [
+      {
+        "question": "What is the Wi-Fi password at Sochi airport?",
+        "any": [
+          "not listed",
+          "not provide",
+          "couldn\u2019t find",
+          "does not list",
+          "not mention",
+          "not specified"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "topic-switch",
+    "turns": [
+      {
+        "question": "What is the tower frequency for Sochi?",
+        "all": [
+          "127"
+        ]
+      },
+      {
+        "question": "How do flaps affect lift?",
+        "all": [
+          "lift"
+        ],
+        "none": [
+          "Sochi",
+          "rotor",
+          "helicopter"
+        ]
+      },
+      {
+        "question": "Tell me about radar",
+        "all": [
+          "radar"
+        ],
+        "none": [
+          "Sochi"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "comparison",
+    "turns": [
+      {
+        "question": "What tower frequencies do Sochi and Kutaisi use?",
+        "all": [
+          "Sochi",
+          "Kutaisi",
+          "127",
+          "134"
+        ]
+      },
+      {
+        "question": "Compare the engines of the F-14 and F-16.",
+        "all": [
+          "F-14",
+          "F-16",
+          "F110"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "long-context",
+    "turns": [
+      {
+        "question": "What is the VORTAC for Ramat David?",
+        "all": [
+          "84X"
+        ]
+      },
+      {
+        "question": "What runways are available?",
+        "all": [
+          "09/27"
+        ]
+      },
+      {
+        "question": "Which one runs east-west?",
+        "all": [
+          "09/27"
+        ],
+        "none": [
+          "087",
+          "267",
+          "none of",
+          "no runway"
+        ],
+        "review": "Select the runway closest to east-west; do not copy illustrative example bearings or reject all strips because none is exactly 090/270."
+      },
+      {
+        "question": "What about tower frequency?",
+        "all": [
+          "251"
+        ]
+      },
+      {
+        "question": "And the VORTAC channel again?",
+        "all": [
+          "84X"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table-airfield",
+    "turns": [
+      {
+        "question": "What is the tower frequency for Kuweires?",
+        "all": [
+          "120.5",
+          "251.35"
+        ]
+      },
+      {
+        "question": "What runways are available?",
+        "all": [
+          "10",
+          "28"
+        ],
+        "none": [
+          "Sochi",
+          "Ramat David"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "comparison-follow-up",
+    "turns": [
+      {
+        "question": "What engines does the F-14B have?",
+        "all": [
+          "F110",
+          "GE-400"
+        ]
+      },
+      {
+        "question": "How does this differ from the F-16?",
+        "all": [
+          "F-14",
+          "F-16"
+        ],
+        "any": [
+          "single",
+          "one"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "theatre-scope",
+    "turns": [
+      {
+        "question": "What is the tower frequency for Hatzerim in Syria?",
+        "all": [
+          "128.2",
+          "259"
+        ],
+        "none": [
+          "119.75"
+        ]
+      },
+      {
+        "question": "What is the tower frequency for Biggin Hill in The Channel?",
+        "all": [
+          "118.2"
+        ],
+        "none": [
+          "134.8"
+        ]
+      },
+      {
+        "question": "What is the tower frequency for King Hussein Air College?",
+        "all": [
+          "118.3",
+          "250.45"
+        ]
+      },
+      {
+        "question": "What is the low VHF tower frequency for Ramat David in Sinai?",
+        "all": [
+          "38.4"
+        ],
+        "none": [
+          "118.6"
+        ]
+      }
+    ]
+  }
+]

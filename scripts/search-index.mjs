@@ -2,6 +2,7 @@ import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import * as pagefind from "pagefind";
+import { prepareCorpus } from "../workers/ask-oversweep/retrieval.mjs";
 import { htmlFiles, indexable } from "./seo-files.mjs";
 
 // Writes search-index.json into the build output for the site search
@@ -74,18 +75,41 @@ export function pageEntries(html, url, { glossary = false } = {}) {
   return entries;
 }
 
-function addAskSections(corpus, html, entry) {
+export function addAskSections(corpus, html, entry) {
   const main = html.match(/<main\b[\s\S]*?<\/main>/)?.[0];
   if (!main || !entry) return;
   const clean = main.replace(/<(script|style|svg|nav)\b[^>]*>[\s\S]*?<\/\1>/gi, "");
   const headings = [...clean.matchAll(/<h([1-6])\b([^>]*)>([\s\S]*?)<\/h\1>/gi)]
     .filter(heading => attr(heading[2], "id") && !/\bfig-title\b/.test(attr(heading[2], "class") ?? ""));
-  const text = (fragment) => clip(textOf(fragment.replace(/>\s*</g, "> <")), 1250);
-  corpus[entry.u] = { title: entry.t, text: text(clean) };
+  const text = fragment => textOf(fragment.replace(/<table\b[\s\S]*?<\/table>/g, table => {
+    const head = table.match(/<thead\b[^>]*>([\s\S]*?)<\/thead>/)?.[1] ?? "";
+    const labels = [...head.matchAll(/<th\b[^>]*>([\s\S]*?)<\/th>/g)].map(cell => textOf(cell[1]));
+    return table.replace(/<tr\b[^>]*>([\s\S]*?)<\/tr>/g, (row, body) => {
+      if (!/<td\b/.test(body)) return row;
+      const cells = [...body.matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/g)].map(cell => cell[1]);
+      return labels.length === cells.length
+        ? "<p>" + cells.map((cell, i) => labels[i] + ": " + cell).join("; ") + ".</p>"
+        : row;
+    });
+  }).replace(/<span\b[^>]*class="[^"]*\bcell-(?:note|line)\b[^"]*"[^>]*>/g, " $&").replace(/>\s*</g, "> <"));
+  corpus[entry.u] = { title: entry.t, text: clip(text(clean), 3500) };
+  // Airfields without standalone articles still have canonical row anchors.
+  // Include the header labels so radio frequencies cannot be confused with navaids.
+  for (const table of clean.matchAll(/<table\b[\s\S]*?<\/table>/g)) {
+    const head = table[0].match(/<thead\b[^>]*>[\s\S]*?<\/thead>/)?.[0] ?? "";
+    for (const row of table[0].matchAll(/<tr\b[^>]*\bid="(af-[^"]+)"[^>]*>([\s\S]*?)<\/tr>/g)) {
+      const name = textOf((row[2].match(/<th\b[^>]*>([\s\S]*?)<\/th>/)?.[1] ?? "").replace(/<span class="cell-note">[\s\S]*?<\/span>/g, ""));
+      const target = row[2].match(/<th\b[^>]*>[\s\S]*?<a\b[^>]*href="([^"]+)"/)?.[1];
+      const record = target && /^\/encyclopedia\/locations\/[a-z0-9-]+\/$/.test(target) ? target : undefined;
+      if (name) corpus[entry.u + "#" + row[1]] = { title: name + " · " + entry.t, name, ...(record ? { record } : {}), text: entry.t + ". " + text("<table>" + head + row[0] + "</table>") };
+    }
+  }
+  if (entry.u === "/encyclopedia/terminology/") return;
   for (const [i, heading] of headings.entries()) {
     const id = attr(heading[2], "id");
     if (!id || skipHeading.test(id)) continue;
-    const passage = text(clean.slice(heading.index + heading[0].length, headings[i + 1]?.index));
+    const whole = text(clean.slice(heading.index + heading[0].length, headings[i + 1]?.index));
+    const passage = id === "map-airfields-title" ? clip(whole, 3500) : whole;
     if (passage) corpus[entry.u + "#" + encodeURIComponent(decode(id))] = {
       title: entry.t + " · " + textOf(heading[3]),
       text: passage,
@@ -120,13 +144,22 @@ export function searchIndex() {
           entries.push(...page);
           if (base === "/" && /^(manual|encyclopedia|training|experiences)\//.test(route + "/")) {
             addAskSections(corpus, html, page[0]);
+            // Keep complete glossary definitions, not the short search preview.
+            if (route === "encyclopedia/terminology") for (const term of html.matchAll(/<div class="term" id="([^"]+)"[^>]*>([\s\S]*?)<\/div>/g)) {
+              const title = textOf(term[2].match(/<span class="term-word">([\s\S]*?)<\/span>/)?.[1] ?? "");
+              const definitions = [...term[2].matchAll(/<p class="term-def">([\s\S]*?)<\/p>/g)].map(match => textOf(match[1]));
+              if (title && definitions.length) corpus[page[0].u + "#" + term[1]] = { title, text: definitions.join(" ") };
+            }
           }
           await fullText.addHTMLFile({ url: `${base}${route}/`, content: html });
         }
         await fullText.writeFiles({ outputPath: path.join(output, "pagefind") });
         await pagefind.close();
         await writeFile(path.join(output, "search-index.json"), JSON.stringify(entries));
-        if (base === "/") await writeFile(path.join(output, "ask-corpus.json"), JSON.stringify(corpus));
+        if (base === "/") {
+          await writeFile(path.join(output, "ask-corpus.txt"), JSON.stringify(corpus));
+          await writeFile(path.join(output, "ask-search.txt"), JSON.stringify(prepareCorpus(corpus)));
+        }
         logger.info(`search-index.json has ${entries.length} entries.`);
       },
     },
