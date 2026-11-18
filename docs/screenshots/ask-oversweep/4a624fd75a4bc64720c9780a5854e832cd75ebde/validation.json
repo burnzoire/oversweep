@@ -1,0 +1,96 @@
+{
+  "sourceRevision": "420b500ceb7a20f7d630196ca818de68bc63fe55",
+  "workerRevision": "4a624fd75a4bc64720c9780a5854e832cd75ebde",
+  "run": "https://github.com/burnzoire/oversweep/actions/runs/44247172621",
+  "checks": "success",
+  "docs": "success",
+  "live": "failure",
+  "noHints": "success",
+  "browser": "success",
+  "files": [
+    {
+      "name": "browser.json",
+      "path": "docs/screenshots/ask-oversweep/4a624fd75a4bc64720c9780a5854e832cd75ebde/browser.json",
+      "sha": "0fc153317c03b63437a4b536d16361b80d4a8c82",
+      "bytes": 8800
+    },
+    {
+      "name": "browser.log",
+      "path": "docs/screenshots/ask-oversweep/4a624fd75a4bc64720c9780a5854e832cd75ebde/browser.log",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "bytes": 0
+    },
+    {
+      "name": "check.log",
+      "path": "docs/screenshots/ask-oversweep/4a624fd75a4bc64720c9780a5854e832cd75ebde/check.log",
+      "sha": "fa94e7f32b43b3f6d3391aedc369970b430d44a6",
+      "bytes": 191649
+    },
+    {
+      "name": "closed.png",
+      "path": "docs/screenshots/ask-oversweep/4a624fd75a4bc64720c9780a5854e832cd75ebde/closed.png",
+      "sha": "1a294e6afa2b24c5f6f7329dd7e67a7264f03075",
+      "bytes": 64286
+    },
+    {
+      "name": "docs.log",
+      "path": "docs/screenshots/ask-oversweep/4a624fd75a4bc64720c9780a5854e832cd75ebde/docs.log",
+      "sha": "8e5b6a8ffcc54275d3dd008fad0ff383a13d29dc",
+      "bytes": 68
+    },
+    {
+      "name": "live.json",
+      "path": "docs/screenshots/ask-oversweep/4a624fd75a4bc64720c9780a5854e832cd75ebde/live.json",
+      "sha": "1872cbbbb246c737d14a6c0b07a9bd3ebf8b3442",
+      "bytes": 35073
+    },
+    {
+      "name": "live.log",
+      "path": "docs/screenshots/ask-oversweep/4a624fd75a4bc64720c9780a5854e832cd75ebde/live.log",
+      "sha": "860b06128a2c69a00d387debf5771a0a9cfbc619",
+      "bytes": 21878
+    },
+    {
+      "name": "mobile.png",
+      "path": "docs/screenshots/ask-oversweep/4a624fd75a4bc64720c9780a5854e832cd75ebde/mobile.png",
+      "sha": "0088983b7720ca1885896e58b026d62a24b590be",
+      "bytes": 40635
+    },
+    {
+      "name": "no-hints.json",
+      "path": "docs/screenshots/ask-oversweep/4a624fd75a4bc64720c9780a5854e832cd75ebde/no-hints.json",
+      "sha": "f4cdc5cc94caf0542c536e80d3530e505ea7b036",
+      "bytes": 7974
+    },
+    {
+      "name": "no-hints.log",
+      "path": "docs/screenshots/ask-oversweep/4a624fd75a4bc64720c9780a5854e832cd75ebde/no-hints.log",
+      "sha": "15e1b5d8e628a500227291f6588c070be7a5c6e7",
+      "bytes": 4989
+    },
+    {
+      "name": "orientation.png",
+      "path": "docs/screenshots/ask-oversweep/4a624fd75a4bc64720c9780a5854e832cd75ebde/orientation.png",
+      "sha": "4acaab05b1c38a6c8fbdb806e8f0f0615c9cc3a0",
+      "bytes": 61206
+    },
+    {
+      "name": "ramat.png",
+      "path": "docs/screenshots/ask-oversweep/4a624fd75a4bc64720c9780a5854e832cd75ebde/ramat.png",
+      "sha": "8adbf48930544df711cf9843ef5f4c5e2d044e2a",
+      "bytes": 70176
+    },
+    {
+      "name": "sochi.png",
+      "path": "docs/screenshots/ask-oversweep/4a624fd75a4bc64720c9780a5854e832cd75ebde/sochi.png",
+      "sha": "ec30a7c6ffa71c8e06197ad95c5f04313523cb71",
+      "bytes": 54764
+    },
+    {
+      "name": "tomcat.png",
+      "path": "docs/screenshots/ask-oversweep/4a624fd75a4bc64720c9780a5854e832cd75ebde/tomcat.png",
+      "sha": "05584f24d8195993c33b9058e03cc00679ea5f2e",
+      "bytes": 39253
+    }
+  ]
+}

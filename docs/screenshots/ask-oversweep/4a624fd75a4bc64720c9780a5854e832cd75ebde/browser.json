@@ -1,0 +1,253 @@
+{
+  "sourceRevision": "420b500ceb7a20f7d630196ca818de68bc63fe55",
+  "workerRevision": "4a624fd75a4bc64720c9780a5854e832cd75ebde",
+  "frontend": "Branch build served locally under allowed origin",
+  "inference": "Live Cloudflare Worker; no inference interception",
+  "browser": "157.0.8103.50",
+  "evidence": [
+    {
+      "question": "What freq is Sochi tower?",
+      "status": 200,
+      "revision": "4a624fd75a4bc64720c9780a5854e832cd75ebde",
+      "request": {
+        "question": "What freq is Sochi tower?",
+        "history": [],
+        "topic": [],
+        "ids": [
+          "/encyclopedia/locations/sochi/",
+          "/encyclopedia/locations/sochi/#history",
+          "/encyclopedia/locations/sochi/#role-title"
+        ]
+      },
+      "reply": {
+        "answer": "In DCS: Caucasus, the Sochi-Adler tower frequencies are 127.0 MHz VHF, 256.0 MHz UHF, 39.6 MHz low VHF, and 4.05 MHz HF.",
+        "ids": [
+          "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+            "title": "Sochi-Adler · DCS: Caucasus"
+          }
+        ]
+      }
+    },
+    {
+      "question": "What about its ILS?",
+      "status": 200,
+      "revision": "4a624fd75a4bc64720c9780a5854e832cd75ebde",
+      "request": {
+        "question": "What about its ILS?",
+        "history": [
+          {
+            "role": "user",
+            "content": "What freq is Sochi tower?"
+          },
+          {
+            "role": "assistant",
+            "content": "In DCS: Caucasus, the Sochi-Adler tower frequencies are 127.0 MHz VHF, 256.0 MHz UHF, 39.6 MHz low VHF, and 4.05 MHz HF."
+          }
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "ids": [
+          "/manual/instrument-flight/ils-approach/",
+          "/manual/instrument-flight/ils-approach/#check",
+          "/manual/instrument-flight/ils-approach/#decision"
+        ]
+      },
+      "reply": {
+        "answer": "In DCS: Caucasus, there is an ILS on runway 06 at 111.1 MHz (ISO).",
+        "ids": [
+          "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+            "title": "Sochi-Adler · DCS: Caucasus"
+          }
+        ]
+      }
+    },
+    {
+      "question": "What engines does the F-14B have?",
+      "status": 200,
+      "revision": "4a624fd75a4bc64720c9780a5854e832cd75ebde",
+      "request": {
+        "question": "What engines does the F-14B have?",
+        "history": [],
+        "topic": [],
+        "ids": [
+          "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-14/#irans-tomcats"
+        ]
+      },
+      "reply": {
+        "answer": "The F-14B is powered by two General Electric F110-GE-400 engines, each providing 27,000 lb of thrust.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          },
+          {
+            "id": "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+            "title": "F-14 Tomcat · Swing wings and Phoenix missiles"
+          }
+        ]
+      }
+    },
+    {
+      "question": "What is the TACAN for Ramat David?",
+      "status": 200,
+      "revision": "4a624fd75a4bc64720c9780a5854e832cd75ebde",
+      "request": {
+        "question": "What is the TACAN for Ramat David?",
+        "history": [],
+        "topic": [],
+        "ids": [
+          "/encyclopedia/locations/ramat-david/",
+          "/encyclopedia/locations/ramat-david/#history",
+          "/encyclopedia/locations/ramat-david/#role-today"
+        ]
+      },
+      "reply": {
+        "answer": "In DCS: Sinai, the TACAN is VORTAC 84X, 113.7 MHz (RMD); in DCS: Syria, the TACAN is VORTAC 84X, 113.7 MHz (RMD).",
+        "ids": [
+          "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+          "/encyclopedia/locations/dcs-syria/#af-ramat-david"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+            "title": "Ramat David · DCS: Sinai"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-ramat-david",
+            "title": "Ramat David · DCS: Syria"
+          }
+        ]
+      }
+    },
+    {
+      "question": "What runways are available?",
+      "status": 200,
+      "revision": "4a624fd75a4bc64720c9780a5854e832cd75ebde",
+      "request": {
+        "question": "What runways are available?",
+        "history": [
+          {
+            "role": "user",
+            "content": "What is the TACAN for Ramat David?"
+          },
+          {
+            "role": "assistant",
+            "content": "In DCS: Sinai, the TACAN is VORTAC 84X, 113.7 MHz (RMD); in DCS: Syria, the TACAN is VORTAC 84X, 113.7 MHz (RMD)."
+          }
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "ids": [
+          "/encyclopedia/locations/anapa/",
+          "/encyclopedia/locations/anapa/#facilities-title",
+          "/encyclopedia/locations/beslan/"
+        ]
+      },
+      "reply": {
+        "answer": "In DCS: Sinai, the available runways are 09 (082°) / 27 (262°), 11 (103°) / 29 (283°), and 15 (140°) / 33 (320°). In DCS: Syria, the available runways are 09 (082°) / 27 (262°), 11 (103°) / 29 (283°), and 33 (320°) / 15 (140°).",
+        "ids": [
+          "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+          "/encyclopedia/locations/dcs-syria/#af-ramat-david"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+            "title": "Ramat David · DCS: Sinai"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-ramat-david",
+            "title": "Ramat David · DCS: Syria"
+          }
+        ]
+      }
+    },
+    {
+      "question": "Which one runs east-west?",
+      "status": 200,
+      "revision": "4a624fd75a4bc64720c9780a5854e832cd75ebde",
+      "request": {
+        "question": "Which one runs east-west?",
+        "history": [
+          {
+            "role": "user",
+            "content": "What is the TACAN for Ramat David?"
+          },
+          {
+            "role": "assistant",
+            "content": "In DCS: Sinai, the TACAN is VORTAC 84X, 113.7 MHz (RMD); in DCS: Syria, the TACAN is VORTAC 84X, 113.7 MHz (RMD)."
+          },
+          {
+            "role": "user",
+            "content": "What runways are available?"
+          },
+          {
+            "role": "assistant",
+            "content": "In DCS: Sinai, the available runways are 09 (082°) / 27 (262°), 11 (103°) / 29 (283°), and 15 (140°) / 33 (320°). In DCS: Syria, the available runways are 09 (082°) / 27 (262°), 11 (103°) / 29 (283°), and 33 (320°) / 15 (140°)."
+          }
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "ids": [
+          "/encyclopedia/locations/bandar-lengeh/#the-airfield",
+          "/encyclopedia/locations/batumi/#role-today",
+          "/encyclopedia/locations/batumi/#the-airfield"
+        ]
+      },
+      "reply": {
+        "answer": "None of the available runways at Ramat David Airbase run east-west; the runways are oriented approximately east-west (09/27 at 082°/262°), northeast-southwest (11/29 at 103°/283°), and southeast-northwest (15/33 at 140°/320°).",
+        "ids": [
+          "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+          "/encyclopedia/locations/dcs-syria/#af-ramat-david"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+            "title": "Ramat David · DCS: Sinai"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-ramat-david",
+            "title": "Ramat David · DCS: Syria"
+          }
+        ]
+      }
+    }
+  ],
+  "findings": [
+    "Overly literal east-west interpretation; question asks which runway is closest to east-west."
+  ]
+}
