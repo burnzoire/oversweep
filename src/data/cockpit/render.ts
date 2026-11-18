@@ -342,10 +342,11 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         return [{ kind: 'control', id: p.control, box: [x0, y0, Math.max(...xs) - x0, Math.max(...ys) - y0] }];
       }
       case 'slot-lever': {
-        // The slot and the lever above it; turned levers get the turned box's bounds.
-        const { root, length, disc } = SLOT_LEVER, w = p.travel + Math.max(root, disc), h = length + 2;
+        // The slot and the lever's knob below it (seen from above); turned levers get the turned box's bounds.
+        const { root, disc, blade, neck, thick } = SLOT_LEVER, w = p.travel + Math.max(root, disc);
+        const top = -blade / 2 - 2, bottom = blade / 2 + neck[2] + thick + 2, h = bottom - top, mid = (top + bottom) / 2;
         const a = ((p.rotate ?? 0) * Math.PI) / 180, c = Math.abs(Math.cos(a)), s = Math.abs(Math.sin(a));
-        const cx = x + (length / 2) * Math.sin(a), cy = y - (length / 2) * Math.cos(a);
+        const cx = x - mid * Math.sin(a), cy = y + mid * Math.cos(a);
         const bw = w * c + h * s, bh = w * s + h * c;
         return [{ kind: 'control', id: p.control, box: [cx - bw / 2, cy - bh / 2, bw, bh] }];
       }

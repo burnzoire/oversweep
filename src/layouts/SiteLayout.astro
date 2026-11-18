@@ -226,10 +226,8 @@ const subjects = manualSubjects.map((subject) => ({ ...subject, count: subjectEn
                 </ul>
               </nav>
             </details>
-            {activeSubject && (
-              // Phones and tablets: once a subject is chosen the menu starts closed, so the page comes first.
-              <script is:inline set:html={"(function(){var d=document.currentScript.previousElementSibling;if(d&&matchMedia('(max-width: 63.99rem)').matches)d.open=false;})();"} />
-            )}
+            {/* Phones and tablets: the menu always starts closed, so the page comes first. */}
+            <script is:inline set:html={"(function(){var d=document.currentScript.previousElementSibling;if(d&&matchMedia('(max-width: 63.99rem)').matches)d.open=false;})();"} />
           </aside>
         )}
         <article class="page-content">
