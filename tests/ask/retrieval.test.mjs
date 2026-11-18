@@ -102,3 +102,17 @@ test('build-prepared metadata round-trips without changing retrieval',()=>{
    assert.deepEqual(r(q,{topic:[ramat]}),retrieve(q,{topic:[ramat]}));
  }
 });
+
+
+test('multiple failed dependent questions preserve the latest explicit subject',()=>{
+ const result=retrieve('What runways are available?',{topic:[sochi],history:[{role:'user',content:'Sochi tower?'},{role:'assistant',content:'127.0'},{role:'user',content:'What is the tower frequency for Ramat David?'},{role:'user',content:'Does it have a TACAN?'}]});
+ assert.equal(result.subject,'Ramat David Airbase');
+});
+
+test('explicit simulator scope prefers the matching row over a standalone article',()=>{
+ const id='/encyclopedia/locations/dcs-sinai/#af-ramat-david';
+ const r=createRetriever({...corpus,'/encyclopedia/locations/dcs-sinai/':{title:'DCS: Sinai',text:'Theatre.'},[id]:{title:'Ramat David · DCS: Sinai',name:'Ramat David',text:'Low VHF tower 38.4'}});
+ const result=r('What is the low VHF tower frequency for Ramat David in Sinai?');
+ assert.deepEqual(result.topic,[id]);
+ assert.ok(result.passages.some(p=>p.text.includes('38.4')));
+});

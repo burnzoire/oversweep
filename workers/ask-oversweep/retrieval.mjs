@@ -10,6 +10,15 @@ const glossary = id => id.startsWith('/encyclopedia/terminology/#');
 const entity = id => /\/encyclopedia\/(aircraft|locations|ordnance|radar-sensors)\//.test(id);
 const root = id => id.split('#')[0];
 const leaf = id => glossary(id) || /#af-/.test(id);
+function intent(question) {
+  const query = [...new Set(terms(question))];
+  const referential = /\b(it|its|they|their|them|that|those|this|same|which one)\b/i.test(question);
+  const definition = /^(?:what(?:’s|'s| is| are) (?!the |its |their |that |this )|define |explain |tell me about )/i.test(question);
+  const independent = !referential && (definition || /^how (?:do|does)\b/i.test(question));
+  const followUp = !independent && (referential || /^(?:and|what about|how about|also)\b/i.test(question) || query.length <= 2 && !/\b(?:for|at|in)\s+\S/i.test(question));
+  return {query, referential, definition, independent, followUp};
+}
+
 export function prepareCorpus(corpus) {
   const rows = Object.entries(corpus).map(([id, value]) => {
     const tokens = terms(value.title + ' ' + value.text);
@@ -58,7 +67,8 @@ export function createRetriever(corpus, prepared = prepareCorpus(corpus)) {
       }));
       return { row, score, evidence };
     }).filter(x => x.score > 0).sort((a, b) => b.score - a.score || Number(leaf(a.row.id)) - Number(leaf(b.row.id)) || a.row.id.localeCompare(b.row.id));
-    if (matches.some(item => /#af-/.test(item.row.id))) matches = matches.filter(item => !scopes.has(item.row.id));
+    const scopedNames = new Set(matches.filter(item => /#af-/.test(item.row.id) && scopes.has(root(item.row.id))).map(item => item.evidence));
+    if (scopedNames.size) matches = matches.filter(item => !scopes.has(item.row.id) && (!scopedNames.has(item.evidence) || /#af-/.test(item.row.id)));
     if (!matches.length) return [];
     const first = matches[0];
     const seen = new Map();
@@ -70,22 +80,20 @@ export function createRetriever(corpus, prepared = prepareCorpus(corpus)) {
     }).slice(0, 3).map(item => item.row);
   }
   return function retrieve(question, { history = [], previous = '', ids = [], topic } = {}) {
-    const query = [...new Set(terms(question))];
-    const referential = /\b(it|its|they|their|them|that|those|this|same|which one)\b/i.test(question);
-    const definition = /^(?:what(?:’s|'s| is| are) (?!the |its |their |that |this )|define |explain |tell me about )/i.test(question);
-    const independent = !referential && (definition || /^how (?:do|does)\b/i.test(question));
-    const followUp = !independent && (referential || /^(?:and|what about|how about|also)\b/i.test(question) || query.length <= 2 && !/\b(?:for|at|in)\s+\S/i.test(question));
+    const { query, referential, definition, independent, followUp } = intent(question);
     const priorQuestions = history.filter(turn => turn.role === 'user').map(turn => turn.content);
     let prior = topic === undefined
       ? [...(previous ? [previous] : []), ...priorQuestions].reverse().map(named).find(matches => matches.some(row => entity(row.id))) ?? []
       : topic.map(id => byId.get(id)).filter(Boolean);
-    // A failed request leaves an unpaired user turn. Its explicit new subject
-    // takes precedence over topic IDs from the last successful reply.
-    const unanswered = history.at(-1);
-    if (unanswered?.role === 'user') {
-      const newer = named(unanswered.content);
+    // Replay every unanswered turn since the last assistant reply. A dependent
+    // failed follow-up must not undo an earlier explicit subject switch.
+    const lastAssistant = history.findLastIndex(turn => turn.role === 'assistant');
+    for (const unanswered of history.slice(lastAssistant + 1)) {
+      const earlierIntent = intent(unanswered.content);
+      let newer = named(unanswered.content);
+      if (prior.length && !earlierIntent.independent && newer.every(row => glossary(row.id))) newer = [];
       if (newer.length) prior = newer;
-      else if (terms(unanswered.content).length > 2 && !/\b(it|its|they|their|that|this)\b/i.test(unanswered.content)) prior = [];
+      else if (!earlierIntent.followUp) prior = [];
     }
     let subjects = named(question);
     if (prior.length && !independent && subjects.every(row => glossary(row.id))) subjects = [];

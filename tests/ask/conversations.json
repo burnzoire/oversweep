@@ -328,6 +328,15 @@
           "118.3",
           "250.45"
         ]
+      },
+      {
+        "question": "What is the low VHF tower frequency for Ramat David in Sinai?",
+        "all": [
+          "38.4"
+        ],
+        "none": [
+          "118.6"
+        ]
       }
     ]
   }
