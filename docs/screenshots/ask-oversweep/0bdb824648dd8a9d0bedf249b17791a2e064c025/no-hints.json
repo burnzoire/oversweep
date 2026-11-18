@@ -1,0 +1,123 @@
+{
+  "endpoint": "https://ask-oversweep.burnzoire.workers.dev/ask",
+  "at": "2026-11-18T05:47:08.747Z",
+  "results": [
+    {
+      "conversation": "tomcat",
+      "question": "What engines does the F-14B have?",
+      "requestedIds": [],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 206
+    },
+    {
+      "conversation": "tomcat",
+      "question": "And the A model?",
+      "requestedIds": [],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 769
+    },
+    {
+      "conversation": "tomcat",
+      "question": "How many crew?",
+      "requestedIds": [],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 220
+    },
+    {
+      "conversation": "sochi",
+      "question": "What freq is Sochi tower?",
+      "requestedIds": [],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 243
+    },
+    {
+      "conversation": "sochi",
+      "question": "Does it have a TACAN?",
+      "requestedIds": [],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 248
+    },
+    {
+      "conversation": "sochi",
+      "question": "What about ILS?",
+      "requestedIds": [],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 233
+    },
+    {
+      "conversation": "sochi",
+      "question": "What runways are available?",
+      "requestedIds": [],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 159
+    },
+    {
+      "conversation": "table-airfield",
+      "question": "What is the tower frequency for Kuweires?",
+      "requestedIds": [],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 204
+    },
+    {
+      "conversation": "table-airfield",
+      "question": "What runways are available?",
+      "requestedIds": [],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 194
+    }
+  ]
+}

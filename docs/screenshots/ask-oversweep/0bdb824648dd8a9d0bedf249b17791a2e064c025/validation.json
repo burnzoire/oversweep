@@ -1,0 +1,54 @@
+{
+  "sourceRevision": "c8ef1a50e82ca6c6306a9f560b57e26f6ceb499a",
+  "workerRevision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+  "run": "https://github.com/burnzoire/oversweep/actions/runs/44246522109",
+  "checks": "success",
+  "docs": "success",
+  "live": "failure",
+  "noHints": "failure",
+  "browser": "failure",
+  "files": [
+    {
+      "name": "browser.log",
+      "path": "docs/screenshots/ask-oversweep/0bdb824648dd8a9d0bedf249b17791a2e064c025/browser.log",
+      "sha": "51e0329046e4c2e1e897a40396110545696f44a8",
+      "bytes": 479
+    },
+    {
+      "name": "check.log",
+      "path": "docs/screenshots/ask-oversweep/0bdb824648dd8a9d0bedf249b17791a2e064c025/check.log",
+      "sha": "56b174a5eeaca1fa3f1c062d4758c2ce0dd16878",
+      "bytes": 191662
+    },
+    {
+      "name": "docs.log",
+      "path": "docs/screenshots/ask-oversweep/0bdb824648dd8a9d0bedf249b17791a2e064c025/docs.log",
+      "sha": "8e5b6a8ffcc54275d3dd008fad0ff383a13d29dc",
+      "bytes": 68
+    },
+    {
+      "name": "live.json",
+      "path": "docs/screenshots/ask-oversweep/0bdb824648dd8a9d0bedf249b17791a2e064c025/live.json",
+      "sha": "070ad22379f5bfaeab5f9b6f005e90e4412d595f",
+      "bytes": 13205
+    },
+    {
+      "name": "live.log",
+      "path": "docs/screenshots/ask-oversweep/0bdb824648dd8a9d0bedf249b17791a2e064c025/live.log",
+      "sha": "92e922f0272be28d4b0c9a8167e90f0935361885",
+      "bytes": 7018
+    },
+    {
+      "name": "no-hints.json",
+      "path": "docs/screenshots/ask-oversweep/0bdb824648dd8a9d0bedf249b17791a2e064c025/no-hints.json",
+      "sha": "f08718331cd94dd85d1c79925ce766f81d306299",
+      "bytes": 3063
+    },
+    {
+      "name": "no-hints.log",
+      "path": "docs/screenshots/ask-oversweep/0bdb824648dd8a9d0bedf249b17791a2e064c025/no-hints.log",
+      "sha": "415c89e30db838caa72b06c8ecd0d919d8394f3f",
+      "bytes": 1807
+    }
+  ]
+}

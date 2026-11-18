@@ -1,0 +1,10 @@
+{"conversation":"tomcat","question":"What engines does the F-14B have?","reply":{"code":"unavailable","stage":"inference"},"ms":206,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"tomcat","question":"And the A model?","reply":{"code":"unavailable","stage":"inference"},"ms":769,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"tomcat","question":"How many crew?","reply":{"code":"unavailable","stage":"inference"},"ms":220,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"sochi","question":"What freq is Sochi tower?","reply":{"code":"unavailable","stage":"inference"},"ms":243,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"sochi","question":"Does it have a TACAN?","reply":{"code":"unavailable","stage":"inference"},"ms":248,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"sochi","question":"What about ILS?","reply":{"code":"unavailable","stage":"inference"},"ms":233,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"sochi","question":"What runways are available?","reply":{"code":"unavailable","stage":"inference"},"ms":159,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"table-airfield","question":"What is the tower frequency for Kuweires?","reply":{"code":"unavailable","stage":"inference"},"ms":204,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"table-airfield","question":"What runways are available?","reply":{"code":"unavailable","stage":"inference"},"ms":194,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+0/9 passed; inspect replies as well as keyword checks.

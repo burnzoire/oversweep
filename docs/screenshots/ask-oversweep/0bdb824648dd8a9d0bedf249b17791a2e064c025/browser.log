@@ -1,0 +1,9 @@
+file:///home/runner/work/oversweep/oversweep/scripts/test-ask-browser-live.mjs:9
+if(head.headers.get('x-ask-revision')!==process.env.ASK_REVISION)throw Error('Wrong Worker revision');
+                                                                       ^
+
+Error: Wrong Worker revision
+    at file:///home/runner/work/oversweep/oversweep/scripts/test-ask-browser-live.mjs:9:72
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+
+Node.js v22.23.4

@@ -1,0 +1,35 @@
+{"conversation":"tomcat","question":"What engines does the F-14B have?","reply":{"code":"unavailable","stage":"inference"},"ms":272,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"tomcat","question":"And the A model?","reply":{"code":"unavailable","stage":"inference"},"ms":620,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"tomcat","question":"How many crew?","reply":{"code":"unavailable","stage":"inference"},"ms":207,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"sochi","question":"What freq is Sochi tower?","reply":{"code":"unavailable","stage":"inference"},"ms":183,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"sochi","question":"Does it have a TACAN?","reply":{"code":"unavailable","stage":"inference"},"ms":216,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"sochi","question":"What about ILS?","reply":{"code":"unavailable","stage":"inference"},"ms":176,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"sochi","question":"What runways are available?","reply":{"code":"unavailable","stage":"inference"},"ms":178,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"ramat","question":"What is the TACAN for Ramat David?","reply":{"code":"unavailable","stage":"inference"},"ms":167,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"ramat","question":"What runways are available?","reply":{"code":"unavailable","stage":"inference"},"ms":184,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"ramat","question":"Which one runs east-west?","reply":{"code":"unavailable","stage":"inference"},"ms":186,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"ramat","question":"What is the tower freq for Sochi?","reply":{"code":"unavailable","stage":"inference"},"ms":182,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"ramat","question":"What about its ILS?","reply":{"code":"unavailable","stage":"inference"},"ms":188,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"concepts","question":"What is angle of attack?","reply":{"code":"unavailable","stage":"inference"},"ms":177,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"concepts","question":"What is a VORTAC?","reply":{"code":"unavailable","stage":"inference"},"ms":286,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"tomcat-alias","question":"What engines does the Tomcat have?","reply":{"code":"unavailable","stage":"inference"},"ms":179,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"unsupported","question":"What is the Wi-Fi password at Sochi airport?","reply":{"code":"unavailable","stage":"inference"},"ms":171,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"topic-switch","question":"What is the tower frequency for Sochi?","reply":{"code":"unavailable","stage":"inference"},"ms":179,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"topic-switch","question":"How do flaps affect lift?","reply":{"code":"unavailable","stage":"inference"},"ms":169,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"topic-switch","question":"Tell me about radar","reply":{"code":"unavailable","stage":"inference"},"ms":170,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"comparison","question":"What tower frequencies do Sochi and Kutaisi use?","reply":{"code":"unavailable","stage":"inference"},"ms":75,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"comparison","question":"Compare the engines of the F-14 and F-16.","reply":{"code":"unavailable","stage":"inference"},"ms":190,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"long-context","question":"What is the VORTAC for Ramat David?","reply":{"code":"unavailable","stage":"inference"},"ms":88,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"long-context","question":"What runways are available?","reply":{"code":"unavailable","stage":"inference"},"ms":233,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"long-context","question":"Which one runs east-west?","reply":{"code":"unavailable","stage":"inference"},"ms":166,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"long-context","question":"What about tower frequency?","reply":{"code":"unavailable","stage":"inference"},"ms":188,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"long-context","question":"And the VORTAC channel again?","reply":{"code":"unavailable","stage":"inference"},"ms":181,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"table-airfield","question":"What is the tower frequency for Kuweires?","reply":{"code":"unavailable","stage":"inference"},"ms":160,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"table-airfield","question":"What runways are available?","reply":{"code":"unavailable","stage":"inference"},"ms":158,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"comparison-follow-up","question":"What engines does the F-14B have?","reply":{"code":"unavailable","stage":"inference"},"ms":62,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"comparison-follow-up","question":"How does this differ from the F-16?","reply":{"code":"unavailable","stage":"inference"},"ms":173,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"theatre-scope","question":"What is the tower frequency for Hatzerim in Syria?","reply":{"code":"unavailable","stage":"inference"},"ms":160,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"theatre-scope","question":"What is the tower frequency for Biggin Hill in The Channel?","reply":{"code":"unavailable","stage":"inference"},"ms":317,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"theatre-scope","question":"What is the tower frequency for King Hussein Air College?","reply":{"code":"unavailable","stage":"inference"},"ms":356,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+{"conversation":"theatre-scope","question":"What is the low VHF tower frequency for Ramat David in Sinai?","reply":{"code":"unavailable","stage":"inference"},"ms":168,"passed":false,"revision":"0bdb824648dd8a9d0bedf249b17791a2e064c025"}
+0/34 passed; inspect replies as well as keyword checks.
