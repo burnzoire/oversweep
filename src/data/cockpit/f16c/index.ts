@@ -20,6 +20,7 @@ import { fuelFlow } from './fuel-flow.ts';
 import { epu } from './epu.ts';
 import { defog } from './defog.ts';
 import { sidewallControls } from './sidewall-controls.ts';
+import { test } from './test.ts';
 
 /**
  * DCS F-16C cockpit catalogue: areas and panels in the order the official guide
@@ -91,7 +92,7 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'uhf', title: 'UHF backup panel', page: 259, spec: uhf },
         { id: 'flt-control', title: 'FLT CONTROL panel', page: 71 },
         { id: 'manual-trim', title: 'MANUAL TRIM panel', page: 72 },
-        { id: 'test', title: 'TEST panel', page: 72 },
+        { id: 'test', title: 'TEST panel', page: 72, spec: test },
         { id: 'canopy-jettison', title: 'Canopy jettison T-handle', page: 74 },
         { id: 'defog', title: 'DEFOG lever', page: 74, spec: defog },
         { id: 'anti-g-test', title: 'ANTI-G TEST button', page: 62 },

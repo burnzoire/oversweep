@@ -509,6 +509,8 @@ export const PUSHES = {
   /** Medium round button (UHF backup TEST DISPLAY and STATUS). */
   'push-round-medium': { r: 4.1, cap: 3.2 },
   'push-round-large': { r: 6.6, cap: 4.5 },
+  /** Large flat cap in a thin rim (F-16C TEST panel FIRE & OHEAT DETECT, MAL & IND LTS). */
+  'push-round-flat': { r: 6.3, cap: 5.6 },
   /** Gear panel DN LOCK REL. */
   'push-round-xl': { r: 7.8, cap: 6.0 },
   /** Gear panel EMER STORES JETTISON: a large flat cap with a circle-and-square mark at its centre. */
