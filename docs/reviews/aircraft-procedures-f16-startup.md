@@ -5,7 +5,7 @@
 - State the exact control/action, prerequisites, expected indication, threshold and any relevant exception.
 - Draw **original schematic/NATOPS-inspired line art**, not realistic cockpit facsimiles. Use monochrome except for meaningful operational cues. Artwork should be as simple as the instructional objective permits.
 - Separate procedural facts from the SVG renderer. Animate only signals whose behaviour is evidenced. Show full textual steps without JavaScript, respect reduced motion and never imply the animation is live DCS telemetry.
-- Source facts to specific sections of official simulator documentation. Community guides (including Chuck's Guides) can prompt questions and be linked, but do not copy their wording, structure, diagrams or imagery.
+- Source facts to specific sections of official simulator documentation. Do not cite or link community guides (such as Chuck's Guides) on the site, and do not copy their wording, structure, diagrams or imagery.
 - Do not include screenshots or extracted simulator assets without resolved rights.
 
 ## Status and omissions
@@ -75,8 +75,7 @@ The prior side-by-side RPM/FTIT cartoon has been replaced with the correct four-
 
 ## Pre-start controls follow-up
 
-The closed-canopy exercise follows Chuck’s *DCS F-16C Viper Guide*, Part 4,
-pp. 88 and 90 in the attached edition. Eagle Dynamics’ 23 March 2026 guide
+The pre-start control steps are sourced only to Eagle Dynamics. Its 23 March 2026 guide
 covers the landing gear panel (pp. 54–55), right eyebrow (p. 47), fuel panel
 (p. 66), canopy switch and handle (p. 72), and air conditioning panel (p. 75).
 Its before-start checklist leaves canopy position to the pilot (p. 134).
