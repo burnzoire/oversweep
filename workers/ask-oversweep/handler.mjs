@@ -7,6 +7,12 @@ const errorCode = error => {
 };
 const insufficient = "I couldn’t find enough on Oversweep to answer that.";
 
+const validTurn = turn => turn && ["user", "assistant"].includes(turn.role) &&
+  typeof turn.content === "string" && turn.content.length <= 1200;
+
+const validSourceIds = (ids, limit) => Array.isArray(ids) && ids.length <= limit &&
+  ids.every(id => typeof id === "string" && id.length <= 500 && /^\/(?![\/\\])[^\s\\]+$/.test(id));
+
 export function createHandler(corpus, prepared) {
   const retrieve = corpus ? createRetriever(corpus, prepared) : undefined;
   return async function handle(request, env) {
@@ -21,7 +27,9 @@ export function createHandler(corpus, prepared) {
     if (/^[a-f0-9]{40}$/.test(env.ASK_REVISION ?? "")) headers["X-Ask-Revision"] = env.ASK_REVISION;
     const json = (body, status = 200) => Response.json(body, { status, headers });
     if (origin && origin !== site) return json({}, 403);
-    if (new URL(request.url).pathname !== "/ask") return json({}, 404);
+    const path = new URL(request.url).pathname;
+    if (path !== "/ask" && path !== "/ask/report") return json({}, 404);
+    if (path === "/ask/report" && origin !== site) return json({}, 403);
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers });
     if (request.method !== "POST" || !request.body) return json({}, 405);
 
@@ -45,18 +53,41 @@ export function createHandler(corpus, prepared) {
     } catch {
       return json({}, 400);
     }
+    if (path === "/ask/report") {
+      const { question, history, answer, stage, sources, topic, revision } = input ?? {};
+      if (typeof question !== "string" || !question.trim() || question.length > 300 ||
+        !Array.isArray(history) || history.length > 2 || !history.every(validTurn) ||
+        typeof answer !== "string" || !answer.trim() || answer.length > 1200 ||
+        !["answered", "no_passages", "no_supported_answer", "response_sources"].includes(stage) ||
+        !validSourceIds(sources, 6) || !validSourceIds(topic, 3) ||
+        (revision !== undefined && (typeof revision !== "string" || !/^[a-f0-9]{40}$/.test(revision)))) {
+        return json({}, 400);
+      }
+      const key = request.headers.get("CF-Connecting-IP") ?? "unknown";
+      const { success } = await env.ASK_REPORT_LIMIT.limit({ key });
+      if (!success) return json({}, 429);
+      console.info("ask_oversweep_report", {
+        question, history: history.map(({ role, content }) => ({ role, content })),
+        answer, stage, sources: [...new Set(sources)],
+        topic, revision,
+      });
+      return new Response(null, { status: 204, headers });
+    }
     const { question, previous, history = [], topic, ids } = input ?? {};
     if (typeof question !== "string" || !question.trim() || question.length > 300 ||
       (previous !== undefined && (typeof previous !== "string" || previous.length > 300)) ||
-      !Array.isArray(history) || history.length > 6 || history.some(turn => !turn || !["user", "assistant"].includes(turn.role) || typeof turn.content !== "string" || turn.content.length > 1200) ||
+      !Array.isArray(history) || history.length > 6 || !history.every(validTurn) ||
       (topic !== undefined && (!Array.isArray(topic) || topic.length > 3 || topic.some(id => typeof id !== "string" || id.length > 500))) ||
       !Array.isArray(ids) || ids.length > 6 || ids.some(id => typeof id !== "string")) return json({}, 400);
 
     if (!corpus) return json({ code: "unavailable" }, 502);
     const context = retrieve(question, { previous, history, ids, topic });
-    const answerJson = body => json({ ...body, topic: context.topic, references: (body.ids ?? []).map(id => ({ id, title: corpus[id].title })) });
     const sources = context.passages.map(passage => passage.id);
-    if (!sources.length) return answerJson({ answer: insufficient, ids: [] });
+    const answerJson = body => json({
+      ...body, topic: context.topic, retrieved: sources, revision: headers["X-Ask-Revision"],
+      references: body.ids.map(id => ({ id, title: corpus[id].title })),
+    });
+    if (!sources.length) return answerJson({ answer: insufficient, ids: [], stage: "no_passages" });
     const passages = context.passages.map(({ id, ...passage }, index) => ({ source: index + 1, ...passage }));
     const model = env.ASK_MODEL || "@cf/google/gemma-4-26b-a4b-it";
     const ray = request.headers.get("cf-ray");
