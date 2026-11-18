@@ -86,12 +86,12 @@ test("temporary capacity retries once, rejects queues, and preserves daily-quota
 });
 
 
-test("structured output requests bounded answers and unique citations", async()=> {
+test("structured output uses compatible schema with completion headroom", async()=> {
  const response=await handle(request(),{AI:{async run(_model,options){
  const schema=options.response_format.json_schema.schema;
- assert.equal(schema.properties.sources.maxItems,1);
- assert.equal(schema.properties.sources.uniqueItems,true);
- assert.equal(schema.properties.answer.maxLength,1200);
+ assert.equal(schema.properties.sources.maxItems,undefined);
+ assert.equal(schema.properties.sources.uniqueItems,undefined);
+ assert.equal(schema.properties.answer.maxLength,undefined);
  assert.equal(options.max_completion_tokens,700);
  return {response:JSON.stringify({answer:"127.0 MHz",sources:[1]})};
  }}});assert.equal(response.status,200);

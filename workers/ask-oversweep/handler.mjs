@@ -79,8 +79,8 @@ export function createHandler(corpus, prepared) {
           schema: {
             type: "object",
             properties: {
-              answer: { type: "string", maxLength: 1200 },
-              sources: { type: "array", maxItems: passages.length, uniqueItems: true, items: { type: "integer", enum: passages.map(passage => passage.source) } },
+              answer: { type: "string" },
+              sources: { type: "array", items: { type: "integer", enum: passages.map(passage => passage.source) } },
             },
             required: ["answer", "sources"],
             additionalProperties: false,
