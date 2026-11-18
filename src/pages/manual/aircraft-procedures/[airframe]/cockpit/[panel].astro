@@ -82,6 +82,7 @@ const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns whe
   </div>
   <h2>Source</h2>
   <p><a href={cockpit.manual.url}>{cockpit.manual.title}</a> ({cockpit.manual.edition}), p. {spec.source.page}. Artwork is traced from the guide's {spec.source.image}.</p>
+  {spec.source.credits?.map(c => <p>{c.what} derived from <a href={c.url}>{c.author}</a>, licensed <a href={c.licenseUrl}>{c.license}</a>.</p>)}
 </SiteLayout>
 <style>
 .cockpit-where{margin-top:0;color:var(--color-muted)}

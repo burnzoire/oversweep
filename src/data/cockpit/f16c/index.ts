@@ -18,6 +18,8 @@ import { engineInstruments } from './engine-instruments.ts';
 import { fuelQty } from './fuel-qty.ts';
 import { fuelFlow } from './fuel-flow.ts';
 import { epu } from './epu.ts';
+import { defog } from './defog.ts';
+import { sidewallControls } from './sidewall-controls.ts';
 
 /**
  * DCS F-16C cockpit catalogue: areas and panels in the order the official guide
@@ -91,16 +93,19 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'manual-trim', title: 'MANUAL TRIM panel', page: 72 },
         { id: 'test', title: 'TEST panel', page: 72 },
         { id: 'canopy-jettison', title: 'Canopy jettison T-handle', page: 74 },
+        { id: 'defog', title: 'DEFOG lever', page: 74, spec: defog },
         { id: 'anti-g-test', title: 'ANTI-G TEST button', page: 62 },
       ],
     },
     {
       id: 'left-sidewall', title: 'Left sidewall', panels: [
         { id: 'throttle', title: 'Throttle', page: 86 },
-        // One page for the controls on the sidewall itself: canopy switch and
-        // handle (p. 73), DEFOG lever (p. 74), manual canopy handcrank (p. 62)
-        // and CHAFF/FLARE dispense button (p. 708).
-        { id: 'sidewall-controls', title: 'Sidewall controls', page: 73 },
+        // Controls on the vertical sidewall above the throttle: canopy switch
+        // and handle (p. 73) and CHAFF/FLARE dispense button (p. 708). The
+        // handcrank is further aft, so it has its own page. DEFOG and the
+        // canopy jettison T-handle are on the (horizontal) left console.
+        { id: 'sidewall-controls', title: 'Sidewall controls', page: 73, spec: sidewallControls },
+        { id: 'canopy-handcrank', title: 'Manual canopy handcrank', page: 62 },
       ],
     },
     {

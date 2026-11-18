@@ -12,7 +12,7 @@
 import type { ControlDef, Cut, Dial, DrumCounter, PanelSpec, Placement, Pt } from './types';
 import {
   FASTENERS, FONT, INK, LAMPS, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, painted, PAINTS, lampModuleFrame, lampRoundBezel, n,
-  gaugeBezel, gaugeHub, drumStrip, paddlePointerArt, PADDLE_POINTER, gearKnob, gearSlot, knobArt, needleArt, polar, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
+  gaugeBezel, gaugeHub, drumStrip, paddlePointerArt, PADDLE_POINTER, gearKnob, gearSlot, leverSlot, slotLeverArt, SLOT_LEVER, knobArt, needleArt, polar, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
 } from './components.ts';
 import { drumPositions, scaleAngle } from './dial.ts';
 export { drumPositions };
@@ -169,15 +169,35 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       return at(p.at, moving(c, state[c.id] ?? c.initial, i =>
         `<g transform="rotate(${c.positions[i].angle ?? 0})">${knobArt(p.component)}</g>`), ` data-art="${p.component}"`);
     }
-    case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-xxl': {
+    case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-xxl': case 'push-round-bezel': {
       const c = controlOf(spec, p.control), art = p.component;
+      // Cap printing shrinks with the cap when pressed.
+      const print = (pressed: boolean) => {
+        if (!p.legend && !p.marks) return '';
+        const k = pressed ? 0.9 : 1;
+        return `<g transform="scale(${k})">` + (p.legend ?? []).map(l => text(0, l.y, l.text, l.cap, l.width)).join('') +
+          (p.marks ? `<path d="${p.marks}" fill="none" ${sw('fine')}/>` : '') + '</g>';
+      };
       // A painted button is painted whole: cap and skirt (DN LOCK REL).
-      return at(p.at, painted(p.paint, pushBase(art) + moving(c, state[c.id] ?? c.initial, i => pushCap(art, i > 0))), ` data-art="${p.component}"`);
+      return at(p.at, painted(p.paint, pushBase(art) + moving(c, state[c.id] ?? c.initial, i => pushCap(art, i > 0) + print(i > 0))), ` data-art="${p.component}"`);
     }
     case 'gear-handle': {
       // Knob centred on the slot at each end of its travel (first position at the top).
       const c = controlOf(spec, p.control), last = c.positions.length - 1;
       return at(p.at, gearSlot(p.travel) + moving(c, state[c.id] ?? c.initial, i => gearKnob(p.size, p.travel * (i / last - 0.5), p.indicator)), ' data-art="gear-handle"');
+    }
+    case 'traced': {
+      const c = controlOf(spec, p.control);
+      const tw = p.tween ? ` data-tween="${p.tween.drag?.axis ?? ''}"${p.tween.drag?.from ? ` data-drag-from="${p.tween.drag.from}"` : ''}` : '';
+      return `<g data-art="traced">` + painted(p.paint, moving(c, state[c.id] ?? c.initial, i => {
+        const sh = p.shapes[c.positions[i].id];
+        return sh ? (sh.d ? cased(`<path d="${sh.d}" fill="${PAPER}" fill-rule="evenodd"/>`) : '') + (sh.parts ?? []).map(d => cased(`<path d="${d}" fill="${PAPER}"/>`)).join('') + (sh.lines ? `<path d="${sh.lines}" fill="none" ${sw('fine')}/>` : '') + (sh.legend ?? []).map(l => text(l.at[0], l.at[1], l.text, l.cap, l.width)).join('') + (sh.svg ?? '') : '';
+      }, tw)) + '</g>';
+    }
+    case 'slot-lever': {
+      // Lever root moves along the slot, first position at the left.
+      const c = controlOf(spec, p.control), last = c.positions.length - 1;
+      return turn(p.rotate, p.at[0], p.at[1], at(p.at, leverSlot(p.travel) + moving(c, state[c.id] ?? c.initial, i => slotLeverArt(p.travel * (i / last - 0.5))), ' data-art="slot-lever"'));
     }
     case 'push-square': {
       const c = controlOf(spec, p.control), [w, h] = p.size, li = 2.2;
@@ -263,6 +283,7 @@ export function renderPanel(spec: PanelSpec, opts: RenderOptions = {}) {
       if (e.clip) clips += `<clipPath id="${id}"><path d="${e.clip}" clip-rule="evenodd"/></clipPath>`;
       return `<path d="${e.d}" fill="${PAINTS[e.paint]}" stroke="none"${e.clip ? ` clip-path="url(#${id})"` : ''}/>`;
     }
+    if (e.kind === 'svg') return e.markup;
     return `<path d="${e.d}" ${sw(e.pen ?? 'medium')}${e.faint ? ' stroke-opacity="0.3"' : ''}/>`;
   }).join('');
   return `<svg class="cockpit-svg" viewBox="0 0 ${n(w)} ${n(h)}" xmlns="http://www.w3.org/2000/svg" ${opts.label ? `role="img" aria-label="${esc(opts.label)}"` : 'aria-hidden="true"'}>` +
@@ -283,6 +304,8 @@ export interface HitZone {
   round?: boolean;
   /** Turn in degrees about the box centre, for items drawn turned (eyebrow lights). */
   rotate?: number;
+  /** Shown only while its control is at this position (hit areas that move with the part). */
+  pos?: string;
 }
 
 /** Hit zones in mm, from the same placements and component dimensions as the art. */
@@ -309,7 +332,24 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         const [w, h] = p.size, bh = p.travel + h;
         return [{ kind: 'control', id: p.control, box: [x - w / 2, y - bh / 2, w, bh] }];
       }
-      case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-xxl': {
+      case 'traced': {
+        if (p.hits) return Object.entries(p.hits).map(([pos, h]) => ({ kind: 'control', id: p.control, box: h.box, rotate: h.rotate, pos }));
+        if (p.hit) return [{ kind: 'control', id: p.control, box: p.hit }];
+        // Bounds of every position's outline.
+        const nums = Object.values(p.shapes).flatMap(sh => (sh.d.match(/-?\d*\.?\d+/g) ?? []).map(Number));
+        const xs = nums.filter((_, i) => i % 2 === 0), ys = nums.filter((_, i) => i % 2 === 1);
+        const x0 = Math.min(...xs), y0 = Math.min(...ys);
+        return [{ kind: 'control', id: p.control, box: [x0, y0, Math.max(...xs) - x0, Math.max(...ys) - y0] }];
+      }
+      case 'slot-lever': {
+        // The slot and the lever above it; turned levers get the turned box's bounds.
+        const { root, length, disc } = SLOT_LEVER, w = p.travel + Math.max(root, disc), h = length + 2;
+        const a = ((p.rotate ?? 0) * Math.PI) / 180, c = Math.abs(Math.cos(a)), s = Math.abs(Math.sin(a));
+        const cx = x + (length / 2) * Math.sin(a), cy = y - (length / 2) * Math.cos(a);
+        const bw = w * c + h * s, bh = w * s + h * c;
+        return [{ kind: 'control', id: p.control, box: [cx - bw / 2, cy - bh / 2, bw, bh] }];
+      }
+      case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-xxl': case 'push-round-bezel': {
         const r = PUSHES[p.component].r;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }
