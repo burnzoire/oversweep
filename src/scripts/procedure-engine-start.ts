@@ -22,6 +22,7 @@ export function startEngineModel(root: HTMLElement, cfg: Config) {
   const stepEls = all<HTMLElement>('[data-step]');
   const previous = one<HTMLButtonElement>('[data-prev]');
   const confirm = one<HTMLButtonElement>('[data-confirm]');
+  const restart = one<HTMLButtonElement>('[data-restart]');
   const progress = one<HTMLElement>('[data-progress]');
   const feedback = one<HTMLElement>('[data-feedback]');
   const visual = one<HTMLElement>('[data-visual]');
@@ -142,6 +143,7 @@ export function startEngineModel(root: HTMLElement, cfg: Config) {
     previous.disabled = step === 0 && !finished;
     one<HTMLElement>('[data-controls]').hidden = false;
     confirm.hidden = finished || !s.confirm;
+    restart.hidden = !finished;
     confirm.textContent = s.confirm ?? 'Confirm';
     confirm.disabled = false;
     const shown = new Set(s.panels);
@@ -255,6 +257,14 @@ export function startEngineModel(root: HTMLElement, cfg: Config) {
     step = to; done = false;
     render();
     if (pos['sidewall-controls.throttle'] === 'idle' && !eng.idle && stepId() !== 'throttle') runUp();
+  });
+
+  restart.addEventListener('click', () => {
+    clearTimers(); stopEngine();
+    pos = { ...cfg.initial }; eng = cold(); history.length = 0; finished = false;
+    setPositions(pos);
+    go(0);
+    stepEls[0]?.querySelector('h2')?.focus();
   });
 
   setPositions(pos);
