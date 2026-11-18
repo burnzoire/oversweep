@@ -32,7 +32,7 @@ export const defog: PanelSpec = {
     unresolved: [
       'Scale: the sill is nearer the p. 62 camera than the console the scale was taken from, so the lever and placard may be drawn up to about a fifth too large.',
       'The mounting plate\'s right and bottom edges are outside the p. 74 image; the drawn outline stops at the crop. Its top edge reads 31.5–39.5 px across the image (faint toward the right) and is drawn level at 33.',
-      'The lever is drawn upright with its traced length; the guide\'s camera leans it toward MIN, and its true lean is not shown.',
+      'The lever is drawn from straight above: the vertical blade shows only its top edge and the mushroom knob reaches inboard over the placard. Knob neck sizes are estimated; the guide\'s camera leans the lever toward MIN.',
       'The lever moves smoothly between MIN and MAX; it is drawn with five evenly spaced stops. Any detents in the simulator are unconfirmed.',
     ],
   },

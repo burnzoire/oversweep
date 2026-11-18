@@ -579,17 +579,17 @@ export function gearKnob([w, h]: [number, number], y: number, indicator?: string
 /* ------------------------------------------------------------ slot lever */
 
 /**
- * Slot lever (F-16C DEFOG), traced from the DCS F-16C guide p. 74: a flat
- * blade with a round top standing out of a straight slot, with a round disc
- * knob on its face. Drawn upright (the guide's camera leans it toward MIN).
- * The disc's face turns inboard, toward the pilot (its long axis runs fore and
- * aft in the guide image), so from above it is seen edge-on: a short bar across
- * the blade, `thick` deep, with its neck (`neck`: width at the disc, width at
- * the blade, length) tapering back to the blade.
- * mm: slot height, blade root width and visible length, disc diameter,
- * thickness and its centre above the slot.
+ * Slot lever (F-16C DEFOG), from the DCS F-16C guide p. 74: a flat blade
+ * standing out of a straight slot, its face turned inboard, with a mushroom
+ * knob on that face (the disc's long axis runs fore and aft in the guide
+ * image). Drawn straight down from above (Nathan, 2026-11-18): the vertical
+ * blade shows only its top edge along the slot, and the knob reaches inboard
+ * (down, over the placard) from it: a neck widening from the blade to the
+ * disc, then the disc edge-on.
+ * mm: slot height, blade width and thickness, neck widths (blade, disc) and
+ * length, disc diameter and thickness.
  */
-export const SLOT_LEVER = { slotH: 2.3, root: 10.8, length: 23, disc: 16.5, thick: 4.2, discY: 3.5, neck: [9, 4.5, 7] } as const;
+export const SLOT_LEVER = { slotH: 2.3, root: 10.8, blade: 2.2, neck: [4.5, 9, 7], disc: 16.5, thick: 4.2 } as const;
 
 /** The slot, long enough for the lever root at both ends of `travel`, centred on the origin. */
 export function leverSlot(travel: number) {
@@ -597,18 +597,14 @@ export function leverSlot(travel: number) {
   return `<rect x="${n(-w / 2)}" y="${n(-slotH / 2)}" width="${n(w)}" height="${n(slotH)}" fill="${INK}" stroke="none"/>`;
 }
 
-/** The lever with its root at `x` on the slot line. */
+/** The lever with its blade centred at `x` on the slot line. */
 export function slotLeverArt(x: number) {
-  const { root, length, disc, discY } = SLOT_LEVER, r = root / 2, top = -length + r;
-  const blade = `M${n(x - r)} 0V${n(top)}A${n(r)} ${n(r)} 0 0 1 ${n(x + r)} ${n(top)}V0Z`;
-  const { thick, neck } = SLOT_LEVER, w = disc, h = thick, x0 = x - w / 2, y0 = -discY - h / 2;
-  // Mushroom knob seen from above: the edge-on disc (a stadium) inboard, and its
-  // neck tapering outboard (up) from the back of the disc to the blade.
-  const [nw0, nw1, nl] = neck, ny = y0 + h * 0.3;
-  const stem = `M${n(x - nw0 / 2)} ${n(ny)}L${n(x - nw1 / 2)} ${n(ny - nl)}H${n(x + nw1 / 2)}L${n(x + nw0 / 2)} ${n(ny)}Z`;
-  return cased(`<path d="${blade}" fill="${PAPER}"/>`) +
+  const { root, blade, neck: [nw0, nw1, nl], disc, thick } = SLOT_LEVER;
+  const y0 = blade / 2, y1 = y0 + nl;
+  const stem = `M${n(x - nw0 / 2)} ${n(y0 - 0.3)}L${n(x - nw1 / 2)} ${n(y1 + thick * 0.3)}H${n(x + nw1 / 2)}L${n(x + nw0 / 2)} ${n(y0 - 0.3)}Z`;
+  return cased(`<rect x="${n(x - root / 2)}" y="${n(-blade / 2)}" width="${n(root)}" height="${n(blade)}" rx="0.4" fill="${PAPER}"/>`) +
     cased(`<path d="${stem}" fill="${PAPER}"/>`) +
-    cased(`<rect x="${n(x0)}" y="${n(y0)}" width="${n(w)}" height="${n(h)}" rx="${n(h / 2)}" fill="${PAPER}"/>`);
+    cased(`<rect x="${n(x - disc / 2)}" y="${n(y1)}" width="${n(disc)}" height="${n(thick)}" rx="${n(thick / 2)}" fill="${PAPER}"/>`);
 }
 
 /* ----------------------------------------------------------------- guards */
