@@ -40,6 +40,10 @@ export interface ControlPosition {
   holdWhile?: string;
   /** Rotary only: detent angle, degrees clockwise from 12 o'clock. */
   angle?: number;
+  /** A drawn key pose the control moves through, not a stop: single steps skip it. */
+  pass?: boolean;
+  /** The simulator's value at this position (e.g. the DCS cockpit argument), for procedures. */
+  value?: number;
 }
 
 /**
@@ -140,7 +144,9 @@ export type Placement =
    * canopy handle). Paths are absolute panel mm (`M`/`L`/`Q`/`Z` with x y pairs);
    * `lines` are fine detail lines on the part. `at` is the part's hinge or pivot.
    */
-  | { component: 'traced'; control: string; at: Pt; shapes: Record<string, { d: string; /** Solid parts drawn over d in order, each filled and outlined. */ parts?: string[]; lines?: string; /** Printed legends on top, in mm. */ legend?: { at: Pt; text: string; cap: number; width?: number }[] }>; paint?: Paint; /** Click area in mm when the outlines' bounds would cover other controls. */ hit?: Rect }
+  | { component: 'traced'; control: string; at: Pt; shapes: Record<string, { d: string; /** Solid parts drawn over d in order, each filled and outlined. */ parts?: string[]; lines?: string; /** Printed legends on top, in mm. */ legend?: { at: Pt; text: string; cap: number; width?: number }[] }>; paint?: Paint; /** Click area in mm when the outlines' bounds would cover other controls. */ hit?: Rect;
+      /** Animate between neighbouring positions (all shapes share one path structure); `drag` lets the pointer move it continuously along an axis, from position `from` on. */
+      tween?: { drag?: { axis: 'x' | 'y'; from?: string } } }
   /** Lever in a straight slot (F-16C DEFOG): slot centred on `at`, turned by `rotate`; the lever root moves `travel` mm between its first and last positions, along the slot. */
   | { component: 'slot-lever'; control: string; at: Pt; travel: number; rotate?: number }
   /** Flip guard hinged at `at` (the middle of its hinge edge); `size` is the closed footprint. `rotate`: degrees clockwise about the hinge (180 = hinged along the top). */

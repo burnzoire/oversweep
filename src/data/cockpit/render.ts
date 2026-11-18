@@ -188,10 +188,11 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
     }
     case 'traced': {
       const c = controlOf(spec, p.control);
+      const tw = p.tween ? ` data-tween="${p.tween.drag?.axis ?? ''}"${p.tween.drag?.from ? ` data-drag-from="${p.tween.drag.from}"` : ''}` : '';
       return `<g data-art="traced">` + painted(p.paint, moving(c, state[c.id] ?? c.initial, i => {
         const sh = p.shapes[c.positions[i].id];
         return sh ? cased(`<path d="${sh.d}" fill="${PAPER}" fill-rule="evenodd"/>`) + (sh.parts ?? []).map(d => cased(`<path d="${d}" fill="${PAPER}"/>`)).join('') + (sh.lines ? `<path d="${sh.lines}" fill="none" ${sw('fine')}/>` : '') + (sh.legend ?? []).map(l => text(l.at[0], l.at[1], l.text, l.cap, l.width)).join('') : '';
-      })) + '</g>';
+      }, tw)) + '</g>';
     }
     case 'slot-lever': {
       // Lever root moves along the slot, first position at the left.

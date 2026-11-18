@@ -96,22 +96,108 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
   const byId = new Map(def.controls.map(c => [c.id, c]));
   const key = (id: string) => `${def.panel}.${id}`;
   let store = load(def.aircraft);
-  const pos = (c: ControlDef) => store[key(c.id)] ?? c.initial;
-  const label = (c: ControlDef, p = pos(c)) => c.positions.find(x => x.id === p)?.label ?? p;
+  /**
+   * Position as a fractional index into c.positions: whole numbers are positions,
+   * fractions lie between two (a throttle left part-way along its travel is stored as `~2.4`).
+   */
+  const at = (c: ControlDef) => {
+    const s = store[key(c.id)] ?? c.initial;
+    if (s.startsWith('~')) return Math.min(c.positions.length - 1, Math.max(0, Number(s.slice(1)) || 0));
+    return Math.max(0, c.positions.findIndex(p => p.id === s));
+  };
+  /** Nearest position id (what protections and steps work from). */
+  const pos = (c: ControlDef) => c.positions[Math.round(at(c))].id;
+  const label = (c: ControlDef, p?: string) => {
+    if (p) return c.positions.find(x => x.id === p)?.label ?? p;
+    const v = at(c), i = Math.floor(v), j = Math.ceil(v);
+    if (i === j) return c.positions[i].label;
+    // Between two stops: name the stops either side, not the pass-through poses.
+    let a = i, b = j;
+    while (a > 0 && c.positions[a].pass) a--;
+    while (b < c.positions.length - 1 && c.positions[b].pass) b++;
+    return `between ${c.positions[a].label} and ${c.positions[b].label}`;
+  };
+  /** The simulator value (e.g. DCS argument) at the current position, interpolated between positions. */
+  const simValue = (c: ControlDef) => {
+    const v = at(c), i = Math.floor(v), j = Math.ceil(v), a = c.positions[i].value, b = c.positions[j].value;
+    return a === undefined || b === undefined ? undefined : a + (b - a) * (v - i);
+  };
 
-  const draw = (c: ControlDef) => {
+  // Tweened controls: every position is drawn with the same path structure, so a
+  // fractional position is drawn by interpolating the numbers of its two neighbours.
+  const NUM = /-?\d*\.?\d+/g;
+  interface Tween { groups: SVGGElement[]; live: SVGGElement; livePaths: SVGPathElement[]; tpl: string[][]; nums: number[][][]; refs: number[]; axis: string; from: number }
+  const tweens = new Map<string, Tween>();
+  for (const el of svg.querySelectorAll<SVGGElement>('[data-move][data-tween]')) {
+    const c = byId.get(el.dataset.move!);
+    if (!c) continue;
+    const groups = c.positions.map(p => el.querySelector<SVGGElement>(`:scope > [data-pos="${p.id}"]`)!);
+    if (groups.some(g => !g)) continue;
+    const ds = groups.map(g => [...g.querySelectorAll('path')].map(p => p.getAttribute('d') ?? ''));
+    const nums = ds.map(list => list.map(d => (d.match(NUM) ?? []).map(Number)));
+    const same = nums.every(list => list.length === nums[0].length && list.every((ns, k) => ns.length === nums[0][k].length));
+    if (!same) continue;
+    const axis = el.dataset.tween ?? '';
+    // Reference point of each pose for dragging: mean of the outline numbers along the axis.
+    const refs = nums.map(list => {
+      const flat = (list.length > 1 ? list.slice(1) : list).flat();
+      const pick = flat.filter((_, k) => k % 2 === (axis === 'y' ? 1 : 0));
+      return pick.reduce((s, v) => s + v, 0) / Math.max(1, pick.length);
+    });
+    const live = groups[0].cloneNode(true) as SVGGElement;
+    live.dataset.pos = '~live';
+    live.setAttribute('display', 'none');
+    el.appendChild(live);
+    const from = el.dataset.dragFrom ? Math.max(0, c.positions.findIndex(p => p.id === el.dataset.dragFrom)) : 0;
+    tweens.set(c.id, { groups, live, livePaths: [...live.querySelectorAll('path')], tpl: ds[0].map(d => d.split(NUM)), nums, refs, axis, from });
+  }
+
+  const drawAt = (c: ControlDef, v: number) => {
+    const tw = tweens.get(c.id);
+    const i = Math.floor(v), j = Math.ceil(v), f = v - i;
+    const frac = tw && i !== j;
     for (const g of svg.querySelectorAll<SVGGElement>(`[data-move="${c.id}"] > [data-pos]`)) {
-      if (g.dataset.pos === pos(c)) g.removeAttribute('display'); else g.setAttribute('display', 'none');
+      const show = frac ? g.dataset.pos === '~live' : g.dataset.pos === c.positions[Math.round(v)].id;
+      if (show) g.removeAttribute('display'); else g.setAttribute('display', 'none');
     }
+    if (frac) {
+      tw.livePaths.forEach((p, k) => {
+        const a = tw.nums[i][k], b = tw.nums[j][k], parts = tw.tpl[k];
+        let d = parts[0];
+        for (let m = 0; m < a.length; m++) d += +(a[m] + (b[m] - a[m]) * f).toFixed(3) + parts[m + 1];
+        p.setAttribute('d', d);
+      });
+    }
+    svg.querySelector(`[data-move="${c.id}"]`)?.setAttribute('data-value', String(simValue(c) ?? ''));
+  };
+  const draw = (c: ControlDef) => {
+    drawAt(c, at(c));
     for (const el of document.querySelectorAll<HTMLElement>(`[data-position-of="${key(c.id)}"]`)) el.textContent = label(c);
   };
-  const set = (c: ControlDef, p: string) => {
+  const setAt = (c: ControlDef, v: number) => {
     store = load(def.aircraft);
-    store[key(c.id)] = p;
+    store[key(c.id)] = Number.isInteger(v) ? c.positions[v].id : `~${+v.toFixed(4)}`;
     save(def.aircraft, store);
     draw(c);
   };
+  const set = (c: ControlDef, p: string) => setAt(c, Math.max(0, c.positions.findIndex(x => x.id === p)));
   const say = (t: string) => { status.textContent = t; };
+
+  /** Move to a position, animated through the poses in between when the control is tweened. */
+  const running = new Map<string, number>();
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const moveTo = (c: ControlDef, to: number, done?: () => void) => {
+    cancelAnimationFrame(running.get(c.id) ?? 0);
+    const from = at(c);
+    if (!tweens.has(c.id) || reduced || from === to) { setAt(c, to); done?.(); return; }
+    const ms = Math.min(700, 160 + 140 * Math.abs(to - from)), t0 = performance.now();
+    const step = (now: number) => {
+      const k = Math.min(1, (now - t0) / ms), e = k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
+      if (k < 1) { drawAt(c, from + (to - from) * e); running.set(c.id, requestAnimationFrame(step)); }
+      else { running.delete(c.id); setAt(c, to); done?.(); }
+    };
+    running.set(c.id, requestAnimationFrame(step));
+  };
 
   const select = (id: string) => {
     svg.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'));
@@ -137,15 +223,17 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
   /** Press: move one detent (or flip). Returns true when a momentary position was entered. */
   const press = (c: ControlDef, dir: string) => {
     select(c.id);
-    const i = c.positions.findIndex(p => p.id === pos(c));
-    const n = c.positions.length;
-    let j = dir === 'flip' ? (i + 1) % n : i + Number(dir);
+    const v = at(c), n = c.positions.length, step = dir === 'flip' ? 1 : Number(dir);
+    // From between two stops, a step goes to the stop on that side.
+    let j = Number.isInteger(v) ? v + step : (step > 0 ? Math.ceil(v) : Math.floor(v));
+    if (dir === 'flip') j = (v + 1) % n;
     if (c.cyclic) j = (j + n) % n;
-    if (j < 0 || j >= c.positions.length) { say(`${c.name} is already at ${label(c)}.`); return; }
+    while (j > 0 && j < n - 1 && c.positions[j].pass) j += step;
+    if (j < 0 || j >= n) { say(`${c.name} is already at ${label(c)}.`); return; }
     const to = c.positions[j];
     const why = blocked(c, to.id);
     if (why) { say(why); return; }
-    set(c, to.id);
+    moveTo(c, j);
     if (c.guards && to.id === 'closed') {
       const guarded = byId.get(c.guards.control);
       if (guarded && pos(guarded) !== c.guards.closesTo) set(guarded, c.guards.closesTo);
@@ -156,20 +244,61 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
   const release = (c: ControlDef) => {
     const p = c.positions.find(x => x.id === pos(c));
     if (p?.hold === 'momentary' && p.spring) {
-      set(c, p.spring);
+      moveTo(c, Math.max(0, c.positions.findIndex(x => x.id === p.spring)));
       say(`${c.name}: ${label(c)} (springs back).`);
     }
   };
 
+  /** Pointer position along a tweened control's drag axis, as a fractional position (from its drag start on). */
+  const along = (tw: Tween, e: PointerEvent) => {
+    const m = svg.getScreenCTM();
+    if (!m) return null;
+    const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse());
+    const u = tw.axis === 'y' ? p.y : p.x, r = tw.refs;
+    let best = tw.from;
+    for (let k = tw.from; k < r.length - 1; k++) {
+      const lo = Math.min(r[k], r[k + 1]), hi = Math.max(r[k], r[k + 1]);
+      if (u >= lo && u <= hi) return k + (u - r[k]) / (r[k + 1] - r[k] || 1);
+      if (Math.abs(u - r[k + 1]) < Math.abs(u - r[best])) best = k + 1;
+    }
+    return Math.abs(u - r[tw.from]) <= Math.abs(u - r[best]) ? tw.from : best;
+  };
+
   for (const b of root.querySelectorAll<HTMLButtonElement>('[data-control]')) {
     const c = byId.get(b.dataset.control!)!;
+    const tw = tweens.get(c.id);
     let held = false;
     const down = () => { if (held) return; held = true; press(c, b.dataset.dir!); };
     const up = () => { if (!held) return; held = false; release(c); };
-    b.addEventListener('pointerdown', e => { if (e.button === 0) { b.setPointerCapture(e.pointerId); down(); } });
-    b.addEventListener('pointerup', up);
-    b.addEventListener('pointercancel', up);
-    b.addEventListener('lostpointercapture', up);
+    // Dragging (tweened controls with a drag axis): a press that moves becomes a drag; one that doesn't is a click.
+    let drag: { x: number; y: number; moving: boolean } | null = null;
+    b.addEventListener('pointerdown', e => {
+      if (e.button !== 0) return;
+      b.setPointerCapture(e.pointerId);
+      if (tw?.axis && at(c) >= tw.from) { drag = { x: e.clientX, y: e.clientY, moving: false }; select(c.id); return; }
+      down();
+    });
+    b.addEventListener('pointermove', e => {
+      if (!drag || !tw) return;
+      if (!drag.moving && Math.hypot(e.clientX - drag.x, e.clientY - drag.y) < 5) return;
+      drag.moving = true;
+      cancelAnimationFrame(running.get(c.id) ?? 0);
+      const v = along(tw, e);
+      if (v !== null) { store[key(c.id)] = `~${v}`; drawAt(c, v); say(`${c.name}: ${label(c)}.`); }
+    });
+    const endDrag = () => {
+      if (!drag) return false;
+      const d = drag; drag = null;
+      if (!d.moving) { down(); up(); return true; }
+      // Settle into a stop when released close to one; otherwise stay where it was left.
+      const v = at(c), k = Math.round(v);
+      if (Math.abs(v - k) < 0.2 && !c.positions[k].pass) moveTo(c, k); else setAt(c, v);
+      say(`${c.name}: ${label(c)}.`);
+      return true;
+    };
+    b.addEventListener('pointerup', () => { if (!endDrag()) up(); });
+    b.addEventListener('pointercancel', () => { if (!endDrag()) up(); });
+    b.addEventListener('lostpointercapture', () => { if (!endDrag()) up(); });
     b.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) { e.preventDefault(); down(); } });
     b.addEventListener('keyup', e => { if (e.key === 'Enter' || e.key === ' ') up(); });
     b.addEventListener('blur', up);
