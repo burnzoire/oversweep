@@ -39,7 +39,7 @@ const dirLabels = (id: string) => {
         const [a, b] = dirLabels(c.id);
         const axis = c.type === 'rotary' || c.travel === 'horizontal' ? 'cp-x' : 'cp-y';
         return (
-          <div class:list={['cp-hit', axis, z.round && 'cp-round']} style={style} role="group" aria-label={c.name}>
+          <div class:list={['cp-hit', axis, z.round && 'cp-round']} style={style} role="group" aria-label={c.name} data-hit-of={z.pos ? c.id : undefined} data-hit-pos={z.pos} hidden={z.pos ? z.pos !== c.initial : undefined}>
             <button type="button" data-control={c.id} data-dir="-1" aria-label={a}></button>
             <button type="button" data-control={c.id} data-dir="1" aria-label={b}></button>
           </div>
@@ -169,6 +169,9 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
       });
     }
     svg.querySelector(`[data-move="${c.id}"]`)?.setAttribute('data-value', String(simValue(c) ?? ''));
+    // Hit areas that move with the part: show the one for the nearest position.
+    const near = c.positions[Math.round(v)].id;
+    for (const z of root.querySelectorAll<HTMLElement>(`[data-hit-of="${c.id}"]`)) z.hidden = z.dataset.hitPos !== near;
   };
   const draw = (c: ControlDef) => {
     drawAt(c, at(c));

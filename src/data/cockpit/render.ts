@@ -304,6 +304,8 @@ export interface HitZone {
   round?: boolean;
   /** Turn in degrees about the box centre, for items drawn turned (eyebrow lights). */
   rotate?: number;
+  /** Shown only while its control is at this position (hit areas that move with the part). */
+  pos?: string;
 }
 
 /** Hit zones in mm, from the same placements and component dimensions as the art. */
@@ -331,6 +333,7 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         return [{ kind: 'control', id: p.control, box: [x - w / 2, y - bh / 2, w, bh] }];
       }
       case 'traced': {
+        if (p.hits) return Object.entries(p.hits).map(([pos, h]) => ({ kind: 'control', id: p.control, box: h.box, rotate: h.rotate, pos }));
         if (p.hit) return [{ kind: 'control', id: p.control, box: p.hit }];
         // Bounds of every position's outline.
         const nums = Object.values(p.shapes).flatMap(sh => (sh.d.match(/-?\d*\.?\d+/g) ?? []).map(Number));

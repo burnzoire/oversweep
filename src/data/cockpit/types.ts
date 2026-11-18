@@ -147,6 +147,8 @@ export type Placement =
    * `lines` are fine detail lines on the part. `at` is the part's hinge or pivot.
    */
   | { component: 'traced'; control: string; at: Pt; shapes: Record<string, { d: string; /** Solid parts drawn over d in order, each filled and outlined. */ parts?: string[]; lines?: string; /** Printed legends on top, in mm. */ legend?: { at: Pt; text: string; cap: number; width?: number }[]; /** Pre-drawn line art in mm drawn after the rest (CAD projections); `d` may be empty when this is the whole part. */ svg?: string }>; paint?: Paint; /** Click area in mm when the outlines' bounds would cover other controls. */ hit?: Rect;
+      /** Click area per position for a part that moves (throttle): box in mm before `rotate`, turned (degrees clockwise) about its centre; split down the middle into its two directions. */
+      hits?: Record<string, { box: Rect; rotate: number }>;
       /** Animate between neighbouring positions (all shapes share one path structure); `drag` lets the pointer move it continuously along an axis, from position `from` on. */
       tween?: { drag?: { axis: 'x' | 'y'; from?: string } } }
   /** Lever in a straight slot (F-16C DEFOG): slot centred on `at`, turned by `rotate`; the lever root moves `travel` mm between its first and last positions, along the slot. */
