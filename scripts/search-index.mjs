@@ -74,13 +74,13 @@ export function pageEntries(html, url, { glossary = false } = {}) {
   return entries;
 }
 
-function addAskSections(corpus, html, entry) {
+export function addAskSections(corpus, html, entry) {
   const main = html.match(/<main\b[\s\S]*?<\/main>/)?.[0];
   if (!main || !entry) return;
   const clean = main.replace(/<(script|style|svg|nav)\b[^>]*>[\s\S]*?<\/\1>/gi, "");
   const headings = [...clean.matchAll(/<h([1-6])\b([^>]*)>([\s\S]*?)<\/h\1>/gi)]
     .filter(heading => attr(heading[2], "id") && !/\bfig-title\b/.test(attr(heading[2], "class") ?? ""));
-  const text = (fragment) => clip(textOf(fragment.replace(/>\s*</g, "> <")), 1250);
+  const text = (fragment) => clip(textOf(fragment.replace(/>\s*</g, "> <")), 3500);
   corpus[entry.u] = { title: entry.t, text: text(clean) };
   for (const [i, heading] of headings.entries()) {
     const id = attr(heading[2], "id");
@@ -120,6 +120,9 @@ export function searchIndex() {
           entries.push(...page);
           if (base === "/" && /^(manual|encyclopedia|training|experiences)\//.test(route + "/")) {
             addAskSections(corpus, html, page[0]);
+            for (const term of page.filter(entry => entry.g)) {
+              corpus[term.u] = { title: term.t, text: term.d };
+            }
           }
           await fullText.addHTMLFile({ url: `${base}${route}/`, content: html });
         }
