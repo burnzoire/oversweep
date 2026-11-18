@@ -17,51 +17,25 @@ test('engine start guide contains actions, expected indications and source mappi
   assert.match(data, /at least 20%/);
   assert.match(data, /evidence:'p\. 135/);
 });
-test('instrument artwork and procedural content remain separate', async () => {
+test('procedure runs on the shared cockpit panels', async () => {
   const page = await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
-  const svg = await read('src/components/aircraft-procedures/EngineInstrument.astro');
+  const script = await read('src/scripts/procedure-engine-start.ts');
+  const data = await read('src/data/aircraft-procedures.ts');
   assert.match(page, /guide\.steps/);
-  assert.match(page, /EngineInstrument/);
-  assert.match(page, /prefers-reduced-motion/);
-  assert.match(svg, /data-needle/);
-  assert.doesNotMatch(svg, /<image\b|href="https?:/);
+  assert.match(page, /<CockpitPanel [^>]*scope=\{scope\}/);
+  assert.doesNotMatch(page, /StartupPanels|EngineInstrument|\.webp/);
+  assert.match(script, /prefers-reduced-motion/);
+  for (const ev of ['cockpit:change', 'cockpit:indicate', 'cockpit:set']) assert.match(script, new RegExp(ev));
+  // Every step names its panels; actions name a shared control and position.
+  assert.equal((data.match(/\bpanels:\[/g) ?? []).length, (data.match(/\{id:'/g) ?? []).length);
+  for (const target of ["elec.main-pwr',to:'batt'", "test.flcs-pwr-test',to:'test'", "eng-jet-start.jfs',to:'start-2'", "sidewall-controls.throttle',to:'idle'", "left-eyebrow.master-caution',to:'in'"])
+    assert.ok(data.includes(target), target);
 });
 
-test('panel controls are native buttons with distinct locations', async () => {
-  const svg = await read('src/components/aircraft-procedures/StartupPanels.astro');
-  const page = await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
-  for (const key of ['flcs-test','jfs-start2']) {
-    assert.match(svg, new RegExp('data-control="' + key + '"'));
-    assert.match(page, new RegExp("'" + key + "'"));
-  }
-  assert.match(svg,/<button type="button"[^>]*data-control=/);
-  assert.match(page, /<div class="procedure-controls"[^>]*>[\s\S]*?<button type="button" data-control="throttle-idle"/);
-  assert.match(page, /throttle: 'throttle-idle'/);
-  assert.match(page,/advanceAfterControl/);
-  assert.match(page,/completed.add\(id\)/);
-});
-
-test('panel redraw uses separate artwork and movable controls', async () => {
-  const svg = await read('src/components/aircraft-procedures/StartupPanels.astro');
-  for (const panel of ['elec','test','jfs'])
-    assert.match(svg, new RegExp('data-panel="' + panel + '"'));
-  for (const panel of ['test', 'jfs', 'caution', 'eyebrow']) {
-    assert.ok(svg.includes(`f16-${panel}.webp`));
-  }
-  assert.match(svg, /data-jfs-lever/);
-  assert.match(svg, /data-flcs-lever/);
-  assert.match(svg, /class="toggle-up"/);
-  assert.match(svg, /class="toggle-down"/);
-});
-
-test('raster panels expose independent annunciators and control overlays', async () => {
-  const panels = await read('src/components/aircraft-procedures/StartupPanels.astro');
-  const instruments = await read('src/components/aircraft-procedures/EngineInstrument.astro');
-  for (const lamp of ['flcs-pmg', 'flcs-rly', 'jfs-run', 'warn-sec', 'warn-engine']) {
-    assert.ok(panels.includes(`data-lamp="${lamp}"`));
-  }
-  for (const channel of ['A', 'B', 'C', 'D']) {
-    assert.ok(panels.includes(`data-flcs-channel="${channel}"`));
-  }
-  assert.match(instruments, /f16-engine\.webp/);
+test('cockpit panels report moves and take lamps from the host page', async () => {
+  const panel = await read('src/components/cockpit/CockpitPanel.astro');
+  assert.match(panel, /new CustomEvent\('cockpit:change'/);
+  assert.match(panel, /addEventListener\('cockpit:indicate'/);
+  assert.match(panel, /addEventListener\('cockpit:set'/);
+  assert.match(panel, /\.lit\[data-colour="amber"\]/);
 });
