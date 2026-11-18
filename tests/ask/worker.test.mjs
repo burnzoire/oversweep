@@ -39,7 +39,8 @@ test("daily inference quota is distinct from capacity throttling", async () => {
 });
 
 test("Gemma chat completions return JSON under choices[0].message.content", async () => {
-  const response = await handle(request(), { AI: { async run(model, options) {
+  const revision = "a".repeat(40);
+  const response = await handle(request(), { ASK_REVISION: revision, AI: { async run(model, options) {
     assert.equal(model, "@cf/google/gemma-4-26b-a4b-it");
     assert.equal(options.response_format.json_schema.name, "oversweep_answer");
     assert.deepEqual(options.response_format.json_schema.schema.properties.sources.items.enum, [1]);
@@ -47,7 +48,7 @@ test("Gemma chat completions return JSON under choices[0].message.content", asyn
     return { choices: [{ message: { content: '{"answer":"Sochi Tower is 127.0 MHz VHF.","sources":[1]}' } }] };
   } } });
   assert.equal(response.status, 200);
-  assert.deepEqual(await response.json(), { answer: "Sochi Tower is 127.0 MHz VHF.", ids: [id], topic: [], retrieved: [id], references: [{ id, title: "Sochi · Sim maps" }] });
+  assert.deepEqual(await response.json(), { answer: "Sochi Tower is 127.0 MHz VHF.", ids: [id], topic: [], retrieved: [id], revision, references: [{ id, title: "Sochi · Sim maps" }] });
 });
 
 
