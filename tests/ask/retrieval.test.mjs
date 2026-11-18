@@ -124,3 +124,14 @@ test('standalone articles include their explicitly linked theatre rows',()=>{
  const result=r('Which one runs east-west?',{topic:[ramat],history:[{role:'user',content:'What runways are available?'}]});
  assert.ok(result.passages.some(p=>p.id===id && p.text.includes('082°')));
 });
+
+
+test('retrieval labels canonical scopes and separates explanations from records',()=>{
+ const r=createRetriever({
+ '/encyclopedia/locations/dcs-syria/#af-example':{title:'Example · DCS: Syria',name:'Example',text:'Tower 120.5 MHz'},
+ '/encyclopedia/aircraft/f-14/':{title:'F-14 Tomcat',text:'Two engines.'},
+ '/manual/example/#rule':{title:'Runway rule',text:'Distinctrule explains numbers.'}});
+ const record=r('Example tower?').passages[0];assert.equal(record.kind,'simulator_record');assert.equal(record.scope,'DCS: Syria');
+ assert.equal(r('F-14 engines?').passages[0].kind,'article');
+ assert.equal(r('Distinctrule?').passages[0].kind,'explanation');
+});

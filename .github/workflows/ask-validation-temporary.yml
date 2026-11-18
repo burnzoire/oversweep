@@ -1,0 +1,59 @@
+name: Validate Ask Oversweep branch
+on:
+  push:
+    branches: [codex/ask-conversation-iterations]
+    paths: [scripts/ask-validation-trigger.json]
+permissions:
+  contents: write
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PUBLIC_ASK_ENDPOINT: https://ask-oversweep.burnzoire.workers.dev/ask
+      ASK_REVISION: 0bdb824648dd8a9d0bedf249b17791a2e064c025
+      ASK_LIVE: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22.23.4'
+          cache: npm
+      - run: mkdir -p evidence && npm ci
+      - id: checks
+        continue-on-error: true
+        run: npm run check > evidence/check.log 2>&1
+      - id: docs
+        continue-on-error: true
+        run: python3 scripts/check_docs.py > evidence/docs.log 2>&1
+      - id: live
+        continue-on-error: true
+        run: node scripts/test-ask-live.mjs evidence/live.json > evidence/live.log 2>&1
+        env:
+          ASK_HINTS: wrong
+      - id: nohints
+        continue-on-error: true
+        run: node scripts/test-ask-live.mjs evidence/no-hints.json tomcat,sochi,table-airfield > evidence/no-hints.log 2>&1
+        env:
+          ASK_HINTS: none
+      - run: npm install --prefix /tmp/ask-browser playwright
+      - run: |
+          if ! command -v google-chrome; then
+            node /tmp/ask-browser/node_modules/playwright/cli.js install --with-deps chromium
+          fi
+      - id: browser
+        continue-on-error: true
+        run: |
+          export ASK_CHROME_PATH="$(command -v google-chrome || true)"
+          node scripts/test-ask-browser-live.mjs > evidence/browser.log 2>&1
+      - if: always()
+        run: node scripts/publish-ask-evidence.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CHECK_OUTCOME: ${{ steps.checks.outcome }}
+          DOCS_OUTCOME: ${{ steps.docs.outcome }}
+          LIVE_OUTCOME: ${{ steps.live.outcome }}
+          NOHINTS_OUTCOME: ${{ steps.nohints.outcome }}
+          BROWSER_OUTCOME: ${{ steps.browser.outcome }}

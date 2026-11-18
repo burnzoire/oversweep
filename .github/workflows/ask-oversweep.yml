@@ -1,9 +1,6 @@
 name: Deploy Ask Oversweep Worker
 on:
   workflow_dispatch:
-  push:
-    branches: [codex/ask-conversation-iterations]
-    paths: [workers/ask-oversweep/**, scripts/search-index.mjs, .github/workflows/ask-oversweep.yml]
 permissions:
   contents: read
 concurrency:

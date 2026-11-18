@@ -86,7 +86,7 @@ test("temporary capacity retries once, rejects queues, and preserves daily-quota
 });
 
 
-test("structured output bounds prevent repeating citations from exhausting completion", async()=> {
+test("structured output requests bounded answers and unique citations", async()=> {
  const response=await handle(request(),{AI:{async run(_model,options){
  const schema=options.response_format.json_schema.schema;
  assert.equal(schema.properties.sources.maxItems,1);

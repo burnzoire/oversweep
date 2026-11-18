@@ -99,8 +99,11 @@
         ],
         "none": [
           "087",
-          "267"
-        ]
+          "267",
+          "none of",
+          "no runway"
+        ],
+        "review": "Select the runway closest to east-west; do not copy illustrative example bearings or reject all strips because none is exactly 090/270."
       },
       {
         "question": "What is the tower freq for Sochi?",
@@ -245,8 +248,11 @@
         ],
         "none": [
           "087",
-          "267"
-        ]
+          "267",
+          "none of",
+          "no runway"
+        ],
+        "review": "Select the runway closest to east-west; do not copy illustrative example bearings or reject all strips because none is exactly 090/270."
       },
       {
         "question": "What about tower frequency?",
