@@ -5,15 +5,6 @@
     {
       "conversation": "tomcat",
       "question": "What engines does the F-14B have?",
-      "history": [],
-      "requestedIds": [
-        "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
-        "/encyclopedia/aircraft/f-14/",
-        "/encyclopedia/aircraft/f-14/#over-the-gulf-of-sidra",
-        "/encyclopedia/aircraft/f-14/#irans-tomcats",
-        "/encyclopedia/terminology/#autorotation",
-        "/manual/abnormal-operations/emergency-procedures/#engine"
-      ],
       "status": 200,
       "revision": "9f4d5030d96a20c734634a5975eeddc341484eb4",
       "reply": {
@@ -28,7 +19,7 @@
         "references": [
           {
             "id": "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
-            "title": "F-14 Tomcat · Swing wings and Phoenix missiles"
+            "title": "F-14 Tomcat \u00b7 Swing wings and Phoenix missiles"
           },
           {
             "id": "/encyclopedia/aircraft/f-14/",
@@ -37,28 +28,24 @@
         ]
       },
       "passed": false,
-      "ms": 7024
+      "ms": 7024,
+      "candidateIds": [
+        "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+        "/encyclopedia/aircraft/f-14/",
+        "/encyclopedia/aircraft/f-14/#over-the-gulf-of-sidra",
+        "/encyclopedia/aircraft/f-14/#irans-tomcats",
+        "/encyclopedia/terminology/#autorotation",
+        "/manual/abnormal-operations/emergency-procedures/#engine"
+      ],
+      "requestedIds": [
+        "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+        "/encyclopedia/aircraft/f-14/",
+        "/encyclopedia/aircraft/f-14/#over-the-gulf-of-sidra"
+      ]
     },
     {
       "conversation": "tomcat",
       "question": "And the A model?",
-      "history": [
-        {
-          "role": "user",
-          "content": "What engines does the F-14B have?"
-        },
-        {
-          "role": "assistant",
-          "content": "The F-14B is equipped with two General Electric F110 engines."
-        }
-      ],
-      "requestedIds": [
-        "/encyclopedia/aircraft/f-14/",
-        "/encyclopedia/aircraft/f-14/#guarding-the-fleet",
-        "/encyclopedia/aircraft/f-14/#irans-tomcats",
-        "/encyclopedia/aircraft/f-14/#over-the-gulf-of-sidra",
-        "/manual/instrument-flight/ils-approach/#model"
-      ],
       "topic": [
         "/encyclopedia/aircraft/f-14/"
       ],
@@ -80,37 +67,23 @@
         ]
       },
       "passed": true,
-      "ms": 1419
-    },
-    {
-      "conversation": "tomcat",
-      "question": "How many crew?",
-      "history": [
-        {
-          "role": "user",
-          "content": "What engines does the F-14B have?"
-        },
-        {
-          "role": "assistant",
-          "content": "The F-14B is equipped with two General Electric F110 engines."
-        },
-        {
-          "role": "user",
-          "content": "And the A model?"
-        },
-        {
-          "role": "assistant",
-          "content": "The F-14A is equipped with two Pratt & Whitney TF30-P-414A afterburning turbofans, each providing 20,900 lb."
-        }
-      ],
-      "requestedIds": [
+      "ms": 1419,
+      "candidateIds": [
         "/encyclopedia/aircraft/f-14/",
         "/encyclopedia/aircraft/f-14/#guarding-the-fleet",
         "/encyclopedia/aircraft/f-14/#irans-tomcats",
         "/encyclopedia/aircraft/f-14/#over-the-gulf-of-sidra",
-        "/encyclopedia/terminology/#landing-signal-enlisted-lse",
-        "/manual/naval-operations/ship-operations/#jerseys"
+        "/manual/instrument-flight/ils-approach/#model"
       ],
+      "requestedIds": [
+        "/encyclopedia/aircraft/f-14/",
+        "/encyclopedia/aircraft/f-14/#guarding-the-fleet",
+        "/encyclopedia/aircraft/f-14/#irans-tomcats"
+      ]
+    },
+    {
+      "conversation": "tomcat",
+      "question": "How many crew?",
       "topic": [
         "/encyclopedia/aircraft/f-14/"
       ],
@@ -132,20 +105,24 @@
         ]
       },
       "passed": true,
-      "ms": 1109
+      "ms": 1109,
+      "candidateIds": [
+        "/encyclopedia/aircraft/f-14/",
+        "/encyclopedia/aircraft/f-14/#guarding-the-fleet",
+        "/encyclopedia/aircraft/f-14/#irans-tomcats",
+        "/encyclopedia/aircraft/f-14/#over-the-gulf-of-sidra",
+        "/encyclopedia/terminology/#landing-signal-enlisted-lse",
+        "/manual/naval-operations/ship-operations/#jerseys"
+      ],
+      "requestedIds": [
+        "/encyclopedia/aircraft/f-14/",
+        "/encyclopedia/aircraft/f-14/#guarding-the-fleet",
+        "/encyclopedia/aircraft/f-14/#irans-tomcats"
+      ]
     },
     {
       "conversation": "sochi",
       "question": "What freq is Sochi tower?",
-      "history": [],
-      "requestedIds": [
-        "/encyclopedia/locations/sochi/#sims-title",
-        "/encyclopedia/locations/sochi/",
-        "/encyclopedia/locations/sochi/#history",
-        "/encyclopedia/locations/sochi/#where-title",
-        "/encyclopedia/terminology/#air-boss",
-        "/manual/airfield-operations/airfield-basics/#talk"
-      ],
       "status": 200,
       "revision": "9f4d5030d96a20c734634a5975eeddc341484eb4",
       "reply": {
@@ -160,7 +137,7 @@
         "references": [
           {
             "id": "/encyclopedia/locations/sochi/#sims-title",
-            "title": "Sochi International Airport · Sim maps"
+            "title": "Sochi International Airport \u00b7 Sim maps"
           },
           {
             "id": "/encyclopedia/locations/sochi/",
@@ -169,29 +146,24 @@
         ]
       },
       "passed": true,
-      "ms": 1083
-    },
-    {
-      "conversation": "sochi",
-      "question": "Does it have a TACAN?",
-      "history": [
-        {
-          "role": "user",
-          "content": "What freq is Sochi tower?"
-        },
-        {
-          "role": "assistant",
-          "content": "The Sochi tower frequencies are 127.0 MHz VHF and 256.0 MHz UHF."
-        }
-      ],
-      "requestedIds": [
+      "ms": 1083,
+      "candidateIds": [
         "/encyclopedia/locations/sochi/#sims-title",
         "/encyclopedia/locations/sochi/",
         "/encyclopedia/locations/sochi/#history",
         "/encyclopedia/locations/sochi/#where-title",
-        "/encyclopedia/terminology/#tacan",
-        "/manual/navigation/air-navigation/#navaids"
+        "/encyclopedia/terminology/#air-boss",
+        "/manual/airfield-operations/airfield-basics/#talk"
       ],
+      "requestedIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/sochi/#history"
+      ]
+    },
+    {
+      "conversation": "sochi",
+      "question": "Does it have a TACAN?",
       "topic": [
         "/encyclopedia/locations/sochi/"
       ],
@@ -209,7 +181,7 @@
         "references": [
           {
             "id": "/encyclopedia/locations/sochi/#sims-title",
-            "title": "Sochi International Airport · Sim maps"
+            "title": "Sochi International Airport \u00b7 Sim maps"
           },
           {
             "id": "/encyclopedia/locations/sochi/",
@@ -218,36 +190,24 @@
         ]
       },
       "passed": true,
-      "ms": 1660
-    },
-    {
-      "conversation": "sochi",
-      "question": "What about ILS?",
-      "history": [
-        {
-          "role": "user",
-          "content": "What freq is Sochi tower?"
-        },
-        {
-          "role": "assistant",
-          "content": "The Sochi tower frequencies are 127.0 MHz VHF and 256.0 MHz UHF."
-        },
-        {
-          "role": "user",
-          "content": "Does it have a TACAN?"
-        },
-        {
-          "role": "assistant",
-          "content": "The sim maps for Sochi International Airport (represented as Sochi-Adler) include an NDB with marker (CO) and an ILS on runway 06, 111.1 MHz (ISO), but a TACAN is not listed."
-        }
+      "ms": 1660,
+      "candidateIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/sochi/#history",
+        "/encyclopedia/locations/sochi/#where-title",
+        "/encyclopedia/terminology/#tacan",
+        "/manual/navigation/air-navigation/#navaids"
       ],
       "requestedIds": [
         "/encyclopedia/locations/sochi/#sims-title",
         "/encyclopedia/locations/sochi/",
-        "/encyclopedia/locations/sochi/#facilities-title",
-        "/encyclopedia/locations/sochi/#history",
-        "/manual/instrument-flight/ils-approach/#launch"
-      ],
+        "/encyclopedia/locations/sochi/#history"
+      ]
+    },
+    {
+      "conversation": "sochi",
+      "question": "What about ILS?",
       "topic": [
         "/encyclopedia/locations/sochi/"
       ],
@@ -265,7 +225,7 @@
         "references": [
           {
             "id": "/encyclopedia/locations/sochi/#sims-title",
-            "title": "Sochi International Airport · Sim maps"
+            "title": "Sochi International Airport \u00b7 Sim maps"
           },
           {
             "id": "/encyclopedia/locations/sochi/",
@@ -274,45 +234,23 @@
         ]
       },
       "passed": true,
-      "ms": 1528
+      "ms": 1528,
+      "candidateIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/sochi/#facilities-title",
+        "/encyclopedia/locations/sochi/#history",
+        "/manual/instrument-flight/ils-approach/#launch"
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/sochi/#facilities-title"
+      ]
     },
     {
       "conversation": "sochi",
       "question": "What runways are available?",
-      "history": [
-        {
-          "role": "user",
-          "content": "What freq is Sochi tower?"
-        },
-        {
-          "role": "assistant",
-          "content": "The Sochi tower frequencies are 127.0 MHz VHF and 256.0 MHz UHF."
-        },
-        {
-          "role": "user",
-          "content": "Does it have a TACAN?"
-        },
-        {
-          "role": "assistant",
-          "content": "The sim maps for Sochi International Airport (represented as Sochi-Adler) include an NDB with marker (CO) and an ILS on runway 06, 111.1 MHz (ISO), but a TACAN is not listed."
-        },
-        {
-          "role": "user",
-          "content": "What about ILS?"
-        },
-        {
-          "role": "assistant",
-          "content": "The sim maps for Sochi International Airport (represented as Sochi-Adler) include an ILS on runway 06 at 111.1 MHz (ISO)."
-        }
-      ],
-      "requestedIds": [
-        "/encyclopedia/locations/sochi/#sims-title",
-        "/encyclopedia/locations/sochi/#facilities-title",
-        "/encyclopedia/locations/sochi/",
-        "/encyclopedia/locations/sochi/#the-airfield",
-        "/encyclopedia/terminology/#runway-designator",
-        "/manual/airfield-operations/airfield-basics/#numbers"
-      ],
       "topic": [
         "/encyclopedia/locations/sochi/"
       ],
@@ -330,7 +268,7 @@
         "references": [
           {
             "id": "/encyclopedia/locations/sochi/#sims-title",
-            "title": "Sochi International Airport · Sim maps"
+            "title": "Sochi International Airport \u00b7 Sim maps"
           },
           {
             "id": "/encyclopedia/locations/sochi/",
@@ -339,20 +277,24 @@
         ]
       },
       "passed": true,
-      "ms": 1017
+      "ms": 1017,
+      "candidateIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/#facilities-title",
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/sochi/#the-airfield",
+        "/encyclopedia/terminology/#runway-designator",
+        "/manual/airfield-operations/airfield-basics/#numbers"
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/#facilities-title",
+        "/encyclopedia/locations/sochi/"
+      ]
     },
     {
       "conversation": "ramat",
       "question": "What is the TACAN for Ramat David?",
-      "history": [],
-      "requestedIds": [
-        "/encyclopedia/locations/ramat-david/#sims-title",
-        "/encyclopedia/locations/ramat-david/#where-title",
-        "/encyclopedia/locations/ramat-david/#the-airfield",
-        "/encyclopedia/locations/ramat-david/#role-today",
-        "/encyclopedia/terminology/#tacan",
-        "/manual/navigation/air-navigation/#navaids"
-      ],
       "status": 200,
       "revision": "9f4d5030d96a20c734634a5975eeddc341484eb4",
       "reply": {
@@ -366,34 +308,29 @@
         "references": [
           {
             "id": "/encyclopedia/locations/ramat-david/#sims-title",
-            "title": "Ramat David Airbase · Sim maps"
+            "title": "Ramat David Airbase \u00b7 Sim maps"
           }
         ]
       },
       "passed": true,
-      "ms": 1240
+      "ms": 1240,
+      "candidateIds": [
+        "/encyclopedia/locations/ramat-david/#sims-title",
+        "/encyclopedia/locations/ramat-david/#where-title",
+        "/encyclopedia/locations/ramat-david/#the-airfield",
+        "/encyclopedia/locations/ramat-david/#role-today",
+        "/encyclopedia/terminology/#tacan",
+        "/manual/navigation/air-navigation/#navaids"
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/ramat-david/#sims-title",
+        "/encyclopedia/locations/ramat-david/#where-title",
+        "/encyclopedia/locations/ramat-david/#the-airfield"
+      ]
     },
     {
       "conversation": "ramat",
       "question": "What runways are available?",
-      "history": [
-        {
-          "role": "user",
-          "content": "What is the TACAN for Ramat David?"
-        },
-        {
-          "role": "assistant",
-          "content": "The VORTAC for Ramat David is RMD, using channel 84X and 113.7 MHz."
-        }
-      ],
-      "requestedIds": [
-        "/encyclopedia/locations/ramat-david/#sims-title",
-        "/encyclopedia/locations/ramat-david/#facilities-title",
-        "/encyclopedia/locations/ramat-david/",
-        "/encyclopedia/locations/ramat-david/#the-airfield",
-        "/encyclopedia/terminology/#runway-designator",
-        "/manual/airfield-operations/airfield-basics/#numbers"
-      ],
       "topic": [
         "/encyclopedia/locations/ramat-david/"
       ],
@@ -413,11 +350,11 @@
         "references": [
           {
             "id": "/encyclopedia/locations/ramat-david/#sims-title",
-            "title": "Ramat David Airbase · Sim maps"
+            "title": "Ramat David Airbase \u00b7 Sim maps"
           },
           {
             "id": "/encyclopedia/locations/ramat-david/#facilities-title",
-            "title": "Ramat David Airbase · Runways and facilities"
+            "title": "Ramat David Airbase \u00b7 Runways and facilities"
           },
           {
             "id": "/encyclopedia/locations/ramat-david/",
@@ -425,42 +362,29 @@
           },
           {
             "id": "/encyclopedia/locations/ramat-david/#the-airfield",
-            "title": "Ramat David Airbase · The airfield"
+            "title": "Ramat David Airbase \u00b7 The airfield"
           }
         ]
       },
       "passed": true,
-      "ms": 1390
+      "ms": 1390,
+      "candidateIds": [
+        "/encyclopedia/locations/ramat-david/#sims-title",
+        "/encyclopedia/locations/ramat-david/#facilities-title",
+        "/encyclopedia/locations/ramat-david/",
+        "/encyclopedia/locations/ramat-david/#the-airfield",
+        "/encyclopedia/terminology/#runway-designator",
+        "/manual/airfield-operations/airfield-basics/#numbers"
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/ramat-david/#sims-title",
+        "/encyclopedia/locations/ramat-david/#facilities-title",
+        "/encyclopedia/locations/ramat-david/"
+      ]
     },
     {
       "conversation": "ramat",
       "question": "Which one runs east-west?",
-      "history": [
-        {
-          "role": "user",
-          "content": "What is the TACAN for Ramat David?"
-        },
-        {
-          "role": "assistant",
-          "content": "The VORTAC for Ramat David is RMD, using channel 84X and 113.7 MHz."
-        },
-        {
-          "role": "user",
-          "content": "What runways are available?"
-        },
-        {
-          "role": "assistant",
-          "content": "The available runways are 09/27, 11/29, and 15/33."
-        }
-      ],
-      "requestedIds": [
-        "/encyclopedia/locations/ramat-david/#sims-title",
-        "/encyclopedia/locations/ramat-david/",
-        "/encyclopedia/locations/ramat-david/#where-title",
-        "/encyclopedia/locations/ramat-david/#units-title",
-        "/encyclopedia/terminology/#variation",
-        "/manual/navigation/air-navigation/#direction"
-      ],
       "topic": [
         "/encyclopedia/locations/ramat-david/"
       ],
@@ -477,50 +401,29 @@
         "references": [
           {
             "id": "/manual/navigation/air-navigation/#direction",
-            "title": "Air Navigation · Direction: true, magnetic and compass"
+            "title": "Air Navigation \u00b7 Direction: true, magnetic and compass"
           }
         ]
       },
       "passed": true,
-      "ms": 335
+      "ms": 335,
+      "candidateIds": [
+        "/encyclopedia/locations/ramat-david/#sims-title",
+        "/encyclopedia/locations/ramat-david/",
+        "/encyclopedia/locations/ramat-david/#where-title",
+        "/encyclopedia/locations/ramat-david/#units-title",
+        "/encyclopedia/terminology/#variation",
+        "/manual/navigation/air-navigation/#direction"
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/ramat-david/#sims-title",
+        "/encyclopedia/locations/ramat-david/",
+        "/encyclopedia/locations/ramat-david/#where-title"
+      ]
     },
     {
       "conversation": "ramat",
       "question": "What is the tower freq for Sochi?",
-      "history": [
-        {
-          "role": "user",
-          "content": "What is the TACAN for Ramat David?"
-        },
-        {
-          "role": "assistant",
-          "content": "The VORTAC for Ramat David is RMD, using channel 84X and 113.7 MHz."
-        },
-        {
-          "role": "user",
-          "content": "What runways are available?"
-        },
-        {
-          "role": "assistant",
-          "content": "The available runways are 09/27, 11/29, and 15/33."
-        },
-        {
-          "role": "user",
-          "content": "Which one runs east-west?"
-        },
-        {
-          "role": "assistant",
-          "content": "Runway 09/27 runs east-west."
-        }
-      ],
-      "requestedIds": [
-        "/encyclopedia/locations/sochi/#sims-title",
-        "/encyclopedia/locations/sochi/",
-        "/encyclopedia/locations/sochi/#history",
-        "/encyclopedia/locations/sochi/#where-title",
-        "/encyclopedia/terminology/#air-boss",
-        "/manual/airfield-operations/airfield-basics/#talk"
-      ],
       "topic": [
         "/encyclopedia/locations/ramat-david/"
       ],
@@ -538,7 +441,7 @@
         "references": [
           {
             "id": "/encyclopedia/locations/sochi/#sims-title",
-            "title": "Sochi International Airport · Sim maps"
+            "title": "Sochi International Airport \u00b7 Sim maps"
           },
           {
             "id": "/encyclopedia/locations/sochi/",
@@ -547,45 +450,24 @@
         ]
       },
       "passed": true,
-      "ms": 1133
-    },
-    {
-      "conversation": "ramat",
-      "question": "What about its ILS?",
-      "history": [
-        {
-          "role": "user",
-          "content": "What runways are available?"
-        },
-        {
-          "role": "assistant",
-          "content": "The available runways are 09/27, 11/29, and 15/33."
-        },
-        {
-          "role": "user",
-          "content": "Which one runs east-west?"
-        },
-        {
-          "role": "assistant",
-          "content": "Runway 09/27 runs east-west."
-        },
-        {
-          "role": "user",
-          "content": "What is the tower freq for Sochi?"
-        },
-        {
-          "role": "assistant",
-          "content": "The tower frequencies for Sochi are 127.0 MHz VHF and 256.0 MHz UHF."
-        }
-      ],
-      "requestedIds": [
+      "ms": 1133,
+      "candidateIds": [
         "/encyclopedia/locations/sochi/#sims-title",
         "/encyclopedia/locations/sochi/",
         "/encyclopedia/locations/sochi/#history",
         "/encyclopedia/locations/sochi/#where-title",
         "/encyclopedia/terminology/#air-boss",
-        "/manual/instrument-flight/ils-approach/#launch"
+        "/manual/airfield-operations/airfield-basics/#talk"
       ],
+      "requestedIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/sochi/#history"
+      ]
+    },
+    {
+      "conversation": "ramat",
+      "question": "What about its ILS?",
       "topic": [
         "/encyclopedia/locations/sochi/"
       ],
@@ -603,7 +485,7 @@
         "references": [
           {
             "id": "/encyclopedia/locations/sochi/#sims-title",
-            "title": "Sochi International Airport · Sim maps"
+            "title": "Sochi International Airport \u00b7 Sim maps"
           },
           {
             "id": "/encyclopedia/locations/sochi/",
@@ -612,16 +494,24 @@
         ]
       },
       "passed": true,
-      "ms": 895
+      "ms": 895,
+      "candidateIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/sochi/#history",
+        "/encyclopedia/locations/sochi/#where-title",
+        "/encyclopedia/terminology/#air-boss",
+        "/manual/instrument-flight/ils-approach/#launch"
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/sochi/#history"
+      ]
     },
     {
       "conversation": "concepts",
       "question": "What is angle of attack?",
-      "history": [],
-      "requestedIds": [
-        "/encyclopedia/terminology/#aoa",
-        "/manual/flight-fundamentals/principles-of-flight/#airfoil"
-      ],
       "status": 200,
       "revision": "9f4d5030d96a20c734634a5975eeddc341484eb4",
       "reply": {
@@ -640,30 +530,24 @@
           },
           {
             "id": "/manual/flight-fundamentals/principles-of-flight/#airfoil",
-            "title": "Fixed-Wing Principles of Flight · The wing and angle of attack"
+            "title": "Fixed-Wing Principles of Flight \u00b7 The wing and angle of attack"
           }
         ]
       },
       "passed": true,
-      "ms": 1179
+      "ms": 1179,
+      "candidateIds": [
+        "/encyclopedia/terminology/#aoa",
+        "/manual/flight-fundamentals/principles-of-flight/#airfoil"
+      ],
+      "requestedIds": [
+        "/encyclopedia/terminology/#aoa",
+        "/manual/flight-fundamentals/principles-of-flight/#airfoil"
+      ]
     },
     {
       "conversation": "concepts",
       "question": "What is a VORTAC?",
-      "history": [
-        {
-          "role": "user",
-          "content": "What is angle of attack?"
-        },
-        {
-          "role": "assistant",
-          "content": "Angle of attack (AOA) is the angle formed between the chord line of an airfoil and the direction of the relative wind or flight path."
-        }
-      ],
-      "requestedIds": [
-        "/manual/instrument-flight/instrument-procedures/#penetration",
-        "/manual/navigation/air-navigation/#navaids"
-      ],
       "topic": [
         "/encyclopedia/terminology/#aoa"
       ],
@@ -678,23 +562,24 @@
         "references": [
           {
             "id": "/manual/navigation/air-navigation/#navaids",
-            "title": "Air Navigation · Radio navigation aids"
+            "title": "Air Navigation \u00b7 Radio navigation aids"
           }
         ]
       },
       "passed": true,
-      "ms": 1458
+      "ms": 1458,
+      "candidateIds": [
+        "/manual/instrument-flight/instrument-procedures/#penetration",
+        "/manual/navigation/air-navigation/#navaids"
+      ],
+      "requestedIds": [
+        "/manual/instrument-flight/instrument-procedures/#penetration",
+        "/manual/navigation/air-navigation/#navaids"
+      ]
     },
     {
       "conversation": "tomcat-alias",
       "question": "What engines does the Tomcat have?",
-      "history": [],
-      "requestedIds": [
-        "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
-        "/encyclopedia/aircraft/f-14/#irans-tomcats",
-        "/encyclopedia/aircraft/f-14/#over-the-gulf-of-sidra",
-        "/manual/naval-operations/case-iii/#launch"
-      ],
       "status": 200,
       "revision": "9f4d5030d96a20c734634a5975eeddc341484eb4",
       "reply": {
@@ -706,27 +591,31 @@
         "references": [
           {
             "id": "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
-            "title": "F-14 Tomcat · Swing wings and Phoenix missiles"
+            "title": "F-14 Tomcat \u00b7 Swing wings and Phoenix missiles"
           }
         ]
       },
       "passed": true,
-      "ms": 1330
+      "ms": 1330,
+      "candidateIds": [
+        "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+        "/encyclopedia/aircraft/f-14/#irans-tomcats",
+        "/encyclopedia/aircraft/f-14/#over-the-gulf-of-sidra",
+        "/manual/naval-operations/case-iii/#launch"
+      ],
+      "requestedIds": [
+        "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+        "/encyclopedia/aircraft/f-14/#irans-tomcats",
+        "/encyclopedia/aircraft/f-14/#over-the-gulf-of-sidra"
+      ]
     },
     {
       "conversation": "unsupported",
       "question": "What is the Wi-Fi password at Sochi airport?",
-      "history": [],
-      "requestedIds": [
-        "/encyclopedia/locations/sochi/#sims-title",
-        "/encyclopedia/locations/sochi/#role-title",
-        "/encyclopedia/locations/sochi/#role-today",
-        "/encyclopedia/locations/sochi/#history"
-      ],
       "status": 200,
       "revision": "9f4d5030d96a20c734634a5975eeddc341484eb4",
       "reply": {
-        "answer": "I couldn’t find enough on Oversweep to answer that.",
+        "answer": "I couldn\u2019t find enough on Oversweep to answer that.",
         "ids": [],
         "topic": [
           "/encyclopedia/locations/sochi/"
@@ -734,20 +623,22 @@
         "references": []
       },
       "passed": true,
-      "ms": 990
+      "ms": 990,
+      "candidateIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/#role-title",
+        "/encyclopedia/locations/sochi/#role-today",
+        "/encyclopedia/locations/sochi/#history"
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/#role-title",
+        "/encyclopedia/locations/sochi/#role-today"
+      ]
     },
     {
       "conversation": "topic-switch",
       "question": "What is the tower frequency for Sochi?",
-      "history": [],
-      "requestedIds": [
-        "/encyclopedia/locations/sochi/#sims-title",
-        "/encyclopedia/locations/sochi/",
-        "/encyclopedia/locations/sochi/#history",
-        "/encyclopedia/locations/sochi/#where-title",
-        "/encyclopedia/terminology/#rsu",
-        "/manual/airfield-operations/airfield-basics/#talk"
-      ],
       "status": 200,
       "revision": "9f4d5030d96a20c734634a5975eeddc341484eb4",
       "reply": {
@@ -762,7 +653,7 @@
         "references": [
           {
             "id": "/encyclopedia/locations/sochi/#sims-title",
-            "title": "Sochi International Airport · Sim maps"
+            "title": "Sochi International Airport \u00b7 Sim maps"
           },
           {
             "id": "/encyclopedia/locations/sochi/",
@@ -771,68 +662,52 @@
         ]
       },
       "passed": true,
-      "ms": 527
+      "ms": 527,
+      "candidateIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/sochi/#history",
+        "/encyclopedia/locations/sochi/#where-title",
+        "/encyclopedia/terminology/#rsu",
+        "/manual/airfield-operations/airfield-basics/#talk"
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/sochi/#history"
+      ]
     },
     {
       "conversation": "topic-switch",
       "question": "How do flaps affect lift?",
-      "history": [
-        {
-          "role": "user",
-          "content": "What is the tower frequency for Sochi?"
-        },
-        {
-          "role": "assistant",
-          "content": "The tower frequencies for Sochi (represented as Sochi-Adler in DCS) are 127.0 MHz VHF and 256.0 MHz UHF."
-        }
-      ],
-      "requestedIds": [
-        "/manual/flight-fundamentals/rotor-wing/#forward",
-        "/manual/flight-fundamentals/principles-of-flight/#lift",
-        "/encyclopedia/terminology/#dissymmetry-of-lift",
-        "/encyclopedia/terminology/#translational-lift"
-      ],
       "topic": [
         "/encyclopedia/locations/sochi/"
       ],
       "status": 200,
       "revision": "9f4d5030d96a20c734634a5975eeddc341484eb4",
       "reply": {
-        "answer": "I couldn’t find enough on Oversweep to answer that.",
+        "answer": "I couldn\u2019t find enough on Oversweep to answer that.",
         "ids": [],
         "topic": [],
         "references": []
       },
       "passed": false,
-      "ms": 965
+      "ms": 965,
+      "candidateIds": [
+        "/manual/flight-fundamentals/rotor-wing/#forward",
+        "/manual/flight-fundamentals/principles-of-flight/#lift",
+        "/encyclopedia/terminology/#dissymmetry-of-lift",
+        "/encyclopedia/terminology/#translational-lift"
+      ],
+      "requestedIds": [
+        "/manual/flight-fundamentals/rotor-wing/#forward",
+        "/manual/flight-fundamentals/principles-of-flight/#lift",
+        "/encyclopedia/terminology/#dissymmetry-of-lift"
+      ]
     },
     {
       "conversation": "topic-switch",
       "question": "Tell me about radar",
-      "history": [
-        {
-          "role": "user",
-          "content": "What is the tower frequency for Sochi?"
-        },
-        {
-          "role": "assistant",
-          "content": "The tower frequencies for Sochi (represented as Sochi-Adler in DCS) are 127.0 MHz VHF and 256.0 MHz UHF."
-        },
-        {
-          "role": "user",
-          "content": "How do flaps affect lift?"
-        },
-        {
-          "role": "assistant",
-          "content": "I couldn’t find enough on Oversweep to answer that."
-        }
-      ],
-      "requestedIds": [
-        "/manual/abnormal-operations/threat-avoidance/#radar",
-        "/manual/sensors-situational-awareness/radar-and-warning/#rwr",
-        "/manual/sensors-situational-awareness/radar-and-warning/",
-        "/manual/sensors-situational-awareness/radar-and-warning/#notch"
-      ],
       "topic": [],
       "status": 200,
       "revision": "9f4d5030d96a20c734634a5975eeddc341484eb4",
@@ -848,11 +723,11 @@
         "references": [
           {
             "id": "/manual/abnormal-operations/threat-avoidance/#radar",
-            "title": "Threat Avoidance and Defeat · Defeating a radar-guided SAM"
+            "title": "Threat Avoidance and Defeat \u00b7 Defeating a radar-guided SAM"
           },
           {
             "id": "/manual/sensors-situational-awareness/radar-and-warning/#rwr",
-            "title": "Radar, Warning Receivers and Countermeasures · Reading the warning receiver"
+            "title": "Radar, Warning Receivers and Countermeasures \u00b7 Reading the warning receiver"
           },
           {
             "id": "/manual/sensors-situational-awareness/radar-and-warning/",
@@ -860,25 +735,27 @@
           },
           {
             "id": "/manual/sensors-situational-awareness/radar-and-warning/#notch",
-            "title": "Radar, Warning Receivers and Countermeasures · The Doppler notch"
+            "title": "Radar, Warning Receivers and Countermeasures \u00b7 The Doppler notch"
           }
         ]
       },
       "passed": true,
-      "ms": 3607
+      "ms": 3607,
+      "candidateIds": [
+        "/manual/abnormal-operations/threat-avoidance/#radar",
+        "/manual/sensors-situational-awareness/radar-and-warning/#rwr",
+        "/manual/sensors-situational-awareness/radar-and-warning/",
+        "/manual/sensors-situational-awareness/radar-and-warning/#notch"
+      ],
+      "requestedIds": [
+        "/manual/abnormal-operations/threat-avoidance/#radar",
+        "/manual/sensors-situational-awareness/radar-and-warning/#rwr",
+        "/manual/sensors-situational-awareness/radar-and-warning/"
+      ]
     },
     {
       "conversation": "comparison",
       "question": "What tower frequencies do Sochi and Kutaisi use?",
-      "history": [],
-      "requestedIds": [
-        "/encyclopedia/locations/sochi/#sims-title",
-        "/encyclopedia/locations/kutaisi/#sims-title",
-        "/encyclopedia/locations/sochi/",
-        "/encyclopedia/locations/kutaisi/",
-        "/encyclopedia/terminology/#jrfl",
-        "/manual/radio-communications/radio-procedures/#bands"
-      ],
       "status": 200,
       "revision": "9f4d5030d96a20c734634a5975eeddc341484eb4",
       "reply": {
@@ -896,11 +773,11 @@
         "references": [
           {
             "id": "/encyclopedia/locations/sochi/#sims-title",
-            "title": "Sochi International Airport · Sim maps"
+            "title": "Sochi International Airport \u00b7 Sim maps"
           },
           {
             "id": "/encyclopedia/locations/kutaisi/#sims-title",
-            "title": "Kutaisi International Airport · Sim maps"
+            "title": "Kutaisi International Airport \u00b7 Sim maps"
           },
           {
             "id": "/encyclopedia/locations/sochi/",
@@ -913,29 +790,24 @@
         ]
       },
       "passed": true,
-      "ms": 1740
+      "ms": 1740,
+      "candidateIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/kutaisi/#sims-title",
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/kutaisi/",
+        "/encyclopedia/terminology/#jrfl",
+        "/manual/radio-communications/radio-procedures/#bands"
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/kutaisi/#sims-title",
+        "/encyclopedia/locations/sochi/"
+      ]
     },
     {
       "conversation": "comparison",
       "question": "Compare the engines of the F-14 and F-16.",
-      "history": [
-        {
-          "role": "user",
-          "content": "What tower frequencies do Sochi and Kutaisi use?"
-        },
-        {
-          "role": "assistant",
-          "content": "Sochi uses tower frequencies 127.0 MHz VHF and 256.0 MHz UHF, while Kutaisi uses 134.0 MHz VHF and 263.0 MHz UHF."
-        }
-      ],
-      "requestedIds": [
-        "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
-        "/encyclopedia/aircraft/f-16/",
-        "/encyclopedia/aircraft/f-14/",
-        "/encyclopedia/aircraft/f-16/#the-fighter-mafias-fighter",
-        "/encyclopedia/terminology/#autorotation",
-        "/manual/#subject-aircraft-procedures"
-      ],
       "topic": [
         "/encyclopedia/locations/sochi/",
         "/encyclopedia/locations/kutaisi/"
@@ -956,7 +828,7 @@
         "references": [
           {
             "id": "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
-            "title": "F-14 Tomcat · Swing wings and Phoenix missiles"
+            "title": "F-14 Tomcat \u00b7 Swing wings and Phoenix missiles"
           },
           {
             "id": "/encyclopedia/aircraft/f-16/",
@@ -969,19 +841,24 @@
         ]
       },
       "passed": true,
-      "ms": 3554
+      "ms": 3554,
+      "candidateIds": [
+        "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+        "/encyclopedia/aircraft/f-16/",
+        "/encyclopedia/aircraft/f-14/",
+        "/encyclopedia/aircraft/f-16/#the-fighter-mafias-fighter",
+        "/encyclopedia/terminology/#autorotation",
+        "/manual/#subject-aircraft-procedures"
+      ],
+      "requestedIds": [
+        "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+        "/encyclopedia/aircraft/f-16/",
+        "/encyclopedia/aircraft/f-14/"
+      ]
     },
     {
       "conversation": "long-context",
       "question": "What is the VORTAC for Ramat David?",
-      "history": [],
-      "requestedIds": [
-        "/encyclopedia/locations/ramat-david/#sims-title",
-        "/encyclopedia/locations/ramat-david/#where-title",
-        "/encyclopedia/locations/ramat-david/#the-airfield",
-        "/encyclopedia/locations/ramat-david/#role-today",
-        "/manual/instrument-flight/instrument-procedures/#penetration"
-      ],
       "status": 200,
       "revision": "9f4d5030d96a20c734634a5975eeddc341484eb4",
       "reply": {
@@ -995,34 +872,28 @@
         "references": [
           {
             "id": "/encyclopedia/locations/ramat-david/#sims-title",
-            "title": "Ramat David Airbase · Sim maps"
+            "title": "Ramat David Airbase \u00b7 Sim maps"
           }
         ]
       },
       "passed": true,
-      "ms": 1024
+      "ms": 1024,
+      "candidateIds": [
+        "/encyclopedia/locations/ramat-david/#sims-title",
+        "/encyclopedia/locations/ramat-david/#where-title",
+        "/encyclopedia/locations/ramat-david/#the-airfield",
+        "/encyclopedia/locations/ramat-david/#role-today",
+        "/manual/instrument-flight/instrument-procedures/#penetration"
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/ramat-david/#sims-title",
+        "/encyclopedia/locations/ramat-david/#where-title",
+        "/encyclopedia/locations/ramat-david/#the-airfield"
+      ]
     },
     {
       "conversation": "long-context",
       "question": "What runways are available?",
-      "history": [
-        {
-          "role": "user",
-          "content": "What is the VORTAC for Ramat David?"
-        },
-        {
-          "role": "assistant",
-          "content": "The VORTAC for Ramat David is RMD, operating on channel 84X and 113.7 MHz."
-        }
-      ],
-      "requestedIds": [
-        "/encyclopedia/locations/ramat-david/#sims-title",
-        "/encyclopedia/locations/ramat-david/#facilities-title",
-        "/encyclopedia/locations/ramat-david/",
-        "/encyclopedia/locations/ramat-david/#the-airfield",
-        "/encyclopedia/terminology/#runway-designator",
-        "/manual/airfield-operations/airfield-basics/#numbers"
-      ],
       "topic": [
         "/encyclopedia/locations/ramat-david/"
       ],
@@ -1042,11 +913,11 @@
         "references": [
           {
             "id": "/encyclopedia/locations/ramat-david/#sims-title",
-            "title": "Ramat David Airbase · Sim maps"
+            "title": "Ramat David Airbase \u00b7 Sim maps"
           },
           {
             "id": "/encyclopedia/locations/ramat-david/#facilities-title",
-            "title": "Ramat David Airbase · Runways and facilities"
+            "title": "Ramat David Airbase \u00b7 Runways and facilities"
           },
           {
             "id": "/encyclopedia/locations/ramat-david/",
@@ -1054,49 +925,36 @@
           },
           {
             "id": "/encyclopedia/locations/ramat-david/#the-airfield",
-            "title": "Ramat David Airbase · The airfield"
+            "title": "Ramat David Airbase \u00b7 The airfield"
           }
         ]
       },
       "passed": true,
-      "ms": 1884
+      "ms": 1884,
+      "candidateIds": [
+        "/encyclopedia/locations/ramat-david/#sims-title",
+        "/encyclopedia/locations/ramat-david/#facilities-title",
+        "/encyclopedia/locations/ramat-david/",
+        "/encyclopedia/locations/ramat-david/#the-airfield",
+        "/encyclopedia/terminology/#runway-designator",
+        "/manual/airfield-operations/airfield-basics/#numbers"
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/ramat-david/#sims-title",
+        "/encyclopedia/locations/ramat-david/#facilities-title",
+        "/encyclopedia/locations/ramat-david/"
+      ]
     },
     {
       "conversation": "long-context",
       "question": "Which one runs east-west?",
-      "history": [
-        {
-          "role": "user",
-          "content": "What is the VORTAC for Ramat David?"
-        },
-        {
-          "role": "assistant",
-          "content": "The VORTAC for Ramat David is RMD, operating on channel 84X and 113.7 MHz."
-        },
-        {
-          "role": "user",
-          "content": "What runways are available?"
-        },
-        {
-          "role": "assistant",
-          "content": "The available runways are 09/27, 11/29, and 15/33."
-        }
-      ],
-      "requestedIds": [
-        "/encyclopedia/locations/ramat-david/#sims-title",
-        "/encyclopedia/locations/ramat-david/",
-        "/encyclopedia/locations/ramat-david/#where-title",
-        "/encyclopedia/locations/ramat-david/#units-title",
-        "/encyclopedia/terminology/#variation",
-        "/manual/navigation/air-navigation/#direction"
-      ],
       "topic": [
         "/encyclopedia/locations/ramat-david/"
       ],
       "status": 200,
       "revision": "9f4d5030d96a20c734634a5975eeddc341484eb4",
       "reply": {
-        "answer": "I couldn’t find enough on Oversweep to answer that.",
+        "answer": "I couldn\u2019t find enough on Oversweep to answer that.",
         "ids": [],
         "topic": [
           "/encyclopedia/locations/ramat-david/"
@@ -1104,45 +962,24 @@
         "references": []
       },
       "passed": false,
-      "ms": 1110
-    },
-    {
-      "conversation": "long-context",
-      "question": "What about tower frequency?",
-      "history": [
-        {
-          "role": "user",
-          "content": "What is the VORTAC for Ramat David?"
-        },
-        {
-          "role": "assistant",
-          "content": "The VORTAC for Ramat David is RMD, operating on channel 84X and 113.7 MHz."
-        },
-        {
-          "role": "user",
-          "content": "What runways are available?"
-        },
-        {
-          "role": "assistant",
-          "content": "The available runways are 09/27, 11/29, and 15/33."
-        },
-        {
-          "role": "user",
-          "content": "Which one runs east-west?"
-        },
-        {
-          "role": "assistant",
-          "content": "I couldn’t find enough on Oversweep to answer that."
-        }
+      "ms": 1110,
+      "candidateIds": [
+        "/encyclopedia/locations/ramat-david/#sims-title",
+        "/encyclopedia/locations/ramat-david/",
+        "/encyclopedia/locations/ramat-david/#where-title",
+        "/encyclopedia/locations/ramat-david/#units-title",
+        "/encyclopedia/terminology/#variation",
+        "/manual/navigation/air-navigation/#direction"
       ],
       "requestedIds": [
         "/encyclopedia/locations/ramat-david/#sims-title",
         "/encyclopedia/locations/ramat-david/",
-        "/encyclopedia/locations/ramat-david/#facilities-title",
-        "/encyclopedia/locations/ramat-david/#history",
-        "/encyclopedia/terminology/#rsu",
-        "/manual/airfield-operations/airfield-basics/#talk"
-      ],
+        "/encyclopedia/locations/ramat-david/#where-title"
+      ]
+    },
+    {
+      "conversation": "long-context",
+      "question": "What about tower frequency?",
       "topic": [
         "/encyclopedia/locations/ramat-david/"
       ],
@@ -1159,50 +996,29 @@
         "references": [
           {
             "id": "/encyclopedia/locations/ramat-david/#sims-title",
-            "title": "Ramat David Airbase · Sim maps"
+            "title": "Ramat David Airbase \u00b7 Sim maps"
           }
         ]
       },
       "passed": true,
-      "ms": 2453
+      "ms": 2453,
+      "candidateIds": [
+        "/encyclopedia/locations/ramat-david/#sims-title",
+        "/encyclopedia/locations/ramat-david/",
+        "/encyclopedia/locations/ramat-david/#facilities-title",
+        "/encyclopedia/locations/ramat-david/#history",
+        "/encyclopedia/terminology/#rsu",
+        "/manual/airfield-operations/airfield-basics/#talk"
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/ramat-david/#sims-title",
+        "/encyclopedia/locations/ramat-david/",
+        "/encyclopedia/locations/ramat-david/#facilities-title"
+      ]
     },
     {
       "conversation": "long-context",
       "question": "And the VORTAC channel again?",
-      "history": [
-        {
-          "role": "user",
-          "content": "What runways are available?"
-        },
-        {
-          "role": "assistant",
-          "content": "The available runways are 09/27, 11/29, and 15/33."
-        },
-        {
-          "role": "user",
-          "content": "Which one runs east-west?"
-        },
-        {
-          "role": "assistant",
-          "content": "I couldn’t find enough on Oversweep to answer that."
-        },
-        {
-          "role": "user",
-          "content": "What about tower frequency?"
-        },
-        {
-          "role": "assistant",
-          "content": "In DCS: Syria and DCS World, the tower frequency is 118.6 MHz VHF and 251.3 MHz UHF. In DCS: Sinai, the tower frequency is 118.0 MHz VHF and 251.1 MHz UHF."
-        }
-      ],
-      "requestedIds": [
-        "/encyclopedia/locations/dcs-the-channel/#sims-title",
-        "/encyclopedia/locations/dcs-the-channel/",
-        "/encyclopedia/locations/dcs-the-channel/#coverage",
-        "/encyclopedia/locations/dcs-the-channel/#map-airfields-title",
-        "/encyclopedia/terminology/#i-say-again",
-        "/manual/navigation/air-navigation/#navaids"
-      ],
       "topic": [
         "/encyclopedia/locations/ramat-david/"
       ],
@@ -1224,12 +1040,25 @@
           },
           {
             "id": "/encyclopedia/locations/dcs-the-channel/#map-airfields-title",
-            "title": "DCS: The Channel · Airfields"
+            "title": "DCS: The Channel \u00b7 Airfields"
           }
         ]
       },
       "passed": false,
-      "ms": 1068
+      "ms": 1068,
+      "candidateIds": [
+        "/encyclopedia/locations/dcs-the-channel/#sims-title",
+        "/encyclopedia/locations/dcs-the-channel/",
+        "/encyclopedia/locations/dcs-the-channel/#coverage",
+        "/encyclopedia/locations/dcs-the-channel/#map-airfields-title",
+        "/encyclopedia/terminology/#i-say-again",
+        "/manual/navigation/air-navigation/#navaids"
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/dcs-the-channel/#sims-title",
+        "/encyclopedia/locations/dcs-the-channel/",
+        "/encyclopedia/locations/dcs-the-channel/#coverage"
+      ]
     }
   ]
 }

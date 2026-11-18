@@ -1,0 +1,762 @@
+{
+  "endpoint": "https://ask-oversweep.burnzoire.workers.dev/ask",
+  "at": "2026-11-18T03:15:09.559Z",
+  "results": [
+    {
+      "conversation": "tomcat",
+      "question": "What engines does the F-14B have?",
+      "requestedIds": [],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "The F-14B has two General Electric F110-GE-400 engines, each providing 27,000 lb.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          },
+          {
+            "id": "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+            "title": "F-14 Tomcat \u00b7 Swing wings and Phoenix missiles"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 7269
+    },
+    {
+      "conversation": "tomcat",
+      "question": "And the A model?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/aircraft/f-14/"
+      ],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "The F-14A has two Pratt & Whitney TF30-P-414A afterburning turbofans, providing 20,900 lb each.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 6469
+    },
+    {
+      "conversation": "tomcat",
+      "question": "How many crew?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/aircraft/f-14/"
+      ],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "The F-14 Tomcat has a crew of 2: a pilot and a radar intercept officer (RIO).",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          }
+        ]
+      },
+      "passed": false,
+      "ms": 1119
+    },
+    {
+      "conversation": "sochi",
+      "question": "What freq is Sochi tower?",
+      "requestedIds": [],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "In the DCS sim maps, the Sochi tower frequency is 127.0 MHz VHF and 256.0 MHz UHF.",
+        "ids": [
+          "/encyclopedia/locations/sochi/#sims-title",
+          "/encyclopedia/locations/sochi/#where-title"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/sochi/#sims-title",
+            "title": "Sochi International Airport \u00b7 Sim maps"
+          },
+          {
+            "id": "/encyclopedia/locations/sochi/#where-title",
+            "title": "Sochi International Airport \u00b7 Location and identity"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1165
+    },
+    {
+      "conversation": "sochi",
+      "question": "Does it have a TACAN?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/sochi/"
+      ],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "A TACAN is not documented in the sources cited for Sochi International Airport.",
+        "ids": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/sochi/",
+            "title": "Sochi International Airport"
+          }
+        ]
+      },
+      "passed": false,
+      "ms": 825
+    },
+    {
+      "conversation": "sochi",
+      "question": "What about ILS?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/sochi/"
+      ],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "In the DCS sim maps, there is an ILS on runway 06 at 111.1 MHz (ISO).",
+        "ids": [
+          "/encyclopedia/locations/sochi/#sims-title",
+          "/encyclopedia/locations/sochi/#history"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/sochi/#sims-title",
+            "title": "Sochi International Airport \u00b7 Sim maps"
+          },
+          {
+            "id": "/encyclopedia/locations/sochi/#history",
+            "title": "Sochi International Airport \u00b7 History"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1309
+    },
+    {
+      "conversation": "sochi",
+      "question": "What runways are available?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/sochi/"
+      ],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "In the DCS sim maps, only runway 06/24 is available. The real airport also has runway 02/20.",
+        "ids": [
+          "/encyclopedia/locations/sochi/#sims-title",
+          "/encyclopedia/locations/sochi/#the-airfield"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/sochi/#sims-title",
+            "title": "Sochi International Airport \u00b7 Sim maps"
+          },
+          {
+            "id": "/encyclopedia/locations/sochi/#the-airfield",
+            "title": "Sochi International Airport \u00b7 The airfield"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1170
+    },
+    {
+      "conversation": "ramat",
+      "question": "What is the TACAN for Ramat David?",
+      "requestedIds": [],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "The TACAN for Ramat David is not explicitly listed, but the airfield features a VORTAC RMD, which provides TACAN azimuth and distance. In DCS: Syria, the VORTAC RMD uses channel 84X and 113.7 MHz; in DCS: Sinai, it also uses channel 84X and 113.7 MHz.",
+        "ids": [
+          "/encyclopedia/locations/ramat-david/#sims-title"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/ramat-david/#sims-title",
+            "title": "Ramat David Airbase \u00b7 Sim maps"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 2145
+    },
+    {
+      "conversation": "ramat",
+      "question": "What runways are available?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/ramat-david/"
+      ],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "The available runways at Ramat David Airbase are 09/27, 11/29, and 15/33.",
+        "ids": [
+          "/encyclopedia/locations/ramat-david/",
+          "/encyclopedia/locations/ramat-david/#sims-title",
+          "/encyclopedia/locations/ramat-david/#facilities-title"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/ramat-david/",
+            "title": "Ramat David Airbase"
+          },
+          {
+            "id": "/encyclopedia/locations/ramat-david/#sims-title",
+            "title": "Ramat David Airbase \u00b7 Sim maps"
+          },
+          {
+            "id": "/encyclopedia/locations/ramat-david/#facilities-title",
+            "title": "Ramat David Airbase \u00b7 Runways and facilities"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1324
+    },
+    {
+      "conversation": "ramat",
+      "question": "Which one runs east-west?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/ramat-david/"
+      ],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "I couldn\u2019t find enough on Oversweep to answer that.",
+        "ids": [],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": []
+      },
+      "passed": false,
+      "ms": 1373
+    },
+    {
+      "conversation": "ramat",
+      "question": "What is the tower freq for Sochi?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/ramat-david/"
+      ],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "In DCS: Caucasus, the tower frequencies for Sochi International Airport are 127.0 MHz VHF and 256.0 MHz UHF.",
+        "ids": [
+          "/encyclopedia/locations/sochi/",
+          "/encyclopedia/locations/sochi/#sims-title",
+          "/encyclopedia/locations/sochi/#where-title"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/sochi/",
+            "title": "Sochi International Airport"
+          },
+          {
+            "id": "/encyclopedia/locations/sochi/#sims-title",
+            "title": "Sochi International Airport \u00b7 Sim maps"
+          },
+          {
+            "id": "/encyclopedia/locations/sochi/#where-title",
+            "title": "Sochi International Airport \u00b7 Location and identity"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1151
+    },
+    {
+      "conversation": "ramat",
+      "question": "What about its ILS?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/sochi/"
+      ],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "In DCS: Caucasus, there is an ILS on runway 06 at 111.1 MHz (ISO).",
+        "ids": [
+          "/encyclopedia/locations/sochi/#where-title"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/sochi/#where-title",
+            "title": "Sochi International Airport \u00b7 Location and identity"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1080
+    },
+    {
+      "conversation": "concepts",
+      "question": "What is angle of attack?",
+      "requestedIds": [],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "Angle of attack (AOA, \u03b1) is the angle formed by the chord of the airfoil and the direction of the relative wind, or between the chord line and the flight path.",
+        "ids": [
+          "/encyclopedia/terminology/#aoa",
+          "/manual/flight-fundamentals/principles-of-flight/#airfoil"
+        ],
+        "topic": [
+          "/encyclopedia/terminology/#aoa"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/terminology/#aoa",
+            "title": "AOA"
+          },
+          {
+            "id": "/manual/flight-fundamentals/principles-of-flight/#airfoil",
+            "title": "Fixed-Wing Principles of Flight \u00b7 The wing and angle of attack"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1399
+    },
+    {
+      "conversation": "concepts",
+      "question": "What is a VORTAC?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/terminology/#aoa"
+      ],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "A VORTAC provides VOR azimuth, TACAN azimuth, and TACAN distance using paired VHF and UHF frequencies.",
+        "ids": [
+          "/manual/navigation/air-navigation/#navaids"
+        ],
+        "topic": [],
+        "references": [
+          {
+            "id": "/manual/navigation/air-navigation/#navaids",
+            "title": "Air Navigation \u00b7 Radio navigation aids"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1034
+    },
+    {
+      "conversation": "tomcat-alias",
+      "question": "What engines does the Tomcat have?",
+      "requestedIds": [],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "The F-14A uses two Pratt & Whitney TF30-P-414A afterburning turbofans, each providing 20,900 lb. The F-14B/D variants use two General Electric F110-GE-400 engines, each providing 27,000 lb.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          },
+          {
+            "id": "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+            "title": "F-14 Tomcat \u00b7 Swing wings and Phoenix missiles"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 7564
+    },
+    {
+      "conversation": "unsupported",
+      "question": "What is the Wi-Fi password at Sochi airport?",
+      "requestedIds": [],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "I couldn\u2019t find enough on Oversweep to answer that.",
+        "ids": [],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": []
+      },
+      "passed": true,
+      "ms": 792
+    },
+    {
+      "conversation": "topic-switch",
+      "question": "What is the tower frequency for Sochi?",
+      "requestedIds": [],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "The tower frequencies for Sochi (represented as Sochi-Adler in DCS) are 127.0 MHz VHF and 256.0 MHz UHF.",
+        "ids": [
+          "/encyclopedia/locations/sochi/",
+          "/encyclopedia/locations/sochi/#sims-title"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/sochi/",
+            "title": "Sochi International Airport"
+          },
+          {
+            "id": "/encyclopedia/locations/sochi/#sims-title",
+            "title": "Sochi International Airport \u00b7 Sim maps"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1138
+    },
+    {
+      "conversation": "topic-switch",
+      "question": "How do flaps affect lift?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/sochi/"
+      ],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "Flaps are high-lift devices that exist to increase CLmax and reduce the stall speed.",
+        "ids": [
+          "/manual/flight-fundamentals/principles-of-flight/#axes"
+        ],
+        "topic": [],
+        "references": [
+          {
+            "id": "/manual/flight-fundamentals/principles-of-flight/#axes",
+            "title": "Fixed-Wing Principles of Flight \u00b7 Axes and flight controls"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1042
+    },
+    {
+      "conversation": "topic-switch",
+      "question": "Tell me about radar",
+      "requestedIds": [],
+      "topic": [],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "Radar measures range by timing its pulses and closure from their Doppler shift. A pulse-Doppler radar can remove ground returns by rejecting everything with a low velocity relative to the ground; this creates a weakness known as the Doppler notch, where a target flying at a 90 degree aspect (straight across the radar's line of sight) has no speed toward or away from the radar and is hidden in the clutter. A radar warning receiver is an electronic warfare support system that uses antennas and a processor to match signals against an emitter identification table, displaying a symbol and tone on a scope to indicate the radar's bearing, mode (such as search, track, or missile launch), and threat type. In brevity, a tracking airborne radar is referred to as a spike, a surface radar is MUD, and no indications is NAKED.",
+        "ids": [
+          "/manual/abnormal-operations/threat-avoidance/#radar",
+          "/manual/sensors-situational-awareness/radar-and-warning/#rwr",
+          "/manual/sensors-situational-awareness/radar-and-warning/",
+          "/manual/sensors-situational-awareness/radar-and-warning/#notch"
+        ],
+        "topic": [],
+        "references": [
+          {
+            "id": "/manual/abnormal-operations/threat-avoidance/#radar",
+            "title": "Threat Avoidance and Defeat \u00b7 Defeating a radar-guided SAM"
+          },
+          {
+            "id": "/manual/sensors-situational-awareness/radar-and-warning/#rwr",
+            "title": "Radar, Warning Receivers and Countermeasures \u00b7 Reading the warning receiver"
+          },
+          {
+            "id": "/manual/sensors-situational-awareness/radar-and-warning/",
+            "title": "Radar, Warning Receivers and Countermeasures"
+          },
+          {
+            "id": "/manual/sensors-situational-awareness/radar-and-warning/#notch",
+            "title": "Radar, Warning Receivers and Countermeasures \u00b7 The Doppler notch"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 6271
+    },
+    {
+      "conversation": "comparison",
+      "question": "What tower frequencies do Sochi and Kutaisi use?",
+      "requestedIds": [],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "Sochi International Airport uses tower frequencies of 127.0 MHz VHF and 256.0 MHz UHF, while Kutaisi International Airport uses tower frequencies of 134.0 MHz VHF and 263.0 MHz UHF.",
+        "ids": [
+          "/encyclopedia/locations/sochi/",
+          "/encyclopedia/locations/kutaisi/"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/",
+          "/encyclopedia/locations/kutaisi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/sochi/",
+            "title": "Sochi International Airport"
+          },
+          {
+            "id": "/encyclopedia/locations/kutaisi/",
+            "title": "Kutaisi International Airport"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1851
+    },
+    {
+      "conversation": "comparison",
+      "question": "Compare the engines of the F-14 and F-16.",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/kutaisi/"
+      ],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "The F-14 Tomcat uses two afterburning turbofans: the F-14A uses two Pratt & Whitney TF30-P-414A (20,900 lb each), while the F-14B/D uses two General Electric F110-GE-400 (27,000 lb each). The F-16 Fighting Falcon is a single-engine aircraft using either a General Electric F110-GE-129 (29,500 lbf) on the Block 50 or a Pratt & Whitney F100-PW-229 on the Block 52.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+          "/encyclopedia/aircraft/f-16/"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-16/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          },
+          {
+            "id": "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+            "title": "F-14 Tomcat \u00b7 Swing wings and Phoenix missiles"
+          },
+          {
+            "id": "/encyclopedia/aircraft/f-16/",
+            "title": "F-16 Fighting Falcon"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 3790
+    },
+    {
+      "conversation": "long-context",
+      "question": "What is the VORTAC for Ramat David?",
+      "requestedIds": [],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "In DCS: Syria, the VORTAC is RMD, channel 84X; in DCS: Sinai, the VORTAC is RMD, channel 84X.",
+        "ids": [
+          "/encyclopedia/locations/ramat-david/#sims-title"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/ramat-david/#sims-title",
+            "title": "Ramat David Airbase \u00b7 Sim maps"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1320
+    },
+    {
+      "conversation": "long-context",
+      "question": "What runways are available?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/ramat-david/"
+      ],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "The available runways are 09/27, 11/29, and 15/33.",
+        "ids": [
+          "/encyclopedia/locations/ramat-david/",
+          "/encyclopedia/locations/ramat-david/#sims-title",
+          "/encyclopedia/locations/ramat-david/#facilities-title"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/ramat-david/",
+            "title": "Ramat David Airbase"
+          },
+          {
+            "id": "/encyclopedia/locations/ramat-david/#sims-title",
+            "title": "Ramat David Airbase \u00b7 Sim maps"
+          },
+          {
+            "id": "/encyclopedia/locations/ramat-david/#facilities-title",
+            "title": "Ramat David Airbase \u00b7 Runways and facilities"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 809
+    },
+    {
+      "conversation": "long-context",
+      "question": "Which one runs east-west?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/ramat-david/"
+      ],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "The available runways at Ramat David Airbase are 09/27, 11/29, and 15/33. Based on the provided information regarding direction, where east is 090 and west is 270, runway 09/27 runs east-west.",
+        "ids": [
+          "/encyclopedia/locations/ramat-david/",
+          "/manual/navigation/air-navigation/#direction"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/ramat-david/",
+            "title": "Ramat David Airbase"
+          },
+          {
+            "id": "/manual/navigation/air-navigation/#direction",
+            "title": "Air Navigation \u00b7 Direction: true, magnetic and compass"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 2238
+    },
+    {
+      "conversation": "long-context",
+      "question": "What about tower frequency?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/ramat-david/"
+      ],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "In DCS: Syria, the tower frequency is 118.6 MHz VHF and 251.3 MHz UHF; in DCS: Sinai, the tower frequency is 118.0 MHz VHF and 251.1 MHz UHF.",
+        "ids": [
+          "/encyclopedia/locations/ramat-david/#sims-title"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/ramat-david/#sims-title",
+            "title": "Ramat David Airbase \u00b7 Sim maps"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1737
+    },
+    {
+      "conversation": "long-context",
+      "question": "And the VORTAC channel again?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/ramat-david/"
+      ],
+      "status": 200,
+      "revision": "b2be39ff25251890830c98fdb9085b4d7c6ba7cc",
+      "reply": {
+        "answer": "In DCS: Syria, the VORTAC RMD is on channel 84X and 113.7 MHz; in DCS: Sinai, the VORTAC RMD is also on channel 84X and 113.7 MHz.",
+        "ids": [
+          "/encyclopedia/locations/ramat-david/#sims-title"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/ramat-david/#sims-title",
+            "title": "Ramat David Airbase \u00b7 Sim maps"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1264
+    }
+  ]
+}
