@@ -112,7 +112,8 @@ const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => ph
   }
 
   .briefing-copy {
-    padding: clamp(1.25rem, 3vw, 2.5rem);
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+    line-height: 1.55;
   }
 
   .briefing-copy .sim-variant {
@@ -218,7 +219,7 @@ const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => ph
     cursor: pointer;
   }
 
-  @media (max-width: 74rem) {
+  @media (max-width: 76rem) {
     .airframe-briefing {
       grid-template-columns: minmax(0, 1fr);
     }
