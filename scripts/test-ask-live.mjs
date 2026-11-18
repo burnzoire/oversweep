@@ -11,15 +11,17 @@ const selected = process.argv[3]?.split(',');
 const results = [];
 for (const conversation of cases.filter(c => !selected || selected.includes(c.id))) {
   let history = [];
+  let topic;
   for (const turn of conversation.turns) {
-    const ids = retrieve(turn.question, { history }).passages.map(p => p.id);
+    const ids = retrieve(turn.question, { history, topic }).passages.map(p => p.id);
     const started = Date.now();
-    const row = { conversation: conversation.id, question: turn.question, history: [...history], requestedIds: ids };
+    const row = { conversation: conversation.id, question: turn.question, history: [...history], requestedIds: ids, topic };
     try {
-      const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question: turn.question, history, ids: ids.slice(0, 3) }), signal: AbortSignal.timeout(40000) });
+      const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question: turn.question, history, topic, ids: process.env.ASK_HINTS === "wrong" ? ["/encyclopedia/aircraft/mig-15/"] : process.env.ASK_HINTS === "none" ? [] : ids.slice(0, 3) }), signal: AbortSignal.timeout(40000) });
       Object.assign(row, { status: response.status, revision: response.headers.get('x-ask-revision'), reply: await response.json() });
       const answer = row.reply.answer?.toLowerCase() ?? '';
-      row.passed = response.ok && (turn.all ?? []).every(s => answer.includes(s.toLowerCase())) && (!turn.any || turn.any.some(s => answer.includes(s.toLowerCase()))) && (turn.none ?? []).every(s => !answer.includes(s.toLowerCase()));
+      row.passed = response.ok && (!process.env.ASK_REVISION || row.revision === process.env.ASK_REVISION) && (turn.all ?? []).every(s => answer.includes(s.toLowerCase())) && (!turn.any || turn.any.some(s => answer.includes(s.toLowerCase()))) && (turn.none ?? []).every(s => !answer.includes(s.toLowerCase()));
+      if (row.reply.topic) topic = row.reply.topic;
       if (row.reply.answer) history = [...history, { role: 'user', content: turn.question }, { role: 'assistant', content: row.reply.answer.slice(0, 1200) }].slice(-6);
     } catch (error) { row.error = error.message; row.passed = false; }
     row.ms = Date.now() - started;

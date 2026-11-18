@@ -27,6 +27,7 @@ const { id } = Astro.props;
     const reset = panel.closest("dialog")?.querySelector<HTMLButtonElement>("[data-new-chat]")
       ?? panel.querySelector<HTMLButtonElement>("[data-new-chat]");
     let history: { role: "user" | "assistant"; content: string }[] = [];
+    let topic: string[] = [];
     let pending: AbortController | undefined;
     let lastQuestion = "";
     let generation = 0;
@@ -35,6 +36,7 @@ const { id } = Astro.props;
       generation++;
       pending?.abort();
       history = [];
+      topic = [];
       lastQuestion = "";
       thread.replaceChildren();
       form.reset();
@@ -77,7 +79,7 @@ const { id } = Astro.props;
         const search = (query: string) => findPassages(pagefind, query, panel.dataset.base!, location.origin);
         const passages = await search(question);
         if (turn !== generation) return;
-        let generated: { answer?: string; ids?: string[] } | undefined;
+        let generated: { answer?: string; ids?: string[]; topic?: string[]; references?: { id: string; title: string }[] } | undefined;
         let quota = false;
         if (panel.dataset.endpoint) {
           try {
@@ -85,7 +87,7 @@ const { id } = Astro.props;
             const response = await fetch(panel.dataset.endpoint, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ question, history, ids: passages.map(passage => passage.url) }),
+              body: JSON.stringify({ question, history, topic, ids: passages.map(passage => passage.url) }),
               signal: AbortSignal.any([pending.signal, AbortSignal.timeout(30000)]),
             });
             const payload = await response.json();
@@ -96,13 +98,15 @@ const { id } = Astro.props;
           }
         }
         if (turn !== generation) return;
+        history = [...history, { role: "user", content: question }].slice(-6) as typeof history;
         if (generated?.answer) {
-          history = [...history, { role: "user", content: question }, { role: "assistant", content: generated.answer.slice(0, 1200) }].slice(-6) as typeof history;
+          history = [...history, { role: "assistant", content: generated.answer.slice(0, 1200) }].slice(-6) as typeof history;
         }
+        if (generated?.topic) topic = generated.topic;
         // The Worker may recover relevant sources that Pagefind missed.
         for (const id of generated?.ids ?? []) {
           if (!passages.some(passage => passage.url === id)) {
-            passages.push({ url: id, title: "Supporting article", excerpt: "" });
+            passages.push({ url: id, title: generated?.references?.find(reference => reference.id === id)?.title ?? "Supporting article", excerpt: "" });
           }
         }
         const sources = document.createElement("ul");
@@ -115,12 +119,12 @@ const { id } = Astro.props;
           result.append(link);
           sources.append(result);
         }
-        if (passages.length || generated?.answer) {
+        if (passages.length || generated?.answer || quota) {
           text.innerHTML = passages[0]?.excerpt ?? "";
           reply.copy.textContent = generated?.answer ?? (quota
             ? "Negative, Ghostrider. The pattern is full"
             : panel.dataset.endpoint ? "I couldn’t generate a reply. Here’s what I found on Oversweep." : "Here’s what I found on Oversweep.");
-          if (!generated?.answer) {
+          if (!generated?.answer && !quota && passages.length) {
             const excerpt = document.createElement("blockquote");
             excerpt.textContent = text.value;
             reply.bubble.append(excerpt);

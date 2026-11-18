@@ -1,4 +1,4 @@
-// Search the server-owned corpus: browser Pagefind IDs are hints, never content.
+// Browser Pagefind IDs are hints. Only server-owned text reaches the model.
 const stop = new Set('a an and are as at be can could do does for from has have how i in is it its me of on or please tell that the them there these they this those to was what when where which who why will with would you available listed about one many'.split(' '));
 const titleNoise = new Set(['airport', 'international', 'airbase', 'air', 'base']);
 export function terms(text = '') {
@@ -6,84 +6,99 @@ export function terms(text = '') {
     .match(/[\p{L}\p{N}]+(?:-[\p{L}\p{N}]+)*/gu) ?? [])
     .filter(t => !stop.has(t)).map(t => t.length > 3 && t.endsWith('s') ? t.slice(0, -1) : t);
 }
+const glossary = id => id.startsWith('/encyclopedia/terminology/#');
+const entity = id => /\/encyclopedia\/(aircraft|locations|ordnance|radar-sensors)\//.test(id);
+const root = id => id.split('#')[0];
 export function createRetriever(corpus) {
   const rows = Object.entries(corpus).map(([id, value]) => {
     const tokens = terms(value.title + ' ' + value.text);
     const counts = new Map();
     for (const token of tokens) counts.set(token, (counts.get(token) ?? 0) + 1);
-    return { id, ...value, counts, length: tokens.length, words: new Set(tokens) };
+    const labels = [value.title];
+    const lead = value.text.split(/[.!?]/)[0];
+    if (glossary(id) && terms(lead).length <= 6) labels.push(lead);
+    return { id, ...value, counts, length: tokens.length, titleWords: new Set(terms(value.title)), labels: labels.map(label => [...new Set(terms(label))].filter(t => !titleNoise.has(t))) };
   });
+  const byId = new Map(rows.map(row => [row.id, row]));
   const averageLength = rows.reduce((sum, row) => sum + row.length, 0) / (rows.length || 1);
   const frequency = new Map();
-  for (const row of rows) for (const word of row.words) frequency.set(word, (frequency.get(word) ?? 0) + 1);
-  const weight = t => Math.log(1 + rows.length / (1 + (frequency.get(t) ?? 0)));
-  const roots = rows.filter(row => !row.id.includes('#') || row.id.startsWith('/encyclopedia/terminology/#'));
-  const named = question => {
+  for (const row of rows) for (const word of row.counts.keys()) frequency.set(word, (frequency.get(word) ?? 0) + 1);
+  const weights = new Map([...frequency].map(([t, count]) => [t, Math.log(1 + rows.length / (1 + count))]));
+  const weight = t => weights.get(t) ?? Math.log(1 + rows.length);
+  const roots = rows.filter(row => !row.id.includes('#') || glossary(row.id));
+  const candidates = rows.filter(row => !/#(?:sources(?:-title)?|terms-title|contents-title|[^#]*fig-title)$/.test(row.id));
+  const acronymTerms = new Set(roots.filter(row => glossary(row.id) && row.title === row.title.toUpperCase()).flatMap(row => [...row.titleWords]));
+  function named(question) {
     const query = new Set(terms(question));
-    return roots.map(row => {
-      const labels = [row.title];
-      if (row.id.startsWith('/encyclopedia/terminology/#')) {
-        const lead = row.text.split(/[.!?]/)[0];
-        if (terms(lead).length <= 6) labels.push(lead);
-      }
-      const score = Math.max(...labels.map(label => {
-        const title = [...new Set(terms(label))].filter(t => !titleNoise.has(t));
+    const phrase = [...query].join(' ');
+    const matches = roots.map(row => {
+      let evidence = '';
+      const score = Math.max(...row.labels.map(title => {
         const matched = title.filter(t => query.has(t));
         const coverage = matched.length / title.length;
-        const phrase = terms(question).join(' ').includes(title.join(' '));
-        const entity = /\/encyclopedia\/(aircraft|locations|ordnance|radar-sensors)\//.test(row.id);
-        const strong = entity
+        const strong = entity(row.id)
           ? coverage >= .6 || matched.some(t => /\d/.test(t)) || (row.id.includes('/locations/') && matched.some(t => weight(t) > 3))
-          : coverage === 1 && phrase;
-        return strong ? matched.reduce((n, t) => n + weight(t), 0) * coverage * (entity ? 2 : 1) : 0;
+          : coverage === 1 && phrase.includes(title.join(' '));
+        if (strong) evidence = matched.join(' ');
+        return strong ? matched.reduce((n, t) => n + weight(t), 0) * coverage * (entity(row.id) ? 2 : 1) : 0;
       }));
-      return { row, score };
-    }).filter(x => x.score > 0).sort((a, b) => b.score - a.score || a.row.id.localeCompare(b.row.id))[0]?.row;
-  };
-  return function retrieve(question, { history = [], previous = '', ids = [] } = {}) {
-    let explicit = named(question);
-    const referential = /\b(it|its|they|their|them|that|those|this|same|which one)\b/i.test(question);
-    if (referential && explicit?.id.startsWith('/encyclopedia/terminology/#')) explicit = undefined;
-    const definition = /^(?:what(?:’s|'s| is| are) (?!the |its |their |that |this )|define |explain )/i.test(question);
-    const priorQuestions = history.filter(turn => turn.role === 'user').map(turn => turn.content);
-    const prior = [...(previous ? [previous] : []), ...priorQuestions].reverse().map(named).find(row => row && !row.id.startsWith('/encyclopedia/terminology/#'));
-    if (prior && explicit?.id.startsWith('/encyclopedia/terminology/#') && !definition) explicit = undefined;
-    const subject = explicit ?? (definition ? undefined : prior);
+      return { row, score, evidence };
+    }).filter(x => x.score > 0).sort((a, b) => b.score - a.score || a.row.id.localeCompare(b.row.id));
+    if (!matches.length) return [];
+    const first = matches[0];
+    const seen = new Set();
+    return matches.filter(item => {
+      if (item !== first && (!entity(first.row.id) || !entity(item.row.id))) return false;
+      if (seen.has(item.evidence)) return false;
+      seen.add(item.evidence); return true;
+    }).slice(0, 3).map(item => item.row);
+  }
+  return function retrieve(question, { history = [], previous = '', ids = [], topic } = {}) {
     const query = [...new Set(terms(question))];
+    const referential = /\b(it|its|they|their|them|that|those|this|same|which one)\b/i.test(question);
+    const definition = /^(?:what(?:’s|'s| is| are) (?!the |its |their |that |this )|define |explain |tell me about )/i.test(question);
+    const independent = !referential && (definition || /^how (?:do|does)\b/i.test(question));
+    const followUp = !independent && (referential || /^(?:and|what about|how about|also)\b/i.test(question) || query.length <= 2);
+    const priorQuestions = history.filter(turn => turn.role === 'user').map(turn => turn.content);
+    const prior = topic === undefined
+      ? [...(previous ? [previous] : []), ...priorQuestions].reverse().map(named).find(matches => matches.some(row => entity(row.id))) ?? []
+      : topic.map(id => byId.get(id)).filter(Boolean);
+    let subjects = named(question);
+    if (prior.length && !independent && subjects.every(row => glossary(row.id))) subjects = [];
+    if (!subjects.length && followUp) subjects = prior;
+    const subjectRoots = new Set(subjects.filter(row => !glossary(row.id)).map(row => root(row.id)));
+    const subjectIds = new Set(subjects.map(row => row.id));
     const previousTerms = referential ? terms(priorQuestions.at(-1) ?? previous) : [];
-    const score = row => [...new Set([...query, ...previousTerms])].reduce((n, t) => {
-      const tf = row.counts.get(t) ?? 0;
-      return n + weight(t) * (query.includes(t) ? 1 : .3) * (tf * 2.2 / (tf + 1.2 * (.25 + .75 * row.length / averageLength)) + (terms(row.title).includes(t) ? 1 : 0));
-    }, 0);
-    const subjectRoot = subject?.id.split('#')[0];
-    const candidates = rows.filter(row => !/#(?:sources(?:-title)?|terms-title|contents-title|[^#]*fig-title)$/.test(row.id));
-    let ranked;
-    if (subject) {
-      // Re-search every section of the subject on each turn, not just old citations.
-      ranked = candidates.filter(row => row.id === subject.id || (!subject.id.includes('#') && row.id.split('#')[0] === subjectRoot))
-        .map(row => ({ row, score: score(row) + (row.id.endsWith('#sims-title') ? 3 : 0) + (row.id === subject.id ? 1 : 0) }))
-        .sort((a, b) => b.score - a.score || a.row.id.localeCompare(b.row.id));
-    } else {
-      ranked = candidates.filter(row => !definition || /^(?:\/manual\/|\/encyclopedia\/terminology\/#)/.test(row.id)).map(row => ({ row, score: score(row) + (ids.includes(row.id) ? 1 : 0) }))
-        .filter(x => x.score > 0).sort((a, b) => b.score - a.score || a.row.id.localeCompare(b.row.id));
-    }
-    const selected = ranked.slice(0, 4).map(x => x.row);
-    // General explanatory sources may connect the requested concept to a record's
-    // terminology. They supplement, rather than replace, the named subject.
-    if (subject && query.length) {
-      const subjectTerms = new Set(terms(subject.title));
-      const concepts = [...new Set([...query, ...previousTerms])].filter(t => !subjectTerms.has(t) && weight(t) > 1);
+    const queryTerms = [...new Set([...query, ...previousTerms])];
+    const scores = new Map();
+    const score = row => {
+      if (!scores.has(row.id)) scores.set(row.id, queryTerms.reduce((n, t) => {
+        const tf = row.counts.get(t) ?? 0;
+        return n + weight(t) * (query.includes(t) ? 1 : .3) * (tf * 2.2 / (tf + 1.2 * (.25 + .75 * row.length / averageLength)) + (row.titleWords.has(t) ? 1 : 0));
+      }, 0));
+      return scores.get(row.id);
+    };
+    const onSubject = row => subjectIds.has(row.id) || subjectRoots.has(root(row.id));
+    const ranked = candidates.filter(row => subjects.length ? onSubject(row) : !definition || row.id.startsWith('/manual/') || glossary(row.id))
+      .map(row => ({ row, score: score(row) + (subjects.length && row.id.endsWith('#sims-title') ? 3 : 0) + (subjectIds.has(row.id) ? 1 : 0) + (!subjects.length && ids.includes(row.id) ? 1 : 0) }))
+      .filter(x => subjects.length || x.score > 0).sort((a, b) => b.score - a.score || a.row.id.localeCompare(b.row.id));
+    // Reserve a relevant section for EACH explicitly named record in a comparison.
+    const selected = subjects.map(subject => ranked.find(x => x.row.id === subject.id || (!glossary(subject.id) && root(x.row.id) === root(subject.id)))?.row).filter(Boolean);
+    for (const { row } of ranked) if (selected.length < 4 && !selected.includes(row)) selected.push(row);
+    if (subjects.length && query.length) {
+      const subjectTerms = new Set(subjects.flatMap(row => [...row.titleWords]));
+      const concepts = queryTerms.filter(t => !subjectTerms.has(t) && weight(t) > 1);
       const acronyms = new Set(terms(selected.map(row => row.text).join(' ').match(/\b[A-Z][A-Z0-9]{1,7}\b/g)?.join(' ') ?? ''));
-      const acronymQuestion = roots.some(row => row.id.startsWith('/encyclopedia/terminology/#') && row.title === row.title.toUpperCase() && terms(row.title).some(t => query.includes(t)));
-      const helperScore = row => score(row) + (acronymQuestion ? [...acronyms].reduce((n, t) => n + (row.words.has(t) ? weight(t) : 0), 0) : 0);
-      const related = candidates.filter(row => /^(?:\/manual\/.+#|\/encyclopedia\/terminology\/#)/.test(row.id) && row.id.split('#')[0] !== subjectRoot && concepts.length && concepts.some(t => row.words.has(t)))
-        .sort((a, b) => helperScore(b) - helperScore(a) || a.text.length - b.text.length);
-      const glossary = related.find(row => row.id.startsWith('/encyclopedia/terminology/#'));
-      const explanation = related.find(row => row.id.startsWith('/manual/') && row.text.length > 300);
-      for (const row of [glossary, explanation]) if (row) selected.push(row);
+      const acronymQuestion = query.some(t => acronymTerms.has(t));
+      const helperScore = row => score(row) + (acronymQuestion ? [...acronyms].reduce((n, t) => n + (row.counts.has(t) ? weight(t) : 0), 0) : 0);
+      const related = candidates.filter(row => (row.id.startsWith('/manual/') && row.id.includes('#') || glossary(row.id)) && !onSubject(row) && concepts.some(t => row.counts.has(t)))
+        .map(row => ({ row, score: helperScore(row) })).sort((a, b) => b.score - a.score || a.row.text.length - b.row.text.length);
+      const definition = subjects.every(row => glossary(row.id)) ? undefined : related.find(x => glossary(x.row.id))?.row;
+      const explanation = related.find(x => x.row.id.startsWith('/manual/') && x.row.text.length > 300)?.row;
+      for (const row of [definition, explanation]) if (row) selected.push(row);
     }
     let remaining = 14000;
-    return { subject: subject?.title, passages: selected.map(row => {
+    return { subject: subjects.map(row => row.title).join(' and ') || undefined, topic: subjects.map(row => row.id), passages: selected.map(row => {
       const text = row.text.slice(0, Math.min(3500, remaining)); remaining -= text.length;
       return { id: row.id, title: row.title, text };
     }).filter(row => row.text) };

@@ -1,0 +1,529 @@
+{
+  "endpoint": "https://ask-oversweep.burnzoire.workers.dev/ask",
+  "at": "2026-11-18T03:00:20.880Z",
+  "results": [
+    {
+      "conversation": "tomcat",
+      "question": "What engines does the F-14B have?",
+      "history": [],
+      "requestedIds": [
+        "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+        "/encyclopedia/aircraft/f-14/",
+        "/encyclopedia/aircraft/f-14/#over-the-gulf-of-sidra",
+        "/encyclopedia/aircraft/f-14/#irans-tomcats",
+        "/encyclopedia/terminology/#autorotation",
+        "/manual/abnormal-operations/emergency-procedures/#engine"
+      ],
+      "status": 200,
+      "revision": "b2ab19cba2e8658b2f9c3f2dcf2a0133fc5a97e0",
+      "reply": {
+        "answer": "The F-14B has two General Electric F110-GE-400 engines, each providing 27,000 lb of thrust.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/"
+        ]
+      },
+      "passed": true,
+      "ms": 11888
+    },
+    {
+      "conversation": "tomcat",
+      "question": "And the A model?",
+      "history": [
+        {
+          "role": "user",
+          "content": "What engines does the F-14B have?"
+        },
+        {
+          "role": "assistant",
+          "content": "The F-14B has two General Electric F110-GE-400 engines, each providing 27,000 lb of thrust."
+        }
+      ],
+      "requestedIds": [
+        "/encyclopedia/aircraft/f-14/",
+        "/encyclopedia/aircraft/f-14/#guarding-the-fleet",
+        "/encyclopedia/aircraft/f-14/#irans-tomcats",
+        "/encyclopedia/aircraft/f-14/#over-the-gulf-of-sidra",
+        "/manual/instrument-flight/ils-approach/#model"
+      ],
+      "status": 200,
+      "revision": "b2ab19cba2e8658b2f9c3f2dcf2a0133fc5a97e0",
+      "reply": {
+        "answer": "The F-14A has two Pratt & Whitney TF30-P-414A afterburning turbofans, each providing 20,900 lb of thrust.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/"
+        ]
+      },
+      "passed": true,
+      "ms": 751
+    },
+    {
+      "conversation": "tomcat",
+      "question": "How many crew?",
+      "history": [
+        {
+          "role": "user",
+          "content": "What engines does the F-14B have?"
+        },
+        {
+          "role": "assistant",
+          "content": "The F-14B has two General Electric F110-GE-400 engines, each providing 27,000 lb of thrust."
+        },
+        {
+          "role": "user",
+          "content": "And the A model?"
+        },
+        {
+          "role": "assistant",
+          "content": "The F-14A has two Pratt & Whitney TF30-P-414A afterburning turbofans, each providing 20,900 lb of thrust."
+        }
+      ],
+      "requestedIds": [
+        "/encyclopedia/aircraft/f-14/",
+        "/encyclopedia/aircraft/f-14/#guarding-the-fleet",
+        "/encyclopedia/aircraft/f-14/#irans-tomcats",
+        "/encyclopedia/aircraft/f-14/#over-the-gulf-of-sidra",
+        "/encyclopedia/terminology/#landing-signal-enlisted-lse",
+        "/manual/naval-operations/ship-operations/#jerseys"
+      ],
+      "status": 200,
+      "revision": "b2ab19cba2e8658b2f9c3f2dcf2a0133fc5a97e0",
+      "reply": {
+        "answer": "The F-14 Tomcat has a crew of two: a pilot and a radar intercept officer (RIO).",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/"
+        ]
+      },
+      "passed": true,
+      "ms": 970
+    },
+    {
+      "conversation": "sochi",
+      "question": "What freq is Sochi tower?",
+      "history": [],
+      "requestedIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/sochi/#history",
+        "/encyclopedia/locations/sochi/#where-title",
+        "/encyclopedia/terminology/#air-boss",
+        "/manual/airfield-operations/airfield-basics/#talk"
+      ],
+      "status": 200,
+      "revision": "b2ab19cba2e8658b2f9c3f2dcf2a0133fc5a97e0",
+      "reply": {
+        "answer": "Sochi tower uses 127.0 MHz VHF and 256.0 MHz UHF.",
+        "ids": [
+          "/encyclopedia/locations/sochi/#sims-title",
+          "/encyclopedia/locations/sochi/"
+        ]
+      },
+      "passed": true,
+      "ms": 867
+    },
+    {
+      "conversation": "sochi",
+      "question": "Does it have a TACAN?",
+      "history": [
+        {
+          "role": "user",
+          "content": "What freq is Sochi tower?"
+        },
+        {
+          "role": "assistant",
+          "content": "Sochi tower uses 127.0 MHz VHF and 256.0 MHz UHF."
+        }
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/sochi/#history",
+        "/encyclopedia/locations/sochi/#where-title",
+        "/encyclopedia/terminology/#tacan",
+        "/manual/navigation/air-navigation/#navaids"
+      ],
+      "status": 200,
+      "revision": "b2ab19cba2e8658b2f9c3f2dcf2a0133fc5a97e0",
+      "reply": {
+        "answer": "The sim maps for Sochi International Airport (represented as Sochi-Adler) include an NDB with marker (CO) and an ILS on runway 06, 111.1 MHz (ISO), but a TACAN is not listed.",
+        "ids": [
+          "/encyclopedia/locations/sochi/#sims-title",
+          "/encyclopedia/locations/sochi/"
+        ]
+      },
+      "passed": true,
+      "ms": 3042
+    },
+    {
+      "conversation": "sochi",
+      "question": "What about ILS?",
+      "history": [
+        {
+          "role": "user",
+          "content": "What freq is Sochi tower?"
+        },
+        {
+          "role": "assistant",
+          "content": "Sochi tower uses 127.0 MHz VHF and 256.0 MHz UHF."
+        },
+        {
+          "role": "user",
+          "content": "Does it have a TACAN?"
+        },
+        {
+          "role": "assistant",
+          "content": "The sim maps for Sochi International Airport (represented as Sochi-Adler) include an NDB with marker (CO) and an ILS on runway 06, 111.1 MHz (ISO), but a TACAN is not listed."
+        }
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/sochi/#facilities-title",
+        "/encyclopedia/locations/sochi/#history",
+        "/manual/instrument-flight/ils-approach/#launch"
+      ],
+      "status": 200,
+      "revision": "b2ab19cba2e8658b2f9c3f2dcf2a0133fc5a97e0",
+      "reply": {
+        "answer": "There is an ILS on runway 06 at 111.1 MHz (ISO).",
+        "ids": [
+          "/encyclopedia/locations/sochi/#sims-title",
+          "/encyclopedia/locations/sochi/"
+        ]
+      },
+      "passed": true,
+      "ms": 1036
+    },
+    {
+      "conversation": "sochi",
+      "question": "What runways are available?",
+      "history": [
+        {
+          "role": "user",
+          "content": "What freq is Sochi tower?"
+        },
+        {
+          "role": "assistant",
+          "content": "Sochi tower uses 127.0 MHz VHF and 256.0 MHz UHF."
+        },
+        {
+          "role": "user",
+          "content": "Does it have a TACAN?"
+        },
+        {
+          "role": "assistant",
+          "content": "The sim maps for Sochi International Airport (represented as Sochi-Adler) include an NDB with marker (CO) and an ILS on runway 06, 111.1 MHz (ISO), but a TACAN is not listed."
+        },
+        {
+          "role": "user",
+          "content": "What about ILS?"
+        },
+        {
+          "role": "assistant",
+          "content": "There is an ILS on runway 06 at 111.1 MHz (ISO)."
+        }
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/#facilities-title",
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/sochi/#the-airfield",
+        "/encyclopedia/terminology/#runway-designator",
+        "/manual/airfield-operations/airfield-basics/#numbers"
+      ],
+      "status": 200,
+      "revision": "b2ab19cba2e8658b2f9c3f2dcf2a0133fc5a97e0",
+      "reply": {
+        "answer": "In the sim maps, only runway 06/24 is available.",
+        "ids": [
+          "/encyclopedia/locations/sochi/#sims-title",
+          "/encyclopedia/locations/sochi/"
+        ]
+      },
+      "passed": true,
+      "ms": 891
+    },
+    {
+      "conversation": "ramat",
+      "question": "What is the TACAN for Ramat David?",
+      "history": [],
+      "requestedIds": [
+        "/encyclopedia/locations/ramat-david/#sims-title",
+        "/encyclopedia/locations/ramat-david/#where-title",
+        "/encyclopedia/locations/ramat-david/#the-airfield",
+        "/encyclopedia/locations/ramat-david/#role-today",
+        "/encyclopedia/terminology/#tacan",
+        "/manual/navigation/air-navigation/#navaids"
+      ],
+      "status": 200,
+      "revision": "b2ab19cba2e8658b2f9c3f2dcf2a0133fc5a97e0",
+      "reply": {
+        "answer": "The VORTAC for Ramat David is RMD, using channel 84X and 113.7 MHz.",
+        "ids": [
+          "/encyclopedia/locations/ramat-david/#sims-title"
+        ]
+      },
+      "passed": true,
+      "ms": 1108
+    },
+    {
+      "conversation": "ramat",
+      "question": "What runways are available?",
+      "history": [
+        {
+          "role": "user",
+          "content": "What is the TACAN for Ramat David?"
+        },
+        {
+          "role": "assistant",
+          "content": "The VORTAC for Ramat David is RMD, using channel 84X and 113.7 MHz."
+        }
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/ramat-david/#sims-title",
+        "/encyclopedia/locations/ramat-david/#facilities-title",
+        "/encyclopedia/locations/ramat-david/",
+        "/encyclopedia/locations/ramat-david/#the-airfield",
+        "/encyclopedia/terminology/#runway-designator",
+        "/manual/airfield-operations/airfield-basics/#numbers"
+      ],
+      "status": 200,
+      "revision": "b2ab19cba2e8658b2f9c3f2dcf2a0133fc5a97e0",
+      "reply": {
+        "answer": "The available runways are 09/27, 11/29, and 15/33.",
+        "ids": [
+          "/encyclopedia/locations/ramat-david/#sims-title",
+          "/encyclopedia/locations/ramat-david/#facilities-title",
+          "/encyclopedia/locations/ramat-david/",
+          "/encyclopedia/locations/ramat-david/#the-airfield"
+        ]
+      },
+      "passed": true,
+      "ms": 1823
+    },
+    {
+      "conversation": "ramat",
+      "question": "Which one runs east-west?",
+      "history": [
+        {
+          "role": "user",
+          "content": "What is the TACAN for Ramat David?"
+        },
+        {
+          "role": "assistant",
+          "content": "The VORTAC for Ramat David is RMD, using channel 84X and 113.7 MHz."
+        },
+        {
+          "role": "user",
+          "content": "What runways are available?"
+        },
+        {
+          "role": "assistant",
+          "content": "The available runways are 09/27, 11/29, and 15/33."
+        }
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/ramat-david/#sims-title",
+        "/encyclopedia/locations/ramat-david/",
+        "/encyclopedia/locations/ramat-david/#where-title",
+        "/encyclopedia/locations/ramat-david/#units-title",
+        "/encyclopedia/terminology/#variation",
+        "/manual/navigation/air-navigation/#direction"
+      ],
+      "status": 200,
+      "revision": "b2ab19cba2e8658b2f9c3f2dcf2a0133fc5a97e0",
+      "reply": {
+        "answer": "Runway 09/27 runs east-west.",
+        "ids": [
+          "/manual/navigation/air-navigation/#direction"
+        ]
+      },
+      "passed": true,
+      "ms": 1404
+    },
+    {
+      "conversation": "ramat",
+      "question": "What is the tower freq for Sochi?",
+      "history": [
+        {
+          "role": "user",
+          "content": "What is the TACAN for Ramat David?"
+        },
+        {
+          "role": "assistant",
+          "content": "The VORTAC for Ramat David is RMD, using channel 84X and 113.7 MHz."
+        },
+        {
+          "role": "user",
+          "content": "What runways are available?"
+        },
+        {
+          "role": "assistant",
+          "content": "The available runways are 09/27, 11/29, and 15/33."
+        },
+        {
+          "role": "user",
+          "content": "Which one runs east-west?"
+        },
+        {
+          "role": "assistant",
+          "content": "Runway 09/27 runs east-west."
+        }
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/sochi/#history",
+        "/encyclopedia/locations/sochi/#where-title",
+        "/encyclopedia/terminology/#air-boss",
+        "/manual/airfield-operations/airfield-basics/#talk"
+      ],
+      "status": 200,
+      "revision": "b2ab19cba2e8658b2f9c3f2dcf2a0133fc5a97e0",
+      "reply": {
+        "answer": "The tower frequencies for Sochi are 127.0 MHz VHF and 256.0 MHz UHF.",
+        "ids": [
+          "/encyclopedia/locations/sochi/#sims-title"
+        ]
+      },
+      "passed": true,
+      "ms": 1305
+    },
+    {
+      "conversation": "ramat",
+      "question": "What about its ILS?",
+      "history": [
+        {
+          "role": "user",
+          "content": "What runways are available?"
+        },
+        {
+          "role": "assistant",
+          "content": "The available runways are 09/27, 11/29, and 15/33."
+        },
+        {
+          "role": "user",
+          "content": "Which one runs east-west?"
+        },
+        {
+          "role": "assistant",
+          "content": "Runway 09/27 runs east-west."
+        },
+        {
+          "role": "user",
+          "content": "What is the tower freq for Sochi?"
+        },
+        {
+          "role": "assistant",
+          "content": "The tower frequencies for Sochi are 127.0 MHz VHF and 256.0 MHz UHF."
+        }
+      ],
+      "requestedIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/sochi/#history",
+        "/encyclopedia/locations/sochi/#where-title",
+        "/encyclopedia/terminology/#air-boss",
+        "/manual/instrument-flight/ils-approach/#launch"
+      ],
+      "status": 200,
+      "revision": "b2ab19cba2e8658b2f9c3f2dcf2a0133fc5a97e0",
+      "reply": {
+        "answer": "There is an ILS on runway 06 at 111.1 MHz (ISO).",
+        "ids": [
+          "/encyclopedia/locations/sochi/#sims-title",
+          "/encyclopedia/locations/sochi/"
+        ]
+      },
+      "passed": true,
+      "ms": 691
+    },
+    {
+      "conversation": "concepts",
+      "question": "What is angle of attack?",
+      "history": [],
+      "requestedIds": [
+        "/encyclopedia/terminology/#aoa",
+        "/manual/flight-fundamentals/principles-of-flight/#airfoil"
+      ],
+      "status": 200,
+      "revision": "b2ab19cba2e8658b2f9c3f2dcf2a0133fc5a97e0",
+      "reply": {
+        "answer": "Angle of attack is the angle formed by the chord of an airfoil and the direction of the relative wind, or the angle between the chord line and the flight path.",
+        "ids": [
+          "/encyclopedia/terminology/#aoa",
+          "/manual/flight-fundamentals/principles-of-flight/#airfoil"
+        ]
+      },
+      "passed": true,
+      "ms": 1585
+    },
+    {
+      "conversation": "concepts",
+      "question": "What is a VORTAC?",
+      "history": [
+        {
+          "role": "user",
+          "content": "What is angle of attack?"
+        },
+        {
+          "role": "assistant",
+          "content": "Angle of attack is the angle formed by the chord of an airfoil and the direction of the relative wind, or the angle between the chord line and the flight path."
+        }
+      ],
+      "requestedIds": [
+        "/manual/instrument-flight/instrument-procedures/#penetration",
+        "/manual/navigation/air-navigation/#navaids"
+      ],
+      "status": 200,
+      "revision": "b2ab19cba2e8658b2f9c3f2dcf2a0133fc5a97e0",
+      "reply": {
+        "answer": "A VORTAC provides VOR azimuth, TACAN azimuth, and TACAN distance using paired VHF and UHF frequencies. It allows a TACAN-equipped aircraft to receive distance automatically because the VOR and TACAN channels are paired so that azimuth and distance come from the same station.",
+        "ids": [
+          "/manual/navigation/air-navigation/#navaids"
+        ]
+      },
+      "passed": true,
+      "ms": 1459
+    },
+    {
+      "conversation": "tomcat-alias",
+      "question": "What engines does the Tomcat have?",
+      "history": [],
+      "requestedIds": [
+        "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+        "/encyclopedia/aircraft/f-14/#irans-tomcats",
+        "/encyclopedia/aircraft/f-14/#over-the-gulf-of-sidra",
+        "/manual/naval-operations/case-iii/#launch"
+      ],
+      "status": 200,
+      "revision": "b2ab19cba2e8658b2f9c3f2dcf2a0133fc5a97e0",
+      "reply": {
+        "answer": "The F-14A used TF30 engines, which were later replaced in the F-14B and F-14D by more powerful General Electric F110 engines.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles"
+        ]
+      },
+      "passed": true,
+      "ms": 1520
+    },
+    {
+      "conversation": "unsupported",
+      "question": "What is the Wi-Fi password at Sochi airport?",
+      "history": [],
+      "requestedIds": [
+        "/encyclopedia/locations/sochi/#sims-title",
+        "/encyclopedia/locations/sochi/#role-title",
+        "/encyclopedia/locations/sochi/#role-today",
+        "/encyclopedia/locations/sochi/#history"
+      ],
+      "status": 200,
+      "revision": "b2ab19cba2e8658b2f9c3f2dcf2a0133fc5a97e0",
+      "reply": {
+        "answer": "I couldn’t find enough on Oversweep to answer that.",
+        "ids": []
+      },
+      "passed": true,
+      "ms": 839
+    }
+  ]
+}

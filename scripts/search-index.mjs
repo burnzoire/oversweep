@@ -120,8 +120,11 @@ export function searchIndex() {
           entries.push(...page);
           if (base === "/" && /^(manual|encyclopedia|training|experiences)\//.test(route + "/")) {
             addAskSections(corpus, html, page[0]);
-            for (const term of page.filter(entry => entry.g)) {
-              corpus[term.u] = { title: term.t, text: term.d };
+            // Keep complete glossary definitions, not the short search preview.
+            if (route === "encyclopedia/terminology") for (const term of html.matchAll(/<div class="term" id="([^"]+)"[^>]*>([\s\S]*?)<\/div>/g)) {
+              const title = textOf(term[2].match(/<span class="term-word">([\s\S]*?)<\/span>/)?.[1] ?? "");
+              const definitions = [...term[2].matchAll(/<p class="term-def">([\s\S]*?)<\/p>/g)].map(match => textOf(match[1]));
+              if (title && definitions.length) corpus[page[0].u + "#" + term[1]] = { title, text: definitions.join(" ") };
             }
           }
           await fullText.addHTMLFile({ url: `${base}${route}/`, content: html });

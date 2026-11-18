@@ -1,8 +1,251 @@
 [
- {"id":"tomcat","turns":[{"question":"What engines does the F-14B have?","all":["F110","GE-400"]},{"question":"And the A model?","all":["TF30"]},{"question":"How many crew?","all":["two"]}]},
- {"id":"sochi","turns":[{"question":"What freq is Sochi tower?","all":["127","256"]},{"question":"Does it have a TACAN?","any":["not listed","does not list","doesn't list","no TACAN","not mention","not provide","not specified"]},{"question":"What about ILS?","all":["111.1","06"]},{"question":"What runways are available?","all":["06/24"],"none":["Gelendzhik","Dubai"]}]},
- {"id":"ramat","turns":[{"question":"What is the TACAN for Ramat David?","all":["84X","RMD"]},{"question":"What runways are available?","all":["09/27","11/29","15/33"],"none":["Gelendzhik","Dubai"]},{"question":"Which one runs east-west?","all":["09/27"]},{"question":"What is the tower freq for Sochi?","all":["127","256"],"none":["Ramat"]},{"question":"What about its ILS?","all":["111.1"]}]},
- {"id":"concepts","turns":[{"question":"What is angle of attack?","all":["chord","air"],"none":["laser-to-target"]},{"question":"What is a VORTAC?","all":["VOR","TACAN"]}]},
- {"id":"tomcat-alias","turns":[{"question":"What engines does the Tomcat have?","all":["TF30","F110"]}]},
- {"id":"unsupported","turns":[{"question":"What is the Wi-Fi password at Sochi airport?","any":["not listed","not provide","couldn’t find","does not list","not mention","not specified"]}]}
+  {
+    "id": "tomcat",
+    "turns": [
+      {
+        "question": "What engines does the F-14B have?",
+        "all": [
+          "F110",
+          "GE-400"
+        ]
+      },
+      {
+        "question": "And the A model?",
+        "all": [
+          "TF30"
+        ]
+      },
+      {
+        "question": "How many crew?",
+        "all": [
+          "two"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "sochi",
+    "turns": [
+      {
+        "question": "What freq is Sochi tower?",
+        "all": [
+          "127",
+          "256"
+        ]
+      },
+      {
+        "question": "Does it have a TACAN?",
+        "any": [
+          "not listed",
+          "does not list",
+          "doesn't list",
+          "no TACAN",
+          "not mention",
+          "not provide",
+          "not specified"
+        ]
+      },
+      {
+        "question": "What about ILS?",
+        "all": [
+          "111.1",
+          "06"
+        ]
+      },
+      {
+        "question": "What runways are available?",
+        "all": [
+          "06/24"
+        ],
+        "none": [
+          "Gelendzhik",
+          "Dubai"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ramat",
+    "turns": [
+      {
+        "question": "What is the TACAN for Ramat David?",
+        "all": [
+          "84X",
+          "RMD"
+        ]
+      },
+      {
+        "question": "What runways are available?",
+        "all": [
+          "09/27",
+          "11/29",
+          "15/33"
+        ],
+        "none": [
+          "Gelendzhik",
+          "Dubai"
+        ]
+      },
+      {
+        "question": "Which one runs east-west?",
+        "all": [
+          "09/27"
+        ]
+      },
+      {
+        "question": "What is the tower freq for Sochi?",
+        "all": [
+          "127",
+          "256"
+        ],
+        "none": [
+          "Ramat"
+        ]
+      },
+      {
+        "question": "What about its ILS?",
+        "all": [
+          "111.1"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "concepts",
+    "turns": [
+      {
+        "question": "What is angle of attack?",
+        "all": [
+          "chord",
+          "air"
+        ],
+        "none": [
+          "laser-to-target"
+        ]
+      },
+      {
+        "question": "What is a VORTAC?",
+        "all": [
+          "VOR",
+          "TACAN"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "tomcat-alias",
+    "turns": [
+      {
+        "question": "What engines does the Tomcat have?",
+        "all": [
+          "TF30",
+          "F110"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unsupported",
+    "turns": [
+      {
+        "question": "What is the Wi-Fi password at Sochi airport?",
+        "any": [
+          "not listed",
+          "not provide",
+          "couldn\u2019t find",
+          "does not list",
+          "not mention",
+          "not specified"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "topic-switch",
+    "turns": [
+      {
+        "question": "What is the tower frequency for Sochi?",
+        "all": [
+          "127"
+        ]
+      },
+      {
+        "question": "How do flaps affect lift?",
+        "all": [
+          "lift"
+        ],
+        "none": [
+          "Sochi",
+          "rotor",
+          "helicopter"
+        ]
+      },
+      {
+        "question": "Tell me about radar",
+        "all": [
+          "radar"
+        ],
+        "none": [
+          "Sochi"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "comparison",
+    "turns": [
+      {
+        "question": "What tower frequencies do Sochi and Kutaisi use?",
+        "all": [
+          "Sochi",
+          "Kutaisi",
+          "127",
+          "134"
+        ]
+      },
+      {
+        "question": "Compare the engines of the F-14 and F-16.",
+        "all": [
+          "F-14",
+          "F-16",
+          "F110"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "long-context",
+    "turns": [
+      {
+        "question": "What is the VORTAC for Ramat David?",
+        "all": [
+          "84X"
+        ]
+      },
+      {
+        "question": "What runways are available?",
+        "all": [
+          "09/27"
+        ]
+      },
+      {
+        "question": "Which one runs east-west?",
+        "all": [
+          "09/27"
+        ]
+      },
+      {
+        "question": "What about tower frequency?",
+        "all": [
+          "251"
+        ]
+      },
+      {
+        "question": "And the VORTAC channel again?",
+        "all": [
+          "84X"
+        ]
+      }
+    ]
+  }
 ]

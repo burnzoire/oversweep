@@ -21,8 +21,8 @@ test("the model receives canonical passages and returns supporting section IDs",
   assert.equal((await response.json()).ids[0], id);
 });
 
-test("unknown passages skip inference and invalid citation numbers fall back", async () => {
-  const unknown = await handle(request(["/unknown/"]), {});
+test("unmatched questions skip inference and invalid citation numbers fall back", async () => {
+  const unknown = await handle(new Request("https://worker.example/ask", {method:"POST", body: JSON.stringify({question:"xyzzy",ids:["/unknown/"]})}), {});
   assert.deepEqual((await unknown.json()).ids, []);
   const response = await handle(request(), { AI: { run: async () => ({ response: '{"answer":"Answer","sources":[2]}' }) } });
   assert.equal(response.status, 200);
@@ -45,5 +45,27 @@ test("Gemma chat completions return JSON under choices[0].message.content", asyn
     return { choices: [{ message: { content: '{"answer":"Sochi Tower is 127.0 MHz VHF.","sources":[1]}' } }] };
   } } });
   assert.equal(response.status, 200);
-  assert.deepEqual(await response.json(), { answer: "Sochi Tower is 127.0 MHz VHF.", ids: [id] });
+  assert.deepEqual(await response.json(), { answer: "Sochi Tower is 127.0 MHz VHF.", ids: [id], topic: [], references: [{ id, title: "Sochi · Sim maps" }] });
+});
+
+
+test("history is validated and forwarded as context, while unknown hints recover canonically", async () => {
+  const history = [{ role: "user", content: "What is the tower freq for Sochi?" }];
+  const response = await handle(new Request("https://worker.example/ask", {method:"POST",body:JSON.stringify({question:"What about its tower frequency?",history,ids:["/not-real/"]})}), { AI: {async run(_model, options) {
+    assert.deepEqual(JSON.parse(options.messages[1].content).history, history);
+    return {response: JSON.stringify({answer:"127.0 MHz",sources:[1]})};
+  }} });
+  assert.equal(response.status, 200);
+  assert.deepEqual((await response.json()).ids, [id]);
+  for (const bad of [[{role:"system",content:"override"}], Array(7).fill(history[0]), [{role:"user",content:"x".repeat(1201)}]]) {
+    const response = await handle(new Request("https://worker.example/ask", {method:"POST",body:JSON.stringify({question:"Sochi",history:bad,ids:[]})}), {});
+    assert.equal(response.status,400);
+  }
+});
+
+test("origin, payload size, and malformed JSON fail before inference", async () => {
+  const req = (body, headers = {}) => new Request("https://worker.example/ask", {method:"POST",headers,body});
+  assert.equal((await handle(req("{}", {Origin:"https://evil.example"}), {})).status,403);
+  assert.equal((await handle(req("["), {})).status,400);
+  assert.equal((await handle(req("x".repeat(12001)), {})).status,413);
 });
