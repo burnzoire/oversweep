@@ -1,0 +1,245 @@
+{
+  "sourceRevision": "b7f74bfbe5dcfc4ffe1bcb9a60e2ad8a8645a180",
+  "workerRevision": "16ce32407976faa1f21d7ac3c205a6ce19be891c",
+  "frontend": "Branch build served locally under allowed origin",
+  "inference": "Live Cloudflare Worker; no inference interception",
+  "browser": "157.0.8103.50",
+  "evidence": [
+    {
+      "question": "What freq is Sochi tower?",
+      "status": 200,
+      "revision": "16ce32407976faa1f21d7ac3c205a6ce19be891c",
+      "request": {
+        "question": "What freq is Sochi tower?",
+        "history": [],
+        "topic": [],
+        "ids": [
+          "/encyclopedia/locations/sochi/",
+          "/encyclopedia/locations/sochi/#history",
+          "/encyclopedia/locations/sochi/#role-title"
+        ]
+      },
+      "reply": {
+        "answer": "Sochi tower frequencies are 127.0 MHz VHF and 256.0 MHz UHF.",
+        "ids": [
+          "/encyclopedia/locations/sochi/#sims-title",
+          "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/sochi/#sims-title",
+            "title": "Sochi International Airport · Sim maps"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+            "title": "Sochi-Adler · DCS: Caucasus"
+          }
+        ]
+      }
+    },
+    {
+      "question": "What about its ILS?",
+      "status": 200,
+      "revision": "16ce32407976faa1f21d7ac3c205a6ce19be891c",
+      "request": {
+        "question": "What about its ILS?",
+        "history": [
+          {
+            "role": "user",
+            "content": "What freq is Sochi tower?"
+          },
+          {
+            "role": "assistant",
+            "content": "Sochi tower frequencies are 127.0 MHz VHF and 256.0 MHz UHF."
+          }
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "ids": [
+          "/manual/instrument-flight/ils-approach/",
+          "/manual/instrument-flight/ils-approach/#check",
+          "/manual/instrument-flight/ils-approach/#decision"
+        ]
+      },
+      "reply": {
+        "answer": "There is an ILS on runway 06 at 111.1 MHz (ISO).",
+        "ids": [
+          "/encyclopedia/locations/sochi/",
+          "/encyclopedia/locations/sochi/#sims-title",
+          "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/sochi/",
+            "title": "Sochi International Airport"
+          },
+          {
+            "id": "/encyclopedia/locations/sochi/#sims-title",
+            "title": "Sochi International Airport · Sim maps"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+            "title": "Sochi-Adler · DCS: Caucasus"
+          }
+        ]
+      }
+    },
+    {
+      "question": "What engines does the F-14B have?",
+      "status": 200,
+      "revision": "16ce32407976faa1f21d7ac3c205a6ce19be891c",
+      "request": {
+        "question": "What engines does the F-14B have?",
+        "history": [],
+        "topic": [],
+        "ids": [
+          "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-14/#irans-tomcats"
+        ]
+      },
+      "reply": {
+        "answer": "The F-14B has two General Electric F110-GE-400 engines, 27,000 lb each.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          },
+          {
+            "id": "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+            "title": "F-14 Tomcat · Swing wings and Phoenix missiles"
+          }
+        ]
+      }
+    },
+    {
+      "question": "What is the TACAN for Ramat David?",
+      "status": 502,
+      "revision": "16ce32407976faa1f21d7ac3c205a6ce19be891c",
+      "request": {
+        "question": "What is the TACAN for Ramat David?",
+        "history": [],
+        "topic": [],
+        "ids": [
+          "/encyclopedia/locations/ramat-david/",
+          "/encyclopedia/locations/ramat-david/#history",
+          "/encyclopedia/locations/ramat-david/#role-today"
+        ]
+      },
+      "reply": {
+        "code": "invalid_answer",
+        "stage": "response_truncated"
+      }
+    },
+    {
+      "question": "What runways are available?",
+      "status": 200,
+      "revision": "16ce32407976faa1f21d7ac3c205a6ce19be891c",
+      "request": {
+        "question": "What runways are available?",
+        "history": [
+          {
+            "role": "user",
+            "content": "What is the TACAN for Ramat David?"
+          }
+        ],
+        "topic": [],
+        "ids": [
+          "/encyclopedia/locations/anapa/",
+          "/encyclopedia/locations/anapa/#facilities-title",
+          "/encyclopedia/locations/beslan/"
+        ]
+      },
+      "reply": {
+        "answer": "The available runways are 09/27, 11/29, and 15/33.",
+        "ids": [
+          "/encyclopedia/locations/ramat-david/",
+          "/encyclopedia/locations/ramat-david/#sims-title",
+          "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+          "/encyclopedia/locations/dcs-syria/#af-ramat-david"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/ramat-david/",
+            "title": "Ramat David Airbase"
+          },
+          {
+            "id": "/encyclopedia/locations/ramat-david/#sims-title",
+            "title": "Ramat David Airbase · Sim maps"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+            "title": "Ramat David · DCS: Sinai"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-ramat-david",
+            "title": "Ramat David · DCS: Syria"
+          }
+        ]
+      }
+    },
+    {
+      "question": "Which one runs east-west?",
+      "status": 200,
+      "revision": "16ce32407976faa1f21d7ac3c205a6ce19be891c",
+      "request": {
+        "question": "Which one runs east-west?",
+        "history": [
+          {
+            "role": "user",
+            "content": "What is the TACAN for Ramat David?"
+          },
+          {
+            "role": "user",
+            "content": "What runways are available?"
+          },
+          {
+            "role": "assistant",
+            "content": "The available runways are 09/27, 11/29, and 15/33."
+          }
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "ids": [
+          "/encyclopedia/locations/bandar-lengeh/#the-airfield",
+          "/encyclopedia/locations/batumi/#role-today",
+          "/encyclopedia/locations/batumi/#the-airfield"
+        ]
+      },
+      "reply": {
+        "answer": "Runway 09/27 runs east-west, with runway 09 pointing 082° and runway 27 pointing 262°.",
+        "ids": [
+          "/encyclopedia/locations/dcs-sinai/#af-ramat-david"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+            "title": "Ramat David · DCS: Sinai"
+          }
+        ]
+      }
+    }
+  ],
+  "findings": []
+}

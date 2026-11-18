@@ -1,0 +1,270 @@
+{
+  "endpoint": "https://ask-oversweep.burnzoire.workers.dev/ask",
+  "at": "2026-11-18T04:03:08.339Z",
+  "results": [
+    {
+      "conversation": "tomcat",
+      "question": "What engines does the F-14B have?",
+      "requestedIds": [],
+      "status": 200,
+      "revision": "16ce32407976faa1f21d7ac3c205a6ce19be891c",
+      "reply": {
+        "answer": "The F-14B has two General Electric F110-GE-400 engines, 27,000 lb each.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          },
+          {
+            "id": "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+            "title": "F-14 Tomcat · Swing wings and Phoenix missiles"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1071
+    },
+    {
+      "conversation": "tomcat",
+      "question": "And the A model?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/aircraft/f-14/"
+      ],
+      "status": 200,
+      "revision": "16ce32407976faa1f21d7ac3c205a6ce19be891c",
+      "reply": {
+        "answer": "The F-14A has two Pratt & Whitney TF30-P-414A afterburning turbofans, 20,900 lb each.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1590
+    },
+    {
+      "conversation": "tomcat",
+      "question": "How many crew?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/aircraft/f-14/"
+      ],
+      "status": 200,
+      "revision": "16ce32407976faa1f21d7ac3c205a6ce19be891c",
+      "reply": {
+        "answer": "The crew consists of 2: a pilot and radar intercept officer (RIO).",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 801
+    },
+    {
+      "conversation": "sochi",
+      "question": "What freq is Sochi tower?",
+      "requestedIds": [],
+      "status": 200,
+      "revision": "16ce32407976faa1f21d7ac3c205a6ce19be891c",
+      "reply": {
+        "answer": "Sochi tower frequencies are 127.0 MHz VHF and 256.0 MHz UHF.",
+        "ids": [
+          "/encyclopedia/locations/sochi/#sims-title",
+          "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/sochi/#sims-title",
+            "title": "Sochi International Airport · Sim maps"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+            "title": "Sochi-Adler · DCS: Caucasus"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 992
+    },
+    {
+      "conversation": "sochi",
+      "question": "Does it have a TACAN?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/sochi/"
+      ],
+      "status": 200,
+      "revision": "16ce32407976faa1f21d7ac3c205a6ce19be891c",
+      "reply": {
+        "answer": "The supplied material for Sochi International Airport (represented as Sochi-Adler in DCS: Caucasus) lists an NDB with marker (CO) and an ILS on runway 06, 111.1 MHz (ISO), but does not list a TACAN.",
+        "ids": [
+          "/encyclopedia/locations/sochi/#sims-title",
+          "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/sochi/#sims-title",
+            "title": "Sochi International Airport · Sim maps"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+            "title": "Sochi-Adler · DCS: Caucasus"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1508
+    },
+    {
+      "conversation": "sochi",
+      "question": "What about ILS?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/sochi/"
+      ],
+      "status": 200,
+      "revision": "16ce32407976faa1f21d7ac3c205a6ce19be891c",
+      "reply": {
+        "answer": "In DCS: Caucasus, there is an ILS on runway 06 at 111.1 MHz (ISO).",
+        "ids": [
+          "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+          "/encyclopedia/locations/sochi/#facilities-title"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+            "title": "Sochi-Adler · DCS: Caucasus"
+          },
+          {
+            "id": "/encyclopedia/locations/sochi/#facilities-title",
+            "title": "Sochi International Airport · Runways and facilities"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 992
+    },
+    {
+      "conversation": "sochi",
+      "question": "What runways are available?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/sochi/"
+      ],
+      "status": 200,
+      "revision": "16ce32407976faa1f21d7ac3c205a6ce19be891c",
+      "reply": {
+        "answer": "At the real Sochi International Airport, the available runways are 06/24 and 02/20. In the DCS: Caucasus sim map, only runway 06/24 is represented.",
+        "ids": [
+          "/encyclopedia/locations/sochi/",
+          "/encyclopedia/locations/sochi/#sims-title",
+          "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/sochi/",
+            "title": "Sochi International Airport"
+          },
+          {
+            "id": "/encyclopedia/locations/sochi/#sims-title",
+            "title": "Sochi International Airport · Sim maps"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+            "title": "Sochi-Adler · DCS: Caucasus"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 932
+    },
+    {
+      "conversation": "table-airfield",
+      "question": "What is the tower frequency for Kuweires?",
+      "requestedIds": [],
+      "status": 200,
+      "revision": "16ce32407976faa1f21d7ac3c205a6ce19be891c",
+      "reply": {
+        "answer": "The tower frequencies for Kuweires are VHF 120.5, UHF 251.35, low VHF 39.8, and HF 4.45.",
+        "ids": [
+          "/encyclopedia/locations/dcs-syria/#af-kuweires"
+        ],
+        "topic": [
+          "/encyclopedia/locations/dcs-syria/#af-kuweires"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-kuweires",
+            "title": "Kuweires · DCS: Syria"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1359
+    },
+    {
+      "conversation": "table-airfield",
+      "question": "What runways are available?",
+      "requestedIds": [],
+      "topic": [
+        "/encyclopedia/locations/dcs-syria/#af-kuweires"
+      ],
+      "status": 200,
+      "revision": "16ce32407976faa1f21d7ac3c205a6ce19be891c",
+      "reply": {
+        "answer": "The available runways at Kuweires are 10 (095°) / 28 (275°), 6,663 ft.",
+        "ids": [
+          "/encyclopedia/locations/dcs-syria/#af-kuweires"
+        ],
+        "topic": [
+          "/encyclopedia/locations/dcs-syria/#af-kuweires"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-kuweires",
+            "title": "Kuweires · DCS: Syria"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1118
+    }
+  ]
+}
