@@ -169,7 +169,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       return at(p.at, moving(c, state[c.id] ?? c.initial, i =>
         `<g transform="rotate(${c.positions[i].angle ?? 0})">${knobArt(p.component)}</g>`), ` data-art="${p.component}"`);
     }
-    case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-xxl': case 'push-round-bezel': {
+    case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-flat': case 'push-round-xxl': case 'push-round-bezel': {
       const c = controlOf(spec, p.control), art = p.component;
       // Cap printing shrinks with the cap when pressed.
       const print = (pressed: boolean) => {
@@ -349,7 +349,7 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         const bw = w * c + h * s, bh = w * s + h * c;
         return [{ kind: 'control', id: p.control, box: [cx - bw / 2, cy - bh / 2, bw, bh] }];
       }
-      case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-xxl': case 'push-round-bezel': {
+      case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-flat': case 'push-round-xxl': case 'push-round-bezel': {
         const r = PUSHES[p.component].r;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }
