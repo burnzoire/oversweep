@@ -191,7 +191,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       const tw = p.tween ? ` data-tween="${p.tween.drag?.axis ?? ''}"${p.tween.drag?.from ? ` data-drag-from="${p.tween.drag.from}"` : ''}` : '';
       return `<g data-art="traced">` + painted(p.paint, moving(c, state[c.id] ?? c.initial, i => {
         const sh = p.shapes[c.positions[i].id];
-        return sh ? cased(`<path d="${sh.d}" fill="${PAPER}" fill-rule="evenodd"/>`) + (sh.parts ?? []).map(d => cased(`<path d="${d}" fill="${PAPER}"/>`)).join('') + (sh.lines ? `<path d="${sh.lines}" fill="none" ${sw('fine')}/>` : '') + (sh.legend ?? []).map(l => text(l.at[0], l.at[1], l.text, l.cap, l.width)).join('') : '';
+        return sh ? (sh.d ? cased(`<path d="${sh.d}" fill="${PAPER}" fill-rule="evenodd"/>`) : '') + (sh.parts ?? []).map(d => cased(`<path d="${d}" fill="${PAPER}"/>`)).join('') + (sh.lines ? `<path d="${sh.lines}" fill="none" ${sw('fine')}/>` : '') + (sh.legend ?? []).map(l => text(l.at[0], l.at[1], l.text, l.cap, l.width)).join('') + (sh.svg ?? '') : '';
       }, tw)) + '</g>';
     }
     case 'slot-lever': {
@@ -283,6 +283,7 @@ export function renderPanel(spec: PanelSpec, opts: RenderOptions = {}) {
       if (e.clip) clips += `<clipPath id="${id}"><path d="${e.clip}" clip-rule="evenodd"/></clipPath>`;
       return `<path d="${e.d}" fill="${PAINTS[e.paint]}" stroke="none"${e.clip ? ` clip-path="url(#${id})"` : ''}/>`;
     }
+    if (e.kind === 'svg') return e.markup;
     return `<path d="${e.d}" ${sw(e.pen ?? 'medium')}${e.faint ? ' stroke-opacity="0.3"' : ''}/>`;
   }).join('');
   return `<svg class="cockpit-svg" viewBox="0 0 ${n(w)} ${n(h)}" xmlns="http://www.w3.org/2000/svg" ${opts.label ? `role="img" aria-label="${esc(opts.label)}"` : 'aria-hidden="true"'}>` +
