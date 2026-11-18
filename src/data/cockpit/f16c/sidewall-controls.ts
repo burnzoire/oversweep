@@ -15,11 +15,11 @@ const canopySwitch = (hidden: boolean) => {
   const body = `<path d="M${x0} ${ye}V${yb}A${rx} ${ry} 0 0 1 ${x1} ${yb}V${ye}" ${st} stroke="#161616" stroke-width="${sw}"/>` +
     `<ellipse cx="${cx}" cy="${ye}" rx="${rx}" ry="${ry}" ${st} stroke="#161616" stroke-width="${sw}"/>`;
   // The toggle seen from above: grommet flattened on the end face, lever standing out of it (down the page).
-  const [r, ball, reach] = [5.2, 3.2, 5.6], k = ry / rx;
+  const [r, reach] = [5.2, 7.5], k = ry / rx;
   const toggle = `<ellipse cx="${cx}" cy="${ye}" rx="${r}" ry="${(r * k).toFixed(2)}" ${st} stroke="#161616" stroke-width="${sw}"/>` +
     `<ellipse cx="${cx}" cy="${ye}" rx="${(r * 0.6).toFixed(2)}" ry="${(r * 0.6 * k).toFixed(2)}" fill="none" ${hidden ? 'stroke-dasharray="1.6 1.2" ' : ''}stroke="#161616" stroke-width="0.25"/>` +
-    `<path d="M${cx - 0.8} ${ye}L${cx - 1.3} ${ye + reach}H${cx + 1.3}L${cx + 0.8} ${ye}Z" ${st} stroke="#161616" stroke-width="${sw}"/>` +
-    `<ellipse cx="${cx}" cy="${ye + reach}" rx="${ball}" ry="${(ball * 0.8).toFixed(2)}" ${st} stroke="#161616" stroke-width="${sw}"/>`;
+    // Plain tapered lever: wide at the grommet, narrowing to a rounded tip.
+    `<path d="M${cx - 1.4} ${ye}L${cx - 0.7} ${ye + reach}A0.7 0.7 0 0 0 ${cx + 0.7} ${ye + reach}L${cx + 1.4} ${ye}Z" ${st} stroke="#161616" stroke-width="${sw}"/>`;
   return body + toggle;
 };
 
