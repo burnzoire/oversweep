@@ -17,8 +17,10 @@
       },
       {
         "question": "How many crew?",
-        "all": [
-          "two"
+        "any": [
+          "two",
+          "2:",
+          "2 "
         ]
       }
     ]
@@ -42,7 +44,11 @@
           "no TACAN",
           "not mention",
           "not provide",
-          "not specified"
+          "not specified",
+          "not documented",
+          "not supplied",
+          "not available",
+          "no listed"
         ]
       },
       {
@@ -244,6 +250,52 @@
         "question": "And the VORTAC channel again?",
         "all": [
           "84X"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table-airfield",
+    "turns": [
+      {
+        "question": "What is the tower frequency for Kuweires?",
+        "all": [
+          "120.5",
+          "251.35"
+        ]
+      },
+      {
+        "question": "What runways are available?",
+        "all": [
+          "10",
+          "28"
+        ],
+        "none": [
+          "Sochi",
+          "Ramat David"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "comparison-follow-up",
+    "turns": [
+      {
+        "question": "What engines does the F-14B have?",
+        "all": [
+          "F110",
+          "GE-400"
+        ]
+      },
+      {
+        "question": "How does this differ from the F-16?",
+        "all": [
+          "F-14",
+          "F-16"
+        ],
+        "any": [
+          "single",
+          "one"
         ]
       }
     ]

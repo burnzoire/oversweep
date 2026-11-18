@@ -60,3 +60,18 @@ test('aircraft nicknames preserve a topic and include the factual record', () =>
   assert.deepEqual(result.topic,[id]);
   assert.ok(result.passages.some(p=>p.text.includes('F110-GE-400')));
 });
+
+test('airfield table rows retain context without mistaking directions for names', () => {
+  const id='/encyclopedia/locations/dcs-syria/#af-kuweires';
+  const r=createRetriever({...corpus,[id]:{title:'Kuweires · DCS: Syria',name:'Kuweires',text:'DCS Syria. Tower: VHF 120.5; Runways: 10/28.'},'/encyclopedia/locations/dcs-normandy/#af-west-malling':{title:'West Malling · DCS: Normandy',name:'West Malling',text:'Runways 01/19.'}});
+  const first=r('What is the tower frequency for Kuweires?');
+  assert.deepEqual(first.topic,[id]);
+  assert.deepEqual(r('What runways are available?',{topic:first.topic}).passages.map(p=>p.id),[id]);
+  assert.equal(r('Which one runs east-west?',{topic:[ramat]}).subject,'Ramat David Airbase');
+});
+
+test('comparison follow-ups retain both the earlier and newly named aircraft', () => {
+  const f14='/encyclopedia/aircraft/f-14/',f16='/encyclopedia/aircraft/f-16/';
+  const r=createRetriever({...corpus,[f14]:{title:'F-14 Tomcat',text:'Two engines.'},[f16]:{title:'F-16 Fighting Falcon',text:'One engine.'}});
+  assert.deepEqual(new Set(r('How does this differ from the F-16?',{topic:[f14]}).topic),new Set([f14,f16]));
+});

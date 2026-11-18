@@ -80,12 +80,33 @@ export function addAskSections(corpus, html, entry) {
   const clean = main.replace(/<(script|style|svg|nav)\b[^>]*>[\s\S]*?<\/\1>/gi, "");
   const headings = [...clean.matchAll(/<h([1-6])\b([^>]*)>([\s\S]*?)<\/h\1>/gi)]
     .filter(heading => attr(heading[2], "id") && !/\bfig-title\b/.test(attr(heading[2], "class") ?? ""));
-  const text = (fragment) => clip(textOf(fragment.replace(/>\s*</g, "> <")), 3500);
-  corpus[entry.u] = { title: entry.t, text: text(clean) };
+  const text = fragment => textOf(fragment.replace(/<table\b[\s\S]*?<\/table>/g, table => {
+    const head = table.match(/<thead\b[^>]*>([\s\S]*?)<\/thead>/)?.[1] ?? "";
+    const labels = [...head.matchAll(/<th\b[^>]*>([\s\S]*?)<\/th>/g)].map(cell => textOf(cell[1]));
+    return table.replace(/<tr\b[^>]*>([\s\S]*?)<\/tr>/g, (row, body) => {
+      if (!/<td\b/.test(body)) return row;
+      const cells = [...body.matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/g)].map(cell => cell[1]);
+      return labels.length === cells.length
+        ? "<p>" + cells.map((cell, i) => labels[i] + ": " + cell).join("; ") + ".</p>"
+        : row;
+    });
+  }).replace(/<span\b[^>]*class="[^"]*\bcell-(?:note|line)\b[^"]*"[^>]*>/g, " $&").replace(/>\s*</g, "> <"));
+  corpus[entry.u] = { title: entry.t, text: clip(text(clean), 3500) };
+  // Airfields without standalone articles still have canonical row anchors.
+  // Include the header labels so radio frequencies cannot be confused with navaids.
+  for (const table of clean.matchAll(/<table\b[\s\S]*?<\/table>/g)) {
+    const head = table[0].match(/<thead\b[^>]*>[\s\S]*?<\/thead>/)?.[0] ?? "";
+    for (const row of table[0].matchAll(/<tr\b[^>]*\bid="(af-[^"]+)"[^>]*>([\s\S]*?)<\/tr>/g)) {
+      const name = textOf((row[2].match(/<th\b[^>]*>([\s\S]*?)<\/th>/)?.[1] ?? "").replace(/<span class="cell-note">[\s\S]*?<\/span>/g, ""));
+      if (name) corpus[entry.u + "#" + row[1]] = { title: name + " · " + entry.t, name, text: entry.t + ". " + text("<table>" + head + row[0] + "</table>") };
+    }
+  }
+  if (entry.u === "/encyclopedia/terminology/") return;
   for (const [i, heading] of headings.entries()) {
     const id = attr(heading[2], "id");
     if (!id || skipHeading.test(id)) continue;
-    const passage = text(clean.slice(heading.index + heading[0].length, headings[i + 1]?.index));
+    const whole = text(clean.slice(heading.index + heading[0].length, headings[i + 1]?.index));
+    const passage = id === "map-airfields-title" ? clip(whole, 3500) : whole;
     if (passage) corpus[entry.u + "#" + encodeURIComponent(decode(id))] = {
       title: entry.t + " · " + textOf(heading[3]),
       text: passage,

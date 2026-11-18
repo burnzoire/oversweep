@@ -7,17 +7,22 @@ if (process.env.ASK_LIVE !== '1') throw new Error('Set ASK_LIVE=1 to authorize l
 const endpoint = process.env.ASK_ENDPOINT ?? 'https://ask-oversweep.burnzoire.workers.dev/ask';
 const cases = JSON.parse(await fs.readFile(new URL('../tests/ask/conversations.json', import.meta.url)));
 const retrieve = createRetriever(JSON.parse(await fs.readFile(new URL('../dist/ask-corpus.json', import.meta.url))));
+if (process.env.ASK_REVISION) {
+  const deployed = await fetch(endpoint, { method: 'HEAD', signal: AbortSignal.timeout(15000) });
+  if (deployed.headers.get('x-ask-revision') !== process.env.ASK_REVISION) throw new Error('Expected branch revision is not deployed; no inference tests were started');
+}
 const selected = process.argv[3]?.split(',');
 const results = [];
 for (const conversation of cases.filter(c => !selected || selected.includes(c.id))) {
   let history = [];
   let topic;
   for (const turn of conversation.turns) {
-    const ids = retrieve(turn.question, { history, topic }).passages.map(p => p.id);
+    const candidates = retrieve(turn.question, { history, topic }).passages.map(p => p.id);
+    const ids = process.env.ASK_HINTS === 'wrong' ? ['/encyclopedia/aircraft/mig-15/'] : process.env.ASK_HINTS === 'none' ? [] : candidates.slice(0, 3);
     const started = Date.now();
     const row = { conversation: conversation.id, question: turn.question, history: [...history], requestedIds: ids, topic };
     try {
-      const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question: turn.question, history, topic, ids: process.env.ASK_HINTS === "wrong" ? ["/encyclopedia/aircraft/mig-15/"] : process.env.ASK_HINTS === "none" ? [] : ids.slice(0, 3) }), signal: AbortSignal.timeout(40000) });
+      const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question: turn.question, history, topic, ids }), signal: AbortSignal.timeout(40000) });
       Object.assign(row, { status: response.status, revision: response.headers.get('x-ask-revision'), reply: await response.json() });
       const answer = row.reply.answer?.toLowerCase() ?? '';
       row.passed = response.ok && (!process.env.ASK_REVISION || row.revision === process.env.ASK_REVISION) && (turn.all ?? []).every(s => answer.includes(s.toLowerCase())) && (!turn.any || turn.any.some(s => answer.includes(s.toLowerCase()))) && (turn.none ?? []).every(s => !answer.includes(s.toLowerCase()));
