@@ -127,7 +127,8 @@ export const sidewallControls: PanelSpec = {
       id: 'canopy-handle', name: 'Canopy handle', type: 'toggle', travel: 'vertical',
       positions: [{ id: 'unlocked', label: 'Unlocked', hold: 'stable' }, { id: 'locked', label: 'Locked', hold: 'stable' }],
       initial: 'locked',
-      description: 'Locks and unlocks the canopy and inflates or deflates its pressure seal. Unlocked (pulled outward): the seal deflates and the CANOPY warning light comes on; set it here before lowering the canopy. It also limits the throttle\'s full travel. Locked (against the cockpit wall): the canopy is locked and the seal inflated, and the handle covers the canopy switch.',
+      guards: { control: 'canopy', closesTo: 'center', when: 'locked' },
+      description: 'Locks and unlocks the canopy and inflates or deflates its pressure seal. Unlocked (pulled outward): the seal deflates and the CANOPY warning light comes on; set it here before lowering the canopy. It also limits the throttle\'s full travel. Locked (against the cockpit wall): the canopy is locked and the seal inflated, the handle covers the canopy switch, and locking it pushes the switch back to center.',
       source: 'DCS F-16C guide p. 73',
     },
     {

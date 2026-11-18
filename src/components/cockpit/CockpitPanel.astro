@@ -237,7 +237,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     const why = blocked(c, to.id);
     if (why) { say(why); return; }
     moveTo(c, j);
-    if (c.guards && to.id === 'closed') {
+    if (c.guards && to.id === (c.guards.when ?? 'closed')) {
       const guarded = byId.get(c.guards.control);
       if (guarded && pos(guarded) !== c.guards.closesTo) set(guarded, c.guards.closesTo);
     }

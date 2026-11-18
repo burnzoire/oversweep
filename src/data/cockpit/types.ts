@@ -86,8 +86,11 @@ export interface ControlDef {
   /** Mechanically latched (lever-lock) switch; see `protections`. */
   latched?: boolean;
   protections?: Protection[];
-  /** Closing this guard drives the guarded control back to this position. */
-  guards?: { control: string; closesTo: string };
+  /**
+   * Closing this guard (moving it to `when`, default `closed`) drives the
+   * guarded control back to `closesTo`.
+   */
+  guards?: { control: string; closesTo: string; when?: string };
   description: string;
   /** Manual page or other evidence for the behaviour. */
   source: string;
