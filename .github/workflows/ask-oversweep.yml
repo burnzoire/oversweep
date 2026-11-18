@@ -1,8 +1,6 @@
 name: Deploy Ask Oversweep Worker
 on:
   workflow_dispatch:
-  push:
-    branches: [codex/ask-conversation-iterations]
 permissions:
   contents: read
 concurrency:
