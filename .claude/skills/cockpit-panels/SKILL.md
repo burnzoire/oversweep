@@ -97,6 +97,11 @@ MS91528 titles and scopes (everyspec.com listings); Honeywell TL datasheet.
 
 Use the official guide of the simulator variant (DCS: Eagle Dynamics guide;
 F-16C link in project memory). Never xFlight, Chuck's Guides or community art.
+This holds for procedures too: step `evidence`, page Sources and review docs cite
+only the official guide (or official/military publications). Never cite or link
+Chuck's Guides or other community guides, never take steps from them, and never
+copy their wording, structure or images (Nathan 2026-11-18: citing them puts a target on
+the site).
 Find the page with `pdftotext`, extract the panel image losslessly
 (`pdfimages -j -f <p> -l <p>`, take the largest JPEG). Put the controls'
 descriptions in the spec from the guide's text with the page as `source`.
