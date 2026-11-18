@@ -1,0 +1,1056 @@
+{
+  "endpoint": "https://ask-oversweep.burnzoire.workers.dev/ask",
+  "at": "2026-11-18T05:48:53.560Z",
+  "results": [
+    {
+      "conversation": "tomcat",
+      "question": "What engines does the F-14B have?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "The F-14B is powered by two General Electric F110-GE-400 afterburning turbofans, each providing 27,000 lb.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          },
+          {
+            "id": "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+            "title": "F-14 Tomcat · Swing wings and Phoenix missiles"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 7750
+    },
+    {
+      "conversation": "tomcat",
+      "question": "And the A model?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/aircraft/f-14/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "The F-14A is powered by two Pratt & Whitney TF30-P-414A afterburning turbofans, each providing 20,900 lb.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 6856
+    },
+    {
+      "conversation": "tomcat",
+      "question": "How many crew?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/aircraft/f-14/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "The F-14 Tomcat has a crew of two, consisting of a pilot and a radar intercept officer (RIO).",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 712
+    },
+    {
+      "conversation": "sochi",
+      "question": "What freq is Sochi tower?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "In the DCS: Caucasus simulator, the Sochi-Adler tower frequencies are 127.0 MHz VHF, 256.0 MHz UHF, 39.6 MHz low VHF, and 4.05 MHz HF.",
+        "ids": [
+          "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+            "title": "Sochi-Adler · DCS: Caucasus"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1373
+    },
+    {
+      "conversation": "sochi",
+      "question": "Does it have a TACAN?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/locations/sochi/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "In the DCS: Caucasus simulator, the Sochi-Adler airfield has an NDB with marker (CO) and an ILS on runway 06, but a TACAN is not listed.",
+        "ids": [
+          "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+            "title": "Sochi-Adler · DCS: Caucasus"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1217
+    },
+    {
+      "conversation": "sochi",
+      "question": "What about ILS?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/locations/sochi/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "In the DCS: Caucasus simulator, there is an ILS on runway 06 at 111.1 MHz (ISO).",
+        "ids": [
+          "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+            "title": "Sochi-Adler · DCS: Caucasus"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 523
+    },
+    {
+      "conversation": "sochi",
+      "question": "What runways are available?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/locations/sochi/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "The real-world Sochi International Airport has runways 06/24 and 02/20, while the DCS: Caucasus simulator only includes runway 06/24.",
+        "ids": [
+          "/encyclopedia/locations/sochi/",
+          "/encyclopedia/locations/sochi/#sims-title",
+          "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+          "/encyclopedia/locations/sochi/#facilities-title"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/sochi/",
+            "title": "Sochi International Airport"
+          },
+          {
+            "id": "/encyclopedia/locations/sochi/#sims-title",
+            "title": "Sochi International Airport · Sim maps"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+            "title": "Sochi-Adler · DCS: Caucasus"
+          },
+          {
+            "id": "/encyclopedia/locations/sochi/#facilities-title",
+            "title": "Sochi International Airport · Runways and facilities"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1546
+    },
+    {
+      "conversation": "ramat",
+      "question": "What is the TACAN for Ramat David?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "In DCS: Sinai, the TACAN, VOR, and NDB is VORTAC 84X, 113.7 MHz (RMD), while in DCS: Syria, the TACAN, VOR, and NDB is NDB 368 kHz (RMD) and VORTAC 84X, 113.7 MHz (RMD).",
+        "ids": [
+          "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+          "/encyclopedia/locations/dcs-syria/#af-ramat-david"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+            "title": "Ramat David · DCS: Sinai"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-ramat-david",
+            "title": "Ramat David · DCS: Syria"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1894
+    },
+    {
+      "conversation": "ramat",
+      "question": "What runways are available?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/locations/ramat-david/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "The available runways are 09/27, 11/29, and 15/33 (source 1). In DCS: Sinai, the runways are 09/27, 11/29, and 15/33 (source 3). In DCS: Syria, the runways are 09/27, 11/29, and 33/15 (source 4).",
+        "ids": [
+          "/encyclopedia/locations/ramat-david/",
+          "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+          "/encyclopedia/locations/dcs-syria/#af-ramat-david"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/ramat-david/",
+            "title": "Ramat David Airbase"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+            "title": "Ramat David · DCS: Sinai"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-ramat-david",
+            "title": "Ramat David · DCS: Syria"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 2226
+    },
+    {
+      "conversation": "ramat",
+      "question": "Which one runs east-west?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/locations/ramat-david/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "None of the available runways at Ramat David Airbase run east-west; the runways are 09/27 (082°/262°), 11/29 (103°/283°), and 15/33 (140°/320°) in DCS: Sinai, and 09/27 (082°/262°), 11/29 (103°/283°), and 33/15 (320°/140°) in DCS: Syria (source 2, 3).",
+        "ids": [
+          "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+          "/encyclopedia/locations/dcs-syria/#af-ramat-david"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+            "title": "Ramat David · DCS: Sinai"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-ramat-david",
+            "title": "Ramat David · DCS: Syria"
+          }
+        ]
+      },
+      "passed": false,
+      "ms": 1398
+    },
+    {
+      "conversation": "ramat",
+      "question": "What is the tower freq for Sochi?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/locations/ramat-david/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "In DCS: Caucasus, the tower frequencies for Sochi-Adler are 127.0 MHz VHF, 256.0 MHz UHF, low VHF 39.6, and HF 4.05 (source 3).",
+        "ids": [
+          "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+            "title": "Sochi-Adler · DCS: Caucasus"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1343
+    },
+    {
+      "conversation": "ramat",
+      "question": "What about its ILS?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/locations/sochi/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "In DCS: Caucasus, there is an ILS on runway 06 at 111.1 MHz (ISO) (source 3).",
+        "ids": [
+          "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+            "title": "Sochi-Adler · DCS: Caucasus"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 925
+    },
+    {
+      "conversation": "concepts",
+      "question": "What is angle of attack?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "Angle of attack is the angle formed by the chord of an airfoil and the direction of the relative wind or between the chord line and the flight path.",
+        "ids": [
+          "/encyclopedia/terminology/#aoa"
+        ],
+        "topic": [
+          "/encyclopedia/terminology/#aoa"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/terminology/#aoa",
+            "title": "AOA"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1011
+    },
+    {
+      "conversation": "concepts",
+      "question": "What is a VORTAC?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/terminology/#aoa"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "A VORTAC is a ground navigation aid that provides VOR azimuth, TACAN azimuth, and TACAN distance. It uses paired VHF and UHF bands so that azimuth and distance information come from the same station.",
+        "ids": [
+          "/manual/navigation/air-navigation/#navaids"
+        ],
+        "topic": [],
+        "references": [
+          {
+            "id": "/manual/navigation/air-navigation/#navaids",
+            "title": "Air Navigation · Radio navigation aids"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1181
+    },
+    {
+      "conversation": "tomcat-alias",
+      "question": "What engines does the Tomcat have?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "The F-14A uses two Pratt & Whitney TF30-P-414A afterburning turbofans, while the F-14B and F-14D variants use two General Electric F110-GE-400 engines.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          },
+          {
+            "id": "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+            "title": "F-14 Tomcat · Swing wings and Phoenix missiles"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1435
+    },
+    {
+      "conversation": "unsupported",
+      "question": "What is the Wi-Fi password at Sochi airport?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "I couldn’t find enough on Oversweep to answer that.",
+        "ids": [],
+        "stage": "response_sources",
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": []
+      },
+      "passed": true,
+      "ms": 965
+    },
+    {
+      "conversation": "topic-switch",
+      "question": "What is the tower frequency for Sochi?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "In the DCS: Caucasus simulator, the tower frequencies for Sochi-Adler are 127.0 MHz VHF and 256.0 MHz UHF, with an additional low VHF frequency of 39.6 MHz.",
+        "ids": [
+          "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+            "title": "Sochi-Adler · DCS: Caucasus"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1305
+    },
+    {
+      "conversation": "topic-switch",
+      "question": "How do flaps affect lift?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/locations/sochi/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "High-lift devices, such as flaps, exist to increase CLmax and reduce the stall speed.",
+        "ids": [
+          "/manual/flight-fundamentals/principles-of-flight/#axes"
+        ],
+        "topic": [],
+        "references": [
+          {
+            "id": "/manual/flight-fundamentals/principles-of-flight/#axes",
+            "title": "Fixed-Wing Principles of Flight · Axes and flight controls"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 822
+    },
+    {
+      "conversation": "topic-switch",
+      "question": "Tell me about radar",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "Pulse-Doppler radar measures range by timing and closure by Doppler shift, using the shift to reject clutter and track targets in velocity (Source 1, Source 5). Pulse repetition frequency (PRF) determines how far a radar can measure range unambiguously and its velocity measurement capability (Source 6). Radar warning receivers (RWR) detect radar signals to identify threat type, rough bearing, and mode, though they do not provide a fix (Source 3, Source 5).",
+        "ids": [
+          "/encyclopedia/terminology/#pulse-doppler-radar",
+          "/encyclopedia/terminology/#radar-warning-receiver",
+          "/manual/sensors-situational-awareness/radar-and-warning/#recap",
+          "/manual/sensors-situational-awareness/radar-and-warning/#prf"
+        ],
+        "topic": [],
+        "references": [
+          {
+            "id": "/encyclopedia/terminology/#pulse-doppler-radar",
+            "title": "Pulse-Doppler radar"
+          },
+          {
+            "id": "/encyclopedia/terminology/#radar-warning-receiver",
+            "title": "Radar warning receiver"
+          },
+          {
+            "id": "/manual/sensors-situational-awareness/radar-and-warning/#recap",
+            "title": "Radar, Warning Receivers and Countermeasures · Key points"
+          },
+          {
+            "id": "/manual/sensors-situational-awareness/radar-and-warning/#prf",
+            "title": "Radar, Warning Receivers and Countermeasures · PRF and its trade-offs"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 2147
+    },
+    {
+      "conversation": "comparison",
+      "question": "What tower frequencies do Sochi and Kutaisi use?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "In the DCS: Caucasus simulator, Sochi-Adler uses tower frequencies VHF 127.0, UHF 256.0, low VHF 39.6, and HF 4.05, while Kutaisi uses VHF 134.0, UHF 263.0, low VHF 41.0, and HF 4.4.",
+        "ids": [
+          "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+          "/encyclopedia/locations/dcs-caucasus/#af-kutaisi"
+        ],
+        "topic": [
+          "/encyclopedia/locations/sochi/",
+          "/encyclopedia/locations/kutaisi/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-caucasus/#af-sochi-adler",
+            "title": "Sochi-Adler · DCS: Caucasus"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-caucasus/#af-kutaisi",
+            "title": "Kutaisi · DCS: Caucasus"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1858
+    },
+    {
+      "conversation": "comparison",
+      "question": "Compare the engines of the F-14 and F-16.",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/locations/sochi/",
+        "/encyclopedia/locations/kutaisi/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "The F-14 Tomcat uses two afterburning turbofans, specifically two Pratt & Whitney TF30-P-414A (20,900 lb each) for the F-14A, or two General Electric F110-GE-400 (27,000 lb each) for the F-14B/D. In contrast, the F-16 Fighting Falcon is a single-engine aircraft using either a General Electric F110-GE-129 (29,500 lbf) on the Block 50 or a Pratt & Whitney F100-PW-229 on the Block 52.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+          "/encyclopedia/aircraft/f-16/"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-16/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          },
+          {
+            "id": "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+            "title": "F-14 Tomcat · Swing wings and Phoenix missiles"
+          },
+          {
+            "id": "/encyclopedia/aircraft/f-16/",
+            "title": "F-16 Fighting Falcon"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 3158
+    },
+    {
+      "conversation": "long-context",
+      "question": "What is the VORTAC for Ramat David?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "In DCS: Sinai, the VORTAC is RMD, channel 84X, 113.7 MHz. In DCS: Syria, the VORTAC is RMD, channel 84X, 113.7 MHz.",
+        "ids": [
+          "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+          "/encyclopedia/locations/dcs-syria/#af-ramat-david"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+            "title": "Ramat David · DCS: Sinai"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-ramat-david",
+            "title": "Ramat David · DCS: Syria"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1206
+    },
+    {
+      "conversation": "long-context",
+      "question": "What runways are available?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/locations/ramat-david/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "The available runways are 09/27, 11/29, and 15/33.",
+        "ids": [
+          "/encyclopedia/locations/ramat-david/",
+          "/encyclopedia/locations/ramat-david/#sims-title"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/ramat-david/",
+            "title": "Ramat David Airbase"
+          },
+          {
+            "id": "/encyclopedia/locations/ramat-david/#sims-title",
+            "title": "Ramat David Airbase · Sim maps"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1113
+    },
+    {
+      "conversation": "long-context",
+      "question": "Which one runs east-west?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/locations/ramat-david/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "None of the available runways at Ramat David Airbase run east-west. In DCS: Sinai, runway 09/27 has headings of 082°/262°, runway 11/29 has headings of 103°/283°, and runway 15/33 has headings of 140°/320°; in DCS: Syria, the headings are 082°/262°, 103°/283°, and 320°/140° respectively.",
+        "ids": [
+          "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+          "/encyclopedia/locations/dcs-syria/#af-ramat-david"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+            "title": "Ramat David · DCS: Sinai"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-ramat-david",
+            "title": "Ramat David · DCS: Syria"
+          }
+        ]
+      },
+      "passed": false,
+      "ms": 4077
+    },
+    {
+      "conversation": "long-context",
+      "question": "What about tower frequency?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/locations/ramat-david/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "In DCS: Sinai, the tower frequencies are VHF 118.0 MHz and UHF 251.1 MHz. In DCS: Syria, the tower frequencies are VHF 118.6 MHz and UHF 251.3 MHz.",
+        "ids": [
+          "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+          "/encyclopedia/locations/dcs-syria/#af-ramat-david"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+            "title": "Ramat David · DCS: Sinai"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-ramat-david",
+            "title": "Ramat David · DCS: Syria"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1345
+    },
+    {
+      "conversation": "long-context",
+      "question": "And the VORTAC channel again?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/locations/ramat-david/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "In both DCS: Sinai and DCS: Syria, the VORTAC RMD uses channel 84X and 113.7 MHz.",
+        "ids": [
+          "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+          "/encyclopedia/locations/dcs-syria/#af-ramat-david"
+        ],
+        "topic": [
+          "/encyclopedia/locations/ramat-david/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+            "title": "Ramat David · DCS: Sinai"
+          },
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-ramat-david",
+            "title": "Ramat David · DCS: Syria"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1069
+    },
+    {
+      "conversation": "table-airfield",
+      "question": "What is the tower frequency for Kuweires?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "The tower frequencies for Kuweires are VHF 120.5, UHF 251.35 low, VHF 39.8, and HF 4.45.",
+        "ids": [
+          "/encyclopedia/locations/dcs-syria/#af-kuweires"
+        ],
+        "topic": [
+          "/encyclopedia/locations/dcs-syria/#af-kuweires"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-kuweires",
+            "title": "Kuweires · DCS: Syria"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1133
+    },
+    {
+      "conversation": "table-airfield",
+      "question": "What runways are available?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/locations/dcs-syria/#af-kuweires"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "The available runways at Kuweires are 10 (095°) / 28 (275°), which are 6,663 ft long.",
+        "ids": [
+          "/encyclopedia/locations/dcs-syria/#af-kuweires"
+        ],
+        "topic": [
+          "/encyclopedia/locations/dcs-syria/#af-kuweires"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-kuweires",
+            "title": "Kuweires · DCS: Syria"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1067
+    },
+    {
+      "conversation": "comparison-follow-up",
+      "question": "What engines does the F-14B have?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "The F-14B is powered by two General Electric F110-GE-400 afterburning turbofans, each providing 27,000 lb of thrust.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          },
+          {
+            "id": "/encyclopedia/aircraft/f-14/#swing-wings-and-phoenix-missiles",
+            "title": "F-14 Tomcat · Swing wings and Phoenix missiles"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 594
+    },
+    {
+      "conversation": "comparison-follow-up",
+      "question": "How does this differ from the F-16?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/aircraft/f-14/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "Unlike the F-14B, which is powered by two General Electric F110-GE-400 afterburning turbofans, the F-16 is a single-engine multirole fighter using either a General Electric F110-GE-129 or a Pratt & Whitney F100-PW-229 afterburning turbofan.",
+        "ids": [
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-16/"
+        ],
+        "topic": [
+          "/encyclopedia/aircraft/f-14/",
+          "/encyclopedia/aircraft/f-16/"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/aircraft/f-14/",
+            "title": "F-14 Tomcat"
+          },
+          {
+            "id": "/encyclopedia/aircraft/f-16/",
+            "title": "F-16 Fighting Falcon"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1910
+    },
+    {
+      "conversation": "theatre-scope",
+      "question": "What is the tower frequency for Hatzerim in Syria?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "The tower frequencies for Hatzerim in DCS: Syria are VHF 128.2, UHF 259.0, low VHF 41.95, and HF 4.975.",
+        "ids": [
+          "/encyclopedia/locations/dcs-syria/#af-hatzerim"
+        ],
+        "topic": [
+          "/encyclopedia/locations/dcs-syria/#af-hatzerim"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-hatzerim",
+            "title": "Hatzerim · DCS: Syria"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1203
+    },
+    {
+      "conversation": "theatre-scope",
+      "question": "What is the tower frequency for Biggin Hill in The Channel?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/locations/dcs-syria/#af-hatzerim"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "The tower frequencies for Biggin Hill in DCS: The Channel are VHF 118.2, UHF 250.2, low VHF 38.6, and HF 3.85.",
+        "ids": [
+          "/encyclopedia/locations/dcs-the-channel/#af-biggin-hill"
+        ],
+        "topic": [
+          "/encyclopedia/locations/dcs-the-channel/#af-biggin-hill"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-the-channel/#af-biggin-hill",
+            "title": "Biggin Hill · DCS: The Channel"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 1241
+    },
+    {
+      "conversation": "theatre-scope",
+      "question": "What is the tower frequency for King Hussein Air College?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/locations/dcs-the-channel/#af-biggin-hill"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "The tower frequencies for King Hussein Air College in DCS: Syria are VHF 118.3, UHF 250.45, low VHF 38.9, and HF 4.0.",
+        "ids": [
+          "/encyclopedia/locations/dcs-syria/#af-king-hussein-air-college"
+        ],
+        "topic": [
+          "/encyclopedia/locations/dcs-syria/#af-king-hussein-air-college"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-syria/#af-king-hussein-air-college",
+            "title": "King Hussein Air College · DCS: Syria"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 420
+    },
+    {
+      "conversation": "theatre-scope",
+      "question": "What is the low VHF tower frequency for Ramat David in Sinai?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "topic": [
+        "/encyclopedia/locations/dcs-syria/#af-king-hussein-air-college"
+      ],
+      "status": 200,
+      "revision": "019e99d4c61b60d5a44c350656fa28e76dbad556",
+      "reply": {
+        "answer": "The low VHF tower frequency for Ramat David in DCS: Sinai is 38.4 MHz.",
+        "ids": [
+          "/encyclopedia/locations/dcs-sinai/#af-ramat-david"
+        ],
+        "topic": [
+          "/encyclopedia/locations/dcs-sinai/#af-ramat-david"
+        ],
+        "references": [
+          {
+            "id": "/encyclopedia/locations/dcs-sinai/#af-ramat-david",
+            "title": "Ramat David · DCS: Sinai"
+          }
+        ]
+      },
+      "passed": true,
+      "ms": 304
+    }
+  ]
+}

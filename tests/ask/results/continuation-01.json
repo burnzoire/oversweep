@@ -1,0 +1,516 @@
+{
+  "endpoint": "https://ask-oversweep.burnzoire.workers.dev/ask",
+  "at": "2026-11-18T05:45:49.855Z",
+  "results": [
+    {
+      "conversation": "tomcat",
+      "question": "What engines does the F-14B have?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 5868
+    },
+    {
+      "conversation": "tomcat",
+      "question": "And the A model?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 6240
+    },
+    {
+      "conversation": "tomcat",
+      "question": "How many crew?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 228
+    },
+    {
+      "conversation": "sochi",
+      "question": "What freq is Sochi tower?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 196
+    },
+    {
+      "conversation": "sochi",
+      "question": "Does it have a TACAN?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 229
+    },
+    {
+      "conversation": "sochi",
+      "question": "What about ILS?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 295
+    },
+    {
+      "conversation": "sochi",
+      "question": "What runways are available?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 279
+    },
+    {
+      "conversation": "ramat",
+      "question": "What is the TACAN for Ramat David?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 112
+    },
+    {
+      "conversation": "ramat",
+      "question": "What runways are available?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 323
+    },
+    {
+      "conversation": "ramat",
+      "question": "Which one runs east-west?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 206
+    },
+    {
+      "conversation": "ramat",
+      "question": "What is the tower freq for Sochi?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 210
+    },
+    {
+      "conversation": "ramat",
+      "question": "What about its ILS?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 253
+    },
+    {
+      "conversation": "concepts",
+      "question": "What is angle of attack?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 238
+    },
+    {
+      "conversation": "concepts",
+      "question": "What is a VORTAC?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 255
+    },
+    {
+      "conversation": "tomcat-alias",
+      "question": "What engines does the Tomcat have?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 199
+    },
+    {
+      "conversation": "unsupported",
+      "question": "What is the Wi-Fi password at Sochi airport?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 244
+    },
+    {
+      "conversation": "topic-switch",
+      "question": "What is the tower frequency for Sochi?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 219
+    },
+    {
+      "conversation": "topic-switch",
+      "question": "How do flaps affect lift?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 295
+    },
+    {
+      "conversation": "topic-switch",
+      "question": "Tell me about radar",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 218
+    },
+    {
+      "conversation": "comparison",
+      "question": "What tower frequencies do Sochi and Kutaisi use?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 213
+    },
+    {
+      "conversation": "comparison",
+      "question": "Compare the engines of the F-14 and F-16.",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 215
+    },
+    {
+      "conversation": "long-context",
+      "question": "What is the VORTAC for Ramat David?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 229
+    },
+    {
+      "conversation": "long-context",
+      "question": "What runways are available?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 210
+    },
+    {
+      "conversation": "long-context",
+      "question": "Which one runs east-west?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 340
+    },
+    {
+      "conversation": "long-context",
+      "question": "What about tower frequency?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 242
+    },
+    {
+      "conversation": "long-context",
+      "question": "And the VORTAC channel again?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 232
+    },
+    {
+      "conversation": "table-airfield",
+      "question": "What is the tower frequency for Kuweires?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 177
+    },
+    {
+      "conversation": "table-airfield",
+      "question": "What runways are available?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 656
+    },
+    {
+      "conversation": "comparison-follow-up",
+      "question": "What engines does the F-14B have?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 188
+    },
+    {
+      "conversation": "comparison-follow-up",
+      "question": "How does this differ from the F-16?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 121
+    },
+    {
+      "conversation": "theatre-scope",
+      "question": "What is the tower frequency for Hatzerim in Syria?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 241
+    },
+    {
+      "conversation": "theatre-scope",
+      "question": "What is the tower frequency for Biggin Hill in The Channel?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 174
+    },
+    {
+      "conversation": "theatre-scope",
+      "question": "What is the tower frequency for King Hussein Air College?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 202
+    },
+    {
+      "conversation": "theatre-scope",
+      "question": "What is the low VHF tower frequency for Ramat David in Sinai?",
+      "requestedIds": [
+        "/encyclopedia/aircraft/mig-15/"
+      ],
+      "status": 502,
+      "revision": "0bdb824648dd8a9d0bedf249b17791a2e064c025",
+      "reply": {
+        "code": "unavailable",
+        "stage": "inference"
+      },
+      "passed": false,
+      "ms": 208
+    }
+  ]
+}

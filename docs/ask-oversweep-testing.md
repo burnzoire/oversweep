@@ -163,3 +163,39 @@ ASK_LIVE=1 ASK_REVISION=<deployed-sha> ASK_HINTS=wrong node scripts/test-ask-liv
 The optional browser harness is `scripts/test-ask-browser-live.mjs`; it requires
 Playwright installed under `/tmp/ask-browser` and writes an `evidence/` directory.
 It intercepts branch static assets only, never the inference endpoint.
+
+
+## Continuation stopped at the daily neuron budget
+
+The owner requested wrap-up near the daily allocation limit. Live inference testing was stopped at that point. Temporary push deployment and
+validation workflows are removed again; deployment remains manual-only.
+
+Latest live Worker: `4a624fd75a4bc64720c9780a5854e832cd75ebde`.
+Continuation changes add explicit article/explanation/simulator-record metadata,
+simulator scope labels, a concise answer request and 700 completion-token headroom.
+A schema-constraint experiment initially failed inference on all 34 requests;
+those constraints were removed and valid inference restored. The failed run is
+retained in `tests/ask/results/continuation-01.json`.
+
+The corrected deployment passed 32/34 local checks; both failures were literal
+interpretations of east-west. The final directional-language revision's remote
+suite passed 31/34 keyword checks: two contradictory east-west conclusions remain,
+and one valid runway list was flagged because measured headings split its runway
+pair formatting. All 34 responses were HTTP 200. Nine no-hint turns and all six
+browser requests also returned HTTP 200. These observations do not establish that
+truncation is eliminated.
+
+Final remote verification passed 428 automated tests and type/build/content checks.
+The 26 targeted tests cover source metadata and preserve the compatible request
+schema. Independent grounding review also caught a low-VHF label moving onto the
+preceding UHF frequency in an earlier reply; numeric matching alone missed it.
+
+[Current validation and screenshots](https://github.com/burnzoire/oversweep/blob/930603a1e1d6d87aae8f56658fcc7287eda6b7c0/docs/screenshots/ask-oversweep/4a624fd75a4bc64720c9780a5854e832cd75ebde/validation.json)
+record the actual failing and passing replies. The workflow's overall success is
+not the answer-quality verdict: its live step outcome is failure and the browser
+manifest explicitly flags overly literal orientation. Source/example/scope quality
+and frequency-band labels still require semantic review.
+
+A proposed fixed-boolean citation format and clearer table-cell punctuation were
+unit-tested locally but left undeployed and excluded from this PR when testing
+stopped. They need live compatibility and grounding checks before release.
