@@ -21,6 +21,7 @@ import { epu } from './epu.ts';
 import { defog } from './defog.ts';
 import { sidewallControls } from './sidewall-controls.ts';
 import { test } from './test.ts';
+import { hydPressure } from './hyd-pressure.ts';
 
 /**
  * DCS F-16C cockpit catalogue: areas and panels in the order the official guide
@@ -71,7 +72,7 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'fuel-qty', title: 'Fuel quantity indicator', page: 58, spec: fuelQty },
         { id: 'pfld', title: 'Pilot fault list display', page: 59 },
         { id: 'caution', title: 'Caution light panel', page: 59, spec: caution },
-        { id: 'hyd-pressure', title: 'Hydraulic pressure indicators', page: 61 },
+        { id: 'hyd-pressure', title: 'Hydraulic pressure indicators', page: 61, spec: hydPressure },
         { id: 'epu-fuel', title: 'EPU fuel quantity indicator', page: 61 },
         { id: 'cabin-pressure', title: 'Cabin pressure indicator', page: 61 },
         { id: 'clock', title: 'Clock', page: 61 },

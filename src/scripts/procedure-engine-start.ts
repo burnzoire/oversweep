@@ -58,6 +58,8 @@ export function startEngineModel(root: HTMLElement, cfg: Config) {
     const powered = main === 'batt' || main === 'main-pwr';
     const onMain = main === 'main-pwr';
     const flcsTest = pos['test.flcs-pwr-test'] === 'test';
+    // Engine-driven pumps: illustrative rise to 3,000 psi (normal 2,850–3,250) as the engine comes up to idle.
+    const hyd = 3000 * Math.min(1, Math.max(0, (eng.rpm - 20) / 40));
     const lit = new Set<string>();
     const on = (id: string, v: boolean) => { if (v) lit.add(id); };
     on('elec.flcs-rly', powered && !flcsTest && !eng.jfsStarted);
@@ -72,7 +74,7 @@ export function startEngineModel(root: HTMLElement, cfg: Config) {
     on('caution.elec-sys', onMain && !eng.mainGen);
     on('caution.seat-not-armed', pos['sidewall-controls.throttle'] === 'idle' && eng.rpm >= 60);
     on('eng-jet-start.jfs-run', eng.jfsRun && eng.rpm < 55);
-    dispatchEvent(new CustomEvent('cockpit:indicate', { detail: { lit: [...lit], readings: { 'engine-instruments.rpm': eng.rpm, 'engine-instruments.ftit': eng.ftit } } }));
+    dispatchEvent(new CustomEvent('cockpit:indicate', { detail: { lit: [...lit], readings: { 'engine-instruments.rpm': eng.rpm, 'engine-instruments.ftit': eng.ftit, 'hyd-pressure.hyd-a': hyd, 'hyd-pressure.hyd-b': hyd } } }));
     if (stepId() === 'sec') confirm.disabled = eng.rpm < 20 || !eng.secCleared;
   }
 

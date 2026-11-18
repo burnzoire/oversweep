@@ -681,6 +681,19 @@ export function needleArt(length: number) {
 }
 
 /**
+ * Wedge pointer of the F-16C HYD PRESS indicators, in mm: straight sides from
+ * `base` wide at the dial centre (hidden under the hub) to `tip` wide at its
+ * length. Measured on the guide's p. 61 image (2.94 px/mm): 5.8 mm wide where
+ * it leaves the 6 mm hub, 0.5 mm at the tip. Drawn pointing at 12 o'clock.
+ */
+export const WEDGE_NEEDLE = { base: 9.0, tip: 0.5 } as const;
+
+export function wedgeNeedleArt(length: number) {
+  const b = WEDGE_NEEDLE.base / 2, t = WEDGE_NEEDLE.tip / 2;
+  return `<path d="M${n(-b)} 0L${n(-t)} ${n(-length)}H${n(t)}L${n(b)} 0Z" fill="${INK}" ${sw('fine')}/>`;
+}
+
+/**
  * Broad tank pointer of the F-16C fuel quantity indicator (AL and FR share
  * it), in mm, pointing at 12 o'clock from the dial centre. Measured on the
  * guide's p. 58 image (2.7 px/mm) with each pointer turned upright: a parallel

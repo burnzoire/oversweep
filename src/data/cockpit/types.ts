@@ -191,6 +191,8 @@ export interface Dial {
   legends: { text: string; at: Pt; cap: number; width?: number }[];
   /** Needle tip radius (the shared needle's shank stretches to it); single-needle dials only. */
   needle?: number;
+  /** Needle shape: the shared thin `NEEDLE` (default) or a straight-sided `wedge` (F-16C HYD PRESS). */
+  needleArt?: 'wedge';
   /**
    * Dials with more than one pointer (F-16C fuel AL and FR): each pointer is
    * its own gauge indicator, drawn back to front, as the shared `art` with its
