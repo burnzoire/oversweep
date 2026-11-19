@@ -332,6 +332,8 @@ export const KNOBS = {
   'knob-radio-large': { r: 12.4, lobes: 0, ridge: [0, 0], lever: true },
   /** Plain round knob with a domed top and no index (F-16C EHSI HDG and CRS: they turn without end). */
   'knob-plain': { r: 7.7, lobes: 0, ridge: [0, 0], plain: true },
+  /** Smaller plain domed knob (F-16C altimeter barometric setting knob). */
+  'knob-plain-small': { r: 6.8, lobes: 0, ridge: [0, 0], plain: true },
 } as const;
 
 /** A KNOBS body pointing at 12 o'clock; the renderer turns it to the detent. */
@@ -719,6 +721,19 @@ export function wedgeNeedleArt(length: number) {
 }
 
 /**
+ * Altimeter needle (F-16C), in mm, pointing at 12 o'clock from the dial
+ * centre: a thin shaft out to `shaft`, a broad blade widening to `width`
+ * by `full`, parallel-sided to `taper`, closing to a point at the tip.
+ * Measured on the guide's p. 51 image turned upright.
+ */
+export const BLADE_NEEDLE = { stem: 0.5, shaft: 13.9, full: 17.0, width: 2.8, taper: 27.2 } as const;
+
+export function bladeNeedleArt(length: number) {
+  const { stem, shaft, full, width, taper } = BLADE_NEEDLE, s = stem / 2, w = width / 2;
+  return `<path d="M${n(-s)} 0V${n(-shaft)}L${n(-w)} ${n(-full)}V${n(-taper)}L0 ${n(-length)}L${n(w)} ${n(-taper)}V${n(-full)}L${n(s)} ${n(-shaft)}V0Z" fill="${INK}" ${sw('fine')}/>`;
+}
+
+/**
  * Broad tank pointer of the F-16C fuel quantity indicator (AL and FR share
  * it), in mm, pointing at 12 o'clock from the dial centre. Measured on the
  * guide's p. 58 image (2.7 px/mm) with each pointer turned upright: a parallel
@@ -761,11 +776,34 @@ function strokeDigit(d: number, y: number, cap: number, width: number) {
   return `<path transform="translate(0 ${n(y)}) scale(${n(width / DIGIT_W)} ${n(cap / DIGIT_H)})" d="${STROKE_DIGITS[d]}" fill="none" stroke="${INK}" stroke-width="${DIGIT_STROKE}" stroke-linecap="round" stroke-linejoin="round"/>`;
 }
 
+/**
+ * Diagonal hatching a drum shows in place of 0 (F-16C altimeter ten-thousands
+ * drum below 10,000 ft), centred on (0, y): four stripes running down to the
+ * right across a cell 1.45 digit widths wide and 1.08 caps high (measured on
+ * the guide's p. 51 image), each clipped to the cell.
+ */
+export function drumHatch(y: number, cap: number, width: number) {
+  const w = width * 1.45, h = cap * 1.08, k = 0.52, stripes = 4, gap = (w + k * h) / stripes;
+  const x0 = -w / 2, x1 = w / 2, y0 = y - h / 2, y1 = y + h / 2;
+  let d = '';
+  // Stripe i: x = c + k (y' - y0) for y' in the cell, spread evenly across every line that crosses the cell.
+  for (let i = 0; i < stripes; i++) {
+    const c = x0 - k * h + gap * (i + 0.5);
+    let ya = y0, yb = y1;
+    if (c < x0) ya = y0 + (x0 - c) / k;
+    if (c + k * h > x1) yb = y0 + (x1 - c) / k;
+    if (yb <= ya) continue;
+    d += `M${n(c + k * (ya - y0))} ${n(ya)}L${n(c + k * (yb - y0))} ${n(yb)}`;
+  }
+  return `<path d="${d}" fill="none" stroke="${INK}" stroke-width="${n(width * 0.17)}" stroke-linecap="butt"/>`;
+}
+
 /** One drum of a counter: digits 0–9 and 0 again (or only zeros), `roll` apart, centred on the origin at 0. `stroked` draws the shared stroked digits instead of type. */
-export function drumStrip(roll: number, cap: number, width: number, zeros = false, blank = false, stroked = false) {
+export function drumStrip(roll: number, cap: number, width: number, zeros = false, blank = false, stroked = false, hatch = false) {
   let s = '';
   for (let i = -1; i <= 10; i++) {
     const d = zeros ? 0 : (i + 10) % 10;
+    if (hatch && d === 0) { s += drumHatch(i * roll, cap, width); continue; }
     if (blank && d === 0) continue;
     s += stroked ? strokeDigit(d, i * roll, cap, width) : text(0, i * roll, String(d), cap, width);
   }

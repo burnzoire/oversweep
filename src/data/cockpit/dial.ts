@@ -4,8 +4,17 @@
  */
 type Knots = readonly (readonly [value: number, angle: number])[];
 
-/** Needle angle (degrees clockwise from 12 o'clock) for `value`, linear between the scale knots, clamped at the ends. */
-export function scaleAngle(k: Knots, value: number) {
+/**
+ * Needle angle (degrees clockwise from 12 o'clock) for `value`, linear between
+ * the scale knots, clamped at the ends. `turn`: the value of one full turn of
+ * a needle that goes round more than once (F-16C altimeter, 1,000 ft); the
+ * knots then cover one turn and the needle keeps turning past it.
+ */
+export function scaleAngle(k: Knots, value: number, turn?: number): number {
+  if (turn) {
+    const t = Math.floor(value / turn);
+    return scaleAngle(k, value - t * turn) + 360 * t;
+  }
   if (value <= k[0][0]) return k[0][1];
   for (let i = 1; i < k.length; i++) {
     const [v0, a0] = k[i - 1], [v1, a1] = k[i];
@@ -22,7 +31,7 @@ export function scaleAngle(k: Knots, value: number) {
  * the fixed drums do not roll.
  */
 export function drumPositions(value: number, drums: number, fixed: number, unit: number, still = false) {
-  const u = Math.max(0, value) / unit, rolling = drums - fixed, out: number[] = [];
+  const u = Math.round((Math.max(0, value) / unit) * 1e6) / 1e6, rolling = drums - fixed, out: number[] = [];
   let carry = u % 10;
   out.unshift(carry);
   for (let i = 1; i < rolling; i++) {
