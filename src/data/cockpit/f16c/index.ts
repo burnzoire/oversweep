@@ -24,6 +24,7 @@ import { test } from './test.ts';
 import { hydPressure } from './hyd-pressure.ts';
 import { icp } from './icp.ts';
 import { ded } from './ded.ts';
+import { altimeter } from './altimeter.ts';
 import { ehsi } from './ehsi.ts';
 import { hud } from './hud.ts';
 import { hudControl } from './hud-control.ts';
@@ -60,7 +61,7 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'engine-instruments', title: 'Engine instruments', page: 50, spec: engineInstruments },
         { id: 'fuel-flow', title: 'Fuel flow indicator', page: 50, spec: fuelFlow },
         { id: 'airspeed-mach', title: 'Airspeed / Mach indicator', page: 51 },
-        { id: 'altimeter', title: 'Altimeter', page: 51 },
+        { id: 'altimeter', title: 'Altimeter', page: 51, spec: altimeter },
         { id: 'aoa-indicator', title: 'AoA indicator', page: 52 },
         { id: 'vvi', title: 'Vertical velocity indicator', page: 52 },
         { id: 'adi', title: 'Attitude director indicator', page: 53 },

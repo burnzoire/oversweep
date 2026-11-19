@@ -218,16 +218,32 @@ export interface Dial {
   legends: { text: string; at: Pt; cap: number; width?: number }[];
   /** Needle tip radius (the shared needle's shank stretches to it); single-needle dials only. */
   needle?: number;
-  /** Needle shape: the shared thin `NEEDLE` (default) or a straight-sided `wedge` (F-16C HYD PRESS). */
-  needleArt?: 'wedge';
+  /** Needle shape: the shared thin `NEEDLE` (default), a straight-sided `wedge` (F-16C HYD PRESS) or a thin shaft ending in a broad `blade` (F-16C altimeter). */
+  needleArt?: 'wedge' | 'blade';
+  /**
+   * The value of one full turn, for a needle that goes round more than once
+   * (F-16C altimeter: 1,000 ft). The scale knots then cover one turn.
+   */
+  turn?: number;
   /**
    * Dials with more than one pointer (F-16C fuel AL and FR): each pointer is
    * its own gauge indicator, drawn back to front, as the shared `art` with its
    * two tank letters printed along it (outer letter first).
    */
   pointers?: { indicator: string; art: 'paddle'; legend: [outer: string, inner: string] }[];
-  /** A drum counter (totalizer) behind a window in the face. */
+  /**
+   * A drum counter (totalizer) behind a window in the face. When its indicator
+   * is the needle's (F-16C altimeter), needle and drums show the one reading.
+   */
   counter?: DrumCounter;
+  /**
+   * Warning flags in windows in the face (F-16C altimeter PNEU): each is a
+   * `display` indicator with pages `shown` and `hidden`; `size` is the flag
+   * (w, h) centred on `at`, with its legend printed on it.
+   */
+  /** Fine line art printed on the face (window frames, index marks), an absolute-command path in mm relative to the dial centre. */
+  marks?: string;
+  flags?: { indicator: string; at: Pt; size: [w: number, h: number]; legend: string; cap: number; width?: number; paint?: Paint }[];
 }
 
 /**
@@ -256,6 +272,10 @@ export interface DrumCounter {
   still?: boolean;
   /** Drums seen through a taller slot than `window` (height `h`, centred on `at`), e.g. a rolling drum showing its neighbours. */
   slots?: { drum: number; h: number }[];
+  /** Drum centres (x, relative to `at`) where they are not evenly `pitch` apart (F-16C altimeter). */
+  places?: number[];
+  /** Leading drums that show diagonal hatching instead of 0 (F-16C altimeter ten-thousands drum below 10,000 ft). */
+  hatch?: number;
 }
 
 /**
@@ -378,7 +398,7 @@ export type Cut = 'up-left' | 'up-right' | 'down-left' | 'down-right';
 
 export type ToggleArt = 'toggle-large' | 'toggle-medium' | 'toggle-small' | 'toggle-large-cylinder' | 'toggle-large-square' | 'toggle-large-lock' | 'toggle-paddle-wide' | 'toggle-hook' | 'toggle-mini-hex';
 export type RotaryArt = 'rotary-pointer' | 'rotary-pointer-large' | 'rotary-pointer-medium';
-export type KnobArt = 'knob-fine-knurl-small' | 'knob-knurled-small' | 'knob-knurled' | 'knob-knurled-edge' | 'knob-knurled-skirt' | 'knob-bar' | 'knob-lobed' | 'knob-bar-medium' | 'knob-knurled-mini' | 'knob-radio-large' | 'knob-bar-thick' | 'knob-spindle' | 'knob-knurled-large' | 'knob-knurled-small-edge' | 'knob-round' | 'knob-round-small' | 'knob-cross' | 'knob-cross-small' | 'knob-plain';
+export type KnobArt = 'knob-fine-knurl-small' | 'knob-knurled-small' | 'knob-knurled' | 'knob-knurled-edge' | 'knob-knurled-skirt' | 'knob-bar' | 'knob-lobed' | 'knob-bar-medium' | 'knob-knurled-mini' | 'knob-radio-large' | 'knob-bar-thick' | 'knob-spindle' | 'knob-knurled-large' | 'knob-knurled-small-edge' | 'knob-round' | 'knob-round-small' | 'knob-cross' | 'knob-cross-small' | 'knob-plain' | 'knob-plain-small';
 export type PushArt = 'push-round-small' | 'push-round-medium' | 'push-round-large' | 'push-round-xl' | 'push-round-flat' | 'push-round-xxl' | 'push-round-bezel' | 'push-round-wide' | 'push-round-plain';
 export type LampModuleArt = 'lamp-module';
 /** A single round press-to-test style indicator lens in a bezel (JFS RUN). */

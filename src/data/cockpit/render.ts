@@ -14,7 +14,7 @@ import { formatReadout } from './readout.ts';
 import {
   FASTENERS, FONT, INK, LAMPS, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, painted, PAINTS, lampModuleFrame, lampRoundBezel, n,
   thumbwheelArt, rockerBase, rockerCap, hatBase, hatLever,
-  gaugeBezel, gaugeHub, drumStrip, paddlePointerArt, PADDLE_POINTER, wedgeNeedleArt, gearKnob, gearSlot, leverSlot, slotLeverArt, SLOT_LEVER, knobArt, needleArt, polar, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
+  gaugeBezel, gaugeHub, bladeNeedleArt, drumStrip, paddlePointerArt, PADDLE_POINTER, wedgeNeedleArt, gearKnob, gearSlot, leverSlot, slotLeverArt, SLOT_LEVER, knobArt, needleArt, polar, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
 } from './components.ts';
 import { drumPositions, scaleAngle } from './dial.ts';
 export { drumPositions };
@@ -54,7 +54,7 @@ function dzusCut([x, y]: Pt, corner: Cut) {
 }
 
 /** Needle angle (degrees clockwise from 12 o'clock) for `value`, linear between the dial's scale knots, clamped at the ends. */
-export const dialAngle = (dial: Dial, value: number) => scaleAngle(dial.scale, value);
+export const dialAngle = (dial: Dial, value: number) => scaleAngle(dial.scale, value, dial.turn);
 
 /** Every tick value of a run, without the values another run draws. */
 export function tickValues(t: Dial['ticks'][number]) {
@@ -77,19 +77,27 @@ function sector(r0: number, r1: number, a0: number, a1: number) {
 /** Drum counter (totalizer): drums behind a window, each turned to its odometer position. */
 function counter(c: DrumCounter, value: number, clip: string) {
   const [w, h] = c.window, pos = drumPositions(value, c.drums, c.fixed, c.unit, c.still);
-  const drumX = (k: number) => c.at[0] + (k - (c.drums - 1) / 2) * c.pitch;
+  const drumX = (k: number) => c.at[0] + (c.places ? c.places[k] : (k - (c.drums - 1) / 2) * c.pitch);
   // The window, plus any taller slot a drum shows through (the clip is their union).
   const rects = [[c.at[0] - w / 2, c.at[1] - h / 2, w, h], ...(c.slots ?? []).map(t => [drumX(t.drum) - c.pitch / 2, c.at[1] - t.h / 2, c.pitch, t.h])]
     .map(([x, y, rw, rh]) => `<rect x="${n(x)}" y="${n(y)}" width="${n(rw)}" height="${n(rh)}"`);
   let s = `<defs><clipPath id="${clip}">${rects.map(r => r + '/>').join('')}</clipPath></defs><g clip-path="url(#${clip})">`;
   pos.forEach((p, k) => {
-    s += `<g transform="translate(${n(drumX(k))} ${n(c.at[1])})"><g data-drum="${c.indicator}" data-place="${k}" transform="translate(0 ${n(-p * c.roll)})">${drumStrip(c.roll, c.cap, c.width, k >= c.drums - c.fixed, k < (c.blank ?? 0), c.stroked)}</g></g>`;
+    s += `<g transform="translate(${n(drumX(k))} ${n(c.at[1])})"><g data-drum="${c.indicator}" data-place="${k}" transform="translate(0 ${n(-p * c.roll)})">${drumStrip(c.roll, c.cap, c.width, k >= c.drums - c.fixed, k < (c.blank ?? 0), c.stroked, k < (c.hatch ?? 0))}</g></g>`;
   });
   return s + `</g><g data-indicator="${c.indicator}">${rects.map(r => r + ' class="lens" stroke="none"/>').join('')}</g>`;
 }
 
 /** Dial art: bezel, face, painted ticks and sectors, legends, counter, needle or pointers (turned to their values), hub. */
-function gauge(spec: PanelSpec, dial: Dial, indicator: string | undefined, value: (id: string) => number) {
+/** Warning flag in a face window: the flag with its legend (page `shown`) or the empty window (page `hidden`). */
+function flag(f: NonNullable<Dial['flags']>[number], current: string) {
+  const [w, h] = f.size, box = `x="${n(f.at[0] - w / 2)}" y="${n(f.at[1] - h / 2)}" width="${n(w)}" height="${n(h)}"`;
+  const shown = painted(f.paint, `<rect ${box} fill="${PAPER}" ${sw('fine')}/>`) + text(f.at[0], f.at[1], f.legend, f.cap, f.width);
+  const pg = (id: string, body: string) => `<g data-page-of="${f.indicator}" data-page="${id}"${id === current ? '' : ' display="none"'}>${body}</g>`;
+  return `<g data-indicator="${f.indicator}"><rect class="lens" ${box} stroke="none"/>${pg('shown', shown)}${pg('hidden', `<rect ${box} fill="none" ${sw('fine')}/>`)}</g>`;
+}
+
+function gauge(spec: PanelSpec, dial: Dial, indicator: string | undefined, value: (id: string) => number, page: (id: string) => string) {
   let s = gaugeBezel(dial.bezel, dial.face);
   for (const f of dial.fills ?? []) s += `<path d="${sector(f.r[0], f.r[1], dialAngle(dial, f.from), dialAngle(dial, f.to))}" fill="${INK}" ${sw('fine')}/>`;
   for (const t of dial.ticks) {
@@ -99,17 +107,20 @@ function gauge(spec: PanelSpec, dial: Dial, indicator: string | undefined, value
     }).join('');
     s += `<path d="${d}" stroke-width="${n(t.width)}" stroke-linecap="butt"/>`;
   }
+  if (dial.marks) s += `<path d="${dial.marks}" ${sw('medium')}/>`;
   s += dial.legends.map(l => text(l.at[0], l.at[1], l.text, l.cap, l.width)).join('');
   if (dial.counter) s += counter(dial.counter, value(dial.counter.indicator), `drums-${spec.id}-${dial.counter.indicator}`);
+  for (const f of dial.flags ?? []) s += flag(f, page(f.indicator));
   if (indicator && dial.needle) s += `<g data-indicator="${indicator}"><circle class="lens" r="${n(dial.face)}" stroke="none"/>` +
-    `<g data-needle="${indicator}" transform="rotate(${n(dialAngle(dial, value(indicator)))})">${dial.needleArt === 'wedge' ? wedgeNeedleArt(dial.needle) : needleArt(dial.needle)}</g></g>`;
+    `<g data-needle="${indicator}" transform="rotate(${n(dialAngle(dial, value(indicator)))})">${dial.needleArt === 'wedge' ? wedgeNeedleArt(dial.needle) : dial.needleArt === 'blade' ? bladeNeedleArt(dial.needle) : needleArt(dial.needle)}</g></g>`;
   for (const p of dial.pointers ?? []) s += `<g data-indicator="${p.indicator}"><g data-needle="${p.indicator}" transform="rotate(${n(dialAngle(dial, value(p.indicator)))})">${paddlePointerArt(p.legend)}</g></g>`;
   return s + gaugeHub(dial.hub);
 }
 
 /** What the page needs to move a reading: a needle's scale or a counter's drums, and the range to try. */
 export type Reading =
-  | { kind: 'needle'; scale: Dial['scale']; range: [number, number, number] }
+  /** `turn`: value of one full turn (the needle goes round more than once); `counter`: drums that show the same reading. */
+  | { kind: 'needle'; scale: Dial['scale']; turn?: number; counter?: { drums: number; fixed: number; unit: number; roll: number; still?: boolean }; range: [number, number, number] }
   /** Moves sideways (or along y with `axis: 'y'`) by `per` mm a unit (HSI deviation bar, HUD symbols). */
   | { kind: 'shift'; per: number; axis?: 'y'; range: [number, number, number] }
   /** A printed number (HUD data fields). */
@@ -158,10 +169,15 @@ export function readings(spec: PanelSpec): Record<string, Reading> {
     if (p.component !== 'gauge') continue;
     const { dial } = p;
     const lo = dial.scale[0][0], hi = dial.scale[dial.scale.length - 1][0];
-    const needle = (id: string) => { out[id] = { kind: 'needle', scale: dial.scale, range: ind(id)?.range ?? [lo, hi, 10 ** Math.floor(Math.log10((hi - lo) / 100))] }; };
+    const needle = (id: string) => { out[id] = { kind: 'needle', scale: dial.scale, ...(dial.turn ? { turn: dial.turn } : {}), range: ind(id)?.range ?? [lo, hi, 10 ** Math.floor(Math.log10((hi - lo) / 100))] }; };
     if (p.indicator) needle(p.indicator);
     for (const q of dial.pointers ?? []) needle(q.indicator);
-    if (dial.counter) drums(dial.counter);
+    const c = dial.counter;
+    if (c && c.indicator === p.indicator) {
+      const r = out[c.indicator] as Extract<Reading, { kind: 'needle' }>;
+      r.counter = { drums: c.drums, fixed: c.fixed, unit: c.unit, roll: c.roll, ...(c.still ? { still: true } : {}) };
+    } else if (c) drums(c);
+    for (const f of dial.flags ?? []) page(f.indicator);
   }
   return out;
 }
@@ -388,14 +404,16 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
 
 /** Every indicator a dial shows: its needle, its pointers and its counter. */
 export function dialIndicators(p: Extract<Placement, { component: 'gauge' }>) {
-  return [...(p.indicator ? [p.indicator] : []), ...(p.dial.pointers ?? []).map(q => q.indicator), ...(p.dial.counter ? [p.dial.counter.indicator] : [])];
+  const ids = [...(p.indicator ? [p.indicator] : []), ...(p.dial.pointers ?? []).map(q => q.indicator), ...(p.dial.counter ? [p.dial.counter.indicator] : []), ...(p.dial.flags ?? []).map(f => f.indicator)];
+  return [...new Set(ids)];
 }
 
 function placement(spec: PanelSpec, p: Placement, state: Record<string, string>): string {
   switch (p.component) {
     case 'gauge': {
       const value = (id: string) => state[id] !== undefined ? Number(state[id]) : spec.indicators.find(i => i.id === id)?.rest ?? p.dial.scale[0][0];
-      return at(p.at, gauge(spec, p.dial, p.indicator, value), ' data-art="gauge"');
+      const page = (id: string) => { const i = spec.indicators.find(d => d.id === id); return state[id] ?? i?.restPage ?? i?.pages?.[0]?.id ?? ''; };
+      return at(p.at, gauge(spec, p.dial, p.indicator, value, page), ' data-art="gauge"');
     }
     case 'counter': {
       const c = p.counter, v = state[c.indicator] !== undefined ? Number(state[c.indicator]) : spec.indicators.find(i => i.id === c.indicator)?.rest ?? 0;
@@ -454,7 +472,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       return at(p.at, rotaryBase(p.component) + moving(c, state[c.id] ?? c.initial, i =>
         `<g transform="rotate(${c.positions[i].angle ?? 0})">${rotaryKnob(p.component)}</g>`), ` data-art="${p.component}"`);
     }
-    case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': case 'knob-plain': {
+    case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': case 'knob-plain': case 'knob-plain-small': {
       const c = controlOf(spec, p.control);
       return at(p.at, moving(c, state[c.id] ?? c.initial, i =>
         `<g transform="rotate(${c.positions[i].angle ?? 0})">${knobArt(p.component)}</g>`), ` data-art="${p.component}"`);
@@ -614,7 +632,7 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         const r = ROTARIES[p.component].skirt * 1.15;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }
-      case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': case 'knob-plain': {
+      case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': case 'knob-plain': case 'knob-plain-small': {
         const r = KNOBS[p.component].r * 1.1;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }
@@ -696,7 +714,8 @@ export function hitZones(spec: PanelSpec): HitZone[] {
           zones.push({ kind: 'indicator', id: q.indicator, box: [x + px - zr, y + py - zr, 2 * zr, 2 * zr], round: true });
         }
         const c = p.dial.counter;
-        if (c) zones.push({ kind: 'indicator', id: c.indicator, box: [x + c.at[0] - c.window[0] / 2, y + c.at[1] - c.window[1] / 2, c.window[0], c.window[1]] });
+        if (c && c.indicator !== p.indicator) zones.push({ kind: 'indicator', id: c.indicator, box: [x + c.at[0] - c.window[0] / 2, y + c.at[1] - c.window[1] / 2, c.window[0], c.window[1]] });
+        for (const f of p.dial.flags ?? []) zones.push({ kind: 'indicator', id: f.indicator, box: [x + f.at[0] - f.size[0] / 2, y + f.at[1] - f.size[1] / 2, f.size[0], f.size[1]] });
         return zones;
       }
       case 'counter': {

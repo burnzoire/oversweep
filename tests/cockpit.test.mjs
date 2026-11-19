@@ -43,7 +43,7 @@ test('every built panel models each placed control and lamp once', { skip: !canI
 });
 
 test('gauge scales increase and every tick and needle lands on the dial', { skip: !canImportTs }, async () => {
-  const { f16cCockpit, builtPanels, dialAngle, tickValues, renderPanel } = await load();
+  const { f16cCockpit, builtPanels, dialAngle, tickValues, renderPanel, readings } = await load();
   const gauges = builtPanels(f16cCockpit).flatMap(({ spec }) => spec.placements.filter(p => p.component === 'gauge').map(p => ({ spec, p })));
   assert.ok(gauges.length >= 4);
   for (const { spec, p } of gauges) {
@@ -51,7 +51,7 @@ test('gauge scales increase and every tick and needle lands on the dial', { skip
     for (let i = 1; i < dial.scale.length; i++) {
       assert.ok(dial.scale[i][0] > dial.scale[i - 1][0] && dial.scale[i][1] > dial.scale[i - 1][1], `${id}: scale knots increase`);
     }
-    assert.ok(dial.scale.at(-1)[1] - dial.scale[0][1] < 360, `${id}: scale under one turn`);
+    assert.ok(dial.turn ? dial.scale.at(-1)[1] - dial.scale[0][1] === 360 && dial.scale.at(-1)[0] - dial.scale[0][0] === dial.turn : dial.scale.at(-1)[1] - dial.scale[0][1] < 360, `${id}: scale under one turn (or exactly one for a needle that goes round)`);
     for (const t of dial.ticks) {
       assert.ok(t.r[0] < t.r[1] && t.r[1] < dial.face, `${id}: ticks inside the face`);
       for (const v of tickValues(t)) assert.ok(v >= dial.scale[0][0] && v <= dial.scale.at(-1)[0], `${id}: tick ${v} on the scale`);
@@ -63,10 +63,16 @@ test('gauge scales increase and every tick and needle lands on the dial', { skip
       assert.match(svg, new RegExp(`data-needle="${ind}"`));
     }
     if (dial.counter) {
-      assert.equal(spec.indicators.find(i => i.id === dial.counter.indicator)?.type, 'counter');
+      // A counter that shows the needle's own reading (altimeter) shares its gauge indicator.
+      assert.equal(spec.indicators.find(i => i.id === dial.counter.indicator)?.type, dial.counter.indicator === p.indicator ? 'gauge' : 'counter');
       assert.equal((svg.match(new RegExp(`data-drum="${dial.counter.indicator}"`, 'g')) ?? []).length, dial.counter.drums);
     }
-    assert.equal(dialAngle(dial, dial.scale[0][0] - 50), dial.scale[0][1], `${id}: needle stops at the bottom of the scale`);
+    if (dial.turn) {
+      // A needle that goes round keeps turning: one turn further up the scale is 360° further round.
+      assert.equal(dialAngle(dial, dial.scale[0][0] + 250 + dial.turn), dialAngle(dial, dial.scale[0][0] + 250) + 360, `${id}: needle goes round`);
+      const r = readings(spec)[p.indicator];
+      if (dial.counter?.indicator === p.indicator) assert.ok(r.kind === 'needle' && r.counter && r.turn === dial.turn, `${id}: one reading moves needle and drums`);
+    } else assert.equal(dialAngle(dial, dial.scale[0][0] - 50), dial.scale[0][1], `${id}: needle stops at the bottom of the scale`);
   }
 });
 
@@ -77,6 +83,8 @@ test('drum counters roll like an odometer', { skip: !canImportTs }, async () => 
   // The thousands drum turns only while the hundreds drum rolls from 9 to 0.
   assert.deepEqual(drumPositions(7950, 5, 2, 100).map(v => +v.toFixed(3)), [0, 7.5, 9.5, 0.5, 0.5]);
   assert.deepEqual(drumPositions(9950, 5, 2, 100).map(v => +v.toFixed(3)), [0.5, 9.5, 9.5, 0.5, 0.5]);
+  // Decimal units (barometric window, 0.01 in Hg) land on whole digits.
+  assert.deepEqual(drumPositions(29.92, 4, 0, 0.01), [2, 9, 9, 2]);
 });
 
 test('shared components keep fixed sizes across panels (same art id, same size)', async () => {
