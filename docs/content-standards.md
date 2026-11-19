@@ -116,6 +116,18 @@ scrolling during that step. Advance automatically when the action demonstrates
 success. Ask for confirmation when interpreting the indication is part of the
 task. Keep the written sequence usable without starting the interaction.
 
+### Scored procedure practice
+
+A Procedure may offer a scored practice mode under Practice. Reuse the same
+starting state, required actions and shared cockpit components as the guided
+mode. Hide step-by-step prompts, count incorrect inputs, and keep the current
+step and cockpit state until the reader performs the expected action. For steps
+that assess instrument interpretation, score the reader's response as well.
+Report the mistake count and where mistakes occurred at the end.
+
+The sequence can stay linear. The component model only needs the behaviour
+that the exercise displays and assesses.
+
 ### Cockpit component dependencies
 
 While outlining the procedure, check each action and expected indication against
