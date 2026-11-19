@@ -27,8 +27,11 @@ for (const id of used) for (const c of built.get(id)!.spec.controls) {
   orders[`${id}.${c.id}`] = c.positions.map(p => p.id);
   for (const p of c.positions) labels[`${id}.${c.id}.${p.id}`] = `${c.name} to ${p.label}`;
 }
-const config = {aircraft:`${cockpit.id}:${scope}`, initial, labels, names, orders, model: guide.model, steps: steps.map(s => ({id:s.id, panels:s.panels, do:s.do, type:s.type, confirm:s.confirm, turn:s.turn, ask:s.ask}))};
+const config = {aircraft:`${cockpit.id}:${scope}`, initial, labels, names, orders, model: guide.model, steps: steps.map(s => ({id:s.id, panels:s.panels, do:s.do, type:s.type, confirm:s.confirm, turn:s.turn, ask:s.ask, hints:s.hints}))};
 const recordLink = (l:{slug:string;anchor?:string}) => { const r = includedRecords.find(x => x.slug === l.slug); if (!r) throw new Error(`${guide.id}: no Encyclopedia record ${l.slug}`); return sitePath(recordRoute(r)) + (l.anchor ? '#' + l.anchor : ''); };
+// `{{phrase|k}}` in a step's text becomes a button that rings hint k on the panels for a moment.
+const esc = (t:string) => t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const rich = (t:string) => esc(t).replace(/\{\{(.+?)\|(\d+)\}\}/g, (_m, text, k) => `<button type="button" class="hint-link" data-hint="${k}">${text}</button>`);
 const shortTitle = guide.title.split('— ')[1] ?? guide.title;
 ---
 <SiteLayout title={guide.title} activeSection="manual" activeSubject="aircraft-procedures"
@@ -45,8 +48,8 @@ const shortTitle = guide.title.split('— ')[1] ?? guide.title;
           <div class="procedure-kicker">{s.section} · {String(i+1).padStart(2,'0')} / {steps.length}</div>
           <h2 tabindex="-1">{s.title}</h2>
           <p><strong>Control</strong> · {s.control}</p>
-          <p class="procedure-action"><strong>Do</strong> · {s.action}</p>
-          <p><strong>Expect</strong> · {s.expect}</p>
+          <p class="procedure-action"><strong>Do</strong> · <Fragment set:html={rich(s.action)} /></p>
+          <p><strong>Expect</strong> · <Fragment set:html={rich(s.expect)} /></p>
           {s.caution && <p class="procedure-warning"><strong>Note</strong> · {s.caution}</p>}
           {s.links && <p class="procedure-panels">Encyclopedia: {s.links.map((l, k) => <>{k > 0 && ', '}<a href={recordLink(l)}>{l.label}</a></>)}</p>}
           {s.ask && <div class="procedure-ask" data-cross-check><p><strong>{s.ask.question}</strong></p><ul>{s.ask.options.map((o, k) => <li><button type="button" data-answer={k}>{o}</button></li>)}</ul></div>}
@@ -86,6 +89,50 @@ if (root && configEl) {
     else (await import('../../../../scripts/procedure-engine-start')).startEngineModel(root, config);
   };
   if (document.readyState === 'loading') addEventListener('DOMContentLoaded', init); else setTimeout(init, 0);
+
+  // Hint links: ring the named indications for a few seconds.
+  let ringTimer: ReturnType<typeof setTimeout> | undefined;
+  const clearRings = () => { clearTimeout(ringTimer); document.querySelectorAll('.hint-ring').forEach(r => r.remove()); };
+  root.addEventListener('click', e => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-hint]');
+    const stepEl = b?.closest<HTMLElement>('[data-step]');
+    if (!b || !stepEl) return;
+    const config = JSON.parse(configEl.textContent!);
+    const hint: string | undefined = config.steps[Number(stepEl.dataset.step)]?.hints?.[Number(b.dataset.hint)];
+    if (!hint) return;
+    clearRings();
+    const rects = new Map<string, DOMRect[]>();
+    for (const target of hint.split(',')) {
+      const [ref, row] = target.split('@');
+      const [panel, id] = ref.split('.');
+      const stage = root.querySelector<HTMLElement>(`[data-proc-panel="${panel}"] .cp-stage`);
+      if (!stage) continue;
+      const els = [...stage.querySelectorAll<Element>(`[data-indicator="${id}"], button[data-control="${id}"]`)];
+      let boxes = els.map(el => el.getBoundingClientRect()).filter(r => r.width > 0);
+      if (row !== undefined && boxes[0]) {
+        // A DED line: the display's inner area split into its five rows.
+        const r = boxes[0], top = r.top + r.height * 0.1, h = (r.height * 0.8) / 5;
+        boxes = [new DOMRect(r.left + r.width * 0.04, top + h * Number(row), r.width * 0.92, h)];
+      }
+      if (boxes.length) rects.set(panel, [...(rects.get(panel) ?? []), ...boxes]);
+    }
+    let first: HTMLElement | undefined;
+    for (const [panel, boxes] of rects) {
+      const stage = root.querySelector<HTMLElement>(`[data-proc-panel="${panel}"] .cp-stage`)!;
+      const s = stage.getBoundingClientRect();
+      const l = Math.min(...boxes.map(r => r.left)), t = Math.min(...boxes.map(r => r.top));
+      const rr = Math.max(...boxes.map(r => r.right)), bb = Math.max(...boxes.map(r => r.bottom));
+      const pad = 6, ring = document.createElement('div');
+      ring.className = 'hint-ring'; ring.setAttribute('aria-hidden', 'true');
+      Object.assign(ring.style, { left: `${l - s.left - pad}px`, top: `${t - s.top - pad}px`, width: `${rr - l + 2 * pad}px`, height: `${bb - t + 2 * pad}px` });
+      stage.append(ring);
+      first ??= ring;
+    }
+    first?.scrollIntoView({ block: 'nearest', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    ringTimer = setTimeout(clearRings, 4000);
+  });
+  addEventListener('cockpit:change', clearRings);
+
 }
 </script>
 <style>
@@ -102,6 +149,11 @@ if (root && configEl) {
 .procedure-ask ul{list-style:none;padding:0;margin:.5rem 0}
 .procedure-ask button{display:block;width:100%;text-align:left;min-height:2.75rem;padding:.5rem .75rem;margin:.35rem 0;border:1px solid var(--color-ink);background:#fff;color:var(--color-ink);cursor:pointer;font:inherit}
 .procedure-ask button:disabled{opacity:.5;cursor:default}
+:global(.hint-link){font:inherit;color:var(--color-link,#005fcc);background:none;border:0;padding:0;border-bottom:2px dotted #c99700;cursor:pointer}
+:global(.hint-link):hover,:global(.hint-link):focus-visible{background:#fff4c2}
+.proc-panel :global(.hint-ring){position:absolute;pointer-events:none;border:3px solid #e6b800;border-radius:12px;box-shadow:0 0 0 2px rgba(255,255,255,.9),0 0 10px 2px rgba(230,184,0,.6);animation:hint-pulse 1s ease-in-out 4}
+@keyframes hint-pulse{50%{opacity:.35}}
+@media(prefers-reduced-motion:reduce){.proc-panel :global(.hint-ring){animation:none}}
 .procedure-cite,.procedure-panels{font-size:.85rem;color:var(--color-muted)}
 .procedure-controls{display:flex;gap:.75rem;margin-top:1rem}
 .procedure-controls button{min-height:2.75rem;padding:.45rem 1rem;border:1px solid var(--color-ink);background:#fff;color:var(--color-ink);cursor:pointer;font:inherit}
