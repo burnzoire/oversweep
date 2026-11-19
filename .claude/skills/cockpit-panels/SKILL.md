@@ -222,6 +222,27 @@ are measured, never laid out from the guide's prose. Worked example: F-16C
 6. Tick widths come from a blurred image: take about 80 % of the
    half-brightness width.
 
+## 3c. Displays and upfront controls
+
+Worked examples: F-16C `ded.ts`, `ehsi.ts`, `icp.ts`.
+
+- **Character displays** (`text-display`): fit the cell grid to the lit
+  characters (pitch, first cell, line pitch) and type each page as fixed-width
+  lines; `{…}` is inverse, `^` the up/down field arrow. The indicator is type
+  `display` with `pages` and `restPage: 'off'` (cold and dark is blank).
+  Procedures switch pages with `cockpit:indicate` `pages`.
+- **Electronic HSI** (`hsi`): measure the centre from the lubber lines, tick and
+  label radii along rays, pointer radii from the pointer colour; record the
+  readings the image shows in `source.shown` so the overlay registers.
+  Readings are needles (turn), `shift` (deviation), `digits` (readouts) and
+  `page` (screen, mode, to-from).
+- **Thumbwheels** are rotaries with `travel: 'vertical'` (rolled up and down);
+  **rockers** are three-position toggles, momentary to the centre; a four-way
+  switch is one `hat` placement with two controls (`control` up/down,
+  `cross` left/right).
+- Displays are drawn black on white like everything else; the sim's colours
+  go in `source.unresolved`.
+
 ## 4. Review by onion skin, adjust, repeat
 
 ```

@@ -14,7 +14,8 @@
  * `cockpit:change` event on window (detail: panel, control, position, phase
  * `press` or `release`) and takes `cockpit:indicate` events (detail: `lit`, the
  * `<panel>.<indicator>` ids that are on; `readings`, values by the same ids),
- * so the procedure, not the panel, decides what lights. `cockpit:set`
+ * so the procedure, not the panel, decides what lights; `pages`, page ids by
+ * the same ids, switches displays such as the DED). `cockpit:set`
  * (detail: `positions` by `<panel>.<control>`) moves controls without a
  * change event.
  */
@@ -29,6 +30,7 @@ const def = { aircraft: scope ? `${cockpit.id}:${scope}` : cockpit.id, panel: sp
 const control = (id: string) => spec.controls.find(c => c.id === id)!;
 const dirLabels = (id: string) => {
   const c = control(id);
+  if (c.type === 'rotary' && c.travel === 'vertical') return [`Roll ${c.name} up`, `Roll ${c.name} down`];
   if (c.type === 'rotary') return [`Turn ${c.name} anticlockwise`, `Turn ${c.name} clockwise`];
   if (c.travel === 'horizontal') return [`Move ${c.name} left`, `Move ${c.name} right`];
   return [`Move ${c.name} up`, `Move ${c.name} down`];
@@ -46,7 +48,7 @@ const dirLabels = (id: string) => {
       const c = control(z.id);
       if (c.type === 'toggle' || c.type === 'rotary') {
         const [a, b] = dirLabels(c.id);
-        const axis = c.type === 'rotary' || c.travel === 'horizontal' ? 'cp-x' : 'cp-y';
+        const axis = c.travel === 'horizontal' || (c.type === 'rotary' && c.travel !== 'vertical') ? 'cp-x' : 'cp-y';
         return (
           <div class:list={['cp-hit', axis, z.round && 'cp-round']} style={style} role="group" aria-label={c.name} data-hit-of={z.pos ? c.id : undefined} data-hit-pos={z.pos} hidden={z.pos ? z.pos !== c.initial : undefined}>
             <button type="button" data-control={c.id} data-dir="-1" aria-label={a}></button>
@@ -90,6 +92,12 @@ const dirLabels = (id: string) => {
 import type { ControlDef, IndicatorDef } from '../../data/cockpit/types';
 import type { Reading } from '../../data/cockpit/render.ts';
 import { drumPositions, scaleAngle } from '../../data/cockpit/dial.ts';
+
+/** Readout digits (kept in step with readoutDigits in render.ts). */
+const digitsOf = (v: number, digits: number, tenths: boolean) => {
+  const t = Math.round(Math.max(0, v) * (tenths ? 10 : 1)), whole = tenths ? Math.floor(t / 10) : t;
+  return { whole: String(whole % 10 ** digits).padStart(digits, '0'), tenth: tenths ? String(t % 10) : '' };
+};
 
 interface Def { aircraft: string; panel: string; controls: ControlDef[]; indicators: IndicatorDef[]; readings: Record<string, Reading> }
 const storeKey = (aircraft: string) => `oversweep:cockpit:${aircraft}`;
@@ -324,7 +332,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     b.addEventListener('click', () => {
       select(b.dataset.select!);
       const ind = def.indicators.find(i => i.id === b.dataset.select);
-      if (ind) say(ind.type === 'lamp' ? `${ind.name}: off (cold jet).` : `${ind.name}: ${ind.restNote ?? `needle at its stop, ${ind.rest} ${ind.unit ?? ''}`} (cold jet).`);
+      if (ind) say(ind.type === 'lamp' ? `${ind.name}: off (cold jet).` : `${ind.name}: ${ind.restNote ?? (ind.type === 'display' ? 'blank' : `needle at its stop, ${ind.rest} ${ind.unit ?? ''}`)} (cold jet).`);
     });
   }
   for (const b of document.querySelectorAll<HTMLButtonElement>(`[data-cockpit-pick="${def.panel}"]`)) {
@@ -342,9 +350,22 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
   const show = (id: string, v: number) => {
     const r = def.readings[id];
     if (!r) return;
+    if (r.kind === 'page') return;
     if (r.kind === 'needle') svg.querySelector(`[data-needle="${id}"]`)?.setAttribute('transform', `rotate(${+scaleAngle(r.scale, v).toFixed(3)})`);
+    else if (r.kind === 'shift') svg.querySelector(`[data-shift="${id}"]`)?.setAttribute('transform', `translate(${+(v * r.per).toFixed(3)} 0)`);
+    else if (r.kind === 'digits') {
+      const d = digitsOf(v, r.digits, !!r.tenths), texts = svg.querySelectorAll(`[data-digits="${id}"] text`);
+      if (texts[0]) texts[0].textContent = d.whole;
+      if (texts[1]) texts[1].textContent = d.tenth;
+    }
     else drumPositions(v, r.drums, r.fixed, r.unit, r.still).forEach((p, k) =>
       svg.querySelector(`[data-drum="${id}"][data-place="${k}"]`)?.setAttribute('transform', `translate(0 ${+(-p * r.roll).toFixed(3)})`));
+  };
+  /** Show one page of a display (DED page, HSI mode legend, screen on or off). */
+  const showPage = (id: string, page: string) => {
+    for (const g of svg.querySelectorAll<SVGGElement>(`[data-page-of="${id}"]`)) {
+      if (g.dataset.page === page) g.removeAttribute('display'); else g.setAttribute('display', 'none');
+    }
   };
   // Lamps and readings the host page sets (procedures); lamp colour from the indicator definition.
   for (const ind of def.indicators) svg.querySelectorAll<SVGGElement>(`[data-indicator="${ind.id}"]`).forEach(g => { if (ind.colour) g.dataset.colour = ind.colour; });
@@ -359,14 +380,23 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     }
   });
   addEventListener('cockpit:indicate', e => {
-    const { lit = [], readings: values = {} } = (e as CustomEvent<{ lit?: string[]; readings?: Record<string, number> }>).detail;
+    const { lit = [], readings: values = {}, pages = {} } = (e as CustomEvent<{ lit?: string[]; readings?: Record<string, number>; pages?: Record<string, string> }>).detail;
     const on = new Set(lit);
     for (const ind of def.indicators) {
       if (ind.type === 'lamp') svg.querySelectorAll(`[data-indicator="${ind.id}"]`).forEach(g => g.classList.toggle('lit', on.has(key(ind.id))));
+      else if (key(ind.id) in pages) showPage(ind.id, pages[key(ind.id)]);
       else if (key(ind.id) in values) show(ind.id, values[key(ind.id)]);
     }
   });
-  for (const input of document.querySelectorAll<HTMLInputElement>(`[data-reading^="${def.panel}."]`)) {
+  for (const sel of document.querySelectorAll<HTMLSelectElement>(`select[data-page-reading^="${def.panel}."]`)) {
+    const id = sel.dataset.pageReading!.slice(def.panel.length + 1);
+    sel.addEventListener('change', () => { showPage(id, sel.value); select(id); });
+    document.querySelector(`[data-cockpit-reset="${def.aircraft}"]`)?.addEventListener('click', () => {
+      sel.selectedIndex = [...sel.options].findIndex(o => o.defaultSelected);
+      showPage(id, sel.value);
+    });
+  }
+  for (const input of document.querySelectorAll<HTMLInputElement>(`input[data-reading^="${def.panel}."]`)) {
     const id = input.dataset.reading!.slice(def.panel.length + 1), ind = def.indicators.find(i => i.id === id);
     const out = document.querySelector(`[data-readout="${input.dataset.reading}"]`);
     input.addEventListener('input', () => {

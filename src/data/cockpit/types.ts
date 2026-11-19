@@ -76,7 +76,9 @@ export interface ControlDef {
   /**
    * Toggle travel. Positions are listed in travel order: top to bottom for
    * vertical, left to right for horizontal, anticlockwise to clockwise for a
-   * rotary, out to in for a pushbutton, closed to open for a guard.
+   * rotary, out to in for a pushbutton, closed to open for a guard. A rotary
+   * with `vertical` travel is a thumbwheel rolled up and down (positions top
+   * to bottom, as they pass under the thumb).
    */
   travel?: 'vertical' | 'horizontal';
   /** Rotary with no end stops: turning past the last position wraps to the first (UHF digit and CHAN knobs). */
@@ -99,8 +101,15 @@ export interface ControlDef {
 export interface IndicatorDef {
   id: string;
   name: string;
-  /** `lamp`: a light (cold jet: off). `gauge`: a pointer instrument (cold jet: needle at `rest`). `counter`: a drum counter (shows `rest`). */
-  type: 'lamp' | 'gauge' | 'counter';
+  /**
+   * `lamp`: a light (cold jet: off). `gauge`: a pointer instrument (cold jet: needle at `rest`). `counter`: a drum counter (shows `rest`).
+   * `display`: an electronic display or one of its symbols; `pages` lists what it can show and `restPage` what it shows cold and dark (blank).
+   * Numeric display readings (HSI heading, range) use `rest`/`range` like a gauge.
+   */
+  type: 'lamp' | 'gauge' | 'counter' | 'display';
+  /** Displays that switch between whole pictures (DED pages, HSI mode legend): the choices, in order. */
+  pages?: { id: string; label: string }[];
+  restPage?: string;
   /** Lamps only. */
   colour?: 'amber' | 'green' | 'red';
   /** Gauges only: unit of the scale, and the value the needle shows cold and dark. */
@@ -159,13 +168,29 @@ export type Placement =
   /** Flip guard hinged at `at` (the middle of its hinge edge); `size` is the closed footprint. `rotate`: degrees clockwise about the hinge (180 = hinged along the top). */
   | { component: 'guard-flip'; control: string; at: Pt; size: [w: number, h: number]; rotate?: number; paint?: Paint }
   /** Square pushbutton, centred on `at`; `legend` lines are placed by their centre `y` (mm from the centre). With `indicator`, the legend face is that lamp's lens. */
-  | { component: 'push-square'; control: string; at: Pt; size: [w: number, h: number]; legend: { text: string; cap: number; y: number; width?: number }[]; indicator?: string; /** Turn (degrees clockwise) about the centre, for buttons on an angled mount. */ rotate?: number }
+  | { component: 'push-square'; control: string; at: Pt; size: [w: number, h: number]; legend: { text: string; cap: number; y: number; width?: number; /** Off-centre legend (keypad direction letters). */ x?: number }[]; indicator?: string; /** Turn (degrees clockwise) about the centre, for buttons on an angled mount. */ rotate?: number }
   | { component: LampModuleArt; at: Pt; size: [w: number, h: number]; lamps: LampCell[]; /** Unused module: a dash across the blank lens. */ blank?: boolean; /** Turn (degrees clockwise) about the module centre, for modules on an angled mount. */ rotate?: number }
   | { component: LampRoundArt; indicator: string; at: Pt }
   /** Pointer instrument centred on `at`; everything inside `dial` is relative to the dial centre. */
   | { component: 'gauge'; /** The needle's indicator; omitted when the dial has `pointers`. */ indicator?: string; at: Pt; dial: Dial }
   /** Drum counter on its own (F-16C FUEL FLOW): the counter is relative to `at`. */
   | { component: 'counter'; at: Pt; counter: DrumCounter }
+  /**
+   * Knurled thumbwheel set into the plate edge (F-16C ICP SYM, BRT, RET DEPR, CONT), seen square-on: the part of the
+   * wheel that stands out of its slot, `size` (w, h) centred on `at`; its control is a rotary with vertical travel.
+   */
+  | { component: 'thumbwheel'; control: string; at: Pt; size: [w: number, h: number] }
+  /** Rocker switch with up and down arrows on its cap (F-16C ICP DED increment/decrement): housing `size` centred on `at`; vertical travel, middle position at rest. */
+  | { component: 'rocker'; control: string; at: Pt; size: [w: number, h: number] }
+  /**
+   * Four-way momentary switch (F-16C ICP Data Control Switch): a lever in a round well of radius `r`; `control` moves
+   * it up and down, `cross` left and right; `lever` is the lever top (w, h) and `throw` how far it moves off centre.
+   */
+  | { component: 'hat'; control: string; cross: string; at: Pt; r: number; lever: [w: number, h: number]; throw: number }
+  /** Character display (F-16C DED): a fixed grid of character cells behind a bezel; `indicator` is a `display` indicator whose pages the display draws. */
+  | { component: 'text-display'; indicator: string; at: Pt; display: TextDisplay }
+  /** Electronic HSI picture (F-16C EHSI), centred on `at` (the compass centre); every symbol is its own indicator, see `HsiDisplay`. */
+  | { component: 'hsi'; at: Pt; hsi: HsiDisplay }
   | { component: 'dzus'; at: Pt; cut?: Cut }
   | { component: 'screw' | 'screw-medium' | 'screw-small'; at: Pt };
 
@@ -231,13 +256,61 @@ export interface DrumCounter {
   slots?: { drum: number; h: number }[];
 }
 
+/**
+ * A character-cell display. Everything is relative to the placement's `at`
+ * (the screen centre). Cells are `pitch` apart, the first cell's centre at
+ * `origin`; characters are `cap` high. Each page is `rows` lines of up to
+ * `cols` characters; `{…}` marks characters shown inverse (lit box, dark
+ * character), `^` is the up/down arrow the display uses to mark a field
+ * that the increment/decrement rocker can change.
+ */
+export interface TextDisplay {
+  bezel: [w: number, h: number];
+  screen: [w: number, h: number];
+  cols: number;
+  rows: number;
+  pitch: [dx: number, dy: number];
+  origin: Pt;
+  cap: number;
+  /** Character width (ink), mm. */
+  width: number;
+  pages: { id: string; lines: string[] }[];
+}
+
+/**
+ * Electronic HSI symbology, square-on, in mm relative to the compass centre;
+ * radii from the centre. The compass card turns with `heading` (indicator id);
+ * the heading marker, course arrow (with its deviation bar and dots) and
+ * bearing pointer turn with it, each by its own indicator. Indicator ids are
+ * fixed: `screen` (page `on`/`off`), `heading`, `heading-set`, `course`,
+ * `bearing`, `deviation` (dots), `range` (NM), `course-set` (the course
+ * readout), `mode` (pages), `to-from` (pages `none`/`to`/`from`).
+ */
+export interface HsiDisplay {
+  /** Screen outline, absolute panel mm path (the screen hit area and clip). */
+  screen: string;
+  card: { r: number; major: number; minor: number; width: number; labelR: number; cap: number; labelWidth: number };
+  lubbers: { cardinal: [r0: number, r1: number]; diagonal: [r0: number, r1: number]; width: number };
+  /** Aircraft symbol path (centre origin, nose up). */
+  aircraft: string;
+  marker: { r: [r0: number, r1: number]; w: number };
+  course: { head: [r0: number, r1: number]; tail: [r0: number, r1: number]; arrow: [w: number, l: number]; width: number; cdi: number; dot: number; dotR: number; toFrom: number };
+  bearing: { head: [r0: number, r1: number]; tail: [r0: number, r1: number]; arrow: [w: number, l: number]; width: number };
+  /** Digit readouts by their centre: range (with its tenths digit boxed), course. */
+  range: { at: Pt; cap: number; width: number };
+  courseSet: { at: Pt; cap: number; width: number };
+  mode: { at: Pt; cap: number };
+  /** Fixed legends drawn on the screen while it is on (NM, CRS, HDG). */
+  legends: { text: string; at: Pt; cap: number; width?: number }[];
+}
+
 /** The plate corner toward which the face plate is cut away around a DZUS. */
 export type Cut = 'up-left' | 'up-right' | 'down-left' | 'down-right';
 
 export type ToggleArt = 'toggle-large' | 'toggle-medium' | 'toggle-small' | 'toggle-large-cylinder' | 'toggle-large-square' | 'toggle-large-lock' | 'toggle-paddle-wide' | 'toggle-hook' | 'toggle-mini-hex';
 export type RotaryArt = 'rotary-pointer' | 'rotary-pointer-large' | 'rotary-pointer-medium';
-export type KnobArt = 'knob-fine-knurl-small' | 'knob-knurled-small' | 'knob-knurled' | 'knob-knurled-edge' | 'knob-knurled-skirt' | 'knob-bar' | 'knob-lobed' | 'knob-bar-medium' | 'knob-knurled-mini' | 'knob-radio-large' | 'knob-bar-thick' | 'knob-spindle' | 'knob-knurled-large' | 'knob-knurled-small-edge' | 'knob-round' | 'knob-round-small' | 'knob-cross' | 'knob-cross-small';
-export type PushArt = 'push-round-small' | 'push-round-medium' | 'push-round-large' | 'push-round-xl' | 'push-round-flat' | 'push-round-xxl' | 'push-round-bezel';
+export type KnobArt = 'knob-fine-knurl-small' | 'knob-knurled-small' | 'knob-knurled' | 'knob-knurled-edge' | 'knob-knurled-skirt' | 'knob-bar' | 'knob-lobed' | 'knob-bar-medium' | 'knob-knurled-mini' | 'knob-radio-large' | 'knob-bar-thick' | 'knob-spindle' | 'knob-knurled-large' | 'knob-knurled-small-edge' | 'knob-round' | 'knob-round-small' | 'knob-cross' | 'knob-cross-small' | 'knob-plain';
+export type PushArt = 'push-round-small' | 'push-round-medium' | 'push-round-large' | 'push-round-xl' | 'push-round-flat' | 'push-round-xxl' | 'push-round-bezel' | 'push-round-wide' | 'push-round-plain';
 export type LampModuleArt = 'lamp-module';
 /** A single round press-to-test style indicator lens in a bezel (JFS RUN). */
 export type LampRoundArt = 'lamp-round';

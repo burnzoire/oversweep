@@ -22,6 +22,9 @@ import { defog } from './defog.ts';
 import { sidewallControls } from './sidewall-controls.ts';
 import { test } from './test.ts';
 import { hydPressure } from './hyd-pressure.ts';
+import { icp } from './icp.ts';
+import { ded } from './ded.ts';
+import { ehsi } from './ehsi.ts';
 
 /**
  * DCS F-16C cockpit catalogue: areas and panels in the order the official guide
@@ -44,6 +47,8 @@ export const f16cCockpit: AircraftCockpit = {
       id: 'instrument-panel', title: 'Instrument panel', panels: [
         { id: 'aoa-indexer', title: 'AoA indexer', page: 44 },
         { id: 'ar-nws-indicator', title: 'AR status / NWS indicator', page: 45 },
+        { id: 'icp', title: 'Integrated control panel (ICP)', page: 99, spec: icp },
+        { id: 'ded', title: 'Data entry display (DED)', page: 101, spec: ded },
         { id: 'left-eyebrow', title: 'Left eyebrow lights', page: 45, spec: leftEyebrow },
         { id: 'right-eyebrow', title: 'Right eyebrow lights', page: 46, spec: rightEyebrow },
         { id: 'misc', title: 'MISC panel', page: 47 },
@@ -56,6 +61,7 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'aoa-indicator', title: 'AoA indicator', page: 52 },
         { id: 'vvi', title: 'Vertical velocity indicator', page: 52 },
         { id: 'adi', title: 'Attitude director indicator', page: 53 },
+        { id: 'ehsi', title: 'Electronic HSI (EHSI)', page: 230, spec: ehsi },
         { id: 'fuel-qty-sel', title: 'FUEL QTY SEL panel', page: 54 },
       ],
     },

@@ -19,11 +19,11 @@ test('catalogue lists every area and panel with unique stable ids', { skip: !can
 });
 
 test('every built panel models each placed control and lamp once', { skip: !canImportTs }, async () => {
-  const { f16cCockpit, builtPanels, renderPanel, hitZones, dialIndicators } = await load();
+  const { f16cCockpit, builtPanels, renderPanel, hitZones, placementIndicators } = await load();
   for (const { spec } of builtPanels(f16cCockpit)) {
-    const placed = spec.placements.filter(p => 'control' in p).map(p => p.control);
+    const placed = spec.placements.flatMap(p => 'control' in p ? [p.control, ...('cross' in p ? [p.cross] : [])] : []);
     assert.deepEqual([...placed].sort(), spec.controls.map(c => c.id).sort(), `${spec.id}: placements and controls differ`);
-    const lamps = spec.placements.flatMap(p => p.component === 'lamp-module' ? p.lamps.map(l => l.indicator) : p.component === 'lamp-round' ? [p.indicator] : (p.component === 'push-square' || p.component === 'gear-handle') && p.indicator ? [p.indicator] : p.component === 'gauge' ? dialIndicators(p) : p.component === 'counter' ? [p.counter.indicator] : []);
+    const lamps = spec.placements.flatMap(placementIndicators);
     assert.deepEqual([...lamps].sort(), spec.indicators.map(i => i.id).sort(), `${spec.id}: lamp cells and indicators differ`);
     for (const c of spec.controls) {
       assert.ok(c.positions.some(p => p.id === c.initial), `${spec.id}.${c.id}: initial position`);
@@ -95,4 +95,21 @@ test('panel page script is generic: no panel or control names in the engine', as
   const script = comp.split('<script>')[1];
   for (const name of ['elec', 'fuel', 'main-pwr', 'eng-feed', 'fuel-master']) assert.doesNotMatch(script, new RegExp(`['"]${name}['"]`));
   assert.match(script, /sessionStorage/);
+});
+
+test('displays draw every page they list and readouts format like the page script', { skip: !canImportTs }, async () => {
+  const { f16cCockpit, builtPanels, renderPanel, readings, readoutDigits } = await load();
+  const shown = builtPanels(f16cCockpit).filter(({ spec }) => spec.indicators.some(i => i.type === 'display'));
+  assert.ok(shown.some(({ spec }) => spec.id === 'ded') && shown.some(({ spec }) => spec.id === 'ehsi'));
+  for (const { spec } of shown) {
+    const svg = renderPanel(spec), r = readings(spec);
+    for (const ind of spec.indicators.filter(i => i.pages)) {
+      assert.equal(r[ind.id]?.kind, 'page', `${spec.id}.${ind.id}: page reading`);
+      for (const pg of ind.pages) assert.match(svg, new RegExp(`data-page-of="${ind.id}" data-page="${pg.id}"`), `${spec.id}.${ind.id}: page ${pg.id} drawn`);
+    }
+  }
+  const ded = shown.find(({ spec }) => spec.id === 'ded').spec;
+  for (const pg of ded.placements[0].display.pages) for (const line of pg.lines) assert.ok(line.replace(/[{}]/g, '').length <= 24, `ded ${pg.id}: 24 characters a line`);
+  assert.deepEqual(readoutDigits(15.94, 3, true), { whole: '015', tenth: '9' });
+  assert.deepEqual(readoutDigits(65, 3, false), { whole: '065', tenth: '' });
 });
