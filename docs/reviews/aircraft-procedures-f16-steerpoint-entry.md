@@ -8,7 +8,7 @@ A guided exercise on the shared cockpit panels (ICP, DED, HUD, EHSI): from a nav
 - The position typed (N 36°35.822′, E 036°35.014′, 892 ft) is the guide's STPT figure's data, given to steerpoint 5.
 
 ## Illustrative, not sourced
-- Aircraft position, heading (197°), ground speed (391 kt), steerpoint 4 (19 NM on 195°) and steerpoint 5 (31.4 NM on 185°, time to go 4:49). The HUD diamond and steering cue offsets are derived from those bearings; the cue's pinned position at 10° is a guess at its lateral boundary.
+- Aircraft position, heading (197°), ground speed (391 kt), steerpoint 4 (19 NM on 195°) and steerpoint 5 (31.4 NM on 190°, time to go 4:49). The HUD diamond and steering cue offsets are derived from those bearings, kept within the HUD field of view (the HUD model draws no X for a diamond outside it).
 - Steerpoint 4's position (N 35°44.295′, E 037°02.898′, 823 ft) is the guide's DEST DIR figure for steerpoint 4. Steerpoint 5 is shown empty (the guide's empty-steerpoint figure) when selected; whether an unused steerpoint is empty in a given DCS mission depends on the mission's route.
 - The course knob turns 5° a click on this page; deviation scale as in the TACAN procedure.
 

@@ -17,12 +17,12 @@ interface Config { aircraft: string; initial: Record<string, string>; labels: Re
 interface State { ded: string; selected: 4 | 5; course: number }
 
 // The scenario (illustrative): heading 197°, 391 kt over the ground. Steerpoint 4 is 19 NM away on 195°; steerpoint 5,
-// once entered, 31.4 NM on 185°. The HUD angles are what the diamond and steering cue show for those bearings.
+// once entered, 31.4 NM on 190°. The HUD angles are what the diamond and steering cue show for those bearings.
 const HEADING = 197;
 interface Picture { bearing: number; range: number; ttg: number; diamond: [number, number]; cue: number; line: number }
 const STEERPOINTS: Record<State['selected'], Picture> = {
   4: { bearing: 195, range: 19, ttg: 175, diamond: [-1.62, -7.63], cue: -1.24, line: -2 },
-  5: { bearing: 185, range: 31.4, ttg: 289, diamond: [-12, -5.98], cue: -10, line: -12 },
+  5: { bearing: 190, range: 31.4, ttg: 289, diamond: [-7, -5.98], cue: -7, line: -7 },
 };
 /** DED page once each step's action is made (steps with typed keys list their pages themselves). */
 const DED_AFTER: Record<string, string> = { 'stpt-open': 'stpt-4', 'lat-field': 'stpt-lat-0', 'lon-field': 'stpt-lon-0', 'elev-field': 'stpt-elev-0', rtn: 'cni-5' };
