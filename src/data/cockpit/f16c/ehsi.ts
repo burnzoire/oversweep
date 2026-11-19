@@ -36,10 +36,11 @@ const rrect = (x0: number, y0: number, x1: number, y1: number, r: number) =>
 const SCREEN = 'M84 50H465Q480 50 480 65V380Q480 386 475 391L412 459Q397 476 380 476H169Q152 476 137 459L74 391Q69 386 69 380V65Q69 50 84 50Z';
 
 /**
- * Raised bezel: its edge sits 15 px inside the base plate, and each corner is cut away in a quarter-circle pocket
- * (radius 25) round the corner screw, the pocket edges meeting the bezel sides at x/y 50 and 500 (corner zooms).
+ * Raised bezel (Nathan's mark-up, 4-way symmetric): the full plate with each corner cut away for its screws. From the
+ * top or bottom edge the cut runs straight in at x 50 / 500 for about 21 px, turns on a short fillet and runs at 45° to
+ * the side edge 77 px from the corner. The base plate shows in the cut-away corners.
  */
-const BEZEL = 'M50 18H500V25A25 25 0 0 0 525 50H532V500H525A25 25 0 0 0 500 525V532H50V525A25 25 0 0 0 25 500H18V50H25A25 25 0 0 0 50 25Z';
+const BEZEL = 'M50 3H500V24Q500 30 504 34L547 77V473L504 516Q500 520 500 526V547H50V526Q50 520 46 516L3 473V77L46 34Q50 30 50 24Z';
 
 const rotary = (id: string, name: string, description: string) => ({
   id, name, type: 'rotary' as const, cyclic: true, initial: '0', source: src, description,
