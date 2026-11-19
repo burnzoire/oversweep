@@ -36,6 +36,31 @@ const ring = (x: number, y: number, r: number) => {
 /** Plate centre and the half spacing of the corner screws and the round marks, px (mirrored about the dial centre). */
 const SCREW = 128.6, MARK = 55;
 
+/**
+ * ELEC/PNEU mode lever, measured on the guide image zoomed 10x: a flat lever
+ * with a round head (radius 9.5 px) about its pivot and a stem 9.5 px wide
+ * hanging 39.5 px below the pivot to a square end. It hangs straight down at
+ * rest and is swung `swing` degrees: tip left toward ELEC, tip right toward PNEU.
+ */
+const LEVER = { pivot: [262, 238.8] as [number, number], head: 9.5, half: 4.75, reach: 39.5, swing: 30, pin: 2.6 };
+function modeLever(deg: number) {
+  const [px, py] = LEVER.pivot, a = (deg * Math.PI) / 180, { head, half, reach } = LEVER;
+  // Turn (clockwise on screen) about the pivot; outline points relative to the pivot, stem pointing down.
+  const P = (u: number, v: number) => `${(px + u * Math.cos(a) - v * Math.sin(a)).toFixed(2)} ${(py + u * Math.sin(a) + v * Math.cos(a)).toFixed(2)}`;
+  const join = Math.sqrt(head * head - half * half), arc: string[] = [];
+  // Head: from the right side of the stem round over the top to the left side (32 steps).
+  // Screen angles: the right join is at t0 below the horizontal, the left join at π − t0; sweep up over the top.
+  const t0 = Math.atan2(join, half), t1 = Math.PI - t0 - Math.PI * 2;
+  for (let i = 0; i <= 32; i++) {
+    const t = t0 + ((t1 - t0) * i) / 32;
+    arc.push(P(head * Math.cos(t), head * Math.sin(t)));
+  }
+  const outline = `M${P(half, reach)}L${arc.join('L')}L${P(-half, reach)}Z`;
+  // Pivot pin.
+  const pin = Array.from({ length: 16 }, (_, i) => P(LEVER.pin * Math.cos((i * Math.PI) / 8), LEVER.pin * Math.sin((i * Math.PI) / 8)));
+  return { d: path(outline), parts: [path(`M${pin.join('L')}Z`)] };
+}
+
 const dial: Dial = {
   bezel: mm(120), face: mm(116.5), hub: mm(2.5),
   // One turn is 1,000 ft: 0 at 12 o'clock (residuals under 1.3°, no trend).
@@ -83,7 +108,7 @@ export const altimeter: PanelSpec = {
     rectify: 'python3 -I scripts/gauge-dial.py fit <image.png> <scratch> docs/cockpit/f16c-altimeter-dial-map.json (x\' = 0.99983x + 0.00081y + 10.00, y\' = 0.00081x + 0.99617y + 10.00; output 307 x 303)',
     pxPerMm: PX,
     scale: 'The corner screw heads (about 13.4 px across) are the shared `screw-small` (4.2 mm), giving 3.23 px/mm; the dial face is then 72 mm across, the same as the 3-inch RPM indicator\'s, and the corner screws 79.6 mm apart.',
-    shown: { altitude: '8092', baro: '29.92', pneu: 'shown', mode: 'elec', 'baro-set': '0' },
+    shown: { altitude: '8092', baro: '29.92', pneu: 'shown', mode: 'centre', 'baro-set': '0' },
     unresolved: [
       'Physical size rests on the corner screws: the guide gives no dimension.',
       'The guide\'s text says the minor ticks are 10 ft; the image has four minor ticks between the 100-ft majors, so they are drawn every 20 ft.',
@@ -93,7 +118,7 @@ export const altimeter: PanelSpec = {
       'The two zeros after the hundreds drum are drawn as fixed drums; whether they are printed on the face cannot be seen.',
       'The hundreds drum rolls with the needle, as the image shows (1 a little below centre at 8,092 ft); the thousands and ten-thousands drums turn only as the hundreds drum rolls from 9 to 0. Below 10,000 ft the ten-thousands drum shows hatching. Readings below 0 ft (the guide gives −1,000 ft) are not drawn.',
       'The barometric window drums are drawn flat and evenly spaced (the image spacing varies from 10.6 to 12.4 px). Its range (28.10–31.00 in Hg) is not stated in the guide.',
-      'The mode lever: the guide says it is held momentarily to ELEC or PNEU, so it is drawn spring-loaded to the centre; the image shows it lying toward ELEC. Drawn as the shared small plain toggle square-on; in the image the lever looks like a flat paddle.',
+      'The mode lever is traced as a flat lever (Nathan: a lever, not a toggle). The guide says it is held momentarily to ELEC or PNEU, so it springs back to hanging straight down, as the image shows it. Which way it swings is read from the legends (ELEC left of the tip, PNEU right); the 30° swing is not stated. No other guide image or photo was found to confirm it.',
       'The barometric setting knob shows only as a faint round outline (about 6.8 mm radius); it is drawn as a plain domed knob with no index.',
       'Eight faint round marks sit on the case on the screw lines (about 55 px either side of the centre lines); they are drawn as fine circles. The top left corner is hidden by another part in the image; its screw and marks are drawn by symmetry.',
       'Cold-and-dark readings are not stated in the guide; the needle, counters and PNEU flag are drawn as the image shows them.',
@@ -116,7 +141,8 @@ export const altimeter: PanelSpec = {
       pitch: mm(11.43), roll: mm(17.5), window: [mm(49), mm(20)], cap: mm(15), width: mm(7),
     } },
     { component: 'knob-plain-small', control: 'baro-set', at: pt(50, 256.7) },
-    { component: 'toggle-small', control: 'mode', at: pt(263.3, 238.3) },
+    // Mode lever: traced one-off (flat keyhole lever: round head about the pivot, flat stem to a square end).
+    { component: 'traced', control: 'mode', at: pt(...LEVER.pivot), shapes: { elec: modeLever(LEVER.swing), centre: modeLever(0), pneu: modeLever(-LEVER.swing) }, hit: [mm(LEVER.pivot[0] - 22), mm(LEVER.pivot[1] - 12), mm(44), mm(54)] },
     ...[[-1, -1], [1, -1], [-1, 1], [1, 1]].map(([sx, sy]) => ({ component: 'screw-small' as const, at: pt(C[0] + sx * SCREW, C[1] + sy * SCREW) })),
   ],
   controls: [
@@ -126,12 +152,12 @@ export const altimeter: PanelSpec = {
       positions: Array.from({ length: 12 }, (_, i) => ({ id: String(i), label: `step ${i}`, angle: i * 30 })),
     },
     {
-      id: 'mode', name: 'Altimeter mode lever (ELEC / PNEU)', type: 'toggle', travel: 'vertical', initial: 'centre', source: src,
+      id: 'mode', name: 'Altimeter mode lever (ELEC / PNEU)', type: 'toggle', travel: 'horizontal', initial: 'centre', source: src,
       description: 'Held momentarily to ELEC (primary: the altimeter is driven by the central air data computer, CADC) or to PNEU (secondary: driven by static pressure from the pitot-static system). The altimeter drops back to PNEU by itself if the CADC or its electric servo fails; the PNEU flag shows whenever it is in PNEU.',
       positions: [
-        { id: 'pneu', label: 'PNEU', hold: 'momentary', spring: 'centre' },
-        { id: 'centre', label: 'Centre' },
         { id: 'elec', label: 'ELEC', hold: 'momentary', spring: 'centre' },
+        { id: 'centre', label: 'Centre' },
+        { id: 'pneu', label: 'PNEU', hold: 'momentary', spring: 'centre' },
       ],
     },
   ],
