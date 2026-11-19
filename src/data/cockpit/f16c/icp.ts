@@ -174,8 +174,9 @@ export const icp: PanelSpec = {
     ...KEYS.map((k): Placement => ({
       component: 'push-square', control: k.id, at: pt(k.x, k.y), size: KEY,
       legend: [
-        ...(k.fn ? [{ text: k.fn, cap: mm(12), y: mm(-15), width: mm(k.fn.length * 8.6) }] : []),
-        { text: k.digit, cap: mm(22), y: mm(11) },
+        // Tall condensed legends (Nathan): the function word top-centre, 5 px under the cap's top edge, the digit below.
+        ...(k.fn ? [{ text: k.fn, cap: mm(15), y: mm(-21), width: mm(k.fn.length * 8.2) }] : []),
+        { text: k.digit, cap: mm(25), y: mm(9.5), width: mm(14) },
         ...(k.corner ? [{ text: k.corner, cap: mm(9), y: mm(17), x: mm(22) }] : []),
       ],
     })),
