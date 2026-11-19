@@ -177,7 +177,8 @@ export type Placement =
   | { component: 'counter'; at: Pt; counter: DrumCounter }
   /**
    * Knurled thumbwheel set into the plate edge (F-16C ICP SYM, BRT, RET DEPR, CONT), seen square-on: the part of the
-   * wheel that stands out of its slot, `size` (w, h) centred on `at`; its control is a rotary with vertical travel.
+   * wheel that stands out of its slot, `size` (w, h) centred on `at`; its control is a rotary with vertical travel,
+   * or horizontal travel for a wheel rolled left and right (F-16C PITCH TRIM).
    */
   | { component: 'thumbwheel'; control: string; at: Pt; size: [w: number, h: number] }
   /** Rocker switch with up and down arrows on its cap (F-16C ICP DED increment/decrement): housing `size` centred on `at`; vertical travel, middle position at rest. */
@@ -211,7 +212,7 @@ export interface Dial {
   /** (value, angle) knots in increasing value; angles increase clockwise and may run past 360. */
   scale: [value: number, angle: number][];
   /** Tick runs: one tick every `step` from `from` to `to`, skipping values on `skip` multiples (drawn by another run). */
-  ticks: { from: number; to: number; step: number; skip?: number; r: [inner: number, outer: number]; width: number }[];
+  ticks: { from: number; to: number; step: number; skip?: number; r: [inner: number, outer: number]; width: number; /** Printed dots instead of lines: a dot `width` across midway between the radii. */ dot?: boolean }[];
   /** Solid painted sectors between two values (RPM's 60–65 % band). */
   fills?: { from: number; to: number; r: [inner: number, outer: number] }[];
   /** Numerals and dial legends, upright, by their centre relative to the dial centre; `width` locks the measured width. */
@@ -219,7 +220,9 @@ export interface Dial {
   /** Needle tip radius (the shared needle's shank stretches to it); single-needle dials only. */
   needle?: number;
   /** Needle shape: the shared thin `NEEDLE` (default), a straight-sided `wedge` (F-16C HYD PRESS) or a thin shaft ending in a broad `blade` (F-16C altimeter). */
-  needleArt?: 'wedge' | 'blade';
+  needleArt?: 'wedge' | 'blade' | 'line';
+  /** Half-disc window instead of a round dial: the side the face bulges to, the flat edge running through the centre (F-16C trim indicators). */
+  half?: 'left' | 'right' | 'up' | 'down';
   /**
    * The value of one full turn, for a needle that goes round more than once
    * (F-16C altimeter: 1,000 ft). The scale knots then cover one turn.
@@ -398,7 +401,7 @@ export type Cut = 'up-left' | 'up-right' | 'down-left' | 'down-right';
 
 export type ToggleArt = 'toggle-large' | 'toggle-medium' | 'toggle-small' | 'toggle-large-cylinder' | 'toggle-large-square' | 'toggle-large-lock' | 'toggle-paddle-wide' | 'toggle-hook' | 'toggle-mini-hex';
 export type RotaryArt = 'rotary-pointer' | 'rotary-pointer-large' | 'rotary-pointer-medium';
-export type KnobArt = 'knob-fine-knurl-small' | 'knob-knurled-small' | 'knob-knurled' | 'knob-knurled-edge' | 'knob-knurled-skirt' | 'knob-bar' | 'knob-lobed' | 'knob-bar-medium' | 'knob-knurled-mini' | 'knob-radio-large' | 'knob-bar-thick' | 'knob-spindle' | 'knob-knurled-large' | 'knob-knurled-small-edge' | 'knob-round' | 'knob-round-small' | 'knob-cross' | 'knob-cross-small' | 'knob-plain' | 'knob-plain-small';
+export type KnobArt = 'knob-fine-knurl-small' | 'knob-knurled-small' | 'knob-knurled' | 'knob-knurled-edge' | 'knob-knurled-skirt' | 'knob-bar' | 'knob-lobed' | 'knob-bar-medium' | 'knob-knurled-mini' | 'knob-radio-large' | 'knob-bar-thick' | 'knob-spindle' | 'knob-knurled-large' | 'knob-knurled-small-edge' | 'knob-round' | 'knob-round-small' | 'knob-cross' | 'knob-cross-small' | 'knob-plain' | 'knob-plain-small' | 'knob-plain-index' | 'knob-bar-wide';
 export type PushArt = 'push-round-small' | 'push-round-medium' | 'push-round-large' | 'push-round-xl' | 'push-round-flat' | 'push-round-xxl' | 'push-round-bezel' | 'push-round-wide' | 'push-round-plain';
 export type LampModuleArt = 'lamp-module';
 /** A single round press-to-test style indicator lens in a bezel (JFS RUN). */
