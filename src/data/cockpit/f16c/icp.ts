@@ -28,21 +28,22 @@ const text = (t: string, x: number, y: number, cap: number, w?: number): Engravi
 const column = (t: string, x: number, y: number, pitch: number, cap: number, widths?: number[]): Engraving[] =>
   [...t].map((c, i) => text(c, x, y + i * pitch, cap, widths?.[i]));
 
-/** Plate edges notched on circles of radius CUT round the corner screws (all in px); Nathan asked for small cuts. */
+/**
+ * Plate corners cut round the corner screws (all in px): the cut is a circle of radius CUT round the screw that runs
+ * on as a vertical line, tangent to it, out to the end of the plate (Nathan).
+ */
 const SCREWS: [number, number][] = [[31, 26], [631, 26], [31, 451], [631, 451]];
 const CUT = 25;
 const f = (v: number) => +v.toFixed(1);
-/** Where the notch round screw (sx, sy) starts and ends on the vertical edge x. */
-const notch = ([sx, sy]: [number, number], x: number) => {
-  const dy = Math.sqrt(CUT ** 2 - (x - sx) ** 2);
-  return { top: f(sy - dy), bot: f(sy + dy) };
-};
-const [tl, tr, bl, br] = [notch(SCREWS[0], 50), notch(SCREWS[1], 610), notch(SCREWS[2], 50), notch(SCREWS[3], 610)];
+/** Where the cut circle round screw (sx, sy) meets the vertical edge x, toward the plate's middle. */
+const meet = ([sx, sy]: [number, number], x: number) => f(sy + Math.sign(240 - sy) * Math.sqrt(CUT ** 2 - (x - sx) ** 2));
+const [tl, tr, bl, br] = SCREWS.map((s, i) => meet(s, i % 2 ? 610 : 50));
+const [xl, xr] = [SCREWS[0][0] + CUT, SCREWS[1][0] - CUT];
 const arc = `A${CUT} ${CUT} 0 0 0`;
 /** OFF blocks between the wheels: y 217–267, out to x 10 and 650, corner radius 4. */
-const FACE = `M50 2H610V${tr.top}${arc} 610 ${tr.bot}V217H646Q650 217 650 221V263Q650 267 646 267H610V${br.top}${arc} 610 ${br.bot}V478` +
-  `H50V${bl.bot}${arc} 50 ${bl.top}V267H14Q10 267 10 263V221Q10 217 14 217H50V${tl.bot}${arc} 50 ${tl.top}Z`;
-const BAR = `M50 8H610V${tr.top}${arc} 610 ${tr.bot}V81Q610 87 604 87H56Q50 87 50 81V${tl.bot}${arc} 50 ${tl.top}Z`;
+const FACE = `M${xl} 2H${xr}V${SCREWS[1][1]}${arc} 610 ${tr}V217H646Q650 217 650 221V263Q650 267 646 267H610V${br}${arc} ${xr} ${SCREWS[3][1]}V478` +
+  `H${xl}V${SCREWS[2][1]}${arc} 50 ${bl}V267H14Q10 267 10 263V221Q10 217 14 217H50V${tl}${arc} ${xl} ${SCREWS[0][1]}Z`;
+const BAR = `M${xl} 8H${xr}V${SCREWS[1][1]}${arc} 610 ${tr}V81Q610 87 604 87H56Q50 87 50 81V${tl}${arc} ${xl} ${SCREWS[0][1]}Z`;
 
 /* Keypad: caps 65 px square on a 90 px pitch (panel-edge rows 140/230/320, columns 120/210/300). */
 const COLS = [120.5, 210.5, 300.5], ROWS = [142.5, 233.5, 323.5];
@@ -156,9 +157,10 @@ export const icp: PanelSpec = {
     ...column('FLIR', 502, 227, 24.2, 18.5, [9, 9, 3, 10]),
     // FLIR rules above and below the legend (x 503, y 108–170 in the guide, run on to the legend as Nathan asked; x 500.5, y 317–438).
     { kind: 'path', d: path('M502 108V210M502 317V438'), pen: 'heavy' },
-    text('GAIN', 539, 341, 12, 34), text('LVL', 588, 382, 12, 26), text('AUTO', 537, 432, 12, 38),
-    text('DRIFT C/O', 382, 372, 14, 90), text('NORM', 444, 417.5, 14, 52), text('WARN RESET', 388, 458, 14, 105),
-    text('RTN', 210, 418, 14, 34), text('SEQ', 310, 418, 14, 34),
+    // GAIN/LVL/AUTO at the DRIFT C/O size, lined up on the toggle (Nathan).
+    text('GAIN', 537, 348, 14, 40), text('LVL', 588, 386.5, 14, 30), text('AUTO', 537, 425, 14, 44),
+    text('DRIFT C/O', 383, 378, 14, 90), text('NORM', 444, 417.5, 14, 52), text('WARN RESET', 388, 458, 14, 105),
+    text('RTN', 204.5, 418, 14, 34), text('SEQ', 309.5, 418, 14, 34),
     // DCS arrows above and below the well, filled (zoom: tips 361 and 474, heads 13 px wide and 14 long, 5 px shafts).
     { kind: 'svg', markup: `<path d="${path('M257 361.5L263.5 375.5H259.5V383.5H254.5V375.5H250.5ZM257 474.5L263.5 460.5H259.5V452.5H254.5V460.5H250.5Z')}" fill="var(--panel-ink,#161616)" stroke="none"/>` },
   ],
