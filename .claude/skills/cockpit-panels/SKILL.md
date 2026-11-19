@@ -236,6 +236,13 @@ Worked examples: F-16C `ded.ts`, `ehsi.ts`, `icp.ts`.
   readings the image shows in `source.shown` so the overlay registers.
   Readings are needles (turn), `shift` (deviation), `digits` (readouts) and
   `page` (screen, mode, to-from).
+- **Head-up display** (`hud`, F-16C `hud.ts`): symbology square-on in mm from the
+  boresight cross, angular scale from the attitude bars (px a degree). Attitude
+  symbols are nested shifts (marker azimuth/elevation, bars by flight path angle)
+  turned by `roll` about the marker; tapes (`tape` readings) move ticks and
+  labels inside fixed windows under a paper-filled readout box; data fields are
+  `number` readings printed with a `ReadoutFormat` (`readout.ts`, shared with the
+  page script) or `pages`. Measure the lettering pitch on a fixed-width line.
 - **Thumbwheels** are rotaries with `travel: 'vertical'` (rolled up and down);
   **rockers** are three-position toggles, momentary to the centre; a four-way
   switch is one `hat` placement with two controls (`control` up/down,
