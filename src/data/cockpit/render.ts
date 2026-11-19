@@ -289,9 +289,10 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
     case 'hat': {
       // The up/down lever is drawn by its control; off centre left or right, the cross control redraws the well and the lever.
       const v = controlOf(spec, p.control), h = controlOf(spec, p.cross), vm = (v.positions.length - 1) / 2, hm = (h.positions.length - 1) / 2;
+      const lean = p.length * Math.sin(p.tilt * Math.PI / 180);
       return at(p.at, hatBase(p.r) +
-        moving(v, state[v.id] ?? v.initial, i => hatLever(p.lever, 0, Math.sign(i - vm) * p.throw)) +
-        moving(h, state[h.id] ?? h.initial, i => i === hm ? '' : `<circle r="${n(p.r * 0.86)}" fill="${PAPER}" ${sw('fine')}/>` + hatLever(p.lever, Math.sign(i - hm) * p.throw, 0)), ' data-art="hat"');
+        moving(v, state[v.id] ?? v.initial, i => hatLever(p.lever, 0, Math.sign(i - vm) * lean)) +
+        moving(h, state[h.id] ?? h.initial, i => i === hm ? '' : `<circle r="${n(p.r * 0.86)}" fill="${PAPER}" ${sw('fine')}/>` + hatLever(p.lever, Math.sign(i - hm) * lean, 0)), ' data-art="hat"');
     }
     case 'text-display': {
       const ind = spec.indicators.find(i => i.id === p.indicator);

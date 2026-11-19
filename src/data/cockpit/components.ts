@@ -834,7 +834,21 @@ export function hatBase(r: number) {
 }
 
 /** Four-way switch lever top (w, h), moved (dx, dy) off centre. */
+/**
+ * Hat lever seen square-on: a square stick on a pivot under the panel. Centred it shows only its top face; held in a
+ * direction it leans, so the top face moves by (dx, dy) and the side facing the lean shows between the stick's root
+ * (a square at the pivot) and the top face.
+ */
 export function hatLever([w, h]: [number, number], dx: number, dy: number) {
-  return `<g transform="translate(${n(dx)} ${n(dy)})">` +
-    cased(`<rect x="${n(-w / 2)}" y="${n(-h / 2)}" width="${n(w)}" height="${n(h)}" rx="0.7" fill="${PAPER}"/>`, 'medium') + '</g>';
+  const top = `<rect x="${n(dx - w / 2)}" y="${n(dy - h / 2)}" width="${n(w)}" height="${n(h)}" rx="0.7" fill="${PAPER}"/>`;
+  if (!dx && !dy) return cased(top, 'medium');
+  // Outline of the root square swept to the top square (their convex hull), drawn first as the stick's side.
+  const [x0, x1, y0, y1] = [-w / 2, w / 2, -h / 2, h / 2];
+  const hull = dy ? (dy < 0
+    ? `M${n(x0)} ${n(y1)}L${n(x0)} ${n(y0 + dy)}H${n(x1)}L${n(x1)} ${n(y1)}Z`
+    : `M${n(x0)} ${n(y0)}L${n(x0)} ${n(y1 + dy)}H${n(x1)}L${n(x1)} ${n(y0)}Z`)
+    : (dx < 0
+    ? `M${n(x1)} ${n(y0)}L${n(x0 + dx)} ${n(y0)}V${n(y1)}L${n(x1)} ${n(y1)}Z`
+    : `M${n(x0)} ${n(y0)}L${n(x1 + dx)} ${n(y0)}V${n(y1)}L${n(x0)} ${n(y1)}Z`);
+  return cased(`<path d="${hull}" fill="${PAPER}"/>`, 'medium') + cased(top, 'medium');
 }

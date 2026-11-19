@@ -186,7 +186,7 @@ export type Placement =
    * Four-way momentary switch (F-16C ICP Data Control Switch): a lever in a round well of radius `r`; `control` moves
    * it up and down, `cross` left and right; `lever` is the lever top (w, h) and `throw` how far it moves off centre.
    */
-  | { component: 'hat'; control: string; cross: string; at: Pt; r: number; lever: [w: number, h: number]; throw: number }
+  | { component: 'hat'; control: string; cross: string; at: Pt; r: number; lever: [w: number, h: number]; /** Stick length from its pivot and its lean when held (degrees). */ length: number; tilt: number }
   /** Character display (F-16C DED): a fixed grid of character cells behind a bezel; `indicator` is a `display` indicator whose pages the display draws. */
   | { component: 'text-display'; indicator: string; at: Pt; display: TextDisplay }
   /** Electronic HSI picture (F-16C EHSI), centred on `at` (the compass centre); every symbol is its own indicator, see `HsiDisplay`. */

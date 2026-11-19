@@ -189,7 +189,9 @@ export const icp: PanelSpec = {
     { component: 'rocker', control: 'flir-incdec', at: pt(543.5, 263), size: [mm(47), mm(93)], arrows: 'arrow' },
     { component: 'rocker', control: 'ded-incdec', at: pt(121, 424), size: [mm(48), mm(92)], arrows: 'spike' },
     // DCS lever top: a 22 px square (its tall look in the guide is the camera seeing the lever's side).
-    { component: 'hat', control: 'dcs-ud', cross: 'dcs-lr', at: pt(257, 418), r: mm(30), lever: [mm(22), mm(22)], throw: mm(9) },
+    { component: 'hat', control: 'dcs-ud', cross: 'dcs-lr', at: pt(257, 418), r: mm(30), lever: [mm(22), mm(22)],
+      // Stick about 0.9 of the well's width long (Nathan's photo of a real ICP), leaning up to 15° each way (Nathan).
+      length: mm(54), tilt: 15 },
     { component: 'toggle-large', control: 'drift-warn', at: pt(383, 418) },
     { component: 'toggle-large', control: 'flir-mode', at: pt(537, 386.5) },
     { component: 'thumbwheel', control: 'sym', at: pt(27, 138), size: [mm(44), mm(148)] },
