@@ -60,7 +60,7 @@ test('steerpoint entry procedure is sourced to the official guide and runs its o
   const page = await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
   for (const id of ['current', 'stpt-open', 'select', 'lat', 'lon', 'elev', 'rtn', 'hud', 'course', 'verify'])
     assert.match(data, new RegExp("id:'" + id + "'"));
-  for (const target of ["icp.key-4',to:'in'", "icp.dcs-ud',to:'down'", "icp.dcs-lr',to:'rtn'", "ehsi.crs',to:190"]) assert.ok(data.includes(target), target);
+  for (const target of ["icp.key-4',to:'in'", "icp.dcs-ud',to:'down'", "icp.dcs-lr',to:'rtn'", "ehsi.crs',to:200"]) assert.ok(data.includes(target), target);
   assert.doesNotMatch(data, /chuck/i);
   assert.match(script, /prefers-reduced-motion/);
   for (const ev of ['cockpit:change', 'cockpit:indicate', 'cockpit:set']) assert.match(script, new RegExp(ev));
