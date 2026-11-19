@@ -139,3 +139,15 @@ test("opt-in reports validate context, respect limits and bypass inference", asy
     "ask_oversweep_report", { ...report, sources: [id] },
   ]);
 });
+
+test("admin report page needs the password and escapes stored text", async () => {
+  const rows = [{ id: 1, created_at: "2026-01-01", resolved: 0, data: JSON.stringify({ question: "<script>x</script>", answer: "a", stage: "answered", sources: [], history: [] }) }];
+  const db = { prepare: () => ({ run: async () => ({}), all: async () => ({ results: rows }), bind() { return this; } }) };
+  const get = auth => new Request("https://worker.example/admin/reports", { headers: auth ? { Authorization: "Basic " + btoa("me:pw") } : {} });
+  assert.equal((await handle(get(false), { ADMIN_PASSWORD: "pw", DB: db })).status, 401);
+  assert.equal((await handle(get(true), { DB: db })).status, 401);
+  const ok = await handle(get(true), { ADMIN_PASSWORD: "pw", DB: db });
+  assert.equal(ok.status, 200);
+  const html = await ok.text();
+  assert.ok(html.includes("&#60;script&#62;") && !html.includes("<script>x"));
+});
