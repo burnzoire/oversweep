@@ -201,7 +201,7 @@ export const icp: PanelSpec = {
   ],
   controls: [
     ...TOP.map(b => push(b.id, b.name, b.desc)),
-    ...KEYS.map(k => push(k.id, k.name, k.desc + ' With the CNI page showing, the priority functions; on any other page, data entry.')),
+    ...KEYS.map(k => push(k.id, k.name, k.desc)),
     push('rcl', 'RCL (recall) button', 'First press erases the last digit typed, like a backspace key; a second press rejects all the new data and restores what was there.'),
     push('entr', 'ENTR (enter) button', 'Accepts the new data into the highlighted DED field.'),
     push('wx', 'TFR WX button', 'Terrain-following radar weather mode. Not used in the Block 50.', 'DCS F-16C guide p. 100 (item 14)'),
@@ -218,7 +218,7 @@ export const icp: PanelSpec = {
     },
     {
       id: 'dcs-lr', name: 'Data control switch (DCS) RTN/SEQ', type: 'toggle', travel: 'horizontal', initial: 'center', source: src,
-      description: 'RTN returns the DED to the CNI page, erasing any data entered but not accepted. SEQ steps through the sub-pages or data fields of the page shown.',
+      description: 'RTN returns the DED to the CNI page, erasing any data entered but not accepted. SEQ steps through the options of the page shown: on the CNI page it toggles the wind display; on the T-ILS page it cycles the TACAN mode REC, T/R, A/A T/R.',
       positions: [
         { id: 'rtn', label: 'RTN', hold: 'momentary', spring: 'center' },
         { id: 'center', label: 'CENTRE' },

@@ -303,7 +303,7 @@ export interface HsiDisplay {
   courseSet: { at: Pt; cap: number; width: number };
   mode: { at: Pt; cap: number };
   /** Brief notice in front of the aircraft symbol (new mode, BRT); indicator `notice`, page `none` blank. */
-  notice: { at: Pt; cap: number; width?: number };
+  notice: { at: Pt; cap: number; charWidth?: number };
   /** Fixed legends drawn on the screen while it is on (NM, CRS, HDG). */
   legends: { text: string; at: Pt; cap: number; width?: number }[];
 }

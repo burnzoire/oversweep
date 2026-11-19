@@ -64,7 +64,7 @@ export const ehsi: PanelSpec = {
       'The to-from indicator is not shown in the guide image ("Not shown"); it is drawn as a small triangle on the course line, 60 px from the centre, which is a guess at its place and size.',
       'Mode legends: the image shows NAV; TCN is drawn the same way. The guide names the ILS modes NAV/PLS and TCN/PLS but does not show their legends, so they are not drawn yet.',
       'The notice above the aircraft (BRT in the image) shows only for a moment after a mode change or a brightness adjustment; procedures pick it. Warning flags are not drawn.',
-      'The HDG and CRS knobs are dials that turn without end. The guide labels a push function for each (ADJ HDG, BRT), but whether pushing does anything in DCS is unconfirmed, so pushes are not modelled. Each click turns a knob one step; what a step does is up to the procedure.',
+      'The HDG and CRS knobs are dials that turn without end. The guide documents a push for each (HDG in ATT mode: ADJ HDG; CRS: BRT); the pushes are not modelled on this page. Each click turns a knob one step; what a step does is up to the procedure.',
       'The small Phillips screws are drawn at the shared tiny-screw size (1.0 mm); the hex socket screws at 3.0 mm.',
       'The bearing and course arrowheads are measured from the image at about 16 px wide and 20 px long; the lines 5 px wide.',
       'Cold and dark, the screen is blank; pick "On" in the Instruments list (or a procedure turns it on).',
@@ -94,7 +94,7 @@ export const ehsi: PanelSpec = {
       courseSet: { at: rel(450, 84), cap: mm(24), width: mm(44) },
       mode: { at: rel(359, 457.5), cap: mm(19) },
       // BRT notice above the aircraft symbol (blob 255–292 x 235–248).
-      notice: { at: rel(273.5, 241.5), cap: mm(13), width: mm(37) },
+      notice: { at: rel(273.5, 241.5), cap: mm(13), charWidth: mm(37 / 3) },
       legends: [
         { text: 'NM', at: rel(88.5, 110.5), cap: mm(17), width: mm(23) },
         { text: 'CRS', at: rel(455.5, 110), cap: mm(18), width: mm(33) },
@@ -117,7 +117,7 @@ export const ehsi: PanelSpec = {
     rotary('crs', 'CRS (course set / brightness) knob', 'Sets the desired course: the course arrow and the CRS readout. Pushed, it adjusts the display brightness (BRT).'),
     {
       id: 'mode', name: 'M (instrument mode) button', type: 'pushbutton', initial: 'out', source: src,
-      description: 'Steps the instrument mode: NAV (steerpoint), TCN (TACAN station) and the ILS modes NAV/PLS and TCN/PLS. The new mode shows in front of the aircraft symbol for a second.',
+      description: 'Steps the instrument mode in the order NAV (steerpoint), NAV/PLS, TCN (TACAN station), TCN/PLS and back to NAV; the PLS modes add the ILS. The new mode shows in front of the aircraft symbol for a second.',
       positions: [{ id: 'out', label: 'OUT' }, { id: 'in', label: 'PRESSED', hold: 'momentary', spring: 'out' }],
     },
   ],
@@ -127,11 +127,11 @@ export const ehsi: PanelSpec = {
     { id: 'heading-set', name: 'Heading marker', type: 'display', unit: '°', rest: 0, range: [0, 359, 1], restNote: 'blank (screen off)', description: 'The heading set with the HDG knob; the autopilot follows it in HDG SEL.', source: src },
     { id: 'course', name: 'Course arrow', type: 'display', unit: '°', rest: 0, range: [0, 359, 1], restNote: 'blank (screen off)', description: 'Desired course, set with the CRS knob. The deviation bar and dots turn with it.', source: src },
     { id: 'bearing', name: 'Bearing pointer', type: 'display', unit: '°', rest: 0, range: [0, 359, 1], restNote: 'blank (screen off)', description: 'Bearing to the steerpoint (NAV) or to the TACAN station (TCN), when the signal is valid.', source: src },
-    { id: 'deviation', name: 'Course deviation bar', type: 'display', unit: 'dots', rest: 0, range: [-2.5, 2.5, 0.05], restNote: 'blank (screen off)', description: 'How far the jet is off the selected course. In NAV and TCN the inner dots are 5° and the outer dots 10°; with an ILS localizer (PLS modes) 1.25° and 2.5°. On the course arrow means on course.', source: src },
+    { id: 'deviation', name: 'Course deviation bar', type: 'display', unit: 'dots', rest: 0, range: [-2.5, 2.5, 0.05], restNote: 'blank (screen off)', description: 'How far the jet is off the selected course. In NAV and TCN the inner dots are 5° and the outer dots 10°; with an ILS localizer (PLS modes) 1.25° and 2.5°. On the course arrow means on course. Positive values put the bar right of the course arrow: the course lies to the right, so the jet is left of it.', source: src },
     { id: 'range', name: 'Range readout', type: 'display', unit: 'NM', rest: 0, range: [0, 999.9, 0.1], restNote: 'blank (screen off)', description: 'Range in nautical miles to the steerpoint (NAV) or to the TACAN station with valid DME (TCN); the boxed fourth digit is tenths.', source: src },
     { id: 'course-set', name: 'Course readout', type: 'display', unit: '°', rest: 0, range: [0, 359, 1], restNote: 'blank (screen off)', description: 'The desired course set with the CRS knob, in degrees.', source: src },
     { id: 'mode', name: 'Mode legend', type: 'display', restPage: 'nav', restNote: 'blank (screen off)', pages: [{ id: 'nav', label: 'NAV' }, { id: 'tcn', label: 'TCN' }], description: 'The instrument mode the M button selected: the navigation source the bearing pointer, range and deviation bar use.', source: src },
-    { id: 'notice', name: 'Notice', type: 'display', restPage: 'none', restNote: 'blank', pages: [{ id: 'none', label: 'Not shown' }, { id: 'brt', label: 'BRT' }, { id: 'nav', label: 'NAV' }, { id: 'tcn', label: 'TCN' }], description: 'A word shown in front of the aircraft symbol for about a second: the new mode after the M button, or BRT while the brightness is being set.', source: src },
+    { id: 'notice', name: 'Notice', type: 'display', restPage: 'none', restNote: 'blank', pages: [{ id: 'none', label: 'Not shown' }, { id: 'brt', label: 'BRT' }, { id: 'nav', label: 'NAV' }, { id: 'tcn', label: 'TCN' }, { id: 'adj-hdg', label: 'ADJ HDG' }], description: 'A word shown in front of the aircraft symbol for about a second: the new mode after the M button, BRT while the brightness is being set, or ADJ HDG while the compass heading is being adjusted.', source: src },
     { id: 'to-from', name: 'To-from indicator', type: 'display', restPage: 'none', restNote: 'blank (screen off)', pages: [{ id: 'none', label: 'Not shown' }, { id: 'to', label: 'TO' }, { id: 'from', label: 'FROM' }], description: 'TACAN only: points the same way as the course arrow when flying the course takes you to the station, the other way when it takes you away from it.', source: src },
   ],
 };

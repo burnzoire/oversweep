@@ -254,7 +254,10 @@ function hsi(spec: PanelSpec, h: HsiDisplay, value: (id: string) => number, page
     `<text x="${n(R.at[0] + R.width / 2 + 0.5 + tw / 2)}" y="${n(R.at[1] + R.cap / 2)}" font-size="${n(R.cap / 0.72)}" text-anchor="middle" fill="${PAPER}" stroke="none">${rd.tenth}</text></g></g>` +
     `<g data-indicator="course-set"><g data-digits="course-set">${text(C.at[0], C.at[1], cd.whole, C.cap, C.width)}</g></g>`;
   const mode = `<g data-indicator="mode">${pages('mode', pg => text(h.mode.at[0], h.mode.at[1], ind('mode')?.pages?.find(q => q.id === pg)?.label ?? '', h.mode.cap))}</g>`;
-  const notice = `<g data-indicator="notice">${pages('notice', pg => pg === 'none' ? '' : text(h.notice.at[0], h.notice.at[1], ind('notice')?.pages?.find(q => q.id === pg)?.label ?? '', h.notice.cap, h.notice.width))}</g>`;
+  const notice = `<g data-indicator="notice">${pages('notice', pg => {
+    const word = pg === 'none' ? '' : ind('notice')?.pages?.find(q => q.id === pg)?.label ?? '';
+    return word ? text(h.notice.at[0], h.notice.at[1], word, h.notice.cap, h.notice.charWidth ? h.notice.charWidth * word.length : undefined) : '';
+  })}</g>`;
   const on = `<path d="${lub}" stroke-width="${n(lubbers.width)}" stroke-linecap="butt"/>` + cardGroup +
     `<path d="${h.aircraft}" ${sw('heavy')}/>` + readouts + mode + notice + h.legends.map(l => text(l.at[0], l.at[1], l.text, l.cap, l.width)).join('');
   return `<g data-page-of="screen" data-page="on"${pageOf('screen') === 'on' ? '' : ' display="none"'}>${on}</g><g data-page-of="screen" data-page="off"${pageOf('screen') === 'off' ? '' : ' display="none"'}></g>`;

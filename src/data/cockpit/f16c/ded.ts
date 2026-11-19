@@ -78,7 +78,7 @@ export const ded: PanelSpec = {
       id: 'display', name: 'DED', type: 'display', restPage: 'off',
       pages: [{ id: 'off', label: 'Off (blank)' }, { id: 'cni', label: 'CNI page' }, { id: 't-ils', label: 'T-ILS page (TACAN/ILS)' }],
       restNote: 'blank',
-      description: 'Five lines of 24 characters. The CNI page (communications, navigation, IFF) is the home page: UHF and VHF frequencies, the selected steerpoint with its bearing, range and time, the system time, the IFF mode and code, and the TACAN channel. The ICP override buttons and, from the CNI page, the priority function keys call up other pages; DCS RTN returns to CNI. The T-ILS page (key 1) sets the TACAN mode, channel and band and the ILS frequency and course. Asterisks mark the field that new data goes into.',
+      description: 'Five lines of 24 characters. The CNI page (communications, navigation, IFF) is the home page: UHF and VHF frequencies or channels, the selected steerpoint number, the wind direction (magnetic) and speed, the system time (Zulu), the hack time when one is set, the IFF/transponder modes and Mode 3 code (not implemented in DCS), and the TACAN channel and band. The ICP override buttons and, from the CNI page, the priority function keys call up other pages; DCS RTN returns to CNI. The T-ILS page (key 1) sets the TACAN mode, channel and band and the ILS frequency and course. Asterisks mark the field that new data goes into.',
       source: src,
     },
   ],
