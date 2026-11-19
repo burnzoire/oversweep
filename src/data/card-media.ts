@@ -37,6 +37,15 @@ export const cardMedia: Record<string, CardMedia> = {
       sourceUrl: 'https://www.dvidshub.net/image/8942229/pacific-air-forces-f-16-demonstration-team-performs-avalon-australian-international-airshow-2025',
     },
   },
+  'procedure.dcs-f16c.tacan-recovery': {
+    summary: 'Bring the Viper home with the INS no longer trusted: look up the beacon, tune it on the ICP and DED, then fly the inbound course on the EHSI.',
+    photo: {
+      src: 'manual/cards/f16c-cockpit.webp',
+      alt: 'The F-16C instrument panel and head-up display from the pilot’s seat.',
+      credit: 'Cockpit — US Air Force (public domain)',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:F-16C_cockpit_m02006112700032.jpg',
+    },
+  },
   'module.principles-of-flight': {
     summary: 'How a wing makes lift, and how a jet turns, climbs and stalls.',
     photo: {
