@@ -28,22 +28,21 @@ const text = (t: string, x: number, y: number, cap: number, w?: number): Engravi
 const column = (t: string, x: number, y: number, pitch: number, cap: number, widths?: number[]): Engraving[] =>
   [...t].map((c, i) => text(c, x, y + i * pitch, cap, widths?.[i]));
 
-/** Plate outline with its corners cut on circles of radius `r` round the corner screws (all in px). */
+/** Plate edges notched on circles of radius CUT round the corner screws (all in px); Nathan asked for small cuts. */
 const SCREWS: [number, number][] = [[31, 26], [631, 26], [31, 451], [631, 451]];
-const CUT = 34;
+const CUT = 25;
 const f = (v: number) => +v.toFixed(1);
-/** Where the cut round screw (sx, sy) meets the vertical edge x and the horizontal edge y. */
-const cutAt = ([sx, sy]: [number, number], x: number, y: number) => ({
-  onX: f(sy - Math.sign(y - sy) * Math.sqrt(CUT ** 2 - (x - sx) ** 2)),
-  onY: f(sx + Math.sign(x - sx) * Math.sqrt(CUT ** 2 - (y - sy) ** 2)),
-});
-const [tl, tr, bl, br] = [cutAt(SCREWS[0], 50, 2), cutAt(SCREWS[1], 610, 2), cutAt(SCREWS[2], 50, 478), cutAt(SCREWS[3], 610, 478)];
+/** Where the notch round screw (sx, sy) starts and ends on the vertical edge x. */
+const notch = ([sx, sy]: [number, number], x: number) => {
+  const dy = Math.sqrt(CUT ** 2 - (x - sx) ** 2);
+  return { top: f(sy - dy), bot: f(sy + dy) };
+};
+const [tl, tr, bl, br] = [notch(SCREWS[0], 50), notch(SCREWS[1], 610), notch(SCREWS[2], 50), notch(SCREWS[3], 610)];
 const arc = `A${CUT} ${CUT} 0 0 0`;
 /** OFF blocks between the wheels: y 217–267, out to x 10 and 650, corner radius 4. */
-const FACE = `M${tl.onY} 2H${tr.onY}${arc} 610 ${tr.onX}V217H646Q650 217 650 221V263Q650 267 646 267H610V${br.onX}${arc} ${br.onY} 478` +
-  `H${bl.onY}${arc} 50 ${bl.onX}V267H14Q10 267 10 263V221Q10 217 14 217H50V${tl.onX}${arc} ${tl.onY} 2Z`;
-const [btl, btr] = [cutAt(SCREWS[0], 50, 8), cutAt(SCREWS[1], 610, 8)];
-const BAR = `M${btl.onY} 8H${btr.onY}${arc} 610 ${btr.onX}V81Q610 87 604 87H56Q50 87 50 81V${btl.onX}${arc} ${btl.onY} 8Z`;
+const FACE = `M50 2H610V${tr.top}${arc} 610 ${tr.bot}V217H646Q650 217 650 221V263Q650 267 646 267H610V${br.top}${arc} 610 ${br.bot}V478` +
+  `H50V${bl.bot}${arc} 50 ${bl.top}V267H14Q10 267 10 263V221Q10 217 14 217H50V${tl.bot}${arc} 50 ${tl.top}Z`;
+const BAR = `M50 8H610V${tr.top}${arc} 610 ${tr.bot}V81Q610 87 604 87H56Q50 87 50 81V${tl.bot}${arc} 50 ${tl.top}Z`;
 
 /* Keypad: caps 65 px square on a 90 px pitch (panel-edge rows 140/230/320, columns 120/210/300). */
 const COLS = [120.5, 210.5, 300.5], ROWS = [142.5, 233.5, 323.5];
@@ -59,8 +58,8 @@ const MSEL_X = 389, RCL_X = 418;
 const RIDGE_W = 6;
 const RIDGE_RECTS = [
   // Placed from Nathan's marked-up side-by-side: full-height ridges between the key columns, a short one between
-  // 9 and M-SEL, one between 3/6 and RCL/ENTR, and the cross ridges running from inside ICP out past RCL/ENTR.
-  ...[[165, 108, 358], [256, 108, 358], [345, 186, 356], [360, 105, 279]].map(([x, y0, y1]) => [x - RIDGE_W / 2, y0, RIDGE_W, y1 - y0]),
+  // 9 and M-SEL (below the 6/9 cross ridge only), one between 3/6 and RCL/ENTR, and the cross ridges running from inside ICP out past RCL/ENTR.
+  ...[[165, 108, 358], [256, 108, 358], [345, 277.5, 356], [360, 105, 279]].map(([x, y0, y1]) => [x - RIDGE_W / 2, y0, RIDGE_W, y1 - y0]),
   ...[187.5, 277.5].map(y => [96, y - RIDGE_W / 2, 352, RIDGE_W]),
 ].map(([x, y, w, h]) => `<rect x="${mm(x)}" y="${mm(y)}" width="${mm(w)}" height="${mm(h)}" rx="${mm(2)}"`);
 const BUMPS = [[212, 188], [287, 278.5], [317, 278.5]].map(([x, y]) => `<circle cx="${mm(x)}" cy="${mm(y)}" r="${mm(5)}"`);
