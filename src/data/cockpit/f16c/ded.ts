@@ -36,13 +36,69 @@ const tcnLines = (o: { mode: 'REC' | 'T/R'; bcn?: string; chan: string; band: 'X
   o.onChan ? `CHAN{*}${o.edit ? `{${o.chan.padStart(3)}}` : o.chan.padStart(3)}{*}   FRQ  108.10 ` : `CHAN${o.chan.padStart(4)}    FRQ  108.10 `,
   `BAND ${o.band}(0)   CRS    0°   `,
 ];
-const cniTcn = (t: string) => [
-  ' UHF  330.50  STPT ^  4 ',
+const cniLines = (t: string, stpt = 4) => [
+  ` UHF  330.50  STPT ^${String(stpt).padStart(3)} `,
   '                257°010 ',
   ' VHF  147.25   14:14:18 ',
   '                0:03:50 ',
   ` M   4   1337      ${t}`,
 ];
+const cniTcn = (t: string) => cniLines(t);
+
+/**
+ * STPT page states for the steerpoint entry procedure, laid out as the guide's STPT figure (p. 207) and its DEST DIR
+ * entry figures (pp. 212-213) show them: line 1 the steerpoint number (asterisks round it, the up/down field arrow)
+ * and MAN sequencing, then LAT, LNG, ELEV and TOS. An empty steerpoint reads N 00°00.000', E000°00.000', 0FT, 00:00:00.
+ * A field being typed is highlighted whole with its asterisks. The characters typed so far are drawn left to right
+ * (the ° . ' marks as they are reached); the guide shows only the finished entry, so partial states are assumed.
+ */
+type SField = 'num' | 'lat' | 'lon' | 'elev';
+interface SData { n: number; lat: string; lon: string; elev: string; tos: string }
+const SP4: SData = { n: 4, lat: "N 35°44.295'", lon: "E037°02.898'", elev: '823FT', tos: '09:01:35' };
+const SP5_EMPTY: SData = { n: 5, lat: "N 00°00.000'", lon: "E000°00.000'", elev: '0FT', tos: '00:00:00' };
+const SP5_LAT = "N 36°35.822'", SP5_LON = "E036°35.014'", SP5_ELEV = '892FT';
+/** A field's cells: columns either side of the value are blank, asterisk boxes (focus) or the highlighted whole (typing). */
+const stptField = (value: string, width: number, focus: boolean, typed: boolean, pad = '') =>
+  typed ? `{*${pad}${value.padEnd(width)}*}` : focus ? `{*}${pad}${value}{*}` : ` ${pad}${value} `;
+const stptLines = (d: SData, focus?: SField, typed?: string) => {
+  const on = (f: SField) => focus === f, ed = (f: SField) => focus === f && typed !== undefined;
+  const num = ed('num') ? ` ${typed!.padStart(2)}` : ` ${String(d.n).padStart(2)}`;
+  return [
+    '      STPT ' + (ed('num') ? `{*${num}*}` : on('num') ? `{*}${num}{*}` : ` ${num} `) + '^ MAN',
+    '    LAT' + stptField(ed('lat') ? typed! : d.lat, 12, on('lat'), ed('lat')),
+    '    LNG' + stptField(ed('lon') ? typed! : d.lon, 12, on('lon'), ed('lon')),
+    '   ELEV' + stptField(ed('elev') ? `${typed}FT`.padStart(5) : d.elev.padStart(5), 5, on('elev'), ed('elev'), '  '),
+    '    TOS ' + d.tos,
+  ];
+};
+/** Hemisphere letter, digits and the marks between them, as far as they are typed (the marks appear once reached). */
+const typedPosition = (hemi: string, digits: string, deg: number) => {
+  const gap = deg === 2 ? ' ' : '';
+  const d = digits.slice(0, deg), m = digits.slice(deg, deg + 2), f = digits.slice(deg + 2);
+  return `${hemi}${digits ? gap : ''}${d}${d.length === deg ? '°' : ''}${m}${m.length === 2 ? '.' : ''}${f}${f.length === 3 ? "'" : ''}`;
+};
+export interface SPage { id: string; label: string; lines: string[] }
+/** Steerpoint 5 is entered as N 36°35.822', E036°35.014', 892 ft: the figure values of the guide's STPT page. */
+const stptPages = (): SPage[] => {
+  const withLat = { ...SP5_EMPTY, lat: SP5_LAT }, withLon = { ...withLat, lon: SP5_LON }, done = { ...withLon, elev: SP5_ELEV };
+  const out: SPage[] = [
+    { id: 'cni-5', label: 'CNI page, steerpoint 5 selected', lines: cniLines('T 21X', 5) },
+    { id: 'stpt-4', label: 'STPT page: steerpoint 4, asterisks on the number', lines: stptLines(SP4, 'num') },
+    { id: 'stpt-5-edit', label: 'STPT: typing 5', lines: stptLines(SP5_EMPTY, 'num', '5') },
+    { id: 'stpt-5-empty', label: 'STPT: steerpoint 5 selected, empty', lines: stptLines(SP5_EMPTY, 'num') },
+    { id: 'stpt-lat-0', label: 'STPT: asterisks on LAT', lines: stptLines(SP5_EMPTY, 'lat') },
+  ];
+  const field = (key: SField, text: (i: number) => string, n: number, before: SData, after: SData, name: string, next?: SField) => {
+    for (let i = 1; i <= n; i++) out.push({ id: `stpt-${key}-${i}`, label: `STPT: typing ${name} (key ${i} of ${n})`, lines: stptLines(before, key, text(i)) });
+    out.push({ id: `stpt-${key}-done`, label: `STPT: ${name} accepted`, lines: stptLines(after, key) });
+    if (next) out.push({ id: `stpt-${next}-0`, label: `STPT: asterisks on ${next === 'lon' ? 'LNG' : 'ELEV'}`, lines: stptLines(after, next) });
+  };
+  field('lat', i => typedPosition('N', '3635822'.slice(0, i - 1), 2), 8, SP5_EMPTY, withLat, 'latitude', 'lon');
+  field('lon', i => typedPosition('E', '03635014'.slice(0, i - 1), 3), 9, withLat, withLon, 'longitude', 'elev');
+  field('elev', i => '892'.slice(0, i), 3, withLon, done, 'elevation');
+  return out;
+};
+const STPT_PAGES = stptPages();
 const { pt, mm } = tracer(PX);
 const src = 'DCS F-16C guide p. 101';
 const C: [number, number] = [141, 59];
@@ -66,6 +122,7 @@ export const ded: PanelSpec = {
       'The DED font is drawn with a bold monospace face, not the display\'s own dot shapes. The up/down field arrow (CNI line 1) is drawn as two triangles.',
       'The asterisks that bracket the selected field show in the guide as lit boxes with a dark asterisk; they are drawn inverse. The left box on the T-ILS page spills into the next cell in the guide; it is drawn in its own cell.',
       'The TACAN states (T-ILS pages and the two extra CNI pages) follow the guide\'s tuning figures on p. 237. How the display shows a digit as it is typed (here right-aligned and highlighted, as the figure shows 21) and the first asterisk position after the page opens are read from that figure. The ILS side is the figure\'s own (ON, CMD STRG, 108.10, course 0°) and is not part of the TACAN procedure.',
+      'The STPT page states (steerpoint 5, empty and as entered) follow the guide\'s STPT figure (p. 207) and DEST DIR entry figures (pp. 212–213): column places from the figures. The guide does not show a field part-typed, so the characters typed so far are drawn left to right, with the ° . and \' marks added as they are reached, and the elevation as typed digits before FT; that, and whether the asterisks stay on a field after ENTR, are assumed. TOS is left at 00:00:00.',
       'Cold and dark, the DED is blank; the CNI page is shown when the reader picks it.',
       'The instrument panel around the bezel is not in the figure.',
     ],
@@ -100,6 +157,8 @@ export const ded: PanelSpec = {
         { id: 'tils-tr-2-edit', lines: tcnLines({ mode: 'T/R', chan: '2', band: 'X', onChan: true, edit: true }) },
         { id: 'tils-tr-21-edit', lines: tcnLines({ mode: 'T/R', chan: '21', band: 'X', onChan: true, edit: true }) },
         { id: 'tils-tr-21x', lines: tcnLines({ mode: 'T/R', bcn: 'DAN', chan: '21', band: 'X', onChan: true }) },
+        // Steerpoint entry procedure states (STPT page, steerpoint 5).
+        ...STPT_PAGES.map(({ id, lines }) => ({ id, lines })),
       ],
     } },
   ],
@@ -111,9 +170,10 @@ export const ded: PanelSpec = {
         { id: 'cni-blank', label: 'CNI page, MIDS LVT off (no TACAN field)' }, { id: 'cni-1x', label: 'CNI page, TACAN 1X' },
         { id: 'tils-rec-1x', label: 'T-ILS: REC, channel 1, band X' }, { id: 'tils-tr-1x', label: 'T-ILS: T/R, channel 1, band X' },
         { id: 'tils-tr-1x-chan', label: 'T-ILS: asterisks on CHAN' }, { id: 'tils-tr-2-edit', label: 'T-ILS: typing 2' },
-        { id: 'tils-tr-21-edit', label: 'T-ILS: typing 21' }, { id: 'tils-tr-21x', label: 'T-ILS: 21X, beacon DAN' }],
+        { id: 'tils-tr-21-edit', label: 'T-ILS: typing 21' }, { id: 'tils-tr-21x', label: 'T-ILS: 21X, beacon DAN' },
+        ...STPT_PAGES.map(({ id, label }) => ({ id, label }))],
       restNote: 'blank',
-      description: 'Five lines of 24 characters. The CNI page (communications, navigation, IFF) is the home page: UHF and VHF frequencies or channels, the selected steerpoint number, the wind direction (magnetic) and speed, the system time (Zulu), the hack time when one is set, the IFF/transponder modes and Mode 3 code (not implemented in DCS), and the TACAN channel and band. The ICP override buttons and, from the CNI page, the priority function keys call up other pages; DCS RTN returns to CNI. The T-ILS page (key 1) sets the TACAN mode, channel and band and the ILS frequency and course. Asterisks mark the field that new data goes into.',
+      description: 'Five lines of 24 characters. The CNI page (communications, navigation, IFF) is the home page: UHF and VHF frequencies or channels, the selected steerpoint number, the wind direction (magnetic) and speed, the system time (Zulu), the hack time when one is set, the IFF/transponder modes and Mode 3 code (not implemented in DCS), and the TACAN channel and band. The ICP override buttons and, from the CNI page, the priority function keys call up other pages; DCS RTN returns to CNI. The STPT page (key 4) shows the selected steerpoint\'s position, elevation and time over steerpoint, and edits them. The T-ILS page (key 1) sets the TACAN mode, channel and band and the ILS frequency and course. Asterisks mark the field that new data goes into.',
       source: src,
     },
   ],

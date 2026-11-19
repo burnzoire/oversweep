@@ -18,6 +18,8 @@ export interface ProcedureStep {
   confirm?: string;
   /** Turn a knob until the readout shows `to`, `per` degrees a click. */
   turn?: { control: string; to: number; per: number };
+  /** Keys typed in order (control ids, `icp.key-N` or `icp.entr`), each pressed in turn, with the DED page after each. */
+  type?: { keys: string[]; pages: string[] };
   /** A cross-check question: the reader picks one answer; `answer` indexes `options`. */
   ask?: { question: string; options: string[]; answer: number; right: string; wrong: string };
   /** Encyclopedia records this step sends the reader to (slugs, shown as links). */
@@ -33,7 +35,7 @@ export interface AircraftProcedure {
   status: 'public-preview' | 'review-only';
   simVersion: string;
   /** Which script drives the cockpit panels. */
-  model: 'engine-start' | 'tacan-recovery';
+  model: 'engine-start' | 'tacan-recovery' | 'steerpoint-entry';
   /** The scenario shown above the steps, and the closing heading. */
   intro: string;
   description: string;
@@ -123,6 +125,45 @@ const tacan: AircraftProcedure = {
   ]
 };
 procedures.push(tacan);
+
+/** Digits typed on the ICP then ENTR; the DED page after each key (`stpt-<field>-1`…, then `-done`) unless given. */
+const typing = (field: string, digits: string, pages?: string[]) => ({
+  keys: [...digits].map(d => `icp.key-${d}`).concat('icp.entr'),
+  pages: pages ?? [...digits].map((_, i) => `stpt-${field}-${i + 1}`).concat(`stpt-${field}-done`),
+});
+const steerpoint: AircraftProcedure = {
+  id: 'procedure.dcs-f16c.steerpoint-entry',
+  slug: 'steerpoint-entry',
+  airframe: 'f-16c',
+  title: 'F-16C — Steerpoint Entry & Navigation',
+  objective: 'Enter a new steerpoint with the ICP and DED, make it the selected steerpoint and check it on the HUD and EHSI.',
+  applicability: 'DCS F-16C Block 50 (circa 2007); official guide edition 16 August 2026. In-simulator verification pending.',
+  simVersion: 'DCS build not yet verified',
+  status: 'public-preview',
+  model: 'steerpoint-entry',
+  intro: 'Scenario: you are airborne in the Syria map, heading 197°, in the NAV master mode with the INS aligned and steerpoint 4 selected. Your lead passes a new point to navigate to, steerpoint 5: N 36°35.822′, E 036°35.014′, elevation 892 ft. The panels beside the steps are a teaching simulation, not connected to DCS; the aircraft’s position, ranges and bearings are illustrative.',
+  description: 'Illustrated DCS F-16C steerpoint entry: type a new steerpoint’s position into the DED with the ICP, then check it on the HUD and EHSI.',
+  complete: 'Steerpoint 5 entered and active: you are navigating to it',
+  sources: 'Eagle Dynamics — DCS F-16C Viper Early Access Guide (EN, 16 August 2026): “Steerpoints” and “STPT DED Page” pp. 205–208, “Editing a Steerpoint” pp. 212–213, “Navigation by Steerpoints”, the HUD and the EHSI pp. 228–232.',
+  steps: [
+    {id:'current',section:'Before you start',title:'Note the selected steerpoint',control:'DED CNI page, HUD, EHSI',action:'Read the selected steerpoint on the CNI page, then on the HUD and the EHSI.',expect:'CNI: STPT 4. HUD: 19 to the left of the chevron and 4 to its right (19 NM to steerpoint 4). EHSI, in NAV mode: range 19.0 NM and the bearing pointer at 195°. These are what change when steerpoint 5 is selected.',evidence:GUIDE+' 228–231',panels:['ded','hud','ehsi'],confirm:'Steerpoint 4 is selected'},
+    {id:'data',section:'Before you start',title:'Read the steerpoint data',control:'Brief',action:'Take the number and position from the brief: steerpoint 5, N 36°35.822′, E 036°35.014′, 892 ft.',expect:'The DED takes latitude as degrees, minutes and thousandths of a minute (DD°MM.MMM′), longitude the same with three digits of degrees (DDD°MM.MMM′), and elevation in feet above sea level. A steerpoint is at least those four things: number, latitude, longitude, elevation.',caution:'Steerpoints 1–25 are the navigation steerpoints. Markpoints, destinations and threats use other number ranges.',evidence:GUIDE+' 205, 207',panels:[],confirm:'I have the data'},
+    {id:'stpt-open',section:'Select the steerpoint',title:'Open the STPT page',control:'ICP 4 / STPT',action:'With the CNI page showing, press 4 / STPT on the ICP keypad.',expect:'The DED shows the STPT page for the selected steerpoint: its number with the asterisks round it, then LAT, LNG, ELEV and TOS.',caution:'The STPT page edits the selected steerpoint. To edit a steerpoint without selecting it, use the DEST DIR page instead.',evidence:GUIDE+' 207, 212',panels:['icp','ded'],do:{control:'icp.key-4',to:'in'}},
+    {id:'select',section:'Select the steerpoint',title:'Select steerpoint 5',control:'ICP keypad, ENTR',action:'Press 5, then ENTR.',expect:'Steerpoint 5 is now the selected steerpoint. It is empty: N 00°00.000′, E000°00.000′, 0 FT, so any range or bearing to it is meaningless until you enter its position. (The ICP rocker steps the number up or down instead of typing it.)',evidence:GUIDE+' 207 (item 1), 212 (steps 2–3)',panels:['icp','ded'],type:typing('5','5',['stpt-5-edit','stpt-5-empty'])},
+    {id:'lat-field',section:'Enter the position',title:'Move the asterisks to LAT',control:'ICP DCS switch',action:'Move the DCS switch down to bring the asterisks round the LAT field.',expect:'Asterisks bracket the latitude: what you type on the keypad goes into that field.',evidence:GUIDE+' 207, 212 (step 4)',panels:['icp','ded'],do:{control:'icp.dcs-ud',to:'down'}},
+    {id:'lat',section:'Enter the position',title:'Enter the latitude',control:'ICP keypad, ENTR',action:'Press 2 for north, then 3 6 3 5 8 2 2, then ENTR.',expect:'The seven digits are 36°35.822: two of degrees, two of minutes, three of thousandths. The field shows what you type, highlighted; after ENTR it reads N 36°35.822′ and is no longer highlighted.',caution:'The first key sets the hemisphere: 2 for north, 8 for south in latitude; 6 for east, 4 for west in longitude. RCL instead of ENTR rejects what you typed.',evidence:GUIDE+' 207 (item 2), 212 (steps 5–7)',panels:['icp','ded'],type:typing('lat','23635822')},
+    {id:'lon-field',section:'Enter the position',title:'Move the asterisks to LNG',control:'ICP DCS switch',action:'Move the DCS switch down again.',expect:'The asterisks move to the longitude field.',evidence:GUIDE+' 212 (step 8)',panels:['icp','ded'],do:{control:'icp.dcs-ud',to:'down'}},
+    {id:'lon',section:'Enter the position',title:'Enter the longitude',control:'ICP keypad, ENTR',action:'Press 6 for east, then 0 3 6 3 5 0 1 4, then ENTR.',expect:'The eight digits are 036°35.014: three of degrees, so the leading zero is typed, then two of minutes and three of thousandths. After ENTR the field reads E036°35.014′.',evidence:GUIDE+' 207 (item 3), 212 (steps 9–11)',panels:['icp','ded'],type:typing('lon','603635014')},
+    {id:'elev-field',section:'Enter the position',title:'Move the asterisks to ELEV',control:'ICP DCS switch',action:'Move the DCS switch down again.',expect:'The asterisks move to the elevation field.',evidence:GUIDE+' 213 (step 12)',panels:['icp','ded'],do:{control:'icp.dcs-ud',to:'down'}},
+    {id:'elev',section:'Enter the position',title:'Enter the elevation',control:'ICP keypad, ENTR',action:'Press 8 9 2, then ENTR.',expect:'ELEV reads 892FT. The elevation is in feet above mean sea level, with no leading zeros. The desired time over steerpoint (TOS) below it is optional and not needed to navigate to the point; leave it.',evidence:GUIDE+' 207 (items 4–5), 213 (steps 13–17)',panels:['icp','ded'],type:typing('elev','892')},
+    {id:'rtn',section:'Check the steerpoint',title:'Return to the CNI page',control:'ICP DCS switch',action:'Move the DCS switch to RTN.',expect:'The DED returns to the CNI page, which now reads STPT 5: the selected steerpoint is the one you entered.',evidence:GUIDE+' 207 (STPT page controls), 103 (CNI page, item 9)',panels:['icp','ded'],do:{control:'icp.dcs-lr',to:'rtn'}},
+    {id:'hud',section:'Check the steerpoint',title:'Check the HUD',control:'HUD',action:'Read the steerpoint number and distance beside the chevron, the time to go and the steerpoint diamond.',expect:'31 to the left of the chevron and 5 to its right: 31 NM to steerpoint 5. The diamond sits 12° left of the nose and a little below it, and the steering cue line points just left of 12 o’clock: the steerpoint is ahead and slightly left. Time to go is about 4:49 at this ground speed.',caution:'The distance beside the chevron is the range across the ground to the steerpoint; the slant range above the time to go is the straight-line distance.',evidence:GUIDE+' 229 (items 1–4)',panels:['hud'],confirm:'HUD shows steerpoint 5'},
+    {id:'course',section:'Check the steerpoint',title:'Set the course on the EHSI',control:'EHSI CRS knob',action:'Read the bearing pointer and range, then turn the CRS knob until the course reads 185°, the bearing to the steerpoint (one click is 5°).',expect:'In NAV mode the EHSI gives the bearing and range to the selected steerpoint: bearing pointer 185°, range 31.4 NM, matching the HUD. The course was still 195°, so the deviation bar sat off to one side; at 185° it centres.',evidence:GUIDE+' 230–232 (items 1, 3, 6–10, 14, 16)',panels:['ehsi'],turn:{control:'ehsi.crs',to:185,per:5}},
+    {id:'verify',section:'Check the steerpoint',title:'Confirm steerpoint 5 is active',control:'CNI page, HUD, EHSI',action:'Compare the three displays.',expect:'The CNI page reads STPT 5, the HUD shows 31 NM to steerpoint 5 and the EHSI shows 31.4 NM with the bearing pointer on the course: all three agree on the steerpoint you entered. Sequencing is MAN, so the selected steerpoint changes only when you change it.',caution:'If the HUD or EHSI still shows the old range (19 NM), steerpoint 4 is still selected: go back to the STPT page and check the number.',evidence:GUIDE+' 208 (item 6), 228–232',panels:['ded','hud','ehsi'],confirm:'Steerpoint 5 is active'},
+  ]
+};
+procedures.push(steerpoint);
+
 export const visibleProcedures = procedures.filter(p => p.status === 'public-preview' || reviewTrainers);
 export const procedureRoute = (p: AircraftProcedure) => `manual/aircraft-procedures/${p.airframe}/${p.slug}/`;
 export const airframes = [{slug:'f-16c',title:'F-16C Viper'}];
