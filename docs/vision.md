@@ -21,10 +21,11 @@ The intended website is oversweep.com.
 
 ## Scope
 
-Three connected collections: Manual, Encyclopedia and Training Library.
-Reference, Interactive, Exploratory, Trainer and Encyclopedia blocks compose
-pages within one content system. The Training Library indexes embedded experiences;
-it does not duplicate their content or define a second application.
+Oversweep has three reader-facing pillars. **Learn** opens the Manual & Training
+Library for explanation and guided procedures. **Practice** surfaces standalone
+exercises with feedback. **Explore** opens the Encyclopedia for lookup and discovery.
+The [content catalogue](content-catalogue.md#content-taxonomy) defines where each
+kind of content belongs and how the pillars link to it.
 
 Initial subjects and examples are proposals in the catalogue, not promised releases.
 The first vertical slice is the existing [Case III Tomcat carrier trainer](https://case-three-tomcat.burnzoire.chatgpt.site/),
