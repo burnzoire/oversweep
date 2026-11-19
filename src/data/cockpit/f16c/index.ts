@@ -25,6 +25,8 @@ import { hydPressure } from './hyd-pressure.ts';
 import { icp } from './icp.ts';
 import { ded } from './ded.ts';
 import { ehsi } from './ehsi.ts';
+import { hud } from './hud.ts';
+import { hudControl } from './hud-control.ts';
 
 /**
  * DCS F-16C cockpit catalogue: areas and panels in the order the official guide
@@ -47,6 +49,7 @@ export const f16cCockpit: AircraftCockpit = {
       id: 'instrument-panel', title: 'Instrument panel', panels: [
         { id: 'aoa-indexer', title: 'AoA indexer', page: 44 },
         { id: 'ar-nws-indicator', title: 'AR status / NWS indicator', page: 45 },
+        { id: 'hud', title: 'Head-up display (HUD)', page: 90, spec: hud },
         { id: 'icp', title: 'Integrated control panel (ICP)', page: 99, spec: icp },
         { id: 'ded', title: 'Data entry display (DED)', page: 101, spec: ded },
         { id: 'left-eyebrow', title: 'Left eyebrow lights', page: 45, spec: leftEyebrow },
@@ -126,6 +129,7 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'anti-ice', title: 'ANTI ICE & ANT SEL switches', page: 78 },
         { id: 'avionics-power', title: 'AVIONICS POWER panel', page: 78, spec: avionicsPower },
         { id: 'misc-switches', title: 'Voice message, zeroize, seat adjust and nuclear consent switches', page: 80 },
+        { id: 'hud-control', title: 'HUD control panel', page: 94, spec: hudControl },
       ],
     },
     {

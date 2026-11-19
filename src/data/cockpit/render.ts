@@ -9,7 +9,8 @@
  * the client engine flips them. Lamps are `<g data-indicator="<id>">` with a
  * `.lens` rect that lights when the group gets the `lit` class.
  */
-import type { ControlDef, Cut, Dial, DrumCounter, HsiDisplay, IndicatorDef, PanelSpec, Placement, Pt, TextDisplay } from './types';
+import type { ControlDef, Cut, Dial, DrumCounter, HsiDisplay, HudDisplay, HudTape, IndicatorDef, PanelSpec, Placement, Pt, ReadoutFormat, TextDisplay } from './types';
+import { formatReadout } from './readout.ts';
 import {
   FASTENERS, FONT, INK, LAMPS, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, painted, PAINTS, lampModuleFrame, lampRoundBezel, n,
   thumbwheelArt, rockerBase, rockerCap, hatBase, hatLever,
@@ -109,8 +110,12 @@ function gauge(spec: PanelSpec, dial: Dial, indicator: string | undefined, value
 /** What the page needs to move a reading: a needle's scale or a counter's drums, and the range to try. */
 export type Reading =
   | { kind: 'needle'; scale: Dial['scale']; range: [number, number, number] }
-  /** Moves sideways by `per` mm a unit (HSI deviation bar). */
-  | { kind: 'shift'; per: number; range: [number, number, number] }
+  /** Moves sideways (or along y with `axis: 'y'`) by `per` mm a unit (HSI deviation bar, HUD symbols). */
+  | { kind: 'shift'; per: number; axis?: 'y'; range: [number, number, number] }
+  /** A printed number (HUD data fields). */
+  | { kind: 'number'; format: ReadoutFormat; range: [number, number, number] }
+  /** A moving tape and its readout box (HUD velocity, altitude, heading): the tape moves `per` mm a unit along `axis`. */
+  | { kind: 'tape'; per: number; axis: 'x' | 'y'; format: ReadoutFormat; range: [number, number, number] }
   /** A digit readout: `digits` whole digits, zero-padded, plus a boxed tenths digit when `tenths`. */
   | { kind: 'digits'; digits: number; tenths?: boolean; range: [number, number, number] }
   /** A display that shows one of several pages. */
@@ -134,6 +139,22 @@ export function readings(spec: PanelSpec): Record<string, Reading> {
       out['course-set'] = { kind: 'digits', digits: 3, range: ind('course-set')?.range ?? [0, 359, 1] };
       for (const id of ['screen', 'mode', 'to-from', 'notice']) page(id);
     }
+    if (p.component === 'hud') {
+      const h = p.hud, r = (id: string, d: [number, number, number]) => ind(id)?.range ?? d;
+      const shift = (id: string, per: number, axis: 'x' | 'y', d: [number, number, number]) => { out[id] = { kind: 'shift', per, ...(axis === 'y' ? { axis } : {}), range: r(id, d) }; };
+      shift('fpm-azimuth', h.deg, 'x', [-10, 10, 0.1]); shift('fpm-elevation', -h.deg, 'y', [-20, 5, 0.1]);
+      shift('pitch', h.deg, 'y', [-90, 90, 0.5]); shift('steering-cue', h.deg, 'x', [-10, 10, 0.1]);
+      shift('steerpoint-azimuth', h.deg, 'x', [-15, 15, 0.1]); shift('steerpoint-elevation', -h.deg, 'y', [-25, 10, 0.1]);
+      out.roll = { kind: 'needle', scale: [[-180, 180], [180, -180]], range: r('roll', [-180, 180, 1]) };
+      out.steering = { kind: 'needle', scale: [[-180, -180], [180, 180]], range: r('steering', [-180, 180, 1]) };
+      const tape = (id: string, t: HudTape) => { out[id] = { kind: 'tape', per: t.axis === 'y' ? t.per : -t.per, axis: t.axis, format: t.readout.format, range: r(id, [t.from, t.to, 1]) }; };
+      tape('velocity', h.velocity); tape('altitude', h.altitude); tape('heading', h.heading);
+      for (const id of ['screen', 'velocity-mode']) page(id);
+      for (const f of h.fields) {
+        if (ind(f.indicator)?.pages) page(f.indicator);
+        else out[f.indicator] = { kind: 'number', format: f.format ?? {}, range: r(f.indicator, [0, 999, 1]) };
+      }
+    }
     if (p.component !== 'gauge') continue;
     const { dial } = p;
     const lo = dial.scale[0][0], hi = dial.scale[dial.scale.length - 1][0];
@@ -148,6 +169,9 @@ export function readings(spec: PanelSpec): Record<string, Reading> {
 /** Indicator ids the HSI picture draws (see `HsiDisplay`). */
 export const HSI_INDICATORS = ['screen', 'heading', 'heading-set', 'course', 'bearing', 'deviation', 'range', 'course-set', 'mode', 'to-from', 'notice'] as const;
 
+/** Indicator ids every HUD picture draws (see `HudDisplay`); its data fields add their own. */
+export const HUD_INDICATORS = ['screen', 'fpm-azimuth', 'fpm-elevation', 'pitch', 'roll', 'steering-cue', 'steering', 'steerpoint-azimuth', 'steerpoint-elevation', 'velocity', 'altitude', 'heading', 'velocity-mode'] as const;
+
 /** Every indicator a placement shows (lamps, needles, counters, displays). */
 export function placementIndicators(p: Placement): string[] {
   switch (p.component) {
@@ -158,6 +182,7 @@ export function placementIndicators(p: Placement): string[] {
     case 'counter': return [p.counter.indicator];
     case 'text-display': return [p.indicator];
     case 'hsi': return [...HSI_INDICATORS];
+    case 'hud': return [...HUD_INDICATORS, ...p.hud.fields.map(f => f.indicator)];
     default: return [];
   }
 }
@@ -267,6 +292,100 @@ function hsi(spec: PanelSpec, h: HsiDisplay, value: (id: string) => number, page
   return `<g data-page-of="screen" data-page="on"${pageOf('screen') === 'on' ? '' : ' display="none"'}>${on}</g><g data-page-of="screen" data-page="off"${pageOf('screen') === 'off' ? '' : ' display="none"'}></g>`;
 }
 
+const HUD_PEN = 0.5;
+
+/** HUD lettering: fixed-width, `pitch` mm a character, centred on y. */
+function hudText(x: number, y: number, s: string, font: HudDisplay['font'], anchor: 'start' | 'middle' | 'end' = 'start') {
+  return `<text x="${n(x)}" y="${n(y + font.cap / 2)}" font-family="${MONO}" font-size="${n(font.pitch / 0.602)}" text-anchor="${anchor}" fill="${INK}" stroke="none">${esc(s)}</text>`;
+}
+
+/** A tape's ticks and labels at reading zero, relative to its origin (the page moves them by the reading). */
+function hudTape(t: HudTape, font: HudDisplay['font']) {
+  const dir = t.axis === 'y' ? -1 : 1;
+  const P = (a: number, c: number) => t.axis === 'y' ? `${n(c)} ${n(a)}` : `${n(a)} ${n(c)}`;
+  const on = (u: number, k: number) => Math.abs(u / k - Math.round(u / k)) < 1e-9;
+  let ticks = '', labels = '';
+  for (let i = 0; ; i++) {
+    const u = t.from + i * t.minor;
+    if (u > t.to + 1e-9) break;
+    const a = dir * u * t.per;
+    ticks += `M${P(a, t.edge)}L${P(a, t.edge + (on(u, t.major) ? t.majorLength : t.minorLength))}`;
+    if (on(u, t.label)) {
+      const shown = t.axis === 'x' ? ((u % 360) + 360) % 360 : u;
+      const s = String(Math.round(shown / t.labelDiv)).padStart(t.labelPad, '0') + (t.labelSuffix ?? '');
+      const [x, y] = t.axis === 'y' ? [t.labelOffset, a] : [a, t.labelOffset];
+      labels += hudText(x, y, s, font, 'middle');
+    }
+  }
+  return { ticks: `<path d="${ticks}" stroke-width="${HUD_PEN}" stroke-linecap="butt" fill="none"/>`, labels };
+}
+
+function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, pageOf: (id: string) => string) {
+  const ind = (id: string) => spec.indicators.find(i => i.id === id);
+  const pages = (id: string, draw: (page: string) => string) => (ind(id)?.pages ?? []).map(pg =>
+    `<g data-page-of="${id}" data-page="${pg.id}"${pg.id === pageOf(id) ? '' : ' display="none"'}>${draw(pg.id)}</g>`).join('');
+  const word = (id: string, pg: string) => pg === 'none' ? '' : ind(id)?.pages?.find(q => q.id === pg)?.label ?? '';
+  const D = h.deg, F = h.font, pen = `stroke-width="${HUD_PEN}" fill="none"`;
+  // `k` scales the page's move for this copy (−1 undoes a parent's shift).
+  const shift = (id: string, axis: 'x' | 'y', per: number, body: string, k = 1) =>
+    `<g data-indicator="${id}"><g data-shift="${id}"${k === 1 ? '' : ` data-k="${k}"`} transform="translate(${axis === 'x' ? `${n(value(id) * per * k)} 0` : `0 ${n(value(id) * per * k)}`})">${body}</g></g>`;
+  const turned = (id: string, deg: number, body: string) => `<g data-indicator="${id}"><g data-needle="${id}" transform="rotate(${n(deg)})">${body}</g></g>`;
+  const clip = `hud-glass-${spec.id}`;
+  // Attitude bars: solid climb bars with their ticks down, dashed dive bars with their ticks up, labels toward the horizon.
+  const L = h.ladder;
+  let bars = `<path d="M${n(-L.horizon)} 0H${n(-L.gap)}M${n(L.gap)} 0H${n(L.horizon)}" ${pen}/>`;
+  for (let p = -90; p <= 90; p += 5) {
+    if (p === 0 || (Math.abs(p) > 60 && p % 10)) continue;
+    const y = -p * D, up = p > 0, t = up ? L.tick : -L.tick, x1 = L.gap + L.length;
+    const dash = up ? '' : ` stroke-dasharray="${n(L.dash[0])} ${n(L.dash[1])}"`;
+    bars += [-1, 1].map(s => `<path d="M${n(s * L.gap)} ${n(y)}H${n(s * x1)}" ${pen}${dash}/><path d="M${n(s * L.gap)} ${n(y)}V${n(y + t)}" ${pen}/>` +
+      hudText(s * (x1 - L.labelInset), y + (up ? L.labelDrop[0] : -L.labelDrop[1]), String(Math.abs(p)), F, 'middle')).join('');
+  }
+  const fpm = `<circle r="${n(h.fpm.r)}" ${pen}/><path d="M${n(-h.fpm.wing)} 0H${n(-h.fpm.r)}M${n(h.fpm.r)} 0H${n(h.fpm.wing)}M0 ${n(-h.fpm.r)}V${n(-h.fpm.tail)}" ${pen}/>`;
+  const cue = shift('steering-cue', 'x', D, `<circle r="${n(h.steering.r)}" ${pen}/>` + turned('steering', value('steering'), `<path d="M0 ${n(-h.steering.r)}V${n(-h.steering.line)}" ${pen}/>`));
+  // The bars sit on the boresight by pitch alone; they are caged to the marker in azimuth and turn with roll about it
+  // (shifted to the marker's height, turned, shifted back).
+  const ladder = shift('fpm-azimuth', 'x', D, shift('fpm-elevation', 'y', -D,
+    turned('roll', -value('roll'), shift('fpm-elevation', 'y', -D, shift('pitch', 'y', D, bars), -1))));
+  const attitude = ladder + shift('fpm-azimuth', 'x', D, shift('fpm-elevation', 'y', -D, fpm + cue));
+  const b = h.boresight.arm, dm = h.diamond;
+  const fixed = `<path d="M${n(-b)} 0H${n(b)}M0 ${n(-b)}V${n(b)}" ${pen}/>`;
+  const steerpoint = shift('steerpoint-azimuth', 'x', D, shift('steerpoint-elevation', 'y', -D, `<path d="M0 ${n(-dm)}L${n(dm)} 0L0 ${n(dm)}L${n(-dm)} 0Z" ${pen}/>`));
+  // Tapes: ticks and labels move inside windows fixed on the HUD; the index and readout box stay put (the box masks what is under it).
+  const tape = (id: string, t: HudTape) => {
+    const [ax, ay] = t.at, deep = 40, along = t.axis === 'y';
+    const rect = (a0: number, a1: number) => along ? `M${n(-deep)} ${n(a0)}H${n(deep)}V${n(a1)}H${n(-deep)}Z` : `M${n(a0)} ${n(-deep)}H${n(a1)}V${n(deep)}H${n(a0)}Z`;
+    const lw = t.labelWindow ?? t.window, per = along ? t.per : -t.per, ra = t.readout, art = hudTape(t, F);
+    const moving = (body: string) => `<g data-shift="${id}" transform="translate(${along ? `0 ${n(value(id) * per)}` : `${n(value(id) * per)} 0`})">${body}</g>`;
+    return `<clipPath id="${clip}-${id}-t"><path d="${rect(-t.window, t.window)}"/></clipPath>` +
+      `<clipPath id="${clip}-${id}-l"><path clip-rule="evenodd" d="${rect(-lw, lw)}${t.labelGap ? rect(-t.labelGap, t.labelGap) : ''}"/></clipPath>` +
+      `<g data-indicator="${id}"><g transform="translate(${n(ax)} ${n(ay)})">` +
+      `<g clip-path="url(#${clip}-${id}-t)">${moving(art.ticks)}</g><g clip-path="url(#${clip}-${id}-l)">${moving(art.labels)}</g></g>` +
+      `<path d="${t.index}" ${pen}/><path d="${t.box}" stroke-width="${HUD_PEN}" fill="${PAPER}"/>` +
+      `<g data-number="${id}">${hudText(ra.at[0], ra.at[1], formatReadout(value(id), ra.format), F, ra.anchor)}</g></g>`;
+  };
+  const R = h.roll, [cx, cy] = R.centre;
+  const rollTicks = R.ticks.map(a => {
+    const r1 = R.longAt.includes(a) ? R.r[2] : R.r[1], s = Math.sin(a * Math.PI / 180), c = Math.cos(a * Math.PI / 180);
+    return `M${n(cx + R.r[0] * s)} ${n(cy + R.r[0] * c)}L${n(cx + r1 * s)} ${n(cy + r1 * c)}`;
+  }).join('');
+  const [ca, cb, cw] = R.caret;
+  const rollArt = `<path d="${rollTicks}" ${pen}/><g transform="translate(${n(cx)} ${n(cy)})">` +
+    turned('roll', -value('roll'), `<path d="M0 ${n(ca)}L${n(cw / 2)} ${n(cb)}H${n(-cw / 2)}Z" ${pen}/>`) + '</g>';
+  const fields = h.fields.map(f => {
+    const pre = f.prefix ? hudText(f.prefix.at[0], f.prefix.at[1], f.prefix.text, F) : '';
+    const body = ind(f.indicator)?.pages ? pages(f.indicator, pg => hudText(f.at[0], f.at[1], word(f.indicator, pg), F, f.anchor))
+      : `<g data-number="${f.indicator}">${hudText(f.at[0], f.at[1], formatReadout(value(f.indicator), f.format), F, f.anchor)}</g>`;
+    return pre + `<g data-indicator="${f.indicator}">${body}</g>`;
+  }).join('');
+  const mode = `<g data-indicator="velocity-mode">${pages('velocity-mode', pg => hudText(h.velocityMode[0], h.velocityMode[1], word('velocity-mode', pg), F, 'middle'))}</g>`;
+  const on = `<g clip-path="url(#${clip})">` + fixed + steerpoint + attitude + rollArt +
+    tape('velocity', h.velocity) + tape('altitude', h.altitude) + tape('heading', h.heading) + mode +
+    h.boxes.map(d => `<path d="${d}" ${pen}/>`).join('') + fields + '</g>';
+  return `<clipPath id="${clip}"><path d="${h.glass}"/></clipPath>` +
+    `<g data-page-of="screen" data-page="on"${pageOf('screen') === 'on' ? '' : ' display="none"'}>${on}</g><g data-page-of="screen" data-page="off"${pageOf('screen') === 'off' ? '' : ' display="none"'}></g>`;
+}
+
 /** Every indicator a dial shows: its needle, its pointers and its counter. */
 export function dialIndicators(p: Extract<Placement, { component: 'gauge' }>) {
   return [...(p.indicator ? [p.indicator] : []), ...(p.dial.pointers ?? []).map(q => q.indicator), ...(p.dial.counter ? [p.dial.counter.indicator] : [])];
@@ -307,6 +426,12 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       const value = (id: string) => state[id] !== undefined ? Number(state[id]) : ind(id)?.rest ?? 0;
       const pageOf = (id: string) => state[id] ?? ind(id)?.restPage ?? ind(id)?.pages?.[0]?.id ?? '';
       return `<g data-indicator="screen"><path class="lens" d="${p.hsi.screen}" stroke="none"/></g>` + at(p.at, hsi(spec, p.hsi, value, pageOf), ' data-art="hsi"');
+    }
+    case 'hud': {
+      const ind = (id: string) => spec.indicators.find(i => i.id === id);
+      const value = (id: string) => state[id] !== undefined ? Number(state[id]) : ind(id)?.rest ?? 0;
+      const pageOf = (id: string) => state[id] ?? ind(id)?.restPage ?? ind(id)?.pages?.[0]?.id ?? '';
+      return at(p.at, `<g data-indicator="screen"><path class="lens" d="${p.hud.glass}" stroke="none"/></g>` + hud(spec, p.hud, value, pageOf), ' data-art="hud"');
     }
     case 'dzus': case 'screw': case 'screw-medium': case 'screw-small': case 'screw-hex': case 'screw-tiny':
       if (p.component === 'dzus' && p.cut) {
@@ -513,6 +638,12 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         const xs = nums.filter((_, i) => i % 2 === 0), ys = nums.filter((_, i) => i % 2 === 1);
         const x0 = Math.min(...xs), y0 = Math.min(...ys);
         return [{ kind: 'indicator', id: 'screen', box: [x0, y0, Math.max(...xs) - x0, Math.max(...ys) - y0] }];
+      }
+      case 'hud': {
+        const nums = (p.hud.glass.match(/-?\d*\.?\d+/g) ?? []).map(Number);
+        const xs = nums.filter((_, i) => i % 2 === 0), ys = nums.filter((_, i) => i % 2 === 1);
+        const x0 = Math.min(...xs), y0 = Math.min(...ys);
+        return [{ kind: 'indicator', id: 'screen', box: [x + x0, y + y0, Math.max(...xs) - x0, Math.max(...ys) - y0] }];
       }
       case 'gear-handle': {
         const [w, h] = p.size, bh = p.travel + h;
