@@ -8,7 +8,13 @@ Ask “What is the tower freq for Sochi?” after deployment. The cited Sim maps
 
 Run the handler tests with `node --test tests/ask/worker.test.mjs`. These tests simulate the Workers AI binding.
 
-## Review submitted reports
+## Report dashboard
+
+Reports are also stored in a D1 database (`ask-oversweep-reports`, created automatically on the next deploy) and listed at `https://ask-oversweep.burnzoire.workers.dev/admin/reports`. The page is protected by HTTP Basic auth: any username, with the Worker secret `ADMIN_PASSWORD` as the password. Without that secret the page always returns 401.
+
+One-time setup: in Cloudflare open Workers & Pages → `ask-oversweep` → Settings → Variables and Secrets → Add, type **Secret**, name `ADMIN_PASSWORD`, value a long random password (a password manager's generator is fine), then Deploy. Deploys keep the secret. After the next **Deploy Ask Oversweep Worker** run, submit a test report and open the page. Cloudflare Access is not used because it can only protect a whole `workers.dev` hostname, which would block the public `/ask` route; it becomes an option if the Worker moves to a custom domain.
+
+## Review submitted reports (logs)
 
 The report control appears once both the updated site and Worker are live.
 In Cloudflare, open the Ask Oversweep Worker's Observability logs and filter for

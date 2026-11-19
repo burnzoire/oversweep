@@ -1,4 +1,5 @@
 import { createRetriever } from "./retrieval.mjs";
+import { handleAdmin, saveReport } from "./admin.mjs";
 const site = "https://www.oversweep.com";
 const dailyQuota = /\b3036\b|daily free allocation/i;
 const errorCode = error => {
@@ -16,6 +17,7 @@ const validSourceIds = (ids, limit) => Array.isArray(ids) && ids.length <= limit
 export function createHandler(corpus, prepared) {
   const retrieve = corpus ? createRetriever(corpus, prepared) : undefined;
   return async function handle(request, env) {
+    if (new URL(request.url).pathname === "/admin/reports") return handleAdmin(request, env);
     const origin = request.headers.get("Origin");
     const headers = {
       "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -66,11 +68,13 @@ export function createHandler(corpus, prepared) {
       const key = request.headers.get("CF-Connecting-IP") ?? "unknown";
       const { success } = await env.ASK_REPORT_LIMIT.limit({ key });
       if (!success) return json({}, 429);
-      console.info("ask_oversweep_report", {
+      const event = {
         question, history: history.map(({ role, content }) => ({ role, content })),
         answer, stage, sources: [...new Set(sources)],
         topic, revision,
-      });
+      };
+      console.info("ask_oversweep_report", event);
+      await saveReport(env, event);
       return new Response(null, { status: 204, headers });
     }
     const { question, previous, history = [], topic, ids } = input ?? {};
