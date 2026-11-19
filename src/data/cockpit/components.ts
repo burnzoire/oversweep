@@ -63,6 +63,10 @@ export const FASTENERS = {
   screw: { r: 3.4 },
   'screw-medium': { r: 2.8 },
   'screw-small': { r: 2.1 },
+  /** Socket head cap screw with a hexagon socket (EHSI bezel). */
+  'screw-hex': { r: 3.0 },
+  /** Small Phillips screw on a lower layer. */
+  'screw-tiny': { r: 1.0 },
 } as const;
 
 export function fastener(kind: keyof typeof FASTENERS) {
@@ -71,6 +75,15 @@ export function fastener(kind: keyof typeof FASTENERS) {
     const w = r * 0.16;
     return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.76)}" ${sw('fine')}/>` +
       `<path d="M${n(-w)} ${n(-r * 0.76)}V${n(r * 0.76)}M${n(w)} ${n(-r * 0.76)}V${n(r * 0.76)}" ${sw('medium')}/>`;
+  }
+  if (kind === 'screw-hex') {
+    const h = r * 0.46, hex = Array.from({ length: 6 }, (_, k) => { const a = Math.PI / 3 * k; return `${n(h * Math.cos(a))} ${n(h * Math.sin(a))}`; });
+    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'medium') + `<circle r="${n(r * 0.8)}" ${sw('fine')}/>` +
+      `<path d="M${hex.join('L')}Z" fill="${INK}" stroke="none"/>`;
+  }
+  if (kind === 'screw-tiny') {
+    const c = r * 0.55;
+    return `<circle r="${r}" fill="${PAPER}" ${sw('fine')}/>` + `<path d="M${n(-c)} 0H${n(c)}M0 ${n(-c)}V${n(c)}" ${sw('medium')}/>`;
   }
   const c = r * 0.42;
   return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'medium') + `<circle r="${n(r * 0.66)}" ${sw('fine')}/>` +
@@ -317,6 +330,8 @@ export const KNOBS = {
    * pointing end. The whole knob turns.
    */
   'knob-radio-large': { r: 12.4, lobes: 0, ridge: [0, 0], lever: true },
+  /** Plain round knob with a domed top and no index (F-16C EHSI HDG and CRS: they turn without end). */
+  'knob-plain': { r: 7.7, lobes: 0, ridge: [0, 0], plain: true },
 } as const;
 
 /** A KNOBS body pointing at 12 o'clock; the renderer turns it to the detent. */
@@ -332,6 +347,7 @@ export function knobArt(art: keyof typeof KNOBS) {
       // Indicator: only the white index set into the rim (nothing at the centre).
       `<rect x="${k(-0.075)}" y="${k(-1.04)}" width="${k(0.15)}" height="${k(0.33)}" rx="${k(0.02)}" fill="${PAPER}" ${sw('heavy')}/>`;
   }
+  if ('plain' in KNOBS[art]) return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.78)}" ${sw('fine')}/>`;
   let rim: string;
   if (!lobes) rim = `<circle r="${r}" fill="${PAPER}"/>`;
   else {
@@ -511,6 +527,10 @@ export const PUSHES = {
   'push-round-large': { r: 6.6, cap: 4.5 },
   /** Large flat cap in a thin rim (F-16C TEST panel FIRE & OHEAT DETECT, MAL & IND LTS). */
   'push-round-flat': { r: 6.3, cap: 5.6 },
+  /** Plain round cap with a printed legend (F-16C ICP WX). */
+  'push-round-plain': { r: 5.5, cap: 4.9 },
+  /** Wide flat cap with printed legend in a thin rim (F-16C ICP override and master mode buttons). */
+  'push-round-wide': { r: 6.9, cap: 6.2 },
   /** Gear panel DN LOCK REL. */
   'push-round-xl': { r: 7.8, cap: 6.0 },
   /** Gear panel EMER STORES JETTISON: a large flat cap with a circle-and-square mark at its centre. */
@@ -760,4 +780,75 @@ export function gaugeBezel(bezel: number, face: number) {
 /** Hub cap over the needle root. */
 export function gaugeHub(r: number) {
   return cased(`<circle r="${n(r)}" fill="${PAPER}"/>`, 'medium') + `<circle r="${n(r * 0.45)}" ${sw('fine')}/>`;
+}
+
+/* ------------------------------------------------- thumbwheels, rockers, hats */
+
+/**
+ * Knurled thumbwheel standing out of a slot, seen square-on (w, h centred on
+ * the origin): a rounded outline with ribs that crowd together towards the
+ * top and bottom as the wheel curves away. `phase` (0–1, one rib pitch) turns
+ * the ribs, so each detent shows them in a different place.
+ */
+export const THUMBWHEEL = { ribs: 18 } as const;
+export function thumbwheelArt([w, h]: [number, number], phase: number) {
+  const r = Math.min(w, h) * 0.22, x0 = -w / 2 + 0.7, x1 = w / 2 - 0.7;
+  let ribs = '';
+  for (let k = 0; k < THUMBWHEEL.ribs; k++) {
+    const a = -Math.PI / 2 + ((k + phase) / THUMBWHEEL.ribs) * Math.PI;
+    const y = (h / 2 - 0.8) * Math.sin(a);
+    if (Math.abs(y) > h / 2 - 1) continue;
+    ribs += `M${n(x0)} ${n(y)}H${n(x1)}`;
+  }
+  return cased(`<rect x="${n(-w / 2)}" y="${n(-h / 2)}" width="${n(w)}" height="${n(h)}" rx="${n(r)}" fill="${PAPER}"/>`, 'heavy') +
+    `<path d="${ribs}" ${sw('medium')}/>`;
+}
+
+/** Rocker housing (w, h centred on the origin). */
+export function rockerBase([w, h]: [number, number]) {
+  return cased(`<rect x="${n(-w / 2)}" y="${n(-h / 2)}" width="${n(w)}" height="${n(h)}" rx="1.2" fill="${PAPER}"/>`, 'heavy');
+}
+
+/**
+ * Rocker cap with its up and down arrows, filled; `tilt` -1 pressed at the top, 1 at the bottom, 0 at rest (the
+ * pressed half sinks). Arrow proportions from the F-16C ICP (guide p. 99): `arrow` heads 0.27 w wide from
+ * 0.34 h to 0.17 h out with 0.11 w shafts to 0.03 h; `spike` triangles 0.26 w wide from 0.3 h to 0.054 h.
+ */
+export function rockerCap([w, h]: [number, number], tilt: number, arrows: 'arrow' | 'spike') {
+  const cw = w - 2, ch = h - 2;
+  const one = (s: number) => arrows === 'spike'
+    ? `M0 ${n(s * 0.3 * h)}L${n(0.13 * w)} ${n(s * 0.054 * h)}H${n(-0.13 * w)}Z`
+    : `M0 ${n(s * 0.339 * h)}L${n(0.134 * w)} ${n(s * 0.172 * h)}H${n(0.053 * w)}V${n(s * 0.032 * h)}H${n(-0.053 * w)}V${n(s * 0.172 * h)}H${n(-0.134 * w)}Z`;
+  let s = cased(`<rect x="${n(-cw / 2)}" y="${n(-ch / 2)}" width="${n(cw)}" height="${n(ch)}" rx="0.8" fill="${PAPER}"/>`, 'medium') +
+    `<path d="${one(-1)}${one(1)}" fill="${INK}" stroke="none"/>`;
+  if (tilt) {
+    const y0 = tilt < 0 ? -ch / 2 + 0.6 : 0.3, y1 = tilt < 0 ? -0.3 : ch / 2 - 0.6;
+    s += `<rect x="${n(-cw / 2 + 0.6)}" y="${n(y0)}" width="${n(cw - 1.2)}" height="${n(y1 - y0)}" rx="0.5" fill="none" ${sw('fine')}/>`;
+  }
+  return s;
+}
+
+/** Four-way switch well (radius r) with its inner lip. */
+export function hatBase(r: number) {
+  return cased(`<circle r="${n(r)}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.86)}" ${sw('fine')}/>`;
+}
+
+/** Four-way switch lever top (w, h), moved (dx, dy) off centre. */
+/**
+ * Hat lever seen square-on: a square stick on a pivot under the panel. Centred it shows only its top face; held in a
+ * direction it leans, so the top face moves by (dx, dy) and the side facing the lean shows between the stick's root
+ * (a square at the pivot) and the top face.
+ */
+export function hatLever([w, h]: [number, number], dx: number, dy: number) {
+  const top = `<rect x="${n(dx - w / 2)}" y="${n(dy - h / 2)}" width="${n(w)}" height="${n(h)}" rx="0.7" fill="${PAPER}"/>`;
+  if (!dx && !dy) return cased(top, 'medium');
+  // Outline of the root square swept to the top square (their convex hull), drawn first as the stick's side.
+  const [x0, x1, y0, y1] = [-w / 2, w / 2, -h / 2, h / 2];
+  const hull = dy ? (dy < 0
+    ? `M${n(x0)} ${n(y1)}L${n(x0)} ${n(y0 + dy)}H${n(x1)}L${n(x1)} ${n(y1)}Z`
+    : `M${n(x0)} ${n(y0)}L${n(x0)} ${n(y1 + dy)}H${n(x1)}L${n(x1)} ${n(y0)}Z`)
+    : (dx < 0
+    ? `M${n(x1)} ${n(y0)}L${n(x0 + dx)} ${n(y0)}V${n(y1)}L${n(x1)} ${n(y1)}Z`
+    : `M${n(x0)} ${n(y0)}L${n(x1 + dx)} ${n(y0)}V${n(y1)}L${n(x0)} ${n(y1)}Z`);
+  return cased(`<path d="${hull}" fill="${PAPER}"/>`, 'medium') + cased(top, 'medium');
 }

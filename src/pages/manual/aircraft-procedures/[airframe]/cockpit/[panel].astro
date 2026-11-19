@@ -69,14 +69,20 @@ const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns whe
       {spec.indicators.length > 0 && <>
         <h2 class="ci-head">{gauges ? 'Instruments' : 'Lights'}</h2>
         <ul class="ci-list">{spec.indicators.map(i => {
-          const t = tries[i.id], v = i.rest ?? t?.range[0];
+          const t = tries[i.id], v = i.rest ?? (t && 'range' in t ? t.range[0] : undefined);
+          if (t?.kind === 'page') return <li class="ci-gauge">
+            <button type="button" data-cockpit-pick={spec.id} data-id={i.id}>{i.name}</button>
+            <select class="ci-page" aria-label={`Show on ${i.name}`} data-page-reading={`${spec.id}.${i.id}`}>
+              {t.pages.map(p => <option value={p.id} selected={p.id === t.rest}>{p.label}</option>)}
+            </select>
+          </li>;
           return <li class:list={[t && 'ci-gauge']}>
             <button type="button" data-cockpit-pick={spec.id} data-id={i.id}>{i.name}</button>
             {t && <output data-readout={`${spec.id}.${i.id}`}>{v?.toLocaleString('en-US')} {i.unit}</output>}
             {t && <input type="range" class="ci-slider" aria-label={`Set ${i.name}`} data-reading={`${spec.id}.${i.id}`} min={t.range[0]} max={t.range[1]} step={t.range[2]} value={v} />}
           </li>;
         })}</ul>
-        {Object.keys(tries).length > 0 && <p class="ci-meta">Drag a slider to set an instrument's reading.</p>}
+        {Object.keys(tries).length > 0 && <p class="ci-meta">{Object.values(tries).some(t => t.kind === 'page') ? "Drag a slider or pick a page to see what a display shows when it is working." : "Drag a slider to set an instrument's reading."}</p>}
       </>}
     </aside>
   </div>
@@ -117,6 +123,7 @@ const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns whe
 .ci-list span{color:var(--color-muted);font-size:.88em;text-align:right}
 .ci-list li.ci-gauge{flex-wrap:wrap;row-gap:0;padding-bottom:.3rem}
 .ci-list output{font-variant-numeric:tabular-nums;font-weight:700;text-align:right}
+.ci-page{font:inherit;font-size:.9rem;min-height:2.25rem;max-width:12rem}
 .ci-slider{flex:1 0 100%;margin:0;min-height:2.25rem;accent-color:var(--color-link)}
 @media(max-width:60rem){.cockpit-page{grid-template-columns:1fr}}
 </style>

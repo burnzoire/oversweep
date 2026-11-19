@@ -9,9 +9,10 @@
  * the client engine flips them. Lamps are `<g data-indicator="<id>">` with a
  * `.lens` rect that lights when the group gets the `lit` class.
  */
-import type { ControlDef, Cut, Dial, DrumCounter, PanelSpec, Placement, Pt } from './types';
+import type { ControlDef, Cut, Dial, DrumCounter, HsiDisplay, IndicatorDef, PanelSpec, Placement, Pt, TextDisplay } from './types';
 import {
   FASTENERS, FONT, INK, LAMPS, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, painted, PAINTS, lampModuleFrame, lampRoundBezel, n,
+  thumbwheelArt, rockerBase, rockerCap, hatBase, hatLever,
   gaugeBezel, gaugeHub, drumStrip, paddlePointerArt, PADDLE_POINTER, wedgeNeedleArt, gearKnob, gearSlot, leverSlot, slotLeverArt, SLOT_LEVER, knobArt, needleArt, polar, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
 } from './components.ts';
 import { drumPositions, scaleAngle } from './dial.ts';
@@ -108,15 +109,31 @@ function gauge(spec: PanelSpec, dial: Dial, indicator: string | undefined, value
 /** What the page needs to move a reading: a needle's scale or a counter's drums, and the range to try. */
 export type Reading =
   | { kind: 'needle'; scale: Dial['scale']; range: [number, number, number] }
+  /** Moves sideways by `per` mm a unit (HSI deviation bar). */
+  | { kind: 'shift'; per: number; range: [number, number, number] }
+  /** A digit readout: `digits` whole digits, zero-padded, plus a boxed tenths digit when `tenths`. */
+  | { kind: 'digits'; digits: number; tenths?: boolean; range: [number, number, number] }
+  /** A display that shows one of several pages. */
+  | { kind: 'page'; pages: { id: string; label: string }[]; rest: string }
   | { kind: 'counter'; drums: number; fixed: number; unit: number; roll: number; still?: boolean; range: [number, number, number] };
 
 /** Every gauge and counter reading on a panel, by indicator id. */
 export function readings(spec: PanelSpec): Record<string, Reading> {
   const out: Record<string, Reading> = {};
   const ind = (id: string) => spec.indicators.find(i => i.id === id);
+  const page = (id: string) => { const i = ind(id); if (i?.pages) out[id] = { kind: 'page', pages: i.pages, rest: i.restPage ?? i.pages[0].id }; };
   const drums = (c: DrumCounter) => { out[c.indicator] = { kind: 'counter', drums: c.drums, fixed: c.fixed, unit: c.unit, roll: c.roll, ...(c.still ? { still: true } : {}), range: ind(c.indicator)?.range ?? [0, c.unit * 10 ** (c.drums - c.fixed) - c.unit, c.unit / 10] }; };
   for (const p of spec.placements) {
     if (p.component === 'counter') drums(p.counter);
+    if (p.component === 'text-display') page(p.indicator);
+    if (p.component === 'hsi') {
+      const turn = (id: string, sign: number) => { out[id] = { kind: 'needle', scale: [[0, 0], [360, 360 * sign]], range: ind(id)?.range ?? [0, 359, 1] }; };
+      turn('heading', -1); turn('heading-set', 1); turn('course', 1); turn('bearing', 1);
+      out.deviation = { kind: 'shift', per: p.hsi.course.dot, range: ind('deviation')?.range ?? [-2.5, 2.5, 0.1] };
+      out.range = { kind: 'digits', digits: 3, tenths: true, range: ind('range')?.range ?? [0, 999.9, 0.1] };
+      out['course-set'] = { kind: 'digits', digits: 3, range: ind('course-set')?.range ?? [0, 359, 1] };
+      for (const id of ['screen', 'mode', 'to-from', 'notice']) page(id);
+    }
     if (p.component !== 'gauge') continue;
     const { dial } = p;
     const lo = dial.scale[0][0], hi = dial.scale[dial.scale.length - 1][0];
@@ -126,6 +143,124 @@ export function readings(spec: PanelSpec): Record<string, Reading> {
     if (dial.counter) drums(dial.counter);
   }
   return out;
+}
+
+/** Indicator ids the HSI picture draws (see `HsiDisplay`). */
+export const HSI_INDICATORS = ['screen', 'heading', 'heading-set', 'course', 'bearing', 'deviation', 'range', 'course-set', 'mode', 'to-from', 'notice'] as const;
+
+/** Every indicator a placement shows (lamps, needles, counters, displays). */
+export function placementIndicators(p: Placement): string[] {
+  switch (p.component) {
+    case 'lamp-module': return p.lamps.map(l => l.indicator);
+    case 'lamp-round': return [p.indicator];
+    case 'push-square': case 'gear-handle': return p.indicator ? [p.indicator] : [];
+    case 'gauge': return dialIndicators(p);
+    case 'counter': return [p.counter.indicator];
+    case 'text-display': return [p.indicator];
+    case 'hsi': return [...HSI_INDICATORS];
+    default: return [];
+  }
+}
+
+/** Monospace face for character displays. */
+const MONO = "'DejaVu Sans Mono','Menlo','Consolas','Liberation Mono',monospace";
+
+/** One display character centred on (x, y); `^` is the up/down field arrow. */
+function displayChar(x: number, y: number, ch: string, cap: number, width: number, fill: string) {
+  if (ch === '^') {
+    const a = width * 0.55, t = cap * 0.48, g = cap * 0.05;
+    return `<path d="M${n(x)} ${n(y - t - g)}L${n(x + a)} ${n(y - g)}H${n(x - a)}ZM${n(x)} ${n(y + t + g)}L${n(x + a)} ${n(y + g)}H${n(x - a)}Z" fill="${fill}" stroke="none"/>`;
+  }
+  return `<text x="${n(x)}" y="${n(y + cap / 2)}" font-family="${MONO}" font-weight="700" font-size="${n(cap / 0.73)}" text-anchor="middle" textLength="${n(width)}" lengthAdjust="spacingAndGlyphs" fill="${fill}" stroke="none">${esc(ch)}</text>`;
+}
+
+/** Character display: bezel, screen, and one group per page (only `current` shown). */
+function textDisplay(d: TextDisplay, ind: IndicatorDef | undefined, id: string, current: string) {
+  const [bw, bh] = d.bezel, [sw_, sh] = d.screen;
+  let s = cased(`<rect x="${n(-bw / 2)}" y="${n(-bh / 2)}" width="${n(bw)}" height="${n(bh)}" rx="1.6" fill="${PAPER}"/>`, 'heavy') +
+    `<g data-indicator="${id}"><rect class="lens" x="${n(-sw_ / 2)}" y="${n(-sh / 2)}" width="${n(sw_)}" height="${n(sh)}" rx="0.8" ${sw('medium')}/></g>`;
+  const [dx, dy] = d.pitch, ch = d.cap * 1.45;
+  for (const pg of ind?.pages ?? []) {
+    const lines = d.pages.find(q => q.id === pg.id)?.lines ?? [];
+    let g = '';
+    lines.forEach((line, row) => {
+      let col = 0, inverse = false;
+      for (const c of line) {
+        if (c === '{') { inverse = true; continue; }
+        if (c === '}') { inverse = false; continue; }
+        const x = d.origin[0] + col * dx, y = d.origin[1] + row * dy;
+        if (inverse) g += `<rect x="${n(x - dx / 2)}" y="${n(y - ch / 2)}" width="${n(dx)}" height="${n(ch)}" fill="${INK}" stroke="none"/>`;
+        if (c !== ' ') g += displayChar(x, y, c, d.cap, d.width, inverse ? PAPER : INK);
+        col++;
+      }
+    });
+    s += `<g data-page-of="${id}" data-page="${pg.id}"${pg.id === current ? '' : ' display="none"'}>${g}</g>`;
+  }
+  return s;
+}
+
+/** Pointer along +y = up (nose), turned by its group: a shaft from r0 to the arrow, an arrowhead at r1, and a tail. */
+function hsiPointer(head: [number, number], tail: [number, number], [aw, al]: [number, number], width: number) {
+  return `<path d="M0 ${n(-head[0])}V${n(-(head[1] - al * 0.6))}M0 ${n(tail[0])}V${n(tail[1])}" stroke-width="${n(width)}" stroke-linecap="butt"/>` +
+    `<path d="M0 ${n(-head[1])}L${n(aw / 2)} ${n(-(head[1] - al))}H${n(-aw / 2)}Z" fill="${INK}" stroke="none"/>`;
+}
+
+/** Digits for a readout value: whole part zero-padded to `digits`, and the tenths digit. */
+export function readoutDigits(v: number, digits: number, tenths: boolean) {
+  const t = Math.round(Math.max(0, v) * (tenths ? 10 : 1));
+  const whole = tenths ? Math.floor(t / 10) : t;
+  return { whole: String(whole % 10 ** digits).padStart(digits, '0'), tenth: tenths ? String(t % 10) : '' };
+}
+
+function hsi(spec: PanelSpec, h: HsiDisplay, value: (id: string) => number, pageOf: (id: string) => string) {
+  const ind = (id: string) => spec.indicators.find(i => i.id === id);
+  const pages = (id: string, draw: (page: string) => string) => (ind(id)?.pages ?? []).map(pg =>
+    `<g data-page-of="${id}" data-page="${pg.id}"${pg.id === pageOf(id) ? '' : ' display="none"'}>${draw(pg.id)}</g>`).join('');
+  const { card, lubbers, course, bearing, marker } = h;
+  // Compass card: a tick every 5°, long every 10°, a letter or number every 30°.
+  let ticks = '';
+  for (let a = 0; a < 360; a += 5) {
+    const [x0, y0] = polar(a % 10 ? card.minor : card.major, a), [x1, y1] = polar(card.r, a);
+    ticks += `M${n(x0)} ${n(y0)}L${n(x1)} ${n(y1)}`;
+  }
+  const names = ['N', '3', '6', 'E', '12', '15', 'S', '21', '24', 'W', '30', '33'];
+  const labels = names.map((t, k) => `<g transform="rotate(${k * 30})">${text(0, -card.labelR, t, card.cap, t.length > 1 ? card.labelWidth : undefined)}</g>`).join('');
+  let lub = '';
+  for (let a = 0; a < 360; a += 45) {
+    const [r0, r1] = a % 90 ? lubbers.diagonal : lubbers.cardinal, [x0, y0] = polar(r0, a), [x1, y1] = polar(r1, a);
+    lub += `M${n(x0)} ${n(y0)}L${n(x1)} ${n(y1)}`;
+  }
+  // Heading marker: two solid squares either side of the set heading, between the card's 10° marks.
+  const gap = marker.gap, side = (marker.w - gap) / 2, my = -marker.r[1], mh = marker.r[1] - marker.r[0];
+  // The card tick under the gap is masked so the gap reads as two squares.
+  const markerArt = `<rect x="${n(-gap / 2)}" y="${n(my)}" width="${n(gap)}" height="${n(mh)}" fill="${PAPER}" stroke="none"/>` + `<path d="M${n(-marker.w / 2)} ${n(my)}h${n(side)}v${n(mh)}h${n(-side)}ZM${n(gap / 2)} ${n(my)}h${n(side)}v${n(mh)}h${n(-side)}Z" fill="${INK}" stroke="none"/>`;
+  const dots = [-2, -1, 1, 2].map(k => `<circle cx="${n(k * course.dot)}" r="${n(course.dotR)}" fill="${INK}" stroke="none"/>`).join('');
+  const tri = (dir: number) => `<path d="M0 ${n(-dir * course.toFrom - dir * course.arrow[1] * 0.5)}L${n(course.arrow[0] * 0.4)} ${n(-dir * course.toFrom + dir * course.arrow[1] * 0.3)}H${n(-course.arrow[0] * 0.4)}Z" fill="${INK}" stroke="none"/>`;
+  const turned = (id: string, deg: number, body: string) =>
+    `<g data-indicator="${id}"><g data-needle="${id}" transform="rotate(${n(deg)})">${body}</g></g>`;
+  const crs = turned('course', value('course'),
+    hsiPointer(course.head, course.tail, course.arrow, course.width) + dots +
+    `<g data-indicator="deviation"><g data-shift="deviation" transform="translate(${n(value('deviation') * course.dot)} 0)"><path d="M0 ${n(-course.cdi)}V${n(course.cdi)}" stroke-width="${n(course.width)}" stroke-linecap="butt"/></g></g>` +
+    `<g data-indicator="to-from">${pages('to-from', pg => pg === 'to' ? tri(1) : pg === 'from' ? tri(-1) : '')}</g>`);
+  const cardGroup = turned('heading', -value('heading'),
+    `<path d="${ticks}" stroke-width="${n(card.width)}" stroke-linecap="butt"/>` + labels +
+    turned('heading-set', value('heading-set'), markerArt) +
+    turned('bearing', value('bearing'), hsiPointer(bearing.head, bearing.tail, bearing.arrow, bearing.width)) + crs);
+  const rd = readoutDigits(value('range'), 3, true), cd = readoutDigits(value('course-set'), 3, false);
+  const R = h.range, C = h.courseSet, tw = R.width / 3;
+  const readouts =
+    `<g data-indicator="range"><g data-digits="range">${text(R.at[0], R.at[1], rd.whole, R.cap, R.width)}` +
+    `<rect x="${n(R.at[0] + R.width / 2 + 0.2)}" y="${n(R.at[1] - R.cap * 0.7)}" width="${n(tw + 0.6)}" height="${n(R.cap * 1.4)}" fill="${INK}" stroke="none"/>` +
+    `<text x="${n(R.at[0] + R.width / 2 + 0.5 + tw / 2)}" y="${n(R.at[1] + R.cap / 2)}" font-size="${n(R.cap / 0.72)}" text-anchor="middle" fill="${PAPER}" stroke="none">${rd.tenth}</text></g></g>` +
+    `<g data-indicator="course-set"><g data-digits="course-set">${text(C.at[0], C.at[1], cd.whole, C.cap, C.width)}</g></g>`;
+  const mode = `<g data-indicator="mode">${pages('mode', pg => text(h.mode.at[0], h.mode.at[1], ind('mode')?.pages?.find(q => q.id === pg)?.label ?? '', h.mode.cap))}</g>`;
+  const notice = `<g data-indicator="notice">${pages('notice', pg => {
+    const word = pg === 'none' ? '' : ind('notice')?.pages?.find(q => q.id === pg)?.label ?? '';
+    return word ? text(h.notice.at[0], h.notice.at[1], word, h.notice.cap, h.notice.charWidth ? h.notice.charWidth * word.length : undefined) : '';
+  })}</g>`;
+  const on = `<path d="${lub}" stroke-width="${n(lubbers.width)}" stroke-linecap="butt"/>` + cardGroup +
+    `<path d="${h.aircraft}" ${sw('heavy')}/>` + readouts + mode + notice + h.legends.map(l => text(l.at[0], l.at[1], l.text, l.cap, l.width)).join('');
+  return `<g data-page-of="screen" data-page="on"${pageOf('screen') === 'on' ? '' : ' display="none"'}>${on}</g><g data-page-of="screen" data-page="off"${pageOf('screen') === 'off' ? '' : ' display="none"'}></g>`;
 }
 
 /** Every indicator a dial shows: its needle, its pointers and its counter. */
@@ -143,7 +278,33 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       const c = p.counter, v = state[c.indicator] !== undefined ? Number(state[c.indicator]) : spec.indicators.find(i => i.id === c.indicator)?.rest ?? 0;
       return at(p.at, counter(c, v, `drums-${spec.id}-${c.indicator}`), ' data-art="counter"');
     }
-    case 'dzus': case 'screw': case 'screw-medium': case 'screw-small':
+    case 'thumbwheel': {
+      const c = controlOf(spec, p.control), k = c.positions.length;
+      return at(p.at, moving(c, state[c.id] ?? c.initial, i => thumbwheelArt(p.size, (i * 2.6 / k) % 1)), ' data-art="thumbwheel"');
+    }
+    case 'rocker': {
+      const c = controlOf(spec, p.control), mid = (c.positions.length - 1) / 2;
+      return at(p.at, rockerBase(p.size) + moving(c, state[c.id] ?? c.initial, i => rockerCap(p.size, Math.sign(i - mid), p.arrows)), ' data-art="rocker"');
+    }
+    case 'hat': {
+      // The up/down lever is drawn by its control; off centre left or right, the cross control redraws the well and the lever.
+      const v = controlOf(spec, p.control), h = controlOf(spec, p.cross), vm = (v.positions.length - 1) / 2, hm = (h.positions.length - 1) / 2;
+      const lean = p.length * Math.sin(p.tilt * Math.PI / 180);
+      return at(p.at, hatBase(p.r) +
+        moving(v, state[v.id] ?? v.initial, i => hatLever(p.lever, 0, Math.sign(i - vm) * lean)) +
+        moving(h, state[h.id] ?? h.initial, i => i === hm ? '' : `<circle r="${n(p.r * 0.86)}" fill="${PAPER}" ${sw('fine')}/>` + hatLever(p.lever, Math.sign(i - hm) * lean, 0)), ' data-art="hat"');
+    }
+    case 'text-display': {
+      const ind = spec.indicators.find(i => i.id === p.indicator);
+      return at(p.at, textDisplay(p.display, ind, p.indicator, state[p.indicator] ?? ind?.restPage ?? 'off'), ' data-art="text-display"');
+    }
+    case 'hsi': {
+      const ind = (id: string) => spec.indicators.find(i => i.id === id);
+      const value = (id: string) => state[id] !== undefined ? Number(state[id]) : ind(id)?.rest ?? 0;
+      const pageOf = (id: string) => state[id] ?? ind(id)?.restPage ?? ind(id)?.pages?.[0]?.id ?? '';
+      return `<g data-indicator="screen"><path class="lens" d="${p.hsi.screen}" stroke="none"/></g>` + at(p.at, hsi(spec, p.hsi, value, pageOf), ' data-art="hsi"');
+    }
+    case 'dzus': case 'screw': case 'screw-medium': case 'screw-small': case 'screw-hex': case 'screw-tiny':
       if (p.component === 'dzus' && p.cut) {
         // The notch edges end at the top layer's outline. On a layered panel the notch first clears
         // the upper layers inside the base plate, then the base plate's border is drawn again.
@@ -164,12 +325,12 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       return at(p.at, rotaryBase(p.component) + moving(c, state[c.id] ?? c.initial, i =>
         `<g transform="rotate(${c.positions[i].angle ?? 0})">${rotaryKnob(p.component)}</g>`), ` data-art="${p.component}"`);
     }
-    case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': {
+    case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': case 'knob-plain': {
       const c = controlOf(spec, p.control);
       return at(p.at, moving(c, state[c.id] ?? c.initial, i =>
         `<g transform="rotate(${c.positions[i].angle ?? 0})">${knobArt(p.component)}</g>`), ` data-art="${p.component}"`);
     }
-    case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-flat': case 'push-round-xxl': case 'push-round-bezel': {
+    case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-flat': case 'push-round-xxl': case 'push-round-bezel': case 'push-round-wide': case 'push-round-plain': {
       const c = controlOf(spec, p.control), art = p.component;
       // Cap printing shrinks with the cap when pressed.
       const print = (pressed: boolean) => {
@@ -202,7 +363,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
     case 'push-square': {
       const c = controlOf(spec, p.control), [w, h] = p.size, li = 2.2;
       // The legend is fixed on top of the moving cap; on a lit button it is the lamp's lens.
-      const legend = p.legend.map(l => text(0, l.y, l.text, l.cap, l.width)).join('');
+      const legend = p.legend.map(l => text(l.x ?? 0, l.y, l.text, l.cap, l.width)).join('');
       const face = p.indicator
         ? `<g data-indicator="${p.indicator}"><rect class="lens" x="${n(-w / 2 + li)}" y="${n(-h / 2 + li)}" width="${n(w - 2 * li)}" height="${n(h - 2 * li)}" rx="0.5" stroke="none"/>${legend}</g>`
         : legend;
@@ -324,9 +485,30 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         const r = ROTARIES[p.component].skirt * 1.15;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }
-      case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': {
+      case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': case 'knob-plain': {
         const r = KNOBS[p.component].r * 1.1;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
+      }
+      case 'thumbwheel': case 'rocker': {
+        const [w, h] = p.size;
+        return [{ kind: 'control', id: p.control, box: [x - w / 2, y - h / 2, w, h] }];
+      }
+      case 'hat': {
+        const r = p.r * 1.2;
+        return [
+          { kind: 'control', id: p.control, box: [x - r * 0.6, y - r * 1.25, r * 1.2, r * 2.5] },
+          { kind: 'control', id: p.cross, box: [x - r * 1.5, y - r * 0.5, r * 3, r] },
+        ];
+      }
+      case 'text-display': {
+        const [w, h] = p.display.bezel;
+        return [{ kind: 'indicator', id: p.indicator, box: [x - w / 2, y - h / 2, w, h] }];
+      }
+      case 'hsi': {
+        const nums = (p.hsi.screen.match(/-?\d*\.?\d+/g) ?? []).map(Number);
+        const xs = nums.filter((_, i) => i % 2 === 0), ys = nums.filter((_, i) => i % 2 === 1);
+        const x0 = Math.min(...xs), y0 = Math.min(...ys);
+        return [{ kind: 'indicator', id: 'screen', box: [x0, y0, Math.max(...xs) - x0, Math.max(...ys) - y0] }];
       }
       case 'gear-handle': {
         const [w, h] = p.size, bh = p.travel + h;
@@ -350,7 +532,7 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         const bw = w * c + h * s, bh = w * s + h * c;
         return [{ kind: 'control', id: p.control, box: [cx - bw / 2, cy - bh / 2, bw, bh] }];
       }
-      case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-flat': case 'push-round-xxl': case 'push-round-bezel': {
+      case 'push-round-small': case 'push-round-medium': case 'push-round-large': case 'push-round-xl': case 'push-round-flat': case 'push-round-xxl': case 'push-round-bezel': case 'push-round-wide': case 'push-round-plain': {
         const r = PUSHES[p.component].r;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }
