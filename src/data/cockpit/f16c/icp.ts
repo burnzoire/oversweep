@@ -41,7 +41,8 @@ const [tl, tr, bl, br] = SCREWS.map((s, i) => meet(s, i % 2 ? 610 : 50));
 const [xl, xr] = [SCREWS[0][0] + CUT, SCREWS[1][0] - CUT];
 const arc = `A${CUT} ${CUT} 0 0 0`;
 /** OFF blocks between the wheels: y 217–267, out to x 10 and 650, corner radius 4. */
-const FACE = `M${xl} 2H${xr}V${SCREWS[1][1]}${arc} 610 ${tr}V217H646Q650 217 650 221V263Q650 267 646 267H610V${br}${arc} ${xr} ${SCREWS[3][1]}V478` +
+// The face plate's top is level with the button bar's (y 8), so its corner cuts stop at the bar (Nathan).
+const FACE = `M${xl} 8H${xr}V${SCREWS[1][1]}${arc} 610 ${tr}V217H646Q650 217 650 221V263Q650 267 646 267H610V${br}${arc} ${xr} ${SCREWS[3][1]}V478` +
   `H${xl}V${SCREWS[2][1]}${arc} 50 ${bl}V267H14Q10 267 10 263V221Q10 217 14 217H50V${tl}${arc} ${xl} ${SCREWS[0][1]}Z`;
 const BAR = `M${xl} 8H${xr}V${SCREWS[1][1]}${arc} 610 ${tr}V81Q610 87 604 87H56Q50 87 50 81V${tl}${arc} ${xl} ${SCREWS[0][1]}Z`;
 
@@ -60,7 +61,7 @@ const RIDGE_W = 6;
 const RIDGE_RECTS = [
   // Placed from Nathan's marked-up side-by-side: full-height ridges between the key columns, a short one between
   // 9 and M-SEL (below the 6/9 cross ridge only), one between 3/6 and RCL/ENTR, and the cross ridges running from inside ICP out past RCL/ENTR.
-  ...[[165, 108, 358], [256, 108, 358], [345, 277.5, 356], [360, 105, 279]].map(([x, y0, y1]) => [x - RIDGE_W / 2, y0, RIDGE_W, y1 - y0]),
+  ...[[165, 108, 358], [256, 108, 358], [345, 277.5, 356], [360, 108, 279]].map(([x, y0, y1]) => [x - RIDGE_W / 2, y0, RIDGE_W, y1 - y0]),
   ...[187.5, 277.5].map(y => [96, y - RIDGE_W / 2, 352, RIDGE_W]),
 ].map(([x, y, w, h]) => `<rect x="${mm(x)}" y="${mm(y)}" width="${mm(w)}" height="${mm(h)}" rx="${mm(2)}"`);
 const BUMPS = [[212, 188], [287, 278.5], [317, 278.5]].map(([x, y]) => `<circle cx="${mm(x)}" cy="${mm(y)}" r="${mm(5)}"`);
