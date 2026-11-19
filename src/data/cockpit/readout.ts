@@ -6,6 +6,7 @@ import type { ReadoutFormat } from './types';
 
 /** Prints `v` as the readout shows it (see `ReadoutFormat`). */
 export function formatReadout(v: number, f: ReadoutFormat = {}): string {
+  if (Number.isNaN(v)) return ''; // a blank readout
   if (f.round) v = Math.round(v / f.round) * f.round;
   if (f.clock) {
     const s = Math.max(0, Math.round(v)), m = Math.floor(s / 60);
