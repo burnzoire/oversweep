@@ -58,8 +58,10 @@ const MSEL_X = 389, RCL_X = 418;
  */
 const RIDGE_W = 6;
 const RIDGE_RECTS = [
-  ...[165.5, 255.5, 345].map(x => [x - RIDGE_W / 2, 100, RIDGE_W, 258]),
-  ...[188, 278.5].map(y => [78, y - RIDGE_W / 2, 274, RIDGE_W]),
+  // Placed from Nathan's marked-up side-by-side: full-height ridges between the key columns, a short one between
+  // 9 and M-SEL, one between 3/6 and RCL/ENTR, and the cross ridges running from inside ICP out past RCL/ENTR.
+  ...[[165, 108, 358], [256, 108, 358], [345, 186, 356], [360, 105, 279]].map(([x, y0, y1]) => [x - RIDGE_W / 2, y0, RIDGE_W, y1 - y0]),
+  ...[187.5, 277.5].map(y => [96, y - RIDGE_W / 2, 352, RIDGE_W]),
 ].map(([x, y, w, h]) => `<rect x="${mm(x)}" y="${mm(y)}" width="${mm(w)}" height="${mm(h)}" rx="${mm(2)}"`);
 const BUMPS = [[212, 188], [287, 278.5], [317, 278.5]].map(([x, y]) => `<circle cx="${mm(x)}" cy="${mm(y)}" r="${mm(5)}"`);
 const RIDGES = `<g stroke="var(--panel-ink,#161616)" stroke-width="0.8">${[...RIDGE_RECTS, ...BUMPS].map(e => e + ' fill="none"/>').join('')}</g>` +
@@ -153,8 +155,8 @@ export const icp: PanelSpec = {
     ...column('DEPR', 596, 108, 23, 16, [8, 8, 7, 8]),
     ...column('CONT', 593.5, 281, 21, 16, [8, 9, 8, 8]),
     ...column('FLIR', 502, 227, 24.2, 18.5, [9, 9, 3, 10]),
-    // FLIR rules above and below the legend (x 503, y 108–170; x 500.5, y 317–438).
-    { kind: 'path', d: path('M502 108V170M502 317V438'), pen: 'heavy' },
+    // FLIR rules above and below the legend (x 503, y 108–170 in the guide, run on to the legend as Nathan asked; x 500.5, y 317–438).
+    { kind: 'path', d: path('M502 108V210M502 317V438'), pen: 'heavy' },
     text('GAIN', 539, 341, 12, 34), text('LVL', 588, 382, 12, 26), text('AUTO', 537, 432, 12, 38),
     text('DRIFT C/O', 382, 372, 14, 90), text('NORM', 444, 417.5, 14, 52), text('WARN RESET', 388, 458, 14, 105),
     text('RTN', 210, 418, 14, 34), text('SEQ', 310, 418, 14, 34),
