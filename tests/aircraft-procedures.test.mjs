@@ -39,3 +39,17 @@ test('cockpit panels report moves and take lamps from the host page', async () =
   assert.match(panel, /addEventListener\('cockpit:set'/);
   assert.match(panel, /\.lit\[data-colour="amber"\]/);
 });
+
+test('TACAN recovery procedure is sourced to the official guide and runs its own script', async () => {
+  const data = await read('src/data/aircraft-procedures.ts');
+  const script = await read('src/scripts/procedure-tacan.ts');
+  const page = await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
+  for (const id of ['lookup', 'mids', 'tils', 'chan-enter', 'band-enter', 'ident', 'ehsi-mode-2', 'course', 'cross-check'])
+    assert.match(data, new RegExp("id:'" + id + "'"));
+  for (const target of ["avionics-power.mids',to:'on'", "icp.dcs-lr',to:'seq'", "icp.entr',to:'in'", "ehsi.mode',to:'in'"]) assert.ok(data.includes(target), target);
+  assert.doesNotMatch(data, /chuck/i);
+  assert.match(data, /slug:'incirlik'/);
+  assert.match(script, /prefers-reduced-motion/);
+  for (const ev of ['cockpit:change', 'cockpit:indicate', 'cockpit:set']) assert.match(script, new RegExp(ev));
+  assert.match(page, /tacan-recovery/);
+});

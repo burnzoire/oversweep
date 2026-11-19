@@ -37,6 +37,9 @@ export const cardMedia: Record<string, CardMedia> = {
       sourceUrl: 'https://www.dvidshub.net/image/8942229/pacific-air-forces-f-16-demonstration-team-performs-avalon-australian-international-airshow-2025',
     },
   },
+  'procedure.dcs-f16c.tacan-recovery': {
+    summary: 'Bring the Viper home with the INS no longer trusted: look up the beacon, tune it on the ICP and DED, then fly the inbound course on the EHSI.',
+  },
   'module.principles-of-flight': {
     summary: 'How a wing makes lift, and how a jet turns, climbs and stalls.',
     photo: {
