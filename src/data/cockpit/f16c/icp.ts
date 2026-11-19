@@ -34,7 +34,7 @@ const CUT = 34;
 const f = (v: number) => +v.toFixed(1);
 /** Where the cut round screw (sx, sy) meets the vertical edge x and the horizontal edge y. */
 const cutAt = ([sx, sy]: [number, number], x: number, y: number) => ({
-  onX: f(sy + Math.sign(y - sy) * Math.sqrt(CUT ** 2 - (x - sx) ** 2)),
+  onX: f(sy - Math.sign(y - sy) * Math.sqrt(CUT ** 2 - (x - sx) ** 2)),
   onY: f(sx + Math.sign(x - sx) * Math.sqrt(CUT ** 2 - (y - sy) ** 2)),
 });
 const [tl, tr, bl, br] = [cutAt(SCREWS[0], 50, 2), cutAt(SCREWS[1], 610, 2), cutAt(SCREWS[2], 50, 478), cutAt(SCREWS[3], 610, 478)];
@@ -148,9 +148,9 @@ export const icp: PanelSpec = {
     { kind: 'svg', markup: RIDGES },
     // Large legends: letter boxes measured on the rectified image (bright blobs), one letter under another.
     ...column('SYM', 66, 118.5, 23.2, 17, [8, 10, 10]),
-    ...column('ICP', 76, 215, 29.7, 21.5, [3, 11, 12]),
+    ...column('ICP', 72, 215, 29.7, 20, [3, 10, 11]),
     ...column('BRT', 65.5, 314.5, 23, 17, [9, 9, 8]),
-    text('OFF', 31.5, 238, 11.5, 23), text('OFF', 72, 415, 12, 24),
+    text('OFF', 31.5, 234, 11.5, 23), text('OFF', 72, 415, 12, 24),
     ...column('RET', 583, 120, 23.5, 16.5, [8, 8, 7]),
     ...column('DEPR', 596, 108, 23, 16, [8, 8, 7, 8]),
     ...column('CONT', 593.5, 281, 21, 16, [8, 9, 8, 8]),
