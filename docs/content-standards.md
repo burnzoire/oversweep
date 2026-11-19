@@ -115,3 +115,22 @@ assets. Show the control and the relevant indication together without requiring
 scrolling during that step. Advance automatically when the action demonstrates
 success. Ask for confirmation when interpreting the indication is part of the
 task. Keep the written sequence usable without starting the interaction.
+
+### Cockpit component dependencies
+
+While outlining the procedure, check each action and expected indication against
+the shared cockpit components. A component built for a cold-and-dark view may
+still need powered display pages, page transitions, or illuminated indicator
+states. For example, a procedure may need a multifunction display (MFD) page
+and its bezel-button behaviour, or an indicator that changes from unlit to lit
+in response to an action.
+
+Add the source-backed pages, states and behaviour to the shared component so
+Cockpit Familiarisation and other procedures can reuse them. The procedure
+defines its starting state and drives the shared components as the steps
+progress. Verify the new behaviour in the procedure and check that the
+component still renders correctly in its existing starting states.
+
+Link all cockpit component dependencies to the procedure issue using GitHub
+blocking relationships, including completed work. If an existing component
+needs more work, link the issue for that addition as a blocker.
