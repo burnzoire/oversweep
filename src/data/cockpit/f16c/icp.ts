@@ -189,7 +189,7 @@ export const icp: PanelSpec = {
     // DCS lever top: a 22 px square (its tall look in the guide is the camera seeing the lever's side).
     { component: 'hat', control: 'dcs-ud', cross: 'dcs-lr', at: pt(257, 418), r: mm(30), lever: [mm(22), mm(22)], throw: mm(9) },
     { component: 'toggle-large', control: 'drift-warn', at: pt(383, 418) },
-    { component: 'toggle-medium', control: 'flir-mode', at: pt(537, 386.5) },
+    { component: 'toggle-large', control: 'flir-mode', at: pt(537, 386.5) },
     { component: 'thumbwheel', control: 'sym', at: pt(27, 138), size: [mm(44), mm(148)] },
     { component: 'thumbwheel', control: 'brt', at: pt(27, 347), size: [mm(44), mm(148)] },
     { component: 'thumbwheel', control: 'ret-depr', at: pt(633, 138), size: [mm(44), mm(148)] },
