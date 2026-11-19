@@ -18,8 +18,8 @@ interface State { ded: string; mode: 'nav' | 'nav-pls' | 'tcn'; course: number; 
 const HEADING = 60, STEERPOINT = { bearing: 100, range: 54.3 }, STATION = { bearing: 75, range: 38.4 };
 /** DED page once each step's action is made. */
 const DED_AFTER: Record<string, string> = {
-  mids: 'cni-1y', tils: 'tils-rec-1y', mode: 'tils-tr-1y', 'chan-field': 'tils-tr-1y-chan', 'chan-2': 'tils-tr-2-edit', 'chan-1': 'tils-tr-21-edit',
-  'chan-enter': 'tils-tr-21y', 'band-zero': 'tils-tr-0-edit', 'band-enter': 'tils-tr-21x',
+  mids: 'cni-1x', tils: 'tils-rec-1x', mode: 'tils-tr-1x', 'chan-field': 'tils-tr-1x-chan', 'chan-2': 'tils-tr-2-edit', 'chan-1': 'tils-tr-21-edit',
+  'chan-enter': 'tils-tr-21x',
 };
 const MODE_AFTER: Record<string, State['mode']> = { 'ehsi-mode-1': 'nav-pls', 'ehsi-mode-2': 'tcn' };
 const initialState = (): State => ({ ded: 'cni-blank', mode: 'nav', course: HEADING, notice: 'none' });
