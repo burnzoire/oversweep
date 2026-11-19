@@ -124,6 +124,11 @@ const { id } = Astro.props;
       appendMessage("you", message);
       input.value = "";
       input.focus();
+      if (/^when is tiger ?shark[\u2019'\u2018`]?s birthday$/.test(question.toLowerCase().replace(/[^\p{L}\p{N}\s'\u2018\u2019`]/gu, "").replace(/\s+/g, " ").trim())) {
+        appendMessage("oversweep", "Today!");
+        button.disabled = false;
+        return;
+      }
       const reply = appendMessage("oversweep", "…");
       const contextHistory = history;
       const contextTopic = topic;
