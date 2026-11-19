@@ -31,9 +31,11 @@ const { id } = Astro.props;
     let pending: AbortController | undefined;
     let lastQuestion = "";
     let generation = 0;
+    let birthdayMode = false;
 
     reset?.addEventListener("click", () => {
       generation++;
+      birthdayMode = false;
       pending?.abort();
       history = [];
       topic = [];
@@ -124,8 +126,17 @@ const { id } = Astro.props;
       appendMessage("you", message);
       input.value = "";
       input.focus();
-      if (/^when is tiger ?shark[\u2019'\u2018`]?s birthday$/.test(question.toLowerCase().replace(/[^\p{L}\p{N}\s'\u2018\u2019`]/gu, "").replace(/\s+/g, " ").trim())) {
-        appendMessage("oversweep", "Today!");
+      const plain = question.toLowerCase().replace(/[^\p{L}\p{N}\s'\u2018\u2019`]/gu, "").replace(/\s+/g, " ").trim();
+      if (/^when is tiger ?shark[\u2019'\u2018`]?s birthday$/.test(plain)) {
+        birthdayMode = true;
+        appendMessage("oversweep", "Today! 🎉🎂🥳");
+        button.disabled = false;
+        return;
+      }
+      const when = birthdayMode && plain.match(/^(?:(?:and|so|what|how) )?(?:about |if |is it )?(?:the )?((?:(?:next|last|this) )?(?:day|week|month|year|weekend|monday|tuesday|wednesday|thursday|friday|saturday|sunday)|today|tomorrow|yesterday|tonight|(?:the )?day after tomorrow)(?: then)?$/);
+      if (when) {
+        const day = when[1].charAt(0).toUpperCase() + when[1].slice(1);
+        appendMessage("oversweep", `${day} is Tigershark's birthday! 🎈🎉🎂🥳🪅`);
         button.disabled = false;
         return;
       }
