@@ -1,7 +1,7 @@
 # Content catalogue
 
-The inventory tables include proposed entries. Use the content registries and
-review records for the status of individual entries.
+This guide describes where content belongs. Examples include existing pages and
+possible future pages.
 
 ## Content taxonomy
 
@@ -33,53 +33,18 @@ block types. Panels and instruments can be shared across document types. See the
 [content standards](content-standards.md#page-structure-for-procedures) for the
 Procedure authoring template.
 
-## Manual
+## Examples by pillar
 
-| Subject | Description and illustrative entries | Proposed content types |
+| Pillar | Content type | Example |
 | --- | --- | --- |
-| Flight Fundamentals | Fixed wing: lift, drag, energy, turns; rate and radius relationships. Rotor wing: blade aerodynamics, controls, hover power, forward flight, rotor hazards, autorotation | Reference, Interactive, Exploratory |
-| Airfield Operations | Aerodrome geometry, traffic patterns, ground procedures | Reference, Interactive, Trainer |
-| Radio Communications | Phraseology, clearances and procedural exchanges | Reference, Exploratory, Trainer |
-| Navigation | Position, bearings, dead reckoning and Bullseye spatial orientation | Reference, Interactive, Trainer |
-| Instrument Flight | Instrument interpretation, approaches and navigation procedures | Reference, Exploratory, Trainer |
-| Flight Planning | Routes, fuel ladders, performance and contingencies | Reference, Interactive, Exploratory |
-| Formation Flying | Station keeping, geometry, joins and departures | Reference, Interactive, Trainer |
-| Air-to-Air Refuelling | Rendezvous, geometry and procedural coordination | Reference, Interactive, Trainer |
-| Naval Operations | Carrier environment; Case I/II/III; Case III timing and recovery | Reference, Interactive, Trainer |
-| Air Combat | BFM rate/radius, one-circle/two-circle and energy geometry | Reference, Interactive, Exploratory, Trainer |
-| Sensors & Situational Awareness | Radar scan volumes, search concepts and target interpretation | Reference, Interactive, Exploratory, Trainer |
-| Air-to-Ground Operations | Delivery concepts, geometry and coordination | Reference, Interactive, Exploratory |
-| Abnormal Operations | Recognition, decision making and applicable procedural references | Reference, Exploratory |
-
-## Encyclopedia
-
-| Category | Description | Type |
-| --- | --- | --- |
-| Aircraft | Variant-specific characteristics and links to relevant subjects | Encyclopedia |
-| Ordnance | Weapons, roles, limitations and applicable platforms | Encyclopedia |
-| Threat Systems | Identification, capabilities and documented limitations | Encyclopedia |
-| Radar & Sensors | Sensor terminology, system records and concept links | Encyclopedia |
-| Locations | Theatres, simulator maps and airfields, with facilities, history and simulator coverage | Encyclopedia |
-| Carriers | Aircraft carrier hulls, classes, names and operator histories | Encyclopedia |
-| Terminology | Acronyms and precise definitions linked from lessons | Encyclopedia |
-| Reference Data | Sourced tables, units and reusable constants | Encyclopedia |
-
-## Training Library
-
-The Training Library provides discovery links to canonical experiences. Use the
-pillars above to choose how readers find guided content and standalone practice.
-
-| Index facet | Purpose | Content |
-| --- | --- | --- |
-| Subject | Find experiences by the thirteen manual subjects | References canonical embedded experience IDs |
-| Experience type | Distinguish explanation, guided exploration and assessed practice | Interactive, Exploratory, Trainer |
-| Applicability | Expose aircraft/variant/simulator scope and prerequisites | Metadata, not separate copies |
-| Learning objective | Explain what the experience teaches and how feedback works | Objective, limitations, assessment description |
-
-Use stable IDs and cross-links: for example Naval Operations links to carrier and
-aircraft records; Radar links to sensor records; Bullseye belongs to Navigation
-and is discoverable from Radio Communications. Avoid duplicating a procedure in
-multiple subjects. URL slugs and detailed information architecture remain provisional.
+| Learn | Subject Learning Module | Case III Carrier Recovery explains the recovery flow with diagrams and guided examples. |
+| Learn | Aircraft Procedure | F-16C Engine Start walks through a defined sequence using interactive cockpit panels. |
+| Learn | Aircraft Procedure | F-16C Steerpoint Entry uses the ICP and DED for the entry and the HUD for verification. |
+| Learn | Aircraft Procedure | F-16C Takeoff and Landing can each be a written guide with annotated instruments. |
+| Learn | Cockpit Familiarisation | F-16C Cockpit Familiarisation lets readers browse by cockpit area and explore individual panels. |
+| Learn | Aircraft Systems Learning Module | F-16C HTS Display Familiarisation uses preset states to explain display modes and indications, with links to Encyclopedia definitions. |
+| Practice | Standalone trainer | The Case III trainer gives readers a recovery scenario to fly with feedback. |
+| Explore | Encyclopedia entry | A TACAN definition explains the navigation aid. An airfield entry provides simulator-specific beacon and runway data. |
 
 ## Carrier inventory
 
