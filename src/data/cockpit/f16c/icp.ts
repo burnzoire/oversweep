@@ -25,13 +25,46 @@ const rrect = (x0: number, y0: number, x1: number, y1: number, r: number) =>
 const text = (t: string, x: number, y: number, cap: number, w?: number): Engraving =>
   ({ kind: 'text', text: t, at: pt(x, y), cap: mm(cap), ...(w ? { width: mm(w) } : {}) });
 /** A word printed one letter under another (SYM, ICP, FLIR …): first letter centre, letter pitch. */
-const column = (t: string, x: number, y: number, pitch: number, cap: number): Engraving[] =>
-  [...t].map((c, i) => text(c, x, y + i * pitch, cap));
+const column = (t: string, x: number, y: number, pitch: number, cap: number, widths?: number[]): Engraving[] =>
+  [...t].map((c, i) => text(c, x, y + i * pitch, cap, widths?.[i]));
+
+/** Plate outline with its corners cut on circles of radius `r` round the corner screws (all in px). */
+const SCREWS: [number, number][] = [[31, 26], [631, 26], [31, 451], [631, 451]];
+const CUT = 34;
+const f = (v: number) => +v.toFixed(1);
+/** Where the cut round screw (sx, sy) meets the vertical edge x and the horizontal edge y. */
+const cutAt = ([sx, sy]: [number, number], x: number, y: number) => ({
+  onX: f(sy + Math.sign(y - sy) * Math.sqrt(CUT ** 2 - (x - sx) ** 2)),
+  onY: f(sx + Math.sign(x - sx) * Math.sqrt(CUT ** 2 - (y - sy) ** 2)),
+});
+const [tl, tr, bl, br] = [cutAt(SCREWS[0], 50, 2), cutAt(SCREWS[1], 610, 2), cutAt(SCREWS[2], 50, 478), cutAt(SCREWS[3], 610, 478)];
+const arc = `A${CUT} ${CUT} 0 0 0`;
+/** OFF blocks between the wheels: y 217–267, out to x 10 and 650, corner radius 4. */
+const FACE = `M${tl.onY} 2H${tr.onY}${arc} 610 ${tr.onX}V217H646Q650 217 650 221V263Q650 267 646 267H610V${br.onX}${arc} ${br.onY} 478` +
+  `H${bl.onY}${arc} 50 ${bl.onX}V267H14Q10 267 10 263V221Q10 217 14 217H50V${tl.onX}${arc} ${tl.onY} 2Z`;
+const [btl, btr] = [cutAt(SCREWS[0], 50, 8), cutAt(SCREWS[1], 610, 8)];
+const BAR = `M${btl.onY} 8H${btr.onY}${arc} 610 ${btr.onX}V81Q610 87 604 87H56Q50 87 50 81V${btl.onX}${arc} ${btl.onY} 8Z`;
 
 /* Keypad: caps 65 px square on a 90 px pitch (panel-edge rows 140/230/320, columns 120/210/300). */
 const COLS = [120.5, 210.5, 300.5], ROWS = [142.5, 233.5, 323.5];
 const KEY = [mm(65) + 2, mm(65) + 2] as [number, number];
 const MSEL_X = 389, RCL_X = 418;
+
+/**
+ * Keypad ridges (zoom of the keypad): bars about 6 px wide centred between the keys, vertical at x 165.5, 255.5
+ * and 345 (y 100–358), horizontal at y 188 and 278.5 (x 78–352), and three round bumps, between 2 and 5
+ * (212, 188) and between 6 and 9 (287 and 317, 278.5). Drawn as one outlined shape: the outlines first, then
+ * the fills over them, so the crossings join.
+ */
+const RIDGE_W = 6;
+const RIDGE_RECTS = [
+  ...[165.5, 255.5, 345].map(x => [x - RIDGE_W / 2, 100, RIDGE_W, 258]),
+  ...[188, 278.5].map(y => [78, y - RIDGE_W / 2, 274, RIDGE_W]),
+].map(([x, y, w, h]) => `<rect x="${mm(x)}" y="${mm(y)}" width="${mm(w)}" height="${mm(h)}" rx="${mm(2)}"`);
+const BUMPS = [[212, 188], [287, 278.5], [317, 278.5]].map(([x, y]) => `<circle cx="${mm(x)}" cy="${mm(y)}" r="${mm(5)}"`);
+const RIDGES = `<g stroke="var(--panel-ink,#161616)" stroke-width="0.8">${[...RIDGE_RECTS, ...BUMPS].map(e => e + ' fill="none"/>').join('')}</g>` +
+  `<g fill="var(--panel-paper,#fff)" stroke="none">${[...RIDGE_RECTS, ...BUMPS].map(e => e + '/>').join('')}</g>` +
+  `<g fill="none" stroke="var(--panel-ink,#161616)" stroke-width="0.25">${BUMPS.map(e => e.replace(/r="([\d.]+)"/, (_, r) => `r="${+(r * 0.55).toFixed(3)}"`) + '/>').join('')}</g>`;
 
 /** Priority function keys: digit, function legend above it, compass letter beside it. */
 const KEYS: { id: string; digit: string; fn?: string; corner?: string; x: number; y: number; name: string; desc: string }[] = [
@@ -99,33 +132,42 @@ export const icp: PanelSpec = {
   },
   plate: [
     // Base plate: left 3, right 657 (panel-edge row 95), top 2, bottom 478 (the image crop; screws sit symmetric 26/451).
+    // It carries the corner screws and the thumbwheels.
     { d: path(rrect(3, 2, 657, 478, 14)) },
-    // Raised top bar carrying the override and master mode buttons: x 47–613 (rows 75), y 8–87 (columns 140, 425, 520).
-    { d: path(rrect(47, 8, 613, 87, 8)), raised: true },
+    // Face plate: its sides run down beside the thumbwheels at x 50 and 610 (zoom of both side strips) and jut out
+    // between each pair of wheels round the OFF legend (y 217–267); its corners are cut round the corner screws.
+    { d: path(FACE), raised: true },
+    // Raised top bar carrying the override and master mode buttons, y 8–87 (columns 140, 425, 520), the same width
+    // as the face plate, its top corners cut round the screws like the face plate's.
+    { d: path(BAR), raised: true },
   ],
   engraving: [
-    ...column('SYM', 64, 118, 23, 16),
-    ...column('ICP', 76, 215, 28, 24),
-    ...column('BRT', 64, 317, 23, 16),
-    text('OFF', 27, 240, 11, 22), text('OFF', 70, 412, 11, 22),
-    ...column('RET', 580, 102, 28, 14),
-    ...column('DEPR', 599, 112, 23, 14),
-    ...column('CONT', 592, 280, 22, 16),
-    ...column('FLIR', 499, 187, 36.7, 20),
-    // FLIR rules above and below the legend.
-    { kind: 'path', d: path('M500 105V160M500 318V435'), pen: 'heavy' },
+    // Keypad ridges (under the keys): raised bars between the rows and columns, with the locating bumps.
+    { kind: 'svg', markup: RIDGES },
+    // Large legends: letter boxes measured on the rectified image (bright blobs), one letter under another.
+    ...column('SYM', 66, 118.5, 23.2, 17, [8, 10, 10]),
+    ...column('ICP', 76, 215, 29.7, 21.5, [3, 11, 12]),
+    ...column('BRT', 65.5, 314.5, 23, 17, [9, 9, 8]),
+    text('OFF', 31.5, 238, 11.5, 23), text('OFF', 72, 415, 12, 24),
+    ...column('RET', 583, 120, 23.5, 16.5, [8, 8, 7]),
+    ...column('DEPR', 596, 108, 23, 16, [8, 8, 7, 8]),
+    ...column('CONT', 593.5, 281, 21, 16, [8, 9, 8, 8]),
+    ...column('FLIR', 502, 227, 24.2, 18.5, [9, 9, 3, 10]),
+    // FLIR rules above and below the legend (x 503, y 108–170; x 500.5, y 317–438).
+    { kind: 'path', d: path('M502 108V170M502 317V438'), pen: 'heavy' },
     text('GAIN', 539, 341, 12, 34), text('LVL', 588, 382, 12, 26), text('AUTO', 537, 432, 12, 38),
     text('DRIFT C/O', 382, 372, 14, 90), text('NORM', 444, 417.5, 14, 52), text('WARN RESET', 388, 458, 14, 105),
     text('RTN', 210, 418, 14, 34), text('SEQ', 310, 418, 14, 34),
-    // DCS arrows above and below the well.
-    { kind: 'path', d: path('M257 362L263 376H251ZM257 372V388M257 472L263 458H251ZM257 462V446'), pen: 'medium' },
+    // DCS arrows above and below the well, filled (zoom: tips 361 and 474, heads 13 px wide and 14 long, 5 px shafts).
+    { kind: 'svg', markup: `<path d="${path('M257 361.5L263.5 375.5H259.5V383.5H254.5V375.5H250.5ZM257 474.5L263.5 460.5H259.5V452.5H254.5V460.5H250.5Z')}" fill="var(--panel-ink,#161616)" stroke="none"/>` },
   ],
   placements: [
     ...TOP.map((b): Placement => ({
       component: 'push-round-wide', control: b.id, at: pt(b.x, 48),
       legend: b.legend[1]
-        ? [{ text: b.legend[0], cap: mm(11), y: mm(-8), width: mm(28) }, { text: b.legend[1], cap: mm(11), y: mm(10) }]
-        : [{ text: b.legend[0], cap: mm(12), y: 0, ...(b.legend[0].length > 3 ? { width: mm(36) } : {}) }],
+        // COM legends (blobs): COM 31 px wide, 17 high, centred 13 px above the button centre; digit 14 high, 15 below.
+        ? [{ text: b.legend[0], cap: mm(17), y: mm(-13), width: mm(31) }, { text: b.legend[1], cap: mm(14), y: mm(15) }]
+        : [{ text: b.legend[0], cap: mm(16), y: mm(1), width: mm(b.legend[0].length === 4 ? 34 : b.legend[0] === 'IFF' ? 22 : 31) }],
     })),
     ...KEYS.map((k): Placement => ({
       component: 'push-square', control: k.id, at: pt(k.x, k.y), size: KEY,
@@ -138,9 +180,11 @@ export const icp: PanelSpec = {
     { component: 'push-square', control: 'rcl', at: pt(RCL_X, ROWS[0]), size: KEY, legend: [{ text: 'RCL', cap: mm(13), y: 0, width: mm(30) }] },
     { component: 'push-square', control: 'entr', at: pt(RCL_X, ROWS[1]), size: KEY, legend: [{ text: 'ENTR', cap: mm(13), y: 0, width: mm(38) }] },
     { component: 'push-round-plain', control: 'wx', at: pt(543.5, 159), legend: [{ text: 'WX', cap: mm(13), y: 0 }] },
-    { component: 'rocker', control: 'flir-incdec', at: pt(543.5, 263), size: [mm(47), mm(93)] },
-    { component: 'rocker', control: 'ded-incdec', at: pt(121, 424), size: [mm(48), mm(92)] },
-    { component: 'hat', control: 'dcs-ud', cross: 'dcs-lr', at: pt(257, 418), r: mm(30), lever: [mm(24), mm(42)], throw: mm(9) },
+    // Rocker arrows (zoom): FLIR has arrows with shafts, the DED rocker two long narrow triangles.
+    { component: 'rocker', control: 'flir-incdec', at: pt(543.5, 263), size: [mm(47), mm(93)], arrows: 'arrow' },
+    { component: 'rocker', control: 'ded-incdec', at: pt(121, 424), size: [mm(48), mm(92)], arrows: 'spike' },
+    // DCS lever top: a 22 px square (its tall look in the guide is the camera seeing the lever's side).
+    { component: 'hat', control: 'dcs-ud', cross: 'dcs-lr', at: pt(257, 418), r: mm(30), lever: [mm(22), mm(22)], throw: mm(9) },
     { component: 'toggle-large', control: 'drift-warn', at: pt(383, 418) },
     { component: 'toggle-medium', control: 'flir-mode', at: pt(537, 386.5) },
     { component: 'thumbwheel', control: 'sym', at: pt(27, 138), size: [mm(44), mm(148)] },

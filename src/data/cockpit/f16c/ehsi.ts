@@ -35,6 +35,12 @@ const rrect = (x0: number, y0: number, x1: number, y1: number, r: number) =>
  */
 const SCREEN = 'M84 50H465Q480 50 480 65V380Q480 386 475 391L412 459Q397 476 380 476H169Q152 476 137 459L74 391Q69 386 69 380V65Q69 50 84 50Z';
 
+/**
+ * Raised bezel: its edge sits 15 px inside the base plate, and each corner is cut away in a quarter-circle pocket
+ * (radius 25) round the corner screw, the pocket edges meeting the bezel sides at x/y 50 and 500 (corner zooms).
+ */
+const BEZEL = 'M50 18H500V25A25 25 0 0 0 525 50H532V500H525A25 25 0 0 0 500 525V532H50V525A25 25 0 0 0 25 500H18V50H25A25 25 0 0 0 50 25Z';
+
 const rotary = (id: string, name: string, description: string) => ({
   id, name, type: 'rotary' as const, cyclic: true, initial: '0', source: src, description,
   positions: Array.from({ length: 12 }, (_, i) => ({ id: String(i), label: `step ${i}`, angle: i * 30 })),
@@ -49,23 +55,25 @@ export const ehsi: PanelSpec = {
     manual: 'Eagle Dynamics — DCS F-16C Viper Early Access Guide (EN, 16 August 2026)',
     page: 230,
     image: 'p. 230 EHSI image (550 x 550 JPEG)',
-    rectify: 'none: square-on (corner screws at 24,25 and 526,525)',
+    rectify: 'none: square-on (corner screws at 25,25 and 525,525)',
     pxPerMm: PX,
-    scale: 'The four corner screws (wells about 19 px radius) are taken as the shared panel screw (3.4 mm), giving 5.6 px/mm; the bezel is then 98 mm (3.9 in) square. The p. 44 overview puts the EHSI at about 1.2 times the altimeter dial width, which agrees within a few per cent.',
-    shown: { screen: 'on', heading: '76.4', 'heading-set': '105', course: '65', bearing: '69.2', deviation: '0.72', range: '15.9', 'course-set': '65', mode: 'nav', 'to-from': 'none' },
+    scale: 'The four corner screw wells (about 19 px radius) are taken as the shared panel screw (3.4 mm), giving 5.6 px/mm; the bezel is then 98 mm (3.9 in) square. The p. 44 overview puts the EHSI at about 1.2 times the altimeter dial width, which agrees within a few per cent.',
+    shown: { screen: 'on', heading: '76.4', 'heading-set': '105', course: '65', bearing: '69.2', deviation: '0.72', range: '15.9', 'course-set': '65', mode: 'nav', 'to-from': 'none', notice: 'brt' },
     unresolved: [
       'The display is drawn black on white like the rest of the cockpit; in the sim the card is white, the pointers cyan and the heading marker yellow on a black screen.',
       'The to-from indicator is not shown in the guide image ("Not shown"); it is drawn as a small triangle on the course line, 60 px from the centre, which is a guess at its place and size.',
       'Mode legends: the image shows NAV; TCN is drawn the same way. The guide names the ILS modes NAV/PLS and TCN/PLS but does not show their legends, so they are not drawn yet.',
-      'The new-mode text (BRT in the image, shown only for a moment) and any warning flags are not drawn.',
-      'The HDG and CRS knobs turn without end and also push (ADJ HDG, BRT); the pushes are not modelled. Each click turns a knob one step; what a step does is up to the procedure.',
+      'The notice above the aircraft (BRT in the image) shows only for a moment after a mode change or a brightness adjustment; procedures pick it. Warning flags are not drawn.',
+      'The HDG and CRS knobs are dials that turn without end. The guide labels a push function for each (ADJ HDG, BRT), but whether pushing does anything in DCS is unconfirmed, so pushes are not modelled. Each click turns a knob one step; what a step does is up to the procedure.',
+      'The small Phillips screws are drawn at the shared tiny-screw size (1.0 mm); the hex socket screws at 3.0 mm.',
       'The bearing and course arrowheads are measured from the image at about 16 px wide and 20 px long; the lines 5 px wide.',
       'Cold and dark, the screen is blank; pick "On" in the Instruments list (or a procedure turns it on).',
     ],
   },
   plate: [
-    // Bezel: the image edges (3–547), corner radius about 18 px.
+    // Base plate: the image edges (3–547), corner radius about 18 px. It carries the small Phillips screws.
     { d: path(rrect(3, 3, 547, 547, 18)) },
+    { d: path(BEZEL), raised: true },
   ],
   engraving: [
     { kind: 'path', d: path(SCREEN), pen: 'medium' },
@@ -77,13 +85,16 @@ export const ehsi: PanelSpec = {
       lubbers: { cardinal: [mm(181), mm(202)], diagonal: [mm(181), mm(202)], width: mm(4.5) },
       // Aircraft symbol (blob 258–292 x 254–287): fuselage, wings and tail.
       aircraft: `M0 ${mm(-15)}V${mm(18)}M${mm(-16.5)} ${mm(-5)}H${mm(16.5)}M${mm(-8.5)} ${mm(12)}H${mm(8.5)}`,
-      marker: { r: [mm(166), mm(184)], w: mm(26) },
+      // Heading marker (zoom at 105°): two solid squares between the 10° marks either side, r 171–183, gap 3.
+      marker: { r: [mm(171), mm(183)], w: mm(24), gap: mm(3) },
       course: { head: [mm(83), mm(126)], tail: [mm(84), mm(127)], arrow: [mm(16), mm(20)], width: mm(5), cdi: mm(81), dot: mm(42.5), dotR: mm(6), toFrom: mm(60) },
       bearing: { head: [mm(162), mm(198)], tail: [mm(163), mm(189)], arrow: [mm(16), mm(20)], width: mm(5) },
       // Readouts (bright blobs): range 77–121 x 72–97 with its tenths box 125–144; course 428–472 x 72–96.
       range: { at: rel(99, 84.5), cap: mm(24.5), width: mm(44) },
       courseSet: { at: rel(450, 84), cap: mm(24), width: mm(44) },
       mode: { at: rel(359, 457.5), cap: mm(19) },
+      // BRT notice above the aircraft symbol (blob 255–292 x 235–248).
+      notice: { at: rel(273.5, 241.5), cap: mm(13), width: mm(37) },
       legends: [
         { text: 'NM', at: rel(88.5, 110.5), cap: mm(17), width: mm(23) },
         { text: 'CRS', at: rel(455.5, 110), cap: mm(18), width: mm(33) },
@@ -95,11 +106,14 @@ export const ehsi: PanelSpec = {
     { component: 'knob-plain', control: 'hdg', at: pt(85, 484) },
     { component: 'knob-plain', control: 'crs', at: pt(464, 484) },
     { component: 'push-square', control: 'mode', at: pt(275, 513), size: [mm(46), mm(46)], legend: [{ text: 'M', cap: mm(22), y: 0 }] },
-    { component: 'screw', at: pt(24, 25) }, { component: 'screw', at: pt(526, 25) },
-    { component: 'screw', at: pt(24, 525) }, { component: 'screw', at: pt(526, 525) },
+    // Hex socket head screws in the bezel's corner pockets; small Phillips screws beside them on the base plate.
+    { component: 'screw-hex', at: pt(25, 25) }, { component: 'screw-hex', at: pt(525, 25) },
+    { component: 'screw-hex', at: pt(25, 525) }, { component: 'screw-hex', at: pt(525, 525) },
+    { component: 'screw-tiny', at: pt(9.5, 59) }, { component: 'screw-tiny', at: pt(540.5, 59) },
+    { component: 'screw-tiny', at: pt(9.5, 491) }, { component: 'screw-tiny', at: pt(540.5, 491) },
   ],
   controls: [
-    rotary('hdg', 'HDG (heading set) knob', 'Turns the heading marker round the compass card; with the autopilot ROLL switch at HDG SEL the jet turns to it. Pushed in ATT mode, it adjusts the compass heading (ADJ HDG).'),
+    rotary('hdg', 'HDG (heading set) knob', 'Turns the heading marker round the compass card; with the autopilot ROLL switch at HDG SEL the jet turns to it. The guide also lists a push in ATT mode to adjust the compass heading (ADJ HDG).'),
     rotary('crs', 'CRS (course set / brightness) knob', 'Sets the desired course: the course arrow and the CRS readout. Pushed, it adjusts the display brightness (BRT).'),
     {
       id: 'mode', name: 'M (instrument mode) button', type: 'pushbutton', initial: 'out', source: src,
@@ -117,6 +131,7 @@ export const ehsi: PanelSpec = {
     { id: 'range', name: 'Range readout', type: 'display', unit: 'NM', rest: 0, range: [0, 999.9, 0.1], restNote: 'blank (screen off)', description: 'Range in nautical miles to the steerpoint (NAV) or to the TACAN station with valid DME (TCN); the boxed fourth digit is tenths.', source: src },
     { id: 'course-set', name: 'Course readout', type: 'display', unit: '°', rest: 0, range: [0, 359, 1], restNote: 'blank (screen off)', description: 'The desired course set with the CRS knob, in degrees.', source: src },
     { id: 'mode', name: 'Mode legend', type: 'display', restPage: 'nav', restNote: 'blank (screen off)', pages: [{ id: 'nav', label: 'NAV' }, { id: 'tcn', label: 'TCN' }], description: 'The instrument mode the M button selected: the navigation source the bearing pointer, range and deviation bar use.', source: src },
+    { id: 'notice', name: 'Notice', type: 'display', restPage: 'none', restNote: 'blank', pages: [{ id: 'none', label: 'Not shown' }, { id: 'brt', label: 'BRT' }, { id: 'nav', label: 'NAV' }, { id: 'tcn', label: 'TCN' }], description: 'A word shown in front of the aircraft symbol for about a second: the new mode after the M button, or BRT while the brightness is being set.', source: src },
     { id: 'to-from', name: 'To-from indicator', type: 'display', restPage: 'none', restNote: 'blank (screen off)', pages: [{ id: 'none', label: 'Not shown' }, { id: 'to', label: 'TO' }, { id: 'from', label: 'FROM' }], description: 'TACAN only: points the same way as the course arrow when flying the course takes you to the station, the other way when it takes you away from it.', source: src },
   ],
 };

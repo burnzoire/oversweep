@@ -181,7 +181,7 @@ export type Placement =
    */
   | { component: 'thumbwheel'; control: string; at: Pt; size: [w: number, h: number] }
   /** Rocker switch with up and down arrows on its cap (F-16C ICP DED increment/decrement): housing `size` centred on `at`; vertical travel, middle position at rest. */
-  | { component: 'rocker'; control: string; at: Pt; size: [w: number, h: number] }
+  | { component: 'rocker'; control: string; at: Pt; size: [w: number, h: number]; /** Cap arrows: `arrow` (head and shaft, F-16C FLIR) or `spike` (long narrow triangles, F-16C DED). */ arrows: 'arrow' | 'spike' }
   /**
    * Four-way momentary switch (F-16C ICP Data Control Switch): a lever in a round well of radius `r`; `control` moves
    * it up and down, `cross` left and right; `lever` is the lever top (w, h) and `throw` how far it moves off centre.
@@ -192,7 +192,7 @@ export type Placement =
   /** Electronic HSI picture (F-16C EHSI), centred on `at` (the compass centre); every symbol is its own indicator, see `HsiDisplay`. */
   | { component: 'hsi'; at: Pt; hsi: HsiDisplay }
   | { component: 'dzus'; at: Pt; cut?: Cut }
-  | { component: 'screw' | 'screw-medium' | 'screw-small'; at: Pt };
+  | { component: 'screw' | 'screw-medium' | 'screw-small' | 'screw-hex' | 'screw-tiny'; at: Pt };
 
 /**
  * A round pointer dial, drawn square-on. Radii in mm from the dial centre,
@@ -284,7 +284,8 @@ export interface TextDisplay {
  * bearing pointer turn with it, each by its own indicator. Indicator ids are
  * fixed: `screen` (page `on`/`off`), `heading`, `heading-set`, `course`,
  * `bearing`, `deviation` (dots), `range` (NM), `course-set` (the course
- * readout), `mode` (pages), `to-from` (pages `none`/`to`/`from`).
+ * readout), `mode` (pages), `to-from` (pages `none`/`to`/`from`), `notice` (pages, `none`
+ * blank).
  */
 export interface HsiDisplay {
   /** Screen outline, absolute panel mm path (the screen hit area and clip). */
@@ -293,13 +294,16 @@ export interface HsiDisplay {
   lubbers: { cardinal: [r0: number, r1: number]; diagonal: [r0: number, r1: number]; width: number };
   /** Aircraft symbol path (centre origin, nose up). */
   aircraft: string;
-  marker: { r: [r0: number, r1: number]; w: number };
+  /** Heading marker: two solid squares, `w` overall with `gap` between them, from r0 to r1. */
+  marker: { r: [r0: number, r1: number]; w: number; gap: number };
   course: { head: [r0: number, r1: number]; tail: [r0: number, r1: number]; arrow: [w: number, l: number]; width: number; cdi: number; dot: number; dotR: number; toFrom: number };
   bearing: { head: [r0: number, r1: number]; tail: [r0: number, r1: number]; arrow: [w: number, l: number]; width: number };
   /** Digit readouts by their centre: range (with its tenths digit boxed), course. */
   range: { at: Pt; cap: number; width: number };
   courseSet: { at: Pt; cap: number; width: number };
   mode: { at: Pt; cap: number };
+  /** Brief notice in front of the aircraft symbol (new mode, BRT); indicator `notice`, page `none` blank. */
+  notice: { at: Pt; cap: number; width?: number };
   /** Fixed legends drawn on the screen while it is on (NM, CRS, HDG). */
   legends: { text: string; at: Pt; cap: number; width?: number }[];
 }

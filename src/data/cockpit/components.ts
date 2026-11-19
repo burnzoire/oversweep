@@ -63,6 +63,10 @@ export const FASTENERS = {
   screw: { r: 3.4 },
   'screw-medium': { r: 2.8 },
   'screw-small': { r: 2.1 },
+  /** Socket head cap screw with a hexagon socket (EHSI bezel). */
+  'screw-hex': { r: 3.0 },
+  /** Small Phillips screw on a lower layer. */
+  'screw-tiny': { r: 1.0 },
 } as const;
 
 export function fastener(kind: keyof typeof FASTENERS) {
@@ -71,6 +75,15 @@ export function fastener(kind: keyof typeof FASTENERS) {
     const w = r * 0.16;
     return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.76)}" ${sw('fine')}/>` +
       `<path d="M${n(-w)} ${n(-r * 0.76)}V${n(r * 0.76)}M${n(w)} ${n(-r * 0.76)}V${n(r * 0.76)}" ${sw('medium')}/>`;
+  }
+  if (kind === 'screw-hex') {
+    const h = r * 0.46, hex = Array.from({ length: 6 }, (_, k) => { const a = Math.PI / 3 * k; return `${n(h * Math.cos(a))} ${n(h * Math.sin(a))}`; });
+    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'medium') + `<circle r="${n(r * 0.8)}" ${sw('fine')}/>` +
+      `<path d="M${hex.join('L')}Z" fill="${INK}" stroke="none"/>`;
+  }
+  if (kind === 'screw-tiny') {
+    const c = r * 0.55;
+    return `<circle r="${r}" fill="${PAPER}" ${sw('fine')}/>` + `<path d="M${n(-c)} 0H${n(c)}M0 ${n(-c)}V${n(c)}" ${sw('medium')}/>`;
   }
   const c = r * 0.42;
   return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'medium') + `<circle r="${n(r * 0.66)}" ${sw('fine')}/>` +
@@ -796,13 +809,18 @@ export function rockerBase([w, h]: [number, number]) {
   return cased(`<rect x="${n(-w / 2)}" y="${n(-h / 2)}" width="${n(w)}" height="${n(h)}" rx="1.2" fill="${PAPER}"/>`, 'heavy');
 }
 
-/** Rocker cap with its up and down arrows; `tilt` -1 pressed at the top, 1 at the bottom, 0 at rest (the pressed half sinks). */
-export function rockerCap([w, h]: [number, number], tilt: number) {
-  const cw = w - 2, ch = h - 2, a = Math.min(cw * 0.32, 2.4), ay = ch * 0.22, al = a * 1.5;
-  const arrow = (sy: number) => `M0 ${n(sy * (ay + al))}L${n(a)} ${n(sy * ay)}H${n(-a)}Z`;
-  const shaft = `M0 ${n(-ay)}V${n(-ch * 0.06)}M0 ${n(ay)}V${n(ch * 0.06)}`;
+/**
+ * Rocker cap with its up and down arrows, filled; `tilt` -1 pressed at the top, 1 at the bottom, 0 at rest (the
+ * pressed half sinks). Arrow proportions from the F-16C ICP (guide p. 99): `arrow` heads 0.27 w wide from
+ * 0.34 h to 0.17 h out with 0.11 w shafts to 0.03 h; `spike` triangles 0.26 w wide from 0.3 h to 0.054 h.
+ */
+export function rockerCap([w, h]: [number, number], tilt: number, arrows: 'arrow' | 'spike') {
+  const cw = w - 2, ch = h - 2;
+  const one = (s: number) => arrows === 'spike'
+    ? `M0 ${n(s * 0.3 * h)}L${n(0.13 * w)} ${n(s * 0.054 * h)}H${n(-0.13 * w)}Z`
+    : `M0 ${n(s * 0.339 * h)}L${n(0.134 * w)} ${n(s * 0.172 * h)}H${n(0.053 * w)}V${n(s * 0.032 * h)}H${n(-0.053 * w)}V${n(s * 0.172 * h)}H${n(-0.134 * w)}Z`;
   let s = cased(`<rect x="${n(-cw / 2)}" y="${n(-ch / 2)}" width="${n(cw)}" height="${n(ch)}" rx="0.8" fill="${PAPER}"/>`, 'medium') +
-    `<path d="${arrow(-1)}${arrow(1)}" fill="${INK}" stroke="none"/><path d="${shaft}" ${sw('medium')}/>`;
+    `<path d="${one(-1)}${one(1)}" fill="${INK}" stroke="none"/>`;
   if (tilt) {
     const y0 = tilt < 0 ? -ch / 2 + 0.6 : 0.3, y1 = tilt < 0 ? -0.3 : ch / 2 - 0.6;
     s += `<rect x="${n(-cw / 2 + 0.6)}" y="${n(y0)}" width="${n(cw - 1.2)}" height="${n(y1 - y0)}" rx="0.5" fill="none" ${sw('fine')}/>`;
@@ -818,6 +836,5 @@ export function hatBase(r: number) {
 /** Four-way switch lever top (w, h), moved (dx, dy) off centre. */
 export function hatLever([w, h]: [number, number], dx: number, dy: number) {
   return `<g transform="translate(${n(dx)} ${n(dy)})">` +
-    cased(`<rect x="${n(-w / 2)}" y="${n(-h / 2)}" width="${n(w)}" height="${n(h)}" rx="0.7" fill="${PAPER}"/>`, 'medium') +
-    `<path d="M${n(-w / 2 + 0.8)} ${n(-h * 0.18)}H${n(w / 2 - 0.8)}M${n(-w / 2 + 0.8)} ${n(h * 0.18)}H${n(w / 2 - 0.8)}" ${sw('fine')}/></g>`;
+    cased(`<rect x="${n(-w / 2)}" y="${n(-h / 2)}" width="${n(w)}" height="${n(h)}" rx="0.7" fill="${PAPER}"/>`, 'medium') + '</g>';
 }

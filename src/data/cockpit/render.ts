@@ -132,7 +132,7 @@ export function readings(spec: PanelSpec): Record<string, Reading> {
       out.deviation = { kind: 'shift', per: p.hsi.course.dot, range: ind('deviation')?.range ?? [-2.5, 2.5, 0.1] };
       out.range = { kind: 'digits', digits: 3, tenths: true, range: ind('range')?.range ?? [0, 999.9, 0.1] };
       out['course-set'] = { kind: 'digits', digits: 3, range: ind('course-set')?.range ?? [0, 359, 1] };
-      for (const id of ['screen', 'mode', 'to-from']) page(id);
+      for (const id of ['screen', 'mode', 'to-from', 'notice']) page(id);
     }
     if (p.component !== 'gauge') continue;
     const { dial } = p;
@@ -146,7 +146,7 @@ export function readings(spec: PanelSpec): Record<string, Reading> {
 }
 
 /** Indicator ids the HSI picture draws (see `HsiDisplay`). */
-export const HSI_INDICATORS = ['screen', 'heading', 'heading-set', 'course', 'bearing', 'deviation', 'range', 'course-set', 'mode', 'to-from'] as const;
+export const HSI_INDICATORS = ['screen', 'heading', 'heading-set', 'course', 'bearing', 'deviation', 'range', 'course-set', 'mode', 'to-from', 'notice'] as const;
 
 /** Every indicator a placement shows (lamps, needles, counters, displays). */
 export function placementIndicators(p: Placement): string[] {
@@ -230,8 +230,10 @@ function hsi(spec: PanelSpec, h: HsiDisplay, value: (id: string) => number, page
     const [r0, r1] = a % 90 ? lubbers.diagonal : lubbers.cardinal, [x0, y0] = polar(r0, a), [x1, y1] = polar(r1, a);
     lub += `M${n(x0)} ${n(y0)}L${n(x1)} ${n(y1)}`;
   }
-  const mw = marker.w, gap = mw * 0.18;
-  const markerArt = `<path d="M${n(-mw / 2)} ${n(-marker.r[0])}V${n(-marker.r[1])}H${n(-gap / 2)}V${n(-marker.r[0])}M${n(gap / 2)} ${n(-marker.r[0])}V${n(-marker.r[1])}H${n(mw / 2)}V${n(-marker.r[0])}" ${sw('heavy')}/>`;
+  // Heading marker: two solid squares either side of the set heading, between the card's 10° marks.
+  const gap = marker.gap, side = (marker.w - gap) / 2, my = -marker.r[1], mh = marker.r[1] - marker.r[0];
+  // The card tick under the gap is masked so the gap reads as two squares.
+  const markerArt = `<rect x="${n(-gap / 2)}" y="${n(my)}" width="${n(gap)}" height="${n(mh)}" fill="${PAPER}" stroke="none"/>` + `<path d="M${n(-marker.w / 2)} ${n(my)}h${n(side)}v${n(mh)}h${n(-side)}ZM${n(gap / 2)} ${n(my)}h${n(side)}v${n(mh)}h${n(-side)}Z" fill="${INK}" stroke="none"/>`;
   const dots = [-2, -1, 1, 2].map(k => `<circle cx="${n(k * course.dot)}" r="${n(course.dotR)}" fill="${INK}" stroke="none"/>`).join('');
   const tri = (dir: number) => `<path d="M0 ${n(-dir * course.toFrom - dir * course.arrow[1] * 0.5)}L${n(course.arrow[0] * 0.4)} ${n(-dir * course.toFrom + dir * course.arrow[1] * 0.3)}H${n(-course.arrow[0] * 0.4)}Z" fill="${INK}" stroke="none"/>`;
   const turned = (id: string, deg: number, body: string) =>
@@ -252,8 +254,9 @@ function hsi(spec: PanelSpec, h: HsiDisplay, value: (id: string) => number, page
     `<text x="${n(R.at[0] + R.width / 2 + 0.5 + tw / 2)}" y="${n(R.at[1] + R.cap / 2)}" font-size="${n(R.cap / 0.72)}" text-anchor="middle" fill="${PAPER}" stroke="none">${rd.tenth}</text></g></g>` +
     `<g data-indicator="course-set"><g data-digits="course-set">${text(C.at[0], C.at[1], cd.whole, C.cap, C.width)}</g></g>`;
   const mode = `<g data-indicator="mode">${pages('mode', pg => text(h.mode.at[0], h.mode.at[1], ind('mode')?.pages?.find(q => q.id === pg)?.label ?? '', h.mode.cap))}</g>`;
+  const notice = `<g data-indicator="notice">${pages('notice', pg => pg === 'none' ? '' : text(h.notice.at[0], h.notice.at[1], ind('notice')?.pages?.find(q => q.id === pg)?.label ?? '', h.notice.cap, h.notice.width))}</g>`;
   const on = `<path d="${lub}" stroke-width="${n(lubbers.width)}" stroke-linecap="butt"/>` + cardGroup +
-    `<path d="${h.aircraft}" ${sw('heavy')}/>` + readouts + mode + h.legends.map(l => text(l.at[0], l.at[1], l.text, l.cap, l.width)).join('');
+    `<path d="${h.aircraft}" ${sw('heavy')}/>` + readouts + mode + notice + h.legends.map(l => text(l.at[0], l.at[1], l.text, l.cap, l.width)).join('');
   return `<g data-page-of="screen" data-page="on"${pageOf('screen') === 'on' ? '' : ' display="none"'}>${on}</g><g data-page-of="screen" data-page="off"${pageOf('screen') === 'off' ? '' : ' display="none"'}></g>`;
 }
 
@@ -278,7 +281,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
     }
     case 'rocker': {
       const c = controlOf(spec, p.control), mid = (c.positions.length - 1) / 2;
-      return at(p.at, rockerBase(p.size) + moving(c, state[c.id] ?? c.initial, i => rockerCap(p.size, Math.sign(i - mid))), ' data-art="rocker"');
+      return at(p.at, rockerBase(p.size) + moving(c, state[c.id] ?? c.initial, i => rockerCap(p.size, Math.sign(i - mid), p.arrows)), ' data-art="rocker"');
     }
     case 'hat': {
       // The up/down lever is drawn by its control; off centre left or right, the cross control redraws the well and the lever.
@@ -297,7 +300,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       const pageOf = (id: string) => state[id] ?? ind(id)?.restPage ?? ind(id)?.pages?.[0]?.id ?? '';
       return `<g data-indicator="screen"><path class="lens" d="${p.hsi.screen}" stroke="none"/></g>` + at(p.at, hsi(spec, p.hsi, value, pageOf), ' data-art="hsi"');
     }
-    case 'dzus': case 'screw': case 'screw-medium': case 'screw-small':
+    case 'dzus': case 'screw': case 'screw-medium': case 'screw-small': case 'screw-hex': case 'screw-tiny':
       if (p.component === 'dzus' && p.cut) {
         // The notch edges end at the top layer's outline. On a layered panel the notch first clears
         // the upper layers inside the base plate, then the base plate's border is drawn again.
