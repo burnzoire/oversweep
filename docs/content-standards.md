@@ -82,9 +82,9 @@ Define acronyms on first use; use consistent terminology and step numbering.
 Keep standard procedures separate from aircraft and simulator notes. Make source
 limitations and known disagreements visible beside the affected content.
 
-## Page structure for modules
+## Page structure for Learning Modules
 
-Every new module, and every rewrite of an existing one, follows the
+Every new Learning Module, and every rewrite of an existing one, follows the
 [module page playbook](reviews/content-audit-playbook.md). In short:
 
 - open with one worked example of the whole procedure;
@@ -94,3 +94,55 @@ Every new module, and every rewrite of an existing one, follows the
 - add an "In the sim" panel from a sim manual that was actually read.
 
 Its review lessons apply when drafting, not only when auditing.
+
+## Page structure for Procedures
+
+Use this template for a task sequence under Aircraft Procedures. See the
+[content taxonomy](content-catalogue.md#content-taxonomy) for placement.
+
+1. **Scope and starting state.** Say when to use the procedure, what it achieves,
+   and which aircraft variant, configuration and simulator it applies to.
+   State prerequisites and the initial cockpit or flight state.
+2. **Ordered steps.** Keep the whole sequence available as a scannable reference.
+   For each step, identify the control and action, then give the expected
+   indication or result. Explain what to look for and why it matters where the
+   reader needs to interpret a cue. Include source-backed waits, exceptions or
+   recovery hints where relevant.
+3. **Completion.** Describe the end state and how to recognise it.
+
+When a step benefits from interaction, reuse the cockpit panel and instrument
+assets. Show the control and the relevant indication together without requiring
+scrolling during that step. Advance automatically when the action demonstrates
+success. Ask for confirmation when interpreting the indication is part of the
+task. Keep the written sequence usable without starting the interaction.
+
+### Scored procedure practice
+
+A Procedure may offer a scored practice mode under Practice. Reuse the same
+starting state, required actions and shared cockpit components as the guided
+mode. Hide step-by-step prompts, count incorrect inputs, and keep the current
+step and cockpit state until the reader performs the expected action. For steps
+that assess instrument interpretation, score the reader's response as well.
+Report the mistake count and where mistakes occurred at the end.
+
+The sequence can stay linear. The component model only needs the behaviour
+that the exercise displays and assesses.
+
+### Cockpit component dependencies
+
+While outlining the procedure, check each action and expected indication against
+the shared cockpit components. A component built for a cold-and-dark view may
+still need powered display pages, page transitions, or illuminated indicator
+states. For example, a procedure may need a multifunction display (MFD) page
+and its bezel-button behaviour, or an indicator that changes from unlit to lit
+in response to an action.
+
+Add the source-backed pages, states and behaviour to the shared component so
+Cockpit Familiarisation and other procedures can reuse them. The procedure
+defines its starting state and drives the shared components as the steps
+progress. Verify the new behaviour in the procedure and check that the
+component still renders correctly in its existing starting states.
+
+Link all cockpit component dependencies to the procedure issue using GitHub
+blocking relationships, including completed work. If an existing component
+needs more work, link the issue for that addition as a blocker.
