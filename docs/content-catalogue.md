@@ -1,10 +1,37 @@
-# Proposed content catalogue
+# Content catalogue
 
-All entries below are **Outlined**, not researched or technically validated.
-Examples describe future inventory, not authorised trainer implementation.
-Types are composable blocks: Reference (guidance/diagrams/tables), Interactive
-(adjustable visualisation), Exploratory (guided experimentation), Trainer
-(scenario, feedback and assessment), Encyclopedia (structured facts).
+The inventory tables include proposed entries. Use the content registries and
+review records for the status of individual entries.
+
+## Content taxonomy
+
+| Pillar | Reader intent | Content |
+| --- | --- | --- |
+| Learn | Understand a subject or follow a guided task | Manual & Training Library, including Learning Modules and Procedures |
+| Practice | Rehearse a task and get feedback on performance | Standalone trainers linked from the relevant Learn pages |
+| Explore | Look up or discover a fact, term, system or place | Encyclopedia entries |
+
+A **Procedure** is a task-oriented document. Its ordered actions and expected
+indications take the reader from a defined starting state to a completed task.
+Engine Start and Steerpoint Entry are examples. A Procedure can be a living
+reference guide, as proposed for Takeoff and Landing, or include guided interaction.
+
+A **Learning Module** is an interactive document organised around what the reader
+needs to understand. Cockpit Familiarisation lets readers explore by area and
+panel. An aircraft systems module can use preset display states to explain modes
+and indications. Both live under the aircraft in Learn.
+
+Group aircraft-specific content by airframe within Learn. Use **Aircraft
+Procedures** for task sequences, **Cockpit Familiarisation** for panel-by-panel
+orientation, and **Aircraft Systems** for system and display learning modules.
+Link to the relevant Encyclopedia entry for reusable definitions and reference
+data. Link standalone exercises from the relevant guide and from Practice. Give
+each guide, exercise and reference entry one canonical home.
+
+Reference, Interactive, Exploratory, Trainer and Encyclopedia are composable
+block types. Panels and instruments can be shared across document types. See the
+[content standards](content-standards.md#page-structure-for-procedures) for the
+Procedure authoring template.
 
 ## Manual
 
@@ -38,6 +65,9 @@ Types are composable blocks: Reference (guidance/diagrams/tables), Interactive
 | Reference Data | Sourced tables, units and reusable constants | Encyclopedia |
 
 ## Training Library
+
+The Training Library provides discovery links to canonical experiences. Use the
+pillars above to choose how readers find guided content and standalone practice.
 
 | Index facet | Purpose | Content |
 | --- | --- | --- |
