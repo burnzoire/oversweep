@@ -101,7 +101,7 @@ export const hud: PanelSpec = {
     pxPerMm: PX,
     scale: 'Measured against the ICP in the same image: COM 1 and A-G are 324.6 px apart there and 108.4 mm apart on the ICP drawing, so 3.0 px/mm at the base of the HUD. The combiner sits a little further from the eye than the ICP, so the frame may be drawn a few per cent large. The symbology keeps its own angular scale (25.9 px a degree).',
     shown: {
-      screen: 'on', 'fpm-azimuth': '-0.35', 'fpm-elevation': '-3.42', 'flight-path-angle': '0.32', roll: '-0.85', 'steering-cue': '-1.24', steering: '0',
+      screen: 'on', 'fpm-azimuth': '-0.35', 'fpm-elevation': '-3.42', pitch: '3.74', roll: '-0.85', 'steering-cue': '-1.24', steering: '0',
       'steerpoint-azimuth': '-1.62', 'steerpoint-elevation': '-7.63', velocity: '350', altitude: '8360', heading: '197', 'velocity-mode': 'c',
       g: '1.1', 'master-arm': 'arm', mach: '0.61', 'max-g': '5.7', 'master-mode': 'nav', 'bullseye-bearing': '324', 'bullseye-range': '53',
       'radar-alt': '7040', alow: '1500', 'slant-range-source': 'b', 'slant-range': '19.5', ttg: '175', 'steerpoint-distance': '19', steerpoint: '4',
@@ -164,9 +164,9 @@ export const hud: PanelSpec = {
   controls: [],
   indicators: [
     word('screen', 'HUD', [{ id: 'on', label: 'On' }, { id: 'off', label: 'Off' }], 'off', 'The HUD picture. Cold and dark it is blank.'),
-    num('fpm-azimuth', 'Flight path marker (left/right)', '°', -0.35, [-10, 10, 0.1], 'Flight path marker: the aircraft\'s inertial velocity vector, a circle with wings at 3 and 9 o\'clock and a tail at 12. Its offset left or right of the boresight cross, in degrees (drift).'),
+    num('fpm-azimuth', 'Flight path marker (left/right)', '°', -0.35, [-10, 10, 0.1], 'Flight path marker: the aircraft\'s inertial velocity vector, a circle with wings at 3 and 9 o\'clock and a tail at 12. Its offset left or right of the boresight cross, in degrees (drift); the attitude bars slide sideways with it.'),
     num('fpm-elevation', 'Flight path marker (up/down)', '°', -3.42, [-20, 5, 0.1], 'The flight path marker\'s height above (+) or below (−) the boresight cross, in degrees; below it by about the angle of attack.'),
-    num('flight-path-angle', 'Attitude bars', '°', 0.32, [-90, 90, 0.5], 'The attitude bars (horizon line and pitch ladder, every 5°, every 10° past 60°) as read at the flight path marker: the climb or dive angle. Climb bars are solid, dive bars dashed; each has a tick pointing to the horizon. Pitch is read at the boresight cross.'),
+    num('pitch', 'Pitch (attitude bars)', '°', 3.74, [-90, 90, 0.5], 'The attitude bars (horizon line and pitch ladder, every 5°, every 10° past 60°): pitch is read at the boresight cross, the climb or dive angle at the flight path marker. Climb bars are solid, dive bars dashed; each has a tick pointing to the horizon. The bars are caged to the flight path marker in azimuth, so they slide sideways with drift, and turn with bank about the marker.'),
     num('roll', 'Bank', '°', -0.85, [-180, 180, 1], 'Bank angle, right wing down positive: the attitude bars turn about the flight path marker, and the roll indicator\'s caret moves along its arc (marks at 0, 10, 20, 30 and 45°).'),
     num('steering-cue', 'Great circle steering cue (position)', '°', -1.24, [-10, 10, 0.1], 'Great circle steering cue: lateral steering to the selected steerpoint. Its offset from the flight path marker, in degrees.'),
     num('steering', 'Great circle steering cue (line)', '°', 0, [-180, 180, 1], 'The line from the steering cue shows the steerpoint\'s relative bearing from the nose: 12 o\'clock ahead, 3 or 9 o\'clock 90° right or left, 6 o\'clock behind.'),

@@ -343,7 +343,7 @@ export interface HudField { indicator: string; at: Pt; anchor?: 'start' | 'middl
  * Head-up display symbology, square-on, in mm relative to the boresight cross
  * (y down). Fixed indicator ids: `screen` (pages on/off), the attitude group
  * (`fpm-azimuth`, `fpm-elevation`: the flight path marker from the boresight,
- * degrees; `flight-path-angle`: where the attitude bars sit on the marker,
+ * degrees; `pitch`: the attitude bars against the boresight, caged to the marker in azimuth,
  * degrees; `roll`: degrees, right bank positive), `steering-cue` (degrees
  * left or right of the marker) and `steering` (relative bearing turning the
  * cue's line), `steerpoint-azimuth`/`steerpoint-elevation` (the diamond), the

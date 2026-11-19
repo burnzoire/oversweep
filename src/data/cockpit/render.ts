@@ -143,7 +143,7 @@ export function readings(spec: PanelSpec): Record<string, Reading> {
       const h = p.hud, r = (id: string, d: [number, number, number]) => ind(id)?.range ?? d;
       const shift = (id: string, per: number, axis: 'x' | 'y', d: [number, number, number]) => { out[id] = { kind: 'shift', per, ...(axis === 'y' ? { axis } : {}), range: r(id, d) }; };
       shift('fpm-azimuth', h.deg, 'x', [-10, 10, 0.1]); shift('fpm-elevation', -h.deg, 'y', [-20, 5, 0.1]);
-      shift('flight-path-angle', h.deg, 'y', [-90, 90, 0.5]); shift('steering-cue', h.deg, 'x', [-10, 10, 0.1]);
+      shift('pitch', h.deg, 'y', [-90, 90, 0.5]); shift('steering-cue', h.deg, 'x', [-10, 10, 0.1]);
       shift('steerpoint-azimuth', h.deg, 'x', [-15, 15, 0.1]); shift('steerpoint-elevation', -h.deg, 'y', [-25, 10, 0.1]);
       out.roll = { kind: 'needle', scale: [[-180, 180], [180, -180]], range: r('roll', [-180, 180, 1]) };
       out.steering = { kind: 'needle', scale: [[-180, -180], [180, 180]], range: r('steering', [-180, 180, 1]) };
@@ -170,7 +170,7 @@ export function readings(spec: PanelSpec): Record<string, Reading> {
 export const HSI_INDICATORS = ['screen', 'heading', 'heading-set', 'course', 'bearing', 'deviation', 'range', 'course-set', 'mode', 'to-from', 'notice'] as const;
 
 /** Indicator ids every HUD picture draws (see `HudDisplay`); its data fields add their own. */
-export const HUD_INDICATORS = ['screen', 'fpm-azimuth', 'fpm-elevation', 'flight-path-angle', 'roll', 'steering-cue', 'steering', 'steerpoint-azimuth', 'steerpoint-elevation', 'velocity', 'altitude', 'heading', 'velocity-mode'] as const;
+export const HUD_INDICATORS = ['screen', 'fpm-azimuth', 'fpm-elevation', 'pitch', 'roll', 'steering-cue', 'steering', 'steerpoint-azimuth', 'steerpoint-elevation', 'velocity', 'altitude', 'heading', 'velocity-mode'] as const;
 
 /** Every indicator a placement shows (lamps, needles, counters, displays). */
 export function placementIndicators(p: Placement): string[] {
@@ -326,8 +326,9 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
     `<g data-page-of="${id}" data-page="${pg.id}"${pg.id === pageOf(id) ? '' : ' display="none"'}>${draw(pg.id)}</g>`).join('');
   const word = (id: string, pg: string) => pg === 'none' ? '' : ind(id)?.pages?.find(q => q.id === pg)?.label ?? '';
   const D = h.deg, F = h.font, pen = `stroke-width="${HUD_PEN}" fill="none"`;
-  const shift = (id: string, axis: 'x' | 'y', per: number, body: string) =>
-    `<g data-indicator="${id}"><g data-shift="${id}" transform="translate(${axis === 'x' ? `${n(value(id) * per)} 0` : `0 ${n(value(id) * per)}`})">${body}</g></g>`;
+  // `k` scales the page's move for this copy (−1 undoes a parent's shift).
+  const shift = (id: string, axis: 'x' | 'y', per: number, body: string, k = 1) =>
+    `<g data-indicator="${id}"><g data-shift="${id}"${k === 1 ? '' : ` data-k="${k}"`} transform="translate(${axis === 'x' ? `${n(value(id) * per * k)} 0` : `0 ${n(value(id) * per * k)}`})">${body}</g></g>`;
   const turned = (id: string, deg: number, body: string) => `<g data-indicator="${id}"><g data-needle="${id}" transform="rotate(${n(deg)})">${body}</g></g>`;
   const clip = `hud-glass-${spec.id}`;
   // Attitude bars: solid climb bars with their ticks down, dashed dive bars with their ticks up, labels toward the horizon.
@@ -342,8 +343,11 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
   }
   const fpm = `<circle r="${n(h.fpm.r)}" ${pen}/><path d="M${n(-h.fpm.wing)} 0H${n(-h.fpm.r)}M${n(h.fpm.r)} 0H${n(h.fpm.wing)}M0 ${n(-h.fpm.r)}V${n(-h.fpm.tail)}" ${pen}/>`;
   const cue = shift('steering-cue', 'x', D, `<circle r="${n(h.steering.r)}" ${pen}/>` + turned('steering', value('steering'), `<path d="M0 ${n(-h.steering.r)}V${n(-h.steering.line)}" ${pen}/>`));
-  const attitude = shift('fpm-azimuth', 'x', D, shift('fpm-elevation', 'y', -D,
-    fpm + cue + turned('roll', -value('roll'), shift('flight-path-angle', 'y', D, bars))));
+  // The bars sit on the boresight by pitch alone; they are caged to the marker in azimuth and turn with roll about it
+  // (shifted to the marker's height, turned, shifted back).
+  const ladder = shift('fpm-azimuth', 'x', D, shift('fpm-elevation', 'y', -D,
+    turned('roll', -value('roll'), shift('fpm-elevation', 'y', -D, shift('pitch', 'y', D, bars), -1))));
+  const attitude = ladder + shift('fpm-azimuth', 'x', D, shift('fpm-elevation', 'y', -D, fpm + cue));
   const b = h.boresight.arm, dm = h.diamond;
   const fixed = `<path d="M${n(-b)} 0H${n(b)}M0 ${n(-b)}V${n(b)}" ${pen}/>`;
   const steerpoint = shift('steerpoint-azimuth', 'x', D, shift('steerpoint-elevation', 'y', -D, `<path d="M0 ${n(-dm)}L${n(dm)} 0L0 ${n(dm)}L${n(-dm)} 0Z" ${pen}/>`));

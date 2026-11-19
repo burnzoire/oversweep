@@ -238,7 +238,8 @@ Worked examples: F-16C `ded.ts`, `ehsi.ts`, `icp.ts`.
   `page` (screen, mode, to-from).
 - **Head-up display** (`hud`, F-16C `hud.ts`): symbology square-on in mm from the
   boresight cross, angular scale from the attitude bars (px a degree). Attitude
-  symbols are nested shifts (marker azimuth/elevation, bars by flight path angle)
+  symbols are nested shifts (marker azimuth/elevation; bars by pitch from the
+  boresight, caged to the marker in azimuth)
   turned by `roll` about the marker; tapes (`tape` readings) move ticks and
   labels inside fixed windows under a paper-filled readout box; data fields are
   `number` readings printed with a `ReadoutFormat` (`readout.ts`, shared with the

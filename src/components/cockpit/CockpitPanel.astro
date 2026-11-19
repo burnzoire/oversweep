@@ -353,7 +353,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     if (!r) return;
     if (r.kind === 'page') return;
     const all = (sel: string, f: (el: Element) => void) => svg.querySelectorAll(sel).forEach(f);
-    const move = (axis: 'x' | 'y' | undefined, d: number) => all(`[data-shift="${id}"]`, el => el.setAttribute('transform', axis === 'y' ? `translate(0 ${+d.toFixed(3)})` : `translate(${+d.toFixed(3)} 0)`));
+    const move = (axis: 'x' | 'y' | undefined, d: number) => all(`[data-shift="${id}"]`, el => { const e = d * Number((el as HTMLElement).dataset.k ?? 1); el.setAttribute('transform', axis === 'y' ? `translate(0 ${+e.toFixed(3)})` : `translate(${+e.toFixed(3)} 0)`); });
     const print = (s: string) => all(`[data-number="${id}"] text`, el => { el.textContent = s; });
     if (r.kind === 'needle') all(`[data-needle="${id}"]`, el => el.setAttribute('transform', `rotate(${+scaleAngle(r.scale, v).toFixed(3)})`));
     else if (r.kind === 'shift') move(r.axis, v * r.per);
