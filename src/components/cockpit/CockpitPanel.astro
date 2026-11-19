@@ -92,6 +92,7 @@ const dirLabels = (id: string) => {
 import type { ControlDef, IndicatorDef } from '../../data/cockpit/types';
 import type { Reading } from '../../data/cockpit/render.ts';
 import { drumPositions, scaleAngle } from '../../data/cockpit/dial.ts';
+import { formatReadout } from '../../data/cockpit/readout.ts';
 
 /** Readout digits (kept in step with readoutDigits in render.ts). */
 const digitsOf = (v: number, digits: number, tenths: boolean) => {
@@ -351,8 +352,13 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     const r = def.readings[id];
     if (!r) return;
     if (r.kind === 'page') return;
-    if (r.kind === 'needle') svg.querySelector(`[data-needle="${id}"]`)?.setAttribute('transform', `rotate(${+scaleAngle(r.scale, v).toFixed(3)})`);
-    else if (r.kind === 'shift') svg.querySelector(`[data-shift="${id}"]`)?.setAttribute('transform', `translate(${+(v * r.per).toFixed(3)} 0)`);
+    const all = (sel: string, f: (el: Element) => void) => svg.querySelectorAll(sel).forEach(f);
+    const move = (axis: 'x' | 'y' | undefined, d: number) => all(`[data-shift="${id}"]`, el => el.setAttribute('transform', axis === 'y' ? `translate(0 ${+d.toFixed(3)})` : `translate(${+d.toFixed(3)} 0)`));
+    const print = (s: string) => all(`[data-number="${id}"] text`, el => { el.textContent = s; });
+    if (r.kind === 'needle') all(`[data-needle="${id}"]`, el => el.setAttribute('transform', `rotate(${+scaleAngle(r.scale, v).toFixed(3)})`));
+    else if (r.kind === 'shift') move(r.axis, v * r.per);
+    else if (r.kind === 'tape') { move(r.axis, v * r.per); print(formatReadout(v, r.format)); }
+    else if (r.kind === 'number') print(formatReadout(v, r.format));
     else if (r.kind === 'digits') {
       const d = digitsOf(v, r.digits, !!r.tenths), texts = svg.querySelectorAll(`[data-digits="${id}"] text`);
       if (texts[0]) texts[0].textContent = d.whole;

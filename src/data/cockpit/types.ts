@@ -191,6 +191,8 @@ export type Placement =
   | { component: 'text-display'; indicator: string; at: Pt; display: TextDisplay }
   /** Electronic HSI picture (F-16C EHSI), centred on `at` (the compass centre); every symbol is its own indicator, see `HsiDisplay`. */
   | { component: 'hsi'; at: Pt; hsi: HsiDisplay }
+  /** Head-up display symbology (F-16C HUD), centred on `at` (the boresight cross); every symbol is its own indicator, see `HudDisplay`. */
+  | { component: 'hud'; at: Pt; hud: HudDisplay }
   | { component: 'dzus'; at: Pt; cut?: Cut }
   | { component: 'screw' | 'screw-medium' | 'screw-small' | 'screw-hex' | 'screw-tiny'; at: Pt };
 
@@ -306,6 +308,69 @@ export interface HsiDisplay {
   notice: { at: Pt; cap: number; charWidth?: number };
   /** Fixed legends drawn on the screen while it is on (NM, CRS, HDG). */
   legends: { text: string; at: Pt; cap: number; width?: number }[];
+}
+
+/** How a numeric readout is printed: `pad` whole digits (zero-filled), `decimals`, thousands `comma`, or `clock` (seconds as m:ss, minutes zero-filled to `pad`). */
+export interface ReadoutFormat { pad?: number; decimals?: number; comma?: boolean; clock?: boolean; /** Rounded to this step first (altitude: 10 ft). */ round?: number }
+
+/** A tape scale (HUD velocity, altitude, heading): ticks every `minor`, long ones every `major`, labels every `label` units. */
+export interface HudTape {
+  /** Pointer (zero of the moving tape) relative to the boresight; tapes run along y (velocity, altitude) or x (heading). */
+  at: Pt;
+  axis: 'x' | 'y';
+  /** mm per unit; the tape moves this far for each unit of its reading. */
+  per: number;
+  from: number; to: number;
+  minor: number; major: number; label: number;
+  /** Tick edge offset from the pointer line across the tape, and tick lengths (outward from that edge, signed). */
+  edge: number; minorLength: number; majorLength: number;
+  /** Label centre offset across the tape from the pointer line; label text = value / `labelDiv`, `labelPad` digits, with `labelSuffix`. */
+  labelOffset: number; labelDiv: number; labelPad: number; labelSuffix?: string;
+  /** Visible half-length of the tape window along its axis (ticks), and for labels when it differs. */
+  window: number; labelWindow?: number;
+  /** Labels whose centre is within this distance of the pointer are hidden (they would sit under the readout box). */
+  labelGap?: number;
+  /** Fixed index: a line across the tape at the pointer (from, to across), or a lubber line along it. */
+  index: string;
+  /** Readout box (closed path relative to the boresight), the readout's text anchor and alignment, and its format. */
+  box: string; readout: { at: Pt; anchor: 'start' | 'middle' | 'end'; format: ReadoutFormat };
+}
+
+/** A data field on the HUD: a number readout or a word (pages), drawn left-aligned (`start`) or centred at `at` (relative to the boresight). */
+export interface HudField { indicator: string; at: Pt; anchor?: 'start' | 'middle' | 'end'; format?: ReadoutFormat; /** Fixed text drawn before the field (AL, R). */ prefix?: { text: string; at: Pt } }
+
+/**
+ * Head-up display symbology, square-on, in mm relative to the boresight cross
+ * (y down). Fixed indicator ids: `screen` (pages on/off), the attitude group
+ * (`fpm-azimuth`, `fpm-elevation`: the flight path marker from the boresight,
+ * degrees; `flight-path-angle`: where the attitude bars sit on the marker,
+ * degrees; `roll`: degrees, right bank positive), `steering-cue` (degrees
+ * left or right of the marker) and `steering` (relative bearing turning the
+ * cue's line), `steerpoint-azimuth`/`steerpoint-elevation` (the diamond), the
+ * tapes `velocity`, `altitude` and `heading`, `velocity-mode` (pages) and the
+ * data fields listed in `fields`.
+ */
+export interface HudDisplay {
+  /** Combiner glass outline relative to the boresight: the symbology is clipped to it. */
+  glass: string;
+  /** Character cap height and pitch (mm) of the HUD's fixed-width lettering. */
+  font: { cap: number; pitch: number };
+  /** mm per degree of the attitude bars (the HUD's angular scale). */
+  deg: number;
+  boresight: { arm: number };
+  fpm: { r: number; wing: number; tail: number };
+  ladder: { gap: number; length: number; tick: number; dash: [on: number, off: number]; labelInset: number; /** Label centre offset toward the horizon for climb and dive bars. */ labelDrop: [climb: number, dive: number]; horizon: number };
+  steering: { r: number; line: number };
+  /** Steerpoint diamond: half-diagonal. */
+  diamond: number;
+  velocity: HudTape; altitude: HudTape; heading: HudTape;
+  /** Velocity mode letter (C/T/G) by the velocity pointer. */
+  velocityMode: Pt;
+  /** Roll indicator: arc centre, tick radii (inner, short, long), tick angles (long ones in `longAt`), caret (apex radius, base radius, width). */
+  roll: { centre: Pt; r: [inner: number, short: number, long: number]; ticks: number[]; longAt: number[]; caret: [apex: number, base: number, width: number] };
+  fields: HudField[];
+  /** Boxes drawn round fields (radar altitude), relative to the boresight. */
+  boxes: string[];
 }
 
 /** The plate corner toward which the face plate is cut away around a DZUS. */

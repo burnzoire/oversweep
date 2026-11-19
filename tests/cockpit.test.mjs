@@ -113,3 +113,20 @@ test('displays draw every page they list and readouts format like the page scrip
   assert.deepEqual(readoutDigits(15.94, 3, true), { whole: '015', tenth: '9' });
   assert.deepEqual(readoutDigits(65, 3, false), { whole: '065', tenth: '' });
 });
+
+test('HUD symbols each have a reading and print like the figure', { skip: !canImportTs }, async () => {
+  const { f16cCockpit, builtPanels, renderPanel, readings, placementIndicators } = await load();
+  const { formatReadout } = await import('../src/data/cockpit/readout.ts');
+  const hud = builtPanels(f16cCockpit).find(({ spec }) => spec.id === 'hud').spec;
+  const r = readings(hud), ids = hud.placements.flatMap(placementIndicators);
+  for (const id of ids) {
+    assert.ok(hud.indicators.some(i => i.id === id), `hud.${id}: indicator defined`);
+    assert.ok(r[id], `hud.${id}: drivable`);
+  }
+  const svg = renderPanel(hud, { state: { screen: 'on' } });
+  for (const s of ['8,360', '002:55', '019.5', '0.61', 'AL', 'NAV']) assert.ok(svg.includes(s), `hud shows ${s}`);
+  assert.equal(formatReadout(8363, { comma: true, round: 10 }), '8,360');
+  assert.equal(formatReadout(175, { clock: true, pad: 3 }), '002:55');
+  assert.equal(formatReadout(19.5, { pad: 3, decimals: 1 }), '019.5');
+  assert.equal(formatReadout(-1.04, { decimals: 1 }), '-1.0');
+});

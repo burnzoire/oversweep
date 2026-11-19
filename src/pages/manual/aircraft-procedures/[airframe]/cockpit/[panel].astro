@@ -57,7 +57,7 @@ const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns whe
       {spec.indicators.map(i => (
         <div class="ci-card" data-item={i.id} hidden>
           <h2>{i.name}</h2>
-          {i.type !== 'lamp' && <p class="ci-pos">Cold and dark: {i.restNote ?? <>needle at its stop, <strong>{i.rest} {i.unit}</strong></>}</p>}
+          {i.type !== 'lamp' && <p class="ci-pos">Cold and dark: {i.restNote ?? (i.type === 'display' ? 'blank' : <>needle at its stop, <strong>{i.rest} {i.unit}</strong></>)}</p>}
           <p>{i.description}</p>
           <p class="ci-src">{i.source}</p>
         </div>
