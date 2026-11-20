@@ -41,6 +41,8 @@ import { hmcs } from './hmcs.ts';
 import { oxygen } from './oxygen.ts';
 import { stick } from './stick.ts';
 import { throttleGrip } from './throttle-grip.ts';
+import { speedBrake } from './speed-brake.ts';
+import { seatArmingLever } from './seat-arming-lever.ts';
 
 /**
  * DCS F-16C cockpit catalogue: areas and panels in the order the official guide
@@ -87,6 +89,7 @@ export const f16cCockpit: AircraftCockpit = {
     {
       id: 'left-aux-console', title: 'Left auxiliary console', panels: [
         { id: 'landing-gear', title: 'Landing gear panel', page: 55, spec: landingGear },
+        { id: 'speed-brake', title: 'SPEED BRAKE position indicator', page: 57, spec: speedBrake },
         { id: 'hmcs', title: 'HMCS control panel', page: 57, spec: hmcs },
         { id: 'alt-gear', title: 'ALT GEAR handle', page: 57 },
       ],
@@ -151,7 +154,8 @@ export const f16cCockpit: AircraftCockpit = {
     },
     {
       id: 'ejection-seat', title: 'Ejection seat', panels: [
-        { id: 'ejection-seat', title: 'Ejection seat controls', page: 81 },
+        { id: 'seat-arming-lever', title: 'Ejection seat arming lever', page: 81, spec: seatArmingLever },
+        { id: 'ejection-seat', title: 'Ejection handle and manual chute lever', page: 81 },
       ],
     },
   ],

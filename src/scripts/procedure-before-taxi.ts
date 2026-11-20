@@ -8,17 +8,22 @@
  * runs on its own clock (DED INS page, HUD ALIGN cue), the FLCS BIT, the MFD
  * DTE page and the altimeter, and sends them back with `cockpit:indicate`.
  * Steps that only read an indication end with a confirm.
+ *
+ * The Before Takeoff procedure runs on the same model (`model: 'before-takeoff'`),
+ * starting where Before Taxi ends: INS in NAV, altimeter set, trim centred.
  */
 
 interface StepDo { control: string; to: string; on?: 'press' | 'release'; hold?: number }
 interface Step { id: string; panels: string[]; hints?: string[]; do?: StepDo; also?: StepDo[]; confirm?: string; turn?: { control: string; to: number; per: number } }
-interface Config { aircraft: string; initial: Record<string, string>; labels: Record<string, string>; names: Record<string, string>; orders: Record<string, string[]>; lamps: string[]; steps: Step[] }
+interface Config { aircraft: string; model?: string; initial: Record<string, string>; labels: Record<string, string>; names: Record<string, string>; orders: Record<string, string[]>; lamps: string[]; steps: Step[] }
 /** `ins`: the alignment stage (-1 not started, 0–4 up the INS DED pages); `flash`: the fine-alignment flash is in its off half; `bit`: the FLCS BIT is running; `dte`: the left MFD shows the DTE page; `pitch`/`roll`: the trim applied, in indicator dots (nose up, left wing down positive). */
-interface State { rpm: number; noz: number; ins: number; flash: boolean; baro: number; mode: 'pneu' | 'elec'; bit: boolean; dte: boolean; pitch: number; roll: number }
+interface State { /** Speedbrakes open at any angle (they stay where SPD BRK left them). */ sb: boolean; rpm: number; noz: number; ins: number; flash: boolean; baro: number; mode: 'pneu' | 'elec'; bit: boolean; dte: boolean; pitch: number; roll: number }
 
 // Illustrative scenario: parked at Incirlik (field elevation 191 ft, from the airfield data), local altimeter setting 29.97.
 const FIELD = 191, QNH = 29.97, PNEU_ERROR = 25;
-const initialState = (): State => ({ rpm: 68, noz: 98, ins: -1, flash: false, baro: 29.92, mode: 'pneu', bit: false, dte: false, pitch: 0, roll: 0 });
+const taxiStart = (): State => ({ sb: false, rpm: 68, noz: 98, ins: -1, flash: false, baro: 29.92, mode: 'pneu', bit: false, dte: false, pitch: 0, roll: 0 });
+/** Before Takeoff starts aligned and in NAV, with the altimeter in ELEC at the local setting. */
+const takeoffStart = (): State => ({ ...taxiStart(), ins: 4, baro: QNH, mode: 'elec', dte: true });
 // The FLCS BIT runs about 45 s in the jet; compressed here.
 const BIT_MS = 4000;
 // The INS alignment is compressed: the guide gives about 90 s for a Stored Heading alignment.
@@ -40,6 +45,7 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
 
   try { sessionStorage.removeItem(`oversweep:cockpit:${cfg.aircraft}`); } catch { /* storage unavailable */ }
   let pos: Record<string, string> = { ...cfg.initial };
+  const initialState = cfg.model === 'before-takeoff' ? takeoffStart : taxiStart;
   let st = initialState();
   let step = 0;
   let finished = false;
@@ -99,7 +105,7 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
     const lit = new Set<string>();
     const set = (id: string, v: boolean) => { if (v) lit.add(id); };
     if (on('test.mal-ind-lts')) cfg.lamps.forEach(l => lit.add(l));
-    set('caution.seat-not-armed', true);
+    set('caution.seat-not-armed', pos['seat-arming-lever.arming-lever'] !== 'armed');
     set('caution.probe-heat', pos['test.probe-heat'] === 'test');
     set('right-eyebrow.eng-fire', on('test.fire-oheat'));
     set('caution.sec', pos['eng-jet-start.eng-cont'] === 'sec');
@@ -138,7 +144,7 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
         'manual-trim.pitch-trim-ind': st.pitch, 'manual-trim.roll-trim-ind': st.roll,
         'ehsi.heading': 232, 'ehsi.heading-set': 232, 'ehsi.course': 232, 'ehsi.course-set': 232, 'ehsi.bearing': 232, 'ehsi.range': 24, 'ehsi.deviation': 0,
       },
-      pages: { 'left-mfd.display': mfd, 'right-mfd.display': mfd === 'off' ? 'off' : 'menu', 'sai.off-flag': pos['sai.cage'] === 'pulled' ? 'shown' : 'hidden', 'hud.master-arm': 'none', 'ded.display': ded, 'hud.screen': hudOn ? 'on' : 'off', 'hud.align': alignCue ? 'align' : 'none', 'altimeter.pneu': st.mode === 'pneu' ? 'shown' : 'hidden',
+      pages: { 'speed-brake.indicator': st.sb ? 'open' : 'closed', 'left-mfd.display': mfd, 'right-mfd.display': mfd === 'off' ? 'off' : 'menu', 'sai.off-flag': pos['sai.cage'] === 'pulled' ? 'shown' : 'hidden', 'hud.master-arm': 'none', 'ded.display': ded, 'hud.screen': hudOn ? 'on' : 'off', 'hud.align': alignCue ? 'align' : 'none', 'altimeter.pneu': st.mode === 'pneu' ? 'shown' : 'hidden',
         // The EHSI comes on with the avionics and shows INU until the aligned INS is in NAV (ATT at the ATT knob position).
         // Backup UHF: lit once the function knob is off OFF; TEST DISPLAY lights every segment.
         'uhf.chan-display': pos['uhf.function'] === 'off' || pos['uhf.mode'] !== 'preset' ? 'off' : pos['uhf.test-display'] === 'in' ? 'test' : String(pos['uhf.chan'] ?? '1').padStart(2, '0'),
@@ -260,6 +266,8 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
         return;
       }
     }
+    // SPD BRK: aft (held) opens the speedbrakes, forward retracts them; centre leaves them where they are.
+    if (key === 'throttle.spd-brk' && d.phase === 'press') { if (d.position === 'aft') st.sb = true; if (d.position === 'fwd') st.sb = false; }
     // The altimeter mode lever sets the mode while it is held (a step that wants it completes below).
     if (key === 'altimeter.mode' && d.phase === 'press' && (d.position === 'elec' || d.position === 'pneu')) st.mode = d.position;
     const want = pending(s).find(w => w.control === key && w.to === d.position && (w.on ?? 'press') === d.phase);

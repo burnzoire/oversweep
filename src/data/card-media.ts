@@ -64,6 +64,15 @@ export const cardMedia: Record<string, CardMedia> = {
       sourceUrl: 'https://www.dvidshub.net/image/8942229/pacific-air-forces-f-16-demonstration-team-performs-avalon-australian-international-airshow-2025',
     },
   },
+  'procedure.dcs-f16c.before-takeoff': {
+    summary: 'The final checks at the holding point: configuration, fuel, oxygen, arming the ejection seat and the flight controls.',
+    photo: {
+      src: 'manual/cards/f16c-start.webp',
+      alt: 'An F-16 pilot in an open cockpit signalling for engine start at Avalon.',
+      credit: 'Engine start at Avalon — Peter Reft, US Air Force (public domain)',
+      sourceUrl: 'https://www.dvidshub.net/image/8942229/pacific-air-forces-f-16-demonstration-team-performs-avalon-australian-international-airshow-2025',
+    },
+  },
   'module.principles-of-flight': {
     summary: 'How a wing makes lift, and how a jet turns, climbs and stalls.',
     photo: {
