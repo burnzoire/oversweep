@@ -98,7 +98,7 @@ const slide = (axis: 'x' | 'y', at: number, labels: string[] = [], slotted = tru
 };
 
 const SB = ['EXTEND', 'RETRACT'];
-export const THROTTLE_FACES = (manRng: number[], antElev: number[]): Record<string, { canvas: [number, number]; placements: Placement[] }> => ({
+export const THROTTLE_FACES = (manRng: number[], antElev: number[]): Record<string, { canvas: [number, number]; placements: Placement[]; hit?: [number, number, number, number] }> => ({
   comm: { canvas: FACE, placements: fourWay('comm-ud', 'comm-lr', { ud: ['fwd', 'center', 'aft'], lr: ['left', 'center', 'right'] }, circle(16, 'heavy') + around('VHF', 'UHF', 'IFF OUT', 'IFF IN', 18.6),
     rect(22, 15, 1.6) + rect(18, 11, 1, 'fine')) },
   cursor: { canvas: FACE, placements: [
@@ -110,10 +110,10 @@ export const THROTTLE_FACES = (manRng: number[], antElev: number[]): Record<stri
     { component: 'traced', control: 'uncage', at: [C, C], shapes: shapes({ out: '', in: knob(0, true) + text('TURN: RANGE  PRESS: UNCAGE', C, C + 19.6) }) },
   ] },
   'ant-elev': { canvas: FACE, placements: [{ component: 'traced', control: 'ant-elev', at: [C, C], shapes: shapes(Object.fromEntries(antElev.map(v => [v > 0 ? `u${v}` : v < 0 ? `d${-v}` : 'center', knob(v * 0.3) + around('UP', 'DOWN')]))) }] },
-  dogfight: { canvas: FACE, placements: [{ component: 'traced', control: 'dogfight', at: [C, C], shapes: shapes(Object.fromEntries((['dogfight', 'center', 'msl-ovrd'] as const).map((id, i) => {
+  dogfight: { canvas: FACE, hit: [12, 8, 26, 34], placements: [{ component: 'traced', control: 'dogfight', at: [C, C], shapes: shapes(Object.fromEntries((['dogfight', 'center', 'msl-ovrd'] as const).map((id, i) => {
     const dy = (i - 1) * 4;
     const cap = circle(12) + circle(10, 'fine', 'none') + rect(15, 2.6, 1.3, 'fine');
     return [id, rect(26, 34, 13, 'heavy') + around('DOGFIGHT', 'MSL OVRD', '', '', 19.8) + g(0, dy, cap)];
   }))) }] },
-  'spd-brk': { canvas: FACE, placements: [{ component: 'traced', control: 'spd-brk', at: [C, C], shapes: shapes({ aft: slide('x', -1, SB), off: slide('x', 0, SB), fwd: slide('x', 1, SB) }) }] },
+  'spd-brk': { canvas: FACE, hit: [7, 18.5, 36, 13], placements: [{ component: 'traced', control: 'spd-brk', at: [C, C], shapes: shapes({ aft: slide('x', -1, SB), off: slide('x', 0, SB), fwd: slide('x', 1, SB) }) }] },
 });

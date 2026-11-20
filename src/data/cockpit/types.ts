@@ -549,7 +549,7 @@ export interface PadDef {
   /** Controls shown as a row of their positions (rotaries as step buttons with a readout). */
   controls?: string[];
   /** The switch drawn face-on, square to the camera, on its own canvas (mm); without it the pad shows the drawing cropped to the switch. */
-  face?: { canvas: [w: number, h: number]; placements: Placement[] };
+  face?: { canvas: [w: number, h: number]; placements: Placement[]; /** The switch's click area (mm); a 34 mm square about the centre by default. */ hit?: [x: number, y: number, w: number, h: number] };
 }
 
 /** Every control a pad works. */

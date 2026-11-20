@@ -32,20 +32,48 @@ const control = (id: string) => spec.controls.find(c => c.id === id)!;
 // Pop-out pads: a control a pad names opens the pad from the drawing instead of moving there.
 const pads = spec.pads ?? [];
 const padOf = new Map(pads.flatMap(p => padControls(p).map(c => [c, p] as const)));
-const ARROW = { up: '▲', down: '▼', left: '◀', right: '▶' } as const;
 const zones = hitZones(spec);
 const art = renderPanel(spec, { label: `${cockpit.title} ${spec.title}` });
+type Box = [x: number, y: number, w: number, h: number];
 /** Each pad's close-up: the drawing cropped to its controls' click areas, with a margin. */
 const padView = (p: (typeof pads)[number]) => {
   if (p.face) {
     const [fw, fh] = p.face.canvas;
-    return { svg: renderPanel({ ...spec, canvas: p.face.canvas, plate: [], engraving: [], placements: p.face.placements }, {}).replace(/role="img" aria-label="[^"]*"/, 'aria-hidden="true"'), ratio: fw / fh };
+    const hit = p.face.hit ?? [fw / 2 - 17, fh / 2 - 17, 34, 34];
+    return { svg: renderPanel({ ...spec, canvas: p.face.canvas, plate: [], engraving: [], placements: p.face.placements }, {}).replace(/role="img" aria-label="[^"]*"/, 'aria-hidden="true"'), ratio: fw / fh, frame: [0, 0, fw, fh] as Box, hit };
   }
   const bs = zones.filter(z => z.kind === 'control' && padControls(p).includes(z.id)).map(z => z.box);
   const x0 = Math.min(...bs.map(b => b[0])), y0 = Math.min(...bs.map(b => b[1]));
   const x1 = Math.max(...bs.map(b => b[0] + b[2])), y1 = Math.max(...bs.map(b => b[1] + b[3]));
   const m = Math.max(10, 0.5 * Math.max(x1 - x0, y1 - y0)), w = x1 - x0 + 2 * m, h = y1 - y0 + 2 * m;
-  return { svg: art.replace(/viewBox="[^"]*"/, `viewBox="${+(x0 - m).toFixed(2)} ${+(y0 - m).toFixed(2)} ${+w.toFixed(2)} ${+h.toFixed(2)}"`).replace(/role="img" aria-label="[^"]*"/, 'aria-hidden="true"'), ratio: w / h };
+  return { frame: [x0 - m, y0 - m, w, h] as Box, hit: [x0, y0, x1 - x0, y1 - y0] as Box, svg: art.replace(/viewBox="[^"]*"/, `viewBox="${+(x0 - m).toFixed(2)} ${+(y0 - m).toFixed(2)} ${+w.toFixed(2)} ${+h.toFixed(2)}"`).replace(/role="img" aria-label="[^"]*"/, 'aria-hidden="true"'), ratio: w / h };
+};
+/**
+ * A pad's click zones on the drawn switch, like a panel's: a four-way switch is pushed by its edge (four triangles),
+ * a toggle or knob by the half it moves toward (or turns toward), a button by its cap; a centre press sits in the middle.
+ */
+type Zone = { box: Box; control: string; pos?: string; step?: string; shape?: 'up' | 'down' | 'left' | 'right' | 'round'; label: string };
+const padZones = (p: (typeof pads)[number], hb: Box): Zone[] => {
+  const [x, y, w, h] = hb, z: Zone[] = [];
+  if (p.cross) for (const dir of ['up', 'down', 'left', 'right'] as const) {
+    const arm = p.cross[dir];
+    if (arm) z.push({ box: hb, control: arm[0], pos: arm[1], shape: dir, label: `${control(arm[0]).name}: ${posLabel(control(arm[0]), arm[1])}` });
+  }
+  const main = p.cross ? undefined : p.controls?.[0];
+  if (main) {
+    const c = control(main);
+    if (c.type === 'pushbutton') z.push({ box: hb, control: c.id, pos: pressedPos(c), label: `Press ${c.name}` });
+    else {
+      const [a, b] = dirLabels(c.id), across = c.travel === 'horizontal' || (c.type === 'rotary' && c.travel !== 'vertical');
+      z.push(across ? { box: [x, y, w / 2, h], control: c.id, step: '-1', label: a } : { box: [x, y, w, h / 2], control: c.id, step: '-1', label: a });
+      z.push(across ? { box: [x + w / 2, y, w / 2, h], control: c.id, step: '1', label: b } : { box: [x, y + h / 2, w, h / 2], control: c.id, step: '1', label: b });
+    }
+  }
+  const r = Math.min(w, h) * 0.24;
+  for (const id of [...(p.centre ? [p.centre] : []), ...(p.controls ?? []).filter(id => id !== main)]) {
+    z.push({ box: [x + w / 2 - r, y + h / 2 - r, 2 * r, 2 * r], control: id, pos: pressedPos(control(id)), shape: 'round', label: `Press ${control(id).name}` });
+  }
+  return z;
 };
 const shownPads = only ? pads.filter(p => only.includes(p.id)) : pads;
 if (only && shownPads.length !== only.length) throw new Error(`${spec.id}: no pad ${only.filter(o => !pads.some(p => p.id === o)).join(', ')}`);
@@ -91,38 +119,14 @@ const dirLabels = (id: string) => {
       {shownPads.map(p => { const v = padView(p); return (
         <section class="cp-pad" data-pad={p.id} hidden={!only} aria-label={p.name}>
           <header class="cp-pad-head"><strong>{p.name}</strong>{!only && <button type="button" class="cp-pad-close" data-pad-close aria-label={`Close the ${p.name} controls`}>Close</button>}</header>
-          <div class="cp-zoom" style={`aspect-ratio:${v.ratio}`}><Fragment set:html={v.svg} /></div>
-          {p.cross && (
-            <div class="cp-cross">
-              {(['up', 'left', 'right', 'down'] as const).map(dir => {
-                const arm = p.cross![dir];
-                if (!arm) return <span class={`cp-arm cp-${dir}`}></span>;
-                const c = control(arm[0]);
-                return <button type="button" class={`cp-pos cp-arm cp-${dir}`} data-pad-control={c.id} data-pad-pos={arm[1]}><span aria-hidden="true">{ARROW[dir]}</span> {posLabel(c, arm[1])}</button>;
-              })}
-              {p.centre
-                ? <button type="button" class="cp-pos cp-hub" data-pad-control={p.centre} data-pad-pos={pressedPos(control(p.centre))}>Press ({control(p.centre).name.replace(/^.*\((.+)\)$/, '$1')})</button>
-                : <span class="cp-hub cp-hub-idle" aria-hidden="true">Centre</span>}
-            </div>
-          )}
-          {(p.controls ?? []).map(id => {
-            const c = control(id);
-            if (c.type === 'rotary') return (
-              <div class="cp-row">{(p.controls!.length > 1 || p.cross) && <span class="cp-row-name">{c.name}</span>}
-                <div class="cp-row-btns">
-                  <button type="button" class="cp-pos cp-step" data-pad-control={c.id} data-pad-step="-1" aria-label={dirLabels(c.id)[0]}>{c.travel === 'vertical' ? '▲' : '↺'}</button>
-                  <output class="cp-readout" data-position-of={`${spec.id}.${c.id}`}></output>
-                  <button type="button" class="cp-pos cp-step" data-pad-control={c.id} data-pad-step="1" aria-label={dirLabels(c.id)[1]}>{c.travel === 'vertical' ? '▼' : '↻'}</button>
-                </div>
-              </div>
-            );
-            const list = c.type === 'pushbutton' ? [pressedPos(c)] : c.positions.map(x => x.id);
-            return (
-              <div class="cp-row">{(p.controls!.length > 1 || p.cross) && <span class="cp-row-name">{c.name}</span>}
-                <div class="cp-row-btns">{list.map(pid => <button type="button" class="cp-pos" data-pad-control={c.id} data-pad-pos={pid}>{c.type === 'pushbutton' ? `Press${c.positions.find(x => x.id === pid)?.hold === 'momentary' ? ' and hold' : ''}` : posLabel(c, pid)}</button>)}</div>
-              </div>
-            );
-          })}
+          <div class="cp-zoom" style={`aspect-ratio:${v.ratio}`}><Fragment set:html={v.svg} />
+            {padZones(p, v.hit).map(z => {
+              const [fx, fy, fw, fh] = v.frame;
+              const style = `left:${pct(z.box[0] - fx, fw)};top:${pct(z.box[1] - fy, fh)};width:${pct(z.box[2], fw)};height:${pct(z.box[3], fh)}`;
+              return <button type="button" class:list={['cp-zone', z.shape && `cp-zone-${z.shape}`]} style={style} data-pad-control={z.control} data-pad-pos={z.pos} data-pad-step={z.step} aria-label={z.label}></button>;
+            })}
+          </div>
+          {(p.controls ?? []).filter(id => control(id).type === 'rotary').map(id => <p class="cp-readout"><output data-position-of={`${spec.id}.${id}`}></output></p>)}
         </section>
       ); })}
     </div>
@@ -157,23 +161,22 @@ const dirLabels = (id: string) => {
 .cp-cards{max-width:100%}
 .cp-cards .cp-pads{display:flex;flex-wrap:wrap;gap:.75rem}
 .cp-cards .cp-pad{flex:1 1 16rem;margin-top:0}
-.cp-zoom{max-height:11rem;margin:0 auto .5rem;max-width:100%}
+.cp-zoom{max-height:14rem;margin:0 auto .5rem;max-width:100%}
 .cp-zoom :global(svg){display:block;width:100%;height:100%}
 .cp-pad-head{display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-bottom:.5rem}
 .cp-pad-close{font:inherit;font-size:.9rem;border:1px solid var(--color-border,#999);background:#fff;padding:.2rem .6rem;cursor:pointer}
-.cp-pos{font:inherit;font-size:.95rem;min-height:2.9rem;min-width:2.9rem;padding:.35rem .6rem;border:2px solid var(--panel-ink);background:#fff;color:var(--panel-ink);cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none;border-radius:6px}
-.cp-pos[aria-pressed="true"]{background:var(--panel-ink);color:#fff}
-.cp-pos.cp-target{box-shadow:0 0 0 3px #fff,0 0 0 6px #e6b800;animation:cp-target 1s ease-in-out 4}
-@keyframes cp-target{50%{box-shadow:0 0 0 3px #fff,0 0 0 6px rgba(230,184,0,.3)}}
-@media(prefers-reduced-motion:reduce){.cp-pos.cp-target{animation:none}}
-.cp-pos:focus-visible,.cp-pad-close:focus-visible{outline:2px solid var(--color-focus,#005fcc);outline-offset:2px}
-.cp-cross{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-areas:". up ." "left hub right" ". down .";gap:.4rem;max-width:30rem;margin:0 auto .3rem}
-.cp-up{grid-area:up}.cp-down{grid-area:down}.cp-left{grid-area:left}.cp-right{grid-area:right}.cp-hub{grid-area:hub}
-.cp-hub-idle{display:flex;align-items:center;justify-content:center;border:2px dashed var(--color-border,#bbb);border-radius:50%;color:var(--color-muted,#595959);font-size:.85rem;aspect-ratio:1;max-height:4.5rem;margin:auto}
-.cp-row{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .8rem;margin:.35rem 0}
-.cp-row-name{flex:1 1 12rem;font-weight:600}
-.cp-row-btns{display:flex;justify-content:center;margin:0 auto;flex-wrap:wrap;gap:.4rem;align-items:center}
-.cp-readout{min-width:9rem;text-align:center}
+.cp-zoom{position:relative}
+.cp-zone{position:absolute;padding:0;margin:0;border:0;background:transparent;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.cp-zone-up{clip-path:polygon(0 0,100% 0,50% 50%)}.cp-zone-down{clip-path:polygon(0 100%,100% 100%,50% 50%)}
+.cp-zone-left{clip-path:polygon(0 0,0 100%,50% 50%)}.cp-zone-right{clip-path:polygon(100% 0,100% 100%,50% 50%)}
+.cp-zone-round{border-radius:50%}
+.cp-zone:hover,.cp-zone:focus-visible{background:rgba(0,95,204,.14)}
+.cp-zone:focus-visible{outline:2px solid var(--color-focus,#005fcc);outline-offset:-2px}
+.cp-zone.cp-target{background:rgba(230,184,0,.45);animation:cp-target 1s ease-in-out 4}
+@keyframes cp-target{50%{background:rgba(230,184,0,.12)}}
+@media(prefers-reduced-motion:reduce){.cp-zone.cp-target{animation:none}}
+.cp-pad-close:focus-visible{outline:2px solid var(--color-focus,#005fcc);outline-offset:2px}
+.cp-readout{text-align:center;margin:0 0 .3rem}
 .cp-status{min-height:1.6em;margin:.4rem 0 0;font-size:.95rem;color:var(--color-muted,#595959)}
 </style>
 
@@ -387,7 +390,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     root.querySelectorAll('.cp-target').forEach(e => e.classList.remove('cp-target'));
     const el = padEls.find(e => e.dataset.pad === id);
     if (!el) return;
-    if (focusControl && target) el.querySelector(`[data-pad-control="${focusControl}"][data-pad-pos="${target}"]`)?.classList.add('cp-target');
+    if (focusControl && target) (el.querySelector(`[data-pad-control="${focusControl}"][data-pad-pos="${target}"]`) ?? el.querySelector(`[data-pad-control="${focusControl}"]`))?.classList.add('cp-target');
     el.scrollIntoView({ block: 'nearest', behavior: reduced ? 'auto' : 'smooth' });
   };
   const closePads = () => { if (cards) { root.querySelectorAll('.cp-target').forEach(e => e.classList.remove('cp-target')); return; } padEls.forEach(el => { el.hidden = true; }); root.querySelectorAll('[data-open-pad]').forEach(b => b.setAttribute('aria-expanded', 'false')); };
