@@ -65,13 +65,13 @@ const ball: AttitudeBall = {
     w: path('M-28 5Q-18.5 23 -9 6M9 6Q18.5 23 28 5'),
     dot: mm(6),
   },
-  flag: { shown: [mm(34), mm(-9), mm(52), mm(18)], hidden: [mm(59), mm(6), mm(27), mm(5)], cap: mm(9) },
+  flag: { shown: [mm(34), mm(5), mm(52), mm(17)], hidden: [mm(59), mm(6), mm(27), mm(5)], cap: mm(9) },
 };
 
 export const sai: PanelSpec = {
   id: 'sai',
   title: 'Standby attitude indicator',
-  canvas: [mm(330), mm(326)],
+  canvas: [mm(330), mm(328)],
   source: {
     variant: 'DCS F-16C Viper (Block 50)',
     manual: 'Eagle Dynamics, DCS F-16C Viper Early Access Guide (EN, 16 Aug 2026)',
@@ -92,7 +92,7 @@ export const sai: PanelSpec = {
     ],
   },
   plate: [
-    { d: path('M2 1H328V318H2Z') },
+    { d: path('M2 1H328V325H2Z') },
   ],
   engraving: [
     ...trimTicks.map(t => ({ kind: 'path' as const, pen: t.major ? 'heavy' as const : 'medium' as const, d: path(t.d) })),
