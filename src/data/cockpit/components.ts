@@ -334,8 +334,6 @@ export const KNOBS = {
   'knob-plain': { r: 7.7, lobes: 0, ridge: [0, 0], plain: true },
   /** Smaller plain domed knob (F-16C altimeter barometric setting knob). */
   'knob-plain-small': { r: 6.8, lobes: 0, ridge: [0, 0], plain: true },
-  /** Bar knob on a wide round body, the bar 0.28 r half-width (F-16C FUEL QTY SEL; guide p. 54, body about 41 px radius at 3.66 px/mm, bar about 23 px wide). */
-  'knob-bar-wide': { r: 11.2, lobes: 0, ridge: [0.92, 0.28], bar: true },
   /** Plain round domed knob with a white index line from the centre to the rim (F-16C YAW TRIM; guide p. 72, about 29 px radius at 3.15 px/mm). */
   'knob-plain-index': { r: 9.2, lobes: 0, ridge: [0, 0], plain: true, index: true },
 } as const;

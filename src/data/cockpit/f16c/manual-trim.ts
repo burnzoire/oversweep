@@ -35,12 +35,20 @@ const trimDial = (half: 'left' | 'down', rest: number): Dial => ({
 });
 
 const slug = (s: string) => s.toLowerCase().replace(/ /g, '-');
-/** Trim wheels: continuous, modelled with a detent at each indicator dot (three each way from the centre). */
+/**
+ * Trim controls turn without detents (analog), so they are read in percent of
+ * trim travel either side of centre, in 10 % clicks: `pct(first, last)` lists
+ * 100 % `first` … 0 % … 100 % `last`, in travel order.
+ */
+const pct = (first: string, last: string) => [
+  ...Array.from({ length: 10 }, (_, i) => 100 - 10 * i).map(v => ({ id: `${slug(first)}-${v}`, label: `${v}% ${first}` })),
+  { id: 'center', label: '0% (centred)' },
+  ...Array.from({ length: 10 }, (_, i) => 10 * (i + 1)).map(v => ({ id: `${slug(last)}-${v}`, label: `${v}% ${last}` })),
+];
 const wheel = (id: string, name: string, travel: 'vertical' | 'horizontal', first: string, last: string, description: string): ControlDef => ({
   id, name, type: 'rotary', travel,
-  // Thumbwheel detents carry a nominal angle (the wheel turns about 20° a step); only their order is drawn.
-  positions: [...[3, 2, 1].map(k => [`${slug(first)}-${k}`, `${first} ${k}`]), ['center', 'Centre'], ...[1, 2, 3].map(k => [`${slug(last)}-${k}`, `${last} ${k}`])]
-    .map(([pid, label], i) => ({ id: pid, label, hold: 'stable' as const, angle: (i - 3) * 20 })),
+  // Thumbwheel steps carry a nominal angle (about 9° a click); only their order is drawn.
+  positions: pct(first, last).map((p, i) => ({ ...p, hold: 'stable' as const, angle: (i - 10) * 9 })),
   initial: 'center', description, source: src,
 });
 
@@ -48,6 +56,8 @@ const wheel = (id: string, name: string, travel: 'vertical' | 'horizontal', firs
 // measured on the eight visible dots (the middle three are hidden by the right bail).
 const YAW: [number, number] = [104, 256];
 const yawAngle = (k: number) => 13.7 + 15.26 * k;
+/** Knob index angle for a yaw trim position, -100 % (L) to 100 % (R): the full scale runs from the L dot to the R dot. */
+const yawPct = (v: number) => 90 + (v / 100) * (90 - 13.7);
 const yawDots = Array.from({ length: 11 }, (_, k) => {
   const a = yawAngle(k) * Math.PI / 180;
   return `<circle cx="${mm(YAW[0] + 45 * Math.sin(a))}" cy="${mm(YAW[1] - 45 * Math.cos(a))}" r="${mm(2.4)}" fill="var(--panel-ink,#161616)" stroke="none"/>`;
@@ -67,7 +77,7 @@ export const manualTrim: PanelSpec = {
     scale: 'DZUS stud heads are drawn at one size (8.5 mm) on every panel; this panel\'s scale is set so its fastener heads (about 27 px across) match. It comes out the same as the FLT CONTROL panel beside it.',
     shown: { 'roll-trim': 'center', 'pitch-trim': 'center', 'yaw-trim': 'center', 'trim-ap-disc': 'norm', 'roll-trim-ind': '0', 'pitch-trim-ind': '0' },
     unresolved: [
-      'The trim wheels and the YAW TRIM knob turn without detents in DCS; they are modelled with a step for each indicator dot (three each way for roll and pitch, five each way for yaw). Rolling a wheel does not move its indicator on this page (no systems logic).',
+      'The trim wheels and the YAW TRIM knob turn without detents in DCS. They are read in percent of trim travel either side of centre and move 10 % a click; the full YAW TRIM travel is taken as the L dot to the R dot. Rolling a wheel does not move its indicator on this page (no systems logic).',
       'Which way the indicators move for each trim direction is not stated; the pointer is taken to swing towards the L WING DN and NOSE UP legends for that trim.',
       'The middle three YAW TRIM dots are hidden behind the right bail; eleven evenly spaced dots are drawn from the eight visible ones.',
       'The camera sits to the left, so the bails and the YAW TRIM knob look shifted left; the bails are drawn equidistant from the knob centre, which is fixed by its dot circle.',
@@ -136,11 +146,7 @@ export const manualTrim: PanelSpec = {
     wheel('roll-trim', 'ROLL TRIM wheel', 'vertical', 'L WING DN', 'R WING DN', 'Trims the aircraft in roll by hand: roll it up for left wing down, down for right wing down. The indicator beside it shows how much manual roll trim is applied.'),
     {
       id: 'yaw-trim', name: 'YAW TRIM knob', type: 'rotary',
-      positions: Array.from({ length: 11 }, (_, k) => ({
-        id: k < 5 ? `l-${5 - k}` : k === 5 ? 'center' : `r-${k - 5}`,
-        label: k < 5 ? `L ${5 - k}` : k === 5 ? 'Centre' : `R ${k - 5}`,
-        hold: 'stable' as const, angle: +yawAngle(k).toFixed(1),
-      })),
+      positions: pct('L', 'R').map((p, i) => ({ ...p, hold: 'stable' as const, angle: +yawPct((i - 10) * 10).toFixed(1) })),
       initial: 'center',
       description: 'Trims the aircraft in yaw. The amount of manual yaw trim is read from the knob index against the dot scale round it, L at the top, R at the bottom.',
       source: src,

@@ -27,11 +27,11 @@ export const manualPitchOverride: PanelSpec = {
     image: 'p. 62 "Manual Pitch Override Switch" cockpit image, 160 x 139 px',
     rectify: 'python3 -I scripts/panel-trace.py <p62-005.png> <out> 0,0 159,0 0,138 159,138 (no warp: the image is square-on)',
     pxPerMm: PX,
-    scale: 'No DZUS fasteners show. The scale is set so the switch grommet (about 17 px radius) measures the shared large plain toggle (5.2 mm); the hold-down screws (about 9 px radius) then match the shared 2.8 mm screw and the legends come out at about 3 mm cap height.',
+    scale: 'No DZUS fasteners show. The scale is set so the hold-down screws (about 9 px radius) match the shared 2.8 mm screw and the legends come out at about 3 mm cap height.',
     shown: { mpo: 'norm' },
     unresolved: [
       'The guide image is a close crop of the switch; the plate edges do not show, so the plate is drawn to the crop.',
-      'The switch shows the orange-red grommet of a plain toggle.',
+      'The switch shows the orange-red grommet of a plain toggle; it is drawn as the medium plain toggle to match its short, thin lever (the grommet measures larger).',
       'The two wire bails above and below the switch are drawn as fixed bars seen from the front, equidistant from the switch (the camera shifts them slightly left).',
     ],
   },
@@ -46,7 +46,7 @@ export const manualPitchOverride: PanelSpec = {
   placements: [
     { component: 'screw-medium', at: pt(17.5, 97) },
     { component: 'screw-medium', at: pt(148.5, 97) },
-    { component: 'toggle-large', control: 'mpo', at: pt(83, 77) },
+    { component: 'toggle-medium', control: 'mpo', at: pt(83, 77) },
   ],
   controls: [
     {

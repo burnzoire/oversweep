@@ -40,7 +40,7 @@ export const fuelQtySel: PanelSpec = {
     shown: { 'fuel-qty-sel': 'norm', 'ext-fuel-trans': 'norm' },
     unresolved: [
       'The FUEL QTY SEL legends sit unevenly round the knob (327, 37, 74, 109, 152, 209°); the detents are drawn evenly spaced across that span and the legends are left where the guide prints them.',
-      'The knob is a bar knob on a round body; its bar stands proud, so the camera shows it shifted down from the index line. It is drawn square-on, crossing the centre along the index.',
+      'The knob is the shared large radio selector (as on the UHF backup panel): broad skirt, centre boss, a flat lever to the rim opposite the index. Its lever stands proud, so the camera shows it shifted down; it is drawn square-on.',
       'The EXT FUEL TRANS bushing shows a lock-insert slot, so it is drawn as a lever-lock toggle. The guide text does not say.',
       'The round socket above the panel\'s left side is on the instrument panel, not on this panel, and is not drawn.',
     ],
@@ -72,7 +72,7 @@ export const fuelQtySel: PanelSpec = {
   placements: [
     { component: 'screw', at: pt(153, 48) },
     { component: 'screw', at: pt(123, 404) },
-    { component: 'knob-bar-wide', control: 'fuel-qty-sel', at: pt(...KNOB) },
+    { component: 'knob-radio-large', control: 'fuel-qty-sel', at: pt(...KNOB) },
     { component: 'toggle-large-lock', control: 'ext-fuel-trans', at: pt(124.5, 320) },
   ],
   controls: [
