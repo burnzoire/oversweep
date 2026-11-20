@@ -88,10 +88,12 @@ def paper(d, fill=PAPER):
 class Part:
     """A moving part: its ink and a paper silhouette, cut out of the view by a region polygon."""
 
-    def __init__(self, view, poly, extra_paper=None, fill=PAPER, close=2):
-        self.v, self.poly, self.fill = view, poly, fill
+    def __init__(self, view, poly, extra_paper=None, fill=PAPER, close=2, drop=None, add=''):
+        self.v, self.poly, self.fill, self.add = view, poly, fill, add
         r = view.region(poly)
         self.mask = view.ink & r
+        if drop:  # ink inside `drop` is left out (and, being inside `poly`, off the static art too)
+            self.mask &= ~view.region(drop)
         sil = ndimage.binary_fill_holes(ndimage.binary_closing(self.mask, iterations=close))
         self.d, self.sil = view.trace(self.mask), view.trace(sil)
         self.cover = extra_paper or self.sil  # paper over the part's rest place when it moves
@@ -107,7 +109,7 @@ class Part:
         if scale:
             cx, cy = self.v.p(*scale[1])
             tf.append(f'translate({cx:.2f} {cy:.2f}) scale({scale[0]}) translate({-cx:.2f} {-cy:.2f})')
-        body = paper(self.sil, self.fill) + ink(self.d)
+        body = paper(self.sil, self.fill) + ink(self.d) + self.add
         g = f'<g transform="{" ".join(tf)}">{body}</g>' if tf else body
         return (paper(self.cover) if (tf and self.cover) else '') + g
 
@@ -148,7 +150,11 @@ def stick():
     # The trigger and weapon release are red (DCS guide render, p. 83).
     trig = Part(side, fill=RED, close=14, poly=[(1318, 252), (1345, 257), (1346, 282), (1322, 304), (1294, 304), (1296, 292), (1320, 270)])
     paddle = Part(side, [(1306, 397), (1337, 393), (1352, 470), (1357, 527), (1340, 529), (1327, 531), (1321, 470)])
-    pinky = Part(side, circle(1433, 473.5, 13.9))
+    # The figure prints a cross on the pinky button, so it reads as a screw head; the real button (DCS guide render, p. 83)
+    # is a plain round cap, so it is drawn as a bezel ring round a cap instead of vectorised.
+    pc = side.p(1433, 473.5)
+    pinky = Part(side, circle(1433, 473.5, 13.9), drop=circle(1433, 473.5, 14.5),
+                 add=''.join(f'<circle cx="{pc[0]:.2f}" cy="{pc[1]:.2f}" r="{r * K:.2f}" fill="{PAPER}" stroke="{INK}" stroke-width="{w}"/>' for r, w in ((12, 0.6), (8, 0.4))))
     # Rear view (looking forward; the pilot's left is on the left).
     wpn = Part(rear, ellipse(1833, 122, 17, 15), fill=RED)
     trim = Part(rear, ellipse(1915, 139, 35, 28))
