@@ -164,7 +164,7 @@ export type Placement =
       /** Animate between neighbouring positions (all shapes share one path structure); `drag` lets the pointer move it continuously along an axis, from position `from` on. */
       tween?: { drag?: { axis: 'x' | 'y'; from?: string } } }
   /** Lever in a straight slot (F-16C DEFOG): slot centred on `at`, turned by `rotate`; the lever root moves `travel` mm between its first and last positions, along the slot. */
-  | { component: 'slot-lever'; control: string; at: Pt; travel: number; rotate?: number }
+  | { component: 'slot-lever'; control: string; at: Pt; /** Knob travel, end to end. */ travel: number; /** Slot length (default travel + root): a pivoting arm's knob travels further than its root moves in the slot. */ slot?: number; rotate?: number }
   /** Flip guard hinged at `at` (the middle of its hinge edge); `size` is the closed footprint. `rotate`: degrees clockwise about the hinge (180 = hinged along the top). */
   | { component: 'guard-flip'; control: string; at: Pt; size: [w: number, h: number]; rotate?: number; paint?: Paint }
   /** Square pushbutton, centred on `at`; `legend` lines are placed by their centre `y` (mm from the centre). With `indicator`, the legend face is that lamp's lens. */
