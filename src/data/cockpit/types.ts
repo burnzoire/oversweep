@@ -111,7 +111,7 @@ export interface IndicatorDef {
   pages?: { id: string; label: string }[];
   restPage?: string;
   /** Lamps only. */
-  colour?: 'amber' | 'green' | 'red';
+  colour?: 'amber' | 'green' | 'red' | 'blue';
   /** Gauges only: unit of the scale, and the value the needle shows cold and dark. */
   unit?: string;
   rest?: number;
@@ -158,7 +158,7 @@ export type Placement =
    * canopy handle). Paths are absolute panel mm (`M`/`L`/`Q`/`Z` with x y pairs);
    * `lines` are fine detail lines on the part. `at` is the part's hinge or pivot.
    */
-  | { component: 'traced'; control: string; at: Pt; shapes: Record<string, { d: string; /** Solid parts drawn over d in order, each filled and outlined. */ parts?: string[]; lines?: string; /** Printed legends on top, in mm. */ legend?: { at: Pt; text: string; cap: number; width?: number }[]; /** Pre-drawn line art in mm drawn after the rest (CAD projections); `d` may be empty when this is the whole part. */ svg?: string }>; paint?: Paint; /** Click area in mm when the outlines' bounds would cover other controls. */ hit?: Rect;
+  | { component: 'traced'; control: string; at: Pt; shapes: Record<string, { d: string; /** Solid parts drawn over d in order, each filled and outlined. */ parts?: string[]; lines?: string; /** Printed legends on top, in mm. */ legend?: { at: Pt; text: string; cap: number; width?: number }[]; /** Pre-drawn line art in mm drawn after the rest (CAD projections); `d` may be empty when this is the whole part. */ svg?: string }>; paint?: Paint; /** Click area in mm when the outlines' bounds would cover other controls. */ hit?: Rect; /** Drawn behind the plate, for a part that comes out from behind the housing (F-16C AR/NWS dimming tab). */ under?: boolean;
       /** Click area per position for a part that moves (throttle): box in mm before `rotate`, turned (degrees clockwise) about its centre; split down the middle into its two directions. */
       hits?: Record<string, { box: Rect; rotate: number }>;
       /** Animate between neighbouring positions (all shapes share one path structure); `drag` lets the pointer move it continuously along an axis, from position `from` on. */
@@ -181,6 +181,12 @@ export type Placement =
    * or horizontal travel for a wheel rolled left and right (F-16C PITCH TRIM).
    */
   | { component: 'thumbwheel'; control: string; at: Pt; size: [w: number, h: number] }
+  /**
+   * Code selector wheel (F-16C IFF MODE 1 / MODE 3): the digit the wheel is set to shows in a `window` (w, h) centred
+   * on `at`, printed `cap` high; the wheel's thumb `tab` (centre and size, relative to `at`) stands out of a slot
+   * below it. Its control is a rotary with vertical travel whose position labels are the digits.
+   */
+  | { component: 'code-wheel'; control: string; at: Pt; window: [w: number, h: number]; cap: number; width?: number; tab: { at: Pt; size: [w: number, h: number] } }
   /** Rocker switch with up and down arrows on its cap (F-16C ICP DED increment/decrement): housing `size` centred on `at`; vertical travel, middle position at rest. */
   | { component: 'rocker'; control: string; at: Pt; size: [w: number, h: number]; /** Cap arrows: `arrow` (head and shaft, F-16C FLIR) or `spike` (long narrow triangles, F-16C DED). */ arrows: 'arrow' | 'spike' }
   /**
@@ -194,6 +200,20 @@ export type Placement =
   | { component: 'hsi'; at: Pt; hsi: HsiDisplay }
   /** Head-up display symbology (F-16C HUD), centred on `at` (the boresight cross); every symbol is its own indicator, see `HudDisplay`. */
   | { component: 'hud'; at: Pt; hud: HudDisplay }
+  /** Standby attitude indicator (F-16C SAI), centred on `at` (the sphere window centre); see `AttitudeBall`. */
+  | { component: 'attitude'; at: Pt; ball: AttitudeBall }
+  /**
+   * Pull-to-cage knob (F-16C SAI): a knurled knob of radius `r` with a face of radius `face` printed with `legend`
+   * (centre-relative); `control` is the turn (a rotary, the printing turns with it), `pull` the pull (positions in
+   * then pulled; pulled shows the knob's side as a second rim).
+   */
+  | { component: 'cage-knob'; control: string; pull: string; at: Pt; r: number; face: number;
+      /** Face printing; with `arc` (mm, positive along the top, negative along the bottom) the letters are set round that radius, `width` along the arc. */
+      legend: { text: string; at: Pt; cap: number; width?: number; arc?: number }[];
+      /** Scale marks round the knob (path in mm about the knob centre), drawn over neighbouring instruments. */
+      marks?: { d: string; pen: Pen; fill?: boolean }[];
+      /** Pointer on the knob rim (r0 to r1, half width at r0), pointing at the position angle; the printing is turned by the angle less `rest`. */
+      needle?: { r: [r0: number, r1: number]; half: number; rest: number } }
   | { component: 'dzus'; at: Pt; cut?: Cut }
   | { component: 'screw' | 'screw-medium' | 'screw-small' | 'screw-hex' | 'screw-tiny'; at: Pt };
 
@@ -219,8 +239,8 @@ export interface Dial {
   legends: { text: string; at: Pt; cap: number; width?: number }[];
   /** Needle tip radius (the shared needle's shank stretches to it); single-needle dials only. */
   needle?: number;
-  /** Needle shape: the shared thin `NEEDLE` (default), a straight-sided `wedge` (F-16C HYD PRESS) or a thin shaft ending in a broad `blade` (F-16C altimeter). */
-  needleArt?: 'wedge' | 'blade' | 'line';
+  /** Needle shape: the shared thin `NEEDLE` (default), a straight-sided `wedge` (F-16C HYD PRESS), a thin shaft ending in a broad `blade` (F-16C altimeter), a `line` with a block tip (F-16C trim) or a broad shank `step`ped down to a narrow tip (F-16C EPU FUEL). */
+  needleArt?: 'wedge' | 'blade' | 'line' | 'step';
   /** Half-disc window instead of a round dial: the side the face bulges to, the flat edge running through the centre (F-16C trim indicators). */
   half?: 'left' | 'right' | 'up' | 'down';
   /**
@@ -247,6 +267,30 @@ export interface Dial {
   /** Fine line art printed on the face (window frames, index marks), an absolute-command path in mm relative to the dial centre. */
   marks?: string;
   flags?: { indicator: string; at: Pt; size: [w: number, h: number]; legend: string; cap: number; width?: number; paint?: Paint }[];
+}
+
+/**
+ * Standby attitude indicator, square-on, in mm from the sphere window centre (y down). The sphere shows through a
+ * round `window`; it moves down `deg` mm a degree of pitch (indicator `pitch`, nose up positive) and turns with bank
+ * (indicator `roll`, right bank positive), the roll `pointer` on it turning too. The face round the window carries the
+ * fixed bank scale (`ticks`, angles clockwise from 12 o'clock) and bank `index`; the aircraft symbol is fixed. The
+ * OFF flag is indicator `off-flag` (pages `shown`, `hidden`).
+ */
+export interface AttitudeBall {
+  bezel: number; face: number; window: number;
+  deg: number;
+  /** Pitch bars (degrees, climb positive) and their half length; `label` splits a word either side of a short bar. */
+  bars: { pitch: number; half: number; label?: [left: string, right: string] }[];
+  label: { cap: number; gap: number; widths: Record<string, number> };
+  /** Roll pointer on the sphere at 6 o'clock: apex radius, base radius, half width. */
+  pointer: [apex: number, base: number, half: number];
+  /** Fixed bank index at 6 o'clock, pointing in: apex radius, base radius, half width. */
+  index: [apex: number, base: number, half: number];
+  ticks: { angle: number; r: [inner: number, outer: number]; width: number }[];
+  /** Aircraft symbol outline paths (stroked) and its centre dot radius. */
+  aircraft: { wings: string; w: string; dot: number };
+  /** OFF flag: shown box, its legend, and the tip seen when hidden. */
+  flag: { shown: Rect; hidden: Rect; cap: number };
 }
 
 /**
@@ -400,7 +444,7 @@ export interface HudDisplay {
 export type Cut = 'up-left' | 'up-right' | 'down-left' | 'down-right';
 
 export type ToggleArt = 'toggle-large' | 'toggle-medium' | 'toggle-small' | 'toggle-large-cylinder' | 'toggle-large-square' | 'toggle-large-lock' | 'toggle-paddle-wide' | 'toggle-hook' | 'toggle-mini-hex';
-export type RotaryArt = 'rotary-pointer' | 'rotary-pointer-large' | 'rotary-pointer-medium';
+export type RotaryArt = 'rotary-pointer' | 'rotary-pointer-large' | 'rotary-pointer-medium' | 'rotary-bar-broad';
 export type KnobArt = 'knob-fine-knurl-small' | 'knob-knurled-small' | 'knob-knurled' | 'knob-knurled-edge' | 'knob-knurled-skirt' | 'knob-bar' | 'knob-lobed' | 'knob-bar-medium' | 'knob-knurled-mini' | 'knob-radio-large' | 'knob-bar-thick' | 'knob-spindle' | 'knob-knurled-large' | 'knob-knurled-small-edge' | 'knob-round' | 'knob-round-small' | 'knob-cross' | 'knob-cross-small' | 'knob-plain' | 'knob-plain-small' | 'knob-plain-index' | 'knob-round-tail';
 export type PushArt = 'push-round-small' | 'push-round-medium' | 'push-round-large' | 'push-round-xl' | 'push-round-flat' | 'push-round-xxl' | 'push-round-bezel' | 'push-round-wide' | 'push-round-plain';
 export type LampModuleArt = 'lamp-module';

@@ -21,7 +21,7 @@ test('catalogue lists every area and panel with unique stable ids', { skip: !can
 test('every built panel models each placed control and lamp once', { skip: !canImportTs }, async () => {
   const { f16cCockpit, builtPanels, renderPanel, hitZones, placementIndicators } = await load();
   for (const { spec } of builtPanels(f16cCockpit)) {
-    const placed = spec.placements.flatMap(p => 'control' in p ? [p.control, ...('cross' in p ? [p.cross] : [])] : []);
+    const placed = spec.placements.flatMap(p => 'control' in p ? [p.control, ...('cross' in p ? [p.cross] : []), ...('pull' in p ? [p.pull] : [])] : []);
     assert.deepEqual([...placed].sort(), spec.controls.map(c => c.id).sort(), `${spec.id}: placements and controls differ`);
     const lamps = spec.placements.flatMap(placementIndicators);
     assert.deepEqual([...lamps].sort(), spec.indicators.map(i => i.id).sort(), `${spec.id}: lamp cells and indicators differ`);

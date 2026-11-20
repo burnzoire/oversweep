@@ -1,0 +1,7 @@
+{
+ "_how": "Blob numbers come from: scripts/gauge-dial.py blobs <p61-005.png> <dir> epu 106 113 62 95 140 (p61-005.png = pdfimages -j -f 61 -l 61 image 005 converted to PNG). Blob 12 is the needle over the 100 % tick; 1, 3, 7, 13-26, 32, 36, 38 are numerals and legends. Then: scripts/gauge-dial.py fit <p61-005.png> <dir> <this file>.",
+ "epu": {
+  "pairs": "27:0,28:5,29:10,30:15,31:20,33:25,34:30,35:35,37:40,39:45,40:50,0:55,2:60,4:65,5:70,6:75,8:80,9:85,10:90,11:95",
+  "classes_every": [[10, "M"], [5, "m"]]
+ }
+}

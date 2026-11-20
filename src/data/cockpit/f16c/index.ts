@@ -26,6 +26,10 @@ import { defog } from './defog.ts';
 import { sidewallControls } from './sidewall-controls.ts';
 import { test } from './test.ts';
 import { hydPressure } from './hyd-pressure.ts';
+import { epuFuel } from './epu-fuel.ts';
+import { arNwsIndicator } from './ar-nws-indicator.ts';
+import { iff } from './iff.ts';
+import { sai } from './sai.ts';
 import { icp } from './icp.ts';
 import { ded } from './ded.ts';
 import { altimeter } from './altimeter.ts';
@@ -53,7 +57,7 @@ export const f16cCockpit: AircraftCockpit = {
     {
       id: 'instrument-panel', title: 'Instrument panel', panels: [
         { id: 'aoa-indexer', title: 'AoA indexer', page: 44 },
-        { id: 'ar-nws-indicator', title: 'AR status / NWS indicator', page: 45 },
+        { id: 'ar-nws-indicator', title: 'AR status / NWS indicator', page: 45, spec: arNwsIndicator },
         { id: 'hud', title: 'Head-up display (HUD)', page: 90, spec: hud },
         { id: 'icp', title: 'Integrated control panel (ICP)', page: 99, spec: icp },
         { id: 'ded', title: 'Data entry display (DED)', page: 101, spec: ded },
@@ -61,7 +65,7 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'right-eyebrow', title: 'Right eyebrow lights', page: 46, spec: rightEyebrow },
         { id: 'misc', title: 'MISC panel', page: 47 },
         { id: 'rf-switch', title: 'RF switch', page: 48 },
-        { id: 'sai', title: 'Standby attitude indicator', page: 49 },
+        { id: 'sai', title: 'Standby attitude indicator', page: 49, spec: sai },
         { id: 'engine-instruments', title: 'Engine instruments', page: 50, spec: engineInstruments },
         { id: 'fuel-flow', title: 'Fuel flow indicator', page: 50, spec: fuelFlow },
         { id: 'airspeed-mach', title: 'Airspeed / Mach indicator', page: 51 },
@@ -87,7 +91,7 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'pfld', title: 'Pilot fault list display', page: 59 },
         { id: 'caution', title: 'Caution light panel', page: 59, spec: caution },
         { id: 'hyd-pressure', title: 'Hydraulic pressure indicators', page: 61, spec: hydPressure },
-        { id: 'epu-fuel', title: 'EPU fuel quantity indicator', page: 61 },
+        { id: 'epu-fuel', title: 'EPU fuel quantity indicator', page: 61, spec: epuFuel },
         { id: 'cabin-pressure', title: 'Cabin pressure indicator', page: 61 },
         { id: 'clock', title: 'Clock', page: 61 },
       ],
@@ -101,7 +105,7 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'audio', title: 'AUDIO 1 & 2 panels', page: 65, spec: audio },
         { id: 'avtr', title: 'AVTR panel', page: 66 },
         { id: 'fuel', title: 'FUEL panel', page: 67, spec: fuel },
-        { id: 'iff', title: 'IFF panel', page: 67 },
+        { id: 'iff', title: 'IFF panel', page: 67, spec: iff },
         { id: 'ext-lighting', title: 'EXT LIGHTING panel', page: 69, spec: extLighting },
         { id: 'ecm', title: 'ECM panel', page: 706, spec: ecm },
         { id: 'uhf', title: 'UHF backup panel', page: 259, spec: uhf },
