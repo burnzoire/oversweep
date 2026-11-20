@@ -31,7 +31,8 @@ const lessons = [
     photo: cockpitMedia?.photo,
   }] : []),
   ...guides.map(guide => ({
-    title: guide.slug === 'engine-start' ? 'Engine Start' : guide.title,
+    // The page is already the airframe's, so cards drop the "F-16C — " prefix.
+    title: guide.title.replace(/^F-16C — /, ''),
     href: procedureRoute(guide),
     summary: cardMedia[guide.id]?.summary ?? guide.objective,
     photo: cardMedia[guide.id]?.photo,
