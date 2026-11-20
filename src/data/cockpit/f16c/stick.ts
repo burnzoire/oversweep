@@ -1,5 +1,6 @@
 import type { ControlDef, PanelSpec } from '../types';
 import { ART, CAPTIONS, HITS } from './stick-art.ts';
+import { STICK_FACES } from './hotas-faces.ts';
 
 /**
  * F-16C side stick controller (SSC), right console, DCS.
@@ -120,4 +121,16 @@ export const stick: PanelSpec = {
     push('expand-fov', 'Expand/FOV (pinky) button', 'Pressed', 'Cycles the fields of view of the sensor of interest: FCR, HSD or HAD expand modes, the targeting pod field of view, or the selected Maverick or HARM seeker. Held, it gives HSD zoom.', 'DCS F-16C guide p. 85'),
   ],
   indicators: [],
+  pads: [
+    { id: 'stick', name: 'Stick (push, pull, roll)', cross: { up: ['pitch', 'fwd'], down: ['pitch', 'aft'], left: ['roll', 'left'], right: ['roll', 'right'] }, face: STICK_FACES['stick'] },
+    { id: 'trigger', name: 'Trigger', controls: ['trigger'] },
+    { id: 'weapon-release', name: 'Weapon release button', controls: ['weapon-release'], face: STICK_FACES['weapon-release'] },
+    { id: 'trim', name: 'Trim switch', cross: { up: ['trim-ud', 'fwd'], down: ['trim-ud', 'aft'], left: ['trim-lr', 'left'], right: ['trim-lr', 'right'] }, face: STICK_FACES['trim'] },
+    { id: 'tms', name: 'Target management switch (TMS)', cross: { up: ['tms-ud', 'fwd'], down: ['tms-ud', 'aft'], left: ['tms-lr', 'left'], right: ['tms-lr', 'right'] }, face: STICK_FACES['tms'] },
+    { id: 'dms', name: 'Display management switch (DMS)', cross: { up: ['dms-ud', 'fwd'], down: ['dms-ud', 'aft'], left: ['dms-lr', 'left'], right: ['dms-lr', 'right'] }, face: STICK_FACES['dms'] },
+    { id: 'cms', name: 'Countermeasures management switch (CMS)', cross: { up: ['cms-ud', 'fwd'], down: ['cms-ud', 'aft'], left: ['cms-lr', 'left'], right: ['cms-lr', 'right'] }, face: STICK_FACES['cms'] },
+    { id: 'msl-step', name: 'Missile step / NWS / A/R DISC button', controls: ['msl-step'], face: STICK_FACES['msl-step'] },
+    { id: 'paddle', name: 'Paddle switch', controls: ['paddle'] },
+    { id: 'expand-fov', name: 'Expand/FOV (pinky) button', controls: ['expand-fov'], face: STICK_FACES['expand-fov'] },
+  ],
 };

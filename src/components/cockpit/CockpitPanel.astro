@@ -19,15 +19,39 @@
  * (detail: `positions` by `<panel>.<control>`) moves controls without a
  * change event.
  */
-import type { AircraftCockpit, PanelSpec } from '../../data/cockpit/types';
+import { padControls, type AircraftCockpit, type ControlDef, type PanelSpec } from '../../data/cockpit/types';
 import { hitZones, readings, renderPanel } from '../../data/cockpit/render.ts';
 
-interface Props { cockpit: AircraftCockpit; spec: PanelSpec; scope?: string }
-const { cockpit, spec, scope } = Astro.props;
+interface Props { cockpit: AircraftCockpit; spec: PanelSpec; scope?: string; only?: string[] }
+/** `only`: show just these pads (switch cards) without the whole drawing, as a procedure step can ask for. */
+const { cockpit, spec, scope, only } = Astro.props;
 const [W, H] = spec.canvas;
 const pct = (v: number, of: number) => `${+((v / of) * 100).toFixed(3)}%`;
 const def = { aircraft: scope ? `${cockpit.id}:${scope}` : cockpit.id, panel: spec.id, controls: spec.controls, indicators: spec.indicators, readings: readings(spec) };
 const control = (id: string) => spec.controls.find(c => c.id === id)!;
+// Pop-out pads: a control a pad names opens the pad from the drawing instead of moving there.
+const pads = spec.pads ?? [];
+const padOf = new Map(pads.flatMap(p => padControls(p).map(c => [c, p] as const)));
+const ARROW = { up: '▲', down: '▼', left: '◀', right: '▶' } as const;
+const zones = hitZones(spec);
+const art = renderPanel(spec, { label: `${cockpit.title} ${spec.title}` });
+/** Each pad's close-up: the drawing cropped to its controls' click areas, with a margin. */
+const padView = (p: (typeof pads)[number]) => {
+  if (p.face) {
+    const [fw, fh] = p.face.canvas;
+    return { svg: renderPanel({ ...spec, canvas: p.face.canvas, plate: [], engraving: [], placements: p.face.placements }, {}).replace(/role="img" aria-label="[^"]*"/, 'aria-hidden="true"'), ratio: fw / fh };
+  }
+  const bs = zones.filter(z => z.kind === 'control' && padControls(p).includes(z.id)).map(z => z.box);
+  const x0 = Math.min(...bs.map(b => b[0])), y0 = Math.min(...bs.map(b => b[1]));
+  const x1 = Math.max(...bs.map(b => b[0] + b[2])), y1 = Math.max(...bs.map(b => b[1] + b[3]));
+  const m = Math.max(10, 0.5 * Math.max(x1 - x0, y1 - y0)), w = x1 - x0 + 2 * m, h = y1 - y0 + 2 * m;
+  return { svg: art.replace(/viewBox="[^"]*"/, `viewBox="${+(x0 - m).toFixed(2)} ${+(y0 - m).toFixed(2)} ${+w.toFixed(2)} ${+h.toFixed(2)}"`).replace(/role="img" aria-label="[^"]*"/, 'aria-hidden="true"'), ratio: w / h };
+};
+const shownPads = only ? pads.filter(p => only.includes(p.id)) : pads;
+if (only && shownPads.length !== only.length) throw new Error(`${spec.id}: no pad ${only.filter(o => !pads.some(p => p.id === o)).join(', ')}`);
+const posLabel = (c: ControlDef, p: string) => c.positions.find(x => x.id === p)?.label ?? p;
+/** The position a pushbutton is pressed to (its first non-initial position). */
+const pressedPos = (c: ControlDef) => c.positions.find(p => p.id !== c.initial)?.id ?? c.positions[0].id;
 const dirLabels = (id: string) => {
   const c = control(id);
   if (c.type === 'rotary' && c.travel === 'vertical') return [`Roll ${c.name} up`, `Roll ${c.name} down`];
@@ -36,16 +60,18 @@ const dirLabels = (id: string) => {
   return [`Move ${c.name} up`, `Move ${c.name} down`];
 };
 ---
-<div class="cockpit-panel" data-cockpit-panel style={`--ratio:${W / H}` + (W / H < 0.6 ? ';--cp-height:52rem' : '')}>
-  <div class="cp-stage">
-    <Fragment set:html={renderPanel(spec, { label: `${cockpit.title} ${spec.title}` })} />
-    {hitZones(spec).map(z => {
+<div class:list={['cockpit-panel', only && 'cp-cards']} data-cockpit-panel data-cards={only ? '' : undefined} style={`--ratio:${W / H}` + (W / H < 0.6 ? ';--cp-height:52rem' : '')}>
+  <div class="cp-stage" hidden={!!only}>
+    <Fragment set:html={art} />
+    {zones.map(z => {
       const style = `left:${pct(z.box[0], W)};top:${pct(z.box[1], H)};width:${pct(z.box[2], W)};height:${pct(z.box[3], H)}` + (z.rotate ? `;transform:rotate(${z.rotate}deg)` : '');
       if (z.kind === 'indicator') {
         const ind = spec.indicators.find(i => i.id === z.id)!;
         return <button type="button" class:list={['cp-hit', 'cp-lamp', z.round && 'cp-round']} style={style} data-select={z.id} aria-label={`${ind.name}: what it shows`}></button>;
       }
       const c = control(z.id);
+      const pad = padOf.get(c.id);
+      if (pad) return <button type="button" class:list={['cp-hit', z.round && 'cp-round']} style={style} data-open-pad={pad.id} data-pad-hit={c.id} aria-label={`${c.name}: open the ${pad.name} controls`} aria-expanded="false"></button>;
       if (c.type === 'toggle' || c.type === 'rotary') {
         const [a, b] = dirLabels(c.id);
         const axis = c.travel === 'horizontal' || (c.type === 'rotary' && c.travel !== 'vertical') ? 'cp-x' : 'cp-y';
@@ -60,6 +86,47 @@ const dirLabels = (id: string) => {
       return <button type="button" class:list={['cp-hit', z.round && 'cp-round']} style={style} data-control={c.id} data-dir="flip" aria-label={verb}></button>;
     })}
   </div>
+  {shownPads.length > 0 && (
+    <div class="cp-pads">
+      {shownPads.map(p => { const v = padView(p); return (
+        <section class="cp-pad" data-pad={p.id} hidden={!only} aria-label={p.name}>
+          <header class="cp-pad-head"><strong>{p.name}</strong>{!only && <button type="button" class="cp-pad-close" data-pad-close aria-label={`Close the ${p.name} controls`}>Close</button>}</header>
+          <div class="cp-zoom" style={`aspect-ratio:${v.ratio}`}><Fragment set:html={v.svg} /></div>
+          {p.cross && (
+            <div class="cp-cross">
+              {(['up', 'left', 'right', 'down'] as const).map(dir => {
+                const arm = p.cross![dir];
+                if (!arm) return <span class={`cp-arm cp-${dir}`}></span>;
+                const c = control(arm[0]);
+                return <button type="button" class={`cp-pos cp-arm cp-${dir}`} data-pad-control={c.id} data-pad-pos={arm[1]}><span aria-hidden="true">{ARROW[dir]}</span> {posLabel(c, arm[1])}</button>;
+              })}
+              {p.centre
+                ? <button type="button" class="cp-pos cp-hub" data-pad-control={p.centre} data-pad-pos={pressedPos(control(p.centre))}>Press ({control(p.centre).name.replace(/^.*\((.+)\)$/, '$1')})</button>
+                : <span class="cp-hub cp-hub-idle" aria-hidden="true">Centre</span>}
+            </div>
+          )}
+          {(p.controls ?? []).map(id => {
+            const c = control(id);
+            if (c.type === 'rotary') return (
+              <div class="cp-row">{(p.controls!.length > 1 || p.cross) && <span class="cp-row-name">{c.name}</span>}
+                <div class="cp-row-btns">
+                  <button type="button" class="cp-pos cp-step" data-pad-control={c.id} data-pad-step="-1" aria-label={dirLabels(c.id)[0]}>{c.travel === 'vertical' ? '▲' : '↺'}</button>
+                  <output class="cp-readout" data-position-of={`${spec.id}.${c.id}`}></output>
+                  <button type="button" class="cp-pos cp-step" data-pad-control={c.id} data-pad-step="1" aria-label={dirLabels(c.id)[1]}>{c.travel === 'vertical' ? '▼' : '↻'}</button>
+                </div>
+              </div>
+            );
+            const list = c.type === 'pushbutton' ? [pressedPos(c)] : c.positions.map(x => x.id);
+            return (
+              <div class="cp-row">{(p.controls!.length > 1 || p.cross) && <span class="cp-row-name">{c.name}</span>}
+                <div class="cp-row-btns">{list.map(pid => <button type="button" class="cp-pos" data-pad-control={c.id} data-pad-pos={pid}>{c.type === 'pushbutton' ? `Press${c.positions.find(x => x.id === pid)?.hold === 'momentary' ? ' and hold' : ''}` : posLabel(c, pid)}</button>)}</div>
+              </div>
+            );
+          })}
+        </section>
+      ); })}
+    </div>
+  )}
   <p class="cp-status" role="status" aria-live="polite" data-cp-status></p>
   <script type="application/json" data-cockpit-def set:html={JSON.stringify(def)} />
 </div>
@@ -85,6 +152,28 @@ const dirLabels = (id: string) => {
 .cp-x > button:last-child{right:0}
 .cp-hit:focus-visible,.cp-hit > button:focus-visible{outline:2px solid var(--color-focus,#005fcc);outline-offset:1px}
 @media(hover:hover){.cp-hit:hover,.cp-hit > button:hover{background:rgba(0,95,204,.08)}}
+.cp-pad{margin-top:.6rem;border:1px solid var(--panel-ink);border-top-width:3px;padding:.6rem .7rem .8rem;background:#fff}
+.cp-pad[hidden],.cp-stage[hidden]{display:none}
+.cp-cards{max-width:100%}
+.cp-cards .cp-pads{display:flex;flex-wrap:wrap;gap:.75rem}
+.cp-cards .cp-pad{flex:1 1 16rem;margin-top:0}
+.cp-zoom{max-height:11rem;margin:0 auto .5rem;max-width:100%}
+.cp-zoom :global(svg){display:block;width:100%;height:100%}
+.cp-pad-head{display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-bottom:.5rem}
+.cp-pad-close{font:inherit;font-size:.9rem;border:1px solid var(--color-border,#999);background:#fff;padding:.2rem .6rem;cursor:pointer}
+.cp-pos{font:inherit;font-size:.95rem;min-height:2.9rem;min-width:2.9rem;padding:.35rem .6rem;border:2px solid var(--panel-ink);background:#fff;color:var(--panel-ink);cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none;border-radius:6px}
+.cp-pos[aria-pressed="true"]{background:var(--panel-ink);color:#fff}
+.cp-pos.cp-target{box-shadow:0 0 0 3px #fff,0 0 0 6px #e6b800;animation:cp-target 1s ease-in-out 4}
+@keyframes cp-target{50%{box-shadow:0 0 0 3px #fff,0 0 0 6px rgba(230,184,0,.3)}}
+@media(prefers-reduced-motion:reduce){.cp-pos.cp-target{animation:none}}
+.cp-pos:focus-visible,.cp-pad-close:focus-visible{outline:2px solid var(--color-focus,#005fcc);outline-offset:2px}
+.cp-cross{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-areas:". up ." "left hub right" ". down .";gap:.4rem;max-width:30rem;margin:0 auto .3rem}
+.cp-up{grid-area:up}.cp-down{grid-area:down}.cp-left{grid-area:left}.cp-right{grid-area:right}.cp-hub{grid-area:hub}
+.cp-hub-idle{display:flex;align-items:center;justify-content:center;border:2px dashed var(--color-border,#bbb);border-radius:50%;color:var(--color-muted,#595959);font-size:.85rem;aspect-ratio:1;max-height:4.5rem;margin:auto}
+.cp-row{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .8rem;margin:.35rem 0}
+.cp-row-name{flex:1 1 12rem;font-weight:600}
+.cp-row-btns{display:flex;justify-content:center;margin:0 auto;flex-wrap:wrap;gap:.4rem;align-items:center}
+.cp-readout{min-width:9rem;text-align:center}
 .cp-status{min-height:1.6em;margin:.4rem 0 0;font-size:.95rem;color:var(--color-muted,#595959)}
 </style>
 
@@ -177,7 +266,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     const tw = tweens.get(c.id);
     const i = Math.floor(v), j = Math.ceil(v), f = v - i;
     const frac = tw && i !== j;
-    for (const g of svg.querySelectorAll<SVGGElement>(`[data-move="${c.id}"] > [data-pos]`)) {
+    for (const g of root.querySelectorAll<SVGGElement>(`[data-move="${c.id}"] > [data-pos]`)) {
       const show = frac ? g.dataset.pos === '~live' : g.dataset.pos === c.positions[Math.round(v)].id;
       if (show) g.removeAttribute('display'); else g.setAttribute('display', 'none');
     }
@@ -197,6 +286,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
   const draw = (c: ControlDef) => {
     drawAt(c, at(c));
     for (const el of document.querySelectorAll<HTMLElement>(`[data-position-of="${key(c.id)}"]`)) el.textContent = label(c);
+    for (const b of root.querySelectorAll<HTMLElement>(`[data-pad-control="${c.id}"][data-pad-pos]`)) b.setAttribute('aria-pressed', String(b.dataset.padPos === pos(c)));
   };
   const setAt = (c: ControlDef, v: number, phase: 'press' | 'release' = 'press') => {
     store = load(def.aircraft);
@@ -225,8 +315,8 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
   };
 
   const select = (id: string) => {
-    svg.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'));
-    svg.querySelectorAll(`[data-move="${id}"], [data-indicator="${id}"]`).forEach(e => e.classList.add('selected'));
+    root.querySelectorAll('.selected').forEach(e => e.classList.remove('selected'));
+    root.querySelectorAll(`[data-move="${id}"], [data-indicator="${id}"]`).forEach(e => e.classList.add('selected'));
     if (!info) return;
     for (const card of info.querySelectorAll<HTMLElement>('[data-item]')) card.hidden = card.dataset.item !== id;
     info.querySelector<HTMLElement>('[data-item-empty]')?.toggleAttribute('hidden', true);
@@ -273,6 +363,63 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
       say(`${c.name}: ${label(c)} (springs back).`);
     }
   };
+
+  /** Pads: go straight to a position (held while the button is held when it is momentary). */
+  const goTo = (c: ControlDef, p: string) => {
+    select(c.id);
+    const j = c.positions.findIndex(x => x.id === p);
+    if (j < 0) return;
+    if (Math.round(at(c)) === j && Number.isInteger(at(c))) { say(`${c.name} is already at ${label(c)}.`); return; }
+    const why = blocked(c, p);
+    if (why) { say(why); return; }
+    moveTo(c, j);
+    if (c.guards && p === (c.guards.when ?? 'closed')) {
+      const guarded = byId.get(c.guards.control);
+      if (guarded && pos(guarded) !== c.guards.closesTo) set(guarded, c.guards.closesTo);
+    }
+    say(`${c.name}: ${c.positions[j].label}.`);
+  };
+  const padEls = [...root.querySelectorAll<HTMLElement>('[data-pad]')];
+  const cards = root.dataset.cards !== undefined;
+  const openPad = (id: string, focusControl?: string, target?: string) => {
+    if (!cards) for (const el of padEls) el.hidden = el.dataset.pad !== id;
+    for (const b of root.querySelectorAll<HTMLElement>('[data-open-pad]')) b.setAttribute('aria-expanded', String(b.dataset.openPad === id));
+    root.querySelectorAll('.cp-target').forEach(e => e.classList.remove('cp-target'));
+    const el = padEls.find(e => e.dataset.pad === id);
+    if (!el) return;
+    if (focusControl && target) el.querySelector(`[data-pad-control="${focusControl}"][data-pad-pos="${target}"]`)?.classList.add('cp-target');
+    el.scrollIntoView({ block: 'nearest', behavior: reduced ? 'auto' : 'smooth' });
+  };
+  const closePads = () => { if (cards) { root.querySelectorAll('.cp-target').forEach(e => e.classList.remove('cp-target')); return; } padEls.forEach(el => { el.hidden = true; }); root.querySelectorAll('[data-open-pad]').forEach(b => b.setAttribute('aria-expanded', 'false')); };
+  for (const b of root.querySelectorAll<HTMLButtonElement>('[data-open-pad]')) {
+    b.addEventListener('click', () => { openPad(b.dataset.openPad!); select(b.dataset.padHit!); say(`${byId.get(b.dataset.padHit!)?.name}: ${label(byId.get(b.dataset.padHit!)!)}.`); });
+  }
+  root.querySelectorAll('[data-pad-close]').forEach(b => b.addEventListener('click', closePads));
+  for (const b of root.querySelectorAll<HTMLButtonElement>('[data-pad-control]')) {
+    const c = byId.get(b.dataset.padControl!)!;
+    let held = false;
+    const down = () => {
+      if (held) return; held = true;
+      b.classList.remove('cp-target');
+      if (b.dataset.padStep) press(c, b.dataset.padStep); else goTo(c, b.dataset.padPos!);
+    };
+    const up = () => { if (!held) return; held = false; release(c); };
+    b.addEventListener('pointerdown', e => { if (e.button !== 0) return; b.setPointerCapture(e.pointerId); down(); });
+    b.addEventListener('pointerup', up);
+    b.addEventListener('pointercancel', up);
+    b.addEventListener('lostpointercapture', up);
+    b.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) { e.preventDefault(); down(); } });
+    b.addEventListener('keyup', e => { if (e.key === 'Enter' || e.key === ' ') up(); });
+    b.addEventListener('blur', up);
+    b.addEventListener('click', e => e.preventDefault());
+  }
+  // A procedure step asks for a control: open its pad with the wanted position ringed, or close the pads.
+  addEventListener('cockpit:pad', e => {
+    const { control = '', to } = (e as CustomEvent<{ control?: string; to?: string }>).detail ?? {};
+    const [panel, id] = control.split('.');
+    const pad = panel === def.panel ? padEls.find(el => el.querySelector(`[data-pad-control="${id}"]`)) : undefined;
+    if (pad) openPad(pad.dataset.pad!, id, to); else closePads();
+  });
 
   /** Pointer position along a tweened control's drag axis, as a fractional position (from its drag start on). */
   const along = (tw: Tween, e: PointerEvent) => {

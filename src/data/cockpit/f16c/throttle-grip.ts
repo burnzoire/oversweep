@@ -1,5 +1,8 @@
 import type { ControlDef, PanelSpec, Rect } from '../types';
 import { ANT_ELEV, ART, HITS, MAN_RNG } from './throttle-grip-art.ts';
+import { THROTTLE_FACES } from './hotas-faces.ts';
+
+const FACES = THROTTLE_FACES(MAN_RNG);
 
 /**
  * F-16C throttle grip (left sidewall), DCS: the hands-on switches. The throttle's travel (OFF, IDLE, MIL,
@@ -109,4 +112,12 @@ export const throttleGrip: PanelSpec = {
     },
   ],
   indicators: [],
+  pads: [
+    { id: 'comm', name: 'Transmit switch', cross: { up: ['comm-ud', 'fwd'], down: ['comm-ud', 'aft'], left: ['comm-lr', 'left'], right: ['comm-lr', 'right'] }, face: FACES['comm'] },
+    { id: 'man-rng', name: 'MAN RNG/UNCAGE knob', controls: ['man-rng', 'uncage'], face: FACES['man-rng'] },
+    { id: 'ant-elev', name: 'ANT ELEV knob', controls: ['ant-elev'], face: FACES['ant-elev'] },
+    { id: 'dogfight', name: 'DOG FIGHT switch', controls: ['dogfight'], face: FACES['dogfight'] },
+    { id: 'cursor', name: 'RDR CURSOR/ENABLE', cross: { up: ['cursor-ud', 'up'], down: ['cursor-ud', 'down'], left: ['cursor-lr', 'aft'], right: ['cursor-lr', 'fwd'] }, centre: 'enable', face: FACES['cursor'] },
+    { id: 'spd-brk', name: 'SPD BRK switch', controls: ['spd-brk'], face: FACES['spd-brk'] },
+  ],
 };
