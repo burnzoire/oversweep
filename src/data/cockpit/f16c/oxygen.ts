@@ -156,7 +156,7 @@ export const oxygen: PanelSpec = {
     shown: { emergency: 'normal', diluter: 'norm', supply: 'on', flow: 'flow', pressure: '34' },
     unresolved: [
       'The guide marks EMERGENCY and the diluter lever not implemented (N/I) in DCS; both are modelled as levers that move between their legends.',
-      'Each lever is fixed to a drum recessed in its slot (about 20% proud) that turns up and down with it: square-on, the drum\'s coloured face fills the slot, the middle position shows the lever end-on as a small square (EMERGENCY, SUPPLY), and the other positions show its length from its root on the drum out past the slot. Drum radius (about 16 mm), lever lengths (15-20 mm) and the 25° throw are derived from the slot height and the guide image, not stated. The guide shows each lever only in one position (EMERGENCY at NORMAL, diluter at NORM, SUPPLY at ON) from a low camera, so the other positions are drawn from that geometry rather than measured. Whether TEST MASK springs back is not stated; all positions are drawn as stable.',
+      'Each lever is fixed to a drum recessed in its slot (about 20% proud) that turns up and down with it: square-on, the drum\'s coloured face fills the slot, the middle position shows the lever end-on as a small square (EMERGENCY, SUPPLY), and the other positions show its length from its root on the drum out past the slot. Drum radius (about 16 mm), lever lengths (15-20 mm) and the 25° throw are derived from the slot height and the guide image, not stated. The guide shows each lever only in one position (EMERGENCY at NORMAL, diluter at NORM, SUPPLY at ON) from a low camera, so the other positions are drawn from that geometry rather than measured. TEST MASK is drawn spring-loaded back to NORMAL (a US Navy test procedure for a related panel regulator describes the emergency lever springing back to NORMAL); the guide does not say, and it is not confirmed for this regulator.',
       'Colours: EMERGENCY red, SUPPLY green and the dial\'s green 10-55 psi band, as the guide shows them; the band\'s ends are taken from the guide\'s normal range, the image does not resolve them. The needle is drawn uncoloured. The dial is traced up to 100 psi tick by tick; above 100 only the dots under the numerals (and two between) resolve; the minor ticks are continued at the same angular pitch all the way round (the bezel hides most of them in the guide).',
       'The black cable loops between the top screws are drawn as the guide shows them, each end in a ring terminal under a screw; the guide does not say what they are. The small round fitting below the left clip is not described in the guide; it is drawn as a plain ring.',
       'The FLOW blinker shows white for flow in the guide; cold and dark (no flow) it shows black.',
@@ -213,9 +213,9 @@ export const oxygen: PanelSpec = {
       positions: [
         { id: 'emergency', label: 'EMERGENCY', hold: 'stable' },
         { id: 'normal', label: 'NORMAL', hold: 'stable' },
-        { id: 'test-mask', label: 'TEST MASK', hold: 'stable' },
+        { id: 'test-mask', label: 'TEST MASK', hold: 'momentary', spring: 'normal' },
       ],
-      description: 'Controls positive-pressure breathing. EMERGENCY gives the most oxygen under positive pressure (the pilot uses it to check the mask for leaks). NORMAL gives positive pressure only above 28,000 ft cockpit altitude. TEST MASK gives the most oxygen under positive pressure for life-support crews to leak-test the mask. Not implemented in DCS.',
+      description: 'Controls positive-pressure breathing. EMERGENCY gives the most oxygen under positive pressure (the pilot uses it to check the mask for leaks). NORMAL gives positive pressure only above 28,000 ft cockpit altitude. TEST MASK, held against a spring that returns the lever to NORMAL, gives the most oxygen under positive pressure for life-support crews to leak-test the mask. Not implemented in DCS.',
     },
     {
       id: 'diluter', name: 'Diluter lever', type: 'toggle', travel: 'vertical', initial: 'norm', source: src,

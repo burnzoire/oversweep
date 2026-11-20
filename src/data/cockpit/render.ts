@@ -623,9 +623,11 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       }, tw)) + '</g>';
     }
     case 'slot-lever': {
-      // Lever root moves along the slot, first position at the left.
+      // The arm pivots under the slot, first position at the left: its knob swings across `travel` while its root
+      // moves only the slot's length (less the root's own width).
       const c = controlOf(spec, p.control), last = c.positions.length - 1;
-      return turn(p.rotate, p.at[0], p.at[1], at(p.at, leverSlot(p.travel) + moving(c, state[c.id] ?? c.initial, i => slotLeverArt(p.travel * (i / last - 0.5))), ' data-art="slot-lever"'));
+      const slot = p.slot ?? p.travel + SLOT_LEVER.root, rootTravel = slot - SLOT_LEVER.root;
+      return turn(p.rotate, p.at[0], p.at[1], at(p.at, leverSlot(slot - SLOT_LEVER.root) + moving(c, state[c.id] ?? c.initial, i => slotLeverArt(p.travel * (i / last - 0.5), rootTravel * (i / last - 0.5))), ' data-art="slot-lever"'));
     }
     case 'push-square': {
       const c = controlOf(spec, p.control), [w, h] = p.size, li = 2.2;
@@ -828,7 +830,7 @@ export function hitZones(spec: PanelSpec): HitZone[] {
       case 'slot-lever': {
         // The slot and the lever's knob below it (seen from above); turned levers get the turned box's bounds.
         const { root, disc, blade, neck, thick } = SLOT_LEVER, w = p.travel + Math.max(root, disc);
-        const top = -blade / 2 - 2, bottom = blade / 2 + neck[2] + thick + 2, h = bottom - top, mid = (top + bottom) / 2;
+        const top = -blade / 2 - 2, bottom = blade / 2 + neck[1] + thick + 2, h = bottom - top, mid = (top + bottom) / 2;
         const a = ((p.rotate ?? 0) * Math.PI) / 180, c = Math.abs(Math.cos(a)), s = Math.abs(Math.sin(a));
         const cx = x - mid * Math.sin(a), cy = y + mid * Math.cos(a);
         const bw = w * c + h * s, bh = w * s + h * c;
