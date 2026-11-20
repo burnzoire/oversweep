@@ -1,6 +1,6 @@
 ---
 import SiteLayout from '../../../../layouts/SiteLayout.astro';
-import { airframes, procedureRoute, sourceUrl, visibleProcedures } from '../../../../data/aircraft-procedures';
+import { airframes, procedureRoute, sourceUrl, visibleProcedures, type AircraftProcedure } from '../../../../data/aircraft-procedures';
 import { cardMedia } from '../../../../data/card-media';
 import { cockpits, cockpitRoute } from '../../../../data/cockpit/f16c/index.ts';
 import { assetPath, sitePath } from '../../../../lib/paths';
@@ -15,12 +15,12 @@ const { airframe } = Astro.props;
 const cockpit = cockpits.find(item => item.airframe === airframe.slug);
 const cockpitMedia = cockpit && cardMedia[`cockpit.${cockpit.id}`];
 // A procedure that continues another (its `next`) is listed straight after it.
-const guides = visibleProcedures.filter(guide => guide.airframe === airframe.slug)
-  .filter((guide, _, all) => !all.some(g => g.next === guide.slug))
-  .flatMap(function chain(guide): typeof visibleProcedures {
-    const after = visibleProcedures.find(g => g.airframe === guide.airframe && g.slug === guide.next);
-    return [guide, ...(after ? chain(after) : [])];
-  });
+const own = visibleProcedures.filter(guide => guide.airframe === airframe.slug);
+const chain = (guide: AircraftProcedure): AircraftProcedure[] => {
+  const after = own.find(g => g.slug === guide.next);
+  return [guide, ...(after ? chain(after) : [])];
+};
+const guides = own.filter(guide => !own.some(g => g.next === guide.slug)).flatMap(chain);
 const isViper = airframe.slug === 'f-16c';
 const hero = cardMedia[`aircraft-procedures.${airframe.slug}`]?.photo;
 const lessons = [
