@@ -29,6 +29,7 @@ const lessons = [
     href: procedureRoute(guide),
     summary: cardMedia[guide.id]?.summary ?? guide.objective,
     photo: cardMedia[guide.id]?.photo,
+    steps: guide.steps.length,
   })),
 ];
 const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => photo !== undefined);
@@ -80,6 +81,7 @@ const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => ph
             <div class="lesson-copy">
               <h3>{lesson.title}</h3>
               <p>{lesson.summary}</p>
+              {'steps' in lesson && <p class="lesson-steps">{lesson.steps} steps</p>}
             </div>
             <span class="lesson-arrow" aria-hidden="true">→</span>
           </a>
@@ -215,6 +217,12 @@ const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => ph
     font-size: 0.875rem;
   }
 
+  .lesson-copy .lesson-steps {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-muted);
+  }
   .airframe-sources summary {
     cursor: pointer;
   }
