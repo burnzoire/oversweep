@@ -756,8 +756,8 @@ export function lineNeedleArt(length: number) {
  */
 export const WEDGE_NEEDLE = { base: 9.0, tip: 0.5 } as const;
 
-export function wedgeNeedleArt(length: number) {
-  const b = WEDGE_NEEDLE.base / 2, t = WEDGE_NEEDLE.tip / 2;
+export function wedgeNeedleArt(length: number, base: number = WEDGE_NEEDLE.base) {
+  const b = base / 2, t = WEDGE_NEEDLE.tip / 2;
   return `<path d="M${n(-b)} 0L${n(-t)} ${n(-length)}H${n(t)}L${n(b)} 0Z" fill="${INK}" ${sw('fine')}/>`;
 }
 
@@ -918,8 +918,22 @@ export function rockerBase([w, h]: [number, number]) {
  * pressed half sinks). Arrow proportions from the F-16C ICP (guide p. 99): `arrow` heads 0.27 w wide from
  * 0.34 h to 0.17 h out with 0.11 w shafts to 0.03 h; `spike` triangles 0.26 w wide from 0.3 h to 0.054 h.
  */
-export function rockerCap([w, h]: [number, number], tilt: number, arrows: 'arrow' | 'spike') {
+export function rockerCap([w, h]: [number, number], tilt: number, arrows: 'arrow' | 'spike' | 'legend', legend?: { text: string; cap: number; y: number; width?: number }) {
   const cw = w - 2, ch = h - 2;
+  if (arrows === 'legend') {
+    // F-16C MFD (guide p. 122, cap 45 x 66 px): up triangle 0.41-0.27 ch above the centre, 0.22 cw wide; a rule
+    // 0.76 cw long just below the legend; a down arrow, shaft 0.067 cw wide from 0.05 ch, head 0.21-0.36 ch, 0.22 cw wide.
+    const marks = `M0 ${n(-0.41 * ch)}L${n(0.11 * cw)} ${n(-0.27 * ch)}H${n(-0.11 * cw)}Z` +
+      `M${n(-0.033 * cw)} ${n(0.05 * ch)}H${n(0.033 * cw)}V${n(0.22 * ch)}H${n(0.11 * cw)}L0 ${n(0.36 * ch)}L${n(-0.11 * cw)} ${n(0.22 * ch)}H${n(-0.033 * cw)}Z`;
+    let s = cased(`<rect x="${n(-cw / 2)}" y="${n(-ch / 2)}" width="${n(cw)}" height="${n(ch)}" rx="0.8" fill="${PAPER}"/>`, 'medium') +
+      `<path d="${marks}" fill="${INK}" stroke="none"/><path d="M${n(-0.38 * cw)} ${n(0.01 * ch)}H${n(0.38 * cw)}" ${sw('medium')}/>` +
+      (legend ? text(0, legend.y, legend.text, legend.cap, legend.width) : '');
+    if (tilt) {
+      const y0 = tilt < 0 ? -ch / 2 + 0.6 : 0.3, y1 = tilt < 0 ? -0.3 : ch / 2 - 0.6;
+      s += `<rect x="${n(-cw / 2 + 0.6)}" y="${n(y0)}" width="${n(cw - 1.2)}" height="${n(y1 - y0)}" rx="0.5" fill="none" ${sw('fine')}/>`;
+    }
+    return s;
+  }
   const one = (s: number) => arrows === 'spike'
     ? `M0 ${n(s * 0.3 * h)}L${n(0.13 * w)} ${n(s * 0.054 * h)}H${n(-0.13 * w)}Z`
     : `M0 ${n(s * 0.339 * h)}L${n(0.134 * w)} ${n(s * 0.172 * h)}H${n(0.053 * w)}V${n(s * 0.032 * h)}H${n(-0.053 * w)}V${n(s * 0.172 * h)}H${n(-0.134 * w)}Z`;

@@ -36,6 +36,9 @@ import { altimeter } from './altimeter.ts';
 import { ehsi } from './ehsi.ts';
 import { hud } from './hud.ts';
 import { hudControl } from './hud-control.ts';
+import { leftMfd, rightMfd } from './mfd.ts';
+import { hmcs } from './hmcs.ts';
+import { oxygen } from './oxygen.ts';
 
 /**
  * DCS F-16C cockpit catalogue: areas and panels in the order the official guide
@@ -75,12 +78,14 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'adi', title: 'Attitude director indicator', page: 53 },
         { id: 'ehsi', title: 'Electronic HSI (EHSI)', page: 230, spec: ehsi },
         { id: 'fuel-qty-sel', title: 'FUEL QTY SEL panel', page: 54, spec: fuelQtySel },
+        { id: 'left-mfd', title: 'Left MFD', page: 122, spec: leftMfd },
+        { id: 'right-mfd', title: 'Right MFD', page: 122, spec: rightMfd },
       ],
     },
     {
       id: 'left-aux-console', title: 'Left auxiliary console', panels: [
         { id: 'landing-gear', title: 'Landing gear panel', page: 55, spec: landingGear },
-        { id: 'hmcs', title: 'HMCS control panel', page: 57 },
+        { id: 'hmcs', title: 'HMCS control panel', page: 57, spec: hmcs },
         { id: 'alt-gear', title: 'ALT GEAR handle', page: 57 },
       ],
     },
@@ -134,7 +139,7 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'interior-lighting', title: 'Interior LIGHTING panel', page: 76, spec: interiorLighting },
         { id: 'air-cond', title: 'AIR COND panel', page: 76, spec: airCond },
         { id: 'ky-58', title: 'KY-58 secure voice panel', page: 77 },
-        { id: 'oxygen', title: 'OXYGEN regulator panel', page: 77 },
+        { id: 'oxygen', title: 'OXYGEN regulator panel', page: 77, spec: oxygen },
         { id: 'anti-ice', title: 'ANTI ICE & ANT SEL switches', page: 78 },
         { id: 'avionics-power', title: 'AVIONICS POWER panel', page: 78, spec: avionicsPower },
         { id: 'misc-switches', title: 'Voice message, zeroize, seat adjust and nuclear consent switches', page: 80 },

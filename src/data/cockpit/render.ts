@@ -9,7 +9,7 @@
  * the client engine flips them. Lamps are `<g data-indicator="<id>">` with a
  * `.lens` rect that lights when the group gets the `lit` class.
  */
-import type { AttitudeBall, ControlDef, Cut, Rect, Dial, DrumCounter, HsiDisplay, HudDisplay, HudTape, IndicatorDef, PanelSpec, Placement, Pt, ReadoutFormat, TextDisplay } from './types';
+import type { AttitudeBall, ControlDef, MfdDisplay, Cut, Rect, Dial, DrumCounter, HsiDisplay, HudDisplay, HudTape, IndicatorDef, PanelSpec, Placement, Pt, ReadoutFormat, TextDisplay } from './types';
 import { formatReadout } from './readout.ts';
 import {
   FASTENERS, FONT, INK, LAMPS, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, painted, PAINTS, lampModuleFrame, lampRoundBezel, n,
@@ -116,7 +116,7 @@ function gauge(spec: PanelSpec, dial: Dial, indicator: string | undefined, value
   if (dial.counter) s += counter(dial.counter, value(dial.counter.indicator), `drums-${spec.id}-${dial.counter.indicator}`);
   for (const f of dial.flags ?? []) s += flag(f, page(f.indicator));
   if (indicator && dial.needle) s += `<g data-indicator="${indicator}">${dial.half ? `<path class="lens" d="${halfDisc(dial.face, dial.half)}" stroke="none"/>` : `<circle class="lens" r="${n(dial.face)}" stroke="none"/>`}` +
-    `<g data-needle="${indicator}" transform="rotate(${n(dialAngle(dial, value(indicator)))})">${dial.needleArt === 'wedge' ? wedgeNeedleArt(dial.needle) : dial.needleArt === 'blade' ? bladeNeedleArt(dial.needle) : dial.needleArt === 'line' ? lineNeedleArt(dial.needle) : dial.needleArt === 'step' ? stepNeedleArt(dial.needle) : needleArt(dial.needle)}</g></g>`;
+    `<g data-needle="${indicator}" transform="rotate(${n(dialAngle(dial, value(indicator)))})">${dial.needleArt === 'wedge' ? wedgeNeedleArt(dial.needle, dial.needleBase) : dial.needleArt === 'blade' ? bladeNeedleArt(dial.needle) : dial.needleArt === 'line' ? lineNeedleArt(dial.needle) : dial.needleArt === 'step' ? stepNeedleArt(dial.needle) : needleArt(dial.needle)}</g></g>`;
   for (const p of dial.pointers ?? []) s += `<g data-indicator="${p.indicator}"><g data-needle="${p.indicator}" transform="rotate(${n(dialAngle(dial, value(p.indicator)))})">${paddlePointerArt(p.legend)}</g></g>`;
   return s + gaugeHub(dial.hub);
 }
@@ -145,7 +145,7 @@ export function readings(spec: PanelSpec): Record<string, Reading> {
   const drums = (c: DrumCounter) => { out[c.indicator] = { kind: 'counter', drums: c.drums, fixed: c.fixed, unit: c.unit, roll: c.roll, ...(c.still ? { still: true } : {}), range: ind(c.indicator)?.range ?? [0, c.unit * 10 ** (c.drums - c.fixed) - c.unit, c.unit / 10] }; };
   for (const p of spec.placements) {
     if (p.component === 'counter') drums(p.counter);
-    if (p.component === 'text-display') page(p.indicator);
+    if (p.component === 'text-display' || p.component === 'mfd-display' || p.component === 'blinker') page(p.indicator);
     if (p.component === 'hsi') {
       const turn = (id: string, sign: number) => { out[id] = { kind: 'needle', scale: [[0, 0], [360, 360 * sign]], range: ind(id)?.range ?? [0, 359, 1] }; };
       turn('heading', -1); turn('heading-set', 1); turn('course', 1); turn('bearing', 1);
@@ -205,7 +205,7 @@ export function placementIndicators(p: Placement): string[] {
     case 'push-square': case 'gear-handle': return p.indicator ? [p.indicator] : [];
     case 'gauge': return dialIndicators(p);
     case 'counter': return [p.counter.indicator];
-    case 'text-display': return [p.indicator];
+    case 'text-display': case 'mfd-display': case 'blinker': return [p.indicator];
     case 'hsi': return [...HSI_INDICATORS];
     case 'hud': return [...HUD_INDICATORS, ...p.hud.fields.map(f => f.indicator)];
     case 'attitude': return ['pitch', 'roll', 'off-flag'];
@@ -246,6 +246,26 @@ function textDisplay(d: TextDisplay, ind: IndicatorDef | undefined, id: string, 
       }
     });
     s += `<g data-page-of="${id}" data-page="${pg.id}"${pg.id === current ? '' : ' display="none"'}>${g}</g>`;
+  }
+  return s;
+}
+
+/** Format display (MFD): the screen opening and glass, and one group per page of fixed-pitch words (only `current` shown). */
+function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, current: string) {
+  const o = d.opening / 2, g = o - d.inset;
+  let s = `<rect x="${n(-o)}" y="${n(-o)}" width="${n(2 * o)}" height="${n(2 * o)}" rx="${n(d.r)}" fill="${PAPER}" ${sw('heavy')}/>` +
+    `<g data-indicator="${id}"><rect class="lens" x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" rx="${n(Math.max(0, d.r - d.inset))}" ${sw('fine')}/></g>`;
+  for (const pg of ind?.pages ?? []) {
+    const page = d.pages.find(q => q.id === pg.id);
+    let body = '';
+    for (const w of page?.words ?? []) {
+      const ink = (w.t.length - 1) * d.pitch + d.width, x0 = w.a === 'start' ? w.at[0] : w.a === 'end' ? w.at[0] - ink : w.at[0] - ink / 2;
+      const y = w.at[1], fill = w.inv ? PAPER : INK;
+      if (w.inv) body += `<rect x="${n(x0 - d.pad[0])}" y="${n(y - d.cap / 2 - d.pad[1])}" width="${n(ink + 2 * d.pad[0])}" height="${n(d.cap + 2 * d.pad[1])}" fill="${INK}" stroke="none"/>`;
+      [...w.t].forEach((c, k) => { if (c !== ' ') body += displayChar(x0 + d.width / 2 + k * d.pitch, y, c, d.cap, d.width, fill); });
+    }
+    if (page?.marks) body += `<path d="${page.marks}" fill="none" ${sw('medium')}/>`;
+    s += `<g data-page-of="${id}" data-page="${pg.id}"${pg.id === current ? '' : ' display="none"'}>${body}</g>`;
   }
   return s;
 }
@@ -508,7 +528,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
     }
     case 'rocker': {
       const c = controlOf(spec, p.control), mid = (c.positions.length - 1) / 2;
-      return at(p.at, rockerBase(p.size) + moving(c, state[c.id] ?? c.initial, i => rockerCap(p.size, Math.sign(i - mid), p.arrows)), ' data-art="rocker"');
+      return at(p.at, rockerBase(p.size) + moving(c, state[c.id] ?? c.initial, i => rockerCap(p.size, Math.sign(i - mid), p.arrows, p.legend)), ' data-art="rocker"');
     }
     case 'hat': {
       // The up/down lever is drawn by its control; off centre left or right, the cross control redraws the well and the lever.
@@ -517,6 +537,16 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       return at(p.at, hatBase(p.r) +
         moving(v, state[v.id] ?? v.initial, i => hatLever(p.lever, 0, Math.sign(i - vm) * lean)) +
         moving(h, state[h.id] ?? h.initial, i => i === hm ? '' : `<circle r="${n(p.r * 0.86)}" fill="${PAPER}" ${sw('fine')}/>` + hatLever(p.lever, Math.sign(i - hm) * lean, 0)), ' data-art="hat"');
+    }
+    case 'blinker': {
+      const ind = spec.indicators.find(i => i.id === p.indicator), cur = state[p.indicator] ?? ind?.restPage ?? p.dark, [w, h] = p.size;
+      const win = (fill: string) => `<rect x="${n(-w / 2)}" y="${n(-h / 2)}" width="${n(w)}" height="${n(h)}" rx="${n(h / 2)}" fill="${fill}" ${sw('medium')}/>`;
+      return at(p.at, `<g data-indicator="${p.indicator}">` + (ind?.pages ?? []).map(pg =>
+        `<g data-page-of="${p.indicator}" data-page="${pg.id}"${pg.id === cur ? '' : ' display="none"'}>${win(pg.id === p.dark ? INK : PAPER)}</g>`).join('') + '</g>', ' data-art="blinker"');
+    }
+    case 'mfd-display': {
+      const ind = spec.indicators.find(i => i.id === p.indicator);
+      return at(p.at, mfdDisplay(p.display, ind, p.indicator, state[p.indicator] ?? ind?.restPage ?? 'off'), ' data-art="mfd-display"');
     }
     case 'text-display': {
       const ind = spec.indicators.find(i => i.id === p.indicator);
@@ -604,7 +634,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       const face = p.indicator
         ? `<g data-indicator="${p.indicator}"><rect class="lens" x="${n(-w / 2 + li)}" y="${n(-h / 2 + li)}" width="${n(w - 2 * li)}" height="${n(h - 2 * li)}" rx="0.5" stroke="none"/>${legend}</g>`
         : legend;
-      return at(p.at, turn(p.rotate, 0, 0, pushSquareBase(p.size) + moving(c, state[c.id] ?? c.initial, i => pushSquareCap(p.size, i > 0)) + face), ' data-art="push-square"');
+      return at(p.at, turn(p.rotate, 0, 0, pushSquareBase(p.size) + moving(c, state[c.id] ?? c.initial, i => pushSquareCap(p.size, i > 0) + (p.marks ? `<path d="${p.marks}" fill="none" ${sw('medium')}/>` : '')) + face), ' data-art="push-square"');
     }
     case 'guard-flip': {
       const c = controlOf(spec, p.control);
@@ -742,6 +772,14 @@ export function hitZones(spec: PanelSpec): HitZone[] {
           { kind: 'control', id: p.control, box: [x - r * 0.6, y - r * 1.25, r * 1.2, r * 2.5] },
           { kind: 'control', id: p.cross, box: [x - r * 1.5, y - r * 0.5, r * 3, r] },
         ];
+      }
+      case 'blinker': {
+        const [w, h] = p.size;
+        return [{ kind: 'indicator', id: p.indicator, box: [x - w / 2, y - h / 2, w, h] }];
+      }
+      case 'mfd-display': {
+        const o = p.display.opening;
+        return [{ kind: 'indicator', id: p.indicator, box: [x - o / 2, y - o / 2, o, o] }];
       }
       case 'text-display': {
         const [w, h] = p.display.bezel;

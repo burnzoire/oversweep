@@ -168,7 +168,7 @@ export type Placement =
   /** Flip guard hinged at `at` (the middle of its hinge edge); `size` is the closed footprint. `rotate`: degrees clockwise about the hinge (180 = hinged along the top). */
   | { component: 'guard-flip'; control: string; at: Pt; size: [w: number, h: number]; rotate?: number; paint?: Paint }
   /** Square pushbutton, centred on `at`; `legend` lines are placed by their centre `y` (mm from the centre). With `indicator`, the legend face is that lamp's lens. */
-  | { component: 'push-square'; control: string; at: Pt; size: [w: number, h: number]; legend: { text: string; cap: number; y: number; width?: number; /** Off-centre legend (keypad direction letters). */ x?: number }[]; indicator?: string; /** Turn (degrees clockwise) about the centre, for buttons on an angled mount. */ rotate?: number }
+  | { component: 'push-square'; control: string; at: Pt; size: [w: number, h: number]; legend: { text: string; cap: number; y: number; width?: number; /** Off-centre legend (keypad direction letters). */ x?: number }[]; indicator?: string; /** Turn (degrees clockwise) about the centre, for buttons on an angled mount. */ rotate?: number; /** Moulded detail on the cap (mm path, centre origin), e.g. the F-16C MFD option button's raised square. */ marks?: string }
   | { component: LampModuleArt; at: Pt; size: [w: number, h: number]; lamps: LampCell[]; /** Unused module: a dash across the blank lens. */ blank?: boolean; /** Turn (degrees clockwise) about the module centre, for modules on an angled mount. */ rotate?: number }
   | { component: LampRoundArt; indicator: string; at: Pt }
   /** Pointer instrument centred on `at`; everything inside `dial` is relative to the dial centre. */
@@ -188,7 +188,11 @@ export type Placement =
    */
   | { component: 'code-wheel'; control: string; at: Pt; window: [w: number, h: number]; cap: number; width?: number; tab: { at: Pt; size: [w: number, h: number] } }
   /** Rocker switch with up and down arrows on its cap (F-16C ICP DED increment/decrement): housing `size` centred on `at`; vertical travel, middle position at rest. */
-  | { component: 'rocker'; control: string; at: Pt; size: [w: number, h: number]; /** Cap arrows: `arrow` (head and shaft, F-16C FLIR) or `spike` (long narrow triangles, F-16C DED). */ arrows: 'arrow' | 'spike' }
+  | { component: 'rocker'; control: string; at: Pt; size: [w: number, h: number];
+      /** Cap arrows: `arrow` (head and shaft, F-16C FLIR), `spike` (long narrow triangles, F-16C DED) or `legend` (F-16C MFD: a small up triangle over `legend`, a rule, then a down arrow). */
+      arrows: 'arrow' | 'spike' | 'legend';
+      /** Legend printed on the cap (`legend` arrows), centred `y` mm from the cap centre. */
+      legend?: { text: string; cap: number; y: number; width?: number } }
   /**
    * Four-way momentary switch (F-16C ICP Data Control Switch): a lever in a round well of radius `r`; `control` moves
    * it up and down, `cross` left and right; `lever` is the lever top (w, h) and `throw` how far it moves off centre.
@@ -196,6 +200,10 @@ export type Placement =
   | { component: 'hat'; control: string; cross: string; at: Pt; r: number; lever: [w: number, h: number]; /** Stick length from its pivot and its lean when held (degrees). */ length: number; tilt: number }
   /** Character display (F-16C DED): a fixed grid of character cells behind a bezel; `indicator` is a `display` indicator whose pages the display draws. */
   | { component: 'text-display'; indicator: string; at: Pt; display: TextDisplay }
+  /** Two-colour flow blinker (F-16C OXYGEN FLOW): a rounded window `size` centred on `at`; its `display` indicator shows `dark` (black) or any other page (white). */
+  | { component: 'blinker'; indicator: string; at: Pt; size: [w: number, h: number]; dark: string }
+  /** Format display (F-16C MFD): a screen whose pages are words set beside the option buttons; `indicator` is a `display` indicator whose pages it draws. */
+  | { component: 'mfd-display'; indicator: string; at: Pt; display: MfdDisplay }
   /** Electronic HSI picture (F-16C EHSI), centred on `at` (the compass centre); every symbol is its own indicator, see `HsiDisplay`. */
   | { component: 'hsi'; at: Pt; hsi: HsiDisplay }
   /** Head-up display symbology (F-16C HUD), centred on `at` (the boresight cross); every symbol is its own indicator, see `HudDisplay`. */
@@ -241,6 +249,8 @@ export interface Dial {
   needle?: number;
   /** Needle shape: the shared thin `NEEDLE` (default), a straight-sided `wedge` (F-16C HYD PRESS), a thin shaft ending in a broad `blade` (F-16C altimeter), a `line` with a block tip (F-16C trim) or a broad shank `step`ped down to a narrow tip (F-16C EPU FUEL). */
   needleArt?: 'wedge' | 'blade' | 'line' | 'step';
+  /** Wedge needle width at the centre, where it differs from the shared wedge (F-16C OXYGEN PSI). */
+  needleBase?: number;
   /** Half-disc window instead of a round dial: the side the face bulges to, the flat edge running through the centre (F-16C trim indicators). */
   half?: 'left' | 'right' | 'up' | 'down';
   /**
@@ -344,6 +354,27 @@ export interface TextDisplay {
   /** Character width (ink), mm. */
   width: number;
   pages: { id: string; lines: string[] }[];
+}
+
+/**
+ * A format display (MFD). Everything is relative to the placement's `at` (the
+ * screen centre). The screen is a rounded square opening (`opening`, corner
+ * radius `r`) with the glass `inset` inside it. Words are fixed-pitch
+ * characters `cap` high, `width` wide, `pitch` apart; each word is placed by
+ * `at` with `a` saying which end of its ink that is (default the middle).
+ * `inv` draws it inverse (lit box, dark letters); `marks` is extra symbology
+ * (mm path, screen-centre origin).
+ */
+export interface MfdDisplay {
+  opening: number;
+  r: number;
+  inset: number;
+  cap: number;
+  width: number;
+  pitch: number;
+  /** Inverse box padding round the ink (x, y). */
+  pad: [x: number, y: number];
+  pages: { id: string; words: { t: string; at: Pt; a?: 'start' | 'middle' | 'end'; inv?: boolean }[]; marks?: string }[];
 }
 
 /**
