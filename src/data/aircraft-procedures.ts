@@ -39,7 +39,7 @@ export interface AircraftProcedure {
   status: 'public-preview' | 'review-only';
   simVersion: string;
   /** Which script drives the cockpit panels. */
-  model: 'engine-start' | 'tacan-recovery' | 'steerpoint-entry' | 'before-taxi';
+  model: 'engine-start' | 'tacan-recovery' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff';
   /** The scenario shown above the steps, and the closing heading. */
   intro: string;
   description: string;
@@ -185,6 +185,7 @@ const beforeTaxi: AircraftProcedure = {
   intro: 'Scenario: you are parked at Incirlik in the Syria map with the engine running at idle, the canopy closed and the ground crew clear: the state the Engine Start procedure ends in. The panels beside the steps are a teaching simulation, not connected to DCS. Steps that only ask you to read an indication, and having the chocks removed, end with a confirm button. The side stick and throttle switches appear as cards drawn face-on: click the switch where you would push it. In DCS the jet starts pre-aligned by the ground crew, so a Stored Heading alignment is available; this procedure uses it, and the alignment is compressed here to about 20 seconds.',
   description: 'Illustrated DCS F-16C after-start and before-taxi checks: warning light tests, avionics power, Stored Heading INS alignment, the SEC engine check, EPU check, altimeter and INS NAV.',
   complete: 'After-start and before-taxi checks complete: the jet is ready to taxi',
+  next: 'before-takeoff',
   sources: 'Eagle Dynamics — DCS F-16C Viper Early Access Guide (EN, 16 August 2026): “After Engine Start” pp. 137–140, “Taxi” (the note on the aircraft’s state at mission start) p. 141, “Before Taxi” p. 142, “INS Alignment”, the INS knob and the INS DED page pp. 169–171. Incirlik’s elevation: the Encyclopedia’s Syria map airfield data.',
   initial: { 'elec.main-pwr': 'main-pwr', 'sidewall-controls.throttle': 'idle', 'sidewall-controls.canopy-handle': 'locked', 'fuel.eng-feed': 'norm', 'air-cond.air-source': 'norm', 'landing-gear.anti-skid': 'parking-brake', 'iff.c-and-i': 'backup', 'sai.cage': 'pulled', 'manual-trim.yaw-trim': 'r-20' },
   steps: [
@@ -250,6 +251,40 @@ const beforeTaxi: AircraftProcedure = {
   ]
 };
 procedures.push(beforeTaxi);
+
+const beforeTakeoff: AircraftProcedure = {
+  id: 'procedure.dcs-f16c.before-takeoff',
+  slug: 'before-takeoff',
+  airframe: 'f-16c',
+  title: 'F-16C — Before Takeoff',
+  objective: 'Holding short of the runway, run the final checks before takeoff: configuration, fuel, oxygen, ejection seat, flight controls and warning lights.',
+  applicability: 'DCS F-16C Block 50 (circa 2007); official guide edition 16 August 2026. In-simulator verification pending.',
+  simVersion: 'DCS build not yet verified',
+  status: 'public-preview',
+  model: 'before-takeoff',
+  intro: 'Scenario: you have taxied to the holding point for runway 05 at Incirlik in the Syria map, with the engine at idle, the INS in NAV, the altimeter set and the trim centred: the state the Before Taxi procedure ends in, after taxiing. These checks can be done at an end-of-runway (EOR) area or in the queue on the taxiway. The jet is clean: no external fuel tanks and no targeting pod, so the pod check (TGP to STBY) is not needed. The guide lists the IFF check (set and check) as not implemented in DCS, so it is left out. The panels beside the steps are a teaching simulation, not connected to DCS. Steps that only ask you to read an indication end with a confirm button, and so does cycling the flight controls: the stick and pedals are moved by hand, not clicked.',
+  description: 'Illustrated DCS F-16C before-takeoff checks: ALT FLAPS, trim, ENG CONT, speedbrakes, canopy, fuel, STORES CONFIG, oxygen, probe heat, arming the ejection seat, flight controls, oil pressure and warning lights.',
+  complete: 'Before-takeoff checks complete: the jet is ready to line up',
+  sources: 'Eagle Dynamics — DCS F-16C Viper Early Access Guide (EN, 16 August 2026): “Takeoff” p. 143, “Before Takeoff” pp. 144–145; the SPEED BRAKE position indicator p. 57; the ejection seat arming lever p. 81. Incirlik’s runway: the Encyclopedia’s Syria map airfield data.',
+  initial: { 'sidewall-controls.throttle': 'idle', 'sidewall-controls.canopy-handle': 'locked', 'oxygen.supply': 'on' },
+  steps: [
+    {id:'alt-flaps',section:'Configuration',title:'ALT FLAPS',control:'ALT FLAPS switch',action:'On the FLT CONTROL panel, check the {{ALT FLAPS switch|0}}.',expect:'It is at NORM.',evidence:G2+' 144, step 1',hints:['flt-control.alt-flaps'],panels:['flt-control'],confirm:'ALT FLAPS at NORM'},
+    {id:'trim',section:'Configuration',title:'Check the trim',control:'MANUAL TRIM panel',action:'Check the {{pitch and roll trim pointers|0}} and the {{YAW TRIM knob|1}}.',expect:'Pitch and yaw trim are centred; roll trim is as required (centred here). This is a final check that the trim is right for takeoff and has not been changed since it was set.',evidence:G2+' 144, step 2',hints:['manual-trim.pitch-trim-ind,manual-trim.roll-trim-ind','manual-trim.yaw-trim'],panels:['manual-trim'],confirm:'Trim set for takeoff'},
+    {id:'eng-cont',section:'Configuration',title:'ENG CONT at PRI',control:'ENG CONT switch',action:'On the ENG & JET START panel, check the {{ENG CONT switch and its guard|0}}.',expect:'The switch is at PRI with the guard down.',evidence:G2+' 144, step 3',hints:['eng-jet-start.eng-cont-guard'],panels:['eng-jet-start'],confirm:'PRI, guard down'},
+    {id:'speedbrakes',section:'Configuration',title:'Speedbrakes closed',control:'SPEED BRAKE position indicator',action:'Look at the {{SPEED BRAKE indicator|0}} below the landing gear panel.',expect:'It reads CLOSED: the speedbrakes are fully retracted. Nine dots would mean they are open at some angle (retract them with the SPD BRK switch forward); stripes mean the indicator has no power.',evidence:G2+' 144, step 4; 57',hints:['speed-brake.indicator'],panels:['speed-brake','throttle:spd-brk'],confirm:'CLOSED'},
+    {id:'canopy',section:'Configuration',title:'Canopy closed and locked',control:'Canopy',action:'Check that the canopy is closed and locked.',expect:'The {{CANOPY warning light|0}} is off.',evidence:G2+' 144, step 5',hints:['right-eyebrow.canopy'],panels:['right-eyebrow','sidewall-controls'],confirm:'Canopy locked'},
+    {id:'fuel-wing',section:'Fuel',title:'Check the wing tanks',control:'FUEL QTY SEL knob',action:'Turn the FUEL QTY SEL knob to INT WING.',expect:'The {{pointers|0}} show the internal wing tanks full: about 550 lb each. With external wing tanks they should be feeding first, so EXT WING would read less than at engine start, and with three tanks the centreline tank should be feeding. This jet carries none.',evidence:G2+' 144, step 7; 139',hints:['fuel-qty.al,fuel-qty.fr'],panels:['fuel-qty-sel','fuel-qty'],do:{control:'fuel-qty-sel.fuel-qty-sel',to:'int-wing'}},
+    {id:'fuel-norm',section:'Fuel',title:'FUEL QTY SEL to NORM',control:'FUEL QTY SEL knob',action:'Turn the knob back to NORM.',expect:'The {{pointers|0}} show the aft and forward fuselage fuel again. NORM is needed for the automatic forward fuel transfer and the trapped fuel warning, and so that the BINGO warning is computed on fuselage fuel.',evidence:G2+' 144, step 8',hints:['fuel-qty.al,fuel-qty.fr'],panels:['fuel-qty-sel','fuel-qty'],do:{control:'fuel-qty-sel.fuel-qty-sel',to:'norm'}},
+    {id:'stores',section:'Configuration',title:'STORES CONFIG',control:'STORES CONFIG switch',action:'On the landing gear panel, set the STORES CONFIG switch to suit the loadout. This clean jet is CAT I.',expect:'The switch is at CAT I. CAT I is for air-to-air loadouts without external wing tanks (or six missiles with wing tanks, no centreline tank and no AIM-120s); CAT III is for air-to-ground loadouts, wing tanks with a centreline tank, or six missiles with AIM-120s and wing tanks. CAT III limits angle of attack and onset rates to resist departure.',evidence:G2+' 144, step 9; 56',panels:['landing-gear'],do:{control:'landing-gear.stores-config',to:'cat-1'}},
+    {id:'oxygen',section:'Pilot',title:'Oxygen to PBG',control:'OXYGEN SUPPLY lever',action:'If high-G manoeuvres are expected straight after takeoff, set the OXYGEN SUPPLY lever to PBG. Here they are.',expect:'The lever is at PBG (pressure breathing for G).',evidence:G2+' 144, step 10',panels:['oxygen'],do:{control:'oxygen.supply',to:'pbg'}},
+    {id:'probe-heat',section:'Pilot',title:'Probe heat',control:'PROBE HEAT switch',action:'If icing conditions exist, set the {{PROBE HEAT switch|0}} to PROBE HEAT at least two minutes before takeoff. Today there is no icing, so leave it at OFF.',expect:'The switch stays at OFF. Heating the probes on the ground when icing is not expected can overheat and damage them; probe heat comes on by itself once airborne.',evidence:G2+' 144, step 11',hints:['test.probe-heat'],panels:['test'],confirm:'No icing: left at OFF'},
+    {id:'seat',section:'Pilot',title:'Arm the ejection seat',control:'Ejection seat arming lever',action:'Rotate the ejection seat arming lever aft and down, flush with the seat.',expect:'The seat is armed and the {{SEAT NOT ARMED caution|0}} goes out. It is armed this late to prevent an inadvertent ejection on the ground; on the ground other ways out are usually better.',evidence:G2+' 144, step 12; 81',hints:['caution.seat-not-armed'],panels:['seat-arming-lever','caution'],do:{control:'seat-arming-lever.arming-lever',to:'armed'}},
+    {id:'controls',section:'Final checks',title:'Cycle the flight controls',control:'Side stick, rudder pedals',action:'Move the stick and the rudder pedals through their full travel in each axis: push and pull the stick, roll it left and right, and push each pedal.',expect:'Everything moves freely and nothing obstructs the controls. The F-16 stick barely moves: it senses the force you apply.',evidence:G2+' 145, step 13',panels:['stick:stick+pedals'],confirm:'Controls free'},
+    {id:'oil',section:'Final checks',title:'Oil pressure',control:'Engine OIL pressure',action:'Read the {{OIL pressure indicator|0}}.',expect:'15–65 psi.',evidence:G2+' 145, step 14',hints:['engine-instruments.oil'],panels:['engine-instruments'],confirm:'Oil 15–65 psi'},
+    {id:'lights',section:'Final checks',title:'Warning and caution lights',control:'Caution panel, eyebrow lights',action:'Scan the {{caution panel|0}} and both eyebrows.',expect:'No unexpected light is lit. SEAT NOT ARMED is out now the seat is armed.',evidence:G2+' 145, step 15',hints:['caution.seat-not-armed'],panels:['caution','left-eyebrow','right-eyebrow'],confirm:'No unexpected lights'},
+  ]
+};
+procedures.push(beforeTakeoff);
 
 export const visibleProcedures = procedures.filter(p => p.status === 'public-preview' || reviewTrainers);
 export const procedureRoute = (p: AircraftProcedure) => `manual/aircraft-procedures/${p.airframe}/${p.slug}/`;

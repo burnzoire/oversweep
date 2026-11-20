@@ -145,7 +145,7 @@ export function readings(spec: PanelSpec): Record<string, Reading> {
   const drums = (c: DrumCounter) => { out[c.indicator] = { kind: 'counter', drums: c.drums, fixed: c.fixed, unit: c.unit, roll: c.roll, ...(c.still ? { still: true } : {}), range: ind(c.indicator)?.range ?? [0, c.unit * 10 ** (c.drums - c.fixed) - c.unit, c.unit / 10] }; };
   for (const p of spec.placements) {
     if (p.component === 'counter') drums(p.counter);
-    if (p.component === 'text-display' || p.component === 'mfd-display' || p.component === 'blinker') page(p.indicator);
+    if (p.component === 'text-display' || p.component === 'mfd-display' || p.component === 'blinker' || p.component === 'flag-window') page(p.indicator);
     if (p.component === 'hsi') {
       const turn = (id: string, sign: number) => { out[id] = { kind: 'needle', scale: [[0, 0], [360, 360 * sign]], range: ind(id)?.range ?? [0, 359, 1] }; };
       turn('heading', -1); turn('heading-set', 1); turn('course', 1); turn('bearing', 1);
@@ -205,7 +205,7 @@ export function placementIndicators(p: Placement): string[] {
     case 'push-square': case 'gear-handle': return p.indicator ? [p.indicator] : [];
     case 'gauge': return dialIndicators(p);
     case 'counter': return [p.counter.indicator];
-    case 'text-display': case 'mfd-display': case 'blinker': return [p.indicator];
+    case 'text-display': case 'mfd-display': case 'blinker': case 'flag-window': return [p.indicator];
     case 'hsi': return [...HSI_INDICATORS];
     case 'hud': return [...HUD_INDICATORS, ...p.hud.fields.map(f => f.indicator)];
     case 'attitude': return ['pitch', 'roll', 'off-flag'];
@@ -553,6 +553,14 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       return at(p.at, `<g data-indicator="${p.indicator}">` + (ind?.pages ?? []).map(pg =>
         `<g data-page-of="${p.indicator}" data-page="${pg.id}"${pg.id === cur ? '' : ' display="none"'}>${win(pg.id === p.dark ? INK : PAPER)}</g>`).join('') + '</g>', ' data-art="blinker"');
     }
+    case 'flag-window': {
+      const ind = spec.indicators.find(i => i.id === p.indicator), cur = state[p.indicator] ?? ind?.restPage ?? '', [w, h] = p.size;
+      const box = `x="${n(-w / 2)}" y="${n(-h / 2)}" width="${n(w)}" height="${n(h)}" rx="${n(p.r)}"`;
+      return at(p.at, `<g data-indicator="${p.indicator}"><rect ${box} fill="${PAPER}" stroke="none"/>` + (ind?.pages ?? []).map(pg => {
+        const f = p.faces[pg.id] ?? {};
+        return `<g data-page-of="${p.indicator}" data-page="${pg.id}"${pg.id === cur ? '' : ' display="none"'}>${f.svg ?? ''}${f.legend ? text(0, 0, f.legend.text, f.legend.cap, f.legend.width) : ''}</g>`;
+      }).join('') + `<rect ${box} fill="none" ${sw('medium')}/></g>`, ' data-art="flag-window"');
+    }
     case 'mfd-display': {
       const ind = spec.indicators.find(i => i.id === p.indicator);
       return at(p.at, mfdDisplay(p.display, ind, p.indicator, state[p.indicator] ?? ind?.restPage ?? 'off'), ' data-art="mfd-display"');
@@ -784,7 +792,7 @@ export function hitZones(spec: PanelSpec): HitZone[] {
           { kind: 'control', id: p.cross, box: [x - r * 1.5, y - r * 0.5, r * 3, r] },
         ];
       }
-      case 'blinker': {
+      case 'blinker': case 'flag-window': {
         const [w, h] = p.size;
         return [{ kind: 'indicator', id: p.indicator, box: [x - w / 2, y - h / 2, w, h] }];
       }
