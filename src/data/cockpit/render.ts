@@ -99,7 +99,7 @@ function flag(f: NonNullable<Dial['flags']>[number], current: string) {
 
 function gauge(spec: PanelSpec, dial: Dial, indicator: string | undefined, value: (id: string) => number, page: (id: string) => string) {
   let s = gaugeBezel(dial.bezel, dial.face, dial.half);
-  for (const f of dial.fills ?? []) s += `<path d="${sector(f.r[0], f.r[1], dialAngle(dial, f.from), dialAngle(dial, f.to))}" fill="${INK}" ${sw('fine')}/>`;
+  for (const f of dial.fills ?? []) s += `<path d="${sector(f.r[0], f.r[1], dialAngle(dial, f.from), dialAngle(dial, f.to))}" fill="${f.paint ? PAINTS[f.paint] : INK}" ${f.paint ? 'stroke="none"' : sw('fine')}/>`;
   for (const t of dial.ticks) {
     if (t.dot) {
       s += tickValues(t).map(v => { const [x, y] = polar((t.r[0] + t.r[1]) / 2, dialAngle(dial, v)); return `<circle cx="${n(x)}" cy="${n(y)}" r="${n(t.width / 2)}" fill="${INK}" stroke="none"/>`; }).join('');

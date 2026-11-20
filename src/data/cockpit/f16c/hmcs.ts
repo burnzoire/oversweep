@@ -12,12 +12,22 @@ import { INK } from '../components.ts';
  * square in the image, so it is traced without a warp. Values below are pixels
  * on that image.
  *
- * Plate 6.5-412 x 4.5-117.5 (panel-edge rows 80-102, columns 120-122). The
+ * Plate 4.5-117.5 high (panel-edge columns 120-122), right edge x 412. The
  * right DZUS (centre 392, 49, about 26 px across) sits in a corner notch whose
- * inner edges measure x 377.5 (rows 10-30) and y 63.5 (columns 400-406).
+ * inner edges measure x 377.5 (rows 10-30) and y 63.5 (columns 400-406). The
+ * left DZUS is mostly cut off by the crop: its head shows at x 0-5, y 58-80,
+ * beside a vertical edge at x 6.5 that runs only from y 58 down (rows 62-110;
+ * none on rows 15-55). That is a bottom-left notch, the right one turned
+ * through 180° about the plate centre: DZUS at (-8, 73), notch edges x 6.5 and
+ * y 58.5, plate from x -28. The reference is padded 30 px on the left for the
+ * review, so values below are image px + 30 in x (`X`).
  */
-const PX = 3.06;
-const { pt, mm, path } = tracer(PX);
+const PX = 3.06, OX = 30;
+const { pt: pt0, mm, path: path0 } = tracer(PX);
+const pt = (x: number, y: number) => pt0(x + OX, y);
+/** Shift an absolute M/L/Q/H path's x values by OX. */
+const path = (d: string) => path0(d.replace(/(-?\d+\.?\d*) (-?\d+\.?\d*)|H(-?\d+\.?\d*)/g, (m, x, y, h) =>
+  x !== undefined ? `${+x + OX} ${y}` : `H${+h + OX}`));
 const src = 'DCS F-16C guide p. 57';
 const L = (at: [number, number], text: string, cap: number, width?: number) =>
   ({ kind: 'text' as const, at: pt(...at), text, cap: mm(cap), ...(width ? { width: mm(width) } : {}) });
@@ -30,25 +40,25 @@ const STEPS = Array.from({ length: 10 }, (_, i) => (i + 1) * 10);
 export const hmcs: PanelSpec = {
   id: 'hmcs',
   title: 'HMCS control panel',
-  canvas: [mm(418), mm(123)],
+  canvas: [mm(418 + OX), mm(123)],
   source: {
     variant: 'DCS F-16C Viper (Block 50)',
     manual: 'Eagle Dynamics, DCS F-16C Viper Early Access Guide (EN, 16 Aug 2026)',
     page: 57,
     image: 'p. 57 "HMCS Control Panel" image, 418 x 123 px',
-    rectify: 'none: the plate edges are straight and square in the image',
+    rectify: 'none: the plate edges are straight and square in the image; padded 30 px on the left (the crop cuts off the left DZUS)',
     pxPerMm: PX,
-    scale: 'The DZUS head (about 26 px across) matches the shared 8.5 mm head at 3.06 px/mm; the plate is then 133 x 37 mm.',
+    scale: 'The DZUS head (about 26 px across) matches the shared 8.5 mm head at 3.06 px/mm; the DZUS are then 131 mm apart across the panel and the plate 144 x 37 mm, a standard 5.75 in console panel.',
     shown: { symbology: '100' },
     unresolved: [
-      'Only the right-hand DZUS shows. The plate\'s left edge has no fastener in the image (the round head just left of it, cut by the crop, is off the plate), so none is drawn there.',
+      'The guide\'s crop cuts off the left end of the plate. Its DZUS and bottom-left notch are placed by the head and notch edge that show at the crop and by turning the right-hand DZUS and notch through 180° about the plate centre; the plate\'s left edge (x -28) is inferred from that, not seen.',
       'The knob is a potentiometer with an OFF stop; the guide gives no detents. It is read in percent of travel, 10 % a click. Its travel (OFF at the OFF legend, about 264° to fully clockwise, where the guide\'s knob points) is measured off the image, not stated.',
       'The knob is drawn as the shared small knurled knob (as EXT LIGHTING ANTI-COLL), square-on; its 50 px top face in the image is the camera looking down on a tall knob.',
       'The curved INC arrow is traced from the image as a printed line with a filled head.',
     ],
   },
   plate: [
-    { d: path('M6.5 4.5H412V117.5H6.5Z') },
+    { d: path('M-28 4.5H412V117.5H-28Z') },
   ],
   engraving: [
     // Vertical HMCS title.
@@ -61,6 +71,7 @@ export const hmcs: PanelSpec = {
   ],
   placements: [
     { component: 'dzus', at: pt(392, 49), cut: 'up-right' },
+    { component: 'dzus', at: pt(-8, 73), cut: 'down-left' },
     { component: 'screw-small', at: pt(90, 99) },
     { component: 'screw-small', at: pt(269, 27) },
     { component: 'knob-knurled-small', control: 'symbology', at: pt(...KNOB) },

@@ -23,6 +23,8 @@ export const PAPER = 'var(--panel-paper,#fff)';
 export const PAINTS = {
   red: 'var(--panel-red,#b3262a)',
   yellow: 'var(--panel-yellow,#f2b807)',
+  /** Safety green (about FS 14187), for normal-range bands and the oxygen SUPPLY lever. */
+  green: 'var(--panel-green,#2f8f46)',
 } as const;
 /** A moving part drawn in a paint: its paper fills take the colour, ink lines stay black. */
 export const painted = (paint: keyof typeof PAINTS | undefined, body: string) =>

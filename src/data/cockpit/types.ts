@@ -242,7 +242,7 @@ export interface Dial {
   /** Tick runs: one tick every `step` from `from` to `to`, skipping values on `skip` multiples (drawn by another run). */
   ticks: { from: number; to: number; step: number; skip?: number; r: [inner: number, outer: number]; width: number; /** Printed dots instead of lines: a dot `width` across midway between the radii. */ dot?: boolean }[];
   /** Solid painted sectors between two values (RPM's 60–65 % band). */
-  fills?: { from: number; to: number; r: [inner: number, outer: number] }[];
+  fills?: { from: number; to: number; r: [inner: number, outer: number]; /** Painted band (F-16C OXYGEN PSI normal range); default ink. */ paint?: Paint }[];
   /** Numerals and dial legends, upright, by their centre relative to the dial centre; `width` locks the measured width. */
   legends: { text: string; at: Pt; cap: number; width?: number }[];
   /** Needle tip radius (the shared needle's shank stretches to it); single-needle dials only. */
@@ -513,7 +513,7 @@ export type Engraving =
  * (the guide shows it coloured): red guards, yellow hazard stripes and
  * caution-yellow caps. Everything else stays black on white.
  */
-export type Paint = 'red' | 'yellow';
+export type Paint = 'red' | 'yellow' | 'green';
 
 export type Pen = 'fine' | 'medium' | 'heavy';
 

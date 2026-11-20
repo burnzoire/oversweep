@@ -129,6 +129,21 @@ const rocker = (id: string, label: string): ControlDef => ({
   description: `${ROCKER_TEXT[id]} Held up or down, the setting keeps changing until it reaches its limit.`,
 });
 
+/** Bottom-corner screw covers (centres from the guide) and the raised corner blocks and ridges round the OSBs. */
+const BOSSES = [[31, 630], [628, 630]] as const;
+const LO = CX - 2.5 * P, HI = CX + 2.5 * P, TOP = CY - 2.5 * P, BOT = CY + 2.5 * P, RW = 3.5, N = 22;
+const ridges = [-1.5, -0.5, 0.5, 1.5].flatMap(k => {
+  const x = CX + k * P, y = CY + k * P;
+  return [`M${x - RW} 3H${x + RW}V70H${x - RW}Z`, `M${x - RW} 590H${x + RW}V657H${x - RW}Z`, `M3 ${y - RW}H70V${y + RW}H3Z`, `M590 ${y - RW}H657V${y + RW}H590Z`];
+});
+const [bl, br] = BOSSES;
+const RAISED = [
+  `M3 21Q3 3 21 3H${LO}V${TOP}H3Z`, `M${HI} 3H639Q657 3 657 21V${TOP}H${HI}Z`,
+  `M3 ${BOT}H${LO}V657H${bl[0] + N}V${bl[1]}Q${bl[0] + N} ${bl[1] - N} ${bl[0]} ${bl[1] - N}H3Z`,
+  `M${HI} ${BOT}H657V${br[1] - N}H${br[0]}Q${br[0] - N} ${br[1] - N} ${br[0] - N} ${br[1]}V657H${HI}Z`,
+  ...ridges,
+].join('');
+
 function build(side: 'left' | 'right'): PanelSpec {
   const Side = side === 'left' ? 'Left' : 'Right';
   return {
@@ -148,17 +163,21 @@ function build(side: 'left' | 'right'): PanelSpec {
         'The guide\'s pictures are of one MFD; the left and right units are drawn the same. Which format each shows at power-up depends on the loaded data and is not drawn: procedures pick the page.',
         'The screen is drawn black on white. In the sim the words are white or green on a dark screen, highlighted words are inverse, and the aircraft reference symbol is cyan.',
         'The DTC file name (SEADSTRIKE) and the TNDL INIT REQD advisory are the guide\'s example; they change with the mission.',
-        'The two screws along the bottom sit 82 px in from each side. The round bosses in the bottom corners are drawn as plain rings.',
+        'The two screws along the bottom sit 82 px in from each side. The screw covers in the bottom corners are drawn as plain rings, 28 px across, in cut-outs in the raised corners.',
         'The OSB caps\' raised squares and the rockers\' arrows are traced from the guide; how far each rocker rocks is not shown.',
       ],
     },
     plate: [
       // Bezel: 3-657 px both ways, corners about 18 px round (the image is cropped close at the corners).
       { d: path('M21 3H639Q657 3 657 21V639Q657 657 639 657H21Q3 657 3 639V21Q3 3 21 3Z') },
+      // Raised corner blocks (out to 133 px from the centre lines' outer OSBs: edge at 136 on the bottom row) and
+      // ridges between the OSBs, 7 px wide at the half-pitch lines (measured 287-293, 365.5-371.5, 444-450 on the
+      // bottom row), standing to the corners' height. The bottom corners are cut away round the screw covers.
+      { d: path(RAISED), raised: true },
     ],
     engraving: [
-      // Round bosses in the bottom corners (about 21 px radius).
-      { kind: 'svg', markup: [[31, 630], [628, 630]].map(([x, y]) => `<circle cx="${mm(x)}" cy="${mm(y)}" r="${mm(21)}" fill="none" stroke-width="0.25"/><circle cx="${mm(x)}" cy="${mm(y)}" r="${mm(13)}" fill="none" stroke-width="0.25"/>`).join('') },
+      // Round screw covers in the bottom corners.
+      { kind: 'svg', markup: BOSSES.map(([x, y]) => `<circle cx="${mm(x)}" cy="${mm(y)}" r="${mm(14)}" fill="none" stroke-width="0.4"/><circle cx="${mm(x)}" cy="${mm(y)}" r="${mm(9)}" fill="none" stroke-width="0.25"/>`).join('') },
     ],
     placements: [
       { component: 'mfd-display', indicator: 'display', at: pt(...SC), display },
