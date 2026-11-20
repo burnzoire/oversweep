@@ -105,3 +105,20 @@ test('before-taxi procedure is sourced to the official guide, its moves exist an
     assert.ok(c && c.positions.some(p => p.id === m[3]), m[0]);
   }
 });
+
+test('HTS familiarization uses HAD and SEAD pages that exist and HOTAS controls that are built', async () => {
+  if (!(process.features?.typescript || process.execArgv.includes('--experimental-strip-types'))) return;
+  const data = await read('src/data/aircraft-procedures.ts');
+  const script = await read('src/scripts/procedure-hts.ts');
+  const { f16cCockpit, builtPanels } = await import('../src/data/cockpit/f16c/index.ts');
+  const panels = builtPanels(f16cCockpit);
+  const pagesOf = id => new Set(panels.find(({ spec }) => spec.id === id).spec.indicators.find(i => i.id === 'display').pages.map(x => x.id));
+  const mfd = pagesOf('right-mfd');
+  for (const m of script.matchAll(/'(had[a-z0-9-]*|menu-blank)'/g)) assert.ok(mfd.has(m[1]), m[1]);
+  assert.ok(pagesOf('ded').has('sead'));
+  for (const [panel, control] of [['snsr-pwr', 'left-hdpt'], ['stick', 'dms-ud'], ['stick', 'tms-ud'], ['stick', 'tms-lr'], ['stick', 'expand-fov'], ['throttle', 'cursor-ud'], ['throttle', 'cursor-lr'], ['right-mfd', 'osb-4']]) {
+    assert.ok(panels.find(({ spec }) => spec.id === panel).spec.controls.some(c => c.id === control), `${panel}.${control}`);
+    assert.ok(data.includes(`${panel}.${control}`), `${panel}.${control} used`);
+  }
+  assert.doesNotMatch(data, /chuck/i);
+});

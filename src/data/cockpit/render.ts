@@ -257,7 +257,7 @@ function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, cu
     `<g data-indicator="${id}"><rect class="lens" x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" rx="${n(Math.max(0, d.r - d.inset))}" ${sw('fine')}/></g>`;
   for (const pg of ind?.pages ?? []) {
     const page = d.pages.find(q => q.id === pg.id);
-    let body = '';
+    let body = page?.fills ? `<path d="${page.fills}" fill="${INK}" stroke="none"/>` : '';
     for (const w of page?.words ?? []) {
       const ink = (w.t.length - 1) * d.pitch + d.width, x0 = w.a === 'start' ? w.at[0] : w.a === 'end' ? w.at[0] - ink : w.at[0] - ink / 2;
       const y = w.at[1], fill = w.inv ? PAPER : INK;
@@ -265,6 +265,7 @@ function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, cu
       [...w.t].forEach((c, k) => { if (c !== ' ') body += displayChar(x0 + d.width / 2 + k * d.pitch, y, c, d.cap, d.width, fill); });
     }
     if (page?.marks) body += `<path d="${page.marks}" fill="none" ${sw('medium')}/>`;
+    if (page?.fine) body += `<path d="${page.fine}" fill="none" ${sw('fine')}/>`;
     s += `<g data-page-of="${id}" data-page="${pg.id}"${pg.id === current ? '' : ' display="none"'}>${body}</g>`;
   }
   return s;

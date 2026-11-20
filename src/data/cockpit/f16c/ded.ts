@@ -181,6 +181,8 @@ export const ded: PanelSpec = {
         { id: 'tils-tr-21-edit', lines: tcnLines({ mode: 'T/R', chan: '21', band: 'X', onChan: true, edit: true }) },
         { id: 'tils-tr-21x', lines: tcnLines({ mode: 'T/R', bcn: 'DAN', chan: '21', band: 'X', onChan: true }) },
         // Steerpoint entry procedure states (STPT page, steerpoint 5).
+        // SEAD page (p. 544 figure, 550 x 209 px; grid fitted: pitch 21 px, first cell centre x 55): the designated SEAD target's position, elevation and time on target.
+        { id: 'sead', lines: ['   SEAD', ' LAT  N 36°26.2\'', ' LNG  E037°07.7\'', ' ELV  1442FT', ' TOT  00:05:34'] },
         ...STPT_PAGES.map(({ id, lines }) => ({ id, lines })),
         ...INS_PAGES.map(({ id, lines }) => ({ id, lines })),
       ],
@@ -190,7 +192,7 @@ export const ded: PanelSpec = {
   indicators: [
     {
       id: 'display', name: 'DED', type: 'display', restPage: 'off',
-      pages: [{ id: 'off', label: 'Off (blank)' }, { id: 'cni', label: 'CNI page' }, { id: 't-ils', label: 'T-ILS page (TACAN/ILS)' },
+      pages: [{ id: 'off', label: 'Off (blank)' }, { id: 'cni', label: 'CNI page' }, { id: 't-ils', label: 'T-ILS page (TACAN/ILS)' }, { id: 'sead', label: 'SEAD page (designated HTS target)' },
         { id: 'cni-blank', label: 'CNI page, MIDS LVT off (no TACAN field)' }, { id: 'cni-1x', label: 'CNI page, TACAN 1X' },
         { id: 'tils-rec-1x', label: 'T-ILS: REC, channel 1, band X' }, { id: 'tils-tr-1x', label: 'T-ILS: T/R, channel 1, band X' },
         { id: 'tils-tr-1x-chan', label: 'T-ILS: asterisks on CHAN' }, { id: 'tils-tr-2-edit', label: 'T-ILS: typing 2' },

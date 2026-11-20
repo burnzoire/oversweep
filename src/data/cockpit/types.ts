@@ -378,7 +378,9 @@ export interface MfdDisplay {
   pitch: number;
   /** Inverse box padding round the ink (x, y). */
   pad: [x: number, y: number];
-  pages: { id: string; words: { t: string; at: Pt; a?: 'start' | 'middle' | 'end'; inv?: boolean }[]; marks?: string }[];
+  pages: { id: string; words: { t: string; at: Pt; a?: 'start' | 'middle' | 'end'; inv?: boolean }[];
+    /** Symbology paths (mm about the screen centre): `marks` medium lines, `fine` thin lines, `fills` solid shapes (drawn under the words). */
+    marks?: string; fine?: string; fills?: string }[];
 }
 
 /**
