@@ -204,6 +204,8 @@ export type Placement =
   | { component: 'blinker'; indicator: string; at: Pt; size: [w: number, h: number]; dark: string }
   /** Indicator window (F-16C SPEED BRAKE): a window `size` with corner radius `r`, centred on `at`; its `display` indicator shows one face a page, each a printed legend and/or line art in mm about the window centre. */
   | { component: 'flag-window'; indicator: string; at: Pt; size: [w: number, h: number]; r: number; faces: Record<string, { legend?: { text: string; cap: number; width?: number }; svg?: string }> }
+  /** LED readout (F-16C backup UHF CHAN and frequency): 10-segment digits at `cells` (centre, half-size w x h, relative to `at`) and an optional decimal `dot`. Its `display` indicator's page id is the text shown (digits, '-', '.'), except `off` (blank) and `test` (every segment). */
+  | { component: 'led-display'; indicator: string; at: Pt; cells: { at: Pt; size: [w: number, h: number] }[]; dot?: { at: Pt; r: number } }
   /** Format display (F-16C MFD): a screen whose pages are words set beside the option buttons; `indicator` is a `display` indicator whose pages it draws. */
   | { component: 'mfd-display'; indicator: string; at: Pt; display: MfdDisplay }
   /** Electronic HSI picture (F-16C EHSI), centred on `at` (the compass centre); every symbol is its own indicator, see `HsiDisplay`. */

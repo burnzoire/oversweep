@@ -978,3 +978,31 @@ export function hatLever([w, h]: [number, number], dx: number, dy: number) {
     : `M${n(x0)} ${n(y0)}L${n(x1 + dx)} ${n(y0)}V${n(y1)}L${n(x0)} ${n(y1)}Z`);
   return cased(`<path d="${hull}" fill="${PAPER}"/>`, 'medium') + cased(top, 'medium');
 }
+
+/**
+ * A 10-segment LED digit's segments, centred on (cx, cy), half-size w x h: the seven bars with the middle bar split in two, and
+ * two diagonals (centre to top right, bottom left to centre), as the lit
+ * digits in the reference show.
+ */
+export const ledSegments = (cx: number, cy: number, w: number, h: number): string[] => {
+  const t = Math.min(w, h) * 0.3, g = t * 0.35, f = (v: number) => +v.toFixed(2);
+  const hz = (x1: number, x2: number, y: number) =>
+    `M${f(x1)} ${f(y)}L${f(x1 + t / 2)} ${f(y - t / 2)}H${f(x2 - t / 2)}L${f(x2)} ${f(y)}L${f(x2 - t / 2)} ${f(y + t / 2)}H${f(x1 + t / 2)}Z`;
+  const vt = (x: number, y1: number, y2: number) =>
+    `M${f(x)} ${f(y1)}L${f(x + t / 2)} ${f(y1 + t / 2)}V${f(y2 - t / 2)}L${f(x)} ${f(y2)}L${f(x - t / 2)} ${f(y2 - t / 2)}V${f(y1 + t / 2)}Z`;
+  const dg = (x1: number, y1: number, x2: number, y2: number) => {
+    const l = Math.hypot(x2 - x1, y2 - y1), nx = -(y2 - y1) / l * t * 0.3, ny = (x2 - x1) / l * t * 0.3;
+    return `M${f(x1 + nx)} ${f(y1 + ny)}L${f(x2 + nx)} ${f(y2 + ny)}L${f(x2 - nx)} ${f(y2 - ny)}L${f(x1 - nx)} ${f(y1 - ny)}Z`;
+  };
+  const [l, r, tp, bt] = [cx - w, cx + w, cy - h, cy + h];
+  return [
+    hz(l + g, r - g, tp), hz(l + g, r - g, bt), hz(l + g, cx - g, cy), hz(cx + g, r - g, cy),
+    vt(l, tp + g, cy - g), vt(l, cy + g, bt - g), vt(r, tp + g, cy - g), vt(r, cy + g, bt - g),
+    dg(cx + g + t / 2, cy - g - t / 2, r - g - t / 2, tp + g + t / 2), dg(l + g + t / 2, bt - g - t / 2, cx - g - t / 2, cy + g + t / 2),
+  ];
+};
+/** Segments lit for each character, by index into `ledSegments` (top, bottom, mid left, mid right, upper left, lower left, upper right, lower right, two diagonals). */
+export const LED_CHARS: Record<string, number[]> = {
+  '0': [0, 1, 4, 5, 6, 7], '1': [6, 7], '2': [0, 1, 2, 3, 5, 6], '3': [0, 1, 2, 3, 6, 7], '4': [2, 3, 4, 6, 7],
+  '5': [0, 1, 2, 3, 4, 7], '6': [0, 1, 2, 3, 4, 5, 7], '7': [0, 6, 7], '8': [0, 1, 2, 3, 4, 5, 6, 7], '9': [0, 1, 2, 3, 4, 6, 7], '-': [2, 3],
+};
