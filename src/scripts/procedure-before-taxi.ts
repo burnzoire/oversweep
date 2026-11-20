@@ -13,12 +13,12 @@
 interface StepDo { control: string; to: string; on?: 'press' | 'release'; hold?: number }
 interface Step { id: string; panels: string[]; hints?: string[]; do?: StepDo; also?: StepDo[]; confirm?: string; turn?: { control: string; to: number; per: number } }
 interface Config { aircraft: string; initial: Record<string, string>; labels: Record<string, string>; names: Record<string, string>; orders: Record<string, string[]>; lamps: string[]; steps: Step[] }
-/** `ins`: the alignment stage (-1 not started, 0–4 up the INS DED pages); `flash`: the fine-alignment flash is in its off half; `bit`: the FLCS BIT is running; `dte`: the left MFD shows the DTE page. */
-interface State { rpm: number; noz: number; ins: number; flash: boolean; baro: number; mode: 'pneu' | 'elec'; bit: boolean; dte: boolean }
+/** `ins`: the alignment stage (-1 not started, 0–4 up the INS DED pages); `flash`: the fine-alignment flash is in its off half; `bit`: the FLCS BIT is running; `dte`: the left MFD shows the DTE page; `pitch`/`roll`: the trim applied, in indicator dots (nose up, left wing down positive). */
+interface State { rpm: number; noz: number; ins: number; flash: boolean; baro: number; mode: 'pneu' | 'elec'; bit: boolean; dte: boolean; pitch: number; roll: number }
 
 // Illustrative scenario: parked at Incirlik (field elevation 191 ft, from the airfield data), local altimeter setting 29.97.
 const FIELD = 191, QNH = 29.97, PNEU_ERROR = 25;
-const initialState = (): State => ({ rpm: 68, noz: 98, ins: -1, flash: false, baro: 29.92, mode: 'pneu', bit: false, dte: false });
+const initialState = (): State => ({ rpm: 68, noz: 98, ins: -1, flash: false, baro: 29.92, mode: 'pneu', bit: false, dte: false, pitch: 0, roll: 0 });
 // The FLCS BIT runs about 45 s in the jet; compressed here.
 const BIT_MS = 4000;
 // The INS alignment is compressed: the guide gives about 90 s for a Stored Heading alignment.
@@ -131,6 +131,7 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
         'hud.fpm-azimuth': 0, 'hud.fpm-elevation': 0, 'hud.radar-alt': 0, 'hud.max-g': aligning() && st.ins >= 2 ? NaN : 1,
         'hud.steerpoint': 1, 'hud.steerpoint-distance': 24, 'hud.slant-range': 24, 'hud.ttg': 0, 'hud.steering-cue': 0, 'hud.steering': 0,
         'hud.steerpoint-azimuth': 0, 'hud.steerpoint-elevation': -3,
+        'manual-trim.pitch-trim-ind': st.pitch, 'manual-trim.roll-trim-ind': st.roll,
         'ehsi.heading': 232, 'ehsi.heading-set': 232, 'ehsi.course': 232, 'ehsi.course-set': 232, 'ehsi.bearing': 232, 'ehsi.range': 24, 'ehsi.deviation': 0,
       },
       pages: { 'left-mfd.display': mfd, 'right-mfd.display': mfd === 'off' ? 'off' : 'menu', 'sai.off-flag': pos['sai.cage'] === 'pulled' ? 'shown' : 'hidden', 'hud.master-arm': 'none', 'ded.display': ded, 'hud.screen': hudOn ? 'on' : 'off', 'hud.align': alignCue ? 'align' : 'none', 'altimeter.pneu': st.mode === 'pneu' ? 'shown' : 'hidden',
@@ -227,6 +228,12 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
     const before = pos[key];
     pos[key] = d.position;
     const s = cfg.steps[step];
+    // Stick trim moves the trim one dot a press, unless TRIM/AP DISC is at DISC.
+    if (d.phase === 'press' && pos['manual-trim.trim-ap-disc'] !== 'disc') {
+      const clamp = (v: number) => Math.max(-3, Math.min(3, v));
+      if (key === 'stick.trim-ud' && d.position !== 'center') st.pitch = clamp(st.pitch + (d.position === 'aft' ? 1 : -1));
+      if (key === 'stick.trim-lr' && d.position !== 'center') st.roll = clamp(st.roll + (d.position === 'left' ? 1 : -1));
+    }
     // The altimeter mode lever sets the mode while it is held (a step that wants it completes below).
     if (key === 'altimeter.mode' && d.phase === 'press' && (d.position === 'elec' || d.position === 'pneu')) st.mode = d.position;
     const want = pending(s).find(w => w.control === key && w.to === d.position && (w.on ?? 'press') === d.phase);

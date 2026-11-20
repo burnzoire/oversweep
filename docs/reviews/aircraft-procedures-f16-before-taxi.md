@@ -1,7 +1,7 @@
 # Aircraft Procedures — F-16C after engine start & before taxi (issue #389)
 
 ## Scope
-From a running engine at idle (the state Engine Start ends in): the after-start checks (guide pp. 137–140), a Stored Heading INS alignment (pp. 169–171) and the before-taxi checks (p. 142), ending with the INS at NAV and the chocks out. 54 steps on the shared cockpit panels. Taxi (guide p. 142, steps 7–10) is a separate procedure.
+From a running engine at idle (the state Engine Start ends in): the after-start checks (guide pp. 137–140), a Stored Heading INS alignment (pp. 169–171) and the before-taxi checks (p. 142), ending with the INS at NAV and the chocks out. 55 steps on the shared cockpit panels. Taxi (guide p. 142, steps 7–10) is a separate procedure.
 
 ## Sources
 - Eagle Dynamics, DCS F-16C Viper Early Access Guide (EN, 16 August 2026): After Engine Start pp. 137–140, Taxi p. 141 (state at mission start), Before Taxi p. 142, INS Alignment, the INS knob and the INS DED page pp. 169–171. No community guide is cited or followed.
@@ -15,6 +15,7 @@ Steps that only read an indication end with a confirm (SEC and PRI nozzle, wheel
 
 ## Modelling choices
 - Rudder pedals are a card on the side stick page (plan view, pushed pedal forward); they are not in the stick figure. This procedure does not use them.
+- Stick trim moves the PITCH and ROLL TRIM pointers one dot a press with TRIM/AP DISC at NORM (nothing at DISC); the manual trim wheels do not add to them in this procedure.
 - The EHSI comes on with the avionics showing the red INU warning flag (guide p. 232, item 18), ringed on step 6, and clears when the aligned INS goes to NAV (ATT if the knob is at ATT). Its range and CDI flags are not drawn, so the readouts show values throughout.
 - The throttle has an "Idle + 10% RPM" stop for the EPU check; it is not a detent in the jet.
 - The altimeter mode lever swings 6° right to PNEU (30° left to ELEC) so it clears the corner screw; the guide says it is held momentarily to either.
