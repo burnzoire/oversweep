@@ -670,6 +670,8 @@ export interface RenderOptions {
 
 export function renderPanel(spec: PanelSpec, opts: RenderOptions = {}) {
   const [w, h] = spec.canvas, state = opts.state ?? {};
+  // Parts that come out from behind the housing (`under`) are drawn before the plate.
+  const under = spec.placements.filter(p => 'under' in p && p.under).map(p => placement(spec, p, state)).join('');
   const plate = spec.plate.map((p, i) =>
     (p.raised ? `<path d="${p.d}" transform="translate(0.45 0.45)" ${sw('medium')}/>` : '') +
     cased(`<path d="${p.d}" fill="${PAPER}" fill-rule="evenodd"/>`, i === 0 || p.raised ? 'heavy' : 'medium')).join('');
@@ -687,8 +689,8 @@ export function renderPanel(spec: PanelSpec, opts: RenderOptions = {}) {
   return `<svg class="cockpit-svg" viewBox="0 0 ${n(w)} ${n(h)}" xmlns="http://www.w3.org/2000/svg" ${opts.label ? `role="img" aria-label="${esc(opts.label)}"` : 'aria-hidden="true"'}>` +
     `<g fill="none" stroke="${INK}" stroke-linejoin="round" stroke-linecap="round" font-family="${FONT}" font-weight="600">` +
     (spec.plate.length || clips ? `<defs>${spec.plate.length ? `<clipPath id="plate-${spec.id}"><path d="${spec.plate[spec.plate.length - 1].d}"/></clipPath><clipPath id="base-${spec.id}"><path d="${spec.plate[0].d}"/></clipPath>` : ''}${clips}</defs>` : '') +
-    `<g class="plate">${plate}</g><g class="engraving">${engraving}</g>` +
-    `<g class="components">${spec.placements.map(p => placement(spec, p, state)).join('')}</g></g>` +
+    (under ? `<g class="components under">${under}</g>` : '') + `<g class="plate">${plate}</g><g class="engraving">${engraving}</g>` +
+    `<g class="components">${spec.placements.filter(p => !('under' in p && p.under)).map(p => placement(spec, p, state)).join('')}</g></g>` +
     (opts.guide ? guideLayer(spec) : '') + '</svg>';
 }
 

@@ -27,21 +27,21 @@ const C: Pt = [156.5, 152], K: Pt = [281, 281];
 const TRIM_DEG = 1.8, TRIM_MID = 315;
 const trimTicks = Array.from({ length: 11 }, (_, k) => {
   const v = -25 + 5 * k, a = ((TRIM_MID + v * TRIM_DEG) * Math.PI) / 180, major = Math.abs(v) === 25;
-  const [r0, r1] = major ? [43, 60] : [46, 57];
+  const [r0, r1] = major ? [42, 59] : [45, 56];
   const P = (r: number) => `${(r * Math.sin(a)).toFixed(2)} ${(-r * Math.cos(a)).toFixed(2)}`;
   return { d: `M${P(r0)}L${P(r1)}`, major };
 });
-/** Opaque band the trim scale is printed on, covering the bezel under it (Nathan, 2026-11-20). */
+/** Opaque band the trim scale is printed on, covering the bezel under it and running on under the two small screws that hold it, just wider than their heads (Nathan, 2026-11-20). */
 const trimBand = (() => {
   const P = (r: number, d: number) => { const a = (d * Math.PI) / 180; return `${(r * Math.sin(a)).toFixed(2)} ${(-r * Math.cos(a)).toFixed(2)}`; };
-  const from = TRIM_MID - 25 * TRIM_DEG - 5, to = TRIM_MID + 25 * TRIM_DEG + 5, steps = 24;
+  const from = 245, to = 388, steps = 40;
   const ring = (r: number, rev: boolean) => Array.from({ length: steps + 1 }, (_, k) => P(r, rev ? to - (k * (to - from)) / steps : from + (k * (to - from)) / steps));
-  return 'M' + [...ring(64, false), ...ring(41, true)].join('L') + 'Z';
+  return 'M' + [...ring(60, false), ...ring(41, true)].join('L') + 'Z';
 })();
 /** White triangular index at the middle of the trim scale (0°), pointing at the knob. */
 const idx = (() => {
   const a = (TRIM_MID * Math.PI) / 180, P = (r: number, s: number) => `${(r * Math.sin(a) + s * Math.cos(a)).toFixed(2)} ${(-r * Math.cos(a) + s * Math.sin(a)).toFixed(2)}`;
-  return `M${P(46, 0)}L${P(62, 5)}L${P(62, -5)}Z`;
+  return `M${P(44, 0)}L${P(58, 5)}L${P(58, -5)}Z`;
 })();
 
 const bars: AttitudeBall['bars'] = [
@@ -105,8 +105,6 @@ export const sai: PanelSpec = {
   ],
   placements: [
     ...[[22, 14], [296, 14], [22, 288]].map(([x, y]) => ({ component: 'screw-medium' as const, at: pt(x, y) })),
-    { component: 'screw-small', at: pt(296, 231) },
-    { component: 'screw-small', at: pt(234, 292) },
     { component: 'attitude', at: pt(...C), ball },
     {
       component: 'cage-knob', control: 'pitch-trim', pull: 'cage', at: pt(...K), r: mm(38), face: mm(33),
@@ -120,6 +118,9 @@ export const sai: PanelSpec = {
       marks: [{ d: path(trimBand), pen: 'fine' as const, fill: true }, ...trimTicks.map(t => ({ d: path(t.d), pen: t.major ? 'heavy' as const : 'medium' as const })), { d: path(idx), pen: 'medium' as const, fill: true }],
       needle: { r: [mm(34), mm(45)], half: mm(2.6), rest: TRIM_MID },
     },
+    // The trim scale's two hold-down screws, over its band.
+    { component: 'screw-small', at: pt(296, 231) },
+    { component: 'screw-small', at: pt(234, 292) },
   ],
   controls: [
     {
