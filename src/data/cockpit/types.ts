@@ -202,6 +202,8 @@ export type Placement =
   | { component: 'text-display'; indicator: string; at: Pt; display: TextDisplay }
   /** Two-colour flow blinker (F-16C OXYGEN FLOW): a rounded window `size` centred on `at`; its `display` indicator shows `dark` (black) or any other page (white). */
   | { component: 'blinker'; indicator: string; at: Pt; size: [w: number, h: number]; dark: string }
+  /** LED readout (F-16C backup UHF CHAN and frequency): 10-segment digits at `cells` (centre, half-size w x h, relative to `at`) and an optional decimal `dot`. Its `display` indicator's page id is the text shown (digits, '-', '.'), except `off` (blank) and `test` (every segment). */
+  | { component: 'led-display'; indicator: string; at: Pt; cells: { at: Pt; size: [w: number, h: number] }[]; dot?: { at: Pt; r: number } }
   /** Format display (F-16C MFD): a screen whose pages are words set beside the option buttons; `indicator` is a `display` indicator whose pages it draws. */
   | { component: 'mfd-display'; indicator: string; at: Pt; display: MfdDisplay }
   /** Electronic HSI picture (F-16C EHSI), centred on `at` (the compass centre); every symbol is its own indicator, see `HsiDisplay`. */
