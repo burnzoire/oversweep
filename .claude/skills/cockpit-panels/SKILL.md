@@ -194,6 +194,14 @@ everything that stands proud of it.
   indicators green, red or yellow where the real part has that colour (e.g.
   OXYGEN's red EMERGENCY lever, green SUPPLY lever, green dial band;
   `paint: 'green'`, Dial `fills[].paint`), to draw the eye to them.
+- **Drum levers (Nathan, 2026-11-20, OXYGEN).** A lever fixed radially to a short
+  drum recessed in its slot (about 20% proud), axis across the slot: the lever
+  turns the whole drum. Square-on, the drum's face fills the slot; straight out,
+  the lever shows end-on as a small square; turned, its root moves R sin a and
+  its end (R + L) sin a off the axis line, end face foreshortened by cos a.
+  Work out a part's side-view geometry before drawing its front view.
+- **Gauge scales** carry their minor ticks evenly all the way round even where
+  the bezel hides them in the guide.
 - **Unfamiliar parts (Nathan, 2026-11-20).** Before drawing a part you don't
   know, read xflight.de (e.g. its oxygen regulator page) and real photos to
   understand its shape and how it moves. That is for comprehension only: never

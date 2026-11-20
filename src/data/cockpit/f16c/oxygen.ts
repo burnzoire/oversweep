@@ -44,9 +44,21 @@ const SUP_Y = { pbg: 160, on: 184, off: 210 };
  * Tick radii: majors 36.6-44, minors 40.5-44.3, dots at 37.
  */
 const lg = (text: string, x: number, y: number, cap: number, w?: number) => ({ text, at: pt(x - 281.5, y - 76) as Pt, cap: mm(cap), ...(w ? { width: mm(w) } : {}) });
+const SCALE: [number, number][] = [[0, 316.1], [100, 430.1], [125, 459.4], [150, 478.4], [250, 508], [350, 539.8], [400, 556.3], [450, 571.8]];
+/** psi at a dial angle (inverse of the piecewise-linear scale). */
+const psiAt = (deg: number) => {
+  for (let i = 1; i < SCALE.length; i++) {
+    const [v0, a0] = SCALE[i - 1], [v1, a1] = SCALE[i];
+    if (deg <= a1) return v0 + ((deg - a0) * (v1 - v0)) / (a1 - a0);
+  }
+  return SCALE[SCALE.length - 1][0];
+};
+/** Minor ticks carry on at the 0-100 psi pitch (5.7°) all the way round; above 100 the bezel hides their inner ends in the guide. */
+const MINOR_PITCH = (430.1 - 316.1) / 20;
+const OUTER_MINORS = Array.from({ length: Math.floor((571.8 - 430.1) / MINOR_PITCH) }, (_, i) => +psiAt(430.1 + (i + 1) * MINOR_PITCH).toFixed(2));
 const dial: Dial = {
   bezel: mm(48), face: mm(45.5), hub: mm(9.5),
-  scale: [[0, 316.1], [100, 430.1], [125, 459.4], [150, 478.4], [250, 508], [350, 539.8], [400, 556.3], [450, 571.8]],
+  scale: SCALE,
   // Green normal band behind the 10-55 psi ticks (the guide's normal operating range).
   fills: [{ from: 10, to: 55, r: [mm(24), mm(44.3)], paint: 'green' }],
   ticks: [
@@ -55,6 +67,7 @@ const dial: Dial = {
     { from: 125, to: 125, step: 25, r: [mm(35), mm(39)], width: mm(2.3), dot: true },
     { from: 150, to: 450, step: 100, r: [mm(35), mm(39)], width: mm(2.3), dot: true },
     { from: 400, to: 400, step: 50, r: [mm(35), mm(39)], width: mm(2.3), dot: true },
+    ...OUTER_MINORS.map((v) => ({ from: v, to: v, step: 1, r: [mm(40.5), mm(44.3)] as [number, number], width: mm(1.8) })),
   ],
   legends: [
     lg('0', 258.5, 52.5, 10), lg('25', 273, 45, 10, 11), lg('50', 292, 45, 10, 11), lg('75', 301.5, 54, 10, 11),
@@ -69,36 +82,49 @@ const dial: Dial = {
 
 const circle = (cx: number, cy: number, r: number, extra = '') => `<circle cx="${mm(cx)}" cy="${mm(cy)}" r="${mm(r)}" fill="${PAPER}" stroke-width="0.4"${extra}/>`;
 /**
- * Levers, square-on (how they work from the real regulator; positions and colours from the guide). Each is a long
- * lever fixed to a thin cylinder that turns about an axis across its slot. With the lever at the middle position it
- * points straight out at the viewer and shows end-on as a small square (EMERGENCY's white tip, SUPPLY's round knob)
- * in the middle of the cylinder; turned up or down, more of its length shows, reaching the selected legend line.
- * Lever widths from the guide image: EMERGENCY 22 px, diluter 22 px, SUPPLY 24 px with a 35 px knob on its end.
+ * Levers, square-on. Each lever is fixed radially to a drum: a short cylinder whose axis runs across its slot,
+ * parallel to the panel face, recessed so only about 20% of its diameter stands proud through the slot. Moving the
+ * lever turns the whole drum up or down. Square-on, the drum's proud curved face fills the slot window (horizontal
+ * fine lines mark the curve falling away at the top and bottom); the lever stands out from the middle of that face.
+ *
+ * Geometry (side view): a sagitta of 0.4 R spans a chord of 1.6 R, so the slots' ~76 px window gives a drum radius
+ * R of about 47 px, its axis behind the panel at the middle legend line. Each lever reaches L beyond the drum (EMERGENCY 45 px,
+ * diluter 50, SUPPLY 35 to its 26 px knob) and each detent turns it 25° from straight out. Turned by a, the lever's
+ * root shows R sin a (20 px) and its end (R + L) sin a from the axis line, past the slot onto the panel face, and its end face is foreshortened by
+ * cos a. At the middle position the lever points straight at the viewer and shows
+ * end-on as a small square (SUPPLY: its round knob). Colours from the guide: EMERGENCY red with a white tip, the
+ * diluter white, SUPPLY green.
  */
 const shape = (d: string, fill: string, w = 0.4) => `<path d="${path(d)}" fill="${fill}" stroke-width="${w}"/>`;
 const rect = (x0: number, y0: number, x1: number, y1: number, fill: string, w = 0.4) =>
   shape(`M${x0} ${Math.min(y0, y1)}H${x1}V${Math.max(y0, y1)}H${x0}Z`, fill, w);
-/** The thin cylinder across a slot, centred on the pivot line: drawn as a band with two fine lines for its curve. */
-const CYL = 7;
-const cylinder = (x0: number, x1: number, y: number) => rect(x0, y - CYL, x1, y + CYL, PAPER) +
-  `<path d="${path(`M${x0} ${y - CYL / 2}H${x1}M${x0} ${y + CYL / 2}H${x1}`)}" fill="none" stroke-width="0.18"/>`;
-/** Lever body from the pivot to the tip line, then its end face: lever centred on x, width w. */
-function lever(x: number, w: number, pivot: number, tip: number, fill: string, end: (y: number) => string) {
-  const h = w / 2;
-  return (tip === pivot ? '' : rect(x - h, pivot, x + h, tip, fill)) + end(tip);
+const DRUM_R = 47, TURN = 25 * Math.PI / 180;
+/** Where a lever of length l ends for a position: -1 up, 0 straight out, 1 down. */
+const tipAt = (axis: number, dir: number, l: number) => +(axis + dir * (DRUM_R + l) * Math.sin(TURN)).toFixed(2);
+const FORE = Math.cos(TURN);
+/** The drum's proud face filling a slot window, with fine lines where the curve falls away (60° and 70° from the axis line). */
+function drum(x0: number, x1: number, y0: number, y1: number, axis: number, fill: string) {
+  const lines = [60, 70].flatMap((deg) => [axis - DRUM_R * Math.sin(deg * Math.PI / 180), axis + DRUM_R * Math.sin(deg * Math.PI / 180)])
+    .filter((y) => y > y0 && y < y1).map((y) => `M${x0} ${+y.toFixed(2)}H${x1}`).join('');
+  return rect(x0, y0, x1, y1, fill, 0.3) + (lines ? `<path d="${path(lines)}" fill="none" stroke-width="0.18"/>` : '');
 }
-const EM_X = 69, EM_W = 22;
-/** EMERGENCY: red lever with a white tip; end-on the white tip shows inside the red square. */
-const emergencyLever = (y: number) => cylinder(50, 88, EM_Y.normal) +
-  lever(EM_X, EM_W, EM_Y.normal, y, PAINTS.red, (t) => rect(EM_X - 11, t - 11, EM_X + 11, t + 11, PAINTS.red) + rect(EM_X - 7.5, t - 7.5, EM_X + 7.5, t + 7.5, PAPER, 0.25));
+/** Lever centred on x, width w, its end on the tip line: body from its root on the drum face out to the end, then the end face. */
+function lever(x: number, w: number, l: number, axis: number, dir: number, fill: string, end: (y: number, k: number) => string) {
+  const h = w / 2, tip = tipAt(axis, dir, l), root = axis + (tip - axis) * DRUM_R / (DRUM_R + l);
+  return (dir === 0 ? '' : rect(x - h, root, x + h, tip, fill)) + end(tip, dir === 0 ? 1 : FORE);
+}
+const EM_X = 69, EM_W = 18;
+/** EMERGENCY: red drum and lever, white tip; end-on the white tip shows inside a thin red rim. */
+const emergencyLever = (dir: number) => drum(50, 88, 152, 224, EM_Y.normal, PAINTS.red) +
+  lever(EM_X, EM_W, 45, EM_Y.normal, dir, PAINTS.red, (t, k) => rect(EM_X - 9, t - 9 * k, EM_X + 9, t + 9 * k, PAINTS.red) + rect(EM_X - 6.5, t - 6.5 * k, EM_X + 6.5, t + 6.5 * k, PAPER, 0.25));
 const DIL_X = 211.5, DIL_PIVOT = 183.75;
-/** Diluter: plain white lever, never straight out (two positions), its square end at the legend line. */
-const diluterLever = (y: number) => cylinder(195, 228, DIL_PIVOT) +
-  lever(DIL_X, 22, DIL_PIVOT, y, PAPER, (t) => rect(DIL_X - 11, t - 11, DIL_X + 11, t + 11, PAPER) + rect(DIL_X - 8, t - 8, DIL_X + 8, t + 8, 'none', 0.18));
+/** Diluter: white drum and lever; two positions, so the lever is always turned and shows its length. */
+const diluterLever = (dir: number) => drum(195, 228, 142, 229, DIL_PIVOT, PAPER) +
+  lever(DIL_X, 16, 50, DIL_PIVOT, dir, PAPER, (t, k) => rect(DIL_X - 8, t - 8 * k, DIL_X + 8, t + 8 * k, PAPER));
 const SUP_X = 358;
-/** SUPPLY: green lever with a round knob on its end. */
-const supplyLever = (y: number) => cylinder(335, 381, SUP_Y.on) +
-  lever(SUP_X, 24, SUP_Y.on, y, PAINTS.green, (t) => `<circle cx="${mm(SUP_X)}" cy="${mm(t)}" r="${mm(17.5)}" fill="${PAPER}" stroke-width="0.4"/><circle cx="${mm(SUP_X)}" cy="${mm(t)}" r="${mm(14)}" fill="none" stroke-width="0.25"/>`);
+/** SUPPLY: green drum and lever with a round knob on its end. */
+const supplyLever = (dir: number) => drum(335, 381, 141, 226, SUP_Y.on, PAINTS.green) +
+  lever(SUP_X, 18, 35, SUP_Y.on, dir, PAINTS.green, (t, k) => `<ellipse cx="${mm(SUP_X)}" cy="${mm(t)}" rx="${mm(13)}" ry="${mm(13 * k)}" fill="${PAPER}" stroke-width="0.4"/><ellipse cx="${mm(SUP_X)}" cy="${mm(t)}" rx="${mm(10)}" ry="${mm(10 * k)}" fill="none" stroke-width="0.25"/>`);
 /**
  * Ring terminal: a closed ring under its screw (r 8.5 px), a tongue tapering out to a crimp barrel where the wire
  * joins at (ex, ey). Directions measured on the guide image (4x zoom): each tongue points to the cable's end.
@@ -130,8 +156,8 @@ export const oxygen: PanelSpec = {
     shown: { emergency: 'normal', diluter: 'norm', supply: 'on', flow: 'flow', pressure: '34' },
     unresolved: [
       'The guide marks EMERGENCY and the diluter lever not implemented (N/I) in DCS; both are modelled as levers that move between their legends.',
-      'Each lever is fixed to a thin cylinder turning across its slot: square-on, the middle position shows the lever end-on as a small square (EMERGENCY, SUPPLY), and the other positions show its length out to the legend line. The guide shows each lever only in one position (EMERGENCY at NORMAL, diluter at NORM, SUPPLY at ON) from a low camera, so the projected lengths are drawn to the legend lines rather than measured. Whether TEST MASK springs back is not stated; all positions are drawn as stable.',
-      'Colours: EMERGENCY red, SUPPLY green and the dial\'s green 10-55 psi band, as the guide shows them; the band\'s ends are taken from the guide\'s normal range, the image does not resolve them. The needle is drawn uncoloured. The dial is traced up to 100 psi tick by tick; above 100 only the dots under the numerals (and two between) resolve.',
+      'Each lever is fixed to a drum recessed in its slot (about 20% proud) that turns up and down with it: square-on, the drum\'s coloured face fills the slot, the middle position shows the lever end-on as a small square (EMERGENCY, SUPPLY), and the other positions show its length from its root on the drum out past the slot. Drum radius (about 16 mm), lever lengths (12-17 mm) and the 25° throw are derived from the slot height and the guide image, not stated. The guide shows each lever only in one position (EMERGENCY at NORMAL, diluter at NORM, SUPPLY at ON) from a low camera, so the other positions are drawn from that geometry rather than measured. Whether TEST MASK springs back is not stated; all positions are drawn as stable.',
+      'Colours: EMERGENCY red, SUPPLY green and the dial\'s green 10-55 psi band, as the guide shows them; the band\'s ends are taken from the guide\'s normal range, the image does not resolve them. The needle is drawn uncoloured. The dial is traced up to 100 psi tick by tick; above 100 only the dots under the numerals (and two between) resolve; the minor ticks are continued at the same angular pitch all the way round (the bezel hides most of them in the guide).',
       'The black cable loops between the top screws are drawn as the guide shows them, each end in a ring terminal under a screw; the guide does not say what they are. The small round fitting below the left clip is not described in the guide; it is drawn as a plain ring.',
       'The FLOW blinker shows white for flow in the guide; cold and dark (no flow) it shows black.',
     ],
@@ -169,16 +195,16 @@ export const oxygen: PanelSpec = {
     { component: 'blinker', indicator: 'flow', at: pt(104.5, 87.5), size: [mm(49), mm(19)], dark: 'no-flow' },
     { component: 'gauge', indicator: 'pressure', at: pt(281.5, 76), dial },
     {
-      component: 'traced', control: 'emergency', at: pt(EM_X, EM_Y.normal), hit: [mm(46), mm(144), mm(46), mm(82)],
-      shapes: Object.fromEntries(Object.entries(EM_Y).map(([id, y]) => [id, { d: '', svg: emergencyLever(y) }])),
+      component: 'traced', control: 'emergency', at: pt(EM_X, EM_Y.normal), hit: [mm(46), mm(132), mm(46), mm(100)],
+      shapes: Object.fromEntries(Object.keys(EM_Y).map((id, i) => [id, { d: '', svg: emergencyLever(i - 1) }])),
     },
     {
-      component: 'traced', control: 'diluter', at: pt(DIL_X, DIL_PIVOT), hit: [mm(192), mm(138), mm(36), mm(94)],
-      shapes: { '100': { d: '', svg: diluterLever(DIL_Y['100']) }, norm: { d: '', svg: diluterLever(DIL_Y.norm) } },
+      component: 'traced', control: 'diluter', at: pt(DIL_X, DIL_PIVOT), hit: [mm(192), mm(132), mm(36), mm(100)],
+      shapes: { '100': { d: '', svg: diluterLever(-1) }, norm: { d: '', svg: diluterLever(1) } },
     },
     {
-      component: 'traced', control: 'supply', at: pt(SUP_X, SUP_Y.on), hit: [mm(320), mm(138), mm(64), mm(92)],
-      shapes: Object.fromEntries(Object.entries(SUP_Y).map(([id, y]) => [id, { d: '', svg: supplyLever(y) }])),
+      component: 'traced', control: 'supply', at: pt(SUP_X, SUP_Y.on), hit: [mm(320), mm(126), mm(64), mm(106)],
+      shapes: Object.fromEntries(Object.keys(SUP_Y).map((id, i) => [id, { d: '', svg: supplyLever(i - 1) }])),
     },
   ],
   controls: [
