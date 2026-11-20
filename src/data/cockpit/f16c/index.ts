@@ -39,6 +39,8 @@ import { hudControl } from './hud-control.ts';
 import { leftMfd, rightMfd } from './mfd.ts';
 import { hmcs } from './hmcs.ts';
 import { oxygen } from './oxygen.ts';
+import { stick } from './stick.ts';
+import { throttleGrip } from './throttle-grip.ts';
 
 /**
  * DCS F-16C cockpit catalogue: areas and panels in the order the official guide
@@ -124,7 +126,7 @@ export const f16cCockpit: AircraftCockpit = {
     },
     {
       id: 'left-sidewall', title: 'Left sidewall', panels: [
-        { id: 'throttle', title: 'Throttle', page: 86 },
+        { id: 'throttle', title: 'Throttle', page: 86, spec: throttleGrip },
         // Controls on the vertical sidewall above the throttle: canopy switch
         // and handle (p. 73) and CHAFF/FLARE dispense button (p. 708). The
         // handcrank is further aft, so it has its own page. DEFOG and the
@@ -135,6 +137,7 @@ export const f16cCockpit: AircraftCockpit = {
     },
     {
       id: 'right-console', title: 'Right console', panels: [
+        { id: 'stick', title: 'Side stick controller', page: 83, spec: stick },
         { id: 'snsr-pwr', title: 'SNSR PWR panel', page: 75, spec: snsrPwr },
         { id: 'interior-lighting', title: 'Interior LIGHTING panel', page: 76, spec: interiorLighting },
         { id: 'air-cond', title: 'AIR COND panel', page: 76, spec: airCond },
