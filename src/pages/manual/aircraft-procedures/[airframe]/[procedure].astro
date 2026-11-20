@@ -183,6 +183,8 @@ if (root && configEl) {
 .proc-panel :global(.cp-status){display:none}
 .procedure-workspace.procedure-finished{grid-template-columns:minmax(0,1fr)}
 @media(min-width:58rem){.procedure-workspace{grid-template-columns:minmax(0,24rem) minmax(0,1fr)}.procedure-visual{position:sticky;top:1rem}}
+/* While the tall TEST panel is acting, the panels it lights (eyebrows, caution panel, EPU, ELEC) stack in a column beside it rather than below it. */
+@media(min-width:58rem){.cockpit-layout:has(> [data-proc-panel="test"].acting){display:grid;grid-template-columns:auto auto;justify-content:start;align-items:start}.cockpit-layout > [data-proc-panel="test"].acting{grid-row:span 4}}
 @media(max-width:57.99rem){
 .procedure-step{padding:.55rem}
 .procedure-step h2{font-size:1.15rem}
