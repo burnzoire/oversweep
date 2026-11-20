@@ -23,6 +23,8 @@ export const PAPER = 'var(--panel-paper,#fff)';
 export const PAINTS = {
   red: 'var(--panel-red,#b3262a)',
   yellow: 'var(--panel-yellow,#f2b807)',
+  /** Safety green (about FS 14187), for normal-range bands and the oxygen SUPPLY lever. */
+  green: 'var(--panel-green,#2f8f46)',
 } as const;
 /** A moving part drawn in a paint: its paper fills take the colour, ink lines stay black. */
 export const painted = (paint: keyof typeof PAINTS | undefined, body: string) =>
@@ -279,6 +281,11 @@ export const ROTARIES = {
   'rotary-pointer-large': { skirt: 13, bar: 12.2, barBack: 6.1, barFront: 4.3 },
   /** Mid-size selector, 11.6 mm skirt, with a broad block grip that chamfers to a pointed front (AVIONICS POWER INS and MIDS LVT). */
   'rotary-pointer-medium': { skirt: 11.6, bar: 10.9, barBack: 6.2, barFront: 2.8, block: true },
+  /**
+   * F-16C IFF MASTER (guide p. 67, 3.3 px/mm): a broad bar grip over a round skirt, flat at the back, its front end
+   * rounded to the full width; `bar` is the front end's reach, `barBack` the back end's, `half` the half width.
+   */
+  'rotary-bar-broad': { skirt: 9.4, bar: 10.0, barBack: 12.4, barFront: 0, half: 5.8 },
 } as const;
 
 /**
@@ -334,6 +341,14 @@ export const KNOBS = {
   'knob-plain': { r: 7.7, lobes: 0, ridge: [0, 0], plain: true },
   /** Smaller plain domed knob (F-16C altimeter barometric setting knob). */
   'knob-plain-small': { r: 6.8, lobes: 0, ridge: [0, 0], plain: true },
+  /**
+   * Round domed knob with a rectangular tail grip running back past the rim, opposite the index (F-16C FUEL QTY SEL;
+   * guide p. 54: body about 41 px radius at 3.66 px/mm, tail about 23 px wide reaching about 57 px behind the centre, drawn shorter and wider square-on: half-width 0.38 r, reach 1.15 r, Nathan 2026-11-20).
+   * The tail has no front edge, so it rises smoothly out of the dome; the index runs from the centre to the front rim.
+   */
+  'knob-round-tail': { r: 11.2, lobes: 0, ridge: [0, 0], tail: [0.38, 1.15] },
+  /** Plain round domed knob with a white index line from the centre to the rim (F-16C YAW TRIM; guide p. 72, about 29 px radius at 3.15 px/mm). */
+  'knob-plain-index': { r: 9.2, lobes: 0, ridge: [0, 0], plain: true, index: true },
 } as const;
 
 /** A KNOBS body pointing at 12 o'clock; the renderer turns it to the detent. */
@@ -349,7 +364,16 @@ export function knobArt(art: keyof typeof KNOBS) {
       // Indicator: only the white index set into the rim (nothing at the centre).
       `<rect x="${k(-0.075)}" y="${k(-1.04)}" width="${k(0.15)}" height="${k(0.33)}" rx="${k(0.02)}" fill="${PAPER}" ${sw('heavy')}/>`;
   }
-  if ('plain' in KNOBS[art]) return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.78)}" ${sw('fine')}/>`;
+  if ('tail' in KNOBS[art]) {
+    // Tail half-width and reach (fractions of r); filled closed but outlined open at the front so it blends into the dome.
+    const [hw, reach] = (KNOBS[art] as { tail: readonly [number, number] }).tail, w = n(hw * r), y0 = n(0.12 * r), y1 = n(reach * r);
+    const back = `V${n(reach * r - 0.08 * r)}Q${w} ${y1} ${n(hw * r - 0.08 * r)} ${y1}H${n(-hw * r + 0.08 * r)}Q${-w} ${y1} ${-w} ${n(reach * r - 0.08 * r)}V${y0}`;
+    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.78)}" ${sw('fine')}/>` +
+      `<path d="M${w} ${y0}${back}Z" fill="${PAPER}" stroke="none"/>` + cased(`<path d="M${w} ${y0}${back}" fill="none"/>`, 'heavy') +
+      `<path d="M0 0V${n(-r * 0.92)}" stroke-width="0.9" stroke-linecap="round"/>`;
+  }
+  if ('plain' in KNOBS[art]) return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.78)}" ${sw('fine')}/>` +
+    ('index' in KNOBS[art] ? `<path d="M0 0V${n(-r * 0.92)}" stroke-width="0.9" stroke-linecap="round"/>` : '');
   let rim: string;
   if (!lobes) rim = `<circle r="${r}" fill="${PAPER}"/>`;
   else {
@@ -503,6 +527,11 @@ export function rotaryKnob(art: keyof typeof ROTARIES) {
       `Q${k(0.5)} ${k(0.96)} ${k(0.38)} ${k(0.96)}H${k(-0.38)}Q${k(-0.5)} ${k(0.96)} ${k(-0.5)} ${k(0.84)}V${k(-0.42)}Z`;
     return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') + `<path d="M0 ${k(-0.8)}V0" ${sw('heavy')}/>`;
   }
+  if ('half' in ROTARIES[art]) {
+    const H = (ROTARIES[art] as { half: number }).half, f = bar - H;
+    const body = `M${n(-H)} ${n(barBack)}V${n(-f)}A${n(H)} ${n(H)} 0 0 1 ${n(H)} ${n(-f)}V${n(barBack)}Z`;
+    return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') + `<path d="M0 0V${n(-bar + 1.2)}" stroke-width="0.9" stroke-linecap="round"/>`;
+  }
   if ('waist' in ROTARIES[art]) {
     // Traced from the guide's p. 65 COMM mode knobs: point at the front, widest just behind the centre, narrow rounded tail.
     const W = (ROTARIES[art] as { waist: number }).waist, T = barBack, k = (v: number) => n(v);
@@ -606,12 +635,15 @@ export function gearKnob([w, h]: [number, number], y: number, indicator?: string
  * knob on that face (the disc's long axis runs fore and aft in the guide
  * image). Drawn straight down from above (Nathan, 2026-11-18): the vertical
  * blade shows only its top edge along the slot, and the knob reaches inboard
- * (down, over the placard) from it: a neck widening from the blade to the
+ * (down, over the placard) from it: a straight-waisted neck from the blade to the
  * disc, then the disc edge-on.
- * mm: slot height, blade width and thickness, neck widths (blade, disc) and
- * length, disc diameter and thickness.
+ * The arm pivots under the console (Nathan, 2026-11-20), so off centre it
+ * leans along the slot: from above, its top edge shows as a strip from where it
+ * leaves the slot out to the knob. The mushroom's neck has a straight waist.
+ * mm: slot height, blade width and thickness, neck width and length, disc
+ * diameter and thickness.
  */
-export const SLOT_LEVER = { slotH: 2.3, root: 10.8, blade: 2.2, neck: [4.5, 9, 7], disc: 16.5, thick: 4.2 } as const;
+export const SLOT_LEVER = { slotH: 2.3, root: 10.8, blade: 2.2, neck: [5, 7], disc: 16.5, thick: 4.2 } as const;
 
 /** The slot, long enough for the lever root at both ends of `travel`, centred on the origin. */
 export function leverSlot(travel: number) {
@@ -619,12 +651,15 @@ export function leverSlot(travel: number) {
   return `<rect x="${n(-w / 2)}" y="${n(-slotH / 2)}" width="${n(w)}" height="${n(slotH)}" fill="${INK}" stroke="none"/>`;
 }
 
-/** The lever with its blade centred at `x` on the slot line. */
-export function slotLeverArt(x: number) {
-  const { root, blade, neck: [nw0, nw1, nl], disc, thick } = SLOT_LEVER;
+/** The lever with its knob at `x` on the slot line and its root, where it leaves the slot, at `rootX` (default x). */
+export function slotLeverArt(x: number, rootX = x) {
+  const { root, blade, neck: [nw, nl], disc, thick } = SLOT_LEVER;
   const y0 = blade / 2, y1 = y0 + nl;
-  const stem = `M${n(x - nw0 / 2)} ${n(y0 - 0.3)}L${n(x - nw1 / 2)} ${n(y1 + thick * 0.3)}H${n(x + nw1 / 2)}L${n(x + nw0 / 2)} ${n(y0 - 0.3)}Z`;
-  return cased(`<rect x="${n(x - root / 2)}" y="${n(-blade / 2)}" width="${n(root)}" height="${n(blade)}" rx="0.4" fill="${PAPER}"/>`) +
+  const stem = `M${n(x - nw / 2)} ${n(y0 - 0.3)}V${n(y1 + thick * 0.3)}H${n(x + nw / 2)}V${n(y0 - 0.3)}Z`;
+  // Arm: root in the slot, then the leaning top edge out to the knob end (a root-wide block over the knob).
+  const x0 = Math.min(rootX - root / 2, x - root / 2), x1 = Math.max(rootX + root / 2, x + root / 2);
+  return cased(`<rect x="${n(x0)}" y="${n(-blade / 2)}" width="${n(x1 - x0)}" height="${n(blade)}" rx="0.4" fill="${PAPER}"/>`) +
+    (Math.abs(x - rootX) > 0.5 ? `<path d="M${n(rootX + Math.sign(x - rootX) * root / 2)} ${n(-blade / 2)}V${n(blade / 2)}" ${sw('fine')}/>` : '') +
     cased(`<path d="${stem}" fill="${PAPER}"/>`) +
     cased(`<rect x="${n(x - disc / 2)}" y="${n(y1)}" width="${n(disc)}" height="${n(thick)}" rx="${n(thick / 2)}" fill="${PAPER}"/>`);
 }
@@ -708,6 +743,20 @@ export function needleArt(length: number) {
 }
 
 /**
+ * Straight line pointer of the F-16C manual trim indicators, in mm: a thin
+ * bar from the centre with a small square block at the tip. Measured on the
+ * guide's p. 72 image (3.15 px/mm): bar about 2 px, block about 5 px square.
+ * Drawn pointing at 12 o'clock from the dial centre.
+ */
+export const LINE_NEEDLE = { width: 0.6, block: 1.6 } as const;
+
+export function lineNeedleArt(length: number) {
+  const w = LINE_NEEDLE.width / 2, b = LINE_NEEDLE.block / 2;
+  return `<path d="M${n(-w)} 0V${n(-length + 2 * b)}H${n(w)}V0Z" fill="${INK}" stroke="none"/>` +
+    `<rect x="${n(-b)}" y="${n(-length)}" width="${n(2 * b)}" height="${n(2 * b)}" rx="0.3" fill="${INK}" ${sw('fine')}/>`;
+}
+
+/**
  * Wedge pointer of the F-16C HYD PRESS indicators, in mm: straight sides from
  * `base` wide at the dial centre (hidden under the hub) to `tip` wide at its
  * length. Measured on the guide's p. 61 image (2.94 px/mm): 5.8 mm wide where
@@ -715,9 +764,23 @@ export function needleArt(length: number) {
  */
 export const WEDGE_NEEDLE = { base: 9.0, tip: 0.5 } as const;
 
-export function wedgeNeedleArt(length: number) {
-  const b = WEDGE_NEEDLE.base / 2, t = WEDGE_NEEDLE.tip / 2;
+export function wedgeNeedleArt(length: number, base: number = WEDGE_NEEDLE.base) {
+  const b = base / 2, t = WEDGE_NEEDLE.tip / 2;
   return `<path d="M${n(-b)} 0L${n(-t)} ${n(-length)}H${n(t)}L${n(b)} 0Z" fill="${INK}" ${sw('fine')}/>`;
+}
+
+/**
+ * Stepped pointer of the F-16C EPU FUEL indicator, in mm, pointing at 12
+ * o'clock from the dial centre: a broad parallel shank `base` wide out to
+ * `shank`, closing over to a narrow parallel tip `tip` wide by `neck`, square
+ * at the end. Measured on the guide's p. 61 EPU FUEL image (3.93 px/mm):
+ * 13.3 px wide to 66 px, 6.2 px from 78 px to its end.
+ */
+export const STEP_NEEDLE = { base: 3.38, shank: 16.8, neck: 19.8, tip: 1.55 } as const;
+
+export function stepNeedleArt(length: number) {
+  const { base, shank, neck, tip } = STEP_NEEDLE, b = base / 2, t = tip / 2;
+  return `<path d="M${n(-b)} 0V${n(-shank)}L${n(-t)} ${n(-neck)}V${n(-length)}H${n(t)}V${n(-neck)}L${n(b)} ${n(-shank)}V0Z" fill="${INK}" ${sw('fine')}/>`;
 }
 
 /**
@@ -810,13 +873,24 @@ export function drumStrip(roll: number, cap: number, width: number, zeros = fals
   return s;
 }
 
-/** Bezel ring with the dial face inside it, centred on the origin. */
-export function gaugeBezel(bezel: number, face: number) {
+/**
+ * Half disc of radius r on one side of the origin (the flat edge runs through the origin): `left` bulges to the
+ * left, `down` downwards (F-16C trim indicators).
+ */
+export function halfDisc(r: number, half: 'left' | 'right' | 'up' | 'down') {
+  const [x0, y0, x1, y1, sweep] = { left: [0, -r, 0, r, 0], right: [0, -r, 0, r, 1], up: [-r, 0, r, 0, 1], down: [-r, 0, r, 0, 0] }[half];
+  return `M${n(x0)} ${n(y0)}A${n(r)} ${n(r)} 0 0 ${sweep} ${n(x1)} ${n(y1)}Z`;
+}
+
+/** Bezel ring with the dial face inside it, centred on the origin; with `half`, a half-disc window (flat edge through the centre). */
+export function gaugeBezel(bezel: number, face: number, half?: 'left' | 'right' | 'up' | 'down') {
+  if (half) return cased(`<path d="${halfDisc(bezel, half)}" fill="${PAPER}"/>`, 'heavy') + `<path d="${halfDisc(face, half)}" ${sw('medium')}/>`;
   return cased(`<circle r="${n(bezel)}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(face)}" ${sw('medium')}/>`;
 }
 
-/** Hub cap over the needle root. */
+/** Hub cap over the needle root (none when r is 0). */
 export function gaugeHub(r: number) {
+  if (!r) return '';
   return cased(`<circle r="${n(r)}" fill="${PAPER}"/>`, 'medium') + `<circle r="${n(r * 0.45)}" ${sw('fine')}/>`;
 }
 
@@ -852,8 +926,22 @@ export function rockerBase([w, h]: [number, number]) {
  * pressed half sinks). Arrow proportions from the F-16C ICP (guide p. 99): `arrow` heads 0.27 w wide from
  * 0.34 h to 0.17 h out with 0.11 w shafts to 0.03 h; `spike` triangles 0.26 w wide from 0.3 h to 0.054 h.
  */
-export function rockerCap([w, h]: [number, number], tilt: number, arrows: 'arrow' | 'spike') {
+export function rockerCap([w, h]: [number, number], tilt: number, arrows: 'arrow' | 'spike' | 'legend', legend?: { text: string; cap: number; y: number; width?: number }) {
   const cw = w - 2, ch = h - 2;
+  if (arrows === 'legend') {
+    // F-16C MFD (guide p. 122, cap 45 x 66 px): up triangle 0.41-0.27 ch above the centre, 0.22 cw wide; a rule
+    // 0.76 cw long just below the legend; a down arrow, shaft 0.067 cw wide from 0.05 ch, head 0.21-0.36 ch, 0.22 cw wide.
+    const marks = `M0 ${n(-0.41 * ch)}L${n(0.11 * cw)} ${n(-0.27 * ch)}H${n(-0.11 * cw)}Z` +
+      `M${n(-0.033 * cw)} ${n(0.05 * ch)}H${n(0.033 * cw)}V${n(0.22 * ch)}H${n(0.11 * cw)}L0 ${n(0.36 * ch)}L${n(-0.11 * cw)} ${n(0.22 * ch)}H${n(-0.033 * cw)}Z`;
+    let s = cased(`<rect x="${n(-cw / 2)}" y="${n(-ch / 2)}" width="${n(cw)}" height="${n(ch)}" rx="0.8" fill="${PAPER}"/>`, 'medium') +
+      `<path d="${marks}" fill="${INK}" stroke="none"/><path d="M${n(-0.38 * cw)} ${n(0.01 * ch)}H${n(0.38 * cw)}" ${sw('medium')}/>` +
+      (legend ? text(0, legend.y, legend.text, legend.cap, legend.width) : '');
+    if (tilt) {
+      const y0 = tilt < 0 ? -ch / 2 + 0.6 : 0.3, y1 = tilt < 0 ? -0.3 : ch / 2 - 0.6;
+      s += `<rect x="${n(-cw / 2 + 0.6)}" y="${n(y0)}" width="${n(cw - 1.2)}" height="${n(y1 - y0)}" rx="0.5" fill="none" ${sw('fine')}/>`;
+    }
+    return s;
+  }
   const one = (s: number) => arrows === 'spike'
     ? `M0 ${n(s * 0.3 * h)}L${n(0.13 * w)} ${n(s * 0.054 * h)}H${n(-0.13 * w)}Z`
     : `M0 ${n(s * 0.339 * h)}L${n(0.134 * w)} ${n(s * 0.172 * h)}H${n(0.053 * w)}V${n(s * 0.032 * h)}H${n(-0.053 * w)}V${n(s * 0.172 * h)}H${n(-0.134 * w)}Z`;

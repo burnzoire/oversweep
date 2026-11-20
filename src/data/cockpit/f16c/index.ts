@@ -16,18 +16,31 @@ import { interiorLighting } from './interior-lighting.ts';
 import { avionicsPower } from './avionics-power.ts';
 import { engineInstruments } from './engine-instruments.ts';
 import { fuelQty } from './fuel-qty.ts';
+import { fuelQtySel } from './fuel-qty-sel.ts';
+import { fltControl } from './flt-control.ts';
+import { manualTrim } from './manual-trim.ts';
+import { manualPitchOverride } from './manual-pitch-override.ts';
 import { fuelFlow } from './fuel-flow.ts';
 import { epu } from './epu.ts';
 import { defog } from './defog.ts';
 import { sidewallControls } from './sidewall-controls.ts';
 import { test } from './test.ts';
 import { hydPressure } from './hyd-pressure.ts';
+import { epuFuel } from './epu-fuel.ts';
+import { arNwsIndicator } from './ar-nws-indicator.ts';
+import { iff } from './iff.ts';
+import { sai } from './sai.ts';
 import { icp } from './icp.ts';
 import { ded } from './ded.ts';
 import { altimeter } from './altimeter.ts';
 import { ehsi } from './ehsi.ts';
 import { hud } from './hud.ts';
 import { hudControl } from './hud-control.ts';
+import { leftMfd, rightMfd } from './mfd.ts';
+import { hmcs } from './hmcs.ts';
+import { oxygen } from './oxygen.ts';
+import { stick } from './stick.ts';
+import { throttleGrip } from './throttle-grip.ts';
 
 /**
  * DCS F-16C cockpit catalogue: areas and panels in the order the official guide
@@ -49,7 +62,7 @@ export const f16cCockpit: AircraftCockpit = {
     {
       id: 'instrument-panel', title: 'Instrument panel', panels: [
         { id: 'aoa-indexer', title: 'AoA indexer', page: 44 },
-        { id: 'ar-nws-indicator', title: 'AR status / NWS indicator', page: 45 },
+        { id: 'ar-nws-indicator', title: 'AR status / NWS indicator', page: 45, spec: arNwsIndicator },
         { id: 'hud', title: 'Head-up display (HUD)', page: 90, spec: hud },
         { id: 'icp', title: 'Integrated control panel (ICP)', page: 99, spec: icp },
         { id: 'ded', title: 'Data entry display (DED)', page: 101, spec: ded },
@@ -57,7 +70,7 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'right-eyebrow', title: 'Right eyebrow lights', page: 46, spec: rightEyebrow },
         { id: 'misc', title: 'MISC panel', page: 47 },
         { id: 'rf-switch', title: 'RF switch', page: 48 },
-        { id: 'sai', title: 'Standby attitude indicator', page: 49 },
+        { id: 'sai', title: 'Standby attitude indicator', page: 49, spec: sai },
         { id: 'engine-instruments', title: 'Engine instruments', page: 50, spec: engineInstruments },
         { id: 'fuel-flow', title: 'Fuel flow indicator', page: 50, spec: fuelFlow },
         { id: 'airspeed-mach', title: 'Airspeed / Mach indicator', page: 51 },
@@ -66,13 +79,15 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'vvi', title: 'Vertical velocity indicator', page: 52 },
         { id: 'adi', title: 'Attitude director indicator', page: 53 },
         { id: 'ehsi', title: 'Electronic HSI (EHSI)', page: 230, spec: ehsi },
-        { id: 'fuel-qty-sel', title: 'FUEL QTY SEL panel', page: 54 },
+        { id: 'fuel-qty-sel', title: 'FUEL QTY SEL panel', page: 54, spec: fuelQtySel },
+        { id: 'left-mfd', title: 'Left MFD', page: 122, spec: leftMfd },
+        { id: 'right-mfd', title: 'Right MFD', page: 122, spec: rightMfd },
       ],
     },
     {
       id: 'left-aux-console', title: 'Left auxiliary console', panels: [
         { id: 'landing-gear', title: 'Landing gear panel', page: 55, spec: landingGear },
-        { id: 'hmcs', title: 'HMCS control panel', page: 57 },
+        { id: 'hmcs', title: 'HMCS control panel', page: 57, spec: hmcs },
         { id: 'alt-gear', title: 'ALT GEAR handle', page: 57 },
       ],
     },
@@ -83,26 +98,26 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'pfld', title: 'Pilot fault list display', page: 59 },
         { id: 'caution', title: 'Caution light panel', page: 59, spec: caution },
         { id: 'hyd-pressure', title: 'Hydraulic pressure indicators', page: 61, spec: hydPressure },
-        { id: 'epu-fuel', title: 'EPU fuel quantity indicator', page: 61 },
+        { id: 'epu-fuel', title: 'EPU fuel quantity indicator', page: 61, spec: epuFuel },
         { id: 'cabin-pressure', title: 'Cabin pressure indicator', page: 61 },
         { id: 'clock', title: 'Clock', page: 61 },
       ],
     },
     {
       id: 'left-console', title: 'Left console', panels: [
-        { id: 'manual-pitch-override', title: 'Manual pitch override switch', page: 62 },
+        { id: 'manual-pitch-override', title: 'Manual pitch override switch', page: 62, spec: manualPitchOverride },
         { id: 'eng-jet-start', title: 'ENG & JET START panel', page: 63, spec: engJetStart },
         { id: 'epu', title: 'EPU panel', page: 64, spec: epu },
         { id: 'elec', title: 'ELEC panel', page: 64, spec: elec },
         { id: 'audio', title: 'AUDIO 1 & 2 panels', page: 65, spec: audio },
         { id: 'avtr', title: 'AVTR panel', page: 66 },
         { id: 'fuel', title: 'FUEL panel', page: 67, spec: fuel },
-        { id: 'iff', title: 'IFF panel', page: 67 },
+        { id: 'iff', title: 'IFF panel', page: 67, spec: iff },
         { id: 'ext-lighting', title: 'EXT LIGHTING panel', page: 69, spec: extLighting },
         { id: 'ecm', title: 'ECM panel', page: 706, spec: ecm },
         { id: 'uhf', title: 'UHF backup panel', page: 259, spec: uhf },
-        { id: 'flt-control', title: 'FLT CONTROL panel', page: 71 },
-        { id: 'manual-trim', title: 'MANUAL TRIM panel', page: 72 },
+        { id: 'flt-control', title: 'FLT CONTROL panel', page: 71, spec: fltControl },
+        { id: 'manual-trim', title: 'MANUAL TRIM panel', page: 72, spec: manualTrim },
         { id: 'test', title: 'TEST panel', page: 72, spec: test },
         { id: 'canopy-jettison', title: 'Canopy jettison T-handle', page: 74 },
         { id: 'defog', title: 'DEFOG lever', page: 74, spec: defog },
@@ -111,7 +126,7 @@ export const f16cCockpit: AircraftCockpit = {
     },
     {
       id: 'left-sidewall', title: 'Left sidewall', panels: [
-        { id: 'throttle', title: 'Throttle', page: 86 },
+        { id: 'throttle', title: 'Throttle', page: 86, spec: throttleGrip },
         // Controls on the vertical sidewall above the throttle: canopy switch
         // and handle (p. 73) and CHAFF/FLARE dispense button (p. 708). The
         // handcrank is further aft, so it has its own page. DEFOG and the
@@ -122,11 +137,12 @@ export const f16cCockpit: AircraftCockpit = {
     },
     {
       id: 'right-console', title: 'Right console', panels: [
+        { id: 'stick', title: 'Side stick controller', page: 83, spec: stick },
         { id: 'snsr-pwr', title: 'SNSR PWR panel', page: 75, spec: snsrPwr },
         { id: 'interior-lighting', title: 'Interior LIGHTING panel', page: 76, spec: interiorLighting },
         { id: 'air-cond', title: 'AIR COND panel', page: 76, spec: airCond },
         { id: 'ky-58', title: 'KY-58 secure voice panel', page: 77 },
-        { id: 'oxygen', title: 'OXYGEN regulator panel', page: 77 },
+        { id: 'oxygen', title: 'OXYGEN regulator panel', page: 77, spec: oxygen },
         { id: 'anti-ice', title: 'ANTI ICE & ANT SEL switches', page: 78 },
         { id: 'avionics-power', title: 'AVIONICS POWER panel', page: 78, spec: avionicsPower },
         { id: 'misc-switches', title: 'Voice message, zeroize, seat adjust and nuclear consent switches', page: 80 },

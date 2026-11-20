@@ -13,16 +13,20 @@ const steps = guide.steps;
 // The procedure runs on the shared cockpit panels (Cockpit Familiarization), kept in their own scope.
 const cockpit = cockpits.find(c => c.airframe === guide.airframe)!;
 const built = new Map(builtPanels(cockpit).map(b => [b.panel.id, b]));
+// A step can show a whole panel (`stick`) or just some of its switch cards (`stick:tms+dms`).
 const used = [...new Set(steps.flatMap(s => s.panels))];
-const missing = used.filter(id => !built.has(id));
+const baseOf = (entry: string) => entry.split(':')[0];
+const cardsOf = (entry: string) => entry.includes(':') ? entry.split(':')[1].split('+') : undefined;
+const usedPanels = [...new Set(used.map(baseOf))];
+const missing = usedPanels.filter(id => !built.has(id));
 if (missing.length) throw new Error(`${guide.id}: panels not built: ${missing.join(', ')}`);
 const scope = guide.slug;
 // Start state: every control's cold-and-dark position, then the procedure's own.
 const initial: Record<string,string> = {};
-for (const id of used) for (const c of built.get(id)!.spec.controls) initial[`${id}.${c.id}`] = c.initial;
+for (const id of usedPanels) for (const c of built.get(id)!.spec.controls) initial[`${id}.${c.id}`] = c.initial;
 Object.assign(initial, guide.initial ?? {});
 const labels: Record<string,string> = {}, names: Record<string,string> = {}, orders: Record<string,string[]> = {};
-for (const id of used) for (const c of built.get(id)!.spec.controls) {
+for (const id of usedPanels) for (const c of built.get(id)!.spec.controls) {
   names[`${id}.${c.id}`] = c.name;
   orders[`${id}.${c.id}`] = c.positions.map(p => p.id);
   for (const p of c.positions) labels[`${id}.${c.id}.${p.id}`] = `${c.name} to ${p.label}`;
@@ -68,8 +72,8 @@ const shortTitle = guide.title.split('— ')[1] ?? guide.title;
       <p class="procedure-feedback" role="status" aria-live="polite" data-feedback></p>
       <div class="cockpit-layout">
         {used.map(id => <div class="proc-panel" data-proc-panel={id}>
-          <h3>{built.get(id)!.panel.title}</h3>
-          <CockpitPanel cockpit={cockpit} spec={built.get(id)!.spec} scope={scope} />
+          <h3>{built.get(baseOf(id))!.panel.title}</h3>
+          <CockpitPanel cockpit={cockpit} spec={built.get(baseOf(id))!.spec} scope={scope} only={cardsOf(id)} />
         </div>)}
       </div>
     </aside>
@@ -106,9 +110,9 @@ if (root && configEl) {
     for (const target of hint.split(',')) {
       const [ref, row] = target.split('@');
       const [panel, id] = ref.split('.');
-      const stage = root.querySelector<HTMLElement>(`[data-proc-panel="${panel}"] .cp-stage`);
+      const stage = root.querySelector<HTMLElement>(`[data-proc-panel="${panel}"] .cp-stage:not([hidden])`);
       if (!stage) continue;
-      const els = [...stage.querySelectorAll<Element>(`[data-indicator="${id}"], button[data-control="${id}"]`)];
+      const els = [...stage.querySelectorAll<Element>(`[data-indicator="${id}"], button[data-control="${id}"], button[data-pad-hit="${id}"]`)];
       let boxes = els.map(el => el.getBoundingClientRect()).filter(r => r.width > 0);
       if (row !== undefined && boxes[0]) {
         // A DED line: the display's inner area split into its five rows.

@@ -156,6 +156,8 @@ export function startEngineModel(root: HTMLElement, cfg: Config) {
     if (finished) say('');
     else if (s.do) say(`${cap(instruction(s.do))}.`);
     else say(s.panels.length ? 'Check the indications, then confirm.' : 'Confirm when the area is clear.');
+    // Panels with pop-out pads (HOTAS) open the pad for the step's control, the wanted position ringed.
+    dispatchEvent(new CustomEvent('cockpit:pad', { detail: { control: finished ? '' : s.do?.control ?? '', to: s.do?.to } }));
     indicate();
   }
 
