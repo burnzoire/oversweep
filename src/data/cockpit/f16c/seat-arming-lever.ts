@@ -32,14 +32,14 @@ const flag = `<path d="${FLAG}" fill="${PAINTS.yellow}" stroke="${INK}" stroke-w
   // The legend is yellow on a black band down the middle of the flag.
   `<g transform="translate(${mm(64)} ${mm(158)}) rotate(-90)">${text(0, 0, 'EJECTION CONTROLS LOCKED', mm(10), mm(150)).replace(`fill="${INK}"`, `fill="${PAINTS.yellow}"`)}</g>`;
 
-/** Top view, in mm: pivot block at the forward end (top of the page), lever 106 mm long (the guide trace) and 24.4 mm wide. */
-const P: [number, number] = [30, 18], L = 106, W = 24.4, X0 = P[0] - W / 2, X1 = P[0] + W / 2;
+/** Top view, in mm (forward up the page): the pivot at the forward end of the recess beside the seat; raised, the lever stands forward of the pivot as the pilot sees it; armed, it lies in the recess aft of it. The lever is lever 106 mm long (the guide trace) and 24.4 mm wide. */
+const P: [number, number] = [30, 82], L = 106, W = 24.4, X0 = P[0] - W / 2, X1 = P[0] + W / 2;
 /** Upright, the lever is drawn leaning 45°, so from above it shows cos 45° of its length. */
 const K = Math.cos(Math.PI / 4);
 const pen = (w: keyof typeof PENS) => `stroke="${INK}" stroke-width="${PENS[w]}"`;
-const block = `<rect x="${X0 + 1}" y="${P[1] - 12}" width="${W - 2}" height="12" rx="1.5" fill="var(--panel-paper,#fff)" ${pen('medium')}/><circle cx="${P[0]}" cy="${P[1] - 6}" r="3" fill="none" ${pen('fine')}/>`;
-/** The guide-traced lever face (grey top, yellow flag, stem; pivot at reference (63, 300)), its free end aft toward the pilot, shortened by K. The flat (armed) position shows dashed behind it: the recess it is pulled down into. */
-const lockedFace = `<rect x="${X0}" y="${P[1]}" width="${W}" height="${L}" rx="2" fill="none" ${pen('fine')} stroke-dasharray="2 1.5"/><g transform="translate(${P[0]} ${P[1]}) scale(1 ${K.toFixed(4)}) rotate(180) translate(${-mm(63)} ${-mm(300)})">` +
+const block = `<rect x="${X0 + 1}" y="${P[1] - 6}" width="${W - 2}" height="12" rx="1.5" fill="var(--panel-paper,#fff)" ${pen('medium')}/><circle cx="${P[0]}" cy="${P[1]}" r="3" fill="none" ${pen('fine')}/>`;
+/** The guide-traced lever face (grey top, yellow flag, stem; pivot at reference (63, 300)), standing forward of the pivot as seen from above, shortened by K. The flat (armed) position shows dashed behind it: the recess it is pulled down into. */
+const lockedFace = `<rect x="${X0}" y="${P[1]}" width="${W}" height="${L}" rx="2" fill="none" ${pen('fine')} stroke-dasharray="2 1.5"/><g transform="translate(${P[0]} ${P[1]}) scale(1 ${K.toFixed(4)}) translate(${-mm(63)} ${-mm(300)})">` +
   `<path d="${path('M41 14H85Q91 14 91 20V62H35V20Q35 14 41 14ZM46 246H80V300H46Z')}" fill="var(--panel-paper,#fff)" ${pen('medium')}/>${flag}</g>`;
 const armedFace = `<rect x="${X0}" y="${P[1]}" width="${W}" height="${L}" rx="2" fill="var(--panel-paper,#fff)" ${pen('heavy')}/>` +
   // The open channel next to the pivot, then the black ARMED placard toward the free (aft) end.
@@ -51,7 +51,7 @@ const armedFace = `<rect x="${X0}" y="${P[1]}" width="${W}" height="${L}" rx="2"
 export const seatArmingLever: PanelSpec = {
   id: 'seat-arming-lever',
   title: 'Ejection seat arming lever',
-  canvas: [60, 130],
+  canvas: [60, 196],
   source: {
     variant: 'DCS F-16C Viper (Block 50)',
     manual: 'Eagle Dynamics, DCS F-16C Viper Early Access Guide (EN, 16 Aug 2026)',
@@ -70,12 +70,12 @@ export const seatArmingLever: PanelSpec = {
   },
   plate: [
     // The console edge strip the lever lies along.
-    { d: 'M14 4H46V128H14Z' },
+    { d: 'M14 4H46V192H14Z' },
   ],
   engraving: [],
   placements: [
     {
-      component: 'traced', control: 'arming-lever', at: P, hit: [X0, 4, W, 124],
+      component: 'traced', control: 'arming-lever', at: P, hit: [X0, 4, W, 188],
       shapes: {
         disarmed: { d: '', svg: lockedFace + block },
         armed: { d: '', svg: armedFace + block },
