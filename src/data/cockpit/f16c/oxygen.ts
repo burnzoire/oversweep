@@ -69,27 +69,49 @@ const dial: Dial = {
 
 const circle = (cx: number, cy: number, r: number, extra = '') => `<circle cx="${mm(cx)}" cy="${mm(cy)}" r="${mm(r)}" fill="${PAPER}" stroke-width="0.4"${extra}/>`;
 /**
- * Levers, square-on (how they work from the real regulator; shapes and layout from the guide). Each is a long paddle
- * lying in its slot, hinged inside the panel at the far end, so the paddle fills the slot in every position and its
- * grip end (EMERGENCY's white tab, SUPPLY's round knob, the diluter's foot) stands at the selected legend. Outlines
- * traced on the guide image: EMERGENCY red x 65-87.3, y 151.7-222.7, left edge bowed out to x 65 below the middle,
- * white tab 22.7 x 16.6 px left of it; diluter cream x 204-226, y 144-227, foot widening to x 197 over its last 22 px;
- * SUPPLY green x 340-380, y 141-226, top corners rounded, knob 35 px across on its left edge.
+ * Levers, square-on (how they work from the real regulator; positions and colours from the guide). Each is a long
+ * lever fixed to a thin cylinder that turns about an axis across its slot. With the lever at the middle position it
+ * points straight out at the viewer and shows end-on as a small square (EMERGENCY's white tip, SUPPLY's round knob)
+ * in the middle of the cylinder; turned up or down, more of its length shows, reaching the selected legend line.
+ * Lever widths from the guide image: EMERGENCY 22 px, diluter 22 px, SUPPLY 24 px with a 35 px knob on its end.
  */
-const shape = (d: string, fill: string) => `<path d="${path(d)}" fill="${fill}" stroke-width="0.4"/>`;
-const EM_X = 76;
-const EM_BODY = 'M68 152H87V223H72Q64 202 65 182Q65 162 68 152Z';
-const emergencyLever = (y: number) => shape(EM_BODY, PAINTS.red) + shape(`M50 ${y - 8.3}H73V${y + 8.3}H50Z`, PAPER);
-const DIL_X = 212, DIL_PIVOT = 183.75;
-/** Diluter lever with its foot down (1, NORM, as the guide shows it) or up (-1, 100%, mirrored about the pivot). */
-function diluterLever(dir: -1 | 1) {
-  const Y = (v: number) => +(dir > 0 ? v : 2 * DIL_PIVOT - v).toFixed(2);
-  return shape(`M204 ${Y(144)}H226V${Y(227)}H197V${Y(213)}Q198 ${Y(207)} 204 ${Y(203)}Z`, PAPER);
+const shape = (d: string, fill: string, w = 0.4) => `<path d="${path(d)}" fill="${fill}" stroke-width="${w}"/>`;
+const rect = (x0: number, y0: number, x1: number, y1: number, fill: string, w = 0.4) =>
+  shape(`M${x0} ${Math.min(y0, y1)}H${x1}V${Math.max(y0, y1)}H${x0}Z`, fill, w);
+/** The thin cylinder across a slot, centred on the pivot line: drawn as a band with two fine lines for its curve. */
+const CYL = 7;
+const cylinder = (x0: number, x1: number, y: number) => rect(x0, y - CYL, x1, y + CYL, PAPER) +
+  `<path d="${path(`M${x0} ${y - CYL / 2}H${x1}M${x0} ${y + CYL / 2}H${x1}`)}" fill="none" stroke-width="0.18"/>`;
+/** Lever body from the pivot to the tip line, then its end face: lever centred on x, width w. */
+function lever(x: number, w: number, pivot: number, tip: number, fill: string, end: (y: number) => string) {
+  const h = w / 2;
+  return (tip === pivot ? '' : rect(x - h, pivot, x + h, tip, fill)) + end(tip);
 }
-const SUP_X = 359, KNOB_X = 340;
-const SUP_BODY = 'M340 141H375Q380 141 380 146V226H340Z';
-const supplyLever = (y: number) => shape(SUP_BODY, PAINTS.green) +
-  `<circle cx="${mm(KNOB_X)}" cy="${mm(y)}" r="${mm(17.5)}" fill="${PAPER}" stroke-width="0.4"/><circle cx="${mm(KNOB_X)}" cy="${mm(y)}" r="${mm(14)}" fill="none" stroke-width="0.25"/>`;
+const EM_X = 69, EM_W = 22;
+/** EMERGENCY: red lever with a white tip; end-on the white tip shows inside the red square. */
+const emergencyLever = (y: number) => cylinder(50, 88, EM_Y.normal) +
+  lever(EM_X, EM_W, EM_Y.normal, y, PAINTS.red, (t) => rect(EM_X - 11, t - 11, EM_X + 11, t + 11, PAINTS.red) + rect(EM_X - 7.5, t - 7.5, EM_X + 7.5, t + 7.5, PAPER, 0.25));
+const DIL_X = 211.5, DIL_PIVOT = 183.75;
+/** Diluter: plain white lever, never straight out (two positions), its square end at the legend line. */
+const diluterLever = (y: number) => cylinder(195, 228, DIL_PIVOT) +
+  lever(DIL_X, 22, DIL_PIVOT, y, PAPER, (t) => rect(DIL_X - 11, t - 11, DIL_X + 11, t + 11, PAPER) + rect(DIL_X - 8, t - 8, DIL_X + 8, t + 8, 'none', 0.18));
+const SUP_X = 358;
+/** SUPPLY: green lever with a round knob on its end. */
+const supplyLever = (y: number) => cylinder(335, 381, SUP_Y.on) +
+  lever(SUP_X, 24, SUP_Y.on, y, PAINTS.green, (t) => `<circle cx="${mm(SUP_X)}" cy="${mm(t)}" r="${mm(17.5)}" fill="${PAPER}" stroke-width="0.4"/><circle cx="${mm(SUP_X)}" cy="${mm(t)}" r="${mm(14)}" fill="none" stroke-width="0.25"/>`);
+/**
+ * Ring terminal: a closed ring under its screw (r 8.5 px), a tongue tapering out to a crimp barrel where the wire
+ * joins at (ex, ey). Directions measured on the guide image (4x zoom): each tongue points to the cable's end.
+ */
+function terminal(cx: number, cy: number, ex: number, ey: number) {
+  const dx = ex - cx, dy = ey - cy, len = Math.hypot(dx, dy), ux = dx / len, uy = dy / len, nx = -uy, ny = ux;
+  const P = (a: number, b: number) => `${+(cx + ux * a + nx * b).toFixed(2)} ${+(cy + uy * a + ny * b).toFixed(2)}`;
+  const r = 8.5, b0 = len - 7;
+  const tongue = `M${P(4, 5.5)}L${P(b0, 2.6)}L${P(b0, -2.6)}L${P(4, -5.5)}Z`;
+  const barrel = `M${P(b0, 3.2)}L${P(len, 2.6)}L${P(len, -2.6)}L${P(b0, -3.2)}Z`;
+  return shape(tongue, PAPER) + `<circle cx="${mm(cx)}" cy="${mm(cy)}" r="${mm(r)}" fill="${PAPER}" stroke-width="0.4"/>` + shape(barrel, PAPER) +
+    `<path d="${path(`M${P(b0 + 2.3, 3)}L${P(b0 + 2.3, -3)}M${P(b0 + 4.6, 2.8)}L${P(b0 + 4.6, -2.8)}`)}" fill="none" stroke-width="0.18"/>`;
+}
 /** A cable: an ink line with a thin paper core. */
 const cable = (d: string) => `<path d="${path(d)}" fill="none" stroke-width="1.1"/><path d="${path(d)}" fill="none" stroke="${PAPER}" stroke-width="0.35"/>`;
 
@@ -108,9 +130,9 @@ export const oxygen: PanelSpec = {
     shown: { emergency: 'normal', diluter: 'norm', supply: 'on', flow: 'flow', pressure: '34' },
     unresolved: [
       'The guide marks EMERGENCY and the diluter lever not implemented (N/I) in DCS; both are modelled as levers that move between their legends.',
-      'The three levers are long paddles hinged inside the panel, so each fills its slot in every position and only its grip end (EMERGENCY tab, SUPPLY knob, diluter foot) moves to the selected legend; grip ends are drawn square-on at their legend lines (the camera shows them a few px higher). The guide shows each only in one position (EMERGENCY at NORMAL, diluter at NORM, SUPPLY at ON). Whether TEST MASK springs back is not stated; all positions are drawn as stable.',
+      'Each lever is fixed to a thin cylinder turning across its slot: square-on, the middle position shows the lever end-on as a small square (EMERGENCY, SUPPLY), and the other positions show its length out to the legend line. The guide shows each lever only in one position (EMERGENCY at NORMAL, diluter at NORM, SUPPLY at ON) from a low camera, so the projected lengths are drawn to the legend lines rather than measured. Whether TEST MASK springs back is not stated; all positions are drawn as stable.',
       'Colours: EMERGENCY red, SUPPLY green and the dial\'s green 10-55 psi band, as the guide shows them; the band\'s ends are taken from the guide\'s normal range, the image does not resolve them. The needle is drawn uncoloured. The dial is traced up to 100 psi tick by tick; above 100 only the dots under the numerals (and two between) resolve.',
-      'The black cable loops between the top clips are drawn as the guide shows them; the guide does not say what they are. The small round fitting below the left clip is not described in the guide; it is drawn as a plain ring.',
+      'The black cable loops between the top screws are drawn as the guide shows them, each end in a ring terminal under a screw; the guide does not say what they are. The small round fitting below the left clip is not described in the guide; it is drawn as a plain ring.',
       'The FLOW blinker shows white for flow in the guide; cold and dark (no flow) it shows black.',
     ],
   },
@@ -131,11 +153,10 @@ export const oxygen: PanelSpec = {
     { kind: 'path', pen: 'fine', d: path('M273 147H281M277 143V151') },
     // Lever slots (EMERGENCY, diluter) and the SUPPLY lever's recess.
     { kind: 'path', pen: 'medium', d: path('M48 150H90V226H48ZM193 140H230V231H193ZM333 139H383V228H333Z') },
-    // Cable clip tabs under the top screws.
-    { kind: 'svg', markup: [[210, 26], [171, 49], [354, 26], [353, 97]].map(([x, y]) => circle(x, y, 8.5)).join('') },
-    { kind: 'path', pen: 'medium', d: path('M203 23L188 29L189 33L203 30ZM177 55L191 72L195 69L182 52ZM351 34V57H357V34ZM357 91L366 84L362 81L353 88Z') },
-    // Cable loops between the clips (black wires in the sim; their purpose is not described in the guide).
-    { kind: 'svg', markup: cable('M190 30C204 34 226 56 222 78C219 92 203 90 199 78C196 70 197 66 193 68') + cable('M356 50C364 38 392 38 398 56C402 70 386 72 372 73C362 74 356 80 358 90') },
+    // Cable loops between the top screws (black wires in the sim; their purpose is not described in the guide), each
+    // ending in a ring terminal under a screw.
+    { kind: 'svg', markup: cable('M190 30C204 34 226 56 222 78C219 92 203 90 199 78C196 70 197 66 194 69') + cable('M352 56C364 38 392 38 398 56C402 70 386 72 376 73C368 74 365 78 364 84') },
+    { kind: 'svg', markup: terminal(210, 26, 190, 30) + terminal(171, 49, 194, 69) + terminal(354, 26, 352, 56) + terminal(353, 97, 364, 84) },
     // Fitting below the left clip.
     { kind: 'svg', markup: `${circle(193, 118, 6.5)}${circle(193, 118, 3.5)}` },
   ],
@@ -153,7 +174,7 @@ export const oxygen: PanelSpec = {
     },
     {
       component: 'traced', control: 'diluter', at: pt(DIL_X, DIL_PIVOT), hit: [mm(192), mm(138), mm(36), mm(94)],
-      shapes: { '100': { d: '', svg: diluterLever(-1) }, norm: { d: '', svg: diluterLever(1) } },
+      shapes: { '100': { d: '', svg: diluterLever(DIL_Y['100']) }, norm: { d: '', svg: diluterLever(DIL_Y.norm) } },
     },
     {
       component: 'traced', control: 'supply', at: pt(SUP_X, SUP_Y.on), hit: [mm(320), mm(138), mm(64), mm(92)],
