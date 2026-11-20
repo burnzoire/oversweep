@@ -7,8 +7,8 @@ import { INK, PAINTS, PENS, text } from '../components.ts';
  * CMDS panel), DCS, drawn in top view: what the pilot sees looking down, forward
  * up the page. Upright (drawn leaning 45° so its face reads from above), it disarms the seat: a flat lever whose face toward the pilot is a
  * yellow flag with two columns of black diamonds either side of a black band
- * lettered EJECTION CONTROLS LOCKED in yellow, on a grey metal top. Armed, it is rotated down
- * until flush with the seat: it lies full length beside the console, showing its
+ * lettered EJECTION CONTROLS LOCKED in yellow, on a grey metal top. Armed, it is pulled aft and down
+ * into the recess beside the seat: it lies full length aft of its pivot, showing its
  * other face, a black placard lettered EJECTION CONTROLS ARMED in white.
  *
  * Reference: the guide's p. 81 image of the lever in the disarmed position
@@ -32,21 +32,21 @@ const flag = `<path d="${FLAG}" fill="${PAINTS.yellow}" stroke="${INK}" stroke-w
   // The legend is yellow on a black band down the middle of the flag.
   `<g transform="translate(${mm(64)} ${mm(158)}) rotate(-90)">${text(0, 0, 'EJECTION CONTROLS LOCKED', mm(10), mm(150)).replace(`fill="${INK}"`, `fill="${PAINTS.yellow}"`)}</g>`;
 
-/** Top view, in mm: pivot block at the aft end (bottom of the page), lever 106 mm long (the guide trace) and 24.4 mm wide. */
-const P: [number, number] = [30, 112], L = 106, W = 24.4, X0 = P[0] - W / 2, X1 = P[0] + W / 2;
+/** Top view, in mm: pivot block at the forward end (top of the page), lever 106 mm long (the guide trace) and 24.4 mm wide. */
+const P: [number, number] = [30, 18], L = 106, W = 24.4, X0 = P[0] - W / 2, X1 = P[0] + W / 2;
 /** Upright, the lever is drawn leaning 45°, so from above it shows cos 45° of its length. */
 const K = Math.cos(Math.PI / 4);
 const pen = (w: keyof typeof PENS) => `stroke="${INK}" stroke-width="${PENS[w]}"`;
-const block = `<rect x="${X0 + 1}" y="${P[1]}" width="${W - 2}" height="12" rx="1.5" fill="var(--panel-paper,#fff)" ${pen('medium')}/><circle cx="${P[0]}" cy="${P[1] + 6}" r="3" fill="none" ${pen('fine')}/>`;
-/** The guide-traced lever face (grey top, yellow flag, stem; pivot at reference (63, 300)), its top end forward, shortened by K. */
-const lockedFace = `<g transform="translate(${P[0]} ${P[1]}) scale(1 ${K.toFixed(4)}) translate(${-mm(63)} ${-mm(300)})">` +
+const block = `<rect x="${X0 + 1}" y="${P[1] - 12}" width="${W - 2}" height="12" rx="1.5" fill="var(--panel-paper,#fff)" ${pen('medium')}/><circle cx="${P[0]}" cy="${P[1] - 6}" r="3" fill="none" ${pen('fine')}/>`;
+/** The guide-traced lever face (grey top, yellow flag, stem; pivot at reference (63, 300)), its free end aft toward the pilot, shortened by K. The flat (armed) position shows dashed behind it: the recess it is pulled down into. */
+const lockedFace = `<rect x="${X0}" y="${P[1]}" width="${W}" height="${L}" rx="2" fill="none" ${pen('fine')} stroke-dasharray="2 1.5"/><g transform="translate(${P[0]} ${P[1]}) scale(1 ${K.toFixed(4)}) rotate(180) translate(${-mm(63)} ${-mm(300)})">` +
   `<path d="${path('M41 14H85Q91 14 91 20V62H35V20Q35 14 41 14ZM46 246H80V300H46Z')}" fill="var(--panel-paper,#fff)" ${pen('medium')}/>${flag}</g>`;
-const armedFace = `<rect x="${X0}" y="${P[1] - L}" width="${W}" height="${L}" rx="2" fill="var(--panel-paper,#fff)" ${pen('heavy')}/>` +
-  // The open channel at the free (forward) end, then the black ARMED placard toward the pivot.
-  `<rect x="${X0 + 2.5}" y="${P[1] - L + 3}" width="${W - 5}" height="30" rx="2" fill="none" ${pen('fine')}/>` +
-  `<rect x="${X0 + 2}" y="${P[1] - L + 38}" width="${W - 4}" height="${L - 44}" fill="${INK}" stroke="none"/>` +
-  `<g transform="translate(${P[0] - 3.5} ${P[1] - L + 38 + (L - 44) / 2}) rotate(-90)">${text(0, 0, 'EJECTION CONTROLS', 3.4, 46).replace(`fill="${INK}"`, 'fill="#fff"')}</g>` +
-  `<g transform="translate(${P[0] + 3.5} ${P[1] - L + 38 + (L - 44) / 2}) rotate(-90)">${text(0, 0, 'ARMED', 3.4, 15).replace(`fill="${INK}"`, 'fill="#fff"')}</g>`;
+const armedFace = `<rect x="${X0}" y="${P[1]}" width="${W}" height="${L}" rx="2" fill="var(--panel-paper,#fff)" ${pen('heavy')}/>` +
+  // The open channel next to the pivot, then the black ARMED placard toward the free (aft) end.
+  `<rect x="${X0 + 2.5}" y="${P[1] + 3}" width="${W - 5}" height="30" rx="2" fill="none" ${pen('fine')}/>` +
+  `<rect x="${X0 + 2}" y="${P[1] + 38}" width="${W - 4}" height="${L - 44}" fill="${INK}" stroke="none"/>` +
+  `<g transform="translate(${P[0] - 3.5} ${P[1] + 38 + (L - 44) / 2}) rotate(-90)">${text(0, 0, 'EJECTION CONTROLS', 3.4, 46).replace(`fill="${INK}"`, 'fill="#fff"')}</g>` +
+  `<g transform="translate(${P[0] + 3.5} ${P[1] + 38 + (L - 44) / 2}) rotate(-90)">${text(0, 0, 'ARMED', 3.4, 15).replace(`fill="${INK}"`, 'fill="#fff"')}</g>`;
 
 export const seatArmingLever: PanelSpec = {
   id: 'seat-arming-lever',
@@ -63,7 +63,7 @@ export const seatArmingLever: PanelSpec = {
     shown: { 'arming-lever': 'disarmed' },
     unresolved: [
       'Drawn in top view, forward up the page, the way the pilot looks down at it. The guide calls the disarmed lever upright; it is drawn leaning 45° so its LOCKED face reads from above.',
-      'The pivot is drawn at the aft end and the lever lies forward of it when armed, as the top-view photos show; the guide says the lever is "rotated aft and down" to arm. The pivot block and the open channel are simplified from the photos.',
+      'The pivot is at the forward end (Nathan, 2026-11-21, as the guide\'s "rotated aft and down" says): the lever is pulled aft and down into the recess beside the seat. The pivot block and the open channel are simplified from the photos.',
       'The ARMED placard\'s lettering is set from the photos; its exact size is not measured.',
       'The ejection handle and the emergency manual chute lever (both not implemented in DCS) are catalogued separately under Ejection seat.',
     ],
