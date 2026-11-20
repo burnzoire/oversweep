@@ -31,7 +31,7 @@ for (const id of usedPanels) for (const c of built.get(id)!.spec.controls) {
   orders[`${id}.${c.id}`] = c.positions.map(p => p.id);
   for (const p of c.positions) labels[`${id}.${c.id}.${p.id}`] = `${c.name} to ${p.label}`;
 }
-const config = {aircraft:`${cockpit.id}:${scope}`, initial, labels, names, orders, model: guide.model, lamps: used.flatMap(id => built.get(id)!.spec.indicators.filter(i => i.type === 'lamp').map(i => `${id}.${i.id}`)), steps: steps.map(s => ({id:s.id, panels:s.panels, do:s.do, also:s.also, type:s.type, confirm:s.confirm, turn:s.turn, ask:s.ask, hints:s.hints}))};
+const config = {aircraft:`${cockpit.id}:${scope}`, initial, labels, names, orders, model: guide.model, lamps: usedPanels.flatMap(id => built.get(id)!.spec.indicators.filter(i => i.type === 'lamp').map(i => `${id}.${i.id}`)), steps: steps.map(s => ({id:s.id, panels:s.panels, do:s.do, also:s.also, type:s.type, confirm:s.confirm, turn:s.turn, ask:s.ask, hints:s.hints}))};
 const recordLink = (l:{slug:string;anchor?:string}) => { const r = includedRecords.find(x => x.slug === l.slug); if (!r) throw new Error(`${guide.id}: no Encyclopedia record ${l.slug}`); return sitePath(recordRoute(r)) + (l.anchor ? '#' + l.anchor : ''); };
 // `{{phrase|k}}` in a step's text becomes a button that rings hint k on the panels for a moment.
 const esc = (t:string) => t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -58,7 +58,7 @@ const shortTitle = guide.title.split('— ')[1] ?? guide.title;
           {s.links && <p class="procedure-panels">Encyclopedia: {s.links.map((l, k) => <>{k > 0 && ', '}<a href={recordLink(l)}>{l.label}</a></>)}</p>}
           {s.ask && <div class="procedure-ask" data-cross-check><p><strong>{s.ask.question}</strong></p><ul>{s.ask.options.map((o, k) => <li><button type="button" data-answer={k}>{o}</button></li>)}</ul></div>}
           <p class="procedure-cite">Evidence: {s.evidence}</p>
-          {s.panels.length > 0 && <p class="procedure-panels">Panels: {s.panels.map((id, k) => <>{k > 0 && ', '}<a href={sitePath(panelRoute(cockpit, id))}>{built.get(id)!.panel.title}</a></>)}</p>}
+          {s.panels.length > 0 && <p class="procedure-panels">Panels: {[...new Set(s.panels.map(baseOf))].map((id, k) => <>{k > 0 && ', '}<a href={sitePath(panelRoute(cockpit, id))}>{built.get(id)!.panel.title}</a></>)}</p>}
         </li>)}
       </ol>
       <h2 class="procedure-step" data-complete tabindex="-1" hidden>{guide.complete}</h2>

@@ -40,10 +40,10 @@ const SCREW = 128.6, MARK = 55;
  * ELEC/PNEU mode lever, measured on the guide image zoomed 10x: a flat lever
  * with a round head (radius 9.5 px) about its pivot and a stem 9.5 px wide
  * hanging 39.5 px below the pivot to a square end. It hangs straight down at
- * rest and is swung `swing` degrees, tip left toward ELEC. It swings that way only
- * (Nathan, 2026-11-20): to the right the plate edge and corner screw are in its way.
+ * rest and is swung `swing` degrees, tip left toward ELEC, and only `pneu` degrees
+ * right toward PNEU, so it clears the plate edge and corner screw (Nathan, 2026-11-20).
  */
-const LEVER = { pivot: [262, 238.8] as [number, number], head: 9.5, half: 4.75, reach: 39.5, swing: 30, pin: 2.6 };
+const LEVER = { pivot: [262, 238.8] as [number, number], head: 9.5, half: 4.75, reach: 39.5, swing: 30, pneu: 6, pin: 2.6 };
 function modeLever(deg: number) {
   const [px, py] = LEVER.pivot, a = (deg * Math.PI) / 180, { head, half, reach } = LEVER;
   // Turn (clockwise on screen) about the pivot; outline points relative to the pivot, stem pointing down.
@@ -119,7 +119,7 @@ export const altimeter: PanelSpec = {
       'The two zeros after the hundreds drum are drawn as fixed drums; whether they are printed on the face cannot be seen.',
       'The hundreds drum rolls with the needle, as the image shows (1 a little below centre at 8,092 ft); the thousands and ten-thousands drums turn only as the hundreds drum rolls from 9 to 0. Below 10,000 ft the ten-thousands drum shows hatching. Readings below 0 ft (the guide gives −1,000 ft) are not drawn.',
       'The barometric window drums are drawn flat and evenly spaced (the image spacing varies from 10.6 to 12.4 px). Its range (28.10–31.00 in Hg) is not stated in the guide.',
-      'The mode lever is traced as a flat lever (Nathan: a lever, not a toggle). It springs back to hanging straight down, as the image shows it, beside the PNEU legend. It swings only left, toward ELEC (Nathan, 2026-11-20): the plate edge and corner screw are in its way to the right. The guide says the switch is held momentarily to ELEC or PNEU; how PNEU is selected by hand is not drawn. The 30° swing is not stated. No other guide image or photo was found to confirm it.',
+      'The mode lever is traced as a flat lever (Nathan: a lever, not a toggle). It springs back to hanging straight down, as the image shows it, beside the PNEU legend. The guide (p. 51) says the switch is held momentarily to ELEC or PNEU. It swings 30° left toward ELEC but only 6° right toward PNEU, which keeps its square end about 1.8 px clear of the corner screw (Nathan, 2026-11-20). Neither swing is stated. No other guide image or photo was found to confirm it.',
       'The barometric setting knob shows only as a faint round outline (about 6.8 mm radius); it is drawn as a plain domed knob with no index.',
       'Eight faint round marks sit on the case on the screw lines (about 55 px either side of the centre lines); they are drawn as fine circles. The top left corner is hidden by another part in the image; its screw and marks are drawn by symmetry.',
       'Cold-and-dark readings are not stated in the guide; the needle, counters and PNEU flag are drawn as the image shows them.',
@@ -144,7 +144,7 @@ export const altimeter: PanelSpec = {
     { component: 'knob-plain-small', control: 'baro-set', at: pt(50, 256.7) },
     ...[[-1, -1], [1, -1], [-1, 1], [1, 1]].map(([sx, sy]) => ({ component: 'screw-small' as const, at: pt(C[0] + sx * SCREW, C[1] + sy * SCREW) })),
     // Mode lever, drawn last so it swings over the corner screw: traced one-off (flat keyhole lever: round head about the pivot, flat stem to a square end).
-    { component: 'traced', control: 'mode', at: pt(...LEVER.pivot), shapes: { elec: modeLever(LEVER.swing), centre: modeLever(0) }, hit: [mm(LEVER.pivot[0] - 22), mm(LEVER.pivot[1] - 12), mm(44), mm(54)] },
+    { component: 'traced', control: 'mode', at: pt(...LEVER.pivot), shapes: { elec: modeLever(LEVER.swing), centre: modeLever(0), pneu: modeLever(-LEVER.pneu) }, hit: [mm(LEVER.pivot[0] - 22), mm(LEVER.pivot[1] - 12), mm(44), mm(54)] },
   ],
   controls: [
     {
@@ -154,10 +154,11 @@ export const altimeter: PanelSpec = {
     },
     {
       id: 'mode', name: 'Altimeter mode lever (ELEC / PNEU)', type: 'toggle', travel: 'horizontal', initial: 'centre', source: src,
-      description: 'Held momentarily left to ELEC (primary: the altimeter is driven by the central air data computer, CADC); it hangs at rest beside the PNEU legend (secondary: driven by static pressure from the pitot-static system). The altimeter drops back to PNEU by itself if the CADC or its electric servo fails; the PNEU flag shows whenever it is in PNEU.',
+      description: 'Held momentarily left to ELEC (primary: the altimeter is driven by the central air data computer, CADC) or right to PNEU (secondary: driven by static pressure from the pitot-static system). The altimeter drops back to PNEU by itself if the CADC or its electric servo fails; the PNEU flag shows whenever it is in PNEU.',
       positions: [
         { id: 'elec', label: 'ELEC', hold: 'momentary', spring: 'centre' },
         { id: 'centre', label: 'Rest' },
+        { id: 'pneu', label: 'PNEU', hold: 'momentary', spring: 'centre' },
       ],
     },
   ],

@@ -5,20 +5,22 @@
  * this script owns the procedure. The engine is already running at idle. It
  * reads the lamps (a lit lamp for each test the reader runs), the engine
  * instruments through the SEC check, the Stored Heading INS alignment that
- * runs on its own clock (DED INS page, HUD ALIGN cue) and the altimeter,
- * and sends them back with `cockpit:indicate`. Steps for panels that are not
- * built yet are text confirms.
+ * runs on its own clock (DED INS page, HUD ALIGN cue), the FLCS BIT, the MFD
+ * DTE page and the altimeter, and sends them back with `cockpit:indicate`.
+ * Steps that only read an indication end with a confirm.
  */
 
 interface StepDo { control: string; to: string; on?: 'press' | 'release'; hold?: number }
 interface Step { id: string; panels: string[]; do?: StepDo; also?: StepDo[]; confirm?: string; turn?: { control: string; to: number; per: number } }
 interface Config { aircraft: string; initial: Record<string, string>; labels: Record<string, string>; names: Record<string, string>; orders: Record<string, string[]>; lamps: string[]; steps: Step[] }
-/** `ins`: the alignment stage (-1 not started, 0–4 up the INS DED pages); `flash`: the fine-alignment flash is in its off half. */
-interface State { rpm: number; noz: number; ins: number; flash: boolean; baro: number; mode: 'pneu' | 'elec' }
+/** `ins`: the alignment stage (-1 not started, 0–4 up the INS DED pages); `flash`: the fine-alignment flash is in its off half; `bit`: the FLCS BIT is running; `dte`: the left MFD shows the DTE page. */
+interface State { rpm: number; noz: number; ins: number; flash: boolean; baro: number; mode: 'pneu' | 'elec'; bit: boolean; dte: boolean }
 
 // Illustrative scenario: parked at Incirlik (field elevation 191 ft, from the airfield data), local altimeter setting 29.97.
 const FIELD = 191, QNH = 29.97, PNEU_ERROR = 25;
-const initialState = (): State => ({ rpm: 68, noz: 98, ins: -1, flash: false, baro: 29.92, mode: 'pneu' });
+const initialState = (): State => ({ rpm: 68, noz: 98, ins: -1, flash: false, baro: 29.92, mode: 'pneu', bit: false, dte: false });
+// The FLCS BIT runs about 45 s in the jet; compressed here.
+const BIT_MS = 4000;
 // The INS alignment is compressed: the guide gives about 90 s for a Stored Heading alignment.
 const INS_STAGE_MS = [0, 4000, 8000, 12000, 17000];
 
@@ -56,7 +58,7 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
   const name = (control: string) => cfg.names[control] ?? control;
   const label = (control: string, to: string) => cfg.labels[`${control}.${to}`] ?? `${name(control)} to ${to}`;
   const cap = (t: string) => t[0].toUpperCase() + t.slice(1);
-  const instruction = (w: StepDo) => w.on === 'release' ? `release the ${name(w.control)}` : w.hold ? `hold the ${label(w.control, w.to).replace(' to ', ' at ')}` : `${(cfg.orders[w.control] ?? []).join() === 'out,in' ? 'press' : 'set'} the ${label(w.control, w.to)}`;
+  const instruction = (w: StepDo) => w.on === 'release' ? `release the ${name(w.control)}` : w.hold ? `hold the ${label(w.control, w.to).replace(' to ', ' at ')}` : (cfg.orders[w.control] ?? []).join() === 'out,in' ? `press ${name(w.control)}` : `set the ${label(w.control, w.to)}`;
   const stepId = () => cfg.steps[step]?.id ?? '';
   const moves = (s: Step) => [...(s.do ? [s.do] : []), ...(s.also ?? [])];
   const mk = (w: StepDo) => `${w.control}=${w.to}:${w.on ?? 'press'}`;
@@ -81,8 +83,8 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
 
   /** Where the engine instruments are heading, from the SEC switch and the throttle. */
   function target() {
-    const sec = pos['eng-jet-start.eng-cont'] === 'sec', mil = pos['sidewall-controls.throttle'] === 'mil';
-    return { rpm: mil ? 92 : sec ? 64 : 68, noz: sec ? 8 : mil ? 12 : 98 };
+    const sec = pos['eng-jet-start.eng-cont'] === 'sec', thr = pos['sidewall-controls.throttle'], mil = thr === 'mil';
+    return { rpm: mil ? 92 : sec ? 64 : thr === 'idle-10' ? 78 : 68, noz: sec ? 8 : mil ? 12 : 98 };
   }
   const settle = setInterval(() => {
     const t = target(), k = reduced.matches ? 1 : 0.12;
@@ -105,6 +107,12 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
     const epuTest = pos['test.epu-gen'] === 'test';
     set('epu.air', epuTest); set('epu.epu-run', epuTest);
     for (const c of ['a', 'b', 'c', 'd']) set(`test.flcs-pwr-${c}`, epuTest);
+    set('flt-control.flcs-run', st.bit);
+    set('right-eyebrow.dbu-on', pos['flt-control.digital-backup'] === 'backup');
+    set('ar-nws-indicator.rdy', pos['fuel.air-refuel'] === 'open');
+    const qtyTest = pos['fuel-qty-sel.fuel-qty-sel'] === 'test';
+    set('caution.fwd-fuel-low', qtyTest); set('caution.aft-fuel-low', qtyTest);
+    const mfd = pos['avionics-power.mfd'] !== 'on' ? 'off' : st.dte ? 'dte' : 'menu';
     // The HUD: on once the SYM knob is up. ALIGN takes the maximum G readout's place while the INS is aligning.
     const hudOn = pos['icp.sym'] !== 'off';
     const alignCue = aligning() && st.ins >= 2 && !(st.ins === 4 && st.flash);
@@ -117,14 +125,14 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
       readings: {
         'engine-instruments.rpm': st.rpm, 'engine-instruments.ftit': 570, 'engine-instruments.oil': 30, 'engine-instruments.noz-pos': st.noz,
         'fuel-flow.fuel-flow': 1100, 'hyd-pressure.hyd-a': 3000, 'hyd-pressure.hyd-b': 3000,
-        'fuel-qty.al': 2810, 'fuel-qty.fr': 3250, 'fuel-qty.total': 6060,
+        'fuel-qty.al': qtyTest ? 2000 : 2810, 'fuel-qty.fr': qtyTest ? 2000 : 3250, 'fuel-qty.total': qtyTest ? 6000 : 6060,
         'altimeter.altitude': alt, 'altimeter.baro': +st.baro.toFixed(2),
         'hud.velocity': 0, 'hud.altitude': alt, 'hud.heading': 232, 'hud.g': 1, 'hud.mach': 0, 'hud.pitch': 0, 'hud.roll': 0,
         'hud.fpm-azimuth': 0, 'hud.fpm-elevation': 0, 'hud.radar-alt': 0, 'hud.max-g': aligning() && st.ins >= 2 ? NaN : 1,
         'hud.steerpoint': 1, 'hud.steerpoint-distance': 24, 'hud.slant-range': 24, 'hud.ttg': 0, 'hud.steering-cue': 0, 'hud.steering': 0,
         'hud.steerpoint-azimuth': 0, 'hud.steerpoint-elevation': -3,
       },
-      pages: { 'hud.master-arm': 'none', 'ded.display': ded, 'hud.screen': hudOn ? 'on' : 'off', 'hud.align': alignCue ? 'align' : 'none', 'altimeter.pneu': st.mode === 'pneu' ? 'shown' : 'hidden' },
+      pages: { 'left-mfd.display': mfd, 'right-mfd.display': mfd === 'off' ? 'off' : 'menu', 'sai.off-flag': pos['sai.cage'] === 'pulled' ? 'shown' : 'hidden', 'hud.master-arm': 'none', 'ded.display': ded, 'hud.screen': hudOn ? 'on' : 'off', 'hud.align': alignCue ? 'align' : 'none', 'altimeter.pneu': st.mode === 'pneu' ? 'shown' : 'hidden' },
     } }));
     const id = stepId();
     const wait = id === 'sec-check' ? st.noz > 10 : id === 'pri-check' ? st.noz < 94 : id === 'ins-ready' ? st.ins < 4 : false;
@@ -161,7 +169,13 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
     else if (moves(s).length === 1) say(`${cap(instruction(moves(s)[0]))}.`);
     else if (moves(s).length) say(`Make these moves, in any order: ${moves(s).map(instruction).join('; ')}.`);
     else say('Check the indications, then confirm.');
+    showPad();
     indicate();
+  }
+  /** Open the switch card a step's next move needs, with the wanted position marked. */
+  function showPad() {
+    const w = finished ? undefined : pending(cfg.steps[step])[0];
+    dispatchEvent(new CustomEvent('cockpit:pad', { detail: { control: w?.control, to: w?.to } }));
   }
 
   function next(delay = 800) {
@@ -187,7 +201,7 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
     if (pos['avionics-power.ins'] === 'stor-hdg' && st.ins < 0) { runIns(0); say('Stored Heading alignment started. In this model it runs in about 20 seconds; the page shows its stages.'); }
     indicate();
     const left = pending(cfg.steps[step]);
-    if (left.length) { say(`Done. Still to do: ${left.map(instruction).join('; ')}.`); return; }
+    if (left.length) { say(`Done. Still to do: ${left.map(instruction).join('; ')}.`); showPad(); return; }
     next();
   }
 
@@ -218,10 +232,17 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
     }
     if (want) {
       // Throttle back from MIL only once RPM has reached 85%.
-      if (key === 'sidewall-controls.throttle' && d.position === 'idle' && st.rpm < 85) {
+      if (stepId() === 'snap-idle' && key === 'sidewall-controls.throttle' && d.position === 'idle' && st.rpm < 85) {
         pos[key] = before; setPositions({ [key]: before });
         say('Wait: RPM has not reached 85% yet.', true);
         indicate();
+        return;
+      }
+      if (key === 'left-mfd.osb-8') st.dte = true;
+      // The FLCS BIT: RUN lights while it runs; the switch drops back to OFF by itself when it is done.
+      if (key === 'flt-control.flcs-bit') {
+        st.bit = true; made.add(mk(want)); say('BIT running (compressed to a few seconds here). Watch the RUN light.'); indicate();
+        later(BIT_MS, () => { st.bit = false; pos[key] = 'off'; setPositions({ [key]: 'off' }); say('BIT complete: the switch is back at OFF, RUN is out and FAIL stayed off.'); indicate(); next(1500); });
         return;
       }
       acted(want); return;
