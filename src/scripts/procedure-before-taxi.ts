@@ -112,6 +112,8 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
     set('ar-nws-indicator.rdy', pos['fuel.air-refuel'] === 'open');
     const qtyTest = pos['fuel-qty-sel.fuel-qty-sel'] === 'test';
     set('caution.fwd-fuel-low', qtyTest); set('caution.aft-fuel-low', qtyTest);
+    // AL and FR pointers by FUEL QTY SEL position (no external tanks on this jet).
+    const qty = ({ test: [2000, 2000], rsvr: [480, 480], 'int-wing': [550, 550], 'ext-wing': [0, 0], 'ext-ctr': [0, 0] } as Record<string, number[]>)[pos['fuel-qty-sel.fuel-qty-sel']] ?? [2810, 3250];
     const mfd = pos['avionics-power.mfd'] !== 'on' ? 'off' : st.dte ? 'dte' : 'menu';
     // The HUD: on once the SYM knob is up. ALIGN takes the maximum G readout's place while the INS is aligning.
     const hudOn = pos['icp.sym'] !== 'off';
@@ -127,7 +129,7 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
       readings: {
         'engine-instruments.rpm': st.rpm, 'engine-instruments.ftit': 570, 'engine-instruments.oil': 30, 'engine-instruments.noz-pos': st.noz,
         'fuel-flow.fuel-flow': 1100, 'hyd-pressure.hyd-a': 3000, 'hyd-pressure.hyd-b': 3000,
-        'fuel-qty.al': qtyTest ? 2000 : 2810, 'fuel-qty.fr': qtyTest ? 2000 : 3250, 'fuel-qty.total': qtyTest ? 6000 : 6060,
+        'fuel-qty.al': qty[0], 'fuel-qty.fr': qty[1], 'fuel-qty.total': qtyTest ? 6000 : 6060,
         'altimeter.altitude': alt, 'altimeter.baro': +st.baro.toFixed(2),
         'hud.velocity': 0, 'hud.altitude': alt, 'hud.heading': 232, 'hud.g': 1, 'hud.mach': 0, 'hud.pitch': 0, 'hud.roll': 0,
         'hud.fpm-azimuth': 0, 'hud.fpm-elevation': 0, 'hud.radar-alt': 0, 'hud.max-g': aligning() && st.ins >= 2 ? NaN : 1,

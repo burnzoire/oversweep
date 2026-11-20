@@ -1,14 +1,14 @@
 # Aircraft Procedures — F-16C after engine start & before taxi (issue #389)
 
 ## Scope
-From a running engine at idle (the state Engine Start ends in): the after-start checks (guide pp. 137–140), a Stored Heading INS alignment (pp. 169–171) and the before-taxi checks (p. 142), ending with the INS at NAV and the chocks out. 54 steps on the shared cockpit panels. Taxi (guide p. 142, steps 7–10) is a separate procedure.
+From a running engine at idle (the state Engine Start ends in): the after-start checks (guide pp. 137–140), a Stored Heading INS alignment (pp. 169–171) and the before-taxi checks (p. 142), ending with the INS at NAV and the chocks out. 59 steps on the shared cockpit panels. Taxi (guide p. 142, steps 7–10) is a separate procedure.
 
 ## Sources
 - Eagle Dynamics, DCS F-16C Viper Early Access Guide (EN, 16 August 2026): After Engine Start pp. 137–140, Taxi p. 141 (state at mission start), Before Taxi p. 142, INS Alignment, the INS knob and the INS DED page pp. 169–171. No community guide is cited or followed.
 - Incirlik field elevation (191 ft): the Syria map airfield data in the Encyclopedia.
 
 ## Playable on built panels
-Every step moves or reads a built panel. Warning light tests (TEST panel with lamps lit while the button is held), AVIONICS POWER, INS knob and the DED INS page, SNSR PWR, HUD (SYM knob, ALIGN cue), C & I knob (IFF), SEC check (ENG CONT guard and switch, throttle, nozzle and RPM readings), FLCS BIT (FLT CONTROL panel, RUN light, switch back to OFF by itself), ECM, speed brake (throttle card), wheels lights, standby attitude indicator uncage (OFF flag), FUEL QTY SEL TEST (pointers, totalizer, FWD/AFT FUEL LOW), EPU fuel, DTE page and LOAD (left MFD), HMCS knob, DBU (DBU ON warning), trim (MANUAL TRIM panel and stick trim card), MPO, AR status lights, oxygen diluter and the throttle 10% above idle for the EPU check, EPU test, backup UHF function knob, altimeter (ELEC and PNEU, barometric setting), exterior lights, INS to NAV.
+Every step moves or reads a built panel. Warning light tests (TEST panel with lamps lit while the button is held), AVIONICS POWER, INS knob and the DED INS page, SNSR PWR, HUD (SYM knob, ALIGN cue), C & I knob (IFF), SEC check (ENG CONT guard and switch, throttle, nozzle and RPM readings), FLCS BIT (FLT CONTROL panel, RUN light, switch back to OFF by itself), ECM, speed brake (throttle card), wheels lights, standby attitude indicator uncage (OFF flag), FUEL QTY SEL through every position (TEST with FWD/AFT FUEL LOW, RSVR, INT WING, EXT WING, EXT CTR, NORM; no external tanks, so EXT reads zero), EPU fuel, DTE page and LOAD (left MFD), HMCS knob, DBU (DBU ON warning), trim (MANUAL TRIM panel and stick trim card), MPO, AR status lights, oxygen diluter and the throttle 10% above idle for the EPU check, EPU test, backup UHF function knob, altimeter (ELEC and PNEU, barometric setting), exterior lights, INS to NAV.
 
 ## Confirms
 Steps that only read an indication end with a confirm (SEC and PRI nozzle, wheels, EPU fuel, EPU lights, canopy, HUD altitude, alignment complete), and the steps that move the stick and rudder pedals through their travel (cycling and operating the controls), which are explained rather than clicked (Nathan, 2026-11-20), and the chocks.
