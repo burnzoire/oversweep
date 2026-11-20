@@ -530,7 +530,30 @@ export interface PanelSpec {
   placements: Placement[];
   controls: ControlDef[];
   indicators: IndicatorDef[];
+  /**
+   * Control pads for parts too small to click on the drawing (HOTAS grips). Clicking any control a pad names
+   * opens that pad under the drawing instead of moving the control; the pad has large buttons for each
+   * position. Procedures open the pad of the step's control and ring the wanted position.
+   */
+  pads?: PadDef[];
 }
+
+/** A pop-out control pad: a four-way cross (`cross`, with a push in the middle, `centre`) and/or rows of positions (`controls`). */
+export interface PadDef {
+  id: string;
+  name: string;
+  /** Each arm: [control id, position id]. Up is forward on the grips. */
+  cross?: Partial<Record<'up' | 'down' | 'left' | 'right', [control: string, position: string]>>;
+  /** Pushbutton pressed in the middle of the cross. */
+  centre?: string;
+  /** Controls shown as a row of their positions (rotaries as step buttons with a readout). */
+  controls?: string[];
+  /** The switch drawn face-on, square to the camera, on its own canvas (mm); without it the pad shows the drawing cropped to the switch. */
+  face?: { canvas: [w: number, h: number]; placements: Placement[]; /** The switch's click area (mm); a 34 mm square about the centre by default. */ hit?: [x: number, y: number, w: number, h: number] };
+}
+
+/** Every control a pad works. */
+export const padControls = (p: PadDef) => [...new Set([...Object.values(p.cross ?? {}).map(a => a![0]), ...(p.centre ? [p.centre] : []), ...(p.controls ?? [])])];
 
 /* ----------------------------------------------------------------- catalogue */
 
