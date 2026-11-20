@@ -5,8 +5,8 @@ import { ANT_ELEV, ART, HITS, MAN_RNG } from './throttle-grip-art.ts';
  * F-16C throttle grip (left sidewall), DCS: the hands-on switches. The throttle's travel (OFF, IDLE, MIL,
  * MAX AB) is on the Sidewall controls page, where the procedures move it.
  *
- * Drawn from the flight-manual line figure "Throttle Grip" (seen from inboard, forward to the right), traced
- * by hand at 1 px = 1 mm in scripts/hotas/throttle.py; the switches' names and functions are the DCS guide's
+ * Drawn from a clean redraw of the flight-manual line figure "Throttle Grip" (seen from inboard, forward to the
+ * right), vectorised by scripts/hotas/clean.py; the switches' names and functions are the DCS guide's
  * (pp. 86–87, 89).
  */
 const src = 'DCS F-16C guide p. 86';
@@ -29,25 +29,26 @@ const COMM = 'Four-way transmit switch. Forward transmits on the VHF radio, aft 
 export const throttleGrip: PanelSpec = {
   id: 'throttle',
   title: 'Throttle',
-  canvas: [300, 215],
+  canvas: [297, 213],
   source: {
     variant: 'DCS F-16C Viper (Block 50)',
     manual: 'Eagle Dynamics, DCS F-16C Viper Early Access Guide (EN, 16 Aug 2026), switch names and functions; drawing from the flight-manual figure "Throttle Grip"',
     page: 86,
-    image: 'Flight-manual figure "Throttle Grip", seen from inboard, 497 x 317 px (Wikimedia Commons, F-16_Throttle.jpg)',
-    rectify: 'python3 -I scripts/hotas/throttle.py (hand-traced outlines in figure pixels; the figure is a line drawing)',
-    pxPerMm: 1,
-    scale: 'The figure prints no dimension. One figure pixel is drawn as 1 mm, the scale of the side stick drawing, which makes the grip about 200 mm long.',
+    image: 'Clean label-free redraw of the flight-manual figures "Side Stick Controller (SSC)" and "Throttle Grip" (docs/cockpit/hotas/clean-ref.png, 2172 x 724 px); throttle grip seen from inboard',
+    rectify: 'python3 -I scripts/hotas/clean.py docs/cockpit/hotas/clean-ref.png throttle (potrace of the line drawing; each switch cut out by a region polygon and moved on its own)',
+    pxPerMm: 1 / 0.375,
+    scale: 'The figure prints no dimension. One drawing pixel is drawn as 0.375 mm, the scale of the side stick drawing, which makes the grip about 290 mm long.',
     shown: { 'comm-ud': 'center', dogfight: 'center', 'spd-brk': 'off' },
     unresolved: [
       'The guide (p. 86) shows the grip only as a shaded render; the drawing follows the flight-manual figure, which names the same switches.',
       'The figure does not show the SPD BRK switch ("not shown": it is behind the grip from this side). It is drawn dashed where the figure points to it, sliding forward and aft.',
       'The black-out switch the figure shows dashed on the outboard side is not described in the DCS guide; it is drawn but not modelled.',
+      'The redraw carries no legends, so the switch names are in the control list rather than on the drawing.',
       'The throttle cutoff release (DCS guide p. 86) is not in the figure; the throttle is rolled outboard past the cutoff on the Sidewall controls page.',
-      'MAN RNG and ANT ELEV have no printed scale, so they read in percent of travel; the knurl slides round as they turn. ANT ELEV has a centre detent.',
+      'MAN RNG and ANT ELEV have no printed scale, so they read in percent of travel; an index line on the MAN RNG knob turns with it and the ANT ELEV knurl slides as it rolls. ANT ELEV has a centre detent.',
       'Which way DOG FIGHT slides on the drawing (up for DOGFIGHT, down for MISSILE OVERRIDE) follows the guide\'s table (UP (OUT), DOWN (IN)).',
     ],
-    credits: [{ what: 'Throttle grip drawing (traced)', author: 'F-16 flight-manual figure via falcon4.wikidot.com, Wikimedia Commons', url: 'https://commons.wikimedia.org/wiki/File:F-16_Throttle.jpg', license: 'CC BY-SA 3.0', licenseUrl: 'https://creativecommons.org/licenses/by-sa/3.0/' }],
+    credits: [{ what: 'Throttle grip drawing (vectorised from a redraw)', author: 'F-16 flight-manual figure via falcon4.wikidot.com, Wikimedia Commons', url: 'https://commons.wikimedia.org/wiki/File:F-16_Throttle.jpg', license: 'CC BY-SA 3.0', licenseUrl: 'https://creativecommons.org/licenses/by-sa/3.0/' }],
   },
   plate: [],
   engraving: [{ kind: 'svg', markup: ART.static }],
@@ -55,8 +56,8 @@ export const throttleGrip: PanelSpec = {
     { component: 'traced', control: 'spd-brk', at: [280, 98], hit: hit('spdBrk'), shapes: svg(ART.spdBrk) },
     { component: 'traced', control: 'comm-ud', at: [217, 28], hit: hit('commUd'), shapes: svg(ART.commUd) },
     { component: 'traced', control: 'comm-lr', at: [217, 28], hit: hit('commLr'), shapes: svg(ART.commLr) },
-    { component: 'traced', control: 'man-rng', at: [258, 20], hit: hit('manRng'), shapes: svg(ART.manRng) },
     { component: 'traced', control: 'uncage', at: [258, 20], hit: hit('uncage'), shapes: svg(ART.uncage) },
+    { component: 'traced', control: 'man-rng', at: [258, 20], hit: hit('manRng'), shapes: svg(ART.manRng) },
     { component: 'traced', control: 'ant-elev', at: [286, 55], hit: hit('antElev'), shapes: svg(ART.antElev) },
     { component: 'traced', control: 'dogfight', at: [284, 79], hit: hit('dogfight'), shapes: svg(ART.dogfight) },
     { component: 'traced', control: 'cursor-ud', at: [262, 123], hit: hit('cursorUd'), shapes: svg(ART.cursorUd) },
