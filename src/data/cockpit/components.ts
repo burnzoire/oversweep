@@ -334,6 +334,14 @@ export const KNOBS = {
   'knob-plain': { r: 7.7, lobes: 0, ridge: [0, 0], plain: true },
   /** Smaller plain domed knob (F-16C altimeter barometric setting knob). */
   'knob-plain-small': { r: 6.8, lobes: 0, ridge: [0, 0], plain: true },
+  /**
+   * Round domed knob with a rectangular tail grip running back past the rim, opposite the index (F-16C FUEL QTY SEL;
+   * guide p. 54: body about 41 px radius at 3.66 px/mm, tail about 23 px wide reaching about 57 px behind the centre, drawn shorter and wider square-on: half-width 0.38 r, reach 1.15 r, Nathan 2026-11-20).
+   * The tail has no front edge, so it rises smoothly out of the dome; the index runs from the centre to the front rim.
+   */
+  'knob-round-tail': { r: 11.2, lobes: 0, ridge: [0, 0], tail: [0.38, 1.15] },
+  /** Plain round domed knob with a white index line from the centre to the rim (F-16C YAW TRIM; guide p. 72, about 29 px radius at 3.15 px/mm). */
+  'knob-plain-index': { r: 9.2, lobes: 0, ridge: [0, 0], plain: true, index: true },
 } as const;
 
 /** A KNOBS body pointing at 12 o'clock; the renderer turns it to the detent. */
@@ -349,7 +357,16 @@ export function knobArt(art: keyof typeof KNOBS) {
       // Indicator: only the white index set into the rim (nothing at the centre).
       `<rect x="${k(-0.075)}" y="${k(-1.04)}" width="${k(0.15)}" height="${k(0.33)}" rx="${k(0.02)}" fill="${PAPER}" ${sw('heavy')}/>`;
   }
-  if ('plain' in KNOBS[art]) return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.78)}" ${sw('fine')}/>`;
+  if ('tail' in KNOBS[art]) {
+    // Tail half-width and reach (fractions of r); filled closed but outlined open at the front so it blends into the dome.
+    const [hw, reach] = (KNOBS[art] as { tail: readonly [number, number] }).tail, w = n(hw * r), y0 = n(0.12 * r), y1 = n(reach * r);
+    const back = `V${n(reach * r - 0.08 * r)}Q${w} ${y1} ${n(hw * r - 0.08 * r)} ${y1}H${n(-hw * r + 0.08 * r)}Q${-w} ${y1} ${-w} ${n(reach * r - 0.08 * r)}V${y0}`;
+    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.78)}" ${sw('fine')}/>` +
+      `<path d="M${w} ${y0}${back}Z" fill="${PAPER}" stroke="none"/>` + cased(`<path d="M${w} ${y0}${back}" fill="none"/>`, 'heavy') +
+      `<path d="M0 0V${n(-r * 0.92)}" stroke-width="0.9" stroke-linecap="round"/>`;
+  }
+  if ('plain' in KNOBS[art]) return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.78)}" ${sw('fine')}/>` +
+    ('index' in KNOBS[art] ? `<path d="M0 0V${n(-r * 0.92)}" stroke-width="0.9" stroke-linecap="round"/>` : '');
   let rim: string;
   if (!lobes) rim = `<circle r="${r}" fill="${PAPER}"/>`;
   else {
@@ -708,6 +725,20 @@ export function needleArt(length: number) {
 }
 
 /**
+ * Straight line pointer of the F-16C manual trim indicators, in mm: a thin
+ * bar from the centre with a small square block at the tip. Measured on the
+ * guide's p. 72 image (3.15 px/mm): bar about 2 px, block about 5 px square.
+ * Drawn pointing at 12 o'clock from the dial centre.
+ */
+export const LINE_NEEDLE = { width: 0.6, block: 1.6 } as const;
+
+export function lineNeedleArt(length: number) {
+  const w = LINE_NEEDLE.width / 2, b = LINE_NEEDLE.block / 2;
+  return `<path d="M${n(-w)} 0V${n(-length + 2 * b)}H${n(w)}V0Z" fill="${INK}" stroke="none"/>` +
+    `<rect x="${n(-b)}" y="${n(-length)}" width="${n(2 * b)}" height="${n(2 * b)}" rx="0.3" fill="${INK}" ${sw('fine')}/>`;
+}
+
+/**
  * Wedge pointer of the F-16C HYD PRESS indicators, in mm: straight sides from
  * `base` wide at the dial centre (hidden under the hub) to `tip` wide at its
  * length. Measured on the guide's p. 61 image (2.94 px/mm): 5.8 mm wide where
@@ -810,13 +841,24 @@ export function drumStrip(roll: number, cap: number, width: number, zeros = fals
   return s;
 }
 
-/** Bezel ring with the dial face inside it, centred on the origin. */
-export function gaugeBezel(bezel: number, face: number) {
+/**
+ * Half disc of radius r on one side of the origin (the flat edge runs through the origin): `left` bulges to the
+ * left, `down` downwards (F-16C trim indicators).
+ */
+export function halfDisc(r: number, half: 'left' | 'right' | 'up' | 'down') {
+  const [x0, y0, x1, y1, sweep] = { left: [0, -r, 0, r, 0], right: [0, -r, 0, r, 1], up: [-r, 0, r, 0, 1], down: [-r, 0, r, 0, 0] }[half];
+  return `M${n(x0)} ${n(y0)}A${n(r)} ${n(r)} 0 0 ${sweep} ${n(x1)} ${n(y1)}Z`;
+}
+
+/** Bezel ring with the dial face inside it, centred on the origin; with `half`, a half-disc window (flat edge through the centre). */
+export function gaugeBezel(bezel: number, face: number, half?: 'left' | 'right' | 'up' | 'down') {
+  if (half) return cased(`<path d="${halfDisc(bezel, half)}" fill="${PAPER}"/>`, 'heavy') + `<path d="${halfDisc(face, half)}" ${sw('medium')}/>`;
   return cased(`<circle r="${n(bezel)}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(face)}" ${sw('medium')}/>`;
 }
 
-/** Hub cap over the needle root. */
+/** Hub cap over the needle root (none when r is 0). */
 export function gaugeHub(r: number) {
+  if (!r) return '';
   return cased(`<circle r="${n(r)}" fill="${PAPER}"/>`, 'medium') + `<circle r="${n(r * 0.45)}" ${sw('fine')}/>`;
 }
 

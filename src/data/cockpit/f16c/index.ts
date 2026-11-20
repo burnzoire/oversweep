@@ -16,6 +16,10 @@ import { interiorLighting } from './interior-lighting.ts';
 import { avionicsPower } from './avionics-power.ts';
 import { engineInstruments } from './engine-instruments.ts';
 import { fuelQty } from './fuel-qty.ts';
+import { fuelQtySel } from './fuel-qty-sel.ts';
+import { fltControl } from './flt-control.ts';
+import { manualTrim } from './manual-trim.ts';
+import { manualPitchOverride } from './manual-pitch-override.ts';
 import { fuelFlow } from './fuel-flow.ts';
 import { epu } from './epu.ts';
 import { defog } from './defog.ts';
@@ -66,7 +70,7 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'vvi', title: 'Vertical velocity indicator', page: 52 },
         { id: 'adi', title: 'Attitude director indicator', page: 53 },
         { id: 'ehsi', title: 'Electronic HSI (EHSI)', page: 230, spec: ehsi },
-        { id: 'fuel-qty-sel', title: 'FUEL QTY SEL panel', page: 54 },
+        { id: 'fuel-qty-sel', title: 'FUEL QTY SEL panel', page: 54, spec: fuelQtySel },
       ],
     },
     {
@@ -90,7 +94,7 @@ export const f16cCockpit: AircraftCockpit = {
     },
     {
       id: 'left-console', title: 'Left console', panels: [
-        { id: 'manual-pitch-override', title: 'Manual pitch override switch', page: 62 },
+        { id: 'manual-pitch-override', title: 'Manual pitch override switch', page: 62, spec: manualPitchOverride },
         { id: 'eng-jet-start', title: 'ENG & JET START panel', page: 63, spec: engJetStart },
         { id: 'epu', title: 'EPU panel', page: 64, spec: epu },
         { id: 'elec', title: 'ELEC panel', page: 64, spec: elec },
@@ -101,8 +105,8 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'ext-lighting', title: 'EXT LIGHTING panel', page: 69, spec: extLighting },
         { id: 'ecm', title: 'ECM panel', page: 706, spec: ecm },
         { id: 'uhf', title: 'UHF backup panel', page: 259, spec: uhf },
-        { id: 'flt-control', title: 'FLT CONTROL panel', page: 71 },
-        { id: 'manual-trim', title: 'MANUAL TRIM panel', page: 72 },
+        { id: 'flt-control', title: 'FLT CONTROL panel', page: 71, spec: fltControl },
+        { id: 'manual-trim', title: 'MANUAL TRIM panel', page: 72, spec: manualTrim },
         { id: 'test', title: 'TEST panel', page: 72, spec: test },
         { id: 'canopy-jettison', title: 'Canopy jettison T-handle', page: 74 },
         { id: 'defog', title: 'DEFOG lever', page: 74, spec: defog },

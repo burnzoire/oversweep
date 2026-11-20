@@ -14,7 +14,7 @@ import { formatReadout } from './readout.ts';
 import {
   FASTENERS, FONT, INK, LAMPS, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, painted, PAINTS, lampModuleFrame, lampRoundBezel, n,
   thumbwheelArt, rockerBase, rockerCap, hatBase, hatLever,
-  gaugeBezel, gaugeHub, bladeNeedleArt, drumStrip, paddlePointerArt, PADDLE_POINTER, wedgeNeedleArt, gearKnob, gearSlot, leverSlot, slotLeverArt, SLOT_LEVER, knobArt, needleArt, polar, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
+  gaugeBezel, gaugeHub, halfDisc, lineNeedleArt, bladeNeedleArt, drumStrip, paddlePointerArt, PADDLE_POINTER, wedgeNeedleArt, gearKnob, gearSlot, leverSlot, slotLeverArt, SLOT_LEVER, knobArt, needleArt, polar, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
 } from './components.ts';
 import { drumPositions, scaleAngle } from './dial.ts';
 export { drumPositions };
@@ -98,9 +98,13 @@ function flag(f: NonNullable<Dial['flags']>[number], current: string) {
 }
 
 function gauge(spec: PanelSpec, dial: Dial, indicator: string | undefined, value: (id: string) => number, page: (id: string) => string) {
-  let s = gaugeBezel(dial.bezel, dial.face);
+  let s = gaugeBezel(dial.bezel, dial.face, dial.half);
   for (const f of dial.fills ?? []) s += `<path d="${sector(f.r[0], f.r[1], dialAngle(dial, f.from), dialAngle(dial, f.to))}" fill="${INK}" ${sw('fine')}/>`;
   for (const t of dial.ticks) {
+    if (t.dot) {
+      s += tickValues(t).map(v => { const [x, y] = polar((t.r[0] + t.r[1]) / 2, dialAngle(dial, v)); return `<circle cx="${n(x)}" cy="${n(y)}" r="${n(t.width / 2)}" fill="${INK}" stroke="none"/>`; }).join('');
+      continue;
+    }
     const d = tickValues(t).map(v => {
       const a = dialAngle(dial, v), [x0, y0] = polar(t.r[0], a), [x1, y1] = polar(t.r[1], a);
       return `M${n(x0)} ${n(y0)}L${n(x1)} ${n(y1)}`;
@@ -111,8 +115,8 @@ function gauge(spec: PanelSpec, dial: Dial, indicator: string | undefined, value
   s += dial.legends.map(l => text(l.at[0], l.at[1], l.text, l.cap, l.width)).join('');
   if (dial.counter) s += counter(dial.counter, value(dial.counter.indicator), `drums-${spec.id}-${dial.counter.indicator}`);
   for (const f of dial.flags ?? []) s += flag(f, page(f.indicator));
-  if (indicator && dial.needle) s += `<g data-indicator="${indicator}"><circle class="lens" r="${n(dial.face)}" stroke="none"/>` +
-    `<g data-needle="${indicator}" transform="rotate(${n(dialAngle(dial, value(indicator)))})">${dial.needleArt === 'wedge' ? wedgeNeedleArt(dial.needle) : dial.needleArt === 'blade' ? bladeNeedleArt(dial.needle) : needleArt(dial.needle)}</g></g>`;
+  if (indicator && dial.needle) s += `<g data-indicator="${indicator}">${dial.half ? `<path class="lens" d="${halfDisc(dial.face, dial.half)}" stroke="none"/>` : `<circle class="lens" r="${n(dial.face)}" stroke="none"/>`}` +
+    `<g data-needle="${indicator}" transform="rotate(${n(dialAngle(dial, value(indicator)))})">${dial.needleArt === 'wedge' ? wedgeNeedleArt(dial.needle) : dial.needleArt === 'blade' ? bladeNeedleArt(dial.needle) : dial.needleArt === 'line' ? lineNeedleArt(dial.needle) : needleArt(dial.needle)}</g></g>`;
   for (const p of dial.pointers ?? []) s += `<g data-indicator="${p.indicator}"><g data-needle="${p.indicator}" transform="rotate(${n(dialAngle(dial, value(p.indicator)))})">${paddlePointerArt(p.legend)}</g></g>`;
   return s + gaugeHub(dial.hub);
 }
@@ -420,8 +424,10 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       return at(p.at, counter(c, v, `drums-${spec.id}-${c.indicator}`), ' data-art="counter"');
     }
     case 'thumbwheel': {
-      const c = controlOf(spec, p.control), k = c.positions.length;
-      return at(p.at, moving(c, state[c.id] ?? c.initial, i => thumbwheelArt(p.size, (i * 2.6 / k) % 1)), ' data-art="thumbwheel"');
+      // A wheel rolled left and right is the same wheel turned a quarter: drawn upright, then turned so its top is on the left.
+      const c = controlOf(spec, p.control), k = c.positions.length, across = c.travel === 'horizontal';
+      const size: [number, number] = across ? [p.size[1], p.size[0]] : p.size;
+      return at(p.at, moving(c, state[c.id] ?? c.initial, i => thumbwheelArt(size, (i * 2.6 / k) % 1), across ? ' transform="rotate(-90)"' : ''), ' data-art="thumbwheel"');
     }
     case 'rocker': {
       const c = controlOf(spec, p.control), mid = (c.positions.length - 1) / 2;
@@ -472,7 +478,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       return at(p.at, rotaryBase(p.component) + moving(c, state[c.id] ?? c.initial, i =>
         `<g transform="rotate(${c.positions[i].angle ?? 0})">${rotaryKnob(p.component)}</g>`), ` data-art="${p.component}"`);
     }
-    case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': case 'knob-plain': case 'knob-plain-small': {
+    case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': case 'knob-plain': case 'knob-plain-small': case 'knob-plain-index': case 'knob-round-tail': {
       const c = controlOf(spec, p.control);
       return at(p.at, moving(c, state[c.id] ?? c.initial, i =>
         `<g transform="rotate(${c.positions[i].angle ?? 0})">${knobArt(p.component)}</g>`), ` data-art="${p.component}"`);
@@ -632,7 +638,7 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         const r = ROTARIES[p.component].skirt * 1.15;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }
-      case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': case 'knob-plain': case 'knob-plain-small': {
+      case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': case 'knob-plain': case 'knob-plain-small': case 'knob-plain-index': case 'knob-round-tail': {
         const r = KNOBS[p.component].r * 1.1;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }
@@ -706,7 +712,10 @@ export function hitZones(spec: PanelSpec): HitZone[] {
       }
       case 'gauge': {
         const r = p.dial.bezel, zones: HitZone[] = [];
-        if (p.indicator) zones.push({ kind: 'indicator', id: p.indicator, box: [x - r, y - r, 2 * r, 2 * r], round: true });
+        const half = p.dial.half;
+        if (p.indicator) zones.push(half
+          ? { kind: 'indicator', id: p.indicator, box: half === 'left' ? [x - r, y - r, r, 2 * r] : half === 'right' ? [x, y - r, r, 2 * r] : half === 'up' ? [x - r, y - r, 2 * r, r] : [x - r, y, 2 * r, r] }
+          : { kind: 'indicator', id: p.indicator, box: [x - r, y - r, 2 * r, 2 * r], round: true });
         // Pointers: a round zone over the letters at the pointer's cold-and-dark reading.
         for (const q of p.dial.pointers ?? []) {
           const rest = spec.indicators.find(i => i.id === q.indicator)?.rest ?? p.dial.scale[0][0];
