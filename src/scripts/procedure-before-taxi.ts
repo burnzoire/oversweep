@@ -140,6 +140,9 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
       },
       pages: { 'left-mfd.display': mfd, 'right-mfd.display': mfd === 'off' ? 'off' : 'menu', 'sai.off-flag': pos['sai.cage'] === 'pulled' ? 'shown' : 'hidden', 'hud.master-arm': 'none', 'ded.display': ded, 'hud.screen': hudOn ? 'on' : 'off', 'hud.align': alignCue ? 'align' : 'none', 'altimeter.pneu': st.mode === 'pneu' ? 'shown' : 'hidden',
         // The EHSI comes on with the avionics and shows INU until the aligned INS is in NAV (ATT at the ATT knob position).
+        // Backup UHF: lit once the function knob is off OFF; TEST DISPLAY lights every segment.
+        'uhf.chan-display': pos['uhf.function'] === 'off' || pos['uhf.mode'] !== 'preset' ? 'off' : pos['uhf.test-display'] === 'in' ? 'test' : String(pos['uhf.chan'] ?? '1').padStart(2, '0'),
+        'uhf.freq-display': pos['uhf.function'] === 'off' ? 'off' : pos['uhf.test-display'] === 'in' ? 'test' : '330.500',
         'ehsi.screen': pos['avionics-power.mmc'] === 'on' ? 'on' : 'off', 'ehsi.warning': pos['avionics-power.ins'] === 'att' ? 'att' : pos['avionics-power.ins'] === 'nav' && st.ins === 4 ? 'none' : 'inu' },
     } }));
     // HUD brightness follows the SYM wheel: the symbology fades from 1 (dimmest) to 5 (brightest).
@@ -232,11 +235,30 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
     const before = pos[key];
     pos[key] = d.position;
     const s = cfg.steps[step];
-    // Stick trim moves the trim one dot a press, unless TRIM/AP DISC is at DISC.
-    if (d.phase === 'press' && pos['manual-trim.trim-ap-disc'] !== 'disc') {
-      const clamp = (v: number) => Math.max(-3, Math.min(3, v));
-      if (key === 'stick.trim-ud' && d.position !== 'center') st.pitch = clamp(st.pitch + (d.position === 'aft' ? 1 : -1));
-      if (key === 'stick.trim-lr' && d.position !== 'center') st.roll = clamp(st.roll + (d.position === 'left' ? 1 : -1));
+    // Stick trim moves the trim one dot a press, unless TRIM/AP DISC is at DISC. Only a press the step
+    // wants counts, so stray presses never leave the pointers off centre; trimming back to centre takes
+    // as many presses as it needs and ends when both pointers are centred.
+    const trimKey = key === 'stick.trim-ud' || key === 'stick.trim-lr';
+    if (trimKey && d.phase === 'press' && d.position !== 'center') {
+      const centring = stepId() === 'trim-centre';
+      // At DISC the trim does nothing; outside the DISC check that press does not count as trimming.
+      if (pos['manual-trim.trim-ap-disc'] === 'disc' && stepId() !== 'trim-disc') {
+        pos[key] = before; setPositions({ [key]: before });
+        say('TRIM/AP DISC is at DISC, so the trim does nothing. Set it to NORM first.', true);
+        return;
+      }
+      const wanted = centring || pending(cfg.steps[step]).some(w => w.control === key && w.to === d.position);
+      if (wanted && pos['manual-trim.trim-ap-disc'] !== 'disc') {
+        const clamp = (v: number) => Math.max(-3, Math.min(3, v));
+        if (key === 'stick.trim-ud') st.pitch = clamp(st.pitch + (d.position === 'aft' ? 1 : -1));
+        else st.roll = clamp(st.roll + (d.position === 'left' ? 1 : -1));
+      }
+      if (centring) {
+        indicate();
+        if (st.pitch === 0 && st.roll === 0) { for (const w of pending(cfg.steps[step])) made.add(mk(w)); done('Both trim pointers are centred.'); }
+        else say(`Keep trimming: ${[st.pitch ? `pitch ${Math.abs(st.pitch)} dot${Math.abs(st.pitch) > 1 ? 's' : ''} ${st.pitch > 0 ? 'nose up' : 'nose down'}` : '', st.roll ? `roll ${Math.abs(st.roll)} dot${Math.abs(st.roll) > 1 ? 's' : ''} ${st.roll > 0 ? 'left wing down' : 'right wing down'}` : ''].filter(Boolean).join(', ')} to go.`);
+        return;
+      }
     }
     // The altimeter mode lever sets the mode while it is held (a step that wants it completes below).
     if (key === 'altimeter.mode' && d.phase === 'press' && (d.position === 'elec' || d.position === 'pneu')) st.mode = d.position;

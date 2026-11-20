@@ -15,6 +15,8 @@ Steps that only read an indication end with a confirm (SEC and PRI nozzle, wheel
 
 ## Modelling choices
 - Rudder pedals are a card on the side stick page (plan view, pushed pedal forward); they are not in the stick figure. This procedure does not use them.
+- The backup UHF CHAN and frequency displays light when the function knob leaves OFF (CHAN only in PRESET): preset 1, 330.500, matching the DED UHF line; TEST DISPLAY lights every segment.
+- Only trim presses a step asks for move the trim pointers; at DISC (outside the DISC check) a press is refused. "Trim back to centre" ends only when both pointers are centred.
 - Stick trim moves the PITCH and ROLL TRIM pointers one dot a press with TRIM/AP DISC at NORM (nothing at DISC); the manual trim wheels do not add to them in this procedure.
 - The EHSI comes on with the avionics showing the red INU warning flag (guide p. 232, item 18), ringed on step 6, and clears when the aligned INS goes to NAV (ATT if the knob is at ATT). Its range and CDI flags are not drawn, so the readouts show values throughout.
 - The throttle has an "Idle + 10% RPM" stop for the EPU check; it is not a detent in the jet.

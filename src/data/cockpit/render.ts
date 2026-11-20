@@ -14,7 +14,7 @@ import { formatReadout } from './readout.ts';
 import {
   FASTENERS, FONT, INK, LAMPS, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, painted, PAINTS, lampModuleFrame, lampRoundBezel, n,
   thumbwheelArt, rockerBase, rockerCap, hatBase, hatLever,
-  gaugeBezel, gaugeHub, halfDisc, lineNeedleArt, stepNeedleArt, bladeNeedleArt, drumStrip, paddlePointerArt, PADDLE_POINTER, wedgeNeedleArt, gearKnob, gearSlot, leverSlot, slotLeverArt, SLOT_LEVER, knobArt, needleArt, polar, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
+  gaugeBezel, gaugeHub, ledSegments, LED_CHARS, halfDisc, lineNeedleArt, stepNeedleArt, bladeNeedleArt, drumStrip, paddlePointerArt, PADDLE_POINTER, wedgeNeedleArt, gearKnob, gearSlot, leverSlot, slotLeverArt, SLOT_LEVER, knobArt, needleArt, polar, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
 } from './components.ts';
 import { drumPositions, scaleAngle } from './dial.ts';
 export { drumPositions };
@@ -145,7 +145,7 @@ export function readings(spec: PanelSpec): Record<string, Reading> {
   const drums = (c: DrumCounter) => { out[c.indicator] = { kind: 'counter', drums: c.drums, fixed: c.fixed, unit: c.unit, roll: c.roll, ...(c.still ? { still: true } : {}), range: ind(c.indicator)?.range ?? [0, c.unit * 10 ** (c.drums - c.fixed) - c.unit, c.unit / 10] }; };
   for (const p of spec.placements) {
     if (p.component === 'counter') drums(p.counter);
-    if (p.component === 'text-display' || p.component === 'mfd-display' || p.component === 'blinker') page(p.indicator);
+    if (p.component === 'text-display' || p.component === 'mfd-display' || p.component === 'blinker' || p.component === 'led-display') page(p.indicator);
     if (p.component === 'hsi') {
       const turn = (id: string, sign: number) => { out[id] = { kind: 'needle', scale: [[0, 0], [360, 360 * sign]], range: ind(id)?.range ?? [0, 359, 1] }; };
       turn('heading', -1); turn('heading-set', 1); turn('course', 1); turn('bearing', 1);
@@ -205,7 +205,7 @@ export function placementIndicators(p: Placement): string[] {
     case 'push-square': case 'gear-handle': return p.indicator ? [p.indicator] : [];
     case 'gauge': return dialIndicators(p);
     case 'counter': return [p.counter.indicator];
-    case 'text-display': case 'mfd-display': case 'blinker': return [p.indicator];
+    case 'text-display': case 'mfd-display': case 'blinker': case 'led-display': return [p.indicator];
     case 'hsi': return [...HSI_INDICATORS];
     case 'hud': return [...HUD_INDICATORS, ...p.hud.fields.map(f => f.indicator)];
     case 'attitude': return ['pitch', 'roll', 'off-flag'];
@@ -553,6 +553,22 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       return at(p.at, `<g data-indicator="${p.indicator}">` + (ind?.pages ?? []).map(pg =>
         `<g data-page-of="${p.indicator}" data-page="${pg.id}"${pg.id === cur ? '' : ' display="none"'}>${win(pg.id === p.dark ? INK : PAPER)}</g>`).join('') + '</g>', ' data-art="blinker"');
     }
+    case 'led-display': {
+      const ind = spec.indicators.find(i => i.id === p.indicator), cur = state[p.indicator] ?? ind?.restPage ?? 'off';
+      const lit = (page: string) => {
+        if (page === 'off') return '';
+        const chars = page === 'test' ? p.cells.map(() => 'all') : [...page.replace('.', '')].reverse().slice(0, p.cells.length).reverse();
+        const pad = p.cells.length - chars.length;
+        const segs = p.cells.flatMap((c, k) => {
+          const ch = chars[k - pad], all = ledSegments(c.at[0], c.at[1], c.size[0], c.size[1]);
+          return ch === undefined ? [] : ch === 'all' ? all : (LED_CHARS[ch] ?? []).map(i => all[i]);
+        });
+        const dot = p.dot && (page === 'test' || page.includes('.')) ? `<circle cx="${n(p.dot.at[0])}" cy="${n(p.dot.at[1])}" r="${n(p.dot.r)}"/>` : '';
+        return `<path d="${segs.join('')}"/>` + dot;
+      };
+      return at(p.at, `<g data-indicator="${p.indicator}" fill="${INK}" stroke="none">` + (ind?.pages ?? []).map(pg =>
+        `<g data-page-of="${p.indicator}" data-page="${pg.id}"${pg.id === cur ? '' : ' display="none"'}>${lit(pg.id)}</g>`).join('') + '</g>', ' data-art="led-display"');
+    }
     case 'mfd-display': {
       const ind = spec.indicators.find(i => i.id === p.indicator);
       return at(p.at, mfdDisplay(p.display, ind, p.indicator, state[p.indicator] ?? ind?.restPage ?? 'off'), ' data-art="mfd-display"');
@@ -783,6 +799,11 @@ export function hitZones(spec: PanelSpec): HitZone[] {
           { kind: 'control', id: p.control, box: [x - r * 0.6, y - r * 1.25, r * 1.2, r * 2.5] },
           { kind: 'control', id: p.cross, box: [x - r * 1.5, y - r * 0.5, r * 3, r] },
         ];
+      }
+      case 'led-display': {
+        const xs = p.cells.flatMap(c => [c.at[0] - c.size[0], c.at[0] + c.size[0]]), ys = p.cells.flatMap(c => [c.at[1] - c.size[1], c.at[1] + c.size[1]]);
+        const [x0, y0] = [Math.min(...xs), Math.min(...ys)];
+        return [{ kind: 'indicator', id: p.indicator, box: [x + x0, y + y0, Math.max(...xs) - x0, Math.max(...ys) - y0] }];
       }
       case 'blinker': {
         const [w, h] = p.size;

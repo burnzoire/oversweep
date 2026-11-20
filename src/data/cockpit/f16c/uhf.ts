@@ -1,5 +1,6 @@
 import type { PanelSpec } from '../types';
 import { tracer } from '../trace.ts';
+import { ledSegments } from '../components.ts';
 
 /**
  * F-16C UHF backup control panel (left console), DCS.
@@ -27,29 +28,8 @@ const pushed = [
   { id: 'out', label: 'Released', hold: 'stable' as const },
   { id: 'in', label: 'Pressed', hold: 'momentary' as const, spring: 'out' },
 ];
-/**
- * Unlit 10-segment LED digit (outlines only), centred on (cx, cy), half-size
- * w x h in reference px: the seven bars with the middle bar split in two, and
- * two diagonals (centre to top right, bottom left to centre), as the lit
- * digits in the reference show.
- */
-const led = (cx: number, cy: number, w: number, h: number) => {
-  const t = Math.min(w, h) * 0.3, g = t * 0.35, f = (v: number) => +v.toFixed(2);
-  const hz = (x1: number, x2: number, y: number) =>
-    `M${f(x1)} ${f(y)}L${f(x1 + t / 2)} ${f(y - t / 2)}H${f(x2 - t / 2)}L${f(x2)} ${f(y)}L${f(x2 - t / 2)} ${f(y + t / 2)}H${f(x1 + t / 2)}Z`;
-  const vt = (x: number, y1: number, y2: number) =>
-    `M${f(x)} ${f(y1)}L${f(x + t / 2)} ${f(y1 + t / 2)}V${f(y2 - t / 2)}L${f(x)} ${f(y2)}L${f(x - t / 2)} ${f(y2 - t / 2)}V${f(y1 + t / 2)}Z`;
-  const dg = (x1: number, y1: number, x2: number, y2: number) => {
-    const l = Math.hypot(x2 - x1, y2 - y1), nx = -(y2 - y1) / l * t * 0.3, ny = (x2 - x1) / l * t * 0.3;
-    return `M${f(x1 + nx)} ${f(y1 + ny)}L${f(x2 + nx)} ${f(y2 + ny)}L${f(x2 - nx)} ${f(y2 - ny)}L${f(x1 - nx)} ${f(y1 - ny)}Z`;
-  };
-  const [l, r, tp, bt] = [cx - w, cx + w, cy - h, cy + h];
-  return [
-    hz(l + g, r - g, tp), hz(l + g, r - g, bt), hz(l + g, cx - g, cy), hz(cx + g, r - g, cy),
-    vt(l, tp + g, cy - g), vt(l, cy + g, bt - g), vt(r, tp + g, cy - g), vt(r, cy + g, bt - g),
-    dg(cx + g + t / 2, cy - g - t / 2, r - g - t / 2, tp + g + t / 2), dg(l + g + t / 2, bt - g - t / 2, cx - g - t / 2, cy + g + t / 2),
-  ].join('');
-};
+/** Unlit 10-segment LED digit outlines (reference px), see `ledSegments`. */
+const led = (cx: number, cy: number, w: number, h: number) => ledSegments(cx, cy, w, h).join('');
 
 /** Preset card table: column and row rules (reference px). */
 const COLS = [42, 63.5, 117, 136.5, 185, 210, 266.5], ROWS = [15, 30, 44, 58, 72.5, 87, 101, 116];
@@ -82,7 +62,7 @@ export const uhf: PanelSpec = {
     scale: 'DZUS stud heads are drawn at one size (8.5 mm) on every panel; this panel\'s scale is set so its fastener heads (about 32 px) match.',
     shown: { chan: '4', 'freq-1': '3', 'freq-2': '6', 'freq-3': '0', 'freq-4': '4', 'freq-5': '00', function: 'both', mode: 'preset' },
     unresolved: [
-      'The CHAN and frequency displays are drawn unlit, with faint outlines of their 10-segment digits; the digits they show (04 and 360.400 in the reference) depend on the radio state, not on the knobs alone.',
+      'The CHAN and frequency displays show faint outlines of their 10-segment digits when blank; lit digits (04 and 360.400 in the reference) depend on the radio state, not on the knobs alone, so procedures pick them (the indicators chan-display and freq-display).',
       'The preset card is a write-on card; only its rules, headings and channel numbers are drawn.',
       'CHAN detents are taken as 18° apart (20 presets), from the bar angle at preset 4. The frequency digit knobs are taken as 36° apart, matching their bar angles at 6, 0 and 4.',
       'The TONE and SQUELCH switches are seen end-on in the reference, so their lever positions are not readable. TONE is drawn as a spring-loaded switch toward TONE.',
@@ -150,6 +130,9 @@ export const uhf: PanelSpec = {
       .map(([x, y]) => ({ component: 'dzus' as const, at: pt(x, y) })),
     ...([[15, 159], [15, 300.5], [535, 159], [535, 300.5], [310, 20], [477, 24], [75, 438], [275, 440], [478, 440]] as const)
       .map(([x, y]) => ({ component: 'screw' as const, at: pt(x, y) })),
+    // Lit LED digits over the faint outlines (same cells).
+    { component: 'led-display', indicator: 'chan-display', at: [0, 0], cells: [354, 376].map(x => ({ at: pt(x, 84.5), size: [mm(9), mm(12.5)] as [number, number] })) },
+    { component: 'led-display', indicator: 'freq-display', at: [0, 0], cells: [0, 1, 2, 3, 4, 5].map(k => ({ at: pt(194.5 + 33 * k, 176.5), size: [mm(9.5), mm(13.5)] as [number, number] })), dot: { at: pt(276, 190.5), r: mm(1.3) } },
     { component: 'knob-spindle', control: 'chan', at: pt(465, 87) },
     { component: 'push-round-medium', control: 'test-display', at: pt(104, 170) },
     { component: 'push-round-medium', control: 'status', at: pt(445, 177) },
@@ -251,5 +234,8 @@ export const uhf: PanelSpec = {
       source: src,
     },
   ],
-  indicators: [],
+  indicators: [
+    { id: 'chan-display', name: 'CHAN display', type: 'display', restPage: 'off', restNote: 'blank (radio off)', pages: [{ id: 'off', label: 'Off (blank)' }, { id: 'test', label: 'TEST DISPLAY (all segments)' }, ...Array.from({ length: 20 }, (_, k) => ({ id: String(k + 1).padStart(2, '0'), label: `Channel ${k + 1}` }))], description: 'The preset channel the CHAN knob selects, lit when the radio is on.', source: src },
+    { id: 'freq-display', name: 'Frequency display', type: 'display', restPage: 'off', restNote: 'blank (radio off)', pages: [{ id: 'off', label: 'Off (blank)' }, { id: 'test', label: 'TEST DISPLAY (all segments)' }, { id: '330.500', label: '330.500 (preset 1 in the before-taxi scenario)' }, { id: '360.400', label: '360.400 (as in the guide image)' }], description: 'The frequency in use: the preset channel’s in PRESET, the frequency knobs’ in MNL, 243.000 in GRD. Procedures pick what it shows.', source: src },
+  ],
 };
