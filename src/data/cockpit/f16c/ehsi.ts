@@ -64,7 +64,7 @@ export const ehsi: PanelSpec = {
       'The display is drawn black on white like the rest of the cockpit; in the sim the card is white, the pointers cyan and the heading marker yellow on a black screen.',
       'The to-from indicator is not shown in the guide image ("Not shown"); it is drawn as a small triangle on the course line, 60 px from the centre, which is a guess at its place and size.',
       'Mode legends: the image shows NAV; TCN is drawn the same way. The guide names the ILS modes NAV/PLS and TCN/PLS but does not show their legends, so they are set in the same lettering, centred where NAV is, and may be off in width or place.',
-      'The notice above the aircraft (BRT in the image) shows only for a moment after a mode change or a brightness adjustment; procedures pick it. Warning flags are not drawn.',
+      'The notice above the aircraft (BRT in the image) shows only for a moment after a mode change or a brightness adjustment; procedures pick it. Of the flags only the warning flag (INU/ATT, p. 232) is drawn; the range and CDI flags are not.',
       'The HDG and CRS knobs are dials that turn without end. The guide documents a push for each (HDG in ATT mode: ADJ HDG; CRS: BRT); the pushes are not modelled on this page. Each click turns a knob one step; what a step does is up to the procedure.',
       'The small Phillips screws are drawn at the shared tiny-screw size (1.0 mm); the hex socket screws at 3.0 mm.',
       'The bearing and course arrowheads are measured from the image at about 16 px wide and 20 px long; the lines 5 px wide.',
@@ -96,6 +96,8 @@ export const ehsi: PanelSpec = {
       mode: { at: rel(359, 457.5), cap: mm(19) },
       // BRT notice above the aircraft symbol (blob 255–292 x 235–248).
       notice: { at: rel(273.5, 241.5), cap: mm(13), charWidth: mm(37 / 3) },
+      // INU warning flag, guide p. 232 item 18 (same render as p. 230): red box 77–101 x 128–199, letters I 131–148, N 156–170, U 180–198.
+      warning: { at: rel(89, 163.5), size: [mm(24), mm(71)], cap: mm(17), pitch: mm(24.5) },
       legends: [
         { text: 'NM', at: rel(88.5, 110.5), cap: mm(17), width: mm(23) },
         { text: 'CRS', at: rel(455.5, 110), cap: mm(18), width: mm(33) },
@@ -133,6 +135,7 @@ export const ehsi: PanelSpec = {
     { id: 'course-set', name: 'Course readout', type: 'display', unit: '°', rest: 0, range: [0, 359, 1], restNote: 'blank (screen off)', description: 'The desired course set with the CRS knob, in degrees.', source: src },
     { id: 'mode', name: 'Mode legend', type: 'display', restPage: 'nav', restNote: 'blank (screen off)', pages: [{ id: 'nav', label: 'NAV' }, { id: 'nav-pls', label: 'NAV/PLS' }, { id: 'tcn', label: 'TCN' }, { id: 'tcn-pls', label: 'TCN/PLS' }], description: 'The instrument mode the M button selected: the navigation source the bearing pointer, range and deviation bar use.', source: src },
     { id: 'notice', name: 'Notice', type: 'display', restPage: 'none', restNote: 'blank', pages: [{ id: 'none', label: 'Not shown' }, { id: 'brt', label: 'BRT' }, { id: 'nav', label: 'NAV' }, { id: 'tcn', label: 'TCN' }, { id: 'nav-pls', label: 'NAV/PLS' }, { id: 'tcn-pls', label: 'TCN/PLS' }, { id: 'adj-hdg', label: 'ADJ HDG' }], description: 'A word shown in front of the aircraft symbol for about a second: the new mode after the M button, BRT while the brightness is being set, or ADJ HDG while the compass heading is being adjusted.', source: src },
+    { id: 'warning', name: 'Warning flag', type: 'display', restPage: 'none', restNote: 'blank (screen off)', pages: [{ id: 'none', label: 'Not shown' }, { id: 'inu', label: 'INU' }, { id: 'att', label: 'ATT' }], description: 'Red flag left of the compass when the EHSI has no good INS data: INU while the INU is off, not aligned or failed; ATT when the INS knob is at ATT (attitude only).', source: 'DCS F-16C guide p. 232 (item 18)' },
     { id: 'to-from', name: 'To-from indicator', type: 'display', restPage: 'none', restNote: 'blank (screen off)', pages: [{ id: 'none', label: 'Not shown' }, { id: 'to', label: 'TO' }, { id: 'from', label: 'FROM' }], description: 'TACAN only: points the same way as the course arrow when flying the course takes you to the station, the other way when it takes you away from it.', source: src },
   ],
 };

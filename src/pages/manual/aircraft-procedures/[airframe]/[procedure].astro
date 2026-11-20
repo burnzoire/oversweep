@@ -1,7 +1,7 @@
 ---
 import SiteLayout from '../../../../layouts/SiteLayout.astro';
 import CockpitPanel from '../../../../components/cockpit/CockpitPanel.astro';
-import {visibleProcedures, sourceUrl, type AircraftProcedure} from '../../../../data/aircraft-procedures';
+import {visibleProcedures, procedureRoute, sourceUrl, type AircraftProcedure} from '../../../../data/aircraft-procedures';
 import {cockpits, builtPanels, panelRoute} from '../../../../data/cockpit/f16c/index.ts';
 import {sitePath} from '../../../../lib/paths';
 import {includedRecords, recordRoute} from '../../../../data/encyclopedia';
@@ -10,6 +10,7 @@ export function getStaticPaths() {
 }
 const {guide} = Astro.props as {guide:AircraftProcedure};
 const steps = guide.steps;
+const nextGuide = guide.next ? visibleProcedures.find(p => p.airframe === guide.airframe && p.slug === guide.next) : undefined;
 // The procedure runs on the shared cockpit panels (Cockpit Familiarization), kept in their own scope.
 const cockpit = cockpits.find(c => c.airframe === guide.airframe)!;
 const built = new Map(builtPanels(cockpit).map(b => [b.panel.id, b]));
@@ -31,7 +32,7 @@ for (const id of usedPanels) for (const c of built.get(id)!.spec.controls) {
   orders[`${id}.${c.id}`] = c.positions.map(p => p.id);
   for (const p of c.positions) labels[`${id}.${c.id}.${p.id}`] = `${c.name} to ${p.label}`;
 }
-const config = {aircraft:`${cockpit.id}:${scope}`, initial, labels, names, orders, model: guide.model, steps: steps.map(s => ({id:s.id, panels:s.panels, do:s.do, type:s.type, confirm:s.confirm, turn:s.turn, ask:s.ask, hints:s.hints}))};
+const config = {aircraft:`${cockpit.id}:${scope}`, initial, labels, names, orders, model: guide.model, lamps: usedPanels.flatMap(id => built.get(id)!.spec.indicators.filter(i => i.type === 'lamp').map(i => `${id}.${i.id}`)), steps: steps.map(s => ({id:s.id, panels:s.panels, do:s.do, also:s.also, type:s.type, confirm:s.confirm, turn:s.turn, ask:s.ask, hints:s.hints}))};
 const recordLink = (l:{slug:string;anchor?:string}) => { const r = includedRecords.find(x => x.slug === l.slug); if (!r) throw new Error(`${guide.id}: no Encyclopedia record ${l.slug}`); return sitePath(recordRoute(r)) + (l.anchor ? '#' + l.anchor : ''); };
 // `{{phrase|k}}` in a step's text becomes a button that rings hint k on the panels for a moment.
 const esc = (t:string) => t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -58,10 +59,11 @@ const shortTitle = guide.title.split('— ')[1] ?? guide.title;
           {s.links && <p class="procedure-panels">Encyclopedia: {s.links.map((l, k) => <>{k > 0 && ', '}<a href={recordLink(l)}>{l.label}</a></>)}</p>}
           {s.ask && <div class="procedure-ask" data-cross-check><p><strong>{s.ask.question}</strong></p><ul>{s.ask.options.map((o, k) => <li><button type="button" data-answer={k}>{o}</button></li>)}</ul></div>}
           <p class="procedure-cite">Evidence: {s.evidence}</p>
-          {s.panels.length > 0 && <p class="procedure-panels">Panels: {s.panels.map((id, k) => <>{k > 0 && ', '}<a href={sitePath(panelRoute(cockpit, id))}>{built.get(id)!.panel.title}</a></>)}</p>}
+          {s.panels.length > 0 && <p class="procedure-panels">Panels: {[...new Set(s.panels.map(baseOf))].map((id, k) => <>{k > 0 && ', '}<a href={sitePath(panelRoute(cockpit, id))}>{built.get(id)!.panel.title}</a></>)}</p>}
         </li>)}
       </ol>
       <h2 class="procedure-step" data-complete tabindex="-1" hidden>{guide.complete}</h2>
+      {nextGuide && <p class="procedure-next">Next: <a href={sitePath(procedureRoute(nextGuide))}>{nextGuide.title.replace(/^F-16C — /, '')}</a>, from where this procedure ends.</p>}
       <div class="procedure-controls" hidden data-controls>
         <button type="button" data-confirm hidden>Confirm indication</button>
         <button type="button" data-prev>Previous</button>
@@ -89,6 +91,7 @@ if (root && configEl) {
   const init = async () => {
     const config = JSON.parse(configEl.textContent!);
     if (config.model === 'tacan-recovery') (await import('../../../../scripts/procedure-tacan')).startTacanModel(root, config);
+    else if (config.model === 'before-taxi') (await import('../../../../scripts/procedure-before-taxi')).startBeforeTaxiModel(root, config);
     else if (config.model === 'steerpoint-entry') (await import('../../../../scripts/procedure-steerpoint')).startSteerpointModel(root, config);
     else (await import('../../../../scripts/procedure-engine-start')).startEngineModel(root, config);
   };
@@ -140,6 +143,8 @@ if (root && configEl) {
 }
 </script>
 <style>
+  [data-complete][hidden] + .procedure-next { display: none; }
+  .procedure-next { margin-block: 0.5rem 1rem; font-size: 1.0625rem; }
 .procedure-workspace{display:grid;gap:1.5rem;margin-top:1.5rem;align-items:start}
 .procedure-progress{font-weight:700}
 .procedure-steps{padding:0;margin:0;list-style:none}
@@ -173,9 +178,13 @@ if (root && configEl) {
 .proc-panel.acting h3{color:var(--color-ink)}
 .proc-panel :global(.cockpit-panel){width:calc(var(--proc-h,40svh) * var(--ratio));max-width:100%}
 .proc-panel.acting{--proc-h:54svh}
+/* Lamp-only panels shown for reading (caution panel, eyebrows) are smaller, so they sit side by side. */
+.proc-panel:is([data-proc-panel="caution"],[data-proc-panel="left-eyebrow"],[data-proc-panel="right-eyebrow"]):not(.acting){--proc-h:22svh}
 .proc-panel :global(.cp-status){display:none}
 .procedure-workspace.procedure-finished{grid-template-columns:minmax(0,1fr)}
 @media(min-width:58rem){.procedure-workspace{grid-template-columns:minmax(0,24rem) minmax(0,1fr)}.procedure-visual{position:sticky;top:1rem}}
+/* While the tall TEST panel is acting, the panels it lights (eyebrows, caution panel, EPU, ELEC) stack in a column beside it rather than below it. */
+@media(min-width:58rem){.cockpit-layout:has(> [data-proc-panel="test"].acting){display:grid;grid-template-columns:auto auto;justify-content:start;align-items:start}.cockpit-layout > [data-proc-panel="test"].acting{grid-row:span 4}}
 @media(max-width:57.99rem){
 .procedure-step{padding:.55rem}
 .procedure-step h2{font-size:1.15rem}

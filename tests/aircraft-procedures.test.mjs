@@ -81,3 +81,27 @@ test('steerpoint entry types the digits the steps give, on DED pages that exist'
   for (let d = 0; d <= 9; d++) assert.ok(keys.has(`key-${d}`));
   assert.ok(keys.has('entr') && keys.has('dcs-ud') && keys.has('dcs-lr'));
 });
+
+test('before-taxi procedure is sourced to the official guide, its moves exist and its DED pages exist', async () => {
+  const data = await read('src/data/aircraft-procedures.ts');
+  const script = await read('src/scripts/procedure-before-taxi.ts');
+  const page = await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
+  assert.doesNotMatch(data, /chuck/i);
+  assert.match(script, /prefers-reduced-motion/);
+  for (const ev of ['cockpit:change', 'cockpit:indicate', 'cockpit:set']) assert.match(script, new RegExp(ev));
+  assert.match(page, /before-taxi/);
+  if (!(process.features?.typescript || process.execArgv.includes('--experimental-strip-types'))) return;
+  const { f16cCockpit, builtPanels } = await import('../src/data/cockpit/f16c/index.ts');
+  const panels = builtPanels(f16cCockpit);
+  const ded = new Set(panels.find(({ spec }) => spec.id === 'ded').spec.indicators[0].pages.map(x => x.id));
+  for (const id of ['ins-0', 'ins-1', 'ins-2', 'ins-3', 'ins-4', 'ins-4-off', 'ins-nav']) assert.ok(ded.has(id), id);
+  assert.ok(script.includes("'ins-nav'") && script.includes("'hud.align'"));
+  // Every control a step moves exists on its panel with that position.
+  const block = data.slice(data.indexOf('const beforeTaxi'));
+  for (const m of block.matchAll(/(?:do:|\{)\{?control:'([\w-]+)\.([\w-]+)',to:'([\w-]+)'/g)) {
+    const spec = panels.find(({ spec }) => spec.id === m[1])?.spec;
+    assert.ok(spec, m[1]);
+    const c = spec.controls.find(x => x.id === m[2]);
+    assert.ok(c && c.positions.some(p => p.id === m[3]), m[0]);
+  }
+});

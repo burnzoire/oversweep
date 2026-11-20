@@ -34,7 +34,7 @@ Only switch this procedure into public listings when it is complete and the tech
 | Startup function | Exact drawing needed | Steps requiring it |
 | --- | --- | --- |
 | Main/battery power | Left console ELEC control panel | battery, main-power |
-| FLCS test | Left console TEST panel and relevant annunciators | flcs-test, flcs-release |
+| FLCS test | Left console TEST panel and relevant annunciators | flcs-test (release folded in, the switch springs back) |
 | EPU status | EPU indication/control area | epu-check |
 | Engine crank | Left console ENG & JET START control panel, including JFS positions and RUN light | jfs |
 | Throttle | F-16C throttle cutoff/IDLE mechanism and relevant control stops | throttle |

@@ -44,6 +44,7 @@ export const stick: PanelSpec = {
     unresolved: [
       'The guide (p. 83) shows the stick only as a shaded render from the front left; the drawing follows the flight-manual figure, which names the same switches.',
       'The stick barely moves (it senses force), so pushing, pulling or rolling it shows as an arrow over the grip rather than a tilt. Click the shaft: left half pushes, right half pulls (side view); left and right halves roll (rear view).',
+      'The rudder pedals are not in the stick figure; they have their own card only, drawn from above (forward up the page), the pushed pedal moving forward and the other back.',
       'The four-way hats are drawn moving a little in the direction pushed; seen from behind, forward is up the page.',
       'The trigger is one switch with two detents; click its left half for the first detent and its right half for the second.',
       'The pinky button (EXPAND/FOV) shows as a small round button low on the left side, where the figure puts it.',
@@ -56,10 +57,13 @@ export const stick: PanelSpec = {
     { kind: 'svg', markup: ART.rearStatic },
     caption(CAPTIONS.side, CAPTIONS.y, 'Left side'),
     caption(CAPTIONS.rear, CAPTIONS.y, 'From behind'),
+    caption(17, CAPTIONS.y, 'Rudder pedals'),
   ],
   placements: [
     // Stick force: click the grip's shaft. Push/pull on the side view (forward is left), left/right on the rear view.
     { component: 'traced', control: 'pitch', at: [108, 136], hit: [...HITS.pitch] as [number, number, number, number], shapes: svg(ART.pitch) },
+    // Rudder pedals: not in the figure; a small plan-view icon in the free corner opens their card.
+    { component: 'traced', control: 'rudder', at: [17, 204], hit: [3, 191, 28, 30], shapes: svg(Object.fromEntries(Object.entries((STICK_FACES['pedals'].placements[0] as { shapes: Record<string, { svg: string }> }).shapes).map(([k, v]) => [k, `<g transform="translate(17 204) scale(0.5) translate(-25 -25)">${v.svg}</g>`]))) },
     { component: 'traced', control: 'roll', at: [219, 136], hit: [...HITS.roll] as [number, number, number, number], shapes: svg(ART.roll) },
     // Side view.
     { component: 'traced', control: 'trigger', at: [56, 74], hit: [...HITS.trigger] as [number, number, number, number], shapes: svg(ART.trigger) },
@@ -118,6 +122,17 @@ export const stick: PanelSpec = {
     fourWay('cms-ud', 'CMS, forward/aft', 'ud', ['Forward', 'Center', 'Aft'], CMS, 'DCS F-16C guide p. 85'),
     fourWay('cms-lr', 'CMS, left/right', 'lr', ['Left', 'Center', 'Right'], CMS, 'DCS F-16C guide p. 85'),
     push('paddle', 'Paddle switch', 'Held', 'Held against the grip, it disengages the autopilot for as long as it is held, so the pilot can fly by hand. On release the autopilot takes up new pitch, roll or altitude references, by the PITCH and ROLL switches on the MISC panel.', 'DCS F-16C guide p. 85'),
+    {
+      id: 'rudder', name: 'Rudder pedals', type: 'toggle', travel: 'horizontal',
+      positions: [
+        { id: 'left', label: 'Left pedal in', hold: 'momentary', spring: 'neutral' },
+        { id: 'neutral', label: 'Neutral', hold: 'stable' },
+        { id: 'right', label: 'Right pedal in', hold: 'momentary', spring: 'neutral' },
+      ],
+      initial: 'neutral',
+      description: 'Rudder pedals, on the cockpit floor ahead of the seat. Pushing the left pedal yaws the nose left and the right pedal right; on the ground with nosewheel steering engaged they also steer the nosewheel. Toe brakes on the pedals work the wheel brakes (not modelled here).',
+      source: 'DCS F-16C guide p. 138',
+    },
     push('expand-fov', 'Expand/FOV (pinky) button', 'Pressed', 'Cycles the fields of view of the sensor of interest: FCR, HSD or HAD expand modes, the targeting pod field of view, or the selected Maverick or HARM seeker. Held, it gives HSD zoom.', 'DCS F-16C guide p. 85'),
   ],
   indicators: [],
@@ -131,6 +146,7 @@ export const stick: PanelSpec = {
     { id: 'cms', name: 'Countermeasures management switch (CMS)', cross: { up: ['cms-ud', 'fwd'], down: ['cms-ud', 'aft'], left: ['cms-lr', 'left'], right: ['cms-lr', 'right'] }, face: STICK_FACES['cms'] },
     { id: 'msl-step', name: 'Missile step / NWS / A/R DISC button', controls: ['msl-step'], face: STICK_FACES['msl-step'] },
     { id: 'paddle', name: 'Paddle switch', controls: ['paddle'] },
+    { id: 'pedals', name: 'Rudder pedals', controls: ['rudder'], face: STICK_FACES['pedals'] },
     { id: 'expand-fov', name: 'Expand/FOV (pinky) button', controls: ['expand-fov'], face: STICK_FACES['expand-fov'] },
   ],
 };

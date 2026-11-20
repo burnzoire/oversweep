@@ -1,6 +1,6 @@
 ---
 import SiteLayout from '../../../../layouts/SiteLayout.astro';
-import { airframes, procedureRoute, sourceUrl, visibleProcedures } from '../../../../data/aircraft-procedures';
+import { airframes, procedureRoute, sourceUrl, visibleProcedures, type AircraftProcedure } from '../../../../data/aircraft-procedures';
 import { cardMedia } from '../../../../data/card-media';
 import { cockpits, cockpitRoute } from '../../../../data/cockpit/f16c/index.ts';
 import { assetPath, sitePath } from '../../../../lib/paths';
@@ -14,7 +14,13 @@ export function getStaticPaths() {
 const { airframe } = Astro.props;
 const cockpit = cockpits.find(item => item.airframe === airframe.slug);
 const cockpitMedia = cockpit && cardMedia[`cockpit.${cockpit.id}`];
-const guides = visibleProcedures.filter(guide => guide.airframe === airframe.slug);
+// A procedure that continues another (its `next`) is listed straight after it.
+const own = visibleProcedures.filter(guide => guide.airframe === airframe.slug);
+const chain = (guide: AircraftProcedure): AircraftProcedure[] => {
+  const after = own.find(g => g.slug === guide.next);
+  return [guide, ...(after ? chain(after) : [])];
+};
+const guides = own.filter(guide => !own.some(g => g.next === guide.slug)).flatMap(chain);
 const isViper = airframe.slug === 'f-16c';
 const hero = cardMedia[`aircraft-procedures.${airframe.slug}`]?.photo;
 const lessons = [
@@ -29,9 +35,10 @@ const lessons = [
     href: procedureRoute(guide),
     summary: cardMedia[guide.id]?.summary ?? guide.objective,
     photo: cardMedia[guide.id]?.photo,
+    steps: guide.steps.length,
   })),
 ];
-const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => photo !== undefined);
+const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => photo !== undefined).filter((photo, i, all) => all.findIndex(p => p!.src === photo!.src) === i);
 ---
 
 <SiteLayout
@@ -80,6 +87,7 @@ const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => ph
             <div class="lesson-copy">
               <h3>{lesson.title}</h3>
               <p>{lesson.summary}</p>
+              {'steps' in lesson && <p class="lesson-steps">{lesson.steps} steps</p>}
             </div>
             <span class="lesson-arrow" aria-hidden="true">→</span>
           </a>
@@ -215,6 +223,12 @@ const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => ph
     font-size: 0.875rem;
   }
 
+  .lesson-copy .lesson-steps {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-muted);
+  }
   .airframe-sources summary {
     cursor: pointer;
   }

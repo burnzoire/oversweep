@@ -385,7 +385,7 @@ export interface MfdDisplay {
  * fixed: `screen` (page `on`/`off`), `heading`, `heading-set`, `course`,
  * `bearing`, `deviation` (dots), `range` (NM), `course-set` (the course
  * readout), `mode` (pages), `to-from` (pages `none`/`to`/`from`), `notice` (pages, `none`
- * blank).
+ * blank), `warning` (pages, `none` blank).
  */
 export interface HsiDisplay {
   /** Screen outline, absolute panel mm path (the screen hit area and clip). */
@@ -404,6 +404,8 @@ export interface HsiDisplay {
   mode: { at: Pt; cap: number };
   /** Brief notice in front of the aircraft symbol (new mode, BRT); indicator `notice`, page `none` blank. */
   notice: { at: Pt; cap: number; charWidth?: number };
+  /** Warning flag left of the compass (INU, ATT): a red box of `size` centred at `at`, letters stacked `pitch` apart; indicator `warning`, page `none` blank. */
+  warning: { at: Pt; size: [w: number, h: number]; cap: number; pitch: number };
   /** Fixed legends drawn on the screen while it is on (NM, CRS, HDG). */
   legends: { text: string; at: Pt; cap: number; width?: number }[];
 }

@@ -152,7 +152,7 @@ export function readings(spec: PanelSpec): Record<string, Reading> {
       out.deviation = { kind: 'shift', per: p.hsi.course.dot, range: ind('deviation')?.range ?? [-2.5, 2.5, 0.1] };
       out.range = { kind: 'digits', digits: 3, tenths: true, range: ind('range')?.range ?? [0, 999.9, 0.1] };
       out['course-set'] = { kind: 'digits', digits: 3, range: ind('course-set')?.range ?? [0, 359, 1] };
-      for (const id of ['screen', 'mode', 'to-from', 'notice']) page(id);
+      for (const id of ['screen', 'mode', 'to-from', 'notice', 'warning']) page(id);
     }
     if (p.component === 'hud') {
       const h = p.hud, r = (id: string, d: [number, number, number]) => ind(id)?.range ?? d;
@@ -192,7 +192,7 @@ export function readings(spec: PanelSpec): Record<string, Reading> {
 }
 
 /** Indicator ids the HSI picture draws (see `HsiDisplay`). */
-export const HSI_INDICATORS = ['screen', 'heading', 'heading-set', 'course', 'bearing', 'deviation', 'range', 'course-set', 'mode', 'to-from', 'notice'] as const;
+export const HSI_INDICATORS = ['screen', 'heading', 'heading-set', 'course', 'bearing', 'deviation', 'range', 'course-set', 'mode', 'to-from', 'notice', 'warning'] as const;
 
 /** Indicator ids every HUD picture draws (see `HudDisplay`); its data fields add their own. */
 export const HUD_INDICATORS = ['screen', 'fpm-azimuth', 'fpm-elevation', 'pitch', 'roll', 'steering-cue', 'steering', 'steerpoint-azimuth', 'steerpoint-elevation', 'velocity', 'altitude', 'heading', 'velocity-mode'] as const;
@@ -333,8 +333,17 @@ function hsi(spec: PanelSpec, h: HsiDisplay, value: (id: string) => number, page
     const word = pg === 'none' ? '' : ind('notice')?.pages?.find(q => q.id === pg)?.label ?? '';
     return word ? text(h.notice.at[0], h.notice.at[1], word, h.notice.cap, h.notice.charWidth ? h.notice.charWidth * word.length : undefined) : '';
   })}</g>`;
+  // Warning flag: a red box with its word stacked one letter a line in paper colour (INU, ATT).
+  const W = h.warning;
+  const warning = `<g data-indicator="warning">${pages('warning', pg => {
+    const word = pg === 'none' ? '' : ind('warning')?.pages?.find(q => q.id === pg)?.label ?? '';
+    if (!word) return '';
+    const top = W.at[1] - W.size[1] / 2, first = W.at[1] - (word.length - 1) * W.pitch / 2;
+    return `<rect x="${n(W.at[0] - W.size[0] / 2)}" y="${n(top)}" width="${n(W.size[0])}" height="${n(W.size[1])}" fill="${PAINTS.red}" stroke="none"/>` +
+      [...word].map((ch, k) => `<text x="${n(W.at[0])}" y="${n(first + k * W.pitch + W.cap / 2)}" font-size="${n(W.cap / 0.72)}" text-anchor="middle" fill="${PAPER}" stroke="none">${esc(ch)}</text>`).join('');
+  })}</g>`;
   const on = `<path d="${lub}" stroke-width="${n(lubbers.width)}" stroke-linecap="butt"/>` + cardGroup +
-    `<path d="${h.aircraft}" ${sw('heavy')}/>` + readouts + mode + notice + h.legends.map(l => text(l.at[0], l.at[1], l.text, l.cap, l.width)).join('');
+    `<path d="${h.aircraft}" ${sw('heavy')}/>` + readouts + mode + notice + warning + h.legends.map(l => text(l.at[0], l.at[1], l.text, l.cap, l.width)).join('');
   return `<g data-page-of="screen" data-page="on"${pageOf('screen') === 'on' ? '' : ' display="none"'}>${on}</g><g data-page-of="screen" data-page="off"${pageOf('screen') === 'off' ? '' : ' display="none"'}></g>`;
 }
 

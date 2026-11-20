@@ -45,7 +45,7 @@ const knurl = (r: number, depth: number, n: number, deg = 0) => {
   return line(k, 'fine');
 };
 
-export const STICK_FACES: Record<string, { canvas: [number, number]; placements: Placement[] }> = {
+export const STICK_FACES: Record<string, { canvas: [number, number]; placements: Placement[]; hit?: [number, number, number, number] }> = {
   trim: { canvas: FACE, placements: fourWay('trim-ud', 'trim-lr', HAT_IDS,
     circle(17, 'heavy') + around('NOSE DOWN', 'NOSE UP', 'L WING', 'R WING'),
     circle(13.5) + [11, 8.8, 6.8, 4.9, 3.1].map(r => circle(r, 'fine', 'none')).join('') + circle(1.2, 'fine', 'none')) },
@@ -71,6 +71,12 @@ export const STICK_FACES: Record<string, { canvas: [number, number]; placements:
     out: circle(15, 'heavy') + circle(10.5, 'medium', RED),
     in: circle(15, 'heavy') + circle(9.6, 'medium', RED),
   }) }] },
+  // Rudder pedals from above, forward up the page: the pushed pedal goes forward and the other comes back.
+  pedals: { canvas: FACE, hit: [5, 12, 40, 26], placements: (() => {
+    const pedal = (x: number, dy: number) => g(0, dy, rect(12, 17, 2, 'heavy', x) + line([-5, -2, 1, 4].map(y => `M${f(x - 4)} ${C + y}H${f(x + 4)}`).join(''), 'fine'));
+    const both = (dl: number) => text('LEFT', C - 11, C - 16) + text('RIGHT', C + 11, C - 16) + line(`M${C} ${C - 12}V${C + 12}`, 'fine') + pedal(C - 11, dl) + pedal(C + 11, -dl);
+    return [{ component: 'traced', control: 'rudder', at: [C, C], shapes: shapes({ left: both(-4), neutral: both(0), right: both(4) }) }] as Placement[];
+  })() },
   'msl-step': { canvas: FACE, placements: [{ component: 'traced', control: 'msl-step', at: [C, C], shapes: shapes({
     out: circle(11, 'heavy') + circle(7.5), in: circle(11, 'heavy') + circle(6.8) + circle(5, 'fine', 'none'),
   }) }] },

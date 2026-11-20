@@ -99,6 +99,29 @@ const stptPages = (): SPage[] => {
   return out;
 };
 const STPT_PAGES = stptPages();
+/**
+ * INS page states for the after-start procedure (a Stored Heading alignment at Incirlik), laid out as the guide's INS
+ * figure (p. 170) shows them: line 1 elapsed minutes / status, RDY and the selected steerpoint; then LAT, LNG, SALT and
+ * THDG with G/S. The position is Incirlik's from the airfield data; the true heading is illustrative. The times are
+ * assumed (the guide gives about 90 s for a Stored Heading alignment) and the asterisks sit on LAT as the figure shows.
+ */
+const insLines = (status: string, rdy: boolean, mode: 'align' | 'nav' = 'align') => [
+  (`INS ${status}` + (rdy ? ' RDY' : '')).padEnd(21) + '  1',
+  mode === 'align' ? "LAT {*}N 37°00.1'{*}" : "LAT  N 37°00.1'",
+  "LNG  E035°25.6'",
+  'SALT    191FT',
+  'THDG  232.0°  G/S    0',
+];
+const INS_PAGES: SPage[] = [
+  { id: 'ins-0', label: 'INS page: alignment started (0.0/99)', lines: insLines('00.0/99', false) },
+  { id: 'ins-1', label: 'INS page: attitude attained, coarse alignment begins (0.5/90)', lines: insLines('00.5/90', false) },
+  { id: 'ins-2', label: 'INS page: coarse alignment usable, RDY (0.8/62)', lines: insLines('00.8/62', true) },
+  { id: 'ins-3', label: 'INS page: fine alignment under way, RDY (1.1/30)', lines: insLines('01.1/30', true) },
+  { id: 'ins-4', label: 'INS page: fully aligned, RDY (1.5/10)', lines: insLines('01.5/10', true) },
+  { id: 'ins-4-off', label: 'INS page: fully aligned, RDY blank (the flash)', lines: insLines('01.5/10', false) },
+  { id: 'ins-nav', label: 'INS page: INS knob in NAV, RDY removed', lines: insLines('01.5/10', false, 'nav') },
+];
+
 const { pt, mm } = tracer(PX);
 const src = 'DCS F-16C guide p. 101';
 const C: [number, number] = [141, 59];
@@ -159,6 +182,7 @@ export const ded: PanelSpec = {
         { id: 'tils-tr-21x', lines: tcnLines({ mode: 'T/R', bcn: 'DAN', chan: '21', band: 'X', onChan: true }) },
         // Steerpoint entry procedure states (STPT page, steerpoint 5).
         ...STPT_PAGES.map(({ id, lines }) => ({ id, lines })),
+        ...INS_PAGES.map(({ id, lines }) => ({ id, lines })),
       ],
     } },
   ],
@@ -171,7 +195,8 @@ export const ded: PanelSpec = {
         { id: 'tils-rec-1x', label: 'T-ILS: REC, channel 1, band X' }, { id: 'tils-tr-1x', label: 'T-ILS: T/R, channel 1, band X' },
         { id: 'tils-tr-1x-chan', label: 'T-ILS: asterisks on CHAN' }, { id: 'tils-tr-2-edit', label: 'T-ILS: typing 2' },
         { id: 'tils-tr-21-edit', label: 'T-ILS: typing 21' }, { id: 'tils-tr-21x', label: 'T-ILS: 21X, beacon DAN' },
-        ...STPT_PAGES.map(({ id, label }) => ({ id, label }))],
+        ...STPT_PAGES.map(({ id, label }) => ({ id, label })),
+        ...INS_PAGES.map(({ id, label }) => ({ id, label }))],
       restNote: 'blank',
       description: 'Five lines of 24 characters. The CNI page (communications, navigation, IFF) is the home page: UHF and VHF frequencies or channels, the selected steerpoint number, the wind direction (magnetic) and speed, the system time (Zulu), the hack time when one is set, the IFF/transponder modes and Mode 3 code (not implemented in DCS), and the TACAN channel and band. The ICP override buttons and, from the CNI page, the priority function keys call up other pages; DCS RTN returns to CNI. The STPT page (key 4) shows the selected steerpoint\'s position, elevation and time over steerpoint, and edits them. The T-ILS page (key 1) sets the TACAN mode, channel and band and the ILS frequency and course. Asterisks mark the field that new data goes into.',
       source: src,
