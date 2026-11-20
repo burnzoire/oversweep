@@ -68,8 +68,8 @@ export const STICK_FACES: Record<string, { canvas: [number, number]; placements:
     ] as Placement[];
   })() },
   'weapon-release': { canvas: FACE, placements: [{ component: 'traced', control: 'weapon-release', at: [C, C], shapes: shapes({
-    out: circle(15, 'heavy') + circle(10.5) + circle(7.5, 'medium', RED) + circle(4, 'fine', 'none'),
-    in: circle(15, 'heavy') + circle(10.5) + circle(6.6, 'medium', RED) + circle(4.6, 'fine', 'none') + circle(2.6, 'fine', 'none'),
+    out: circle(15, 'heavy') + circle(10.5, 'medium', RED),
+    in: circle(15, 'heavy') + circle(9.6, 'medium', RED),
   }) }] },
   'msl-step': { canvas: FACE, placements: [{ component: 'traced', control: 'msl-step', at: [C, C], shapes: shapes({
     out: circle(11, 'heavy') + circle(7.5), in: circle(11, 'heavy') + circle(6.8) + circle(5, 'fine', 'none'),

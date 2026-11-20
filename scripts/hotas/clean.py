@@ -111,8 +111,8 @@ class Part:
         g = f'<g transform="{" ".join(tf)}">{body}</g>' if tf else body
         return (paper(self.cover) if (tf and self.cover) else '') + g
 
-    def hit(self):
-        xs, ys = zip(*self.poly)
+    def hit(self, also=()):
+        xs, ys = zip(*self.poly, *also)
         (x0, y0), (x1, y1) = self.v.p(min(xs), min(ys)), self.v.p(max(xs), max(ys))
         return [round(x0, 2), round(y0, 2), round(x1 - x0, 2), round(y1 - y0, 2)]
 
@@ -158,7 +158,10 @@ def stick():
     msl = Part(rear, [(1959, 128), (1988, 128), (1988, 172), (1959, 172)])
     parts_side, parts_rear = [trig, paddle, pinky], [wpn, trim, tms, dms, cms, msl]
 
-    out = {'rearStatic': static(rear, parts_rear), 'sideStatic': static(side, parts_side)}
+    # The trigger is red all over: the part behind its moving face, out to the grip line, is painted under the outline.
+    w = side.region([(1316, 243), (1346, 243), (1394, 301), (1330, 301), (1294, 304), (1296, 292), (1320, 270)])
+    behind = ndimage.binary_fill_holes(ndimage.binary_closing(side.ink & w, iterations=2)) & w & ~trig.mask
+    out = {'rearStatic': static(rear, parts_rear), 'sideStatic': paper(side.trace(behind), RED) + static(side, parts_side)}
     out['trigger'] = {'first': trig.art(rot=-6, about=(1336, 252)), 'out': trig.art(), 'second': trig.art(rot=-12, about=(1336, 252))}
     out['paddle'] = {'out': paddle.art(), 'in': paddle.art(rot=7, about=(1336, 548))}
     out['pinky'] = {'out': pinky.art(), 'in': pinky.art(scale=(0.86, (1433, 473.5)))}
@@ -176,7 +179,7 @@ def stick():
     hits = {
         'pitch': box(side, 1452, 330, 1505, 500),
         'roll': box(rear, 1862, 262, 1930, 500),
-        'trigger': trig.hit(), 'paddle': paddle.hit(), 'pinky': pinky.hit(),
+        'trigger': trig.hit(also=[(1394, 301)]), 'paddle': paddle.hit(), 'pinky': pinky.hit(),
         'weaponRelease': wpn.hit(), 'mslStep': msl.hit(),
     }
     for name, (cx, cy, rx_, ry_) in {'trim': (1915, 139, 35, 28), 'tms': (1843, 200, 25, 25), 'dms': (1910, 200, 25, 25), 'cms': (1816, 312, 20, 16)}.items():
