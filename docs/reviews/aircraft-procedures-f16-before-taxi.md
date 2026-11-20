@@ -1,7 +1,7 @@
 # Aircraft Procedures — F-16C after engine start & before taxi (issue #389)
 
 ## Scope
-From a running engine at idle (the state Engine Start ends in): the after-start checks (guide pp. 137–140), a Stored Heading INS alignment (pp. 169–171) and the before-taxi checks (p. 142), ending with the INS at NAV and the chocks out. 55 steps on the shared cockpit panels. Taxi (guide p. 142, steps 7–10) is a separate procedure.
+From a running engine at idle (the state Engine Start ends in): the after-start checks (guide pp. 137–140), a Stored Heading INS alignment (pp. 169–171) and the before-taxi checks (p. 142), ending with the INS at NAV and the chocks out. 54 steps on the shared cockpit panels. Taxi (guide p. 142, steps 7–10) is a separate procedure.
 
 ## Sources
 - Eagle Dynamics, DCS F-16C Viper Early Access Guide (EN, 16 August 2026): After Engine Start pp. 137–140, Taxi p. 141 (state at mission start), Before Taxi p. 142, INS Alignment, the INS knob and the INS DED page pp. 169–171. No community guide is cited or followed.
