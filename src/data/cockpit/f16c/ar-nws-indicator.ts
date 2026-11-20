@@ -40,24 +40,25 @@ export const arNwsIndicator: PanelSpec = {
     unresolved: [
       'The lights are shown lit in the guide (RDY pale blue, AR/NWS green, DISC red); they are drawn unlit here.',
       'The dimming lever is seen end-on from the side: its pivot is taken on the housing edge, its travel (about 45° down) and whether it has detents are not shown. It is read in percent of travel, 10 % a click.',
-      'The housing\'s mounting below the crop is not drawn.',
+      'The housing is drawn square-on: a hood block across the top, the lens below it, the lever out of the right side and the stand below. The strip down its left side in the close-up is the housing\'s side seen at an angle and is not drawn. The hood\'s depth is taken from the close-up (y 8 to 52); the guide\'s p. 44 cockpit view is too small to measure it.',
+      'The housing\'s mounting below the crop is not drawn. It sits right of the HUD.',
       'Physical size rests on the legend height: the guide gives no dimension.',
     ],
   },
   plate: [
-    // Stalk below the housing, to the image crop.
+    // Stand below the housing, to the image crop.
     { d: path('M14 245H91V292H14Z') },
-    // Side flange on the left edge of the housing.
-    { d: path('M7 50H13V125H7Z') },
+    // Hood across the top of the housing, over the lens (the guide's p. 44 cockpit view shows it as a separate block).
+    { d: path('M18 8H95Q101 8 101 14V52H12V14Q12 8 18 8Z'), raised: true },
   ],
   engraving: [],
   placements: [
     {
-      component: 'lamp-module', at: pt(12, 8), size: [mm(89), mm(244)], undivided: true,
+      component: 'lamp-module', at: pt(12, 52), size: [mm(89), mm(200)], undivided: true,
       lamps: [
-        { indicator: 'rdy', legend: 'RDY', rect: [mm(5.5), mm(68), mm(64), mm(34)], width: mm(22.5), cap: mm(13.5) },
-        { indicator: 'ar-nws', legend: 'AR\nNWS', rect: [mm(5.5), mm(126), mm(64), mm(46)], width: [mm(14), mm(25.5)], cap: mm(13.3) },
-        { indicator: 'disc', legend: 'DISC', rect: [mm(5.5), mm(199), mm(64), mm(34)], width: mm(27), cap: mm(14) },
+        { indicator: 'rdy', legend: 'RDY', rect: [mm(5.5), mm(24), mm(64), mm(34)], width: mm(22.5), cap: mm(13.5) },
+        { indicator: 'ar-nws', legend: 'AR\nNWS', rect: [mm(5.5), mm(82), mm(64), mm(46)], width: [mm(14), mm(25.5)], cap: mm(13.3) },
+        { indicator: 'disc', legend: 'DISC', rect: [mm(5.5), mm(155), mm(64), mm(34)], width: mm(27), cap: mm(14) },
       ],
     },
     {

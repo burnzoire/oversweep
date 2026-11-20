@@ -23,18 +23,18 @@ const src = 'DCS F-16C guide p. 49';
 
 /** Sphere window centre, and the PULL TO CAGE knob centre (rectified px). */
 const C: Pt = [156.5, 152], K: Pt = [281, 281];
-/** Pitch trim scale round the knob: ticks every 5° from −25° (9 o'clock) to +25° (12 o'clock), 9° apart. */
+/** Pitch trim scale round the knob: ticks every 5° from −25° (9 o'clock) to +25° (12 o'clock), 9° apart; paths in px about the knob centre. */
 const TRIM_DEG = 1.8, TRIM_MID = 315;
 const trimTicks = Array.from({ length: 11 }, (_, k) => {
   const v = -25 + 5 * k, a = ((TRIM_MID + v * TRIM_DEG) * Math.PI) / 180, major = Math.abs(v) === 25;
   const [r0, r1] = major ? [43, 60] : [46, 57];
-  const P = (r: number) => `${(K[0] + r * Math.sin(a)).toFixed(2)} ${(K[1] - r * Math.cos(a)).toFixed(2)}`;
+  const P = (r: number) => `${(r * Math.sin(a)).toFixed(2)} ${(-r * Math.cos(a)).toFixed(2)}`;
   return { d: `M${P(r0)}L${P(r1)}`, major };
 });
-/** Index at the middle of the trim scale (0°), pointing at the knob. */
+/** White triangular index at the middle of the trim scale (0°), pointing at the knob. */
 const idx = (() => {
-  const a = (TRIM_MID * Math.PI) / 180, P = (r: number, s: number) => `${(K[0] + r * Math.sin(a) + s * Math.cos(a)).toFixed(2)} ${(K[1] - r * Math.cos(a) + s * Math.sin(a)).toFixed(2)}`;
-  return `M${P(44, 0)}L${P(62, 5)}L${P(62, -5)}Z`;
+  const a = (TRIM_MID * Math.PI) / 180, P = (r: number, s: number) => `${(r * Math.sin(a) + s * Math.cos(a)).toFixed(2)} ${(-r * Math.cos(a) + s * Math.sin(a)).toFixed(2)}`;
+  return `M${P(46, 0)}L${P(62, 5)}L${P(62, -5)}Z`;
 })();
 
 const bars: AttitudeBall['bars'] = [
@@ -85,8 +85,8 @@ export const sai: PanelSpec = {
       'The sphere is drawn black on white with a faint ground half; in the sim the sky is light blue and the ground dark brown.',
       'Only ±20° of the sphere shows in the image. Its pitch scale is taken as linear (2.85 px a degree) and the long bars every 10° beyond 20° are extrapolated, unlabelled.',
       'The OFF flag is mostly out of sight in the image (only its tip shows at the right of the window); its shown size and place are not in the image and are drawn as a red flag across the right of the window. The guide says it is red.',
-      'The pitch trim scale reads ±25° (guide text). Its ticks are 9° apart round the knob from 9 o\'clock to 12 o\'clock, and its middle mark is drawn as a triangle; which way the knob turns for nose up, and its arrow, are not shown.',
-      'PULL TO CAGE is printed curved round the knob face in the sim; it is set straight here. Pulling the knob shows its side as a second rim.',
+      'The pitch trim scale reads ±25° (guide text). Its ticks are 9° apart round the knob from 9 o\'clock to 12 o\'clock, and its middle mark is drawn as a triangle; which way the knob turns for nose up is not shown.',
+      'Pulling the knob shows its side as a second rim. The knob\'s pointer to the trim scale is drawn as a small needle on its rim (Nathan, 2026-11-20); the guide image does not show one.',
       'The aircraft symbol is drawn fixed at the window centre; the pitch trim knob moves it up and down in the sim (no systems logic here).',
       'Physical size rests on the corner screws: the guide gives no dimension.',
     ],
@@ -95,8 +95,6 @@ export const sai: PanelSpec = {
     { d: path('M2 1H328V325H2Z') },
   ],
   engraving: [
-    ...trimTicks.map(t => ({ kind: 'path' as const, pen: t.major ? 'heavy' as const : 'medium' as const, d: path(t.d) })),
-    { kind: 'path', pen: 'medium', d: path(idx) },
   ],
   placements: [
     ...[[22, 14], [296, 14], [22, 288]].map(([x, y]) => ({ component: 'screw-medium' as const, at: pt(x, y) })),
@@ -105,11 +103,15 @@ export const sai: PanelSpec = {
     { component: 'attitude', at: pt(...C), ball },
     {
       component: 'cage-knob', control: 'pitch-trim', pull: 'cage', at: pt(...K), r: mm(38), face: mm(33),
+      // PULL and CAGE are set round the face along the top and bottom, TO straight across the middle.
       legend: [
-        { text: 'PULL', at: pt(-1, -22), cap: mm(12), width: mm(36) },
+        { text: 'PULL', at: [0, 0], cap: mm(12), width: mm(34), arc: mm(22) },
         { text: 'TO', at: pt(0, 0), cap: mm(12), width: mm(20) },
-        { text: 'CAGE', at: pt(0, 21), cap: mm(12), width: mm(40) },
+        { text: 'CAGE', at: [0, 0], cap: mm(12), width: mm(40), arc: mm(-22) },
       ],
+      // The pitch trim scale is drawn with the knob, over the attitude indicator's bezel.
+      marks: [...trimTicks.map(t => ({ d: path(t.d), pen: t.major ? 'heavy' as const : 'medium' as const })), { d: path(idx), pen: 'medium' as const, fill: true }],
+      needle: { r: [mm(34), mm(45)], half: mm(2.6), rest: TRIM_MID },
     },
   ],
   controls: [
@@ -117,7 +119,7 @@ export const sai: PanelSpec = {
       id: 'pitch-trim', name: 'PULL TO CAGE knob (turn)', type: 'rotary',
       positions: Array.from({ length: 11 }, (_, k) => {
         const v = -25 + 5 * k;
-        return { id: v === 0 ? 'zero' : v < 0 ? `down-${-v}` : `up-${v}`, label: v === 0 ? '0° (index)' : `${Math.abs(v)}° ${v < 0 ? 'down' : 'up'}`, angle: v * TRIM_DEG, hold: 'stable' as const };
+        return { id: v === 0 ? 'zero' : v < 0 ? `down-${-v}` : `up-${v}`, label: v === 0 ? '0° (index)' : `${Math.abs(v)}° ${v < 0 ? 'down' : 'up'}`, angle: TRIM_MID + v * TRIM_DEG, hold: 'stable' as const };
       }),
       initial: 'zero',
       description: 'Turning the knob moves the aircraft symbol up or down against the sphere, read on the pitch trim scale (±25°, a mark every 5°). With the knob arrow at the white index the trim is zero. The knob turns without detents; it moves 5° a click here.',

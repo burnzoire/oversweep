@@ -207,7 +207,13 @@ export type Placement =
    * (centre-relative); `control` is the turn (a rotary, the printing turns with it), `pull` the pull (positions in
    * then pulled; pulled shows the knob's side as a second rim).
    */
-  | { component: 'cage-knob'; control: string; pull: string; at: Pt; r: number; face: number; legend: { text: string; at: Pt; cap: number; width?: number }[] }
+  | { component: 'cage-knob'; control: string; pull: string; at: Pt; r: number; face: number;
+      /** Face printing; with `arc` (mm, positive along the top, negative along the bottom) the letters are set round that radius, `width` along the arc. */
+      legend: { text: string; at: Pt; cap: number; width?: number; arc?: number }[];
+      /** Scale marks round the knob (path in mm about the knob centre), drawn over neighbouring instruments. */
+      marks?: { d: string; pen: Pen; fill?: boolean }[];
+      /** Pointer on the knob rim (r0 to r1, half width at r0), pointing at the position angle; the printing is turned by the angle less `rest`. */
+      needle?: { r: [r0: number, r1: number]; half: number; rest: number } }
   | { component: 'dzus'; at: Pt; cut?: Cut }
   | { component: 'screw' | 'screw-medium' | 'screw-small' | 'screw-hex' | 'screw-tiny'; at: Pt };
 
@@ -439,7 +445,7 @@ export type Cut = 'up-left' | 'up-right' | 'down-left' | 'down-right';
 
 export type ToggleArt = 'toggle-large' | 'toggle-medium' | 'toggle-small' | 'toggle-large-cylinder' | 'toggle-large-square' | 'toggle-large-lock' | 'toggle-paddle-wide' | 'toggle-hook' | 'toggle-mini-hex';
 export type RotaryArt = 'rotary-pointer' | 'rotary-pointer-large' | 'rotary-pointer-medium' | 'rotary-bar-broad';
-export type KnobArt = 'knob-fine-knurl-small' | 'knob-knurled-small' | 'knob-knurled' | 'knob-knurled-edge' | 'knob-knurled-skirt' | 'knob-bar' | 'knob-lobed' | 'knob-bar-medium' | 'knob-knurled-mini' | 'knob-radio-large' | 'knob-bar-thick' | 'knob-spindle' | 'knob-knurled-large' | 'knob-knurled-small-edge' | 'knob-round' | 'knob-round-small' | 'knob-cross' | 'knob-cross-small' | 'knob-plain' | 'knob-plain-small' | 'knob-plain-index' | 'knob-plain-index-large' | 'knob-round-tail';
+export type KnobArt = 'knob-fine-knurl-small' | 'knob-knurled-small' | 'knob-knurled' | 'knob-knurled-edge' | 'knob-knurled-skirt' | 'knob-bar' | 'knob-lobed' | 'knob-bar-medium' | 'knob-knurled-mini' | 'knob-radio-large' | 'knob-bar-thick' | 'knob-spindle' | 'knob-knurled-large' | 'knob-knurled-small-edge' | 'knob-round' | 'knob-round-small' | 'knob-cross' | 'knob-cross-small' | 'knob-plain' | 'knob-plain-small' | 'knob-plain-index' | 'knob-round-tail';
 export type PushArt = 'push-round-small' | 'push-round-medium' | 'push-round-large' | 'push-round-xl' | 'push-round-flat' | 'push-round-xxl' | 'push-round-bezel' | 'push-round-wide' | 'push-round-plain';
 export type LampModuleArt = 'lamp-module';
 /** A single round press-to-test style indicator lens in a bezel (JFS RUN). */

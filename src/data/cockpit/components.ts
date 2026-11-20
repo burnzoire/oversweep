@@ -347,8 +347,6 @@ export const KNOBS = {
   'knob-round-tail': { r: 11.2, lobes: 0, ridge: [0, 0], tail: [0.38, 1.15] },
   /** Plain round domed knob with a white index line from the centre to the rim (F-16C YAW TRIM; guide p. 72, about 29 px radius at 3.15 px/mm). */
   'knob-plain-index': { r: 9.2, lobes: 0, ridge: [0, 0], plain: true, index: true },
-  /** F-16C IFF C & I: a plain round knob with an index line from the centre to the rim (guide p. 67, 33 px radius at 3.3 px/mm). */
-  'knob-plain-index-large': { r: 10.0, lobes: 0, ridge: [0, 0], plain: true, index: true },
 } as const;
 
 /** A KNOBS body pointing at 12 o'clock; the renderer turns it to the detent. */

@@ -447,17 +447,33 @@ function attitude(spec: PanelSpec, a: AttitudeBall, value: (id: string) => numbe
   return s;
 }
 
-/** Pull-to-cage knob: knurled rim, face printing turned with the knob; pulled shows the knob's side as an outer rim. */
+/** Letters of `t` set round a circle of radius |arc| about the origin: along the top (arc > 0) or the bottom (arc < 0), `width` along the arc. */
+function arcText(t: string, arc: number, cap: number, width: number) {
+  const R = Math.abs(arc), step = width / t.length;
+  return [...t].map((ch, i) => {
+    const a = ((i - (t.length - 1) / 2) * step) / R * 180 / Math.PI, phi = arc > 0 ? a : 180 - a;
+    const [x, y] = polar(R, phi);
+    return `<g transform="translate(${n(x)} ${n(y)}) rotate(${n(arc > 0 ? a : -a)})">${text(0, 0, ch, cap)}</g>`;
+  }).join('');
+}
+
+/** Pull-to-cage knob: scale marks, knurled rim, face printing and pointer turned with the knob; pulled shows the knob's side as an outer rim. */
 function cageKnob(spec: PanelSpec, p: Extract<Placement, { component: 'cage-knob' }>, state: Record<string, string>) {
   const turnC = controlOf(spec, p.control), pullC = controlOf(spec, p.pull), knurl = Array.from({ length: 48 }, (_, k) => {
     const [x0, y0] = polar(p.face, k * 7.5), [x1, y1] = polar(p.r - 0.3, k * 7.5);
     return `M${n(x0)} ${n(y0)}L${n(x1)} ${n(y1)}`;
   }).join('');
+  const marks = (p.marks ?? []).map(m => `<path d="${m.d}" ${m.fill ? `fill="${PAPER}" ` : ''}${sw(m.pen)}/>`).join('');
   const pulled = moving(pullC, state[pullC.id] ?? pullC.initial, i => i ? `<circle r="${n(p.r + 1.2)}" fill="${PAPER}" ${sw('medium')}/>` : '');
-  const knob = moving(turnC, state[turnC.id] ?? turnC.initial, i => `<g transform="rotate(${turnC.positions[i].angle ?? 0})">` +
-    cased(`<circle r="${n(p.r)}" fill="${PAPER}"/>`, 'heavy') + `<path d="${knurl}" ${sw('fine')}/><circle r="${n(p.face)}" fill="${PAPER}" ${sw('medium')}/>` +
-    p.legend.map(l => text(l.at[0], l.at[1], l.text, l.cap, l.width)).join('') + '</g>');
-  return at(p.at, pulled + knob, ' data-art="cage-knob"');
+  const nd = p.needle;
+  const pointer = nd ? cased(`<path d="M${n(-nd.half)} ${n(-nd.r[0])}L0 ${n(-nd.r[1])}L${n(nd.half)} ${n(-nd.r[0])}Z" fill="${PAPER}"/>`, 'medium') : '';
+  const knob = moving(turnC, state[turnC.id] ?? turnC.initial, i => {
+    const a = turnC.positions[i].angle ?? 0, print = a - (nd?.rest ?? 0);
+    return (nd ? `<g transform="rotate(${n(a)})">${pointer}</g>` : '') + `<g transform="rotate(${n(print)})">` +
+      cased(`<circle r="${n(p.r)}" fill="${PAPER}"/>`, 'heavy') + `<path d="${knurl}" ${sw('fine')}/><circle r="${n(p.face)}" fill="${PAPER}" ${sw('medium')}/>` +
+      p.legend.map(l => l.arc ? arcText(l.text, l.arc, l.cap, l.width ?? l.cap * l.text.length) : text(l.at[0], l.at[1], l.text, l.cap, l.width)).join('') + '</g>';
+  });
+  return at(p.at, marks + pulled + knob, ' data-art="cage-knob"');
 }
 
 /** Every indicator a dial shows: its needle, its pointers and its counter. */
@@ -546,7 +562,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       return at(p.at, rotaryBase(p.component) + moving(c, state[c.id] ?? c.initial, i =>
         `<g transform="rotate(${c.positions[i].angle ?? 0})">${rotaryKnob(p.component)}</g>`), ` data-art="${p.component}"`);
     }
-    case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': case 'knob-plain': case 'knob-plain-small': case 'knob-plain-index': case 'knob-plain-index-large': case 'knob-round-tail': {
+    case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': case 'knob-plain': case 'knob-plain-small': case 'knob-plain-index': case 'knob-round-tail': {
       const c = controlOf(spec, p.control);
       return at(p.at, moving(c, state[c.id] ?? c.initial, i =>
         `<g transform="rotate(${c.positions[i].angle ?? 0})">${knobArt(p.component)}</g>`), ` data-art="${p.component}"`);
@@ -706,7 +722,7 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         const r = ROTARIES[p.component].skirt * 1.15;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }
-      case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': case 'knob-plain': case 'knob-plain-small': case 'knob-plain-index': case 'knob-plain-index-large': case 'knob-round-tail': {
+      case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': case 'knob-plain': case 'knob-plain-small': case 'knob-plain-index': case 'knob-round-tail': {
         const r = KNOBS[p.component].r * 1.1;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }

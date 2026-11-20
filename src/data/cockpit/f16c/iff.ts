@@ -47,6 +47,7 @@ export const iff: PanelSpec = {
     scale: 'DZUS stud heads are drawn at one size (8.5 mm) on every panel; this panel\'s heads measure 28 px across, giving 3.3 px/mm.',
     shown: { master: 'norm', 'm4-code': 'ab', 'c-and-i': 'ufc', enable: 'm1-m3', 'mode-1-1': '0', 'mode-1-2': '0', 'mode-3-1': '4', 'mode-3-2': '0', reply: 'a', monitor: 'audio' },
     unresolved: [
+      'C & I is the shared round knob of the AUDIO 1 MSL knob (same 10 mm size; Nathan, 2026-11-20).',
       'The MASTER detents are taken from where the legend leaders meet the knob (OFF −20°, STBY 20°, LOW 55°, NORM 90°, EMER 125°); the C & I detents the same way (±18°).',
       'Toggle positions shown are read from the levers\' lean through the camera\'s perspective: ENABLE leans to M1/M3, MONITOR to AUDIO, M-4 CODE and REPLY stand near the middle (A/B and A).',
       'M-4 CODE and REPLY are drawn as lever-lock switches with domed caps (lock slot seen in the M-4 CODE bushing); the REPLY bushing is hidden under its cap. MONITOR and ENABLE are plain toggles in red grommets.',
@@ -100,7 +101,7 @@ export const iff: PanelSpec = {
     { component: 'screw', at: pt(395, 118) },
     { component: 'screw', at: pt(343, 253) },
     { component: 'rotary-bar-broad', control: 'master', at: pt(...MASTER) },
-    { component: 'knob-plain-index-large', control: 'c-and-i', at: pt(...CI) },
+    { component: 'knob-round', control: 'c-and-i', at: pt(...CI) },
     { component: 'toggle-large-lock', control: 'm4-code', at: pt(...M4) },
     { component: 'toggle-large', control: 'enable', at: pt(...ENABLE) },
     { component: 'toggle-large-lock', control: 'reply', at: pt(...REPLY) },
