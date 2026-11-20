@@ -26,10 +26,10 @@ function tab(deg: number) {
   // The bar starts inside the housing so its root stays hidden behind the side as it swings.
   return `M${P(-12, -HALF)}L${P(REACH, -HALF)}L${P(REACH, HALF)}L${P(-12, HALF)}Z`;
 }
-/** One square lens module (55 x 54 px) at its top-left corner; the lens inside the frame carries the legend. */
+/** One square lens module (55 x 54 px) at its top-left corner, set left of centre as on the real unit (gaps 40 and 95 photo px either side); the lens inside the frame carries the legend. */
 const LENS = 55, LENS_H = 54;
 const lens = (y: number, l: { indicator: string; legend: string; width: number | number[]; cap: number }) => ({
-  component: 'lamp-module' as const, at: pt(36.5, y), size: [mm(LENS), mm(LENS_H)] as [number, number],
+  component: 'lamp-module' as const, at: pt(27.7, y), size: [mm(LENS), mm(LENS_H)] as [number, number],
   lamps: [{ ...l, rect: [mm(5), mm(5), mm(LENS - 10), mm(LENS_H - 10)] as [number, number, number, number], width: Array.isArray(l.width) ? l.width.map(mm) : mm(l.width), cap: mm(l.cap) }],
 });
 
@@ -42,7 +42,7 @@ export const arNwsIndicator: PanelSpec = {
     manual: 'Eagle Dynamics, DCS F-16C Viper Early Access Guide (EN, 16 Aug 2026)',
     page: 45,
     image: 'p. 45 "AR Status/NWS Indicator" image, 154 x 294 px',
-    rectify: 'none: laid out square-on from the photo of a real unit (0.317 guide px a photo px, from the 205 photo px lens pitch against the guide\'s 65 px legend pitch; the lens centres sit on the guide\'s legends) and checked against the guide image',
+    rectify: 'none: laid out square-on from the photo of a real unit (0.317 guide px a photo px, from the 205 photo px lens pitch against the guide\'s 65 px legend pitch; the lens centres sit on the guide\'s legends in height) and checked against the guide image',
     pxPerMm: PX,
     scale: 'No shared component on this image. The legends (13 px cap height) are taken as the shared lamp legend height (2.3 mm), giving 5.65 px/mm; the housing is then 18.4 mm wide over the hood (its front face 310 photo px wide, between the hood\'s side sheets; the left side wall the camera sees at an angle is left out).',
     shown: { 'dimming-lever': 'up' },

@@ -38,10 +38,10 @@ const trimBand = (() => {
   const ring = (r: number, rev: boolean) => Array.from({ length: steps + 1 }, (_, k) => P(r, rev ? to - (k * (to - from)) / steps : from + (k * (to - from)) / steps));
   return 'M' + [...ring(60, false), ...ring(41, true)].join('L') + 'Z';
 })();
-/** White triangular index at the middle of the trim scale (0°), pointing at the knob. */
+/** White triangular index at the middle of the trim scale (0°): the outer half of the band, pointing at the knob to meet its needle on the band's centre line (Nathan, 2026-11-20). */
 const idx = (() => {
   const a = (TRIM_MID * Math.PI) / 180, P = (r: number, s: number) => `${(r * Math.sin(a) + s * Math.cos(a)).toFixed(2)} ${(-r * Math.cos(a) + s * Math.sin(a)).toFixed(2)}`;
-  return `M${P(44, 0)}L${P(58, 5)}L${P(58, -5)}Z`;
+  return `M${P(50.5, 0)}L${P(60, 5)}L${P(60, -5)}Z`;
 })();
 
 const bars: AttitudeBall['bars'] = [
@@ -116,7 +116,8 @@ export const sai: PanelSpec = {
       ],
       // The pitch trim scale is drawn with the knob, over the attitude indicator's bezel.
       marks: [{ d: path(trimBand), pen: 'fine' as const, fill: true }, ...trimTicks.map(t => ({ d: path(t.d), pen: t.major ? 'heavy' as const : 'medium' as const })), { d: path(idx), pen: 'medium' as const, fill: true }],
-      needle: { r: [mm(34), mm(45)], half: mm(2.6), rest: TRIM_MID },
+      // The knob's needle is the index's twin in the inner half of the band, the tips meeting at r 50.5.
+      needle: { r: [mm(41), mm(50.5)], half: mm(5), rest: TRIM_MID },
     },
     // The trim scale's two hold-down screws, over its band.
     { component: 'screw-small', at: pt(296, 231) },
