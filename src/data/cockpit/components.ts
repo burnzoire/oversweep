@@ -334,6 +334,12 @@ export const KNOBS = {
   'knob-plain': { r: 7.7, lobes: 0, ridge: [0, 0], plain: true },
   /** Smaller plain domed knob (F-16C altimeter barometric setting knob). */
   'knob-plain-small': { r: 6.8, lobes: 0, ridge: [0, 0], plain: true },
+  /**
+   * Round domed knob with a rectangular tail grip running back past the rim, opposite the index (F-16C FUEL QTY SEL;
+   * guide p. 54: body about 41 px radius at 3.66 px/mm, tail about 23 px wide reaching about 57 px behind the centre).
+   * The tail has no front edge, so it rises smoothly out of the dome; the index runs from the centre to the front rim.
+   */
+  'knob-round-tail': { r: 11.2, lobes: 0, ridge: [0, 0], tail: [0.28, 1.38] },
   /** Plain round domed knob with a white index line from the centre to the rim (F-16C YAW TRIM; guide p. 72, about 29 px radius at 3.15 px/mm). */
   'knob-plain-index': { r: 9.2, lobes: 0, ridge: [0, 0], plain: true, index: true },
 } as const;
@@ -350,6 +356,14 @@ export function knobArt(art: keyof typeof KNOBS) {
       `<path d="${lever}" fill="${PAPER}" ${sw('medium')}/>` +
       // Indicator: only the white index set into the rim (nothing at the centre).
       `<rect x="${k(-0.075)}" y="${k(-1.04)}" width="${k(0.15)}" height="${k(0.33)}" rx="${k(0.02)}" fill="${PAPER}" ${sw('heavy')}/>`;
+  }
+  if ('tail' in KNOBS[art]) {
+    // Tail half-width and reach (fractions of r); filled closed but outlined open at the front so it blends into the dome.
+    const [hw, reach] = (KNOBS[art] as { tail: readonly [number, number] }).tail, w = n(hw * r), y0 = n(0.12 * r), y1 = n(reach * r);
+    const back = `V${n(reach * r - 0.08 * r)}Q${w} ${y1} ${n(hw * r - 0.08 * r)} ${y1}H${n(-hw * r + 0.08 * r)}Q${-w} ${y1} ${-w} ${n(reach * r - 0.08 * r)}V${y0}`;
+    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.78)}" ${sw('fine')}/>` +
+      `<path d="M${w} ${y0}${back}Z" fill="${PAPER}" stroke="none"/>` + cased(`<path d="M${w} ${y0}${back}" fill="none"/>`, 'heavy') +
+      `<path d="M0 0V${n(-r * 0.92)}" stroke-width="0.9" stroke-linecap="round"/>`;
   }
   if ('plain' in KNOBS[art]) return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.78)}" ${sw('fine')}/>` +
     ('index' in KNOBS[art] ? `<path d="M0 0V${n(-r * 0.92)}" stroke-width="0.9" stroke-linecap="round"/>` : '');
