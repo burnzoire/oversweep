@@ -11,7 +11,7 @@
  */
 
 interface StepDo { control: string; to: string; on?: 'press' | 'release'; hold?: number }
-interface Step { id: string; panels: string[]; do?: StepDo; also?: StepDo[]; confirm?: string; turn?: { control: string; to: number; per: number } }
+interface Step { id: string; panels: string[]; hints?: string[]; do?: StepDo; also?: StepDo[]; confirm?: string; turn?: { control: string; to: number; per: number } }
 interface Config { aircraft: string; initial: Record<string, string>; labels: Record<string, string>; names: Record<string, string>; orders: Record<string, string[]>; lamps: string[]; steps: Step[] }
 /** `ins`: the alignment stage (-1 not started, 0–4 up the INS DED pages); `flash`: the fine-alignment flash is in its off half; `bit`: the FLCS BIT is running; `dte`: the left MFD shows the DTE page. */
 interface State { rpm: number; noz: number; ins: number; flash: boolean; baro: number; mode: 'pneu' | 'elec'; bit: boolean; dte: boolean }
@@ -134,6 +134,9 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
       },
       pages: { 'left-mfd.display': mfd, 'right-mfd.display': mfd === 'off' ? 'off' : 'menu', 'sai.off-flag': pos['sai.cage'] === 'pulled' ? 'shown' : 'hidden', 'hud.master-arm': 'none', 'ded.display': ded, 'hud.screen': hudOn ? 'on' : 'off', 'hud.align': alignCue ? 'align' : 'none', 'altimeter.pneu': st.mode === 'pneu' ? 'shown' : 'hidden' },
     } }));
+    // HUD brightness follows the SYM wheel: the symbology fades from 1 (dimmest) to 5 (brightest).
+    const sym = Number(pos['icp.sym']);
+    for (const g of all<SVGGElement>('[data-proc-panel="hud"] [data-page-of="screen"][data-page="on"]')) g.style.opacity = String(Number.isFinite(sym) ? 0.15 + 0.85 * (sym - 1) / 4 : 1);
     const id = stepId();
     const wait = id === 'sec-check' ? st.noz > 10 : id === 'pri-check' ? st.noz < 94 : id === 'ins-ready' ? st.ins < 4 : false;
     if (!confirm.hidden && confirm.disabled !== wait) {
@@ -178,6 +181,15 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
     dispatchEvent(new CustomEvent('cockpit:pad', { detail: { control: w?.control, to: w?.to } }));
   }
 
+  /** Every move is made. A step that shows indications to check waits for the reader; the others move on. */
+  function done(text = 'Done.') {
+    const s = cfg.steps[step];
+    if (!(s.hints?.length || s.panels.length > 1)) { say(text); next(); return; }
+    confirm.textContent = 'Indications checked';
+    confirm.disabled = false;
+    confirm.hidden = false;
+    say(`${text} Check the indications, then continue.`);
+  }
   function next(delay = 800) {
     const at = step;
     later(matchMedia('(max-width: 48rem)').matches ? delay + 600 : delay, () => {
@@ -202,7 +214,7 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
     indicate();
     const left = pending(cfg.steps[step]);
     if (left.length) { say(`Done. Still to do: ${left.map(instruction).join('; ')}.`); showPad(); return; }
-    next();
+    done();
   }
 
   addEventListener('cockpit:change', e => {
@@ -230,19 +242,19 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
       indicate();
       return;
     }
+    // Throttle back from MIL only once RPM has reached 85% (the throttle may pass the idle + 10% stop on the way to IDLE).
+    if (stepId() === 'snap-idle' && key === 'sidewall-controls.throttle' && before === 'mil' && d.phase === 'press' && st.rpm < 85) {
+      pos[key] = before; setPositions({ [key]: before });
+      say('Wait: RPM has not reached 85% yet.', true);
+      indicate();
+      return;
+    }
     if (want) {
-      // Throttle back from MIL only once RPM has reached 85%.
-      if (stepId() === 'snap-idle' && key === 'sidewall-controls.throttle' && d.position === 'idle' && st.rpm < 85) {
-        pos[key] = before; setPositions({ [key]: before });
-        say('Wait: RPM has not reached 85% yet.', true);
-        indicate();
-        return;
-      }
       if (key === 'left-mfd.osb-8') st.dte = true;
       // The FLCS BIT: RUN lights while it runs; the switch drops back to OFF by itself when it is done.
       if (key === 'flt-control.flcs-bit') {
         st.bit = true; made.add(mk(want)); say('BIT running (compressed to a few seconds here). Watch the RUN light.'); indicate();
-        later(BIT_MS, () => { st.bit = false; pos[key] = 'off'; setPositions({ [key]: 'off' }); say('BIT complete: the switch is back at OFF, RUN is out and FAIL stayed off.'); indicate(); next(1500); });
+        later(BIT_MS, () => { st.bit = false; pos[key] = 'off'; setPositions({ [key]: 'off' }); indicate(); done('BIT complete: the switch is back at OFF, RUN is out and FAIL stayed off.'); });
         return;
       }
       acted(want); return;
