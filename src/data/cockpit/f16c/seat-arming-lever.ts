@@ -4,10 +4,12 @@ import { INK, PAINTS, PENS, text } from '../components.ts';
 
 /**
  * F-16C ejection seat arming lever (left side of the seat bucket, beside the
- * CMDS panel), DCS. Upright, it disarms the seat: a flat lever whose face is a
+ * CMDS panel), DCS, drawn in top view: what the pilot sees looking down, forward
+ * up the page. Upright (drawn leaning 45° so its face reads from above), it disarms the seat: a flat lever whose face toward the pilot is a
  * yellow flag with two columns of black diamonds either side of a black band
- * lettered EJECTION CONTROLS LOCKED in yellow, on a grey metal top. Armed, it is rotated aft and down
- * until flush with the seat, so seen from the front only its edge shows.
+ * lettered EJECTION CONTROLS LOCKED in yellow, on a grey metal top. Armed, it is rotated down
+ * until flush with the seat: it lies full length beside the console, showing its
+ * other face, a black placard lettered EJECTION CONTROLS ARMED in white.
  *
  * Reference: the guide's p. 81 image of the lever in the disarmed position
  * (440 x 611 JPEG, `pdfimages -j -f 81 -l 81`, image 007). Values are
@@ -15,11 +17,9 @@ import { INK, PAINTS, PENS, text } from '../components.ts';
  * by `tracer`.
  */
 const PX = 2.7;
-const { pt, mm, path } = tracer(PX);
+const { mm, path } = tracer(PX);
 const src = 'DCS F-16C guide p. 81';
 
-/** Lever centre line and pivot (reference px, x less 160). */
-const CX = 63, PIVOT: [number, number] = [CX, 300];
 /** Diamonds: two columns, tip to tip, 15.5 px a row from y 80 (measured). */
 const DIAMOND_X = [41, 85], DIAMOND_W = 8.5, DIAMOND_H = 7.75;
 const diamonds = Array.from({ length: 11 }, (_, k) => 80 + 15.5 * k).flatMap(y => DIAMOND_X.map(x =>
@@ -32,41 +32,53 @@ const flag = `<path d="${FLAG}" fill="${PAINTS.yellow}" stroke="${INK}" stroke-w
   // The legend is yellow on a black band down the middle of the flag.
   `<g transform="translate(${mm(64)} ${mm(158)}) rotate(-90)">${text(0, 0, 'EJECTION CONTROLS LOCKED', mm(10), mm(150)).replace(`fill="${INK}"`, `fill="${PAINTS.yellow}"`)}</g>`;
 
+/** Top view, in mm: pivot block at the aft end (bottom of the page), lever 106 mm long (the guide trace) and 24.4 mm wide. */
+const P: [number, number] = [30, 112], L = 106, W = 24.4, X0 = P[0] - W / 2, X1 = P[0] + W / 2;
+/** Upright, the lever is drawn leaning 45°, so from above it shows cos 45° of its length. */
+const K = Math.cos(Math.PI / 4);
+const pen = (w: keyof typeof PENS) => `stroke="${INK}" stroke-width="${PENS[w]}"`;
+const block = `<rect x="${X0 + 1}" y="${P[1]}" width="${W - 2}" height="12" rx="1.5" fill="var(--panel-paper,#fff)" ${pen('medium')}/><circle cx="${P[0]}" cy="${P[1] + 6}" r="3" fill="none" ${pen('fine')}/>`;
+/** The guide-traced lever face (grey top, yellow flag, stem; pivot at reference (63, 300)), its top end forward, shortened by K. */
+const lockedFace = `<g transform="translate(${P[0]} ${P[1]}) scale(1 ${K.toFixed(4)}) translate(${-mm(63)} ${-mm(300)})">` +
+  `<path d="${path('M41 14H85Q91 14 91 20V62H35V20Q35 14 41 14ZM46 246H80V300H46Z')}" fill="var(--panel-paper,#fff)" ${pen('medium')}/>${flag}</g>`;
+const armedFace = `<rect x="${X0}" y="${P[1] - L}" width="${W}" height="${L}" rx="2" fill="var(--panel-paper,#fff)" ${pen('heavy')}/>` +
+  // The open channel at the free (forward) end, then the black ARMED placard toward the pivot.
+  `<rect x="${X0 + 2.5}" y="${P[1] - L + 3}" width="${W - 5}" height="30" rx="2" fill="none" ${pen('fine')}/>` +
+  `<rect x="${X0 + 2}" y="${P[1] - L + 38}" width="${W - 4}" height="${L - 44}" fill="${INK}" stroke="none"/>` +
+  `<g transform="translate(${P[0] - 3.5} ${P[1] - L + 38 + (L - 44) / 2}) rotate(-90)">${text(0, 0, 'EJECTION CONTROLS', 3.4, 46).replace(`fill="${INK}"`, 'fill="#fff"')}</g>` +
+  `<g transform="translate(${P[0] + 3.5} ${P[1] - L + 38 + (L - 44) / 2}) rotate(-90)">${text(0, 0, 'ARMED', 3.4, 15).replace(`fill="${INK}"`, 'fill="#fff"')}</g>`;
+
 export const seatArmingLever: PanelSpec = {
   id: 'seat-arming-lever',
   title: 'Ejection seat arming lever',
-  canvas: [mm(126), mm(334)],
+  canvas: [60, 130],
   source: {
     variant: 'DCS F-16C Viper (Block 50)',
     manual: 'Eagle Dynamics, DCS F-16C Viper Early Access Guide (EN, 16 Aug 2026)',
     page: 81,
-    image: 'p. 81 "Ejection Seat Arming Lever (Disarmed position)" image, 440 x 611 px (image 007); the lever at x 190–256',
-    rectify: 'none: the lever faces the camera; it is squared up about its centre line (x 223 in the image), the flag\'s left and right edges made parallel',
+    image: 'p. 81 "Ejection Seat Arming Lever (Disarmed position)" image, 440 x 611 px (image 007), for the LOCKED face; the top view and the ARMED face from photos Nathan supplied (a real lever, both faces, and a cockpit replica seen from above, 2026-11-21)',
+    rectify: 'none: the LOCKED face is squared up about its centre line (x 223 in the guide image), the flag\'s edges made parallel, then shortened by cos 45° for the top view',
     pxPerMm: PX,
-    scale: 'The CMDS panel\'s DZUS head beside the lever is 23 px across: at the shared 8.5 mm DZUS size that is 2.7 px/mm, taken for the lever, which stands at about the same distance from the camera. The flag is then 24 mm wide and 66 mm tall.',
+    scale: 'The CMDS panel\'s DZUS head beside the lever is 23 px across in the guide image: at the shared 8.5 mm DZUS size that is 2.7 px/mm, giving a lever 106 mm long and 24.4 mm wide. The top view is laid out in mm.',
     shown: { 'arming-lever': 'disarmed' },
     unresolved: [
-      'The guide pictures the armed position only from above, flush with the seat; square-on from the front only the lever\'s edge shows, drawn as a thin bar at the seat surface. The angle it turns through (taken as 90° aft) is not given.',
-      'The seat bucket round the lever (cushion, side rail) is drawn as a plain strip with the lever\'s slot.',
-      'The grey top of the lever is plain metal in the image; its top corners are drawn rounded as they appear.',
+      'Drawn in top view, forward up the page, the way the pilot looks down at it. The guide calls the disarmed lever upright; it is drawn leaning 45° so its LOCKED face reads from above.',
+      'The pivot is drawn at the aft end and the lever lies forward of it when armed, as the top-view photos show; the guide says the lever is "rotated aft and down" to arm. The pivot block and the open channel are simplified from the photos.',
+      'The ARMED placard\'s lettering is set from the photos; its exact size is not measured.',
       'The ejection handle and the emergency manual chute lever (both not implemented in DCS) are catalogued separately under Ejection seat.',
     ],
   },
   plate: [
-    // Seat bucket surface the lever folds down onto, with the slot it lies in.
-    { d: path('M8 300H118V330H8Z') },
+    // The console edge strip the lever lies along.
+    { d: 'M14 4H46V128H14Z' },
   ],
-  engraving: [
-    { kind: 'path', d: path('M28 300V306H98V300'), pen: 'fine' },
-  ],
+  engraving: [],
   placements: [
     {
-      component: 'traced', control: 'arming-lever', at: pt(...PIVOT), hit: [mm(26), mm(10), mm(74), mm(298)],
+      component: 'traced', control: 'arming-lever', at: P, hit: [X0, 4, W, 124],
       shapes: {
-        // Upright: grey metal top, the yellow flag below it, a narrow stem down to the pivot.
-        disarmed: { d: path('M41 14H85Q91 14 91 20V62H35V20Q35 14 41 14ZM46 246H80V300H46Z'), svg: flag },
-        // Folded aft and down, flush with the seat: its edge in the slot.
-        armed: { d: path('M30 300H96V306H30Z') },
+        disarmed: { d: '', svg: lockedFace + block },
+        armed: { d: '', svg: armedFace + block },
       },
     },
   ],
