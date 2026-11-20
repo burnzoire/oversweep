@@ -31,6 +31,13 @@ const trimTicks = Array.from({ length: 11 }, (_, k) => {
   const P = (r: number) => `${(r * Math.sin(a)).toFixed(2)} ${(-r * Math.cos(a)).toFixed(2)}`;
   return { d: `M${P(r0)}L${P(r1)}`, major };
 });
+/** Opaque band the trim scale is printed on, covering the bezel under it (Nathan, 2026-11-20). */
+const trimBand = (() => {
+  const P = (r: number, d: number) => { const a = (d * Math.PI) / 180; return `${(r * Math.sin(a)).toFixed(2)} ${(-r * Math.cos(a)).toFixed(2)}`; };
+  const from = TRIM_MID - 25 * TRIM_DEG - 5, to = TRIM_MID + 25 * TRIM_DEG + 5, steps = 24;
+  const ring = (r: number, rev: boolean) => Array.from({ length: steps + 1 }, (_, k) => P(r, rev ? to - (k * (to - from)) / steps : from + (k * (to - from)) / steps));
+  return 'M' + [...ring(64, false), ...ring(41, true)].join('L') + 'Z';
+})();
 /** White triangular index at the middle of the trim scale (0°), pointing at the knob. */
 const idx = (() => {
   const a = (TRIM_MID * Math.PI) / 180, P = (r: number, s: number) => `${(r * Math.sin(a) + s * Math.cos(a)).toFixed(2)} ${(-r * Math.cos(a) + s * Math.sin(a)).toFixed(2)}`;
@@ -105,12 +112,12 @@ export const sai: PanelSpec = {
       component: 'cage-knob', control: 'pitch-trim', pull: 'cage', at: pt(...K), r: mm(38), face: mm(33),
       // PULL and CAGE are set round the face along the top and bottom, TO straight across the middle.
       legend: [
-        { text: 'PULL', at: [0, 0], cap: mm(12), width: mm(34), arc: mm(22) },
+        { text: 'PULL', at: [0, 0], cap: mm(12), width: mm(40), arc: mm(22) },
         { text: 'TO', at: pt(0, 0), cap: mm(12), width: mm(20) },
-        { text: 'CAGE', at: [0, 0], cap: mm(12), width: mm(40), arc: mm(-22) },
+        { text: 'CAGE', at: [0, 0], cap: mm(12), width: mm(47), arc: mm(-22) },
       ],
       // The pitch trim scale is drawn with the knob, over the attitude indicator's bezel.
-      marks: [...trimTicks.map(t => ({ d: path(t.d), pen: t.major ? 'heavy' as const : 'medium' as const })), { d: path(idx), pen: 'medium' as const, fill: true }],
+      marks: [{ d: path(trimBand), pen: 'fine' as const, fill: true }, ...trimTicks.map(t => ({ d: path(t.d), pen: t.major ? 'heavy' as const : 'medium' as const })), { d: path(idx), pen: 'medium' as const, fill: true }],
       needle: { r: [mm(34), mm(45)], half: mm(2.6), rest: TRIM_MID },
     },
   ],

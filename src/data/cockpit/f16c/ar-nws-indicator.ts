@@ -2,77 +2,83 @@ import type { PanelSpec } from '../types';
 import { tracer } from '../trace.ts';
 
 /**
- * F-16C AR status / NWS indicator (instrument panel, left of the HUD), DCS:
- * three lights (RDY, AR/NWS, DISC) in one upright housing, with a dimming
- * lever out of its right side.
+ * F-16C AR status / NWS indicator (instrument panel, right of the HUD), DCS:
+ * three square lights (RDY, AR/NWS, DISC) stacked in an upright housing under
+ * a hood that wraps its left, top and right sides, with a flat dimming tab out
+ * of its right side.
  *
  * Reference: the guide's p. 45 "AR Status/NWS Indicator" image (154 x 294
- * JPEG, extracted with `pdfimages -j -f 45 -l 45`, image 013). The face is
- * square-on (its side edges are vertical), so it is traced unrectified.
- * Values are reference pixels, converted to mm by `tracer`.
+ * JPEG, extracted with `pdfimages -j -f 45 -l 45`, image 013) for the legends
+ * and scale; the layout (separate square lenses, hood, tab, screw) is squared
+ * up from a photo of a real unit Nathan supplied (2026-11-20), since the guide
+ * shows the housing only at an angle. Values are reference pixels at the
+ * guide image's scale, converted to mm by `tracer`.
  */
 const PX = 5.65;
 const { pt, mm, path } = tracer(PX);
 const src = 'DCS F-16C guide p. 45';
 
-/** Dimming lever: pivot on the housing's right edge, tab 14 px deep to a round end 45 px out; swung up to `SWING` degrees down. */
-const PIVOT: [number, number] = [100.5, 105], REACH = 44.5, HALF = 7, SWING = 45;
+/** Dimming tab: a flat bar out of the housing's right side, 46 px long and 22 px deep (photo), level with the foot of RDY as in the guide; swung up to `SWING` degrees down. */
+const PIVOT: [number, number] = [132, 105], REACH = 46, HALF = 11, SWING = 45;
 const STEPS = Array.from({ length: 11 }, (_, i) => i * 10);
 function tab(deg: number) {
   const a = (deg * Math.PI) / 180, P = (u: number, v: number) => pt(PIVOT[0] + u * Math.cos(a) - v * Math.sin(a), PIVOT[1] + u * Math.sin(a) + v * Math.cos(a)).join(' ');
-  const end = Array.from({ length: 13 }, (_, k) => { const t = -Math.PI / 2 + (k * Math.PI) / 12; return P(REACH - HALF + HALF * Math.cos(t), HALF * Math.sin(t)); });
-  return `M${P(0, -HALF)}L${end.join('L')}L${P(0, HALF)}Z`;
+  return `M${P(0, -HALF)}L${P(REACH, -HALF)}L${P(REACH, HALF)}L${P(0, HALF)}Z`;
 }
+/** One square lens module (55 x 54 px) at its top-left corner; the lens inside the frame carries the legend. */
+const LENS = 55, LENS_H = 54;
+const lens = (y: number, l: { indicator: string; legend: string; width: number | number[]; cap: number }) => ({
+  component: 'lamp-module' as const, at: pt(36.5, y), size: [mm(LENS), mm(LENS_H)] as [number, number],
+  lamps: [{ ...l, rect: [mm(5), mm(5), mm(LENS - 10), mm(LENS_H - 10)] as [number, number, number, number], width: Array.isArray(l.width) ? l.width.map(mm) : mm(l.width), cap: mm(l.cap) }],
+});
 
 export const arNwsIndicator: PanelSpec = {
   id: 'ar-nws-indicator',
   title: 'AR status / NWS indicator',
-  canvas: [mm(154), mm(294)],
+  canvas: [mm(190), mm(294)],
   source: {
     variant: 'DCS F-16C Viper (Block 50)',
     manual: 'Eagle Dynamics, DCS F-16C Viper Early Access Guide (EN, 16 Aug 2026)',
     page: 45,
     image: 'p. 45 "AR Status/NWS Indicator" image, 154 x 294 px',
-    rectify: 'none: the face is square-on (side edges vertical), traced as extracted',
+    rectify: 'none: laid out square-on from the photo of a real unit (0.317 guide px a photo px, from the 205 photo px lens pitch against the guide\'s 65 px legend pitch; the lens centres sit on the guide\'s legends) and checked against the guide image',
     pxPerMm: PX,
-    scale: 'No shared component on this image. The legends (13 px cap height) are taken as the shared lamp legend height (2.3 mm), giving 5.65 px/mm; the housing is then 15.8 mm wide.',
+    scale: 'No shared component on this image. The legends (13 px cap height) are taken as the shared lamp legend height (2.3 mm), giving 5.65 px/mm; the housing is then 23.2 mm wide over the hood.',
     shown: { 'dimming-lever': 'up' },
     unresolved: [
       'The lights are shown lit in the guide (RDY pale blue, AR/NWS green, DISC red); they are drawn unlit here.',
-      'The dimming lever is seen end-on from the side: its pivot is taken on the housing edge, its travel (about 45° down) and whether it has detents are not shown. It is read in percent of travel, 10 % a click.',
-      'The housing is drawn square-on: a hood block across the top, the lens below it, the lever out of the right side and the stand below. The strip down its left side in the close-up is the housing\'s side seen at an angle and is not drawn. The hood\'s depth is taken from the close-up (y 8 to 52); the guide\'s p. 44 cockpit view is too small to measure it.',
+      'The guide shows the dimming tab level with the foot of RDY; the photo of a real unit shows it at mid height. The guide\'s place is drawn. Its travel (taken as 45° down) and whether it has detents are not shown in the guide or the photo. It is read in percent of travel, 10 % a click.',
+      'The hood is a thin sheet folded round the left, top and right of the housing, so square-on it shows only as a thin edge. Its depth is not drawn.',
       'The housing\'s mounting below the crop is not drawn. It sits right of the HUD.',
       'Physical size rests on the legend height: the guide gives no dimension.',
     ],
   },
   plate: [
-    // Stand below the housing, to the image crop.
-    { d: path('M14 245H91V292H14Z') },
-    // Hood across the top of the housing, over the lens (the guide's p. 44 cockpit view shows it as a separate block).
-    { d: path('M18 8H95Q101 8 101 14V52H12V14Q12 8 18 8Z'), raised: true },
+    // Stand below the housing, between the hood's side flanges.
+    { d: path('M27 278H117V292H27Z') },
+    // Housing face.
+    { d: path('M9 53H132V278H9Z') },
+    // Hood: a thin sheet round the left, top and right, its side flanges running down past the face.
+    { d: path('M5 49H136V292H132V53H9V292H5Z'), raised: true },
   ],
   engraving: [],
   placements: [
-    {
-      component: 'lamp-module', at: pt(12, 52), size: [mm(89), mm(200)], undivided: true,
-      lamps: [
-        { indicator: 'rdy', legend: 'RDY', rect: [mm(5.5), mm(24), mm(64), mm(34)], width: mm(22.5), cap: mm(13.5) },
-        { indicator: 'ar-nws', legend: 'AR\nNWS', rect: [mm(5.5), mm(82), mm(64), mm(46)], width: [mm(14), mm(25.5)], cap: mm(13.3) },
-        { indicator: 'disc', legend: 'DISC', rect: [mm(5.5), mm(155), mm(64), mm(34)], width: mm(27), cap: mm(14) },
-      ],
-    },
+    lens(66, { indicator: 'rdy', legend: 'RDY', width: 22.5, cap: 13.5 }),
+    lens(131, { indicator: 'ar-nws', legend: 'AR\nNWS', width: [14, 25.5], cap: 13.3 }),
+    lens(196, { indicator: 'disc', legend: 'DISC', width: 27, cap: 14 }),
+    { component: 'screw-small', at: pt(97.5, 264) },
     {
       component: 'traced', control: 'dimming-lever', at: pt(...PIVOT),
       shapes: Object.fromEntries(STEPS.map(v => [v === 0 ? 'up' : `down-${v}`, { d: tab((v / 100) * SWING) }])),
-      hit: [mm(101), mm(80), mm(52), mm(90)],
+      hit: [mm(134), mm(88), mm(54), mm(76)],
     },
   ],
   controls: [
     {
-      id: 'dimming-lever', name: 'Dimming lever', type: 'rotary', travel: 'vertical',
+      id: 'dimming-lever', name: 'Dimming tab', type: 'rotary', travel: 'vertical',
       positions: STEPS.map(v => ({ id: v === 0 ? 'up' : `down-${v}`, label: v === 0 ? 'Up (brightest)' : `${v}% down${v === 100 ? ' (dimmest)' : ''}`, hold: 'stable' as const, angle: +((v / 100) * SWING).toFixed(1) })),
       initial: 'up',
-      description: 'Rotating the lever downward dims the indicator lights. It turns without detents and is read in percent of its travel, 10 % a click.',
+      description: 'Rotating the tab downward dims the indicator lights. It turns without detents and is read in percent of its travel, 10 % a click.',
       source: src,
     },
   ],

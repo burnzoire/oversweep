@@ -169,7 +169,7 @@ export type Placement =
   | { component: 'guard-flip'; control: string; at: Pt; size: [w: number, h: number]; rotate?: number; paint?: Paint }
   /** Square pushbutton, centred on `at`; `legend` lines are placed by their centre `y` (mm from the centre). With `indicator`, the legend face is that lamp's lens. */
   | { component: 'push-square'; control: string; at: Pt; size: [w: number, h: number]; legend: { text: string; cap: number; y: number; width?: number; /** Off-centre legend (keypad direction letters). */ x?: number }[]; indicator?: string; /** Turn (degrees clockwise) about the centre, for buttons on an angled mount. */ rotate?: number }
-  | { component: LampModuleArt; at: Pt; size: [w: number, h: number]; lamps: LampCell[]; /** Unused module: a dash across the blank lens. */ blank?: boolean; /** One undivided lens, no rules between the cells (F-16C AR/NWS indicator). */ undivided?: boolean; /** Turn (degrees clockwise) about the module centre, for modules on an angled mount. */ rotate?: number }
+  | { component: LampModuleArt; at: Pt; size: [w: number, h: number]; lamps: LampCell[]; /** Unused module: a dash across the blank lens. */ blank?: boolean; /** Turn (degrees clockwise) about the module centre, for modules on an angled mount. */ rotate?: number }
   | { component: LampRoundArt; indicator: string; at: Pt }
   /** Pointer instrument centred on `at`; everything inside `dial` is relative to the dial centre. */
   | { component: 'gauge'; /** The needle's indicator; omitted when the dial has `pointers`. */ indicator?: string; at: Pt; dial: Dial }
