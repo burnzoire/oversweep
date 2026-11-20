@@ -484,7 +484,12 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     });
   }
   for (const b of document.querySelectorAll<HTMLButtonElement>(`[data-cockpit-pick="${def.panel}"]`)) {
-    b.addEventListener('click', () => select(b.dataset.id!));
+    b.addEventListener('click', () => {
+      select(b.dataset.id!);
+      // A control worked from a pad: picking it from the list opens its card too.
+      const pad = padEls.find(el => el.querySelector(`[data-pad-control="${b.dataset.id}"]`));
+      if (pad) openPad(pad.dataset.pad!);
+    });
   }
   document.querySelector(`[data-cockpit-reset="${def.aircraft}"]`)?.addEventListener('click', () => {
     try { sessionStorage.removeItem(storeKey(def.aircraft)); } catch { /* nothing stored */ }

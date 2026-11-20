@@ -2,7 +2,7 @@ import type { ControlDef, PanelSpec, Rect } from '../types';
 import { ANT_ELEV, ART, HITS, MAN_RNG } from './throttle-grip-art.ts';
 import { THROTTLE_FACES } from './hotas-faces.ts';
 
-const FACES = THROTTLE_FACES(MAN_RNG);
+const FACES = THROTTLE_FACES(MAN_RNG, ANT_ELEV);
 
 /**
  * F-16C throttle grip (left sidewall), DCS: the hands-on switches. The throttle's travel (OFF, IDLE, MIL,

@@ -3,16 +3,17 @@ import type { Placement } from '../types';
 /**
  * Face-on drawings of the F-16C HOTAS switches for their control pads: each switch seen square to its own face,
  * as every panel is drawn, centred in a 50 x 50 mm canvas. Shapes follow the clean flight-manual line drawing
- * (concentric trim hat, ridged TMS, four-tab DMS, square transmit cap, oval cursor cap, knurled MAN RNG knob).
+ * and the DCS guide's switch diagrams and renders (pp. 83–89): concentric trim hat, knurled and ridged TMS, four-bar DMS,
+ * round CMS with a raised cross, red weapon release and trigger, four-tab transmit cap, round knurled cursor/enable,
+ * knurled MAN RNG and ANT ELEV wheels, ridged round DOG FIGHT slide.
  * A held four-way switch is drawn rocked a little toward the direction pushed.
  */
 export const FACE: [number, number] = [50, 50];
-const C = 25, INK = '#161616', PAPER = 'var(--panel-paper,#fff)';
+const C = 25, INK = '#161616', PAPER = 'var(--panel-paper,#fff)', RED = 'var(--panel-red,#b3262a)';
 const W = { heavy: 0.6, medium: 0.4, fine: 0.25 };
 const f = (v: number) => +v.toFixed(2);
 const line = (d: string, w: keyof typeof W = 'medium', fill = 'none') => `<path d="${d}" fill="${fill}" stroke="${INK}" stroke-width="${W[w]}" stroke-linecap="round" stroke-linejoin="round"/>`;
 const circle = (r: number, w: keyof typeof W = 'medium', fill = PAPER, x = C, y = C) => `<circle cx="${f(x)}" cy="${f(y)}" r="${f(r)}" fill="${fill}" stroke="${INK}" stroke-width="${W[w]}"/>`;
-const ellipse = (rx: number, ry: number, w: keyof typeof W = 'medium', fill = PAPER, x = C, y = C) => `<ellipse cx="${f(x)}" cy="${f(y)}" rx="${f(rx)}" ry="${f(ry)}" fill="${fill}" stroke="${INK}" stroke-width="${W[w]}"/>`;
 const rect = (w: number, h: number, r: number, pen: keyof typeof W = 'medium', x = C, y = C) => `<rect x="${f(x - w / 2)}" y="${f(y - h / 2)}" width="${f(w)}" height="${f(h)}" rx="${f(r)}" fill="${PAPER}" stroke="${INK}" stroke-width="${W[pen]}"/>`;
 const cover = (svg: string) => svg; // parts are drawn on paper, so a moved cap hides the centred one under it
 const g = (dx: number, dy: number, body: string) => (dx || dy ? `<g transform="translate(${f(dx)} ${f(dy)})">${body}</g>` : body);
@@ -28,6 +29,16 @@ function fourWay(ud: string, lr: string, ids: { ud: [string, string, string]; lr
 }
 const HAT_IDS = { ud: ['fwd', 'center', 'aft'] as [string, string, string], lr: ['left', 'center', 'right'] as [string, string, string] };
 
+/** Knurl teeth round the rim of a circle of radius r, `depth` deep, turned `deg`. */
+const knurl = (r: number, depth: number, n: number, deg = 0) => {
+  let k = '';
+  for (let i = 0; i < n; i++) {
+    const t = ((i / n) * 360 + deg) * Math.PI / 180;
+    k += `M${f(C + Math.sin(t) * (r - depth))} ${f(C - Math.cos(t) * (r - depth))}L${f(C + Math.sin(t) * r)} ${f(C - Math.cos(t) * r)}`;
+  }
+  return line(k, 'fine');
+};
+
 /** Chords of a circle of radius r at 45 degrees, `n` of them, as fine ridges. */
 const ridges = (r: number, n: number, gap: number) => {
   let d = '';
@@ -42,11 +53,11 @@ const ridges = (r: number, n: number, gap: number) => {
 export const STICK_FACES: Record<string, { canvas: [number, number]; placements: Placement[] }> = {
   trim: { canvas: FACE, placements: fourWay('trim-ud', 'trim-lr', HAT_IDS, circle(17, 'heavy'),
     circle(13.5) + [11, 8.8, 6.8, 4.9, 3.1].map(r => circle(r, 'fine', 'none')).join('') + circle(1.2, 'fine', 'none')) },
-  tms: { canvas: FACE, placements: fourWay('tms-ud', 'tms-lr', HAT_IDS, circle(16, 'heavy'), circle(12) + ridges(11.4, 6, 3.6)) },
+  tms: { canvas: FACE, placements: fourWay('tms-ud', 'tms-lr', HAT_IDS, circle(16, 'heavy'), circle(13) + knurl(13, 1.6, 40) + circle(11.4, 'fine') + ridges(10.8, 6, 3.4)) },
   dms: { canvas: FACE, placements: fourWay('dms-ud', 'dms-lr', HAT_IDS, circle(16, 'heavy'),
-    circle(12.5) + [[0, -9], [9, 0], [0, 9], [-9, 0]].map(([x, y]) => rect(x ? 3.6 : 6, x ? 6 : 3.6, 0.6, 'medium', C + x, C + y)).join('')) },
-  cms: { canvas: FACE, placements: fourWay('cms-ud', 'cms-lr', HAT_IDS, rect(30, 22, 3, 'heavy'),
-    rect(22, 14, 2) + line(`M${C - 6} ${C - 4.5}V${C + 4.5}M${C} ${C - 4.5}V${C + 4.5}M${C + 6} ${C - 4.5}V${C + 4.5}`, 'fine')) },
+    rect(21, 21, 6) + [[0, -10.5], [10.5, 0], [0, 10.5], [-10.5, 0]].map(([x, y]) => rect(x ? 4 : 11, x ? 11 : 4, 1.2, 'medium', C + x, C + y)).join('')) },
+  cms: { canvas: FACE, placements: fourWay('cms-ud', 'cms-lr', HAT_IDS, circle(16, 'heavy'),
+    circle(12.5) + line(`M${C - 2} ${C - 12.3}V${C - 2}H${C - 12.3}M${C + 2} ${C - 12.3}V${C - 2}H${C + 12.3}M${C - 2} ${C + 12.3}V${C + 2}H${C - 12.3}M${C + 2} ${C + 12.3}V${C + 2}H${C + 12.3}`, 'medium')) },
   // The stick senses force: its grip top, with an arrow for the force applied.
   stick: { canvas: FACE, placements: (() => {
     const grip = rect(24, 30, 9, 'heavy') + line(`M${C - 7} ${C - 9}H${C + 7}`, 'fine');
@@ -60,28 +71,23 @@ export const STICK_FACES: Record<string, { canvas: [number, number]; placements:
     ] as Placement[];
   })() },
   'weapon-release': { canvas: FACE, placements: [{ component: 'traced', control: 'weapon-release', at: [C, C], shapes: shapes({
-    out: circle(15, 'heavy') + circle(10.5) + circle(7) + circle(3, 'fine', 'none'),
-    in: circle(15, 'heavy') + circle(10.5) + circle(6.3) + circle(4.2, 'fine', 'none') + circle(2.4, 'fine', 'none'),
+    out: circle(15, 'heavy') + circle(10.5) + circle(7.5, 'medium', RED) + circle(4, 'fine', 'none'),
+    in: circle(15, 'heavy') + circle(10.5) + circle(6.6, 'medium', RED) + circle(4.6, 'fine', 'none') + circle(2.6, 'fine', 'none'),
   }) }] },
   'msl-step': { canvas: FACE, placements: [{ component: 'traced', control: 'msl-step', at: [C, C], shapes: shapes({
     out: circle(11, 'heavy') + circle(7.5), in: circle(11, 'heavy') + circle(6.8) + circle(5, 'fine', 'none'),
   }) }] },
   'expand-fov': { canvas: FACE, placements: [{ component: 'traced', control: 'expand-fov', at: [C, C], shapes: shapes({
-    out: circle(12, 'heavy') + circle(9) + line(`M${C - 5} ${C}H${C + 5}M${C} ${C - 5}V${C + 5}`, 'heavy'),
-    in: circle(12, 'heavy') + circle(8.2) + circle(6.8, 'fine', 'none') + line(`M${C - 4.4} ${C}H${C + 4.4}M${C} ${C - 4.4}V${C + 4.4}`, 'heavy'),
+    out: circle(12, 'heavy') + circle(9),
+    in: circle(12, 'heavy') + circle(8.2) + circle(6.6, 'fine', 'none'),
   }) }] },
 };
 
-/** Knurled knob seen from its face, index line at `deg` (clockwise from up). */
-const knob = (deg: number, pressed = false) => {
-  const r = pressed ? 12.3 : 13, a = (deg * Math.PI) / 180;
-  let k = '';
-  for (let i = 0; i < 40; i++) {
-    const t = (i / 40) * 2 * Math.PI;
-    k += `M${f(C + Math.sin(t) * (r - 1.6))} ${f(C - Math.cos(t) * (r - 1.6))}L${f(C + Math.sin(t) * r)} ${f(C - Math.cos(t) * r)}`;
-  }
-  return circle(16.5, 'heavy') + circle(r) + line(k, 'fine') + circle(r - 1.6, 'fine', 'none') +
-    line(`M${C} ${C}L${f(C + Math.sin(a) * (r - 2.5))} ${f(C - Math.cos(a) * (r - 2.5))}`, 'heavy');
+/** Knurled wheel or knob seen from its face; the knurl turns `deg` with it (it has no index mark). */
+const knob = (deg: number, pressed = false, label = '') => {
+  const r = pressed ? 12.3 : 13;
+  return circle(16.5, 'heavy') + circle(r) + knurl(r, 1.8, 36, deg) + circle(r - 1.8, 'fine', 'none') +
+    (label ? `<text x="${C}" y="${C + 1.2}" font-size="3.4" font-weight="700" text-anchor="middle" fill="${INK}" stroke="none">${label}</text>` : '');
 };
 
 /** Three-position slide: a slot along `axis` with the slider at -1, 0 or 1. */
@@ -92,18 +98,22 @@ const slide = (axis: 'x' | 'y', at: number, ridged = true) => {
   return slot + g(dx, dy, cap);
 };
 
-export const THROTTLE_FACES = (manRng: number[]): Record<string, { canvas: [number, number]; placements: Placement[] }> => ({
+export const THROTTLE_FACES = (manRng: number[], antElev: number[]): Record<string, { canvas: [number, number]; placements: Placement[] }> => ({
   comm: { canvas: FACE, placements: fourWay('comm-ud', 'comm-lr', { ud: ['fwd', 'center', 'aft'], lr: ['left', 'center', 'right'] }, circle(16, 'heavy'),
-    rect(17, 17, 1.6) + rect(12.5, 12.5, 1, 'fine')) },
+    [[0, -9.6], [9.6, 0], [0, 9.6], [-9.6, 0]].map(([x, y]) => rect(x ? 3.4 : 8, x ? 8 : 3.4, 0.8, 'medium', C + x, C + y)).join('') + rect(17, 17, 2.4)) },
   cursor: { canvas: FACE, placements: [
-    ...fourWay('cursor-ud', 'cursor-lr', { ud: ['up', 'center', 'down'], lr: ['aft', 'center', 'fwd'] }, ellipse(12, 19, 'heavy'), ellipse(8.5, 15) + ellipse(5, 10.5, 'fine', 'none')),
-    { component: 'traced', control: 'enable', at: [C, C], shapes: shapes({ out: '', in: ellipse(8.5, 15) + ellipse(6.6, 12.6, 'fine', 'none') + ellipse(4.2, 8.6, 'fine', 'none') }) },
+    ...fourWay('cursor-ud', 'cursor-lr', { ud: ['up', 'center', 'down'], lr: ['aft', 'center', 'fwd'] }, circle(16.5, 'heavy'), circle(12.5) + knurl(12.5, 1.6, 36) + circle(10.9, 'fine', 'none')),
+    { component: 'traced', control: 'enable', at: [C, C], shapes: shapes({ out: '', in: circle(11.8) + knurl(11.8, 1.5, 36) + circle(10.3, 'fine', 'none') + circle(8.6, 'fine', 'none') }) },
   ] },
   'man-rng': { canvas: FACE, placements: [
-    { component: 'traced', control: 'man-rng', at: [C, C], shapes: shapes(Object.fromEntries(manRng.map(v => [`p${v}`, knob(-135 + 2.7 * v)]))) },
-    { component: 'traced', control: 'uncage', at: [C, C], shapes: shapes({ out: '', in: circle(16.5, 'heavy') + circle(12.3) + circle(10.4, 'fine', 'none') }) },
+    { component: 'traced', control: 'man-rng', at: [C, C], shapes: shapes(Object.fromEntries(manRng.map(v => [`p${v}`, knob(v * 0.9)]))) },
+    { component: 'traced', control: 'uncage', at: [C, C], shapes: shapes({ out: '', in: knob(0, true) }) },
   ] },
-  'ant-elev': { canvas: FACE, placements: [{ component: 'thumbwheel', control: 'ant-elev', at: [C, C], size: [12, 30] }] },
-  dogfight: { canvas: FACE, placements: [{ component: 'traced', control: 'dogfight', at: [C, C], shapes: shapes({ dogfight: slide('y', -1), center: slide('y', 0), 'msl-ovrd': slide('y', 1) }) }] },
+  'ant-elev': { canvas: FACE, placements: [{ component: 'traced', control: 'ant-elev', at: [C, C], shapes: shapes(Object.fromEntries(antElev.map(v => [v > 0 ? `u${v}` : v < 0 ? `d${-v}` : 'center', knob(v * 0.3)]))) }] },
+  dogfight: { canvas: FACE, placements: [{ component: 'traced', control: 'dogfight', at: [C, C], shapes: shapes(Object.fromEntries((['dogfight', 'center', 'msl-ovrd'] as const).map((id, i) => {
+    const dy = (i - 1) * 4;
+    const cap = circle(12) + line([-8, -4, 0, 4, 8].map(y => { const h = Math.sqrt(144 - y * y) - 1; return `M${f(C - h)} ${C + y}H${f(C + h)}`; }).join(''), 'fine');
+    return [id, rect(26, 34, 13, 'heavy') + g(0, dy, cap)];
+  }))) }] },
   'spd-brk': { canvas: FACE, placements: [{ component: 'traced', control: 'spd-brk', at: [C, C], shapes: shapes({ aft: slide('x', -1), off: slide('x', 0), fwd: slide('x', 1) }) }] },
 });

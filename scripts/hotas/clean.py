@@ -18,7 +18,7 @@ from scipy import ndimage
 
 K = 0.375  # mm per reference px
 UP = 3  # upscale before tracing, for smoother curves
-INK, PAPER = '#161616', 'var(--panel-paper,#fff)'
+INK, PAPER, RED = '#161616', 'var(--panel-paper,#fff)', 'var(--panel-red,#b3262a)'
 THRESH = 96  # darker than this is ink; thins the drawing's 2.8 px strokes to about 2 px (0.75 mm)
 
 IM = None
@@ -81,18 +81,18 @@ def ink(d):
     return f'<path d="{d}" fill="{INK}" fill-rule="evenodd" stroke="none"/>' if d else ''
 
 
-def paper(d):
-    return f'<path d="{d}" fill="{PAPER}" stroke="none"/>' if d else ''
+def paper(d, fill=PAPER):
+    return f'<path d="{d}" fill="{fill}" stroke="none"/>' if d else ''
 
 
 class Part:
     """A moving part: its ink and a paper silhouette, cut out of the view by a region polygon."""
 
-    def __init__(self, view, poly, extra_paper=None):
-        self.v, self.poly = view, poly
+    def __init__(self, view, poly, extra_paper=None, fill=PAPER, close=2):
+        self.v, self.poly, self.fill = view, poly, fill
         r = view.region(poly)
         self.mask = view.ink & r
-        sil = ndimage.binary_fill_holes(ndimage.binary_closing(self.mask, iterations=2))
+        sil = ndimage.binary_fill_holes(ndimage.binary_closing(self.mask, iterations=close))
         self.d, self.sil = view.trace(self.mask), view.trace(sil)
         self.cover = extra_paper or self.sil  # paper over the part's rest place when it moves
 
@@ -107,7 +107,7 @@ class Part:
         if scale:
             cx, cy = self.v.p(*scale[1])
             tf.append(f'translate({cx:.2f} {cy:.2f}) scale({scale[0]}) translate({-cx:.2f} {-cy:.2f})')
-        body = paper(self.sil) + ink(self.d)
+        body = paper(self.sil, self.fill) + ink(self.d)
         g = f'<g transform="{" ".join(tf)}">{body}</g>' if tf else body
         return (paper(self.cover) if (tf and self.cover) else '') + g
 
@@ -145,11 +145,12 @@ def stick():
     side = View(1205, 88, 1600, 662, (0, 12))
     rear = View(1785, 88, 1995, 662, (156, 12))
     # Side view (left side; forward is to the left).
-    trig = Part(side, [(1318, 252), (1345, 257), (1346, 282), (1322, 304), (1294, 304), (1296, 292), (1320, 270)])
+    # The trigger and weapon release are red (DCS guide render, p. 83).
+    trig = Part(side, fill=RED, close=14, poly=[(1318, 252), (1345, 257), (1346, 282), (1322, 304), (1294, 304), (1296, 292), (1320, 270)])
     paddle = Part(side, [(1306, 397), (1337, 393), (1352, 470), (1357, 527), (1340, 529), (1327, 531), (1321, 470)])
     pinky = Part(side, circle(1433, 473.5, 13.9))
     # Rear view (looking forward; the pilot's left is on the left).
-    wpn = Part(rear, ellipse(1833, 122, 17, 15))
+    wpn = Part(rear, ellipse(1833, 122, 17, 15), fill=RED)
     trim = Part(rear, ellipse(1915, 139, 35, 28))
     tms = Part(rear, circle(1843, 200, 25))
     dms = Part(rear, circle(1910, 200, 25.2))
