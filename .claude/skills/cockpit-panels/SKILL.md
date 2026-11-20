@@ -190,7 +190,14 @@ everything that stands proud of it.
   engraving `fill` under the stripe lines, clipped to the striped area).
   Paints approximate FED-STD-595 insignia red 11136 and insignia yellow 33538
   (`PAINTS` in components.ts). Grey or black parts stay uncoloured; lamps stay
-  unlit.
+  unlit. **Safety paint (Nathan, 2026-11-20):** also paint safety controls and
+  indicators green, red or yellow where the real part has that colour (e.g.
+  OXYGEN's red EMERGENCY lever, green SUPPLY lever, green dial band;
+  `paint: 'green'`, Dial `fills[].paint`), to draw the eye to them.
+- **Unfamiliar parts (Nathan, 2026-11-20).** Before drawing a part you don't
+  know, read xflight.de (e.g. its oxygen regulator page) and real photos to
+  understand its shape and how it moves. That is for comprehension only: never
+  cite or link xflight; the trace and the citations stay the DCS guide.
 - **Unlit displays** show faint outlines of their segment digits (UHF uses
   10-segment LEDs: seven bars with a split middle and two diagonals); use a
   `faint` engraving path.
