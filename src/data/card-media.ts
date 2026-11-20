@@ -58,10 +58,10 @@ export const cardMedia: Record<string, CardMedia> = {
   'procedure.dcs-f16c.before-taxi': {
     summary: 'The after-start checks, a Stored Heading INS alignment and the before-taxi checks, from a running engine to ready to taxi.',
     photo: {
-      src: 'manual/cards/f16c-cockpit.webp',
-      alt: 'The F-16C instrument panel and head-up display from the pilot’s seat.',
-      credit: 'Cockpit — US Air Force (public domain)',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:F-16C_cockpit_m02006112700032.jpg',
+      src: 'manual/cards/f16c-start.webp',
+      alt: 'An F-16 pilot in an open cockpit signalling for engine start at Avalon.',
+      credit: 'Engine start at Avalon — Peter Reft, US Air Force (public domain)',
+      sourceUrl: 'https://www.dvidshub.net/image/8942229/pacific-air-forces-f-16-demonstration-team-performs-avalon-australian-international-airshow-2025',
     },
   },
   'module.principles-of-flight': {

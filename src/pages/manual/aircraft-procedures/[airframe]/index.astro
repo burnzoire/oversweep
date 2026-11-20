@@ -14,7 +14,13 @@ export function getStaticPaths() {
 const { airframe } = Astro.props;
 const cockpit = cockpits.find(item => item.airframe === airframe.slug);
 const cockpitMedia = cockpit && cardMedia[`cockpit.${cockpit.id}`];
-const guides = visibleProcedures.filter(guide => guide.airframe === airframe.slug);
+// A procedure that continues another (its `next`) is listed straight after it.
+const guides = visibleProcedures.filter(guide => guide.airframe === airframe.slug)
+  .filter((guide, _, all) => !all.some(g => g.next === guide.slug))
+  .flatMap(function chain(guide): typeof visibleProcedures {
+    const after = visibleProcedures.find(g => g.airframe === guide.airframe && g.slug === guide.next);
+    return [guide, ...(after ? chain(after) : [])];
+  });
 const isViper = airframe.slug === 'f-16c';
 const hero = cardMedia[`aircraft-procedures.${airframe.slug}`]?.photo;
 const lessons = [
@@ -32,7 +38,7 @@ const lessons = [
     steps: guide.steps.length,
   })),
 ];
-const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => photo !== undefined);
+const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => photo !== undefined).filter((photo, i, all) => all.findIndex(p => p!.src === photo!.src) === i);
 ---
 
 <SiteLayout

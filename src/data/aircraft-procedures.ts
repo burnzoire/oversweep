@@ -44,6 +44,8 @@ export interface AircraftProcedure {
   intro: string;
   description: string;
   complete: string;
+  /** Slug of the procedure that follows this one; the closing heading links to it. */
+  next?: string;
   /** The Sources section's text. */
   sources: string;
   steps: ProcedureStep[];
@@ -64,6 +66,7 @@ export const procedures: AircraftProcedure[] = [{
   intro: 'Initial state: cold-and-dark F-16C on the ground, canopy open, throttle at cutoff. Ground crew and area must be clear before cranking. The cockpit panels beside the steps are a teaching simulation, not connected to DCS.',
   description: 'Illustrated DCS F-16C engine-start procedure on interactive cockpit panels.',
   complete: 'Engine start complete',
+  next: 'before-taxi',
   sources: 'Eagle Dynamics — DCS F-16C Early Access Guide (23 March 2026), cockpit controls, “Before Engine Start” and “Engine Start”, pp. 134–135.',
   initial: { 'sidewall-controls.canopy-handle': 'unlocked', 'air-cond.air-source': 'off' },
   steps: [
