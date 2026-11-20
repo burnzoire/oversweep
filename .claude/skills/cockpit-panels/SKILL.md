@@ -263,8 +263,11 @@ Worked examples: F-16C `ded.ts`, `ehsi.ts`, `icp.ts`.
   **rockers** are three-position toggles, momentary to the centre; a four-way
   switch is one `hat` placement with two controls (`control` up/down,
   `cross` left/right).
-- Displays are drawn black on white like everything else; the sim's colours
-  go in `source.unresolved`.
+- Character displays (DED, HUD, EHSI) are drawn black on white like everything
+  else, with the sim's colours in `source.unresolved`. **MFDs are in full colour
+  (Nathan, 2026-11-21):** dark glass, words and symbols in the sim's colours
+  sampled off the guide (`MFD_COLOURS` in render.ts; word `c`, page `paths`),
+  because the HAD's threat colours carry meaning.
 
 ## 4. Review by onion skin, adjust, repeat
 

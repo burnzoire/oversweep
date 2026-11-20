@@ -369,6 +369,7 @@ export interface TextDisplay {
  * `inv` draws it inverse (lit box, dark letters); `marks` is extra symbology
  * (mm path, screen-centre origin).
  */
+export type MfdColour = 'white' | 'grey' | 'cyan' | 'magenta' | 'green' | 'yellow' | 'red';
 export interface MfdDisplay {
   opening: number;
   r: number;
@@ -378,9 +379,12 @@ export interface MfdDisplay {
   pitch: number;
   /** Inverse box padding round the ink (x, y). */
   pad: [x: number, y: number];
-  pages: { id: string; words: { t: string; at: Pt; a?: 'start' | 'middle' | 'end'; inv?: boolean }[];
-    /** Symbology paths (mm about the screen centre): `marks` medium lines, `fine` thin lines, `fills` solid shapes (drawn under the words). */
-    marks?: string; fine?: string; fills?: string }[];
+  /** Words and symbols are drawn in the sim's colours on dark glass; `c` names an `MFD_COLOURS` entry (white when left out). */
+  pages: { id: string; words: { t: string; at: Pt; a?: 'start' | 'middle' | 'end'; inv?: boolean; c?: MfdColour }[];
+    /** White symbology paths (mm about the screen centre): `marks` medium lines, `fine` thin lines, `fills` solid shapes (drawn under the words). */
+    marks?: string; fine?: string; fills?: string;
+    /** Coloured symbology: `pen` fine or medium (default) line, or a solid `fill`. */
+    paths?: { d: string; c: MfdColour; pen?: 'fine' | 'medium'; fill?: boolean }[] }[];
 }
 
 /**

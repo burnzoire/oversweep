@@ -91,7 +91,7 @@ const display: MfdDisplay = {
         ...hadBottom('BLANK'),
       ],
     },
-    ...hadPages.map(p => (p.id === 'had-thrt' ? { ...p, marks: ars } : p)),
+    ...hadPages.map(p => (p.id === 'had-thrt' ? { ...p, paths: [{ d: ars, c: 'cyan' as const }] } : p)),
     {
       id: 'dte', words: [
         w('ON', 184.5, 117), w('CLSD', 257.5, 117), w('LOAD', 331, 116.5), w('FCR', 404, 116.5),
@@ -100,7 +100,7 @@ const display: MfdDisplay = {
         ...dteTop, w('TNDL INIT REQD', 319, 377),
         ...bottom('DTE'),
       ],
-      marks: ars,
+      paths: [{ d: ars, c: 'cyan' }],
     },
     {
       id: 'dte-2', words: [
@@ -108,7 +108,7 @@ const display: MfdDisplay = {
         ...dteTop, R('PAGE', 464), R('2', 481),
         ...bottom('DTE'),
       ],
-      marks: ars,
+      paths: [{ d: ars, c: 'cyan' }],
     },
   ],
 };
@@ -172,9 +172,9 @@ function build(side: 'left' | 'right'): PanelSpec {
       shown: { display: 'menu' },
       unresolved: [
         'The guide\'s pictures are of one MFD; the left and right units are drawn the same. Which format each shows at power-up depends on the loaded data and is not drawn: procedures pick the page.',
-        'The screen is drawn black on white. In the sim the words are white or green on a dark screen, highlighted words are inverse, and the aircraft reference symbol is cyan.',
+        'The screen is drawn in the sim\'s colours on dark glass (colours sampled off the guide\'s images): white words, highlighted words inverse, cyan aircraft reference symbol; on the HAD magenta range rings, cyan ownship, flight members and bullseye, grey inactive route, threats in their emission-state colour.',
         'The DTC file name (SEADSTRIKE) and the TNDL INIT REQD advisory are the guide\'s example; they change with the mission.',
-        'HAD pages (HTS): the screen is one tactical picture, traced from the p. 539 image (30 NM depressed, the SA-6 designated) and drawn in the states a procedure steps through. The HAD cursor is drawn as the two short bars seen in the p. 537 expanded images; the guide does not show it in the normal field of view. Threat emission colours (search, track, launch) are not drawn. The expanded fields of view are worked out from the guide\'s description (2:1 and 4:1 about the cursor, rings, DEP and range scale removed), not traced.',
+        'HAD pages (HTS): the screen is one tactical picture, traced from the p. 539 image (30 NM depressed, the SA-6 designated) and drawn in the states a procedure steps through. The HAD cursor is drawn as the two short bars seen in the p. 537 expanded images; the guide does not show it in the normal field of view. The expanded fields of view are worked out from the guide\'s description (2:1 and 4:1 about the cursor, rings, DEP and range scale removed), not traced.',
         'The empty format slot is labelled BLANK, after the BLANK format at OSB 1 on MENU; the guide does not picture an empty slot.',
         'The two screws along the bottom sit 82 px in from each side. The screw covers in the bottom corners are drawn as plain rings, 28 px across, in cut-outs in the raised corners.',
         'The OSB caps\' raised squares and the rockers\' arrows are traced from the guide; how far each rocker rocks is not shown.',

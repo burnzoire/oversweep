@@ -251,21 +251,28 @@ function textDisplay(d: TextDisplay, ind: IndicatorDef | undefined, id: string, 
 }
 
 /** Format display (MFD): the screen opening and glass, and one group per page of fixed-pitch words (only `current` shown). */
+/** MFD glass and symbology colours, sampled off the guide's MFD images (p. 539): white text and route, magenta range rings, cyan ownship, flight members and bullseye, green/yellow/red threat states. */
+export const MFD_COLOURS = { white: '#f2f3f7', grey: '#b9bcc6', cyan: '#3cc3cf', magenta: '#b443cf', green: '#45c08e', yellow: '#efd14a', red: '#ff4a42' } as const;
+const MFD_GLASS = '#0b0c10';
 function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, current: string) {
   const o = d.opening / 2, g = o - d.inset;
   let s = `<rect x="${n(-o)}" y="${n(-o)}" width="${n(2 * o)}" height="${n(2 * o)}" rx="${n(d.r)}" fill="${PAPER}" ${sw('heavy')}/>` +
+    `<rect x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" rx="${n(Math.max(0, d.r - d.inset))}" fill="${MFD_GLASS}" stroke="none"/>` +
     `<g data-indicator="${id}"><rect class="lens" x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" rx="${n(Math.max(0, d.r - d.inset))}" ${sw('fine')}/></g>`;
+  const W = MFD_COLOURS.white;
   for (const pg of ind?.pages ?? []) {
     const page = d.pages.find(q => q.id === pg.id);
-    let body = page?.fills ? `<path d="${page.fills}" fill="${INK}" stroke="none"/>` : '';
+    let body = page?.fills ? `<path d="${page.fills}" fill="${W}" stroke="none"/>` : '';
+    for (const p of page?.paths ?? []) if (p.fill) body += `<path d="${p.d}" fill="${MFD_COLOURS[p.c]}" stroke="none"/>`;
     for (const w of page?.words ?? []) {
       const ink = (w.t.length - 1) * d.pitch + d.width, x0 = w.a === 'start' ? w.at[0] : w.a === 'end' ? w.at[0] - ink : w.at[0] - ink / 2;
-      const y = w.at[1], fill = w.inv ? PAPER : INK;
-      if (w.inv) body += `<rect x="${n(x0 - d.pad[0])}" y="${n(y - d.cap / 2 - d.pad[1])}" width="${n(ink + 2 * d.pad[0])}" height="${n(d.cap + 2 * d.pad[1])}" fill="${INK}" stroke="none"/>`;
+      const y = w.at[1], colour = MFD_COLOURS[w.c ?? 'white'], fill = w.inv ? MFD_GLASS : colour;
+      if (w.inv) body += `<rect x="${n(x0 - d.pad[0])}" y="${n(y - d.cap / 2 - d.pad[1])}" width="${n(ink + 2 * d.pad[0])}" height="${n(d.cap + 2 * d.pad[1])}" fill="${colour}" stroke="none"/>`;
       [...w.t].forEach((c, k) => { if (c !== ' ') body += displayChar(x0 + d.width / 2 + k * d.pitch, y, c, d.cap, d.width, fill); });
     }
-    if (page?.marks) body += `<path d="${page.marks}" fill="none" ${sw('medium')}/>`;
-    if (page?.fine) body += `<path d="${page.fine}" fill="none" ${sw('fine')}/>`;
+    if (page?.marks) body += `<path d="${page.marks}" fill="none" stroke="${W}" ${sw('medium')}/>`;
+    if (page?.fine) body += `<path d="${page.fine}" fill="none" stroke="${W}" ${sw('fine')}/>`;
+    for (const p of page?.paths ?? []) if (!p.fill) body += `<path d="${p.d}" fill="none" stroke="${MFD_COLOURS[p.c]}" ${sw(p.pen ?? 'medium')}/>`;
     s += `<g data-page-of="${id}" data-page="${pg.id}"${pg.id === current ? '' : ' display="none"'}>${body}</g>`;
   }
   return s;

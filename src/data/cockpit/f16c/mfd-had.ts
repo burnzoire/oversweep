@@ -1,4 +1,4 @@
-import type { MfdDisplay } from '../types';
+import type { MfdColour, MfdDisplay } from '../types';
 import { tracer } from '../trace.ts';
 
 /**
@@ -27,6 +27,8 @@ type Word = MfdDisplay['pages'][number]['words'][number];
 type Page = MfdDisplay['pages'][number];
 const w = (t: string, x: number, y: number, a?: Word['a'], inv?: boolean): Word =>
   ({ t, at: [mm(x - SC[0]), mm(y - SC[1])], ...(a ? { a } : {}), ...(inv ? { inv } : {}) });
+/** A word in a colour. */
+const c = (word: Word, colour: MfdColour): Word => ({ ...word, c: colour });
 const L = (t: string, y: number, inv?: boolean) => w(t, 111.5, y, 'start', inv);
 const R = (t: string, y: number) => w(t, 551.5, y, 'end');
 
@@ -129,8 +131,8 @@ const FRAME = [
 const RANGE = { words: [w('30', 128.5, 223)], marks: poly([[129, 192], [145, 208], [113, 208]], true) + poly([[113, 237], [145, 237], [129, 254]], true) };
 /** Bullseye: range inside the pointer circle, bearing below, line-of-sight pointer on the circle (p. 539 items 26). */
 const BULL = {
-  words: [w('54', 133.5, 508.5), w('054', 133.5, 537)],
-  marks: clipCircle([133.3, 508.3], 15.7).replace(/^/, ''),
+  words: [c(w('54', 133.5, 508.5), 'cyan'), c(w('054', 133.5, 537), 'cyan')],
+  marks: clipCircle([133.3, 508.3], 15.7),
   fill: poly([[121, 485], [131, 492], [121, 499]], true),
 };
 /** HAD cursor: two short bars (as the p. 537 expanded images show them, 7 px apart), 16 px long, here 18 px apart so a symbol under it still reads. */
@@ -145,38 +147,43 @@ function had(id: string, s: HadState): Page {
   const v: View = exp ? { k: s.fov === 'EXP1' ? 2 : 4, about: cur, to: [329.5, 330] } : NORM;
   const words: Word[] = [];
   let marks = '', fine = '', fills = '';
+  const paths: NonNullable<Page['paths']> = [];
+  const cyan = (d: string) => { if (d) paths.push({ d, c: 'cyan' }); };
   // Fixed labels.
   if (!exp) words.push(w('DEP', 186, 117.5), ...RANGE.words);
   words.push(w(s.fov, 332.5, 117.5, undefined, exp), w('THRT', 406, 117.5), w('CNTL', 478, 117.5));
   words.push(L('TM', 330.5), w('MEM', 112, 473.5, 'start'), R('FR', 320.5), R('ON', 337.5), R('GS', 392), R('OF', 408.5), w('T', 548, 464), w('I', 548, 480.5));
   words.push(...BULL.words, ...hadBottom('HAD'));
-  fine += BULL.marks; fills += BULL.fill;
+  paths.push({ d: BULL.marks, c: 'cyan', pen: 'fine' }, { d: BULL.fill, c: 'cyan', fill: true });
   if (!exp) marks += RANGE.marks;
   if (s.soi) fine += FRAME + (exp ? poly([[165, 108], [208, 108]]) + poly([[111, 190], [111, 255]]) : '');
   else words.push(w('NOT SOI', 331, 223));
   if (s.data) words.push(...DATA);
   // Scene.
-  if (!exp) fine += RINGS.map(r => clipCircle(OWN, r)).join('');
+  // Range rings magenta; route 1 white, route 2 (not active) grey.
+  if (!exp) paths.push({ d: RINGS.map(r => clipCircle(OWN, r)).join(''), c: 'magenta' });
   marks += routeMarks(ROUTE1, v);
-  fine += routeMarks(ROUTE2, v);
-  for (const sym of Object.values(S) as Sym[]) { const m = symMarks(sym, v); (sym === S.tgt2 || sym === S.ip2 ? (fine += m.line) : (marks += m.line)); fills += m.fill; }
+  let grey = routeMarks(ROUTE2, v);
+  for (const sym of Object.values(S) as Sym[]) { const m = symMarks(sym, v); (sym === S.tgt2 || sym === S.ip2 ? (grey += m.line) : (marks += m.line)); fills += m.fill; }
+  paths.push({ d: grey, c: 'grey', pen: 'fine' });
   const [ox, oy] = tf(v, OWN);
-  if (inside([ox, oy])) marks += poly([[ox, oy - 5], [ox, oy + 22]]) + poly([[ox - 12, oy], [ox + 11, oy]]) + poly([[ox - 4.5, oy + 18], [ox + 4.5, oy + 18]]);
-  for (const [n, c, alt] of MEMBERS) {
-    const [x, y] = tf(v, c);
+  if (inside([ox, oy])) cyan(poly([[ox, oy - 5], [ox, oy + 22]]) + poly([[ox - 12, oy], [ox + 11, oy]]) + poly([[ox - 4.5, oy + 18], [ox + 4.5, oy + 18]]));
+  for (const [n, at, alt] of MEMBERS) {
+    const [x, y] = tf(v, at);
     if (!inside([x, y])) continue;
-    marks += clipCircle([x, y], 10) + poly([[x, y - 10], [x, y - 22]]);
-    words.push(w(n, x, y), w('20', x + alt[0] - c[0], y + alt[1] - c[1]));
+    cyan(clipCircle([x, y], 10) + poly([[x, y - 10], [x, y - 22]]));
+    words.push(c(w(n, x, y), 'cyan'), c(w('20', x + alt[0] - at[0], y + alt[1] - at[1]), 'cyan'));
   }
-  for (const [t, p] of [['6', SA6], ['8', SA8]] as [string, P][]) {
+  // Threat radars in their emission-state colours as p. 539 shows them: the SA-6 white, the SA-8 green (searching).
+  for (const [t, p, col] of [['6', SA6, 'white'], ['8', SA8, 'green']] as [string, P, MfdColour][]) {
     const [x, y] = tf(v, p);
     if (!inside([x, y])) continue;
     // Designated SEAD target (p. 539): the symbol in a highlighted box, 34 x 25 px.
     if (t === '6' && s.designated) { fills += poly([[x - 17, y - 12.5], [x + 17, y - 12.5], [x + 17, y + 12.5], [x - 17, y + 12.5]], true); words.push(w(t, x, y, undefined, true)); }
-    else words.push(w(t, x, y));
+    else words.push(c(w(t, x, y), col));
   }
   if (s.soi && !s.designated) marks += cursor(tf(v, cur));
-  return { id, words, marks, fine, fills };
+  return { id, words, marks, fine, fills, paths };
 }
 
 /* ------------------------------------------------------------------ THRT page */
