@@ -122,6 +122,8 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
     const ded = !dedOn ? 'off' : aligning() ? stage : pos['avionics-power.ins'] === 'nav' && st.ins >= 0 ? 'ins-nav' : 'cni';
     dispatchEvent(new CustomEvent('cockpit:indicate', { detail: {
       lit: [...lit],
+      // PROBE HEAT at TEST flashes the caution 3–5 times a second (MAL & IND LTS lights it steady).
+      flash: pos['test.probe-heat'] === 'test' && !on('test.mal-ind-lts') ? ['caution.probe-heat'] : [],
       readings: {
         'engine-instruments.rpm': st.rpm, 'engine-instruments.ftit': 570, 'engine-instruments.oil': 30, 'engine-instruments.noz-pos': st.noz,
         'fuel-flow.fuel-flow': 1100, 'hyd-pressure.hyd-a': 3000, 'hyd-pressure.hyd-b': 3000,

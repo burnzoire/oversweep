@@ -13,7 +13,7 @@
  * apart from Cockpit Familiarization. The engine reports every move as a
  * `cockpit:change` event on window (detail: panel, control, position, phase
  * `press` or `release`) and takes `cockpit:indicate` events (detail: `lit`, the
- * `<panel>.<indicator>` ids that are on; `readings`, values by the same ids),
+ * `<panel>.<indicator>` ids that are on; `flash`, lit lamps that flash, about 4 a second; `readings`, values by the same ids),
  * so the procedure, not the panel, decides what lights; `pages`, page ids by
  * the same ids, switches displays such as the DED). `cockpit:set`
  * (detail: `positions` by `<panel>.<control>`) moves controls without a
@@ -144,6 +144,9 @@ const dirLabels = (id: string) => {
 .cp-stage :global([data-indicator].lit[data-colour="green"] .lens){fill:#5fd35f}
 .cp-stage :global([data-indicator].lit[data-colour="red"] .lens){fill:#ff5a4f}
 .cp-stage :global([data-indicator].lit[data-colour="blue"] .lens){fill:#6fb4ff}
+.cp-stage :global([data-indicator].lit.flash .lens){animation:cp-flash .25s steps(1,end) infinite}
+@keyframes cp-flash{50%{fill:transparent}}
+@media (prefers-reduced-motion:reduce){.cp-stage :global([data-indicator].lit.flash .lens){animation-duration:1s}}
 .cp-stage :global([data-indicator].selected .lens){fill:rgba(0,95,204,.14);stroke:#005fcc;stroke-width:.5}
 .cp-stage :global([data-indicator].selected > [data-needle] > path:first-child){stroke:#005fcc;stroke-width:.6}
 .cp-hit{position:absolute;margin:0;padding:0;border:0;background:transparent;cursor:pointer;border-radius:8%;overflow:hidden}
@@ -546,10 +549,10 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     }
   });
   addEventListener('cockpit:indicate', e => {
-    const { lit = [], readings: values = {}, pages = {} } = (e as CustomEvent<{ lit?: string[]; readings?: Record<string, number>; pages?: Record<string, string> }>).detail;
-    const on = new Set(lit);
+    const { lit = [], flash = [], readings: values = {}, pages = {} } = (e as CustomEvent<{ lit?: string[]; flash?: string[]; readings?: Record<string, number>; pages?: Record<string, string> }>).detail;
+    const on = new Set(lit), flashing = new Set(flash);
     for (const ind of def.indicators) {
-      if (ind.type === 'lamp') svg.querySelectorAll(`[data-indicator="${ind.id}"]`).forEach(g => g.classList.toggle('lit', on.has(key(ind.id))));
+      if (ind.type === 'lamp') svg.querySelectorAll(`[data-indicator="${ind.id}"]`).forEach(g => { g.classList.toggle('lit', on.has(key(ind.id))); g.classList.toggle('flash', flashing.has(key(ind.id))); });
       else if (key(ind.id) in pages) showPage(ind.id, pages[key(ind.id)]);
       else if (key(ind.id) in values) show(ind.id, values[key(ind.id)]);
     }
