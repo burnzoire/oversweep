@@ -8,13 +8,13 @@ From a running engine at idle (the state Engine Start ends in): the after-start 
 - Incirlik field elevation (191 ft): the Syria map airfield data in the Encyclopedia.
 
 ## Playable on built panels
-Every step moves or reads a built panel. Warning light tests (TEST panel with lamps lit while the button is held), AVIONICS POWER, INS knob and the DED INS page, SNSR PWR, HUD (SYM knob, ALIGN cue), C & I knob (IFF), SEC check (ENG CONT guard and switch, throttle, nozzle and RPM readings), stick and rudder pedal cycling (side stick cards), FLCS BIT (FLT CONTROL panel, RUN light, switch back to OFF by itself), ECM, speed brake (throttle card), wheels lights, standby attitude indicator uncage (OFF flag), FUEL QTY SEL TEST (pointers, totalizer, FWD/AFT FUEL LOW), EPU fuel, DTE page and LOAD (left MFD), HMCS knob, DBU (DBU ON warning), trim (MANUAL TRIM panel and stick trim card), MPO, AR status lights, oxygen diluter and the throttle 10% above idle for the EPU check, EPU test, backup UHF function knob, altimeter (ELEC and PNEU, barometric setting), exterior lights, INS to NAV.
+Every step moves or reads a built panel. Warning light tests (TEST panel with lamps lit while the button is held), AVIONICS POWER, INS knob and the DED INS page, SNSR PWR, HUD (SYM knob, ALIGN cue), C & I knob (IFF), SEC check (ENG CONT guard and switch, throttle, nozzle and RPM readings), FLCS BIT (FLT CONTROL panel, RUN light, switch back to OFF by itself), ECM, speed brake (throttle card), wheels lights, standby attitude indicator uncage (OFF flag), FUEL QTY SEL TEST (pointers, totalizer, FWD/AFT FUEL LOW), EPU fuel, DTE page and LOAD (left MFD), HMCS knob, DBU (DBU ON warning), trim (MANUAL TRIM panel and stick trim card), MPO, AR status lights, oxygen diluter and the throttle 10% above idle for the EPU check, EPU test, backup UHF function knob, altimeter (ELEC and PNEU, barometric setting), exterior lights, INS to NAV.
 
 ## Confirms
-Steps that only read an indication end with a confirm (SEC and PRI nozzle, wheels, EPU fuel, EPU lights, canopy, HUD altitude, alignment complete), and the chocks, which no panel moves.
+Steps that only read an indication end with a confirm (SEC and PRI nozzle, wheels, EPU fuel, EPU lights, canopy, HUD altitude, alignment complete), and the steps that move the stick and rudder pedals through their travel (cycling and operating the controls), which are explained rather than clicked (Nathan, 2026-11-20), and the chocks.
 
 ## Modelling choices
-- Rudder pedals are a card on the side stick page (plan view, pushed pedal forward); they are not in the stick figure.
+- Rudder pedals are a card on the side stick page (plan view, pushed pedal forward); they are not in the stick figure. This procedure does not use them.
 - The throttle has an "Idle + 10% RPM" stop for the EPU check; it is not a detent in the jet.
 - The altimeter mode lever swings 6° right to PNEU (30° left to ELEC) so it clears the corner screw; the guide says it is held momentarily to either.
 - Mission-dependent steps use one illustrative choice: UHF function to BOTH; exterior lights by day (MASTER NORM, ANTI-COLL 1, position lights BRT); HMCS symbology 50%. The DTC load and HMCS alignment on the DED are not modelled beyond the button presses.
