@@ -131,8 +131,11 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
         'hud.fpm-azimuth': 0, 'hud.fpm-elevation': 0, 'hud.radar-alt': 0, 'hud.max-g': aligning() && st.ins >= 2 ? NaN : 1,
         'hud.steerpoint': 1, 'hud.steerpoint-distance': 24, 'hud.slant-range': 24, 'hud.ttg': 0, 'hud.steering-cue': 0, 'hud.steering': 0,
         'hud.steerpoint-azimuth': 0, 'hud.steerpoint-elevation': -3,
+        'ehsi.heading': 232, 'ehsi.heading-set': 232, 'ehsi.course': 232, 'ehsi.course-set': 232, 'ehsi.bearing': 232, 'ehsi.range': 24, 'ehsi.deviation': 0,
       },
-      pages: { 'left-mfd.display': mfd, 'right-mfd.display': mfd === 'off' ? 'off' : 'menu', 'sai.off-flag': pos['sai.cage'] === 'pulled' ? 'shown' : 'hidden', 'hud.master-arm': 'none', 'ded.display': ded, 'hud.screen': hudOn ? 'on' : 'off', 'hud.align': alignCue ? 'align' : 'none', 'altimeter.pneu': st.mode === 'pneu' ? 'shown' : 'hidden' },
+      pages: { 'left-mfd.display': mfd, 'right-mfd.display': mfd === 'off' ? 'off' : 'menu', 'sai.off-flag': pos['sai.cage'] === 'pulled' ? 'shown' : 'hidden', 'hud.master-arm': 'none', 'ded.display': ded, 'hud.screen': hudOn ? 'on' : 'off', 'hud.align': alignCue ? 'align' : 'none', 'altimeter.pneu': st.mode === 'pneu' ? 'shown' : 'hidden',
+        // The EHSI comes on with the avionics and shows INU until the aligned INS is in NAV (ATT at the ATT knob position).
+        'ehsi.screen': pos['avionics-power.mmc'] === 'on' ? 'on' : 'off', 'ehsi.warning': pos['avionics-power.ins'] === 'att' ? 'att' : pos['avionics-power.ins'] === 'nav' && st.ins === 4 ? 'none' : 'inu' },
     } }));
     // HUD brightness follows the SYM wheel: the symbology fades from 1 (dimmest) to 5 (brightest).
     const sym = Number(pos['icp.sym']);

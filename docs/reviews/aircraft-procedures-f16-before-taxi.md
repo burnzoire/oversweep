@@ -15,6 +15,7 @@ Steps that only read an indication end with a confirm (SEC and PRI nozzle, wheel
 
 ## Modelling choices
 - Rudder pedals are a card on the side stick page (plan view, pushed pedal forward); they are not in the stick figure. This procedure does not use them.
+- The EHSI comes on with the avionics showing the red INU warning flag (guide p. 232, item 18), ringed on step 6, and clears when the aligned INS goes to NAV (ATT if the knob is at ATT). Its range and CDI flags are not drawn, so the readouts show values throughout.
 - The throttle has an "Idle + 10% RPM" stop for the EPU check; it is not a detent in the jet.
 - The altimeter mode lever swings 6° right to PNEU (30° left to ELEC) so it clears the corner screw; the guide says it is held momentarily to either.
 - Mission-dependent steps use one illustrative choice: UHF function to BOTH; exterior lights by day (MASTER NORM, ANTI-COLL 1, position lights BRT); HMCS symbology 50%. The DTC load and HMCS alignment on the DED are not modelled beyond the button presses.
