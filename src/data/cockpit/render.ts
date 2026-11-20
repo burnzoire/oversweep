@@ -9,12 +9,12 @@
  * the client engine flips them. Lamps are `<g data-indicator="<id>">` with a
  * `.lens` rect that lights when the group gets the `lit` class.
  */
-import type { ControlDef, Cut, Dial, DrumCounter, HsiDisplay, HudDisplay, HudTape, IndicatorDef, PanelSpec, Placement, Pt, ReadoutFormat, TextDisplay } from './types';
+import type { AttitudeBall, ControlDef, Cut, Rect, Dial, DrumCounter, HsiDisplay, HudDisplay, HudTape, IndicatorDef, PanelSpec, Placement, Pt, ReadoutFormat, TextDisplay } from './types';
 import { formatReadout } from './readout.ts';
 import {
   FASTENERS, FONT, INK, LAMPS, PAPER, PUSHES, ROTARIES, TOGGLES, cased, esc, fastener, guardArt, painted, PAINTS, lampModuleFrame, lampRoundBezel, n,
   thumbwheelArt, rockerBase, rockerCap, hatBase, hatLever,
-  gaugeBezel, gaugeHub, halfDisc, lineNeedleArt, bladeNeedleArt, drumStrip, paddlePointerArt, PADDLE_POINTER, wedgeNeedleArt, gearKnob, gearSlot, leverSlot, slotLeverArt, SLOT_LEVER, knobArt, needleArt, polar, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
+  gaugeBezel, gaugeHub, halfDisc, lineNeedleArt, stepNeedleArt, bladeNeedleArt, drumStrip, paddlePointerArt, PADDLE_POINTER, wedgeNeedleArt, gearKnob, gearSlot, leverSlot, slotLeverArt, SLOT_LEVER, knobArt, needleArt, polar, KNOBS, pushBase, pushCap, pushSquareBase, pushSquareCap, rotaryBase, rotaryKnob, sw, text, toggleBase, toggleLeans, toggleLever,
 } from './components.ts';
 import { drumPositions, scaleAngle } from './dial.ts';
 export { drumPositions };
@@ -116,7 +116,7 @@ function gauge(spec: PanelSpec, dial: Dial, indicator: string | undefined, value
   if (dial.counter) s += counter(dial.counter, value(dial.counter.indicator), `drums-${spec.id}-${dial.counter.indicator}`);
   for (const f of dial.flags ?? []) s += flag(f, page(f.indicator));
   if (indicator && dial.needle) s += `<g data-indicator="${indicator}">${dial.half ? `<path class="lens" d="${halfDisc(dial.face, dial.half)}" stroke="none"/>` : `<circle class="lens" r="${n(dial.face)}" stroke="none"/>`}` +
-    `<g data-needle="${indicator}" transform="rotate(${n(dialAngle(dial, value(indicator)))})">${dial.needleArt === 'wedge' ? wedgeNeedleArt(dial.needle) : dial.needleArt === 'blade' ? bladeNeedleArt(dial.needle) : dial.needleArt === 'line' ? lineNeedleArt(dial.needle) : needleArt(dial.needle)}</g></g>`;
+    `<g data-needle="${indicator}" transform="rotate(${n(dialAngle(dial, value(indicator)))})">${dial.needleArt === 'wedge' ? wedgeNeedleArt(dial.needle) : dial.needleArt === 'blade' ? bladeNeedleArt(dial.needle) : dial.needleArt === 'line' ? lineNeedleArt(dial.needle) : dial.needleArt === 'step' ? stepNeedleArt(dial.needle) : needleArt(dial.needle)}</g></g>`;
   for (const p of dial.pointers ?? []) s += `<g data-indicator="${p.indicator}"><g data-needle="${p.indicator}" transform="rotate(${n(dialAngle(dial, value(p.indicator)))})">${paddlePointerArt(p.legend)}</g></g>`;
   return s + gaugeHub(dial.hub);
 }
@@ -170,6 +170,11 @@ export function readings(spec: PanelSpec): Record<string, Reading> {
         else out[f.indicator] = { kind: 'number', format: f.format ?? {}, range: r(f.indicator, [0, 999, 1]) };
       }
     }
+    if (p.component === 'attitude') {
+      out.pitch = { kind: 'shift', per: p.ball.deg, axis: 'y', range: ind('pitch')?.range ?? [-90, 90, 1] };
+      out.roll = { kind: 'needle', scale: [[-180, 180], [180, -180]], range: ind('roll')?.range ?? [-180, 180, 1] };
+      page('off-flag');
+    }
     if (p.component !== 'gauge') continue;
     const { dial } = p;
     const lo = dial.scale[0][0], hi = dial.scale[dial.scale.length - 1][0];
@@ -203,6 +208,7 @@ export function placementIndicators(p: Placement): string[] {
     case 'text-display': return [p.indicator];
     case 'hsi': return [...HSI_INDICATORS];
     case 'hud': return [...HUD_INDICATORS, ...p.hud.fields.map(f => f.indicator)];
+    case 'attitude': return ['pitch', 'roll', 'off-flag'];
     default: return [];
   }
 }
@@ -406,6 +412,54 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
     `<g data-page-of="screen" data-page="on"${pageOf('screen') === 'on' ? '' : ' display="none"'}>${on}</g><g data-page-of="screen" data-page="off"${pageOf('screen') === 'off' ? '' : ' display="none"'}></g>`;
 }
 
+/** Standby attitude indicator: face with the fixed bank scale, the sphere (pitch then roll) through the window, the aircraft symbol and the OFF flag. */
+function attitude(spec: PanelSpec, a: AttitudeBall, value: (id: string) => number, pageOf: (id: string) => string) {
+  const clip = `sai-window-${spec.id}`, D = a.deg, W = a.window, big = W * 6;
+  let s = gaugeBezel(a.bezel, a.face);
+  s += a.ticks.map(t => { const [x0, y0] = polar(t.r[0], t.angle), [x1, y1] = polar(t.r[1], t.angle); return `<path d="M${n(x0)} ${n(y0)}L${n(x1)} ${n(y1)}" stroke-width="${n(t.width)}" stroke-linecap="butt"/>`; }).join('');
+  const [ia, ib, ih] = a.index;
+  s += `<path d="M0 ${n(ia)}L${n(ih)} ${n(ib)}H${n(-ih)}Z" fill="${PAPER}" ${sw('medium')}/>`;
+  // Sphere: ground below the horizon (faint), the horizon, bars and their split labels.
+  const lab = a.label;
+  let sphere = `<rect x="${n(-big)}" y="0" width="${n(2 * big)}" height="${n(big)}" fill="${INK}" fill-opacity="0.1" stroke="none"/>` +
+    `<path d="M${n(-big)} 0H${n(big)}" ${sw('heavy')}/>`;
+  for (const b of a.bars) {
+    const y = -b.pitch * D;
+    sphere += `<path d="M${n(-b.half)} ${n(y)}H${n(b.half)}" ${sw('medium')}/>`;
+    if (b.label) {
+      const [l, r] = b.label, wl = lab.widths[l], wr = lab.widths[r];
+      sphere += text(-(lab.gap + wl / 2), y, l, lab.cap, wl) + text(lab.gap + wr / 2, y, r, lab.cap, wr);
+    }
+  }
+  const [pa, pb, ph] = a.pointer;
+  const pitch = `<g data-indicator="pitch"><g data-shift="pitch" transform="translate(0 ${n(value('pitch') * D)})">${sphere}</g></g>`;
+  const ball = `<g data-indicator="roll"><g data-needle="roll" transform="rotate(${n(-value('roll'))})">${pitch}<path d="M0 ${n(pa)}L${n(ph)} ${n(pb)}H${n(-ph)}Z" fill="${PAPER}" ${sw('medium')}/></g></g>`;
+  const box = (r: Rect, extra: string) => `<rect x="${n(r[0])}" y="${n(r[1])}" width="${n(r[2])}" height="${n(r[3])}" ${extra}/>`;
+  const pg = (id: string, body: string) => `<g data-page-of="off-flag" data-page="${id}"${pageOf('off-flag') === id ? '' : ' display="none"'}>${body}</g>`;
+  const [fx, fy, fw, fh] = a.flag.shown;
+  const flag = `<g data-indicator="off-flag">` +
+    pg('shown', painted('red', box(a.flag.shown, `fill="${PAPER}" ${sw('medium')}`)) + text(fx + fw / 2, fy + fh / 2, 'OFF', a.flag.cap)) +
+    pg('hidden', box(a.flag.hidden, `fill="${PAPER}" ${sw('fine')}`)) + '</g>';
+  s += `<clipPath id="${clip}"><circle r="${n(W)}"/></clipPath><circle r="${n(W)}" fill="${PAPER}" ${sw('medium')}/>` +
+    `<g clip-path="url(#${clip})">${ball}${flag}</g>` +
+    `<path d="${a.aircraft.wings}" fill="${PAPER}" ${sw('medium')}/><path d="${a.aircraft.w}" fill="none" ${sw('heavy')}/>` +
+    `<circle r="${n(a.aircraft.dot)}" fill="${PAPER}" ${sw('medium')}/>` + `<circle r="${n(W)}" fill="none" ${sw('heavy')}/>`;
+  return s;
+}
+
+/** Pull-to-cage knob: knurled rim, face printing turned with the knob; pulled shows the knob's side as an outer rim. */
+function cageKnob(spec: PanelSpec, p: Extract<Placement, { component: 'cage-knob' }>, state: Record<string, string>) {
+  const turnC = controlOf(spec, p.control), pullC = controlOf(spec, p.pull), knurl = Array.from({ length: 48 }, (_, k) => {
+    const [x0, y0] = polar(p.face, k * 7.5), [x1, y1] = polar(p.r - 0.3, k * 7.5);
+    return `M${n(x0)} ${n(y0)}L${n(x1)} ${n(y1)}`;
+  }).join('');
+  const pulled = moving(pullC, state[pullC.id] ?? pullC.initial, i => i ? `<circle r="${n(p.r + 1.2)}" fill="${PAPER}" ${sw('medium')}/>` : '');
+  const knob = moving(turnC, state[turnC.id] ?? turnC.initial, i => `<g transform="rotate(${turnC.positions[i].angle ?? 0})">` +
+    cased(`<circle r="${n(p.r)}" fill="${PAPER}"/>`, 'heavy') + `<path d="${knurl}" ${sw('fine')}/><circle r="${n(p.face)}" fill="${PAPER}" ${sw('medium')}/>` +
+    p.legend.map(l => text(l.at[0], l.at[1], l.text, l.cap, l.width)).join('') + '</g>');
+  return at(p.at, pulled + knob, ' data-art="cage-knob"');
+}
+
 /** Every indicator a dial shows: its needle, its pointers and its counter. */
 export function dialIndicators(p: Extract<Placement, { component: 'gauge' }>) {
   const ids = [...(p.indicator ? [p.indicator] : []), ...(p.dial.pointers ?? []).map(q => q.indicator), ...(p.dial.counter ? [p.dial.counter.indicator] : []), ...(p.dial.flags ?? []).map(f => f.indicator)];
@@ -428,6 +482,13 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       const c = controlOf(spec, p.control), k = c.positions.length, across = c.travel === 'horizontal';
       const size: [number, number] = across ? [p.size[1], p.size[0]] : p.size;
       return at(p.at, moving(c, state[c.id] ?? c.initial, i => thumbwheelArt(size, (i * 2.6 / k) % 1), across ? ' transform="rotate(-90)"' : ''), ' data-art="thumbwheel"');
+    }
+    case 'code-wheel': {
+      const c = controlOf(spec, p.control), [w, h] = p.window, [tx, ty] = p.tab.at, [tw, th] = p.tab.size;
+      const win = cased(`<rect x="${n(-w / 2)}" y="${n(-h / 2)}" width="${n(w)}" height="${n(h)}" rx="0.4" fill="${PAPER}"/>`, 'heavy');
+      const slot = `<rect x="${n(tx - tw / 2 - 0.8)}" y="${n(ty - th / 2 - 0.8)}" width="${n(tw + 1.6)}" height="${n(th + 1.6)}" rx="0.6" fill="${PAPER}" ${sw('fine')}/>`;
+      const tab = cased(`<rect x="${n(tx - tw / 2)}" y="${n(ty - th / 2)}" width="${n(tw)}" height="${n(th)}" rx="0.5" fill="${PAPER}"/>`, 'medium');
+      return at(p.at, win + slot + tab + moving(c, state[c.id] ?? c.initial, i => text(0, 0, c.positions[i].label, p.cap, p.width)), ' data-art="code-wheel"');
     }
     case 'rocker': {
       const c = controlOf(spec, p.control), mid = (c.positions.length - 1) / 2;
@@ -457,6 +518,13 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       const pageOf = (id: string) => state[id] ?? ind(id)?.restPage ?? ind(id)?.pages?.[0]?.id ?? '';
       return at(p.at, `<g data-indicator="screen"><path class="lens" d="${p.hud.glass}" stroke="none"/></g>` + hud(spec, p.hud, value, pageOf), ' data-art="hud"');
     }
+    case 'attitude': {
+      const ind = (id: string) => spec.indicators.find(i => i.id === id);
+      const value = (id: string) => state[id] !== undefined ? Number(state[id]) : ind(id)?.rest ?? 0;
+      const pageOf = (id: string) => state[id] ?? ind(id)?.restPage ?? ind(id)?.pages?.[0]?.id ?? '';
+      return at(p.at, attitude(spec, p.ball, value, pageOf), ' data-art="attitude"');
+    }
+    case 'cage-knob': return cageKnob(spec, p, state);
     case 'dzus': case 'screw': case 'screw-medium': case 'screw-small': case 'screw-hex': case 'screw-tiny':
       if (p.component === 'dzus' && p.cut) {
         // The notch edges end at the top layer's outline. On a layered panel the notch first clears
@@ -473,12 +541,12 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       const rot = c.travel === 'horizontal' ? ' transform="rotate(-90)"' : '';
       return at(p.at, toggleBase(p.component) + moving(c, state[c.id] ?? c.initial, i => painted(p.paint, toggleLever(p.component as keyof typeof TOGGLES, leans[i], c.positions.length)), rot), ` data-art="${p.component}"`);
     }
-    case 'rotary-pointer': case 'rotary-pointer-large': case 'rotary-pointer-medium': {
+    case 'rotary-pointer': case 'rotary-pointer-large': case 'rotary-pointer-medium': case 'rotary-bar-broad': {
       const c = controlOf(spec, p.control);
       return at(p.at, rotaryBase(p.component) + moving(c, state[c.id] ?? c.initial, i =>
         `<g transform="rotate(${c.positions[i].angle ?? 0})">${rotaryKnob(p.component)}</g>`), ` data-art="${p.component}"`);
     }
-    case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': case 'knob-plain': case 'knob-plain-small': case 'knob-plain-index': case 'knob-round-tail': {
+    case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': case 'knob-plain': case 'knob-plain-small': case 'knob-plain-index': case 'knob-plain-index-large': case 'knob-round-tail': {
       const c = controlOf(spec, p.control);
       return at(p.at, moving(c, state[c.id] ?? c.initial, i =>
         `<g transform="rotate(${c.positions[i].angle ?? 0})">${knobArt(p.component)}</g>`), ` data-art="${p.component}"`);
@@ -537,7 +605,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
             ? l.legend.split('\n').map((t, k) => text(x + cw / 2, y + ch * (k ? 0.75 : 0.25), t, l.cap ?? 2.3, lineWidth(l.width, k))).join('')
             : legendLines(x + cw / 2, y + ch / 2, l.legend, l.cap ?? 2.3, l.width)) + '</g>';
         if (l.halves) s += `<path d="M0.9 ${n(y + ch / 2)}H${n(w - 0.9)}" ${sw('fine')}/>`;
-        if (i) s += `<path d="M0.9 ${n(y - 0.3)}H${n(w - 0.9)}" ${sw('fine')}/>`;
+        if (i && !p.undivided) s += `<path d="M0.9 ${n(y - 0.3)}H${n(w - 0.9)}" ${sw('fine')}/>`;
       });
       // An unused module shows a dash across its blank lens.
       if (p.blank) s += `<path d="M${n(w * 0.22)} ${n(h / 2)}H${n(w * 0.78)}" ${sw('medium')}/>`;
@@ -634,13 +702,17 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         const [bw, bh] = c.travel === 'horizontal' ? [long, wide] : [wide, long];
         return [{ kind: 'control', id: p.control, box: [x - bw / 2, y - bh / 2, bw, bh] }];
       }
-      case 'rotary-pointer': case 'rotary-pointer-large': case 'rotary-pointer-medium': {
+      case 'rotary-pointer': case 'rotary-pointer-large': case 'rotary-pointer-medium': case 'rotary-bar-broad': {
         const r = ROTARIES[p.component].skirt * 1.15;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
       }
-      case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': case 'knob-plain': case 'knob-plain-small': case 'knob-plain-index': case 'knob-round-tail': {
+      case 'knob-fine-knurl-small': case 'knob-knurled-small': case 'knob-knurled': case 'knob-knurled-edge': case 'knob-knurled-skirt': case 'knob-bar': case 'knob-lobed': case 'knob-bar-medium': case 'knob-knurled-mini': case 'knob-radio-large': case 'knob-bar-thick': case 'knob-spindle': case 'knob-knurled-large': case 'knob-knurled-small-edge': case 'knob-round': case 'knob-round-small': case 'knob-cross': case 'knob-cross-small': case 'knob-plain': case 'knob-plain-small': case 'knob-plain-index': case 'knob-plain-index-large': case 'knob-round-tail': {
         const r = KNOBS[p.component].r * 1.1;
         return [{ kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true }];
+      }
+      case 'code-wheel': {
+        const [w, h] = p.window, [tx, ty] = p.tab.at, [tw, th] = p.tab.size, x0 = Math.min(-w / 2, tx - tw / 2) - 0.8, x1 = Math.max(w / 2, tx + tw / 2) + 0.8;
+        return [{ kind: 'control', id: p.control, box: [x + x0, y - h / 2 - 0.8, x1 - x0, ty + th / 2 + h / 2 + 1.6] }];
       }
       case 'thumbwheel': case 'rocker': {
         const [w, h] = p.size;
@@ -662,6 +734,21 @@ export function hitZones(spec: PanelSpec): HitZone[] {
         const xs = nums.filter((_, i) => i % 2 === 0), ys = nums.filter((_, i) => i % 2 === 1);
         const x0 = Math.min(...xs), y0 = Math.min(...ys);
         return [{ kind: 'indicator', id: 'screen', box: [x0, y0, Math.max(...xs) - x0, Math.max(...ys) - y0] }];
+      }
+      case 'attitude': {
+        const a = p.ball, w = a.window, [fx, fy, fw, fh] = a.flag.shown;
+        return [
+          { kind: 'indicator', id: 'pitch', box: [x - w * 0.6, y - w * 0.85, w * 1.2, w * 1.4] },
+          { kind: 'indicator', id: 'roll', box: [x - a.face * 0.5, y + w * 0.6, a.face, a.face - w * 0.6] },
+          { kind: 'indicator', id: 'off-flag', box: [x + fx, y + fy, fw, fh] },
+        ];
+      }
+      case 'cage-knob': {
+        const r = p.r * 1.1;
+        return [
+          { kind: 'control', id: p.control, box: [x - r, y - r, 2 * r, 2 * r], round: true },
+          { kind: 'control', id: p.pull, box: [x - p.face * 0.5, y - p.face * 0.5, p.face, p.face] },
+        ];
       }
       case 'hud': {
         const nums = (p.hud.glass.match(/-?\d*\.?\d+/g) ?? []).map(Number);

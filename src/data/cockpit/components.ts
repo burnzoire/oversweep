@@ -279,6 +279,11 @@ export const ROTARIES = {
   'rotary-pointer-large': { skirt: 13, bar: 12.2, barBack: 6.1, barFront: 4.3 },
   /** Mid-size selector, 11.6 mm skirt, with a broad block grip that chamfers to a pointed front (AVIONICS POWER INS and MIDS LVT). */
   'rotary-pointer-medium': { skirt: 11.6, bar: 10.9, barBack: 6.2, barFront: 2.8, block: true },
+  /**
+   * F-16C IFF MASTER (guide p. 67, 3.3 px/mm): a broad bar grip over a round skirt, flat at the back, its front end
+   * rounded to the full width; `bar` is the front end's reach, `barBack` the back end's, `half` the half width.
+   */
+  'rotary-bar-broad': { skirt: 9.4, bar: 10.0, barBack: 12.4, barFront: 0, half: 5.8 },
 } as const;
 
 /**
@@ -342,6 +347,8 @@ export const KNOBS = {
   'knob-round-tail': { r: 11.2, lobes: 0, ridge: [0, 0], tail: [0.38, 1.15] },
   /** Plain round domed knob with a white index line from the centre to the rim (F-16C YAW TRIM; guide p. 72, about 29 px radius at 3.15 px/mm). */
   'knob-plain-index': { r: 9.2, lobes: 0, ridge: [0, 0], plain: true, index: true },
+  /** F-16C IFF C & I: a plain round knob with an index line from the centre to the rim (guide p. 67, 33 px radius at 3.3 px/mm). */
+  'knob-plain-index-large': { r: 10.0, lobes: 0, ridge: [0, 0], plain: true, index: true },
 } as const;
 
 /** A KNOBS body pointing at 12 o'clock; the renderer turns it to the detent. */
@@ -519,6 +526,11 @@ export function rotaryKnob(art: keyof typeof ROTARIES) {
     const body = `M${k(-0.07)} ${k(-0.93)}Q0 ${k(-0.97)} ${k(0.07)} ${k(-0.93)}L${k(0.5)} ${k(-0.42)}V${k(0.84)}` +
       `Q${k(0.5)} ${k(0.96)} ${k(0.38)} ${k(0.96)}H${k(-0.38)}Q${k(-0.5)} ${k(0.96)} ${k(-0.5)} ${k(0.84)}V${k(-0.42)}Z`;
     return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') + `<path d="M0 ${k(-0.8)}V0" ${sw('heavy')}/>`;
+  }
+  if ('half' in ROTARIES[art]) {
+    const H = (ROTARIES[art] as { half: number }).half, f = bar - H;
+    const body = `M${n(-H)} ${n(barBack)}V${n(-f)}A${n(H)} ${n(H)} 0 0 1 ${n(H)} ${n(-f)}V${n(barBack)}Z`;
+    return cased(`<path d="${body}" fill="${PAPER}"/>`, 'heavy') + `<path d="M0 0V${n(-bar + 1.2)}" stroke-width="0.9" stroke-linecap="round"/>`;
   }
   if ('waist' in ROTARIES[art]) {
     // Traced from the guide's p. 65 COMM mode knobs: point at the front, widest just behind the centre, narrow rounded tail.
@@ -749,6 +761,20 @@ export const WEDGE_NEEDLE = { base: 9.0, tip: 0.5 } as const;
 export function wedgeNeedleArt(length: number) {
   const b = WEDGE_NEEDLE.base / 2, t = WEDGE_NEEDLE.tip / 2;
   return `<path d="M${n(-b)} 0L${n(-t)} ${n(-length)}H${n(t)}L${n(b)} 0Z" fill="${INK}" ${sw('fine')}/>`;
+}
+
+/**
+ * Stepped pointer of the F-16C EPU FUEL indicator, in mm, pointing at 12
+ * o'clock from the dial centre: a broad parallel shank `base` wide out to
+ * `shank`, closing over to a narrow parallel tip `tip` wide by `neck`, square
+ * at the end. Measured on the guide's p. 61 EPU FUEL image (3.93 px/mm):
+ * 13.3 px wide to 66 px, 6.2 px from 78 px to its end.
+ */
+export const STEP_NEEDLE = { base: 3.38, shank: 16.8, neck: 19.8, tip: 1.55 } as const;
+
+export function stepNeedleArt(length: number) {
+  const { base, shank, neck, tip } = STEP_NEEDLE, b = base / 2, t = tip / 2;
+  return `<path d="M${n(-b)} 0V${n(-shank)}L${n(-t)} ${n(-neck)}V${n(-length)}H${n(t)}V${n(-neck)}L${n(b)} ${n(-shank)}V0Z" fill="${INK}" ${sw('fine')}/>`;
 }
 
 /**
