@@ -40,19 +40,19 @@ export const cardMedia: Record<string, CardMedia> = {
   'procedure.dcs-f16c.tacan-recovery': {
     summary: 'Bring the Viper home with the INS no longer trusted: look up the beacon, tune it on the ICP and DED, then fly the inbound course on the EHSI.',
     photo: {
-      src: 'manual/cards/f16c-cockpit.webp',
-      alt: 'The F-16C instrument panel and head-up display from the pilot’s seat.',
-      credit: 'Cockpit — US Air Force (public domain)',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:F-16C_cockpit_m02006112700032.jpg',
+      src: 'manual/cards/f16c-final.webp',
+      alt: 'An F-16 on final approach, gear down, under a grey sky at Aviano.',
+      credit: 'F-16 landing at Aviano — Airman 1st Class Zachary Jakel, US Air Force (public domain)',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Fighting_Wyvern_25-01_F-16_landings_(8912159).jpg',
     },
   },
   'procedure.dcs-f16c.steerpoint-entry': {
     summary: 'Enter a new steerpoint on the ICP and DED, make it the selected steerpoint, then check it against the HUD and the EHSI.',
     photo: {
-      src: 'manual/cards/f16c-cockpit.webp',
-      alt: 'The F-16C instrument panel and head-up display from the pilot’s seat.',
-      credit: 'Cockpit — US Air Force (public domain)',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:F-16C_cockpit_m02006112700032.jpg',
+      src: 'manual/cards/f16c-preflight-checks.webp',
+      alt: 'An F-16 pilot head down in the cockpit, running his pre-flight checks.',
+      credit: 'Pre-flight checks at Kandahar — Tech. Sgt. Stephen Hudson, US Air National Guard (public domain)',
+      sourceUrl: 'https://www.dvidshub.net/image/643852',
     },
   },
   'procedure.dcs-f16c.before-taxi': {
