@@ -336,10 +336,10 @@ export const KNOBS = {
   'knob-plain-small': { r: 6.8, lobes: 0, ridge: [0, 0], plain: true },
   /**
    * Round domed knob with a rectangular tail grip running back past the rim, opposite the index (F-16C FUEL QTY SEL;
-   * guide p. 54: body about 41 px radius at 3.66 px/mm, tail about 23 px wide reaching about 57 px behind the centre).
+   * guide p. 54: body about 41 px radius at 3.66 px/mm, tail about 23 px wide reaching about 57 px behind the centre, drawn shorter and wider square-on: half-width 0.38 r, reach 1.15 r, Nathan 2026-11-20).
    * The tail has no front edge, so it rises smoothly out of the dome; the index runs from the centre to the front rim.
    */
-  'knob-round-tail': { r: 11.2, lobes: 0, ridge: [0, 0], tail: [0.28, 1.38] },
+  'knob-round-tail': { r: 11.2, lobes: 0, ridge: [0, 0], tail: [0.38, 1.15] },
   /** Plain round domed knob with a white index line from the centre to the rim (F-16C YAW TRIM; guide p. 72, about 29 px radius at 3.15 px/mm). */
   'knob-plain-index': { r: 9.2, lobes: 0, ridge: [0, 0], plain: true, index: true },
 } as const;
