@@ -139,9 +139,18 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     dispatchEvent(new CustomEvent('cockpit:pad', { detail: { control: w?.control, to: w?.to } }));
   }
 
-  /** Every move is made: show the result and wait for the reader to confirm it. */
+  /**
+   * Every move is made. A step whose result is just the page it opened (no `confirm`) moves on by itself;
+   * the others show the result and wait for the reader to confirm it.
+   */
   function done(text = 'Done.') {
-    confirm.textContent = cfg.steps[step].confirm ?? 'Continue';
+    if (!cfg.steps[step].confirm) {
+      say(text);
+      const at = step;
+      later(matchMedia('(max-width: 48rem)').matches ? 1400 : 800, () => { if (step === at && !finished) go(step + 1); });
+      return;
+    }
+    confirm.textContent = cfg.steps[step].confirm!;
     confirm.disabled = false;
     confirm.hidden = false;
     say(`${text} Check the indications, then continue.`);
