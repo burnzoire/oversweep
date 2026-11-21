@@ -168,6 +168,11 @@ interface HadState {
   scale?: 'DEP30' | 'DEP60' | 'CEN40'; rot?: number;
   /** Route 2 shown (NAV2 on the CNTL page); the threats on the picture; the CNTL page labels instead of the base page's. */
   nav2?: boolean; threats?: Threat[]; cntl?: { nav2: boolean };
+  /**
+   * A teaching overlay, not part of the HAD: the bearing line each scan measured (from where the jet was, scene
+   * points) and the error ellipse they leave (`at`, major-axis bearing in degrees, major and minor axes in NM).
+   */
+  aid?: { from: P[]; to: P; ellipse: [number, number, number] };
 }
 /**
  * Range scales (p. 531 item 6): DEP 15/30/60/120/240 NM, CEN 10/20/40/80/160 NM. Depressed keeps the ownship where
@@ -199,6 +204,32 @@ export const HAD_SLEW = {
   start: local([329.5, 330]), target: local(SA6), reach: f(mm(9)), speed: f(mm(140)),
   box: [...local([BOX.x0 + 10, BOX.y0 + 10]), ...local([BOX.x1 - 10, BOX.y1 - 10])] as [number, number, number, number],
 };
+/** NM in scene px (the p. 539 picture is DEP 30). */
+const NM = RINGS[2] / 30;
+/** Runs of a polyline that fall inside the drawing area. */
+function clipRuns(pts: P[]) {
+  let d = '', run: P[] = [];
+  const flush = () => { if (run.length > 1) d += poly(run); run = []; };
+  for (const p of pts) { if (inside(p)) run.push(p); else flush(); }
+  flush();
+  return d;
+}
+/** The teaching overlay: each scan's bearing line, run on 8 NM past the radar so the crossings show, and the error ellipse. */
+function aidMarks(a: NonNullable<HadState['aid']>, v: View) {
+  let d = '';
+  for (const o of a.from) {
+    const dx = a.to[0] - o[0], dy = a.to[1] - o[1], len = Math.hypot(dx, dy), past = (8 * NM) / len;
+    const seg = clipSeg(tf(v, o), tf(v, [a.to[0] + dx * past, a.to[1] + dy * past]));
+    if (seg) d += poly(seg);
+  }
+  const [brg, maj, min] = a.ellipse, r = (brg * Math.PI) / 180;
+  const u: P = [Math.sin(r), -Math.cos(r)], n: P = [Math.cos(r), Math.sin(r)];
+  const pts: P[] = Array.from({ length: 121 }, (_, i) => {
+    const t = (2 * Math.PI * i) / 120, A = (maj / 2) * NM * Math.cos(t), B = (min / 2) * NM * Math.sin(t);
+    return tf(v, [a.to[0] + A * u[0] + B * n[0], a.to[1] + A * u[1] + B * n[1]]);
+  });
+  return d + clipRuns(pts);
+}
 function had(id: string, s: HadState): Page {
   const sc = SCALES[s.scale ?? 'DEP30'];
   GEO = { own: sc.own, k: sc.k, rot: s.rot ?? 0 };
@@ -257,6 +288,7 @@ function had(id: string, s: HadState): Page {
   }
   if (s.soi && !s.designated && !s.free && !s.cntl) marks += cursor(exp ? [329.5, 330] : cur);
   const page: Page = { id, words, marks, fine, fills, paths };
+  if (s.aid) page.aid = aidMarks(s.aid, v);
   if (s.free) page.cursor = { d: `M${f(mm(-8))} ${f(mm(-9))}H${f(mm(8))}M${f(mm(-8))} ${f(mm(9))}H${f(mm(8))}`, at: HAD_SLEW.start };
   GEO = GEO30;
   return page;
@@ -299,7 +331,6 @@ const thrt = thrtPage('had-thrt', [1, 2], true, '0:22');
  * track, green memory). The ellipse data and PGM levels as the picture turns are illustrative: the guide gives the
  * behaviour (pp. 528, 541: dead ahead PGM 4-5, off to the side PGM 3-2, AOA no better than PGM 2), not values.
  */
-const NM = RINGS[2] / 30;
 const SA11: P = [OWN[0] + 3 * NM, OWN[1] - 50 * NM];
 /** The turn: about 50° left puts the SA-11 well off the right side of the nose (picture swings clockwise). */
 export const TURN = 50;
@@ -311,6 +342,20 @@ const PGM: Record<number, [string, string]> = {
   3: ['008°  6.2NM  1.1NM', 'PGM3'], 2: ['010°  2.3NM  2950FT', 'PGM2'],
 };
 const base = { soi: true, fov: 'NORM' as const };
+/**
+ * Where the jet was at each scan, for the teaching overlay. The guide gives no scan spacing; 4 NM apart is
+ * illustrative. Before the turn the jet flies straight up the picture; after it, 50° left, so the earlier points trail
+ * behind on the new heading and, beyond the turn point, back down the old one.
+ */
+const STEP = 4 * NM, HDG: P = [-Math.sin((TURN * Math.PI) / 180), -Math.cos((TURN * Math.PI) / 180)];
+const track = (after: number): P[] => {
+  const turnAt: P = [OWN[0] - after * STEP * HDG[0], OWN[1] - after * STEP * HDG[1]];
+  const since = Array.from({ length: after }, (_, j): P => [OWN[0] - j * STEP * HDG[0], OWN[1] - j * STEP * HDG[1]]);
+  return [...since, ...[0, 1, 2, 3].map((j): P => [turnAt[0], turnAt[1] + j * STEP])];
+};
+/** The ellipse each PGM page's data describes: major-axis bearing (deg), major and minor axes (NM). */
+const ELLIPSE: Record<number, [number, number, number]> = { 5: [4, 21.4, 1.8], 4: [6, 12.6, 1.5], 3: [8, 6.2, 1.1], 2: [10, 2.3, 2950 / 6076] };
+const aid = (after: number, n: number) => ({ from: track(after), to: SA11, ellipse: ELLIPSE[n] });
 const hadx: Page[] = [
   had('hadx', { ...base, threats: T_START }),
   thrtPage('had-thrt-c1', [2], true, '0:22'),
@@ -323,7 +368,8 @@ const hadx: Page[] = [
   had('hadx-60-free', { ...base, threats: T_11('yellow'), nav2: false, scale: 'DEP60', free: true }),
   had('hadx-60-hover', { ...base, threats: T_11('yellow'), nav2: false, scale: 'DEP60', cursor: SA11, data: PGM[5] }),
   had('hadx-des', { ...base, threats: T_11('yellow'), nav2: false, scale: 'DEP60', designated: '11', data: PGM[5] }),
-  ...[5, 4, 3, 2].map(n => had(`hadx-t${n}`, { ...base, threats: T_11(n > 3 ? 'yellow' : 'red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[n] })),
+  had('hadx-des-aid', { ...base, threats: T_11('yellow'), nav2: false, scale: 'DEP60', designated: '11', data: PGM[5], aid: aid(0, 5) }),
+  ...[5, 4, 3, 2].map(n => had(`hadx-t${n}`, { ...base, threats: T_11(n > 3 ? 'yellow' : 'red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[n], aid: aid(5 - n, n) })),
   had('hadx-t-des6', { ...base, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '6', data: DATA }),
   had('hadx-t-notsoi', { ...base, soi: false, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[2] }),
 ];
@@ -365,10 +411,11 @@ export const hadPageLabels: Record<string, string> = {
   'hadx-60-free': 'HAD 60 NM: cursor being slewed',
   'hadx-60-hover': 'HAD 60 NM: cursor on the SA-11, PGM5',
   'hadx-des': 'HAD 60 NM: SA-11 designated, PGM5',
-  'hadx-t5': 'HAD after the turn: PGM5',
-  'hadx-t4': 'HAD after the turn: PGM4',
-  'hadx-t3': 'HAD after the turn: PGM3, the SA-11 tracking (red)',
-  'hadx-t2': 'HAD after the turn: PGM2',
+  'hadx-des-aid': 'HAD 60 NM: SA-11 designated, with the scan bearings and error ellipse drawn on',
+  'hadx-t5': 'HAD after the turn: PGM5, bearings drawn on',
+  'hadx-t4': 'HAD after the turn: PGM4, bearings drawn on',
+  'hadx-t3': 'HAD after the turn: PGM3, the SA-11 tracking (red), bearings drawn on',
+  'hadx-t2': 'HAD after the turn: PGM2, bearings drawn on',
   'hadx-t-des6': 'HAD: TMS right stepped to the SA-6',
   'hadx-t-notsoi': 'HAD not SOI, SA-11 still designated',
 };

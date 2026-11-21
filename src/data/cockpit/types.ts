@@ -387,6 +387,8 @@ export interface MfdDisplay {
     paths?: { d: string; c: MfdColour; pen?: 'fine' | 'medium'; fill?: boolean }[];
     /** Sensor video under the symbology, filling the glass (an image URL, e.g. a data URI). */
     video?: string;
+    /** A teaching overlay that is not on the real display (bearing lines, an error ellipse): drawn dashed in orange. */
+    aid?: string;
     /** A cursor the procedure moves (`cockpit:indicate` `cursors`): white lines about its own origin, starting at `at`. */
     cursor?: { d: string; at: Pt } }[];
 }

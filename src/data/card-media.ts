@@ -74,7 +74,7 @@ export const cardMedia: Record<string, CardMedia> = {
     },
   },
   'procedure.dcs-f16c.hts-targeting': {
-    summary: 'Set up the HTS for a manual threat class, range an SA-11 from PGM 5 to PGM 2 by flying the geometry, and hand it to the targeting pod.',
+    summary: 'Set up the HTS for a manual threat class, range an SA-11 from PGM 5 to PGM 2 by turning it well off the nose, and hand it to the targeting pod.',
     photo: {
       src: 'manual/cards/f16c-harm-pylon.webp',
       alt: 'An AGM-88 HARM on an F-16’s wing pylon in flight, with a second F-16 beyond it over farmland.',

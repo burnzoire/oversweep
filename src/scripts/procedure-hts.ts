@@ -28,6 +28,8 @@ interface Scenario {
   initial: Pages; after: Record<string, Pages>;
   slew: { step: string; on: string; free: string; done: string; target: [number, number]; start: [number, number]; reach: number; speed: number; box: [number, number, number, number] };
   scans?: { step: string; pages: string[]; ms: number };
+  /** Pages a step shows as it opens (a look step that adds a teaching overlay). */
+  enter?: Record<string, Partial<Pick<State, 'mfd' | 'left' | 'ded'>>>;
 }
 const SCENARIOS: Record<string, Scenario> = {
   hts: {
@@ -52,6 +54,7 @@ const SCENARIOS: Record<string, Scenario> = {
     },
     slew: { step: 'slew', on: 'hadx-60', free: 'hadx-60-free', done: 'hadx-60-hover', ...HADX.slew },
     // One page per HTS scan as the radar moves off the nose (the scan cycle time with only MAN in the scan: 0:08, compressed).
+    enter: { bearings: { mfd: 'hadx-des-aid' } },
     scans: { step: 'turn', pages: ['hadx-t5', 'hadx-t4', 'hadx-t3', 'hadx-t2'], ms: 1600 },
   },
 };
@@ -202,9 +205,15 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     if (to >= cfg.steps.length) { finished = true; render(); complete.focus(); return; }
     history[to] = { pos: { ...pos }, st: copy(st) };
     step = to; made = new Set(); typed = 0;
+    enterStep();
     render();
     if (st.pod > 0) warmUp();
     if (sc.scans && stepId() === sc.scans.step) playScans();
+  }
+
+  function enterStep() {
+    const e = sc.enter?.[stepId()];
+    if (e) { Object.assign(st, e); indicate(); }
   }
 
   /** The HTS scans: the picture refines one page per scan, then the step's button is offered. */
@@ -293,6 +302,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     const h = history[to];
     if (h) { pos = { ...h.pos }; st = copy(h.st); setPositions(pos); }
     step = to; made = new Set(); typed = 0; scanning = false;
+    enterStep();
     render();
     if (sc.scans && stepId() === sc.scans.step) playScans();
   });
