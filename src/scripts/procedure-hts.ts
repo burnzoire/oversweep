@@ -9,15 +9,18 @@
  * each waits for the reader to confirm what it shows.
  */
 
+import { HAD_SLEW } from '../data/cockpit/f16c/mfd-had';
+
 interface StepDo { control: string; to: string; on?: 'press' | 'release' }
 interface Step { id: string; panels: string[]; hints?: string[]; do?: StepDo; also?: StepDo[]; confirm?: string }
 interface Config { aircraft: string; initial: Record<string, string>; labels: Record<string, string>; names: Record<string, string>; steps: Step[] }
-/** `pod`: seconds of pod warm-up left (-1 off); `up`/`left`: the cursor slews made; the rest name pages. */
-interface State { pod: number; mfd: string; ded: string; up: boolean; left: boolean }
+/** `pod`: ms of pod warm-up left (-1 off); `cur`: the HAD cursor while it is slewed by hand (page units); the rest name pages. */
+interface State { pod: number; mfd: string; ded: string; cur: [number, number] }
 
 // The pod takes about 30 s to initialize (guide p. 525); compressed here.
 const POD_MS = 5000;
-const initialState = (): State => ({ pod: -1, mfd: 'menu-blank', ded: 'cni', up: false, left: false });
+const initialState = (): State => ({ pod: -1, mfd: 'menu-blank', ded: 'cni', cur: [...HAD_SLEW.start] });
+const copy = (s: State): State => ({ ...s, cur: [...s.cur] });
 /** The right MFD page once each step's action is made. */
 const MFD_AFTER: Record<string, string> = {
   'select-had': 'had-not-soi', soi: 'had', thrt: 'had-thrt', 'thrt-back': 'had', designate: 'had-designated',
@@ -59,12 +62,47 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   const pending = (s: Step) => moves(s).filter(w => !made.has(mk(w)));
   const stepId = () => cfg.steps[step]?.id ?? '';
 
+  /** Slewing: the cursor moves by hand until it is on the SA-6. */
+  const slewing = () => stepId() === 'slew' && !finished && st.mfd === 'had';
   function indicate() {
-    // The HAD cursor part of the way to the SA-6 while it is being slewed.
-    const mfd = stepId() === 'slew' && !made.size ? 'had' : st.mfd;
-    const page = mfd === 'had' && (st.up || st.left) ? (st.up && st.left ? 'had-hover' : st.up ? 'had-up' : 'had-left') : mfd;
-    dispatchEvent(new CustomEvent('cockpit:indicate', { detail: { pages: { 'right-mfd.display': page, 'left-mfd.display': 'menu', 'ded.display': st.ded } } }));
+    const page = slewing() ? 'had-free' : st.mfd;
+    dispatchEvent(new CustomEvent('cockpit:indicate', { detail: { pages: { 'right-mfd.display': page, 'left-mfd.display': 'menu', 'ded.display': st.ded }, cursors: { 'right-mfd.display': st.cur } } }));
   }
+
+  /*
+   * The RDR CURSOR switch is force-sensing: the cursor moves while it is held, faster the harder it is pushed.
+   * `defl` is its deflection (x right/forward, y up, -1..1) from the on-screen joystick (`cockpit:analog`) or, from
+   * the keyboard, full deflection on each arm held.
+   */
+  const defl = { x: 0, y: 0 };
+  let raf = 0, last = 0;
+  const stopSlew = () => { cancelAnimationFrame(raf); raf = 0; defl.x = defl.y = 0; };
+  function slew(now: number) {
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    if (!slewing() || (!defl.x && !defl.y)) { raf = 0; return; }
+    const speed = (d: number) => Math.sign(d) * Math.abs(d) ** 1.5 * HAD_SLEW.speed;
+    const [x0, y0, x1, y1] = HAD_SLEW.box;
+    st.cur = [Math.min(x1, Math.max(x0, st.cur[0] + speed(defl.x) * dt)), Math.min(y1, Math.max(y0, st.cur[1] - speed(defl.y) * dt))];
+    if (Math.hypot(st.cur[0] - HAD_SLEW.target[0], st.cur[1] - HAD_SLEW.target[1]) < HAD_SLEW.reach) {
+      st.cur = [...HAD_SLEW.target];
+      st.mfd = 'had-hover';
+      stopSlew();
+      indicate();
+      done('The cursor is on the SA-6.');
+      return;
+    }
+    indicate();
+    raf = requestAnimationFrame(slew);
+  }
+  const push = (x: number, y: number) => {
+    defl.x = x; defl.y = y;
+    if (!raf && slewing() && (x || y)) { last = performance.now(); raf = requestAnimationFrame(slew); }
+  };
+  addEventListener('cockpit:analog', e => {
+    const d = (e as CustomEvent<{ aircraft: string; panel: string; pad: string; x: number; y: number }>).detail;
+    if (d.aircraft === cfg.aircraft && d.panel === 'throttle' && d.pad === 'cursor') push(d.x, d.y);
+  });
 
   function render() {
     const s = cfg.steps[step];
@@ -77,7 +115,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     previous.disabled = step === 0 && !finished;
     one<HTMLElement>('[data-controls]').hidden = false;
     // The button names what the reader checks; it shows once the step's moves are made.
-    confirm.hidden = finished || !s.confirm || moves(s).length > 0;
+    confirm.hidden = finished || !s.confirm || moves(s).length > 0 || slewing();
     restart.hidden = !finished;
     confirm.textContent = s.confirm ?? 'Confirm';
     confirm.disabled = false;
@@ -90,6 +128,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     if (finished) say('');
     else if (moves(s).length === 1) say(`${cap(instruction(moves(s)[0]))}.`);
     else if (moves(s).length) say(`Make these moves, in any order: ${moves(s).map(instruction).join('; ')}.`);
+    else if (slewing()) say('Steer the cursor onto the 6: press and drag on the RDR CURSOR switch.');
     else say('Check the indications, then confirm.');
     showPad();
     indicate();
@@ -109,8 +148,9 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   }
   function go(to: number) {
     timers.splice(0).forEach(clearTimeout);
+    stopSlew();
     if (to >= cfg.steps.length) { finished = true; render(); complete.focus(); return; }
-    history[to] = { pos: { ...pos }, st: { ...st } };
+    history[to] = { pos: { ...pos }, st: copy(st) };
     step = to; made = new Set();
     render();
     if (st.pod > 0) warmUp();
@@ -136,22 +176,27 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   function acted(w: StepDo) {
     made.add(mk(w));
     const id = stepId();
-    if (id === 'slew') { if (w.control === 'throttle.cursor-ud') st.up = true; else st.left = true; }
     const left = pending(cfg.steps[step]);
     if (left.length) { say(`Done. Still to do: ${left.map(instruction).join('; ')}.`); showPad(); indicate(); return; }
     if (MFD_AFTER[id]) st.mfd = MFD_AFTER[id];
-    if (id === 'slew') st.mfd = 'had-hover';
     if (id === 'sead-ded') st.ded = 'sead';
     if (id === 'reject') st.ded = 'cni';
     indicate();
     if (id === 'pod-power') { st.pod = POD_MS; warmUp(); return; }
-    done(id === 'slew' ? 'The cursor is on the SA-6.' : 'Done.');
+    done();
   }
 
   addEventListener('cockpit:change', e => {
     const d = (e as CustomEvent<{ aircraft: string; panel: string; control: string; position: string; phase: 'press' | 'release' }>).detail;
     if (d.aircraft !== cfg.aircraft || finished) return;
     const key = `${d.panel}.${d.control}`;
+    // The cursor switch while slewing: each arm held is full deflection that way (the joystick refines it).
+    if (slewing() && (key === 'throttle.cursor-ud' || key === 'throttle.cursor-lr')) {
+      const on = d.phase === 'press' ? 1 : 0;
+      if (key === 'throttle.cursor-ud') push(defl.x, on * (d.position === 'up' ? 1 : d.position === 'down' ? -1 : 0));
+      else push(on * (d.position === 'fwd' ? 1 : d.position === 'aft' ? -1 : 0), defl.y);
+      return;
+    }
     const before = pos[key];
     pos[key] = d.position;
     const s = cfg.steps[step];
@@ -174,15 +219,17 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   });
   previous.addEventListener('click', () => {
     timers.splice(0).forEach(clearTimeout);
+    stopSlew();
     const to = finished ? cfg.steps.length - 1 : Math.max(0, step - 1);
     finished = false;
     const h = history[to];
-    if (h) { pos = { ...h.pos }; st = { ...h.st }; setPositions(pos); }
+    if (h) { pos = { ...h.pos }; st = copy(h.st); setPositions(pos); }
     step = to; made = new Set();
     render();
   });
   restart.addEventListener('click', () => {
     timers.splice(0).forEach(clearTimeout);
+    stopSlew();
     pos = { ...cfg.initial }; st = initialState(); history.length = 0; finished = false;
     setPositions(pos);
     go(0);

@@ -13,7 +13,7 @@ import { tracer } from '../trace.ts';
  * states, so a procedure can step through it:
  * - `had-not-soi`: no frame, NOT SOI in the middle (as p. 530 shows it);
  * - `had`: SOI (the frame round the format, p. 539), the HAD cursor in the centre;
- * - `had-up` / `had-left`: the cursor slewed part of the way to the SA-6;
+ * - `had-free`: the cursor slewed by hand (a page `cursor` the procedure moves);
  * - `had-hover`: the cursor on the SA-6, its expanded data along the top;
  * - `had-designated`: the SA-6 designated as the SEAD target (boxed), as p. 539;
  * - `had-exp1` / `had-exp2`: the Expand fields of view, 2:1 and 4:1 about the
@@ -146,7 +146,16 @@ const cursor = ([x, y]: P) => poly([[x - 8, y - 9], [x + 8, y - 9]]) + poly([[x 
 /** Expanded threat data along the top (p. 539 items 19-22): major-axis bearing, major and minor axis lengths, PGM level. */
 const DATA = [w('335°  5.1NM  3633FT', 116.5, 135.5, 'start'), w('PGM2', 453, 135.5, 'start')];
 
-interface HadState { soi: boolean; fov: 'NORM' | 'EXP1' | 'EXP2'; cursor?: P; data?: boolean; designated?: boolean }
+interface HadState { soi: boolean; fov: 'NORM' | 'EXP1' | 'EXP2'; cursor?: P; data?: boolean; designated?: boolean; free?: boolean }
+const local = ([x, y]: P): P => [f(mm(x - SC[0])), f(mm(y - SC[1]))];
+/**
+ * The cursor slewed by hand (`had-free`): the procedure moves it in the page's units, from the centre toward the SA-6.
+ * `reach`: how close counts as on the radar; `speed`: travel at full deflection, per second; `box`: where it can go.
+ */
+export const HAD_SLEW = {
+  start: local([329.5, 330]), target: local(SA6), reach: f(mm(9)), speed: f(mm(140)),
+  box: [...local([BOX.x0 + 10, BOX.y0 + 10]), ...local([BOX.x1 - 10, BOX.y1 - 10])] as [number, number, number, number],
+};
 function had(id: string, s: HadState): Page {
   const exp = s.fov !== 'NORM';
   const cur = s.cursor ?? [329.5, 330];
@@ -188,8 +197,10 @@ function had(id: string, s: HadState): Page {
     if (t === '6' && s.designated) { fills += poly([[x - 17, y - 12.5], [x + 17, y - 12.5], [x + 17, y + 12.5], [x - 17, y + 12.5]], true); words.push(w(t, x, y, undefined, true)); }
     else words.push(c(w(t, x, y), col));
   }
-  if (s.soi && !s.designated) marks += cursor(tf(v, cur));
-  return { id, words, marks, fine, fills, paths };
+  if (s.soi && !s.designated && !s.free) marks += cursor(tf(v, cur));
+  const page: Page = { id, words, marks, fine, fills, paths };
+  if (s.free) page.cursor = { d: `M${f(mm(-8))} ${f(mm(-9))}H${f(mm(8))}M${f(mm(-8))} ${f(mm(9))}H${f(mm(8))}`, at: HAD_SLEW.start };
+  return page;
 }
 
 /* ------------------------------------------------------------------ THRT page */
@@ -212,8 +223,7 @@ const thrt: Page = {
 export const hadPages: Page[] = [
   had('had-not-soi', { soi: false, fov: 'NORM' }),
   had('had', { soi: true, fov: 'NORM' }),
-  had('had-up', { soi: true, fov: 'NORM', cursor: [329.5, SA6[1]] }),
-  had('had-left', { soi: true, fov: 'NORM', cursor: [SA6[0], 330] }),
+  had('had-free', { soi: true, fov: 'NORM', free: true }),
   had('had-hover', { soi: true, fov: 'NORM', cursor: SA6, data: true }),
   had('had-designated', { soi: true, fov: 'NORM', cursor: SA6, data: true, designated: true }),
   had('had-exp1', { soi: true, fov: 'EXP1', cursor: SA6, data: true }),
@@ -223,8 +233,7 @@ export const hadPages: Page[] = [
 export const hadPageLabels: Record<string, string> = {
   'had-not-soi': 'HAD format, not SOI',
   had: 'HAD format, SOI, cursor centred',
-  'had-up': 'HAD: cursor slewed up',
-  'had-left': 'HAD: cursor slewed left',
+  'had-free': 'HAD: cursor being slewed',
   'had-hover': 'HAD: cursor on the SA-6, expanded data shown',
   'had-designated': 'HAD: SA-6 designated as the SEAD target',
   'had-exp1': 'HAD: EXP1 field of view (2:1)',

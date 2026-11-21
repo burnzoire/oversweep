@@ -117,7 +117,7 @@ export const throttleGrip: PanelSpec = {
     { id: 'man-rng', name: 'MAN RNG/UNCAGE knob', controls: ['man-rng', 'uncage'], face: FACES['man-rng'] },
     { id: 'ant-elev', name: 'ANT ELEV knob', controls: ['ant-elev'], face: FACES['ant-elev'] },
     { id: 'dogfight', name: 'DOG FIGHT switch', controls: ['dogfight'], face: FACES['dogfight'] },
-    { id: 'cursor', name: 'RDR CURSOR/ENABLE', cross: { up: ['cursor-ud', 'up'], down: ['cursor-ud', 'down'], left: ['cursor-lr', 'aft'], right: ['cursor-lr', 'fwd'] }, centre: 'enable', face: FACES['cursor'] },
+    { id: 'cursor', name: 'RDR CURSOR/ENABLE', cross: { up: ['cursor-ud', 'up'], down: ['cursor-ud', 'down'], left: ['cursor-lr', 'aft'], right: ['cursor-lr', 'fwd'] }, centre: 'enable', analog: true, face: FACES['cursor'] },
     { id: 'spd-brk', name: 'SPD BRK switch', controls: ['spd-brk'], face: FACES['spd-brk'] },
   ],
 };

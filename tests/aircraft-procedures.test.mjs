@@ -118,7 +118,9 @@ test('HTS familiarization uses HAD and SEAD pages that exist and HOTAS controls 
   assert.ok(pagesOf('ded').has('sead'));
   for (const [panel, control] of [['snsr-pwr', 'left-hdpt'], ['stick', 'dms-ud'], ['stick', 'tms-ud'], ['stick', 'tms-lr'], ['stick', 'expand-fov'], ['throttle', 'cursor-ud'], ['throttle', 'cursor-lr'], ['right-mfd', 'osb-4']]) {
     assert.ok(panels.find(({ spec }) => spec.id === panel).spec.controls.some(c => c.id === control), `${panel}.${control}`);
-    assert.ok(data.includes(`${panel}.${control}`), `${panel}.${control} used`);
+    assert.ok(data.includes(`${panel}.${control}`) || script.includes(`${panel}.${control}`), `${panel}.${control} used`);
   }
+  // The cursor is slewed by hand: the RDR CURSOR pad works as a joystick.
+  assert.ok(panels.find(({ spec }) => spec.id === 'throttle').spec.pads.find(p => p.id === 'cursor').analog);
   assert.doesNotMatch(data, /chuck/i);
 });

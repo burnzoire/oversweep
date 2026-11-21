@@ -384,7 +384,9 @@ export interface MfdDisplay {
     /** White symbology paths (mm about the screen centre): `marks` medium lines, `fine` thin lines, `fills` solid shapes (drawn under the words). */
     marks?: string; fine?: string; fills?: string;
     /** Coloured symbology: `pen` fine or medium (default) line, or a solid `fill`. */
-    paths?: { d: string; c: MfdColour; pen?: 'fine' | 'medium'; fill?: boolean }[] }[];
+    paths?: { d: string; c: MfdColour; pen?: 'fine' | 'medium'; fill?: boolean }[];
+    /** A cursor the procedure moves (`cockpit:indicate` `cursors`): white lines about its own origin, starting at `at`. */
+    cursor?: { d: string; at: Pt } }[];
 }
 
 /**
@@ -558,6 +560,11 @@ export interface PadDef {
   cross?: Partial<Record<'up' | 'down' | 'left' | 'right', [control: string, position: string]>>;
   /** Pushbutton pressed in the middle of the cross. */
   centre?: string;
+  /**
+   * An analog hat (force-sensing cursor, the stick): the pad works as an on-screen joystick. Press and drag to
+   * deflect it, a short click presses `centre`; the deflection is sent as `cockpit:analog`.
+   */
+  analog?: boolean;
   /** Controls shown as a row of their positions (rotaries as step buttons with a readout). */
   controls?: string[];
   /** The switch drawn face-on, square to the camera, on its own canvas (mm); without it the pad shows the drawing cropped to the switch. */
