@@ -67,10 +67,10 @@ export const cardMedia: Record<string, CardMedia> = {
   'procedure.dcs-f16c.hts': {
     summary: 'Power the HARM Targeting System pod, bring up the HAD, and find, inspect and designate a threat radar with the HOTAS.',
     photo: {
-      src: 'manual/cards/f16c-cockpit.webp',
-      alt: 'The F-16C instrument panel and head-up display from the pilot’s seat.',
-      credit: 'Cockpit — US Air Force (public domain)',
-      sourceUrl: 'https://commons.wikimedia.org/wiki/File:F-16C_cockpit_m02006112700032.jpg',
+      src: 'manual/cards/f16c-hts-pod.webp',
+      alt: 'An AN/ASQ-213 HARM Targeting System pod on the hardpoint under an F-16CJ’s intake, beside the nose gear.',
+      credit: 'HTS pod on an F-16CJ at Langley — US Air Force (public domain)',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:F16_HTS.jpg',
     },
   },
   'procedure.dcs-f16c.before-takeoff': {
