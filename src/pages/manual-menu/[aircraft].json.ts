@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
+// @ts-ignore tsc has no declaration for .astro files; astro check and the build resolve it.
 import MenuBranch from "../../components/MenuBranch.astro";
 import { aircraftMenus } from "../../data/manual-menu";
 
