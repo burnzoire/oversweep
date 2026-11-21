@@ -71,7 +71,7 @@ export const fuelFlow: PanelSpec = {
   indicators: [
     {
       id: 'fuel-flow', name: 'FUEL FLOW counter', type: 'counter', unit: 'PPH', rest: 6510, range: [0, 99900, 100],
-      restNote: 'drawn as the guide shows it, about 6,500 PPH',
+      restNote: 'as pictured, about 6,500 PPH',
       description: 'Fuel flow to the engine in pounds per hour (PPH), in 100-pound steps; the last two drums are fixed zeros.',
       source: src,
     },

@@ -35,7 +35,7 @@ const three = (ids: [string, string, string], labels: [string, string, string]) 
   ids.map((id, i) => ({ id, label: labels[i], hold: 'stable' as const }));
 const toggle = (id: string, name: string, positions: ReturnType<typeof three>, initial: string, description: string, extra: Partial<ControlDef> = {}): ControlDef =>
   ({ id, name, type: 'toggle', travel: 'vertical', positions, initial, description, source: src, ...extra });
-const lock = { latched: true, protections: [{ kind: 'latch' as const, verified: false, note: 'The guide image shows a lever-lock slot in the bushing, so it is drawn as latched. It moves with a plain click; the lock is not simulated.' }] };
+const lock = { latched: true, protections: [{ kind: 'latch' as const, verified: false, note: 'A lever-lock slot in the bushing marks it as a lever-lock toggle, so it is drawn as latched. It moves with a plain click; the lock is not simulated.' }] };
 
 export const hudControl: PanelSpec = {
   id: 'hud-control',

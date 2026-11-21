@@ -155,7 +155,7 @@ export const manualTrim: PanelSpec = {
       id: 'trim-ap-disc', name: 'TRIM/AP DISC switch', type: 'toggle', travel: 'vertical', latched: true,
       positions: [{ id: 'norm', label: 'NORM', hold: 'stable' }, { id: 'disc', label: 'DISC', hold: 'stable' }],
       initial: 'norm',
-      protections: [{ kind: 'latch', verified: false, note: 'The guide image shows a lever-lock slot in the bushing, so it is drawn as latched. It moves with a plain click; the lock is not simulated.' }],
+      protections: [{ kind: 'latch', verified: false, note: 'A lever-lock slot in the bushing marks it as a lever-lock toggle, so it is drawn as latched. It moves with a plain click; the lock is not simulated.' }],
       description: 'NORM: pitch and roll trim from either the four-way trim switch on the side stick or this panel, and the autopilot can be engaged. DISC: pitch and roll trim from this panel only; the stick trim switch is disabled and the autopilot cannot be engaged.',
       source: src,
     },

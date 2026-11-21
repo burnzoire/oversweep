@@ -81,6 +81,52 @@ terms:
   - term: Field of regard
     definition: "The whole region a sensor can look into without the aircraft turning. For the HTS it is the forward 180° of the aircraft."
     cite: [{ n: 1, page: "527, 541" }]
+  - term: FLCS
+    expansion: Flight control system
+    definition: "The F-16C's flight control system, which moves the control surfaces through flight control computers from the pilot's stick and rudder inputs. Its branches have their own power supply, including a permanent magnet generator, checked before flight."
+    cite: [{ n: 1, page: "73, 125" }]
+  - term: EPU
+    expansion: Emergency power unit
+    definition: "A self-contained unit, run on engine bleed air or hydrazine, that gives emergency hydraulic and electrical power when the engine or main power is lost."
+    cite: [{ n: 1, page: "64" }]
+  - term: JFS
+    expansion: Jet fuel starter
+    definition: "A small turbine that spins the main engine up for start. The RUN light shows it is running."
+    cite: [{ n: 1, page: "63, 134" }]
+  - term: FTIT
+    expansion: Fan turbine inlet temperature
+    definition: "The engine temperature read on its own gauge, watched during start and in flight."
+    cite: [{ n: 1, page: "50" }]
+  - term: INS
+    expansion: Inertial navigation system
+    definition: "Works out the jet's position, heading and attitude from its own motion sensors. It must be aligned on the ground, with the jet kept still, before it can navigate."
+    cite: [{ n: 1, page: "79, 167" }]
+  - term: EHSI
+    expansion: Electronic horizontal situation indicator
+    definition: "The round display below the main instruments showing heading, the course and bearing to the selected steerpoint or TACAN station, and the distance to it."
+    cite: [{ n: 1, page: "27, 228" }]
+  - term: UFC
+    expansion: Upfront controls
+    definition: "The controls below the head-up display: the integrated control panel and the data entry display, with the switches around them."
+    cite: [{ n: 1, page: "98" }]
+  - term: CNI page
+    definition: "The data entry display's home page, showing the radios, the selected steerpoint, the time and the TACAN. The DCS switch returns the display to it."
+    cite: [{ n: 1, page: "100, 103" }]
+  - term: HMCS
+    expansion: Helmet-mounted cueing system
+    definition: "Symbols projected on the helmet visor: an extension of the head-up display that works wherever the pilot looks, used to aim sensors and weapons off the nose."
+    cite: [{ n: 1, page: "228, 549" }]
+  - term: FCR
+    expansion: Fire control radar
+    definition: "The F-16C's nose radar, with air-to-air and air-to-ground modes, shown on its own MFD format."
+    cite: [{ n: 1, page: "376" }]
+  - term: MIDS
+    expansion: Multifunctional Information Distribution System
+    definition: "The jet's Link 16 datalink terminal, which shares positions and targets between flight members. Its knob on the avionics power panel turns it on, off or zeroises it."
+    cite: [{ n: 1, page: "79" }]
+  - term: Steerpoint
+    definition: "A numbered point stored in the navigation system for the jet to steer to; the HUD and EHSI show the course and distance to the selected one. Some number ranges are kept for markpoints, pre-planned threats and datalink targets."
+    cite: [{ n: 1, page: "27, 205–206" }]
 sources:
   - n: 1
     title: "DCS: F-16C Viper Early Access Guide (English)"
@@ -92,4 +138,4 @@ sources:
 ---
 ## The words of the F-16C's avionics
 
-These are the words for how an F-16C pilot works the jet's sensors and displays: the sensor of interest and system point of interest that tie them together, the hand controls and screens, and the HARM Targeting System and targeting pod used to find and target enemy air defence radars. They come from the DCS F-16C guide [[1]](#source-1), so they describe the aircraft as that simulation models it.
+These are the words for how an F-16C pilot works the jet's sensors and displays: the sensor of interest and system point of interest that tie them together, the hand controls and screens, and the HARM Targeting System and targeting pod used to find and target enemy air defence radars. They describe the aircraft as the DCS F-16C simulation models it [[1]](#source-1). Engine, power and flight control words used in the F-16C procedures are here too.

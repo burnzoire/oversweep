@@ -55,7 +55,7 @@ const MIDS_POS = [
   { id: 'on', label: 'ON', angle: 45 },
 ] as const;
 const onOff = [{ id: 'on', label: 'On', hold: 'stable' as const }, { id: 'off', label: 'OFF', hold: 'stable' as const }];
-const latch = [{ kind: 'latch' as const, verified: false, note: 'The guide image shows a lever-lock slot in the bushing, so it is drawn as latched. It moves with a plain click; the lock is not simulated.' }];
+const latch = [{ kind: 'latch' as const, verified: false, note: 'A lever-lock slot in the bushing marks it as a lever-lock toggle, so it is drawn as latched. It moves with a plain click; the lock is not simulated.' }];
 const sw = (id: string, name: string, description: string) =>
   ({ id, name, type: 'toggle' as const, travel: 'vertical' as const, positions: onOff, initial: 'off', latched: true, protections: latch, description, source: src });
 

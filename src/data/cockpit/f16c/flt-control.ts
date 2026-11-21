@@ -15,7 +15,7 @@ const { pt, mm, path } = tracer(PX);
 const src = 'DCS F-16C guide p. 71';
 const L = (at: [number, number], text: string, cap: number, width?: number) =>
   ({ kind: 'text' as const, at: pt(...at), text, cap: mm(cap), ...(width ? { width: mm(width) } : {}) });
-const latch = [{ kind: 'latch' as const, verified: false, note: 'The guide image shows a lever-lock slot in the bushing, so it is drawn as latched. It moves with a plain click; the lock is not simulated.' }];
+const latch = [{ kind: 'latch' as const, verified: false, note: 'A lever-lock slot in the bushing marks it as a lever-lock toggle, so it is drawn as latched. It moves with a plain click; the lock is not simulated.' }];
 
 export const fltControl: PanelSpec = {
   id: 'flt-control',

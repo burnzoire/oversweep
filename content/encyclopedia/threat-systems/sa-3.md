@@ -60,7 +60,7 @@ The S-125 Neva/Pechora, NATO reporting name **SA-3 Goa**, is a Soviet SAM system
 
 ## The site
 
-Missiles are typically deployed on fixed turrets holding two or four, but can also be carried ready to fire in pairs on ZIL trucks. [[1]](#source-1) Figure 3 shows both turret types; the cited text does not give the number of launchers per battery. The SNR-125 **Low Blow** radar tracks the target and guides the missiles: a 250 kW I/D-band radar with a 40 km range, or 80 km in a second mode. Targets are acquired by the 380 kW C-band P-15 **Flat Face** (250 km) or its P-15M(2) **Squat Eye** variant, with a PRV-11 **Side Net** height finder. [[1]](#source-1)
+Missiles are typically deployed on fixed turrets holding two or four, but can also be carried ready to fire in pairs on ZIL trucks. [[1]](#source-1) Figure 3 shows both turret types; the number of launchers per battery is not given here. The SNR-125 **Low Blow** radar tracks the target and guides the missiles: a 250 kW I/D-band radar with a 40 km range, or 80 km in a second mode. Targets are acquired by the 380 kW C-band P-15 **Flat Face** (250 km) or its P-15M(2) **Squat Eye** variant, with a PRV-11 **Side Net** height finder. [[1]](#source-1)
 
 ## How it engages
 

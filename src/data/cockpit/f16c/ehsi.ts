@@ -116,7 +116,7 @@ export const ehsi: PanelSpec = {
     { component: 'screw-tiny', at: pt(9.5, 491) }, { component: 'screw-tiny', at: pt(540.5, 491) },
   ],
   controls: [
-    rotary('hdg', 'HDG (heading set) knob', 'Turns the heading marker round the compass card; with the autopilot ROLL switch at HDG SEL the jet turns to it. The guide also lists a push in ATT mode to adjust the compass heading (ADJ HDG).'),
+    rotary('hdg', 'HDG (heading set) knob', 'Turns the heading marker round the compass card; with the autopilot ROLL switch at HDG SEL the jet turns to it. Pushing it in ATT mode adjusts the compass heading (ADJ HDG); the push is not modelled here.'),
     rotary('crs', 'CRS (course set / brightness) knob', 'Sets the desired course: the course arrow and the CRS readout. Pushed, it adjusts the display brightness (BRT).'),
     {
       id: 'mode', name: 'M (instrument mode) button', type: 'pushbutton', initial: 'out', source: src,
