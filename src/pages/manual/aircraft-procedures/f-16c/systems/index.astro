@@ -1,0 +1,18 @@
+---
+import MenuCards from "../../../../../components/MenuCards.astro";
+import SiteLayout from "../../../../../layouts/SiteLayout.astro";
+import { manualMenu } from "../../../../../data/manual-menu";
+import { sitePath } from "../../../../../lib/paths";
+const aircraft = manualMenu.find((n) => n.id === "area-aircraft")!.children!.find((n) => n.id === "f16c")!;
+const node = aircraft.children!.find((n) => n.id === "f16c-systems")!;
+---
+<SiteLayout title={`F-16C ${node.title}`} activeSection="manual" activeSubject="aircraft-procedures" description={node.summary}
+  breadcrumbs={[
+    { label: "Manual", href: sitePath("manual/") },
+    { label: "Aircraft", href: sitePath("manual/aircraft-procedures/") },
+    { label: aircraft.title, href: sitePath(aircraft.href!) },
+    { label: node.title },
+  ]}>
+  <p class="lead">{node.summary}</p>
+  <MenuCards node={node} />
+</SiteLayout>

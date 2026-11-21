@@ -1,13 +1,12 @@
 ---
 import Self from "./MenuBranch.astro";
-import { containsRoute, progress, type MenuNode } from "../data/manual-menu";
+import { childCount, containsRoute, type MenuNode } from "../data/manual-menu";
 import { sitePath } from "../lib/paths";
 
 // One level of the Manual menu. Siblings share the <details> name, so opening
 // one closes the others in the browser, with no script.
 interface Props { nodes: MenuNode[]; route: string; parent: string; depth?: number }
 const { nodes, route, parent, depth = 0 } = Astro.props;
-const showCount = (node: MenuNode) => { const p = progress(node); return p.built < p.total ? `${p.built}/${p.total}` : ""; };
 const link = (node: MenuNode) => (node.href && !node.planned ? sitePath(node.href) : undefined);
 ---
 
@@ -24,7 +23,7 @@ const link = (node: MenuNode) => (node.href && !node.planned ? sitePath(node.hre
           <summary>
             <span class="chev" aria-hidden="true"></span>
             {label}
-            {showCount(node) && <span class="count">{showCount(node)}</span>}
+            <span class="count">{childCount(node)}</span>
           </summary>
           <Self nodes={node.children} route={route} parent={node.id} depth={depth + 1} />
         </details>

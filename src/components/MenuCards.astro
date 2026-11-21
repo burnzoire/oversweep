@@ -1,0 +1,37 @@
+---
+import { sitePath } from "../lib/paths";
+import type { MenuNode } from "../data/manual-menu";
+
+// A landing page mirrors the menu: one card per direct child of `node`, and
+// nothing deeper. A child that is only a heading (a phase or weapon group, no page
+// of its own) becomes a labelled row of its own children. Unwritten items are grey.
+interface Props { node: MenuNode }
+const { node } = Astro.props;
+const heading = (n: MenuNode) => !n.href && !n.planned && (n.children?.length ?? 0) > 0;
+const slug = (n: MenuNode) => `card-${n.id}`;
+---
+{node.children?.some((c) => !heading(c)) && (
+  <div class="entry-grid menu-cards">
+    {node.children!.filter((c) => !heading(c)).map((c) => (
+      <article class:list={["entry-card", "compact", { "card-unwritten": c.planned }]}>
+        <h3 class="entry-title">{c.href && !c.planned ? <a href={sitePath(c.href)}>{c.title}</a> : <span>{c.title}</span>}</h3>
+        {c.summary && <p class="entry-objective">{c.summary}</p>}
+        {c.planned && <p class="entry-objective">Not written yet.</p>}
+      </article>
+    ))}
+  </div>
+)}
+{node.children?.filter(heading).map((g) => (
+  <section class="subject-group" aria-labelledby={slug(g)}>
+    <h2 id={slug(g)}>{g.title}</h2>
+    <div class="entry-grid menu-cards">
+      {g.children!.map((c) => (
+        <article class:list={["entry-card", "compact", { "card-unwritten": c.planned }]}>
+          <h3 class="entry-title">{c.href && !c.planned ? <a href={sitePath(c.href)}>{c.title}</a> : <span>{c.title}</span>}</h3>
+          {c.summary && <p class="entry-objective">{c.summary}</p>}
+          {c.planned && <p class="entry-objective">Not written yet.</p>}
+        </article>
+      ))}
+    </div>
+  </section>
+))}

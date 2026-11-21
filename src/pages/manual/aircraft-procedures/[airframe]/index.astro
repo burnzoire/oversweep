@@ -3,6 +3,8 @@ import Term from '../../../../components/Term.astro';
 import SiteLayout from '../../../../layouts/SiteLayout.astro';
 import { airframes, procedureRoute, sourceUrl, visibleProcedures, type AircraftProcedure } from '../../../../data/aircraft-procedures';
 import { cardMedia } from '../../../../data/card-media';
+import MenuCards from '../../../../components/MenuCards.astro';
+import { manualMenu } from '../../../../data/manual-menu';
 import { cockpits, cockpitRoute } from '../../../../data/cockpit/f16c/index.ts';
 import { assetPath, sitePath } from '../../../../lib/paths';
 
@@ -23,6 +25,8 @@ const chain = (guide: AircraftProcedure): AircraftProcedure[] => {
 };
 const guides = own.filter(guide => !own.some(g => g.next === guide.slug)).flatMap(chain);
 const isViper = airframe.slug === 'f-16c';
+// An airframe in the menu shows its parts here, mirroring the menu; others list their lessons.
+const menuNode = manualMenu.find(n => n.id === 'area-aircraft')?.children?.find(n => n.href === `manual/aircraft-procedures/${airframe.slug}/`);
 const hero = cardMedia[`aircraft-procedures.${airframe.slug}`]?.photo;
 const lessons = [
   ...(cockpit ? [{
@@ -79,7 +83,8 @@ const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => ph
     </header>
   )}
 
-  <section class="syllabus" aria-labelledby="ground-operations">
+  {menuNode?.children?.length && <MenuCards node={menuNode} />}
+  {!menuNode?.children?.length && <section class="syllabus" aria-labelledby="ground-operations">
     <h2 id="ground-operations">Cockpit and Ground Operations</h2>
     <ol class="lesson-list" role="list">
       {lessons.map(lesson => (
@@ -96,7 +101,7 @@ const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => ph
         </li>
       ))}
     </ol>
-  </section>
+  </section>}
 
   <div class="airframe-sources">
     {isViper && <a href={sourceUrl}>Eagle Dynamics F-16C manual</a>}
