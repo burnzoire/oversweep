@@ -1,6 +1,10 @@
 ---
 import Self from "./MenuCards.astro";
+import EntryCard from "./EntryCard.astro";
+import { manualEntries } from "../data/availability";
 import { sitePath } from "../lib/paths";
+
+const entryById = new Map(manualEntries.map((entry) => [entry.id, entry]));
 import type { MenuNode } from "../data/manual-menu";
 
 // A landing page mirrors the menu. Items with a page of their own are cards;
@@ -30,7 +34,9 @@ const Heading = (level === 2 ? "h2" : "h3") as "h2" | "h3";
   </section>
 ) : (
   <div class="entry-grid menu-cards">
-    {seg.cards.map((c) => (
+    {seg.cards.map((c) => entryById.get(c.id) && !c.planned ? (
+      <EntryCard entry={entryById.get(c.id)!} headingLevel={(level + 1) as 3 | 4} compact />
+    ) : (
       <article class:list={["entry-card", "compact", { "card-unwritten": c.planned }]}>
         <h3 class="entry-title">{target(c) ? <a href={sitePath(target(c)!)}>{c.title}</a> : <span>{c.title}</span>}</h3>
         {blurb(c) && <p class="entry-objective">{blurb(c)}</p>}

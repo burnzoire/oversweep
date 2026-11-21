@@ -50,7 +50,7 @@ export async function checkModules({ dist, modules, review = false, base = "" })
       continue;
     }
     const revision = `data-module-revision="${m.revision}"`;
-    const pages = { page: await read(`${route(m)}index.html`), "subject index": await read(`manual/${m.subject}/index.html`) };
+    const pages = { page: await read(`${route(m)}index.html`), "Manual landing page": await read("manual/index.html") };
     const sections = {};
     for (const [name, html] of Object.entries(pages)) {
       if (html === null) { problems.push(`${m.id}: ${name} is missing.`); continue; }
@@ -59,8 +59,8 @@ export async function checkModules({ dist, modules, review = false, base = "" })
         problems.push(`${m.id}: ${name} lacks the registered id or revision ${m.revision}.`);
       if (section?.body.includes(m.maturity)) problems.push(`${m.id}: ${name} shows the internal maturity label "${m.maturity}".`);
     }
-    if (pages["subject index"] && !sections["subject index"]?.body.includes(`href="${base}/${route(m)}"`))
-      problems.push(`${m.id}: subject index does not link to ${base}/${route(m)}.`);
+    if (pages["Manual landing page"] && !sections["Manual landing page"]?.body.includes(`href="${base}/${route(m)}"`))
+      problems.push(`${m.id}: Manual landing page does not link to ${base}/${route(m)}.`);
     // A module without a trainer must not frame or launch one.
     if (pages.page && (/<iframe\b/.test(pages.page) || pages.page.includes("data-experience-launch")))
       problems.push(`${m.id}: page embeds or launches a trainer.`);

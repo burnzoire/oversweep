@@ -12,7 +12,7 @@ const module = {
 const tag = `data-module-id="${module.id}" data-module-revision="2"`;
 const complete = {
   'manual/navigation/example/index.html': `<section ${tag}></section>`,
-  'manual/navigation/index.html': `<section ${tag}><a href="/manual/navigation/example/">Open</a></section>`,
+  'manual/index.html': `<section ${tag}><a href="/manual/navigation/example/">Open</a></section>`,
 };
 
 async function checkAll(files, modules, review = false) {
@@ -35,9 +35,9 @@ test('a complete published module passes', async () => {
 });
 
 test('a published module must ship its page and subject listing', async () => {
-  const problems = await check({ 'manual/navigation/index.html': '<p>Coming soon</p>' });
+  const problems = await check({ 'manual/index.html': '<p>Coming soon</p>' });
   assert(problems.some(p => p.includes('page is missing')));
-  assert(problems.some(p => p.includes('subject index lacks')));
+  assert(problems.some(p => p.includes('Manual landing page lacks')));
   assert(problems.some(p => p.includes('does not link')));
 });
 
@@ -80,11 +80,11 @@ test('one module card cannot mask another on a shared subject page', async () =>
     ...complete,
     'manual/navigation/other/index.html': `<section data-module-id="${other.id}" data-module-revision="5"></section>`,
     // The other card is stale (revision 4); the first card carries its revision in an attribute.
-    'manual/navigation/index.html': `<section ${otherTag}><a href="/manual/navigation/other/">Open</a></section>`
+    'manual/index.html': `<section ${otherTag}><a href="/manual/navigation/other/">Open</a></section>`
       + `<section ${tag} data-note="5"><a href="/manual/navigation/example/">Open</a></section>`,
   };
   const problems = await checkAll(files, [module, other]);
-  assert(problems.some(p => p.includes('module.other: subject index lacks the registered id or revision 5')));
+  assert(problems.some(p => p.includes('module.other: Manual landing page lacks the registered id or revision 5')));
   assert(!problems.some(p => p.startsWith('module.example')));
 });
 

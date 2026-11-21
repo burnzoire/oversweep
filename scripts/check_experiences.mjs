@@ -50,7 +50,7 @@ export async function checkExperiences({ dist, experiences, review = false, base
     const pages = {
       wrapper: await read(`${route(e)}index.html`),
       frame: await read(`${frame(e)}index.html`),
-      "subject index": await read(`manual/${e.subject}/index.html`),
+      "Manual landing page": await read("manual/index.html"),
       "Training Library": await read("training/index.html"),
     };
     for (const [name, html] of Object.entries(pages)) {
@@ -66,7 +66,7 @@ export async function checkExperiences({ dist, experiences, review = false, base
         problems.push(`${e.id}: ${name} shows the internal maturity label "${e.maturity}".`);
     }
     const href = `href="${base}/${route(e)}"`;
-    for (const name of (unlisted ? [] : ["subject index", "Training Library"]))
+    for (const name of (unlisted ? [] : ["Manual landing page", "Training Library"]))
       if (pages[name] && !pages[name].includes(href)) problems.push(`${e.id}: ${name} does not link to ${base}/${route(e)}.`);
     // Window-only experiences must be linked in a new window and never framed.
     if (unlisted && pages.frame && !pages.frame.includes('name="robots" content="noindex,nofollow"')) problems.push(`${e.id}: unlisted frame lacks noindex.`);
