@@ -36,7 +36,10 @@ const config = {aircraft:`${cockpit.id}:${scope}`, initial, labels, names, order
 const recordLink = (l:{slug:string;anchor?:string}) => { const r = includedRecords.find(x => x.slug === l.slug); if (!r) throw new Error(`${guide.id}: no Encyclopedia record ${l.slug}`); return sitePath(recordRoute(r)) + (l.anchor ? '#' + l.anchor : ''); };
 // `{{phrase|k}}` in a step's text becomes a button that rings hint k on the panels for a moment.
 const esc = (t:string) => t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-const rich = (t:string) => esc(t).replace(/\{\{(.+?)\|(\d+)\}\}/g, (_m, text, k) => `<button type="button" class="hint-link" data-hint="${k}">${text}</button>`);
+// `[text](record:slug#anchor)` becomes a link to an Encyclopedia record (a reference table, say).
+const rich = (t:string) => esc(t)
+  .replace(/\{\{(.+?)\|(\d+)\}\}/g, (_m, text, k) => `<button type="button" class="hint-link" data-hint="${k}">${text}</button>`)
+  .replace(/\[([^\]]+)\]\(record:([a-z0-9-]+)(?:#([a-z0-9-]+))?\)/g, (_m, text, slug, anchor) => `<a href="${recordLink({slug, anchor})}">${text}</a>`);
 const shortTitle = guide.title.split('— ')[1] ?? guide.title;
 ---
 <SiteLayout title={guide.title} activeSection="manual" activeSubject="aircraft-procedures"
