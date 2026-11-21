@@ -1,7 +1,7 @@
 ---
 import Self from "./MenuBranch.astro";
 import { containsRoute, type MenuNode } from "../data/manual-menu";
-import { sitePath } from "../lib/paths";
+import { assetPath, sitePath } from "../lib/paths";
 
 // One level of the Manual menu. Siblings share the <details> name, so opening
 // one closes the others in the browser, with no script.
@@ -19,7 +19,7 @@ const link = (node: MenuNode) => (node.href && !node.planned ? sitePath(node.hre
       : <span class:list={{ unwritten: node.planned }}>{node.title}{node.planned && <span class="visually-hidden"> (not written yet)</span>}</span>;
     return node.children?.length ? (
       <li class:list={{ unwritten: node.planned }}>
-        <details name={parent} open={containsRoute(node, route)} data-lazy={node.lazy ? sitePath(node.lazy) : undefined}>
+        <details name={parent} open={containsRoute(node, route)} data-lazy={node.lazy ? assetPath(node.lazy) : undefined}>
           <summary>
             <span class="chev" aria-hidden="true"></span>
             {label}
