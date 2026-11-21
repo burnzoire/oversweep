@@ -99,14 +99,14 @@ const systems = group('f16c-systems', 'Systems', [
   plan('Aerodynamics and limits'),
   plan('Fuel system'),
   plan('Electrical, hydraulic and EPU'),
-], `${F16C_HREF}systems/`, 'The cockpit, sensors, weapons systems and aircraft systems.');
+]);
 
 // Normal procedures sit directly under the aircraft, one group per phase of the sortie.
 const phases: MenuNode[] = [
-  group('phase-ground', 'Ground', [proc('engine-start'), proc('before-taxi'), proc('before-takeoff'), plan('Taxi and lineup'), plan('Takeoff'), plan('After landing and shutdown')], `${F16C_HREF}ground/`, 'Engine start to takeoff.'),
-  group('phase-navigation', 'Navigation', [proc('steerpoint-entry'), proc('tacan-navigation', 'TACAN navigation'), plan('INS alignment modes'), plan('HSD and route management'), plan('Markpoints'), plan('Reference points (VIP, VRP, PUP, OAP)'), plan('Bullseye'), plan('CRUS and DEST pages'), plan('INS drift: altitude calibration and fix'), plan('ILS approach set-up')], `${F16C_HREF}navigation/`, 'Setting up and using the navigation systems.'),
-  group('phase-enroute', 'Enroute', [plan('Air-to-air refuelling')], `${F16C_HREF}enroute/`, 'Procedures between takeoff and recovery.'),
-  group('phase-recovery', 'Recovery', [plan('Overhead break'), plan('Instrument approach'), plan('Landing')], `${F16C_HREF}recovery/`, 'Returning to the field and landing.'),
+  group('phase-ground', 'Ground', [proc('engine-start'), proc('before-taxi'), proc('before-takeoff'), plan('Taxi and lineup'), plan('Takeoff'), plan('After landing and shutdown')]),
+  group('phase-navigation', 'Navigation', [proc('steerpoint-entry'), proc('tacan-navigation', 'TACAN navigation'), plan('INS alignment modes'), plan('HSD and route management'), plan('Markpoints'), plan('Reference points (VIP, VRP, PUP, OAP)'), plan('Bullseye'), plan('CRUS and DEST pages'), plan('INS drift: altitude calibration and fix'), plan('ILS approach set-up')]),
+  group('phase-enroute', 'Enroute', [plan('Air-to-air refuelling')]),
+  group('phase-recovery', 'Recovery', [plan('Overhead break'), plan('Instrument approach'), plan('Landing')]),
 ];
 
 const emergency = plan('Emergency procedures', ['Engine failure and flameout', 'Engine relight', 'Engine fire', 'Electrical failure', 'Hydraulic failure', 'FLCS failure', 'EPU activation', 'Fuel system malfunction', 'Landing gear malfunction', 'Ejection decision']);
@@ -130,7 +130,7 @@ const weapons = group('f16c-weapons', 'Weapons and tactics', [
     plan('Ordnance jettison', ['Selective jettison', 'Emergency stores jettison']),
   ]),
   group('weapons-self-protection', 'Self-protection', [plan('Chaff and flares', ['Manual and programmed dispense']), plan('ECM pod', ['Mode selection'])]),
-], `${F16C_HREF}weapons-and-tactics/`, 'Employing the Viper\'s weapons: SEAD, air-to-air and air-to-ground.');
+]);
 
 return group('f16c', 'F-16C Viper', [systems, ...phases, emergency, weapons], F16C_HREF, 'Cockpit, systems, procedures and weapons for the DCS F-16C Block 50.');
 };
@@ -148,9 +148,9 @@ export const aircraftMenus: AircraftMenu[] = [
 ];
 
 const areas = (aircraft: MenuNode[]): MenuNode[] => [
-  group('area-general-flight', 'General Flight', generalFlight.map(subjectNode), 'manual/general-flight/', 'Skills that apply to any aircraft: flying it, navigating, talking, planning and handling emergencies.'),
-  group('area-tactics', 'Tactics', tactics.map(subjectNode), 'manual/tactics/', 'Employment and threats: fighting, attacking ground targets, using sensors and staying alive.'),
-  group('area-aircraft', 'Aircraft', aircraft, 'manual/aircraft-procedures/', 'One guide per aircraft type: cockpit, systems, procedures and weapons.'),
+  group('area-general-flight', 'General Flight', generalFlight.map(subjectNode)),
+  group('area-tactics', 'Tactics', tactics.map(subjectNode)),
+  group('area-aircraft', 'Aircraft', aircraft),
 ];
 
 /** Every airframe fully built: the source of truth for tests and the landing page. */

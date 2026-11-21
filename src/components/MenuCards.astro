@@ -1,18 +1,32 @@
 ---
+import Self from "./MenuCards.astro";
 import { sitePath } from "../lib/paths";
 import type { MenuNode } from "../data/manual-menu";
 
-// A landing page mirrors the menu: one card per direct child of `node`, and
-// nothing deeper. A child that is only a heading (a phase or weapon group, no page
-// of its own) becomes a labelled row of its own children. Unwritten items are grey.
-interface Props { node: MenuNode }
-const { node } = Astro.props;
-const heading = (n: MenuNode) => !n.href && !n.planned && (n.children?.length ?? 0) > 0;
-const slug = (n: MenuNode) => `card-${n.id}`;
+// A landing page mirrors the menu. Items with a page of their own are cards;
+// a plain group (no page, only a heading in the menu) is a labelled row holding
+// its own items, so groups never need pages. Unwritten items are grey.
+interface Props { node: MenuNode; level?: 2 | 3 }
+const { node, level = 2 } = Astro.props;
+const isGroup = (n: MenuNode) => !n.href && !n.planned && (n.children?.length ?? 0) > 0;
+// Keep the menu's order: runs of cards share a grid, each group is its own row.
+type Segment = { cards: MenuNode[] } | { group: MenuNode };
+const segments = (node.children ?? []).reduce<Segment[]>((acc, c) => {
+  if (isGroup(c)) return [...acc, { group: c }];
+  const last = acc[acc.length - 1];
+  if (last && "cards" in last) { last.cards.push(c); return acc; }
+  return [...acc, { cards: [c] }];
+}, []);
+const Heading = (level === 2 ? "h2" : "h3") as "h2" | "h3";
 ---
-{node.children?.some((c) => !heading(c)) && (
+{segments.map((seg) => "group" in seg ? (
+  <section class="subject-group" aria-labelledby={`card-${seg.group.id}`}>
+    <Heading id={`card-${seg.group.id}`}>{seg.group.title}</Heading>
+    <Self node={seg.group} level={3} />
+  </section>
+) : (
   <div class="entry-grid menu-cards">
-    {node.children!.filter((c) => !heading(c)).map((c) => (
+    {seg.cards.map((c) => (
       <article class:list={["entry-card", "compact", { "card-unwritten": c.planned }]}>
         <h3 class="entry-title">{c.href && !c.planned ? <a href={sitePath(c.href)}>{c.title}</a> : <span>{c.title}</span>}</h3>
         {c.summary && <p class="entry-objective">{c.summary}</p>}
@@ -20,18 +34,4 @@ const slug = (n: MenuNode) => `card-${n.id}`;
       </article>
     ))}
   </div>
-)}
-{node.children?.filter(heading).map((g) => (
-  <section class="subject-group" aria-labelledby={slug(g)}>
-    <h2 id={slug(g)}>{g.title}</h2>
-    <div class="entry-grid menu-cards">
-      {g.children!.map((c) => (
-        <article class:list={["entry-card", "compact", { "card-unwritten": c.planned }]}>
-          <h3 class="entry-title">{c.href && !c.planned ? <a href={sitePath(c.href)}>{c.title}</a> : <span>{c.title}</span>}</h3>
-          {c.summary && <p class="entry-objective">{c.summary}</p>}
-          {c.planned && <p class="entry-objective">Not written yet.</p>}
-        </article>
-      ))}
-    </div>
-  </section>
 ))}
