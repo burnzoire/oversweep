@@ -1,4 +1,5 @@
 ---
+import Term from '../../../../components/Term.astro';
 import SiteLayout from '../../../../layouts/SiteLayout.astro';
 import { airframes, procedureRoute, sourceUrl, visibleProcedures, type AircraftProcedure } from '../../../../data/aircraft-procedures';
 import { cardMedia } from '../../../../data/card-media';
@@ -61,7 +62,8 @@ const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => ph
       <div class="briefing-copy">
         <p class="sim-variant">DCS World · Block 50</p>
         <h1>{airframe.title}</h1>
-        <p>Learn where everything is, then put it to use. Start with the cockpit, then work through the procedures from engine start onward.</p>
+        <p>The Viper is a small single-seat fighter. You sit low in a compact cockpit under a bubble canopy with a clear view all round, and in the Block 50 you can also fly the Wild Weasel role, hunting radars for <Term>SEAD</Term>.</p>
+        <p>Learn the cockpit first, then work through the procedures from engine start to engaging radars.</p>
       </div>
       {hero && (
         <img
