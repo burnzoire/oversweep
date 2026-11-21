@@ -354,6 +354,8 @@ const SA6X: P = [OWN[0] - 14 * NM, OWN[1] - 24.2 * NM];
 const Y6: Threat = { t: '6', at: SA6X, c: 'yellow' };
 const T_START: Threat[] = [Y6, { t: '8', at: SA8, c: 'green' }];
 const T_11 = (c: MfdColour): Threat[] => [Y6, { t: '11', at: SA11, c }];
+// After the turn the SA-6, passed about 17 NM away, tracks the jet; the distant 11 keeps searching.
+const T_TURN = (red: boolean): Threat[] => [{ ...Y6, c: red ? 'red' : 'yellow' }, { t: '11', at: SA11, c: 'yellow' }];
 const PGM: Record<number, [string, string]> = {
   5: ['004°  21.4NM  1.8NM', 'PGM5'], 4: ['008°  12.6NM  1.5NM', 'PGM4'],
   3: ['012°  6.2NM  1.1NM', 'PGM3'], 2: ['016°  2.3NM  2950FT', 'PGM2'],
@@ -391,11 +393,11 @@ const hadx: Page[] = [
   had('hadx-60-hover', { ...base, threats: T_11('yellow'), nav2: false, scale: 'DEP60', cursor: SA11, data: PGM[5] }),
   had('hadx-des', { ...base, threats: T_11('yellow'), nav2: false, scale: 'DEP60', designated: '11', data: PGM[5] }),
   had('hadx-des-aid', { ...base, threats: T_11('yellow'), nav2: false, scale: 'DEP60', designated: '11', data: PGM[5], aid: aid(0, 5) }),
-  ...[5, 4, 3, 2].map(n => had(`hadx-t${n}`, { ...base, threats: T_11(n > 3 ? 'yellow' : 'red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[n], aid: aid(5 - n, n), pos: flown(5 - n) })),
-  had('hadx-t11', { ...base, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[2], pos: FLOWN }),
-  had('hadx-t-des6', { ...base, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '6', data: ['344°  4.6NM  3300FT', 'PGM2'], pos: FLOWN }),
-  had('hadx-t-notsoi', { ...base, soi: false, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[2], pos: FLOWN }),
-  had('hadx-t-tracked', { ...base, soi: false, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, pos: FLOWN }),
+  ...[5, 4, 3, 2].map(n => had(`hadx-t${n}`, { ...base, threats: T_TURN(n <= 3), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[n], aid: aid(5 - n, n), pos: flown(5 - n) })),
+  had('hadx-t11', { ...base, threats: T_TURN(true), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[2], pos: FLOWN }),
+  had('hadx-t-des6', { ...base, threats: T_TURN(true), nav2: false, scale: 'DEP60', rot: TURN, designated: '6', data: ['344°  4.6NM  3300FT', 'PGM2'], pos: FLOWN }),
+  had('hadx-t-notsoi', { ...base, soi: false, threats: T_TURN(true), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[2], pos: FLOWN }),
+  had('hadx-t-tracked', { ...base, soi: false, threats: T_TURN(true), nav2: false, scale: 'DEP60', rot: TURN, pos: FLOWN }),
 ];
 /** Where things are on the advanced pages (p. 539 px), for hint rings and the cursor slew. */
 export const HADX = {
@@ -438,7 +440,7 @@ export const hadPageLabels: Record<string, string> = {
   'hadx-des-aid': 'HAD 60 NM: SA-11 designated, with the scan bearings and error ellipse drawn on',
   'hadx-t5': 'HAD after the turn: PGM5, bearings drawn on',
   'hadx-t4': 'HAD after the turn: PGM4, bearings drawn on',
-  'hadx-t3': 'HAD after the turn: PGM3, the SA-11 tracking (red), bearings drawn on',
+  'hadx-t3': 'HAD after the turn: PGM3, the SA-6 tracking (red), bearings drawn on',
   'hadx-t2': 'HAD after the turn: PGM2, bearings drawn on',
   'hadx-t11': 'HAD after the turn: SA-11 designated at PGM2',
   'hadx-t-des6': 'HAD: TMS right stepped to the SA-6',
