@@ -44,11 +44,11 @@ const NORTH_FILL = poly([[407.5, 172.5], [417, 167.5], [417, 177.5]], true);
 /** Aircraft reference symbol, cyan (as on p. 495; the same symbol as the DTE page's, p. 127 item 16). */
 const ARS = poly([[114.5, 503], [114.5, 539]]) + poly([[112, 515], [122, 515], [128, 527], [133.5, 515], [139, 527], [144.5, 515], [155, 515]]);
 
-interface Spi { lat: string; lon: string; elv: string; hq: boolean; range: string; meter: string; video?: string }
+interface Spi { lat: string; lon: string; elv: string; hq: boolean; range: string; meter: string; ttg: string; video?: string }
 const SPI: Record<string, Spi> = {
-  stpt: { lat: '036:25.012', lon: '037:14.986', elv: '+1320', hq: true, range: 'E17.4', meter: '450', video: TGP_VIDEO_STPT },
-  sa6: { lat: '036:26.214', lon: '037:07.692', elv: '+1442', hq: false, range: 'E20.1', meter: '519', video: TGP_VIDEO_SA6 },
-  sa11: { lat: '036:58.031', lon: '037:21.874', elv: '+1680', hq: false, range: 'E50.1', meter: '1294', video: TGP_VIDEO_SA11 },
+  stpt: { lat: '036:25.012', lon: '037:14.986', elv: '+1320', hq: true, range: 'E17.4', meter: '450', ttg: '002:08', video: TGP_VIDEO_STPT },
+  sa6: { lat: '036:26.214', lon: '037:07.692', elv: '+1442', hq: false, range: 'E20.1', meter: '519', ttg: '002:28', video: TGP_VIDEO_SA6 },
+  sa11: { lat: '036:58.031', lon: '037:21.874', elv: '+1680', hq: false, range: 'E50.1', meter: '1294', ttg: '006:08', video: TGP_VIDEO_SA11 },
 };
 function tgp(id: string, spi: Spi, soi: boolean): Page {
   const words: Word[] = [
@@ -57,7 +57,7 @@ function tgp(id: string, spi: Spi, soi: boolean): Page {
     ...(spi.hq ? [sm('HQ', 190, 181, 'start')] : []),
     w('1.0X', 332.5, 144), sm('18600', 531, 144, 'end'), w('WHOT', 551.5, 186, 'end'),
     ...stack('LST', 117, 185), ...stack('MT', 117, 330.5), ...stack('NT', 547, 259.5), ...stack('SP', 547, 330.5), ...stack('CZ', 547, 402.5), ...stack('TGT', 547, 472),
-    sm(spi.meter, 441.5, 313.5, 'start'), sm(spi.range, 167.5, 511, 'start'), sm('002:08', 520, 492.5, 'end'),
+    sm(spi.meter, 441.5, 313.5, 'start'), sm(spi.range, 167.5, 511, 'start'), sm(spi.ttg, 520, 492.5, 'end'),
     ...hadBottom('TGP'),
   ];
   return {

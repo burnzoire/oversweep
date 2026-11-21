@@ -307,8 +307,8 @@ const Y6: Threat = { t: '6', at: SA6, c: 'yellow' };
 const T_START: Threat[] = [Y6, { t: '8', at: SA8, c: 'green' }];
 const T_11 = (c: MfdColour): Threat[] => [Y6, { t: '11', at: SA11, c }];
 const PGM: Record<number, [string, string]> = {
-  5: ['004°  21.4NM  1.8NM', 'PGM5'], 4: ['011°  12.6NM  1.5NM', 'PGM4'],
-  3: ['027°  6.2NM  1.1NM', 'PGM3'], 2: ['041°  2.3NM  2950FT', 'PGM2'],
+  5: ['004°  21.4NM  1.8NM', 'PGM5'], 4: ['006°  12.6NM  1.5NM', 'PGM4'],
+  3: ['008°  6.2NM  1.1NM', 'PGM3'], 2: ['010°  2.3NM  2950FT', 'PGM2'],
 };
 const base = { soi: true, fov: 'NORM' as const };
 const hadx: Page[] = [
