@@ -144,7 +144,7 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
         'manual-trim.pitch-trim-ind': st.pitch, 'manual-trim.roll-trim-ind': st.roll,
         'ehsi.heading': 232, 'ehsi.heading-set': 232, 'ehsi.course': 232, 'ehsi.course-set': 232, 'ehsi.bearing': 232, 'ehsi.range': 24, 'ehsi.deviation': 0,
       },
-      pages: { 'speed-brake.indicator': st.sb ? 'open' : 'closed', 'left-mfd.display': mfd, 'right-mfd.display': mfd === 'off' ? 'off' : 'menu', 'sai.off-flag': pos['sai.cage'] === 'pulled' ? 'shown' : 'hidden', 'hud.master-arm': 'none', 'ded.display': ded, 'hud.screen': hudOn ? 'on' : 'off', 'hud.align': alignCue ? 'align' : 'none', 'altimeter.pneu': st.mode === 'pneu' ? 'shown' : 'hidden',
+      pages: { 'landing-gear.speed-brake': st.sb ? 'open' : 'closed', 'left-mfd.display': mfd, 'right-mfd.display': mfd === 'off' ? 'off' : 'menu', 'sai.off-flag': pos['sai.cage'] === 'pulled' ? 'shown' : 'hidden', 'hud.master-arm': 'none', 'ded.display': ded, 'hud.screen': hudOn ? 'on' : 'off', 'hud.align': alignCue ? 'align' : 'none', 'altimeter.pneu': st.mode === 'pneu' ? 'shown' : 'hidden',
         // The EHSI comes on with the avionics and shows INU until the aligned INS is in NAV (ATT at the ATT knob position).
         // Backup UHF: lit once the function knob is off OFF; TEST DISPLAY lights every segment.
         'uhf.chan-display': pos['uhf.function'] === 'off' || pos['uhf.mode'] !== 'preset' ? 'off' : pos['uhf.test-display'] === 'in' ? 'test' : String(pos['uhf.chan'] ?? '1').padStart(2, '0'),

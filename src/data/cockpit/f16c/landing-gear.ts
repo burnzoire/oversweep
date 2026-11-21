@@ -1,5 +1,6 @@
 import type { PanelSpec } from '../types';
 import { tracer } from '../trace.ts';
+import { speedBrakeParts } from './speed-brake.ts';
 
 /**
  * F-16C landing gear panel (left auxiliary console), DCS.
@@ -8,10 +9,22 @@ import { tracer } from '../trace.ts';
  * `pdfimages -j -f 55 -l 55`), rectified on the two top DZUS fasteners, the bottom-left
  * panel screw and the bottom-right DZUS:
  *   python3 -I scripts/panel-trace.py <p55.jpg> <out> 140,70 439,19 140,401 428,401
- * Measurements below are in rectified pixels and stored in mm.
+ * Measurements below are in rectified pixels and stored in mm, shifted right by
+ * `OX` so the SPEED BRAKE indicator, which hangs below the panel's lower-left
+ * corner, fits on the canvas.
+ *
+ * SPEED BRAKE indicator: placed from the guide's p. 55 wide shot (1152 x 680
+ * px, image 002), registered onto the rectified p. 55 image by SIFT feature
+ * matching (gear panel screws land within 8 px of their traced places). Its
+ * legend centre maps to x 2, y 462. The indicator's face is a separate, tilted
+ * plane, so that mapping stretches it 1.38 times top to bottom (legend line
+ * spacing and housing height both agree); its offset below the panel's lower
+ * edge (y 422) is divided by 1.38. That puts the indicator's own drawing
+ * (speed-brake.ts) with its top-left corner at x -22.75, y 432.
  */
-const PX = 3.06;
-const { pt, mm, path } = tracer(PX);
+const PX = 3.06, OX = 26;
+const { pt, mm, path } = tracer(PX, [OX, 0]);
+const speedBrake = speedBrakeParts([mm(-22.75 + OX), mm(432)]);
 const src = 'DCS F-16C guide pp. 55–57';
 const L = (at: [number, number], text: string, cap: number, width?: number) =>
   ({ kind: 'text' as const, at: pt(...at), text, cap: mm(cap), ...(width ? { width: mm(width) } : {}) });
@@ -82,31 +95,33 @@ const W = 327;                                   // WHEELS aircraft outline cent
 export const landingGear: PanelSpec = {
   id: 'landing-gear',
   title: 'Landing gear panel',
-  canvas: [mm(458), mm(426)],
+  canvas: [mm(458 + OX), mm(534)],
   source: {
     variant: 'DCS F-16C Viper (Block 50)',
     manual: 'Eagle Dynamics, DCS F-16C Viper Early Access Guide (EN, 16 Aug 2026)',
     page: 55,
-    image: 'p. 55 "Landing Gear Panel" cockpit image, 468 x 541 px',
+    image: 'p. 55 "Landing Gear Panel" cockpit image, 468 x 541 px; SPEED BRAKE indicator placed from the p. 55 wide shot (1152 x 680 px) and drawn from the p. 57 close-ups',
     rectify: 'python3 -I scripts/panel-trace.py <p55.jpg> <out> 140,70 439,19 140,401 428,401',
     pxPerMm: PX,
     scale: 'DZUS stud heads are drawn at one size (8.5 mm) on every panel; this panel\'s scale is set so its fastener heads (about 26 px) match.',
-    shown: { 'lg-handle': 'up', hook: 'up', 'gnd-jett': 'off', brakes: 'chan-1', 'anti-skid': 'anti-skid', 'stores-config': 'cat-3', lights: 'off' },
+    shown: { 'lg-handle': 'up', hook: 'up', 'gnd-jett': 'off', brakes: 'chan-1', 'anti-skid': 'anti-skid', 'stores-config': 'cat-3', lights: 'off', 'speed-brake': 'closed' },
     unresolved: [
       'The panel has no fourth DZUS in view, so it is rectified on three fasteners and the bottom-left panel screw, taken as a rectangle.',
       'The gear handle hides its slot. The slot is placed under the UP and DN legends, where the handle\'s shaft enters the panel; the knob is drawn square-on over it, at UP as shown and at DN at the bottom of the slot. Its DN position overlaps the edge of the DN LOCK REL stripes.',
       'The gear handle wheel is drawn on its tread, square-on, with the whole tyre as the red warning light lens.',
       'The LIGHTS switch is drawn as a wide flat paddle, from its end-on look in the image (three round bosses along a long pill).',
       'GND JETT and ANTI-SKID are large lever-locks; BRAKES and STORES CONFIG show no lever-lock slot in the image, so they are drawn as plain toggles. The HOOK lever is a one-off, traced from the image: a flat vertical paddle with a semicircular end toward the bushing, overhanging well past it toward the selected position (over the HOOK plate at UP).',
-      'The SPEED BRAKE position indicator (item 12) sits on the strip below this panel, outside the rectified image, so it is not drawn here.',
+      'The SPEED BRAKE position indicator (item 12) sits on the strip below this panel, outside the rectified image, on a face tilted away from the panel. Its place comes from the p. 55 wide shot, with the vertical offset corrected for that tilt (see the note at the top of the spec); about ±2 mm. The strip it is mounted on is not drawn, only its legend plate and housing.',
+      ...speedBrake.unresolved,
       'EMER STORES JETTISON has a light circle-and-square mark at the centre of its cap; what it is (a lens, a latch or a guard insert) is not stated in the guide, so it is drawn as an outline only.',
       'The upper-left corner of the panel is hidden behind the canopy frame in the image; the plate outline steps in there as the visible edge suggests, and its left edge slopes in above GND JETT ENABLE, traced from the strip of side wall visible beside it.',
     ],
   },
   plate: [
     { d: path('M139 23L449 13Q453 12.9 453 17V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23Z') },
+    ...speedBrake.plate,
     // Top layer, cut away for the gear handle's channel and, to its lower left, a padded recess round the DN LOCK REL button; the cut edge runs through the striped border, so the stripes stop at it; its left end is a half-round concentric with the button.
-    { d: path('M139 23L449 13Q453 12.9 453 17V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23ZM397 190H447V364H365') + `A${mm(DNL.r)} ${mm(DNL.r)} 0 0 1 ${mm(DNL.cx)} ${mm(DNL.cy - DNL.r)}` + path('H397Z'), raised: true },
+    { d: path('M139 23L449 13Q453 12.9 453 17V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23ZM397 190H447V364H365') + `A${mm(DNL.r)} ${mm(DNL.r)} 0 0 1 ${pt(DNL.cx, DNL.cy - DNL.r).join(' ')}` + path('H397Z'), raised: true },
   ],
   engraving: [
     // EMER STORES JETTISON: legend, and the hazard-striped square around the button.
@@ -158,9 +173,10 @@ export const landingGear: PanelSpec = {
     L([362, 266], 'DN LOCK', 8.5, 41),
     L([362, 279], 'REL', 8.5, 20),
     { kind: 'fill', paint: 'yellow', d: yellowBands(328, 289, 397, 370),
-      clip: path(box(328, 289, 397, 370) + `M${DNL.cx} ${DNL.cy - DNL.r}H${DNL.x1}V${DNL.cy + DNL.r}H${DNL.cx}`) + `A${mm(DNL.r)} ${mm(DNL.r)} 0 0 1 ${mm(DNL.cx)} ${mm(DNL.cy - DNL.r)}Z` },
+      clip: path(box(328, 289, 397, 370) + `M${DNL.cx} ${DNL.cy - DNL.r}H${DNL.x1}V${DNL.cy + DNL.r}H${DNL.cx}`) + `A${mm(DNL.r)} ${mm(DNL.r)} 0 0 1 ${pt(DNL.cx, DNL.cy - DNL.r).join(" ")}Z` },
     { kind: 'path', pen: 'heavy', d: stripesCut(328, 289, 397, 370, inDnLockCut, 'M397 301V289H328V370H397V364') },
     L([217, 310], '+', 7),
+    ...speedBrake.engraving,
   ],
   placements: [
     { component: 'dzus', at: pt(147, 43), cut: 'up-left' },
@@ -183,6 +199,7 @@ export const landingGear: PanelSpec = {
     { component: 'toggle-paddle-wide', control: 'lights', at: pt(271, 364) },
     { component: 'push-round-xl', control: 'dn-lock-rel', at: pt(365, 332), paint: 'yellow' },
     { component: 'gear-handle', control: 'lg-handle', at: pt(421, 272.5), travel: mm(145), size: [mm(54), mm(100)], indicator: 'gear-handle-light' },
+    ...speedBrake.placements,
   ],
   controls: [
     {
@@ -264,5 +281,6 @@ export const landingGear: PanelSpec = {
     { id: 'wheels-nose', name: 'Nose gear WHEELS light', type: 'lamp', colour: 'green', description: 'Green when the nose gear is down and locked.', source: src },
     { id: 'wheels-left', name: 'Left main gear WHEELS light', type: 'lamp', colour: 'green', description: 'Green when the left main gear is down and locked.', source: src },
     { id: 'wheels-right', name: 'Right main gear WHEELS light', type: 'lamp', colour: 'green', description: 'Green when the right main gear is down and locked.', source: src },
+    speedBrake.indicator,
   ],
 };
