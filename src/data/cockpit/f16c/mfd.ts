@@ -1,5 +1,6 @@
 import type { ControlDef, MfdDisplay, PanelSpec, Placement } from '../types';
 import { tracer } from '../trace.ts';
+import { hadBottom, hadPageLabels, hadPages } from './mfd-had.ts';
 
 /**
  * F-16C Multi-Function Displays (MFD), DCS: the left and right MFDs are the
@@ -82,6 +83,16 @@ const display: MfdDisplay = {
       ],
     },
     {
+      // MENU for an empty third format slot (OSB 12) in the guide's HTS mission (SMS, HSD and HAD slots, pp. 530-539).
+      id: 'menu-blank', words: [
+        w('BLANK', 184, 116.5), w('HAD', 258, 116.5), w('RCCE', 404, 116), w('RESET', 477, 116), w('MENU', 476.5, 143.5),
+        L('FCR', 185.5), L('TGP', 257.5), L('WPN', 328.5), L('TFR', 400.5), L('FLIR', 472),
+        R('SMS', 184.5), R('HSD', 256.5), R('DTE', 328), R('TEST', 400), R('FLCS', 471),
+        ...hadBottom('BLANK'),
+      ],
+    },
+    ...hadPages.map(p => (p.id === 'had-thrt' ? { ...p, paths: [{ d: ars, c: 'cyan' as const }] } : p)),
+    {
       id: 'dte', words: [
         w('ON', 184.5, 117), w('CLSD', 257.5, 117), w('LOAD', 331, 116.5), w('FCR', 404, 116.5),
         L('MPD', 185.5), L('COMM', 257.5), L('INV', 329.5), L('PROF', 400.5), L('MSMD', 472),
@@ -89,7 +100,7 @@ const display: MfdDisplay = {
         ...dteTop, w('TNDL INIT REQD', 319, 377),
         ...bottom('DTE'),
       ],
-      marks: ars,
+      paths: [{ d: ars, c: 'cyan' }],
     },
     {
       id: 'dte-2', words: [
@@ -97,7 +108,7 @@ const display: MfdDisplay = {
         ...dteTop, R('PAGE', 464), R('2', 481),
         ...bottom('DTE'),
       ],
-      marks: ars,
+      paths: [{ d: ars, c: 'cyan' }],
     },
   ],
 };
@@ -154,15 +165,17 @@ function build(side: 'left' | 'right'): PanelSpec {
       variant: 'DCS F-16C Viper (Block 50)',
       manual: 'Eagle Dynamics, DCS F-16C Viper Early Access Guide (EN, 16 Aug 2026)',
       page: 122,
-      image: 'p. 122 MFD image, 660 x 660 px; DTE format pages p. 127 and p. 128 (same camera)',
+      image: 'p. 122 MFD image, 660 x 660 px; DTE format pages p. 127 and p. 128, HAD p. 539 and THRT p. 534 (same camera)',
       rectify: 'none: square-on (OSB rows and columns straight and evenly spaced)',
       pxPerMm: PX,
       scale: 'The guide gives the display as 4 x 4 in. The glass inside the screen opening is 489 px across (opening 519 px less a 15 px bevel each side), taken as 4 in: 4.8 px/mm. The whole unit is then about 137 mm square.',
       shown: { display: 'menu' },
       unresolved: [
         'The guide\'s pictures are of one MFD; the left and right units are drawn the same. Which format each shows at power-up depends on the loaded data and is not drawn: procedures pick the page.',
-        'The screen is drawn black on white. In the sim the words are white or green on a dark screen, highlighted words are inverse, and the aircraft reference symbol is cyan.',
+        'The screen is drawn in the sim\'s colours on dark glass (colours sampled off the guide\'s images): white words, highlighted words inverse, cyan aircraft reference symbol; on the HAD magenta range rings, cyan ownship, flight members and bullseye, grey inactive route, threats in their emission-state colour (p. 531: yellow search, red track, red flashing launch, green in memory). The SA-6 is white before it is designated, as the p. 537 image shows it; white is not one of the p. 531 states.',
         'The DTC file name (SEADSTRIKE) and the TNDL INIT REQD advisory are the guide\'s example; they change with the mission.',
+        'HAD pages (HTS): the screen is one tactical picture, traced from the p. 539 image (30 NM depressed, the SA-6 designated) and drawn in the states a procedure steps through. The HAD cursor is drawn as the two short bars seen in the p. 537 expanded images; the guide does not show it in the normal field of view. The expanded fields of view are worked out from the guide\'s description (2:1 and 4:1 about the cursor, rings, DEP, the range scale and the bullseye removed, as the p. 537 images show), not traced.',
+        'The empty format slot is labelled BLANK, after the BLANK format at OSB 1 on MENU; the guide does not picture an empty slot.',
         'The two screws along the bottom sit 82 px in from each side. The screw covers in the bottom corners are drawn as plain rings, 28 px across, in cut-outs in the raised corners.',
         'The OSB caps\' raised squares and the rockers\' arrows are traced from the guide; how far each rocker rocks is not shown.',
       ],
@@ -202,10 +215,12 @@ function build(side: 'left' | 'right'): PanelSpec {
           { id: 'menu', label: 'MENU format (format select)' },
           { id: 'dte', label: 'DTE format, page 1' },
           { id: 'dte-2', label: 'DTE format, page 2' },
+          { id: 'menu-blank', label: 'MENU format for an empty (BLANK) format slot' },
+          ...Object.entries(hadPageLabels).map(([id, label]) => ({ id, label })),
         ],
         restPage: 'off',
-        description: 'A 4 x 4 in colour LCD showing the selected format. MENU lists the formats that can be assigned to the highlighted format-select button along the bottom (OSB 12-14). The DTE format loads mission data from the data transfer cartridge: LOAD (OSB 3) loads every partition, or each partition loads on its own button (MPD, COMM, ELINT on page 1; GPS, COLR on page 2; PAGE at OSB 10 changes page). The display is powered by the MFD switch on the AVIONICS POWER panel.',
-        source: `${src}; ${dteSrc}`,
+        description: 'A 4 x 4 in colour LCD showing the selected format. MENU lists the formats that can be assigned to the highlighted format-select button along the bottom (OSB 12-14). The DTE format loads mission data from the data transfer cartridge: LOAD (OSB 3) loads every partition, or each partition loads on its own button (MPD, COMM, ELINT on page 1; GPS, COLR on page 2; PAGE at OSB 10 changes page). The HAD (HARM Attack Display) format shows the radars the HTS pod has located, over the route and range rings: OSB 1 DEP/CEN, OSB 3 field of view, OSB 4 THRT (threat classes in each HTS scan), OSB 5 CNTL, OSB 19/20 range scale. The display is powered by the MFD switch on the AVIONICS POWER panel.',
+        source: `${src}; ${dteSrc}; DCS F-16C guide pp. 530-539 (HAD)`,
       },
     ],
   };

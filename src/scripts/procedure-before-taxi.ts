@@ -202,7 +202,7 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
   function done(text = 'Done.') {
     const s = cfg.steps[step];
     if (!(s.hints?.length || s.panels.length > 1)) { say(text); next(); return; }
-    confirm.textContent = 'Indications checked';
+    confirm.textContent = s.confirm ?? 'Indications checked';
     confirm.disabled = false;
     confirm.hidden = false;
     say(`${text} Check the indications, then continue.`);

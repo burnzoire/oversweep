@@ -137,7 +137,7 @@ export const stick: PanelSpec = {
   ],
   indicators: [],
   pads: [
-    { id: 'stick', name: 'Stick (push, pull, roll)', cross: { up: ['pitch', 'fwd'], down: ['pitch', 'aft'], left: ['roll', 'left'], right: ['roll', 'right'] }, face: STICK_FACES['stick'] },
+    { id: 'stick', name: 'Stick (push, pull, roll)', analog: true, cross: { up: ['pitch', 'fwd'], down: ['pitch', 'aft'], left: ['roll', 'left'], right: ['roll', 'right'] }, face: STICK_FACES['stick'] },
     { id: 'trigger', name: 'Trigger', controls: ['trigger'] },
     { id: 'weapon-release', name: 'Weapon release button', controls: ['weapon-release'], face: STICK_FACES['weapon-release'] },
     { id: 'trim', name: 'Trim switch', cross: { up: ['trim-ud', 'fwd'], down: ['trim-ud', 'aft'], left: ['trim-lr', 'left'], right: ['trim-lr', 'right'] }, face: STICK_FACES['trim'] },

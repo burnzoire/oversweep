@@ -229,6 +229,7 @@ function displayChar(x: number, y: number, ch: string, cap: number, width: numbe
 function textDisplay(d: TextDisplay, ind: IndicatorDef | undefined, id: string, current: string) {
   const [bw, bh] = d.bezel, [sw_, sh] = d.screen;
   let s = cased(`<rect x="${n(-bw / 2)}" y="${n(-bh / 2)}" width="${n(bw)}" height="${n(bh)}" rx="1.6" fill="${PAPER}"/>`, 'heavy') +
+    `<rect x="${n(-sw_ / 2)}" y="${n(-sh / 2)}" width="${n(sw_)}" height="${n(sh)}" rx="0.8" fill="${MFD_GLASS}" stroke="none"/>` +
     `<g data-indicator="${id}"><rect class="lens" x="${n(-sw_ / 2)}" y="${n(-sh / 2)}" width="${n(sw_)}" height="${n(sh)}" rx="0.8" ${sw('medium')}/></g>`;
   const [dx, dy] = d.pitch, ch = d.cap * 1.45;
   for (const pg of ind?.pages ?? []) {
@@ -245,26 +246,41 @@ function textDisplay(d: TextDisplay, ind: IndicatorDef | undefined, id: string, 
         col++;
       }
     });
-    s += `<g data-page-of="${id}" data-page="${pg.id}"${pg.id === current ? '' : ' display="none"'}>${g}</g>`;
+    s += `<g data-page-of="${id}" data-page="${pg.id}"${pg.id === current ? '' : ' display="none"'}>${onGlass(SCREEN.ded, g)}</g>`;
   }
   return s;
 }
 
 /** Format display (MFD): the screen opening and glass, and one group per page of fixed-pitch words (only `current` shown). */
+/** MFD glass and symbology colours, sampled off the guide's MFD images (p. 539): white text and route, magenta range rings, cyan ownship, flight members and bullseye, green/yellow/red threat states. */
+export const MFD_COLOURS = { white: '#f2f3f7', grey: '#b9bcc6', cyan: '#3cc3cf', magenta: '#b443cf', green: '#45c08e', yellow: '#efd14a', red: '#ff4a42' } as const;
+const MFD_GLASS = '#0b0c10';
+/** Every electronic screen is drawn lit on dark glass in the sim's colours (Nathan, 2026-11-21), sampled off the guide's images: DED yellow-green (p. 544), UHF LEDs yellow (p. 262), EHSI white with cyan course and bearing pointers and a yellow heading marker (p. 230), HUD green (p. 90). */
+export const SCREEN = { glass: MFD_GLASS, ded: '#d6f46a', led: '#f2d64b', ehsi: '#f2f3f7', ehsiCyan: '#52bddd', ehsiYellow: '#efd14a', hud: '#5cf08a' } as const;
+/** A group drawing in `ink` over the glass: the shared INK/PAPER become the screen's colour and the glass. */
+const onGlass = (ink: string, body: string, paper: string = MFD_GLASS) => `<g style="--panel-ink:${ink};--panel-paper:${paper}" stroke="${ink}">${body}</g>`;
+/** The HUD's symbology is seen against a desaturated blue sky (Nathan, 2026-11-21): lighter toward the horizon. */
+const HUD_SKY = ['#3f5468', '#6f8293'] as const;
 function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, current: string) {
   const o = d.opening / 2, g = o - d.inset;
   let s = `<rect x="${n(-o)}" y="${n(-o)}" width="${n(2 * o)}" height="${n(2 * o)}" rx="${n(d.r)}" fill="${PAPER}" ${sw('heavy')}/>` +
+    `<rect x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" rx="${n(Math.max(0, d.r - d.inset))}" fill="${MFD_GLASS}" stroke="none"/>` +
     `<g data-indicator="${id}"><rect class="lens" x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" rx="${n(Math.max(0, d.r - d.inset))}" ${sw('fine')}/></g>`;
+  const W = MFD_COLOURS.white;
   for (const pg of ind?.pages ?? []) {
     const page = d.pages.find(q => q.id === pg.id);
-    let body = '';
+    let body = page?.fills ? `<path d="${page.fills}" fill="${W}" stroke="none"/>` : '';
+    for (const p of page?.paths ?? []) if (p.fill) body += `<path d="${p.d}" fill="${MFD_COLOURS[p.c]}" stroke="none"/>`;
     for (const w of page?.words ?? []) {
       const ink = (w.t.length - 1) * d.pitch + d.width, x0 = w.a === 'start' ? w.at[0] : w.a === 'end' ? w.at[0] - ink : w.at[0] - ink / 2;
-      const y = w.at[1], fill = w.inv ? PAPER : INK;
-      if (w.inv) body += `<rect x="${n(x0 - d.pad[0])}" y="${n(y - d.cap / 2 - d.pad[1])}" width="${n(ink + 2 * d.pad[0])}" height="${n(d.cap + 2 * d.pad[1])}" fill="${INK}" stroke="none"/>`;
+      const y = w.at[1], colour = MFD_COLOURS[w.c ?? 'white'], fill = w.inv ? MFD_GLASS : colour;
+      if (w.inv) body += `<rect x="${n(x0 - d.pad[0])}" y="${n(y - d.cap / 2 - d.pad[1])}" width="${n(ink + 2 * d.pad[0])}" height="${n(d.cap + 2 * d.pad[1])}" fill="${colour}" stroke="none"/>`;
       [...w.t].forEach((c, k) => { if (c !== ' ') body += displayChar(x0 + d.width / 2 + k * d.pitch, y, c, d.cap, d.width, fill); });
     }
-    if (page?.marks) body += `<path d="${page.marks}" fill="none" ${sw('medium')}/>`;
+    if (page?.marks) body += `<path d="${page.marks}" fill="none" stroke="${W}" ${sw('medium')}/>`;
+    if (page?.fine) body += `<path d="${page.fine}" fill="none" stroke="${W}" ${sw('fine')}/>`;
+    for (const p of page?.paths ?? []) if (!p.fill) body += `<path d="${p.d}" fill="none" stroke="${MFD_COLOURS[p.c]}" ${sw(p.pen ?? 'medium')}/>`;
+    if (page?.cursor) body += `<g data-cursor="${id}" transform="translate(${n(page.cursor.at[0])} ${n(page.cursor.at[1])})"><path d="${page.cursor.d}" fill="none" stroke="${W}" ${sw('medium')}/></g>`;
     s += `<g data-page-of="${id}" data-page="${pg.id}"${pg.id === current ? '' : ' display="none"'}>${body}</g>`;
   }
   return s;
@@ -309,14 +325,14 @@ function hsi(spec: PanelSpec, h: HsiDisplay, value: (id: string) => number, page
   const tri = (dir: number) => `<path d="M0 ${n(-dir * course.toFrom - dir * course.arrow[1] * 0.5)}L${n(course.arrow[0] * 0.4)} ${n(-dir * course.toFrom + dir * course.arrow[1] * 0.3)}H${n(-course.arrow[0] * 0.4)}Z" fill="${INK}" stroke="none"/>`;
   const turned = (id: string, deg: number, body: string) =>
     `<g data-indicator="${id}"><g data-needle="${id}" transform="rotate(${n(deg)})">${body}</g></g>`;
-  const crs = turned('course', value('course'),
+  const crs = turned('course', value('course'), onGlass(SCREEN.ehsiCyan,
     hsiPointer(course.head, course.tail, course.arrow, course.width) + dots +
     `<g data-indicator="deviation"><g data-shift="deviation" transform="translate(${n(value('deviation') * course.dot)} 0)"><path d="M0 ${n(-course.cdi)}V${n(course.cdi)}" stroke-width="${n(course.width)}" stroke-linecap="butt"/></g></g>` +
-    `<g data-indicator="to-from">${pages('to-from', pg => pg === 'to' ? tri(1) : pg === 'from' ? tri(-1) : '')}</g>`);
+    `<g data-indicator="to-from">${pages('to-from', pg => pg === 'to' ? tri(1) : pg === 'from' ? tri(-1) : '')}</g>`));
   const cardGroup = turned('heading', -value('heading'),
     `<path d="${ticks}" stroke-width="${n(card.width)}" stroke-linecap="butt"/>` + labels +
-    turned('heading-set', value('heading-set'), markerArt) +
-    turned('bearing', value('bearing'), hsiPointer(bearing.head, bearing.tail, bearing.arrow, bearing.width)) + crs);
+    turned('heading-set', value('heading-set'), onGlass(SCREEN.ehsiYellow, markerArt)) +
+    turned('bearing', value('bearing'), onGlass(SCREEN.ehsiCyan, hsiPointer(bearing.head, bearing.tail, bearing.arrow, bearing.width))) + crs);
   const rd = readoutDigits(value('range'), 3, true), cd = readoutDigits(value('course-set'), 3, false);
   const R = h.range, C = h.courseSet, tw = R.width / 3;
   const readouts =
@@ -406,7 +422,8 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
   const b = h.boresight.arm, dm = h.diamond;
   const fixed = `<path d="M${n(-b)} 0H${n(b)}M0 ${n(-b)}V${n(b)}" ${pen}/>`;
   const steerpoint = shift('steerpoint-azimuth', 'x', D, shift('steerpoint-elevation', 'y', -D, `<path d="M0 ${n(-dm)}L${n(dm)} 0L0 ${n(dm)}L${n(-dm)} 0Z" ${pen}/>`));
-  // Tapes: ticks and labels move inside windows fixed on the HUD; the index and readout box stay put (the box masks what is under it).
+  // Tapes: ticks and labels move inside windows fixed on the HUD; the index and readout box stay put. A HUD only adds light, so
+  // the box is an outline and the symbol generator leaves the tape out of it: a mask cuts the box (and a pen's width round it) out.
   const tape = (id: string, t: HudTape) => {
     const [ax, ay] = t.at, deep = 40, along = t.axis === 'y';
     const rect = (a0: number, a1: number) => along ? `M${n(-deep)} ${n(a0)}H${n(deep)}V${n(a1)}H${n(-deep)}Z` : `M${n(a0)} ${n(-deep)}H${n(a1)}V${n(deep)}H${n(a0)}Z`;
@@ -414,9 +431,11 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
     const moving = (body: string) => `<g data-shift="${id}" transform="translate(${along ? `0 ${n(value(id) * per)}` : `${n(value(id) * per)} 0`})">${body}</g>`;
     return `<clipPath id="${clip}-${id}-t"><path d="${rect(-t.window, t.window)}"/></clipPath>` +
       `<clipPath id="${clip}-${id}-l"><path clip-rule="evenodd" d="${rect(-lw, lw)}${t.labelGap ? rect(-t.labelGap, t.labelGap) : ''}"/></clipPath>` +
-      `<g data-indicator="${id}"><g transform="translate(${n(ax)} ${n(ay)})">` +
-      `<g clip-path="url(#${clip}-${id}-t)">${moving(art.ticks)}</g><g clip-path="url(#${clip}-${id}-l)">${moving(art.labels)}</g></g>` +
-      `<path d="${t.index}" ${pen}/><path d="${t.box}" stroke-width="${HUD_PEN}" fill="${PAPER}"/>` +
+      `<mask id="${clip}-${id}-m" maskUnits="userSpaceOnUse" x="-10000" y="-10000" width="20000" height="20000">` +
+      `<rect x="-10000" y="-10000" width="20000" height="20000" fill="#fff"/><path d="${t.box}" fill="#000" stroke="#000" stroke-width="${n(HUD_PEN * 3)}"/></mask>` +
+      `<g data-indicator="${id}"><g mask="url(#${clip}-${id}-m)"><g transform="translate(${n(ax)} ${n(ay)})">` +
+      `<g clip-path="url(#${clip}-${id}-t)">${moving(art.ticks)}</g><g clip-path="url(#${clip}-${id}-l)">${moving(art.labels)}</g></g></g>` +
+      `<path d="${t.index}" ${pen}/><path d="${t.box}" ${pen}/>` +
       `<g data-number="${id}">${hudText(ra.at[0], ra.at[1], formatReadout(value(id), ra.format), F, ra.anchor)}</g></g>`;
   };
   const R = h.roll, [cx, cy] = R.centre;
@@ -574,7 +593,13 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
         const dot = p.dot && (page === 'test' || page.includes('.')) ? `<circle cx="${n(p.dot.at[0])}" cy="${n(p.dot.at[1])}" r="${n(p.dot.r)}"/>` : '';
         return `<path d="${segs.join('')}"/>` + dot;
       };
-      return at(p.at, `<g data-indicator="${p.indicator}" fill="${INK}" stroke="none">` + (ind?.pages ?? []).map(pg =>
+      // Dark window round the cells, the unlit segments faint, the lit ones in LED yellow.
+      const xs = p.cells.flatMap(c => [c.at[0] - c.size[0] / 2, c.at[0] + c.size[0] / 2]), ys = p.cells.flatMap(c => [c.at[1] - c.size[1] / 2, c.at[1] + c.size[1] / 2]);
+      const [x0, x1, y0, y1] = [Math.min(...xs) - 1.6, Math.max(...xs) + 1.6, Math.min(...ys) - 1.3, Math.max(...ys) + 1.3];
+      const faint = p.cells.flatMap(c => ledSegments(c.at[0], c.at[1], c.size[0], c.size[1])).join('');
+      return at(p.at, `<rect x="${n(x0)}" y="${n(y0)}" width="${n(x1 - x0)}" height="${n(y1 - y0)}" rx="0.6" fill="${MFD_GLASS}" stroke="none"/>` +
+        `<path d="${faint}" fill="${SCREEN.led}" fill-opacity="0.1" stroke="none"/>` +
+        `<g data-indicator="${p.indicator}" fill="${SCREEN.led}" stroke="none">` + (ind?.pages ?? []).map(pg =>
         `<g data-page-of="${p.indicator}" data-page="${pg.id}"${pg.id === cur ? '' : ' display="none"'}>${lit(pg.id)}</g>`).join('') + '</g>', ' data-art="led-display"');
     }
     case 'mfd-display': {
@@ -589,13 +614,15 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       const ind = (id: string) => spec.indicators.find(i => i.id === id);
       const value = (id: string) => state[id] !== undefined ? Number(state[id]) : ind(id)?.rest ?? 0;
       const pageOf = (id: string) => state[id] ?? ind(id)?.restPage ?? ind(id)?.pages?.[0]?.id ?? '';
-      return `<g data-indicator="screen"><path class="lens" d="${p.hsi.screen}" stroke="none"/></g>` + at(p.at, hsi(spec, p.hsi, value, pageOf), ' data-art="hsi"');
+      return `<path d="${p.hsi.screen}" fill="${MFD_GLASS}" stroke="none"/><g data-indicator="screen"><path class="lens" d="${p.hsi.screen}" stroke="none"/></g>` + at(p.at, onGlass(SCREEN.ehsi, hsi(spec, p.hsi, value, pageOf)), ' data-art="hsi"');
     }
     case 'hud': {
       const ind = (id: string) => spec.indicators.find(i => i.id === id);
       const value = (id: string) => state[id] !== undefined ? Number(state[id]) : ind(id)?.rest ?? 0;
       const pageOf = (id: string) => state[id] ?? ind(id)?.restPage ?? ind(id)?.pages?.[0]?.id ?? '';
-      return at(p.at, `<g data-indicator="screen"><path class="lens" d="${p.hud.glass}" stroke="none"/></g>` + hud(spec, p.hud, value, pageOf), ' data-art="hud"');
+      const sky = `hud-sky-${spec.id}`;
+      return at(p.at, `<linearGradient id="${sky}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${HUD_SKY[0]}"/><stop offset="1" stop-color="${HUD_SKY[1]}"/></linearGradient>` +
+        `<path d="${p.hud.glass}" fill="url(#${sky})" stroke="none"/><g data-indicator="screen"><path class="lens" d="${p.hud.glass}" stroke="none"/></g>` + onGlass(SCREEN.hud, hud(spec, p.hud, value, pageOf), HUD_SKY[0]), ' data-art="hud"');
     }
     case 'attitude': {
       const ind = (id: string) => spec.indicators.find(i => i.id === id);

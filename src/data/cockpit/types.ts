@@ -369,6 +369,7 @@ export interface TextDisplay {
  * `inv` draws it inverse (lit box, dark letters); `marks` is extra symbology
  * (mm path, screen-centre origin).
  */
+export type MfdColour = 'white' | 'grey' | 'cyan' | 'magenta' | 'green' | 'yellow' | 'red';
 export interface MfdDisplay {
   opening: number;
   r: number;
@@ -378,7 +379,14 @@ export interface MfdDisplay {
   pitch: number;
   /** Inverse box padding round the ink (x, y). */
   pad: [x: number, y: number];
-  pages: { id: string; words: { t: string; at: Pt; a?: 'start' | 'middle' | 'end'; inv?: boolean }[]; marks?: string }[];
+  /** Words and symbols are drawn in the sim's colours on dark glass; `c` names an `MFD_COLOURS` entry (white when left out). */
+  pages: { id: string; words: { t: string; at: Pt; a?: 'start' | 'middle' | 'end'; inv?: boolean; c?: MfdColour }[];
+    /** White symbology paths (mm about the screen centre): `marks` medium lines, `fine` thin lines, `fills` solid shapes (drawn under the words). */
+    marks?: string; fine?: string; fills?: string;
+    /** Coloured symbology: `pen` fine or medium (default) line, or a solid `fill`. */
+    paths?: { d: string; c: MfdColour; pen?: 'fine' | 'medium'; fill?: boolean }[];
+    /** A cursor the procedure moves (`cockpit:indicate` `cursors`): white lines about its own origin, starting at `at`. */
+    cursor?: { d: string; at: Pt } }[];
 }
 
 /**
@@ -552,6 +560,11 @@ export interface PadDef {
   cross?: Partial<Record<'up' | 'down' | 'left' | 'right', [control: string, position: string]>>;
   /** Pushbutton pressed in the middle of the cross. */
   centre?: string;
+  /**
+   * An analog hat (force-sensing cursor, the stick): the pad works as an on-screen joystick. Press and drag to
+   * deflect it, a short click presses `centre`; the deflection is sent as `cockpit:analog`.
+   */
+  analog?: boolean;
   /** Controls shown as a row of their positions (rotaries as step buttons with a readout). */
   controls?: string[];
   /** The switch drawn face-on, square to the camera, on its own canvas (mm); without it the pad shows the drawing cropped to the switch. */

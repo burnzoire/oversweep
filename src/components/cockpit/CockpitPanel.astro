@@ -125,6 +125,12 @@ const dirLabels = (id: string) => {
               const style = `left:${pct(z.box[0] - fx, fw)};top:${pct(z.box[1] - fy, fh)};width:${pct(z.box[2], fw)};height:${pct(z.box[3], fh)}`;
               return <button type="button" class:list={['cp-zone', z.shape && `cp-zone-${z.shape}`]} style={style} data-pad-control={z.control} data-pad-pos={z.pos} data-pad-step={z.step} aria-label={z.label}></button>;
             })}
+            {p.analog && p.cross && (() => {
+              // An analog hat works like an on-screen joystick: press and drag to deflect it, a short click presses it.
+              const [fx, fy, fw, fh] = v.frame, b = v.hit;
+              const style = `left:${pct(b[0] - fx, fw)};top:${pct(b[1] - fy, fh)};width:${pct(b[2], fw)};height:${pct(b[3], fh)}`;
+              return <div class="cp-joystick" style={style} data-joystick={JSON.stringify({ pad: p.id, cross: p.cross, centre: p.centre })} aria-hidden="true"><span class="cp-joy-knob" hidden></span></div>;
+            })()}
           </div>
           {(p.controls ?? []).filter(id => control(id).type === 'rotary').map(id => <p class="cp-readout"><output data-position-of={`${spec.id}.${id}`}></output></p>)}
         </section>
@@ -181,6 +187,9 @@ const dirLabels = (id: string) => {
 @media(prefers-reduced-motion:reduce){.cp-zone.cp-target{animation:none}}
 .cp-pad-close:focus-visible{outline:2px solid var(--color-focus,#005fcc);outline-offset:2px}
 .cp-readout{text-align:center;margin:0 0 .3rem}
+.cp-joystick{position:absolute;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+.cp-joystick.held{cursor:grabbing}
+.cp-joy-knob{position:absolute;left:50%;top:50%;width:34%;height:34%;margin:-17% 0 0 -17%;border-radius:50%;background:rgba(0,95,204,.28);border:2px solid rgba(0,95,204,.8);pointer-events:none}
 .cp-status{min-height:1.6em;margin:.4rem 0 0;font-size:.95rem;color:var(--color-muted,#595959)}
 </style>
 
@@ -411,14 +420,95 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
       if (b.dataset.padStep) press(c, b.dataset.padStep); else goTo(c, b.dataset.padPos!);
     };
     const up = () => { if (!held) return; held = false; release(c); };
-    b.addEventListener('pointerdown', e => { if (e.button !== 0) return; b.setPointerCapture(e.pointerId); down(); });
-    b.addEventListener('pointerup', up);
-    b.addEventListener('pointercancel', up);
-    b.addEventListener('lostpointercapture', up);
+    // A wheel or knob (step zones) turns with a drag along its travel, one stop per 12 px; a short click steps once.
+    const across = c.travel === 'horizontal' || (c.type === 'rotary' && c.travel !== 'vertical');
+    let turn: { x: number; y: number; done: number } | null = null;
+    b.addEventListener('pointerdown', e => {
+      if (e.button !== 0) return;
+      b.setPointerCapture(e.pointerId);
+      if (b.dataset.padStep) { turn = { x: e.clientX, y: e.clientY, done: 0 }; b.classList.remove('cp-target'); select(c.id); return; }
+      down();
+    });
+    b.addEventListener('pointermove', e => {
+      if (!turn) return;
+      // Right or down turns toward the later stops, as the step zones do.
+      const d = across ? e.clientX - turn.x : e.clientY - turn.y, want = Math.trunc(d / 12);
+      while (turn.done !== want) { const k = want > turn.done ? 1 : -1; press(c, String(k)); turn.done += k; }
+    });
+    const endTurn = () => { if (!turn) return false; const t = turn; turn = null; if (!t.done) press(c, b.dataset.padStep!); return true; };
+    b.addEventListener('pointerup', () => { if (!endTurn()) up(); });
+    b.addEventListener('pointercancel', () => { turn = null; up(); });
+    b.addEventListener('lostpointercapture', () => { if (!endTurn()) up(); });
     b.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) { e.preventDefault(); down(); } });
     b.addEventListener('keyup', e => { if (e.key === 'Enter' || e.key === ' ') up(); });
     b.addEventListener('blur', up);
     b.addEventListener('click', e => e.preventDefault());
+  }
+  /**
+   * Analog hats (on-screen joystick): press and drag to deflect. Past a third of full travel an axis holds its arm's
+   * position (released, it springs back), and the deflection itself is sent as `cockpit:analog` (x right, y up, -1..1)
+   * for whatever the hat drives. Pressed on an arm it deflects at once; a short click in the middle presses the hat.
+   */
+  for (const j of root.querySelectorAll<HTMLElement>('[data-joystick]')) {
+    const cfg = JSON.parse(j.dataset.joystick!) as { pad: string; cross: Partial<Record<'up' | 'down' | 'left' | 'right', [string, string]>>; centre?: string };
+    const knob = j.querySelector<HTMLElement>('.cp-joy-knob')!;
+    const axes = [[cfg.cross.up, cfg.cross.down], [cfg.cross.left, cfg.cross.right]] as const;
+    const holding = new Map<string, string>();
+    let grip: { cx: number; cy: number; r: number; x: number; y: number; moved: boolean; centre: boolean } | null = null;
+    const analog = (x: number, y: number) => dispatchEvent(new CustomEvent('cockpit:analog', { detail: { aircraft: def.aircraft, panel: def.panel, pad: cfg.pad, x, y } }));
+    const hold = (arm: [string, string] | undefined, on: boolean) => {
+      if (!arm) return;
+      const c = byId.get(arm[0]);
+      if (!c) return;
+      if (on && holding.get(c.id) !== arm[1]) { if (holding.has(c.id)) release(c); holding.set(c.id, arm[1]); goTo(c, arm[1]); }
+      if (!on && holding.get(c.id) === arm[1]) { holding.delete(c.id); release(c); }
+    };
+    const deflect = (dx: number, dy: number) => {
+      const len = Math.hypot(dx, dy), k = len > 1 ? 1 / len : 1;
+      const x = dx * k, y = dy * k;
+      knob.hidden = false;
+      knob.style.transform = `translate(${(x * 150).toFixed(1)}%, ${(y * 150).toFixed(1)}%)`;
+      const [ud, lr] = axes;
+      hold(ud[0], y < -1 / 3); hold(ud[1], y > 1 / 3); hold(lr[0], x < -1 / 3); hold(lr[1], x > 1 / 3);
+      analog(+x.toFixed(3), +(-y).toFixed(3));
+    };
+    const centreBox = 0.24 * 2;
+    j.addEventListener('pointerdown', e => {
+      if (e.button !== 0) return;
+      j.setPointerCapture(e.pointerId);
+      j.classList.add('held');
+      root.querySelectorAll('.cp-target').forEach(t => t.classList.remove('cp-target'));
+      const r = j.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2, R = Math.min(r.width, r.height) / 2;
+      const ox = (e.clientX - cx) / R, oy = (e.clientY - cy) / R;
+      const centre = Math.hypot(ox, oy) < centreBox;
+      // From the middle the stick deflects from where the finger went down; from an arm, from the true centre.
+      grip = centre ? { cx: e.clientX, cy: e.clientY, r: R, x: e.clientX, y: e.clientY, moved: false, centre } : { cx, cy, r: R, x: e.clientX, y: e.clientY, moved: true, centre };
+      select((cfg.cross.up ?? cfg.cross.left)![0]);
+      if (!centre) deflect(ox, oy);
+    });
+    j.addEventListener('pointermove', e => {
+      if (!grip) return;
+      if (!grip.moved && Math.hypot(e.clientX - grip.x, e.clientY - grip.y) < 6) return;
+      grip.moved = true;
+      deflect((e.clientX - grip.cx) / grip.r, (e.clientY - grip.cy) / grip.r);
+    });
+    const end = () => {
+      if (!grip) return;
+      const g = grip; grip = null;
+      j.classList.remove('held');
+      knob.hidden = true;
+      knob.style.transform = '';
+      if (!g.moved && g.centre && cfg.centre) {
+        const c = byId.get(cfg.centre);
+        if (c) { goTo(c, c.positions.find(p => p.id !== c.initial)?.id ?? c.positions[0].id); release(c); }
+        return;
+      }
+      for (const [id, p] of [...holding]) hold([id, p], false);
+      analog(0, 0);
+    };
+    j.addEventListener('pointerup', end);
+    j.addEventListener('pointercancel', end);
+    j.addEventListener('lostpointercapture', end);
   }
   // A procedure step asks for a control: open its pad with the wanted position ringed, or close the pads.
   addEventListener('cockpit:pad', e => {
@@ -549,11 +639,13 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     }
   });
   addEventListener('cockpit:indicate', e => {
-    const { lit = [], flash = [], readings: values = {}, pages = {} } = (e as CustomEvent<{ lit?: string[]; flash?: string[]; readings?: Record<string, number>; pages?: Record<string, string> }>).detail;
+    const { lit = [], flash = [], readings: values = {}, pages = {}, cursors = {} } = (e as CustomEvent<{ lit?: string[]; flash?: string[]; readings?: Record<string, number>; pages?: Record<string, string>; cursors?: Record<string, [number, number]> }>).detail;
     const on = new Set(lit), flashing = new Set(flash);
     for (const ind of def.indicators) {
       if (ind.type === 'lamp') svg.querySelectorAll(`[data-indicator="${ind.id}"]`).forEach(g => { g.classList.toggle('lit', on.has(key(ind.id))); g.classList.toggle('flash', flashing.has(key(ind.id))); });
       else if (key(ind.id) in pages) showPage(ind.id, pages[key(ind.id)]);
+      // A display's own cursor (a page's `cursor`), moved by the procedure in the page's units.
+      if (key(ind.id) in cursors) svg.querySelectorAll(`[data-cursor="${ind.id}"]`).forEach(g => g.setAttribute('transform', `translate(${cursors[key(ind.id)].map(v => +v.toFixed(3)).join(' ')})`));
       else if (key(ind.id) in values) show(ind.id, values[key(ind.id)]);
     }
   });

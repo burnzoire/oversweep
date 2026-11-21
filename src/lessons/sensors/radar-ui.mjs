@@ -121,19 +121,23 @@ function setupRwr(root) {
   function draw() {
     const s = RWR_STEPS[current];
     const items = [el('rect', { class: 'frame', x: 1, y: 1, width: 638, height: 338 }), el('text', { class: 'lbl', x: 14, y: 22 }, 'GENERIC WARNING RECEIVER SCOPE')];
-    items.push(el('circle', { class: 'thin', cx: C, cy: C, r: R }), el('circle', { class: 'thin dotted', cx: C, cy: C, r: R / 2 }));
+    // The scope is a lit screen: dark glass, green rings and symbols (as the Encyclopedia's warning receiver displays).
+    const GLASS = '#0b0c10', LIT = '#4fe08a', DIM = '#2f8a55';
+    const lit = (node, line = false) => { node.setAttribute('style', line ? `stroke:${LIT};fill:none` : `fill:${LIT};stroke:none`); return node; };
+    items.push(el('circle', { cx: C, cy: C, r: R + 4, style: `fill:${GLASS};stroke:#161616;stroke-width:2` }));
+    items.push(el('circle', { class: 'thin', cx: C, cy: C, r: R, style: `stroke:${DIM};fill:none` }), el('circle', { class: 'thin dotted', cx: C, cy: C, r: R / 2, style: `stroke:${DIM};fill:none` }));
     for (let a = 0; a < 360; a += 30) {
       const x = C + R * Math.sin((a * Math.PI) / 180), y = C - R * Math.cos((a * Math.PI) / 180);
-      items.push(el('line', { class: 'thin', x1: C + (R - 8) * Math.sin((a * Math.PI) / 180), y1: C - (R - 8) * Math.cos((a * Math.PI) / 180), x2: x, y2: y }));
+      items.push(el('line', { class: 'thin', x1: C + (R - 8) * Math.sin((a * Math.PI) / 180), y1: C - (R - 8) * Math.cos((a * Math.PI) / 180), x2: x, y2: y, style: `stroke:${DIM}` }));
     }
-    items.push(el('text', { class: 'lbl small', x: C, y: C - R - 8, 'text-anchor': 'middle' }, 'NOSE'), jet(C, C, 0, 'fill', 0.8));
+    items.push(el('text', { class: 'lbl small', x: C, y: C - R - 8, 'text-anchor': 'middle' }, 'NOSE'), lit(jet(C, C, 0, 'fill', 0.8)));
     for (const t of s.threats) {
       const r = rel(t.bearing, s.heading), d = R * 0.78;
       const x = C + d * Math.sin((r * Math.PI) / 180), y = C - d * Math.cos((r * Math.PI) / 180);
-      if (t.mode === 'track') items.push(el('rect', { class: 'ln on', x: x - 14, y: y - 12, width: 28, height: 22 }));
-      if (t.mode === 'launch') items.push(el('circle', { class: 'ln on', cx: x, cy: y - 1, r: 17 }));
-      if (t.kind === 'air') items.push(el('path', { class: 'ln', d: `M${x - 9} ${y - 14} L${x} ${y - 20} L${x + 9} ${y - 14}` }));
-      items.push(el('text', { class: 'lbl', x, y: y + 4, 'text-anchor': 'middle' }, t.id));
+      if (t.mode === 'track') items.push(lit(el('rect', { class: 'ln on', x: x - 14, y: y - 12, width: 28, height: 22 }), true));
+      if (t.mode === 'launch') items.push(lit(el('circle', { class: 'ln on', cx: x, cy: y - 1, r: 17 }), true));
+      if (t.kind === 'air') items.push(lit(el('path', { class: 'ln', d: `M${x - 9} ${y - 14} L${x} ${y - 20} L${x + 9} ${y - 14}` }), true));
+      items.push(lit(el('text', { class: 'lbl', x, y: y + 4, 'text-anchor': 'middle' }, t.id)));
     }
     // Plan-view inset: your heading and the threats' true bearings.
     const PX = 470, PY = 170;
