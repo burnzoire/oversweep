@@ -61,7 +61,7 @@ export const ehsi: PanelSpec = {
     scale: 'The four corner screw wells (about 19 px radius) are taken as the shared panel screw (3.4 mm), giving 5.6 px/mm; the bezel is then 98 mm (3.9 in) square. The p. 44 overview puts the EHSI at about 1.2 times the altimeter dial width, which agrees within a few per cent.',
     shown: { screen: 'on', heading: '76.4', 'heading-set': '105', course: '65', bearing: '69.2', deviation: '0.72', range: '15.9', 'course-set': '65', mode: 'nav', 'to-from': 'none', notice: 'brt' },
     unresolved: [
-      'The display is drawn black on white like the rest of the cockpit; in the sim the card is white, the pointers cyan and the heading marker yellow on a black screen.',
+      'The display is drawn lit on dark glass in the sim\'s colours: white card and legends, cyan course and bearing pointers, yellow heading marker (sampled off the p. 230 image).',
       'The to-from indicator is not shown in the guide image ("Not shown"); it is drawn as a small triangle on the course line, 60 px from the centre, which is a guess at its place and size.',
       'Mode legends: the image shows NAV; TCN is drawn the same way. The guide names the ILS modes NAV/PLS and TCN/PLS but does not show their legends, so they are set in the same lettering, centred where NAV is, and may be off in width or place.',
       'The notice above the aircraft (BRT in the image) shows only for a moment after a mode change or a brightness adjustment; procedures pick it. Of the flags only the warning flag (INU/ATT, p. 232) is drawn; the range and CDI flags are not.',

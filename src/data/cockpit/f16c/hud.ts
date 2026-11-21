@@ -107,7 +107,7 @@ export const hud: PanelSpec = {
       'radar-alt': '7040', alow: '1500', 'slant-range-source': 'b', 'slant-range': '19.5', ttg: '175', 'steerpoint-distance': '19', steerpoint: '4',
     },
     unresolved: [
-      'Drawn black on white like the rest of the cockpit; in the sim the symbology is green on the combiner glass.',
+      'The symbology is drawn green on dark glass. In the sim it is green on the combiner, over the outside view.',
       'Only the NAV symbology in the guide\'s figure is drawn. Not built yet: the vertical velocity scale and bank angle indicator (Scales switch VV/VAH), the ground-track triangle (velocity in GND SPD), the DED and PFL repeaters, the manual bombing reticles, the X over a symbol outside the field of view, flashing fields, the zenith and nadir symbols, and the weapon symbology of other master modes.',
       'The guide says every 500 ft altitude mark carries a label; the figure shows labels only at whole thousands (09,0 and 08,0, none at 8500), so labels are drawn every 1000 ft. Velocity labels are drawn every 100 kt as the figure shows (30, 40).',
       'Tape windows (velocity and altitude ±60 px, heading ±36 px) are taken from the ticks the figure shows; heading labels are hidden within 23 px of the lubber line, under and beside the readout box, as the figure hides the 20 (14 px right of it) and shows the 19 (33 px left).',

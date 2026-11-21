@@ -263,11 +263,12 @@ Worked examples: F-16C `ded.ts`, `ehsi.ts`, `icp.ts`.
   **rockers** are three-position toggles, momentary to the centre; a four-way
   switch is one `hat` placement with two controls (`control` up/down,
   `cross` left/right).
-- Character displays (DED, HUD, EHSI) are drawn black on white like everything
-  else, with the sim's colours in `source.unresolved`. **MFDs are in full colour
-  (Nathan, 2026-11-21):** dark glass, words and symbols in the sim's colours
-  sampled off the guide (`MFD_COLOURS` in render.ts; word `c`, page `paths`),
-  because the HAD's threat colours carry meaning.
+- **Every electronic screen is lit on dark glass in the sim's colours (Nathan,
+  2026-11-21)**, sampled off the guide: MFDs in full colour (`MFD_COLOURS` in
+  render.ts; word `c`, page `paths`), DED yellow-green, UHF LEDs yellow, EHSI
+  white with cyan course and bearing pointers, HUD green (`SCREEN` in
+  render.ts). The rest of the panel stays black on white. Lesson figures that
+  show a screen (the generic RWR scope) follow the same rule.
 
 ## 4. Review by onion skin, adjust, repeat
 
