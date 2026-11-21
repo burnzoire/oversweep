@@ -1,4 +1,5 @@
 ---
+import Term from '../../../../components/Term.astro';
 import SiteLayout from '../../../../layouts/SiteLayout.astro';
 import { airframes, procedureRoute, sourceUrl, visibleProcedures, type AircraftProcedure } from '../../../../data/aircraft-procedures';
 import { cardMedia } from '../../../../data/card-media';
@@ -47,7 +48,7 @@ const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => ph
   activeSection="manual"
   activeSubject="aircraft-procedures"
   customHeading={isViper}
-  description={isViper ? 'Get to know the DCS F-16C Block 50 cockpit, then practise a cold-and-dark engine start.' : undefined}
+  description={isViper ? 'Learn the DCS F-16C Block 50 cockpit, then practise its procedures from engine start onward.' : undefined}
   image={hero?.src}
   imageAlt={hero?.alt}
   breadcrumbs={[
@@ -61,8 +62,8 @@ const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => ph
       <div class="briefing-copy">
         <p class="sim-variant">DCS World · Block 50</p>
         <h1>{airframe.title}</h1>
-        <p>Take a moment to get oriented in the Viper. The sidestick is on your right, the throttle on your left, and the head-up display is straight ahead. Now look down at the side consoles. That’s where much of your work on the ground happens.</p>
-        <p>Start by learning where to reach. In the engine-start exercise, practise looking back to the instruments to see how the jet responds.</p>
+        <p>The Viper is a small single-seat fighter. You sit low in a compact cockpit under a bubble canopy with a clear view all round, and in the Block 50 you can also fly the Wild Weasel role, hunting radars for <Term>SEAD</Term>.</p>
+        <p>Learn the cockpit first, then work through the procedures from engine start to engaging radars.</p>
       </div>
       {hero && (
         <img
@@ -132,6 +133,12 @@ const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => ph
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  .briefing-copy :global(a) {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
   }
 
   .briefing-copy h1 {
