@@ -122,6 +122,37 @@ const INS_PAGES: SPage[] = [
   { id: 'ins-nav', label: 'INS page: INS knob in NAV, RDY removed', lines: insLines('01.5/10', false, 'nav') },
 ];
 
+/**
+ * LIST, MISC and HTS (manual threat class) pages for the advanced HTS procedure, laid out on the 24-cell grid as
+ * the guide's p. 121 figure (1207 x 786 JPEG, image 000: the LIST and MISC pages and the empty HTS MAN page; cells
+ * fitted 10 px apart) and the p. 538 HTS figure (550 x 209 px, pitch 20.9 px, first cell centre x 33) show them.
+ * LIST and MISC: each entry's key character inverse. HTS: line 1 HTS MAN and the selected steerpoint with the
+ * up/down arrow (cols 8-14, 22-23); entries 1-4 at col 1 and 5-8 at col 10, each a four-cell code field (cols 3-6,
+ * 12-15) between its asterisk cells; an empty slot reads XXXX. The codes are the ALIC codes of Appendix B: 108 the
+ * SA-6 STRAIGHT FLUSH, 115 the SA-11 FIRE DOME. The guide shows only finished entries: a code being typed is drawn
+ * highlighted and right-aligned in its field, which is assumed.
+ */
+const LIST_LINES = ['          LIST', '{1}DEST {2}BNGO {3}VIP  {R}INTG', '{4}NAV  {5}MAN  {6}INS  {E}DLNK', '{7}CMDS {8}MODE {9}VRP  {0}MISC'];
+const MISC_LINES = ['          MISC', '{1}CORR {2}MAGV {3}OFP  {R}HMCS', '{4}INSM {5}LASR {6}GPS  {E}HTS', '{7}DRNG {8}BULL {9}     {0}HARM'];
+const htsLines = (codes: string[], focus: number, typing?: string) => {
+  const field = (k: number) => {
+    const v = (k === focus && typing !== undefined ? typing : codes[k] ?? '').padStart(4);
+    const shown = v.trim() ? v : 'XXXX';
+    return k === focus ? (typing !== undefined ? `{*${shown}*}` : `{*}${shown}{*}`) : ` ${shown} `;
+  };
+  return ['        HTS MAN       4^', ...[0, 1, 2, 3].map(r => ` ${r + 1}${field(r)}  ${r + 5}${field(r + 4)}`)];
+};
+const HTS_PAGES: SPage[] = [
+  { id: 'list', label: 'LIST page', lines: LIST_LINES },
+  { id: 'misc', label: 'MISC page (LIST, 0)', lines: MISC_LINES },
+  { id: 'hts-1', label: 'HTS page: manual class empty, asterisks on entry 1', lines: htsLines([], 0) },
+  ...['1', '10', '108'].map((t, i) => ({ id: `hts-1-t${i + 1}`, label: `HTS page: typing ${t} in entry 1`, lines: htsLines([], 0, t) })),
+  { id: 'hts-1-done', label: 'HTS page: entry 1 is 108 (SA-6)', lines: htsLines(['108'], 0) },
+  { id: 'hts-2', label: 'HTS page: asterisks on entry 2', lines: htsLines(['108'], 1) },
+  ...['1', '11', '115'].map((t, i) => ({ id: `hts-2-t${i + 1}`, label: `HTS page: typing ${t} in entry 2`, lines: htsLines(['108'], 1, t) })),
+  { id: 'hts-2-done', label: 'HTS page: entry 2 is 115 (SA-11)', lines: htsLines(['108', '115'], 1) },
+];
+
 const { pt, mm } = tracer(PX);
 const src = 'DCS F-16C guide p. 101';
 const C: [number, number] = [141, 59];
@@ -185,6 +216,7 @@ export const ded: PanelSpec = {
         { id: 'sead', lines: ['   SEAD', ' LAT  N 36°26.2\'', ' LNG  E037°07.7\'', ' ELV  1442FT', ' TOT  00:05:34'] },
         ...STPT_PAGES.map(({ id, lines }) => ({ id, lines })),
         ...INS_PAGES.map(({ id, lines }) => ({ id, lines })),
+        ...HTS_PAGES.map(({ id, lines }) => ({ id, lines })),
       ],
     } },
   ],
@@ -198,7 +230,8 @@ export const ded: PanelSpec = {
         { id: 'tils-tr-1x-chan', label: 'T-ILS: asterisks on CHAN' }, { id: 'tils-tr-2-edit', label: 'T-ILS: typing 2' },
         { id: 'tils-tr-21-edit', label: 'T-ILS: typing 21' }, { id: 'tils-tr-21x', label: 'T-ILS: 21X, beacon DAN' },
         ...STPT_PAGES.map(({ id, label }) => ({ id, label })),
-        ...INS_PAGES.map(({ id, label }) => ({ id, label }))],
+        ...INS_PAGES.map(({ id, label }) => ({ id, label })),
+        ...HTS_PAGES.map(({ id, label }) => ({ id, label }))],
       restNote: 'blank',
       description: 'Five lines of 24 characters. The CNI page (communications, navigation, IFF) is the home page: UHF and VHF frequencies or channels, the selected steerpoint number, the wind direction (magnetic) and speed, the system time (Zulu), the hack time when one is set, the IFF/transponder modes and Mode 3 code (not implemented in DCS), and the TACAN channel and band. The ICP override buttons and, from the CNI page, the priority function keys call up other pages; DCS RTN returns to CNI. The STPT page (key 4) shows the selected steerpoint\'s position, elevation and time over steerpoint, and edits them. The T-ILS page (key 1) sets the TACAN mode, channel and band and the ILS frequency and course. Asterisks mark the field that new data goes into.',
       source: src,

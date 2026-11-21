@@ -94,7 +94,19 @@ export const hadSpot = (x0: number, y0: number, x1: number, y1: number) => `#${[
 
 interface View { k: number; about: P; to: P }
 const NORM: View = { k: 1, about: [0, 0], to: [0, 0] };
-const tf = (v: View, [x, y]: P): P => [v.to[0] + v.k * (x - v.about[0]), v.to[1] + v.k * (y - v.about[1])];
+/**
+ * Where a scene point (p. 539 px, 30 NM depressed) is drawn: the range scale and DEP/CEN set where the ownship sits
+ * and how many px per NM (`Geo`), a turn swings the picture about the ownship (heading up: a turn left moves
+ * everything clockwise), then an Expand view (`View`) enlarges about the cursor.
+ */
+interface Geo { own: P; k: number; rot: number }
+const GEO30: Geo = { own: OWN, k: 1, rot: 0 };
+const geoPt = (g: Geo, [x, y]: P): P => {
+  const a = (g.rot * Math.PI) / 180, dx = (x - OWN[0]) * g.k, dy = (y - OWN[1]) * g.k;
+  return [g.own[0] + dx * Math.cos(a) - dy * Math.sin(a), g.own[1] + dx * Math.sin(a) + dy * Math.cos(a)];
+};
+let GEO: Geo = GEO30;
+const tf = (v: View, p: P): P => { const [x, y] = geoPt(GEO, p); return [v.to[0] + v.k * (x - v.about[0]), v.to[1] + v.k * (y - v.about[1])]; };
 
 function routeMarks(r: (P | Sym)[], v: View) {
   const pts = r.map(p => (Array.isArray(p) ? { at: tf(v, p), r: 0 } : { at: tf(v, p.at), r: p.r }));
@@ -127,7 +139,7 @@ export const hadBottom = (slot3: string) => [
   w('SWAP', 186, 538.5), w('SMS', 259, 538.5), w('HSD', 332, 538.5), w(slot3, 405, 538.5, undefined, true), w('DCLT', 477.5, 538.5),
 ];
 /** SOI frame (p. 539): a thin line round the format, broken for the option labels. */
-const FRAME = [
+export const FRAME = [
   poly([[111, 190], [111, 108], [165, 108]]), poly([[208, 108], [304, 108]]), poly([[357, 108], [377, 108]]), poly([[433, 108], [448, 108]]),
   poly([[518, 108], [547, 108], [553, 113], [553, 313]]), poly([[553, 347], [553, 383]]), poly([[553, 417], [553, 457]]), poly([[553, 488], [553, 548], [505, 548]]),
   poly([[111, 255], [111, 320]]), poly([[111, 340], [111, 465]]), poly([[111, 548], [160, 548]]),
@@ -144,9 +156,40 @@ const BULL = {
 /** HAD cursor: two short bars (as the p. 537 expanded images show them, 7 px apart), 16 px long, here 18 px apart so a symbol under it still reads. */
 const cursor = ([x, y]: P) => poly([[x - 8, y - 9], [x + 8, y - 9]]) + poly([[x - 8, y + 9], [x + 8, y + 9]]);
 /** Expanded threat data along the top (p. 539 items 19-22): major-axis bearing, major and minor axis lengths, PGM level. */
-const DATA = [w('335°  5.1NM  3633FT', 116.5, 135.5, 'start'), w('PGM2', 453, 135.5, 'start')];
+const DATA: [string, string] = ['335°  5.1NM  3633FT', 'PGM2'];
 
-interface HadState { soi: boolean; fov: 'NORM' | 'EXP1' | 'EXP2'; cursor?: P; data?: boolean; designated?: boolean; free?: boolean }
+/** A threat radar on the picture: its number, where it is (p. 539 px), its emission-state colour. */
+interface Threat { t: string; at: P; c: MfdColour }
+interface HadState {
+  soi: boolean; fov: 'NORM' | 'EXP1' | 'EXP2'; cursor?: P; designated?: string; free?: boolean;
+  /** Expanded data along the top (major-axis bearing and lengths; PGM level), for the radar under the cursor or designated. */
+  data?: [string, string];
+  /** Range scale and format: DEP 30 (the p. 539 picture), DEP 60, or CEN 40; `rot` a turn in degrees (+ = picture clockwise). */
+  scale?: 'DEP30' | 'DEP60' | 'CEN40'; rot?: number;
+  /** Route 2 shown (NAV2 on the CNTL page); the threats on the picture; the CNTL page labels instead of the base page's. */
+  nav2?: boolean; threats?: Threat[]; cntl?: { nav2: boolean };
+}
+/**
+ * Range scales (p. 531 item 6): DEP 15/30/60/120/240 NM, CEN 10/20/40/80/160 NM. Depressed keeps the ownship where
+ * p. 539 has it, with the rings at a third, two thirds and the full scale (p. 530 item 5), so DEP 60 halves the px
+ * per NM. Centered puts the ownship mid-picture with rings at half and full scale; the guide has no Centered image,
+ * so the outer ring is drawn 200 px round the middle of the drawing area (assumed, `source.unresolved`).
+ */
+const SCALES = {
+  DEP30: { label: '30', dep: 'DEP', own: OWN, k: 1, rings: RINGS },
+  DEP60: { label: '60', dep: 'DEP', own: OWN, k: 0.5, rings: RINGS },
+  CEN40: { label: '40', dep: 'CEN', own: [332, 319] as P, k: 200 / 40 / (RINGS[2] / 30), rings: [100, 200] },
+} as const;
+/** The p. 539 threats: the SA-6 white (as p. 537 draws it before designation; white is not a p. 531 emission colour), the SA-8 green (in HTS memory). */
+const P539_THREATS: Threat[] = [{ t: '6', at: SA6, c: 'white' }, { t: '8', at: SA8, c: 'green' }];
+/** A designated SEAD target's box (p. 539: 34 x 25 px about the symbol; wider for two characters). */
+const desBox = ([x, y]: P, t: string) => { const h = t.length > 1 ? 21 : 17; return poly([[x - h, y - 12.5], [x + h, y - 12.5], [x + h, y + 12.5], [x - h, y + 12.5]], true); };
+/** Bullseye line-of-sight pointer, swung round its circle by a turn. */
+const bullPointer = (rot: number) => {
+  const a = (rot * Math.PI) / 180, [cx, cy] = [133.3, 508.3];
+  const r = ([x, y]: P): P => [cx + (x - cx) * Math.cos(a) - (y - cy) * Math.sin(a), cy + (x - cx) * Math.sin(a) + (y - cy) * Math.cos(a)];
+  return poly(([[121, 485], [131, 492], [121, 499]] as P[]).map(r), true);
+};
 const local = ([x, y]: P): P => [f(mm(x - SC[0])), f(mm(y - SC[1]))];
 /**
  * The cursor slewed by hand (`had-free`): the procedure moves it in the page's units, from the centre toward the SA-6.
@@ -157,31 +200,46 @@ export const HAD_SLEW = {
   box: [...local([BOX.x0 + 10, BOX.y0 + 10]), ...local([BOX.x1 - 10, BOX.y1 - 10])] as [number, number, number, number],
 };
 function had(id: string, s: HadState): Page {
+  const sc = SCALES[s.scale ?? 'DEP30'];
+  GEO = { own: sc.own, k: sc.k, rot: s.rot ?? 0 };
   const exp = s.fov !== 'NORM';
-  const cur = s.cursor ?? [329.5, 330];
+  // The cursor sits on a scene point (`cursor`) or in the middle of the format.
+  const cur: P = s.cursor ? geoPt(GEO, s.cursor) : [329.5, 330];
   const v: View = exp ? { k: s.fov === 'EXP1' ? 2 : 4, about: cur, to: [329.5, 330] } : NORM;
   const words: Word[] = [];
   let marks = '', fine = '', fills = '';
   const paths: NonNullable<Page['paths']> = [];
   const cyan = (d: string) => { if (d) paths.push({ d, c: 'cyan' }); };
-  // Fixed labels.
-  if (!exp) words.push(w('DEP', 186, 117.5), ...RANGE.words);
-  words.push(w(s.fov, 332.5, 117.5, undefined, exp), w('THRT', 406, 117.5), w('CNTL', 478, 117.5));
-  words.push(L('TM', 330.5), w('MEM', 112, 473.5, 'start'), R('FR', 320.5), R('ON', 337.5), R('GS', 392), R('OF', 408.5), w('T', 548, 464), w('I', 548, 480.5));
+  // Fixed labels: the base page's (p. 539), or the Control page's (p. 535: PRE, TER and TBL1, NAV1-3, SAM, LINE1-4, PAGE 1).
+  if (s.cntl) {
+    const row = (k: number) => 188.5 + 71.4 * k;
+    words.push(w('PRE', 186, 117.5), w('TER', 258, 117.5), w('TBL1', 258, 135), w('NORM', 332.5, 117.5), w('CNTL', 478, 117.5, undefined, true));
+    words.push(L('NAV1', row(0), true), L('NAV2', row(1), s.cntl.nav2), L('NAV3', row(2), true), L('SAM', row(3), true), w('MEM', 112, 473.5, 'start'));
+    words.push(...[1, 2, 3, 4].map(k => ({ ...R(`LINE${k}`, row(k - 1)), inv: true })), R('PAGE', 463), R('1', 481));
+  } else {
+    if (!exp) words.push(w(sc.dep, 186, 117.5), w(sc.label, 128.5, 223));
+    words.push(w(s.fov, 332.5, 117.5, undefined, exp), w('THRT', 406, 117.5), w('CNTL', 478, 117.5));
+    words.push(L('TM', 330.5), w('MEM', 112, 473.5, 'start'), R('FR', 320.5), R('ON', 337.5), R('GS', 392), R('OF', 408.5), w('T', 548, 464), w('I', 548, 480.5));
+    if (!exp) marks += RANGE.marks;
+  }
   // The bullseye goes in the expanded views (p. 537).
   words.push(...(exp ? [] : BULL.words), ...hadBottom('HAD'));
-  if (!exp) paths.push({ d: BULL.marks, c: 'cyan', pen: 'fine' }, { d: BULL.fill, c: 'cyan', fill: true });
-  if (!exp) marks += RANGE.marks;
+  if (!exp) paths.push({ d: BULL.marks, c: 'cyan', pen: 'fine' }, { d: bullPointer(s.rot ?? 0), c: 'cyan', fill: true });
   if (s.soi) fine += FRAME + (exp ? poly([[165, 108], [208, 108]]) + poly([[111, 190], [111, 255]]) : '');
   else words.push(w('NOT SOI', 331, 223));
-  if (s.data) words.push(...DATA);
+  if (s.data && !s.cntl) words.push(w(s.data[0], 116.5, 135.5, 'start'), w(s.data[1], 453, 135.5, 'start'));
   // Scene.
   // Range rings magenta; route 1 white, route 2 (not active) grey.
-  if (!exp) paths.push({ d: RINGS.map(r => clipCircle(OWN, r)).join(''), c: 'magenta' });
+  if (!exp) paths.push({ d: sc.rings.map(r => clipCircle(sc.own, r)).join(''), c: 'magenta' });
   marks += routeMarks(ROUTE1, v);
-  let grey = routeMarks(ROUTE2, v);
-  for (const sym of Object.values(S) as Sym[]) { const m = symMarks(sym, v); (sym === S.tgt2 || sym === S.ip2 ? (grey += m.line) : (marks += m.line)); fills += m.fill; }
-  paths.push({ d: grey, c: 'grey', pen: 'fine' });
+  const nav2 = s.cntl ? s.cntl.nav2 : s.nav2 ?? true;
+  let grey = nav2 ? routeMarks(ROUTE2, v) : '';
+  for (const sym of Object.values(S) as Sym[]) {
+    const m = symMarks(sym, v), route2 = sym === S.tgt2 || sym === S.ip2;
+    if (route2) { if (nav2) grey += m.line; } else marks += m.line;
+    if (!route2 || nav2) fills += m.fill;
+  }
+  if (grey) paths.push({ d: grey, c: 'grey', pen: 'fine' });
   const [ox, oy] = tf(v, OWN);
   if (inside([ox, oy])) cyan(poly([[ox, oy - 5], [ox, oy + 22]]) + poly([[ox - 12, oy], [ox + 11, oy]]) + poly([[ox - 4.5, oy + 18], [ox + 4.5, oy + 18]]));
   for (const [n, at, alt] of MEMBERS) {
@@ -190,34 +248,89 @@ function had(id: string, s: HadState): Page {
     cyan(clipCircle([x, y], 10) + poly([[x, y - 10], [x, y - 22]]));
     words.push(c(w(n, x, y), 'cyan'), c(w('20', x + alt[0] - at[0], y + alt[1] - at[1]), 'cyan'));
   }
-  // Threat radars in their emission-state colours as p. 539 shows them: the SA-6 white (as p. 537 draws it before designation; white is not one of the p. 531 emission colours), the SA-8 green (in HTS memory).
-  for (const [t, p, col] of [['6', SA6, 'white'], ['8', SA8, 'green']] as [string, P, MfdColour][]) {
-    const [x, y] = tf(v, p);
+  // Threat radars in their emission-state colours (p. 531 item 7); the designated SEAD target in a highlighted box (p. 539).
+  for (const th of s.threats ?? P539_THREATS) {
+    const [x, y] = tf(v, th.at);
     if (!inside([x, y])) continue;
-    // Designated SEAD target (p. 539): the symbol in a highlighted box, 34 x 25 px.
-    if (t === '6' && s.designated) { fills += poly([[x - 17, y - 12.5], [x + 17, y - 12.5], [x + 17, y + 12.5], [x - 17, y + 12.5]], true); words.push(w(t, x, y, undefined, true)); }
-    else words.push(c(w(t, x, y), col));
+    if (th.t === s.designated) { fills += desBox([x, y], th.t); words.push(w(th.t, x, y, undefined, true)); }
+    else words.push(c(w(th.t, x, y), th.c));
   }
-  if (s.soi && !s.designated && !s.free) marks += cursor(tf(v, cur));
+  if (s.soi && !s.designated && !s.free && !s.cntl) marks += cursor(exp ? [329.5, 330] : cur);
   const page: Page = { id, words, marks, fine, fills, paths };
   if (s.free) page.cursor = { d: `M${f(mm(-8))} ${f(mm(-9))}H${f(mm(8))}M${f(mm(-8))} ${f(mm(9))}H${f(mm(8))}`, at: HAD_SLEW.start };
+  GEO = GEO30;
   return page;
 }
+/** Where a scene point is drawn at a scale and turn (for cursor positions and hint rings). */
+export const hadAt = (scale: keyof typeof SCALES, rot: number, p: P): P => {
+  GEO = { own: SCALES[scale].own, k: SCALES[scale].k, rot };
+  const q = tf(NORM, p);
+  GEO = GEO30;
+  return [f(q[0]), f(q[1])];
+};
 
 /* ------------------------------------------------------------------ THRT page */
 
-/** Threat classes down the sides (p. 534): CLASS 1-5 left, 6-10 right, 71.4 px apart; classes 1 and 2 highlighted. */
+/**
+ * Threat classes down the sides (p. 534): CLASS 1-5 left, 6-10 right, 71.4 px apart; highlighted classes are in the
+ * scan (p. 534 shows 1, 2 and MAN). SCT is the scan cycle time: p. 534 reads 0:22 with classes 1, 2 and MAN; the
+ * guide gives no other values, so the shorter time with only MAN highlighted is illustrative (`source.unresolved`).
+ */
 const CLASS_Y = (k: number) => 188.5 + 71.4 * k;
-const thrt: Page = {
-  id: 'had-thrt',
+const thrtPage = (id: string, on: number[], man: boolean, sct: string): Page => ({
+  id,
   words: [
-    w('CLASS', 186, 119), w('11', 182.5, 140), w('MAN', 258, 119, undefined, true), w('SITE', 330, 119), w('ALL', 330.5, 140),
+    w('CLASS', 186, 119), w('11', 182.5, 140), w('MAN', 258, 119, undefined, man), w('SITE', 330, 119), w('ALL', 330.5, 140),
     w('THRT', 404, 119, undefined, true), w('ALL', 477, 119),
-    w('SCT  0:22', 279, 172.5, 'start'), w('HTS OFP', 337.5, 307), w('ID 0042', 338, 323),
-    ...[1, 2, 3, 4, 5].flatMap(n => [L('CLASS', CLASS_Y(n - 1), n <= 2), L(String(n), CLASS_Y(n - 1) + 22.5, n <= 2)]),
+    w(`SCT  ${sct}`, 279, 172.5, 'start'), w('HTS OFP', 337.5, 307), w('ID 0042', 338, 323),
+    ...[1, 2, 3, 4, 5].flatMap(n => [L('CLASS', CLASS_Y(n - 1), on.includes(n)), L(String(n), CLASS_Y(n - 1) + 22.5, on.includes(n))]),
     ...[6, 7, 8, 9, 10].flatMap(n => [R('CLASS', CLASS_Y(n - 6)), R(String(n), CLASS_Y(n - 6) + 22.5)]),
     ...hadBottom('HAD'),
   ],
+});
+const thrt = thrtPage('had-thrt', [1, 2], true, '0:22');
+
+/* ------------------------------------------------- advanced HTS procedure */
+
+/**
+ * The advanced procedure ("locating and targeting radars") works the same p. 539 picture, with the SA-6 now
+ * searching (yellow) and, once the scan is narrowed to the manual class and the range scale doubled, a new SA-11
+ * FIRE DOME ("11", class 1) 50 NM ahead and 3 NM right. Its emission colours follow p. 531 (yellow search, red
+ * track, green memory). The ellipse data and PGM levels as the picture turns are illustrative: the guide gives the
+ * behaviour (pp. 528, 541: dead ahead PGM 4-5, off to the side PGM 3-2, AOA no better than PGM 2), not values.
+ */
+const NM = RINGS[2] / 30;
+const SA11: P = [OWN[0] + 3 * NM, OWN[1] - 50 * NM];
+/** The turn: about 50° left puts the SA-11 well off the right side of the nose (picture swings clockwise). */
+export const TURN = 50;
+const Y6: Threat = { t: '6', at: SA6, c: 'yellow' };
+const T_START: Threat[] = [Y6, { t: '8', at: SA8, c: 'green' }];
+const T_11 = (c: MfdColour): Threat[] => [Y6, { t: '11', at: SA11, c }];
+const PGM: Record<number, [string, string]> = {
+  5: ['004°  21.4NM  1.8NM', 'PGM5'], 4: ['011°  12.6NM  1.5NM', 'PGM4'],
+  3: ['027°  6.2NM  1.1NM', 'PGM3'], 2: ['041°  2.3NM  2950FT', 'PGM2'],
+};
+const base = { soi: true, fov: 'NORM' as const };
+const hadx: Page[] = [
+  had('hadx', { ...base, threats: T_START }),
+  thrtPage('had-thrt-c1', [2], true, '0:22'),
+  thrtPage('had-thrt-man', [], true, '0:08'),
+  had('hadx-cntl', { ...base, threats: T_START, cntl: { nav2: true } }),
+  had('hadx-cntl-nav2', { ...base, threats: T_START, cntl: { nav2: false } }),
+  had('hadx-n', { ...base, threats: T_START, nav2: false }),
+  had('hadx-60', { ...base, threats: T_11('yellow'), nav2: false, scale: 'DEP60' }),
+  had('hadx-cen', { ...base, threats: T_11('yellow'), nav2: false, scale: 'CEN40' }),
+  had('hadx-60-free', { ...base, threats: T_11('yellow'), nav2: false, scale: 'DEP60', free: true }),
+  had('hadx-60-hover', { ...base, threats: T_11('yellow'), nav2: false, scale: 'DEP60', cursor: SA11, data: PGM[5] }),
+  had('hadx-des', { ...base, threats: T_11('yellow'), nav2: false, scale: 'DEP60', designated: '11', data: PGM[5] }),
+  ...[5, 4, 3, 2].map(n => had(`hadx-t${n}`, { ...base, threats: T_11(n > 3 ? 'yellow' : 'red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[n] })),
+  had('hadx-t-des6', { ...base, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '6', data: DATA }),
+  had('hadx-t-notsoi', { ...base, soi: false, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[2] }),
+];
+/** Where things are on the advanced pages (p. 539 px), for hint rings and the cursor slew. */
+export const HADX = {
+  sa11: hadAt('DEP60', 0, SA11), sa11Turned: hadAt('DEP60', TURN, SA11), sa6Turned: hadAt('DEP60', TURN, SA6),
+  slew: { ...HAD_SLEW, target: local(hadAt('DEP60', 0, SA11)) },
 };
 
 /** Every HAD page, in the order the procedure meets them. Cursor positions are on the p. 539 picture. */
@@ -225,11 +338,12 @@ export const hadPages: Page[] = [
   had('had-not-soi', { soi: false, fov: 'NORM' }),
   had('had', { soi: true, fov: 'NORM' }),
   had('had-free', { soi: true, fov: 'NORM', free: true }),
-  had('had-hover', { soi: true, fov: 'NORM', cursor: SA6, data: true }),
-  had('had-designated', { soi: true, fov: 'NORM', cursor: SA6, data: true, designated: true }),
-  had('had-exp1', { soi: true, fov: 'EXP1', cursor: SA6, data: true }),
-  had('had-exp2', { soi: true, fov: 'EXP2', cursor: SA6, data: true }),
+  had('had-hover', { soi: true, fov: 'NORM', cursor: SA6, data: DATA }),
+  had('had-designated', { soi: true, fov: 'NORM', cursor: SA6, data: DATA, designated: '6' }),
+  had('had-exp1', { soi: true, fov: 'EXP1', cursor: SA6, data: DATA }),
+  had('had-exp2', { soi: true, fov: 'EXP2', cursor: SA6, data: DATA }),
   thrt,
+  ...hadx,
 ];
 export const hadPageLabels: Record<string, string> = {
   'had-not-soi': 'HAD format, not SOI',
@@ -240,4 +354,21 @@ export const hadPageLabels: Record<string, string> = {
   'had-exp1': 'HAD: EXP1 field of view (2:1)',
   'had-exp2': 'HAD: EXP2 field of view (4:1)',
   'had-thrt': 'HAD Threat (THRT) page',
+  hadx: 'HAD (advanced): SOI, the SA-6 searching',
+  'had-thrt-c1': 'THRT page: class 1 off',
+  'had-thrt-man': 'THRT page: only the manual class in the scan',
+  'hadx-cntl': 'HAD Control (CNTL) page 1',
+  'hadx-cntl-nav2': 'CNTL page: NAV2 off',
+  'hadx-n': 'HAD: route 2 hidden',
+  'hadx-60': 'HAD: 60 NM depressed, SA-11 ahead',
+  'hadx-cen': 'HAD: 40 NM centered',
+  'hadx-60-free': 'HAD 60 NM: cursor being slewed',
+  'hadx-60-hover': 'HAD 60 NM: cursor on the SA-11, PGM5',
+  'hadx-des': 'HAD 60 NM: SA-11 designated, PGM5',
+  'hadx-t5': 'HAD after the turn: PGM5',
+  'hadx-t4': 'HAD after the turn: PGM4',
+  'hadx-t3': 'HAD after the turn: PGM3, the SA-11 tracking (red)',
+  'hadx-t2': 'HAD after the turn: PGM2',
+  'hadx-t-des6': 'HAD: TMS right stepped to the SA-6',
+  'hadx-t-notsoi': 'HAD not SOI, SA-11 still designated',
 };

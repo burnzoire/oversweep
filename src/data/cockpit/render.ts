@@ -272,10 +272,11 @@ function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, cu
     let body = page?.fills ? `<path d="${page.fills}" fill="${W}" stroke="none"/>` : '';
     for (const p of page?.paths ?? []) if (p.fill) body += `<path d="${p.d}" fill="${MFD_COLOURS[p.c]}" stroke="none"/>`;
     for (const w of page?.words ?? []) {
-      const ink = (w.t.length - 1) * d.pitch + d.width, x0 = w.a === 'start' ? w.at[0] : w.a === 'end' ? w.at[0] - ink : w.at[0] - ink / 2;
+      const k0 = w.s ?? 1, pitch = d.pitch * k0, width = d.width * k0, cap = d.cap * k0;
+      const ink = (w.t.length - 1) * pitch + width, x0 = w.a === 'start' ? w.at[0] : w.a === 'end' ? w.at[0] - ink : w.at[0] - ink / 2;
       const y = w.at[1], colour = MFD_COLOURS[w.c ?? 'white'], fill = w.inv ? MFD_GLASS : colour;
-      if (w.inv) body += `<rect x="${n(x0 - d.pad[0])}" y="${n(y - d.cap / 2 - d.pad[1])}" width="${n(ink + 2 * d.pad[0])}" height="${n(d.cap + 2 * d.pad[1])}" fill="${colour}" stroke="none"/>`;
-      [...w.t].forEach((c, k) => { if (c !== ' ') body += displayChar(x0 + d.width / 2 + k * d.pitch, y, c, d.cap, d.width, fill); });
+      if (w.inv) body += `<rect x="${n(x0 - d.pad[0])}" y="${n(y - cap / 2 - d.pad[1])}" width="${n(ink + 2 * d.pad[0])}" height="${n(cap + 2 * d.pad[1])}" fill="${colour}" stroke="none"/>`;
+      [...w.t].forEach((c, k) => { if (c !== ' ') body += displayChar(x0 + width / 2 + k * pitch, y, c, cap, width, fill); });
     }
     if (page?.marks) body += `<path d="${page.marks}" fill="none" stroke="${W}" ${sw('medium')}/>`;
     if (page?.fine) body += `<path d="${page.fine}" fill="none" stroke="${W}" ${sw('fine')}/>`;

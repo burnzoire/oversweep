@@ -124,3 +124,24 @@ test('HTS familiarization uses HAD and SEAD pages that exist and HOTAS controls 
   assert.ok(panels.find(({ spec }) => spec.id === 'throttle').spec.pads.find(p => p.id === 'cursor').analog);
   assert.doesNotMatch(data, /chuck/i);
 });
+
+test('HTS targeting uses pages that exist and controls that are built, and the basic HTS procedure leads to it', async () => {
+  if (!(process.features?.typescript || process.execArgv.includes('--experimental-strip-types'))) return;
+  const data = await read('src/data/aircraft-procedures.ts');
+  const script = await read('src/scripts/procedure-hts.ts');
+  const { f16cCockpit, builtPanels } = await import('../src/data/cockpit/f16c/index.ts');
+  const panels = builtPanels(f16cCockpit);
+  const spec = id => panels.find(({ spec }) => spec.id === id).spec;
+  const pagesOf = id => new Set(spec(id).indicators.find(i => i.id === 'display').pages.map(x => x.id));
+  const mfd = pagesOf('right-mfd'), ded = pagesOf('ded');
+  for (const m of script.matchAll(/(mfd|left|ded): '([\w-]+)'/g)) assert.ok((m[1] === 'ded' ? ded : mfd).has(m[2]), m[2]);
+  for (const m of script.matchAll(/(?:on|free|done): '([\w-]+)'|'(hadx-t[\w-]*)'/g)) assert.ok(mfd.has(m[1] ?? m[2]), m[1] ?? m[2]);
+  assert.match(data.slice(data.indexOf('const hts:'), data.indexOf('const hts2')), /next: 'hts-targeting'/);
+  const block = data.slice(data.indexOf('const hts2'));
+  for (const m of block.matchAll(/control:'([\w-]+)\.([\w-]+)',to:'([\w-]+)'/g)) {
+    assert.ok(spec(m[1]).controls.find(c => c.id === m[2])?.positions.some(p => p.id === m[3]), m[0]);
+  }
+  for (const m of block.matchAll(/'icp\.([\w-]+)'/g)) assert.ok(spec('icp').controls.some(c => c.id === m[1]), m[1]);
+  for (const m of block.matchAll(/pages:\[([^\]]*)\]/g)) for (const p of m[1].match(/[\w-]+/g)) assert.ok(ded.has(p), p);
+  assert.doesNotMatch(block, /chuck/i);
+});
