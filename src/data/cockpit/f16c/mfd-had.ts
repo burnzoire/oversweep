@@ -168,8 +168,9 @@ function had(id: string, s: HadState): Page {
   if (!exp) words.push(w('DEP', 186, 117.5), ...RANGE.words);
   words.push(w(s.fov, 332.5, 117.5, undefined, exp), w('THRT', 406, 117.5), w('CNTL', 478, 117.5));
   words.push(L('TM', 330.5), w('MEM', 112, 473.5, 'start'), R('FR', 320.5), R('ON', 337.5), R('GS', 392), R('OF', 408.5), w('T', 548, 464), w('I', 548, 480.5));
-  words.push(...BULL.words, ...hadBottom('HAD'));
-  paths.push({ d: BULL.marks, c: 'cyan', pen: 'fine' }, { d: BULL.fill, c: 'cyan', fill: true });
+  // The bullseye goes in the expanded views (p. 537).
+  words.push(...(exp ? [] : BULL.words), ...hadBottom('HAD'));
+  if (!exp) paths.push({ d: BULL.marks, c: 'cyan', pen: 'fine' }, { d: BULL.fill, c: 'cyan', fill: true });
   if (!exp) marks += RANGE.marks;
   if (s.soi) fine += FRAME + (exp ? poly([[165, 108], [208, 108]]) + poly([[111, 190], [111, 255]]) : '');
   else words.push(w('NOT SOI', 331, 223));
@@ -189,7 +190,7 @@ function had(id: string, s: HadState): Page {
     cyan(clipCircle([x, y], 10) + poly([[x, y - 10], [x, y - 22]]));
     words.push(c(w(n, x, y), 'cyan'), c(w('20', x + alt[0] - at[0], y + alt[1] - at[1]), 'cyan'));
   }
-  // Threat radars in their emission-state colours as p. 539 shows them: the SA-6 white, the SA-8 green (searching).
+  // Threat radars in their emission-state colours as p. 539 shows them: the SA-6 white (as p. 537 draws it before designation; white is not one of the p. 531 emission colours), the SA-8 green (in HTS memory).
   for (const [t, p, col] of [['6', SA6, 'white'], ['8', SA8, 'green']] as [string, P, MfdColour][]) {
     const [x, y] = tf(v, p);
     if (!inside([x, y])) continue;
