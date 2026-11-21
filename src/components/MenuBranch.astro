@@ -19,7 +19,7 @@ const link = (node: MenuNode) => (node.href && !node.planned ? sitePath(node.hre
       : <span class:list={{ unwritten: node.planned }}>{node.title}{node.planned && <span class="visually-hidden"> (not written yet)</span>}</span>;
     return node.children?.length ? (
       <li class:list={{ unwritten: node.planned }}>
-        <details name={parent} open={containsRoute(node, route)}>
+        <details name={parent} open={containsRoute(node, route)} data-lazy={node.lazy ? sitePath(node.lazy) : undefined}>
           <summary>
             <span class="chev" aria-hidden="true"></span>
             {label}

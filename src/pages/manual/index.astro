@@ -12,21 +12,7 @@ const featured = ["module.principles-of-flight", "module.bvr-intercepts", "modul
 
 <SiteLayout title="Manual" activeSection="manual" isSectionIndex
   description="Military flight procedures for flight sim pilots, taught from first principles with interactive figures, sources and knowledge checks: general flight, tactics and aircraft guides.">
-  <p class="lead">The Manual teaches military flying from first principles, for flight sim pilots. Everything is in the menu, grouped in three parts. Start with whichever matches what you want to learn.</p>
-
-  <section class="manual-kinds" aria-labelledby="kinds-heading">
-    <h2 id="kinds-heading">Three parts, two kinds of article</h2>
-    <dl>
-      <dt>General Flight</dt>
-      <dd>Skills that apply to any aircraft: how it flies, instruments, navigation, radio, the airfield and carrier, formation, refuelling, planning and emergencies.</dd>
-      <dt>Tactics</dt>
-      <dd>Employment and threats: fighting other aircraft, attacking ground targets, using sensors and staying out of reach of air defences. Not tied to one airframe.</dd>
-      <dt>Aircraft</dt>
-      <dd>One guide per aircraft type, built from that aircraft's own cockpit and systems: where each control is, then the procedures, in the order you fly them.</dd>
-    </dl>
-    <p><strong>Modules</strong> (General Flight and Tactics) teach one topic from first principles. They have interactive figures, sources and a short knowledge check, and they apply across aircraft, so the aircraft's own manual governs its systems.</p>
-    <p><strong>Aircraft guides</strong> are specific to one type. They walk you through the cockpit panel by panel and through procedures one step at a time, with the controls you operate shown in front of you. They are for using the aircraft, where modules are for understanding the flying.</p>
-  </section>
+  <p class="lead">Modules teach the flying, for any aircraft. Aircraft guides teach one aircraft, panel by panel. Pick from the menu, or start with one of these.</p>
 
   <section class="manual-featured" aria-labelledby="featured-heading">
     <h2 id="featured-heading">Featured</h2>
@@ -35,10 +21,3 @@ const featured = ["module.principles-of-flight", "module.bvr-intercepts", "modul
     </div>
   </section>
 </SiteLayout>
-
-<style>
-  .manual-kinds dl { display: grid; gap: 0.25rem 1.5rem; grid-template-columns: max-content 1fr; margin: 1rem 0; }
-  .manual-kinds dt { font-weight: 700; }
-  .manual-kinds dd { margin: 0; }
-  @media (max-width: 40rem) { .manual-kinds dl { grid-template-columns: 1fr; } .manual-kinds dd { margin-bottom: 0.5rem; } }
-</style>

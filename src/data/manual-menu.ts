@@ -18,6 +18,8 @@ export interface MenuNode {
   /** Listed but not written: shown grey and unlinked. */
   planned?: boolean;
   children?: MenuNode[];
+  /** A group whose children load on first open, from this JSON file (see menuFor). */
+  lazy?: string;
 }
 
 const slugify = (text: string) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -157,10 +159,12 @@ const areas = (aircraft: MenuNode[]): MenuNode[] => [
 /** Every airframe fully built: the source of truth for tests and the landing page. */
 export const manualMenu: MenuNode[] = areas(aircraftMenus.map(a => a.build()));
 
+export const aircraftMenuFile = (id: string) => `manual-menu/${id}.json`;
+
 /** The menu a page renders: only the airframe the page belongs to is expanded;
  *  the others are a single link, however many aircraft there are. */
 export function menuFor(route: string): MenuNode[] {
-  return areas(aircraftMenus.map(a => (route.startsWith(a.href) ? a.build() : { id: a.id, title: a.title, href: a.href, summary: a.summary })));
+  return areas(aircraftMenus.map(a => (route.startsWith(a.href) ? a.build() : { id: a.id, title: a.title, lazy: aircraftMenuFile(a.id), children: [{ id: `${a.id}-overview`, title: 'Overview', href: a.href }] })));
 }
 
 /** Whether `route` is this node's page or one beneath it (so its branch opens). */

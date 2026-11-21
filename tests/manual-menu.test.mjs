@@ -45,3 +45,9 @@ test('the menu expands only the airframe a page is on, so aircraft count does no
 test('the menu has no counts', async () => {
   assert.doesNotMatch(await read('src/components/MenuBranch.astro'), /count|progress/);
 });
+
+test('an aircraft not on the page loads its branch when opened', async () => {
+  assert.match(await read('src/components/MenuBranch.astro'), /data-lazy/);
+  assert.match(await read('src/components/ManualMenu.astro'), /dataset\.lazy/);
+  assert.match(await read('src/pages/manual-menu/[aircraft].json.ts'), /aircraftMenus/);
+});
