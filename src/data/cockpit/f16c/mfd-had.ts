@@ -291,11 +291,11 @@ function had(id: string, s: HadState): Page {
     const ring = clipCircle(tf(v, t.at), t.nm * NM * sc.k * v.k);
     if (ring) paths.push({ d: ring, c: inside ? 'red' : 'yellow', pen: 'fine' });
   }
-  // Threat radars in their emission-state colours (p. 531 item 7); the designated SEAD target in a highlighted box (p. 539).
+  // Threat radars in their emission-state colours (p. 531 item 7); the designated SEAD target in a highlighted box of its own colour (p. 539).
   for (const th of s.threats ?? P539_THREATS) {
     const [x, y] = tf(v, th.at);
     if (!inside([x, y])) continue;
-    if (th.t === s.designated) { fills += desBox([x, y], th.t); words.push(w(th.t, x, y, undefined, true)); }
+    if (th.t === s.designated) { paths.push({ d: desBox([x, y], th.t), c: th.c, fill: true }); words.push(c(w(th.t, x, y, undefined, true), th.c)); }
     else words.push(c(w(th.t, x, y), th.c));
   }
   if (s.soi && !s.designated && !s.free && !s.cntl) marks += cursor(exp ? [329.5, 330] : cur);
