@@ -1,6 +1,6 @@
 import type { PanelSpec } from '../types';
 import { tracer } from '../trace.ts';
-import { speedBrakeParts } from './speed-brake.ts';
+import { LEGEND, speedBrakeParts } from './speed-brake.ts';
 
 /**
  * F-16C landing gear panel (left auxiliary console), DCS.
@@ -10,21 +10,27 @@ import { speedBrakeParts } from './speed-brake.ts';
  * panel screw and the bottom-right DZUS:
  *   python3 -I scripts/panel-trace.py <p55.jpg> <out> 140,70 439,19 140,401 428,401
  * Measurements below are in rectified pixels and stored in mm, shifted right by
- * `OX` so the SPEED BRAKE indicator, which hangs below the panel's lower-left
- * corner, fits on the canvas.
+ * `OX` so the panel's lower-left part, which reaches left of the rectified
+ * image's origin, fits on the canvas.
  *
- * SPEED BRAKE indicator: placed from the guide's p. 55 wide shot (1152 x 680
- * px, image 002), registered onto the rectified p. 55 image by SIFT feature
- * matching (gear panel screws land within 8 px of their traced places). Its
- * legend centre maps to x 2, y 462. The indicator's face is a separate, tilted
- * plane, so that mapping stretches it 1.38 times top to bottom (legend line
- * spacing and housing height both agree); its offset below the panel's lower
- * edge (y 422) is divided by 1.38. That puts the indicator's own drawing
- * (speed-brake.ts) with its top-left corner at x -22.75, y 432.
+ * Outline left of the image: the guide image hides the panel's left edge
+ * behind the canopy frame, so the left edge, the DZUS notch and the lower-left
+ * tab come from a dimensioned drawing of the real panel's lighted plate
+ * (194.6 x 169.9 mm), fitted to this trace by a similarity transform on
+ * 16 hole centres (scale 2.72 px per drawing mm, rotation 1.6 deg, rms 11 px)
+ * and squared to the trace's bottom edge. The tab hangs 11.7 mm (32 px) below
+ * the main bottom edge, 44.6 mm (121 px) wide, and carries the SPEED BRAKE
+ * legend; the indicator's housing hangs below the tab.
+ *
+ * SPEED BRAKE legend and housing, across: from the guide's p. 55 wide shot
+ * (1152 x 680 px, image 002), registered onto the rectified image by SIFT
+ * feature matching (legend centre x 2, housing centre x 4.5). Down: the legend
+ * sits on the tab as in a photo of the real panel; the housing's top is just
+ * below the tab.
  */
-const PX = 3.06, OX = 26;
+const PX = 3.06, OX = 75;
 const { pt, mm, path } = tracer(PX, [OX, 0]);
-const speedBrake = speedBrakeParts([mm(-22.75 + OX), mm(432)]);
+const speedBrake = speedBrakeParts([mm(4.5 + OX) - 46.5 / 4.76, mm(457) - 66 / 4.76]);
 const src = 'DCS F-16C guide pp. 55–57';
 const L = (at: [number, number], text: string, cap: number, width?: number) =>
   ({ kind: 'text' as const, at: pt(...at), text, cap: mm(cap), ...(width ? { width: mm(width) } : {}) });
@@ -95,7 +101,7 @@ const W = 327;                                   // WHEELS aircraft outline cent
 export const landingGear: PanelSpec = {
   id: 'landing-gear',
   title: 'Landing gear panel',
-  canvas: [mm(458 + OX), mm(534)],
+  canvas: [mm(458 + OX), mm(516)],
   source: {
     variant: 'DCS F-16C Viper (Block 50)',
     manual: 'Eagle Dynamics, DCS F-16C Viper Early Access Guide (EN, 16 Aug 2026)',
@@ -111,17 +117,18 @@ export const landingGear: PanelSpec = {
       'The gear handle wheel is drawn on its tread, square-on, with the whole tyre as the red warning light lens.',
       'The LIGHTS switch is drawn as a wide flat paddle, from its end-on look in the image (three round bosses along a long pill).',
       'GND JETT and ANTI-SKID are large lever-locks; BRAKES and STORES CONFIG show no lever-lock slot in the image, so they are drawn as plain toggles. The HOOK lever is a one-off, traced from the image: a flat vertical paddle with a semicircular end toward the bushing, overhanging well past it toward the selected position (over the HOOK plate at UP).',
-      'The SPEED BRAKE position indicator (item 12) sits on the strip below this panel, outside the rectified image, on a face tilted away from the panel. Its place comes from the p. 55 wide shot, with the vertical offset corrected for that tilt (see the note at the top of the spec); about ±2 mm. The strip it is mounted on is not drawn, only its legend plate and housing.',
+      'The panel\'s left edge, its DZUS notch and the lower-left tab are hidden or cropped in the guide image; they come from the lighted plate\'s dimensioned drawing (see the note at the top of the spec), fitted to this trace within about 4 mm. The canopy-side edge of the earlier trace is replaced.',
+      'The SPEED BRAKE position indicator (item 12): legend and housing placed across from the p. 55 wide shot; their height on and below the tab follows a photo of the real panel, because the wide shot sees that face tilted. The console strip below the panel is not drawn.',
       ...speedBrake.unresolved,
       'EMER STORES JETTISON has a light circle-and-square mark at the centre of its cap; what it is (a lens, a latch or a guard insert) is not stated in the guide, so it is drawn as an outline only.',
-      'The upper-left corner of the panel is hidden behind the canopy frame in the image; the plate outline steps in there as the visible edge suggests, and its left edge slopes in above GND JETT ENABLE, traced from the strip of side wall visible beside it.',
+      'The upper-left corner of the panel is hidden behind the canopy frame in the image; the plate outline steps in there as the visible edge suggests.',
     ],
   },
   plate: [
-    { d: path('M139 23L449 13Q453 12.9 453 17V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23Z') },
+    { d: path('M139 23L449 13Q453 12.9 453 17V418Q453 422 449 422H53.5V454H-68V415L-51.9 385.9L-40.2 393A15 15 0 0 0 -25.5 366.8L-37.2 359.7L75 152L135 150V27Q135 23 139 23Z') },
     ...speedBrake.plate,
     // Top layer, cut away for the gear handle's channel and, to its lower left, a padded recess round the DN LOCK REL button; the cut edge runs through the striped border, so the stripes stop at it; its left end is a half-round concentric with the button.
-    { d: path('M139 23L449 13Q453 12.9 453 17V418Q453 422 449 422H9Q5 422 5 418V246L40 152Q41 150 43 150H135V27Q135 23 139 23ZM397 190H447V364H365') + `A${mm(DNL.r)} ${mm(DNL.r)} 0 0 1 ${pt(DNL.cx, DNL.cy - DNL.r).join(' ')}` + path('H397Z'), raised: true },
+    { d: path('M139 23L449 13Q453 12.9 453 17V418Q453 422 449 422H53.5V454H-68V415L-51.9 385.9L-40.2 393A15 15 0 0 0 -25.5 366.8L-37.2 359.7L75 152L135 150V27Q135 23 139 23ZM397 190H447V364H365') + `A${mm(DNL.r)} ${mm(DNL.r)} 0 0 1 ${pt(DNL.cx, DNL.cy - DNL.r).join(' ')}` + path('H397Z'), raised: true },
   ],
   engraving: [
     // EMER STORES JETTISON: legend, and the hazard-striped square around the button.
@@ -176,10 +183,15 @@ export const landingGear: PanelSpec = {
       clip: path(box(328, 289, 397, 370) + `M${DNL.cx} ${DNL.cy - DNL.r}H${DNL.x1}V${DNL.cy + DNL.r}H${DNL.cx}`) + `A${mm(DNL.r)} ${mm(DNL.r)} 0 0 1 ${pt(DNL.cx, DNL.cy - DNL.r).join(" ")}Z` },
     { kind: 'path', pen: 'heavy', d: stripesCut(328, 289, 397, 370, inDnLockCut, 'M397 301V289H328V370H397V364') },
     L([217, 310], '+', 7),
+    // SPEED BRAKE legend on the lower-left tab.
+    { kind: 'text', at: pt(2, 433), text: 'SPEED', ...LEGEND },
+    { kind: 'text', at: pt(2, 446), text: 'BRAKE', ...LEGEND },
     ...speedBrake.engraving,
   ],
   placements: [
     { component: 'dzus', at: pt(147, 43), cut: 'up-left' },
+    // In the notch on the lower-left edge (lighted plate drawing, fitted).
+    { component: 'dzus', at: pt(-32.8, 379.9) },
     { component: 'dzus', at: pt(438, 32), cut: 'up-right' },
     { component: 'dzus', at: pt(437, 402), cut: 'down-right' },
     { component: 'screw-medium', at: pt(280, 48) },
