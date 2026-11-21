@@ -165,19 +165,19 @@ export const altimeter: PanelSpec = {
   indicators: [
     {
       id: 'altitude', name: 'Altitude (needle and counter)', type: 'gauge', unit: 'ft', rest: 8092, range: [0, 80000, 10],
-      restNote: 'drawn as the guide shows it, about 8,100 ft',
-      description: 'Barometric altitude. The needle goes round once every 1,000 ft on the outer scale (numbers are hundreds of feet, ticks every 20 ft); the counter shows ten-thousands, thousands and hundreds of feet, with hatching on the ten-thousands drum below 10,000 ft. The guide gives the range as −1,000 to 80,000 ft.',
+      restNote: 'as pictured, about 8,100 ft',
+      description: 'Barometric altitude. The needle goes round once every 1,000 ft on the outer scale (numbers are hundreds of feet, ticks every 20 ft); the counter shows ten-thousands, thousands and hundreds of feet, with hatching on the ten-thousands drum below 10,000 ft. Its range is −1,000 to 80,000 ft.',
       source: src,
     },
     {
       id: 'baro', name: 'Barometric ("Kollsman") window', type: 'counter', unit: 'in Hg', rest: 29.92, range: [28.1, 31, 0.01],
-      restNote: 'drawn as the guide shows it, 29.92 in Hg',
+      restNote: 'as pictured, 29.92 in Hg',
       description: 'The altimeter setting in inches of mercury, set with the barometric setting knob. The F-16 uses QNH, so with the local setting the altimeter reads altitude above mean sea level.',
       source: src,
     },
     {
       id: 'pneu', name: 'PNEU flag', type: 'display', restPage: 'shown', pages: [{ id: 'shown', label: 'Shown' }, { id: 'hidden', label: 'Hidden' }],
-      restNote: 'shown, as the guide image shows it',
+      restNote: 'shown',
       description: 'Shows when the altimeter is working in PNEU (pneumatic) mode, from static pressure alone, instead of ELEC from the central air data computer. It reverts to PNEU by itself if the CADC or the altimeter\'s electric servo fails.',
       source: src,
     },

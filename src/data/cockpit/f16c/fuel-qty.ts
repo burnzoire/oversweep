@@ -80,19 +80,19 @@ export const fuelQty: PanelSpec = {
   indicators: [
     {
       id: 'al', name: 'AL pointer', type: 'gauge', unit: 'lb', rest: 2840, range: [0, 4200, 10],
-      restNote: 'drawn as the guide shows it, 2,840 lb',
+      restNote: 'as pictured, 2,840 lb',
       description: 'Fuel in the aft and left (AL) tanks, read on the scale in hundreds of pounds. The FUEL QTY SEL knob chooses which internal or external tanks the two pointers show. If AL and FR drift too far apart, red shows at the base of a pointer: a fuel imbalance, corrected with the ENG FEED knob on the FUEL panel.',
       source: src,
     },
     {
       id: 'fr', name: 'FR pointer', type: 'gauge', unit: 'lb', rest: 3280, range: [0, 4200, 10],
-      restNote: 'drawn as the guide shows it, 3,280 lb',
+      restNote: 'as pictured, 3,280 lb',
       description: 'Fuel in the forward and right (FR) tanks, read on the scale in hundreds of pounds. The FUEL QTY SEL knob chooses which internal or external tanks the two pointers show. If AL and FR drift too far apart, red shows at the base of a pointer: a fuel imbalance, corrected with the ENG FEED knob on the FUEL panel.',
       source: src,
     },
     {
       id: 'total', name: 'TOTAL fuel counter', type: 'counter', unit: 'lb', rest: 7170, range: [0, 15000, 10],
-      restNote: 'drawn as the guide shows it, about 7,170 lb',
+      restNote: 'as pictured, about 7,170 lb',
       description: 'Total fuel remaining in all tanks, in pounds, on a five-drum counter.',
       source: src,
     },

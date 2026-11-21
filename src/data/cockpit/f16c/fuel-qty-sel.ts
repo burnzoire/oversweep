@@ -94,7 +94,7 @@ export const fuelQtySel: PanelSpec = {
       id: 'ext-fuel-trans', name: 'EXT FUEL TRANS switch', type: 'toggle', travel: 'vertical', latched: true,
       positions: [{ id: 'norm', label: 'NORM', hold: 'stable' }, { id: 'wing-first', label: 'WING FIRST', hold: 'stable' }],
       initial: 'norm',
-      protections: [{ kind: 'latch', verified: false, note: 'The guide image shows a lever-lock slot in the bushing, so it is drawn as latched. It moves with a plain click; the lock is not simulated.' }],
+      protections: [{ kind: 'latch', verified: false, note: 'A lever-lock slot in the bushing marks it as a lever-lock toggle, so it is drawn as latched. It moves with a plain click; the lock is not simulated.' }],
       description: 'Sets the order fuel is taken from the external tanks. NORM: the centreline tank first, then the wing tanks. WING FIRST: the wing tanks first, then the centreline tank.',
       source: src,
     },

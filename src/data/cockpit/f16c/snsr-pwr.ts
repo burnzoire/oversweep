@@ -19,7 +19,7 @@ const L = (at: [number, number], text: string, cap: number, width?: number) =>
 const SW: Record<string, [number, number]> = {
   'left-hdpt': [78, 70], 'right-hdpt': [164, 70], fcr: [250, 70], 'rdr-alt': [337, 70],
 };
-const latch = [{ kind: 'latch' as const, verified: false, note: 'The guide image shows a lever-lock slot in the bushing, so it is drawn as latched. It moves with a plain click; the lock is not simulated.' }];
+const latch = [{ kind: 'latch' as const, verified: false, note: 'A lever-lock slot in the bushing marks it as a lever-lock toggle, so it is drawn as latched. It moves with a plain click; the lock is not simulated.' }];
 const onOff = [{ id: 'on', label: 'On', hold: 'stable' as const }, { id: 'off', label: 'OFF', hold: 'stable' as const }];
 
 export const snsrPwr: PanelSpec = {

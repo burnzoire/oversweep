@@ -149,7 +149,7 @@ test('HTS targeting uses pages that exist and controls that are built, and the b
 test('procedure text speaks in its own voice, never about "the guide"', async () => {
   const text = await readFile(new URL('../src/data/aircraft-procedures.ts', import.meta.url), 'utf8');
   for (const field of ['intro', 'action', 'expect', 'caution', 'complete', 'confirm', 'title']) {
-    for (const m of text.matchAll(new RegExp(`${field}: ?'((?:[^'\\\\]|\\\\.)*)'`, 'g'))) assert.doesNotMatch(m[1], /\bthe guide\b/i, `${field}: ${m[1].slice(0, 80)}`);
+    for (const m of text.matchAll(new RegExp(`${field}: ?'((?:[^'\\\\]|\\\\.)*)'`, 'g'))) assert.doesNotMatch(m[1], /\b(the|official|DCS|sim) guide\b|\bguide (says|does not|gives|shows|lists)\b/i, `${field}: ${m[1].slice(0, 80)}`);
   }
 });
 

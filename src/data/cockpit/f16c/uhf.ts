@@ -236,6 +236,6 @@ export const uhf: PanelSpec = {
   ],
   indicators: [
     { id: 'chan-display', name: 'CHAN display', type: 'display', restPage: 'off', restNote: 'blank (radio off)', pages: [{ id: 'off', label: 'Off (blank)' }, { id: 'test', label: 'TEST DISPLAY (all segments)' }, ...Array.from({ length: 20 }, (_, k) => ({ id: String(k + 1).padStart(2, '0'), label: `Channel ${k + 1}` }))], description: 'The preset channel the CHAN knob selects, lit when the radio is on.', source: src },
-    { id: 'freq-display', name: 'Frequency display', type: 'display', restPage: 'off', restNote: 'blank (radio off)', pages: [{ id: 'off', label: 'Off (blank)' }, { id: 'test', label: 'TEST DISPLAY (all segments)' }, { id: '330.500', label: '330.500 (preset 1 in the before-taxi scenario)' }, { id: '360.400', label: '360.400 (as in the guide image)' }], description: 'The frequency in use: the preset channel’s in PRESET, the frequency knobs’ in MNL, 243.000 in GRD. Procedures pick what it shows.', source: src },
+    { id: 'freq-display', name: 'Frequency display', type: 'display', restPage: 'off', restNote: 'blank (radio off)', pages: [{ id: 'off', label: 'Off (blank)' }, { id: 'test', label: 'TEST DISPLAY (all segments)' }, { id: '330.500', label: '330.500 (preset 1 in the before-taxi scenario)' }, { id: '360.400', label: '360.400' }], description: 'The frequency in use: the preset channel’s in PRESET, the frequency knobs’ in MNL, 243.000 in GRD. Procedures pick what it shows.', source: src },
   ],
 };

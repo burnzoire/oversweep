@@ -112,7 +112,7 @@ export const fuel: PanelSpec = {
       id: 'air-refuel', name: 'AIR REFUEL switch', type: 'toggle', travel: 'vertical', latched: true,
       positions: [{ id: 'open', label: 'OPEN', hold: 'stable' }, { id: 'close', label: 'CLOSE', hold: 'stable' }],
       initial: 'close',
-      protections: [{ kind: 'latch', verified: false, note: 'The guide image shows a lever-lock slot in the bushing, so it is drawn as latched. It moves with a plain click; the lock is not simulated.' }],
+      protections: [{ kind: 'latch', verified: false, note: 'A lever-lock slot in the bushing marks it as a lever-lock toggle, so it is drawn as latched. It moves with a plain click; the lock is not simulated.' }],
       description: 'OPEN opens the refuelling door, depressurises the tanks for refuelling and turns on the AR floodlights; below 400 knots it also sets the FLCS gains to takeoff and landing. CLOSE reverses this.',
       source: src,
     },
