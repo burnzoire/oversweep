@@ -1,17 +1,13 @@
 ---
 import EntryCard from "../../components/EntryCard.astro";
-import CardPhoto from "../../components/card-photo/CardPhoto.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { manualEntries } from "../../data/availability";
-import { cardMedia } from "../../data/card-media";
-import { sitePath } from "../../lib/paths";
 
 // The Manual landing page explains the Manual and features a few articles. The
 // menu holds the full list; only menu leaves are pages (issue #429).
-const featured = ["module.principles-of-flight", "module.bvr-intercepts", "module.sead-dead"]
+const featured = ["module.principles-of-flight", "module.bvr-intercepts", "module.sead-dead", "procedure.dcs-f16c.engine-start", "procedure.dcs-f16c.hts"]
   .map((id) => manualEntries.find((entry) => entry.id === id))
   .filter((entry) => entry !== undefined);
-const viperMedia = cardMedia["aircraft-procedures.f-16c"];
 ---
 
 <SiteLayout title="Manual" activeSection="manual" isSectionIndex
@@ -36,11 +32,6 @@ const viperMedia = cardMedia["aircraft-procedures.f-16c"];
     <h2 id="featured-heading">Featured</h2>
     <div class="entry-grid">
       {featured.map((entry) => <EntryCard entry={entry!} headingLevel={3} compact />)}
-      <article class="entry-card compact">
-        <CardPhoto id="aircraft-procedures.f-16c" />
-        <h3 class="entry-title"><a href={sitePath("manual/aircraft-procedures/f-16c/")}>F-16C Viper</a></h3>
-        {viperMedia && <p class="entry-objective">{viperMedia.summary}</p>}
-      </article>
     </div>
   </section>
 </SiteLayout>
