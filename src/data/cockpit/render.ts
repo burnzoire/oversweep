@@ -421,7 +421,8 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
   const b = h.boresight.arm, dm = h.diamond;
   const fixed = `<path d="M${n(-b)} 0H${n(b)}M0 ${n(-b)}V${n(b)}" ${pen}/>`;
   const steerpoint = shift('steerpoint-azimuth', 'x', D, shift('steerpoint-elevation', 'y', -D, `<path d="M0 ${n(-dm)}L${n(dm)} 0L0 ${n(dm)}L${n(-dm)} 0Z" ${pen}/>`));
-  // Tapes: ticks and labels move inside windows fixed on the HUD; the index and readout box stay put (the box masks what is under it).
+  // Tapes: ticks and labels move inside windows fixed on the HUD; the index and readout box stay put. A HUD only adds light, so
+  // the box is an outline and the symbol generator leaves the tape out of it: a mask cuts the box (and a pen's width round it) out.
   const tape = (id: string, t: HudTape) => {
     const [ax, ay] = t.at, deep = 40, along = t.axis === 'y';
     const rect = (a0: number, a1: number) => along ? `M${n(-deep)} ${n(a0)}H${n(deep)}V${n(a1)}H${n(-deep)}Z` : `M${n(a0)} ${n(-deep)}H${n(a1)}V${n(deep)}H${n(a0)}Z`;
@@ -429,9 +430,11 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
     const moving = (body: string) => `<g data-shift="${id}" transform="translate(${along ? `0 ${n(value(id) * per)}` : `${n(value(id) * per)} 0`})">${body}</g>`;
     return `<clipPath id="${clip}-${id}-t"><path d="${rect(-t.window, t.window)}"/></clipPath>` +
       `<clipPath id="${clip}-${id}-l"><path clip-rule="evenodd" d="${rect(-lw, lw)}${t.labelGap ? rect(-t.labelGap, t.labelGap) : ''}"/></clipPath>` +
-      `<g data-indicator="${id}"><g transform="translate(${n(ax)} ${n(ay)})">` +
-      `<g clip-path="url(#${clip}-${id}-t)">${moving(art.ticks)}</g><g clip-path="url(#${clip}-${id}-l)">${moving(art.labels)}</g></g>` +
-      `<path d="${t.index}" ${pen}/><path d="${t.box}" stroke-width="${HUD_PEN}" fill="${PAPER}"/>` +
+      `<mask id="${clip}-${id}-m" maskUnits="userSpaceOnUse" x="-10000" y="-10000" width="20000" height="20000">` +
+      `<rect x="-10000" y="-10000" width="20000" height="20000" fill="#fff"/><path d="${t.box}" fill="#000" stroke="#000" stroke-width="${n(HUD_PEN * 3)}"/></mask>` +
+      `<g data-indicator="${id}"><g mask="url(#${clip}-${id}-m)"><g transform="translate(${n(ax)} ${n(ay)})">` +
+      `<g clip-path="url(#${clip}-${id}-t)">${moving(art.ticks)}</g><g clip-path="url(#${clip}-${id}-l)">${moving(art.labels)}</g></g></g>` +
+      `<path d="${t.index}" ${pen}/><path d="${t.box}" ${pen}/>` +
       `<g data-number="${id}">${hudText(ra.at[0], ra.at[1], formatReadout(value(id), ra.format), F, ra.anchor)}</g></g>`;
   };
   const R = h.roll, [cx, cy] = R.centre;
