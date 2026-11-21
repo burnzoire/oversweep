@@ -78,6 +78,16 @@ validated-content index by default. Add a machine-enforced publication gate when
 content tooling is implemented. AI prose remains Drafted without the evidence and independent agent review above.
 CI alone cannot establish factual correctness.
 
+Write in the site's own voice. Reader-facing text never talks about its sources
+("the guide says", "the guide does not give"): state the fact, and cite the
+pages in the evidence line or source list. Where something is assumed or
+illustrative, say so plainly (for example "drawn here as an assumption")
+without pointing at what a source leaves out (Nathan, 2026-11-21).
+
+Link glossary words and acronyms (SPI, SOI, PGM and the like) to the
+Terminology encyclopedia wherever they appear, procedures included; add any
+missing term to a terminology set rather than defining it inline.
+
 Define acronyms on first use; use consistent terminology and step numbering.
 Keep standard procedures separate from aircraft and simulator notes. Make source
 limitations and known disagreements visible beside the affected content.

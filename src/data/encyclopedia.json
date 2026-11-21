@@ -2532,6 +2532,17 @@
     "summary": "How SAMs and anti-aircraft guns guide and aim, the terrain and maneuvers that defeat them, the threat reaction and the imminent threat warning."
   },
   {
+    "id": "encyclopedia.terminology.f16c-avionics",
+    "slug": "f16c-avionics",
+    "category": "terminology",
+    "revision": 1,
+    "title": "F-16C avionics terms",
+    "designation": "DCS F-16C guide",
+    "maturity": "Drafted — not technically validated",
+    "publication": "published",
+    "summary": "The sensor of interest and system point of interest, the F-16C's hand controls and displays, and the HARM Targeting System and targeting pod words used to find and target air defence radars."
+  },
+  {
     "id": "encyclopedia.terminology.bvr",
     "slug": "bvr",
     "category": "terminology",

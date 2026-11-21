@@ -1,6 +1,7 @@
 import type { ControlDef, MfdDisplay, PanelSpec, Placement } from '../types';
 import { tracer } from '../trace.ts';
 import { hadBottom, hadPageLabels, hadPages } from './mfd-had.ts';
+import { tgpPageLabels, tgpPages } from './mfd-tgp.ts';
 
 /**
  * F-16C Multi-Function Displays (MFD), DCS: the left and right MFDs are the
@@ -91,7 +92,8 @@ const display: MfdDisplay = {
         ...hadBottom('BLANK'),
       ],
     },
-    ...hadPages.map(p => (p.id === 'had-thrt' ? { ...p, paths: [{ d: ars, c: 'cyan' as const }] } : p)),
+    ...hadPages.map(p => (p.id.startsWith('had-thrt') ? { ...p, paths: [{ d: ars, c: 'cyan' as const }] } : p)),
+    ...tgpPages,
     {
       id: 'dte', words: [
         w('ON', 184.5, 117), w('CLSD', 257.5, 117), w('LOAD', 331, 116.5), w('FCR', 404, 116.5),
@@ -217,10 +219,11 @@ function build(side: 'left' | 'right'): PanelSpec {
           { id: 'dte-2', label: 'DTE format, page 2' },
           { id: 'menu-blank', label: 'MENU format for an empty (BLANK) format slot' },
           ...Object.entries(hadPageLabels).map(([id, label]) => ({ id, label })),
+          ...Object.entries(tgpPageLabels).map(([id, label]) => ({ id, label })),
         ],
         restPage: 'off',
-        description: 'A 4 x 4 in colour LCD showing the selected format. MENU lists the formats that can be assigned to the highlighted format-select button along the bottom (OSB 12-14). The DTE format loads mission data from the data transfer cartridge: LOAD (OSB 3) loads every partition, or each partition loads on its own button (MPD, COMM, ELINT on page 1; GPS, COLR on page 2; PAGE at OSB 10 changes page). The HAD (HARM Attack Display) format shows the radars the HTS pod has located, over the route and range rings: OSB 1 DEP/CEN, OSB 3 field of view, OSB 4 THRT (threat classes in each HTS scan), OSB 5 CNTL, OSB 19/20 range scale. The display is powered by the MFD switch on the AVIONICS POWER panel.',
-        source: `${src}; ${dteSrc}; DCS F-16C guide pp. 530-539 (HAD)`,
+        description: 'A 4 x 4 in colour LCD showing the selected format. MENU lists the formats that can be assigned to the highlighted format-select button along the bottom (OSB 12-14). The DTE format loads mission data from the data transfer cartridge: LOAD (OSB 3) loads every partition, or each partition loads on its own button (MPD, COMM, ELINT on page 1; GPS, COLR on page 2; PAGE at OSB 10 changes page). The HAD (HARM Attack Display) format shows the radars the HTS pod has located, over the route and range rings: OSB 1 DEP/CEN, OSB 3 field of view, OSB 4 THRT (threat classes in each HTS scan), OSB 5 CNTL, OSB 19/20 range scale. The TGP format shows the targeting pod video and symbology: in Slave mode (large crosshairs) the pod looks at the system point of interest, with its coordinates and elevation top left. The HAD Control (CNTL) page turns the routes, lines and pre-planned threats on the HAD on or off. The display is powered by the MFD switch on the AVIONICS POWER panel.',
+        source: `${src}; ${dteSrc}; DCS F-16C guide pp. 530-539 (HAD), p. 495 (TGP)`,
       },
     ],
   };
