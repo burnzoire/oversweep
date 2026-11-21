@@ -135,6 +135,12 @@ const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => ph
     text-transform: uppercase;
   }
 
+  .briefing-copy :global(a) {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
   .briefing-copy h1 {
     font-size: clamp(2rem, 4vw, 3rem);
   }
