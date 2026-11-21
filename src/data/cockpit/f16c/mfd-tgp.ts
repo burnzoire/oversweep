@@ -38,6 +38,8 @@ const CROSS = poly([[X[0] - 98, X[1]], [X[0] - 10, X[1]]]) + poly([[X[0] + 10, X
 /** Small crosshairs: the pod in a track mode (p. 497 item 16). The guide gives no image of them here; their size is assumed. */
 const CROSS_SMALL = poly([[X[0] - 34, X[1]], [X[0] - 6, X[1]]]) + poly([[X[0] + 6, X[1]], [X[0] + 34, X[1]]]) +
   poly([[X[0], X[1] - 34], [X[0], X[1] - 6]]) + poly([[X[0], X[1] + 6], [X[0], X[1] + 34]]);
+/** Point track box about the tracked target (p. 498 image, item 27), scaled from that image to about 76 px square. */
+const TRACK_BOX = poly([[X[0] - 38, X[1] - 38], [X[0] + 38, X[1] - 38], [X[0] + 38, X[1] + 38], [X[0] - 38, X[1] + 38]], true);
 /** Field-of-view brackets (WIDE): corners at x 276/388.5, y 272.5/383.5, arms 22 px. */
 const BRACKETS = ([[276, 272.5, 1, 1], [388.5, 272.5, -1, 1], [276, 383.5, 1, -1], [388.5, 383.5, -1, -1]] as const)
   .map(([x, y, sx, sy]) => poly([[x + sx * 22, y], [x, y], [x, y + sy * 22]])).join('');
@@ -54,7 +56,7 @@ const SPI: Record<string, Spi> = {
   sa6Near: { lat: '036:32.200', lon: '037:00.740', elv: '+1442', hq: false, range: 'E17.4', meter: '450', ttg: '002:08', video: TGP_VIDEO_SA6 },
   sa11: { lat: '036:58.031', lon: '037:21.874', elv: '+1680', hq: false, range: 'E50.1', meter: '1294', ttg: '006:08', video: TGP_VIDEO_SA11 },
   sa11Near: { lat: '036:58.031', lon: '037:21.874', elv: '+1680', hq: false, range: 'E44.1', meter: '1139', ttg: '005:24', video: TGP_VIDEO_SA11 },
-  sa11Track: { lat: '036:58.044', lon: '037:21.851', elv: '+1674', hq: false, range: 'E44.0', meter: '1137', ttg: '005:24', video: TGP_VIDEO_SA11 },
+  sa11Track: { lat: '036:58.044', lon: '037:21.851', elv: '+1674', hq: false, range: 'T44.0', meter: '1137', ttg: '005:24', video: TGP_VIDEO_SA11 },
 };
 function tgp(id: string, spi: Spi, soi: boolean, track = false): Page {
   const words: Word[] = [
@@ -64,10 +66,12 @@ function tgp(id: string, spi: Spi, soi: boolean, track = false): Page {
     w('1.0X', 332.5, 144), sm('18600', 531, 144, 'end'), w('WHOT', 551.5, 186, 'end'),
     ...stack('LST', 117, 185), ...stack('MT', 117, 330.5), ...stack('NT', 547, 259.5), ...stack('SP', 547, 330.5), ...stack('CZ', 547, 402.5), ...stack('TGT', 547, 472),
     sm(spi.meter, 441.5, 313.5, 'start'), sm(spi.range, 167.5, 511, 'start'), sm(spi.ttg, 520, 492.5, 'end'),
+    // In a track mode: tracking sensor and mode (p. 499 items 28-29) under the crosshairs, placed from the p. 498 image; blank in Slave.
+    ...(track ? [sm('IR POINT', 344, 482, 'middle')] : []),
     ...hadBottom('TGP'),
   ];
   return {
-    id, words, marks: (track ? CROSS_SMALL : CROSS) + BRACKETS + NORTH, fills: NORTH_FILL, fine: soi ? FRAME : '',
+    id, words, marks: (track ? CROSS_SMALL + TRACK_BOX : CROSS) + BRACKETS + NORTH, fills: NORTH_FILL, fine: soi ? FRAME : '',
     paths: [{ d: ARS, c: 'cyan' }], ...(spi.video ? { video: spi.video } : {}),
   };
 }
