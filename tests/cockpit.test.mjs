@@ -33,7 +33,8 @@ test('every built panel models each placed control and lamp once', { skip: !canI
     }
     const svg = renderPanel(spec);
     for (const c of spec.controls) assert.equal((svg.match(new RegExp(`data-move="${c.id}"`, 'g')) ?? []).length, 1, `${spec.id}.${c.id}: one moving part`);
-    assert.doesNotMatch(svg, /<image\b/);
+    // Panel art is drawn, never raster; only a sensor display's video layer may be an image.
+    assert.doesNotMatch(svg, /<image\b(?! data-video)/);
     const zones = hitZones(spec);
     for (const z of zones) for (const v of z.box) assert.ok(Number.isFinite(v));
     for (const [w, h] of [spec.canvas]) for (const z of zones) {

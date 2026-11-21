@@ -73,6 +73,15 @@ export const cardMedia: Record<string, CardMedia> = {
       sourceUrl: 'https://commons.wikimedia.org/wiki/File:F16_HTS.jpg',
     },
   },
+  'procedure.dcs-f16c.hts-targeting': {
+    summary: 'Set up the HTS for a manual threat class, range an SA-11 from PGM 5 to PGM 2 by turning it well off the nose, and hand it to the targeting pod.',
+    photo: {
+      src: 'manual/cards/f16c-harm-pylon.webp',
+      alt: 'An AGM-88 HARM on an F-16’s wing pylon in flight, with a second F-16 beyond it over farmland.',
+      credit: 'HARM on an F-16 near Shaw AFB — SSgt Greg L. Davis, US Air Force (public domain)',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:A_view_of_the_AIM-120_Advanced_Medium_Range_Air-to-Air_Missiles_(AMRAAM),_AIM-9_Sidewinder_and_AGM-88_High-Speed_Anti-radiation_Missile_(HARM)_attached_to_the_wing_pylon_of_an_US_Ai_-_DPLA_-_e95cfeed0519d450141e807bc12fe49f.jpeg',
+    },
+  },
   'procedure.dcs-f16c.before-takeoff': {
     summary: 'The final checks at the holding point: configuration, fuel, oxygen, arming the ejection seat and the flight controls.',
     photo: {

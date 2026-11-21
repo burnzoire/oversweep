@@ -255,12 +255,16 @@ function textDisplay(d: TextDisplay, ind: IndicatorDef | undefined, id: string, 
 /** MFD glass and symbology colours, sampled off the guide's MFD images (p. 539): white text and route, magenta range rings, cyan ownship, flight members and bullseye, green/yellow/red threat states. */
 export const MFD_COLOURS = { white: '#f2f3f7', grey: '#b9bcc6', cyan: '#3cc3cf', magenta: '#b443cf', green: '#45c08e', yellow: '#efd14a', red: '#ff4a42' } as const;
 const MFD_GLASS = '#0b0c10';
+/** Teaching overlays on a display (not part of the sim's picture): orange, unlike any MFD symbology colour. */
+const MFD_AID = '#ff9a3c';
 /** Every electronic screen is drawn lit on dark glass in the sim's colours (Nathan, 2026-11-21), sampled off the guide's images: DED yellow-green (p. 544), UHF LEDs yellow (p. 262), EHSI white with cyan course and bearing pointers and a yellow heading marker (p. 230), HUD green (p. 90). */
 export const SCREEN = { glass: MFD_GLASS, ded: '#d6f46a', led: '#f2d64b', ehsi: '#f2f3f7', ehsiCyan: '#52bddd', ehsiYellow: '#efd14a', hud: '#5cf08a' } as const;
 /** A group drawing in `ink` over the glass: the shared INK/PAPER become the screen's colour and the glass. */
 const onGlass = (ink: string, body: string, paper: string = MFD_GLASS) => `<g style="--panel-ink:${ink};--panel-paper:${paper}" stroke="${ink}">${body}</g>`;
 /** The HUD's symbology is seen against a desaturated blue sky (Nathan, 2026-11-21): lighter toward the horizon. */
 const HUD_SKY = ['#3f5468', '#6f8293'] as const;
+/** Each video clip gets its own id: both MFDs carry the same pages, and a clip defined in a hidden page of the other display does not apply. */
+let videoClips = 0;
 function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, current: string) {
   const o = d.opening / 2, g = o - d.inset;
   let s = `<rect x="${n(-o)}" y="${n(-o)}" width="${n(2 * o)}" height="${n(2 * o)}" rx="${n(d.r)}" fill="${PAPER}" ${sw('heavy')}/>` +
@@ -269,17 +273,21 @@ function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, cu
   const W = MFD_COLOURS.white;
   for (const pg of ind?.pages ?? []) {
     const page = d.pages.find(q => q.id === pg.id);
-    let body = page?.fills ? `<path d="${page.fills}" fill="${W}" stroke="none"/>` : '';
+    const clip = `mfd-video-${++videoClips}`;
+    let body = page?.video ? `<clipPath id="${clip}"><rect x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" rx="${n(Math.max(0, d.r - d.inset))}"/></clipPath><image data-video href="${page.video}" x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${clip})" opacity="0.9"/>` : '';
+    if (page?.fills) body += `<path d="${page.fills}" fill="${W}" stroke="none"/>`;
     for (const p of page?.paths ?? []) if (p.fill) body += `<path d="${p.d}" fill="${MFD_COLOURS[p.c]}" stroke="none"/>`;
     for (const w of page?.words ?? []) {
-      const ink = (w.t.length - 1) * d.pitch + d.width, x0 = w.a === 'start' ? w.at[0] : w.a === 'end' ? w.at[0] - ink : w.at[0] - ink / 2;
+      const k0 = w.s ?? 1, pitch = d.pitch * k0, width = d.width * k0, cap = d.cap * k0;
+      const ink = (w.t.length - 1) * pitch + width, x0 = w.a === 'start' ? w.at[0] : w.a === 'end' ? w.at[0] - ink : w.at[0] - ink / 2;
       const y = w.at[1], colour = MFD_COLOURS[w.c ?? 'white'], fill = w.inv ? MFD_GLASS : colour;
-      if (w.inv) body += `<rect x="${n(x0 - d.pad[0])}" y="${n(y - d.cap / 2 - d.pad[1])}" width="${n(ink + 2 * d.pad[0])}" height="${n(d.cap + 2 * d.pad[1])}" fill="${colour}" stroke="none"/>`;
-      [...w.t].forEach((c, k) => { if (c !== ' ') body += displayChar(x0 + d.width / 2 + k * d.pitch, y, c, d.cap, d.width, fill); });
+      if (w.inv) body += `<rect x="${n(x0 - d.pad[0])}" y="${n(y - cap / 2 - d.pad[1])}" width="${n(ink + 2 * d.pad[0])}" height="${n(cap + 2 * d.pad[1])}" fill="${colour}" stroke="none"/>`;
+      [...w.t].forEach((c, k) => { if (c !== ' ') body += displayChar(x0 + width / 2 + k * pitch, y, c, cap, width, fill); });
     }
     if (page?.marks) body += `<path d="${page.marks}" fill="none" stroke="${W}" ${sw('medium')}/>`;
     if (page?.fine) body += `<path d="${page.fine}" fill="none" stroke="${W}" ${sw('fine')}/>`;
     for (const p of page?.paths ?? []) if (!p.fill) body += `<path d="${p.d}" fill="none" stroke="${MFD_COLOURS[p.c]}" ${sw(p.pen ?? 'medium')}/>`;
+    if (page?.aid) body += `<path data-aid d="${page.aid}" fill="none" stroke="${MFD_AID}" stroke-dasharray="1.2 0.8" ${sw('fine')}/>`;
     if (page?.cursor) body += `<g data-cursor="${id}" transform="translate(${n(page.cursor.at[0])} ${n(page.cursor.at[1])})"><path d="${page.cursor.d}" fill="none" stroke="${W}" ${sw('medium')}/></g>`;
     s += `<g data-page-of="${id}" data-page="${pg.id}"${pg.id === current ? '' : ' display="none"'}>${body}</g>`;
   }

@@ -380,11 +380,15 @@ export interface MfdDisplay {
   /** Inverse box padding round the ink (x, y). */
   pad: [x: number, y: number];
   /** Words and symbols are drawn in the sim's colours on dark glass; `c` names an `MFD_COLOURS` entry (white when left out). */
-  pages: { id: string; words: { t: string; at: Pt; a?: 'start' | 'middle' | 'end'; inv?: boolean; c?: MfdColour }[];
+  pages: { id: string; words: { t: string; at: Pt; a?: 'start' | 'middle' | 'end'; inv?: boolean; c?: MfdColour; /** Character size as a fraction of the display's (the TGP's small coordinate block). */ s?: number }[];
     /** White symbology paths (mm about the screen centre): `marks` medium lines, `fine` thin lines, `fills` solid shapes (drawn under the words). */
     marks?: string; fine?: string; fills?: string;
     /** Coloured symbology: `pen` fine or medium (default) line, or a solid `fill`. */
     paths?: { d: string; c: MfdColour; pen?: 'fine' | 'medium'; fill?: boolean }[];
+    /** Sensor video under the symbology, filling the glass (an image URL, e.g. a data URI). */
+    video?: string;
+    /** A teaching overlay that is not on the real display (bearing lines, an error ellipse): drawn dashed in orange. */
+    aid?: string;
     /** A cursor the procedure moves (`cockpit:indicate` `cursors`): white lines about its own origin, starting at `at`. */
     cursor?: { d: string; at: Pt } }[];
 }
