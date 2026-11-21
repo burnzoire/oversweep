@@ -51,7 +51,7 @@ interface Spi { lat: string; lon: string; elv: string; hq: boolean; range: strin
 const SPI: Record<string, Spi> = {
   stpt: { lat: '036:25.012', lon: '037:14.986', elv: '+1320', hq: true, range: 'E17.4', meter: '450', ttg: '002:08', video: TGP_VIDEO_STPT },
   sa6: { lat: '036:26.214', lon: '037:07.692', elv: '+1442', hq: false, range: 'E20.1', meter: '519', ttg: '002:28', video: TGP_VIDEO_SA6 },
-  sa6Near: { lat: '036:26.214', lon: '037:07.692', elv: '+1442', hq: false, range: 'E10.9', meter: '282', ttg: '001:20', video: TGP_VIDEO_SA6 },
+  sa6Near: { lat: '036:32.200', lon: '037:00.740', elv: '+1442', hq: false, range: 'E17.4', meter: '450', ttg: '002:08', video: TGP_VIDEO_SA6 },
   sa11: { lat: '036:58.031', lon: '037:21.874', elv: '+1680', hq: false, range: 'E50.1', meter: '1294', ttg: '006:08', video: TGP_VIDEO_SA11 },
   sa11Near: { lat: '036:58.031', lon: '037:21.874', elv: '+1680', hq: false, range: 'E44.1', meter: '1139', ttg: '005:24', video: TGP_VIDEO_SA11 },
   sa11Track: { lat: '036:58.044', lon: '037:21.851', elv: '+1674', hq: false, range: 'E44.0', meter: '1137', ttg: '005:24', video: TGP_VIDEO_SA11 },

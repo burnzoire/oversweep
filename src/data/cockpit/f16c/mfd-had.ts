@@ -175,6 +175,8 @@ interface HadState {
   aid?: { from: P[]; to: P; ellipse: [number, number, number] };
   /** Where the jet has flown to in the scene (default: where p. 539 has it). The wingmen fly with it. */
   pos?: P;
+  /** Pre-planned threats from the DTC (p. 531 item 11): a ring the size of the threat's engagement zone, yellow, red once inside it. */
+  ppt?: { at: P; nm: number }[];
 }
 /**
  * Range scales (p. 531 item 6): DEP 15/30/60/120/240 NM, CEN 10/20/40/80/160 NM. Depressed keeps the ownship where
@@ -246,7 +248,7 @@ function had(id: string, s: HadState): Page {
   // Fixed labels: the base page's (p. 539), or the Control page's (p. 535: PRE, TER and TBL1, NAV1-3, SAM, LINE1-4, PAGE 1).
   if (s.cntl) {
     const row = (k: number) => 188.5 + 71.4 * k;
-    words.push(w('PRE', 186, 117.5), w('TER', 258, 117.5), w('TBL1', 258, 135), w('NORM', 332.5, 117.5), w('CNTL', 478, 117.5, undefined, true));
+    words.push(w('PRE', 186, 117.5, undefined, !!s.ppt?.length), w('TER', 258, 117.5), w('TBL1', 258, 135), w('NORM', 332.5, 117.5), w('CNTL', 478, 117.5, undefined, true));
     words.push(L('NAV1', row(0), true), L('NAV2', row(1), s.cntl.nav2), L('NAV3', row(2), true), L('SAM', row(3), true), w('MEM', 112, 473.5, 'start'));
     words.push(...[1, 2, 3, 4].map(k => ({ ...R(`LINE${k}`, row(k - 1)), inv: true })), R('PAGE', 463), R('1', 481));
   } else {
@@ -282,6 +284,12 @@ function had(id: string, s: HadState): Page {
     if (!inside([x, y])) continue;
     cyan(clipCircle([x, y], 10) + poly([[x, y - 10], [x, y - 22]]));
     words.push(c(w(n, x, y), 'cyan'), c(w('20', x + alt[0] - at[0], y + alt[1] - at[1]), 'cyan'));
+  }
+  // Pre-planned threat rings (p. 531 item 11): yellow, red once the jet is inside one. Shown unless PRE is off (p. 535).
+  for (const t of s.ppt ?? []) {
+    const [px, py] = s.pos ?? OWN, inside = Math.hypot(t.at[0] - px, t.at[1] - py) < t.nm * NM;
+    const ring = clipCircle(tf(v, t.at), t.nm * NM * sc.k * v.k);
+    if (ring) paths.push({ d: ring, c: inside ? 'red' : 'yellow', pen: 'fine' });
   }
   // Threat radars in their emission-state colours (p. 531 item 7); the designated SEAD target in a highlighted box (p. 539).
   for (const th of s.threats ?? P539_THREATS) {
@@ -338,14 +346,20 @@ const thrt = thrtPage('had-thrt', [1, 2], true, '0:22');
 const SA11: P = [OWN[0] + 3 * NM, OWN[1] - 50 * NM];
 /** The turn: about 50° left puts the SA-11 well off the right side of the nose (picture swings clockwise). */
 export const TURN = 50;
-const Y6: Threat = { t: '6', at: SA6, c: 'yellow' };
+/**
+ * The advanced scenario's SA-6 sits further out than p. 539's (28 NM, 30° left of the nose), so the turn that ranges
+ * the SA-11 ends about 17 NM from it, outside its roughly 13 NM (24 km) reach.
+ */
+const SA6X: P = [OWN[0] - 14 * NM, OWN[1] - 24.2 * NM];
+const Y6: Threat = { t: '6', at: SA6X, c: 'yellow' };
 const T_START: Threat[] = [Y6, { t: '8', at: SA8, c: 'green' }];
 const T_11 = (c: MfdColour): Threat[] => [Y6, { t: '11', at: SA11, c }];
 const PGM: Record<number, [string, string]> = {
   5: ['004°  21.4NM  1.8NM', 'PGM5'], 4: ['008°  12.6NM  1.5NM', 'PGM4'],
   3: ['012°  6.2NM  1.1NM', 'PGM3'], 2: ['016°  2.3NM  2950FT', 'PGM2'],
 };
-const base = { soi: true, fov: 'NORM' as const };
+/** The briefed SA-6 is loaded as a pre-planned threat, with a ring at its missiles' reach (about 13 NM, 24 km). */
+const base = { soi: true, fov: 'NORM' as const, ppt: [{ at: SA6X, nm: 13 }] };
 /**
  * Where the jet was at each scan, for the teaching overlay. The guide gives no scan spacing; 4 NM apart is
  * illustrative. Before the turn the jet flies straight up the picture; after it, 50° left, so the earlier points trail
@@ -379,13 +393,13 @@ const hadx: Page[] = [
   had('hadx-des-aid', { ...base, threats: T_11('yellow'), nav2: false, scale: 'DEP60', designated: '11', data: PGM[5], aid: aid(0, 5) }),
   ...[5, 4, 3, 2].map(n => had(`hadx-t${n}`, { ...base, threats: T_11(n > 3 ? 'yellow' : 'red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[n], aid: aid(5 - n, n), pos: flown(5 - n) })),
   had('hadx-t11', { ...base, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[2], pos: FLOWN }),
-  had('hadx-t-des6', { ...base, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '6', data: DATA, pos: FLOWN }),
+  had('hadx-t-des6', { ...base, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '6', data: ['344°  4.6NM  3300FT', 'PGM2'], pos: FLOWN }),
   had('hadx-t-notsoi', { ...base, soi: false, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[2], pos: FLOWN }),
   had('hadx-t-tracked', { ...base, soi: false, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, pos: FLOWN }),
 ];
 /** Where things are on the advanced pages (p. 539 px), for hint rings and the cursor slew. */
 export const HADX = {
-  sa11: hadAt('DEP60', 0, SA11), sa11Turned: hadAt('DEP60', TURN, SA11, FLOWN), sa6Turned: hadAt('DEP60', TURN, SA6, FLOWN),
+  sa11: hadAt('DEP60', 0, SA11), sa11Turned: hadAt('DEP60', TURN, SA11, FLOWN), sa6Turned: hadAt('DEP60', TURN, SA6X, FLOWN), sa6At60: hadAt('DEP60', 0, SA6X),
   slew: { ...HAD_SLEW, target: local(hadAt('DEP60', 0, SA11)) },
 };
 
