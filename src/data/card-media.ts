@@ -10,7 +10,7 @@ export interface CardMedia {
 
 export const cardMedia: Record<string, CardMedia> = {
   'aircraft-procedures.f-16c': {
-    summary: 'Get to know the DCS F-16C cockpit and practise a cold-and-dark engine start.',
+    summary: 'Learn the DCS F-16C cockpit, then practise its procedures from engine start onward.',
     photo: {
       src: 'manual/cards/f16c-viper.webp',
       alt: 'An F-16C Viper banking hard with white vapour streaming over the wings.',
