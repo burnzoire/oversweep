@@ -385,6 +385,8 @@ export interface MfdDisplay {
     marks?: string; fine?: string; fills?: string;
     /** Coloured symbology: `pen` fine or medium (default) line, or a solid `fill`. */
     paths?: { d: string; c: MfdColour; pen?: 'fine' | 'medium'; fill?: boolean }[];
+    /** Sensor video under the symbology, filling the glass (an image URL, e.g. a data URI). */
+    video?: string;
     /** A cursor the procedure moves (`cockpit:indicate` `cursors`): white lines about its own origin, starting at `at`. */
     cursor?: { d: string; at: Pt } }[];
 }

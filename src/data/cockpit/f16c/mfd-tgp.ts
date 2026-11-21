@@ -1,6 +1,7 @@
 import type { MfdDisplay } from '../types';
 import { tracer } from '../trace.ts';
 import { FRAME, hadBottom } from './mfd-had.ts';
+import { TGP_VIDEO_SA11, TGP_VIDEO_SA6, TGP_VIDEO_STPT } from './tgp-video.ts';
 
 /**
  * F-16C Targeting Pod (TGP) MFD format, A-G mode, for the shared MFD (`mfd.ts`). Traced from the guide's p. 495
@@ -8,7 +9,7 @@ import { FRAME, hadBottom } from './mfd-had.ts';
  * 4.8 px/mm). It shows the pod in Slave mode (large line-of-sight crosshairs, no track mode word: p. 497 items 16,
  * 29), which is what it does when another sensor owns the system point of interest (SPI), so it is drawn that way.
  *
- * Only the symbology is drawn: the sensor video is not. The coordinate block, HQ, radar altitude, meterstick, range
+ * The sensor video is a generated still per SPI (`tgp-video.ts`), not traced from the guide. The coordinate block, HQ, radar altitude, meterstick, range
  * and time to go are drawn smaller than the format's words, as p. 495 shows them (about three quarters size).
  * Values per state are the scenario's: the SPI's position (the selected steerpoint, then the HTS-designated SA-6
  * or SA-11), slant range E (estimated) and a meterstick scaled from p. 495's (62 m at 2.4 NM) by range. The
@@ -43,11 +44,11 @@ const NORTH_FILL = poly([[407.5, 172.5], [417, 167.5], [417, 177.5]], true);
 /** Aircraft reference symbol, cyan (as on p. 495; the same symbol as the DTE page's, p. 127 item 16). */
 const ARS = poly([[114.5, 503], [114.5, 539]]) + poly([[112, 515], [122, 515], [128, 527], [133.5, 515], [139, 527], [144.5, 515], [155, 515]]);
 
-interface Spi { lat: string; lon: string; elv: string; hq: boolean; range: string; meter: string }
+interface Spi { lat: string; lon: string; elv: string; hq: boolean; range: string; meter: string; video?: string }
 const SPI: Record<string, Spi> = {
-  stpt: { lat: '036:25.012', lon: '037:14.986', elv: '+1320', hq: true, range: 'E17.4', meter: '450' },
-  sa6: { lat: '036:26.214', lon: '037:07.692', elv: '+1442', hq: false, range: 'E20.1', meter: '519' },
-  sa11: { lat: '036:58.031', lon: '037:21.874', elv: '+1680', hq: false, range: 'E50.1', meter: '1294' },
+  stpt: { lat: '036:25.012', lon: '037:14.986', elv: '+1320', hq: true, range: 'E17.4', meter: '450', video: TGP_VIDEO_STPT },
+  sa6: { lat: '036:26.214', lon: '037:07.692', elv: '+1442', hq: false, range: 'E20.1', meter: '519', video: TGP_VIDEO_SA6 },
+  sa11: { lat: '036:58.031', lon: '037:21.874', elv: '+1680', hq: false, range: 'E50.1', meter: '1294', video: TGP_VIDEO_SA11 },
 };
 function tgp(id: string, spi: Spi, soi: boolean): Page {
   const words: Word[] = [
@@ -61,7 +62,7 @@ function tgp(id: string, spi: Spi, soi: boolean): Page {
   ];
   return {
     id, words, marks: CROSS + BRACKETS + NORTH, fills: NORTH_FILL, fine: soi ? FRAME : '',
-    paths: [{ d: ARS, c: 'cyan' }],
+    paths: [{ d: ARS, c: 'cyan' }], ...(spi.video ? { video: spi.video } : {}),
   };
 }
 export const tgpPages: Page[] = [
