@@ -86,6 +86,12 @@ const SA6: P = [254, 253], SA8: P = [428.3, 470];
 /** Flight members 2 and 3 (PPLI circles, heading stalk, altitude in thousands of feet below). */
 const MEMBERS: [string, P, P][] = [['2', [290.7, 445], [290.5, 470]], ['3', [380, 453.3], [379.3, 477.3]]];
 
+/**
+ * A hint ring round part of the HAD: a box in p. 539 pixels as `#x0 y0 x1 y1` in the page's own units,
+ * appended to `right-mfd.display` in a procedure step's hints.
+ */
+export const hadSpot = (x0: number, y0: number, x1: number, y1: number) => `#${[x0 - SC[0], y0 - SC[1], x1 - SC[0], y1 - SC[1]].map(v => f(mm(v))).join(' ')}`;
+
 interface View { k: number; about: P; to: P }
 const NORM: View = { k: 1, about: [0, 0], to: [0, 0] };
 const tf = (v: View, [x, y]: P): P => [v.to[0] + v.k * (x - v.about[0]), v.to[1] + v.k * (y - v.about[1])];

@@ -76,7 +76,8 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     progress.textContent = `Step ${step + 1} of ${cfg.steps.length}`;
     previous.disabled = step === 0 && !finished;
     one<HTMLElement>('[data-controls]').hidden = false;
-    confirm.hidden = finished || !s.confirm;
+    // The button names what the reader checks; it shows once the step's moves are made.
+    confirm.hidden = finished || !s.confirm || moves(s).length > 0;
     restart.hidden = !finished;
     confirm.textContent = s.confirm ?? 'Confirm';
     confirm.disabled = false;
@@ -101,7 +102,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
 
   /** Every move is made: show the result and wait for the reader to confirm it. */
   function done(text = 'Done.') {
-    confirm.textContent = 'Indications checked';
+    confirm.textContent = cfg.steps[step].confirm ?? 'Continue';
     confirm.disabled = false;
     confirm.hidden = false;
     say(`${text} Check the indications, then continue.`);
@@ -115,14 +116,21 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     if (st.pod > 0) warmUp();
   }
 
-  /** The pod's warm-up: the step that powers it waits for it before moving on. */
+  /** The pod's warm-up: the step that powers it counts the wait down on its button, then lets the reader on. */
   function warmUp() {
     const wait = stepId() === 'pod-power';
-    if (wait) { confirm.hidden = false; confirm.disabled = true; confirm.textContent = 'Indications checked'; say('Pod initializing: about 30 seconds in the jet, a few seconds here.'); }
-    later(POD_MS, () => {
-      st.pod = 0;
-      if (wait) { confirm.disabled = false; say('The pod is ready. Continue.'); }
-    });
+    if (wait) { confirm.hidden = false; confirm.disabled = true; say('Pod initializing: about 30 seconds in the jet, a few seconds here.'); }
+    const tick = () => {
+      // Shown in the jet's seconds (30), counted down in the compressed time.
+      if (wait) confirm.textContent = `Initializing… ${Math.ceil((st.pod / POD_MS) * 30)} s`;
+      if (st.pod <= 0) {
+        if (wait) { confirm.disabled = false; confirm.textContent = cfg.steps[step].confirm ?? 'Continue'; say('The 30 seconds are up: the pod has initialized. Continue.'); }
+        return;
+      }
+      const step5 = POD_MS / 6;
+      later(Math.min(step5, st.pod), () => { st.pod = Math.max(0, st.pod - step5); tick(); });
+    };
+    tick();
   }
 
   function acted(w: StepDo) {
