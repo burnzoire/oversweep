@@ -36,12 +36,10 @@ const subjectNode = (spec: SubjectSpec): MenuNode => {
   const subject = manualSubjects.find(s => s.slug === spec.subject)!;
   const entries = subjectEntries(spec.subject).filter(e => (!spec.only || spec.only.includes(e.id)) && !spec.skip?.includes(e.id));
   const children = entries.map(e => ({ id: e.id, title: e.title, href: e.href }));
-  const whole = !spec.only && !spec.skip;
   return {
     id: `subject-${spec.subject}-${spec.title ? slugify(spec.title) : 'all'}`,
     title: spec.title ?? subject.title,
     summary: spec.summary,
-    href: whole && children.length ? `manual/${subject.slug}/` : undefined,
     planned: children.length === 0,
     children,
   };
@@ -79,13 +77,16 @@ const proc = (slug: string, fallback?: string): MenuNode => {
 
 const buildF16c = (): MenuNode => {
 const cockpit = cockpits[0];
-const cockpitNode = group('f16c-cockpit', 'Cockpit', cockpit.areas.map(area => group(`cockpit-${area.id}`, area.title, area.panels.map(panel => (panel.spec
-  ? { id: `panel-${panel.id}`, title: panel.title, href: panelRoute(cockpit, panel.id) }
-  : plan(panel.title))))), cockpitRoute(cockpit), 'Every panel, by where it sits in the cockpit.');
+const cockpitNode = group('f16c-cockpit', 'Cockpit', [
+  { id: 'cockpit-overview', title: 'Overview', href: cockpitRoute(cockpit), summary: 'Every panel, by where it sits in the cockpit.' },
+  ...cockpit.areas.map(area => group(`cockpit-${area.id}`, area.title, area.panels.map(panel => (panel.spec
+    ? { id: `panel-${panel.id}`, title: panel.title, href: panelRoute(cockpit, panel.id) }
+    : plan(panel.title))))),
+]);
 
 const systems = group('f16c-systems', 'Systems', [
   cockpitNode,
-  { ...proc('hts'), title: 'HARM Targeting System (HTS)', summary: 'Find and rank enemy radars on the HAD page and hand them to the HARM.', children: [proc('hts-targeting'), plan('TDOA')] },
+  group('f16c-hts', 'HARM Targeting System (HTS)', [{ ...proc('hts'), title: 'Overview', summary: 'Find and rank enemy radars on the HAD page and hand them to the HARM.' }, proc('hts-targeting'), plan('TDOA')]),
   plan('TGP / Sniper pod'),
   plan('Radar (APG-68)', ['RWS: range while search', 'TWS: track while scan', 'Single target track', 'ACM modes', 'Ground map, expand and DBS', 'Ground moving target', 'Sea mode']),
   plan('Fire control and SMS'),
@@ -132,7 +133,7 @@ const weapons = group('f16c-weapons', 'Weapons and tactics', [
   group('weapons-self-protection', 'Self-protection', [plan('Chaff and flares', ['Manual and programmed dispense']), plan('ECM pod', ['Mode selection'])]),
 ]);
 
-return group('f16c', 'F-16C Viper', [systems, ...phases, emergency, weapons], F16C_HREF, 'Cockpit, systems, procedures and weapons for the DCS F-16C Block 50.');
+return group('f16c', 'F-16C Viper', [{ id: 'f16c-overview', title: 'Overview', href: F16C_HREF, summary: 'The Viper, and where to start.' }, systems, ...phases, emergency, weapons]);
 };
 
 // ---- Aircraft registry --------------------------------------------------------

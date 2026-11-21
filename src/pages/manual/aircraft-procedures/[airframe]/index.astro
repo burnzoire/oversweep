@@ -26,7 +26,10 @@ const chain = (guide: AircraftProcedure): AircraftProcedure[] => {
 const guides = own.filter(guide => !own.some(g => g.next === guide.slug)).flatMap(chain);
 const isViper = airframe.slug === 'f-16c';
 // An airframe in the menu shows its parts here, mirroring the menu; others list their lessons.
-const menuNode = manualMenu.find(n => n.id === 'area-aircraft')?.children?.find(n => n.href === `manual/aircraft-procedures/${airframe.slug}/`);
+const hubHref = `manual/aircraft-procedures/${airframe.slug}/`;
+const airframeNode = manualMenu.find(n => n.id === 'area-aircraft')?.children?.find(n => n.children?.some(c => c.href === hubHref));
+// This page is the airframe's Overview leaf, so the cards leave it out.
+const menuNode = airframeNode && { ...airframeNode, children: airframeNode.children!.filter(c => c.href !== hubHref) };
 const hero = cardMedia[`aircraft-procedures.${airframe.slug}`]?.photo;
 const lessons = [
   ...(cockpit ? [{

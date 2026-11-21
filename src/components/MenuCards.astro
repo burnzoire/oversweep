@@ -8,7 +8,11 @@ import type { MenuNode } from "../data/manual-menu";
 // its own items, so groups never need pages. Unwritten items are grey.
 interface Props { node: MenuNode; level?: 2 | 3 }
 const { node, level = 2 } = Astro.props;
-const isGroup = (n: MenuNode) => !n.href && !n.planned && (n.children?.length ?? 0) > 0;
+// A group's explanatory page is its "Overview" leaf; a group that has one shows as a card for it.
+const overview = (n: MenuNode) => n.children?.find((c) => c.id.endsWith("overview") && c.href && !c.planned);
+const isGroup = (n: MenuNode) => !n.href && !n.planned && (n.children?.length ?? 0) > 0 && !overview(n);
+const target = (n: MenuNode) => (n.href && !n.planned ? n.href : overview(n)?.href);
+const blurb = (n: MenuNode) => n.summary ?? overview(n)?.summary;
 // Keep the menu's order: runs of cards share a grid, each group is its own row.
 type Segment = { cards: MenuNode[] } | { group: MenuNode };
 const segments = (node.children ?? []).reduce<Segment[]>((acc, c) => {
@@ -28,8 +32,8 @@ const Heading = (level === 2 ? "h2" : "h3") as "h2" | "h3";
   <div class="entry-grid menu-cards">
     {seg.cards.map((c) => (
       <article class:list={["entry-card", "compact", { "card-unwritten": c.planned }]}>
-        <h3 class="entry-title">{c.href && !c.planned ? <a href={sitePath(c.href)}>{c.title}</a> : <span>{c.title}</span>}</h3>
-        {c.summary && <p class="entry-objective">{c.summary}</p>}
+        <h3 class="entry-title">{target(c) ? <a href={sitePath(target(c)!)}>{c.title}</a> : <span>{c.title}</span>}</h3>
+        {blurb(c) && <p class="entry-objective">{blurb(c)}</p>}
         {c.planned && <p class="entry-objective">Not written yet.</p>}
       </article>
     ))}
