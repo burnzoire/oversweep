@@ -258,7 +258,9 @@ const MFD_GLASS = '#0b0c10';
 /** Every electronic screen is drawn lit on dark glass in the sim's colours (Nathan, 2026-11-21), sampled off the guide's images: DED yellow-green (p. 544), UHF LEDs yellow (p. 262), EHSI white with cyan course and bearing pointers and a yellow heading marker (p. 230), HUD green (p. 90). */
 export const SCREEN = { glass: MFD_GLASS, ded: '#d6f46a', led: '#f2d64b', ehsi: '#f2f3f7', ehsiCyan: '#52bddd', ehsiYellow: '#efd14a', hud: '#5cf08a' } as const;
 /** A group drawing in `ink` over the glass: the shared INK/PAPER become the screen's colour and the glass. */
-const onGlass = (ink: string, body: string) => `<g style="--panel-ink:${ink};--panel-paper:${MFD_GLASS}" stroke="${ink}">${body}</g>`;
+const onGlass = (ink: string, body: string, paper: string = MFD_GLASS) => `<g style="--panel-ink:${ink};--panel-paper:${paper}" stroke="${ink}">${body}</g>`;
+/** The HUD's symbology is seen against a desaturated blue sky (Nathan, 2026-11-21): lighter toward the horizon. */
+const HUD_SKY = ['#3f5468', '#6f8293'] as const;
 function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, current: string) {
   const o = d.opening / 2, g = o - d.inset;
   let s = `<rect x="${n(-o)}" y="${n(-o)}" width="${n(2 * o)}" height="${n(2 * o)}" rx="${n(d.r)}" fill="${PAPER}" ${sw('heavy')}/>` +
@@ -614,7 +616,9 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
       const ind = (id: string) => spec.indicators.find(i => i.id === id);
       const value = (id: string) => state[id] !== undefined ? Number(state[id]) : ind(id)?.rest ?? 0;
       const pageOf = (id: string) => state[id] ?? ind(id)?.restPage ?? ind(id)?.pages?.[0]?.id ?? '';
-      return at(p.at, `<path d="${p.hud.glass}" fill="${MFD_GLASS}" stroke="none"/><g data-indicator="screen"><path class="lens" d="${p.hud.glass}" stroke="none"/></g>` + onGlass(SCREEN.hud, hud(spec, p.hud, value, pageOf)), ' data-art="hud"');
+      const sky = `hud-sky-${spec.id}`;
+      return at(p.at, `<linearGradient id="${sky}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${HUD_SKY[0]}"/><stop offset="1" stop-color="${HUD_SKY[1]}"/></linearGradient>` +
+        `<path d="${p.hud.glass}" fill="url(#${sky})" stroke="none"/><g data-indicator="screen"><path class="lens" d="${p.hud.glass}" stroke="none"/></g>` + onGlass(SCREEN.hud, hud(spec, p.hud, value, pageOf), HUD_SKY[0]), ' data-art="hud"');
     }
     case 'attitude': {
       const ind = (id: string) => spec.indicators.find(i => i.id === id);

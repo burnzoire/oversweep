@@ -266,7 +266,7 @@ Worked examples: F-16C `ded.ts`, `ehsi.ts`, `icp.ts`.
 - **Every electronic screen is lit on dark glass in the sim's colours (Nathan,
   2026-11-21)**, sampled off the guide: MFDs in full colour (`MFD_COLOURS` in
   render.ts; word `c`, page `paths`), DED yellow-green, UHF LEDs yellow, EHSI
-  white with cyan course and bearing pointers, HUD green (`SCREEN` in
+  white with cyan course and bearing pointers, HUD green over a desaturated blue sky (`SCREEN`, `HUD_SKY` in
   render.ts). The rest of the panel stays black on white. Lesson figures that
   show a screen (the generic RWR scope) follow the same rule.
 
