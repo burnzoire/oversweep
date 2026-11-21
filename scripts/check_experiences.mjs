@@ -50,7 +50,7 @@ export async function checkExperiences({ dist, experiences, review = false, base
     const pages = {
       wrapper: await read(`${route(e)}index.html`),
       frame: await read(`${frame(e)}index.html`),
-      "Manual landing page": await read("manual/index.html"),
+      "Manual menu": await read("manual/index.html"),
       "Training Library": await read("training/index.html"),
     };
     for (const [name, html] of Object.entries(pages)) {
@@ -60,13 +60,15 @@ export async function checkExperiences({ dist, experiences, review = false, base
         continue;
       }
       if (html === null) { problems.push(`${e.id}: ${name} page is missing.`); continue; }
+      // The menu only links an experience; its card and revision live on its own page and the Training Library.
+      if (name === "Manual menu") continue;
       if (!html.includes(marker) || !html.includes(revision))
         problems.push(`${e.id}: ${name} lacks the registered id or revision ${e.revision}.`);
       if (html.includes(e.maturity))
         problems.push(`${e.id}: ${name} shows the internal maturity label "${e.maturity}".`);
     }
     const href = `href="${base}/${route(e)}"`;
-    for (const name of (unlisted ? [] : ["Manual landing page", "Training Library"]))
+    for (const name of (unlisted ? [] : ["Manual menu", "Training Library"]))
       if (pages[name] && !pages[name].includes(href)) problems.push(`${e.id}: ${name} does not link to ${base}/${route(e)}.`);
     // Window-only experiences must be linked in a new window and never framed.
     if (unlisted && pages.frame && !pages.frame.includes('name="robots" content="noindex,nofollow"')) problems.push(`${e.id}: unlisted frame lacks noindex.`);
