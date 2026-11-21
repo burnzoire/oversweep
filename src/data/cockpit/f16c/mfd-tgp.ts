@@ -51,8 +51,10 @@ interface Spi { lat: string; lon: string; elv: string; hq: boolean; range: strin
 const SPI: Record<string, Spi> = {
   stpt: { lat: '036:25.012', lon: '037:14.986', elv: '+1320', hq: true, range: 'E17.4', meter: '450', ttg: '002:08', video: TGP_VIDEO_STPT },
   sa6: { lat: '036:26.214', lon: '037:07.692', elv: '+1442', hq: false, range: 'E20.1', meter: '519', ttg: '002:28', video: TGP_VIDEO_SA6 },
+  sa6Near: { lat: '036:26.214', lon: '037:07.692', elv: '+1442', hq: false, range: 'E10.9', meter: '282', ttg: '001:20', video: TGP_VIDEO_SA6 },
   sa11: { lat: '036:58.031', lon: '037:21.874', elv: '+1680', hq: false, range: 'E50.1', meter: '1294', ttg: '006:08', video: TGP_VIDEO_SA11 },
-  sa11Track: { lat: '036:58.044', lon: '037:21.851', elv: '+1674', hq: false, range: 'E50.0', meter: '1291', ttg: '006:08', video: TGP_VIDEO_SA11 },
+  sa11Near: { lat: '036:58.031', lon: '037:21.874', elv: '+1680', hq: false, range: 'E44.1', meter: '1139', ttg: '005:24', video: TGP_VIDEO_SA11 },
+  sa11Track: { lat: '036:58.044', lon: '037:21.851', elv: '+1674', hq: false, range: 'E44.0', meter: '1137', ttg: '005:24', video: TGP_VIDEO_SA11 },
 };
 function tgp(id: string, spi: Spi, soi: boolean, track = false): Page {
   const words: Word[] = [
@@ -71,13 +73,15 @@ function tgp(id: string, spi: Spi, soi: boolean, track = false): Page {
 }
 export const tgpPages: Page[] = [
   tgp('tgp', SPI.stpt, false), tgp('tgp-soi', SPI.stpt, true),
-  tgp('tgp-sa6', SPI.sa6, false), tgp('tgp-sa11', SPI.sa11, false), tgp('tgp-sa11-soi', SPI.sa11, true), tgp('tgp-sa11-track', SPI.sa11Track, true, true),
+  tgp('tgp-sa6', SPI.sa6, false), tgp('tgp-sa6-near', SPI.sa6Near, false), tgp('tgp-sa11', SPI.sa11, false), tgp('tgp-sa11-near', SPI.sa11Near, false), tgp('tgp-sa11-soi', SPI.sa11Near, true), tgp('tgp-sa11-track', SPI.sa11Track, true, true),
 ];
 export const tgpPageLabels: Record<string, string> = {
   tgp: 'TGP format: Slave, on the selected steerpoint',
   'tgp-soi': 'TGP format, SOI: Slave, on the selected steerpoint',
   'tgp-sa6': 'TGP format: slaved to the HTS-designated SA-6',
+  'tgp-sa6-near': 'TGP format: slaved to the SA-6, after the turn',
   'tgp-sa11': 'TGP format: slaved to the HTS-designated SA-11',
+  'tgp-sa11-near': 'TGP format: slaved to the SA-11, after the turn',
   'tgp-sa11-soi': 'TGP format, SOI: slaved to the SA-11',
   'tgp-sa11-track': 'TGP format, SOI: Point track on the SA-11 site, the pod owns the SPI',
 };

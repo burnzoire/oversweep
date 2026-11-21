@@ -99,10 +99,10 @@ const NORM: View = { k: 1, about: [0, 0], to: [0, 0] };
  * and how many px per NM (`Geo`), a turn swings the picture about the ownship (heading up: a turn left moves
  * everything clockwise), then an Expand view (`View`) enlarges about the cursor.
  */
-interface Geo { own: P; k: number; rot: number }
+interface Geo { own: P; k: number; rot: number; /** Where the jet is in the scene (it flies on after the turn). */ pos?: P }
 const GEO30: Geo = { own: OWN, k: 1, rot: 0 };
 const geoPt = (g: Geo, [x, y]: P): P => {
-  const a = (g.rot * Math.PI) / 180, dx = (x - OWN[0]) * g.k, dy = (y - OWN[1]) * g.k;
+  const [px, py] = g.pos ?? OWN, a = (g.rot * Math.PI) / 180, dx = (x - px) * g.k, dy = (y - py) * g.k;
   return [g.own[0] + dx * Math.cos(a) - dy * Math.sin(a), g.own[1] + dx * Math.sin(a) + dy * Math.cos(a)];
 };
 let GEO: Geo = GEO30;
@@ -173,6 +173,8 @@ interface HadState {
    * points) and the error ellipse they leave (`at`, major-axis bearing in degrees, major and minor axes in NM).
    */
   aid?: { from: P[]; to: P; ellipse: [number, number, number] };
+  /** Where the jet has flown to in the scene (default: where p. 539 has it). The wingmen fly with it. */
+  pos?: P;
 }
 /**
  * Range scales (p. 531 item 6): DEP 15/30/60/120/240 NM, CEN 10/20/40/80/160 NM. Depressed keeps the ownship where
@@ -232,7 +234,7 @@ function aidMarks(a: NonNullable<HadState['aid']>, v: View) {
 }
 function had(id: string, s: HadState): Page {
   const sc = SCALES[s.scale ?? 'DEP30'];
-  GEO = { own: sc.own, k: sc.k, rot: s.rot ?? 0 };
+  GEO = { own: sc.own, k: sc.k, rot: s.rot ?? 0, pos: s.pos };
   const exp = s.fov !== 'NORM';
   // The cursor sits on a scene point (`cursor`) or in the middle of the format.
   const cur: P = s.cursor ? geoPt(GEO, s.cursor) : [329.5, 330];
@@ -271,9 +273,11 @@ function had(id: string, s: HadState): Page {
     if (!route2 || nav2) fills += m.fill;
   }
   if (grey) paths.push({ d: grey, c: 'grey', pen: 'fine' });
-  const [ox, oy] = tf(v, OWN);
+  const [ox, oy] = tf(v, s.pos ?? OWN);
   if (inside([ox, oy])) cyan(poly([[ox, oy - 5], [ox, oy + 22]]) + poly([[ox - 12, oy], [ox + 11, oy]]) + poly([[ox - 4.5, oy + 18], [ox + 4.5, oy + 18]]));
-  for (const [n, at, alt] of MEMBERS) {
+  const fly = (q: P): P => (s.pos ? [q[0] + s.pos[0] - OWN[0], q[1] + s.pos[1] - OWN[1]] : q);
+  for (const [n, at0, alt0] of MEMBERS) {
+    const at = fly(at0), alt = fly(alt0);
     const [x, y] = tf(v, at);
     if (!inside([x, y])) continue;
     cyan(clipCircle([x, y], 10) + poly([[x, y - 10], [x, y - 22]]));
@@ -294,8 +298,8 @@ function had(id: string, s: HadState): Page {
   return page;
 }
 /** Where a scene point is drawn at a scale and turn (for cursor positions and hint rings). */
-export const hadAt = (scale: keyof typeof SCALES, rot: number, p: P): P => {
-  GEO = { own: SCALES[scale].own, k: SCALES[scale].k, rot };
+export const hadAt = (scale: keyof typeof SCALES, rot: number, p: P, pos?: P): P => {
+  GEO = { own: SCALES[scale].own, k: SCALES[scale].k, rot, pos };
   const q = tf(NORM, p);
   GEO = GEO30;
   return [f(q[0]), f(q[1])];
@@ -338,23 +342,27 @@ const Y6: Threat = { t: '6', at: SA6, c: 'yellow' };
 const T_START: Threat[] = [Y6, { t: '8', at: SA8, c: 'green' }];
 const T_11 = (c: MfdColour): Threat[] => [Y6, { t: '11', at: SA11, c }];
 const PGM: Record<number, [string, string]> = {
-  5: ['004°  21.4NM  1.8NM', 'PGM5'], 4: ['006°  12.6NM  1.5NM', 'PGM4'],
-  3: ['008°  6.2NM  1.1NM', 'PGM3'], 2: ['010°  2.3NM  2950FT', 'PGM2'],
+  5: ['004°  21.4NM  1.8NM', 'PGM5'], 4: ['008°  12.6NM  1.5NM', 'PGM4'],
+  3: ['012°  6.2NM  1.1NM', 'PGM3'], 2: ['016°  2.3NM  2950FT', 'PGM2'],
 };
 const base = { soi: true, fov: 'NORM' as const };
 /**
  * Where the jet was at each scan, for the teaching overlay. The guide gives no scan spacing; 4 NM apart is
  * illustrative. Before the turn the jet flies straight up the picture; after it, 50° left, so the earlier points trail
- * behind on the new heading and, beyond the turn point, back down the old one.
+ * behind on the new heading and, beyond the turn point, back down the old one. The jet flies on after the turn, so
+ * the picture moves under it scan by scan.
  */
 const STEP = 4 * NM, HDG: P = [-Math.sin((TURN * Math.PI) / 180), -Math.cos((TURN * Math.PI) / 180)];
-const track = (after: number): P[] => {
-  const turnAt: P = [OWN[0] - after * STEP * HDG[0], OWN[1] - after * STEP * HDG[1]];
-  const since = Array.from({ length: after }, (_, j): P => [OWN[0] - j * STEP * HDG[0], OWN[1] - j * STEP * HDG[1]]);
-  return [...since, ...[0, 1, 2, 3].map((j): P => [turnAt[0], turnAt[1] + j * STEP])];
-};
+/** Where the jet is `n` drawn scans after the turn: flying on along the new heading from the turn point. */
+const flown = (n: number): P => [OWN[0] + n * STEP * HDG[0], OWN[1] + n * STEP * HDG[1]];
+const track = (after: number): P[] => [
+  ...Array.from({ length: after + 1 }, (_, j) => flown(after - j)),
+  ...[1, 2, 3].map((j): P => [OWN[0], OWN[1] + j * STEP]),
+];
 /** The ellipse each PGM page's data describes: major-axis bearing (deg), major and minor axes (NM). */
-const ELLIPSE: Record<number, [number, number, number]> = { 5: [4, 21.4, 1.8], 4: [6, 12.6, 1.5], 3: [8, 6.2, 1.1], 2: [10, 2.3, 2950 / 6076] };
+const ELLIPSE: Record<number, [number, number, number]> = { 5: [4, 21.4, 1.8], 4: [8, 12.6, 1.5], 3: [12, 6.2, 1.1], 2: [16, 2.3, 2950 / 6076] };
+/** Where the jet is once the scans are done. */
+const FLOWN = flown(3);
 const aid = (after: number, n: number) => ({ from: track(after), to: SA11, ellipse: ELLIPSE[n] });
 const hadx: Page[] = [
   had('hadx', { ...base, threats: T_START }),
@@ -369,15 +377,15 @@ const hadx: Page[] = [
   had('hadx-60-hover', { ...base, threats: T_11('yellow'), nav2: false, scale: 'DEP60', cursor: SA11, data: PGM[5] }),
   had('hadx-des', { ...base, threats: T_11('yellow'), nav2: false, scale: 'DEP60', designated: '11', data: PGM[5] }),
   had('hadx-des-aid', { ...base, threats: T_11('yellow'), nav2: false, scale: 'DEP60', designated: '11', data: PGM[5], aid: aid(0, 5) }),
-  ...[5, 4, 3, 2].map(n => had(`hadx-t${n}`, { ...base, threats: T_11(n > 3 ? 'yellow' : 'red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[n], aid: aid(5 - n, n) })),
-  had('hadx-t11', { ...base, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[2] }),
-  had('hadx-t-des6', { ...base, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '6', data: DATA }),
-  had('hadx-t-notsoi', { ...base, soi: false, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[2] }),
-  had('hadx-t-tracked', { ...base, soi: false, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN }),
+  ...[5, 4, 3, 2].map(n => had(`hadx-t${n}`, { ...base, threats: T_11(n > 3 ? 'yellow' : 'red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[n], aid: aid(5 - n, n), pos: flown(5 - n) })),
+  had('hadx-t11', { ...base, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[2], pos: FLOWN }),
+  had('hadx-t-des6', { ...base, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '6', data: DATA, pos: FLOWN }),
+  had('hadx-t-notsoi', { ...base, soi: false, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[2], pos: FLOWN }),
+  had('hadx-t-tracked', { ...base, soi: false, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, pos: FLOWN }),
 ];
 /** Where things are on the advanced pages (p. 539 px), for hint rings and the cursor slew. */
 export const HADX = {
-  sa11: hadAt('DEP60', 0, SA11), sa11Turned: hadAt('DEP60', TURN, SA11), sa6Turned: hadAt('DEP60', TURN, SA6),
+  sa11: hadAt('DEP60', 0, SA11), sa11Turned: hadAt('DEP60', TURN, SA11, FLOWN), sa6Turned: hadAt('DEP60', TURN, SA6, FLOWN),
   slew: { ...HAD_SLEW, target: local(hadAt('DEP60', 0, SA11)) },
 };
 

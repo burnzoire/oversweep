@@ -54,7 +54,7 @@ const SCENARIOS: Record<string, Scenario> = {
       thrt: { mfd: 'had-thrt' }, 'class-1': { mfd: 'had-thrt-c1' }, 'class-2': { mfd: 'had-thrt-man' }, 'thrt-back': { mfd: 'hadx' },
       cntl: { mfd: 'hadx-cntl' }, nav2: { mfd: 'hadx-cntl-nav2' }, 'cntl-back': { mfd: 'hadx-n' },
       range: { mfd: 'hadx-60' }, cen: { mfd: 'hadx-cen' }, dep: { mfd: 'hadx-60' },
-      designate: { mfd: 'hadx-des', left: 'tgp-sa11' }, 'step-6': { mfd: 'hadx-t-des6', left: 'tgp-sa6' }, 'step-11': { mfd: 'hadx-t11', left: 'tgp-sa11' },
+      designate: { mfd: 'hadx-des', left: 'tgp-sa11' }, 'step-6': { mfd: 'hadx-t-des6', left: 'tgp-sa6-near' }, 'step-11': { mfd: 'hadx-t11', left: 'tgp-sa11-near' },
       'tgp-soi': { mfd: 'hadx-t-notsoi', left: 'tgp-sa11-soi' },
       track: { mfd: 'hadx-t-tracked', left: 'tgp-sa11-track' },
     },

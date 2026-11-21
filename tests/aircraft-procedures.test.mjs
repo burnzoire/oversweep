@@ -152,3 +152,12 @@ test('procedure text speaks in its own voice, never about "the guide"', async ()
     for (const m of text.matchAll(new RegExp(`${field}: ?'((?:[^'\\\\]|\\\\.)*)'`, 'g'))) assert.doesNotMatch(m[1], /\bthe guide\b/i, `${field}: ${m[1].slice(0, 80)}`);
   }
 });
+
+test('link markup only appears in fields the page renders as rich text', async () => {
+  const text = await readFile(new URL('../src/data/aircraft-procedures.ts', import.meta.url), 'utf8');
+  for (const field of ['title', 'control', 'confirm', 'section', 'description']) {
+    for (const m of text.matchAll(new RegExp(`\\b${field}: ?'((?:[^'\\\\]|\\\\.)*)'`, 'g'))) assert.doesNotMatch(m[1], /\]\((term|record):/, `${field}: ${m[1].slice(0, 80)}`);
+  }
+  const page = await readFile(new URL('../src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro', import.meta.url), 'utf8');
+  for (const field of ['intro', 'complete', 'action', 'expect', 'caution']) assert.match(page, new RegExp(`rich\\((guide|s)\\.${field}\\)`), field);
+});
