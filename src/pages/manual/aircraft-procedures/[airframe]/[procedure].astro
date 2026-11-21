@@ -5,6 +5,7 @@ import {visibleProcedures, procedureRoute, sourceUrl, type AircraftProcedure} fr
 import {cockpits, builtPanels, panelRoute} from '../../../../data/cockpit/f16c/index.ts';
 import {sitePath} from '../../../../lib/paths';
 import {includedRecords, recordRoute} from '../../../../data/encyclopedia';
+import {termTarget, recordTarget, termMarkup} from '../../../../data/links';
 export function getStaticPaths() {
   return visibleProcedures.map(p=>({params:{airframe:p.airframe,procedure:p.slug},props:{guide:p}}));
 }
@@ -39,14 +40,24 @@ const esc = (t:string) => t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/
 // `[text](record:slug#anchor)` becomes a link to an Encyclopedia record (a reference table, say).
 const rich = (t:string) => esc(t)
   .replace(/\{\{(.+?)\|(\d+)\}\}/g, (_m, text, k) => `<button type="button" class="hint-link" data-hint="${k}">${text}</button>`)
-  .replace(/\[([^\]]+)\]\(record:([a-z0-9-]+)(?:#([a-z0-9-]+))?\)/g, (_m, text, slug, anchor) => `<a href="${recordLink({slug, anchor})}">${text}</a>`);
+  .replace(/\[([^\]]+)\]\(record:([a-z0-9-]+)(?:#([a-z0-9-]+))?\)/g, (_m, text, slug, anchor) => {
+    // A record named in passing gets the glossary-style link and preview; a link into a table goes straight there.
+    const target = anchor ? undefined : recordTarget(slug);
+    return target ? termMarkup(target, text) : `<a href="${recordLink({slug, anchor})}">${text}</a>`;
+  })
+  // `[word](term:slug)` (or `term:` alone, taking the word) links a glossary term, with its preview.
+  .replace(/\[([^\]]+)\]\(term:([a-z0-9-]*)\)/g, (_m, text, slug) => {
+    const target = termTarget(slug || text);
+    if (!target) throw new Error(`${guide.id}: no glossary entry "${slug || text}"`);
+    return termMarkup(target, text);
+  });
 const shortTitle = guide.title.split('— ')[1] ?? guide.title;
 ---
 <SiteLayout title={guide.title} activeSection="manual" activeSubject="aircraft-procedures"
  description={guide.description}
  breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Aircraft Procedures',href:sitePath('manual/aircraft-procedures/')},{label:'F-16C',href:sitePath('manual/aircraft-procedures/f-16c/')},{label:shortTitle}]}>
   <section class="status-panel">
-    <p>{guide.intro}</p>
+    <p><Fragment set:html={rich(guide.intro)} /></p>
   </section>
   <div class="procedure-workspace" data-procedure>
     <div class="procedure-guide">
@@ -58,7 +69,7 @@ const shortTitle = guide.title.split('— ')[1] ?? guide.title;
           <p><strong>Control</strong> · {s.control}</p>
           <p class="procedure-action"><strong>Do</strong> · <Fragment set:html={rich(s.action)} /></p>
           <p><strong>Expect</strong> · <Fragment set:html={rich(s.expect)} /></p>
-          {s.caution && <p class="procedure-warning"><strong>Note</strong> · {s.caution}</p>}
+          {s.caution && <p class="procedure-warning"><strong>Note</strong> · <Fragment set:html={rich(s.caution)} /></p>}
           {s.links && <p class="procedure-panels">Encyclopedia: {s.links.map((l, k) => <>{k > 0 && ', '}<a href={recordLink(l)}>{l.label}</a></>)}</p>}
           {s.ask && <div class="procedure-ask" data-cross-check><p><strong>{s.ask.question}</strong></p><ul>{s.ask.options.map((o, k) => <li><button type="button" data-answer={k}>{o}</button></li>)}</ul></div>}
           <p class="procedure-cite">Evidence: {s.evidence}</p>
@@ -80,6 +91,11 @@ const shortTitle = guide.title.split('— ')[1] ?? guide.title;
           <h3>{built.get(baseOf(id))!.panel.title}</h3>
           <CockpitPanel cockpit={cockpit} spec={built.get(baseOf(id))!.spec} scope={scope} only={cardsOf(id)} />
         </div>)}
+      </div>
+      <div class="procedure-player" data-player hidden>
+        <button type="button" data-play data-state="play" aria-label="Play"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="i-play" d="M4 2.5v11l9-5.5z"/><path class="i-pause" d="M3.5 2.5h3v11h-3zM9.5 2.5h3v11h-3z"/><path class="i-replay" d="M8 2.5a5.5 5.5 0 1 1-5.2 3.7" fill="none" stroke="currentColor" stroke-width="1.8"/><path class="i-replay" d="M1.5 2.5v4.5h4.5z"/></svg></button>
+        <input type="range" data-scrub aria-label="Time" value="0" />
+        <span class="procedure-clock" data-clock aria-hidden="true"></span>
       </div>
     </aside>
   </div>
@@ -178,6 +194,14 @@ if (root && configEl) {
 @media(prefers-reduced-motion:reduce){.proc-panel :global(.hint-ring){animation:none}}
 .procedure-cite,.procedure-panels{font-size:.85rem;color:var(--color-muted)}
 .procedure-controls{display:flex;gap:.75rem;margin-top:1rem}
+.procedure-player{display:flex;align-items:center;gap:.75rem;margin-top:1rem;padding:.5rem .75rem;border:1px solid var(--color-ink)}
+.procedure-player[hidden]{display:none}
+.procedure-player button{flex:none;width:2.75rem;height:2.75rem;display:grid;place-items:center;border:1px solid var(--color-ink);background:#fff;color:var(--color-ink);cursor:pointer;padding:0}
+.procedure-player svg{width:1.1rem;height:1.1rem;fill:currentColor}
+.procedure-player [data-state] path{display:none}
+.procedure-player [data-state="play"] .i-play,.procedure-player [data-state="pause"] .i-pause,.procedure-player [data-state="replay"] .i-replay{display:inline}
+.procedure-player input{flex:1;min-width:0;accent-color:var(--color-ink)}
+.procedure-clock{flex:none;font-variant-numeric:tabular-nums;font-size:.9rem}
 .procedure-controls button{min-height:2.75rem;padding:.45rem 1rem;border:1px solid var(--color-ink);background:#fff;color:var(--color-ink);cursor:pointer;font:inherit}
 .procedure-controls button:disabled{opacity:.4;cursor:default}
 .procedure-visual{position:relative}

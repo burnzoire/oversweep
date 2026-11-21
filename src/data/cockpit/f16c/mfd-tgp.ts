@@ -35,6 +35,9 @@ const stack = (t: string, x: number, y: number) => [...t].map((ch, k) => w(ch, x
 const X: P = [332.5, 327.5];
 const CROSS = poly([[X[0] - 98, X[1]], [X[0] - 10, X[1]]]) + poly([[X[0] + 10, X[1]], [X[0] + 98, X[1]]]) +
   poly([[X[0], X[1] - 98], [X[0], X[1] - 10]]) + poly([[X[0], X[1] + 10], [X[0], X[1] + 98]]);
+/** Small crosshairs: the pod in a track mode (p. 497 item 16). The guide gives no image of them here; their size is assumed. */
+const CROSS_SMALL = poly([[X[0] - 34, X[1]], [X[0] - 6, X[1]]]) + poly([[X[0] + 6, X[1]], [X[0] + 34, X[1]]]) +
+  poly([[X[0], X[1] - 34], [X[0], X[1] - 6]]) + poly([[X[0], X[1] + 6], [X[0], X[1] + 34]]);
 /** Field-of-view brackets (WIDE): corners at x 276/388.5, y 272.5/383.5, arms 22 px. */
 const BRACKETS = ([[276, 272.5, 1, 1], [388.5, 272.5, -1, 1], [276, 383.5, 1, -1], [388.5, 383.5, -1, -1]] as const)
   .map(([x, y, sx, sy]) => poly([[x + sx * 22, y], [x, y], [x, y + sy * 22]])).join('');
@@ -49,8 +52,9 @@ const SPI: Record<string, Spi> = {
   stpt: { lat: '036:25.012', lon: '037:14.986', elv: '+1320', hq: true, range: 'E17.4', meter: '450', ttg: '002:08', video: TGP_VIDEO_STPT },
   sa6: { lat: '036:26.214', lon: '037:07.692', elv: '+1442', hq: false, range: 'E20.1', meter: '519', ttg: '002:28', video: TGP_VIDEO_SA6 },
   sa11: { lat: '036:58.031', lon: '037:21.874', elv: '+1680', hq: false, range: 'E50.1', meter: '1294', ttg: '006:08', video: TGP_VIDEO_SA11 },
+  sa11Track: { lat: '036:58.044', lon: '037:21.851', elv: '+1674', hq: false, range: 'E50.0', meter: '1291', ttg: '006:08', video: TGP_VIDEO_SA11 },
 };
-function tgp(id: string, spi: Spi, soi: boolean): Page {
+function tgp(id: string, spi: Spi, soi: boolean, track = false): Page {
   const words: Word[] = [
     w('A-G', 186, 117.5), w('PTR', 258, 117.5), w('WIDE', 332, 117.5), w('OVRD', 405, 117.5), w('CNTL', 478, 117.5),
     sm(spi.lat, 180, 140, 'start'), sm(spi.lon, 180, 153.5, 'start'), sm(spi.elv, 272.5, 170, 'end'),
@@ -61,13 +65,13 @@ function tgp(id: string, spi: Spi, soi: boolean): Page {
     ...hadBottom('TGP'),
   ];
   return {
-    id, words, marks: CROSS + BRACKETS + NORTH, fills: NORTH_FILL, fine: soi ? FRAME : '',
+    id, words, marks: (track ? CROSS_SMALL : CROSS) + BRACKETS + NORTH, fills: NORTH_FILL, fine: soi ? FRAME : '',
     paths: [{ d: ARS, c: 'cyan' }], ...(spi.video ? { video: spi.video } : {}),
   };
 }
 export const tgpPages: Page[] = [
   tgp('tgp', SPI.stpt, false), tgp('tgp-soi', SPI.stpt, true),
-  tgp('tgp-sa6', SPI.sa6, false), tgp('tgp-sa11', SPI.sa11, false), tgp('tgp-sa11-soi', SPI.sa11, true),
+  tgp('tgp-sa6', SPI.sa6, false), tgp('tgp-sa11', SPI.sa11, false), tgp('tgp-sa11-soi', SPI.sa11, true), tgp('tgp-sa11-track', SPI.sa11Track, true, true),
 ];
 export const tgpPageLabels: Record<string, string> = {
   tgp: 'TGP format: Slave, on the selected steerpoint',
@@ -75,4 +79,5 @@ export const tgpPageLabels: Record<string, string> = {
   'tgp-sa6': 'TGP format: slaved to the HTS-designated SA-6',
   'tgp-sa11': 'TGP format: slaved to the HTS-designated SA-11',
   'tgp-sa11-soi': 'TGP format, SOI: slaved to the SA-11',
+  'tgp-sa11-track': 'TGP format, SOI: Point track on the SA-11 site, the pod owns the SPI',
 };

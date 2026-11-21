@@ -263,6 +263,8 @@ export const SCREEN = { glass: MFD_GLASS, ded: '#d6f46a', led: '#f2d64b', ehsi: 
 const onGlass = (ink: string, body: string, paper: string = MFD_GLASS) => `<g style="--panel-ink:${ink};--panel-paper:${paper}" stroke="${ink}">${body}</g>`;
 /** The HUD's symbology is seen against a desaturated blue sky (Nathan, 2026-11-21): lighter toward the horizon. */
 const HUD_SKY = ['#3f5468', '#6f8293'] as const;
+/** Each video clip gets its own id: both MFDs carry the same pages, and a clip defined in a hidden page of the other display does not apply. */
+let videoClips = 0;
 function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, current: string) {
   const o = d.opening / 2, g = o - d.inset;
   let s = `<rect x="${n(-o)}" y="${n(-o)}" width="${n(2 * o)}" height="${n(2 * o)}" rx="${n(d.r)}" fill="${PAPER}" ${sw('heavy')}/>` +
@@ -271,7 +273,8 @@ function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, cu
   const W = MFD_COLOURS.white;
   for (const pg of ind?.pages ?? []) {
     const page = d.pages.find(q => q.id === pg.id);
-    let body = page?.video ? `<clipPath id="v-${id}-${pg.id}"><rect x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" rx="${n(Math.max(0, d.r - d.inset))}"/></clipPath><image data-video href="${page.video}" x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" preserveAspectRatio="xMidYMid slice" clip-path="url(#v-${id}-${pg.id})" opacity="0.9"/>` : '';
+    const clip = `mfd-video-${++videoClips}`;
+    let body = page?.video ? `<clipPath id="${clip}"><rect x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" rx="${n(Math.max(0, d.r - d.inset))}"/></clipPath><image data-video href="${page.video}" x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${clip})" opacity="0.9"/>` : '';
     if (page?.fills) body += `<path d="${page.fills}" fill="${W}" stroke="none"/>`;
     for (const p of page?.paths ?? []) if (p.fill) body += `<path d="${p.d}" fill="${MFD_COLOURS[p.c]}" stroke="none"/>`;
     for (const w of page?.words ?? []) {

@@ -9,7 +9,7 @@ Two guided procedures on the shared cockpit panels: HTS familiarization (SNSR PW
 ```review-sources
 source: https://www.digitalcombatsimulator.com/upload/iblock/e78/33zl8132hi71d3tv0194vvkzpzl3mrr6/DCS%20F-16C%20Early%20Access%20Guide%20EN.pdf
 sha256: b26f89b715cd130f82798a2e8973a1b7dd52b4366007feb4c7a29677f248e7c5
-pages: 75; 83-87; 117; 121; 330-331; 489; 491; 495-498; 525-547; 749-750; 753
+pages: 75; 83-87; 98-101; 122; 330-331; 486; 489; 491; 495-498; 525-547; 657; 749-750; 753
 ```
 
 ## Illustrative, not sourced

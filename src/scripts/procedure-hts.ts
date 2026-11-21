@@ -27,7 +27,12 @@ type Pages = Partial<Pick<State, 'mfd' | 'left' | 'ded'>>;
 interface Scenario {
   initial: Pages; after: Record<string, Pages>;
   slew: { step: string; on: string; free: string; done: string; target: [number, number]; start: [number, number]; reach: number; speed: number; box: [number, number, number, number] };
-  scans?: { step: string; pages: string[]; ms: number };
+  /**
+   * A step that plays out over time (the HTS scans after a turn): one page per moment, at `secs` jet seconds from the
+   * start, played back `ms` real milliseconds per page. The step panel gets a player (play, scrubber, elapsed time)
+   * so the reader can replay it or drag through it; `caption` follows the time ("after the turn").
+   */
+  scans?: { step: string; pages: string[]; secs: number[]; ms: number; caption: string };
   /** Pages a step shows as it opens (a look step that adds a teaching overlay). */
   enter?: Record<string, Partial<Pick<State, 'mfd' | 'left' | 'ded'>>>;
 }
@@ -49,13 +54,15 @@ const SCENARIOS: Record<string, Scenario> = {
       thrt: { mfd: 'had-thrt' }, 'class-1': { mfd: 'had-thrt-c1' }, 'class-2': { mfd: 'had-thrt-man' }, 'thrt-back': { mfd: 'hadx' },
       cntl: { mfd: 'hadx-cntl' }, nav2: { mfd: 'hadx-cntl-nav2' }, 'cntl-back': { mfd: 'hadx-n' },
       range: { mfd: 'hadx-60' }, cen: { mfd: 'hadx-cen' }, dep: { mfd: 'hadx-60' },
-      designate: { mfd: 'hadx-des', left: 'tgp-sa11' }, 'step-6': { mfd: 'hadx-t-des6', left: 'tgp-sa6' }, 'step-11': { mfd: 'hadx-t2', left: 'tgp-sa11' },
+      designate: { mfd: 'hadx-des', left: 'tgp-sa11' }, 'step-6': { mfd: 'hadx-t-des6', left: 'tgp-sa6' }, 'step-11': { mfd: 'hadx-t11', left: 'tgp-sa11' },
       'tgp-soi': { mfd: 'hadx-t-notsoi', left: 'tgp-sa11-soi' },
+      track: { mfd: 'hadx-t-tracked', left: 'tgp-sa11-track' },
     },
     slew: { step: 'slew', on: 'hadx-60', free: 'hadx-60-free', done: 'hadx-60-hover', ...HADX.slew },
     // One page per HTS scan as the radar moves off the nose (the scan cycle time with only MAN in the scan: 0:08, compressed).
-    enter: { bearings: { mfd: 'hadx-des-aid' } },
-    scans: { step: 'turn', pages: ['hadx-t5', 'hadx-t4', 'hadx-t3', 'hadx-t2'], ms: 1600 },
+    enter: { bearings: { mfd: 'hadx-des-aid' }, 'step-6': { mfd: 'hadx-t11' } },
+    // The bearing lines are drawn 4 NM apart: about 29 s at 490 kt (the guide gives no timings; illustrative).
+    scans: { step: 'turn', pages: ['hadx-t5', 'hadx-t4', 'hadx-t3', 'hadx-t2'], secs: [0, 29, 59, 88], ms: 2600, caption: 'after the turn' },
   },
 };
 
@@ -171,7 +178,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     else if (moves(s).length) say(`Make these moves, in any order: ${moves(s).map(instruction).join('; ')}.`);
     else if (s.type) say(`Press ${keyText(s.type.keys[0])} (key 1 of ${s.type.keys.length}).`);
     else if (slewing()) say('Steer the cursor onto the radar: press and drag on the RDR CURSOR switch.');
-    else if (scanning) say('Watch the HAD: each scan refines the position.');
+    else if (scanning) say('Watch the HAD: each scan refines the position. Replay it or drag through it below.');
     else say('Check the indications, then confirm.');
     showPad();
     indicate();
@@ -201,7 +208,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   }
   function go(to: number) {
     timers.splice(0).forEach(clearTimeout);
-    stopSlew();
+    stopSlew(); stopPlayer();
     if (to >= cfg.steps.length) { finished = true; render(); complete.focus(); return; }
     history[to] = { pos: { ...pos }, st: copy(st) };
     step = to; made = new Set(); typed = 0;
@@ -216,15 +223,63 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     if (e) { Object.assign(st, e); indicate(); }
   }
 
-  /** The HTS scans: the picture refines one page per scan, then the step's button is offered. */
-  function playScans() {
-    const { pages, ms } = sc.scans!;
-    scanning = true; render();
-    pages.forEach((pg, i) => later(i * ms, () => {
-      st.mfd = pg; indicate();
-      if (i === pages.length - 1) { scanning = false; render(); }
-    }));
+  /* ---------------------------------------------------------------- player */
+  const player = one<HTMLElement>('[data-player]');
+  const playBtn = one<HTMLButtonElement>('[data-play]');
+  const scrub = one<HTMLInputElement>('[data-scrub]');
+  const clock = one<HTMLElement>('[data-clock]');
+  let t = 0, frame = 0, lastFrame = 0;
+  const mmss = (v: number) => `${Math.floor(v / 60)}:${String(Math.floor(v % 60)).padStart(2, '0')}`;
+  /** Show the moment `v` jet seconds in: the latest page at or before it, the scrubber and the clock. */
+  function seek(v: number) {
+    const { pages, secs, caption } = sc.scans!, end = secs[secs.length - 1];
+    t = Math.max(0, Math.min(end, v));
+    let k = 0;
+    secs.forEach((x, i) => { if (x <= t) k = i; });
+    if (st.mfd !== pages[k]) { st.mfd = pages[k]; indicate(); }
+    scrub.value = String(t);
+    clock.textContent = `${mmss(t)} / ${mmss(end)} ${caption}`;
+    scrub.setAttribute('aria-valuetext', `${mmss(t)} ${caption}`);
   }
+  function setPlaying(on: boolean) {
+    cancelAnimationFrame(frame);
+    playBtn.dataset.state = on ? 'pause' : t >= +scrub.max ? 'replay' : 'play';
+    playBtn.setAttribute('aria-label', on ? 'Pause' : t >= +scrub.max ? 'Replay' : 'Play');
+    if (!on) return;
+    const { secs, ms } = sc.scans!, rate = (secs[secs.length - 1] / ((secs.length - 1) * ms));
+    lastFrame = performance.now();
+    const tick = (now: number) => {
+      seek(t + (now - lastFrame) * rate); lastFrame = now;
+      if (t >= +scrub.max) {
+        setPlaying(false);
+        // The step's button comes once the reader has seen the whole run.
+        if (scanning) { scanning = false; render(); }
+        return;
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+  }
+  function stopPlayer() { cancelAnimationFrame(frame); player.hidden = true; }
+  /** The HTS scans: the picture refines one page per moment; the step's button is offered once it has played through. */
+  function playScans() {
+    const { secs } = sc.scans!;
+    scrub.min = '0'; scrub.max = String(secs[secs.length - 1]); scrub.step = '1';
+    player.hidden = false;
+    scanning = true; render();
+    seek(0);
+    if (reduced.matches) { seek(+scrub.max); scanning = false; setPlaying(false); render(); return; }
+    setPlaying(true);
+  }
+  playBtn.addEventListener('click', () => {
+    if (playBtn.dataset.state === 'pause') { setPlaying(false); return; }
+    if (t >= +scrub.max) seek(0);
+    setPlaying(true);
+  });
+  scrub.addEventListener('input', () => {
+    cancelAnimationFrame(frame); seek(+scrub.value); setPlaying(false);
+    if (scanning && t >= +scrub.max) { scanning = false; render(); }
+  });
 
   /** The pod's warm-up: the step that powers it counts the wait down on its button, then lets the reader on. */
   function warmUp() {
@@ -296,7 +351,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   });
   previous.addEventListener('click', () => {
     timers.splice(0).forEach(clearTimeout);
-    stopSlew();
+    stopSlew(); stopPlayer();
     const to = finished ? cfg.steps.length - 1 : Math.max(0, step - 1);
     finished = false;
     const h = history[to];
@@ -308,7 +363,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   });
   restart.addEventListener('click', () => {
     timers.splice(0).forEach(clearTimeout);
-    stopSlew(); scanning = false;
+    stopSlew(); stopPlayer(); scanning = false;
     pos = { ...cfg.initial }; st = initialState(); history.length = 0; finished = false;
     setPositions(pos);
     go(0);

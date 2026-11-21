@@ -370,8 +370,10 @@ const hadx: Page[] = [
   had('hadx-des', { ...base, threats: T_11('yellow'), nav2: false, scale: 'DEP60', designated: '11', data: PGM[5] }),
   had('hadx-des-aid', { ...base, threats: T_11('yellow'), nav2: false, scale: 'DEP60', designated: '11', data: PGM[5], aid: aid(0, 5) }),
   ...[5, 4, 3, 2].map(n => had(`hadx-t${n}`, { ...base, threats: T_11(n > 3 ? 'yellow' : 'red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[n], aid: aid(5 - n, n) })),
+  had('hadx-t11', { ...base, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[2] }),
   had('hadx-t-des6', { ...base, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '6', data: DATA }),
   had('hadx-t-notsoi', { ...base, soi: false, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[2] }),
+  had('hadx-t-tracked', { ...base, soi: false, threats: T_11('red'), nav2: false, scale: 'DEP60', rot: TURN }),
 ];
 /** Where things are on the advanced pages (p. 539 px), for hint rings and the cursor slew. */
 export const HADX = {
@@ -416,6 +418,8 @@ export const hadPageLabels: Record<string, string> = {
   'hadx-t4': 'HAD after the turn: PGM4, bearings drawn on',
   'hadx-t3': 'HAD after the turn: PGM3, the SA-11 tracking (red), bearings drawn on',
   'hadx-t2': 'HAD after the turn: PGM2, bearings drawn on',
+  'hadx-t11': 'HAD after the turn: SA-11 designated at PGM2',
   'hadx-t-des6': 'HAD: TMS right stepped to the SA-6',
   'hadx-t-notsoi': 'HAD not SOI, SA-11 still designated',
+  'hadx-t-tracked': 'HAD not SOI, designation dropped once the pod tracks',
 };
