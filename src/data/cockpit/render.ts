@@ -269,7 +269,7 @@ function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, cu
   const W = MFD_COLOURS.white;
   for (const pg of ind?.pages ?? []) {
     const page = d.pages.find(q => q.id === pg.id);
-    let body = page?.video ? `<clipPath id="v-${id}-${pg.id}"><rect x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" rx="${n(Math.max(0, d.r - d.inset))}"/></clipPath><image href="${page.video}" x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" preserveAspectRatio="xMidYMid slice" clip-path="url(#v-${id}-${pg.id})" opacity="0.9"/>` : '';
+    let body = page?.video ? `<clipPath id="v-${id}-${pg.id}"><rect x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" rx="${n(Math.max(0, d.r - d.inset))}"/></clipPath><image data-video href="${page.video}" x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" preserveAspectRatio="xMidYMid slice" clip-path="url(#v-${id}-${pg.id})" opacity="0.9"/>` : '';
     if (page?.fills) body += `<path d="${page.fills}" fill="${W}" stroke="none"/>`;
     for (const p of page?.paths ?? []) if (p.fill) body += `<path d="${p.d}" fill="${MFD_COLOURS[p.c]}" stroke="none"/>`;
     for (const w of page?.words ?? []) {
