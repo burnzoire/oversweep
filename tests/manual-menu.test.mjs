@@ -29,10 +29,10 @@ test('unwritten pages are listed but never linked', async () => {
 
 test('TACAN procedure is TACAN Navigation and its old address redirects', async () => {
   const data = await read('src/data/aircraft-procedures.ts');
-  const config = await read('astro.config.mjs');
+  const moved = await read('src/pages/manual/aircraft-procedures/f-16c/tacan-recovery/index.astro');
   assert.match(data, /slug: 'tacan-navigation'/);
   assert.doesNotMatch(data, /tacan-recovery/);
-  assert.match(config, /"\/manual\/aircraft-procedures\/f-16c\/tacan-recovery\/": "\/manual\/aircraft-procedures\/f-16c\/tacan-navigation\/"/);
+  assert.match(moved, /to="manual\/aircraft-procedures\/f-16c\/tacan-navigation\/"/);
 });
 
 test('the menu expands only the airframe a page is on, so aircraft count does not grow every page', async () => {
