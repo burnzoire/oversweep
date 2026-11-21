@@ -367,17 +367,9 @@ h2 {
 }
 
 .menu-tree .unwritten,
-.menu-tree .unwritten > details > summary > span:not(.chev):not(.count) {
+.menu-tree .unwritten > details > summary > span:not(.chev) {
   color: var(--color-unavailable);
   font-weight: 400;
-}
-
-.menu-tree .count {
-  margin-left: auto;
-  flex: none;
-  color: var(--color-muted);
-  font-size: 0.8rem;
-  font-variant-numeric: tabular-nums;
 }
 
 .manual-menu > summary {

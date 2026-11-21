@@ -1,6 +1,6 @@
 ---
 import Self from "./MenuBranch.astro";
-import { childCount, containsRoute, type MenuNode } from "../data/manual-menu";
+import { containsRoute, type MenuNode } from "../data/manual-menu";
 import { sitePath } from "../lib/paths";
 
 // One level of the Manual menu. Siblings share the <details> name, so opening
@@ -23,7 +23,6 @@ const link = (node: MenuNode) => (node.href && !node.planned ? sitePath(node.hre
           <summary>
             <span class="chev" aria-hidden="true"></span>
             {label}
-            <span class="count">{childCount(node)}</span>
           </summary>
           <Self nodes={node.children} route={route} parent={node.id} depth={depth + 1} />
         </details>

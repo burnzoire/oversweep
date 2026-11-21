@@ -101,12 +101,13 @@ const systems = group('f16c-systems', 'Systems', [
   plan('Electrical, hydraulic and EPU'),
 ], `${F16C_HREF}systems/`, 'The cockpit, sensors, weapons systems and aircraft systems.');
 
-const normal = group('f16c-normal', 'Normal procedures', [
+// Normal procedures sit directly under the aircraft, one group per phase of the sortie.
+const phases: MenuNode[] = [
   group('phase-ground', 'Ground', [proc('engine-start'), proc('before-taxi'), proc('before-takeoff'), plan('Taxi and lineup'), plan('Takeoff'), plan('After landing and shutdown')]),
   group('phase-navigation', 'Navigation', [proc('steerpoint-entry'), proc('tacan-navigation', 'TACAN navigation'), plan('INS alignment modes'), plan('HSD and route management'), plan('Markpoints'), plan('Reference points (VIP, VRP, PUP, OAP)'), plan('Bullseye'), plan('CRUS and DEST pages'), plan('INS drift: altitude calibration and fix'), plan('ILS approach set-up')]),
   group('phase-enroute', 'Enroute', [plan('Air-to-air refuelling')]),
   group('phase-recovery', 'Recovery', [plan('Overhead break'), plan('Instrument approach'), plan('Landing')]),
-], `${F16C_HREF}normal-procedures/`, 'Start-up to shutdown, by phase of the sortie.');
+];
 
 const emergency = plan('Emergency procedures', ['Engine failure and flameout', 'Engine relight', 'Engine fire', 'Electrical failure', 'Hydraulic failure', 'FLCS failure', 'EPU activation', 'Fuel system malfunction', 'Landing gear malfunction', 'Ejection decision']);
 
@@ -131,7 +132,7 @@ const weapons = group('f16c-weapons', 'Weapons and tactics', [
   group('weapons-self-protection', 'Self-protection', [plan('Chaff and flares', ['Manual and programmed dispense']), plan('ECM pod', ['Mode selection'])]),
 ], `${F16C_HREF}weapons-and-tactics/`, 'Employing the Viper\'s weapons: SEAD, air-to-air and air-to-ground.');
 
-return group('f16c', 'F-16C Viper', [systems, normal, emergency, weapons], F16C_HREF, 'Cockpit, systems, procedures and weapons for the DCS F-16C Block 50.');
+return group('f16c', 'F-16C Viper', [systems, ...phases, emergency, weapons], F16C_HREF, 'Cockpit, systems, procedures and weapons for the DCS F-16C Block 50.');
 };
 
 // ---- Aircraft registry --------------------------------------------------------
@@ -160,9 +161,6 @@ export const manualMenu: MenuNode[] = areas(aircraftMenus.map(a => a.build()));
 export function menuFor(route: string): MenuNode[] {
   return areas(aircraftMenus.map(a => (route.startsWith(a.href) ? a.build() : { id: a.id, title: a.title, href: a.href, summary: a.summary })));
 }
-
-/** The number beside a group in the menu: its direct children only. */
-export const childCount = (node: MenuNode): number => node.children?.length ?? 0;
 
 /** Whether `route` is this node's page or one beneath it (so its branch opens). */
 export const containsRoute = (node: MenuNode, route: string): boolean =>

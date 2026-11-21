@@ -42,10 +42,9 @@ test('the menu expands only the airframe a page is on, so aircraft count does no
   assert.match(await read('src/components/ManualMenu.astro'), /menuFor\(route\)/);
 });
 
-test('menu counts show direct children only, and landing pages list the next level', async () => {
+test('the menu has no counts, and landing pages list the next level', async () => {
   const branch = await read('src/components/MenuBranch.astro');
-  assert.match(branch, /childCount\(node\)/);
-  assert.doesNotMatch(branch, /progress|\/\$\{/);
+  assert.doesNotMatch(branch, /count|progress/);
   const cards = await read('src/components/MenuCards.astro');
   assert.match(cards, /node\.children/);
 });
