@@ -103,10 +103,10 @@ const systems = group('f16c-systems', 'Systems', [
 
 // Normal procedures sit directly under the aircraft, one group per phase of the sortie.
 const phases: MenuNode[] = [
-  group('phase-ground', 'Ground', [proc('engine-start'), proc('before-taxi'), proc('before-takeoff'), plan('Taxi and lineup'), plan('Takeoff'), plan('After landing and shutdown')]),
-  group('phase-navigation', 'Navigation', [proc('steerpoint-entry'), proc('tacan-navigation', 'TACAN navigation'), plan('INS alignment modes'), plan('HSD and route management'), plan('Markpoints'), plan('Reference points (VIP, VRP, PUP, OAP)'), plan('Bullseye'), plan('CRUS and DEST pages'), plan('INS drift: altitude calibration and fix'), plan('ILS approach set-up')]),
-  group('phase-enroute', 'Enroute', [plan('Air-to-air refuelling')]),
-  group('phase-recovery', 'Recovery', [plan('Overhead break'), plan('Instrument approach'), plan('Landing')]),
+  group('phase-ground', 'Ground', [proc('engine-start'), proc('before-taxi'), proc('before-takeoff'), plan('Taxi and lineup'), plan('Takeoff'), plan('After landing and shutdown')], `${F16C_HREF}ground/`, 'Engine start to takeoff.'),
+  group('phase-navigation', 'Navigation', [proc('steerpoint-entry'), proc('tacan-navigation', 'TACAN navigation'), plan('INS alignment modes'), plan('HSD and route management'), plan('Markpoints'), plan('Reference points (VIP, VRP, PUP, OAP)'), plan('Bullseye'), plan('CRUS and DEST pages'), plan('INS drift: altitude calibration and fix'), plan('ILS approach set-up')], `${F16C_HREF}navigation/`, 'Setting up and using the navigation systems.'),
+  group('phase-enroute', 'Enroute', [plan('Air-to-air refuelling')], `${F16C_HREF}enroute/`, 'Procedures between takeoff and recovery.'),
+  group('phase-recovery', 'Recovery', [plan('Overhead break'), plan('Instrument approach'), plan('Landing')], `${F16C_HREF}recovery/`, 'Returning to the field and landing.'),
 ];
 
 const emergency = plan('Emergency procedures', ['Engine failure and flameout', 'Engine relight', 'Engine fire', 'Electrical failure', 'Hydraulic failure', 'FLCS failure', 'EPU activation', 'Fuel system malfunction', 'Landing gear malfunction', 'Ejection decision']);
