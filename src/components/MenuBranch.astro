@@ -1,0 +1,36 @@
+---
+import Self from "./MenuBranch.astro";
+import { containsRoute, progress, type MenuNode } from "../data/manual-menu";
+import { sitePath } from "../lib/paths";
+
+// One level of the Manual menu. Siblings share the <details> name, so opening
+// one closes the others in the browser, with no script.
+interface Props { nodes: MenuNode[]; route: string; parent: string; depth?: number }
+const { nodes, route, parent, depth = 0 } = Astro.props;
+const showCount = (node: MenuNode) => { const p = progress(node); return p.built < p.total ? `${p.built}/${p.total}` : ""; };
+const link = (node: MenuNode) => (node.href && !node.planned ? sitePath(node.href) : undefined);
+---
+
+<ul class="menu-tree" data-depth={depth}>
+  {nodes.map((node) => {
+    const url = link(node);
+    const current = node.href === route && !node.planned;
+    const label = url
+      ? <a href={url} aria-current={current ? "page" : undefined} class:list={{ current }}>{node.title}</a>
+      : <span class:list={{ unwritten: node.planned }}>{node.title}{node.planned && <span class="visually-hidden"> (not written yet)</span>}</span>;
+    return node.children?.length ? (
+      <li class:list={{ unwritten: node.planned }}>
+        <details name={parent} open={containsRoute(node, route)}>
+          <summary>
+            <span class="chev" aria-hidden="true"></span>
+            {label}
+            {showCount(node) && <span class="count">{showCount(node)}</span>}
+          </summary>
+          <Self nodes={node.children} route={route} parent={node.id} depth={depth + 1} />
+        </details>
+      </li>
+    ) : (
+      <li class:list={{ unwritten: node.planned }}>{label}</li>
+    );
+  })}
+</ul>

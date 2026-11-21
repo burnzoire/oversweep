@@ -1,22 +1,60 @@
 ---
 import EntryCard from "../../components/EntryCard.astro";
+import CardPhoto from "../../components/card-photo/CardPhoto.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
-import { manualSubjects } from "../../data/catalogue";
-import { subjectEntries, subjectGroups } from "../../data/availability";
+import { manualEntries } from "../../data/availability";
+import { airframes, visibleProcedures } from "../../data/aircraft-procedures";
+import { cardMedia } from "../../data/card-media";
+import { manualMenu } from "../../data/manual-menu";
 import { sitePath } from "../../lib/paths";
 
-const available = manualSubjects.filter((s) => subjectEntries(s.slug).length > 0);
+// The Manual has three sub-areas: General Flight and Tactics list their modules by
+// subject; Aircraft lists one guide per type (issue #429).
+const entryById = new Map(manualEntries.map((entry) => [entry.id, entry]));
+const [generalFlight, tactics] = manualMenu;
+const areas = [
+  { node: generalFlight, intro: "Skills that apply to any aircraft: flying it, navigating, talking, planning and handling emergencies." },
+  { node: tactics, intro: "Employment and threats: fighting, attacking ground targets, using sensors and staying alive. Not tied to one airframe." },
+].map(({ node, intro }) => ({
+  ...node,
+  intro,
+  subjects: (node.children ?? []).filter((subject) => !subject.planned),
+}));
+const guides = airframes.filter((airframe) => visibleProcedures.some((guide) => guide.airframe === airframe.slug));
 ---
 
 <SiteLayout title="Manual" activeSection="manual" isSectionIndex
-  description="Military flight procedures for flight sim pilots, taught from first principles with interactive figures, sources and knowledge checks: navigation, instruments, formation, carrier ops, air combat and more.">
-  <p class="lead">Each module teaches one topic from first principles, with interactive figures, sources and a short knowledge check. Every module states its review status. Subjects without modules yet are dimmed in the subject list.</p>
-  {available.map((subject) => (
-    <section class="subject-group" aria-labelledby={`subject-${subject.slug}`}>
-      <h2 id={`subject-${subject.slug}`}><a href={sitePath(`manual/${subject.slug}/`)}>{subject.title}</a></h2>
-      <div class="entry-grid">
-        {subjectGroups(subject.slug).flatMap((g) => g.entries).map((entry) => <EntryCard entry={entry} headingLevel={3} compact />)}
-      </div>
+  description="Military flight procedures for flight sim pilots, taught from first principles with interactive figures, sources and knowledge checks: general flight, tactics and aircraft guides.">
+  <p class="lead">The Manual has three parts: general flight skills that apply to any aircraft, tactics, and a guide for each aircraft type. Modules teach one topic from first principles, with interactive figures, sources and a short knowledge check.</p>
+  {areas.map((area) => (
+    <section class="manual-area" aria-labelledby={`area-${area.id}`}>
+      <h2 id={`area-${area.id}`}>{area.title}</h2>
+      <p>{area.intro}</p>
+      {area.subjects.map((subject) => (
+        <section class="subject-group" aria-labelledby={`subject-${subject.id}`}>
+          <h3 id={`subject-${subject.id}`}>{subject.href ? <a href={sitePath(subject.href)}>{subject.title}</a> : subject.title}</h3>
+          <div class="entry-grid">
+            {(subject.children ?? []).map((module) => entryById.get(module.id)).filter((entry) => entry !== undefined).map((entry) => <EntryCard entry={entry} headingLevel={4} compact />)}
+          </div>
+        </section>
+      ))}
     </section>
   ))}
+  <section class="manual-area" aria-labelledby="area-aircraft">
+    <h2 id="area-aircraft"><a href={sitePath("manual/aircraft-procedures/")}>Aircraft</a></h2>
+    <p>One guide per aircraft type: cockpit, systems, procedures and weapons for that type.</p>
+    <div class="entry-grid">
+      {guides.map((airframe) => {
+        const mediaId = `aircraft-procedures.${airframe.slug}`;
+        const media = cardMedia[mediaId];
+        return (
+          <article class="entry-card compact">
+            <CardPhoto id={mediaId} />
+            <h3 class="entry-title"><a href={sitePath(`manual/aircraft-procedures/${airframe.slug}/`)}>{airframe.title}</a></h3>
+            {media && <p class="entry-objective">{media.summary}</p>}
+          </article>
+        );
+      })}
+    </div>
+  </section>
 </SiteLayout>

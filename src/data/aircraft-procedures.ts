@@ -40,7 +40,7 @@ export interface AircraftProcedure {
   status: 'public-preview' | 'review-only';
   simVersion: string;
   /** Which script drives the cockpit panels. */
-  model: 'engine-start' | 'tacan-recovery' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff' | 'hts' | 'hts-targeting';
+  model: 'engine-start' | 'tacan-navigation' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff' | 'hts' | 'hts-targeting';
   /** The scenario shown above the steps, and the closing heading. */
   intro: string;
   description: string;
@@ -101,18 +101,18 @@ export const procedures: AircraftProcedure[] = [{
 
 const GUIDE = 'Eagle Dynamics pp.';
 const tacan: AircraftProcedure = {
-  id: 'procedure.dcs-f16c.tacan-recovery',
-  slug: 'tacan-recovery',
+  id: 'procedure.dcs-f16c.tacan-navigation',
+  slug: 'tacan-navigation',
   airframe: 'f-16c',
-  title: 'F-16C — TACAN Navigation & Recovery',
+  title: 'F-16C — TACAN Navigation',
   objective: 'Return to Incirlik with the INS no longer trusted: look up the beacon, tune it on the ICP and DED, set the EHSI to TCN and read the bearing, course and distance.',
   applicability: 'DCS F-16C Block 50 (circa 2007); official guide edition 16 August 2026. Beacon data is the Syria map’s. In-simulator verification pending.',
   simVersion: 'DCS build not yet verified',
   status: 'public-preview',
-  model: 'tacan-recovery',
+  model: 'tacan-navigation',
   intro: 'Scenario: you are airborne in the Syria map, heading 060°, and the [INS](term:ins) can no longer be relied on, so the [EHSI](term:ehsi) is still in NAV mode and its [steerpoint](term:steerpoint) bearing and range cannot be trusted. Incirlik is your recovery field. The panels beside the steps are a teaching simulation, not connected to DCS; the aircraft’s position, bearing and range are illustrative.',
-  description: 'Illustrated DCS F-16C TACAN recovery: look up a beacon, tune it with the ICP and DED, and navigate to it on the EHSI.',
-  complete: '[TACAN](term:tacan) recovery set up: you are tracking inbound to Incirlik',
+  description: 'Illustrated DCS F-16C TACAN navigation: look up a beacon, tune it with the ICP and DED, and navigate to it on the EHSI.',
+  complete: '[TACAN](term:tacan) navigation set up: you are tracking inbound to Incirlik',
   sources: 'Eagle Dynamics — DCS F-16C Viper Early Access Guide (EN, 16 August 2026): EHSI pp. 230–232, MIDS LVT p. 235, “Tuning a TACAN Station” and T-ILS page pp. 236–237, “Radio Navigation by TACAN” and EHSI TACAN mode pp. 238–239. Beacon data: the Encyclopedia’s Syria map table, from the game’s own data.',
   steps: [
     {id:'lookup',section:'Find the beacon',title:'Look up the airfield’s TACAN',control:'Encyclopedia',action:'Open the Syria map’s airfield table and find Incirlik. Note its [TACAN](term:tacan) channel and three-letter identifier.',expect:'[TACAN](term:tacan) channel 21, identifier DAN. The game’s data gives no band (the table shows 21X*, band assumed); Incirlik’s TACAN is 21X, and you will confirm the band by the identifier you receive.',evidence:'Encyclopedia: Syria map airfield table; Eagle Dynamics p. 236 (DAN is Incirlik)',panels:[],links:[{slug:'dcs-syria',label:'Syria map airfield table',anchor:'af-incirlik'},{slug:'incirlik',label:'Incirlik record'}],confirm:'I have channel 21 and ident DAN'},

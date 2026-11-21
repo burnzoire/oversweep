@@ -40,7 +40,7 @@ test('cockpit panels report moves and take lamps from the host page', async () =
   assert.match(panel, /\.lit\[data-colour="amber"\]/);
 });
 
-test('TACAN recovery procedure is sourced to the official guide and runs its own script', async () => {
+test('TACAN navigation procedure is sourced to the official guide and runs its own script', async () => {
   const data = await read('src/data/aircraft-procedures.ts');
   const script = await read('src/scripts/procedure-tacan.ts');
   const page = await read('src/pages/manual/aircraft-procedures/[airframe]/[procedure].astro');
@@ -51,7 +51,7 @@ test('TACAN recovery procedure is sourced to the official guide and runs its own
   assert.match(data, /slug:'incirlik'/);
   assert.match(script, /prefers-reduced-motion/);
   for (const ev of ['cockpit:change', 'cockpit:indicate', 'cockpit:set']) assert.match(script, new RegExp(ev));
-  assert.match(page, /tacan-recovery/);
+  assert.match(page, /tacan-navigation/);
 });
 
 test('steerpoint entry procedure is sourced to the official guide and runs its own script', async () => {

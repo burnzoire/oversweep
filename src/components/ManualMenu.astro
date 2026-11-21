@@ -1,0 +1,16 @@
+---
+import MenuBranch from "./MenuBranch.astro";
+import { manualMenu } from "../data/manual-menu";
+
+interface Props { route: string; compact?: boolean }
+const { route, compact = false } = Astro.props;
+---
+
+<details class="manual-menu" open={!compact}>
+  <summary>Manual menu</summary>
+  <nav aria-label="Manual menu">
+    <MenuBranch nodes={manualMenu} route={route} parent="manual-menu" />
+  </nav>
+</details>
+{/* Phones and tablets: the menu always starts closed, so the page comes first. */}
+<script is:inline set:html={"(function(){var d=document.currentScript.previousElementSibling;if(d&&matchMedia('(max-width: 63.99rem)').matches)d.open=false;})();"} />

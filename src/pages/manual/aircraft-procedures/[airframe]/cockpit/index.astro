@@ -10,7 +10,7 @@ const built = builtPanels(cockpit);
 ---
 <SiteLayout title={`${cockpit.title} — Cockpit Familiarization`} activeSection="manual" activeSubject="aircraft-procedures"
  description={`Find your way around the ${cockpit.variant} cockpit, area by area and panel by panel, with every control on each panel working as it does in the sim.`}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Aircraft Procedures',href:sitePath('manual/aircraft-procedures/')},{label:cockpit.title,href:sitePath(`manual/aircraft-procedures/${cockpit.airframe}/`)},{label:'Cockpit Familiarization'}]}>
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Aircraft',href:sitePath('manual/aircraft-procedures/')},{label:cockpit.title,href:sitePath(`manual/aircraft-procedures/${cockpit.airframe}/`)},{label:'Cockpit Familiarization'}]}>
   <p class="lead">Learn where each control is and how it moves before you fly procedures. Choose a cockpit area, then a panel. The jet is cold and dark, and every switch, knob and guard on a panel moves the way it does in the sim. Your switch positions are kept as you move between panels.</p>
   <div class="cockpit-home">
     <CockpitNav cockpit={cockpit} />

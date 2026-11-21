@@ -8,6 +8,10 @@ export default defineConfig({
   site: "https://www.oversweep.com",
   output: "static",
   trailingSlash: "always",
+  // Pages that moved keep their old address (issue #429).
+  redirects: {
+    "/manual/aircraft-procedures/f-16c/tacan-recovery/": "/manual/aircraft-procedures/f-16c/tacan-navigation/",
+  },
   devToolbar: { enabled: false },
   integrations: [seoFiles(), searchIndex()],
 });
