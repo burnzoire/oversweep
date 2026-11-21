@@ -65,6 +65,8 @@ const tactics: SubjectSpec[] = [
 
 // ---- Aircraft: the F-16C guide ----------------------------------------------
 
+const F16C_HREF = 'manual/aircraft-procedures/f-16c/';
+
 const proc = (slug: string, fallback?: string): MenuNode => {
   const p = visibleProcedures.find(x => x.slug === slug);
   return p
@@ -72,6 +74,7 @@ const proc = (slug: string, fallback?: string): MenuNode => {
     : plan(fallback ?? slug);
 };
 
+const buildF16c = (): MenuNode => {
 const cockpit = cockpits[0];
 const cockpitNode = group('f16c-cockpit', 'Cockpit', cockpit.areas.map(area => group(`cockpit-${area.id}`, area.title, area.panels.map(panel => (panel.spec
   ? { id: `panel-${panel.id}`, title: panel.title, href: panelRoute(cockpit, panel.id) }
@@ -125,13 +128,35 @@ const weapons = group('f16c-weapons', 'Weapons and tactics', [
   group('weapons-self-protection', 'Self-protection', [plan('Chaff and flares', ['Manual and programmed dispense']), plan('ECM pod', ['Mode selection'])]),
 ]);
 
-const f16c = group('f16c', 'F-16C Viper', [systems, normal, emergency, weapons], 'manual/aircraft-procedures/f-16c/');
+return group('f16c', 'F-16C Viper', [systems, normal, emergency, weapons], F16C_HREF);
+};
 
-export const manualMenu: MenuNode[] = [
+// ---- Aircraft registry --------------------------------------------------------
+// One entry per airframe. `build` runs only when a page is on that airframe, so
+// a dozen aircraft add a dozen small list rows to every page, not a dozen trees.
+// The full tree is built for the current airframe alone (and once for the
+// manual landing page counts); see `menuFor`.
+
+interface AircraftMenu { id: string; title: string; href: string; build: () => MenuNode }
+const once = <T>(f: () => T): (() => T) => { let v: T | undefined; return () => (v ??= f()); };
+export const aircraftMenus: AircraftMenu[] = [
+  { id: 'f16c', title: 'F-16C Viper', href: F16C_HREF, build: once(buildF16c) },
+];
+
+const areas = (aircraft: MenuNode[]): MenuNode[] => [
   group('area-general-flight', 'General Flight', generalFlight.map(subjectNode)),
   group('area-tactics', 'Tactics', tactics.map(subjectNode)),
-  group('area-aircraft', 'Aircraft', [f16c]),
+  group('area-aircraft', 'Aircraft', aircraft),
 ];
+
+/** Every airframe fully built: the source of truth for tests and the landing page. */
+export const manualMenu: MenuNode[] = areas(aircraftMenus.map(a => a.build()));
+
+/** The menu a page renders: only the airframe the page belongs to is expanded;
+ *  the others are a single link, however many aircraft there are. */
+export function menuFor(route: string): MenuNode[] {
+  return areas(aircraftMenus.map(a => (route.startsWith(a.href) ? a.build() : { id: a.id, title: a.title, href: a.href })));
+}
 
 /** Built pages under a node, and the planned ones: the progress count beside a group. */
 export function progress(node: MenuNode): { built: number; total: number } {

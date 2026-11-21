@@ -17,7 +17,7 @@ test('every Manual subject sits in General Flight, Tactics or Aircraft', async (
   const catalogue = await read('src/data/catalogue.ts');
   const subjects = [...catalogue.matchAll(/slug: "([a-z-]+)", title/g)].map(m => m[1]).slice(0, 14);
   for (const slug of subjects.filter(s => s !== 'aircraft-procedures')) assert.match(menu, new RegExp(`subject: '${slug}'`), slug);
-  assert.match(menu, /'Aircraft', \[f16c\]/);
+  assert.match(menu, /'Aircraft', aircraft/);
   assert.match(menu, /'General Flight'/);
   assert.match(menu, /'Tactics'/);
 });
@@ -33,4 +33,11 @@ test('TACAN procedure is TACAN Navigation and its old address redirects', async 
   assert.match(data, /slug: 'tacan-navigation'/);
   assert.doesNotMatch(data, /tacan-recovery/);
   assert.match(config, /"\/manual\/aircraft-procedures\/f-16c\/tacan-recovery\/": "\/manual\/aircraft-procedures\/f-16c\/tacan-navigation\/"/);
+});
+
+test('the menu expands only the airframe a page is on, so aircraft count does not grow every page', async () => {
+  const src = await read('src/data/manual-menu.ts');
+  assert.match(src, /export function menuFor\(route/);
+  assert.match(src, /route\.startsWith\(a\.href\)/);
+  assert.match(await read('src/components/ManualMenu.astro'), /menuFor\(route\)/);
 });
