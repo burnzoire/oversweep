@@ -341,9 +341,8 @@ h2 {
   background: var(--color-page);
 }
 
-/* The Manual menu: an accordion tree. Siblings share a <details> name, so the
-   browser closes the others when one opens. Unwritten pages are grey and unlinked. */
-.manual-menu > nav {
+/* Section menus use named details so only one sibling branch opens at a time. */
+.section-menu > nav {
   padding: 0 0.4rem 0.6rem;
 }
 
@@ -432,7 +431,7 @@ h2 {
   font-weight: 400;
 }
 
-.manual-menu > summary {
+.section-menu > summary {
   min-height: 2.75rem;
   padding: 0.55rem 0.75rem;
   font-weight: 700;
@@ -538,17 +537,21 @@ h2 {
   text-decoration: none;
 }
 
+.category-card.unavailable h2 a {
+  color: var(--color-unavailable);
+}
+
 .category-card h2 a::after {
   content: "";
   position: absolute;
   inset: 0;
 }
 
-.category-card:not(.unavailable):hover h2 a {
+.category-card:hover h2 a {
   text-decoration: underline;
 }
 
-.category-card:not(.unavailable):focus-within {
+.category-card:focus-within {
   outline: 3px solid var(--color-focus);
   outline-offset: 2px;
 }

@@ -1,18 +1,9 @@
 ---
-import MenuBranch from "./MenuBranch.astro";
+import SectionMenu from "./SectionMenu.astro";
 import { menuFor } from "../data/manual-menu";
 
 interface Props { route: string; compact?: boolean }
-const { route, compact = false } = Astro.props;
+const { route, compact } = Astro.props;
 ---
 
-<details class="manual-menu" open={!compact}>
-  <summary>Manual menu</summary>
-  <nav aria-label="Manual menu">
-    <MenuBranch nodes={menuFor(route)} route={route} parent="manual-menu" />
-  </nav>
-</details>
-{/* Phones and tablets: the menu always starts closed, so the page comes first. */}
-<script is:inline set:html={"(function(){var d=document.currentScript.previousElementSibling;if(d&&matchMedia('(max-width: 63.99rem)').matches)d.open=false;})();"} />
-{/* An aircraft not on this page is a row that loads its branch when first opened. */}
-<script is:inline set:html={"document.querySelector('.manual-menu nav').addEventListener('toggle',function(e){var d=e.target;if(!d.open||!d.dataset.lazy||d.dataset.loaded)return;d.dataset.loaded='1';fetch(d.dataset.lazy).then(function(r){return r.json()}).then(function(j){var ul=d.querySelector(':scope > ul');if(ul)ul.outerHTML=j.html;}).catch(function(){delete d.dataset.loaded;});},true);"} />
+<SectionMenu id="manual-menu" label="Manual menu" nodes={menuFor(route)} route={route} compact={compact} />

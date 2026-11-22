@@ -23,6 +23,11 @@ function pageFile(route) {
   return path.join(output, relative, "index.html");
 }
 
+const encyclopediaCategories = [
+  "aircraft", "ordnance", "threat-systems", "radar-sensors",
+  "carriers", "locations", "terminology", "reference-data",
+].map((slug) => `encyclopedia/${slug}/`);
+
 const requiredRoutes = [
   "",
   "manual",
@@ -42,19 +47,10 @@ const requiredRoutes = [
     "abnormal-operations",
   ].map((slug) => `manual/${slug}`),
   "encyclopedia",
-  "encyclopedia/carriers",
   "encyclopedia/locations/carriers",
   "encyclopedia/locations/theatres",
   ...carrierRegistry.flatMap((entry) => [`encyclopedia/carriers/${entry.slug}`, `encyclopedia/locations/carriers/${entry.slug}`]),
-  ...[
-    "aircraft",
-    "ordnance",
-    "threat-systems",
-    "radar-sensors",
-    "locations",
-    "terminology",
-    "reference-data",
-  ].map((slug) => `encyclopedia/${slug}`),
+  ...encyclopediaCategories,
   "training",
 ];
 
@@ -65,14 +61,16 @@ const htmlFiles = (await filesIn(output)).filter((filename) => filename.endsWith
 assert.ok(htmlFiles.length >= requiredRoutes.length, "all catalogue routes should be emitted");
 
 // Catalogue destinations with nothing published still build, so their URLs stay
-// stable, but carry `data-empty` and stay linked in navigation for Manual groups.
+// stable, but carry `data-empty` and stay linked for Manual groups and Encyclopedia categories.
 const pages = new Map(await Promise.all(htmlFiles.map(async (filename) => [filename, await readFile(filename, "utf8")])));
 const isEmpty = (html) => /<main\b[^>]*\bdata-empty\b/.test(html);
 const emptyPages = new Set([...pages].filter(([, html]) => isEmpty(html)).map(([filename]) => filename));
 
+const canLinkEmpty = (route) => route.startsWith("manual/") || encyclopediaCategories.includes(route);
+
 for (const [filename, html] of pages) {
   const relativePage = path.relative(output, filename).split(path.sep).join("/");
-  if (!(emptyPages.has(filename) && relativePage.startsWith("manual/")))
+  if (!(emptyPages.has(filename) && canLinkEmpty(relativePage.replace(/index\.html$/, ""))))
     assert.doesNotMatch(html, /coming soon/i, `${relativePage} should not label unavailable destinations Coming soon`);
   if (emptyPages.has(filename))
     assert.doesNotMatch(html, /data-(?:module|experience|record)-id=/, `${relativePage} lists content but is marked empty`);
@@ -102,7 +100,52 @@ for (const [filename, html] of pages) {
       ? destination
       : path.join(destination, "index.html");
     await stat(candidate);
-    assert.ok(!emptyPages.has(candidate) || relative.startsWith("manual/"), `${relativePage} links to ${relative || "/"}, which has nothing published`);
+    assert.ok(!emptyPages.has(candidate) || canLinkEmpty(relative), `${relativePage} links to ${relative || "/"}, which has nothing published`);
+  }
+}
+
+// The compact index links every category. Only the current category is inlined
+// on a destination page; the other category trees are fetched on expansion.
+const encyclopediaMenu = (html) => html?.match(/<nav aria-label="Encyclopedia menu">([\s\S]*?)<\/nav>/)?.[1];
+const links = (html) => [...html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/g)].map((match) => match[1]);
+const indexMenu = encyclopediaMenu(pages.get(pageFile("encyclopedia")));
+assert.ok(indexMenu, "the Encyclopedia index should have a menu");
+assert.deepEqual(links(indexMenu), encyclopediaCategories.map((route) => base + route));
+
+for (const category of encyclopediaCategories) {
+  const filename = pageFile(category);
+  const slug = category.split("/")[1];
+  const fragmentPath = `encyclopedia-menu/${slug}.json`;
+  assert.ok(links(encyclopediaMenu(pages.get(filename))).includes(base + category));
+  if (emptyPages.has(filename)) {
+    assert.ok(!indexMenu.includes(`data-lazy="${base}${fragmentPath}"`), `${category} has no records to load`);
+    continue;
+  }
+
+  assert.ok(indexMenu.includes(`data-lazy="${base}${fragmentPath}"`), `${category} should load its records on demand`);
+  const { html } = JSON.parse(await readFile(path.join(output, fragmentPath), "utf8"));
+  const destinations = links(html);
+  const inlineLinks = links(encyclopediaMenu(pages.get(filename))).filter((href) => href.startsWith(base + category) && href !== base + category);
+  assert.deepEqual(destinations, inlineLinks, `${category} should list the same records when loaded on demand`);
+  const expectedLinks = [...pages].flatMap(([file, page]) => {
+    const route = path.relative(output, file).split(path.sep).join("/").replace(/index\.html$/, "");
+    return route !== category && route.startsWith(category) && /<nav class="primary-nav"/.test(page)
+      ? [base + route]
+      : [];
+  });
+  assert.deepEqual([...destinations].sort(), expectedLinks.sort(), `${category} should list every page in the category once`);
+  for (const href of [base + category, ...destinations]) {
+    const page = pages.get(pageFile(href.slice(base.length)));
+    const menu = encyclopediaMenu(page);
+    assert.ok(menu, `${href} should have an Encyclopedia menu`);
+    const current = [...menu.matchAll(/<a\b[^>]*\baria-current="page"[^>]*>/g)].map((match) => match[0]);
+    assert.deepEqual(links(current.join("")), [href], `${href} should be the only current menu link`);
+    assert.doesNotMatch(page, /<nav class="record-nav"/, `${href} should use breadcrumbs for record navigation`);
+    const breadcrumbs = page.match(/<nav class="breadcrumbs"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
+    assert.ok(breadcrumbs, `${href} should have breadcrumbs`);
+    const parents = href === base + category ? [`${base}encyclopedia/`] : [`${base}encyclopedia/`, base + category];
+    assert.deepEqual(links(breadcrumbs).slice(0, parents.length), parents, `${href} should link to its Encyclopedia parents`);
+    assert.match(breadcrumbs, /<span aria-current="page">/, `${href} should mark the current breadcrumb`);
   }
 }
 

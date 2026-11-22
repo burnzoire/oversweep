@@ -7,9 +7,7 @@ import { carriers } from "../../data/carriers";
 import carrierCover from "../../data/carrier-cover.json";
 import { assetPath, sitePath } from "../../lib/paths";
 
-// The landing page is a map of categories, not a list of records: each category
-// with records links to its own page, and empty ones are dimmed, unlinked and
-// listed after those with records so open categories lead the grid.
+// Every category has a landing page. Categories with records lead the grid.
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
 const cover = (slug: string): Photo | undefined => {
   if (slug === 'carriers') return carrierCover;
@@ -33,16 +31,14 @@ const empty = !categories.some((c) => c.available);
   {empty ? (
     <p class="empty-note">No encyclopedia records are published yet. Start with the <a href={sitePath("manual/")}>Manual</a> instead.</p>
   ) : (
-    <p class="lead">Structured reference records with their sources: what a system is, how it works and how to recognise it. Every record states its review status. Choose a category; categories without records yet are dimmed.</p>
+    <p class="lead">Look up an aircraft’s service history, find an airfield’s radio frequencies, or check what a cockpit abbreviation means.</p>
   )}
   <ul class="card-grid category-grid">
     {categories.map((category) => (
       <li class:list={["collection-card", "category-card", { unavailable: !category.available }]}>
         {category.available && category.cover && <img class="category-cover" src={assetPath(category.cover.src)} alt="" loading="lazy" decoding="async" />}
         <h2>
-          {category.available
-            ? <a href={sitePath(`encyclopedia/${category.slug}/`)}>{category.title}</a>
-            : <>{category.title}<span class="visually-hidden"> (nothing published yet)</span></>}
+          <a href={sitePath(`encyclopedia/${category.slug}/`)}>{category.title}{!category.available && <span class="visually-hidden"> (nothing published yet)</span>}</a>
         </h2>
         <p>{category.summary}</p>
         <p class="collection-status">{category.available ? plural(category.count, "record") : "Nothing published yet"}</p>

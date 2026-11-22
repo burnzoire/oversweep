@@ -95,11 +95,11 @@ The header is a flight-deck ink band (`#111a24`) with a deck-yellow (`#ffc20e`)
 rule and mark: a plan-view F-14 Tomcat silhouette with its wings overswept for
 deck stowage, traced from the owner's reference drawing, also used as the favicon. Yellow is decorative and only sits
 on ink; pages stay white with black type. Navigation is derived from the
-registries in `src/data/availability.ts`: a section, subject or category with
-nothing published is shown dimmed and unlinked rather than labelled "coming
-soon", and its route still builds with `data-empty` so URLs stay stable.
-`scripts/check_site.mjs` fails if any page links to an empty destination or
-says "coming soon".
+registries in `src/data/availability.ts`. Empty Manual groups and Encyclopedia
+categories have dimmed links and stable landing pages marked `data-empty`
+with a coming-soon note. Unwritten articles and unavailable primary sections
+appear dimmed without links. `scripts/check_site.mjs` checks these destinations
+in the generated site.
 
 ## Source presentation
 

@@ -9,7 +9,7 @@ test('menu is an accordion: siblings share a details name so opening one closes 
   assert.match(branch, /<details name=\{parent\}/);
   assert.match(branch, /parent=\{node\.id\}/);
   const menu = await read('src/components/ManualMenu.astro');
-  assert.match(menu, /parent="manual-menu"/);
+  assert.match(menu, /id="manual-menu"/);
 });
 
 test('every Manual subject sits in General Flight, Tactics or Aircraft', async () => {
@@ -53,7 +53,7 @@ test('the menu has no counts', async () => {
 
 test('an aircraft not on the page loads its branch when opened', async () => {
   assert.ok((await read('src/components/MenuBranch.astro')).includes('data-lazy={node.lazy ? assetPath('));
-  assert.match(await read('src/components/ManualMenu.astro'), /dataset\.lazy/);
+  assert.match(await read('src/components/SectionMenu.astro'), /dataset\.lazy/);
   assert.match(await read('src/pages/manual-menu/[aircraft].json.ts'), /aircraftMenus/);
 });
 

@@ -2,9 +2,11 @@
 import AskLauncher from "../components/AskLauncher.astro";
 import BrandMark from "../components/BrandMark.astro";
 import ManualMenu from "../components/ManualMenu.astro";
+import SectionMenu from "../components/SectionMenu.astro";
 import SiteSearch from "../components/SiteSearch.astro";
 import ThemePreference from "../components/ThemePreference.astro";
 import PreviewSwitch from "../components/PreviewSwitch.astro";
+import { encyclopediaMenuFor } from "../data/encyclopedia-menu";
 import { sectionHasContent } from "../data/availability";
 import { assetPath, sitePath } from "../lib/paths";
 import { audience, clip, defaultDescription, describeRoute, entryForRoute, routeOf, shareSiteName, siteName } from "../lib/seo";
@@ -24,7 +26,7 @@ interface Props {
   isSectionIndex?: boolean;
   isHomePage?: boolean;
   breadcrumbs?: Breadcrumb[];
-  // A destination with nothing published: navigation never links to it.
+  // A destination with nothing published.
   empty?: boolean;
   // Pages that render their own <h1>, such as the home page hero.
   customHeading?: boolean;
@@ -196,10 +198,15 @@ const pageTitle = isHomePage ? `Oversweep · ${title}` : `${title} | Oversweep`;
           <h1>{title}</h1>
         </header>
       )}
-      <div class:list={["page-layout", { "with-subject-nav": activeSection === "manual" }]}>
+      <div class:list={["page-layout", { "with-subject-nav": activeSection === "manual" || activeSection === "encyclopedia" }]}>
         {activeSection === "manual" && (
           <aside class="subject-nav" aria-label="Manual menu">
             <ManualMenu route={route} compact={compactSubjectNav} />
+          </aside>
+        )}
+        {activeSection === "encyclopedia" && (
+          <aside class="subject-nav" aria-label="Encyclopedia menu">
+            <SectionMenu id="encyclopedia-menu" label="Encyclopedia menu" nodes={encyclopediaMenuFor(route)} route={route} />
           </aside>
         )}
         <article class="page-content">

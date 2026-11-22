@@ -141,9 +141,7 @@ const weight = (kg: number) => `${n(kg)} kg (${n(Math.round(kg * 2.20462))} lb)`
   ]}
 >
   {records.length === 0 ? (
-    <p class="empty-note">No {category.title.toLowerCase()} records are published yet. {sectionHasContent.encyclopedia
-      ? <>Categories with records are linked from the <a href={sitePath("encyclopedia/")}>Encyclopedia</a>.</>
-      : <>Start with the <a href={sitePath("manual/")}>Manual</a> instead.</>}</p>
+    <p class="empty-note">Coming soon. No {category.title.toLowerCase()} records are published yet.</p>
   ) : (
     <div class="ency">
       {category.slug === "threat-systems" && (
