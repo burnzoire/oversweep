@@ -167,7 +167,7 @@ export function linkGroups(nodes: MenuNode[], parent = 'manual/'): MenuNode[] {
 /** True if a node contains at least one written article at any depth. */
 export const hasArticle = (node: MenuNode): boolean =>
   (!node.children?.length && !!node.href && !node.planned && !node.lazy) ||
-  (node.children ?? []).some(hasArticle);
+  !!node.lazy || (node.children ?? []).some(hasArticle);
 
 export const manualMenu: MenuNode[] = linkGroups(areas(aircraftMenus.map(a => a.build())));
 
