@@ -59,6 +59,17 @@
     --color-chat-border: light-dark(#c6cdd4, #788594);
     --color-page-text: var(--color-text);
     --color-search-mark: #171717;
+    --color-source-target: light-dark(#fff6d6, #403416);
+    --figure-grid: light-dark(#c8ccd0, #566373);
+    --figure-shade: light-dark(#e6e9ec, #303a45);
+    --figure-blue: light-dark(#cfe0f3, #294259);
+    --figure-blue-strong: light-dark(#b9d5ee, #375b7a);
+    --figure-rose: light-dark(#f6d6f4, #523653);
+    --figure-alert: light-dark(#f1e3e3, #482d31);
+    --figure-sky: light-dark(#dcebf6, #283c51);
+    --figure-ground: light-dark(#e9e2d4, #443e32);
+    --figure-grass: light-dark(#eef0ea, #29352f);
+    --figure-warning: light-dark(#c2410c, #ffad78);
     --color-hint-surface: light-dark(#fff4c2, #403416);
     --panel-ink: light-dark(#161616, #f0f2f5);
     --panel-red: light-dark(#b3262a, #c64440);

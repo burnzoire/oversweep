@@ -644,10 +644,10 @@ const bms = (pages: string) => `[13, ${/–|,/.test(pages) ? 'pp.' : 'p.'} ${pag
   input[type="range"] { min-height: 2.75rem; width: 100%; }
   input:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
   .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
-  .lesson :global(button) { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: #fff; background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
-  .lesson :global(button + button), .lesson :global(button[aria-pressed="false"]) { color: var(--color-text); background: #fff; }
-  .lesson :global(button[aria-pressed="true"]) { color: #fff; background: var(--color-link); border-color: var(--color-link); }
-  .lesson :global([data-choices] button) { color: var(--color-text); background: #fff; }
+  .lesson :global(button) { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: var(--color-page, #fff); background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
+  .lesson :global(button + button), .lesson :global(button[aria-pressed="false"]) { color: var(--color-text); background: var(--color-page, #fff); }
+  .lesson :global(button[aria-pressed="true"]) { color: var(--color-page, #fff); background: var(--color-link); border-color: var(--color-link); }
+  .lesson :global([data-choices] button) { color: var(--color-text); background: var(--color-page, #fff); }
   .lesson :global(button:disabled) { cursor: default; opacity: 0.7; }
   .lesson :global(button:focus-visible) { outline: 3px solid var(--color-focus); outline-offset: 2px; }
   .feedback { font-weight: 700; min-height: 1.6em; }
@@ -656,7 +656,7 @@ const bms = (pages: string) => `[13, ${/–|,/.test(pages) ? 'pp.' : 'p.'} ${pag
   .lesson:not(.ready) .call, .lesson:not(.ready) .sign-quiz, .lesson:not(.ready) .gun-row, .lesson:not(.ready) .beacon-row { display: none; }
   .lesson.ready .no-js { display: none; }
   .no-js { font-weight: 700; }
-  .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+  .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: var(--color-page, #fff); }
   @media (min-width: 64rem) {
     .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
   }
@@ -673,7 +673,7 @@ const bms = (pages: string) => `[13, ${/–|,/.test(pages) ? 'pp.' : 'p.'} ${pag
   dl.jargon dt { font-weight: 700; }
   dl.jargon dd { margin: 0; }
   .quiz-lesson .task { font-style: italic; }
-  .sign-gallery :global(.sign-button) { display: grid; justify-items: center; gap: 0.3rem; padding: 0.5rem; font-weight: 400; font-size: 0.85rem; color: var(--color-text); background: #fff; }
+  .sign-gallery :global(.sign-button) { display: grid; justify-items: center; gap: 0.3rem; padding: 0.5rem; font-weight: 400; font-size: 0.85rem; color: var(--color-text); background: var(--color-page, #fff); }
   .sign-gallery :global(.sign-button[aria-pressed="true"]) { color: var(--color-text); background: var(--color-surface); outline: 3px solid var(--color-link); }
   .sign-shown { min-height: 3.5rem; margin-bottom: 0.5rem; }
   .step-list :global(button) { font-weight: 400; }
@@ -687,7 +687,7 @@ const bms = (pages: string) => `[13, ${/–|,/.test(pages) ? 'pp.' : 'p.'} ${pag
   .gun-label { font-weight: 700; min-height: 1.6em; }
   .beacon-lamp { width: 2.5rem; height: 2.5rem; flex: none; }
   .beacon-strip { max-width: 22rem; }
-  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
+  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: var(--color-page, #fff); }
   :global(.natops .frame) { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
   :global(.natops .lbl) { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
   :global(.natops .lbl.small) { font-size: 10px; }
@@ -705,7 +705,7 @@ const bms = (pages: string) => `[13, ${/–|,/.test(pages) ? 'pp.' : 'p.'} ${pag
   :global(.natops .leg.active .track) { stroke-width: 5; }
   :global(.natops .leg.active .lbl) { fill: var(--color-link); }
   :global(.natops .rb-datum) { fill: none; stroke: var(--color-border); stroke-width: 1; stroke-dasharray: 3 3; }
-  :global(.natops .grass) { fill: #eef0ea; }
+  :global(.natops .grass) { fill: var(--figure-grass, #eef0ea); }
   :global(.natops .rwy) { fill: #50555b; }
   :global(.natops .rwy-cl) { fill: none; stroke: #fff; stroke-width: 1.6; stroke-dasharray: 10 7; }
   :global(.natops .rwy-num) { fill: #fff; font: 700 18px Arial, Helvetica, sans-serif; }
@@ -719,11 +719,11 @@ const bms = (pages: string) => `[13, ${/–|,/.test(pages) ? 'pp.' : 'p.'} ${pag
   :global(.natops .twy-cl) { fill: none; stroke: #f2c200; stroke-width: 1.4; }
   :global(.natops .hold-solid) { fill: none; stroke: #f2c200; stroke-width: 1.6; }
   :global(.natops .hold-dash) { fill: none; stroke: #f2c200; stroke-width: 1.6; stroke-dasharray: 3 2; }
-  :global(.natops .apron) { fill: #c9ccd0; stroke: var(--color-text); stroke-width: 1; }
-  :global(.bldg) { fill: #fff; stroke: var(--color-text); stroke-width: 1.6; }
+  :global(.natops .apron) { fill: var(--figure-shade, #c9ccd0); stroke: var(--color-text); stroke-width: 1; }
+  :global(.bldg) { fill: var(--color-page, #fff); stroke: var(--color-text); stroke-width: 1.6; }
   :global(.natops .beacon) { fill: #2e8540; stroke: var(--color-text); stroke-width: 1.2; }
   :global(.natops .sock) { fill: #e87722; stroke: var(--color-text); stroke-width: 1; }
-  :global(.natops .tetra) { fill: #fff; stroke: var(--color-text); stroke-width: 1.6; }
+  :global(.natops .tetra) { fill: var(--color-page, #fff); stroke: var(--color-text); stroke-width: 1.6; }
   :global(.natops [data-part].active .ln), :global(.natops [data-part].active .thin), :global(.natops [data-part].active .bldg) { stroke: var(--color-link); stroke-width: 3; }
   :global(.natops [data-part].active .rwy), :global(.natops [data-part].active .apron) { stroke: var(--color-link); stroke-width: 4; }
   :global(.natops [data-part].active .twy) { stroke: var(--color-link); }
