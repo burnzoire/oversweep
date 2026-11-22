@@ -39,16 +39,11 @@ const plate: [string, string][] = [
   description={`${record.title} (${record.designation}): ${record.summary}`}
   breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: category, href: sitePath('encyclopedia/aircraft/') }, { label: record.title }]}>
   <div class="ency">
-    {hasViperTraining && (
-      <aside class="sim-panel" aria-labelledby="f16-training-title">
-        <h2 id="f16-training-title">F-16C training</h2>
-        <p>Learn the DCS F-16C Block 50 cockpit and practise its procedures in the <a href={sitePath('manual/aircraft-procedures/f-16c/')}>F-16C Viper Manual</a>.</p>
-      </aside>
-    )}
     {leadPhoto && <PhotoFigure photo={leadPhoto} lead />}
     <section class="status-panel" data-record-id={record.id} data-record-revision={record.revision}>
       <p>Record revision {record.revision} · {record.summary}</p>
       <p>Real-world aircraft as described in public sources. Figures vary between variants, loads and sources; the data plate names the variant its figures describe, and differences are noted beside the number they affect.</p>
+      {hasViperTraining && <p>Learn the DCS F-16C Block 50 cockpit and practise its procedures in the <a href={sitePath('manual/aircraft-procedures/f-16c/')}>F-16C Viper Manual</a>.</p>}
     </section>
 
     <section class="data-plate" aria-labelledby="plate-title">
