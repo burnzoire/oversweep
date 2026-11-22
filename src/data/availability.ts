@@ -6,9 +6,8 @@ import { carriers } from './carriers';
 import { visibleProcedures, procedureRoute } from './aircraft-procedures';
 import { cockpits, cockpitRoute } from './cockpit/f16c/index.ts';
 
-// What a reader can actually open, derived from the registries. Navigation shows
-// destinations without content dimmed and unlinked, so readers only follow links
-// that lead somewhere; the empty routes still build so their URLs stay stable.
+// Content availability derived from the registries. Empty Manual groups and
+// Encyclopedia categories keep navigable landing pages.
 
 export interface Entry {
   id: string;

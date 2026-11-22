@@ -1,0 +1,42 @@
+---
+import MenuBranch from "./MenuBranch.astro";
+import type { MenuNode } from "../data/manual-menu";
+
+interface Props {
+  id: string;
+  label: string;
+  nodes: MenuNode[];
+  route: string;
+  compact?: boolean;
+}
+
+const { id, label, nodes, route, compact = false } = Astro.props;
+---
+
+<details class="section-menu" open={!compact}>
+  <summary>{label}</summary>
+  <nav aria-label={label}>
+    <MenuBranch nodes={nodes} route={route} parent={id} />
+  </nav>
+</details>
+{/* Close before the first paint on smaller screens. */}
+<script is:inline>
+  (() => {
+    const menu = document.currentScript.previousElementSibling;
+    if (matchMedia("(max-width: 63.99rem)").matches) menu.open = false;
+
+    menu.addEventListener("toggle", async (event) => {
+      const branch = event.target;
+      if (!branch.open || !branch.dataset.lazy || branch.dataset.loaded) return;
+      branch.dataset.loaded = "1";
+      try {
+        const response = await fetch(branch.dataset.lazy);
+        if (!response.ok) throw new Error("Menu branch could not be loaded");
+        const { html } = await response.json();
+        branch.querySelector(":scope > ul").outerHTML = html;
+      } catch {
+        delete branch.dataset.loaded;
+      }
+    }, true);
+  })();
+</script>

@@ -7,9 +7,7 @@ import { carriers } from "../../data/carriers";
 import carrierCover from "../../data/carrier-cover.json";
 import { assetPath, sitePath } from "../../lib/paths";
 
-// The landing page is a map of categories, not a list of records: each category
-// with records links to its own page, and empty ones are dimmed, unlinked and
-// listed after those with records so open categories lead the grid.
+// Every category has a landing page. Categories with records lead the grid.
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" : "s"}`;
 const cover = (slug: string): Photo | undefined => {
   if (slug === 'carriers') return carrierCover;
@@ -40,9 +38,7 @@ const empty = !categories.some((c) => c.available);
       <li class:list={["collection-card", "category-card", { unavailable: !category.available }]}>
         {category.available && category.cover && <img class="category-cover" src={assetPath(category.cover.src)} alt="" loading="lazy" decoding="async" />}
         <h2>
-          {category.available
-            ? <a href={sitePath(`encyclopedia/${category.slug}/`)}>{category.title}</a>
-            : <>{category.title}<span class="visually-hidden"> (nothing published yet)</span></>}
+          <a href={sitePath(`encyclopedia/${category.slug}/`)}>{category.title}{!category.available && <span class="visually-hidden"> (nothing published yet)</span>}</a>
         </h2>
         <p>{category.summary}</p>
         <p class="collection-status">{category.available ? plural(category.count, "record") : "Nothing published yet"}</p>

@@ -3,7 +3,7 @@ import Self from "./MenuBranch.astro";
 import { containsRoute, hasArticle, type MenuNode } from "../data/manual-menu";
 import { assetPath, sitePath } from "../lib/paths";
 
-// One level of the Manual menu. Siblings share the <details> name, so opening
+// One level of a section menu. Siblings share the <details> name, so opening
 // one closes the others in the browser, with no script.
 interface Props { nodes: MenuNode[]; route: string; parent: string; depth?: number }
 const { nodes, route, parent, depth = 0 } = Astro.props;
