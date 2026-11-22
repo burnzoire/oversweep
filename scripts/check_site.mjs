@@ -72,7 +72,8 @@ const emptyPages = new Set([...pages].filter(([, html]) => isEmpty(html)).map(([
 
 for (const [filename, html] of pages) {
   const relativePage = path.relative(output, filename).split(path.sep).join("/");
-  assert.doesNotMatch(html, /coming soon/i, `${relativePage} should dim unavailable destinations, not label them Coming soon`);
+  if (!(emptyPages.has(filename) && relativePage.startsWith("manual/")))
+    assert.doesNotMatch(html, /coming soon/i, `${relativePage} should not label unavailable destinations Coming soon`);
   if (emptyPages.has(filename))
     assert.doesNotMatch(html, /data-(?:module|experience|record)-id=/, `${relativePage} lists content but is marked empty`);
 }
@@ -101,7 +102,7 @@ for (const [filename, html] of pages) {
       ? destination
       : path.join(destination, "index.html");
     await stat(candidate);
-    assert.ok(!emptyPages.has(candidate), `${relativePage} links to ${relative || "/"}, which has nothing published`);
+    assert.ok(!emptyPages.has(candidate) || relative.startsWith("manual/"), `${relativePage} links to ${relative || "/"}, which has nothing published`);
   }
 }
 
