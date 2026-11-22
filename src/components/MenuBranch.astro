@@ -13,7 +13,8 @@ const link = (node: MenuNode) => (node.href && (node.children?.length || !node.p
 <ul class="menu-tree" data-depth={depth}>
   {nodes.map((node) => {
     const url = link(node);
-    const current = node.href === route;\n    const empty = !!node.children?.length && !hasArticle(node);
+    const current = node.href === route;
+    const empty = !!node.children?.length && !hasArticle(node);
     const label = url
       ? <a href={url} aria-current={current ? "page" : undefined} class:list={{ current, unwritten: empty }}>{node.title}</a>
       : <span class:list={{ unwritten: node.planned || empty }}>{node.title}{node.planned && <span class="visually-hidden"> (not written yet)</span>}</span>;
