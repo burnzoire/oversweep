@@ -31,7 +31,7 @@ const empty = !categories.some((c) => c.available);
   {empty ? (
     <p class="empty-note">No encyclopedia records are published yet. Start with the <a href={sitePath("manual/")}>Manual</a> instead.</p>
   ) : (
-    <p class="lead">Structured reference records with their sources: what a system is, how it works and how to recognise it. Every record states its review status. Choose a category; categories without records yet are dimmed.</p>
+    <p class="lead">Look up an aircraft’s service history, find an airfield’s radio frequencies, or check what a cockpit abbreviation means.</p>
   )}
   <ul class="card-grid category-grid">
     {categories.map((category) => (
