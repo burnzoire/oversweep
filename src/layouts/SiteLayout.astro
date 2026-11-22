@@ -147,10 +147,6 @@ const pageTitle = isHomePage ? `Oversweep · ${title}` : `${title} | Oversweep`;
             <span class="brand-tagline">The Interactive Flight Sim Reference</span>
           </span>
         </a>
-        <div class="header-tools">
-          <SiteSearch />
-          <ThemePreference />
-        </div>
         <nav class="primary-nav" aria-label="Primary navigation">
           {sections.map((section) => {
             const current = activeSection === section.id;
@@ -175,6 +171,10 @@ const pageTitle = isHomePage ? `Oversweep · ${title}` : `${title} | Oversweep`;
             );
           })}
         </nav>
+        <div class="header-tools">
+          <ThemePreference />
+          <SiteSearch />
+        </div>
       </div>
     </header>
     <main id="main-content" class="page-shell" data-empty={empty ? "" : undefined}>

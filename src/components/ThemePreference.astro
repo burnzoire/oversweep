@@ -1,24 +1,45 @@
-<select aria-label="Colour theme" autocomplete="off" data-theme-preference hidden>
-  <option value="system">System</option>
-  <option value="light">Light</option>
-  <option value="dark">Dark</option>
-</select>
+<button type="button" aria-label="Switch to dark mode" data-theme-preference hidden>
+  <svg class="moon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M20.8 14.2A9 9 0 0 1 9.8 3.2 9 9 0 1 0 20.8 14.2Z" />
+  </svg>
+  <svg class="sun" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.4 1.4m11.2 11.2L19 19M5 19l1.4-1.4M17.6 6.4 19 5" />
+  </svg>
+</button>
 
 <style>
-  select {
-    min-height: 2.75rem;
-    padding-inline: 0.5rem;
-    font: inherit;
-    font-size: 0.875rem;
-    color: var(--color-ink-text);
-    background: var(--color-ink);
-    border: 1px solid var(--color-ink-muted);
+  button {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    color: var(--color-ink-muted);
+    background: transparent;
+    border: 0;
     border-radius: 0.25rem;
-    color-scheme: dark;
+    cursor: pointer;
   }
 
-  select:focus-visible {
+  button[hidden],
+  .sun,
+  button[data-current-theme="dark"] .moon { display: none; }
+
+  button[data-current-theme="dark"] .sun { display: block; }
+
+  button:hover { color: var(--color-ink-text); }
+
+  button:focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
+  }
+
+  svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.6;
   }
 </style>

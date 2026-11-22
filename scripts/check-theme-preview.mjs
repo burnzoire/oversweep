@@ -56,7 +56,16 @@ const viewports = {
   mobile: { width: 390, height: 844 },
 };
 const scheme = page => page.locator('html').evaluate(html => getComputedStyle(html).colorScheme);
-const preference = page => page.getByRole('combobox', { name: 'Colour theme' });
+const preference = page => page.getByRole('button', { name: /^Switch to (light|dark) mode$/ });
+const activeTheme = page => preference(page).getAttribute('data-current-theme');
+
+async function selectTheme(page, theme) {
+  if (await scheme(page) === 'light dark' && await activeTheme(page) === theme) {
+    await preference(page).click();
+  }
+  if (await activeTheme(page) !== theme) await preference(page).click();
+  assert.equal(await scheme(page), theme);
+}
 
 async function visit(page, route) {
   const response = await page.goto(new URL(route, base).href);
@@ -81,21 +90,27 @@ try {
     const context = await browser.newContext({ viewport, colorScheme: 'dark', reducedMotion: 'reduce' });
     const page = await context.newPage();
     await visit(page, '');
-    assert.equal(await preference(page).inputValue(), 'system');
-    const search = page.locator('.header-tools .search-trigger');
-    await search.focus();
+    assert.equal(await activeTheme(page), 'dark');
+    const search = page.getByRole('link', { name: 'Search', exact: true });
+    await preference(page).focus();
     await page.keyboard.press('Tab');
-    assert.ok(await preference(page).evaluate(control => control === document.activeElement));
-    const [searchBox, themeBox] = await Promise.all([search.boundingBox(), preference(page).boundingBox()]);
-    assert.ok(searchBox && themeBox && searchBox.x < themeBox.x && searchBox.y === themeBox.y);
+    assert.ok(await search.evaluate(control => control === document.activeElement));
+    const [searchBox, themeBox, headerBox] = await Promise.all([
+      search.boundingBox(), preference(page).boundingBox(), page.locator('.header-inner').boundingBox(),
+    ]);
+    assert.ok(searchBox && themeBox && headerBox && themeBox.x < searchBox.x && searchBox.y === themeBox.y);
+    assert.ok(Math.abs(searchBox.x + searchBox.width - (headerBox.x + headerBox.width)) < 1);
+    await page.keyboard.press('Enter');
+    await page.getByRole('dialog', { name: 'Search Oversweep' }).waitFor({ state: 'visible' });
+    await page.keyboard.press('Escape');
     assert.equal(await scheme(page), 'light dark');
     const systemBackground = await page.locator('body').evaluate(body => getComputedStyle(body).backgroundColor);
 
     for (const theme of ['light', 'dark']) {
-      await preference(page).selectOption(theme);
+      await selectTheme(page, theme);
       for (const [name, route] of Object.entries(routes)) {
         await visit(page, route);
-        assert.equal(await preference(page).inputValue(), theme, name);
+        assert.equal(await activeTheme(page), theme, name);
         assert.equal(await scheme(page), theme, name);
         const [foreground, background] = await page.locator('body').evaluate(body => {
           const style = getComputedStyle(body);
@@ -143,7 +158,7 @@ try {
       if (size !== 'tablet') {
         for (const [name, [route, target]] of Object.entries(referenceRoutes)) {
           await visit(page, route);
-          assert.equal(await preference(page).inputValue(), theme, name);
+          assert.equal(await activeTheme(page), theme, name);
           const subject = page.locator(target).first();
           const surface = await subject.evaluate(element => {
             for (let node = element; node; node = node.parentElement) {
@@ -178,20 +193,20 @@ try {
       }
     }
 
-    await preference(page).focus();
-    await page.keyboard.press('Home');
-    await page.keyboard.press('Enter');
-    assert.equal(await preference(page).inputValue(), 'system');
+    await page.evaluate(() => localStorage.removeItem('oversweep:theme'));
+    await page.reload();
+    assert.equal(await scheme(page), 'light dark');
     const background = () => page.locator('body').evaluate(body => getComputedStyle(body).backgroundColor);
     assert.equal(await background(), systemBackground);
     await page.emulateMedia({ colorScheme: 'light' });
     assert.notEqual(await background(), systemBackground);
+    await page.getByRole('button', { name: 'Switch to dark mode' }).waitFor();
     if (size !== 'tablet') {
       const trainer = await context.newPage();
       await trainer.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' });
       for (const [slug, [brief, start, exercise]] of Object.entries(trainers)) {
         for (const theme of ['light', 'dark']) {
-          await preference(page).selectOption(theme);
+          await selectTheme(page, theme);
           await visit(trainer, `experiences/${slug}/`);
           assert.ok(await trainer.locator('body').getAttribute('data-experience-id'), slug);
           assert.equal(await scheme(trainer), theme, slug);
@@ -226,27 +241,27 @@ try {
         const context = canvas.getContext('2d');
         return Array.from(context.getImageData(30, 30, 1, 1).data);
       });
-      await preference(page).selectOption('light');
+      await selectTheme(page, 'light');
       await trainer.waitForFunction(() => document.documentElement.dataset.theme === 'light');
       await trainer.waitForFunction(dark => {
         const canvas = document.querySelector('#scene');
         const rgba = canvas.getContext('2d').getImageData(30, 30, 1, 1).data;
         return rgba[0] > dark[0] + 40 && rgba[3] === 255;
       }, darkSky);
-      await preference(page).selectOption('system');
+      await page.evaluate(() => localStorage.removeItem('oversweep:theme'));
       await trainer.waitForFunction(() => !document.documentElement.dataset.theme);
       assert.equal(await scheme(trainer), 'light dark');
       await trainer.close();
     }
     if (size === 'desktop') {
       await visit(page, '');
-      await preference(page).selectOption('light');
+      await selectTheme(page, 'light');
       await visit(page, 'manual/');
       const otherTab = await context.newPage();
       await visit(otherTab, '');
-      await preference(otherTab).selectOption('dark');
+      await selectTheme(otherTab, 'dark');
       await page.goBack();
-      await page.waitForFunction(() => document.querySelector('[data-theme-preference]')?.value === 'dark');
+      await page.waitForFunction(() => document.querySelector('[data-theme-preference]')?.dataset.currentTheme === 'dark');
       assert.equal(await scheme(page), 'dark');
       await otherTab.close();
     }

@@ -1147,31 +1147,29 @@ h2 {
   }
 }
 
-/* Keep the header tools next to each other and in keyboard reading order. */
-.header-inner {
-  column-gap: 0.75rem;
-}
-
 .header-tools {
+  order: 1;
   display: flex;
   align-items: center;
-  gap: 0.35rem;
   margin-inline-start: auto;
-}
-
-.header-tools .search-trigger {
-  order: 0;
-  margin-left: 0;
 }
 
 @media (max-width: 40rem) {
   .header-inner {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 0.5rem;
   }
 
   .primary-nav {
     grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 64rem) {
+  .header-tools {
+    order: 2;
+    margin-inline-start: 0;
   }
 }
 
