@@ -1,6 +1,10 @@
 name: Deploy Ask Oversweep Worker
 on:
   workflow_dispatch:
+  # Refresh the bundled knowledge corpus after a successful production publish.
+  workflow_run:
+    workflows: [Deploy GitHub Pages]
+    types: [completed]
 permissions:
   contents: read
 concurrency:
@@ -8,12 +12,15 @@ concurrency:
   cancel-in-progress: false
 jobs:
   deploy:
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      # Always build trusted, current main content, not a potentially stale workflow_run SHA.
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
+          ref: main
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '22.23.4'
