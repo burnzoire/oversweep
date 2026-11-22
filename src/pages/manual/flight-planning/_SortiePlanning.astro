@@ -40,8 +40,7 @@ const ex = planSortie({ from: 270, kt: 40 });
 const etp60 = equalTimePoint({ distance: 600, gsReturn: 360, gsContinue: 480 });
 const lb = (x: number) => `${(Math.round(x / 10) * 10).toLocaleString('en-US')} lb`;
 ---
-<SiteLayout title={mod.title} activeSection="manual" activeSubject="flight-planning" compactSubjectNav={true}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Flight Planning',href:sitePath('manual/flight-planning/')},{label:mod.title}]}>
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="flight-planning" compactSubjectNav={true}>
  <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
   <p>Module revision {mod.revision} · How a sortie is planned: the tasking and inputs, the route and nav log, fuel with JOKER and BINGO, the flight plan and NOTAMs, and what goes on your card. For pilots of every service.</p>
  </section>

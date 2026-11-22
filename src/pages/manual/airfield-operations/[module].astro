@@ -37,8 +37,7 @@ const nav = cite(1), hw = cite(2), cbm = cite(3), jbsa = cite(4), fm = cite(5), 
 const aim2 = cite(7), aim4 = cite(8), pcg = cite(9), afh = cite(10), ac = cite(11), atc = cite(12);
 const bms = (pages: string) => `[13, ${/–|,/.test(pages) ? 'pp.' : 'p.'} ${pages}]`;
 ---
-<SiteLayout title={mod.title} activeSection="manual" activeSubject="airfield-operations" compactSubjectNav={true}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Airfield Operations',href:sitePath('manual/airfield-operations/')},{label:mod.title}]}>
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="airfield-operations" compactSubjectNav={true}>
  <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
   <p>Module revision {mod.revision} · How a military airfield is laid out, marked, signed and lit, how the runway in use, the overhead and the standard pattern work, and how to move safely on the ground. Written for military pilots of every US service: Navy, Air Force, Marine Corps and Army practice comes first. US civil (FAA) standards, which military fields share for most markings, signs, lights and tower rules, are supplementary, and civil towered and non-towered fields are covered as places a military pilot also lands. General radio technique and phraseology are taught in <a href={radioHref}>Radio Procedures</a>. Carrier operations belong to Naval Operations.</p>
   <p>Every figure is interactive. The core sequence follows one sortie from the line to the runway, around the pattern and back; markings, lighting and glide slope systems are in the reference half.</p>

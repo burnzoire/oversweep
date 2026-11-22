@@ -14,7 +14,7 @@ import { sitePath } from "../lib/paths";
       <h1 id="home-title">Understand flight.<br />Put it into practice.</h1>
       <p class="introduction">A military aviation reference for flight sim enthusiasts, built for DCS World, Falcon BMS and other simulators. The Manual covers principles and procedures with interactive figures; the Training Library provides practical exercises.</p>
     </div>
-    <nav class="learning-routes" aria-label="Start learning">
+    <nav class="learning-routes" aria-label="Explore Oversweep">
       <a class="learning-route" href={sitePath('manual/')}>
         <svg class="route-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M16 8c-4-3-8-3-13-2v20c5-1 9-1 13 2 4-3 8-3 13-2V6c-5-1-9-1-13 2Z"/><path d="M16 8v20M7 11c2-.3 4 0 6 1M7 16c2-.3 4 0 6 1M20 12c2-1 4-1.3 6-1M20 17c2-1 4-1.3 6-1"/></svg>
         <span class="route-body">
@@ -31,20 +31,19 @@ import { sitePath } from "../lib/paths";
         <span class="route-description">Standalone exercises with scenario feedback.</span>
         </span>
       </a>
+      <a class="learning-route" href={sitePath('encyclopedia/')}>
+        <svg class="route-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="16" cy="16" r="12"/><path d="m21 11-3 7-7 3 3-7 7-3ZM16 1v3M7 16H1m15 12v3m12-15h3"/></svg>
+        <span class="route-body">
+          <span class="route-meta">Explore</span>
+          <span class="route-title">Encyclopedia <span aria-hidden="true">↗</span></span>
+          <span class="route-description">Aircraft, systems, airfields and aviation terms.</span>
+        </span>
+      </a>
     </nav>
   </section>
 
   <section class="reference-section" aria-labelledby="reference-heading">
-    <header class="reference-heading">
-      <div class="reference-label">
-        <svg class="reference-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="16" cy="16" r="12"/><path d="m21 11-3 7-7 3 3-7 7-3ZM16 1v3M16 28v3M1 16h3M28 16h3"/></svg>
-        <div>
-        <p class="eyebrow">Reference articles</p>
-        <h2 id="reference-heading">From the encyclopedia</h2>
-        </div>
-      </div>
-      <a class="reference-browse" href={sitePath('encyclopedia/')}>Browse all reference articles <span aria-hidden="true">↗</span></a>
-    </header>
+    <h2 id="reference-heading">Featured article</h2>
     <FeaturedArticle />
   </section>
 </SiteLayout>
@@ -60,8 +59,6 @@ import { sitePath } from "../lib/paths";
   .learning-route { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr); gap: 1rem; padding-block: 1.5rem; border-top: 1px solid #56616e; color: inherit; text-decoration: none; }
   .route-icon { width: 2.5rem; height: 2.5rem; color: var(--color-accent); margin-top: .15rem; }
   .route-body { display: block; min-width: 0; }
-  .reference-label { display: flex; align-items: center; gap: 1rem; }
-  .reference-icon { width: 2.5rem; height: 2.5rem; flex: none; color: var(--color-outline); }
   .learning-route:last-child { border-bottom: 1px solid #56616e; }
   .learning-route:focus-visible { outline-color: var(--color-accent); }
   .route-meta { display: block; color: var(--color-ink-muted); text-transform: uppercase; letter-spacing: .09em; font-size: .7rem; }
@@ -69,9 +66,5 @@ import { sitePath } from "../lib/paths";
   .route-title > span { color: var(--color-accent); font-size: 1.4rem; }
   .learning-route:hover .route-title { text-decoration: underline; text-underline-offset: .2em; }
   .route-description { display: block; max-width: 38ch; color: #dce2e8; font-size: .9rem; }
-  .reference-heading { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
-  .reference-heading .eyebrow { color: var(--color-muted); margin-bottom: .5rem; }
-  .reference-heading h2 { font-size: 1.6rem; letter-spacing: -.025em; margin: 0; }
-  .reference-browse { display: inline-flex; align-items: center; min-height: 2.75rem; gap: 1rem; font-size: .85rem; }
   @media (max-width: 50rem) { .learning-intro { grid-template-columns: 1fr; gap: 2rem; } .learning-routes { width: 100%; } }
 </style>

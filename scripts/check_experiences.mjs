@@ -74,6 +74,10 @@ export async function checkExperiences({ dist, experiences, review = false, base
     if (unlisted && pages.frame && !pages.frame.includes('name="robots" content="noindex,nofollow"')) problems.push(`${e.id}: unlisted frame lacks noindex.`);
     if (unlisted) { /* no wrapper by design */ }
     else if (pages.wrapper && e.launch === "window") {
+      if (pages.frame && !pages.frame.includes(`href="${base}/${route(e)}"`))
+        problems.push(`${e.id}: standalone trainer does not link back to its Manual module.`);
+      if (pages.frame && !pages.frame.includes(`href="${base}/training/"`))
+        problems.push(`${e.id}: standalone trainer does not link back to the Training Library.`);
       if (!launchLink(pages.wrapper, `${base}/${frame(e)}`))
         problems.push(`${e.id}: wrapper does not link to ${base}/${frame(e)} in a new window.`);
       if (/<iframe\b/.test(pages.wrapper)) problems.push(`${e.id}: wrapper frames a window-only experience.`);

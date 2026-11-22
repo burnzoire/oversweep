@@ -2,7 +2,6 @@
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import GlossaryList from '../../../components/GlossaryList.astro';
 import { getModule } from '../../../data/modules';
-import { sitePath } from '../../../lib/paths';
 import FlowFigure from '../../../components/bfm/FlowFigure.astro';
 import OvershootFigure from '../../../components/bfm/OvershootFigure.astro';
 import Term from '../../../components/Term.astro';
@@ -20,8 +19,7 @@ const reference = [
 const cite = (n: number) => (pages: string) => `[${n}, ${pages.includes('–') || pages.includes(',') ? 'pp.' : 'p.'} ${pages}]`;
 const p = cite(1), q = cite(2), b = cite(3);
 ---
-<SiteLayout title={bfm.title} activeSection="manual" activeSubject="air-combat" compactSubjectNav={true}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Air Combat',href:sitePath('manual/air-combat/')},{label:bfm.title}]}>
+<SiteLayout title={bfm.title} activeSection="manual" activeSubject="air-combat" compactSubjectNav={true}>
  <section class="status-panel" data-module-id={bfm.id} data-module-revision={bfm.revision}>
   <p>Module revision {bfm.revision} · One-versus-one (1v1) basic fighter maneuvers (BFM). Generic concepts for any fighter or trainer; the numbers are worked examples from one jet trainer's syllabus, the US Navy T-45C's. Defensive and high-aspect BFM and <Term>section</Term> (2v1) engaged maneuvering are outside this revision.</p>
   <p>Learn the geometry first, then how turn performance, the vertical and energy decide what each aircraft can do. Every figure is interactive. Revision 3 puts the core sequence first, with a worked engagement, and moves the training rules, the vertical, three-dimensional maneuvers and guns into the reference half.</p>

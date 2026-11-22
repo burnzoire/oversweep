@@ -149,4 +149,28 @@ for (const category of encyclopediaCategories) {
   }
 }
 
+// These pages have URLs that skip a level or use an older subject name.
+const manualPaths = [
+  ["abnormal-operations/threat-avoidance/", ["tactics/", "tactics/threat-avoidance/"]],
+  ["aircraft-procedures/f-16c/engine-start/", ["aircraft-procedures/", "aircraft-procedures/f-16c/", "aircraft-procedures/f-16c/ground/"]],
+];
+for (const [route, parents] of manualPaths) {
+  const page = pages.get(pageFile(`manual/${route}`));
+  const breadcrumbs = page.match(/<nav class="breadcrumbs"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
+  assert.ok(breadcrumbs, `manual/${route} should have breadcrumbs`);
+  assert.deepEqual(links(breadcrumbs), [`${base}manual/`, ...parents.map((parent) => `${base}manual/${parent}`)]);
+}
+
+const locations = pages.get(pageFile("encyclopedia/locations/"));
+const simTable = locations.match(/<table class="airfield-table sim-airfield-table">([\s\S]*?)<\/table>/)?.[1];
+assert.ok(simTable, "Locations should have a simulator airfield table");
+const simRows = [...simTable.matchAll(/<tr\b([^>]*)>([\s\S]*?)<\/tr>/g)].filter(([, attrs]) => attrs.includes("data-filter-item"));
+assert.ok(simRows.length > 0, "the simulator airfield table should contain filterable rows");
+for (const [, attrs, row] of simRows) {
+  const map = attrs.match(/data-facet-map="([^" ]+)"/)?.[1];
+  assert.ok(map, "each simulator airfield row should match just one map");
+  assert.ok(links(row).some((href) => href.startsWith(`${base}encyclopedia/locations/${map}/#af-`)), "the row link must use its own map");
+  assert.match(row, /<th scope="row">/, "a filtered row should have its own airfield name");
+}
+
 console.log(`Generated-site checks passed: ${htmlFiles.length} pages, base ${base}`);

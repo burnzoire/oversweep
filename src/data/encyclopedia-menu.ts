@@ -1,8 +1,9 @@
 import type { MenuNode } from './manual-menu';
 import { categoryHasContent } from './availability';
 import { encyclopediaCategories } from './catalogue';
+import { carrierEntryDate } from './carrier-model.mjs';
 import { carrierClassRoute } from './carrier-profile-model.mjs';
-import { carrierProfiles } from './carrier-profiles';
+import { classProfileFor } from './carrier-profiles';
 import { carrierRoute, carriers } from './carriers';
 import {
   airfieldCatalogue, aircraftContent, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups,
@@ -39,14 +40,19 @@ function buildCategory(slug: Category): MenuNode[] {
   }
 
   if (slug === 'carriers') {
-    return [
-      group('ency-carrier-classes', 'Class Profiles', carrierProfiles.classes.map((profile) => ({
-        id: profile.slug, title: profile.name, href: carrierClassRoute(profile),
-      }))),
-      group('ency-carrier-hulls', 'Ships', carriers.map((carrier) => ({
-        id: carrier.slug, title: carrier.name, href: carrierRoute(carrier),
-      }))),
-    ].filter(({ children }) => children?.length);
+    const classes = Map.groupBy(carriers, (carrier) => carrier.class);
+    const byIntroduction = [...classes].map(([name, ships]) => ({
+      name, ships,
+      firstEntry: ships.map(carrierEntryDate).filter(Boolean).sort()[0] ?? '',
+    })).sort((a, b) => b.firstEntry.localeCompare(a.firstEntry) || a.name.localeCompare(b.name, 'en'));
+    return byIntroduction.map(({ name, ships }) => {
+      const profile = classProfileFor(name);
+      return group(`ency-carrier-class-${ships[0].slug}`, name, ships.map((carrier) => ({
+        id: carrier.slug,
+        title: carrier.hull ? `${carrier.name} (${carrier.hull})` : carrier.name,
+        href: carrierRoute(carrier),
+      })), profile ? carrierClassRoute(profile) : undefined);
+    });
   }
 
   const records = categoryRecords(slug);

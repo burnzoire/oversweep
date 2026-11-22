@@ -26,25 +26,31 @@ const letters = [...new Set(sorted.map((e) => e.word[0].toUpperCase()))];
 const haystack = (entry: (typeof sorted)[number]) =>
   [entry.word, ...entry.senses.flatMap(({ term }) => [term.expansion ?? '', term.definition])].join(' ').toLowerCase().replace(/\[\d+\]/g, '');
 ---
-<p class="lead">Brevity words, joint terms and abbreviations, airfield and air traffic words, and carrier terms, from the US joint and multi-service publications first. Each word gives its definition, who uses it and its source. Where NATO, ICAO or another service uses a word differently, the entry says how, and a word that two sources define differently shows both meanings.</p>
-<h2>Term sets</h2>
-<div class="entry-grid record-grid">
-  {sets.map(({ record }) => <RecordCard record={record} />)}
-</div>
-
+<p class="lead">Look up brevity words, abbreviations and aviation terms. Each entry identifies the source and who uses the term.</p>
 <h2 id="glossary">All terms A–Z</h2>
 <div class="glossary-tools" hidden>
-  <label for="term-search">Find a term</label>
-  <input id="term-search" type="search" autocomplete="off" spellcheck="false" placeholder="Word, abbreviation or meaning" />
-  <div class="buttons" role="group" aria-label="Show terms from">
-    <button type="button" data-term-filter="all" aria-pressed="true">All</button>
-    {sets.map(({ record, data }) => <button type="button" data-term-filter={record.slug} aria-pressed="false">{data.short}</button>)}
-    <button type="button" data-term-filter="differs" aria-pressed="false">Usage differs</button>
+  <div>
+    <label for="term-search">Find a term</label>
+    <input id="term-search" type="search" autocomplete="off" spellcheck="false" placeholder="Word, abbreviation or meaning" />
+  </div>
+  <div>
+    <label for="term-set">Term set</label>
+    <select id="term-set">
+      <option value="all">All terms</option>
+      <option value="differs">Usage differs</option>
+      {sets.map(({ record, data }) => <option value={record.slug}>{data.short}</option>)}
+    </select>
   </div>
   <p class="term-count" aria-live="polite" data-term-count></p>
 </div>
+<details class="term-sets">
+  <summary>Browse term sets</summary>
+  <div class="entry-grid record-grid">
+    {sets.map(({ record }) => <RecordCard record={record} />)}
+  </div>
+</details>
 <nav class="letter-nav" aria-label="Letters">
-  <ol>{letters.map((l) => <li><a href={`#letter-${l.toLowerCase()}`}>{l}</a></li>)}</ol>
+  <ol>{letters.map((l) => <li data-term-letter={`letter-${l.toLowerCase()}`}><a href={`#letter-${l.toLowerCase()}`}>{l}</a></li>)}</ol>
 </nav>
 {letters.map((letter) => (
   <section class="letter-group" aria-labelledby={`letter-${letter.toLowerCase()}`}>

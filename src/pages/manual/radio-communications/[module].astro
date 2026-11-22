@@ -45,8 +45,7 @@ const bfm = sitePath('manual/air-combat/bfm/');
 const caseIii = sitePath('manual/naval-operations/case-iii/');
 const airfield = sitePath('manual/airfield-operations/airfield-basics/');
 ---
-<SiteLayout title={radio.title} activeSection="manual" activeSubject="radio-communications" compactSubjectNav={true}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Radio Communications',href:sitePath('manual/radio-communications/')},{label:radio.title}]}>
+<SiteLayout title={radio.title} activeSection="manual" activeSubject="radio-communications" compactSubjectNav={true}>
  <section class="status-panel" data-module-id={radio.id} data-module-revision={radio.revision}>
   <p>Module revision {radio.revision} · Air–ground voice radio for pilots: how to transmit, how to say letters and numbers, how to make and answer calls, and what to do in an emergency or when the radio fails. Written for military pilots of every US service: military practice first (the multi-service brevity words shared by the Army, Marine Corps, Navy and Air Force, UHF and preset channels, and a worked Navy training <Term>sortie</Term> with its formation check-ins and training-rule calls), then the Federal Aviation Administration (FAA) rules that every military aircraft follows in US airspace.</p>
   <p>Every figure is interactive. The core sequence runs from one exchange to a whole sortie and what to do when things go wrong; bands, spelling, numbers, call signs, formation and brevity calls are in the reference half. Step through a training <Term id="Sortie">sortie</Term> call by call, build calls, convert numbers into radio words, <Term id="Read back">read back</Term> clearances, set a transponder without tripping an emergency code, and fly a lost-communications route.</p>

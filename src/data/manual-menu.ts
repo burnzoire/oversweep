@@ -185,11 +185,11 @@ export const containsRoute = (node: MenuNode, route: string): boolean =>
 export const menuHrefs = (nodes: MenuNode[] = manualMenu): string[] =>
   nodes.flatMap(n => [...(n.href ? [n.href] : []), ...menuHrefs(n.children ?? [])]);
 
-/** The groups above a page, outermost first, for breadcrumbs: [{ title, href }]. */
-export function ancestors(href: string, nodes: MenuNode[] = manualMenu, trail: MenuNode[] = []): MenuNode[] | undefined {
+/** The path to a page, outermost first, including the page itself. */
+export function manualTrail(href: string, nodes: MenuNode[] = manualMenu, trail: MenuNode[] = []): MenuNode[] | undefined {
   for (const n of nodes) {
-    if (n.href === href) return trail;
-    const found = ancestors(href, n.children ?? [], [...trail, n]);
+    if (n.href === href) return [...trail, n];
+    const found = manualTrail(href, n.children ?? [], [...trail, n]);
     if (found) return found;
   }
   return undefined;

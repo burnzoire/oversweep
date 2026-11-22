@@ -5,7 +5,7 @@ import { airframes, sourceUrl, visibleProcedures } from '../../../../data/aircra
 import GroupCards from '../../../../components/GroupCards.astro';
 import { manualMenu } from '../../../../data/manual-menu';
 import { cardMedia } from '../../../../data/card-media';
-import { assetPath, sitePath } from '../../../../lib/paths';
+import { assetPath } from '../../../../lib/paths';
 
 export function getStaticPaths() {
   return airframes
@@ -28,11 +28,6 @@ const node = manualMenu.find(n => n.id === 'area-aircraft')?.children?.find(n =>
   description={isViper ? 'Learn the DCS F-16C Block 50 cockpit, then practise its procedures from engine start onward.' : undefined}
   image={hero?.src}
   imageAlt={hero?.alt}
-  breadcrumbs={[
-    { label: 'Manual', href: sitePath('manual/') },
-    { label: 'Aircraft', href: sitePath('manual/aircraft-procedures/') },
-    { label: airframe.title },
-  ]}
 >
   {isViper && (
     <header class="airframe-briefing">

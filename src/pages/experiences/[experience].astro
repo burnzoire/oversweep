@@ -1,7 +1,7 @@
 ---
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { includedExperiences, experienceFrame, type Experience } from '../../data/experiences';
+import { includedExperiences, experienceFrame, experienceRoute, type Experience } from '../../data/experiences';
 import { sitePath } from '../../lib/paths';
 import { versionAssets } from '../../lib/experience-assets';
 import { themeHead } from '../../lib/theme';
@@ -15,7 +15,11 @@ const source = await readFile(resolve(process.cwd(), 'src/experiences', experien
 const base = sitePath(experienceFrame(experience));
 // Unlisted trainers stay out of search results and the sitemap.
 const robots = experience.publication === 'unlisted' ? '<meta name="robots" content="noindex">' : '';
-const html = await versionAssets(source
+const withNavigation = experience.publication !== 'unlisted' && experience.launch === 'window'
+  ? source.replace(/(<div class="draft-status" role="note">[^]*?)(<\/div>)/, (_, banner, end) =>
+      `${banner} · <a href="${sitePath(experienceRoute(experience))}" target="_top">Read the module</a> · <a href="${sitePath('training/')}" target="_top">Training Library</a>${end}`)
+  : source;
+const html = await versionAssets(withNavigation
   .replace(/<meta charset[^>]*>/i, charset => charset + themeHead)
   .replace('<head>', `<head><base href="${base}">${robots}`)
   .replace('<body>', `<body data-experience-id="${experience.id}" data-experience-revision="${experience.revision}">`), experience.slug, experience.assets, base);

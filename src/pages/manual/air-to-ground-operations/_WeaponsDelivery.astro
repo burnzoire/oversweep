@@ -35,8 +35,7 @@ const rows = [30, 20, 10] as const;
 const ordnance = sitePath('encyclopedia/ordnance/');
 const bfm = sitePath('manual/air-combat/bfm/');
 ---
-<SiteLayout title={wd.title} activeSection="manual" activeSubject="air-to-ground-operations" compactSubjectNav={true}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Air-to-Ground Operations',href:sitePath('manual/air-to-ground-operations/')},{label:wd.title}]}>
+<SiteLayout title={wd.title} activeSection="manual" activeSubject="air-to-ground-operations" compactSubjectNav={true}>
  <section class="status-panel" data-module-id={wd.id} data-module-revision={wd.revision}>
   <p>Module revision {wd.revision} · How a fixed-wing pilot puts an unguided weapon on a target: the four kinds of attack, the geometry of a dive delivery, the numbers a pilot flies to and what an error in each does to the hit, and the offset <Term>pop-up</Term> attack from the run-in to the recovery. Written for military pilots of every service from the US Navy's T-45 weapons and operational navigation training instructions, with sim manuals for the computed modes.</p>
   <p>Figure 1 lets you fly a dive delivery badly on purpose and see where the bomb goes; Figure 2 steps through a <Term>pop-up</Term> attack in profile and plan.</p>

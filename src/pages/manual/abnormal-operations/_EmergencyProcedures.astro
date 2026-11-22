@@ -46,8 +46,7 @@ const keys = [
 ];
 const initial = glideCheck({ rule: 't6', distanceNm: 6, heightFt: 8000 });
 ---
-<SiteLayout title={mod.title} activeSection="manual" activeSubject="abnormal-operations" compactSubjectNav={true}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Abnormal Operations',href:sitePath('manual/abnormal-operations/')},{label:mod.title}]}>
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="abnormal-operations" compactSubjectNav={true}>
  <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
   <p>Module revision {mod.revision} · How a military pilot handles an emergency in flight, whatever the aircraft: the rules that come first, how soon to land, engine failure, fire and system failures, ejection, ditching and losing the radios. It follows Navy primary training squadrons' published study aids and the Air Force's flight rules, with the FAA's handbook and information manual as supplementary sources.</p>
   <p>Helicopter engine failures are in <a href={auto}>Autorotation</a>, the next module in this subject. The radio calls and codes are in <a href={`${radio}#emergency`}>Radio Procedures</a>.</p>

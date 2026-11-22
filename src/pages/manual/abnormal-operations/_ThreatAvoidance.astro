@@ -32,8 +32,7 @@ const initial = { speedKt: 450, tofS: 3, loadG: 4 };
 const pic = jinkPicture(initial);
 const ft = (n: number) => `${Math.round(n).toLocaleString('en-US')} ft`;
 ---
-<SiteLayout title={mod.title} activeSection="manual" activeSubject="abnormal-operations" compactSubjectNav={true}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Abnormal Operations',href:sitePath('manual/abnormal-operations/')},{label:mod.title}]}>
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="abnormal-operations" compactSubjectNav={true}>
  <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
   <p>Module revision {mod.revision} · How aircrew of any service stay out of reach of surface-to-air missiles and anti-aircraft guns, and what they do when one engages them anyway: planning around the threat, how each kind of threat guides or aims, the warning, and the maneuvers, chaff, flares and jamming that defeat it. It follows an Air Force electronic warfare text, the Air Force's F-16 fundamentals in two versions, and the Army's attack helicopter manual, with joint brevity.</p>
   <p>How a radar sees, the Doppler notch and the countermeasures themselves are in <a href={radar}>Radar and Warning Systems</a>; attacking the defences is in <a href={sead}>SEAD and DEAD</a>; the threats one by one are in <a href={threats}>Threat Systems</a>.</p>

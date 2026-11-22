@@ -12,7 +12,7 @@ import FilterBar from '../../../components/encyclopedia/FilterBar.astro';
 import { buildFacets, filterAttributes, slug, type FilterItem } from '../../../data/record-facets';
 import '../../../styles/encyclopedia.css';
 import '../../../styles/carriers.css';
-const list = [...carriers].sort((a, b) => carrierEntryDate(a).localeCompare(carrierEntryDate(b)) || a.name.localeCompare(b.name));
+const list = [...carriers].sort((a, b) => carrierEntryDate(b).localeCompare(carrierEntryDate(a)) || a.name.localeCompare(b.name));
 const labels: Record<string, string> = {};
 const tag = (text: string) => { labels[slug(text)] = text; return slug(text); };
 const items = list.map((carrier) => ({ carrier, filter: { count: 'records', search: carrierSearchText(carrier), values: { origin: [tag(carrier.origin)], class: [tag(carrier.class)], operator: carrier.operators.map(tag) } } as FilterItem }));
@@ -24,8 +24,19 @@ const facets = buildFacets(items.map((x) => x.filter), [
 ---
 <SiteLayout title="Carriers" activeSection="encyclopedia" breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: 'Carriers' }]}>
   <div class="ency carriers">
-    <nav class="theatre-jump" aria-label="Encyclopedia"><ul><li><a href={sitePath('encyclopedia/')}>All categories</a></li><li><a href={sitePath('encyclopedia/locations/')}>Locations</a></li><li><span aria-current="page">Carriers</span></li></ul></nav>
     <p class="lead">Aircraft carriers completed after the Second World War, with one record per hull across changes of name and navy.</p>
+    <h2 id="find-carrier">Find a carrier</h2>
+    <FilterBar quickLookup id="carrier" label="Find a carrier" search={{ label: 'Name, hull number or former name', placeholder: 'e.g. CVN-74, Vikrant or R 11' }} facets={facets} nouns={{ records: 'carriers' }} sort={{ label: 'Order', options: [{ value: '-date', label: 'Completion / first service: newest first' }, { value: 'date', label: 'Completion / first service: oldest first' }, { value: 'name', label: 'Name' }] }} />
+    <div class="table-scroll" role="region" aria-label="Carrier catalogue, scrolls sideways on narrow screens" tabindex="0">
+      <table class="carrier-table">
+        <caption>{carriers.length} carrier hulls</caption>
+        <thead><tr><th scope="col">Carrier</th><th scope="col">Class</th><th scope="col">Built / converted in</th><th scope="col">Completion / commission</th><th scope="col">Operators</th></tr></thead>
+        <tbody>{items.map(({ carrier, filter }) => <tr {...filterAttributes(filter)} data-sort-date={carrierEntryDate(carrier)} data-sort-name={carrier.name}>
+          <th scope="row"><a href={sitePath(carrierRoute(carrier))}>{carrier.name}</a><span class="carrier-detail">{carrier.hull}</span>{carrier.aliases.length > 0 && <span class="carrier-detail">Also: {carrier.aliases.join(' · ')}</span>}</th>
+          <td>{classProfileFor(carrier.class) ? <a href={sitePath(carrierClassRoute(classProfileFor(carrier.class)!))}>{carrier.class}</a> : carrier.class}</td><td>{carrier.origin}</td><td><time datetime={carrierEntryDate(carrier)}>{carrierDate(carrierEntryDate(carrier))}</time><span class="carrier-detail">{carrierEntryLabel(carrier)}</span></td><td>{carrier.operators.length ? carrier.operators.join(' · ') : 'No commissioned service'}</td>
+        </tr>)}</tbody>
+      </table>
+    </div>
     <CarrierModuleLink />
     <section class="status-panel" aria-labelledby="carrier-scope-title">
       <h2 id="carrier-scope-title">Scope</h2>
@@ -34,17 +45,6 @@ const facets = buildFacets(items.map((x) => x.filter), [
       <p>{carriers.length} hull records · Coverage checked {carrierDate(carrierAsOf)}. Sources and any coverage limitations are listed on each record.</p>
     </section>
     {carrierProfiles.classes.length > 0 && <section aria-labelledby="carrier-class-profiles"><h2 id="carrier-class-profiles">Class profiles</h2><p>Shared design characteristics and individual ship histories.</p><div class="carrier-class-cards">{carrierProfiles.classes.map((profile) => <article><h3><a href={sitePath(carrierClassRoute(profile))}>{profile.name}</a></h3><p>{profile.summary} <ProfileCitations cites={profile.summaryCites} sources={profile.sources} namespace="class" hrefPrefix={sitePath(carrierClassRoute(profile))} /></p></article>)}</div></section>}
-    <FilterBar id="carrier" label="Find a carrier" search={{ label: 'Name, hull number or former name', placeholder: 'e.g. Midway, R 11 or Vikramaditya' }} facets={facets} nouns={{ records: 'carriers' }} sort={{ label: 'Order', options: [{ value: 'date', label: 'Completion / first service: oldest first' }, { value: '-date', label: 'Completion / first service: newest first' }, { value: 'name', label: 'Name' }] }} />
-    <div class="table-scroll" role="region" aria-label="Carrier catalogue, scrolls sideways on narrow screens" tabindex="0">
-      <table class="carrier-table">
-        <caption>{carriers.length} carrier hulls, ordered by completion or first carrier commission</caption>
-        <thead><tr><th scope="col">Carrier</th><th scope="col">Class</th><th scope="col">Built / converted in</th><th scope="col">Completion / commission</th><th scope="col">Operators</th></tr></thead>
-        <tbody>{items.map(({ carrier, filter }) => <tr {...filterAttributes(filter)} data-sort-date={carrierEntryDate(carrier)} data-sort-name={carrier.name}>
-          <th scope="row"><a href={sitePath(carrierRoute(carrier))}>{carrier.name}</a><span class="carrier-detail">{carrier.hull}</span>{carrier.aliases.length > 0 && <span class="carrier-detail">Also: {carrier.aliases.join(' · ')}</span>}</th>
-          <td>{classProfileFor(carrier.class) ? <a href={sitePath(carrierClassRoute(classProfileFor(carrier.class)!))}>{carrier.class}</a> : carrier.class}</td><td>{carrier.origin}</td><td><time datetime={carrierEntryDate(carrier)}>{carrierDate(carrierEntryDate(carrier))}</time><span class="carrier-detail">{carrierEntryLabel(carrier)}</span></td><td>{carrier.operators.length ? carrier.operators.join(' · ') : 'No commissioned service'}</td>
-        </tr>)}</tbody>
-      </table>
-    </div>
     <p class="note">Category photograph: <a href={carrierCover.sourceUrl}>{carrierCover.caption}</a> {carrierCover.author} · {carrierCover.licence}.</p>
   </div>
 </SiteLayout>

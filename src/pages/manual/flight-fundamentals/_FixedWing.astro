@@ -37,8 +37,7 @@ const bms = cite(6);
 const bfm = sitePath('manual/air-combat/bfm/'), caseIii = sitePath('manual/naval-operations/case-iii/');
 const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
 ---
-<SiteLayout title={mod.title} activeSection="manual" activeSubject="flight-fundamentals" compactSubjectNav={true}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Flight Fundamentals',href:sitePath('manual/flight-fundamentals/')},{label:mod.title}]}>
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="flight-fundamentals" compactSubjectNav={true}>
  <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
   <p>Module revision {mod.revision} · How military aircraft fly, written for pilots of every service: the four forces, lift and <Term id="AOA">angle of attack</Term>, drag, control and stability, turns and <Term id="Load factor">load factor</Term>, stalls, the maneuvering envelope and energy. It follows the services' own texts, the Navy's aerodynamics books and its jet syllabus, with the FAA handbooks as supplementary sources. Worked numbers use an invented jet trainer. What changes when the wing is a rotor blade is in the companion module, <a href={rotor}>Rotor-Wing Principles of Flight</a>.</p>
   <p>Every figure is interactive: move a control and the drawing and readout follow. The core sequence runs from the four forces to the stall boundary; ground effect, controls, stability and energy are in the reference half. Propellers, high-speed (<Term id="Transonic">transonic</Term>) flight, spins and weight and balance are outside this revision.</p>

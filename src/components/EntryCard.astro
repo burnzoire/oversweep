@@ -22,10 +22,11 @@ const objective = asTrainer ? experience!.objective : entry.objective;
 const summary = (compact && cardMedia[entry.id]?.summary) || objective;
 const applicability = asTrainer ? experience!.applicability : entry.applicability;
 const isProcedure = !experience && !entry.module;
-const revision = asTrainer
-  ? `Exercise revision ${experience!.revision}`
-  : isProcedure ? 'Aircraft procedure' : `Module revision ${experience?.module?.revision ?? entry.module?.revision}`;
 const local = isProcedure ? entry.procedureStatus !== 'public-preview' : (experience ?? entry.module)?.publication !== 'published';
+const meta = [
+  asTrainer ? `Exercise revision ${experience!.revision}` : isProcedure ? 'Aircraft procedure' : undefined,
+  local ? 'Local review only' : isProcedure ? 'Public preview' : undefined,
+].filter(Boolean).join(' · ');
 const markers = experience
   ? { 'data-experience-id': experience.id, 'data-experience-revision': experience.revision }
   : isProcedure
@@ -36,15 +37,15 @@ const Heading = (headingLevel === 4 ? 'h4' : headingLevel === 3 ? 'h3' : 'h2') a
 <section class:list={['entry-card', { compact }]} {...markers}>
   {compact && !asTrainer && <CardPhoto id={entry.id} />}
   {showSubject && <p class="entry-kicker">{subjectTitle(entry.subject)}</p>}
-  <Heading class="entry-title"><a href={sitePath(entry.href)}>{title}</a></Heading>
+  <Heading class="entry-title">{asTrainer ? title : <a href={sitePath(entry.href)}>{title}</a>}</Heading>
   <p class="entry-objective">{summary}</p>
   {!compact && <p class="entry-applicability">{applicability}</p>}
-  <p class="entry-meta">{revision}{local ? ' · Local review only' : isProcedure && ' · Public preview'}</p>
+  {meta && <p class="entry-meta">{meta}</p>}
   <p class="entry-actions">
     {asTrainer ? (
       <>
         <a class="button" href={sitePath(entry.trainer!.href)} target="_blank" rel="noopener">Launch the exercise <span class="visually-hidden"> (opens in a new window)</span> <span aria-hidden="true">↗</span></a>
-        <a href={sitePath(entry.href)}>Read the {entry.title} module first</a>
+        <a href={sitePath(entry.href)}>Read the module</a>
       </>
     ) : (
       <>

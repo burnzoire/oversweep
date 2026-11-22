@@ -56,9 +56,13 @@ export async function checkRecords({ dist, records, review = false, base = "", c
       if (await read(`${route(r)}index.html`) !== null) problems.push(`${r.id} is excluded but ${route(r)}index.html was emitted.`);
       continue;
     }
-    const simMap = r.category === "locations" && /^kind: map$/m.test(await readFile(path.join(contentRoot, contentFile(r)), "utf8").catch(() => ""));
+    const kind = r.category === "locations"
+      ? (await readFile(path.join(contentRoot, contentFile(r)), "utf8").catch(() => "")).match(/^kind: (\w+)$/m)?.[1]
+      : undefined;
+    const simMap = kind === "map";
     const revision = `data-record-revision="${r.revision}"`;
-    const pages = { page: await read(`${route(r)}index.html`), "category index": await read(`encyclopedia/${r.category}/index.html`) };
+    const indexRoute = kind === "theatre" || simMap ? "encyclopedia/locations/theatres/" : `encyclopedia/${r.category}/`;
+    const pages = { page: await read(`${route(r)}index.html`), "category index": await read(`${indexRoute}index.html`) };
     const sections = {};
     for (const [name, html] of Object.entries(pages)) {
       if (html === null) { problems.push(`${r.id}: ${name} is missing.`); continue; }
@@ -70,7 +74,10 @@ export async function checkRecords({ dist, records, review = false, base = "", c
         problems.push(`${r.id}: ${name} lacks the registered id or revision ${r.revision}.`);
       if (section?.body.includes(r.maturity)) problems.push(`${r.id}: ${name} shows the internal maturity label "${r.maturity}".`);
     }
-    if (pages["category index"] && !(simMap ? pages["category index"] : sections["category index"]?.body)?.includes(`href="${base}/${route(r)}"`))
+    const listing = simMap
+      ? pages["category index"]?.match(/<article class="page-content">([\s\S]*?)<\/article>/)?.[1]
+      : sections["category index"]?.body;
+    if (pages["category index"] && !listing?.includes(`href="${base}/${route(r)}"`))
       problems.push(`${r.id}: category index does not link to ${base}/${route(r)}.`);
     // Cards on a filtered list carry the facets the list's filter bar reads.
     if (r.category === "aircraft" && pages["category index"] && !sections["category index"]?.tag.includes(`data-facet-era="${r.era}"`))

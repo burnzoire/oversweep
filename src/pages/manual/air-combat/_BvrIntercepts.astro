@@ -33,8 +33,7 @@ const nav = sitePath('manual/navigation/air-navigation/');
 const ordnance = sitePath('encyclopedia/ordnance/');
 const k = (ft: number) => `${Math.round(ft / 1000)},000`;
 ---
-<SiteLayout title={bvr.title} activeSection="manual" activeSubject="air-combat" compactSubjectNav={true}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Air Combat',href:sitePath('manual/air-combat/')},{label:bvr.title}]}>
+<SiteLayout title={bvr.title} activeSection="manual" activeSubject="air-combat" compactSubjectNav={true}>
  <section class="status-panel" data-module-id={bvr.id} data-module-revision={bvr.revision}>
   <p>Module revision {bvr.revision} · The fight before the merge: radar intercepts, missile launch zones, the section's timeline and the controller's calls. For fighter aircrew of every service, from the Navy's public intercept training instruction and joint doctrine. Unclassified training principles only.</p>
  </section>
