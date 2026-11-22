@@ -13,7 +13,8 @@ const children = node.children ?? [];
 ---
 <div class="entry-grid">
   {children.map((c) => {
-    const entry = !c.planned && entryById.get(c.id);\n    const empty = !!c.children?.length && !hasArticle(c);
+    const entry = !c.planned && entryById.get(c.id);
+    const empty = !!c.children?.length && !hasArticle(c);
     return entry ? <EntryCard entry={entry} headingLevel={2} compact /> : (
       <article class:list={["entry-card", "compact", { "card-unwritten": c.planned || empty }]}>
         <h2 class="entry-title">{c.href && (c.children?.length || !c.planned) ? <a href={sitePath(c.href)}>{c.title}</a> : <span>{c.title}</span>}</h2>
