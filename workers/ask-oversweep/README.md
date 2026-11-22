@@ -1,8 +1,8 @@
 # Ask Oversweep deployment
 
-The deployment workflow builds the site and bundles its passage corpus into the Worker. The site sends section IDs, the question, and the previous topic. Run the Worker deployment after site content changes to refresh the bundled corpus.
+The deployment workflow builds the site and bundles its passage corpus into the Worker. The site sends section IDs, the question, and the previous topic. After each successful production GitHub Pages deployment on `main`, GitHub Actions automatically rebuilds and redeploys the Worker from the latest `main` content. This refreshes its bundled corpus without manual re-indexing. Failed Pages deployments do not trigger the Worker. The Worker workflow also supports manual dispatch for recovery or testing.
 
-After approval and merge, run **Deploy Ask Oversweep Worker** from Actions. It uses the existing `CLOUDFLARE_API_TOKEN` repository secret and `CLOUDFLARE_ACCOUNT_ID` variable. Set the repository variable `PUBLIC_ASK_ENDPOINT` to `https://ask-oversweep.burnzoire.workers.dev/ask` and rerun the Pages deployment to activate generated replies. Builds with no endpoint use Pagefind alone.
+For an immediate refresh after merging, wait for **Deploy GitHub Pages** to succeed and then **Deploy Ask Oversweep Worker** to complete. You can also manually run **Deploy Ask Oversweep Worker** from Actions. It uses the existing `CLOUDFLARE_API_TOKEN` repository secret and `CLOUDFLARE_ACCOUNT_ID` variable. Set the repository variable `PUBLIC_ASK_ENDPOINT` to `https://ask-oversweep.burnzoire.workers.dev/ask` and rerun the Pages deployment to activate generated replies. Builds with no endpoint use Pagefind alone.
 
 Ask “What is the tower freq for Sochi?” after deployment. The cited Sim maps passage should support 127.0 MHz VHF and 256.0 MHz UHF for DCS: Caucasus. The Worker defaults to Gemma 4 26B A4B IT. Set the optional Worker variable `ASK_MODEL` to compare another free-tier model with a compatible chat-completion and structured-output schema.
 
