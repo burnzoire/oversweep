@@ -1,3 +1,4 @@
+import { INK, PAPER } from '../components.ts';
 import type { Placement } from '../types';
 
 /**
@@ -11,7 +12,7 @@ import type { Placement } from '../types';
  * A held four-way switch is drawn rocked a little toward the direction pushed.
  */
 export const FACE: [number, number] = [50, 50];
-const C = 25, INK = '#161616', PAPER = 'var(--panel-paper,#fff)', RED = 'var(--panel-red,#b3262a)';
+const C = 25, RED = 'var(--panel-red,#b3262a)';
 const W = { heavy: 0.6, medium: 0.4, fine: 0.25 };
 const f = (v: number) => +v.toFixed(2);
 const line = (d: string, w: keyof typeof W = 'medium', fill = 'none') => `<path d="${d}" fill="${fill}" stroke="${INK}" stroke-width="${W[w]}" stroke-linecap="round" stroke-linejoin="round"/>`;

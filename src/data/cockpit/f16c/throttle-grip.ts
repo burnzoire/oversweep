@@ -1,3 +1,4 @@
+import { tracedLineArt } from '../components.ts';
 import type { ControlDef, PanelSpec, Rect } from '../types';
 import { ANT_ELEV, ART, HITS, MAN_RNG } from './throttle-grip-art.ts';
 import { THROTTLE_FACES } from './hotas-faces.ts';
@@ -23,7 +24,7 @@ const push = (id: string, name: string, description: string, source = src): Cont
   positions: [{ id: 'out', label: 'Out', hold: 'stable' }, { id: 'in', label: 'Pressed', hold: 'momentary', spring: 'out' }],
   initial: 'out', description, source,
 });
-const svg = (shapes: Record<string, string>) => Object.fromEntries(Object.entries(shapes).map(([k, v]) => [k, { d: '', svg: v }]));
+const svg = (shapes: Record<string, string>) => Object.fromEntries(Object.entries(shapes).map(([k, v]) => [k, { d: '', svg: tracedLineArt(v) }]));
 const hit = (k: keyof typeof HITS) => [...HITS[k]] as Rect;
 const elevId = (v: number) => v > 0 ? `u${v}` : v < 0 ? `d${-v}` : 'center';
 const CURSOR = 'Radar cursor/enable control. Pushed in any direction it slews the cursor on the FCR, HSD and HAD formats, the targeting pod or the Maverick seeker, or the HUD TD box and mark cue. Pressed (enable), it swaps the AIM-9 between BORE and SLAVE while held, or steps the Maverick through PRE, VIS and BORE.';
@@ -54,7 +55,7 @@ export const throttleGrip: PanelSpec = {
     credits: [{ what: 'Throttle grip drawing (vectorised from a redraw)', author: 'F-16 flight-manual figure via falcon4.wikidot.com, Wikimedia Commons', url: 'https://commons.wikimedia.org/wiki/File:F-16_Throttle.jpg', license: 'CC BY-SA 3.0', licenseUrl: 'https://creativecommons.org/licenses/by-sa/3.0/' }],
   },
   plate: [],
-  engraving: [{ kind: 'svg', markup: ART.static }],
+  engraving: [{ kind: 'svg', markup: tracedLineArt(ART.static) }],
   placements: [
     { component: 'traced', control: 'spd-brk', at: [280, 98], hit: hit('spdBrk'), shapes: svg(ART.spdBrk) },
     { component: 'traced', control: 'comm-ud', at: [217, 28], hit: hit('commUd'), shapes: svg(ART.commUd) },

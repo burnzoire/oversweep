@@ -246,11 +246,11 @@ const { id } = Astro.props;
   button:disabled { opacity: .65; cursor: wait; }
   [data-thread] { display: grid; gap: .65rem; max-height: min(48dvh, 24rem); overflow-y: auto; margin-top: .5rem; }
   [data-thread]:empty { display: none; }
-  [data-thread] :global(article) { width: fit-content; max-width: 92%; padding: .65rem .8rem; border-radius: .75rem; background: #eef1f4; overflow-wrap: anywhere; }
+  [data-thread] :global(article) { width: fit-content; max-width: 92%; padding: .65rem .8rem; border-radius: .75rem; background: var(--color-chat-reply, #eef1f4); overflow-wrap: anywhere; }
   [data-thread] :global([data-sender="you"]) { justify-self: end; background: var(--color-ink); color: white; }
   [data-thread] :global(p) { margin: 0; color: inherit; }
   [data-thread] :global(ul) { padding: 0; margin: .5rem 0 0; list-style: none; }
-  [data-thread] :global(li) { padding: .5rem; margin-top: .4rem; border: 1px solid #c6cdd4; border-radius: .4rem; background: white; }
+  [data-thread] :global(li) { padding: .5rem; margin-top: .4rem; border: 1px solid var(--color-chat-border, #c6cdd4); border-radius: .4rem; background: var(--color-page); }
   [data-thread] :global([data-report]) { margin-top: .5rem; font-size: .875em; }
   [data-thread] :global([data-report] summary) { cursor: pointer; }
   [data-thread] :global([data-report] button) { margin: .4rem 0; }

@@ -81,8 +81,8 @@ const avatar = assetPath("images/ask-oversweep.webp");
     width: min(28rem, calc(100% - 2rem));
     max-height: calc(100dvh - 2rem);
     padding: 1rem;
-    color: var(--color-ink);
-    background: white;
+    color: var(--color-page-text, var(--color-ink));
+    background: var(--color-page);
     border: 1px solid currentColor;
   }
   dialog::backdrop { background: rgb(0 0 0 / .24); }

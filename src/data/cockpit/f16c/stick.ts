@@ -1,3 +1,4 @@
+import { INK, tracedLineArt } from '../components.ts';
 import type { ControlDef, PanelSpec } from '../types';
 import { ART, CAPTIONS, HITS } from './stick-art.ts';
 import { STICK_FACES } from './hotas-faces.ts';
@@ -21,8 +22,8 @@ const push = (id: string, name: string, pressed: string, description: string, so
   positions: [{ id: 'out', label: 'Out', hold: 'stable' }, { id: 'in', label: pressed, hold: 'momentary', spring: 'out' }],
   initial: 'out', description, source,
 });
-const svg = (shapes: Record<string, string>) => Object.fromEntries(Object.entries(shapes).map(([k, v]) => [k, { d: '', svg: v }]));
-const caption = (x: number, y: number, t: string) => ({ kind: 'svg' as const, markup: `<text x="${x}" y="${y}" font-size="5" font-weight="400" text-anchor="middle" fill="#161616" stroke="none">${t}</text>` });
+const svg = (shapes: Record<string, string>) => Object.fromEntries(Object.entries(shapes).map(([k, v]) => [k, { d: '', svg: tracedLineArt(v) }]));
+const caption = (x: number, y: number, t: string) => ({ kind: 'svg' as const, markup: `<text x="${x}" y="${y}" font-size="5" font-weight="400" text-anchor="middle" fill="${INK}" stroke="none">${t}</text>` });
 
 const TMS = 'Target management switch (TMS). Designates and manages targets on the sensor of interest (SOI). Forward: designate (short) or, with the HUD as SOI, makes the HMCS the SOI (long). Left: FCR scan and NCTR/LOS interrogation. Right: target step, sighting point rotary or TWS toggle. Aft: target reject or return. A short press is under half a second, a long one over.';
 const DMS = 'Display management switch (DMS). Selects the sensor of interest (SOI). Forward: SOI to the HUD. Left and right: next format on the left or right MFD. Aft: SOI to an MFD or swap the SOI between the MFDs (short), HMCS display on and off (long).';
@@ -53,8 +54,8 @@ export const stick: PanelSpec = {
   },
   plate: [],
   engraving: [
-    { kind: 'svg', markup: ART.sideStatic },
-    { kind: 'svg', markup: ART.rearStatic },
+    { kind: 'svg', markup: tracedLineArt(ART.sideStatic) },
+    { kind: 'svg', markup: tracedLineArt(ART.rearStatic) },
     caption(CAPTIONS.side, CAPTIONS.y, 'Left side'),
     caption(CAPTIONS.rear, CAPTIONS.y, 'From behind'),
     caption(17, CAPTIONS.y, 'Rudder pedals'),

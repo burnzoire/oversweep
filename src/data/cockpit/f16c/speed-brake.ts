@@ -1,3 +1,4 @@
+import { INK } from '../components.ts';
 import type { IndicatorDef, PanelSpec, Pt } from '../types';
 import { tracer } from '../trace.ts';
 
@@ -25,7 +26,7 @@ export const LEGEND = { cap: mm(14), width: mm(44) };
 const WIN: [number, number] = [45.5, 99.5], WIN_W = 41, WIN_H = 47;
 /** Dot grid: columns and rows measured on image 005, as offsets from the window centre. */
 const DOT_X = [31, 46, 61].map(x => mm(x - WIN[0])), DOT_Y = [84, 98, 113].map(y => mm(y - WIN[1])), DOT_R = mm(4);
-const dots = DOT_Y.flatMap(y => DOT_X.map(x => `<circle cx="${x}" cy="${y}" r="${DOT_R}" fill="#161616" stroke="none"/>`)).join('');
+const dots = DOT_Y.flatMap(y => DOT_X.map(x => `<circle cx="${x}" cy="${y}" r="${DOT_R}" fill="${INK}" stroke="none"/>`)).join('');
 /**
  * No power: diagonal black and white stripes across the window, rising to the
  * right ("/"), four white bands across. The guide does not picture this face;
@@ -34,7 +35,7 @@ const dots = DOT_Y.flatMap(y => DOT_X.map(x => `<circle cx="${x}" cy="${y}" r="$
 const stripes = (() => {
   const w = mm(WIN_W) / 2, h = mm(WIN_H) / 2, step = mm(13), out: string[] = [];
   for (let k = -w - h; k < w + h; k += step) out.push(`M${(k - h).toFixed(2)} ${h.toFixed(2)}L${(k + h).toFixed(2)} ${(-h).toFixed(2)}`);
-  return `<clipPath id="sb-stripes"><rect x="${-w}" y="${-h}" width="${2 * w}" height="${2 * h}"/></clipPath><path d="${out.join('')}" clip-path="url(#sb-stripes)" fill="none" stroke="#161616" stroke-width="${mm(13 / Math.SQRT2 / 2)}"/>`;
+  return `<clipPath id="sb-stripes"><rect x="${-w}" y="${-h}" width="${2 * w}" height="${2 * h}"/></clipPath><path d="${out.join('')}" clip-path="url(#sb-stripes)" fill="none" stroke="${INK}" stroke-width="${mm(13 / Math.SQRT2 / 2)}"/>`;
 })();
 
 /**

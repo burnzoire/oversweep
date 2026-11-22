@@ -1,10 +1,12 @@
 :root {
   color-scheme: light;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  color: #171717;
-  background: #fff;
+  color: var(--color-text);
+  background: var(--color-page);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+  --color-page: #fff;
+  --color-divider: #e3e5e8;
   --color-text: #171717;
   --color-muted: #595959;
   --color-border: #767676;
@@ -19,10 +21,62 @@
   --color-ink-muted: #b8c2cc;
   --color-accent: #ffc20e;
   --color-unavailable: #767676;
+  --color-outline: var(--color-ink);
+  --color-warning: #915300;
+  --color-error: #b00020;
+  --color-hint-surface: #fff4c2;
+  --panel-ink: #161616;
+  --panel-paper: var(--color-page);
+  --panel-lit-amber: #f5b400;
+  --panel-lit-green: #5fd35f;
+  --panel-lit-red: #ff5a4f;
+  --panel-lit-blue: #6fb4ff;
   /* The page shell is wide so figures, tables and card grids can use desktop
      screens; running text keeps a readable line length via --measure-prose. */
   --measure-page: 80rem;
   --measure-prose: 72ch;
+}
+
+/* Preview palettes use the browser's colour scheme so System also works
+   without JavaScript and follows changes to the device setting. */
+@supports (color: light-dark(white, black)) {
+  :root[data-theme-preview] {
+    color-scheme: light dark;
+    --color-page: light-dark(#fff, #14171b);
+    --color-surface: light-dark(#f5f6f7, #20252c);
+    --color-text: light-dark(#171717, #edf0f4);
+    --color-muted: light-dark(#595959, #bac3ce);
+    --color-border: light-dark(#767676, #788594);
+    --color-divider: light-dark(#e3e5e8, #424c57);
+    --color-link: light-dark(#005a9c, #9ad0ff);
+    --color-term: light-dark(#0b6bcb, #9ad0ff);
+    --color-focus: light-dark(#005fcc, #80baff);
+    --color-unavailable: light-dark(#767676, #99a4b1);
+    --color-outline: light-dark(#111a24, #9ca7b4);
+    --color-warning: light-dark(#915300, #ffc570);
+    --color-error: light-dark(#b00020, #ffaaaa);
+    --color-chat-reply: light-dark(#eef1f4, #20252c);
+    --color-chat-border: light-dark(#c6cdd4, #788594);
+    --color-page-text: var(--color-text);
+    --color-search-mark: #171717;
+    --color-hint-surface: light-dark(#fff4c2, #403416);
+    --panel-ink: light-dark(#161616, #f0f2f5);
+    --panel-red: light-dark(#b3262a, #c64440);
+    --panel-lit-amber: light-dark(#f5b400, #8b6100);
+    --panel-lit-green: light-dark(#5fd35f, #327444);
+    --panel-lit-red: light-dark(#ff5a4f, #b34740);
+    --panel-lit-blue: light-dark(#6fb4ff, #326eac);
+  }
+
+  :root[data-theme-preview][data-theme="light"] { color-scheme: light; }
+  :root[data-theme-preview][data-theme="dark"] { color-scheme: dark; }
+}
+
+@media (forced-colors: active) {
+  :root[data-theme-preview] {
+    --panel-ink: CanvasText;
+    --panel-paper: Canvas;
+  }
 }
 
 * {
@@ -33,7 +87,7 @@ body {
   min-width: 20rem;
   margin: 0;
   color: var(--color-text);
-  background: #fff;
+  background: var(--color-page);
   line-height: 1.6;
 }
 
@@ -75,7 +129,7 @@ summary:focus-visible {
   min-height: 2.75rem;
   padding: 0.5rem 0.75rem;
   transform: translateY(-160%);
-  background: #fff;
+  background: var(--color-page);
   color: var(--color-text);
   border: 2px solid var(--color-focus);
 }
@@ -278,7 +332,7 @@ h2 {
 .subject-nav {
   min-width: 0;
   border: 1px solid var(--color-border);
-  background: #fff;
+  background: var(--color-page);
 }
 
 /* The Manual menu: an accordion tree. Siblings share a <details> name, so the
@@ -412,7 +466,7 @@ h2 {
   min-height: 9rem;
   padding: 1rem;
   border: 1px solid var(--color-border);
-  background: #fff;
+  background: var(--color-page);
 }
 
 .collection-card h2,
@@ -452,7 +506,7 @@ h2 {
 .category-card {
   position: relative;
   overflow: hidden;
-  border-top: 4px solid var(--color-ink);
+  border-top: 4px solid var(--color-outline);
 }
 
 .category-card.unavailable {
@@ -527,8 +581,8 @@ h2 {
   padding: 1.1rem 1.25rem;
   margin-bottom: 1rem;
   border: 1px solid var(--color-border);
-  border-top: 4px solid var(--color-ink);
-  background: #fff;
+  border-top: 4px solid var(--color-outline);
+  background: var(--color-page);
 }
 
 .entry-grid .entry-card {
@@ -673,7 +727,7 @@ h2 {
 .footer-brand .brand-mark {
   width: 1.2rem;
   height: 1.9rem;
-  fill: var(--color-ink);
+  fill: var(--color-outline);
 }
 
 .footer-inner {
@@ -767,7 +821,7 @@ h2 {
   border: 1px solid var(--color-border);
   border-radius: 0.25rem;
   color: var(--color-text);
-  background: #fff;
+  background: var(--color-page);
   box-shadow: 0 0.25rem 0.75rem rgb(17 26 36 / 18%);
   font-size: 0.875rem;
   font-weight: normal;
@@ -881,7 +935,7 @@ h2 {
   margin: 0;
   padding: 0;
   color: var(--color-text);
-  background: #fff;
+  background: var(--color-page);
   border: 0;
 }
 
@@ -917,7 +971,7 @@ h2 {
   color: var(--color-text);
   font: inherit;
   font-size: 1.05rem;
-  background: #fff;
+  background: var(--color-page);
   border: 1px solid var(--color-border);
   border-radius: 0.25rem;
 }
@@ -964,7 +1018,7 @@ h2 {
 }
 
 .search-result + .search-result {
-  border-top: 1px solid #e3e5e8;
+  border-top: 1px solid var(--color-divider);
 }
 
 .search-result-link {
@@ -1006,7 +1060,7 @@ h2 {
 }
 
 .search-results mark {
-  color: inherit;
+  color: var(--color-search-mark, inherit);
   background: #ffe48a;
   border-radius: 0.1rem;
 }
@@ -1087,6 +1141,34 @@ h2 {
   }
 }
 
+/* Keep the preview tools next to each other and in keyboard reading order. */
+[data-theme-preview] .header-inner {
+  column-gap: 0.75rem;
+}
+
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-inline-start: auto;
+}
+
+.header-tools .search-trigger {
+  order: 0;
+  margin-left: 0;
+}
+
+@media (max-width: 40rem) {
+  [data-theme-preview] .header-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  [data-theme-preview] .primary-nav {
+    grid-column: 1 / -1;
+  }
+}
+
 .search-group {
   padding: 1rem 0.5rem 0.35rem;
   color: var(--color-muted);
@@ -1094,7 +1176,7 @@ h2 {
   font-weight: 700;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  border-top: 2px solid #e3e5e8;
+  border-top: 2px solid var(--color-divider);
 }
 
 .search-result-section {

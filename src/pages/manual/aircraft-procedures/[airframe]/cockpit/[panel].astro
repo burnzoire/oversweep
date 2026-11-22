@@ -95,10 +95,10 @@ const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns whe
 .cockpit-area{display:flex;flex-wrap:wrap;align-items:baseline;gap:.25rem .75rem;margin:.5rem 0}
 .ca-title{font-weight:700}
 .cockpit-area ul{display:flex;flex-wrap:wrap;gap:.2rem .35rem;list-style:none;margin:0;padding:0}
-.cockpit-area li > *{display:inline-flex;align-items:center;min-height:2.2rem;padding:0 .55rem;border:1px solid #d0d0d0;border-radius:1.1rem;font-size:.88rem}
+.cockpit-area li > *{display:inline-flex;align-items:center;min-height:2.2rem;padding:0 .55rem;border:1px solid var(--color-divider);border-radius:1.1rem;font-size:.88rem}
 .cockpit-area li > span{color:var(--color-unavailable);border-style:dashed}
 .cockpit-area a{text-decoration:none}
-.cockpit-area a[aria-current="page"]{background:var(--color-ink);color:var(--color-ink-text);border-color:var(--color-ink)}
+.cockpit-area a[aria-current="page"]{background:var(--color-ink);color:var(--color-ink-text);border-color:var(--color-outline)}
 .cockpit-all{margin:0 0 1.25rem}
 .cockpit-all summary{cursor:pointer;color:var(--color-link);min-height:2.4rem;display:flex;align-items:center}
 .cockpit-all[open] .cockpit-nav{max-width:30rem}
@@ -108,7 +108,7 @@ const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns whe
 .cockpit-hint{font-size:.9rem;color:var(--color-muted)}
 .cockpit-pager{display:flex;justify-content:space-between;align-items:center;gap:.75rem;flex-wrap:wrap;margin-top:1rem}
 .cockpit-pager a{min-height:2.75rem;display:inline-flex;align-items:center}
-.cockpit-reset{font:inherit;font-size:.9rem;padding:.45rem .8rem;border:1px solid var(--color-border);border-radius:.25rem;background:#fff;cursor:pointer;min-height:2.75rem}
+.cockpit-reset{font:inherit;font-size:.9rem;padding:.45rem .8rem;border:1px solid var(--color-border);border-radius:.25rem;background:var(--color-page);color:var(--color-text);cursor:pointer;min-height:2.75rem}
 .cockpit-info{font-size:.93rem}
 .ci-card{padding:.8rem 1rem;border:1px solid var(--color-border);border-left:.3rem solid var(--color-text);background:var(--color-surface)}
 .ci-card h2{font-size:1.05rem;margin:0 0 .3rem}
@@ -118,7 +118,7 @@ const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns whe
 .ci-src{font-size:.82rem;color:var(--color-muted)}
 .ci-head{font-size:1rem;margin:1.1rem 0 .3rem}
 .ci-list{list-style:none;margin:0;padding:0}
-.ci-list li{display:flex;justify-content:space-between;gap:.5rem;align-items:center;border-bottom:1px solid #e3e3e3}
+.ci-list li{display:flex;justify-content:space-between;gap:.5rem;align-items:center;border-bottom:1px solid var(--color-divider)}
 .ci-list button{font:inherit;background:none;border:0;padding:.35rem 0;color:var(--color-link);cursor:pointer;text-align:left;min-height:2.5rem}
 .ci-list span{color:var(--color-muted);font-size:.88em;text-align:right}
 .ci-list li.ci-gauge{flex-wrap:wrap;row-gap:0;padding-bottom:.3rem}

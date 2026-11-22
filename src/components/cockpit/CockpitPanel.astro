@@ -142,19 +142,20 @@ const dirLabels = (id: string) => {
 </div>
 
 <style>
-.cockpit-panel{--panel-ink:#161616;max-width:min(100%,calc(var(--cp-height,34rem) * var(--ratio)))}
-.cp-stage{position:relative;aspect-ratio:var(--ratio);background:#fff;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.cockpit-panel{max-width:min(100%,calc(var(--cp-height,34rem) * var(--ratio)))}
+.cp-stage{position:relative;aspect-ratio:var(--ratio);background:var(--panel-paper);user-select:none;-webkit-user-select:none;touch-action:manipulation}
 .cp-stage :global(svg){display:block;width:100%;height:100%}
 .cp-stage :global(.lens){fill:transparent}
-.cp-stage :global([data-indicator].lit[data-colour="amber"] .lens){fill:#f5b400}
-.cp-stage :global([data-indicator].lit[data-colour="green"] .lens){fill:#5fd35f}
-.cp-stage :global([data-indicator].lit[data-colour="red"] .lens){fill:#ff5a4f}
-.cp-stage :global([data-indicator].lit[data-colour="blue"] .lens){fill:#6fb4ff}
+.cp-stage :global([data-indicator].lit[data-colour="amber"] .lens){fill:var(--panel-lit-amber)}
+.cp-stage :global([data-indicator].lit[data-colour="green"] .lens){fill:var(--panel-lit-green)}
+.cp-stage :global([data-indicator].lit[data-colour="red"] .lens){fill:var(--panel-lit-red)}
+.cp-stage :global([data-indicator].lit[data-colour="blue"] .lens){fill:var(--panel-lit-blue)}
 .cp-stage :global([data-indicator].lit.flash .lens){animation:cp-flash .25s steps(1,end) infinite}
 @keyframes cp-flash{50%{fill:transparent}}
 @media (prefers-reduced-motion:reduce){.cp-stage :global([data-indicator].lit.flash .lens){animation-duration:1s}}
-.cp-stage :global([data-indicator].selected .lens){fill:rgba(0,95,204,.14);stroke:#005fcc;stroke-width:.5}
-.cp-stage :global([data-indicator].selected > [data-needle] > path:first-child){stroke:#005fcc;stroke-width:.6}
+.cp-stage :global([data-indicator].selected:not(.lit) .lens){fill:color-mix(in srgb,var(--color-focus) 14%,transparent)}
+.cp-stage :global([data-indicator].selected .lens){stroke:var(--color-focus);stroke-width:.5}
+.cp-stage :global([data-indicator].selected > [data-needle] > path:first-child){stroke:var(--color-focus);stroke-width:.6}
 .cp-hit{position:absolute;margin:0;padding:0;border:0;background:transparent;cursor:pointer;border-radius:8%;overflow:hidden}
 .cp-round{border-radius:50%}
 .cp-hit > button{position:absolute;margin:0;padding:0;border:0;background:transparent;cursor:pointer}
@@ -165,8 +166,8 @@ const dirLabels = (id: string) => {
 .cp-x > button:first-child{left:0}
 .cp-x > button:last-child{right:0}
 .cp-hit:focus-visible,.cp-hit > button:focus-visible{outline:2px solid var(--color-focus,#005fcc);outline-offset:1px}
-@media(hover:hover){.cp-hit:hover,.cp-hit > button:hover{background:rgba(0,95,204,.08)}}
-.cp-pad{margin-top:.6rem;border:1px solid var(--panel-ink);border-top-width:3px;padding:.6rem .7rem .8rem;background:#fff}
+@media(hover:hover){.cp-hit:hover,.cp-hit > button:hover{background:color-mix(in srgb,var(--color-focus) 8%,transparent)}}
+.cp-pad{margin-top:.6rem;border:1px solid var(--panel-ink);border-top-width:3px;padding:.6rem .7rem .8rem;background:var(--panel-paper)}
 .cp-pad[hidden],.cp-stage[hidden]{display:none}
 .cp-cards{max-width:100%}
 .cp-cards .cp-pads{display:flex;flex-wrap:wrap;gap:.75rem}
@@ -174,13 +175,13 @@ const dirLabels = (id: string) => {
 .cp-zoom{max-height:14rem;margin:0 auto .5rem;max-width:100%}
 .cp-zoom :global(svg){display:block;width:100%;height:100%}
 .cp-pad-head{display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-bottom:.5rem}
-.cp-pad-close{font:inherit;font-size:.9rem;border:1px solid var(--color-border,#999);background:#fff;padding:.2rem .6rem;cursor:pointer}
+.cp-pad-close{font:inherit;font-size:.9rem;border:1px solid var(--color-border,#999);background:var(--panel-paper);padding:.2rem .6rem;cursor:pointer}
 .cp-zoom{position:relative}
 .cp-zone{position:absolute;padding:0;margin:0;border:0;background:transparent;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .cp-zone-up{clip-path:polygon(0 0,100% 0,50% 50%)}.cp-zone-down{clip-path:polygon(0 100%,100% 100%,50% 50%)}
 .cp-zone-left{clip-path:polygon(0 0,0 100%,50% 50%)}.cp-zone-right{clip-path:polygon(100% 0,100% 100%,50% 50%)}
 .cp-zone-round{border-radius:50%}
-.cp-zone:hover,.cp-zone:focus-visible{background:rgba(0,95,204,.14)}
+.cp-zone:hover,.cp-zone:focus-visible{background:color-mix(in srgb,var(--color-focus) 14%,transparent)}
 .cp-zone:focus-visible{outline:2px solid var(--color-focus,#005fcc);outline-offset:-2px}
 .cp-zone.cp-target{background:rgba(230,184,0,.45);animation:cp-target 1s ease-in-out 4}
 @keyframes cp-target{50%{background:rgba(230,184,0,.12)}}
