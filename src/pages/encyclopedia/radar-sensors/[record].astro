@@ -3,7 +3,7 @@ import LinkedText from '../../../components/LinkedText.astro';
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import Cited from '../../../components/encyclopedia/Cited.astro';
 import PhotoFigure from '../../../components/encyclopedia/PhotoFigure.astro';
-import { categoryRecords, sensorContent, sensorGroups, recordRoute, type EncyclopediaRecord } from '../../../data/encyclopedia';
+import { categoryRecords, sensorContent, type EncyclopediaRecord } from '../../../data/encyclopedia';
 import { categoryTitle } from '../../../data/availability';
 import { sitePath } from '../../../lib/paths';
 import '../../../styles/encyclopedia.css';
@@ -15,11 +15,7 @@ export function getStaticPaths() {
 const { record } = Astro.props as { record: EncyclopediaRecord };
 const { frontmatter: data, Content } = sensorContent(record);
 const category = categoryTitle(record.category);
-const group = sensorGroups.find((g) => g.slug === data.group)!;
-// The record nav lists the sensors of the same group, so it stays short.
-const siblings = categoryRecords('radar-sensors').filter((r) => sensorContent(r).frontmatter.group === data.group);
 const [leadPhoto, ...morePhotos] = data.photos;
-const label = (r: EncyclopediaRecord) => sensorContent(r).frontmatter.short ?? r.title;
 const plate: [string, string | undefined][] = [
   ['Type', data.type],
   ['Origin', data.origin],
@@ -49,9 +45,6 @@ const caveat = {
   description={`${record.title} (${record.designation}): ${record.summary}`}
   breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: category, href: sitePath('encyclopedia/radar-sensors/') }, { label: record.title }]}>
   <div class="ency ordnance sensors">
-    <nav class="record-nav" aria-label={`${group.title} records`}>
-      <ol>{siblings.map((r) => <li>{r.slug === record.slug ? <span aria-current="page">{label(r)}</span> : <a href={sitePath(recordRoute(r))}>{label(r)}</a>}</li>)}</ol>
-    </nav>
     {leadPhoto && <PhotoFigure photo={leadPhoto} lead />}
     <section class="status-panel" data-record-id={record.id} data-record-revision={record.revision}>
       <p>Record revision {record.revision} · {record.summary}</p>

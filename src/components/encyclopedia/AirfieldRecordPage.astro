@@ -30,7 +30,6 @@ const plan = a && airfieldPlan(record.slug);
 const t = theatre?.data as TheatreData | undefined;
 const m = map?.data as MapData | undefined;
 
-const label = (r: EncyclopediaRecord) => airfieldContent(r).frontmatter.short ?? r.title;
 const link = (r: EncyclopediaRecord) => sitePath(recordRoute(r));
 // Citations belong to each record's own source list, so text from another record drops them.
 const plain = (text: string) => text.replace(/\s*\[\d+\]/g, '');
@@ -39,16 +38,6 @@ const ft = (feet: number) => `${n(feet)} ft (${n(Math.round(feet * 0.3048))} m)`
 const nation = (key: keyof typeof nations) => nations[key].name + ('note' in nations[key] ? ` (${nations[key].note})` : '');
 const when = (p: Period) => periodText(p) ?? 'date not given';
 const coord = (value: number, pos: string, neg: string) => `${Math.abs(value).toFixed(4)}° ${value >= 0 ? pos : neg}`;
-
-// The record nav: on an airfield page, its theatre's airfields, or every
-// airfield when it has no theatre; on a theatre page, every theatre; on a map
-// page, the other maps of its theatre.
-const home = airfield?.theatres[0];
-const homeTheatre = home && theatres.find((x) => x.record === home.record);
-const mapTheatre = map?.theatres[0] && theatres.find((x) => x.record === map.theatres[0].record);
-const nav = airfield ? (homeTheatre ? homeTheatre.airfields : airfields).map((x) => x.record)
-  : theatre ? theatres.map((x) => x.record) : (mapTheatre ? mapTheatre.maps : maps).map((x) => x.record);
-const navLabel = airfield ? (homeTheatre ? `Airfields in ${homeTheatre.record.title}` : 'Airfields') : theatre ? 'Theatres' : mapTheatre ? `Sim maps in ${mapTheatre.record.title}` : 'Sim maps';
 
 const photos = frontmatter.photos ?? [];
 const [leadPhoto, ...morePhotos] = photos;
@@ -74,11 +63,14 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
 <SiteLayout title={record.title} activeSection="encyclopedia"
   image={leadPhoto?.src} imageAlt={leadPhoto?.alt}
   description={`${record.title} (${record.designation}): ${record.summary}`}
-  breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: category, href: sitePath(`encyclopedia/${record.category}/`) }, ...(map?.theatres[0] ? [{ label: map.theatres[0].record.title, href: link(map.theatres[0].record) }] : []), { label: record.title }]}>
+  breadcrumbs={[
+    { label: 'Encyclopedia', href: sitePath('encyclopedia/') },
+    { label: category, href: sitePath(`encyclopedia/${record.category}/`) },
+    ...(theatre ? [{ label: 'Theatres', href: sitePath('encyclopedia/locations/theatres/') }] : []),
+    ...(map?.theatres[0] ? [{ label: map.theatres[0].record.title, href: link(map.theatres[0].record) }] : []),
+    { label: record.title },
+  ]}>
   <div class="ency airfield">
-    <nav class="record-nav" aria-label={navLabel}>
-      <ol>{nav.map((r) => <li>{r === record ? <span aria-current="page">{label(r)}</span> : <a href={link(r)}>{label(r)}</a>}</li>)}</ol>
-    </nav>
     {leadPhoto && <PhotoFigure photo={leadPhoto} lead />}
     <section class="status-panel" data-record-id={record.id} data-record-revision={record.revision}>
       <p>Record revision {record.revision} · {record.summary}</p>
@@ -215,7 +207,7 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
           {checkedMaps.every((x) => x.coverage.status === 'unchecked')
             ? <p>No sim map has been checked against this airfield yet. That is not a claim that no map represents it.</p>
             : <p class="note">Only the maps marked represented or confirmed absent have been checked. Any other map may or may not represent this airfield.</p>}
-          {uncheckedMaps.length > 0 && <p>Other maps in {homeTheatre?.record.title ?? 'its theatre'}, not yet checked for this airfield, which may lie outside them: {uncheckedMaps.map((x, i) => <>{i > 0 && ', '}<a href={link(x.record)}>{x.data.name}</a></>)}.</p>}
+          {uncheckedMaps.length > 0 && <p>Other maps in {airfield.theatres[0]?.record.title ?? 'its theatre'}, not yet checked for this airfield, which may lie outside them: {uncheckedMaps.map((x, i) => <>{i > 0 && ', '}<a href={link(x.record)}>{x.data.name}</a></>)}.</p>}
         </section>
       </>
     )}

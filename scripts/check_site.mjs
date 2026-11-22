@@ -135,10 +135,17 @@ for (const category of encyclopediaCategories) {
   });
   assert.deepEqual([...destinations].sort(), expectedLinks.sort(), `${category} should list every page in the category once`);
   for (const href of [base + category, ...destinations]) {
-    const menu = encyclopediaMenu(pages.get(pageFile(href.slice(base.length))));
+    const page = pages.get(pageFile(href.slice(base.length)));
+    const menu = encyclopediaMenu(page);
     assert.ok(menu, `${href} should have an Encyclopedia menu`);
     const current = [...menu.matchAll(/<a\b[^>]*\baria-current="page"[^>]*>/g)].map((match) => match[0]);
     assert.deepEqual(links(current.join("")), [href], `${href} should be the only current menu link`);
+    assert.doesNotMatch(page, /<nav class="record-nav"/, `${href} should use breadcrumbs for record navigation`);
+    const breadcrumbs = page.match(/<nav class="breadcrumbs"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
+    assert.ok(breadcrumbs, `${href} should have breadcrumbs`);
+    const parents = href === base + category ? [`${base}encyclopedia/`] : [`${base}encyclopedia/`, base + category];
+    assert.deepEqual(links(breadcrumbs).slice(0, parents.length), parents, `${href} should link to its Encyclopedia parents`);
+    assert.match(breadcrumbs, /<span aria-current="page">/, `${href} should mark the current breadcrumb`);
   }
 }
 

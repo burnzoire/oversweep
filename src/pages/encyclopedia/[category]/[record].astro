@@ -6,7 +6,7 @@ import RwrFigure from '../../../components/encyclopedia/RwrFigure.astro';
 import BatteryFigure from '../../../components/encyclopedia/BatteryFigure.astro';
 import RecordPhoto from '../../../components/encyclopedia/RecordPhoto.astro';
 import Cited from '../../../components/encyclopedia/Cited.astro';
-import { categoryRecords, includedRecords, recordContent, recordRoute, type EncyclopediaRecord } from '../../../data/encyclopedia';
+import { categoryRecords, includedRecords, recordContent, type EncyclopediaRecord } from '../../../data/encyclopedia';
 import { categoryTitle } from '../../../data/availability';
 import { kmToNm, mToFt } from '../../../lib/envelope';
 import { sitePath } from '../../../lib/paths';
@@ -19,7 +19,7 @@ export function getStaticPaths() {
 
 const { record } = Astro.props as { record: EncyclopediaRecord };
 const { frontmatter: data, Content } = recordContent(record);
-// Records are navigated and compared within their group (missiles, guns, radars).
+// Envelope comparisons use the records in the same group.
 const group = (r: EncyclopediaRecord) => recordContent(r).frontmatter.group;
 const siblings = categoryRecords(record.category).filter((r) => group(r) === data.group);
 const category = categoryTitle(record.category);
@@ -47,9 +47,6 @@ const fig = { envelope: e ? 1 : 0, rwr: e ? 2 : 1, battery: e ? 3 : 2 };
   description={`${record.title} (${record.designation}): ${record.summary}`}
   breadcrumbs={[{ label: 'Encyclopedia', href: sitePath('encyclopedia/') }, { label: category, href: sitePath(`encyclopedia/${record.category}/`) }, { label: record.title }]}>
   <div class="ency">
-    <nav class="record-nav" aria-label={`${category} records`}>
-      <ol>{siblings.map((r) => { const name = recordContent(r).frontmatter.short ?? r.title.split(' ')[0]; return <li>{r.slug === record.slug ? <span aria-current="page">{name}</span> : <a href={sitePath(recordRoute(r))}>{name}</a>}</li>; })}</ol>
-    </nav>
     <section class="status-panel" data-record-id={record.id} data-record-revision={record.revision}>
       <p>Record revision {record.revision} · {record.summary}</p>
       <p>Real-world system as described in public sources. Figures vary between variants and sources, so differences are shown beside the number they affect. Simulator implementations may differ.</p>
