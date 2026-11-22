@@ -177,42 +177,42 @@ if (root && configEl) {
 .procedure-workspace{display:grid;gap:1.5rem;margin-top:1.5rem;align-items:start}
 .procedure-progress{font-weight:700}
 .procedure-steps{padding:0;margin:0;list-style:none}
-.procedure-step{border:1px solid var(--color-border);border-top:4px solid var(--color-ink);padding:1.25rem;margin:0}
+.procedure-step{border:1px solid var(--color-border);border-top:4px solid var(--color-outline);padding:1.25rem;margin:0}
 .procedure-step[hidden],.procedure-controls[hidden]{display:none}
 .procedure-step h2{margin:.25rem 0 .8rem}
 .procedure-step p{margin:.65rem 0}
 .procedure-kicker{font-size:.8rem;color:var(--color-muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 .procedure-action{padding:.7rem;background:var(--color-surface)}
-.procedure-warning{border-left:4px solid #915300;padding-left:.7rem}
+.procedure-warning{border-left:4px solid var(--color-warning);padding-left:.7rem}
 .procedure-ask ul{list-style:none;padding:0;margin:.5rem 0}
-.procedure-ask button{display:block;width:100%;text-align:left;min-height:2.75rem;padding:.5rem .75rem;margin:.35rem 0;border:1px solid var(--color-ink);background:#fff;color:var(--color-ink);cursor:pointer;font:inherit}
+.procedure-ask button{display:block;width:100%;text-align:left;min-height:2.75rem;padding:.5rem .75rem;margin:.35rem 0;border:1px solid var(--color-outline);background:var(--color-page);color:var(--color-text);cursor:pointer;font:inherit}
 .procedure-ask button:disabled{opacity:.5;cursor:default}
 :global(.hint-link){font:inherit;color:var(--color-link,#005fcc);background:none;border:0;padding:0;border-bottom:2px dotted #c99700;cursor:pointer}
-:global(.hint-link):hover,:global(.hint-link):focus-visible{background:#fff4c2}
+:global(.hint-link):hover,:global(.hint-link):focus-visible{background:var(--color-hint-surface)}
 .proc-panel :global(.hint-ring){position:absolute;pointer-events:none;border:3px solid #e6b800;border-radius:12px;box-shadow:0 0 0 2px rgba(255,255,255,.9),0 0 10px 2px rgba(230,184,0,.6);animation:hint-pulse 1s ease-in-out 4}
 @keyframes hint-pulse{50%{opacity:.35}}
 @media(prefers-reduced-motion:reduce){.proc-panel :global(.hint-ring){animation:none}}
 .procedure-cite,.procedure-panels{font-size:.85rem;color:var(--color-muted)}
 .procedure-controls{display:flex;gap:.75rem;margin-top:1rem}
-.procedure-player{display:flex;align-items:center;gap:.75rem;margin-top:1rem;padding:.5rem .75rem;border:1px solid var(--color-ink)}
+.procedure-player{display:flex;align-items:center;gap:.75rem;margin-top:1rem;padding:.5rem .75rem;border:1px solid var(--color-outline)}
 .procedure-player[hidden]{display:none}
-.procedure-player button{flex:none;width:2.75rem;height:2.75rem;display:grid;place-items:center;border:1px solid var(--color-ink);background:#fff;color:var(--color-ink);cursor:pointer;padding:0}
+.procedure-player button{flex:none;width:2.75rem;height:2.75rem;display:grid;place-items:center;border:1px solid var(--color-outline);background:var(--color-page);color:var(--color-text);cursor:pointer;padding:0}
 .procedure-player svg{width:1.1rem;height:1.1rem;fill:currentColor}
 .procedure-player [data-state] path{display:none}
 .procedure-player [data-state="play"] .i-play,.procedure-player [data-state="pause"] .i-pause,.procedure-player [data-state="replay"] .i-replay{display:inline}
-.procedure-player input{flex:1;min-width:0;accent-color:var(--color-ink)}
+.procedure-player input{flex:1;min-width:0;accent-color:var(--color-text)}
 .procedure-clock{flex:none;font-variant-numeric:tabular-nums;font-size:.9rem}
-.procedure-controls button{min-height:2.75rem;padding:.45rem 1rem;border:1px solid var(--color-ink);background:#fff;color:var(--color-ink);cursor:pointer;font:inherit}
+.procedure-controls button{min-height:2.75rem;padding:.45rem 1rem;border:1px solid var(--color-outline);background:var(--color-page);color:var(--color-text);cursor:pointer;font:inherit}
 .procedure-controls button:disabled{opacity:.4;cursor:default}
 .procedure-visual{position:relative}
 .procedure-visual[hidden]{display:none}
 .procedure-feedback{min-height:1.5em;margin:0 0 .5rem;font-weight:600}
-.procedure-feedback.retry{color:#b00020}
+.procedure-feedback.retry{color:var(--color-error)}
 .cockpit-layout{display:flex;flex-wrap:wrap;gap:.75rem 1rem;align-items:flex-start}
 .proc-panel{flex:0 1 auto;min-width:0;max-width:100%}
 .proc-panel[hidden]{display:none}
 .proc-panel h3{margin:0 0 .25rem;font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;color:var(--color-muted)}
-.proc-panel.acting h3{color:var(--color-ink)}
+.proc-panel.acting h3{color:var(--color-text)}
 .proc-panel :global(.cockpit-panel){width:calc(var(--proc-h,40svh) * var(--ratio));max-width:100%}
 .proc-panel.acting{--proc-h:54svh}
 /* Lamp-only panels shown for reading (caution panel, eyebrows) are smaller, so they sit side by side. */
