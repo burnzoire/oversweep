@@ -22,6 +22,12 @@
   };
 
   restore();
+  window.addEventListener('pageshow', (event) => {
+    // History traversal can restore form values after the document loads.
+    if (event.persisted || performance.getEntriesByType('navigation').some(
+      (entry) => /** @type {PerformanceNavigationTiming} */ (entry).type === 'back_forward',
+    )) requestAnimationFrame(restore);
+  });
   window.addEventListener('storage', (event) => {
     if (event.key === key || event.key === null) restore();
   });

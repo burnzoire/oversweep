@@ -229,6 +229,18 @@ try {
       assert.equal(await scheme(trainer), 'light dark');
       await trainer.close();
     }
+    if (size === 'desktop') {
+      await visit(page, '');
+      await preference(page).selectOption('light');
+      await visit(page, 'manual/');
+      const otherTab = await context.newPage();
+      await visit(otherTab, '');
+      await preference(otherTab).selectOption('dark');
+      await page.goBack();
+      await page.waitForFunction(() => document.querySelector('[data-theme-preference]')?.value === 'dark');
+      assert.equal(await scheme(page), 'dark');
+      await otherTab.close();
+    }
     await context.close();
   }
 } finally {
