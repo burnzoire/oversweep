@@ -9,7 +9,7 @@ interface Props { nodes: MenuNode[]; route: string; parent: string; depth?: numb
 const { nodes, route, parent, depth = 0 } = Astro.props;
 const activeNode = nodes.find((node) => containsRoute(node, route));
 const link = (node: MenuNode) => {
-  if (!node.href || (node.planned && !node.children)) return undefined;
+  if (!(node.href && (node.children || !node.planned))) return undefined;
   const [path, anchor] = node.href.split("#", 2);
   return sitePath(path) + (anchor ? `#${anchor}` : "");
 };
