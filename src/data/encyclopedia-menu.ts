@@ -7,7 +7,8 @@ import { classProfileFor } from './carrier-profiles';
 import { carrierRoute, carriers } from './carriers';
 import {
   airfieldCatalogue, aircraftContent, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups,
-  recordContent, recordRoute, sensorContent, sensorGroups, threatGroups, type EncyclopediaRecord,
+  mapAirfieldAnchor, recordContent, recordRoute, sensorContent, sensorGroups, simAirfields, threatGroups,
+  type EncyclopediaRecord,
 } from './encyclopedia';
 
 type Category = (typeof encyclopediaCategories)[number]['slug'];
@@ -20,7 +21,7 @@ const categoryGroups = {
 };
 
 const byTitle = (a: MenuNode, b: MenuNode) => a.title.localeCompare(b.title, 'en');
-const recordNode = (record: EncyclopediaRecord): MenuNode => ({
+const recordNode = (record: EncyclopediaRecord) => ({
   id: record.id,
   title: record.title,
   href: recordRoute(record),
@@ -29,15 +30,60 @@ const group = (id: string, title: string, children: MenuNode[], href?: string): 
   id, title, href, children: children.sort(byTitle),
 });
 
-function buildCategory(slug: Category): MenuNode[] {
-  if (slug === 'locations') {
-    const { theatres, maps, airfields } = airfieldCatalogue();
-    return [
-      group('ency-theatres', 'Theatres', theatres.map(({ record }) => recordNode(record)), 'encyclopedia/locations/theatres/'),
-      group('ency-sim-maps', 'Sim Maps', maps.map(({ record }) => recordNode(record))),
-      group('ency-airfields', 'Airfields', airfields.map(({ record }) => recordNode(record))),
-    ].filter(({ children }) => children?.length);
+function locationBranch(): MenuNode[] {
+  const { theatres, maps, airfields } = airfieldCatalogue();
+  const fieldsByMap = new Map(maps.map((map) => [map, new Map<string, MenuNode>()]));
+  const mappedRecords = new Set<EncyclopediaRecord>();
+
+  for (const map of maps) {
+    const fields = fieldsByMap.get(map)!;
+    for (const { airfield, coverage } of map.airfields) {
+      if (coverage.status !== 'represented') continue;
+      const node = recordNode(airfield.record);
+      fields.set(node.href, node);
+      mappedRecords.add(airfield.record);
+    }
   }
+
+  for (const field of simAirfields()) {
+    for (const { map, name } of field.maps) {
+      const anchor = mapAirfieldAnchor(name);
+      const node = field.record ? recordNode(field.record.record) : {
+        id: anchor,
+        title: name,
+        href: `${recordRoute(map.record)}#${anchor}`,
+      };
+      fieldsByMap.get(map)!.set(node.href, node);
+      if (field.record) mappedRecords.add(field.record.record);
+    }
+  }
+
+  const otherAirfields = airfields.filter(({ record }) => !mappedRecords.has(record));
+  const mapNode = (map: (typeof maps)[number], parent: string) => {
+    const { id, href } = recordNode(map.record);
+    return group(`${parent}-${id}`, map.data.name, [...fieldsByMap.get(map)!.values()], href);
+  };
+
+  const theatreNodes = theatres.map((theatre) => {
+    const { id, title, href } = recordNode(theatre.record);
+    const children = theatre.maps.map((map) => mapNode(map, id));
+    const localAirfields = otherAirfields
+      .filter((field) => field.theatres.some(({ record }) => record === theatre.record))
+      .map(({ record }) => recordNode(record));
+    if (localAirfields.length) children.push(group(`${id}-other-airfields`, 'Other airfields', localAirfields));
+    return group(id, title, children, href);
+  });
+
+  const branch = [group('ency-theatres', 'Theatres', theatreNodes, 'encyclopedia/locations/theatres/')];
+  const unassignedMaps = maps.filter((map) => !map.theatres.length).map((map) => mapNode(map, 'ency-locations'));
+  const unassignedAirfields = otherAirfields.filter((field) => !field.theatres.length).map(({ record }) => recordNode(record));
+  if (unassignedMaps.length) branch.push(group('ency-other-sim-maps', 'Other sim maps', unassignedMaps));
+  if (unassignedAirfields.length) branch.push(group('ency-other-airfields', 'Other airfields', unassignedAirfields));
+  return branch;
+}
+
+function buildCategory(slug: Category): MenuNode[] {
+  if (slug === 'locations') return locationBranch();
 
   if (slug === 'carriers') {
     const classes = Map.groupBy(carriers, (carrier) => carrier.class);

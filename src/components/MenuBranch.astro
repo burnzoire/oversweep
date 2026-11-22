@@ -7,25 +7,31 @@ import { assetPath, sitePath } from "../lib/paths";
 // one closes the others in the browser, with no script.
 interface Props { nodes: MenuNode[]; route: string; parent: string; depth?: number }
 const { nodes, route, parent, depth = 0 } = Astro.props;
-const link = (node: MenuNode) => (node.href && (node.children || !node.planned) ? sitePath(node.href) : undefined);
+const activeNode = nodes.find((node) => containsRoute(node, route));
+const link = (node: MenuNode) => {
+  if (!node.href || (node.planned && !node.children)) return undefined;
+  const [path, anchor] = node.href.split("#", 2);
+  return sitePath(path) + (anchor ? `#${anchor}` : "");
+};
 ---
 
 <ul class="menu-tree" data-depth={depth}>
   {nodes.map((node) => {
     const url = link(node);
-    const current = node.href === route;
+    const active = node === activeNode;
+    const current = active && node.href === route;
     const unwritten = node.children ? !hasArticle(node) : node.planned;
     const label = url
       ? <a href={url} aria-current={current ? "page" : undefined} class:list={{ current, unwritten }}>{node.title}</a>
       : <span class:list={{ unwritten }}>{node.title}{node.planned && <span class="visually-hidden"> (not written yet)</span>}</span>;
     return node.children?.length || node.lazy ? (
       <li>
-        <details name={parent} open={containsRoute(node, route)} data-lazy={node.lazy ? assetPath(node.lazy) : undefined}>
+        <details name={parent} open={active} data-lazy={node.lazy ? assetPath(node.lazy) : undefined}>
           <summary>
             <span class="chev" aria-hidden="true"></span>
             {label}
           </summary>
-          <Self nodes={node.children ?? []} route={route} parent={node.id} depth={depth + 1} />
+          <Self nodes={node.children ?? []} route={active ? route : ""} parent={node.id} depth={depth + 1} />
         </details>
       </li>
     ) : (
