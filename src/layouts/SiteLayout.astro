@@ -8,6 +8,7 @@ import PreviewSwitch from "../components/PreviewSwitch.astro";
 import { sectionHasContent } from "../data/availability";
 import { assetPath, sitePath } from "../lib/paths";
 import { audience, clip, defaultDescription, describeRoute, entryForRoute, routeOf, shareSiteName, siteName } from "../lib/seo";
+import { themeHead } from "../lib/theme";
 import "../styles/global.css";
 
 interface Breadcrumb {
@@ -57,8 +58,6 @@ const absolute = (path: string) => (site ? new URL(path, site).href : undefined)
 // A PR preview (served under /preview/<sha>/) is never indexed; its canonical
 // URL is the live page.
 const isPreview = Boolean(import.meta.env.PUBLIC_PREVIEW_SHA);
-// Standalone experience frames do not use SiteLayout.
-const previewTheme = isPreview || import.meta.env.DEV;
 const canonical = isNotFound ? undefined : absolute(isPreview ? `/${route}` : sitePath(route));
 const shareImage = absolute(assetPath(image ?? "og-default.png"));
 const shareImageAlt = image ? (imageAlt ?? title) : "Oversweep, the interactive flight sim reference";
@@ -106,43 +105,10 @@ const pageTitle = isHomePage ? `Oversweep · ${title}` : `${title} | Oversweep`;
 ---
 
 <!doctype html>
-<html lang="en" data-theme-preview={previewTheme ? "" : undefined}>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    {previewTheme && <meta name="color-scheme" content="light dark" />}
-    {previewTheme && <script is:inline>
-      (() => {
-        if (!CSS.supports("color", "light-dark(white, black)")) return;
-        const key = "oversweep:theme";
-        const root = document.documentElement;
-        const apply = (choice) => {
-          if (choice === "light" || choice === "dark") root.dataset.theme = choice;
-          else delete root.dataset.theme;
-        };
-
-        try {
-          apply(localStorage.getItem(key));
-        } catch {
-          // The system preference also works when storage is unavailable.
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-          const select = document.querySelector("[data-theme-preference]");
-          if (!select) return;
-          select.value = root.dataset.theme ?? "system";
-          select.hidden = false;
-          select.addEventListener("change", () => {
-            apply(select.value);
-            try {
-              if (select.value === "system") localStorage.removeItem(key);
-              else localStorage.setItem(key, select.value);
-            } catch {
-              // The choice still applies to the current page.
-            }
-          });
-        });
-      })();
-    </script>}
+    <Fragment set:html={themeHead} />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#111a24" />
@@ -181,12 +147,6 @@ const pageTitle = isHomePage ? `Oversweep · ${title}` : `${title} | Oversweep`;
             <span class="brand-tagline">The Interactive Flight Sim Reference</span>
           </span>
         </a>
-        {previewTheme && (
-          <div class="header-tools">
-            <SiteSearch />
-            <ThemePreference />
-          </div>
-        )}
         <nav class="primary-nav" aria-label="Primary navigation">
           {sections.map((section) => {
             const current = activeSection === section.id;
@@ -211,7 +171,10 @@ const pageTitle = isHomePage ? `Oversweep · ${title}` : `${title} | Oversweep`;
             );
           })}
         </nav>
-        {!previewTheme && <SiteSearch />}
+        <div class="header-tools">
+          <ThemePreference />
+          <SiteSearch />
+        </div>
       </div>
     </header>
     <main id="main-content" class="page-shell" data-empty={empty ? "" : undefined}>

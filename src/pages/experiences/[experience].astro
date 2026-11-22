@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 import { includedExperiences, experienceFrame, type Experience } from '../../data/experiences';
 import { sitePath } from '../../lib/paths';
 import { versionAssets } from '../../lib/experience-assets';
+import { themeHead } from '../../lib/theme';
 export function getStaticPaths() {
   return includedExperiences.map(experience => ({ params: { experience: experience.slug }, props: { experience } }));
 }
@@ -14,7 +15,9 @@ const source = await readFile(resolve(process.cwd(), 'src/experiences', experien
 const base = sitePath(experienceFrame(experience));
 // Unlisted trainers stay out of search results and the sitemap.
 const robots = experience.publication === 'unlisted' ? '<meta name="robots" content="noindex">' : '';
-const html = await versionAssets(source.replace('<head>', `<head><base href="${base}">${robots}`)
+const html = await versionAssets(source
+  .replace(/<meta charset[^>]*>/i, charset => charset + themeHead)
+  .replace('<head>', `<head><base href="${base}">${robots}`)
   .replace('<body>', `<body data-experience-id="${experience.id}" data-experience-revision="${experience.revision}">`), experience.slug, experience.assets, base);
 ---
 <Fragment set:html={html} />

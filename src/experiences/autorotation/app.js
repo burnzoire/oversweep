@@ -208,6 +208,39 @@ import { createAxisBindings } from './lessons/shared/axis-bindings.mjs';
 
   /* ---------- drawing ---------- */
 
+  const palettes = {
+    light: {
+      skyTop: '#cfe0ea', skyHorizon: '#f4f2ea', terrain: '#b9b48f', horizon: '#8d8a66',
+      terrainText: '#5c5a44', terrainTick: '#6f6c50', bush: '#7f8a5a',
+      skyText: 'rgba(32,34,31,.7)', skyTick: 'rgba(32,34,31,.35)', scaleNote: 'rgba(32,34,31,.6)',
+      frame: '#2b2e2a', fuselage: '#56604a', glass: '#a9c1c9', deck: '#454c3b', rotor: '40,42,38',
+      bezel: '#555',
+    },
+    dark: {
+      skyTop: '#233143', skyHorizon: '#384958', terrain: '#44483a', horizon: '#78806a',
+      terrainText: '#e0e3d6', terrainTick: '#b1b8a4', bush: '#798766',
+      skyText: '#eef1f5', skyTick: '#a9b7c7', scaleNote: '#d1dbe7',
+      frame: '#c0c6b3', fuselage: '#899575', glass: '#c2d9dd', deck: '#a1ab92', rotor: '223,228,216',
+      bezel: '#8793a0',
+    },
+  };
+  const systemScheme = window.matchMedia('(prefers-color-scheme: dark)');
+  let palette;
+
+  function updatePalette() {
+    const schemes = getComputedStyle(document.documentElement).colorScheme.split(' ');
+    const dark = schemes.includes('dark') && (!schemes.includes('light') || systemScheme.matches);
+    palette = palettes[dark ? 'dark' : 'light'];
+  }
+
+  // Canvas pixels do not update with CSS. Re-read the applied scheme when the
+  // shared theme preference or the system setting changes.
+  updatePalette();
+  systemScheme.addEventListener('change', updatePalette);
+  new MutationObserver(updatePalette).observe(document.documentElement, {
+    attributes: true, attributeFilter: ['data-theme'],
+  });
+
   // Before a run the scene shows the helicopter trimmed at the chosen start.
   let previewKey = '', previewed = null;
   function preview() {
@@ -236,14 +269,14 @@ import { createAxisBindings } from './lessons/shared/axis-bindings.mjs';
     const sx = x => (x - camX) * scale, sy = z => groundY - z * scale;
 
     const sky = ctx.createLinearGradient(0, 0, 0, groundY);
-    sky.addColorStop(0, '#cfe0ea'); sky.addColorStop(1, '#f4f2ea');
+    sky.addColorStop(0, palette.skyTop); sky.addColorStop(1, palette.skyHorizon);
     ctx.fillStyle = sky; ctx.fillRect(0, 0, w, groundY);
-    ctx.fillStyle = '#b9b48f'; ctx.fillRect(0, groundY, w, h - groundY);
-    ctx.fillStyle = '#8d8a66'; ctx.fillRect(0, groundY, w, 3);
+    ctx.fillStyle = palette.terrain; ctx.fillRect(0, groundY, w, h - groundY);
+    ctx.fillStyle = palette.horizon; ctx.fillRect(0, groundY, w, 3);
 
     // Ground posts for a sense of speed, labelled in metres along the ground.
     const step = scale > 6 ? 10 : scale > 1.5 ? 50 : 200;
-    ctx.font = '10px monospace'; ctx.fillStyle = '#5c5a44'; ctx.strokeStyle = '#6f6c50'; ctx.lineWidth = 1;
+    ctx.font = '10px monospace'; ctx.fillStyle = palette.terrainText; ctx.strokeStyle = palette.terrainTick; ctx.lineWidth = 1;
     for (let x = Math.floor(camX / step) * step, n = 0; x < camX + w / scale && n < 500; x += step, n++) {
       const px = sx(x), big = x % (step * 5) === 0;
       ctx.beginPath(); ctx.moveTo(px, groundY); ctx.lineTo(px, groundY + (big ? 12 : 6)); ctx.stroke();
@@ -254,7 +287,7 @@ import { createAxisBindings } from './lessons/shared/axis-bindings.mjs';
     // Height ladder in feet on the left edge.
     const ftScale = scale * M.FT;
     const ladder = [10, 50, 100, 250, 500, 1000].find(v => v * ftScale > 28) || 1000;
-    ctx.fillStyle = 'rgba(32,34,31,.7)'; ctx.strokeStyle = 'rgba(32,34,31,.35)';
+    ctx.fillStyle = palette.skyText; ctx.strokeStyle = palette.skyTick;
     for (let f = ladder, n = 0; sy(f * M.FT) > 10 && n < 100; f += ladder, n++) {
       const y = sy(f * M.FT);
       ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(10, y); ctx.stroke();
@@ -262,7 +295,7 @@ import { createAxisBindings } from './lessons/shared/axis-bindings.mjs';
     }
 
     if (trail.length > 1) {
-      ctx.strokeStyle = 'rgba(32,34,31,.35)'; ctx.setLineDash([4, 4]); ctx.beginPath();
+      ctx.strokeStyle = palette.skyTick; ctx.setLineDash([4, 4]); ctx.beginPath();
       trail.forEach((p, i) => { const X = sx(p.x), Y = sy(p.h + M.HELI.mastHeight / 2); i ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y); });
       ctx.stroke(); ctx.setLineDash([]);
     }
@@ -270,13 +303,13 @@ import { createAxisBindings } from './lessons/shared/axis-bindings.mjs';
     const size = Math.max(scale, 70 / 13);       // keep the helicopter visible when high
     helicopter(ctx, sx(s.x), sy(s.h), size, s.pitch, s.rpm);
     if (size > scale * 1.05) {
-      ctx.fillStyle = 'rgba(32,34,31,.6)';
+      ctx.fillStyle = palette.scaleNote;
       ctx.fillText('not to scale', sx(s.x) - 30, sy(s.h) + 18);
     }
   }
 
   function bush(ctx, x, y, scale) {
-    ctx.fillStyle = '#7f8a5a';
+    ctx.fillStyle = palette.bush;
     ctx.beginPath(); ctx.ellipse(x + 3 * scale, y, 1.6 * scale, 1.1 * scale, 0, Math.PI, 0); ctx.fill();
   }
 
@@ -285,36 +318,36 @@ import { createAxisBindings } from './lessons/shared/axis-bindings.mjs';
     ctx.save();
     ctx.translate(x, y); ctx.scale(k, -k); ctx.rotate(pitch * DEG);
     ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-    ctx.strokeStyle = '#2b2e2a'; ctx.lineWidth = 0.12;
+    ctx.strokeStyle = palette.frame; ctx.lineWidth = 0.12;
     // skids and struts
     ctx.beginPath(); ctx.moveTo(-1.7, 0); ctx.lineTo(1.5, 0); ctx.quadraticCurveTo(1.9, 0, 1.95, 0.3);
     ctx.moveTo(-0.9, 0); ctx.lineTo(-0.7, 0.6); ctx.moveTo(0.9, 0); ctx.lineTo(0.8, 0.6); ctx.stroke();
     // tail boom and fin
-    ctx.fillStyle = '#56604a';
+    ctx.fillStyle = palette.fuselage;
     ctx.beginPath(); ctx.moveTo(-1.0, 1.45); ctx.lineTo(-6.6, 1.85); ctx.lineTo(-6.6, 2.0); ctx.lineTo(-1.0, 2.05); ctx.closePath(); ctx.fill();
     ctx.beginPath(); ctx.moveTo(-6.0, 1.9); ctx.lineTo(-6.75, 2.9); ctx.lineTo(-6.95, 2.9); ctx.lineTo(-6.7, 1.3); ctx.lineTo(-6.45, 1.3); ctx.closePath(); ctx.fill();
     // cabin
     ctx.beginPath(); ctx.moveTo(-1.3, 0.6); ctx.lineTo(1.0, 0.6); ctx.quadraticCurveTo(2.1, 0.7, 2.0, 1.6);
     ctx.quadraticCurveTo(1.7, 2.35, 0.6, 2.4); ctx.lineTo(-1.3, 2.4); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = '#a9c1c9';
+    ctx.fillStyle = palette.glass;
     ctx.beginPath(); ctx.moveTo(0.35, 1.25); ctx.lineTo(1.75, 1.25); ctx.quadraticCurveTo(1.65, 2.1, 0.6, 2.2); ctx.lineTo(0.35, 2.2); ctx.closePath(); ctx.fill();
     // engine deck and mast
-    ctx.fillStyle = '#454c3b'; ctx.fillRect(-1.4, 2.35, 1.8, 0.3);
+    ctx.fillStyle = palette.deck; ctx.fillRect(-1.4, 2.35, 1.8, 0.3);
     ctx.fillRect(-0.08, 2.6, 0.16, 0.25);
     // main rotor: a blurred disk whose strength follows rotor rpm
     const a = Math.min(1, rpm / 100);
-    ctx.fillStyle = `rgba(40,42,38,${0.18 + 0.25 * a})`;
+    ctx.fillStyle = `rgba(${palette.rotor},${0.18 + 0.25 * a})`;
     ctx.beginPath(); ctx.ellipse(0, 2.9, 5, 0.14, 0, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#2b2e2a'; ctx.fillRect(-0.25, 2.82, 0.5, 0.16);
+    ctx.fillStyle = palette.frame; ctx.fillRect(-0.25, 2.82, 0.5, 0.16);
     // tail rotor
-    ctx.strokeStyle = `rgba(40,42,38,${0.25 + 0.35 * a})`; ctx.lineWidth = 0.08;
+    ctx.strokeStyle = `rgba(${palette.rotor},${0.25 + 0.35 * a})`; ctx.lineWidth = 0.08;
     ctx.beginPath(); ctx.arc(-6.6, 2.25, 0.7, 0, Math.PI * 2); ctx.stroke();
     ctx.restore();
   }
 
   function dial(ctx, cx, cy, r, title) {
     ctx.fillStyle = '#16181a'; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = '#555'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.strokeStyle = palette.bezel; ctx.lineWidth = 2; ctx.stroke();
     ctx.fillStyle = '#c9c9c1'; ctx.font = `${Math.max(8, r * 0.13)}px monospace`; ctx.textAlign = 'center';
     ctx.fillText(title, cx, cy - r * 0.26);
   }
