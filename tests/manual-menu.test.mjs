@@ -22,9 +22,14 @@ test('every Manual subject sits in General Flight, Tactics or Aircraft', async (
   assert.match(menu, /'Tactics'/);
 });
 
-test('unwritten pages are listed but never linked', async () => {
+test('planned groups remain linked but unwritten article leaves do not', async () => {
   const branch = await read('src/components/MenuBranch.astro');
-  assert.match(branch, /node\.href && !node\.planned \? sitePath/);
+  assert.match(branch, /node\\.href && \\(node\\.children\\?\\.length \\|\\| !node\\.planned\\)/);
+  const menu = await read('src/data/manual-menu.ts');
+  assert.match(menu, /export function linkGroups/);
+  assert.match(menu, /node\\.children\\?\\.length/);
+  assert.match(menu, /export const hasArticle/);
+  assert.match(await read('src/components/GroupCards.astro'), /c\\.children\\?\\.length \\|\\| !c\\.planned/);
 });
 
 test('TACAN procedure is TACAN Navigation and its old address redirects', async () => {
