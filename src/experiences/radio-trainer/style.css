@@ -37,6 +37,7 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);font:14px Arial,Helvetica,sans-serif}
 button,input,select{font:inherit;color:inherit}
+input::placeholder{color:var(--sub);opacity:1}
 button{background:var(--surface);border:1px solid var(--line);padding:10px 12px;cursor:pointer;border-radius:2px}
 button:hover{background:var(--wash);border-color:var(--ink)}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--ink);outline-offset:2px}

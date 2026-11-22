@@ -202,6 +202,15 @@ try {
             await trainer.locator(start).click();
           }
           await trainer.locator(exercise).waitFor({ state: 'visible' });
+          if (slug === 'radio-trainer') {
+            for (const input of await trainer.locator('input[placeholder]').all()) {
+              const [text, paper] = await input.evaluate(element => [
+                getComputedStyle(element, '::placeholder').color,
+                getComputedStyle(element).backgroundColor,
+              ]);
+              assert.ok(contrast(text, paper) >= 4.5, `Radio trainer placeholder contrast: ${theme}`);
+            }
+          }
           await trainer.screenshot({ path: join(output, `trainer-${slug}-${size}-${theme}.png`) });
           if (size === 'desktop' && slug === 'ils-approach') {
             await trainer.locator('#goAround').click();
