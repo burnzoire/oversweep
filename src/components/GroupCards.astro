@@ -1,0 +1,25 @@
+---
+import EntryCard from "./EntryCard.astro";
+import { manualEntries } from "../data/availability";
+import { sitePath } from "../lib/paths";
+import type { MenuNode } from "../data/manual-menu";
+
+// The list on a group's landing page: one card per direct child, whether it is a
+// group (its own landing page) or a leaf. Unwritten items are grey and unlinked.
+interface Props { node: MenuNode }
+const { node } = Astro.props;
+const entryById = new Map(manualEntries.map((entry) => [entry.id, entry]));
+const children = node.children ?? [];
+---
+<div class="entry-grid">
+  {children.map((c) => {
+    const entry = !c.planned && entryById.get(c.id);
+    return entry ? <EntryCard entry={entry} headingLevel={2} compact /> : (
+      <article class:list={["entry-card", "compact", { "card-unwritten": c.planned }]}>
+        <h2 class="entry-title">{c.href && !c.planned ? <a href={sitePath(c.href)}>{c.title}</a> : <span>{c.title}</span>}</h2>
+        {c.summary && <p class="entry-objective">{c.summary}</p>}
+        {c.planned && <p class="entry-objective">Not written yet.</p>}
+      </article>
+    );
+  })}
+</div>

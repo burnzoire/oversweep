@@ -5,7 +5,6 @@ import ManualMenu from "../components/ManualMenu.astro";
 import SiteSearch from "../components/SiteSearch.astro";
 import PreviewSwitch from "../components/PreviewSwitch.astro";
 import { sectionHasContent } from "../data/availability";
-import { manualSubjects } from "../data/catalogue";
 import { assetPath, sitePath } from "../lib/paths";
 import { audience, clip, defaultDescription, describeRoute, entryForRoute, routeOf, shareSiteName, siteName } from "../lib/seo";
 import "../styles/global.css";
@@ -41,17 +40,13 @@ const {
   compactSubjectNav = false,
   isSectionIndex = false,
   isHomePage = false,
-  breadcrumbs: givenBreadcrumbs = [],
+  breadcrumbs = [],
   empty = false,
   customHeading = false,
   description: givenDescription,
   image,
   imageAlt,
 } = Astro.props;
-// Only menu leaves are pages: a subject is a group, so its old page is retired
-// and a breadcrumb for it is plain text (issue #429).
-const retiredGroups = new Set(manualSubjects.map((subject) => sitePath(`manual/${subject.slug}/`)));
-const breadcrumbs = givenBreadcrumbs.map((crumb) => (crumb.href && retiredGroups.has(crumb.href) ? { label: crumb.label } : crumb));
 const route = routeOf(Astro.url.pathname, import.meta.env.BASE_URL);
 const isNotFound = Astro.url.pathname.replace(/\/+$/, "").endsWith("/404");
 const description = clip(givenDescription ?? describeRoute(route) ?? defaultDescription);

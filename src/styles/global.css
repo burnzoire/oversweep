@@ -1101,3 +1101,9 @@ h2 {
   font-weight: 400;
 }
 
+
+/* Cards for items not written yet: grey, no link. */
+.entry-card.card-unwritten { border-top-color: var(--color-border); background: transparent; }
+.entry-card.card-unwritten .entry-title,
+.entry-card.card-unwritten .entry-objective { color: var(--color-unavailable); }
+.entry-grid .entry-title { font-size: 1.25rem; }

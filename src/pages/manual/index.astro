@@ -1,5 +1,7 @@
 ---
 import EntryCard from "../../components/EntryCard.astro";
+import GroupCards from "../../components/GroupCards.astro";
+import { manualMenu } from "../../data/manual-menu";
 import SiteLayout from "../../layouts/SiteLayout.astro";
 import { manualEntries } from "../../data/availability";
 
@@ -12,7 +14,9 @@ const featured = ["module.principles-of-flight", "module.bvr-intercepts", "modul
 
 <SiteLayout title="Manual" activeSection="manual" isSectionIndex
   description="Military flight procedures for flight sim pilots, taught from first principles with interactive figures, sources and knowledge checks: general flight, tactics and aircraft guides.">
-  <p class="lead">Modules teach the flying, for any aircraft. Aircraft guides teach one aircraft, panel by panel. Pick from the menu, or start with one of these.</p>
+  <p class="lead">Modules teach the flying, for any aircraft. Aircraft guides teach one aircraft, panel by panel. Pick a part below, or start with one of these.</p>
+
+  <GroupCards node={{ id: "manual", title: "Manual", children: manualMenu }} />
 
   <section class="manual-featured" aria-labelledby="featured-heading">
     <h2 id="featured-heading">Featured</h2>

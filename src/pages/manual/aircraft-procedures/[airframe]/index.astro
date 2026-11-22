@@ -2,6 +2,8 @@
 import Term from '../../../../components/Term.astro';
 import SiteLayout from '../../../../layouts/SiteLayout.astro';
 import { airframes, sourceUrl, visibleProcedures } from '../../../../data/aircraft-procedures';
+import GroupCards from '../../../../components/GroupCards.astro';
+import { manualMenu } from '../../../../data/manual-menu';
 import { cardMedia } from '../../../../data/card-media';
 import { assetPath, sitePath } from '../../../../lib/paths';
 
@@ -15,6 +17,7 @@ const { airframe } = Astro.props;
 const isViper = airframe.slug === 'f-16c';
 const hero = cardMedia[`aircraft-procedures.${airframe.slug}`]?.photo;
 const photos = hero ? [hero] : [];
+const node = manualMenu.find(n => n.id === 'area-aircraft')?.children?.find(n => n.href === `manual/aircraft-procedures/${airframe.slug}/`);
 ---
 
 <SiteLayout
@@ -52,6 +55,8 @@ const photos = hero ? [hero] : [];
       )}
     </header>
   )}
+
+  {node && <GroupCards node={node} />}
 
   <div class="airframe-sources">
     {isViper && <a href={sourceUrl}>Eagle Dynamics F-16C manual</a>}

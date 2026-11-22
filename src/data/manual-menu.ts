@@ -42,6 +42,7 @@ const subjectNode = (spec: SubjectSpec): MenuNode => {
     id: `subject-${spec.subject}-${spec.title ? slugify(spec.title) : 'all'}`,
     title: spec.title ?? subject.title,
     summary: spec.summary,
+    href: children.length ? (spec.title ? `manual/tactics/${slugify(spec.title)}/` : `manual/${spec.subject}/`) : undefined,
     planned: children.length === 0,
     children,
   };
@@ -79,16 +80,13 @@ const proc = (slug: string, fallback?: string): MenuNode => {
 
 const buildF16c = (): MenuNode => {
 const cockpit = cockpits[0];
-const cockpitNode = group('f16c-cockpit', 'Cockpit', [
-  { id: 'cockpit-overview', title: 'Overview', href: cockpitRoute(cockpit), summary: 'Every panel, by where it sits in the cockpit.' },
-  ...cockpit.areas.map(area => group(`cockpit-${area.id}`, area.title, area.panels.map(panel => (panel.spec
-    ? { id: `panel-${panel.id}`, title: panel.title, href: panelRoute(cockpit, panel.id) }
-    : plan(panel.title))))),
-]);
+const cockpitNode = group('f16c-cockpit', 'Cockpit', cockpit.areas.map(area => group(`cockpit-${area.id}`, area.title, area.panels.map(panel => (panel.spec
+  ? { id: `panel-${panel.id}`, title: panel.title, href: panelRoute(cockpit, panel.id) }
+  : plan(panel.title))), `${F16C_HREF}cockpit/areas/${area.id}/`, `The panels on the ${area.title.toLowerCase()}.`)), cockpitRoute(cockpit), 'Every panel, by where it sits in the cockpit.');
 
 const systems = group('f16c-systems', 'Systems', [
   cockpitNode,
-  group('f16c-hts', 'HARM Targeting System (HTS)', [{ ...proc('hts'), title: 'Overview', summary: 'Find and rank enemy radars on the HAD page and hand them to the HARM.' }, proc('hts-targeting'), plan('TDOA')]),
+  group('f16c-hts', 'HARM Targeting System (HTS)', [{ ...proc('hts'), title: 'Basic HTS' }, proc('hts-targeting'), plan('TDOA')], `${F16C_HREF}systems/hts/`, 'Find and rank enemy radars on the HAD page and hand them to the HARM.'),
   plan('TGP / Sniper pod'),
   plan('Radar (APG-68)', ['RWS: range while search', 'TWS: track while scan', 'Single target track', 'ACM modes', 'Ground map, expand and DBS', 'Ground moving target', 'Sea mode']),
   plan('Fire control and SMS'),
@@ -102,26 +100,26 @@ const systems = group('f16c-systems', 'Systems', [
   plan('Aerodynamics and limits'),
   plan('Fuel system'),
   plan('Electrical, hydraulic and EPU'),
-]);
+], `${F16C_HREF}systems/`, 'The cockpit, sensors, weapons systems and aircraft systems.');
 
 // Normal procedures sit directly under the aircraft, one group per phase of the sortie.
 const phases: MenuNode[] = [
-  group('phase-ground', 'Ground', [proc('engine-start'), proc('before-taxi'), proc('before-takeoff'), plan('Taxi and lineup'), plan('Takeoff'), plan('After landing and shutdown')]),
-  group('phase-navigation', 'Navigation', [proc('steerpoint-entry'), proc('tacan-navigation', 'TACAN navigation'), plan('INS alignment modes'), plan('HSD and route management'), plan('Markpoints'), plan('Reference points (VIP, VRP, PUP, OAP)'), plan('Bullseye'), plan('CRUS and DEST pages'), plan('INS drift: altitude calibration and fix'), plan('ILS approach set-up')]),
-  group('phase-enroute', 'Enroute', [plan('Air-to-air refuelling')]),
-  group('phase-recovery', 'Recovery', [plan('Overhead break'), plan('Instrument approach'), plan('Landing')]),
+  group('phase-ground', 'Ground', [proc('engine-start'), proc('before-taxi'), proc('before-takeoff'), plan('Taxi and lineup'), plan('Takeoff'), plan('After landing and shutdown')], `${F16C_HREF}ground/`, 'Engine start to takeoff.'),
+  group('phase-navigation', 'Navigation', [proc('steerpoint-entry'), proc('tacan-navigation', 'TACAN navigation'), plan('INS alignment modes'), plan('HSD and route management'), plan('Markpoints'), plan('Reference points (VIP, VRP, PUP, OAP)'), plan('Bullseye'), plan('CRUS and DEST pages'), plan('INS drift: altitude calibration and fix'), plan('ILS approach set-up')], `${F16C_HREF}navigation/`, 'Setting up and using the navigation systems.'),
+  group('phase-enroute', 'Enroute', [plan('Air-to-air refuelling')], `${F16C_HREF}enroute/`, 'Procedures between takeoff and recovery.'),
+  group('phase-recovery', 'Recovery', [plan('Overhead break'), plan('Instrument approach'), plan('Landing')], `${F16C_HREF}recovery/`, 'Returning to the field and landing.'),
 ];
 
 const emergency = plan('Emergency procedures', ['Engine failure and flameout', 'Engine relight', 'Engine fire', 'Electrical failure', 'Hydraulic failure', 'FLCS failure', 'EPU activation', 'Fuel system malfunction', 'Landing gear malfunction', 'Ejection decision']);
 
 const weapons = group('f16c-weapons', 'Weapons and tactics', [
-  group('weapons-sead', 'SEAD', [plan('AGM-88 HARM', ['POS shot', 'HAS shot', 'HTS handoff shot'])]),
+  group('weapons-sead', 'SEAD', [plan('AGM-88 HARM', ['POS shot', 'HAS shot', 'HTS handoff shot'])], `${F16C_HREF}weapons-and-tactics/sead/`, 'Hunting and killing radars with the HARM.'),
   group('weapons-air-to-air', 'Air-to-air weapons', [
     plan('Dogfight and missile override modes', ['Dogfight mode', 'Missile override mode']),
     plan('AIM-120 AMRAAM', ['Pre-planned and maddog shot', 'Defensive shot']),
     plan('AIM-9 Sidewinder', ['Boresight and slaved shot', 'AIM-9X with HMCS']),
     plan('M61 gun', ['EEGS without radar', 'EEGS with radar']),
-  ]),
+  ], `${F16C_HREF}weapons-and-tactics/air-to-air/`, 'Missiles and the gun for fighting other aircraft.'),
   group('weapons-air-to-ground', 'Air-to-ground weapons', [
     plan('GBU-12 Paveway II', ['TGP laser delivery']),
     plan('GBU-31/38 JDAM', ['Pre-planned and TOO']),
@@ -131,11 +129,11 @@ const weapons = group('f16c-weapons', 'Weapons and tactics', [
     plan('Cluster munitions', ['CBU-87 CCIP', 'CBU-105 CCRP']),
     plan('AGM-154 JSOW', ['Pre-planned delivery']),
     plan('Ordnance jettison', ['Selective jettison', 'Emergency stores jettison']),
-  ]),
-  group('weapons-self-protection', 'Self-protection', [plan('Chaff and flares', ['Manual and programmed dispense']), plan('ECM pod', ['Mode selection'])]),
-]);
+  ], `${F16C_HREF}weapons-and-tactics/air-to-ground/`, 'Guided and unguided weapons against ground targets.'),
+  group('weapons-self-protection', 'Self-protection', [plan('Chaff and flares', ['Manual and programmed dispense']), plan('ECM pod', ['Mode selection'])], `${F16C_HREF}weapons-and-tactics/self-protection/`, 'Chaff, flares and the ECM pod.'),
+], `${F16C_HREF}weapons-and-tactics/`, 'Employing the Viper\'s weapons: SEAD, air-to-air and air-to-ground.');
 
-return group('f16c', 'F-16C Viper', [{ id: 'f16c-overview', title: 'Overview', href: F16C_HREF, summary: 'The Viper, and where to start.' }, systems, ...phases, emergency, weapons]);
+return group('f16c', 'F-16C Viper', [systems, ...phases, emergency, weapons], F16C_HREF, 'Cockpit, systems, procedures and weapons for the DCS F-16C Block 50.');
 };
 
 // ---- Aircraft registry --------------------------------------------------------
@@ -151,9 +149,9 @@ export const aircraftMenus: AircraftMenu[] = [
 ];
 
 const areas = (aircraft: MenuNode[]): MenuNode[] => [
-  group('area-general-flight', 'General Flight', generalFlight.map(subjectNode)),
-  group('area-tactics', 'Tactics', tactics.map(subjectNode)),
-  group('area-aircraft', 'Aircraft', aircraft),
+  group('area-general-flight', 'General Flight', generalFlight.map(subjectNode), 'manual/general-flight/', 'Skills that apply to any aircraft: flying it, navigating, talking, planning and handling emergencies.'),
+  group('area-tactics', 'Tactics', tactics.map(subjectNode), 'manual/tactics/', 'Employment and threats: fighting, attacking ground targets, using sensors and staying alive.'),
+  group('area-aircraft', 'Aircraft', aircraft, 'manual/aircraft-procedures/', 'One guide per aircraft type: cockpit, systems, procedures and weapons.'),
 ];
 
 /** Every airframe fully built: the source of truth for tests and the landing page. */
@@ -164,7 +162,7 @@ export const aircraftMenuFile = (id: string) => `manual-menu/${id}.json`;
 /** The menu a page renders: only the airframe the page belongs to is expanded;
  *  the others are a single link, however many aircraft there are. */
 export function menuFor(route: string): MenuNode[] {
-  return areas(aircraftMenus.map(a => (route.startsWith(a.href) ? a.build() : { id: a.id, title: a.title, lazy: aircraftMenuFile(a.id), children: [{ id: `${a.id}-overview`, title: 'Overview', href: a.href }] })));
+  return areas(aircraftMenus.map(a => (route.startsWith(a.href) ? a.build() : { id: a.id, title: a.title, href: a.href, summary: a.summary, lazy: aircraftMenuFile(a.id) })));
 }
 
 /** Whether `route` is this node's page or one beneath it (so its branch opens). */
@@ -173,3 +171,18 @@ export const containsRoute = (node: MenuNode, route: string): boolean =>
 
 export const menuHrefs = (nodes: MenuNode[] = manualMenu): string[] =>
   nodes.flatMap(n => [...(n.href ? [n.href] : []), ...menuHrefs(n.children ?? [])]);
+
+/** The groups above a page, outermost first, for breadcrumbs: [{ title, href }]. */
+export function ancestors(href: string, nodes: MenuNode[] = manualMenu, trail: MenuNode[] = []): MenuNode[] | undefined {
+  for (const n of nodes) {
+    if (n.href === href) return trail;
+    const found = ancestors(href, n.children ?? [], [...trail, n]);
+    if (found) return found;
+  }
+  return undefined;
+}
+
+/** Every group that has a landing page, with the pages that exist as files left to their own route. */
+export function groupPages(nodes: MenuNode[] = manualMenu): MenuNode[] {
+  return nodes.flatMap(n => [...(n.href && !n.planned && n.children?.length ? [n] : []), ...groupPages(n.children ?? [])]);
+}

@@ -17,14 +17,14 @@ const link = (node: MenuNode) => (node.href && !node.planned ? sitePath(node.hre
     const label = url
       ? <a href={url} aria-current={current ? "page" : undefined} class:list={{ current }}>{node.title}</a>
       : <span class:list={{ unwritten: node.planned }}>{node.title}{node.planned && <span class="visually-hidden"> (not written yet)</span>}</span>;
-    return node.children?.length ? (
+    return node.children?.length || node.lazy ? (
       <li class:list={{ unwritten: node.planned }}>
         <details name={parent} open={containsRoute(node, route)} data-lazy={node.lazy ? assetPath(node.lazy) : undefined}>
           <summary>
             <span class="chev" aria-hidden="true"></span>
             {label}
           </summary>
-          <Self nodes={node.children} route={route} parent={node.id} depth={depth + 1} />
+          <Self nodes={node.children ?? []} route={route} parent={node.id} depth={depth + 1} />
         </details>
       </li>
     ) : (

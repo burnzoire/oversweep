@@ -51,3 +51,10 @@ test('an aircraft not on the page loads its branch when opened', async () => {
   assert.match(await read('src/components/ManualMenu.astro'), /dataset\.lazy/);
   assert.match(await read('src/pages/manual-menu/[aircraft].json.ts'), /aircraftMenus/);
 });
+
+test('every menu group has a landing page listing its children', async () => {
+  const menu = await read('src/data/manual-menu.ts');
+  assert.match(menu, /export function groupPages/);
+  assert.match(await read('src/pages/manual/[...group].astro'), /groupPages\(\)/);
+  assert.match(await read('src/components/GroupCards.astro'), /node\.children/);
+});
