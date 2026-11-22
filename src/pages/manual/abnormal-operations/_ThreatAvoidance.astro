@@ -360,11 +360,11 @@ const ft = (n: number) => `${Math.round(n).toLocaleString('en-US')} ft`;
 </script>
 <style>
  .contents-groups ol { columns: auto; }
- .natops .missile-track { fill: none; stroke: #b91c1c; stroke-width: 2.5; stroke-dasharray: 6 4; }
+ .natops .missile-track { fill: none; stroke: var(--color-error, #b91c1c); stroke-width: 2.5; stroke-dasharray: 6 4; }
  .natops .jet-track { fill: none; stroke: var(--color-link); stroke-width: 3; stroke-linecap: round; }
  .natops .jet-arrow { fill: var(--color-link); }
  .natops .flare { fill: #f59e0b; stroke: #b45309; stroke-width: 1.5; }
- .natops .aim { fill: none; stroke: #b91c1c; stroke-width: 2.5; }
- .natops .offset { fill: none; stroke: #b91c1c; stroke-width: 2; }
- .natops .missile-track + path { fill: #b91c1c; }
+ .natops .aim { fill: none; stroke: var(--color-error, #b91c1c); stroke-width: 2.5; }
+ .natops .offset { fill: none; stroke: var(--color-error, #b91c1c); stroke-width: 2; }
+ .natops .missile-track + path { fill: var(--color-error, #b91c1c); }
 </style>

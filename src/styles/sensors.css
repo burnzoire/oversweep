@@ -11,8 +11,8 @@
 .natops .mine { fill: var(--color-link); stroke: var(--color-link); }
 .natops .thin.dashed { stroke-dasharray: 6 4; }
 .natops .thin.on { stroke: var(--color-link); stroke-width: 2.4; }
-.natops .zone { fill: #eef0f2; stroke: var(--color-text); stroke-width: 0.8; }
-.natops .zone.on { fill: #cfe0f3; stroke: var(--color-link); stroke-width: 1.4; }
+.natops .zone { fill: var(--figure-shade, #eef0f2); stroke: var(--color-text); stroke-width: 0.8; }
+.natops .zone.on { fill: var(--figure-blue, #cfe0f3); stroke: var(--color-link); stroke-width: 1.4; }
 .lesson:not(.ready) .controls, .lesson:not(.ready) [data-sources] { display: none; }
 @media (max-width: 40rem) {
   .lesson .controls { grid-template-columns: 1fr; }

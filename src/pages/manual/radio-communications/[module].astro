@@ -474,7 +474,7 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
   .controls label { display: grid; gap: 0.2rem; font-weight: 700; }
   .controls output { font-weight: 400; font-variant-numeric: tabular-nums; }
   .controls label[hidden] { display: none; }
-  .controls input[type="text"], .controls select { width: 100%; box-sizing: border-box; min-height: 2.75rem; font: inherit; padding: 0.3rem 0.5rem; border: 1px solid var(--color-text); background: #fff; }
+  .controls input[type="text"], .controls select { width: 100%; box-sizing: border-box; min-height: 2.75rem; font: inherit; padding: 0.3rem 0.5rem; border: 1px solid var(--color-text); background: var(--color-page, #fff); }
   fieldset { margin: 0 0 0.75rem; padding: 0.5rem 0.75rem; border: 1px solid var(--color-border); }
   legend { font-weight: 700; }
   fieldset.inline { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; }
@@ -482,13 +482,13 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
   input[type="range"] { min-height: 2.75rem; width: 100%; }
   input:focus-visible, button:focus-visible, select:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
   .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
-  .lesson :global(button) { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: #fff; background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
-  .lesson :global(button + button), .lesson :global(button[aria-pressed="false"]) { color: var(--color-text); background: #fff; }
-  .lesson :global(button[aria-pressed="true"]) { color: #fff; background: var(--color-link); border-color: var(--color-link); }
+  .lesson :global(button) { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: var(--color-page, #fff); background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
+  .lesson :global(button + button), .lesson :global(button[aria-pressed="false"]) { color: var(--color-text); background: var(--color-page, #fff); }
+  .lesson :global(button[aria-pressed="true"]) { color: var(--color-page, #fff); background: var(--color-link); border-color: var(--color-link); }
   .lesson :global(button:disabled) { opacity: 0.45; cursor: default; }
   .lesson :global(button:focus-visible) { outline: 3px solid var(--color-focus); outline-offset: 2px; }
-  .lesson [data-choices] :global(button), .chips :global(button) { color: var(--color-text); background: #fff; font-weight: 400; text-align: left; }
-  .chips :global(button[aria-pressed="true"]) { color: #fff; background: var(--color-link); border-color: var(--color-link); }
+  .lesson [data-choices] :global(button), .chips :global(button) { color: var(--color-text); background: var(--color-page, #fff); font-weight: 400; text-align: left; }
+  .chips :global(button[aria-pressed="true"]) { color: var(--color-page, #fff); background: var(--color-link); border-color: var(--color-link); }
   ol.built { min-height: 2.75rem; margin: 0 0 0.75rem; padding: 0.5rem 0.75rem 0.5rem 2rem; border: 1px dashed var(--color-text); font-weight: 700; }
   blockquote.atc { margin: 0 0 0.75rem; padding: 0.6rem 0.9rem; border-left: 0.3rem solid var(--color-text); background: var(--color-surface); font-style: italic; }
   .spoken { min-height: 4rem; padding: 0.6rem 0.9rem; border: 2px solid var(--color-text); background: var(--color-surface); }
@@ -502,14 +502,14 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
   .squawk :global(.knob button), .squawk :global(.knob button + span + button) { padding: 0; color: #fff; background: #3d4855; border-color: #8a8f94; font-size: 1.3rem; }
   .feedback { font-weight: 700; min-height: 1.6em; }
   .feedback :global(p) { margin: 0.2rem 0; }
-  .feedback :global(.bad) { color: #a3000b; }
+  .feedback :global(.bad) { color: var(--color-error, #a3000b); }
   .lesson:not(.ready) .buttons, .lesson:not(.ready) .controls, .lesson:not(.ready) fieldset, .lesson:not(.ready) svg:empty,
   .lesson:not(.ready) .built, .lesson:not(.ready) .spoken, .lesson:not(.ready) .squawk, .lesson:not(.ready) blockquote { display: none; }
   .lesson.ready .no-js { display: none; }
   .no-js { font-weight: 700; }
   details.log { margin-bottom: 0.75rem; }
   details.log ul, details.log ol { margin: 0.4rem 0; font-size: 0.95rem; }
-  .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+  .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: var(--color-page, #fff); }
   @media (min-width: 64rem) {
     .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
   }
@@ -526,46 +526,46 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
     .contents ol { columns: 1; }
     dl.jargon div { grid-template-columns: 1fr; gap: 0.1rem; }
   }
-  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
+  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: var(--color-page, #fff); }
   :global(.natops .frame) { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
   :global(.natops .lbl) { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
   :global(.natops .lbl.small) { font-size: 10px; font-weight: 400; }
   :global(.natops .lbl.big) { font-size: 15px; }
   :global(.natops .lbl.mono) { font-family: ui-monospace, Menlo, Consolas, monospace; }
   :global(.natops .lbl.on) { fill: var(--color-link); }
-  :global(.natops .lbl.bad) { fill: #a3000b; }
-  :global(.natops .lbl.inv) { fill: #fff; }
+  :global(.natops .lbl.bad) { fill: var(--color-error, #a3000b); }
+  :global(.natops .lbl.inv) { fill: var(--color-page, #fff); }
   :global(.natops .ln) { fill: none; stroke: var(--color-text); stroke-width: 1.8; }
   :global(.natops .ln.heavy) { stroke-width: 2.6; }
   :global(.natops .ln.dashed) { stroke-dasharray: 7 4; }
   :global(.natops .ln.on) { stroke: var(--color-link); }
   :global(.natops .thin) { fill: none; stroke: var(--color-text); stroke-width: 1; }
-  :global(.natops .grid) { fill: none; stroke: #c8ccd0; stroke-width: 1; }
-  :global(.natops .box) { fill: #fff; stroke: var(--color-text); stroke-width: 1.6; }
+  :global(.natops .grid) { fill: none; stroke: var(--figure-grid, #c8ccd0); stroke-width: 1; }
+  :global(.natops .box) { fill: var(--color-page, #fff); stroke: var(--color-text); stroke-width: 1.6; }
   :global(.natops .box.on) { fill: var(--color-link); stroke: var(--color-link); }
-  :global(.natops .box.dim) { fill: #fff; stroke: #c8ccd0; }
-  :global(.natops .busy) { fill: #e4e6e8; stroke: var(--color-text); stroke-width: 1.2; }
-  :global(.natops .busy.atc) { fill: #fff; stroke-dasharray: 4 2; }
+  :global(.natops .box.dim) { fill: #fff; stroke: var(--figure-grid, #c8ccd0); }
+  :global(.natops .busy) { fill: var(--figure-shade, #e4e6e8); stroke: var(--color-text); stroke-width: 1.2; }
+  :global(.natops .busy.atc) { fill: var(--color-page, #fff); stroke-dasharray: 4 2; }
   :global(.natops .mine) { fill: var(--color-link); stroke: var(--color-link); }
-  :global(.natops .mine.bad) { fill: #a3000b; stroke: #a3000b; }
-  :global(.natops .busy.bad) { stroke: #a3000b; stroke-width: 2; }
+  :global(.natops .mine.bad) { fill: var(--color-error, #a3000b); stroke: var(--color-error, #a3000b); }
+  :global(.natops .busy.bad) { stroke: var(--color-error, #a3000b); stroke-width: 2; }
   :global(.natops .unheard) { fill: var(--color-surface); opacity: 0.6; }
-  :global(.natops .band) { fill: #e4e6e8; stroke: var(--color-text); stroke-width: 1.4; }
-  :global(.natops .band.uhf) { fill: #fff; }
+  :global(.natops .band) { fill: var(--figure-shade, #e4e6e8); stroke: var(--color-text); stroke-width: 1.4; }
+  :global(.natops .band.uhf) { fill: var(--color-page, #fff); }
   :global(.natops .cursor) { stroke: var(--color-link); stroke-width: 2.4; }
   :global(.natops .fill) { fill: var(--color-text); }
-  :global(.natops .dot) { fill: #fff; stroke: var(--color-text); stroke-width: 1.4; }
+  :global(.natops .dot) { fill: var(--color-page, #fff); stroke: var(--color-text); stroke-width: 1.4; }
   :global(.natops .dot.done) { fill: var(--color-text); }
   :global(.natops .pointer) { fill: var(--color-link); stroke: #fff; stroke-width: 2; }
   :global(.natops .thin.dotted) { stroke-dasharray: 2 3; }
   .feedback :global(.derived) { font-weight: 400; }
   :global(.natops .acft) { fill: var(--color-link); stroke: var(--color-link); stroke-width: 1; }
-  :global(.natops .acft.other) { fill: #fff; stroke: var(--color-text); stroke-width: 1.6; }
-  :global(.natops .terrain) { fill: #e4e6e8; stroke: var(--color-text); stroke-width: 1.2; }
+  :global(.natops .acft.other) { fill: var(--color-page, #fff); stroke: var(--color-text); stroke-width: 1.6; }
+  :global(.natops .terrain) { fill: var(--figure-shade, #e4e6e8); stroke: var(--color-text); stroke-width: 1.2; }
   :global(.natops .flown) { fill: none; stroke: var(--color-link); stroke-width: 3.4; stroke-linejoin: round; }
   :global(.natops .lamp-green) { fill: #138a36; }
   :global(.natops .lamp-red) { fill: #c4141c; }
-  :global(.natops .lamp-white) { fill: #fff; stroke: var(--color-text); stroke-width: 1.6; }
+  :global(.natops .lamp-white) { fill: var(--color-page, #fff); stroke: var(--color-text); stroke-width: 1.6; }
   :global(.natops .beam-green) { fill: #138a36; opacity: 0.18; }
   :global(.natops .beam-red) { fill: #c4141c; opacity: 0.18; }
   :global(.natops .beam-white) { fill: #8a8f94; opacity: 0.15; }

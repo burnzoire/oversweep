@@ -350,21 +350,21 @@ const glideRatio = (mph: number, fpm: number) => (mph * 88 / fpm).toFixed(1);
  .contents-groups ol { columns: auto; }
  .steps li { margin-block: 0.5rem; }
  kbd { font-family: var(--font-mono, monospace); font-size: 0.85em; border: 1px solid var(--color-rule, #ccc); border-bottom-width: 2px; border-radius: 3px; padding: 0 0.3em; }
- .natops .track { fill: none; stroke: #c2410c; stroke-width: 5; stroke-linecap: round; opacity: 0.75; }
- .natops .ground { stroke: #1b1f24; stroke-width: 1.5; }
- .natops .ground-fill { fill: #e9e2d4; }
+ .natops .track { fill: none; stroke: var(--figure-warning, #c2410c); stroke-width: 5; stroke-linecap: round; opacity: 0.75; }
+ .natops .ground { stroke: var(--color-text); stroke-width: 1.5; }
+ .natops .ground-fill { fill: var(--figure-ground, #e9e2d4); }
  .natops .badge { fill: #f5c518; stroke: #1b1f24; stroke-width: 1; }
  .natops .badge-n { font: 700 14px Arial, Helvetica, sans-serif; fill: #1b1f24; }
- .natops .grid { stroke: #d0d5db; stroke-width: 1; }
- .natops .hatch-bg { fill: #c7ccd2; }
- .natops .hatch { stroke: #1b1f24; stroke-width: 0.8; }
- .natops .avoid { stroke: #1b1f24; stroke-width: 1.5; }
- .natops .takeoff { fill: none; stroke: #c2410c; stroke-width: 2.5; stroke-dasharray: 7 5; }
- .natops .descent { fill: none; stroke: #c2410c; stroke-width: 3; }
- .natops .tangent { stroke: #1b1f24; stroke-width: 1.5; stroke-dasharray: 6 4; }
- .natops .pt { fill: #fff; stroke: #1b1f24; stroke-width: 2; }
- .natops .marker { stroke: #1d4ed8; stroke-width: 1.5; stroke-dasharray: 3 3; }
- .natops .marker-dot { fill: #1d4ed8; opacity: 0.85; }
+ .natops .grid { stroke: var(--figure-grid, #d0d5db); stroke-width: 1; }
+ .natops .hatch-bg { fill: var(--figure-shade, #c7ccd2); }
+ .natops .hatch { stroke: var(--color-text); stroke-width: 0.8; }
+ .natops .avoid { stroke: var(--color-text); stroke-width: 1.5; }
+ .natops .takeoff { fill: none; stroke: var(--figure-warning, #c2410c); stroke-width: 2.5; stroke-dasharray: 7 5; }
+ .natops .descent { fill: none; stroke: var(--figure-warning, #c2410c); stroke-width: 3; }
+ .natops .tangent { stroke: var(--color-text); stroke-width: 1.5; stroke-dasharray: 6 4; }
+ .natops .pt { fill: var(--color-page); stroke: var(--color-text); stroke-width: 2; }
+ .natops .marker { stroke: var(--color-link); stroke-width: 1.5; stroke-dasharray: 3 3; }
+ .natops .marker-dot { fill: var(--color-link); opacity: 0.85; }
  .lesson:not(.ready) [data-marker] { display: none; }
  .natops .lbl.small { font-size: 11px; }
 </style>

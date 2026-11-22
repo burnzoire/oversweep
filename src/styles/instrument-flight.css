@@ -31,15 +31,15 @@ ol.steps li { margin-block: 0.35rem; }
 .controls output { display: inline-block; min-width: 2.5rem; font-variant-numeric: tabular-nums; }
 button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
 .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
-.lesson button { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: #fff; background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
+.lesson button { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: var(--color-page, #fff); background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
 .lesson button:disabled { opacity: 0.45; cursor: default; }
-.lesson [data-choices] button { color: var(--color-text); background: #fff; font-weight: 400; text-align: left; }
+.lesson [data-choices] button { color: var(--color-text); background: var(--color-page, #fff); font-weight: 400; text-align: left; }
 .feedback { font-weight: 700; min-height: 1.6em; }
 .feedback p { margin: 0.2rem 0; }
 .feedback .derived { font-weight: 400; }
 .lesson.ready .no-js { display: none; }
 .no-js { font-weight: 700; }
-.figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+.figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: var(--color-page, #fff); }
 @media (min-width: 64rem) {
   .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
 }
@@ -55,7 +55,7 @@ button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2p
   ol.exchange li { display: block; }
   ol.exchange .who { display: block; }
 }
-svg.natops { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
+svg.natops { display: block; width: 100%; height: auto; color: var(--color-text); background: var(--color-page, #fff); }
 .natops .frame { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
 .natops .lbl { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
 .natops .lbl.small { font-size: 10px; font-weight: 400; }
@@ -64,8 +64,8 @@ svg.natops { display: block; width: 100%; height: auto; color: var(--color-text)
 .natops .ln.on { stroke: var(--color-link); stroke-width: 2.8; }
 .natops .thin { fill: none; stroke: var(--color-text); stroke-width: 1; }
 .natops .thin.dotted { stroke-dasharray: 2 3; }
-.natops .shade { fill: #e6e9ec; stroke: none; }
-.natops .mine.shade { fill: #cfe0f3; stroke: none; }
+.natops .shade { fill: var(--figure-shade, #e6e9ec); stroke: none; }
+.natops .mine.shade { fill: var(--figure-blue, #cfe0f3); stroke: none; }
 .natops .fill { fill: var(--color-text); }
 .lesson:not(.ready) .buttons, .lesson:not(.ready) svg:empty { display: none; }
 

@@ -1,13 +1,13 @@
 /* Formation module figures (svg.form). Loaded after instrument-flight.css,
    which supplies the shared page layout, tables, exchanges and lessons. */
-svg.form { display: block; width: 100%; height: auto; background: #fff; }
+svg.form { display: block; width: 100%; height: auto; background: var(--color-page, #fff); }
 .fig-scroll svg.form { min-width: 0; }
-.form .sky { fill: #cfe3f2; }
+.form .sky { fill: var(--figure-sky, #cfe3f2); }
 .form .night { fill: #0b1020; }
-.form .view { fill: #fff; stroke: var(--color-text); stroke-width: 1.5; }
+.form .view { fill: var(--color-page, #fff); stroke: var(--color-text); stroke-width: 1.5; }
 .form .dark { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; }
 .form .dark.small { font-size: 10px; font-weight: 400; }
-.form .tag { fill: #111; font: 700 11px Arial, Helvetica, sans-serif; paint-order: stroke; stroke: #fff; stroke-width: 3px; }
+.form .tag { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; paint-order: stroke; stroke: var(--color-page, #fff); stroke-width: 3px; }
 .form .thin { stroke: #9aa1a8; stroke-width: 1; stroke-dasharray: 3 3; fill: none; }
 .form .panel { stroke: #3b434b; stroke-width: 0.5; stroke-linejoin: round; }
 .form .panel.fuse { fill: #a7b0b8; }
@@ -43,7 +43,7 @@ svg.form { display: block; width: 100%; height: auto; background: #fff; }
 .form .lamp.strobe { fill: #ff3b30; animation: strobe 1.2s steps(1) infinite; }
 @keyframes strobe { 0% { opacity: 1; } 12% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .form .lamp.strobe { animation: none; } }
-.lesson [data-choices] button[aria-pressed="true"] { background: var(--color-text); color: #fff; }
+.lesson [data-choices] button[aria-pressed="true"] { background: var(--color-text); color: var(--color-page, #fff); }
 .controls label { margin-right: 0.6rem; }
 /* Helicopter Formation module (helo-ui.mjs). */
 .form .heli .disk { fill: rgba(60, 64, 70, 0.08); stroke: #6b747c; stroke-width: 1; stroke-dasharray: 4 3; }

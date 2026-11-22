@@ -607,12 +607,12 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   input[type="range"] { min-height: 2.75rem; width: 100%; }
   input:focus-visible, button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
   .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
-  .lesson :global(button) { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: #fff; background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
-  .lesson :global(button[aria-pressed="false"]) { color: var(--color-text); background: #fff; }
-  .lesson :global(button[aria-pressed="true"]) { color: #fff; background: var(--color-link); border-color: var(--color-link); }
+  .lesson :global(button) { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: var(--color-page, #fff); background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
+  .lesson :global(button[aria-pressed="false"]) { color: var(--color-text); background: var(--color-page, #fff); }
+  .lesson :global(button[aria-pressed="true"]) { color: var(--color-page, #fff); background: var(--color-link); border-color: var(--color-link); }
   .lesson :global(button:disabled) { opacity: 0.45; cursor: default; }
-  .lesson [data-choices] :global(button), .chips :global(button) { color: var(--color-text); background: #fff; font-weight: 400; text-align: left; }
-  .chips :global(button[aria-pressed="true"]) { color: #fff; background: var(--color-link); border-color: var(--color-link); }
+  .lesson [data-choices] :global(button), .chips :global(button) { color: var(--color-text); background: var(--color-page, #fff); font-weight: 400; text-align: left; }
+  .chips :global(button[aria-pressed="true"]) { color: var(--color-page, #fff); background: var(--color-link); border-color: var(--color-link); }
   .callouts { padding-left: 0; list-style: none; display: grid; gap: 0.5rem; }
   .callouts li { padding: 0.5rem 0.75rem; border: 1px solid var(--color-border); }
   .callouts li.on { border-color: var(--color-link); border-width: 2px; }
@@ -621,11 +621,11 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   .feedback { font-weight: 700; min-height: 1.6em; }
   .feedback :global(p) { margin: 0.2rem 0; }
   .feedback :global(.derived) { font-weight: 400; }
-  .feedback :global(.bad) { color: #a3000b; }
+  .feedback :global(.bad) { color: var(--color-error, #a3000b); }
   .feedback :global(ul) { margin: 0.2rem 0; font-weight: 400; }
   .lesson.ready .no-js { display: none; }
   .no-js { font-weight: 700; }
-  .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+  .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: var(--color-page, #fff); }
   @media (min-width: 64rem) {
     .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
   }
@@ -644,20 +644,20 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   @media (max-width: 40rem) {
     .contents ol { columns: 1; }
   }
-  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
+  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: var(--color-page, #fff); }
   :global(.natops .frame) { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
   :global(.natops .lbl) { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
   :global(.natops .lbl.small) { font-size: 10px; font-weight: 400; }
-  :global(.natops .lbl.halo) { stroke: #e8eaed; stroke-width: 3px; stroke-linejoin: round; paint-order: stroke; }
+  :global(.natops .lbl.halo) { stroke: var(--figure-shade, #e8eaed); stroke-width: 3px; stroke-linejoin: round; paint-order: stroke; }
   :global(.natops .ln) { fill: none; stroke: var(--color-text); stroke-width: 1.8; }
   :global(.natops .ln.heavy) { stroke-width: 2.8; }
   :global(.natops .ln.dashed) { stroke-dasharray: 7 4; }
   :global(.natops .ln.on) { stroke: var(--color-link); }
   :global(.natops .thin) { fill: none; stroke: var(--color-text); stroke-width: 1; }
   :global(.natops .thin.dotted) { stroke-dasharray: 2 3; }
-  :global(.natops .grid) { fill: none; stroke: #c8ccd0; stroke-width: 1; }
+  :global(.natops .grid) { fill: none; stroke: var(--figure-grid, #c8ccd0); stroke-width: 1; }
   :global(.natops .fill) { fill: var(--color-text); }
-  :global(.natops .deck) { fill: #e8eaed; stroke: var(--color-text); stroke-width: 1.5; }
+  :global(.natops .deck) { fill: var(--figure-shade, #e8eaed); stroke: var(--color-text); stroke-width: 1.5; }
   :global(.natops .part) { fill: none; stroke: var(--color-text); stroke-width: 1.5; cursor: pointer; }
   :global(.natops .part.dashed) { stroke-dasharray: 7 4; }
   :global(.natops .part.heavy) { stroke-width: 4; }
@@ -665,7 +665,7 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   :global(.natops .partfill) { fill: var(--color-text); cursor: pointer; }
   :global(.natops .partfill.on) { fill: var(--color-link); }
   :global(.natops .mine) { fill: var(--color-link); stroke: var(--color-link); }
-  :global(.natops .mine.bad) { fill: #a3000b; stroke: #a3000b; }
+  :global(.natops .mine.bad) { fill: var(--color-error, #a3000b); stroke: var(--color-error, #a3000b); }
   :global(.natops .elevator) { fill: none; stroke: var(--color-text); stroke-width: 1; stroke-dasharray: 4 2; }
   :global(.natops .hull) { fill: #c8ccd0; stroke: var(--color-text); stroke-width: 1; }
   :global(.natops .track) { fill: none; stroke: #7a828c; stroke-width: 1; stroke-dasharray: 2 3; }
@@ -676,7 +676,7 @@ const rotor = sitePath('manual/flight-fundamentals/rotor-wing/');
   :global(.natops .ribbon) { fill: none; stroke: #fff; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
   :global(.natops .ribbon-on) { fill: none; stroke: var(--color-link); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
   :global(.natops .wake) { fill: none; stroke: #9aa3ad; stroke-width: 1.2; stroke-dasharray: 3 3; }
-  :global(.natops .arrow) { fill: #fff; stroke: var(--color-text); stroke-width: 1.5; }
+  :global(.natops .arrow) { fill: var(--color-page, #fff); stroke: var(--color-text); stroke-width: 1.5; }
   :global(.natops .callout.on .lbl) { fill: var(--color-link); }
   :global(.natops .amber) { fill: #f0a020; }
   :global(.natops .red) { fill: #c0161f; }

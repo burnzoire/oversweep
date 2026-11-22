@@ -342,10 +342,10 @@ const lb = (x: number) => `${(Math.round(x / 10) * 10).toLocaleString('en-US')} 
   .lesson h3 { margin-top: 0; }
   button:focus-visible, input:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
   .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
-  .lesson :global(button) { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: #fff; background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
+  .lesson :global(button) { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: var(--color-page, #fff); background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
   .lesson :global(button:disabled) { opacity: 0.45; cursor: default; }
-  .lesson [data-choices] :global(button), .chips :global(button) { color: var(--color-text); background: #fff; font-weight: 400; text-align: left; }
-  .chips :global(button[aria-pressed="true"]) { color: #fff; background: var(--color-link); border-color: var(--color-link); }
+  .lesson [data-choices] :global(button), .chips :global(button) { color: var(--color-text); background: var(--color-page, #fff); font-weight: 400; text-align: left; }
+  .chips :global(button[aria-pressed="true"]) { color: var(--color-page, #fff); background: var(--color-link); border-color: var(--color-link); }
   .controls { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1rem; align-items: center; margin-bottom: 0.75rem; }
   .controls input[type="range"] { width: 100%; min-height: 2.75rem; }
   .controls .check { grid-column: 1 / -1; }
@@ -355,7 +355,7 @@ const lb = (x: number) => `${(Math.round(x / 10) * 10).toLocaleString('en-US')} 
   .feedback :global(.derived) { font-weight: 400; }
   .lesson.ready .no-js { display: none; }
   .no-js { font-weight: 700; }
-  .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+  .figure-lesson { border-width: 2px; width: min(64rem, calc(100vw - 3rem)); background: var(--color-page, #fff); }
   @media (min-width: 64rem) {
     .figure-lesson { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
   }
@@ -376,11 +376,11 @@ const lb = (x: number) => `${(Math.round(x / 10) * 10).toLocaleString('en-US')} 
     ol.exchange .who { display: block; }
     .controls { grid-template-columns: 1fr; }
   }
-  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
+  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: var(--color-page, #fff); }
   :global(.natops .frame) { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
   :global(.natops .lbl) { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
   :global(.natops .lbl.small) { font-size: 10px; font-weight: 400; }
-  :global(.natops .lbl.inv) { fill: #fff; }
+  :global(.natops .lbl.inv) { fill: var(--color-page, #fff); }
   :global(.natops .lbl.call) { font-size: 16px; fill: var(--color-link); }
   :global(.natops .ln) { fill: none; stroke: var(--color-text); stroke-width: 1.8; }
   :global(.natops .ln.heavy) { stroke-width: 2.8; }
@@ -388,7 +388,7 @@ const lb = (x: number) => `${(Math.round(x / 10) * 10).toLocaleString('en-US')} 
   :global(.natops .ln.on), :global(.natops .thin.on) { stroke: var(--color-link); stroke-width: 2.4; }
   :global(.natops .thin) { fill: none; stroke: var(--color-text); stroke-width: 1; }
   :global(.natops .thin.dotted) { stroke-dasharray: 2 3; }
-  :global(.natops .shade) { fill: #e6e9ec; stroke: none; }
+  :global(.natops .shade) { fill: var(--figure-shade, #e6e9ec); stroke: none; }
   :global(.natops .fill) { fill: var(--color-text); }
   :global(.natops .mine) { fill: var(--color-link); stroke: var(--color-link); }
   .lesson:not(.ready) .buttons, .lesson:not(.ready) .controls, .lesson:not(.ready) svg:empty { display: none; }

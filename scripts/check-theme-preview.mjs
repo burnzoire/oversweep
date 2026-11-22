@@ -22,6 +22,28 @@ const routes = {
   sidewall: f16 + 'cockpit/sidewall-controls/',
   'engine-start': f16 + 'engine-start/',
 };
+const referenceRoutes = {
+  manual: ['manual/', '.subject-nav'],
+  'manual-group': ['manual/general-flight/', '.page-content'],
+  'flight-diagram': ['manual/flight-fundamentals/principles-of-flight/', 'svg.natops'],
+  'instrument-lesson': ['manual/instrument-flight/attitude-instrument-flying/', 'svg.inst'],
+  'formation-lesson': ['manual/formation-flying/two-ship-formation/', 'svg.form'],
+  'refueling-lesson': ['manual/air-to-air-refuelling/aar-procedures/', 'svg.aar'],
+  'aerodrome-lesson': ['manual/airfield-operations/airfield-basics/', 'svg:has(.apron)'],
+  'radio-bands': ['manual/radio-communications/radio-procedures/', 'svg:has(.band.uhf)'],
+  'training-library': ['training/', '.page-content'],
+  encyclopedia: ['encyclopedia/', '.page-content'],
+  'aircraft-catalogue': ['encyclopedia/aircraft/', '.record-filter'],
+  'aircraft-record': ['encyclopedia/aircraft/f-16/', '.data-plate'],
+  glossary: ['encyclopedia/terminology/brevity/', '.term'],
+  'reference-data': ['encyclopedia/reference-data/units-and-conversions/', 'table'],
+  'airfield-plan': ['encyclopedia/locations/sochi/', 'svg.plan'],
+  'carrier-profile': ['encyclopedia/carriers/classes/nimitz/', '.page-content'],
+};
+const figureLabels = {
+  'aerodrome-lesson': ['APRON (RAMP)', '.apron'],
+  'radio-bands': [/^UHF +300/, '.band.uhf'],
+};
 const viewports = {
   desktop: { width: 1440, height: 1000 },
   tablet: { width: 1024, height: 768 },
@@ -111,6 +133,42 @@ try {
           await page.screenshot({ path: join(output, 'engine-start-battery-desktop-dark.png') });
         }
       }
+      if (size !== 'tablet') {
+        for (const [name, [route, target]] of Object.entries(referenceRoutes)) {
+          await visit(page, route);
+          assert.equal(await preference(page).inputValue(), theme, name);
+          const subject = page.locator(target).first();
+          const surface = await subject.evaluate(element => {
+            for (let node = element; node; node = node.parentElement) {
+              const background = getComputedStyle(node).backgroundColor;
+              if (background !== 'rgba(0, 0, 0, 0)') return background;
+            }
+          });
+          const ink = await subject.evaluate(element => getComputedStyle(element).color);
+          assert.ok(contrast(ink, surface) >= 4.5, `Reference surface contrast: ${name} ${theme}`);
+          const label = figureLabels[name];
+          if (label) {
+            const [text, shape] = label;
+            const [pigment, paper] = await Promise.all([
+              subject.locator('text').filter({ hasText: text }).first().evaluate(node => getComputedStyle(node).fill),
+              subject.locator(shape).first().evaluate(node => getComputedStyle(node).fill),
+            ]);
+            assert.ok(contrast(pigment, paper) >= 4.5, `Diagram label contrast: ${name} ${theme}`);
+          }
+          if (name === 'aircraft-catalogue') {
+            const select = subject.locator('select:visible').first();
+            const [text, background] = await select.evaluate(element => {
+              const style = getComputedStyle(element);
+              return [style.color, style.backgroundColor];
+            });
+            assert.ok(contrast(text, background) >= 4.5, `Catalogue select contrast: ${theme}`);
+          }
+          await page.screenshot({ path: join(output, `${name}-${size}-${theme}.png`) });
+          if (target !== '.page-content') {
+            await subject.screenshot({ path: join(output, `${name}-${size}-${theme}-detail.png`) });
+          }
+        }
+      }
     }
 
     await preference(page).focus();
@@ -121,9 +179,11 @@ try {
     assert.equal(await background(), systemBackground);
     await page.emulateMedia({ colorScheme: 'light' });
     assert.notEqual(await background(), systemBackground);
-    await visit(page, 'encyclopedia/');
+    await preference(page).selectOption('dark');
+    await visit(page, 'experiences/ils-approach/');
+    assert.equal(await page.locator('body').getAttribute('data-experience-id'), 'experience.ils-approach');
+    assert.equal(await page.locator('html').getAttribute('data-theme-preview'), null);
     assert.equal(await preference(page).count(), 0);
-    assert.equal(await scheme(page), 'light');
     await page.close();
   }
 } finally {

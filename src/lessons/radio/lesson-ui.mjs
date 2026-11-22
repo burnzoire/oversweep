@@ -449,7 +449,7 @@ function setupSquawk(root) {
     svg.append(el('text', { x: 220, y: 24, class: 'lbl' }, 'CODES SENT'));
     sent.slice(-8).forEach((c, i) => {
       const bad = c in SPECIAL_CODES;
-      svg.append(el('rect', { x: 220 + i * 47, y: 34, width: 43, height: 26, class: `box${bad ? ' on' : ''}`, style: bad ? 'fill:#a3000b;stroke:#a3000b' : '' }));
+      svg.append(el('rect', { x: 220 + i * 47, y: 34, width: 43, height: 26, class: `box${bad ? ' on' : ''}`, style: bad ? 'fill:var(--color-error, #a3000b);stroke:var(--color-error, #a3000b)' : '' }));
       svg.append(el('text', { x: 241 + i * 47, y: 52, class: `lbl mono${bad ? ' inv' : ''}`, 'text-anchor': 'middle' }, c));
     });
     svg.append(el('text', { x: 220, y: 84, class: 'lbl small' }, `TARGET ${to}`));

@@ -57,12 +57,8 @@ const absolute = (path: string) => (site ? new URL(path, site).href : undefined)
 // A PR preview (served under /preview/<sha>/) is never indexed; its canonical
 // URL is the live page.
 const isPreview = Boolean(import.meta.env.PUBLIC_PREVIEW_SHA);
-// Expand this list as the remaining page types are checked in both themes.
-const f16Route = "manual/aircraft-procedures/f-16c/";
-const previewTheme = (isPreview || import.meta.env.DEV) && (
-  route === "" || route === f16Route || route.startsWith(`${f16Route}cockpit/`) ||
-  route === `${f16Route}engine-start/`
-);
+// Standalone experience frames do not use SiteLayout.
+const previewTheme = isPreview || import.meta.env.DEV;
 const canonical = isNotFound ? undefined : absolute(isPreview ? `/${route}` : sitePath(route));
 const shareImage = absolute(assetPath(image ?? "og-default.png"));
 const shareImageAlt = image ? (imageAlt ?? title) : "Oversweep, the interactive flight sim reference";

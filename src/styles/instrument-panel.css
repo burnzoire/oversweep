@@ -1,7 +1,7 @@
 /* The instrument panel, HSI and ILS views (svg.inst), shared by the
    instrument flight pages and the instrument trainer. Uses the site colour
    tokens --color-text and --color-link. */
-svg.inst { display: block; width: 100%; height: auto; background: #fff; }
+svg.inst { display: block; width: 100%; height: auto; background: var(--color-page, #fff); }
 .fig-scroll svg.inst { min-width: 0; }
 .inst .panel { fill: #2b2f33; }
 .inst .bezel { fill: #15181b; stroke: #50565c; stroke-width: 1.5; }
@@ -50,13 +50,13 @@ svg.inst { display: block; width: 100%; height: auto; background: #fff; }
 .inst .box.on { fill: #4fc3f7; stroke: #4fc3f7; }
 .inst .acft { fill: #ffb300; stroke: #ffb300; stroke-width: 1; }
 /* Plan and profile views on white (ILS figure). */
-.inst .view { fill: #fff; stroke: var(--color-text); stroke-width: 1.5; }
+.inst .view { fill: var(--color-page, #fff); stroke: var(--color-text); stroke-width: 1.5; }
 .inst .rwy { fill: #6b7076; }
-.inst .beam { fill: #cfe0f3; stroke: none; }
-.inst .beam.gs { fill: #f6d6f4; }
+.inst .beam { fill: var(--figure-blue, #cfe0f3); stroke: none; }
+.inst .beam.gs { fill: var(--figure-rose, #f6d6f4); }
 .inst .cl { stroke: var(--color-text); stroke-width: 1; stroke-dasharray: 6 4; }
 .inst .track { fill: none; stroke: var(--color-link); stroke-width: 2.5; }
 .inst .me { fill: var(--color-link); }
 .inst .dark { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; }
 .inst .dark.small { font-size: 10px; font-weight: 400; }
-.inst .mark { fill: #fff; stroke: var(--color-text); stroke-width: 2; }
+.inst .mark { fill: var(--color-page, #fff); stroke: var(--color-text); stroke-width: 2; }

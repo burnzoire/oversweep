@@ -500,8 +500,8 @@ const reference = [
   input[type="range"] { min-height: 2.75rem; width: 100%; }
   input:focus-visible, button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
   .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  button { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: #fff; background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
-  button + button { color: var(--color-text); background: #fff; }
+  button { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: var(--color-page, #fff); background: var(--color-text); border: 1px solid var(--color-text); cursor: pointer; }
+  button + button { color: var(--color-text); background: var(--color-page, #fff); }
   .derived { margin: 0; }
   .feedback { font-weight: 700; min-height: 1.6em; }
   .lesson svg { width: 100%; max-width: 24rem; height: auto; justify-self: center; color: var(--color-text); }
@@ -525,7 +525,7 @@ const reference = [
   :global(.lesson svg .label.strong) { font-weight: 700; font-size: 12px; }
   :global(.lesson svg .station) { fill: var(--color-text); }
   :global(.lesson svg .radial) { stroke: var(--color-border); stroke-dasharray: 5 3; }
-  :global(.lesson svg .you) { fill: #fff; stroke: var(--color-text); stroke-width: 2; }
+  :global(.lesson svg .you) { fill: var(--color-page, #fff); stroke: var(--color-text); stroke-width: 2; }
   :global(.lesson svg .fix) { fill: var(--color-text); }
   :global(.lesson svg .track) { stroke: var(--color-link); stroke-width: 2.5; color: var(--color-link); }
   :global(.lesson svg .parallel) { stroke: var(--color-link); stroke-width: 1.5; stroke-dasharray: 6 4; color: var(--color-link); }
@@ -534,7 +534,7 @@ const reference = [
   :global(.lesson svg .inbound) { stroke: var(--color-text); stroke-width: 2; }
   :global(.lesson svg .arrival) { stroke: var(--color-link); stroke-width: 2.5; color: var(--color-link); }
   :global(.lesson svg .circuit) { stroke: var(--color-text); fill: var(--color-surface); }
-  :global(.lesson svg .circuit.adjusted) { fill: #d7dbe0; stroke-dasharray: 4 2; }
+  :global(.lesson svg .circuit.adjusted) { fill: var(--figure-shade, #d7dbe0); stroke-dasharray: 4 2; }
   :global(.lesson svg .circuit.short) { fill: #fff; stroke-dasharray: 2 2; }
   /* NATOPS-style line art shared by the static and script-drawn figures. */
   .figure-lesson { border-width: 2px; }
@@ -542,7 +542,7 @@ const reference = [
   /* Extend right from the article's left edge into the layout column: the
      article is capped at 68ch, its grid column is not. 3rem leaves room for a
      scrollbar inside the page shell's 1rem gutters. */
-  .figure-lesson, .lesson.bleed { width: min(64rem, calc(100vw - 3rem)); background: #fff; }
+  .figure-lesson, .lesson.bleed { width: min(64rem, calc(100vw - 3rem)); background: var(--color-page, #fff); }
   @media (min-width: 64rem) {
     .figure-lesson, .lesson.bleed { width: min(64rem, calc(min(100vw - 3rem, 72rem) - 19rem)); }
   }
@@ -554,7 +554,7 @@ const reference = [
   .lesson-grid.wide .controls { grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); align-items: end; }
   .lesson-grid.wide svg { max-width: none; }
   .lesson-grid.wide .controls .feedback { grid-column: 1 / -1; }
-  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: #fff; }
+  :global(svg.natops) { display: block; width: 100%; height: auto; color: var(--color-text); background: var(--color-page, #fff); }
   :global(.natops .frame) { fill: none; stroke: var(--color-text); stroke-width: 1.5; }
   :global(.natops .lbl) { fill: var(--color-text); font: 700 11px Arial, Helvetica, sans-serif; letter-spacing: 0.04em; }
   :global(.natops .lbl.small) { font-size: 10px; font-weight: 700; }
@@ -565,30 +565,30 @@ const reference = [
   :global(.natops .tick), :global(.natops .bracket) { fill: none; stroke: var(--color-text); stroke-width: 1.6; }
   :global(.natops .thin) { fill: none; stroke: var(--color-text); stroke-width: 1; }
   :global(.natops .fixmark) { fill: var(--color-text); }
-  :global(.natops .ballmark) { fill: #fff; stroke: var(--color-text); stroke-width: 2; }
-  :global(.natops .ship path), :global(.natops .shipfill) { fill: #e4e6e8; stroke: var(--color-text); stroke-width: 1.6; }
+  :global(.natops .ballmark) { fill: var(--color-page, #fff); stroke: var(--color-text); stroke-width: 2; }
+  :global(.natops .ship path), :global(.natops .shipfill) { fill: var(--figure-shade, #e4e6e8); stroke: var(--color-text); stroke-width: 1.6; }
   :global(.natops .ship rect) { fill: var(--color-text); }
   :global(.natops .deck) { fill: none; stroke: var(--color-text); stroke-width: 1.4; stroke-dasharray: 5 3; }
   :global(.natops .callout) { cursor: pointer; }
-  :global(.natops .callout circle) { fill: #fff; stroke: var(--color-text); stroke-width: 1.6; }
+  :global(.natops .callout circle) { fill: var(--color-page, #fff); stroke: var(--color-text); stroke-width: 1.6; }
   :global(.natops .callout text) { fill: var(--color-text); font: 700 12px Arial, Helvetica, sans-serif; }
   :global(.natops .part.active .ln), :global(.natops .part.active .tick), :global(.natops .part.active .bracket) { stroke: var(--color-link); stroke-width: 3.2; }
   :global(.natops .part.active .lbl) { fill: var(--color-link); }
   :global(.natops .callout.active circle) { fill: var(--color-link); stroke: var(--color-link); }
-  :global(.natops .callout.active text) { fill: #fff; }
+  :global(.natops .callout.active text) { fill: var(--color-page, #fff); }
   .callouts { display: grid; gap: 0.25rem; padding-left: 0; list-style: none; counter-reset: callout; }
   .callouts li { counter-increment: callout; border-left: 0.25rem solid transparent; padding: 0.25rem 0.5rem; }
   .callouts li.active { border-left-color: var(--color-link); background: var(--color-surface); }
-  .callouts button { color: var(--color-text); background: #fff; border-color: var(--color-text); min-height: 2.75rem; }
+  .callouts button { color: var(--color-text); background: var(--color-page, #fff); border-color: var(--color-text); min-height: 2.75rem; }
   .callouts button::before { content: counter(callout) "  "; font-variant-numeric: tabular-nums; }
-  .callouts li.active button { color: #fff; background: var(--color-link); border-color: var(--color-link); }
+  .callouts li.active button { color: var(--color-page, #fff); background: var(--color-link); border-color: var(--color-link); }
   .callouts p { margin: 0.25rem 0 0.25rem; }
   .lesson:not(.ready) .callouts li p { display: block; }
-  :global(.natops .grid) { stroke: #c9cccf; stroke-width: 1; }
+  :global(.natops .grid) { stroke: var(--figure-grid, #c9cccf); stroke-width: 1; }
   :global(.natops .label) { fill: var(--color-text); font: 700 10px Arial, Helvetica, sans-serif; letter-spacing: 0.03em; }
   :global(.natops .label.strong) { font-size: 11px; }
   :global(.natops .path) { fill: none; stroke: var(--color-text); stroke-width: 2.6; }
-  :global(.natops .mark) { fill: #fff; stroke: var(--color-text); stroke-width: 2; }
+  :global(.natops .mark) { fill: var(--color-page, #fff); stroke: var(--color-text); stroke-width: 2; }
   :global(.natops .station) { fill: var(--color-text); }
   :global(.natops .acft) { fill: var(--color-link); stroke: var(--color-link); stroke-width: 1; }
   :global(.natops .drop) { stroke: var(--color-link); stroke-dasharray: 2 3; }
@@ -596,13 +596,13 @@ const reference = [
   :global(.natops .dim) { stroke: var(--color-text); stroke-width: 1.2; color: var(--color-text); }
   :global(.natops .flown) { fill: none; stroke: var(--color-link); stroke-width: 2; stroke-dasharray: 7 4; }
   :global(.natops .sea) { stroke: var(--color-text); stroke-width: 2; }
-  :global(.natops .slot) { fill: #fff; stroke: var(--color-text); stroke-width: 1.4; }
+  :global(.natops .slot) { fill: var(--color-page, #fff); stroke: var(--color-text); stroke-width: 1.4; }
   :global(.natops .slot.on) { fill: var(--color-link); stroke: var(--color-link); }
   .profile-table tr.passed td { color: var(--color-muted); }
   .profile-table tr.passed td:first-child::before { content: "✓ "; }
   .clearance { display: flex; flex-wrap: wrap; gap: 0.35rem; line-height: 1.3; }
-  .clearance :global(.phrase) { color: var(--color-text); background: #fff; border: 1px dashed var(--color-text); font-weight: 400; font-family: "Courier New", Courier, monospace; text-align: left; }
-  .clearance :global(.phrase[aria-pressed="true"]) { color: #fff; background: var(--color-text); border-style: solid; }
+  .clearance :global(.phrase) { color: var(--color-text); background: var(--color-page, #fff); border: 1px dashed var(--color-text); font-weight: 400; font-family: "Courier New", Courier, monospace; text-align: left; }
+  .clearance :global(.phrase[aria-pressed="true"]) { color: var(--color-page, #fff); background: var(--color-text); border-style: solid; }
   .decode dt { font-family: "Courier New", Courier, monospace; font-weight: 700; }
   .decode dd { margin: 0 0 0.5rem 1rem; }
   /* Turn indicator */
@@ -640,10 +640,10 @@ const reference = [
   /* Communications ladder */
   .agencies { display: flex; flex-wrap: wrap; gap: 0; padding: 0; list-style: none; counter-reset: agency; }
   .agencies li { flex: 1 1 9rem; display: flex; margin: 0 -2px -2px 0; }
-  .agencies button { flex: 1; display: block; text-align: left; padding: 0.5rem 0.75rem; color: var(--color-text); background: #fff; border: 2px solid var(--color-text); font-weight: 400; }
+  .agencies button { flex: 1; display: block; text-align: left; padding: 0.5rem 0.75rem; color: var(--color-text); background: var(--color-page, #fff); border: 2px solid var(--color-text); font-weight: 400; }
   .agencies strong { display: block; text-transform: uppercase; letter-spacing: 0.06em; }
   .agencies span { display: block; font-size: 0.85rem; line-height: 1.35; }
-  .agencies li.on button { background: var(--color-text); color: #fff; }
+  .agencies li.on button { background: var(--color-text); color: var(--color-page, #fff); }
   .stepper { align-items: center; margin-block: 0.75rem; }
   .dialogue { list-style: none; padding: 0; display: grid; gap: 0.5rem; }
   .dialogue li { border-left: 0.3rem solid var(--color-border); padding: 0.4rem 0.75rem; background: var(--color-surface); }
@@ -658,7 +658,7 @@ const reference = [
   .jargon div { border: 1px solid var(--color-text); padding: 0.5rem 0.75rem; }
   .jargon dt { font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
   .jargon dd { margin: 0; font-size: 0.92rem; }
-  .quiz-lesson [data-choices] :global(button) { color: var(--color-text); background: #fff; }
+  .quiz-lesson [data-choices] :global(button) { color: var(--color-text); background: var(--color-page, #fff); }
   .quiz-lesson:not(.ready) { display: none; }
   @media (min-width: 40rem) {
     .lesson-grid { grid-template-columns: minmax(12rem, 1fr) minmax(0, 1.3fr); }
