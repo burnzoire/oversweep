@@ -8,7 +8,7 @@ interface Props {
   // `trainer` presents the standalone exercise first, for the Training Library.
   focus?: 'module' | 'trainer';
   showSubject?: boolean;
-  headingLevel?: 2 | 3;
+  headingLevel?: 2 | 3 | 4;
   // `compact` is the Manual index card: photo on top, the one-line summary from
   // card-media.ts, no applicability paragraph.
   compact?: boolean;
@@ -31,7 +31,7 @@ const markers = experience
   : isProcedure
     ? { 'data-procedure-id': entry.id }
     : { 'data-module-id': entry.module!.id, 'data-module-revision': entry.module!.revision };
-const Heading = (headingLevel === 3 ? 'h3' : 'h2') as 'h2' | 'h3';
+const Heading = (headingLevel === 4 ? 'h4' : headingLevel === 3 ? 'h3' : 'h2') as 'h2' | 'h3' | 'h4';
 ---
 <section class:list={['entry-card', { compact }]} {...markers}>
   {compact && !asTrainer && <CardPhoto id={entry.id} />}

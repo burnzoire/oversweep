@@ -1,9 +1,10 @@
 ---
 import Term from '../../../../components/Term.astro';
 import SiteLayout from '../../../../layouts/SiteLayout.astro';
-import { airframes, procedureRoute, sourceUrl, visibleProcedures, type AircraftProcedure } from '../../../../data/aircraft-procedures';
+import { airframes, sourceUrl, visibleProcedures } from '../../../../data/aircraft-procedures';
+import GroupCards from '../../../../components/GroupCards.astro';
+import { manualMenu } from '../../../../data/manual-menu';
 import { cardMedia } from '../../../../data/card-media';
-import { cockpits, cockpitRoute } from '../../../../data/cockpit/f16c/index.ts';
 import { assetPath, sitePath } from '../../../../lib/paths';
 
 export function getStaticPaths() {
@@ -13,34 +14,10 @@ export function getStaticPaths() {
 }
 
 const { airframe } = Astro.props;
-const cockpit = cockpits.find(item => item.airframe === airframe.slug);
-const cockpitMedia = cockpit && cardMedia[`cockpit.${cockpit.id}`];
-// A procedure that continues another (its `next`) is listed straight after it.
-const own = visibleProcedures.filter(guide => guide.airframe === airframe.slug);
-const chain = (guide: AircraftProcedure): AircraftProcedure[] => {
-  const after = own.find(g => g.slug === guide.next);
-  return [guide, ...(after ? chain(after) : [])];
-};
-const guides = own.filter(guide => !own.some(g => g.next === guide.slug)).flatMap(chain);
 const isViper = airframe.slug === 'f-16c';
 const hero = cardMedia[`aircraft-procedures.${airframe.slug}`]?.photo;
-const lessons = [
-  ...(cockpit ? [{
-    title: 'Cockpit Familiarisation',
-    href: cockpitRoute(cockpit),
-    summary: cockpitMedia?.summary ?? 'Explore the cockpit panel by panel.',
-    photo: cockpitMedia?.photo,
-  }] : []),
-  ...guides.map(guide => ({
-    // The page is already the airframe's, so cards drop the "F-16C — " prefix.
-    title: guide.title.replace(/^F-16C — /, ''),
-    href: procedureRoute(guide),
-    summary: cardMedia[guide.id]?.summary ?? guide.objective,
-    photo: cardMedia[guide.id]?.photo,
-    steps: guide.steps.length,
-  })),
-];
-const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => photo !== undefined).filter((photo, i, all) => all.findIndex(p => p!.src === photo!.src) === i);
+const photos = hero ? [hero] : [];
+const node = manualMenu.find(n => n.id === 'area-aircraft')?.children?.find(n => n.href === `manual/aircraft-procedures/${airframe.slug}/`);
 ---
 
 <SiteLayout
@@ -53,7 +30,7 @@ const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => ph
   imageAlt={hero?.alt}
   breadcrumbs={[
     { label: 'Manual', href: sitePath('manual/') },
-    { label: 'Aircraft Procedures', href: sitePath('manual/aircraft-procedures/') },
+    { label: 'Aircraft', href: sitePath('manual/aircraft-procedures/') },
     { label: airframe.title },
   ]}
 >
@@ -79,24 +56,7 @@ const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => ph
     </header>
   )}
 
-  <section class="syllabus" aria-labelledby="ground-operations">
-    <h2 id="ground-operations">Cockpit and Ground Operations</h2>
-    <ol class="lesson-list" role="list">
-      {lessons.map(lesson => (
-        <li>
-          <a class="lesson-link" href={sitePath(lesson.href)}>
-            {lesson.photo && <img src={assetPath(lesson.photo.src)} alt="" loading="lazy" decoding="async" />}
-            <div class="lesson-copy">
-              <h3>{lesson.title}</h3>
-              <p>{lesson.summary}</p>
-              {'steps' in lesson && <p class="lesson-steps">{lesson.steps} steps</p>}
-            </div>
-            <span class="lesson-arrow" aria-hidden="true">→</span>
-          </a>
-        </li>
-      ))}
-    </ol>
-  </section>
+  {node && <GroupCards node={node} />}
 
   <div class="airframe-sources">
     {isViper && <a href={sourceUrl}>Eagle Dynamics F-16C manual</a>}
@@ -161,66 +121,15 @@ const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => ph
     object-fit: cover;
   }
 
-  .syllabus h2 {
-    margin-bottom: 0.75rem;
-  }
 
-  .lesson-list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    border-top: 1px solid var(--color-border);
-  }
 
-  .lesson-list li {
-    max-width: none;
-    margin: 0;
-    border-bottom: 1px solid var(--color-border);
-  }
 
-  .lesson-link {
-    display: flex;
-    align-items: center;
-    gap: clamp(0.75rem, 2.5vw, 1.5rem);
-    padding: 0.75rem 0.5rem 0.75rem 0;
-    color: inherit;
-    text-decoration: none;
-  }
 
-  .lesson-link:hover,
-  .lesson-link:focus-visible {
-    background: var(--color-surface);
-  }
 
-  .lesson-link img {
-    width: clamp(5.25rem, 23%, 12rem);
-    height: auto;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    flex: none;
-  }
 
-  .lesson-copy {
-    flex: 1;
-  }
 
-  .lesson-copy h3 {
-    margin: 0;
-    color: var(--color-link);
-    font-size: 1.125rem;
-    text-decoration: underline;
-    text-underline-offset: 0.15em;
-  }
 
-  .lesson-copy p {
-    margin-block: 0.25rem 0;
-  }
 
-  .lesson-arrow {
-    flex: none;
-    color: var(--color-link);
-    font-size: 1.25rem;
-  }
 
   .airframe-sources {
     display: flex;
@@ -231,12 +140,6 @@ const photos = [hero, ...lessons.map(lesson => lesson.photo)].filter(photo => ph
     font-size: 0.875rem;
   }
 
-  .lesson-copy .lesson-steps {
-    margin-top: 0.25rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--color-muted);
-  }
   .airframe-sources summary {
     cursor: pointer;
   }

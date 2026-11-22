@@ -23,7 +23,7 @@ const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns whe
 ---
 <SiteLayout title={`${cockpit.title} ${spec.title}`} activeSection="manual" activeSubject="aircraft-procedures" compactSubjectNav={true}
  description={`Interactive ${cockpit.variant} ${spec.title}: where every control is, how it moves and what each light means.`}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Aircraft Procedures',href:sitePath('manual/aircraft-procedures/')},{label:cockpit.title,href:sitePath(`manual/aircraft-procedures/${cockpit.airframe}/`)},{label:'Cockpit',href:sitePath(cockpitRoute(cockpit))},{label:panel.title}]}>
+ breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Aircraft',href:sitePath('manual/aircraft-procedures/')},{label:cockpit.title,href:sitePath(`manual/aircraft-procedures/${cockpit.airframe}/`)},{label:'Cockpit',href:sitePath(cockpitRoute(cockpit))},{label:panel.title}]}>
   <p class="cockpit-where">{area.title} · {cockpit.manual.title.replace('Eagle Dynamics — ', '')}, p. {spec.source.page}</p>
   <nav class="cockpit-area" aria-label={`${area.title} panels`}>
     <span class="ca-title">{area.title}</span>

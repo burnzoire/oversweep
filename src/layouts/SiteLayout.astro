@@ -1,10 +1,10 @@
 ---
 import AskLauncher from "../components/AskLauncher.astro";
 import BrandMark from "../components/BrandMark.astro";
+import ManualMenu from "../components/ManualMenu.astro";
 import SiteSearch from "../components/SiteSearch.astro";
 import PreviewSwitch from "../components/PreviewSwitch.astro";
-import { manualSubjects } from "../data/catalogue";
-import { sectionHasContent, subjectEntries } from "../data/availability";
+import { sectionHasContent } from "../data/availability";
 import { assetPath, sitePath } from "../lib/paths";
 import { audience, clip, defaultDescription, describeRoute, entryForRoute, routeOf, shareSiteName, siteName } from "../lib/seo";
 import "../styles/global.css";
@@ -100,7 +100,6 @@ const sections = [
   { id: "training", label: "Training Library", path: "training/", available: sectionHasContent.training },
 ] as const;
 const pageTitle = isHomePage ? `Oversweep · ${title}` : `${title} | Oversweep`;
-const subjects = manualSubjects.map((subject) => ({ ...subject, count: subjectEntries(subject.slug).length }));
 ---
 
 <!doctype html>
@@ -193,41 +192,8 @@ const subjects = manualSubjects.map((subject) => ({ ...subject, count: subjectEn
       )}
       <div class:list={["page-layout", { "with-subject-nav": activeSection === "manual" }]}>
         {activeSection === "manual" && (
-          <aside class="subject-nav" aria-label="Manual subjects">
-            <details open={!compactSubjectNav}>
-              <summary>Manual subjects</summary>
-              <nav aria-label="Manual subject navigation">
-                <ul>
-                  {subjects.map((subject) => {
-                    const current = activeSubject === subject.slug;
-                    return (
-                      <li>
-                        {subject.count > 0 ? (
-                          <a
-                            href={sitePath(`manual/${subject.slug}/`)}
-                            class:list={{ current }}
-                            aria-current={current ? "page" : undefined}
-                          >
-                            <span>{subject.title}</span>
-                            <span class="count" aria-label={`${subject.count} ${subject.count === 1 ? "module" : "modules"}`}>{subject.count}</span>
-                          </a>
-                        ) : (
-                          <a
-                            class:list={["unavailable", { current }]}
-                            aria-disabled="true"
-                            aria-current={current ? "page" : undefined}
-                          >
-                            {subject.title}<span class="visually-hidden"> (nothing published yet)</span>
-                          </a>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </nav>
-            </details>
-            {/* Phones and tablets: the menu always starts closed, so the page comes first. */}
-            <script is:inline set:html={"(function(){var d=document.currentScript.previousElementSibling;if(d&&matchMedia('(max-width: 63.99rem)').matches)d.open=false;})();"} />
+          <aside class="subject-nav" aria-label="Manual menu">
+            <ManualMenu route={route} compact={compactSubjectNav} />
           </aside>
         )}
         <article class="page-content">

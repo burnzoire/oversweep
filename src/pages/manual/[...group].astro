@@ -1,0 +1,28 @@
+---
+import GroupCards from "../../components/GroupCards.astro";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { ancestors, groupPages, type MenuNode } from "../../data/manual-menu";
+import { cockpitRoute, cockpits } from "../../data/cockpit/f16c/index.ts";
+import { sitePath } from "../../lib/paths";
+
+// A landing page for every group in the Manual menu: an intro and its children.
+// The F-16C hub and the cockpit page are their own pages and are left out here.
+export function getStaticPaths() {
+  const own = new Set(["manual/aircraft-procedures/f-16c/", ...cockpits.map((c) => cockpitRoute(c))]);
+  return groupPages()
+    .filter((node) => !own.has(node.href!))
+    .map((node) => ({ params: { group: node.href!.replace(/^manual\//, "").replace(/\/$/, "") }, props: { node } }));
+}
+
+const { node } = Astro.props as { node: MenuNode };
+const trail = ancestors(node.href!) ?? [];
+---
+<SiteLayout title={node.title} activeSection="manual" description={node.summary}
+  breadcrumbs={[
+    { label: "Manual", href: sitePath("manual/") },
+    ...trail.map((n) => ({ label: n.title, href: n.href ? sitePath(n.href) : undefined })),
+    { label: node.title },
+  ]}>
+  {node.summary && <p class="lead">{node.summary}</p>}
+  <GroupCards node={node} />
+</SiteLayout>

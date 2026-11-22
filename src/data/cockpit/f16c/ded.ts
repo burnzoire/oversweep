@@ -24,7 +24,7 @@ import { tracer } from '../trace.ts';
 const PX = 3.57;
 
 /**
- * TACAN states of the T-ILS and CNI pages for the TACAN recovery procedure, laid out as the guide's tuning figures
+ * TACAN states of the T-ILS and CNI pages for the TACAN navigation procedure, laid out as the guide's tuning figures
  * (p. 237) show them: line 1 mode and ILS status, line 3 the beacon identifier and (while the asterisks are not on
  * the channel) the asterisks round CMD STRG, line 4 channel, line 5 band. The ILS side is the figure's: ON, CMD STRG,
  * 108.10, course 0°.

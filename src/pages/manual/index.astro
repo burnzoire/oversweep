@@ -1,22 +1,27 @@
 ---
 import EntryCard from "../../components/EntryCard.astro";
+import GroupCards from "../../components/GroupCards.astro";
+import { manualMenu } from "../../data/manual-menu";
 import SiteLayout from "../../layouts/SiteLayout.astro";
-import { manualSubjects } from "../../data/catalogue";
-import { subjectEntries, subjectGroups } from "../../data/availability";
-import { sitePath } from "../../lib/paths";
+import { manualEntries } from "../../data/availability";
 
-const available = manualSubjects.filter((s) => subjectEntries(s.slug).length > 0);
+// The Manual landing page explains the Manual and features a few articles. The
+// menu holds the full list; only menu leaves are pages (issue #429).
+const featured = ["module.principles-of-flight", "module.bvr-intercepts", "module.sead-dead", "procedure.dcs-f16c.engine-start", "procedure.dcs-f16c.hts"]
+  .map((id) => manualEntries.find((entry) => entry.id === id))
+  .filter((entry) => entry !== undefined);
 ---
 
 <SiteLayout title="Manual" activeSection="manual" isSectionIndex
-  description="Military flight procedures for flight sim pilots, taught from first principles with interactive figures, sources and knowledge checks: navigation, instruments, formation, carrier ops, air combat and more.">
-  <p class="lead">Each module teaches one topic from first principles, with interactive figures, sources and a short knowledge check. Every module states its review status. Subjects without modules yet are dimmed in the subject list.</p>
-  {available.map((subject) => (
-    <section class="subject-group" aria-labelledby={`subject-${subject.slug}`}>
-      <h2 id={`subject-${subject.slug}`}><a href={sitePath(`manual/${subject.slug}/`)}>{subject.title}</a></h2>
-      <div class="entry-grid">
-        {subjectGroups(subject.slug).flatMap((g) => g.entries).map((entry) => <EntryCard entry={entry} headingLevel={3} compact />)}
-      </div>
-    </section>
-  ))}
+  description="Military flight procedures for flight sim pilots, taught from first principles with interactive figures, sources and knowledge checks: general flight, tactics and aircraft guides.">
+  <p class="lead">Modules teach the flying, for any aircraft. Aircraft guides teach one aircraft, panel by panel. Pick a part below, or start with one of these.</p>
+
+  <GroupCards node={{ id: "manual", title: "Manual", children: manualMenu }} />
+
+  <section class="manual-featured" aria-labelledby="featured-heading">
+    <h2 id="featured-heading">Featured</h2>
+    <div class="entry-grid">
+      {featured.map((entry) => <EntryCard entry={entry!} headingLevel={3} compact />)}
+    </div>
+  </section>
 </SiteLayout>

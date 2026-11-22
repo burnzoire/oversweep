@@ -15,7 +15,7 @@ const complete = {
   'manual/navigation/example/index.html': `<section ${tag}></section><iframe src="/experiences/example/"></iframe>`,
   'experiences/example/index.html': `<body ${tag}><script src="app.js"></script></body>`,
   'experiences/example/app.js': 'run();',
-  'manual/navigation/index.html': listing,
+  'manual/index.html': listing,
   'training/index.html': listing,
 };
 
@@ -79,7 +79,7 @@ test('unlisted experience emits direct frame but never a Manual wrapper or catal
   const unlisted = {
     'experiences/example/index.html': '<head><meta name="robots" content="noindex,nofollow"></head><body '+tag+'><script src="app.js"></script></body>',
     'experiences/example/app.js': 'run();',
-    'manual/navigation/index.html': '<h1>Navigation</h1>',
+    'manual/index.html': '<h1>Navigation</h1>',
     'training/index.html': '<h1>Training</h1>',
   };
   assert.deepEqual(await check(unlisted, { experience: { publication: 'unlisted' } }), []);

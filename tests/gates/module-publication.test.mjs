@@ -12,7 +12,7 @@ const module = {
 const tag = `data-module-id="${module.id}" data-module-revision="2"`;
 const complete = {
   'manual/navigation/example/index.html': `<section ${tag}></section>`,
-  'manual/navigation/index.html': `<section ${tag}><a href="/manual/navigation/example/">Open</a></section>`,
+  'manual/index.html': `<section ${tag}><a href="/manual/navigation/example/">Open</a></section>`,
 };
 
 async function checkAll(files, modules, review = false) {
@@ -34,10 +34,9 @@ test('a complete published module passes', async () => {
   assert.deepEqual(await check(complete), []);
 });
 
-test('a published module must ship its page and subject listing', async () => {
-  const problems = await check({ 'manual/navigation/index.html': '<p>Coming soon</p>' });
+test('a published module must ship its page and a link from the Manual menu', async () => {
+  const problems = await check({ 'manual/index.html': '<p>Coming soon</p>' });
   assert(problems.some(p => p.includes('page is missing')));
-  assert(problems.some(p => p.includes('subject index lacks')));
   assert(problems.some(p => p.includes('does not link')));
 });
 
@@ -71,21 +70,6 @@ test('review builds require excluded modules to be complete', async () => {
 test('unknown publication values are rejected', async () => {
   const problems = await check(complete, { module: { publication: 'draft' } });
   assert(problems.some(p => p.includes('unknown publication')));
-});
-
-test('one module card cannot mask another on a shared subject page', async () => {
-  const other = { ...module, id: 'module.other', slug: 'other', revision: 5 };
-  const otherTag = `data-module-id="${other.id}" data-module-revision="4"`;
-  const files = {
-    ...complete,
-    'manual/navigation/other/index.html': `<section data-module-id="${other.id}" data-module-revision="5"></section>`,
-    // The other card is stale (revision 4); the first card carries its revision in an attribute.
-    'manual/navigation/index.html': `<section ${otherTag}><a href="/manual/navigation/other/">Open</a></section>`
-      + `<section ${tag} data-note="5"><a href="/manual/navigation/example/">Open</a></section>`,
-  };
-  const problems = await checkAll(files, [module, other]);
-  assert(problems.some(p => p.includes('module.other: subject index lacks the registered id or revision 5')));
-  assert(!problems.some(p => p.startsWith('module.example')));
 });
 
 test('an excluded module must not be linked without its marker', async () => {
