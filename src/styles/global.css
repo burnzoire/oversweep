@@ -1188,8 +1188,9 @@ h2 {
 }
 
 
-/* Cards for items not written yet: grey, no link. */
+/* Empty groups and unwritten articles share the muted card style. */
 .entry-card.card-unwritten { border-top-color: var(--color-border); background: transparent; }
 .entry-card.card-unwritten .entry-title,
+.entry-card.card-unwritten .entry-title a,
 .entry-card.card-unwritten .entry-objective { color: var(--color-unavailable); }
 .entry-grid .entry-title { font-size: 1.25rem; }

@@ -15,14 +15,16 @@ export function getStaticPaths() {
 }
 
 const { node } = Astro.props as { node: MenuNode };
+const empty = !hasArticle(node);
 const trail = ancestors(node.href!) ?? [];
 ---
-<SiteLayout title={node.title} activeSection="manual" description={node.summary}
+<SiteLayout title={node.title} activeSection="manual" description={node.summary} empty={empty}
   breadcrumbs={[
     { label: "Manual", href: sitePath("manual/") },
     ...trail.map((n) => ({ label: n.title, href: n.href ? sitePath(n.href) : undefined })),
     { label: node.title },
   ]}>
   {node.summary && <p class="lead">{node.summary}</p>}
-  {!hasArticle(node) && <p class="muted">Content coming soon.</p>}\n  <GroupCards node={node} />
+  {empty && <p class="muted">Content coming soon.</p>}
+  <GroupCards node={node} />
 </SiteLayout>

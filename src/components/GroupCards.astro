@@ -5,7 +5,7 @@ import { sitePath } from "../lib/paths";
 import { hasArticle, type MenuNode } from "../data/manual-menu";
 
 // The list on a group's landing page: one card per direct child, whether it is a
-// group (its own landing page) or a leaf. Unwritten items are grey and unlinked.
+// group (its own landing page) or a leaf. Empty groups link; unwritten leaves do not.
 interface Props { node: MenuNode }
 const { node } = Astro.props;
 const entryById = new Map(manualEntries.map((entry) => [entry.id, entry]));
@@ -14,12 +14,12 @@ const children = node.children ?? [];
 <div class="entry-grid">
   {children.map((c) => {
     const entry = !c.planned && entryById.get(c.id);
-    const empty = !!c.children?.length && !hasArticle(c);
+    const unwritten = c.children ? !hasArticle(c) : c.planned;
     return entry ? <EntryCard entry={entry} headingLevel={2} compact /> : (
-      <article class:list={["entry-card", "compact", { "card-unwritten": c.planned || empty }]}>
-        <h2 class="entry-title">{c.href && (c.children?.length || !c.planned) ? <a href={sitePath(c.href)}>{c.title}</a> : <span>{c.title}</span>}</h2>
+      <article class:list={["entry-card", "compact", { "card-unwritten": unwritten }]}>
+        <h2 class="entry-title">{c.href && (c.children || !c.planned) ? <a href={sitePath(c.href)}>{c.title}</a> : <span>{c.title}</span>}</h2>
         {c.summary && <p class="entry-objective">{c.summary}</p>}
-        {(c.planned || empty) && <p class="entry-objective">Not written yet.</p>}
+        {(unwritten) && <p class="entry-objective">Not written yet.</p>}
       </article>
     );
   })}

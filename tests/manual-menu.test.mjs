@@ -24,12 +24,12 @@ test('every Manual subject sits in General Flight, Tactics or Aircraft', async (
 
 test('planned groups remain linked but unwritten article leaves do not', async () => {
   const branch = await read('src/components/MenuBranch.astro');
-  assert.match(branch, /node\.href && \(node\.children\?\.length \|\| !node\.planned\)/);
+  assert.match(branch, /node\.href && \(node\.children \|\| !node\.planned\)/);
   const menu = await read('src/data/manual-menu.ts');
   assert.match(menu, /export function linkGroups/);
-  assert.match(menu, /node\.children\?\.length/);
+  assert.match(menu, /node\.children \? /);
   assert.match(menu, /export const hasArticle/);
-  assert.match(await read('src/components/GroupCards.astro'), /c\.children\?\.length \|\| !c\.planned/);
+  assert.match(await read('src/components/GroupCards.astro'), /c\.children \|\| !c\.planned/);
 });
 
 test('TACAN procedure is TACAN Navigation and its old address redirects', async () => {

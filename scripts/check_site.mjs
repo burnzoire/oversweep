@@ -65,7 +65,7 @@ const htmlFiles = (await filesIn(output)).filter((filename) => filename.endsWith
 assert.ok(htmlFiles.length >= requiredRoutes.length, "all catalogue routes should be emitted");
 
 // Catalogue destinations with nothing published still build, so their URLs stay
-// stable, but carry `data-empty` and are shown dimmed and unlinked in navigation.
+// stable, but carry `data-empty` and stay linked in navigation for Manual groups.
 const pages = new Map(await Promise.all(htmlFiles.map(async (filename) => [filename, await readFile(filename, "utf8")])));
 const isEmpty = (html) => /<main\b[^>]*\bdata-empty\b/.test(html);
 const emptyPages = new Set([...pages].filter(([, html]) => isEmpty(html)).map(([filename]) => filename));

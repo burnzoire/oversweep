@@ -4,8 +4,7 @@ import { visibleProcedures, procedureRoute } from './aircraft-procedures';
 import { cockpits, cockpitRoute, panelRoute } from './cockpit/f16c/index.ts';
 
 // The Manual menu: three sub-areas (General Flight, Tactics, Aircraft). Built
-// pages link; pages not written yet are listed grey and unlinked, so the
-// tree shows the plan without sending readers anywhere empty. Modules come from
+// groups link even when empty. Unwritten articles are grey and unlinked. Modules come from
 // the module registry, the F-16C tree from the cockpit catalogue and the
 // procedure list. Issue #429 holds the structure.
 
@@ -159,14 +158,14 @@ const areas = (aircraft: MenuNode[]): MenuNode[] => [
 // Planned leaves are still non-navigable until an article exists.
 export function linkGroups(nodes: MenuNode[], parent = 'manual/'): MenuNode[] {
   return nodes.map(node => {
-    const href = node.href ?? (node.children?.length ? `${parent}${slugify(node.title)}/` : undefined);
+    const href = node.href ?? (node.children ? `${parent}${slugify(node.title)}/` : undefined);
     return { ...node, href, children: node.children ? linkGroups(node.children, href ?? parent) : undefined };
   });
 }
 
 /** True if a node contains at least one written article at any depth. */
 export const hasArticle = (node: MenuNode): boolean =>
-  (!node.children?.length && !!node.href && !node.planned && !node.lazy) ||
+  (!node.children && !!node.href && !node.planned && !node.lazy) ||
   !!node.lazy || (node.children ?? []).some(hasArticle);
 
 export const manualMenu: MenuNode[] = linkGroups(areas(aircraftMenus.map(a => a.build())));
@@ -198,5 +197,5 @@ export function ancestors(href: string, nodes: MenuNode[] = manualMenu, trail: M
 
 /** Every group that has a landing page, with the pages that exist as files left to their own route. */
 export function groupPages(nodes: MenuNode[] = manualMenu): MenuNode[] {
-  return nodes.flatMap(n => [...(n.href && n.children?.length ? [n] : []), ...groupPages(n.children ?? [])]);
+  return nodes.flatMap(n => [...(n.href && n.children ? [n] : []), ...groupPages(n.children ?? [])]);
 }
