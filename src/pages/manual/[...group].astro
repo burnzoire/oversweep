@@ -1,7 +1,7 @@
 ---
 import GroupCards from "../../components/GroupCards.astro";
 import SiteLayout from "../../layouts/SiteLayout.astro";
-import { ancestors, groupPages, type MenuNode } from "../../data/manual-menu";
+import { ancestors, groupPages, hasArticle, type MenuNode } from "../../data/manual-menu";
 import { cockpitRoute, cockpits } from "../../data/cockpit/f16c/index.ts";
 import { sitePath } from "../../lib/paths";
 
@@ -15,14 +15,16 @@ export function getStaticPaths() {
 }
 
 const { node } = Astro.props as { node: MenuNode };
+const empty = !hasArticle(node);
 const trail = ancestors(node.href!) ?? [];
 ---
-<SiteLayout title={node.title} activeSection="manual" description={node.summary}
+<SiteLayout title={node.title} activeSection="manual" description={node.summary} empty={empty}
   breadcrumbs={[
     { label: "Manual", href: sitePath("manual/") },
     ...trail.map((n) => ({ label: n.title, href: n.href ? sitePath(n.href) : undefined })),
     { label: node.title },
   ]}>
   {node.summary && <p class="lead">{node.summary}</p>}
+  {empty && <p class="muted">Content coming soon.</p>}
   <GroupCards node={node} />
 </SiteLayout>

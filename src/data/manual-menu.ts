@@ -4,8 +4,7 @@ import { visibleProcedures, procedureRoute } from './aircraft-procedures';
 import { cockpits, cockpitRoute, panelRoute } from './cockpit/f16c/index.ts';
 
 // The Manual menu: three sub-areas (General Flight, Tactics, Aircraft). Built
-// pages link; pages not written yet are listed grey and unlinked, so the
-// tree shows the plan without sending readers anywhere empty. Modules come from
+// groups link even when empty. Unwritten articles are grey and unlinked. Modules come from
 // the module registry, the F-16C tree from the cockpit catalogue and the
 // procedure list. Issue #429 holds the structure.
 
@@ -15,7 +14,7 @@ export interface MenuNode {
   href?: string;
   /** One line for the card on the parent's landing page. */
   summary?: string;
-  /** Listed but not written: shown grey and unlinked. */
+  /** Listed but not written: shown grey; groups remain navigable. */
   planned?: boolean;
   children?: MenuNode[];
   /** A group whose children load on first open, from this JSON file (see menuFor). */
@@ -42,7 +41,7 @@ const subjectNode = (spec: SubjectSpec): MenuNode => {
     id: `subject-${spec.subject}-${spec.title ? slugify(spec.title) : 'all'}`,
     title: spec.title ?? subject.title,
     summary: spec.summary,
-    href: children.length ? (spec.title ? `manual/tactics/${slugify(spec.title)}/` : `manual/${spec.subject}/`) : undefined,
+    href: spec.title ? `manual/tactics/${slugify(spec.title)}/` : `manual/${spec.subject}/`,
     planned: children.length === 0,
     children,
   };
@@ -155,14 +154,28 @@ const areas = (aircraft: MenuNode[]): MenuNode[] => [
 ];
 
 /** Every airframe fully built: the source of truth for tests and the landing page. */
-export const manualMenu: MenuNode[] = areas(aircraftMenus.map(a => a.build()));
+// Assign stable landing-page URLs to planned groups, including nested groups.
+// Planned leaves are still non-navigable until an article exists.
+export function linkGroups(nodes: MenuNode[], parent = 'manual/'): MenuNode[] {
+  return nodes.map(node => {
+    const href = node.href ?? (node.children ? `${parent}${slugify(node.title)}/` : undefined);
+    return { ...node, href, children: node.children ? linkGroups(node.children, href ?? parent) : undefined };
+  });
+}
+
+/** True if a node contains at least one written article at any depth. */
+export const hasArticle = (node: MenuNode): boolean =>
+  (!node.children && !!node.href && !node.planned && !node.lazy) ||
+  !!node.lazy || (node.children ?? []).some(hasArticle);
+
+export const manualMenu: MenuNode[] = linkGroups(areas(aircraftMenus.map(a => a.build())));
 
 export const aircraftMenuFile = (id: string) => `manual-menu/${id}.json`;
 
 /** The menu a page renders: only the airframe the page belongs to is expanded;
  *  the others are a single link, however many aircraft there are. */
 export function menuFor(route: string): MenuNode[] {
-  return areas(aircraftMenus.map(a => (route.startsWith(a.href) ? a.build() : { id: a.id, title: a.title, href: a.href, summary: a.summary, lazy: aircraftMenuFile(a.id) })));
+  return linkGroups(areas(aircraftMenus.map(a => (route.startsWith(a.href) ? a.build() : { id: a.id, title: a.title, href: a.href, summary: a.summary, lazy: aircraftMenuFile(a.id) }))));
 }
 
 /** Whether `route` is this node's page or one beneath it (so its branch opens). */
@@ -184,5 +197,5 @@ export function ancestors(href: string, nodes: MenuNode[] = manualMenu, trail: M
 
 /** Every group that has a landing page, with the pages that exist as files left to their own route. */
 export function groupPages(nodes: MenuNode[] = manualMenu): MenuNode[] {
-  return nodes.flatMap(n => [...(n.href && !n.planned && n.children?.length ? [n] : []), ...groupPages(n.children ?? [])]);
+  return nodes.flatMap(n => [...(n.href && n.children ? [n] : []), ...groupPages(n.children ?? [])]);
 }

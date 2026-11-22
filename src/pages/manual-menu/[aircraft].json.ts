@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 // @ts-ignore tsc has no declaration for .astro files; astro check and the build resolve it.
 import MenuBranch from "../../components/MenuBranch.astro";
-import { aircraftMenus } from "../../data/manual-menu";
+import { aircraftMenus, linkGroups } from "../../data/manual-menu";
 
 // One file per aircraft with its menu branch as HTML. Pages carry only a row for
 // each aircraft; opening it fetches this file, so a dozen aircraft never put a
@@ -16,7 +16,7 @@ export const GET: APIRoute = async ({ props }) => {
   const node = aircraft.build();
   const container = await AstroContainer.create();
   const html = await container.renderToString(MenuBranch, {
-    props: { nodes: node.children ?? [], route: "", parent: node.id, depth: 2 },
+    props: { nodes: linkGroups(node.children ?? [], aircraft.href), route: "", parent: node.id, depth: 2 },
   });
   return new Response(JSON.stringify({ html }), { headers: { "Content-Type": "application/json" } });
 };

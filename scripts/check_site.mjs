@@ -65,14 +65,15 @@ const htmlFiles = (await filesIn(output)).filter((filename) => filename.endsWith
 assert.ok(htmlFiles.length >= requiredRoutes.length, "all catalogue routes should be emitted");
 
 // Catalogue destinations with nothing published still build, so their URLs stay
-// stable, but carry `data-empty` and are shown dimmed and unlinked in navigation.
+// stable, but carry `data-empty` and stay linked in navigation for Manual groups.
 const pages = new Map(await Promise.all(htmlFiles.map(async (filename) => [filename, await readFile(filename, "utf8")])));
 const isEmpty = (html) => /<main\b[^>]*\bdata-empty\b/.test(html);
 const emptyPages = new Set([...pages].filter(([, html]) => isEmpty(html)).map(([filename]) => filename));
 
 for (const [filename, html] of pages) {
   const relativePage = path.relative(output, filename).split(path.sep).join("/");
-  assert.doesNotMatch(html, /coming soon/i, `${relativePage} should dim unavailable destinations, not label them Coming soon`);
+  if (!(emptyPages.has(filename) && relativePage.startsWith("manual/")))
+    assert.doesNotMatch(html, /coming soon/i, `${relativePage} should not label unavailable destinations Coming soon`);
   if (emptyPages.has(filename))
     assert.doesNotMatch(html, /data-(?:module|experience|record)-id=/, `${relativePage} lists content but is marked empty`);
 }
@@ -101,7 +102,7 @@ for (const [filename, html] of pages) {
       ? destination
       : path.join(destination, "index.html");
     await stat(candidate);
-    assert.ok(!emptyPages.has(candidate), `${relativePage} links to ${relative || "/"}, which has nothing published`);
+    assert.ok(!emptyPages.has(candidate) || relative.startsWith("manual/"), `${relativePage} links to ${relative || "/"}, which has nothing published`);
   }
 }
 

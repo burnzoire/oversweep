@@ -1,24 +1,25 @@
 ---
 import Self from "./MenuBranch.astro";
-import { containsRoute, type MenuNode } from "../data/manual-menu";
+import { containsRoute, hasArticle, type MenuNode } from "../data/manual-menu";
 import { assetPath, sitePath } from "../lib/paths";
 
 // One level of the Manual menu. Siblings share the <details> name, so opening
 // one closes the others in the browser, with no script.
 interface Props { nodes: MenuNode[]; route: string; parent: string; depth?: number }
 const { nodes, route, parent, depth = 0 } = Astro.props;
-const link = (node: MenuNode) => (node.href && !node.planned ? sitePath(node.href) : undefined);
+const link = (node: MenuNode) => (node.href && (node.children || !node.planned) ? sitePath(node.href) : undefined);
 ---
 
 <ul class="menu-tree" data-depth={depth}>
   {nodes.map((node) => {
     const url = link(node);
-    const current = node.href === route && !node.planned;
+    const current = node.href === route;
+    const unwritten = node.children ? !hasArticle(node) : node.planned;
     const label = url
-      ? <a href={url} aria-current={current ? "page" : undefined} class:list={{ current }}>{node.title}</a>
-      : <span class:list={{ unwritten: node.planned }}>{node.title}{node.planned && <span class="visually-hidden"> (not written yet)</span>}</span>;
+      ? <a href={url} aria-current={current ? "page" : undefined} class:list={{ current, unwritten }}>{node.title}</a>
+      : <span class:list={{ unwritten }}>{node.title}{node.planned && <span class="visually-hidden"> (not written yet)</span>}</span>;
     return node.children?.length || node.lazy ? (
-      <li class:list={{ unwritten: node.planned }}>
+      <li>
         <details name={parent} open={containsRoute(node, route)} data-lazy={node.lazy ? assetPath(node.lazy) : undefined}>
           <summary>
             <span class="chev" aria-hidden="true"></span>
@@ -28,7 +29,7 @@ const link = (node: MenuNode) => (node.href && !node.planned ? sitePath(node.hre
         </details>
       </li>
     ) : (
-      <li class:list={{ unwritten: node.planned }}>{label}</li>
+      <li>{label}</li>
     );
   })}
 </ul>
