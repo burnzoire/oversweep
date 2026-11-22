@@ -72,6 +72,13 @@
   :root[data-theme-preview][data-theme="dark"] { color-scheme: dark; }
 }
 
+@media (forced-colors: active) {
+  :root[data-theme-preview] {
+    --panel-ink: CanvasText;
+    --panel-paper: Canvas;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
