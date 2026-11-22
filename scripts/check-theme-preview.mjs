@@ -1,4 +1,4 @@
-// Run against the dev server or a PR preview. Install Playwright and Chromium
+// Run against a local build, dev server, or PR preview. Install Playwright and Chromium
 // separately, as for scripts/cockpit-review.mjs. Screenshots go to <output-dir>.
 import assert from 'node:assert/strict';
 import { mkdir } from 'node:fs/promises';
@@ -44,6 +44,12 @@ const figureLabels = {
   'aerodrome-lesson': ['APRON (RAMP)', '.apron'],
   'radio-bands': [/^UHF +300/, '.band.uhf'],
 };
+const trainers = {
+  'case-iii': ['#briefDialog', '#startExercise', '#chart'],
+  'ils-approach': ['#brief', '#start', '#mainApp'],
+  'autorotation': ['#setup', '#start', '#scene'],
+  'radio-trainer': [null, null, '.columns'],
+};
 const viewports = {
   desktop: { width: 1440, height: 1000 },
   tablet: { width: 1024, height: 768 },
@@ -72,7 +78,8 @@ function contrast(foreground, background) {
 try {
   await mkdir(output, { recursive: true });
   for (const [size, viewport] of Object.entries(viewports)) {
-    const page = await browser.newPage({ viewport, colorScheme: 'dark', reducedMotion: 'reduce' });
+    const context = await browser.newContext({ viewport, colorScheme: 'dark', reducedMotion: 'reduce' });
+    const page = await context.newPage();
     await visit(page, '');
     assert.equal(await preference(page).inputValue(), 'system');
     const search = page.locator('.header-tools .search-trigger');
@@ -179,12 +186,50 @@ try {
     assert.equal(await background(), systemBackground);
     await page.emulateMedia({ colorScheme: 'light' });
     assert.notEqual(await background(), systemBackground);
-    await preference(page).selectOption('dark');
-    await visit(page, 'experiences/ils-approach/');
-    assert.equal(await page.locator('body').getAttribute('data-experience-id'), 'experience.ils-approach');
-    assert.equal(await page.locator('html').getAttribute('data-theme-preview'), null);
-    assert.equal(await preference(page).count(), 0);
-    await page.close();
+    if (size !== 'tablet') {
+      const trainer = await context.newPage();
+      await trainer.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' });
+      for (const [slug, [brief, start, exercise]] of Object.entries(trainers)) {
+        for (const theme of ['light', 'dark']) {
+          await preference(page).selectOption(theme);
+          await visit(trainer, `experiences/${slug}/`);
+          assert.ok(await trainer.locator('body').getAttribute('data-experience-id'), slug);
+          assert.equal(await scheme(trainer), theme, slug);
+          assert.equal(await preference(trainer).count(), 0);
+          if (brief) {
+            await trainer.locator(brief).waitFor({ state: 'visible' });
+            await trainer.screenshot({ path: join(output, `trainer-${slug}-${size}-${theme}-brief.png`) });
+            await trainer.locator(start).click();
+          }
+          await trainer.locator(exercise).waitFor({ state: 'visible' });
+          await trainer.screenshot({ path: join(output, `trainer-${slug}-${size}-${theme}.png`) });
+          if (size === 'desktop' && slug === 'ils-approach') {
+            await trainer.locator('#goAround').click();
+            await trainer.locator('#debrief').waitFor({ state: 'visible' });
+            await trainer.screenshot({ path: join(output, `trainer-${slug}-${size}-${theme}-debrief.png`) });
+          }
+        }
+      }
+
+      // A trainer already open in a separate tab updates without a reload.
+      await visit(trainer, 'experiences/autorotation/');
+      const darkSky = await trainer.locator('#scene').evaluate(canvas => {
+        const context = canvas.getContext('2d');
+        return Array.from(context.getImageData(30, 30, 1, 1).data);
+      });
+      await preference(page).selectOption('light');
+      await trainer.waitForFunction(() => document.documentElement.dataset.theme === 'light');
+      await trainer.waitForFunction(dark => {
+        const canvas = document.querySelector('#scene');
+        const rgba = canvas.getContext('2d').getImageData(30, 30, 1, 1).data;
+        return rgba[0] > dark[0] + 40 && rgba[3] === 255;
+      }, darkSky);
+      await preference(page).selectOption('system');
+      await trainer.waitForFunction(() => !document.documentElement.dataset.theme);
+      assert.equal(await scheme(trainer), 'light dark');
+      await trainer.close();
+    }
+    await context.close();
   }
 } finally {
   await browser.close();
