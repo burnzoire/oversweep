@@ -65,8 +65,16 @@ test('a window-only experience must be linked in a new window and never framed',
   const wrapper = 'manual/navigation/example/index.html';
   const launch = `<section ${tag}></section><a href="/experiences/example/" target="_blank" rel="noopener" data-experience-launch>Launch</a>`;
   const options = { experience: { launch: 'window' } };
-  assert.deepEqual(await check({ ...complete, [wrapper]: launch }, options), []);
+  const frame = 'experiences/example/index.html';
+  const standalone = {
+    ...complete,
+    [wrapper]: launch,
+    [frame]: complete[frame] + '<a href="/manual/navigation/example/">Read the module</a><a href="/training/">Training Library</a>',
+  };
+  assert.deepEqual(await check(standalone, options), []);
   let problems = await check(complete, options);
+  assert(problems.some(p => p.includes('link back to its Manual module')));
+  assert(problems.some(p => p.includes('link back to the Training Library')));
   assert(problems.some(p => p.includes('in a new window')));
   assert(problems.some(p => p.includes('frames a window-only experience')));
   problems = await check({ ...complete, [wrapper]: launch.replace(' target="_blank"', '') }, options);

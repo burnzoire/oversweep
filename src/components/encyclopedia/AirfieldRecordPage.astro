@@ -8,7 +8,7 @@ import PurchaseRow from './PurchaseRow.astro';
 import RunwayFigure from './RunwayFigure.astro';
 import AirfieldPlanFigure from './AirfieldPlanFigure.astro';
 import { ilsLines, navaidLines, runwayLines, towerLines, towerNote } from '../../data/map-airfield-text';
-import { airfieldCatalogue, airfieldContent, airfieldPlan, mapAirfieldAnchor, mapAirfieldTables, recordRoute, type AirfieldData, type EncyclopediaRecord, type MapData, type Period, type TheatreData } from '../../data/encyclopedia';
+import { airfieldCatalogue, airfieldContent, airfieldPlan, mapAirfieldAnchor, mapAirfieldTables, recordRoute, simAirfields, type AirfieldData, type EncyclopediaRecord, type MapData, type Period, type TheatreData } from '../../data/encyclopedia';
 import { airfieldRoles, basings, branches, coverageStatuses, currentUse, dateText, eras, hasEnded, nations, periodText, sims, useLabels } from '../../data/airfield-model.mjs';
 import { categoryTitle } from '../../data/availability';
 import { assetPath, sitePath } from '../../lib/paths';
@@ -54,7 +54,15 @@ const uncheckedMaps = airfield ? maps.filter((x) => x.theatres.some((th) => airf
 // Every airfield on a DCS map, generated from pydcs by
 // scripts/import_pydcs_airfields.py; rows link to records that name the map.
 const mapTable = map && mapAirfieldTables().find((x) => x.map === record.slug);
-const recordFor = (name: string) => map?.airfields.find((x) => x.coverage.status === 'represented' && x.coverage.inSimName === name)?.airfield.record;
+// Use the same airfield identities as the Locations index for map-table links.
+const mapRecords = new Map<string, EncyclopediaRecord>();
+if (mapTable) {
+  for (const field of simAirfields()) {
+    if (!field.record) continue;
+    const onMap = field.maps.find((entry) => entry.map === map);
+    if (onMap) mapRecords.set(onMap.name, field.record.record);
+  }
+}
 const runwayFields = mapTable?.airfields.filter((x) => x.runways.length) ?? [];
 const padFields = mapTable?.airfields.filter((x) => !x.runways.length) ?? [];
 const ids = a?.identifiers;
@@ -66,7 +74,7 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
   breadcrumbs={[
     { label: 'Encyclopedia', href: sitePath('encyclopedia/') },
     { label: category, href: sitePath(`encyclopedia/${record.category}/`) },
-    ...(theatre ? [{ label: 'Theatres', href: sitePath('encyclopedia/locations/theatres/') }] : []),
+    ...(theatre || map?.theatres[0] ? [{ label: 'Theatres', href: sitePath('encyclopedia/locations/theatres/') }] : []),
     ...(map?.theatres[0] ? [{ label: map.theatres[0].record.title, href: link(map.theatres[0].record) }] : []),
     { label: record.title },
   ]}>
@@ -247,7 +255,7 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
         {(m.overview || m.interactiveMap) && mapTable && <TheatreMap name={m.name} overview={m.overview} source={mapTable.source.url}
           fields={runwayFields.flatMap(field => {
             if (!Number.isFinite(field.lat) || !Number.isFinite(field.lon)) return [];
-            const r = recordFor(field.name);
+            const r = mapRecords.get(field.name);
             return [{ name: field.name, lat: field.lat!, lon: field.lon!, recordHref: r ? link(r) : undefined,
               rows: [
                 { label: 'Coordinates', lines: [`${coord(field.lat!, 'N', 'S')}, ${coord(field.lon!, 'E', 'W')}`] },
@@ -271,7 +279,7 @@ const idText = ids && [ids.icao && `ICAO ${ids.icao}`, ids.iata && `IATA ${ids.i
                 <thead><tr><th scope="col">Airfield</th>{mapTable.source.beacons && <th scope="col">Elevation</th>}<th scope="col">Runways</th><th scope="col">Tower (MHz)</th>{mapTable.source.beacons && <><th scope="col">TACAN, VOR and NDB</th><th scope="col">ILS</th></>}</tr></thead>
                 <tbody>
                   {runwayFields.map((x) => {
-                    const r = recordFor(x.name);
+                    const r = mapRecords.get(x.name);
                     const radio = x.radio;
                     return (
                       <tr id={mapAirfieldAnchor(x.name)}>

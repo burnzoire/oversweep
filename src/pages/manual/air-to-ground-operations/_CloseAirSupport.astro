@@ -27,8 +27,7 @@ const glossary = sitePath('encyclopedia/terminology/close-air-support/');
 const lines = NINE_LINE.filter((l) => l.line);
 const say = (id: string) => NINE_LINE.find((l) => l.id === id)!.says.replace(/"/g, '');
 ---
-<SiteLayout title={cas.title} activeSection="manual" activeSubject="air-to-ground-operations" compactSubjectNav={true}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Air-to-Ground Operations',href:sitePath('manual/air-to-ground-operations/')},{label:cas.title}]}>
+<SiteLayout title={cas.title} activeSection="manual" activeSubject="air-to-ground-operations" compactSubjectNav={true}>
  <section class="status-panel" data-module-id={cas.id} data-module-revision={cas.revision}>
   <p>Module revision {cas.revision} · How an attack close to friendly troops is controlled, briefed and cleared, from the cockpit's side. For fixed- and rotary-wing aircrew of every service, from the joint close air support publication.</p>
  </section>

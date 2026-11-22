@@ -10,6 +10,7 @@ export function normalize(text) {
     .normalize("NFKD")
     .replace(/[̀-ͯ]/g, "")
     .toLowerCase()
+    .replace(/[‐‑‒–−]/g, "-")
     .replace(/(?<=[a-z0-9])[-/.'’]+(?=[a-z0-9])/g, "")
     .replace(/[^a-z0-9]+/g, " ")
     .trim();

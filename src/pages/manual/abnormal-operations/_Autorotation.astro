@@ -56,8 +56,7 @@ const minPt = S300_CURVE.reduce((a, b) => (b[1] < a[1] ? b : a));
 const tangentEnd = [glideMph * 1.12, glideFpm * 1.12];
 const glideRatio = (mph: number, fpm: number) => (mph * 88 / fpm).toFixed(1);
 ---
-<SiteLayout title={mod.title} activeSection="manual" activeSubject="abnormal-operations" compactSubjectNav={true}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Abnormal Operations',href:sitePath('manual/abnormal-operations/')},{label:mod.title}]}>
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="abnormal-operations" compactSubjectNav={true}>
  <section class="status-panel">
   <p>Module revision {mod.revision} · How a helicopter's rotor keeps turning without power, and how the pilot uses it to get to the ground after an engine failure, written for military pilots of every service. It follows the Navy's <em>Aerodynamics for Naval Aviators</em> for the rotor's behaviour and the FAA <em>Helicopter Flying Handbook</em>, as the supplementary source, for the control technique.</p>
   <p>The rotor aerodynamics behind it (the driving and driven regions of the blade) are in <a href={rotor}>Rotor-Wing Principles of Flight</a>. A standalone exercise to fly it is linked at the end of the page. Fixed-wing engine failures, fires and the other emergencies are in <a href={sitePath('manual/abnormal-operations/emergency-procedures/')}>Emergency Procedures</a>.</p>

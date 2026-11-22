@@ -1,0 +1,20 @@
+---
+interface Props {
+  id: string;
+  search: { label: string; placeholder: string };
+  sort?: { label: string; options: { value: string; label: string }[] };
+}
+const { id, search, sort } = Astro.props;
+---
+<div class="filter-field">
+  <label for={`${id}-q`}>{search.label}</label>
+  <input id={`${id}-q`} name="q" type="search" autocomplete="off" placeholder={search.placeholder} />
+</div>
+{sort && (
+  <div class="filter-field">
+    <label for={`${id}-sort`}>{sort.label}</label>
+    <select id={`${id}-sort`} name="sort" data-sort>
+      {sort.options.map((o) => <option value={o.value}>{o.label}</option>)}
+    </select>
+  </div>
+)}

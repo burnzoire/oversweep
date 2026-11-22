@@ -27,8 +27,7 @@ const da = RUN.tdze + RUN.da, locMins = RUN.tdze + RUN.locMins;
 const descent = levelTrim(RUN.speed, { dragK: RUN.dragK, gamma: -3 }), level = levelTrim(RUN.speed, { dragK: RUN.dragK });
 const r0 = (v: number) => Math.round(v);
 ---
-<SiteLayout title={mod.title} activeSection="manual" activeSubject="instrument-flight" compactSubjectNav={true}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Instrument Flight',href:sitePath('manual/instrument-flight/')},{label:mod.title}]}>
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="instrument-flight" compactSubjectNav={true}>
  <section class="status-panel" data-module-id={exercise.manualId} data-module-revision={mod.revision}>
   <p>Module revision {mod.revision} · The ILS from the start of the approach to the decision altitude: what the localizer and glide slope show, setting up, the intercept and the wind, tracking both needles, the limits, the decision and the missed approach. Written for fixed-wing military pilots of every service, from the Air Force's instrument flight procedures manual, with the Navy's instrument training instruction for the needle scaling.</p>
   <p>It assumes the crosscheck from <a href={attitude}>Attitude Instrument Flying</a>; the approach parts it shares with other approaches (the FAF, minimums and the plate) are in <a href={`${procedures}#approach`}>Instrument Procedures</a>. Then hand-fly it in the trainer, which opens in its own window.</p>

@@ -10,7 +10,7 @@ import { ilsLines, navaidLines, runwayLines, towerLines, towerNote } from "../..
 import { airfieldCatalogue, aircraftContent, mapAirfieldAnchor, simAirfields, aircraftEra, aircraftEras, aircraftGroups, categoryRecords, ordnanceContent, ordnanceGroups, recordContent, threatGroups, sensorContent, sensorGroups, recordRoute } from "../../data/encyclopedia";
 import { sitePath } from "../../lib/paths";
 import { aircraftFacets, aircraftFilter, buildFacets, filterAttributes, ordnanceFacets, ordnanceFilter, searchText, sensorFacets, sensorFilter, threatFacets, threatFilter, type FilterItem } from "../../data/record-facets";
-import { airfieldRoles, branches, currentUse, nations, searchTerms, sims, useLabels } from "../../data/airfield-model.mjs";
+import { airfieldRoles, branches, currentUse, nations, searchTerms, useLabels } from "../../data/airfield-model.mjs";
 import "../../styles/encyclopedia.css";
 
 export function getStaticPaths() {
@@ -121,7 +121,18 @@ const simIndex = category.slug === "locations" && airfieldData ? simAirfields().
   };
 }) : [];
 // Location facets count every airfield once: the records, then the sim-map airfields without one.
-const locationFacets = airfieldData ? buildFacets([...airfieldIndex, ...simIndex.filter((x) => !x.record)].map((a) => a.filter), [
+const simMatches = Map.groupBy(simIndex, (entry) => entry.record?.record);
+const locationFacetItems = [
+  ...airfieldIndex.map(({ record, filter: { values } }) => ({
+    values: {
+      ...values,
+      map: [...values.map, ...(simMatches.get(record) ?? []).flatMap(({ filter }) => filter.values.map)],
+      theatre: [...values.theatre, ...(simMatches.get(record) ?? []).flatMap(({ filter }) => filter.values.theatre)],
+    },
+  })),
+  ...(simMatches.get(undefined) ?? []).map(({ filter }) => filter),
+];
+const locationFacets = airfieldData ? buildFacets(locationFacetItems, [
   { key: "country", label: "Country or territory", any: "Any", labels: Object.fromEntries(Object.entries(nations).map(([k, v]) => [k, v.name])) },
   { key: "theatre", label: "Theatre", any: "Any", order: byTitle(airfieldData.theatres).map((x) => ({ slug: x.record.slug, title: x.record.title })) },
   { key: "map", label: "Sim map", any: "Any, or none checked", order: airfieldData.maps.map((x) => ({ slug: x.record.slug, title: x.data.name })) },
@@ -249,22 +260,14 @@ const weight = (kg: number) => `${n(kg)} kg (${n(Math.round(kg * 2.20462))} lb)`
         </>
       ) : category.slug === "locations" && airfieldData ? (
         <>
-          <p class="lead">Theatres, simulator maps and airfields. Browse a region or find an airfield below. An airfield with no map listed has not been checked yet.</p>
-          <nav class="theatre-jump" aria-label="Browse locations"><ul><li><a href="#browse-theatres">Theatres</a></li><li><a href="#airfield-index">Find a location</a></li><li><a href="#sim-airfields">Every represented airfield</a></li></ul></nav>
-          <section aria-labelledby="browse-theatres">
-            <h2 id="browse-theatres">Browse theatres</h2>
-            <p>Explore a region, then choose a simulator map for its setting and airfields.</p>
-            <div class="entry-grid record-grid">
-              {byTitle(airfieldData.theatres).map((x) => (
-                <RecordCard record={x.record} photo={x.data.photos[0]}>
-                  <p class="card-list"><strong>{x.maps.length} {x.maps.length === 1 ? "map" : "maps"} represented</strong></p>
-                  {x.maps.length > 0 && <ul class="card-list">{x.maps.map((m) => <li><a href={sitePath(recordRoute(m.record))}>{m.data.name}</a> <span class="cell-note">{sims[m.data.sim]}</span></li>)}</ul>}
-                </RecordCard>
-              ))}
-            </div>
-          </section>
-          <h2 id="airfield-index">Find a location</h2>
-          <FilterBar id="airfield" label="Find a location" search={{ label: "Location name, former name or identifier", placeholder: "e.g. Isely, KLSV or Batumi" }} facets={locationFacets} nouns={{ records: "airfield records", rows: "airfields on the sim maps" }} />
+          <nav class="theatre-jump" aria-label="Browse locations">
+            <ul>
+              <li id="browse-theatres"><a href={sitePath("encyclopedia/locations/theatres/")}>Browse theatres and sim maps</a></li>
+              <li><a href="#sim-airfields">Airfields on sim maps</a></li>
+            </ul>
+          </nav>
+          <h2 id="airfield-index">Find an airfield</h2>
+          <FilterBar id="airfield" label="Find an airfield" quickLookup search={{ label: "Airfield name, former name or identifier", placeholder: "e.g. Isely, KLSV or Batumi" }} facets={locationFacets} nouns={{ records: "airfield records", rows: "airfields on the sim maps" }} />
 
           <section data-filter-group>
           <h2>Airfields</h2>
@@ -284,16 +287,20 @@ const weight = (kg: number) => `${n(kg)} kg (${n(Math.round(kg * 2.20462))} lb)`
             ))}
           </div>
           </section>
-          <section data-filter-group>
+          <section aria-labelledby="sim-airfields">
           <h2 id="sim-airfields">Every represented airfield</h2>
           <p>Every airfield with a runway on each DCS World map, with its runways, tower frequencies, navaids and ILS as the game has them. An airfield on more than one map gets a line for each map. {simIndex.filter((x) => x.record).length} of {simIndex.length} have a full record so far; more are being added theatre by theatre, the major military bases first.</p>
-          <div class="table-scroll" role="region" aria-label="Every represented airfield, scrolls sideways on narrow screens" tabindex="0">
+          <div class="table-scroll" data-filter-group role="region" aria-label="Every represented airfield, scrolls sideways on narrow screens" tabindex="0">
             <table class="airfield-table sim-airfield-table">
               <thead><tr><th scope="col">Airfield</th><th scope="col">Map and name in the sim</th><th scope="col">Elevation</th><th scope="col">Runways (magnetic)</th><th scope="col">Tower (MHz)</th><th scope="col">TACAN, VOR and NDB</th><th scope="col">ILS</th></tr></thead>
               <tbody>
-                {simIndex.flatMap((x) => x.maps.map((m, i) => (
-                  <tr class={i === 0 ? "sim-airfield" : "sim-airfield-more"} {...filterAttributes({ ...x.filter, count: i === 0 ? "rows" : undefined })}>
-                    {i === 0 && <th scope="row" rowspan={x.maps.length}>{x.record ? <a href={sitePath(recordRoute(x.record.record))}>{x.name}</a> : x.name}<span class="cell-note">{x.theatres.map((t) => t.record.title).join(", ")}{!x.record && " · record not written yet"}</span></th>}
+                {simIndex.flatMap((x, index) => x.maps.map((m) => (
+                  <tr data-filter-key={`sim-airfield-${index}`} {...filterAttributes({
+                    ...x.filter,
+                    count: "rows",
+                    values: { ...x.filter.values, map: [m.map.record.slug] },
+                  })}>
+                    <th scope="row">{x.record ? <a href={sitePath(recordRoute(x.record.record))}>{x.name}</a> : x.name}<span class="cell-note">{x.theatres.map((t) => t.record.title).join(", ")}{!x.record && " · record not written yet"}</span></th>
                     <td><a href={`${sitePath(recordRoute(m.map.record))}#${mapAirfieldAnchor(m.name)}`}>{m.map.data.name}</a>{m.name !== x.name && <span class="cell-note">as {m.name}</span>}</td>
                     <td>{m.field.elevationFt === undefined ? "—" : `${n(m.field.elevationFt)} ft`}</td>
                     <td>{runwayLines(m.field).map((t) => <span class="cell-line">{t}</span>)}</td>

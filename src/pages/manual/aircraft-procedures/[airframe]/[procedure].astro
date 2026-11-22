@@ -51,11 +51,9 @@ const rich = (t:string) => esc(t)
     if (!target) throw new Error(`${guide.id}: no glossary entry "${slug || text}"`);
     return termMarkup(target, text);
   });
-const shortTitle = guide.title.split('— ')[1] ?? guide.title;
 ---
 <SiteLayout title={guide.title} activeSection="manual" activeSubject="aircraft-procedures"
- description={guide.description}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Aircraft',href:sitePath('manual/aircraft-procedures/')},{label:'F-16C',href:sitePath('manual/aircraft-procedures/f-16c/')},{label:shortTitle}]}>
+ description={guide.description}>
   <section class="status-panel">
     <p><Fragment set:html={rich(guide.intro)} /></p>
   </section>

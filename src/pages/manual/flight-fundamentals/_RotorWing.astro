@@ -43,8 +43,7 @@ const airfield = sitePath('manual/airfield-operations/airfield-basics/');
 const autorotationPractice = includedExperiences.find((e) => e.slug === 'autorotation');
 const practice = autorotationPractice && sitePath(experienceRoute(autorotationPractice));
 ---
-<SiteLayout title={mod.title} activeSection="manual" activeSubject="flight-fundamentals" compactSubjectNav={true}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Flight Fundamentals',href:sitePath('manual/flight-fundamentals/')},{label:mod.title}]}>
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="flight-fundamentals" compactSubjectNav={true}>
  <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
   <p>Module revision {mod.revision} · How a helicopter's rotor flies, written for military pilots of every service: the blade's own relative wind, the forces in a hover and a turn, the <Term id="Collective">collective</Term>, <Term id="Cyclic">cyclic</Term> and pedals, rotor systems and torque, hover power, forward flight and <Term id="Dissymmetry of lift">dissymmetry of lift</Term>, the rotor's hazards and <Term id="Autorotation">autorotation</Term>. It follows the Navy's <em>Aerodynamics for Naval Aviators</em> and the Army's <em>Fundamentals of Flight</em>, with the FAA <em>Helicopter Flying Handbook</em> as the supplementary source for most hazards. Worked numbers use an invented utility helicopter.</p>
   <p>Every figure is interactive: move a control and the drawing and readout follow. The core sequence covers normal rotor aerodynamics and ends with a table of the hazards; each hazard's full section is in the reference half. The wing itself (lift, drag, <Term id="AOA">angle of attack</Term> and stall) is in the companion module, <a href={fixed}>Fixed-Wing Principles of Flight</a>. Tiltrotors, weight and balance, and type-specific procedures are outside this revision.</p>

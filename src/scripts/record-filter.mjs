@@ -5,6 +5,8 @@
 // data-filter-count are counted by kind, named by the form's data-nouns.
 // The choices are kept in the URL query; without JavaScript the form stays
 // hidden and everything is listed.
+import { normalize } from "./site-search.mjs";
+
 const fold = (text) => text.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
 
 for (const form of document.querySelectorAll('.record-filter')) {
@@ -16,18 +18,30 @@ for (const form of document.querySelectorAll('.record-filter')) {
   const fields = [form.elements.q, ...facets, ...(sort ? [sort] : [])];
   const nouns = JSON.parse(form.dataset.nouns || '{}');
   const count = form.querySelector('.filter-count');
+  const active = form.querySelector('[data-filter-active]');
+  const queryInDisclosure = Boolean(form.elements.q.closest('.filter-disclosure'));
   const empty = form.querySelector('.filter-empty');
   const clear = form.querySelector('.filter-clear');
   // Counted kinds count distinct records, so a record listed twice counts once.
-  const key = (item) => item.dataset.recordId ?? item;
+  const key = (item) => item.dataset.filterKey ?? item.dataset.recordId ?? item;
+  const searchTexts = new Map(items.map((item) => {
+    const text = item.dataset.search ?? '';
+    return [item, { original: fold(text), normalized: normalize(text) }];
+  }));
   const totals = Object.fromEntries(Object.keys(nouns).map((kind) => [kind, new Set(items.filter((i) => i.dataset.filterCount === kind).map(key)).size]));
 
   const apply = () => {
     const query = fold(form.elements.q.value.trim());
+    const normalized = normalize(query);
+    const joined = /^[a-z]+ \d+[a-z0-9]*$/.test(normalized) ? normalized.replaceAll(' ', '') : '';
     const chosen = facets.filter((s) => s.value).map((s) => [s.dataset.facet, s.value]);
     const shown = Object.fromEntries(Object.keys(nouns).map((kind) => [kind, new Set()]));
     for (const item of items) {
-      const matches = (!query || fold(item.dataset.search ?? '').includes(query))
+      const text = searchTexts.get(item);
+      const matchesQuery = !query || text.original.includes(query)
+        || (normalized && text.normalized.includes(normalized))
+        || (joined && text.normalized.split(' ').some((word) => word.startsWith(joined)));
+      const matches = matchesQuery
         && chosen.every(([facet, value]) => (item.getAttribute(`data-facet-${facet}`) ?? '').split(' ').includes(value));
       item.hidden = !matches;
       if (matches && item.dataset.filterCount in shown) shown[item.dataset.filterCount].add(key(item));
@@ -39,7 +53,13 @@ for (const form of document.querySelectorAll('.record-filter')) {
       const parent = items[0]?.parentElement;
       if (parent) for (const item of [...items].sort((a, b) => (desc ? -1 : 1) * by(a, field).localeCompare(by(b, field)) || by(a, 'name').localeCompare(by(b, 'name')))) parent.append(item);
     }
-    const filtered = Boolean(query) || chosen.length > 0;
+    const activeCount = Number(Boolean(query)) + chosen.length;
+    const filtered = activeCount > 0;
+    if (active) {
+      const disclosureCount = chosen.length + Number(queryInDisclosure && Boolean(query));
+      active.hidden = disclosureCount === 0;
+      active.textContent = `${disclosureCount} active`;
+    }
     const parts = Object.entries(nouns).map(([kind, noun]) => filtered ? `${shown[kind].size} of ${totals[kind]} ${noun}` : `${totals[kind]} ${noun}`);
     count.textContent = `${filtered ? 'Showing' : 'All'} ${parts.join(', and ')}.`;
     empty.hidden = !filtered || Object.values(shown).some((s) => s.size > 0);

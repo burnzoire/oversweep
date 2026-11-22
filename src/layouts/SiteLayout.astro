@@ -6,6 +6,7 @@ import SectionMenu from "../components/SectionMenu.astro";
 import SiteSearch from "../components/SiteSearch.astro";
 import ThemePreference from "../components/ThemePreference.astro";
 import PreviewSwitch from "../components/PreviewSwitch.astro";
+import { manualTrail } from "../data/manual-menu";
 import { encyclopediaMenuFor } from "../data/encyclopedia-menu";
 import { sectionHasContent } from "../data/availability";
 import { assetPath, sitePath } from "../lib/paths";
@@ -44,7 +45,7 @@ const {
   compactSubjectNav = false,
   isSectionIndex = false,
   isHomePage = false,
-  breadcrumbs = [],
+  breadcrumbs: suppliedBreadcrumbs = [],
   empty = false,
   customHeading = false,
   description: givenDescription,
@@ -52,6 +53,11 @@ const {
   imageAlt,
 } = Astro.props;
 const route = routeOf(Astro.url.pathname, import.meta.env.BASE_URL);
+const trail = activeSection === "manual" ? manualTrail(route) : undefined;
+const breadcrumbs = trail ? [
+  { label: "Manual", href: sitePath("manual/") },
+  ...trail.map(({ title, href }) => ({ label: title, href: href && sitePath(href) })),
+] : suppliedBreadcrumbs;
 const isNotFound = Astro.url.pathname.replace(/\/+$/, "").endsWith("/404");
 const description = clip(givenDescription ?? describeRoute(route) ?? defaultDescription);
 // Absolute URLs need the site origin, set as `site` in astro.config.mjs.

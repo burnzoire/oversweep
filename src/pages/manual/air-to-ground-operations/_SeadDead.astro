@@ -28,8 +28,7 @@ const glossary = sitePath('encyclopedia/terminology/sead/');
 const htsTables = sitePath('encyclopedia/reference-data/f-16-harm-threat-tables/');
 const hz = (ft: number) => horizonNm(ft).toFixed(0);
 ---
-<SiteLayout title={sead.title} activeSection="manual" activeSubject="air-to-ground-operations" compactSubjectNav={true}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Air-to-Ground Operations',href:sitePath('manual/air-to-ground-operations/')},{label:sead.title}]}>
+<SiteLayout title={sead.title} activeSection="manual" activeSubject="air-to-ground-operations" compactSubjectNav={true}>
  <section class="status-panel" data-module-id={sead.id} data-module-revision={sead.revision}>
   <p>Module revision {sead.revision} · How surface air defences are avoided, suppressed and destroyed so a strike gets through. For aircrew of every service, from the joint counterair publication.</p>
  </section>

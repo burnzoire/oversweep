@@ -1,6 +1,5 @@
 ---
 import SiteLayout from '../../../../../layouts/SiteLayout.astro';
-import CockpitNav from '../../../../../components/cockpit/CockpitNav.astro';
 import CockpitPanel from '../../../../../components/cockpit/CockpitPanel.astro';
 import { cockpits, builtPanels, panelRoute, cockpitRoute } from '../../../../../data/cockpit/f16c/index.ts';
 import { readings } from '../../../../../data/cockpit/render.ts';
@@ -22,8 +21,7 @@ const hint = [
 const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns when released' : h === 'magnetic' ? 'magnetically held' : '';
 ---
 <SiteLayout title={`${cockpit.title} ${spec.title}`} activeSection="manual" activeSubject="aircraft-procedures" compactSubjectNav={true}
- description={`Interactive ${cockpit.variant} ${spec.title}: where every control is, how it moves and what each light means.`}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Aircraft',href:sitePath('manual/aircraft-procedures/')},{label:cockpit.title,href:sitePath(`manual/aircraft-procedures/${cockpit.airframe}/`)},{label:'Cockpit',href:sitePath(cockpitRoute(cockpit))},{label:panel.title}]}>
+ description={`Interactive ${cockpit.variant} ${spec.title}: where every control is, how it moves and what each light means.`}>
   <p class="cockpit-where">{area.title} · {cockpit.manual.title.replace('Eagle Dynamics — ', '')}, p. {spec.source.page}</p>
   <nav class="cockpit-area" aria-label={`${area.title} panels`}>
     <span class="ca-title">{area.title}</span>
@@ -31,7 +29,7 @@ const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns whe
       ? <a href={sitePath(panelRoute(cockpit, p.id))} aria-current={p.id === panel.id ? 'page' : undefined}>{p.title}</a>
       : <span>{p.title}</span>}</li>)}</ul>
   </nav>
-  <details class="cockpit-all"><summary>All cockpit areas and panels</summary><CockpitNav cockpit={cockpit} current={panel.id} /></details>
+  <p class="cockpit-all"><a href={sitePath(cockpitRoute(cockpit))}>All cockpit panels</a></p>
   <div class="cockpit-page">
     <div class="cockpit-main">
       <CockpitPanel cockpit={cockpit} spec={spec} />
@@ -100,8 +98,6 @@ const holdText = (h?: string) => h === 'momentary' ? 'spring-loaded, returns whe
 .cockpit-area a{text-decoration:none}
 .cockpit-area a[aria-current="page"]{background:var(--color-ink);color:var(--color-ink-text);border-color:var(--color-outline)}
 .cockpit-all{margin:0 0 1.25rem}
-.cockpit-all summary{cursor:pointer;color:var(--color-link);min-height:2.4rem;display:flex;align-items:center}
-.cockpit-all[open] .cockpit-nav{max-width:30rem}
 .cockpit-page{display:grid;grid-template-columns:minmax(0,1fr) minmax(15rem,20rem);gap:1.75rem;align-items:start}
 .cockpit-main{min-width:0}
 .cockpit-main :global(.cockpit-panel){margin-inline:auto}

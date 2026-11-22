@@ -31,8 +31,7 @@ const wb = balance({});
 const solo = balance({ rear: 0 });
 const ft = (x: number) => `${Math.round(x).toLocaleString('en-US')} ft`;
 ---
-<SiteLayout title={mod.title} activeSection="manual" activeSubject="flight-planning" compactSubjectNav={true}
- breadcrumbs={[{label:'Manual',href:sitePath('manual/')},{label:'Flight Planning',href:sitePath('manual/flight-planning/')},{label:mod.title}]}>
+<SiteLayout title={mod.title} activeSection="manual" activeSubject="flight-planning" compactSubjectNav={true}>
  <section class="status-panel" data-module-id={mod.id} data-module-revision={mod.revision}>
   <p>Module revision {mod.revision} · Reading the weather for a plan and working out what the aircraft can do: the briefing, METAR and TAF, density altitude, takeoff and landing distance, and weight and balance.</p>
  </section>

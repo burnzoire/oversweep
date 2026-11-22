@@ -133,8 +133,16 @@ for (const category of encyclopediaCategories) {
       ? [base + route]
       : [];
   });
-  assert.deepEqual([...destinations].sort(), expectedLinks.sort(), `${category} should list every page in the category once`);
-  for (const href of [base + category, ...destinations]) {
+  const locationLinks = slug === "locations";
+  const pageLinks = locationLinks ? [...new Set(destinations.filter((href) => !href.includes("#")))] : destinations;
+  assert.deepEqual([...pageLinks].sort(), expectedLinks.sort(), `${category} should list every page in the category`);
+  if (locationLinks) {
+    for (const href of destinations.filter((destination) => destination.includes("#"))) {
+      const [route, anchor] = href.slice(base.length).split("#");
+      assert.ok(pages.get(pageFile(route))?.includes(`id="${anchor}"`), `${href} should link to an airfield row`);
+    }
+  }
+  for (const href of [base + category, ...pageLinks]) {
     const page = pages.get(pageFile(href.slice(base.length)));
     const menu = encyclopediaMenu(page);
     assert.ok(menu, `${href} should have an Encyclopedia menu`);
@@ -147,6 +155,40 @@ for (const category of encyclopediaCategories) {
     assert.deepEqual(links(breadcrumbs).slice(0, parents.length), parents, `${href} should link to its Encyclopedia parents`);
     assert.match(breadcrumbs, /<span aria-current="page">/, `${href} should mark the current breadcrumb`);
   }
+}
+
+// The Syria page opens its parent theatre in the sidebar and lists its airfields beneath it.
+const syriaMenu = encyclopediaMenu(pages.get(pageFile("encyclopedia/locations/dcs-syria/")));
+if (syriaMenu) {
+  const openBranches = [...syriaMenu.matchAll(/<details\b[^>]*\bopen(?=\s|>)[^>]*>\s*<summary>([\s\S]*?)<\/summary>/g)];
+  const parentLinks = ["", "theatres/", "middle-east/", "dcs-syria/"].map((route) => `${base}encyclopedia/locations/${route}`);
+  assert.deepEqual(openBranches.flatMap((match) => links(match[1])), parentLinks);
+  const syria = syriaMenu.slice(openBranches.at(-1).index).split("</details>")[0];
+  assert.ok(links(syria).includes(`${base}encyclopedia/locations/ramat-david/`), "Ramat David should be nested under Syria");
+}
+
+// These pages have URLs that skip a level or use an older subject name.
+const manualPaths = [
+  ["abnormal-operations/threat-avoidance/", ["tactics/", "tactics/threat-avoidance/"]],
+  ["aircraft-procedures/f-16c/engine-start/", ["aircraft-procedures/", "aircraft-procedures/f-16c/", "aircraft-procedures/f-16c/ground/"]],
+];
+for (const [route, parents] of manualPaths) {
+  const page = pages.get(pageFile(`manual/${route}`));
+  const breadcrumbs = page.match(/<nav class="breadcrumbs"[^>]*>([\s\S]*?)<\/nav>/)?.[1];
+  assert.ok(breadcrumbs, `manual/${route} should have breadcrumbs`);
+  assert.deepEqual(links(breadcrumbs), [`${base}manual/`, ...parents.map((parent) => `${base}manual/${parent}`)]);
+}
+
+const locations = pages.get(pageFile("encyclopedia/locations/"));
+const simTable = locations.match(/<table class="airfield-table sim-airfield-table">([\s\S]*?)<\/table>/)?.[1];
+assert.ok(simTable, "Locations should have a simulator airfield table");
+const simRows = [...simTable.matchAll(/<tr\b([^>]*)>([\s\S]*?)<\/tr>/g)].filter(([, attrs]) => attrs.includes("data-filter-item"));
+assert.ok(simRows.length > 0, "the simulator airfield table should contain filterable rows");
+for (const [, attrs, row] of simRows) {
+  const map = attrs.match(/data-facet-map="([^" ]+)"/)?.[1];
+  assert.ok(map, "each simulator airfield row should match just one map");
+  assert.ok(links(row).some((href) => href.startsWith(`${base}encyclopedia/locations/${map}/#af-`)), "the row link must use its own map");
+  assert.match(row, /<th scope="row">/, "a filtered row should have its own airfield name");
 }
 
 console.log(`Generated-site checks passed: ${htmlFiles.length} pages, base ${base}`);

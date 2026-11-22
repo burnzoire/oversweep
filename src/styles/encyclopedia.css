@@ -51,11 +51,11 @@
 .ency button { min-height: 2.75rem; padding: 0.4rem 0.9rem; font: inherit; font-weight: 700; color: var(--color-text); background: var(--color-page, #fff); border: 1px solid var(--color-text); cursor: pointer; }
 .ency button[aria-pressed="true"] { color: var(--color-page, #fff); background: var(--color-link); border-color: var(--color-link); }
 .ency button:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
-/* The shared list filter bar (FilterBar.astro): `hidden` must win over the flex and grid displays. */
-.ency .record-filter { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: 0.75rem 1rem; align-items: end; margin: 0 0 1rem; padding: 0.9rem 1rem; border: 1px solid var(--color-border); background: var(--color-surface, #f6f7f8); }
-/* Two selects a row on a phone. */
-@media (max-width: 40rem) { .ency .record-filter { grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr)); } }
-.ency .record-filter .filter-search, .ency .record-filter .filter-status, .ency .record-filter .filter-empty { grid-column: 1 / -1; }
+.ency .record-filter { display: grid; gap: 0.75rem; margin: 0 0 1rem; padding: 0.75rem 1rem; border: 1px solid var(--color-border); background: var(--color-surface); }
+.ency .filter-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: 0.75rem 1rem; align-items: end; }
+.ency .filter-disclosure summary { padding-block: 0.45rem; font-weight: 700; cursor: pointer; }
+.ency .filter-disclosure[open] .filter-fields { margin-top: 0.5rem; }
+.ency [data-filter-active] { margin-inline-start: 0.5rem; font-weight: 400; color: var(--color-muted); }
 .ency .record-filter label { display: block; font-weight: 700; margin-bottom: 0.3rem; }
 .ency .record-filter input, .ency .record-filter select { box-sizing: border-box; width: 100%; min-height: 2.75rem; padding: 0.4rem 0.6rem; font: inherit; color: var(--color-text); border: 1px solid var(--color-text); background: var(--color-page, #fff); }
 /* A drawn chevron replaces the native arrow, which browsers place flush with the border: centred vertically with room on the right. */
@@ -149,11 +149,14 @@
 .ency .term-set { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 .ency .term-meta, .ency .term-source { font-size: 0.88rem; color: var(--color-muted); }
 .ency .term-note { padding-left: 0.6rem; border-left: 3px solid var(--color-accent); }
-.ency .glossary-tools { margin: 0 0 1rem; }
+.ency .glossary-tools { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; align-items: end; margin: 0 0 1rem; }
 .ency .glossary-tools label { display: block; font-weight: 700; margin-bottom: 0.3rem; }
-.ency .glossary-tools input { box-sizing: border-box; width: min(100%, 28rem); min-height: 2.75rem; padding: 0.4rem 0.7rem; font: inherit; border: 1px solid var(--color-text); margin-bottom: 0.75rem; }
-.ency .glossary-tools input:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
-.ency .term-count { margin: 0; color: var(--color-muted); font-size: 0.9rem; }
+.ency .glossary-tools input, .ency .glossary-tools select { box-sizing: border-box; width: min(100%, 28rem); min-height: 2.75rem; padding: 0.4rem 0.7rem; font: inherit; color: var(--color-text); background: var(--color-page); border: 1px solid var(--color-text); }
+.ency .glossary-tools :is(input, select):focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+.ency .glossary-tools > div { min-width: 0; }
+.ency .glossary-tools :is(input, select) { max-width: 100%; }
+.ency .term-sets > summary { cursor: pointer; margin-bottom: 0.65rem; }
+.ency .term-count { flex-basis: 100%; margin: 0; color: var(--color-muted); font-size: 0.9rem; }
 .ency .letter-nav ol { display: flex; flex-wrap: wrap; gap: 0.3rem; padding: 0; margin: 0 0 0.5rem; list-style: none; }
 .ency .letter-nav a { display: inline-flex; align-items: center; justify-content: center; min-width: 2.75rem; min-height: 2.75rem; border: 1px solid var(--color-border); font-weight: 700; text-decoration: none; background: var(--color-page, #fff); }
 .ency .letter-nav a:hover { background: var(--color-surface); }

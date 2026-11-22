@@ -6,12 +6,25 @@ import { hasArticle, type MenuNode } from "../data/manual-menu";
 
 // The list on a group's landing page: one card per direct child, whether it is a
 // group (its own landing page) or a leaf. Empty groups link; unwritten leaves do not.
-interface Props { node: MenuNode }
-const { node } = Astro.props;
+interface Props { node: MenuNode; list?: boolean }
+const { node, list = false } = Astro.props;
 const entryById = new Map(manualEntries.map((entry) => [entry.id, entry]));
 const children = node.children ?? [];
 ---
-<div class="entry-grid">
+{list ? (
+  <ul class="group-links">
+    {children.map((child) => {
+      const unwritten = child.children ? !hasArticle(child) : child.planned;
+      return (
+        <li class:list={{ unwritten }}>
+          {child.href && (child.children || !child.planned)
+            ? <a href={sitePath(child.href)}>{child.title}</a>
+            : <>{child.title}<span class="visually-hidden"> (not written yet)</span></>}
+        </li>
+      );
+    })}
+  </ul>
+) : (<div class="entry-grid">
   {children.map((c) => {
     const entry = !c.planned && entryById.get(c.id);
     const unwritten = c.children ? !hasArticle(c) : c.planned;
@@ -23,4 +36,10 @@ const children = node.children ?? [];
       </article>
     );
   })}
-</div>
+</div>)}
+
+<style>
+  .group-links:empty { display: none; }
+  .group-links li { margin-block: 0.35rem; }
+  .group-links .unwritten, .group-links .unwritten a { color: var(--color-unavailable); }
+</style>
