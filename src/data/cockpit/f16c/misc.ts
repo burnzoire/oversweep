@@ -72,7 +72,7 @@ export const misc: PanelSpec = {
     T(63, 700, 'ROLL', 16, 46), T(65, 720, 'HDG SEL', 12, 64), T(113.5, 757.5, 'ATT', 12, 27), T(114, 775, 'HOLD', 12, 38), T(69, 808, 'STRG SEL', 12, 72),
     T(185, 700, 'PITCH', 16, 52), T(184.5, 720, 'ALT HOLD', 12, 75), T(230, 757.5, 'A/P', 12, 30), T(231, 775, 'OFF', 12, 28), T(186, 808, 'ATT HOLD', 12, 73),
     // Panel title, one letter above the next.
-    T(18, 732, 'M', 18, 16), T(18, 758, 'I', 18), T(18, 786, 'S', 18, 14), T(18, 813, 'C', 18, 14),
+    T(16, 731, 'M', 17, 15), T(16, 756, 'I', 17), T(16, 781, 'S', 17, 13), T(16, 806, 'C', 17, 13),
   ],
   placements: [
     { component: 'screw-medium', at: pt(117, 151) },
