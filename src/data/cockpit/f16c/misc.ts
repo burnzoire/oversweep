@@ -68,7 +68,7 @@ export const misc: PanelSpec = {
     T(224, 337.5, 'ALT REL', 15, 76),
     T(181.5, 462.5, 'MASTER ARM', 16, 100), T(233, 513.5, 'OFF', 12, 27), T(181.5, 556, 'SIMULATE', 12, 73),
     { kind: 'path', pen: 'fine', d: path('M68 567.5H277') },
-    T(225, 615.5, 'ADV', 12, 30), T(226, 635.5, 'MODE', 12, 42),
+    T(226, 614, 'ADV', 14, 34), T(227, 635, 'MODE', 14, 46),
     T(63, 700, 'ROLL', 16, 46), T(65, 720, 'HDG SEL', 12, 64), T(113.5, 757.5, 'ATT', 12, 27), T(114, 775, 'HOLD', 12, 38), T(69, 808, 'STRG SEL', 12, 72),
     T(185, 700, 'PITCH', 16, 52), T(184.5, 720, 'ALT HOLD', 12, 75), T(230, 757.5, 'A/P', 12, 30), T(231, 775, 'OFF', 12, 28), T(186, 808, 'ATT HOLD', 12, 73),
     // Panel title, one letter above the next.
@@ -85,7 +85,7 @@ export const misc: PanelSpec = {
     {
       component: 'push-square', control: 'adv-mode', indicator: 'adv-mode', at: pt(159.5, 624), size: [mm(81), mm(78)],
       marks: 'M-8 0H8',
-      legend: [{ text: 'ACTIVE', cap: mm(10), y: mm(-14), width: mm(34) }, { text: 'STBY', cap: mm(10), y: mm(14), width: mm(26) }],
+      legend: [{ text: 'ACTIVE', cap: mm(13), y: mm(-15), width: mm(45) }, { text: 'STBY', cap: mm(13), y: mm(15), width: mm(34) }],
     },
     { component: 'toggle-large', control: 'roll', at: pt(...ROLL) },
     { component: 'toggle-large-cylinder', control: 'pitch', at: pt(...PITCH) },
