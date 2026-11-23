@@ -104,13 +104,15 @@ const STPT5: Spi = { lat: '036:33.106', lon: '037:09.874', elv: '+1355', hq: tru
 const PB = { at: at(IR.bTgp, IR.bTgp.spi), k: IR.bTgp.k }, PB1 = { at: at(IR.bTgp, IR.bTgp.aim), k: IR.bTgp.k };
 const PT = { at: at(IR.tTgp, IR.tTgp.spi), k: IR.tTgp.k }, PT1 = { at: at(IR.tTgp, IR.tTgp.aim), k: IR.tTgp.k };
 const tgpD: Page[] = [
-  tgp('tgp-b', STPT3, false, false, { mbc: 'S', next: '3', ...PB }), tgp('tgp-b-soi', STPT3, true, false, { mbc: 'S', next: '3', ...PB, cz: true }),
+  tgp('tgp-b', STPT3, false, false, { mbc: 'S', next: '3', ...PB }), tgp('tgp-b-soi', STPT3, true, false, { mbc: 'S', next: '3', ...PB }),
+  tgp('tgp-b-soi-cz', STPT3, true, false, { mbc: 'S', next: '3', ...PB, cz: true }),
   tgp('tgp-b-on', STPT3, false, false, { mbc: 'S', next: '3', ...PB1, cz: true }), tgp('tgp-b-on7', STPT3, false, false, { mbc: 'S', next: '7', ...PB1, cz: true }),
   // Back to the TGP as SOI, still in Slave, before Cursor Zero; then the slew removed and the pod back on steerpoint 3.
   tgp('tgp-b-on7-soi', STPT3, true, false, { mbc: 'S', next: '7', ...PB1, cz: true }),
   tgp('tgp-b-cz', STPT3, true, false, { mbc: 'S', next: '7', ...PB }),
   // The shot starts from station 7, next after boresighting.
-  tgp('tgp-t', STPT5, false, false, { mbc: 'S', next: '7', ...PT }), tgp('tgp-t-soi', STPT5, true, false, { mbc: 'S', next: '7', ...PT, cz: true }),
+  tgp('tgp-t', STPT5, false, false, { mbc: 'S', next: '7', ...PT }), tgp('tgp-t-soi', STPT5, true, false, { mbc: 'S', next: '7', ...PT }),
+  tgp('tgp-t-soi-cz', STPT5, true, false, { mbc: 'S', next: '7', ...PT, cz: true }),
   ...['1', '2', 'T', 'C'].map(l => tgp(`tgp-t-${l}`, STPT5, true, false, { mbc: l, next: '7', ...PT1, cz: true })),
   tgp('tgp-t-3', STPT5, true, false, { mbc: 'S', next: '3', ...PT1, cz: true }),
 ];
@@ -128,13 +130,15 @@ export const tgpPageLabels: Record<string, string> = {
   'tgp-sa11-soi': 'TGP format, SOI: slaved to the SA-11',
   'tgp-sa11-track': 'TGP format, SOI: Point track on the SA-11 site, the pod owns the SPI',
   'tgp-b': 'TGP format, AGM-65D selected: NARO, on steerpoint 3',
-  'tgp-b-soi': 'TGP format, SOI: NARO, slewed by hand toward the chimney',
+  'tgp-b-soi': 'TGP format, SOI: NARO, on steerpoint 3',
+  'tgp-b-soi-cz': 'TGP format, SOI: NARO, slewed by hand toward the chimney, CZ shown',
   'tgp-b-on': 'TGP format: on the brickworks chimney, station 3 next',
   'tgp-b-on7': 'TGP format: on the chimney, station 7 next',
   'tgp-b-on7-soi': 'TGP format, SOI: on the chimney in Slave, CZ shown',
   'tgp-b-cz': 'TGP format, SOI: slews zeroed, CZ gone, back on steerpoint 3',
   'tgp-t': 'TGP format, AGM-65D selected: on steerpoint 5',
-  'tgp-t-soi': 'TGP format, SOI: slewed by hand toward the lead T-72',
+  'tgp-t-soi': 'TGP format, SOI: on steerpoint 5',
+  'tgp-t-soi-cz': 'TGP format, SOI: slewed by hand toward the lead T-72, CZ shown',
   'tgp-t-1': 'TGP format, SOI: on the T-72, correlator slewing (1)',
   'tgp-t-2': 'TGP format, SOI: on the T-72, correlator matching the pictures (2)',
   'tgp-t-T': 'TGP format, SOI: on the T-72, missile commanded to track (T)',
