@@ -18,9 +18,10 @@ pages: 36; 47; 83-87; 91; 99; 330; 671-691
 - The launch range scale's ends (maximum 8 NM, minimum 1 NM) are illustrative; the guide shows the staple but gives no values. The digit under the staple in the p. 673 image (a 7) is not drawn: the guide does not say what it is.
 - The tracking gate is drawn as the crosshairs stopping 18 px either side of the target; the guide says only that the crosshairs "expand to indicate the boundaries of the target".
 - WPN station: after the shot, station 7 is drawn at the right of the station row; the guide's images show only station 3. NOT SOI is placed from the p. 681 image. The SOI frame breaks round the WPN page's own words.
-- SMS: RDY appears only once the warm-up is over (the p. 672 image shows RDY with PWR OFF; not modelled). The warm-up is 3 minutes in the jet, a few seconds here. The sub-mode starts at BORE, and OSB 2 steps BORE → PRE.
+- SMS: RDY is drawn only once the warm-up is over, a simplification (RDY means armed and ready, p. 674; the p. 672 image shows it with PWR OFF). The procedure teaches NOT TIMED OUT going out as the warm-up cue (p. 679). RP is not explained: p. 672 limits it to the D and G, p. 687 does not. The warm-up is 3 minutes in the jet, a few seconds here. The sub-mode starts at BORE, and OSB 2 steps BORE → PRE.
+- WPN starting state (OPER, NOT SOI on first opening in BORE), station 3 firing before 7, and station 7's picture after the shot are illustrative.
 - HUD: only the master mode word (BORE, PRE) and ARM change; the PRE (CCRP-style) HUD symbology is not drawn and the procedure does not ask the reader to look at it.
 - The seeker video is generated art (ChatGPT, from Nathan) painted over to-scale placeholders (`scripts/maverick-placeholders.py`); it draws the vehicles about 2.5 to 3 times their true size at 4 NM.
 
 ## Reviews
-- Not yet reviewed.
+- 2026-11-23, Claude SME review of cbec052: READY, 0 blockers. Fixed after: RDY cue (now NOT TIMED OUT), RP dropped for the H, video polarity reworded, DMS aft caution, forced correlation at the end, "at least" 3 minutes, G force correlate in the table, close air support only.

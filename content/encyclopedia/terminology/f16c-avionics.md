@@ -175,7 +175,7 @@ terms:
     definition: "The system that hands a target from the targeting pod to a Maverick: it compares the pod's picture with the missile's and slews the seeker until they match, then commands the missile to track. A letter over the station on the WPN format shows how far it has got."
     cite: [{ n: 1, page: "671, 673, 687" }]
   - term: Video polarity
-    definition: "Whether a seeker or pod shows hot or bright things light on dark (hot-on-cold, HOC) or dark on light (cold-on-hot, COH). On the Maverick it is changed on the WPN format or with the TMS; the G and H models add AREA, for force correlate."
+    definition: "The contrast a seeker or pod works on: hot-on-cold (HOC) or cold-on-hot (COH). On the Maverick it is changed on the WPN format or with the TMS; the G and H models add AREA, for force correlate."
     cite: [{ n: 1, page: "674, 690" }]
   - term: Force correlate
     definition: "A Maverick tracking mode (AGM-65G and H, polarity AREA) that tracks a chosen part of the picture rather than the centre of a vehicle, so the missile hits that exact spot on a building or structure."
