@@ -564,10 +564,10 @@ export interface PanelSpec {
    */
   pads?: PadDef[];
   /**
-   * The part of the drawing a switch card shows as the whole device beside it (procedure steps), as a viewBox
-   * [x, y, w, h]: the grip views only, without icons and captions. Default: the whole canvas.
+   * The part of the drawing a switch card shows as the whole device beside it (procedure steps), as viewBoxes
+   * [x, y, w, h], one per view: the card shows the view its switch is on, without icons and captions. Default: the whole canvas.
    */
-  device?: [x: number, y: number, w: number, h: number];
+  device?: [x: number, y: number, w: number, h: number][];
 }
 
 /** A pop-out control pad: a four-way cross (`cross`, with a push in the middle, `centre`) and/or rows of positions (`controls`). */

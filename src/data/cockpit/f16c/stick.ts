@@ -150,6 +150,6 @@ export const stick: PanelSpec = {
     { id: 'pedals', name: 'Rudder pedals', controls: ['rudder'], device: false, face: STICK_FACES['pedals'] },
     { id: 'expand-fov', name: 'Expand/FOV (pinky) button', controls: ['expand-fov'], face: STICK_FACES['expand-fov'] },
   ],
-  // Beside a switch card: the two grip views without the captions (the pedals icon is left out as a card of its own).
-  device: [0, 0, 238, 228],
+  // Beside a switch card: the left-side or rear view, whichever the switch is on, without the captions or pedals icon.
+  device: [[4, 0, 136, 228], [146, 0, 92, 228]],
 };
