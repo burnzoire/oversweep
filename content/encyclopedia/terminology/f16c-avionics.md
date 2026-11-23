@@ -127,6 +127,30 @@ terms:
   - term: Steerpoint
     definition: "A numbered point stored in the navigation system for the jet to steer to; the HUD and EHSI show the course and distance to the selected one. Some number ranges are kept for markpoints, pre-planned threats and datalink targets."
     cite: [{ n: 1, page: "27, 205–206" }]
+  - term: SMS
+    expansion: Stores management system
+    definition: "The jet's weapons manager. Its MFD format picks the weapon, powers it and shows which stations carry it; the WPN format then shows that weapon's own sensor and modes."
+    cite: [{ n: 1, page: "659" }]
+  - term: POS mode
+    expansion: Position known
+    definition: "The HARM mode for a radar whose position is already known: the missile is told the radar type and flies toward the position until it hears the radar, then homes on its signal. Designating a radar on the HAD sets it."
+    cite: [{ n: 1, page: "539, 668" }]
+  - term: HAS mode
+    expansion: HARM as sensor
+    definition: "The HARM mode in which the missile's own seeker searches ahead of the jet for the radars on the chosen threat table and shows what it hears on the WPN format, for the pilot to pick one."
+    cite: [{ n: 1, page: "660–661" }]
+  - term: AMZ
+    expansion: Aircraft maneuver zone
+    definition: "The area from which a HARM can reach the target if the launching jet first turns toward it or lofts. Beyond it the missile cannot get there."
+    cite: [{ n: 1, page: "663" }]
+  - term: MMZ
+    expansion: Missile maneuver zone
+    definition: "The area from which a HARM can reach the target by its own manoeuvring alone, with no turn or loft needed first. The weapon release button is live only inside it."
+    cite: [{ n: 1, page: "663" }]
+  - term: HARM launch scale
+    expansion: HLS
+    definition: "The range staple on the right of the HUD in a POS shot: it spans the missile's minimum to maximum launch range, with a dash between the AMZ and the MMZ and a caret for the jet's present range."
+    cite: [{ n: 1, page: "663–664" }]
 sources:
   - n: 1
     title: "DCS: F-16C Viper Early Access Guide (English)"

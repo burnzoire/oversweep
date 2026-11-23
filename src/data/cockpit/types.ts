@@ -487,6 +487,11 @@ export interface HudDisplay {
   fields: HudField[];
   /** Boxes drawn round fields (radar altitude), relative to the boresight. */
   boxes: string[];
+  /**
+   * Weapon cues that come and go with the weapon (the HARM launch scale): one display indicator `id` whose pages each
+   * draw `art` (pen paths, relative to the boresight), `texts` and a `flash` path that blinks (the FOV box in range).
+   */
+  cues?: { id: string; pages: { id: string; art: string; texts: { t: string; at: Pt; anchor?: 'start' | 'middle' | 'end' }[]; flash?: string }[] };
 }
 
 /** The plate corner toward which the face plate is cut away around a DZUS. */

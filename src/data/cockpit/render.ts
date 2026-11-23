@@ -165,6 +165,7 @@ export function readings(spec: PanelSpec): Record<string, Reading> {
       const tape = (id: string, t: HudTape) => { out[id] = { kind: 'tape', per: t.axis === 'y' ? t.per : -t.per, axis: t.axis, format: t.readout.format, range: r(id, [t.from, t.to, 1]) }; };
       tape('velocity', h.velocity); tape('altitude', h.altitude); tape('heading', h.heading);
       for (const id of ['screen', 'velocity-mode']) page(id);
+      if (h.cues) page(h.cues.id);
       for (const f of h.fields) {
         if (ind(f.indicator)?.pages) page(f.indicator);
         else out[f.indicator] = { kind: 'number', format: f.format ?? {}, range: r(f.indicator, [0, 999, 1]) };
@@ -207,7 +208,7 @@ export function placementIndicators(p: Placement): string[] {
     case 'counter': return [p.counter.indicator];
     case 'text-display': case 'mfd-display': case 'blinker': case 'flag-window': case 'led-display': return [p.indicator];
     case 'hsi': return [...HSI_INDICATORS];
-    case 'hud': return [...HUD_INDICATORS, ...p.hud.fields.map(f => f.indicator)];
+    case 'hud': return [...HUD_INDICATORS, ...(p.hud.cues ? [p.hud.cues.id] : []), ...p.hud.fields.map(f => f.indicator)];
     case 'attitude': return ['pitch', 'roll', 'off-flag'];
     default: return [];
   }
@@ -461,7 +462,12 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
     return pre + `<g data-indicator="${f.indicator}">${body}</g>`;
   }).join('');
   const mode = `<g data-indicator="velocity-mode">${pages('velocity-mode', pg => hudText(h.velocityMode[0], h.velocityMode[1], word('velocity-mode', pg), F, 'middle'))}</g>`;
-  const on = `<g clip-path="url(#${clip})">` + fixed + steerpoint + attitude + rollArt +
+  const cues = h.cues ? `<g data-indicator="${h.cues.id}">${pages(h.cues.id, pg => {
+    const c = h.cues!.pages.find(q => q.id === pg)!;
+    return `<path d="${c.art}" ${pen}/>` + c.texts.map(t => hudText(t.at[0], t.at[1], t.t, F, t.anchor)).join('') +
+      (c.flash ? `<path d="${c.flash}" ${pen}><animate attributeName="opacity" values="1;0.15;1" dur="0.9s" repeatCount="indefinite"/></path>` : '');
+  })}</g>` : '';
+  const on = `<g clip-path="url(#${clip})">` + fixed + steerpoint + attitude + rollArt + cues +
     tape('velocity', h.velocity) + tape('altitude', h.altitude) + tape('heading', h.heading) + mode +
     h.boxes.map(d => `<path d="${d}" ${pen}/>`).join('') + fields + '</g>';
   return `<clipPath id="${clip}"><path d="${h.glass}"/></clipPath>` +

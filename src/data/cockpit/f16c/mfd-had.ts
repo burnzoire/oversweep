@@ -83,6 +83,13 @@ const OWN: P = [332.5, 421];
 const RINGS = [92.2, 184.4, 276.6];
 /** Threat radars (HTS-detected): the SA-6 the procedure works with and an SA-8. */
 const SA6: P = [254, 253], SA8: P = [428.3, 470];
+/**
+ * HARM POS weapon engagement zone (p. 532 image, EOM): a 14-sided outline, mirrored about the jet's centre line, from
+ * 19.4 NM ahead to 2.6 NM behind the jet (ownship at 332.5, 421) and 12.6 NM either side, at the 30 NM scale. Its real
+ * shape and size follow the profile, the jet's attitude, altitude and speed (p. 533 item 33); this is the guide's one example.
+ */
+const WEZ: P[] = ([[0, 178.5], [46, 169], [87, 146], [116, 116], [116, 48], [89, 0], [44, -19], [0, -24], [-44, -19], [-89, 0], [-116, 48], [-116, 116], [-87, 146], [-46, 169]] as P[])
+  .map(([dx, dy]): P => [OWN[0] + dx, OWN[1] - dy]);
 /** Flight members 2 and 3 (PPLI circles, heading stalk, altitude in thousands of feet below). */
 const MEMBERS: [string, P, P][] = [['2', [290.7, 445], [290.5, 470]], ['3', [380, 453.3], [379.3, 477.3]]];
 
@@ -177,6 +184,11 @@ interface HadState {
   pos?: P;
   /** Pre-planned threats from the DTC (p. 531 item 11): a ring the size of the threat's engagement zone, yellow, red once inside it. */
   ppt?: { at: P; nm: number }[];
+  /**
+   * AGM-88 selected in A-G and the HARM in POS mode (p. 532 items 32-33): the POS sub-mode word at the lower right and
+   * the weapon engagement zone about the jet; `handoff`: the designated radar has been handed to the missile (red box).
+   */
+  harm?: { handoff: boolean; wez: boolean; mode?: 'EOM' };
 }
 /**
  * Range scales (p. 531 item 6): DEP 15/30/60/120/240 NM, CEN 10/20/40/80/160 NM. Depressed keeps the ownship where
@@ -295,8 +307,18 @@ function had(id: string, s: HadState): Page {
   for (const th of s.threats ?? P539_THREATS) {
     const [x, y] = tf(v, th.at);
     if (!inside([x, y])) continue;
-    if (th.t === s.designated) { fills += desBox([x, y], th.t); words.push(w(th.t, x, y, undefined, true)); }
+    if (th.t === s.designated && s.harm?.handoff) { paths.push({ d: desBox([x, y], th.t), c: 'red', fill: true }); words.push(c(w(th.t, x, y, undefined, true), 'red')); }
+    else if (th.t === s.designated) { fills += desBox([x, y], th.t); words.push(w(th.t, x, y, undefined, true)); }
     else words.push(c(w(th.t, x, y), th.c));
+  }
+  if (s.harm && !s.cntl && !exp) {
+    words.push(w(s.harm.mode ?? 'EOM', 490, 500));
+    // The WEZ: the jet's reach, drawn ahead of it (screen up) and not turning with the picture; scaled with the range scale.
+    if (s.harm.wez) {
+      const [sx, sy] = sc.own;
+      const run = clipRuns(WEZ.map(([x, y]): P => [sx + (x - OWN[0]) * sc.k, sy + (y - OWN[1]) * sc.k]).concat([[sx + (WEZ[0][0] - OWN[0]) * sc.k, sy + (WEZ[0][1] - OWN[1]) * sc.k]]));
+      if (run) paths.push({ d: run, c: 'white', pen: 'fine' });
+    }
   }
   if (s.soi && !s.designated && !s.free && !s.cntl) marks += cursor(exp ? [329.5, 330] : cur);
   const page: Page = { id, words, marks, fine, fills, paths };
@@ -399,7 +421,30 @@ const hadx: Page[] = [
   had('hadx-t-notsoi', { ...base, soi: false, threats: T_TURN(true), nav2: false, scale: 'DEP60', rot: TURN, designated: '11', data: PGM[2], pos: FLOWN }),
   had('hadx-t-tracked', { ...base, soi: false, threats: T_TURN(true), nav2: false, scale: 'DEP60', rot: TURN, pos: FLOWN }),
 ];
+/**
+ * The HARM shot's HAD (the advanced procedure's sortie a little later): the jet is where the turn left it, with the
+ * SA-11 about 55° off the nose; closing, it has flown on toward the radar and turned to face it. Ranges and the
+ * 17 NM standoff are illustrative.
+ */
+/** The jet has turned back 30° toward the radar (heading 20° left of north), so the SA-11 is about 36° right of the nose. */
+const HROT = 20;
+const AFTER_TURN = { ...base, threats: T_TURN(true), nav2: false, scale: 'DEP60' as const, rot: HROT, pos: FLOWN };
+const closeIn = (): { pos: P; rot: number } => {
+  const dx = FLOWN[0] - SA11[0], dy = FLOWN[1] - SA11[1], len = Math.hypot(dx, dy), pos: P = [SA11[0] + (dx / len) * 17 * NM, SA11[1] + (dy / len) * 17 * NM];
+  // Heading-up: the picture swings so the radar is straight ahead (rot = minus the heading, east positive).
+  return { pos, rot: -(Math.atan2(SA11[0] - pos[0], -(SA11[1] - pos[1])) * 180) / Math.PI };
+};
+const CLOSE = closeIn();
+const harmCases: Page[] = [
+  had('hadh', { ...AFTER_TURN }),
+  had('hadh-hover', { ...AFTER_TURN, cursor: SA11, data: PGM[2] }),
+  had('hadh-free', { ...AFTER_TURN, free: true }),
+  had('hadh-des', { ...AFTER_TURN, designated: '11', data: PGM[2], harm: { handoff: true, wez: true } }),
+  had('hadh-close', { ...base, threats: T_TURN(true), nav2: false, scale: 'DEP60', rot: CLOSE.rot, pos: CLOSE.pos, designated: '11', data: PGM[2], harm: { handoff: true, wez: true } }),
+];
+hadx.push(...harmCases);
 /** Where things are on the advanced pages (p. 539 px), for hint rings and the cursor slew. */
+export const HADH = { sa11: hadAt('DEP60', HROT, SA11, FLOWN), slew: { ...HAD_SLEW, start: local([329.5, 330]), target: local(hadAt('DEP60', HROT, SA11, FLOWN)) } };
 export const HADX = {
   sa11: hadAt('DEP60', 0, SA11), sa11Turned: hadAt('DEP60', TURN, SA11, FLOWN), sa6Turned: hadAt('DEP60', TURN, SA6X, FLOWN), sa6At60: hadAt('DEP60', 0, SA6X),
   slew: { ...HAD_SLEW, target: local(hadAt('DEP60', 0, SA11)) },
@@ -446,4 +491,9 @@ export const hadPageLabels: Record<string, string> = {
   'hadx-t-des6': 'HAD: TMS right stepped to the SA-6',
   'hadx-t-notsoi': 'HAD not SOI, SA-11 still designated',
   'hadx-t-tracked': 'HAD not SOI, designation dropped once the pod tracks',
+  hadh: 'HAD after the turn, AGM-88 in HAS: SOI, cursor centred, the SA-11 yellow',
+  'hadh-hover': 'HAD after the turn, AGM-88 in HAS: cursor on the SA-11, PGM2',
+  'hadh-free': 'HAD after the turn: cursor being slewed',
+  'hadh-des': 'HAD: SA-11 designated and handed off to the AGM-88 (red box), POS EOM, engagement zone drawn',
+  'hadh-close': 'HAD: closing on the SA-11, now inside the engagement zone',
 };

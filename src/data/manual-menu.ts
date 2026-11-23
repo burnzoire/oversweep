@@ -112,7 +112,7 @@ const phases: MenuNode[] = [
 const emergency = plan('Emergency procedures', ['Engine failure and flameout', 'Engine relight', 'Engine fire', 'Electrical failure', 'Hydraulic failure', 'FLCS failure', 'EPU activation', 'Fuel system malfunction', 'Landing gear malfunction', 'Ejection decision']);
 
 const weapons = group('f16c-weapons', 'Weapons and tactics', [
-  group('weapons-sead', 'SEAD', [plan('AGM-88 HARM', ['POS shot', 'HAS shot', 'HTS handoff shot'])], `${F16C_HREF}weapons-and-tactics/sead/`, 'Hunting and killing radars with the HARM.'),
+  group('weapons-sead', 'SEAD', [group('weapon-agm-88', 'AGM-88 HARM', [plan('POS shot'), plan('HAS shot'), { ...proc('harm-hts-shot'), title: 'HTS handoff shot' }], `${F16C_HREF}weapons-and-tactics/sead/agm-88/`, 'Arming, targeting and firing the HARM: from the HTS, from a known position, or with its own seeker.')], `${F16C_HREF}weapons-and-tactics/sead/`, 'Hunting and killing radars with the HARM.'),
   group('weapons-air-to-air', 'Air-to-air weapons', [
     plan('Dogfight and missile override modes', ['Dogfight mode', 'Missile override mode']),
     plan('AIM-120 AMRAAM', ['Pre-planned and maddog shot', 'Defensive shot']),
