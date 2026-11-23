@@ -211,6 +211,16 @@ everything that stands proud of it.
   `faint` engraving path.
 - Real-part datasheets (e.g. Honeywell TL series) are fine for a component's
   shape; panel layout still traces from the sim guide only.
+- **Switch cards in procedures show the whole device (Nathan, 2026-11-24).** A
+  HOTAS card (`panels: ['stick:tms']`) is split in two equal halves: the
+  device (the grip view the switch is on, from `PanelSpec.device`) and the
+  interactive face card. The switch is called out by a thick ring in the focus
+  blue `#1f6fd6`, centred on the drawn switch, with a leader of the same
+  thickness running to the card. Never yellow (yellow rings are the on-demand
+  hints from underlined words), no fills or fades, no icons or captions on the
+  device (`PadDef.device: false` for cards not on it, like the rudder pedals).
+  Use the same callout for any future "where is it" locator (e.g. a console
+  with the active panel).
 
 ## 3b. Pointer dials (gauges)
 
