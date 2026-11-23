@@ -64,6 +64,8 @@ const DEG = 7.26;
 /** The crosshairs run edge to edge of the format (p. 673: x 100-478, y 97-460); tracking, they open round the target. */
 /** Tracking: the crosshairs close in round the lead tank (its half-length in the narrow picture) and work on it. */
 const GATE = 10;
+/** Not tracking, the crosshairs stand open round the middle of the picture (gap assumed; Nathan, from the sim). */
+const OPEN = 36;
 function crosshairs(gate = 0) {
   if (!gate) return poly([[108, CY], [548, CY]]) + poly([[CX, 102], [CX, 534]]);
   return poly([[108, CY], [CX - gate, CY]]) + poly([[CX + gate, CY], [548, CY]]) + poly([[CX, 102], [CX, CY - gate]]) + poly([[CX, CY + gate], [CX, 534]]);
@@ -126,7 +128,7 @@ function wpn(s: Wpn): Page {
   const sx = s.station === '3' ? 132 : 505;
   return {
     id: s.id, words, video: s.video, ...(s.pan ? { pan: true, videoScale: MAV_VIDEO_K, cursor: { d: '', at: MAV_SLEW.start } } : { videoScale: MAV_VIDEO_K }),
-    marks: (s.track ? '' : crosshairs()) + DEPRESSION + pointer(...s.ptr) + (s.wide ? BRACKETS : '') + (s.range ? LAR_STAPLE : ''),
+    marks: (s.track ? '' : crosshairs(OPEN)) + DEPRESSION + pointer(...s.ptr) + (s.wide ? BRACKETS : '') + (s.range ? LAR_STAPLE : ''),
     fine: s.soi ? FRAME : '',
     paths: [...(s.track ? [{ d: crosshairs(GATE), alt: crosshairs(GATE + 3), c: 'white' as const }] : []), { d: poly([[sx - 7, 463.5], [sx + 7, 463.5], [sx + 7, 480.5], [sx - 7, 480.5]], true), c: 'white', pen: 'fine' }],
   };
