@@ -76,6 +76,48 @@ const padZones = (p: (typeof pads)[number], hb: Box): Zone[] => {
   return z;
 };
 const shownPads = only ? pads.filter(p => only.includes(p.id)) : pads;
+/**
+ * A switch card shown alone (procedure step) carries the whole device beside it, with the card's switch painted
+ * yellow, so the reader sees where on the grip it sits. The device is a picture only: the card is what you work.
+ */
+const DVS = spec.device ?? [[0, 0, W, H]];
+const deviceSvg = art.replace(/role="img" aria-label="[^"]*"/, 'aria-hidden="true" focusable="false"');
+/**
+ * A callout points out the card's switch on the device, as a flight-manual figure does: a dot on the drawn switch
+ * (the outline of its rest position, at each place it shows) and a leader line out to the right edge, toward the card.
+ * A switch drawn with no outline falls back to its click areas.
+ */
+const drawnBox = (c: string): Box[] => {
+  const out: Box[] = [];
+  for (const m of art.matchAll(new RegExp(`data-move="${c}">`, 'g'))) {
+    const rest = art.slice(m.index!, m.index! + 400).match(new RegExp(`<g data-pos="${control(c).initial}"[^>]*>`));
+    const from = rest ? m.index! + art.slice(m.index!).indexOf(rest[0]) : m.index!;
+    const d = art.slice(from, from + 200000).match(/<path d="([^"]+)" fill="var\(--panel-paper/)?.[1];
+    if (!d) continue;
+    const n = d.match(/-?\d+(?:\.\d+)?/g)!.map(Number), xs = n.filter((_, i) => i % 2 === 0), ys = n.filter((_, i) => i % 2 === 1);
+    const x0 = Math.min(...xs), y0 = Math.min(...ys);
+    out.push([x0, y0, Math.max(...xs) - x0, Math.max(...ys) - y0]);
+  }
+  return out;
+};
+/** The view the card's switch shows on (the first, if it shows on more than one), cropped, with a thick ring round it. */
+const deviceView = (p: (typeof pads)[number]) => {
+  const boxes = padControls(p).flatMap(c => { const d = drawnBox(c); return d.length ? d : zones.filter(z => z.kind === 'control' && z.id === c).map(z => z.box); });
+  const inView = (v: Box, [x, y, w, h]: Box) => x + w / 2 >= v[0] && x + w / 2 <= v[0] + v[2] && y + h / 2 >= v[1] && y + h / 2 <= v[1] + v[3];
+  const view = DVS.find(v => boxes.some(b => inView(v, b))) ?? DVS[0];
+  const mine = boxes.filter(b => inView(view, b));
+  const x0 = Math.min(...mine.map(b => b[0])), y0 = Math.min(...mine.map(b => b[1]));
+  const x1 = Math.max(...mine.map(b => b[0] + b[2])), y1 = Math.max(...mine.map(b => b[1] + b[3]));
+  // A first guess from the outlines' points; the page script re-centres it on the switch's true drawn extent.
+  const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, r = Math.max(0.055 * Math.max(view[2], view[3]), Math.max(x1 - x0, y1 - y0) / 2 + 4.5);
+  const ring = mine.length ? `<g data-device-ring="${padControls(p).join(' ')}" data-view="${view.join(' ')}" fill="none" stroke="#1f6fd6" stroke-linecap="round"><circle cx="${+cx.toFixed(2)}" cy="${+cy.toFixed(2)}" r="${+r.toFixed(2)}" stroke-width="2.8"/></g>` : '';
+  return { ratio: view[2] / view[3], // The view sits in a nested svg whose viewport is the view itself, so the neighbouring view is clipped off and
+  // never shows in the letterbox when the half is wider than the view.
+  svg: `<svg viewBox="${view.join(' ')}" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">` + deviceSvg.replace(/<svg ([^>]*?)viewBox="[^"]*"([^>]*)>/, `<svg $1x="${view[0]}" y="${view[1]}" width="${view[2]}" height="${view[3]}" viewBox="${view.join(' ')}"$2>`).replace(/<\/svg>\s*$/, ring + '</svg></svg>') };
+};
+// Controls whose cards stand alone (rudder pedals) are not part of the device, so they are left off it.
+const offDevice = pads.filter(p => p.device === false).flatMap(padControls);
+const deviceCss = (p: (typeof pads)[number]) => offDevice.length ? offDevice.map(c => `.cp-device-${spec.id}-${p.id} [data-move="${c}"]`).join(',') + '{display:none}' : '';
 if (only && shownPads.length !== only.length) throw new Error(`${spec.id}: no pad ${only.filter(o => !pads.some(p => p.id === o)).join(', ')}`);
 const posLabel = (c: ControlDef, p: string) => c.positions.find(x => x.id === p)?.label ?? p;
 /** The position a pushbutton is pressed to (its first non-initial position). */
@@ -119,6 +161,8 @@ const dirLabels = (id: string) => {
       {shownPads.map(p => { const v = padView(p); return (
         <section class="cp-pad" data-pad={p.id} hidden={!only} aria-label={p.name}>
           <header class="cp-pad-head"><strong>{p.name}</strong>{!only && <button type="button" class="cp-pad-close" data-pad-close aria-label={`Close the ${p.name} controls`}>Close</button>}</header>
+          <div class:list={[only && p.device !== false && 'cp-split']}>
+          {only && p.device !== false && <figure class:list={['cp-device', `cp-device-${spec.id}-${p.id}`]}><Fragment set:html={`<style>${deviceCss(p)}</style>${deviceView(p).svg}`} /></figure>}
           <div class="cp-zoom" style={`aspect-ratio:${v.ratio}`}><Fragment set:html={v.svg} />
             {padZones(p, v.hit).map(z => {
               const [fx, fy, fw, fh] = v.frame;
@@ -131,6 +175,7 @@ const dirLabels = (id: string) => {
               const style = `left:${pct(b[0] - fx, fw)};top:${pct(b[1] - fy, fh)};width:${pct(b[2], fw)};height:${pct(b[3], fh)}`;
               return <div class="cp-joystick" style={style} data-joystick={JSON.stringify({ pad: p.id, cross: p.cross, centre: p.centre })} aria-hidden="true"><span class="cp-joy-knob" hidden></span></div>;
             })()}
+          </div>
           </div>
           {(p.controls ?? []).filter(id => control(id).type === 'rotary').map(id => <p class="cp-readout"><output data-position-of={`${spec.id}.${id}`}></output></p>)}
         </section>
@@ -171,12 +216,18 @@ const dirLabels = (id: string) => {
 .cp-pad[hidden],.cp-stage[hidden]{display:none}
 .cp-cards{max-width:100%}
 .cp-cards .cp-pads{display:flex;flex-wrap:wrap;gap:.75rem}
-.cp-cards .cp-pad{flex:1 1 16rem;margin-top:0}
+.cp-cards .cp-pad{flex:1 1 20rem;margin-top:0}
 .cp-zoom{max-height:14rem;margin:0 auto .5rem;max-width:100%}
 .cp-zoom :global(svg){display:block;width:100%;height:100%}
 .cp-pad-head{display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-bottom:.5rem}
 .cp-pad-close{font:inherit;font-size:.9rem;border:1px solid var(--color-border,#999);background:var(--panel-paper);padding:.2rem .6rem;cursor:pointer}
 .cp-zoom{position:relative}
+.cp-split{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:.6rem;align-items:center}
+.cp-split .cp-zoom{margin:0;width:100%}
+.cp-device{margin:0;height:14rem;max-height:55vw;border-right:1px solid var(--color-border,#ccc)}
+.cp-device > :global(svg){display:block;width:100%;height:100%}
+.cp-device :global(text){display:none}
+.cp-split :global(.cp-leader){position:absolute;background:#1f6fd6;border-radius:0 2px 2px 0;transform:translateY(-50%);pointer-events:none}
 .cp-zone{position:absolute;padding:0;margin:0;border:0;background:transparent;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .cp-zone-up{clip-path:polygon(0 0,100% 0,50% 50%)}.cp-zone-down{clip-path:polygon(0 100%,100% 100%,50% 50%)}
 .cp-zone-left{clip-path:polygon(0 0,0 100%,50% 50%)}.cp-zone-right{clip-path:polygon(100% 0,100% 100%,50% 50%)}
@@ -215,6 +266,32 @@ const save = (aircraft: string, s: Record<string, string>) => {
   try { sessionStorage.setItem(storeKey(aircraft), JSON.stringify(s)); } catch { /* storage unavailable: state lasts for this page only */ }
 };
 
+// Centre each device ring on its switch as drawn (true geometry, not the outline's control points), and run its
+// leader line from the ring out to the view's right edge, at the divider beside the card.
+for (const g of document.querySelectorAll<SVGGElement>('[data-device-ring]')) {
+  const fit = () => {
+    const parts = g.dataset.deviceRing!.split(' ').flatMap(c => [...g.ownerSVGElement!.querySelectorAll<SVGGraphicsElement>(`[data-move="${c}"] > [data-pos]:not([display="none"])`)]);
+    const [vx, vy, vw, vh] = g.dataset.view!.split(' ').map(Number);
+    const boxes = parts.map(e => e.getBBox()).filter(b => b.width && b.x + b.width / 2 >= vx && b.x + b.width / 2 <= vx + vw && b.y + b.height / 2 >= vy && b.y + b.height / 2 <= vy + vh);
+    if (!boxes.length) return;
+    const x0 = Math.min(...boxes.map(b => b.x)), y0 = Math.min(...boxes.map(b => b.y)), x1 = Math.max(...boxes.map(b => b.x + b.width)), y1 = Math.max(...boxes.map(b => b.y + b.height));
+    const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, r = Math.max(0.055 * Math.max(vw, vh), Math.max(x1 - x0, y1 - y0) / 2 + 4.5);
+    const c = g.querySelector('circle')!;
+    c.setAttribute('cx', cx.toFixed(2)); c.setAttribute('cy', cy.toFixed(2)); c.setAttribute('r', r.toFixed(2));
+    // The leader runs from the ring, across the divider, to the switch on the card.
+    const split = g.closest<HTMLElement>('.cp-split');
+    const faces = [...(split?.querySelectorAll('.cp-zoom [data-move] > [data-pos]:not([display="none"])') ?? [])].map(e => e.getBoundingClientRect()).filter(b => b.width);
+    if (!split || !faces.length) return;
+    const s = split.getBoundingClientRect(), ring = c.getBoundingClientRect(), k = g.ownerSVGElement!.getScreenCTM()?.a ?? 1;
+    let lead = split.querySelector<HTMLElement>('.cp-leader');
+    if (!lead) { lead = document.createElement('span'); lead.className = 'cp-leader'; lead.setAttribute('aria-hidden', 'true'); split.append(lead); }
+    const from = ring.right, to = Math.min(...faces.map(b => b.left)) - 6;
+    lead.style.left = `${from - s.left}px`; lead.style.top = `${ring.top + ring.height / 2 - s.top}px`;
+    lead.style.width = `${Math.max(0, to - from)}px`; lead.style.height = `${+c.getAttribute('stroke-width')! * k || 2.8 * k}px`;
+  };
+  const watch = () => { fit(); const ro = new ResizeObserver(fit); ro.observe(g.closest('.cp-split') ?? g.ownerSVGElement!); ro.observe(g.closest('figure') ?? g.ownerSVGElement!); };
+  if (g.getBoundingClientRect().width) watch(); else new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { o.disconnect(); watch(); } }).observe(g.ownerSVGElement!);
+}
 for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]')) {
   const def: Def = JSON.parse(root.querySelector('[data-cockpit-def]')!.textContent!);
   const svg = root.querySelector('svg')!;
