@@ -84,12 +84,18 @@ const RINGS = [92.2, 184.4, 276.6];
 /** Threat radars (HTS-detected): the SA-6 the procedure works with and an SA-8. */
 const SA6: P = [254, 253], SA8: P = [428.3, 470];
 /**
- * HARM POS weapon engagement zone (p. 532 image, EOM): a 14-sided outline, mirrored about the jet's centre line, from
+ * HARM POS weapon engagement zone (p. 532 image, EOM) drawn as a lobe, mirrored about the jet's centre line, from
  * 19.4 NM ahead to 2.6 NM behind the jet (ownship at 332.5, 421) and 12.6 NM either side, at the 30 NM scale. Its real
  * shape and size follow the profile, the jet's attitude, altitude and speed (p. 533 item 33); this is the guide's one example.
  */
-const WEZ: P[] = ([[0, 178.5], [46, 169], [87, 146], [116, 116], [116, 48], [89, 0], [44, -19], [0, -24], [-44, -19], [-89, 0], [-116, 48], [-116, 116], [-87, 146], [-46, 169]] as P[])
-  .map(([dx, dy]): P => [OWN[0] + dx, OWN[1] - dy]);
+const WEZ: P[] = (() => {
+  // A lobe: narrow at the jet, widest about 40% of the way out (12.6 NM either side) and closing to a rounded tip 19.4 NM ahead.
+  const back = -24, ahead = 178.5, half = 116, n = 24;
+  const w = (u: number) => half * Math.sin(Math.PI * u ** 0.75) ** 0.8;
+  const side = Array.from({ length: n + 1 }, (_, k): [number, number] => { const u = k / n; return [w(u), back + u * (ahead - back)]; });
+  return [...side.map(([x, y]) => [x, y] as [number, number]), ...side.slice(1, -1).reverse().map(([x, y]) => [-x, y] as [number, number])]
+    .map(([dx, dy]): P => [OWN[0] + dx, OWN[1] - dy]);
+})();
 /** Flight members 2 and 3 (PPLI circles, heading stalk, altitude in thousands of feet below). */
 const MEMBERS: [string, P, P][] = [['2', [290.7, 445], [290.5, 470]], ['3', [380, 453.3], [379.3, 477.3]]];
 
@@ -424,13 +430,13 @@ const hadx: Page[] = [
 /**
  * The HARM shot's HAD (the advanced procedure's sortie a little later): the jet is where the turn left it, with the
  * SA-11 about 55° off the nose; closing, it has flown on toward the radar and turned to face it. Ranges and the
- * 17 NM standoff are illustrative.
+ * 12 NM standoff are illustrative.
  */
 /** The jet has turned back 30° toward the radar (heading 20° left of north), so the SA-11 is about 36° right of the nose. */
 const HROT = 20;
 const AFTER_TURN = { ...base, threats: T_TURN(true), nav2: false, scale: 'DEP60' as const, rot: HROT, pos: FLOWN };
 const closeIn = (): { pos: P; rot: number } => {
-  const dx = FLOWN[0] - SA11[0], dy = FLOWN[1] - SA11[1], len = Math.hypot(dx, dy), pos: P = [SA11[0] + (dx / len) * 17 * NM, SA11[1] + (dy / len) * 17 * NM];
+  const dx = FLOWN[0] - SA11[0], dy = FLOWN[1] - SA11[1], len = Math.hypot(dx, dy), pos: P = [SA11[0] + (dx / len) * 17 * NM, SA11[1] + (dy / len) * 12 * NM];
   // Heading-up: the picture swings so the radar is straight ahead (rot = minus the heading, east positive).
   return { pos, rot: -(Math.atan2(SA11[0] - pos[0], -(SA11[1] - pos[1])) * 180) / Math.PI };
 };
