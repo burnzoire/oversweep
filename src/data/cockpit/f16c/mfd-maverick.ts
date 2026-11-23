@@ -62,10 +62,11 @@ const [CX, CY] = MAV_CROSS;
 /** Pointer cross and reticle depression: 30.5 image px per 5 degrees (p. 673), so 7.26 grid px a degree. */
 const DEG = 7.26;
 /** The crosshairs run edge to edge of the format (p. 673: x 100-478, y 97-460); tracking, they open round the target. */
-/** Tracking: the crosshairs close right in on the lead tank and jiggle as the tracker holds it. */
-const GATE = 4;
-/** Not tracking, the crosshairs stand open round the middle of the picture (gap assumed; Nathan, from the sim). */
-const OPEN = 36;
+/**
+ * Not tracking, the crosshairs stand open round the middle of the picture; locked on a target this small they close
+ * (sim screenshots from Nathan: a gap about 7% of the glass before lock, unbroken lines at lock).
+ */
+const OPEN = 18;
 function crosshairs(gate = 0, dx = 0, dy = 0) {
   const x = CX + dx, y = CY + dy;
   if (!gate) return poly([[108, y], [548, y]]) + poly([[x, 102], [x, 534]]);
@@ -129,9 +130,9 @@ function wpn(s: Wpn): Page {
   const sx = s.station === '3' ? 132 : 505;
   return {
     id: s.id, words, video: s.video, ...(s.pan ? { pan: true, videoScale: MAV_VIDEO_K, cursor: { d: '', at: MAV_SLEW.start } } : { videoScale: MAV_VIDEO_K }),
-    marks: (s.track ? '' : crosshairs(OPEN)) + DEPRESSION + pointer(...s.ptr) + (s.wide ? BRACKETS : '') + (s.range ? LAR_STAPLE : ''),
+    marks: crosshairs(s.track ? 0 : OPEN) + DEPRESSION + pointer(...s.ptr) + (s.wide ? BRACKETS : '') + (s.range ? LAR_STAPLE : ''),
     fine: s.soi ? FRAME : '',
-    paths: [...(s.track ? [{ d: crosshairs(GATE), alt: crosshairs(GATE, 1.5, -1.2), c: 'white' as const }] : []), { d: poly([[sx - 7, 463.5], [sx + 7, 463.5], [sx + 7, 480.5], [sx - 7, 480.5]], true), c: 'white', pen: 'fine' }],
+    paths: [{ d: poly([[sx - 7, 463.5], [sx + 7, 463.5], [sx + 7, 480.5], [sx - 7, 480.5]], true), c: 'white', pen: 'fine' }],
   };
 }
 
