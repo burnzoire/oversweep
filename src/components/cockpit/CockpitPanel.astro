@@ -76,6 +76,17 @@ const padZones = (p: (typeof pads)[number], hb: Box): Zone[] => {
   return z;
 };
 const shownPads = only ? pads.filter(p => only.includes(p.id)) : pads;
+/**
+ * A switch card shown alone (procedure step) carries the whole device beside it, with the card's switch painted
+ * yellow, so the reader sees where on the grip it sits. The device is a picture only: the card is what you work.
+ */
+const deviceArt = art.replace(/role="img" aria-label="[^"]*"/, 'aria-hidden="true" focusable="false"');
+/** Small switches get lost at this size, so a yellow ring circles each place the card's switch shows on the device. */
+const deviceRing = (p: (typeof pads)[number]) => deviceArt.replace(/<\/svg>\s*$/, zones.filter(z => z.kind === 'control' && padControls(p).includes(z.id)).map(z => {
+  const [x, y, w, h] = z.box, r = Math.max(w, h) / 2 + 3;
+  return `<circle cx="${+(x + w / 2).toFixed(2)}" cy="${+(y + h / 2).toFixed(2)}" r="${+r.toFixed(2)}" fill="none" stroke="#e6b800" stroke-width="1.6"/>`;
+}).join('') + '</svg>');
+const deviceHl = (p: (typeof pads)[number]) => padControls(p).map(c => `.cp-device-${spec.id}-${p.id} [data-move="${c}"] path:is([fill^="var(--panel-paper"],[fill^="var(--panel-red"],[fill="#fff"])`).join(',') + '{fill:#f2c200}';
 if (only && shownPads.length !== only.length) throw new Error(`${spec.id}: no pad ${only.filter(o => !pads.some(p => p.id === o)).join(', ')}`);
 const posLabel = (c: ControlDef, p: string) => c.positions.find(x => x.id === p)?.label ?? p;
 /** The position a pushbutton is pressed to (its first non-initial position). */
@@ -119,6 +130,8 @@ const dirLabels = (id: string) => {
       {shownPads.map(p => { const v = padView(p); return (
         <section class="cp-pad" data-pad={p.id} hidden={!only} aria-label={p.name}>
           <header class="cp-pad-head"><strong>{p.name}</strong>{!only && <button type="button" class="cp-pad-close" data-pad-close aria-label={`Close the ${p.name} controls`}>Close</button>}</header>
+          <div class:list={[only && 'cp-split']}>
+          {only && <figure class:list={['cp-device', `cp-device-${spec.id}-${p.id}`]} style={`aspect-ratio:${W / H}`}><Fragment set:html={`<style>${deviceHl(p)}</style>` + deviceRing(p)} /></figure>}
           <div class="cp-zoom" style={`aspect-ratio:${v.ratio}`}><Fragment set:html={v.svg} />
             {padZones(p, v.hit).map(z => {
               const [fx, fy, fw, fh] = v.frame;
@@ -131,6 +144,7 @@ const dirLabels = (id: string) => {
               const style = `left:${pct(b[0] - fx, fw)};top:${pct(b[1] - fy, fh)};width:${pct(b[2], fw)};height:${pct(b[3], fh)}`;
               return <div class="cp-joystick" style={style} data-joystick={JSON.stringify({ pad: p.id, cross: p.cross, centre: p.centre })} aria-hidden="true"><span class="cp-joy-knob" hidden></span></div>;
             })()}
+          </div>
           </div>
           {(p.controls ?? []).filter(id => control(id).type === 'rotary').map(id => <p class="cp-readout"><output data-position-of={`${spec.id}.${id}`}></output></p>)}
         </section>
@@ -171,12 +185,16 @@ const dirLabels = (id: string) => {
 .cp-pad[hidden],.cp-stage[hidden]{display:none}
 .cp-cards{max-width:100%}
 .cp-cards .cp-pads{display:flex;flex-wrap:wrap;gap:.75rem}
-.cp-cards .cp-pad{flex:1 1 16rem;margin-top:0}
+.cp-cards .cp-pad{flex:1 1 20rem;margin-top:0}
 .cp-zoom{max-height:14rem;margin:0 auto .5rem;max-width:100%}
 .cp-zoom :global(svg){display:block;width:100%;height:100%}
 .cp-pad-head{display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-bottom:.5rem}
 .cp-pad-close{font:inherit;font-size:.9rem;border:1px solid var(--color-border,#999);background:var(--panel-paper);padding:.2rem .6rem;cursor:pointer}
 .cp-zoom{position:relative}
+.cp-split{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;align-items:center}
+.cp-split .cp-zoom{margin:0;width:100%}
+.cp-device{margin:0;max-height:14rem;width:100%;border-right:1px solid var(--color-border,#ccc);padding-right:.6rem}
+.cp-device :global(svg){display:block;width:100%;height:100%}
 .cp-zone{position:absolute;padding:0;margin:0;border:0;background:transparent;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .cp-zone-up{clip-path:polygon(0 0,100% 0,50% 50%)}.cp-zone-down{clip-path:polygon(0 100%,100% 100%,50% 50%)}
 .cp-zone-left{clip-path:polygon(0 0,0 100%,50% 50%)}.cp-zone-right{clip-path:polygon(100% 0,100% 100%,50% 50%)}
