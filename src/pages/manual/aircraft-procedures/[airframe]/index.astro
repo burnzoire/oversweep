@@ -36,13 +36,13 @@ const node = manualMenu.find(n => n.id === 'area-aircraft')?.children?.find(n =>
       <div class="briefing-copy">
         <p class="sim-variant">DCS World · Block 50</p>
         <h1>{airframe.title}</h1>
+        <p>The Viper is a small single-seat fighter. You sit low in a compact cockpit under a bubble canopy with a clear view all round, and in the Block 50 you can also fly the Wild Weasel role, hunting radars for <Term>SEAD</Term>.</p>
+        <p>Learn the cockpit first, then work through the procedures from engine start to engaging radars.</p>
         {reference && (
           <aside class="airframe-reference" aria-label="Aircraft reference">
             Read the <a href={sitePath(recordRoute(reference))}>{reference.title}</a> article in the Encyclopedia.
           </aside>
         )}
-        <p>The Viper is a small single-seat fighter. You sit low in a compact cockpit under a bubble canopy with a clear view all round, and in the Block 50 you can also fly the Wild Weasel role, hunting radars for <Term>SEAD</Term>.</p>
-        <p>Learn the cockpit first, then work through the procedures from engine start to engaging radars.</p>
       </div>
       {hero && (
         <img
