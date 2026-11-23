@@ -81,12 +81,40 @@ const shownPads = only ? pads.filter(p => only.includes(p.id)) : pads;
  * yellow, so the reader sees where on the grip it sits. The device is a picture only: the card is what you work.
  */
 const DV = spec.device ?? [0, 0, W, H];
-const deviceArt = art.replace(/role="img" aria-label="[^"]*"/, 'aria-hidden="true" focusable="false"').replace(/viewBox="[^"]*"/, `viewBox="${DV.join(' ')}"`);
+const deviceArt = art.replace(/role="img" aria-label="[^"]*"/, 'aria-hidden="true" focusable="false"').replace(/viewBox="[^"]*"/, `viewBox="${DV.join(' ')}" preserveAspectRatio="xMaxYMid meet"`);
 /**
- * The device is drawn faded, with the card's switch on top in full ink: a second copy of the drawing that shows
- * only that switch (visibility is inherited, so the switch's groups can turn back on inside a hidden drawing).
+ * A callout points out the card's switch on the device, as a flight-manual figure does: a dot on the drawn switch
+ * (the outline of its rest position, at each place it shows) and a leader line out to the right edge, toward the card.
+ * A switch drawn with no outline falls back to its click areas.
  */
-const deviceOn = (p: (typeof pads)[number]) => padControls(p).map(c => `.cp-device-${spec.id}-${p.id} .cp-device-on [data-move="${c}"]`).join(',') + '{visibility:visible}';
+const drawnBox = (c: string): Box[] => {
+  const out: Box[] = [];
+  for (const m of art.matchAll(new RegExp(`data-move="${c}">`, 'g'))) {
+    const rest = art.slice(m.index!, m.index! + 400).match(new RegExp(`<g data-pos="${control(c).initial}"[^>]*>`));
+    const from = rest ? m.index! + art.slice(m.index!).indexOf(rest[0]) : m.index!;
+    const d = art.slice(from, from + 200000).match(/<path d="([^"]+)" fill="var\(--panel-paper/)?.[1];
+    if (!d) continue;
+    const n = d.match(/-?\d+(?:\.\d+)?/g)!.map(Number), xs = n.filter((_, i) => i % 2 === 0), ys = n.filter((_, i) => i % 2 === 1);
+    const x0 = Math.min(...xs), y0 = Math.min(...ys);
+    out.push([x0, y0, Math.max(...xs) - x0, Math.max(...ys) - y0]);
+  }
+  return out;
+};
+const deviceCallout = (p: (typeof pads)[number]) => {
+  const boxes = padControls(p).flatMap(c => { const d = drawnBox(c); return d.length ? d : zones.filter(z => z.kind === 'control' && z.id === c).map(z => z.box); });
+  const groups: Box[] = [];
+  for (const [x, y, w, h] of boxes) {
+    const g = groups.findIndex(([gx, gy, gw, gh]) => x < gx + gw && gx < x + w && y < gy + gh && gy < y + h);
+    if (g < 0) { groups.push([x, y, w, h]); continue; }
+    const [gx, gy, gw, gh] = groups[g], x0 = Math.min(gx, x), y0 = Math.min(gy, y);
+    groups[g] = [x0, y0, Math.max(gx + gw, x + w) - x0, Math.max(gy + gh, y + h) - y0];
+  }
+  const right = DV[0] + DV[2];
+  return deviceArt.replace(/<\/svg>\s*$/, groups.map(([x, y, w, h]) => {
+    const cx = +(x + w / 2).toFixed(2), cy = +(y + h / 2).toFixed(2);
+    return `<g class="cp-callout"><path d="M${cx} ${cy}H${right}" stroke="var(--panel-paper,#fff)" stroke-width="3" fill="none"/><path d="M${cx} ${cy}H${right}" stroke="#161616" stroke-width="1.3" fill="none"/><circle cx="${cx}" cy="${cy}" r="3.2" fill="#161616" stroke="var(--panel-paper,#fff)" stroke-width="1"/></g>`;
+  }).join('') + '</svg>');
+};
 // Controls whose cards stand alone (rudder pedals) are not part of the device, so they are left off it.
 const offDevice = pads.filter(p => p.device === false).flatMap(padControls);
 const deviceCss = (p: (typeof pads)[number]) => offDevice.length ? offDevice.map(c => `.cp-device-${spec.id}-${p.id} [data-move="${c}"]`).join(',') + '{display:none}' : '';
@@ -134,7 +162,7 @@ const dirLabels = (id: string) => {
         <section class="cp-pad" data-pad={p.id} hidden={!only} aria-label={p.name}>
           <header class="cp-pad-head"><strong>{p.name}</strong>{!only && <button type="button" class="cp-pad-close" data-pad-close aria-label={`Close the ${p.name} controls`}>Close</button>}</header>
           <div class:list={[only && p.device !== false && 'cp-split']}>
-          {only && p.device !== false && <figure class:list={['cp-device', `cp-device-${spec.id}-${p.id}`]} style={`aspect-ratio:${DV[2] / DV[3]}`}><Fragment set:html={`<style>${deviceCss(p)}${deviceOn(p)}</style><div class="cp-device-base">${deviceArt}</div><div class="cp-device-on">${deviceArt}</div>`} /></figure>}
+          {only && p.device !== false && <figure class:list={['cp-device', `cp-device-${spec.id}-${p.id}`]} style={`aspect-ratio:${DV[2] / DV[3]}`}><Fragment set:html={`<style>${deviceCss(p)}</style>${deviceCallout(p)}`} /></figure>}
           <div class="cp-zoom" style={`aspect-ratio:${v.ratio}`}><Fragment set:html={v.svg} />
             {padZones(p, v.hit).map(z => {
               const [fx, fy, fw, fh] = v.frame;
@@ -196,13 +224,9 @@ const dirLabels = (id: string) => {
 .cp-zoom{position:relative}
 .cp-split{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;align-items:center}
 .cp-split .cp-zoom{margin:0;width:100%}
-.cp-device{margin:0;max-height:14rem;width:100%;border-right:1px solid var(--color-border,#ccc);padding-right:.6rem}
+.cp-device{margin:0;max-height:14rem;width:100%;border-right:1px solid var(--color-border,#ccc)}
 .cp-device :global(svg){display:block;width:100%;height:100%;overflow:hidden}
 .cp-device :global(text){display:none}
-.cp-device{position:relative}
-.cp-device :global(.cp-device-base),.cp-device :global(.cp-device-on){position:absolute;inset:0 .6rem 0 0}
-.cp-device :global(.cp-device-base){opacity:.22}
-.cp-device :global(.cp-device-on svg){visibility:hidden}
 .cp-zone{position:absolute;padding:0;margin:0;border:0;background:transparent;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .cp-zone-up{clip-path:polygon(0 0,100% 0,50% 50%)}.cp-zone-down{clip-path:polygon(0 100%,100% 100%,50% 50%)}
 .cp-zone-left{clip-path:polygon(0 0,0 100%,50% 50%)}.cp-zone-right{clip-path:polygon(100% 0,100% 100%,50% 50%)}
