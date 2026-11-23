@@ -291,7 +291,14 @@ function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, cu
     }
     if (page?.marks) body += `<path d="${page.marks}" fill="none" stroke="${W}" ${sw('medium')}/>`;
     if (page?.fine) body += `<path d="${page.fine}" fill="none" stroke="${W}" ${sw('fine')}/>`;
-    for (const p of page?.paths ?? []) if (!p.fill) body += `<path d="${p.d}" fill="none" stroke="${MFD_COLOURS[p.c]}" ${sw(p.pen ?? 'medium')}${p.dash ? ' stroke-dasharray="2.2 1.4"' : ''}/>`;
+    for (const p of page?.paths ?? []) {
+      if (p.fill) continue;
+      const attrs = `fill="none" stroke="${MFD_COLOURS[p.c]}" ${sw(p.pen ?? 'medium')}${p.dash ? ' stroke-dasharray="2.2 1.4"' : ''}`;
+      if (!p.alt) { body += `<path d="${p.d}" ${attrs}/>`; continue; }
+      // Flicker between the two shapes, unevenly, so it reads as a tracker working rather than a blink.
+      const flick = (v: string) => `<animate attributeName="opacity" values="${v}" calcMode="discrete" dur="0.9s" repeatCount="indefinite"/>`;
+      body += `<path d="${p.d}" ${attrs}>${flick('1;0;1;1;0;1')}</path><path d="${p.alt}" ${attrs} opacity="0">${flick('0;1;0;0;1;0')}</path>`;
+    }
     if (page?.aid) body += `<path data-aid d="${page.aid}" fill="none" stroke="${MFD_AID}" stroke-dasharray="1.2 0.8" ${sw('fine')}/>`;
     if (page?.cursor && !page.pan) body += `<g data-cursor="${id}" transform="translate(${n(page.cursor.at[0])} ${n(page.cursor.at[1])})"><path d="${page.cursor.d}" fill="none" stroke="${W}" ${sw('medium')}/></g>`;
     s += `<g data-page-of="${id}" data-page="${pg.id}"${pg.id === current ? '' : ' display="none"'}>${body}</g>`;
