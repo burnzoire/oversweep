@@ -1,6 +1,6 @@
 import type { MfdDisplay } from '../types';
 import { tracer } from '../trace.ts';
-import { MAV_TV_BORE, MAV_TV_LEAD, MAV_TV_NARROW, MAV_TV_SPI, MAV_TV_WIDE, MAV_VIDEO_K } from './maverick-video.ts';
+import { MAV_TV_BORE, MAV_TV_LEAD, MAV_TV_TANK3, MAV_TV_NARROW, MAV_TV_SPI, MAV_TV_WIDE, MAV_VIDEO_K } from './maverick-video.ts';
 
 /**
  * F-16C AGM-65 Maverick formats for the shared MFD (`mfd.ts`): the SMS page with AG65 selected (guide p. 672) and
@@ -94,9 +94,12 @@ const IMG = (v: number) => v * (489 / (768 / MAV_VIDEO_K));
 const CROSS_IMG: P = [384 + (CX - SC[0]) / IMG(1), 384 + (CY - SC[1]) / IMG(1)];
 /** The video offset (page mm) that puts picture point `p` (image px) under the crosshairs. */
 const under = (p: P): P => [mm(IMG(p[0] - CROSS_IMG[0])), mm(IMG(p[1] - CROSS_IMG[1]))];
-/** Slew: from the crossroads (the steerpoint the seeker is slaved to) to the lead T-72, under the crosshairs. */
+/**
+ * Slew: from the crossroads (the steerpoint the seeker is slaved to) to the lead T-72, under the crosshairs. Landing on
+ * any of the three tanks counts (`along`); the picture then settles on the lead.
+ */
 export const MAV_SLEW = {
-  start: under(MAV_TV_SPI), target: under(MAV_TV_LEAD), reach: mm(7), speed: mm(110),
+  start: under(MAV_TV_SPI), target: under(MAV_TV_LEAD), along: under(MAV_TV_TANK3), reach: mm(7), speed: mm(110),
   box: [mm(-140), mm(-140), mm(140), mm(140)] as [number, number, number, number],
 };
 

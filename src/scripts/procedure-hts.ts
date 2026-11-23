@@ -28,7 +28,7 @@ type Pages = Partial<Pick<State, 'mfd' | 'left' | 'ded' | 'x' | 'r'>>;
 interface Scenario {
   initial: Pages; after: Record<string, Pages>;
   /** `display`: the MFD the cursor is on (the right one unless named); `what`: the prompt's name for the thing steered onto. */
-  slew: { step: string; on: string; free: string; done: string; target: [number, number]; start: [number, number]; reach: number; speed: number; box: [number, number, number, number]; display?: 'left' | 'right'; what?: string };
+  slew: { step: string; on: string; free: string; done: string; target: [number, number]; start: [number, number]; reach: number; speed: number; box: [number, number, number, number]; display?: 'left' | 'right'; what?: string; along?: [number, number] };
   /**
    * A warm-up the step that starts it waits out (the HTS pod's 30 s by default): its button counts down the jet's
    * `secs`, compressed to `ms`; `busy` and `ready` are the prompts; `after` the pages once it is over.
@@ -166,6 +166,12 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
    */
   const defl = { x: 0, y: 0 };
   let raf = 0, last = 0;
+  /** Distance from the target, or from the segment target → `along` when the slew accepts a line of targets. */
+  function offTarget([x, y]: [number, number]) {
+    const [ax, ay] = sc.slew.target, [bx, by] = sc.slew.along ?? sc.slew.target;
+    const l2 = (bx - ax) ** 2 + (by - ay) ** 2, t = l2 ? Math.max(0, Math.min(1, ((x - ax) * (bx - ax) + (y - ay) * (by - ay)) / l2)) : 0;
+    return Math.hypot(x - ax - t * (bx - ax), y - ay - t * (by - ay));
+  }
   const stopSlew = () => { cancelAnimationFrame(raf); raf = 0; defl.x = defl.y = 0; };
   function slew(now: number) {
     const dt = Math.min(0.05, (now - last) / 1000);
@@ -174,7 +180,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     const speed = (d: number) => Math.sign(d) * Math.abs(d) ** 1.5 * sc.slew.speed;
     const [x0, y0, x1, y1] = sc.slew.box;
     st.cur = [Math.min(x1, Math.max(x0, st.cur[0] + speed(defl.x) * dt)), Math.min(y1, Math.max(y0, st.cur[1] - speed(defl.y) * dt))];
-    if (Math.hypot(st.cur[0] - sc.slew.target[0], st.cur[1] - sc.slew.target[1]) < sc.slew.reach) {
+    if (offTarget(st.cur) < sc.slew.reach) {
       st.cur = [...sc.slew.target];
       if (slewLeft) st.left = sc.slew.done; else st.mfd = sc.slew.done;
       stopSlew();

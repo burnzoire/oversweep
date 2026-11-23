@@ -18,6 +18,8 @@ export const MAV_TV_BORE = file('tv-bore');
 export const MAV_TV_NARROW = file('tv-narrow');
 /** In the wide picture (image px, 768 px image): the crossroads and the lead T-72, measured on the art. */
 export const MAV_TV_SPI: [number, number] = [352, 326];
-export const MAV_TV_LEAD: [number, number] = [432, 286];
+export const MAV_TV_LEAD: [number, number] = [447, 290];
+/** The third T-72, the last tank of the column (the BMP-2 and the truck follow it). */
+export const MAV_TV_TANK3: [number, number] = [498, 274];
 /** Image px per glass px: the image (768 px) spans 1.6 times the glass (489 px on the 660 px MFD grid). */
 export const MAV_VIDEO_K = 1.6;
