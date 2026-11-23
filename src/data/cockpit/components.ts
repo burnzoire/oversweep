@@ -150,6 +150,9 @@ export function toggleLeans(count: number) {
   return count === 3 ? [-1, 0, 1] : count === 2 ? [-1, 1] : Array.from({ length: count }, (_, i) => -1 + (2 * i) / (count - 1));
 }
 
+/** A lever-lock bushing's slot, as fractions of the bushing radius: half-width and half-length. */
+const LOCK_SLOT = [0.39, 0.88] as const;
+
 export function toggleBase(art: keyof typeof TOGGLES) {
   const t = TOGGLES[art], r = t.r;
   if (t.cap === 'hook') {
@@ -162,11 +165,12 @@ export function toggleBase(art: keyof typeof TOGGLES) {
     // Lever-lock: round bushing (no hex nut on the panel face) with the
     // locking insert showing: a slot the lever travels in, with a detent
     // notch at each latched position (top, centre, bottom).
-    // Nathan (2026-11-23): a locking lever's bushing shows one long slot with rounded ends, dark, as on the MISC panel's LASER ARM.
-    const ri = r * 0.68, sw2 = r * 0.2, sl = r * 0.6;
-    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.82)}" ${sw('fine')}/>` +
-      cased(`<circle r="${n(ri)}" fill="${PAPER}"/>`, 'medium') +
-      `<rect x="${n(-sw2)}" y="${n(-sl)}" width="${n(sw2 * 2)}" height="${n(sl * 2)}" rx="${n(sw2)}" fill="${INK}" ${sw('medium')}/>`;
+    // Nathan (2026-11-23, from his own sketch): a locking lever's bushing is three rings (the rim, a thin ring just inside it and a
+    // larger inner ring) with one long rounded slot almost to the rim; the lever standing straight up shows as two round ends on the slot.
+    const sw2 = r * LOCK_SLOT[0], sl = r * LOCK_SLOT[1];
+    return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.93)}" ${sw('fine')}/>` +
+      cased(`<circle r="${n(r * 0.76)}" fill="${PAPER}"/>`, 'medium') +
+      `<rect x="${n(-sw2)}" y="${n(-sl)}" width="${n(sw2 * 2)}" height="${n(sl * 2)}" rx="${n(sw2)}" fill="${PAPER}" ${sw('medium')}/>`;
   }
   if ('hex' in t) {
     // Hex mounting nut (flats top and bottom) round the threaded bushing and its lever hole.
@@ -201,8 +205,12 @@ export function toggleReach(art: keyof typeof TOGGLES, count = 0) {
 
 function leverOnPivot(art: keyof typeof TOGGLES, k: number, count = 0) {
   const t = TOGGLES[art], { r, cap } = t, reach = toggleReach(art, count);
-  // A lever-lock standing straight up shows only a small head, so the slot behind it can be seen (Nathan, 2026-11-23).
-  const ball = 'lock' in t && t.lock && Math.abs(k) < 1e-6 ? t.ball * 0.5 : t.ball;
+  const ball = t.ball;
+  // A lever-lock standing straight up is drawn as the two round ends of its slot, so the slot stays visible (Nathan, 2026-11-23).
+  if ('lock' in t && t.lock && Math.abs(k) < 1e-6) {
+    const e = r * LOCK_SLOT[0], y = r * (LOCK_SLOT[1] - LOCK_SLOT[0]);
+    return [-y, y].map(cy => cased(`<circle cy="${n(cy)}" r="${n(e)}" fill="${PAPER}"/>`, 'medium')).join('');
+  }
   const L = reach * k;
   const w0 = cap === 'cylinder' ? ball * 0.58 : cap === 'dome' ? ball * 0.36 : 'hex' in t ? r * 0.17 : r * 0.3, w1 = cap === 'dome' ? ball * 0.8 : ball * 0.62;
   // Mushroom cap: the lever leans only ~17° from the panel normal, so the cap stays almost square to the
