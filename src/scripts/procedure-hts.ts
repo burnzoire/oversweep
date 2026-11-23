@@ -45,7 +45,7 @@ interface Scenario {
   enter?: Record<string, Pages>;
 }
 /** A slew: from page `on` (drawn as `free` while slewed), ending on `done` once the cursor is within `reach` of `target`. Several may run, one per step. */
-interface Slew { step: string; on: string; free: string; done: string; target: [number, number]; start: [number, number]; reach: number; speed: number; box: [number, number, number, number]; display?: 'left' | 'right'; what?: string; along?: [number, number] }
+interface Slew { step: string; on: string; free: string; done: string; target: [number, number]; start: [number, number]; reach: number; speed: number; box: [number, number, number, number]; display?: 'left' | 'right'; what?: string; along?: [number, number]; freeOnMove?: boolean }
 interface Warm { step: string; secs: number; ms: number; busy: string; ready: string; label: string; after?: Pages }
 const SCENARIOS: Record<string, Scenario> = {
   hts: {
@@ -114,7 +114,7 @@ const SCENARIOS: Record<string, Scenario> = {
       'tgp-soi': { mfd: 'tgp-b-soi' }, 'wpn-soi': { mfd: 'tgp-b-on', left: 'wpn-d-b' },
       lock: { left: 'wpn-d-b-track' }, break: { left: 'wpn-d-b-slaved' },
       step: { left: 'wpn-d-b7', mfd: 'tgp-b-on7' }, lock7: { left: 'wpn-d-b7-track' }, break7: { left: 'wpn-d-b7-slaved' },
-      cz: { mfd: 'tgp-b-cz' }, sms: { left: 'sms-d-pre7' }, 'power-off': { left: 'sms-d-pre-off' }, reset: { x: { 'hud.master-arm': 'none', 'hud.master-mode': 'nav' } },
+      'cz-soi': { mfd: 'tgp-b-on7-soi' }, cz: { mfd: 'tgp-b-cz' }, sms: { left: 'sms-d-pre7' }, 'power-off': { left: 'sms-d-pre-off' }, reset: { x: { 'hud.master-arm': 'none', 'hud.master-mode': 'nav' } },
       rearm: { x: { 'hud.master-arm': 'arm', 'hud.master-mode': 'pre' } }, 'power-on': { left: 'sms-d-pre-on' },
       wpn2: { left: 'wpn-d-t-wide' }, fov2: { left: 'wpn-d-t' }, 'tgp-soi2': { mfd: 'tgp-t-soi' },
       release: { left: 'wpn-d-t-3', mfd: 'tgp-t-3' },
@@ -122,10 +122,10 @@ const SCENARIOS: Record<string, Scenario> = {
     // Steerpoint 5 selected on the way to the target: the pod slews to it.
     enter: { rearm: { mfd: 'tgp-t' } },
     slew: [
-      { step: 'tgp-slew', on: 'tgp-b-soi', free: 'tgp-b-soi', done: 'tgp-b-soi', ...TGP_SLEW_B },
+      { step: 'tgp-slew', on: 'tgp-b-soi', free: 'tgp-b-soi-cz', done: 'tgp-b-soi-cz', freeOnMove: true, ...TGP_SLEW_B },
       { step: 'mav-slew', on: 'wpn-d-b', free: 'wpn-d-b', done: 'wpn-d-b', display: 'left', ...MAV_D_SLEW3 },
       { step: 'slew7', on: 'wpn-d-b7', free: 'wpn-d-b7', done: 'wpn-d-b7', display: 'left', ...MAV_D_SLEW7 },
-      { step: 'tgp-slew2', on: 'tgp-t-soi', free: 'tgp-t-soi', done: 'tgp-t-soi', ...TGP_SLEW_T },
+      { step: 'tgp-slew2', on: 'tgp-t-soi', free: 'tgp-t-soi-cz', done: 'tgp-t-soi-cz', freeOnMove: true, ...TGP_SLEW_T },
     ],
     // The 3-minute warm-up (guide p. 675), compressed, once to boresight and again before the shot.
     warm: [
@@ -194,7 +194,9 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   const slewLeft = () => sl().display === 'left';
   const slewing = () => stepId() === sl().step && !finished && (slewLeft() ? st.left : st.mfd) === sl().on;
   function indicate() {
-    const s = sl(), right = slewing() && !slewLeft() ? s.free : st.mfd, left = slewing() && slewLeft() ? s.free : st.left;
+    // `freeOnMove`: the `on` page stays until the cursor first leaves its start (e.g. the TGP's CZ appears only once slewed).
+    const s = sl(), free = s.freeOnMove && st.cur[0] === s.start[0] && st.cur[1] === s.start[1] ? s.on : s.free;
+    const right = slewing() && !slewLeft() ? free : st.mfd, left = slewing() && slewLeft() ? free : st.left;
     // The hand-slewed position goes only to a page of that slew; other pages carry their own.
     const shown = slewLeft() ? left : right;
     const cursors = [s.on, s.free, s.done].includes(shown) ? { [`${slewLeft() ? 'left' : 'right'}-mfd.display`]: st.cur } : {};
