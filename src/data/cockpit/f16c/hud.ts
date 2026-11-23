@@ -100,16 +100,31 @@ const ASL = hp([[298, -40], [298, 470]]);
 const LOFT = hp([[286, 67], [310, 67]]) + hp([[281, 212], [315, 212]]);
 /** FOV box (p. 663 image 002: 111 x 40 px, 101 x 36 reference px) about the target, which is the selected steerpoint: centred on the steerpoint diamond's rest position (533, 250). */
 const FOV = rel([[483, 232], [583, 232], [583, 268], [483, 268]]);
+/**
+ * With the HARM cues up the heading scale sits above the boresight (p. 663 image 002: ticks hanging from y 92.5, long 9.5 and short
+ * 6.2 px, label centre y 110.7, readout box x 283-312.5 by y 103-124 around the steering line), where it is a tape of the same scale
+ * as the usual one.
+ */
+const headingHigh: HudTape = {
+  ...heading,
+  at: r(...H(298, 92.5)), minorLength: mm(5.6), majorLength: mm(8.6), labelOffset: mm(16.5),
+  index: 'M0 0',
+  box: box(H(283, 103)[0], H(283, 103)[1], H(312.5, 124)[0], H(312.5, 124)[1]),
+  readout: { at: r(...H(298, 113.5)), anchor: 'middle', format: { pad: 3 } },
+};
+/** The small box with an X in it at the foot of the steering line (p. 663 image 002: box x 291-309, y 446-456 with a heavy top bar, an X from (297, 449) to (303, 455)). The guide's key labels it nowhere; it may be the A-G mode symbol the key lists beside the figure. */
+const BOXED_X = hp([[291, 456], [291, 446], [309, 446], [309, 456]]) + hp([[291, 447.5], [309, 447.5]]) + hp([[297, 449.5], [303, 455]]) + hp([[303, 449.5], [297, 455]]);
 const harmCues = {
   id: 'harm-cues',
+  heading: headingHigh,
   pages: [
     { id: 'none', art: '', texts: [] },
     {
-      id: 'amz', art: ASL + LOFT + STAPLE + FOV,
+      id: 'amz', art: STAPLE + FOV + BOXED_X, steer: ASL + LOFT,
       texts: [ht('80', 404.5, 151), ht('14>', 397, 209, 'end'), ht('246', 402, 290), ht('00', 403, 303)],
     },
     {
-      id: 'mmz', art: ASL + LOFT + STAPLE,
+      id: 'mmz', art: STAPLE + BOXED_X, steer: ASL + LOFT,
       texts: [ht('80', 404.5, 151), ht('A36>', 397, 214, 'end'), ht('264', 402, 290)],
       flash: FOV,
     },
@@ -177,6 +192,7 @@ export const hud: PanelSpec = {
         roll: { centre: r(575, 284.5), r: [mm(67), mm(75), mm(80)], ticks: [-45, -30, -20, -10, 0, 10, 20, 30, 45], longAt: [-45, -30, 30, 45], caret: [mm(76), mm(87.5), mm(11)] },
         fields: [
           { indicator: 'g', at: r(468.7, 135.8), anchor: 'middle', format: { decimals: 1 } },
+          { indicator: 'soi', at: r(451.8, 121.8) },
           { indicator: 'master-arm', at: r(456.7, 275.4) },
           { indicator: 'mach', at: r(456.7, 290), format: { decimals: 2 } },
           { indicator: 'max-g', at: r(440, 304.6), format: { decimals: 1 } },
@@ -213,6 +229,8 @@ export const hud: PanelSpec = {
     num('altitude', 'Altitude', 'ft', 8360, [0, 60000, 10], 'Altitude scale and readout to the nearest 10 ft; a long mark every 500 ft, a short one every 100 ft.'),
     num('heading', 'Heading', '°', 197, [0, 359, 1], 'Heading scale (magnetic) with its lubber line above and the readout below; a long mark every 10°, a short one every 5°.'),
     num('g', 'G', 'g', 1.1, [-9.9, 9.9, 0.1], 'Current load factor, to a tenth of a g.'),
+    word('soi', 'Sensor of interest marker', [{ id: 'off', label: '' }, { id: 'on', label: '*' }], 'off', 'An asterisk above the G readout while the HUD is the sensor of interest (guide p. 663 shows it). Blank when another display, such as the HAD, is the SOI.'),
+    num('harm-asl', 'Azimuth steering line (position)', '°', 0, [-10, 10, 0.1], 'The azimuth steering line of the HARM launch cues: its offset from the boresight is how far you must turn to be on bearing to the target. Aligned through the flight path marker when on bearing (guide p. 663).'),
     word('master-arm', 'Master arm status', [{ id: 'none', label: '(blank)' }, { id: 'arm', label: 'ARM' }, { id: 'sim', label: 'SIM' }], 'arm', 'MASTER ARM switch: ARM, SIM (simulate) or blank (OFF).'),
     num('mach', 'Mach', 'M', 0.61, [0, 2.2, 0.01], 'Mach number to the hundredth.'),
     num('max-g', 'Maximum G', 'g', 5.7, [-9.9, 9.9, 0.1], 'Highest load factor of the flight; WARN RESET on the ICP resets it to 1.0.'),

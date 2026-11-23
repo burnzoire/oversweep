@@ -55,7 +55,7 @@ function sms(id: string, powered: boolean): Page {
 /** Station boxes at the bottom of the WPN page: the next station to fire is inverse. */
 const stations = (sel: '3' | '7', has: boolean) => has
   ? [w('3', 186, 511.5, undefined, sel === '3'), w('7', 486, 511.5, undefined, sel === '7')]
-  : [w('7', 546, 504, undefined, true)];
+  : [w(sel, 477, 504, undefined, true)];
 
 /** HAS page (p. 660): threat table 3 (3, S, 6, 2, 13), the ALIC video box, scan time and the crosshair scale. */
 const HAS_LEFT = ['3', 'S', '6', '2', '13'];
@@ -107,7 +107,7 @@ function pos(s: PosState): Page {
   words.push(w('RDY', 330, 504), ...stations('3', false), ...row('WPN', 'WPN', 'DCLT'));
   const lsdl = poly([[146, 288], [513, 288]]);
   // The range-staple symbol at the lower right (p. 662; a bar with serifs and a small tick), as drawn there.
-  const staple = poly([[534, 453.5], [552, 453.5]]) + poly([[543, 453.5], [543, 485]]) + poly([[538, 471], [548, 471]]) + poly([[534, 485], [552, 485]]);
+  const staple = poly([[537, 453.5], [549, 453.5]]) + poly([[543, 453.5], [543, 485]]) + poly([[539.5, 471], [546.5, 471]]) + poly([[537, 485], [549, 485]]);
   return { id: s.id, words, marks: staple, paths: [{ d: lsdl, c: 'green' }] };
 }
 

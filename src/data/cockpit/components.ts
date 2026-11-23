@@ -162,11 +162,11 @@ export function toggleBase(art: keyof typeof TOGGLES) {
     // Lever-lock: round bushing (no hex nut on the panel face) with the
     // locking insert showing: a slot the lever travels in, with a detent
     // notch at each latched position (top, centre, bottom).
-    const ri = r * 0.6, sw2 = r * 0.2, sl = r * 0.48, nd = r * 0.12;
-    const notches = [-sl * 0.85, 0, sl * 0.85].map(y => `M${n(-sw2)} ${n(y - nd)}H${n(-sw2 - nd)}V${n(y + nd)}H${n(-sw2)}M${n(sw2)} ${n(y - nd)}H${n(sw2 + nd)}V${n(y + nd)}H${n(sw2)}`).join('');
+    // Nathan (2026-11-23): a locking lever's bushing shows one long slot with rounded ends, dark, as on the MISC panel's LASER ARM.
+    const ri = r * 0.68, sw2 = r * 0.2, sl = r * 0.6;
     return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.82)}" ${sw('fine')}/>` +
       cased(`<circle r="${n(ri)}" fill="${PAPER}"/>`, 'medium') +
-      `<rect x="${n(-sw2)}" y="${n(-sl)}" width="${n(sw2 * 2)}" height="${n(sl * 2)}" ${sw('medium')}/><path d="${notches}" ${sw('fine')}/>`;
+      `<rect x="${n(-sw2)}" y="${n(-sl)}" width="${n(sw2 * 2)}" height="${n(sl * 2)}" rx="${n(sw2)}" fill="${INK}" ${sw('medium')}/>`;
   }
   if ('hex' in t) {
     // Hex mounting nut (flats top and bottom) round the threaded bushing and its lever hole.
@@ -200,7 +200,9 @@ export function toggleReach(art: keyof typeof TOGGLES, count = 0) {
 }
 
 function leverOnPivot(art: keyof typeof TOGGLES, k: number, count = 0) {
-  const t = TOGGLES[art], { r, ball, cap } = t, reach = toggleReach(art, count);
+  const t = TOGGLES[art], { r, cap } = t, reach = toggleReach(art, count);
+  // A lever-lock standing straight up shows only a small head, so the slot behind it can be seen (Nathan, 2026-11-23).
+  const ball = 'lock' in t && t.lock && Math.abs(k) < 1e-6 ? t.ball * 0.5 : t.ball;
   const L = reach * k;
   const w0 = cap === 'cylinder' ? ball * 0.58 : cap === 'dome' ? ball * 0.36 : 'hex' in t ? r * 0.17 : r * 0.3, w1 = cap === 'dome' ? ball * 0.8 : ball * 0.62;
   // Mushroom cap: the lever leans only ~17° from the panel normal, so the cap stays almost square to the

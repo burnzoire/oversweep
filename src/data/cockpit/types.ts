@@ -150,7 +150,7 @@ export type Placement =
   | { component: RotaryArt; control: string; at: Pt }
   | { component: KnobArt; control: string; at: Pt }
   /** `legend` lines are printed on the cap, placed by their centre `y` (mm from the centre); `marks` is extra cap printing (mm path, centre origin). */
-  | { component: PushArt; control: string; at: Pt; paint?: Paint; legend?: { text: string; cap: number; y: number; width?: number }[]; marks?: string }
+  | { component: PushArt; control: string; at: Pt; paint?: Paint; /** Paint only the cap, not the skirt (MISC ALT REL). */ paintCapOnly?: boolean; legend?: { text: string; cap: number; y: number; width?: number }[]; marks?: string }
   /** Landing gear handle: a slot centred on `at`, `travel` mm between the knob's end positions, knob `size` in mm. */
   | { component: 'gear-handle'; control: string; at: Pt; travel: number; size: [w: number, h: number]; /** The light in the knob. */ indicator?: string }
   /**
@@ -491,7 +491,7 @@ export interface HudDisplay {
    * Weapon cues that come and go with the weapon (the HARM launch scale): one display indicator `id` whose pages each
    * draw `art` (pen paths, relative to the boresight), `texts` and a `flash` path that blinks (the FOV box in range).
    */
-  cues?: { id: string; pages: { id: string; art: string; texts: { t: string; at: Pt; anchor?: 'start' | 'middle' | 'end' }[]; flash?: string }[] };
+  cues?: { id: string; /** The heading tape shown in place of the usual one while a cue page other than `none` is up (HARM: it sits above the boresight, p. 663). */ heading?: HudTape; pages: { id: string; art: string; /** Art that slides sideways with the `harm-asl` reading (the azimuth steering line and its loft ticks). */ steer?: string; texts: { t: string; at: Pt; anchor?: 'start' | 'middle' | 'end' }[]; flash?: string }[] };
 }
 
 /** The plate corner toward which the face plate is cut away around a DZUS. */

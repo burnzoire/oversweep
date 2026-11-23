@@ -50,9 +50,10 @@ export const misc: PanelSpec = {
     ],
   },
   plate: [
-    // One layer. Right edge x 285, top y 8 (corner 6 px), diagonal top-left edge from (170, 8) to (72, 112), left edge x 72
-    // down to the rule's height, then curving out to x 14 for the wider bottom part; bottom y 823.
-    { d: path('M170 8H279Q285 8 285 14V817Q285 823 279 823H14V705Q14 692 20 680L66 562Q72 548 72 535V112Z') },
+    // One layer. Right edge x 285, top y 8 (corner 6 px), diagonal top-left edge from (170, 8) to (80, 112), the left edge sloping
+    // out to x 62 at the rule's height, then one long curve out to x 2 for the wider bottom part (Nathan, 2026-11-23); the right edge
+    // curves in at the bottom in a large cut-out from y 705 to the bottom edge (y 823).
+    { d: path('M170 8H279Q285 8 285 14V705C285 760 280 790 262 823H2V760C2 650 62 640 62 540L80 112Z') },
   ],
   engraving: [
     // RF: NORM (up; RF above it), QUIET (centre, down the right of the lever), SILENT (down).
@@ -71,7 +72,7 @@ export const misc: PanelSpec = {
     T(63, 700, 'ROLL', 13, 40), T(65, 720, 'HDG SEL', 12, 64), T(113.5, 757.5, 'ATT', 12, 27), T(114, 775, 'HOLD', 12, 38), T(69, 808, 'STRG SEL', 12, 72),
     T(185, 700, 'PITCH', 13, 44), T(184.5, 720, 'ALT HOLD', 12, 75), T(230, 757.5, 'A/P', 12, 30), T(231, 775, 'OFF', 12, 28), T(186, 808, 'ATT HOLD', 12, 73),
     // Panel title, one letter above the next.
-    T(15, 732, 'M', 18, 16), T(15, 758, 'I', 18), T(15, 786, 'S', 18, 14), T(15, 813, 'C', 18, 14),
+    T(22, 732, 'M', 18, 16), T(22, 758, 'I', 18), T(22, 786, 'S', 18, 14), T(22, 813, 'C', 18, 14),
   ],
   placements: [
     { component: 'screw-medium', at: pt(117, 151) },
@@ -79,11 +80,12 @@ export const misc: PanelSpec = {
     { component: 'toggle-large-cylinder', control: 'rf', at: pt(...RF) },
     { component: 'lamp-round', indicator: 'ecm', at: pt(221.5, 258) },
     { component: 'toggle-large-cylinder', control: 'laser-arm', at: pt(...LASER) },
-    { component: 'push-round-large', control: 'alt-rel', at: pt(226, 379), paint: 'red' },
+    { component: 'push-round-large', control: 'alt-rel', at: pt(226, 379), paint: 'red', paintCapOnly: true },
     { component: 'toggle-large-cylinder', control: 'master-arm', at: pt(...MASTER) },
     {
       component: 'push-square', control: 'adv-mode', indicator: 'adv-mode', at: pt(159.5, 624), size: [mm(81), mm(78)],
-      legend: [{ text: 'ACTIVE', cap: mm(10), y: mm(-14), width: mm(50) }, { text: 'STBY', cap: mm(10), y: mm(14), width: mm(36) }],
+      marks: 'M-8 0H8',
+      legend: [{ text: 'ACTIVE', cap: mm(10), y: mm(-14), width: mm(34) }, { text: 'STBY', cap: mm(10), y: mm(14), width: mm(26) }],
     },
     { component: 'toggle-large', control: 'roll', at: pt(...ROLL) },
     { component: 'toggle-large-cylinder', control: 'pitch', at: pt(...PITCH) },
