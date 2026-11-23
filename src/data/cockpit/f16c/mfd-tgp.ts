@@ -65,14 +65,15 @@ const SPI: Record<string, Spi> = {
  * slews (`at`, page mm, the picture's offset under the crosshairs). Placed from the p. 679 image by its SWAP and TGP
  * labels (1.56 grid px per image px).
  */
-interface Mav { mbc: string; next: '3' | '7'; at: [number, number]; k: number }
+/** `cz`: the Navigation cursor has been slewed, so CZ shows at OSB 9 (p. 341: it goes out once the slews are zeroed). */
+interface Mav { mbc: string; next: '3' | '7'; at: [number, number]; k: number; cz?: boolean }
 function tgp(id: string, spi: Spi, soi: boolean, track = false, mav?: Mav): Page {
   const words: Word[] = [
     w('A-G', 186, 117.5), w('PTR', 258, 117.5), w(mav ? 'NARO' : 'WIDE', 332, 117.5), w('OVRD', 405, 117.5), w('CNTL', 478, 117.5),
     sm(spi.lat, 180, 140, 'start'), sm(spi.lon, 180, 153.5, 'start'), sm(spi.elv, 272.5, 170, 'end'),
     ...(spi.hq ? [sm('HQ', 190, 181, 'start')] : []),
     w('1.0X', 332.5, 144), sm('18600', 531, 144, 'end'), w('WHOT', 551.5, 186, 'end'),
-    ...stack('LST', 117, 185), ...stack('MT', 117, 330.5), ...stack('NT', 547, 259.5), ...stack('SP', 547, 330.5), ...stack('CZ', 547, 402.5), ...stack('TGT', 547, 472),
+    ...stack('LST', 117, 185), ...stack('MT', 117, 330.5), ...stack('NT', 547, 259.5), ...stack('SP', 547, 330.5), ...(!mav || mav.cz ? stack('CZ', 547, 402.5) : []), ...stack('TGT', 547, 472),
     sm(spi.meter, 441.5, 313.5, 'start'), sm(spi.range, 167.5, 511, 'start'), sm(spi.ttg, 520, 492.5, 'end'),
     // In a track mode: tracking sensor and mode (p. 499 items 28-29) under the crosshairs, placed from the p. 498 image; blank in Slave.
     ...(track ? [sm('IR POINT', 344, 482, 'middle')] : []),
@@ -103,14 +104,15 @@ const STPT5: Spi = { lat: '036:33.106', lon: '037:09.874', elv: '+1355', hq: tru
 const PB = { at: at(IR.bTgp, IR.bTgp.spi), k: IR.bTgp.k }, PB1 = { at: at(IR.bTgp, IR.bTgp.aim), k: IR.bTgp.k };
 const PT = { at: at(IR.tTgp, IR.tTgp.spi), k: IR.tTgp.k }, PT1 = { at: at(IR.tTgp, IR.tTgp.aim), k: IR.tTgp.k };
 const tgpD: Page[] = [
-  tgp('tgp-b', STPT3, false, false, { mbc: 'S', next: '3', ...PB }), tgp('tgp-b-soi', STPT3, true, false, { mbc: 'S', next: '3', ...PB }),
-  tgp('tgp-b-on', STPT3, false, false, { mbc: 'S', next: '3', ...PB1 }), tgp('tgp-b-on7', STPT3, false, false, { mbc: 'S', next: '7', ...PB1 }),
-  // Cursor Zero: the slew is removed and the pod is back on steerpoint 3.
-  tgp('tgp-b-cz', STPT3, false, false, { mbc: 'S', next: '7', ...PB }),
+  tgp('tgp-b', STPT3, false, false, { mbc: 'S', next: '3', ...PB }), tgp('tgp-b-soi', STPT3, true, false, { mbc: 'S', next: '3', ...PB, cz: true }),
+  tgp('tgp-b-on', STPT3, false, false, { mbc: 'S', next: '3', ...PB1, cz: true }), tgp('tgp-b-on7', STPT3, false, false, { mbc: 'S', next: '7', ...PB1, cz: true }),
+  // Back to the TGP as SOI, still in Slave, before Cursor Zero; then the slew removed and the pod back on steerpoint 3.
+  tgp('tgp-b-on7-soi', STPT3, true, false, { mbc: 'S', next: '7', ...PB1, cz: true }),
+  tgp('tgp-b-cz', STPT3, true, false, { mbc: 'S', next: '7', ...PB }),
   // The shot starts from station 7, next after boresighting.
-  tgp('tgp-t', STPT5, false, false, { mbc: 'S', next: '7', ...PT }), tgp('tgp-t-soi', STPT5, true, false, { mbc: 'S', next: '7', ...PT }),
-  ...['1', '2', 'T', 'C'].map(l => tgp(`tgp-t-${l}`, STPT5, true, false, { mbc: l, next: '7', ...PT1 })),
-  tgp('tgp-t-3', STPT5, true, false, { mbc: 'S', next: '3', ...PT1 }),
+  tgp('tgp-t', STPT5, false, false, { mbc: 'S', next: '7', ...PT }), tgp('tgp-t-soi', STPT5, true, false, { mbc: 'S', next: '7', ...PT, cz: true }),
+  ...['1', '2', 'T', 'C'].map(l => tgp(`tgp-t-${l}`, STPT5, true, false, { mbc: l, next: '7', ...PT1, cz: true })),
+  tgp('tgp-t-3', STPT5, true, false, { mbc: 'S', next: '3', ...PT1, cz: true }),
 ];
 export const tgpPages: Page[] = [
   tgp('tgp', SPI.stpt, false), tgp('tgp-soi', SPI.stpt, true),
@@ -129,7 +131,8 @@ export const tgpPageLabels: Record<string, string> = {
   'tgp-b-soi': 'TGP format, SOI: NARO, slewed by hand toward the chimney',
   'tgp-b-on': 'TGP format: on the brickworks chimney, station 3 next',
   'tgp-b-on7': 'TGP format: on the chimney, station 7 next',
-  'tgp-b-cz': 'TGP format: slews zeroed (CZ), back on steerpoint 3',
+  'tgp-b-on7-soi': 'TGP format, SOI: on the chimney in Slave, CZ shown',
+  'tgp-b-cz': 'TGP format, SOI: slews zeroed, CZ gone, back on steerpoint 3',
   'tgp-t': 'TGP format, AGM-65D selected: on steerpoint 5',
   'tgp-t-soi': 'TGP format, SOI: slewed by hand toward the lead T-72',
   'tgp-t-1': 'TGP format, SOI: on the T-72, correlator slewing (1)',
