@@ -45,10 +45,12 @@ function sms(id: string, powered: boolean): Page {
       ...(powered ? [w('RDY', 385, 185)] : []),
       w('PWR', 551.5, 249, 'end'), w(powered ? 'ON' : 'OFF', 551.5, 265, 'end'),
       w('BIT', 551.5, RIGHT_Y[2], 'end'),
-      w('3', 118, 470, undefined, true), w('7', 546, 470),
+      w('3', 118, 470), w('7', 546, 470),
       ...(powered ? [w('RDY', 332.5, 505)] : []),
       ...row('SMS', 'WPN', 'S-J'),
     ],
+    // The next station to fire is an outlined box (p. 659), not a filled one.
+    paths: [{ d: poly([[111, 461.5], [125, 461.5], [125, 478.5], [111, 478.5]], true), c: 'white', pen: 'fine' }],
   };
 }
 

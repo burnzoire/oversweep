@@ -151,7 +151,9 @@ export function toggleLeans(count: number) {
 }
 
 /** A lever-lock bushing's slot, as fractions of the bushing radius: half-width and half-length. */
-const LOCK_SLOT = [0.39, 0.88] as const;
+const LOCK_SLOT = [0.34, 0.82] as const;
+/** The raised ridge round the slot: half-width and half-length. */
+const LOCK_RIDGE = [0.46, 0.9] as const;
 /** The head of a lever-lock standing straight up, as a fraction of the bushing radius. */
 const LOCK_HEAD = 0.76;
 
@@ -168,9 +170,11 @@ export function toggleBase(art: keyof typeof TOGGLES) {
     // locking insert showing: a slot the lever travels in, with a detent
     // notch at each latched position (top, centre, bottom).
     // Nathan (2026-11-23, from his sketch): a locking lever's bushing is the rim, a thin ring just inside it and one long dark slot with
-    // rounded ends that runs almost to the rim. A lever standing straight up sits over the middle of the slot and hides most of it.
+    // rounded ends in a raised ridge that runs almost to the rim. A lever standing straight up sits over the middle of the slot and hides most of it.
     const sw2 = r * LOCK_SLOT[0], sl = r * LOCK_SLOT[1];
+    const rw = r * LOCK_RIDGE[0], rl = r * LOCK_RIDGE[1];
     return cased(`<circle r="${r}" fill="${PAPER}"/>`, 'heavy') + `<circle r="${n(r * 0.93)}" ${sw('fine')}/>` +
+      `<rect x="${n(-rw)}" y="${n(-rl)}" width="${n(rw * 2)}" height="${n(rl * 2)}" rx="${n(rw)}" fill="${PAPER}" ${sw('medium')}/>` +
       `<rect x="${n(-sw2)}" y="${n(-sl)}" width="${n(sw2 * 2)}" height="${n(sl * 2)}" rx="${n(sw2)}" fill="${INK}" ${sw('medium')}/>`;
   }
   if ('hex' in t) {

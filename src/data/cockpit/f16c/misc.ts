@@ -51,9 +51,9 @@ export const misc: PanelSpec = {
   },
   plate: [
     // One layer. Right edge x 285, top y 8 (corner 6 px), diagonal top-left edge from (170, 8) to (80, 112), the left edge sloping
-    // out to x 62 at the rule's height, then one long curve out to x 2 for the wider bottom part (Nathan, 2026-11-23); the right edge
-    // curves in at the bottom in a large cut-out from y 705 to the bottom edge (y 823).
-    { d: path('M170 8H279Q285 8 285 14V705C285 760 280 790 262 823H2V760C2 650 62 640 62 540L80 112Z') },
+    // out to x 62 at the rule's height, then a rounded shoulder and a straight diagonal out to x 8 at y 748 and the foot of the wider bottom part (Nathan, 2026-11-23: curve
+    // at the shoulder only); the right edge bends in, concave, from y 640 to x 268 at the bottom edge (y 823).
+    { d: path('M170 8H279Q285 8 285 14V640Q272 725 268 823H2L8 748L55 585Q60 566 62 540L80 112Z') },
   ],
   engraving: [
     // RF: NORM (up; RF above it), QUIET (centre, down the right of the lever), SILENT (down).
