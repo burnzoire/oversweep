@@ -53,7 +53,7 @@ export const misc: PanelSpec = {
     // One layer. Right edge x 285, top y 8 (corner 6 px), diagonal top-left edge from (170, 8) to (80, 112), the left edge sloping
     // out to x 62 at the rule's height, then a rounded shoulder and a straight diagonal out to x 2 at y 740 and straight down the foot of the wider bottom part (Nathan, 2026-11-23: curve
     // at the shoulder only); the right edge bends in, concave, from y 640 to x 268 at the bottom edge (y 823).
-    { d: path('M170 8H279Q285 8 285 14V640Q276 730 270 823H4V740Q8 700 22 650Q36 605 50 550L62 470L72 400L80 112Z') },
+    { d: path('M167 6H282Q288 6 288 12V650Q286 700 270 760Q267 790 268 820H4V705Q6 680 22 645Q40 612 56 576L99 91Z') },
   ],
   engraving: [
     // RF: NORM (up; RF above it), QUIET (centre, down the right of the lever), SILENT (down).
