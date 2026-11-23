@@ -90,6 +90,10 @@ const heading: HudTape = {
  * prefix and the flashing box (the MMZ) follow image 003, whose staple and caret read the same way.
  */
 const H = (x: number, y: number): [number, number] => [B[0] + (x - 298) / 1.1, B[1] + (y - 61) / 1.1];
+/** A hint box on the HARM cues, in p. 663 image px (`H`) or HUD reference px (`ref`), as `#x0 y0 x1 y1` in the cues' own units. */
+const spot = (a: [number, number], b: [number, number]) => `#${[...a, ...b].map(v => +v.toFixed(3)).join(' ')}`;
+export const hudSpot = (x0: number, y0: number, x1: number, y1: number) => spot(r(...H(x0, y0)), r(...H(x1, y1)));
+export const hudSpotRef = (x0: number, y0: number, x1: number, y1: number) => spot(r(x0, y0), r(x1, y1));
 const hp = (pts: [number, number][]) => rel(pts.map(([x, y]) => H(x, y)), false);
 const ht = (t: string, x: number, y: number, anchor: 'start' | 'middle' | 'end' = 'middle') => ({ t, at: r(...H(x, y)), anchor });
 /**
@@ -101,7 +105,7 @@ const ht = (t: string, x: number, y: number, anchor: 'start' | 'middle' | 'end' 
  */
 const SCALE_NM = 40;
 const nmY = (nm: number) => 279.5 - (nm * 117.5) / SCALE_NM;
-const CARET_Y = nmY(12);
+export const CARET_Y = nmY(12);
 const STAPLE = hp([[409, 201], [398, 201], [398, 273], [409, 273]]) + hp([[399, 162], [411, 162]]) + hp([[399, 279.5], [411, 279.5]]);
 const separator = (nm: number) => hp([[398, nmY(nm)], [409, nmY(nm)]]);
 /** Azimuth steering line: the full height of the glass through the boresight. */

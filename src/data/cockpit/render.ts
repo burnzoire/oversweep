@@ -470,7 +470,7 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
   const cues = h.cues ? `<g data-indicator="${h.cues.id}">${pages(h.cues.id, pg => {
     const c = h.cues!.pages.find(q => q.id === pg)!;
     return `<path d="${c.art}" ${pen}/>` + (c.steer ? shift('harm-asl', 'x', D, `<path d="${c.steer}" ${pen}/>`) : '') + c.texts.map(t => hudText(t.at[0], t.at[1], t.t, F, t.anchor)).join('') +
-      (c.flash ? `<path d="${c.flash}" ${pen}><animate attributeName="opacity" values="1;0.15;1" dur="0.9s" repeatCount="indefinite"/></path>` : '');
+      (c.flash ? `<path d="${c.flash}" ${pen}><animate attributeName="opacity" values="1;0" calcMode="discrete" dur="0.4s" repeatCount="indefinite"/></path>` : '');
   })}</g>` : '';
   const heading = h.cues?.heading
     ? `<g data-indicator="${h.cues.id}">${pages(h.cues.id, pg => pg === 'none' ? tape('heading', h.heading) : tape('heading', h.cues!.heading!, '-hi'))}</g>`
