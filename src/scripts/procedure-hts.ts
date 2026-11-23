@@ -114,7 +114,7 @@ const SCENARIOS: Record<string, Scenario> = {
       'tgp-soi': { mfd: 'tgp-b-soi' }, 'wpn-soi': { mfd: 'tgp-b-on', left: 'wpn-d-b' },
       lock: { left: 'wpn-d-b-track' }, break: { left: 'wpn-d-b-slaved' },
       step: { left: 'wpn-d-b7', mfd: 'tgp-b-on7' }, lock7: { left: 'wpn-d-b7-track' }, break7: { left: 'wpn-d-b7-slaved' },
-      sms: { left: 'sms-d-pre7' }, 'power-off': { left: 'sms-d-pre-off' }, reset: { x: { 'hud.master-arm': 'none', 'hud.master-mode': 'nav' } },
+      cz: { mfd: 'tgp-b-cz' }, sms: { left: 'sms-d-pre7' }, 'power-off': { left: 'sms-d-pre-off' }, reset: { x: { 'hud.master-arm': 'none', 'hud.master-mode': 'nav' } },
       rearm: { x: { 'hud.master-arm': 'arm', 'hud.master-mode': 'pre' } }, 'power-on': { left: 'sms-d-pre-on' },
       wpn2: { left: 'wpn-d-t-wide' }, fov2: { left: 'wpn-d-t' }, 'tgp-soi2': { mfd: 'tgp-t-soi' },
       release: { left: 'wpn-d-t-3', mfd: 'tgp-t-3' },

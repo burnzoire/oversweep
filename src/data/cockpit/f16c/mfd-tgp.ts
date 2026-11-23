@@ -105,6 +105,8 @@ const PT = { at: at(IR.tTgp, IR.tTgp.spi), k: IR.tTgp.k }, PT1 = { at: at(IR.tTg
 const tgpD: Page[] = [
   tgp('tgp-b', STPT3, false, false, { mbc: 'S', next: '3', ...PB }), tgp('tgp-b-soi', STPT3, true, false, { mbc: 'S', next: '3', ...PB }),
   tgp('tgp-b-on', STPT3, false, false, { mbc: 'S', next: '3', ...PB1 }), tgp('tgp-b-on7', STPT3, false, false, { mbc: 'S', next: '7', ...PB1 }),
+  // Cursor Zero: the slew is removed and the pod is back on steerpoint 3.
+  tgp('tgp-b-cz', STPT3, false, false, { mbc: 'S', next: '7', ...PB }),
   // The shot starts from station 7, next after boresighting.
   tgp('tgp-t', STPT5, false, false, { mbc: 'S', next: '7', ...PT }), tgp('tgp-t-soi', STPT5, true, false, { mbc: 'S', next: '7', ...PT }),
   ...['1', '2', 'T', 'C'].map(l => tgp(`tgp-t-${l}`, STPT5, true, false, { mbc: l, next: '7', ...PT1 })),
@@ -127,6 +129,7 @@ export const tgpPageLabels: Record<string, string> = {
   'tgp-b-soi': 'TGP format, SOI: NARO, slewed by hand toward the chimney',
   'tgp-b-on': 'TGP format: on the brickworks chimney, station 3 next',
   'tgp-b-on7': 'TGP format: on the chimney, station 7 next',
+  'tgp-b-cz': 'TGP format: slews zeroed (CZ), back on steerpoint 3',
   'tgp-t': 'TGP format, AGM-65D selected: on steerpoint 5',
   'tgp-t-soi': 'TGP format, SOI: slewed by hand toward the lead T-72',
   'tgp-t-1': 'TGP format, SOI: on the T-72, correlator slewing (1)',

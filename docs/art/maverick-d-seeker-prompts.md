@@ -38,7 +38,7 @@ Make a 768 x 768 px square image that exactly matches the layout of the attached
 
 ## ir-tgp-boresight (`TGP_IR_B`)
 
-Targeting pod, narrow field of view (NARO), the same scene, four times closer than the Maverick's narrow view: the junction at the centre, the kiln and the hot chimney (box 2) up and to the right.
+Targeting pod, narrow field of view (NARO), the same scene, 2.5 times closer than the Maverick's narrow view: the junction at the centre, the kiln and the hot chimney (box 2) up and to the right.
 
 Prompt:
 
