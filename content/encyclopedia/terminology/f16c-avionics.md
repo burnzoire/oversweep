@@ -151,6 +151,35 @@ terms:
     expansion: HLS
     definition: "The range staple on the right of the HUD in a POS shot: it spans the missile's minimum to maximum launch range, with a dash between the AMZ and the MMZ and a caret for the jet's present range."
     cite: [{ n: 1, page: "663–664" }]
+  - term: WPN format
+    expansion: Weapon format
+    definition: "The MFD format for the selected weapon's own sensor and modes: for the AGM-65 Maverick, the missile seeker's video under its crosshairs; for the HARM, its search or handoff data."
+    cite: [{ n: 1, page: "660, 673" }]
+  - term: Pointer cross
+    definition: "The cross on the Maverick's WPN format that shows where the missile's seeker is looking, measured from the jet's boresight. It flashes when the seeker is more than 10 degrees off the boresight or the target image is too small to track: a launch condition is not met."
+    cite: [{ n: 1, page: "673" }]
+  - term: PRE mode
+    expansion: Pre-planned
+    definition: "The Maverick delivery sub-mode that slaves the seeker to the system point of interest, usually a steerpoint, so the pilot finds the target on the WPN format near that point and locks it there."
+    cite: [{ n: 1, page: "681" }]
+  - term: VIS mode
+    expansion: Visual
+    definition: "The Maverick delivery sub-mode for a target the pilot can see: a box on the HUD is slewed over it and designated, and the seeker looks there. Not available with Mavericks on the three-missile LAU-88 rack."
+    cite: [{ n: 1, page: "683" }]
+  - term: BORE mode
+    expansion: Boresight
+    definition: "The Maverick delivery sub-mode for a quick shot at a target of opportunity: the seeker starts on the jet's boresight and is shown as a cross on the HUD, which the pilot flies near the target and slews onto it."
+    cite: [{ n: 1, page: "685" }]
+  - term: MBC
+    expansion: Missile boresight correlator
+    definition: "The system that hands a target from the targeting pod to a Maverick: it compares the pod's picture with the missile's and slews the seeker until they match, then commands the missile to track. A letter over the station on the WPN format shows how far it has got."
+    cite: [{ n: 1, page: "671, 673, 687" }]
+  - term: Video polarity
+    definition: "The contrast a seeker or pod works on: hot-on-cold (HOC) or cold-on-hot (COH). On the Maverick it is changed on the WPN format or with the TMS; the G and H models add AREA, for force correlate."
+    cite: [{ n: 1, page: "674, 690" }]
+  - term: Force correlate
+    definition: "A Maverick tracking mode (AGM-65G and H, polarity AREA) that tracks a chosen part of the picture rather than the centre of a vehicle, so the missile hits that exact spot on a building or structure."
+    cite: [{ n: 1, page: "690" }]
 sources:
   - n: 1
     title: "DCS: F-16C Viper Early Access Guide (English)"
@@ -162,4 +191,4 @@ sources:
 ---
 ## The words of the F-16C's avionics
 
-These are the words for how an F-16C pilot works the jet's sensors and displays: the sensor of interest and system point of interest that tie them together, the hand controls and screens, and the HARM Targeting System and targeting pod used to find and target enemy air defence radars. They describe the aircraft as the DCS F-16C simulation models it [[1]](#source-1). Engine, power and flight control words used in the F-16C procedures are here too.
+These are the words for how an F-16C pilot works the jet's sensors and displays: the sensor of interest and system point of interest that tie them together, the hand controls and screens, the HARM Targeting System and targeting pod used to find and target enemy air defence radars, and the weapon formats used to aim the HARM and the Maverick. They describe the aircraft as the DCS F-16C simulation models it [[1]](#source-1). Engine, power and flight control words used in the F-16C procedures are here too.

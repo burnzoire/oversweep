@@ -17,6 +17,8 @@ export interface MenuNode {
   /** Listed but not written: shown grey; groups remain navigable. */
   planned?: boolean;
   children?: MenuNode[];
+  /** A group with its own written article page (it lists its children itself), not the generic landing page. */
+  article?: boolean;
   /** A group whose children load on first open, from this JSON file (see menuFor). */
   lazy?: string;
 }
@@ -122,7 +124,7 @@ const weapons = group('f16c-weapons', 'Weapons and tactics', [
   group('weapons-air-to-ground', 'Air-to-ground weapons', [
     plan('GBU-12 Paveway II', ['TGP laser delivery']),
     plan('GBU-31/38 JDAM', ['Pre-planned and TOO']),
-    plan('AGM-65 Maverick', ['Boresight and lock', 'Slaved to TGP']),
+    { ...group('weapon-agm-65', 'AGM-65 Maverick', [{ ...proc('maverick-pre'), title: 'PRE shot' }, plan('Boresighting and TGP handoff'), plan('VIS shot'), plan('BORE shot'), plan('Ripple fire'), plan('Force correlate'), plan('Automatic power-on')], `${F16C_HREF}weapons-and-tactics/air-to-ground/agm-65/`, 'The TV- and infrared-guided missile: how it works, its delivery modes, and firing it.'), article: true },
     plan('Unguided bombs, low and high drag', ['CCIP', 'CCRP', 'Offset pop-up', 'Loft (toss)']),
     plan('Rockets', ['CCIP']),
     plan('Cluster munitions', ['CBU-87 CCIP', 'CBU-105 CCRP']),

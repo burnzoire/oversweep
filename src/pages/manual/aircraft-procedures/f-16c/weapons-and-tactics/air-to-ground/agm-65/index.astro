@@ -1,0 +1,56 @@
+---
+import GroupCards from '../../../../../../../components/GroupCards.astro';
+import Term from '../../../../../../../components/Term.astro';
+import SiteLayout from '../../../../../../../layouts/SiteLayout.astro';
+import { sourceUrl } from '../../../../../../../data/aircraft-procedures';
+import { groupPages } from '../../../../../../../data/manual-menu';
+
+// The AGM-65 Maverick article: the parent of the Maverick procedures (issue #429's article-as-parent). It replaces
+// the generic group landing page for this node (`article: true` in the menu).
+const node = groupPages().find(n => n.id === 'weapon-agm-65')!;
+---
+<SiteLayout title="AGM-65 Maverick" activeSection="manual" description={node.summary}>
+  <article class="prose">
+    <p class="lead">The <Term record="agm-65">AGM-65 Maverick</Term> is an air-to-ground missile for close air support. A camera in its nose sees the target, and once the pilot has locked it on the missile guides itself to it: fire and forget. <a href="#source-1">[1, p. 671]</a></p>
+
+    <h2>The four F-16C Mavericks</h2>
+    <p>The DCS F-16C carries four models. Two see in infrared and two in visible light, and each pair comes with a 125 lb shaped-charge warhead or a 300 lb penetrating one, for harder targets. <a href="#source-1">[1, p. 36]</a></p>
+    <table>
+      <thead><tr><th scope="col">Model</th><th scope="col">Seeker</th><th scope="col">Warhead</th><th scope="col">Use</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">AGM-65D</th><td>Imaging infrared</td><td>125 lb shaped charge</td><td>Day and night, in clear or restricted visibility</td></tr>
+        <tr><th scope="row">AGM-65G</th><td>Imaging infrared</td><td>300 lb penetrating</td><td>As the D, against hardened targets; can force correlate</td></tr>
+        <tr><th scope="row">AGM-65H</th><td>TV (CCD camera)</td><td>125 lb shaped charge</td><td>Daylight only; can force correlate</td></tr>
+        <tr><th scope="row">AGM-65K</th><td>TV (CCD camera)</td><td>300 lb penetrating</td><td>As the H, against hardened targets</td></tr>
+      </tbody>
+    </table>
+    <p>One Maverick hangs on an LAU-117 rail, or up to three on an LAU-88. Its maximum range is about 13 NM. <a href="#source-1">[1, p. 36]</a> The ground crew set its fuze delay and a LAND or SHIP switch, which picks a tracking method suited to vehicles or to ships. <a href="#source-1">[1, p. 671]</a></p>
+
+    <h2>Warming up</h2>
+    <p>A Maverick has gyroscopes that hold its camera picture steady, and they must spin up before it can be used. Powering the missiles on the <Term>SMS</Term> format starts a 3-minute warm-up. Until it is over the <Term>WPN format</Term> reads NOT TIMED OUT, and any video it shows is not ground-stabilized. Pressing the uncage button with the WPN format as the <Term>SOI</Term> brings the video up sooner, once the gyroscopes reach 90% of their speed. <a href="#source-1">[1, pp. 671, 675, 679]</a></p>
+    <p>After the warm-up a missile has 1 hour in standby, and 30 minutes once its video is on. When that time runs out it must be off for 2 hours. So power the Mavericks at least 3 minutes before you need them, not at takeoff. The SMS control page can switch them on by itself as you cross a chosen steerpoint heading a chosen way. <a href="#source-1">[1, pp. 675–677]</a></p>
+
+    <h2>The seeker picture</h2>
+    <p>The WPN format shows the missile's own camera picture. The crosshairs are the missile's line of sight. The <Term>pointer cross</Term> shows where the seeker is looking compared with the jet's boresight, and marks under the crosshairs show 5, 10 and 15° below the boresight. The AGM-65D's seeker can turn up to 42° either side. <a href="#source-1">[1, pp. 671, 673]</a></p>
+    <p>The wide field of view helps you find the target. The narrow one, which shows the part inside the brackets, makes the target bigger. <Term>Video polarity</Term> selects hot-on-cold (HOC) or cold-on-hot (COH). A launch range scale on the right shows the maximum and minimum range, with a caret at the present range, and TTI is the time the missile would take to reach the target if fired now. <a href="#source-1">[1, pp. 673–674]</a></p>
+    <p>Before firing, check three things. The missile must be tracking the right target. The pointer cross must be steady: it flashes when the seeker is more than 10° off the boresight, or when the target is too small to hold. And the target must be in range. <a href="#source-1">[1, pp. 673, 681]</a></p>
+
+    <h2>Delivery modes</h2>
+    <p>You pick how the seeker is pointed at the target with the sub-mode on the SMS or WPN format (OSB 2), or by depressing the RDR CURSOR/ENABLE switch. <a href="#source-1">[1, p. 672]</a></p>
+    <ul>
+      <li><strong><Term>PRE mode</Term>:</strong> the seeker is slaved to the system point of interest (<Term>SPI</Term>), usually the steerpoint. You find the target on the WPN format near it, slew onto it and lock. <a href="#source-1">[1, p. 681]</a></li>
+      <li><strong><Term>VIS mode</Term>:</strong> for a target you can see. You slew a box on the <Term>HUD</Term> onto it and designate, and the seeker looks there. Not available on the LAU-88. <a href="#source-1">[1, p. 683]</a></li>
+      <li><strong><Term>BORE mode</Term>:</strong> for a quick shot at a target of opportunity, without moving the SPI. The seeker starts on the boresight, shown as a cross on the HUD, which you fly near the target and slew onto it. <a href="#source-1">[1, p. 685]</a></li>
+      <li><strong>Targeting pod handoff:</strong> in PRE or VIS, the <Term>TGP</Term> passes its target to the missile. The <Term>MBC</Term> slews the seeker until its picture matches the pod's. A letter over the station on the WPN format shows its progress, from S (slave) through 1 and 2 (slewing) to T (track) and C (correlated), or I if the handoff is impossible. Boresighting each missile to the pod beforehand makes the handoff quicker. <a href="#source-1">[1, pp. 671, 673, 678–680, 687]</a></li>
+    </ul>
+    <p>With two missiles on LAU-117 rails you can lock a separate target with each, then fire them in quick succession: ripple fire. The G and H models can also <Term>force correlate</Term>: with the polarity set to AREA they track one chosen spot on a building, not the centre of a vehicle. <a href="#source-1">[1, pp. 687–691]</a></p>
+
+    <h2>After launch</h2>
+    <p>The missile tracks the target on its own picture, so you can turn away at once. When the target fills about three quarters of its picture it switches from tracking the whole target to forced correlation, matching the image, for the rest of the way. <a href="#source-1">[1, p. 671]</a></p>
+
+    <h2>Procedures</h2>
+    <GroupCards node={node} list />
+
+    <section class="sources" aria-labelledby="mav-sources"><h2 id="mav-sources">Sources</h2><ol><li id="source-1"><a href={sourceUrl}>DCS F-16C Viper Early Access Guide (EN, 16 August 2026)</a> — Eagle Dynamics. “AGM-65 Maverick” pp. 671–691; weapons overview p. 36. A sim manual: it describes the DCS F-16C, which models the real missile in simplified form.</li></ol></section>
+  </article>
+</SiteLayout>

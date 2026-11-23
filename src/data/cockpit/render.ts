@@ -275,7 +275,11 @@ function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, cu
   for (const pg of ind?.pages ?? []) {
     const page = d.pages.find(q => q.id === pg.id);
     const clip = `mfd-video-${++videoClips}`;
-    let body = page?.video ? `<clipPath id="${clip}"><rect x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" rx="${n(Math.max(0, d.r - d.inset))}"/></clipPath><image data-video href="${page.video}" x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${clip})" opacity="0.9"/>` : '';
+    // The video fills the glass, or is larger (`videoScale`) and slews under it: a panned picture moves opposite to the cursor.
+    const vg = g * (page?.videoScale ?? 1), at = page?.pan && page.cursor ? page.cursor.at : [0, 0];
+    const image = page?.video ? `<image data-video href="${page.video}" x="${n(-vg)}" y="${n(-vg)}" width="${n(2 * vg)}" height="${n(2 * vg)}" preserveAspectRatio="xMidYMid slice" opacity="0.9"/>` : '';
+    let body = page?.video ? `<clipPath id="${clip}"><rect x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" rx="${n(Math.max(0, d.r - d.inset))}"/></clipPath><g clip-path="url(#${clip})">` +
+      (page.pan ? `<g data-pan="${id}" transform="translate(${n(-at[0])} ${n(-at[1])})">${image}</g>` : image) + '</g>' : '';
     if (page?.fills) body += `<path d="${page.fills}" fill="${W}" stroke="none"/>`;
     for (const p of page?.paths ?? []) if (p.fill) body += `<path d="${p.d}" fill="${MFD_COLOURS[p.c]}" stroke="none"/>`;
     for (const w of page?.words ?? []) {
@@ -289,7 +293,7 @@ function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, cu
     if (page?.fine) body += `<path d="${page.fine}" fill="none" stroke="${W}" ${sw('fine')}/>`;
     for (const p of page?.paths ?? []) if (!p.fill) body += `<path d="${p.d}" fill="none" stroke="${MFD_COLOURS[p.c]}" ${sw(p.pen ?? 'medium')}${p.dash ? ' stroke-dasharray="2.2 1.4"' : ''}/>`;
     if (page?.aid) body += `<path data-aid d="${page.aid}" fill="none" stroke="${MFD_AID}" stroke-dasharray="1.2 0.8" ${sw('fine')}/>`;
-    if (page?.cursor) body += `<g data-cursor="${id}" transform="translate(${n(page.cursor.at[0])} ${n(page.cursor.at[1])})"><path d="${page.cursor.d}" fill="none" stroke="${W}" ${sw('medium')}/></g>`;
+    if (page?.cursor && !page.pan) body += `<g data-cursor="${id}" transform="translate(${n(page.cursor.at[0])} ${n(page.cursor.at[1])})"><path d="${page.cursor.d}" fill="none" stroke="${W}" ${sw('medium')}/></g>`;
     s += `<g data-page-of="${id}" data-page="${pg.id}"${pg.id === current ? '' : ' display="none"'}>${body}</g>`;
   }
   return s;

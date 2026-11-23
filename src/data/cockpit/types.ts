@@ -384,9 +384,13 @@ export interface MfdDisplay {
     /** White symbology paths (mm about the screen centre): `marks` medium lines, `fine` thin lines, `fills` solid shapes (drawn under the words). */
     marks?: string; fine?: string; fills?: string;
     /** Coloured symbology: `pen` fine or medium (default) line, or a solid `fill`. */
-    paths?: { d: string; c: MfdColour; pen?: 'fine' | 'medium'; fill?: boolean; /** Dashed line (the HAS video frame). */ dash?: boolean }[];
+    paths?: { d: string; c: MfdColour; pen?: 'fine' | 'medium'; fill?: boolean; /** Dashed line (the HAS video frame). */ dash?: boolean; }[];
     /** Sensor video under the symbology, filling the glass (an image URL, e.g. a data URI). */
     video?: string;
+    /** The video image's size as a multiple of the glass (default 1): a larger picture can be slewed (`pan`). */
+    videoScale?: number;
+    /** The procedure's cursor slews the video instead of drawing a symbol: the picture moves opposite to the cursor (the Maverick seeker). */
+    pan?: boolean;
     /** A teaching overlay that is not on the real display (bearing lines, an error ellipse): drawn dashed in orange. */
     aid?: string;
     /** A cursor the procedure moves (`cockpit:indicate` `cursors`): white lines about its own origin, starting at `at`. */
