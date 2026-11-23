@@ -124,7 +124,7 @@ const weapons = group('f16c-weapons', 'Weapons and tactics', [
   group('weapons-air-to-ground', 'Air-to-ground weapons', [
     plan('GBU-12 Paveway II', ['TGP laser delivery']),
     plan('GBU-31/38 JDAM', ['Pre-planned and TOO']),
-    { ...group('weapon-agm-65', 'AGM-65 Maverick', [{ ...proc('maverick-pre'), title: 'PRE shot' }, plan('Boresighting and TGP handoff'), plan('VIS shot'), plan('BORE shot'), plan('Ripple fire'), plan('Force correlate'), plan('Automatic power-on')], `${F16C_HREF}weapons-and-tactics/air-to-ground/agm-65/`, 'The TV- and infrared-guided missile: how it works, its delivery modes, and firing it.'), article: true },
+    { ...group('weapon-agm-65', 'AGM-65 Maverick', [{ ...proc('maverick-pre'), title: 'PRE shot' }, { ...proc('maverick-handoff'), title: 'Boresight and TGP handoff shot' }, plan('VIS shot'), plan('BORE shot'), plan('Ripple fire'), plan('Force correlate'), plan('Automatic power-on')], `${F16C_HREF}weapons-and-tactics/air-to-ground/agm-65/`, 'The TV- and infrared-guided missile: how it works, its delivery modes, and firing it.'), article: true },
     plan('Unguided bombs, low and high drag', ['CCIP', 'CCRP', 'Offset pop-up', 'Loft (toss)']),
     plan('Rockets', ['CCIP']),
     plan('Cluster munitions', ['CBU-87 CCIP', 'CBU-105 CCRP']),

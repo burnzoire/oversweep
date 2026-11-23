@@ -1,6 +1,6 @@
 import type { MfdDisplay } from '../types';
 import { tracer } from '../trace.ts';
-import { MAV_TV_BORE, MAV_TV_LEAD, MAV_TV_TANK3, MAV_TV_NARROW, MAV_TV_SPI, MAV_TV_WIDE, MAV_VIDEO_K } from './maverick-video.ts';
+import { IR, underIn, MAV_IR_B_NARROW, MAV_IR_B_WIDE, MAV_IR_T_NARROW, MAV_IR_T_WIDE, MAV_TV_BORE, MAV_TV_LEAD, MAV_TV_TANK3, MAV_TV_NARROW, MAV_TV_SPI, MAV_TV_WIDE, MAV_VIDEO_K } from './maverick-video.ts';
 
 /**
  * F-16C AGM-65 Maverick formats for the shared MFD (`mfd.ts`): the SMS page with AG65 selected (guide p. 672) and
@@ -36,21 +36,22 @@ const row = (cur: 'SMS' | 'WPN') => [
 
 export type MavMode = 'PRE' | 'VIS' | 'BORE';
 /** SMS page (p. 672): A-G (OSB 1), sub-mode (OSB 2), INV (OSB 4), CNTL (OSB 5), weapon (OSB 6), power (OSB 7), release pulses (OSB 8), STEP (OSB 19), stations 3 and 7, station 3 next. */
-function sms(id: string, mode: MavMode, power: 'off' | 'on' | 'ready'): Page {
+/** `status`: the weapon status word once warmed up (RDY armed, SIM with MASTER ARM at SIMULATE, p. 674). */
+function sms(id: string, mode: MavMode, power: 'off' | 'on' | 'ready', type: 'H' | 'D' = 'H', status: 'RDY' | 'SIM' = 'RDY', next: '3' | '7' = '3'): Page {
   return {
     id, words: [
       ...top('A-G', mode, '', 'INV', 'CNTL'),
-      w('2AG65H', 551.5, RIGHT_Y[0], 'end'),
-      ...(power === 'ready' ? [w('RDY', 385, 185)] : []),
+      w(`2AG65${type}`, 551.5, RIGHT_Y[0], 'end'),
+      ...(power === 'ready' ? [w(status, 385, 185)] : []),
       w('PWR', 551.5, 249, 'end'), w(power === 'off' ? 'OFF' : 'ON', 551.5, 265, 'end'),
       w('RP', 551.5, 320, 'end'), w('1', 551.5, 336, 'end'),
       w('STEP', 111.5, LEFT_Y[1], 'start'),
       w('3', 118, 470), w('7', 546, 470),
-      ...(power === 'ready' ? [w('RDY', 332.5, 505)] : []),
+      ...(power === 'ready' ? [w(status, 332.5, 505)] : []),
       ...row('SMS'),
     ],
     // The next station to fire is outlined (as on the HARM SMS page, p. 659).
-    paths: [{ d: poly([[111, 461.5], [125, 461.5], [125, 478.5], [111, 478.5]], true), c: 'white', pen: 'fine' }],
+    paths: [{ d: next === '3' ? poly([[111, 461.5], [125, 461.5], [125, 478.5], [111, 478.5]], true) : poly([[539, 461.5], [553, 461.5], [553, 478.5], [539, 478.5]], true), c: 'white', pen: 'fine' }],
   };
 }
 
@@ -113,15 +114,22 @@ interface Wpn {
   id: string; mode: MavMode; video: string; wide: boolean; soi: boolean; pan?: boolean;
   /** Seeker direction from the boresight, degrees right and down. */
   ptr: [number, number]; track?: boolean; station: '3' | '7'; count: number; range?: number; tti?: string; ready: boolean;
+  /** AGM-65D pages: the type, the status word (SIM at MASTER ARM SIMULATE), the MBC letter over the station (S unless
+   * named, p. 673), HANDOFF IN PROGRESS (p. 687), and where the panned picture sits (page mm; the slew start if not named). */
+  type?: 'H' | 'D'; status?: 'RDY' | 'SIM'; mbc?: string; handoff?: boolean; at?: [number, number];
+  /** Glasses the picture spans (MAV_VIDEO_K unless named). */
+  videoK?: number;
 }
 function wpn(s: Wpn): Page {
   const words: Word[] = [
     ...top('OPER', s.mode, 'FOV'),
     w('BSGT', 111.5, LEFT_Y[0], 'start'),
-    w(`${s.count}AG65H`, 551.5, RIGHT_Y[0], 'end'), w('HOC', 551.5, RIGHT_Y[1], 'end'),
+    w(`${s.count}AG65${s.type ?? 'H'}`, 551.5, RIGHT_Y[0], 'end'), w('HOC', 551.5, RIGHT_Y[1], 'end'),
     // Station: the Missile Boresight Correlator's status (S: slave) over the next station to fire (p. 673).
-    ...(s.station === '3' ? [w('S', 132, 455.5), w('3', 132, 472)] : [w('S', 505, 455.5), w('7', 505, 472)]),
-    ...(s.ready ? [w('RDY', 330, 504)] : []),
+    ...(s.station === '3' ? [w(s.mbc ?? 'S', 132, 455.5), w('3', 132, 472)] : [w(s.mbc ?? 'S', 505, 455.5), w('7', 505, 472)]),
+    ...(s.ready ? [w(s.status ?? 'RDY', 330, 504)] : []),
+    // Where HANDOFF IN PROGRESS is written is assumed (the guide shows no image of it): under NOT SOI.
+    ...(s.handoff ? [w('HANDOFF IN', 330, 238), w('PROGRESS', 330, 256)] : []),
     ...(s.tti ? [w(s.tti, 494, 504, 'end')] : []),
     ...(s.range ? [w(`${s.range}>`, 536, larY(s.range), 'end')] : []),
     ...(s.soi ? [] : [w('NOT SOI', 330, 218)]),
@@ -129,7 +137,7 @@ function wpn(s: Wpn): Page {
   ];
   const sx = s.station === '3' ? 132 : 505;
   return {
-    id: s.id, words, video: s.video, ...(s.pan ? { pan: true, videoScale: MAV_VIDEO_K, cursor: { d: '', at: MAV_SLEW.start } } : { videoScale: MAV_VIDEO_K }),
+    id: s.id, words, video: s.video, ...(s.pan ? { pan: true, videoScale: s.videoK ?? MAV_VIDEO_K, cursor: { d: '', at: s.at ?? MAV_SLEW.start } } : { videoScale: s.videoK ?? MAV_VIDEO_K }),
     marks: crosshairs(s.track ? 0 : OPEN) + DEPRESSION + pointer(...s.ptr) + (s.wide ? BRACKETS : '') + (s.range ? LAR_STAPLE : ''),
     fine: s.soi ? FRAME : '',
     paths: [{ d: poly([[sx - 7, 463.5], [sx + 7, 463.5], [sx + 7, 480.5], [sx - 7, 480.5]], true), c: 'white', pen: 'fine' }],
@@ -149,6 +157,80 @@ export const maverickPages: Page[] = [
   // After the shot: station 7 is next, its seeker video on the same picture, not tracking.
   wpn({ id: 'wpn-mav-7', ...pre, station: '7', count: 1, video: MAV_TV_NARROW, wide: false, soi: true, ptr: AT_LEAD }),
 ];
+/* ------------------------------------------- AGM-65D boresight and TGP handoff */
+
+type IP = readonly [number, number];
+const add = (a: IP, b: IP): P => [a[0] + b[0], a[1] + b[1]];
+const mid = (a: IP, b: IP, t: number): P => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+/** The page offset that puts point `p` of picture `pic` under the WPN crosshairs. */
+const at = (pic: { k: number }, p: IP): P => { const [x, y] = underIn(pic, MAV_CROSS, p); return [mm(x), mm(y)]; };
+/**
+ * Each missile's seeker is a little out of line with the pod until it is boresighted (illustrative), so slaved to the
+ * steerpoint it looks just beside it. Narrow-picture px, the point under the crosshairs.
+ */
+const ERR3: IP = [16, 12], ERR7: IP = [-22, 16];
+const B = IR.bNarrow, T = IR.tNarrow;
+const slewD = (from: IP, to: IP) => {
+  const start = at(B, from), target = at(B, to);
+  return { start, target, reach: mm(6), speed: Math.max(mm(45), Math.hypot(target[0] - start[0], target[1] - start[1]) / 3), box: [mm(-1500), mm(-1500), mm(1500), mm(1500)] as [number, number, number, number] };
+};
+/** Boresighting: station 3's seeker from beside steerpoint 3 onto the chimney, then station 7's from beside the chimney. */
+export const MAV_D_SLEW3 = { ...slewD(add(B.spi, ERR3), B.aim), what: 'chimney' };
+export const MAV_D_SLEW7 = { ...slewD(add(B.aim, ERR7), B.aim), what: 'chimney' };
+/** Seeker angles: boresight scene 10 NM ahead at 8,000 ft, the jet level (7.6 degrees down plus 2 of nose-up); target scene in a shallow dive. */
+const B_PTR: [number, number] = [0, 9.6], T_PTR: [number, number] = [0, 8.3], T_PTR_TANK: [number, number] = [0.22, 8.25];
+const bD = { type: 'D' as const, mode: 'PRE' as const, count: 2, ready: true, status: 'SIM' as const, ptr: B_PTR };
+const tD = { type: 'D' as const, mode: 'PRE' as const, station: '7' as const, count: 2, ready: true, range: 5, tti: '000:31' };
+const bNar = (id: string, p: IP, o: Partial<Wpn> = {}) => wpn({ id, ...bD, station: '3', video: MAV_IR_B_NARROW, videoK: B.k, wide: false, soi: true, pan: true, at: at(B, p), ...o });
+const tNar = (id: string, p: IP, o: Partial<Wpn> = {}) => wpn({ id, ...tD, video: MAV_IR_T_NARROW, videoK: T.k, wide: false, soi: false, pan: true, at: at(T, p), ptr: T_PTR, ...o });
+export const maverickDPages: Page[] = [
+  sms('sms-d-off', 'BORE', 'off', 'D'), sms('sms-d-on', 'BORE', 'on', 'D'), sms('sms-d', 'BORE', 'ready', 'D', 'SIM'), sms('sms-d-pre', 'PRE', 'ready', 'D', 'SIM'),
+  // After boresighting station 7 is next to fire, so the shot starts there.
+  sms('sms-d-pre7', 'PRE', 'ready', 'D', 'SIM', '7'), sms('sms-d-pre-off', 'PRE', 'off', 'D', 'RDY', '7'), sms('sms-d-pre-on', 'PRE', 'on', 'D', 'RDY', '7'), sms('sms-d-pre-rdy', 'PRE', 'ready', 'D', 'RDY', '7'),
+  // Boresighting, steerpoint 3, MASTER ARM at SIMULATE.
+  wpn({ id: 'wpn-d-b-wide', ...bD, station: '3', video: MAV_IR_B_WIDE, videoK: IR.bWide.k, wide: true, soi: false, pan: true, at: at(IR.bWide, add(IR.bWide.spi, [ERR3[0] / 2, ERR3[1] / 2])) }),
+  bNar('wpn-d-b-narrow', add(B.spi, ERR3), { soi: false }),
+  bNar('wpn-d-b', add(B.spi, ERR3)),
+  bNar('wpn-d-b-track', B.aim, { track: true }),
+  bNar('wpn-d-b-slaved', B.aim),
+  bNar('wpn-d-b7', add(B.aim, ERR7), { station: '7' }),
+  bNar('wpn-d-b7-track', B.aim, { station: '7', track: true }),
+  bNar('wpn-d-b7-slaved', B.aim, { station: '7' }),
+  // The shot, steerpoint 5, armed: the seeker follows the pod as the correlator hands the tank off (S, 1, 2, T, C).
+  wpn({ id: 'wpn-d-t-wide', ...tD, video: MAV_IR_T_WIDE, videoK: IR.tWide.k, wide: true, soi: false, pan: true, at: at(IR.tWide, IR.tWide.spi), ptr: T_PTR }),
+  tNar('wpn-d-t', T.spi),
+  tNar('wpn-d-t-1', mid(T.spi, T.aim, 0.55), { mbc: '1', handoff: true, ptr: mid(T_PTR, T_PTR_TANK, 0.55) }),
+  tNar('wpn-d-t-2', add(T.aim, [5, 3]), { mbc: '2', handoff: true, ptr: T_PTR_TANK }),
+  tNar('wpn-d-t-T', T.aim, { mbc: 'T', handoff: true, track: true, ptr: T_PTR_TANK }),
+  tNar('wpn-d-t-C', T.aim, { mbc: 'C', track: true, ptr: T_PTR_TANK }),
+  tNar('wpn-d-t-3', T.aim, { station: '3', count: 1, soi: false, ptr: T_PTR_TANK }),
+];
+export const maverickDPageLabels: Record<string, string> = {
+  'sms-d-off': 'SMS format: AG65D selected, BORE, powered off',
+  'sms-d-on': 'SMS format: AG65D, BORE, powered on and warming up',
+  'sms-d': 'SMS format: AG65D, BORE, ready, MASTER ARM at SIMULATE',
+  'sms-d-pre': 'SMS format: AG65D, PRE, MASTER ARM at SIMULATE',
+  'sms-d-pre7': 'SMS format: AG65D, PRE, SIM, station 7 next',
+  'sms-d-pre-off': 'SMS format: AG65D, PRE, powered off',
+  'sms-d-pre-on': 'SMS format: AG65D, PRE, powered on and warming up',
+  'sms-d-pre-rdy': 'SMS format: AG65D, PRE, armed and ready',
+  'wpn-d-b-wide': 'WPN format: AGM-65D in PRE on steerpoint 3, wide, SIM, not SOI',
+  'wpn-d-b-narrow': 'WPN format: AGM-65D, narrow field of view, beside steerpoint 3, not SOI',
+  'wpn-d-b': 'WPN format, SOI: AGM-65D station 3, the seeker slewed by hand',
+  'wpn-d-b-track': 'WPN format, SOI: station 3 tracking the chimney',
+  'wpn-d-b-slaved': 'WPN format, SOI: station 3 boresighted, following the pod onto the chimney',
+  'wpn-d-b7': 'WPN format, SOI: station 7 next, its seeker beside the chimney',
+  'wpn-d-b7-track': 'WPN format, SOI: station 7 tracking the chimney',
+  'wpn-d-b7-slaved': 'WPN format, SOI: station 7 boresighted, on the chimney',
+  'wpn-d-t-wide': 'WPN format: AGM-65D in PRE on steerpoint 5, wide, armed, not SOI',
+  'wpn-d-t': 'WPN format: narrow, on steerpoint 5, not SOI',
+  'wpn-d-t-1': 'WPN format: handoff in progress, correlator slewing to the pod line of sight (1)',
+  'wpn-d-t-2': 'WPN format: handoff in progress, correlator matching the pictures (2)',
+  'wpn-d-t-T': 'WPN format: handoff, the missile commanded to track (T)',
+  'wpn-d-t-C': 'WPN format: handoff complete (C), tracking the lead T-72',
+  'wpn-d-t-3': 'WPN format: after the shot, station 3 next',
+};
+
 export const maverickPageLabels: Record<string, string> = {
   'sms-ag65-off': 'SMS format: AG65 selected, BORE, Mavericks powered off',
   'sms-ag65-on': 'SMS format: AG65, BORE, powered on and warming up',

@@ -10,14 +10,15 @@
  */
 
 import { HAD_SLEW, HADH, HADX } from '../data/cockpit/f16c/mfd-had';
-import { MAV_SLEW } from '../data/cockpit/f16c/mfd-maverick';
+import { MAV_D_SLEW3, MAV_D_SLEW7, MAV_SLEW } from '../data/cockpit/f16c/mfd-maverick';
+import { TGP_SLEW_B, TGP_SLEW_T } from '../data/cockpit/f16c/mfd-tgp';
 
 interface StepDo { control: string; to: string; on?: 'press' | 'release' }
 interface Typing { keys: string[]; pages: string[] }
 interface Step { id: string; panels: string[]; hints?: string[]; do?: StepDo; also?: StepDo[]; type?: Typing; confirm?: string }
 interface Config { aircraft: string; model: string; initial: Record<string, string>; labels: Record<string, string>; names: Record<string, string>; steps: Step[] }
 /** `pod`: ms of pod warm-up left (-1 off); `cur`: the HAD cursor while it is slewed by hand (page units); the rest name pages. */
-interface State { pod: number; mfd: string; left: string; ded: string; cur: [number, number]; /** Pages of other panels' indicators (`hud.master-arm`), by indicator. */ x: Record<string, string>; /** Other panels' number readings (`hud.slant-range`), by indicator. */ r?: Record<string, number> }
+interface State { pod: number; /** The running warm-up (index into the scenario's). */ wk: number; mfd: string; left: string; ded: string; cur: [number, number]; /** Pages of other panels' indicators (`hud.master-arm`), by indicator. */ x: Record<string, string>; /** Other panels' number readings (`hud.slant-range`), by indicator. */ r?: Record<string, number> }
 type Pages = Partial<Pick<State, 'mfd' | 'left' | 'ded' | 'x' | 'r'>>;
 
 /**
@@ -28,21 +29,24 @@ type Pages = Partial<Pick<State, 'mfd' | 'left' | 'ded' | 'x' | 'r'>>;
 interface Scenario {
   initial: Pages; after: Record<string, Pages>;
   /** `display`: the MFD the cursor is on (the right one unless named); `what`: the prompt's name for the thing steered onto. */
-  slew: { step: string; on: string; free: string; done: string; target: [number, number]; start: [number, number]; reach: number; speed: number; box: [number, number, number, number]; display?: 'left' | 'right'; what?: string; along?: [number, number] };
+  slew: Slew | Slew[];
   /**
    * A warm-up the step that starts it waits out (the HTS pod's 30 s by default): its button counts down the jet's
    * `secs`, compressed to `ms`; `busy` and `ready` are the prompts; `after` the pages once it is over.
    */
-  warm?: { step: string; secs: number; ms: number; busy: string; ready: string; label: string; after?: Pages };
+  warm?: Warm | Warm[];
   /**
    * A step that plays out over time (the HTS scans after a turn): one page per moment, at `secs` jet seconds from the
    * start, played back `ms` real milliseconds per page. The step panel gets a player (play, scrubber, elapsed time)
    * so the reader can replay it or drag through it; `caption` follows the time ("after the turn").
    */
-  scans?: { step: string; pages: string[]; secs: number[]; ms: number; caption: string };
+  scans?: { step: string; pages: (string | Pages)[]; secs: number[]; ms: number; caption: string; display?: 'left' | 'right'; prompt?: string };
   /** Pages a step shows as it opens (a look step that adds a teaching overlay). */
   enter?: Record<string, Pages>;
 }
+/** A slew: from page `on` (drawn as `free` while slewed), ending on `done` once the cursor is within `reach` of `target`. Several may run, one per step. */
+interface Slew { step: string; on: string; free: string; done: string; target: [number, number]; start: [number, number]; reach: number; speed: number; box: [number, number, number, number]; display?: 'left' | 'right'; what?: string; along?: [number, number] }
+interface Warm { step: string; secs: number; ms: number; busy: string; ready: string; label: string; after?: Pages }
 const SCENARIOS: Record<string, Scenario> = {
   hts: {
     // The SOI starts on the left MFD, which shows the targeting pod (Slave, on the selected steerpoint).
@@ -101,6 +105,39 @@ const SCENARIOS: Record<string, Scenario> = {
     // The 3-minute warm-up (guide p. 675), compressed.
     warm: { step: 'power', secs: 180, ms: 6000, label: 'Warming up…', busy: 'The Mavericks are warming up: 3 minutes in the jet, a few seconds here.', ready: 'The 3 minutes are up: the Mavericks are in standby, ready to use. Continue.', after: { left: 'sms-ag65' } },
   },
+  'maverick-handoff': {
+    // The pod is on the right MFD, slaved to steerpoint 3; the left MFD shows the SMS format, AG65 (D) selected; NAV, master arm off.
+    initial: { mfd: 'tgp-b', left: 'sms-d-off', ded: 'cni', x: { 'hud.screen': 'on', 'hud.master-arm': 'none', 'hud.master-mode': 'nav' } },
+    after: {
+      'a-g': { x: { 'hud.master-mode': 'bore' } }, 'master-sim': { x: { 'hud.master-arm': 'sim' } },
+      power: { left: 'sms-d-on' }, pre: { left: 'sms-d-pre', x: { 'hud.master-mode': 'pre' } }, wpn: { left: 'wpn-d-b-wide' }, fov: { left: 'wpn-d-b-narrow' },
+      'tgp-soi': { mfd: 'tgp-b-soi' }, 'wpn-soi': { mfd: 'tgp-b-on', left: 'wpn-d-b' },
+      lock: { left: 'wpn-d-b-track' }, break: { left: 'wpn-d-b-slaved' },
+      step: { left: 'wpn-d-b7', mfd: 'tgp-b-on7' }, lock7: { left: 'wpn-d-b7-track' }, break7: { left: 'wpn-d-b7-slaved' },
+      cz: { mfd: 'tgp-b-cz' }, sms: { left: 'sms-d-pre7' }, 'power-off': { left: 'sms-d-pre-off' }, reset: { x: { 'hud.master-arm': 'none', 'hud.master-mode': 'nav' } },
+      rearm: { x: { 'hud.master-arm': 'arm', 'hud.master-mode': 'pre' } }, 'power-on': { left: 'sms-d-pre-on' },
+      wpn2: { left: 'wpn-d-t-wide' }, fov2: { left: 'wpn-d-t' }, 'tgp-soi2': { mfd: 'tgp-t-soi' },
+      release: { left: 'wpn-d-t-3', mfd: 'tgp-t-3' },
+    },
+    // Steerpoint 5 selected on the way to the target: the pod slews to it.
+    enter: { rearm: { mfd: 'tgp-t' } },
+    slew: [
+      { step: 'tgp-slew', on: 'tgp-b-soi', free: 'tgp-b-soi', done: 'tgp-b-soi', ...TGP_SLEW_B },
+      { step: 'mav-slew', on: 'wpn-d-b', free: 'wpn-d-b', done: 'wpn-d-b', display: 'left', ...MAV_D_SLEW3 },
+      { step: 'slew7', on: 'wpn-d-b7', free: 'wpn-d-b7', done: 'wpn-d-b7', display: 'left', ...MAV_D_SLEW7 },
+      { step: 'tgp-slew2', on: 'tgp-t-soi', free: 'tgp-t-soi', done: 'tgp-t-soi', ...TGP_SLEW_T },
+    ],
+    // The 3-minute warm-up (guide p. 675), compressed, once to boresight and again before the shot.
+    warm: [
+      { step: 'power', secs: 180, ms: 6000, label: 'Warming up…', busy: 'The Mavericks are warming up: 3 minutes in the jet, a few seconds here.', ready: 'The 3 minutes are up: the Mavericks are in standby. Continue.', after: { left: 'sms-d' } },
+      { step: 'power-on', secs: 180, ms: 6000, label: 'Warming up…', busy: 'The Mavericks are warming up again: 3 minutes in the jet, a few seconds here.', ready: 'The 3 minutes are up: the Mavericks are ready. Continue.', after: { left: 'sms-d-pre-rdy' } },
+    ],
+    // The correlator's handoff, letter by letter (the guide gives no timings; illustrative).
+    scans: {
+      step: 'handoff', secs: [0, 1, 3, 4], ms: 1400, caption: 'after the pod stops', prompt: 'Watch the letter over station 7 on either format. Replay it or drag through it below.',
+      pages: [{ left: 'wpn-d-t-1', mfd: 'tgp-t-1' }, { left: 'wpn-d-t-2', mfd: 'tgp-t-2' }, { left: 'wpn-d-t-T', mfd: 'tgp-t-T' }, { left: 'wpn-d-t-C', mfd: 'tgp-t-C' }],
+    },
+  },
 };
 
 // The pod takes about 30 s to initialize (guide p. 525); compressed here.
@@ -122,7 +159,9 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
   const sc = SCENARIOS[cfg.model] ?? SCENARIOS.hts;
-  const initialState = (): State => ({ pod: -1, mfd: 'off', left: 'off', ded: 'off', ...sc.initial, x: { ...sc.initial.x }, r: { ...sc.initial.r }, cur: [...sc.slew.start] } as State);
+  const slews = ([] as Slew[]).concat(sc.slew);
+  const warms = ([] as Warm[]).concat(sc.warm ?? POD_WARM);
+  const initialState = (): State => ({ pod: -1, wk: 0, mfd: 'off', left: 'off', ded: 'off', ...sc.initial, x: { ...sc.initial.x }, r: { ...sc.initial.r }, cur: [...slews[0].start] } as State);
   const copy = (s: State): State => ({ ...s, cur: [...s.cur], x: { ...s.x }, r: { ...s.r } });
   /** Apply a step's page changes; `x` adds to the other panels' pages rather than replacing them. */
   const apply = (p: Pages) => { const { x, r, ...rest } = p; Object.assign(st, rest); if (x) st.x = { ...st.x, ...x }; if (r) st.r = { ...st.r, ...r }; };
@@ -149,13 +188,17 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   const pending = (s: Step) => moves(s).filter(w => !made.has(mk(w)));
   const stepId = () => cfg.steps[step]?.id ?? '';
 
-  /** Slewing: the cursor moves by hand until it is on the SA-6. */
-  const slewLeft = sc.slew.display === 'left';
-  const slewing = () => stepId() === sc.slew.step && !finished && (slewLeft ? st.left : st.mfd) === sc.slew.on;
-  const warm: NonNullable<Scenario['warm']> = sc.warm ?? POD_WARM;
+  /** Slewing: the cursor (or a sensor's picture) moves by hand until it is on the target. The slew in play is this step's, else the last one before it. */
+  const stepOf = (id: string) => cfg.steps.findIndex(x => x.id === id);
+  const sl = () => slews.find(x => x.step === stepId()) ?? [...slews].reverse().find(x => stepOf(x.step) < step) ?? slews[0];
+  const slewLeft = () => sl().display === 'left';
+  const slewing = () => stepId() === sl().step && !finished && (slewLeft() ? st.left : st.mfd) === sl().on;
   function indicate() {
-    const right = slewing() && !slewLeft ? sc.slew.free : st.mfd, left = slewing() && slewLeft ? sc.slew.free : st.left;
-    dispatchEvent(new CustomEvent('cockpit:indicate', { detail: { pages: { 'right-mfd.display': right, 'left-mfd.display': left, 'ded.display': st.ded, ...st.x }, readings: { ...st.r }, cursors: { [`${slewLeft ? 'left' : 'right'}-mfd.display`]: st.cur } } }));
+    const s = sl(), right = slewing() && !slewLeft() ? s.free : st.mfd, left = slewing() && slewLeft() ? s.free : st.left;
+    // The hand-slewed position goes only to a page of that slew; other pages carry their own.
+    const shown = slewLeft() ? left : right;
+    const cursors = [s.on, s.free, s.done].includes(shown) ? { [`${slewLeft() ? 'left' : 'right'}-mfd.display`]: st.cur } : {};
+    dispatchEvent(new CustomEvent('cockpit:indicate', { detail: { pages: { 'right-mfd.display': right, 'left-mfd.display': left, 'ded.display': st.ded, ...st.x }, readings: { ...st.r }, cursors } }));
   }
   const keyText = (k: string) => name(k).replace(/ (key|button)$/, '').replace(/ \/.*$/, '');
 
@@ -168,7 +211,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   let raf = 0, last = 0;
   /** Distance from the target, or from the segment target → `along` when the slew accepts a line of targets. */
   function offTarget([x, y]: [number, number]) {
-    const [ax, ay] = sc.slew.target, [bx, by] = sc.slew.along ?? sc.slew.target;
+    const [ax, ay] = sl().target, [bx, by] = sl().along ?? sl().target;
     const l2 = (bx - ax) ** 2 + (by - ay) ** 2, t = l2 ? Math.max(0, Math.min(1, ((x - ax) * (bx - ax) + (y - ay) * (by - ay)) / l2)) : 0;
     return Math.hypot(x - ax - t * (bx - ax), y - ay - t * (by - ay));
   }
@@ -177,15 +220,15 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
     if (!slewing() || (!defl.x && !defl.y)) { raf = 0; return; }
-    const speed = (d: number) => Math.sign(d) * Math.abs(d) ** 1.5 * sc.slew.speed;
-    const [x0, y0, x1, y1] = sc.slew.box;
+    const speed = (d: number) => Math.sign(d) * Math.abs(d) ** 1.5 * sl().speed;
+    const [x0, y0, x1, y1] = sl().box;
     st.cur = [Math.min(x1, Math.max(x0, st.cur[0] + speed(defl.x) * dt)), Math.min(y1, Math.max(y0, st.cur[1] - speed(defl.y) * dt))];
-    if (offTarget(st.cur) < sc.slew.reach) {
-      st.cur = [...sc.slew.target];
-      if (slewLeft) st.left = sc.slew.done; else st.mfd = sc.slew.done;
+    if (offTarget(st.cur) < sl().reach) {
+      st.cur = [...sl().target];
+      if (slewLeft()) st.left = sl().done; else st.mfd = sl().done;
       stopSlew();
       indicate();
-      done(`The cursor is on the ${sc.slew.what ?? 'radar'}.`);
+      done(`The ${sl().display === 'left' || sl().on.startsWith('tgp') ? 'crosshairs are' : 'cursor is'} on the ${sl().what ?? 'radar'}.`);
       return;
     }
     indicate();
@@ -225,8 +268,8 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     else if (moves(s).length === 1) say(`${cap(instruction(moves(s)[0]))}.`);
     else if (moves(s).length) say(`Make these moves, in any order: ${moves(s).map(instruction).join('; ')}.`);
     else if (s.type) say(`Press ${keyText(s.type.keys[0])} (key 1 of ${s.type.keys.length}).`);
-    else if (slewing()) say(`Steer the cursor onto the ${sc.slew.what ?? 'radar'}: press and drag on the RDR CURSOR switch.`);
-    else if (scanning) say('Watch the HAD: each scan refines the position. Replay it or drag through it below.');
+    else if (slewing()) say(`Steer the ${sl().display === 'left' || sl().on.startsWith('tgp') ? 'crosshairs' : 'cursor'} onto the ${sl().what ?? 'radar'}: press and drag on the RDR CURSOR switch.`);
+    else if (scanning) say(sc.scans?.prompt ?? 'Watch the HAD: each scan refines the position. Replay it or drag through it below.');
     else say('Check the indications, then confirm.');
     showPad();
     indicate();
@@ -269,6 +312,9 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   function enterStep() {
     const e = sc.enter?.[stepId()];
     if (e) { apply(e); indicate(); }
+    // A slew starts from its own place.
+    const s = slews.find(x => x.step === stepId());
+    if (s) st.cur = [...s.start];
   }
 
   /* ---------------------------------------------------------------- player */
@@ -284,7 +330,9 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     t = Math.max(0, Math.min(end, v));
     let k = 0;
     secs.forEach((x, i) => { if (x <= t) k = i; });
-    if (st.mfd !== pages[k]) { st.mfd = pages[k]; indicate(); }
+    const pg = pages[k];
+    if (typeof pg !== 'string') { apply(pg); indicate(); }
+    else if (sc.scans!.display === 'left' ? st.left !== pg : st.mfd !== pg) { if (sc.scans!.display === 'left') st.left = pg; else st.mfd = pg; indicate(); }
     scrub.value = String(t);
     clock.textContent = `${mmss(t)} / ${mmss(end)} ${caption}`;
     scrub.setAttribute('aria-valuetext', `${mmss(t)} ${caption}`);
@@ -331,6 +379,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
 
   /** The pod's warm-up: the step that powers it counts the wait down on its button, then lets the reader on. */
   function warmUp() {
+    const warm = warms[st.wk];
     const wait = stepId() === warm.step;
     if (wait) { confirm.hidden = false; confirm.disabled = true; say(warm.busy); }
     const tick = () => {
@@ -355,7 +404,8 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     if (left.length) { say(`Done. Still to do: ${left.map(instruction).join('; ')}.`); showPad(); indicate(); return; }
     apply(sc.after[id] ?? {});
     indicate();
-    if (id === warm.step) { st.pod = warm.ms; warmUp(); return; }
+    const wi = warms.findIndex(w => w.step === id);
+    if (wi >= 0) { st.wk = wi; st.pod = warms[wi].ms; warmUp(); return; }
     done();
   }
 
