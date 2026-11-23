@@ -2,7 +2,7 @@ import type { MfdDisplay } from '../types';
 import { tracer } from '../trace.ts';
 import { FRAME, hadBottom } from './mfd-had.ts';
 import { TGP_VIDEO_SA11, TGP_VIDEO_SA6, TGP_VIDEO_STPT } from './tgp-video.ts';
-import { IR_AIM, IR_SPI, MAV_VIDEO_K, TGP_IR_B, TGP_IR_T } from './maverick-video.ts';
+import { IR, underIn, TGP_IR_B, TGP_IR_T } from './maverick-video.ts';
 
 /**
  * F-16C Targeting Pod (TGP) MFD format, A-G mode, for the shared MFD (`mfd.ts`). Traced from the guide's p. 495
@@ -65,7 +65,7 @@ const SPI: Record<string, Spi> = {
  * slews (`at`, page mm, the picture's offset under the crosshairs). Placed from the p. 679 image by its SWAP and TGP
  * labels (1.56 grid px per image px).
  */
-interface Mav { mbc: string; next: '3' | '7'; at: [number, number] }
+interface Mav { mbc: string; next: '3' | '7'; at: [number, number]; k: number }
 function tgp(id: string, spi: Spi, soi: boolean, track = false, mav?: Mav): Page {
   const words: Word[] = [
     w('A-G', 186, 117.5), w('PTR', 258, 117.5), w(mav ? 'NARO' : 'WIDE', 332, 117.5), w('OVRD', 405, 117.5), w('CNTL', 478, 117.5),
@@ -83,30 +83,32 @@ function tgp(id: string, spi: Spi, soi: boolean, track = false, mav?: Mav): Page
     id, words, marks: (track ? CROSS_SMALL + TRACK_BOX : CROSS) + (mav ? '' : BRACKETS) + NORTH, fills: NORTH_FILL, fine: soi ? FRAME : '',
     paths: [{ d: ARS, c: 'cyan' }, ...(mav ? [{ d: STATION_BOX[mav.next], c: 'white' as const, pen: 'fine' as const }] : [])],
     ...(spi.video ? { video: spi.video } : {}),
-    ...(mav ? { pan: true, videoScale: MAV_VIDEO_K, cursor: { d: '', at: mav.at } } : {}),
+    ...(mav ? { pan: true, videoScale: mav.k, cursor: { d: '', at: mav.at } } : {}),
   };
 }
 /** The next station's box (the p. 679 image highlights it). */
 const STATION_BOX = { '3': poly([[167.5, 446], [181.5, 446], [181.5, 463], [167.5, 463]], true), '7': poly([[485, 442.5], [499, 442.5], [499, 459.5], [485, 459.5]], true) };
-/** Glass px per picture px (the 768 px picture spans 1.6 glasses of 489 px), and the picture point under the crosshairs. */
-const IMG = (v: number) => v * (489 / (768 / MAV_VIDEO_K));
-const CROSS_IMG: P = [384 + (X[0] - SC[0]) / IMG(1), 384 + (X[1] - SC[1]) / IMG(1)];
-const under = (p: readonly [number, number]): [number, number] => [mm(IMG(p[0] - CROSS_IMG[0])), mm(IMG(p[1] - CROSS_IMG[1]))];
-/** The pod slewed by hand onto the chimney (boresighting) and onto the lead T-72 (the handoff). */
-const podSlew = (to: readonly [number, number]) => ({ start: under(IR_SPI), target: under(to), reach: mm(7), speed: mm(110), box: [mm(-140), mm(-140), mm(140), mm(140)] as [number, number, number, number] });
-export const TGP_SLEW_B = { ...podSlew(IR_AIM.bTgp), what: 'chimney' };
-export const TGP_SLEW_T = { ...podSlew(IR_AIM.tTgp), what: 'tank' };
+/** The page offset that puts point `p` of a picture under the pod's crosshairs. */
+const at = (pic: { k: number }, p: readonly [number, number]): [number, number] => { const [x, y] = underIn(pic, X, p); return [mm(x), mm(y)]; };
+/** The pod slewed by hand onto the chimney (boresighting) and onto the lead T-72 (the handoff): about 3 s at full deflection. */
+const podSlew = (pic: { k: number; spi: readonly [number, number]; aim: readonly [number, number] }) => {
+  const start = at(pic, pic.spi), target = at(pic, pic.aim);
+  return { start, target, reach: mm(7), speed: Math.max(mm(110), Math.hypot(target[0] - start[0], target[1] - start[1]) / 3), box: [mm(-1500), mm(-1500), mm(1500), mm(1500)] as [number, number, number, number] };
+};
+export const TGP_SLEW_B = { ...podSlew(IR.bTgp), what: 'chimney' };
+export const TGP_SLEW_T = { ...podSlew(IR.tTgp), what: 'tank' };
 /** The AGM-65D scenario's steerpoints 3 (10 NM, the brickworks) and 5 (5 NM, the T-72s); meterstick for NARO (assumed a quarter of WIDE's). */
 const STPT3: Spi = { lat: '036:21.840', lon: '037:04.215', elv: '+1210', hq: true, range: 'E10.0', meter: '65', ttg: '001:15', video: TGP_IR_B };
 const STPT5: Spi = { lat: '036:33.106', lon: '037:09.874', elv: '+1355', hq: true, range: 'E5.0', meter: '32', ttg: '000:31', video: TGP_IR_T };
-const B0 = under(IR_SPI), B1 = under(IR_AIM.bTgp), T1 = under(IR_AIM.tTgp);
+const PB = { at: at(IR.bTgp, IR.bTgp.spi), k: IR.bTgp.k }, PB1 = { at: at(IR.bTgp, IR.bTgp.aim), k: IR.bTgp.k };
+const PT = { at: at(IR.tTgp, IR.tTgp.spi), k: IR.tTgp.k }, PT1 = { at: at(IR.tTgp, IR.tTgp.aim), k: IR.tTgp.k };
 const tgpD: Page[] = [
-  tgp('tgp-b', STPT3, false, false, { mbc: 'S', next: '3', at: B0 }), tgp('tgp-b-soi', STPT3, true, false, { mbc: 'S', next: '3', at: B0 }),
-  tgp('tgp-b-on', STPT3, false, false, { mbc: 'S', next: '3', at: B1 }), tgp('tgp-b-on7', STPT3, false, false, { mbc: 'S', next: '7', at: B1 }),
+  tgp('tgp-b', STPT3, false, false, { mbc: 'S', next: '3', ...PB }), tgp('tgp-b-soi', STPT3, true, false, { mbc: 'S', next: '3', ...PB }),
+  tgp('tgp-b-on', STPT3, false, false, { mbc: 'S', next: '3', ...PB1 }), tgp('tgp-b-on7', STPT3, false, false, { mbc: 'S', next: '7', ...PB1 }),
   // The shot starts from station 7, next after boresighting.
-  tgp('tgp-t', STPT5, false, false, { mbc: 'S', next: '7', at: B0 }), tgp('tgp-t-soi', STPT5, true, false, { mbc: 'S', next: '7', at: B0 }),
-  ...['1', '2', 'T', 'C'].map(l => tgp(`tgp-t-${l}`, STPT5, true, false, { mbc: l, next: '7', at: T1 })),
-  tgp('tgp-t-3', STPT5, true, false, { mbc: 'S', next: '3', at: T1 }),
+  tgp('tgp-t', STPT5, false, false, { mbc: 'S', next: '7', ...PT }), tgp('tgp-t-soi', STPT5, true, false, { mbc: 'S', next: '7', ...PT }),
+  ...['1', '2', 'T', 'C'].map(l => tgp(`tgp-t-${l}`, STPT5, true, false, { mbc: l, next: '7', ...PT1 })),
+  tgp('tgp-t-3', STPT5, true, false, { mbc: 'S', next: '3', ...PT1 }),
 ];
 export const tgpPages: Page[] = [
   tgp('tgp', SPI.stpt, false), tgp('tgp-soi', SPI.stpt, true),

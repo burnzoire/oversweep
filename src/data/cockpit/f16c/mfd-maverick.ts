@@ -1,6 +1,6 @@
 import type { MfdDisplay } from '../types';
 import { tracer } from '../trace.ts';
-import { IR_AIM, IR_SPI, MAV_IR_B_NARROW, MAV_IR_B_WIDE, MAV_IR_T_NARROW, MAV_IR_T_WIDE, MAV_TV_BORE, MAV_TV_LEAD, MAV_TV_TANK3, MAV_TV_NARROW, MAV_TV_SPI, MAV_TV_WIDE, MAV_VIDEO_K } from './maverick-video.ts';
+import { IR, underIn, MAV_IR_B_NARROW, MAV_IR_B_WIDE, MAV_IR_T_NARROW, MAV_IR_T_WIDE, MAV_TV_BORE, MAV_TV_LEAD, MAV_TV_TANK3, MAV_TV_NARROW, MAV_TV_SPI, MAV_TV_WIDE, MAV_VIDEO_K } from './maverick-video.ts';
 
 /**
  * F-16C AGM-65 Maverick formats for the shared MFD (`mfd.ts`): the SMS page with AG65 selected (guide p. 672) and
@@ -117,6 +117,8 @@ interface Wpn {
   /** AGM-65D pages: the type, the status word (SIM at MASTER ARM SIMULATE), the MBC letter over the station (S unless
    * named, p. 673), HANDOFF IN PROGRESS (p. 687), and where the panned picture sits (page mm; the slew start if not named). */
   type?: 'H' | 'D'; status?: 'RDY' | 'SIM'; mbc?: string; handoff?: boolean; at?: [number, number];
+  /** Glasses the picture spans (MAV_VIDEO_K unless named). */
+  videoK?: number;
 }
 function wpn(s: Wpn): Page {
   const words: Word[] = [
@@ -135,7 +137,7 @@ function wpn(s: Wpn): Page {
   ];
   const sx = s.station === '3' ? 132 : 505;
   return {
-    id: s.id, words, video: s.video, ...(s.pan ? { pan: true, videoScale: MAV_VIDEO_K, cursor: { d: '', at: s.at ?? MAV_SLEW.start } } : { videoScale: MAV_VIDEO_K }),
+    id: s.id, words, video: s.video, ...(s.pan ? { pan: true, videoScale: s.videoK ?? MAV_VIDEO_K, cursor: { d: '', at: s.at ?? MAV_SLEW.start } } : { videoScale: s.videoK ?? MAV_VIDEO_K }),
     marks: crosshairs(s.track ? 0 : OPEN) + DEPRESSION + pointer(...s.ptr) + (s.wide ? BRACKETS : '') + (s.range ? LAR_STAPLE : ''),
     fine: s.soi ? FRAME : '',
     paths: [{ d: poly([[sx - 7, 463.5], [sx + 7, 463.5], [sx + 7, 480.5], [sx - 7, 480.5]], true), c: 'white', pen: 'fine' }],
@@ -160,42 +162,48 @@ export const maverickPages: Page[] = [
 type IP = readonly [number, number];
 const add = (a: IP, b: IP): P => [a[0] + b[0], a[1] + b[1]];
 const mid = (a: IP, b: IP, t: number): P => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+/** The page offset that puts point `p` of picture `pic` under the WPN crosshairs. */
+const at = (pic: { k: number }, p: IP): P => { const [x, y] = underIn(pic, MAV_CROSS, p); return [mm(x), mm(y)]; };
 /**
- * Each missile's seeker is a little out of line with the pod until it is boresighted (illustrative: about 0.1 to 0.2
- * degrees), so slaved to the steerpoint it looks just beside it. Narrow-picture px, the point under the crosshairs.
+ * Each missile's seeker is a little out of line with the pod until it is boresighted (illustrative), so slaved to the
+ * steerpoint it looks just beside it. Narrow-picture px, the point under the crosshairs.
  */
-const ERR3: IP = [30, 22], ERR7: IP = [-26, 18];
-const slewD = (from: IP, to: IP) => ({ start: under(from as P), target: under(to as P), reach: mm(6), speed: mm(45), box: [mm(-140), mm(-140), mm(140), mm(140)] as [number, number, number, number] });
+const ERR3: IP = [16, 12], ERR7: IP = [-22, 16];
+const B = IR.bNarrow, T = IR.tNarrow;
+const slewD = (from: IP, to: IP) => {
+  const start = at(B, from), target = at(B, to);
+  return { start, target, reach: mm(6), speed: Math.max(mm(45), Math.hypot(target[0] - start[0], target[1] - start[1]) / 3), box: [mm(-1500), mm(-1500), mm(1500), mm(1500)] as [number, number, number, number] };
+};
 /** Boresighting: station 3's seeker from beside steerpoint 3 onto the chimney, then station 7's from beside the chimney. */
-export const MAV_D_SLEW3 = { ...slewD(add(IR_SPI, ERR3), IR_AIM.bNarrow), what: 'chimney' };
-export const MAV_D_SLEW7 = { ...slewD(add(IR_AIM.bNarrow, ERR7), IR_AIM.bNarrow), what: 'chimney' };
+export const MAV_D_SLEW3 = { ...slewD(add(B.spi, ERR3), B.aim), what: 'chimney' };
+export const MAV_D_SLEW7 = { ...slewD(add(B.aim, ERR7), B.aim), what: 'chimney' };
 /** Seeker angles: boresight scene 10 NM ahead at 8,000 ft, the jet level (7.6 degrees down plus 2 of nose-up); target scene in a shallow dive. */
 const B_PTR: [number, number] = [0, 9.6], T_PTR: [number, number] = [0, 8.3], T_PTR_TANK: [number, number] = [0.22, 8.25];
 const bD = { type: 'D' as const, mode: 'PRE' as const, count: 2, ready: true, status: 'SIM' as const, ptr: B_PTR };
 const tD = { type: 'D' as const, mode: 'PRE' as const, station: '7' as const, count: 2, ready: true, range: 5, tti: '000:31' };
-const bNar = (id: string, at: IP, o: Partial<Wpn> = {}) => wpn({ id, ...bD, station: '3', video: MAV_IR_B_NARROW, wide: false, soi: true, pan: true, at: under(at as P), ...o });
-const tNar = (id: string, at: IP, o: Partial<Wpn> = {}) => wpn({ id, ...tD, video: MAV_IR_T_NARROW, wide: false, soi: false, pan: true, at: under(at as P), ptr: T_PTR, ...o });
+const bNar = (id: string, p: IP, o: Partial<Wpn> = {}) => wpn({ id, ...bD, station: '3', video: MAV_IR_B_NARROW, videoK: B.k, wide: false, soi: true, pan: true, at: at(B, p), ...o });
+const tNar = (id: string, p: IP, o: Partial<Wpn> = {}) => wpn({ id, ...tD, video: MAV_IR_T_NARROW, videoK: T.k, wide: false, soi: false, pan: true, at: at(T, p), ptr: T_PTR, ...o });
 export const maverickDPages: Page[] = [
   sms('sms-d-off', 'BORE', 'off', 'D'), sms('sms-d-on', 'BORE', 'on', 'D'), sms('sms-d', 'BORE', 'ready', 'D', 'SIM'), sms('sms-d-pre', 'PRE', 'ready', 'D', 'SIM'),
   // After boresighting station 7 is next to fire, so the shot starts there.
   sms('sms-d-pre7', 'PRE', 'ready', 'D', 'SIM', '7'), sms('sms-d-pre-off', 'PRE', 'off', 'D', 'RDY', '7'), sms('sms-d-pre-on', 'PRE', 'on', 'D', 'RDY', '7'), sms('sms-d-pre-rdy', 'PRE', 'ready', 'D', 'RDY', '7'),
   // Boresighting, steerpoint 3, MASTER ARM at SIMULATE.
-  wpn({ id: 'wpn-d-b-wide', ...bD, station: '3', video: MAV_IR_B_WIDE, wide: true, soi: false, pan: true, at: under(add(IR_SPI, [ERR3[0] / 2, ERR3[1] / 2])) }),
-  bNar('wpn-d-b-narrow', add(IR_SPI, ERR3), { soi: false }),
-  bNar('wpn-d-b', add(IR_SPI, ERR3)),
-  bNar('wpn-d-b-track', IR_AIM.bNarrow, { track: true }),
-  bNar('wpn-d-b-slaved', IR_AIM.bNarrow),
-  bNar('wpn-d-b7', add(IR_AIM.bNarrow, ERR7), { station: '7' }),
-  bNar('wpn-d-b7-track', IR_AIM.bNarrow, { station: '7', track: true }),
-  bNar('wpn-d-b7-slaved', IR_AIM.bNarrow, { station: '7' }),
+  wpn({ id: 'wpn-d-b-wide', ...bD, station: '3', video: MAV_IR_B_WIDE, videoK: IR.bWide.k, wide: true, soi: false, pan: true, at: at(IR.bWide, add(IR.bWide.spi, [ERR3[0] / 2, ERR3[1] / 2])) }),
+  bNar('wpn-d-b-narrow', add(B.spi, ERR3), { soi: false }),
+  bNar('wpn-d-b', add(B.spi, ERR3)),
+  bNar('wpn-d-b-track', B.aim, { track: true }),
+  bNar('wpn-d-b-slaved', B.aim),
+  bNar('wpn-d-b7', add(B.aim, ERR7), { station: '7' }),
+  bNar('wpn-d-b7-track', B.aim, { station: '7', track: true }),
+  bNar('wpn-d-b7-slaved', B.aim, { station: '7' }),
   // The shot, steerpoint 5, armed: the seeker follows the pod as the correlator hands the tank off (S, 1, 2, T, C).
-  wpn({ id: 'wpn-d-t-wide', ...tD, video: MAV_IR_T_WIDE, wide: true, soi: false, pan: true, at: under(IR_SPI as P), ptr: T_PTR }),
-  tNar('wpn-d-t', IR_SPI),
-  tNar('wpn-d-t-1', mid(IR_SPI, IR_AIM.tNarrow, 0.55), { mbc: '1', handoff: true, ptr: mid(T_PTR, T_PTR_TANK, 0.55) }),
-  tNar('wpn-d-t-2', add(IR_AIM.tNarrow, [5, 3]), { mbc: '2', handoff: true, ptr: T_PTR_TANK }),
-  tNar('wpn-d-t-T', IR_AIM.tNarrow, { mbc: 'T', handoff: true, track: true, ptr: T_PTR_TANK }),
-  tNar('wpn-d-t-C', IR_AIM.tNarrow, { mbc: 'C', track: true, ptr: T_PTR_TANK }),
-  tNar('wpn-d-t-3', IR_AIM.tNarrow, { station: '3', count: 1, soi: false, ptr: T_PTR_TANK }),
+  wpn({ id: 'wpn-d-t-wide', ...tD, video: MAV_IR_T_WIDE, videoK: IR.tWide.k, wide: true, soi: false, pan: true, at: at(IR.tWide, IR.tWide.spi), ptr: T_PTR }),
+  tNar('wpn-d-t', T.spi),
+  tNar('wpn-d-t-1', mid(T.spi, T.aim, 0.55), { mbc: '1', handoff: true, ptr: mid(T_PTR, T_PTR_TANK, 0.55) }),
+  tNar('wpn-d-t-2', add(T.aim, [5, 3]), { mbc: '2', handoff: true, ptr: T_PTR_TANK }),
+  tNar('wpn-d-t-T', T.aim, { mbc: 'T', handoff: true, track: true, ptr: T_PTR_TANK }),
+  tNar('wpn-d-t-C', T.aim, { mbc: 'C', track: true, ptr: T_PTR_TANK }),
+  tNar('wpn-d-t-3', T.aim, { station: '3', count: 1, soi: false, ptr: T_PTR_TANK }),
 ];
 export const maverickDPageLabels: Record<string, string> = {
   'sms-d-off': 'SMS format: AG65D selected, BORE, powered off',

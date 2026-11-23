@@ -23,7 +23,7 @@ pages: 36; 47; 83-87; 91; 99; 330-331; 495-499; 671-687
 - The station block on the TGP format (letter over the next station, 3 and 7, next one boxed) is placed from the p. 679 image by its SWAP and TGP labels. The TGP top row keeps the p. 495 trace (PTR) with NARO in place of WIDE; the p. 679 image reads MAN there.
 - GND JETT ENABLE is not set: the boresight is done in the air (p. 678 asks for it only on the ground). It is named in a caution.
 - The SOI starts on the HUD; DMS aft is taken to land on the TGP format first (a caution covers the other MFD).
-- Seeker and pod pictures are to-scale placeholders (`scripts/maverick-d-placeholders.py`), to be replaced by generated art (prompts in docs/art/maverick-d-seeker-prompts.md).
+- Seeker and pod pictures are generated art (ChatGPT, from Nathan) over to-scale placeholders (`scripts/maverick-d-placeholders.py`, prompts in docs/art/maverick-d-seeker-prompts.md), cropped round the steerpoint and the aim point; each picture's span (k, 1.6 to 3.9 glasses) is set so both can be slewed to, so the drawn sizes are not to scale.
 
 ## Reviews
 - Not yet reviewed.

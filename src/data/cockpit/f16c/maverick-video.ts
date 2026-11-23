@@ -26,9 +26,8 @@ export const MAV_VIDEO_K = 1.6;
 
 /*
  * AGM-65D (infrared, white-hot) and targeting pod pictures for the boresight and TGP handoff procedure: to-scale
- * placeholders from `scripts/maverick-d-placeholders.py`, prompts in docs/art/maverick-d-seeker-prompts.md. Each is
- * centred on its steerpoint and spans 1.6 times its field of view (assumed: Maverick 5 degrees wide, 2.5 narrow; pod
- * NARO 1 degree). Points are image px on the 768 px pictures.
+ * generated art (ChatGPT, from Nathan) painted over the to-scale placeholders of
+ * `scripts/maverick-d-placeholders.py` with the prompts in docs/art/maverick-d-seeker-prompts.md.
  */
 /** Boresight scene, steerpoint 3 (a road junction by a brickworks), 10 NM from the jet at 8,000 ft. */
 export const MAV_IR_B_WIDE = file('ir-mav-wide-boresight');
@@ -38,10 +37,23 @@ export const TGP_IR_B = file('ir-tgp-boresight');
 export const MAV_IR_T_WIDE = file('ir-mav-wide-target');
 export const MAV_IR_T_NARROW = file('ir-mav-narrow-target');
 export const TGP_IR_T = file('ir-tgp-target');
-/** The steerpoint is each picture's centre. */
-export const IR_SPI: [number, number] = [384, 384];
-/** The kiln chimney (the boresight point) and the lead T-72, in each picture. */
-export const IR_AIM = {
-  bWide: [403.5, 376.4], bNarrow: [423.1, 368.7], bTgp: [481.8, 345.8],
-  tWide: [404.7, 379.5], tNarrow: [425.5, 374.9], tTgp: [487.7, 361.3],
-} as const satisfies Record<string, readonly [number, number]>;
+/**
+ * Where things are in each picture (image px on the 768 px picture): the steerpoint junction (`spi`), the chimney or
+ * the lead T-72 (`aim`), and `k`, how many glasses the picture spans. The art (ChatGPT, from Nathan, 2026-11-24) is
+ * cropped round the two points and `k` set so both can be slewed under the crosshairs without the picture's edge showing.
+ */
+export const IR = {
+  bWide: { spi: [257.3, 428.4], aim: [510.7, 339.6], k: 1.75 },
+  bNarrow: { spi: [192.6, 463.8], aim: [575.4, 304.2], k: 2.49 },
+  bTgp: { spi: [136.7, 512.1], aim: [631.3, 255.9], k: 3.9 },
+  tWide: { spi: [312.5, 403.7], aim: [455.5, 364.3], k: 1.6 },
+  tNarrow: { spi: [333.4, 402.7], aim: [434.6, 365.3], k: 1.6 },
+  tTgp: { spi: [327.3, 411.7], aim: [440.7, 356.3], k: 1.6 },
+} as const satisfies Record<string, { spi: readonly [number, number]; aim: readonly [number, number]; k: number }>;
+export type IrPic = (typeof IR)[keyof typeof IR];
+/** The page offset (page units, from px via `mm`) that puts picture point `p` under crosshairs at `cross` (660 px grid), the glass centred at 329.5, 330. */
+export const underIn = (pic: { k: number }, cross: readonly [number, number], p: readonly [number, number]): [number, number] => {
+  const g = 489 / (768 / pic.k);
+  const c = [384 + (cross[0] - 329.5) / g, 384 + (cross[1] - 330) / g];
+  return [(p[0] - c[0]) * g, (p[1] - c[1]) * g];
+};
