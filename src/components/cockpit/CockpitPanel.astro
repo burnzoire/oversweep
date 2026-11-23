@@ -287,9 +287,9 @@ for (const g of document.querySelectorAll<SVGGElement>('[data-device-ring]')) {
     if (!lead) { lead = document.createElement('span'); lead.className = 'cp-leader'; lead.setAttribute('aria-hidden', 'true'); split.append(lead); }
     const from = ring.right, to = Math.min(...faces.map(b => b.left)) - 6;
     lead.style.left = `${from - s.left}px`; lead.style.top = `${ring.top + ring.height / 2 - s.top}px`;
-    lead.style.width = `${Math.max(0, to - from)}px`; lead.style.height = `${Math.max(1.5, 2 * k)}px`;
+    lead.style.width = `${Math.max(0, to - from)}px`; lead.style.height = `${+c.getAttribute('stroke-width')! * k || 2.8 * k}px`;
   };
-  const watch = () => { fit(); new ResizeObserver(fit).observe(g.closest('.cp-split') ?? g.ownerSVGElement!); };
+  const watch = () => { fit(); const ro = new ResizeObserver(fit); ro.observe(g.closest('.cp-split') ?? g.ownerSVGElement!); ro.observe(g.closest('figure') ?? g.ownerSVGElement!); };
   if (g.getBoundingClientRect().width) watch(); else new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { o.disconnect(); watch(); } }).observe(g.ownerSVGElement!);
 }
 for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]')) {
