@@ -85,15 +85,16 @@ const RINGS = [92.2, 184.4, 276.6];
 const SA6: P = [254, 253], SA8: P = [428.3, 470];
 /**
  * HARM POS weapon engagement zone (p. 532 image, EOM) traced as a round front with two aft lobes meeting at the jet, mirrored about its centre line,
- * 19.4 NM ahead and 12.9 NM either side (ownship at 332.5, 421), at the 30 NM scale. Its real
+ * about 38 NM ahead and 25 NM either side (ownship at 332.5, 421); the picture is at the 60 NM scale, rings at a third, two thirds and the full 60 NM. Its real
  * shape and size follow the profile, the jet's attitude, altitude and speed (p. 533 item 33); this is the guide's one example.
  */
 const WEZ: P[] = (() => {
-  // Traced from the p. 532 figure: a rounded front (a 14-sided outline, 19.4 NM ahead and 12.9 NM wide at its widest), and
+  // Traced from the p. 532 figure: a rounded front (a 14-sided outline), and
   // aft two small lobes either side of the jet that meet at the ownship. Right half, front to aft, then mirrored.
   const half: [number, number][] = [[1, 181], [47, 172.5], [90, 150], [117.5, 117.5], [119, 54], [91, 4], [45, -16], [0, -1]];
   const right = half.slice(0, -1), left = half.slice(1, -1).reverse().map(([x, y]): [number, number] => [-x, y]);
-  return [...right, half[half.length - 1], ...left].map(([dx, dy]): P => [OWN[0] + dx, OWN[1] - dy]);
+  // The p. 532 picture is at the 60 NM scale (its range arrows read 60) and the scene is in 30 NM pixels, so double it.
+  return [...right, half[half.length - 1], ...left].map(([dx, dy]): P => [OWN[0] + dx * 2, OWN[1] - dy * 2]);
 })();
 /** Flight members 2 and 3 (PPLI circles, heading stalk, altitude in thousands of feet below). */
 const MEMBERS: [string, P, P][] = [['2', [290.7, 445], [290.5, 470]], ['3', [380, 453.3], [379.3, 477.3]]];
