@@ -51,9 +51,9 @@ export const misc: PanelSpec = {
   },
   plate: [
     // One layer. Right edge x 285, top y 8 (corner 6 px), diagonal top-left edge from (170, 8) to (80, 112), the left edge sloping
-    // out to x 62 at the rule's height, then a rounded shoulder and a straight diagonal out to x 8 at y 748 and the foot of the wider bottom part (Nathan, 2026-11-23: curve
+    // out to x 62 at the rule's height, then a rounded shoulder and a straight diagonal out to x 2 at y 740 and straight down the foot of the wider bottom part (Nathan, 2026-11-23: curve
     // at the shoulder only); the right edge bends in, concave, from y 640 to x 268 at the bottom edge (y 823).
-    { d: path('M170 8H279Q285 8 285 14V640Q272 725 268 823H2L8 748L55 585Q60 566 62 540L80 112Z') },
+    { d: path('M170 8H279Q285 8 285 14V640Q272 725 268 823H2V740L55 585Q60 566 62 540L80 112Z') },
   ],
   engraving: [
     // RF: NORM (up; RF above it), QUIET (centre, down the right of the lever), SILENT (down).
@@ -72,7 +72,7 @@ export const misc: PanelSpec = {
     T(63, 700, 'ROLL', 13, 40), T(65, 720, 'HDG SEL', 12, 64), T(113.5, 757.5, 'ATT', 12, 27), T(114, 775, 'HOLD', 12, 38), T(69, 808, 'STRG SEL', 12, 72),
     T(185, 700, 'PITCH', 13, 44), T(184.5, 720, 'ALT HOLD', 12, 75), T(230, 757.5, 'A/P', 12, 30), T(231, 775, 'OFF', 12, 28), T(186, 808, 'ATT HOLD', 12, 73),
     // Panel title, one letter above the next.
-    T(22, 732, 'M', 18, 16), T(22, 758, 'I', 18), T(22, 786, 'S', 18, 14), T(22, 813, 'C', 18, 14),
+    T(18, 732, 'M', 18, 16), T(18, 758, 'I', 18), T(18, 786, 'S', 18, 14), T(18, 813, 'C', 18, 14),
   ],
   placements: [
     { component: 'screw-medium', at: pt(117, 151) },
