@@ -72,7 +72,7 @@ const hasFrame = poly([[163, 211], [502, 211], [502, 488], [163, 488]], true);
 const dtsb = poly([[179.5, 140], [481, 140], [481, 183], [179.5, 183]], true);
 const has: Page = {
   id: 'wpn-has', words: [
-    ...top('HAS', 'TBL3', 'CTR', 'SRCH', 'UFC'),
+    ...top('HAS', 'TBL1', 'CTR', 'SRCH', 'UFC'),
     ...left(...HAS_LEFT),
     w('00:22', 294, 195.5), w('SCT-7', 369.5, 195.5),
     w('R', 543, 243), w('S', 543, 262),
@@ -86,7 +86,7 @@ const has: Page = {
 /**
  * POS page (p. 662): sub-mode, threat table, attack profile and UFC across the top; the table's five threats down
  * the left (the handed-off one inverse); in-flight missile data above the launch status divider line (LSDL), the
- * next missile's data below it (threat, steerpoint, time to impact, impact time); station 7 boxed.
+ * next missile's data below it (threat, steerpoint, time to impact, impact time); station 3 boxed.
  */
 export interface PosState { profile: 'EOM' | 'PB' | 'RUK'; threat?: string; stpt?: string; tti?: string; impact?: string; inflight?: { tti: string; stpt: string; threat: string }; id: string }
 const TBL1 = ['10', 'BB', 'CS', '11', 'SD'];
@@ -104,7 +104,7 @@ function pos(s: PosState): Page {
     words.push(w(s.threat, 473, 307, undefined, true), w(s.stpt ?? '', 479, 331));
     if (!ruk && s.tti) words.push(w(s.tti, 474.7, 377), w(s.impact ?? '', 494, 399));
   }
-  words.push(w('RDY', 330, 504), ...stations('7', false), ...row('WPN', 'WPN', 'DCLT'));
+  words.push(w('RDY', 330, 504), ...stations('3', false), ...row('WPN', 'WPN', 'DCLT'));
   const lsdl = poly([[146, 288], [513, 288]]);
   // The range-staple symbol at the lower right (p. 662; a bar with serifs and a small tick), as drawn there.
   const staple = poly([[534, 453.5], [552, 453.5]]) + poly([[543, 453.5], [543, 485]]) + poly([[538, 471], [548, 471]]) + poly([[534, 485], [552, 485]]);

@@ -9,7 +9,7 @@ One guided procedure on the shared cockpit panels, the follow-up to the two HTS 
 ```review-sources
 source: https://www.digitalcombatsimulator.com/upload/iblock/e78/33zl8132hi71d3tv0194vvkzpzl3mrr6/DCS%20F-16C%20Early%20Access%20Guide%20EN.pdf
 sha256: b26f89b715cd130f82798a2e8973a1b7dd52b4366007feb4c7a29677f248e7c5
-pages: 47; 90-91; 99; 526; 532-533; 539-540; 657-670
+pages: 47; 90-91; 99; 526; 528; 532-533; 539-540; 657-670
 ```
 
 ## Illustrative, not sourced
@@ -18,6 +18,7 @@ pages: 47; 90-91; 99; 526; 532-533; 539-540; 657-670
 - HUD caret positions: the AMZ state is traced from p. 663 image 002; the MMZ state moves the caret below the separator and flashes the box after image 003 (a PB figure). The FOV box is centred on the steerpoint diamond. Time to MMZ and bearing/distance datablocks are not drawn (the HUD's own fields show).
 - SMS power-up is instant here (it takes time in the jet); a PWR OFF page shows no RDY (assumed).
 - The HAS page's dashed red video frame is drawn solid; the small range symbol at the lower right of the POS page is drawn as it appears on p. 662, its meaning is not stated.
+- The POS page boxes station 3 and the HAS page shows TBL1 so the scenario stays consistent; p. 662 itself shows station 7 for its own example. The unit of the release altitude is not stated in the guide.
 - MISC panel: lever types, hold behaviour of the autopilot PITCH switch and the unlabelled cross; see its spec's `unresolved` list.
 
 ## Reviews
