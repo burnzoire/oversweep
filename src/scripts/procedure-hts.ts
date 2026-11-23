@@ -10,6 +10,7 @@
  */
 
 import { HAD_SLEW, HADH, HADX } from '../data/cockpit/f16c/mfd-had';
+import { MAV_SLEW } from '../data/cockpit/f16c/mfd-maverick';
 
 interface StepDo { control: string; to: string; on?: 'press' | 'release' }
 interface Typing { keys: string[]; pages: string[] }
@@ -26,7 +27,13 @@ type Pages = Partial<Pick<State, 'mfd' | 'left' | 'ded' | 'x' | 'r'>>;
  */
 interface Scenario {
   initial: Pages; after: Record<string, Pages>;
-  slew: { step: string; on: string; free: string; done: string; target: [number, number]; start: [number, number]; reach: number; speed: number; box: [number, number, number, number] };
+  /** `display`: the MFD the cursor is on (the right one unless named); `what`: the prompt's name for the thing steered onto. */
+  slew: { step: string; on: string; free: string; done: string; target: [number, number]; start: [number, number]; reach: number; speed: number; box: [number, number, number, number]; display?: 'left' | 'right'; what?: string };
+  /**
+   * A warm-up the step that starts it waits out (the HTS pod's 30 s by default): its button counts down the jet's
+   * `secs`, compressed to `ms`; `busy` and `ready` are the prompts; `after` the pages once it is over.
+   */
+  warm?: { step: string; secs: number; ms: number; busy: string; ready: string; label: string; after?: Pages };
   /**
    * A step that plays out over time (the HTS scans after a turn): one page per moment, at `secs` jet seconds from the
    * start, played back `ms` real milliseconds per page. The step panel gets a player (play, scrubber, elapsed time)
@@ -79,10 +86,26 @@ const SCENARIOS: Record<string, Scenario> = {
     // Pages a step shows as it opens: closing on the radar, then the HUD cues as the jet climbs into the missile zone.
     enter: { fly: { mfd: 'hadh-close', x: { 'hud.harm-cues': 'amz' }, r: { 'hud.steerpoint-distance': 12, 'hud.slant-range': 12.1 } }, mmz: { x: { 'hud.harm-cues': 'mmz' } } },
   },
+  'maverick-pre': {
+    // The left MFD shows the SMS format, AG65 selected; the HUD is on, in NAV, master arm off.
+    initial: { left: 'sms-ag65-off', ded: 'cni', x: { 'hud.screen': 'on', 'hud.master-arm': 'none', 'hud.master-mode': 'nav' } },
+    after: {
+      'a-g': { x: { 'hud.master-mode': 'bore' } },
+      'master-arm': { x: { 'hud.master-arm': 'arm' } },
+      power: { left: 'sms-ag65-on' }, wpn: { left: 'wpn-mav-bore' },
+      pre: { left: 'wpn-mav-pre-notsoi', x: { 'hud.master-mode': 'pre' } }, soi: { left: 'wpn-mav-pre' },
+      fov: { left: 'wpn-mav-narrow' }, lock: { left: 'wpn-mav-track' }, release: { left: 'wpn-mav-7' },
+    },
+    // The seeker is slewed by hand: the picture moves under the crosshairs until the lead tank is there.
+    slew: { step: 'slew', on: 'wpn-mav-pre', free: 'wpn-mav-pre', done: 'wpn-mav-pre', display: 'left', what: 'tank', ...MAV_SLEW },
+    // The 3-minute warm-up (guide p. 675), compressed.
+    warm: { step: 'power', secs: 180, ms: 6000, label: 'Warming up…', busy: 'The Mavericks are warming up: 3 minutes in the jet, a few seconds here.', ready: 'The 3 minutes are up: the Mavericks are in standby, ready to use. Continue.', after: { left: 'sms-ag65' } },
+  },
 };
 
 // The pod takes about 30 s to initialize (guide p. 525); compressed here.
 const POD_MS = 5000;
+const POD_WARM = { step: 'pod-power', secs: 30, ms: POD_MS, busy: 'Pod initializing: about 30 seconds in the jet, a few seconds here.', ready: 'The 30 seconds are up: the pod has initialized. Continue.', label: 'Initializing…' };
 
 export function startHtsModel(root: HTMLElement, cfg: Config) {
   const all = <T extends Element>(sel: string) => [...root.querySelectorAll<T>(sel)];
@@ -127,10 +150,12 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   const stepId = () => cfg.steps[step]?.id ?? '';
 
   /** Slewing: the cursor moves by hand until it is on the SA-6. */
-  const slewing = () => stepId() === sc.slew.step && !finished && st.mfd === sc.slew.on;
+  const slewLeft = sc.slew.display === 'left';
+  const slewing = () => stepId() === sc.slew.step && !finished && (slewLeft ? st.left : st.mfd) === sc.slew.on;
+  const warm: NonNullable<Scenario['warm']> = sc.warm ?? POD_WARM;
   function indicate() {
-    const page = slewing() ? sc.slew.free : st.mfd;
-    dispatchEvent(new CustomEvent('cockpit:indicate', { detail: { pages: { 'right-mfd.display': page, 'left-mfd.display': st.left, 'ded.display': st.ded, ...st.x }, readings: { ...st.r }, cursors: { 'right-mfd.display': st.cur } } }));
+    const right = slewing() && !slewLeft ? sc.slew.free : st.mfd, left = slewing() && slewLeft ? sc.slew.free : st.left;
+    dispatchEvent(new CustomEvent('cockpit:indicate', { detail: { pages: { 'right-mfd.display': right, 'left-mfd.display': left, 'ded.display': st.ded, ...st.x }, readings: { ...st.r }, cursors: { [`${slewLeft ? 'left' : 'right'}-mfd.display`]: st.cur } } }));
   }
   const keyText = (k: string) => name(k).replace(/ (key|button)$/, '').replace(/ \/.*$/, '');
 
@@ -151,10 +176,10 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     st.cur = [Math.min(x1, Math.max(x0, st.cur[0] + speed(defl.x) * dt)), Math.min(y1, Math.max(y0, st.cur[1] - speed(defl.y) * dt))];
     if (Math.hypot(st.cur[0] - sc.slew.target[0], st.cur[1] - sc.slew.target[1]) < sc.slew.reach) {
       st.cur = [...sc.slew.target];
-      st.mfd = sc.slew.done;
+      if (slewLeft) st.left = sc.slew.done; else st.mfd = sc.slew.done;
       stopSlew();
       indicate();
-      done('The cursor is on the radar.');
+      done(`The cursor is on the ${sc.slew.what ?? 'radar'}.`);
       return;
     }
     indicate();
@@ -194,7 +219,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     else if (moves(s).length === 1) say(`${cap(instruction(moves(s)[0]))}.`);
     else if (moves(s).length) say(`Make these moves, in any order: ${moves(s).map(instruction).join('; ')}.`);
     else if (s.type) say(`Press ${keyText(s.type.keys[0])} (key 1 of ${s.type.keys.length}).`);
-    else if (slewing()) say('Steer the cursor onto the radar: press and drag on the RDR CURSOR switch.');
+    else if (slewing()) say(`Steer the cursor onto the ${sc.slew.what ?? 'radar'}: press and drag on the RDR CURSOR switch.`);
     else if (scanning) say('Watch the HAD: each scan refines the position. Replay it or drag through it below.');
     else say('Check the indications, then confirm.');
     showPad();
@@ -300,16 +325,18 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
 
   /** The pod's warm-up: the step that powers it counts the wait down on its button, then lets the reader on. */
   function warmUp() {
-    const wait = stepId() === 'pod-power';
-    if (wait) { confirm.hidden = false; confirm.disabled = true; say('Pod initializing: about 30 seconds in the jet, a few seconds here.'); }
+    const wait = stepId() === warm.step;
+    if (wait) { confirm.hidden = false; confirm.disabled = true; say(warm.busy); }
     const tick = () => {
-      // Shown in the jet's seconds (30), counted down in the compressed time.
-      if (wait) confirm.textContent = `Initializing… ${Math.ceil((st.pod / POD_MS) * 30)} s`;
+      // Shown in the jet's seconds, counted down in the compressed time.
+      const left = Math.ceil((st.pod / warm.ms) * warm.secs);
+      if (wait) confirm.textContent = `${warm.label} ${warm.secs >= 60 ? `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}` : `${left} s`}`;
       if (st.pod <= 0) {
-        if (wait) { confirm.disabled = false; confirm.textContent = cfg.steps[step].confirm ?? 'Continue'; say('The 30 seconds are up: the pod has initialized. Continue.'); }
+        if (warm.after) { apply(warm.after); indicate(); }
+        if (wait) { confirm.disabled = false; confirm.textContent = cfg.steps[step].confirm ?? 'Continue'; say(warm.ready); }
         return;
       }
-      const step5 = POD_MS / 6;
+      const step5 = warm.ms / 6;
       later(Math.min(step5, st.pod), () => { st.pod = Math.max(0, st.pod - step5); tick(); });
     };
     tick();
@@ -322,7 +349,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     if (left.length) { say(`Done. Still to do: ${left.map(instruction).join('; ')}.`); showPad(); indicate(); return; }
     apply(sc.after[id] ?? {});
     indicate();
-    if (id === 'pod-power') { st.pod = POD_MS; warmUp(); return; }
+    if (id === warm.step) { st.pod = warm.ms; warmUp(); return; }
     done();
   }
 

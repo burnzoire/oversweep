@@ -5,11 +5,11 @@ import { groupPages, hasArticle, type MenuNode } from "../../data/manual-menu";
 import { cockpitRoute, cockpits } from "../../data/cockpit/f16c/index.ts";
 
 // A landing page for every group in the Manual menu: an intro and its children.
-// The F-16C hub and the cockpit page are their own pages and are left out here.
+// The F-16C hub, the cockpit page and groups with a written article are their own pages and are left out here.
 export function getStaticPaths() {
   const own = new Set(["manual/aircraft-procedures/f-16c/", ...cockpits.map((c) => cockpitRoute(c))]);
   return groupPages()
-    .filter((node) => !own.has(node.href!))
+    .filter((node) => !own.has(node.href!) && !node.article)
     .map((node) => ({ params: { group: node.href!.replace(/^manual\//, "").replace(/\/$/, "") }, props: { node } }));
 }
 
