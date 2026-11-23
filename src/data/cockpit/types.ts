@@ -384,7 +384,7 @@ export interface MfdDisplay {
     /** White symbology paths (mm about the screen centre): `marks` medium lines, `fine` thin lines, `fills` solid shapes (drawn under the words). */
     marks?: string; fine?: string; fills?: string;
     /** Coloured symbology: `pen` fine or medium (default) line, or a solid `fill`. */
-    paths?: { d: string; c: MfdColour; pen?: 'fine' | 'medium'; fill?: boolean }[];
+    paths?: { d: string; c: MfdColour; pen?: 'fine' | 'medium'; fill?: boolean; /** Dashed line (the HAS video frame). */ dash?: boolean }[];
     /** Sensor video under the symbology, filling the glass (an image URL, e.g. a data URI). */
     video?: string;
     /** A teaching overlay that is not on the real display (bearing lines, an error ellipse): drawn dashed in orange. */

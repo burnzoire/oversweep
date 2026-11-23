@@ -14,8 +14,8 @@ const { mm } = tracer(PX);
 const SC: [number, number] = [329.5, 330];
 type Page = MfdDisplay['pages'][number];
 type Word = Page['words'][number];
-const w = (t: string, x: number, y: number, a?: Word['a'], inv?: boolean, c?: Word['c']): Word =>
-  ({ t, at: [mm(x - SC[0]), mm(y - SC[1])], ...(a ? { a } : {}), ...(inv ? { inv } : {}), ...(c ? { c } : {}) });
+const w = (t: string, x: number, y: number, a?: Word['a'], inv?: boolean, c?: Word['c'], size?: number): Word =>
+  ({ t, at: [mm(x - SC[0]), mm(y - SC[1])], ...(a ? { a } : {}), ...(inv ? { inv } : {}), ...(c ? { c } : {}), ...(size ? { s: size } : {}) });
 type P = [number, number];
 const q = ([x, y]: P) => `${+mm(x - SC[0]).toFixed(3)} ${+mm(y - SC[1]).toFixed(3)}`;
 const poly = (pts: P[], close = false) => `M${pts.map(q).join('L')}${close ? 'Z' : ''}`;
@@ -54,33 +54,36 @@ function sms(id: string, powered: boolean): Page {
 
 /** Station boxes at the bottom of the WPN page: the next station to fire is inverse. */
 const stations = (sel: '3' | '7', has: boolean) => has
-  ? [w('3', 186, 511.5, undefined, sel === '3'), w('7', 486, 511.5, undefined, sel === '7')]
+  ? [w('3', 186, 511.5), w('7', 486, 511.5)]
   : [w(sel, 477, 504, undefined, true)];
 
 /** HAS page (p. 660): threat table 3 (3, S, 6, 2, 13), the ALIC video box, scan time and the crosshair scale. */
 const HAS_LEFT = ['3', 'S', '6', '2', '13'];
 const hasMarks = (() => {
   const x = (v: number) => 1.638 * v - 13.8, y = (v: number) => 1.58 * v - 9.9;
-  const cx = x(211);
-  let d = poly([[cx, y(140)], [cx, y(310)]]) + poly([[x(108), y(175)], [x(313), y(175)]]);
-  for (const t of [143, 177, 244, 278]) d += poly([[x(t), y(175) - 9], [x(t), y(175) + 9]]);
+  const cx = x(211), top = y(140), bottom = 488;
+  // The vertical runs the whole height of the frame, down to its lower edge; the scale's end ticks sit just inside the frame.
+  let d = poly([[cx, top], [cx, bottom]]) + poly([[x(111), y(175)], [x(310), y(175)]]);
+  for (const t of [111, 143, 177, 244, 278, 310]) d += poly([[x(t), y(175) - 9], [x(t), y(175) + 9]]);
   for (const [ty, hw] of [[243, 9], [277, 9]] as const) d += poly([[cx - hw, y(ty)], [cx + hw, y(ty)]]);
   d += poly([[cx - 9, y(207) - 8], [cx - 9, y(207) + 8]]) + poly([[cx + 9, y(207) - 8], [cx + 9, y(207) + 8]]) + poly([[cx - 9, y(207)], [cx + 9, y(207)]]);
   return d;
 })();
 const hasFrame = poly([[163, 211], [502, 211], [502, 488], [163, 488]], true);
+/** The selected station on the HAS page is an outlined box, not a filled one (p. 660; the guide does not say why). */
+const stationBox = poly([[179, 503], [193, 503], [193, 520], [179, 520]], true);
 const dtsb = poly([[179.5, 140], [481, 140], [481, 183], [179.5, 183]], true);
 const has: Page = {
   id: 'wpn-has', words: [
     ...top('HAS', 'TBL1', 'CTR', 'SRCH', 'UFC'),
     ...left(...HAS_LEFT),
-    w('00:22', 294, 195.5), w('SCT-7', 369.5, 195.5),
+    w('00:22', 286, 195.5, undefined, false, undefined, 0.8), w('SCT-7', 376, 195.5, undefined, false, undefined, 0.8),
     w('R', 543, 243), w('S', 543, 262),
     ...stations('3', true),
     ...row('WPN', 'WPN', 'DCLT'),
   ],
   marks: hasMarks,
-  paths: [{ d: dtsb, c: 'green' }, { d: hasFrame, c: 'red', pen: 'fine' }],
+  paths: [{ d: dtsb, c: 'green' }, { d: hasFrame, c: 'red', pen: 'fine', dash: true }, { d: stationBox, c: 'white', pen: 'fine' }],
 };
 
 /**
