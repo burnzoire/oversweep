@@ -35,6 +35,7 @@ import { ded } from './ded.ts';
 import { altimeter } from './altimeter.ts';
 import { ehsi } from './ehsi.ts';
 import { hud } from './hud.ts';
+import { misc } from './misc.ts';
 import { hudControl } from './hud-control.ts';
 import { leftMfd, rightMfd } from './mfd.ts';
 import { hmcs } from './hmcs.ts';
@@ -69,7 +70,7 @@ export const f16cCockpit: AircraftCockpit = {
         { id: 'ded', title: 'Data entry display (DED)', page: 101, spec: ded },
         { id: 'left-eyebrow', title: 'Left eyebrow lights', page: 45, spec: leftEyebrow },
         { id: 'right-eyebrow', title: 'Right eyebrow lights', page: 46, spec: rightEyebrow },
-        { id: 'misc', title: 'MISC panel', page: 47 },
+        { id: 'misc', title: 'MISC panel', page: 47, spec: misc },
         { id: 'rf-switch', title: 'RF switch', page: 48 },
         { id: 'sai', title: 'Standby attitude indicator', page: 49, spec: sai },
         { id: 'engine-instruments', title: 'Engine instruments', page: 50, spec: engineInstruments },

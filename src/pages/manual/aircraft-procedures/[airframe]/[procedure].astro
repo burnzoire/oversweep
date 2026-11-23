@@ -109,7 +109,7 @@ if (root && configEl) {
     const config = JSON.parse(configEl.textContent!);
     if (config.model === 'tacan-navigation') (await import('../../../../scripts/procedure-tacan')).startTacanModel(root, config);
     else if (config.model === 'before-taxi' || config.model === 'before-takeoff') (await import('../../../../scripts/procedure-before-taxi')).startBeforeTaxiModel(root, config);
-    else if (config.model === 'hts' || config.model === 'hts-targeting') (await import('../../../../scripts/procedure-hts')).startHtsModel(root, config);
+    else if (config.model === 'hts' || config.model === 'hts-targeting' || config.model === 'harm-shot') (await import('../../../../scripts/procedure-hts')).startHtsModel(root, config);
     else if (config.model === 'steerpoint-entry') (await import('../../../../scripts/procedure-steerpoint')).startSteerpointModel(root, config);
     else (await import('../../../../scripts/procedure-engine-start')).startEngineModel(root, config);
   };
@@ -126,14 +126,17 @@ if (root && configEl) {
     const hint: string | undefined = config.steps[Number(stepEl.dataset.step)]?.hints?.[Number(b.dataset.hint)];
     if (!hint) return;
     clearRings();
-    const rects = new Map<string, DOMRect[]>();
+    const rects = new Map<HTMLElement, DOMRect[]>();
     for (const target of hint.split(',')) {
       const [spotRef, spot] = target.split('#');
       const [ref, row] = spotRef.split('@');
       const [panel, id] = ref.split('.');
-      const stage = root.querySelector<HTMLElement>(`[data-proc-panel="${panel}"] .cp-stage:not([hidden])`);
+      // A HOTAS card shown alone is scoped (`stick:tms`); a hint names its panel (`stick.tms-ud`), so look in the card too.
+      const box = root.querySelector<HTMLElement>(`[data-proc-panel="${panel}"]`) ?? [...root.querySelectorAll<HTMLElement>(`[data-proc-panel^="${panel}:"]`)].find(b => b.querySelector(`.cp-pad:not([hidden]) [data-pad-control="${id}"]`));
+      // The panel's drawing, or, for a card shown alone, the card itself.
+      const stage = box?.querySelector<HTMLElement>('.cp-stage:not([hidden])') ?? box?.querySelector<HTMLElement>('.cp-pad:not([hidden])');
       if (!stage) continue;
-      const els = [...stage.querySelectorAll<Element>(`[data-indicator="${id}"], button[data-control="${id}"], button[data-pad-hit="${id}"]`)];
+      const els = [...stage.querySelectorAll<Element>(`[data-indicator="${id}"], button[data-control="${id}"], button[data-pad-hit="${id}"], button[data-pad-control="${id}"]`)];
       let boxes = els.map(el => el.getBoundingClientRect()).filter(r => r.width > 0);
       if (spot && els[0]) {
         // Part of a display: a box in the shown page's own units, mapped to the screen.
@@ -148,11 +151,11 @@ if (root && configEl) {
         const r = boxes[0], top = r.top + r.height * 0.1, h = (r.height * 0.8) / 5;
         boxes = [new DOMRect(r.left + r.width * 0.04, top + h * Number(row), r.width * 0.92, h)];
       }
-      if (boxes.length) rects.set(panel, [...(rects.get(panel) ?? []), ...boxes]);
+      if (boxes.length) rects.set(stage, [...(rects.get(stage) ?? []), ...boxes]);
     }
     let first: HTMLElement | undefined;
-    for (const [panel, boxes] of rects) {
-      const stage = root.querySelector<HTMLElement>(`[data-proc-panel="${panel}"] .cp-stage`)!;
+    for (const [stage, boxes] of rects) {
+      if (getComputedStyle(stage).position === 'static') stage.style.position = 'relative';
       const s = stage.getBoundingClientRect();
       const l = Math.min(...boxes.map(r => r.left)), t = Math.min(...boxes.map(r => r.top));
       const rr = Math.max(...boxes.map(r => r.right)), bb = Math.max(...boxes.map(r => r.bottom));

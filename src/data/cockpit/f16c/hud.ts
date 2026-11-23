@@ -81,6 +81,69 @@ const heading: HudTape = {
   readout: { at: r(575.2, 295), anchor: 'middle', format: { pad: 3 } },
 };
 
+
+/**
+ * HARM launch cues (guide pp. 663-664). The p. 663 figures are the same HUD seen at about 1.1 times the p. 90 scale (the
+ * velocity and altitude tapes are 266 px apart there, 240 here), with the boresight cross at (298, 61) in them. A point
+ * (x, y) in a p. 663 image is drawn at the boresight plus ((x - 298), (y - 61)) / 1.1 reference px. The staple, scale
+ * dashes, loft ticks and FOV box are measured off image 002 (AMZ, EOM); the caret below the AMZ/MMZ separator, the A
+ * prefix and the flashing box (the MMZ) follow image 003, whose staple and caret read the same way.
+ */
+const H = (x: number, y: number): [number, number] => [B[0] + (x - 298) / 1.1, B[1] + (y - 61) / 1.1];
+/** A hint box on the HARM cues, in p. 663 image px (`H`) or HUD reference px (`ref`), as `#x0 y0 x1 y1` in the cues' own units. */
+const spot = (a: [number, number], b: [number, number]) => `#${[...a, ...b].map(v => +v.toFixed(3)).join(' ')}`;
+export const hudSpot = (x0: number, y0: number, x1: number, y1: number) => spot(r(...H(x0, y0)), r(...H(x1, y1)));
+export const hudSpotRef = (x0: number, y0: number, x1: number, y1: number) => spot(r(x0, y0), r(x1, y1));
+const hp = (pts: [number, number][]) => rel(pts.map(([x, y]) => H(x, y)), false);
+const ht = (t: string, x: number, y: number, anchor: 'start' | 'middle' | 'end' = 'middle') => ({ t, at: r(...H(x, y)), anchor });
+/**
+ * Staple: line x 398 from y 201 to 273, serifs right to x 409; the upper range dash at y 162 and the zero dash at y 279.5
+ * (p. 663 image 002). The figures are for a target about 45 NM away on the 80 NM scale; this scenario closes to 12 NM,
+ * so the scale reads 40 NM (p. 664: 40 or 80 NM, whichever covers the range) and the caret sits at 12 NM. The staple's
+ * ends and the AMZ/MMZ separator are illustrative: in the AMZ the separator is below the caret (manoeuvre first), and
+ * once on bearing the MMZ grows past the caret.
+ */
+const SCALE_NM = 40;
+const nmY = (nm: number) => 279.5 - (nm * 117.5) / SCALE_NM;
+export const CARET_Y = nmY(12);
+const STAPLE = hp([[409, 201], [398, 201], [398, 273], [409, 273]]) + hp([[399, 162], [411, 162]]) + hp([[399, 279.5], [411, 279.5]]);
+const separator = (nm: number) => hp([[398, nmY(nm)], [409, nmY(nm)]]);
+/** Azimuth steering line: the full height of the glass through the boresight. */
+const ASL = hp([[298, -40], [298, 470]]);
+/** EOM loft cues on the line: the small tick (y 67, 24 wide) and the large tick (y 212, 34 wide). */
+const LOFT = hp([[286, 67], [310, 67]]) + hp([[281, 212], [315, 212]]);
+/** FOV box (p. 663 image 002: 111 x 40 px, 101 x 36 reference px) about the target, which is the selected steerpoint: centred on the steerpoint diamond's rest position (533, 250). */
+const FOV = rel([[483, 232], [583, 232], [583, 268], [483, 268]]);
+/**
+ * With the HARM cues up the heading scale sits above the boresight (p. 663 image 002: ticks hanging from y 92.5, long 9.5 and short
+ * 6.2 px, label centre y 110.7, readout box x 283-312.5 by y 103-124 around the steering line), where it is a tape of the same scale
+ * as the usual one.
+ */
+const headingHigh: HudTape = {
+  ...heading,
+  at: r(...H(298, 92.5)), minorLength: mm(5.6), majorLength: mm(8.6), labelOffset: mm(16.5),
+  index: 'M0 0',
+  box: box(H(283, 103)[0], H(283, 103)[1], H(312.5, 124)[0], H(312.5, 124)[1]),
+  readout: { at: r(...H(298, 113.5)), anchor: 'middle', format: { pad: 3 } },
+};
+/** The small box with an X in it at the foot of the steering line (p. 663 image 002: box x 291-309, y 446-456 with a heavy top bar, an X from (297, 449) to (303, 455)). The guide's key labels it nowhere; it may be the A-G mode symbol the key lists beside the figure. */
+const BOXED_X = hp([[291, 456], [291, 446], [309, 446], [309, 456]]) + hp([[291, 447.5], [309, 447.5]]) + hp([[297, 449.5], [303, 455]]) + hp([[303, 449.5], [297, 455]]);
+const harmCues = {
+  id: 'harm-cues',
+  heading: headingHigh,
+  pages: [
+    { id: 'none', art: '', texts: [] },
+    {
+      id: 'amz', art: STAPLE + separator(10) + FOV + BOXED_X, steer: ASL + LOFT,
+      texts: [ht(String(SCALE_NM), 404.5, 151), ht('14>', 397, CARET_Y, 'end'), ht('246', 402, 290), ht('00', 403, 303)],
+    },
+    {
+      id: 'mmz', art: STAPLE + separator(16) + BOXED_X, steer: ASL + LOFT,
+      texts: [ht(String(SCALE_NM), 404.5, 151), ht('A36>', 397, CARET_Y, 'end'), ht('264', 402, 290)],
+      flash: FOV,
+    },
+  ],
+};
 const MODES = ['NAV', 'CCIP', 'CCRP', 'DTOS', 'LADD', 'MAN', 'VIS', 'PRE', 'BORE', 'STRF', 'HARM', 'HTS', 'AAM', 'MSL', 'DGFT', 'MRM', 'SRM', 'HOB', 'EEGS', 'JETT'];
 const num = (id: string, name: string, unit: string, rest: number, range: [number, number, number], description: string) =>
   ({ id, name, type: 'display' as const, unit, rest, range, description, source: src });
@@ -143,6 +206,7 @@ export const hud: PanelSpec = {
         roll: { centre: r(575, 284.5), r: [mm(67), mm(75), mm(80)], ticks: [-45, -30, -20, -10, 0, 10, 20, 30, 45], longAt: [-45, -30, 30, 45], caret: [mm(76), mm(87.5), mm(11)] },
         fields: [
           { indicator: 'g', at: r(468.7, 135.8), anchor: 'middle', format: { decimals: 1 } },
+          { indicator: 'soi', at: r(451.8, 121.8) },
           { indicator: 'master-arm', at: r(456.7, 275.4) },
           { indicator: 'mach', at: r(456.7, 290), format: { decimals: 2 } },
           { indicator: 'max-g', at: r(440, 304.6), format: { decimals: 1 } },
@@ -159,6 +223,7 @@ export const hud: PanelSpec = {
           { indicator: 'steerpoint', at: r(697.4, 352.5), format: { pad: 3 } },
         ],
         boxes: [box(674, 280, 719, 296.7)],
+        cues: harmCues,
       },
     },
   ],
@@ -178,10 +243,13 @@ export const hud: PanelSpec = {
     num('altitude', 'Altitude', 'ft', 8360, [0, 60000, 10], 'Altitude scale and readout to the nearest 10 ft; a long mark every 500 ft, a short one every 100 ft.'),
     num('heading', 'Heading', '°', 197, [0, 359, 1], 'Heading scale (magnetic) with its lubber line above and the readout below; a long mark every 10°, a short one every 5°.'),
     num('g', 'G', 'g', 1.1, [-9.9, 9.9, 0.1], 'Current load factor, to a tenth of a g.'),
+    word('soi', 'Sensor of interest marker', [{ id: 'off', label: '' }, { id: 'on', label: '*' }], 'off', 'An asterisk above the G readout while the HUD is the sensor of interest (guide p. 663 shows it). Blank when another display, such as the HAD, is the SOI.'),
+    num('harm-asl', 'Azimuth steering line (position)', '°', 0, [-10, 10, 0.1], 'The azimuth steering line of the HARM launch cues: its offset from the boresight is how far you must turn to be on bearing to the target. Aligned through the flight path marker when on bearing (guide p. 663).'),
     word('master-arm', 'Master arm status', [{ id: 'none', label: '(blank)' }, { id: 'arm', label: 'ARM' }, { id: 'sim', label: 'SIM' }], 'arm', 'MASTER ARM switch: ARM, SIM (simulate) or blank (OFF).'),
     num('mach', 'Mach', 'M', 0.61, [0, 2.2, 0.01], 'Mach number to the hundredth.'),
     num('max-g', 'Maximum G', 'g', 5.7, [-9.9, 9.9, 0.1], 'Highest load factor of the flight; WARN RESET on the ICP resets it to 1.0.'),
     word('align', 'INS alignment cue (ALIGN)', [{ id: 'none', label: '(blank)' }, { id: 'align', label: 'ALIGN' }], 'none', 'ALIGN, in the place of the maximum G readout, while the INS alignment is usable for navigation (steady) and fully aligned (flashing); gone once the INS knob is in NAV. While it shows, the maximum G is not drawn.'),
+    word('harm-cues', 'HARM launch cues', [{ id: 'none', label: '(none)' }, { id: 'amz', label: 'AMZ: loft cues, launch scale, FOV box steady' }, { id: 'mmz', label: 'MMZ: FOV box flashing, in range' }], 'none', 'The AGM-88 POS launch cues (guide pp. 663-664): the azimuth steering line, the minimum and maximum loft ticks on it, the HARM launch scale (HLS) staple on the right with a caret for the present range and the loft angle needed (an A prefix inside the missile maneuver zone), the release altitude under it, and the FOV box, which flashes when the missile is in range and the weapon release button is hot.'),
     word('master-mode', 'Master mode', P(...MODES), 'nav', 'Master mode, air-to-air missile type or air-to-ground submode.'),
     num('bullseye-bearing', 'Bullseye bearing', '°', 324, [0, 359, 1], 'Ownship bearing from the bullseye, when bullseye is on and no fuel message shows.'),
     num('bullseye-range', 'Bullseye range', 'NM', 53, [0, 999, 1], 'Ownship range from the bullseye, nautical miles.'),

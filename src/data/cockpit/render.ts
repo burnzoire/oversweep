@@ -165,6 +165,7 @@ export function readings(spec: PanelSpec): Record<string, Reading> {
       const tape = (id: string, t: HudTape) => { out[id] = { kind: 'tape', per: t.axis === 'y' ? t.per : -t.per, axis: t.axis, format: t.readout.format, range: r(id, [t.from, t.to, 1]) }; };
       tape('velocity', h.velocity); tape('altitude', h.altitude); tape('heading', h.heading);
       for (const id of ['screen', 'velocity-mode']) page(id);
+      if (h.cues) { page(h.cues.id); shift('harm-asl', h.deg, 'x', [-10, 10, 0.1]); }
       for (const f of h.fields) {
         if (ind(f.indicator)?.pages) page(f.indicator);
         else out[f.indicator] = { kind: 'number', format: f.format ?? {}, range: r(f.indicator, [0, 999, 1]) };
@@ -207,7 +208,7 @@ export function placementIndicators(p: Placement): string[] {
     case 'counter': return [p.counter.indicator];
     case 'text-display': case 'mfd-display': case 'blinker': case 'flag-window': case 'led-display': return [p.indicator];
     case 'hsi': return [...HSI_INDICATORS];
-    case 'hud': return [...HUD_INDICATORS, ...p.hud.fields.map(f => f.indicator)];
+    case 'hud': return [...HUD_INDICATORS, ...(p.hud.cues ? [p.hud.cues.id, 'harm-asl'] : []), ...p.hud.fields.map(f => f.indicator)];
     case 'attitude': return ['pitch', 'roll', 'off-flag'];
     default: return [];
   }
@@ -286,7 +287,7 @@ function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, cu
     }
     if (page?.marks) body += `<path d="${page.marks}" fill="none" stroke="${W}" ${sw('medium')}/>`;
     if (page?.fine) body += `<path d="${page.fine}" fill="none" stroke="${W}" ${sw('fine')}/>`;
-    for (const p of page?.paths ?? []) if (!p.fill) body += `<path d="${p.d}" fill="none" stroke="${MFD_COLOURS[p.c]}" ${sw(p.pen ?? 'medium')}/>`;
+    for (const p of page?.paths ?? []) if (!p.fill) body += `<path d="${p.d}" fill="none" stroke="${MFD_COLOURS[p.c]}" ${sw(p.pen ?? 'medium')}${p.dash ? ' stroke-dasharray="2.2 1.4"' : ''}/>`;
     if (page?.aid) body += `<path data-aid d="${page.aid}" fill="none" stroke="${MFD_AID}" stroke-dasharray="1.2 0.8" ${sw('fine')}/>`;
     if (page?.cursor) body += `<g data-cursor="${id}" transform="translate(${n(page.cursor.at[0])} ${n(page.cursor.at[1])})"><path d="${page.cursor.d}" fill="none" stroke="${W}" ${sw('medium')}/></g>`;
     s += `<g data-page-of="${id}" data-page="${pg.id}"${pg.id === current ? '' : ' display="none"'}>${body}</g>`;
@@ -375,8 +376,13 @@ const HUD_PEN = 0.5;
 
 /** HUD lettering: fixed-width, `pitch` mm a character, centred on y. */
 function hudText(x: number, y: number, s: string, font: HudDisplay['font'], anchor: 'start' | 'middle' | 'end' = 'start') {
-  return `<text x="${n(x)}" y="${n(y + font.cap / 2)}" font-family="${MONO}" font-size="${n(font.pitch / 0.602)}" text-anchor="${anchor}" fill="${INK}" stroke="none">${esc(s)}</text>`;
+  return `<text x="${n(x)}" y="${n(y + font.cap / 2)}" font-family="${MONO}" font-size="${n(font.pitch / 0.602)}" text-anchor="${anchor}"${squeeze(s, font.pitch * 0.3)} fill="${INK}" stroke="none">${esc(s)}</text>`;
 }
+/** HUD lettering is fixed pitch, but a comma is a narrow mark: pull it and the next character in by `d` each side (Nathan, 2026-11-23). */
+const squeeze = (s: string, d: number) => {
+  const dx = Array.from(s, (c, i) => (c === ',' ? -d : s[i - 1] === ',' ? -d : 0));
+  return dx.some(v => v) ? ` dx="${dx.map(n).join(' ')}"` : '';
+};
 
 /** A tape's ticks and labels at reading zero, relative to its origin (the page moves them by the reading). */
 function hudTape(t: HudTape, font: HudDisplay['font']) {
@@ -432,17 +438,17 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
   const steerpoint = shift('steerpoint-azimuth', 'x', D, shift('steerpoint-elevation', 'y', -D, `<path d="M0 ${n(-dm)}L${n(dm)} 0L0 ${n(dm)}L${n(-dm)} 0Z" ${pen}/>`));
   // Tapes: ticks and labels move inside windows fixed on the HUD; the index and readout box stay put. A HUD only adds light, so
   // the box is an outline and the symbol generator leaves the tape out of it: a mask cuts the box (and a pen's width round it) out.
-  const tape = (id: string, t: HudTape) => {
+  const tape = (id: string, t: HudTape, sfx = '') => {
     const [ax, ay] = t.at, deep = 40, along = t.axis === 'y';
     const rect = (a0: number, a1: number) => along ? `M${n(-deep)} ${n(a0)}H${n(deep)}V${n(a1)}H${n(-deep)}Z` : `M${n(a0)} ${n(-deep)}H${n(a1)}V${n(deep)}H${n(a0)}Z`;
     const lw = t.labelWindow ?? t.window, per = along ? t.per : -t.per, ra = t.readout, art = hudTape(t, F);
     const moving = (body: string) => `<g data-shift="${id}" transform="translate(${along ? `0 ${n(value(id) * per)}` : `${n(value(id) * per)} 0`})">${body}</g>`;
-    return `<clipPath id="${clip}-${id}-t"><path d="${rect(-t.window, t.window)}"/></clipPath>` +
-      `<clipPath id="${clip}-${id}-l"><path clip-rule="evenodd" d="${rect(-lw, lw)}${t.labelGap ? rect(-t.labelGap, t.labelGap) : ''}"/></clipPath>` +
-      `<mask id="${clip}-${id}-m" maskUnits="userSpaceOnUse" x="-10000" y="-10000" width="20000" height="20000">` +
+    return `<clipPath id="${clip}-${id}${sfx}-t"><path d="${rect(-t.window, t.window)}"/></clipPath>` +
+      `<clipPath id="${clip}-${id}${sfx}-l"><path clip-rule="evenodd" d="${rect(-lw, lw)}${t.labelGap ? rect(-t.labelGap, t.labelGap) : ''}"/></clipPath>` +
+      `<mask id="${clip}-${id}${sfx}-m" maskUnits="userSpaceOnUse" x="-10000" y="-10000" width="20000" height="20000">` +
       `<rect x="-10000" y="-10000" width="20000" height="20000" fill="#fff"/><path d="${t.box}" fill="#000" stroke="#000" stroke-width="${n(HUD_PEN * 3)}"/></mask>` +
-      `<g data-indicator="${id}"><g mask="url(#${clip}-${id}-m)"><g transform="translate(${n(ax)} ${n(ay)})">` +
-      `<g clip-path="url(#${clip}-${id}-t)">${moving(art.ticks)}</g><g clip-path="url(#${clip}-${id}-l)">${moving(art.labels)}</g></g></g>` +
+      `<g data-indicator="${id}"><g mask="url(#${clip}-${id}${sfx}-m)"><g transform="translate(${n(ax)} ${n(ay)})">` +
+      `<g clip-path="url(#${clip}-${id}${sfx}-t)">${moving(art.ticks)}</g><g clip-path="url(#${clip}-${id}${sfx}-l)">${moving(art.labels)}</g></g></g>` +
       `<path d="${t.index}" ${pen}/><path d="${t.box}" ${pen}/>` +
       `<g data-number="${id}">${hudText(ra.at[0], ra.at[1], formatReadout(value(id), ra.format), F, ra.anchor)}</g></g>`;
   };
@@ -461,8 +467,16 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
     return pre + `<g data-indicator="${f.indicator}">${body}</g>`;
   }).join('');
   const mode = `<g data-indicator="velocity-mode">${pages('velocity-mode', pg => hudText(h.velocityMode[0], h.velocityMode[1], word('velocity-mode', pg), F, 'middle'))}</g>`;
-  const on = `<g clip-path="url(#${clip})">` + fixed + steerpoint + attitude + rollArt +
-    tape('velocity', h.velocity) + tape('altitude', h.altitude) + tape('heading', h.heading) + mode +
+  const cues = h.cues ? `<g data-indicator="${h.cues.id}">${pages(h.cues.id, pg => {
+    const c = h.cues!.pages.find(q => q.id === pg)!;
+    return `<path d="${c.art}" ${pen}/>` + (c.steer ? shift('harm-asl', 'x', D, `<path d="${c.steer}" ${pen}/>`) : '') + c.texts.map(t => hudText(t.at[0], t.at[1], t.t, F, t.anchor)).join('') +
+      (c.flash ? `<path d="${c.flash}" ${pen}><animate attributeName="opacity" values="1;0" calcMode="discrete" dur="0.4s" repeatCount="indefinite"/></path>` : '');
+  })}</g>` : '';
+  const heading = h.cues?.heading
+    ? `<g data-indicator="${h.cues.id}">${pages(h.cues.id, pg => pg === 'none' ? tape('heading', h.heading) : tape('heading', h.cues!.heading!, '-hi'))}</g>`
+    : tape('heading', h.heading);
+  const on = `<g clip-path="url(#${clip})">` + fixed + steerpoint + attitude + rollArt + cues +
+    tape('velocity', h.velocity) + tape('altitude', h.altitude) + heading + mode +
     h.boxes.map(d => `<path d="${d}" ${pen}/>`).join('') + fields + '</g>';
   return `<clipPath id="${clip}"><path d="${h.glass}"/></clipPath>` +
     `<g data-page-of="screen" data-page="on"${pageOf('screen') === 'on' ? '' : ' display="none"'}>${on}</g><g data-page-of="screen" data-page="off"${pageOf('screen') === 'off' ? '' : ' display="none"'}></g>`;
@@ -675,6 +689,7 @@ function placement(spec: PanelSpec, p: Placement, state: Record<string, string>)
           (p.marks ? `<path d="${p.marks}" fill="none" ${sw('fine')}/>` : '') + '</g>';
       };
       // A painted button is painted whole: cap and skirt (DN LOCK REL).
+      if (p.paintCapOnly) return at(p.at, pushBase(art) + moving(c, state[c.id] ?? c.initial, i => painted(p.paint, pushCap(art, i > 0)) + print(i > 0)), ` data-art="${p.component}"`);
       return at(p.at, painted(p.paint, pushBase(art) + moving(c, state[c.id] ?? c.initial, i => pushCap(art, i > 0) + print(i > 0))), ` data-art="${p.component}"`);
     }
     case 'gear-handle': {
