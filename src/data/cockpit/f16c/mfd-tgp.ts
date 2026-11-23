@@ -2,6 +2,7 @@ import type { MfdDisplay } from '../types';
 import { tracer } from '../trace.ts';
 import { FRAME, hadBottom } from './mfd-had.ts';
 import { TGP_VIDEO_SA11, TGP_VIDEO_SA6, TGP_VIDEO_STPT } from './tgp-video.ts';
+import { IR_AIM, IR_SPI, MAV_VIDEO_K, TGP_IR_B, TGP_IR_T } from './maverick-video.ts';
 
 /**
  * F-16C Targeting Pod (TGP) MFD format, A-G mode, for the shared MFD (`mfd.ts`). Traced from the guide's p. 495
@@ -58,9 +59,16 @@ const SPI: Record<string, Spi> = {
   sa11Near: { lat: '036:58.031', lon: '037:21.874', elv: '+1680', hq: false, range: 'E44.1', meter: '1139', ttg: '005:24', video: TGP_VIDEO_SA11 },
   sa11Track: { lat: '036:58.044', lon: '037:21.851', elv: '+1674', hq: false, range: 'T44.0', meter: '1137', ttg: '005:24', video: TGP_VIDEO_SA11 },
 };
-function tgp(id: string, spi: Spi, soi: boolean, track = false): Page {
+/**
+ * With the AGM-65 selected (guide p. 679 image): NARO, the stations along the bottom with the Missile Boresight
+ * Correlator's letter over the next one (as on the WPN format), and a picture larger than the glass that the pod
+ * slews (`at`, page mm, the picture's offset under the crosshairs). Placed from the p. 679 image by its SWAP and TGP
+ * labels (1.56 grid px per image px).
+ */
+interface Mav { mbc: string; next: '3' | '7'; at: [number, number] }
+function tgp(id: string, spi: Spi, soi: boolean, track = false, mav?: Mav): Page {
   const words: Word[] = [
-    w('A-G', 186, 117.5), w('PTR', 258, 117.5), w('WIDE', 332, 117.5), w('OVRD', 405, 117.5), w('CNTL', 478, 117.5),
+    w('A-G', 186, 117.5), w('PTR', 258, 117.5), w(mav ? 'NARO' : 'WIDE', 332, 117.5), w('OVRD', 405, 117.5), w('CNTL', 478, 117.5),
     sm(spi.lat, 180, 140, 'start'), sm(spi.lon, 180, 153.5, 'start'), sm(spi.elv, 272.5, 170, 'end'),
     ...(spi.hq ? [sm('HQ', 190, 181, 'start')] : []),
     w('1.0X', 332.5, 144), sm('18600', 531, 144, 'end'), w('WHOT', 551.5, 186, 'end'),
@@ -68,16 +76,41 @@ function tgp(id: string, spi: Spi, soi: boolean, track = false): Page {
     sm(spi.meter, 441.5, 313.5, 'start'), sm(spi.range, 167.5, 511, 'start'), sm(spi.ttg, 520, 492.5, 'end'),
     // In a track mode: tracking sensor and mode (p. 499 items 28-29) under the crosshairs, placed from the p. 498 image; blank in Slave.
     ...(track ? [sm('IR POINT', 344, 482, 'middle')] : []),
+    ...(mav ? [w(mav.next === '3' ? mav.mbc : '', 174.5, 435.5), w('3', 174.5, 454.5), w(mav.next === '7' ? mav.mbc : '', 492, 432), w('7', 492, 451)].filter(x => x.t) : []),
     ...hadBottom('TGP'),
   ];
   return {
-    id, words, marks: (track ? CROSS_SMALL + TRACK_BOX : CROSS) + BRACKETS + NORTH, fills: NORTH_FILL, fine: soi ? FRAME : '',
-    paths: [{ d: ARS, c: 'cyan' }], ...(spi.video ? { video: spi.video } : {}),
+    id, words, marks: (track ? CROSS_SMALL + TRACK_BOX : CROSS) + (mav ? '' : BRACKETS) + NORTH, fills: NORTH_FILL, fine: soi ? FRAME : '',
+    paths: [{ d: ARS, c: 'cyan' }, ...(mav ? [{ d: STATION_BOX[mav.next], c: 'white' as const, pen: 'fine' as const }] : [])],
+    ...(spi.video ? { video: spi.video } : {}),
+    ...(mav ? { pan: true, videoScale: MAV_VIDEO_K, cursor: { d: '', at: mav.at } } : {}),
   };
 }
+/** The next station's box (the p. 679 image highlights it). */
+const STATION_BOX = { '3': poly([[167.5, 446], [181.5, 446], [181.5, 463], [167.5, 463]], true), '7': poly([[485, 442.5], [499, 442.5], [499, 459.5], [485, 459.5]], true) };
+/** Glass px per picture px (the 768 px picture spans 1.6 glasses of 489 px), and the picture point under the crosshairs. */
+const IMG = (v: number) => v * (489 / (768 / MAV_VIDEO_K));
+const CROSS_IMG: P = [384 + (X[0] - SC[0]) / IMG(1), 384 + (X[1] - SC[1]) / IMG(1)];
+const under = (p: readonly [number, number]): [number, number] => [mm(IMG(p[0] - CROSS_IMG[0])), mm(IMG(p[1] - CROSS_IMG[1]))];
+/** The pod slewed by hand onto the chimney (boresighting) and onto the lead T-72 (the handoff). */
+const podSlew = (to: readonly [number, number]) => ({ start: under(IR_SPI), target: under(to), reach: mm(7), speed: mm(110), box: [mm(-140), mm(-140), mm(140), mm(140)] as [number, number, number, number] });
+export const TGP_SLEW_B = { ...podSlew(IR_AIM.bTgp), what: 'chimney' };
+export const TGP_SLEW_T = { ...podSlew(IR_AIM.tTgp), what: 'tank' };
+/** The AGM-65D scenario's steerpoints 3 (10 NM, the brickworks) and 5 (5 NM, the T-72s); meterstick for NARO (assumed a quarter of WIDE's). */
+const STPT3: Spi = { lat: '036:21.840', lon: '037:04.215', elv: '+1210', hq: true, range: 'E10.0', meter: '65', ttg: '001:15', video: TGP_IR_B };
+const STPT5: Spi = { lat: '036:33.106', lon: '037:09.874', elv: '+1355', hq: true, range: 'E5.0', meter: '32', ttg: '000:31', video: TGP_IR_T };
+const B0 = under(IR_SPI), B1 = under(IR_AIM.bTgp), T1 = under(IR_AIM.tTgp);
+const tgpD: Page[] = [
+  tgp('tgp-b', STPT3, false, false, { mbc: 'S', next: '3', at: B0 }), tgp('tgp-b-soi', STPT3, true, false, { mbc: 'S', next: '3', at: B0 }),
+  tgp('tgp-b-on', STPT3, false, false, { mbc: 'S', next: '3', at: B1 }), tgp('tgp-b-on7', STPT3, false, false, { mbc: 'S', next: '7', at: B1 }),
+  // The shot starts from station 7, next after boresighting.
+  tgp('tgp-t', STPT5, false, false, { mbc: 'S', next: '7', at: B0 }), tgp('tgp-t-soi', STPT5, true, false, { mbc: 'S', next: '7', at: B0 }),
+  ...['1', '2', 'T', 'C'].map(l => tgp(`tgp-t-${l}`, STPT5, true, false, { mbc: l, next: '7', at: T1 })),
+  tgp('tgp-t-3', STPT5, true, false, { mbc: 'S', next: '3', at: T1 }),
+];
 export const tgpPages: Page[] = [
   tgp('tgp', SPI.stpt, false), tgp('tgp-soi', SPI.stpt, true),
-  tgp('tgp-sa6', SPI.sa6, false), tgp('tgp-sa6-near', SPI.sa6Near, false), tgp('tgp-sa11', SPI.sa11, false), tgp('tgp-sa11-near', SPI.sa11Near, false), tgp('tgp-sa11-soi', SPI.sa11Near, true), tgp('tgp-sa11-track', SPI.sa11Track, true, true),
+  tgp('tgp-sa6', SPI.sa6, false), tgp('tgp-sa6-near', SPI.sa6Near, false), tgp('tgp-sa11', SPI.sa11, false), tgp('tgp-sa11-near', SPI.sa11Near, false), tgp('tgp-sa11-soi', SPI.sa11Near, true), tgp('tgp-sa11-track', SPI.sa11Track, true, true), ...tgpD,
 ];
 export const tgpPageLabels: Record<string, string> = {
   tgp: 'TGP format: Slave, on the selected steerpoint',
@@ -88,4 +121,15 @@ export const tgpPageLabels: Record<string, string> = {
   'tgp-sa11-near': 'TGP format: slaved to the SA-11, after the turn',
   'tgp-sa11-soi': 'TGP format, SOI: slaved to the SA-11',
   'tgp-sa11-track': 'TGP format, SOI: Point track on the SA-11 site, the pod owns the SPI',
+  'tgp-b': 'TGP format, AGM-65D selected: NARO, on steerpoint 3',
+  'tgp-b-soi': 'TGP format, SOI: NARO, slewed by hand toward the chimney',
+  'tgp-b-on': 'TGP format: on the brickworks chimney, station 3 next',
+  'tgp-b-on7': 'TGP format: on the chimney, station 7 next',
+  'tgp-t': 'TGP format, AGM-65D selected: on steerpoint 5',
+  'tgp-t-soi': 'TGP format, SOI: slewed by hand toward the lead T-72',
+  'tgp-t-1': 'TGP format, SOI: on the T-72, correlator slewing (1)',
+  'tgp-t-2': 'TGP format, SOI: on the T-72, correlator matching the pictures (2)',
+  'tgp-t-T': 'TGP format, SOI: on the T-72, missile commanded to track (T)',
+  'tgp-t-C': 'TGP format, SOI: handoff complete (C)',
+  'tgp-t-3': 'TGP format, SOI: after the shot, station 3 next',
 };
