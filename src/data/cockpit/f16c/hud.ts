@@ -92,8 +92,18 @@ const heading: HudTape = {
 const H = (x: number, y: number): [number, number] => [B[0] + (x - 298) / 1.1, B[1] + (y - 61) / 1.1];
 const hp = (pts: [number, number][]) => rel(pts.map(([x, y]) => H(x, y)), false);
 const ht = (t: string, x: number, y: number, anchor: 'start' | 'middle' | 'end' = 'middle') => ({ t, at: r(...H(x, y)), anchor });
-/** Staple: line x 398 from y 201 to 273, serifs right to x 409, the AMZ/MMZ separator at y 209.5; 80 NM dash at y 162 and zero dash at y 279.5. */
-const STAPLE = hp([[409, 201], [398, 201], [398, 273], [409, 273]]) + hp([[398, 209.5], [409, 209.5]]) + hp([[399, 162], [411, 162]]) + hp([[399, 279.5], [411, 279.5]]);
+/**
+ * Staple: line x 398 from y 201 to 273, serifs right to x 409; the upper range dash at y 162 and the zero dash at y 279.5
+ * (p. 663 image 002). The figures are for a target about 45 NM away on the 80 NM scale; this scenario closes to 12 NM,
+ * so the scale reads 40 NM (p. 664: 40 or 80 NM, whichever covers the range) and the caret sits at 12 NM. The staple's
+ * ends and the AMZ/MMZ separator are illustrative: in the AMZ the separator is below the caret (manoeuvre first), and
+ * once on bearing the MMZ grows past the caret.
+ */
+const SCALE_NM = 40;
+const nmY = (nm: number) => 279.5 - (nm * 117.5) / SCALE_NM;
+const CARET_Y = nmY(12);
+const STAPLE = hp([[409, 201], [398, 201], [398, 273], [409, 273]]) + hp([[399, 162], [411, 162]]) + hp([[399, 279.5], [411, 279.5]]);
+const separator = (nm: number) => hp([[398, nmY(nm)], [409, nmY(nm)]]);
 /** Azimuth steering line: the full height of the glass through the boresight. */
 const ASL = hp([[298, -40], [298, 470]]);
 /** EOM loft cues on the line: the small tick (y 67, 24 wide) and the large tick (y 212, 34 wide). */
@@ -120,12 +130,12 @@ const harmCues = {
   pages: [
     { id: 'none', art: '', texts: [] },
     {
-      id: 'amz', art: STAPLE + FOV + BOXED_X, steer: ASL + LOFT,
-      texts: [ht('80', 404.5, 151), ht('14>', 397, 209, 'end'), ht('246', 402, 290), ht('00', 403, 303)],
+      id: 'amz', art: STAPLE + separator(10) + FOV + BOXED_X, steer: ASL + LOFT,
+      texts: [ht(String(SCALE_NM), 404.5, 151), ht('14>', 397, CARET_Y, 'end'), ht('246', 402, 290), ht('00', 403, 303)],
     },
     {
-      id: 'mmz', art: STAPLE + BOXED_X, steer: ASL + LOFT,
-      texts: [ht('80', 404.5, 151), ht('A36>', 397, 214, 'end'), ht('264', 402, 290)],
+      id: 'mmz', art: STAPLE + separator(16) + BOXED_X, steer: ASL + LOFT,
+      texts: [ht(String(SCALE_NM), 404.5, 151), ht('A36>', 397, CARET_Y, 'end'), ht('264', 402, 290)],
       flash: FOV,
     },
   ],

@@ -16,8 +16,8 @@ interface Typing { keys: string[]; pages: string[] }
 interface Step { id: string; panels: string[]; hints?: string[]; do?: StepDo; also?: StepDo[]; type?: Typing; confirm?: string }
 interface Config { aircraft: string; model: string; initial: Record<string, string>; labels: Record<string, string>; names: Record<string, string>; steps: Step[] }
 /** `pod`: ms of pod warm-up left (-1 off); `cur`: the HAD cursor while it is slewed by hand (page units); the rest name pages. */
-interface State { pod: number; mfd: string; left: string; ded: string; cur: [number, number]; /** Pages of other panels' indicators (`hud.master-arm`), by indicator. */ x: Record<string, string> }
-type Pages = Partial<Pick<State, 'mfd' | 'left' | 'ded' | 'x'>>;
+interface State { pod: number; mfd: string; left: string; ded: string; cur: [number, number]; /** Pages of other panels' indicators (`hud.master-arm`), by indicator. */ x: Record<string, string>; /** Other panels' number readings (`hud.slant-range`), by indicator. */ r?: Record<string, number> }
+type Pages = Partial<Pick<State, 'mfd' | 'left' | 'ded' | 'x' | 'r'>>;
 
 /**
  * What each procedure's steps do to the displays. `after`: the pages once a step's moves are made; `slew`: the step
@@ -66,16 +66,18 @@ const SCENARIOS: Record<string, Scenario> = {
   },
   'harm-shot': {
     // The jet's HAD is SOI after the turn; the left MFD shows the SMS format; the HUD is on, master arm off, in NAV.
-    initial: { mfd: 'hadh', left: 'sms-ag88-off', ded: 'cni', x: { 'hud.screen': 'on', 'hud.master-arm': 'none', 'hud.master-mode': 'nav', 'hud.harm-cues': 'none' } },
+    initial: { mfd: 'hadh', left: 'sms-ag88-off', ded: 'cni', x: { 'hud.screen': 'on', 'hud.master-arm': 'none', 'hud.master-mode': 'nav', 'hud.harm-cues': 'none' }, r: { 'hud.steerpoint-distance': 19, 'hud.slant-range': 19.5 } },
     after: {
+      'a-g': { x: { 'hud.master-mode': 'harm' } },
       'master-arm': { x: { 'hud.master-arm': 'arm' } },
       power: { left: 'sms-ag88' }, wpn: { left: 'wpn-has' },
-      designate: { mfd: 'hadh-des', left: 'wpn-pos-handoff', x: { 'hud.master-mode': 'harm' } },
+      // Designating moves steerpoint 4 onto the radar (p. 539), about 44 NM away; the HUD's range fields follow it.
+      designate: { mfd: 'hadh-des', left: 'wpn-pos-handoff', x: { 'hud.master-mode': 'harm' }, r: { 'hud.steerpoint-distance': 44, 'hud.slant-range': 44.1 } },
       release: { left: 'wpn-pos-flight', x: { 'hud.harm-cues': 'none' } },
     },
     slew: { step: 'slew', on: 'hadh', free: 'hadh-free', done: 'hadh-hover', ...HADH.slew },
     // Pages a step shows as it opens: closing on the radar, then the HUD cues as the jet climbs into the missile zone.
-    enter: { fly: { mfd: 'hadh-close', x: { 'hud.harm-cues': 'amz' } }, mmz: { x: { 'hud.harm-cues': 'mmz' } } },
+    enter: { fly: { mfd: 'hadh-close', x: { 'hud.harm-cues': 'amz' }, r: { 'hud.steerpoint-distance': 12, 'hud.slant-range': 12.1 } }, mmz: { x: { 'hud.harm-cues': 'mmz' } } },
   },
 };
 
@@ -97,10 +99,10 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
   const sc = SCENARIOS[cfg.model] ?? SCENARIOS.hts;
-  const initialState = (): State => ({ pod: -1, mfd: 'off', left: 'off', ded: 'off', ...sc.initial, x: { ...sc.initial.x }, cur: [...sc.slew.start] } as State);
-  const copy = (s: State): State => ({ ...s, cur: [...s.cur], x: { ...s.x } });
+  const initialState = (): State => ({ pod: -1, mfd: 'off', left: 'off', ded: 'off', ...sc.initial, x: { ...sc.initial.x }, r: { ...sc.initial.r }, cur: [...sc.slew.start] } as State);
+  const copy = (s: State): State => ({ ...s, cur: [...s.cur], x: { ...s.x }, r: { ...s.r } });
   /** Apply a step's page changes; `x` adds to the other panels' pages rather than replacing them. */
-  const apply = (p: Pages) => { const { x, ...rest } = p; Object.assign(st, rest); if (x) st.x = { ...st.x, ...x }; };
+  const apply = (p: Pages) => { const { x, r, ...rest } = p; Object.assign(st, rest); if (x) st.x = { ...st.x, ...x }; if (r) st.r = { ...st.r, ...r }; };
   try { sessionStorage.removeItem(`oversweep:cockpit:${cfg.aircraft}`); } catch { /* storage unavailable */ }
   let pos: Record<string, string> = { ...cfg.initial };
   let st = initialState();
@@ -128,7 +130,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   const slewing = () => stepId() === sc.slew.step && !finished && st.mfd === sc.slew.on;
   function indicate() {
     const page = slewing() ? sc.slew.free : st.mfd;
-    dispatchEvent(new CustomEvent('cockpit:indicate', { detail: { pages: { 'right-mfd.display': page, 'left-mfd.display': st.left, 'ded.display': st.ded, ...st.x }, cursors: { 'right-mfd.display': st.cur } } }));
+    dispatchEvent(new CustomEvent('cockpit:indicate', { detail: { pages: { 'right-mfd.display': page, 'left-mfd.display': st.left, 'ded.display': st.ded, ...st.x }, readings: { ...st.r }, cursors: { 'right-mfd.display': st.cur } } }));
   }
   const keyText = (k: string) => name(k).replace(/ (key|button)$/, '').replace(/ \/.*$/, '');
 

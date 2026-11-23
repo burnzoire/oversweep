@@ -59,8 +59,8 @@ const stations = (sel: '3' | '7', has: boolean) => has
   ? [w('3', 186, 511.5), w('7', 486, 511.5)]
   : [w(sel, 477, 504, undefined, true)];
 
-/** HAS page (p. 660): threat table 3 (3, S, 6, 2, 13), the ALIC video box, scan time and the crosshair scale. */
-const HAS_LEFT = ['3', 'S', '6', '2', '13'];
+/** HAS page (p. 660, which shows table 3): here threat table 1 (10, BB, CS, 11, SD, p. 657), as on the POS page, the ALIC video box, scan time and the crosshair scale. */
+const HAS_LEFT = ['10', 'BB', 'CS', '11', 'SD'];
 const hasMarks = (() => {
   const x = (v: number) => 1.638 * v - 13.8, y = (v: number) => 1.58 * v - 9.9;
   const cx = x(211), top = y(140), bottom = 488;
@@ -93,7 +93,7 @@ const has: Page = {
  * the left (the handed-off one inverse); in-flight missile data above the launch status divider line (LSDL), the
  * next missile's data below it (threat, steerpoint, time to impact, impact time); station 3 boxed.
  */
-export interface PosState { profile: 'EOM' | 'PB' | 'RUK'; threat?: string; stpt?: string; tti?: string; impact?: string; inflight?: { tti: string; stpt: string; threat: string }; id: string }
+export interface PosState { profile: 'EOM' | 'PB' | 'RUK'; station?: '3' | '7'; threat?: string; stpt?: string; tti?: string; impact?: string; inflight?: { tti: string; stpt: string; threat: string }; id: string }
 const TBL1 = ['10', 'BB', 'CS', '11', 'SD'];
 function pos(s: PosState): Page {
   const ruk = s.profile === 'RUK';
@@ -109,7 +109,7 @@ function pos(s: PosState): Page {
     words.push(w(s.threat, 473, 307, undefined, true), w(s.stpt ?? '', 479, 331));
     if (!ruk && s.tti) words.push(w(s.tti, 474.7, 377), w(s.impact ?? '', 494, 399));
   }
-  words.push(w('RDY', 330, 504), ...stations('3', false), ...row('WPN', 'WPN', 'DCLT'));
+  words.push(w('RDY', 330, 504), ...stations(s.station ?? '3', false), ...row('WPN', 'WPN', 'DCLT'));
   const lsdl = poly([[146, 288], [513, 288]]);
   // The range-staple symbol at the lower right (p. 662; a bar with serifs and a small tick), as drawn there.
   const staple = poly([[537, 453.5], [549, 453.5]]) + poly([[543, 453.5], [543, 485]]) + poly([[539.5, 471], [546.5, 471]]) + poly([[537, 485], [549, 485]]);
@@ -120,7 +120,8 @@ export const harmPages: Page[] = [
   sms('sms-ag88-off', false), sms('sms-ag88', true), has,
   pos({ id: 'wpn-pos', profile: 'EOM' }),
   pos({ id: 'wpn-pos-handoff', profile: 'EOM', threat: '11', stpt: '4', tti: '1:23', impact: '16:01:40' }),
-  pos({ id: 'wpn-pos-flight', profile: 'EOM', inflight: { tti: '1:22', stpt: '4', threat: '11' } }),
+  // One missile away from station 3 at about 12 NM; station 7 is next, its data still shown (p. 662). Times are illustrative.
+  pos({ id: 'wpn-pos-flight', profile: 'EOM', station: '7', threat: '11', stpt: '4', tti: '0:35', impact: '16:03:05', inflight: { tti: '0:34', stpt: '4', threat: '11' } }),
 ];
 export const harmPageLabels: Record<string, string> = {
   'sms-ag88-off': 'SMS format: AG88 selected, HARMs powered off',

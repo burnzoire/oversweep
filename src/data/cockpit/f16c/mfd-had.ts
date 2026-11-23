@@ -436,7 +436,7 @@ const hadx: Page[] = [
 const HROT = 20;
 const AFTER_TURN = { ...base, threats: T_TURN(true), nav2: false, scale: 'DEP60' as const, rot: HROT, pos: FLOWN };
 const closeIn = (): { pos: P; rot: number } => {
-  const dx = FLOWN[0] - SA11[0], dy = FLOWN[1] - SA11[1], len = Math.hypot(dx, dy), pos: P = [SA11[0] + (dx / len) * 17 * NM, SA11[1] + (dy / len) * 12 * NM];
+  const dx = FLOWN[0] - SA11[0], dy = FLOWN[1] - SA11[1], len = Math.hypot(dx, dy), pos: P = [SA11[0] + (dx / len) * 12 * NM, SA11[1] + (dy / len) * 12 * NM];
   // Heading-up: the picture swings so the radar is straight ahead (rot = minus the heading, east positive).
   return { pos, rot: -(Math.atan2(SA11[0] - pos[0], -(SA11[1] - pos[1])) * 180) / Math.PI };
 };

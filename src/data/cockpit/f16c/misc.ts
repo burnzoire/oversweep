@@ -45,7 +45,7 @@ export const misc: PanelSpec = {
       'LASER ARM: the OFF legend is mostly hidden under the lever (only the F shows), so it is centred under the lever, where the visible F puts it. The pivot sits between the bushing (y 301) and the legends\' centre line (y 309).',
       'The cross engraved below LASER ARM (x 129, y 400) is drawn as it is printed; the guide does not say what it marks.',
       'Lever types: RF, LASER ARM, MASTER ARM and PITCH show a lock slot in the bushing and a broad mushroom cap, so they are drawn as lever-locks (the MAIN PWR part); ROLL shows the round orange-red grommet of a plain toggle. In DCS they all move with a plain click.',
-      'The guide does not say which positions hold. RF, LASER ARM, MASTER ARM and ROLL are drawn as stable. PITCH is drawn magnetically held at ALT HOLD and ATT HOLD, dropping to A/P OFF (the guide\'s autopilot chapter, p. 130: the autopilot disengages to A/P OFF).',
+      'The guide does not say which positions hold for RF, LASER ARM, MASTER ARM and ROLL; they are drawn as stable. PITCH is drawn magnetically held at ALT HOLD and ATT HOLD, dropping to A/P OFF (the guide\'s autopilot chapter, p. 131: the switch is held by a solenoid and drops to A/P OFF when the autopilot disengages).',
       'ADV MODE is drawn unlit with its ACTIVE and STBY legends; the guide says it is not used in the Block 50.',
     ],
   },
