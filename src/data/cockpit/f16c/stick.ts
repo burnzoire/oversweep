@@ -147,7 +147,9 @@ export const stick: PanelSpec = {
     { id: 'cms', name: 'Countermeasures management switch (CMS)', cross: { up: ['cms-ud', 'fwd'], down: ['cms-ud', 'aft'], left: ['cms-lr', 'left'], right: ['cms-lr', 'right'] }, face: STICK_FACES['cms'] },
     { id: 'msl-step', name: 'Missile step / NWS / A/R DISC button', controls: ['msl-step'], face: STICK_FACES['msl-step'] },
     { id: 'paddle', name: 'Paddle switch', controls: ['paddle'] },
-    { id: 'pedals', name: 'Rudder pedals', controls: ['rudder'], face: STICK_FACES['pedals'] },
+    { id: 'pedals', name: 'Rudder pedals', controls: ['rudder'], device: false, face: STICK_FACES['pedals'] },
     { id: 'expand-fov', name: 'Expand/FOV (pinky) button', controls: ['expand-fov'], face: STICK_FACES['expand-fov'] },
   ],
+  // Beside a switch card: the two grip views without the captions (the pedals icon is left out as a card of its own).
+  device: [0, 0, 238, 228],
 };

@@ -563,6 +563,11 @@ export interface PanelSpec {
    * position. Procedures open the pad of the step's control and ring the wanted position.
    */
   pads?: PadDef[];
+  /**
+   * The part of the drawing a switch card shows as the whole device beside it (procedure steps), as a viewBox
+   * [x, y, w, h]: the grip views only, without icons and captions. Default: the whole canvas.
+   */
+  device?: [x: number, y: number, w: number, h: number];
 }
 
 /** A pop-out control pad: a four-way cross (`cross`, with a push in the middle, `centre`) and/or rows of positions (`controls`). */
@@ -578,6 +583,8 @@ export interface PadDef {
    * deflect it, a short click presses `centre`; the deflection is sent as `cockpit:analog`.
    */
   analog?: boolean;
+  /** false: the card's control is not on the device drawing (rudder pedals), so the card shows alone. */
+  device?: false;
   /** Controls shown as a row of their positions (rotaries as step buttons with a readout). */
   controls?: string[];
   /** The switch drawn face-on, square to the camera, on its own canvas (mm); without it the pad shows the drawing cropped to the switch. */
