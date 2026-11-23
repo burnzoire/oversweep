@@ -62,13 +62,14 @@ const [CX, CY] = MAV_CROSS;
 /** Pointer cross and reticle depression: 30.5 image px per 5 degrees (p. 673), so 7.26 grid px a degree. */
 const DEG = 7.26;
 /** The crosshairs run edge to edge of the format (p. 673: x 100-478, y 97-460); tracking, they open round the target. */
-/** Tracking: the crosshairs close in round the lead tank (its half-length in the narrow picture) and work on it. */
-const GATE = 10;
+/** Tracking: the crosshairs close right in on the lead tank and jiggle as the tracker holds it. */
+const GATE = 4;
 /** Not tracking, the crosshairs stand open round the middle of the picture (gap assumed; Nathan, from the sim). */
 const OPEN = 36;
-function crosshairs(gate = 0) {
-  if (!gate) return poly([[108, CY], [548, CY]]) + poly([[CX, 102], [CX, 534]]);
-  return poly([[108, CY], [CX - gate, CY]]) + poly([[CX + gate, CY], [548, CY]]) + poly([[CX, 102], [CX, CY - gate]]) + poly([[CX, CY + gate], [CX, 534]]);
+function crosshairs(gate = 0, dx = 0, dy = 0) {
+  const x = CX + dx, y = CY + dy;
+  if (!gate) return poly([[108, y], [548, y]]) + poly([[x, 102], [x, 534]]);
+  return poly([[108, y], [x - gate, y]]) + poly([[x + gate, y], [548, y]]) + poly([[x, 102], [x, y - gate]]) + poly([[x, y + gate], [x, 534]]);
 }
 /** Reticle depression marks at 5, 10 and 15 degrees under the crosshairs (p. 673: 21 image px wide). */
 const DEPRESSION = [5, 10, 15].map(d => poly([[CX - 12, CY + d * DEG], [CX + 12, CY + d * DEG]])).join('');
@@ -130,7 +131,7 @@ function wpn(s: Wpn): Page {
     id: s.id, words, video: s.video, ...(s.pan ? { pan: true, videoScale: MAV_VIDEO_K, cursor: { d: '', at: MAV_SLEW.start } } : { videoScale: MAV_VIDEO_K }),
     marks: (s.track ? '' : crosshairs(OPEN)) + DEPRESSION + pointer(...s.ptr) + (s.wide ? BRACKETS : '') + (s.range ? LAR_STAPLE : ''),
     fine: s.soi ? FRAME : '',
-    paths: [...(s.track ? [{ d: crosshairs(GATE), alt: crosshairs(GATE + 3), c: 'white' as const }] : []), { d: poly([[sx - 7, 463.5], [sx + 7, 463.5], [sx + 7, 480.5], [sx - 7, 480.5]], true), c: 'white', pen: 'fine' }],
+    paths: [...(s.track ? [{ d: crosshairs(GATE), alt: crosshairs(GATE, 1.5, -1.2), c: 'white' as const }] : []), { d: poly([[sx - 7, 463.5], [sx + 7, 463.5], [sx + 7, 480.5], [sx - 7, 480.5]], true), c: 'white', pen: 'fine' }],
   };
 }
 
