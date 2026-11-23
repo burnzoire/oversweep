@@ -1,6 +1,6 @@
 import type { MfdDisplay } from '../types';
 import { tracer } from '../trace.ts';
-import { MAV_TV_BORE, MAV_TV_LEAD, MAV_TV_NARROW, MAV_TV_WIDE, MAV_VIDEO_K } from './maverick-video.ts';
+import { MAV_TV_BORE, MAV_TV_LEAD, MAV_TV_NARROW, MAV_TV_SPI, MAV_TV_WIDE, MAV_VIDEO_K } from './maverick-video.ts';
 
 /**
  * F-16C AGM-65 Maverick formats for the shared MFD (`mfd.ts`): the SMS page with AG65 selected (guide p. 672) and
@@ -90,9 +90,13 @@ const FRAME = [
 
 /** Glass px per page unit: the image's 768 px span MAV_VIDEO_K times the 489 px glass. */
 const IMG = (v: number) => v * (489 / (768 / MAV_VIDEO_K));
-/** Slew target: the lead T-72 under the crosshairs (page mm, the video's offset). */
+/** The crosshairs' place in the (centred) picture, image px. */
+const CROSS_IMG: P = [384 + (CX - SC[0]) / IMG(1), 384 + (CY - SC[1]) / IMG(1)];
+/** The video offset (page mm) that puts picture point `p` (image px) under the crosshairs. */
+const under = (p: P): P => [mm(IMG(p[0] - CROSS_IMG[0])), mm(IMG(p[1] - CROSS_IMG[1]))];
+/** Slew: from the crossroads (the steerpoint the seeker is slaved to) to the lead T-72, under the crosshairs. */
 export const MAV_SLEW = {
-  start: [0, 0] as P, target: [mm(IMG(MAV_TV_LEAD[0])), mm(IMG(MAV_TV_LEAD[1]))] as P, reach: mm(7), speed: mm(110),
+  start: under(MAV_TV_SPI), target: under(MAV_TV_LEAD), reach: mm(7), speed: mm(110),
   box: [mm(-140), mm(-140), mm(140), mm(140)] as [number, number, number, number],
 };
 
@@ -117,7 +121,7 @@ function wpn(s: Wpn): Page {
   const sx = s.station === '3' ? 132 : 505;
   return {
     id: s.id, words, video: s.video, ...(s.pan ? { pan: true, videoScale: MAV_VIDEO_K, cursor: { d: '', at: MAV_SLEW.start } } : { videoScale: MAV_VIDEO_K }),
-    marks: crosshairs(s.track ? 10 : 0) + DEPRESSION + pointer(...s.ptr) + (s.wide ? BRACKETS : '') + (s.range ? LAR_STAPLE : ''),
+    marks: crosshairs(s.track ? 18 : 0) + DEPRESSION + pointer(...s.ptr) + (s.wide ? BRACKETS : '') + (s.range ? LAR_STAPLE : ''),
     fine: s.soi ? FRAME : '',
     paths: [{ d: poly([[sx - 7, 463.5], [sx + 7, 463.5], [sx + 7, 480.5], [sx - 7, 480.5]], true), c: 'white', pen: 'fine' }],
   };
