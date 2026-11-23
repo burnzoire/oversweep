@@ -5,6 +5,7 @@ import Cited from '../../../components/encyclopedia/Cited.astro';
 import PhotoFigure from '../../../components/encyclopedia/PhotoFigure.astro';
 import PurchaseRow from '../../../components/encyclopedia/PurchaseRow.astro';
 import { aircraftContent, categoryRecords, type EncyclopediaRecord } from '../../../data/encyclopedia';
+import { visibleProcedures } from '../../../data/aircraft-procedures';
 import { categoryTitle } from '../../../data/availability';
 import { sitePath } from '../../../lib/paths';
 import '../../../styles/encyclopedia.css';
@@ -17,6 +18,7 @@ const { record } = Astro.props as { record: EncyclopediaRecord };
 const { frontmatter: data, Content } = aircraftContent(record);
 const category = categoryTitle(record.category);
 const [leadPhoto, ...morePhotos] = data.photos;
+const hasViperTraining = record.slug === 'f-16' && visibleProcedures.some((guide) => guide.airframe === 'f-16c');
 const plate: [string, string][] = [
   ['Variant described', data.variant],
   ['Role', data.role],
@@ -41,6 +43,7 @@ const plate: [string, string][] = [
     <section class="status-panel" data-record-id={record.id} data-record-revision={record.revision}>
       <p>Record revision {record.revision} · {record.summary}</p>
       <p>Real-world aircraft as described in public sources. Figures vary between variants, loads and sources; the data plate names the variant its figures describe, and differences are noted beside the number they affect.</p>
+      {hasViperTraining && <p>Learn the DCS F-16C Block 50 cockpit and practise its procedures in the <a href={sitePath('manual/aircraft-procedures/f-16c/')}>F-16C Viper Manual</a>.</p>}
     </section>
 
     <section class="data-plate" aria-labelledby="plate-title">

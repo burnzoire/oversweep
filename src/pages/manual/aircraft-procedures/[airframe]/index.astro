@@ -5,7 +5,8 @@ import { airframes, sourceUrl, visibleProcedures } from '../../../../data/aircra
 import GroupCards from '../../../../components/GroupCards.astro';
 import { manualMenu } from '../../../../data/manual-menu';
 import { cardMedia } from '../../../../data/card-media';
-import { assetPath } from '../../../../lib/paths';
+import { categoryRecords, recordRoute } from '../../../../data/encyclopedia';
+import { assetPath, sitePath } from '../../../../lib/paths';
 
 export function getStaticPaths() {
   return airframes
@@ -15,6 +16,7 @@ export function getStaticPaths() {
 
 const { airframe } = Astro.props;
 const isViper = airframe.slug === 'f-16c';
+const reference = isViper ? categoryRecords('aircraft').find((record) => record.slug === 'f-16') : undefined;
 const hero = cardMedia[`aircraft-procedures.${airframe.slug}`]?.photo;
 const photos = hero ? [hero] : [];
 const node = manualMenu.find(n => n.id === 'area-aircraft')?.children?.find(n => n.href === `manual/aircraft-procedures/${airframe.slug}/`);
@@ -36,6 +38,11 @@ const node = manualMenu.find(n => n.id === 'area-aircraft')?.children?.find(n =>
         <h1>{airframe.title}</h1>
         <p>The Viper is a small single-seat fighter. You sit low in a compact cockpit under a bubble canopy with a clear view all round, and in the Block 50 you can also fly the Wild Weasel role, hunting radars for <Term>SEAD</Term>.</p>
         <p>Learn the cockpit first, then work through the procedures from engine start to engaging radars.</p>
+        {reference && (
+          <aside class="airframe-reference" aria-label="Aircraft reference">
+            Read the <a href={sitePath(recordRoute(reference))}>{reference.title}</a> article in the Encyclopedia.
+          </aside>
+        )}
       </div>
       {hero && (
         <img
@@ -102,6 +109,12 @@ const node = manualMenu.find(n => n.id === 'area-aircraft')?.children?.find(n =>
 
   .briefing-copy h1 + p {
     margin-top: 1rem;
+  }
+
+  .airframe-reference {
+    margin-top: 0.9rem;
+    padding-left: 0.75rem;
+    border-left: 3px solid var(--color-accent);
   }
 
   .briefing-copy p + p {
