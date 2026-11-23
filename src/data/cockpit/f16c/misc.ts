@@ -53,7 +53,7 @@ export const misc: PanelSpec = {
     // One layer. Right edge x 285, top y 8 (corner 6 px), diagonal top-left edge from (170, 8) to (80, 112), the left edge sloping
     // out to x 62 at the rule's height, then a rounded shoulder and a straight diagonal out to x 2 at y 740 and straight down the foot of the wider bottom part (Nathan, 2026-11-23: curve
     // at the shoulder only); the right edge bends in, concave, from y 640 to x 268 at the bottom edge (y 823).
-    { d: path('M170 8H279Q285 8 285 14V640Q272 725 268 823H2V740L55 585Q60 566 62 540L80 112Z') },
+    { d: path('M170 8H279Q285 8 285 14V640Q276 730 270 823H4V740Q8 700 22 650Q36 605 50 550L62 470L72 400L80 112Z') },
   ],
   engraving: [
     // RF: NORM (up; RF above it), QUIET (centre, down the right of the lever), SILENT (down).
@@ -61,16 +61,16 @@ export const misc: PanelSpec = {
     T(256, 91, 'Q', 11), T(256, 107.5, 'U', 11), T(256, 124, 'I', 11), T(256, 140.5, 'E', 11), T(256, 157, 'T', 11),
     T(216.5, 169.5, 'SILENT', 12, 53),
     // ECM light in a ruled box (left and bottom rules).
-    T(221, 214.5, 'ECM', 12, 32),
+    T(221, 214.5, 'ECM', 15, 40),
     { kind: 'path', pen: 'fine', d: path('M184.5 176V309H262') },
     T(145, 245, 'LASER', 12, 51), T(146, 264.5, 'ARM', 12, 32), T(145, 354, 'OFF', 12, 26),
     { kind: 'path', pen: 'fine', d: path('M123 400H135M129 394V406') },
-    T(224, 337.5, 'ALT REL', 12, 64),
-    T(181.5, 462.5, 'MASTER ARM', 12, 97), T(233, 513.5, 'OFF', 12, 27), T(181.5, 556, 'SIMULATE', 12, 73),
+    T(224, 337.5, 'ALT REL', 15, 76),
+    T(181.5, 462.5, 'MASTER ARM', 16, 100), T(233, 513.5, 'OFF', 12, 27), T(181.5, 556, 'SIMULATE', 12, 73),
     { kind: 'path', pen: 'fine', d: path('M68 567.5H277') },
     T(225, 615.5, 'ADV', 12, 30), T(226, 635.5, 'MODE', 12, 42),
-    T(63, 700, 'ROLL', 13, 40), T(65, 720, 'HDG SEL', 12, 64), T(113.5, 757.5, 'ATT', 12, 27), T(114, 775, 'HOLD', 12, 38), T(69, 808, 'STRG SEL', 12, 72),
-    T(185, 700, 'PITCH', 13, 44), T(184.5, 720, 'ALT HOLD', 12, 75), T(230, 757.5, 'A/P', 12, 30), T(231, 775, 'OFF', 12, 28), T(186, 808, 'ATT HOLD', 12, 73),
+    T(63, 700, 'ROLL', 16, 46), T(65, 720, 'HDG SEL', 12, 64), T(113.5, 757.5, 'ATT', 12, 27), T(114, 775, 'HOLD', 12, 38), T(69, 808, 'STRG SEL', 12, 72),
+    T(185, 700, 'PITCH', 16, 52), T(184.5, 720, 'ALT HOLD', 12, 75), T(230, 757.5, 'A/P', 12, 30), T(231, 775, 'OFF', 12, 28), T(186, 808, 'ATT HOLD', 12, 73),
     // Panel title, one letter above the next.
     T(18, 732, 'M', 18, 16), T(18, 758, 'I', 18), T(18, 786, 'S', 18, 14), T(18, 813, 'C', 18, 14),
   ],

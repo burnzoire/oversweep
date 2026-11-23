@@ -210,7 +210,8 @@ export function toggleReach(art: keyof typeof TOGGLES, count = 0) {
 
 function leverOnPivot(art: keyof typeof TOGGLES, k: number, count = 0) {
   const t = TOGGLES[art], { r, cap } = t, reach = toggleReach(art, count);
-  const ball = t.ball;
+  const lockT = 'lock' in t && t.lock;
+  const ball = lockT ? Math.min(t.ball, r * LOCK_HEAD) : t.ball;
   // A lever-lock standing straight up is a round head over the middle of its slot, hiding most of it (Nathan, 2026-11-23).
   if ('lock' in t && t.lock && Math.abs(k) < 1e-6) return cased(`<circle r="${n(r * LOCK_HEAD)}" fill="${PAPER}"/>`, 'medium');
   const L = reach * k;
