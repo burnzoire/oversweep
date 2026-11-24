@@ -111,9 +111,12 @@ const deviceView = (p: (typeof pads)[number]) => {
   // A first guess from the outlines' points; the page script re-centres it on the switch's true drawn extent.
   const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, r = Math.max(0.055 * Math.max(view[2], view[3]), Math.max(x1 - x0, y1 - y0) / 2 + 4.5);
   const ring = mine.length ? `<g data-device-ring="${padControls(p).join(' ')}" data-view="${view.join(' ')}" fill="none" stroke="#1f6fd6" stroke-linecap="round"><circle cx="${+cx.toFixed(2)}" cy="${+cy.toFixed(2)}" r="${+r.toFixed(2)}" stroke-width="2.8"/></g>` : '';
+  // The device is drawn a little smaller than its half (a margin of a tenth of the view all round), so a ring at the
+  // view's edge stays inside the card and never runs over the divider line. The ring sits outside the clipped inner view.
+  const pad = 0.1 * Math.max(view[2], view[3]), outer = [view[0] - pad, view[1] - pad, view[2] + 2 * pad, view[3] + 2 * pad];
   return { ratio: view[2] / view[3], // The view sits in a nested svg whose viewport is the view itself, so the neighbouring view is clipped off and
-  // never shows in the letterbox when the half is wider than the view.
-  svg: `<svg viewBox="${view.join(' ')}" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">` + deviceSvg.replace(/<svg ([^>]*?)viewBox="[^"]*"([^>]*)>/, `<svg $1x="${view[0]}" y="${view[1]}" width="${view[2]}" height="${view[3]}" viewBox="${view.join(' ')}"$2>`).replace(/<\/svg>\s*$/, ring + '</svg></svg>') };
+  // never shows in the margin or letterbox.
+  svg: `<svg viewBox="${outer.join(' ')}" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">` + deviceSvg.replace(/<svg ([^>]*?)viewBox="[^"]*"([^>]*)>/, `<svg $1x="${view[0]}" y="${view[1]}" width="${view[2]}" height="${view[3]}" viewBox="${view.join(' ')}"$2>`).replace(/<\/svg>\s*$/, '</svg>' + ring + '</svg>') };
 };
 // Controls whose cards stand alone (rudder pedals) are not part of the device, so they are left off it.
 const offDevice = pads.filter(p => p.device === false).flatMap(padControls);
