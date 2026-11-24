@@ -123,7 +123,7 @@ const SCENARIOS: Record<string, Scenario> = {
       bug: { ...aim('bugged'), x: { 'hud.harm-cues': 'mrm-bugged', 'hud.slant-range-source': 'f' } },
       shoot: { ...aim('launched'), mfd: 'sms-msl-3', x: { 'hud.harm-cues': 'mrm-launched', 'hud.master-mode': 'mrm3' } },
     },
-    enter: { turn: aim('turned'), away: awayPage(1), crank: aim('cranked'), smoke: { ...aim('impact'), x: { 'hud.harm-cues': 'mrm-smoke' }, r: { 'hud.slant-range': MOMENTS.impact.nm, 'hud.heading': 340 } } },
+    enter: { turn: aim('turned'), away: awayPage(1), crank: aim('cranked'), smoke: { ...aim('impact'), x: { 'hud.harm-cues': 'mrm-smoke' }, r: { 'hud.slant-range': MOMENTS.impact.nm, 'hud.heading': 326 } } },
     slew: { step: 'slew', on: 'fcr-msl-80', free: 'fcr-msl-80-free', done: 'fcr-msl-80-lead', display: 'left', cursor: true, what: 'lead contact', ...AIM_SLEW },
     scans: [
       aimScan('close', ['turned', 'c42', 'c38', 'c35', 'rpi'], 'after the turn', 'Watch the missile scale on the FCR and the HUD as the range closes. Replay it or drag through it below.'),

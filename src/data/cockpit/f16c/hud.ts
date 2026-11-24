@@ -254,7 +254,7 @@ const aimCue = (k: MomentId) => {
   const m = MOMENTS[k], off = ((m.brg - m.hdg + 540) % 360) - 180;
   return mrmCue({ id: `mrm-${k}`, view: m.view, scale: scaleFor(m.nm), ...(Math.abs(off) > 10 ? { tll: off } : { td: [off, 0.6] }) });
 };
-/** After the launch: the smoke trail growing toward the lead (jet still on 347°, the target 7° left), and the black smoke where it hit (jet turned back to the target's 340°). */
+/** After the launch: the smoke trail growing toward the lead (jet still on 347°, the target 7° left), and the black smoke where it hit (jet turned back to the target's bearing at impact, about 326°). */
 const awayCue = (id: string, reach: number) => mrmCue({ id: `mrm-${id}`, view: MOMENTS.launched.view, scale: scaleFor(MOMENTS.launched.nm), td: [-7, 0.6], scene: smokeTrail(-7, 0.6, reach) });
 const smokeCue = (id: string, scene: string) => mrmCue({ id: `mrm-${id}`, view: { rdy: '' }, scene });
 /**
