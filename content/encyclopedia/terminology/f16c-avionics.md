@@ -151,15 +151,15 @@ terms:
     cite: [{ n: 1, page: "47" }]
   - term: CCRP
     expansion: Continuously computed release point
-    definition: "A pre-planned air-to-ground delivery sub-mode in which the jet steers to the point where the bomb should be released to hit a steerpoint target, and releases it there."
-    cite: [{ n: 1, page: "335, 343" }]
+    definition: "A pre-planned air-to-ground delivery sub-mode in which the jet gives steering cues to the point where the bomb should be released to hit a steerpoint target, and releases it automatically there."
+    cite: [{ n: 1, page: "335, 628" }]
   - term: DTOS
     expansion: Dive toss
-    definition: "A visual air-to-ground delivery sub-mode for a dive and toss attack on a target the pilot can see and designates with the target designator box."
+    definition: "One of the visual air-to-ground delivery sub-modes, for a target the pilot can see and designates with the target designator box. The name is dive/toss."
     cite: [{ n: 1, page: "335" }]
   - term: LADD
     expansion: Low altitude drogue delivery
-    definition: "A pre-planned air-to-ground delivery sub-mode for retarded (drogue-slowed) bombs delivered from low altitude against a steerpoint target."
+    definition: "One of the pre-planned air-to-ground delivery sub-modes, aimed at a steerpoint target. The name is low altitude drogue delivery, for retarded bombs."
     cite: [{ n: 1, page: "335" }]
   - term: POS mode
     expansion: Position known

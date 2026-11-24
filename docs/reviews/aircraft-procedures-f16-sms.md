@@ -10,10 +10,10 @@ Master mode, Master arm, CCRP, DTOS, LADD (the last two defined from their names
 - Eagle Dynamics, DCS F-16C Viper Early Access Guide (EN, 16 August 2026): MISC panel p. 47; side stick pp. 83–84; master modes pp. 326–329; delivery sub-modes pp. 335, 343; SMS pp. 366–368; AIM-9 cueing pp. 570–571; SMS AAM page pp. 599–600; A-G SMS pp. 618–619. No community guide is cited or followed.
 
 ## Assumptions
-- None beyond the guide. The guide's OSB numbers are used where stated (OSB 1, 4, 6, 7); SLAVE/BORE has no OSB number in the article because the guide gives two (18 and 19).
+- LADD and DTOS are defined by name and the guide's category lists only. The guide's OSB numbers are used where stated (OSB 1, 4, 6, 7); SLAVE/BORE has no OSB number in the article because the guide gives two (18 and 19).
 
 ## SME review
-Not run; awaiting Nathan's yes.
+2026-11-24 at f712a55: READY, 0 blockers (report in project files sme-reviews/2026-11-24-pr-543.md). Wording fixes for the 8 non-blocking findings applied afterwards; not re-reviewed (Nathan's standing rule for minor fixes).
 
 ## Checks
 - `node --test tests/manual-menu.test.mjs tests/aircraft-procedures.test.mjs`: pass.
