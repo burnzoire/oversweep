@@ -61,7 +61,7 @@ const SCENARIOS: Record<string, Scenario> = {
     slew: { step: 'slew', on: 'fcr-vsr', free: 'fcr-vsr-free', done: 'fcr-vsr-far', display: 'left', cursor: true, what: 'far contact', ...FCR_SLEW.far },
   },
   'fcr-bug': {
-    initial: { left: 'fcr-80-a3-lead', mfd: 'menu-blank', ded: 'cni', x: { 'hud.screen': 'on', 'hud.master-arm': 'none', 'hud.master-mode': 'nav', 'hud.harm-cues': 'none', 'hud.slant-range-source': 'b' }, r: { 'hud.altitude': 28000, 'hud.velocity': 360, 'hud.mach': 0.92, 'hud.heading': 360, 'hud.pitch': 0, 'hud.roll': 0, 'hud.fpm-azimuth': 0, 'hud.fpm-elevation': 0, 'hud.steerpoint-azimuth': 0, 'hud.steerpoint-elevation': -24.7, 'hud.steering-cue': 0, 'hud.slant-range': 11, 'hud.steerpoint-distance': 10, 'hud.steerpoint': 1, 'hud.ttg': 65, 'hud.radar-alt': 27000 } },
+    initial: { left: 'fcr-80-a3-lead', mfd: 'menu-blank', ded: 'cni', x: { 'hud.screen': 'on', 'hud.master-arm': 'none', 'hud.master-mode': 'nav', 'hud.harm-cues': 'none', 'hud.slant-range-source': 'b' }, r: { 'hud.altitude': 28000, 'hud.velocity': 370, 'hud.mach': 0.92, 'hud.heading': 360, 'hud.pitch': 0, 'hud.roll': 0, 'hud.fpm-azimuth': 0, 'hud.fpm-elevation': 0, 'hud.steerpoint-azimuth': 0, 'hud.steerpoint-elevation': -24.7, 'hud.steering-cue': 0, 'hud.slant-range': 11, 'hud.steerpoint-distance': 10, 'hud.steerpoint': 1, 'hud.ttg': 65, 'hud.radar-alt': 27000 } },
     after: {
       bug: { left: 'fcr-sam', x: { 'hud.harm-cues': 'aa-tll', 'hud.slant-range-source': 'f' }, r: { 'hud.slant-range': 45 } },
       stt: { left: 'fcr-stt' }, back: { left: 'fcr-sam-turned' },

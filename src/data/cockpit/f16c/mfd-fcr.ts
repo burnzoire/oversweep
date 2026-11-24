@@ -152,21 +152,22 @@ const stptAz = (hdg = 360) => off(0, hdg);
 /**
  * The bugged target's data along the top (p. 405 items 1-4): aspect, ground track, airspeed and closure. The scenario's
  * lead is at 340° from the jet, so the line of sight back to the jet is 160°; it flies 150°, so the jet is 10° right of
- * its nose (aspect 1R), at 280 KCAS (about 410 KTAS at 25,000 ft). The jet flies 550 KTAS (0.92 Mach at 28,000 ft).
- * Collision course: the jet's speed across the line of sight must match the target's, 410 sin 10° = 550 sin L, a lead
- * L of 7.4° right of the target, so the CATA is at 347° (12.6° left of the nose on 360°, 7.4° right of the lead). On
- * the 347° heading they close at 550 cos 7° + 410 cos 10° = 950 kt (on 360°, 550 cos 20° + 404 = 921 kt).
+ * its nose. Aspect counts tens of degrees from the target's tail (p. 405: 0 = tail-on, 18 = nose-on), so 170° right
+ * reads 17R. It flies 280 KCAS (about 404 KTAS at 25,000 ft). The jet flies 550 KTAS (0.92 Mach at 28,000 ft).
+ * Collision course: the jet's speed across the line of sight must match the target's, 404 sin 10° = 550 sin L, a lead
+ * L of 7.3° right of the target, so the CATA is at 347° (12.7° left of the nose on 360°, 7.3° right of the lead). On
+ * the 347° heading they close at 550 cos 7° + 404 cos 10° = 944 kt (on 360°, 550 cos 20° + 398 = 915 kt).
  * `CATA_HDG` is the lead's collision heading (° magnetic).
  */
 export const CATA_HDG = 347;
 const cos = (d: number) => Math.cos((d * Math.PI) / 180);
 /**
- * The far contact (VSR) flies 188°, straight at the jet (aspect 0, its CATA on top of it), at 400 KCAS (about 660 KTAS
- * at 33,000 ft): closure 550 cos 8° + 660 = 1205 kt. Its track shows to the nearest 10°.
+ * The far contact (VSR) flies 188°, straight at the jet (aspect 18, nose-on, its CATA on top of it), at 400 KCAS (about
+ * 628 KTAS, Mach 1.08, at 33,000 ft): closure 550 cos 8° + 628 = 1173 kt. Its track shows to the nearest 10°.
  */
 const TOI: Partial<Record<ContactId, { aspect: string; track: string; kcas: string; closure: (hdg: number) => number; cata: number }>> = {
-  lead: { aspect: '1R', track: '150°', kcas: '280', closure: hdg => Math.round(550 * cos(340 - hdg) + 410 * cos(10)), cata: CATA_HDG },
-  far: { aspect: '0', track: '190°', kcas: '400', closure: hdg => Math.round(550 * cos(8 - (hdg - 360)) + 660), cata: 368 },
+  lead: { aspect: '17R', track: '150°', kcas: '280', closure: hdg => Math.round(550 * cos(340 - hdg) + 404 * cos(10)), cata: CATA_HDG },
+  far: { aspect: '18', track: '190°', kcas: '400', closure: hdg => Math.round(550 * cos(8 - (hdg - 360)) + 628), cata: 368 },
 };
 const toiData = (k: ContactId, hdg = 360) => {
   const t = TOI[k]!;

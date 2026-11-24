@@ -193,7 +193,7 @@ terms:
     cite: [{ n: 1, page: "690" }]
   - term: CRM
     expansion: Combined radar mode
-    definition: "The fire control radar's main air-to-air mode, which holds the search sub-modes range while search, velocity search with ranging and track while scan. The pilot steps between them with a button on the radar page or the target management switch."
+    definition: "The fire control radar's main air-to-air mode for fights beyond visual range. It holds the search and tracking sub-modes: range while search, velocity search with ranging, track while scan, situation awareness mode and dual and single target track. The pilot steps between them with a button on the radar page or the target management switch."
     cite: [{ n: 1, page: "408–409" }]
   - term: B-scope
     definition: "A radar picture drawn as a rectangle with bearing across and range up the screen, the jet's own position at the bottom edge. Contacts at the same range lie on one horizontal line whatever their bearing, which makes range easy to read but distorts geometry close in."
