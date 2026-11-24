@@ -3,6 +3,7 @@ import { reviewTrainers } from './experiences';
 import { hadSpot, HADH, HADX } from './cockpit/f16c/mfd-had';
 import { hudSpot, hudSpotRef, CARET_Y } from './cockpit/f16c/hud';
 import { HSD_STATES, SPT, hsdBox, hsdSpot } from './cockpit/f16c/mfd-hsd';
+import { fcrBox } from './cockpit/f16c/mfd-fcr';
 
 export interface ProcedureStep {
   id: string;
@@ -42,7 +43,7 @@ export interface AircraftProcedure {
   status: 'public-preview' | 'review-only';
   simVersion: string;
   /** Which script drives the cockpit panels. */
-  model: 'engine-start' | 'tacan-navigation' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff' | 'hts' | 'hts-targeting' | 'harm-shot' | 'maverick-pre' | 'maverick-handoff' | 'markpoints';
+  model: 'engine-start' | 'tacan-navigation' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff' | 'hts' | 'hts-targeting' | 'harm-shot' | 'maverick-pre' | 'maverick-handoff' | 'markpoints' | 'fcr-rws' | 'fcr-vsr' | 'fcr-bug';
   /** The scenario shown above the steps, and the closing heading. */
   intro: string;
   description: string;
@@ -524,6 +525,93 @@ const markpoints: AircraftProcedure = {
   ]
 };
 procedures.push(markpoints);
+
+// Air-to-air radar (FCR on the left MFD): hint boxes in p. 394 pixels (mfd-fcr.ts); HUD hints in p. 90 pixels.
+const FL = (x0: number, y0: number, x1: number, y1: number) => 'left-mfd.display' + fcrBox(x0, y0, x1, y1);
+const FH = (x0: number, y0: number, x1: number, y1: number) => 'hud.harm-cues' + hudSpotRef(x0, y0, x1, y1);
+const RADAR_SRC = 'Eagle Dynamics — DCS F-16C Viper Early Access Guide (EN, 16 August 2026): sensor of interest p. 331; HOTAS pp. 84–87; the FCR, its scan patterns and azimuth, range and elevation control pp. 375–383; the FCR air-to-air format and target symbols pp. 394–397, 404; target of interest data and HUD symbology pp. 405–406; CRM sub-modes pp. 408–409';
+const RADAR_INTRO = 'Scenario: a combat air patrol (CAP) in the Syria map. You are at 28,000 ft, 0.92 Mach, heading 360° in the NAV master mode, with the CAP point, [steerpoint](term:steerpoint) 1, 10 NM ahead. The [FCR](term:fcr) is on, in [CRM](term:crm), on the left [MFD](term:mfd); its datalink symbols are decluttered (NONE). Master arm is off and no air-to-air weapon is selected. The panels beside the steps are a teaching simulation, not connected to DCS: the contacts, ranges and altitudes are illustrative, and the picture holds still while you read each step.';
+
+const fcrRws: AircraftProcedure = {
+  id: 'procedure.dcs-f16c.fcr-rws',
+  slug: 'radar-rws',
+  airframe: 'f-16c',
+  title: 'F-16C — Radar: RWS search',
+  objective: 'Read the radar’s air-to-air format, set its search volume (range, azimuth and bars) and put the cursor on a contact in Range While Search.',
+  applicability: 'DCS F-16C Block 50 (circa 2007); official guide edition 16 August 2026. In-simulator verification pending.',
+  simVersion: 'DCS build not yet verified',
+  status: 'public-preview',
+  model: 'fcr-rws',
+  intro: RADAR_INTRO + ' The [HUD](term:hud) is the [SOI](term:soi).',
+  description: 'Illustrated DCS F-16C radar search: make the FCR the SOI, read the RWS B-scope, step the range up to find a group, narrow the scan to A3 and slew the cursor onto the lead contact.',
+  complete: 'The cursor is on the lead contact, ready to bug it',
+  next: 'radar-bug-lock',
+  sources: RADAR_SRC + '; RWS pp. 410–411.',
+  steps: [
+    {id:'soi',section:'Bring up the radar',title:'Make the FCR the SOI',control:'DMS aft (short)',action:'The [FCR](term:fcr) format on the left [MFD](term:mfd) reads {{NOT SOI|1}}: the hand controls are working the [HUD](term:hud). Press the {{DMS aft|0}}, briefly.',expect:'NOT SOI goes out and a {{frame|2}} is drawn round the format: the FCR is the [SOI](term:soi), so the [TMS](term:tms) and the RDR CURSOR switch now work the radar, and its {{acquisition cursor|3}} appears. From the HUD, DMS aft gives the SOI to the main format of the master mode, here the FCR.',evidence:G3+' 84, 331',hints:['stick.dms-ud',FL(290,150,372,170),FL(105,103,556,552),FL(312,375,375,410)],panels:['stick:dms','left-mfd'],do:{control:'stick.dms-ud',to:'aft'},confirm:'FCR is the SOI'},
+    {id:'mode',section:'Read the format',title:'Read the mode',control:'Left MFD, FCR format',action:'Read the top row.',expect:'{{CRM|0}}: [combined radar mode](term:crm), the mode for finding and tracking targets beyond visual range. {{RWS|1}}: [range while search](term:range-while-search), its default sub-mode, which shows contacts by range and azimuth and finds them whether they fly toward you or away. The format is a [B-scope](term:b-scope): you are the middle of the bottom edge, range runs up the screen and azimuth across it, ±60° from the nose at the edges.',evidence:G3+' 394, 408–410',hints:[FL(165,108,207,127),FL(238,108,280,127)],panels:['left-mfd'],confirm:'CRM, range while search'},
+    {id:'scale',section:'Read the format',title:'Read the range scale',control:'Left MFD, FCR format',action:'Read the {{range scale|0}} between the arrows, then the {{range marks|1}} down the right edge.',expect:'The scale is 40 NM: the top of the screen is 40 NM from you. The green marks are a quarter, a half and three quarters of the scale (10, 20 and 30 NM). The {{steerpoint|2}}, the "wedding cake", sits 10 NM up the middle, on the lower mark: the CAP point is dead ahead.',evidence:G3+' 395 (item 7), 397 (items 18, 21)',hints:[FL(108,186,150,258),FL(530,208,558,448),FL(314,412,348,444)],panels:['left-mfd'],confirm:'40 NM scale'},
+    {id:'volume',section:'Read the format',title:'Read the search volume',control:'Left MFD, FCR format',action:'Read the left edge and the bottom of the format.',expect:'{{A6|0}}: the radar sweeps ±60° either side of the nose. {{4B|1}}: four bars, four sweeps stacked one above the other, to cover a block of sky in height. The cyan {{elevation scale|2}} shows where the antenna points up and down, at 0° here, and the {{azimuth caret|3}} along the bottom follows the antenna as it sweeps. The {{horizon line|4}} is level: so are you.',caution:'A bigger volume is swept more slowly: A6 4B takes longest to cover each piece of sky. Narrow it once you know roughly where to look.',evidence:G3+' 379, 395–397 (items 8–10, 20, 23)',hints:[FL(108,310,128,350),FL(108,378,128,418),FL(132,212,170,444),FL(270,500,300,545),FL(214,320,448,338)],panels:['left-mfd'],confirm:'A6, four bars'},
+    {id:'cursor',section:'Read the format',title:'Read the cursor',control:'Left MFD, FCR format',action:'Find the {{acquisition cursor|0}}, the two short bars, and the {{numbers beside it|1}}.',expect:'The numbers are the search volume’s top and bottom at the cursor’s range, in thousands of feet: 36,000 and 20,000 ft, 14 NM out. They grow apart with range, since the bars fan out. The {{field at the left|2}}, 002 04, is the cursor’s bearing and range from the steerpoint: 002° and 4 NM. The ANT ELEV knob on the throttle tilts the whole volume up and down; these numbers show where it is looking.',caution:'The bar width is not published, so these altitudes are an approximation, about ±5.4° either side of the antenna for four bars.',evidence:G3+' 382, 396 (items 11, 12)',hints:[FL(312,375,355,410),FL(347,368,378,418),FL(108,430,172,450)],panels:['left-mfd'],confirm:'36 to 20 thousand'},
+    {id:'single',section:'Read the format',title:'Read the contact',control:'Left MFD, FCR format',action:'Find the {{contact|0}} at the upper right.',expect:'A search target: a radar return, 30 NM away and 40° right. Its short vertical line is the hot line. On top it means the aircraft is cold, flying away from you; below the symbol it would be hot, coming toward you.',evidence:G3+' 404',hints:[FL(462,198,494,236)],panels:['left-mfd'],confirm:'Single contact, cold'},
+    {id:'range-up',section:'Find the group',title:'Step the range up',control:'Left MFD, OSB 20 (range up)',action:'Press the [OSB](term:osb) beside the {{up arrow|0}}.',expect:'The scale is {{80|1}}: everything is drawn half as far up the screen. A {{group|2}} shows 45 NM out, 20° left: two contacts close together, both with hot lines below, coming toward you. The {{single|3}} is now lower down, still 30 NM away. The cursor stayed put on the screen, so it is now 28 NM out, and its numbers read 44 and 12.',caution:'Scales are 5, 10, 20, 40, 80 and 160 NM; at the top or bottom scale the arrow that would go further is removed. Slewing the cursor past the top or bottom of the screen bumps the scale too.',evidence:G3+' 395 (item 7), 410',hints:[FL(108,186,150,212),FL(108,212,150,234),FL(228,280,272,320),FL(462,364,494,402)],panels:['left-mfd'],do:{control:'left-mfd.osb-20',to:'in'},confirm:'Group at 45 NM'},
+    {id:'a3',section:'Find the group',title:'Narrow the scan',control:'Left MFD, OSB 18 (azimuth)',action:'Press the [OSB](term:osb) beside {{A6|0}}.',expect:'It reads {{A3|0}}: the radar now sweeps ±30° either side of the cursor, shown by the two {{scan limit lines|1}}. Half the width, so each piece of sky is looked at twice as often. The {{single|2}}, 40° right, is outside the scan now: it is no longer refreshed and drops off.',caution:'Each press steps A6, A3, A1 (±10°) and round again. In A3 and A1 the scan follows the cursor; in A6 it stays on the nose.',evidence:G3+' 395–396 (item 8), 381',hints:[FL(108,310,128,350),FL(180,140,480,515),FL(462,364,494,402)],panels:['left-mfd'],do:{control:'left-mfd.osb-18',to:'in'},confirm:'A3, single gone'},
+    {id:'slew',section:'Find the group',title:'Put the cursor on the lead',control:'RDR CURSOR/ENABLE',action:'Steer the cursor onto the {{lead contact|1}}, the right-hand one of the pair, with the {{RDR CURSOR/ENABLE switch|0}}: press and drag on it like a joystick. Up on the switch is forward, toward the top of the screen.',expect:'The cursor brackets the lead, and the {{scan limits|2}} have moved with it: the scan is now centred on the group. Under the contact is its {{altitude|3}}, 25: 25,000 ft, a little below you. The cursor’s {{numbers|4}} read 54 and 02 at 45 NM, and the {{field at the left|5}} gives the lead 335° and 36 NM from the CAP point. It is ready to bug.',evidence:G3+' 381, 396 (items 11, 12), 404',hints:['throttle.cursor-ud',FL(242,284,272,316),FL(100,140,400,515),FL(244,314,272,338),FL(272,276,304,324),FL(108,430,172,450)],panels:['throttle:cursor','left-mfd'],confirm:'Lead at 25,000 ft'},
+  ]
+};
+procedures.push(fcrRws);
+
+const fcrBug: AircraftProcedure = {
+  id: 'procedure.dcs-f16c.fcr-bug-lock',
+  slug: 'radar-bug-lock',
+  airframe: 'f-16c',
+  title: 'F-16C — Radar: bug and lock (SAM, STT)',
+  objective: 'Bug a contact in Situation Awareness Mode, read its data, turn onto a collision course with the CATA, lock it in Single Target Track and drop back to search.',
+  applicability: 'DCS F-16C Block 50 (circa 2007); official guide edition 16 August 2026. In-simulator verification pending.',
+  simVersion: 'DCS build not yet verified',
+  status: 'public-preview',
+  model: 'fcr-bug',
+  intro: RADAR_INTRO + ' The FCR is the [SOI](term:soi), in [RWS](term:range-while-search) at 80 NM, A3, with the cursor on the lead of a two-ship group 45 NM out, 20° left, at 25,000 ft (where the RWS search procedure ends).',
+  description: 'Illustrated DCS F-16C radar bug and lock: TMS forward to bug the lead in SAM, read its aspect, track, speed and closure, turn to the CATA, lock it in STT, then TMS aft back to SAM and RWS, with the HUD target designator box.',
+  complete: 'Back in RWS, the lead still under the cursor',
+  next: 'radar-vsr',
+  sources: RADAR_SRC + '; SAM pp. 417–418; STT p. 421.',
+  steps: [
+    {id:'start',section:'Bug the lead',title:'Check the picture',control:'Left MFD, FCR format',action:'Read the format.',expect:'[RWS](term:range-while-search), 80 NM, A3. The cursor is on the {{lead|0}}, 25,000 ft, of a hot two-ship 45 NM out; its {{wingman|1}} is just left of it.',evidence:G3+' 404, 410',hints:[FL(242,284,272,316),FL(232,282,256,312)],panels:['left-mfd'],confirm:'Cursor on the lead'},
+    {id:'bug',section:'Bug the lead',title:'Bug the lead',control:'TMS forward (short)',action:'Press the {{TMS forward|0}}, briefly.',expect:'The lead is bugged: the [FCR](term:fcr) goes into [situation awareness mode](term:situation-awareness-mode) (SAM), which keeps searching but breaks off every few seconds to look hard at the {{bugged target|1}}, the ring round its symbol. Its {{data|2}} appears along the top. Two {{track crosses|3}} on the scales show where it is in elevation and azimuth. The top row still reads RWS. In the [HUD](term:hud), the target is too far left to box: a {{line from the boresight cross|4}} points toward it, with {{F20|4}}, 20° off the nose, and the {{slant range|5}} reads F045.0, 45 NM from the radar (F).',caution:'SAM looks at the target only now and then, so its radar warning receiver is less likely to call it a lock than in STT.',evidence:G3+' 84, 405–406, 417–418',hints:['stick.tms-ud',FL(240,282,276,322),FL(110,127,560,146),FL(136,316,154,342),FH(470,40,580,64),'hud.slant-range'+hudSpotRef(660,313,722,331)],panels:['stick:tms','left-mfd','hud'],do:{control:'stick.tms-ud',to:'fwd'},confirm:'Lead bugged'},
+    {id:'data',section:'Bug the lead',title:'Read its data',control:'Left MFD, top row',action:'Read the data along the top, left to right.',expect:'{{1R|0}}: its [aspect angle](term:aspect-angle), in tens of degrees: you are 10° right of its nose, so it is pointing almost at you. {{150°|1}}: its ground track. {{280|2}}: its airspeed in knots (calibrated). {{+921K|3}}: the [closure](term:rate-of-closure), 921 kt; plus means the range is shrinking.',evidence:G3+' 405 (items 1–4)',hints:[FL(124,128,152,145),FL(182,128,230,145),FL(388,128,422,145),FL(462,128,518,145)],panels:['left-mfd'],confirm:'1R, 150°, 280 kt, +921'},
+    {id:'cata',section:'Intercept',title:'Find the CATA',control:'Left MFD, FCR format',action:'Find the {{cross|0}} beside the bugged target, at the same range.',expect:'The [CATA](term:cata), the collision antenna train angle: the bearing to fly for a [collision course](term:collision-course), where the line of sight to the target stops turning. It sits 13° left of the nose, 7° right of the target: the lead is drifting right across your nose, so the CATA leads it.',evidence:G3+' 405 (item 5)',hints:[FL(274,291,292,309)],panels:['left-mfd'],confirm:'CATA 13° left'},
+    {id:'turn',section:'Intercept',title:'Turn onto the CATA',control:'Flight controls',action:'Roll left and turn until the CATA is in the middle of the screen, then roll out. Heading 347°.',expect:'The {{CATA|0}} is on the nose and the {{target|1}} 7° left of it. Now inside the HUD’s view, the target has a {{designator box|2}}, the TD box, with its altitude, 25, under it: the radar is pointing there. Out to 45 NM it is only a box; when it gets close enough to see, the aircraft will be in it. {{Closure|3}} is up to 950 kt.',evidence:G3+' 405 (item 5), 406 (item 6)',hints:[FL(320,290,342,310),FL(290,286,320,316),FH(380,54,408,96),FL(462,128,518,145)],panels:['left-mfd','hud'],confirm:'TD box in the HUD'},
+    {id:'stt',section:'Lock',title:'Lock it',control:'TMS forward (short)',action:'With the cursor on the bugged target, press the {{TMS forward|0}} again.',expect:'[Single target track](term:single-target-track) (STT): the radar stops searching and points at the lead alone. The {{cursor and scan limits go|1}}, the other contacts go with the search, and the {{field at the left|2}} gives the lead’s bearing and range from the CAP point. The HUD {{box|3}} stays on it.',caution:'STT is the steadiest track, but the target’s radar warning receiver will almost certainly see it as a lock and warn the pilot.',evidence:G3+' 84, 418, 421',hints:['stick.tms-ud',FL(100,140,560,515),FL(108,430,172,450),FH(380,54,408,96)],panels:['stick:tms','left-mfd','hud'],do:{control:'stick.tms-ud',to:'fwd'},confirm:'STT on the lead'},
+    {id:'back',section:'Back to search',title:'Back to SAM',control:'TMS aft (short)',action:'Press the {{TMS aft|0}}, briefly.',expect:'The lock breaks back to [SAM](term:situation-awareness-mode): the {{cursor and scan limits|1}} come back and the search starts again, the lead still bugged.',evidence:G3+' 84, 421',hints:['stick.tms-ud',FL(100,140,560,515)],panels:['stick:tms','left-mfd'],do:{control:'stick.tms-ud',to:'aft'},confirm:'SAM again'},
+    {id:'reject',section:'Back to search',title:'Drop the bug',control:'TMS aft (short)',action:'Press the {{TMS aft|0}} again.',expect:'The bug is dropped and the radar is back in plain [RWS](term:range-while-search): the {{lead|1}} is a search target again under the cursor, the {{data along the top|2}} has gone, and the HUD shows {{no box|3}}; its slant range is back to the steerpoint.',evidence:G3+' 84, 418',hints:['stick.tms-ud',FL(290,286,320,316),FL(110,127,560,146),FH(380,54,408,96)],panels:['stick:tms','left-mfd','hud'],do:{control:'stick.tms-ud',to:'aft'},confirm:'Back in RWS'},
+  ]
+};
+procedures.push(fcrBug);
+
+const fcrVsr: AircraftProcedure = {
+  id: 'procedure.dcs-f16c.fcr-vsr',
+  slug: 'radar-vsr',
+  airframe: 'f-16c',
+  title: 'F-16C — Radar: VSR search',
+  objective: 'Switch the radar to Velocity Search with Ranging to find a nose-on contact beyond RWS range, lock it straight into STT and drop back to search.',
+  applicability: 'DCS F-16C Block 50 (circa 2007); official guide edition 16 August 2026. In-simulator verification pending.',
+  simVersion: 'DCS build not yet verified',
+  status: 'public-preview',
+  model: 'fcr-vsr',
+  intro: RADAR_INTRO + ' The FCR is the [SOI](term:soi), in [RWS](term:range-while-search) at 80 NM, A6: a hot two-ship 45 NM out, 20° left, and a single going away 30 NM out, 40° right. A CAP to the north has called a fast mover coming your way from further out.',
+  description: 'Illustrated DCS F-16C VSR search: OSB 2 to VSR, see the cold contact vanish and a far hot one appear, slew onto it, TMS forward straight into STT and TMS aft back to VSR.',
+  complete: 'Back in VSR, the cursor on the far contact',
+  sources: RADAR_SRC + '; VSR p. 412; STT p. 421.',
+  steps: [
+    {id:'start',section:'Switch to VSR',title:'Check the picture',control:'Left MFD, FCR format',action:'Read the format.',expect:'[RWS](term:range-while-search), 80 NM, A6. The {{group|0}} is hot, the {{single|1}} cold. Nothing shows beyond 45 NM.',evidence:G3+' 404, 410',hints:[FL(228,280,272,320),FL(462,364,494,402)],panels:['left-mfd'],confirm:'Group and single'},
+    {id:'vsr',section:'Switch to VSR',title:'Select VSR',control:'Left MFD, OSB 2 (sub-mode)',action:'Press the [OSB](term:osb) above {{RWS|0}}.',expect:'It reads {{VSR|0}}: velocity search with ranging. It adds high [PRF](term:pulse-repetition-frequency) sweeps, which see nose-on targets further out and reject more ground [clutter](term:clutter), but it does not look for aircraft going away. So: a new {{contact|1}} appears 70 NM out, 8° right, the one called by the CAP; the {{single|2}}, cold, is gone; and no contact has a hot line, since VSR only shows hot ones. NORM is gone from the top row: the expanded view does not work in VSR.',caution:'OSB 2 steps RWS, VSR, TWS and back to RWS.',evidence:G3+' 394, 409, 412, 422',hints:[FL(238,108,280,127),FL(346,148,376,176),FL(462,364,494,402)],panels:['left-mfd'],do:{control:'left-mfd.osb-2',to:'in'},confirm:'Far contact at 70 NM'},
+    {id:'slew',section:'Lock it',title:'Put the cursor on it',control:'RDR CURSOR/ENABLE',action:'Steer the cursor onto the {{far contact|1}} with the {{RDR CURSOR/ENABLE switch|0}}: press and drag on it like a joystick.',expect:'The cursor brackets it and its {{altitude|2}} shows: 33,000 ft, above you.',evidence:G3+' 381, 404',hints:['throttle.cursor-ud',FL(346,148,376,176),FL(346,176,376,200)],panels:['throttle:cursor','left-mfd'],confirm:'Far contact at 33,000 ft'},
+    {id:'stt',section:'Lock it',title:'Lock it',control:'TMS forward (short)',action:'Press the {{TMS forward|0}}, briefly.',expect:'From VSR the radar goes straight to [single target track](term:single-target-track) (STT): there is no SAM in VSR. The contact is {{bugged|1}}, the other contacts and the cursor go, and its {{data|2}} reads aspect 0, track 190°, 400 kt and +1205K: it is flying straight at you, fast. Its CATA is hidden under the bug: when a target flies straight at you, pointing at it is already a collision course.',caution:'STT is the steadiest track, but the target’s radar warning receiver will almost certainly see it as a lock.',evidence:G3+' 84, 405, 412, 421',hints:['stick.tms-ud',FL(344,146,378,182),FL(110,127,560,146)],panels:['stick:tms','left-mfd'],do:{control:'stick.tms-ud',to:'fwd'},confirm:'STT, closing at 1205'},
+    {id:'drop',section:'Back to search',title:'Back to VSR',control:'TMS aft (short)',action:'Press the {{TMS aft|0}}, briefly.',expect:'The lock breaks back to VSR, the sub-mode it came from: the {{cursor|1}} is back on the contact and the search goes on.',evidence:G3+' 84, 421',hints:['stick.tms-ud',FL(340,146,380,200)],panels:['stick:tms','left-mfd'],do:{control:'stick.tms-ud',to:'aft'},confirm:'VSR again'},
+  ]
+};
+procedures.push(fcrVsr);
 
 export const visibleProcedures = procedures.filter(p => p.status === 'public-preview' || reviewTrainers);
 export const procedureRoute = (p: AircraftProcedure) => `manual/aircraft-procedures/${p.airframe}/${p.slug}/`;

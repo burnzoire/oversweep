@@ -394,7 +394,9 @@ export interface MfdDisplay {
     /** A teaching overlay that is not on the real display (bearing lines, an error ellipse): drawn dashed in orange. */
     aid?: string;
     /** A cursor the procedure moves (`cockpit:indicate` `cursors`): white lines about its own origin, starting at `at`. */
-    cursor?: { d: string; at: Pt } }[];
+    cursor?: { d: string; at: Pt };
+    /** Lines that follow the cursor sideways only (the FCR's azimuth scan limits): a path about x 0, in a colour. */
+    cursorX?: { d: string; c: MfdColour } }[];
 }
 
 /**
@@ -495,7 +497,7 @@ export interface HudDisplay {
    * Weapon cues that come and go with the weapon (the HARM launch scale): one display indicator `id` whose pages each
    * draw `art` (pen paths, relative to the boresight), `texts` and a `flash` path that blinks (the FOV box in range).
    */
-  cues?: { id: string; /** The heading tape shown in place of the usual one while a cue page other than `none` is up (HARM: it sits above the boresight, p. 663). */ heading?: HudTape; pages: { id: string; art: string; /** Art that slides sideways with the `harm-asl` reading (the azimuth steering line and its loft ticks). */ steer?: string; texts: { t: string; at: Pt; anchor?: 'start' | 'middle' | 'end' }[]; flash?: string }[] };
+  cues?: { id: string; /** The heading tape shown in place of the usual one while a cue page other than `none` is up (HARM: it sits above the boresight, p. 663). */ heading?: HudTape; pages: { id: string; art: string; /** Keep the usual heading tape on this page (air-to-air cues). */ keepHeading?: boolean; /** Art that slides sideways with the `harm-asl` reading (the azimuth steering line and its loft ticks). */ steer?: string; texts: { t: string; at: Pt; anchor?: 'start' | 'middle' | 'end' }[]; flash?: string }[] };
 }
 
 /** The plate corner toward which the face plate is cut away around a DZUS. */

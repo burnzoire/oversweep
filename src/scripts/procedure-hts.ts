@@ -12,6 +12,7 @@
 import { HAD_SLEW, HADH, HADX } from '../data/cockpit/f16c/mfd-had';
 import { MAV_D_SLEW3, MAV_D_SLEW7, MAV_SLEW } from '../data/cockpit/f16c/mfd-maverick';
 import { TGP_SLEW_B, TGP_SLEW_T } from '../data/cockpit/f16c/mfd-tgp';
+import { FCR_SLEW } from '../data/cockpit/f16c/mfd-fcr';
 
 interface StepDo { control: string; to: string; on?: 'press' | 'release' }
 interface Typing { keys: string[]; pages: string[] }
@@ -45,9 +46,31 @@ interface Scenario {
   enter?: Record<string, Pages>;
 }
 /** A slew: from page `on` (drawn as `free` while slewed), ending on `done` once the cursor is within `reach` of `target`. Several may run, one per step. */
-interface Slew { step: string; on: string; free: string; done: string; target: [number, number]; start: [number, number]; reach: number; speed: number; box: [number, number, number, number]; display?: 'left' | 'right'; what?: string; along?: [number, number]; freeOnMove?: boolean }
+interface Slew { /** Whether the thing steered is a cursor (the FCR's, on the left MFD) rather than crosshairs. */ cursor?: boolean; step: string; on: string; free: string; done: string; target: [number, number]; start: [number, number]; reach: number; speed: number; box: [number, number, number, number]; display?: 'left' | 'right'; what?: string; along?: [number, number]; freeOnMove?: boolean }
 interface Warm { step: string; secs: number; ms: number; busy: string; ready: string; label: string; after?: Pages }
 const SCENARIOS: Record<string, Scenario> = {
+  // F-16C air-to-air radar (mfd-fcr.ts): the FCR on the left MFD; a CAP at 28,000 ft heading 360°, the CAP point 10 NM ahead.
+  'fcr-rws': {
+    initial: { left: 'fcr-not-soi', mfd: 'menu-blank', ded: 'cni' },
+    after: { soi: { left: 'fcr-40' }, 'range-up': { left: 'fcr-80' }, a3: { left: 'fcr-80-a3' } },
+    slew: { step: 'slew', on: 'fcr-80-a3', free: 'fcr-80-a3-free', done: 'fcr-80-a3-lead', display: 'left', cursor: true, what: 'lead contact', ...FCR_SLEW.lead },
+  },
+  'fcr-vsr': {
+    initial: { left: 'fcr-80', mfd: 'menu-blank', ded: 'cni' },
+    after: { vsr: { left: 'fcr-vsr' }, stt: { left: 'fcr-vsr-stt' }, drop: { left: 'fcr-vsr-far' } },
+    slew: { step: 'slew', on: 'fcr-vsr', free: 'fcr-vsr-free', done: 'fcr-vsr-far', display: 'left', cursor: true, what: 'far contact', ...FCR_SLEW.far },
+  },
+  'fcr-bug': {
+    initial: { left: 'fcr-80-a3-lead', mfd: 'menu-blank', ded: 'cni', x: { 'hud.screen': 'on', 'hud.master-arm': 'none', 'hud.master-mode': 'nav', 'hud.harm-cues': 'none', 'hud.slant-range-source': 'b' }, r: { 'hud.altitude': 28000, 'hud.velocity': 360, 'hud.mach': 0.92, 'hud.heading': 360, 'hud.pitch': 0, 'hud.roll': 0, 'hud.fpm-azimuth': 0, 'hud.fpm-elevation': 0, 'hud.steerpoint-azimuth': 0, 'hud.steerpoint-elevation': -24.7, 'hud.steering-cue': 0, 'hud.slant-range': 11, 'hud.steerpoint-distance': 10, 'hud.steerpoint': 1, 'hud.ttg': 65, 'hud.radar-alt': 27000 } },
+    after: {
+      bug: { left: 'fcr-sam', x: { 'hud.harm-cues': 'aa-tll', 'hud.slant-range-source': 'f' }, r: { 'hud.slant-range': 45 } },
+      stt: { left: 'fcr-stt' }, back: { left: 'fcr-sam-turned' },
+      reject: { left: 'fcr-rws-turned', x: { 'hud.harm-cues': 'none', 'hud.slant-range-source': 'b' }, r: { 'hud.slant-range': 11 } },
+    },
+    // The turn onto the collision course: the picture as the step opens.
+    enter: { turn: { left: 'fcr-sam-turned', x: { 'hud.harm-cues': 'aa-td' }, r: { 'hud.heading': 347, 'hud.steerpoint-azimuth': 13 } } },
+    slew: [],
+  },
   markpoints: {
     // The right MFD shows the HSD (60 NM, depressed), steerpoint 3 selected; the DED the CNI page.
     initial: { mfd: 'hsd-start', ded: 'cni-3' },
@@ -245,7 +268,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
       if (slewLeft()) st.left = sl().done; else st.mfd = sl().done;
       stopSlew();
       indicate();
-      done(`The ${sl().display === 'left' || sl().on.startsWith('tgp') ? 'crosshairs are' : 'cursor is'} on the ${sl().what ?? 'radar'}.`);
+      done(`The ${!sl().cursor && (sl().display === 'left' || sl().on.startsWith('tgp')) ? 'crosshairs are' : 'cursor is'} on the ${sl().what ?? 'radar'}.`);
       return;
     }
     indicate();
@@ -285,7 +308,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     else if (moves(s).length === 1) say(`${cap(instruction(moves(s)[0]))}.`);
     else if (moves(s).length) say(`Make these moves, in any order: ${moves(s).map(instruction).join('; ')}.`);
     else if (s.type) say(`Press ${keyText(s.type.keys[0])} (key 1 of ${s.type.keys.length}).`);
-    else if (slewing()) say(`Steer the ${sl().display === 'left' || sl().on.startsWith('tgp') ? 'crosshairs' : 'cursor'} onto the ${sl().what ?? 'radar'}: press and drag on the RDR CURSOR switch.`);
+    else if (slewing()) say(`Steer the ${!sl().cursor && (sl().display === 'left' || sl().on.startsWith('tgp')) ? 'crosshairs' : 'cursor'} onto the ${sl().what ?? 'radar'}: press and drag on the RDR CURSOR switch.`);
     else if (scanning) say(sc.scans?.prompt ?? 'Watch the HAD: each scan refines the position. Replay it or drag through it below.');
     else say('Check the indications, then confirm.');
     showPad();

@@ -142,6 +142,21 @@ const harmCues = {
       texts: [ht(String(SCALE_NM), 404.5, 151), ht('A36>', 397, CARET_Y, 'end'), ht('264', 402, 290)],
       flash: FOV,
     },
+    // Air-to-air target designation (guide pp. 405-406), drawn in the radar procedures' scene (see mfd-fcr.ts): the
+    // bugged target 45 NM out at 25,000 ft, 0.6° below the jet's 28,000 ft. These keep the heading tape in its usual place.
+    {
+      // Target 20° left of the nose, outside the HUD: the FCR target locator line from the boresight cross toward it, and
+      // the target locator angle at its end, prefixed F for the FCR (p. 406 items 8-9; the line's length is not given:
+      // drawn 90 px).
+      id: 'aa-tll', keepHeading: true, art: rel([B, [B[0] - 90, B[1] + 2.7]], false),
+      texts: [{ t: 'F20', at: r(B[0] - 96, B[1] + 2.7), anchor: 'end' as const }],
+    },
+    {
+      // On the collision course the target is 7° left and 0.6° low: the A-A target designator box (p. 597 image 005: a
+      // square about 0.9° across, the target's altitude in thousands of feet below it).
+      id: 'aa-td', keepHeading: true, art: rel([[B[0] - 181 - 11.5, B[1] + 15.5 - 11.5], [B[0] - 181 + 11.5, B[1] + 15.5 - 11.5], [B[0] - 181 + 11.5, B[1] + 15.5 + 11.5], [B[0] - 181 - 11.5, B[1] + 15.5 + 11.5]]),
+      texts: [{ t: '25', at: r(B[0] - 181, B[1] + 15.5 + 22), anchor: 'middle' as const }],
+    },
   ],
 };
 const MODES = ['NAV', 'CCIP', 'CCRP', 'DTOS', 'LADD', 'MAN', 'VIS', 'PRE', 'BORE', 'STRF', 'HARM', 'HTS', 'AAM', 'MSL', 'DGFT', 'MRM', 'SRM', 'HOB', 'EEGS', 'JETT'];
@@ -249,7 +264,7 @@ export const hud: PanelSpec = {
     num('mach', 'Mach', 'M', 0.61, [0, 2.2, 0.01], 'Mach number to the hundredth.'),
     num('max-g', 'Maximum G', 'g', 5.7, [-9.9, 9.9, 0.1], 'Highest load factor of the flight; WARN RESET on the ICP resets it to 1.0.'),
     word('align', 'INS alignment cue (ALIGN)', [{ id: 'none', label: '(blank)' }, { id: 'align', label: 'ALIGN' }], 'none', 'ALIGN, in the place of the maximum G readout, while the INS alignment is usable for navigation (steady) and fully aligned (flashing); gone once the INS knob is in NAV. While it shows, the maximum G is not drawn.'),
-    word('harm-cues', 'HARM launch cues', [{ id: 'none', label: '(none)' }, { id: 'amz', label: 'AMZ: loft cues, launch scale, FOV box steady' }, { id: 'mmz', label: 'MMZ: FOV box flashing, in range' }], 'none', 'The AGM-88 POS launch cues (guide pp. 663-664): the azimuth steering line, the minimum and maximum loft ticks on it, the HARM launch scale (HLS) staple on the right with a caret for the present range and the loft angle needed (an A prefix inside the missile maneuver zone), the release altitude under it, and the FOV box, which flashes when the missile is in range and the weapon release button is hot.'),
+    word('harm-cues', 'HARM launch cues', [{ id: 'none', label: '(none)' }, { id: 'amz', label: 'AMZ: loft cues, launch scale, FOV box steady' }, { id: 'mmz', label: 'MMZ: FOV box flashing, in range' }, { id: 'aa-tll', label: 'A-A: target locator line toward a bugged target outside the HUD' }, { id: 'aa-td', label: 'A-A: target designator box on the bugged target' }], 'none', 'Weapon and target cues. Air-to-air: the target designator box over the FCR target of interest, with its altitude below, or, when it is outside the HUD, the target locator line from the boresight cross toward it and the angle off the nose (guide pp. 405-406). AGM-88: the POS launch cues (guide pp. 663-664): the azimuth steering line, the minimum and maximum loft ticks on it, the HARM launch scale (HLS) staple on the right with a caret for the present range and the loft angle needed (an A prefix inside the missile maneuver zone), the release altitude under it, and the FOV box, which flashes when the missile is in range and the weapon release button is hot.'),
     word('master-mode', 'Master mode', P(...MODES), 'nav', 'Master mode, air-to-air missile type or air-to-ground submode.'),
     num('bullseye-bearing', 'Bullseye bearing', '°', 324, [0, 359, 1], 'Ownship bearing from the bullseye, when bullseye is on and no fuel message shows.'),
     num('bullseye-range', 'Bullseye range', 'NM', 53, [0, 999, 1], 'Ownship range from the bullseye, nautical miles.'),

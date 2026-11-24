@@ -1,0 +1,40 @@
+---
+import GroupCards from '../../../../../../components/GroupCards.astro';
+import Term from '../../../../../../components/Term.astro';
+import SiteLayout from '../../../../../../layouts/SiteLayout.astro';
+import { sourceUrl } from '../../../../../../data/aircraft-procedures';
+import { groupPages } from '../../../../../../data/manual-menu';
+
+// The Radar (APG-68) article: the parent of the fire control radar procedures. It replaces the generic group
+// landing page for this node (`article: true` in the menu).
+const node = groupPages().find(n => n.id === 'f16c-radar')!;
+---
+<SiteLayout title="Radar (APG-68)" activeSection="manual" description="The F-16C's fire control radar: its air-to-air modes, the B-scope format, the hand controls, and procedures for searching, bugging and locking aircraft.">
+  <article class="prose">
+    <p class="lead">The AN/APG-68 is the F-16C's fire control radar (<Term>FCR</Term>), a <Term>pulse-Doppler radar</Term> in the nose. It is the jet's main sensor: it finds, tracks and identifies aircraft for the missiles and the gun, and maps the ground, finds moving vehicles and ships, and gives ranging for bombs. Its antenna is steered mechanically, up to 60° either side of the nose in azimuth and elevation. <a href="#source-1">[1, pp. 375–376]</a></p>
+
+    <h2>Procedures</h2>
+    <GroupCards node={node} />
+
+    <h2>Air-to-air modes</h2>
+    <p>Two modes cover air-to-air work. <Term>CRM</Term>, the combined radar mode, is for finding and engaging aircraft beyond visual range. Air combat mode (ACM) is for short-range, manoeuvring fights: it searches small volumes near the nose and locks the first aircraft it finds. The NAV, A-A and MSL master modes start in CRM; dogfight (DGFT) starts in ACM. <a href="#source-1">[1, pp. 408–409]</a></p>
+    <ul>
+      <li><strong>RWS</strong>, <Term>range while search</Term>: the default search. It shows each contact by range and bearing, whether it is flying toward you or away. <a href="#source-1">[1, p. 410]</a></li>
+      <li><strong>VSR</strong>, velocity search with ranging: adds high <Term>pulse repetition frequency</Term> sweeps that see nose-on aircraft further out, but it shows only aircraft closing on you. <a href="#source-1">[1, p. 412]</a></li>
+      <li><strong>TWS</strong>, track while scan: keeps tracking up to ten contacts while it searches, for shots at several aircraft. <a href="#source-1">[1, pp. 413–416]</a></li>
+      <li><Term>Situation awareness mode</Term> (SAM): a bugged contact in RWS. The radar keeps searching but stops now and then to look hard at the bugged aircraft, which gives its heading, speed and height. A second aircraft can be bugged too (DT SAM). <a href="#source-1">[1, pp. 417–419]</a></li>
+      <li><Term>Single target track</Term> (STT) and dual target track (DTT): the radar stops searching and points at one aircraft, or alternates between two close ones. STT is the steadiest track, but the target's warning receiver sees it as a lock. <a href="#source-1">[1, pp. 420–421]</a></li>
+    </ul>
+
+    <h2>The air-to-air format</h2>
+    <p>The radar's air-to-air page is a <Term>B-scope</Term>: your jet is the middle of the bottom edge, range runs up the screen and bearing across it, ±60° at the edges. Contacts are small boxes with a short hot line showing which way they are going, and the bugged target is a ring with its heading drawn as a stub. Along the edges are the mode, the range scale, the scan width and number of bars, the antenna's elevation, and a horizon line. The bugged target's aspect, track, speed and closure show along the top, and the <Term>CATA</Term> cue beside it gives the heading for a collision course. <a href="#source-1">[1, pp. 394–397, 404–405]</a></p>
+
+    <h2>Hand controls</h2>
+    <p>The radar is worked with the <Term>HOTAS</Term> when it is the <Term>SOI</Term> (DMS aft gives it the SOI from the HUD). The RDR CURSOR/ENABLE switch on the throttle moves the acquisition cursor; the ANT ELEV knob tilts the search volume up and down. On the stick, <Term>TMS</Term> forward bugs the contact under the cursor and, again, locks it; TMS aft steps back, from STT to SAM, from SAM to search. The <Term>OSB</Term>s round the page set the sub-mode, range scale, scan width and bars. <a href="#source-1">[1, pp. 84–87, 377, 381–383]</a></p>
+
+    <h2>The search volume</h2>
+    <p>The antenna sweeps a block of sky in stacked bars: several side-to-side sweeps one above the other. Wider scans and more bars cover more sky but come back to each piece of it less often, so narrow the volume once you know roughly where to look. In A3 and A1 the scan is centred on the cursor; the cursor's two numbers give the top and bottom of the volume, in thousands of feet, at its range. <a href="#source-1">[1, pp. 379–383, 396]</a></p>
+
+    <section class="sources" aria-labelledby="radar-sources"><h2 id="radar-sources">Sources</h2><ol><li id="source-1"><a href={sourceUrl}>DCS F-16C Viper Early Access Guide (EN, 16 August 2026)</a> — Eagle Dynamics. HOTAS pp. 84–87; “AN/APG-68 Fire Control Radar” pp. 374–435. A sim manual: it describes the DCS F-16C, which models the real aircraft's radar in simplified form.</li></ol></section>
+  </article>
+</SiteLayout>

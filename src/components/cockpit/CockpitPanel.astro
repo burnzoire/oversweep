@@ -729,6 +729,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
         svg.querySelectorAll(`${shown}[data-cursor="${ind.id}"]`).forEach(g => g.setAttribute('transform', `translate(${cursors[key(ind.id)].map(v => +v.toFixed(3)).join(' ')})`));
         // A slewed sensor picture moves the other way: the seeker looks where the cursor goes.
         svg.querySelectorAll(`${shown}[data-pan="${ind.id}"]`).forEach(g => g.setAttribute('transform', `translate(${cursors[key(ind.id)].map(v => +(-v).toFixed(3)).join(' ')})`));
+        svg.querySelectorAll(`${shown}[data-cursor-x="${ind.id}"]`).forEach(g => g.setAttribute('transform', `translate(${+cursors[key(ind.id)][0].toFixed(3)} 0)`));
       }
       else if (key(ind.id) in values) show(ind.id, values[key(ind.id)]);
     }

@@ -191,6 +191,21 @@ terms:
   - term: Force correlate
     definition: "A Maverick tracking mode (AGM-65G and H, polarity AREA) that tracks a chosen part of the picture rather than the centre of a vehicle, so the missile hits that exact spot on a building or structure."
     cite: [{ n: 1, page: "690" }]
+  - term: CRM
+    expansion: Combined radar mode
+    definition: "The fire control radar's main air-to-air mode, which holds the search sub-modes range while search, velocity search with ranging and track while scan. The pilot steps between them with a button on the radar page or the target management switch."
+    cite: [{ n: 1, page: "408–409" }]
+  - term: B-scope
+    definition: "A radar picture drawn as a rectangle with bearing across and range up the screen, the jet's own position at the bottom edge. Contacts at the same range lie on one horizontal line whatever their bearing, which makes range easy to read but distorts geometry close in."
+    cite: [{ n: 1, page: "394" }]
+  - term: Situation awareness mode
+    expansion: SAM
+    definition: "A fire control radar mode that keeps searching while it also tracks one chosen (bugged) contact, by breaking off the search scan now and then to look at it. The pilot gets the contact's heading, speed and height without losing sight of the others; a second designation commands a single-target track."
+    cite: [{ n: 1, page: "417–418" }]
+  - term: CATA
+    expansion: Collision antenna train angle
+    definition: "A cue on the radar page, drawn at the bugged target's range, that steers an intercept. Turning towards it until it sits in the middle of the screen puts the jet on a collision course with the target."
+    cite: [{ n: 1, page: "404–405" }]
 sources:
   - n: 1
     title: "DCS: F-16C Viper Early Access Guide (English)"
