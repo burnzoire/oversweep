@@ -13,9 +13,10 @@ import { HAD_SLEW, HADH, HADX } from '../data/cockpit/f16c/mfd-had';
 import { MAV_D_SLEW3, MAV_D_SLEW7, MAV_SLEW } from '../data/cockpit/f16c/mfd-maverick';
 import { TGP_SLEW_B, TGP_SLEW_T } from '../data/cockpit/f16c/mfd-tgp';
 import { AIM_SLEW, FCR_SLEW, VOL_SEEN } from '../data/cockpit/f16c/mfd-fcr';
+import { TWO_SLEW } from '../data/cockpit/f16c/mfd-fcr-two';
 import { MOMENTS, SHOT_TIMES, type MomentId } from '../data/cockpit/f16c/aim120-scene';
 
-interface StepDo { control: string; to: string; on?: 'press' | 'release' }
+interface StepDo { control: string; to: string; on?: 'press' | 'release'; /** Presses it takes (each short of the last shows `after['<step>-<n>']`). */ times?: number }
 interface Typing { keys: string[]; pages: string[] }
 interface Step { id: string; panels: string[]; hints?: string[]; do?: StepDo; also?: StepDo[]; type?: Typing; confirm?: string }
 interface Config { aircraft: string; model: string; initial: Record<string, string>; labels: Record<string, string>; names: Record<string, string>; steps: Step[] }
@@ -73,6 +74,27 @@ const SCENARIOS: Record<string, Scenario> = {
       near: 'The contact is in the scan, but near its edge: keep rolling until 3,000 ft sits well inside the numbers.',
       done: 'The contact is inside the scan.',
     },
+  },
+  'fcr-tws': {
+    initial: { left: 'tw-rws', mfd: 'menu-blank', ded: 'cni' },
+    after: {
+      'mode-1': { left: 'tw-vsr' }, mode: { left: 'tw-search' },
+      'sys-lead': { left: 'tw-lead-sys' }, 'sys-wing': { left: 'tw-two-sys' }, bug: { left: 'tw-bug-lead' }, step: { left: 'tw-bug-wing' },
+      'back-1': { left: 'tw-two-sys' }, 'back-2': { left: 'tw-down' }, 'back-3': { left: 'tw-purged' }, back: { left: 'tw-rws-end' },
+    },
+    // The tracks have formed by the time the step opens.
+    enter: { tracks: { left: 'tw-tracks' } },
+    slew: [
+      { step: 'slew-lead', on: 'tw-tracks', free: 'tw-cur-free', done: 'tw-cur-lead', display: 'left', cursor: true, what: 'lead’s track', ...TWO_SLEW.lead },
+      { step: 'slew-wing', on: 'tw-lead-sys', free: 'tw-wing-free', done: 'tw-cur-wing', display: 'left', cursor: true, what: 'wingman’s track', ...TWO_SLEW.wing },
+    ],
+  },
+  'fcr-two': {
+    initial: { left: 'dt-start', mfd: 'menu-blank', ded: 'cni' },
+    after: { bug: { left: 'dt-sam' }, second: { left: 'dt-dtsam' }, swap: { left: 'dt-swap' }, stt: { left: 'dt-stt' } },
+    // Two and a half minutes on, inside 10 NM of the lead: the radar has gone to DTT.
+    enter: { close: { left: 'dt-dtt' } },
+    slew: { step: 'slew', on: 'dt-sam', free: 'dt-free', done: 'dt-wing', display: 'left', cursor: true, what: 'wingman', ...TWO_SLEW.wing },
   },
   'fcr-rws': {
     initial: { left: 'fcr-not-soi', mfd: 'menu-blank', ded: 'cni' },
@@ -268,6 +290,8 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   let step = 0;
   let finished = false;
   let made = new Set<string>();
+  /** Presses made so far of a repeated move (`times`). */
+  let presses: Record<string, number> = {};
   let typed = 0;
   let scanning = false;
   const history: { pos: Record<string, string>; st: State }[] = [];
@@ -403,7 +427,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     stopSlew(); stopPlayer();
     if (to >= cfg.steps.length) { finished = true; render(); complete.focus(); return; }
     history[to] = { pos: { ...pos }, st: copy(st) };
-    step = to; made = new Set(); typed = 0;
+    step = to; made = new Set(); presses = {}; typed = 0;
     enterStep();
     render();
     if (st.pod > 0) warmUp();
@@ -547,7 +571,20 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     const before = pos[key];
     pos[key] = d.position;
     const want = pending(s).find(w => w.control === key && w.to === d.position && (w.on ?? 'press') === d.phase);
-    if (want) { acted(want); return; }
+    if (want) {
+      const need = want.times ?? 1;
+      if (need > 1) {
+        const n = (presses[mk(want)] = (presses[mk(want)] ?? 0) + 1);
+        if (n < need) {
+          apply(sc.after[`${stepId()}-${n}`] ?? {});
+          indicate();
+          say(`Pressed ${n} of ${need}: ${instruction(want)} again.`);
+          return;
+        }
+      }
+      acted(want);
+      return;
+    }
     // Springing back from a momentary press, or a press that completes nothing.
     if (d.phase === 'release') { indicate(); return; }
     // A control that is not part of this step: put it back.
@@ -570,7 +607,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     finished = false;
     const h = history[to];
     if (h) { pos = { ...h.pos }; st = copy(h.st); setPositions(pos); }
-    step = to; made = new Set(); typed = 0; scanning = false;
+    step = to; made = new Set(); presses = {}; typed = 0; scanning = false;
     enterStep();
     render();
     if (scanOf()) playScans();

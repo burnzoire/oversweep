@@ -89,7 +89,7 @@ const systems = group('f16c-systems', 'Systems', [
   cockpitNode,
   group('f16c-hts', 'HARM Targeting System (HTS)', [{ ...proc('hts'), title: 'Basic HTS' }, proc('hts-targeting'), plan('TDOA')], `${F16C_HREF}systems/hts/`, 'Find and rank enemy radars on the HAD page and hand them to the HARM.'),
   plan('TGP / Sniper pod'),
-  { ...group('f16c-radar', 'Radar (APG-68)', [{ ...proc('radar-rws'), title: 'RWS search' }, { ...proc('radar-volume'), title: 'Aim the search volume' }, { ...proc('radar-vsr'), title: 'VSR search' }, { ...proc('radar-bug-lock'), title: 'Bug and lock (SAM, STT)' }, plan('TWS: track while scan'), plan('Two targets (DT SAM, DTT)'), plan('Dogfight modes (ACM)'), plan('Identify contacts (NCTR, AIFF)'), plan('Ground map, expand and DBS'), plan('Ground moving target'), plan('Sea mode')], `${F16C_HREF}systems/radar/`, 'The fire control radar: searching for, tracking and identifying aircraft, and mapping the ground.'), article: true },
+  { ...group('f16c-radar', 'Radar (APG-68)', [{ ...proc('radar-rws'), title: 'RWS search' }, { ...proc('radar-volume'), title: 'Aim the search volume' }, { ...proc('radar-vsr'), title: 'VSR search' }, { ...proc('radar-bug-lock'), title: 'Bug and lock (SAM, STT)' }, { ...proc('radar-tws'), title: 'TWS: track while scan' }, { ...proc('radar-two-targets'), title: 'Two targets (DT SAM, DTT)' }, plan('Dogfight modes (ACM)'), plan('Identify contacts (NCTR, AIFF)'), plan('Ground map, expand and DBS'), plan('Ground moving target'), plan('Sea mode')], `${F16C_HREF}systems/radar/`, 'The fire control radar: searching for, tracking and identifying aircraft, and mapping the ground.'), article: true },
   plan('Fire control and SMS'),
   plan('RWR and countermeasures'),
   plan('Navigation and INS'),

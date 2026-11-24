@@ -26,15 +26,15 @@ import { MOMENTS, scaleFor, type MomentId } from './aim120-scene.ts';
  */
 const PX = 4.8;
 const { mm } = tracer(PX);
-const SC: [number, number] = [329.5, 330];
+export const SC: [number, number] = [329.5, 330];
 type Page = MfdDisplay['pages'][number];
 type P = [number, number];
 
 /* ------------------------------------------------------------------ geometry */
 
-const AZ0 = 330.75, PX_DEG = 220.75 / 60, R0 = 548, RH = 441;
-export type Scale = 40 | 80;
-const local = ([x, y]: P): P => [f(mm(x - SC[0])), f(mm(y - SC[1]))];
+export const AZ0 = 330.75, PX_DEG = 220.75 / 60, R0 = 548, RH = 441;
+export type Scale = 20 | 40 | 80;
+export const local = ([x, y]: P): P => [f(mm(x - SC[0])), f(mm(y - SC[1]))];
 /** Where a point at `az` degrees off the nose and `nm` range is drawn on the B-scope. */
 export const scope = (az: number, nm: number, scale: Scale): P => [AZ0 + az * PX_DEG, R0 - (nm / scale) * RH];
 /** Azimuth and range of a B-scope point. */
@@ -52,9 +52,9 @@ const HALF_4B = 5.4;
  * Fewer bars, less height. The beam is 4.6° tall (Lockheed Martin MLU Pilot's Guide 16PR14341 p. 134), so the 4-bar
  * coverage (10.8°) puts the bars about 2.07° apart; two bars then cover 6.7° (±3.3°) and one bar the beam, 4.6° (±2.3°).
  */
-const HALF: Record<Bars, number> = { 4: HALF_4B, 2: (4.6 + (2 * HALF_4B - 4.6) / 3) / 2, 1: 2.3 };
-export type Bars = 4 | 2 | 1;
-const FT_NM = 6076.1;
+const HALF: Record<Bars, number> = { 4: HALF_4B, 3: (4.6 + (2 * HALF_4B - 4.6) * (2 / 3)) / 2, 2: (4.6 + (2 * HALF_4B - 4.6) / 3) / 2, 1: 2.3 };
+export type Bars = 4 | 3 | 2 | 1;
+export const FT_NM = 6076.1;
 const tan = (d: number) => Math.tan((d * Math.PI) / 180);
 /** The search volume's altitude limits (thousands of ft) at a range, for the antenna `el` degrees up and a bar count. */
 export const limits = (nm: number, el = 0, bars: Bars = 4) => {
@@ -70,7 +70,7 @@ export const fromStpt = (az: number, nm: number, hdg = 360) => {
   const brg = Math.round(((Math.atan2(x, y) * 180) / Math.PI + 360) % 360) || 360;
   return { brg, nm: Math.round(Math.hypot(x, y)) };
 };
-const pad = (v: number, n: number) => String(Math.abs(v)).padStart(n, '0');
+export const pad = (v: number, n: number) => String(Math.abs(v)).padStart(n, '0');
 
 /* ------------------------------------------------------------------ contacts */
 
@@ -106,25 +106,25 @@ const FRAME = [
 
 /* ------------------------------------------------------------------ symbols */
 
-const rect = (x0: number, y0: number, x1: number, y1: number) => poly([[x0, y0], [x1, y0], [x1, y1], [x0, y1]], true);
-const ring = ([x, y]: P, r: number, n = 36) => poly(Array.from({ length: n }, (_, i): P => [x + r * Math.sin((2 * Math.PI * i) / n), y - r * Math.cos((2 * Math.PI * i) / n)]), true);
+export const rect = (x0: number, y0: number, x1: number, y1: number) => poly([[x0, y0], [x1, y0], [x1, y1], [x0, y1]], true);
+export const ring = ([x, y]: P, r: number, n = 36) => poly(Array.from({ length: n }, (_, i): P => [x + r * Math.sin((2 * Math.PI * i) / n), y - r * Math.cos((2 * Math.PI * i) / n)]), true);
 /** Search target (p. 394, p. 404): a filled square, 16 x 12 px, its hot line (4 x 9 px) below it when hot, above when cold. */
-const searchTarget = ([x, y]: P, hot: boolean | null) =>
+export const searchTarget = ([x, y]: P, hot: boolean | null) =>
   rect(x - 8, y - 6, x + 8, y + 6) + (hot === null ? '' : hot ? rect(x - 2, y + 6, x + 2, y + 15) : rect(x - 2, y - 15, x + 2, y - 6));
 /** Bugged target (p. 417): a ring (r 12.5) round a filled disc (r 8.5), the heading line (toward the jet when hot) leaving the ring. */
-const bugged = ([x, y]: P, hot: boolean) => ({
+export const bugged = ([x, y]: P, hot: boolean) => ({
   marks: ring([x, y], 12.5) + poly(hot ? [[x, y + 12.5], [x, y + 18]] : [[x, y - 12.5], [x, y - 18]]),
   fills: ring([x, y], 8.5, 24),
 });
 /** Collision antenna train angle (p. 405, p. 417): a filled cross pattée, 16 px across, at the target's range. */
-const cata = ([x, y]: P) => {
+export const cata = ([x, y]: P) => {
   const a = 8, b = 2.2, t = 5;
   return poly([[x - b, y - b], [x - t, y - a], [x + t, y - a], [x + b, y - b], [x + a, y - t], [x + a, y + t], [x + b, y + b], [x + t, y + a], [x - t, y + a], [x - b, y + b], [x - a, y + t], [x - a, y - t]], true);
 };
 /** Steerpoint "wedding cake" (p. 394): a 24 x 8 px base, a 12 x 12 tier and a 4 px cap. */
 const cake = ([x, y]: P) => rect(x - 12, y - 4, x + 12, y + 4) + rect(x - 6, y - 16, x + 6, y - 4) + rect(x - 2, y - 20, x + 2, y - 16);
 /** Acquisition cursor (p. 394): two bars 28 px apart and 29 px tall, about its own centre (the moving part, in mm). */
-const CURSOR_BARS = (() => {
+export const CURSOR_BARS = (() => {
   const q = ([x, y]: P) => `${f(mm(x))} ${f(mm(y))}`;
   return `M${q([-14, -14.5])}L${q([-14, 14.5])}M${q([14, -14.5])}L${q([14, 14.5])}`;
 })();
@@ -202,7 +202,7 @@ export interface FcrState {
   soi: boolean;
   scale: Scale;
   sub: Sub;
-  az: 'A6' | 'A3';
+  az: 'A6' | 'A3' | 'A2';
   /** The cursor (B-scope px), or `free` while it is slewed by hand (the procedure moves it), or none (STT). */
   cursor: P | 'free' | null;
   /** The contact the cursor rests on (its altitude printed below it). */
@@ -218,7 +218,9 @@ export interface FcrState {
   /** The jet's heading (° magnetic): 360 unless it has turned onto the collision course (347). */
   hdg?: number;
   /** The search-volume scene: only its low contact, shown only while it is inside the scanned volume. */
-  scene?: 'vol';
+  scene?: 'vol' | 'none';
+  /** No steerpoint symbol (the jet has flown on: the picture's own geometry puts it elsewhere). */
+  noStpt?: boolean;
   /** Antenna elevation set with ANT ELEV (° up); 0 by default. */
   el?: number;
   /** Elevation bars (4 by default). */
@@ -264,7 +266,7 @@ const toiData = (k: ContactId, hdg = 360, mrm?: MrmView) => {
   return [w(aspect, 128, 136.5, 'start'), w(t.track, 186, 136.5, 'start'), w(t.kcas, 405, 136.5), w(`+${mrm?.closure ?? t.closure(hdg)}K`, 513.5, 136.5, 'end')];
 };
 
-function fcr(id: string, s: FcrState): Page {
+export function fcr(id: string, s: FcrState): Page {
   // SAM and STT keep the search sub-mode's label (pp. 417, 421 show RWS); STT entered from VSR is assumed to keep VSR.
   const sub = s.sub === 'VSR' || s.from === 'VSR' ? 'VSR' : 'RWS';
   const words: Page['words'] = [
@@ -305,7 +307,7 @@ function fcr(id: string, s: FcrState): Page {
 
   const tgt = { fills: '', flashFill: '', red: '', redFlash: '' };
   // Scene: the steerpoint, then the contacts the radar shows in this sub-mode.
-  fills += cake(scope(stptAz(s.hdg), 10, s.scale));
+  if (!s.noStpt) fills += cake(scope(stptAz(s.hdg), 10, s.scale));
   const shown = (Object.entries(CONTACTS) as [ContactId, Contact][]).filter(([k, t]) => {
     if (s.sub === 'STT') return k === s.bug;
     if ((t as Contact).scene !== s.scene) return false;
@@ -377,7 +379,7 @@ function fcr(id: string, s: FcrState): Page {
 /* -------------------------------------------------------------------- pages */
 
 /** The cursor's resting place as the guide shows it (p. 394: centred, 14.1 NM on the 40 NM scale). */
-const HOME: P = [333, 392.5];
+export const HOME: P = [333, 392.5];
 const on = (k: ContactId, scale: Scale, hdg = 360): P => scope(off(CONTACTS[k].az, hdg), CONTACTS[k].nm, scale);
 
 /** The states the radar procedures pass through. */
