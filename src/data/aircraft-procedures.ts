@@ -50,6 +50,8 @@ export interface AircraftProcedure {
   intro: string;
   description: string;
   complete: string;
+  /** What the reader just learned: a few short takeaways shown under the closing heading. Glossary links work as in steps. */
+  summary?: string[];
   /** Slug of the procedure that follows this one; the closing heading links to it. */
   next?: string;
   /** The Sources section's text. */
@@ -662,6 +664,12 @@ const fcrTws: AircraftProcedure = {
   intro: RADAR_INTRO + ' The FCR is the [SOI](term:soi), in [RWS](term:range-while-search) at 80 NM, A6, four bars. A hot two-ship is 45 NM out, 20° left, at 25,000 ft, flying abreast, 11 NM apart: a lead and its wingman. A fast single is 38 NM out, 12° right, at 31,000 ft, and a low single is going away, 55 NM out, 40° right. The aim: keep track of all four, and be ready to shoot the pair.',
   description: 'Illustrated DCS F-16C Track While Scan: OSB 2 to TWS, tracks form on four contacts, the cursor and TMS forward promote two to system tracks, TMS right bugs the closest and steps the bug to the other, and TMS aft backs out layer by layer to RWS.',
   complete: 'Back in RWS, the cursor on the wingman’s position',
+  summary: [
+    '[Track while scan](term:track-while-scan) keeps up to ten contacts in track while it still searches, so you read each one\u2019s altitude, heading and speed without locking any of them.',
+    'TMS forward on a track makes it a [system track](term:system-track), shown white. Only a system track can be bugged.',
+    'TMS right bugs the closest system track and, on each further press, steps the bug to the next, so you change targets without moving the cursor.',
+    'Tracks are not locked: a contact the radar stops seeing can drop after a few scans. TMS aft backs out one level at a time and ends in RWS.',
+  ],
   next: 'radar-two-targets',
   sources: TWO_SRC,
   steps: [
@@ -692,6 +700,12 @@ const fcrTwo: AircraftProcedure = {
   intro: RADAR_INTRO + ' The FCR is the [SOI](term:soi), in [RWS](term:range-while-search) at 80 NM, A3, the cursor on the lead of a hot pair 45 NM out, 20° left, at 25,000 ft. Its wingman is abeam, 11 NM to the right and 47 NM out. You want to hold both for a two-missile shot.',
   description: 'Illustrated DCS F-16C two-target radar: TMS forward bugs the lead in SAM, the cursor and TMS forward add the wingman as the second target (DT SAM), TMS right swaps the primary, the radar goes to DTT once a target is inside 10 NM, and TMS forward locks one in STT.',
   complete: 'STT on the wingman',
+  summary: [
+    'In [SAM](term:situation-awareness-mode), TMS forward bugs the first contact as the primary target. With the cursor on a second contact, another press makes it the secondary and puts the radar in [DT SAM](term:dt-sam).',
+    'TMS right swaps primary and secondary, so one jet can shoot each in turn.',
+    'Once a target is inside 10 NM the radar goes to [DTT](term:dtt): the search stops and it only alternates between the two.',
+    'TMS forward with the cursor on a target locks it in [STT](term:single-target-track) and drops the other. The target\u2019s warning receiver sees that as a lock.',
+  ],
   sources: TWO_SRC,
   steps: [
     {id:'start',section:'Two targets in SAM',title:'Check the picture',control:'Left MFD, FCR format',action:'Read the format.',expect:'[RWS](term:range-while-search), 80 NM, A3. The cursor is on the {{lead|0}}; its {{wingman|1}} is 11 NM to the right. Both are hot, both inside the {{A3 scan limits|2}}.',evidence:G3+' 404, 410–411',hints:[FK('lead'),FK('wing'),FLN('lead',30)],panels:['left-mfd'],confirm:'Pair, cursor on the lead'},
