@@ -2,6 +2,7 @@
 import ArticlePhoto from '../../../../../../../components/ArticlePhoto.astro';
 import GroupCards from '../../../../../../../components/GroupCards.astro';
 import Term from '../../../../../../../components/Term.astro';
+import ReferenceTable from '../../../../../../../components/encyclopedia/ReferenceTable.astro';
 import SiteLayout from '../../../../../../../layouts/SiteLayout.astro';
 import { sourceUrl } from '../../../../../../../data/aircraft-procedures';
 import { sitePath } from '../../../../../../../lib/paths';
@@ -21,7 +22,7 @@ const node = groupPages().find(n => n.id === 'weapon-agm-88')!;
     <GroupCards node={node} />
 
     <h2>The F-16C HARM</h2>
-    <p>The DCS F-16C carries the AGM-88C. It can hang on stations 3, 4, 6 or 7, but is normally used from 3 and 7. The aircraft talks to the missile through a computer in its LAU-118 launcher, which passes the missile's receiver picture to the <Term>SMS</Term> and hands it the type of radar to hunt. After launch the missile homes on radars of that type. <a href="#source-1">[1, p. 657]</a></p>
+    <p>The DCS F-16C carries the AGM-88C. Its dimensions, weight, warhead and variants are in the <a href={sitePath('encyclopedia/ordnance/agm-88/')}>AGM-88 Encyclopedia entry</a>. It can hang on stations 3, 4, 6 or 7, but is normally used from 3 and 7. The aircraft talks to the missile through a computer in its LAU-118 launcher, which passes the missile's receiver picture to the <Term>SMS</Term> and hands it the type of radar to hunt. After launch the missile homes on radars of that type. <a href="#source-1">[1, p. 657]</a></p>
     <p>A HARM can be pointed at a radar in three ways: position known (POS), HARM-as-sensor (HAS) and datalink. Datalink is not in DCS yet. <a href="#source-1">[1, pp. 657, 660]</a></p>
     <div class="article-table" role="region" aria-label="HARM targeting modes" tabindex="0">
       <table>
@@ -34,7 +35,9 @@ const node = groupPages().find(n => n.id === 'weapon-agm-88')!;
     </div>
 
     <h2>Before flight: threat tables</h2>
-    <p>The missile can only hunt radars on the threat table you select. Three default tables are loaded: TBL1 for modern SAM systems (SA-10 and SA-11 radars among others), TBL2 for anti-aircraft guns and short-range air defences, and TBL3 for older SAMs (SA-2, SA-3, SA-6 among others). If a threat you expect is missing, edit a table on the HARM DED page before departure, and keep the expected threats on one table so the missile has fewer to search. <a href="#source-1">[1, pp. 657–658]</a></p>
+    <p>The missile can only hunt radars on the threat table you select, and each table holds five. Three default tables are loaded. If a threat you expect is missing, edit a table on the HARM DED page with the radar's ALIC code before departure, and keep the expected threats on one table so the missile has fewer to search. <a href="#source-1">[1, pp. 657–658]</a> Each radar below links to its threat-system entry in the Encyclopedia.</p>
+    <ReferenceTable record="f-16-harm-threat-tables" table="dcs-harm-tables" />
+    <p>The <Term>HTS</Term> uses a different grouping, ten threat classes shown on the <Term>HAD</Term>. See the <a href={sitePath('encyclopedia/reference-data/f-16-harm-threat-tables/') + '#table-dcs-had-classes'}>HAD threat classes</a> and the <a href={sitePath('encyclopedia/reference-data/f-16-harm-threat-tables/') + '#table-bms-harm-codes'}>Falcon BMS threat codes</a> in the Encyclopedia.</p>
 
     <h2>The WPN format</h2>
     <p>In HAS the <Term>WPN format</Term> lists the threat types of the selected table down the left side and fills the video area with the radars the missile has found, each shown as its type code. An A after the code means the radar is radiating, and a T means it is guiding a missile. Slewing the cursor onto one and pressing TMS forward designates it and hands its type to the missile. A full scan can take up to 90 seconds, and fewer threats on the search filter or a narrower field of view make it faster. <a href="#source-1">[1, pp. 660–661, 665]</a></p>
