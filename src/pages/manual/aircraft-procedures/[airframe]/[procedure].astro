@@ -45,6 +45,12 @@ const rich = (t:string) => esc(t)
     const target = anchor ? undefined : recordTarget(slug);
     return target ? termMarkup(target, text) : `<a href="${recordLink({slug, anchor})}">${text}</a>`;
   })
+  // `[text](procedure:slug)` links another procedure of the same aircraft.
+  .replace(/\[([^\]]+)\]\(procedure:([a-z0-9-]+)\)/g, (_m, text, slug) => {
+    const p = visibleProcedures.find(q => q.airframe === guide.airframe && q.slug === slug);
+    if (!p) throw new Error(`${guide.id}: no procedure "${slug}"`);
+    return `<a href="${sitePath(procedureRoute(p))}">${text}</a>`;
+  })
   // `[word](term:slug)` (or `term:` alone, taking the word) links a glossary term, with its preview.
   .replace(/\[([^\]]+)\]\(term:([a-z0-9-]*)\)/g, (_m, text, slug) => {
     const target = termTarget(slug || text);
@@ -109,7 +115,7 @@ if (root && configEl) {
     const config = JSON.parse(configEl.textContent!);
     if (config.model === 'tacan-navigation') (await import('../../../../scripts/procedure-tacan')).startTacanModel(root, config);
     else if (config.model === 'before-taxi' || config.model === 'before-takeoff') (await import('../../../../scripts/procedure-before-taxi')).startBeforeTaxiModel(root, config);
-    else if (config.model === 'hts' || config.model === 'hts-targeting' || config.model === 'harm-shot' || config.model === 'maverick-pre' || config.model === 'maverick-handoff' || config.model === 'markpoints' || config.model === 'fcr-rws' || config.model === 'fcr-vsr' || config.model === 'fcr-bug' || config.model === 'fcr-vol') (await import('../../../../scripts/procedure-hts')).startHtsModel(root, config);
+    else if (config.model === 'hts' || config.model === 'hts-targeting' || config.model === 'harm-shot' || config.model === 'maverick-pre' || config.model === 'maverick-handoff' || config.model === 'markpoints' || config.model === 'fcr-rws' || config.model === 'fcr-vsr' || config.model === 'fcr-bug' || config.model === 'aim120' || config.model === 'aim120-bore' || config.model === 'fcr-vol') (await import('../../../../scripts/procedure-hts')).startHtsModel(root, config);
     else if (config.model === 'steerpoint-entry') (await import('../../../../scripts/procedure-steerpoint')).startSteerpointModel(root, config);
     else (await import('../../../../scripts/procedure-engine-start')).startEngineModel(root, config);
   };

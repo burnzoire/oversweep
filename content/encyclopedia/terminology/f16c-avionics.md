@@ -206,6 +206,44 @@ terms:
     expansion: Collision antenna train angle
     definition: "A cue on the radar page, drawn at the bugged target's range, that steers an intercept. Turning towards it until it sits in the middle of the screen puts the jet on a collision course with the target."
     cite: [{ n: 1, page: "404–405" }]
+  - term: Missile override
+    expansion: MSL
+    definition: "A master mode for missile shots, selected by sliding the DOG FIGHT switch on the throttle inboard. It sets up the radar and the stores for air-to-air missiles without a hand leaving the controls, recalls the missile type last used in it (AIM-120 by default) and locks out the A-A and A-G buttons until the switch is centred again. The gun cannot be fired in it."
+    cite: [{ n: 1, page: "558–559, 599" }]
+  - term: Dogfight mode
+    expansion: DGFT
+    definition: "A master mode for close-in combat, selected by sliding the DOG FIGHT switch on the throttle outboard. Missiles and the gun can both be fired; the head-up display is decluttered and shows the gun sight."
+    cite: [{ n: 1, page: "558–559" }]
+  - term: DLZ
+    expansion: Dynamic launch zone
+    definition: "The span of ranges in which a missile fired now should reach the bugged target, worked out from both aircraft's speeds, headings and heights and shown on the missile scale. For the AIM-120 it runs from RPI down to RMIN. The box within it, from RTR to RMIN, is the manoeuvre zone, where even a target that turns away and runs should be caught. ROPT and RAERO sit above it."
+    cite: [{ n: 1, page: "595–596" }]
+  - term: RAERO
+    expansion: Aerodynamic range
+    definition: "The AIM-120's longest reach against the bugged target, if the pilot steers on the attack steering cue and pulls up to a 40° loft before the shot. A target that manoeuvres at all will outrun a missile fired this far out."
+    cite: [{ n: 1, page: "595" }]
+  - term: RPI
+    expansion: Range, probability of intercept
+    definition: "The longest range at which an AIM-120 fired with the attack steering cue in its circle has a high chance of hitting a target that does not manoeuvre: the top of the dynamic launch zone's bar."
+    cite: [{ n: 1, page: "596, 602" }]
+  - term: RTR
+    expansion: Turn-and-run range
+    definition: "The longest range at which an AIM-120 should still catch a target that turns hard away and accelerates the moment it is fired: the top of the box on the missile scale."
+    cite: [{ n: 1, page: "596" }]
+  - term: ASEC
+    expansion: Allowable steering error circle
+    definition: "The circle in the head-up display and on the radar page within which the attack steering cue must sit for an AIM-120 shot. Small beyond ROPT, it grows as the range closes to RPI, and shrinks again at close range where the missile has little room to turn. A caret on its rim shows the target's aspect: at the bottom, tail-on; at the top, nose-on."
+    cite: [{ n: 1, page: "594" }]
+  - term: ASC
+    expansion: Attack steering cue
+    definition: "A small circle that shows where to steer for an AIM-120 shot: fly it into the middle of the allowable steering error circle. Beyond the launch zone it steers left and right only; inside it, up and down as well."
+    cite: [{ n: 1, page: "594, 602" }]
+  - term: M-pole
+    definition: "On the AIM-120's missile scale, the range from the shooter to the target at the moment the missile's own radar goes active, if the target holds its course and speed. Shown before the shot for a missile fired now, and after it for the one in flight."
+    cite: [{ n: 1, page: "595–596" }]
+  - term: F-pole
+    definition: "The range from the shooter to the target when the missile reaches it, if neither aircraft changes course or speed. The F-16C's missile scale shows it once the AIM-120 in flight has gone active, or before the shot at ranges so close the missile would go active at once."
+    cite: [{ n: 1, page: "595–596" }]
 sources:
   - n: 1
     title: "DCS: F-16C Viper Early Access Guide (English)"
