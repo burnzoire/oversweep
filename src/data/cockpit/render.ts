@@ -293,6 +293,7 @@ function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, cu
     if (page?.fine) body += `<path d="${page.fine}" fill="none" stroke="${W}" ${sw('fine')}/>`;
     for (const p of page?.paths ?? []) if (!p.fill) body += `<path d="${p.d}" fill="none" stroke="${MFD_COLOURS[p.c]}" ${sw(p.pen ?? 'medium')}${p.dash ? ' stroke-dasharray="2.2 1.4"' : ''}/>`;
     if (page?.aid) body += `<path data-aid d="${page.aid}" fill="none" stroke="${MFD_AID}" stroke-dasharray="1.2 0.8" ${sw('fine')}/>`;
+    if (page?.cursorX && page.cursor) body += `<g data-cursor-x="${id}" transform="translate(${n(page.cursor.at[0])} 0)"><path d="${page.cursorX.d}" fill="none" stroke="${MFD_COLOURS[page.cursorX.c]}" ${sw('medium')}/></g>`;
     if (page?.cursor && !page.pan) body += `<g data-cursor="${id}" transform="translate(${n(page.cursor.at[0])} ${n(page.cursor.at[1])})"><path d="${page.cursor.d}" fill="none" stroke="${W}" ${sw('medium')}/></g>`;
     s += `<g data-page-of="${id}" data-page="${pg.id}"${pg.id === current ? '' : ' display="none"'}>${body}</g>`;
   }
@@ -477,7 +478,7 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
       (c.flash ? `<path d="${c.flash}" ${pen}><animate attributeName="opacity" values="1;0" calcMode="discrete" dur="0.4s" repeatCount="indefinite"/></path>` : '');
   })}</g>` : '';
   const heading = h.cues?.heading
-    ? `<g data-indicator="${h.cues.id}">${pages(h.cues.id, pg => pg === 'none' ? tape('heading', h.heading) : tape('heading', h.cues!.heading!, '-hi'))}</g>`
+    ? `<g data-indicator="${h.cues.id}">${pages(h.cues.id, pg => pg === 'none' || h.cues!.pages.find(q => q.id === pg)?.keepHeading ? tape('heading', h.heading) : tape('heading', h.cues!.heading!, '-hi'))}</g>`
     : tape('heading', h.heading);
   const on = `<g clip-path="url(#${clip})">` + fixed + steerpoint + attitude + rollArt + cues +
     tape('velocity', h.velocity) + tape('altitude', h.altitude) + heading + mode +
