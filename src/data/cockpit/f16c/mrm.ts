@@ -21,10 +21,10 @@ export interface MrmView {
   dlz?: Dlz;
   /** Pre-launch pole and time (`21M`, `A40`), shown once inside RAERO. */
   pre?: [pole: string, time: string];
-  /** Post-launch pole and time of the missile of interest (`24M`, `A30`, then `20F`, `T18`). */
+  /** Post-launch pole and time of the missile of interest (`24M`, `A30`, then `20F`, `T17`). */
   post?: [pole: string, time: string];
-  /** Allowable steering error circle size: `small` beyond ROPT, `large` at RPI and inside (p. 594). */
-  asec?: 'small' | 'large';
+  /** Allowable steering error circle size, 0 (small, beyond ROPT) to 1 (largest, at RPI and inside), p. 594. */
+  asec?: number;
   /** Attack steering cue, in ASEC radii off its centre (right, down); it stops at 1.6 radii. */
   asc?: [number, number];
   /** Target aspect angle (degrees from the target's tail, right positive) for the HUD's aspect caret. */
@@ -38,3 +38,5 @@ export interface MrmView {
 export const RETICLE = { down: 6, r: 7.6 };
 /** ASEC, p. 594 and p. 597 (HUD figure px, 27.45 px a degree): centred 6° below the boresight; radius 59 px (2.15°) at RPI, 23.7 px (0.86°) beyond. */
 export const ASEC = { down: 6, large: 2.15, small: 0.863, asc: 0.24 };
+/** The ASEC radius (degrees) for a size from 0 to 1. */
+export const asecDeg = (f: number) => ASEC.small + (ASEC.large - ASEC.small) * f;

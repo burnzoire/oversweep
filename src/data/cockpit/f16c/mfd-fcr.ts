@@ -1,8 +1,8 @@
 import type { MfdDisplay } from '../types';
 import { tracer } from '../trace.ts';
 import { c, f, poly, w } from './mfd-had.ts';
-import { ASEC, type MrmView } from './mrm.ts';
-import { MOMENTS, type MomentId } from './aim120-scene.ts';
+import { ASEC, asecDeg, type MrmView } from './mrm.ts';
+import { MOMENTS, scaleFor, type MomentId } from './aim120-scene.ts';
 
 /**
  * F-16C Fire Control Radar (FCR) air-to-air format, for the shared MFD (`mfd.ts`). Traced from the guide's FCR
@@ -152,8 +152,8 @@ function mrmMarks(m: MrmView, scale: Scale) {
   if (m.pre) words.push(w(m.pre[0], 500, ty + 14.7, 'end'));
   const lines = m.post ?? (m.pre ? [m.pre[1]] : []);
   lines.forEach((t, i) => words.push(w(t, 537, DLZ_0 + 10 + 17.3 * i, 'end')));
-  if (m.asec) {
-    const r = m.asec === 'large' ? ASEC_R : (ASEC_R * ASEC.small) / ASEC.large;
+  if (m.asec !== undefined) {
+    const r = (ASEC_R * asecDeg(m.asec)) / ASEC.large;
     marks += ring(ASEC_C, r);
     if (m.asc) {
       const k = (v: number) => Math.max(-1.6, Math.min(1.6, v)) * r;
@@ -230,9 +230,11 @@ const TOI: Partial<Record<ContactId, { aspect: string; track: string; kcas: stri
   lead: { aspect: '17R', track: '150°', kcas: '280', closure: hdg => Math.round(550 * cos(340 - hdg) + 404 * cos(10)), cata: CATA_HDG },
   far: { aspect: '18', track: '190°', kcas: '400', closure: hdg => Math.round(550 * cos(8 - (hdg - 360)) + 628), cata: 368 },
 };
-const toiData = (k: ContactId, hdg = 360) => {
+const toiData = (k: ContactId, hdg = 360, mrm?: MrmView) => {
   const t = TOI[k]!;
-  return [w(t.aspect, 128, 136.5, 'start'), w(t.track, 186, 136.5, 'start'), w(t.kcas, 405, 136.5), w(`+${t.closure(hdg)}K`, 513.5, 136.5, 'end')];
+  /** With AIM-120 symbology the moment carries its own aspect and closure (`aim120-scene.ts`). */
+  const a = mrm?.aspect, aspect = a === undefined ? t.aspect : Math.round(Math.abs(a) / 10) >= 18 ? '18' : `${Math.round(Math.abs(a) / 10)}${a > 0 ? 'R' : 'L'}`;
+  return [w(aspect, 128, 136.5, 'start'), w(t.track, 186, 136.5, 'start'), w(t.kcas, 405, 136.5), w(`+${mrm?.closure ?? t.closure(hdg)}K`, 513.5, 136.5, 'end')];
 };
 
 function fcr(id: string, s: FcrState): Page {
@@ -296,7 +298,7 @@ function fcr(id: string, s: FcrState): Page {
     }
   }
   if (s.bug) {
-    words.push(...toiData(s.bug, s.hdg));
+    words.push(...toiData(s.bug, s.hdg, s.mrm));
     // SAM track indicators (p. 418): crosses on the elevation and azimuth scales at the primary target's elevation and azimuth.
     if (s.sub === 'SAM') {
       const t = { ...CONTACTS[s.bug], ...s.moved?.[s.bug] }, el = (Math.atan2((t.alt * 1000 - OWN_ALT) / FT_NM, t.nm) * 180) / Math.PI;
@@ -372,8 +374,8 @@ const AIM_STATES: Record<string, FcrState> = {
   'fcr-msl-80-free': { soi: true, scale: 80, sub: 'RWS', az: 'A6', cursor: 'free', ant: -8, mrm: R },
   'fcr-msl-80-lead': { soi: true, scale: 80, sub: 'RWS', az: 'A6', cursor: on('lead', 80), over: 'lead', ant: -28, mrm: R },
   ...Object.fromEntries((Object.entries(MOMENTS) as [MomentId, (typeof MOMENTS)[MomentId]][]).map(([k, m]) => [`fcr-aim-${k}`, {
-    soi: true, scale: 80, sub: 'SAM', az: 'A6', cursor: scope(((-20 + 360 - m.hdg + 540) % 360) - 180, m.nm, 80), bug: 'lead', ant: 0, hdg: m.hdg,
-    moved: { lead: { az: -20, nm: m.nm }, wing: { az: -23.5, nm: m.nm + 1 } }, mrm: m.view,
+    soi: true, scale: scaleFor(m.nm), sub: 'SAM', az: 'A6', cursor: scope(((m.brg - m.hdg + 540) % 360) - 180, m.nm, scaleFor(m.nm)), bug: 'lead', ant: 0, hdg: m.hdg,
+    moved: { lead: { az: m.brg - 360, nm: m.nm }, wing: { az: m.brg - 363.5, nm: m.nm + 1 } }, mrm: m.view,
   } satisfies FcrState])),
 };
 export type FcrPage = keyof typeof FCR_STATES;

@@ -1,7 +1,7 @@
 import type { HudTape, PanelSpec } from '../types';
 import { tracer } from '../trace.ts';
-import { ASEC, RETICLE, type MrmView } from './mrm.ts';
-import { MOMENTS, type MomentId } from './aim120-scene.ts';
+import { ASEC, RETICLE, asecDeg, type MrmView } from './mrm.ts';
+import { MOMENTS, scaleFor, type MomentId } from './aim120-scene.ts';
 
 /**
  * F-16C head-up display (HUD), DCS: the combiner glass between its two posts,
@@ -220,8 +220,8 @@ export function mrmCue(o: MrmCue) {
     art += rel([B, end], false);
     texts.push({ t: `F${Math.abs(Math.round(o.tll))}`, at: r(end[0] + (o.tll < 0 ? -4 : 4), end[1]), anchor: o.tll < 0 ? 'end' : 'start' });
   }
-  if (v.asec) {
-    const R = (v.asec === 'large' ? ASEC.large : ASEC.small) * DEG;
+  if (v.asec !== undefined) {
+    const R = asecDeg(v.asec) * DEG;
     art += ringAt(c, R);
     if (v.aspect !== undefined) {
       const ph = v.aspect * RAD, ux = Math.sin(ph), uy = Math.cos(ph), tx = -uy, ty = ux;
@@ -251,8 +251,8 @@ export function mrmCue(o: MrmCue) {
 }
 /** The single-target shot's HUD moments (`aim120-scene.ts`): the lead at 340° and 0.6° below; on 347° it is in the HUD. */
 const aimCue = (k: MomentId) => {
-  const m = MOMENTS[k], off = ((340 - m.hdg + 540) % 360) - 180;
-  return mrmCue({ id: `mrm-${k}`, view: m.view, scale: 80, ...(Math.abs(off) > 10 ? { tll: off } : { td: [off, 0.6] }) });
+  const m = MOMENTS[k], off = ((m.brg - m.hdg + 540) % 360) - 180;
+  return mrmCue({ id: `mrm-${k}`, view: m.view, scale: scaleFor(m.nm), ...(Math.abs(off) > 10 ? { tll: off } : { td: [off, 0.6] }) });
 };
 /**
  * A bandit seen through the glass (not HUD symbology): a fighter nearly nose-on, a dark silhouette 12 reference px

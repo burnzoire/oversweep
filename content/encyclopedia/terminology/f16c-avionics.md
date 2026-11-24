@@ -216,7 +216,7 @@ terms:
     cite: [{ n: 1, page: "558–559" }]
   - term: DLZ
     expansion: Dynamic launch zone
-    definition: "The span of ranges in which a missile fired now should reach the bugged target, worked out from both aircraft's speeds, headings and heights and shown on the missile scale. For the AIM-120 it runs from RTR, the longest range at which a target that turns away and runs can still be caught, down to RMIN; above it sit RPI, ROPT and RAERO."
+    definition: "The span of ranges in which a missile fired now should reach the bugged target, worked out from both aircraft's speeds, headings and heights and shown on the missile scale. For the AIM-120 it runs from RPI down to RMIN. The box within it, from RTR to RMIN, is the manoeuvre zone, where even a target that turns away and runs should be caught. ROPT and RAERO sit above it."
     cite: [{ n: 1, page: "595–596" }]
   - term: RAERO
     expansion: Aerodynamic range
@@ -239,7 +239,7 @@ terms:
     definition: "A small circle that shows where to steer for an AIM-120 shot: fly it into the middle of the allowable steering error circle. Beyond the launch zone it steers left and right only; inside it, up and down as well."
     cite: [{ n: 1, page: "594, 602" }]
   - term: M-pole
-    definition: "On the AIM-120's missile scale, the range from the shooter to the target at the moment the missile's own radar goes active, if neither aircraft changes course or speed. Shown before the shot for a missile fired now, and after it for the one in flight."
+    definition: "On the AIM-120's missile scale, the range from the shooter to the target at the moment the missile's own radar goes active, if the target holds its course and speed. Shown before the shot for a missile fired now, and after it for the one in flight."
     cite: [{ n: 1, page: "595–596" }]
   - term: F-pole
     definition: "The range from the shooter to the target when the missile reaches it, if neither aircraft changes course or speed. The F-16C's missile scale shows it once the AIM-120 in flight has gone active, or before the shot at ranges so close the missile would go active at once."
