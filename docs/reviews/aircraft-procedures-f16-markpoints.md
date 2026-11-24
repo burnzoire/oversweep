@@ -20,6 +20,10 @@ A guided exercise on the shared cockpit panels (ICP, DED, stick TMS card, right 
 - Before a markpoint is stored, the MARK page shows 26 with zeros (as the guide's p. 225 OFLY figure does), and after storing it still shows 26 (the guide's stored figure).
 - After the store the asterisks stay on the sensor option, so M-SEL selects the markpoint without moving them (the p. 220 figure shows them there).
 - How the HSD draws a markpoint once it is the selected steerpoint: drawn as the same cyan X. Steerpoint 3 turns hollow (p. 359 item 13).
+- After a store the MARK page still shows 26, as the p. 225 figure does. The p. 220 text (item 6) says the displayed number "will automatically increment up to the next steerpoint number" after a store; if DCS moves it to 27, M-SEL would select an empty markpoint.
+- The MARK page opens with HUD as the sensor option (the pp. 219–220 figures show HUD; no text says it is the default), and it stays on the DED until left.
+- Opening the MARK page on HUD puts the FCR into AGR (pp. 219, 221); what that does with the radar silent is not stated.
+- The guide conflicts on MGRS: p. 220 item 5 says the MARK page's MGRS field can be changed with the keypad, p. 225 says a markpoint cannot be entered in MGRS. The article follows p. 225.
 - The X is sized as the X on the p. 358 figure (8 x 9 px); that one is not cyan, so it may be a different symbol.
 
 ## Checks

@@ -136,8 +136,8 @@ terms:
     cite: [{ n: 1, page: "205, 219–220" }]
   - term: MGRS
     expansion: Military Grid Reference System
-    definition: "A way of giving a position as a grid zone, a 100 km square and an easting and northing in metres (37SCV 28541/55914), instead of latitude and longitude. The DED shows it beside the latitude and longitude of steerpoints and markpoints."
-    cite: [{ n: 1, page: "219–220" }]
+    definition: "A way of giving a position as a grid zone, a 100 km square and an easting and northing in metres (37SCV 28541/55914), instead of latitude and longitude. The DED's MARK page shows it beside a markpoint's latitude and longitude; the STPT page can show steerpoints 21 to 25 in it."
+    cite: [{ n: 1, page: "208, 219–220" }]
   - term: SMS
     expansion: Stores management system
     definition: "The jet's weapons manager. Its MFD format picks the weapon, powers it and shows which stations carry it; the WPN format then shows that weapon's own sensor and modes."
