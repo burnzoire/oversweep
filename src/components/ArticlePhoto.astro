@@ -1,0 +1,18 @@
+---
+import { assetPath } from "../lib/paths";
+
+// A photo with its caption and credit at the top of a weapon article.
+interface Props { src: string; alt: string; caption: string; credit: string; sourceUrl: string }
+const { src, alt, caption, credit, sourceUrl } = Astro.props;
+---
+<figure class="article-photo">
+  <img src={assetPath(src)} alt={alt} loading="lazy" />
+  <figcaption>{caption} <span class="credit">{credit}. <a href={sourceUrl}>Source</a>.</span></figcaption>
+</figure>
+
+<style>
+  .article-photo { margin: 1.25rem 0; border: 2px solid var(--color-text); background: var(--color-page, #fff); }
+  .article-photo img { display: block; width: 100%; height: auto; max-height: 24rem; object-fit: contain; background: var(--color-ink); }
+  .article-photo figcaption { padding: 0.5rem 0.75rem; border-top: 3px solid var(--color-accent); font-size: 0.9rem; }
+  .article-photo .credit { display: block; margin-top: 0.2rem; color: var(--color-muted); }
+</style>

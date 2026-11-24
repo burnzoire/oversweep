@@ -1197,3 +1197,11 @@ h2 {
 .entry-card.card-unwritten .entry-title a,
 .entry-card.card-unwritten .entry-objective { color: var(--color-unavailable); }
 .entry-grid .entry-title { font-size: 1.25rem; }
+
+/* A plain data table in a Manual article (weapon variants and the like). */
+.article-table { overflow-x: auto; border: 1px solid var(--color-border); margin: 1rem 0; }
+.article-table table { width: 100%; border-collapse: collapse; }
+.article-table th, .article-table td { padding: 0.45rem 0.75rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-border); }
+.article-table thead th { border-bottom: 3px solid var(--color-accent); }
+.article-table tbody tr:last-child > * { border-bottom: 0; }
+.article-table:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
