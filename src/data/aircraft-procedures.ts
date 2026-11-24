@@ -499,10 +499,10 @@ const HS = (state: keyof typeof HSD_STATES, p: [number, number], r?: number) => 
 const HB = (x0: number, y0: number, x1: number, y1: number) => 'right-mfd.display' + hsdBox(x0, y0, x1, y1);
 const markpoints: AircraftProcedure = {
   id: 'procedure.dcs-f16c.markpoints',
-  slug: 'markpoints',
+  slug: 'markpoint-ofly',
   airframe: 'f-16c',
-  title: 'F-16C — Markpoints',
-  objective: 'Store a markpoint by flying over a landmark, then make it the selected steerpoint and find it on the HSD.',
+  title: 'F-16C — Markpoint: overfly (OFLY)',
+  objective: 'Store a markpoint by flying over a landmark (OFLY), then make it the selected steerpoint and find it on the HSD.',
   applicability: 'DCS F-16C Block 50 (circa 2007); official guide edition 16 August 2026. In-simulator verification pending.',
   simVersion: 'DCS build not yet verified',
   status: 'public-preview',

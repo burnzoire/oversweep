@@ -1,7 +1,7 @@
 # Aircraft Procedures — F-16C markpoints (issue #441)
 
 ## Scope
-A guided exercise on the shared cockpit panels (ICP, DED, stick TMS card, right MFD with the HSD): in the NAV master mode with steerpoint 3 selected, open the MARK page, select OFLY, fly over the middle of Abu al-Duhur's runway and store markpoint 26 with TMS forward, fly on, make the markpoint the selected steerpoint with M-SEL, return to the CNI page and find the markpoint on the HSD at a closer range scale. Menu: Manual → Aircraft → F-16C Viper → Navigation → Markpoints.
+A guided exercise on the shared cockpit panels (ICP, DED, stick TMS card, right MFD with the HSD): in the NAV master mode with steerpoint 3 selected, open the MARK page, select OFLY, fly over the middle of Abu al-Duhur's runway and store markpoint 26 with TMS forward, fly on, make the markpoint the selected steerpoint with M-SEL, return to the CNI page and find the markpoint on the HSD at a closer range scale. Menu: Manual → Aircraft → F-16C Viper → Navigation → Markpoints → Overfly (OFLY) mark (slug `markpoint-ofly`). The Markpoints article (navigation/markpoints/) is the parent of the five markpoint procedures.
 
 ## New cockpit parts
 - **DED MARK page** (`ded.ts`, `markLines`): line 1 MARK, the sensor option between asterisk cells (cols 6–11), the displayed markpoint and up/down arrow (cols 15–17), STPT highlighted (cols 19–22) when the markpoint is the selected steerpoint; LAT, LNG, ELEV and MGRS below. Columns measured on the p. 219, 220 and 225 figures (550 x 209 px, pitch 20.9 px).

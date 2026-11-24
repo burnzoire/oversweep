@@ -1,0 +1,38 @@
+---
+import GroupCards from '../../../../../../components/GroupCards.astro';
+import Term from '../../../../../../components/Term.astro';
+import SiteLayout from '../../../../../../layouts/SiteLayout.astro';
+import { sourceUrl } from '../../../../../../data/aircraft-procedures';
+import { groupPages } from '../../../../../../data/manual-menu';
+
+// The Markpoints article: the parent of the markpoint procedures, one per way of storing a markpoint. It replaces
+// the generic group landing page for this node (`article: true` in the menu).
+const node = groupPages().find(n => n.id === 'nav-markpoints')!;
+---
+<SiteLayout title="Markpoints" activeSection="manual" description={node.summary}>
+  <article class="prose">
+    <p class="lead">A <Term>markpoint</Term> is a point you store in flight: somewhere to navigate back to, a place of interest seen on a reconnaissance run, or a target for the sensors and weapons later in the sortie. Once stored it is a steerpoint like any other, so you can select it and steer to it. <a href="#source-1">[1, pp. 205, 219]</a></p>
+
+    <h2>Procedures</h2>
+    <GroupCards node={node} />
+
+    <h2>Where markpoints are kept</h2>
+    <p>The jet keeps its own markpoints in steerpoints 26 to 30, stored in turn: the first in 26, the next in 27, and the sixth back in 26 over the first. The <Term>HSD</Term> and HAD draw them as a small cyan X. Markpoints sent by other jets over the datalink are kept from steerpoint 500 up and drawn as a large white X. <a href="#source-1">[1, pp. 205–206, 220]</a></p>
+
+    <h2>The MARK page</h2>
+    <p>Pressing 7 / MARK on the <Term>ICP</Term> with the <Term>CNI page</Term> showing brings up the MARK page on the <Term>DED</Term>. It shows the most recent markpoint: its number, latitude, longitude, elevation and <Term>MGRS</Term> position. The increment/decrement rocker steps through the others. The top line also shows the sensor option, the way the next markpoint will be stored; SEQ on the DCS switch steps through the options. <a href="#source-1">[1, pp. 219–220]</a></p>
+    <p>To navigate to a markpoint, put the asterisks round the sensor option and press 0 / M-SEL. STPT then shows highlighted at the top right: the markpoint is the selected steerpoint. <a href="#source-1">[1, p. 220]</a></p>
+
+    <h2>Ways to store one</h2>
+    <ul>
+      <li><strong>HUD:</strong> slew the HUD mark cue onto a spot you can see through the <Term>HUD</Term>, then TMS forward twice: once to fix the cue on the ground, once to store. Selecting HUD makes the HUD the <Term>SOI</Term> and puts the radar into air-to-ground ranging for an accurate position. With the <Term>HMCS</Term>, TMS forward long moves the mark cue to the helmet's aiming cross, so you can mark a spot outside the HUD. <a href="#source-1">[1, pp. 219, 221–222]</a></li>
+      <li><strong>FCR:</strong> with the <Term>FCR</Term> in a ground mode (GM, GMT or SEA), slew its cursor onto the point and TMS forward to track it, then TMS forward again to store it. If the radar is already tracking when you open the MARK page, FCR is selected for you. <a href="#source-1">[1, pp. 220, 223]</a></li>
+      <li><strong>TGP:</strong> with the targeting pod (<Term>TGP</Term>) in its air-to-ground mode, slew it onto the point, put it in point track and TMS forward to store. Firing the laser while you store gives a more accurate position, especially low or at a shallow look-down angle. <a href="#source-1">[1, pp. 220, 224]</a></li>
+      <li><strong>OFLY:</strong> fly directly over the point and press TMS forward as it passes beneath you. In the A-A, MSL and DGFT master modes this is the only way that works. <a href="#source-1">[1, pp. 220, 225]</a></li>
+      <li><strong>Manual entry:</strong> type a latitude, longitude and elevation into the MARK page with the ICP, as for any steerpoint, or correct a stored markpoint the same way. MGRS cannot be typed in on this page. <a href="#source-1">[1, p. 225]</a></li>
+    </ul>
+    <p>After storing a markpoint with the radar or the pod in the NAV master mode, or in a pre-planned air-to-ground mode, zero any cursor slews with CZ on the FCR, TGP or HSD format. <a href="#source-1">[1, p. 220]</a></p>
+
+    <section class="sources" aria-labelledby="mark-sources"><h2 id="mark-sources">Sources</h2><ol><li id="source-1"><a href={sourceUrl}>DCS F-16C Viper Early Access Guide (EN, 16 August 2026)</a> — Eagle Dynamics. Steerpoint ranges pp. 205–206; “Storing a Markpoint” pp. 219–225. A sim manual: it describes the DCS F-16C, which models the real aircraft's avionics in simplified form.</li></ol></section>
+  </article>
+</SiteLayout>
