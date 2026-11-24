@@ -62,6 +62,9 @@ interface Warm { step: string; secs: number; ms: number; busy: string; ready: st
 const aim = (k: MomentId): Pages => ({ left: `fcr-aim-${k}`, x: { 'hud.harm-cues': `mrm-${k}` }, r: { 'hud.slant-range': MOMENTS[k].nm, 'hud.heading': MOMENTS[k].hdg } });
 const aimScan = (step: string, ks: MomentId[], caption: string, prompt: string) =>
   ({ step, pages: ks.map(aim), secs: ks.map(k => SHOT_TIMES[k as keyof typeof SHOT_TIMES]), ms: 1600, caption, display: 'left' as const, prompt });
+/** The smoke trail growing toward the lead after the launch (HUD cue pages `mrm-away-n`), the jet still on 347°. */
+const awayPage = (n: number): Pages => ({ left: 'fcr-aim-launched', x: { 'hud.harm-cues': `mrm-away-${n}` }, r: { 'hud.slant-range': MOMENTS.launched.nm, 'hud.heading': MOMENTS.launched.hdg } });
+const awayScan = { step: 'away', pages: [1, 2, 3].map(awayPage), secs: [2, 4, 6], ms: 1600, caption: 'after the launch', display: 'left' as const, prompt: 'Watch the smoke trail grow toward the target. Replay it or drag through it below.' };
 const HUD_CAP = { 'hud.altitude': 28000, 'hud.velocity': 370, 'hud.mach': 0.92, 'hud.heading': 360, 'hud.pitch': 0, 'hud.roll': 0, 'hud.fpm-azimuth': 0, 'hud.fpm-elevation': 0, 'hud.steerpoint-azimuth': 0, 'hud.steerpoint-elevation': -24.7, 'hud.steering-cue': 0, 'hud.slant-range': 11, 'hud.steerpoint-distance': 10, 'hud.steerpoint': 1, 'hud.ttg': 65, 'hud.radar-alt': 27000 };
 const SCENARIOS: Record<string, Scenario> = {
   // F-16C air-to-air radar (mfd-fcr.ts): the FCR on the left MFD; a CAP at 28,000 ft heading 360°, the CAP point 10 NM ahead.
@@ -120,11 +123,12 @@ const SCENARIOS: Record<string, Scenario> = {
       bug: { ...aim('bugged'), x: { 'hud.harm-cues': 'mrm-bugged', 'hud.slant-range-source': 'f' } },
       shoot: { ...aim('launched'), mfd: 'sms-msl-3', x: { 'hud.harm-cues': 'mrm-launched', 'hud.master-mode': 'mrm3' } },
     },
-    enter: { turn: aim('turned'), crank: aim('cranked') },
+    enter: { turn: aim('turned'), away: awayPage(1), crank: aim('cranked'), smoke: { ...aim('impact'), x: { 'hud.harm-cues': 'mrm-smoke' }, r: { 'hud.slant-range': MOMENTS.impact.nm, 'hud.heading': 340 } } },
     slew: { step: 'slew', on: 'fcr-msl-80', free: 'fcr-msl-80-free', done: 'fcr-msl-80-lead', display: 'left', cursor: true, what: 'lead contact', ...AIM_SLEW },
     scans: [
       aimScan('close', ['turned', 'c42', 'c38', 'c35', 'rpi'], 'after the turn', 'Watch the missile scale on the FCR and the HUD as the range closes. Replay it or drag through it below.'),
       aimScan('support', ['cranked', 't10', 't20', 't30', 'active'], 'after the launch', 'Watch the timer count down under the missile scale. Replay it or drag through it below.'),
+      awayScan,
       aimScan('impact', ['active', 'last8', 'impact'], 'after the launch', 'Watch the target on the FCR. Replay it or drag through it below.'),
     ],
   },
