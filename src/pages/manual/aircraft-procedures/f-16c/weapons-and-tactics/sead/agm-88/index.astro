@@ -1,0 +1,51 @@
+---
+import ArticlePhoto from '../../../../../../../components/ArticlePhoto.astro';
+import GroupCards from '../../../../../../../components/GroupCards.astro';
+import Term from '../../../../../../../components/Term.astro';
+import SiteLayout from '../../../../../../../layouts/SiteLayout.astro';
+import { sourceUrl } from '../../../../../../../data/aircraft-procedures';
+import { sitePath } from '../../../../../../../lib/paths';
+import { groupPages } from '../../../../../../../data/manual-menu';
+
+// The AGM-88 HARM article: the parent of the HARM procedures (issue #429's article-as-parent). It replaces
+// the generic group landing page for this node (`article: true` in the menu).
+const node = groupPages().find(n => n.id === 'weapon-agm-88')!;
+---
+<SiteLayout title="AGM-88 HARM" activeSection="manual" description={node.summary}>
+  <article class="prose">
+    <p class="lead">The <Term record="agm-88">AGM-88 HARM</Term> is a supersonic missile that destroys air defence radars. An antenna in its nose picks up a radar's own signal and the missile flies down it, so it is fire and forget. <a href="#source-1">[1, p. 657]</a></p>
+
+    <ArticlePhoto src="encyclopedia/ordnance/agm-88.jpg" alt="A long white missile with mid-body wings mounted under the wing of a jet" caption="An AGM-88 HARM under the wing of a 37th Tactical Fighter Wing F-4G Wild Weasel at George Air Force Base, 1988." credit="SSGT. SCOTT STEWART, public domain" sourceUrl="https://commons.wikimedia.org/wiki/File:AGM-88_HARM_on_F-4G_(cropped).jpg" />
+
+    <h2>Procedures</h2>
+    <GroupCards node={node} />
+
+    <h2>The F-16C HARM</h2>
+    <p>The DCS F-16C carries the AGM-88C. It can hang on stations 3, 4, 6 or 7, but is normally used from 3 and 7. The aircraft talks to the missile through a computer in its LAU-118 launcher, which passes the missile's receiver picture to the <Term>SMS</Term> and hands it the type of radar to hunt. After launch the missile homes on radars of that type. <a href="#source-1">[1, p. 657]</a></p>
+    <p>A HARM can be pointed at a radar in three ways: position known (POS), HARM-as-sensor (HAS) and datalink. Datalink is not in DCS yet. <a href="#source-1">[1, pp. 657, 660]</a></p>
+    <div class="article-table" role="region" aria-label="HARM targeting modes" tabindex="0">
+      <table>
+        <thead><tr><th scope="col">Mode</th><th scope="col">How the missile learns the target</th><th scope="col">Use</th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><Term>POS mode</Term></th><td>You hand it a radar type and a position, by the <Term>HTS</Term> or from a steerpoint</td><td>A radar you already know about. The missile can loft, so it reaches farther. <a href="#source-1">[1, p. 662]</a></td></tr>
+          <tr><th scope="row"><Term>HAS mode</Term></th><td>The missile's own receiver scans ahead and lists the radars it hears</td><td>A target of opportunity. Only the bearing is known, so the missile does not loft and its range is shorter. <a href="#source-1">[1, p. 665]</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Before flight: threat tables</h2>
+    <p>The missile can only hunt radars on the threat table you select. Three default tables are loaded: TBL1 for modern SAM systems (SA-10 and SA-11 radars among others), TBL2 for anti-aircraft guns and short-range air defences, and TBL3 for older SAMs (SA-2, SA-3, SA-6 among others). If a threat you expect is missing, edit a table on the HARM DED page before departure, and keep the expected threats on one table so the missile has fewer to search. <a href="#source-1">[1, pp. 657–658]</a></p>
+
+    <h2>The WPN format</h2>
+    <p>In HAS the <Term>WPN format</Term> lists the threat types of the selected table down the left side and fills the video area with the radars the missile has found, each shown as its type code. An A after the code means the radar is radiating, and a T means it is guiding a missile. Slewing the cursor onto one and pressing TMS forward designates it and hands its type to the missile. A full scan can take up to 90 seconds, and fewer threats on the search filter or a narrower field of view make it faster. <a href="#source-1">[1, pp. 660–661, 665]</a></p>
+    <p>In POS the format instead lists the threats of the table, and pressing the button beside one hands that type over. It also shows the next missile's data (threat type, steerpoint, time to impact) and the data of any missile in flight. You choose the attack profile on it: EOM (equations of motion), PB (pre-briefed) or RUK (range unknown). <a href="#source-1">[1, p. 662]</a></p>
+
+    <h2>Launch zones on the HUD</h2>
+    <p>The <Term>HUD</Term> shows a launch scale on its right side, with the target taken to be at the selected steerpoint. Its upper end is 40 or 80 NM, whichever covers the distance. The scale has two zones. In the <Term>AMZ</Term> the missile can reach the radar only if you first loft or turn toward it. In the <Term>MMZ</Term> it can do the rest by itself. A caret shows your present range, with the loft angle you need beside it, and an A before the angle means you are inside the MMZ. The release button is live only in the MMZ, and the box showing the missile's final field of view flashes when the handoff is done and the missile is ready. The scale is switched off in HAS. <a href="#source-1">[1, pp. 663–664]</a></p>
+
+    <h2>Working with the HTS</h2>
+    <p>The <Term>HTS</Term> pod finds and ranges radars far beyond the missile's own receiver. Designating one on the <Term>HAD</Term> with AG88 selected sets the missile to POS and hands it the radar's type and position at once. <a href="#source-1">[1, pp. 526, 539–540]</a> The <a href={sitePath('manual/aircraft-procedures/f-16c/systems/hts/')}>HTS pages</a> cover finding and ranking radars before the shot.</p>
+
+    <section class="sources" aria-labelledby="harm-sources"><h2 id="harm-sources">Sources</h2><ol><li id="source-1"><a href={sourceUrl}>DCS F-16C Viper Early Access Guide (EN, 16 August 2026)</a> — Eagle Dynamics. “AGM-88 HARM” pp. 657–670; the HAD and SEAD target designation pp. 526, 539–540. A sim manual: it describes the DCS F-16C, which models the real missile in simplified form.</li></ol></section>
+  </article>
+</SiteLayout>

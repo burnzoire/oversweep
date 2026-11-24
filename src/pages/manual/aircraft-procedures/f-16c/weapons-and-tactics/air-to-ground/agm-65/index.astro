@@ -1,4 +1,5 @@
 ---
+import ArticlePhoto from '../../../../../../../components/ArticlePhoto.astro';
 import GroupCards from '../../../../../../../components/GroupCards.astro';
 import Term from '../../../../../../../components/Term.astro';
 import SiteLayout from '../../../../../../../layouts/SiteLayout.astro';
@@ -13,9 +14,14 @@ const node = groupPages().find(n => n.id === 'weapon-agm-65')!;
   <article class="prose">
     <p class="lead">The <Term record="agm-65">AGM-65 Maverick</Term> is an air-to-ground missile for close air support. A camera in its nose sees the target, and once the pilot has locked it on the missile guides itself to it: fire and forget. <a href="#source-1">[1, p. 671]</a></p>
 
+    <ArticlePhoto src="encyclopedia/ordnance/agm-65.jpg" alt="A stubby white missile with long delta wings against a black background" caption="An inert AGM-65 Maverick of the Swiss Air Force at Payerne, 2007." credit="Rama, CC BY-SA 2.0 fr" sourceUrl="https://commons.wikimedia.org/wiki/File:AGM-65_Maverick_MG_1382.jpg" />
+
+    <h2>Procedures</h2>
+    <GroupCards node={node} />
+
     <h2>The four F-16C Mavericks</h2>
     <p>The DCS F-16C carries four models. Two see in infrared and two in visible light, and each pair comes with a 125 lb shaped-charge warhead or a 300 lb penetrating one, for harder targets. <a href="#source-1">[1, p. 36]</a></p>
-    <table>
+    <div class="article-table" role="region" aria-label="The four F-16C Mavericks" tabindex="0"><table>
       <thead><tr><th scope="col">Model</th><th scope="col">Seeker</th><th scope="col">Warhead</th><th scope="col">Use</th></tr></thead>
       <tbody>
         <tr><th scope="row">AGM-65D</th><td>Imaging infrared</td><td>125 lb shaped charge</td><td>Day and night, in clear or restricted visibility</td></tr>
@@ -23,7 +29,7 @@ const node = groupPages().find(n => n.id === 'weapon-agm-65')!;
         <tr><th scope="row">AGM-65H</th><td>TV (CCD camera)</td><td>125 lb shaped charge</td><td>Daylight only; can force correlate</td></tr>
         <tr><th scope="row">AGM-65K</th><td>TV (CCD camera)</td><td>300 lb penetrating</td><td>As the H, against hardened targets</td></tr>
       </tbody>
-    </table>
+    </table></div>
     <p>One Maverick hangs on an LAU-117 rail, or up to three on an LAU-88. Its maximum range is about 13 NM. <a href="#source-1">[1, p. 36]</a> The ground crew set its fuze delay and a LAND or SHIP switch, which picks a tracking method suited to vehicles or to ships. <a href="#source-1">[1, p. 671]</a></p>
 
     <h2>Warming up</h2>
@@ -47,9 +53,6 @@ const node = groupPages().find(n => n.id === 'weapon-agm-65')!;
 
     <h2>After launch</h2>
     <p>The missile tracks the target on its own picture, so you can turn away at once. When the target fills about three quarters of its picture it switches from tracking the whole target to forced correlation, matching the image, for the rest of the way. <a href="#source-1">[1, p. 671]</a></p>
-
-    <h2>Procedures</h2>
-    <GroupCards node={node} list />
 
     <section class="sources" aria-labelledby="mav-sources"><h2 id="mav-sources">Sources</h2><ol><li id="source-1"><a href={sourceUrl}>DCS F-16C Viper Early Access Guide (EN, 16 August 2026)</a> — Eagle Dynamics. “AGM-65 Maverick” pp. 671–691; weapons overview p. 36. A sim manual: it describes the DCS F-16C, which models the real missile in simplified form.</li></ol></section>
   </article>
