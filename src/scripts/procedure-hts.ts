@@ -290,6 +290,8 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   let step = 0;
   let finished = false;
   let made = new Set<string>();
+  /** A long press under way (held, not yet 0.5 s). */
+  let longPress: { control: string; timer: ReturnType<typeof setTimeout> } | null = null;
   /** Presses made so far of a repeated move (`times`). */
   let presses: Record<string, number> = {};
   let typed = 0;
@@ -572,6 +574,13 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     if (t && d.phase === 'release') { indicate(); return; }
     const before = pos[key];
     pos[key] = d.position;
+    // Let go before a long press counted (TMS forward for a spotlight): in the jet that was a short press.
+    if (longPress && d.phase === 'release' && key === longPress.control) {
+      clearTimeout(longPress.timer); longPress = null;
+      say('That was a short press: in the jet it bugs the contact in SAM. Hold TMS forward for the spotlight, then let go on the contact.', true);
+      indicate();
+      return;
+    }
     // A release reports the position the switch springs back to; a release step means letting go from `to`.
     const want = pending(s).find(w => w.control === key && (w.on ?? 'press') === d.phase && (d.phase === 'release' ? before === w.to : w.to === d.position));
     if (want) {
@@ -584,6 +593,14 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
           say(`Pressed ${n} of ${need}: ${instruction(want)} again.`);
           return;
         }
+      }
+      // A press whose next step lets go of the same switch is a long press (over 0.5 s, p. 84): it counts once held.
+      const next = cfg.steps[step + 1]?.do;
+      if (d.phase === 'press' && next?.on === 'release' && next.control === want.control && next.to === want.to) {
+        const at = step;
+        longPress = { control: key, timer: setTimeout(() => { longPress = null; if (step === at && !finished && pos[key] === want.to) acted(want); }, 500) };
+        indicate();
+        return;
       }
       acted(want);
       return;
