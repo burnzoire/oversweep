@@ -109,7 +109,7 @@ if (root && configEl) {
     const config = JSON.parse(configEl.textContent!);
     if (config.model === 'tacan-navigation') (await import('../../../../scripts/procedure-tacan')).startTacanModel(root, config);
     else if (config.model === 'before-taxi' || config.model === 'before-takeoff') (await import('../../../../scripts/procedure-before-taxi')).startBeforeTaxiModel(root, config);
-    else if (config.model === 'hts' || config.model === 'hts-targeting' || config.model === 'harm-shot' || config.model === 'maverick-pre' || config.model === 'maverick-handoff' || config.model === 'markpoints' || config.model === 'fcr-rws' || config.model === 'fcr-vsr' || config.model === 'fcr-bug') (await import('../../../../scripts/procedure-hts')).startHtsModel(root, config);
+    else if (config.model === 'hts' || config.model === 'hts-targeting' || config.model === 'harm-shot' || config.model === 'maverick-pre' || config.model === 'maverick-handoff' || config.model === 'markpoints' || config.model === 'fcr-rws' || config.model === 'fcr-vsr' || config.model === 'fcr-bug' || config.model === 'fcr-vol') (await import('../../../../scripts/procedure-hts')).startHtsModel(root, config);
     else if (config.model === 'steerpoint-entry') (await import('../../../../scripts/procedure-steerpoint')).startSteerpointModel(root, config);
     else (await import('../../../../scripts/procedure-engine-start')).startEngineModel(root, config);
   };

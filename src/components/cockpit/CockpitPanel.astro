@@ -498,8 +498,10 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
       if (b.dataset.padStep) press(c, b.dataset.padStep); else goTo(c, b.dataset.padPos!);
     };
     const up = () => { if (!held) return; held = false; release(c); };
-    // A wheel or knob (step zones) turns with a drag along its travel, one stop per 12 px; a short click steps once.
+    // A wheel or knob (step zones) turns with a drag along its travel, one stop per 12 px (4 px on a near-analogue
+    // knob with many fine stops, such as ANT ELEV); a short click steps once.
     const across = c.travel === 'horizontal' || (c.type === 'rotary' && c.travel !== 'vertical');
+    const stopPx = c.positions.length > 20 ? 4 : 12;
     let turn: { x: number; y: number; done: number } | null = null;
     b.addEventListener('pointerdown', e => {
       if (e.button !== 0) return;
@@ -510,7 +512,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     b.addEventListener('pointermove', e => {
       if (!turn) return;
       // Right or down turns toward the later stops, as the step zones do.
-      const d = across ? e.clientX - turn.x : e.clientY - turn.y, want = Math.trunc(d / 12);
+      const d = across ? e.clientX - turn.x : e.clientY - turn.y, want = Math.trunc(d / stopPx);
       while (turn.done !== want) { const k = want > turn.done ? 1 : -1; press(c, String(k)); turn.done += k; }
     });
     const endTurn = () => { if (!turn) return false; const t = turn; turn = null; if (!t.done) press(c, b.dataset.padStep!); return true; };

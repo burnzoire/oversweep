@@ -43,7 +43,7 @@ export interface AircraftProcedure {
   status: 'public-preview' | 'review-only';
   simVersion: string;
   /** Which script drives the cockpit panels. */
-  model: 'engine-start' | 'tacan-navigation' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff' | 'hts' | 'hts-targeting' | 'harm-shot' | 'maverick-pre' | 'maverick-handoff' | 'markpoints' | 'fcr-rws' | 'fcr-vsr' | 'fcr-bug';
+  model: 'engine-start' | 'tacan-navigation' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff' | 'hts' | 'hts-targeting' | 'harm-shot' | 'maverick-pre' | 'maverick-handoff' | 'markpoints' | 'fcr-rws' | 'fcr-vsr' | 'fcr-bug' | 'fcr-vol';
   /** The scenario shown above the steps, and the closing heading. */
   intro: string;
   description: string;
@@ -545,7 +545,7 @@ const fcrRws: AircraftProcedure = {
   intro: RADAR_INTRO + ' The [HUD](term:hud) is the [SOI](term:soi).',
   description: 'Illustrated DCS F-16C radar search: make the FCR the SOI, read the RWS B-scope, step the range up to find a group, narrow the scan to A3 and slew the cursor onto the lead contact.',
   complete: 'The cursor is on the lead contact, ready to bug it',
-  next: 'radar-bug-lock',
+  next: 'radar-volume',
   sources: RADAR_SRC + '; RWS pp. 410–411.',
   steps: [
     {id:'soi',section:'Bring up the radar',title:'Make the FCR the SOI',control:'DMS aft (short)',action:'The [FCR](term:fcr) format on the left [MFD](term:mfd) reads {{NOT SOI|1}}: the hand controls are working the [HUD](term:hud). Press the {{DMS aft|0}}, briefly.',expect:'NOT SOI goes out and a {{frame|2}} is drawn round the format: the FCR is the [SOI](term:soi), so the [TMS](term:tms) and the RDR CURSOR switch now work the radar and move its {{acquisition cursor|3}}. From the HUD, DMS aft gives the SOI to the main format of the master mode, here the FCR.',evidence:G3+' 84, 331',hints:['stick.dms-ud',FL(290,150,372,170),FL(105,103,556,552),FL(312,375,375,410)],panels:['stick:dms','left-mfd'],do:{control:'stick.dms-ud',to:'aft'},confirm:'FCR is the SOI'},
@@ -560,6 +560,33 @@ const fcrRws: AircraftProcedure = {
   ]
 };
 procedures.push(fcrRws);
+
+const fcrVol: AircraftProcedure = {
+  id: 'procedure.dcs-f16c.fcr-volume',
+  slug: 'radar-volume',
+  airframe: 'f-16c',
+  title: 'F-16C — Radar: aim the search volume (ANT ELEV, bars, spotlight)',
+  objective: 'Find a low contact the radar is not looking at: put the cursor where it was called, read the volume’s height there, tilt the antenna down with ANT ELEV until the contact shows, thin the scan to two bars and lock it with a spotlight scan.',
+  applicability: 'DCS F-16C Block 50 (circa 2007); official guide edition 16 August 2026. In-simulator verification pending.',
+  simVersion: 'DCS build not yet verified',
+  status: 'public-preview',
+  model: 'fcr-vol',
+  intro: RADAR_INTRO + ' The FCR is the [SOI](term:soi), in [RWS](term:range-while-search) at 40 NM, A6, four bars, the antenna level. A controller calls a low single, 30 NM, 10° right of your nose, 3,000 ft, heading 190°: coming straight at you.',
+  description: 'Illustrated DCS F-16C radar search volume: slew the cursor to a called low contact, read the cursor altitude limits, roll ANT ELEV down until it shows, select 2B with OSB 17, then hold TMS forward for a spotlight scan and release on the contact to lock it in STT.',
+  complete: 'Locked on the low contact in STT',
+  next: 'radar-bug-lock',
+  sources: RADAR_SRC + '; scan patterns, azimuth and elevation control and spotlight scan pp. 379–383; cursor altitude limits and bar settings p. 396; antenna elevation scale p. 397; RWS pp. 410–411; STT p. 421.',
+  steps: [
+    {id:'call',section:'Where is it?',title:'Look for the contact',control:'Left MFD, FCR format',action:'Look where the contact was called: {{30 NM, 10° right|0}}, three quarters of the way up the 40 NM scale.',expect:'Nothing. The radar is searching, but not low enough: at that range its beam passes over the contact.',evidence:G3+' 394, 410',hints:[FL(345,190,395,245)],panels:['left-mfd'],confirm:'Nothing at 30 NM'},
+    {id:'cursor',section:'Where is it?',title:'Put the cursor there',control:'RDR CURSOR/ENABLE',action:'Steer the cursor to 30 NM, 10° right, on the {{three-quarter range mark|1}}, with the {{RDR CURSOR/ENABLE switch|0}}: press and drag on it like a joystick.',expect:'The cursor sits over the called position. Its numbers now describe the search volume there.',evidence:G3+' 381, 396 (item 11), 397 (item 21)',hints:['throttle.cursor-ud',FL(530,208,558,228)],panels:['throttle:cursor','left-mfd'],confirm:'Cursor at 30 NM'},
+    {id:'numbers',section:'Where is it?',title:'Read the volume’s height',control:'Left MFD, FCR format',action:'Read the {{two numbers|0}} beside the cursor and the {{elevation caret|1}} on the left.',expect:'45 and 11: at 30 NM the radar searches from 45,000 ft down to 11,000 ft. The contact, at 3,000 ft, is under the volume. The caret is on the 0° mark: the antenna is level, so the volume fans out evenly above and below your own 28,000 ft, about 5.4° each way for four bars.',caution:'The numbers are worked out for the cursor’s range only: the same volume is thinner close in and taller further out.',evidence:G3+' 382, 396 (item 11), 397 (item 20)',hints:[FL(380,196,412,238),FL(132,316,170,340)],panels:['left-mfd'],confirm:'45 to 11 thousand'},
+    {id:'tilt',section:'Tilt the volume',title:'Roll ANT ELEV down',control:'ANT ELEV knob',action:'Roll the {{ANT ELEV knob|0}} down: drag down on it. Watch the {{caret|1}} and the {{numbers|2}} as it turns, and stop when 3,000 ft sits well inside the numbers, 10 to 15 % of the knob’s travel down.',expect:'The {{contact|3}} appears, its altitude, 03, under it: the volume now reaches down to it. The caret shows the antenna 6 to 9° below the nose. The lower number has turned red: below zero, the scan reaches into the ground, which is where low contacts hide in the clutter.',caution:'ANT ELEV sets where the antenna points, not how fast it moves: leave it and it stays. How far the antenna tilts for each bit of knob travel is not published; here full travel is the antenna’s full ±60°, so read the numbers, not the knob.',evidence:G3+' 87 (item 4), 381–382, 396 (item 11), 397 (item 20); MLU Pilot’s Guide p. 168',hints:['throttle.ant-elev',FL(130,330,170,380),FL(380,196,412,238),FL(352,202,384,248)],panels:['throttle:ant-elev','left-mfd'],confirm:'Contact at 3,000 ft'},
+    {id:'bars',section:'Tilt the volume',title:'Thin it to two bars',control:'Left MFD, OSB 17 (bars)',action:'Press the [OSB](term:osb) beside {{4B|0}}.',expect:'It reads {{2B|0}}: two bars. The radar now sweeps half as many bars, so it comes back to the contact about twice as often. The {{numbers|1}} close up, the volume thinner, but the contact is still inside it.',caution:'Each press steps 4B, 2B, 1B and round again. Fewer bars miss a target that climbs or dives out of the thinner volume: keep the numbers bracketing it.',evidence:G3+' 379, 382, 396 (item 9)',hints:[FL(108,378,128,418),FL(380,196,412,238)],panels:['left-mfd'],do:{control:'left-mfd.osb-17',to:'in'},confirm:'Two bars, contact still in'},
+    {id:'spot',section:'Lock it',title:'Hold TMS forward',control:'TMS forward (hold)',action:'With the cursor on the contact, press and hold the {{TMS forward|0}}.',expect:'Spotlight scan.',evidence:G3+' 84, 383',hints:['stick.tms-ud'],panels:['stick:tms','left-mfd'],do:{control:'stick.tms-ud',to:'fwd'}},
+    {id:'lock',section:'Lock it',title:'Release on the contact',control:'TMS forward (release)',action:'While you hold it, the radar runs a spotlight scan: {{A1 4B|1}}, ±10° about the cursor ({{scan limits|2}}), four bars, so it looks at the contact many times a second. Release the {{TMS|0}} with the cursor still on the contact.',expect:'Released over a contact, the spotlight goes straight to [single target track](term:single-target-track) (STT). The contact is {{bugged|3}} and its {{data|4}} reads aspect 18, track 190°, 350 kt and +907K: nose-on, closing fast. The {{caret|5}} shows the antenna pointing at it, about 8° down, and the scan settings are back to A6 2B.',caution:'Spotlight works from RWS or TWS with no target bugged. Released over empty sky, the radar just goes back to its search.',evidence:G3+' 84, 383, 405, 421',hints:['stick.tms-ud',FL(108,310,128,418),FL(320,140,420,515),FL(352,202,384,236),FL(110,127,560,146),FL(130,340,170,380)],panels:['stick:tms','left-mfd'],do:{control:'stick.tms-ud',to:'fwd',on:'release'},confirm:'STT on the low contact'},
+  ]
+};
+procedures.push(fcrVol);
 
 const fcrBug: AircraftProcedure = {
   id: 'procedure.dcs-f16c.fcr-bug-lock',
