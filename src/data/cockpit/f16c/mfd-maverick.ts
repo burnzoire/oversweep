@@ -196,6 +196,9 @@ export const maverickDPages: Page[] = [
   bNar('wpn-d-b7', add(B.aim, ERR7), { station: '7' }),
   bNar('wpn-d-b7-track', B.aim, { station: '7', track: true }),
   bNar('wpn-d-b7-slaved', B.aim, { station: '7' }),
+  // The TGP made the SOI again, then Cursor Zero: the seeker, slaved to the pod's line of sight, follows it back to steerpoint 3 (boresighted, so no error).
+  bNar('wpn-d-b7-notsoi', B.aim, { station: '7', soi: false }),
+  bNar('wpn-d-b7-cz', B.spi, { station: '7', soi: false }),
   // The shot, steerpoint 5, armed: the seeker follows the pod as the correlator hands the tank off (S, 1, 2, T, C).
   wpn({ id: 'wpn-d-t-wide', ...tD, video: MAV_IR_T_WIDE, videoK: IR.tWide.k, wide: true, soi: false, pan: true, at: at(IR.tWide, IR.tWide.spi), ptr: T_PTR }),
   tNar('wpn-d-t', T.spi),
@@ -222,6 +225,8 @@ export const maverickDPageLabels: Record<string, string> = {
   'wpn-d-b7': 'WPN format, SOI: station 7 next, its seeker beside the chimney',
   'wpn-d-b7-track': 'WPN format, SOI: station 7 tracking the chimney',
   'wpn-d-b7-slaved': 'WPN format, SOI: station 7 boresighted, on the chimney',
+  'wpn-d-b7-notsoi': 'WPN format, not SOI: station 7 on the chimney',
+  'wpn-d-b7-cz': 'WPN format, not SOI: station 7 back on steerpoint 3 with the pod',
   'wpn-d-t-wide': 'WPN format: AGM-65D in PRE on steerpoint 5, wide, armed, not SOI',
   'wpn-d-t': 'WPN format: narrow, on steerpoint 5, not SOI',
   'wpn-d-t-1': 'WPN format: handoff in progress, correlator slewing to the pod line of sight (1)',
