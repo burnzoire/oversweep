@@ -93,13 +93,13 @@ const SCENARIOS: Record<string, Scenario> = {
     dial: [
       {
         step: 'tilt-up', control: 'throttle.ant-elev', page: 'fcr-80-a3-lead-{pos}', ok: ['u10', 'u15', 'u20', 'u25', 'u30'], seen: ['u5'], display: 'left',
-        prompt: 'Drag up on the ANT ELEV knob to roll it up, watching the cursor’s numbers.',
+        prompt: 'Press and drag up on the ANT ELEV knob to roll it up, watching the cursor’s numbers.',
         near: 'The lead is still in the scan, near its bottom edge: keep rolling until 25,000 ft is below the bottom number.',
         done: 'The lead is out of the volume.',
       },
       {
         step: 'tilt-back', control: 'throttle.ant-elev', page: 'fcr-80-a3-lead-{pos}', ok: ['center'], seen: ['u5', 'd5'], display: 'left',
-        prompt: 'Drag down on the ANT ELEV knob to roll it back, until the caret is level with the horizon line.',
+        prompt: 'Press and drag down on the ANT ELEV knob to roll it back, until the caret is level with the horizon line.',
         near: 'Almost: the caret is just off 0°. One more notch to level.',
         done: 'The antenna is level and the lead is back.',
       },
@@ -296,6 +296,8 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   let step = 0;
   let finished = false;
   let made = new Set<string>();
+  /** A long press under way (held, not yet 0.5 s). */
+  let longPress: { control: string; timer: ReturnType<typeof setTimeout> } | null = null;
   /** Presses made so far of a repeated move (`times`). */
   let presses: Record<string, number> = {};
   let typed = 0;
@@ -308,9 +310,9 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   const say = (t: string, retry = false) => { feedback.textContent = t; feedback.classList.toggle('retry', retry); };
   const name = (control: string) => cfg.names[control] ?? control;
   const label = (control: string, to: string) => cfg.labels[`${control}.${to}`] ?? `${name(control)} to ${to}`;
-  const instruction = (w: StepDo) => (w.to === 'in' ? `press ${name(w.control)}` : `set the ${label(w.control, w.to)}`);
+  const instruction = (w: StepDo) => (w.on === 'release' ? `release the ${name(w.control)}` : w.to === 'in' ? `press ${name(w.control)}` : `set the ${label(w.control, w.to)}`);
   const cap = (t: string) => t[0].toUpperCase() + t.slice(1);
-  const mk = (w: StepDo) => `${w.control}=${w.to}`;
+  const mk = (w: StepDo) => `${w.control}=${w.to}${w.on === 'release' ? ':release' : ''}`;
   const moves = (s: Step) => [...(s.do ? [s.do] : []), ...(s.also ?? [])];
   const pending = (s: Step) => moves(s).filter(w => !made.has(mk(w)));
   const stepId = () => cfg.steps[step]?.id ?? '';
@@ -419,7 +421,9 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   function done(text = 'Done.') {
     if (!cfg.steps[step].confirm) {
       say(text);
-      const at = step;
+      const at = step, next = cfg.steps[step + 1]?.do, held = cfg.steps[step].do;
+      // A press whose next step is letting go of the same switch moves on at once, so the release is not missed.
+      if (next?.on === 'release' && held && next.control === held.control && next.to === held.to) { go(step + 1); return; }
       later(matchMedia('(max-width: 48rem)').matches ? 1400 : 800, () => { if (step === at && !finished) go(step + 1); });
       return;
     }
@@ -576,7 +580,15 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     if (t && d.phase === 'release') { indicate(); return; }
     const before = pos[key];
     pos[key] = d.position;
-    const want = pending(s).find(w => w.control === key && w.to === d.position && (w.on ?? 'press') === d.phase);
+    // Let go before a long press counted (TMS forward for a spotlight): in the jet that was a short press.
+    if (longPress && d.phase === 'release' && key === longPress.control) {
+      clearTimeout(longPress.timer); longPress = null;
+      say('That was a short press: in the jet it bugs the contact in SAM. Hold TMS forward for the spotlight, then let go on the contact.', true);
+      indicate();
+      return;
+    }
+    // A release reports the position the switch springs back to; a release step means letting go from `to`.
+    const want = pending(s).find(w => w.control === key && (w.on ?? 'press') === d.phase && (d.phase === 'release' ? before === w.to : w.to === d.position));
     if (want) {
       const need = want.times ?? 1;
       if (need > 1) {
@@ -588,11 +600,22 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
           return;
         }
       }
+      // A press whose next step lets go of the same switch is a long press (over 0.5 s, p. 84): it counts once held.
+      const next = cfg.steps[step + 1]?.do;
+      if (d.phase === 'press' && next?.on === 'release' && next.control === want.control && next.to === want.to) {
+        const at = step;
+        longPress = { control: key, timer: setTimeout(() => { longPress = null; if (step === at && !finished && pos[key] === want.to) acted(want); }, 500) };
+        indicate();
+        return;
+      }
       acted(want);
       return;
     }
     // Springing back from a momentary press, or a press that completes nothing.
     if (d.phase === 'release') { indicate(); return; }
+    // Pressed again on a step done by letting go (the earlier press was a short click): hold it, then let go.
+    const hold = pending(s).find(w => w.on === 'release' && w.control === key && w.to === d.position);
+    if (hold) { indicate(); say(`Now ${instruction(hold)}.`); return; }
     // A control that is not part of this step: put it back.
     pos[key] = before;
     setPositions({ [key]: before });
