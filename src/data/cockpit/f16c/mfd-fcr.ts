@@ -87,8 +87,6 @@ export const CONTACTS = {
   single: { az: 40, nm: 30, alt: 15, hot: false },
   /** A fast mover nose on, 70 NM out: beyond RWS's detection range, inside VSR's. */
   far: { az: 8, nm: 70, alt: 33, hot: true, vsrOnly: true },
-  /** The search-volume scene's low contact: 30 NM, 10° right, 3,000 ft, flying 190°, straight at the jet. */
-  low: { az: 10, nm: 30, alt: 3, hot: true, scene: 'vol' },
 } satisfies Record<string, Contact>;
 export type ContactId = keyof typeof CONTACTS;
 
@@ -219,6 +217,8 @@ export interface FcrState {
   hdg?: number;
   /** The search-volume scene: only its low contact, shown only while it is inside the scanned volume. */
   scene?: 'vol' | 'none';
+  /** Contacts are drawn only while inside the scanned volume (set by ANT ELEV and the bars). */
+  vcheck?: boolean;
   /** No steerpoint symbol (the jet has flown on: the picture's own geometry puts it elsewhere). */
   noStpt?: boolean;
   /** Antenna elevation set with ANT ELEV (° up); 0 by default. */
@@ -255,8 +255,6 @@ const cos = (d: number) => Math.cos((d * Math.PI) / 180);
  */
 const TOI: Partial<Record<ContactId, { aspect: string; track: string; kcas: string; closure: (hdg: number) => number; cata: number }>> = {
   lead: { aspect: '17R', track: '150°', kcas: '280', closure: hdg => Math.round(550 * cos(340 - hdg) + 404 * cos(10)), cata: CATA_HDG },
-  // The low contact: 350 KCAS at 3,000 ft is about 365 KTAS; flying 190° straight at the jet: aspect 18, closure 550 cos 10° + 365.
-  low: { aspect: '18', track: '190°', kcas: '350', closure: hdg => Math.round(550 * cos(10 - (hdg - 360)) + 365), cata: 370 },
   far: { aspect: '18', track: '190°', kcas: '400', closure: hdg => Math.round(550 * cos(8 - (hdg - 360)) + 628), cata: 368 },
 };
 const toiData = (k: ContactId, hdg = 360, mrm?: MrmView) => {
@@ -311,7 +309,7 @@ export function fcr(id: string, s: FcrState): Page {
   const shown = (Object.entries(CONTACTS) as [ContactId, Contact][]).filter(([k, t]) => {
     if (s.sub === 'STT') return k === s.bug;
     if ((t as Contact).scene !== s.scene) return false;
-    if (s.scene) {
+    if (s.scene || s.vcheck) {
       // Seen only inside the scanned volume: within the bars' half-height of the antenna, as seen from the jet.
       const tel = (Math.atan2((t.alt * 1000 - OWN_ALT) / FT_NM, t.nm) * 180) / Math.PI;
       if (Math.abs(tel - (s.el ?? 0)) > HALF[s.spot ? 4 : s.bars ?? 4]) return false;
@@ -419,39 +417,23 @@ const AIM_STATES: Record<string, FcrState> = {
 export type FcrPage = keyof typeof FCR_STATES;
 
 /**
- * The search-volume procedure: RWS 40 NM, A6, the cursor slewed to where a low contact was called (30 NM, 10° right),
- * then the ANT ELEV knob (every 5 % of travel, `d10` = 10 % down) tilting the volume, 2B and a spotlight scan.
+ * Aiming the volume (the basic radar controls procedure): from the cursor on the lead (80 NM, A3), the ANT ELEV knob
+ * (every 5 % of travel, `d10` = 10 % down) tilts the volume, the contacts leave the scan when it passes them, and OSB 17
+ * thins the bars. Contacts are seen only inside the scanned volume (`vcheck`).
  */
 export const ANT_STOPS = Array.from({ length: 41 }, (_, i) => 100 - i * 5);
 export const antId = (v: number) => (v > 0 ? `u${v}` : v < 0 ? `d${-v}` : 'center');
 const AIM: P = scope(10, 30, 40);
-const VOL = (el: number): FcrState => ({ soi: true, scale: 40, sub: 'RWS', az: 'A6', cursor: AIM, scene: 'vol', el, ant: 4 });
-const volStates: Record<string, FcrState> = {
-  'fcr-vol': { soi: true, scale: 40, sub: 'RWS', az: 'A6', cursor: HOME, scene: 'vol', ant: -22 },
-  'fcr-vol-free': { soi: true, scale: 40, sub: 'RWS', az: 'A6', cursor: 'free', scene: 'vol', ant: 12 },
-  'fcr-vol-aim': VOL(0),
-};
+const elStates: Record<string, FcrState> = {};
+const elLabels: Record<string, string> = {};
 for (const v of ANT_STOPS) {
   const el = v * ANT_DEG_PER_PCT, id = antId(v);
-  const seen = (b: Bars) => Math.abs((Math.atan2(-25000 / FT_NM, 30) * 180) / Math.PI - el) <= HALF[b];
-  volStates[`fcr-vol-${id}`] = { ...VOL(el), over: seen(4) ? 'low' : undefined };
-  volStates[`fcr-vol-2b-${id}`] = { ...VOL(el), bars: 2, over: seen(2) ? 'low' : undefined, ant: -6 };
-  volStates[`fcr-vol-spot-${id}`] = { ...VOL(el), bars: 2, spot: true, over: seen(4) ? 'low' : undefined, ant: 9 };
-  volStates[`fcr-vol-stt-${id}`] = { soi: true, scale: 40, sub: 'STT', az: 'A6', bars: 2, cursor: null, bug: 'low', scene: 'vol', el: -7.8, ant: 10 };
+  elStates[`fcr-80-a3-lead-${id}`] = { ...FCR_STATES['fcr-80-a3-lead'], el, vcheck: true };
+  elLabels[`fcr-80-a3-lead-${id}`] = `FCR: cursor on the lead, antenna ${el}°`;
 }
-/** Knob positions at which the low contact is inside the 4-bar scan. */
-export const VOL_SEEN = ANT_STOPS.filter(v => Math.abs((Math.atan2(-25000 / FT_NM, 30) * 180) / Math.PI - v * ANT_DEG_PER_PCT) <= HALF[4]).map(antId);
-const volLabels: Record<string, string> = {
-  'fcr-vol': 'FCR search volume: RWS 40 NM, A6 4B, nothing low',
-  'fcr-vol-free': 'FCR search volume: cursor being slewed',
-  'fcr-vol-aim': 'FCR search volume: cursor at 30 NM, 10° right',
-  ...Object.fromEntries(ANT_STOPS.flatMap(v => [
-    [`fcr-vol-${antId(v)}`, `FCR search volume: antenna ${v * ANT_DEG_PER_PCT}°`],
-    [`fcr-vol-2b-${antId(v)}`, `FCR search volume: 2B, antenna ${v * ANT_DEG_PER_PCT}°`],
-    [`fcr-vol-spot-${antId(v)}`, `FCR search volume: spotlight, antenna ${v * ANT_DEG_PER_PCT}°`],
-    [`fcr-vol-stt-${antId(v)}`, 'FCR search volume: STT on the low contact'],
-  ])),
-};
+elStates['fcr-80-a3-lead-2b'] = { ...FCR_STATES['fcr-80-a3-lead'], bars: 2, vcheck: true };
+elLabels['fcr-80-a3-lead-2b'] = 'FCR: cursor on the lead, two bars';
+const volStates = elStates, volLabels = elLabels;
 export const fcrPages: Page[] = [...Object.entries(FCR_STATES), ...Object.entries(volStates), ...Object.entries(AIM_STATES)].map(([id, s]) => fcr(id, s as FcrState));
 export const aimFcrLabels: Record<string, string> = Object.fromEntries(Object.entries(AIM_STATES).map(([id, s]) => [id,
   `FCR with AIM-120: ${s.bug ? `SAM, lead ${s.moved?.lead?.nm} NM${s.mrm?.post ? `, missile ${s.mrm.post[1]}` : ''}${s.mrm?.x ? ', X' : ''}` : `RWS ${s.scale} NM${s.soi ? '' : ', not SOI'}${s.mrm?.rdy ? ', RDY' : ''}`}`]));

@@ -45,3 +45,6 @@ Nathan (2026-11-24): the search procedures were too light; ANT ELEV and the bars
 - Elevation caret: 3.65 px per degree (p. 397 item 20: ±60° over the scale).
 - Spotlight display (A1 4B labels and ±10° limit lines while TMS is held) is assumed from p. 383's description.
 - Low contact: 350 KCAS at 3,000 ft is about 365 KTAS, flying 190°: aspect 18, closure 550 cos 10° + 365 = 907 kt.
+
+## Follow-up: elevation folded into basic radar controls (2026-11-24)
+Nathan: radar elevation should be part of the basic radar controls, not its own procedure, and some radar procedures were too brief. `radar-volume` is removed (its URL redirects to `radar-rws`); `radar-rws` is now "Basic radar controls (RWS)" and ends with three steps on the lead at 80 NM, A3: roll ANT ELEV up until the pair leaves the volume (the cursor numbers rise to about 83/31), roll it back to level, then OSB 17 to 2B (44/12). The engine's `dial` accepts several dial steps. VSR gained a step reading the locked contact's data. Dropped with the low-contact scene: the spotlight-scan lock (TMS forward held), which could be added to Bug and lock. ANT ELEV gearing (0.6° per % of travel) and the bar heights are the same derived figures as before, not published: check in DCS.

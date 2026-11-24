@@ -9,5 +9,7 @@ export default defineConfig({
   output: "static",
   trailingSlash: "always",
   devToolbar: { enabled: false },
+  // The radar elevation procedure was folded into the basic radar controls (RWS) one.
+  redirects: { "/manual/aircraft-procedures/f-16c/radar-volume/": "/manual/aircraft-procedures/f-16c/radar-rws/" },
   integrations: [seoFiles(), searchIndex()],
 });
