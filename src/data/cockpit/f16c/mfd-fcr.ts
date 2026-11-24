@@ -2,6 +2,7 @@ import type { MfdDisplay } from '../types';
 import { tracer } from '../trace.ts';
 import { c, f, poly, w } from './mfd-had.ts';
 import { ASEC, type MrmView } from './mrm.ts';
+import { MOMENTS, type MomentId } from './aim120-scene.ts';
 
 /**
  * F-16C Fire Control Radar (FCR) air-to-air format, for the shared MFD (`mfd.ts`). Traced from the guide's FCR
@@ -33,6 +34,7 @@ type P = [number, number];
 
 const AZ0 = 330.75, PX_DEG = 220.75 / 60, R0 = 548, RH = 441;
 export type Scale = 40 | 80;
+const local = ([x, y]: P): P => [f(mm(x - SC[0])), f(mm(y - SC[1]))];
 /** Where a point at `az` degrees off the nose and `nm` range is drawn on the B-scope. */
 export const scope = (az: number, nm: number, scale: Scale): P => [AZ0 + az * PX_DEG, R0 - (nm / scale) * RH];
 /** Azimuth and range of a B-scope point. */
@@ -357,8 +359,29 @@ export const FCR_STATES = {
   'fcr-vsr-far': { soi: true, scale: 80, sub: 'VSR', az: 'A6', cursor: on('far', 80), over: 'far', ant: 5 },
   'fcr-vsr-stt': { soi: true, scale: 80, sub: 'STT', az: 'A6', cursor: null, bug: 'far', ant: 8, from: 'VSR' },
 } satisfies Record<string, FcrState>;
+/**
+ * The AIM-120 single-target shot (see `aim120-scene.ts`): before the bug, the radar as the RWS procedure leaves it at
+ * 40 NM, A6, with the missile status word; then one page per moment of the shot, the lead bugged in SAM.
+ */
+const R = { rdy: 'RDY' } as const;
+const AIM_STATES: Record<string, FcrState> = {
+  'fcr-msl': { soi: false, scale: 40, sub: 'RWS', az: 'A6', cursor: HOME, ant: -12.5, mrm: { rdy: '' } },
+  'fcr-msl-rdy': { soi: false, scale: 40, sub: 'RWS', az: 'A6', cursor: HOME, ant: -12.5, mrm: R },
+  'fcr-msl-soi': { soi: true, scale: 40, sub: 'RWS', az: 'A6', cursor: HOME, ant: 20, mrm: R },
+  'fcr-msl-80': { soi: true, scale: 80, sub: 'RWS', az: 'A6', cursor: HOME, ant: 22, mrm: R },
+  'fcr-msl-80-free': { soi: true, scale: 80, sub: 'RWS', az: 'A6', cursor: 'free', ant: -8, mrm: R },
+  'fcr-msl-80-lead': { soi: true, scale: 80, sub: 'RWS', az: 'A6', cursor: on('lead', 80), over: 'lead', ant: -28, mrm: R },
+  ...Object.fromEntries((Object.entries(MOMENTS) as [MomentId, (typeof MOMENTS)[MomentId]][]).map(([k, m]) => [`fcr-aim-${k}`, {
+    soi: true, scale: 80, sub: 'SAM', az: 'A6', cursor: scope(((-20 + 360 - m.hdg + 540) % 360) - 180, m.nm, 80), bug: 'lead', ant: 0, hdg: m.hdg,
+    moved: { lead: { az: -20, nm: m.nm }, wing: { az: -23.5, nm: m.nm + 1 } }, mrm: m.view,
+  } satisfies FcrState])),
+};
 export type FcrPage = keyof typeof FCR_STATES;
-export const fcrPages: Page[] = Object.entries(FCR_STATES).map(([id, s]) => fcr(id, s as FcrState));
+export const fcrPages: Page[] = [...Object.entries(FCR_STATES), ...Object.entries(AIM_STATES)].map(([id, s]) => fcr(id, s as FcrState));
+export const aimFcrLabels: Record<string, string> = Object.fromEntries(Object.entries(AIM_STATES).map(([id, s]) => [id,
+  `FCR with AIM-120: ${s.bug ? `SAM, lead ${s.moved?.lead?.nm} NM${s.mrm?.post ? `, missile ${s.mrm.post[1]}` : ''}${s.mrm?.x ? ', X' : ''}` : `RWS ${s.scale} NM${s.soi ? '' : ', not SOI'}${s.mrm?.rdy ? ', RDY' : ''}`}`]));
+/** The cursor's slew onto the lead in A6 (the AIM-120 shot). */
+export const AIM_SLEW = { start: local(HOME), target: local(on('lead', 80)), reach: f(mm(9)), speed: f(mm(140)), box: [...local([125, 125]), ...local([537, 500])] as [number, number, number, number] };
 export const fcrPageLabels: Record<FcrPage, string> = {
   'fcr-not-soi': 'FCR air-to-air (CRM RWS, 40 NM, A6 4B), not SOI',
   'fcr-40': 'FCR air-to-air: SOI, 40 NM, the single contact to the right',
@@ -378,7 +401,6 @@ export const fcrPageLabels: Record<FcrPage, string> = {
 
 /* ------------------------------------------------------------------- helpers */
 
-const local = ([x, y]: P): P => [f(mm(x - SC[0])), f(mm(y - SC[1]))];
 /** A hint box in p. 394 pixels (`#x0 y0 x1 y1` in mm about the screen centre). */
 export const fcrBox = (x0: number, y0: number, x1: number, y1: number) => `#${[x0 - SC[0], y0 - SC[1], x1 - SC[0], y1 - SC[1]].map(v => f(mm(v))).join(' ')}`;
 /** A hint ring round a contact on a scale. */

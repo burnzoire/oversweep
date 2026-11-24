@@ -1,5 +1,7 @@
 import type { HudTape, PanelSpec } from '../types';
 import { tracer } from '../trace.ts';
+import { ASEC, RETICLE, type MrmView } from './mrm.ts';
+import { MOMENTS, type MomentId } from './aim120-scene.ts';
 
 /**
  * F-16C head-up display (HUD), DCS: the combiner glass between its two posts,
@@ -157,8 +159,123 @@ const harmCues = {
       id: 'aa-td', keepHeading: true, art: rel([[B[0] - 181 - 11.5, B[1] + 15.5 - 11.5], [B[0] - 181 + 11.5, B[1] + 15.5 - 11.5], [B[0] - 181 + 11.5, B[1] + 15.5 + 11.5], [B[0] - 181 - 11.5, B[1] + 15.5 + 11.5]]),
       texts: [{ t: '25', at: r(B[0] - 181, B[1] + 15.5 + 22), anchor: 'middle' as const }],
     },
-  ],
+  ] as { id: string; art: string; texts: { t: string; at: [number, number]; anchor?: 'start' | 'middle' | 'end' }[]; keepHeading?: boolean; steer?: string; flash?: string; scene?: string }[],
 };
+
+/**
+ * AIM-120 (MRM) cues, guide pp. 593-597. The p. 594 and p. 597 figures are this HUD at 1.06 times the p. 90 scale
+ * (pitch ladder 27.45 px a degree there, 25.9 here), boresight cross at (289.5, 53.5). Measured there: the ASEC centred
+ * 6° below the boresight (radius 59 px at RPI, 23.7 px beyond ROPT), its aspect caret a small triangle on the rim
+ * (bottom 0°, top 180°), the ASC a circle r 6.5 px; the FCR TD box 39 px square with the missile diamond on it (SLAVE);
+ * the target locator line about 91 px long, F and the angle at its end. The missile reticle and diamond (boresight
+ * launch, p. 593): the diamond 6° below the boresight with four ticks at its corners (p. 593 image 011), the reticle
+ * 7.6° in radius about it.
+ *
+ * The linear missile scale is traced from the p. 595 close-up (image 053, 208 x 492 px), which matches the p. 594 HUD
+ * at 0.312 times: its bar 0.312 x (x - 145) from x 390 in p. 594 px, zero at y 262.5 and the range scale (the FCR's,
+ * printed above, underlined) 377 image px above it. RPI is the bar's top with a tick right; the box from RTR to RMIN;
+ * ROPT a circle (r 10) left of the bar; RAERO a triangle pointing left. The closure and caret end at the bar; the
+ * pre-launch pole 54 image px below; the pre-launch time, or the post-launch pole and time, centred under the bar
+ * (p. 596).
+ */
+const DEG = 25.9;
+const K = 1.06;
+/** A point in the p. 594 figure, in HUD reference px. */
+const M5 = (x: number, y: number): [number, number] => [B[0] + (x - 289.5) / K, B[1] + (y - 53.5) / K];
+/** A point in the p. 595 scale close-up, in HUD reference px. */
+const S5 = (x: number, y: number) => M5(390 + (x - 145) * 0.312, 262.5 + (y - 437) * 0.312);
+const ringAt = ([x, y]: [number, number], rad: number, n = 40) =>
+  rel(Array.from({ length: n }, (_, i): [number, number] => [x + rad * Math.sin((2 * Math.PI * i) / n), y - rad * Math.cos((2 * Math.PI * i) / n)]));
+/** Missile diamond (p. 593 image 011): half-diagonal 0.40°, ticks out to 0.79° at its corners. */
+const missileDiamond = ([x, y]: [number, number]) => {
+  const a = 0.4 * DEG, b = 0.79 * DEG;
+  return rel([[x, y - a], [x + a, y], [x, y + a], [x - a, y]]) + rel([[x, y - a], [x, y - b]], false) + rel([[x + a, y], [x + b, y]], false) +
+    rel([[x, y + a], [x, y + b]], false) + rel([[x - a, y], [x - b, y]], false);
+};
+export interface MrmCue {
+  id: string;
+  view: MrmView;
+  /** The target inside the HUD (degrees right, down of the boresight): the TD box, with the missile diamond on it. */
+  td?: [number, number];
+  /** The target outside the HUD: the target locator line toward it (0.6° low), degrees off the nose (left negative). */
+  tll?: number;
+  /** No target of interest: the missile reticle and the diamond. */
+  bore?: boolean;
+  /** The FCR's range scale (the missile scale's range). */
+  scale?: number;
+  scene?: string;
+}
+const RAD = Math.PI / 180;
+export function mrmCue(o: MrmCue) {
+  const v = o.view, texts: { t: string; at: [number, number]; anchor?: 'start' | 'middle' | 'end' }[] = [];
+  let art = '';
+  const c: [number, number] = [B[0], B[1] + ASEC.down * DEG];
+  if (o.bore) art += ringAt([B[0], B[1] + RETICLE.down * DEG], RETICLE.r * DEG, 72) + missileDiamond([B[0], B[1] + RETICLE.down * DEG]);
+  if (o.td) {
+    const p: [number, number] = [B[0] + o.td[0] * DEG, B[1] + o.td[1] * DEG], h = 39 / K / 2;
+    art += rel([[p[0] - h, p[1] - h], [p[0] + h, p[1] - h], [p[0] + h, p[1] + h], [p[0] - h, p[1] + h]]) + missileDiamond(p);
+  }
+  if (o.tll !== undefined) {
+    const L = 91 / K, n = Math.hypot(o.tll, 0.6), end: [number, number] = [B[0] + (L * o.tll) / n, B[1] + (L * 0.6) / n];
+    art += rel([B, end], false);
+    texts.push({ t: `F${Math.abs(Math.round(o.tll))}`, at: r(end[0] + (o.tll < 0 ? -4 : 4), end[1]), anchor: o.tll < 0 ? 'end' : 'start' });
+  }
+  if (v.asec) {
+    const R = (v.asec === 'large' ? ASEC.large : ASEC.small) * DEG;
+    art += ringAt(c, R);
+    if (v.aspect !== undefined) {
+      const ph = v.aspect * RAD, ux = Math.sin(ph), uy = Math.cos(ph), tx = -uy, ty = ux;
+      const ap: [number, number] = [c[0] + R * ux, c[1] + R * uy], bc: [number, number] = [c[0] + (R + 6) * ux, c[1] + (R + 6) * uy];
+      art += rel([ap, [bc[0] + 3.8 * tx, bc[1] + 3.8 * ty], [bc[0] - 3.8 * tx, bc[1] - 3.8 * ty]]);
+    }
+    if (v.asc) {
+      const k = (q: number) => Math.max(-1.6, Math.min(1.6, q)) * R;
+      art += ringAt([c[0] + k(v.asc[0]), c[1] + k(v.asc[1])], 6.5 / K, 24);
+    }
+  }
+  if (v.nm !== undefined && v.dlz && o.scale) {
+    const d = v.dlz, sy = (nm: number) => 437 - (Math.min(nm, o.scale!) / o.scale!) * 377;
+    art += rel([S5(145, sy(d.min)), S5(145, sy(d.pi)), S5(176.5, sy(d.pi))], false);
+    art += rel([S5(145, sy(d.tr)), S5(176.5, sy(d.tr)), S5(176.5, sy(d.min)), S5(145, sy(d.min))]);
+    art += ringAt(S5(144.5, sy(d.opt)), 10 * 0.312 / K, 20);
+    art += rel([S5(149, sy(d.aero)), S5(176, sy(d.aero) - 13), S5(176, sy(d.aero) + 13)]);
+    art += rel([S5(143, 60.5), S5(177, 60.5)], false);
+    texts.push({ t: String(o.scale), at: r(...S5(160, 31)), anchor: 'middle' });
+    const ty = sy(v.nm);
+    texts.push({ t: `${v.closure}>`, at: r(...S5(150, ty)), anchor: 'end' });
+    if (v.pre) texts.push({ t: v.pre[0], at: r(...S5(122, ty + 54)), anchor: 'end' });
+    const lines = v.post ?? (v.pre ? [v.pre[1]] : []);
+    lines.forEach((t, i) => texts.push({ t, at: r(...S5(156, 465 + 45.5 * i)), anchor: 'middle' }));
+  }
+  return { id: o.id, art, texts, keepHeading: true, ...(o.scene ? { scene: o.scene } : {}) };
+}
+/** The single-target shot's HUD moments (`aim120-scene.ts`): the lead at 340° and 0.6° below; on 347° it is in the HUD. */
+const aimCue = (k: MomentId) => {
+  const m = MOMENTS[k], off = ((340 - m.hdg + 540) % 360) - 180;
+  return mrmCue({ id: `mrm-${k}`, view: m.view, scale: 80, ...(Math.abs(off) > 10 ? { tll: off } : { td: [off, 0.6] }) });
+};
+/**
+ * A bandit seen through the glass (not HUD symbology): a fighter nearly nose-on, a dark silhouette 12 reference px
+ * across (drawn larger than it would look at a few miles, so it can be seen), and its contrail at high altitude
+ * streaming back and up-right. `az` degrees right and `down` degrees below the boresight cross.
+ */
+export function bandit(az: number, down: number) {
+  const [x, y] = [B[0] + az * DEG, B[1] + down * DEG];
+  const P = (pts: [number, number][], close = true) => rel(pts.map(([u, v]) => [x + u, y + v] as [number, number]), false) + (close ? 'Z' : '');
+  const body = P([[-6, 0.6], [-1.2, -0.4], [-0.6, -3.6], [0.6, -3.6], [1.2, -0.4], [6, 0.6], [6, 1.3], [1.2, 1], [0.8, 2.2], [-0.8, 2.2], [-1.2, 1], [-6, 1.3]]);
+  const trail = P([[0.6, -0.6], [60, -26], [64, -22], [1, 0.6]]);
+  return `<path d="${trail}" fill="#f4f6fa" fill-opacity="0.55" stroke="none"/><path d="${body}" fill="#2a303b" stroke="none"/>`;
+}
+export const MRM_CUES = [
+  mrmCue({ id: 'mrm-bore', view: { rdy: '' }, bore: true }),
+  // The visual shot (BORE): the bandit 5° right, level with you, then on the missile diamond.
+  { id: 'scene-bandit', art: '', texts: [], keepHeading: true, scene: bandit(5, 0) },
+  mrmCue({ id: 'mrm-bore-bandit', view: { rdy: '' }, bore: true, scene: bandit(5, 0) }),
+  mrmCue({ id: 'mrm-bore-on', view: { rdy: '' }, bore: true, scene: bandit(0, RETICLE.down) }),
+  ...(Object.keys(MOMENTS) as MomentId[]).map(aimCue),
+];
+
+harmCues.pages.push(...MRM_CUES);
 const MODES = ['NAV', 'CCIP', 'CCRP', 'DTOS', 'LADD', 'MAN', 'VIS', 'PRE', 'BORE', 'STRF', 'HARM', 'HTS', 'AAM', 'MSL', 'DGFT', 'MRM', 'SRM', 'HOB', 'EEGS', 'JETT'];
 const num = (id: string, name: string, unit: string, rest: number, range: [number, number, number], description: string) =>
   ({ id, name, type: 'display' as const, unit, rest, range, description, source: src });
@@ -264,8 +381,8 @@ export const hud: PanelSpec = {
     num('mach', 'Mach', 'M', 0.61, [0, 2.2, 0.01], 'Mach number to the hundredth.'),
     num('max-g', 'Maximum G', 'g', 5.7, [-9.9, 9.9, 0.1], 'Highest load factor of the flight; WARN RESET on the ICP resets it to 1.0.'),
     word('align', 'INS alignment cue (ALIGN)', [{ id: 'none', label: '(blank)' }, { id: 'align', label: 'ALIGN' }], 'none', 'ALIGN, in the place of the maximum G readout, while the INS alignment is usable for navigation (steady) and fully aligned (flashing); gone once the INS knob is in NAV. While it shows, the maximum G is not drawn.'),
-    word('harm-cues', 'HARM launch cues', [{ id: 'none', label: '(none)' }, { id: 'amz', label: 'AMZ: loft cues, launch scale, FOV box steady' }, { id: 'mmz', label: 'MMZ: FOV box flashing, in range' }, { id: 'aa-tll', label: 'A-A: target locator line toward a bugged target outside the HUD' }, { id: 'aa-td', label: 'A-A: target designator box on the bugged target' }], 'none', 'Weapon and target cues. Air-to-air: the target designator box over the FCR target of interest, with its altitude below, or, when it is outside the HUD, the target locator line from the boresight cross toward it and the angle off the nose (guide pp. 405-406). AGM-88: the POS launch cues (guide pp. 663-664): the azimuth steering line, the minimum and maximum loft ticks on it, the HARM launch scale (HLS) staple on the right with a caret for the present range and the loft angle needed (an A prefix inside the missile maneuver zone), the release altitude under it, and the FOV box, which flashes when the missile is in range and the weapon release button is hot.'),
-    word('master-mode', 'Master mode', P(...MODES), 'nav', 'Master mode, air-to-air missile type or air-to-ground submode.'),
+    word('harm-cues', 'HARM launch cues', [{ id: 'none', label: '(none)' }, { id: 'amz', label: 'AMZ: loft cues, launch scale, FOV box steady' }, { id: 'mmz', label: 'MMZ: FOV box flashing, in range' }, { id: 'aa-tll', label: 'A-A: target locator line toward a bugged target outside the HUD' }, { id: 'aa-td', label: 'A-A: target designator box on the bugged target' }, ...MRM_CUES.map(c => ({ id: c.id, label: `AIM-120: ${c.id.slice(4)}` }))], 'none', 'Weapon and target cues. Air-to-air: the target designator box over the FCR target of interest, with its altitude below, or, when it is outside the HUD, the target locator line from the boresight cross toward it and the angle off the nose (guide pp. 405-406). AGM-88: the POS launch cues (guide pp. 663-664): the azimuth steering line, the minimum and maximum loft ticks on it, the HARM launch scale (HLS) staple on the right with a caret for the present range and the loft angle needed (an A prefix inside the missile maneuver zone), the release altitude under it, and the FOV box, which flashes when the missile is in range and the weapon release button is hot.'),
+    word('master-mode', 'Master mode', [...P(...MODES), { id: 'mrm4', label: '4 MRM' }, { id: 'mrm3', label: '3 MRM' }], 'nav', 'Master mode, air-to-air missile type or air-to-ground submode.'),
     num('bullseye-bearing', 'Bullseye bearing', '°', 324, [0, 359, 1], 'Ownship bearing from the bullseye, when bullseye is on and no fuel message shows.'),
     num('bullseye-range', 'Bullseye range', 'NM', 53, [0, 999, 1], 'Ownship range from the bullseye, nautical miles.'),
     num('radar-alt', 'Radar altitude', 'ft', 7040, [0, 50000, 10], 'Radar altitude to the nearest 10 ft, boxed with R; blank when the radar altimeter is in standby or not transmitting.'),

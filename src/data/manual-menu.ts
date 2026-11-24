@@ -120,7 +120,7 @@ const weapons = group('f16c-weapons', 'Weapons and tactics', [
     plan('Dogfight and missile override modes', ['Air combat setup']),
     plan('M61 gun', ['EEGS with radar', 'EEGS without radar']),
     plan('AIM-9 Sidewinder', ['Radar-cued shot (SLAVE FCR)', 'Pod-cued shot (SLAVE TGP)', 'Helmet-cued shot (BORE HMCS)', 'Uncued shot (BORE)']),
-    plan('AIM-120 AMRAAM', ['Single-target shot (SAM, STT)', 'Two-target shot (DT SAM, DTT)', 'Several-target shot (TWS)', 'Visual shot (BORE)']),
+    { ...group('weapon-aim-120', 'AIM-120 AMRAAM', [{ ...proc('aim120-single-target'), title: 'Single-target shot (SAM, STT)' }, plan('Two-target shot (DT SAM, DTT)'), plan('Several-target shot (TWS)'), { ...proc('aim120-bore', 'Visual shot (BORE)'), title: 'Visual shot (BORE)' }], `${F16C_HREF}weapons-and-tactics/air-to-air/aim-120/`, 'The active radar missile for shots beyond visual range: how it guides, its launch modes and symbols, and firing it.'), article: true },
   ], `${F16C_HREF}weapons-and-tactics/air-to-air/`, 'Missiles and the gun for fighting other aircraft.'),
   group('weapons-air-to-ground', 'Air-to-ground weapons', [
     plan('GBU-12 Paveway II', ['TGP laser delivery']),

@@ -4,7 +4,7 @@ import { hadBottom, hadPageLabels, hadPages } from './mfd-had.ts';
 import { tgpPageLabels, tgpPages } from './mfd-tgp.ts';
 import { harmPageLabels, harmPages } from './mfd-harm.ts';
 import { hsdPageLabels, hsdPages } from './mfd-hsd.ts';
-import { fcrPageLabels, fcrPages } from './mfd-fcr.ts';
+import { aimFcrLabels, fcrPageLabels, fcrPages } from './mfd-fcr.ts';
 import { smsAaPageLabels, smsAaPages } from './mfd-sms-aa.ts';
 import { maverickDPageLabels, maverickDPages, maverickPageLabels, maverickPages } from './mfd-maverick.ts';
 
@@ -236,6 +236,7 @@ function build(side: 'left' | 'right'): PanelSpec {
           ...Object.entries(maverickDPageLabels).map(([id, label]) => ({ id, label })),
           ...Object.entries(hsdPageLabels).map(([id, label]) => ({ id, label })),
           ...Object.entries(fcrPageLabels).map(([id, label]) => ({ id, label })),
+          ...Object.entries(aimFcrLabels).map(([id, label]) => ({ id, label })),
           ...Object.entries(smsAaPageLabels).map(([id, label]) => ({ id, label })),
         ],
         restPage: 'off',

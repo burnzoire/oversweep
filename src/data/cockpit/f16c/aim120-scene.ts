@@ -56,7 +56,8 @@ export const MOMENTS = {
   c38: closing(38, 347),
   c35: closing(35, 347),
   rpi: closing(32, 347),
-  launched: { ...flying(1), hdg: 347 },
+  launched: (m => ({ ...m, hdg: 347, view: { ...m.view, closure: 944, asc: [0.05, 0.6] as [number, number] } }))(flying(1)),
+  cranked: flying(4),
   t10: flying(10),
   t20: flying(20),
   t30: flying(30),
@@ -65,5 +66,5 @@ export const MOMENTS = {
   impact: flying(Math.ceil(T_HIT + 1)),
 } satisfies Record<string, Moment>;
 export type MomentId = keyof typeof MOMENTS;
-/** Seconds after launch of the post-launch moments, for the procedure's player. */
-export const SHOT_TIMES = { t10: 10, t20: 20, t30: 30, active: Math.ceil(T_ACTIVE), last8: Math.ceil(T_HIT - 8), impact: Math.ceil(T_HIT + 1) };
+/** Seconds after launch of the post-launch moments, and seconds after the turn of the closing ones, for the procedure's player. */
+export const SHOT_TIMES = { cranked: 4, t10: 10, t20: 20, t30: 30, active: Math.ceil(T_ACTIVE), last8: Math.ceil(T_HIT - 8), impact: Math.ceil(T_HIT + 1), turned: 0, c42: Math.round(2.2 / CLOSE.collision), c38: Math.round(6.2 / CLOSE.collision), c35: Math.round(9.2 / CLOSE.collision), rpi: Math.round(12.2 / CLOSE.collision) };
