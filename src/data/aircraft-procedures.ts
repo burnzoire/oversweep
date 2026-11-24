@@ -665,10 +665,10 @@ const fcrTws: AircraftProcedure = {
   description: 'Illustrated DCS F-16C Track While Scan: OSB 2 to TWS, tracks form on four contacts, the cursor and TMS forward promote two to system tracks, TMS right bugs the closest and steps the bug to the other, and TMS aft backs out layer by layer to RWS.',
   complete: 'Back in RWS, the cursor on the wingman’s position',
   summary: [
-    '[Track while scan](term:track-while-scan) keeps up to ten contacts in track while it still searches, so you read each one\u2019s altitude, heading and speed without locking any of them.',
-    'TMS forward on a track makes it a [system track](term:system-track), shown white. Only a system track can be bugged.',
+    '[Track while scan](term:track-while-scan) keeps up to ten contacts in track while it still searches, so you read each one\u2019s altitude and heading without locking any of them.',
+    'TMS forward on a track makes it a [system track](term:system-track). Only a system track can be bugged.',
     'TMS right bugs the closest system track and, on each further press, steps the bug to the next, so you change targets without moving the cursor.',
-    'Tracks are not locked: a contact the radar stops seeing can drop after a few scans. TMS aft backs out one level at a time and ends in RWS.',
+    'Tracks are not locked: a track the radar has not refreshed for about 13 seconds can drop. TMS aft backs out one level at a time and ends in RWS.',
   ],
   next: 'radar-two-targets',
   sources: TWO_SRC,
@@ -704,7 +704,7 @@ const fcrTwo: AircraftProcedure = {
     'In [SAM](term:situation-awareness-mode), TMS forward bugs the first contact as the primary target. With the cursor on a second contact, another press makes it the secondary and puts the radar in [DT SAM](term:dt-sam).',
     'TMS right swaps primary and secondary, so one jet can shoot each in turn.',
     'Once a target is inside 10 NM the radar goes to [DTT](term:dtt): the search stops and it only alternates between the two.',
-    'TMS forward with the cursor on a target locks it in [STT](term:single-target-track) and drops the other. The target\u2019s warning receiver sees that as a lock.',
+    'TMS forward with the cursor on a target locks it in [STT](term:single-target-track) and drops the other. The target\u2019s warning receiver will likely read that as a lock.',
   ],
   sources: TWO_SRC,
   steps: [
