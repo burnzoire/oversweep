@@ -153,6 +153,30 @@ const HTS_PAGES: SPage[] = [
   { id: 'hts-2-done', label: 'HTS page: entry 2 is 115 (SA-11)', lines: htsLines(['108', '115'], 1) },
 ];
 
+/**
+ * MARK page states for the markpoint procedure, laid out as the guide's MARK figures show them (p. 219 figure, 550 x
+ * 209 px, pitch 20.9 px, first cell centre x 33; p. 220 with the highlighted STPT; p. 225 OFLY, before and after the
+ * store): line 1 MARK, the sensor option in a four-cell field between its asterisk cells (cols 6-11), the displayed
+ * markpoint and the up/down arrow (cols 15-17) and, once it is the selected steerpoint, STPT highlighted (cols 19-22);
+ * then LAT and LNG (hemisphere col 6), ELEV right-aligned to col 13 and MGRS. Markpoint 26 is stored over Abu
+ * al-Duhur's runway midpoint (the map's airfield data: N 35°43.938', E037°06.246', 820 ft; MGRS computed from them).
+ */
+const markLines = (sensor: 'HUD' | 'OFLY', stored: boolean, stpt = false) => [
+  ` MARK {*}${sensor.padEnd(4)}{*}   26^` + (stpt ? ' {STPT}' : ''),
+  stored ? "  LAT N 35°43.938'" : "  LAT N 00°00.000'",
+  stored ? "  LNG E037°06.246'" : "  LNG E000°00.000'",
+  stored ? ' ELEV    820FT' : ' ELEV      0FT',
+  stored ? ' MGRS 37SCV 28541/55914' : ' MGRS 31NAA 66021/0',
+];
+const MARK_PAGES: SPage[] = [
+  { id: 'cni-3', label: 'CNI page, steerpoint 3 selected', lines: cniLines('T 21X', 3) },
+  { id: 'mark-hud', label: 'MARK page: HUD sensor option, markpoint 26 empty', lines: markLines('HUD', false) },
+  { id: 'mark-ofly', label: 'MARK page: OFLY sensor option, markpoint 26 empty', lines: markLines('OFLY', false) },
+  { id: 'mark-26', label: 'MARK page: markpoint 26 stored (OFLY)', lines: markLines('OFLY', true) },
+  { id: 'mark-26-stpt', label: 'MARK page: markpoint 26 is the selected steerpoint (STPT)', lines: markLines('OFLY', true, true) },
+  { id: 'cni-26', label: 'CNI page, markpoint 26 selected', lines: cniLines('T 21X', 26) },
+];
+
 const { pt, mm } = tracer(PX);
 const src = 'DCS F-16C guide p. 101';
 const C: [number, number] = [141, 59];
@@ -217,6 +241,7 @@ export const ded: PanelSpec = {
         ...STPT_PAGES.map(({ id, lines }) => ({ id, lines })),
         ...INS_PAGES.map(({ id, lines }) => ({ id, lines })),
         ...HTS_PAGES.map(({ id, lines }) => ({ id, lines })),
+        ...MARK_PAGES.map(({ id, lines }) => ({ id, lines })),
       ],
     } },
   ],
@@ -231,7 +256,8 @@ export const ded: PanelSpec = {
         { id: 'tils-tr-21-edit', label: 'T-ILS: typing 21' }, { id: 'tils-tr-21x', label: 'T-ILS: 21X, beacon DAN' },
         ...STPT_PAGES.map(({ id, label }) => ({ id, label })),
         ...INS_PAGES.map(({ id, label }) => ({ id, label })),
-        ...HTS_PAGES.map(({ id, label }) => ({ id, label }))],
+        ...HTS_PAGES.map(({ id, label }) => ({ id, label })),
+        ...MARK_PAGES.map(({ id, label }) => ({ id, label }))],
       restNote: 'blank',
       description: 'Five lines of 24 characters. The CNI page (communications, navigation, IFF) is the home page: UHF and VHF frequencies or channels, the selected steerpoint number, the wind direction (magnetic) and speed, the system time (Zulu), the hack time when one is set, the IFF/transponder modes and Mode 3 code (not implemented in DCS), and the TACAN channel and band. The ICP override buttons and, from the CNI page, the priority function keys call up other pages; DCS RTN returns to CNI. The STPT page (key 4) shows the selected steerpoint\'s position, elevation and time over steerpoint, and edits them. The T-ILS page (key 1) sets the TACAN mode, channel and band and the ILS frequency and course. Asterisks mark the field that new data goes into.',
       source: src,
