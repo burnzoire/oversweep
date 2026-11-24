@@ -211,8 +211,8 @@ const TWO: Record<string, [string, Spec]> = {
   'dt-wing': ['SAM: cursor on the wingman', { scale: 80, sub: 'RWS', az: 'A3', bars: 4, syms: { lead: 'bugd', wing: 'search' }, cursor: 'wing', lim: 'cursor', sam: ['lead'], ant: -9 }],
   'dt-dtsam': ['DT SAM: the lead primary, the wingman secondary', { scale: 80, sub: 'RWS', az: 'A3', bars: 4, syms: { lead: 'bugd', wing: 'second' }, cursor: 'wing', lim: 'cursor', sam: ['lead', 'wing'], ant: -16 }],
   'dt-swap': ['DT SAM: the wingman primary, the lead secondary', { scale: 80, sub: 'RWS', az: 'A3', bars: 4, syms: { lead: 'second', wing: 'bugd' }, cursor: 'wing', lim: 'cursor', sam: ['lead', 'wing'], ant: -5 }],
-  'dt-dtt': ['DTT: both inside 10 NM, 20 NM scale', { scale: 20, sub: 'RWS', az: 'A3', bars: 4, syms: { lead: 'second', wing: 'bugd' }, cursor: 'lead', t: 138, hdg: 347, ten: true, ant: 3 }],
-  'dt-stt': ['STT on the lead', { scale: 20, sub: 'RWS', az: 'A3', bars: 4, syms: { lead: 'bugd' }, stt: true, t: 138, hdg: 347, ant: 0 }],
+  'dt-dtt': ['DTT: the lead inside 10 NM, 20 NM scale', { scale: 20, sub: 'RWS', az: 'A3', bars: 4, syms: { lead: 'second', wing: 'bugd' }, cursor: 'wing', t: 138, hdg: 347, ten: true, ant: 3 }],
+  'dt-stt': ['STT on the wingman', { scale: 20, sub: 'RWS', az: 'A3', bars: 4, syms: { wing: 'bugd' }, stt: true, t: 138, hdg: 347, ant: 0 }],
 };
 export const twoPages: Page[] = Object.entries(TWO).map(([id, [, s]]) => two(id, s));
 export const twoPageLabels: Record<string, string> = Object.fromEntries(Object.entries(TWO).map(([id, [label]]) => [id, `FCR ${label}`]));

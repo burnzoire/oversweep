@@ -27,6 +27,7 @@ Scenario positions and speeds; the contacts hold still while a step is read. Fou
 - Track symbols turn to ground track relative to the jet's heading (B-scope is nose-up); stem is the nose.
 - DT SAM and DTT keep the RWS label on the top row (pp. 419-420 figures), as SAM and STT do.
 - The DT SAM secondary is drawn as a search square (p. 419 figure) with its altitude under it.
+- DTT drops to STT by itself on the closer target inside 3 NM (p. 420), stated not animated; TMS aft takes four presses to get from a bugged target to RWS (p. 416).
 - Track dropping after 13 s outside the narrow volume is stated, not animated.
 
 ## Checks
