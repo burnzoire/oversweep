@@ -48,6 +48,17 @@ interface Scenario {
 interface Slew { step: string; on: string; free: string; done: string; target: [number, number]; start: [number, number]; reach: number; speed: number; box: [number, number, number, number]; display?: 'left' | 'right'; what?: string; along?: [number, number]; freeOnMove?: boolean }
 interface Warm { step: string; secs: number; ms: number; busy: string; ready: string; label: string; after?: Pages }
 const SCENARIOS: Record<string, Scenario> = {
+  markpoints: {
+    // The right MFD shows the HSD (60 NM, depressed), steerpoint 3 selected; the DED the CNI page.
+    initial: { mfd: 'hsd-start', ded: 'cni-3' },
+    after: {
+      mark: { ded: 'mark-hud' }, ofly: { ded: 'mark-ofly' }, store: { ded: 'mark-26', mfd: 'hsd-marked' },
+      select: { ded: 'mark-26-stpt', mfd: 'hsd-mark-sel' }, rtn: { ded: 'cni-26' }, range: { mfd: 'hsd-mark-30' },
+    },
+    // Flying on: the picture moves as each step opens.
+    enter: { overfly: { mfd: 'hsd-over' }, 'fly-on': { mfd: 'hsd-on' } },
+    slew: [],
+  },
   hts: {
     // The SOI starts on the left MFD, which shows the targeting pod (Slave, on the selected steerpoint).
     initial: { mfd: 'menu-blank', left: 'tgp-soi', ded: 'cni' },
@@ -140,6 +151,8 @@ const SCENARIOS: Record<string, Scenario> = {
   },
 };
 
+const NO_SLEW: Slew = { step: '', on: '', free: '', done: '', target: [0, 0], start: [0, 0], reach: 0, speed: 0, box: [0, 0, 0, 0] };
+
 // The pod takes about 30 s to initialize (guide p. 525); compressed here.
 const POD_MS = 5000;
 const POD_WARM = { step: 'pod-power', secs: 30, ms: POD_MS, busy: 'Pod initializing: about 30 seconds in the jet, a few seconds here.', ready: 'The 30 seconds are up: the pod has initialized. Continue.', label: 'Initializing…' };
@@ -159,7 +172,9 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
   const sc = SCENARIOS[cfg.model] ?? SCENARIOS.hts;
+  // A scenario with nothing to slew gets a slew no step or page matches.
   const slews = ([] as Slew[]).concat(sc.slew);
+  if (!slews.length) slews.push(NO_SLEW);
   const warms = ([] as Warm[]).concat(sc.warm ?? POD_WARM);
   const initialState = (): State => ({ pod: -1, wk: 0, mfd: 'off', left: 'off', ded: 'off', ...sc.initial, x: { ...sc.initial.x }, r: { ...sc.initial.r }, cur: [...slews[0].start] } as State);
   const copy = (s: State): State => ({ ...s, cur: [...s.cur], x: { ...s.x }, r: { ...s.r } });

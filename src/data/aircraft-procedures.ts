@@ -2,6 +2,7 @@
 import { reviewTrainers } from './experiences';
 import { hadSpot, HADH, HADX } from './cockpit/f16c/mfd-had';
 import { hudSpot, hudSpotRef, CARET_Y } from './cockpit/f16c/hud';
+import { HSD_STATES, SPT, hsdBox, hsdSpot } from './cockpit/f16c/mfd-hsd';
 
 export interface ProcedureStep {
   id: string;
@@ -41,7 +42,7 @@ export interface AircraftProcedure {
   status: 'public-preview' | 'review-only';
   simVersion: string;
   /** Which script drives the cockpit panels. */
-  model: 'engine-start' | 'tacan-navigation' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff' | 'hts' | 'hts-targeting' | 'harm-shot' | 'maverick-pre' | 'maverick-handoff';
+  model: 'engine-start' | 'tacan-navigation' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff' | 'hts' | 'hts-targeting' | 'harm-shot' | 'maverick-pre' | 'maverick-handoff' | 'markpoints';
   /** The scenario shown above the steps, and the closing heading. */
   intro: string;
   description: string;
@@ -492,6 +493,37 @@ const mavHandoff: AircraftProcedure = {
   ]
 };
 procedures.push(mavHandoff);
+
+// Markpoints: hint rings on the HSD (right MFD), round map points in a page's own state or boxes in p. 230 pixels.
+const HS = (state: keyof typeof HSD_STATES, p: [number, number], r?: number) => 'right-mfd.display' + hsdSpot(HSD_STATES[state], p, r);
+const HB = (x0: number, y0: number, x1: number, y1: number) => 'right-mfd.display' + hsdBox(x0, y0, x1, y1);
+const markpoints: AircraftProcedure = {
+  id: 'procedure.dcs-f16c.markpoints',
+  slug: 'markpoints',
+  airframe: 'f-16c',
+  title: 'F-16C — Markpoints',
+  objective: 'Store a markpoint by flying over a landmark, then make it the selected steerpoint and find it on the HSD.',
+  applicability: 'DCS F-16C Block 50 (circa 2007); official guide edition 16 August 2026. In-simulator verification pending.',
+  simVersion: 'DCS build not yet verified',
+  status: 'public-preview',
+  model: 'markpoints',
+  intro: 'Scenario: a road reconnaissance sortie in the Syria map, in the NAV master mode with [steerpoint](term:steerpoint) 3 selected. You have left the route to look at [Abu al-Duhur](record:abu-al-duhur) air base, about 5 NM north of it, and want to keep its position to come back to later. You are 4 NM east of the airfield, heading 267° down the line of its runway (09/27) at 3,000 ft above the ground. The [DED](term:ded) shows the [CNI page](term:cni-page) and the right [MFD](term:mfd) the [HSD](term:hsd), at its 60 NM range scale. The radar is silent and the jet carries no targeting pod. The panels beside the steps are a teaching simulation, not connected to DCS; positions, ranges and bearings are illustrative.',
+  description: 'Illustrated DCS F-16C markpoint: open the MARK page, select OFLY, fly over Abu al-Duhur’s runway and store markpoint 26 with the TMS, then select it with M-SEL and find it on the HSD.',
+  complete: 'Markpoint 26 stored and selected: the HSD shows it behind you, ready to fly back to',
+  sources: 'Eagle Dynamics — DCS F-16C Viper Early Access Guide (EN, 16 August 2026): steerpoint ranges and the markpoint symbol pp. 205–206, “Storing a Markpoint” and the MARK DED page pp. 219–220, “Storing a Markpoint using OFLY” p. 225, the HSD pp. 230, 358–359; ICP p. 99; HOTAS pp. 83–84.',
+  steps: [
+    {id:'start',section:'Before you start',title:'Find yourself on the HSD',control:'DED CNI page, right MFD (HSD)',action:'Read the [CNI page](term:cni-page), then the [HSD](term:hsd).',expect:'CNI: {{STPT 3|0}}. The HSD is heading up, like the view ahead: you are the {{cyan symbol|1}} low in the middle, and the magenta rings round you are 20, 40 and 60 NM. {{Steerpoint 3|2}}, the selected steerpoint, is the solid circle ahead, 34 NM away. The white route line runs from {{steerpoint 2|3}}, behind you to the left, through 3 and on to 4. The airfield is just ahead of you, 4 NM; the HSD does not draw airfields.',evidence:G3+' 205, 230, 358–359',hints:['ded.display@0',HB(316,412,350,446),HS('hsd-start',SPT[3]),HS('hsd-start',SPT[2])],panels:['ded','right-mfd'],confirm:'Steerpoint 3 ahead'},
+    {id:'mark',section:'Store the markpoint',title:'Open the MARK page',control:'ICP 7 / MARK',action:'With the [CNI page](term:cni-page) showing, press 7 / MARK on the [ICP](term:icp).',expect:'The [DED](term:ded) shows the MARK page. The {{sensor option|0}}, between the asterisks, is HUD; the {{displayed markpoint|0}} is 26, and it is {{empty|1}}: zeros, because no [markpoint](term:markpoint) is stored yet.',caution:'Markpoints are stored in steerpoints 26 to 30, one after another: the sixth goes back into 26, over the first. With HUD as the sensor option the [HUD](term:hud) becomes the [SOI](term:soi), ready to mark a spot you see through it; this procedure uses overflight instead.',evidence:G3+' 205, 219–220 (items 1, 6)',hints:['ded.display@0','ded.display@1'],panels:['icp','ded'],do:{control:'icp.key-7',to:'in'},confirm:'MARK page: HUD, 26'},
+    {id:'ofly',section:'Store the markpoint',title:'Select OFLY',control:'ICP DCS switch, SEQ',action:'Move the DCS switch right (SEQ), and again if needed, until the sensor option reads OFLY.',expect:'The sensor option is {{OFLY|0}}, overfly: the markpoint will be the point on the ground directly below the jet when you store it.',caution:'FCR and TGP mark with the radar or the targeting pod tracking a point on the ground. Drawn here as an assumption: with the radar silent and no pod, one press of SEQ goes straight from HUD to OFLY; if FCR or TGP shows, press SEQ again. In the A-A, MSL and DGFT master modes OFLY is the only option that works.',evidence:G3+' 219–220 (item 1), 225 (step 2)',hints:['ded.display@0'],panels:['icp','ded'],do:{control:'icp.dcs-lr',to:'seq'},confirm:'OFLY'},
+    {id:'overfly',section:'Store the markpoint',title:'Fly over the runway’s midpoint',control:'Flight path',action:'Hold 267°, down the runway’s line, and fly straight over the middle of it.',expect:'The runway passes under the nose and out of sight. OFLY stores where the jet is, so the markpoint is only as close to the midpoint as you fly over it: look down the side of the canopy to judge the moment you pass overhead. On the HSD, {{your symbol|0}} has moved 4 NM on; nothing else has changed.',evidence:G3+' 225 (step 3)',hints:[HB(316,412,350,446)],panels:['right-mfd','ded'],links:[{slug:'abu-al-duhur',label:'Abu al-Duhur'}],confirm:'Over the midpoint'},
+    {id:'store',section:'Store the markpoint',title:'Store the markpoint',control:'TMS forward (short)',action:'As the midpoint passes under you, press the {{TMS forward|0}}, briefly.',expect:'Markpoint 26 is stored. The MARK page now shows its {{latitude|1}}, {{longitude|2}}, {{elevation|3}} (820 ft, the height of the ground) and {{grid position|4}} in [MGRS](term:mgrs). On the HSD it is a {{small cyan X|5}}, under your own symbol for now.',caution:'With OFLY selected, TMS forward stores a markpoint whatever the [SOI](term:soi). Every press stores another, in the next number: the next one you store goes in 27.',evidence:G3+' 205, 220 (items 2–6), 225 (step 4)',hints:['stick.tms-ud','ded.display@1','ded.display@2','ded.display@3','ded.display@4',HS('hsd-marked',SPT.mark,16)],panels:['stick:tms','ded','right-mfd'],do:{control:'stick.tms-ud',to:'fwd'},confirm:'Markpoint 26 stored'},
+    {id:'fly-on',section:'Call it back',title:'Fly on',control:'Right MFD, HSD',action:'Fly on toward steerpoint 3 for 8 NM, then look at the [HSD](term:hsd).',expect:'The {{cyan X|0}} stays where you stored it: over the airfield, 8 NM behind you now. {{Steerpoint 3|1}} is still the selected steerpoint, 22 NM ahead. The MARK page stays on the [DED](term:ded) until you leave it, so you can call the markpoint up straight away.',evidence:G3+' 205, 230',hints:[HS('hsd-on',SPT.mark),HS('hsd-on',SPT[3])],panels:['right-mfd','ded'],confirm:'X 8 NM behind'},
+    {id:'select',section:'Call it back',title:'Make the markpoint the selected steerpoint',control:'ICP 0 / M-SEL',action:'With the asterisks round the sensor option, press 0 / M-SEL.',expect:'{{STPT|0}} appears highlighted at the top right: markpoint 26 is the selected steerpoint, and the [HUD](term:hud) and [EHSI](term:ehsi) now steer to it. On the [HSD](term:hsd), {{steerpoint 3|1}} is a hollow circle again.',caution:'The asterisks must be round the sensor option for M-SEL to select the markpoint; if they are on another field, move them up with the DCS switch. To select an older markpoint, first step the displayed number with the increment/decrement rocker.',evidence:G3+' 219–220 (STPT label), 359 (item 13)',hints:['ded.display@0',HS('hsd-mark-sel',SPT[3])],panels:['icp','ded','right-mfd'],do:{control:'icp.key-0',to:'in'},confirm:'STPT highlighted'},
+    {id:'rtn',section:'Call it back',title:'Return to the CNI page',control:'ICP DCS switch, RTN',action:'Move the DCS switch left (RTN).',expect:'The [CNI page](term:cni-page) reads {{STPT 26|0}}: the markpoint is the selected steerpoint.',evidence:G3+' 103 (item 9), 219',hints:['ded.display@0'],panels:['icp','ded'],do:{control:'icp.dcs-lr',to:'rtn'},confirm:'STPT 26'},
+    {id:'range',section:'Find it on the HSD',title:'Bring the range in',control:'Right MFD, OSB 19 (range down)',action:'On the [HSD](term:hsd), press the [OSB](term:osb) beside the {{down arrow|0}}.',expect:'The range scale reads {{30|1}}: the rings are now 10, 20 and 30 NM, and everything is drawn twice as far from you. The {{cyan X|2}} is the selected steerpoint, straight behind you, 8 NM away, just inside the 10 NM ring: turn back and it leads you over the airfield. The steering line beside the {{W at the lower left|3}} is pegged to one side, because the point is behind you.',caution:'The HSD draws markpoints as a cyan X whether or not one is selected; once selected it is the point the steering cues and the EHSI work to.',evidence:G3+' 205, 358–359 (items 6, 7, 12)',hints:[HB(110,234,148,257),HB(113,212,144,234),HS('hsd-mark-30',SPT.mark),HB(108,500,160,544)],panels:['right-mfd'],do:{control:'right-mfd.osb-19',to:'in'},confirm:'Markpoint 26 behind me'},
+  ]
+};
+procedures.push(markpoints);
 
 export const visibleProcedures = procedures.filter(p => p.status === 'public-preview' || reviewTrainers);
 export const procedureRoute = (p: AircraftProcedure) => `manual/aircraft-procedures/${p.airframe}/${p.slug}/`;

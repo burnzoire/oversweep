@@ -127,6 +127,17 @@ terms:
   - term: Steerpoint
     definition: "A numbered point stored in the navigation system for the jet to steer to; the HUD and EHSI show the course and distance to the selected one. Some number ranges are kept for markpoints, pre-planned threats and datalink targets."
     cite: [{ n: 1, page: "27, 205–206" }]
+  - term: HSD
+    expansion: Horizontal situation display
+    definition: "The MFD format that gives a map-like plan view round the jet: range rings, the steerpoints and route, markpoints, threats and flight members, heading up."
+    cite: [{ n: 1, page: "230, 358–359" }]
+  - term: Markpoint
+    definition: "A point stored in flight to come back to or target later: the ground below the jet as it passes overhead, or the spot a sensor or the HUD is on. Stored in turn in steerpoints 26 to 30, and drawn on the HSD as a small cyan X."
+    cite: [{ n: 1, page: "205, 219–220" }]
+  - term: MGRS
+    expansion: Military Grid Reference System
+    definition: "A way of giving a position as a grid zone, a 100 km square and an easting and northing in metres (37SCV 28541/55914), instead of latitude and longitude. The DED shows it beside the latitude and longitude of steerpoints and markpoints."
+    cite: [{ n: 1, page: "219–220" }]
   - term: SMS
     expansion: Stores management system
     definition: "The jet's weapons manager. Its MFD format picks the weapon, powers it and shows which stations carry it; the WPN format then shows that weapon's own sensor and modes."

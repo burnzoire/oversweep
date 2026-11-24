@@ -25,24 +25,24 @@ const SC: [number, number] = [329.5, 330];
 
 type Word = MfdDisplay['pages'][number]['words'][number];
 type Page = MfdDisplay['pages'][number];
-const w = (t: string, x: number, y: number, a?: Word['a'], inv?: boolean): Word =>
+export const w = (t: string, x: number, y: number, a?: Word['a'], inv?: boolean): Word =>
   ({ t, at: [mm(x - SC[0]), mm(y - SC[1])], ...(a ? { a } : {}), ...(inv ? { inv } : {}) });
 /** A word in a colour. */
-const c = (word: Word, colour: MfdColour): Word => ({ ...word, c: colour });
+export const c = (word: Word, colour: MfdColour): Word => ({ ...word, c: colour });
 const L = (t: string, y: number, inv?: boolean) => w(t, 111.5, y, 'start', inv);
 const R = (t: string, y: number) => w(t, 551.5, y, 'end');
 
 type P = [number, number];
-const f = (v: number) => +v.toFixed(3);
+export const f = (v: number) => +v.toFixed(3);
 /** A point in image px to path mm, relative to the screen centre. */
 const q = ([x, y]: P) => `${f(mm(x - SC[0]))} ${f(mm(y - SC[1]))}`;
-const poly = (pts: P[], close = false) => `M${pts.map(q).join('L')}${close ? 'Z' : ''}`;
+export const poly = (pts: P[], close = false) => `M${pts.map(q).join('L')}${close ? 'Z' : ''}`;
 
 /* ------------------------------------------------------------------ clipping */
 
 /** The HAD's drawing area: inside the frame (p. 539: x 111-553, y 108-548), above the format-select row. */
 const BOX = { x0: 113, x1: 551, y0: 110, y1: 528 };
-function clipSeg(a: P, b: P): [P, P] | null {
+export function clipSeg(a: P, b: P): [P, P] | null {
   let t0 = 0, t1 = 1;
   const dx = b[0] - a[0], dy = b[1] - a[1];
   for (const [p, qq] of [[-dx, a[0] - BOX.x0], [dx, BOX.x1 - a[0]], [-dy, a[1] - BOX.y0], [dy, BOX.y1 - a[1]]] as const) {
@@ -54,7 +54,7 @@ function clipSeg(a: P, b: P): [P, P] | null {
 }
 const inside = ([x, y]: P) => x >= BOX.x0 && x <= BOX.x1 && y >= BOX.y0 && y <= BOX.y1;
 /** A circle as the runs of a 240-gon that fall inside the drawing area. */
-function clipCircle(c: P, r: number) {
+export function clipCircle(c: P, r: number) {
   const n = 240, pts: P[] = Array.from({ length: n + 1 }, (_, i) => [c[0] + r * Math.sin(2 * Math.PI * i / n), c[1] - r * Math.cos(2 * Math.PI * i / n)]);
   let d = '', run: P[] = [];
   const flush = () => { if (run.length > 1) d += poly(run); run = []; };
