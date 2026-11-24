@@ -206,6 +206,17 @@ terms:
     expansion: Collision antenna train angle
     definition: "A cue on the radar page, drawn at the bugged target's range, that steers an intercept. Turning towards it until it sits in the middle of the screen puts the jet on a collision course with the target."
     cite: [{ n: 1, page: "404–405" }]
+  - term: System track
+    definition: "A track the fire control radar has promoted from the ten it keeps in track while scan, so the pilot can work with it. Only a system track can be bugged: the radar looks at it more often, shows its data, and steers a missile shot or a target classification to it."
+    cite: [{ n: 1, page: "414–415" }]
+  - term: DT SAM
+    expansion: Dual target situation awareness mode
+    definition: "Situation awareness mode with a second contact designated: between search sweeps the radar looks hard at the first (primary) contact and then the second. Stepping the bug between the two lets one jet fire at both."
+    cite: [{ n: 1, page: "419" }]
+  - term: DTT
+    expansion: Dual target track
+    definition: "The radar mode that takes over from dual target SAM once either contact is inside 10 NM: the search stops and the radar only alternates between the two contacts, for the steadiest tracks at close range."
+    cite: [{ n: 1, page: "420" }]
 sources:
   - n: 1
     title: "DCS: F-16C Viper Early Access Guide (English)"

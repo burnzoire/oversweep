@@ -4,6 +4,7 @@ import { hadSpot, HADH, HADX } from './cockpit/f16c/mfd-had';
 import { hudSpot, hudSpotRef, CARET_Y } from './cockpit/f16c/hud';
 import { HSD_STATES, SPT, hsdBox, hsdSpot } from './cockpit/f16c/mfd-hsd';
 import { fcrBox } from './cockpit/f16c/mfd-fcr';
+import { twoCata, twoLines, twoSpot } from './cockpit/f16c/mfd-fcr-two';
 
 export interface ProcedureStep {
   id: string;
@@ -17,7 +18,7 @@ export interface ProcedureStep {
   /** Cockpit panels shown for this step (catalogue ids), the acting one first. */
   panels: string[];
   /** The control move that completes the step: `<panel>.<control>` to a position; `hold` ms it must be held. */
-  do?: { control: string; to: string; on?: 'press' | 'release'; hold?: number };
+  do?: { control: string; to: string; on?: 'press' | 'release'; hold?: number; /** Presses it takes. */ times?: number };
   /** More moves the step needs (any order) besides `do`. */
   also?: { control: string; to: string; on?: 'press' | 'release'; hold?: number }[];
   /** Check steps: the confirm button's label. */
@@ -43,7 +44,7 @@ export interface AircraftProcedure {
   status: 'public-preview' | 'review-only';
   simVersion: string;
   /** Which script drives the cockpit panels. */
-  model: 'engine-start' | 'tacan-navigation' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff' | 'hts' | 'hts-targeting' | 'harm-shot' | 'maverick-pre' | 'maverick-handoff' | 'markpoints' | 'fcr-rws' | 'fcr-vsr' | 'fcr-bug' | 'fcr-vol';
+  model: 'engine-start' | 'tacan-navigation' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff' | 'hts' | 'hts-targeting' | 'harm-shot' | 'maverick-pre' | 'maverick-handoff' | 'markpoints' | 'fcr-tws' | 'fcr-two' | 'fcr-rws' | 'fcr-vsr' | 'fcr-bug' | 'fcr-vol';
   /** The scenario shown above the steps, and the closing heading. */
   intro: string;
   description: string;
@@ -639,6 +640,69 @@ const fcrVsr: AircraftProcedure = {
   ]
 };
 procedures.push(fcrVsr);
+
+// Two-target radar procedures (mfd-fcr-two.ts): TWS, DT SAM and DTT on the same CAP scene.
+const FS = (k: Parameters<typeof twoSpot>[0], scale?: 20 | 40 | 80, t?: number, h?: number) => 'left-mfd.display' + twoSpot(k, scale, t, h);
+const FC = (k: Parameters<typeof twoCata>[0], scale?: 20 | 40 | 80, t?: number, h?: number) => 'left-mfd.display' + twoCata(k, scale, t, h);
+const FLN = (k: Parameters<typeof twoLines>[0], half: number) => twoLines(k, half).map(b => 'left-mfd.display' + b).join(',');
+const TOI_ROW = FL(110,127,560,146);
+const TWO_SRC = RADAR_SRC + '; track targets, system tracks, cursor and bugged targets pp. 404–405, 413–416; SAM p. 417–418; DT SAM p. 419; DTT p. 420; STT p. 421.';
+
+const fcrTws: AircraftProcedure = {
+  id: 'procedure.dcs-f16c.fcr-tws',
+  slug: 'radar-tws',
+  airframe: 'f-16c',
+  title: 'F-16C — Radar: TWS, track several targets',
+  objective: 'Switch the radar to Track While Scan, let it build tracks on a group, promote two of them with the cursor, bug one, step the bug to the other and back out to RWS.',
+  applicability: 'DCS F-16C Block 50 (circa 2007); official guide edition 16 August 2026. In-simulator verification pending.',
+  simVersion: 'DCS build not yet verified',
+  status: 'public-preview',
+  model: 'fcr-tws',
+  intro: RADAR_INTRO + ' The FCR is the [SOI](term:soi), in [RWS](term:range-while-search) at 80 NM, A6, four bars. A hot two-ship is 45 NM out, 20° left, at 25,000 ft, flying abreast, 11 NM apart: a lead and its wingman. A fast single is 38 NM out, 12° right, at 31,000 ft, and a low single is going away, 55 NM out, 40° right. The aim: keep track of all four, and be ready to shoot the pair.',
+  description: 'Illustrated DCS F-16C Track While Scan: OSB 2 to TWS, tracks form on four contacts, the cursor and TMS forward promote two to system tracks, TMS right bugs the closest and steps the bug to the other, and TMS aft backs out layer by layer to RWS.',
+  complete: 'Back in RWS, the cursor on the wingman’s position',
+  next: 'radar-two-targets',
+  sources: TWO_SRC,
+  steps: [
+    {id:'start',section:'Switch to TWS',title:'Check the picture',control:'Left MFD, FCR format',action:'Read the format.',expect:'[RWS](term:range-while-search), 80 NM, A6, four bars. Four contacts: the {{lead|0}} and its {{wingman|1}}, a {{high single|2}} closer in and a {{low single|3}} going away. Each has its hot line: below the square for a contact flying toward you, above it for one flying away.',evidence:G3+' 404, 410',hints:[FS('lead'),FS('wing'),FS('mid'),FS('single')],panels:['left-mfd'],confirm:'Four contacts'},
+    {id:'mode',section:'Switch to TWS',title:'Select TWS',control:'Left MFD, OSB 2 (sub-mode)',action:'Press the [OSB](term:osb) above {{RWS|0}} twice, one press at a time.',expect:'The first press gave VSR, the second gives {{TWS|0}}: [track while scan](term:track-while-scan). The contacts are still search targets, each at the place the radar last saw it, with its hot line. Unlike VSR, TWS shows hot and cold contacts alike, and keeps NORM on the top row.',caution:'Holding TMS right for a full second does the same job: it toggles between TWS and the RWS or VSR last used.',evidence:G3+' 409, 413',hints:[FL(238,108,280,127)],panels:['left-mfd'],do:{control:'left-mfd.osb-2',to:'in',times:2},confirm:'TWS, search targets'},
+    {id:'tracks',section:'Switch to TWS',title:'Let the tracks form',control:'Left MFD, FCR format',action:'Wait through a few scans, then look at the {{contacts|0}} again.',expect:'Each contact is now a track: from several returns the radar has worked out its course, speed and altitude. The symbols are yellow, each turned to the target’s ground track with a stem off its nose, and its altitude, in thousands of feet, is printed under it: {{25|1}} for the lead, 25 for the wingman, 31 and 15 for the singles. The radar can keep up to 10 tracks.',caution:'A track shows where the radar expects the target to be now, not where it last returned, so the symbol can jump when the target turns. A big search volume refreshes each track less often, and a track the radar has not updated for 13 seconds is dropped.',evidence:G3+' 404, 414',hints:[FS('lead'),FL(250,255,285,275)],panels:['left-mfd'],confirm:'Four tracks, altitudes shown'},
+    {id:'slew-lead',section:'Choose your targets',title:'Put the cursor on the lead',control:'RDR CURSOR/ENABLE',action:'Steer the cursor onto the {{lead’s track|1}} with the {{RDR CURSOR/ENABLE switch|0}}: press and drag on it like a joystick.',expect:'The cursor brackets the lead’s track. The radar is still on the wide scan: the cursor is on an ordinary track, which changes nothing yet.',evidence:G3+' 381, 414',hints:['throttle.cursor-ud',FS('lead')],panels:['throttle:cursor','left-mfd'],confirm:'Cursor on the lead'},
+    {id:'sys-lead',section:'Choose your targets',title:'Promote it',control:'TMS forward (short)',action:'Press the {{TMS forward|0}}, briefly.',expect:'The lead’s track turns {{white|1}}: it is now a [system track](term:system-track), one the radar will let you work with. With the cursor on it the radar also narrows its search to A2, three bars (A2 3B on the left): {{±25° and three bars|2}} about the cursor, so it comes back to the lead more often.',caution:'The radar tracks a system track no differently from the others: promoting it marks it as one you may bug and shoot. Only system tracks can be.',evidence:G3+' 84, 414–415',hints:['stick.tms-ud',FS('lead'),FL(108,310,128,418),FLN('lead',25)],panels:['stick:tms','left-mfd'],do:{control:'stick.tms-ud',to:'fwd'},confirm:'Lead white, A2 3B'},
+    {id:'slew-wing',section:'Choose your targets',title:'Move the cursor to the wingman',control:'RDR CURSOR/ENABLE',action:'Steer the cursor onto the {{wingman’s track|1}} with the {{RDR CURSOR/ENABLE switch|0}}.',expect:'The cursor leaves the lead and the scan goes back to the wide A6 4B: the narrow scan lasts only while the cursor sits on a system track. The lead stays white, a system track.',evidence:G3+' 381, 414',hints:['throttle.cursor-ud',FS('wing')],panels:['throttle:cursor','left-mfd'],confirm:'Cursor on the wingman'},
+    {id:'sys-wing',section:'Choose your targets',title:'Promote it too',control:'TMS forward (short)',action:'Press the {{TMS forward|0}} again.',expect:'The wingman turns {{white|1}} as well, and the search is A2 3B about the cursor once more: ±25° about the wingman covers the lead too, so both are refreshed.',evidence:G3+' 84, 414–415',hints:['stick.tms-ud',FS('wing'),FS('lead')],panels:['stick:tms','left-mfd'],do:{control:'stick.tms-ud',to:'fwd'},confirm:'Two system tracks'},
+    {id:'bug',section:'Bug and step',title:'Bug the closest system track',control:'TMS right (short)',action:'Press the {{TMS right|0}}, briefly.',expect:'With no target bugged, TMS right bugs the closest system track: the {{lead|1}}, at 45 NM, with the wingman at 47. A ring surrounds it, its {{data|2}} runs along the top (17R: aspect, 150°: track, 280 kt, +915K: closure) and its {{CATA|3}} marks the collision course. The search is now A2 3B about the bug, so the {{limit lines|4}} follow it.',caution:'Everything outside the narrow volume is no longer refreshed, and tracks left stale for 13 seconds are dropped. The cursor can stay where it is: the bug, not the cursor, steers the radar.',evidence:G3+' 84, 405–406, 415–416',hints:['stick.tms-lr',FS('lead'),TOI_ROW,FC('lead'),FLN('lead',25)],panels:['stick:tms','left-mfd'],do:{control:'stick.tms-lr',to:'right'},confirm:'Lead bugged, 17R'},
+    {id:'step',section:'Bug and step',title:'Step the bug',control:'TMS right (short)',action:'Press the {{TMS right|0}}, briefly, again.',expect:'The bug steps to the next system track out, the {{wingman|1}}: the ring, the {{CATA|2}} and the {{data|3}} move with it (16R, 150°, 280, +916K). The lead stays white. With a missile fired at each target in turn, this press is how a pilot moves from one to the next.',evidence:G3+' 84, 415–416',hints:['stick.tms-lr',FS('wing'),FC('wing'),TOI_ROW],panels:['stick:tms','left-mfd'],do:{control:'stick.tms-lr',to:'right'},confirm:'Wingman bugged, 16R'},
+    {id:'back',section:'Back out',title:'Back out to RWS',control:'TMS aft (short)',action:'Press the {{TMS aft|0}}, briefly, four times, one press at a time.',expect:'Each press undoes one layer. The first rejects the bug: the ring, data and CATA go (the cursor still sits on a system track, so the narrow volume stays). The second downgrades the system tracks to ordinary yellow tracks, the third purges the tracks and leaves search targets, and the fourth returns the radar to {{RWS|1}}.',evidence:G3+' 84, 416',hints:['stick.tms-ud',FL(238,108,280,127)],panels:['stick:tms','left-mfd'],do:{control:'stick.tms-ud',to:'aft',times:4},confirm:'Back in RWS'},
+  ]
+};
+procedures.push(fcrTws);
+
+const fcrTwo: AircraftProcedure = {
+  id: 'procedure.dcs-f16c.fcr-two-targets',
+  slug: 'radar-two-targets',
+  airframe: 'f-16c',
+  title: 'F-16C — Radar: two targets (DT SAM, DTT)',
+  objective: 'Bug the lead of a pair in SAM, designate its wingman as a second target (DT SAM), swap which one is primary, watch the radar change to DTT inside 10 NM and lock one of them in STT.',
+  applicability: 'DCS F-16C Block 50 (circa 2007); official guide edition 16 August 2026. In-simulator verification pending.',
+  simVersion: 'DCS build not yet verified',
+  status: 'public-preview',
+  model: 'fcr-two',
+  intro: RADAR_INTRO + ' The FCR is the [SOI](term:soi), in [RWS](term:range-while-search) at 80 NM, A3, the cursor on the lead of a hot pair 45 NM out, 20° left, at 25,000 ft. Its wingman is abeam, 11 NM to the right and 47 NM out. You want to hold both for a two-missile shot.',
+  description: 'Illustrated DCS F-16C two-target radar: TMS forward bugs the lead in SAM, the cursor and TMS forward add the wingman as the second target (DT SAM), TMS right swaps the primary, the radar goes to DTT once a target is inside 10 NM, and TMS forward locks one in STT.',
+  complete: 'STT on the lead',
+  sources: TWO_SRC,
+  steps: [
+    {id:'start',section:'Two targets in SAM',title:'Check the picture',control:'Left MFD, FCR format',action:'Read the format.',expect:'[RWS](term:range-while-search), 80 NM, A3. The cursor is on the {{lead|0}}; its {{wingman|1}} is 11 NM to the right. Both are hot, both inside the {{A3 scan limits|2}}.',evidence:G3+' 404, 410–411',hints:[FS('lead'),FS('wing'),FLN('lead',30)],panels:['left-mfd'],confirm:'Pair, cursor on the lead'},
+    {id:'bug',section:'Two targets in SAM',title:'Bug the lead',control:'TMS forward (short)',action:'Press the {{TMS forward|0}}, briefly.',expect:'The lead is the primary target of [SAM](term:situation-awareness-mode): the {{ring|1}}, its {{data|2}} and the {{CATA|3}} appear and the {{track crosses|4}} on the scales mark it. The radar keeps searching A3 and breaks off every few seconds to look hard at the lead.',evidence:G3+' 84, 405, 417–418',hints:['stick.tms-ud',FS('lead'),TOI_ROW,FC('lead'),FL(136,260,170,400)],panels:['stick:tms','left-mfd'],do:{control:'stick.tms-ud',to:'fwd'},confirm:'Lead is the primary'},
+    {id:'slew',section:'Two targets in SAM',title:'Put the cursor on the wingman',control:'RDR CURSOR/ENABLE',action:'Steer the cursor onto the {{wingman|1}} with the {{RDR CURSOR/ENABLE switch|0}}: press and drag on it like a joystick.',expect:'The cursor brackets the wingman and its {{altitude|2}} shows: 25,000 ft, level with the lead.',evidence:G3+' 381, 404',hints:['throttle.cursor-ud',FS('wing'),FL(250,255,285,275)],panels:['throttle:cursor','left-mfd'],confirm:'Cursor on the wingman'},
+    {id:'second',section:'Two targets in SAM',title:'Designate the second target',control:'TMS forward (short)',action:'Press the {{TMS forward|0}}, briefly.',expect:'The wingman is the secondary target and the radar is in [DT SAM](term:dt-sam): after each search sweep it looks at the lead, then at the wingman. The cursor sits on the {{secondary|1}}; the track crosses now mark {{both|2}}; the {{ring and data|3}} stay on the lead, the primary. The top row still reads RWS.',caution:'A further TMS forward with the cursor on either target locks that one in STT. Holding TMS right for a second turns DT SAM into TWS, with the primary as the bugged target.',evidence:G3+' 84, 419',hints:['stick.tms-ud',FS('wing'),FL(136,260,170,400),TOI_ROW],panels:['stick:tms','left-mfd'],do:{control:'stick.tms-ud',to:'fwd'},confirm:'Two targets tracked'},
+    {id:'swap',section:'Hold both',title:'Swap the primary',control:'TMS right (short)',action:'Press the {{TMS right|0}}, briefly.',expect:'The secondary becomes the primary: the {{ring, CATA|1}} and {{data|2}} move to the wingman (16R, 150°, 280 kt, +916K) and the lead becomes the secondary. A pilot swaps between two shots like this, to fire at each in turn.',evidence:G3+' 84, 419',hints:['stick.tms-lr',FS('wing'),FC('wing'),TOI_ROW],panels:['stick:tms','left-mfd'],do:{control:'stick.tms-lr',to:'right'},confirm:'Wingman is the primary'},
+    {id:'close',section:'Hold both',title:'Close inside 10 NM',control:'Flight controls',action:'Turn left onto the lead’s collision course, heading 347°, and fly it for about two and a half minutes. The radar scale steps down on its own as the range closes.',expect:'The lead is now 9 NM away, the wingman 15 NM, well off to the right (so its CATA is off the edge of the screen). Inside 10 NM the radar goes to [DTT](term:dtt): the search stops, so no {{scan limits|0}}, and the radar only alternates between the {{primary|1}} (the wingman) and the {{secondary|2}} (the lead). The scale is 20 NM and a dotted {{10 NM line|3}} marks the changeover.',caution:'DTT gives the steadiest tracks at close range at the cost of seeing nothing else in the airspace.',evidence:G3+' 420–421',hints:[FL(110,140,552,515),FS('wing',20,138,347),FS('lead',20,138,347),FL(113,322,549,333)],panels:['left-mfd'],confirm:'DTT, both inside 20 NM'},
+    {id:'stt',section:'Lock one',title:'Lock the closer target',control:'TMS forward (short)',action:'With the cursor on the {{lead|1}}, the secondary and the closer, press the {{TMS forward|0}}, briefly.',expect:'[Single target track](term:single-target-track) (STT) on the lead: the radar stops alternating and tracks it alone. The {{wingman|3}}, the cursor and the 10 NM line are gone, and the {{field at the left|2}} gives its bearing and range from the CAP point.',caution:'The target’s radar warning receiver will see this as a lock. DTT drops to STT by itself, on the closer target, inside 3 NM.',evidence:G3+' 84, 420–421',hints:['stick.tms-ud',FS('lead',20,138,347),FL(108,430,172,450),FS('wing',20,138,347)],panels:['stick:tms','left-mfd'],do:{control:'stick.tms-ud',to:'fwd'},confirm:'STT on the lead'},
+  ]
+};
+procedures.push(fcrTwo);
 
 export const visibleProcedures = procedures.filter(p => p.status === 'public-preview' || reviewTrainers);
 export const procedureRoute = (p: AircraftProcedure) => `manual/aircraft-procedures/${p.airframe}/${p.slug}/`;
