@@ -48,12 +48,21 @@ const STPT: P = [0, 10];
  * and 15 at 14.1 NM; p. 410: 41 and 05 at 30.7 NM, both about ±5.4°), with the antenna at 0°.
  */
 const HALF_4B = 5.4;
+/**
+ * Fewer bars, less height. The beam is 4.6° tall (Lockheed Martin MLU Pilot's Guide 16PR14341 p. 134), so the 4-bar
+ * coverage (10.8°) puts the bars about 2.07° apart; two bars then cover 6.7° (±3.3°) and one bar the beam, 4.6° (±2.3°).
+ */
+const HALF: Record<Bars, number> = { 4: HALF_4B, 2: (4.6 + (2 * HALF_4B - 4.6) / 3) / 2, 1: 2.3 };
+export type Bars = 4 | 2 | 1;
 const FT_NM = 6076.1;
-/** The search volume's altitude limits (thousands of ft) at a range. */
-export const limits = (nm: number) => {
-  const d = nm * FT_NM * Math.tan((HALF_4B * Math.PI) / 180);
-  return [Math.round((OWN_ALT + d) / 1000), Math.round((OWN_ALT - d) / 1000)] as const;
+const tan = (d: number) => Math.tan((d * Math.PI) / 180);
+/** The search volume's altitude limits (thousands of ft) at a range, for the antenna `el` degrees up and a bar count. */
+export const limits = (nm: number, el = 0, bars: Bars = 4) => {
+  const r = nm * FT_NM, h = HALF[bars];
+  return [Math.round((OWN_ALT + r * tan(el + h)) / 1000), Math.round((OWN_ALT + r * tan(el - h)) / 1000)] as const;
 };
+/** ANT ELEV knob travel to antenna elevation: full travel (100 %) taken as the antenna's ±60° gimbal limit (p. 381). */
+export const ANT_DEG_PER_PCT = 0.6;
 /** Bearing (° magnetic, 001-360) and range (NM) from the steerpoint to a point given by azimuth and range off a heading. */
 export const fromStpt = (az: number, nm: number, hdg = 360) => {
   const b = ((az + hdg) * Math.PI) / 180;
@@ -69,7 +78,7 @@ const pad = (v: number, n: number) => String(Math.abs(v)).padStart(n, '0');
  * The scene's aircraft: `az`/`nm` where they are (off a 360° heading), `alt` (thousands of ft), `hot` whether they fly toward the jet,
  * `vsrOnly` too far for RWS, seen only in VSR's high-PRF search.
  */
-export interface Contact { az: number; nm: number; alt: number; hot: boolean; vsrOnly?: boolean }
+export interface Contact { az: number; nm: number; alt: number; hot: boolean; vsrOnly?: boolean; /** Only in the search-volume scene. */ scene?: 'vol' }
 export const CONTACTS = {
   /** The group: a two-ship, hot (heading 150°, 10° off a line straight at the jet), 45 NM north-northwest at 25,000 ft. */
   lead: { az: -20, nm: 45, alt: 25, hot: true },
@@ -78,6 +87,8 @@ export const CONTACTS = {
   single: { az: 40, nm: 30, alt: 15, hot: false },
   /** A fast mover nose on, 70 NM out: beyond RWS's detection range, inside VSR's. */
   far: { az: 8, nm: 70, alt: 33, hot: true, vsrOnly: true },
+  /** The search-volume scene's low contact: 30 NM, 10° right, 3,000 ft, flying 190°, straight at the jet. */
+  low: { az: 10, nm: 30, alt: 3, hot: true, scene: 'vol' },
 } satisfies Record<string, Contact>;
 export type ContactId = keyof typeof CONTACTS;
 
@@ -121,6 +132,12 @@ const CURSOR_BARS = (() => {
 const LIMITS_X = (() => {
   const q = ([x, y]: P) => `${f(mm(x))} ${f(mm(y - SC[1]))}`;
   const d = 30 * PX_DEG;
+  return `M${q([-d, 144])}L${q([-d, 511])}M${q([d, 144])}L${q([d, 511])}`;
+})();
+/** Spotlight scan limits, ±10° about the cursor (p. 383). */
+const LIMITS_X10 = (() => {
+  const q = ([x, y]: P) => `${f(mm(x))} ${f(mm(y - SC[1]))}`;
+  const d = 10 * PX_DEG;
   return `M${q([-d, 144])}L${q([-d, 511])}M${q([d, 144])}L${q([d, 511])}`;
 })();
 
@@ -200,6 +217,14 @@ export interface FcrState {
   from?: 'VSR';
   /** The jet's heading (° magnetic): 360 unless it has turned onto the collision course (347). */
   hdg?: number;
+  /** The search-volume scene: only its low contact, shown only while it is inside the scanned volume. */
+  scene?: 'vol';
+  /** Antenna elevation set with ANT ELEV (° up); 0 by default. */
+  el?: number;
+  /** Elevation bars (4 by default). */
+  bars?: Bars;
+  /** Spotlight scan (TMS forward held): A1 4B about the cursor while held (p. 383). */
+  spot?: boolean;
   /** Contacts moved from their place in the scene (AIM-120 shots: the lead closing), azimuth off 360° and range. */
   moved?: Partial<Record<ContactId, { az: number; nm: number }>>;
   /** AIM-120 symbology (p. 598): the status word, and with a bugged target the missile scale, ASEC and ASC. */
@@ -228,6 +253,8 @@ const cos = (d: number) => Math.cos((d * Math.PI) / 180);
  */
 const TOI: Partial<Record<ContactId, { aspect: string; track: string; kcas: string; closure: (hdg: number) => number; cata: number }>> = {
   lead: { aspect: '17R', track: '150°', kcas: '280', closure: hdg => Math.round(550 * cos(340 - hdg) + 404 * cos(10)), cata: CATA_HDG },
+  // The low contact: 350 KCAS at 3,000 ft is about 365 KTAS; flying 190° straight at the jet: aspect 18, closure 550 cos 10° + 365.
+  low: { aspect: '18', track: '190°', kcas: '350', closure: hdg => Math.round(550 * cos(10 - (hdg - 360)) + 365), cata: 370 },
   far: { aspect: '18', track: '190°', kcas: '400', closure: hdg => Math.round(550 * cos(8 - (hdg - 360)) + 628), cata: 368 },
 };
 const toiData = (k: ContactId, hdg = 360, mrm?: MrmView) => {
@@ -244,7 +271,7 @@ function fcr(id: string, s: FcrState): Page {
     w('CRM', 185.5, 117.5), w(sub, 258.5, 117.5), ...(sub === 'VSR' ? [] : [w('NORM', 332, 117.5)]), w('OVRD', 405, 117.5), w('CNTL', 477, 117.5),
     w('CONT', 551.5, 204.5, 'end'),
     w(String(s.scale), 128.5, 223),
-    w('A', 117.5, 321), w(s.az[1], 117.5, 341), w('4', 117.5, 389), w('B', 117.5, 408.5),
+    w('A', 117.5, 321), w(s.spot ? '1' : s.az[1], 117.5, 341), w(String(s.spot ? 4 : s.bars ?? 4), 117.5, 389), w('B', 117.5, 408.5),
     w('M4', 112.5, 462.5, 'start'), w('NONE', 180, 518),
     w('SWAP', 186, 538.5), w('FCR', 259, 538.5, undefined, true), w('TEST', 332, 538.5), w('DTE', 405, 538.5), w('DCLT', 477.5, 538.5),
   ];
@@ -255,7 +282,9 @@ function fcr(id: string, s: FcrState): Page {
   const cyan: string[] = [];
   // Elevation scale (cyan): ticks every 10° from +30° to -30°, the 0° tick longer; the caret at the antenna's elevation (0°).
   for (const k of [-3, -2, -1, 1, 2, 3]) cyan.push(poly([[149, 327.5 - k * 36.5], [163, 327.5 - k * 36.5]]));
-  cyan.push(poly([[149, 327.5], [167, 327.5]]), poly([[136, 327.5], [147, 327.5]]) + poly([[147.5, 322], [147.5, 333]]));
+  // The caret (a sideways T) moves 3.65 px a degree with the antenna (p. 397 item 20: ±60° over the scale).
+  const ey = 327.5 - (s.el ?? 0) * 3.65;
+  cyan.push(poly([[149, 327.5], [167, 327.5]]), poly([[136, ey], [147, ey]]) + poly([[147.5, ey - 5.5], [147.5, ey + 5.5]]));
   // Horizon line (level flight), cyan.
   cyan.push(poly([[220, 334], [220, 327.5], [312, 327.5]]) + poly([[351, 327.5], [442, 327.5], [442, 334]]));
   // Azimuth scale: white ticks every 10° from -30° to +30°, the 0° tick taller; the antenna caret (cyan T) on the format row.
@@ -279,6 +308,12 @@ function fcr(id: string, s: FcrState): Page {
   fills += cake(scope(stptAz(s.hdg), 10, s.scale));
   const shown = (Object.entries(CONTACTS) as [ContactId, Contact][]).filter(([k, t]) => {
     if (s.sub === 'STT') return k === s.bug;
+    if ((t as Contact).scene !== s.scene) return false;
+    if (s.scene) {
+      // Seen only inside the scanned volume: within the bars' half-height of the antenna, as seen from the jet.
+      const tel = (Math.atan2((t.alt * 1000 - OWN_ALT) / FT_NM, t.nm) * 180) / Math.PI;
+      if (Math.abs(tel - (s.el ?? 0)) > HALF[s.spot ? 4 : s.bars ?? 4]) return false;
+    }
     if (s.az === 'A3' && Math.abs(off(t.az, s.hdg) - (s.scanAz ?? 0)) > 30) return false;
     if (s.sub === 'VSR') return t.hot;
     return !t.vsrOnly;
@@ -314,7 +349,7 @@ function fcr(id: string, s: FcrState): Page {
     cursor = { d: CURSOR_BARS, at: at ? [f(mm(at[0] - SC[0])), f(mm(at[1] - SC[1]))] : [0, 0] };
     if (at) {
       const { az, nm } = unscope(at, s.scale);
-      const [hi, lo] = limits(nm);
+      const [hi, lo] = limits(nm, s.el ?? 0, s.spot ? 4 : s.bars ?? 4);
       words.push(c(w(pad(hi, 2), at[0] + 18, at[1] - 12.5, 'start'), hi < 0 ? 'red' : 'cyan'), c(w(pad(lo, 2), at[0] + 18, at[1] + 13.5, 'start'), lo < 0 ? 'red' : 'white'));
       const b = fromStpt(az, nm, s.hdg);
       words.push(w(pad(b.brg, 3), 112.5, 440, 'start'), w(pad(b.nm, 2), 151, 440, 'start'));
@@ -334,7 +369,8 @@ function fcr(id: string, s: FcrState): Page {
   }
   const page: Page = { id, words, marks, fills, fine, paths, ...(cursor ? { cursor } : {}), ...(tgt.flashFill ? { flashFill: tgt.flashFill } : {}) };
   if (tgt.redFlash) page.paths!.push({ d: tgt.redFlash, c: 'red', blink: true });
-  if (s.az === 'A3' && cursor && s.sub !== 'STT') page.cursorX = { d: LIMITS_X, c: 'cyan' };
+  if (s.spot && cursor) page.cursorX = { d: LIMITS_X10, c: 'cyan' };
+  else if (s.az === 'A3' && cursor && s.sub !== 'STT') page.cursorX = { d: LIMITS_X, c: 'cyan' };
   return page;
 }
 
@@ -379,7 +415,42 @@ const AIM_STATES: Record<string, FcrState> = {
   } satisfies FcrState])),
 };
 export type FcrPage = keyof typeof FCR_STATES;
-export const fcrPages: Page[] = [...Object.entries(FCR_STATES), ...Object.entries(AIM_STATES)].map(([id, s]) => fcr(id, s as FcrState));
+
+/**
+ * The search-volume procedure: RWS 40 NM, A6, the cursor slewed to where a low contact was called (30 NM, 10° right),
+ * then the ANT ELEV knob (every 5 % of travel, `d10` = 10 % down) tilting the volume, 2B and a spotlight scan.
+ */
+export const ANT_STOPS = Array.from({ length: 41 }, (_, i) => 100 - i * 5);
+export const antId = (v: number) => (v > 0 ? `u${v}` : v < 0 ? `d${-v}` : 'center');
+const AIM: P = scope(10, 30, 40);
+const VOL = (el: number): FcrState => ({ soi: true, scale: 40, sub: 'RWS', az: 'A6', cursor: AIM, scene: 'vol', el, ant: 4 });
+const volStates: Record<string, FcrState> = {
+  'fcr-vol': { soi: true, scale: 40, sub: 'RWS', az: 'A6', cursor: HOME, scene: 'vol', ant: -22 },
+  'fcr-vol-free': { soi: true, scale: 40, sub: 'RWS', az: 'A6', cursor: 'free', scene: 'vol', ant: 12 },
+  'fcr-vol-aim': VOL(0),
+};
+for (const v of ANT_STOPS) {
+  const el = v * ANT_DEG_PER_PCT, id = antId(v);
+  const seen = (b: Bars) => Math.abs((Math.atan2(-25000 / FT_NM, 30) * 180) / Math.PI - el) <= HALF[b];
+  volStates[`fcr-vol-${id}`] = { ...VOL(el), over: seen(4) ? 'low' : undefined };
+  volStates[`fcr-vol-2b-${id}`] = { ...VOL(el), bars: 2, over: seen(2) ? 'low' : undefined, ant: -6 };
+  volStates[`fcr-vol-spot-${id}`] = { ...VOL(el), bars: 2, spot: true, over: seen(4) ? 'low' : undefined, ant: 9 };
+  volStates[`fcr-vol-stt-${id}`] = { soi: true, scale: 40, sub: 'STT', az: 'A6', bars: 2, cursor: null, bug: 'low', scene: 'vol', el: -7.8, ant: 10 };
+}
+/** Knob positions at which the low contact is inside the 4-bar scan. */
+export const VOL_SEEN = ANT_STOPS.filter(v => Math.abs((Math.atan2(-25000 / FT_NM, 30) * 180) / Math.PI - v * ANT_DEG_PER_PCT) <= HALF[4]).map(antId);
+const volLabels: Record<string, string> = {
+  'fcr-vol': 'FCR search volume: RWS 40 NM, A6 4B, nothing low',
+  'fcr-vol-free': 'FCR search volume: cursor being slewed',
+  'fcr-vol-aim': 'FCR search volume: cursor at 30 NM, 10° right',
+  ...Object.fromEntries(ANT_STOPS.flatMap(v => [
+    [`fcr-vol-${antId(v)}`, `FCR search volume: antenna ${v * ANT_DEG_PER_PCT}°`],
+    [`fcr-vol-2b-${antId(v)}`, `FCR search volume: 2B, antenna ${v * ANT_DEG_PER_PCT}°`],
+    [`fcr-vol-spot-${antId(v)}`, `FCR search volume: spotlight, antenna ${v * ANT_DEG_PER_PCT}°`],
+    [`fcr-vol-stt-${antId(v)}`, 'FCR search volume: STT on the low contact'],
+  ])),
+};
+export const fcrPages: Page[] = [...Object.entries(FCR_STATES), ...Object.entries(volStates), ...Object.entries(AIM_STATES)].map(([id, s]) => fcr(id, s as FcrState));
 export const aimFcrLabels: Record<string, string> = Object.fromEntries(Object.entries(AIM_STATES).map(([id, s]) => [id,
   `FCR with AIM-120: ${s.bug ? `SAM, lead ${s.moved?.lead?.nm} NM${s.mrm?.post ? `, missile ${s.mrm.post[1]}` : ''}${s.mrm?.x ? ', X' : ''}` : `RWS ${s.scale} NM${s.soi ? '' : ', not SOI'}${s.mrm?.rdy ? ', RDY' : ''}`}`]));
 /** The cursor's slew onto the lead in A6 (the AIM-120 shot). */
@@ -399,7 +470,8 @@ export const fcrPageLabels: Record<FcrPage, string> = {
   'fcr-vsr-free': 'FCR VSR: cursor being slewed',
   'fcr-vsr-far': 'FCR VSR: cursor on the far contact',
   'fcr-vsr-stt': 'FCR: STT on the far contact (from VSR)',
-};
+  ...volLabels,
+} as Record<FcrPage, string>;
 
 /* ------------------------------------------------------------------- helpers */
 
@@ -414,4 +486,9 @@ const slewTo = (k: ContactId) => ({
   start: local(HOME), target: local(on(k, 80)), reach: f(mm(9)), speed: f(mm(140)),
   box: [...local([125, 125]), ...local([537, 500])] as [number, number, number, number],
 });
-export const FCR_SLEW = { lead: slewTo('lead'), far: slewTo('far') };
+export const FCR_SLEW = {
+  lead: slewTo('lead'), far: slewTo('far'),
+  aim: { start: local(HOME), target: local(AIM), reach: f(mm(9)), speed: f(mm(140)), box: [...local([125, 125]), ...local([537, 500])] as [number, number, number, number] },
+};
+/** Hint box round the called position on the 40 NM scale. */
+export const fcrAim = (r = 16) => fcrBox(AIM[0] - r, AIM[1] - r, AIM[0] + r, AIM[1] + r);

@@ -36,3 +36,12 @@ Eagle Dynamics, DCS F-16C Viper Early Access Guide (EN, 16 August 2026): HOTAS p
 - `npx tsc --noEmit`, `node --test tests/*.test.mjs` (33 pass), `npm run check` (777 pages), `python3 scripts/check_docs.py`: pass.
 - All three procedures driven to the end in Playwright: every hint link rings its target, every confirm button shows its own text, no page errors.
 - Onion-skin overlays of the format against pp. 394, 411, 417 and 421 and of the HUD cues against p. 406.
+
+## Follow-up: aim the search volume (radar-volume)
+Nathan (2026-11-24): the search procedures were too light; ANT ELEV and the bars were never used. Added `radar-volume` (7 steps, between RWS search and Bug and lock): a low contact is called at 30 NM, 10° right, 3,000 ft; slew the cursor there and read 45/11; roll ANT ELEV down (drag on the knob, now in 5 % steps) until the contact shows; OSB 17 to 2B; hold TMS forward for a spotlight scan (A1 4B, ±10° about the cursor) and release on the contact for STT.
+
+- Bar heights: 4B ±5.4° (fitted to the DCS figures); beam 4.6° (MLU p. 134), so bars about 2.07° apart, 2B ±3.3°, 1B ±2.3°. Derived, not published.
+- ANT ELEV gearing: full knob travel taken as the antenna's ±60° gimbal limit (DCS p. 381), 0.6° per % of travel. Not published; the step tells the reader to read the numbers, not the knob. Check in DCS.
+- Elevation caret: 3.65 px per degree (p. 397 item 20: ±60° over the scale).
+- Spotlight display (A1 4B labels and ±10° limit lines while TMS is held) is assumed from p. 383's description.
+- Low contact: 350 KCAS at 3,000 ft is about 365 KTAS, flying 190°: aspect 18, closure 550 cos 10° + 365 = 907 kt.

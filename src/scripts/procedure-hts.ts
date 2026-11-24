@@ -12,7 +12,7 @@
 import { HAD_SLEW, HADH, HADX } from '../data/cockpit/f16c/mfd-had';
 import { MAV_D_SLEW3, MAV_D_SLEW7, MAV_SLEW } from '../data/cockpit/f16c/mfd-maverick';
 import { TGP_SLEW_B, TGP_SLEW_T } from '../data/cockpit/f16c/mfd-tgp';
-import { AIM_SLEW, FCR_SLEW } from '../data/cockpit/f16c/mfd-fcr';
+import { AIM_SLEW, FCR_SLEW, VOL_SEEN } from '../data/cockpit/f16c/mfd-fcr';
 import { MOMENTS, SHOT_TIMES, type MomentId } from '../data/cockpit/f16c/aim120-scene';
 
 interface StepDo { control: string; to: string; on?: 'press' | 'release' }
@@ -45,6 +45,12 @@ interface Scenario {
   scans?: Scan | Scan[];
   /** Pages a step shows as it opens (a look step that adds a teaching overlay). */
   enter?: Record<string, Pages>;
+  /**
+   * A knob turned by hand to a setting (ANT ELEV): each position shows `page` with `{pos}` replaced by the position id,
+   * on the `display` MFD; the step is done while the knob is at one of `ok`. Later steps' pages may name `{dial}`,
+   * the position it was left at. `near`: the prompt when the knob is off `ok`.
+   */
+  dial?: { step: string; control: string; page: string; ok: string[]; /** Positions where the thing looked for shows, but off `ok`. */ seen: string[]; display: 'left' | 'right'; prompt: string; near: string; done: string };
 }
 /** A slew: from page `on` (drawn as `free` while slewed), ending on `done` once the cursor is within `reach` of `target`. Several may run, one per step. */
 interface Slew { /** Whether the thing steered is a cursor (the FCR's, on the left MFD) rather than crosshairs. */ cursor?: boolean; step: string; on: string; free: string; done: string; target: [number, number]; start: [number, number]; reach: number; speed: number; box: [number, number, number, number]; display?: 'left' | 'right'; what?: string; along?: [number, number]; freeOnMove?: boolean }
@@ -57,6 +63,17 @@ const aimScan = (step: string, ks: MomentId[], caption: string, prompt: string) 
 const HUD_CAP = { 'hud.altitude': 28000, 'hud.velocity': 370, 'hud.mach': 0.92, 'hud.heading': 360, 'hud.pitch': 0, 'hud.roll': 0, 'hud.fpm-azimuth': 0, 'hud.fpm-elevation': 0, 'hud.steerpoint-azimuth': 0, 'hud.steerpoint-elevation': -24.7, 'hud.steering-cue': 0, 'hud.slant-range': 11, 'hud.steerpoint-distance': 10, 'hud.steerpoint': 1, 'hud.ttg': 65, 'hud.radar-alt': 27000 };
 const SCENARIOS: Record<string, Scenario> = {
   // F-16C air-to-air radar (mfd-fcr.ts): the FCR on the left MFD; a CAP at 28,000 ft heading 360°, the CAP point 10 NM ahead.
+  'fcr-vol': {
+    initial: { left: 'fcr-vol', mfd: 'menu-blank', ded: 'cni' },
+    after: { bars: { left: 'fcr-vol-2b-{dial}' }, spot: { left: 'fcr-vol-spot-{dial}' }, lock: { left: 'fcr-vol-stt-{dial}' } },
+    slew: { step: 'cursor', on: 'fcr-vol', free: 'fcr-vol-free', done: 'fcr-vol-aim', display: 'left', cursor: true, what: 'called position, 30 NM and 10° right', ...FCR_SLEW.aim },
+    dial: {
+      step: 'tilt', control: 'throttle.ant-elev', page: 'fcr-vol-{pos}', ok: ['d10', 'd15'], seen: VOL_SEEN, display: 'left',
+      prompt: 'Drag down on the ANT ELEV knob to roll it down, watching the cursor’s numbers.',
+      near: 'The contact is in the scan, but near its edge: keep rolling until 3,000 ft sits well inside the numbers.',
+      done: 'The contact is inside the scan.',
+    },
+  },
   'fcr-rws': {
     initial: { left: 'fcr-not-soi', mfd: 'menu-blank', ded: 'cni' },
     after: { soi: { left: 'fcr-40' }, 'range-up': { left: 'fcr-80' }, a3: { left: 'fcr-80-a3' } },
@@ -241,7 +258,10 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   const initialState = (): State => ({ pod: -1, wk: 0, mfd: 'off', left: 'off', ded: 'off', ...sc.initial, x: { ...sc.initial.x }, r: { ...sc.initial.r }, cur: [...slews[0].start] } as State);
   const copy = (s: State): State => ({ ...s, cur: [...s.cur], x: { ...s.x }, r: { ...s.r } });
   /** Apply a step's page changes; `x` adds to the other panels' pages rather than replacing them. */
-  const apply = (p: Pages) => { const { x, r, ...rest } = p; Object.assign(st, rest); if (x) st.x = { ...st.x, ...x }; if (r) st.r = { ...st.r, ...r }; };
+  /** The dial's position as it was left (`{dial}` in later pages). */
+  const dialAt = () => (sc.dial && pos[sc.dial.control]) || 'center';
+  const fill = (v: string) => v.replace('{dial}', dialAt());
+  const apply = (p: Pages) => { const { x, r, ...rest } = p; for (const k of ['mfd', 'left', 'ded'] as const) if (rest[k]) rest[k] = fill(rest[k]!); Object.assign(st, rest); if (x) st.x = { ...st.x, ...x }; if (r) st.r = { ...st.r, ...r }; };
   try { sessionStorage.removeItem(`oversweep:cockpit:${cfg.aircraft}`); } catch { /* storage unavailable */ }
   let pos: Record<string, string> = { ...cfg.initial };
   let st = initialState();
@@ -269,6 +289,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   const stepOf = (id: string) => cfg.steps.findIndex(x => x.id === id);
   const sl = () => slews.find(x => x.step === stepId()) ?? [...slews].reverse().find(x => stepOf(x.step) < step) ?? slews[0];
   const slewLeft = () => sl().display === 'left';
+  const dialing = () => !!sc.dial && stepId() === sc.dial.step && !finished;
   const slewing = () => stepId() === sl().step && !finished && (slewLeft() ? st.left : st.mfd) === sl().on;
   function indicate() {
     // `freeOnMove`: the `on` page stays until the cursor first leaves its start (e.g. the TGP's CZ appears only once slewed).
@@ -333,7 +354,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     previous.disabled = step === 0 && !finished;
     one<HTMLElement>('[data-controls]').hidden = false;
     // The button names what the reader checks; it shows once the step's moves are made.
-    confirm.hidden = finished || !s.confirm || moves(s).length > 0 || !!s.type || slewing() || scanning;
+    confirm.hidden = finished || !s.confirm || moves(s).length > 0 || !!s.type || slewing() || scanning || (dialing() && !sc.dial!.ok.includes(dialAt()));
     restart.hidden = !finished;
     confirm.textContent = s.confirm ?? 'Confirm';
     confirm.disabled = false;
@@ -348,6 +369,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     else if (moves(s).length) say(`Make these moves, in any order: ${moves(s).map(instruction).join('; ')}.`);
     else if (s.type) say(`Press ${keyText(s.type.keys[0])} (key 1 of ${s.type.keys.length}).`);
     else if (slewing()) say(`Steer the ${!sl().cursor && (sl().display === 'left' || sl().on.startsWith('tgp')) ? 'crosshairs' : 'cursor'} onto the ${sl().what ?? 'radar'}: press and drag on the RDR CURSOR switch.`);
+    else if (dialing()) say(sc.dial!.ok.includes(dialAt()) ? `${sc.dial!.done} Check the indications, then continue.` : sc.dial!.prompt);
     else if (scanning) say(scanOf()?.prompt ?? 'Watch the HAD: each scan refines the position. Replay it or drag through it below.');
     else say('Check the indications, then confirm.');
     showPad();
@@ -492,6 +514,19 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     const d = (e as CustomEvent<{ aircraft: string; panel: string; control: string; position: string; phase: 'press' | 'release' }>).detail;
     if (d.aircraft !== cfg.aircraft || finished) return;
     const key = `${d.panel}.${d.control}`;
+    // The dial step's knob: every position shows its page; the step is done while it is in the wanted band.
+    if (dialing() && key === sc.dial!.control) {
+      if (d.phase === 'release') return;
+      pos[key] = d.position;
+      const page = sc.dial!.page.replace('{pos}', d.position);
+      if (sc.dial!.display === 'left') st.left = page; else st.mfd = page;
+      indicate();
+      const ok = sc.dial!.ok.includes(d.position), near = !ok && sc.dial!.seen.includes(d.position);
+      confirm.hidden = !ok;
+      if (ok) { confirm.textContent = cfg.steps[step].confirm ?? 'Confirm'; confirm.disabled = false; }
+      say(ok ? `${sc.dial!.done} Check the indications, then continue.` : near ? sc.dial!.near : sc.dial!.prompt, near);
+      return;
+    }
     // The cursor switch while slewing: each arm held is full deflection that way (the joystick refines it).
     if (slewing() && (key === 'throttle.cursor-ud' || key === 'throttle.cursor-lr')) {
       const on = d.phase === 'press' ? 1 : 0;
