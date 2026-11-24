@@ -1,0 +1,57 @@
+---
+import Term from '../../../../../../components/Term.astro';
+import SiteLayout from '../../../../../../layouts/SiteLayout.astro';
+import { sourceUrl } from '../../../../../../data/aircraft-procedures';
+import { sitePath } from '../../../../../../lib/paths';
+
+// Concept page ahead of the weapon articles: the SMS, master modes, choosing a weapon and its delivery mode.
+// Defence (RWR, chaff, flares, ECM) and jettison are separate articles, not covered here.
+const F16C = 'manual/aircraft-procedures/f-16c/';
+const link = (path: string) => sitePath(`${F16C}weapons-and-tactics/${path}/`);
+---
+<SiteLayout title="Stores management and delivery modes" activeSection="manual" description="How the F-16C's stores management system works: master modes, the SMS page, choosing a weapon, and the delivery modes the weapon articles are divided by.">
+  <article class="prose">
+    <p class="lead">Every weapon on the F-16C is set up in the same place: the <Term>SMS</Term> page on a multifunction display (<Term>MFD</Term>). The page lists what is loaded, picks the weapon, and sets how it will be aimed. What it shows depends on the <Term>master mode</Term> the jet is in, so the first choice is the mode, then the weapon, then the delivery mode. The weapon articles that follow assume this much. <a href="#source-1">[1, pp. 326, 366]</a></p>
+
+    <h2>Master modes</h2>
+    <p>The mission computer holds one set of sensor, display and weapon settings for each master mode. Switching mode swaps the whole set, and switching back brings the old one back, so a jet can be set up for each job before the mission. <a href="#source-1">[1, p. 326]</a></p>
+    <ul>
+      <li><strong>NAV</strong> is the start-up mode, for takeoff, landing and navigating. Weapons cannot be employed in it. <a href="#source-1">[1, p. 327]</a></li>
+      <li><strong>A-A</strong> and <strong>A-G</strong> are chosen with the buttons of the same name on the <Term>ICP</Term>. Pressing the button of the mode already in use drops back to NAV. <a href="#source-1">[1, pp. 327–328]</a></li>
+      <li><strong>MSL</strong> and <strong>DGFT</strong> come from the DOG FIGHT switch on the throttle, which is how a pilot reaches an air-to-air setup without letting go of the controls. <Term>Missile override</Term> (switch inboard) is for missile shots; <Term>dogfight mode</Term> (switch outboard) arms the gun and a missile together. Centring the switch returns to the previous mode. <a href="#source-1">[1, pp. 328–329]</a></li>
+    </ul>
+    <p>Two more master modes exist for jettisoning stores. <a href="#source-1">[1, p. 326]</a></p>
+
+    <h2>Arming</h2>
+    <p>The SMS only works out what a weapon can do; the <Term>master arm</Term> switch on the MISC panel decides whether it can fire. In ARM the weapons fire; in OFF they cannot; in SIMULATE the cues and symbols appear exactly as in ARM but nothing is released. A weapon's status on the SMS page shows the same thing: RDY when it can fire, SIM when it is simulated, and blank when it is not armed. <a href="#source-1">[1, pp. 47, 599]</a></p>
+
+    <h2>The SMS page</h2>
+    <p>The page has a base page for each master mode, with an operating mode button in the top left (OSB 1) and an inventory button (OSB 4). The inventory page draws the jet with what hangs from each station, using short codes such as A120C for an AIM-120C, A-9X for an AIM-9X or AG65H for an AGM-65H. In NAV it is the base page. <a href="#source-1">[1, pp. 366–368]</a></p>
+    <p>In the air-to-air modes the operating mode button switches between AAM and GUN in A-A; MSL and DGFT have their own pages. In A-G the page shows the weapon, its profile and its delivery sub-mode. <a href="#source-1">[1, pp. 599, 618–619]</a></p>
+
+    <h2>Choosing a weapon</h2>
+    <ul>
+      <li><strong>Air-to-air:</strong> the missile type is cycled on the SMS page (OSB 7) or with a long press of the missile step button on the side stick. A short press steps to the next station carrying that missile. <a href="#source-1">[1, pp. 83–84, 599–600]</a></li>
+      <li><strong>Air-to-ground:</strong> press OSB 6 until the weapon wanted is shown. Bombs then have two stored profiles, PROF1 and PROF2, holding typical delivery sub-mode, fuze, spacing and quantity settings; the profile button swaps between them and any change is saved. <a href="#source-1">[1, pp. 618–619]</a></li>
+    </ul>
+
+    <h2>Delivery modes</h2>
+    <p>The delivery mode sets how the weapon is aimed and which cues the head-up display shows. The weapon articles divide by it, because the same weapon is flown differently in each.</p>
+    <p><strong>Air-to-air.</strong> A radar missile's line of sight is either SLAVE, sent after the radar's target of interest, or BORE, fired straight ahead for the seeker to find the first target it sees. The AIM-9 is cued in the same way, to the radar, the targeting pod or the helmet, or fixed to the jet's boresight if nothing is cueing it. So the AIM-120 articles are divided by the radar mode that supplies the target, and the AIM-9 ones by what cues the seeker. <a href="#source-1">[1, pp. 570–571, 599–600]</a></p>
+    <p><strong>Air-to-ground.</strong> The sub-modes fall into two groups, by how the target is found. <a href="#source-1">[1, pp. 335, 343]</a></p>
+    <ul>
+      <li><strong>Pre-planned</strong> modes aim at a steerpoint placed on the target: <Term>CCRP</Term>, <Term>LADD</Term>, EO-PRE, EO-BORE, PRE, HARM and HTS. Their accuracy depends on how well the navigation solution matches the real position of the target.</li>
+      <li><strong>Visual</strong> modes aim at a target the pilot has seen, without a steerpoint: <Term>CCIP</Term>, <Term>DTOS</Term>, STRF, EO-VIS and VIS.</li>
+    </ul>
+    <p>Which sub-modes are offered depends on the weapon, and they can be changed at any time, even during the attack. On the side stick a short press of the missile step button cycles CCIP, DTOS and CCRP for bombs, or steps to the next station if an AGM-65 or AGM-88 is selected. <a href="#source-1">[1, pp. 84, 335, 619]</a></p>
+
+    <h2>The weapon articles</h2>
+    <ul>
+      <li><a href={link('air-to-air/aim-120')}>AIM-120 AMRAAM</a>: single-target and visual shots.</li>
+      <li><a href={link('air-to-ground/agm-65')}>AGM-65 Maverick</a>: its PRE, VIS and BORE sub-modes.</li>
+      <li><a href={link('sead/agm-88')}>AGM-88 HARM</a>: shots from the HARM targeting system and from a known position.</li>
+    </ul>
+
+    <section class="sources" aria-labelledby="sms-sources"><h2 id="sms-sources">Sources</h2><ol><li id="source-1"><a href={sourceUrl}>DCS F-16C Viper Early Access Guide (EN, 16 August 2026)</a> — Eagle Dynamics. MISC panel p. 47; side stick pp. 83–84; “Master Modes” pp. 326–329; “Weapon Delivery Sub-modes” pp. 335, 343; “Stores Management System” pp. 366–368; AIM-9 pp. 570–571; SMS AAM page pp. 599–600; A-G SMS pp. 618–619. A sim manual: it describes the DCS F-16C, which models the real aircraft's weapons in simplified form.</li></ol></section>
+  </article>
+</SiteLayout>

@@ -90,7 +90,6 @@ const systems = group('f16c-systems', 'Systems', [
   group('f16c-hts', 'HARM Targeting System (HTS)', [{ ...proc('hts'), title: 'Basic HTS' }, proc('hts-targeting'), plan('TDOA')], `${F16C_HREF}systems/hts/`, 'Find and rank enemy radars on the HAD page and hand them to the HARM.'),
   plan('TGP / Sniper pod'),
   { ...group('f16c-radar', 'Radar (APG-68)', [{ ...proc('radar-rws'), title: 'Basic radar controls (RWS)' }, { ...proc('radar-vsr'), title: 'VSR search' }, { ...proc('radar-bug-lock'), title: 'Bug and lock (SAM, STT)' }, { ...proc('radar-tws'), title: 'TWS: track while scan' }, { ...proc('radar-two-targets'), title: 'Two targets (DT SAM, DTT)' }, plan('Dogfight modes (ACM)'), plan('Identify contacts (NCTR, AIFF)'), plan('Ground map, expand and DBS'), plan('Ground moving target'), plan('Sea mode')], `${F16C_HREF}systems/radar/`, 'The fire control radar: searching for, tracking and identifying aircraft, and mapping the ground.'), article: true },
-  plan('Fire control and SMS'),
   plan('RWR and countermeasures'),
   plan('Navigation and INS'),
   plan('Radios'),
@@ -115,6 +114,7 @@ const phases: MenuNode[] = [
 const emergency = plan('Emergency procedures', ['Engine failure and flameout', 'Engine relight', 'Engine fire', 'Electrical failure', 'Hydraulic failure', 'FLCS failure', 'EPU activation', 'Fuel system malfunction', 'Landing gear malfunction', 'Ejection decision']);
 
 const weapons = group('f16c-weapons', 'Weapons and tactics', [
+  { id: 'weapons-sms', title: 'Stores management and delivery modes', href: `${F16C_HREF}weapons-and-tactics/stores-management/`, summary: 'The SMS page, selecting a weapon and its delivery mode, and how the weapon articles divide by cue.' },
   group('weapons-sead', 'SEAD', [{ ...group('weapon-agm-88', 'AGM-88 HARM', [plan('POS shot'), plan('HAS shot'), { ...proc('harm-hts-shot'), title: 'HTS handoff shot' }], `${F16C_HREF}weapons-and-tactics/sead/agm-88/`, 'Arming, targeting and firing the HARM: from the HTS, from a known position, or with its own seeker.'), article: true }], `${F16C_HREF}weapons-and-tactics/sead/`, 'Hunting and killing radars with the HARM.'),
   group('weapons-air-to-air', 'Air-to-air weapons', [
     plan('Dogfight and missile override modes', ['Air combat setup']),
