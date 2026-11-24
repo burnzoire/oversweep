@@ -12,7 +12,7 @@
 import { HAD_SLEW, HADH, HADX } from '../data/cockpit/f16c/mfd-had';
 import { MAV_D_SLEW3, MAV_D_SLEW7, MAV_SLEW } from '../data/cockpit/f16c/mfd-maverick';
 import { TGP_SLEW_B, TGP_SLEW_T } from '../data/cockpit/f16c/mfd-tgp';
-import { AIM_SLEW, FCR_SLEW, VOL_SEEN } from '../data/cockpit/f16c/mfd-fcr';
+import { AIM_SLEW, FCR_SLEW } from '../data/cockpit/f16c/mfd-fcr';
 import { TWO_SLEW } from '../data/cockpit/f16c/mfd-fcr-two';
 import { MOMENTS, SHOT_TIMES, type MomentId } from '../data/cockpit/f16c/aim120-scene';
 
@@ -51,8 +51,9 @@ interface Scenario {
    * on the `display` MFD; the step is done while the knob is at one of `ok`. Later steps' pages may name `{dial}`,
    * the position it was left at. `near`: the prompt when the knob is off `ok`.
    */
-  dial?: { step: string; control: string; page: string; ok: string[]; /** Positions where the thing looked for shows, but off `ok`. */ seen: string[]; display: 'left' | 'right'; prompt: string; near: string; done: string };
+  dial?: Dial | Dial[];
 }
+interface Dial { step: string; control: string; page: string; ok: string[]; /** Positions where the thing looked for shows, but off `ok`. */ seen: string[]; display: 'left' | 'right'; prompt: string; near: string; done: string }
 /** A slew: from page `on` (drawn as `free` while slewed), ending on `done` once the cursor is within `reach` of `target`. Several may run, one per step. */
 interface Slew { /** Whether the thing steered is a cursor (the FCR's, on the left MFD) rather than crosshairs. */ cursor?: boolean; step: string; on: string; free: string; done: string; target: [number, number]; start: [number, number]; reach: number; speed: number; box: [number, number, number, number]; display?: 'left' | 'right'; what?: string; along?: [number, number]; freeOnMove?: boolean }
 interface Scan { step: string; pages: (string | Pages)[]; secs: number[]; ms: number; caption: string; display?: 'left' | 'right'; prompt?: string }
@@ -64,17 +65,6 @@ const aimScan = (step: string, ks: MomentId[], caption: string, prompt: string) 
 const HUD_CAP = { 'hud.altitude': 28000, 'hud.velocity': 370, 'hud.mach': 0.92, 'hud.heading': 360, 'hud.pitch': 0, 'hud.roll': 0, 'hud.fpm-azimuth': 0, 'hud.fpm-elevation': 0, 'hud.steerpoint-azimuth': 0, 'hud.steerpoint-elevation': -24.7, 'hud.steering-cue': 0, 'hud.slant-range': 11, 'hud.steerpoint-distance': 10, 'hud.steerpoint': 1, 'hud.ttg': 65, 'hud.radar-alt': 27000 };
 const SCENARIOS: Record<string, Scenario> = {
   // F-16C air-to-air radar (mfd-fcr.ts): the FCR on the left MFD; a CAP at 28,000 ft heading 360°, the CAP point 10 NM ahead.
-  'fcr-vol': {
-    initial: { left: 'fcr-vol', mfd: 'menu-blank', ded: 'cni' },
-    after: { bars: { left: 'fcr-vol-2b-{dial}' }, spot: { left: 'fcr-vol-spot-{dial}' }, lock: { left: 'fcr-vol-stt-{dial}' } },
-    slew: { step: 'cursor', on: 'fcr-vol', free: 'fcr-vol-free', done: 'fcr-vol-aim', display: 'left', cursor: true, what: 'called position, 30 NM and 10° right', ...FCR_SLEW.aim },
-    dial: {
-      step: 'tilt', control: 'throttle.ant-elev', page: 'fcr-vol-{pos}', ok: ['d10', 'd15'], seen: VOL_SEEN, display: 'left',
-      prompt: 'Drag down on the ANT ELEV knob to roll it down, watching the cursor’s numbers.',
-      near: 'The contact is in the scan, but near its edge: keep rolling until 3,000 ft sits well inside the numbers.',
-      done: 'The contact is inside the scan.',
-    },
-  },
   'fcr-tws': {
     initial: { left: 'tw-rws', mfd: 'menu-blank', ded: 'cni' },
     after: {
@@ -98,8 +88,22 @@ const SCENARIOS: Record<string, Scenario> = {
   },
   'fcr-rws': {
     initial: { left: 'fcr-not-soi', mfd: 'menu-blank', ded: 'cni' },
-    after: { soi: { left: 'fcr-40' }, 'range-up': { left: 'fcr-80' }, a3: { left: 'fcr-80-a3' } },
+    after: { soi: { left: 'fcr-40' }, 'range-up': { left: 'fcr-80' }, a3: { left: 'fcr-80-a3' }, bars: { left: 'fcr-80-a3-lead-2b' } },
     slew: { step: 'slew', on: 'fcr-80-a3', free: 'fcr-80-a3-free', done: 'fcr-80-a3-lead', display: 'left', cursor: true, what: 'lead contact', ...FCR_SLEW.lead },
+    dial: [
+      {
+        step: 'tilt-up', control: 'throttle.ant-elev', page: 'fcr-80-a3-lead-{pos}', ok: ['u10', 'u15', 'u20', 'u25', 'u30'], seen: ['u5'], display: 'left',
+        prompt: 'Press and drag up on the ANT ELEV knob to roll it up, watching the cursor’s numbers.',
+        near: 'The lead is still in the scan, near its bottom edge: keep rolling until 25,000 ft is below the bottom number.',
+        done: 'The lead is out of the volume.',
+      },
+      {
+        step: 'tilt-back', control: 'throttle.ant-elev', page: 'fcr-80-a3-lead-{pos}', ok: ['center'], seen: ['u5', 'd5'], display: 'left',
+        prompt: 'Press and drag down on the ANT ELEV knob to roll it back, until the caret is level with the horizon line.',
+        near: 'Almost: the caret is just off 0°. One more notch to level.',
+        done: 'The antenna is level and the lead is back.',
+      },
+    ],
   },
   'fcr-vsr': {
     initial: { left: 'fcr-80', mfd: 'menu-blank', ded: 'cni' },
@@ -281,7 +285,9 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   const copy = (s: State): State => ({ ...s, cur: [...s.cur], x: { ...s.x }, r: { ...s.r } });
   /** Apply a step's page changes; `x` adds to the other panels' pages rather than replacing them. */
   /** The dial's position as it was left (`{dial}` in later pages). */
-  const dialAt = () => (sc.dial && pos[sc.dial.control]) || 'center';
+  const dials = ([] as Dial[]).concat(sc.dial ?? []);
+  const dialNow = () => dials.find(d => d.step === stepId());
+  const dialAt = () => (dials[0] && pos[dials[0].control]) || 'center';
   const fill = (v: string) => v.replace('{dial}', dialAt());
   const apply = (p: Pages) => { const { x, r, ...rest } = p; for (const k of ['mfd', 'left', 'ded'] as const) if (rest[k]) rest[k] = fill(rest[k]!); Object.assign(st, rest); if (x) st.x = { ...st.x, ...x }; if (r) st.r = { ...st.r, ...r }; };
   try { sessionStorage.removeItem(`oversweep:cockpit:${cfg.aircraft}`); } catch { /* storage unavailable */ }
@@ -290,6 +296,8 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   let step = 0;
   let finished = false;
   let made = new Set<string>();
+  /** A long press under way (held, not yet 0.5 s). */
+  let longPress: { control: string; timer: ReturnType<typeof setTimeout> } | null = null;
   /** Presses made so far of a repeated move (`times`). */
   let presses: Record<string, number> = {};
   let typed = 0;
@@ -302,9 +310,9 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   const say = (t: string, retry = false) => { feedback.textContent = t; feedback.classList.toggle('retry', retry); };
   const name = (control: string) => cfg.names[control] ?? control;
   const label = (control: string, to: string) => cfg.labels[`${control}.${to}`] ?? `${name(control)} to ${to}`;
-  const instruction = (w: StepDo) => (w.to === 'in' ? `press ${name(w.control)}` : `set the ${label(w.control, w.to)}`);
+  const instruction = (w: StepDo) => (w.on === 'release' ? `release the ${name(w.control)}` : w.to === 'in' ? `press ${name(w.control)}` : `set the ${label(w.control, w.to)}`);
   const cap = (t: string) => t[0].toUpperCase() + t.slice(1);
-  const mk = (w: StepDo) => `${w.control}=${w.to}`;
+  const mk = (w: StepDo) => `${w.control}=${w.to}${w.on === 'release' ? ':release' : ''}`;
   const moves = (s: Step) => [...(s.do ? [s.do] : []), ...(s.also ?? [])];
   const pending = (s: Step) => moves(s).filter(w => !made.has(mk(w)));
   const stepId = () => cfg.steps[step]?.id ?? '';
@@ -313,7 +321,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   const stepOf = (id: string) => cfg.steps.findIndex(x => x.id === id);
   const sl = () => slews.find(x => x.step === stepId()) ?? [...slews].reverse().find(x => stepOf(x.step) < step) ?? slews[0];
   const slewLeft = () => sl().display === 'left';
-  const dialing = () => !!sc.dial && stepId() === sc.dial.step && !finished;
+  const dialing = () => !!dialNow() && !finished;
   const slewing = () => stepId() === sl().step && !finished && (slewLeft() ? st.left : st.mfd) === sl().on;
   function indicate() {
     // `freeOnMove`: the `on` page stays until the cursor first leaves its start (e.g. the TGP's CZ appears only once slewed).
@@ -378,7 +386,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     previous.disabled = step === 0 && !finished;
     one<HTMLElement>('[data-controls]').hidden = false;
     // The button names what the reader checks; it shows once the step's moves are made.
-    confirm.hidden = finished || !s.confirm || moves(s).length > 0 || !!s.type || slewing() || scanning || (dialing() && !sc.dial!.ok.includes(dialAt()));
+    confirm.hidden = finished || !s.confirm || moves(s).length > 0 || !!s.type || slewing() || scanning || (dialing() && !dialNow()!.ok.includes(dialAt()));
     restart.hidden = !finished;
     confirm.textContent = s.confirm ?? 'Confirm';
     confirm.disabled = false;
@@ -393,7 +401,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     else if (moves(s).length) say(`Make these moves, in any order: ${moves(s).map(instruction).join('; ')}.`);
     else if (s.type) say(`Press ${keyText(s.type.keys[0])} (key 1 of ${s.type.keys.length}).`);
     else if (slewing()) say(`Steer the ${!sl().cursor && (sl().display === 'left' || sl().on.startsWith('tgp')) ? 'crosshairs' : 'cursor'} onto the ${sl().what ?? 'radar'}: press and drag on the RDR CURSOR switch.`);
-    else if (dialing()) say(sc.dial!.ok.includes(dialAt()) ? `${sc.dial!.done} Check the indications, then continue.` : sc.dial!.prompt);
+    else if (dialing()) say(dialNow()!.ok.includes(dialAt()) ? `${dialNow()!.done} Check the indications, then continue.` : dialNow()!.prompt);
     else if (scanning) say(scanOf()?.prompt ?? 'Watch the HAD: each scan refines the position. Replay it or drag through it below.');
     else say('Check the indications, then confirm.');
     showPad();
@@ -413,7 +421,9 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   function done(text = 'Done.') {
     if (!cfg.steps[step].confirm) {
       say(text);
-      const at = step;
+      const at = step, next = cfg.steps[step + 1]?.do, held = cfg.steps[step].do;
+      // A press whose next step is letting go of the same switch moves on at once, so the release is not missed.
+      if (next?.on === 'release' && held && next.control === held.control && next.to === held.to) { go(step + 1); return; }
       later(matchMedia('(max-width: 48rem)').matches ? 1400 : 800, () => { if (step === at && !finished) go(step + 1); });
       return;
     }
@@ -539,16 +549,16 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     if (d.aircraft !== cfg.aircraft || finished) return;
     const key = `${d.panel}.${d.control}`;
     // The dial step's knob: every position shows its page; the step is done while it is in the wanted band.
-    if (dialing() && key === sc.dial!.control) {
+    if (dialing() && key === dialNow()!.control) {
       if (d.phase === 'release') return;
       pos[key] = d.position;
-      const page = sc.dial!.page.replace('{pos}', d.position);
-      if (sc.dial!.display === 'left') st.left = page; else st.mfd = page;
+      const page = dialNow()!.page.replace('{pos}', d.position);
+      if (dialNow()!.display === 'left') st.left = page; else st.mfd = page;
       indicate();
-      const ok = sc.dial!.ok.includes(d.position), near = !ok && sc.dial!.seen.includes(d.position);
+      const ok = dialNow()!.ok.includes(d.position), near = !ok && dialNow()!.seen.includes(d.position);
       confirm.hidden = !ok;
       if (ok) { confirm.textContent = cfg.steps[step].confirm ?? 'Confirm'; confirm.disabled = false; }
-      say(ok ? `${sc.dial!.done} Check the indications, then continue.` : near ? sc.dial!.near : sc.dial!.prompt, near);
+      say(ok ? `${dialNow()!.done} Check the indications, then continue.` : near ? dialNow()!.near : dialNow()!.prompt, near);
       return;
     }
     // The cursor switch while slewing: each arm held is full deflection that way (the joystick refines it).
@@ -570,7 +580,15 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     if (t && d.phase === 'release') { indicate(); return; }
     const before = pos[key];
     pos[key] = d.position;
-    const want = pending(s).find(w => w.control === key && w.to === d.position && (w.on ?? 'press') === d.phase);
+    // Let go before a long press counted (TMS forward for a spotlight): in the jet that was a short press.
+    if (longPress && d.phase === 'release' && key === longPress.control) {
+      clearTimeout(longPress.timer); longPress = null;
+      say('That was a short press: in the jet it bugs the contact in SAM. Hold TMS forward for the spotlight, then let go on the contact.', true);
+      indicate();
+      return;
+    }
+    // A release reports the position the switch springs back to; a release step means letting go from `to`.
+    const want = pending(s).find(w => w.control === key && (w.on ?? 'press') === d.phase && (d.phase === 'release' ? before === w.to : w.to === d.position));
     if (want) {
       const need = want.times ?? 1;
       if (need > 1) {
@@ -582,11 +600,22 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
           return;
         }
       }
+      // A press whose next step lets go of the same switch is a long press (over 0.5 s, p. 84): it counts once held.
+      const next = cfg.steps[step + 1]?.do;
+      if (d.phase === 'press' && next?.on === 'release' && next.control === want.control && next.to === want.to) {
+        const at = step;
+        longPress = { control: key, timer: setTimeout(() => { longPress = null; if (step === at && !finished && pos[key] === want.to) acted(want); }, 500) };
+        indicate();
+        return;
+      }
       acted(want);
       return;
     }
     // Springing back from a momentary press, or a press that completes nothing.
     if (d.phase === 'release') { indicate(); return; }
+    // Pressed again on a step done by letting go (the earlier press was a short click): hold it, then let go.
+    const hold = pending(s).find(w => w.on === 'release' && w.control === key && w.to === d.position);
+    if (hold) { indicate(); say(`Now ${instruction(hold)}.`); return; }
     // A control that is not part of this step: put it back.
     pos[key] = before;
     setPositions({ [key]: before });
