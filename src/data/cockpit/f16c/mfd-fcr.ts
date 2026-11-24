@@ -241,7 +241,8 @@ function fcr(id: string, s: FcrState): Page {
   }
   // Cursor: its altitude limits and the bearing and range from the steerpoint (left column); none while slewed or in STT.
   let cursor: Page['cursor'];
-  if (s.cursor && s.soi) {
+  // The cursor stays on the format when the FCR is not the SOI; it just does not answer the cursor switch.
+  if (s.cursor) {
     const at = s.cursor === 'free' ? null : s.cursor;
     cursor = { d: CURSOR_BARS, at: at ? [f(mm(at[0] - SC[0])), f(mm(at[1] - SC[1]))] : [0, 0] };
     if (at) {
