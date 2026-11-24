@@ -289,7 +289,9 @@ export function smokeTrail(az: number, down: number, reach: number) {
 export function impactSmoke(az: number, down: number) {
   const [x, y] = [B[0] + az * DEG, B[1] + down * DEG];
   const blob = (dx: number, dy: number, rr: number, o: number) => `<circle cx="${rx(x + dx).toFixed(3)}" cy="${ry(y + dy).toFixed(3)}" r="${mm(rr).toFixed(3)}" fill="#14171c" fill-opacity="${o}" stroke="none"/>`;
-  return blob(0, 6, 8, 0.85) + blob(-8, 0, 6.5, 0.75) + blob(8, -2, 6, 0.7) + blob(-2, -7, 5.5, 0.6) + blob(3, -12, 4, 0.4);
+  // From so far away: a tiny dark burst, and a thin dark streak of smoke falling away beneath it.
+  const streak = rel([[x - 1.2, y], [x + 1.2, y], [x + 2.4, y + 30], [x - 0.6, y + 34]]);
+  return `<path d="${streak}" fill="#14171c" fill-opacity="0.6" stroke="none"/>` + blob(0, 0, 3, 0.85) + blob(-2.5, -1.5, 2, 0.7) + blob(2.5, -1, 2, 0.7);
 }
 export const MRM_CUES = [
   mrmCue({ id: 'mrm-bore', view: { rdy: '' }, bore: true }),
