@@ -12,8 +12,9 @@
 import { HAD_SLEW, HADH, HADX } from '../data/cockpit/f16c/mfd-had';
 import { MAV_D_SLEW3, MAV_D_SLEW7, MAV_SLEW } from '../data/cockpit/f16c/mfd-maverick';
 import { TGP_SLEW_B, TGP_SLEW_T } from '../data/cockpit/f16c/mfd-tgp';
-import { FCR_SLEW, VOL_SEEN } from '../data/cockpit/f16c/mfd-fcr';
+import { AIM_SLEW, FCR_SLEW, VOL_SEEN } from '../data/cockpit/f16c/mfd-fcr';
 import { TWO_SLEW } from '../data/cockpit/f16c/mfd-fcr-two';
+import { MOMENTS, SHOT_TIMES, type MomentId } from '../data/cockpit/f16c/aim120-scene';
 
 interface StepDo { control: string; to: string; on?: 'press' | 'release'; /** Presses it takes (each short of the last shows `after['<step>-<n>']`). */ times?: number }
 interface Typing { keys: string[]; pages: string[] }
@@ -42,7 +43,7 @@ interface Scenario {
    * start, played back `ms` real milliseconds per page. The step panel gets a player (play, scrubber, elapsed time)
    * so the reader can replay it or drag through it; `caption` follows the time ("after the turn").
    */
-  scans?: { step: string; pages: (string | Pages)[]; secs: number[]; ms: number; caption: string; display?: 'left' | 'right'; prompt?: string };
+  scans?: Scan | Scan[];
   /** Pages a step shows as it opens (a look step that adds a teaching overlay). */
   enter?: Record<string, Pages>;
   /**
@@ -54,7 +55,13 @@ interface Scenario {
 }
 /** A slew: from page `on` (drawn as `free` while slewed), ending on `done` once the cursor is within `reach` of `target`. Several may run, one per step. */
 interface Slew { /** Whether the thing steered is a cursor (the FCR's, on the left MFD) rather than crosshairs. */ cursor?: boolean; step: string; on: string; free: string; done: string; target: [number, number]; start: [number, number]; reach: number; speed: number; box: [number, number, number, number]; display?: 'left' | 'right'; what?: string; along?: [number, number]; freeOnMove?: boolean }
+interface Scan { step: string; pages: (string | Pages)[]; secs: number[]; ms: number; caption: string; display?: 'left' | 'right'; prompt?: string }
 interface Warm { step: string; secs: number; ms: number; busy: string; ready: string; label: string; after?: Pages }
+/** The AIM-120 shot's pages at one moment (`aim120-scene.ts`): the FCR, the HUD cues, its slant range and heading. */
+const aim = (k: MomentId): Pages => ({ left: `fcr-aim-${k}`, x: { 'hud.harm-cues': `mrm-${k}` }, r: { 'hud.slant-range': MOMENTS[k].nm, 'hud.heading': MOMENTS[k].hdg } });
+const aimScan = (step: string, ks: MomentId[], caption: string, prompt: string) =>
+  ({ step, pages: ks.map(aim), secs: ks.map(k => SHOT_TIMES[k as keyof typeof SHOT_TIMES]), ms: 1600, caption, display: 'left' as const, prompt });
+const HUD_CAP = { 'hud.altitude': 28000, 'hud.velocity': 370, 'hud.mach': 0.92, 'hud.heading': 360, 'hud.pitch': 0, 'hud.roll': 0, 'hud.fpm-azimuth': 0, 'hud.fpm-elevation': 0, 'hud.steerpoint-azimuth': 0, 'hud.steerpoint-elevation': -24.7, 'hud.steering-cue': 0, 'hud.slant-range': 11, 'hud.steerpoint-distance': 10, 'hud.steerpoint': 1, 'hud.ttg': 65, 'hud.radar-alt': 27000 };
 const SCENARIOS: Record<string, Scenario> = {
   // F-16C air-to-air radar (mfd-fcr.ts): the FCR on the left MFD; a CAP at 28,000 ft heading 360°, the CAP point 10 NM ahead.
   'fcr-vol': {
@@ -98,6 +105,36 @@ const SCENARIOS: Record<string, Scenario> = {
     initial: { left: 'fcr-80', mfd: 'menu-blank', ded: 'cni' },
     after: { vsr: { left: 'fcr-vsr' }, stt: { left: 'fcr-vsr-stt' }, drop: { left: 'fcr-vsr-far' } },
     slew: { step: 'slew', on: 'fcr-vsr', free: 'fcr-vsr-free', done: 'fcr-vsr-far', display: 'left', cursor: true, what: 'far contact', ...FCR_SLEW.far },
+  },
+  aim120: {
+    // The radar procedures' CAP: the FCR (not SOI) on the left MFD, the SMS on the right; NAV, master arm off.
+    initial: { left: 'fcr-not-soi', mfd: 'sms-msl', ded: 'cni', x: { 'hud.screen': 'on', 'hud.master-arm': 'none', 'hud.master-mode': 'nav', 'hud.harm-cues': 'none', 'hud.slant-range-source': 'b' }, r: HUD_CAP },
+    after: {
+      msl: { left: 'fcr-msl', x: { 'hud.master-mode': 'mrm4', 'hud.harm-cues': 'mrm-bore' } },
+      arm: { left: 'fcr-msl-rdy', mfd: 'sms-msl-rdy', x: { 'hud.master-arm': 'arm' } },
+      soi: { left: 'fcr-msl-soi' }, range: { left: 'fcr-msl-80' },
+      bug: { ...aim('bugged'), x: { 'hud.harm-cues': 'mrm-bugged', 'hud.slant-range-source': 'f' } },
+      shoot: { ...aim('launched'), mfd: 'sms-msl-3', x: { 'hud.harm-cues': 'mrm-launched', 'hud.master-mode': 'mrm3' } },
+    },
+    enter: { turn: aim('turned'), crank: aim('cranked') },
+    slew: { step: 'slew', on: 'fcr-msl-80', free: 'fcr-msl-80-free', done: 'fcr-msl-80-lead', display: 'left', cursor: true, what: 'lead contact', ...AIM_SLEW },
+    scans: [
+      aimScan('close', ['turned', 'c42', 'c38', 'c35', 'rpi'], 'after the turn', 'Watch the missile scale on the FCR and the HUD as the range closes. Replay it or drag through it below.'),
+      aimScan('support', ['cranked', 't10', 't20', 't30', 'active'], 'after the launch', 'Watch the timer count down under the missile scale. Replay it or drag through it below.'),
+      aimScan('impact', ['active', 'last8', 'impact'], 'after the launch', 'Watch the target on the FCR. Replay it or drag through it below.'),
+    ],
+  },
+  'aim120-bore': {
+    // The CAP, a bandit in sight 5° right: the SMS on the right MFD; NAV, master arm off; the radar not tracking.
+    initial: { mfd: 'sms-aam', ded: 'cni', x: { 'hud.screen': 'on', 'hud.master-arm': 'none', 'hud.master-mode': 'nav', 'hud.harm-cues': 'scene-bandit', 'hud.slant-range-source': 'b' }, r: HUD_CAP },
+    after: {
+      'a-a': { x: { 'hud.master-mode': 'mrm4', 'hud.harm-cues': 'mrm-bore-bandit' } },
+      bore: { mfd: 'sms-aam-bore' },
+      arm: { mfd: 'sms-aam-bore-rdy', x: { 'hud.master-arm': 'arm' } },
+      shoot: { mfd: 'sms-aam-bore-3', x: { 'hud.master-mode': 'mrm3' } },
+    },
+    enter: { aim: { x: { 'hud.harm-cues': 'mrm-bore-on' }, r: { 'hud.heading': 5, 'hud.pitch': 6, 'hud.fpm-elevation': -2 } } },
+    slew: [],
   },
   'fcr-bug': {
     initial: { left: 'fcr-80-a3-lead', mfd: 'menu-blank', ded: 'cni', x: { 'hud.screen': 'on', 'hud.master-arm': 'none', 'hud.master-mode': 'nav', 'hud.harm-cues': 'none', 'hud.slant-range-source': 'b' }, r: { 'hud.altitude': 28000, 'hud.velocity': 370, 'hud.mach': 0.92, 'hud.heading': 360, 'hud.pitch': 0, 'hud.roll': 0, 'hud.fpm-azimuth': 0, 'hud.fpm-elevation': 0, 'hud.steerpoint-azimuth': 0, 'hud.steerpoint-elevation': -24.7, 'hud.steering-cue': 0, 'hud.slant-range': 11, 'hud.steerpoint-distance': 10, 'hud.steerpoint': 1, 'hud.ttg': 65, 'hud.radar-alt': 27000 } },
@@ -234,6 +271,8 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
   const sc = SCENARIOS[cfg.model] ?? SCENARIOS.hts;
+  const scanList = ([] as Scan[]).concat(sc.scans ?? []);
+  const scanOf = () => scanList.find(x => x.step === stepId());
   // A scenario with nothing to slew gets a slew no step or page matches.
   const slews = ([] as Slew[]).concat(sc.slew);
   if (!slews.length) slews.push(NO_SLEW);
@@ -355,7 +394,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     else if (s.type) say(`Press ${keyText(s.type.keys[0])} (key 1 of ${s.type.keys.length}).`);
     else if (slewing()) say(`Steer the ${!sl().cursor && (sl().display === 'left' || sl().on.startsWith('tgp')) ? 'crosshairs' : 'cursor'} onto the ${sl().what ?? 'radar'}: press and drag on the RDR CURSOR switch.`);
     else if (dialing()) say(sc.dial!.ok.includes(dialAt()) ? `${sc.dial!.done} Check the indications, then continue.` : sc.dial!.prompt);
-    else if (scanning) say(sc.scans?.prompt ?? 'Watch the HAD: each scan refines the position. Replay it or drag through it below.');
+    else if (scanning) say(scanOf()?.prompt ?? 'Watch the HAD: each scan refines the position. Replay it or drag through it below.');
     else say('Check the indications, then confirm.');
     showPad();
     indicate();
@@ -392,7 +431,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     enterStep();
     render();
     if (st.pod > 0) warmUp();
-    if (sc.scans && stepId() === sc.scans.step) playScans();
+    if (scanOf()) playScans();
   }
 
   function enterStep() {
@@ -412,13 +451,13 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   const mmss = (v: number) => `${Math.floor(v / 60)}:${String(Math.floor(v % 60)).padStart(2, '0')}`;
   /** Show the moment `v` jet seconds in: the latest page at or before it, the scrubber and the clock. */
   function seek(v: number) {
-    const { pages, secs, caption } = sc.scans!, end = secs[secs.length - 1];
+    const { pages, secs, caption } = scanOf()!, end = secs[secs.length - 1];
     t = Math.max(0, Math.min(end, v));
     let k = 0;
     secs.forEach((x, i) => { if (x <= t) k = i; });
     const pg = pages[k];
     if (typeof pg !== 'string') { apply(pg); indicate(); }
-    else if (sc.scans!.display === 'left' ? st.left !== pg : st.mfd !== pg) { if (sc.scans!.display === 'left') st.left = pg; else st.mfd = pg; indicate(); }
+    else if (scanOf()!.display === 'left' ? st.left !== pg : st.mfd !== pg) { if (scanOf()!.display === 'left') st.left = pg; else st.mfd = pg; indicate(); }
     scrub.value = String(t);
     clock.textContent = `${mmss(t)} / ${mmss(end)} ${caption}`;
     scrub.setAttribute('aria-valuetext', `${mmss(t)} ${caption}`);
@@ -428,7 +467,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     playBtn.dataset.state = on ? 'pause' : t >= +scrub.max ? 'replay' : 'play';
     playBtn.setAttribute('aria-label', on ? 'Pause' : t >= +scrub.max ? 'Replay' : 'Play');
     if (!on) return;
-    const { secs, ms } = sc.scans!, rate = (secs[secs.length - 1] / ((secs.length - 1) * ms));
+    const { secs, ms } = scanOf()!, rate = (secs[secs.length - 1] / ((secs.length - 1) * ms));
     lastFrame = performance.now();
     const tick = (now: number) => {
       seek(t + (now - lastFrame) * rate); lastFrame = now;
@@ -445,7 +484,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   function stopPlayer() { cancelAnimationFrame(frame); player.hidden = true; }
   /** The HTS scans: the picture refines one page per moment; the step's button is offered once it has played through. */
   function playScans() {
-    const { secs } = sc.scans!;
+    const { secs } = scanOf()!;
     scrub.min = '0'; scrub.max = String(secs[secs.length - 1]); scrub.step = '1';
     player.hidden = false;
     scanning = true; render();
@@ -571,7 +610,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     step = to; made = new Set(); presses = {}; typed = 0; scanning = false;
     enterStep();
     render();
-    if (sc.scans && stepId() === sc.scans.step) playScans();
+    if (scanOf()) playScans();
   });
   restart.addEventListener('click', () => {
     timers.splice(0).forEach(clearTimeout);

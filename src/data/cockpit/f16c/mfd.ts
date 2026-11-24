@@ -4,8 +4,9 @@ import { hadBottom, hadPageLabels, hadPages } from './mfd-had.ts';
 import { tgpPageLabels, tgpPages } from './mfd-tgp.ts';
 import { harmPageLabels, harmPages } from './mfd-harm.ts';
 import { hsdPageLabels, hsdPages } from './mfd-hsd.ts';
-import { fcrPageLabels, fcrPages } from './mfd-fcr.ts';
+import { aimFcrLabels, fcrPageLabels, fcrPages } from './mfd-fcr.ts';
 import { twoPageLabels, twoPages } from './mfd-fcr-two.ts';
+import { smsAaPageLabels, smsAaPages } from './mfd-sms-aa.ts';
 import { maverickDPageLabels, maverickDPages, maverickPageLabels, maverickPages } from './mfd-maverick.ts';
 
 /**
@@ -105,6 +106,7 @@ const display: MfdDisplay = {
     ...hsdPages,
     ...fcrPages,
     ...twoPages,
+    ...smsAaPages,
     {
       id: 'dte', words: [
         w('ON', 184.5, 117), w('CLSD', 257.5, 117), w('LOAD', 331, 116.5), w('FCR', 404, 116.5),
@@ -237,10 +239,12 @@ function build(side: 'left' | 'right'): PanelSpec {
           ...Object.entries(hsdPageLabels).map(([id, label]) => ({ id, label })),
           ...Object.entries(fcrPageLabels).map(([id, label]) => ({ id, label })),
           ...Object.entries(twoPageLabels).map(([id, label]) => ({ id, label })),
+          ...Object.entries(aimFcrLabels).map(([id, label]) => ({ id, label })),
+          ...Object.entries(smsAaPageLabels).map(([id, label]) => ({ id, label })),
         ],
         restPage: 'off',
         description: 'A 4 x 4 in colour LCD showing the selected format. MENU lists the formats that can be assigned to the highlighted format-select button along the bottom (OSB 12-14). The DTE format loads mission data from the data transfer cartridge: LOAD (OSB 3) loads every partition, or each partition loads on its own button (MPD, COMM, ELINT on page 1; GPS, COLR on page 2; PAGE at OSB 10 changes page). The HAD (HARM Attack Display) format shows the radars the HTS pod has located, over the route and range rings: OSB 1 DEP/CEN, OSB 3 field of view, OSB 4 THRT (threat classes in each HTS scan), OSB 5 CNTL, OSB 19/20 range scale. The TGP format shows the targeting pod video and symbology: in Slave mode (large crosshairs) the pod looks at the system point of interest, with its coordinates and elevation top left. The HAD Control (CNTL) page turns the routes, lines and pre-planned threats on the HAD on or off. With the AGM-65 Maverick selected, the WPN format shows the missile seeker’s video under the crosshairs, pointer cross and launch range scale. The display is powered by the MFD switch on the AVIONICS POWER panel.',
-        source: `${src}; ${dteSrc}; DCS F-16C guide pp. 530-539 (HAD), p. 495 (TGP), pp. 659-662 (HARM SMS, WPN), pp. 672-673 (Maverick SMS, WPN)`,
+        source: `${src}; ${dteSrc}; DCS F-16C guide pp. 530-539 (HAD), p. 495 (TGP), pp. 659-662 (HARM SMS, WPN), pp. 672-673 (Maverick SMS, WPN), p. 599 (SMS air-to-air), p. 598 (FCR AIM-120 symbology)`,
       },
     ],
   };

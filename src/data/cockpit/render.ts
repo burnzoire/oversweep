@@ -291,7 +291,8 @@ function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, cu
     }
     if (page?.marks) body += `<path d="${page.marks}" fill="none" stroke="${W}" ${sw('medium')}/>`;
     if (page?.fine) body += `<path d="${page.fine}" fill="none" stroke="${W}" ${sw('fine')}/>`;
-    for (const p of page?.paths ?? []) if (!p.fill) body += `<path d="${p.d}" fill="none" stroke="${MFD_COLOURS[p.c]}" ${sw(p.pen ?? 'medium')}${p.dash ? ' stroke-dasharray="2.2 1.4"' : ''}/>`;
+    if (page?.flash || page?.flashFill) body += `<g><animate attributeName="opacity" values="1;0" calcMode="discrete" dur="0.8s" repeatCount="indefinite"/>${page.flashFill ? `<path d="${page.flashFill}" fill="${W}" stroke="none"/>` : ''}${page.flash ? `<path d="${page.flash}" fill="none" stroke="${W}" ${sw('medium')}/>` : ''}</g>`;
+    for (const p of page?.paths ?? []) if (!p.fill) body += `<path d="${p.d}" fill="none" stroke="${MFD_COLOURS[p.c]}" ${sw(p.pen ?? 'medium')}${p.dash ? ' stroke-dasharray="2.2 1.4"' : ''}>${p.blink ? '<animate attributeName="opacity" values="1;0" calcMode="discrete" dur="0.8s" repeatCount="indefinite"/>' : ''}</path>`;
     if (page?.aid) body += `<path data-aid d="${page.aid}" fill="none" stroke="${MFD_AID}" stroke-dasharray="1.2 0.8" ${sw('fine')}/>`;
     if (page?.cursorX && page.cursor) body += `<g data-cursor-x="${id}" transform="translate(${n(page.cursor.at[0])} 0)"><path d="${page.cursorX.d}" fill="none" stroke="${MFD_COLOURS[page.cursorX.c]}" ${sw('medium')}/></g>`;
     if (page?.cursor && !page.pan) body += `<g data-cursor="${id}" transform="translate(${n(page.cursor.at[0])} ${n(page.cursor.at[1])})"><path d="${page.cursor.d}" fill="none" stroke="${W}" ${sw('medium')}/></g>`;
@@ -474,7 +475,7 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
   const mode = `<g data-indicator="velocity-mode">${pages('velocity-mode', pg => hudText(h.velocityMode[0], h.velocityMode[1], word('velocity-mode', pg), F, 'middle'))}</g>`;
   const cues = h.cues ? `<g data-indicator="${h.cues.id}">${pages(h.cues.id, pg => {
     const c = h.cues!.pages.find(q => q.id === pg)!;
-    return `<path d="${c.art}" ${pen}/>` + (c.steer ? shift('harm-asl', 'x', D, `<path d="${c.steer}" ${pen}/>`) : '') + c.texts.map(t => hudText(t.at[0], t.at[1], t.t, F, t.anchor)).join('') +
+    return (c.scene ?? '') + `<path d="${c.art}" ${pen}/>` + (c.steer ? shift('harm-asl', 'x', D, `<path d="${c.steer}" ${pen}/>`) : '') + c.texts.map(t => hudText(t.at[0], t.at[1], t.t, F, t.anchor)).join('') +
       (c.flash ? `<path d="${c.flash}" ${pen}><animate attributeName="opacity" values="1;0" calcMode="discrete" dur="0.4s" repeatCount="indefinite"/></path>` : '');
   })}</g>` : '';
   const heading = h.cues?.heading

@@ -1,6 +1,8 @@
 import type { MfdDisplay } from '../types';
 import { tracer } from '../trace.ts';
 import { c, f, poly, w } from './mfd-had.ts';
+import { ASEC, asecDeg, type MrmView } from './mrm.ts';
+import { MOMENTS, scaleFor, type MomentId } from './aim120-scene.ts';
 
 /**
  * F-16C Fire Control Radar (FCR) air-to-air format, for the shared MFD (`mfd.ts`). Traced from the guide's FCR
@@ -32,6 +34,7 @@ type P = [number, number];
 
 export const AZ0 = 330.75, PX_DEG = 220.75 / 60, R0 = 548, RH = 441;
 export type Scale = 20 | 40 | 80;
+export const local = ([x, y]: P): P => [f(mm(x - SC[0])), f(mm(y - SC[1]))];
 /** Where a point at `az` degrees off the nose and `nm` range is drawn on the B-scope. */
 export const scope = (az: number, nm: number, scale: Scale): P => [AZ0 + az * PX_DEG, R0 - (nm / scale) * RH];
 /** Azimuth and range of a B-scope point. */
@@ -138,6 +141,60 @@ const LIMITS_X10 = (() => {
   return `M${q([-d, 144])}L${q([-d, 511])}M${q([d, 144])}L${q([d, 511])}`;
 })();
 
+/* ---------------------------------------------------------------- AIM-120 */
+
+/**
+ * AIM-120 symbology on the FCR (p. 598 image, the same 660 px grid). The missile scale stands on the right of the
+ * B-scope: its bar at x 513.3, zero at y 436.7; the guide's figure (40 NM scale) puts the target-range caret at the
+ * bugged target's range (26.8 NM, measured off the B-scope) 140.7 px up the bar, so the scale is taken as 210 px for
+ * the radar's range scale. RPI is the bar's top, with a tick right to x 531.7; the box from RTR to RMIN is 18 px wide;
+ * ROPT a circle (r 4.5) on the bar's left; RAERO a triangle pointing left (13 x 12 px). The closure and caret end at
+ * x 512.5, the pre-launch pole 14.7 px under them; the post-launch pole and time (or the pre-launch time) are right
+ * aligned at x 537, 10 and 27.3 px under the bar. The ASEC (r 49.4 at RPI, centre 331.9, 329) and the ASC (r 4.5) are
+ * white; the guide's figure shows the large circle only, so the small one is scaled from the HUD's (p. 597).
+ */
+const DLZ_X = 513.3, DLZ_0 = 436.7, DLZ_H = 210;
+const ASEC_C: P = [331.9, 329], ASEC_R = 49.4;
+function mrmMarks(m: MrmView, scale: Scale) {
+  const words: Page['words'] = [];
+  let marks = '';
+  if (m.rdy) words.push(w(m.rdy, 332, 511));
+  if (m.nm === undefined || !m.dlz) return { words, marks };
+  const y = (nm: number) => DLZ_0 - (Math.min(nm, scale) / scale) * DLZ_H;
+  const d = m.dlz;
+  marks += poly([[DLZ_X, y(d.min)], [DLZ_X, y(d.pi)], [531.7, y(d.pi)]]) + rect(DLZ_X, y(d.tr), 531.7, y(d.min));
+  marks += ring([DLZ_X - 4.5, y(d.opt)], 4.5) + poly([[514, y(d.aero)], [527, y(d.aero) - 6], [527, y(d.aero) + 6]], true);
+  const ty = y(m.nm);
+  words.push(w(`${m.closure}>`, 512.5, ty, 'end'));
+  if (m.pre) words.push(w(m.pre[0], 500, ty + 14.7, 'end'));
+  const lines = m.post ?? (m.pre ? [m.pre[1]] : []);
+  lines.forEach((t, i) => words.push(w(t, 537, DLZ_0 + 10 + 17.3 * i, 'end')));
+  if (m.asec !== undefined) {
+    const r = (ASEC_R * asecDeg(m.asec)) / ASEC.large;
+    marks += ring(ASEC_C, r);
+    if (m.asc) {
+      const k = (v: number) => Math.max(-1.6, Math.min(1.6, v)) * r;
+      marks += ring([ASEC_C[0] + k(m.asc[0]), ASEC_C[1] + k(m.asc[1])], 4.5);
+    }
+  }
+  return { words, marks };
+}
+/**
+ * The AIM-120 target marks (p. 598 key): a rectangular tail behind the symbol once a missile is in flight (drawn 10 x 6
+ * px, on the far side of the ring from the heading line, from the key's proportions), flashing once the missile is
+ * active; a red X (26 px) over it for the last 8 s, flashing for 5 s after.
+ */
+function mrmTarget([x, y]: P, hot: boolean, m: MrmView, out: { fills: string; flashFill: string; red: string; redFlash: string }) {
+  if (m.tail) {
+    const t = hot ? rect(x - 5, y - 19, x + 5, y - 13) : rect(x - 5, y + 13, x + 5, y + 19);
+    if (m.tail === 'flash') out.flashFill += t; else out.fills += t;
+  }
+  if (m.x) {
+    const xx = poly([[x - 13, y - 13], [x + 13, y + 13]]) + poly([[x + 13, y - 13], [x - 13, y + 13]]);
+    if (m.x === 'flash') out.redFlash += xx; else out.red += xx;
+  }
+}
+
 /* -------------------------------------------------------------------- state */
 
 export type Sub = 'RWS' | 'VSR' | 'SAM' | 'STT';
@@ -170,6 +227,10 @@ export interface FcrState {
   bars?: Bars;
   /** Spotlight scan (TMS forward held): A1 4B about the cursor while held (p. 383). */
   spot?: boolean;
+  /** Contacts moved from their place in the scene (AIM-120 shots: the lead closing), azimuth off 360° and range. */
+  moved?: Partial<Record<ContactId, { az: number; nm: number }>>;
+  /** AIM-120 symbology (p. 598): the status word, and with a bugged target the missile scale, ASEC and ASC. */
+  mrm?: MrmView;
 }
 /** A point's azimuth off the nose on a heading (the scene is laid out on 360°). */
 const off = (az: number, hdg = 360) => ((az + 360 - hdg + 540) % 360) - 180;
@@ -198,9 +259,11 @@ const TOI: Partial<Record<ContactId, { aspect: string; track: string; kcas: stri
   low: { aspect: '18', track: '190°', kcas: '350', closure: hdg => Math.round(550 * cos(10 - (hdg - 360)) + 365), cata: 370 },
   far: { aspect: '18', track: '190°', kcas: '400', closure: hdg => Math.round(550 * cos(8 - (hdg - 360)) + 628), cata: 368 },
 };
-const toiData = (k: ContactId, hdg = 360) => {
+const toiData = (k: ContactId, hdg = 360, mrm?: MrmView) => {
   const t = TOI[k]!;
-  return [w(t.aspect, 128, 136.5, 'start'), w(t.track, 186, 136.5, 'start'), w(t.kcas, 405, 136.5), w(`+${t.closure(hdg)}K`, 513.5, 136.5, 'end')];
+  /** With AIM-120 symbology the moment carries its own aspect and closure (`aim120-scene.ts`). */
+  const a = mrm?.aspect, aspect = a === undefined ? t.aspect : Math.round(Math.abs(a) / 10) >= 18 ? '18' : `${Math.round(Math.abs(a) / 10)}${a > 0 ? 'R' : 'L'}`;
+  return [w(aspect, 128, 136.5, 'start'), w(t.track, 186, 136.5, 'start'), w(t.kcas, 405, 136.5), w(`+${mrm?.closure ?? t.closure(hdg)}K`, 513.5, 136.5, 'end')];
 };
 
 export function fcr(id: string, s: FcrState): Page {
@@ -242,6 +305,7 @@ export function fcr(id: string, s: FcrState): Page {
   if (s.soi) fine += FRAME;
   else words.push(w('NOT SOI', 331, 160));
 
+  const tgt = { fills: '', flashFill: '', red: '', redFlash: '' };
   // Scene: the steerpoint, then the contacts the radar shows in this sub-mode.
   if (!s.noStpt) fills += cake(scope(stptAz(s.hdg), 10, s.scale));
   const shown = (Object.entries(CONTACTS) as [ContactId, Contact][]).filter(([k, t]) => {
@@ -256,23 +320,25 @@ export function fcr(id: string, s: FcrState): Page {
     if (s.sub === 'VSR') return t.hot;
     return !t.vsrOnly;
   });
-  for (const [k, t] of shown) {
+  for (const [k, t0] of shown) {
+    const t = { ...t0, ...s.moved?.[k] };
     const p = scope(off(t.az, s.hdg), t.nm, s.scale);
     if (p[1] < 112) continue;
     if (k === s.bug) {
       const b = bugged(p, t.hot);
       marks += b.marks; fills += b.fills + cata(scope(off(TOI[k]!.cata - 360, s.hdg), t.nm, s.scale));
       words.push(w(pad(t.alt, 2), p[0], p[1] + 28));
+      if (s.mrm) mrmTarget(p, t.hot, s.mrm, tgt);
     } else {
       fills += searchTarget(p, s.sub === 'VSR' ? null : t.hot);
       if (k === s.over) words.push(w(pad(t.alt, 2), p[0], p[1] + 28));
     }
   }
   if (s.bug) {
-    words.push(...toiData(s.bug, s.hdg));
+    words.push(...toiData(s.bug, s.hdg, s.mrm));
     // SAM track indicators (p. 418): crosses on the elevation and azimuth scales at the primary target's elevation and azimuth.
     if (s.sub === 'SAM') {
-      const t = CONTACTS[s.bug], el = (Math.atan2((t.alt * 1000 - OWN_ALT) / FT_NM, t.nm) * 180) / Math.PI;
+      const t = { ...CONTACTS[s.bug], ...s.moved?.[s.bug] }, el = (Math.atan2((t.alt * 1000 - OWN_ALT) / FT_NM, t.nm) * 180) / Math.PI;
       const ey = 327.5 - el * 3.65, tx = AZ0 + off(t.az, s.hdg) * PX_DEG;
       cyan.push(poly([[139, ey], [151, ey]]) + poly([[145, ey - 6], [145, ey + 6]]) + poly([[tx - 6, 528], [tx + 6, 528]]) + poly([[tx, 520], [tx, 536]]));
     }
@@ -293,11 +359,18 @@ export function fcr(id: string, s: FcrState): Page {
   }
   // In STT there is no cursor: the field gives the bearing and range from the steerpoint to the bugged target (p. 421).
   if (s.sub === 'STT' && s.bug) {
-    const t = CONTACTS[s.bug], b = fromStpt(off(t.az, s.hdg), t.nm, s.hdg);
+    const t = { ...CONTACTS[s.bug], ...s.moved?.[s.bug] }, b = fromStpt(off(t.az, s.hdg), t.nm, s.hdg);
     words.push(w(pad(b.brg, 3), 112.5, 440, 'start'), w(pad(b.nm, 2), 151, 440, 'start'));
   }
   paths.push({ d: cyan.join(''), c: 'cyan' });
-  const page: Page = { id, words, marks, fills, fine, paths, ...(cursor ? { cursor } : {}) };
+  if (s.mrm) {
+    const m = mrmMarks(s.mrm, s.scale);
+    words.push(...m.words); marks += m.marks;
+    fills += tgt.fills;
+    if (tgt.red) paths.push({ d: tgt.red, c: 'red' });
+  }
+  const page: Page = { id, words, marks, fills, fine, paths, ...(cursor ? { cursor } : {}), ...(tgt.flashFill ? { flashFill: tgt.flashFill } : {}) };
+  if (tgt.redFlash) page.paths!.push({ d: tgt.redFlash, c: 'red', blink: true });
   if (s.spot && cursor) page.cursorX = { d: LIMITS_X10, c: 'cyan' };
   else if (s.az === 'A3' && cursor && s.sub !== 'STT') page.cursorX = { d: LIMITS_X, c: 'cyan' };
   return page;
@@ -326,6 +399,23 @@ export const FCR_STATES = {
   'fcr-vsr-far': { soi: true, scale: 80, sub: 'VSR', az: 'A6', cursor: on('far', 80), over: 'far', ant: 5 },
   'fcr-vsr-stt': { soi: true, scale: 80, sub: 'STT', az: 'A6', cursor: null, bug: 'far', ant: 8, from: 'VSR' },
 } satisfies Record<string, FcrState>;
+/**
+ * The AIM-120 single-target shot (see `aim120-scene.ts`): before the bug, the radar as the RWS procedure leaves it at
+ * 40 NM, A6, with the missile status word; then one page per moment of the shot, the lead bugged in SAM.
+ */
+const R = { rdy: 'RDY' } as const;
+const AIM_STATES: Record<string, FcrState> = {
+  'fcr-msl': { soi: false, scale: 40, sub: 'RWS', az: 'A6', cursor: HOME, ant: -12.5, mrm: { rdy: '' } },
+  'fcr-msl-rdy': { soi: false, scale: 40, sub: 'RWS', az: 'A6', cursor: HOME, ant: -12.5, mrm: R },
+  'fcr-msl-soi': { soi: true, scale: 40, sub: 'RWS', az: 'A6', cursor: HOME, ant: 20, mrm: R },
+  'fcr-msl-80': { soi: true, scale: 80, sub: 'RWS', az: 'A6', cursor: HOME, ant: 22, mrm: R },
+  'fcr-msl-80-free': { soi: true, scale: 80, sub: 'RWS', az: 'A6', cursor: 'free', ant: -8, mrm: R },
+  'fcr-msl-80-lead': { soi: true, scale: 80, sub: 'RWS', az: 'A6', cursor: on('lead', 80), over: 'lead', ant: -28, mrm: R },
+  ...Object.fromEntries((Object.entries(MOMENTS) as [MomentId, (typeof MOMENTS)[MomentId]][]).map(([k, m]) => [`fcr-aim-${k}`, {
+    soi: true, scale: scaleFor(m.nm), sub: 'SAM', az: 'A6', cursor: scope(((m.brg - m.hdg + 540) % 360) - 180, m.nm, scaleFor(m.nm)), bug: 'lead', ant: 0, hdg: m.hdg,
+    moved: { lead: { az: m.brg - 360, nm: m.nm }, wing: { az: m.brg - 363.5, nm: m.nm + 1 } }, mrm: m.view,
+  } satisfies FcrState])),
+};
 export type FcrPage = keyof typeof FCR_STATES;
 
 /**
@@ -362,7 +452,11 @@ const volLabels: Record<string, string> = {
     [`fcr-vol-stt-${antId(v)}`, 'FCR search volume: STT on the low contact'],
   ])),
 };
-export const fcrPages: Page[] = [...Object.entries(FCR_STATES), ...Object.entries(volStates)].map(([id, s]) => fcr(id, s as FcrState));
+export const fcrPages: Page[] = [...Object.entries(FCR_STATES), ...Object.entries(volStates), ...Object.entries(AIM_STATES)].map(([id, s]) => fcr(id, s as FcrState));
+export const aimFcrLabels: Record<string, string> = Object.fromEntries(Object.entries(AIM_STATES).map(([id, s]) => [id,
+  `FCR with AIM-120: ${s.bug ? `SAM, lead ${s.moved?.lead?.nm} NM${s.mrm?.post ? `, missile ${s.mrm.post[1]}` : ''}${s.mrm?.x ? ', X' : ''}` : `RWS ${s.scale} NM${s.soi ? '' : ', not SOI'}${s.mrm?.rdy ? ', RDY' : ''}`}`]));
+/** The cursor's slew onto the lead in A6 (the AIM-120 shot). */
+export const AIM_SLEW = { start: local(HOME), target: local(on('lead', 80)), reach: f(mm(9)), speed: f(mm(140)), box: [...local([125, 125]), ...local([537, 500])] as [number, number, number, number] };
 export const fcrPageLabels: Record<FcrPage, string> = {
   'fcr-not-soi': 'FCR air-to-air (CRM RWS, 40 NM, A6 4B), not SOI',
   'fcr-40': 'FCR air-to-air: SOI, 40 NM, the single contact to the right',
@@ -383,7 +477,6 @@ export const fcrPageLabels: Record<FcrPage, string> = {
 
 /* ------------------------------------------------------------------- helpers */
 
-export const local = ([x, y]: P): P => [f(mm(x - SC[0])), f(mm(y - SC[1]))];
 /** A hint box in p. 394 pixels (`#x0 y0 x1 y1` in mm about the screen centre). */
 export const fcrBox = (x0: number, y0: number, x1: number, y1: number) => `#${[x0 - SC[0], y0 - SC[1], x1 - SC[0], y1 - SC[1]].map(v => f(mm(v))).join(' ')}`;
 /** A hint ring round a contact on a scale. */
