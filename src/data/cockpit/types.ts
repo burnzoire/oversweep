@@ -383,8 +383,10 @@ export interface MfdDisplay {
   pages: { id: string; words: { t: string; at: Pt; a?: 'start' | 'middle' | 'end'; inv?: boolean; c?: MfdColour; /** Character size as a fraction of the display's (the TGP's small coordinate block). */ s?: number }[];
     /** White symbology paths (mm about the screen centre): `marks` medium lines, `fine` thin lines, `fills` solid shapes (drawn under the words). */
     marks?: string; fine?: string; fills?: string;
+    /** Symbology that blinks (the AIM-120 target's tail once the missile is active): white medium lines, and a solid `flashFill`. */
+    flash?: string; flashFill?: string;
     /** Coloured symbology: `pen` fine or medium (default) line, or a solid `fill`. */
-    paths?: { d: string; c: MfdColour; pen?: 'fine' | 'medium'; fill?: boolean; /** Dashed line (the HAS video frame). */ dash?: boolean; }[];
+    paths?: { d: string; c: MfdColour; pen?: 'fine' | 'medium'; fill?: boolean; /** Dashed line (the HAS video frame). */ dash?: boolean; /** Blinks (the AIM-120 X after termination). */ blink?: boolean }[];
     /** Sensor video under the symbology, filling the glass (an image URL, e.g. a data URI). */
     video?: string;
     /** The video image's size as a multiple of the glass (default 1): a larger picture can be slewed (`pan`). */
@@ -497,7 +499,7 @@ export interface HudDisplay {
    * Weapon cues that come and go with the weapon (the HARM launch scale): one display indicator `id` whose pages each
    * draw `art` (pen paths, relative to the boresight), `texts` and a `flash` path that blinks (the FOV box in range).
    */
-  cues?: { id: string; /** The heading tape shown in place of the usual one while a cue page other than `none` is up (HARM: it sits above the boresight, p. 663). */ heading?: HudTape; pages: { id: string; art: string; /** Keep the usual heading tape on this page (air-to-air cues). */ keepHeading?: boolean; /** Art that slides sideways with the `harm-asl` reading (the azimuth steering line and its loft ticks). */ steer?: string; texts: { t: string; at: Pt; anchor?: 'start' | 'middle' | 'end' }[]; flash?: string }[] };
+  cues?: { id: string; /** The heading tape shown in place of the usual one while a cue page other than `none` is up (HARM: it sits above the boresight, p. 663). */ heading?: HudTape; pages: { id: string; art: string; /** Keep the usual heading tape on this page (air-to-air cues). */ keepHeading?: boolean; /** Art that slides sideways with the `harm-asl` reading (the azimuth steering line and its loft ticks). */ steer?: string; texts: { t: string; at: Pt; anchor?: 'start' | 'middle' | 'end' }[]; flash?: string; /** The outside world behind the glass (an aircraft silhouette, its contrail): SVG markup in the cues' units, drawn under the symbology. */ scene?: string }[] };
 }
 
 /** The plate corner toward which the face plate is cut away around a DZUS. */
