@@ -65,8 +65,12 @@ const padZones = (p: (typeof pads)[number], hb: Box): Zone[] => {
     if (c.type === 'pushbutton') z.push({ box: hb, control: c.id, pos: pressedPos(c), label: `Press ${c.name}` });
     else {
       const [a, b] = dirLabels(c.id), across = c.travel === 'horizontal' || (c.type === 'rotary' && c.travel !== 'vertical');
+      // A near-analogue knob (many fine stops, such as ANT ELEV) is one zone, turned only by dragging along its travel.
+      if (c.type === 'rotary' && c.positions.length > 20) z.push({ box: hb, control: c.id, step: 'drag', label: `${c.name}: drag ${across ? 'left or right' : 'up or down'} to turn it` });
+      else {
       z.push(across ? { box: [x, y, w / 2, h], control: c.id, step: '-1', label: a } : { box: [x, y, w, h / 2], control: c.id, step: '-1', label: a });
       z.push(across ? { box: [x + w / 2, y, w / 2, h], control: c.id, step: '1', label: b } : { box: [x, y + h / 2, w, h / 2], control: c.id, step: '1', label: b });
+    }
     }
   }
   const r = Math.min(w, h) * 0.24;
@@ -498,13 +502,14 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     const down = () => {
       if (held) return; held = true;
       b.classList.remove('cp-target');
+      if (b.dataset.padStep === 'drag') return;
       if (b.dataset.padStep) press(c, b.dataset.padStep); else goTo(c, b.dataset.padPos!);
     };
     const up = () => { if (!held) return; held = false; release(c); };
-    // A wheel or knob (step zones) turns with a drag along its travel, one stop per 12 px (4 px on a near-analogue
-    // knob with many fine stops, such as ANT ELEV); a short click steps once.
+    // A wheel or knob (step zones) turns with a drag along its travel, one stop per 12 px (8 px on a near-analogue
+    // knob with many fine stops, such as ANT ELEV, whose one zone only drags); a short click on a step zone steps once.
     const across = c.travel === 'horizontal' || (c.type === 'rotary' && c.travel !== 'vertical');
-    const stopPx = c.positions.length > 20 ? 4 : 12;
+    const stopPx = c.positions.length > 20 ? 8 : 12;
     let turn: { x: number; y: number; done: number } | null = null;
     b.addEventListener('pointerdown', e => {
       if (e.button !== 0) return;
@@ -518,10 +523,15 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
       const d = across ? e.clientX - turn.x : e.clientY - turn.y, want = Math.trunc(d / stopPx);
       while (turn.done !== want) { const k = want > turn.done ? 1 : -1; press(c, String(k)); turn.done += k; }
     });
-    const endTurn = () => { if (!turn) return false; const t = turn; turn = null; if (!t.done) press(c, b.dataset.padStep!); return true; };
+    const endTurn = () => { if (!turn) return false; const t = turn; turn = null; if (!t.done && b.dataset.padStep !== 'drag') press(c, b.dataset.padStep!); return true; };
     b.addEventListener('pointerup', () => { if (!endTurn()) up(); });
     b.addEventListener('pointercancel', () => { turn = null; up(); });
     b.addEventListener('lostpointercapture', () => { if (!endTurn()) up(); });
+    // The drag-only knob zone steps with the arrow keys along its travel.
+    if (b.dataset.padStep === 'drag') b.addEventListener('keydown', e => {
+      const k = ({ ArrowUp: -1, ArrowLeft: -1, ArrowDown: 1, ArrowRight: 1 } as Record<string, number>)[e.key];
+      if (k) { e.preventDefault(); press(c, String(k)); }
+    });
     b.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) { e.preventDefault(); down(); } });
     b.addEventListener('keyup', e => { if (e.key === 'Enter' || e.key === ' ') up(); });
     b.addEventListener('blur', up);
