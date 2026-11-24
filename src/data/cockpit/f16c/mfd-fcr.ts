@@ -61,7 +61,7 @@ export const limits = (nm: number, el = 0, bars: Bars = 4) => {
   const r = nm * FT_NM, h = HALF[bars];
   return [Math.round((OWN_ALT + r * tan(el + h)) / 1000), Math.round((OWN_ALT + r * tan(el - h)) / 1000)] as const;
 };
-/** ANT ELEV knob travel to antenna elevation: full travel (100 %) taken as the antenna's ±60° gimbal limit (p. 381). */
+/** ANT ELEV knob travel to antenna elevation: full travel (100 %) taken as the antenna's ±60° limit (Falcon BMS TO 1F-16CMAM-34-1-1 p. 184; DCS gives no range). */
 export const ANT_DEG_PER_PCT = 0.6;
 /** Bearing (° magnetic, 001-360) and range (NM) from the steerpoint to a point given by azimuth and range off a heading. */
 export const fromStpt = (az: number, nm: number, hdg = 360) => {
