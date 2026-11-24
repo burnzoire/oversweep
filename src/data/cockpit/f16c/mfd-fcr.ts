@@ -1,6 +1,7 @@
 import type { MfdDisplay } from '../types';
 import { tracer } from '../trace.ts';
 import { c, f, poly, w } from './mfd-had.ts';
+import { ASEC, type MrmView } from './mrm.ts';
 
 /**
  * F-16C Fire Control Radar (FCR) air-to-air format, for the shared MFD (`mfd.ts`). Traced from the guide's FCR
@@ -121,6 +122,60 @@ const LIMITS_X = (() => {
   return `M${q([-d, 144])}L${q([-d, 511])}M${q([d, 144])}L${q([d, 511])}`;
 })();
 
+/* ---------------------------------------------------------------- AIM-120 */
+
+/**
+ * AIM-120 symbology on the FCR (p. 598 image, the same 660 px grid). The missile scale stands on the right of the
+ * B-scope: its bar at x 513.3, zero at y 436.7; the guide's figure (40 NM scale) puts the target-range caret at the
+ * bugged target's range (26.8 NM, measured off the B-scope) 140.7 px up the bar, so the scale is taken as 210 px for
+ * the radar's range scale. RPI is the bar's top, with a tick right to x 531.7; the box from RTR to RMIN is 18 px wide;
+ * ROPT a circle (r 4.5) on the bar's left; RAERO a triangle pointing left (13 x 12 px). The closure and caret end at
+ * x 512.5, the pre-launch pole 14.7 px under them; the post-launch pole and time (or the pre-launch time) are right
+ * aligned at x 537, 10 and 27.3 px under the bar. The ASEC (r 49.4 at RPI, centre 331.9, 329) and the ASC (r 4.5) are
+ * white; the guide's figure shows the large circle only, so the small one is scaled from the HUD's (p. 597).
+ */
+const DLZ_X = 513.3, DLZ_0 = 436.7, DLZ_H = 210;
+const ASEC_C: P = [331.9, 329], ASEC_R = 49.4;
+function mrmMarks(m: MrmView, scale: Scale) {
+  const words: Page['words'] = [];
+  let marks = '';
+  if (m.rdy) words.push(w(m.rdy, 332, 511));
+  if (m.nm === undefined || !m.dlz) return { words, marks };
+  const y = (nm: number) => DLZ_0 - (Math.min(nm, scale) / scale) * DLZ_H;
+  const d = m.dlz;
+  marks += poly([[DLZ_X, y(d.min)], [DLZ_X, y(d.pi)], [531.7, y(d.pi)]]) + rect(DLZ_X, y(d.tr), 531.7, y(d.min));
+  marks += ring([DLZ_X - 4.5, y(d.opt)], 4.5) + poly([[514, y(d.aero)], [527, y(d.aero) - 6], [527, y(d.aero) + 6]], true);
+  const ty = y(m.nm);
+  words.push(w(`${m.closure}>`, 512.5, ty, 'end'));
+  if (m.pre) words.push(w(m.pre[0], 500, ty + 14.7, 'end'));
+  const lines = m.post ?? (m.pre ? [m.pre[1]] : []);
+  lines.forEach((t, i) => words.push(w(t, 537, DLZ_0 + 10 + 17.3 * i, 'end')));
+  if (m.asec) {
+    const r = m.asec === 'large' ? ASEC_R : (ASEC_R * ASEC.small) / ASEC.large;
+    marks += ring(ASEC_C, r);
+    if (m.asc) {
+      const k = (v: number) => Math.max(-1.6, Math.min(1.6, v)) * r;
+      marks += ring([ASEC_C[0] + k(m.asc[0]), ASEC_C[1] + k(m.asc[1])], 4.5);
+    }
+  }
+  return { words, marks };
+}
+/**
+ * The AIM-120 target marks (p. 598 key): a rectangular tail behind the symbol once a missile is in flight (drawn 10 x 6
+ * px, on the far side of the ring from the heading line, from the key's proportions), flashing once the missile is
+ * active; a red X (26 px) over it for the last 8 s, flashing for 5 s after.
+ */
+function mrmTarget([x, y]: P, hot: boolean, m: MrmView, out: { fills: string; flashFill: string; red: string; redFlash: string }) {
+  if (m.tail) {
+    const t = hot ? rect(x - 5, y - 19, x + 5, y - 13) : rect(x - 5, y + 13, x + 5, y + 19);
+    if (m.tail === 'flash') out.flashFill += t; else out.fills += t;
+  }
+  if (m.x) {
+    const xx = poly([[x - 13, y - 13], [x + 13, y + 13]]) + poly([[x + 13, y - 13], [x - 13, y + 13]]);
+    if (m.x === 'flash') out.redFlash += xx; else out.red += xx;
+  }
+}
+
 /* -------------------------------------------------------------------- state */
 
 export type Sub = 'RWS' | 'VSR' | 'SAM' | 'STT';
@@ -143,6 +198,10 @@ export interface FcrState {
   from?: 'VSR';
   /** The jet's heading (° magnetic): 360 unless it has turned onto the collision course (347). */
   hdg?: number;
+  /** Contacts moved from their place in the scene (AIM-120 shots: the lead closing), azimuth off 360° and range. */
+  moved?: Partial<Record<ContactId, { az: number; nm: number }>>;
+  /** AIM-120 symbology (p. 598): the status word, and with a bugged target the missile scale, ASEC and ASC. */
+  mrm?: MrmView;
 }
 /** A point's azimuth off the nose on a heading (the scene is laid out on 360°). */
 const off = (az: number, hdg = 360) => ((az + 360 - hdg + 540) % 360) - 180;
@@ -211,6 +270,7 @@ function fcr(id: string, s: FcrState): Page {
   if (s.soi) fine += FRAME;
   else words.push(w('NOT SOI', 331, 160));
 
+  const tgt = { fills: '', flashFill: '', red: '', redFlash: '' };
   // Scene: the steerpoint, then the contacts the radar shows in this sub-mode.
   fills += cake(scope(stptAz(s.hdg), 10, s.scale));
   const shown = (Object.entries(CONTACTS) as [ContactId, Contact][]).filter(([k, t]) => {
@@ -219,13 +279,15 @@ function fcr(id: string, s: FcrState): Page {
     if (s.sub === 'VSR') return t.hot;
     return !t.vsrOnly;
   });
-  for (const [k, t] of shown) {
+  for (const [k, t0] of shown) {
+    const t = { ...t0, ...s.moved?.[k] };
     const p = scope(off(t.az, s.hdg), t.nm, s.scale);
     if (p[1] < 112) continue;
     if (k === s.bug) {
       const b = bugged(p, t.hot);
       marks += b.marks; fills += b.fills + cata(scope(off(TOI[k]!.cata - 360, s.hdg), t.nm, s.scale));
       words.push(w(pad(t.alt, 2), p[0], p[1] + 28));
+      if (s.mrm) mrmTarget(p, t.hot, s.mrm, tgt);
     } else {
       fills += searchTarget(p, s.sub === 'VSR' ? null : t.hot);
       if (k === s.over) words.push(w(pad(t.alt, 2), p[0], p[1] + 28));
@@ -235,7 +297,7 @@ function fcr(id: string, s: FcrState): Page {
     words.push(...toiData(s.bug, s.hdg));
     // SAM track indicators (p. 418): crosses on the elevation and azimuth scales at the primary target's elevation and azimuth.
     if (s.sub === 'SAM') {
-      const t = CONTACTS[s.bug], el = (Math.atan2((t.alt * 1000 - OWN_ALT) / FT_NM, t.nm) * 180) / Math.PI;
+      const t = { ...CONTACTS[s.bug], ...s.moved?.[s.bug] }, el = (Math.atan2((t.alt * 1000 - OWN_ALT) / FT_NM, t.nm) * 180) / Math.PI;
       const ey = 327.5 - el * 3.65, tx = AZ0 + off(t.az, s.hdg) * PX_DEG;
       cyan.push(poly([[139, ey], [151, ey]]) + poly([[145, ey - 6], [145, ey + 6]]) + poly([[tx - 6, 528], [tx + 6, 528]]) + poly([[tx, 520], [tx, 536]]));
     }
@@ -256,11 +318,18 @@ function fcr(id: string, s: FcrState): Page {
   }
   // In STT there is no cursor: the field gives the bearing and range from the steerpoint to the bugged target (p. 421).
   if (s.sub === 'STT' && s.bug) {
-    const t = CONTACTS[s.bug], b = fromStpt(off(t.az, s.hdg), t.nm, s.hdg);
+    const t = { ...CONTACTS[s.bug], ...s.moved?.[s.bug] }, b = fromStpt(off(t.az, s.hdg), t.nm, s.hdg);
     words.push(w(pad(b.brg, 3), 112.5, 440, 'start'), w(pad(b.nm, 2), 151, 440, 'start'));
   }
   paths.push({ d: cyan.join(''), c: 'cyan' });
-  const page: Page = { id, words, marks, fills, fine, paths, ...(cursor ? { cursor } : {}) };
+  if (s.mrm) {
+    const m = mrmMarks(s.mrm, s.scale);
+    words.push(...m.words); marks += m.marks;
+    fills += tgt.fills;
+    if (tgt.red) paths.push({ d: tgt.red, c: 'red' });
+  }
+  const page: Page = { id, words, marks, fills, fine, paths, ...(cursor ? { cursor } : {}), ...(tgt.flashFill ? { flashFill: tgt.flashFill } : {}) };
+  if (tgt.redFlash) page.paths!.push({ d: tgt.redFlash, c: 'red', blink: true });
   if (s.az === 'A3' && cursor && s.sub !== 'STT') page.cursorX = { d: LIMITS_X, c: 'cyan' };
   return page;
 }
