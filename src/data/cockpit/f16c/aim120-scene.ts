@@ -4,7 +4,8 @@ import type { Dlz, MrmView } from './mrm.ts';
  * The AIM-120 single-target shot's scene, shared by the FCR (`mfd-fcr.ts`) and HUD (`hud.ts`) pages. It continues the
  * radar procedures' scene: a CAP at 28,000 ft and 550 KTAS, heading 360°; the lead of a hot two-ship 45 NM out on
  * 340° at 25,000 ft, flying 150° at 404 KTAS (aspect 17R). On the 347° collision heading the bearing holds at 340° and
- * the range closes at 944 kt. After the shot the jet cranks right to hold the target 50° left, inside the radar's ±60°:
+ * the range closes at 944 kt. The playback centres the contact in azimuth through rollout and the smoke view.
+ * After the shot the jet cranks right to hold the target 50° left, inside the radar's ±60°:
  * 030° at first, easing back to about 016° by impact as the bearing drifts left; the closure is then about 755 kt.
  * The radar steps down from 80 to 40 NM once the bugged target is inside 40% of the scale (p. 405), at launch.
  *
@@ -114,9 +115,13 @@ export interface SceneFrame extends Moment {
   trailOpacity: number;
 }
 
+const centredContact = new Set<MomentId>(['turned', 'c42', 'c38', 'c35', 'rpi', 'launched']);
+
 export function sceneFrame(id: MomentId): SceneFrame {
   const moment = MOMENTS[id];
-  return { ...moment, id, scale: scaleFor(moment.aircraft.range), trail: 0, trailOpacity: 0 };
+  // Both displays use this playback framing. The scenario's authored geometry supplies the other readings.
+  const aircraft = centredContact.has(id) ? { ...moment.aircraft, bearing: moment.aircraft.heading } : moment.aircraft;
+  return { ...moment, aircraft, id, scale: scaleFor(aircraft.range), trail: 0, trailOpacity: 0 };
 }
 
 export function sceneView({ aircraft, view }: SceneFrame): MrmView {
@@ -127,6 +132,9 @@ const mix = (a: number, b: number, t: number) => a + (b - a) * t;
 export const relativeBearing = (bearing: number, heading: number) => ((bearing - heading + 540) % 360) - 180;
 const mixAngle = (a: number, b: number, t: number) => a + relativeBearing(b, a) * t;
 const ease = (t: number) => t * t * (3 - 2 * t);
+
+/** Roll in over the first quarter, hold the bank, and roll out over the last quarter. */
+const bankAmount = (progress: number) => ease(Math.min(1, 4 * progress, 4 * (1 - progress)));
 
 interface SceneKeyframe { seconds: number; frame: SceneFrame }
 
@@ -164,7 +172,7 @@ export function sampleScene(motion: SceneMotion, seconds: number, start = motion
   const from = a.aircraft, to = b.aircraft;
   const aircraft: AircraftState = {
     heading: mixAngle(from.heading, to.heading, t),
-    bank: mix(from.bank, to.bank, t) + (motion.bank ?? 0) * Math.sin(Math.PI * t) ** 2,
+    bank: mix(from.bank, to.bank, t) + (motion.bank ?? 0) * bankAmount(progress),
     pitch: mix(from.pitch, to.pitch, t),
     range: mix(from.range, to.range, t),
     bearing: mixAngle(from.bearing, to.bearing, t),

@@ -1,9 +1,9 @@
 // Playback and display geometry for the authored simulator scene.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { SCENE_MOTIONS, relativeBearing, sampleScene, sceneView } from '../src/data/cockpit/f16c/aim120-scene.ts';
+import { MOMENTS, SCENE_MOTIONS, relativeBearing, sampleScene, sceneFrame, sceneView } from '../src/data/cockpit/f16c/aim120-scene.ts';
 import { aimCue, hud } from '../src/data/cockpit/f16c/hud.ts';
-import { aimFcr } from '../src/data/cockpit/f16c/mfd-fcr.ts';
+import { aimFcr, local, scope } from '../src/data/cockpit/f16c/mfd-fcr.ts';
 import { renderPanel } from '../src/data/cockpit/render.ts';
 
 const seconds = (motion, index = -1) => motion.keyframes.at(index).seconds;
@@ -16,7 +16,10 @@ test('turn eases in and out while both displays follow the same intermediate pos
   const start = at(turn, 0), early = at(turn, 0.25), mid = at(turn, 0.5), end = at(turn, 1);
   assert.equal(start.aircraft.bank, 0);
   assert.equal(end.aircraft.bank, 0);
-  assert.ok(mid.aircraft.bank < early.aircraft.bank && early.aircraft.bank < 0);
+  assert.ok(early.aircraft.bank < at(turn, 0.125).aircraft.bank && at(turn, 0.125).aircraft.bank < 0);
+  assert.equal(early.aircraft.bank, mid.aircraft.bank);
+  assert.equal(mid.aircraft.bank, at(turn, 0.75).aircraft.bank);
+  assert.ok(mid.aircraft.bank < at(turn, 0.875).aircraft.bank && at(turn, 0.875).aircraft.bank < 0);
   assert.ok(start.aircraft.heading - early.aircraft.heading < early.aircraft.heading - mid.aircraft.heading);
 
   const poses = Array.from({ length: 11 }, (_, i) => at(turn, i / 10));
@@ -25,6 +28,13 @@ test('turn eases in and out while both displays follow the same intermediate pos
   assert.ok(Math.abs(radarX.at(-1)) < Math.abs(radarX[0]));
   assert.equal(new Set(poses.map(frame => aimCue(frame).art)).size, poses.length);
   assert.ok(aimCue(mid).bankHeading);
+  const relative = frame => relativeBearing(frame.aircraft.bearing, frame.aircraft.heading);
+  assert.equal(relative(end), 0);
+  assert.equal(relative(MOMENTS.turned), -7);
+  assert.deepEqual(aimFcr(end).cursor.at, local(scope(0, end.aircraft.range, end.scale)));
+  assert.equal(relative(at(SCENE_MOTIONS.close, 0, end)), 0);
+  assert.equal(relative(at(SCENE_MOTIONS.close, 1)), 0);
+  assert.equal(relative(sceneFrame('launched')), 0);
 });
 
 test('the heading tape shares the attitude ladder roll in the scene pages', () => {
