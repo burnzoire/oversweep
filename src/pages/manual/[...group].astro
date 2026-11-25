@@ -19,5 +19,5 @@ const empty = !hasArticle(node);
 <SiteLayout title={node.title} activeSection="manual" description={node.summary} empty={empty}>
   {node.summary && <p class="lead">{node.summary}</p>}
   {empty && <p class="muted">Content coming soon.</p>}
-  <GroupCards node={node} list={empty || node.children?.length === 1} />
+  <GroupCards node={node} list={empty || (node.children?.length === 1 && node.id !== "area-aircraft")} />
 </SiteLayout>

@@ -19,6 +19,16 @@ export const cardMedia: Record<string, CardMedia> = {
       position: '68% 50%',
     },
   },
+  f16c: {
+    summary: 'The DCS F-16C Block 50: cockpit, systems, procedures from engine start to weapons, and tactics.',
+    photo: {
+      src: 'manual/cards/f16c-viper.webp',
+      alt: 'An F-16C Viper banking hard with white vapour streaming over the wings.',
+      credit: 'F-16C in flight — Steven Cardo, US Air Force (public domain)',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Viper_Demo_arrives_in_Colombia_for_F-AIR_2025_(9249001).jpg',
+      position: '68% 50%',
+    },
+  },
   'cockpit.dcs-f16c': {
     summary: 'Work through the cockpit panel by panel. Find the switches, knobs and indicators you’ll use in the procedures.',
     photo: {
