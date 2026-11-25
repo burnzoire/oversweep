@@ -88,22 +88,14 @@ const SCENARIOS: Record<string, Scenario> = {
   },
   'fcr-rws': {
     initial: { left: 'fcr-not-soi', mfd: 'menu-blank', ded: 'cni' },
-    after: { soi: { left: 'fcr-40' }, 'range-up': { left: 'fcr-80' }, a3: { left: 'fcr-80-a3' }, bars: { left: 'fcr-80-a3-lead-2b' } },
-    slew: { step: 'slew', on: 'fcr-80-a3', free: 'fcr-80-a3-free', done: 'fcr-80-a3-lead', display: 'left', cursor: true, what: 'lead contact', ...FCR_SLEW.lead },
-    dial: [
-      {
-        step: 'tilt-up', control: 'throttle.ant-elev', page: 'fcr-80-a3-lead-{pos}', ok: ['u10', 'u15', 'u20', 'u25', 'u30'], seen: ['u5'], display: 'left',
-        prompt: 'Press and drag up on the ANT ELEV knob to roll it up, watching the cursor’s numbers.',
-        near: 'The lead is still in the scan, near its bottom edge: keep rolling until 25,000 ft is below the bottom number.',
-        done: 'The lead is out of the volume.',
-      },
-      {
-        step: 'tilt-back', control: 'throttle.ant-elev', page: 'fcr-80-a3-lead-{pos}', ok: ['center'], seen: ['u5', 'd5'], display: 'left',
-        prompt: 'Press and drag down on the ANT ELEV knob to roll it back, until the caret is level with the horizon line.',
-        near: 'Almost: the caret is just off 0°. One more notch to level.',
-        done: 'The antenna is level and the lead is back.',
-      },
-    ],
+    after: { soi: { left: 'fcr-40' }, 'range-up': { left: 'fcr-80' }, a3: { left: 'fcr-80-a3-center' }, bars: { left: 'fcr-80-a3-low-2b' } },
+    dial: {
+      step: 'tilt', control: 'throttle.ant-elev', page: 'fcr-80-a3-{pos}', ok: ['d5'], seen: ['d10', 'd15', 'd20', 'd25', 'd30'], display: 'left',
+      prompt: 'Press and drag down on the ANT ELEV knob to tilt the volume down, watching 10° left, 25 NM out.',
+      near: 'Too far down: the floor of the volume is now well below the ground. Drag back up until the caret is one notch under level.',
+      done: 'The single shows, and the group is still in the volume.',
+    },
+    slew: { step: 'slew', on: 'fcr-80-a3-d5', free: 'fcr-80-a3-low-free', done: 'fcr-80-a3-low', display: 'left', cursor: true, what: 'low single', ...FCR_SLEW.low },
   },
   'fcr-vsr': {
     initial: { left: 'fcr-80', mfd: 'menu-blank', ded: 'cni' },

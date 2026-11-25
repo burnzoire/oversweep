@@ -78,7 +78,7 @@ export const pad = (v: number, n: number) => String(Math.abs(v)).padStart(n, '0'
  * The scene's aircraft: `az`/`nm` where they are (off a 360° heading), `alt` (thousands of ft), `hot` whether they fly toward the jet,
  * `vsrOnly` too far for RWS, seen only in VSR's high-PRF search.
  */
-export interface Contact { az: number; nm: number; alt: number; hot: boolean; vsrOnly?: boolean; /** Only in the search-volume scene. */ scene?: 'vol' }
+export interface Contact { az: number; nm: number; alt: number; hot: boolean; vsrOnly?: boolean; /** Only on the ANT ELEV pages (`vcheck`): under the level volume, found by tilting it down. */ low?: boolean }
 export const CONTACTS = {
   /** The group: a two-ship, hot (heading 150°, 10° off a line straight at the jet), 45 NM north-northwest at 25,000 ft. */
   lead: { az: -20, nm: 45, alt: 25, hot: true },
@@ -87,6 +87,8 @@ export const CONTACTS = {
   single: { az: 40, nm: 30, alt: 15, hot: false },
   /** A fast mover nose on, 70 NM out: beyond RWS's detection range, inside VSR's. */
   far: { az: 8, nm: 70, alt: 33, hot: true, vsrOnly: true },
+  /** A single 25 NM out, 10° left, at 12,000 ft: just under the level four-bar volume there (its floor is about 13,600 ft), inside it 3° down. */
+  low: { az: -10, nm: 25, alt: 12, hot: true, low: true },
 } satisfies Record<string, Contact>;
 export type ContactId = keyof typeof CONTACTS;
 
@@ -215,8 +217,8 @@ export interface FcrState {
   from?: 'VSR';
   /** The jet's heading (° magnetic): 360 unless it has turned onto the collision course (347). */
   hdg?: number;
-  /** The search-volume scene: only its low contact, shown only while it is inside the scanned volume. */
-  scene?: 'vol' | 'none';
+  /** `none`: none of the scene's contacts are drawn (the page draws its own). */
+  scene?: 'none';
   /** Contacts are drawn only while inside the scanned volume (set by ANT ELEV and the bars). */
   vcheck?: boolean;
   /** No steerpoint symbol (the jet has flown on: the picture's own geometry puts it elsewhere). */
@@ -308,8 +310,8 @@ export function fcr(id: string, s: FcrState): Page {
   if (!s.noStpt) fills += cake(scope(stptAz(s.hdg), 10, s.scale));
   const shown = (Object.entries(CONTACTS) as [ContactId, Contact][]).filter(([k, t]) => {
     if (s.sub === 'STT') return k === s.bug;
-    if ((t as Contact).scene !== s.scene) return false;
-    if (s.scene || s.vcheck) {
+    if (s.scene === 'none' || ((t as Contact).low && !s.vcheck)) return false;
+    if (s.vcheck) {
       // Seen only inside the scanned volume: within the bars' half-height of the antenna, as seen from the jet.
       const tel = (Math.atan2((t.alt * 1000 - OWN_ALT) / FT_NM, t.nm) * 180) / Math.PI;
       if (Math.abs(tel - (s.el ?? 0)) > HALF[s.spot ? 4 : s.bars ?? 4]) return false;
@@ -417,9 +419,10 @@ const AIM_STATES: Record<string, FcrState> = {
 export type FcrPage = keyof typeof FCR_STATES;
 
 /**
- * Aiming the volume (the basic radar controls procedure): from the cursor on the lead (80 NM, A3), the ANT ELEV knob
- * (every 5 % of travel, `d10` = 10 % down) tilts the volume, the contacts leave the scan when it passes them, and OSB 17
- * thins the bars. Contacts are seen only inside the scanned volume (`vcheck`).
+ * Finding the low single (the basic radar controls procedure): from A3 with the cursor at home (28 NM on the 80 NM
+ * scale), the ANT ELEV knob (every 5 % of travel, `d5` = 5 % down) tilts the volume; the single shows once the volume
+ * reaches down to it. With the antenna 3° down the cursor goes onto it and OSB 17 thins the bars. Contacts are seen only
+ * inside the scanned volume (`vcheck`).
  */
 export const ANT_STOPS = Array.from({ length: 41 }, (_, i) => 100 - i * 5);
 export const antId = (v: number) => (v > 0 ? `u${v}` : v < 0 ? `d${-v}` : 'center');
@@ -428,11 +431,16 @@ const elStates: Record<string, FcrState> = {};
 const elLabels: Record<string, string> = {};
 for (const v of ANT_STOPS) {
   const el = v * ANT_DEG_PER_PCT, id = antId(v);
-  elStates[`fcr-80-a3-lead-${id}`] = { ...FCR_STATES['fcr-80-a3-lead'], el, vcheck: true };
-  elLabels[`fcr-80-a3-lead-${id}`] = `FCR: cursor on the lead, antenna ${el}°`;
+  elStates[`fcr-80-a3-${id}`] = { ...FCR_STATES['fcr-80-a3'], el, vcheck: true };
+  elLabels[`fcr-80-a3-${id}`] = `FCR: A3, antenna ${el}°`;
 }
-elStates['fcr-80-a3-lead-2b'] = { ...FCR_STATES['fcr-80-a3-lead'], bars: 2, vcheck: true };
-elLabels['fcr-80-a3-lead-2b'] = 'FCR: cursor on the lead, two bars';
+const DOWN = 5 * -ANT_DEG_PER_PCT;
+elStates['fcr-80-a3-low-free'] = { ...FCR_STATES['fcr-80-a3-free'], scanAz: -10, el: DOWN, vcheck: true };
+elLabels['fcr-80-a3-low-free'] = 'FCR: antenna 3° down, cursor being slewed';
+elStates['fcr-80-a3-low'] = { soi: true, scale: 80, sub: 'RWS', az: 'A3', cursor: on('low', 80), over: 'low', ant: -14, scanAz: -10, el: DOWN, vcheck: true };
+elLabels['fcr-80-a3-low'] = 'FCR: antenna 3° down, cursor on the low single';
+elStates['fcr-80-a3-low-2b'] = { ...elStates['fcr-80-a3-low'], bars: 2 };
+elLabels['fcr-80-a3-low-2b'] = 'FCR: cursor on the low single, two bars';
 const volStates = elStates, volLabels = elLabels;
 export const fcrPages: Page[] = [...Object.entries(FCR_STATES), ...Object.entries(volStates), ...Object.entries(AIM_STATES)].map(([id, s]) => fcr(id, s as FcrState));
 export const aimFcrLabels: Record<string, string> = Object.fromEntries(Object.entries(AIM_STATES).map(([id, s]) => [id,
@@ -471,7 +479,7 @@ const slewTo = (k: ContactId) => ({
   box: [...local([125, 125]), ...local([537, 500])] as [number, number, number, number],
 });
 export const FCR_SLEW = {
-  lead: slewTo('lead'), far: slewTo('far'),
+  lead: slewTo('lead'), far: slewTo('far'), low: slewTo('low'),
   aim: { start: local(HOME), target: local(AIM), reach: f(mm(9)), speed: f(mm(140)), box: [...local([125, 125]), ...local([537, 500])] as [number, number, number, number] },
 };
 /** Hint box round the called position on the 40 NM scale. */
