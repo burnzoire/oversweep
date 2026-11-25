@@ -85,3 +85,21 @@ Report actual changes, evidence, next steps and genuine blockers, not percentage
 Opening a PR is In Review; Complete requires delivered criteria, applicable checks,
 review and authorised merge. Keep aviation content maturity separate. No secrets
 or restricted/copyrighted manual dumps. See docs/development.md for details.
+
+## Working notes from the F-16C procedures
+
+- Keep threads lean. Procedure threads run on Sonnet; panel, drawing and tracing work
+  runs in separate Opus threads first. Self-check before showing the owner anything,
+  run the SME review once at the end, and hand off through memory, not long context.
+- Write briefs, code comments and scenario text in plain, neutral technical wording.
+  Dramatic or graphic outcome text has tripped automated content filters and got
+  weapons-procedure threads refused. Describe the system and the procedure, not the
+  effects. The AIM-120 procedure ends at "Missile active": add no post-shot outcome.
+- Animate from one shared state record (`AircraftState` in
+  `src/data/cockpit/f16c/aim120-scene.ts`) that the HUD, radar scope and instruments
+  all read, so they never disagree. Author a few keyframes per step, ease the geometry
+  between them (`sampleScene`), keep discrete indications on their keyframes, and
+  start each step from the previous step's final frame so the scene carries over.
+- Sync instruments with flight data by deriving every reading (range, bearing,
+  closure, heading, DLZ poles, times) from one track computed once from the scenario,
+  never by typing numbers per display. Cross-check each displayed number against it.
