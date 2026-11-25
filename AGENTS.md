@@ -93,10 +93,11 @@ or restricted/copyrighted manual dumps. See docs/development.md for details.
   run the SME review once at the end, and hand off through memory, not long context.
 - Write briefs, code comments and scenario text in plain, neutral technical wording.
   Dramatic or graphic outcome text has tripped automated content filters and got
-  weapons-procedure threads refused. Describe the system and the procedure, not the
-  effects. The AIM-120 procedure ends at "Missile active": add no post-shot outcome.
+  threads refused. Describe the system and the procedure, not the effects. Procedures
+  stop at the last control action; add no outcome content after it.
+- Every procedure ends with a short summary of what the reader did.
 - Animate from one shared state record (`AircraftState` in
-  `src/data/cockpit/f16c/aim120-scene.ts`) that the HUD, radar scope and instruments
+  `src/data/cockpit/f16c/*-scene.ts`) that the HUD, radar scope and instruments
   all read, so they never disagree. Author a few keyframes per step, ease the geometry
   between them (`sampleScene`), keep discrete indications on their keyframes, and
   start each step from the previous step's final frame so the scene carries over.
