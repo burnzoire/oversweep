@@ -1,7 +1,7 @@
 import type { HudTape, PanelSpec } from '../types';
 import { tracer } from '../trace.ts';
 import { ASEC, RETICLE, asecDeg, type MrmView } from './mrm.ts';
-import { MOMENTS, relativeBearing, sceneFrame, sceneView, type MomentId, type SceneFrame } from './aim120-scene.ts';
+import { MOMENTS, SCENE_MOTIONS, relativeBearing, sceneFrame, sceneView, type MomentId, type SceneFrame } from './aim120-scene.ts';
 
 /**
  * F-16C head-up display (HUD), DCS: the combiner glass between its two posts,
@@ -294,12 +294,20 @@ export function smokeTrail(az: number, down: number, reach: number) {
   }
   return `<path d="${rel([...left, ...right.reverse()])}" fill="#f4f6fa" fill-opacity="0.6" stroke="none"/>`;
 }
+const boreTarget = bandit(0, RETICLE.down);
+
+export function boreAwayCue(trail: number) {
+  const scene = boreTarget + (trail > 0 ? smokeTrail(0, RETICLE.down, trail) : '');
+  return mrmCue({ id: 'mrm-bore-away', view: { rdy: '' }, bore: true, scene });
+}
+
 export const MRM_CUES = [
   mrmCue({ id: 'mrm-bore', view: { rdy: '' }, bore: true }),
   // The visual shot (BORE): the bandit 5° right, level with you, then on the missile diamond.
   { id: 'scene-bandit', art: '', texts: [], keepHeading: true, scene: bandit(5, 0) },
   mrmCue({ id: 'mrm-bore-bandit', view: { rdy: '' }, bore: true, scene: bandit(5, 0) }),
-  mrmCue({ id: 'mrm-bore-on', view: { rdy: '' }, bore: true, scene: bandit(0, RETICLE.down) }),
+  mrmCue({ id: 'mrm-bore-on', view: { rdy: '' }, bore: true, scene: boreTarget }),
+  boreAwayCue(SCENE_MOTIONS.away.keyframes[1].frame.trail),
   ...(Object.keys(MOMENTS) as MomentId[]).map(id => aimCue(sceneFrame(id))),
   // Keep the individual smoke views available in standalone cockpit familiarisation.
   ...[0.25, 0.55, 0.85].map((trail, i) => ({

@@ -2,7 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { MOMENTS, SCENE_MOTIONS, relativeBearing, sampleScene, sceneFrame, sceneView } from '../src/data/cockpit/f16c/aim120-scene.ts';
-import { aimCue, hud } from '../src/data/cockpit/f16c/hud.ts';
+import { aimCue, boreAwayCue, hud } from '../src/data/cockpit/f16c/hud.ts';
 import { aimFcr, local, scope } from '../src/data/cockpit/f16c/mfd-fcr.ts';
 import { renderPanel } from '../src/data/cockpit/render.ts';
 
@@ -100,4 +100,18 @@ test('smoke grows smoothly and the next step starts at exactly the previous endp
   assert.equal(end.aircraft.bank, 0);
   assert.equal(end.trailOpacity, 0);
   assert.strictEqual(at(support, 0, end), end);
+});
+
+test('the BORE playback layers the shared growing trail over its selected HUD view', () => {
+  const { away } = SCENE_MOTIONS;
+  const start = boreAwayCue(at(away, 0).trail);
+  const mid = boreAwayCue(at(away, 0.5).trail);
+  const end = boreAwayCue(at(away, 1).trail);
+  assert.equal(start.id, 'mrm-bore-away');
+  assert.equal(start.art, end.art);
+  assert.ok(mid.scene.startsWith(start.scene));
+  assert.ok(end.scene.startsWith(start.scene));
+  assert.notEqual(mid.scene, start.scene);
+  assert.notEqual(mid.scene, end.scene);
+  assert.ok(renderPanel(hud).includes(end.scene));
 });
