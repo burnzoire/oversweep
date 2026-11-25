@@ -16,6 +16,8 @@ Two guided exercises on the shared cockpit panels, each starting from an AWACS B
 - Eagle Dynamics, DCS F-16C Viper Early Access Guide (EN, 16 August 2026): master modes pp. 558–559; "AIM-120 AMRAAM" pp. 590–607 (guidance 590–591, launch modes 592 and 600, HUD 593–597, FCR 598, SMS 599, firing 600–607). No community guide is cited or followed.
 
 ## Illustrative, not sourced
+
+- The smoke trail under the canopy and the black smoke at impact (steps `away` and `smoke`) are illustrative DCS-style visuals, not drawn from the guide; the smoke step turns the jet to the target bearing at impact (about 326°, from the shot model) and shows only the HUD.
 - The scene: own jet 28,000 ft, 550 KTAS, heading 360°; a hot two-ship 45 NM out on 340° at 25,000 ft, flying 150° at 404 KTAS. Collision heading 347° (closure 944 kt); after the shot the jet cranks to hold the target 50° left (030° easing to about 016° by impact, closure about 755 kt), worked out by relative motion so the target stays inside the radar's ±60°. The BORE bandit: 005°, 6 NM, 28,000 ft.
 - The launch zone: RAERO 38, ROPT 35, RPI 32, RTR 9, RMIN 1 NM, kept in the guide's order and roughly the p. 595 figure's proportions. The missile closing at 0.557 NM/s and going active 10 NM from the target; times and poles follow from these (launch at 32 NM, active about 39 s, impact about 57 s). The guide gives no AIM-120 performance figures.
 
