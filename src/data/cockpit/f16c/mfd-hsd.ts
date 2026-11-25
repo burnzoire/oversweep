@@ -36,6 +36,9 @@ const DIR: P = [Math.sin((HSD_HEADING * Math.PI) / 180), Math.cos((HSD_HEADING *
 export const JET = { start: [-4 * DIR[0], -4 * DIR[1]] as P, over: [0, 0] as P, on: [8 * DIR[0], 8 * DIR[1]] as P };
 /** Route steerpoints 2, 3 and 4 and markpoint 26 (stored over the runway midpoint). */
 export const SPT = { 2: [14, -6] as P, 3: [-29.7, -4.2] as P, 4: [-46, 9] as P, mark: [0, 0] as P };
+/** Local map coordinates for the manual-entry exercise, centred on the briefed checkpoint. */
+export const MANUAL_CHECKPOINT: P = [0, 0];
+const MANUAL_JET: P = [-10, 3];
 
 /** Bearing (°, magnetic) and range (NM) from the jet to a point. */
 export const bearingRange = (from: P, to: P) => {
@@ -47,8 +50,8 @@ interface HsdState {
   jet: P;
   /** Selected steerpoint: 3 or the markpoint (26). */
   sel: 3 | 26;
-  /** Markpoint 26 stored (the cyan X shown). */
-  mark: boolean;
+  /** Markpoint 26's position when stored (the cyan X shown). */
+  mark: P | false;
   /** Range scale (DEP): 30 or 60 NM. */
   scale: 30 | 60;
 }
@@ -125,13 +128,13 @@ function hsd(id: string, s: HsdState): Page {
   });
   // Markpoint 26: a small cyan X (p. 205), sized as the X on the p. 358 figure (8 x 9 px).
   if (s.mark) {
-    const [x, y] = at(s, SPT.mark);
+    const [x, y] = at(s, s.mark);
     if (inBox([x, y])) paths.push({ d: poly([[x - 4, y - 4.5], [x + 4, y + 4.5]]) + poly([[x + 4, y - 4.5], [x - 4, y + 4.5]]), c: 'cyan' });
   }
   // Ownship (cyan).
   const [ox, oy] = OWN;
   paths.push({ d: poly([[ox, oy - 5], [ox, oy + 22]]) + poly([[ox - 12, oy], [ox + 11, oy]]) + poly([[ox - 4.5, oy + 18], [ox + 4.5, oy + 18]]), c: 'cyan' });
-  const target = s.sel === 26 ? SPT.mark : SPT[3];
+  const target = s.sel === 26 && s.mark ? s.mark : SPT[3];
   const rel = ((bearingRange(s.jet, target).brg - HSD_HEADING + 540) % 360) - 180;
   paths.push({ d: reference(rel), c: 'cyan' });
   return { id, words, marks, fills, paths };
@@ -149,15 +152,21 @@ export const hsdBox = (x0: number, y0: number, x1: number, y1: number) => `#${[x
 
 /** The states the markpoint procedure passes through. */
 export const HSD_STATES = {
+  'hsd-manual-start': { jet: MANUAL_JET, sel: 3, mark: false, scale: 60 },
+  'hsd-manual-saved': { jet: MANUAL_JET, sel: 3, mark: MANUAL_CHECKPOINT, scale: 60 },
+  'hsd-manual-selected': { jet: MANUAL_JET, sel: 26, mark: MANUAL_CHECKPOINT, scale: 60 },
   'hsd-start': { jet: JET.start, sel: 3, mark: false, scale: 60 },
   'hsd-over': { jet: JET.over, sel: 3, mark: false, scale: 60 },
-  'hsd-marked': { jet: JET.over, sel: 3, mark: true, scale: 60 },
-  'hsd-on': { jet: JET.on, sel: 3, mark: true, scale: 60 },
-  'hsd-mark-sel': { jet: JET.on, sel: 26, mark: true, scale: 60 },
-  'hsd-mark-30': { jet: JET.on, sel: 26, mark: true, scale: 30 },
+  'hsd-marked': { jet: JET.over, sel: 3, mark: SPT.mark, scale: 60 },
+  'hsd-on': { jet: JET.on, sel: 3, mark: SPT.mark, scale: 60 },
+  'hsd-mark-sel': { jet: JET.on, sel: 26, mark: SPT.mark, scale: 60 },
+  'hsd-mark-30': { jet: JET.on, sel: 26, mark: SPT.mark, scale: 30 },
 } satisfies Record<string, HsdState>;
 export const hsdPages: Page[] = Object.entries(HSD_STATES).map(([id, s]) => hsd(id, s as HsdState));
 export const hsdPageLabels: Record<keyof typeof HSD_STATES, string> = {
+  'hsd-manual-start': 'HSD (60 NM, depressed): steerpoint 3 selected, no markpoint stored',
+  'hsd-manual-saved': 'HSD: manual markpoint 26 stored, steerpoint 3 selected',
+  'hsd-manual-selected': 'HSD: manual markpoint 26 selected',
   'hsd-start': 'HSD (60 NM, depressed): steerpoint 3 selected, the jet north of the route',
   'hsd-over': 'HSD: over the runway midpoint',
   'hsd-marked': 'HSD: markpoint 26 stored under the ownship (cyan X)',

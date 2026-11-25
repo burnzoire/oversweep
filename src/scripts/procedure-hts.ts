@@ -180,6 +180,26 @@ const SCENARIOS: Record<string, Scenario> = {
     enter: { overfly: { mfd: 'hsd-over' }, 'fly-on': { mfd: 'hsd-on' } },
     slew: [],
   },
+  'markpoint-manual': {
+    initial: { mfd: 'hsd-manual-start', ded: 'cni-3' },
+    after: {
+      mark: { ded: 'mark-hud' },
+      'lat-field': { ded: 'mark-manual-lat-0' },
+      'lon-field': { ded: 'mark-manual-lon-0' },
+      'elev-field': { ded: 'mark-manual-elev-0' },
+      'leave-mark': { ded: 'cni-3', mfd: 'hsd-manual-saved' },
+      recall: { ded: 'mark-manual-saved' },
+      'edit-elev-1': { ded: 'mark-manual-saved-lat' },
+      'edit-elev-2': { ded: 'mark-manual-saved-lon' },
+      'edit-elev': { ded: 'mark-manual-correction-0' },
+      'focus-sensor-1': { ded: 'mark-manual-corrected-lon' },
+      'focus-sensor-2': { ded: 'mark-manual-corrected-lat' },
+      'focus-sensor': { ded: 'mark-manual-corrected' },
+      select: { ded: 'mark-manual-selected', mfd: 'hsd-manual-selected' },
+      rtn: { ded: 'cni-26' },
+    },
+    slew: [],
+  },
   hts: {
     // The SOI starts on the left MFD, which shows the targeting pod (Slave, on the selected steerpoint).
     initial: { mfd: 'menu-blank', left: 'tgp-soi', ded: 'cni' },
