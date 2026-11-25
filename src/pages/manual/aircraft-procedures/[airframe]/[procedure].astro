@@ -137,14 +137,16 @@ if (root && configEl) {
     for (const target of hint.split(',')) {
       const [spotRef, spot] = target.split('#');
       const [ref, row] = spotRef.split('@');
-      const [panel, id] = ref.split('.');
+      const [panel, idStep] = ref.split('.');
+      // `id~1` / `id~-1`: only the half of a step switch that moves it that way (`1` = down or right).
+      const [id, half] = idStep.split('~');
       // A HOTAS card shown alone is scoped (`stick:tms`); a hint names its panel (`stick.tms-ud`), so look in the card too.
       const box = root.querySelector<HTMLElement>(`[data-proc-panel="${panel}"]`) ?? [...root.querySelectorAll<HTMLElement>(`[data-proc-panel^="${panel}:"]`)].find(b => b.querySelector(`.cp-pad:not([hidden]) [data-pad-control="${id}"]`));
       // The panel's drawing, or, for a card shown alone, the card itself.
       const stage = box?.querySelector<HTMLElement>('.cp-stage:not([hidden])') ?? box?.querySelector<HTMLElement>('.cp-pad:not([hidden])');
       if (!stage) continue;
       const els = [...stage.querySelectorAll<Element>(`[data-indicator="${id}"], button[data-control="${id}"], button[data-pad-hit="${id}"], button[data-pad-control="${id}"]`)];
-      let boxes = els.map(el => el.getBoundingClientRect()).filter(r => r.width > 0);
+      let boxes = (half === undefined ? els : els.filter(el => (el as HTMLElement).dataset.padStep === half)).map(el => el.getBoundingClientRect()).filter(r => r.width > 0);
       if (spot && els[0]) {
         // Part of a display: a box in the shown page's own units, mapped to the screen.
         const g = [...stage.querySelectorAll<SVGGraphicsElement>(`[data-page-of="${id}"]`)].find(p => p.getAttribute('display') !== 'none') ?? (els[0] as SVGGraphicsElement);

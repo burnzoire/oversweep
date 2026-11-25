@@ -488,7 +488,8 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     root.querySelectorAll('.cp-target').forEach(e => e.classList.remove('cp-target'));
     const el = padEls.find(e => e.dataset.pad === id);
     if (!el) return;
-    if (focusControl && target) (el.querySelector(`[data-pad-control="${focusControl}"][data-pad-pos="${target}"]`) ?? el.querySelector(`[data-pad-control="${focusControl}"]`))?.classList.add('cp-target');
+    // A card alone gives nothing away: the target is ringed only when the reader clicks the word that names it.
+    if (!cards && focusControl && target) (el.querySelector(`[data-pad-control="${focusControl}"][data-pad-pos="${target}"]`) ?? el.querySelector(`[data-pad-control="${focusControl}"]`))?.classList.add('cp-target');
     el.scrollIntoView({ block: 'nearest', behavior: reduced ? 'auto' : 'smooth' });
   };
   const closePads = () => { if (cards) { root.querySelectorAll('.cp-target').forEach(e => e.classList.remove('cp-target')); return; } padEls.forEach(el => { el.hidden = true; }); root.querySelectorAll('[data-open-pad]').forEach(b => b.setAttribute('aria-expanded', 'false')); };
