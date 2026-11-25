@@ -271,34 +271,39 @@ function mfdDisplay(d: MfdDisplay, ind: IndicatorDef | undefined, id: string, cu
   let s = `<rect x="${n(-o)}" y="${n(-o)}" width="${n(2 * o)}" height="${n(2 * o)}" rx="${n(d.r)}" fill="${PAPER}" ${sw('heavy')}/>` +
     `<rect x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" rx="${n(Math.max(0, d.r - d.inset))}" fill="${MFD_GLASS}" stroke="none"/>` +
     `<g data-indicator="${id}"><rect class="lens" x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" rx="${n(Math.max(0, d.r - d.inset))}" ${sw('fine')}/></g>`;
-  const W = MFD_COLOURS.white;
   for (const pg of ind?.pages ?? []) {
     const page = d.pages.find(q => q.id === pg.id);
-    const clip = `mfd-video-${++videoClips}`;
-    // The video fills the glass, or is larger (`videoScale`) and slews under it: a panned picture moves opposite to the cursor.
-    const vg = g * (page?.videoScale ?? 1), at = page?.pan && page.cursor ? page.cursor.at : [0, 0];
-    const image = page?.video ? `<image data-video href="${page.video}" x="${n(-vg)}" y="${n(-vg)}" width="${n(2 * vg)}" height="${n(2 * vg)}" preserveAspectRatio="xMidYMid slice" opacity="0.9"/>` : '';
-    let body = page?.video ? `<clipPath id="${clip}"><rect x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" rx="${n(Math.max(0, d.r - d.inset))}"/></clipPath><g clip-path="url(#${clip})">` +
-      (page.pan ? `<g data-pan="${id}" transform="translate(${n(-at[0])} ${n(-at[1])})">${image}</g>` : image) + '</g>' : '';
-    if (page?.fills) body += `<path d="${page.fills}" fill="${W}" stroke="none"/>`;
-    for (const p of page?.paths ?? []) if (p.fill) body += `<path d="${p.d}" fill="${MFD_COLOURS[p.c]}" stroke="none"/>`;
-    for (const w of page?.words ?? []) {
-      const k0 = w.s ?? 1, pitch = d.pitch * k0, width = d.width * k0, cap = d.cap * k0;
-      const ink = (w.t.length - 1) * pitch + width, x0 = w.a === 'start' ? w.at[0] : w.a === 'end' ? w.at[0] - ink : w.at[0] - ink / 2;
-      const y = w.at[1], colour = MFD_COLOURS[w.c ?? 'white'], fill = w.inv ? MFD_GLASS : colour;
-      if (w.inv) body += `<rect x="${n(x0 - d.pad[0])}" y="${n(y - cap / 2 - d.pad[1])}" width="${n(ink + 2 * d.pad[0])}" height="${n(cap + 2 * d.pad[1])}" fill="${colour}" stroke="none"/>`;
-      [...w.t].forEach((c, k) => { if (c !== ' ') body += displayChar(x0 + width / 2 + k * pitch, y, c, cap, width, fill); });
-    }
-    if (page?.marks) body += `<path d="${page.marks}" fill="none" stroke="${W}" ${sw('medium')}/>`;
-    if (page?.fine) body += `<path d="${page.fine}" fill="none" stroke="${W}" ${sw('fine')}/>`;
-    if (page?.flash || page?.flashFill) body += `<g><animate attributeName="opacity" values="1;0" calcMode="discrete" dur="0.8s" repeatCount="indefinite"/>${page.flashFill ? `<path d="${page.flashFill}" fill="${W}" stroke="none"/>` : ''}${page.flash ? `<path d="${page.flash}" fill="none" stroke="${W}" ${sw('medium')}/>` : ''}</g>`;
-    for (const p of page?.paths ?? []) if (!p.fill) body += `<path d="${p.d}" fill="none" stroke="${MFD_COLOURS[p.c]}" ${sw(p.pen ?? 'medium')}${p.dash ? ' stroke-dasharray="2.2 1.4"' : ''}>${p.blink ? '<animate attributeName="opacity" values="1;0" calcMode="discrete" dur="0.8s" repeatCount="indefinite"/>' : ''}</path>`;
-    if (page?.aid) body += `<path data-aid d="${page.aid}" fill="none" stroke="${MFD_AID}" stroke-dasharray="1.2 0.8" ${sw('fine')}/>`;
-    if (page?.cursorX && page.cursor) body += `<g data-cursor-x="${id}" transform="translate(${n(page.cursor.at[0])} 0)"><path d="${page.cursorX.d}" fill="none" stroke="${MFD_COLOURS[page.cursorX.c]}" ${sw('medium')}/></g>`;
-    if (page?.cursor && !page.pan) body += `<g data-cursor="${id}" transform="translate(${n(page.cursor.at[0])} ${n(page.cursor.at[1])})"><path d="${page.cursor.d}" fill="none" stroke="${W}" ${sw('medium')}/></g>`;
-    s += `<g data-page-of="${id}" data-page="${pg.id}"${pg.id === current ? '' : ' display="none"'}>${body}</g>`;
+    s += `<g data-page-of="${id}" data-page="${pg.id}" data-page-art${pg.id === current ? '' : ' display="none"'}>${renderMfdPage(d, id, page)}</g>`;
   }
   return s;
+}
+
+export function renderMfdPage(d: MfdDisplay, id: string, page?: MfdDisplay['pages'][number]) {
+  if (!page) return '';
+  const g = d.opening / 2 - d.inset, W = MFD_COLOURS.white;
+  const clip = page.video ? `mfd-video-${++videoClips}` : '';
+  // The video fills the glass, or is larger (`videoScale`) and slews under it: a panned picture moves opposite to the cursor.
+  const vg = g * (page?.videoScale ?? 1), at = page?.pan && page.cursor ? page.cursor.at : [0, 0];
+  const image = page?.video ? `<image data-video href="${page.video}" x="${n(-vg)}" y="${n(-vg)}" width="${n(2 * vg)}" height="${n(2 * vg)}" preserveAspectRatio="xMidYMid slice" opacity="0.9"/>` : '';
+  let body = page?.video ? `<clipPath id="${clip}"><rect x="${n(-g)}" y="${n(-g)}" width="${n(2 * g)}" height="${n(2 * g)}" rx="${n(Math.max(0, d.r - d.inset))}"/></clipPath><g clip-path="url(#${clip})">` +
+    (page.pan ? `<g data-pan="${id}" transform="translate(${n(-at[0])} ${n(-at[1])})">${image}</g>` : image) + '</g>' : '';
+  if (page?.fills) body += `<path d="${page.fills}" fill="${W}" stroke="none"/>`;
+  for (const p of page?.paths ?? []) if (p.fill) body += `<path d="${p.d}" fill="${MFD_COLOURS[p.c]}" stroke="none"/>`;
+  for (const w of page?.words ?? []) {
+    const k0 = w.s ?? 1, pitch = d.pitch * k0, width = d.width * k0, cap = d.cap * k0;
+    const ink = (w.t.length - 1) * pitch + width, x0 = w.a === 'start' ? w.at[0] : w.a === 'end' ? w.at[0] - ink : w.at[0] - ink / 2;
+    const y = w.at[1], colour = MFD_COLOURS[w.c ?? 'white'], fill = w.inv ? MFD_GLASS : colour;
+    if (w.inv) body += `<rect x="${n(x0 - d.pad[0])}" y="${n(y - cap / 2 - d.pad[1])}" width="${n(ink + 2 * d.pad[0])}" height="${n(cap + 2 * d.pad[1])}" fill="${colour}" stroke="none"/>`;
+    [...w.t].forEach((c, k) => { if (c !== ' ') body += displayChar(x0 + width / 2 + k * pitch, y, c, cap, width, fill); });
+  }
+  if (page?.marks) body += `<path d="${page.marks}" fill="none" stroke="${W}" ${sw('medium')}/>`;
+  if (page?.fine) body += `<path d="${page.fine}" fill="none" stroke="${W}" ${sw('fine')}/>`;
+  if (page?.flash || page?.flashFill) body += `<g><animate attributeName="opacity" values="1;0" calcMode="discrete" dur="0.8s" repeatCount="indefinite"/>${page.flashFill ? `<path d="${page.flashFill}" fill="${W}" stroke="none"/>` : ''}${page.flash ? `<path d="${page.flash}" fill="none" stroke="${W}" ${sw('medium')}/>` : ''}</g>`;
+  for (const p of page?.paths ?? []) if (!p.fill) body += `<path d="${p.d}" fill="none" stroke="${MFD_COLOURS[p.c]}" ${sw(p.pen ?? 'medium')}${p.dash ? ' stroke-dasharray="2.2 1.4"' : ''}>${p.blink ? '<animate attributeName="opacity" values="1;0" calcMode="discrete" dur="0.8s" repeatCount="indefinite"/>' : ''}</path>`;
+  if (page?.aid) body += `<path data-aid d="${page.aid}" fill="none" stroke="${MFD_AID}" stroke-dasharray="1.2 0.8" ${sw('fine')}/>`;
+  if (page?.cursorX && page.cursor) body += `<g data-cursor-x="${id}" transform="translate(${n(page.cursor.at[0])} 0)"><path d="${page.cursorX.d}" fill="none" stroke="${MFD_COLOURS[page.cursorX.c]}" ${sw('medium')}/></g>`;
+  if (page?.cursor && !page.pan) body += `<g data-cursor="${id}" transform="translate(${n(page.cursor.at[0])} ${n(page.cursor.at[1])})"><path d="${page.cursor.d}" fill="none" stroke="${W}" ${sw('medium')}/></g>`;
+  return body;
 }
 
 /** Pointer along +y = up (nose), turned by its group: a shaft from r0 to the arrow, an arrowhead at r1, and a tail. */
@@ -411,10 +416,18 @@ function hudTape(t: HudTape, font: HudDisplay['font']) {
   return { ticks: `<path d="${ticks}" stroke-width="${HUD_PEN}" stroke-linecap="butt" fill="none"/>`, labels };
 }
 
+export function renderHudCue(font: HudDisplay['font'], cue: NonNullable<HudDisplay['cues']>['pages'][number], steer = (art: string) => art) {
+  const pen = `stroke-width="${HUD_PEN}" fill="none"`;
+  return (cue.scene ?? '') + `<path d="${cue.art}" ${pen}/>` +
+    (cue.steer ? steer(`<path d="${cue.steer}" ${pen}/>`) : '') +
+    cue.texts.map(t => hudText(t.at[0], t.at[1], t.t, font, t.anchor)).join('') +
+    (cue.flash ? `<path d="${cue.flash}" ${pen}><animate attributeName="opacity" values="1;0" calcMode="discrete" dur="0.4s" repeatCount="indefinite"/></path>` : '');
+}
+
 function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, pageOf: (id: string) => string) {
   const ind = (id: string) => spec.indicators.find(i => i.id === id);
-  const pages = (id: string, draw: (page: string) => string) => (ind(id)?.pages ?? []).map(pg =>
-    `<g data-page-of="${id}" data-page="${pg.id}"${pg.id === pageOf(id) ? '' : ' display="none"'}>${draw(pg.id)}</g>`).join('');
+  const pages = (id: string, draw: (page: string) => string, artwork = false) => (ind(id)?.pages ?? []).map(pg =>
+    `<g data-page-of="${id}" data-page="${pg.id}"${artwork ? ' data-page-art' : ''}${pg.id === pageOf(id) ? '' : ' display="none"'}>${draw(pg.id)}</g>`).join('');
   const word = (id: string, pg: string) => pg === 'none' ? '' : ind(id)?.pages?.find(q => q.id === pg)?.label ?? '';
   const D = h.deg, F = h.font, pen = `stroke-width="${HUD_PEN}" fill="none"`;
   // `k` scales the page's move for this copy (−1 undoes a parent's shift).
@@ -434,11 +447,11 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
   }
   const fpm = `<circle r="${n(h.fpm.r)}" ${pen}/><path d="M${n(-h.fpm.wing)} 0H${n(-h.fpm.r)}M${n(h.fpm.r)} 0H${n(h.fpm.wing)}M0 ${n(-h.fpm.r)}V${n(-h.fpm.tail)}" ${pen}/>`;
   const cue = shift('steering-cue', 'x', D, `<circle r="${n(h.steering.r)}" ${pen}/>` + turned('steering', value('steering'), `<path d="M0 ${n(-h.steering.r)}V${n(-h.steering.line)}" ${pen}/>`));
-  // The bars sit on the boresight by pitch alone; they are caged to the marker in azimuth and turn with roll about it
-  // (shifted to the marker's height, turned, shifted back).
-  const ladder = shift('fpm-azimuth', 'x', D, shift('fpm-elevation', 'y', -D,
-    turned('roll', -value('roll'), shift('fpm-elevation', 'y', -D, shift('pitch', 'y', D, bars), -1))));
-  const attitude = ladder + shift('fpm-azimuth', 'x', D, shift('fpm-elevation', 'y', -D, fpm + cue));
+  const atFpm = (body: string) => shift('fpm-azimuth', 'x', D, shift('fpm-elevation', 'y', -D, body));
+  const rollAtFpm = (body: string) => atFpm(turned('roll', -value('roll'), body));
+  // Keep the ladder caged to the marker in azimuth and let pitch set its height before banking.
+  const ladder = rollAtFpm(shift('fpm-elevation', 'y', -D, shift('pitch', 'y', D, bars), -1));
+  const attitude = ladder + atFpm(fpm + cue);
   const b = h.boresight.arm, dm = h.diamond;
   const fixed = `<path d="M${n(-b)} 0H${n(b)}M0 ${n(-b)}V${n(b)}" ${pen}/>`;
   const steerpoint = shift('steerpoint-azimuth', 'x', D, shift('steerpoint-elevation', 'y', -D, `<path d="M0 ${n(-dm)}L${n(dm)} 0L0 ${n(dm)}L${n(-dm)} 0Z" ${pen}/>`));
@@ -473,13 +486,17 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
     return pre + `<g data-indicator="${f.indicator}">${body}</g>`;
   }).join('');
   const mode = `<g data-indicator="velocity-mode">${pages('velocity-mode', pg => hudText(h.velocityMode[0], h.velocityMode[1], word('velocity-mode', pg), F, 'middle'))}</g>`;
-  const cues = h.cues ? `<g data-indicator="${h.cues.id}">${pages(h.cues.id, pg => {
-    const c = h.cues!.pages.find(q => q.id === pg)!;
-    return (c.scene ?? '') + `<path d="${c.art}" ${pen}/>` + (c.steer ? shift('harm-asl', 'x', D, `<path d="${c.steer}" ${pen}/>`) : '') + c.texts.map(t => hudText(t.at[0], t.at[1], t.t, F, t.anchor)).join('') +
-      (c.flash ? `<path d="${c.flash}" ${pen}><animate attributeName="opacity" values="1;0" calcMode="discrete" dur="0.4s" repeatCount="indefinite"/></path>` : '');
-  })}</g>` : '';
+  const cues = h.cues ? `<g data-indicator="${h.cues.id}">${pages(h.cues.id, pg =>
+    renderHudCue(F, h.cues!.pages.find(q => q.id === pg)!, art => shift('harm-asl', 'x', D, art)), true)}</g>` : '';
   const heading = h.cues?.heading
-    ? `<g data-indicator="${h.cues.id}">${pages(h.cues.id, pg => pg === 'none' || h.cues!.pages.find(q => q.id === pg)?.keepHeading ? tape('heading', h.heading) : tape('heading', h.cues!.heading!, '-hi'))}</g>`
+    ? `<g data-indicator="${h.cues.id}">${pages(h.cues.id, pg => {
+      const cue = h.cues!.pages.find(q => q.id === pg);
+      if (cue?.bankHeading) {
+        const tapeAtRest = shift('fpm-azimuth', 'x', D, shift('fpm-elevation', 'y', -D, tape('heading', h.heading), -1), -1);
+        return rollAtFpm(tapeAtRest);
+      }
+      return pg === 'none' || cue?.keepHeading ? tape('heading', h.heading) : tape('heading', h.cues!.heading!, '-hi');
+    })}</g>`
     : tape('heading', h.heading);
   const on = `<g clip-path="url(#${clip})">` + fixed + steerpoint + attitude + rollArt + cues +
     tape('velocity', h.velocity) + tape('altitude', h.altitude) + heading + mode +

@@ -76,7 +76,7 @@ const ars = `M114.5 503V539M112 515H122L128 527L133.5 515L139 527L144.5 515H155`
     x !== undefined ? `${mm(+x - SC[0])} ${mm(+y - SC[1])}` : `${c}${mm(+v - (c === 'H' ? SC[0] : SC[1]))}`);
 const dteTop = [w('DTC ID', 331, 229.5), w('SEADSTRIKE', 329, 248)];
 
-const display: MfdDisplay = {
+export const mfdDisplay: MfdDisplay = {
   opening: mm(519), r: mm(63), inset: mm(15),
   cap: mm(CAP), width: mm(W), pitch: mm(PITCH), pad: [mm(3), mm(3.2)],
   pages: [
@@ -208,7 +208,7 @@ function build(side: 'left' | 'right'): PanelSpec {
       { kind: 'svg', markup: BOSSES.map(([x, y]) => `<circle cx="${mm(x)}" cy="${mm(y)}" r="${mm(14)}" fill="none" stroke-width="0.4"/><circle cx="${mm(x)}" cy="${mm(y)}" r="${mm(9)}" fill="none" stroke-width="0.25"/>`).join('') },
     ],
     placements: [
-      { component: 'mfd-display', indicator: 'display', at: pt(...SC), display },
+      { component: 'mfd-display', indicator: 'display', at: pt(...SC), display: mfdDisplay },
       ...Array.from({ length: 20 }, (_, i): Placement => ({
         component: 'push-square', control: `osb-${i + 1}`, at: pt(...osbAt(i + 1)), size: [OSB, OSB], legend: [], marks: osbMarks,
       })),

@@ -2,7 +2,7 @@ import type { MfdDisplay } from '../types';
 import { tracer } from '../trace.ts';
 import { c, f, poly, w } from './mfd-had.ts';
 import { ASEC, asecDeg, type MrmView } from './mrm.ts';
-import { MOMENTS, scaleFor, type MomentId } from './aim120-scene.ts';
+import { MOMENTS, relativeBearing, sceneFrame, sceneView, type MomentId, type SceneFrame } from './aim120-scene.ts';
 
 /**
  * F-16C Fire Control Radar (FCR) air-to-air format, for the shared MFD (`mfd.ts`). Traced from the guide's FCR
@@ -411,11 +411,21 @@ const AIM_STATES: Record<string, FcrState> = {
   'fcr-msl-80': { soi: true, scale: 80, sub: 'RWS', az: 'A6', cursor: HOME, ant: 22, mrm: R },
   'fcr-msl-80-free': { soi: true, scale: 80, sub: 'RWS', az: 'A6', cursor: 'free', ant: -8, mrm: R },
   'fcr-msl-80-lead': { soi: true, scale: 80, sub: 'RWS', az: 'A6', cursor: on('lead', 80), over: 'lead', ant: -28, mrm: R },
-  ...Object.fromEntries((Object.entries(MOMENTS) as [MomentId, (typeof MOMENTS)[MomentId]][]).map(([k, m]) => [`fcr-aim-${k}`, {
-    soi: true, scale: scaleFor(m.nm), sub: 'SAM', az: 'A6', cursor: scope(((m.brg - m.hdg + 540) % 360) - 180, m.nm, scaleFor(m.nm)), bug: 'lead', ant: 0, hdg: m.hdg,
-    moved: { lead: { az: m.brg - 360, nm: m.nm }, wing: { az: m.brg - 363.5, nm: m.nm + 1 } }, mrm: m.view,
-  } satisfies FcrState])),
+  ...Object.fromEntries((Object.keys(MOMENTS) as MomentId[]).map(id => [`fcr-aim-${id}`, aimFcrState(sceneFrame(id))])),
 };
+
+function aimFcrState(frame: SceneFrame): FcrState {
+  const { aircraft: { heading, bearing, range }, scale } = frame;
+  return {
+    soi: true, scale, sub: 'SAM', az: 'A6',
+    cursor: scope(relativeBearing(bearing, heading), range, scale),
+    bug: 'lead', ant: 0, hdg: heading,
+    moved: { lead: { az: bearing - 360, nm: range }, wing: { az: bearing - 363.5, nm: range + 1 } },
+    mrm: sceneView(frame),
+  };
+}
+
+export const aimFcr = (frame: SceneFrame) => fcr(`fcr-aim-${frame.id}`, aimFcrState(frame));
 export type FcrPage = keyof typeof FCR_STATES;
 
 /**
