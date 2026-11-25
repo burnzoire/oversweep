@@ -249,11 +249,16 @@ export function mrmCue(o: MrmCue) {
   }
   return { id: o.id, art, texts, keepHeading: true, ...(o.scene ? { scene: o.scene } : {}) };
 }
+const launchAircraft = sceneFrame('launched').aircraft;
+const launchAzimuth = relativeBearing(launchAircraft.bearing, launchAircraft.heading);
+
 export function aimCue(frame: SceneFrame) {
   const { heading, bearing } = frame.aircraft;
   const off = relativeBearing(bearing, heading);
+  // Project the whole trail as the view turns away from its original bearing.
+  const trailOffset = mm(relativeBearing(off, launchAzimuth) * DEG);
   const scene = frame.trail > 0
-    ? `<g opacity="${frame.trailOpacity}">${smokeTrail(off, 0.6, frame.trail)}</g>`
+    ? `<g opacity="${frame.trailOpacity}" transform="translate(${trailOffset.toFixed(3)} 0)">${smokeTrail(launchAzimuth, 0.6, frame.trail)}</g>`
     : undefined;
   return {
     ...mrmCue({ id: `mrm-${frame.id}`, view: sceneView(frame), scale: frame.scale, scene,

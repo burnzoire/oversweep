@@ -89,6 +89,14 @@ test('smoke grows smoothly and the next step starts at exactly the previous endp
   assert.ok(turn > 0 && turn < 180);
   assert.equal(relativeBearing(mid.aircraft.heading, launchEnd.aircraft.heading), turn / 2);
   assert.ok(mid.aircraft.bank > 0 && mid.trailOpacity < launchEnd.trailOpacity);
+  const trailStart = aimCue(launchEnd).scene;
+  const trailMid = aimCue(mid).scene;
+  assert.equal(aimCue(at(crank, 0, launchEnd)).scene, trailStart);
+  const path = svg => svg.match(/<path d="([^"]+)"/)[1];
+  const x = svg => Number(svg.match(/translate\(([^ ]+) 0\)/)[1]);
+  assert.equal(path(trailMid), path(trailStart));
+  assert.ok(x(trailMid) < x(aimCue(at(crank, 0.25, launchEnd)).scene));
+  assert.ok(x(aimCue(at(crank, 0.25, launchEnd)).scene) < x(trailStart));
   assert.equal(end.aircraft.bank, 0);
   assert.equal(end.trailOpacity, 0);
   assert.strictEqual(at(support, 0, end), end);

@@ -713,6 +713,11 @@ const aim120Single: AircraftProcedure = {
   intro: AIM_INTRO,
   description: 'Illustrated DCS F-16C AIM-120 AMRAAM shot on one radar target: BRAA call, missile override, SMS check, master arm, bug in SAM, ASEC and ASC steering, the missile scale (RAERO, ROPT, RPI, DLZ), launch, the missile-away smoke trail, crank, the A and T timers, and the missile going active.',
   complete: 'Missile away and active',
+  summary: [
+    'You matched the stores display’s readiness and inventory indications with their counterparts in the HUD.',
+    'You followed one contact across the radar scope and HUD, reading its position, range and closure as the aircraft turned.',
+    'You distinguished the visible smoke trail from the radar indications that track the missile’s progress.',
+  ],
   sources: AIM_SRC + ' The radar steps are covered in more detail in the radar procedures.',
   steps: [
     {id:'braa',section:'The call',title:'Take the call',control:'Radio',action:'The AWACS calls: “Viper 1-1, Darkstar, group [BRAA](term:braa) 340, 45, 25 thousand, hot, hostile.”',expect:'BRAA is bearing, range, altitude and aspect from you. The group bears 340° magnetic, 20° left of your nose, 45 NM away, at 25,000 ft, and hot: pointing at you. Hostile is the declaration that clears you to engage it. The {{radar|0}} is still on 40 NM, so nothing shows yet.',evidence:G3+' 268–269, 394; brevity: ATP 1-02.1/AFTTP 3-2.5 (BRAA, HOSTILE)',hints:[FL(105,103,556,552)],panels:['left-mfd'],confirm:'Group 340, 45, hot'},
