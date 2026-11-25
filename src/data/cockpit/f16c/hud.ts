@@ -285,13 +285,20 @@ export function smokeTrail(az: number, down: number, reach: number) {
   }
   return `<path d="${rel([...left, ...right.reverse()])}" fill="#f4f6fa" fill-opacity="0.6" stroke="none"/>`;
 }
-/** Black smoke from the missile's impact, `az` degrees right and `down` below the boresight cross: a dark puff. */
+/**
+ * Smoke from the missile's impact, `az` degrees right and `down` below the boresight cross. The target is many miles
+ * away, so there is no cloud to see: only a speck where it was hit and a thin dark trail of smoke as it falls away.
+ */
 export function impactSmoke(az: number, down: number) {
   const [x, y] = [B[0] + az * DEG, B[1] + down * DEG];
-  const blob = (dx: number, dy: number, rr: number, o: number) => `<circle cx="${rx(x + dx).toFixed(3)}" cy="${ry(y + dy).toFixed(3)}" r="${mm(rr).toFixed(3)}" fill="#14171c" fill-opacity="${o}" stroke="none"/>`;
-  // From so far away: a tiny dark burst, and a thin dark streak of smoke falling away beneath it.
-  const streak = rel([[x - 1.2, y], [x + 1.2, y], [x + 2.4, y + 30], [x - 0.6, y + 34]]);
-  return `<path d="${streak}" fill="#14171c" fill-opacity="0.6" stroke="none"/>` + blob(0, 0, 3, 0.85) + blob(-2.5, -1.5, 2, 0.7) + blob(2.5, -1, 2, 0.7);
+  // A thin trail that tapers as it falls and drifts a little to one side.
+  const n = 12, len = 22, left: [number, number][] = [], right: [number, number][] = [];
+  for (let i = 0; i <= n; i++) {
+    const t = i / n, cx = x + 2.5 * t * t, cy = y + len * t, w = 0.9 - 0.6 * t;
+    left.push([cx - w / 2, cy]); right.push([cx + w / 2, cy]);
+  }
+  return `<path d="${rel([...left, ...right.reverse()])}" fill="#14171c" fill-opacity="0.7" stroke="none"/>` +
+    `<circle cx="${rx(x).toFixed(3)}" cy="${ry(y).toFixed(3)}" r="${mm(0.8).toFixed(3)}" fill="#14171c" fill-opacity="0.85" stroke="none"/>`;
 }
 export const MRM_CUES = [
   mrmCue({ id: 'mrm-bore', view: { rdy: '' }, bore: true }),
