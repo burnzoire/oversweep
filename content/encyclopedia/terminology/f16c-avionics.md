@@ -155,12 +155,12 @@ terms:
     cite: [{ n: 1, page: "335, 628" }]
   - term: DTOS
     expansion: Dive toss
-    definition: "One of the visual air-to-ground delivery sub-modes, for a target the pilot can see and designates with the target designator box. The name is dive/toss."
-    cite: [{ n: 1, page: "335" }]
+    definition: "A visual air-to-ground delivery sub-mode. The pilot puts the HUD cursor on a target they can see and designates it; the target designator box and the sensors then hold that point, and the release is computed to it."
+    cite: [{ n: 1, page: "333, 335" }]
   - term: LADD
     expansion: Low altitude drogue delivery
-    definition: "One of the pre-planned air-to-ground delivery sub-modes, aimed at a steerpoint target. The name is low altitude drogue delivery, for retarded bombs."
-    cite: [{ n: 1, page: "335" }]
+    definition: "A pre-planned air-to-ground delivery sub-mode for bombs: like CCRP, it aims at a target whose position is set by a steerpoint rather than seen by the pilot. It is offered on the SMS page beside CCIP, CCRP and DTOS."
+    cite: [{ n: 1, page: "335, 619" }]
   - term: POS mode
     expansion: Position known
     definition: "The HARM mode for a radar whose position is already known: the missile is told the radar type and flies toward the position until it hears the radar, then homes on its signal. Designating a radar on the HAD sets it."
