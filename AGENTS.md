@@ -104,3 +104,11 @@ or restricted/copyrighted manual dumps. See docs/development.md for details.
 - Sync instruments with flight data by deriving every reading (range, bearing,
   closure, heading, DLZ poles, times) from one track computed once from the scenario,
   never by typing numbers per display. Cross-check each displayed number against it.
+- Pull requests: fill in `.github/pull_request_template.md`. For any PR that changes how
+  the site looks, add screenshots of the affected pages (desktop 1280 wide, plus phone 390
+  wide where layout changes), shot from the built `dist/` with the preinstalled Playwright
+  and re-shot after visual changes. Host them on the orphan `pr-screenshots` branch, one
+  `pr-<n>/` folder per PR (never on main or the PR branch), and embed them with
+  `https://github.com/burnzoire/oversweep/blob/pr-screenshots/pr-<n>/<file>.png?raw=true`.
+  Add the `preview` label to show a PR live at `/?pr=<n>`. Never post GitHub comments
+  on the owner's behalf.
