@@ -447,11 +447,11 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
   }
   const fpm = `<circle r="${n(h.fpm.r)}" ${pen}/><path d="M${n(-h.fpm.wing)} 0H${n(-h.fpm.r)}M${n(h.fpm.r)} 0H${n(h.fpm.wing)}M0 ${n(-h.fpm.r)}V${n(-h.fpm.tail)}" ${pen}/>`;
   const cue = shift('steering-cue', 'x', D, `<circle r="${n(h.steering.r)}" ${pen}/>` + turned('steering', value('steering'), `<path d="M0 ${n(-h.steering.r)}V${n(-h.steering.line)}" ${pen}/>`));
-  // The bars sit on the boresight by pitch alone; they are caged to the marker in azimuth and turn with roll about it
-  // (shifted to the marker's height, turned, shifted back).
-  const ladder = shift('fpm-azimuth', 'x', D, shift('fpm-elevation', 'y', -D,
-    turned('roll', -value('roll'), shift('fpm-elevation', 'y', -D, shift('pitch', 'y', D, bars), -1))));
-  const attitude = ladder + shift('fpm-azimuth', 'x', D, shift('fpm-elevation', 'y', -D, fpm + cue));
+  const atFpm = (body: string) => shift('fpm-azimuth', 'x', D, shift('fpm-elevation', 'y', -D, body));
+  const rollAtFpm = (body: string) => atFpm(turned('roll', -value('roll'), body));
+  // Keep the ladder caged to the marker in azimuth and let pitch set its height before banking.
+  const ladder = rollAtFpm(shift('fpm-elevation', 'y', -D, shift('pitch', 'y', D, bars), -1));
+  const attitude = ladder + atFpm(fpm + cue);
   const b = h.boresight.arm, dm = h.diamond;
   const fixed = `<path d="M${n(-b)} 0H${n(b)}M0 ${n(-b)}V${n(b)}" ${pen}/>`;
   const steerpoint = shift('steerpoint-azimuth', 'x', D, shift('steerpoint-elevation', 'y', -D, `<path d="M0 ${n(-dm)}L${n(dm)} 0L0 ${n(dm)}L${n(-dm)} 0Z" ${pen}/>`));
@@ -491,7 +491,10 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
   const heading = h.cues?.heading
     ? `<g data-indicator="${h.cues.id}">${pages(h.cues.id, pg => {
       const cue = h.cues!.pages.find(q => q.id === pg);
-      if (cue?.bankHeading) return turned('roll', -value('roll'), tape('heading', h.heading));
+      if (cue?.bankHeading) {
+        const tapeAtRest = shift('fpm-azimuth', 'x', D, shift('fpm-elevation', 'y', -D, tape('heading', h.heading), -1), -1);
+        return rollAtFpm(tapeAtRest);
+      }
       return pg === 'none' || cue?.keepHeading ? tape('heading', h.heading) : tape('heading', h.cues!.heading!, '-hi');
     })}</g>`
     : tape('heading', h.heading);

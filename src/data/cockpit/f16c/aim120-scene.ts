@@ -66,8 +66,11 @@ interface Moment {
   view: Omit<MrmView, 'nm' | 'closure'>;
 }
 
+// Illustrative nose-up attitude for level flight in this HUD view.
+const LEVEL_PITCH = 3.75;
+
 const level = (heading: number, range: number, bearing: number, closure: number): AircraftState =>
-  ({ heading, bank: 0, pitch: 0, range, bearing, closure });
+  ({ heading, bank: 0, pitch: LEVEL_PITCH, range, bearing, closure });
 
 const r1 = (v: number) => Math.round(v * 10) / 10;
 const closing = (nm: number, hdg: number): Moment => ({

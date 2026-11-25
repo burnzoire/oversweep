@@ -67,6 +67,9 @@ const aimScan = (step: keyof typeof SCENE_MOTIONS, caption: string, prompt: stri
   return { step, motion, secs: motion.keyframes.map(key => key.seconds), ms: motion.ms, caption, prompt };
 };
 
+// The flight path stays on the horizon in this level-flight scene.
+const levelHud = (pitch: number) => ({ 'hud.pitch': pitch, 'hud.fpm-elevation': -pitch });
+
 const HUD_CAP = { 'hud.altitude': 28000, 'hud.velocity': 370, 'hud.mach': 0.92, 'hud.heading': 360, 'hud.pitch': 0, 'hud.roll': 0, 'hud.fpm-azimuth': 0, 'hud.fpm-elevation': 0, 'hud.steerpoint-azimuth': 0, 'hud.steerpoint-elevation': -24.7, 'hud.steering-cue': 0, 'hud.slant-range': 11, 'hud.steerpoint-distance': 10, 'hud.steerpoint': 1, 'hud.ttg': 65, 'hud.radar-alt': 27000 };
 const SCENARIOS: Record<string, Scenario> = {
   // F-16C air-to-air radar (mfd-fcr.ts): the FCR on the left MFD; a CAP at 28,000 ft heading 360°, the CAP point 10 NM ahead.
@@ -109,7 +112,7 @@ const SCENARIOS: Record<string, Scenario> = {
   },
   aim120: {
     // The radar procedures' CAP: the FCR (not SOI) on the left MFD, the SMS on the right; NAV, master arm off.
-    initial: { left: 'fcr-not-soi', mfd: 'sms-msl', ded: 'cni', x: { 'hud.screen': 'on', 'hud.master-arm': 'none', 'hud.master-mode': 'nav', 'hud.harm-cues': 'none', 'hud.slant-range-source': 'b' }, r: HUD_CAP },
+    initial: { left: 'fcr-not-soi', mfd: 'sms-msl', ded: 'cni', x: { 'hud.screen': 'on', 'hud.master-arm': 'none', 'hud.master-mode': 'nav', 'hud.harm-cues': 'none', 'hud.slant-range-source': 'b' }, r: { ...HUD_CAP, ...levelHud(sceneFrame('bugged').aircraft.pitch) } },
     after: {
       msl: { left: 'fcr-msl', x: { 'hud.master-mode': 'mrm4', 'hud.harm-cues': 'mrm-bore' } },
       arm: { left: 'fcr-msl-rdy', mfd: 'sms-msl-rdy', x: { 'hud.master-arm': 'arm' } },
@@ -339,7 +342,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
       pages['hud.harm-cues'] = cue.id;
       readings['hud.heading'] = ((heading % 360) + 360) % 360 || 360;
       readings['hud.roll'] = bank;
-      readings['hud.pitch'] = pitch;
+      Object.assign(readings, levelHud(pitch));
       readings['hud.slant-range'] = range;
       artwork['hud.harm-cues'] = renderHudCue(hudFont, cue);
       artwork['left-mfd.display'] = renderMfdPage(mfdDisplay, 'display', aimFcr(frame));

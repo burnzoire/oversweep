@@ -37,11 +37,22 @@ test('turn eases in and out while both displays follow the same intermediate pos
   assert.equal(relative(sceneFrame('launched')), 0);
 });
 
-test('the heading tape shares the attitude ladder roll in the scene pages', () => {
+test('level-flight scenes hold their nose-up pitch through both turns', () => {
+  const { turn, crank } = SCENE_MOTIONS;
+  for (const motion of [turn, crank]) {
+    const pitch = at(motion, 0).aircraft.pitch;
+    assert.ok(pitch > 0);
+    assert.equal(at(motion, 0.5).aircraft.pitch, pitch);
+    assert.equal(at(motion, 1).aircraft.pitch, pitch);
+  }
+});
+
+test('the heading tape shares the attitude ladder pivot in the scene pages', () => {
   const svg = renderPanel(hud);
-  const heading = svg.match(/data-page="mrm-bugged"[^>]*><g data-indicator="roll">.*?<g data-indicator="heading">/s);
+  const heading = svg.match(/data-page="mrm-bugged"[^>]*><g data-indicator="fpm-azimuth">[^]*?<g data-indicator="heading">/);
   assert.ok(heading);
-  assert.match(heading[0], /data-needle="roll"/);
+  assert.match(heading[0], /data-shift="fpm-azimuth"[^>]*>.*data-shift="fpm-elevation"[^>]*>.*data-needle="roll"/s);
+  assert.match(heading[0], /data-needle="roll"[^>]*>.*data-shift="fpm-azimuth" data-k="-1"[^>]*>.*data-shift="fpm-elevation" data-k="-1"/s);
   for (const id of ['mrm-away-1', 'mrm-away-2', 'mrm-away-3']) {
     assert.match(svg, new RegExp(`data-page="${id}"`));
   }
