@@ -13,7 +13,7 @@ Master mode, Master arm, CCRP, DTOS, LADD. DTOS is defined from the visual-desig
 - LADD's delivery manoeuvre is not described in the guide and an outside manual (F-16 MLU Pilot's Guide) was unreachable through the network proxy, so the definition stops at what is sourced. The guide's OSB numbers are used where stated (OSB 1, 4, 6, 7); SLAVE/BORE has no OSB number in the article because the guide gives two (18 and 19).
 
 ## SME review
-2026-11-24 at f712a55: READY, 0 blockers (report in project files sme-reviews/2026-11-24-pr-543.md). Wording fixes for the 8 non-blocking findings applied afterwards; not re-reviewed (Nathan's standing rule for minor fixes). 2026-11-25: rebased on main, DTOS and LADD definitions re-sourced (minor, not re-reviewed).
+2026-11-24 at f712a55: READY, 0 blockers (report in project files sme-reviews/2026-11-24-pr-543.md). Wording fixes for the 8 non-blocking findings applied afterwards; not re-reviewed (Nathan's standing rule for minor fixes). 2026-11-25: rebased on main and DTOS/LADD definitions re-sourced; fresh review at 3445d2a: READY, 0 blockers. Its low findings were applied (pre-planned/visual wording, missile boresight p. 571, CCRP target and release button p. 628).
 
 ## Checks
 - `node --test tests/manual-menu.test.mjs tests/aircraft-procedures.test.mjs`: pass.

@@ -151,7 +151,7 @@ terms:
     cite: [{ n: 1, page: "47" }]
   - term: CCRP
     expansion: Continuously computed release point
-    definition: "A pre-planned air-to-ground delivery sub-mode in which the jet gives steering cues to the point where the bomb should be released to hit a steerpoint target, and releases it automatically there."
+    definition: "A pre-planned air-to-ground delivery sub-mode in which the jet gives steering cues to the point where the bomb should be released to hit a designated target (a steerpoint or a targeting-pod point), and releases it automatically there while the pilot holds the release button."
     cite: [{ n: 1, page: "335, 628" }]
   - term: DTOS
     expansion: Dive toss
