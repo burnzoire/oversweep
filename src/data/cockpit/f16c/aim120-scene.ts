@@ -50,20 +50,38 @@ const post = (t: number): [string, string] => (t < T_ACTIVE
   ? [`${Math.round(at(T_ACTIVE).nm)}M`, `A${Math.round(T_ACTIVE - t)}`]
   : [`${Math.round(at(T_HIT).nm)}F`, `T${Math.max(0, Math.round(T_HIT - t))}`]);
 
-/** One moment of the shot: the jet's heading, the lead's range, and the AIM-120 symbology. */
-export interface Moment { hdg: number; nm: number; brg: number; view: MrmView }
+/** Presentation values shared by the two displays, sampled once per animation frame. */
+export interface AircraftState {
+  heading: number;
+  bank: number;
+  pitch: number;
+  range: number;
+  bearing: number;
+  closure: number;
+}
+
+interface Moment {
+  aircraft: AircraftState;
+  view: Omit<MrmView, 'nm' | 'closure'>;
+}
+
+const level = (heading: number, range: number, bearing: number, closure: number): AircraftState =>
+  ({ heading, bank: 0, pitch: 0, range, bearing, closure });
+
 const r1 = (v: number) => Math.round(v * 10) / 10;
 const closing = (nm: number, hdg: number): Moment => ({
-  hdg, nm, brg: 340, view: {
-    rdy: 'RDY', nm, closure: hdg === 360 ? 915 : 944, dlz: DLZ, pre: pre(nm, CLOSE.collision),
+  aircraft: level(hdg, nm, 340, hdg === 360 ? 915 : 944),
+  view: {
+    rdy: 'RDY', dlz: DLZ, pre: pre(nm, CLOSE.collision),
     asec: Math.min(1, Math.max(0, (DLZ.opt - nm) / (DLZ.opt - DLZ.pi))), asc: hdg === 360 ? [-1.6, 0] : nm <= DLZ.pi ? [0.05, 0.6] : [0, 0], aspect: 170,
   },
 });
 const flying = (t: number): Moment => {
-  const f = at(t), nm = r1(f.nm), closure = Math.round(f.closure);
+  const f = at(t), nm = r1(f.nm);
   return {
-    hdg: Math.round(f.hdg) || 360, nm, brg: f.brg, view: {
-      rdy: 'RDY', nm, closure, dlz: DLZ, pre: pre(nm, f.closure / 3600), post: t < T_HIT + 0.5 ? post(t) : undefined,
+    aircraft: level(Math.round(f.hdg) || 360, nm, f.brg, Math.round(f.closure)),
+    view: {
+      rdy: 'RDY', dlz: DLZ, pre: pre(nm, f.closure / 3600), post: t < T_HIT + 0.5 ? post(t) : undefined,
       asec: 1, asc: [-1.6, 0.6], aspect: aspectAt(f.brg),
       tail: t < T_ACTIVE ? 'on' : 'flash', ...(t >= T_HIT - 8 ? { x: t > T_HIT ? 'flash' as const : 'on' as const } : {}),
     },
@@ -88,3 +106,84 @@ export const MOMENTS = {
 export type MomentId = keyof typeof MOMENTS;
 /** Seconds after launch of the post-launch moments, and seconds after the turn of the closing ones, for the procedure's player. */
 export const SHOT_TIMES = { cranked: 4, t10: 10, t20: 20, t30: 30, active: Math.ceil(T_ACTIVE), turned: 0, c42: Math.round(2.2 / CLOSE.collision), c38: Math.round(6.2 / CLOSE.collision), c35: Math.round(9.2 / CLOSE.collision), rpi: Math.round(12.2 / CLOSE.collision) };
+
+export interface SceneFrame extends Moment {
+  id: MomentId;
+  scale: ReturnType<typeof scaleFor>;
+  trail: number;
+  trailOpacity: number;
+}
+
+export function sceneFrame(id: MomentId): SceneFrame {
+  const moment = MOMENTS[id];
+  return { ...moment, id, scale: scaleFor(moment.aircraft.range), trail: 0, trailOpacity: 0 };
+}
+
+export function sceneView({ aircraft, view }: SceneFrame): MrmView {
+  return { ...view, nm: aircraft.range, closure: Math.round(aircraft.closure) };
+}
+
+const mix = (a: number, b: number, t: number) => a + (b - a) * t;
+export const relativeBearing = (bearing: number, heading: number) => ((bearing - heading + 540) % 360) - 180;
+const mixAngle = (a: number, b: number, t: number) => a + relativeBearing(b, a) * t;
+const ease = (t: number) => t * t * (3 - 2 * t);
+
+interface SceneKeyframe { seconds: number; frame: SceneFrame }
+
+export interface SceneMotion {
+  keyframes: SceneKeyframe[];
+  ms: number;
+  bank?: number;
+}
+
+/** The existing scene poses, with a presentation-only bank and smoke transition. */
+export const SCENE_MOTIONS = {
+  turn: { keyframes: [{ seconds: 0, frame: sceneFrame('bugged') }, { seconds: 3, frame: sceneFrame('turned') }], ms: 2200, bank: -24 },
+  close: { keyframes: (['turned', 'c42', 'c38', 'c35', 'rpi'] as const).map(id => ({ seconds: SHOT_TIMES[id], frame: sceneFrame(id) })), ms: 6400 },
+  away: { keyframes: [{ seconds: 0, frame: sceneFrame('launched') }, { seconds: 6, frame: { ...sceneFrame('launched'), trail: 0.85, trailOpacity: 1 } }], ms: 3200 },
+  crank: { keyframes: [{ seconds: 0, frame: sceneFrame('launched') }, { seconds: SHOT_TIMES.cranked, frame: sceneFrame('cranked') }], ms: 2600, bank: 30 },
+  support: { keyframes: (['cranked', 't10', 't20', 't30', 'active'] as const).map(id => ({ seconds: SHOT_TIMES[id], frame: sceneFrame(id) })), ms: 6400 },
+} satisfies Record<string, SceneMotion>;
+
+/** Keep discrete indications on their authored keyframes and ease the geometry between them. */
+export function sampleScene(motion: SceneMotion, seconds: number, start = motion.keyframes[0].frame): SceneFrame {
+  const keys = motion.keyframes;
+  const last = keys[keys.length - 1];
+  if (seconds <= keys[0].seconds) return start;
+  if (seconds >= last.seconds) return last.frame;
+
+  const next = keys.findIndex(key => seconds < key.seconds);
+  const left = keys[next - 1], right = keys[next];
+  const a = next === 1 ? start : left.frame, b = right.frame;
+  const progress = (seconds - left.seconds) / (right.seconds - left.seconds);
+  // Ease at the ends of a longer sequence without stopping at every intermediate keyframe.
+  let t = progress;
+  if (keys.length === 2) t = ease(progress);
+  else if (next === 1) t = progress * progress * (2 - progress);
+  else if (next === keys.length - 1) t = 1 - (1 - progress) ** 2 * (1 + progress);
+  const from = a.aircraft, to = b.aircraft;
+  const aircraft: AircraftState = {
+    heading: mixAngle(from.heading, to.heading, t),
+    bank: mix(from.bank, to.bank, t) + (motion.bank ?? 0) * Math.sin(Math.PI * t) ** 2,
+    pitch: mix(from.pitch, to.pitch, t),
+    range: mix(from.range, to.range, t),
+    bearing: mixAngle(from.bearing, to.bearing, t),
+    closure: mix(from.closure, to.closure, t),
+  };
+  const interpolate = (a: number | undefined, b: number | undefined) => a === undefined || b === undefined ? a : mix(a, b, t);
+  const { asc, post } = a.view;
+  const view: SceneFrame['view'] = {
+    ...a.view,
+    aspect: interpolate(a.view.aspect, b.view.aspect),
+    asec: interpolate(a.view.asec, b.view.asec),
+    asc: asc && b.view.asc ? [mix(asc[0], b.view.asc[0], t), mix(asc[1], b.view.asc[1], t)] : asc,
+    post: post && b.view.post && post[1][0] === b.view.post[1][0]
+      ? [post[0], post[1][0] + Math.round(mix(Number(post[1].slice(1)), Number(b.view.post[1].slice(1)), progress))]
+      : post,
+  };
+  return {
+    ...a, aircraft, view,
+    trail: a.trail && !b.trail ? a.trail : mix(a.trail, b.trail, t),
+    trailOpacity: !a.trail ? b.trailOpacity : mix(a.trailOpacity, b.trailOpacity, t),
+  };
+}

@@ -714,10 +714,22 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     else roll(r);
   };
   /** Show one page of a display (DED page, HSI mode legend, screen on or off). */
-  const showPage = (id: string, page: string) => {
-    for (const g of svg.querySelectorAll<SVGGElement>(`[data-page-of="${id}"]`)) {
-      if (g.dataset.page === page) g.removeAttribute('display'); else g.setAttribute('display', 'none');
+  const currentPages = new Map<string, string>();
+  const pageArtwork = new WeakMap<Element, string>();
+  const showPage = (id: string, page: string, art?: string) => {
+    const changed = currentPages.get(id) !== page;
+    if (!changed && art === undefined) return;
+    const groups = svg.querySelectorAll<SVGGElement>(`[data-page-of="${id}"]${changed ? '' : ':not([display])[data-page-art]'}`);
+    for (const g of groups) {
+      if (g.dataset.page === page) {
+        if (changed) g.removeAttribute('display');
+        if (art !== undefined && g.hasAttribute('data-page-art') && pageArtwork.get(g) !== art) {
+          g.innerHTML = art;
+          pageArtwork.set(g, art);
+        }
+      } else if (changed) g.setAttribute('display', 'none');
     }
+    currentPages.set(id, page);
   };
   // Lamps and readings the host page sets (procedures); lamp colour from the indicator definition.
   for (const ind of def.indicators) svg.querySelectorAll<SVGGElement>(`[data-indicator="${ind.id}"]`).forEach(g => { if (ind.colour) g.dataset.colour = ind.colour; });
@@ -732,11 +744,11 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-cockpit-panel]'
     }
   });
   addEventListener('cockpit:indicate', e => {
-    const { lit = [], flash = [], readings: values = {}, pages = {}, cursors = {} } = (e as CustomEvent<{ lit?: string[]; flash?: string[]; readings?: Record<string, number>; pages?: Record<string, string>; cursors?: Record<string, [number, number]> }>).detail;
+    const { lit = [], flash = [], readings: values = {}, pages = {}, cursors = {}, artwork = {} } = (e as CustomEvent<{ lit?: string[]; flash?: string[]; readings?: Record<string, number>; pages?: Record<string, string>; artwork?: Record<string, string>; cursors?: Record<string, [number, number]> }>).detail;
     const on = new Set(lit), flashing = new Set(flash);
     for (const ind of def.indicators) {
       if (ind.type === 'lamp') svg.querySelectorAll(`[data-indicator="${ind.id}"]`).forEach(g => { g.classList.toggle('lit', on.has(key(ind.id))); g.classList.toggle('flash', flashing.has(key(ind.id))); });
-      else if (key(ind.id) in pages) showPage(ind.id, pages[key(ind.id)]);
+      else if (key(ind.id) in pages) showPage(ind.id, pages[key(ind.id)], artwork[key(ind.id)]);
       // A display's own cursor (a page's `cursor`), moved by the procedure in the page's units.
       if (key(ind.id) in cursors) {
         // Only the page on show: the others keep the place their own definition gives them.

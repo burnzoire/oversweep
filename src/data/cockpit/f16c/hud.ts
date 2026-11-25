@@ -1,7 +1,7 @@
 import type { HudTape, PanelSpec } from '../types';
 import { tracer } from '../trace.ts';
 import { ASEC, RETICLE, asecDeg, type MrmView } from './mrm.ts';
-import { MOMENTS, scaleFor, type MomentId } from './aim120-scene.ts';
+import { MOMENTS, relativeBearing, sceneFrame, sceneView, type MomentId, type SceneFrame } from './aim120-scene.ts';
 
 /**
  * F-16C head-up display (HUD), DCS: the combiner glass between its two posts,
@@ -59,7 +59,7 @@ const LEFT_POST: [number, number][] = [[302, 52], [339.5, 49], [381, 432], [381,
 const RIGHT_POST = LEFT_POST.map(([x, y]) => [1152 - x, y] as [number, number]);
 
 const box = (x0: number, y0: number, x1: number, y1: number) => rel([[x0, y0], [x1, y0], [x1, y1], [x0, y1]]);
-const font = { cap: mm(9.6), pitch: mm(7.9) };
+export const hudFont = { cap: mm(9.6), pitch: mm(7.9) };
 
 const velocity: HudTape = {
   at: r(455.8, 207), axis: 'y', per: mm(0.742), from: 0, to: 900, minor: 10, major: 50, label: 100,
@@ -249,13 +249,18 @@ export function mrmCue(o: MrmCue) {
   }
   return { id: o.id, art, texts, keepHeading: true, ...(o.scene ? { scene: o.scene } : {}) };
 }
-/** The single-target shot's HUD moments (`aim120-scene.ts`): the lead at 340° and 0.6° below; on 347° it is in the HUD. */
-const aimCue = (k: MomentId) => {
-  const m = MOMENTS[k], off = ((m.brg - m.hdg + 540) % 360) - 180;
-  return mrmCue({ id: `mrm-${k}`, view: m.view, scale: scaleFor(m.nm), ...(Math.abs(off) > 10 ? { tll: off } : { td: [off, 0.6] }) });
-};
-/** After the launch: the smoke trail growing toward the lead (jet still on 347°, the target 7° left). */
-const awayCue = (id: string, reach: number) => mrmCue({ id: `mrm-${id}`, view: MOMENTS.launched.view, scale: scaleFor(MOMENTS.launched.nm), td: [-7, 0.6], scene: smokeTrail(-7, 0.6, reach) });
+export function aimCue(frame: SceneFrame) {
+  const { heading, bearing } = frame.aircraft;
+  const off = relativeBearing(bearing, heading);
+  const scene = frame.trail > 0
+    ? `<g opacity="${frame.trailOpacity}">${smokeTrail(off, 0.6, frame.trail)}</g>`
+    : undefined;
+  return {
+    ...mrmCue({ id: `mrm-${frame.id}`, view: sceneView(frame), scale: frame.scale, scene,
+      ...(Math.abs(off) > 10 ? { tll: off } : { td: [off, 0.6] }) }),
+    bankHeading: true,
+  };
+}
 /**
  * A bandit seen through the glass (not HUD symbology): a fighter nearly nose-on, a dark silhouette 12 reference px
  * across (drawn larger than it would look at a few miles, so it can be seen), and its contrail at high altitude
@@ -290,8 +295,12 @@ export const MRM_CUES = [
   { id: 'scene-bandit', art: '', texts: [], keepHeading: true, scene: bandit(5, 0) },
   mrmCue({ id: 'mrm-bore-bandit', view: { rdy: '' }, bore: true, scene: bandit(5, 0) }),
   mrmCue({ id: 'mrm-bore-on', view: { rdy: '' }, bore: true, scene: bandit(0, RETICLE.down) }),
-  ...(Object.keys(MOMENTS) as MomentId[]).map(aimCue),
-  awayCue('away-1', 0.25), awayCue('away-2', 0.55), awayCue('away-3', 0.85),
+  ...(Object.keys(MOMENTS) as MomentId[]).map(id => aimCue(sceneFrame(id))),
+  // Keep the individual smoke views available in standalone cockpit familiarisation.
+  ...[0.25, 0.55, 0.85].map((trail, i) => ({
+    ...aimCue({ ...sceneFrame('launched'), trail, trailOpacity: 1 }),
+    id: `mrm-away-${i + 1}`,
+  })),
 ];
 
 harmCues.pages.push(...MRM_CUES);
@@ -346,7 +355,7 @@ export const hud: PanelSpec = {
     {
       component: 'hud', at: pt(B[0] - X0, B[1]), hud: {
         glass: rel(GLASS),
-        font, deg: mm(25.9),
+        font: hudFont, deg: mm(25.9),
         boresight: { arm: mm(12) },
         fpm: { r: mm(6), wing: mm(23), tail: mm(15) },
         ladder: { gap: mm(23.5), length: mm(37.5), tick: mm(7), dash: [mm(9.5), mm(4.5)], labelInset: mm(2.5), labelDrop: [mm(7.9), mm(5.3)], horizon: mm(224) },
