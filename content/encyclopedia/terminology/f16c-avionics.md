@@ -142,6 +142,25 @@ terms:
     expansion: Stores management system
     definition: "The jet's weapons manager. Its MFD format picks the weapon, powers it and shows which stations carry it; the WPN format then shows that weapon's own sensor and modes."
     cite: [{ n: 1, page: "659" }]
+  - term: Master mode
+    definition: "One of the modes the mission computer switches the jet's sensors, displays and weapons between: navigation, air-to-air, air-to-ground, missile override, dogfight and the two jettison modes. Each remembers its own settings."
+    cite: [{ n: 1, page: "326–329" }]
+  - term: Master arm
+    expansion: MASTER ARM switch
+    definition: "The switch on the MISC panel that allows weapons to be released. In ARM the weapons can fire; in OFF they cannot; in SIMULATE the cues are shown but nothing fires."
+    cite: [{ n: 1, page: "47" }]
+  - term: CCRP
+    expansion: Continuously computed release point
+    definition: "A pre-planned air-to-ground delivery sub-mode in which the jet gives steering cues to the point where the bomb should be released to hit a designated target (a steerpoint or a targeting-pod point), and releases it automatically there while the pilot holds the release button."
+    cite: [{ n: 1, page: "335, 628" }]
+  - term: DTOS
+    expansion: Dive toss
+    definition: "A visual air-to-ground delivery sub-mode. The pilot puts the HUD cursor on a target they can see and designates it; the target designator box and the sensors then hold that point, and the release is computed to it."
+    cite: [{ n: 1, page: "333, 335" }]
+  - term: LADD
+    expansion: Low altitude drogue delivery
+    definition: "A pre-planned air-to-ground delivery sub-mode for bombs: like CCRP, it aims at a target whose position is set by a steerpoint rather than seen by the pilot. It is offered on the SMS page beside CCIP, CCRP and DTOS."
+    cite: [{ n: 1, page: "335, 619" }]
   - term: POS mode
     expansion: Position known
     definition: "The HARM mode for a radar whose position is already known: the missile is told the radar type and flies toward the position until it hears the radar, then homes on its signal. Designating a radar on the HAD sets it."
