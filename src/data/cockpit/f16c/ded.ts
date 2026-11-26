@@ -161,25 +161,73 @@ const HTS_PAGES: SPage[] = [
  * then LAT and LNG (hemisphere col 6), ELEV right-aligned to col 13 and MGRS. Markpoint 26 is stored over Abu
  * al-Duhur's runway midpoint (the map's airfield data: N 35°43.938', E037°06.246', 820 ft; MGRS computed from them).
  */
-const markLines = (sensor: 'HUD' | 'FCR' | 'OFLY', stored: boolean, stpt = false) => [
-  ` MARK {*}${sensor.padEnd(4)}{*}   26^` + (stpt ? ' {STPT}' : ''),
-  stored ? "  LAT N 35°43.938'" : "  LAT N 00°00.000'",
-  stored ? "  LNG E037°06.246'" : "  LNG E000°00.000'",
-  stored ? ' ELEV    820FT' : ' ELEV      0FT',
-  stored ? ' MGRS 37SCV 28541/55914' : ' MGRS 31NAA 66021/0',
-];
+type MarkField = 'sensor' | 'lat' | 'lon' | 'elev';
+interface MarkData { lat: string; lon: string; elev: string; mgrs: string }
+const EMPTY_MARK: MarkData = { lat: "N 00°00.000'", lon: "E000°00.000'", elev: '0FT', mgrs: '31NAA 66021/0' };
+const OVERFLY_MARK: MarkData = { lat: "N 35°43.938'", lon: "E037°06.246'", elev: '820FT', mgrs: '37SCV 28541/55914' };
+
+function markLines(sensor: 'HUD' | 'FCR' | 'OFLY', data: MarkData, focus: MarkField = 'sensor', typed?: string, selected = false) {
+  const field = (key: MarkField, value: string, width: number, pad = '') => {
+    const editing = focus === key && typed !== undefined;
+    return stptField(editing ? typed : value, width, focus === key, editing, pad);
+  };
+  const elevation = `${focus === 'elev' && typed !== undefined ? typed + 'FT' : data.elev}`.padStart(5);
+  return [
+    ' MARK ' + field('sensor', sensor.padEnd(4), 4) + '   26^' + (selected ? ' {STPT}' : ''),
+    '  LAT' + field('lat', data.lat, 12),
+    '  LNG' + field('lon', data.lon, 12),
+    ' ELEV' + stptField(elevation, 5, focus === 'elev', focus === 'elev' && typed !== undefined, '   '),
+    ' MGRS ' + data.mgrs,
+  ];
+}
+
+export const MANUAL_MARK_KEYS = { lat: '23635822', lon: '603635014', elev: '892', correction: '982' };
+const MANUAL_MARK_LAT = { ...EMPTY_MARK, lat: typedPosition('N', MANUAL_MARK_KEYS.lat.slice(1), 2), mgrs: '' };
+const MANUAL_MARK_POSITION = {
+  ...MANUAL_MARK_LAT, lon: typedPosition('E', MANUAL_MARK_KEYS.lon.slice(1), 3), mgrs: '37SBA 83847/52889',
+};
+const MANUAL_MARK = { ...MANUAL_MARK_POSITION, elev: MANUAL_MARK_KEYS.elev + 'FT' };
+const CORRECTED_MARK = { ...MANUAL_MARK, elev: MANUAL_MARK_KEYS.correction + 'FT' };
+
+function manualMarkPages(): SPage[] {
+  const pages: SPage[] = [];
+  const add = (id: string, label: string, data: MarkData, focus: MarkField, typed?: string, selected = false) => {
+    pages.push({ id: `mark-manual-${id}`, label: `MARK page: ${label}`, lines: markLines('HUD', data, focus, typed, selected) });
+  };
+  const edit = (id: keyof typeof MANUAL_MARK_KEYS, field: MarkField, before: MarkData, after: MarkData, text: (keys: string) => string) => {
+    const keys = MANUAL_MARK_KEYS[id];
+    add(`${id}-0`, `asterisks on ${field}`, before, field);
+    for (let i = 1; i <= keys.length; i++) {
+      add(`${id}-${i}`, `typing ${id} (key ${i} of ${keys.length})`, before, field, text(keys.slice(0, i)));
+    }
+    add(`${id}-done`, `${id} accepted`, after, field);
+  };
+  edit('lat', 'lat', EMPTY_MARK, MANUAL_MARK_LAT, keys => typedPosition('N', keys.slice(1), 2));
+  edit('lon', 'lon', MANUAL_MARK_LAT, MANUAL_MARK_POSITION, keys => typedPosition('E', keys.slice(1), 3));
+  edit('elev', 'elev', MANUAL_MARK_POSITION, MANUAL_MARK, keys => keys);
+  add('saved', 'markpoint 26 with original elevation', MANUAL_MARK, 'sensor');
+  add('saved-lat', 'markpoint 26 with LAT in focus', MANUAL_MARK, 'lat');
+  add('saved-lon', 'markpoint 26 with LNG in focus', MANUAL_MARK, 'lon');
+  edit('correction', 'elev', MANUAL_MARK, CORRECTED_MARK, keys => keys);
+  add('corrected-lon', 'corrected markpoint 26 with LNG in focus', CORRECTED_MARK, 'lon');
+  add('corrected-lat', 'corrected markpoint 26 with LAT in focus', CORRECTED_MARK, 'lat');
+  add('corrected', 'corrected markpoint 26', CORRECTED_MARK, 'sensor');
+  add('selected', 'corrected markpoint 26 selected', CORRECTED_MARK, 'sensor', undefined, true);
+  return pages;
+}
 const MARK_PAGES: SPage[] = [
   { id: 'cni-3', label: 'CNI page, steerpoint 3 selected', lines: cniLines('T 21X', 3) },
-  { id: 'mark-hud', label: 'MARK page: HUD sensor option, markpoint 26 empty', lines: markLines('HUD', false) },
-  { id: 'mark-ofly', label: 'MARK page: OFLY sensor option, markpoint 26 empty', lines: markLines('OFLY', false) },
-  { id: 'mark-26', label: 'MARK page: markpoint 26 stored (OFLY)', lines: markLines('OFLY', true) },
-  { id: 'mark-26-stpt', label: 'MARK page: markpoint 26 is the selected steerpoint (STPT)', lines: markLines('OFLY', true, true) },
-  { id: 'mark-hud-26', label: 'MARK page: markpoint 26 stored (HUD)', lines: markLines('HUD', true) },
-  { id: 'mark-hud-26-stpt', label: 'MARK page: markpoint 26 is the selected steerpoint (HUD, STPT)', lines: markLines('HUD', true, true) },
-  { id: 'mark-fcr', label: 'MARK page: FCR sensor option, markpoint 26 empty', lines: markLines('FCR', false) },
-  { id: 'mark-fcr-26', label: 'MARK page: markpoint 26 stored (FCR)', lines: markLines('FCR', true) },
-  { id: 'mark-fcr-26-stpt', label: 'MARK page: markpoint 26 is the selected steerpoint (FCR, STPT)', lines: markLines('FCR', true, true) },
+  { id: 'mark-hud', label: 'MARK page: HUD sensor option, markpoint 26 empty', lines: markLines('HUD', EMPTY_MARK) },
+  { id: 'mark-ofly', label: 'MARK page: OFLY sensor option, markpoint 26 empty', lines: markLines('OFLY', EMPTY_MARK) },
+  { id: 'mark-26', label: 'MARK page: markpoint 26 stored (OFLY)', lines: markLines('OFLY', OVERFLY_MARK) },
+  { id: 'mark-26-stpt', label: 'MARK page: markpoint 26 is the selected steerpoint (STPT)', lines: markLines('OFLY', OVERFLY_MARK, 'sensor', undefined, true) },
+  { id: 'mark-hud-26', label: 'MARK page: markpoint 26 stored (HUD)', lines: markLines('HUD', OVERFLY_MARK) },
+  { id: 'mark-hud-26-stpt', label: 'MARK page: markpoint 26 is the selected steerpoint (HUD, STPT)', lines: markLines('HUD', OVERFLY_MARK, 'sensor', undefined, true) },
+  { id: 'mark-fcr', label: 'MARK page: FCR sensor option, markpoint 26 empty', lines: markLines('FCR', EMPTY_MARK) },
+  { id: 'mark-fcr-26', label: 'MARK page: markpoint 26 stored (FCR)', lines: markLines('FCR', OVERFLY_MARK) },
+  { id: 'mark-fcr-26-stpt', label: 'MARK page: markpoint 26 is the selected steerpoint (FCR, STPT)', lines: markLines('FCR', OVERFLY_MARK, 'sensor', undefined, true) },
   { id: 'cni-26', label: 'CNI page, markpoint 26 selected', lines: cniLines('T 21X', 26) },
+  ...manualMarkPages(),
 ];
 
 const { pt, mm } = tracer(PX);

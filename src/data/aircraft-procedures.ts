@@ -4,7 +4,8 @@ import { hadSpot, HADH, HADX } from './cockpit/f16c/mfd-had';
 import { hudSpot, hudSpotRef, CARET_Y } from './cockpit/f16c/hud';
 import { FPM_AT, MIDPOINT } from './cockpit/f16c/hud-ground';
 import { GM_TARGET, gmBox } from './cockpit/f16c/mfd-fcr-gm';
-import { HSD_STATES, SPT, hsdBox, hsdSpot } from './cockpit/f16c/mfd-hsd';
+import { HSD_STATES, MANUAL_CHECKPOINT, SPT, hsdBox, hsdSpot } from './cockpit/f16c/mfd-hsd';
+import { MANUAL_MARK_KEYS } from './cockpit/f16c/ded';
 import { fcrBox } from './cockpit/f16c/mfd-fcr';
 import { smsBox } from './cockpit/f16c/mfd-sms-aa';
 import { twoCata, twoLines, twoSpot } from './cockpit/f16c/mfd-fcr-two';
@@ -47,7 +48,7 @@ export interface AircraftProcedure {
   status: 'public-preview' | 'review-only';
   simVersion: string;
   /** Which script drives the cockpit panels. */
-  model: 'engine-start' | 'fcr-tws' | 'fcr-two' | 'tacan-navigation' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff' | 'hts' | 'hts-targeting' | 'harm-shot' | 'maverick-pre' | 'maverick-handoff' | 'markpoints' | 'markpoint-hud' | 'markpoint-fcr' | 'fcr-rws' | 'fcr-vsr' | 'fcr-bug' | 'aim120' | 'aim120-bore' | 'fcr-vol';
+  model: 'engine-start' | 'fcr-tws' | 'fcr-two' | 'tacan-navigation' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff' | 'hts' | 'hts-targeting' | 'harm-shot' | 'maverick-pre' | 'maverick-handoff' | 'markpoints' | 'markpoint-manual' | 'markpoint-hud' | 'markpoint-fcr' | 'fcr-rws' | 'fcr-vsr' | 'fcr-bug' | 'aim120' | 'aim120-bore' | 'fcr-vol';
   /** The scenario shown above the steps, and the closing heading. */
   intro: string;
   description: string;
@@ -532,6 +533,49 @@ const markpoints: AircraftProcedure = {
 };
 procedures.push(markpoints);
 
+const markTyping = (field: keyof typeof MANUAL_MARK_KEYS) => {
+  const digits = MANUAL_MARK_KEYS[field];
+  const page = `mark-manual-${field}`;
+  return typing(field, digits, [...digits].map((_, i) => `${page}-${i + 1}`).concat(`${page}-done`));
+};
+
+procedures.push({
+  id: 'procedure.dcs-f16c.markpoint-manual',
+  slug: 'markpoint-manual',
+  airframe: 'f-16c',
+  title: 'F-16C — Markpoint: manual entry',
+  objective: 'Enter a navigation markpoint, correct its elevation, then select it and verify it on the HSD.',
+  applicability: 'DCS F-16C Block 50 (circa 2007); official guide edition 16 August 2026. In-simulator verification pending.',
+  simVersion: 'DCS build not yet verified',
+  status: 'public-preview',
+  model: 'markpoint-manual',
+  intro: 'You are airborne in NAV with the [INS](term:ins) aligned, [steerpoint](term:steerpoint) 3 selected and the [CNI page](term:cni-page) displayed. Store a navigation checkpoint at N 36°35.822′, E 036°35.014′, initially briefed at 892 ft above mean sea level. Then reopen the saved entry, correct its elevation to 982 ft and select it for navigation. The exercise uses an illustrative checkpoint and a static [HSD](term:hsd) picture.',
+  description: 'Create and correct a DCS F-16C navigation markpoint with the ICP and confirm it on the HSD.',
+  complete: 'Markpoint 26 is selected with the corrected elevation of 982 ft',
+  summary: [
+    'You entered latitude, longitude and elevation on MARK, accepting each field with ENTR.',
+    'You recalled markpoint 26 and corrected its elevation in the same slot.',
+    'You selected 26 with 0 / M-SEL, checked STPT 26 on the [CNI page](term:cni-page) and found its cyan X on the [HSD](term:hsd).',
+  ],
+  sources: 'Eagle Dynamics — DCS F-16C Viper Early Access Guide (EN, 16 August 2026). Coordinate entry pp. 212–213; MARK page and manual entry pp. 219–220, 225; CNI page p. 103; ownship markpoint and HSD symbology pp. 205, 358–359.',
+  steps: [
+    {id:'mark',section:'Enter the checkpoint',title:'Open the MARK page',control:'ICP 7 / MARK',action:'From the [CNI page](term:cni-page), press 7 / MARK on the [ICP](term:icp).',expect:'The [DED](term:ded) shows {{slot 26|0}}, empty, with zero latitude, longitude and elevation. The asterisks bracket the sensor option.',caution:'Check the displayed slot before typing. Use the increment/decrement rocker to display another slot when needed.',evidence:G3+' 219–220, 225',hints:['ded.display@0'],panels:['icp','ded'],do:{control:'icp.key-7',to:'in'}},
+    {id:'lat-field',section:'Enter the checkpoint',title:'Select the LAT field',control:'ICP DCS switch, down',action:'Move the Data Control Switch (DCS) down once.',expect:'The asterisks move to {{LAT|0}}.',evidence:G3+' 219–220, 225',hints:['ded.display@1'],panels:['icp','ded'],do:{control:'icp.dcs-ud',to:'down'}},
+    {id:'lat',section:'Enter the checkpoint',title:'Enter the latitude',control:'ICP keypad and ENTR',action:'Press 2 for north, then 3 6 3 5 8 2 2. Press ENTR.',expect:'{{LAT|0}} reads N 36°35.822′. The pending entry is highlighted while you type. ENTR accepts the value and clears the highlight.',evidence:G3+' 212, 220, 225',hints:['ded.display@1'],panels:['icp','ded'],type:markTyping('lat')},
+    {id:'lon-field',section:'Enter the checkpoint',title:'Select the LNG field',control:'ICP DCS switch, down',action:'Move the DCS switch down once.',expect:'The asterisks move to {{LNG|0}}.',evidence:G3+' 219–220, 225',hints:['ded.display@2'],panels:['icp','ded'],do:{control:'icp.dcs-ud',to:'down'}},
+    {id:'lon',section:'Enter the checkpoint',title:'Enter the longitude',control:'ICP keypad and ENTR',action:'Press 6 for east, then 0 3 6 3 5 0 1 4. Press ENTR.',expect:'{{LNG|0}} reads E 036°35.014′. Include the leading zero to enter three digits of longitude degrees.',caution:'Use latitude and longitude for manual entry. The MGRS row shows the grid reference.',evidence:G3+' 212, 220, 225',hints:['ded.display@2'],panels:['icp','ded'],type:markTyping('lon')},
+    {id:'elev-field',section:'Enter the checkpoint',title:'Select the ELEV field',control:'ICP DCS switch, down',action:'Move the DCS switch down once.',expect:'The asterisks move to {{ELEV|0}}.',evidence:G3+' 219–220, 225',hints:['ded.display@3'],panels:['icp','ded'],do:{control:'icp.dcs-ud',to:'down'}},
+    {id:'elev',section:'Enter the checkpoint',title:'Enter the elevation',control:'ICP keypad and ENTR',action:'Press 8 9 2, then ENTR.',expect:'{{ELEV|0}} reads 892FT. Use the checkpoint’s elevation above mean sea level.',evidence:G3+' 213, 220, 225',hints:['ded.display@3'],panels:['icp','ded'],type:markTyping('elev')},
+    {id:'leave-mark',section:'Correct the saved checkpoint',title:'Return to CNI',control:'ICP DCS switch, RTN',action:'Move the DCS switch left to RTN.',expect:'The [CNI page](term:cni-page) still shows {{STPT 3|0}}. You have stored 26 and are still navigating to 3.',evidence:G3+' 103, 219–220',hints:['ded.display@0'],panels:['icp','ded'],do:{control:'icp.dcs-lr',to:'rtn'}},
+    {id:'recall',section:'Correct the saved checkpoint',title:'Recall markpoint 26',control:'ICP 7 / MARK',action:'Press 7 / MARK and check that the displayed slot is 26. If another slot shows, use the increment/decrement rocker to bring up 26, so you can correct its elevation to 982 ft.',expect:'MARK shows {{26|0}} and the previously accepted {{892FT|1}}. Check the number before editing a saved entry.',evidence:G3+' 219–220, 225',hints:['ded.display@0','ded.display@3'],panels:['icp','ded'],do:{control:'icp.key-7',to:'in'},confirm:'26 shows 892FT'},
+    {id:'edit-elev',section:'Correct the saved checkpoint',title:'Move the asterisks to ELEV',control:'ICP DCS switch, down',action:'Move the DCS switch down three times, through LAT and LNG to ELEV.',expect:'The asterisks bracket {{ELEV|0}} on slot 26.',evidence:G3+' 219–220, 225',hints:['ded.display@3'],panels:['icp','ded'],do:{control:'icp.dcs-ud',to:'down',times:3}},
+    {id:'correction',section:'Correct the saved checkpoint',title:'Update the elevation',control:'ICP keypad and ENTR',action:'Press 9 8 2, then ENTR.',expect:'{{ELEV|0}} reads 982FT. The latitude, longitude and slot number are unchanged.',evidence:G3+' 213, 220, 225',hints:['ded.display@3'],panels:['icp','ded'],type:markTyping('correction'),confirm:'26 shows 982FT'},
+    {id:'focus-sensor',section:'Select and verify',title:'Return the asterisks to the top line',control:'ICP DCS switch, up',action:'Move the DCS switch up three times to return to the sensor option.',expect:'The asterisks bracket the {{sensor option|0}}, ready for M-SEL.',evidence:G3+' 219–220',hints:['ded.display@0'],panels:['icp','ded'],do:{control:'icp.dcs-ud',to:'up',times:3}},
+    {id:'select',section:'Select and verify',title:'Select markpoint 26 for navigation',control:'ICP 0 / M-SEL',action:'Press 0 / M-SEL with the asterisks on the sensor option.',expect:'{{STPT|0}} is highlighted at the top right of MARK. Your selected [steerpoint](term:steerpoint) is now 26.',evidence:G3+' 220',hints:['ded.display@0'],panels:['icp','ded'],do:{control:'icp.key-0',to:'in'}},
+    {id:'rtn',section:'Select and verify',title:'Return to CNI',control:'ICP DCS switch, RTN',action:'Move the DCS switch left to RTN.',expect:'The [CNI page](term:cni-page) reads {{STPT 26|0}}.',evidence:G3+' 103, 219–220',hints:['ded.display@0'],panels:['icp','ded'],do:{control:'icp.dcs-lr',to:'rtn'}},
+    {id:'verify',section:'Select and verify',title:'Verify the markpoint on the HSD',control:'DED CNI page and right MFD',action:'Compare the [CNI page](term:cni-page) with the [HSD](term:hsd).',expect:'CNI reads {{STPT 26|0}}. The checkpoint is the {{small cyan X|1}} just behind ownship. Steerpoint 3, if it is on the active route, is now a hollow circle.',evidence:G3+' 103, 205, 220, 358–359',hints:['ded.display@0',HS('hsd-manual-selected',MANUAL_CHECKPOINT)],panels:['right-mfd','ded'],confirm:'STPT 26 and cyan X'},
+  ],
+});
 // HUD mark: the same scenario, the jet still 4 NM short of the runway, with the HUD mark cue as the sensor.
 const HM = (x0: number, y0: number, x1: number, y1: number) => 'hud.harm-cues' + hudSpotRef(x0, y0, x1, y1);
 const RUNWAY_BOX = HM(MIDPOINT[0] - 24, MIDPOINT[1] - 15, MIDPOINT[0] + 24, MIDPOINT[1] + 15);
