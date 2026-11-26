@@ -161,7 +161,7 @@ const HTS_PAGES: SPage[] = [
  * then LAT and LNG (hemisphere col 6), ELEV right-aligned to col 13 and MGRS. Markpoint 26 is stored over Abu
  * al-Duhur's runway midpoint (the map's airfield data: N 35°43.938', E037°06.246', 820 ft; MGRS computed from them).
  */
-const markLines = (sensor: 'HUD' | 'OFLY', stored: boolean, stpt = false) => [
+const markLines = (sensor: 'HUD' | 'FCR' | 'OFLY', stored: boolean, stpt = false) => [
   ` MARK {*}${sensor.padEnd(4)}{*}   26^` + (stpt ? ' {STPT}' : ''),
   stored ? "  LAT N 35°43.938'" : "  LAT N 00°00.000'",
   stored ? "  LNG E037°06.246'" : "  LNG E000°00.000'",
@@ -174,6 +174,11 @@ const MARK_PAGES: SPage[] = [
   { id: 'mark-ofly', label: 'MARK page: OFLY sensor option, markpoint 26 empty', lines: markLines('OFLY', false) },
   { id: 'mark-26', label: 'MARK page: markpoint 26 stored (OFLY)', lines: markLines('OFLY', true) },
   { id: 'mark-26-stpt', label: 'MARK page: markpoint 26 is the selected steerpoint (STPT)', lines: markLines('OFLY', true, true) },
+  { id: 'mark-hud-26', label: 'MARK page: markpoint 26 stored (HUD)', lines: markLines('HUD', true) },
+  { id: 'mark-hud-26-stpt', label: 'MARK page: markpoint 26 is the selected steerpoint (HUD, STPT)', lines: markLines('HUD', true, true) },
+  { id: 'mark-fcr', label: 'MARK page: FCR sensor option, markpoint 26 empty', lines: markLines('FCR', false) },
+  { id: 'mark-fcr-26', label: 'MARK page: markpoint 26 stored (FCR)', lines: markLines('FCR', true) },
+  { id: 'mark-fcr-26-stpt', label: 'MARK page: markpoint 26 is the selected steerpoint (FCR, STPT)', lines: markLines('FCR', true, true) },
   { id: 'cni-26', label: 'CNI page, markpoint 26 selected', lines: cniLines('T 21X', 26) },
 ];
 

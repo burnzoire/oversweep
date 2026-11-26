@@ -155,6 +155,10 @@ export const HSD_STATES = {
   'hsd-on': { jet: JET.on, sel: 3, mark: true, scale: 60 },
   'hsd-mark-sel': { jet: JET.on, sel: 26, mark: true, scale: 60 },
   'hsd-mark-30': { jet: JET.on, sel: 26, mark: true, scale: 30 },
+  // The HUD mark is stored from 4 NM out, the jet still on its way in.
+  'hsd-hud-marked': { jet: JET.start, sel: 3, mark: true, scale: 60 },
+  'hsd-hud-sel': { jet: JET.start, sel: 26, mark: true, scale: 60 },
+  'hsd-hud-30': { jet: JET.start, sel: 26, mark: true, scale: 30 },
 } satisfies Record<string, HsdState>;
 export const hsdPages: Page[] = Object.entries(HSD_STATES).map(([id, s]) => hsd(id, s as HsdState));
 export const hsdPageLabels: Record<keyof typeof HSD_STATES, string> = {
@@ -164,4 +168,7 @@ export const hsdPageLabels: Record<keyof typeof HSD_STATES, string> = {
   'hsd-on': 'HSD: 8 NM on, markpoint 26 behind',
   'hsd-mark-sel': 'HSD: markpoint 26 selected, steerpoint 3 hollow',
   'hsd-mark-30': 'HSD (30 NM, depressed): markpoint 26 selected',
+  'hsd-hud-marked': 'HSD: markpoint 26 stored 4 NM ahead (cyan X)',
+  'hsd-hud-sel': 'HSD: markpoint 26 selected, 4 NM ahead, steerpoint 3 hollow',
+  'hsd-hud-30': 'HSD (30 NM, depressed): markpoint 26 selected, 4 NM ahead',
 };
