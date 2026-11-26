@@ -248,6 +248,7 @@ if (root && configEl) {
 .procedure-feedback{min-height:1.5em;margin:0 0 .5rem;font-weight:600}
 .procedure-feedback.retry{color:var(--color-error)}
 .cockpit-layout{display:flex;flex-wrap:wrap;gap:.75rem 1rem;align-items:flex-start}
+.cockpit-layout:has(>[data-proc-panel="stick:msl-step"].acting):has(>[data-proc-panel="ar-nws-indicator"]:not([hidden])){display:grid;grid-template-columns:minmax(0,1fr) minmax(4.25rem,22%);column-gap:.65rem}
 .proc-panel{flex:0 1 auto;min-width:0;max-width:100%}
 .proc-panel[hidden]{display:none}
 .proc-panel h3{margin:0 0 .25rem;font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;color:var(--color-muted)}

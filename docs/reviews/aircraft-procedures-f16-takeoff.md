@@ -3,7 +3,7 @@
 Procedure `takeoff` (13 steps), after Before Takeoff. Source: Eagle Dynamics DCS F-16C Early Access Guide, Takeoff p. 143 and p. 146 (steps 1–8, takeoff speed chart), crosswind p. 147.
 
 ## Drawn as assumptions (not in the guide)
-- NWS is engaged after taxiing (a runway start begins disengaged); the stick's NWS (missile step) button disengages it (p. 83), but the procedure shows no stick or throttle controls: the throttle moves between detents only, and the step is an explained confirm.
+- The scenario starts with NWS engaged after taxiing. On a DCS runway start it begins disengaged. In the walkthrough the learner presses the stick's NWS button and the AR/NWS light goes out (pp. 45, 83, 143, 146).
 - 90% RPM: the run-up step is an explained confirm (the throttle is not drawn); engine readings at 90% (45 psi oil, 650 °C FTIT, 3,000 psi hydraulics, nozzle 30%) are illustrative.
 - Roll model: 2.5 kt/s at 90% RPM for 4 s, then 9.5 kt/s in AB; rotation at 6°/s to 10.5°; climb angle building to 7°; gear up 3 s after liftoff, 6 s in transit. 28,000 lb, 156 KCAS takeoff speed, 141 kt rotation in AB.
 - The final step plays three more seconds of the illustrative climb to show the altitude trend. The lesson gives no target climb speed or pitch for the remainder of the departure.
