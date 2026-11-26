@@ -162,7 +162,6 @@ export const GM_STATES = {
   'gm-free': { soi: true, cursor: 'free', cz: true },
   'gm-on': { soi: true, cursor: GM_TARGET, cz: true },
   'gm-ftt': { soi: true, cursor: GM_TARGET, cz: true, hold: true },
-  'gm-ftt-cz': { soi: true, cursor: GM_TARGET, hold: true },
 } satisfies Record<string, GmState>;
 export const gmPages: Page[] = Object.entries(GM_STATES).map(([id, s]) => gm(id, s as GmState));
 export const gmPageLabels: Record<keyof typeof GM_STATES, string> = {
@@ -171,7 +170,6 @@ export const gmPageLabels: Record<keyof typeof GM_STATES, string> = {
   'gm-free': 'FCR ground map: crosshairs being slewed (CZ shown)',
   'gm-on': 'FCR ground map: crosshairs on the runway midpoint',
   'gm-ftt': 'FCR ground map: Fixed Target Track on the runway midpoint (FZ, diamond)',
-  'gm-ftt-cz': 'FCR ground map: Fixed Target Track, cursor slews zeroed (no CZ)',
 };
 /** The crosshairs' slew from where they start onto the runway midpoint. */
 export const GM_SLEW = {

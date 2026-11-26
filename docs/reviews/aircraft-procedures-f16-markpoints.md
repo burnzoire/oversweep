@@ -50,7 +50,8 @@ Assumptions (check in the sim):
 - The antenna elevation caret is placed for a level jet at 3,000 ft above flat ground and the cursor's range; the azimuth caret follows the cursor.
 - In FTT the ownship X is drawn just above the format-select row, below the map, where it lies at the bottom centre (the guide shows it pinned at the edge only when the ownship is beyond the map).
 - The held point's coordinates are written as the MARK page's (N 35°43.938', E 037°06.246'); the elevation stored (820 ft) is the ground's, as in the HUD mark.
-- The radar stays in FTT, with the diamond, after the markpoint is stored and after CZ; only the CZ option goes. The guide shows neither page, and does not say whether CZ leaves FTT.
+- The radar stays in FTT, with the diamond, after the markpoint is stored. The guide does not show that page.
+- CZ is a note in the store step (Nathan, 2026-11-26: a CZ step shows nothing without another sensor visibly resetting), with a hint ring on the CZ label.
 - TTG, the gain scale, EGM/RGM and the snowplow are drawn as labels only, with no function.
 - The sensor option reads FCR when MARK opens because the radar is already in FTT (p. 220); the SEQ route is a note.
 
@@ -58,4 +59,4 @@ Assumptions (check in the sim):
 - `npm test`, `tsc --noEmit` and `npm run build` pass; `check_site.mjs` and `check_encyclopedia.mjs` pass.
 - Walked every step in the running page (Playwright): the DMS, TMS, ICP and OSB moves complete their steps, the crosshairs slew onto the runway midpoint, every confirm carries the step's own text, no console errors.
 
-- SME review (2026-11-26, READY) low findings applied: the CZ caution now says zeroing "may be necessary"; the lower-left bearing/range field is no longer described for the pre-hold ground map (p. 396 is the air-to-air format); the CZ step now points out the option that has been showing since the first slew. Not applied here (belongs to the HUD mark, PR #553): the explicit SEQ to HUD in its MARK step.
+- SME review (2026-11-26, READY) low findings applied: the CZ caution now says zeroing "may be necessary"; the lower-left bearing/range field is no longer described for the pre-hold ground map (p. 396 is the air-to-air format); the CZ step was dropped for a note in the store step (see assumptions). Not applied here (belongs to the HUD mark, PR #553): the explicit SEQ to HUD in its MARK step.

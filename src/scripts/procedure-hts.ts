@@ -211,7 +211,7 @@ const SCENARIOS: Record<string, Scenario> = {
     initial: { left: 'gm-not-soi', mfd: 'hsd-start', ded: 'cni-3' },
     after: {
       soi: { left: 'gm' }, hold: { left: 'gm-ftt' }, mark: { ded: 'mark-fcr' },
-      store: { ded: 'mark-fcr-26', mfd: 'hsd-hud-marked' }, cz: { left: 'gm-ftt-cz' },
+      store: { ded: 'mark-fcr-26', mfd: 'hsd-hud-marked' },
       select: { ded: 'mark-fcr-26-stpt', mfd: 'hsd-hud-sel' },
     },
     slew: { step: 'slew', on: 'gm', free: 'gm-free', done: 'gm-on', display: 'left', freeOnMove: true, what: 'runways’ midpoint', ...GM_SLEW },
