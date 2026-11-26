@@ -95,7 +95,7 @@ export type ContactId = keyof typeof CONTACTS;
 /* -------------------------------------------------------------------- frame */
 
 /** SOI frame (p. 394): a line round the format, broken for the option labels, with short drops at each break along the top. */
-const FRAME = [
+export const FRAME = [
   poly([[110.5, 113], [110.5, 107.5], [165, 107.5], [165, 112]]), poly([[207, 112], [207, 107.5], [238, 107.5], [238, 112]]),
   poly([[280, 112], [280, 107.5], [309, 107.5], [309, 112]]), poly([[357, 112], [357, 107.5], [380, 107.5], [380, 112]]),
   poly([[432, 112], [432, 107.5], [449, 107.5], [449, 112]]), poly([[505, 112], [505, 107.5], [551.5, 107.5], [551.5, 195]]),

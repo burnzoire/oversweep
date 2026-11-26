@@ -22,8 +22,8 @@ const poly = (pts: [number, number][]) => 'M' + pts.map(pt).join('L') + 'Z';
 const H = (GROUND.heading * Math.PI) / 180;
 const FWD: [number, number] = [Math.sin(H), Math.cos(H)];
 const RIGHT: [number, number] = [Math.cos(H), -Math.sin(H)];
-const [LAT0, LON0] = [(35.732934 + 35.731725) / 2, (37.087827 + 37.120655) / 2];
-const NM_LAT = 60, NM_LON = 60 * Math.cos((LAT0 * Math.PI) / 180);
+export const [LAT0, LON0] = [(35.732934 + 35.731725) / 2, (37.087827 + 37.120655) / 2];
+export const NM_LAT = 60, NM_LON = 60 * Math.cos((LAT0 * Math.PI) / 180);
 /** A point's east and north offset in NM from the southern runway's midpoint. */
 const en = ([lat, lon]: [number, number]): [number, number] => [(lon - LON0) * NM_LON, (lat - LAT0) * NM_LAT];
 const JET: [number, number] = [-GROUND.range * FWD[0], -GROUND.range * FWD[1]];

@@ -37,3 +37,26 @@ Sources: Eagle Dynamics DCS F-16C guide pp. 219-222 (MARK page, HUD and HMCS ste
 Built: `hud-ground.ts` draws Abu al-Duhur from the OSM plan in true angular scale (jet level, 3,000 ft AGL, 4 NM short of the southern runway's midpoint, heading 267) behind the HUD symbology (new `ground` HUD indicator); mark cue pages (`mark-caged`, `mark-free`, `mark-on`); a HUD slew in the HTS engine; MARK/HSD states for a point stored 4 NM ahead.
 
 Assumptions (check in the sim): the mark cue's look (a small ring with a centre dot, about the size of the flight path marker's circle; caged, a small ring inside the marker) is read off the p. 221 figures and not specified; the sensor option reads HUD when the MARK page opens; the cue stays drawn after storing and after M-SEL; the HUD diamond for the markpoint is drawn at the point's ground elevation; the ground-stabilised cue looks the same as the slewed one. The HMCS extension is covered in a note, not as steps.
+
+## FCR mark (markpoint-fcr)
+
+Sources: Eagle Dynamics DCS F-16C guide pp. 219–220 (MARK page, FCR sensor option, the CZ note), 223 (storing a markpoint using FCR, with its figures), 437 (GM mode), 443–444 (FTT mode), 189 and 341 (Cursor Zero), 358–359 (HSD). In-simulator verification pending (no DCS build recorded). Built on the HUD mark's scene (jet level at 3,000 ft above the ground, 4 NM short of the southern runway's midpoint, heading 267°, steerpoint 3 selected, markpoint 26 stored over the runway midpoint), so the MARK and HSD pages are the HUD mark's, with the FCR sensor option.
+
+Built: `mfd-fcr-gm.ts`, the FCR ground map format (GM, FTT) laid out on the guide's pp. 437, 443 and 223 figures, with the radar picture as a generated image (`scripts/gm-radar-map.py`, `public/images/cockpit/radar/gm-map.webp`, from the airfield's map data); crosshairs that follow the cursor on both axes (a `cursorY` option beside `cursorX`); MARK page states with the FCR sensor option; the engine's `markpoint-fcr` scenario.
+
+Assumptions (check in the sim):
+- The crosshairs start away from the target at mid-screen. In the sim they start on the SPI, the selected steerpoint, which here (steerpoint 3, 34 NM away) is beyond the 10 NM scale; the scenario sets range scale switching to MAN so the scale stays put, as the guide's own FCR markpoint figures show (MAN).
+- The radar picture is an illustration: pavement dark, buildings bright, farmland speckled. The runways are drawn about 4 px wide, wider than their true width at this scale, as the radar's resolution would blur them. The sector's lower edges follow the guide's p. 437 figure (30° to the horizontal from x 245 and 416.5 at the bottom of the format).
+- The antenna elevation caret is placed for a level jet at 3,000 ft above flat ground and the cursor's range; the azimuth caret follows the cursor.
+- In FTT the ownship X is drawn just above the format-select row, below the map, where it lies at the bottom centre (the guide shows it pinned at the edge only when the ownship is beyond the map).
+- The held point's coordinates are written as the MARK page's (N 35°43.938', E 037°06.246'); the elevation stored (820 ft) is the ground's, as in the HUD mark.
+- The radar stays in FTT, with the diamond, after the markpoint is stored. The guide does not show that page.
+- CZ is a note in the store step (Nathan, 2026-11-26: a CZ step shows nothing without another sensor visibly resetting), with a hint ring on the CZ label.
+- TTG, the gain scale, EGM/RGM and the snowplow are drawn as labels only, with no function.
+- The sensor option reads FCR when MARK opens because the radar is already in FTT (p. 220); the SEQ route is a note.
+
+## Checks (FCR mark)
+- `npm test`, `tsc --noEmit` and `npm run build` pass; `check_site.mjs` and `check_encyclopedia.mjs` pass.
+- Walked every step in the running page (Playwright): the DMS, TMS, ICP and OSB moves complete their steps, the crosshairs slew onto the runway midpoint, every confirm carries the step's own text, no console errors.
+
+- SME review (2026-11-26, READY) low findings applied: the CZ caution now says zeroing "may be necessary"; the lower-left bearing/range field is no longer described for the pre-hold ground map (p. 396 is the air-to-air format); the CZ step was dropped for a note in the store step (see assumptions). Not applied here (belongs to the HUD mark, PR #553): the explicit SEQ to HUD in its MARK step.

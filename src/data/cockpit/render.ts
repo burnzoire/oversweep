@@ -303,6 +303,7 @@ export function renderMfdPage(d: MfdDisplay, id: string, page?: MfdDisplay['page
   for (const p of page?.paths ?? []) if (!p.fill) body += `<path d="${p.d}" fill="none" stroke="${MFD_COLOURS[p.c]}" ${sw(p.pen ?? 'medium')}${p.dash ? ' stroke-dasharray="2.2 1.4"' : ''}>${p.blink ? '<animate attributeName="opacity" values="1;0" calcMode="discrete" dur="0.8s" repeatCount="indefinite"/>' : ''}</path>`;
   if (page?.aid) body += `<path data-aid d="${page.aid}" fill="none" stroke="${MFD_AID}" stroke-dasharray="1.2 0.8" ${sw('fine')}/>`;
   if (page?.cursorX && page.cursor) body += `<g data-cursor-x="${id}" transform="translate(${n(page.cursor.at[0])} 0)"><path d="${page.cursorX.d}" fill="none" stroke="${MFD_COLOURS[page.cursorX.c]}" ${sw('medium')}/></g>`;
+  if (page?.cursorY && page.cursor) body += `<g data-cursor-y="${id}" transform="translate(0 ${n(page.cursor.at[1])})"><path d="${page.cursorY.d}" fill="none" stroke="${MFD_COLOURS[page.cursorY.c]}" ${sw('medium')}/></g>`;
   if (page?.cursor && !page.pan) body += `<g data-cursor="${id}" transform="translate(${n(page.cursor.at[0])} ${n(page.cursor.at[1])})"><path d="${page.cursor.d}" fill="none" stroke="${W}" ${sw('medium')}/></g>`;
   return body;
 }

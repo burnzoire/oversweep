@@ -14,6 +14,7 @@ import { MAV_D_SLEW3, MAV_D_SLEW7, MAV_SLEW } from '../data/cockpit/f16c/mfd-mav
 import { TGP_SLEW_B, TGP_SLEW_T } from '../data/cockpit/f16c/mfd-tgp';
 import { AIM_SLEW, FCR_SLEW, aimFcr } from '../data/cockpit/f16c/mfd-fcr';
 import { TWO_SLEW } from '../data/cockpit/f16c/mfd-fcr-two';
+import { GM_SLEW } from '../data/cockpit/f16c/mfd-fcr-gm';
 import { SCENE_MOTIONS, sampleScene, sceneFrame, type SceneFrame, type SceneMotion } from '../data/cockpit/f16c/aim120-scene';
 import { aimCue, boreAwayCue, hudFont, markCue } from '../data/cockpit/f16c/hud';
 import { FPM_AT, GROUND, MIDPOINT } from '../data/cockpit/f16c/hud-ground';
@@ -204,6 +205,16 @@ const SCENARIOS: Record<string, Scenario> = {
       range: { mfd: 'hsd-hud-30' },
     },
     slew: { hud: true, step: 'slew', on: 'mark-caged', free: 'mark-free', done: 'mark-on', noun: 'mark cue', what: 'runway’s midpoint', target: MIDPOINT, start: FPM_AT, reach: 7, speed: 170, box: [395, 70, 755, 415] },
+  },
+  'markpoint-fcr': {
+    // As the HUD mark's scene, the jet 4 NM short of the runway: the radar in ground map on the left MFD, the HSD on the right, steerpoint 3 selected.
+    initial: { left: 'gm-not-soi', mfd: 'hsd-start', ded: 'cni-3' },
+    after: {
+      soi: { left: 'gm' }, hold: { left: 'gm-ftt' }, mark: { ded: 'mark-fcr' },
+      store: { ded: 'mark-fcr-26', mfd: 'hsd-hud-marked' },
+      select: { ded: 'mark-fcr-26-stpt', mfd: 'hsd-hud-sel' },
+    },
+    slew: { step: 'slew', on: 'gm', free: 'gm-free', done: 'gm-on', display: 'left', freeOnMove: true, what: 'runways’ midpoint', ...GM_SLEW },
   },
   hts: {
     // The SOI starts on the left MFD, which shows the targeting pod (Slave, on the selected steerpoint).

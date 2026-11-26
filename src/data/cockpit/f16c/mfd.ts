@@ -6,6 +6,7 @@ import { harmPageLabels, harmPages } from './mfd-harm.ts';
 import { hsdPageLabels, hsdPages } from './mfd-hsd.ts';
 import { aimFcrLabels, fcrPageLabels, fcrPages } from './mfd-fcr.ts';
 import { twoPageLabels, twoPages } from './mfd-fcr-two.ts';
+import { gmPageLabels, gmPages } from './mfd-fcr-gm.ts';
 import { smsAaPageLabels, smsAaPages } from './mfd-sms-aa.ts';
 import { maverickDPageLabels, maverickDPages, maverickPageLabels, maverickPages } from './mfd-maverick.ts';
 
@@ -106,6 +107,7 @@ export const mfdDisplay: MfdDisplay = {
     ...hsdPages,
     ...fcrPages,
     ...twoPages,
+    ...gmPages,
     ...smsAaPages,
     {
       id: 'dte', words: [
@@ -239,6 +241,7 @@ function build(side: 'left' | 'right'): PanelSpec {
           ...Object.entries(hsdPageLabels).map(([id, label]) => ({ id, label })),
           ...Object.entries(fcrPageLabels).map(([id, label]) => ({ id, label })),
           ...Object.entries(twoPageLabels).map(([id, label]) => ({ id, label })),
+          ...Object.entries(gmPageLabels).map(([id, label]) => ({ id, label })),
           ...Object.entries(aimFcrLabels).map(([id, label]) => ({ id, label })),
           ...Object.entries(smsAaPageLabels).map(([id, label]) => ({ id, label })),
         ],
