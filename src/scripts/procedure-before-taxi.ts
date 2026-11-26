@@ -14,7 +14,7 @@
  */
 
 interface StepDo { control: string; to: string; on?: 'press' | 'release'; hold?: number }
-interface Step { id: string; panels: string[]; hints?: string[]; do?: StepDo; also?: StepDo[]; confirm?: string; turn?: { control: string; to: number; per: number } }
+interface Step { id: string; panels: string[]; do?: StepDo; also?: StepDo[]; confirm?: string; turn?: { control: string; to: number; per: number } }
 interface Config { aircraft: string; model?: string; initial: Record<string, string>; labels: Record<string, string>; names: Record<string, string>; orders: Record<string, string[]>; lamps: string[]; steps: Step[] }
 /** `ins`: the alignment stage (-1 not started, 0–4 up the INS DED pages); `flash`: the fine-alignment flash is in its off half; `bit`: the FLCS BIT is running; `dte`: the left MFD shows the DTE page; `pitch`/`roll`: the trim applied, in indicator dots (nose up, left wing down positive). */
 interface State { /** Speedbrakes open at any angle (they stay where SPD BRK left them). */ sb: boolean; rpm: number; noz: number; ins: number; flash: boolean; baro: number; mode: 'pneu' | 'elec'; bit: boolean; dte: boolean; pitch: number; roll: number }
@@ -174,7 +174,7 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
     progress.textContent = `Step ${step + 1} of ${cfg.steps.length}`;
     previous.disabled = step === 0 && !finished;
     one<HTMLElement>('[data-controls]').hidden = false;
-    confirm.hidden = finished || !s.confirm;
+    confirm.hidden = finished || !s.confirm || moves(s).length > 0;
     restart.hidden = !finished;
     confirm.textContent = s.confirm ?? 'Confirm';
     confirm.disabled = false;
@@ -186,7 +186,7 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
     }
     if (finished) say('');
     else if (s.turn) say(`Turn the ${name(s.turn.control)} until the setting reads ${s.turn.to.toFixed(2)}.`);
-    else if (moves(s).length === 1) say(`${cap(instruction(moves(s)[0]))}.`);
+    else if (s.id === 'spd-brk' || moves(s).length === 1) say(`${cap(instruction(moves(s)[0]))}.`);
     else if (moves(s).length) say(`Make these moves, in any order: ${moves(s).map(instruction).join('; ')}.`);
     else say('Check the indications, then confirm.');
     showPad();
@@ -201,8 +201,8 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
   /** Every move is made. A step that shows indications to check waits for the reader; the others move on. */
   function done(text = 'Done.') {
     const s = cfg.steps[step];
-    if (!(s.hints?.length || s.panels.length > 1)) { say(text); next(); return; }
-    confirm.textContent = s.confirm ?? 'Indications checked';
+    if (!s.confirm) { say(text); next(); return; }
+    confirm.textContent = s.confirm;
     confirm.disabled = false;
     confirm.hidden = false;
     say(`${text} Check the indications, then continue.`);
@@ -266,11 +266,12 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
         return;
       }
     }
-    // SPD BRK: aft (held) opens the speedbrakes, forward retracts them; centre leaves them where they are.
-    if (key === 'throttle.spd-brk' && d.phase === 'press') { if (d.position === 'aft') st.sb = true; if (d.position === 'fwd') st.sb = false; }
     // The altimeter mode lever sets the mode while it is held (a step that wants it completes below).
     if (key === 'altimeter.mode' && d.phase === 'press' && (d.position === 'elec' || d.position === 'pneu')) st.mode = d.position;
-    const want = pending(s).find(w => w.control === key && w.to === d.position && (w.on ?? 'press') === d.phase);
+    // The speedbrake check extends first, then retracts.
+    const remaining = pending(s);
+    const allowed = s.id === 'spd-brk' ? remaining.slice(0, 1) : remaining;
+    const want = allowed.find(w => w.control === key && w.to === d.position && (w.on ?? 'press') === d.phase);
     if (want?.hold) {
       holding = true;
       clearTimeout(holdTimer);
@@ -294,6 +295,8 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
       return;
     }
     if (want) {
+      // Only an accepted SPD BRK move can change the indication.
+      if (key === 'throttle.spd-brk') st.sb = want.to === 'aft';
       if (key === 'left-mfd.osb-8') st.dte = true;
       // The FLCS BIT: RUN lights while it runs; the switch drops back to OFF by itself when it is done.
       if (key === 'flt-control.flcs-bit') {
@@ -317,7 +320,7 @@ export function startBeforeTaxiModel(root: HTMLElement, cfg: Config) {
     }
     if (key === 'altimeter.mode') { indicate(); return; }
     // A rotary on its way to its position (the INS knob passes NORM on the way to NAV).
-    const order = cfg.orders[key] ?? [], target = pending(s).find(w => w.control === key);
+    const order = cfg.orders[key] ?? [], target = allowed.find(w => w.control === key);
     const gap = (p: string) => Math.abs(order.indexOf(p) - order.indexOf(target?.to ?? ''));
     if (target && gap(d.position) < gap(before)) { say(`Keep going: ${instruction(target)}.`); indicate(); return; }
     // A control that is not part of this step: put it back.

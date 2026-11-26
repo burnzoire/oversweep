@@ -19,6 +19,7 @@ import { INK, PAINTS, PENS, text } from '../components.ts';
 const PX = 2.7;
 const { mm, path } = tracer(PX);
 const src = 'DCS F-16C guide p. 81';
+const PLACARD_BLACK = '#000';
 
 /** Diamonds: two columns, tip to tip, 15.5 px a row from y 80 (measured). */
 const DIAMOND_X = [41, 85], DIAMOND_W = 8.5, DIAMOND_H = 7.75;
@@ -26,9 +27,9 @@ const diamonds = Array.from({ length: 11 }, (_, k) => 80 + 15.5 * k).flatMap(y =
   `M${mm(x)} ${mm(y - DIAMOND_H)}L${mm(x + DIAMOND_W)} ${mm(y)}L${mm(x)} ${mm(y + DIAMOND_H)}L${mm(x - DIAMOND_W)} ${mm(y)}Z`)).join('');
 /** The yellow flag on the lever face: square top, lower corners drawn in to the stem. */
 const FLAG = path('M30 62H96V240L90 246H36L30 240Z');
-const flag = `<path d="${FLAG}" fill="${PAINTS.yellow}" stroke="${INK}" stroke-width="${PENS.medium}"/>` +
-  `<path d="${diamonds}" fill="${INK}" stroke="none"/>` +
-  `<path d="${path('M53 86Q53 75 64 75Q75 75 75 86V229Q75 240 64 240Q53 240 53 229Z')}" fill="${INK}" stroke="none"/>` +
+const flag = `<path d="${FLAG}" fill="${PAINTS.yellow}" stroke="${PLACARD_BLACK}" stroke-width="${PENS.medium}"/>` +
+  `<path d="${diamonds}" fill="${PLACARD_BLACK}" stroke="none"/>` +
+  `<path d="${path('M53 86Q53 75 64 75Q75 75 75 86V229Q75 240 64 240Q53 240 53 229Z')}" fill="${PLACARD_BLACK}" stroke="none"/>` +
   // The legend is yellow on a black band down the middle of the flag.
   `<g transform="translate(${mm(64)} ${mm(158)}) rotate(-90)">${text(0, 0, 'EJECTION CONTROLS LOCKED', mm(10), mm(150)).replace(`fill="${INK}"`, `fill="${PAINTS.yellow}"`)}</g>`;
 
@@ -44,7 +45,7 @@ const lockedFace = `<rect x="${X0}" y="${P[1]}" width="${W}" height="${L}" rx="2
 const armedFace = `<rect x="${X0}" y="${P[1]}" width="${W}" height="${L}" rx="2" fill="var(--panel-paper,#fff)" ${pen('heavy')}/>` +
   // The open channel next to the pivot, then the black ARMED placard toward the free (aft) end.
   `<rect x="${X0 + 2.5}" y="${P[1] + 3}" width="${W - 5}" height="30" rx="2" fill="none" ${pen('fine')}/>` +
-  `<rect x="${X0 + 2}" y="${P[1] + 38}" width="${W - 4}" height="${L - 44}" fill="${INK}" stroke="none"/>` +
+  `<rect x="${X0 + 2}" y="${P[1] + 38}" width="${W - 4}" height="${L - 44}" fill="${PLACARD_BLACK}" stroke="none"/>` +
   `<g transform="translate(${P[0] - 3.5} ${P[1] + 38 + (L - 44) / 2}) rotate(-90)">${text(0, 0, 'EJECTION CONTROLS', 3.4, 46).replace(`fill="${INK}"`, 'fill="#fff"')}</g>` +
   `<g transform="translate(${P[0] + 3.5} ${P[1] + 38 + (L - 44) / 2}) rotate(-90)">${text(0, 0, 'ARMED', 3.4, 15).replace(`fill="${INK}"`, 'fill="#fff"')}</g>`;
 
