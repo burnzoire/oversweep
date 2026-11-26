@@ -174,6 +174,8 @@ const MARK_PAGES: SPage[] = [
   { id: 'mark-ofly', label: 'MARK page: OFLY sensor option, markpoint 26 empty', lines: markLines('OFLY', false) },
   { id: 'mark-26', label: 'MARK page: markpoint 26 stored (OFLY)', lines: markLines('OFLY', true) },
   { id: 'mark-26-stpt', label: 'MARK page: markpoint 26 is the selected steerpoint (STPT)', lines: markLines('OFLY', true, true) },
+  { id: 'mark-hud-26', label: 'MARK page: markpoint 26 stored (HUD)', lines: markLines('HUD', true) },
+  { id: 'mark-hud-26-stpt', label: 'MARK page: markpoint 26 is the selected steerpoint (HUD, STPT)', lines: markLines('HUD', true, true) },
   { id: 'cni-26', label: 'CNI page, markpoint 26 selected', lines: cniLines('T 21X', 26) },
 ];
 

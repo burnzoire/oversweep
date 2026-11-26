@@ -499,6 +499,8 @@ export interface HudDisplay {
    * Weapon cues that come and go with the weapon (the HARM launch scale): one display indicator `id` whose pages each
    * draw `art` (pen paths, relative to the boresight), `texts` and a `flash` path that blinks (the FOV box in range).
    */
+  /** The outside view behind the symbology: one display indicator `id` whose pages each draw `art` (SVG about the boresight, under everything else). */
+  ground?: { id: string; pages: Record<string, string> };
   cues?: { id: string; /** The heading tape shown in place of the usual one while a cue page other than `none` is up (HARM: it sits above the boresight, p. 663). */ heading?: HudTape; pages: { id: string; art: string; /** Keep the usual heading tape on this page (air-to-air cues). */ keepHeading?: boolean; /** Roll the heading tape with the attitude ladder on this page. */ bankHeading?: boolean; /** Art that slides sideways with the `harm-asl` reading (the azimuth steering line and its loft ticks). */ steer?: string; texts: { t: string; at: Pt; anchor?: 'start' | 'middle' | 'end' }[]; flash?: string; /** The outside world behind the glass (an aircraft silhouette, its contrail): SVG markup in the cues' units, drawn under the symbology. */ scene?: string }[] };
 }
 

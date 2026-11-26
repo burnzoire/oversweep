@@ -134,6 +134,17 @@ terms:
   - term: Markpoint
     definition: "A point stored in flight to come back to or target later: the ground below the jet as it passes overhead, or the spot a sensor or the HUD is on. Stored in turn in steerpoints 26 to 30, and drawn on the HSD as a small cyan X."
     cite: [{ n: 1, page: "205, 219–220" }]
+  - term: Mark cue
+    definition: "The symbol on the HUD that picks a spot on the ground for a markpoint. It starts caged to the flight path marker, is slewed with the cursor switch and is pinned to the ground by the first TMS forward press; a second press stores the markpoint."
+    cite: [{ n: 1, page: "221–222" }]
+  - term: Flight path marker
+    expansion: FPM
+    definition: "The HUD's small circle with a tail and two wings, showing where the jet is actually going, not where its nose points. On the horizon line it means level flight."
+    cite: [{ n: 1, page: "92" }]
+  - term: AGR
+    expansion: Air-to-ground ranging
+    definition: "The radar mode that measures the range to the ground point a visual sight is on, so that point can be placed accurately. It comes on by itself when the HUD is the sensor for a markpoint, a fix or an altitude calibration."
+    cite: [{ n: 1, page: "449" }]
   - term: MGRS
     expansion: Military Grid Reference System
     definition: "A way of giving a position as a grid zone, a 100 km square and an easting and northing in metres (37SCV 28541/55914), instead of latitude and longitude. The DED's MARK page shows it beside a markpoint's latitude and longitude; the STPT page can show steerpoints 21 to 25 in it."
@@ -194,8 +205,8 @@ terms:
     cite: [{ n: 1, page: "681" }]
   - term: VIS mode
     expansion: Visual
-    definition: "The Maverick delivery sub-mode for a target the pilot can see: a box on the HUD is slewed over it and designated, and the seeker looks there. Not available with Mavericks on the three-missile LAU-88 rack."
-    cite: [{ n: 1, page: "683" }]
+    definition: "The sub-mode for a spot the pilot can see: a cue on the HUD is slewed over it and designated. For a Maverick it is a delivery sub-mode, and the seeker looks where the box is put (not available with Mavericks on the three-missile LAU-88 rack); the MARK page's HUD sensor option also enters it, with the mark cue in place of the box."
+    cite: [{ n: 1, page: "219, 683" }]
   - term: BORE mode
     expansion: Boresight
     definition: "The Maverick delivery sub-mode for a quick shot at a target of opportunity: the seeker starts on the jet's boresight and is shown as a cross on the HUD, which the pilot flies near the target and slews onto it."

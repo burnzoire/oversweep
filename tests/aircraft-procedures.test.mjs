@@ -135,7 +135,9 @@ test('HTS targeting uses pages that exist and controls that are built, and the b
   const pagesOf = id => new Set(spec(id).indicators.find(i => i.id === 'display').pages.map(x => x.id));
   const mfd = pagesOf('right-mfd'), ded = pagesOf('ded');
   for (const m of script.matchAll(/(mfd|left|ded): '([\w-]+)'/g)) assert.ok((m[1] === 'ded' ? ded : mfd).has(m[2]), m[2]);
-  for (const m of script.matchAll(/(?:on|free|done): '([\w-]+)'|'(hadx-t[\w-]*)'/g)) assert.ok(mfd.has(m[1] ?? m[2]), m[1] ?? m[2]);
+  // The HUD mark cue's slew names pages of the HUD's cues, not an MFD's.
+  const hudCues = new Set(spec('hud').placements.find(p => p.component === 'hud').hud.cues.pages.map(x => x.id));
+  for (const m of script.matchAll(/(?:on|free|done): '([\w-]+)'|'(hadx-t[\w-]*)'/g)) assert.ok(mfd.has(m[1] ?? m[2]) || hudCues.has(m[1] ?? m[2]), m[1] ?? m[2]);
   assert.match(data.slice(data.indexOf('const hts:'), data.indexOf('const hts2')), /next: 'hts-targeting'/);
   const block = data.slice(data.indexOf('const hts2'));
   for (const m of block.matchAll(/control:'([\w-]+)\.([\w-]+)',to:'([\w-]+)'/g)) {

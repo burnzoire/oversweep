@@ -29,3 +29,11 @@ A guided exercise on the shared cockpit panels (ICP, DED, stick TMS card, right 
 ## Checks
 - `node --experimental-strip-types --test tests/aircraft-procedures.test.mjs tests/cockpit.test.mjs tests/manual-menu.test.mjs`: pass.
 - Walked every step in the running page (Playwright): each move completes its step, every hint ring lands on its indication, the confirm buttons carry the step's own text, no console errors.
+
+## HUD mark (markpoint-hud)
+
+Sources: Eagle Dynamics DCS F-16C guide pp. 219-222 (MARK page, HUD and HMCS steps), 340 (markpoint cursor), 449 (AGR), 92 (flight path marker), 358-359 (HSD). In-simulator verification pending (no DCS build recorded).
+
+Built: `hud-ground.ts` draws Abu al-Duhur from the OSM plan in true angular scale (jet level, 3,000 ft AGL, 4 NM short of the southern runway's midpoint, heading 267) behind the HUD symbology (new `ground` HUD indicator); mark cue pages (`mark-caged`, `mark-free`, `mark-on`); a HUD slew in the HTS engine; MARK/HSD states for a point stored 4 NM ahead.
+
+Assumptions (check in the sim): the mark cue's look (a small ring with a centre dot, about the size of the flight path marker's circle; caged, a small ring inside the marker) is read off the p. 221 figures and not specified; the sensor option reads HUD when the MARK page opens; the cue stays drawn after storing and after M-SEL; the HUD diamond for the markpoint is drawn at the point's ground elevation; the ground-stabilised cue looks the same as the slewed one. The HMCS extension is covered in a note, not as steps.
