@@ -417,7 +417,7 @@ export const hud: PanelSpec = {
   ],
   controls: [],
   indicators: [
-    word('ground', 'Outside view', [{ id: 'none', label: '(sky only)' }, { id: 'airfield', label: 'Abu al-Duhur ahead' }, { id: 'takeoff', label: 'Batumi runway 12 (takeoff roll)' }], 'none', 'What is seen through the glass behind the symbology: only sky and a plain ground in the guide figure, or, in the markpoint procedures, the air base 4 NM ahead, drawn from its map data.'),
+    word('ground', 'Outside view', [{ id: 'none', label: '(sky only)' }, { id: 'airfield', label: 'Abu al-Duhur ahead' }, { id: 'takeoff', label: 'Batumi runway 13 (takeoff roll)' }], 'none', 'What is seen through the glass behind the symbology: only sky and a plain ground in the guide figure, or, in the markpoint procedures, the air base 4 NM ahead, drawn from its map data.'),
     word('screen', 'HUD', [{ id: 'on', label: 'On' }, { id: 'off', label: 'Off' }], 'off', 'The HUD picture. Cold and dark it is blank.'),
     num('fpm-azimuth', 'Flight path marker (left/right)', '°', -0.35, [-10, 10, 0.1], 'Flight path marker: the aircraft\'s inertial velocity vector, a circle with wings at 3 and 9 o\'clock and a tail at 12. Its offset left or right of the boresight cross, in degrees (drift); the attitude bars slide sideways with it.'),
     num('fpm-elevation', 'Flight path marker (up/down)', '°', -3.42, [-20, 5, 0.1], 'The flight path marker\'s height above (+) or below (−) the boresight cross, in degrees; below it by about the angle of attack.'),

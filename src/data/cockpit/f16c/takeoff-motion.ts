@@ -1,5 +1,5 @@
 /**
- * The takeoff roll of the F-16C takeoff procedure: an AB takeoff at 28,000 lb from the start of Batumi's runway 12,
+ * The takeoff roll of the F-16C takeoff procedure: an AB takeoff at 28,000 lb from the start of Batumi's runway 13,
  * sampled by time for the HUD and the ground picture behind it.
  *
  * Fixed by the guide (p. 146): takeoff speed at 28,000 lb is 156 KCAS; pull back 15 knots below it in AB (141); take-off

@@ -1,7 +1,7 @@
 import plan from '../../airfield-plans/batumi.json' with { type: 'json' };
 
 /**
- * The ground seen through the HUD on the takeoff roll: Batumi's runway 12, drawn in true angular scale from the
+ * The ground seen through the HUD on the takeoff roll: Batumi's runway 13, drawn in true angular scale from the
  * airfield's map data (OpenStreetMap, `airfield-plans/batumi.json`: runway, taxiways, apron, terminal), from the
  * pilot's eye on the runway. Everything is drawn in the HUD frame (mm about the boresight, 25.9 px a degree in the
  * guide figure's 3 px a mm) and redrawn for each frame of the roll: the eye moves up the runway and the horizon
@@ -21,7 +21,7 @@ const [RW0, RW1] = of('runway')[0].line!;
 const LON_FT = FT_LAT * Math.cos((RW0[0] * Math.PI) / 180);
 const east = (p: [number, number]) => (p[1] - RW0[1]) * LON_FT, north = (p: [number, number]) => (p[0] - RW0[0]) * FT_LAT;
 const HEAD = Math.atan2(east(RW1), north(RW1));
-/** Runway frame: u feet along runway 12 from its start, v feet to the right of the centreline. */
+/** Runway frame: u feet along runway 13 from its start, v feet to the right of the centreline. */
 const rw = (p: [number, number]): [number, number] => [east(p) * Math.sin(HEAD) + north(p) * Math.cos(HEAD), east(p) * Math.cos(HEAD) - north(p) * Math.sin(HEAD)];
 export const RUNWAY = { length: Math.hypot(east(RW1), north(RW1)), half: (of('runway')[0].widthM ?? 45) * 3.2808 / 2, heading: (HEAD * 180) / Math.PI };
 
@@ -169,8 +169,8 @@ const TAXI_LIGHTS: [number, number][] = TAXIWAYS.flatMap(t => t.line.slice(1).fl
 const BUILDINGS = ringsOf('terminal').map(ring => ({ ring, h: 30 }));
 
 /**
- * The runway numbers, small as in the aerial (about 30 ft): "12" at the start, upright to a pilot rolling along the
- * runway, and "30" at the far end, upright to one landing from the other way: seven-segment rectangles [u0, u1, v0, v1].
+ * The runway numbers, small as in the aerial (about 30 ft): "13" at the start, upright to a pilot rolling along the
+ * runway, and "31" at the far end, upright to one landing from the other way: seven-segment rectangles [u0, u1, v0, v1].
  */
 const NUMBERS: [number, number, number, number][] = (() => {
   const t = 2.5, h = 30, w = 10, out: [number, number, number, number][] = [];
@@ -186,10 +186,10 @@ const NUMBERS: [number, number, number, number][] = (() => {
     if (parts.includes('c')) r.push([u0, um, vr - t, vr]);
     return r;
   };
-  out.push(...glyph(135, -12, 'bc'), ...glyph(135, 2, 'abged'));
-  // The far end's "30": the same glyphs turned half a turn about the middle of the pair (u 8000, v -3).
+  out.push(...glyph(135, -12, 'bc'), ...glyph(135, 2, 'abgcd'));
+  // The far end's "31": the same glyphs turned half a turn about the middle of the pair (u 8000, v -3).
   const uc = RUNWAY.length - 145, vc = -5;
-  for (const r of [...glyph(uc - h / 2, -12, 'abgcd'), ...glyph(uc - h / 2, 2, 'abcdef')]) out.push([2 * uc - r[1], 2 * uc - r[0], 2 * vc - r[3], 2 * vc - r[2]]);
+  for (const r of [...glyph(uc - h / 2, -12, 'abgcd'), ...glyph(uc - h / 2, 2, 'bc')]) out.push([2 * uc - r[1], 2 * uc - r[0], 2 * vc - r[3], 2 * vc - r[2]]);
   return out;
 })();
 
