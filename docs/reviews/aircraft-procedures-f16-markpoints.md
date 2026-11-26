@@ -40,7 +40,7 @@ Assumptions (check in the sim): the mark cue's look (a small ring with a centre 
 
 ## FCR mark (markpoint-fcr)
 
-Sources: Eagle Dynamics DCS F-16C guide pp. 219–220 (MARK page, FCR sensor option, the CZ note), 223 (storing a markpoint using FCR, with its figures), 437 (GM mode), 443–444 (FTT mode), 396 (FCR cursor bearing and range), 189 and 341 (Cursor Zero), 358–359 (HSD). In-simulator verification pending (no DCS build recorded). Built on the HUD mark's scene (jet level at 3,000 ft above the ground, 4 NM short of the southern runway's midpoint, heading 267°, steerpoint 3 selected, markpoint 26 stored over the runway midpoint), so the MARK and HSD pages are the HUD mark's, with the FCR sensor option.
+Sources: Eagle Dynamics DCS F-16C guide pp. 219–220 (MARK page, FCR sensor option, the CZ note), 223 (storing a markpoint using FCR, with its figures), 437 (GM mode), 443–444 (FTT mode), 189 and 341 (Cursor Zero), 358–359 (HSD). In-simulator verification pending (no DCS build recorded). Built on the HUD mark's scene (jet level at 3,000 ft above the ground, 4 NM short of the southern runway's midpoint, heading 267°, steerpoint 3 selected, markpoint 26 stored over the runway midpoint), so the MARK and HSD pages are the HUD mark's, with the FCR sensor option.
 
 Built: `mfd-fcr-gm.ts`, the FCR ground map format (GM, FTT) laid out on the guide's pp. 437, 443 and 223 figures, with the radar picture as a generated image (`scripts/gm-radar-map.py`, `public/images/cockpit/radar/gm-map.webp`, from the airfield's map data); crosshairs that follow the cursor on both axes (a `cursorY` option beside `cursorX`); MARK page states with the FCR sensor option; the engine's `markpoint-fcr` scenario.
 
@@ -57,3 +57,5 @@ Assumptions (check in the sim):
 ## Checks (FCR mark)
 - `npm test`, `tsc --noEmit` and `npm run build` pass; `check_site.mjs` and `check_encyclopedia.mjs` pass.
 - Walked every step in the running page (Playwright): the DMS, TMS, ICP and OSB moves complete their steps, the crosshairs slew onto the runway midpoint, every confirm carries the step's own text, no console errors.
+
+- SME review (2026-11-26, READY) low findings applied: the CZ caution now says zeroing "may be necessary"; the lower-left bearing/range field is no longer described for the pre-hold ground map (p. 396 is the air-to-air format); the CZ step now points out the option that has been showing since the first slew. Not applied here (belongs to the HUD mark, PR #553): the explicit SEQ to HUD in its MARK step.
