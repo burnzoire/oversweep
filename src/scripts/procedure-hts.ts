@@ -266,8 +266,9 @@ const SCENARIOS: Record<string, Scenario> = {
       r: { ...takeoffHud(FRAME0), ...TAKEOFF_STEERPOINT, 'hud.ttg': 480, ...ENGINE(68, 98, 570, 30) },
       artwork: { 'hud.ground': takeoffGround({ u: FRAME0.u, eye: TAKEOFF.eye, pitch: FRAME0.pitch }) },
     },
-    enter: { 'run-up': { r: ENGINE(90, 30, 650, 45) }, nws: { lit: WHEELS } },
+    enter: { 'run-up': { r: ENGINE(90, 30, 650, 45) } },
     after: {
+      nws: { lit: WHEELS },
       gear: { lit: ['landing-gear.gear-handle-light'] },
     },
     slew: [],
