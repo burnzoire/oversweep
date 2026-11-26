@@ -3,6 +3,7 @@ import { reviewTrainers } from './experiences';
 import { hadSpot, HADH, HADX } from './cockpit/f16c/mfd-had';
 import { hudSpot, hudSpotRef, CARET_Y } from './cockpit/f16c/hud';
 import { FPM_AT, MIDPOINT } from './cockpit/f16c/hud-ground';
+import { GM_TARGET, gmBox } from './cockpit/f16c/mfd-fcr-gm';
 import { HSD_STATES, SPT, hsdBox, hsdSpot } from './cockpit/f16c/mfd-hsd';
 import { fcrBox } from './cockpit/f16c/mfd-fcr';
 import { smsBox } from './cockpit/f16c/mfd-sms-aa';
@@ -46,7 +47,7 @@ export interface AircraftProcedure {
   status: 'public-preview' | 'review-only';
   simVersion: string;
   /** Which script drives the cockpit panels. */
-  model: 'engine-start' | 'fcr-tws' | 'fcr-two' | 'tacan-navigation' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff' | 'hts' | 'hts-targeting' | 'harm-shot' | 'maverick-pre' | 'maverick-handoff' | 'markpoints' | 'markpoint-hud' | 'fcr-rws' | 'fcr-vsr' | 'fcr-bug' | 'aim120' | 'aim120-bore' | 'fcr-vol';
+  model: 'engine-start' | 'fcr-tws' | 'fcr-two' | 'tacan-navigation' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff' | 'hts' | 'hts-targeting' | 'harm-shot' | 'maverick-pre' | 'maverick-handoff' | 'markpoints' | 'markpoint-hud' | 'markpoint-fcr' | 'fcr-rws' | 'fcr-vsr' | 'fcr-bug' | 'aim120' | 'aim120-bore' | 'fcr-vol';
   /** The scenario shown above the steps, and the closing heading. */
   intro: string;
   description: string;
@@ -567,6 +568,41 @@ const markpointHud: AircraftProcedure = {
   ]
 };
 procedures.push(markpointHud);
+
+// FCR mark: the same scene as the HUD mark (the jet 4 NM short of the runway), the radar in ground map on the left MFD.
+const GB = (x0: number, y0: number, x1: number, y1: number) => 'left-mfd.display' + gmBox(x0, y0, x1, y1);
+const [GX, GY] = GM_TARGET;
+const markpointFcr: AircraftProcedure = {
+  id: 'procedure.dcs-f16c.markpoint-fcr',
+  slug: 'markpoint-fcr',
+  airframe: 'f-16c',
+  title: 'F-16C — Markpoint: FCR mark',
+  objective: 'Store a markpoint on a landmark the radar shows, by holding it in fixed target track, then make it the selected steerpoint and find it on the HSD.',
+  applicability: 'DCS F-16C Block 50 (circa 2007); official guide edition 16 August 2026. In-simulator verification pending.',
+  simVersion: 'DCS build not yet verified',
+  status: 'public-preview',
+  model: 'markpoint-fcr',
+  intro: 'Scenario: a road reconnaissance sortie in the Syria map, in the NAV master mode with [steerpoint](term:steerpoint) 3 selected. You have left the route to look at [Abu al-Duhur](record:abu-al-duhur) air base and want to keep the position of its runways to come back to later, this time with the radar. You are level at 3,000 ft above the ground, heading 267° along the line of the southern runway and 4 NM short of its midpoint. The [FCR](term:fcr) is on the left [MFD](term:mfd) in [ground map](term:gm) (GM) at 10 NM, with its range scale switching set to manual so the scale stays put as you slew; the right MFD shows the [HSD](term:hsd) and the [DED](term:ded) the [CNI page](term:cni-page). The panels beside the steps are a teaching simulation, not connected to DCS; the radar picture is drawn from the air base’s map data, and positions, ranges and bearings are illustrative.',
+  description: 'Illustrated DCS F-16C markpoint with the radar: make the FCR the SOI, slew its crosshairs onto the middle of Abu al-Duhur’s runways, hold the point in fixed target track, open the MARK page, store markpoint 26 with a second TMS forward, zero the cursor slews and select the markpoint to find it on the HSD.',
+  complete: 'Markpoint 26 stored from the radar and selected: the HSD shows it 4 NM ahead, over the runways',
+  summary: [
+    'With the radar in ground map and the [SOI](term:soi), RDR CURSOR/ENABLE slews the crosshairs onto a defined feature and TMS forward holds the point in [fixed target track](term:ftt): the map freezes and a diamond marks the point.',
+    'The 7 / MARK page picks FCR as its sensor option by itself while the radar is holding a point; if not, press SEQ on the DCS switch until it reads FCR.',
+    'A second TMS forward stores the held point as the next [markpoint](term:markpoint), 26 to 30; TMS aft instead drops the hold and stores nothing.',
+    'Moving the crosshairs slews the navigation cursor, so press [CZ](term:cz) afterwards to take the slews out. M-SEL, with the asterisks round the sensor option, makes the markpoint the selected steerpoint, and the HSD draws it.',
+  ],
+  sources: 'Eagle Dynamics — DCS F-16C Viper Early Access Guide (EN, 16 August 2026): “Storing a Markpoint” and the MARK DED page pp. 219–220 (the Cursor Zero note p. 220), “Storing a Markpoint using FCR” p. 223; GM mode p. 437; FTT mode pp. 443–444; the FCR cursor bearing and range p. 396; Cursor Zero pp. 189, 341; the HSD pp. 358–359; HOTAS pp. 83–84, 331. The air base is drawn from OpenStreetMap contributors’ data (ODbL).',
+  steps: [
+    {id:'soi',section:'Hold the point',title:'Make the FCR the SOI',control:'DMS aft (short)',action:'The [FCR](term:fcr) format on the left [MFD](term:mfd) reads {{NOT SOI|1}}: the hand controls are working another display. Press the {{DMS aft|0}}, briefly.',expect:'NOT SOI goes out and a {{frame|2}} is drawn round the format: the radar is the [SOI](term:soi), so the [TMS](term:tms) and the RDR CURSOR/ENABLE switch now work it. The picture is a plan view of the ground ahead, you at the bottom centre, drawn from the strength of the radar returns. The {{range scale|3}} reads 10 NM: smooth ground, such as pavement, returns little and shows dark, and rough ground and buildings show bright.',evidence:G3+' 83–84, 223 (step 1), 331, 437',hints:['stick.dms-ud',GB(290,150,372,170),GB(105,103,556,552),GB(108,186,150,258)],panels:['stick:dms','left-mfd'],do:{control:'stick.dms-ud',to:'aft'},confirm:'Radar page outlined'},
+    {id:'slew',section:'Hold the point',title:'Slew the crosshairs onto the runways',control:'RDR CURSOR/ENABLE',action:'Slew the {{crosshairs|0}} with the RDR CURSOR/ENABLE switch until their centre is on the middle of the {{runways|1}}, the pair of dark lines: press and drag on the switch like a joystick. The further you drag, the faster they move, so ease off as they get close.',expect:'The crosshairs cross at the middle of the runways. The {{CZ|2}} option has appeared down the right edge: moving the crosshairs also moves the navigation cursor, and CZ is how those slews are taken out again.',caution:'Choose a defined terrain feature or a man-made object: the radar can only hold what its picture shows clearly. The field at the lower left is the crosshairs’ bearing and range from the selected steerpoint.',evidence:G3+' 223 (step 2), 341, 396 (item 12), 437, 443',hints:['throttle.cursor-ud',GB(GX-16,GY-42,GX+16,GY+42),GB(528,378,556,415)],panels:['throttle:cursor','left-mfd'],confirm:'Crosshairs on the runways'},
+    {id:'hold',section:'Hold the point',title:'Hold the point',control:'TMS forward (short)',action:'Press the {{TMS forward|0}}, briefly.',expect:'The radar goes into [fixed target track](term:ftt) (FTT): it holds the point under the crosshairs as a fixed position. The map freezes, {{FZ|1}} is highlighted and a {{solid diamond|2}} sits at the centre of the crosshairs. The point’s {{latitude and longitude|3}} are written at the top right, and its {{bearing and range|4}} from you, 267° and 4.0 NM, at the lower left. An {{X|5}} marks where you are in relation to the map.',caution:'Press TMS aft (short) instead and the radar goes back to ground map without holding anything.',evidence:G3+' 223 (step 3), 443',hints:['stick.tms-ud',GB(534,246,556,270),GB(GX-14,GY-14,GX+14,GY+14),GB(368,142,530,180),GB(158,482,246,520),GB(314,514,348,540)],panels:['stick:tms','left-mfd'],do:{control:'stick.tms-ud',to:'fwd'},confirm:'Diamond on the runways, FZ'},
+    {id:'mark',section:'Store the markpoint',title:'Open the MARK page',control:'ICP 7 / MARK',action:'With the [CNI page](term:cni-page) showing, press 7 / MARK on the [ICP](term:icp).',expect:'The [DED](term:ded) shows the MARK page. The {{sensor option|0}}, between the asterisks, is FCR: the radar was already holding a point, so it was chosen for you. The displayed markpoint is 26, and it is {{empty|1}}: zeros, because no markpoint is stored yet.',caution:'If the sensor option shows another choice, momentarily press the DCS switch to SEQ until it reads FCR. The FCR option works only while the radar is in ground map, ground moving target or sea mode.',evidence:G3+' 219–220, 223 (steps 4, 5)',hints:['ded.display@0','ded.display@1'],panels:['icp','ded'],do:{control:'icp.key-7',to:'in'},confirm:'MARK page: FCR, 26'},
+    {id:'store',section:'Store the markpoint',title:'Store the markpoint',control:'TMS forward (short)',action:'Press the {{TMS forward|0}}, briefly, a second time.',expect:'The held point is stored as markpoint 26. The MARK page now shows its {{latitude|1}}, {{longitude|2}}, {{elevation|3}} (820 ft, the height of the ground) and {{grid position|4}} in [MGRS](term:mgrs).',caution:'Press TMS aft (short) instead to reject the hold without storing anything. The figures shown are for the runways’ midpoint: your own would differ by however far the crosshairs were from it. The next markpoint you store goes in 27.',evidence:G3+' 205, 219–220, 223 (step 6)',hints:['stick.tms-ud','ded.display@1','ded.display@2','ded.display@3','ded.display@4'],panels:['stick:tms','ded'],do:{control:'stick.tms-ud',to:'fwd'},confirm:'Markpoint 26 stored'},
+    {id:'cz',section:'Clean up',title:'Zero the cursor slews',control:'Left MFD, OSB 9 (CZ)',action:'On the radar format, press the [OSB](term:osb) beside {{CZ|0}}.',expect:'The CZ option goes out: the slews you put on the navigation cursor by moving the crosshairs are taken out, and the navigation symbols are back on the navigation system’s own solution.',caution:'Zero the slews after designating a markpoint with the radar or the targeting pod in the NAV master mode, or in a pre-planned air-to-ground mode. On the HSD the same option is OSB 10.',evidence:G3+' 189, 220 (note), 341',hints:['left-mfd.osb-9'],panels:['left-mfd'],do:{control:'left-mfd.osb-9',to:'in'},confirm:'CZ gone'},
+    {id:'select',section:'Call it up',title:'Select the markpoint and find it on the HSD',control:'ICP 0 / M-SEL',action:'With the asterisks round the sensor option, press 0 / M-SEL, then look at the [HSD](term:hsd) on the right MFD.',expect:'{{STPT|0}} appears highlighted at the top right of the [DED](term:ded): markpoint 26 is the selected steerpoint. On the HSD the {{cyan X|1}} is the markpoint, straight ahead, 4 NM away, over the runways where the crosshairs were; {{steerpoint 3|2}} is now a hollow circle.',caution:'The asterisks must be round the sensor option for M-SEL to select the markpoint; if they are on another field, move them up with the DCS switch.',evidence:G3+' 205, 219–220 (STPT label), 358–359',hints:['ded.display@0',HS('hsd-hud-sel',SPT.mark,16),HS('hsd-hud-sel',SPT[3])],panels:['icp','ded','right-mfd'],do:{control:'icp.key-0',to:'in'},confirm:'Mark symbol on the runways'},
+  ]
+};
+procedures.push(markpointFcr);
 
 // Air-to-air radar (FCR on the left MFD): hint boxes in p. 394 pixels (mfd-fcr.ts); HUD hints in p. 90 pixels.
 const FL = (x0: number, y0: number, x1: number, y1: number) => 'left-mfd.display' + fcrBox(x0, y0, x1, y1);

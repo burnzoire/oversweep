@@ -398,7 +398,9 @@ export interface MfdDisplay {
     /** A cursor the procedure moves (`cockpit:indicate` `cursors`): white lines about its own origin, starting at `at`. */
     cursor?: { d: string; at: Pt };
     /** Lines that follow the cursor sideways only (the FCR's azimuth scan limits): a path about x 0, in a colour. */
-    cursorX?: { d: string; c: MfdColour } }[];
+    cursorX?: { d: string; c: MfdColour };
+    /** Lines that follow the cursor up and down only (a ground map's horizontal crosshair): a path about y 0, in a colour. */
+    cursorY?: { d: string; c: MfdColour } }[];
 }
 
 /**

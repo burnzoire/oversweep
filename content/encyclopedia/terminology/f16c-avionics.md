@@ -134,6 +134,18 @@ terms:
   - term: Markpoint
     definition: "A point stored in flight to come back to or target later: the ground below the jet as it passes overhead, or the spot a sensor or the HUD is on. Stored in turn in steerpoints 26 to 30, and drawn on the HSD as a small cyan X."
     cite: [{ n: 1, page: "205, 219–220" }]
+  - term: GM
+    expansion: Ground map
+    definition: "The radar mode that draws a picture of the ground ahead from the strength of the radar returns, as a plan view with the jet at the bottom. Smooth ground such as plains and water returns little and shows dark; buildings, towns and hills return strongly and show bright."
+    cite: [{ n: 1, page: "437" }]
+  - term: FTT
+    expansion: Fixed target track
+    definition: "The radar holds a point on the ground, a building or a slow ship that the pilot picked by slewing the crosshairs and pressing TMS forward. The map freezes, FZ lights, a solid diamond marks the point and its position and range are shown; TMS aft goes back to the ground map."
+    cite: [{ n: 1, page: "443–444" }]
+  - term: CZ
+    expansion: Cursor zero
+    definition: "The option (OSB 9 on the radar and pod formats, OSB 10 on the HSD) that takes out the slews put on the navigation cursor with the cursor switch, so the symbols are back on the navigation system's own solution. It shows only while there are slews."
+    cite: [{ n: 1, page: "189, 341" }]
   - term: Mark cue
     definition: "The symbol on the HUD that picks a spot on the ground for a markpoint. It starts caged to the flight path marker, is slewed with the cursor switch and is pinned to the ground by the first TMS forward press; a second press stores the markpoint."
     cite: [{ n: 1, page: "221–222" }]
