@@ -159,21 +159,28 @@ const TAXI_LIGHTS: [number, number][] = TAXIWAYS.flatMap(t => t.line.slice(1).fl
 })).filter(([u, v]) => u > -100 && u < 6000 && Math.abs(v) < 900);
 const BUILDINGS = ringsOf('terminal').map(ring => ({ ring, h: 30 }));
 
-/** The runway number "13" painted at the start, upright to the pilot rolling along it: seven-segment rectangles [u0, u1, v0, v1]. */
+/**
+ * The runway numbers, small as in the aerial (about 30 ft): "13" at the start, upright to a pilot rolling along the
+ * runway, and "31" at the far end, upright to one landing from the other way: seven-segment rectangles [u0, u1, v0, v1].
+ */
 const NUMBERS: [number, number, number, number][] = (() => {
-  const t = 2.5, h = 30, w = 10, out: [number, number, number, number][] = [], u0 = 135;
-  const seg = (dv: number, parts: string) => {
+  const t = 2.5, h = 30, w = 10, out: [number, number, number, number][] = [];
+  const glyph = (u0: number, dv: number, parts: string) => {
     const vl = dv, vr = dv + w, um = u0 + h / 2;
-    if (parts.includes('a')) out.push([u0 + h - t, u0 + h, vl, vr]);
-    if (parts.includes('g')) out.push([um - t / 2, um + t / 2, vl, vr]);
-    if (parts.includes('d')) out.push([u0, u0 + t, vl, vr]);
-    if (parts.includes('f')) out.push([um, u0 + h, vl, vl + t]);
-    if (parts.includes('e')) out.push([u0, um, vl, vl + t]);
-    if (parts.includes('b')) out.push([um, u0 + h, vr - t, vr]);
-    if (parts.includes('c')) out.push([u0, um, vr - t, vr]);
+    const r: [number, number, number, number][] = [];
+    if (parts.includes('a')) r.push([u0 + h - t, u0 + h, vl, vr]);
+    if (parts.includes('g')) r.push([um - t / 2, um + t / 2, vl, vr]);
+    if (parts.includes('d')) r.push([u0, u0 + t, vl, vr]);
+    if (parts.includes('f')) r.push([um, u0 + h, vl, vl + t]);
+    if (parts.includes('e')) r.push([u0, um, vl, vl + t]);
+    if (parts.includes('b')) r.push([um, u0 + h, vr - t, vr]);
+    if (parts.includes('c')) r.push([u0, um, vr - t, vr]);
+    return r;
   };
-  seg(-12, 'bc');
-  seg(2, 'abgcd');
+  out.push(...glyph(135, -12, 'bc'), ...glyph(135, 2, 'abgcd'));
+  // The far end's "31": the same glyphs turned half a turn about the middle of the pair (u 8000, v -3).
+  const uc = RUNWAY.length - 145, vc = -5;
+  for (const r of [...glyph(uc - h / 2, -12, 'abgcd'), ...glyph(uc - h / 2, 2, 'bc')]) out.push([2 * uc - r[1], 2 * uc - r[0], 2 * vc - r[3], 2 * vc - r[2]]);
   return out;
 })();
 
