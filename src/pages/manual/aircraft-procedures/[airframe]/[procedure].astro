@@ -82,7 +82,7 @@ const rich = (t:string) => esc(t)
       </ol>
       <h2 class="procedure-step" data-complete tabindex="-1" hidden><Fragment set:html={rich(guide.complete)} /></h2>
       {guide.summary && <section class="procedure-summary" aria-labelledby="procedure-summary-h"><h3 id="procedure-summary-h">What you learned</h3><ul>{guide.summary.map(l => <li><Fragment set:html={rich(l)} /></li>)}</ul></section>}
-      {nextGuide && <p class="procedure-next">Next: <a href={sitePath(procedureRoute(nextGuide))}>{nextGuide.title.replace(/^F-16C — /, '')}</a>, from where this procedure ends.</p>}
+      {nextGuide && <p class="procedure-next">Next: <a href={sitePath(procedureRoute(nextGuide))}>{nextGuide.title.replace(/^F-16C — /, '')}</a>{guide.nextScenario ? ` (${guide.nextScenario}).` : ', from where this procedure ends.'}</p>}
       <div class="procedure-controls" hidden data-controls>
         <button type="button" data-prev>Previous</button>
         <button type="button" data-confirm hidden>Confirm indication</button>
@@ -124,9 +124,14 @@ if (root && configEl) {
 
   // Hint links: ring the named indications for a few seconds.
   let ringTimer: ReturnType<typeof setTimeout> | undefined;
-  const clearRings = () => { clearTimeout(ringTimer); document.querySelectorAll('.hint-ring').forEach(r => r.remove()); };
+  const clearRings = () => {
+    clearTimeout(ringTimer);
+    root.querySelectorAll('.hint-ring, .hud-hint-ring').forEach(r => r.remove());
+  };
   root.addEventListener('click', e => {
-    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-hint]');
+    const target = e.target as Element;
+    if (target.closest('[data-prev], [data-confirm], [data-restart]')) clearRings();
+    const b = target.closest<HTMLButtonElement>('[data-hint]');
     const stepEl = b?.closest<HTMLElement>('[data-step]');
     if (!b || !stepEl) return;
     const config = JSON.parse(configEl.textContent!);
@@ -134,6 +139,7 @@ if (root && configEl) {
     if (!hint) return;
     clearRings();
     const rects = new Map<HTMLElement, DOMRect[]>();
+    let first: HTMLElement | undefined;
     for (const target of hint.split(',')) {
       const [spotRef, spot] = target.split('#');
       const [ref, row] = spotRef.split('@');
@@ -145,6 +151,24 @@ if (root && configEl) {
       // The panel's drawing, or, for a card shown alone, the card itself.
       const stage = box?.querySelector<HTMLElement>('.cp-stage:not([hidden])') ?? box?.querySelector<HTMLElement>('.cp-pad:not([hidden])');
       if (!stage) continue;
+      // Find the symbol itself for a hint that follows the HUD's transforms.
+      const anchor = stage.querySelector<SVGGraphicsElement>(`[data-hint-target="${id}"]`);
+      if (anchor) {
+        // A sibling inherits the symbol's motion and is clipped by the HUD glass.
+        const { x, y, width, height } = anchor.getBBox();
+        const ring = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        const pad = 2;
+        ring.setAttribute('class', 'hud-hint-ring');
+        ring.setAttribute('aria-hidden', 'true');
+        ring.setAttribute('x', String(x - pad));
+        ring.setAttribute('y', String(y - pad));
+        ring.setAttribute('width', String(width + 2 * pad));
+        ring.setAttribute('height', String(height + 2 * pad));
+        ring.setAttribute('rx', '2');
+        anchor.after(ring);
+        first ??= stage;
+        continue;
+      }
       const els = [...stage.querySelectorAll<Element>(`[data-indicator="${id}"], button[data-control="${id}"], button[data-pad-hit="${id}"], button[data-pad-control="${id}"]`)];
       let boxes = (half === undefined ? els : els.filter(el => (el as HTMLElement).dataset.padStep === half)).map(el => el.getBoundingClientRect()).filter(r => r.width > 0);
       if (spot && els[0]) {
@@ -162,7 +186,6 @@ if (root && configEl) {
       }
       if (boxes.length) rects.set(stage, [...(rects.get(stage) ?? []), ...boxes]);
     }
-    let first: HTMLElement | undefined;
     for (const [stage, boxes] of rects) {
       if (getComputedStyle(stage).position === 'static') stage.style.position = 'relative';
       const s = stage.getBoundingClientRect();
@@ -204,7 +227,8 @@ if (root && configEl) {
 :global(.hint-link):hover,:global(.hint-link):focus-visible{background:var(--color-hint-surface)}
 .proc-panel :global(.hint-ring){position:absolute;pointer-events:none;border:3px solid #e6b800;border-radius:12px;box-shadow:0 0 0 2px rgba(255,255,255,.9),0 0 10px 2px rgba(230,184,0,.6);animation:hint-pulse 1s ease-in-out 4}
 @keyframes hint-pulse{50%{opacity:.35}}
-@media(prefers-reduced-motion:reduce){.proc-panel :global(.hint-ring){animation:none}}
+.proc-panel :global(.hud-hint-ring){pointer-events:none;fill:none;stroke:#e6b800;stroke-width:3px;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 3px #e6b800);animation:hint-pulse 1s ease-in-out 4}
+@media(prefers-reduced-motion:reduce){.proc-panel :global(.hint-ring),.proc-panel :global(.hud-hint-ring){animation:none}}
 .procedure-cite,.procedure-panels{font-size:.85rem;color:var(--color-muted)}
 .procedure-controls{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:.75rem;margin-top:1rem}
 .procedure-player{display:flex;align-items:center;gap:.75rem;margin-top:1rem;padding:.5rem .75rem;border:1px solid var(--color-outline)}

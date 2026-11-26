@@ -277,6 +277,7 @@ const SCENARIOS: Record<string, Scenario> = {
       rollScan('accel', TO_T.v70, TO_T.rotate, false, 'after the brakes come off', 'Watch the airspeed climb to the rotation speed. Replay it or drag through it below.'),
       rollScan('rotate', TO_T.rotate, TO_T.positive, false, 'after the brakes come off', 'Watch the nose come up and the jet leave the runway. Replay it or drag through it below.'),
       { step: 'gear-check', secs: [TO_T.positive, TO_T.gearDone], ms: (TO_T.gearDone - TO_T.positive) * 1000, caption: 'after the brakes come off', prompt: 'Watch the gear light and the airspeed while the gear comes up. Replay it or drag through it below.', sample: s => takeoffPages(s, false) },
+      rollScan('climb', TO_T.gearDone, TO_T.gearDone + 3, false, 'after the brakes come off', 'Watch the altitude continue to rise. Replay the climb or drag through it below.'),
     ],
   },
   hts: {

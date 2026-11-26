@@ -444,8 +444,9 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
     if (p === 0 || (Math.abs(p) > 60 && p % 10)) continue;
     const y = -p * D, up = p > 0, t = up ? L.tick : -L.tick, x1 = L.gap + L.length;
     const dash = up ? '' : ` stroke-dasharray="${n(L.dash[0])} ${n(L.dash[1])}"`;
-    bars += [-1, 1].map(s => `<path d="M${n(s * L.gap)} ${n(y)}H${n(s * x1)}" ${pen}${dash}/><path d="M${n(s * L.gap)} ${n(y)}V${n(y + t)}" ${pen}/>` +
+    const row = [-1, 1].map(s => `<path d="M${n(s * L.gap)} ${n(y)}H${n(s * x1)}" ${pen}${dash}/><path d="M${n(s * L.gap)} ${n(y)}V${n(y + t)}" ${pen}/>` +
       hudText(s * (x1 - L.labelInset), y + (up ? L.labelDrop[0] : -L.labelDrop[1]), String(Math.abs(p)), F, 'middle')).join('');
+    bars += p === 10 ? `<g data-hint-target="pitch-plus-ten">${row}</g>` : row;
   }
   const fpm = `<circle r="${n(h.fpm.r)}" ${pen}/><path d="M${n(-h.fpm.wing)} 0H${n(-h.fpm.r)}M${n(h.fpm.r)} 0H${n(h.fpm.wing)}M0 ${n(-h.fpm.r)}V${n(-h.fpm.tail)}" ${pen}/>`;
   const cue = shift('steering-cue', 'x', D, `<circle r="${n(h.steering.r)}" ${pen}/>` + turned('steering', value('steering'), `<path d="M0 ${n(-h.steering.r)}V${n(-h.steering.line)}" ${pen}/>`));
@@ -453,9 +454,9 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
   const rollAtFpm = (body: string) => atFpm(turned('roll', -value('roll'), body));
   // Keep the ladder caged to the marker in azimuth and let pitch set its height before banking.
   const ladder = rollAtFpm(shift('fpm-elevation', 'y', -D, shift('pitch', 'y', D, bars), -1));
-  const attitude = ladder + atFpm(fpm + cue);
+  const attitude = ladder + atFpm(`<g data-hint-target="flight-path-marker">${fpm}</g>` + cue);
   const b = h.boresight.arm, dm = h.diamond;
-  const fixed = `<path d="M${n(-b)} 0H${n(b)}M0 ${n(-b)}V${n(b)}" ${pen}/>`;
+  const fixed = `<path data-hint-target="boresight-cross" d="M${n(-b)} 0H${n(b)}M0 ${n(-b)}V${n(b)}" ${pen}/>`;
   const steerpoint = shift('steerpoint-azimuth', 'x', D, shift('steerpoint-elevation', 'y', -D, `<path d="M0 ${n(-dm)}L${n(dm)} 0L0 ${n(dm)}L${n(-dm)} 0Z" ${pen}/>`));
   // Tapes: ticks and labels move inside windows fixed on the HUD; the index and readout box stay put. A HUD only adds light, so
   // the box is an outline and the symbol generator leaves the tape out of it: a mask cuts the box (and a pen's width round it) out.
