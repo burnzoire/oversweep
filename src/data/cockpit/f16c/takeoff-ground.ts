@@ -26,7 +26,8 @@ const rw = (p: [number, number]): [number, number] => [east(p) * Math.sin(HEAD) 
 export const RUNWAY = { length: Math.hypot(east(RW1), north(RW1)), half: (of('runway')[0].widthM ?? 45) * 3.2808 / 2, heading: (HEAD * 180) / Math.PI };
 
 type P3 = [number, number, number];
-export interface View { u: number; eye: number; pitch: number }
+/** `top`: draw plan view instead (mm a foot, x along the runway, y to its right), for checking the drawing against aerial imagery. */
+export interface View { u: number; eye: number; pitch: number; top?: number }
 
 const NEAR = 3;
 function camera(view: View) {
@@ -53,6 +54,7 @@ function clip(pts: P3[]): P3[] {
 export function takeoffGround(view: View, pitch = view.pitch) {
   const cam = camera(view);
   const poly = (pts: P3[], fill: string, extra = '') => {
+    if (view.top) return `<path d="M${pts.map(([u, v]) => `${n(u * view.top!)} ${n(v * view.top!)}`).join('L')}Z" fill="${fill}"${extra}/>`;
     const q = clip(pts.map(cam));
     return q.length < 3 ? '' : `<path d="M${q.map(toMm).join('L')}Z" fill="${fill}"${extra}/>`;
   };
@@ -67,6 +69,7 @@ export function takeoffGround(view: View, pitch = view.pitch) {
   const L = RUNWAY.length, H = RUNWAY.half;
   const dist = (u: number, v = 0) => Math.hypot(u - view.u, v);
   const light = (u: number, v: number, fill: string, z = 1.5) => {
+    if (view.top) return `<circle cx="${n(u * view.top)}" cy="${n(v * view.top)}" r="0.5" fill="${fill}"/>`;
     const q = cam([u, v, z]);
     if (q[0] < NEAR * 3) return '';
     const [x, y] = toMm(q).split(' ').map(Number);
@@ -74,20 +77,24 @@ export function takeoffGround(view: View, pitch = view.pitch) {
   };
 
   // Ground and haze, then distant hills.
-  let out = `<g stroke="none"><path d="M-200 ${horizon}H200V140H-200Z" fill="#6f7347"/>`;
-  out += [[0.8, 0.22], [1.6, 0.18], [2.6, 0.14], [3.8, 0.1], [5.2, 0.08], [7, 0.05]].map(([deg, op]) => `<rect x="-200" y="${horizon}" width="400" height="${n(deg * MM_DEG)}" fill="#c4c39a" fill-opacity="${op}"/>`).join('');
+  let out = view.top ? `<g stroke="none"><rect x="-2000" y="-2000" width="9000" height="4000" fill="#6f7347"/>` : `<g stroke="none"><path d="M-200 ${horizon}H200V140H-200Z" fill="#6f7347"/>`;
+  if (!view.top) out += [[0.8, 0.22], [1.6, 0.18], [2.6, 0.14], [3.8, 0.1], [5.2, 0.08], [7, 0.05]].map(([deg, op]) => `<rect x="-200" y="${horizon}" width="400" height="${n(deg * MM_DEG)}" fill="#c4c39a" fill-opacity="${op}"/>`).join('');
   out += FIELDS.map(([u, v, l, w, fill]) => rect(u, u + l, v, v + w, fill)).join('');
   // The airfield: grass inside the boundary, the apron, taxiways, runway.
   out += AERODROME.map(r => flat(r, '#7c8352')).join('') + APRON.map(r => flat(r, '#8d8a80')).join('');
   out += TAXIWAYS.map(t => strip(t.line, t.w, '#55524b') + strip(t.line, 1.2, '#b9a64a')).join('');
-  out += rect(0, L, -H, H, '#413f3a');
-  // Runway markings: edge lines, centreline, threshold bars, numbers and the aiming point.
-  out += rect(0, L, -H + 3, -H + 4.6, '#d9d7ce') + rect(0, L, H - 4.6, H - 3, '#d9d7ce');
-  for (let u = 260; u + 98 < L - 200; u += 164) out += rect(u, u + 98, -1.6, 1.6, '#d9d7ce');
-  for (let i = 0; i < 14; i++) { const v = -H + 12 + i * ((2 * H - 24) / 13); out += rect(12, 112, v - 2.4, v + 2.4, '#d9d7ce'); }
-  out += NUMBERS.map(r => rect(r[0], r[1], r[2], r[3], '#d9d7ce')).join('');
-  out += rect(1000, 1150, -60, -27, '#d9d7ce') + rect(1000, 1150, 27, 60, '#d9d7ce');
-  out += rect(L - 112, L - 12, -H + 8, H - 8, '#413f3a');
+  // Measured on the aerial imagery of the runway frame: concrete 193 ft wide with shoulders (v -98 to +95), a dark asphalt
+  // strip (v -15 to +48) between 100 ft and 100 ft from the ends, pads beyond both ends, and the markings below.
+  out += rect(-230, 0, -98, 52, '#85847e') + rect(L, L + 210, -95, 82, '#85847e') + rect(0, L, -98, 95, '#7e7d78');
+  out += rect(100, L - 100, -15, 48, '#403e3a');
+  const white = '#dedcd3';
+  out += rect(0, L, -H - 2, -H, white) + rect(0, L, H, H + 2, white);
+  for (let u = 260; u + 98 < L - 200; u += 164) out += rect(u, u + 98, -0.6, 0.6, '#b9b7ae');
+  // Threshold bars at both ends: 14 stripes along the runway, 100 ft long.
+  for (let i = 0; i < 14; i++) { const v = -H + 4 + i * ((2 * H - 8) / 13); out += rect(0, 100, v - 2.2, v + 2.2, white) + rect(L - 95, L, v - 2.2, v + 2.2, white); }
+  // Aiming point bars at 1,000 ft and touchdown zone bars at 500 ft (and the far end's, 1,000 ft and 500 ft from it).
+  for (const [u0, l] of [[960, 100], [475, 70], [L - 1030, 80], [L - 535, 80]] as [number, number][]) out += rect(u0, u0 + l, -45, -28, white) + rect(u0, u0 + l, 30, 47, white);
+  out += NUMBERS.map(r => rect(r[0], r[1], r[2], r[3], white)).join('');
   // Lights: edge (white; yellow for the last 2,000 ft), threshold (green) and runway end (red), and the taxiway edges (blue).
   for (let u = 0; u <= L; u += 200) { const fill = u > L - 2000 ? '#e8d46a' : '#f2f0e4'; out += light(u, -H - 9, fill) + light(u, H + 9, fill); }
   for (let v = -H - 9; v <= H + 9; v += 12) out += light(L + 3, v, '#d94b3b');
@@ -124,11 +131,11 @@ export function takeoffGround(view: View, pitch = view.pitch) {
 const FIELDS: [number, number, number, number, string][] = (() => {
   let s = 11;
   const rand = () => { s = (s * 1664525 + 1013904223) % 4294967296; return s / 4294967296; };
-  const tones = ['#6c7348', '#807c52', '#5f6a43', '#8a8456', '#68703f', '#76744c'];
+  const tones = ['#4f6a3a', '#5b7442', '#46603a', '#6b7a48', '#56703e', '#62703f'];
   const out: [number, number, number, number, string][] = [];
   for (let i = 0; i < 260; i++) {
     const u = -1200 + rand() * 12500, side = rand() < 0.5 ? -1 : 1, v = side * (320 + rand() ** 1.4 * 3400);
-    out.push([u, side > 0 ? v : v - 60, 120 + rand() * 700, 60 + rand() * 420, tones[Math.floor(rand() * tones.length)]]);
+    out.push([u, side > 0 ? v : v - 60, 80 + rand() * 320, 50 + rand() * 220, tones[Math.floor(rand() * tones.length)]]);
   }
   return out;
 })();
@@ -146,7 +153,7 @@ const BUILDINGS = ringsOf('terminal').map(ring => ({ ring, h: 30 }));
 
 /** The runway number "13" painted at the start, upright to the pilot rolling along it: seven-segment rectangles [u0, u1, v0, v1]. */
 const NUMBERS: [number, number, number, number][] = (() => {
-  const t = 5, h = 60, w = 24, out: [number, number, number, number][] = [], u0 = 150;
+  const t = 2.5, h = 30, w = 10, out: [number, number, number, number][] = [], u0 = 135;
   const seg = (dv: number, parts: string) => {
     const vl = dv, vr = dv + w, um = u0 + h / 2;
     if (parts.includes('a')) out.push([u0 + h - t, u0 + h, vl, vr]);
@@ -157,8 +164,8 @@ const NUMBERS: [number, number, number, number][] = (() => {
     if (parts.includes('b')) out.push([um, u0 + h, vr - t, vr]);
     if (parts.includes('c')) out.push([u0, um, vr - t, vr]);
   };
-  seg(-34, 'bc');
-  seg(8, 'abgcd');
+  seg(-12, 'bc');
+  seg(2, 'abgcd');
   return out;
 })();
 
