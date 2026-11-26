@@ -104,7 +104,7 @@ const hudDiamond = (to: [number, number], n: number) => {
   return { 'hud.steerpoint-azimuth': +d.az.toFixed(1), 'hud.steerpoint-elevation': -+d.down.toFixed(1), 'hud.steering-cue': +d.az.toFixed(1), 'hud.steering': +d.az.toFixed(0), 'hud.steerpoint-distance': Math.round(d.nm), 'hud.slant-range': +d.nm.toFixed(1), 'hud.ttg': Math.round((d.nm / 330) * 3600), 'hud.steerpoint': n };
 };
 const HUD_MARK = { 'hud.altitude': 3820, 'hud.velocity': 350, 'hud.mach': 0.57, 'hud.heading': HSD_HEADING, 'hud.roll': 0, 'hud.fpm-azimuth': 0, 'hud.g': 1, 'hud.max-g': 2.4, 'hud.radar-alt': GROUND.agl, ...levelHud(GROUND.pitch), ...hudDiamond(SPT[3], 3) };
-// Takeoff: an AB takeoff from the start of Batumi's runway 13 (takeoff-motion.ts). Every frame redraws the ground behind the HUD.
+// Takeoff: an AB takeoff from the start of Batumi's runway 12 (takeoff-motion.ts). Every frame redraws the ground behind the HUD.
 const WHEELS = ['landing-gear.wheels-nose', 'landing-gear.wheels-left', 'landing-gear.wheels-right'];
 const NWS_LIT = 'ar-nws-indicator.ar-nws';
 const ENGINE = (rpm: number, noz: number, ftit: number, oil: number) => ({ 'engine-instruments.rpm': rpm, 'engine-instruments.noz-pos': noz, 'engine-instruments.ftit': ftit, 'engine-instruments.oil': oil, 'hyd-pressure.hyd-a': 3000, 'hyd-pressure.hyd-b': 3000 });
@@ -259,7 +259,7 @@ const SCENARIOS: Record<string, Scenario> = {
     slew: { step: 'slew', on: 'gm', free: 'gm-free', done: 'gm-on', display: 'left', freeOnMove: true, what: 'runways’ midpoint', ...GM_SLEW },
   },
   takeoff: {
-    // Lined up on runway 13, brakes held, NWS engaged (the AR/NWS light), the HUD on in NAV, the engine at idle.
+    // Lined up on runway 12, brakes held, NWS engaged (the AR/NWS light), the HUD on in NAV, the engine at idle.
     initial: {
       mfd: 'off', left: 'off', ded: 'off', lit: [...WHEELS, NWS_LIT],
       x: { 'hud.screen': 'on', 'hud.ground': 'takeoff', 'hud.master-arm': 'none', 'hud.master-mode': 'nav', 'hud.harm-cues': 'none', 'hud.soi': 'off', 'hud.slant-range-source': 'b' },
