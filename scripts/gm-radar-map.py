@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Radar ground map picture for the FCR mark procedure: python3 -I scripts/gm-radar-map.py <out.webp>
+"""Radar ground map picture for the FCR mark procedure: python3 -I scripts/gm-radar-map.py <out.webp> [--placeholder]
 
 A plan-position radar picture of Abu al-Duhur air base as the F-16C's FCR (GM mode) would show it from the markpoint
 scenario's jet: level 4 NM short of the southern runway's midpoint, heading 267, on the 10 NM range scale. It is an
@@ -88,6 +88,15 @@ img = np.where(inside, img, 0)
 # Tone: the range falls off a little with distance, as the return weakens.
 rng_nm = np.hypot(gx - OWN[0], gy - OWN[1]) / PX_NM
 img = img * (1.0 - 0.012 * rng_nm) * 0.82
+if '--placeholder' in sys.argv:
+    # To-scale guide for painting the final art (ChatGPT, prompt in docs/art/gm-radar-prompts.md): flat tones, one per kind of ground.
+    flat = np.full((N, N), 120.0)
+    flat = flat * (1 - aero) + 85 * aero
+    flat = flat * (1 - apron) + 170 * apron
+    flat = flat * (1 - taxi) + 45 * taxi
+    flat = flat * (1 - run) + 8 * run
+    flat = flat * (1 - hangar) + 240 * hangar
+    img = np.where(inside, flat, 0)
 out = Image.fromarray(np.clip(img, 0, 255).astype(np.uint8), 'L')
 out.save(sys.argv[1], quality=72, method=6)
 print('wrote', sys.argv[1], out.size)
