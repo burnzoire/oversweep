@@ -61,7 +61,8 @@ export function takeoffGround(view: View, pitch = view.pitch) {
   const flat = (pts: [number, number][], fill: string, z = 0) => poly(pts.map(([u, v]) => [u, v, z] as P3), fill);
   const rect = (u0: number, u1: number, v0: number, v1: number, fill: string) => flat([[u0, v0], [u1, v0], [u1, v1], [u0, v1]], fill);
   /** A strip along a line of runway-frame points, `w` feet wide. */
-  const strip = (line: [number, number][], w: number, fill: string) => line.slice(1).map((b, i) => {
+  const disk = ([u, v]: [number, number], r: number, fill: string) => flat(Array.from({ length: 14 }, (_, k) => [u + r * Math.cos((k * Math.PI) / 7), v + r * Math.sin((k * Math.PI) / 7)] as [number, number]), fill);
+  const strip = (line: [number, number][], w: number, fill: string) => line.map(q => disk(q, w / 2, fill)).join('') + line.slice(1).map((b, i) => {
     const a = line[i], len = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1, nu = -(b[1] - a[1]) / len * w / 2, nv = (b[0] - a[0]) / len * w / 2;
     return flat([[a[0] + nu, a[1] + nv], [b[0] + nu, b[1] + nv], [b[0] - nu, b[1] - nv], [a[0] - nu, a[1] - nv]], fill);
   }).join('');
@@ -82,11 +83,18 @@ export function takeoffGround(view: View, pitch = view.pitch) {
   out += FIELDS.map(([u, v, l, w, fill]) => rect(u, u + l, v, v + w, fill)).join('');
   // The airfield: grass inside the boundary, the apron, taxiways, runway.
   out += AERODROME.map(r => flat(r, '#7c8352')).join('') + APRON.map(r => flat(r, '#8d8a80')).join('');
-  out += TAXIWAYS.map(t => strip(t.line, t.w, '#55524b') + strip(t.line, 1.2, '#b9a64a')).join('');
+  out += TAXIWAYS.map(t => strip(t.line, t.w, '#7e7d78') + strip(t.line, 1.2, '#b9a64a')).join('');
   // Measured on the aerial imagery of the runway frame: concrete 193 ft wide with shoulders (v -98 to +95), a dark asphalt
   // strip (v -15 to +48) between 100 ft and 100 ft from the ends, pads beyond both ends, and the markings below.
   out += rect(-230, 0, -98, 52, '#85847e') + rect(L, L + 210, -95, 82, '#85847e') + rect(0, L, -98, 95, '#7e7d78');
-  out += rect(100, L - 100, -15, 48, '#403e3a');
+  // Tyre marks where the aerial shows them, at the touchdown spots near each end (not the whole length).
+  for (const [u0, u1, v0, v1] of [[100, 640, -13, 47], [7020, 8130, -28, 48]] as number[][]) {
+    for (let i = 0; i < 14; i++) {
+      const r1 = ((i * 7919) % 97) / 97, r2 = ((i * 104729) % 89) / 89, r3 = ((i * 15485863) % 83) / 83;
+      const len = 40 + r1 * 170, a = u0 + r2 * (u1 - u0 - len), v = v0 + 3 + r3 * (v1 - v0 - 6);
+      out += rect(a, a + len, v - 2.2, v + 2.2, i % 3 ? '#57554f' : '#4a4844');
+    }
+  }
   const white = '#dedcd3';
   out += rect(0, L, -H - 2, -H, white) + rect(0, L, H, H + 2, white);
   for (let u = 260; u + 98 < L - 200; u += 164) out += rect(u, u + 98, -0.6, 0.6, '#b9b7ae');
