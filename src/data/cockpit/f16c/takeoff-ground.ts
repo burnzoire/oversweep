@@ -101,7 +101,8 @@ export function takeoffGround(view: View, pitch = view.pitch) {
   // Threshold bars at both ends: 14 stripes along the runway, 100 ft long.
   for (let i = 0; i < 14; i++) { const v = -H + 4 + i * ((2 * H - 8) / 13); out += rect(0, 100, v - 2.2, v + 2.2, white) + rect(L - 95, L, v - 2.2, v + 2.2, white); }
   // Aiming point bars at 1,000 ft and touchdown zone bars at 500 ft (and the far end's, 1,000 ft and 500 ft from it).
-  for (const [u0, l] of [[960, 100], [475, 70], [L - 1030, 80], [L - 535, 80]] as [number, number][]) out += rect(u0, u0 + l, -45, -28, white) + rect(u0, u0 + l, 30, 47, white);
+  out += rect(960, 1060, -45, -28, white) + rect(960, 1060, 30, 47, white);
+  for (const u0 of [475, L - 1030, L - 535]) for (const [va] of [[-45], [30]]) for (let k = 0; k < 3; k++) out += rect(u0, u0 + 75, va + k * 6.5, va + k * 6.5 + 4, white);
   out += NUMBERS.map(r => rect(r[0], r[1], r[2], r[3], white)).join('');
   // Lights: edge (white; yellow for the last 2,000 ft), threshold (green) and runway end (red), and the taxiway edges (blue).
   for (let u = 0; u <= L; u += 200) { const fill = u > L - 2000 ? '#e8d46a' : '#f2f0e4'; out += light(u, -H - 9, fill) + light(u, H + 9, fill); }
