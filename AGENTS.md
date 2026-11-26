@@ -85,30 +85,3 @@ Report actual changes, evidence, next steps and genuine blockers, not percentage
 Opening a PR is In Review; Complete requires delivered criteria, applicable checks,
 review and authorised merge. Keep aviation content maturity separate. No secrets
 or restricted/copyrighted manual dumps. See docs/development.md for details.
-
-## Working notes from the F-16C procedures
-
-- Keep threads lean. Procedure threads run on Sonnet; panel, drawing and tracing work
-  runs in separate Opus threads first. Self-check before showing the owner anything,
-  run the SME review once at the end, and hand off through memory, not long context.
-- Write briefs, code comments and scenario text in plain, neutral technical wording.
-  Dramatic or graphic outcome text has tripped automated content filters and got
-  threads refused. Describe the system and the procedure, not the effects. Procedures
-  stop at the last control action; add no outcome content after it.
-- Every procedure ends with a short summary of what the reader did.
-- Animate from one shared state record (`AircraftState` in
-  `src/data/cockpit/f16c/*-scene.ts`) that the HUD, radar scope and instruments
-  all read, so they never disagree. Author a few keyframes per step, ease the geometry
-  between them (`sampleScene`), keep discrete indications on their keyframes, and
-  start each step from the previous step's final frame so the scene carries over.
-- Sync instruments with flight data by deriving every reading (range, bearing,
-  closure, heading, DLZ poles, times) from one track computed once from the scenario,
-  never by typing numbers per display. Cross-check each displayed number against it.
-- Pull requests: fill in `.github/pull_request_template.md`. For any PR that changes how
-  the site looks, add screenshots of the affected pages (desktop 1280 wide, plus phone 390
-  wide where layout changes), shot from the built `dist/` with the preinstalled Playwright
-  and re-shot after visual changes. Host them on the orphan `pr-screenshots` branch, one
-  `pr-<n>/` folder per PR (never on main or the PR branch), and embed them with
-  `https://github.com/burnzoire/oversweep/blob/pr-screenshots/pr-<n>/<file>.png?raw=true`.
-  Add the `preview` label to show a PR live at `/?pr=<n>`. Never post GitHub comments
-  on the owner's behalf.
