@@ -166,7 +166,7 @@ interface MarkData { lat: string; lon: string; elev: string; mgrs: string }
 const EMPTY_MARK: MarkData = { lat: "N 00°00.000'", lon: "E000°00.000'", elev: '0FT', mgrs: '31NAA 66021/0' };
 const OVERFLY_MARK: MarkData = { lat: "N 35°43.938'", lon: "E037°06.246'", elev: '820FT', mgrs: '37SCV 28541/55914' };
 
-function markLines(sensor: 'HUD' | 'OFLY', data: MarkData, focus: MarkField = 'sensor', typed?: string, selected = false) {
+function markLines(sensor: 'HUD' | 'FCR' | 'OFLY', data: MarkData, focus: MarkField = 'sensor', typed?: string, selected = false) {
   const field = (key: MarkField, value: string, width: number, pad = '') => {
     const editing = focus === key && typed !== undefined;
     return stptField(editing ? typed : value, width, focus === key, editing, pad);
@@ -221,6 +221,11 @@ const MARK_PAGES: SPage[] = [
   { id: 'mark-ofly', label: 'MARK page: OFLY sensor option, markpoint 26 empty', lines: markLines('OFLY', EMPTY_MARK) },
   { id: 'mark-26', label: 'MARK page: markpoint 26 stored (OFLY)', lines: markLines('OFLY', OVERFLY_MARK) },
   { id: 'mark-26-stpt', label: 'MARK page: markpoint 26 is the selected steerpoint (STPT)', lines: markLines('OFLY', OVERFLY_MARK, 'sensor', undefined, true) },
+  { id: 'mark-hud-26', label: 'MARK page: markpoint 26 stored (HUD)', lines: markLines('HUD', OVERFLY_MARK) },
+  { id: 'mark-hud-26-stpt', label: 'MARK page: markpoint 26 is the selected steerpoint (HUD, STPT)', lines: markLines('HUD', OVERFLY_MARK, 'sensor', undefined, true) },
+  { id: 'mark-fcr', label: 'MARK page: FCR sensor option, markpoint 26 empty', lines: markLines('FCR', EMPTY_MARK) },
+  { id: 'mark-fcr-26', label: 'MARK page: markpoint 26 stored (FCR)', lines: markLines('FCR', OVERFLY_MARK) },
+  { id: 'mark-fcr-26-stpt', label: 'MARK page: markpoint 26 is the selected steerpoint (FCR, STPT)', lines: markLines('FCR', OVERFLY_MARK, 'sensor', undefined, true) },
   { id: 'cni-26', label: 'CNI page, markpoint 26 selected', lines: cniLines('T 21X', 26) },
   ...manualMarkPages(),
 ];

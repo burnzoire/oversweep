@@ -1,6 +1,7 @@
 import type { HudTape, PanelSpec } from '../types';
 import { tracer } from '../trace.ts';
 import { ASEC, RETICLE, asecDeg, type MrmView } from './mrm.ts';
+import { FPM_AT, MIDPOINT, airfieldGround } from './hud-ground.ts';
 import { MOMENTS, SCENE_MOTIONS, relativeBearing, sceneFrame, sceneView, type MomentId, type SceneFrame } from './aim120-scene.ts';
 
 /**
@@ -316,6 +317,17 @@ export const MRM_CUES = [
   })),
 ];
 
+/**
+ * The HUD mark cue (guide pp. 221-222), shown with the MARK page's HUD sensor option. Caged it rides the flight path marker
+ * (figure, p. 221 top: a small ring inside the marker's circle); slewed it is drawn as a small ring with a dot at its
+ * centre, on the ground point it marks (p. 221 lower: on the runway, about the size of the marker's circle). The guide
+ * does not give its size: drawn a little smaller than the marker's circle (r 6 px).
+ */
+export const markCue = (id: string, at?: [number, number]) => at
+  ? { id, art: ringAt(at, 5.5, 24) + ringAt(at, 1.1, 10), texts: [], keepHeading: true }
+  : { id, art: ringAt(FPM_AT, 2.4, 14), texts: [], keepHeading: true };
+export const MARK_CUES = [markCue('mark-caged'), markCue('mark-free', FPM_AT), markCue('mark-on', MIDPOINT)];
+harmCues.pages.push(...MARK_CUES);
 harmCues.pages.push(...MRM_CUES);
 const MODES = ['NAV', 'CCIP', 'CCRP', 'DTOS', 'LADD', 'MAN', 'VIS', 'PRE', 'BORE', 'STRF', 'HARM', 'HTS', 'AAM', 'MSL', 'DGFT', 'MRM', 'SRM', 'HOB', 'EEGS', 'JETT'];
 const num = (id: string, name: string, unit: string, rest: number, range: [number, number, number], description: string) =>
@@ -397,11 +409,13 @@ export const hud: PanelSpec = {
         ],
         boxes: [box(674, 280, 719, 296.7)],
         cues: harmCues,
+        ground: { id: 'ground', pages: { none: '', airfield: airfieldGround() } },
       },
     },
   ],
   controls: [],
   indicators: [
+    word('ground', 'Outside view', [{ id: 'none', label: '(sky only)' }, { id: 'airfield', label: 'Abu al-Duhur ahead' }], 'none', 'What is seen through the glass behind the symbology: only sky and a plain ground in the guide figure, or, in the markpoint procedures, the air base 4 NM ahead, drawn from its map data.'),
     word('screen', 'HUD', [{ id: 'on', label: 'On' }, { id: 'off', label: 'Off' }], 'off', 'The HUD picture. Cold and dark it is blank.'),
     num('fpm-azimuth', 'Flight path marker (left/right)', '°', -0.35, [-10, 10, 0.1], 'Flight path marker: the aircraft\'s inertial velocity vector, a circle with wings at 3 and 9 o\'clock and a tail at 12. Its offset left or right of the boresight cross, in degrees (drift); the attitude bars slide sideways with it.'),
     num('fpm-elevation', 'Flight path marker (up/down)', '°', -3.42, [-20, 5, 0.1], 'The flight path marker\'s height above (+) or below (−) the boresight cross, in degrees; below it by about the angle of attack.'),
@@ -422,7 +436,7 @@ export const hud: PanelSpec = {
     num('mach', 'Mach', 'M', 0.61, [0, 2.2, 0.01], 'Mach number to the hundredth.'),
     num('max-g', 'Maximum G', 'g', 5.7, [-9.9, 9.9, 0.1], 'Highest load factor of the flight; WARN RESET on the ICP resets it to 1.0.'),
     word('align', 'INS alignment cue (ALIGN)', [{ id: 'none', label: '(blank)' }, { id: 'align', label: 'ALIGN' }], 'none', 'ALIGN, in the place of the maximum G readout, while the INS alignment is usable for navigation (steady) and fully aligned (flashing); gone once the INS knob is in NAV. While it shows, the maximum G is not drawn.'),
-    word('harm-cues', 'HARM launch cues', [{ id: 'none', label: '(none)' }, { id: 'amz', label: 'AMZ: loft cues, launch scale, FOV box steady' }, { id: 'mmz', label: 'MMZ: FOV box flashing, in range' }, { id: 'aa-tll', label: 'A-A: target locator line toward a bugged target outside the HUD' }, { id: 'aa-td', label: 'A-A: target designator box on the bugged target' }, ...MRM_CUES.map(c => ({ id: c.id, label: `AIM-120: ${c.id.slice(4)}` }))], 'none', 'Weapon and target cues. Air-to-air: the target designator box over the FCR target of interest, with its altitude below, or, when it is outside the HUD, the target locator line from the boresight cross toward it and the angle off the nose (guide pp. 405-406). AGM-88: the POS launch cues (guide pp. 663-664): the azimuth steering line, the minimum and maximum loft ticks on it, the HARM launch scale (HLS) staple on the right with a caret for the present range and the loft angle needed (an A prefix inside the missile maneuver zone), the release altitude under it, and the FOV box, which flashes when the missile is in range and the weapon release button is hot.'),
+    word('harm-cues', 'HARM launch cues', [{ id: 'none', label: '(none)' }, { id: 'amz', label: 'AMZ: loft cues, launch scale, FOV box steady' }, { id: 'mmz', label: 'MMZ: FOV box flashing, in range' }, { id: 'aa-tll', label: 'A-A: target locator line toward a bugged target outside the HUD' }, { id: 'aa-td', label: 'A-A: target designator box on the bugged target' }, ...MRM_CUES.map(c => ({ id: c.id, label: `AIM-120: ${c.id.slice(4)}` })), ...MARK_CUES.map(c => ({ id: c.id, label: `Mark cue: ${c.id.slice(5)} (caged to the flight path marker, slewed, or on the ground point)` }))], 'none', 'Weapon and target cues. Mark cue (markpoint HUD sensor option, guide pp. 221-222): a small ring on the ground point it marks, or inside the flight path marker while caged. Air-to-air: the target designator box over the FCR target of interest, with its altitude below, or, when it is outside the HUD, the target locator line from the boresight cross toward it and the angle off the nose (guide pp. 405-406). AGM-88: the POS launch cues (guide pp. 663-664): the azimuth steering line, the minimum and maximum loft ticks on it, the HARM launch scale (HLS) staple on the right with a caret for the present range and the loft angle needed (an A prefix inside the missile maneuver zone), the release altitude under it, and the FOV box, which flashes when the missile is in range and the weapon release button is hot.'),
     word('master-mode', 'Master mode', [...P(...MODES), { id: 'mrm4', label: '4 MRM' }, { id: 'mrm3', label: '3 MRM' }], 'nav', 'Master mode, air-to-air missile type or air-to-ground submode.'),
     num('bullseye-bearing', 'Bullseye bearing', '°', 324, [0, 359, 1], 'Ownship bearing from the bullseye, when bullseye is on and no fuel message shows.'),
     num('bullseye-range', 'Bullseye range', 'NM', 53, [0, 999, 1], 'Ownship range from the bullseye, nautical miles.'),

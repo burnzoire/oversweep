@@ -14,8 +14,11 @@ import { MAV_D_SLEW3, MAV_D_SLEW7, MAV_SLEW } from '../data/cockpit/f16c/mfd-mav
 import { TGP_SLEW_B, TGP_SLEW_T } from '../data/cockpit/f16c/mfd-tgp';
 import { AIM_SLEW, FCR_SLEW, aimFcr } from '../data/cockpit/f16c/mfd-fcr';
 import { TWO_SLEW } from '../data/cockpit/f16c/mfd-fcr-two';
+import { GM_SLEW } from '../data/cockpit/f16c/mfd-fcr-gm';
 import { SCENE_MOTIONS, sampleScene, sceneFrame, type SceneFrame, type SceneMotion } from '../data/cockpit/f16c/aim120-scene';
-import { aimCue, boreAwayCue, hudFont } from '../data/cockpit/f16c/hud';
+import { aimCue, boreAwayCue, hudFont, markCue } from '../data/cockpit/f16c/hud';
+import { FPM_AT, GROUND, MIDPOINT } from '../data/cockpit/f16c/hud-ground';
+import { HSD_HEADING, JET, SPT, bearingRange } from '../data/cockpit/f16c/mfd-hsd';
 import { mfdDisplay } from '../data/cockpit/f16c/mfd';
 import { renderHudCue, renderMfdPage } from '../data/cockpit/render';
 
@@ -57,7 +60,7 @@ interface Scenario {
 }
 interface Dial { step: string; control: string; page: string; ok: string[]; /** Positions where the thing looked for shows, but off `ok`. */ seen: string[]; display: 'left' | 'right'; prompt: string; near: string; done: string }
 /** A slew: from page `on` (drawn as `free` while slewed), ending on `done` once the cursor is within `reach` of `target`. Several may run, one per step. */
-interface Slew { /** Whether the thing steered is a cursor (the FCR's, on the left MFD) rather than crosshairs. */ cursor?: boolean; step: string; on: string; free: string; done: string; target: [number, number]; start: [number, number]; reach: number; speed: number; box: [number, number, number, number]; display?: 'left' | 'right'; what?: string; along?: [number, number]; freeOnMove?: boolean }
+interface Slew { /** The HUD mark cue is slewed (on the HUD's `harm-cues` pages: `on` caged, `free` while moving, `done` on the target) rather than an MFD cursor; `cur` and `box` are HUD figure pixels. */ hud?: boolean; /** What the prompt calls the thing moved (the cursor, by default). */ noun?: string; /** Whether the thing steered is a cursor (the FCR's, on the left MFD) rather than crosshairs. */ cursor?: boolean; step: string; on: string; free: string; done: string; target: [number, number]; start: [number, number]; reach: number; speed: number; box: [number, number, number, number]; display?: 'left' | 'right'; what?: string; along?: [number, number]; freeOnMove?: boolean }
 interface ScanTiming { step: string; secs: number[]; ms: number; caption: string; display?: 'left' | 'right'; prompt?: string }
 type Scan = ScanTiming & (
   | { pages: (string | Pages)[]; motion?: never; sample?: never }
@@ -87,6 +90,18 @@ const boreAway: Scan = {
 const levelHud = (pitch: number) => ({ 'hud.pitch': pitch, 'hud.fpm-elevation': -pitch });
 
 const HUD_CAP = { 'hud.altitude': 28000, 'hud.velocity': 370, 'hud.mach': 0.92, 'hud.heading': 360, 'hud.pitch': 0, 'hud.roll': 0, 'hud.fpm-azimuth': 0, 'hud.fpm-elevation': 0, 'hud.steerpoint-azimuth': 0, 'hud.steerpoint-elevation': -24.7, 'hud.steering-cue': 0, 'hud.slant-range': 11, 'hud.steerpoint-distance': 10, 'hud.steerpoint': 1, 'hud.ttg': 65, 'hud.radar-alt': 27000 };
+
+// HUD mark: the jet 4 NM short of the runway midpoint, level at 3,000 ft above the ground (3,820 ft on the altimeter, the field at 820 ft).
+// The steerpoint diamond sits where the selected steerpoint is: steerpoint 3 on the horizon, 34 NM out and a little left, or the markpoint on the ground ahead.
+const diamond = (to: [number, number]) => {
+  const { brg, nm } = bearingRange(JET.start, to);
+  return { az: ((brg - HSD_HEADING + 540) % 360) - 180, down: GROUND.pitch + (Math.atan((GROUND.agl / 6076.12) / nm) * 180) / Math.PI, nm };
+};
+const hudDiamond = (to: [number, number], n: number) => {
+  const d = diamond(to);
+  return { 'hud.steerpoint-azimuth': +d.az.toFixed(1), 'hud.steerpoint-elevation': -+d.down.toFixed(1), 'hud.steering-cue': +d.az.toFixed(1), 'hud.steering': +d.az.toFixed(0), 'hud.steerpoint-distance': Math.round(d.nm), 'hud.slant-range': +d.nm.toFixed(1), 'hud.ttg': Math.round((d.nm / 330) * 3600), 'hud.steerpoint': n };
+};
+const HUD_MARK = { 'hud.altitude': 3820, 'hud.velocity': 350, 'hud.mach': 0.57, 'hud.heading': HSD_HEADING, 'hud.roll': 0, 'hud.fpm-azimuth': 0, 'hud.g': 1, 'hud.max-g': 2.4, 'hud.radar-alt': GROUND.agl, ...levelHud(GROUND.pitch), ...hudDiamond(SPT[3], 3) };
 const SCENARIOS: Record<string, Scenario> = {
   // F-16C air-to-air radar (mfd-fcr.ts): the FCR on the left MFD; a CAP at 28,000 ft heading 360°, the CAP point 10 NM ahead.
   'fcr-tws': {
@@ -199,6 +214,27 @@ const SCENARIOS: Record<string, Scenario> = {
       rtn: { ded: 'cni-26' },
     },
     slew: [],
+  },
+  'markpoint-hud': {
+    // As the OFLY procedure's, but the jet is still 4 NM short of the runway and the HUD is the sensor; steerpoint 3 selected.
+    initial: { mfd: 'hsd-start', ded: 'cni-3', x: { 'hud.screen': 'on', 'hud.ground': 'airfield', 'hud.master-arm': 'none', 'hud.master-mode': 'nav', 'hud.harm-cues': 'none', 'hud.soi': 'off', 'hud.slant-range-source': 'b' }, r: HUD_MARK },
+    after: {
+      mark: { ded: 'mark-hud', x: { 'hud.master-mode': 'vis', 'hud.soi': 'on', 'hud.harm-cues': 'mark-caged' } },
+      store: { ded: 'mark-hud-26', mfd: 'hsd-hud-marked' },
+      select: { ded: 'mark-hud-26-stpt', mfd: 'hsd-hud-sel', r: hudDiamond(SPT.mark, 26) },
+      range: { mfd: 'hsd-hud-30' },
+    },
+    slew: { hud: true, step: 'slew', on: 'mark-caged', free: 'mark-free', done: 'mark-on', noun: 'mark cue', what: 'runway’s midpoint', target: MIDPOINT, start: FPM_AT, reach: 7, speed: 170, box: [395, 70, 755, 415] },
+  },
+  'markpoint-fcr': {
+    // As the HUD mark's scene, the jet 4 NM short of the runway: the radar in ground map on the left MFD, the HSD on the right, steerpoint 3 selected.
+    initial: { left: 'gm-not-soi', mfd: 'hsd-start', ded: 'cni-3' },
+    after: {
+      soi: { left: 'gm' }, hold: { left: 'gm-ftt' }, mark: { ded: 'mark-fcr' },
+      store: { ded: 'mark-fcr-26', mfd: 'hsd-hud-marked' },
+      select: { ded: 'mark-fcr-26-stpt', mfd: 'hsd-hud-sel' },
+    },
+    slew: { step: 'slew', on: 'gm', free: 'gm-free', done: 'gm-on', display: 'left', freeOnMove: true, what: 'runways’ midpoint', ...GM_SLEW },
   },
   hts: {
     // The SOI starts on the left MFD, which shows the targeting pod (Slave, on the selected steerpoint).
@@ -360,7 +396,8 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   const sl = () => slews.find(x => x.step === stepId()) ?? [...slews].reverse().find(x => stepOf(x.step) < step) ?? slews[0];
   const slewLeft = () => sl().display === 'left';
   const dialing = () => !!dialNow() && !finished;
-  const slewing = () => stepId() === sl().step && !finished && (slewLeft() ? st.left : st.mfd) === sl().on;
+  const slewing = () => stepId() === sl().step && !finished && (sl().hud ? st.x['hud.harm-cues'] !== sl().done : (slewLeft() ? st.left : st.mfd) === sl().on);
+  const moved = () => sl().noun ?? (!sl().cursor && (sl().display === 'left' || sl().on.startsWith('tgp')) ? 'crosshairs' : 'cursor');
   function indicate() {
     // `freeOnMove`: the `on` page stays until the cursor first leaves its start (e.g. the TGP's CZ appears only once slewed).
     const s = sl(), free = s.freeOnMove && st.cur[0] === s.start[0] && st.cur[1] === s.start[1] ? s.on : s.free;
@@ -373,6 +410,12 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     const pages: Record<string, string> = { 'right-mfd.display': right, 'left-mfd.display': left, 'ded.display': st.ded, ...st.x };
     const readings = { ...st.r };
     const artwork = { ...st.artwork };
+    // The HUD mark cue while it is slewed: caged on the marker until it first moves, then drawn where the cursor has taken it.
+    if (slewing() && s.hud) {
+      const moving = st.cur[0] !== s.start[0] || st.cur[1] !== s.start[1];
+      pages['hud.harm-cues'] = moving ? s.free : s.on;
+      if (moving) artwork['hud.harm-cues'] = renderHudCue(hudFont, markCue(s.free, st.cur));
+    }
     if (frame) {
       const cue = aimCue(frame);
       const { heading, bank, pitch, range } = frame.aircraft;
@@ -411,10 +454,11 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     st.cur = [Math.min(x1, Math.max(x0, st.cur[0] + speed(defl.x) * dt)), Math.min(y1, Math.max(y0, st.cur[1] - speed(defl.y) * dt))];
     if (offTarget(st.cur) < sl().reach) {
       st.cur = [...sl().target];
-      if (slewLeft()) st.left = sl().done; else st.mfd = sl().done;
+      if (sl().hud) st.x = { ...st.x, 'hud.harm-cues': sl().done };
+      else if (slewLeft()) st.left = sl().done; else st.mfd = sl().done;
       stopSlew();
       indicate();
-      done(`The ${!sl().cursor && (sl().display === 'left' || sl().on.startsWith('tgp')) ? 'crosshairs are' : 'cursor is'} on the ${sl().what ?? 'radar'}.`);
+      done(`The ${moved()} ${moved() === 'crosshairs' ? 'are' : 'is'} on the ${sl().what ?? 'radar'}.`);
       return;
     }
     indicate();
@@ -454,7 +498,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     else if (moves(s).length === 1) say(`${cap(instruction(moves(s)[0]))}.`);
     else if (moves(s).length) say(`Make these moves, in any order: ${moves(s).map(instruction).join('; ')}.`);
     else if (s.type) say(`Press ${keyText(s.type.keys[0])} (key 1 of ${s.type.keys.length}).`);
-    else if (slewing()) say(`Steer the ${!sl().cursor && (sl().display === 'left' || sl().on.startsWith('tgp')) ? 'crosshairs' : 'cursor'} onto the ${sl().what ?? 'radar'}: press and drag on the RDR CURSOR switch.`);
+    else if (slewing()) say(`Steer the ${moved()} onto the ${sl().what ?? 'radar'}: press and drag on the RDR CURSOR switch.`);
     else if (dialing()) say(dialNow()!.ok.includes(dialAt()) ? `${dialNow()!.done} Check the indications, then continue.` : dialNow()!.prompt);
     else if (scanning) say(scanOf()?.prompt ?? 'Watch the HAD: each scan refines the position. Replay it or drag through it below.');
     else say('Check the indications, then confirm.');

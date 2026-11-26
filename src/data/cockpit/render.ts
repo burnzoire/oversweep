@@ -165,6 +165,7 @@ export function readings(spec: PanelSpec): Record<string, Reading> {
       const tape = (id: string, t: HudTape) => { out[id] = { kind: 'tape', per: t.axis === 'y' ? t.per : -t.per, axis: t.axis, format: t.readout.format, range: r(id, [t.from, t.to, 1]) }; };
       tape('velocity', h.velocity); tape('altitude', h.altitude); tape('heading', h.heading);
       for (const id of ['screen', 'velocity-mode']) page(id);
+      if (h.ground) page(h.ground.id);
       if (h.cues) { page(h.cues.id); shift('harm-asl', h.deg, 'x', [-10, 10, 0.1]); }
       for (const f of h.fields) {
         if (ind(f.indicator)?.pages) page(f.indicator);
@@ -208,7 +209,7 @@ export function placementIndicators(p: Placement): string[] {
     case 'counter': return [p.counter.indicator];
     case 'text-display': case 'mfd-display': case 'blinker': case 'flag-window': case 'led-display': return [p.indicator];
     case 'hsi': return [...HSI_INDICATORS];
-    case 'hud': return [...HUD_INDICATORS, ...(p.hud.cues ? [p.hud.cues.id, 'harm-asl'] : []), ...p.hud.fields.map(f => f.indicator)];
+    case 'hud': return [...HUD_INDICATORS, ...(p.hud.cues ? [p.hud.cues.id, 'harm-asl'] : []), ...(p.hud.ground ? [p.hud.ground.id] : []), ...p.hud.fields.map(f => f.indicator)];
     case 'attitude': return ['pitch', 'roll', 'off-flag'];
     default: return [];
   }
@@ -302,6 +303,7 @@ export function renderMfdPage(d: MfdDisplay, id: string, page?: MfdDisplay['page
   for (const p of page?.paths ?? []) if (!p.fill) body += `<path d="${p.d}" fill="none" stroke="${MFD_COLOURS[p.c]}" ${sw(p.pen ?? 'medium')}${p.dash ? ' stroke-dasharray="2.2 1.4"' : ''}>${p.blink ? '<animate attributeName="opacity" values="1;0" calcMode="discrete" dur="0.8s" repeatCount="indefinite"/>' : ''}</path>`;
   if (page?.aid) body += `<path data-aid d="${page.aid}" fill="none" stroke="${MFD_AID}" stroke-dasharray="1.2 0.8" ${sw('fine')}/>`;
   if (page?.cursorX && page.cursor) body += `<g data-cursor-x="${id}" transform="translate(${n(page.cursor.at[0])} 0)"><path d="${page.cursorX.d}" fill="none" stroke="${MFD_COLOURS[page.cursorX.c]}" ${sw('medium')}/></g>`;
+  if (page?.cursorY && page.cursor) body += `<g data-cursor-y="${id}" transform="translate(0 ${n(page.cursor.at[1])})"><path d="${page.cursorY.d}" fill="none" stroke="${MFD_COLOURS[page.cursorY.c]}" ${sw('medium')}/></g>`;
   if (page?.cursor && !page.pan) body += `<g data-cursor="${id}" transform="translate(${n(page.cursor.at[0])} ${n(page.cursor.at[1])})"><path d="${page.cursor.d}" fill="none" stroke="${W}" ${sw('medium')}/></g>`;
   return body;
 }
@@ -498,7 +500,8 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
       return pg === 'none' || cue?.keepHeading ? tape('heading', h.heading) : tape('heading', h.cues!.heading!, '-hi');
     })}</g>`
     : tape('heading', h.heading);
-  const on = `<g clip-path="url(#${clip})">` + fixed + steerpoint + attitude + rollArt + cues +
+  const ground = h.ground ? `<g data-indicator="${h.ground.id}">${pages(h.ground.id, pg => h.ground!.pages[pg] ?? '')}</g>` : '';
+  const on = `<g clip-path="url(#${clip})">` + ground + fixed + steerpoint + attitude + rollArt + cues +
     tape('velocity', h.velocity) + tape('altitude', h.altitude) + heading + mode +
     h.boxes.map(d => `<path d="${d}" ${pen}/>`).join('') + fields + '</g>';
   return `<clipPath id="${clip}"><path d="${h.glass}"/></clipPath>` +
