@@ -2,6 +2,8 @@ import type { HudTape, PanelSpec } from '../types';
 import { tracer } from '../trace.ts';
 import { ASEC, RETICLE, asecDeg, type MrmView } from './mrm.ts';
 import { FPM_AT, MIDPOINT, airfieldGround } from './hud-ground.ts';
+import { takeoffGround } from './takeoff-ground.ts';
+import { TAKEOFF } from './takeoff-motion.ts';
 import { MOMENTS, SCENE_MOTIONS, relativeBearing, sceneFrame, sceneView, type MomentId, type SceneFrame } from './aim120-scene.ts';
 
 /**
@@ -409,13 +411,13 @@ export const hud: PanelSpec = {
         ],
         boxes: [box(674, 280, 719, 296.7)],
         cues: harmCues,
-        ground: { id: 'ground', pages: { none: '', airfield: airfieldGround() } },
+        ground: { id: 'ground', pages: { none: '', airfield: airfieldGround(), takeoff: takeoffGround({ u: TAKEOFF.start, eye: TAKEOFF.eye, pitch: TAKEOFF.pitchOnGround }) } },
       },
     },
   ],
   controls: [],
   indicators: [
-    word('ground', 'Outside view', [{ id: 'none', label: '(sky only)' }, { id: 'airfield', label: 'Abu al-Duhur ahead' }], 'none', 'What is seen through the glass behind the symbology: only sky and a plain ground in the guide figure, or, in the markpoint procedures, the air base 4 NM ahead, drawn from its map data.'),
+    word('ground', 'Outside view', [{ id: 'none', label: '(sky only)' }, { id: 'airfield', label: 'Abu al-Duhur ahead' }, { id: 'takeoff', label: 'Batumi runway 13 (takeoff roll)' }], 'none', 'What is seen through the glass behind the symbology: only sky and a plain ground in the guide figure, or, in the markpoint procedures, the air base 4 NM ahead, drawn from its map data.'),
     word('screen', 'HUD', [{ id: 'on', label: 'On' }, { id: 'off', label: 'Off' }], 'off', 'The HUD picture. Cold and dark it is blank.'),
     num('fpm-azimuth', 'Flight path marker (left/right)', '°', -0.35, [-10, 10, 0.1], 'Flight path marker: the aircraft\'s inertial velocity vector, a circle with wings at 3 and 9 o\'clock and a tail at 12. Its offset left or right of the boresight cross, in degrees (drift); the attitude bars slide sideways with it.'),
     num('fpm-elevation', 'Flight path marker (up/down)', '°', -3.42, [-20, 5, 0.1], 'The flight path marker\'s height above (+) or below (−) the boresight cross, in degrees; below it by about the angle of attack.'),

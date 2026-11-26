@@ -297,6 +297,14 @@ terms:
     expansion: Dual target track
     definition: "The radar mode that takes over from dual target SAM once either contact is inside 10 NM: the search stops and the radar only alternates between the two contacts, for the steadiest tracks at close range."
     cite: [{ n: 1, page: "420" }]
+  - term: NWS
+    expansion: Nosewheel steering
+    definition: "Steers the nosewheel from the rudder pedals on the ground. It is engaged and disengaged with the side stick's missile step button, and the AR/NWS light shows it engaged. It is disengaged during the takeoff roll, at 70 knots or sooner, so that large pedal inputs cannot oversteer the nosewheel."
+    cite: [{ n: 1, page: "45, 83, 146" }]
+  - term: KCAS
+    expansion: Knots calibrated airspeed
+    definition: "Airspeed corrected for the errors of the jet's own pitot-static system, in knots; the speed on the HUD's velocity scale in its default calibrated mode, and the one takeoff speeds and limits such as the 300 knot gear limit are given in."
+    cite: [{ n: 1, page: "92, 143, 146" }]
 sources:
   - n: 1
     title: "DCS: F-16C Viper Early Access Guide (English)"
