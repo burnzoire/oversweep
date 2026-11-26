@@ -55,8 +55,16 @@ export function takeoffGround(view: View, pitch = view.pitch) {
   const cam = camera(view);
   const poly = (pts: P3[], fill: string, extra = '') => {
     if (view.top) return `<path d="M${pts.map(([u, v]) => `${n(u * view.top!)} ${n(v * view.top!)}`).join('L')}Z" fill="${fill}"${extra}/>`;
-    const q = clip(pts.map(cam));
-    return q.length < 3 ? '' : `<path d="M${q.map(toMm).join('L')}Z" fill="${fill}"${extra}/>`;
+    const c = clip(pts.map(cam));
+    if (c.length < 3) return '';
+    // The angular mapping bends straight edges, so split long ones into short chords (finer where the edge is near).
+    const q: P3[] = [];
+    c.forEach((a, i) => {
+      const b = c[(i + 1) % c.length], len = Math.hypot(b[0] - a[0], b[1] - a[1], b[2] - a[2]), near = Math.max(NEAR, Math.min(a[0], b[0]));
+      const k = Math.min(64, Math.max(1, Math.ceil(len / (near * 0.15))));
+      for (let j = 0; j < k; j++) q.push([a[0] + (b[0] - a[0]) * j / k, a[1] + (b[1] - a[1]) * j / k, a[2] + (b[2] - a[2]) * j / k]);
+    });
+    return `<path d="M${q.map(toMm).join('L')}Z" fill="${fill}"${extra}/>`;
   };
   const flat = (pts: [number, number][], fill: string, z = 0) => poly(pts.map(([u, v]) => [u, v, z] as P3), fill);
   const rect = (u0: number, u1: number, v0: number, v1: number, fill: string) => flat([[u0, v0], [u1, v0], [u1, v1], [u0, v1]], fill);
