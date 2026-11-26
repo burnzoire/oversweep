@@ -20,6 +20,8 @@ import { aimCue, boreAwayCue, hudFont, markCue } from '../data/cockpit/f16c/hud'
 import { FPM_AT, GROUND, MIDPOINT } from '../data/cockpit/f16c/hud-ground';
 import { HSD_HEADING, JET, SPT, bearingRange } from '../data/cockpit/f16c/mfd-hsd';
 import { mfdDisplay } from '../data/cockpit/f16c/mfd';
+import { T as TO_T, TAKEOFF, takeoffAt, takeoffHud } from '../data/cockpit/f16c/takeoff-motion';
+import { takeoffGround } from '../data/cockpit/f16c/takeoff-ground';
 import { renderHudCue, renderMfdPage } from '../data/cockpit/render';
 
 interface StepDo { control: string; to: string; on?: 'press' | 'release'; /** Presses it takes (each short of the last shows `after['<step>-<n>']`). */ times?: number }
@@ -27,8 +29,8 @@ interface Typing { keys: string[]; pages: string[] }
 interface Step { id: string; panels: string[]; hints?: string[]; do?: StepDo; also?: StepDo[]; type?: Typing; confirm?: string }
 interface Config { aircraft: string; model: string; initial: Record<string, string>; labels: Record<string, string>; names: Record<string, string>; steps: Step[] }
 /** `pod`: ms of pod warm-up left (-1 off); `cur`: the HAD cursor while it is slewed by hand (page units); the rest name pages. */
-interface State { pod: number; /** The running warm-up (index into the scenario's). */ wk: number; mfd: string; left: string; ded: string; cur: [number, number]; /** Pages of other panels' indicators (`hud.master-arm`), by indicator. */ x: Record<string, string>; /** Other panels' number readings (`hud.slant-range`), by indicator. */ r?: Record<string, number>; scene?: SceneFrame; artwork?: Record<string, string> }
-type Pages = Partial<Pick<State, 'mfd' | 'left' | 'ded' | 'x' | 'r' | 'scene' | 'artwork'>>;
+interface State { /** Lamps lit (`panel.lamp`). */ lit: string[]; pod: number; /** The running warm-up (index into the scenario's). */ wk: number; mfd: string; left: string; ded: string; cur: [number, number]; /** Pages of other panels' indicators (`hud.master-arm`), by indicator. */ x: Record<string, string>; /** Other panels' number readings (`hud.slant-range`), by indicator. */ r?: Record<string, number>; scene?: SceneFrame; artwork?: Record<string, string> }
+type Pages = Partial<Pick<State, 'mfd' | 'left' | 'ded' | 'x' | 'r' | 'scene' | 'artwork' | 'lit'>>;
 
 /**
  * What each procedure's steps do to the displays. `after`: the pages once a step's moves are made; `slew`: the step
@@ -102,6 +104,26 @@ const hudDiamond = (to: [number, number], n: number) => {
   return { 'hud.steerpoint-azimuth': +d.az.toFixed(1), 'hud.steerpoint-elevation': -+d.down.toFixed(1), 'hud.steering-cue': +d.az.toFixed(1), 'hud.steering': +d.az.toFixed(0), 'hud.steerpoint-distance': Math.round(d.nm), 'hud.slant-range': +d.nm.toFixed(1), 'hud.ttg': Math.round((d.nm / 330) * 3600), 'hud.steerpoint': n };
 };
 const HUD_MARK = { 'hud.altitude': 3820, 'hud.velocity': 350, 'hud.mach': 0.57, 'hud.heading': HSD_HEADING, 'hud.roll': 0, 'hud.fpm-azimuth': 0, 'hud.g': 1, 'hud.max-g': 2.4, 'hud.radar-alt': GROUND.agl, ...levelHud(GROUND.pitch), ...hudDiamond(SPT[3], 3) };
+// Takeoff: an AB takeoff from the start of Batumi's runway 13 (takeoff-motion.ts). Every frame redraws the ground behind the HUD.
+const WHEELS = ['landing-gear.wheels-nose', 'landing-gear.wheels-left', 'landing-gear.wheels-right'];
+const NWS_LIT = 'ar-nws-indicator.ar-nws';
+const ENGINE = (rpm: number, noz: number, ftit: number, oil: number) => ({ 'engine-instruments.rpm': rpm, 'engine-instruments.noz-pos': noz, 'engine-instruments.ftit': ftit, 'engine-instruments.oil': oil, 'hyd-pressure.hyd-a': 3000, 'hyd-pressure.hyd-b': 3000 });
+const TAKEOFF_STEERPOINT = { 'hud.steerpoint-distance': 20, 'hud.slant-range': 20, 'hud.steerpoint': 1, 'hud.ttg': 0 };
+let lastTakeoff: { key: number; pages: Pages } | undefined;
+/** One frame of the roll: the readings, the ground behind the HUD and the lamps (the gear lights follow its travel; NWS stays lit until it is disengaged). */
+const takeoffPages = (seconds: number, nws: boolean): Pages => {
+  const key = Math.round(seconds * 30) * 2 + (nws ? 1 : 0);
+  if (lastTakeoff?.key === key) return lastTakeoff.pages;
+  const f = takeoffAt(Math.round(seconds * 30) / 30);
+  const transit = f.gear < 1 && f.gear > 0;
+  const lit = [...(f.gear >= 1 ? WHEELS : []), ...(transit ? ['landing-gear.gear-handle-light'] : []), ...(nws ? [NWS_LIT] : [])];
+  const r = { ...takeoffHud(f), ...TAKEOFF_STEERPOINT, 'hud.ttg': Math.round((20 / Math.max(f.kt, 150)) * 3600) };
+  const pages = { r, lit, artwork: { 'hud.ground': takeoffGround({ u: f.u, eye: TAKEOFF.eye + f.agl, pitch: f.pitch }) } };
+  lastTakeoff = { key, pages };
+  return pages;
+};
+const rollScan = (step: string, from: number, to: number, nws: boolean, caption: string, prompt: string): Scan => ({ step, secs: [from, to], ms: (to - from) * 1000, caption, prompt, sample: s => takeoffPages(s, nws) });
+const FRAME0 = takeoffAt(0);
 const SCENARIOS: Record<string, Scenario> = {
   // F-16C air-to-air radar (mfd-fcr.ts): the FCR on the left MFD; a CAP at 28,000 ft heading 360°, the CAP point 10 NM ahead.
   'fcr-tws': {
@@ -236,6 +258,27 @@ const SCENARIOS: Record<string, Scenario> = {
     },
     slew: { step: 'slew', on: 'gm', free: 'gm-free', done: 'gm-on', display: 'left', freeOnMove: true, what: 'runways’ midpoint', ...GM_SLEW },
   },
+  takeoff: {
+    // Lined up on runway 13, brakes held, NWS engaged (the AR/NWS light), the HUD on in NAV, the engine at idle.
+    initial: {
+      mfd: 'off', left: 'off', ded: 'off', lit: [...WHEELS, NWS_LIT],
+      x: { 'hud.screen': 'on', 'hud.ground': 'takeoff', 'hud.master-arm': 'none', 'hud.master-mode': 'nav', 'hud.harm-cues': 'none', 'hud.soi': 'off', 'hud.slant-range-source': 'b' },
+      r: { ...takeoffHud(FRAME0), ...TAKEOFF_STEERPOINT, 'hud.ttg': 480, ...ENGINE(68, 98, 570, 30) },
+      artwork: { 'hud.ground': takeoffGround({ u: FRAME0.u, eye: TAKEOFF.eye, pitch: FRAME0.pitch }) },
+    },
+    enter: { 'run-up': { r: ENGINE(90, 30, 650, 45) }, nws: { lit: WHEELS } },
+    after: {
+      gear: { lit: ['landing-gear.gear-handle-light'] },
+    },
+    slew: [],
+    scans: [
+      rollScan('release', 0, TO_T.thrust, true, 'after the brakes come off', 'The brakes are off and the jet starts to move. Watch the HUD, or replay it below.'),
+      rollScan('to70', TO_T.thrust, TO_T.v70, true, 'after the brakes come off', 'Watch the airspeed climb to 70 knots. Replay it or drag through it below.'),
+      rollScan('accel', TO_T.v70, TO_T.rotate, false, 'after the brakes come off', 'Watch the airspeed climb to the rotation speed. Replay it or drag through it below.'),
+      rollScan('rotate', TO_T.rotate, TO_T.positive, false, 'after the brakes come off', 'Watch the nose come up and the jet leave the runway. Replay it or drag through it below.'),
+      { step: 'gear-check', secs: [TO_T.positive, TO_T.gearDone], ms: (TO_T.gearDone - TO_T.positive) * 1000, caption: 'after the brakes come off', prompt: 'Watch the gear light and the airspeed while the gear comes up. Replay it or drag through it below.', sample: s => takeoffPages(s, false) },
+    ],
+  },
   hts: {
     // The SOI starts on the left MFD, which shows the targeting pod (Slave, on the selected steerpoint).
     initial: { mfd: 'menu-blank', left: 'tgp-soi', ded: 'cni' },
@@ -355,7 +398,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
   const slews = ([] as Slew[]).concat(sc.slew);
   if (!slews.length) slews.push(NO_SLEW);
   const warms = ([] as Warm[]).concat(sc.warm ?? POD_WARM);
-  const initialState = (): State => ({ pod: -1, wk: 0, mfd: 'off', left: 'off', ded: 'off', ...sc.initial, x: { ...sc.initial.x }, r: { ...sc.initial.r }, cur: [...slews[0].start] } as State);
+  const initialState = (): State => ({ lit: [], pod: -1, wk: 0, mfd: 'off', left: 'off', ded: 'off', ...sc.initial, x: { ...sc.initial.x }, r: { ...sc.initial.r }, cur: [...slews[0].start] } as State);
   const copy = (s: State): State => ({ ...s, cur: [...s.cur], x: { ...s.x }, r: { ...s.r } });
   /** Apply a step's page changes; `x` adds to the other panels' pages rather than replacing them. */
   /** The dial's position as it was left (`{dial}` in later pages). */
@@ -427,7 +470,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
       artwork['hud.harm-cues'] = renderHudCue(hudFont, cue);
       artwork['left-mfd.display'] = renderMfdPage(mfdDisplay, 'display', aimFcr(frame));
     }
-    dispatchEvent(new CustomEvent('cockpit:indicate', { detail: { pages, readings, cursors, artwork } }));
+    dispatchEvent(new CustomEvent('cockpit:indicate', { detail: { pages, readings, cursors, artwork, lit: st.lit } }));
   }
   const keyText = (k: string) => name(k).replace(/ (key|button)$/, '').replace(/ \/.*$/, '');
 

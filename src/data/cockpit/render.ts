@@ -500,7 +500,7 @@ function hud(spec: PanelSpec, h: HudDisplay, value: (id: string) => number, page
       return pg === 'none' || cue?.keepHeading ? tape('heading', h.heading) : tape('heading', h.cues!.heading!, '-hi');
     })}</g>`
     : tape('heading', h.heading);
-  const ground = h.ground ? `<g data-indicator="${h.ground.id}">${pages(h.ground.id, pg => h.ground!.pages[pg] ?? '')}</g>` : '';
+  const ground = h.ground ? `<g data-indicator="${h.ground.id}">${pages(h.ground.id, pg => h.ground!.pages[pg] ?? '', true)}</g>` : '';
   const on = `<g clip-path="url(#${clip})">` + ground + fixed + steerpoint + attitude + rollArt + cues +
     tape('velocity', h.velocity) + tape('altitude', h.altitude) + heading + mode +
     h.boxes.map(d => `<path d="${d}" ${pen}/>`).join('') + fields + '</g>';
