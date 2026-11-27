@@ -25,10 +25,11 @@ issue containing the report time, response stage when available, and a signed-in
 Cloudflare dashboard link with an event lookup. Read the original question and
 reply in Cloudflare while the event is still retained.
 
-When the report records the public quotation notice and the entire question
-matches supported wording and a public subject, the issue also includes the
-original question. The issue is created even if the question cannot be quoted
-or the published corpus is unavailable.
+Reports sent under the current public-quotation notice include the visitor's
+exact question as literal text. For reports sent under the older conditional
+notice, the collector quotes only questions that pass the original screening.
+The collector files the issue even when a quote is unavailable. Earlier turns
+and bot replies remain in Cloudflare.
 
 Keep the issue's hidden report marker and `ask-oversweep-report` label. The
 collector checks them on open and closed issues so reruns skip reports already

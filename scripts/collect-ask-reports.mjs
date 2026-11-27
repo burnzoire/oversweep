@@ -30,12 +30,25 @@ function reportPayload(source) {
 
 const observability = 'https://dash.cloudflare.com/?to=/:account/workers-and-pages/observability';
 
+function disclosedQuestion(report, screenLegacyQuestion) {
+  if (report?.publicQuestionNotice === 1) return screenLegacyQuestion(report);
+  if (report?.publicQuestionNotice !== 2) return undefined;
+  const { question } = report;
+  if (typeof question !== 'string' || !question.trim() || question.length > 300 ||
+      /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/u.test(question)) return undefined;
+  return { question };
+}
+
 function createIssue(event, quote) {
   const stage = stages.has(event.report?.stage) ? event.report.stage : undefined;
   const time = `${new Date(event.timestamp).toISOString().slice(0, 16)}Z`;
   const blocks = [event.marker, `**Reported** ${time} (UTC)`];
   if (stage) blocks.push(`**Response stage** \`${stage}\``);
-  if (quote) blocks.push(`**Reported question (verbatim)**\n\n    ${quote.question}`);
+  if (quote) {
+    const fenceLength = Math.max(3, ...(quote.question.match(/`+/g) ?? []).map(run => run.length + 1));
+    const fence = '`'.repeat(fenceLength);
+    blocks.push(`**Reported question (verbatim)**\n\n${fence}\n${quote.question}\n${fence}`);
+  }
   if (quote?.subjectId) blocks.push(`**Public reference** <https://www.oversweep.com${quote.subjectId}>`);
   const lookup = /^[a-z0-9_-]{8,128}$/i.test(event.id)
     ? `Filter by \`$metadata.id\` = \`${event.id}\`.`
@@ -169,18 +182,18 @@ export async function collectReports(env, fetcher = fetch, now = Date.now()) {
       if (!Array.isArray(issues)) throw new Error('GitHub returned an unexpected issue page.');
       for (const issue of issues) {
         if (issue.pull_request) continue;
-        const marker = issue.body?.match(/^<!-- ask-oversweep-report:[a-f0-9]{64} -->$/m)?.[0];
+        const marker = issue.body?.match(/^<!-- ask-oversweep-report:[a-f0-9]{64} -->(?=\r?\n|$)/)?.[0];
         if (marker) pending.delete(marker);
       }
       if (issues.length < 100) break;
     }
     alreadyFiled = reports.size - pending.size;
     const oldestFirst = [...pending.values()].sort((a, b) => a.timestamp - b.timestamp);
-    const selectQuote = oldestFirst.some(event => event.report?.publicQuestionNotice === 1)
+    const screenLegacyQuestion = oldestFirst.some(event => event.report?.publicQuestionNotice === 1)
       ? await reportQuoteSelector(fetcher)
       : () => undefined;
     for (const event of oldestFirst) {
-      const quote = event.report?.publicQuestionNotice === 1 ? selectQuote(event.report) : undefined;
+      const quote = disclosedQuestion(event.report, screenLegacyQuestion);
       const issue = createIssue(event, quote);
       try {
         const result = await github('/issues', { body: { ...issue, labels: [label] } });

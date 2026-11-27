@@ -71,7 +71,7 @@ const { id } = Astro.props;
       const label = document.createElement("summary");
       label.textContent = report.stage === "answered" ? "Report answer" : "Report unanswered question";
       const disclosure = document.createElement("p");
-      disclosure.textContent = "Send this question, the reply, up to two preceding messages, source IDs and topic IDs to Oversweep for review. By sending, you agree that the question may be quoted in a public GitHub issue if it passes a privacy check. The report time, response status and links to published Oversweep pages may also appear. Only send if the messages contain no personal details.";
+      disclosure.textContent = "Reports are anonymous. Your question will be posted verbatim in a public GitHub issue with the report time and response status. Oversweep also receives the reply, up to two preceding messages, and source and topic IDs for review. Leave out names, contact details and other personal information.";
       const send = document.createElement("button");
       send.type = "button";
       send.textContent = "Send report";
@@ -89,7 +89,7 @@ const { id } = Astro.props;
           const response = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ...report, publicQuestionNotice: 1 }),
+            body: JSON.stringify({ ...report, publicQuestionNotice: 2 }),
             signal: AbortSignal.timeout(10000),
           });
           if (response.status === 429) {

@@ -142,4 +142,6 @@ test("opt-in reports validate context, respect limits and bypass inference", asy
   assert.equal(info.mock.calls[1].arguments[0].publicQuestionNotice, 1);
   assert.equal((await handle(submit({ ...report, publicQuestionNotice: "1" }), env)).status, 204);
   assert.equal(Object.hasOwn(info.mock.calls[2].arguments[0], "publicQuestionNotice"), false);
+  assert.equal((await handle(submit({ ...report, publicQuestionNotice: 2 }), env)).status, 204);
+  assert.equal(info.mock.calls[3].arguments[0].publicQuestionNotice, 2);
 });

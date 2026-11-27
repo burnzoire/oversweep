@@ -161,7 +161,7 @@ test('preserves the whole safe question and withholds the answer and prior turns
   assert.equal(result.quoted, 1);
   assert.equal(result.created, 1);
   const issue = run.writes.find(x => x.pathname.endsWith('/issues'));
-  assert.ok(issue.body.includes(`**Reported question (verbatim)**\n\n    ${question}`));
+  assert.ok(issue.body.includes('**Reported question (verbatim)**\n\n```\n' + question + '\n```'));
   assert.doesNotMatch(issue.body, /Where is Sochi|Try the airfield page|Offline retrieval check/);
 });
 
@@ -183,7 +183,8 @@ test('files older and unquotable reports without including the question', async 
   const question = 'What is the tower freq for Sochi?';
   const variants = [
     { question },
-    { question, publicQuestionNotice: 2 },
+    { question, publicQuestionNotice: 3 },
+    { question, publicQuestionNotice: '2' },
     { question, publicQuestionNotice: '1' },
     ...[
       'What is the tower freq for Sochi, Alice Smith?',
@@ -205,4 +206,35 @@ test('files older and unquotable reports without including the question', async 
     assert.doesNotMatch(issue.body, /What is the tower freq|Synthetic test question/);
     assert.doesNotMatch(issue.body, /Alice Smith|0412 345 678|example\.com|\u200b|\[Sochi\]/u);
   }
+});
+
+test('quotes the exact disclosed question as literal text without fetching the corpus', async () => {
+  const markerLikeText = `<!-- ask-oversweep-report:${'a'.repeat(64)} -->`;
+  const question = ['Could Ask Oversweep answer this?', '````', '@example <b>text</b>', markerLikeText].join('\n');
+  const source = { message: 'ask_oversweep_report', ...report, question, publicQuestionNotice: 2 };
+  const run = simulate({ pages: [[event('direct-quote', source)]] });
+  const fetcher = (url, options) => {
+    assert.notEqual(new URL(url).hostname, 'www.oversweep.com');
+    return run.fetcher(url, options);
+  };
+  const env = { ...environment, PUBLISH: 'true' };
+  const result = await collectReports(env, fetcher, now);
+  assert.equal(result.created, 1);
+  assert.equal(result.quoted, 1);
+  const issue = run.writes.find(x => x.pathname.endsWith('/issues'));
+  assert.ok(issue.body.includes('\n\n`````\n' + question + '\n`````\n\n'));
+  assert.doesNotMatch(issue.body, /Try the airfield page|Where is Sochi/);
+
+  const realMarker = issue.body.split('\n')[0];
+  const retry = simulate({ pages: [[event('direct-quote', source)]], issues: [{ body: 'Another issue\n' + realMarker }] });
+  assert.equal((await collectReports(env, retry.fetcher, now)).created, 1);
+});
+
+test('files a report even when the disclosed question contains a transport control character', async () => {
+  const source = { message: 'ask_oversweep_report', ...report, question: 'Bad\u0000question', publicQuestionNotice: 2 };
+  const run = simulate({ pages: [[event('control-character', source)]] });
+  const result = await collectReports({ ...environment, PUBLISH: 'true' }, run.fetcher, now);
+  assert.equal(result.created, 1);
+  assert.equal(result.quoted, 0);
+  assert.doesNotMatch(run.writes.find(x => x.pathname.endsWith('/issues')).body, /Bad|\u0000/u);
 });
