@@ -47,6 +47,16 @@ const maxHeadings = 40;
 
 const sectionLabel = { manual: "Manual", encyclopedia: "Encyclopedia", training: "Training Library", experiences: "Training Library" };
 
+// Associate a published procedure summary with the aircraft and wording it answers.
+const procedureQueries = {
+  "/manual/aircraft-procedures/f-16c/takeoff/#procedure-summary-h": {
+    aircraft: "/encyclopedia/aircraft/f-16/",
+    match: /\bhow (?:(?:do|can|should) (?:I|we|you)|to) (?:perform (?:a |the )?)?take[\s–—-]*off\b|\btake[\s–—-]*off (?:checklist|procedure|walkthrough)\b|^F[\s–—-]?16C?\s+take[\s–—-]*off[?.]?$/i.source,
+    exclude: /\b(?:before|pre[\s–—-]*)\s*take[\s–—-]*off\b|\b(?:BMS|Falcon\s*4|MSFS|X-Plane|real[\s-]+(?:world|life)|F[\s–—-]?16(?!C\b)[A-Z])\b/i.source,
+    scope: "DCS F-16C Viper",
+  },
+};
+
 export function pageEntries(html, url, { glossary = false } = {}) {
   const main = html.match(/<main\b[\s\S]*<\/main>/)?.[0] ?? html;
   const title = textOf(main.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/)?.[1] ?? "")
@@ -110,10 +120,15 @@ export function addAskSections(corpus, html, entry) {
     if (!id || skipHeading.test(id)) continue;
     const whole = text(clean.slice(heading.index + heading[0].length, headings[i + 1]?.index));
     const passage = id === "map-airfields-title" ? clip(whole, 3500) : whole;
-    if (passage) corpus[entry.u + "#" + encodeURIComponent(decode(id))] = {
-      title: entry.t + " · " + textOf(heading[3]),
-      text: passage,
-    };
+    if (passage) {
+      const url = entry.u + "#" + encodeURIComponent(decode(id));
+      const procedure = procedureQueries[url];
+      corpus[url] = {
+        title: entry.t + " · " + textOf(heading[3]),
+        text: passage,
+        ...(procedure ? { procedure } : {}),
+      };
+    }
   }
 }
 
