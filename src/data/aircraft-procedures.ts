@@ -48,7 +48,7 @@ export interface AircraftProcedure {
   status: 'public-preview' | 'review-only';
   simVersion: string;
   /** Which script drives the cockpit panels. */
-  model: 'engine-start' | 'fcr-tws' | 'fcr-two' | 'tacan-navigation' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff' | 'hts' | 'hts-targeting' | 'harm-shot' | 'maverick-pre' | 'maverick-handoff' | 'markpoints' | 'markpoint-manual' | 'markpoint-hud' | 'markpoint-fcr' | 'fcr-rws' | 'fcr-vsr' | 'fcr-bug' | 'aim120' | 'aim120-bore' | 'fcr-vol' | 'takeoff';
+  model: 'engine-start' | 'fcr-tws' | 'fcr-two' | 'tacan-navigation' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff' | 'hts' | 'hts-targeting' | 'harm-shot' | 'maverick-pre' | 'maverick-handoff' | 'markpoints' | 'markpoint-manual' | 'markpoint-hud' | 'markpoint-fcr' | 'markpoint-tgp' | 'fcr-rws' | 'fcr-vsr' | 'fcr-bug' | 'aim120' | 'aim120-bore' | 'fcr-vol' | 'takeoff';
   /** The scenario shown above the steps, and the closing heading. */
   intro: string;
   description: string;
@@ -650,6 +650,36 @@ const markpointFcr: AircraftProcedure = {
   ]
 };
 procedures.push(markpointFcr);
+
+procedures.push({
+  id: 'procedure.dcs-f16c.markpoint-tgp',
+  slug: 'markpoint-tgp',
+  airframe: 'f-16c',
+  title: 'F-16C — Markpoint: TGP mark',
+  objective: 'Save a runway checkpoint from a prepared TGP view, recall it and verify it as the selected steerpoint.',
+  applicability: 'DCS F-16C Block 50; official guide edition 16 August 2026. In-simulator verification pending.',
+  simVersion: 'DCS build not yet verified',
+  status: 'public-preview',
+  model: 'markpoint-tgp',
+  intro: 'You are navigating to steerpoint 3. A fictional airfield lies 4 NM ahead, and the [targeting pod](term:tgp) is already holding a point where a taxiway meets the runway. Save that point so you can navigate back to it. This exercise starts with a prepared sensor view and uses illustrative coordinates.',
+  description: 'Save a navigation checkpoint from an illustrated F-16C targeting pod view, recall markpoint 26 on the MARK page and verify it on the HSD.',
+  complete: 'Runway checkpoint stored and selected as steerpoint 26',
+  summary: [
+    'The sensor option on the MARK page identifies the source of the next [markpoint](term:markpoint).',
+    'Markpoints occupy steerpoints 26 through 30. The displayed slot can advance after a save, so recall the slot you just stored before selecting it.',
+    'The highlighted STPT on the MARK page and STPT 26 on CNI confirm the selection. The cyan X on the [HSD](term:hsd) shows where the point is.',
+  ],
+  sources: 'Eagle Dynamics — DCS F-16C Viper Early Access Guide (EN, 16 August 2026), pp. 103, 205, 219–220, 224, 358–359 and 495–499. The airfield image is a generated illustration.',
+  steps: [
+    {id:'landmark',section:'Identify the checkpoint',title:'Find the taxiway junction',control:'Left MFD, TGP format',action:'Look for the short connector between the parallel taxiway and the runway.',expect:'The {{track box|0}} sits over the runway centreline beside the junction. This is the point you will save.',evidence:G3+' 224, 497–499',hints:['left-mfd.display#-8 -9 9 8'],panels:['left-mfd'],confirm:'Junction in view'},
+    {id:'mark',section:'Store the checkpoint',title:'Open the MARK page',control:'ICP 7 / MARK',action:'Press 7 / MARK on the [ICP](term:icp).',expect:'The [DED](term:ded) shows {{TGP and slot 26|0}}. With the pod already in point track, TGP is selected when the page opens.',evidence:G3+' 219–220, 224',hints:['ded.display@0'],panels:['icp','ded'],do:{control:'icp.key-7',to:'in'},confirm:'TGP, slot 26'},
+    {id:'store',section:'Store the checkpoint',title:'Save the runway checkpoint',control:'Exercise button',action:'Select Store checkpoint to simulate saving the point shown in the track box.',expect:'The exercise saves the location in slot 26 and advances the MARK page to slot 27.',evidence:G3+' 220 (item 6), 224',panels:['left-mfd','ded'],confirm:'Store checkpoint'},
+    {id:'recall',section:'Recall and select',title:'Recall markpoint 26',control:'ICP DED increment/decrement rocker',action:'The MARK page is showing {{slot 27|0}}. Press the lower half of the rocker once to return to 26.',expect:'Slot 26 shows the saved {{latitude|1}}, {{longitude|2}} and {{elevation|3}}.',evidence:G3+' 219–220',hints:['ded.display@0','ded.display@1','ded.display@2','ded.display@3'],panels:['icp','ded'],do:{control:'icp.ded-incdec',to:'down'},confirm:'Checkpoint recalled'},
+    {id:'select',section:'Recall and select',title:'Select it as a steerpoint',control:'ICP 0 / M-SEL',action:'With the asterisks bracketing TGP, press 0 / M-SEL.',expect:'{{STPT|0}} is highlighted on the MARK page. Markpoint 26 is now the selected steerpoint.',evidence:G3+' 219–220',hints:['ded.display@0'],panels:['icp','ded'],do:{control:'icp.key-0',to:'in'},confirm:'Steerpoint selected'},
+    {id:'rtn',section:'Check the route',title:'Return to CNI',control:'ICP DCS switch, RTN',action:'Move the DCS switch left to RTN.',expect:'The [CNI page](term:cni-page) reads {{STPT 26|0}}.',evidence:G3+' 103, 219',hints:['ded.display@0'],panels:['icp','ded'],do:{control:'icp.dcs-lr',to:'rtn'},confirm:'STPT 26 shown on CNI'},
+    {id:'verify',section:'Check the route',title:'Find the checkpoint on the HSD',control:'Right MFD (HSD) and DED',action:'Compare the selected steerpoint on the [DED](term:ded) with the map on the [HSD](term:hsd).',expect:'{{STPT 26|0}} is selected and the {{small cyan X|1}} is about 4 NM straight ahead. The previous route steerpoint is now hollow.',evidence:G3+' 103, 205, 358–359',hints:['ded.display@0',HS('hsd-hud-sel',SPT.mark,16)],panels:['right-mfd','ded'],confirm:'Checkpoint confirmed'},
+  ],
+});
 
 // Air-to-air radar (FCR on the left MFD): hint boxes in p. 394 pixels (mfd-fcr.ts); HUD hints in p. 90 pixels.
 const FL = (x0: number, y0: number, x1: number, y1: number) => 'left-mfd.display' + fcrBox(x0, y0, x1, y1);

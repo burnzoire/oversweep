@@ -50,7 +50,10 @@ const NORTH_FILL = poly([[407.5, 172.5], [417, 167.5], [417, 177.5]], true);
 /** Aircraft reference symbol, cyan (as on p. 495; the same symbol as the DTE page's, p. 127 item 16). */
 const ARS = poly([[114.5, 503], [114.5, 539]]) + poly([[112, 515], [122, 515], [128, 527], [133.5, 515], [139, 527], [144.5, 515], [155, 515]]);
 
-interface Spi { lat: string; lon: string; elv: string; hq: boolean; range: string; meter: string; ttg: string; video?: string }
+type Spi = { lat: string; lon: string; elv: string; hq: boolean; video?: string } & (
+  | { navigationPreview: true }
+  | { navigationPreview?: false; range: string; meter: string; ttg: string }
+);
 const SPI: Record<string, Spi> = {
   stpt: { lat: '036:25.012', lon: '037:14.986', elv: '+1320', hq: true, range: 'E17.4', meter: '450', ttg: '002:08', video: TGP_VIDEO_STPT },
   sa6: { lat: '036:26.214', lon: '037:07.692', elv: '+1442', hq: false, range: 'E20.1', meter: '519', ttg: '002:28', video: TGP_VIDEO_SA6 },
@@ -68,13 +71,17 @@ const SPI: Record<string, Spi> = {
 /** `cz`: the Navigation cursor has been slewed, so CZ shows at OSB 9 (p. 341: it goes out once the slews are zeroed). */
 interface Mav { mbc: string; next: '3' | '7'; at: [number, number]; k: number; cz?: boolean }
 function tgp(id: string, spi: Spi, soi: boolean, track = false, mav?: Mav): Page {
+  const showCz = mav ? mav.cz : !spi.navigationPreview;
   const words: Word[] = [
     w('A-G', 186, 117.5), w('PTR', 258, 117.5), w(mav ? 'NARO' : 'WIDE', 332, 117.5), w('OVRD', 405, 117.5), w('CNTL', 478, 117.5),
     sm(spi.lat, 180, 140, 'start'), sm(spi.lon, 180, 153.5, 'start'), sm(spi.elv, 272.5, 170, 'end'),
     ...(spi.hq ? [sm('HQ', 190, 181, 'start')] : []),
-    w('1.0X', 332.5, 144), sm('18600', 531, 144, 'end'), w('WHOT', 551.5, 186, 'end'),
-    ...stack('LST', 117, 185), ...stack('MT', 117, 330.5), ...stack('NT', 547, 259.5), ...stack('SP', 547, 330.5), ...(!mav || mav.cz ? stack('CZ', 547, 402.5) : []), ...stack('TGT', 547, 472),
-    sm(spi.meter, 441.5, 313.5, 'start'), sm(spi.range, 167.5, 511, 'start'), sm(spi.ttg, 520, 492.5, 'end'),
+    w('1.0X', 332.5, 144), w('WHOT', 551.5, 186, 'end'),
+    ...stack('LST', 117, 185), ...stack('MT', 117, 330.5), ...stack('NT', 547, 259.5), ...stack('SP', 547, 330.5), ...(showCz ? stack('CZ', 547, 402.5) : []), ...stack('TGT', 547, 472),
+    ...(spi.navigationPreview ? [] : [
+      sm('18600', 531, 144, 'end'), sm(spi.meter, 441.5, 313.5, 'start'),
+      sm(spi.range, 167.5, 511, 'start'), sm(spi.ttg, 520, 492.5, 'end'),
+    ]),
     // In a track mode: tracking sensor and mode (p. 499 items 28-29) under the crosshairs, placed from the p. 498 image; blank in Slave.
     ...(track ? [sm('IR POINT', 344, 482, 'middle')] : []),
     ...(mav ? [w(mav.next === '3' ? mav.mbc : '', 174.5, 435.5), w('3', 174.5, 454.5), w(mav.next === '7' ? mav.mbc : '', 492, 432), w('7', 492, 451)].filter(x => x.t) : []),
@@ -116,11 +123,23 @@ const tgpD: Page[] = [
   ...['1', '2', 'T', 'C'].map(l => tgp(`tgp-t-${l}`, STPT5, true, false, { mbc: l, next: '7', ...PT1, cz: true })),
   tgp('tgp-t-3', STPT5, true, false, { mbc: 'S', next: '3', ...PT1, cz: true }),
 ];
+// Fixed, reframed view of a fictional airfield. Keep the image under the shared symbology.
+const base = ((import.meta as { env?: { BASE_URL?: string } }).env?.BASE_URL ?? '/').replace(/\/+$/, '');
+const RUNWAY: Spi = {
+  lat: '036:35.822', lon: '036:35.014', elv: '+0892', hq: false, navigationPreview: true,
+  video: base + '/images/cockpit/tgp/runway-navigation.webp',
+};
+const runwayPage: Page = {
+  ...tgp('tgp-mark-runway', RUNWAY, true, true),
+  pan: true, videoScale: 1.35, cursor: { d: '', at: [mm(72), mm(-35)] },
+};
 export const tgpPages: Page[] = [
+  runwayPage,
   tgp('tgp', SPI.stpt, false), tgp('tgp-soi', SPI.stpt, true),
   tgp('tgp-sa6', SPI.sa6, false), tgp('tgp-sa6-near', SPI.sa6Near, false), tgp('tgp-sa11', SPI.sa11, false), tgp('tgp-sa11-near', SPI.sa11Near, false), tgp('tgp-sa11-soi', SPI.sa11Near, true), tgp('tgp-sa11-track', SPI.sa11Track, true, true), ...tgpD,
 ];
 export const tgpPageLabels: Record<string, string> = {
+  'tgp-mark-runway': 'TGP format: thermal view of the runway checkpoint in point track',
   tgp: 'TGP format: Slave, on the selected steerpoint',
   'tgp-soi': 'TGP format, SOI: Slave, on the selected steerpoint',
   'tgp-sa6': 'TGP format: slaved to the HTS-designated SA-6',
