@@ -8,7 +8,17 @@ const targetRepository = 'burnzoire/oversweep';
 const label = 'ask-oversweep-report';
 const pageSize = 100;
 const hour = 3_600_000;
-const stages = new Set(['answered', 'no_passages', 'no_supported_answer', 'response_sources']);
+const stageCases = {
+  answered: 'Ask a question with an answer in a known published passage. Verify the reply answers the question and its citations support each claim.',
+  no_passages: 'Ask a paraphrase of a question answered by a published passage. Verify retrieval selects that passage before generating a reply.',
+  no_supported_answer: 'Ask a question answered by a retrieved passage. Verify the model uses that passage to answer and cites it.',
+  response_sources: 'Ask a question answered by a retrieved passage. Verify the Worker accepts a reply that cites a supplied source and rejects a reply that cites a source outside that request.',
+};
+const replayAdvice = {
+  verbatim: 'Replay the reported question to verify the failure. Prior turns and the original reply are available in Cloudflare.',
+  synthetic: 'Replay the synthetic question to verify answer generation. The collector checked retrieval only.',
+  scenario: 'The collector could not produce a publishable question that matched this report. The scenario is a starting point for testing. The original question and reply are available in Cloudflare.',
+};
 
 function parseJson(value) {
   if (typeof value !== 'string') return value;
@@ -37,23 +47,26 @@ function createIssue(event, report, sample) {
   const blocks = [
     marker,
     `**Reported stage** \`${report.stage}\``,
-    `**${sample.verbatim ? 'Reported question (verbatim)' : 'Synthetic test question'}**\n\n    ${sample.question}`,
   ];
-  if (!sample.verbatim) {
+  if (sample) {
+    blocks.push(`**${sample.verbatim ? 'Reported question (verbatim)' : 'Synthetic test question'}**\n\n    ${sample.question}`);
+  } else {
+    blocks.push(`**Suggested test scenario** ${stageCases[report.stage]}`);
+  }
+  if (sample && !sample.verbatim) {
     const result = sample.lead ? `Both questions selected the same first [passage](https://www.oversweep.com${sample.lead}).` : 'Neither question retrieved a passage.';
     blocks.push(`**Offline retrieval check** ${result}`);
   }
-  if (sample.subjectId) blocks.push(`**Public reference** <https://www.oversweep.com${sample.subjectId}>`);
+  if (sample?.subjectId) blocks.push(`**Public reference** <https://www.oversweep.com${sample.subjectId}>`);
   blocks.push(
     `**Original report** Open [Cloudflare Workers Observability](${observability}), select \`${worker}\`, then filter for \`${eventName}\` around \`${time}\` (UTC).`,
-    sample.verbatim
-      ? 'Replay the reported question to verify the failure. Prior turns and the original reply are available in Cloudflare.'
-      : 'Replay the synthetic question to verify answer generation. The collector checked retrieval only.',
   );
   if (/^[a-z0-9_-]{8,128}$/i.test(event.$metadata.id)) {
-    blocks.splice(-1, 0, `**Event filter** \`$metadata.id\` equals \`${event.$metadata.id}\`.`);
+    blocks.push(`**Event filter** \`$metadata.id\` equals \`${event.$metadata.id}\`.`);
   }
-  return { marker, verbatim: sample.verbatim, timestamp: event.timestamp, title: `Ask Oversweep report · ${report.stage}`, body: blocks.join('\n\n') };
+  const kind = sample?.verbatim ? 'verbatim' : sample ? 'synthetic' : 'scenario';
+  blocks.push(replayAdvice[kind]);
+  return { marker, kind, timestamp: event.timestamp, title: `Ask Oversweep report · ${report.stage}`, body: blocks.join('\n\n') };
 }
 
 async function request(fetcher, url, { token, service, body, allow404 = false }) {
@@ -87,7 +100,6 @@ async function readReports(fetcher, { account, token, now, backfill, selectQuest
   const reports = new Map();
   const cursors = new Set();
   let unparsed = 0;
-  let unsupported = 0;
   let decoded = 0;
   let offset;
   for (let page = 0; page < 50; page++) {
@@ -117,20 +129,15 @@ async function readReports(fetcher, { account, token, now, backfill, selectQuest
         throw new Error('Cloudflare returned an event with unexpected metadata.');
       }
       const report = reportPayload(row.source);
-      if (!stages.has(report?.stage) || typeof report.question !== 'string') {
+      if (typeof report?.stage !== 'string' || !Object.hasOwn(stageCases, report.stage) || typeof report.question !== 'string') {
         unparsed++;
         continue;
       }
       decoded++;
-      const sample = selectQuestion(report);
-      if (!sample) {
-        unsupported++;
-        continue;
-      }
-      const issue = createIssue(row, report, sample);
+      const issue = createIssue(row, report, selectQuestion(report));
       reports.set(issue.marker, issue);
     }
-    if (rows.length < pageSize) return { reports, unparsed, unsupported, decoded };
+    if (rows.length < pageSize) return { reports, unparsed, decoded };
     offset = rows.at(-1).$metadata.id;
     if (cursors.has(offset)) throw new Error('Cloudflare repeated a telemetry pagination cursor.');
     cursors.add(offset);
@@ -161,7 +168,7 @@ export async function collectReports(env, fetcher = fetch, now = Date.now()) {
   }
   const synthesise = createReportSynthesiser(corpus);
   const selectPublicQuestion = createPublicQuestionSelector(corpus);
-  const { reports, unparsed, unsupported, decoded } = await readReports(fetcher, {
+  const { reports, unparsed, decoded } = await readReports(fetcher, {
     account, token, now, backfill: env.BACKFILL === 'true',
     selectQuestion: report => selectPublicQuestion(report) ?? synthesise(report),
   });
@@ -189,14 +196,15 @@ export async function collectReports(env, fetcher = fetch, now = Date.now()) {
     }
     deferred = pending.size - created;
   }
-  const verbatim = [...reports.values()].filter(report => report.verbatim).length;
-  return { decoded, verbatim, synthetic: reports.size - verbatim, unsupported, unparsed, created, deferred };
+  const counts = { verbatim: 0, synthetic: 0, scenario: 0 };
+  for (const report of reports.values()) counts[report.kind]++;
+  return { decoded, ...counts, unparsed, created, deferred };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
-    const { decoded, verbatim, synthetic, unsupported, unparsed, created, deferred } = await collectReports(process.env);
-    console.log(`Reports decoded: ${decoded}. Verbatim questions: ${verbatim}. Synthetic cases: ${synthetic}. Needs manual review: ${unsupported}. Issues created: ${created}. Deferred: ${deferred}. Unrecognised events: ${unparsed}.`);
+    const { decoded, verbatim, synthetic, scenario, unparsed, created, deferred } = await collectReports(process.env);
+    console.log(`Reports decoded: ${decoded}. Verbatim questions: ${verbatim}. Synthetic questions: ${synthetic}. Stage scenarios: ${scenario}. Issues created: ${created}. Deferred: ${deferred}. Unrecognised events: ${unparsed}.`);
     if (unparsed || deferred) process.exitCode = 1;
   } catch (error) {
     console.error(error.message);

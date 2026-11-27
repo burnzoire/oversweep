@@ -58,7 +58,7 @@ test('dry run paginates stored log events and makes no GitHub writes', async () 
   const second = event('100', 'ask_oversweep_report ' + JSON.stringify(report));
   const run = simulate({ pages: [first, [second]] });
   assert.deepEqual(await collectReports({ ...environment, BACKFILL: 'true' }, run.fetcher, now), {
-    decoded: 101, verbatim: 0, synthetic: 101, unsupported: 0, unparsed: 0, created: 0, deferred: 0,
+    decoded: 101, verbatim: 0, synthetic: 101, scenario: 0, unparsed: 0, created: 0, deferred: 0,
   });
   assert.equal(run.queries[0].timeframe.from, now - 72 * 3_600_000);
   assert.equal(run.queries[1].offset, '99');
@@ -93,7 +93,7 @@ test('rejects other repositories before reading reports', async () => {
 test('distinguishes empty results, undecodable events and failed queries', async () => {
   const empty = simulate({ pages: [[]] });
   assert.deepEqual(await collectReports(environment, empty.fetcher, now), {
-    decoded: 0, verbatim: 0, synthetic: 0, unsupported: 0, unparsed: 0, created: 0, deferred: 0,
+    decoded: 0, verbatim: 0, synthetic: 0, scenario: 0, unparsed: 0, created: 0, deferred: 0,
   });
   const unparsed = simulate({ pages: [[event('one', { message: 'ask_oversweep_report' })]] });
   assert.equal((await collectReports(environment, unparsed.fetcher, now)).unparsed, 1);
@@ -101,13 +101,24 @@ test('distinguishes empty results, undecodable events and failed queries', async
   await assert.rejects(collectReports(environment, denied.fetcher, now), /telemetry query returned HTTP 403/);
 });
 
-test('withholds issues when no synthetic replay can match the report', async () => {
-  const unmatched = { ...report, question: 'private note about something unrelated' };
-  const run = simulate({ pages: [[event('unmatched', { message: 'ask_oversweep_report', ...unmatched })]] });
-  assert.deepEqual(await collectReports({ ...environment, PUBLISH: 'true' }, run.fetcher, now), {
-    decoded: 1, verbatim: 0, synthetic: 0, unsupported: 1, unparsed: 0, created: 0, deferred: 0,
+test('automatically files a stage scenario when a safe question cannot be produced', async () => {
+  const unmatched = {
+    ...report, stage: 'response_sources', publicQuestionNotice: 1,
+    question: 'private note about something unrelated',
+  };
+  const pages = [[event('unmatched-1', { message: 'ask_oversweep_report', ...unmatched })]];
+  const run = simulate({ pages });
+  const env = { ...environment, PUBLISH: 'true' };
+  assert.deepEqual(await collectReports(env, run.fetcher, now), {
+    decoded: 1, verbatim: 0, synthetic: 0, scenario: 1, unparsed: 0, created: 1, deferred: 0,
   });
-  assert.deepEqual(run.writes, []);
+  const issue = run.writes.find(x => x.pathname.endsWith('/issues'));
+  assert.match(issue.body, /Suggested test scenario.*cites a supplied source/);
+  assert.match(issue.body, /Cloudflare Workers Observability/);
+  assert.match(issue.body, /unmatched-1/);
+  assert.doesNotMatch(issue.body, /private note|Try the airfield page|Where is Sochi|Offline retrieval check/);
+  const retry = simulate({ pages, issues: [{ body: issue.body, state: 'closed' }] });
+  assert.equal((await collectReports(env, retry.fetcher, now)).created, 0);
 });
 
 test('keeps the requested navigation aid distinct from radio frequencies', async () => {

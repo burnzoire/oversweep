@@ -24,13 +24,14 @@ time. It searches the previous 48 hours. When the report records the public
 quotation notice, the collector checks the entire question against supported
 question forms and public subject names before quoting it verbatim. Older
 reports and questions that do not pass the check use the synthetic path.
-The collector files a synthetic question only when offline replay selects the
-same first passage for both questions, or both return no passages. Unmatched
-reports are counted in the run summary for manual review.
+The collector uses a synthetic question when offline replay selects the same
+first passage for both questions, or both return no passages. If the collector
+cannot quote the question or match a synthetic question, it still files an
+issue with a suggested test scenario based on the reported response stage.
 Replay checks retrieval against the current corpus. It cannot verify the original
 generated answer or recreate browser search hints. The workflow makes no AI calls.
 
-Issues contain the original or synthetic question, public references when
+Issues contain the original question, synthetic question or suggested test scenario, public references when
 available, response stage and
 a signed-in Cloudflare dashboard link with a timestamp and event ID when available.
 Use the metadata to locate the event in Workers Observability while it is still
