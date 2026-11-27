@@ -8,6 +8,8 @@ const targetRepository = 'burnzoire/oversweep';
 const label = 'ask-oversweep-report';
 const pageSize = 100;
 const hour = 3_600_000;
+// The public-quotation notice was deployed to production on this release.
+const publicQuotationStarted = Date.parse('2026-11-27T10:05:17Z');
 const stages = new Set(['answered', 'no_passages', 'no_supported_answer', 'response_sources']);
 
 function parseJson(value) {
@@ -30,9 +32,10 @@ function reportPayload(source) {
 
 const observability = 'https://dash.cloudflare.com/?to=/:account/workers-and-pages/observability';
 
-function disclosedQuestion(report, screenLegacyQuestion) {
-  if (report?.publicQuestionNotice === 1) return screenLegacyQuestion(report);
-  if (report?.publicQuestionNotice !== 2) return undefined;
+function disclosedQuestion({ report, timestamp }, screenLegacyQuestion) {
+  if (!report) return undefined;
+  if (report.publicQuestionNotice === 1) return screenLegacyQuestion(report);
+  if (timestamp < publicQuotationStarted && report.publicQuestionNotice !== 2) return undefined;
   const { question } = report;
   if (typeof question !== 'string' || !question.trim() || question.length > 300 ||
       /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/u.test(question)) return undefined;
@@ -193,7 +196,7 @@ export async function collectReports(env, fetcher = fetch, now = Date.now()) {
       ? await reportQuoteSelector(fetcher)
       : () => undefined;
     for (const event of oldestFirst) {
-      const quote = disclosedQuestion(event.report, screenLegacyQuestion);
+      const quote = disclosedQuestion(event, screenLegacyQuestion);
       const issue = createIssue(event, quote);
       try {
         const result = await github('/issues', { body: { ...issue, labels: [label] } });

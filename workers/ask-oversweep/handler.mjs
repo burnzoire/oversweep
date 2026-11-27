@@ -54,7 +54,7 @@ export function createHandler(corpus, prepared) {
       return json({}, 400);
     }
     if (path === "/ask/report") {
-      const { question, history, answer, stage, sources, topic, revision, publicQuestionNotice } = input ?? {};
+      const { question, history, answer, stage, sources, topic, revision } = input ?? {};
       if (typeof question !== "string" || !question.trim() || question.length > 300 ||
         !Array.isArray(history) || history.length > 2 || !history.every(validTurn) ||
         typeof answer !== "string" || !answer.trim() || answer.length > 1200 ||
@@ -71,7 +71,6 @@ export function createHandler(corpus, prepared) {
         question, history: history.map(({ role, content }) => ({ role, content })),
         answer, stage, sources: [...new Set(sources)],
         topic, revision,
-        ...((publicQuestionNotice === 1 || publicQuestionNotice === 2) && { publicQuestionNotice }),
       });
       return new Response(null, { status: 204, headers });
     }
