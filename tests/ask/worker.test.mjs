@@ -138,10 +138,8 @@ test("opt-in reports validate context, respect limits and bypass inference", asy
   assert.deepEqual(info.mock.calls[0].arguments, [
     { message: "ask_oversweep_report", ...report, sources: [id] },
   ]);
-  assert.equal((await handle(submit({ ...report, publicQuestionNotice: 1 }), env)).status, 204);
-  assert.equal(info.mock.calls[1].arguments[0].publicQuestionNotice, 1);
-  assert.equal((await handle(submit({ ...report, publicQuestionNotice: "1" }), env)).status, 204);
-  assert.equal(Object.hasOwn(info.mock.calls[2].arguments[0], "publicQuestionNotice"), false);
   assert.equal((await handle(submit({ ...report, publicQuestionNotice: 2 }), env)).status, 204);
-  assert.equal(info.mock.calls[3].arguments[0].publicQuestionNotice, 2);
+  assert.deepEqual(info.mock.calls[1].arguments, info.mock.calls[0].arguments);
+  assert.equal((await handle(submit({ ...report, publicQuestionNotice: 1 }), env)).status, 204);
+  assert.equal(info.mock.calls[2].arguments[0].publicQuestionNotice, 1);
 });

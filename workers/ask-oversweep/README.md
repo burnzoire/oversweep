@@ -25,9 +25,10 @@ issue containing the report time, response stage when available, and a signed-in
 Cloudflare dashboard link with an event lookup. Read the original question and
 reply in Cloudflare while the event is still retained.
 
-Reports sent under the current public-quotation notice include the visitor's
-exact question as literal text. For reports sent under the older conditional
-notice, the collector quotes only questions that pass the original screening.
+Reports received since the public-quotation notice went live include the
+visitor's exact question as literal text. The collector uses the Cloudflare
+event timestamp for the rollout cutoff. Older reports and reports that record
+the earlier conditional notice follow their original publication rules.
 The collector files the issue even when a quote is unavailable. Earlier turns
 and bot replies remain in Cloudflare.
 

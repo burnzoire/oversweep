@@ -71,7 +71,7 @@ export function createHandler(corpus, prepared) {
         question, history: history.map(({ role, content }) => ({ role, content })),
         answer, stage, sources: [...new Set(sources)],
         topic, revision,
-        ...((publicQuestionNotice === 1 || publicQuestionNotice === 2) && { publicQuestionNotice }),
+        ...(publicQuestionNotice === 1 && { publicQuestionNotice }),
       });
       return new Response(null, { status: 204, headers });
     }

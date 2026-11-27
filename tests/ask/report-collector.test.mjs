@@ -208,11 +208,12 @@ test('files older and unquotable reports without including the question', async 
   }
 });
 
-test('quotes the exact disclosed question as literal text without fetching the corpus', async () => {
+test('quotes the exact question after rollout without a notice flag or a corpus fetch', async () => {
   const markerLikeText = `<!-- ask-oversweep-report:${'a'.repeat(64)} -->`;
   const question = ['Could Ask Oversweep answer this?', '````', '@example <b>text</b>', markerLikeText].join('\n');
-  const source = { message: 'ask_oversweep_report', ...report, question, publicQuestionNotice: 2 };
-  const run = simulate({ pages: [[event('direct-quote', source)]] });
+  const source = { message: 'ask_oversweep_report', ...report, question };
+  const afterRollout = { ...event('direct-quote', source), timestamp: Date.parse('2026-11-27T10:05:17Z') };
+  const run = simulate({ pages: [[afterRollout]] });
   const fetcher = (url, options) => {
     assert.notEqual(new URL(url).hostname, 'www.oversweep.com');
     return run.fetcher(url, options);
@@ -226,8 +227,17 @@ test('quotes the exact disclosed question as literal text without fetching the c
   assert.doesNotMatch(issue.body, /Try the airfield page|Where is Sochi/);
 
   const realMarker = issue.body.split('\n')[0];
-  const retry = simulate({ pages: [[event('direct-quote', source)]], issues: [{ body: 'Another issue\n' + realMarker }] });
+  const retry = simulate({ pages: [[afterRollout]], issues: [{ body: 'Another issue\n' + realMarker }] });
   assert.equal((await collectReports(env, retry.fetcher, now)).created, 1);
+});
+
+test('honours a recorded older notice even for reports received after rollout', async () => {
+  const source = { message: 'ask_oversweep_report', ...report, publicQuestionNotice: 1 };
+  const run = simulate({ pages: [[{ ...event('legacy-notice', source), timestamp: Date.parse('2026-11-27T11:05:17Z') }]] });
+  const result = await collectReports({ ...environment, PUBLISH: 'true' }, run.fetcher, now);
+  assert.equal(result.created, 1);
+  assert.equal(result.quoted, 0);
+  assert.doesNotMatch(run.writes.find(x => x.pathname.endsWith('/issues')).body, /pilot@example\.com/);
 });
 
 test('files a report even when the disclosed question contains a transport control character', async () => {
