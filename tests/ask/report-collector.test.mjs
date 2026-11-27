@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { collectReports } from '../../scripts/collect-ask-reports.mjs';
-import { createPublicQuestionSelector } from '../../scripts/synthesise-ask-report.mjs';
+import { createPublicQuestionSelector } from '../../scripts/screen-ask-report-question.mjs';
 
 const now = Date.UTC(2026, 10, 27);
 const environment = {
@@ -20,7 +20,7 @@ const report = {
 function event(id, source = { message: ['ask_oversweep_report', report] }) {
   return { $metadata: { id, service: 'ask-oversweep' }, timestamp: now - 60_000, source };
 }
-function simulate({ pages = [[event('event-1')]], issues = [], cloudflareStatus = 200 } = {}) {
+function simulate({ pages = [[event('event-1')]], issues = [], cloudflareStatus = 200, corpusStatus = 200 } = {}) {
   const queries = [];
   const writes = [];
   let issueRead = 0;
@@ -28,6 +28,7 @@ function simulate({ pages = [[event('event-1')]], issues = [], cloudflareStatus 
     const { hostname, pathname } = new URL(url);
     if (hostname === 'www.oversweep.com') {
       assert.equal(options.headers.Authorization, undefined);
+      if (corpusStatus !== 200) return new Response(null, { status: corpusStatus });
       return Response.json({
         '/encyclopedia/locations/dcs-caucasus/#af-sochi': {
           name: 'Sochi', title: 'Sochi · DCS Caucasus', text: 'Tower frequency 127 MHz.',
@@ -37,12 +38,12 @@ function simulate({ pages = [[event('event-1')]], issues = [], cloudflareStatus 
     }
     if (hostname === 'api.cloudflare.com') {
       queries.push(JSON.parse(options.body));
-      return Response.json({ success: true, result: { events: { events: pages[queries.length - 1] } } }, { status: cloudflareStatus });
+      return Response.json({ success: true, result: { events: { events: pages[queries.length - 1] } } }, { status: Array.isArray(cloudflareStatus) ? cloudflareStatus[queries.length - 1] : cloudflareStatus });
     }
     if (pathname.endsWith('/labels/ask-oversweep-report')) return new Response(null, { status: 404 });
     if (options.body) {
       writes.push({ pathname, ...JSON.parse(options.body) });
-      return Response.json({});
+      return Response.json(pathname.endsWith('/issues') ? { number: writes.length } : {});
     }
     if (pathname.endsWith('/issues')) {
       issueRead++;
@@ -58,7 +59,7 @@ test('dry run paginates stored log events and makes no GitHub writes', async () 
   const second = event('100', 'ask_oversweep_report ' + JSON.stringify(report));
   const run = simulate({ pages: [first, [second]] });
   assert.deepEqual(await collectReports({ ...environment, BACKFILL: 'true' }, run.fetcher, now), {
-    decoded: 101, verbatim: 0, synthetic: 101, unsupported: 0, unparsed: 0, created: 0, deferred: 0,
+    reports: 101, alreadyFiled: 0, created: 0, quoted: 0, invalidMetadata: 0, incomplete: false, issueNumbers: [],
   });
   assert.equal(run.queries[0].timeframe.from, now - 72 * 3_600_000);
   assert.equal(run.queries[1].offset, '99');
@@ -68,20 +69,21 @@ test('dry run paginates stored log events and makes no GitHub writes', async () 
   assert.deepEqual(run.writes, []);
 });
 
-test('creates labelled issues, publishes only canonical links, and skips closed duplicates', async () => {
+test('files report metadata and skips closed duplicates', async () => {
   const run = simulate({ pages: [[event('unique-12345', { message: 'ask_oversweep_report', ...report, publicQuestionNotice: 1 })]] });
   const env = { ...environment, PUBLISH: 'true' };
   assert.equal((await collectReports(env, run.fetcher, now)).created, 1);
   const issue = run.writes.find(x => x.pathname.endsWith('/issues'));
   assert.deepEqual(issue.labels, ['ask-oversweep-report']);
-  assert.match(issue.body, /oversweep\.com\/encyclopedia\/locations\/dcs-caucasus\/#af-sochi/);
-  assert.match(issue.body, /What frequency should I use to contact the tower at Sochi · DCS Caucasus\?/);
+  assert.match(issue.body, /Response stage.*answered/);
   assert.match(issue.body, /2026-11-26T23:59Z/);
   assert.match(issue.body, /dash\.cloudflare\.com.*observability/);
   assert.match(issue.body, /unique-12345/);
   assert.doesNotMatch(issue.body, /Tower frequency for Sochi|Where is Sochi|example\.com|arbitrary\/private|airfield page/);
   const retry = simulate({ pages: [[event('unique-12345')]], issues: [{ body: issue.body, state: 'closed' }] });
-  assert.equal((await collectReports(env, retry.fetcher, now)).created, 0);
+  const replay = await collectReports(env, retry.fetcher, now);
+  assert.equal(replay.created, 0);
+  assert.equal(replay.alreadyFiled, 1);
 });
 
 test('rejects other repositories before reading reports', async () => {
@@ -90,32 +92,47 @@ test('rejects other repositories before reading reports', async () => {
   assert.deepEqual(run.queries, []);
 });
 
-test('distinguishes empty results, undecodable events and failed queries', async () => {
+test('files metadata even if the event payload format or published corpus is unavailable', async () => {
+  const pages = [[
+    event('unrecognised-event', { message: 'ask_oversweep_report unreadable' }),
+    event('corpus-unavailable', {
+      message: 'ask_oversweep_report', ...report,
+      question: 'Tower frequency for Sochi?', publicQuestionNotice: 1,
+    }),
+  ]];
+  const run = simulate({ pages, corpusStatus: 503 });
+  const env = { ...environment, PUBLISH: 'true' };
+  assert.deepEqual(await collectReports(env, run.fetcher, now), {
+    reports: 2, alreadyFiled: 0, created: 2, quoted: 0, invalidMetadata: 0, incomplete: false, issueNumbers: [2, 3],
+  });
+  const written = run.writes.filter(x => x.pathname.endsWith('/issues'));
+  assert.equal(written[0].title, 'Ask Oversweep report');
+  assert.match(written[0].body, /unrecognised-event/);
+  assert.match(written[1].body, /corpus-unavailable/);
+  assert.doesNotMatch(written.map(issue => issue.body).join(' '), /unreadable|Tower frequency for Sochi|Try the airfield page/);
+});
+
+test('files valid events alongside bad metadata and counts terminal query failures', async () => {
   const empty = simulate({ pages: [[]] });
   assert.deepEqual(await collectReports(environment, empty.fetcher, now), {
-    decoded: 0, verbatim: 0, synthetic: 0, unsupported: 0, unparsed: 0, created: 0, deferred: 0,
+    reports: 0, alreadyFiled: 0, created: 0, quoted: 0, invalidMetadata: 0, incomplete: false, issueNumbers: [],
   });
-  const unparsed = simulate({ pages: [[event('one', { message: 'ask_oversweep_report' })]] });
-  assert.equal((await collectReports(environment, unparsed.fetcher, now)).unparsed, 1);
   const denied = simulate({ cloudflareStatus: 403 });
   await assert.rejects(collectReports(environment, denied.fetcher, now), /telemetry query returned HTTP 403/);
+
+  const valid = event('valid-one');
+  const run = simulate({ pages: [[{ ...valid, timestamp: null }, valid]] });
+  const result = await collectReports({ ...environment, PUBLISH: 'true' }, run.fetcher, now);
+  assert.equal(result.invalidMetadata, 1);
+  assert.equal(result.created, 1);
 });
 
-test('withholds issues when no synthetic replay can match the report', async () => {
-  const unmatched = { ...report, question: 'private note about something unrelated' };
-  const run = simulate({ pages: [[event('unmatched', { message: 'ask_oversweep_report', ...unmatched })]] });
-  assert.deepEqual(await collectReports({ ...environment, PUBLISH: 'true' }, run.fetcher, now), {
-    decoded: 1, verbatim: 0, synthetic: 0, unsupported: 1, unparsed: 0, created: 0, deferred: 0,
-  });
-  assert.deepEqual(run.writes, []);
-});
-
-test('keeps the requested navigation aid distinct from radio frequencies', async () => {
-  const navigation = { ...report, question: 'What frequency is the TACAN at Sochi?' };
-  const run = simulate({ pages: [[event('navigation', { message: 'ask_oversweep_report', ...navigation })]] });
-  assert.equal((await collectReports({ ...environment, PUBLISH: 'true' }, run.fetcher, now)).created, 1);
-  const issue = run.writes.find(x => x.pathname.endsWith('/issues'));
-  assert.match(issue.body, /Which navigation beacon serves Sochi · DCS Caucasus\?/);
+test('files a successful Cloudflare page when a later page fails', async () => {
+  const first = Array.from({ length: 100 }, (_, i) => event(`event-${i}`));
+  const run = simulate({ pages: [first], cloudflareStatus: [200, 503] });
+  const result = await collectReports({ ...environment, PUBLISH: 'true' }, run.fetcher, now);
+  assert.equal(result.incomplete, true);
+  assert.equal(result.created, 100);
 });
 
 test('preserves the whole safe question and withholds the answer and prior turns', async () => {
@@ -123,8 +140,7 @@ test('preserves the whole safe question and withholds the answer and prior turns
   const source = { message: 'ask_oversweep_report', ...report, question, publicQuestionNotice: 1 };
   const run = simulate({ pages: [[event('verbatim', source)]] });
   const result = await collectReports({ ...environment, PUBLISH: 'true' }, run.fetcher, now);
-  assert.equal(result.verbatim, 1);
-  assert.equal(result.synthetic, 0);
+  assert.equal(result.quoted, 1);
   assert.equal(result.created, 1);
   const issue = run.writes.find(x => x.pathname.endsWith('/issues'));
   assert.ok(issue.body.includes(`**Reported question (verbatim)**\n\n    ${question}`));
@@ -140,12 +156,12 @@ test('recognises the published slug of a standalone airfield without guessing si
     '/encyclopedia/locations/dcs-sinai/#af-ramat-david': { name: 'Ramat David' },
   });
   const question = 'What is the tower freq for Sochi?';
-  assert.deepEqual(classify({ question, publicQuestionNotice: 1 }), { question, subjectId: sochi, verbatim: true });
+  assert.deepEqual(classify({ question, publicQuestionNotice: 1 }), { question, subjectId: sochi });
   const ambiguous = 'Which runway at Ramat David runs east-west?';
-  assert.deepEqual(classify({ question: ambiguous, publicQuestionNotice: 1 }), { question: ambiguous, subjectId: null, verbatim: true });
+  assert.deepEqual(classify({ question: ambiguous, publicQuestionNotice: 1 }), { question: ambiguous, subjectId: null });
 });
 
-test('uses synthetic cases for older reports and questions that fail screening', async () => {
+test('files older and unquotable reports without including the question', async () => {
   const question = 'What is the tower freq for Sochi?';
   const variants = [
     { question },
@@ -164,10 +180,11 @@ test('uses synthetic cases for older reports and questions that fail screening',
     message: 'ask_oversweep_report', ...report, ...variant,
   }))] });
   const result = await collectReports({ ...environment, PUBLISH: 'true' }, run.fetcher, now);
-  assert.equal(result.verbatim, 0);
-  assert.equal(result.synthetic, variants.length);
+  assert.equal(result.quoted, 0);
+  assert.equal(result.created, variants.length);
   for (const issue of run.writes.filter(x => x.pathname.endsWith('/issues'))) {
-    assert.match(issue.body, /Synthetic test question/);
+    assert.match(issue.body, /Original report/);
+    assert.doesNotMatch(issue.body, /What is the tower freq|Synthetic test question/);
     assert.doesNotMatch(issue.body, /Alice Smith|0412 345 678|example\.com|\u200b|\[Sochi\]/u);
   }
 });

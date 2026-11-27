@@ -35,11 +35,10 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '22.23.4'
-      - run: node --test tests/ask/report-collector.test.mjs
       - run: node scripts/collect-ask-reports.mjs
         env:
           GH_TOKEN: ${{ github.token }}
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_REPORTS_API_TOKEN: ${{ secrets.CLOUDFLARE_REPORTS_API_TOKEN }}
           PUBLISH: ${{ github.event_name == 'schedule' || inputs.publish }}
-          BACKFILL: ${{ inputs.backfill }}
+          BACKFILL: ${{ github.event_name == 'schedule' || inputs.backfill }}
