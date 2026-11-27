@@ -40,7 +40,7 @@ function createIssue(event, quote) {
   const lookup = /^[a-z0-9_-]{8,128}$/i.test(event.id)
     ? `Filter by \`$metadata.id\` = \`${event.id}\`.`
     : `Filter for \`${eventName}\` around the report time above.`;
-  blocks.push(`**Original report** Open [Cloudflare Workers Observability](${observability}) and select \`${worker}\`. ${lookup} The event contains the original question and reply.`);
+  blocks.push(`**Original report** Open [Cloudflare Workers Observability](${observability}) and select \`${worker}\`. ${lookup} Open the matching event to inspect the report.`);
   return { title: stage ? `Ask Oversweep report · ${stage}` : 'Ask Oversweep report', body: blocks.join('\n\n') };
 }
 
@@ -157,6 +157,7 @@ export async function collectReports(env, fetcher = fetch, now = Date.now()) {
   let quoted = 0;
   let created = 0;
   let alreadyFiled = 0;
+  let publishError;
   const issueNumbers = [];
   if (publish && reports.size) {
     if (!await github(`/labels/${label}`, { allow404: true })) {
@@ -181,22 +182,30 @@ export async function collectReports(env, fetcher = fetch, now = Date.now()) {
     for (const event of oldestFirst) {
       const quote = event.report?.publicQuestionNotice === 1 ? selectQuote(event.report) : undefined;
       const issue = createIssue(event, quote);
-      const result = await github('/issues', { body: { ...issue, labels: [label] } });
-      if (Number.isSafeInteger(result?.number) && result.number > 0) issueNumbers.push(result.number);
+      try {
+        const result = await github('/issues', { body: { ...issue, labels: [label] } });
+        if (Number.isSafeInteger(result?.number) && result.number > 0) issueNumbers.push(result.number);
+      } catch (error) {
+        // A timed-out POST may have created an issue. Let the next run check
+        // the event marker before attempting another write.
+        publishError = error.message;
+        break;
+      }
       if (quote) quoted++;
       created++;
     }
   }
-  return { reports: reports.size, alreadyFiled, created, quoted, invalidMetadata, incomplete, issueNumbers };
+  return { reports: reports.size, alreadyFiled, created, quoted, invalidMetadata, incomplete, issueNumbers, ...(publishError && { publishError }) };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
-    const { reports, alreadyFiled, created, quoted, invalidMetadata, incomplete, issueNumbers } = await collectReports(process.env);
+    const { reports, alreadyFiled, created, quoted, invalidMetadata, incomplete, issueNumbers, publishError } = await collectReports(process.env);
     console.log(`Reports found: ${reports}. Already filed: ${alreadyFiled}. Issues created: ${created}. Questions quoted: ${quoted}. Events missing valid metadata: ${invalidMetadata}.`);
     for (const number of issueNumbers) console.log(`https://github.com/${targetRepository}/issues/${number}`);
     if (incomplete) console.error('Cloudflare did not return every page. Retry to collect the remaining reports.');
-    if (invalidMetadata || incomplete) process.exitCode = 1;
+    if (publishError) console.error(`${publishError} Retry to file the remaining reports.`);
+    if (invalidMetadata || incomplete || publishError) process.exitCode = 1;
   } catch (error) {
     console.error(error.message);
     process.exitCode = 1;

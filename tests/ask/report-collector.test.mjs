@@ -20,7 +20,7 @@ const report = {
 function event(id, source = { message: ['ask_oversweep_report', report] }) {
   return { $metadata: { id, service: 'ask-oversweep' }, timestamp: now - 60_000, source };
 }
-function simulate({ pages = [[event('event-1')]], issues = [], cloudflareStatus = 200, corpusStatus = 200 } = {}) {
+function simulate({ pages = [[event('event-1')]], issues = [], cloudflareStatus = 200, corpusStatus = 200, failWrite = 0 } = {}) {
   const queries = [];
   const writes = [];
   let issueRead = 0;
@@ -42,6 +42,7 @@ function simulate({ pages = [[event('event-1')]], issues = [], cloudflareStatus 
     }
     if (pathname.endsWith('/labels/ask-oversweep-report')) return new Response(null, { status: 404 });
     if (options.body) {
+      if (writes.length + 1 === failWrite) return new Response(null, { status: 503 });
       writes.push({ pathname, ...JSON.parse(options.body) });
       return Response.json(pathname.endsWith('/issues') ? { number: writes.length } : {});
     }
@@ -133,6 +134,23 @@ test('files a successful Cloudflare page when a later page fails', async () => {
   const result = await collectReports({ ...environment, PUBLISH: 'true' }, run.fetcher, now);
   assert.equal(result.incomplete, true);
   assert.equal(result.created, 100);
+});
+
+test('reports successful writes and deduplicates them on retry after a GitHub failure', async () => {
+  const env = { ...environment, PUBLISH: 'true' };
+  const pages = [[event('first-event'), event('second-event')]];
+  const failing = simulate({ pages, failWrite: 3 });
+  const first = await collectReports(env, failing.fetcher, now);
+  assert.deepEqual(first.issueNumbers, [2]);
+  assert.equal(first.created, 1);
+  assert.equal(first.publishError, 'GitHub returned HTTP 503.');
+
+  const existing = failing.writes.find(x => x.pathname.endsWith('/issues'));
+  const retry = simulate({ pages, issues: [existing] });
+  const second = await collectReports(env, retry.fetcher, now);
+  assert.equal(second.alreadyFiled, 1);
+  assert.equal(second.created, 1);
+  assert.match(retry.writes.find(x => x.pathname.endsWith('/issues')).body, /second-event/);
 });
 
 test('preserves the whole safe question and withholds the answer and prior turns', async () => {
