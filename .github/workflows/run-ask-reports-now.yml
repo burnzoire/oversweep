@@ -1,0 +1,30 @@
+name: Run Ask Oversweep reports now
+on:
+  push:
+    branches:
+      - codex/run-ask-reports-20261127-evening
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: ask-oversweep-reports
+  cancel-in-progress: false
+jobs:
+  collect:
+    if: github.repository == 'burnzoire/oversweep'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22.23.4'
+      - run: node scripts/collect-ask-reports.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_REPORTS_API_TOKEN: ${{ secrets.CLOUDFLARE_REPORTS_API_TOKEN }}
+          PUBLISH: 'true'
+          BACKFILL: 'true'
