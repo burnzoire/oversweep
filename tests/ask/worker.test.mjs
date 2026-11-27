@@ -140,4 +140,6 @@ test("opt-in reports validate context, respect limits and bypass inference", asy
   ]);
   assert.equal((await handle(submit({ ...report, publicQuestionNotice: 2 }), env)).status, 204);
   assert.deepEqual(info.mock.calls[1].arguments, info.mock.calls[0].arguments);
+  assert.equal((await handle(submit({ ...report, publicQuestionNotice: 1 }), env)).status, 204);
+  assert.equal(info.mock.calls[2].arguments[0].publicQuestionNotice, 1);
 });
