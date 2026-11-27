@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { collectReports } from '../../scripts/collect-ask-reports.mjs';
+import { createPublicQuestionSelector } from '../../scripts/synthesise-ask-report.mjs';
 
 const now = Date.UTC(2026, 10, 27);
 const environment = {
@@ -57,7 +58,7 @@ test('dry run paginates stored log events and makes no GitHub writes', async () 
   const second = event('100', 'ask_oversweep_report ' + JSON.stringify(report));
   const run = simulate({ pages: [first, [second]] });
   assert.deepEqual(await collectReports({ ...environment, BACKFILL: 'true' }, run.fetcher, now), {
-    decoded: 101, synthetic: 101, unsupported: 0, unparsed: 0, created: 0, deferred: 0,
+    decoded: 101, verbatim: 0, synthetic: 101, unsupported: 0, unparsed: 0, created: 0, deferred: 0,
   });
   assert.equal(run.queries[0].timeframe.from, now - 72 * 3_600_000);
   assert.equal(run.queries[1].offset, '99');
@@ -68,7 +69,7 @@ test('dry run paginates stored log events and makes no GitHub writes', async () 
 });
 
 test('creates labelled issues, publishes only canonical links, and skips closed duplicates', async () => {
-  const run = simulate({ pages: [[event('unique-12345', { message: 'ask_oversweep_report', ...report })]] });
+  const run = simulate({ pages: [[event('unique-12345', { message: 'ask_oversweep_report', ...report, publicQuestionNotice: 1 })]] });
   const env = { ...environment, PUBLISH: 'true' };
   assert.equal((await collectReports(env, run.fetcher, now)).created, 1);
   const issue = run.writes.find(x => x.pathname.endsWith('/issues'));
@@ -92,7 +93,7 @@ test('rejects other repositories before reading reports', async () => {
 test('distinguishes empty results, undecodable events and failed queries', async () => {
   const empty = simulate({ pages: [[]] });
   assert.deepEqual(await collectReports(environment, empty.fetcher, now), {
-    decoded: 0, synthetic: 0, unsupported: 0, unparsed: 0, created: 0, deferred: 0,
+    decoded: 0, verbatim: 0, synthetic: 0, unsupported: 0, unparsed: 0, created: 0, deferred: 0,
   });
   const unparsed = simulate({ pages: [[event('one', { message: 'ask_oversweep_report' })]] });
   assert.equal((await collectReports(environment, unparsed.fetcher, now)).unparsed, 1);
@@ -104,7 +105,7 @@ test('withholds issues when no synthetic replay can match the report', async () 
   const unmatched = { ...report, question: 'private note about something unrelated' };
   const run = simulate({ pages: [[event('unmatched', { message: 'ask_oversweep_report', ...unmatched })]] });
   assert.deepEqual(await collectReports({ ...environment, PUBLISH: 'true' }, run.fetcher, now), {
-    decoded: 1, synthetic: 0, unsupported: 1, unparsed: 0, created: 0, deferred: 0,
+    decoded: 1, verbatim: 0, synthetic: 0, unsupported: 1, unparsed: 0, created: 0, deferred: 0,
   });
   assert.deepEqual(run.writes, []);
 });
@@ -115,4 +116,58 @@ test('keeps the requested navigation aid distinct from radio frequencies', async
   assert.equal((await collectReports({ ...environment, PUBLISH: 'true' }, run.fetcher, now)).created, 1);
   const issue = run.writes.find(x => x.pathname.endsWith('/issues'));
   assert.match(issue.body, /Which navigation beacon serves Sochi · DCS Caucasus\?/);
+});
+
+test('preserves the whole safe question and withholds the answer and prior turns', async () => {
+  const question = 'What is the Tower freq for  Sochi?';
+  const source = { message: 'ask_oversweep_report', ...report, question, publicQuestionNotice: 1 };
+  const run = simulate({ pages: [[event('verbatim', source)]] });
+  const result = await collectReports({ ...environment, PUBLISH: 'true' }, run.fetcher, now);
+  assert.equal(result.verbatim, 1);
+  assert.equal(result.synthetic, 0);
+  assert.equal(result.created, 1);
+  const issue = run.writes.find(x => x.pathname.endsWith('/issues'));
+  assert.ok(issue.body.includes(`**Reported question (verbatim)**\n\n    ${question}`));
+  assert.doesNotMatch(issue.body, /Where is Sochi|Try the airfield page|Offline retrieval check/);
+});
+
+test('recognises the published slug of a standalone airfield without guessing simulator scope', () => {
+  const sochi = '/encyclopedia/locations/sochi/';
+  const classify = createPublicQuestionSelector({
+    [sochi]: { title: 'Sochi International Airport' },
+    '/encyclopedia/locations/dcs-caucasus/#af-sochi-adler': { name: 'Sochi-Adler', record: sochi },
+    '/encyclopedia/locations/dcs-syria/#af-ramat-david': { name: 'Ramat David' },
+    '/encyclopedia/locations/dcs-sinai/#af-ramat-david': { name: 'Ramat David' },
+  });
+  const question = 'What is the tower freq for Sochi?';
+  assert.deepEqual(classify({ question, publicQuestionNotice: 1 }), { question, subjectId: sochi, verbatim: true });
+  const ambiguous = 'Which runway at Ramat David runs east-west?';
+  assert.deepEqual(classify({ question: ambiguous, publicQuestionNotice: 1 }), { question: ambiguous, subjectId: null, verbatim: true });
+});
+
+test('uses synthetic cases for older reports and questions that fail screening', async () => {
+  const question = 'What is the tower freq for Sochi?';
+  const variants = [
+    { question },
+    { question, publicQuestionNotice: 2 },
+    { question, publicQuestionNotice: '1' },
+    ...[
+      'What is the tower freq for Sochi, Alice Smith?',
+      'What is the tower freq for Sochi 0412 345 678?',
+      'What is the tower freq for Sochi https://example.com/private?',
+      'What is the tower freq for Sochi?\n',
+      'What is the tower freq for Sochi\u200b?',
+      'What is the tower freq for `[Sochi]`?',
+    ].map(question => ({ question, publicQuestionNotice: 1 })),
+  ];
+  const run = simulate({ pages: [variants.map((variant, index) => event(`variant-${index}`, {
+    message: 'ask_oversweep_report', ...report, ...variant,
+  }))] });
+  const result = await collectReports({ ...environment, PUBLISH: 'true' }, run.fetcher, now);
+  assert.equal(result.verbatim, 0);
+  assert.equal(result.synthetic, variants.length);
+  for (const issue of run.writes.filter(x => x.pathname.endsWith('/issues'))) {
+    assert.match(issue.body, /Synthetic test question/);
+    assert.doesNotMatch(issue.body, /Alice Smith|0412 345 678|example\.com|\u200b|\[Sochi\]/u);
+  }
 });
