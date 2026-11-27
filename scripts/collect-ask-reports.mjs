@@ -132,7 +132,19 @@ async function readReports(fetcher, { account, token, now, backfill }) {
           continue;
         }
         const marker = `<!-- ask-oversweep-report:${createHash('sha256').update(id).digest('hex')} -->`;
-        reports.set(marker, { id, marker, timestamp: row.timestamp, report: reportPayload(row.source) });
+        if (id === '01M8E88V0C0000000000000003') {
+        const parsed = reportPayload(row.source);
+        const issueQuote = disclosedQuestion(parsed, () => undefined);
+        console.log(JSON.stringify({
+          report570: true,
+          notice: [1, 2, '1', '2'].includes(parsed?.publicQuestionNotice) ? parsed.publicQuestionNotice : 'missing or unrecognised',
+          rawObjectNotice: [1, 2, '1', '2'].includes(row.source?.publicQuestionNotice) ? row.source.publicQuestionNotice : 'missing or unrecognised',
+          hasQuestion: typeof parsed?.question === 'string' && Boolean(parsed.question.trim()),
+          allowedLength: typeof parsed?.question === 'string' && parsed.question.length <= 300,
+          quoteAccepted: Boolean(issueQuote),
+        }));
+      }
+      reports.set(marker, { id, marker, timestamp: row.timestamp, report: reportPayload(row.source) });
       }
       if (rows.length < pageSize) return { reports, invalidMetadata, incomplete: false };
       offset = rows.at(-1)?.$metadata?.id;
