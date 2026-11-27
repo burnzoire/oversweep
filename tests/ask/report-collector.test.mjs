@@ -74,8 +74,8 @@ test('creates labelled issues, publishes only canonical links, and skips closed 
   const issue = run.writes.find(x => x.pathname.endsWith('/issues'));
   assert.deepEqual(issue.labels, ['ask-oversweep-report']);
   assert.match(issue.body, /oversweep\.com\/encyclopedia\/locations\/dcs-caucasus\/#af-sochi/);
-  assert.match(issue.body, /Which radio frequency is listed for Sochi · DCS Caucasus\?/);
-  assert.match(issue.body, /2026-11-26T23:59:00/);
+  assert.match(issue.body, /What frequency should I use to contact the tower at Sochi · DCS Caucasus\?/);
+  assert.match(issue.body, /2026-11-26T23:59Z/);
   assert.match(issue.body, /dash\.cloudflare\.com.*observability/);
   assert.match(issue.body, /unique-12345/);
   assert.doesNotMatch(issue.body, /Tower frequency for Sochi|Where is Sochi|example\.com|arbitrary\/private|airfield page/);
@@ -107,4 +107,12 @@ test('withholds issues when no synthetic replay can match the report', async () 
     decoded: 1, synthetic: 0, unsupported: 1, unparsed: 0, created: 0, deferred: 0,
   });
   assert.deepEqual(run.writes, []);
+});
+
+test('keeps the requested navigation aid distinct from radio frequencies', async () => {
+  const navigation = { ...report, question: 'What frequency is the TACAN at Sochi?' };
+  const run = simulate({ pages: [[event('navigation', { message: 'ask_oversweep_report', ...navigation })]] });
+  assert.equal((await collectReports({ ...environment, PUBLISH: 'true' }, run.fetcher, now)).created, 1);
+  const issue = run.writes.find(x => x.pathname.endsWith('/issues'));
+  assert.match(issue.body, /Which navigation beacon serves Sochi · DCS Caucasus\?/);
 });

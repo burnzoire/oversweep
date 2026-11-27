@@ -33,7 +33,7 @@ const observability = 'https://dash.cloudflare.com/?to=/:account/workers-and-pag
 function createIssue(event, report, sample) {
   const id = createHash('sha256').update(event.$metadata.id).digest('hex');
   const marker = `<!-- ask-oversweep-report:${id} -->`;
-  const time = new Date(event.timestamp).toISOString();
+  const time = `${new Date(event.timestamp).toISOString().slice(0, 16)}Z`;
   const blocks = [
     marker,
     `**Reported stage** \`${report.stage}\``,

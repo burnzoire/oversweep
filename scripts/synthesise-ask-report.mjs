@@ -3,11 +3,12 @@ import { createRetriever } from '../workers/ask-oversweep/retrieval.mjs';
 // Report text can select a template and public corpus entries, but cannot supply
 // any text for the public issue. Keep simulator scope in the published titles.
 const intents = [
-  [/\b(?:tower|frequency|frequencies|freq|contact the tower)\b/i, subject => `Which radio frequency is listed for ${subject}?`],
-  [/\b(?:TACAN|VORTAC|navigation beacon)\b/i, subject => `What navigation beacon is available at ${subject}?`],
+  [/\b(?:TACAN|VORTAC|navigation beacon)\b/i, subject => `Which navigation beacon serves ${subject}?`],
   [/\b(?:east[ -]west|west[ -]east)\b/i, subject => `Which runway at ${subject} is aligned roughly east to west?`],
   [/\b(?:north[ -]south|south[ -]north)\b/i, subject => `Which runway at ${subject} is aligned roughly north to south?`],
   [/\b(?:runway|runways|landing strip)\b/i, subject => `Which runways are listed for ${subject}?`],
+  [/\btower\b/i, subject => `What frequency should I use to contact the tower at ${subject}?`],
+  [/\b(?:frequency|frequencies|freq)\b/i, subject => `Which radio frequency is listed for ${subject}?`],
   [/\b(?:what (?:is|are|does)|explain|mean|meaning|define)\b/i, subject => `How does Oversweep explain ${subject}?`],
 ];
 
@@ -26,7 +27,7 @@ export function createReportSynthesiser(corpus) {
       .filter(turn => ['user', 'assistant'].includes(turn?.role) && typeof turn.content === 'string')
       .map(turn => ({ role: turn.role, content: turn.content.slice(0, 1200) }));
     const topic = canonical(report.topic, 3);
-    const originalReplay = retrieve(original, { history, topic: topic.length ? topic : undefined });
+    const originalReplay = retrieve(original, { history, topic });
     // Reported sources are the outcome of retrieval, not the browser's input hints.
     const reported = canonical(report.sources, 6);
     const originalLead = originalReplay.passages[0]?.id;
