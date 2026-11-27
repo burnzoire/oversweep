@@ -71,7 +71,7 @@ const { id } = Astro.props;
       const label = document.createElement("summary");
       label.textContent = report.stage === "answered" ? "Report answer" : "Report unanswered question";
       const disclosure = document.createElement("p");
-      disclosure.textContent = "Send this question, the reply, up to two preceding messages, source IDs and topic IDs to Oversweep for review. Only send if those messages contain no personal details.";
+      disclosure.textContent = "Send this question, the reply, up to two preceding messages, source IDs and topic IDs to Oversweep for review. The report time, response status and links to published Oversweep pages may appear in a public GitHub issue. Only send if the messages contain no personal details.";
       const send = document.createElement("button");
       send.type = "button";
       send.textContent = "Send report";

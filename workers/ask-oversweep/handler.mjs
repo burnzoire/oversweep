@@ -66,7 +66,8 @@ export function createHandler(corpus, prepared) {
       const key = request.headers.get("CF-Connecting-IP") ?? "unknown";
       const { success } = await env.ASK_REPORT_LIMIT.limit({ key });
       if (!success) return json({}, 429);
-      console.info("ask_oversweep_report", {
+      console.info({
+        message: "ask_oversweep_report",
         question, history: history.map(({ role, content }) => ({ role, content })),
         answer, stage, sources: [...new Set(sources)],
         topic, revision,
