@@ -258,6 +258,17 @@ const SCENARIOS: Record<string, Scenario> = {
     },
     slew: { step: 'slew', on: 'gm', free: 'gm-free', done: 'gm-on', display: 'left', freeOnMove: true, what: 'runways’ midpoint', ...GM_SLEW },
   },
+  'markpoint-tgp': {
+    initial: { left: 'tgp-mark-runway', mfd: 'hsd-start', ded: 'cni-3' },
+    enter: { recall: { ded: 'mark-tgp-next', mfd: 'hsd-hud-marked' } },
+    after: {
+      mark: { ded: 'mark-tgp' },
+      recall: { ded: 'mark-tgp-26' },
+      select: { ded: 'mark-tgp-selected', mfd: 'hsd-hud-sel' },
+      rtn: { ded: 'cni-26' },
+    },
+    slew: [],
+  },
   takeoff: {
     // Lined up on runway 13, brakes held, NWS engaged (the AR/NWS light), the HUD on in NAV, the engine at idle.
     initial: {

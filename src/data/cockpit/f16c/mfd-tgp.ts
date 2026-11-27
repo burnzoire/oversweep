@@ -116,11 +116,23 @@ const tgpD: Page[] = [
   ...['1', '2', 'T', 'C'].map(l => tgp(`tgp-t-${l}`, STPT5, true, false, { mbc: l, next: '7', ...PT1, cz: true })),
   tgp('tgp-t-3', STPT5, true, false, { mbc: 'S', next: '3', ...PT1, cz: true }),
 ];
+// Fixed, reframed view of a fictional airfield. Keep the image under the shared symbology.
+const base = ((import.meta as { env?: { BASE_URL?: string } }).env?.BASE_URL ?? '/').replace(/\/+$/, '');
+const RUNWAY: Spi = {
+  lat: '036:35.822', lon: '036:35.014', elv: '+0892', hq: false, range: 'E4.0', meter: '103', ttg: '000:36',
+  video: base + '/images/cockpit/tgp/runway-navigation.webp',
+};
+const runwayPage: Page = {
+  ...tgp('tgp-mark-runway', RUNWAY, true, true),
+  pan: true, videoScale: 1.35, cursor: { d: '', at: [mm(72), mm(-35)] },
+};
 export const tgpPages: Page[] = [
+  runwayPage,
   tgp('tgp', SPI.stpt, false), tgp('tgp-soi', SPI.stpt, true),
   tgp('tgp-sa6', SPI.sa6, false), tgp('tgp-sa6-near', SPI.sa6Near, false), tgp('tgp-sa11', SPI.sa11, false), tgp('tgp-sa11-near', SPI.sa11Near, false), tgp('tgp-sa11-soi', SPI.sa11Near, true), tgp('tgp-sa11-track', SPI.sa11Track, true, true), ...tgpD,
 ];
 export const tgpPageLabels: Record<string, string> = {
+  'tgp-mark-runway': 'TGP format: thermal view of the runway checkpoint in point track',
   tgp: 'TGP format: Slave, on the selected steerpoint',
   'tgp-soi': 'TGP format, SOI: Slave, on the selected steerpoint',
   'tgp-sa6': 'TGP format: slaved to the HTS-designated SA-6',
