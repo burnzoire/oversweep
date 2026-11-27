@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
-import { createReportSynthesiser } from './synthesise-ask-report.mjs';
+import { createPublicQuestionSelector, createReportSynthesiser } from './synthesise-ask-report.mjs';
 
 const eventName = 'ask_oversweep_report';
 const worker = 'ask-oversweep';
@@ -37,16 +37,23 @@ function createIssue(event, report, sample) {
   const blocks = [
     marker,
     `**Reported stage** \`${report.stage}\``,
-    `**Synthetic test question**\n\n    ${sample.question}`,
-    `**Offline retrieval check** ${sample.lead ? `The synthetic question and the reported question selected the same first [passage](https://www.oversweep.com${sample.lead}).` : 'Neither question retrieved a passage.'}`,
-    `**Public reference** <https://www.oversweep.com${sample.subjectId}>`,
-    `**Original report** Open [Cloudflare Workers Observability](${observability}), select \`${worker}\`, then filter for \`${eventName}\` around \`${time}\` (UTC).`,
-    'Replay the synthetic question to verify answer generation. The collector checked retrieval only.',
+    `**${sample.verbatim ? 'Reported question (verbatim)' : 'Synthetic test question'}**\n\n    ${sample.question}`,
   ];
+  if (!sample.verbatim) {
+    const result = sample.lead ? `Both questions selected the same first [passage](https://www.oversweep.com${sample.lead}).` : 'Neither question retrieved a passage.';
+    blocks.push(`**Offline retrieval check** ${result}`);
+  }
+  if (sample.subjectId) blocks.push(`**Public reference** <https://www.oversweep.com${sample.subjectId}>`);
+  blocks.push(
+    `**Original report** Open [Cloudflare Workers Observability](${observability}), select \`${worker}\`, then filter for \`${eventName}\` around \`${time}\` (UTC).`,
+    sample.verbatim
+      ? 'Replay the reported question to verify the failure. Prior turns and the original reply are available in Cloudflare.'
+      : 'Replay the synthetic question to verify answer generation. The collector checked retrieval only.',
+  );
   if (/^[a-z0-9_-]{8,128}$/i.test(event.$metadata.id)) {
     blocks.splice(-1, 0, `**Event filter** \`$metadata.id\` equals \`${event.$metadata.id}\`.`);
   }
-  return { marker, timestamp: event.timestamp, title: `Ask Oversweep report · ${report.stage}`, body: blocks.join('\n\n') };
+  return { marker, verbatim: sample.verbatim, timestamp: event.timestamp, title: `Ask Oversweep report · ${report.stage}`, body: blocks.join('\n\n') };
 }
 
 async function request(fetcher, url, { token, service, body, allow404 = false }) {
@@ -75,7 +82,7 @@ async function request(fetcher, url, { token, service, body, allow404 = false })
   }
 }
 
-async function readReports(fetcher, { account, token, now, backfill, synthesise }) {
+async function readReports(fetcher, { account, token, now, backfill, selectQuestion }) {
   const url = `https://api.cloudflare.com/client/v4/accounts/${account}/workers/observability/telemetry/query`;
   const reports = new Map();
   const cursors = new Set();
@@ -115,7 +122,7 @@ async function readReports(fetcher, { account, token, now, backfill, synthesise 
         continue;
       }
       decoded++;
-      const sample = synthesise(report);
+      const sample = selectQuestion(report);
       if (!sample) {
         unsupported++;
         continue;
@@ -153,8 +160,10 @@ export async function collectReports(env, fetcher = fetch, now = Date.now()) {
     throw new Error('The published Ask Oversweep corpus returned an unexpected format.');
   }
   const synthesise = createReportSynthesiser(corpus);
+  const selectPublicQuestion = createPublicQuestionSelector(corpus);
   const { reports, unparsed, unsupported, decoded } = await readReports(fetcher, {
-    account, token, now, backfill: env.BACKFILL === 'true', synthesise,
+    account, token, now, backfill: env.BACKFILL === 'true',
+    selectQuestion: report => selectPublicQuestion(report) ?? synthesise(report),
   });
   let created = 0;
   let deferred = 0;
@@ -180,13 +189,14 @@ export async function collectReports(env, fetcher = fetch, now = Date.now()) {
     }
     deferred = pending.size - created;
   }
-  return { decoded, synthetic: reports.size, unsupported, unparsed, created, deferred };
+  const verbatim = [...reports.values()].filter(report => report.verbatim).length;
+  return { decoded, verbatim, synthetic: reports.size - verbatim, unsupported, unparsed, created, deferred };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
-    const { decoded, synthetic, unsupported, unparsed, created, deferred } = await collectReports(process.env);
-    console.log(`Reports decoded: ${decoded}. Synthetic cases: ${synthetic}. Needs manual review: ${unsupported}. Issues created: ${created}. Deferred: ${deferred}. Unrecognised events: ${unparsed}.`);
+    const { decoded, verbatim, synthetic, unsupported, unparsed, created, deferred } = await collectReports(process.env);
+    console.log(`Reports decoded: ${decoded}. Verbatim questions: ${verbatim}. Synthetic cases: ${synthetic}. Needs manual review: ${unsupported}. Issues created: ${created}. Deferred: ${deferred}. Unrecognised events: ${unparsed}.`);
     if (unparsed || deferred) process.exitCode = 1;
   } catch (error) {
     console.error(error.message);
