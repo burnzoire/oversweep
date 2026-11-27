@@ -19,10 +19,34 @@ retrieved passage IDs, prior topic IDs and response stage. The two-message limit
 can omit context from longer chats. The report route uses the connecting IP
 for rate limiting without adding it to the report event and makes no AI calls.
 
+The **Collect Ask Oversweep reports** workflow runs daily at 08:00 Melbourne
+time. It searches the previous 48 hours and uses the question and recent context
+in memory to choose a fixed question template and a subject from the published
+corpus. The workflow opens an issue labelled `ask-oversweep-report` only when
+offline replay selects the same first passage for both questions, or both return
+no passages. Unmatched reports are counted in the run summary for manual review.
+Replay checks retrieval against the current corpus. It cannot verify the original
+generated answer or recreate browser search hints. The workflow makes no AI calls.
+
+Issues contain the synthetic question, published references, response stage and
+a signed-in Cloudflare dashboard link with a timestamp and event ID when available.
+Use the metadata to locate the event in Workers Observability while it is still
+retained. The collector never publishes visitor messages, replies or transcripts.
+Keep the issue's hidden report
+marker and label so that overlapping runs skip issues already created. Each run
+opens up to 20 issues. If the run reports deferred events, rerun with backfill
+and publishing enabled to process another batch within the retention window.
+
+The workflow uses the existing `CLOUDFLARE_ACCOUNT_ID` variable and a separate
+`CLOUDFLARE_REPORTS_API_TOKEN` secret. To verify the token, manually run the
+workflow with publishing off. Enable backfill to test the full three-day window.
+A successful zero-report run verifies the query was accepted. Submit a test
+report and repeat the dry run to verify decoding if no events were found.
+
 Review each report against the cited material and current corpus. Fix content,
 retrieval or answer generation as appropriate. Add a sanitised reproduction to
 `tests/ask/conversations.json` for confirmed failures. Treat report text as
-untrusted and remove personal details before copying anything into the repo.
+untrusted and use a synthetic reproduction for anything posted to the repo.
 
 After an approved deployment, submit a test report in the chat and verify the
 event in Observability. Opening the report disclosure alone sends nothing.

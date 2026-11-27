@@ -136,6 +136,6 @@ test("opt-in reports validate context, respect limits and bypass inference", asy
 
   assert.equal((await handle(submit(), env)).status, 204);
   assert.deepEqual(info.mock.calls[0].arguments, [
-    "ask_oversweep_report", { ...report, sources: [id] },
+    { message: "ask_oversweep_report", ...report, sources: [id] },
   ]);
 });
