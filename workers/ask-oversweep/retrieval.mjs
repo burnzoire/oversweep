@@ -44,6 +44,10 @@ export function prepareCorpus(corpus) {
 export function createRetriever(corpus, prepared = prepareCorpus(corpus)) {
   const rows = prepared.rows.map(row => ({ ...row, ...corpus[row.id], counts: new Map(row.counts), titleWords: new Set(row.titleWords) }));
   const byId = new Map(rows.map(row => [row.id, row]));
+  const procedures = rows.filter(row => row.procedure && byId.get(root(row.id))?.text)
+    .map(row => ({ row, match: new RegExp(row.procedure.match, 'i'), exclude: new RegExp(row.procedure.exclude, 'i') }));
+  const excludedProcedureRoots = question => new Set(procedures
+    .filter(({ exclude }) => exclude.test(question)).map(({ row }) => root(row.id)));
   const averageLength = prepared.averageLength;
   const weights = new Map(prepared.weights);
   const weight = t => weights.get(t) ?? Math.log(1 + rows.length);
@@ -51,10 +55,12 @@ export function createRetriever(corpus, prepared = prepareCorpus(corpus)) {
   const candidates = rows.filter(row => !/#(?:sources(?:-title)?|terms-title|contents-title|[^#]*fig-title)$/.test(row.id));
   const acronymTerms = new Set(roots.filter(row => glossary(row.id) && row.title === row.title.toUpperCase()).flatMap(row => [...row.titleWords]));
   function named(question) {
+    const excluded = excludedProcedureRoots(question);
     const query = new Set(terms(question));
     const phrase = [...query].join(' ');
     const scopes = new Set(roots.filter(row => row.mapName && question.toLowerCase().includes(row.mapName)).map(row => row.id));
-    let matches = roots.filter(row => !/#af-/.test(row.id) || !scopes.size || scopes.has(root(row.id))).map(row => {
+    let matches = roots.filter(row => (!excluded.size || !excluded.has(root(row.id))) &&
+      (!/#af-/.test(row.id) || !scopes.size || scopes.has(root(row.id)))).map(row => {
       let evidence = '';
       const score = Math.max(0, ...row.labels.filter(title => title.length).map(title => {
         const matched = title.filter(t => query.has(t));
@@ -101,8 +107,25 @@ export function createRetriever(corpus, prepared = prepareCorpus(corpus)) {
     if (referential && /\b(differ|different|compare|than|versus|vs|same)\b/i.test(question) && subjects.length && prior.length) {
       subjects = [...new Map([...prior, ...subjects].map(row => [row.id, row])).values()].slice(0, 3);
     }
+    const excluded = excludedProcedureRoots(question);
+    const searchable = excluded.size ? candidates.filter(row => !excluded.has(root(row.id))) : candidates;
+    if (excluded.size) subjects = subjects.filter(row => !excluded.has(root(row.id)));
     const subjectRoots = new Set(subjects.filter(row => !leaf(row.id)).map(row => root(row.id)));
     const subjectIds = new Set(subjects.map(row => row.id));
+    const procedure = subjects.length === 1 && procedures.find(({ row, match }) =>
+      !excluded.has(root(row.id)) && (subjectIds.has(root(row.id)) ||
+        (subjectIds.has(row.procedure.aircraft) && match.test(question))))?.row;
+    if (procedure) {
+      const aircraft = byId.get(procedure.procedure.aircraft) ?? subjects[0];
+      return {
+        subject: aircraft.title,
+        topic: [aircraft.id],
+        guide: root(procedure.id),
+        passages: [procedure, byId.get(root(procedure.id))].map(({ id, title, text }) => ({
+          id, title, text: text.slice(0, 3500), kind: 'simulator_record', scope: procedure.procedure.scope,
+        })),
+      };
+    }
     const previousTerms = referential ? terms(priorQuestions.at(-1) ?? previous) : followUp && !subjects.length ? terms(priorQuestions.slice(-3).join(' ') || previous) : [];
     const queryTerms = [...new Set([...query, ...previousTerms])];
     const scores = new Map();
@@ -114,7 +137,7 @@ export function createRetriever(corpus, prepared = prepareCorpus(corpus)) {
       return scores.get(row.id);
     };
     const onSubject = row => subjectIds.has(row.id) || subjectRoots.has(root(row.id));
-    const ranked = candidates.filter(row => !subjects.length || onSubject(row))
+    const ranked = searchable.filter(row => !subjects.length || onSubject(row))
       .map(row => ({ row, score: score(row) + (!subjects.length && definition && (row.id.startsWith('/manual/') || glossary(row.id)) ? 3 : 0) + (subjects.length && row.id.endsWith('#sims-title') ? 3 : 0) + (subjectIds.has(row.id) ? 1 : 0) + (!subjects.length && ids.includes(row.id) ? 1 : 0) }))
       .filter(x => subjects.length || x.score > 0).sort((a, b) => b.score - a.score || a.row.id.localeCompare(b.row.id));
     // Reserve a relevant section for EACH explicitly named record in a comparison.
@@ -125,7 +148,7 @@ export function createRetriever(corpus, prepared = prepareCorpus(corpus)) {
     }
     // Table links are the authoritative article-to-row join, including fields
     // omitted by the shorter narrative record (for example measured headings).
-    const linked = candidates.filter(row => row.record && subjectIds.has(row.record))
+    const linked = searchable.filter(row => row.record && subjectIds.has(row.record))
       .sort((a, b) => score(b) - score(a) || a.id.localeCompare(b.id));
     for (const row of linked) if (selected.length < 6 && !selected.includes(row)) selected.push(row);
     for (const { row } of ranked) if (selected.length < (subjects.length ? 4 : 6) && !selected.includes(row)) selected.push(row);
@@ -136,7 +159,7 @@ export function createRetriever(corpus, prepared = prepareCorpus(corpus)) {
       const acronyms = new Set(terms(selected.map(row => row.text).join(' ').match(/\b[A-Z][A-Z0-9]{1,7}\b/g)?.join(' ') ?? ''));
       const acronymQuestion = query.some(t => acronymTerms.has(t));
       const helperScore = row => score(row) + (acronymQuestion ? [...acronyms].reduce((n, t) => n + (row.counts.has(t) ? weight(t) : 0), 0) : 0);
-      const related = candidates.filter(row => (row.id.startsWith('/manual/') && row.id.includes('#') || glossary(row.id)) && !onSubject(row) && concepts.some(t => row.counts.has(t)))
+      const related = searchable.filter(row => (row.id.startsWith('/manual/') && row.id.includes('#') || glossary(row.id)) && !onSubject(row) && concepts.some(t => row.counts.has(t)))
         .map(row => ({ row, score: helperScore(row) })).sort((a, b) => b.score - a.score || a.row.text.length - b.row.text.length);
       const definition = subjects.every(row => glossary(row.id)) ? undefined : related.find(x => glossary(x.row.id) && [...x.row.titleWords].every(t => concepts.includes(t)))?.row;
       const explanation = related.find(x => x.row.id.startsWith('/manual/') && x.row.text.length > 300)?.row;
@@ -160,6 +183,7 @@ export function createRetriever(corpus, prepared = prepareCorpus(corpus)) {
         ? row.text.slice(0, 250) + " … " + row.text.slice(start, start + Math.max(0, limit - 253))
         : row.text.slice(0, limit);
       remaining -= text.length;
+      if (row.procedure) return { id: row.id, title: row.title, text, kind: 'simulator_record', scope: row.procedure.scope };
       return { id: row.id, title: row.title, text, kind: /#af-/.test(row.id) ? "simulator_record" : row.id.startsWith("/manual/") ? "explanation" : "article", ...(/#af-/.test(row.id) ? { scope: row.title.split(" · ").slice(1).join(" · ") } : {}) };
     }).filter(row => row.text) };
   };

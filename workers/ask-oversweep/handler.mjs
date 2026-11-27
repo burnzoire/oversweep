@@ -89,6 +89,9 @@ export function createHandler(corpus, prepared) {
       ...body, topic: context.topic, retrieved: sources, revision: headers["X-Ask-Revision"],
       references: body.ids.map(id => ({ id, title: corpus[id].title })),
     });
+    const noGroundedAnswer = stage => context.guide
+      ? answerJson({ answer: `Open the Oversweep walkthrough to practise this procedure in the ${context.passages[0].scope}.`, ids: [context.guide], stage })
+      : answerJson({ answer: insufficient, ids: [], stage });
     if (!sources.length) return answerJson({ answer: insufficient, ids: [], stage: "no_passages" });
     const passages = context.passages.map(({ id, ...passage }, index) => ({ source: index + 1, ...passage }));
     const model = env.ASK_MODEL || "@cf/google/gemma-4-26b-a4b-it";
@@ -167,12 +170,12 @@ export function createHandler(corpus, prepared) {
       return json({ code: "invalid_answer", stage: "response_shape" }, 502);
     }
     if (!reply.answer.trim() && !reply.sources.length) {
-      return answerJson({ answer: insufficient, ids: [], stage: "no_supported_answer" });
+      return noGroundedAnswer("no_supported_answer");
     }
     if (!reply.answer.trim() || !reply.sources.length ||
       reply.sources.some(n => !Number.isInteger(n) || !sources[n - 1])) {
       logFailure("response_sources");
-      return answerJson({ answer: insufficient, ids: [], stage: "response_sources" });
+      return noGroundedAnswer("response_sources");
     }
     return answerJson({ answer: reply.answer.trim(), ids: [...new Set(reply.sources.map(n => sources[n - 1]))] });
   };
