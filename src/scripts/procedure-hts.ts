@@ -23,10 +23,11 @@ import { mfdDisplay } from '../data/cockpit/f16c/mfd';
 import { T as TO_T, TAKEOFF, takeoffAt, takeoffHud } from '../data/cockpit/f16c/takeoff-motion';
 import { takeoffGround } from '../data/cockpit/f16c/takeoff-ground';
 import { renderHudCue, renderMfdPage } from '../data/cockpit/render';
+import type { ProcedureQuestion } from '../data/aircraft-procedures';
 
 interface StepDo { control: string; to: string; on?: 'press' | 'release'; /** Presses it takes (each short of the last shows `after['<step>-<n>']`). */ times?: number }
 interface Typing { keys: string[]; pages: string[] }
-interface Step { id: string; panels: string[]; hints?: string[]; do?: StepDo; also?: StepDo[]; type?: Typing; confirm?: string }
+interface Step { id: string; panels: string[]; hints?: string[]; do?: StepDo; also?: StepDo[]; type?: Typing; confirm?: string; ask?: ProcedureQuestion }
 interface Config { aircraft: string; model: string; initial: Record<string, string>; labels: Record<string, string>; names: Record<string, string>; steps: Step[] }
 /** `pod`: ms of pod warm-up left (-1 off); `cur`: the HAD cursor while it is slewed by hand (page units); the rest name pages. */
 interface State { /** Lamps lit (`panel.lamp`). */ lit: string[]; pod: number; /** The running warm-up (index into the scenario's). */ wk: number; mfd: string; left: string; ded: string; cur: [number, number]; /** Pages of other panels' indicators (`hud.master-arm`), by indicator. */ x: Record<string, string>; /** Other panels' number readings (`hud.slant-range`), by indicator. */ r?: Record<string, number>; scene?: SceneFrame; artwork?: Record<string, string> }
@@ -139,6 +140,12 @@ const SCENARIOS: Record<string, Scenario> = {
       { step: 'slew-lead', on: 'tw-tracks', free: 'tw-cur-free', done: 'tw-cur-lead', display: 'left', cursor: true, what: 'lead’s track', ...TWO_SLEW.lead },
       { step: 'slew-wing', on: 'tw-lead-sys', free: 'tw-wing-free', done: 'tw-cur-wing', display: 'left', cursor: true, what: 'wingman’s track', ...TWO_SLEW.wing },
     ],
+  },
+  'fcr-contact-reading': {
+    initial: { left: 'tw-tracks' },
+    after: {},
+    enter: { count: { left: 'tw-tracks' }, range: { left: 'tw-tracks' }, primary: { left: 'dt-dtsam' }, scale: { left: 'dt-dtt' } },
+    slew: [],
   },
   'fcr-two': {
     initial: { left: 'dt-start', mfd: 'menu-blank', ded: 'cni' },
@@ -540,7 +547,8 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     previous.disabled = step === 0 && !finished;
     one<HTMLElement>('[data-controls]').hidden = false;
     // The button names what the reader checks; it shows once the step's moves are made.
-    confirm.hidden = finished || !s.confirm || moves(s).length > 0 || !!s.type || slewing() || scanning || (dialing() && !dialNow()!.ok.includes(dialAt()));
+    confirm.hidden = finished || !s.confirm || !!s.ask || moves(s).length > 0 || !!s.type || slewing() || scanning || (dialing() && !dialNow()!.ok.includes(dialAt()));
+    if (s.ask) stepEls[step].querySelectorAll<HTMLButtonElement>('[data-answer]').forEach(button => { button.disabled = false; });
     restart.hidden = !finished;
     confirm.textContent = s.confirm ?? 'Confirm';
     confirm.disabled = false;
@@ -550,7 +558,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
       p.classList.toggle('acting', p.dataset.procPanel === s.panels[0]);
       p.style.order = String(s.panels.indexOf(p.dataset.procPanel!));
     }
-    if (finished) say('');
+    if (finished || s.ask) say('');
     else if (moves(s).length === 1) say(`${cap(instruction(moves(s)[0]))}.`);
     else if (moves(s).length) say(`Make these moves, in any order: ${moves(s).map(instruction).join('; ')}.`);
     else if (s.type) say(`Press ${keyText(s.type.keys[0])} (key 1 of ${s.type.keys.length}).`);
@@ -799,10 +807,23 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     indicate();
   });
 
+  root.addEventListener('click', event => {
+    const answer = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-answer]');
+    const question = cfg.steps[step].ask;
+    if (!answer || answer.disabled || !question || finished || !stepEls[step].contains(answer)) return;
+    if (Number(answer.dataset.answer) !== question.answer) {
+      say(question.wrong, true);
+      return;
+    }
+    stepEls[step].querySelectorAll<HTMLButtonElement>('[data-answer]').forEach(button => { button.disabled = true; });
+    say(question.right);
+    confirm.hidden = false;
+    confirm.focus({ preventScroll: true });
+  });
   confirm.addEventListener('click', () => {
     if (confirm.disabled || confirm.hidden) return;
     go(step + 1);
-    stepEls[step]?.querySelector('h2')?.focus({ preventScroll: true });
+    if (!finished) stepEls[step]?.querySelector('h2')?.focus({ preventScroll: !cfg.steps[step].ask });
   });
   previous.addEventListener('click', () => {
     timers.splice(0).forEach(clearTimeout);
@@ -814,6 +835,7 @@ export function startHtsModel(root: HTMLElement, cfg: Config) {
     step = to; made = new Set(); presses = {}; typed = 0; scanning = false;
     enterStep();
     render();
+    if (cfg.steps[step].ask) stepEls[step].querySelector('h2')?.focus();
     if (scanOf()) playScans();
   });
   restart.addEventListener('click', () => {

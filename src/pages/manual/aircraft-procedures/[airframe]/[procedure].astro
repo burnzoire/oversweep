@@ -75,24 +75,29 @@ const rich = (t:string) => esc(t)
           <p><strong>Expect</strong> · <Fragment set:html={rich(s.expect)} /></p>
           {s.caution && <p class="procedure-warning"><strong>Note</strong> · <Fragment set:html={rich(s.caution)} /></p>}
           {s.links && <p class="procedure-panels">Encyclopedia: {s.links.map((l, k) => <>{k > 0 && ', '}<a href={recordLink(l)}>{l.label}</a></>)}</p>}
-          {s.ask && <div class="procedure-ask" data-cross-check><p><strong>{s.ask.question}</strong></p><ul>{s.ask.options.map((o, k) => <li><button type="button" data-answer={k}>{o}</button></li>)}</ul></div>}
+          {s.ask && <div class="procedure-ask" data-cross-check>
+            <p><strong>{s.ask.question}</strong></p>
+            {s.displayDescription && <details><summary>Display as text</summary><p>{s.displayDescription}</p></details>}
+            <ul>{s.ask.options.map((o, k) => <li><button type="button" data-answer={k}>{o}</button></li>)}</ul>
+          </div>}
           <p class="procedure-cite">Evidence: {s.evidence}</p>
           {s.panels.length > 0 && <p class="procedure-panels">Panels: {[...new Set(s.panels.map(baseOf))].map((id, k) => <>{k > 0 && ', '}<a href={sitePath(panelRoute(cockpit, id))}>{built.get(id)!.panel.title}</a></>)}</p>}
         </li>)}
       </ol>
+      {guide.model === 'fcr-contact-reading' && <p class="procedure-feedback" role="status" aria-live="polite" data-feedback></p>}
       <h2 class="procedure-step" data-complete tabindex="-1" hidden><Fragment set:html={rich(guide.complete)} /></h2>
       {guide.summary && <section class="procedure-summary" aria-labelledby="procedure-summary-h"><h3 id="procedure-summary-h">What you learned</h3><ul>{guide.summary.map(l => <li><Fragment set:html={rich(l)} /></li>)}</ul></section>}
       {nextGuide && <p class="procedure-next">Next: <a href={sitePath(procedureRoute(nextGuide))}>{nextGuide.title.replace(/^F-16C — /, '')}</a>{guide.nextScenario ? ` (${guide.nextScenario}).` : ', from where this procedure ends.'}</p>}
       <div class="procedure-controls" hidden data-controls>
         <button type="button" data-prev>Previous</button>
         <button type="button" data-confirm hidden>Confirm indication</button>
-        <button type="button" data-restart hidden>Restart procedure</button>
+        <button type="button" data-restart hidden>{guide.model === 'fcr-contact-reading' ? 'Restart exercise' : 'Restart procedure'}</button>
       </div>
     </div>
-    <aside class="procedure-visual" aria-label="Interactive cockpit panels" data-visual>
-      <p class="procedure-feedback" role="status" aria-live="polite" data-feedback></p>
+    <aside class="procedure-visual" aria-label={guide.model === 'fcr-contact-reading' ? 'Radar display' : 'Interactive cockpit panels'} data-visual>
+      {guide.model !== 'fcr-contact-reading' && <p class="procedure-feedback" role="status" aria-live="polite" data-feedback></p>}
       <div class="cockpit-layout">
-        {used.map(id => <div class="proc-panel" data-proc-panel={id}>
+        {used.map(id => <div class="proc-panel" data-proc-panel={id} inert={guide.model === 'fcr-contact-reading'}>
           <h3>{built.get(baseOf(id))!.panel.title}</h3>
           <CockpitPanel cockpit={cockpit} spec={built.get(baseOf(id))!.spec} scope={scope} only={cardsOf(id)} />
         </div>)}
@@ -116,7 +121,7 @@ if (root && configEl) {
     const config = JSON.parse(configEl.textContent!);
     if (config.model === 'tacan-navigation') (await import('../../../../scripts/procedure-tacan')).startTacanModel(root, config);
     else if (config.model === 'before-taxi' || config.model === 'before-takeoff') (await import('../../../../scripts/procedure-before-taxi')).startBeforeTaxiModel(root, config);
-    else if (config.model === 'hts' || config.model === 'hts-targeting' || config.model === 'harm-shot' || config.model === 'maverick-pre' || config.model === 'maverick-handoff' || config.model === 'markpoints' || config.model === 'markpoint-manual' || config.model === 'markpoint-hud' || config.model === 'markpoint-fcr' || config.model === 'markpoint-tgp' || config.model === 'fcr-rws' || config.model === 'fcr-vsr' || config.model === 'fcr-bug' || config.model === 'fcr-tws' || config.model === 'fcr-two' || config.model === 'aim120' || config.model === 'aim120-bore' || config.model === 'fcr-vol' || config.model === 'takeoff') (await import('../../../../scripts/procedure-hts')).startHtsModel(root, config);
+    else if (config.model === 'hts' || config.model === 'hts-targeting' || config.model === 'harm-shot' || config.model === 'maverick-pre' || config.model === 'maverick-handoff' || config.model === 'markpoints' || config.model === 'markpoint-manual' || config.model === 'markpoint-hud' || config.model === 'markpoint-fcr' || config.model === 'markpoint-tgp' || config.model === 'fcr-rws' || config.model === 'fcr-vsr' || config.model === 'fcr-bug' || config.model === 'fcr-tws' || config.model === 'fcr-two' || config.model === 'fcr-contact-reading' || config.model === 'aim120' || config.model === 'aim120-bore' || config.model === 'fcr-vol' || config.model === 'takeoff') (await import('../../../../scripts/procedure-hts')).startHtsModel(root, config);
     else if (config.model === 'steerpoint-entry') (await import('../../../../scripts/procedure-steerpoint')).startSteerpointModel(root, config);
     else (await import('../../../../scripts/procedure-engine-start')).startEngineModel(root, config);
   };

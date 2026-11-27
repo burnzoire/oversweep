@@ -10,6 +10,14 @@ import { fcrBox } from './cockpit/f16c/mfd-fcr';
 import { smsBox } from './cockpit/f16c/mfd-sms-aa';
 import { twoCata, twoLines, twoSpot } from './cockpit/f16c/mfd-fcr-two';
 
+export interface ProcedureQuestion {
+  question: string;
+  options: string[];
+  answer: number;
+  right: string;
+  wrong: string;
+}
+
 export interface ProcedureStep {
   id: string;
   section: string;
@@ -34,7 +42,9 @@ export interface ProcedureStep {
   /** Rings the step text can show: `{{phrase|k}}` in `action`/`expect` shows hint k. A hint is comma-separated targets `panel.indicator`, `panel.control` or `panel.indicator@row` (a DED row, 0–4). */
   hints?: string[];
   /** A cross-check question: the reader picks one answer; `answer` indexes `options`. */
-  ask?: { question: string; options: string[]; answer: number; right: string; wrong: string };
+  ask?: ProcedureQuestion;
+  /** Text equivalent of the display for a question that depends on its contents. */
+  displayDescription?: string;
   /** Encyclopedia records this step sends the reader to (slugs, shown as links). */
   links?: { slug: string; label: string; anchor?: string }[];
 }
@@ -48,7 +58,7 @@ export interface AircraftProcedure {
   status: 'public-preview' | 'review-only';
   simVersion: string;
   /** Which script drives the cockpit panels. */
-  model: 'engine-start' | 'fcr-tws' | 'fcr-two' | 'tacan-navigation' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff' | 'hts' | 'hts-targeting' | 'harm-shot' | 'maverick-pre' | 'maverick-handoff' | 'markpoints' | 'markpoint-manual' | 'markpoint-hud' | 'markpoint-fcr' | 'markpoint-tgp' | 'fcr-rws' | 'fcr-vsr' | 'fcr-bug' | 'aim120' | 'aim120-bore' | 'fcr-vol' | 'takeoff';
+  model: 'engine-start' | 'fcr-tws' | 'fcr-two' | 'fcr-contact-reading' | 'tacan-navigation' | 'steerpoint-entry' | 'before-taxi' | 'before-takeoff' | 'hts' | 'hts-targeting' | 'harm-shot' | 'maverick-pre' | 'maverick-handoff' | 'markpoints' | 'markpoint-manual' | 'markpoint-hud' | 'markpoint-fcr' | 'markpoint-tgp' | 'fcr-rws' | 'fcr-vsr' | 'fcr-bug' | 'aim120' | 'aim120-bore' | 'fcr-vol' | 'takeoff';
   /** The scenario shown above the steps, and the closing heading. */
   intro: string;
   description: string;
@@ -845,6 +855,87 @@ const fcrTwo: AircraftProcedure = {
   ]
 };
 procedures.push(fcrTwo);
+
+const twsContactDescription = 'From left to right: a yellow track at 45 NM marked 25, a yellow track at 47 NM marked 25, a yellow track at 38 NM marked 31, and a yellow track at 55 NM marked 15. The numbers by the tracks are altitudes in thousands of feet.';
+
+procedures.push({
+  id: 'procedure.dcs-f16c.fcr-contact-reading',
+  slug: 'radar-contact-reading',
+  airframe: 'f-16c',
+  title: 'F-16C — Reading multiple radar contacts',
+  objective: 'Read contact count, relative range and track symbols across TWS, DT SAM and DTT display snapshots.',
+  applicability: 'Illustrated DCS F-16C Block 50 display exercise.',
+  simVersion: 'DCS build not yet verified',
+  status: 'public-preview',
+  model: 'fcr-contact-reading',
+  intro: 'Answer four questions about fictional radar pictures on the left MFD. Each picture is already set up for you. Range increases up the display, and azimuth runs left to right.',
+  description: 'A four-question radar display exercise using fictional contacts in TWS, DT SAM and DTT.',
+  complete: 'Contact reading exercise complete',
+  summary: [
+    'In the TWS picture, each filled yellow square with a stem represents a contact track.',
+    'In the DT SAM picture, the ring marks the primary contact.',
+    'Read the range scale before comparing positions across displays.',
+  ],
+  sources: 'Eagle Dynamics — DCS F-16C Viper Early Access Guide (16 August 2026), B-scope format, track symbols and display formats, pp. 394–397, 404–405 and 413–420.',
+  steps: [
+    {
+      id: 'count', section: 'TWS', title: 'Count the contacts', control: 'Left MFD',
+      action: 'Scan across the centre of the display.',
+      expect: 'Look for filled yellow squares with a short stem.',
+      displayDescription: twsContactDescription,
+      evidence: 'Fictional snapshot; track symbols, pp. 404–405.',
+      panels: ['left-mfd'], confirm: 'Next question',
+      ask: {
+        question: 'How many contact tracks are shown?',
+        options: ['Two', 'Three', 'Four'], answer: 2,
+        right: 'Four tracks. The numbers beside them show altitude.',
+        wrong: 'Count the yellow track symbols across both sides of the display.',
+      },
+    },
+    {
+      id: 'range', section: 'TWS', title: 'Compare range', control: 'Left MFD',
+      action: 'Compare the vertical position of the tracks.',
+      expect: 'Your aircraft is at the bottom of the display.',
+      displayDescription: twsContactDescription,
+      evidence: 'Fictional snapshot; B-scope format, pp. 394–397.',
+      panels: ['left-mfd'], confirm: 'Next picture',
+      ask: {
+        question: 'Which track is closest in range?',
+        options: ['The 31,000 ft track', 'The 15,000 ft track', 'The two 25,000 ft tracks are tied'], answer: 0,
+        right: 'The 31,000 ft track sits lowest on the screen, at 38 NM. Altitude is the number by the symbol.',
+        wrong: 'Read from the bottom edge upward. Range and azimuth use different axes.',
+      },
+    },
+    {
+      id: 'primary', section: 'DT SAM', title: 'Find the primary contact', control: 'Left MFD',
+      action: 'Compare the two contact symbols in the DT SAM picture.',
+      expect: 'A ring distinguishes the primary contact.',
+      displayDescription: 'The left-hand contact has a ring around its symbol. The right-hand contact is shown as a square without a ring.',
+      evidence: 'Fictional snapshot; DT SAM display, p. 419.',
+      panels: ['left-mfd'], confirm: 'Next picture',
+      ask: {
+        question: 'Which contact is primary in this picture?',
+        options: ['The right-hand contact', 'The left-hand contact'], answer: 1,
+        right: 'The left-hand contact has the ring.',
+        wrong: 'Find the contact with a ring around it, then check which side it is on.',
+      },
+    },
+    {
+      id: 'scale', section: 'DTT', title: 'Read the new scale', control: 'Left MFD',
+      action: 'Read the range scale at the left edge of the DTT picture.',
+      expect: 'The preceding picture used an 80 NM scale.',
+      displayDescription: 'The left edge of the display shows 20 beside the range arrows.',
+      evidence: 'Fictional snapshot; DTT display, p. 420.',
+      panels: ['left-mfd'], confirm: 'Finish exercise',
+      ask: {
+        question: 'What range does the top of this display represent?',
+        options: ['80 NM', '40 NM', '20 NM'], answer: 2,
+        right: '20 NM. A symbol at the same height would represent a shorter range on this scale.',
+        wrong: 'Use the scale shown beside the range arrows in this picture.',
+      },
+    },
+  ],
+});
 
 /* ------------------------------------------------------------------ AIM-120 */
 
